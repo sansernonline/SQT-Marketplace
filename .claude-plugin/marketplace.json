@@ -1,0 +1,13 @@
+{
+  "name": "sqt-marketplace",
+  "owner": {
+    "name": "Your Name"
+  },
+  "plugins": [
+    {
+      "name": "software-company",
+      "source": "./plugins/software-company",
+      "description": "Complete software development company simulation with 9 roles (PM, BA, SA, Architect, UX, Developer, Tester, DevOps, SEO), 9 specialized skills, and slash commands for common SDLC workflows."
+    }
+  ]
+}
