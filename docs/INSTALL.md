@@ -35,7 +35,7 @@ claude
 
 ใน Claude Code prompt พิมพ์:
 ```
-/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace
+/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace
 ```
 
 ระบบจะตอบกลับว่าเพิ่ม marketplace สำเร็จ
@@ -66,7 +66,7 @@ claude
 
 ```bash
 # ใน project ที่ต้องการใช้
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace/plugins/software-company/." ".claude/"
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/." ".claude/"
 ```
 
 โครงสร้างที่ได้:
@@ -84,9 +84,9 @@ your-project/
 mkdir -p ~/.claude/agents ~/.claude/skills ~/.claude/commands
 
 # Windows (Git Bash)
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace/plugins/software-company/agents/." ~/.claude/agents/
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace/plugins/software-company/skills/." ~/.claude/skills/
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace/plugins/software-company/commands/." ~/.claude/commands/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/agents/." ~/.claude/agents/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/skills/." ~/.claude/skills/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/commands/." ~/.claude/commands/
 ```
 
 **ข้อเสีย:** อัปเดตทีหลังต้อง copy ทับเอง
@@ -102,18 +102,18 @@ cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketpla
 **1. Push ขึ้น Git**
 
 ```bash
-cd "sqt-marketplace"
+cd "SQT-Marketplace"
 git init
 git add .
 git commit -m "feat: initial software company plugin"
-git remote add origin https://github.com/YOUR-ORG/sqt-marketplace.git
+git remote add origin https://github.com/sansernonline/SQT-Marketplace.git
 git push -u origin main
 ```
 
 **2. เพื่อนร่วมทีมติดตั้งด้วยคำสั่ง**
 
 ```
-/plugin marketplace add YOUR-ORG/sqt-marketplace
+/plugin marketplace add sansernonline/SQT-Marketplace
 /plugin install software-company@sqt-marketplace
 ```
 
@@ -207,5 +207,5 @@ Claude ควรเรียก skill `user-story-writer` มาใช้อั�
 ### Path บน Windows มีช่องว่าง
 - ใส่ quotation marks รอบ path:
   ```
-  /plugin marketplace add "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace"
+  /plugin marketplace add "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace"
   ```

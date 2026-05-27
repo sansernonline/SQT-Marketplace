@@ -294,7 +294,7 @@ User Request
 ## 📁 File Structure
 
 ```
-sqt-marketplace/
+SQT-Marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/

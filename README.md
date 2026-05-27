@@ -2,6 +2,18 @@
 
 Plugin จำลองทีมพัฒนาซอฟต์แวร์ครบทีม สำหรับใช้ใน Claude Code — มาพร้อม 9 roles, 9 specialized skills, และ 7 slash commands สำหรับ workflow ที่ใช้บ่อยใน SDLC
 
+🔗 **GitHub:** [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
+
+## ⚡ Install (1-step)
+
+ใน Claude Code:
+```
+/plugin marketplace add sansernonline/SQT-Marketplace
+/plugin install software-company@sqt-marketplace
+```
+
+แล้วรีสตาร์ท Claude Code
+
 ## 📚 เอกสาร
 
 | ไฟล์ | เนื้อหา |
@@ -18,7 +30,7 @@ Plugin จำลองทีมพัฒนาซอฟต์แวร์คร�
 
 ใน Claude Code prompt:
 ```
-/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/sqt-marketplace
+/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace
 /plugin install software-company@sqt-marketplace
 ```
 
@@ -83,7 +95,7 @@ Plugin จำลองทีมพัฒนาซอฟต์แวร์คร�
 ## 🗂️ โครงสร้างไฟล์
 
 ```
-sqt-marketplace/
+SQT-Marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
