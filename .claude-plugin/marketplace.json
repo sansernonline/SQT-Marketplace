@@ -7,7 +7,7 @@
     {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company simulation with 9 roles (PM, BA, SA, Architect, UX, Developer, Tester, DevOps, SEO), 9 specialized skills, and slash commands for common SDLC workflows."
+      "description": "Complete software development company simulation with 12 roles (Product Manager, Project Manager, BA, SA, Architect, UX, Developer, Tester, DevOps, Security Engineer, Tech Writer, SEO), 10 specialized skills (including polished-document-style for stakeholder-ready docs with Mermaid diagrams), and slash commands for common SDLC workflows. Each agent includes Initial Discovery and Performance Targets sections aligned with industry standards."
     }
   ]
 }

@@ -4,7 +4,7 @@
 
 ---
 
-## 🧑‍💼 Agents (9)
+## 🧑‍💼 Agents (12)
 
 ### 1. project-manager
 **Model:** Sonnet
@@ -137,7 +137,63 @@
 
 ---
 
-## 🛠️ Skills (9)
+### 10. product-manager ⭐ NEW
+**Model:** Sonnet
+**Tools:** Read, Write, Edit, Grep, Glob, Skill, WebFetch, WebSearch
+
+**ใช้เมื่อ:**
+- กำหนด product vision และ strategy
+- สร้าง roadmap (quarterly/yearly)
+- จัดลำดับ feature ด้วย RICE/MoSCoW
+- ทำ user research
+- เขียน PRD
+- วิเคราะห์ competitive landscape
+- กำหนด product KPIs
+
+**ต่างจาก project-manager อย่างไร:**
+- product-manager: WHAT + WHY (กลยุทธ์)
+- project-manager: HOW + WHEN (delivery)
+
+**Skills ที่ใช้:** `polished-document-style`, `user-story-writer`
+
+---
+
+### 11. technical-writer ⭐ NEW
+**Model:** Sonnet
+**Tools:** Read, Write, Edit, Grep, Glob, Skill
+
+**ใช้เมื่อ:**
+- เขียน user guide / tutorial
+- เขียน API documentation
+- สร้าง README
+- เขียน release notes
+- ออกแบบ onboarding doc
+
+**Framework ใช้:** Diátaxis (Tutorial / How-To / Reference / Explanation)
+
+**Skills ที่ใช้:** `polished-document-style`, `commit-message-format`
+
+---
+
+### 12. security-engineer ⭐ NEW
+**Model:** Opus (ใช้โมเดลที่แรงกว่าเพราะ stakes สูง)
+**Tools:** Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
+
+**ใช้เมื่อ:**
+- ทำ threat modeling (STRIDE)
+- Security code review
+- กำหนด authentication / authorization
+- ตรวจสอบ compliance (PDPA, GDPR, PCI-DSS, SOC2)
+- ตอบสนอง security incident
+- Vulnerability assessment
+
+**Framework ใช้:** OWASP Top 10, STRIDE, Defense in Depth
+
+**Skills ที่ใช้:** `polished-document-style`, `postmortem-template`, `code-review-checklist`
+
+---
+
+## 🛠️ Skills (10)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -200,6 +256,14 @@
 **Output:** SEO audit report พร้อม action plan
 **Covers:** Technical SEO, on-page SEO, content, off-page SEO, analytics
 **Includes:** Severity levels, prioritized findings, 3-month roadmap
+
+---
+
+### 10. polished-document-style ⭐ NEW
+**ใช้กับ:** ทุก agent ที่ผลิตเอกสารสำหรับ stakeholder (BA, SA, Architect, PM, QA, DevOps, SEO)
+**Output:** Rich markdown formatting conventions
+**Includes:** Emoji vocabulary, callout boxes, table patterns, Mermaid diagram guide, cover blocks, sign-off sections
+**Covers:** Document structure, status badges, comparison tables, glossary patterns
 
 ---
 
@@ -301,8 +365,8 @@ SQT-Marketplace/
 │   └── software-company/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
-│       ├── agents/         (9 files)
-│       ├── skills/         (9 folders)
+│       ├── agents/         (12 files)
+│       ├── skills/         (10 folders)
 │       └── commands/       (7 files)
 ├── docs/
 │   ├── INSTALL.md

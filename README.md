@@ -1,6 +1,6 @@
 # Software Company Plugin
 
-Plugin จำลองทีมพัฒนาซอฟต์แวร์ครบทีม สำหรับใช้ใน Claude Code — มาพร้อม 9 roles, 9 specialized skills, และ 7 slash commands สำหรับ workflow ที่ใช้บ่อยใน SDLC
+Plugin จำลองทีมพัฒนาซอฟต์แวร์ครบทีม สำหรับใช้ใน Claude Code — มาพร้อม 12 roles, 10 specialized skills, และ 7 slash commands สำหรับ workflow ที่ใช้บ่อยใน SDLC
 
 🔗 **GitHub:** [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
@@ -53,10 +53,11 @@ Plugin จำลองทีมพัฒนาซอฟต์แวร์คร�
 
 ## 📦 มีอะไรบ้าง
 
-### 9 Sub Agents
+### 12 Sub Agents
 | Agent | บทบาท |
 |-------|-------|
-| `project-manager` | วางแผน, timeline, risk, status report |
+| `product-manager` ⭐ NEW | vision, roadmap, prioritization, user research (กลยุทธ์) |
+| `project-manager` | timeline, risk, status report (delivery) |
 | `business-analyst` | BRD, user stories, requirement gathering |
 | `solution-architect` | system design, tech stack, ADR |
 | `system-analyst` | FSD, use cases, API spec |
@@ -64,9 +65,11 @@ Plugin จำลองทีมพัฒนาซอฟต์แวร์คร�
 | `developer` | implement code, unit test, code review |
 | `qa-tester` | test plan, test cases, bug report |
 | `devops-engineer` | CI/CD, deployment, infrastructure |
+| `security-engineer` ⭐ NEW | threat modeling, security review, compliance, OWASP |
+| `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 9 Skills
+### 10 Skills
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `user-story-writer` | เขียน user story ตาม format มาตรฐาน |
@@ -78,6 +81,7 @@ Plugin จำลองทีมพัฒนาซอฟต์แวร์คร�
 | `pr-description-template` | PR description ที่ reviewer เข้าใจง่าย |
 | `postmortem-template` | blameless postmortem หลังเกิด incident |
 | `seo-audit-checklist` | SEO audit ครอบคลุม technical/on-page/content/off-page |
+| `polished-document-style` | format เอกสารสวยงาม (Rich markdown + Mermaid) สำหรับ stakeholder |
 
 ### 7 Slash Commands
 | Command | ทำอะไร |
@@ -102,8 +106,8 @@ SQT-Marketplace/
 │   └── software-company/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
-│       ├── agents/         (9 agents)
-│       ├── skills/         (9 skills)
+│       ├── agents/         (12 agents)
+│       ├── skills/         (10 skills)
 │       └── commands/       (7 commands)
 ├── docs/
 │   ├── INSTALL.md
