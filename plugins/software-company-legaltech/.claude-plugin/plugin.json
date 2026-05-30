@@ -1,0 +1,8 @@
+{
+  "name": "software-company-legaltech",
+  "version": "1.0.0",
+  "description": "LegalTech add-on: contract analysis, e-signature, legal document automation, compliance. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["legaltech", "contract", "e-signature", "compliance"],
+  "requires": ["software-company"]
+}

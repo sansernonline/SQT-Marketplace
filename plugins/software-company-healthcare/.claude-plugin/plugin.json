@@ -1,0 +1,10 @@
+{
+  "name": "software-company-healthcare",
+  "version": "1.0.0",
+  "description": "Healthcare specialist add-on: HIPAA compliance, FHIR/HL7 integration, clinical workflows, and PHI handling. Requires software-company plugin for shared infrastructure.",
+  "author": {
+    "name": "Your Name"
+  },
+  "keywords": ["healthcare", "hipaa", "fhir", "hl7", "ehr", "clinical", "phi"],
+  "requires": ["software-company"]
+}

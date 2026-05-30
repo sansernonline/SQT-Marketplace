@@ -1,0 +1,10 @@
+{
+  "name": "software-company-ai",
+  "version": "1.0.0",
+  "description": "AI/ML specialist team for the software-company plugin: ML engineering, data pipelines, LLM architecture, RAG, MLOps. Requires software-company plugin for shared infrastructure (polished-document-style skill).",
+  "author": {
+    "name": "Your Name"
+  },
+  "keywords": ["ai", "ml", "llm", "rag", "mlops", "data-engineering", "prompt-engineering"],
+  "requires": ["software-company"]
+}

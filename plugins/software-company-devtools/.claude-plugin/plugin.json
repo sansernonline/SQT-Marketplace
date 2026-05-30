@@ -1,0 +1,8 @@
+{
+  "name": "software-company-devtools",
+  "version": "1.0.0",
+  "description": "Developer Tools add-on: DX engineering, SDK design, DevRel, documentation engineering. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["devtools", "dx", "sdk", "devrel", "documentation"],
+  "requires": ["software-company"]
+}

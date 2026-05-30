@@ -1,0 +1,8 @@
+{
+  "name": "software-company-web3",
+  "version": "1.0.0",
+  "description": "Web3 add-on: smart contracts, DeFi, blockchain architecture, tokenomics. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["web3", "blockchain", "smart-contracts", "defi", "solidity"],
+  "requires": ["software-company"]
+}

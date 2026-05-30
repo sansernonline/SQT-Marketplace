@@ -1,0 +1,8 @@
+{
+  "name": "software-company-mobile",
+  "version": "1.0.0",
+  "description": "Mobile add-on: iOS/Android/cross-platform development, app store optimization, mobile performance. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["mobile", "ios", "android", "react-native", "flutter", "aso"],
+  "requires": ["software-company"]
+}

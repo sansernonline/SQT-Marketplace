@@ -1,0 +1,8 @@
+{
+  "name": "software-company-saas-b2b",
+  "version": "1.0.0",
+  "description": "SaaS B2B add-on: multi-tenancy, enterprise integration, subscription billing, customer success engineering. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["saas", "b2b", "multi-tenant", "subscription", "enterprise"],
+  "requires": ["software-company"]
+}

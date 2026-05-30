@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (10)
+## 🛠️ Skills (14)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -259,15 +259,42 @@
 
 ---
 
-### 10. polished-document-style ⭐ NEW
-**ใช้กับ:** ทุก agent ที่ผลิตเอกสารสำหรับ stakeholder (BA, SA, Architect, PM, QA, DevOps, SEO)
+### 10. polished-document-style
+**ใช้กับ:** ทุก agent ที่ผลิตเอกสารสำหรับ stakeholder
 **Output:** Rich markdown formatting conventions
 **Includes:** Emoji vocabulary, callout boxes, table patterns, Mermaid diagram guide, cover blocks, sign-off sections
-**Covers:** Document structure, status badges, comparison tables, glossary patterns
 
 ---
 
-## ⚡ Commands (7)
+### 11. auth-implementation-patterns ⭐ NEW
+**ใช้กับ:** developer, security-engineer
+**Output:** Concrete auth implementation guidance
+**Covers:** Session vs JWT, OAuth/OIDC, MFA (TOTP/WebAuthn), password storage (Argon2/bcrypt), account lockout, API auth, RBAC/ABAC, OWASP auth pitfalls
+
+---
+
+### 12. e2e-testing-patterns ⭐ NEW
+**ใช้กับ:** qa-tester, developer
+**Output:** E2E test design + framework guidance
+**Covers:** Testing pyramid, Playwright/Cypress selection, Page Object Model, test data strategy, fighting flaky tests, parallelization, CI integration
+
+---
+
+### 13. architecture-patterns ⭐ NEW
+**ใช้กับ:** solution-architect, developer
+**Output:** Architecture pattern selection guidance
+**Covers:** Monolith/microservices/serverless decision, sync vs async communication, CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig migration, anti-patterns
+
+---
+
+### 14. incident-runbook-template ⭐ NEW
+**ใช้กับ:** devops-engineer, security-engineer
+**Output:** Operational runbook for on-call engineers
+**Covers:** Detection, diagnosis (with Mermaid flowchart), mitigation steps (ordered by risk), escalation paths, post-incident actions, game days
+
+---
+
+## ⚡ Commands (15)
 
 ### 1. /feature-kickoff `<feature description>`
 **Workflow:** BA → Solution Architect → System Analyst → PM
@@ -315,6 +342,62 @@
 **Agent:** seo-specialist + seo-audit-checklist skill
 **Use case:** ตรวจสุขภาพ SEO ของเว็บไซต์
 **Output:** Audit report + health score + 3-month action plan
+
+---
+
+### 8. /threat-model `<feature>` ⭐ NEW
+**Agent:** security-engineer + polished-document-style
+**Use case:** STRIDE threat modeling สำหรับ feature/system
+**Output:** Threat model + data flow diagram + required controls + sign-off
+
+---
+
+### 9. /release-notes `<version>` ⭐ NEW
+**Agent:** technical-writer + polished-document-style
+**Use case:** สร้าง release notes ให้ user (ไม่ใช่ dev-speak)
+**Output:** User-facing release notes + categorized changes + migration guide
+
+---
+
+### 10. /product-roadmap `<horizon>` ⭐ NEW
+**Agent:** product-manager + polished-document-style
+**Use case:** สร้าง strategic roadmap พร้อม prioritization
+**Output:** Roadmap + RICE table + Gantt + KPIs + strategic risks
+
+---
+
+### 11. /onboard `<role>` ⭐ NEW
+**Agent:** technical-writer + polished-document-style
+**Use case:** สร้าง onboarding doc สำหรับ team member ใหม่
+**Output:** 30/60/90 day plan + setup checklist + team norms + FAQ
+
+---
+
+### 12. /incident-response `<issue>` ⭐ NEW
+**Agent:** devops-engineer + postmortem-template + incident-runbook-template
+**Use case:** Coordinate live incident (detection → mitigation → resolution)
+**Output:** Incident log + mitigation actions + postmortem prep
+
+---
+
+### 13. /api-design `<feature>` ⭐ NEW
+**Agent:** system-analyst + polished-document-style
+**Use case:** ออกแบบ API spec
+**Output:** Full API spec (endpoints, schemas, errors, examples) ครบ
+
+---
+
+### 14. /architecture-review `<system>` ⭐ NEW
+**Agent:** solution-architect + architecture-patterns + polished-document-style
+**Use case:** Review existing/proposed architecture vs NFRs
+**Output:** Quality scorecard + risk register + improvement recommendations
+
+---
+
+### 15. /security-scan `<scope>` ⭐ NEW
+**Agent:** security-engineer + polished-document-style
+**Use case:** Security audit (code, deps, infra)
+**Output:** Findings (S1-S4) + OWASP mapping + remediation roadmap
 
 ---
 
@@ -366,8 +449,8 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 files)
-│       ├── skills/         (10 folders)
-│       └── commands/       (7 files)
+│       ├── skills/         (14 folders)
+│       └── commands/       (15 files)
 ├── docs/
 │   ├── INSTALL.md
 │   ├── USAGE.md

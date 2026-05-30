@@ -7,7 +7,72 @@
     {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company simulation with 12 roles (Product Manager, Project Manager, BA, SA, Architect, UX, Developer, Tester, DevOps, Security Engineer, Tech Writer, SEO), 10 specialized skills (including polished-document-style for stakeholder-ready docs with Mermaid diagrams), and slash commands for common SDLC workflows. Each agent includes Initial Discovery and Performance Targets sections aligned with industry standards."
+      "description": "Complete software development company simulation with 12 roles (Product Manager, Project Manager, BA, SA, Architect, UX, Developer, Tester, DevOps, Security Engineer, Tech Writer, SEO), 14 specialized skills covering output templates + how-to patterns (auth, e2e-testing, architecture, runbooks), and 15 slash commands for full SDLC workflows. Each agent includes Initial Discovery and Performance Targets aligned with industry standards (DORA, OWASP, MoSCoW, RICE)."
+    },
+    {
+      "name": "software-company-fintech",
+      "source": "./plugins/software-company-fintech",
+      "description": "FinTech specialist add-on for software-company plugin. 4 agents (fintech-engineer, payment-integration, compliance-officer, quant-analyst), 3 how-to skills (pci-dss-compliance, kyc-aml-patterns, payment-gateway-integration), and 2 commands (/pci-audit, /transaction-flow-design). Requires software-company plugin for shared infrastructure."
+    },
+    {
+      "name": "software-company-ai",
+      "source": "./plugins/software-company-ai",
+      "description": "AI/ML specialist add-on for software-company plugin. 5 agents (ml-engineer, data-engineer, prompt-engineer, llm-architect, mlops-engineer), 3 how-to skills (rag-architecture, prompt-engineering-patterns, llm-evaluation-patterns), and 2 commands (/rag-design, /llm-eval). Requires software-company plugin for shared infrastructure."
+    },
+    {
+      "name": "software-company-healthcare",
+      "source": "./plugins/software-company-healthcare",
+      "description": "Healthcare specialist add-on. 4 agents (healthcare-engineer, hipaa-officer, fhir-specialist, clinical-data-analyst), 3 skills (hipaa-compliance, fhir-implementation, clinical-workflows), 2 commands (/hipaa-audit, /fhir-design). Requires software-company plugin."
+    },
+    {
+      "name": "software-company-ecommerce",
+      "source": "./plugins/software-company-ecommerce",
+      "description": "E-commerce specialist add-on. 4 agents (ecommerce-engineer, recommendation-engineer, inventory-specialist, cro-specialist), 3 skills (checkout-optimization, recommendation-systems, inventory-management), 2 commands (/checkout-audit, /recommendation-design). Requires software-company plugin."
+    },
+    {
+      "name": "software-company-gaming",
+      "source": "./plugins/software-company-gaming",
+      "description": "Gaming specialist add-on. 4 agents (game-developer, multiplayer-engineer, game-designer, live-ops-specialist), 3 skills (game-architecture, multiplayer-netcode, live-ops-patterns), 2 commands (/game-design, /multiplayer-architecture). Requires software-company plugin."
+    },
+    {
+      "name": "software-company-iot",
+      "source": "./plugins/software-company-iot",
+      "description": "IoT specialist add-on. 4 agents (iot-engineer, firmware-engineer, edge-architect, mqtt-specialist), 3 skills (mqtt-protocol-patterns, edge-computing-architecture, device-fleet-management), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-cybersecurity",
+      "source": "./plugins/software-company-cybersecurity",
+      "description": "Cybersecurity add-on. 4 agents (soc-analyst, threat-hunter, incident-responder, security-architect), 3 skills (threat-detection-patterns, soc-operations, security-incident-response), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-saas-b2b",
+      "source": "./plugins/software-company-saas-b2b",
+      "description": "SaaS B2B add-on. 4 agents (saas-architect, integration-engineer, customer-success-engineer, revops-analyst), 3 skills (multi-tenancy-patterns, enterprise-integration, subscription-billing), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-devtools",
+      "source": "./plugins/software-company-devtools",
+      "description": "Developer Tools add-on. 4 agents (dx-engineer, sdk-builder, devrel-engineer, docs-engineer), 3 skills (sdk-design-patterns, developer-experience, technical-content), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-mobile",
+      "source": "./plugins/software-company-mobile",
+      "description": "Mobile add-on. 4 agents (ios-engineer, android-engineer, cross-platform-engineer, aso-specialist), 3 skills (mobile-architecture-patterns, app-store-optimization, mobile-performance), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-web3",
+      "source": "./plugins/software-company-web3",
+      "description": "Web3 add-on. 4 agents (smart-contract-developer, blockchain-architect, defi-engineer, tokenomics-designer), 3 skills (solidity-security, defi-patterns, smart-contract-testing), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-legaltech",
+      "source": "./plugins/software-company-legaltech",
+      "description": "LegalTech add-on. 4 agents (legaltech-engineer, contract-analyzer, e-signature-specialist, legal-compliance-officer, document-automation-engineer), 3 skills (contract-parsing-patterns, e-signature-compliance, document-automation-patterns), 2 commands. Requires software-company plugin."
+    },
+    {
+      "name": "software-company-insurtech",
+      "source": "./plugins/software-company-insurtech",
+      "description": "InsurTech add-on. 4 agents (insurance-engineer, claims-processing-specialist, underwriting-analyst, actuarial-engineer, insurance-compliance-officer), 3 skills (claims-workflow-patterns, underwriting-models, insurance-compliance), 2 commands. Requires software-company plugin."
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "name": "software-company-insurtech",
+  "version": "1.0.0",
+  "description": "InsurTech add-on: claims processing, underwriting models, actuarial engineering, insurance compliance. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["insurtech", "claims", "underwriting", "actuarial"],
+  "requires": ["software-company"]
+}

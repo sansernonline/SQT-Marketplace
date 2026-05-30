@@ -1,0 +1,10 @@
+{
+  "name": "software-company-gaming",
+  "version": "1.0.0",
+  "description": "Gaming specialist add-on: game development, multiplayer architecture, game design, live operations, monetization. Requires software-company plugin for shared infrastructure.",
+  "author": {
+    "name": "Your Name"
+  },
+  "keywords": ["gaming", "game-dev", "multiplayer", "netcode", "live-ops", "monetization"],
+  "requires": ["software-company"]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "software-company-iot",
+  "version": "1.0.0",
+  "description": "IoT specialist add-on: device fleet management, MQTT, firmware, edge computing. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["iot", "mqtt", "firmware", "edge", "embedded"],
+  "requires": ["software-company"]
+}

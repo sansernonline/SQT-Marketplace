@@ -1,0 +1,8 @@
+{
+  "name": "software-company-cybersecurity",
+  "version": "1.0.0",
+  "description": "Cybersecurity add-on: SOC, threat hunting, incident response, security architecture. Requires software-company plugin.",
+  "author": { "name": "Your Name" },
+  "keywords": ["security", "soc", "threat-intel", "incident-response"],
+  "requires": ["software-company"]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "software-company-fintech",
+  "version": "1.0.0",
+  "description": "FinTech specialist team for the software-company plugin: payments, PCI-DSS compliance, KYC/AML, and quantitative analysis. Requires software-company plugin for shared infrastructure (polished-document-style skill).",
+  "author": {
+    "name": "Your Name"
+  },
+  "keywords": ["fintech", "payments", "pci-dss", "compliance", "kyc", "aml", "quant"],
+  "requires": ["software-company"]
+}
