@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (14)
+## 🛠️ Skills (16)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -291,6 +291,22 @@
 **ใช้กับ:** devops-engineer, security-engineer
 **Output:** Operational runbook for on-call engineers
 **Covers:** Detection, diagnosis (with Mermaid flowchart), mitigation steps (ordered by risk), escalation paths, post-incident actions, game days
+
+---
+
+### 15. office-document-handling ⭐ NEW
+**ใช้กับ:** business-analyst, system-analyst, product-manager, project-manager, technical-writer, solution-architect, qa-tester, ux-designer, seo-specialist, security-engineer (plus any plugin agent reading/producing Office docs)
+**Output:** Patterns for reading + producing .docx, .xlsx, .pptx, .pdf
+**Wraps:** Anthropic's built-in `anthropic-skills:docx`, `anthropic-skills:xlsx`, `anthropic-skills:pptx`, `anthropic-skills:pdf`
+**Includes:** Decision tree (which skill for which file), common patterns by role, format selection guidance (markdown source → Office output), quality checklist, anti-patterns
+
+---
+
+### 16. work-session-context ⭐ NEW
+**ใช้กับ:** ทุก core agent (12 agents)
+**Output:** Structured session summaries in `.claude/context/`
+**Includes:** INDEX.md pattern (latest-on-top), per-session files with status/decisions/next steps, resume pattern, integration with git for team handoff
+**Use at:** START of session (read INDEX), END of significant work (write summary)
 
 ---
 
@@ -449,7 +465,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 files)
-│       ├── skills/         (14 folders)
+│       ├── skills/         (16 folders)
 │       └── commands/       (15 files)
 ├── docs/
 │   ├── INSTALL.md

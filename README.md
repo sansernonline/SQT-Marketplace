@@ -60,7 +60,8 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 
 | ไฟล์ | เนื้อหา |
 |------|---------|
-| **[docs/PLUGINS.md](docs/PLUGINS.md)** | สรุป plugins ทั้ง 3 ตัว + เลือกติดตั้งยังไง |
+| **[docs/PLUGINS.md](docs/PLUGINS.md)** | สรุป plugins ทั้งหมด + เลือกติดตั้งยังไง |
+| **[docs/COMMANDS-CHEATSHEET.md](docs/COMMANDS-CHEATSHEET.md)** ⭐ | คำสั่งที่ใช้บ่อย + เมื่อไหร่ใช้ + workflow bundles |
 | **[docs/INSTALL.md](docs/INSTALL.md)** | คู่มือติดตั้ง 3 วิธี + troubleshooting |
 | **[docs/USAGE.md](docs/USAGE.md)** | คู่มือใช้งาน + ตัวอย่าง workflow จริง |
 | **[docs/REFERENCE.md](docs/REFERENCE.md)** | รายละเอียดทุก agent/skill/command ของ software-company |
@@ -112,9 +113,9 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 14 Skills
+### 16 Skills
 
-**Output Templates (10)**
+**Output Templates (11)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `user-story-writer` | เขียน user story ตาม format มาตรฐาน |
@@ -127,14 +128,20 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | `postmortem-template` | blameless postmortem หลังเกิด incident |
 | `seo-audit-checklist` | SEO audit ครอบคลุม technical/on-page/content/off-page |
 | `polished-document-style` | format เอกสารสวยงาม (Rich markdown + Mermaid) |
+| `office-document-handling` ⭐ NEW | อ่าน/สร้าง .docx, .xlsx, .pptx, .pdf ผ่าน anthropic-skills |
 
-**How-To Patterns (4 NEW ⭐)**
+**How-To Patterns (4)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `auth-implementation-patterns` ⭐ | implement auth (session/JWT/OAuth/MFA/password) |
 | `e2e-testing-patterns` ⭐ | ออกแบบ E2E tests (Playwright/Cypress, POM, flaky fix) |
 | `architecture-patterns` ⭐ | เลือก architecture (monolith/microservices/CQRS/Saga) |
 | `incident-runbook-template` ⭐ | เขียน on-call runbook ที่ใช้งานจริงตอน incident |
+
+**Cross-Session Continuity (1 NEW ⭐)**
+| Skill | ใช้เมื่อ |
+|-------|---------|
+| `work-session-context` ⭐ NEW | บันทึก context สรุปเป็นไฟล์ใน `.claude/context/` หลังทำงานเสร็จ — เปิด session ใหม่จะรู้ทันทีว่าทำอะไรไปแล้ว |
 
 ### 15 Slash Commands
 
@@ -190,7 +197,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 agents)
-│       ├── skills/         (14 skills)
+│       ├── skills/         (16 skills)
 │       └── commands/       (15 commands)
 ├── docs/
 │   ├── INSTALL.md

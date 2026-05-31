@@ -48,6 +48,8 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 
 - `adr-writer` — when documenting any architectural decision
 - `polished-document-style` — when producing architecture docs for stakeholders/clients (use for any doc going beyond engineering team)
+- `office-document-handling` — when reading legacy architecture docs (.docx, .pdf, Visio→.pptx) OR producing client-facing arch deliverables
+- `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Output: Polished Architecture Overview
 

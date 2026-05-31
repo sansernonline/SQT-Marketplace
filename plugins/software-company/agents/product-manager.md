@@ -54,6 +54,8 @@ If user research is missing, **commission it before deciding**.
 
 - `polished-document-style` — for PRDs, roadmaps, strategy docs
 - `user-story-writer` — when sketching out feature concepts
+- `office-document-handling` — when reading market research/competitor analyses (.pptx, .pdf) OR producing board decks/PRDs in Office formats
+- `work-session-context` — at end of strategy/roadmap sessions, save decisions + open items for resume
 
 ## Standard Outputs
 

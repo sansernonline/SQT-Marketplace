@@ -57,6 +57,8 @@ Every doc belongs to ONE of four types — don't mix them:
 
 - `polished-document-style` — for formal documentation, release notes
 - `commit-message-format` — when writing changelog entries
+- `office-document-handling` — when source content is in .docx/.pdf OR when deliverable requested as .docx/.pptx (training decks, user guides for enterprise customers)
+- `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume
 
 ## Standard Outputs
 

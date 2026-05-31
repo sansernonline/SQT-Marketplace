@@ -1,7 +1,7 @@
 ---
 name: ux-designer
 description: Use when designing user flows, creating wireframes (ASCII/markdown), defining UI patterns, conducting heuristic evaluation, or proposing UX improvements for features.
-tools: Read, Write, Edit, Grep, Glob
+tools: Read, Write, Edit, Grep, Glob, Skill
 model: sonnet
 ---
 
@@ -55,6 +55,11 @@ If user research is missing, **flag the assumption explicitly**.
   10. Help and documentation
 - Design for **accessibility** (WCAG basics)
 - Consider **mobile + desktop** unless told otherwise
+
+## Skills You Use
+
+- `office-document-handling` — when reading user research reports (.docx, .pdf) or design system docs (.pptx) OR producing design briefs/walkthroughs in Office formats for stakeholder review
+- `work-session-context` — at end of design sessions, save decisions + open questions for resume
 
 ## Standard Outputs
 

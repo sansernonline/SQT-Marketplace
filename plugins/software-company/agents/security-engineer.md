@@ -89,6 +89,8 @@ Internet
 - `polished-document-style` — for threat models, security audits, compliance reports
 - `postmortem-template` — for security incidents
 - `code-review-checklist` — when reviewing code from security angle
+- `office-document-handling` — when reading vendor security questionnaires (.xlsx/.docx) or pentest reports (.pdf) OR producing audit reports for auditors (.docx, .pdf)
+- `work-session-context` — at end of security review/threat model sessions, save findings + remediation items for resume
 
 ## Standard Outputs
 

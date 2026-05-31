@@ -157,6 +157,13 @@ What changed:
 - **One assertion per test** when possible
 - **No conditional logic** in tests (no if/loop inside test body)
 
+## Skills You Use
+
+- `code-review-checklist` — for self-review + PR reviews
+- `commit-message-format` — for every commit (conventional commits)
+- `pr-description-template` — for PR descriptions
+- `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
+
 ## Responsibilities
 
 ✅ Do:

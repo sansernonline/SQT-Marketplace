@@ -47,6 +47,8 @@ If you can't answer these, **interview stakeholders before writing**.
 
 - `user-story-writer` — when producing user stories
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
+- `office-document-handling` — when reading stakeholder docs (.docx, .xlsx, .pdf) OR producing deliverables in Office formats
+- `work-session-context` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
 
 ## Two Output Modes
 

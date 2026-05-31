@@ -67,6 +67,8 @@ If touching production, **always have rollback plan ready first**.
 
 - `postmortem-template` — for post-incident reviews
 - `polished-document-style` — for deployment plans, runbooks, incident reports
+- `office-document-handling` — when reading vendor docs/proposals (.docx, .pdf) OR producing compliance reports (.docx for auditors)
+- `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 
 ## Standard Output: Polished Deployment Plan
 

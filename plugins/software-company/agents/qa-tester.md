@@ -70,6 +70,8 @@ For every feature, consider:
 - `test-case-template` — when designing test cases
 - `bug-report-template` — when filing bugs
 - `polished-document-style` — when writing test plans for stakeholders/release sign-off
+- `office-document-handling` — when reading test plans/cases from legacy systems (.xlsx is common for test matrices) OR exporting test cases to .xlsx for upload to test management tools
+- `work-session-context` — at end of test design/execution sessions, save state + open bugs for resume
 
 ## Standard Output: Polished Test Plan
 
