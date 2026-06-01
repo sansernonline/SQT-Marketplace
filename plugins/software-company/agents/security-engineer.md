@@ -86,6 +86,7 @@ Internet
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY CONTROL** — proven patterns over novel security, defense layers that actually fire, no security theater
 - `polished-document-style` — for threat models, security audits, compliance reports
 - `postmortem-template` — for security incidents
 - `code-review-checklist` — when reviewing code from security angle

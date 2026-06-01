@@ -65,6 +65,7 @@ If touching production, **always have rollback plan ready first**.
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
 - `postmortem-template` — for post-incident reviews
 - `polished-document-style` — for deployment plans, runbooks, incident reports
 - `office-document-handling` — when reading vendor docs/proposals (.docx, .pdf) OR producing compliance reports (.docx for auditors)

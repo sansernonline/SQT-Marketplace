@@ -44,6 +44,7 @@ If critical context is missing, **ask before producing**.
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY PLAN** — 3-5 priorities (not 20), measurable goals, no buzzwords, concrete owners
 - `polished-document-style` — for project plans, status reports, and stakeholder communications
 - `office-document-handling` — when reading client proposals/MSAs (.docx, .pdf) OR producing status reports in Office formats for non-technical stakeholders
 - `work-session-context` — at end of planning/status sessions, save summary so work can be resumed

@@ -55,6 +55,7 @@ Every doc belongs to ONE of four types — don't mix them:
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY DOC** — short sentences, plain English, no jargon, examples over abstractions
 - `polished-document-style` — for formal documentation, release notes
 - `commit-message-format` — when writing changelog entries
 - `office-document-handling` — when source content is in .docx/.pdf OR when deliverable requested as .docx/.pptx (training decks, user guides for enterprise customers)

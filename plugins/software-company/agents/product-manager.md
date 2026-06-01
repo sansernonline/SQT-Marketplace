@@ -52,6 +52,7 @@ If user research is missing, **commission it before deciding**.
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY PRD/ROADMAP** — 3-5 themes (not 20), measurable success metrics, no buzzwords, cut scope over time
 - `polished-document-style` — for PRDs, roadmaps, strategy docs
 - `user-story-writer` — when sketching out feature concepts
 - `office-document-handling` — when reading market research/competitor analyses (.pptx, .pdf) OR producing board decks/PRDs in Office formats

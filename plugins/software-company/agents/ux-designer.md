@@ -58,6 +58,7 @@ If user research is missing, **flag the assumption explicitly**.
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY DESIGN** — fewest steps to user goal, reuse existing patterns, defaults that work for 80%
 - `office-document-handling` — when reading user research reports (.docx, .pdf) or design system docs (.pptx) OR producing design briefs/walkthroughs in Office formats for stakeholder review
 - `work-session-context` — at end of design sessions, save decisions + open questions for resume
 

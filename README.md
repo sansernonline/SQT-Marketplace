@@ -113,7 +113,7 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 16 Skills
+### 17 Skills
 
 **Output Templates (11)**
 | Skill | ใช้เมื่อ |
@@ -138,10 +138,15 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | `architecture-patterns` ⭐ | เลือก architecture (monolith/microservices/CQRS/Saga) |
 | `incident-runbook-template` ⭐ | เขียน on-call runbook ที่ใช้งานจริงตอน incident |
 
-**Cross-Session Continuity (1 NEW ⭐)**
+**Cross-Session Continuity (1)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
-| `work-session-context` ⭐ NEW | บันทึก context สรุปเป็นไฟล์ใน `.claude/context/` หลังทำงานเสร็จ — เปิด session ใหม่จะรู้ทันทีว่าทำอะไรไปแล้ว |
+| `work-session-context` | บันทึก context สรุปเป็นไฟล์ใน `.claude/context/` หลังทำงานเสร็จ — เปิด session ใหม่จะรู้ทันทีว่าทำอะไรไปแล้ว |
+
+**Universal Quality (1 NEW ⭐)**
+| Skill | ใช้เมื่อ |
+|-------|---------|
+| `simplicity-first` ⭐ NEW | ทำให้ output ทุกแบบ (code/docs/architecture/plans) **simple ที่สุดที่ work** — junior อ่านเข้าใจใน 6 เดือน. Reject premature abstraction + buzzwords. ใช้ทุก agent. |
 
 ### 15 Slash Commands
 
@@ -197,7 +202,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 agents)
-│       ├── skills/         (16 skills)
+│       ├── skills/         (17 skills)
 │       └── commands/       (15 commands)
 ├── docs/
 │   ├── INSTALL.md

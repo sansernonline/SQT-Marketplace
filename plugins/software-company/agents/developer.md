@@ -159,6 +159,7 @@ What changed:
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY OUTPUT** — simple logic, obvious code, fewest moving parts. The "junior at 3 AM" test before any code is delivered.
 - `code-review-checklist` — for self-review + PR reviews
 - `commit-message-format` — for every commit (conventional commits)
 - `pr-description-template` — for PR descriptions

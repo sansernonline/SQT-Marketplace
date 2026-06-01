@@ -45,6 +45,7 @@ If you can't answer these, **interview stakeholders before writing**.
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
 - `user-story-writer` — when producing user stories
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
 - `office-document-handling` — when reading stakeholder docs (.docx, .xlsx, .pdf) OR producing deliverables in Office formats

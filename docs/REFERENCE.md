@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (16)
+## 🛠️ Skills (17)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -307,6 +307,14 @@
 **Output:** Structured session summaries in `.claude/context/`
 **Includes:** INDEX.md pattern (latest-on-top), per-session files with status/decisions/next steps, resume pattern, integration with git for team handoff
 **Use at:** START of session (read INDEX), END of significant work (write summary)
+
+---
+
+### 17. simplicity-first ⭐ NEW
+**ใช้กับ:** ทุก core agent (12 agents) — applied to EVERY output
+**Output:** N/A — this is a quality filter
+**Core Test:** "Could a tired junior teammate understand this in 6 months, at 3 AM during an incident?" If no → simplify.
+**Includes:** 5 universal principles, by-output-type guidance (code/docs/architecture/plans/designs), 3-question filter for new abstractions, common anti-patterns (resume-driven design, future-proofing, premature DRY, etc.), pre-submit checklist
 
 ---
 
@@ -465,7 +473,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 files)
-│       ├── skills/         (16 folders)
+│       ├── skills/         (17 folders)
 │       └── commands/       (15 files)
 ├── docs/
 │   ├── INSTALL.md

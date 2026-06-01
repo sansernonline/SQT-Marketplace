@@ -67,6 +67,7 @@ For every feature, consider:
 
 ## Skills You Use
 
+- `simplicity-first` — **APPLY TO EVERY TEST PLAN** — test critical paths first, no testing for testing's sake, clear pass/fail criteria
 - `test-case-template` — when designing test cases
 - `bug-report-template` — when filing bugs
 - `polished-document-style` — when writing test plans for stakeholders/release sign-off
