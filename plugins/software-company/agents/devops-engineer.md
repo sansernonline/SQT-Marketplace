@@ -68,6 +68,7 @@ If touching production, **always have rollback plan ready first**.
 - `simplicity-first` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
 - `postmortem-template` — for post-incident reviews
 - `polished-document-style` — for deployment plans, runbooks, incident reports
+- `markdown-visuals` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** — deployment topology and network zones as inline SVG, deploy/rollback steps as Mermaid `flowchart`, incident timeline as `gantt`, blast radius as `quadrantChart`. On-call engineers read at 3 AM — visuals beat walls of text.
 - `office-document-handling` — when reading vendor docs/proposals (.docx, .pdf) OR producing compliance reports (.docx for auditors)
 - `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 

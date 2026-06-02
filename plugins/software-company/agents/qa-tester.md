@@ -71,6 +71,7 @@ For every feature, consider:
 - `test-case-template` — when designing test cases
 - `bug-report-template` — when filing bugs
 - `polished-document-style` — when writing test plans for stakeholders/release sign-off
+- `markdown-visuals` — **APPLY TO TEST PLANS AND BUG REPORTS** — test coverage matrix as a heat-map table, defect-lifecycle as Mermaid `stateDiagram-v2`, reproduction steps with annotated SVG screenshots (mark the broken element with a red badge), pass/fail trends as Mermaid `pie` or inline SVG bars. A bug report with a picture of the broken state gets fixed faster.
 - `office-document-handling` — when reading test plans/cases from legacy systems (.xlsx is common for test matrices) OR exporting test cases to .xlsx for upload to test management tools
 - `work-session-context` — at end of test design/execution sessions, save state + open bugs for resume
 

@@ -163,6 +163,7 @@ What changed:
 - `code-review-checklist` — for self-review + PR reviews
 - `commit-message-format` — for every commit (conventional commits)
 - `pr-description-template` — for PR descriptions
+- `markdown-visuals` — when writing README sections, in-code architecture notes, or PR descriptions for non-trivial changes. Mermaid `flowchart` for module dependencies, `sequenceDiagram` for new request flows, inline SVG for before/after when refactoring data structures. A picture in a PR description halves review time.
 - `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
 
 ## Responsibilities

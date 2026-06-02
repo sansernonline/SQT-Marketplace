@@ -57,6 +57,7 @@ Every doc belongs to ONE of four types — don't mix them:
 
 - `simplicity-first` — **APPLY TO EVERY DOC** — short sentences, plain English, no jargon, examples over abstractions
 - `polished-document-style` — for formal documentation, release notes
+- `markdown-visuals` — **APPLY TO TUTORIALS / API DOCS / RELEASE NOTES** — annotated UI screenshots (inline SVG), request/response shape diagrams (Mermaid `sequenceDiagram`), before/after comparisons for breaking changes, conceptual diagrams for "Explanation" docs. Words alone fail learners — pair each non-trivial step with a picture.
 - `commit-message-format` — when writing changelog entries
 - `office-document-handling` — when source content is in .docx/.pdf OR when deliverable requested as .docx/.pptx (training decks, user guides for enterprise customers)
 - `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume

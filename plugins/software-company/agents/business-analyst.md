@@ -48,6 +48,7 @@ If you can't answer these, **interview stakeholders before writing**.
 - `simplicity-first` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
 - `user-story-writer` — when producing user stories
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
+- `markdown-visuals` — when BRD describes a process, journey, or organisational structure. Use Mermaid `journey` for user-experience flows, `flowchart` for As-Is/To-Be processes, inline SVG for stakeholder maps. Stakeholders skim — pictures land faster than paragraphs.
 - `office-document-handling` — when reading stakeholder docs (.docx, .xlsx, .pdf) OR producing deliverables in Office formats
 - `work-session-context` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
 

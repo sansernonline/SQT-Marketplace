@@ -55,6 +55,7 @@ If user research is missing, **commission it before deciding**.
 - `simplicity-first` — **APPLY TO EVERY PRD/ROADMAP** — 3-5 themes (not 20), measurable success metrics, no buzzwords, cut scope over time
 - `polished-document-style` — for PRDs, roadmaps, strategy docs
 - `user-story-writer` — when sketching out feature concepts
+- `markdown-visuals` — **APPLY TO EVERY PRD / ROADMAP / STRATEGY DOC** — roadmaps as Mermaid `gantt`, competitive positioning as `quadrantChart`, AARRR funnel as inline SVG, persona maps + journey maps as Mermaid `journey`. Executives skim — visuals carry the argument; paragraphs are footnotes.
 - `office-document-handling` — when reading market research/competitor analyses (.pptx, .pdf) OR producing board decks/PRDs in Office formats
 - `work-session-context` — at end of strategy/roadmap sessions, save decisions + open items for resume
 

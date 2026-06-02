@@ -59,6 +59,7 @@ If user research is missing, **flag the assumption explicitly**.
 ## Skills You Use
 
 - `simplicity-first` — **APPLY TO EVERY DESIGN** — fewest steps to user goal, reuse existing patterns, defaults that work for 80%
+- `markdown-visuals` — **APPLY TO EVERY MOCKUP / WIREFRAME / UI SPEC** — never deliver a text-only design. Embed inline SVG for UI states, ASCII art for layout sketches, Mermaid for flows. Mockups that read as prose only are rejected output.
 - `office-document-handling` — when reading user research reports (.docx, .pdf) or design system docs (.pptx) OR producing design briefs/walkthroughs in Office formats for stakeholder review
 - `work-session-context` — at end of design sessions, save decisions + open questions for resume
 
@@ -80,7 +81,9 @@ If user research is missing, **flag the assumption explicitly**.
 5. User reaches goal at Page C
 ```
 
-### Wireframe (ASCII)
+### Wireframe — pick a format per `markdown-visuals`
+
+**ASCII** (quick layout sketch — fastest to iterate):
 ```
 ┌─────────────────────────────────────┐
 │ Logo          Search [_____]  [👤] │
@@ -99,6 +102,26 @@ If user research is missing, **flag the assumption explicitly**.
 │                                     │
 └─────────────────────────────────────┘
 ```
+
+**Inline SVG** (visual mockup with real colour/shape — preferred for state-by-state UI specs):
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="Dashboard wireframe — hover state on primary CTA">
+  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+  <rect x="40" y="40" width="560" height="40" rx="8" fill="#2a3245"/>
+  <text x="60" y="65" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Logo</text>
+  <rect x="380" y="50" width="120" height="20" rx="4" fill="#22272e"/>
+  <circle cx="560" cy="60" r="12" fill="#0078d4"/>
+  <rect x="80" y="120" width="480" height="120" rx="12" fill="#2a3245"/>
+  <text x="100" y="156" fill="#fff" font-family="system-ui" font-size="16" font-weight="600">Welcome back, Alice</text>
+  <rect x="100" y="184" width="140" height="40" rx="8" fill="#0078d4"/>
+  <text x="170" y="209" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Get started</text>
+</svg>
+</p>
+```
+
+When designing a UI with multiple states (default / hover / loading / error / empty), **render each as its own SVG** in the doc — refer to `markdown-visuals` for templates.
 
 ### Interaction Spec
 ```markdown
