@@ -8,7 +8,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 
 | Plugin | Roles | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** ⭐ core | 12 | 24 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
+| **`software-company`** ⭐ core | 12 | 25 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
 | **`software-company-fintech`** 🏦 | 4 | 3 | 2 | บริษัทการเงิน, PCI-DSS, payment |
 | **`software-company-ai`** 🤖 | 5 | 3 | 2 | ทีม AI/ML, LLM, RAG |
 | **`software-company-healthcare`** 🏥 | 4 | 3 | 2 | บริษัท health tech, HIPAA, FHIR |
@@ -23,7 +23,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | **`software-company-legaltech`** ⚖️ | 5 | 3 | 2 | Contract analysis, e-signature, legal automation |
 | **`software-company-insurtech`** 🛡️ | 5 | 3 | 2 | Claims, underwriting, actuarial, insurance compliance |
 
-**รวม: 67 agents, 63 skills, 41 commands** (core 24 skills + add-on 39 skills)
+**รวม: 67 agents, 64 skills, 41 commands** (core 25 skills + add-on 39 skills)
 
 > 💡 **Add-on plugins (fintech/ai/healthcare/ecommerce/gaming) ต้องติดตั้ง `software-company` ก่อน** เพราะใช้ shared skills
 
@@ -113,7 +113,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 24 Skills
+### 25 Skills
 
 **Output Templates (13)**
 | Skill | ใช้เมื่อ |
@@ -132,9 +132,10 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `branded-document-design` ⭐ NEW | .docx/.pptx/.pdf ที่หน้าตาเป็นระบบ (design tokens + brandkit.py) รองรับเอกสารไทย |
 | `markdown-visuals` | ใส่ภาพในเอกสาร markdown (inline SVG / ASCII / Mermaid) แทนการบรรยายด้วยตัวหนังสือ |
 
-**UI / Visual Design (2)**
+**UI / Visual Design (3)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
+| `mobile-app-design` ⭐ NEW | ทำ UI แอปมือถือ (PWA / Capacitor / React Native / Flutter) สไตล์ Speak Go — ฟอนต์ 4 ตระกูล + safe area + mockup กรอบเครื่อง |
 | `web-app-design` ⭐ NEW | ทำ UI เว็บแอป (แดชบอร์ด/admin/SaaS) สไตล์ Apps Track — 94 tokens + appstrack.css + mockup + ตัวตรวจ hardcode สี |
 | `windows-app-design` ⭐ NEW | ทำ UI แอป Windows 11 (WinUI 3 / Avalonia / MAUI / Electron-Tauri) — Fluent 2 tokens + mockup template + fluent.css/XAML พร้อมใช้ |
 
@@ -217,7 +218,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 agents)
-│       ├── skills/         (24 skills)
+│       ├── skills/         (25 skills)
 │       └── commands/       (15 commands)
 ├── docs/
 │   ├── INSTALL.md

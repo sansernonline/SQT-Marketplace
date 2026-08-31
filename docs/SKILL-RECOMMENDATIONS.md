@@ -1,6 +1,6 @@
 # Skill Recommendations & Changes
 
-_Reviewed: all 14 plugins, 67 agents, 63 skills. Goal: each agent gets more capable with **less** prompting, by reusing simple, readable skills — not by adding bulk._
+_Reviewed: all 14 plugins, 67 agents, 64 skills. Goal: each agent gets more capable with **less** prompting, by reusing simple, readable skills — not by adding bulk._
 
 ---
 

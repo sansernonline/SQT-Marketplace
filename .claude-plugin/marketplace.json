@@ -7,7 +7,7 @@
     {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company simulation with 12 roles (Product Manager, Project Manager, BA, SA, Architect, UX, Developer, Tester, DevOps, Security Engineer, Tech Writer, SEO), 24 specialized skills covering output templates + how-to patterns (auth, e2e-testing, architecture, runbooks) + office-document-handling (Word/Excel/PowerPoint/PDF) + branded-document-design (branded .docx/.pptx output with Thai typography) + windows-app-design (Fluent 2 UI for WinUI 3 / Avalonia / Electron desktop apps) + web-app-design (token-driven web app UI system with CI enforcement), and 15 slash commands for full SDLC workflows. Each agent includes Initial Discovery and Performance Targets aligned with industry standards (DORA, OWASP, MoSCoW, RICE)."
+      "description": "Complete software development company simulation with 12 roles (Product Manager, Project Manager, BA, SA, Architect, UX, Developer, Tester, DevOps, Security Engineer, Tech Writer, SEO), 25 specialized skills covering output templates + how-to patterns (auth, e2e-testing, architecture, runbooks) + office-document-handling (Word/Excel/PowerPoint/PDF) + branded-document-design (branded .docx/.pptx output with Thai typography) + windows-app-design (Fluent 2 UI for WinUI 3 / Avalonia / Electron desktop apps) + web-app-design (token-driven web app UI system with CI enforcement) + mobile-app-design (phone app UI with four-family typography and safe-area handling), and 15 slash commands for full SDLC workflows. Each agent includes Initial Discovery and Performance Targets aligned with industry standards (DORA, OWASP, MoSCoW, RICE)."
     },
     {
       "name": "software-company-fintech",

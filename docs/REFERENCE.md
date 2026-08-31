@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (24)
+## 🛠️ Skills (25)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -369,6 +369,15 @@
 **Output:** HTML mockup ก่อน แล้วค่อยเป็นคอมโพเนนต์จริงที่ใช้คลาสเดิม
 **Includes:** ระบบดีไซน์ Apps Track ครบชุด — 94 design tokens (แบรนด์/gradient/พื้นผิว/ตัวอักษร/สีกราฟ/pill 7 โทน/เลย์เอาต์), `assets/appstrack.css` พร้อมคอมโพเนนต์ครบ (app shell, card, KPI stat, table, form, chips, tabs, progress, avatar, markdown, toast, modal), ธีม accent สลับได้ 5 ชุด + sidebar สว่าง/เข้ม, `scripts/check-design-tokens.mjs` ที่ทำให้ CI แดงเมื่อมีใคร hardcode สี, `scripts/screenshot.py` สำหรับตรวจทุกความกว้าง
 **Anti-patterns ที่กันไว้:** `#hex` ในคอมโพเนนต์, gradient บนกราฟ, ปุ่มหลักหลายปุ่มในหน้าเดียว, `overflow-x` ที่ body, `alert()`, `.modal` ที่ไม่ตั้ง position
+
+---
+
+### 25. mobile-app-design ⭐ NEW
+**ใช้กับ:** ux-designer, developer + agents ของ software-company-mobile
+**สแต็ก:** PWA · เว็บห่อเป็นแอป (Capacitor / Cordova / WebView) · React Native · Flutter
+**Output:** HTML mockup ที่โชว์เป็นกรอบเครื่อง แล้วค่อยแปลงเป็นโค้ดจริง
+**Includes:** ระบบดีไซน์ Speak Go — 53 tokens ตั้งชื่อตามหน้าที่ (`--repair` ไม่ใช่ `--red`), ระบบฟอนต์ **4 ตระกูล 4 หน้าที่** (UI chrome / ตัวเลขใหญ่ / เนื้อหาที่ต้องอ่านเป็น serif / ป้าย mono), `assets/speakgo.css` พร้อมคอมโพเนนต์ครบ (app shell + tabbar + overlay เต็มจอ, ไทล์ไล่สี, การ์ด, บทสนทนาพร้อมกล่องแก้ไข del/ins, แถบไมค์, หน้าสรุปผล, กลุ่มตั้งค่าแบบ iOS), ธีมเรียบ/ไล่สี, สลับฟอนต์ตามภาษาไทย-อังกฤษ, การจัดการ safe-area + `100dvh`
+**Anti-patterns ที่กันไว้:** `100vh`, ลืม safe-area, แท็บล่างเกิน 5 อัน, modal เล็กสำหรับงานยาว, ยุบฟอนต์เหลือตระกูลเดียว, ไม่มี `:active` feedback
 
 ---
 

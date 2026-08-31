@@ -13,6 +13,7 @@
  *   node check-design-tokens.mjs src/styles.css src/app
  *   node check-design-tokens.mjs src/theme.css src --ext ts,tsx,jsx,vue,svelte,html,css
  *   node check-design-tokens.mjs src/styles.css src/app --ignore src/app/vendor
+ *   node check-design-tokens.mjs src/theme.css src --require --bg,--ink,--signal
  *
  * ใส่ใน package.json:  "lint:tokens": "node tools/check-design-tokens.mjs src/styles.css src/app"
  * แล้วต่อเข้า CI — ถ้าไม่บังคับด้วยเครื่อง ระบบดีไซน์จะพังภายในสามสัปดาห์
@@ -40,13 +41,16 @@ const SRC_DIR = resolve(argv[1]);
 const EXT = opt('ext', 'ts,tsx,js,jsx,vue,svelte,html,css,scss').split(',');
 const IGNORE = opt('ignore', 'node_modules,dist,.git').split(',');
 
-/** token แกนหลักที่ทุกโปรเจกต์ต้องมี — แก้ให้ตรงกับสัญญาของโปรเจกต์คุณ */
-const REQUIRED = [
+/** token แกนหลักที่ต้องมี — ค่าเริ่มต้นคือชุดของ web-app-design
+    ระบบดีไซน์อื่นมี token คนละชุด ให้ส่งของตัวเองมาทาง --require
+      --require --bg,--surface,--ink,--signal,--r-card */
+const DEFAULT_REQUIRED = [
   '--brand', '--brand-2', '--grad-accent', '--grad-page',
   '--bg', '--surface', '--line', '--line-strong', '--shadow', '--radius',
   '--text', '--text-body', '--text-muted', '--text-faint',
   '--sidebar-w', '--topbar-h', '--content-max',
 ];
+const REQUIRED = opt('require', '') ? opt('require', '').split(',') : DEFAULT_REQUIRED;
 
 /** เส้นแบ่ง: ในไฟล์ token เอง อนุญาตสีดิบเฉพาะ "ก่อน" บรรทัดนี้ */
 const BASE_MARKER = opt('marker', '=========================== base');
