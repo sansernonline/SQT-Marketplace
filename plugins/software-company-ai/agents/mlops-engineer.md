@@ -247,6 +247,7 @@ def psi(baseline: np.ndarray, current: np.ndarray, bins: int = 10) -> float:
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `polished-document-style` (from software-company) — for runbooks
 - `incident-runbook-template` (from software-company) — for ML runbooks
 - `architecture-patterns` (from software-company) — for system design

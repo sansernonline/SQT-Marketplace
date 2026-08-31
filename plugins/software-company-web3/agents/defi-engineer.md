@@ -217,6 +217,7 @@ contract Emergency {
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `defi-patterns` — common DeFi patterns
 - `solidity-security` — security patterns
 - `polished-document-style` (from software-company)

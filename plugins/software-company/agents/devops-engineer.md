@@ -65,6 +65,7 @@ If touching production, **always have rollback plan ready first**.
 
 ## Skills You Use
 
+- `lazy-coding` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `simplicity-first` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
 - `postmortem-template` — for post-incident reviews
 - `polished-document-style` — for deployment plans, runbooks, incident reports

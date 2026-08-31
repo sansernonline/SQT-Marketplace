@@ -1,0 +1,118 @@
+<!--
+  FluentTokens.axaml — Avalonia 11 (และใช้แนวเดียวกันได้กับ .NET MAUI)
+  โทเคนชุดเดียวกับ assets/fluent.css
+
+  วิธีใช้ใน App.axaml:
+    <Application.Styles>
+      <FluentTheme />
+    </Application.Styles>
+    <Application.Resources>
+      <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+          <ResourceInclude Source="avares://YourApp/Assets/FluentTokens.axaml"/>
+        </ResourceDictionary.MergedDictionaries>
+      </ResourceDictionary>
+    </Application.Resources>
+
+  ต่างจาก WinUI ตรงที่ Avalonia ใช้ key ธีมว่า "Default" / "Light" / "Dark"
+  และคอนโทรลของ FluentTheme อ่าน key คนละชื่อกับ WinUI — key ที่ override
+  ของมาตรฐานได้จริงคือชุด SystemAccentColor* ด้านล่าง
+-->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.ThemeDictionaries>
+
+    <!-- ================= DARK ================= -->
+    <ResourceDictionary x:Key="Dark">
+      <Color x:Key="SystemAccentColor">#4CC2FF</Color>
+      <Color x:Key="SystemAccentColorLight1">#66CDFF</Color>
+      <Color x:Key="SystemAccentColorLight2">#99EBFF</Color>
+
+      <SolidColorBrush x:Key="AppBackgroundBrush"    Color="#000000"/>
+      <SolidColorBrush x:Key="AppLayerBrush"         Color="#000000"/>
+      <SolidColorBrush x:Key="AppCardBrush"          Color="#0F0F0F"/>
+      <SolidColorBrush x:Key="AppCardSecondaryBrush" Color="#1C1C1C"/>
+      <SolidColorBrush x:Key="AppDividerBrush"       Color="#2D2D2D"/>
+
+      <SolidColorBrush x:Key="AppTextBrush"          Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#CCCCCC"/>
+      <SolidColorBrush x:Key="AppTextTertiaryBrush"  Color="#8B8B8B"/>
+
+      <SolidColorBrush x:Key="AppAccentBrush"     Color="#4CC2FF"/>
+      <SolidColorBrush x:Key="AppAccentTextBrush" Color="#99EBFF"/>
+      <SolidColorBrush x:Key="AppOnAccentBrush"   Color="#000000"/>
+
+      <SolidColorBrush x:Key="AppControlBrush"        Color="#333333"/>
+      <SolidColorBrush x:Key="AppControlHoverBrush"   Color="#3D3D3D"/>
+      <SolidColorBrush x:Key="AppSubtleHoverBrush"    Color="#1A1A1A"/>
+      <SolidColorBrush x:Key="AppSubtleSelectedBrush" Color="#0F0F0F"/>
+
+      <SolidColorBrush x:Key="AppSuccessBrush"    Color="#6CCB5F"/>
+      <SolidColorBrush x:Key="AppSuccessBgBrush"  Color="#393D1B"/>
+      <SolidColorBrush x:Key="AppCautionBrush"    Color="#FCE100"/>
+      <SolidColorBrush x:Key="AppCautionBgBrush"  Color="#433519"/>
+      <SolidColorBrush x:Key="AppCriticalBrush"   Color="#FF99A4"/>
+      <SolidColorBrush x:Key="AppCriticalBgBrush" Color="#442726"/>
+      <SolidColorBrush x:Key="AppInfoBrush"       Color="#60CDFF"/>
+      <SolidColorBrush x:Key="AppInfoBgBrush"     Color="#2E2E2E"/>
+    </ResourceDictionary>
+
+    <!-- ================= LIGHT (และ Default) ================= -->
+    <ResourceDictionary x:Key="Light">
+      <Color x:Key="SystemAccentColor">#005FB8</Color>
+      <Color x:Key="SystemAccentColorDark1">#1A6EC0</Color>
+      <Color x:Key="SystemAccentColorDark2">#003E92</Color>
+
+      <SolidColorBrush x:Key="AppBackgroundBrush"    Color="#F3F3F3"/>
+      <SolidColorBrush x:Key="AppLayerBrush"         Color="#F9F9F9"/>
+      <SolidColorBrush x:Key="AppCardBrush"          Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="AppCardSecondaryBrush" Color="#F6F6F6"/>
+      <SolidColorBrush x:Key="AppDividerBrush"       Color="#E5E5E5"/>
+
+      <SolidColorBrush x:Key="AppTextBrush"          Color="#1A1A1A"/>
+      <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#5D5D5D"/>
+      <SolidColorBrush x:Key="AppTextTertiaryBrush"  Color="#8B8B8B"/>
+
+      <SolidColorBrush x:Key="AppAccentBrush"     Color="#005FB8"/>
+      <SolidColorBrush x:Key="AppAccentTextBrush" Color="#003E92"/>
+      <SolidColorBrush x:Key="AppOnAccentBrush"   Color="#FFFFFF"/>
+
+      <SolidColorBrush x:Key="AppControlBrush"        Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="AppControlHoverBrush"   Color="#F9F9F9"/>
+      <SolidColorBrush x:Key="AppSubtleHoverBrush"    Color="#F5F5F5"/>
+      <SolidColorBrush x:Key="AppSubtleSelectedBrush" Color="#EFEFEF"/>
+
+      <SolidColorBrush x:Key="AppSuccessBrush"    Color="#0F7B0F"/>
+      <SolidColorBrush x:Key="AppSuccessBgBrush"  Color="#DFF6DD"/>
+      <SolidColorBrush x:Key="AppCautionBrush"    Color="#9D5D00"/>
+      <SolidColorBrush x:Key="AppCautionBgBrush"  Color="#FFF4CE"/>
+      <SolidColorBrush x:Key="AppCriticalBrush"   Color="#C42B1C"/>
+      <SolidColorBrush x:Key="AppCriticalBgBrush" Color="#FDE7E9"/>
+      <SolidColorBrush x:Key="AppInfoBrush"       Color="#005FB8"/>
+      <SolidColorBrush x:Key="AppInfoBgBrush"     Color="#F4F9FF"/>
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+  <!-- ================= ค่าที่ไม่ขึ้นกับธีม ================= -->
+  <x:Double x:Key="NavPaneOpenWidth">320</x:Double>
+  <x:Double x:Key="ContentMaxWidth">1064</x:Double>
+  <x:Double x:Key="TitleBarHeight">48</x:Double>
+
+  <CornerRadius x:Key="ControlCornerRadiusApp">4</CornerRadius>
+  <CornerRadius x:Key="CardCornerRadius">8</CornerRadius>
+  <Thickness   x:Key="CardPadding">16</Thickness>
+
+  <!-- Type ramp (Avalonia ไม่มี ramp มาให้ ต้องประกาศเอง) -->
+  <x:Double x:Key="FontSizeCaption">12</x:Double>
+  <x:Double x:Key="FontSizeBody">14</x:Double>
+  <x:Double x:Key="FontSizeBodyLarge">18</x:Double>
+  <x:Double x:Key="FontSizeSubtitle">20</x:Double>
+  <x:Double x:Key="FontSizeTitle">28</x:Double>
+  <x:Double x:Key="FontSizeTitleLarge">40</x:Double>
+
+  <!-- ฟอนต์: บน Linux/macOS ต้อง fallback เอง Avalonia ไม่ทำให้ -->
+  <FontFamily x:Key="AppFontFamily">Segoe UI Variable Text, Segoe UI, Noto Sans Thai, Inter, sans-serif</FontFamily>
+
+</ResourceDictionary>

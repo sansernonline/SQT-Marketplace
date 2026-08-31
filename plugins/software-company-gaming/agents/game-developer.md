@@ -261,6 +261,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-architecture` — engine + system design
 - `polished-document-style` (from software-company) — for design docs
 

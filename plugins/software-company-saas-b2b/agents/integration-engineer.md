@@ -211,6 +211,7 @@ try {
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `enterprise-integration` — patterns for common integrations
 - `polished-document-style` (from software-company) — for integration docs
 

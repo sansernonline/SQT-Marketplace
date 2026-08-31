@@ -218,6 +218,10 @@ let products = try modelContext.fetch(descriptor)
 - ❌ Skip iPad if claiming "Universal"
 - ❌ Hardcode strings (localization)
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - Android version → `android-engineer`

@@ -1,6 +1,6 @@
 # 📦 Plugins ใน SQT Marketplace
 
-ทั้งหมด **6 plugins** — เลือกติดตั้งตามอุตสาหกรรม
+ทั้งหมด **14 plugins** — core 1 ตัว + add-on ตามอุตสาหกรรม 13 ตัว
 
 ---
 
@@ -9,7 +9,7 @@
 Plugin หลัก — จำลองทีมพัฒนาซอฟต์แวร์ครบ SDLC
 
 ### มีอะไรบ้าง
-**12 agents · 14 skills · 15 commands**
+**12 agents · 24 skills · 15 commands**
 
 Agents: product-manager, project-manager, business-analyst, solution-architect, system-analyst, ux-designer, developer, qa-tester, devops-engineer, security-engineer, technical-writer, seo-specialist
 
@@ -162,6 +162,224 @@ Gaming — game dev, multiplayer, design, live ops
 
 ---
 
+## 🌐 `software-company-iot` (Add-on)
+
+IoT — edge computing, firmware, device fleet
+
+### มีอะไรบ้าง
+**4 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| edge-architect | device-fleet-management | /device-fleet-design |
+| firmware-engineer | edge-computing-architecture | /iot-architecture |
+| iot-engineer | mqtt-protocol-patterns |  |
+| mqtt-specialist |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-iot@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ โรงงาน/อุตสาหกรรมที่มีเซนเซอร์จำนวนมาก
+- ✅ Smart home / smart building
+- ✅ Fleet ของอุปกรณ์ที่ต้อง OTA update
+- ✅ ระบบที่ต้องประมวลผลที่ edge
+
+---
+
+## 🔒 `software-company-cybersecurity` (Add-on)
+
+Cybersecurity — SOC, threat hunting, incident response
+
+### มีอะไรบ้าง
+**4 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| incident-responder | security-incident-response | /soc-design |
+| security-architect | soc-operations | /threat-hunt |
+| soc-analyst | threat-detection-patterns |  |
+| threat-hunter |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-cybersecurity@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ ทีม SOC / Blue team
+- ✅ องค์กรที่ต้องทำ threat detection เอง
+- ✅ ระบบที่ต้องรับมือ incident บ่อย
+- ✅ งานที่ต้องออกแบบ security architecture
+
+---
+
+## 🏢 `software-company-saas-b2b` (Add-on)
+
+SaaS B2B — multi-tenancy, billing, enterprise integration
+
+### มีอะไรบ้าง
+**4 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| customer-success-engineer | enterprise-integration | /integration-design |
+| integration-engineer | multi-tenancy-patterns | /saas-architecture-review |
+| revops-analyst | subscription-billing |  |
+| saas-architect |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-saas-b2b@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ ผลิตภัณฑ์ SaaS ที่ขายองค์กร
+- ✅ ระบบที่ต้องแยก tenant
+- ✅ Subscription billing / usage-based pricing
+- ✅ ต้องเชื่อมระบบลูกค้าองค์กร (SSO, SCIM, webhook)
+
+---
+
+## 🔧 `software-company-devtools` (Add-on)
+
+Developer tools — SDK, DX, DevRel, technical content
+
+### มีอะไรบ้าง
+**4 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| devrel-engineer | developer-experience | /dx-audit |
+| docs-engineer | sdk-design-patterns | /sdk-design |
+| dx-engineer | technical-content |  |
+| sdk-builder |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-devtools@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ บริษัทที่ขาย API/SDK
+- ✅ ทีม DevRel
+- ✅ งานที่ต้องเขียน docs ให้นักพัฒนาอ่าน
+- ✅ ปรับ onboarding ของนักพัฒนาให้เร็วขึ้น
+
+---
+
+## 📱 `software-company-mobile` (Add-on)
+
+Mobile — iOS, Android, cross-platform, ASO
+
+### มีอะไรบ้าง
+**4 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| android-engineer | app-store-optimization | /aso-audit |
+| aso-specialist | mobile-architecture-patterns | /mobile-architecture |
+| cross-platform-engineer | mobile-performance |  |
+| ios-engineer |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-mobile@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ แอปมือถือ native หรือ cross-platform
+- ✅ ทีมที่ต้องดูแลทั้ง 2 store
+- ✅ งานปรับ performance บนมือถือ
+- ✅ ต้องทำ App Store Optimization
+
+---
+
+## 🌐 `software-company-web3` (Add-on)
+
+Web3 — smart contracts, DeFi, tokenomics
+
+### มีอะไรบ้าง
+**4 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| blockchain-architect | defi-patterns | /smart-contract-audit |
+| defi-engineer | smart-contract-testing | /tokenomics-design |
+| smart-contract-developer | solidity-security |  |
+| tokenomics-designer |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-web3@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ โปรเจกต์ on-chain
+- ✅ DeFi protocol
+- ✅ งานที่ต้อง audit smart contract
+- ✅ ออกแบบ token economy
+
+---
+
+## ⚖️ `software-company-legaltech` (Add-on)
+
+LegalTech — contract analysis, e-signature, document automation
+
+### มีอะไรบ้าง
+**5 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| contract-analyzer | contract-parsing-patterns | /contract-analysis-design |
+| document-automation-engineer | document-automation-patterns | /esignature-audit |
+| e-signature-specialist | e-signature-compliance |  |
+| legal-compliance-officer |  |  |
+| legaltech-engineer |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-legaltech@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ ระบบจัดการสัญญา
+- ✅ e-Signature ที่ต้องอ้างอิงกฎหมาย
+- ✅ งาน document automation
+- ✅ ทีม compliance ด้านกฎหมาย
+
+---
+
+## 🛡️ `software-company-insurtech` (Add-on)
+
+InsurTech — claims, underwriting, actuarial
+
+### มีอะไรบ้าง
+**5 agents · 3 skills · 2 commands**
+
+| Agents | Skills | Commands |
+|--------|--------|----------|
+| actuarial-engineer | claims-workflow-patterns | /claims-flow-design |
+| claims-processing-specialist | insurance-compliance | /underwriting-model-design |
+| insurance-compliance-officer | underwriting-models |  |
+| insurance-engineer |  |  |
+| underwriting-analyst |  |  |
+
+### ติดตั้ง
+```
+/plugin install software-company-insurtech@sqt-marketplace
+```
+
+### เหมาะกับ
+- ✅ บริษัทประกัน / โบรกเกอร์
+- ✅ ระบบเคลม
+- ✅ โมเดล underwriting และคำนวณเบี้ย
+- ✅ งาน compliance ของธุรกิจประกัน
+
+---
+
 ## 🎯 ติดตั้งชุดไหนดี
 
 ```
@@ -183,10 +401,10 @@ Startup ทดลอง (เลือกทีหลัง)        → core เ�
 ## 📊 Marketplace Total
 
 ```
-6 plugins
-33 agents (12 core + 21 add-on)
-29 skills (14 core + 15 add-on)
-25 commands (15 core + 10 add-on)
+14 plugins
+67 agents (12 core + 55 add-on)
+63 skills (24 core + 39 add-on)
+41 commands (15 core + 26 add-on)
 ```
 
 ## 🔄 อัปเดต Plugins
@@ -233,7 +451,7 @@ Plugins add-on **อ้างอิง shared skills** จาก software-compan
 
 ```
 software-company-fintech / healthcare / ecommerce / gaming / ai
-  └── ทุก agent + command → ใช้ polished-document-style skill
+  └── ทุก agent + command → ใช้ polished-document-style + branded-document-design
                                          ↓
                                 ⚠️ skill นี้อยู่ใน software-company
 ```

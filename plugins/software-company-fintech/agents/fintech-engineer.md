@@ -81,6 +81,7 @@ NEVER go backwards (except via reversal record)
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `payment-gateway-integration` — when integrating Stripe, Adyen, Omise, etc.
 - `pci-dss-compliance` — when handling card data
 - `kyc-aml-patterns` — when verifying customer identity

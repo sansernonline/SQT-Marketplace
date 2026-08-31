@@ -35,7 +35,7 @@ claude
 
 ใน Claude Code prompt พิมพ์:
 ```
-/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace
+/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace
 ```
 
 ระบบจะตอบกลับว่าเพิ่ม marketplace สำเร็จ
@@ -66,7 +66,7 @@ claude
 
 ```bash
 # ใน project ที่ต้องการใช้
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/." ".claude/"
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/." ".claude/"
 ```
 
 โครงสร้างที่ได้:
@@ -84,9 +84,9 @@ your-project/
 mkdir -p ~/.claude/agents ~/.claude/skills ~/.claude/commands
 
 # Windows (Git Bash)
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/agents/." ~/.claude/agents/
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/skills/." ~/.claude/skills/
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace/plugins/software-company/commands/." ~/.claude/commands/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/agents/." ~/.claude/agents/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/skills/." ~/.claude/skills/
+cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/commands/." ~/.claude/commands/
 ```
 
 **ข้อเสีย:** อัปเดตทีหลังต้อง copy ทับเอง
@@ -207,5 +207,5 @@ Claude ควรเรียก skill `user-story-writer` มาใช้อั�
 ### Path บน Windows มีช่องว่าง
 - ใส่ quotation marks รอบ path:
   ```
-  /plugin marketplace add "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace"
+  /plugin marketplace add "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace"
   ```

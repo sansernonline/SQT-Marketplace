@@ -18,6 +18,11 @@ description: Use when producing stakeholder-facing or human-readable documents (
 - Quick scratch notes
 - Code comments / inline docs
 
+> ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
+> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
+> `branded-document-design` on top of it — that skill carries the design tokens,
+> the typography scale, Thai typography rules, and the `brandkit.py` builder.
+
 ---
 
 ## Document Header (Always)

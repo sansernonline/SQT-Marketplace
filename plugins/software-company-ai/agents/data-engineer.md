@@ -235,6 +235,7 @@ for message in consumer:
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `polished-document-style` (from software-company) — for data model docs
 - `architecture-patterns` (from software-company) — for system design
 

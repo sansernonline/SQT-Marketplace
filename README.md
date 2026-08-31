@@ -1,6 +1,6 @@
 # SQT Marketplace — Software Company Plugin Suite
 
-Marketplace สำหรับ Claude Code มี **3 plugins** สำหรับจำลองทีมพัฒนาซอฟต์แวร์ — เลือกติดตั้งตามอุตสาหกรรม
+Marketplace สำหรับ Claude Code มี **14 plugins** สำหรับจำลองทีมพัฒนาซอฟต์แวร์ — เลือกติดตั้งตามอุตสาหกรรม
 
 🔗 **GitHub:** [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
@@ -8,7 +8,7 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 
 | Plugin | Roles | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** ⭐ core | 12 | 14 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
+| **`software-company`** ⭐ core | 12 | 24 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
 | **`software-company-fintech`** 🏦 | 4 | 3 | 2 | บริษัทการเงิน, PCI-DSS, payment |
 | **`software-company-ai`** 🤖 | 5 | 3 | 2 | ทีม AI/ML, LLM, RAG |
 | **`software-company-healthcare`** 🏥 | 4 | 3 | 2 | บริษัท health tech, HIPAA, FHIR |
@@ -23,7 +23,7 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | **`software-company-legaltech`** ⚖️ | 5 | 3 | 2 | Contract analysis, e-signature, legal automation |
 | **`software-company-insurtech`** 🛡️ | 5 | 3 | 2 | Claims, underwriting, actuarial, insurance compliance |
 
-**รวม: 67 agents, 53 skills, 41 commands**
+**รวม: 67 agents, 63 skills, 41 commands** (core 24 skills + add-on 39 skills)
 
 > 💡 **Add-on plugins (fintech/ai/healthcare/ecommerce/gaming) ต้องติดตั้ง `software-company` ก่อน** เพราะใช้ shared skills
 
@@ -74,7 +74,7 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 
 ใน Claude Code prompt:
 ```
-/plugin marketplace add C:/Users/sanse/OneDrive/WORK/_KK/Projects/Test - Sub Agents/SQT-Marketplace
+/plugin marketplace add "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace"
 /plugin install software-company@sqt-marketplace
 ```
 
@@ -113,9 +113,9 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 17 Skills
+### 24 Skills
 
-**Output Templates (11)**
+**Output Templates (13)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `user-story-writer` | เขียน user story ตาม format มาตรฐาน |
@@ -129,6 +129,14 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 | `seo-audit-checklist` | SEO audit ครอบคลุม technical/on-page/content/off-page |
 | `polished-document-style` | format เอกสารสวยงาม (Rich markdown + Mermaid) |
 | `office-document-handling` ⭐ NEW | อ่าน/สร้าง .docx, .xlsx, .pptx, .pdf ผ่าน anthropic-skills |
+| `branded-document-design` ⭐ NEW | .docx/.pptx/.pdf ที่หน้าตาเป็นระบบ (design tokens + brandkit.py) รองรับเอกสารไทย |
+| `markdown-visuals` | ใส่ภาพในเอกสาร markdown (inline SVG / ASCII / Mermaid) แทนการบรรยายด้วยตัวหนังสือ |
+
+**UI / Visual Design (2)**
+| Skill | ใช้เมื่อ |
+|-------|---------|
+| `web-app-design` ⭐ NEW | ทำ UI เว็บแอป (แดชบอร์ด/admin/SaaS) สไตล์ Apps Track — 94 tokens + appstrack.css + mockup + ตัวตรวจ hardcode สี |
+| `windows-app-design` ⭐ NEW | ทำ UI แอป Windows 11 (WinUI 3 / Avalonia / MAUI / Electron-Tauri) — Fluent 2 tokens + mockup template + fluent.css/XAML พร้อมใช้ |
 
 **How-To Patterns (4)**
 | Skill | ใช้เมื่อ |
@@ -143,10 +151,17 @@ Marketplace สำหรับ Claude Code มี **3 plugins** สำหรั�
 |-------|---------|
 | `work-session-context` | บันทึก context สรุปเป็นไฟล์ใน `.claude/context/` หลังทำงานเสร็จ — เปิด session ใหม่จะรู้ทันทีว่าทำอะไรไปแล้ว |
 
-**Universal Quality (1 NEW ⭐)**
+**Universal Quality (3)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
-| `simplicity-first` ⭐ NEW | ทำให้ output ทุกแบบ (code/docs/architecture/plans) **simple ที่สุดที่ work** — junior อ่านเข้าใจใน 6 เดือน. Reject premature abstraction + buzzwords. ใช้ทุก agent. |
+| `simplicity-first` ⭐ | ทำให้ output ทุกแบบ (docs/architecture/plans) **simple ที่สุดที่ work** — junior อ่านเข้าใจใน 6 เดือน. Reject premature abstraction + buzzwords. ใช้ทุก agent |
+| `lazy-coding` | เวลาเขียน/แก้/refactor โค้ด — YAGNI ก่อน แล้วค่อยใช้ stdlib/native ก่อนเขียนเอง |
+| `targeted-fix` | มี error / test fail / regression — หาจุดที่ผิดจริงแล้วแก้ให้เล็กที่สุด ไม่รื้อทั้งไฟล์ |
+
+**Chat Mode (1)**
+| Skill | ใช้เมื่อ |
+|-------|---------|
+| `caveman` | อยากให้ตอบสั้น — ตัดคำ 50–75% แต่ข้อมูลเทคนิคและโค้ดครบเท่าเดิม |
 
 ### 15 Slash Commands
 
@@ -202,7 +217,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 agents)
-│       ├── skills/         (17 skills)
+│       ├── skills/         (24 skills)
 │       └── commands/       (15 commands)
 ├── docs/
 │   ├── INSTALL.md

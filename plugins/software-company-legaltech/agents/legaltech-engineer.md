@@ -207,6 +207,7 @@ async function checkRetention() {
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `contract-parsing-patterns` — for contract analysis
 - `e-signature-compliance` — for signing systems
 - `polished-document-style` (from software-company)

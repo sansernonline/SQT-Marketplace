@@ -291,6 +291,10 @@ GET <content-location-url>
 - ❌ Mix demographics with clinical data in custom shapes
 - ❌ Use FHIR for high-throughput non-healthcare data
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - Backend storage architecture → `solution-architect` (from software-company)

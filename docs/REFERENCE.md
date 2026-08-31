@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (17)
+## 🛠️ Skills (24)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -315,6 +315,60 @@
 **Output:** N/A — this is a quality filter
 **Core Test:** "Could a tired junior teammate understand this in 6 months, at 3 AM during an incident?" If no → simplify.
 **Includes:** 5 universal principles, by-output-type guidance (code/docs/architecture/plans/designs), 3-question filter for new abstractions, common anti-patterns (resume-driven design, future-proofing, premature DRY, etc.), pre-submit checklist
+
+---
+
+### 18. branded-document-design ⭐ NEW
+**ใช้กับ:** technical-writer, business-analyst, system-analyst, product-manager, project-manager, ux-designer (ทุก agent ที่ต้องส่งไฟล์ให้ลูกค้าเปิดดู)
+**Output:** .docx / .pptx / .pdf ที่มีระบบสี ระบบขนาดตัวอักษร และช่องไฟสม่ำเสมอทั้งฉบับ
+**Includes:** Design tokens (สกัดจาก Apps Track), typography scale, กฎ typography ภาษาไทย (กับดัก complex script), `scripts/brandkit.py` + `scripts/brandkit_pptx.py` ที่ทำหน้าปก/ตารางแบรนด์/KPI strip/callout/status pill/คำบรรยายรูป/footer ให้พร้อม, loop ตรวจงานด้วยการ render เป็นภาพแล้วดูจริง
+**คู่กับ:** `polished-document-style` (คุมเนื้อหา markdown) — skill นี้คุมหน้าตาไฟล์ที่ render ออกมา
+
+---
+
+### 19. markdown-visuals
+**ใช้กับ:** ux-designer, solution-architect, system-analyst, technical-writer
+**Output:** เอกสาร markdown ที่มีภาพจริง ไม่ใช่คำบรรยาย
+**Covers:** decision tree เลือกฟอร์แมต (inline SVG / ASCII / Mermaid / ไฟล์รูป), boilerplate SVG, wireframe + UI state, สถาปัตยกรรม
+
+---
+
+### 20. lazy-coding
+**ใช้กับ:** developer, devops-engineer (ทุกครั้งที่เขียน/แก้/refactor โค้ด)
+**Output:** N/A — quality filter สำหรับโค้ด
+**Core Test:** "จำเป็นต้องมีสิ่งนี้ไหม" (YAGNI) → stdlib ก่อน → native platform ก่อน → ค่อยเขียนเอง
+
+---
+
+### 21. targeted-fix
+**ใช้กับ:** developer, qa-tester
+**Output:** การแก้ที่เล็กที่สุดที่ตรงจุด
+**Use when:** error message, stack trace, failing test, regression, "ไม่ใช่ที่ขอ"
+
+---
+
+### 22. caveman
+**ใช้กับ:** ทุก agent เมื่อผู้ใช้ขอให้ตอบสั้น
+**Output:** คำตอบที่สั้นลง 50–75% โดยข้อมูลเทคนิค/term/โค้ดครบเท่าเดิม
+**Trigger:** "caveman", "be brief", "less tokens"
+
+---
+
+### 23. windows-app-design ⭐ NEW
+**ใช้กับ:** ux-designer, developer (งาน UI แอปเดสก์ท็อป Windows)
+**Stack ที่รองรับ:** WinUI 3 / Windows App SDK · Avalonia 11 · .NET MAUI · Electron / Tauri / WebView2
+**Output:** HTML mockup ก่อน แล้วค่อยเป็นโค้ด style จริง (`fluent.css` / `FluentTokens.xaml` / `FluentTokens.axaml`)
+**Includes:** Fluent 2 design tokens ที่วัดจาก Windows 11 จริง (สี light/dark, type ramp, ระยะ, มุม, ขนาด NavigationView, breakpoints), ตารางเทียบ token ข้ามสแต็ก, กฎ typography ภาษาไทยบน Segoe UI Variable, `scripts/screenshot.py` สำหรับเรนเดอร์ตรวจทั้งโหมดมืด/สว่างและทุกความกว้างหน้าต่าง
+**Anti-patterns ที่กันไว้:** ระบายพื้น accent ทั้งแถวเมนู, มุมโค้ง 12–16px, เงาใต้การ์ด, `alert()`, ทำเฉพาะโหมดมืด
+
+---
+
+### 24. web-app-design ⭐ NEW
+**ใช้กับ:** ux-designer, developer (งาน UI เว็บแอป — แดชบอร์ด, admin panel, เครื่องมือภายใน, SaaS)
+**เฟรมเวิร์ก:** Angular · React · Vue · Svelte · HTML เปล่า (เป็น CSS ล้วน ไม่ผูกเฟรมเวิร์ก)
+**Output:** HTML mockup ก่อน แล้วค่อยเป็นคอมโพเนนต์จริงที่ใช้คลาสเดิม
+**Includes:** ระบบดีไซน์ Apps Track ครบชุด — 94 design tokens (แบรนด์/gradient/พื้นผิว/ตัวอักษร/สีกราฟ/pill 7 โทน/เลย์เอาต์), `assets/appstrack.css` พร้อมคอมโพเนนต์ครบ (app shell, card, KPI stat, table, form, chips, tabs, progress, avatar, markdown, toast, modal), ธีม accent สลับได้ 5 ชุด + sidebar สว่าง/เข้ม, `scripts/check-design-tokens.mjs` ที่ทำให้ CI แดงเมื่อมีใคร hardcode สี, `scripts/screenshot.py` สำหรับตรวจทุกความกว้าง
+**Anti-patterns ที่กันไว้:** `#hex` ในคอมโพเนนต์, gradient บนกราฟ, ปุ่มหลักหลายปุ่มในหน้าเดียว, `overflow-x` ที่ body, `alert()`, `.modal` ที่ไม่ตั้ง position
 
 ---
 

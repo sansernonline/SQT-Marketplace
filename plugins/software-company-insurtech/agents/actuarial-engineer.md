@@ -216,6 +216,7 @@ for scenario_name, shocks in scenarios.items():
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `underwriting-models` — pricing models
 - `polished-document-style` (from software-company)
 

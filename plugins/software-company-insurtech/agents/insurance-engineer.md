@@ -245,6 +245,7 @@ async function processRenewals(daysAhead: number = 60) {
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `claims-workflow-patterns` — for claims integration
 - `insurance-compliance` — for regulatory
 - `polished-document-style` (from software-company)

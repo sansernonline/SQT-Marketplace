@@ -198,6 +198,10 @@ Daily job:
 - ❌ Block webhook processing inline (causes retries)
 - ❌ Build your own gateway
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - PCI compliance documentation → `compliance-officer`

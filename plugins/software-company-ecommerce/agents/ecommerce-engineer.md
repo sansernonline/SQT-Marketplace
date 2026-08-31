@@ -291,6 +291,7 @@ async function updateProduct(slug: string, updates: any) {
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `checkout-optimization` — friction analysis + reduction
 - `inventory-management` — stock control patterns
 - `polished-document-style` (from software-company) — for spec docs

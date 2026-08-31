@@ -284,6 +284,10 @@ return { document: newlyGenerated, changes_from_last: diff };
 - ❌ Provide legal advice
 - ❌ Forget e-signature integration
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - E-signature integration → `e-signature-specialist`

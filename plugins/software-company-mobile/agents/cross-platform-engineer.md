@@ -190,6 +190,10 @@ class MyModule: NSObject {
 - ❌ Pretend cross-platform is free (it costs)
 - ❌ Ignore platform-specific App Store policies
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - iOS deep work → `ios-engineer`

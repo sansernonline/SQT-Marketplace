@@ -160,6 +160,10 @@ extern const i2c_driver_t esp32_i2c;
 - ❌ Skip watchdog feeding
 - ❌ Ship without OTA capability
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - Cloud connectivity → `iot-engineer`

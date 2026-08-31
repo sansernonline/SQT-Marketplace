@@ -183,6 +183,7 @@ for ioc in iocs:
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `threat-detection-patterns` — detection patterns
 - `polished-document-style` (from software-company) — for hunt reports
 

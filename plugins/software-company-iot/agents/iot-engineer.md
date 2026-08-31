@@ -159,6 +159,10 @@ NEVER:
 - ❌ Allow unbounded telemetry rates (DDoS your own service)
 - ❌ Push firmware without rollback path
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - Firmware → `firmware-engineer`

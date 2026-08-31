@@ -64,6 +64,7 @@ If clinical workflow is unclear, **shadow a clinician before designing**.
 
 ## Skills You Use
 
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `hipaa-compliance` — HIPAA safeguards implementation
 - `fhir-implementation` — HL7 FHIR standards
 - `clinical-workflows` — clinical process patterns

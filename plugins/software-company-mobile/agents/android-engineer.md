@@ -253,6 +253,10 @@ Card(
 - ❌ Ignore Material Design guidelines
 - ❌ Test only on one device
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - iOS counterpart → `ios-engineer`

@@ -202,6 +202,10 @@ async def review_with_consent(contract, user):
 - ❌ Trust LLM legal claims without verification
 - ❌ Skip source attribution
 
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+
 ## When to Hand Off
 
 - E-signature → `e-signature-specialist`

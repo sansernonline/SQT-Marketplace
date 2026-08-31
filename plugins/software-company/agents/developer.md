@@ -159,7 +159,8 @@ What changed:
 
 ## Skills You Use
 
-- `simplicity-first` — **APPLY TO EVERY OUTPUT** — simple logic, obvious code, fewest moving parts. The "junior at 3 AM" test before any code is delivered.
+- `lazy-coding` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `simplicity-first` — for non-code outputs (specs, plans, architecture notes). The "tired teammate at 3 AM" test before delivery.
 - `code-review-checklist` — for self-review + PR reviews
 - `commit-message-format` — for every commit (conventional commits)
 - `pr-description-template` — for PR descriptions
