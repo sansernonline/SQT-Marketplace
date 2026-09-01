@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (25)
+## 🛠️ Skills (28)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst
@@ -378,6 +378,35 @@
 **Output:** HTML mockup ที่โชว์เป็นกรอบเครื่อง แล้วค่อยแปลงเป็นโค้ดจริง
 **Includes:** ระบบดีไซน์ Speak Go — 53 tokens ตั้งชื่อตามหน้าที่ (`--repair` ไม่ใช่ `--red`), ระบบฟอนต์ **4 ตระกูล 4 หน้าที่** (UI chrome / ตัวเลขใหญ่ / เนื้อหาที่ต้องอ่านเป็น serif / ป้าย mono), `assets/speakgo.css` พร้อมคอมโพเนนต์ครบ (app shell + tabbar + overlay เต็มจอ, ไทล์ไล่สี, การ์ด, บทสนทนาพร้อมกล่องแก้ไข del/ins, แถบไมค์, หน้าสรุปผล, กลุ่มตั้งค่าแบบ iOS), ธีมเรียบ/ไล่สี, สลับฟอนต์ตามภาษาไทย-อังกฤษ, การจัดการ safe-area + `100dvh`
 **Anti-patterns ที่กันไว้:** `100vh`, ลืม safe-area, แท็บล่างเกิน 5 อัน, modal เล็กสำหรับงานยาว, ยุบฟอนต์เหลือตระกูลเดียว, ไม่มี `:active` feedback
+
+---
+
+### 26. logging-standards ⭐ NEW
+**ใช้กับ:** developer, devops-engineer, solution-architect (ทุกโปรเจกต์ที่เขียนโค้ด)
+**สแต็ก:** .NET (Serilog) · Node/TS (winston) · Python (stdlib logging) · Angular
+**Output:** logger ที่ให้บรรทัดรูปแบบเดียวกันทุกภาษา + ไฟล์ log ที่หมุนและมี retention
+**Includes:** รูปแบบบรรทัดมาตรฐาน (เวลา+timezone / level / correlation id / source / ข้อความ / context k=v), เกณฑ์เลือกระดับ log, การส่งต่อ correlation id ข้าม service, โครงโฟลเดอร์ `logs/` + retention, รายการข้อมูลที่ห้ามลง log + ตัว redact อัตโนมัติ, การกัน log injection
+**โค้ดที่รันทดสอบแล้ว:** `assets/logger.node.js` (winston) · `assets/logger_py.py` (stdlib)
+**Anti-patterns ที่กันไว้:** `console.log` ในโค้ดจริง, catch เงียบ, log แล้ว throw ต่อ, ตัวแปรฝังในข้อความ, timestamp ไม่มี timezone, ไม่มี retention
+
+---
+
+### 27. testing-standards ⭐ NEW
+**ใช้กับ:** developer, qa-tester
+**สแต็ก:** xUnit · Vitest/Jest · pytest · Angular (Vitest หรือ Jasmine/Karma)
+**พิเศษ:** **ขั้นแรกคือถามผู้ใช้ว่าจะใช้ framework ไหน** ไม่เลือกให้เอง (เว้นแต่โปรเจกต์มีอยู่แล้ว)
+**Includes:** พีระมิดและสัดส่วนที่ยั่งยืน, เกณฑ์ว่าอะไรควร/ไม่ควรมี test, coverage ที่ซื่อสัตย์ (70–80% ของ business logic ไม่ใช่ 100%), การตั้งชื่อ `Method_Scenario_Expected`, โครง AAA, การทำให้ผลเหมือนเดิมทุกครั้ง (เวลา/สุ่ม/ลำดับ), integration test ด้วย DB จริง, การต่อ CI
+**Anti-patterns ที่กันไว้:** เขียน test หลังจบงานเพื่อผ่าน gate, assert ว่า "ไม่ throw", test ที่พึ่ง test ก่อนหน้า, `sleep` รอ async, retry flaky จนเขียว, ไล่ coverage 100%
+
+---
+
+### 28. web-service-essentials ⭐ NEW
+**ใช้กับ:** developer, solution-architect, devops-engineer (ทุก service/API)
+**สแต็ก:** ASP.NET Core · Node/Express · Python/FastAPI · Angular (ฝั่งเรียกใช้)
+**Output:** endpoint พื้นฐาน 4 ตัว + รูปแบบ error ที่เหมือนกันทั้งระบบ
+**Includes:** `/ping` `/health/live` `/health/ready` `/version` พร้อมรูปร่าง response ที่ตรงกันทุกภาษา, สามสถานะ up/degraded/down, timeout ของทุก check, error envelope ตาม RFC 9457, การส่งต่อ `X-Request-Id`, graceful shutdown, รายการที่ต้องมีก่อน deploy (timeout, ขนาด body, CORS, rate limit, security headers)
+**โค้ดที่รันทดสอบแล้ว:** `assets/health.node.js` · `assets/health_py.py` (ทดสอบครบทั้งเคสปกติ/degraded/down/timeout)
+**Anti-patterns ที่กันไว้:** liveness เช็ค DB (ทำให้ Kubernetes ฆ่า pod ยกแถว), `/health` ตัวเดียวเช็คทุกอย่าง, health ไม่มี timeout, ส่ง stack trace ออก endpoint สาธารณะ, `/ping` เขียนลง log
 
 ---
 

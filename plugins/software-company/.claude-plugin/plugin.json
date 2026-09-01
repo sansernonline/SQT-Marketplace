@@ -1,6 +1,6 @@
 {
   "name": "software-company",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Simulates a complete software development company with PM, BA, SA, Architect, UX, Developer, Tester, and DevOps roles. Includes specialized skills and slash commands for common SDLC workflows.",
   "author": {
     "name": "Your Name"

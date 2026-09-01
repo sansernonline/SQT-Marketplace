@@ -8,7 +8,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 
 | Plugin | Roles | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** ⭐ core | 12 | 25 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
+| **`software-company`** ⭐ core | 12 | 28 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
 | **`software-company-fintech`** 🏦 | 4 | 3 | 2 | บริษัทการเงิน, PCI-DSS, payment |
 | **`software-company-ai`** 🤖 | 5 | 3 | 2 | ทีม AI/ML, LLM, RAG |
 | **`software-company-healthcare`** 🏥 | 4 | 3 | 2 | บริษัท health tech, HIPAA, FHIR |
@@ -23,7 +23,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | **`software-company-legaltech`** ⚖️ | 5 | 3 | 2 | Contract analysis, e-signature, legal automation |
 | **`software-company-insurtech`** 🛡️ | 5 | 3 | 2 | Claims, underwriting, actuarial, insurance compliance |
 
-**รวม: 67 agents, 64 skills, 41 commands** (core 25 skills + add-on 39 skills)
+**รวม: 67 agents, 67 skills, 41 commands** (core 28 skills + add-on 39 skills)
 
 > 💡 **Add-on plugins (fintech/ai/healthcare/ecommerce/gaming) ต้องติดตั้ง `software-company` ก่อน** เพราะใช้ shared skills
 
@@ -113,7 +113,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 25 Skills
+### 28 Skills
 
 **Output Templates (13)**
 | Skill | ใช้เมื่อ |
@@ -139,7 +139,14 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `web-app-design` ⭐ NEW | ทำ UI เว็บแอป (แดชบอร์ด/admin/SaaS) สไตล์ Apps Track — 94 tokens + appstrack.css + mockup + ตัวตรวจ hardcode สี |
 | `windows-app-design` ⭐ NEW | ทำ UI แอป Windows 11 (WinUI 3 / Avalonia / MAUI / Electron-Tauri) — Fluent 2 tokens + mockup template + fluent.css/XAML พร้อมใช้ |
 
-**How-To Patterns (4)**
+**Engineering Baseline (3)** ⭐ NEW
+| Skill | ใช้เมื่อ |
+|-------|---------|
+| `logging-standards` ⭐ NEW | เขียนโค้ดที่ต้องมี log — รูปแบบบรรทัดเดียวกันทุกภาษา, ไฟล์หมุนรายวัน, correlation id, ปิดข้อมูลลับ |
+| `testing-standards` ⭐ NEW | วาง unit/integration test — **ถามก่อนว่าจะใช้ framework ไหน** แล้วค่อยเขียน |
+| `web-service-essentials` ⭐ NEW | ทำ service/API — ping, health/live, health/ready, version, error envelope, graceful shutdown |
+
+**How-To Patterns (4)
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `auth-implementation-patterns` ⭐ | implement auth (session/JWT/OAuth/MFA/password) |
@@ -218,7 +225,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 agents)
-│       ├── skills/         (25 skills)
+│       ├── skills/         (28 skills)
 │       └── commands/       (15 commands)
 ├── docs/
 │   ├── INSTALL.md
