@@ -74,7 +74,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 
 ใน Claude Code prompt:
 ```
-/plugin marketplace add "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace"
+/plugin marketplace add "C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace"
 /plugin install software-company@sqt-marketplace
 ```
 
