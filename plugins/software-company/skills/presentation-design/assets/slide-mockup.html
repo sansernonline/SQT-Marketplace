@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<title>Slide layouts</title>
+<style>
+:root{
+  --ink:#333B4A; --body:#414957; --mute:#7D8492; --faint:#A9AEB9;
+  --brand:#2A78D6; --brand-deep:#2A4C86; --tint:#EDF1FB;
+  --line:#E4E7EE; --page:#FFFFFF;
+  --good:#1F8A5B; --warn:#B07B00; --bad:#C0392B;
+  --pad:64px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#9AA1AE;font-family:Tahoma,Arial,sans-serif;padding:24px;display:flex;flex-direction:column;gap:24px;align-items:center}
+.slide{width:1280px;height:720px;background:var(--page);position:relative;
+  padding:var(--pad);display:flex;flex-direction:column;overflow:hidden}
+.eyebrow{font-size:16px;color:var(--mute);letter-spacing:.04em;margin-bottom:10px}
+h1{font-size:54px;line-height:1.2;color:var(--ink);font-weight:bold;letter-spacing:-.01em}
+h2{font-size:34px;line-height:1.3;color:var(--ink);font-weight:bold}
+.sub{font-size:22px;line-height:1.55;color:var(--body);margin-top:18px;max-width:20em}
+.foot{position:absolute;left:var(--pad);right:var(--pad);bottom:28px;display:flex;
+  justify-content:space-between;font-size:14px;color:var(--faint);
+  border-top:1px solid var(--line);padding-top:12px}
+.rule{flex:none;width:72px;height:4px;background:var(--brand);margin:22px 0 0}
+.body{flex:1;display:flex;gap:40px;margin-top:28px;min-height:0}
+ul{list-style:none;display:flex;flex-direction:column;gap:20px}
+li{font-size:24px;line-height:1.5;color:var(--body);padding-left:26px;position:relative}
+li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;
+  border-radius:99px;background:var(--brand)}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.stack{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;margin-top:24px}
+.kpis{display:flex;gap:24px}
+.kpi{flex:1;border:1px solid var(--line);border-radius:12px;padding:26px 24px}
+.kpi .n{font-size:46px;line-height:1.1;color:var(--brand-deep);font-weight:bold}
+.kpi .l{font-size:16px;color:var(--mute);margin-top:8px}
+.kpi .d{font-size:15px;margin-top:10px}
+.up{color:var(--good)} .dn{color:var(--bad)}
+.quote{font-size:38px;line-height:1.45;color:var(--ink);max-width:16em}
+.who{font-size:18px;color:var(--mute);margin-top:26px}
+.chartwrap{flex:1;display:flex;flex-direction:column;min-width:0}
+.bars{flex:1;min-height:0;display:flex;align-items:stretch;gap:28px;padding-top:16px}
+.bar{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:10px}
+.bar i{display:block;width:100%;background:#D7DEEA;border-radius:6px 6px 0 0;min-height:4px}
+.bar.hl i{background:var(--brand)}
+.bar span{font-size:16px;color:var(--mute)}
+.bar b{font-size:18px;color:var(--body)}
+.note{margin-top:18px;font-size:19px;color:var(--body);background:var(--tint);
+  border-left:3px solid var(--brand);padding:14px 18px;border-radius:0 8px 8px 0}
+.side{width:300px;border-left:1px solid var(--line);padding-left:32px;align-self:flex-start}
+.side h3{font-size:17px;color:var(--mute);margin-bottom:14px;font-weight:normal}
+.side p{font-size:19px;line-height:1.55;color:var(--body)}
+.divider{flex:1;display:flex;flex-direction:column;justify-content:center;
+  background:var(--brand-deep);margin:calc(var(--pad)*-1);padding:var(--pad)}
+.divider .n{font-size:20px;color:#8FB6E8;margin-bottom:14px}
+.divider h2{color:#fff;font-size:46px}
+/* ใน flex column ต้องมี align-self ไม่งั้น pill ยืดเต็มความกว้าง */
+.tag{align-self:flex-start;display:inline-block;font-size:15px;padding:5px 14px;border-radius:99px;
+  background:var(--tint);color:var(--brand-deep)}
+</style></head><body>
+
+<!-- 1 · ปก -->
+<section class="slide">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="eyebrow">ข้อเสนอโครงการ · กันยายน 2569</div>
+    <h1>ลดเวลาปิดยอดสิ้นเดือน<br>จาก 5 วัน เหลือ 1 วัน</h1>
+    <div class="rule"></div>
+    <div class="sub">ระบบติดตามงานและอนุมัติอัตโนมัติสำหรับฝ่ายคลังสินค้า</div>
+  </div>
+  <div class="foot"><span>Square Tech Solutions</span><span>1</span></div>
+</section>
+
+<!-- 2 · หัวข้อคือข้อสรุป + บูลเล็ต -->
+<section class="slide">
+  <div class="eyebrow">ปัญหา</div>
+  <h2>งานค้างที่ขั้นอนุมัติ ไม่ใช่ที่การบันทึกข้อมูล</h2>
+  <div class="body">
+    <div class="col">
+      <ul>
+        <li>ใบขอซื้อรออนุมัติเฉลี่ย <b>3.2 วัน</b> จากทั้งหมด 5 วัน</li>
+        <li>ผู้อนุมัติไม่รู้ว่ามีงานรออยู่จนกว่าจะเปิดระบบเอง</li>
+        <li>ไม่มีใครเห็นภาพรวมว่าค้างอยู่ที่ใคร</li>
+      </ul>
+    </div>
+    <div class="side">
+      <h3>ที่มาของตัวเลข</h3>
+      <p>บันทึกระบบเดิม 1 ม.ค. – 31 ส.ค. 2569 จำนวน 4,182 ใบ</p>
+    </div>
+  </div>
+  <div class="foot"><span>ปัญหา</span><span>4</span></div>
+</section>
+
+<!-- 3 · ตัวเลข -->
+<section class="slide">
+  <div class="eyebrow">ผลที่คาดว่าจะได้ · 12 เดือนแรก</div>
+  <h2>คืนทุนภายในไตรมาสที่สาม</h2>
+  <div class="stack">
+  <div class="kpis">
+    <div class="kpi"><div class="n">1 วัน</div><div class="l">เวลาปิดยอด</div><div class="d up">▼ จาก 5 วัน</div></div>
+    <div class="kpi"><div class="n">312 ชม.</div><div class="l">เวลาทำงานที่ประหยัดได้ต่อปี</div><div class="d up">▲ 4 คนเต็มเวลา 1 เดือน</div></div>
+    <div class="kpi"><div class="n">0</div><div class="l">ใบที่ค้างเกิน 2 วัน</div><div class="d up">▼ จาก 148 ใบ</div></div>
+  </div>
+  <div class="note" style="margin-top:28px">ตัวเลขคิดจากอัตราค่าแรงจริงของฝ่ายคลัง ไม่รวมมูลค่าจากการลดของขาดสต๊อก</div>
+  </div>
+  <div class="foot"><span>ผลที่คาดว่าจะได้</span><span>9</span></div>
+</section>
+
+<!-- 4 · กราฟ + ข้อสรุป -->
+<section class="slide">
+  <div class="eyebrow">เวลาที่ใช้ในแต่ละขั้น · เฉลี่ยต่อใบ</div>
+  <h2>ขั้นอนุมัติกินเวลาสองในสามของทั้งหมด</h2>
+  <div class="body">
+    <div class="chartwrap">
+      <div class="bars">
+        <div class="bar"><b>0.4 วัน</b><i style="height:12%"></i><span>บันทึก</span></div>
+        <div class="bar"><b>0.6 วัน</b><i style="height:18%"></i><span>ตรวจสอบ</span></div>
+        <div class="bar hl"><b>3.2 วัน</b><i style="height:96%"></i><span>อนุมัติ</span></div>
+        <div class="bar"><b>0.8 วัน</b><i style="height:24%"></i><span>จัดของ</span></div>
+      </div>
+    </div>
+    <div class="side">
+      <h3>อ่านกราฟนี้ยังไง</h3>
+      <p>แท่งสีน้ำเงินคือขั้นที่เราจะแก้ อีกสามขั้นเร็วอยู่แล้ว การเพิ่มคนในขั้นอื่นไม่ช่วยอะไร</p>
+    </div>
+  </div>
+  <div class="foot"><span>ปัญหา</span><span>5</span></div>
+</section>
+
+<!-- 5 · คั่นบท -->
+<section class="slide">
+  <div class="divider">
+    <div class="n">ส่วนที่ 3 จาก 4</div>
+    <h2>แผนการทำงานและกำหนดส่ง</h2>
+  </div>
+</section>
+
+<!-- 6 · ข้อความเดียว -->
+<section class="slide">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <span class="tag">สิ่งที่ขออนุมัติวันนี้</span>
+    <div class="quote" style="margin-top:28px">เริ่มเฟสแรกเดือนตุลาคม<br>ด้วยงบ 1 ทีม 3 เดือน</div>
+    <div class="who">ตัดสินใจภายใน 26 ก.ย. เพื่อให้ทันปิดยอดรอบธันวาคม</div>
+  </div>
+  <div class="foot"><span>ข้อเสนอ</span><span>18</span></div>
+</section>
+
+</body></html>

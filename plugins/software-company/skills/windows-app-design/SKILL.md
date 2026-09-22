@@ -184,3 +184,12 @@ python scripts/screenshot.py mockup.html out/ --width 600     # Small
 | กราฟในแดชบอร์ด | `markdown-visuals` (ออกแบบ) แล้ว render เป็น SVG |
 | เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
 | เลือกสถาปัตยกรรมแอป | `architecture-patterns` |
+| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
+| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`

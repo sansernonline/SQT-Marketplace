@@ -402,7 +402,11 @@ Before delivering any polished doc:
 
 ---
 
+> ไดอะแกรมในเอกสาร: ชนิดไหนตอบคำถามไหน และธีม Mermaid ชุดเดียวกันทั้งโปรเจกต์
+> อยู่ใน `software-diagrams` · เอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
+
 ## Anti-patterns
+
 
 - ❌ **Emoji spam** — emoji in every heading just for decoration
 - ❌ **All emoji, no labels** — `🔴 High` reads better than `🔴` alone
@@ -412,3 +416,10 @@ Before delivering any polished doc:
 - ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
 - ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
 - ❌ **Skipping the cover block** — readers need version/status/date
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`

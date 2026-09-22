@@ -8,7 +8,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 
 | Plugin | Roles | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** ⭐ core | 12 | 28 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
+| **`software-company`** ⭐ core | 12 | 34 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
 | **`software-company-fintech`** 🏦 | 4 | 3 | 2 | บริษัทการเงิน, PCI-DSS, payment |
 | **`software-company-ai`** 🤖 | 5 | 3 | 2 | ทีม AI/ML, LLM, RAG |
 | **`software-company-healthcare`** 🏥 | 4 | 3 | 2 | บริษัท health tech, HIPAA, FHIR |
@@ -23,7 +23,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | **`software-company-legaltech`** ⚖️ | 5 | 3 | 2 | Contract analysis, e-signature, legal automation |
 | **`software-company-insurtech`** 🛡️ | 5 | 3 | 2 | Claims, underwriting, actuarial, insurance compliance |
 
-**รวม: 67 agents, 67 skills, 41 commands** (core 28 skills + add-on 39 skills)
+**รวม: 67 agents, 73 skills, 41 commands** (core 34 skills + add-on 39 skills)
 
 > 💡 **Add-on plugins (fintech/ai/healthcare/ecommerce/gaming) ต้องติดตั้ง `software-company` ก่อน** เพราะใช้ shared skills
 
@@ -56,6 +56,76 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 
 แล้วรีสตาร์ท Claude Code
 
+---
+
+## 🔄 อัปเดต skill (เมื่อแก้ไฟล์ในรีโป)
+
+แก้ไฟล์ skill แล้ว Claude ยังใช้ของเก่าอยู่ เพราะตอนติดตั้งมันคัดลอกไปเก็บไว้อีกที่
+ต้อง sync ใหม่ทุกครั้งที่แก้
+
+### วิธีที่ 1 — ผ่าน plugin (แนะนำ)
+
+ใช้ได้ทั้ง Claude Code และ Cowork · แชร์ให้ทีมได้ · ได้ agent กับ command ไปด้วย
+
+```
+/plugin marketplace update sqt-marketplace
+/plugin update software-company@sqt-marketplace
+```
+
+แล้วรีสตาร์ท Claude Code
+
+### วิธีที่ 2 — เป็น personal skill
+
+ใช้ได้เฉพาะ Claude Code บนเครื่องนี้ แต่ **ไม่ต้องติดตั้ง plugin และไม่ต้อง commit ก่อน**
+เหมาะตอนกำลังแก้ skill อยู่แล้วอยากลองทันที
+
+```powershell
+cd "C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace"
+.\scripts\sync-global-skills.ps1
+```
+
+คัดลอก **30 core skills** ทั้งหมดไปที่ `%USERPROFILE%\.claude\skills\` ทับของเดิม
+รันซ้ำได้ทุกครั้งที่แก้ไฟล์ · ดูก่อนว่าจะทำอะไรบ้างโดยไม่เขียนจริง:
+
+```powershell
+.\scripts\sync-global-skills.ps1 -WhatIf
+```
+
+**สคริปต์จำว่าตัวเองคัดลอกอะไรไป** (`.sqt-synced.json` ในโฟลเดอร์ปลายทาง)
+รอบถัดไปจึงลบเฉพาะ skill ที่เคยคัดลอกไปแล้วถูกลบออกจากรีโป —
+skill ส่วนตัวอื่นที่คุณเขียนเองไม่ถูกแตะ
+
+> ⚠️ ถ้ามี personal skill ชื่อซ้ำกับใน `plugins/software-company/skills/`
+> ตัวในรีโปจะทับ — เปลี่ยนชื่อตัวใดตัวหนึ่งก่อนรัน
+
+### สองวิธีนี้ต่างกันยังไง
+
+| | Plugin | Personal skill |
+|---|---|---|
+| Claude Code | ✅ | ✅ |
+| Cowork (แอปเดสก์ท็อป) | ✅ | ❌ |
+| ได้ agent + command ด้วย | ✅ | ❌ เฉพาะ skill |
+| แชร์ให้ทีม | ✅ | ❌ เครื่องใครเครื่องมัน |
+| ต้อง commit ก่อนถึงจะเห็นการแก้ | ✅ | ❌ อ่านจากไฟล์ตรง ๆ |
+| ครอบคลุม add-on 39 skills | ✅ | ❌ core 30 เท่านั้น |
+
+ใช้คู่กันได้ — **plugin** ไว้ใช้งานจริง, **personal skill** ไว้ลองตอนกำลังแก้
+
+### ตรวจว่าโหลดครบไหม
+
+```
+/doctor
+```
+
+ไม่เห็น skill ที่เพิ่งเพิ่ม ให้ไล่เช็คตามนี้:
+
+| อาการ | สาเหตุที่เจอบ่อย |
+|---|---|
+| ไม่ขึ้นเลย | ยังไม่ได้รีสตาร์ท Claude Code |
+| ขึ้นแต่ไม่ทำงาน | `SKILL.md` ไม่มี frontmatter `name` / `description` |
+| ชื่อไม่ตรง | `name` ใน frontmatter ต้องตรงกับชื่อโฟลเดอร์ |
+| plugin ยังเป็นของเก่า | ลืม `/plugin marketplace update` ก่อน `/plugin update` |
+
 ## 📚 เอกสาร
 
 | ไฟล์ | เนื้อหา |
@@ -65,6 +135,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | **[docs/INSTALL.md](docs/INSTALL.md)** | คู่มือติดตั้ง 3 วิธี + troubleshooting |
 | **[docs/USAGE.md](docs/USAGE.md)** | คู่มือใช้งาน + ตัวอย่าง workflow จริง |
 | **[docs/REFERENCE.md](docs/REFERENCE.md)** | รายละเอียดทุก agent/skill/command ของ software-company |
+| **[scripts/README.md](scripts/README.md)** ⭐ NEW | สคริปต์ช่วยงาน — sync skill ไป `~/.claude/skills` |
 
 ---
 
@@ -113,9 +184,9 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `technical-writer` ⭐ NEW | user guides, API docs, tutorials, release notes |
 | `seo-specialist` | keyword research, on-page/technical SEO, SEO audit |
 
-### 28 Skills
+### 34 Skills
 
-**Output Templates (13)**
+**เอกสารและการสื่อสาร (16)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `user-story-writer` | เขียน user story ตาม format มาตรฐาน |
@@ -130,11 +201,15 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `polished-document-style` | format เอกสารสวยงาม (Rich markdown + Mermaid) |
 | `office-document-handling` ⭐ NEW | อ่าน/สร้าง .docx, .xlsx, .pptx, .pdf ผ่าน anthropic-skills |
 | `branded-document-design` ⭐ NEW | .docx/.pptx/.pdf ที่หน้าตาเป็นระบบ (design tokens + brandkit.py) รองรับเอกสารไทย |
+| `srs-writing` ⭐ NEW | เขียน/รีวิว SRS — โครงตาม ISO/IEC/IEEE 29148, กฎเขียนข้อกำหนดที่ทดสอบได้, รหัสและ traceability, NFR 11 หมวด |
+| `presentation-design` ⭐ NEW | ทำเด็คนำเสนอ — ลำดับเรื่องตามจุดประสงค์, หัวสไลด์เป็นข้อสรุป, งบตัวอักษร, 6 เลย์เอาต์ที่เรนเดอร์แล้ว |
+| `software-diagrams` ⭐ NEW | วาด C4 / sequence / state / ER / deployment — ธีม Mermaid ชุดเดียวทั้งโปรเจกต์ ทดสอบเรนเดอร์แล้วทุกแบบ |
 | `markdown-visuals` | ใส่ภาพในเอกสาร markdown (inline SVG / ASCII / Mermaid) แทนการบรรยายด้วยตัวหนังสือ |
 
-**UI / Visual Design (3)**
+**UI / Visual Design (4)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
+| `ui-craft` ⭐ NEW | **ใช้คู่กับ 3 ตัวล่าง** — สเกลระยะห่าง/ตัวอักษร, ลำดับสายตา, เส้น-เงา-พื้นหลัง, contrast, 5 สถานะของทุกหน้าจอ, งบ animation |
 | `mobile-app-design` ⭐ NEW | ทำ UI แอปมือถือ (PWA / Capacitor / React Native / Flutter) สไตล์ Speak Go — ฟอนต์ 4 ตระกูล + safe area + mockup กรอบเครื่อง |
 | `web-app-design` ⭐ NEW | ทำ UI เว็บแอป (แดชบอร์ด/admin/SaaS) สไตล์ Apps Track — 94 tokens + appstrack.css + mockup + ตัวตรวจ hardcode สี |
 | `windows-app-design` ⭐ NEW | ทำ UI แอป Windows 11 (WinUI 3 / Avalonia / MAUI / Electron-Tauri) — Fluent 2 tokens + mockup template + fluent.css/XAML พร้อมใช้ |
@@ -146,7 +221,7 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 | `testing-standards` ⭐ NEW | วาง unit/integration test — **ถามก่อนว่าจะใช้ framework ไหน** แล้วค่อยเขียน |
 | `web-service-essentials` ⭐ NEW | ทำ service/API — ping, health/live, health/ready, version, error envelope, graceful shutdown |
 
-**How-To Patterns (4)
+**How-To Patterns (4)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
 | `auth-implementation-patterns` ⭐ | implement auth (session/JWT/OAuth/MFA/password) |
@@ -159,9 +234,11 @@ Marketplace สำหรับ Claude Code มี **14 plugins** สำหรั
 |-------|---------|
 | `work-session-context` | บันทึก context สรุปเป็นไฟล์ใน `.claude/context/` หลังทำงานเสร็จ — เปิด session ใหม่จะรู้ทันทีว่าทำอะไรไปแล้ว |
 
-**Universal Quality (3)**
+**Universal Quality (5)**
 | Skill | ใช้เมื่อ |
 |-------|---------|
+| `spell-out-abbreviations` ⭐ NEW | เขียนอะไรก็ตามให้คนอ่าน — กางตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ เช่น Model Context Protocol (MCP) |
+| `short-answers` ⭐ NEW | ตอบคำถาม/อธิบาย — คำตอบมาก่อน ใช้คำง่าย ไม่ทวนคำถาม ไม่เกริ่นนำ |
 | `simplicity-first` ⭐ | ทำให้ output ทุกแบบ (docs/architecture/plans) **simple ที่สุดที่ work** — junior อ่านเข้าใจใน 6 เดือน. Reject premature abstraction + buzzwords. ใช้ทุก agent |
 | `lazy-coding` | เวลาเขียน/แก้/refactor โค้ด — YAGNI ก่อน แล้วค่อยใช้ stdlib/native ก่อนเขียนเอง |
 | `targeted-fix` | มี error / test fail / regression — หาจุดที่ผิดจริงแล้วแก้ให้เล็กที่สุด ไม่รื้อทั้งไฟล์ |
@@ -225,12 +302,15 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (12 agents)
-│       ├── skills/         (28 skills)
+│       ├── skills/         (34 skills)
 │       └── commands/       (15 commands)
 ├── docs/
 │   ├── INSTALL.md
 │   ├── USAGE.md
 │   └── REFERENCE.md
+├── scripts/
+│   ├── sync-global-skills.ps1   (คัดลอก core skills ไป ~/.claude/skills)
+│   └── README.md
 └── README.md
 ```
 

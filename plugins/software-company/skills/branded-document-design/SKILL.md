@@ -217,3 +217,13 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 | ไดอะแกรมที่จะเอามาแปะเป็นรูป | `markdown-visuals` → export PNG → `figure()` |
 | อ่านไฟล์ Office ที่ลูกค้าส่งมา | `office-document-handling` |
 | สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
+| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
+| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
+| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`

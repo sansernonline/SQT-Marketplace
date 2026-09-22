@@ -1,6 +1,6 @@
 # Skill Recommendations & Changes
 
-_Reviewed: all 14 plugins, 67 agents, 67 skills. Goal: each agent gets more capable with **less** prompting, by reusing simple, readable skills — not by adding bulk._
+_Reviewed: all 14 plugins, 67 agents, 73 skills. Goal: each agent gets more capable with **less** prompting, by reusing simple, readable skills — not by adding bulk._
 
 ---
 
@@ -41,12 +41,25 @@ less code, 47–77% less cost, 3–6× faster. That's the pattern worth copying.
 3. **Wired `lazy-coding` into 30 code-writing agents** across all 14 plugins —
    including the ones that previously had no skills section at all.
 
+4. **Created `spell-out-abbreviations` and `short-answers`**
+   (`software-company/skills/`) — the two rules that apply to *everything*
+   written for a person, not just code or docs.
+
+5. **Appended the abbreviation rule to all 134 agent and skill files** across
+   all 14 plugins — the same problem as §1: a rule that lives only in
+   `simplicity-first` reaches only the 12 core agents. The rule is now also
+   written into `simplicity-first` itself, so both paths carry it.
+
 Split rule, going forward:
 
 | Output | Skill |
 |--------|-------|
 | Code (write / fix / refactor / review) | `lazy-coding` |
 | Docs, plans, architecture, UX/API design | `simplicity-first` |
+| Anything a person reads — first mention of an abbreviation | `spell-out-abbreviations` |
+| Anything a person reads — length and plainness | `short-answers` |
+| Any interface, on any platform | `ui-craft` (**with** the platform skill, not instead of it) |
+| Any picture of how software works | `software-diagrams` |
 
 ---
 

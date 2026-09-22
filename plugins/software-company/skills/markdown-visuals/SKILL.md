@@ -351,3 +351,12 @@ If unsure whether a visual will render, mention that the user should preview in 
 
 - [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
 - [[simplicity-first]] — don't over-design the diagram; show what's needed
+- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
+- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`

@@ -164,3 +164,12 @@ python scripts/screenshot.py mockup.html out/ --width 420
 | แอปเดสก์ท็อป Windows โทนเดียวกัน | `windows-app-design` |
 | เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
 | ไดอะแกรมประกอบ spec | `markdown-visuals` |
+| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
+| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
