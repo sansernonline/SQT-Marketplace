@@ -5,7 +5,59 @@
 
 | ไฟล์ | ทำอะไร |
 |------|--------|
-| `sync-global-skills.ps1` | คัดลอก core skills ทั้ง 30 ตัวไปเป็น personal skill ที่ `%USERPROFILE%\.claude\skills\` |
+| `sync-global-skills.ps1` | คัดลอก core skills ทั้งหมดไปเป็น personal skill ที่ `%USERPROFILE%\.claude\skills\` |
+| `validate-marketplace.mjs` | ตรวจ frontmatter, ชื่อ, ความยาว และความครบถ้วนของทุก skill/agent/plugin |
+
+---
+
+## validate-marketplace.mjs
+
+```bash
+node scripts/validate-marketplace.mjs              # ตรวจทั้ง marketplace
+node scripts/validate-marketplace.mjs --warn       # ให้ warning นับเป็น error ด้วย
+node scripts/validate-marketplace.mjs --self-test  # พิสูจน์ว่าตัวตรวจยังจับบั๊กได้จริง
+```
+
+ออก exit code 1 เมื่อเจอ error — ใช้เป็นประตูใน continuous integration (CI) ได้เลย
+ไม่ใช้ dependency ภายนอก
+
+### ตรวจอะไรบ้าง
+
+| ระดับ | รายการ |
+|---|---|
+| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์หรือชื่อไฟล์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` ยาวเกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้คีย์ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` (และกลับกัน) |
+| warning | `description` สั้นกว่า 60 ตัวอักษร หรือไม่ได้บอกว่าใช้เมื่อไหร่ · เนื้อหาเกิน 400 บรรทัด · ไฟล์ใน `references/` ยาวเกิน 100 บรรทัดแต่ไม่มีสารบัญ · README ไม่พูดถึง plugin บางตัว |
+
+### กับดักที่ตัวตรวจนี้มีไว้จับเป็นหลัก
+
+```yaml
+description: ... as a working system: a token contract ...
+                                    ^^ ตรงนี้
+```
+
+`": "` ในค่าที่ไม่ได้ครอบด้วยเครื่องหมายคำพูด ทำให้ YAML **parse ทั้งบล็อกไม่ผ่าน**
+loader จะทิ้ง field ทุกตัว → skill ไม่มี `name` ไม่มี `description` → **ไม่เคยถูกเรียกเลย
+และไม่มี error ให้เห็น** · เจอมาแล้ว 3 ตัวในรีโปนี้ (แก้แล้ว)
+
+แก้โดยเปลี่ยน `: ` เป็น ` — ` หรือครอบค่าทั้งหมดด้วย `"..."`
+
+### สองกฎที่อยู่ในตัวสคริปต์เอง
+
+**ตรวจศูนย์รายการ = พัง ไม่ใช่ผ่าน** — ถ้าหาไฟล์ไม่เจอเลย สคริปต์ออก exit 1
+พร้อมบอกว่า "ไม่ได้ตรวจอะไรเลย" ไม่ใช่ขึ้นเขียวแล้วเงียบ · ตัวตรวจที่ path ผิด
+แล้วขึ้นเขียวคือบั๊กที่อยู่ได้เป็นเดือนโดยไม่มีใครรู้
+
+**`--self-test` พิสูจน์ว่ากฎยังยิงโดนเป้า** — ป้อนไฟล์ที่พังจริง 4 แบบ
+แล้วยืนยันว่าจับได้ทุกแบบ รันก่อนเชื่อผลทุกครั้งที่แก้ตัวสคริปต์
+
+### ใส่ใน CI
+
+```yaml
+- run: node scripts/validate-marketplace.mjs --self-test
+- run: node scripts/validate-marketplace.mjs
+```
+
+รัน `--self-test` **ก่อน** เสมอ — ไม่งั้นตัวตรวจที่พังจะรายงานว่าทุกอย่างเรียบร้อย
 
 ---
 

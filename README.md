@@ -136,6 +136,7 @@ skill ส่วนตัวอื่นที่คุณเขียนเอ�
 | **[docs/USAGE.md](docs/USAGE.md)** | คู่มือใช้งาน + ตัวอย่าง workflow จริง |
 | **[docs/REFERENCE.md](docs/REFERENCE.md)** | รายละเอียดทุก agent/skill/command ของ software-company |
 | **[scripts/README.md](scripts/README.md)** ⭐ NEW | สคริปต์ช่วยงาน — sync skill ไป `~/.claude/skills` |
+| **[docs/UPGRADE-IDEAS.md](docs/UPGRADE-IDEAS.md)** ⭐ NEW | สำรวจว่า online มีอะไรที่เอามาอัปเกรด marketplace นี้ได้ |
 
 ---
 
@@ -310,6 +311,7 @@ SQT-Marketplace/
 │   └── REFERENCE.md
 ├── scripts/
 │   ├── sync-global-skills.ps1   (คัดลอก core skills ไป ~/.claude/skills)
+│   ├── validate-marketplace.mjs (ตรวจ frontmatter/ชื่อ/ความยาวทุก skill)
 │   └── README.md
 └── README.md
 ```
