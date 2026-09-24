@@ -1,4 +1,5 @@
 ---
+name: game-design
 description: Design game mechanics, loops, and progression using game-designer agent. Produces comprehensive game design document.
 argument-hint: <game concept or feature to design>
 ---

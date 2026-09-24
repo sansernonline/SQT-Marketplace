@@ -1,4 +1,5 @@
 ---
+name: recommendation-design
 description: Design recommendation system for e-commerce using recommendation-engineer agent. Covers algorithm selection, serving architecture, evaluation.
 argument-hint: <surface, e.g., "PDP similar items" or "personalized homepage">
 ---

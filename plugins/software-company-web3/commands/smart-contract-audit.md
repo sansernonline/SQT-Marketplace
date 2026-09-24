@@ -1,4 +1,5 @@
 ---
+name: smart-contract-audit
 description: Audit smart contracts using smart-contract-developer + defi-engineer agents.
 argument-hint: <contract or repo to audit>
 ---

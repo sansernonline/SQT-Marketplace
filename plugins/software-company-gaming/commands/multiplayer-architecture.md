@@ -1,4 +1,5 @@
 ---
+name: multiplayer-architecture
 description: Design multiplayer architecture using multiplayer-engineer agent. Covers netcode, matchmaking, anti-cheat for the game type.
 argument-hint: <game type, e.g., "5v5 FPS" or "100-player BR" or "co-op 2-4 players">
 ---

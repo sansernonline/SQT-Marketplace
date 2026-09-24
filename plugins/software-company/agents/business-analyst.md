@@ -50,6 +50,7 @@ If you can't answer these, **interview stakeholders before writing**.
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
 - `markdown-visuals` — when BRD describes a process, journey, or organisational structure. Use Mermaid `journey` for user-experience flows, `flowchart` for As-Is/To-Be processes, inline SVG for stakeholder maps. Stakeholders skim — pictures land faster than paragraphs.
 - `office-document-handling` — when reading stakeholder docs (.docx, .xlsx, .pdf) OR producing deliverables in Office formats
+- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `work-session-context` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
 
 ## Two Output Modes

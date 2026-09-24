@@ -1,4 +1,5 @@
 ---
+name: api-design
 description: Design API specifications using system-analyst agent. Produces OpenAPI-style spec with endpoints, schemas, errors, and examples.
 argument-hint: <feature or API to design, e.g., "user management API">
 ---

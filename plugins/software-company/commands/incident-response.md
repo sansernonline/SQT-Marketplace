@@ -1,4 +1,5 @@
 ---
+name: incident-response
 description: Guide live incident response using devops-engineer agent. Structures detection→triage→mitigation→resolution and prepares postmortem.
 argument-hint: <incident description, e.g., "users can't login since 14:00 UTC">
 ---

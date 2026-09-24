@@ -1,4 +1,5 @@
 ---
+name: feature-kickoff
 description: Start a new feature by coordinating BA → SA → Architect → planning. Produces requirements, FSD, and architecture.
 argument-hint: <feature description>
 ---

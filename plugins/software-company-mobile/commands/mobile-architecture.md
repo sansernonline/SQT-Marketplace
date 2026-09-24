@@ -1,4 +1,5 @@
 ---
+name: mobile-architecture
 description: Design mobile app architecture using cross-platform-engineer agent. Covers framework choice, state management, navigation.
 argument-hint: <app description and constraints>
 ---

@@ -1,4 +1,5 @@
 ---
+name: transaction-flow-design
 description: Design end-to-end financial transaction flow using fintech-engineer agent. Covers idempotency, state machine, audit, reconciliation.
 argument-hint: <transaction type, e.g., "P2P transfer" or "card payment with refund">
 ---

@@ -1,4 +1,5 @@
 ---
+name: esignature-audit
 description: Audit e-signature system compliance using e-signature-specialist agent.
 argument-hint: <system or use case>
 ---

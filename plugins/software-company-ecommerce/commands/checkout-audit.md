@@ -1,4 +1,5 @@
 ---
+name: checkout-audit
 description: Audit and optimize checkout flow using cro-specialist agent. Identifies friction points and produces test backlog.
 argument-hint: <site URL or description>
 ---

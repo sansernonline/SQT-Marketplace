@@ -1,4 +1,5 @@
 ---
+name: rag-design
 description: Design a production-grade RAG system using llm-architect agent. Covers ingestion, chunking, embeddings, retrieval, re-ranking, and evaluation.
 argument-hint: <use case, e.g., "customer support Q&A" or "internal knowledge base">
 ---

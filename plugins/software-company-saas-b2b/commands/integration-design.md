@@ -1,4 +1,5 @@
 ---
+name: integration-design
 description: Design enterprise integration using integration-engineer agent. Covers SSO, SCIM, webhooks, API client.
 argument-hint: <integration type or system, e.g., "SAML SSO with Okta">
 ---

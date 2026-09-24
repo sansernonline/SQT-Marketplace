@@ -1,4 +1,5 @@
 ---
+name: dx-audit
 description: Audit developer experience using dx-engineer agent. Measures TTFHW, error UX, sample quality, onboarding flow.
 argument-hint: <product or area to audit>
 ---

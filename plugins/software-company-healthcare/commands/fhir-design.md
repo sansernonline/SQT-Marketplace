@@ -1,4 +1,5 @@
 ---
+name: fhir-design
 description: Design FHIR API for healthcare interoperability using fhir-specialist agent. Selects resources, defines profiles, designs SMART on FHIR flow.
 argument-hint: <feature, e.g., "patient labs API" or "EHR integration for X">
 ---

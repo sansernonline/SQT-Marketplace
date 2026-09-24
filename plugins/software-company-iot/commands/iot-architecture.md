@@ -1,4 +1,5 @@
 ---
+name: iot-architecture
 description: Design IoT system architecture using iot-engineer + edge-architect agents. Covers connectivity, data flow, edge tier.
 argument-hint: <use case, e.g., "smart factory" or "fleet vehicle telemetry">
 ---

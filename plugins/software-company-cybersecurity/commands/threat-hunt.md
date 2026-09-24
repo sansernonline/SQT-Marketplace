@@ -1,4 +1,5 @@
 ---
+name: threat-hunt
 description: Conduct hypothesis-driven threat hunt using threat-hunter agent.
 argument-hint: <hypothesis or threat to hunt>
 ---

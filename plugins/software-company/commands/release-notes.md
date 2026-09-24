@@ -1,4 +1,5 @@
 ---
+name: release-notes
 description: Generate user-facing release notes for a version using technical-writer agent. Translates technical changes into customer-friendly highlights.
 argument-hint: <version number or release name>
 ---

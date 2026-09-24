@@ -1,6 +1,7 @@
 ---
+name: security-scan
 description: Run a security audit on code, dependencies, or infrastructure using security-engineer agent. Identifies vulnerabilities with OWASP-aligned findings.
-argument-hint: <scope: "code", "deps", "infra", or specific file/component>
+argument-hint: "<scope — code, deps, infra, or a specific file/component>"
 ---
 
 Use the `security-engineer` agent to perform a security scan on: **$ARGUMENTS**

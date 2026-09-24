@@ -1,4 +1,5 @@
 ---
+name: sprint-plan
 description: Run sprint planning — backlog refinement, prioritization, and capacity planning.
 argument-hint: <sprint number or goal>
 ---

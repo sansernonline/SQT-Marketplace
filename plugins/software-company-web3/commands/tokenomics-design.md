@@ -1,4 +1,5 @@
 ---
+name: tokenomics-design
 description: Design tokenomics using tokenomics-designer agent.
 argument-hint: <protocol name or context>
 ---

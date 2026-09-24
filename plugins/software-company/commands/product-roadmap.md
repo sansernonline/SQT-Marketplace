@@ -1,4 +1,5 @@
 ---
+name: product-roadmap
 description: Build a strategic product roadmap with prioritization using product-manager agent. Produces quarterly plan with RICE scoring and success metrics.
 argument-hint: <time horizon, e.g., "Q1-Q4 2026" or "next 6 months">
 ---

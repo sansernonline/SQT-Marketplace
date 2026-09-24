@@ -215,3 +215,18 @@ File ends in    → Use skill              → Common use case
 .pdf            → anthropic-skills:pdf   → Reports, contracts, RFPs
 .md, .txt       → (no skill needed)      → Native handling
 ```
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.

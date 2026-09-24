@@ -1,4 +1,5 @@
 ---
+name: pci-audit
 description: Run a PCI-DSS readiness audit using compliance-officer agent. Identifies scope, gaps, and produces remediation plan.
 argument-hint: <scope description, e.g., "checkout flow" or "full CDE">
 ---

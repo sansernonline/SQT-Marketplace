@@ -220,6 +220,7 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 | เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
 | โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
 | ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
+| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
 
 ---
 

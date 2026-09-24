@@ -1,4 +1,5 @@
 ---
+name: contract-analysis-design
 description: Design contract analysis system using contract-analyzer agent.
 argument-hint: <use case, e.g., "NDA review automation">
 ---

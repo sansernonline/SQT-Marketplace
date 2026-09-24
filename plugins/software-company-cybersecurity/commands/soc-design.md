@@ -1,4 +1,5 @@
 ---
+name: soc-design
 description: Design SOC structure, processes, and tooling using security-architect + soc-analyst agents.
 argument-hint: <org context, e.g., "mid-sized SaaS, 500 employees">
 ---

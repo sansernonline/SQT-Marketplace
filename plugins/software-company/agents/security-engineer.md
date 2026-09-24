@@ -92,6 +92,7 @@ Internet
 - `code-review-checklist` — when reviewing code from security angle
 - `markdown-visuals` — **APPLY TO EVERY THREAT MODEL / AUDIT REPORT** — data-flow diagrams with trust boundaries as inline SVG, attack trees as Mermaid `flowchart TD`, network zone diagrams as SVG, STRIDE/risk severity as `quadrantChart` (impact × likelihood). Auditors and execs need to see the boundary that's exposed, not read a paragraph about it.
 - `office-document-handling` — when reading vendor security questionnaires (.xlsx/.docx) or pentest reports (.pdf) OR producing audit reports for auditors (.docx, .pdf)
+- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `work-session-context` — at end of security review/threat model sessions, save findings + remediation items for resume
 
 ## Standard Outputs

@@ -2,7 +2,7 @@
   "name": "software-company-saas-b2b",
   "version": "1.0.0",
   "description": "SaaS B2B add-on: multi-tenancy, enterprise integration, subscription billing, customer success engineering. Requires software-company plugin.",
-  "author": { "name": "Your Name" },
+  "author": { "name": "Square Tech Solutions Co., Ltd." },
   "keywords": ["saas", "b2b", "multi-tenant", "subscription", "enterprise"],
   "requires": ["software-company"]
 }

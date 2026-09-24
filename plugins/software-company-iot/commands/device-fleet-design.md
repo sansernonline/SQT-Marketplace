@@ -1,4 +1,5 @@
 ---
+name: device-fleet-design
 description: Design device fleet management — provisioning, OTA, monitoring, config. Uses iot-engineer agent.
 argument-hint: <fleet description, e.g., "10k smart thermostats">
 ---

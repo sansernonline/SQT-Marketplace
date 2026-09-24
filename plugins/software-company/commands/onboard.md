@@ -1,4 +1,5 @@
 ---
+name: onboard
 description: Create comprehensive onboarding documentation for a new team member using technical-writer agent. Produces role-specific guide for first 30/60/90 days.
 argument-hint: <role, e.g., "backend developer" or "QA engineer">
 ---

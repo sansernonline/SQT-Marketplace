@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a software question needs a picture — system architecture, how a request flows between services, what states a record moves through, how tables relate, or what runs on which machine. Decides which diagram type answers the question asked, then draws it with one shared Mermaid theme so every diagram in the project looks like it came from the same hand. Covers the C4 model at three zoom levels, sequence, state, entity relationship and deployment diagrams, the rules that keep a diagram readable (seven boxes, one level of detail, every arrow labelled), Thai label handling, and a render-and-look verification loop. Pair with markdown-visuals (which picks the format) and polished-document-style (which governs the document around it).
+description: Use when a software question needs a picture — system architecture, how a request flows between services, what states a record moves through, how tables relate, or what runs on which machine. Decides which diagram type answers the question asked, then draws it with one shared Mermaid theme so every diagram in the project looks like it came from the same hand. Covers the C4 model at three zoom levels, sequence, state, entity relationship and deployment diagrams, the rules that keep a diagram readable (seven boxes, one level of detail, every arrow labelled), Thai label handling, and a render-and-look verification loop. Also routes the two cases Mermaid cannot serve — real vendor icons go to the Python diagrams library, and a figure that must look designed for a client or a slide goes to diagram-figures. Pair with markdown-visuals and polished-document-style.
 ---
 
 # Software Diagrams
@@ -44,6 +44,8 @@ description: Use when a software question needs a picture — system architectur
 | "ตารางไหนเชื่อมกับตารางไหน" | Entity Relationship (ER) |
 | "ของจริงรันอยู่บนเครื่องอะไร กี่ตัว" | Deployment |
 | "ใครอนุมัติต่อจากใคร" | Flowchart (ขั้นตอนงาน) |
+| "ผังคลาวด์ที่มีโลโก้ AWS / Azure จริง ๆ" | Infrastructure — ข้อ 3 |
+| "อยากได้รูปสวย ๆ ไว้ใส่ข้อเสนอลูกค้า" | ภาพประกอบ — `diagram-figures` |
 
 > **C4 model** คือวิธีวาดสถาปัตยกรรมเป็นชั้น ๆ เหมือนซูมแผนที่ —
 > ระดับ 1 มองจากนอกระบบ · ระดับ 2 เปิดฝาดูข้างใน · ระดับ 3 ซูมเข้าไปในกล่องเดียว
@@ -86,7 +88,60 @@ classDef store fill:#FFFFFF,stroke:#C6CCD8,color:#414957
 
 ---
 
-## 3 · กฎที่ทำให้อ่านรู้เรื่อง
+## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
+
+เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Kubernetes ของจริง
+Mermaid วาดให้ไม่ได้ — ใช้ไลบรารี **`diagrams`** (Python) แทน
+
+| ต้องการ | ใช้ |
+|---|---|
+| C4 · sequence · state · ER · flowchart | **Mermaid** (ข้อ 2) |
+| ผังของจริงบนคลาวด์ พร้อมโลโก้ผู้ให้บริการ | **`diagrams`** (Python + Graphviz) |
+| รูปในข้อเสนอลูกค้า · สไลด์ · เอกสารเซ็นรับ ที่ต้องดู "ออกแบบมา" | **`diagram-figures`** |
+| ลากวางเอง ปรับตำแหน่งทีละกล่อง | draw.io — คนทำเอง agent ทำแทนไม่ได้ |
+
+> **อย่าวาดสองที่** — เรื่องเดียวกันเลือกเครื่องมือเดียว
+> ในทีมพัฒนาใช้ Mermaid (อยู่ใน git · diff ได้ · แก้ง่าย) ·
+> เอกสารเสนอลูกค้าหรือผู้บริหารใช้ `diagrams`
+
+### ติดตั้ง
+
+```bash
+pip install diagrams
+# ต้องมี Graphviz ด้วย ไม่งั้นรันแล้วไม่มีไฟล์ออกมาและไม่มี error
+apt install graphviz     # Windows: choco install graphviz   macOS: brew install graphviz
+dot -V                   # ตรวจว่าติดตั้งแล้วจริง
+```
+
+### เริ่มจากโครงที่ทดสอบแล้ว
+
+คัดลอก **`assets/infra-diagram.py`** ไปแก้ — ตั้งธีมชุดเดียวกับ Mermaid ในข้อ 2 ไว้ให้แล้ว
+รายชื่อ node ที่ใช้บ่อยและกับดักที่เจอจริงอยู่ใน **`assets/diagrams-python.md`**
+
+### กติกาเพิ่มจากข้อ 4
+
+- **หนึ่งกล่องต่อหนึ่งหน้าที่ จำนวนใส่ในป้าย** — `"Web / App ×2-6"` อ่านง่ายกว่าวาดกล่องเหมือนกันสามใบ
+  (กล่องซ้ำไม่ได้บอกอะไรเพิ่ม นอกจากทำให้เส้นพันกัน)
+- **กลุ่มมีแค่ 2 สี** — `BOX` เทาอ่อน กับ `FOCUS` ฟ้า สำหรับส่วนที่เอกสารนี้กำลังพูดถึง
+- **ไอคอนต้องเป็นของจริง** — ระบบไม่ได้ใช้ AWS ห้ามหยิบไอคอน AWS มาใช้เพราะสวย
+  ใช้ `diagrams.onprem.*` หรือ `diagrams.generic.*` แทน
+- ป้ายเส้นยังต้องบอกว่า**อะไรไหลผ่าน** เหมือนเดิม — `SQL` `put object` `session` ไม่ใช่ `ใช้`
+
+### กับดักที่เสียเวลาแน่ถ้าไม่รู้ก่อน
+
+| อาการ | สาเหตุ · ทางแก้ |
+|---|---|
+| `TypeError: unsupported operand type(s) for >>: 'list' and 'list'` | ต่อ list เข้ากับ list ไม่ได้ — วนลูป หรือยุบเป็นกล่องเดียวแล้วใส่จำนวนในป้าย |
+| ภาษาไทยสระหาย วรรณยุกต์ลอยผิดที่ | ฟอนต์ไม่รองรับไทย (ค่าเริ่มต้นคือ DejaVu Sans) — ตั้ง `fontname` เป็น Noto Sans Thai · TH Sarabun New · Loma · โครงมี `pick_font()` เลือกให้อัตโนมัติ |
+| รูปสูงยาวเป็นเส้นเดียว | `direction="TB"` กับสายยาว — เปลี่ยนเป็น `"LR"` |
+| ชื่อกลุ่มโดนเส้นพาดทับ | เพิ่ม `ranksep` / `nodesep` หรือย้ายกล่องที่เส้นวิ่งผ่าน |
+| รันแล้วเงียบ ไม่มีไฟล์ | ไม่ได้ติดตั้ง Graphviz — `dot -V` |
+
+เรนเดอร์แล้ว**เปิดดูด้วยตา**ตามเช็กลิสต์ข้อ 6 เหมือนกันทุกข้อ
+
+---
+
+## 4 · กฎที่ทำให้อ่านรู้เรื่อง
 
 **เจ็ดกล่อง** — เกินนี้คนอ่านเลิกอ่าน แยกเป็นรูปย่อยหรือยุบกลุ่ม
 (นับกล่องจริง ไม่นับ subgraph)
@@ -117,7 +172,7 @@ classDef store fill:#FFFFFF,stroke:#C6CCD8,color:#414957
 
 ---
 
-## 4 · ภาษาไทยในไดอะแกรม
+## 5 · ภาษาไทยในไดอะแกรม
 
 - **ป้ายเส้นภาษาไทยยาวเกิน 3 คำจะทับเส้น** — ตัดให้สั้น หรือใส่ `<br>` เอง
 - **ห้ามใช้ `()` `[]` `{}` ในข้อความ** จะไปชนกับไวยากรณ์ Mermaid — ครอบด้วย `"..."` เสมอ
@@ -127,7 +182,7 @@ classDef store fill:#FFFFFF,stroke:#C6CCD8,color:#414957
 
 ---
 
-## 5 · เรนเดอร์ดูจริง — ห้ามข้าม
+## 6 · เรนเดอร์ดูจริง — ห้ามข้าม
 
 ไดอะแกรมที่ไม่เคยเรนเดอร์คือข้อความ ไม่ใช่รูป Mermaid เงียบ ๆ เวลาเจอไวยากรณ์ผิด
 บางกรณี และวาดออกมาคนละแบบกับที่คิดบ่อยมาก
@@ -160,7 +215,7 @@ mmdc -i diagram.mmd -o diagram.png -b white -s 2
 
 ---
 
-## 6 · Anti-patterns
+## 7 · Anti-patterns
 
 - ❌ **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
 - ❌ **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
@@ -174,7 +229,7 @@ mmdc -i diagram.mmd -o diagram.png -b white -s 2
 
 ---
 
-## 7 · เชื่อมกับ skill อื่น
+## 8 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
@@ -183,6 +238,7 @@ mmdc -i diagram.mmd -o diagram.png -b white -s 2
 | ฝังในไฟล์ Word / PowerPoint | `branded-document-design` |
 | ไดอะแกรมในเอกสาร SRS | `srs-writing` |
 | เลือกสถาปัตยกรรมก่อนวาด | `architecture-patterns` |
+| รูปที่ลูกค้าจะเห็น ต้องจัดวางเอง | `diagram-figures` |
 | บันทึกเหตุผลที่เลือกแบบนี้ | `adr-writer` |
 
 ---

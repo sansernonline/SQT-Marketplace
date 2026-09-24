@@ -258,6 +258,7 @@ description: Use on every user interface task, alongside whichever platform skil
 | ไดอะแกรมประกอบ spec | `software-diagrams` |
 | สไลด์นำเสนอ | `presentation-design` |
 | ตัดของที่ไม่จำเป็นออก | `simplicity-first` |
+| โลโก้ · โปสเตอร์ · โพสต์ · งานพิมพ์ | `graphic-design` |
 
 ---
 

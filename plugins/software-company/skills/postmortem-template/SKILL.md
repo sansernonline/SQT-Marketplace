@@ -192,3 +192,18 @@ Almost never. Even for SEV4, a short writeup helps. Always do one for:
 - Security incidents
 - Customer-facing incidents
 - Data integrity issues
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.

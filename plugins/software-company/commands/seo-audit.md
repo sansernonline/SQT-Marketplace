@@ -1,4 +1,5 @@
 ---
+name: seo-audit
 description: Run a comprehensive SEO audit using the seo-specialist agent + seo-audit-checklist skill. Covers technical, on-page, content, and off-page SEO.
 argument-hint: <URL or page/site description>
 ---

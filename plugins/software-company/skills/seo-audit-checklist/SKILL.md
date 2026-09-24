@@ -256,3 +256,18 @@ description: Use when auditing a website's SEO health, reviewing a page for SEO 
 - ❌ Ignoring user experience for SEO gains
 - ❌ Audit that's a list of tool screenshots, not insights
 - ❌ Recommendations that contradict accessibility/UX best practices
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.

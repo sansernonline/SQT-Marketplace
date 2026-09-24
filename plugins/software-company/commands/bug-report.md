@@ -1,4 +1,5 @@
 ---
+name: bug-report
 description: File a structured bug report using QA tester + bug-report-template skill.
 argument-hint: <brief description of the bug>
 ---

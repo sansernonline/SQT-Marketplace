@@ -57,6 +57,7 @@ If user research is missing, **commission it before deciding**.
 - `user-story-writer` — when sketching out feature concepts
 - `markdown-visuals` — **APPLY TO EVERY PRD / ROADMAP / STRATEGY DOC** — roadmaps as Mermaid `gantt`, competitive positioning as `quadrantChart`, AARRR funnel as inline SVG, persona maps + journey maps as Mermaid `journey`. Executives skim — visuals carry the argument; paragraphs are footnotes.
 - `office-document-handling` — when reading market research/competitor analyses (.pptx, .pdf) OR producing board decks/PRDs in Office formats
+- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `work-session-context` — at end of strategy/roadmap sessions, save decisions + open items for resume
 
 ## Standard Outputs

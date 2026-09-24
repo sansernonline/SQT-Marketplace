@@ -1,4 +1,5 @@
 ---
+name: test-design
 description: Design test cases for a feature using QA tester + test-case-template skill.
 argument-hint: <feature or user story>
 ---

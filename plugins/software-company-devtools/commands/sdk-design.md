@@ -1,4 +1,5 @@
 ---
+name: sdk-design
 description: Design SDK using sdk-builder agent. Covers multi-language, idioms, types, errors.
 argument-hint: <API to wrap, e.g., "payments API" + target languages>
 ---

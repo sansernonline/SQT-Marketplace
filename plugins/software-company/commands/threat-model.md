@@ -1,4 +1,5 @@
 ---
+name: threat-model
 description: Run STRIDE threat modeling on a feature or system using security-engineer agent. Produces structured threat model with mitigations.
 argument-hint: <feature or system to analyze>
 ---

@@ -1,4 +1,5 @@
 ---
+name: llm-eval
 description: Design or run LLM evaluation suite using prompt-engineer agent. Builds eval set, defines metrics, and creates regression test framework.
 argument-hint: <LLM application or prompt to evaluate>
 ---

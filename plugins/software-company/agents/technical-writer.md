@@ -60,6 +60,7 @@ Every doc belongs to ONE of four types — don't mix them:
 - `markdown-visuals` — **APPLY TO TUTORIALS / API DOCS / RELEASE NOTES** — annotated UI screenshots (inline SVG), request/response shape diagrams (Mermaid `sequenceDiagram`), before/after comparisons for breaking changes, conceptual diagrams for "Explanation" docs. Words alone fail learners — pair each non-trivial step with a picture.
 - `commit-message-format` — when writing changelog entries
 - `office-document-handling` — when source content is in .docx/.pdf OR when deliverable requested as .docx/.pptx (training decks, user guides for enterprise customers)
+- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume
 
 ## Standard Outputs

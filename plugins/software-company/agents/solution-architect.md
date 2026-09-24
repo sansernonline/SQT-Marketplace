@@ -51,6 +51,7 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 - `polished-document-style` — when producing architecture docs for stakeholders/clients (use for any doc going beyond engineering team)
 - `markdown-visuals` — **APPLY TO EVERY ARCHITECTURE DOC** — pair Mermaid (flows/sequences/ER) with inline SVG (component layouts, deployment topologies, network zones). Never deliver a text-only architecture overview.
 - `office-document-handling` — when reading legacy architecture docs (.docx, .pdf, Visio→.pptx) OR producing client-facing arch deliverables
+- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Output: Polished Architecture Overview

@@ -1,4 +1,5 @@
 ---
+name: saas-architecture-review
 description: Review B2B SaaS architecture using saas-architect agent. Covers multi-tenancy, isolation, scaling.
 argument-hint: <system or area to review>
 ---

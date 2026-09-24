@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "E-commerce specialist add-on: checkout optimization, recommendation systems, inventory management, conversion rate optimization. Requires software-company plugin for shared infrastructure.",
   "author": {
-    "name": "Your Name"
+    "name": "Square Tech Solutions Co., Ltd."
   },
   "keywords": ["ecommerce", "checkout", "recommendations", "inventory", "cro"],
   "requires": ["software-company"]

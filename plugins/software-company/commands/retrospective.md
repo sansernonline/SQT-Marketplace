@@ -1,4 +1,5 @@
 ---
+name: retrospective
 description: Run a sprint retrospective covering what went well, what didn't, and action items.
 argument-hint: <sprint number or period>
 ---

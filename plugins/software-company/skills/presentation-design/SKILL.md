@@ -220,6 +220,7 @@ description: Use when building a slide deck someone will present or read — a p
 | กฎระยะห่างและลำดับสายตา | `ui-craft` |
 | เนื้อหามาจากเอกสาร SRS | `srs-writing` |
 | ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
+| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` |
 
 ---
 

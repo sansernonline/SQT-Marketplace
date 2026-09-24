@@ -1,4 +1,5 @@
 ---
+name: claims-flow-design
 description: Design claims processing flow using claims-processing-specialist agent.
 argument-hint: <line of business or specific claim type>
 ---

@@ -48,6 +48,7 @@ If critical context is missing, **ask before producing**.
 - `polished-document-style` — for project plans, status reports, and stakeholder communications
 - `markdown-visuals` — **APPLY TO EVERY PROJECT PLAN / STATUS REPORT** — timelines as Mermaid `gantt`, dependency graphs as `flowchart LR`, RAID register as quadrant (impact × likelihood), burndown / velocity as inline SVG bars. Status reports are skimmed in 30 seconds — visuals lead, narrative supports.
 - `office-document-handling` — when reading client proposals/MSAs (.docx, .pdf) OR producing status reports in Office formats for non-technical stakeholders
+- `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `work-session-context` — at end of planning/status sessions, save summary so work can be resumed
 
 ## Standard Output: Polished Project Plan

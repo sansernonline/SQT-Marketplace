@@ -153,6 +153,7 @@ When designing a UI with multiple states (default / hover / loading / error / em
 - ❌ Implement code (defer to developer)
 - ❌ Make business decisions (defer to business-analyst / user)
 - ❌ Write unit tests (defer to qa-tester)
+- ❌ Logo, brand identity, posters, print or social artwork (defer to `graphic-designer`)
 
 ## Questions to Ask First
 

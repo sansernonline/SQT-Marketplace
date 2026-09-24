@@ -1,4 +1,5 @@
 ---
+name: architecture-review
 description: Review existing or proposed architecture using solution-architect agent. Evaluates against NFRs, identifies risks, and recommends improvements.
 argument-hint: <system or component to review>
 ---

@@ -1,4 +1,5 @@
 ---
+name: hipaa-audit
 description: Run HIPAA readiness audit using hipaa-officer agent. Covers all 3 safeguard categories and produces remediation roadmap.
 argument-hint: <scope, e.g., "full enterprise" or "patient portal">
 ---

@@ -1,4 +1,5 @@
 ---
+name: aso-audit
 description: Audit App Store / Play Store listing using aso-specialist agent.
 argument-hint: <app name or store URL>
 ---

@@ -1,4 +1,5 @@
 ---
+name: underwriting-model-design
 description: Design underwriting model using underwriting-analyst + actuarial-engineer agents.
 argument-hint: <line of business, e.g., "auto insurance pricing">
 ---

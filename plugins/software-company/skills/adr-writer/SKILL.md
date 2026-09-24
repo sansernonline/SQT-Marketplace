@@ -121,3 +121,18 @@ Before finalizing:
 - ❌ Vague titles like "Database Decision" (be specific: "Use PostgreSQL over MongoDB for user data")
 - ❌ Skipping "Negative consequences" (every decision has trade-offs)
 - ❌ Editing accepted ADRs (create new one that supersedes it instead)
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.
