@@ -4,7 +4,7 @@ Marketplace สำหรับ Claude Code · **14 plugins** จำลองท�
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
-**รวม 68 agents · 83 skills · 41 commands** — core 44 skills + add-on 39 skills
+**รวม 68 agents · 94 skills · 41 commands** — core 55 skills + add-on 39 skills
 
 ---
 

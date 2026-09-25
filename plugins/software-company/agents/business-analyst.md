@@ -57,6 +57,9 @@ If you can't answer these, **interview stakeholders before writing**.
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `fsd-writing` — เมื่อต้องส่งต่อความต้องการให้ละเอียดพอลงมือทำ ไม่ใช่แค่ระดับ BRD
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `document-naming` — เมื่อสร้างหรือส่ง BRD — ชื่อไฟล์ เวอร์ชัน สถานะ ประวัติการแก้ไข
+- `pdpa-compliance` — เมื่อความต้องการแตะข้อมูลส่วนบุคคลหรือความยินยอม
+- `data-import-export` — เมื่อความต้องการมีการนำเข้าหรือส่งออกไฟล์
 - `work-session-context` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
 
 ## Two Output Modes

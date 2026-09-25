@@ -180,6 +180,15 @@ What changed:
 - `config-and-secrets` — เมื่อมีค่าตั้งที่ต่างกันตาม environment หรือมีอะไรที่ห้ามเข้า git
 - `fsd-writing` — เมื่อต้องอ่านหรือรีวิว FSD ก่อนลงมือ — จุดที่ต้องเดาคือจุดที่ต้องถามกลับ
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `error-handling-patterns` — ก่อนเขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล หรือระบบอื่น — จับที่ไหน retry กี่ครั้ง timeout เท่าไหร่
+- `project-bootstrap` — เมื่อเปิด repository ใหม่ หรือคนใหม่ใช้เวลานานเกินกว่าจะรันได้
+- `background-jobs` — เมื่อมีงานที่ผู้ใช้ไม่ควรต้องรอ หรืองานตามเวลา
+- `audit-trail` — เมื่อระบบต้องตอบได้ว่าใครทำอะไรเมื่อไหร่
+- `i18n-and-locale` — เมื่อมีข้อความ วันที่ เงิน หรือการเรียงลำดับที่ผู้ใช้เห็น — โดยเฉพาะไทยคู่อังกฤษ
+- `file-upload-and-storage` — เมื่อผู้ใช้อัปโหลดไฟล์ หรือระบบต้องเก็บและส่งไฟล์
+- `notifications` — เมื่อระบบต้องส่งอีเมล SMS LINE push หรือแจ้งเตือนในแอป
+- `data-import-export` — เมื่อมีการนำเข้าหรือส่งออก Excel/CSV
+- `observability-basics` — เมื่อต้องรู้ว่าระบบปกติไหมโดยไม่ต้องรอลูกค้าแจ้ง
 - `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
 
 ## Responsibilities

@@ -80,6 +80,9 @@ If touching production, **always have rollback plan ready first**.
 - `cicd-and-release` — เมื่อตั้งหรือรื้อ pipeline เลือกวิธีปล่อยของ และซ้อม rollback
 - `config-and-secrets` — เมื่อวางที่เก็บ secret สิทธิ์เข้าถึง และรอบหมุนเวียน
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `observability-basics` — เมื่อวาง metric แดชบอร์ด และการแจ้งเตือนที่ต้องมีอะไรให้ทำ
+- `project-bootstrap` — เมื่อตั้งโครง repository, lint/format, และคำสั่งติดตั้งที่รันได้จริง
+- `background-jobs` — เมื่อดูแลคิว งานตามเวลา และงานที่ค้าง
 - `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 
 ## Standard Output: Polished Deployment Plan

@@ -100,6 +100,10 @@ Internet
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `config-and-secrets` — เมื่อตรวจการเก็บ secret การหมุนเวียน หรือเมื่อ secret หลุด
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `pdpa-compliance` — เมื่อตรวจความสอดคล้องกับ PDPA — ฐานทางกฎหมาย ความยินยอม สิทธิเจ้าของข้อมูล
+- `audit-trail` — เมื่อตรวจว่าระบบบันทึกร่องรอยครบและแก้ไม่ได้
+- `file-upload-and-storage` — เมื่อตรวจการรับไฟล์ — ชนิดไฟล์ ลิงก์ส่วนตัว การสแกน
+- `error-handling-patterns` — เมื่อตรวจว่าข้อความ error หลุดรายละเอียดภายในออกไปไหม
 - `work-session-context` — at end of security review/threat model sessions, save findings + remediation items for resume
 
 ## Standard Outputs

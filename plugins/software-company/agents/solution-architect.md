@@ -64,6 +64,11 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 - `api-conventions` — เมื่อกำหนดข้อตกลงกลางของ API ทั้งระบบ
 - `cicd-and-release` — เมื่อออกแบบเส้นทางจากคอมมิตถึง production และวิธี rollback
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `error-handling-patterns` — เมื่อออกแบบว่าระบบจะรับมือความล้มเหลวยังไง — retry, ตัดวงจร, ล้มบางส่วน
+- `observability-basics` — เมื่อออกแบบการวัดผลและการแจ้งเตือนของระบบ
+- `background-jobs` — เมื่อออกแบบคิว งานตามเวลา หรือการแยกงานออกจากคำขอ
+- `audit-trail` — เมื่อระบบอยู่ภายใต้การตรวจสอบย้อนหลัง
+- `pdpa-compliance` — เมื่อระบบเก็บข้อมูลส่วนบุคคล — กระทบทั้งชั้นข้อมูลและการออกแบบ
 - `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Output: Polished Architecture Overview

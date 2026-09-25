@@ -63,6 +63,7 @@ If user research is missing, **commission it before deciding**.
 - `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `document-naming` — เมื่อสร้างหรือส่งเอกสารกลยุทธ์ — ชื่อไฟล์ เวอร์ชัน สถานะ
 - `work-session-context` — at end of strategy/roadmap sessions, save decisions + open items for resume
 
 ## Standard Outputs

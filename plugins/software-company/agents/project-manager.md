@@ -53,6 +53,7 @@ If critical context is missing, **ask before producing**.
 - `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
+- `document-naming` — เมื่อจัดเอกสารโครงการ — ชื่อไฟล์ เวอร์ชัน สถานะ และที่เก็บ
 - `work-session-context` — at end of planning/status sessions, save summary so work can be resumed
 
 ## Standard Output: Polished Project Plan
