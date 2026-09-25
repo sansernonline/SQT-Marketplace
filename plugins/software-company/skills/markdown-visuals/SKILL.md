@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use whenever a markdown document needs a picture, mockup, diagram, or any kind of visual — wireframes, UI states, architecture diagrams, flows, data viz, icons. Stop emitting text-only design docs. Pick the right format (inline SVG, image file, ASCII art, Mermaid) and embed it so it renders in GitHub/Notion/VSCode/Obsidian. Use for design mockups, FSD diagrams, BRD process maps, ADR architecture sketches — any time prose alone won't communicate the idea.
+description: Use when a markdown document needs a picture — wireframe, UI state, architecture diagram, flow, data viz. Picks the right format (inline SVG, image file, ASCII, Mermaid) and embeds it so it renders in GitHub, Notion, VS Code and Obsidian. For design mockups, FSD diagrams, BRD process maps and ADR sketches — any time prose alone will not carry the idea.
 ---
 
 # Markdown Visuals
@@ -64,26 +64,30 @@ What are you showing?
 - Icon / chip: `viewBox="0 0 64 64"`
 - Full screen layout: `viewBox="0 0 800 500"`
 
-### Color palette (consistent across docs)
+### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 
-Use these tokens so multiple mockups in the same doc look coherent:
+**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
+ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
 
-| Token | Hex | Use |
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+
+| Token | หน้าที่ | ได้มาจาก |
 |---|---|---|
-| `bg-canvas` | `#1c2230` | Dark canvas background |
-| `bg-surface` | `#2a3245` | Plate, panel, card |
-| `bg-elevated` | `#22272e` | Elevated tile |
-| `accent-primary` | `#4cc2ff` | Highlight, active state |
-| `accent-success` | `#1ed760` | Success, running indicator |
-| `accent-danger` | `#e24b4a` | Error, broken badge |
-| `accent-warning` | `#ffd47a` | Warning callout |
-| `brand-blue` | `#0078d4` | Generic brand blue |
-| `text-primary` | `#ffffff` | Primary text on dark |
-| `text-muted` | `rgba(255,255,255,0.55)` | Placeholder, secondary |
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
 
-For **light mode** docs, swap canvas to `#f5f6f8`, surface to `#ffffff`, text to `#1c2230`.
+**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
 
 ### Reusable SVG snippets
+
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
 
 **Window chrome (desktop app mockup):**
 ```xml
@@ -138,29 +142,6 @@ For **light mode** docs, swap canvas to `#f5f6f8`, surface to `#ffffff`, text to
 This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
 
 ```markdown
-## Hover state — icon zooms, neighbours push aside
-
-> Description: cursor is over Projects; centre icon scales 1.4×, neighbours slide outward, tooltip floats above.
-
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" role="img" aria-label="Dock hover state with magnified centre tile">
-  <rect width="640" height="240" rx="14" fill="#1c2230"/>
-  <text x="320" y="64" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="18" font-weight="500">Projects</text>
-  <rect x="60" y="96" width="520" height="120" rx="20" fill="#2a3245"/>
-  <rect x="84" y="144" width="48" height="48" rx="10" fill="#0078d4"/>
-  <rect x="148" y="140" width="56" height="56" rx="11" fill="#22272e"/>
-  <rect x="222" y="124" width="76" height="76" rx="14" fill="#3578e5"/>
-  <rect x="316" y="140" width="56" height="56" rx="11" fill="#e8462b"/>
-  <rect x="396" y="144" width="48" height="48" rx="10" fill="#1ed760"/>
-  <circle cx="260" cy="216" r="4" fill="#4cc2ff"/>
-</svg>
-</p>
-```
-
-When producing a multi-state design doc, **show every state in its own SVG** — don't try to cram all states into one diagram.
-
----
-
 ## 2 · External image files
 
 Use when:
@@ -263,26 +244,16 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ---
 
-## 4 · Mermaid diagrams
+## 4 · Mermaid
 
-For **flows, sequences, state machines, ER, class diagrams, gantt, journeys** — use Mermaid. It's the right tool when relationships matter more than pixel-precise layout.
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
-See [[polished-document-style]] §"Mermaid Diagrams" for the full syntax catalogue. The short list:
-
-| Mermaid type | Use for |
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
 |---|---|
-| `flowchart TD` | Decision trees, pipelines |
-| `sequenceDiagram` | API calls, user-system interactions |
-| `stateDiagram-v2` | Application states, lifecycle |
-| `erDiagram` | Database schema |
-| `gantt` | Project timeline |
-| `journey` | UX journey map (satisfaction over steps) |
-| `pie` | Distribution |
-| `quadrantChart` | 2×2 comparison |
-
-**When to use Mermaid vs. SVG:**
-- **Mermaid**: relationships, flows, things-that-connect — let Mermaid lay them out
-- **SVG**: visual mockups, layouts, anything where the *look* is the point
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
 
 ---
 

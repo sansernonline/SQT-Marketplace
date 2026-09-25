@@ -60,7 +60,15 @@ If user research is missing, **flag the assumption explicitly**.
 
 - `simplicity-first` — **APPLY TO EVERY DESIGN** — fewest steps to user goal, reuse existing patterns, defaults that work for 80%
 - `markdown-visuals` — **APPLY TO EVERY MOCKUP / WIREFRAME / UI SPEC** — never deliver a text-only design. Embed inline SVG for UI states, ASCII art for layout sketches, Mermaid for flows. Mockups that read as prose only are rejected output.
-- `office-document-handling` — when reading user research reports (.docx, .pdf) or design system docs (.pptx) OR producing design briefs/walkthroughs in Office formats for stakeholder review
+- ไฟล์ Office ที่ได้รับมาหรือที่ต้องส่งออก — เรียก skill ที่มีมากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
+- `ui-craft` — ทุกงานหน้าจอ — ใช้คู่กับ skill แพลตฟอร์ม ไม่ใช่แทนกัน
+- `web-app-design` — เมื่อเป้าหมายคือเว็บแอป
+- `mobile-app-design` — เมื่อเป้าหมายคือแอปมือถือ
+- `windows-app-design` — เมื่อเป้าหมายคือโปรแกรมบนวินโดวส์
+- `svg-diagram-system` — เมื่อ flow หรือ mockup ต้องออกมาเป็นรูปจริง
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `work-session-context` — at end of design sessions, save decisions + open questions for resume
 
 ## Standard Outputs

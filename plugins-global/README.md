@@ -2,7 +2,7 @@
 
 ไฟล์นี้คือ plugin `software-company` ที่บีบอัดไว้สำหรับ **อัปโหลดเข้า claude.ai** เพื่อให้ใช้ skill ได้ใน Cowork และแชทบนเว็บ/เดสก์ท็อป — ไม่ใช่เฉพาะ Claude Code
 
-**ในไฟล์:** 38 skills · 13 agents · 15 commands · `plugin.json` v1.15.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**ในไฟล์:** 42 skills · 13 agents · 15 commands · `plugin.json` v1.22.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 
@@ -36,16 +36,16 @@ skill ทำงานทุกที่ · agent กับ hook จะเป็�
 ```bash
 node scripts/validate-marketplace.mjs          # ตรวจก่อนเสมอ
 cd plugins
-rm -f ../cowork/software-company.zip
-zip -q -r -X ../cowork/software-company.zip software-company
+rm -f ../plugins-global/software-company.zip
+zip -q -r -X ../plugins-global/software-company.zip software-company
 ```
 
 PowerShell:
 
 ```powershell
 node scripts\validate-marketplace.mjs
-Remove-Item cowork\software-company.zip -ErrorAction SilentlyContinue
-Compress-Archive -Path plugins\software-company -DestinationPath cowork\software-company.zip
+Remove-Item plugins-global\software-company.zip -ErrorAction SilentlyContinue
+Compress-Archive -Path plugins\software-company -DestinationPath plugins-global\software-company.zip
 ```
 
 > ⚠️ ต้อง zip จากในโฟลเดอร์ `plugins/` เพื่อให้โฟลเดอร์หลักในไฟล์เป็น `software-company/` ไม่ใช่ `plugins/software-company/`
@@ -66,7 +66,7 @@ Compress-Archive -Path plugins\software-company -DestinationPath cowork\software
 
 ## หมายเหตุ
 
-- ตอนนี้ `cowork/` **ยังไม่อยู่ใน `.gitignore`** ไฟล์ zip 384 KB จะถูก commit ขึ้น git ด้วย ถ้าไม่ต้องการให้เพิ่ม `cowork/` ลงใน `.gitignore`
+- `plugins-global/` **ไม่อยู่ใน `.gitignore`** ไฟล์ zip 3 MB จะถูก commit ขึ้น git ด้วย ถ้าไม่ต้องการให้เพิ่ม `plugins-global/` ลงใน `.gitignore`
 
 ---
 

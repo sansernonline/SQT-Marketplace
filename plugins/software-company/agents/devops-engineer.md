@@ -70,7 +70,15 @@ If touching production, **always have rollback plan ready first**.
 - `postmortem-template` — for post-incident reviews
 - `polished-document-style` — for deployment plans, runbooks, incident reports
 - `markdown-visuals` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** — deployment topology and network zones as inline SVG, deploy/rollback steps as Mermaid `flowchart`, incident timeline as `gantt`, blast radius as `quadrantChart`. On-call engineers read at 3 AM — visuals beat walls of text.
-- `office-document-handling` — when reading vendor docs/proposals (.docx, .pdf) OR producing compliance reports (.docx for auditors)
+- ไฟล์ Office ที่ได้รับมาหรือที่ต้องส่งออก — เรียก skill ที่มีมากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
+- `incident-runbook-template` — เมื่อทำ runbook ให้คนเวรตี 3 ใช้
+- `logging-standards` — เมื่อวาง log pipeline, retention หรือ redaction
+- `web-service-essentials` — เมื่อตั้ง health check, probe, timeout หรือ graceful shutdown
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
+- `cicd-and-release` — เมื่อตั้งหรือรื้อ pipeline เลือกวิธีปล่อยของ และซ้อม rollback
+- `config-and-secrets` — เมื่อวางที่เก็บ secret สิทธิ์เข้าถึง และรอบหมุนเวียน
 - `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 
 ## Standard Output: Polished Deployment Plan

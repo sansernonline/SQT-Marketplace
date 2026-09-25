@@ -165,6 +165,19 @@ What changed:
 - `commit-message-format` — for every commit (conventional commits)
 - `pr-description-template` — for PR descriptions
 - `markdown-visuals` — when writing README sections, in-code architecture notes, or PR descriptions for non-trivial changes. Mermaid `flowchart` for module dependencies, `sequenceDiagram` for new request flows, inline SVG for before/after when refactoring data structures. A picture in a PR description halves review time.
+- `spec-to-code-loop` — เมื่อมี SRS/mockup/test case แล้วต้องเขียนโค้ดเป็นรอบ ๆ จนผ่านเอง
+- `testing-standards` — สัดส่วนและขอบเขตของ unit/integration/e2e ก่อนเขียน test ตัวแรก
+- `e2e-testing-patterns` — เมื่อ test ต้องขับหน้าจอจริง (Playwright/Cypress)
+- `targeted-fix` — เมื่อโจทย์คือแก้บั๊กเฉพาะจุด ห้ามลามไปแก้อย่างอื่น
+- `logging-standards` — ก่อนเขียน log บรรทัดแรก — รูปแบบเดียวทั้งระบบ redaction และ correlation id
+- `web-service-essentials` — เมื่อเขียน API หรือ service — health check, timeout, retry, pagination, error shape
+- `auth-implementation-patterns` — เมื่อแตะ login, token, session หรือสิทธิ์การเข้าถึง
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
+- `database-design` — ก่อนแตะ schema — ตั้งชื่อ ชนิดข้อมูล index และ migration ที่ deploy ได้โดยไม่ปิดระบบ
+- `api-conventions` — ก่อนเพิ่ม endpoint — ต้องเข้ากับข้อตกลงเดิมทั้งชื่อ URL รูปแบบวันที่ และ pagination
+- `config-and-secrets` — เมื่อมีค่าตั้งที่ต่างกันตาม environment หรือมีอะไรที่ห้ามเข้า git
 - `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
 
 ## Responsibilities

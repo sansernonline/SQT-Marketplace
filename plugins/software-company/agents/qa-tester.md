@@ -72,7 +72,13 @@ For every feature, consider:
 - `bug-report-template` — when filing bugs
 - `polished-document-style` — when writing test plans for stakeholders/release sign-off
 - `markdown-visuals` — **APPLY TO TEST PLANS AND BUG REPORTS** — test coverage matrix as a heat-map table, defect-lifecycle as Mermaid `stateDiagram-v2`, reproduction steps with annotated SVG screenshots (mark the broken element with a red badge), pass/fail trends as Mermaid `pie` or inline SVG bars. A bug report with a picture of the broken state gets fixed faster.
-- `office-document-handling` — when reading test plans/cases from legacy systems (.xlsx is common for test matrices) OR exporting test cases to .xlsx for upload to test management tools
+- ไฟล์ Office ที่ได้รับมาหรือที่ต้องส่งออก — เรียก skill ที่มีมากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
+- `testing-standards` — สัดส่วน test แต่ละชั้นและอะไรควร/ไม่ควร automate
+- `e2e-testing-patterns` — เมื่อออกแบบ test ที่ขับหน้าจอจริง — selector, ข้อมูลตั้งต้น, flaky test
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
+- `api-conventions` — เมื่อทดสอบ API — ตรวจว่าตรงข้อตกลงกลาง ไม่ใช่แค่ทำงานได้
 - `work-session-context` — at end of test design/execution sessions, save state + open bugs for resume
 
 ## Standard Output: Polished Test Plan

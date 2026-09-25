@@ -1,6 +1,6 @@
 ---
 name: logging-standards
-description: Use whenever writing or reviewing application code that needs to record what it did — any service, API, worker, batch job, desktop app or frontend. Defines one log line format shared across .NET, Node/TypeScript, Python and Angular, with concrete rules for levels, correlation ids, daily-rotating log files, retention, secret redaction and log-injection safety. Ships tested drop-in loggers (winston for Node, stdlib logging for Python) and Serilog/Angular configuration that produce byte-identical output. Load it before adding the first log line to a project, when someone asks for logging, log files, log format, log levels, structured logging, or when debugging why production logs are useless.
+description: Use when writing or reviewing code that records what it did — service, API, worker, batch job, desktop app or frontend. Defines one log line format shared across .NET, Node, Python and Angular, with rules for levels, correlation ids, daily-rotating files, retention, secret redaction and log-injection safety. Ships tested drop-in loggers that produce identical output. Load it before the first log line, or when production logs turn out to be useless.
 ---
 
 # Logging Standards

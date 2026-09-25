@@ -1,6 +1,6 @@
 ---
 name: branded-document-design
-description: Use when the deliverable is a rendered document that a stakeholder will actually look at — a Word file (.docx), a slide deck (.pptx), or a PDF for sign-off — and it must look designed, not like default Word. Provides a fixed design-token palette, typography scale, and a tested python-docx / python-pptx builder (brandkit.py) that produces cover pages, brand-tinted tables, KPI strips, callouts, status pills, figure captions and page footers. Also covers Thai-language typography (complex-script font pitfalls) and the render-and-look verification loop. Pair with polished-document-style (which governs markdown) — this skill governs what the rendered file looks like.
+description: Use when the deliverable is a rendered document a stakeholder will look at — a Word file, a slide deck, or a PDF for sign-off — and it must look designed rather than like default Word. Ships a design-token palette, a typography scale, and a tested python-docx and python-pptx builder producing cover pages, tinted tables, callouts, figure captions and page footers. Covers Thai typography pitfalls and the render-and-look loop. Pair with polished-document-style, which governs markdown.
 ---
 
 # Branded Document Design
@@ -18,7 +18,7 @@ description: Use when the deliverable is a rendered document that a stakeholder 
 ## เมื่อไหร่ **ไม่** ใช้
 
 - ผลลัพธ์เป็น markdown ในรีโป → ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา → ใช้ `office-document-handling`
+- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา → ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - ไดอะแกรมในเอกสาร markdown → ใช้ `markdown-visuals`
 
 **ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
@@ -26,26 +26,56 @@ description: Use when the deliverable is a rendered document that a stakeholder 
 
 ---
 
+## 0 · สีมาจากเนื้องาน — ถามก่อนเริ่ม
+
+**ถ้า markdown ต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น — อย่าถามซ้ำ อย่าตั้งใหม่**
+(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
+
+ถ้ายังไม่มี — **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ถามผู้ใช้ว่าจะใช้สีอะไร
+ถ้ายังไม่ระบุ ให้เสนอจากเนื้องานแล้วรอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
+
+| เนื้องาน | โทนที่เสนอ | เหตุผล |
+|---|---|---|
+| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
+| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
+| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
+| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
+| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
+| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
+| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+
+ถ้าลูกค้ามีแบรนด์อยู่แล้ว ใช้สีแบรนด์เป็นตัวตั้ง — ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
+
+**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่ใช่เลือกเพิ่มทีละสี
+สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ซึ่งต้องคงความหมายเดิมเสมอ
+
+---
+
 ## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
 
-ชุดนี้สกัดจาก Apps Track (`AppsTrack_SRS.docx` + `styles.css`) โทน "สว่าง โปร่ง นุ่มนวล"
-accent น้ำเงิน–ม่วง บนตัวอักษรเทาเย็น — อ่านสบายตาและพิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก
+ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
+ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
 
-| Token | ค่า | ใช้กับ |
-|-------|-----|--------|
-| `brand` | `#2A78D6` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent |
-| `brand_2` | `#6A5CD6` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี |
-| `brand_deep` | `#2A4C86` | หัวข้อ H2 · ตัวอักษรหัวตาราง |
-| `brand_tint` | `#EDF1FB` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปกสไลด์ |
-| `brand_tint_2` | `#F6F8FD` | แถวสลับ (zebra) ในตารางยาว |
-| `text` | `#333B4A` | หัวข้อ H3 · ข้อความเน้น |
-| `text_body` | `#414957` | เนื้อความทั้งหมด (ไม่ใช่ดำสนิท — ดำสนิทล้าตา) |
-| `text_muted` | `#7D8492` | คำบรรยายรูป · meta · footer |
-| `line` | `#E4E7EE` | เส้นตาราง เส้นคั่น |
+| Token | หน้าที่ | ได้มาจาก |
+|-------|---------|----------|
+| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีหลักที่ผู้ใช้เลือก |
+| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
+| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
+| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
+| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
+| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
+| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` หนึ่งขั้น — **ไม่ใช่ดำสนิท ดำสนิทล้าตา** |
+| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
+| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
 
-**สีสถานะ** (คู่ พื้น/ตัวอักษร): green `#E9F7EF`/`#17794A` · blue `#EAF2FD`/`#2160AB` ·
-amber `#FDF5E4`/`#96660D` · red `#FDEDEC`/`#A63A34` · violet `#F1EEFC`/`#52439F` ·
-grey `#F2F4F8`/`#626A7A`
+**สีสถานะ 6 ตัว** (คู่ พื้น/ตัวอักษร) — สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
+สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
+พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
+
+> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
+> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก — ถ้าไม่ผ่านให้ปรับความเข้ม ไม่ใช่ปรับสี
+>
+> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
 
 > 💡 **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
 > `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
@@ -198,8 +228,8 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 
 - ❌ **ใช้ built-in Heading style ของ Word** — จะทับสีที่เราตั้ง ให้ใช้ `h1()/h2()/h3()`
   ซึ่งตั้ง `outlineLvl` เองเพื่อให้ TOC ยังเห็นหัวข้อ
-- ❌ **เส้นตารางดำหนา default** — เอกสารดูเก่าทันที ใช้เส้น `#E4E7EE` หนา 0.5pt
-- ❌ **ตัวอักษรสีดำสนิท `#000000`** — ใช้ `#414957` เนื้อความจะนุ่มขึ้นมาก
+- ❌ **เส้นตารางดำหนา default** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
+- ❌ **ตัวอักษรสีดำสนิท** — ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
 - ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตาจะไม่รู้ว่าตารางเริ่มตรงไหนเวลาข้ามหน้า
 - ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
   ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
@@ -213,9 +243,9 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 
 | ต้องการ | ใช้คู่กับ |
 |---------|-----------|
-| โครงเนื้อหา/สำนวนเอกสารทางการ | `polished-document-style` |
+| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
 | ไดอะแกรมที่จะเอามาแปะเป็นรูป | `markdown-visuals` → export PNG → `figure()` |
-| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `office-document-handling` |
+| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
 | สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
 | เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
 | โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |

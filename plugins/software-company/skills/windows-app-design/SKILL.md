@@ -1,6 +1,6 @@
 ---
 name: windows-app-design
-description: Use when designing or building a desktop app UI that must look like a native Windows 11 app — WinUI 3 / Windows App SDK, Avalonia, .NET MAUI, or a web-wrapped desktop shell (Electron, Tauri, WebView2). Provides the Fluent 2 design tokens measured from real Windows 11 (colors, type ramp, spacing, radii, NavigationView metrics, breakpoints), a drop-in fluent.css, WinUI and Avalonia ResourceDictionaries carrying the same values, an HTML mockup template of the Windows app shell, and a render-and-look verification loop. Use it for any window layout, navigation pane, settings page, dashboard, dialog, or Windows-style component. NOT for web sites or mobile apps.
+description: Use when designing or building a desktop app that must look like a native Windows 11 app — WinUI 3, Avalonia, .NET MAUI, or a web-wrapped shell. Ships the Fluent 2 tokens measured from real Windows 11, a drop-in stylesheet, resource dictionaries carrying the same values, a mockup template of the Windows app shell, and a render-and-look loop. Not for web sites or mobile apps.
 ---
 
 # Windows App Design
@@ -58,6 +58,14 @@ description: Use when designing or building a desktop app UI that must look like
 | accent | `#4CC2FF` | `#005FB8` |
 | ลิงก์ | `#99EBFF` | `#003E92` |
 | พื้นปุ่ม | `#333333` | `#FFFFFF` |
+
+> **ค่ากลาง (พื้น ข้อความ เส้น เงา) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — ห้ามคิดเอง ห้ามปรับให้สวยขึ้น**
+> แอปที่สีกลางไม่ตรงกับระบบปฏิบัติการ จะดูเหมือนของแปลกปลอมทันทีที่วางข้างแอปอื่น
+>
+> **สีที่เปลี่ยนตามงานมีแค่ accent** — ใช้สีแบรนด์ของลูกค้า หรือเสนอโทนจากเนื้องานแล้วรอยืนยัน
+> (ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+> ค่า accent ในตารางข้างบนคือค่าเริ่มต้นของ Windows ซึ่งเป็นตัวเลือกที่ปลอดภัยเมื่อยังไม่มีแบรนด์
+> **ไม่ใช่ค่าที่ต้องใช้** · accent ต้องผ่าน contrast ≥ 4.5:1 ทั้งโหมดมืดและสว่าง จึงมักต้องมีคนละค่าต่อโหมด
 
 **เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ที่เดียวทั้งแอป
 

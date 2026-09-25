@@ -1,6 +1,6 @@
 ---
 name: mobile-app-design
-description: Use when designing or building a phone app UI — screens, bottom tab bars, conversation and chat interfaces, lesson or content lists, result and report screens, settings, onboarding — for a PWA, a web-wrapped app (Capacitor, Cordova, WebView), React Native, or Flutter. Provides the Speak Go design language as a working system — a function-named token contract, a four-family typography system where UI chrome, big numbers, readable content and meta labels each get their own font, a phone-frame HTML mockup template with tab bar and full-screen task overlay, safe-area and 100dvh handling, a plain and a gradient theme, Thai-English bilingual font switching, and a render-and-look verification loop at real phone sizes. NOT for desktop web apps (use web-app-design) or Windows apps (use windows-app-design).
+description: Use when designing or building a phone app user interface — screens, bottom tab bars, chat, lists, results, settings, onboarding — for a progressive web app, a web-wrapped app, React Native or Flutter. Ships a token contract, a four-family typography system, a phone-frame mockup template, safe-area and full-height handling, light and gradient themes, Thai-English font switching, and a render-and-look loop at real phone sizes. Not for desktop web or Windows apps.
 ---
 
 # Mobile App Design
@@ -42,18 +42,28 @@ description: Use when designing or building a phone app UI — screens, bottom t
 
 ## 2 · Design tokens
 
+> **สีมาจากเนื้องาน — ถามก่อนเริ่ม**
+> มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+> (ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+
 อยู่ครบใน `assets/speakgo.css` · ตารางเต็มใน **`references/tokens.md`**
 
-| | ค่า | |
+| Token | หน้าที่ | ได้มาจาก |
 |---|---|---|
-| พื้นหน้าจอ / การ์ด | `#F2F4F6` / `#FFF` | พื้นเป็นเทาอ่อน ไม่ใช่ขาว การ์ดจะได้ลอย |
-| ข้อความ | `#131A21` หลัก · `#66727E` รอง · `#98A3AD` จาง | |
-| accent | `#0E7C86` | แท็บที่เลือก · ความคืบหน้า · ไมค์ตอนอัด |
-| ต้องแก้ / คำใบ้ / ถูกใจ | `#C0392B` / `#8A6D1F` / `#D9455F` | มีสีพื้นอ่อนคู่กันทุกตัว |
-| ไทล์ | ไล่ `#0B7076` → `#4338A8` | |
+| พื้นหน้าจอ / การ์ด | พื้นเป็น**เทาอ่อน ไม่ใช่ขาว** การ์ดจะได้ลอยขึ้นมาโดยไม่ต้องมีเงา | เทาอ่อนมาก / ขาว |
+| ข้อความ 3 ระดับ | หลัก · รอง · จาง | เข้ม → อ่อน · หลัก contrast ≥ 4.5:1 |
+| `--accent` | แท็บที่เลือก · ความคืบหน้า · ปุ่มหลัก | **สีหลักที่ผู้ใช้เลือก** |
+| ไทล์ไล่สี | ปลายสองข้างของ gradient | สีหลัก → เพื่อนบ้านบนวงล้อสี |
+| สีบอกสถานะของเนื้อหา | ต้องแก้ · คำใบ้ · ถูกใจ — **มีสีพื้นอ่อนคู่กันทุกตัว** | ตามความหมาย ไม่ตามแบรนด์ |
+
+**สีที่บอกสถานะไม่เปลี่ยนตามแบรนด์** — แดงคือจุดที่ต้องแก้ ไม่ว่าแบรนด์จะเป็นสีอะไร
+ถ้าสีแบรนด์ชนกับสีสถานะ ให้เลี่ยงการใช้แบรนด์ในบริบทนั้น ไม่ใช่เปลี่ยนสีสถานะ
 
 **ชื่อ token ตั้งตามหน้าที่ ไม่ใช่ตามสี** — `--repair` ไม่ใช่ `--red`
 วันที่เปลี่ยนใจว่าจุดที่ต้องแก้ควรเป็นสีส้ม แก้ค่าเดียวโดยชื่อยังถูกอยู่
+
+`assets/speakgo.css` มาพร้อมชุดสีหนึ่งชุดเป็น**ตัวอย่างที่ประกอบครบแล้ว** ไม่ใช่ค่ามาตรฐาน
+เปลี่ยนค่าใน `:root` ให้ตรงกับเนื้องานก่อนทำ mockup แรก
 
 ---
 

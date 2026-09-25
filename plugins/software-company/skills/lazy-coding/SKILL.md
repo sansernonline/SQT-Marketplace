@@ -1,6 +1,6 @@
 ---
 name: lazy-coding
-description: Use ALWAYS when writing, fixing, refactoring, or reviewing code. Forces the simplest solution that actually works — ask "do we need this at all?" first (YAGNI), then reach for the standard library before custom code, native platform features before dependencies, and one line before fifty. Mark deliberate simplifications with a `// simple:` comment. Supports intensity levels lite / full (default) / ultra. Trigger on any implementation, refactor, or bug-fix task, and whenever someone complains about bloat, boilerplate, over-engineering, or unnecessary dependencies. For non-code outputs (docs, plans, architecture), use `simplicity-first` instead.
+description: Use when writing, fixing, refactoring or reviewing code. Forces the simplest solution that actually works — ask whether it is needed at all, then reach for the standard library before custom code, native platform features before dependencies, and one line before fifty. Mark deliberate simplifications with a comment. Also triggers when someone complains about bloat or over-engineering. For documents and plans use simplicity-first instead.
 ---
 
 # Lazy Coding

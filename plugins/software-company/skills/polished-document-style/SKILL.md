@@ -66,54 +66,46 @@ Status values:
 
 ---
 
+## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
+
+เอกสารหนึ่งฉบับผ่านมือหลาย skill — markdown ตัวนี้ · รูปจาก `software-diagrams` ·
+ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
+ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
+
+**markdown คือ source of truth ธีมจึงประกาศไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
+
+```markdown
+<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
+```
+
+**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
+มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน
+(ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+
+| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
+|---|---|---|
+| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
+| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
+| รูปที่เป็นไฟล์ภาพ | `svg-diagram-system` · `diagram-figures` | `doc-theme` |
+| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
+| สไลด์ | `presentation-design` | `doc-theme` |
+
+**สีสถานะไม่นับรวม** — 🔴 วิกฤต 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
+
+---
+
 ## Emoji Vocabulary
 
-Use emoji **purposefully** — they should add meaning, not decoration.
+ใช้ให้**คงที่ทั้งเอกสาร** และใช้เพื่อ**หาของเจอเร็วขึ้น** ไม่ใช่เพื่อความน่ารัก
 
-### Document Markers
-| Emoji | Use for |
-|:-----:|---------|
-| 📋 | Document title / overview |
-| 📑 | Table of contents |
-| 📊 | Data / metrics / charts |
-| 📈 | Trend up / growth |
-| 📉 | Trend down / decline |
-| 🎯 | Goals / objectives |
-| 🗓️ | Schedule / timeline |
-| 📝 | Notes / annotations |
+| ใช้ทำอะไร | ชุดที่ใช้ |
+|---|---|
+| ระดับความสำคัญ | 🔴 วิกฤต · 🟠 สูง · 🟡 กลาง · 🟢 ต่ำ |
+| สถานะ | ✅ เสร็จ · 🚧 กำลังทำ · ⏳ รอ · ❌ ไม่ผ่าน · ⚠️ ต้องระวัง |
+| ชนิดกล่องข้อความ | 💡 ข้อแนะนำ · 📌 ข้อควรจำ · 🚨 อันตราย · 📋 รายการตรวจ |
+| หมวดเนื้อหา | 🎯 เป้าหมาย · 🏗️ สถาปัตยกรรม · 🔐 ความปลอดภัย · 📊 ตัวเลข · 🧪 การทดสอบ |
 
-### Status Indicators
-| Emoji | Use for |
-|:-----:|---------|
-| 🟢 | Done / approved / healthy |
-| 🟡 | In progress / draft / warning |
-| 🔴 | Blocked / critical / failed |
-| ⚪ | Not started / archived |
-| 🔵 | Under review |
-
-### Call-out Types
-| Emoji | Use for |
-|:-----:|---------|
-| 💡 | Tip / insight |
-| ⚠️ | Warning |
-| 🚨 | Critical alert |
-| ℹ️ | Information |
-| ❓ | Question / open item |
-| ✅ | Yes / in scope / passed |
-| ❌ | No / out of scope / failed |
-
-### Domain Markers
-| Emoji | Use for |
-|:-----:|---------|
-| 👤 | Person / actor / user |
-| 👥 | Team / group |
-| 🌐 | API / external / network |
-| 🔒 | Security / privacy |
-| ⚡ | Performance / speed |
-| 🐛 | Bug / defect |
-| 🚀 | Release / deployment |
-| 🔄 | Process / workflow |
-| 💰 | Cost / pricing |
+**หนึ่งอิโมจิต่อหัวข้อ ไม่ใช่ต่อบรรทัด** — เอกสารที่ทุกบรรทัดมีอิโมจิอ่านยากกว่าเอกสารที่ไม่มีเลย
 
 ---
 
@@ -173,67 +165,26 @@ Use tables when items have **2+ attributes**:
 
 ## Mermaid Diagrams
 
-Render in GitHub, Notion, VSCode, Obsidian.
+**ตัวเลือกชนิดไดอะแกรม กติกาความอ่านง่าย ธีม และการจัดการป้ายภาษาไทย อยู่ใน `software-diagrams`**
+skill นี้คุมเฉพาะเรื่องการวางไดอะแกรมลงในเอกสาร markdown
 
-### Choose the right diagram
+- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
+- ทุกรูปมีคำบรรยายใต้รูปหนึ่งบรรทัด ขึ้นต้นด้วย **รูปที่ N —**
+- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
+- รูปที่ต้องส่งให้คนนอกทีมหรือใส่สไลด์ ใช้ `svg-diagram-system` แล้วฝังเป็นไฟล์ภาพ
 
-| Diagram | Use for | Syntax |
-|---------|---------|--------|
-| Flowchart | Decisions, branches | `flowchart TD` |
-| Sequence | Interactions over time | `sequenceDiagram` |
-| State | Status transitions | `stateDiagram-v2` |
-| ER | Database schemas | `erDiagram` |
-| Class | OO design | `classDiagram` |
-| Gantt | Project schedule | `gantt` |
-| Journey | UX experience | `journey` |
-| Mindmap | Concept relationships | `mindmap` |
-| Pie | Distribution | `pie` |
-| Quadrant | 2×2 comparison | `quadrantChart` |
-
-### Quick examples
-
-**Sequence (most common):**
 ````markdown
 ```mermaid
 sequenceDiagram
     autonumber
-    actor U as User
+    actor U as ผู้ใช้
     participant API
-    participant DB
-
-    U->>API: Request
-    API->>DB: Query
-    DB-->>API: Result
-    API-->>U: Response
+    U->>API: ส่งคำขอ
+    API-->>U: ตอบกลับ
 ```
 ````
 
-**Flowchart:**
-````markdown
-```mermaid
-flowchart TD
-    A[Start] --> B{Decision?}
-    B -->|Yes| C[Action 1]
-    B -->|No| D[Action 2]
-    C --> E[End]
-    D --> E
-```
-````
-
-**Gantt (timeline):**
-````markdown
-```mermaid
-gantt
-    title Project Schedule
-    dateFormat YYYY-MM-DD
-    section Phase 1
-    Design       :a1, 2025-01-01, 14d
-    Build        :after a1, 21d
-    section Phase 2
-    Test         :2025-02-15, 7d
-    Deploy       :3d
-```
-````
+*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: srs-writing
-description: Use when writing or reviewing a Software Requirements Specification (SRS) — the document a team builds from and a client signs off on. Gives the full section skeleton based on ISO/IEC/IEEE 29148, the rules that make a single requirement testable (one statement, one actor, a number instead of an adjective, no solution inside the requirement), an identifier and traceability scheme that survives change requests, a non-functional requirement catalogue with the questions to ask for each, and a completeness review that catches the gaps a reader will otherwise find during user acceptance testing. Covers Thai-English bilingual documents. Pair with branded-document-design for the rendered .docx and software-diagrams for the pictures inside it.
+description: Use when writing or reviewing a Software Requirements Specification — the document a team builds from and a client signs off on. Gives the section skeleton from ISO/IEC/IEEE 29148, the rules that make one requirement testable, an identifier and traceability scheme that survives change requests, a non-functional requirement catalogue with the question to ask for each, and a completeness review that catches the gaps a reader would otherwise find during acceptance testing. Covers Thai-English bilingual documents.
 ---
 
 # SRS Writing
@@ -25,7 +25,7 @@ description: Use when writing or reviewing a Software Requirements Specification
 | บันทึกเหตุผลที่เลือกเทคโนโลยี | `adr-writer` |
 | Functional Specification Document (FSD) ระดับหน้าจอ | agent `system-analyst` |
 | หน้าตาไฟล์ Word ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` |
+| รูปในเอกสาร | `software-diagrams` · `svg-diagram-system` · `diagram-figures` |
 
 ---
 
@@ -170,7 +170,18 @@ IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อ�
 ## 6 · รูปในเอกสาร
 
 SRS ที่ไม่มีรูปเลย = คนอ่านต้องสร้างภาพในหัวเอง แล้วแต่ละคนสร้างไม่เหมือนกัน
-รูปขั้นต่ำที่ควรมี (วิธีวาดดู `software-diagrams`):
+**เลือกเครื่องมือให้ตรงกับปลายทางของเอกสาร:**
+
+| SRS ฉบับนี้ไปจบที่ไหน | วาดด้วย |
+|---|---|
+| markdown ที่ให้ git ตามความเปลี่ยนแปลงได้ | `software-diagrams` (Mermaid) |
+| ไฟล์ .docx / PDF ที่ลูกค้าเซ็นรับ | `svg-diagram-system` — ได้ไฟล์ภาพคมชัดคุมตำแหน่งเอง |
+| ผังที่ต้องมีโลโก้ผู้ให้บริการจริง | `diagram-figures` |
+
+**ทุกรูปในเอกสารฉบับเดียวต้องใช้ธีมสีชุดเดียวกัน** — ประกาศธีมไว้ที่ต้นเอกสารตาม
+`polished-document-style` หัวข้อ "ธีมของเอกสาร" แล้วทุกเครื่องมืออ่านค่าจากที่เดียวกัน
+
+รูปขั้นต่ำที่ควรมี:
 
 | หัวข้อ | รูป |
 |---|---|
@@ -253,7 +264,8 @@ SRS ที่ไม่มีรูปเลย = คนอ่านต้อง�
 |---|---|
 | หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
 | รูปแบบ markdown ระหว่างร่าง | `polished-document-style` |
-| รูปในเอกสาร | `software-diagrams` |
+| รูปในเอกสาร (ดูข้อ 6 ว่าเลือกตัวไหน) | `software-diagrams` · `svg-diagram-system` · `diagram-figures` |
+| ธีมสีของทั้งเอกสาร | `polished-document-style` หัวข้อ "ธีมของเอกสาร" |
 | แตกเป็น user story ตอนเริ่มทำจริง | `user-story-writer` |
 | แปลงข้อกำหนดเป็น test case | `test-case-template` |
 | ตัดสิ่งที่ไม่จำเป็นออกจากเอกสาร | `simplicity-first` |

@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when building a slide deck someone will present or read — a proposal, a status update, a design review, a training deck, a steering-committee briefing. Covers the part that decides whether a deck works — a story order chosen by the deck's purpose, headlines that state the finding instead of naming the topic, a text budget per slide, six layouts that are enough for almost any deck, data slides where the chart is annotated with its own takeaway, type sizes that stay readable from the back of a room, Thai typography on slides, and a look-at-the-thumbnails verification loop. Hands the .pptx file mechanics to branded-document-design and the chart colour set to web-app-design.
+description: Use when building a slide deck someone will present or read — a proposal, a status update, a design review, a training deck. Covers what decides whether a deck works — a story order chosen by purpose, headlines that state the finding instead of naming the topic, a text budget per slide, six layouts that cover almost any deck, data slides annotated with their own takeaway, type sizes readable from the back of a room, Thai typography, and a look-at-the-thumbnails check.
 ---
 
 # Presentation Design
@@ -9,6 +9,9 @@ description: Use when building a slide deck someone will present or read — a p
 > ถ้าผู้ฟังอ่านแค่หัวสไลด์ทุกแผ่นแล้วเข้าใจเรื่องทั้งหมด แปลว่าเด็คใช้ได้
 
 ---
+
+> **ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น** — อย่าเลือกสีใหม่ให้เด็ค
+> (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 
 ## เมื่อไหร่ใช้ skill นี้
 

@@ -1,6 +1,6 @@
 ---
 name: web-app-design
-description: Use when designing or building the UI of a web application — dashboards, admin panels, internal tools, SaaS screens — in any framework (Angular, React, Vue, Svelte, or plain HTML). Provides the Apps Track design language as a working system — a token contract (colors, gradients, surfaces, type scale, layout metrics, status pills, chart colors), a drop-in appstrack.css with the full component set (app shell, cards, KPI stats, tables, forms, chips, tabs, toasts, modals), an HTML mockup template, five swappable accent themes plus light/dark sidebar, and check-design-tokens.mjs which fails CI when anyone hardcodes a color. Use it for any screen layout, dashboard, form, data table, or component styling on the web. NOT for Windows desktop apps (use windows-app-design) or documents (use branded-document-design).
+description: Use when designing or building the user interface of a web application — dashboards, admin panels, internal tools, SaaS screens — in any framework or in plain HTML. Ships a token contract for colours, type scale and layout, a drop-in stylesheet with the full component set, an HTML mockup template, swappable accent themes, and a checker that fails the build when anyone hardcodes a colour. Not for Windows desktop apps or for documents.
 ---
 
 # Web App Design
@@ -44,21 +44,34 @@ description: Use when designing or building the UI of a web application — dash
 
 ## 2 · Design tokens
 
-93 token อยู่ใน `assets/appstrack.css` บล็อก `:root` · รายละเอียดครบใน
-**`references/tokens.md`** ค่าที่ต้องจำได้:
+> **สีมาจากเนื้องาน — ถามก่อนเริ่ม**
+> ถ้าลูกค้ามีสีแบรนด์อยู่แล้ว ใช้สีนั้น · ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+> (การแพทย์เขียว · การเงินน้ำเงินเข้ม · อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า ·
+> ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
+> **ห้ามเริ่มด้วยธีมเริ่มต้นแล้วค่อยเปลี่ยนทีหลัง** — mockup ที่ผู้ใช้เห็นครั้งแรกคือสีที่เขาจะจำ
 
-| | ค่า | |
+93 token อยู่ใน `assets/appstrack.css` บล็อก `:root` · รายละเอียดครบใน
+**`references/tokens.md`** โครงที่ต้องจำได้ (ค่าสีมาจากข้อบนนี้ ไม่ใช่จากตาราง):
+
+| | หน้าที่ | ได้มาจาก |
 |---|---|---|
-| brand / brand-2 | `#2A78D6` / `#6A5CD6` | ไล่สี 135deg เป็น `--grad-accent` |
-| พื้นหน้า / การ์ด | `#F6F7FB` / `#FFFFFF` | พื้นหน้ามี `--grad-page` ทับอีกชั้น |
-| ข้อความ | `#333B4A` หัวข้อ · `#414957` เนื้อ · `#7D8492` รอง · `#A9AEB9` จาง | |
-| เส้น | `#EEF0F5` ในการ์ด · `#E4E7EE` ขอบ input | |
-| มุม | `14px` การ์ด · `9px` ปุ่ม/input · `99px` pill | |
-| เลย์เอาต์ | sidebar `232px` · topbar `56px` · เนื้อหา `1160px` | |
+| `--brand` / `--brand-2` | สีหลัก · ปลายไล่สี 135deg ใน `--grad-accent` | สีที่ผู้ใช้เลือก + เพื่อนบ้านบนวงล้อสี |
+| `--brand-50` / `--brand-100` | พื้นอ่อนของ chip การ์ด และแถวที่เลือก | สีหลักผสมขาว 96% / 90% |
+| พื้นหน้า / การ์ด | พื้นหลังเทาอ่อนมาก / การ์ดขาว | เทากลาง ๆ อมโทนเดียวกับสีหลักได้เล็กน้อย |
+| ข้อความ 4 ระดับ | หัวข้อ · เนื้อ · รอง · จาง | เทาเข้ม → เทาอ่อน · เนื้อความ contrast ≥ 4.5:1 |
+| เส้น 2 ระดับ | เส้นในการ์ด (อ่อนกว่า) · ขอบ input | เทาอ่อนมาก |
+| มุม | `14px` การ์ด · `9px` ปุ่ม/input · `99px` pill | **ค่าคงที่ ไม่เปลี่ยนตามแบรนด์** |
+| เลย์เอาต์ | sidebar `232px` · topbar `56px` · เนื้อหา `1160px` | **ค่าคงที่ ไม่เปลี่ยนตามแบรนด์** |
 
 **เปลี่ยนแบรนด์ทั้งแอป = แก้ 5 ค่า** (`--grad-accent --brand --brand-2 --brand-50 --brand-100`)
-มีธีมสำเร็จให้แล้ว 5 ชุด: ocean (ค่าเริ่มต้น) · emerald · sunset · plum · graphite
+ทุกอย่างที่เหลือคำนวณหรืออ้างอิงจาก 5 ค่านี้ — ถ้าต้องแก้ค่าที่ 6 แปลว่ามีที่ไหน hardcode อยู่
+
+`assets/appstrack.css` มีชุดสีตัวอย่างมาให้ 5 ชุด (ocean · emerald · sunset · plum · graphite)
 สลับด้วย `body[data-theme]` และ sidebar สว่าง/เข้มด้วย `body[data-side='dark']`
+**ชุดพวกนี้คือตัวอย่างให้ดูว่าระบบรองรับการเปลี่ยนสีได้จริง ไม่ใช่ตัวเลือกที่ต้องเลือกใช้**
+เนื้องานที่ไม่เข้ากับทั้ง 5 ชุด ให้สร้างชุดที่ 6 จากสีของงานนั้น
+
+**สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่าน เสมอ
 
 ---
 

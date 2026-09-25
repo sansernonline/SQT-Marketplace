@@ -1,6 +1,6 @@
 ---
 name: ui-craft
-description: Use on every user interface task, alongside whichever platform skill applies (web-app-design, windows-app-design, mobile-app-design). Covers the craft rules that make an interface look modern and minimal regardless of brand or platform — one spacing scale, one type scale, a single visual hierarchy per screen, the choice between border, background and shadow for separation, contrast numbers that pass accessibility checks, the five states every screen needs (empty, loading, error, partial, success), a motion budget, and a density decision. Use it when a screen "looks off" but nothing is obviously wrong, when reviewing someone else's UI, or when there is no platform skill for the target. It sets no colours and no fonts — those come from the platform skill.
+description: Use on any task that produces a screen or a screen spec, alongside the platform skill. Covers the craft rules that make a screen look modern and minimal regardless of brand — one spacing scale, one type scale, one hierarchy per screen, border versus shadow, contrast numbers that pass accessibility, the five states every screen needs, a motion budget and a density decision. Sets no colours and no fonts — those come from the platform skill.
 ---
 
 # UI Craft

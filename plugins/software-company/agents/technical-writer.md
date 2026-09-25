@@ -59,8 +59,11 @@ Every doc belongs to ONE of four types — don't mix them:
 - `polished-document-style` — for formal documentation, release notes
 - `markdown-visuals` — **APPLY TO TUTORIALS / API DOCS / RELEASE NOTES** — annotated UI screenshots (inline SVG), request/response shape diagrams (Mermaid `sequenceDiagram`), before/after comparisons for breaking changes, conceptual diagrams for "Explanation" docs. Words alone fail learners — pair each non-trivial step with a picture.
 - `commit-message-format` — when writing changelog entries
-- `office-document-handling` — when source content is in .docx/.pdf OR when deliverable requested as .docx/.pptx (training decks, user guides for enterprise customers)
+- ไฟล์ Office ที่ได้รับมาหรือที่ต้องส่งออก — เรียก skill ที่มีมากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
 - `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume
 
 ## Standard Outputs

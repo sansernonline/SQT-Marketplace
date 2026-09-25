@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a software question needs a picture — system architecture, how a request flows between services, what states a record moves through, how tables relate, or what runs on which machine. Decides which diagram type answers the question asked, then draws it with one shared Mermaid theme so every diagram in the project looks like it came from the same hand. Covers the C4 model at three zoom levels, sequence, state, entity relationship and deployment diagrams, the rules that keep a diagram readable (seven boxes, one level of detail, every arrow labelled), Thai label handling, and a render-and-look verification loop. Also routes the two cases Mermaid cannot serve — real vendor icons go to the Python diagrams library, and a figure that must look designed for a client or a slide goes to diagram-figures. Pair with markdown-visuals and polished-document-style.
+description: Use when a software question needs a picture — architecture, how a request flows, what states a record moves through, how tables relate, or what runs on which machine. Picks the diagram type that answers the question, draws it in Mermaid with one shared theme, and applies the rules that keep it readable — seven boxes, one level of detail, every arrow labelled, Thai labels handled. Routes the two cases Mermaid cannot serve, to the Python diagrams library for real vendor icons and to diagram-figures or svg-diagram-system for a figure that must look designed.
 ---
 
 # Software Diagrams
@@ -9,6 +9,9 @@ description: Use when a software question needs a picture — system architectur
 > ถ้าตอบสองคำถาม ให้วาดสองรูป
 
 ---
+
+> **ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น** — อย่าเลือกสีใหม่รายรูป
+> (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 
 ## เมื่อไหร่ใช้ skill นี้
 
@@ -55,28 +58,47 @@ description: Use when a software question needs a picture — system architectur
 
 ## 2 · ธีม — ใช้ชุดเดียวทั้งโปรเจกต์
 
+> **สีหลักมาจากเนื้องาน ไม่ใช่จาก skill นี้**
+> ถ้าโปรเจกต์มีสีแบรนด์อยู่แล้ว ใช้สีนั้น ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+> (ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+> **ทั้งไดอะแกรมใช้สีหลักสีเดียว** ที่เหลือเป็นเทาโครงสร้างซึ่งไม่ต้องเปลี่ยนตามแบรนด์
+
 วางบรรทัด `%%{init: ...}%%` ไว้**บรรทัดแรกสุด**ของทุกไดอะแกรม
 ชุดเต็มพร้อมตัวอย่างที่เรนเดอร์แล้วอยู่ใน **`assets/mermaid-theme.md`**
 
 ```
 %%{init: {'theme':'base','fontFamily':'Tahoma, Arial, sans-serif','themeVariables':{
-  'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'#333B4A',
-  'primaryBorderColor':'#C6CCD8','lineColor':'#8A93A3','clusterBkg':'#F8F9FC',
-  'clusterBorder':'#E4E7EE','edgeLabelBackground':'#FFFFFF'}}}%%
+  'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'<TEXT>',
+  'primaryBorderColor':'<LINE>','lineColor':'<LINE_DARK>','clusterBkg':'<BG_SOFT>',
+  'clusterBorder':'<LINE>','edgeLabelBackground':'#FFFFFF'}}}%%
 ```
+
+| ตัวแทนค่า | คือสีอะไร |
+|---|---|
+| `<TEXT>` | เทาเข้มสำหรับตัวอักษร — ไม่ใช่ดำสนิท |
+| `<LINE>` | เทาอ่อนสำหรับเส้นขอบกล่อง |
+| `<LINE_DARK>` | เทากลางสำหรับเส้นเชื่อม เข้มกว่า `<LINE>` หนึ่งขั้น |
+| `<BG_SOFT>` | เทาอ่อนมากสำหรับพื้นของกลุ่ม |
 
 > ⚠️ **`fontFamily` ต้องอยู่นอก `themeVariables`** — เป็นจุดที่พลาดกันมากที่สุด
 > ใส่ไว้ข้างในจะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
 > (ทดสอบแล้วกับ Mermaid 11 — ดูหลักฐานใน `assets/mermaid-theme.md`)
 
-**สีในไดอะแกรมใช้ 3 คลาสพอ** — กล่องส่วนใหญ่เป็นสีขาวเส้นเทา สีแบรนด์สงวนไว้ให้
-"ของที่เรากำลังพูดถึง" เท่านั้น
+**สีในไดอะแกรมใช้ 3 คลาสพอ** — กล่องส่วนใหญ่เป็นสีขาวเส้นเทา **สีหลักสงวนไว้ให้
+"ของที่เรากำลังพูดถึง" เท่านั้น** นี่คือที่เดียวในรูปที่สีมีความหมาย
 
 ```
-classDef focus fill:#EDF1FB,stroke:#2A78D6,stroke-width:1.5px,color:#2A4C86
-classDef ext   fill:#F6F7FB,stroke:#C6CCD8,color:#7D8492
-classDef store fill:#FFFFFF,stroke:#C6CCD8,color:#414957
+classDef focus fill:<ACCENT_TINT>,stroke:<ACCENT>,stroke-width:1.5px,color:<ACCENT_DEEP>
+classDef ext   fill:<BG_SOFT>,stroke:<LINE>,color:<TEXT_MUTED>
+classDef store fill:#FFFFFF,stroke:<LINE>,color:<TEXT>
 ```
+
+| ตัวแทนค่า | คือสีอะไร |
+|---|---|
+| `<ACCENT>` | สีหลักที่ผู้ใช้เลือก |
+| `<ACCENT_TINT>` | สีหลักผสมขาวประมาณ 90% |
+| `<ACCENT_DEEP>` | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้น `<ACCENT_TINT>` |
+| `<TEXT_MUTED>` | เทากลางสำหรับของที่ไม่ใช่จุดสนใจ |
 
 | คลาส | ใช้กับ |
 |---|---|
@@ -143,8 +165,32 @@ dot -V                   # ตรวจว่าติดตั้งแล้�
 
 ## 4 · กฎที่ทำให้อ่านรู้เรื่อง
 
-**เจ็ดกล่อง** — เกินนี้คนอ่านเลิกอ่าน แยกเป็นรูปย่อยหรือยุบกลุ่ม
-(นับกล่องจริง ไม่นับ subgraph)
+**เจ็ดกล่อง** — เกินนี้คนอ่านเลิกอ่าน (นับกล่องจริง ไม่นับ subgraph)
+
+**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — เกินเจ็ดเมื่อไหร่ **หยุด แล้วเสนอการแยกรูปให้ผู้ใช้เลือก**
+ห้ามวาดต่อจนครบแล้วค่อยบอกทีหลัง
+
+```
+เนื้อหาที่ให้มามี 20 กล่อง เกินเพดานสามเท่า ขอแยกเป็น 3 รูป:
+  รูปที่ 1 — ตอนทดลอง: อะไรเข้า อะไรออก
+  รูปที่ 2 — ตอนรันชุดการทดลอง
+  รูปที่ 3 — ตอนออกรายงาน
+ตกลงตามนี้ไหม หรือจะแบ่งแบบอื่น
+```
+
+> **"แยกคนละไฟล์ก็ได้" = ต้องแยก** — ถ้าคำขอเปิดช่องให้แยก และเนื้อหาเกินเพดาน
+> ให้ถือว่าเป็นคำสั่งให้แยก ไม่ใช่ทางเลือก
+
+**สามอย่างนี้ห้ามอยู่ในไดอะแกรม** — มันคือคู่มือ ไม่ใช่รูป และทำให้กล่องบานจนผังเบี้ยว
+
+| ห้ามใส่ | ไปอยู่ที่ไหน |
+|---|---|
+| ตัวเลือกบรรทัดคำสั่ง `--all` `--resume` `--limit N` | `README` หรือ `docs/cli.md` |
+| รายการ input/output ของหลายตัว | **ตารางข้างรูป** — คอลัมน์: ส่วนประกอบ · รับอะไร · ให้อะไร · เก็บที่ไหน |
+| ชื่อไฟล์หรือ path ครบทุกตัว | ตารางเดียวกัน ใส่ในรูปเฉพาะตัวที่เป็นใจความ |
+
+**คำขอว่า "บอก input/output ด้วย" ไม่ได้แปลว่าให้วาดทุกอย่างเป็นกล่อง** —
+กล่องคือสิ่งที่ *ทำงาน* · สิ่งที่ *ไหลผ่าน* เป็นป้ายบนเส้น · *รายละเอียด* เป็นตาราง
 
 **ระดับรายละเอียดเดียวกันทั้งรูป** — มี `PostgreSQL` กับ `OrderRepository.cs` อยู่ในรูปเดียวกัน
 คือสัญญาณว่าผสมสองระดับ
@@ -218,6 +264,8 @@ mmdc -i diagram.mmd -o diagram.png -b white -s 2
 ## 7 · Anti-patterns
 
 - ❌ **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
+- ❌ **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องหยุดถามตอนนับได้ว่าเกิน
+- ❌ **ยัดตัวเลือกบรรทัดคำสั่งลงในกล่อง** — กล่องบาน ตัวอักษรเล็ก อ่านไม่ออกทั้งรูป
 - ❌ **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
 - ❌ **ผสมระดับรายละเอียด** — `Kubernetes` อยู่ข้าง ๆ `UserService.validate()`
 - ❌ **สีรุ้ง** — สีต้องมีความหมาย ไม่ใช่ใส่ให้ไม่น่าเบื่อ

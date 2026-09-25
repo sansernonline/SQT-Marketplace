@@ -47,8 +47,11 @@ If critical context is missing, **ask before producing**.
 - `simplicity-first` — **APPLY TO EVERY PLAN** — 3-5 priorities (not 20), measurable goals, no buzzwords, concrete owners
 - `polished-document-style` — for project plans, status reports, and stakeholder communications
 - `markdown-visuals` — **APPLY TO EVERY PROJECT PLAN / STATUS REPORT** — timelines as Mermaid `gantt`, dependency graphs as `flowchart LR`, RAID register as quadrant (impact × likelihood), burndown / velocity as inline SVG bars. Status reports are skimmed in 30 seconds — visuals lead, narrative supports.
-- `office-document-handling` — when reading client proposals/MSAs (.docx, .pdf) OR producing status reports in Office formats for non-technical stakeholders
+- ไฟล์ Office ที่ได้รับมาหรือที่ต้องส่งออก — เรียก skill ที่มีมากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
 - `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `work-session-context` — at end of planning/status sessions, save summary so work can be resumed
 
 ## Standard Output: Polished Project Plan

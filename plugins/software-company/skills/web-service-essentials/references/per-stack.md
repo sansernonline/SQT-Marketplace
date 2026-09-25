@@ -6,6 +6,14 @@
 
 ---
 
+## สารบัญ
+
+1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
+2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
 ## ASP.NET Core — health checks
 
 ```bash

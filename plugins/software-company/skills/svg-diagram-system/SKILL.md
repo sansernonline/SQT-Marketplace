@@ -1,6 +1,6 @@
 ---
 name: svg-diagram-system
-description: Use when an architecture diagram has to come out as a high-quality image file for a specification document, a slide, or a client deliverable — drawn as Python that writes Scalable Vector Graphics and rendered to Portable Network Graphics through Playwright, with real product logos, every box on a grid, and connectors that are orthogonal with rounded corners. Sets no colours of its own — one accent colour chosen from the subject matter drives every tint in the drawing, and the skill asks for it before drawing. Use instead of software-diagrams when the result must be an image whose layout is controlled by hand rather than by Mermaid's automatic layout.
+description: Use when an architecture diagram has to come out as a high-quality image file for a specification, a slide or a client deliverable — written as Python that emits Scalable Vector Graphics and rendered through a headless browser, with real product logos, every box on a grid, and connectors that are orthogonal with rounded corners. Sets no colours of its own — one accent colour taken from the subject matter drives every tint, and the skill asks for it before drawing.
 ---
 
 # ระบบวาดไดอะแกรมด้วย SVG
@@ -23,6 +23,9 @@ description: Use when an architecture diagram has to come out as a high-quality 
 ---
 
 ## 0 · สีมาจากเนื้องาน — ถามก่อนวาด
+
+**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น — อย่าถามซ้ำ**
+(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
 
 **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ถามผู้ใช้ว่าจะใช้สีอะไร
 ถ้ายังไม่ระบุ ให้เสนอจากเนื้องานแล้วรอยืนยัน

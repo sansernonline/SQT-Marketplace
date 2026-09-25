@@ -1,6 +1,6 @@
 ---
 name: simplicity-first
-description: Use ALWAYS when producing documents, designs, architectures, or plans (BRD, FSD, ADR, roadmaps, UX/API designs, sprint plans). Defaults to the simplest version that works and applies the "could a tired teammate understand this in 6 months?" test before delivery. Rejects buzzwords, premature abstraction, over-engineering, and unnecessary layers. For CODE, use `lazy-coding` instead.
+description: Use when producing a document, design, architecture or plan — BRD, FSD, ADR, roadmap, UX or API design, sprint plan. Defaults to the simplest version that works and applies the "could a tired teammate follow this in 6 months?" test before delivery. Rejects buzzwords, premature abstraction and unnecessary layers. For code use lazy-coding instead.
 ---
 
 # Simplicity First

@@ -1,6 +1,6 @@
 ---
 name: diagram-figures
-description: Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document, or a sign-off package. Builds the figure as a hand-laid-out HTML page and photographs it, which buys control that Mermaid and auto-layout tools cannot give — Thai typography, a figure header carrying version and owner, nested containers, a legend and a constraints callout. Ships three tested layouts — a C4 system context figure, a deployment figure showing what runs inside one machine, and a cloud figure using the official Amazon Web Services, Azure, Google Cloud and Kubernetes icon sets. Also covers the colour and size system, when to use an official logo versus a drawn icon, connectors drawn after layout, and a render-and-look loop.
+description: Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document or a sign-off package. Lays the figure out by hand as an HTML page and photographs it, which buys control that automatic layout cannot give — Thai typography, a header carrying version and owner, nested containers, a legend and a constraints callout. Ships three tested layouts and the official cloud vendor icon sets.
 ---
 
 # Diagram Figures
@@ -161,14 +161,26 @@ python collect-icons.py                   # คัดลอกตามราย
 
 ## 5 · ระบบสีและขนาด
 
-ทั้งหมดอยู่ใน `:root` ของ `assets/figure-template.html` แล้ว **อย่าตั้งค่าใหม่เอง**
+**ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว — อย่าตั้งค่าใหม่เอง**
+ตัวเลขพวกนี้ปรับจนรูปดูตั้งใจแล้ว การขยับมันคือการทำให้รูปดูไม่เท่ากันในเอกสารเดียว
+
+**สีเป็นคนละเรื่อง — สีมาจากเนื้องาน**
+ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
+มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+(ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+แก้ที่ `--accent` ใน `:root` ที่เดียว เฉดอ่อน/เข้มอ้างอิงจากค่านั้น
+
+ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์:
+
+- **สีโลโก้ผู้ให้บริการ** — AWS ส้ม Azure ฟ้า ต้องเป็นสีจริงของเขา ไม่ใช่สีแบรนด์เรา
+- **เทาโครงสร้าง** — เส้นขอบและพื้นกล่อง ต้องจางพอที่จะไม่แย่งสายตากับเนื้อหา
 
 | อย่าง | ค่า |
 |---|---|
 | ตัวอักษร | ชื่อรูป 30 · ชื่อกล่อง 16 · คำอธิบาย 13.5 · ป้ายกลุ่ม 12 ตัวใหญ่ |
 | ไอคอน | กรอบ 66px · มุม 18px · ไอคอน 29px · เส้น 1.6px |
-| กล่อง | มุม 20px · ขอบ 1px `#E7EAF0` · กล่องซ้อนใน มุม 16px พื้น `#F8F9FC` |
-| กล่อง `.focus` | ขอบ 2px `#1B63A8` · มุม 22px |
+| กล่อง | มุม 20px · ขอบ 1px เทาอ่อน · กล่องซ้อนใน มุม 16px พื้นเทาอ่อนมาก |
+| กล่อง `.focus` | ขอบ 2px สี `--accent` เฉดเข้ม · มุม 22px |
 | ระยะ | 12 · 20 · 26 · 34 · 48 · ช่องว่างระหว่างคอลัมน์ 130 |
 
 > **กรอบไอคอนต้องใหญ่** — 66px คือจุดที่รูปเริ่มดูตั้งใจ ไม่ใช่ผังที่ generate มา

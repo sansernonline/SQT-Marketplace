@@ -50,8 +50,19 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 - `adr-writer` — when documenting any architectural decision
 - `polished-document-style` — when producing architecture docs for stakeholders/clients (use for any doc going beyond engineering team)
 - `markdown-visuals` — **APPLY TO EVERY ARCHITECTURE DOC** — pair Mermaid (flows/sequences/ER) with inline SVG (component layouts, deployment topologies, network zones). Never deliver a text-only architecture overview.
-- `office-document-handling` — when reading legacy architecture docs (.docx, .pdf, Visio→.pptx) OR producing client-facing arch deliverables
+- ไฟล์ Office ที่ได้รับมาหรือที่ต้องส่งออก — เรียก skill ที่มีมากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
 - `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
+- `architecture-patterns` — เมื่อเลือกรูปแบบสถาปัตยกรรม — monolith, modular, event-driven, CQRS พร้อมข้อแลกเปลี่ยน
+- `prior-art-review` — ก่อนตัดสินใจ build เอง — สำรวจของที่มีอยู่แล้วจบที่ adopt/fork/build/drop
+- `svg-diagram-system` — เมื่อผังต้องออกมาเป็นรูปคมชัดคุมสีเองได้ ไม่ใช่ Mermaid
+- `diagram-figures` — เมื่อผังต้องมีโลโก้ผู้ให้บริการจริง (AWS/Azure/GCP) หรือเป็นรูปนำเสนอ
+- `web-service-essentials` — เมื่อกำหนดสัญญาระหว่าง service
+- `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
+- `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
+- `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
+- `database-design` — เมื่อออกแบบชั้นข้อมูล — relational หรือ document, multi-tenant, id
+- `api-conventions` — เมื่อกำหนดข้อตกลงกลางของ API ทั้งระบบ
+- `cicd-and-release` — เมื่อออกแบบเส้นทางจากคอมมิตถึง production และวิธี rollback
 - `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Output: Polished Architecture Overview

@@ -1,6 +1,6 @@
 ---
 name: graphic-design
-description: Use for visual work that is not an app screen — a logo, a brand colour and type system, a poster, a flyer, a social post, a LINE Official Account rich menu, a product label, a name card, an advertisement, or a cover image. Forces a written direction before any pixels, picks from named positions instead of averaging, carries real numbers for print and for each platform size, and covers Thai typography which most design guidance ignores. Also use when reviewing visual work that feels generic and the reason is not obvious. Not for application user interface screens, slide layout, document formatting, or software diagrams.
+description: Use for visual work that is not an app screen — a logo, a brand colour and type system, a poster, a flyer, a social post, a rich menu, a label, a name card or a cover image. Forces a written direction before any pixels, picks from named positions instead of averaging, carries real numbers for print and for each platform size, and covers Thai typography which most design guidance ignores. Also use when reviewing work that feels generic and the reason is not obvious.
 ---
 
 # Graphic Design
