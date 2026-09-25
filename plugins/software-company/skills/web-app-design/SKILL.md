@@ -1,6 +1,6 @@
 ---
 name: web-app-design
-description: Use when designing or building the user interface of a web application — dashboards, admin panels, internal tools, SaaS screens — in any framework or in plain HTML. Ships a token contract for colours, type scale and layout, a drop-in stylesheet with the full component set, an HTML mockup template, swappable accent themes, and a checker that fails the build when anyone hardcodes a colour. Not for Windows desktop apps or for documents.
+description: Use when designing or building the user interface of a web application — dashboards, admin panels, internal tools, SaaS screens — in any framework or plain HTML. Ships a token contract, a drop-in stylesheet with the full component set, a mockup template, swappable accent themes and a checker that fails the build on a hardcoded colour.
 ---
 
 # Web App Design

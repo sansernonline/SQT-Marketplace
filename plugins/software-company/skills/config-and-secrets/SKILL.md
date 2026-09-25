@@ -1,6 +1,6 @@
 ---
 name: config-and-secrets
-description: Use when a project needs settings that differ between environments, or handles anything that must not be committed — connection strings, API keys, signing keys, certificates. Separates configuration from secrets, sets the precedence order, validates every setting at start-up so a missing value fails immediately instead of at 2 AM, names environment variables consistently, picks a secret store that matches the team size, makes rotation possible, and gives the order of steps for a leaked credential. Also covers why nothing in a frontend build is ever secret.
+description: Use when a project needs settings that differ between environments, or holds anything that must not be committed — connection strings, keys, certificates. Separates config from secrets, validates every setting at start-up, names variables consistently, picks a secret store, makes rotation possible, and gives the order of steps for a leaked credential.
 ---
 
 # Config และ Secret

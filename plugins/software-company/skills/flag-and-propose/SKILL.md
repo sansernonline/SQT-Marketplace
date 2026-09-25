@@ -1,6 +1,6 @@
 ---
 name: flag-and-propose
-description: Use when reporting something found mid-task that changes what happens next — a stale file, a number that no longer matches, a blocked step, a risk spotted while reviewing — and a decision is needed before carrying on. Opens with the consequence rather than the discovery, puts conflicting numbers in a recorded-versus-actual table, states the proposal as a what-you-get table, names what is deliberately not being done and why, and closes with one question answerable in a few words. Use it for the moment that ends in a decision, not for answering a question or reporting finished work.
+description: Use when reporting something found mid-task that changes what happens next — a stale file, a number that no longer matches, a blocked step, a risk — and a decision is needed before carrying on. Opens with the consequence, puts conflicting numbers in a recorded-versus-actual table, and closes with one short question.
 ---
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป

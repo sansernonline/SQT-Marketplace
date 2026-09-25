@@ -1,6 +1,6 @@
 ---
 name: mobile-app-design
-description: Use when designing or building a phone app user interface — screens, bottom tab bars, chat, lists, results, settings, onboarding — for a progressive web app, a web-wrapped app, React Native or Flutter. Ships a token contract, a four-family typography system, a phone-frame mockup template, safe-area and full-height handling, light and gradient themes, Thai-English font switching, and a render-and-look loop at real phone sizes. Not for desktop web or Windows apps.
+description: Use when designing or building a phone app user interface for a progressive web app, a web-wrapped app, React Native or Flutter. Ships a token contract, a four-family typography system, a phone-frame mockup template, safe-area handling, Thai-English font switching and a render-and-look loop at real phone sizes. Not for desktop or Windows.
 ---
 
 # Mobile App Design

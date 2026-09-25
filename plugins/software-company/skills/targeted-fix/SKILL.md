@@ -1,6 +1,6 @@
 ---
 name: targeted-fix
-description: Use when feedback says something is wrong — an error message, stack trace, failing test, regression, broken-output screenshot, or "that's not what I asked for". Finds the exact spot causing the problem, makes the smallest correct fix that matches what the user actually wants, and verifies it — without touching unrelated code. Trigger on "still broken", "this is wrong", "fix the bug", error text, or any correction of previous output.
+description: Use when feedback says something is wrong — an error message, stack trace, failing test, regression, broken-output screenshot, or that is not what I asked for. Finds the exact spot causing the problem, makes the smallest correct fix, and verifies it without touching unrelated code.
 ---
 
 # Targeted Fix

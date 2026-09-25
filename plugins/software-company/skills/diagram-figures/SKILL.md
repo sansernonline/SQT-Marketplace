@@ -1,6 +1,6 @@
 ---
 name: diagram-figures
-description: Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document or a sign-off package. Lays the figure out by hand as an HTML page and photographs it, which buys control that automatic layout cannot give — Thai typography, a header carrying version and owner, nested containers, a legend and a constraints callout. Ships three tested layouts and the official cloud vendor icon sets.
+description: Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document or a sign-off package. Lays the figure out by hand as an HTML page and photographs it, which buys control automatic layout cannot give. Ships three tested layouts and the official cloud vendor icon sets.
 ---
 
 # Diagram Figures

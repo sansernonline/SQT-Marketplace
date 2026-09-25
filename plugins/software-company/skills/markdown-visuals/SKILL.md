@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a markdown document needs a picture — wireframe, UI state, architecture diagram, flow, data viz. Picks the right format (inline SVG, image file, ASCII, Mermaid) and embeds it so it renders in GitHub, Notion, VS Code and Obsidian. For design mockups, FSD diagrams, BRD process maps and ADR sketches — any time prose alone will not carry the idea.
+description: Use when a markdown document needs a picture — wireframe, UI state, architecture diagram, flow or data viz. Picks the format (inline SVG, image file, ASCII, Mermaid) and embeds it so it renders in GitHub, Notion, VS Code and Obsidian. For any document where prose alone will not carry the idea.
 ---
 
 # Markdown Visuals

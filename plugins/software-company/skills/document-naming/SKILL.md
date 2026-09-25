@@ -1,6 +1,6 @@
 ---
 name: document-naming
-description: Use when creating, renaming or filing any document a team or client will keep — a specification, a proposal, a manual, a report, a deck, an acceptance form. Decides which format the document belongs in, gives one file name pattern per document type, states where the version number goes and where it must not, separates version from status, and requires a revision history table inside the file rather than trusting the file name alone. Stops the folder full of final, final2 and latest.
+description: Use when creating, renaming or filing a document a team or client will keep. Decides which format it belongs in, gives one file name pattern per type, states where the version number goes and where it must not, separates version from status, and requires a revision history inside the file. Stops the folder full of final and final2.
 ---
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร

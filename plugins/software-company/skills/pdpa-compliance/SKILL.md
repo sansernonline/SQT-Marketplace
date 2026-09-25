@@ -1,6 +1,6 @@
 ---
 name: pdpa-compliance
-description: Use when a system holds personal data about people in Thailand and has to stand up to the Personal Data Protection Act. Covers making an inventory of what is held and why, choosing a lawful basis instead of asking consent for everything, consent that is recorded and withdrawable, the data subject rights a system must be able to serve within the statutory window, collecting only what is needed, retention with a job that actually deletes, processors and cross-border transfer, and what to do in the first seventy-two hours of a breach. This is engineering guidance, not legal advice.
+description: Use when a system holds personal data about people in Thailand. Covers an inventory of what is held and why, choosing a lawful basis instead of asking consent for everything, recorded and withdrawable consent, data subject rights, collecting only what is needed, retention that actually deletes, processors and the first hours of a breach. Engineering guidance, not legal advice.
 ---
 
 # PDPA — ข้อมูลส่วนบุคคล

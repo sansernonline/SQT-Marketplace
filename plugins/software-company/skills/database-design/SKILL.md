@@ -1,6 +1,6 @@
 ---
 name: database-design
-description: Use when designing or changing a database schema — new tables, new columns, indexes, relationships, or a migration. Covers choosing relational versus document storage, one naming convention, the columns every table needs, identifier choice, the four data types teams get wrong (money, time, enum, boolean), where indexes actually help, constraints that belong in the database rather than the application, expand and contract migrations that deploy without downtime, multi-tenant layouts, and personal-data handling. Load it before the first CREATE TABLE, not after the data is already in production.
+description: Use when designing or changing a database schema — tables, columns, indexes, relationships or a migration. Covers relational versus document, naming, identifier choice, the four data types teams get wrong, where indexes help, constraints, expand-and-contract migrations and multi-tenant layouts. Load it before the first CREATE TABLE.
 ---
 
 # ออกแบบฐานข้อมูล

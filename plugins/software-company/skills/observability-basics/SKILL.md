@@ -1,6 +1,6 @@
 ---
 name: observability-basics
-description: Use when a system has real users and someone has to know it is healthy without waiting for a complaint. Covers the four signals worth measuring, naming metrics so they stay usable, the difference between a metric, a log line and a trace and when each answers the question, alerts tied to what a user feels rather than to a machine number, an on-call rule that every alert must be actionable, dashboards that answer is it broken and where, and the small set of business metrics worth watching. Pairs with logging-standards, which covers log lines only.
+description: Use when a system has real users and someone has to know it is healthy without waiting for a complaint. Covers the four signals worth measuring, metric naming, when a metric, a log line or a trace answers the question, alerts tied to what a user feels, dashboards and the business metrics worth watching.
 ---
 
 # วัดผลและเฝ้าระบบ

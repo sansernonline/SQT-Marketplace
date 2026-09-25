@@ -1,6 +1,6 @@
 ---
 name: lazy-coding
-description: Use when writing, fixing, refactoring or reviewing code. Forces the simplest solution that actually works — ask whether it is needed at all, then reach for the standard library before custom code, native platform features before dependencies, and one line before fifty. Mark deliberate simplifications with a comment. Also triggers when someone complains about bloat or over-engineering. For documents and plans use simplicity-first instead.
+description: Use when writing, fixing, refactoring or reviewing code. Forces the simplest solution that actually works — ask whether it is needed at all, then the standard library before custom code, native features before dependencies, and one line before fifty. Also triggers on complaints about bloat. For documents and plans use simplicity-first.
 ---
 
 # Lazy Coding

@@ -1,6 +1,6 @@
 ---
 name: temp-file-discipline
-description: Use on every task that writes files into someone's project folder. Keeps the folder clean by sending every temporary file to one place — a `_to_delete/` folder at the project root — instead of leaving transfer archives, extracted folders, rendered previews, backup copies and one-off scripts scattered where the real work lives. Covers what counts as temporary, where it goes, what never goes there, how to leave the folder at the end of a task, and the fact that a temporary file is never deleted without asking. Load it before the first file is written, not while cleaning up afterwards.
+description: Use on every task that writes files into someone's project folder. Sends every temporary file to one `_to_delete/` folder at the project root instead of leaving archives, extracted folders, previews, backups and one-off scripts where the real work lives. Load it before the first file is written, not while cleaning up afterwards.
 ---
 
 # ระเบียบไฟล์ชั่วคราว

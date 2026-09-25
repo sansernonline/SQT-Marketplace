@@ -1,6 +1,6 @@
 ---
 name: testing-standards
-description: Use when adding, reviewing or setting up automated tests for any project — unit tests, integration tests, test structure, naming, coverage targets, mocking, test data, CI wiring — across .NET, Node/TypeScript, Python and Angular. Starts by ASKING which test framework to use rather than assuming one, then applies a shared set of rules on what deserves a test, how to name it, how to keep it deterministic, and what coverage number is honest. Load it before writing the first test in a project, when someone asks for unit tests or automated tests, or when a suite has become slow, flaky or ignored.
+description: Use when adding, reviewing or setting up automated tests in .NET, Node, Python or Angular. Asks which framework to use rather than assuming, then sets what deserves a test, how to name it, how to keep it deterministic and what coverage number is honest. Load it before the first test, or when a suite is slow, flaky or ignored.
 ---
 
 # Testing Standards

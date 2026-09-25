@@ -1,6 +1,6 @@
 ---
 name: logging-standards
-description: Use when writing or reviewing code that records what it did — service, API, worker, batch job, desktop app or frontend. Defines one log line format shared across .NET, Node, Python and Angular, with rules for levels, correlation ids, daily-rotating files, retention, secret redaction and log-injection safety. Ships tested drop-in loggers that produce identical output. Load it before the first log line, or when production logs turn out to be useless.
+description: Use when writing or reviewing code that records what it did. Defines one log line format shared across .NET, Node, Python and Angular, with rules for levels, correlation ids, rotating files, retention, secret redaction and log-injection safety. Ships tested drop-in loggers. Load it before the first log line.
 ---
 
 # Logging Standards

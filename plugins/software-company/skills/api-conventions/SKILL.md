@@ -1,6 +1,6 @@
 ---
 name: api-conventions
-description: Use when starting an API, adding endpoints to one, or reviewing an API for consistency. This is the project-wide rulebook decided once and applied to every endpoint — URL naming, versioning and what counts as a breaking change, pagination, filtering and sorting, how dates, money, identifiers and nulls are represented, validation error shape, idempotency and concurrency control, rate-limit headers, and how an endpoint is deprecated without breaking callers. Ships a fillable conventions document to drop at the project root.
+description: Use when starting an API, adding endpoints, or reviewing one for consistency. The project-wide rulebook decided once and applied everywhere — URL naming, versioning and what counts as a breaking change, pagination, how dates, money, identifiers and nulls are represented, validation errors, idempotency and deprecation. Ships a fillable conventions document.
 ---
 
 # ข้อตกลงของ API

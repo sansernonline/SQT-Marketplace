@@ -1,6 +1,6 @@
 ---
 name: project-bootstrap
-description: Use when starting a new repository, or when an existing one takes too long to get running on a new machine. Sets the folder layout, the README that answers the five questions a newcomer has, one command to install and one to run, formatter and linter settings that end style arguments, editor and line-ending settings that stop whole-file diffs, a dependency and upgrade policy, and a getting-started check measured in minutes. The goal is that someone who has never seen the project can run it within thirty minutes.
+description: Use when starting a new repository, or when an existing one takes too long to run on a new machine. Sets the folder layout, a README that answers the five questions a newcomer has, one command to install and one to run, formatter and editor settings that stop whole-file diffs, and a dependency policy. The target is running within thirty minutes.
 ---
 
 # ตั้งต้นโปรเจกต์

@@ -1,6 +1,6 @@
 ---
 name: spec-to-code-loop
-description: Use when building software from a written specification and mockups as a repeating agent loop rather than one long conversation — plan, write a failing test for one requirement, write code until it passes, check the screen against the mockup, record progress, repeat. Gives the loop a stop condition a machine can check, one requirement per pass, a state file that survives losing context, test names tied to requirement identifiers, a retry ceiling, and the conditions for splitting work across parallel agents.
+description: Use when building software from a specification and mockups as a repeating agent loop rather than one long conversation — plan, write a failing test for one requirement, write code until it passes, check the screen, record progress, repeat. Gives the loop a machine-checkable stop condition, a state file and a retry ceiling.
 ---
 
 # วงรอบจากข้อกำหนดไปเป็นโค้ด

@@ -1,6 +1,6 @@
 ---
 name: cicd-and-release
-description: Use when setting up or fixing a build and deploy pipeline, or when deciding how a project ships. Covers the pipeline stages and what each one must block on, the build-once and promote-the-same-artifact rule, version numbers that trace back to a commit, branch strategy, environments and gates, where database migrations belong, release patterns such as rolling, blue-green and canary, feature flags, a rollback that has actually been rehearsed, and keeping the pipeline fast enough that people do not route around it. Ships working starter pipelines for GitHub Actions, Azure DevOps and GitLab.
+description: Use when setting up or fixing a build and deploy pipeline, or deciding how a project ships. Covers pipeline stages and what each blocks on, build once and promote the same artifact, versions that trace back to a commit, branches, environments and gates, release patterns, feature flags and a rehearsed rollback. Ships starter pipelines.
 ---
 
 # CI/CD และการปล่อยของ

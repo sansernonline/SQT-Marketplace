@@ -1,6 +1,6 @@
 ---
 name: notifications
-description: Use when a system sends messages to people — email, SMS, LINE, push or in-app. Covers choosing the channel by urgency rather than by habit, templates that live outside the code, sending as a background job so a failed send never fails the transaction, stopping duplicates and floods, an unsubscribe and preference model, what must never be put in a message body, delivery tracking and what to do when a message bounces, and the Thai-language specifics of SMS length and LINE messaging.
+description: Use when a system sends messages to people — email, SMS, LINE, push or in-app. Covers choosing the channel by urgency, templates outside the code, sending as a background job, stopping duplicates and floods, an unsubscribe model, what must never go in a message body, delivery tracking, and the Thai specifics of SMS length.
 ---
 
 # การแจ้งเตือนผู้ใช้

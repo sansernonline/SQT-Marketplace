@@ -1,6 +1,6 @@
 ---
 name: branded-document-design
-description: Use when the deliverable is a rendered document a stakeholder will look at — a Word file, a slide deck, or a PDF for sign-off — and it must look designed rather than like default Word. Ships a design-token palette, a typography scale, and a tested python-docx and python-pptx builder producing cover pages, tinted tables, callouts, figure captions and page footers. Covers Thai typography pitfalls and the render-and-look loop. Pair with polished-document-style, which governs markdown.
+description: Use when the deliverable is a rendered document a stakeholder will look at — a Word file, a deck, or a PDF for sign-off — and it must look designed rather than like default Word. Ships a token palette, a type scale and a tested python-docx and python-pptx builder. Covers Thai typography. Pair with polished-document-style for markdown.
 ---
 
 # Branded Document Design

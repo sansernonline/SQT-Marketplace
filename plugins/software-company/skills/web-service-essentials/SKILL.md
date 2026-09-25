@@ -1,6 +1,6 @@
 ---
 name: web-service-essentials
-description: Use when building or reviewing any HTTP service, REST API or backend — the baseline every service needs before feature work starts. Defines the four operational endpoints with exact response shapes, a consistent error envelope based on RFC 9457, request-id propagation, graceful shutdown, timeouts and the security headers that are not optional. Ships tested drop-in health routers for Node and Python plus ASP.NET Core configuration.
+description: Use when building or reviewing any HTTP service, REST API or backend — the baseline every service needs before feature work starts. Defines the four operational endpoints with exact response shapes, an error envelope based on RFC 9457, request-id propagation, graceful shutdown, timeouts and the security headers that are not optional.
 ---
 
 # Web Service Essentials

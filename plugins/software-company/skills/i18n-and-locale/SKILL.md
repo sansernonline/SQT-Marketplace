@@ -1,6 +1,6 @@
 ---
 name: i18n-and-locale
-description: Use when a system shows text, dates, numbers or money to people — especially Thai and English side by side. Covers where translated text lives and how keys are named, the Buddhist and Gregorian calendar conversion that must happen at display time only, storing time in UTC and rendering in the viewer's zone, Thai sorting and search which no default collation gets right, Thai text that has no spaces between words and therefore wraps and truncates badly, plural and gender pitfalls, and the layout headroom other languages need. Load it before the first hardcoded string, because retrofitting is far more expensive.
+description: Use when a system shows text, dates, numbers or money to people, especially Thai and English together. Stores UTC and Gregorian years and converts only at display, handles Buddhist-year input, Thai sorting and search, Thai text that has no spaces between words, and the layout headroom other languages need.
 ---
 
 # ภาษาและรูปแบบท้องถิ่น

@@ -1,6 +1,6 @@
 ---
 name: answer-shape
-description: Use when answering a question and the content has structure — comparing options, listing trade-offs, explaining how parts connect, or reporting several numbers side by side. Decides whether the answer should be prose, a comparison table, a small diagram or a short list, because the wrong shape makes a correct answer hard to read. Covers the signals that call for a table, the rules that keep one readable, when a picture beats a table, and when plain sentences beat both.
+description: Use when answering a question and the content has structure — comparing options, listing trade-offs, explaining how parts connect, or reporting several numbers side by side. Decides whether the answer should be prose, a comparison table, a small diagram or a short list, and keeps the chosen shape readable.
 ---
 
 # รูปทรงของคำตอบ

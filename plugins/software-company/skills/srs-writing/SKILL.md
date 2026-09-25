@@ -1,6 +1,6 @@
 ---
 name: srs-writing
-description: Use when writing or reviewing a Software Requirements Specification — the document a team builds from and a client signs off on. Gives the section skeleton from ISO/IEC/IEEE 29148, the rules that make one requirement testable, an identifier and traceability scheme that survives change requests, a non-functional requirement catalogue with the question to ask for each, and a completeness review that catches the gaps a reader would otherwise find during acceptance testing. Covers Thai-English bilingual documents.
+description: Use when writing or reviewing a Software Requirements Specification — the document a team builds from and a client signs off on. Gives the section skeleton from ISO/IEC/IEEE 29148, the rules that make one requirement testable, an identifier and traceability scheme that survives change requests, and a completeness review. Covers Thai-English documents.
 ---
 
 # SRS Writing

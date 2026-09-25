@@ -1,6 +1,6 @@
 ---
 name: background-jobs
-description: Use when work has to happen outside the request a user is waiting on — sending mail, generating a report, importing a file, calling a slow third party, or anything on a schedule. Covers deciding what belongs in the background at all, picking a queue over a timer table, making a job safe to run twice, retries with a ceiling and a dead letter queue, keeping a scheduled job from running twice across several instances, long jobs that must report progress and be cancellable, and what to measure so a silently stuck queue is noticed.
+description: Use when work happens outside the request a user is waiting on — mail, reports, imports, slow third parties, anything scheduled. Covers what belongs in the background, queue choice, making a job safe to run twice, retries with a ceiling and a dead letter queue, scheduled jobs across several instances, and what to measure.
 ---
 
 # งานเบื้องหลัง

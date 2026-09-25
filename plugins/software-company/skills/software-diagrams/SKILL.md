@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a software question needs a picture — architecture, how a request flows, what states a record moves through, how tables relate, or what runs on which machine. Picks the diagram type that answers the question, draws it in Mermaid with one shared theme, and applies the rules that keep it readable — seven boxes, one level of detail, every arrow labelled, Thai labels handled. Routes the two cases Mermaid cannot serve, to the Python diagrams library for real vendor icons and to diagram-figures or svg-diagram-system for a figure that must look designed.
+description: Use when a software question needs a picture — architecture, how a request flows, what states a record moves through, how tables relate, or what runs where. Picks the diagram type that answers the question and draws it in Mermaid with one shared theme. Routes vendor icons to the Python diagrams library and designed figures to diagram-figures.
 ---
 
 # Software Diagrams

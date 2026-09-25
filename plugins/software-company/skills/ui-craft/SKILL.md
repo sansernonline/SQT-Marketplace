@@ -1,6 +1,6 @@
 ---
 name: ui-craft
-description: Use on any task that produces a screen or a screen spec, alongside the platform skill. Covers the craft rules that make a screen look modern and minimal regardless of brand — one spacing scale, one type scale, one hierarchy per screen, border versus shadow, contrast numbers that pass accessibility, the five states every screen needs, a motion budget and a density decision. Sets no colours and no fonts — those come from the platform skill.
+description: Use on any task that produces a screen or a screen spec, alongside the platform skill. Covers the craft rules that make a screen look modern and minimal regardless of brand — one spacing scale, one type scale, one hierarchy per screen, contrast that passes accessibility, and the five states every screen needs. Sets no colours and no fonts.
 ---
 
 # UI Craft
