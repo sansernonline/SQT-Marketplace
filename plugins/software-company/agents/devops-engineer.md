@@ -79,6 +79,7 @@ If touching production, **always have rollback plan ready first**.
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `cicd-and-release` — เมื่อตั้งหรือรื้อ pipeline เลือกวิธีปล่อยของ และซ้อม rollback
 - `config-and-secrets` — เมื่อวางที่เก็บ secret สิทธิ์เข้าถึง และรอบหมุนเวียน
+- `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 
 ## Standard Output: Polished Deployment Plan

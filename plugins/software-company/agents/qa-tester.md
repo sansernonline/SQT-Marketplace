@@ -80,6 +80,7 @@ For every feature, consider:
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `api-conventions` — เมื่อทดสอบ API — ตรวจว่าตรงข้อตกลงกลาง ไม่ใช่แค่ทำงานได้
 - `fsd-writing` — เมื่อแปลง use case และกรณีขอบใน FSD เป็น test case
+- `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `work-session-context` — at end of test design/execution sessions, save state + open bugs for resume
 
 ## Standard Output: Polished Test Plan

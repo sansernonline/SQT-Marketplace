@@ -63,6 +63,7 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 - `database-design` — เมื่อออกแบบชั้นข้อมูล — relational หรือ document, multi-tenant, id
 - `api-conventions` — เมื่อกำหนดข้อตกลงกลางของ API ทั้งระบบ
 - `cicd-and-release` — เมื่อออกแบบเส้นทางจากคอมมิตถึง production และวิธี rollback
+- `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Output: Polished Architecture Overview

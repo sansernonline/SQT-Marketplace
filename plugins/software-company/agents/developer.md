@@ -179,6 +179,7 @@ What changed:
 - `api-conventions` — ก่อนเพิ่ม endpoint — ต้องเข้ากับข้อตกลงเดิมทั้งชื่อ URL รูปแบบวันที่ และ pagination
 - `config-and-secrets` — เมื่อมีค่าตั้งที่ต่างกันตาม environment หรือมีอะไรที่ห้ามเข้า git
 - `fsd-writing` — เมื่อต้องอ่านหรือรีวิว FSD ก่อนลงมือ — จุดที่ต้องเดาคือจุดที่ต้องถามกลับ
+- `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
 
 ## Responsibilities
