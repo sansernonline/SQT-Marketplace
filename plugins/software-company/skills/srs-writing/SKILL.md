@@ -23,7 +23,7 @@ description: Use when writing or reviewing a Software Requirements Specification
 |---|---|
 | user story สำหรับ sprint | `user-story-writer` |
 | บันทึกเหตุผลที่เลือกเทคโนโลยี | `adr-writer` |
-| Functional Specification Document (FSD) ระดับหน้าจอ | agent `system-analyst` |
+| Functional Specification Document (FSD) ระดับหน้าจอ | `fsd-writing` |
 | หน้าตาไฟล์ Word ที่ส่งออก | `branded-document-design` |
 | รูปในเอกสาร | `software-diagrams` · `svg-diagram-system` · `diagram-figures` |
 
@@ -266,6 +266,7 @@ SRS ที่ไม่มีรูปเลย = คนอ่านต้อง�
 | รูปแบบ markdown ระหว่างร่าง | `polished-document-style` |
 | รูปในเอกสาร (ดูข้อ 6 ว่าเลือกตัวไหน) | `software-diagrams` · `svg-diagram-system` · `diagram-figures` |
 | ธีมสีของทั้งเอกสาร | `polished-document-style` หัวข้อ "ธีมของเอกสาร" |
+| ลงรายละเอียดระดับที่ developer ลงมือได้ | `fsd-writing` |
 | แตกเป็น user story ตอนเริ่มทำจริง | `user-story-writer` |
 | แปลงข้อกำหนดเป็น test case | `test-case-template` |
 | ตัดสิ่งที่ไม่จำเป็นออกจากเอกสาร | `simplicity-first` |

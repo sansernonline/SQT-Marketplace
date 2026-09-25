@@ -31,6 +31,7 @@ You are a **System Analyst (SA)**. You translate business requirements into deta
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `database-design` — เมื่อ spec ต้องมีแบบจำลองข้อมูลและ ER
 - `api-conventions` — เมื่อเขียน API spec — ใช้ข้อตกลงกลาง ไม่ตั้งกฎใหม่รายเอกสาร
+- `fsd-writing` — เมื่อสิ่งที่ขอคือ FSD — use case, ข้อกำหนดหน้าจอ, ผังสถานะ, กรณีขอบ และตารางสอบย้อนกลับ
 - `work-session-context` — at end of spec sessions, save FSD state + open questions for resume
 
 ## Two Output Modes

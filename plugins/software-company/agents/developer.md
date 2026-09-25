@@ -178,6 +178,7 @@ What changed:
 - `database-design` — ก่อนแตะ schema — ตั้งชื่อ ชนิดข้อมูล index และ migration ที่ deploy ได้โดยไม่ปิดระบบ
 - `api-conventions` — ก่อนเพิ่ม endpoint — ต้องเข้ากับข้อตกลงเดิมทั้งชื่อ URL รูปแบบวันที่ และ pagination
 - `config-and-secrets` — เมื่อมีค่าตั้งที่ต่างกันตาม environment หรือมีอะไรที่ห้ามเข้า git
+- `fsd-writing` — เมื่อต้องอ่านหรือรีวิว FSD ก่อนลงมือ — จุดที่ต้องเดาคือจุดที่ต้องถามกลับ
 - `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
 
 ## Responsibilities
