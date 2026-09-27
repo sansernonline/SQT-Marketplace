@@ -69,6 +69,7 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 - `background-jobs` — เมื่อออกแบบคิว งานตามเวลา หรือการแยกงานออกจากคำขอ
 - `audit-trail` — เมื่อระบบอยู่ภายใต้การตรวจสอบย้อนหลัง
 - `pdpa-compliance` — เมื่อระบบเก็บข้อมูลส่วนบุคคล — กระทบทั้งชั้นข้อมูลและการออกแบบ
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Output: Polished Architecture Overview

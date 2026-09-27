@@ -71,6 +71,7 @@ If user research is missing, **flag the assumption explicitly**.
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `i18n-and-locale` — เมื่อหน้าจอมีสองภาษา — ความยาวข้อความ การตัดบรรทัดไทย พ.ศ. และการเรียงลำดับ
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of design sessions, save decisions + open questions for resume
 
 ## Standard Outputs

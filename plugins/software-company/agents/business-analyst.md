@@ -60,6 +60,7 @@ If you can't answer these, **interview stakeholders before writing**.
 - `document-naming` — เมื่อสร้างหรือส่ง BRD — ชื่อไฟล์ เวอร์ชัน สถานะ ประวัติการแก้ไข
 - `pdpa-compliance` — เมื่อความต้องการแตะข้อมูลส่วนบุคคลหรือความยินยอม
 - `data-import-export` — เมื่อความต้องการมีการนำเข้าหรือส่งออกไฟล์
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
 
 ## Two Output Modes

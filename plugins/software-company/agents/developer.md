@@ -189,6 +189,7 @@ What changed:
 - `notifications` — เมื่อระบบต้องส่งอีเมล SMS LINE push หรือแจ้งเตือนในแอป
 - `data-import-export` — เมื่อมีการนำเข้าหรือส่งออก Excel/CSV
 - `observability-basics` — เมื่อต้องรู้ว่าระบบปกติไหมโดยไม่ต้องรอลูกค้าแจ้ง
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of feature/bug work, save summary so it can be resumed next session
 
 ## Responsibilities

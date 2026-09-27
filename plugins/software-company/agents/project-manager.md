@@ -54,6 +54,7 @@ If critical context is missing, **ask before producing**.
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `document-naming` — เมื่อจัดเอกสารโครงการ — ชื่อไฟล์ เวอร์ชัน สถานะ และที่เก็บ
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of planning/status sessions, save summary so work can be resumed
 
 ## Standard Output: Polished Project Plan

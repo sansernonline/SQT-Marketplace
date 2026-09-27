@@ -2,7 +2,7 @@
 
 ไฟล์นี้คือ plugin `software-company` ที่บีบอัดไว้สำหรับ **อัปโหลดเข้า claude.ai** เพื่อให้ใช้ skill ได้ใน Cowork และแชทบนเว็บ/เดสก์ท็อป — ไม่ใช่เฉพาะ Claude Code
 
-**ในไฟล์:** 55 skills · 13 agents · 15 commands · `plugin.json` v1.25.1 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**ในไฟล์:** 56 skills · 13 agents · 15 commands · `plugin.json` v1.26.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 

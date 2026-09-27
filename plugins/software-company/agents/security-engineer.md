@@ -104,6 +104,7 @@ Internet
 - `audit-trail` — เมื่อตรวจว่าระบบบันทึกร่องรอยครบและแก้ไม่ได้
 - `file-upload-and-storage` — เมื่อตรวจการรับไฟล์ — ชนิดไฟล์ ลิงก์ส่วนตัว การสแกน
 - `error-handling-patterns` — เมื่อตรวจว่าข้อความ error หลุดรายละเอียดภายในออกไปไหม
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of security review/threat model sessions, save findings + remediation items for resume
 
 ## Standard Outputs

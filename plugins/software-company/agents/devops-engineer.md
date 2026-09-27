@@ -83,6 +83,7 @@ If touching production, **always have rollback plan ready first**.
 - `observability-basics` — เมื่อวาง metric แดชบอร์ด และการแจ้งเตือนที่ต้องมีอะไรให้ทำ
 - `project-bootstrap` — เมื่อตั้งโครง repository, lint/format, และคำสั่งติดตั้งที่รันได้จริง
 - `background-jobs` — เมื่อดูแลคิว งานตามเวลา และงานที่ค้าง
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 
 ## Standard Output: Polished Deployment Plan

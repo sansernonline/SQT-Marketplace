@@ -83,6 +83,7 @@ For every feature, consider:
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `data-import-export` — เมื่อทดสอบการนำเข้าไฟล์ — แถวผิด ค่าที่ขอบเขต กับดัก Excel
 - `error-handling-patterns` — เมื่อออกแบบ test สำหรับกรณีล้มเหลวและการ retry
+- `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
 - `work-session-context` — at end of test design/execution sessions, save state + open bugs for resume
 
 ## Standard Output: Polished Test Plan

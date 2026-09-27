@@ -4,7 +4,22 @@ Marketplace สำหรับ Claude Code · **14 plugins** จำลองท�
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
-**รวม 68 agents · 94 skills · 41 commands** — core 55 skills + add-on 39 skills
+**รวม 68 agents · 95 skills · 41 commands** — core 56 skills + add-on 39 skills
+
+---
+
+## ⚙️ ค่าตั้งระดับเครื่อง — `configs/`
+
+ปลั๊กอินตามบัญชีไปเอง แต่ `~/.claude/CLAUDE.md` เป็นไฟล์บนเครื่อง ต้องติดตั้งใหม่ทุกครั้งที่ย้ายเครื่อง
+
+```powershell
+cd configs
+powershell -ExecutionPolicy Bypass -File .\install-global.ps1      # Windows
+./install-global.sh                                                # macOS / Linux
+```
+
+ต้นฉบับอยู่ที่ `configs/CLAUDE.global.md` — แก้ที่นั่นที่เดียว แล้วรันสคริปต์ใหม่
+รายละเอียด → [`configs/README.md`](configs/README.md)
 
 ---
 
@@ -12,7 +27,7 @@ Marketplace สำหรับ Claude Code · **14 plugins** จำลองท�
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** ⭐ core | 13 | 38 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
+| **`software-company`** ⭐ core | 13 | 56 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
 | `software-company-fintech` | 4 | 3 | 2 | การเงิน · PCI-DSS · payment |
 | `software-company-ai` | 5 | 3 | 2 | AI/ML · LLM · RAG |
 | `software-company-healthcare` | 4 | 3 | 2 | health tech · HIPAA · FHIR |
