@@ -8,18 +8,18 @@ Marketplace สำหรับ Claude Code · **14 plugins** จำลองท�
 
 ---
 
-## ⚙️ ค่าตั้งระดับเครื่อง — `configs/`
+## ⚙️ ค่าตั้งระดับเครื่อง — `claude-global/`
 
 ปลั๊กอินตามบัญชีไปเอง แต่ `~/.claude/CLAUDE.md` เป็นไฟล์บนเครื่อง ต้องติดตั้งใหม่ทุกครั้งที่ย้ายเครื่อง
 
 ```powershell
-cd configs
+cd claude-global
 powershell -ExecutionPolicy Bypass -File .\install-global.ps1      # Windows
 ./install-global.sh                                                # macOS / Linux
 ```
 
-ต้นฉบับอยู่ที่ `configs/CLAUDE.global.md` — แก้ที่นั่นที่เดียว แล้วรันสคริปต์ใหม่
-รายละเอียด → [`configs/README.md`](configs/README.md)
+ต้นฉบับอยู่ที่ `claude-global/CLAUDE.global.md` — แก้ที่นั่นที่เดียว แล้วรันสคริปต์ใหม่
+รายละเอียด → [`claude-global/README.md`](claude-global/README.md)
 
 ---
 

@@ -1,4 +1,4 @@
-# configs — ค่าตั้งระดับเครื่อง
+# claude-global — ค่าตั้งระดับเครื่อง
 
 ไฟล์ในโฟลเดอร์นี้ **ไม่ได้ติดไปกับปลั๊กอิน** — ปลั๊กอินตามบัญชีไปเอง
 แต่ `~/.claude/CLAUDE.md` เป็นไฟล์บนเครื่อง ต้องติดตั้งใหม่ทุกครั้งที่ย้ายเครื่อง
@@ -13,7 +13,7 @@
 
 ```powershell
 # 1. กฎประจำตัว
-git clone <repo> && cd SQT-Marketplace\configs
+git clone <repo> && cd SQT-Marketplace\claude-global
 powershell -ExecutionPolicy Bypass -File .\install-global.ps1
 ```
 
