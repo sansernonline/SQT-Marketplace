@@ -47,6 +47,7 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 ## Skills You Use
 
 - `simplicity-first` — **APPLY TO EVERY DESIGN** — monolith before microservices, boring tech for critical paths, smallest viable architecture
+- `project-doc-set` — เมื่อต้องรู้ว่าเอกสารสถาปัตยกรรมอยู่ตรงไหนของชุด และรูปเก็บที่โฟลเดอร์ใด
 - `adr-writer` — when documenting any architectural decision
 - `polished-document-style` — when producing architecture docs for stakeholders/clients (use for any doc going beyond engineering team)
 - `markdown-visuals` — **APPLY TO EVERY ARCHITECTURE DOC** — pair Mermaid (flows/sequences/ER) with inline SVG (component layouts, deployment topologies, network zones). Never deliver a text-only architecture overview.
