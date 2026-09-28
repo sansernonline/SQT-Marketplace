@@ -51,6 +51,10 @@ description: Use when starting a new repository, or when an existing one takes t
 **กฎ:** รากโปรเจกต์มีแต่ไฟล์ตั้งค่าและ README · ของชั่วคราวไม่เคยอยู่ที่ราก ·
 ชื่อโฟลเดอร์และไฟล์เป็นตัวพิมพ์เล็กขีดกลาง ไม่มีเว้นวรรค
 
+> **โครงนี้ใช้เมื่อเอกสารเป็น markdown ทั้งหมดและผู้อ่านคือทีมพัฒนา**
+> ถ้าโปรเจกต์มี `.docx` · `.xlsx` · mockup · รูปที่ลูกค้าต้องเห็น ให้ย้ายเอกสารออกไปอยู่นอก repo
+> ตาม `project-doc-set` ข้อ 1 แบบ B แล้วเหลือไว้ใน repo แค่ `docs/adr/` กับ `docs/runbook.md`
+
 **`docs/README.md` คือสารบัญ ไม่ใช่เนื้อหา:**
 
 ```markdown
