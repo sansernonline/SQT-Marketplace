@@ -1,6 +1,6 @@
 ---
 name: product-naming
-description: Use when naming a product, app, module, brand or code name — including when the name is invented rather than descriptive. Generates candidates from eight repeatable formulas instead of free association, screens them against the six tests that kill a name, attaches a meaning to a name that did not start with one and ships a bank of Latin, Greek and borrowed-word roots, keeps a family consistent when there are several products, checks availability before anyone falls in love with one, and covers how a name behaves when Thai speakers say and type it.
+description: Use when naming a product, app, module, brand or code name — including when the name is invented rather than descriptive. Generates candidates from nine repeatable formulas instead of free association, screens them against the six tests that kill a name, attaches a meaning to a name that did not start with one and ships a bank of Latin, Greek and borrowed-word roots, keeps a family consistent when there are several products, checks availability before anyone falls in love with one, and covers how a name behaves when Thai speakers say and type it.
 ---
 
 # ตั้งชื่อผลิตภัณฑ์
@@ -47,7 +47,7 @@ description: Use when naming a product, app, module, brand or code name — incl
 
 ---
 
-## 2 · แปดสูตรผลิตชื่อ
+## 2 · เก้าสูตรผลิตชื่อ
 
 อย่านั่งนึกลอย ๆ — เดินทีละสูตร ผลิตสูตรละ 5–10 ชื่อ แล้วค่อยคัด
 
@@ -61,6 +61,7 @@ description: Use when naming a product, app, module, brand or code name — incl
 | 6 | **คำสั้นไร้ความหมาย** | 4–5 ตัวอักษร พยัญชนะ-สระ-พยัญชนะ อ่านได้ทันที | **Quix · Zeno · Riva · Volt** |
 | 7 | **คำจริงยืมข้ามบริบท** | คำธรรมดาที่ไม่เกี่ยวกับงาน แต่ให้ความรู้สึกตรง | **Slack · Notion · Arc · Linear** |
 | 8 | **สองพยางค์อ่านลื่น** | คำจริงสองคำสั้น ๆ วางคู่กัน | **Speak Go · Cash App** |
+| 9 | **คำเต็มสองคำที่ไม่เกี่ยวกัน** | เอาคำจริงสองคำที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง มาต่อเป็นคำเดียว | **Tailscale · Snowflake · Firebase · Basecamp** |
 
 **สูตรที่ให้ชื่อ "cool + clean" มากที่สุด** คือ 1 · 4 · 6 — สั้น ไร้ความหมายตรงตัว จำง่าย
 **สูตร 7 ได้ชื่อที่ดูโตแล้ว** แต่โดเมนหายากที่สุด
@@ -69,6 +70,44 @@ description: Use when naming a product, app, module, brand or code name — incl
 **ตัวอักษรที่ทำให้ดูเชย** — `-soft` `-tech` `-sys` `-pro` `-plus` `-max` ต่อท้าย
 
 ---
+
+
+### สูตร 9 ลงลึก — แบบที่ให้ชื่อดูเท่าที่สุดโดยไม่ต้องประดิษฐ์คำ
+
+`Tailscale` = *tail* + *scale* · ทั้งสองคำไม่เกี่ยวกับเครือข่ายส่วนตัวเลย และไม่เกี่ยวกันเองด้วย
+
+| ต่างจากสูตร 2 ตรงไหน | |
+|---|---|
+| สูตร 2 | **ตัด**พยางค์ก่อนต่อ — `fold`+`drop` → Foldrop · คำที่ได้ไม่ใช่คำจริง |
+| สูตร 9 | **ไม่ตัดอะไรเลย** — คำจริงสองคำเต็ม ๆ วางติดกัน |
+
+**ทำไมได้ผล**
+
+| เหตุผล | |
+|---|---|
+| จำง่าย | ผู้ฟังรู้จักทั้งสองคำอยู่แล้ว ไม่ต้องจำการสะกดใหม่ |
+| ไม่ซ้ำใคร | คู่คำที่ไม่มีเหตุผลต้องอยู่ด้วยกัน จึงไม่มีใครเคยจับคู่ไว้ |
+| โดเมนหาง่าย | ง่ายกว่าคำเดี่ยวมาก เพราะไม่มีใครไปจับจอง |
+| ผ่านทดสอบโทรศัพท์ | พูดแล้วพิมพ์ถูกทันที เพราะเป็นคำที่เขารู้จัก |
+
+**กฎของสูตรนี้**
+
+- รวมกันไม่เกิน **3 พยางค์** — `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
+- **คำแรกควรเป็นรูปธรรม** — สิ่งที่นึกภาพออก (tail, snow, fire, base, bit, black, cloud)
+- อย่าให้คู่คำอธิบายสินค้า — ถ้าอธิบายได้ มันจะกลายเป็นชื่อเชย ๆ แบบ `DataSync`
+- **ห้ามให้ความหมายรวมกันแล้วแปลก** — ลองอ่านออกเสียงและนึกภาพก่อน
+- ตัวสะกดต้องไม่ชนกันจนอ่านยาก — เลี่ยงคำแรกลงท้ายด้วยตัวเดียวกับที่คำหลังขึ้นต้น
+
+**วิธีผลิต** — ทำสองคลังแยกกัน แล้วสุ่มจับคู่ อ่านออกเสียงทุกคู่
+
+| คลัง A — รูปธรรม | คลัง B — โครงสร้าง/มาตรา |
+|---|---|
+| tail · snow · fire · bit · black · cloud · iron · salt · moon · north · glass · pine | scale · flake · base · bucket · camp · bird · flare · stack · frame · gate · port · line |
+
+ตัวอย่างที่ได้จากการจับคู่ — `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
+
+> **ความหมายใส่ทีหลังได้เต็มที่** (ดูข้อ 3) — `Tailscale` ไม่ได้มีความหมายตั้งแต่แรก
+> แต่พอใช้ไปสักพัก คนก็ผูกมันกับเรื่องของเครือข่ายที่ขยายได้ไปเอง
 
 ## 3 · ใส่ความหมายให้ชื่อ
 
