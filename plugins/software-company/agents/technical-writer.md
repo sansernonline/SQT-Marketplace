@@ -67,6 +67,7 @@ Every doc belongs to ONE of four types — don't mix them:
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `document-naming` — เมื่อตั้งชื่อ จัดเวอร์ชัน และเลือกว่าเอกสารควรเป็น docx หรือ markdown
 - `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
+- `product-naming` — เมื่อต้องตั้งชื่อฟีเจอร์หรือคำที่ใช้เรียกของในผลิตภัณฑ์ให้สม่ำเสมอ
 - `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume
 
 ## Standard Outputs

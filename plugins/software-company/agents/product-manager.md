@@ -65,6 +65,7 @@ If user research is missing, **commission it before deciding**.
 - `flag-and-propose` — เมื่อเจอของที่ทำให้แผนเดิมใช้ไม่ได้ หรือจะเสนออะไรที่ผู้ใช้ยังไม่ได้ขอ — เปิดด้วยผลกระทบ ปิดด้วยคำถามเดียว
 - `document-naming` — เมื่อสร้างหรือส่งเอกสารกลยุทธ์ — ชื่อไฟล์ เวอร์ชัน สถานะ
 - `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว — เลือกวิธีที่ประหยัด context ก่อนลงมือ
+- `product-naming` — เมื่อต้องตั้งชื่อผลิตภัณฑ์ โมดูล หรือวางตระกูลชื่อของหลายผลิตภัณฑ์
 - `work-session-context` — at end of strategy/roadmap sessions, save decisions + open items for resume
 
 ## Standard Outputs
