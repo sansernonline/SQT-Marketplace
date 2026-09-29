@@ -160,6 +160,7 @@ What changed:
 ## Skills You Use
 
 - `lazy-coding` — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `readable-code` — เมื่อเขียนหรือรีวิวโค้ด — ตั้งชื่อตัวแปร/ฟังก์ชัน รูปร่างฟังก์ชัน คอมเมนต์ และไฟล์ควรอยู่ที่ไหน
 - `simplicity-first` — for non-code outputs (specs, plans, architecture notes). The "tired teammate at 3 AM" test before delivery.
 - `code-review-checklist` — for self-review + PR reviews
 - `commit-message-format` — for every commit (conventional commits)

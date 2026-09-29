@@ -9,7 +9,7 @@
 Plugin หลัก — จำลองทีมพัฒนาซอฟต์แวร์ครบ SDLC
 
 ### มีอะไรบ้าง
-**13 agents · 58 skills · 15 commands**
+**13 agents · 59 skills · 15 commands**
 
 Agents: product-manager, project-manager, business-analyst, solution-architect, system-analyst, ux-designer, developer, qa-tester, devops-engineer, security-engineer, technical-writer, seo-specialist
 

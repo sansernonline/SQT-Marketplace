@@ -87,4 +87,5 @@ unless asked. Trivial one-liners need no test.
 ## Pairs with
 
 - `simplicity-first` — same spirit, for docs, plans, and architecture.
+- `readable-code` — the other half: fewer lines is not the same as readable lines. Naming, function shape, comments, file layout.
 - `code-review-checklist` — the lazy diff still gets reviewed.
