@@ -10,6 +10,7 @@
  *
  * ไม่ใช้ dependency ภายนอก
  */
+import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -217,5 +218,15 @@ console.log();
 console.log(`  ตรวจ ${inspected} รายการ · error ${errors.length} · warning ${warns.length}`);
 console.log();
 
-const failed = errors.length > 0 || (STRICT && warns.length > 0);
+// ตัวเลขนับในเอกสารต้องตรงกับของจริง — sync-docs.mjs เป็นเจ้าของเรื่องนี้
+let docsOutOfDate = false;
+try {
+  execFileSync(process.execPath, [join(ROOT, 'scripts', 'sync-docs.mjs'), '--check'], { stdio: 'pipe' });
+} catch {
+  docsOutOfDate = true;
+  console.log('  ⚠  เอกสารไม่ตรงกับของจริง — รัน: node scripts/sync-docs.mjs');
+  console.log();
+}
+
+const failed = errors.length > 0 || docsOutOfDate || (STRICT && warns.length > 0);
 process.exit(failed ? 1 : 0);

@@ -5,6 +5,7 @@
 | ไฟล์ | ทำอะไร | รันเมื่อไหร่ |
 |------|--------|---|
 | `validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
+| `sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | `install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 
 ---
@@ -86,3 +87,30 @@ powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps
 |---|---|
 | `validate-marketplace.mjs` | ✅ รันจริงกับทั้งรีโป + `--self-test` ผ่าน 4/4 |
 | `install-marketplace.ps1` | ✅ ทดสอบบน PowerShell 7.4 ครบทุกเส้นทาง |
+
+---
+
+## 3 · sync-docs.mjs
+
+```bash
+node scripts/sync-docs.mjs --check   # ตรวจว่าเอกสารตรงกับของจริงไหม (CI)
+node scripts/sync-docs.mjs           # เขียนทับให้ตรง
+```
+
+**แหล่งความจริงคือโฟลเดอร์ `plugins/` เท่านั้น** เอกสารทุกไฟล์เป็นผลลัพธ์ที่สร้างจากที่นั่น
+
+| ไฟล์ที่ถูกเขียน | เขียนอะไร |
+|---|---|
+| `README.md` | บรรทัดยอดรวม และตัวเลขสามคอลัมน์ในตาราง plugin ทุกแถว |
+| `docs/PLUGINS.md` | จำนวน plugin · ตัวเลขของแต่ละ plugin · บล็อก Marketplace Total |
+| `docs/REFERENCE.md` | เลขในหัวข้อ Agents/Skills/Commands · บล็อก skill ทั้งหมด พร้อมเลขลำดับและบรรทัด `**ใช้กับ:**` |
+| `plugins-global/README.md` | บรรทัด "ในไฟล์:" พร้อมเลขเวอร์ชันจาก `plugin.json` |
+
+**บรรทัดคำอธิบายที่เขียนมือใน `docs/REFERENCE.md` ไม่หาย** — สคริปต์เก็บทุกบรรทัดที่ขึ้นต้นด้วย `**`
+(เช่น `**Includes:**` `**Anti-patterns ที่กันไว้:**`) แล้วย้ายตามไปให้เอง
+มีแต่ `**ใช้กับ:**` ที่ถูกเขียนใหม่ เพราะหาได้จากการที่ agent อ้างชื่อ skill นั้นจริง ๆ
+
+skill ใหม่ที่ยังไม่มีบล็อกใน `REFERENCE.md` จะถูกต่อท้ายพร้อม `description` จาก frontmatter
+เขียนคำอธิบายมือเพิ่มทีหลังได้ รันซ้ำแล้วไม่หาย
+
+`validate-marketplace.mjs` เรียก `--check` ให้อัตโนมัติ ถ้าไม่ตรงจะขึ้นคำเตือนและ exit code 1

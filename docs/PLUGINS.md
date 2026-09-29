@@ -402,8 +402,8 @@ Startup ทดลอง (เลือกทีหลัง)        → core เ�
 
 ```
 14 plugins
-67 agents (12 core + 55 add-on)
-74 skills (35 core + 39 add-on)
+68 agents (13 core + 55 add-on)
+98 skills (59 core + 39 add-on)
 41 commands (15 core + 26 add-on)
 ```
 
