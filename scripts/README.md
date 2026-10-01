@@ -6,6 +6,7 @@
 |------|--------|---|
 | `validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
 | `sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
+| `build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
 | `install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 
 ---
@@ -104,7 +105,7 @@ node scripts/sync-docs.mjs           # เขียนทับให้ตร�
 | `README.md` | บรรทัดยอดรวม และตัวเลขสามคอลัมน์ในตาราง plugin ทุกแถว |
 | `docs/PLUGINS.md` | จำนวน plugin · ตัวเลขของแต่ละ plugin · บล็อก Marketplace Total |
 | `docs/REFERENCE.md` | เลขในหัวข้อ Agents/Skills/Commands · บล็อก skill ทั้งหมด พร้อมเลขลำดับและบรรทัด `**ใช้กับ:**` |
-| `plugins-global/README.md` | บรรทัด "ในไฟล์:" พร้อมเลขเวอร์ชันจาก `plugin.json` |
+| `docs/CLAUDE-WEB.md` | บรรทัด "ในไฟล์:" พร้อมเลขเวอร์ชันจาก `plugin.json` |
 
 **บรรทัดคำอธิบายที่เขียนมือใน `docs/REFERENCE.md` ไม่หาย** — สคริปต์เก็บทุกบรรทัดที่ขึ้นต้นด้วย `**`
 (เช่น `**Includes:**` `**Anti-patterns ที่กันไว้:**`) แล้วย้ายตามไปให้เอง
@@ -114,3 +115,23 @@ skill ใหม่ที่ยังไม่มีบล็อกใน `REFERE
 เขียนคำอธิบายมือเพิ่มทีหลังได้ รันซ้ำแล้วไม่หาย
 
 `validate-marketplace.mjs` เรียก `--check` ให้อัตโนมัติ ถ้าไม่ตรงจะขึ้นคำเตือนและ exit code 1
+
+---
+
+## 4 · build-targets.mjs
+
+```bash
+node scripts/build-targets.mjs
+```
+
+ลบ `dist/` แล้วสร้างใหม่จาก `plugins/` ทุกครั้ง · ไม่ใช้ dependency ภายนอก · วิธีติดตั้งฝั่งปลายทางอยู่ใน [docs/OTHER-LLMS.md](../docs/OTHER-LLMS.md)
+
+| ปลายทาง | skill | agent | command |
+|---|---|---|---|
+| `dist/claude-web/` | `software-company.zip` — plugin หลักทั้งโฟลเดอร์ตามเดิม ([วิธีอัปโหลด](../docs/CLAUDE-WEB.md)) | ← | ← |
+| `dist/codex/` | คัดลอกไป `.agents/skills/` | `.codex/agents/<name>.toml` | แปลงเป็น skill (Codex เลิกใช้ custom prompt) · `$ARGUMENTS` → ข้อความบอกให้ใช้สิ่งที่ผู้ใช้ระบุ |
+| `dist/gemini-cli/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง | `commands/<name>.toml` · `$ARGUMENTS` → `{{args}}` |
+| `dist/chat-web/` | รวมเป็นไฟล์ความรู้ไม่เกิน 10 ไฟล์ต่อบทบาท | `instructions.md` · ถ้าเกิน 8000 ตัวอักษรย้ายไป `knowledge/00-role.md` | ไม่มี (หน้าเว็บไม่มี slash command) |
+
+skill ที่บทบาทหนึ่งได้รับคือชื่อ skill ที่เขียนใน backtick ในไฟล์ agent นั้น
+

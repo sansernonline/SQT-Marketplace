@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F2F4F6"><!-- ค่านี้ต้องเป็นสีดิบ: เบราว์เซอร์อ่าน meta ก่อน CSS โหลด -->
+<title>Mockup — ชื่อแอปของคุณ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="speakgo.css">
+</head>
+
+<!--
+  Mockup แอปมือถือสไตล์ Speak Go — คัดลอกไฟล์นี้ + speakgo.css ไปไว้คู่กัน
+
+  โครง: #app (กรอบเครื่อง) > .appbar + .screen ×N + .tabbar
+        .overlay = หน้าจอทับเต็มสำหรับงานที่ใช้เวลานาน
+
+  สลับธีม: body[data-theme="grad"]  · สลับภาษา: body[data-lang="en"]
+  บนจอกว้าง ≥560px จะเห็นเป็นกรอบเครื่องลอยบนพื้นเข้ม — ไว้โชว์ให้คนอื่นดู
+-->
+<body data-lang="th">
+<div id="app">
+
+  <div class="appbar">
+    <h1 id="pageTitle">ชื่อหน้า</h1>
+    <div class="sub" id="pageSub">คำอธิบายสั้น · META</div>
+  </div>
+
+  <!-- ============ หน้า 1: รายการ / ไทล์ ============ -->
+  <div class="screen on" id="s1">
+    <input id="search" placeholder="ค้นหา…">
+
+    <div class="chips">
+      <button class="chip on">ทั้งหมด</button>
+      <button class="chip">กำลังเรียน</button>
+      <button class="chip">ถูกใจ</button>
+      <button class="chip">เสร็จแล้ว</button>
+    </div>
+
+    <div class="welcome">
+      <b>สวัสดีตอนเช้า</b>
+      วันนี้เหลืออีก 2 บทเรียนก็ครบเป้าประจำสัปดาห์แล้ว
+    </div>
+
+    <div class="grouphead">หมวดหมู่</div>
+    <div class="tiles">
+      <button class="tile">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>
+        <span class="tn">บทสนทนาทั่วไป</span>
+        <span class="tm">12 บทเรียน</span>
+        <span class="tbar"><span style="width:64%"></span></span>
+      </button>
+      <button class="tile">
+        <span class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 13h4"/></svg></span>
+        <span class="tn">สัมภาษณ์งาน</span>
+        <span class="tm">8 บทเรียน</span>
+        <span class="tbar"><span style="width:25%"></span></span>
+      </button>
+    </div>
+
+    <div class="grouphead">เรียนต่อ</div>
+    <div class="card">
+      <div class="body">
+        <div class="t">สั่งอาหารในร้าน <span class="lvl">A2</span></div>
+        <div class="e">Ordering at a restaurant</div>
+        <div class="m">ทำต่อจากเทิร์นที่ 4</div>
+      </div>
+      <button class="heart on"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9-8.4C1.3 9.3 3 5.5 6.6 5.5c2 0 3.4 1.2 4.4 2.6 1-1.4 2.4-2.6 4.4-2.6 3.6 0 5.3 3.8 3.6 7.1C19 16.4 12 21 12 21z"/></svg></button>
+    </div>
+    <div class="card">
+      <div class="body">
+        <div class="t">นัดหมายกับหมอ <span class="lvl">B1</span></div>
+        <div class="e">Booking a doctor's appointment</div>
+        <div class="m none">ยังไม่เริ่ม</div>
+      </div>
+      <button class="heart"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9-8.4C1.3 9.3 3 5.5 6.6 5.5c2 0 3.4 1.2 4.4 2.6 1-1.4 2.4-2.6 4.4-2.6 3.6 0 5.3 3.8 3.6 7.1C19 16.4 12 21 12 21z"/></svg></button>
+    </div>
+
+    <button class="sg"><b>ทบทวนคำที่ผิดบ่อย</b><span class="tbar"><span style="width:40%"></span></span><span class="n">40%</span></button>
+    <button class="sg"><b>ฝึกออกเสียง</b><span class="tbar"><span style="width:78%"></span></span><span class="n">78%</span></button>
+
+    <button class="cta" onclick="openOverlay()">เริ่มบทเรียนวันนี้</button>
+  </div>
+
+  <!-- ============ หน้า 2: สรุปผล ============ -->
+  <div class="screen" id="s2">
+    <div class="score"><b>82</b><span>คะแนนรวมของบทเรียนล่าสุด</span></div>
+
+    <div class="mini">
+      <div><b>14</b><span>เทิร์น</span></div>
+      <div><b>9</b><span>ถูกต้อง</span></div>
+      <div><b>5</b><span>ต้องแก้</span></div>
+      <div><b>6:20</b><span>นาที</span></div>
+    </div>
+
+    <h2>จุดที่ต้องแก้บ่อย</h2>
+    <div class="bar"><span class="lab">Past tense</span><span class="track"><span class="fill" style="width:70%"></span></span><span class="n">7</span></div>
+    <div class="bar"><span class="lab">Articles</span><span class="track"><span class="fill" style="width:40%"></span></span><span class="n">4</span></div>
+    <div class="bar"><span class="lab">Prepositions</span><span class="track"><span class="fill" style="width:20%"></span></span><span class="n">2</span></div>
+
+    <h2>รายละเอียด</h2>
+    <div class="wk">
+      <div class="hd"><span class="nm">Past tense</span><span class="ct">7 ครั้ง</span></div>
+      <div class="lb">ปัญหา</div>
+      <div class="tx">ใช้รูปปัจจุบันเวลาเล่าเรื่องที่เกิดไปแล้ว</div>
+      <div class="lb">ตัวอย่าง</div>
+      <div class="ex"><del>I go there yesterday</del> <ins>I went there yesterday</ins></div>
+      <button class="go">ฝึกเรื่องนี้ 5 ข้อ</button>
+    </div>
+
+    <button class="cta">เริ่มบทเรียนถัดไป</button>
+    <button class="cta alt">กลับหน้าแรก</button>
+  </div>
+
+  <!-- ============ หน้า 3: ตั้งค่า ============ -->
+  <div class="screen" id="s3">
+    <div class="sect">การเรียน</div>
+    <div class="group">
+      <div class="r2"><span class="k">ระดับ</span><select><option>A2 — พื้นฐาน</option></select></div>
+      <div class="r2"><span class="k">เป้าหมายต่อวัน</span><select><option>15 นาที</option></select></div>
+      <div class="rcol"><span class="k">ความเร็วเสียง</span>
+        <div class="seg"><button>ช้า</button><button class="on">ปกติ</button><button>เร็ว</button></div>
+      </div>
+    </div>
+
+    <div class="sect">การแสดงผล</div>
+    <div class="group">
+      <div class="rcol"><span class="k">ธีม</span>
+        <div class="seg">
+          <button class="on" onclick="setTheme('')">เรียบ</button>
+          <button onclick="setTheme('grad')">ไล่สี</button>
+        </div>
+      </div>
+      <div class="rcol"><span class="k">ภาษาอินเทอร์เฟซ</span>
+        <div class="seg">
+          <button class="on" onclick="setLang('th')">ไทย</button>
+          <button onclick="setLang('en')">English</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="outline danger">ล้างข้อมูลการเรียน</button>
+  </div>
+
+  <!-- ============ แถบแท็บล่าง ============ -->
+  <nav class="tabbar">
+    <button class="tab on" onclick="go('s1',this,'ชื่อหน้า','คำอธิบายสั้น · META')">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>เรียน</button>
+    <button class="tab" onclick="go('s2',this,'สรุปผล','REPORT')">
+      <svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>ความคืบหน้า</button>
+    <button class="tab" onclick="go('s3',this,'ตั้งค่า','SETTINGS')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>ตั้งค่า</button>
+  </nav>
+
+  <!-- ============ หน้าจอทับเต็ม: บทสนทนา ============ -->
+  <div class="overlay" id="ov">
+    <div class="ovbar">
+      <button class="iconbtn" onclick="closeOverlay()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div><div class="t">สั่งอาหารในร้าน</div><div class="s">TURN 5 / 12</div></div>
+      <span class="grow"></span>
+    </div>
+
+    <div id="thread">
+      <div class="turn ai">
+        <span class="who">Tutor</span>
+        <div class="bub">Good evening! Do you have a reservation with us tonight?</div>
+        <div class="acts"><button class="actbtn">ฟังอีกครั้ง</button><button class="actbtn hintb">ขอคำใบ้</button></div>
+      </div>
+
+      <div class="turn me">
+        <span class="who">คุณ</span>
+        <div class="bub">No, we don't have. Table for two please.</div>
+        <div class="repair">
+          <span class="tag">ไวยากรณ์</span>
+          <del>No, we don't have.</del> <ins>No, we don't.</ins>
+          <span class="note">ภาษาอังกฤษไม่ต้องพูดกรรมซ้ำหลัง don't ถ้าอีกฝ่ายรู้อยู่แล้วว่าหมายถึงอะไร</span>
+        </div>
+      </div>
+
+      <div class="turn ai">
+        <span class="who">Tutor</span>
+        <div class="bub">Of course. Would you prefer indoor or on the terrace?</div>
+      </div>
+
+      <div class="turn me">
+        <span class="who">คุณ</span>
+        <div class="bub">The terrace sounds nice.</div>
+        <span class="clean">ไม่มีจุดต้องแก้</span>
+      </div>
+    </div>
+
+    <div class="dock">
+      <div id="interim">แตะไมค์แล้วพูดได้เลย</div>
+      <div class="dockrow">
+        <button class="txtbtn" onclick="toggleType()">พิมพ์แทน</button>
+        <button id="mic" onclick="this.classList.toggle('live')">พูด</button>
+        <button class="txtbtn">ข้ามข้อนี้</button>
+      </div>
+      <div class="typerow" id="typerow">
+        <input placeholder="พิมพ์คำตอบ…">
+        <button>↑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // มีเฉพาะใน mockup — แอปจริงใช้ router และเก็บค่าที่ผู้ใช้เลือกไว้ในโปรไฟล์
+  function go(id, el, title, sub) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t === el));
+    pageTitle.textContent = title; pageSub.textContent = sub;
+    document.querySelector('.screen.on').scrollTop = 0;
+  }
+  function openOverlay() { ov.classList.add('on'); }
+  function closeOverlay() { ov.classList.remove('on'); }
+  function toggleType() { typerow.classList.toggle('on'); }
+  function setTheme(t) {
+    t ? document.body.dataset.theme = t : delete document.body.dataset.theme;
+    document.querySelectorAll('.seg')[1].querySelectorAll('button')
+      .forEach((b, i) => b.classList.toggle('on', (i === 1) === (t === 'grad')));
+  }
+  function setLang(l) {
+    document.body.dataset.lang = l;
+    document.querySelectorAll('.seg')[2].querySelectorAll('button')
+      .forEach((b, i) => b.classList.toggle('on', (i === 1) === (l === 'en')));
+  }
+</script>
+</body>
+</html>

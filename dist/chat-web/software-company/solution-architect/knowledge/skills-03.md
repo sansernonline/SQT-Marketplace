@@ -1,0 +1,1038 @@
+# skill: branded-document-design
+
+Use when the deliverable is a rendered document a stakeholder will look at — a Word file, a deck, or a PDF for sign-off — and it must look designed rather than like default Word. Ships a token palette, a type scale and a tested python-docx and python-pptx builder. Covers Thai typography. Pair with polished-document-style for markdown.
+
+# Branded Document Design
+
+> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้อง "ดูตั้งใจ" — มีระบบสี ระบบขนาดตัวอักษร
+> และจังหวะช่องไฟที่ซ้ำเดิมทุกหน้า ไม่ใช่ Word ที่เปิดมาแล้วพิมพ์เลย
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
+- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
+- เอกสารไทย–อังกฤษปนกัน (ซึ่งพังง่ายมากถ้าตั้งฟอนต์ไม่ครบ)
+- ต้องออกเอกสารชุดเดียวกันซ้ำ ๆ แล้วอยากให้ทุกฉบับหน้าตาเหมือนกัน
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- ผลลัพธ์เป็น markdown ในรีโป → ใช้ `polished-document-style`
+- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา → ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- ไดอะแกรมในเอกสาร markdown → ใช้ `markdown-visuals`
+
+**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
+→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ · markdown คือ source of truth เสมอ
+
+---
+
+## 0 · สีมาจากเนื้องาน — ถามก่อนเริ่ม
+
+**ถ้า markdown ต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น — อย่าถามซ้ำ อย่าตั้งใหม่**
+(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
+
+ถ้ายังไม่มี — **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ถามผู้ใช้ว่าจะใช้สีอะไร
+ถ้ายังไม่ระบุ ให้เสนอจากเนื้องานแล้วรอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
+
+| เนื้องาน | โทนที่เสนอ | เหตุผล |
+|---|---|---|
+| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
+| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
+| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
+| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
+| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
+| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
+| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+
+ถ้าลูกค้ามีแบรนด์อยู่แล้ว ใช้สีแบรนด์เป็นตัวตั้ง — ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
+
+**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่ใช่เลือกเพิ่มทีละสี
+สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ซึ่งต้องคงความหมายเดิมเสมอ
+
+---
+
+## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
+
+ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
+ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
+
+| Token | หน้าที่ | ได้มาจาก |
+|-------|---------|----------|
+| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีหลักที่ผู้ใช้เลือก |
+| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
+| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
+| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
+| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
+| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
+| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` หนึ่งขั้น — **ไม่ใช่ดำสนิท ดำสนิทล้าตา** |
+| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
+| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
+
+**สีสถานะ 6 ตัว** (คู่ พื้น/ตัวอักษร) — สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
+สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
+พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
+
+> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
+> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก — ถ้าไม่ผ่านให้ปรับความเข้ม ไม่ใช่ปรับสี
+>
+> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
+
+> 💡 **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
+> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
+
+### สเกลตัวอักษร (pt)
+
+| ระดับ | Word | Slide | น้ำหนัก · สี |
+|-------|------|-------|--------------|
+| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
+| H1 | 16 | 26 | bold · `brand` |
+| H2 | 12.5 | — | bold · `brand_deep` |
+| H3 | 11.5 | — | bold · `text` |
+| เนื้อความ | 11 | 17 | regular · `text_body` |
+| ตาราง | 11 | 12.5 | regular · `text_body` |
+| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
+
+**อย่าเพิ่มขนาดใหม่นอกสเกลนี้** — ทุกขนาดที่เพิ่มคือความไม่สม่ำเสมอที่ตาจับได้
+
+---
+
+## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
+
+ใช้ **Tahoma** เป็นค่าเริ่มต้น: มีทุกเครื่อง Windows/Office · วรรณยุกต์ไม่ชนสระ ·
+bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
+
+> 🚨 **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
+> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม** —
+> ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
+> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว — **ห้ามตั้งฟอนต์เองแบบ manual**
+
+กฎอื่นสำหรับเอกสารไทย:
+
+- ระยะบรรทัด **1.3–1.35** (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์บน–ล่าง ต้องหายใจ)
+- **ห้ามใช้ justify** กับย่อหน้าไทย — ไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
+- ตัดคำไทยของ LibreOffice ไม่เหมือน Word — ถ้าจะส่ง PDF ให้ export จาก Word จริง
+  หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
+- ถ้าสร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
+  (ReportLab จัดวรรณยุกต์ไทยผิด — ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
+- เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
+  ไม่ใช่บั๊กของขนาดฟอนต์ — บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน ให้ตรวจครั้งสุดท้ายจาก Word
+
+---
+
+## 3 · โครงหน้าเอกสาร Word
+
+```
+หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
+              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
+              → ขึ้นหน้าใหม่
+สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
+เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
+              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
+ท้ายเอกสาร    ตารางลงนามอนุมัติ
+footer        "หน้า N" กลางหน้า สีเทา 9pt
+```
+
+หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. → ความกว้างเนื้อหา ≈ **9360 twips**
+(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
+
+---
+
+## 4 · องค์ประกอบที่ใช้ซ้ำ
+
+| องค์ประกอบ | หน้าตา | เมธอด |
+|-----------|--------|-------|
+| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
+| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` เส้นเทาบาง หัวซ้ำทุกหน้า | `table()` |
+| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
+| แถบตัวเลขสรุป | การ์ดพื้นฟ้าอ่อน ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
+| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
+| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
+| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
+| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
+
+**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · KPI strip 3–5 ช่อง (6 ช่องขึ้นไปตัวเลขจะเล็กจนไม่มีพลัง) ·
+ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
+
+---
+
+## 5 · วิธีใช้ brandkit
+
+```python
+import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
+from brandkit import BrandDoc, use_brand, to_pdf
+
+doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
+doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
+          subtitle="ระบบ Apps Track — Project Control & Monitor",
+          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
+          logo="asset/AppsTrack_Logo_Badge.png")
+doc.toc()
+
+doc.h1("1. ภาพรวมระบบ")
+doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
+doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
+doc.table(["หัวข้อ", "รายละเอียด"],
+          [["URL ระบบ", "https://project.eitaccount.cloud"]],
+          widths=[2600, 6760])                  # รวม = 9360
+doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
+doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
+doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
+               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
+doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
+doc.save("SRS.docx")
+```
+
+สไลด์ใช้ `brandkit_pptx.py` ซึ่งกินโทเคนชุดเดียวกัน:
+
+```python
+from brandkit_pptx import BrandDeck
+d = BrandDeck()                                  # 16:9
+d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
+d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
+d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
+d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
+              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
+d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
+d.save("deck.pptx")
+```
+
+รายละเอียดเมธอดทั้งหมดอยู่ใน `references/api.md` · ไฟล์ตัวอย่างที่รันได้จริงคือ
+`scripts/example_srs.py`
+
+---
+
+## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
+
+เอกสารที่ไม่เคยถูก "มอง" คือเอกสารที่ยังไม่เสร็จ ตารางล้นขอบ หัวข้อค้างท้ายหน้า
+วรรณยุกต์ลอย — สิ่งเหล่านี้ไม่มีทางเห็นจากโค้ด
+
+```bash
+soffice --headless --convert-to pdf --outdir out SRS.docx
+pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.png ...
+```
+
+แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
+
+- [ ] ไม่มีตารางล้นออกนอกขอบกระดาษ · คอลัมน์กว้างสมเหตุสมผล ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
+- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
+- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
+- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ
+- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
+- [ ] footer เลขหน้าครบทุกหน้า
+- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ
+
+---
+
+## 7 · Anti-patterns
+
+- ❌ **ใช้ built-in Heading style ของ Word** — จะทับสีที่เราตั้ง ให้ใช้ `h1()/h2()/h3()`
+  ซึ่งตั้ง `outlineLvl` เองเพื่อให้ TOC ยังเห็นหัวข้อ
+- ❌ **เส้นตารางดำหนา default** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
+- ❌ **ตัวอักษรสีดำสนิท** — ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
+- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตาจะไม่รู้ว่าตารางเริ่มตรงไหนเวลาข้ามหน้า
+- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
+  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
+- ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
+- ❌ **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
+- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
+
+---
+
+## 8 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---------|-----------|
+| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
+| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `markdown-visuals` → export PNG → `figure()` |
+| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
+| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
+| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
+| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
+| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
+| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: api.md
+
+# brandkit API — อ้างอิงเมธอด
+
+ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้เสมอ
+
+## สารบัญ
+
+1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
+2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
+3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
+
+---
+
+## brandkit.py — Word (.docx)
+
+### สร้างเอกสาร
+
+```python
+BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
+         footer_text="หน้า")
+```
+
+| พารามิเตอร์ | ความหมาย |
+|-------------|----------|
+| `path_template` | ไฟล์ .docx/.dotx ที่ใช้เป็นแม่แบบ (มี header/logo ขององค์กรอยู่แล้ว) |
+| `page` | `"A4"` หรือ `"Letter"` |
+| `margins_cm` | (บน, ขวา, ล่าง, ซ้าย) |
+| `footer_text` | คำนำหน้าเลขหน้า · `""` = เลขเปล่า |
+
+### บล็อกระดับหน้า
+
+| เมธอด | หมายเหตุ |
+|-------|----------|
+| `cover(title, subtitle, meta, note, logo, logo_width_cm=2.6, top_space_pt=150, page_break=True)` | โลโก้รับได้ทั้ง .png และ .emf — **.svg ใช้ไม่ได้ใน python-docx** ให้แปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
+| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC · ใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
+| `page_break()` | |
+| `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
+
+### หัวข้อและข้อความ
+
+| เมธอด | ผลลัพธ์ |
+|-------|---------|
+| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · ตั้ง `outlineLvl` ให้ TOC เห็น |
+| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (ไทยอย่าใช้ justify) |
+| `rich([(text, opts), ...])` | หลายรูปแบบในย่อหน้าเดียว เช่น `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
+| `bullets([...], style="List Bullet")` | `style="List Number"` สำหรับเลขลำดับ |
+| `code(text)` | บล็อกโค้ดพื้นเทา |
+
+### ตารางและข้อมูล
+
+| เมธอด | หมายเหตุ |
+|-------|----------|
+| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False)` | `widths` หน่วย twips รวม **9360** สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ |
+| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` — โทนที่ใช้ได้: green blue amber red violet grey |
+| `kpi_row([(value, label), ...])` | 3–5 ช่องกำลังดี |
+| `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
+
+### อื่น ๆ
+
+| เมธอด | หมายเหตุ |
+|-------|----------|
+| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
+| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` → ขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
+| `save(path)` | |
+
+### ฟังก์ชันระดับโมดูล
+
+| ฟังก์ชัน | ใช้เมื่อ |
+|----------|---------|
+| `use_brand(**tokens)` | เปลี่ยน palette ทั้งชุด — เรียก **ก่อน** สร้าง `BrandDoc` |
+| `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
+| `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
+| `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
+| `set_borders(table)` · `no_borders(table)` | |
+| `repeat_header(row)` · `keep_with_next(paragraph)` | |
+| `add_field(paragraph, "PAGE")` | แทรก field ของ Word |
+| `to_pdf(docx_path, outdir)` | เรียก LibreOffice แปลงเป็น PDF |
+
+---
+
+## brandkit_pptx.py — สไลด์ (.pptx)
+
+```python
+BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
+```
+
+| เมธอด | สไลด์ที่ได้ |
+|-------|-------------|
+| `title_slide(title, subtitle, meta)` | พื้นฟ้าอ่อน + เส้นแบรนด์คั่น |
+| `section(title, kicker=None)` | แถบแบรนด์แนวตั้งซ้าย + ชื่อส่วน |
+| `bullets_slide(title, items, subtitle=None)` | หัวข้อ + ขีดม่วงใต้หัวข้อ + bullet 17pt |
+| `kpi_slide(title, items, subtitle=None)` | การ์ดตัวเลข |
+| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` เป็นสัดส่วน เช่น `[1, 4, 2, 2]` |
+| `image_slide(title, image_path, caption, subtitle)` | รูปกลางสไลด์ พอดีกรอบอัตโนมัติ |
+| `quote_slide(text, source)` | สไลด์คำพูด/ข้อสรุป |
+| `save(path)` | |
+
+**ข้อจำกัดที่ต้องรู้**
+
+- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) — ไม่มี placeholder ให้แก้ใน PowerPoint
+  แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
+- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ · ถ้าต้องการตารางไร้เส้นให้ใช้กล่องข้อความเรียงแทน
+- ความสูงแถวตารางเป็นค่าต่ำสุด — ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
+
+---
+
+## สูตรความกว้างคอลัมน์ (Word)
+
+| จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9360) |
+|:---:|---|
+| 2 | `[2600, 6760]` — หัวข้อ/รายละเอียด |
+| 3 | `[1400, 5960, 2000]` — รหัส/รายการ/ผู้รับผิดชอบ |
+| 4 | `[1100, 4200, 1900, 2160]` — รหัส/รายการ/ผู้รับผิดชอบ/สถานะ |
+| 5 | `[1000, 1800, 2560, 2000, 2000]` |
+| 6 ขึ้นไป | ใช้ `landscape_section()` (พื้นที่ ≈ 14700 twips) |
+
+
+## reference: palette-examples.md
+
+# ตัวอย่างชุดสีที่เคยใช้จริง
+
+> ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
+> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
+> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+
+## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
+
+โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
+
+```python
+use_brand(
+    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
+    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
+    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
+)
+```
+
+## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
+
+```python
+use_brand(
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
+    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
+    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
+)
+```
+
+## ชุด C — กรมท่า (ราชการ · กฎหมาย)
+
+```python
+use_brand(
+    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
+    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
+    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
+)
+```
+
+## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
+
+accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
+
+```python
+use_brand(
+    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
+    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
+    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
+)
+```
+
+## สีสถานะ — ชุดเดียวกันทุกแบรนด์
+
+สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
+
+| สถานะ | พื้น | ตัวอักษร |
+|---|---|---|
+| สำเร็จ | `E9F7EF` | `17794A` |
+| ข้อมูล | `EAF2FD` | `2160AB` |
+| เตือน | `FDF5E4` | `96660D` |
+| ผิดพลาด | `FDEDEC` | `A63A34` |
+| เน้น | `F1EEFC` | `52439F` |
+| เป็นกลาง | `F2F4F8` | `626A7A` |
+
+> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
+> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
+
+## วิธีตรวจก่อนใช้
+
+1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
+2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
+3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
+
+
+---
+
+# skill: architecture-patterns
+
+Use when choosing system architecture (monolith vs microservices vs serverless), designing distributed systems, deciding on synchronous vs event-driven communication, applying patterns like CQRS/Event Sourcing/Saga, or evaluating architectural trade-offs. Reference for common patterns with concrete decision guidance.
+
+# Architecture Patterns
+
+## When to use this skill
+
+- Greenfield architecture decisions
+- Choosing communication patterns between services
+- Refactoring monolith → modular or microservices
+- Designing event-driven systems
+- Implementing CQRS, Event Sourcing, Saga
+- Reviewing existing architecture
+- Making ADR-level decisions
+
+---
+
+## High-Level Architecture Choice
+
+### Decision tree
+
+```
+How many engineers? Team count? Domain complexity?
+│
+├─ <10 engineers, 1 team
+│  └─ ✅ Monolith (modular monolith)
+│
+├─ 10-50 engineers, 2-5 teams
+│  └─ ✅ Modular monolith OR few services
+│
+├─ 50+ engineers, 5+ teams
+│  └─ Consider microservices (only if needed)
+│
+└─ Any size + spiky/event-driven workload
+   └─ Add serverless for that piece
+```
+
+---
+
+## Pattern 1: Modular Monolith
+
+**The 2026 default for most teams.**
+
+```
+┌─────────────────────────────────────┐
+│   Single deployable application     │
+│ ┌───────┐ ┌───────┐ ┌───────────┐  │
+│ │Module │ │Module │ │  Module   │  │
+│ │  A    │ │  B    │ │     C     │  │
+│ └───────┘ └───────┘ └───────────┘  │
+│   ▲           ▲           ▲         │
+│   └── Strict module boundaries ──┘  │
+└─────────────────────────────────────┘
+         │
+         ▼
+    Single DB (or per-module schemas)
+```
+
+**When to use:**
+- ✅ Small/medium team (< 30 engineers)
+- ✅ Need fast iteration
+- ✅ Simple ops requirements
+- ✅ Can deploy together
+
+**When NOT to use:**
+- ❌ Multiple teams needing independent deploys
+- ❌ Wildly different scaling needs per feature
+- ❌ Different tech stacks needed
+
+**Implementation tips:**
+- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
+- Each module exposes a public interface
+- Avoid cross-module DB access
+- One DB but logical schema separation
+
+---
+
+## Pattern 2: Microservices
+
+**When you've outgrown the monolith.**
+
+```
+┌──────┐  ┌──────┐  ┌──────┐
+│ Svc A│  │ Svc B│  │ Svc C│
+└──┬───┘  └──┬───┘  └──┬───┘
+   │ ▲      │ ▲      │ ▲
+   │ │      │ │      │ │     ← Each owns its DB
+   ▼ │      ▼ │      ▼ │
+  ┌──┴┐    ┌──┴┐    ┌──┴┐
+  │DB │    │DB │    │DB │
+  └───┘    └───┘    └───┘
+```
+
+**When to use:**
+- ✅ Independent teams (Conway's Law)
+- ✅ Different scaling needs per service
+- ✅ Need polyglot tech stacks
+- ✅ Mature CI/CD + observability
+
+**When NOT to use (most projects):**
+- ❌ Small team — overhead kills velocity
+- ❌ No K8s/IaC expertise
+- ❌ Can't afford distributed tracing
+- ❌ Don't have strong domain boundaries yet
+
+**Hidden costs:**
+- 💸 Operational complexity (5x ops effort)
+- 💸 Network latency between services
+- 💸 Distributed transactions hard
+- 💸 Debug-ability suffers
+- 💸 Need service mesh, observability stack
+
+> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt only when team coordination is the bottleneck.
+
+---
+
+## Pattern 3: Serverless / Functions
+
+**For spiky, event-driven workloads.**
+
+```
+Event ──► Function ──► Service / DB / Queue
+```
+
+**Sweet spots:**
+- ✅ Async background processing
+- ✅ Scheduled tasks (cron)
+- ✅ Glue code between services
+- ✅ Spiky / unpredictable traffic
+- ✅ Image/video processing pipelines
+
+**Bad fits:**
+- ❌ Long-running processes (15 min limit usually)
+- ❌ Stateful processing
+- ❌ High-frequency low-latency (cold starts)
+- ❌ Massive sustained traffic (cost spikes)
+
+---
+
+## Communication Patterns
+
+### Synchronous (Request-Response)
+
+```
+Client ──HTTP/gRPC──► Server
+       ◄──Response───
+```
+
+| Protocol | When |
+|----------|------|
+| REST | Public APIs, simple CRUD |
+| GraphQL | Mobile clients, multiple read patterns |
+| gRPC | Internal service-to-service |
+| WebSocket | Real-time bidirectional |
+
+**Pros:** Simple mental model, easy debugging
+**Cons:** Coupling, cascading failures, hard to scale independently
+
+### Asynchronous (Event-Driven)
+
+```
+Producer ──► Topic/Queue ──► Consumer(s)
+         (publish)         (subscribe)
+```
+
+| Tech | When |
+|------|------|
+| Kafka | High throughput, event sourcing, replay needed |
+| RabbitMQ | Traditional queuing, work distribution |
+| SQS/SNS | AWS-native, simpler than Kafka |
+| NATS | Lightweight, low-latency |
+| Redis Pub/Sub | Simple, ephemeral |
+
+**Pros:** Decoupling, resilience, scalability
+**Cons:** Eventual consistency, harder debugging, ordering challenges
+
+### When to choose which
+
+```
+Need immediate response? ─Yes─► Sync
+                         └─No──► Async
+
+Is producer impacted by consumer? ─Yes─► Sync
+                                  └─No──► Async
+
+Multiple consumers? ─Yes─► Async (pub/sub)
+                   └─No──► Either
+```
+
+---
+
+## Pattern 4: CQRS (Command Query Responsibility Segregation)
+
+**Split write model from read model.**
+
+```
+Commands ──► Write Model ──► Event Store
+                              │
+                              ▼
+                          Projector
+                              │
+                              ▼
+Queries ◄── Read Models (denormalized for query)
+```
+
+**When to use:**
+- ✅ Vastly different read vs write loads
+- ✅ Complex reporting / dashboards
+- ✅ Multiple read views from same data
+
+**When NOT to use:**
+- ❌ Simple CRUD (massive overkill)
+- ❌ Strong consistency required for reads
+
+---
+
+## Pattern 5: Event Sourcing
+
+**Store events, not state.**
+
+```
+Instead of:           Store:
+Account                Events:
+  balance: $100        ├─ AccountOpened
+                       ├─ Deposit($50)
+                       ├─ Deposit($75)
+                       └─ Withdraw($25)
+
+State is computed from events
+```
+
+**When to use:**
+- ✅ Strong audit/compliance requirements
+- ✅ Need to replay history
+- ✅ Temporal queries ("balance at date X")
+- ✅ Complex business logic with many state transitions
+
+**When NOT to use:**
+- ❌ Simple state apps (overkill)
+- ❌ No team experience with it
+- ❌ Don't need history/audit
+- ❌ Hard to delete data (GDPR considerations)
+
+> ⚠️ **Both CQRS and Event Sourcing add MASSIVE complexity. Use sparingly.**
+
+---
+
+## Pattern 6: Saga (Distributed Transactions)
+
+**When you need atomicity across services.**
+
+### Orchestration (centralized)
+```
+Orchestrator
+   │
+   ├──► Service A (do step 1)
+   │    [if fail → Orchestrator triggers compensations]
+   ├──► Service B (do step 2)
+   └──► Service C (do step 3)
+```
+
+### Choreography (decentralized)
+```
+Service A ──Event──► Service B ──Event──► Service C
+   ▲                                            │
+   └──────────── Compensation Event ────────────┘
+```
+
+| | Orchestration | Choreography |
+|---|--------------|--------------|
+| Visibility | 🟢 Central | 🔴 Distributed |
+| Coupling | 🟡 Coupled to orchestrator | 🟢 Loosely coupled |
+| Debugging | 🟢 Easier | 🔴 Hard |
+| Adding services | 🟡 Update orchestrator | 🟢 Add subscriber |
+
+**Choose orchestration** when: complex flow, need clear visibility
+**Choose choreography** when: simple flow, many independent teams
+
+---
+
+## Pattern 7: API Gateway
+
+```
+Clients ──► API Gateway ──► Multiple Services
+              │
+              ├─ Routing
+              ├─ Auth
+              ├─ Rate limit
+              ├─ Logging
+              └─ Aggregation
+```
+
+**Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
+
+**Use when:** External clients, multiple services, need cross-cutting concerns
+
+---
+
+## Pattern 8: Strangler Fig (Migration)
+
+**Migrate monolith → modular gradually.**
+
+```
+Phase 1:    Phase 2:           Phase 3:
+[Monolith]  [Mono] [NewSvc]    [NewSvc1] [NewSvc2]
+                ▲    │              ▲
+                └────┘ Proxy routes  └── Old Monolith deprecated
+                  selective traffic
+```
+
+**Steps:**
+1. Identify bounded context to extract
+2. Build new service for that context
+3. Add proxy/feature flag to route portion of traffic
+4. Gradually shift traffic to new service
+5. Delete old code when fully migrated
+
+> 💡 **Beats big-bang rewrites every time.**
+
+---
+
+## Cross-Cutting Decisions
+
+### Database per service vs Shared DB
+
+| | Shared DB | DB per service |
+|---|-----------|----------------|
+| Coupling | 🔴 High | 🟢 Low |
+| Consistency | 🟢 ACID | 🟡 Eventual |
+| Schema changes | 🔴 Coordinate | 🟢 Independent |
+| Performance | 🟢 Easy joins | 🔴 Network calls |
+| Use when | Monolith | Microservices |
+
+### Caching tiers
+
+```
+Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
+       1                  2                       3                4
+       ▲                                                           ▲
+       Closest to user (fastest)              Furthest (last resort)
+```
+
+Each tier ~10x faster than the next.
+
+### Idempotency
+
+**Always design APIs to handle duplicate requests:**
+```
+Client retries → Server detects duplicate → Same result, no side effect
+```
+
+Methods:
+- Idempotency key header (Stripe pattern)
+- Deduplication window
+- Natural idempotency (PUT vs POST)
+
+---
+
+## Decision Matrix Template
+
+When proposing architecture, compare options:
+
+```markdown
+| Factor | Weight | Option A | Option B | Option C |
+|--------|:------:|:--------:|:--------:|:--------:|
+| Performance | 30% | 8 | 9 | 7 |
+| Cost | 20% | 9 | 6 | 8 |
+| Team skill | 20% | 9 | 5 | 7 |
+| Operations | 15% | 8 | 5 | 7 |
+| Future-proof | 15% | 6 | 9 | 7 |
+| **Total** | 100% | **7.95** | 7.10 | 7.20 |
+```
+
+---
+
+## Anti-patterns
+
+- ❌ **Microservices premature** — monolith first
+- ❌ **Distributed monolith** — services that must deploy together
+- ❌ **God service** — one service that does everything
+- ❌ **Chatty interfaces** — N+1 service calls
+- ❌ **Shared database across microservices** — coupling without isolation
+- ❌ **Synchronous calls in critical path** — cascading failures
+- ❌ **No bulkheading** — one slow service kills everything
+- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
+
+---
+
+## Quick Reference: When to Use What
+
+| Need | Pattern |
+|------|---------|
+| Small team, fast iteration | Modular monolith |
+| Independent team deploys | Microservices |
+| Spiky background jobs | Serverless |
+| High write throughput, complex reads | CQRS |
+| Full audit trail, time-travel | Event Sourcing |
+| Multi-service transaction | Saga |
+| Reduce service-to-service complexity | Service mesh |
+| Multiple external clients | API Gateway |
+| Migrate legacy system | Strangler Fig |
+
+---
+
+## Always Reference
+
+When you make a decision, document it with **adr-writer** skill. Architecture decisions are about trade-offs, and future-you (or your replacement) needs to understand why.
+
+
+---
+
+# skill: prior-art-review
+
+Use before building something that might already exist — a library, a model, a product, or an approach for a thesis. Compares candidates on what actually decides the outcome rather than on feature lists, and ends in one of four decisions — adopt, fork, build our own, or drop it. Always checks the licence and whether the project is maintained.
+
+# สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
+
+> **กฎข้อเดียว:** จบที่**การตัดสินใจ** ไม่ใช่จบที่รายงาน
+> ถ้าอ่านจบแล้วยังไม่รู้ว่าจะใช้ตัวไหน แปลว่ายังไม่เสร็จ
+
+---
+
+## ต่างจาก `reference-app-research` อย่างไร
+
+| | `reference-app-research` | skill นี้ |
+|---|---|---|
+| ผลลัพธ์ | รายงาน feature · UI · UX + ข้อเสนอปรับปรุง | ตารางเทียบ + การตัดสินใจ + สิ่งที่ยอมแลก |
+| คำถามตั้งต้น | "แอปนี้ดีและพังตรงไหน ของเราจะดีกว่าอย่างไร" | "ควรหยิบตัวไหนมาใช้ หรือทำเอง" |
+| ใช้ร่วมกัน | แกะแอปต้นแบบที่จะสร้างแบบเดียวกัน | ตัดสินเรื่องไลบรารี เครื่องมือ หรือของที่จะนำมาใช้ แล้วบันทึก |
+
+---
+
+## 1 · ตั้งคำถามให้แคบก่อนค้น
+
+คำถามกว้างได้รายชื่อยาวที่เทียบกันไม่ได้
+
+```
+❌ มีเครื่องมือถอดเสียงอะไรบ้าง
+✅ ตัวไหนถอดเสียงไทยยาว 2 ชั่วโมงได้ แยกผู้พูดได้ รันบนเครื่องตัวเองได้
+   และสัญญาอนุญาตให้ขายต่อได้
+```
+
+คำถามต้องมี **3 อย่าง** เสมอ: สิ่งที่ต้องทำได้ · ข้อจำกัดที่ยอมไม่ได้ · เงื่อนไขการนำไปใช้
+
+**เขียนคำถามลงไฟล์ก่อนค้น** — ไม่งั้นพอเจอของสวย ๆ จะเปลี่ยนคำถามให้เข้ากับของที่เจอ
+
+---
+
+## 2 · ดูให้ครบสี่แหล่ง
+
+| แหล่ง | หาอะไร | สัญญาณที่ต้องเก็บ |
+|---|---|---|
+| โค้ดโอเพนซอร์ส | ของที่หยิบมาใช้ได้ทันที | สัญญาอนุญาต · commit ล่าสุด · จำนวนผู้ดูแล |
+| ผลิตภัณฑ์ที่ขายอยู่ | ตลาดยอมจ่ายเท่าไหร่ ของเขาขาดอะไร | ราคา · สิ่งที่เขาไม่ทำ · คำบ่นของผู้ใช้ |
+| งานวิจัย | วิธีที่ดีกว่าที่ยังไม่มีใครทำเป็นผลิตภัณฑ์ | ปีที่ตีพิมพ์ · มีโค้ดให้ไหม · ทำซ้ำได้ไหม |
+| มาตรฐานและข้อกำหนด | สิ่งที่ห้ามคิดเอง | หมายเลขมาตรฐาน · ฉบับล่าสุด |
+
+**แหล่งที่คนลืมบ่อยที่สุดคือมาตรฐาน** — เขียนรูปแบบไฟล์เองทั้งที่มีมาตรฐานอยู่แล้ว
+คือการสร้างงานให้ตัวเองและปิดทางเชื่อมกับระบบอื่น
+
+---
+
+## 3 · ตารางเทียบ — หกคอลัมน์นี้ต้องมีเสมอ
+
+| ตัวเลือก | ทำสิ่งที่เราต้องได้ไหม | สัญญาอนุญาต | โครงการยังมีชีวิตไหม | ต้องยอมแลกอะไร | ต้นทุนจริง |
+|---|---|---|---|---|---|
+
+- **คอลัมน์ "ทำสิ่งที่เราต้องได้ไหม" ไม่ใช่รายการความสามารถ** — ตอบเฉพาะข้อที่เราถามในข้อ 1
+- **ต้นทุนจริง** รวมค่าเรียนรู้ ค่าดูแล และค่าย้ายออกถ้าวันหนึ่งต้องเลิกใช้ ไม่ใช่แค่ค่าลิขสิทธิ์
+- แถวเรียงตามความเหมาะสม ตัวที่แนะนำอยู่บนสุด
+- **ปิดท้ายด้วยข้อสรุปหนึ่งบรรทัดเสมอ**
+
+---
+
+## 4 · สัญญาอนุญาต — ตรวจก่อน อย่าตรวจทีหลัง
+
+**เรื่องนี้รู้ช้าแล้วเจ็บที่สุด** เพราะรู้ตอนใกล้ส่งมอบ แปลว่าต้องรื้อ
+
+| กลุ่ม | ตัวอย่าง | ใช้ในของที่ขายได้ไหม |
+|---|---|---|
+| ปล่อยเสรี | MIT · Apache-2.0 · BSD | ได้ · Apache-2.0 มีเงื่อนไขเรื่องสิทธิบัตรเพิ่ม |
+| ต้องเปิดโค้ดต่อ | GPL-3.0 · AGPL-3.0 | ได้แต่**ต้องเปิดโค้ดของเรา** · AGPL นับรวมการให้บริการผ่านเครือข่ายด้วย |
+| ห้ามเชิงพาณิชย์ | CC BY-NC · โมเดลที่เขียนว่า research only | **ขายไม่ได้** ใช้ทดลองและเทียบผลได้ |
+| เฉพาะราย | ต้องอ่านสัญญาจริง | ขึ้นกับข้อสัญญา |
+
+**กฎสองข้อที่พลาดกันบ่อย**
+
+1. **โมเดลปัญญาประดิษฐ์มีสัญญาแยกจากโค้ด** — โค้ดเป็น MIT แต่น้ำหนักโมเดลเป็น non-commercial ได้
+2. **สืบสายด้วย** — โมเดลที่ fine-tune มาจากโมเดล non-commercial ก็ยัง non-commercial
+
+ทุกตัวที่จะใช้จริง ต้อง**เขียนชื่อสัญญาอนุญาตลงไฟล์** ไม่ใช่จำไว้
+
+---
+
+## 5 · โครงการยังมีชีวิตไหม
+
+| สัญญาณ | ตีความ |
+|---|---|
+| commit ล่าสุดเกิน 12 เดือน | ตายแล้ว เว้นแต่เป็นของที่นิ่งจริง เช่นไลบรารีคณิตศาสตร์เล็ก ๆ |
+| ผู้ดูแลคนเดียว | ความเสี่ยงสูง คนนั้นหายไปคือจบ |
+| issue ค้างเป็นร้อยไม่มีใครตอบ | ไม่มีใครดูแลจริง |
+| ไม่มีการออกรุ่นเลยในปีที่ผ่านมา | เหมือนข้อแรก |
+| เอกสารตรงกับโค้ดรุ่นเก่า | จะเสียเวลาเดามาก |
+| ไม่มี test ในโครงการ | ยกรุ่นทีไรพังทุกที |
+
+**ของที่ตายแล้วยังใช้ได้** ถ้ายอมรับว่าจะต้องดูแลเอง — แต่ต้องรู้ตัวตั้งแต่ต้น ไม่ใช่รู้ตอนติด
+
+---
+
+## 6 · จบด้วยหนึ่งในสี่ทาง
+
+| ทาง | เมื่อไหร่ | สิ่งที่ต้องบันทึก |
+|---|---|---|
+| **ใช้เลย** | ตรงความต้องการ ≥80% · สัญญาอนุญาตผ่าน · ยังมีชีวิต | รุ่นที่ล็อกไว้ · สิ่งที่มันทำไม่ได้ |
+| **แยกไปแก้เอง** | ใกล้เคียงมากแต่ขาดบางอย่าง และสัญญาอนุญาตให้แก้ได้ | แก้อะไรบ้าง · จะตามรุ่นต้นทางอย่างไร |
+| **ทำเอง** | ไม่มีตัวไหนผ่านข้อจำกัดที่ยอมไม่ได้ | ตัวที่ใกล้ที่สุดคือตัวไหน และขาดอะไร |
+| **ไม่ทำ** | มีของที่ดีกว่าอยู่แล้วในราคาที่ถูกกว่าทำเอง | เหตุผล และเงื่อนไขที่จะกลับมาคิดใหม่ |
+
+**"ทำเอง" ต้องมีเหตุผลที่เขียนออกมาได้** — "อยากคุมเอง" ไม่ใช่เหตุผล
+ต้องบอกได้ว่าคุมเองแล้วได้อะไรที่หยิบของเขามาใช้แล้วไม่ได้
+
+---
+
+## 7 · บันทึกสิ่งที่ยอมแลก
+
+ทุกทางเลือกแลกบางอย่างไป **ไม่บันทึกวันนี้ อีกหกเดือนไม่มีใครจำได้**
+บันทึกเป็น Architecture Decision Record ด้วย `adr-writer` — อย่างน้อยสามบรรทัด
+
+```
+เลือก: <ตัวเลือก>  เพราะ <เหตุผลหลักข้อเดียว>
+ยอมแลก: <สิ่งที่เสียไป>
+จะกลับมาคิดใหม่เมื่อ: <เงื่อนไขที่วัดได้>
+```
+
+---
+
+## 8 · ฉบับงานวิจัย
+
+ผลลัพธ์ไม่ใช่ "ใช้ตัวไหน" แต่คือ **"ช่องว่างอยู่ตรงไหน"**
+
+- ตารางเทียบเปลี่ยนคอลัมน์เป็น: งาน · ปี · วิธีที่ใช้ · ชุดข้อมูล · ผลที่รายงาน · ข้อจำกัดที่เขาบอกเอง
+- **คอลัมน์ "ข้อจำกัดที่เขาบอกเอง" คือที่มาของช่องว่าง** — ส่วนใหญ่ผู้เขียนบอกไว้เองในหัวข้อสุดท้าย
+- ช่องว่างที่ใช้ได้ต้องเป็นอย่างใดอย่างหนึ่ง: ยังไม่มีใครทดสอบกับบริบทนี้ · วิธีเดิมใช้ไม่ได้เมื่อเงื่อนไขเปลี่ยน · ผลที่รายงานทำซ้ำไม่ได้
+- **ห้ามอ้างงานที่ยังไม่ได้อ่านตัวเต็ม** — อ่านแค่บทคัดย่อแล้วอ้าง คือความผิดพลาดที่กรรมการจับได้เร็วที่สุด
+- งานที่หาโค้ดหรือชุดข้อมูลไม่ได้ ให้ระบุไว้ว่าทำซ้ำไม่ได้ อย่าเงียบ
+
+---
+
+## 9 · Anti-patterns
+
+- ❌ **ค้นจนได้รายชื่อ 20 ตัวแล้วไม่ตัดสินใจ** — รายชื่อไม่ใช่ผลงาน
+- ❌ **เทียบด้วยรายการความสามารถ** — ทุกตัวจะดูดีหมด เพราะทุกคนเขียนหน้าแรกเก่ง
+- ❌ **ตรวจสัญญาอนุญาตหลังเขียนโค้ดไปแล้ว**
+- ❌ **เชื่อหน้าแรกของโครงการ** — ต้องดู commit และ issue จริง
+- ❌ **"ทำเองเร็วกว่า" โดยไม่เคยลองของที่มี**
+- ❌ **ไม่บันทึกสิ่งที่ยอมแลก** — ทีมจะถกเรื่องเดิมซ้ำทุกหกเดือน
+- ❌ **ลืมมาตรฐานที่มีอยู่แล้ว** แล้วประดิษฐ์รูปแบบข้อมูลเอง
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| แกะแอปต้นแบบที่จะทำแบบเดียวกัน — feature · UI · UX · ข้อเสนอปรับปรุง | `reference-app-research` |
+| บันทึกการตัดสินใจ | `adr-writer` |
+| เทียบรูปแบบสถาปัตยกรรม ไม่ใช่เทียบเครื่องมือ | `architecture-patterns` |
+| รูปทรงของตารางเทียบในคำตอบ | `answer-shape` |
+| ตัดข้อเสนอให้เหลือเท่าที่จำเป็น | `simplicity-first` |
+| ไฟล์ที่ดาวน์โหลดหรือแปลงระหว่างสำรวจ | `temp-file-discipline` |
+
+---
+
+## ตัวย่อ
+
+- **MIT** — Massachusetts Institute of Technology License (สัญญาอนุญาตแบบปล่อยเสรี)
+- **GPL** — General Public License (ใช้ได้แต่ต้องเปิดโค้ดที่ต่อยอด)
+- **AGPL** — Affero General Public License (เหมือน GPL และนับรวมการให้บริการผ่านเครือข่าย)
+- **BSD** — Berkeley Software Distribution License
+- **CC BY-NC** — Creative Commons Attribution-NonCommercial (ห้ามใช้เชิงพาณิชย์)
+- **ADR** — Architecture Decision Record (บันทึกการตัดสินใจเชิงสถาปัตยกรรม)

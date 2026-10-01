@@ -117,7 +117,7 @@ function updateGlobalReadme(core) {
   const version = JSON.parse(
     readFileSync(join(ROOT, "plugins", CORE, ".claude-plugin", "plugin.json"), "utf8")
   ).version;
-  edit("plugins-global/README.md", (text) =>
+  edit("docs/CLAUDE-WEB.md", (text) =>
     text.replace(
       /\*\*ในไฟล์:\*\* \d+ skills · \d+ agents · \d+ commands · `plugin\.json` v[\d.]+/,
       `**ในไฟล์:** ${core.skills.length} skills · ${core.agents.length} agents · ${core.commands.length} commands · \`plugin.json\` v${version}`

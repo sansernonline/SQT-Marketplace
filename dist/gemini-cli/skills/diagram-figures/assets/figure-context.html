@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8">
+<title>Figure — System Context</title>
+<!--
+  โครงที่ 2 · System Context (C4 ระดับ 1) — ของ skill `diagram-figures`
+  ใช้ตอบคำถาม "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง"
+
+  แก้ 5 ที่:  1.หัวรูป  2.ผู้ใช้งานคอลัมน์ซ้าย  3.การ์ดกลาง  4.ระบบภายนอกคอลัมน์ขวา  5.WIRES ท้ายไฟล์
+  เรนเดอร์:  python render-figure.py figure-context.html figure.png 2
+-->
+<style>
+  :root{
+    --ink:#16324F; --body:#333B4A; --muted:#6C7689; --faint:#98A1B3;
+    --line:#E4E7EE; --line-strong:#C6CCD8; --surface:#F8F9FC; --paper:#FFFFFF;
+    --accent:#1B63A8; --accent-deep:#12456F; --accent-soft:#EEF4FB; --accent-line:#1B63A8;
+    --r-box:16px;
+    --font:"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--paper);color:var(--body);
+       -webkit-font-smoothing:antialiased;line-height:1.5}
+  .sheet{width:1980px;padding:44px 52px 36px}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;
+        padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .head h1{font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+  .head .sub{font-size:14.5px;color:var(--muted);margin-top:5px}
+  .meta{text-align:right;font-size:13px;color:var(--muted);line-height:1.7;white-space:nowrap}
+  .meta .tag{color:var(--accent);font-weight:700}
+
+  .stage{position:relative;display:grid;grid-template-columns:350px 1fr 430px;
+         gap:230px;align-items:center;margin-top:44px;padding:16px 0 8px}
+  .col{display:flex;flex-direction:column;gap:22px}
+  .col.right{gap:40px}
+
+  /* ── ผู้ใช้งาน — แถบนอน ─────────────────── */
+  .actor{display:flex;align-items:center;gap:16px;padding:16px 22px;
+         border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+  .actor .ic{flex:none;width:44px;height:44px;border-radius:999px;background:var(--paper);
+             border:1px solid var(--line);display:grid;place-items:center}
+  .actor .ic svg{width:21px;height:21px;fill:none;stroke:#5C6675;stroke-width:1.6;
+                 stroke-linecap:round;stroke-linejoin:round}
+  .actor .name{font-size:17px;font-weight:700;color:var(--ink)}
+  .actor .desc{font-size:13px;color:var(--muted);margin-top:2px}
+
+  /* ── การ์ดกลาง — ระบบที่เอกสารนี้อธิบาย ──── */
+  .system{border:2px solid var(--accent-line);border-radius:20px;background:var(--accent-soft);
+          padding:30px 34px 26px;position:relative}
+  .system .badge-ic{position:absolute;top:26px;left:30px;width:48px;height:48px;border-radius:14px;
+                    background:#DCE9F7;display:grid;place-items:center}
+  .system .badge-ic svg{width:24px;height:24px;fill:none;stroke:var(--accent);stroke-width:1.7;
+                        stroke-linecap:round;stroke-linejoin:round}
+  .system h2{font-size:30px;font-weight:700;color:var(--accent-deep);text-align:center}
+  .system .tagline{font-size:15px;color:#3A5B7C;text-align:center;margin-top:4px}
+  .system hr{border:0;border-top:1px solid #C9DBEC;margin:22px 8px}
+  .system ul{list-style:none;display:flex;flex-direction:column;gap:11px;padding:0 8px}
+  .system li{font-size:15px;color:#2C4B68}
+  .system .note{margin:26px auto 0;width:max-content;font-size:14px;color:var(--accent-deep);
+                background:var(--paper);border:1px solid #BFD6EA;border-radius:999px;padding:9px 26px}
+
+  /* ── ระบบภายนอก ───────────────────────── */
+  .ext{border:1px solid var(--line);border-radius:var(--r-box);background:var(--surface);
+       padding:22px 26px;display:flex;gap:18px;align-items:flex-start}
+  .ext .ic{flex:none;width:46px;height:46px;border-radius:12px;background:var(--paper);
+           border:1px solid var(--line);display:grid;place-items:center;margin-top:18px}
+  .ext .ic svg{width:22px;height:22px;fill:none;stroke:#5C6675;stroke-width:1.6;
+               stroke-linecap:round;stroke-linejoin:round}
+  .ext .kicker{font-size:12px;letter-spacing:.06em;color:var(--faint);
+               font-family:"IBM Plex Mono",Consolas,monospace}
+  .ext .name{font-size:19px;font-weight:700;color:var(--ink);margin-top:3px}
+  .ext .desc{font-size:13.5px;color:var(--muted);margin-top:7px;line-height:1.6}
+
+  /* ── สายเชื่อม ─────────────────────────── */
+  .wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .wires path.wire{fill:none;stroke:var(--line-strong);stroke-width:1.6}
+  .wires path.wire.planned{stroke-dasharray:7 6}
+  .wire-label{position:absolute;transform:translate(-50%,-50%);z-index:2}
+  .pill{display:inline-block;font-size:13px;color:var(--muted);background:var(--paper);
+        border:1px solid var(--line);border-radius:999px;padding:5px 16px;white-space:nowrap}
+
+  /* ── คำอธิบายสัญลักษณ์ + เชิงอรรถ ───────── */
+  .legend{display:flex;align-items:center;gap:26px;margin-top:40px;padding-top:18px;
+          border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+  .legend .k{font-weight:700;color:var(--body)}
+  .legend .item{display:flex;align-items:center;gap:10px}
+  .legend .sw{width:42px;height:24px;border-radius:999px;background:var(--surface);
+              border:1px solid var(--line)}
+  .legend .sw.focus{background:var(--paper);border:2px solid var(--accent-line);border-radius:8px}
+  .foot{margin-top:16px;font-size:13px;color:var(--faint);line-height:1.8}
+</style></head>
+<body>
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <h1>System Context — Dr Screening</h1>
+      <div class="sub">คำถามที่รูปนี้ตอบ: ระบบคัดกรองนี้คุยกับใครและกับอะไรข้างนอกบ้าง</div>
+    </div>
+    <div class="meta">
+      <div><span class="tag">รูปที่ 1 · C4 ระดับ 1</span></div>
+      <div>เวอร์ชัน 1.0 · 23 กันยายน 2569</div>
+      <div>Square Tech Solutions</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <svg class="wires" id="wires"><defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+              orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#C6CCD8"/></marker>
+    </defs></svg>
+
+    <!-- ซ้าย: คน -->
+    <div class="col">
+      <div class="actor" id="a-staff">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/></svg></div>
+        <div><div class="name">เจ้าหน้าที่คัดกรอง</div>
+             <div class="desc">ลงทะเบียนผู้ป่วย อัปโหลดภาพ ออกรายงาน</div></div>
+      </div>
+      <div class="actor" id="a-doctor">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.6"/></svg></div>
+        <div><div class="name">จักษุแพทย์</div>
+             <div class="desc">กำกับภาพ อ่านผล และลงนามรับรอง</div></div>
+      </div>
+      <div class="actor" id="a-mle">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="10" rx="3"/><circle cx="9" cy="13" r="1.4"/><circle cx="15" cy="13" r="1.4"/><path d="M12 8V4M9 21h6"/></svg></div>
+        <div><div class="name">วิศวกรการเรียนรู้ของเครื่อง</div>
+             <div class="desc">จัดชุดข้อมูล เทรน และประเมินโมเดล</div></div>
+      </div>
+      <div class="actor" id="a-admin">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></div>
+        <div><div class="name">ผู้ดูแลระบบ</div>
+             <div class="desc">ดูแลเครื่อง สิทธิ์ผู้ใช้ และค่าตัดสิน</div></div>
+      </div>
+    </div>
+
+    <!-- กลาง: ระบบที่อธิบาย -->
+    <div class="system" id="sys">
+      <div class="badge-ic"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.6"/></svg></div>
+      <h2>Dr Screening</h2>
+      <div class="tagline">ระบบคัดกรองเบาหวานขึ้นจอตาด้วยปัญญาประดิษฐ์</div>
+      <hr>
+      <ul>
+        <li>รับภาพจอตา ลบข้อมูลระบุตัวผู้ป่วย</li>
+        <li>ทำนายระดับความรุนแรง ICDR ระดับ 0 ถึง 4</li>
+        <li>ให้แพทย์กำกับภาพ ตรวจทาน และลงนาม</li>
+        <li>เทรนและประเมินโมเดลจากชุดข้อมูลที่ล็อกไว้</li>
+        <li>ออกรายงานและเก็บร่องรอยตรวจสอบ</li>
+      </ul>
+      <div class="note">ติดตั้งในโรงพยาบาล ไม่ต่อออกอินเทอร์เน็ต</div>
+    </div>
+
+    <!-- ขวา: ระบบภายนอก -->
+    <div class="col right">
+      <div class="ext" id="e-camera">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.2"/><path d="M9 7l1.2-2h3.6L15 7"/></svg></div>
+        <div><div class="kicker">external system</div>
+             <div class="name">กล้องถ่ายภาพจอตา</div>
+             <div class="desc">สร้างภาพ DICOM แล้วส่งเข้าระบบโดยตรง<br>ระบบภายนอกตัวเดียวที่เชื่อมอยู่จริงตอนนี้</div></div>
+      </div>
+      <div class="ext" id="e-his">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><path d="M10 21v-6h4v6"/><path d="M12 8v3M10.5 9.5h3"/></svg></div>
+        <div><div class="kicker">external system</div>
+             <div class="name">ระบบโรงพยาบาล HIS และ PACS</div>
+             <div class="desc">ยังไม่ได้เชื่อมต่อในเวอร์ชันนี้<br>อยู่ในแผนเวอร์ชันถัดไป ตาม GAP-05</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="k">สัญลักษณ์</span>
+    <span class="item"><span class="sw"></span> ผู้ใช้งาน</span>
+    <span class="item"><span class="sw focus"></span> ระบบที่เอกสารนี้อธิบาย</span>
+    <span class="item"><span class="sw"></span> ระบบภายนอก</span>
+  </div>
+  <div class="foot">
+    เส้นประ = ยังไม่ได้เชื่อมต่อจริง อยู่ในแผนเวอร์ชันถัดไป<br>
+    ICDR = International Clinical Diabetic Retinopathy severity scale · DICOM = Digital Imaging and Communications in Medicine<br>
+    ข้างในระบบมีอะไรบ้าง ดูรูปที่ 3 — C4 ระดับ 2
+  </div>
+</div>
+
+<script>
+/* สายเชื่อม — แก้เฉพาะรายการนี้
+   fs/ts = ด้านที่เส้นออก-เข้า (l r t b) · fp/tp = ตำแหน่งบนขอบ 0..1 · planned:true = เส้นประ */
+const WIRES = [
+  {from:"a-staff",  fs:"r", to:"sys", ts:"l", tp:0.14, label:"เบราว์เซอร์ · HTTPS"},
+  {from:"a-doctor", fs:"r", to:"sys", ts:"l", tp:0.40},
+  {from:"a-mle",    fs:"r", to:"sys", ts:"l", tp:0.62},
+  {from:"a-admin",  fs:"r", to:"sys", ts:"l", tp:0.82},
+  {from:"e-camera", fs:"l", to:"sys", ts:"r", tp:0.28, label:"ภาพ DICOM · C-STORE"},
+  {from:"sys",      fs:"r", fp:0.78, to:"e-his", ts:"l", label:"ผล AI · SR และ SEG", planned:true}
+];
+function anchor(el, side, box, p){
+  const r = el.getBoundingClientRect();
+  p = (p === undefined) ? 0.5 : p;
+  const x = {l:r.left, r:r.right, t:r.left+r.width*p, b:r.left+r.width*p}[side] - box.left;
+  const y = {l:r.top+r.height*p, r:r.top+r.height*p, t:r.top, b:r.bottom}[side] - box.top;
+  return [x, y];
+}
+function draw(){
+  const stage = document.getElementById("stage"), svg = document.getElementById("wires");
+  const box = stage.getBoundingClientRect();
+  document.querySelectorAll(".wire-label").forEach(n=>n.remove());
+  svg.querySelectorAll("path.wire").forEach(n=>n.remove());   /* .wire เท่านั้น ไม่งั้นหัวลูกศรใน defs หาย */
+  for (const w of WIRES){
+    const a = document.getElementById(w.from), b = document.getElementById(w.to);
+    if (!a || !b){ console.warn("wire: ไม่พบ id", w.from, w.to); continue; }
+    const [x1,y1] = anchor(a, w.fs, box, w.fp), [x2,y2] = anchor(b, w.ts, box, w.tp);
+    const p = document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("class", "wire" + (w.planned ? " planned" : ""));
+    p.setAttribute("d", `M${x1} ${y1} L${x2} ${y2}`);
+    p.setAttribute("marker-end","url(#ah)");
+    svg.appendChild(p);
+    if (w.label){
+      const t = (w.lp === undefined) ? 0.5 : w.lp;          /* เลื่อนป้ายไปตามเส้นได้ */
+      const d = document.createElement("div");
+      d.className = "wire-label";
+      d.style.left = (x1 + (x2-x1)*t) + "px";
+      d.style.top  = (y1 + (y2-y1)*t) + "px";
+      d.innerHTML = `<span class="pill">${w.label}</span>`;
+      stage.appendChild(d);
+    }
+  }
+}
+draw(); window.addEventListener("resize", draw);
+</script>
+</body></html>

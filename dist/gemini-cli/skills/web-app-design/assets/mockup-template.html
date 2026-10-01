@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — ชื่อแอปของคุณ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="appstrack.css">
+<style>
+  /* เฉพาะของหน้านี้ — ห้ามเขียนค่าสีดิบ ใช้ var(--token) เท่านั้น */
+  .two-col { display: grid; grid-template-columns: 1fr 320px; gap: 12px; align-items: start; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+
+<!--
+  Mockup เว็บแอปสไตล์ Apps Track — คัดลอกไฟล์นี้ + appstrack.css ไปไว้คู่กัน
+  สลับธีม/สลับ sidebar ได้จากปุ่มบน topbar (มีเฉพาะใน mockup)
+    body[data-theme] = ocean(ว่าง) | emerald | sunset | plum | graphite
+    body[data-side]  = ว่าง(สว่าง) | dark
+-->
+<body>
+
+<div class="nav-scrim" onclick="document.body.classList.remove('nav-open')"></div>
+
+<div class="app-shell">
+
+  <!-- ===== Sidebar =================================================== -->
+  <aside class="app-sidebar">
+    <div class="brand"><span class="mark"></span><span>ชื่อแอป</span></div>
+
+    <div class="group">ภาพรวม</div>
+    <a class="nav-link on" href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span>แดชบอร์ด</span></a>
+    <a class="nav-link" href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h18"/></svg><span>รายการงาน</span></a>
+    <a class="nav-link" href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>ปฏิทิน</span></a>
+
+    <div class="group">ทีม</div>
+    <a class="nav-link" href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M17 11a3 3 0 1 0 0-6"/></svg><span>สมาชิก</span></a>
+    <a class="nav-link" href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>ข้อความ</span></a>
+
+    <div class="foot">
+      <a class="nav-link" href="#"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span>ตั้งค่า</span></a>
+    </div>
+  </aside>
+
+  <div class="app-body">
+
+    <!-- ===== Topbar ================================================== -->
+    <header class="app-topbar">
+      <button class="nav-burger" onclick="document.body.classList.toggle('nav-open')" aria-label="เปิดเมนู">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <input class="input" style="max-width:280px" placeholder="ค้นหา…">
+      <span class="grow"></span>
+      <div class="chips hide-sm">
+        <button class="chip" onclick="setTheme('')">Ocean</button>
+        <button class="chip" onclick="setTheme('emerald')">Emerald</button>
+        <button class="chip" onclick="setTheme('sunset')">Sunset</button>
+        <button class="chip" onclick="setTheme('plum')">Plum</button>
+        <button class="chip" onclick="toggleSide()">Sidebar เข้ม/สว่าง</button>
+      </div>
+      <span class="ava">JK</span>
+    </header>
+
+    <!-- ===== Content ================================================= -->
+    <main class="app-main">
+      <div class="inner">
+
+        <div class="page-head">
+          <div>
+            <h1>ชื่อหน้า</h1>
+            <div class="sub">คำอธิบายหนึ่งบรรทัด บอกว่าผู้ใช้ทำอะไรได้ที่นี่</div>
+          </div>
+          <div class="row">
+            <button class="btn">ส่งออก</button>
+            <button class="btn btn-primary">สร้างใหม่</button>
+          </div>
+        </div>
+
+        <!-- KPI: การ์ดตัวเลข 3–5 ใบ เกินนั้นตัวเลขเล็กจนไม่มีพลัง -->
+        <div class="stat-grid mb-16">
+          <div class="card stat"><div class="label">โครงการทั้งหมด</div>
+               <div class="value num">19</div><div class="foot">+2 จากเดือนก่อน</div></div>
+          <div class="card stat"><div class="label">Work items</div>
+               <div class="value num">115</div><div class="foot">เปิดอยู่ 103</div></div>
+          <div class="card stat"><div class="label">เกินกำหนด</div>
+               <div class="value num">7</div><div class="foot">ต้องจัดการวันนี้</div></div>
+          <div class="card stat"><div class="label">สมาชิก</div>
+               <div class="value num">14</div><div class="foot">มี AI Agent 1</div></div>
+        </div>
+
+        <div class="two-col">
+          <div class="col gap-12">
+
+            <!-- ตาราง + สถานะ -->
+            <section class="card">
+              <div class="card-head">
+                <h2>งานล่าสุด</h2>
+                <div class="chips">
+                  <button class="chip on">ทั้งหมด</button>
+                  <button class="chip">ของฉัน</button>
+                  <button class="chip">เกินกำหนด</button>
+                </div>
+              </div>
+              <div class="tb-wrap">
+                <table class="tb">
+                  <thead><tr><th>รหัส</th><th>รายการ</th><th>ผู้รับผิดชอบ</th><th>สถานะ</th><th class="right">ความคืบหน้า</th></tr></thead>
+                  <tbody>
+                    <tr><td class="num">M-01</td><td>ออกแบบฐานข้อมูลและ Domain model</td>
+                        <td><span class="row"><span class="ava">SA</span> ปรียา</span></td>
+                        <td><span class="pill pill-green">เสร็จ</span></td>
+                        <td class="right" style="width:130px"><div class="prog"><i style="width:100%"></i></div></td></tr>
+                    <tr><td class="num">M-02</td><td>ระบบยืนยันตัวตนและ RBAC</td>
+                        <td><span class="row"><span class="ava">DV</span> กิตติ</span></td>
+                        <td><span class="pill pill-amber">กำลังทำ</span></td>
+                        <td class="right"><div class="prog"><i style="width:62%"></i></div></td></tr>
+                    <tr><td class="num">M-03</td><td>Kanban / Sprint board</td>
+                        <td><span class="row"><span class="ava">DV</span> อนันต์</span></td>
+                        <td><span class="pill pill-blue">รีวิว</span></td>
+                        <td class="right"><div class="prog"><i style="width:85%"></i></div></td></tr>
+                    <tr><td class="num">M-04</td><td>เชื่อมต่อ Git / CI</td>
+                        <td><span class="row"><span class="ava">OP</span> สุชาติ</span></td>
+                        <td><span class="pill pill-red">ค้าง</span></td>
+                        <td class="right"><div class="prog"><i style="width:18%"></i></div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- ฟอร์ม -->
+            <section class="card">
+              <div class="card-head"><h2>เพิ่มรายการ</h2></div>
+              <div class="card-body">
+                <div class="tabs mb-16">
+                  <button class="tab on">รายละเอียด</button>
+                  <button class="tab">ผู้เกี่ยวข้อง</button>
+                  <button class="tab">ไฟล์แนบ</button>
+                </div>
+                <div class="field"><label>ชื่อรายการ</label>
+                     <input class="input" placeholder="เช่น ปรับหน้าจอรายงาน"></div>
+                <div class="row gap-12">
+                  <div class="field grow"><label>ผู้รับผิดชอบ</label>
+                       <select class="select"><option>เลือกสมาชิก</option></select></div>
+                  <div class="field grow"><label>กำหนดส่ง</label>
+                       <input class="input" type="date"></div>
+                </div>
+                <div class="field"><label>รายละเอียด</label>
+                     <textarea class="textarea" placeholder="เขียนได้ด้วย Markdown"></textarea></div>
+                <div class="row-between">
+                  <span class="faint">บันทึกอัตโนมัติทุก 30 วินาที</span>
+                  <div class="row"><button class="btn btn-ghost">ยกเลิก</button>
+                                   <button class="btn btn-primary">บันทึก</button></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- คอลัมน์ขวา -->
+          <div class="col gap-12">
+            <section class="card">
+              <div class="card-head"><h2>กิจกรรมล่าสุด</h2></div>
+              <div class="card-body col gap-12">
+                <div class="row"><span class="ava">กต</span>
+                  <div class="grow"><div>กิตติ ปิดงาน <b>M-01</b></div><div class="faint">12 นาทีที่แล้ว</div></div></div>
+                <div class="row"><span class="ava">ปร</span>
+                  <div class="grow"><div>ปรียา แสดงความคิดเห็นใน <b>M-03</b></div><div class="faint">1 ชั่วโมงที่แล้ว</div></div></div>
+                <div class="row"><span class="ava">AI</span>
+                  <div class="grow"><div>AI Agent สรุปรายงานประจำสัปดาห์</div><div class="faint">เมื่อวาน</div></div></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-head"><h2>สถานะระบบ</h2></div>
+              <div class="card-body col gap-12">
+                <div class="row-between"><span>Git hosting</span><span class="pill pill-green">ปกติ</span></div>
+                <div class="row-between"><span>CI pipeline</span><span class="pill pill-amber">ช้ากว่าปกติ</span></div>
+                <div class="row-between"><span>อีเมลแจ้งเตือน</span><span class="pill pill-grey">ปิดอยู่</span></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-body empty">ยังไม่มีรายการในส่วนนี้</div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- toast — ใช้แทน alert() เสมอ -->
+<div class="toasts">
+  <div class="toast ok">บันทึกเรียบร้อยแล้ว</div>
+</div>
+
+<script>
+  // มีเฉพาะใน mockup — แอปจริงเก็บค่าที่ผู้ใช้เลือกไว้ในโปรไฟล์
+  function setTheme(t) { t ? document.body.dataset.theme = t : delete document.body.dataset.theme; }
+  function toggleSide() {
+    document.body.dataset.side === 'dark'
+      ? delete document.body.dataset.side
+      : document.body.dataset.side = 'dark';
+  }
+</script>
+</body>
+</html>

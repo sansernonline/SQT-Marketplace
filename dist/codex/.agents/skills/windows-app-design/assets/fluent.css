@@ -1,0 +1,376 @@
+/* =========================================================================
+   fluent.css — Windows 11 (Fluent 2) design tokens + core components
+   ค่าทั้งหมดสกัดจาก Windows 11 dark theme จริง (สุ่มพิกเซลจาก Windows Security)
+   ใช้กับ: web-wrapped desktop (Electron / Tauri / WebView2) และ HTML mockup
+   ค่าชุดเดียวกันนี้ map ไป WinUI 3 / Avalonia ได้ที่ references/tokens.md
+   ========================================================================= */
+
+/* ---- LIGHT (ค่าเริ่มต้น) ------------------------------------------------ */
+:root {
+  /* พื้นผิว — ไล่จากล่างขึ้นบน: window → layer → card */
+  --win-bg: #f3f3f3;              /* พื้นหน้าต่าง (แทน Mica) */
+  --win-layer: #f9f9f9;           /* พื้นเนื้อหา / nav pane */
+  --win-card: #ffffff;            /* การ์ด, expander, dialog */
+  --win-card-secondary: #f6f6f6;  /* การ์ดซ้อนในการ์ด */
+
+  /* ตัวอักษร */
+  --win-text: #1a1a1a;            /* หัวข้อ + ข้อความหลัก */
+  --win-text-secondary: #5d5d5d;  /* คำอธิบาย, meta */
+  --win-text-tertiary: #8b8b8b;   /* ป้ายกำกับที่ไม่สำคัญ */
+  --win-text-disabled: #a5a5a5;
+
+  /* แบรนด์ / accent — เปลี่ยน 3 ค่านี้ = เปลี่ยนสีแอปทั้งตัว */
+  --win-accent: #005fb8;          /* พื้นปุ่มหลัก, แถบเลือกใน nav */
+  --win-accent-hover: #1a6ec0;
+  --win-accent-text: #003e92;     /* ลิงก์ (ต้องเข้มกว่าพื้น accent) */
+  --win-on-accent: #ffffff;
+
+  /* คอนโทรล */
+  --win-control: #ffffff;
+  --win-control-hover: #f9f9f9;
+  --win-control-pressed: #f5f5f5;
+  --win-control-stroke: #0000000f;
+  --win-subtle-hover: #0000000a;  /* hover ของแถวใน nav / list */
+  --win-subtle-selected: #00000010;
+  --win-divider: #e5e5e5;
+
+  /* สถานะ */
+  --win-success: #0f7b0f;  --win-success-bg: #dff6dd;
+  --win-caution: #9d5d00;  --win-caution-bg: #fff4ce;
+  --win-critical: #c42b1c; --win-critical-bg: #fde7e9;
+  --win-info: #005fb8;     --win-info-bg: #f4f9ff;
+
+  /* รูปทรง */
+  --win-radius: 4px;              /* ปุ่ม, textbox, checkbox */
+  --win-radius-card: 8px;         /* การ์ด, flyout, dialog */
+  --win-shadow-flyout: 0 8px 16px rgba(0, 0, 0, .14);
+
+  /* เลย์เอาต์ */
+  --win-titlebar-h: 48px;         /* 32px ถ้าเป็น title bar แบบคลาสสิก */
+  --win-nav-w: 320px;             /* NavigationView เปิด (ค่ามาตรฐาน Fluent) */
+  --win-nav-w-compact: 48px;      /* ย่อเหลือไอคอน */
+  --win-content-max: 1064px;      /* ความกว้างเนื้อหาสูงสุด — เกินนี้ตาไล่บรรทัดไม่ไหว */
+  --win-gutter: 36px;             /* ระยะขอบเนื้อหาซ้าย/ขวา */
+
+  /* ฟอนต์ — Segoe UI Variable คือฟอนต์ระบบของ Windows 11
+     ใส่ Noto Sans Thai ไว้เป็นตัวถัดไปเพราะ Segoe ไม่มีสระ/วรรณยุกต์ไทย */
+  --win-font: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI",
+              "Noto Sans Thai", "Leelawadee UI", system-ui, sans-serif;
+  --win-font-display: "Segoe UI Variable Display", "Segoe UI Variable",
+                      "Segoe UI", "Noto Sans Thai", "Leelawadee UI", system-ui, sans-serif;
+  --win-font-icon: "Segoe Fluent Icons", "Segoe MDL2 Assets";
+}
+
+/* ---- DARK ---------------------------------------------------------------
+   ค่าที่วัดได้จาก Windows Security: พื้น #000000 · เลือกใน nav #0F0F0F
+   ปุ่ม #333333 · แถบ accent #4CC2FF · ลิงก์ #99EBFF · เนื้อความ #CCCCCC
+   หมายเหตุ: Windows 11 ปกติใช้พื้น #202020/#272727 (Mica) — ชุดนี้เป็นแบบ
+   พื้นดำสนิทตามภาพต้นแบบ สลับได้ที่ 2 บรรทัดแรก                            */
+:root[data-theme="dark"] {
+  --win-bg: #000000;
+  --win-layer: #000000;
+  --win-card: #0f0f0f;
+  --win-card-secondary: #1c1c1c;
+
+  --win-text: #ffffff;
+  --win-text-secondary: #cccccc;
+  --win-text-tertiary: #8b8b8b;
+  --win-text-disabled: #767676;
+
+  --win-accent: #4cc2ff;
+  --win-accent-hover: #47b1e8;
+  --win-accent-text: #99ebff;
+  --win-on-accent: #000000;
+
+  --win-control: #333333;
+  --win-control-hover: #3d3d3d;
+  --win-control-pressed: #2b2b2b;
+  --win-control-stroke: #ffffff14;
+  --win-subtle-hover: #ffffff0f;
+  --win-subtle-selected: #0f0f0f;
+  --win-divider: #2d2d2d;
+
+  /* ค่าจริงของ WinUI dark (SystemFillColor*) — พื้นเป็นโทนกลาง ไม่ใช่สีจัด
+     ถ้าใช้สีอิ่มตัวเป็นพื้น InfoBar จะแย่งความสนใจจากเนื้อหาทั้งหน้า */
+  --win-success: #6ccb5f;  --win-success-bg: #393d1b;
+  --win-caution: #fce100;  --win-caution-bg: #433519;
+  --win-critical: #ff99a4; --win-critical-bg: #442726;
+  --win-info: #60cdff;     --win-info-bg: #2e2e2e;
+
+  --win-shadow-flyout: 0 8px 16px rgba(0, 0, 0, .4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --win-bg: #000000;            --win-layer: #000000;
+    --win-card: #0f0f0f;          --win-card-secondary: #1c1c1c;
+    --win-text: #ffffff;          --win-text-secondary: #cccccc;
+    --win-text-tertiary: #8b8b8b; --win-text-disabled: #767676;
+    --win-accent: #4cc2ff;        --win-accent-hover: #47b1e8;
+    --win-accent-text: #99ebff;   --win-on-accent: #000000;
+    --win-control: #333333;       --win-control-hover: #3d3d3d;
+    --win-control-pressed: #2b2b2b; --win-control-stroke: #ffffff14;
+    --win-subtle-hover: #ffffff0f; --win-subtle-selected: #0f0f0f;
+    --win-divider: #2d2d2d;
+    --win-success: #6ccb5f;  --win-success-bg: #393d1b;
+    --win-caution: #fce100;  --win-caution-bg: #433519;
+    --win-critical: #ff99a4; --win-critical-bg: #442726;
+    --win-info: #60cdff;     --win-info-bg: #2e2e2e;
+    --win-shadow-flyout: 0 8px 16px rgba(0, 0, 0, .4);
+  }
+}
+
+/* =========================================================================
+   Type ramp — ชื่อและค่าตรงกับ Fluent 2 ห้ามคิดขนาดใหม่นอกชุดนี้
+   ========================================================================= */
+.win-caption      { font-size: 12px; line-height: 16px; font-weight: 400; }
+.win-body         { font-size: 14px; line-height: 20px; font-weight: 400; }
+.win-body-strong  { font-size: 14px; line-height: 20px; font-weight: 600; }
+.win-body-large   { font-size: 18px; line-height: 24px; font-weight: 400; }
+.win-subtitle     { font-size: 20px; line-height: 28px; font-weight: 600;
+                    font-family: var(--win-font-display); }
+.win-title        { font-size: 28px; line-height: 36px; font-weight: 600;
+                    font-family: var(--win-font-display); }
+.win-title-large  { font-size: 40px; line-height: 52px; font-weight: 600;
+                    font-family: var(--win-font-display); }
+.win-display      { font-size: 68px; line-height: 92px; font-weight: 600;
+                    font-family: var(--win-font-display); }
+
+/* =========================================================================
+   Shell — title bar · nav pane · content
+   ========================================================================= */
+* { box-sizing: border-box; }
+
+body.win-app {
+  margin: 0;
+  font-family: var(--win-font);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--win-text);
+  background: var(--win-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.win-titlebar {
+  height: var(--win-titlebar-h);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 16px;
+  background: var(--win-bg);
+  -webkit-app-region: drag;          /* Electron: ลากหน้าต่างได้ */
+  user-select: none;
+}
+.win-titlebar .app-name { font-size: 12px; line-height: 16px; color: var(--win-text); }
+.win-titlebar .spacer { flex: 1; }
+.win-caption-buttons { display: flex; -webkit-app-region: no-drag; }
+.win-caption-buttons button {
+  width: 46px; height: var(--win-titlebar-h);
+  border: 0; background: transparent; color: var(--win-text);
+  font-family: var(--win-font-icon); font-size: 10px; cursor: pointer;
+}
+.win-caption-buttons button:hover { background: var(--win-subtle-hover); }
+.win-caption-buttons button.close:hover { background: #c42b1c; color: #fff; }
+
+.win-shell { display: flex; height: calc(100vh - var(--win-titlebar-h)); }
+
+.win-nav {
+  width: var(--win-nav-w);
+  flex: 0 0 var(--win-nav-w);
+  background: var(--win-layer);
+  padding: 0 4px;
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+}
+.win-nav.compact { width: var(--win-nav-w-compact); flex-basis: var(--win-nav-w-compact); }
+.win-nav .nav-toggle {
+  width: 40px; height: 40px; margin: 4px 0 8px 4px;
+  border: 0; border-radius: var(--win-radius); background: transparent;
+  color: var(--win-text); font-family: var(--win-font-icon); font-size: 16px; cursor: pointer;
+}
+.win-nav .nav-toggle:hover { background: var(--win-subtle-hover); }
+
+.nav-item {
+  position: relative;
+  display: flex; align-items: center; gap: 16px;
+  height: 40px; padding: 0 12px; margin: 2px 0;
+  border-radius: var(--win-radius);
+  color: var(--win-text); text-decoration: none;
+  font-size: 14px; line-height: 20px; cursor: pointer;
+}
+.nav-item .icon {
+  font-family: var(--win-font-icon); font-size: 16px; width: 16px;
+  flex: 0 0 16px; text-align: center; color: var(--win-text);
+}
+.nav-item:hover { background: var(--win-subtle-hover); }
+.nav-item.selected { background: var(--win-subtle-selected); }
+/* แถบบอกหน้าที่เลือก: 3×16 มุมมน ชิดซ้าย — ห้ามใช้พื้นสี accent ทั้งแถว */
+.nav-item.selected::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 3px; height: 16px; border-radius: 2px; background: var(--win-accent);
+}
+.nav-item.selected .icon { color: var(--win-accent); }
+.win-nav .nav-footer { margin-top: auto; padding-bottom: 8px; }
+
+.win-content {
+  flex: 1; overflow-y: auto;
+  padding: 8px var(--win-gutter) 48px;
+}
+.win-content .page-head { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }
+.win-content .page-head .icon { font-family: var(--win-font-icon); font-size: 24px; }
+.win-content .page-sub { color: var(--win-text-secondary); margin: 0 0 28px; }
+.win-columns { display: flex; gap: 48px; align-items: flex-start; }
+.win-columns .main { flex: 1; max-width: var(--win-content-max); min-width: 0; }
+.win-columns .rail { flex: 0 0 300px; }
+
+/* =========================================================================
+   Components
+   ========================================================================= */
+.win-section { margin-bottom: 40px; }
+.win-section > .head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.win-section > .head .icon { font-family: var(--win-font-icon); font-size: 20px; }
+.win-section p { margin: 0 0 4px; color: var(--win-text-secondary); }
+
+.win-card {
+  background: var(--win-card);
+  border: 1px solid var(--win-control-stroke);
+  border-radius: var(--win-radius-card);
+  padding: 16px;
+}
+.win-card + .win-card { margin-top: 4px; }
+
+/* Expander / setting row — แถวตั้งค่าแบบ Windows 11 */
+.win-setting {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--win-card);
+  border: 1px solid var(--win-control-stroke);
+  border-radius: var(--win-radius-card);
+  padding: 12px 16px; margin-bottom: 4px; min-height: 60px;
+}
+.win-setting .icon { font-family: var(--win-font-icon); font-size: 20px; flex: 0 0 20px; }
+.win-setting .text { flex: 1; min-width: 0; }
+.win-setting .text .title { font-size: 14px; line-height: 20px; }
+.win-setting .text .desc { font-size: 12px; line-height: 16px; color: var(--win-text-secondary); }
+
+button.win-btn {
+  min-width: 120px; height: 32px; padding: 0 12px;
+  border: 1px solid var(--win-control-stroke);
+  border-radius: var(--win-radius);
+  background: var(--win-control); color: var(--win-text);
+  font-family: inherit; font-size: 14px; line-height: 20px; cursor: pointer;
+}
+button.win-btn:hover { background: var(--win-control-hover); }
+button.win-btn:active { background: var(--win-control-pressed); color: var(--win-text-secondary); }
+button.win-btn.accent {
+  background: var(--win-accent); color: var(--win-on-accent);
+  border-color: transparent; font-weight: 600;
+}
+button.win-btn.accent:hover { background: var(--win-accent-hover); }
+button.win-btn:focus-visible,
+.nav-item:focus-visible, a.win-link:focus-visible {
+  outline: 2px solid var(--win-text); outline-offset: 1px; border-radius: var(--win-radius);
+}
+
+a.win-link {
+  color: var(--win-accent-text); text-decoration: none;
+  font-size: 14px; line-height: 20px; display: inline-block;
+}
+a.win-link:hover { text-decoration: underline; }
+.win-links { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+
+/* InfoBar — แถบแจ้งสถานะ ใช้แทน alert() เสมอ */
+.win-infobar {
+  display: flex; gap: 12px; align-items: flex-start;
+  border: 1px solid var(--win-control-stroke);
+  border-radius: var(--win-radius-card);
+  padding: 12px 16px; margin-bottom: 8px;
+  background: var(--win-info-bg);
+}
+.win-infobar .icon { font-family: var(--win-font-icon); font-size: 16px; color: var(--win-info); }
+.win-infobar.success { background: var(--win-success-bg); }
+.win-infobar.success .icon { color: var(--win-success); }
+.win-infobar.caution { background: var(--win-caution-bg); }
+.win-infobar.caution .icon { color: var(--win-caution); }
+.win-infobar.critical { background: var(--win-critical-bg); }
+.win-infobar.critical .icon { color: var(--win-critical); }
+.win-infobar .title { font-weight: 600; }
+.win-infobar .msg { color: var(--win-text-secondary); }
+
+/* Status pill */
+.win-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 24px; padding: 0 10px; border-radius: 12px;
+  font-size: 12px; line-height: 16px; font-weight: 600;
+  background: var(--win-subtle-selected); color: var(--win-text-secondary);
+}
+.win-pill.success  { background: var(--win-success-bg);  color: var(--win-success); }
+.win-pill.caution  { background: var(--win-caution-bg);  color: var(--win-caution); }
+.win-pill.critical { background: var(--win-critical-bg); color: var(--win-critical); }
+.win-pill.info     { background: var(--win-info-bg);     color: var(--win-info); }
+
+/* KPI row */
+.win-kpis { display: flex; gap: 8px; margin: 8px 0 16px; }
+.win-kpis .kpi {
+  flex: 1; background: var(--win-card);
+  border: 1px solid var(--win-control-stroke);
+  border-radius: var(--win-radius-card);
+  padding: 16px; text-align: center;
+}
+.win-kpis .kpi .value {
+  font-family: var(--win-font-display); font-size: 28px; line-height: 36px;
+  font-weight: 600; color: var(--win-accent);
+}
+.win-kpis .kpi .label { font-size: 12px; line-height: 16px; color: var(--win-text-secondary); }
+
+/* Toggle switch */
+.win-toggle { position: relative; width: 40px; height: 20px; flex: 0 0 40px; cursor: pointer; }
+.win-toggle input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.win-toggle .track {
+  position: absolute; inset: 0; border-radius: 10px;
+  border: 1px solid var(--win-text-secondary); background: transparent;
+  transition: background .1s, border-color .1s;
+}
+.win-toggle .track::after {
+  content: ""; position: absolute; left: 3px; top: 50%;
+  transform: translateY(-50%);
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--win-text); transition: left .1s, background .1s;
+}
+.win-toggle input:checked + .track { background: var(--win-accent); border-color: transparent; }
+.win-toggle input:checked + .track::after { left: 23px; background: var(--win-on-accent); }
+
+/* Data table */
+.win-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.win-table th {
+  text-align: left; font-weight: 600; color: var(--win-text-secondary);
+  padding: 8px 12px; border-bottom: 1px solid var(--win-divider);
+}
+.win-table td { padding: 10px 12px; border-bottom: 1px solid var(--win-divider); }
+.win-table tr:hover td { background: var(--win-subtle-hover); }
+
+/* Scrollbar แบบ Fluent — บาง โผล่เมื่อจำเป็น */
+.win-content::-webkit-scrollbar, .win-nav::-webkit-scrollbar { width: 12px; }
+.win-content::-webkit-scrollbar-thumb, .win-nav::-webkit-scrollbar-thumb {
+  background: var(--win-text-tertiary); border: 4px solid transparent;
+  background-clip: content-box; border-radius: 6px;
+}
+
+/* Responsive: หน้าต่างแคบ → nav ย่อเป็นไอคอน, rail ตกลงมาข้างล่าง */
+@media (max-width: 1007px) {
+  .win-nav { width: var(--win-nav-w-compact); flex-basis: var(--win-nav-w-compact); }
+  .win-nav .nav-item span:not(.icon) { display: none; }
+  /* align-items:stretch จำเป็น — ถ้าปล่อยเป็น flex-start ตอนเป็นคอลัมน์
+     ความกว้างจะหดตามเนื้อหา เหลือที่ว่างครึ่งจอ */
+  .win-columns { flex-direction: column; gap: 24px; align-items: stretch; }
+  .win-columns .main { max-width: none; }
+  .win-columns .rail { flex: 1 1 auto; width: 100%; }
+}
+@media (max-width: 640px) {
+  :root { --win-gutter: 16px; }
+}
+
+/* ลดการเคลื่อนไหวถ้าผู้ใช้ตั้งค่าไว้ */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

@@ -4,7 +4,7 @@
 
 ## วิธีใช้
 
-วางทั้งไฟล์ใน Claude Code ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
+วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 
 **กฎการทำงานของไฟล์รวม (agent ต้องทำตาม):**
 
@@ -321,7 +321,7 @@ agent `solution-architect` + `project-manager` · skill `spec-to-code-loop` · `
 
 ### โครงของ `docs/AGENT-LOOP.md` ที่ต้องเขียน
 
-1. **วิธีใช้** (สำหรับผู้ใช้ อ่านใน 30 วินาที): รันใน repo โค้ดที่เป็น git และอยู่บน branch แยก · ใช้ได้ 2 แบบ — วางทีละรอบในหน้าต่างใหม่ (context สะอาด) หรือสั่ง `/loop อ่านและทำตาม docs/AGENT-LOOP.md` ให้วนเอง · สั่งหยุดด้วยไฟล์ `_to_delete/STOP`
+1. **วิธีใช้** (สำหรับผู้ใช้ อ่านใน 30 วินาที): รันใน repo โค้ดที่เป็น git และอยู่บน branch แยก · ใช้ได้ 2 แบบ — วางทีละรอบในหน้าต่างใหม่ (context สะอาด) หรือสั่ง `/loop อ่านและทำตาม docs/AGENT-LOOP.md` ให้วนเอง (`/loop` มีเฉพาะ Claude Code — เครื่องมืออื่นใช้แบบวางทีละรอบ) · สั่งหยุดด้วยไฟล์ `_to_delete/STOP`
 2. **บริบทโปรเจกต์**: ข้อมูลข้อ 1–6 ข้างบน
 3. **ไฟล์สถานะ `docs/BUILD-PLAN.md`** — ทุกรอบอ่านไฟล์นี้ก่อน สถานะอยู่ในไฟล์ ไม่อยู่ในหัว agent:
    - ตารางค่าคงที่บนสุด `| รายการ | ค่า |` แถว `test` `smoke` `รันแอป` `URL แอป` (ค่าอยู่ใน backtick)
@@ -395,7 +395,7 @@ agent `technical-writer` · skill `polished-document-style` · `branded-document
 
 ## 13. Render เอกสารเป็นไฟล์ส่งมอบ (.docx + .pdf)
 
-agent `technical-writer` · skill `branded-document-design` · `document-naming` · `anthropic-skills:docx` · `anthropic-skills:pdf`
+agent `technical-writer` · skill `branded-document-design` · `document-naming` · `anthropic-skills:docx` · `anthropic-skills:pdf` (ถ้ามี — มีเฉพาะ Claude · ไม่มีให้ใช้ `branded-document-design` อย่างเดียว ซึ่งต้องรัน Python ได้)
 **ต้นฉบับ:** <!-- เช่น docs/srs.md -->
 
 ### ลำดับ

@@ -1,0 +1,1009 @@
+# skill: svg-diagram-system
+
+Use when an architecture diagram has to come out as a high-quality image file for a specification, a slide or a client deliverable — Python that emits SVG and renders through a headless browser, with real product logos, every box on a grid and orthogonal connectors. Sets no colours of its own and asks for one accent before drawing.
+
+# ระบบวาดไดอะแกรมด้วย SVG
+
+ใช้เมื่อไดอะแกรมต้องออกมาเป็น**ไฟล์ภาพ**ที่ใส่ในเอกสารข้อกำหนด สไลด์ หรือส่งให้ลูกค้า
+ถ้าแค่ต้องการรูปใน markdown ที่ GitHub เรนเดอร์ให้ ใช้ `software-diagrams` (Mermaid) แทน เร็วกว่ามาก
+
+---
+
+## เลือกทางให้ถูกก่อน
+
+| ต้องการ | ใช้ |
+|---|---|
+| รูปในโค้ด · README · Pull Request | `software-diagrams` (Mermaid) |
+| ผังคลาวด์แบบผังอ้างอิงของผู้ให้บริการ | `diagram-figures` โครง `figure-cloud.html` |
+| **ไฟล์ภาพที่คุมตำแหน่งทุกจุดเอง เส้นตั้งฉากมุมโค้ง** | **skill นี้** |
+
+ต้นทุนคือเวลา — หนึ่งรูปใช้หลายรอบ ใช้กับรูปที่คนนอกทีมจะเห็นและเห็นซ้ำเท่านั้น
+
+---
+
+## 0 · สีมาจากเนื้องาน — ถามก่อนวาด
+
+**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น — อย่าถามซ้ำ**
+(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
+
+**ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ถามผู้ใช้ว่าจะใช้สีอะไร
+ถ้ายังไม่ระบุ ให้เสนอจากเนื้องานแล้วรอยืนยัน
+
+| เนื้องาน | โทนที่เสนอ | เหตุผล |
+|---|---|---|
+| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
+| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
+| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
+| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
+| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
+| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
+| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+
+ใส่**สีหลักสีเดียว**ใน `assets/_src/theme.py` ที่ `ACCENT` — เฉดอ่อนและเข้มทั้งหมด
+คำนวณจากสีนั้นด้วย `tint()` ไม่มีสีอื่นฝังอยู่ในโค้ดวาดรูป
+
+สีเดียวที่ไม่ผูกกับ `ACCENT` คือ `EXCEPT_HUE` สำหรับป้าย "ข้อยกเว้น" ซึ่งต้องต่างจากสีหลักเสมอ
+ถ้าสีหลักเป็นส้มอยู่แล้ว ให้เปลี่ยน `EXCEPT_HUE` เป็นสีอื่นที่ตัดกัน
+
+---
+
+## 1 · ลำดับการทำงาน
+
+1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน ถามว่า**รูปนี้ตอบคำถามอะไร** — หนึ่งรูปตอบหนึ่งคำถาม
+2. ถามสีตามข้อ 0
+3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อที่สำคัญที่สุด ดูข้อ 3
+4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
+5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่เช็กว่าสคริปต์รันผ่าน
+6. ได้รูปที่สะอาดแล้วจึงเขียนลงโฟลเดอร์ปลายทาง รูปเก่าย้ายไป `_to_delete/`
+
+---
+
+## 2 · โครงไฟล์
+
+```
+architecture/
+  01-system-context.png      ← ผลลัพธ์ เลขนำหน้าเรียงตามลำดับการอ่าน
+  _src/
+    theme.py                 ← สีทั้งหมด — แก้ที่นี่ที่เดียว
+    ref.py                   ← ภาษาภาพ: โซน หน่วย เส้น ป้าย แถบสัญลักษณ์
+    render.py                ← SVG → PNG ด้วย Playwright ที่ 2 เท่า
+    d01.py … dNN.py          ← หนึ่งไฟล์ต่อหนึ่งรูป มีแต่การจัดวาง
+    logos/                   ← โลโก้ผลิตภัณฑ์ + colors.json
+```
+
+คัดลอกทั้งโฟลเดอร์จาก `assets/_src/` ไปเริ่มงาน — `d01.py` เป็นรูปตัวอย่างที่เรนเดอร์ได้จริง
+
+---
+
+## 3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง
+
+เส้นเฉียงทำให้อ่านยาก แต่การดัดเส้นทีหลังไม่ช่วย **ต้องแก้ที่ตำแหน่ง**
+
+```python
+CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # คอลัมน์
+R1,R2,R3          = 288,458,624                  # แถว ห่างกัน ~170
+```
+
+ทุกกล่องอยู่บนจุดตัดของคอลัมน์กับแถว ไม่มีตัวไหนหลุดกริด
+พอทุกจุดอยู่บนเส้นเดียวกัน เส้นเชื่อมก็ตั้งฉากได้เองโดยไม่ต้องดัด
+
+### กฎจุดกึ่งกลาง
+
+ตัวที่รับหลายทางต้องอยู่**กึ่งกลางของทางเหล่านั้น** ไม่ใช่เกาะแถวใดแถวหนึ่ง
+และถ้าส่งต่อหลายทาง ต้องอยู่กึ่งกลางของทางที่ส่งออกด้วย
+
+ใช้**จุดรวมเดียวและจุดแยกเดียว** ให้เส้นสมมาตร
+
+```python
+RM = (R1+R2)//2      # Nginx อยู่กึ่งกลางของสองแถวที่รับเข้ามา
+J1, J2 = CB-74, CB+86
+
+flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # เข้าจากบน
+flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # เข้าจากล่าง
+flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # ออกขึ้นบน
+flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # ออกลงล่าง
+```
+
+### ช่องเดินสาย
+
+เส้นที่ต้องข้ามกริด **ห้ามวิ่งทับแถวที่มีกล่อง** จองช่องว่างไว้เฉพาะ
+
+```python
+TB = 238        # ช่องบน — ห่างจากขอบโซนอย่างน้อย 36
+MB = R3-48      # ช่องกลาง — ระหว่างแถว
+```
+
+---
+
+## 4 · เส้นเชื่อม
+
+ตั้งฉากทั้งหมด มุมโค้งรัศมี 14 — จุดนี้ทำให้ดูประณีตขึ้นมากโดยไม่เสียความชัดเจน
+`ref.flow(pts, dashed=False, arrow=True)` คำนวณมุมโค้งให้เอง
+
+**หัวลูกศรต้องจบที่ขอบไอคอน ไม่ใช่ที่ป้ายชื่อ** — เช่น `CD-30` เมื่อไอคอนกว้าง 46
+
+---
+
+## 5 · ป้ายบนเส้น — สองบทบาทเท่านั้น
+
+| บทบาท | สี | ใช้กับ |
+|---|---|---|
+| ปกติ | เฉดอ่อนของ `ACCENT` | สิ่งที่ไหลผ่านเส้นตามปกติ |
+| ข้อยกเว้น | `EXCEPT_HUE` | ทางที่ไม่ผ่านประตูหน้า · กรณีพิเศษ |
+
+**ข้อยกเว้นมีได้ป้ายเดียวต่อรูป** ถ้ามีสองอันขึ้นไป แปลว่าไม่มีอันไหนเด่นจริง
+
+ป้ายบอก**อะไรไหลผ่าน** — `SQL` `/api/` `DICOM 11112` ไม่ใช่ `เชื่อมต่อ`
+
+---
+
+## 6 · โซน
+
+กรอบพื้นสีอ่อนมาก ป้ายชื่อเป็นแคปซูลพื้นขาวคร่อมเส้นขอบ มีจุดสีนำหน้า
+
+```python
+zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
+```
+
+| ชนิด | เส้น | ความหมาย |
+|---|---|---|
+| `physical` | ทึบ | ขอบเขตของจริงทางกายภาพ — ห้อง อาคาร เครื่อง |
+| `logical` | ประ | ขอบเขตเชิงตรรกะ — Docker Compose · namespace · VPC |
+| `outside` | ประ | นอกระบบที่เราดูแล |
+
+อ่านออกทันทีว่าอันไหนมีอยู่จริง · ซ้อนได้ไม่เกิน 3 ชั้น
+
+---
+
+## 7 · ไอคอนและโลโก้
+
+ไอคอน**ลอยบนพื้น ไม่มีกรอบ ไม่มีไทล์** ชื่อและคำอธิบายอยู่ใต้ภาพ
+
+```python
+unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
+#  มี logos/<slug>.svg → ใช้โลโก้จริง เติมสีจาก colors.json
+#  ไม่มี              → ใช้สัญลักษณ์เส้นที่ออกแบบเอง
+```
+
+ค่าที่ใช้ได้จริง: ไอคอน 46 · ชื่อ 11.5 ตัวหนา ห่างจากกึ่งกลาง `size/2+20` · คำอธิบาย 10 ห่าง `size/2+35`
+
+โลโก้เอามาจากชุดไอคอนใน `diagram-figures` — Simple Icons ให้ SVG สีเดียว `viewBox 0 0 24 24`
+พร้อม `colors.json` ที่เก็บรหัสสีทางการของแต่ละแบรนด์
+
+### เรื่องเครื่องหมายการค้า — ห้ามข้าม
+
+- โลโก้เป็นของเจ้าของ ใช้เพื่ออ้างถึงตัวผลิตภัณฑ์ในผังได้
+  **ห้ามดัดแปลงรูปทรง ห้ามยืดบีบ ห้ามทำให้ดูเหมือนเจ้าของมารับรอง**
+- ตัวไหนไม่มีไฟล์โลโก้ ใช้สัญลักษณ์แทน แล้ว**ระบุชื่อตัวนั้นไว้ในหมายเหตุท้ายรูป**
+- อย่าไปดาวน์โหลดโลโก้ใหม่มาเอง ใช้จากชุดที่มีอยู่ หรือให้ผู้ใช้หาจากหน้า brand ของโครงการนั้น
+
+---
+
+## 8 · เรนเดอร์
+
+```bash
+pip install playwright && playwright install chromium
+python render.py d01.svg ../01-architecture.png 1400 860
+```
+
+ที่ 2 เท่าเสมอ — 1 เท่าได้ภาพเบลอเมื่อขยายในสไลด์
+
+ภาษาไทยต้องมีฟอนต์ไทยในเครื่องที่เรนเดอร์ แล้วประกาศใน `font-family` ของ `<svg>`
+**อย่าใช้ Python Imaging Library (PIL) วาดข้อความไทยปนอังกฤษ** — ได้กล่องสี่เหลี่ยมแทนตัวอักษร
+
+---
+
+## 9 · วงจรตรวจงาน — ห้ามข้าม
+
+เรนเดอร์ → เปิดไฟล์ภาพดูจริง → แก้ → เรนเดอร์ใหม่ จนกว่าจะสะอาด
+**หกข้อนี้เจอซ้ำทุกครั้ง ตรวจทุกรอบ:**
+
+1. **ป้ายบนเส้นทับไอคอนหรือชื่อ** — ย้ายไปกึ่งกลางช่วงที่ยาวที่สุด หรือย้ายไปบนขาตั้ง
+2. **เส้นที่ออกจากไอคอนตัดคำอธิบายของตัวเอง** — เริ่มเส้นที่ `cy+58` ไม่ใช่ `cy+32`
+3. **ขอบโซนตัดคำอธิบายแถวล่างสุด** — ขอบล่างโซนต้อง ≥ `R_ล่างสุด + 58 + 24`
+4. **ข้อความกำกับโซนนั่งทับเส้นขอบ** — รวมกับชื่อในแคปซูลเดียว
+5. **หัวลูกศรไปจบที่ป้ายชื่อ ไม่ใช่ที่ไอคอน** — จบที่ขอบไอคอน
+6. **ข้อความล้นกรอบ** — ไทย 11.5px ≈ 6.0 px/ตัว · หัวเรื่อง 15px ≈ 7.5 px/ตัว
+   ไม่พอให้ตัดคำ **อย่าลดขนาดตัวอักษร**
+
+---
+
+## 10 · ค่าคงที่ที่ใช้ได้จริง
+
+```
+ความกว้าง 1400 · ขอบ 56
+หัวเรื่องกลางหน้า 22 · คำอธิบายใต้หัว 12.5
+ชื่อหน่วย 11.5 ตัวหนา · คำอธิบาย 10 · ป้ายบนเส้น 10.5
+เส้นเชื่อม 1.6 · ขอบโซน 1.4 · รัศมีมุมโค้ง 14 · ป้ายสูง 21
+```
+
+---
+
+## 11 · แถบสัญลักษณ์
+
+ทุกรูปปิดท้ายด้วยแถบเดียว บอกว่ากรอบแต่ละแบบคืออะไร และป้ายสองสีต่างกันตรงไหน
+ต่อด้วยหมายเหตุ 2–4 บรรทัด รวมบรรทัดเรื่องเครื่องหมายการค้า และการอ้างถึงรูปอื่นที่เกี่ยวข้อง
+
+---
+
+## 12 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| เลือกว่าจะวาดด้วยอะไร | `software-diagrams` |
+| ชุดไอคอนและโลโก้ | `diagram-figures` |
+| เอารูปไปวางในสไลด์ | `presentation-design` |
+| เอารูปไปวางในไฟล์ Word หรือ PDF | `branded-document-design` |
+| รูปในเอกสาร SRS | `srs-writing` |
+
+---
+
+## ตัวย่อ
+
+- **SVG** — Scalable Vector Graphics
+- **PNG** — Portable Network Graphics
+- **PIL** — Python Imaging Library
+
+
+---
+
+# skill: diagram-figures
+
+Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document or a sign-off package. Lays the figure out by hand as an HTML page and photographs it, which buys control automatic layout cannot give. Ships three tested layouts and the official cloud vendor icon sets.
+
+# Diagram Figures
+
+> **ใช้เมื่อรูปต้องดู "ออกแบบมา" ไม่ใช่ "generate มา"**
+> ถ้าเป็นรูปในเอกสารภายในทีม กลับไปใช้ Mermaid ใน `software-diagrams` — เร็วกว่ามาก
+
+---
+
+## เลือกทางให้ถูกก่อน
+
+| สถานการณ์ | ใช้ |
+|---|---|
+| รูปในโค้ด · README · Pull Request · เอกสารในทีม | **Mermaid** (`software-diagrams` ข้อ 2) |
+| ผังคลาวด์ที่ต้องมีโลโก้ AWS / Azure จริง | **`diagrams`** (`software-diagrams` ข้อ 3) |
+| รูปในข้อเสนอลูกค้า · สไลด์นำเสนอ · เอกสารเซ็นรับ · งานพิมพ์ | **skill นี้** |
+
+ต้นทุนของ skill นี้คือ **เวลา** — หนึ่งรูปใช้เวลาหลายรอบ
+ใช้กับรูปที่คนนอกทีมจะเห็น และเห็นซ้ำหลายครั้งเท่านั้น
+
+---
+
+## 1 · ตอบสามข้อก่อนเปิดไฟล์
+
+1. **รูปนี้ไปอยู่ที่ไหน** — สไลด์ 16:9 · หน้า A4 · หน้าจอ
+   กำหนด `.sheet{width:...}` ตามนั้น: สไลด์ 1600px · A4 แนวตั้ง 1240px · A4 แนวนอน 1750px
+2. **ผู้อ่านคือใคร** — ลูกค้าที่ไม่ใช่ช่าง อ่านชื่อกล่องเป็นภาษาไทย · ทีมเทคนิค อ่านชื่อจริงของ service
+3. **คำถามเดียวที่รูปนี้ตอบคืออะไร** — กฎข้อเดียวของ `software-diagrams` ยังใช้อยู่
+
+---
+
+## 2 · เลือกโครง
+
+มีสองโครงในโฟลเดอร์ `assets/` **คัดลอกไปแก้ อย่าเริ่มเขียนเอง**
+
+| คำถามที่รูปตอบ | โครง |
+|---|---|
+| "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" — C4 ระดับ 1 | **`figure-context.html`** |
+| "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" — deployment · container | **`figure-template.html`** |
+| "ใช้บริการอะไรของคลาวด์บ้าง" — ต้องมีโลโก้ AWS · Azure · Google Cloud ของจริง | **`figure-cloud.html`** |
+
+โครงทั้งสองใช้สี ขนาด ฟอนต์ และสคริปต์ลากเส้นชุดเดียวกัน ต่างกันที่การจัดวาง
+
+### `figure-context.html` — ระบบกับโลกภายนอก
+
+```
+┌─ หัวรูป ────────────────────────────────────────────────────────┐
+│  ผู้ใช้งาน (แถบนอน)   →   ระบบที่อธิบาย (การ์ดใหญ่)   ←   ระบบภายนอก  │
+│  ─ เจ้าหน้าที่           ─ ชื่อ + คำขยาย                ─ external system │
+│  ─ แพทย์                ─ หน้าที่ 3-6 ข้อ               ─ ชื่อ + สถานะ    │
+│  ─ ผู้ดูแล               ─ ป้ายข้อจำกัด                                │
+├─ คำอธิบายสัญลักษณ์ ─────────────────────────────────────────────┤
+│  เชิงอรรถ — ความหมายเส้นประ · ตัวย่อทั้งหมด · รูปถัดไป              │
+└────────────────────────────────────────────────────────────────┘
+```
+
+- **ผู้ใช้งานอยู่ซ้าย ระบบภายนอกอยู่ขวา** ไม่ปนกัน — คนกับเครื่องคนละชนิด
+- **หน้าที่ในการ์ดกลาง 3 ถึง 6 ข้อ** เกินนี้แปลว่ากำลังเขียน SRS ไม่ใช่วาดรูป
+- **ระบบภายนอกที่ยังไม่ได้เชื่อม** ใช้เส้นประ (`planned:true`) แล้วเขียนไว้ในการ์ดว่าอยู่ในแผนเวอร์ชันไหน
+  — รูปที่วาดเฉพาะของที่มีแล้วจะถูกถามซ้ำทุกรอบว่า "แล้วเชื่อม HIS หรือยัง"
+- **มีคำอธิบายสัญลักษณ์เสมอ** เมื่อรูปทรงหรือเส้นสื่อความหมาย
+- **ตัวย่อกางที่เชิงอรรถ** — ผู้อ่านฝั่งลูกค้าไม่รู้ว่า SEG คืออะไร
+
+### `figure-cloud.html` — ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ
+
+ใช้เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Google Cloud ·
+Kubernetes ของจริง แบบผังอ้างอิงที่ผู้ให้บริการเผยแพร่
+
+**ไอคอนมีให้แล้ว 205 ตัวใน `assets/icons/`** ไม่ต้องติดตั้งอะไรเพิ่ม —
+PNG พื้นโปร่ง 160×160 เป็นไอคอนทางการของผู้ให้บริการและเครื่องมือ แบ่งเป็น 9 กลุ่ม
+
+| โฟลเดอร์ | มีอะไร |
+|---|---|
+| `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
+| `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
+| `icons/gcp/` | 21 — Compute Engine · GKE · Cloud Run · BigQuery · Pub/Sub · Firestore … |
+| `icons/k8s/` | 16 — Pod · Deployment · Service · Ingress · ConfigMap · Secret · Node … |
+| `icons/data/` | 18 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
+| `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
+| `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
+| `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
+| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · ผู้ใช้ … |
+
+รายชื่อทั้งหมดอยู่ใน **`icons/INDEX.md`** · เปิด **`icons/contact-sheet.html`** เพื่อดูรูปทั้งหมดในหน้าเดียว
+
+```html
+<div class="unit"><img src="icons/aws/ec2.png" alt="">
+  <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
+```
+
+**ต้องการตัวที่ไม่มีในชุดนี้** — แพ็กเกจ `diagrams` มีอีกกว่า 2,400 ไอคอน ใช้สคริปต์ดึงมาเพิ่ม:
+
+```bash
+pip install diagrams                      # ไม่ต้องมี Graphviz ถ้าใช้แค่ไอคอน
+python collect-icons.py --find kafka      # หาชื่อไฟล์ที่ต้องการ
+python collect-icons.py                   # คัดลอกตามรายการ WANT ในสคริปต์
+```
+
+**กติกาเฉพาะโครงนี้:**
+
+- **สายที่ข้ามขอบเขต ให้ออกจากขอบของกล่องขอบเขต** (`n-region`) ไม่ใช่จากกล่องข้างใน
+  — ต่อจากกล่องข้างในเมื่อไหร่ เส้นจะพาดทะแยงทับทุกอย่างที่ขวางทาง
+- **เส้นประ = ขอบเขตที่ผู้ให้บริการจัดการให้** · เส้นทึบสีส้ม = เครื่องที่เราดูแลเอง
+  ใส่ความหมายไว้ในคำอธิบายสัญลักษณ์เสมอ
+- ไอคอนแสดงเปล่า ๆ ไม่ต้องมีกรอบ — โลโก้มีสีและรูปทรงของตัวเองอยู่แล้ว
+- ชื่อบริการใช้ชื่อทางการ (`Amazon RDS`) คำอธิบายใต้ชื่อเป็นภาษาไทยได้
+
+> **เรื่องสัญญาอนุญาต** — ชุดไอคอนสถาปัตยกรรมของ AWS · Azure · Google Cloud
+> เผยแพร่มาเพื่อใช้วาดผังสถาปัตยกรรมโดยเฉพาะ ใช้ในเอกสารข้อเสนอได้
+> สิ่งที่ทำไม่ได้คือใช้โลโก้ในลักษณะที่ทำให้เข้าใจว่าผู้ให้บริการรับรองหรือร่วมงานด้วย
+> และใช้เป็นส่วนหนึ่งของแบรนด์ตัวเอง · ถ้าไม่มีไอคอนทางการของเครื่องมือนั้น ให้วาดไอคอนเส้นเองตามข้อ 7
+
+### `figure-template.html` — ข้างในเครื่อง
+
+สามคอลัมน์ ซ้ายไปขวาตามทิศที่ข้อมูลไหล · กล่องซ้อนได้ 3 ชั้น
+รายละเอียดอยู่ในข้อ 3
+
+---
+
+## 3 · โครง deployment — ข้างในเครื่อง
+
+สามคอลัมน์ ซ้ายไปขวาตามทิศที่ข้อมูลไหล:
+
+```
+┌─ หัวรูป ───────────────────────────────────────────────┐
+│  ชื่อ + คำขยาย                    เลขรูป · เวอร์ชัน · เจ้าของ  │
+├────────────┬──────────────────────────┬────────────────┤
+│ นอกระบบ    │  ⬅ กล่อง .focus           │ ปลายทาง        │
+│ คน อุปกรณ์  │  สิ่งที่เอกสารนี้อธิบาย       │ ข้อบังคับ       │
+│ ระบบอื่น    │  ซ้อนได้อีก 1 ชั้น          │ ของที่ไหลออก    │
+├────────────┴──────────────────────────┴────────────────┤
+│ เชิงอรรถ — รูปอื่นที่เกี่ยวข้อง · ที่มาของไอคอน              │
+└────────────────────────────────────────────────────────┘
+```
+
+**ซ้อนกล่องได้ไม่เกิน 3 ชั้น** — คอลัมน์ → กล่องใหญ่ → กล่องย่อย
+ชั้นที่ 4 แปลว่ารูปนี้ตอบสองคำถาม ให้แยกรูป
+
+**กล่อง `.focus` มีได้กล่องเดียวต่อรูป** — ถ้ามีสองกล่องแปลว่ายังไม่ตัดสินใจว่ารูปนี้เรื่องอะไร
+
+---
+
+## 4 · หัวรูปต้องมีครบห้าอย่าง
+
+ชื่อ · คำขยายหนึ่งบรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+
+เหตุผลไม่ใช่ความสวย — รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมล ในสไลด์ ในเอกสารสัญญา
+แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้และไม่มีใครกล้าเชื่อ**
+
+คำขยายบอก "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ:
+
+```
+❌ ภาพรวมระบบ Dr Screening
+✅ เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
+```
+
+---
+
+## 5 · ระบบสีและขนาด
+
+**ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว — อย่าตั้งค่าใหม่เอง**
+ตัวเลขพวกนี้ปรับจนรูปดูตั้งใจแล้ว การขยับมันคือการทำให้รูปดูไม่เท่ากันในเอกสารเดียว
+
+**สีเป็นคนละเรื่อง — สีมาจากเนื้องาน**
+ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
+มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+(ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+แก้ที่ `--accent` ใน `:root` ที่เดียว เฉดอ่อน/เข้มอ้างอิงจากค่านั้น
+
+ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์:
+
+- **สีโลโก้ผู้ให้บริการ** — AWS ส้ม Azure ฟ้า ต้องเป็นสีจริงของเขา ไม่ใช่สีแบรนด์เรา
+- **เทาโครงสร้าง** — เส้นขอบและพื้นกล่อง ต้องจางพอที่จะไม่แย่งสายตากับเนื้อหา
+
+| อย่าง | ค่า |
+|---|---|
+| ตัวอักษร | ชื่อรูป 30 · ชื่อกล่อง 16 · คำอธิบาย 13.5 · ป้ายกลุ่ม 12 ตัวใหญ่ |
+| ไอคอน | กรอบ 66px · มุม 18px · ไอคอน 29px · เส้น 1.6px |
+| กล่อง | มุม 20px · ขอบ 1px เทาอ่อน · กล่องซ้อนใน มุม 16px พื้นเทาอ่อนมาก |
+| กล่อง `.focus` | ขอบ 2px สี `--accent` เฉดเข้ม · มุม 22px |
+| ระยะ | 12 · 20 · 26 · 34 · 48 · ช่องว่างระหว่างคอลัมน์ 130 |
+
+> **กรอบไอคอนต้องใหญ่** — 66px คือจุดที่รูปเริ่มดูตั้งใจ ไม่ใช่ผังที่ generate มา
+> ต่ำกว่า 56px ไอคอนจะกลายเป็นจุดเล็ก ๆ ในกล่องใหญ่ และรูปจะดูโหวง
+
+**สีไอคอนมีเจ็ดกลุ่ม และแต่ละกลุ่มต้องแปลว่าอะไรได้**
+
+| คลาส | ใช้กับ |
+|---|---|
+| `t-neutral` | คน อุปกรณ์ ของนอกระบบ ที่เก็บไฟล์ธรรมดา |
+| `t-edge` | ทางเข้า-ออก · gateway · API |
+| `t-app` | เครื่องมือที่ผู้ใช้ทำงานด้วย |
+| `t-view` | ส่วนที่ผู้ใช้ใช้ดูหรืออ่านผล |
+| `t-data` | ฐานข้อมูล · สำรองข้อมูล |
+| `t-alert` | คิว งานที่ค้างได้ ของที่พังแล้วเจ็บ |
+| `t-warn` | ของที่มีเงื่อนไข — สัญญาอนุญาต ข้อจำกัดทางกฎหมาย |
+
+ทุกกรอบมี**พื้นอ่อนกับขอบในโทนเดียวกัน** ไม่ใช่พื้นสีทึบ — สีทึบจะดึงสายตาไปจากเนื้อหา
+ถ้าอยากได้สีที่แปด แปลว่ากำลังใช้สีเพื่อความสวย ไม่ใช่เพื่อสื่อความหมาย
+
+---
+
+## 6 · ไอคอน — วาดเอง ไม่ใช้โลโก้
+
+**มีไอคอนทางการของบริการนั้นหรือไม่** เป็นตัวตัดสิน
+
+- **มี** (AWS · Azure · Google Cloud · Kubernetes · เครื่องมือโอเพนซอร์สส่วนใหญ่) —
+  ใช้ของทางการผ่าน `collect-icons.py` ชุดเหล่านี้เผยแพร่มาเพื่อวาดผังสถาปัตยกรรมโดยเฉพาะ
+- **ไม่มี** หรือเป็นของที่เราสร้างเอง — วาดไอคอนเส้นเอง แล้วเขียนที่เชิงอรรถว่า
+  ไอคอนไม่ใช่โลโก้ทางการ (โครง `figure-template.html` มีบรรทัดนี้ให้แล้ว)
+- **ห้ามปนกัน**ในรูปเดียว — โลโก้สีจัดข้าง ๆ ไอคอนเส้นบางทำให้รูปดูไม่เสร็จ
+
+ไอคอนเส้นที่วาดเอง: `viewBox 0 0 24 24` · `stroke-width 1.6` · ไม่มีพื้น · ปลายเส้นมน
+รูปทรงต้องอ่านออกที่ขนาด 24px — ลายละเอียดเกินสามเส้นจะกลายเป็นก้อนดำ
+
+---
+
+## 7 · สายเชื่อม
+
+**ในคอลัมน์เดียวกัน** ใช้ลูกศรลง `.down` ระหว่างกล่อง — ไม่ต้องเขียนอะไรเพิ่ม
+
+**ข้ามคอลัมน์** ใช้รายการ `WIRES` ท้ายไฟล์ สคริปต์จะลากเส้นให้หลังจัดหน้าเสร็จ:
+
+```js
+{from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
+//    ^id ต้นทาง   ^ด้านออก  ^id ปลายทาง  ^ด้านเข้า ^ตำแหน่งบนขอบ 0=บน 1=ล่าง
+```
+
+ทำไมต้องคำนวณหลังจัดหน้า — เพราะตำแหน่งกล่องขึ้นกับความยาวข้อความไทย
+เขียนพิกัดตายตัวไว้ พอแก้ข้อความทีเดียวเส้นจะหลุดทั้งรูป
+
+**กติกา:**
+
+- **ป้ายต้องแคบกว่าช่องว่างระหว่างคอลัมน์** ไม่งั้นป้ายจะทับกล่องหรือบังเส้นจนหาย
+  — ป้ายยาวขึ้น ต้องเพิ่ม `gap` ของ `.stage` ตามไปด้วย
+- เลื่อนป้ายไปตามเส้นได้ด้วย `lp` (0 = ต้นทาง · 1 = ปลายทาง · ไม่ใส่ = กลางเส้น)
+- เส้นที่ยังไม่ได้เชื่อมจริง ใช้ `planned:true` ได้เส้นประ แล้ว**เขียนความหมายไว้ที่เชิงอรรถ**
+- เส้นข้ามคอลัมน์ **ไม่เกิน 5 เส้น** ต่อรูป — เกินนี้รูปกลายเป็นใยแมงมุม
+- ต่อเข้า**กล่องเล็กที่สุดที่ถูกต้อง** ไม่ใช่กล่องใหญ่ที่ครอบอยู่
+- กล่องสูงมาก ให้ใส่ `tp` เลี่ยงไม่ให้เส้นจ่อกลางกล่อง
+- ป้ายบนเส้นบอกว่า**อะไรไหลผ่าน** — `HTTPS 443` ไม่ใช่ `เชื่อมต่อ`
+- เส้นที่ไม่มีอะไรจะบอก ไม่ต้องใส่ป้าย ดีกว่าใส่คำว่า "ใช้"
+
+---
+
+## 8 · ภาษาไทย
+
+- **`line-height` ต่ำกว่า 1.5 ไม่ได้** — สระบนกับวรรณยุกต์ซ้อนกันสองชั้น จะโดนตัด
+- **ห้ามกำหนดความสูงตายตัวให้กล่องข้อความ** ด้วยเหตุผลเดียวกัน
+- ฟอนต์เรียงตามนี้ `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` — ตั้งไว้ในโครงแล้ว
+  เครื่องที่ไม่มีสักตัวจะตกไปใช้ฟอนต์ที่วางสระผิดตำแหน่งแบบเงียบ ๆ **ต้องเรนเดอร์ดูทุกครั้ง**
+- **ไทยไม่เว้นวรรคระหว่างคำ** เบราว์เซอร์จึงตัดบรรทัดกลางคำ — ข้อความยาวให้ใส่ `<br>` เอง
+- ตัวอักษรไทยดูเล็กกว่าอังกฤษที่ขนาดเท่ากัน — คำอธิบายอย่าต่ำกว่า 12px
+
+---
+
+## 9 · เรนเดอร์แล้วเปิดดู — ห้ามข้าม
+
+```bash
+pip install playwright && playwright install chromium
+python assets/render-figure.py figure.html figure.png 2
+```
+
+ตัวคูณ **2** เสมอ · ตัวคูณ 1 ได้ภาพเบลอเมื่อเอาไปขยายในสไลด์
+
+เปิดไฟล์ภาพดูด้วยตา ไล่ตามนี้:
+
+- [ ] สายข้ามคอลัมน์มีหัวลูกศรครบทุกเส้นไหม
+- [ ] เส้นพาดทับกล่องหรือทับตัวหนังสือไหม
+- [ ] ป้ายบนเส้นอ่านออกไหม ไม่ทับกันเองไหม
+- [ ] ข้อความไทยครบไหม สระหรือวรรณยุกต์หายไหม
+- [ ] มีคำไหนถูกตัดกลางคำไหม
+- [ ] กล่อง `.focus` มีกล่องเดียวจริงไหม
+- [ ] หัวรูปมีครบห้าอย่างไหม
+- [ ] ย่อรูปลงเหลือความกว้าง 25% แล้วยังแยกออกไหมว่าอะไรอยู่ตรงไหน
+- [ ] คนที่ไม่เคยเห็นระบบนี้ ตอบคำถามต้นทางได้ไหม
+
+---
+
+## 10 · กับดักที่เจอจริง
+
+| อาการ | สาเหตุ · ทางแก้ |
+|---|---|
+| หัวลูกศรหายทั้งรูป | สคริปต์ลบ `path` ทุกตัวก่อนวาดใหม่ รวมถึงสามเหลี่ยมหัวลูกศรที่อยู่ใน `<defs>` — ลบเฉพาะ `path.wire` (โครงแก้ไว้แล้ว) |
+| เส้นลากไปผิดกล่อง | `id` ไปติดกล่องอื่นที่หน้าตาเหมือนกัน — เปิด console ดู `wire: ไม่พบ id` และตรวจว่า `id` ไม่ซ้ำ |
+| เส้นจ่อกลางกล่องสูง แล้วพาดทับของข้างใน | ใส่ `tp` / `fp` ให้เส้นเข้าใกล้ขอบบน |
+| สระไทยหาย | เครื่องไม่มีฟอนต์ไทยในรายการ — ติดตั้ง Noto Sans Thai หรือเพิ่มฟอนต์ที่มีเข้าไปในรายการ |
+| ภาพเบลอในสไลด์ | เรนเดอร์ด้วยตัวคูณ 1 |
+| รูปมีขอบขาวเยอะ | ถ่ายทั้งหน้าแทนที่จะถ่ายเฉพาะ `.sheet` |
+| แก้ข้อความแล้วเส้นหลุด | เขียนพิกัดเส้นตายตัวแทนที่จะใช้ `WIRES` |
+| ป้ายบนเส้นทับกล่อง หรือบังเส้นจนมองไม่เห็น | ป้ายกว้างกว่าช่องว่างระหว่างคอลัมน์ — เพิ่ม `gap` หรือตัดคำในป้ายให้สั้นลง |
+| ชื่อกล่องภาษาไทยตกบรรทัดสอง | คอลัมน์แคบไป — เพิ่มความกว้างคอลัมน์นั้น อย่าลดขนาดตัวอักษร |
+| ใช้ไอคอนเป็นไฟล์ภาพแล้วเส้นลากผิดตำแหน่งทั้งรูป | สคริปต์คำนวณก่อนรูปโหลดเสร็จ — เรียก `draw()` ใน `window.onload` ไม่ใช่ตอนอ่านสคริปต์ (`figure-cloud.html` ทำไว้แล้ว) |
+| เส้นพาดทะแยงทับทั้งรูป | ต่อเส้นจากกล่องข้างในกล่องขอบเขต — ต่อจากขอบของกล่องขอบเขตแทน |
+
+---
+
+## 11 · Anti-patterns
+
+- ❌ **ใช้ skill นี้กับรูปในทีม** — เสียเวลาสิบเท่าเพื่อความสวยที่ไม่มีใครต้องการ
+- ❌ **ใส่โลโก้ทางการในเอกสารเสนอขาย** — ข้อ 5
+- ❌ **สองกล่อง `.focus`** — แปลว่ารูปตอบสองคำถาม
+- ❌ **ส่งไฟล์ HTML ให้ลูกค้า** — ส่ง PNG · ไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
+- ❌ **ไม่เก็บไฟล์ HTML** — ปีหน้าต้องแก้รูป แล้วต้องวาดใหม่ทั้งใบ
+- ❌ **รูปไม่มีวันที่และเจ้าของ**
+- ❌ **ไอคอนต่างสไตล์ปนกัน** — เส้นบางปนเส้นหนา ปนไอคอนทึบ
+
+---
+
+## 12 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| เลือกว่าจะวาดด้วยอะไร | `software-diagrams` |
+| เอารูปไปวางในสไลด์ | `presentation-design` |
+| เอารูปไปวางในไฟล์ Word / PDF | `branded-document-design` |
+| รูปในเอกสาร SRS | `srs-writing` |
+| สีและระยะห่างของหน้าจอแอป (คนละระบบกับรูปนี้) | `ui-craft` |
+
+---
+
+## ตัวย่อ
+
+- **HTML** — HyperText Markup Language
+- **PNG** — Portable Network Graphics
+- **SVG** — Scalable Vector Graphics
+- **CSS** — Cascading Style Sheets
+
+
+---
+
+# skill: web-service-essentials
+
+Use when building or reviewing any HTTP service, REST API or backend — the baseline every service needs before feature work starts. Defines the four operational endpoints with exact response shapes, an error envelope based on RFC 9457, request-id propagation, graceful shutdown, timeouts and the security headers that are not optional.
+
+# Web Service Essentials
+
+> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
+> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะเดาล้วน ๆ
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่ม service / REST API / microservice ใหม่
+- มีคนขอ health check, ping, readiness, liveness, version endpoint
+- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
+- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- ออกแบบ endpoint ทางธุรกิจ → command `/api-design`
+- รูปแบบ log → `logging-standards`
+- เลือกสถาปัตยกรรม → `architecture-patterns`
+
+---
+
+## 1 · endpoint พื้นฐาน 4 ตัว
+
+| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+|---|---|:---:|:---:|---|
+| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
+| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
+| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
+| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+
+> 🚨 **live ห้ามเช็ค dependency** — นี่คือความผิดพลาดที่เจอบ่อยที่สุด
+> ถ้า `/health/live` เช็ค DB แล้ว DB ล่มชั่วคราว Kubernetes จะ **ฆ่า pod ทิ้งทั้งหมด**
+> ทั้งที่แอปยังปกติดี พอ DB กลับมา ก็ไม่มี pod เหลือให้รับ traffic แล้ว
+> ของพวกนี้ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัดออกจาก pool ชั่วคราว
+
+\* `/version` ถ้าไม่อยากเปิด commit hash สาธารณะ ให้จำกัดเฉพาะเครือข่ายภายใน
+
+### รูปร่าง response (เหมือนกันทุกภาษา)
+
+```jsonc
+// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+{
+  "status": "up",                       // up | degraded | down
+  "timestamp": "2026-08-31T09:42:13.482Z",
+  "checks": {
+    "db":    { "status": "up",   "durationMs": 12 },
+    "redis": { "status": "up",   "durationMs": 3 },
+    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
+  }
+}
+```
+
+```jsonc
+// GET /version → 200
+{
+  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
+  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
+}
+```
+
+**สามสถานะ ไม่ใช่สอง:**
+- `up` — ทุกอย่างปกติ → 200
+- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) ยังรับ traffic ได้ → 200
+- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+
+**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
+จะทำให้ health endpoint ค้างตาม แล้ว orchestrator จะตัดสินใจผิดทั้งกระดาน
+
+**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** — เปิดสาธารณะ
+
+---
+
+## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+
+ยึด **RFC 9457 (`application/problem+json`)** — เป็นมาตรฐานจริง ไม่ต้องคิดเอง
+
+```jsonc
+// 400
+{
+  "type": "https://api.example.com/errors/validation",
+  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
+  "status": 400,
+  "detail": "จำนวนสินค้าต้องมากกว่า 0",
+  "instance": "/api/v1/orders",
+  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
+  "errors": { "quantity": ["ต้องมากกว่า 0"] }   // เฉพาะ validation
+}
+```
+
+| สถานะ | ใช้เมื่อ |
+|---|---|
+| 400 | ข้อมูลผิดรูป |
+| 401 | ยังไม่ได้ยืนยันตัวตน |
+| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
+| 404 | ไม่มีสิ่งนี้ |
+| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
+| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
+| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
+| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
+
+> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
+> การส่ง stack trace ออกไปคือการแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
+
+---
+
+## 3 · Request id
+
+- รับจาก header **`X-Request-Id`** ไม่มีก็สร้าง (uuid ตัด 8 ตัว)
+- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
+- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
+- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+
+ลูกค้าโทรมาบอก "มันพัง" → ขอ requestId → `grep` ครั้งเดียวเจอทั้งเรื่อง
+
+---
+
+## 4 · Graceful shutdown
+
+ตอน deploy ใหม่ orchestrator ส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+
+```
+SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
+          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
+          3. ปิด DB pool / คิว / ไฟล์
+          4. exit(0)
+```
+
+> ข้อ 1 สำคัญกว่าที่คิด — ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
+> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+
+---
+
+## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+
+- **Timeout ทุกทาง** — request เข้า, การเรียกออก, query DB · ไม่มี timeout = แขวนทั้งระบบเมื่อปลายทางช้า
+- **จำกัดขนาด body** (เช่น 1MB) — กัน memory ระเบิดจาก payload ใหญ่
+- **CORS ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
+- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่ง OTP/อีเมล
+- **Security headers**: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+  `Strict-Transport-Security` (helmet / `UseHsts()` ทำให้ครบในบรรทัดเดียว)
+- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
+- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก ย้ายทีหลังแพงกว่ามาก
+- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+
+---
+
+## 6 · โค้ดที่พร้อมใช้
+
+| ไฟล์ | สแต็ก | สถานะ |
+|---|---|---|
+| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
+
+---
+
+## 7 · ตรวจงาน
+
+```bash
+curl -i localhost:8080/ping                    # 200 pong
+curl -s localhost:8080/health/live  | jq
+curl -s localhost:8080/health/ready | jq
+curl -s localhost:8080/version      | jq
+
+# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
+```
+
+- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
+- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
+- [ ] dependency ที่ไม่ critical ล่ม → `degraded` + 200 (ยังรับ traffic)
+- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
+- [ ] `/version` ตรงกับ commit ที่ deploy จริง
+- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
+- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
+- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
+- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
+- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
+- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| รูปแบบ log และ correlation id | `logging-standards` |
+| test ให้ endpoint พวกนี้ | `testing-standards` |
+| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
+| runbook ตอน service ล่ม | `incident-runbook-template` |
+| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |
+
+
+## reference: per-stack.md
+
+# .NET และ Angular
+
+> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
+> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) เป็นการตั้งค่ามาตรฐานของ
+> ASP.NET Core — ให้รันครั้งแรกแล้วเทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+
+---
+
+## สารบัญ
+
+1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
+2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## ASP.NET Core — health checks
+
+```bash
+dotnet add package AspNetCore.HealthChecks.NpgSql
+dotnet add package AspNetCore.HealthChecks.Redis
+```
+
+```csharp
+builder.Services.AddHealthChecks()
+    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
+    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddSmtpHealthCheck(o => { }, name: "mail",
+        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
+        tags: ["ready"]);
+```
+
+```csharp
+// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
+app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
+
+// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
+// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false,
+    ResponseWriter = WriteLive,
+});
+
+// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = c => c.Tags.Contains("ready"),
+    ResponseWriter = WriteReady,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+    },
+});
+
+app.MapGet("/version", () => Results.Ok(new
+{
+    name = "orders-api",
+    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
+    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
+    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
+    env = app.Environment.EnvironmentName,
+    host = Environment.MachineName,
+}));
+```
+
+ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+
+```csharp
+static Task WriteReady(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new
+    {
+        status = report.Status switch
+        {
+            HealthStatus.Healthy  => "up",
+            HealthStatus.Degraded => "degraded",
+            _                     => "down",
+        },
+        timestamp = DateTimeOffset.UtcNow,
+        checks = report.Entries.ToDictionary(
+            e => e.Key,
+            e => new
+            {
+                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
+                durationMs = (int)e.Value.Duration.TotalMilliseconds,
+                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
+                error = e.Value.Exception?.Message,
+            }),
+    });
+}
+
+static Task WriteLive(HttpContext ctx, HealthReport _)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
+}
+```
+
+### Error envelope (RFC 9457)
+
+ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว — ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+
+```csharp
+builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
+{
+    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
+    ctx.ProblemDetails.Extensions["requestId"] =
+        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
+});
+
+app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
+app.UseStatusCodePages();
+```
+
+### Graceful shutdown
+
+```csharp
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+
+// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
+// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
+app.Lifetime.ApplicationStopping.Register(() =>
+{
+    ReadinessState.IsShuttingDown = true;
+    Thread.Sleep(TimeSpan.FromSeconds(5));
+});
+```
+
+### สิ่งที่ต้องเปิดก่อน deploy
+
+```csharp
+app.UseHsts();
+app.UseHttpsRedirection();
+builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
+builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
+     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+```
+
+---
+
+## Angular — ฝั่งที่เรียกใช้
+
+**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
+
+```ts
+export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
+  const id = crypto.randomUUID().slice(0, 8);
+  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
+};
+```
+
+**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+
+```ts
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const toast = inject(ToastService);
+  return next(req).pipe(
+    catchError((e: HttpErrorResponse) => {
+      const p = e.error;                       // ProblemDetails
+      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
+      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
+      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
+      return throwError(() => e);
+    }),
+  );
+};
+```
+
+**หน้าสถานะระบบ** — ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+
+```ts
+this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
+// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node/Express | Python/FastAPI |
+|---|---|---|---|
+| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
+| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
+| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
+| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` | `helmet` | `secure` middleware |
+| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8">
+<title>Figure — Cloud</title>
+<!--
+  โครงที่ 3 · ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ — ของ skill `diagram-figures`
+  ใช้ตอบคำถาม "ระบบนี้ใช้บริการอะไรของคลาวด์บ้าง ต่อกันอย่างไร"
+
+  ก่อนเปิดไฟล์นี้:  python collect-icons.py     (คัดลอกไอคอนทางการมาไว้ที่ icons/)
+  เรนเดอร์:        python render-figure.py figure-cloud.html figure.png 2
+
+  แก้ 4 ที่:  1.หัวรูป  2.รายการ WANT ใน collect-icons.py  3.กล่องในสามคอลัมน์  4.WIRES ท้ายไฟล์
+-->
+<style>
+  :root{
+    --ink:#16324F; --body:#333B4A; --muted:#6C7689; --faint:#98A1B3;
+    --line:#E7EAF0; --line-soft:#EFF1F5; --line-strong:#B9C1CE;
+    --surface:#F8F9FC; --paper:#FFFFFF;
+    --accent:#1B63A8; --accent-deep:#12456F;
+    --zone:#E08A2E; --zone-soft:#FEF8F0;
+    --font:"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--paper);color:var(--body);
+       -webkit-font-smoothing:antialiased;line-height:1.5}
+  .sheet{width:1960px;padding:48px 56px 40px}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;
+        padding-bottom:20px;border-bottom:1px solid var(--line)}
+  .head h1{font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+  .head .sub{font-size:15px;color:var(--muted);margin-top:5px}
+  .meta{text-align:right;font-size:13px;color:var(--muted);line-height:1.75;white-space:nowrap}
+  .meta .tag{color:var(--accent);font-weight:700}
+
+  .stage{position:relative;display:grid;grid-template-columns:270px 1fr 250px;
+         gap:120px;align-items:start;margin-top:36px}
+  .col{display:flex;flex-direction:column;gap:30px}
+
+  .box{border:1px solid var(--line);border-radius:20px;background:var(--paper);padding:24px}
+  .box.sunken{background:var(--surface);border-color:var(--line-soft);border-radius:16px;padding:22px}
+  .box.region{border:1.5px dashed var(--line-strong);border-radius:22px;padding:26px;background:#FCFDFE}
+  .box.zone{border:1.5px dashed var(--zone);background:var(--zone-soft);border-radius:18px;padding:22px}
+  .box-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:18px}
+  .box-label{font-size:12px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--muted)}
+  .box.region > .box-head .box-label{color:var(--accent)}
+  .box.zone > .box-head .box-label{color:#B06D18}
+  .box-note{font-size:12.5px;color:var(--faint)}
+  .row{display:flex;justify-content:center;gap:56px;flex-wrap:wrap}
+
+  /* ── หน่วย: ไอคอนทางการ + ชื่อ + คำอธิบาย ── */
+  .unit{display:flex;flex-direction:column;align-items:center;gap:9px;width:180px;text-align:center}
+  .unit img{width:58px;height:58px;object-fit:contain}
+  .unit .name{font-size:14.5px;font-weight:700;color:var(--ink)}
+  .unit .desc{font-size:12.5px;color:var(--muted);line-height:1.45}
+  .col .unit{width:100%}
+
+  .down{display:grid;place-items:center;height:26px;color:var(--line-strong)}
+  .down svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none}
+  .wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .wires path.wire{fill:none;stroke:var(--line-strong);stroke-width:1.6}
+  .wires path.wire.planned{stroke-dasharray:7 6}
+  .wire-label{position:absolute;transform:translate(-50%,-50%);z-index:2}
+  .pill{display:inline-block;font-size:12.5px;color:var(--muted);background:var(--paper);
+        border:1px solid var(--line);border-radius:999px;padding:5px 14px;white-space:nowrap}
+
+  .legend{display:flex;align-items:center;gap:26px;margin-top:34px;padding-top:18px;
+          border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .legend .k{font-weight:700;color:var(--body)}
+  .legend .item{display:flex;align-items:center;gap:9px}
+  .legend .sw{width:40px;height:22px;border-radius:8px;border:1.5px dashed var(--line-strong)}
+  .legend .sw.zone{border-color:var(--zone);background:var(--zone-soft)}
+  .foot{margin-top:14px;font-size:12.5px;color:var(--faint);line-height:1.8}
+</style></head>
+<body>
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <h1>Web Application — ผังบริการบน AWS</h1>
+      <div class="sub">คำถามที่รูปนี้ตอบ: ระบบนี้ใช้บริการอะไรของ Amazon Web Services บ้าง และต่อกันอย่างไร</div>
+    </div>
+    <div class="meta">
+      <div><span class="tag">รูปที่ 4 · Cloud architecture</span></div>
+      <div>เวอร์ชัน 1.0 · 23 กันยายน 2569</div>
+      <div>Square Tech Solutions</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <svg class="wires" id="wires"><defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+              orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B9C1CE"/></marker>
+    </defs></svg>
+
+    <!-- ซ้าย: บริการที่รับแจ้งเตือนและเก็บข้อมูลเสริม -->
+    <div class="col">
+      <div class="box">
+        <div class="box-head"><span class="box-label">เฝ้าระวังและแจ้งเตือน</span></div>
+        <div class="row" style="flex-direction:column;gap:26px">
+          <div class="unit" id="n-cw"><img src="icons/cloudwatch.png" alt="">
+            <div class="name">CloudWatch Alarms</div><div class="desc">เฝ้าค่าที่ตั้งไว้</div></div>
+          <div class="unit" id="n-sns"><img src="icons/sns.png" alt="">
+            <div class="name">SNS Notifications</div><div class="desc">กระจายการแจ้งเตือน</div></div>
+          <div class="unit" id="n-ses"><img src="icons/ses.png" alt="">
+            <div class="name">SES Email</div><div class="desc">ส่งอีเมลถึงผู้ดูแล</div></div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-head"><span class="box-label">ข้อมูลเสริม</span></div>
+        <div class="row">
+          <div class="unit" id="n-ddb"><img src="icons/dynamodb.png" alt="">
+            <div class="name">DynamoDB Tables</div><div class="desc">session · ค่าตั้งระบบ</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- กลาง: Region -->
+    <div class="box region" id="n-region">
+      <div class="box-head">
+        <span class="box-label">Region ap-southeast-1</span>
+        <span class="box-note">เส้นประ = ขอบเขตที่ AWS จัดการให้</span>
+      </div>
+
+      <div class="row" style="margin-bottom:8px">
+        <div class="unit" id="n-elb"><img src="icons/elb.png" alt="">
+          <div class="name">Elastic Load Balancer</div><div class="desc">กระจายคำขอ · ตรวจสุขภาพเครื่อง</div></div>
+      </div>
+      <div class="down"><svg viewBox="0 0 24 24"><path d="M12 4v14M6 12l6 6 6-6"/></svg></div>
+
+      <div class="box zone">
+        <div class="box-head">
+          <span class="box-label">Amazon EC2 Instances</span>
+          <span class="box-note">กระจายสองโซน AZ-1 · AZ-2</span>
+        </div>
+
+        <div class="box sunken">
+          <div class="box-head"><span class="box-label">Auto Scaling Group</span></div>
+          <div class="row">
+            <div class="unit"><img src="icons/ec2.png" alt="">
+              <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
+            <div class="unit" id="n-web2"><img src="icons/ec2.png" alt="">
+              <div class="name">Web Server</div><div class="desc">AZ-2</div></div>
+          </div>
+        </div>
+        <div class="down"><svg viewBox="0 0 24 24"><path d="M12 4v14M6 12l6 6 6-6"/></svg></div>
+
+        <div class="box sunken">
+          <div class="box-head"><span class="box-label">App Tier</span></div>
+          <div class="row">
+            <div class="unit"><img src="icons/ec2.png" alt="">
+              <div class="name">App Server</div><div class="desc">AZ-1</div></div>
+            <div class="unit" id="n-app2"><img src="icons/ec2.png" alt="">
+              <div class="name">App Server</div><div class="desc">AZ-2</div></div>
+          </div>
+        </div>
+        <div class="down"><svg viewBox="0 0 24 24"><path d="M12 4v14M6 12l6 6 6-6"/></svg></div>
+
+        <div class="box sunken">
+          <div class="box-head"><span class="box-label">Data</span></div>
+          <div class="row">
+            <div class="unit" id="n-cache"><img src="icons/elasticache.png" alt="">
+              <div class="name">ElastiCache Tier</div><div class="desc">session · ผลที่ใช้ซ้ำ</div></div>
+            <div class="unit" id="n-rds"><img src="icons/rds.png" alt="">
+              <div class="name">Amazon RDS</div><div class="desc">หลัก AZ-1 · สำรอง AZ-2</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ขวา: ทางเข้าและไฟล์นิ่ง -->
+    <div class="col">
+      <div class="box">
+        <div class="box-head"><span class="box-label">ทางเข้า</span></div>
+        <div class="row" style="flex-direction:column;gap:26px">
+          <div class="unit" id="n-users"><img src="icons/users.png" alt="">
+            <div class="name">www.yourApp.com</div><div class="desc">ผู้ใช้ทั่วไป</div></div>
+          <div class="unit" id="n-dns"><img src="icons/route53.png" alt="">
+            <div class="name">Route 53</div><div class="desc">Hosted Zone</div></div>
+        </div>
+      </div>
+      <div class="box">
+        <div class="box-head"><span class="box-label">ไฟล์นิ่ง</span></div>
+        <div class="row" style="flex-direction:column;gap:26px">
+          <div class="unit" id="n-s3"><img src="icons/s3.png" alt="">
+            <div class="name">S3 Bucket</div><div class="desc">ไฟล์อัปโหลด · static</div></div>
+          <div class="unit" id="n-cdn"><img src="icons/cloudfront.png" alt="">
+            <div class="name">CloudFront</div><div class="desc">media.yourApp.com</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="k">สัญลักษณ์</span>
+    <span class="item"><span class="sw"></span> ขอบเขตที่ AWS จัดการให้</span>
+    <span class="item"><span class="sw zone"></span> เครื่องที่เราดูแลเอง</span>
+  </div>
+  <div class="foot">
+    AWS = Amazon Web Services · AZ = Availability Zone · CDN = Content Delivery Network<br>
+    ไอคอนเป็นชุด AWS Architecture Icons ทางการ ใช้ตามเงื่อนไขของผู้ให้บริการสำหรับผังสถาปัตยกรรม
+  </div>
+</div>
+
+<script>
+const WIRES = [
+  /* สายที่ข้ามขอบเขต ออกจาก "ขอบของกล่องขอบเขต" (n-region) ไม่ใช่จากกล่องข้างใน
+     ไม่งั้นเส้นจะพาดทะแยงทับทุกอย่างที่อยู่ระหว่างทาง */
+  {from:"n-users",  fs:"l", to:"n-dns",   ts:"l", label:"HTTPS"},
+  {from:"n-dns",    fs:"l", to:"n-region", ts:"r", tp:0.08, label:"DNS"},
+  {from:"n-region", fs:"r", fp:0.34, to:"n-s3",  ts:"l", label:"upload"},
+  {from:"n-s3",     fs:"r", to:"n-cdn",   ts:"r", label:"origin"},
+  {from:"n-region", fs:"l", fp:0.60, to:"n-ddb", ts:"r", label:"items"},
+  {from:"n-region", fs:"l", fp:0.30, to:"n-cw",  ts:"r", label:"metric", planned:true}
+];
+function anchor(el, side, box, p){
+  const r = el.getBoundingClientRect();
+  p = (p === undefined) ? 0.5 : p;
+  const x = {l:r.left, r:r.right, t:r.left+r.width*p, b:r.left+r.width*p}[side] - box.left;
+  const y = {l:r.top+r.height*p, r:r.top+r.height*p, t:r.top, b:r.bottom}[side] - box.top;
+  return [x, y];
+}
+function draw(){
+  const stage = document.getElementById("stage"), svg = document.getElementById("wires");
+  const box = stage.getBoundingClientRect();
+  document.querySelectorAll(".wire-label").forEach(n=>n.remove());
+  svg.querySelectorAll("path.wire").forEach(n=>n.remove());
+  for (const w of WIRES){
+    const a = document.getElementById(w.from), b = document.getElementById(w.to);
+    if (!a || !b){ console.warn("wire: ไม่พบ id", w.from, w.to); continue; }
+    const [x1,y1] = anchor(a, w.fs, box, w.fp), [x2,y2] = anchor(b, w.ts, box, w.tp);
+    const p = document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("class", "wire" + (w.planned ? " planned" : ""));
+    p.setAttribute("d", `M${x1} ${y1} L${x2} ${y2}`);
+    p.setAttribute("marker-end","url(#ah)");
+    svg.appendChild(p);
+    if (w.label){
+      const t = (w.lp === undefined) ? 0.5 : w.lp;
+      const d = document.createElement("div");
+      d.className = "wire-label";
+      d.style.left = (x1 + (x2-x1)*t) + "px";
+      d.style.top  = (y1 + (y2-y1)*t) + "px";
+      d.innerHTML = `<span class="pill">${w.label}</span>`;
+      stage.appendChild(d);
+    }
+  }
+}
+window.addEventListener("load", draw);   /* รอรูปไอคอนโหลดเสร็จก่อน ไม่งั้นตำแหน่งเพี้ยน */
+window.addEventListener("resize", draw);
+</script>
+</body></html>

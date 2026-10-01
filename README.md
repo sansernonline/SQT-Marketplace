@@ -133,7 +133,9 @@ powershell -ExecutionPolicy Bypass -File .\install-global.ps1      # Windows
 | [docs/USAGE.md](docs/USAGE.md) | ตัวอย่าง workflow จริง |
 | [docs/INSTALL.md](docs/INSTALL.md) | คู่มือติดตั้งแบบละเอียด + troubleshooting |
 | [docs/UPGRADE-IDEAS.md](docs/UPGRADE-IDEAS.md) | สำรวจของจากภายนอกที่เอามาอัปเกรดได้ |
-| [scripts/README.md](scripts/README.md) | สคริปต์ช่วยงาน 3 ตัว |
+| [docs/CLAUDE-WEB.md](docs/CLAUDE-WEB.md) | อัปโหลด plugin เข้า claude.ai (Cowork / แชทเว็บ) |
+| [docs/OTHER-LLMS.md](docs/OTHER-LLMS.md) | ใช้ชุดนี้กับ ChatGPT / Codex CLI / Gemini CLI / Gemini Gem |
+| [scripts/README.md](scripts/README.md) | สคริปต์ช่วยงาน 4 ตัว |
 
 ---
 
@@ -148,6 +150,7 @@ SQT-Marketplace/
 │       ├── agents/     (13)
 │       ├── skills/     (35)
 │       └── commands/   (15)
+├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
 ├── scripts/
 └── README.md
