@@ -28,9 +28,9 @@ description: Use when designing or building a phone app user interface for a pro
 ```
 1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน
 2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html out/ --width 390 --height 844   # iPhone
-   python scripts/screenshot.py mockup.html out/ --width 360 --height 800   # Android
-   python scripts/screenshot.py mockup.html out/ --width 430 --height 932   # Pro Max
+3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
+   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
+   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
 4. เปิดภาพดูจริงทุกขนาด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
 5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
 ```
@@ -151,9 +151,9 @@ description: Use when designing or building a phone app user interface for a pro
 
 ```bash
 # 1. หน้าตาถูกทุกขนาดจอไหม
-python scripts/screenshot.py mockup.html out/ --width 390 --height 844   # iPhone
-python scripts/screenshot.py mockup.html out/ --width 360 --height 800   # Android เล็ก
-python scripts/screenshot.py mockup.html out/ --width 430 --height 932   # Pro Max
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android เล็ก
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
 
 # 2. ระบบดีไซน์ยังสะอาดอยู่ไหม (ใช้ตัวตรวจของ web-app-design ได้เลย
 #    แต่ต้องส่ง --require เป็น token ชุดของระบบนี้ ไม่ใช่ชุดของเว็บ)

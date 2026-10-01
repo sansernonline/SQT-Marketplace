@@ -4,7 +4,7 @@ Marketplace สำหรับ Claude Code · **14 plugins** จำลองท�
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
-**รวม 68 agents · 98 skills · 41 commands** — core 59 skills + add-on 39 skills
+**รวม 68 agents · 100 skills · 41 commands** — core 61 skills + add-on 39 skills
 
 ---
 
@@ -27,7 +27,7 @@ powershell -ExecutionPolicy Bypass -File .\install-global.ps1      # Windows
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** ⭐ core | 13 | 59 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
+| **`software-company`** ⭐ core | 13 | 61 | 15 | บริษัทซอฟต์แวร์ทั่วไป |
 | `software-company-fintech` | 4 | 3 | 2 | การเงิน · PCI-DSS · payment |
 | `software-company-ai` | 5 | 3 | 2 | AI/ML · LLM · RAG |
 | `software-company-healthcare` | 4 | 3 | 2 | health tech · HIPAA · FHIR |

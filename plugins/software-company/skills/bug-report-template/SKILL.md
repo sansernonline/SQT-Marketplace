@@ -5,6 +5,10 @@ description: Use when reporting a bug, documenting a defect found during testing
 
 # Bug Report Template
 
+## Where bug reports live
+
+One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNN>/` — redact personal data first.
+
 ## When to use this skill
 
 - Filing a new bug during testing

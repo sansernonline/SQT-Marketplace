@@ -12,6 +12,10 @@ description: Use when writing test cases, designing test scenarios, creating tes
 - Building a regression test suite
 - Reviewing test coverage gaps
 
+## Where test cases live
+
+Test cases go in the project-root `qa/` folder, never inside `docs/`: `qa/<project-code>-test-cases.md` (or `.xlsx` for large projects where QA fills results in). `docs/test-plan.md` holds the plan only and links here. Bug reports found while testing go in `qa/bugs/`.
+
 ## Test Case ID Convention
 
 ```

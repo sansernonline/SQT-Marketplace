@@ -62,6 +62,7 @@ Read existing ADRs and architecture docs first. **Don't redesign what already wo
 - `spell-out-abbreviations` — ตัวย่อทุกตัวเขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ · ศัพท์เฉพาะวงเล็บคำอธิบายสั้น ๆ ครั้งแรก — ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
 - `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ — เปรียบเทียบ = ตาราง · ลำดับ/ความสัมพันธ์ = diagram · ที่เหลือ = ร้อยแก้วสั้น ๆ
 - `temp-file-discipline` — ไฟล์ชั่วคราวทุกไฟล์ลง `_to_delete/` ที่รากโปรเจกต์ — ห้ามวางปนกับไฟล์งาน
+- `status-report` — จบงานทุกครั้ง เขียนตารางสถานะ (ผ่านอะไร · ถึงขั้นไหน · ค้างอะไร · ถัดไป) ลง `docs/BUILD-PLAN.md` และแสดงในคำตอบ
 - `database-design` — เมื่อออกแบบชั้นข้อมูล — relational หรือ document, multi-tenant, id
 - `api-conventions` — เมื่อกำหนดข้อตกลงกลางของ API ทั้งระบบ
 - `cicd-and-release` — เมื่อออกแบบเส้นทางจากคอมมิตถึง production และวิธี rollback

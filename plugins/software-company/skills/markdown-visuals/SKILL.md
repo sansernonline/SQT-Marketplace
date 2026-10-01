@@ -154,13 +154,14 @@ Use when:
 
 ```
 docs/
-  assets/
+  figures/
     01-hover-state.svg
     02-empty-state.png
     architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
 ```
 
-- Put assets in `docs/assets/` (or `docs/images/`) — relative to the doc
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
 - Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
 - Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
 

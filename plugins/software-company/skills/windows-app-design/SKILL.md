@@ -28,7 +28,7 @@ description: Use when designing or building a desktop app that must look like a 
 ```
 1. คัดลอก assets/mockup-template.html + assets/fluent.css ไปไว้คู่กัน
 2. แก้เนื้อหาใน mockup ให้เป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html out/     → ได้ภาพ dark + light
+3. python scripts/screenshot.py mockup.html _to_delete/screenshots/     → ได้ภาพ dark + light
 4. เปิดภาพดูจริงทั้งสองโหมด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
 5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดียวกัน ไม่ออกแบบใหม่
 ```
@@ -137,9 +137,9 @@ description: Use when designing or building a desktop app that must look like a 
 ## 6 · ตรวจงาน — ห้ามข้าม
 
 ```bash
-python scripts/screenshot.py mockup.html out/                 # 1440px = Large
-python scripts/screenshot.py mockup.html out/ --width 900     # Medium
-python scripts/screenshot.py mockup.html out/ --width 600     # Small
+python scripts/screenshot.py mockup.html _to_delete/screenshots/                 # 1440px = Large
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900     # Medium
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600     # Small
 ```
 
 แล้วเปิดภาพดูจริง ตรวจตามนี้:

@@ -193,7 +193,7 @@
 
 ---
 
-## 🛠️ Skills (59)
+## 🛠️ Skills (61)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -673,6 +673,18 @@
 **Includes:** สามโครงที่ทดสอบแล้ว (`figure-context` ระบบกับโลกภายนอก · `figure-template` ข้างในเครื่อง · `figure-cloud` ผังคลาวด์), **ชุดไอคอนทางการ 205 ตัว** ของ AWS · Azure · Google Cloud · Kubernetes · ฐานข้อมูล · คิว · เครื่องมือ DevOps, กฎว่าหัวรูปต้องมีครบห้าอย่าง (ชื่อ · คำขยาย · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ), ระบบสีเจ็ดกลุ่มที่แต่ละกลุ่มต้องแปลว่าอะไรได้, การลากสายด้วยรายการ `WIRES` ที่คำนวณหลังจัดหน้าเสร็จ, ข้อควรระวังภาษาไทย (`line-height` ≥ 1.5 · ห้ามกำหนดความสูงตายตัว · ต้องใส่ `<br>` เอง), การเรนเดอร์ด้วย Playwright ที่ตัวคูณ 2 พร้อมรายการตรวจด้วยตา 9 ข้อ
 **Output:** ไฟล์ `.png` ความละเอียด 2 เท่า + ไฟล์ HTML ต้นทางที่เก็บไว้แก้ปีหน้าได้
 **Anti-patterns ที่กันไว้:** ใช้กับรูปในทีม, ใส่โลโก้ทางการในเอกสารเสนอขาย, สองกล่อง `.focus` ในรูปเดียว, ส่งไฟล์ HTML ให้ลูกค้า, ไม่เก็บไฟล์ต้นทาง, รูปไม่มีวันที่และเจ้าของ, ไอคอนต่างสไตล์ปนกัน
+
+---
+
+### 60. status-report
+**ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**Description:** Use at the END of every task that produces or checks project work — a document, a mockup, a review, a code round, a fix, a release. Writes one status table (what passed, what stage each item has reached, what is still pending, what comes next) into `docs/BUILD-PLAN.md` and shows the same table in the reply. Keeps one living snapshot plus a one-line history so anyone opening the project knows where it stands without reading the conversation. Load it before reporting "done", not after.
+
+---
+
+### 61. reference-app-research
+**ใช้กับ:** product-manager
+**Description:** Use when someone says "I want an app like X" — names an existing product (with or without a link) as the model for what to build. Researches that product in depth from official pages, documentation, changelogs, user reviews and close competitors, then writes one research document covering its features, user interface, user experience, strengths, weaknesses and — the most important part — concrete improvements our version should make, each backed by evidence and mapped to the requirement and screen it will become. The output feeds the BRD, SRS and mockup. Requires web search and fetch tools.
 
 ---
 

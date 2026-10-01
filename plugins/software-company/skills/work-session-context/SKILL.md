@@ -231,6 +231,7 @@ Keep INDEX.md **scannable** — < 50 entries visible at top level.
 - **At start of every workflow command** (e.g., `/feature-kickoff`): check context
 - **`polished-document-style`** — use for stakeholder-facing output, NOT for session files (those should be quick + scannable)
 - **`commit-message-format`** — when committing session file, use: `docs(context): <task summary>`
+- **`status-report`** — the project-wide status table lives in `docs/BUILD-PLAN.md` (what passed, stage, pending). Session files here record *how* the work went; link to BUILD-PLAN instead of copying its table
 
 ## Sample Workflow
 

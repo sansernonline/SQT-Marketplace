@@ -2,7 +2,7 @@
 
 ไฟล์นี้คือ plugin `software-company` ที่บีบอัดไว้สำหรับ **อัปโหลดเข้า claude.ai** เพื่อให้ใช้ skill ได้ใน Cowork และแชทบนเว็บ/เดสก์ท็อป — ไม่ใช่เฉพาะ Claude Code
 
-**ในไฟล์:** 59 skills · 13 agents · 15 commands · `plugin.json` v1.30.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**ในไฟล์:** 61 skills · 13 agents · 15 commands · `plugin.json` v1.31.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 
@@ -40,13 +40,16 @@ rm -f ../plugins-global/software-company.zip
 zip -q -r -X ../plugins-global/software-company.zip software-company
 ```
 
-PowerShell:
+Windows (ไม่มีคำสั่ง `zip`) — ใช้ Python:
 
 ```powershell
 node scripts\validate-marketplace.mjs
-Remove-Item plugins-global\software-company.zip -ErrorAction SilentlyContinue
-Compress-Archive -Path plugins\software-company -DestinationPath plugins-global\software-company.zip
+cd plugins
+Remove-Item ..\plugins-global\software-company.zip -ErrorAction SilentlyContinue
+python -c "import os,zipfile; z=zipfile.ZipFile('../plugins-global/software-company.zip','w',zipfile.ZIP_DEFLATED); [z.write(os.path.join(d,f), os.path.join(d,f).replace(os.sep,'/')) for d,_,fs in os.walk('software-company') for f in fs]; z.close()"
 ```
+
+> ⚠️ **ห้ามใช้ `Compress-Archive`** ของ Windows PowerShell 5.1 — มันเก็บ path ในไฟล์ zip ด้วย `\` แทน `/` ระบบที่ไม่ใช่ Windows จะเห็นเป็นชื่อไฟล์ยาวไฟล์เดียว ไม่ใช่โฟลเดอร์
 
 > ⚠️ ต้อง zip จากในโฟลเดอร์ `plugins/` เพื่อให้โฟลเดอร์หลักในไฟล์เป็น `software-company/` ไม่ใช่ `plugins/software-company/`
 
