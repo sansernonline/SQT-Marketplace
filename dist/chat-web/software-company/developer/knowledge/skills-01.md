@@ -285,7 +285,7 @@ fix(profile): correct date format in display
 
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code. Forces the simplest solution that actually works — ask whether it is needed at all, then the standard library before custom code, native features before dependencies, and one line before fifty. Also triggers on complaints about bloat. For documents and plans use simplicity-first.
+Use when writing, fixing, refactoring or reviewing code. Forces the simplest solution that actually works — ask whether it is needed at all, then the standard library before custom code, native features before dependencies, and one line before fifty. Lazy about how much code exists, never about where it lives — one concern per file, feature folders, clear names, the layout a software engineer expects. Also triggers on complaints about bloat or scattered code. For documents and plans use simplicity-first.
 
 # Lazy Coding
 
@@ -319,9 +319,26 @@ not a research project. The first lazy solution that works is the right one.
 - No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
 - No scaffolding "for later." Later can scaffold for itself.
 - Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
-- Fewest files. Shortest working diff wins.
+- Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
 - Match the repo — read 2-3 nearby files first and copy their style.
 - Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.
+
+## Simple is not scattered
+
+Lazy cuts *how much* code exists. It never cuts *where code lives*. A 40-line
+project still looks like software engineering, not a scratchpad:
+
+- **One concern per file.** Entry point, logic, config and I/O each have their own place. A `main.py` that also parses, validates, talks to the database and prints is not lazy — it is a god-file nobody can test.
+- **Feature folders, not type folders.** `invoice/` holds everything about invoices (`readable-code` §7). No `utils/` dumping ground.
+- **Names carry meaning.** Lazy is not `tmp`, `data`, `handle()`. Follow `readable-code` §1–4.
+- **Boundaries stay explicit.** Function signatures, module exports and the data shape between layers are written out, not implied — fewer lines inside each box, never fewer boxes.
+- **Config and secrets outside code.** Even one environment variable goes in `.env.example`, not inline.
+- **Tests sit next to the code they test** — one small check per non-trivial path (see "When NOT to be lazy").
+- **New project → `project-bootstrap` first.** Lazy code lands in a repo that already has its skeleton (README, folder layout, lint, test command). Never scatter files at the root to save a minute.
+
+Test: a tired teammate opens the repo cold. Can they guess which file holds a
+given behaviour in 30 seconds? If not, the structure is not too complex — it
+is *missing*.
 
 ## Mark your simplifications
 
@@ -370,8 +387,9 @@ unless asked. Trivial one-liners need no test.
 
 ## Pairs with
 
+- `readable-code` — **always load together**. Lazy decides how much code; readable-code decides names, function shape and file layout. One without the other gives either bloat or a scratchpad.
+- `project-bootstrap` — the repo skeleton lazy code lands in.
 - `simplicity-first` — same spirit, for docs, plans, and architecture.
-- `readable-code` — the other half: fewer lines is not the same as readable lines. Naming, function shape, comments, file layout.
 - `code-review-checklist` — the lazy diff still gets reviewed.
 
 

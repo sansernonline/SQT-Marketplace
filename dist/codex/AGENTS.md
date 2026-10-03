@@ -1,6 +1,6 @@
 # SQT Software Company — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/ โดย scripts/build-targets.mjs (v1.31.0) — ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/ โดย scripts/build-targets.mjs (v1.32.0) — ห้ามแก้ไฟล์นี้โดยตรง
 
 ชุดนี้จำลองทีมพัฒนาซอฟต์แวร์ครบทุกบทบาท ประกอบด้วย skill 100 ตัว
 บทบาท 68 บทบาท และคำสั่งสำเร็จรูป 41 คำสั่ง

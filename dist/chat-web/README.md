@@ -1,6 +1,6 @@
 # ChatGPT Custom GPT / Gemini Gem
 
-> สร้างอัตโนมัติโดย scripts/build-targets.mjs (v1.31.0) — ห้ามแก้ไฟล์ในโฟลเดอร์นี้โดยตรง
+> สร้างอัตโนมัติโดย scripts/build-targets.mjs (v1.32.0) — ห้ามแก้ไฟล์ในโฟลเดอร์นี้โดยตรง
 
 หนึ่งโฟลเดอร์ = หนึ่ง GPT หรือ Gem (`<plugin>/<role>/`)
 
