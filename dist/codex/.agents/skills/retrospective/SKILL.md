@@ -3,6 +3,8 @@ name: "retrospective"
 description: "Run a sprint retrospective covering what went well, what didn't, and action items."
 ---
 
+> **ทางลัดเข้า A-Team:** เปิด skill `agent-team` ด้วย playbook `learn-from-session` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน · ขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ใช้ประกอบ playbook ไม่ใช่แทนที่
+
 Use the `project-manager` agent to facilitate a retrospective for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 The PM should run this structured retro:

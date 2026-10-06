@@ -1,6 +1,6 @@
 ---
 name: data-import-export
-description: Use when a system takes data in from a spreadsheet or sends data out as one. Covers a downloadable template, validating everything before writing anything, an error report naming the row and column, large files as a background job, the Excel traps that silently corrupt Thai data, the Buddhist year question, and exports that do not leak.
+description: Use when a system imports or exports spreadsheet data. Template, validate before writing, row and column error report, large files in the background, Excel traps for Thai data, Buddhist years, leak-free exports.
 ---
 
 # นำเข้าและส่งออกข้อมูล

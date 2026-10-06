@@ -1,0 +1,6 @@
+# Locked network: outbound traffic only to hosts in allowlist.txt (applied by init-firewall.sh).
+services:
+  dev:
+    cap_add: [NET_ADMIN, NET_RAW]
+    volumes:
+      - ./allowlist.txt:/etc/sandbox/allowlist.txt:ro

@@ -3,6 +3,8 @@ name: "security-scan"
 description: "Run a security audit on code, dependencies, or infrastructure using security-engineer agent. Identifies vulnerabilities with OWASP-aligned findings."
 ---
 
+> **ทางลัดเข้า A-Team:** เปิด skill `agent-team` ด้วย playbook `review` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน · ขั้น security gate ใช้ skill `security-gate` · ขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ใช้ประกอบ playbook ไม่ใช่แทนที่
+
 Use the `security-engineer` agent to perform a security scan on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 The security engineer should:

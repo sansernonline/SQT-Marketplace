@@ -4,6 +4,8 @@ description: Run a comprehensive code review using the developer agent + code-re
 argument-hint: <file path or PR description>
 ---
 
+> **ทางลัดเข้า A-Team:** เปิด skill `agent-team` ด้วย playbook `review` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน · ขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ใช้ประกอบ playbook ไม่ใช่แทนที่
+
 Use the `developer` agent to perform a thorough code review of: **$ARGUMENTS**
 
 The developer should:

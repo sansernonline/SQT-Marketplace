@@ -1,6 +1,6 @@
 ---
 name: product-naming
-description: Use when naming a product, app, module, brand or code name — including when the name is invented rather than descriptive. Generates candidates from nine repeatable formulas instead of free association, screens them against the six tests that kill a name, attaches a meaning to a name that did not start with one and ships a bank of Latin, Greek and borrowed-word roots, keeps a family consistent when there are several products, checks availability before anyone falls in love with one, and covers how a name behaves when Thai speakers say and type it.
+description: Use when naming a product, app, module, brand or code name, including invented names. Nine formulas, six kill tests, a root-word bank, family consistency, availability checks, and how Thai speakers say and type it.
 ---
 
 # ตั้งชื่อผลิตภัณฑ์

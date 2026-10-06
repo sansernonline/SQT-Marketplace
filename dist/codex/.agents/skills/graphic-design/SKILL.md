@@ -1,6 +1,6 @@
 ---
 name: graphic-design
-description: Use for visual work that is not an app screen — a logo, a brand colour and type system, a poster, a flyer, a social post, a rich menu, a label or a cover image. Forces a written direction before any pixels, picks from named positions instead of averaging, carries real numbers for print and platform sizes, and covers Thai typography.
+description: Use for visual work that is not an app screen (logo, brand colour and type, poster, flyer, social post, rich menu, label, cover). Written direction first, named positions, real print and platform sizes, Thai typography.
 ---
 
 # Graphic Design

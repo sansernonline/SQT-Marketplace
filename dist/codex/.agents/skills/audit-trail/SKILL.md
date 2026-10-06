@@ -1,6 +1,6 @@
 ---
 name: audit-trail
-description: Use when a system has to answer who did what and when — approvals, money, permissions, personal data. Defines the fields every record needs, which events are worth recording, why the audit log is separate from the application log and append only, and what personal data must never be written into it. It cannot be filled in backwards.
+description: Use when a system must answer who did what and when (approvals, money, permissions, personal data). Required fields, events worth recording, a separate append-only log, and what personal data must never go in it.
 ---
 
 # ร่องรอยการใช้งาน (audit trail)

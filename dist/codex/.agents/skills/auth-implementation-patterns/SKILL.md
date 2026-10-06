@@ -1,6 +1,6 @@
 ---
 name: auth-implementation-patterns
-description: Use when implementing authentication, designing login flows, choosing between session vs JWT, implementing OAuth/SSO, adding MFA, password reset, or any identity & access management feature. Covers patterns, security pitfalls, and concrete implementation guidance.
+description: Use when implementing authentication or identity features (login flows, session vs JWT, OAuth/SSO, MFA, password reset). Patterns, security pitfalls and implementation guidance.
 ---
 
 # Authentication Implementation Patterns

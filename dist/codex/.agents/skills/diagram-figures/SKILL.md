@@ -1,7 +1,9 @@
 ---
 name: diagram-figures
-description: Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document or a sign-off package. Lays the figure out by hand as an HTML page and photographs it, which buys control automatic layout cannot give. Ships three tested layouts and the official cloud vendor icon sets.
+description: Use when an architecture picture must look designed, not generated (proposal, slide, print, sign-off). Lays it out by hand as an HTML page and screenshots it. Three tested layouts plus official cloud icon sets.
 ---
+
+> **สีเริ่มต้น = ชุดประจำบ้าน** ถ้า `doc-theme` ไม่ได้ประกาศ accent เฉพาะงาน ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") — brand `#2A78D6` และชุดเดียวกับสไลด์/เอกสาร
 
 # Diagram Figures
 

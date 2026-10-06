@@ -1,9 +1,15 @@
 {
   "name": "software-company",
-  "version": "1.32.0",
-  "description": "Simulates a complete software development company with PM, BA, SA, Architect, UX, Developer, Tester, and DevOps roles. Includes specialized skills and slash commands for common SDLC workflows.",
+  "version": "2.0.0",
+  "description": "Simulates a complete software development company — 38 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 101 skills and 28 slash commands for the whole SDLC.",
   "author": {
     "name": "Square Tech Solutions Co., Ltd."
   },
-  "keywords": ["software-development", "sdlc", "agile", "team", "template"]
+  "keywords": [
+    "software-development",
+    "sdlc",
+    "agile",
+    "team",
+    "template"
+  ]
 }

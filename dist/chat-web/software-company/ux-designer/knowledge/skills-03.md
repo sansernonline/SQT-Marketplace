@@ -1,219 +1,451 @@
-# skill: mobile-app-design
+# skill: simplicity-first
 
-Use when designing or building a phone app user interface for a progressive web app, a web-wrapped app, React Native or Flutter. Ships a token contract, a four-family typography system, a phone-frame mockup template, safe-area handling, Thai-English font switching and a render-and-look loop at real phone sizes. Not for desktop or Windows.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, UX, API design, sprint plan). Simplest version that works, the tired-teammate test, no buzzwords or extra layers. For code use lazy-coding.
 
-# Mobile App Design
+# Simplicity First
 
-> **กฎข้อเดียว:** หน้าจอมือถือมีที่ให้แสดงน้อยกว่าที่คุณคิดครึ่งหนึ่ง
-> ทุกอย่างที่ไม่ใช่เนื้อหาต้องเงียบลงจนแทบมองไม่เห็น
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
-## เมื่อไหร่ใช้ skill นี้
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
 
-- ทำหน้าจอแอปมือถือ: รายการเนื้อหา, บทสนทนา/แชท, หน้าสรุปผล, ตั้งค่า, onboarding
-- PWA · เว็บที่ห่อเป็นแอป (Capacitor / Cordova / WebView) · React Native · Flutter
-- แอปที่มีเนื้อหาให้อ่านเยอะ — เรียนภาษา, อ่านบทความ, คอร์สออนไลน์
-- ต้องรองรับไทย–อังกฤษปนกัน
+## The one test
 
-## เมื่อไหร่ **ไม่** ใช้
+Before submitting, ask:
 
-- เว็บแอปบนเดสก์ท็อป (แดชบอร์ด/admin) → `web-app-design`
-- แอปเดสก์ท็อป Windows → `windows-app-design`
-- เอกสาร .docx/.pptx → `branded-document-design`
+> Could a tired teammate understand this in 6 months, with no prior context?
+
+If "no" or "not sure" → simplify.
+
+## 5 principles
+
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
+
+## By output type
+
+### Documents (BRD, FSD, ADR)
+
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+
+### Architecture
+
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
+
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
+
+### Plans
+
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
+
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
+
+### Designs (UX, API)
+
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
+
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
+
+## The 3-question filter
+
+Before adding any new component, configuration option, or pattern:
+
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
+
+Two or more answers point to "simpler is fine" → don't add it.
+
+## Examples
+
+**API description**
+
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
+
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
+
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## Pre-submit checklist
+
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
+
+If any answer is "no" → simplify before delivering.
+
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry
+
 
 ---
 
-## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
+# skill: markdown-visuals
 
-```
-1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน
-2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
-   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
-   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
-4. เปิดภาพดูจริงทุกขนาด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
-5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
-```
+Use when a markdown document needs a picture (wireframe, UI state, architecture, flow, data viz). Picks inline SVG, image, ASCII or Mermaid and embeds it so it renders in GitHub, Notion, VS Code and Obsidian.
 
-เปิด mockup บนจอคอมกว้างกว่า 560px จะเห็นเป็น **กรอบเครื่องลอยบนพื้นเข้ม**
-ส่งลิงก์ให้ลูกค้าดูได้เลยโดยไม่ต้องอธิบายว่านี่คือหน้าจอมือถือ
+# Markdown Visuals
+
+> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- Producing **any** design mockup, wireframe, or UI spec
+- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user said "make a mockup," "show me how it looks," or "design X"
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
 
 ---
 
-## 2 · Design tokens
+## Decision tree: which format?
 
-> **สีมาจากเนื้องาน — ถามก่อนเริ่ม**
-> มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
-> (ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
+```
+What are you showing?
+│
+├─ UI mockup / component state / icon       →  Inline SVG
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / sequence / decision tree          →  Mermaid (see polished-document-style)
+├─ Architecture / ER / class                →  Mermaid
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
 
-อยู่ครบใน `assets/speakgo.css` · ตารางเต็มใน **`references/tokens.md`**
+**Default to inline SVG** for anything that isn't a flow/sequence (use Mermaid for those). It renders everywhere, versions in git, doesn't bloat the repo with binaries, and the user can read/edit the markup.
+
+---
+
+## 1 · Inline SVG (primary technique)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background -->
+  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+
+**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
+ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
+
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
 
 | Token | หน้าที่ | ได้มาจาก |
 |---|---|---|
-| พื้นหน้าจอ / การ์ด | พื้นเป็น**เทาอ่อน ไม่ใช่ขาว** การ์ดจะได้ลอยขึ้นมาโดยไม่ต้องมีเงา | เทาอ่อนมาก / ขาว |
-| ข้อความ 3 ระดับ | หลัก · รอง · จาง | เข้ม → อ่อน · หลัก contrast ≥ 4.5:1 |
-| `--accent` | แท็บที่เลือก · ความคืบหน้า · ปุ่มหลัก | **สีหลักที่ผู้ใช้เลือก** |
-| ไทล์ไล่สี | ปลายสองข้างของ gradient | สีหลัก → เพื่อนบ้านบนวงล้อสี |
-| สีบอกสถานะของเนื้อหา | ต้องแก้ · คำใบ้ · ถูกใจ — **มีสีพื้นอ่อนคู่กันทุกตัว** | ตามความหมาย ไม่ตามแบรนด์ |
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
 
-**สีที่บอกสถานะไม่เปลี่ยนตามแบรนด์** — แดงคือจุดที่ต้องแก้ ไม่ว่าแบรนด์จะเป็นสีอะไร
-ถ้าสีแบรนด์ชนกับสีสถานะ ให้เลี่ยงการใช้แบรนด์ในบริบทนั้น ไม่ใช่เปลี่ยนสีสถานะ
+**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
 
-**ชื่อ token ตั้งตามหน้าที่ ไม่ใช่ตามสี** — `--repair` ไม่ใช่ `--red`
-วันที่เปลี่ยนใจว่าจุดที่ต้องแก้ควรเป็นสีส้ม แก้ค่าเดียวโดยชื่อยังถูกอยู่
+### Reusable SVG snippets
 
-`assets/speakgo.css` มาพร้อมชุดสีหนึ่งชุดเป็น**ตัวอย่างที่ประกอบครบแล้ว** ไม่ใช่ค่ามาตรฐาน
-เปลี่ยนค่าใน `:root` ให้ตรงกับเนื้องานก่อนทำ mockup แรก
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
 
----
-
-## 3 · ฟอนต์ 4 ตระกูล — หัวใจของระบบนี้
-
-| Token | ฟอนต์ | หน้าที่ |
-|---|---|---|
-| `--ui` | IBM Plex Sans Thai | ปุ่ม เมนู ป้าย ชื่อหน้า — ทุกอย่างที่เป็น "แอป" |
-| `--dis` | Space Grotesk | ตัวเลขใหญ่ — คะแนน สถิติ |
-| `--text` | Source Serif 4 | เนื้อหาที่ผู้ใช้ต้อง **อ่าน** — บับเบิล ประโยคตัวอย่าง |
-| `--mono` | system mono | ป้ายกำกับพิมพ์ใหญ่ + `letter-spacing:.14em` — META · LEVEL · TURN 5/12 |
-
-**อย่ายุบให้เหลือตระกูลเดียว** — การแยกฟอนต์ทำให้ผู้ใช้แยก "สิ่งที่แอปพูด"
-ออกจาก "ปุ่มของแอป" ได้ทันทีโดยไม่ต้องพึ่งสี ซึ่งสำคัญมากบนจอเล็ก
-
-`body[data-lang="en"]` สลับ `--ui` เป็น Space Grotesk เมื่อ UI เป็นอังกฤษล้วน
-
----
-
-## 4 · โครงหน้าจอ
-
-```
-┌─────────────────────────┐  #app  max-width 430px · 100dvh
-│ .appbar                 │  padding-top + safe-area-inset-top
-│   h1 24/700             │
-│   .sub  mono 10 UPPER   │
-├─────────────────────────┤
-│ .screen.on  (เลื่อนได้)  │  ← มีหลาย .screen สลับด้วยคลาส .on
-│   .chips  (เลื่อนขวาได้) │
-│   .tiles  2 คอลัมน์      │
-│   .card / .sg           │
-│   .cta                  │
-├─────────────────────────┤
-│ .tabbar  3–5 แท็บ        │  padding-bottom + safe-area-inset-bottom
-└─────────────────────────┘
-
-.overlay.on = หน้าจอทับเต็ม สำหรับงานที่ใช้เวลานาน (บทสนทนา, แบบทดสอบ)
-              ใช้แทน modal เพราะงานพวกนี้ไม่ได้จบใน 3 วินาที
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
 ```
 
-กฎที่คนทำเว็บมาทำมือถือมักพลาด:
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
 
-- **`100dvh` ไม่ใช่ `100vh`** — `vh` ไม่หดตามแถบที่อยู่ เนื้อหาท่อนล่างจะโดนบัง
-- **`env(safe-area-inset-*)`** ที่ appbar/tabbar/dock + `viewport-fit=cover` ใน meta viewport
-  ไม่งั้นชนรอยบากบนและ home indicator ล่าง
-- **เลื่อนที่ `.screen` ไม่ใช่ที่ `body`** — `body{overflow:hidden}` แถบบน/ล่างจะได้อยู่นิ่ง
-- **ไม่มี hover บนมือถือ** — สถานะที่ผู้ใช้เห็นได้มีแค่ `:active` ทุกอย่างที่กดได้ต้องยุบ
-  (`transform:scale(.98)`) และตั้ง `-webkit-tap-highlight-color:transparent`
-- **เป้าแตะ ≥ 44×44px** (แนวทาง Apple) — ปุ่มไอคอน 38px ต้องมี padding รอบให้ถึง 44
-- **แท็บล่าง 3–5 อัน** เกินนั้นนิ้วโป้งเอื้อมไม่ถึงและป้ายจะตัดคำ
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+### Worked example — UI state mockup
+
+This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
+
+```markdown
+## 2 · External image files
+
+Use when:
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
 
 ---
 
-## 5 · คอมโพเนนต์ที่มีให้แล้ว
+## 3 · ASCII art
 
-| กลุ่ม | คลาสหลัก |
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+### Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+### Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+---
+
+## 4 · Mermaid
+
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
 |---|---|
-| รายการ | `.tile` (ไทล์ไล่สี) · `.card` · `.sg` (แถว + แถบความคืบหน้า) · `.heart` · `.lvl` |
-| ตัวควบคุม | `.chips/.chip` · `.lvlchip` · `.cta` · `.outline` · `.seg` · `.iconbtn` |
-| ตั้งค่า | `.group > .r2 / .rcol` (การ์ดเดียว แถวคั่นด้วยเส้น แบบ iOS) |
-| สนทนา | `.turn.ai/.me > .bub` · `.repair` (`del`/`ins`) · `.hintbox` · `.acts/.actbtn` · `.dots` |
-| แถบไมค์ | `.dock` · `#mic(.live/.busy)` · `.typerow` · `#interim` |
-| สรุปผล | `.score` · `.mini` · `.bar` · `.verdict` · `.wk` · `.stat` |
-
-**บับเบิลสนทนา:** มุม 18px ทุกด้าน ยกเว้นมุมที่ชี้เข้าหาผู้พูดเหลือ **5px** —
-บอกว่าใครพูดโดยไม่ต้องวาดหางบับเบิล
-
-**กล่องแก้ไข (`.repair`):** ใช้ `<del>` ขีดฆ่า + `<ins>` ขีดเส้นใต้ —
-สื่อความหมายได้แม้ผู้ใช้ตาบอดสี ห้ามใช้สีอย่างเดียว
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
 
 ---
 
-## 6 · ภาษาไทยบนจอเล็ก
+## Combining formats in one doc
 
-- **IBM Plex Sans Thai** วรรณยุกต์ไม่ชนสระที่ขนาดเล็ก และมีน้ำหนัก 400–700 ครบ
-- ระยะบรรทัด **1.5–1.75** — ไทยต้องการมากกว่าอังกฤษ ยิ่งจอเล็กยิ่งต้องหายใจ
-- **ห้าม `text-transform:uppercase` กับข้อความไทย** — ไม่มีผลกับตัวไทย แต่
-  `letter-spacing` ที่มักมาคู่กันจะดันวรรณยุกต์เพี้ยน ป้าย mono ใช้กับอังกฤษเท่านั้น
-- ปุ่มไทยกว้างกว่าอังกฤษ ~20% — อย่า fix ความกว้างปุ่ม ให้ปุ่มหลักเต็มความกว้างไปเลย
-- ทดสอบด้วยข้อความไทยจริง ไม่ใช่ Lorem ipsum
+A full design spec usually mixes formats. Pattern from `DockXI/docs/12-design-mockup.md`:
 
----
-
-## 7 · ตรวจงาน
-
-```bash
-# 1. หน้าตาถูกทุกขนาดจอไหม
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android เล็ก
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
-
-# 2. ระบบดีไซน์ยังสะอาดอยู่ไหม (ใช้ตัวตรวจของ web-app-design ได้เลย
-#    แต่ต้องส่ง --require เป็น token ชุดของระบบนี้ ไม่ใช่ชุดของเว็บ)
-node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
-  --require "--bg,--surface,--ink,--soft,--faint,--line,--signal,--repair,--hint,--ui,--dis,--text,--mono,--r-tile,--r-card,--app-max,--gutter"
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
 ```
 
-> ข้อยกเว้นเดียวที่ยอมให้มีสีดิบ: `<meta name="theme-color">` ใน `index.html` —
-> เบราว์เซอร์อ่าน meta ก่อน CSS โหลด จึงใช้ `var()` ไม่ได้
-
-เปิดภาพดูจริง ตรวจ:
-
-- [ ] แถบบน/ล่างไม่โดนรอยบากหรือ home indicator ทับ
-- [ ] เลื่อนแล้วแถบบน/ล่างอยู่นิ่ง ไม่เลื่อนตาม
-- [ ] จอ 360px (Android เล็ก) ป้ายแท็บไม่ตัดคำ · ไทล์ไม่ล้น
-- [ ] ปุ่มทุกอันแตะได้จริง ≥ 44×44px
-- [ ] ข้อความไทยไม่ล้นปุ่ม วรรณยุกต์ไม่ชนสระ
-- [ ] คอนทราสต์ ≥ 4.5:1 (`--faint` บนพื้นขาวคือจุดที่เฉียดสุด — ใช้กับข้อความประกอบเท่านั้น)
-- [ ] มี empty state (`.blank`) ทุกที่ที่รายการอาจว่าง
-- [ ] สลับทั้งธีมเรียบและธีมไล่สีแล้วไม่มีข้อความกลืนพื้น
-- [ ] ทางเลือก "พิมพ์แทนพูด" ยังอยู่ (ผู้ใช้อาจอยู่ในที่ที่พูดไม่ได้)
+Don't pick one format and force everything into it — each format has a sweet spot.
 
 ---
 
-## 8 · Anti-patterns
+## Accessibility checklist
 
-- ❌ **`100vh`** — ใช้ `100dvh`
-- ❌ **ลืม `env(safe-area-inset-*)`** หรือลืม `viewport-fit=cover`
-- ❌ **ยัด 6+ แท็บในแถบล่าง** — 3–5 พอ ที่เหลือไปอยู่ในหน้า "เพิ่มเติม"
-- ❌ **modal เล็ก ๆ สำหรับงานที่ใช้เวลานาน** — ใช้ `.overlay` เต็มจอ
-- ❌ **ยุบฟอนต์เหลือตระกูลเดียว** — เสียกลไกแยกเนื้อหาออกจาก chrome
-- ❌ **ไล่สีหลังข้อความยาว** — ไล่สีอยู่บน chrome และปุ่มหลักเท่านั้น
-- ❌ **พึ่งสีอย่างเดียวบอกความหมาย** — `del`/`ins` มีรูปแบบขีดของตัวเองอยู่แล้ว
-- ❌ **ไม่มี `:active` feedback** — มือถือไม่มี hover ถ้ากดแล้วไม่ขยับ ผู้ใช้จะกดซ้ำ
-- ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดูที่ขนาดจริง**
+For every visual:
 
----
-
-## 9 · ข้อจำกัดที่ต้องรู้
-
-- ค่าทั้งหมด **ตรวจแล้วบน HTML/CSS** — ตาราง React Native / Flutter ใน
-  `references/tokens.md` เป็นการเทียบกลไก **ยังไม่ได้ build ทดสอบ**
-  ค่าโอนได้ตรง ๆ แต่ให้ดูหน้าจอจริงบนเครื่องอีกรอบ
-- ฟอนต์โหลดจาก Google Fonts ใน mockup — แอปจริงควร bundle ไฟล์ฟอนต์ไปเลย
-  ไม่งั้นเปิดครั้งแรกตอนเน็ตช้าจะเห็นฟอนต์ระบบก่อนแล้วค่อยกระตุก
-- ระบบนี้ออกแบบมาสำหรับ **โหมดสว่าง** ถ้าต้องมีโหมดมืดต้องเพิ่มชุด token ใหม่
-  (พื้น `--bg`/`--surface` สลับลำดับ และ `--ink` ต้องไม่ใช่ขาวสนิท)
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
 
 ---
 
-## 10 · เชื่อมกับ skill อื่น
+## Anti-patterns
 
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| user flow / IA ก่อนลงสี | agent `ux-designer` |
-| เว็บแอปเดสก์ท็อปของระบบเดียวกัน | `web-app-design` |
-| ตัวตรวจ hardcode สีใน CI | `web-app-design` → `scripts/check-design-tokens.mjs` |
-| เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
-| App Store Optimization | `software-company-mobile` → `app-store-optimization` |
-| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
-| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
+- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- ❌ **PNG screenshots of text** — use the text, in a code block
+- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
+- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax for GitHub compat
+- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+
+---
+
+## Quick-start recipe
+
+When the user asks for a design / mockup:
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+If unsure whether a visual will render, mention that the user should preview in GitHub/Notion to confirm.
+
+---
+
+## Related skills
+
+- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
+- [[simplicity-first]] — don't over-design the diagram; show what's needed
+- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
+- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
 
 ---
 
@@ -223,358 +455,285 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
 หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
 
 
-## reference: tokens.md
-
-# Token reference — ระบบดีไซน์แอปมือถือสไตล์ Speak Go
-
-> ⚠️ **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานก่อนเสมอ (ดูข้อ "สีมาจากเนื้องาน" ใน `SKILL.md`)
-> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่าสี
-> ขนาด ระยะ มุม และ breakpoint เป็นค่าคงที่ — พวกนั้นคัดลอกไปใช้ได้เลย
-
-นิยามทั้งหมดอยู่ใน `assets/speakgo.css` บล็อก `:root`
-**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** — ใช้ตัวตรวจตัวเดียวกับ `web-app-design` ได้
-
-## สารบัญ
-
-1. [สี](#สี)
-2. [ฟอนต์ — 4 ตระกูล 4 หน้าที่](#ฟอนต์--4-ตระกูล-4-หน้าที่)
-3. [สเกลตัวอักษร](#สเกลตัวอักษร)
-4. [รูปทรง](#รูปทรง)
-5. [เลย์เอาต์และ safe area](#เลย์เอาต์และ-safe-area)
-6. [ธีม](#ธีม)
-7. [ย้ายไปสแต็กอื่น](#ย้ายไปสแต็กอื่น)
-8. [คลาสที่มีให้แล้ว](#คลาสที่มีให้แล้ว)
-
 ---
 
-## สี
+# skill: ui-craft
 
-| Token | ค่า | ใช้กับ |
-|---|---|---|
-| `--bg` | `#F2F4F6` | พื้นหน้าจอ — เทาอ่อน ไม่ใช่ขาว การ์ดจะได้ลอยขึ้นมา |
-| `--surface` | `#FFF` | การ์ด · แถบล่าง · ช่องกรอก |
-| `--ink` | `#131A21` | ข้อความหลัก · พื้นปุ่มหลัก · บับเบิลของผู้ใช้ |
-| `--soft` | `#66727E` | ข้อความรอง · คำอธิบาย |
-| `--faint` | `#98A3AD` | ป้ายกำกับ · meta · ไอคอนที่ไม่ active |
-| `--line` | `#E2E7EB` | เส้นขอบ · รางแถบความคืบหน้า |
-| `--signal` | `#0E7C86` | แท็บที่เลือก · ความคืบหน้า · ไมค์ตอนอัด |
-| `--signal-soft` | `#E3F1F2` | พื้นป้ายระดับ |
-| `--repair` / `-bg` | `#C0392B` / `#FBEDEB` | จุดที่ต้องแก้ |
-| `--hint` / `-bg` | `#8A6D1F` / `#FBF4E3` | คำใบ้ |
-| `--fav` | `#D9455F` | หัวใจ / ถูกใจ |
-| `--tile1` → `--tile2` | `#0B7076` → `#4338A8` | ไล่สีบนไทล์หมวดหมู่ |
+Use on any task that produces a screen or screen spec, alongside the platform skill. One spacing scale, one type scale, one hierarchy per screen, accessible contrast, five screen states. Sets no colours or fonts.
 
-> ชื่อ token ตั้งตาม **หน้าที่** ไม่ใช่ตามสี — `--repair` ไม่ใช่ `--red`
-> พอเปลี่ยนใจว่า "จุดที่ต้องแก้" ควรเป็นสีส้ม ก็แก้ที่เดียวโดยชื่อยังถูกอยู่
+# UI Craft
 
-## ฟอนต์ — 4 ตระกูล 4 หน้าที่
-
-นี่คือสิ่งที่ทำให้ระบบนี้ต่างจากแอปทั่วไป **อย่ายุบให้เหลือตระกูลเดียว**
-
-| Token | ฟอนต์ | ใช้กับ |
-|---|---|---|
-| `--ui` | IBM Plex Sans Thai | ส่วนควบคุมทั้งหมด — ปุ่ม เมนู ป้าย ชื่อหน้า |
-| `--dis` | Space Grotesk | ตัวเลขใหญ่ — คะแนน สถิติ (`.score b`, `.mini b`, `.stat b`) |
-| `--text` | Source Serif 4 | เนื้อหาที่ผู้ใช้ต้อง **อ่าน** — บับเบิล ประโยคตัวอย่าง |
-| `--mono` | system mono | ป้ายกำกับตัวพิมพ์ใหญ่ + `letter-spacing:.14em` — META, LEVEL, TURN 5/12 |
-
-`body[data-lang="en"]` สลับ `--ui` เป็น Space Grotesk
-(IBM Plex Sans Thai มีอักษรละตินแต่หน้าตาไม่คมเท่าเมื่อไม่มีไทยปน)
-
-**ทำไม serif กับบับเบิล:** เนื้อหาที่ต้องอ่านยาวและอ่านซ้ำ serif ช่วยแยกตัวอักษรได้ดีกว่า
-และแยก "สิ่งที่แอปพูด" ออกจาก "ปุ่มของแอป" ได้ทันทีโดยไม่ต้องใช้สี
-
-## สเกลตัวอักษร
-
-| ขนาด | ตระกูล | ใช้กับ |
-|---|---|---|
-| 60 / 44 | dis | คะแนนใหญ่ · verdict |
-| 24 | ui 700 | ชื่อหน้าใน appbar |
-| 19–24 | dis 700 | ตัวเลขสถิติ |
-| 17 | text | บับเบิลสนทนา |
-| 15.5–16 | text | ประโยคตัวอย่าง · กล่องแก้ไข |
-| 16 | ui 600 | ชื่อรายการในการ์ด |
-| 15 | ui | ช่องกรอก · ปุ่มหลัก |
-| 13–14 | ui | เนื้อความ · ปุ่มรอง |
-| 11–12 | ui | คำอธิบาย · ป้ายกำกับ |
-| 9–10 | mono uppercase | meta · LEVEL · ชื่อผู้พูด |
-
-## รูปทรง
-
-| Token | ค่า | ใช้กับ |
-|---|---|---|
-| `--r-tile` | 16px | ไทล์ · การ์ดสถิติ · ปุ่ม CTA |
-| `--r-card` | 18px | การ์ดรายการ · บับเบิล · กล่องใหญ่ |
-| `--r-field` | 13px | ช่องกรอก · ปุ่ม outline |
-| `--r-pill` | 22px | ชิป · ช่องค้นหา |
-| — | 50% | ปุ่มไอคอน · หัวใจ · ไมค์ |
-
-**บับเบิลสนทนา** ใช้ 18px ทุกมุม **ยกเว้น** มุมที่ชี้เข้าหาผู้พูดเหลือ **5px**
-(`border-bottom-left-radius` ฝั่ง AI · `border-bottom-right-radius` ฝั่งผู้ใช้)
-เป็นสัญญาณว่าใครพูดโดยไม่ต้องวาดหางบับเบิล
-
-## เลย์เอาต์และ safe area
-
-| ค่า | ตัวเลข |
-|---|---|
-| ความกว้างแอปสูงสุด | 430px (iPhone Pro Max) |
-| ขอบซ้าย/ขวา | 16px (`--gutter`) · หน้าสรุปผลใช้ 18px |
-| ปุ่มไมค์ | 66px |
-| ปุ่มไอคอน | 38px |
-| ไทล์ | สูงต่ำสุด 118px · 2 คอลัมน์ gap 9px |
-| แถบแท็บ | ไอคอน 22px + ป้าย 10px |
-
-**safe area — ห้ามลืม** ไม่งั้นชนรอยบากบน / home indicator ล่าง:
-
-```css
-.appbar  { padding-top:    calc(14px + env(safe-area-inset-top)); }
-.tabbar  { padding-bottom: calc(8px  + env(safe-area-inset-bottom)); }
-.dock    { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
-```
-และต้องมี `<meta name="viewport" content="…,viewport-fit=cover">` ไม่งั้น `env()` เป็น 0
-
-ใช้ **`100dvh`** ไม่ใช่ `100vh` — `vh` ไม่หดตามแถบที่อยู่ของเบราว์เซอร์บนมือถือ
-เนื้อหาท่อนล่างจะโดนบัง
-
-## ธีม
-
-| ธีม | เปิดด้วย | ต่างกันตรงไหน |
-|---|---|---|
-| เรียบ (ค่าเริ่มต้น) | — | chrome ขาว/เทา accent เขียวน้ำทะเล |
-| ไล่สี | `body[data-theme="grad"]` | appbar/ovbar/CTA/ไมค์/บับเบิลผู้ใช้เป็นไล่สี · `--signal` เปลี่ยนเป็นม่วง · คะแนนเป็นตัวอักษรไล่สี |
-
-**กฎของธีมไล่สี:** ไล่สีอยู่บน **chrome และปุ่มหลัก** เท่านั้น พื้นที่เนื้อหายังเรียบเสมอ
-ถ้าไล่สีไปอยู่หลังข้อความยาว จะอ่านยากและคอนทราสต์ควบคุมไม่ได้
-
-## ย้ายไปสแต็กอื่น
-
-CSS คือต้นฉบับ ค่าเดียวกันใช้ได้ทุกที่ — ที่ต้องระวังคือกลไก ไม่ใช่ตัวเลข
-
-| เรื่อง | React Native | Flutter |
-|---|---|---|
-| token | ไฟล์ `tokens.ts` เป็น object แล้ว import (ไม่มี CSS variable) | `ThemeExtension` หรือ class `AppTokens` ค่าคงที่ |
-| safe area | `react-native-safe-area-context` → `useSafeAreaInsets()` | `SafeArea` / `MediaQuery.padding` |
-| ฟอนต์ | ต้อง link ไฟล์ฟอนต์เข้าโปรเจกต์ ไม่มี fallback อัตโนมัติ | `pubspec.yaml` → `fontFamily` |
-| ไล่สี | `expo-linear-gradient` | `BoxDecoration(gradient: LinearGradient(...))` |
-| เงา | `shadowColor/Offset/Opacity/Radius` (iOS) + `elevation` (Android) | `BoxShadow` |
-| มุมไม่เท่ากัน | `borderBottomLeftRadius` ฯลฯ | `BorderRadius.only(...)` |
-| กดแล้วยุบ | `Pressable` + `Animated.spring` scale .98 | `InkWell` / `AnimatedScale` |
-| ตัวเลขเรียงหลัก | `fontVariant: ['tabular-nums']` | `FontFeature.tabularFigures()` |
-
-> **ข้อจำกัดที่ต้องรู้:** ตัวเลขในตารางนี้ตรวจแล้วบน HTML/CSS เท่านั้น
-> ส่วน RN/Flutter เป็นการเทียบกลไก **ยังไม่ได้ build ทดสอบ** — ค่าโอนได้ แต่ให้ตรวจหน้าตาจริงบนเครื่องอีกรอบ
-
-## คลาสที่มีให้แล้ว
-
-| กลุ่ม | คลาส |
-|---|---|
-| โครง | `#app` `.appbar` `.screen(.on)` `.tabbar > .tab(.on)` `.overlay(.on)` `.ovbar` |
-| รายการ | `.tiles > .tile` `.card` `.sg` `.heart(.on)` `.lvl` `.grouphead` `.welcome` `.blank` |
-| ตัวควบคุม | `.chips > .chip(.on)` `.lvlchip(.on)` `#search` `.iconbtn` `.cta(.alt)` `.outline(.danger)` `.seg > button(.on)` |
-| ตั้งค่า | `.sect` `.group > .r2 / .rcol` |
-| สนทนา | `#thread` `.turn(.ai/.me)` `.who` `.bub(.masked)` `.repair` `del` `ins` `.note` `.tag` `.clean` `.hintbox` `.acts > .actbtn(.hintb)` `.sys` `.dots` |
-| แถบไมค์ | `.dock` `#interim` `.dockrow` `#mic(.live/.busy)` `.typerow(.on)` `.txtbtn` |
-| สรุปผล | `.report` `.score` `.mini` `.bar` `.verdict` `.wk` `.stat` `.g4` `.drillrow` `.fixrow` `.dnote` |
-
+> **กฎข้อเดียวของ skill นี้:** หน้าจอที่ดูดีไม่ได้มาจากสีสวย มาจาก**ความสม่ำเสมอ**
+> ระยะห่างมาจากสเกลเดียว ขนาดตัวอักษรมาจากสเกลเดียว และมีของสำคัญที่สุดแค่อย่างเดียวต่อหน้า
 
 ---
-
-# skill: windows-app-design
-
-Use when designing or building a desktop app that must look like a native Windows 11 app — WinUI 3, Avalonia, .NET MAUI or a web-wrapped shell. Ships the Fluent 2 tokens measured from real Windows 11, a drop-in stylesheet, matching resource dictionaries and a render-and-look loop. Not for web sites or mobile apps.
-
-# Windows App Design
-
-> **กฎข้อเดียว:** แอปที่ทำต้องดูเหมือนของที่มากับ Windows 11 ไม่ใช่เว็บที่ถูกยัดใส่หน้าต่าง
-> ผู้ใช้ Windows รู้ทันทีว่าอะไรไม่ใช่ของแท้ — มุมโค้งผิดขนาด ปุ่มสูงผิด เมนูอยู่ผิดที่
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ทำแอปเดสก์ท็อปบน **WinUI 3 / Windows App SDK**, **Avalonia**, **.NET MAUI**
-- ห่อเว็บเป็นเดสก์ท็อปด้วย **Electron / Tauri / WebView2**
-- ออกแบบหน้าต่าง, แถบเมนูซ้าย, หน้าตั้งค่า, แดชบอร์ด, dialog
-- ต้องรองรับธีมสว่าง/มืดตามระบบ
+- ทุกครั้งที่ทำ user interface (UI) — ใช้**คู่กับ** skill แพลตฟอร์ม ไม่ใช่แทนกัน
+- หน้าจอ "ดูแปลก ๆ" แต่บอกไม่ถูกว่าผิดตรงไหน
+- รีวิว UI ที่คนอื่นทำ
+- แพลตฟอร์มที่ยังไม่มี skill เฉพาะ (เช่น แอป TV, kiosk, smart watch)
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- เว็บไซต์ หรือแอปมือถือ → ใช้ agent `ux-designer` ตามปกติ
-- เอกสาร .docx/.pptx → `branded-document-design`
-- ไดอะแกรมในเอกสาร → `markdown-visuals`
-
----
-
-## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
-
-```
-1. คัดลอก assets/mockup-template.html + assets/fluent.css ไปไว้คู่กัน
-2. แก้เนื้อหาใน mockup ให้เป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/     → ได้ภาพ dark + light
-4. เปิดภาพดูจริงทั้งสองโหมด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
-5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดียวกัน ไม่ออกแบบใหม่
-```
-
-**ทำไมต้อง mockup ก่อน:** แก้ HTML ใช้เวลาเป็นนาที แก้ XAML ที่ผูกกับ ViewModel แล้ว
-ใช้เวลาเป็นชั่วโมง และการถกเรื่องหน้าตาบนโค้ดที่เขียนไปแล้วจะกลายเป็นการถกเรื่องต้นทุน
-
----
-
-## 2 · Design tokens
-
-ค่าทั้งหมดวัดจาก Windows 11 dark theme จริง อยู่ครบใน **`references/tokens.md`**
-(ตารางเทียบ CSS ↔ WinUI ↔ Avalonia) และพร้อมใช้ใน:
-
-| ไฟล์ | สำหรับ |
+| งาน | ใช้ตัวนี้แทน |
 |---|---|
-| `assets/fluent.css` | web-wrapped desktop + mockup |
-| `assets/FluentTokens.xaml` | WinUI 3 / Windows App SDK |
-| `assets/FluentTokens.axaml` | Avalonia 11 (แนวเดียวกันใช้กับ MAUI ได้) |
+| ต้องการสี ฟอนต์ คอมโพเนนต์จริง ๆ | `web-app-design` · `windows-app-design` · `mobile-app-design` |
+| กราฟและแผนภูมิข้อมูล | `web-app-design` ข้อ chart colors |
+| เอกสารที่พิมพ์ออกมา | `branded-document-design` |
+| สไลด์ | `presentation-design` |
 
-ค่าที่ต้องจำได้โดยไม่ต้องเปิดตาราง:
+**skill นี้ไม่กำหนดสีและไม่กำหนดฟอนต์** — เอาจาก skill แพลตฟอร์ม
+ที่นี่คุมแค่ *ระยะ ขนาด ลำดับ และสถานะ*
 
-| | Dark | Light |
+---
+
+## 1 · สเกลระยะห่าง — ใช้ชุดเดียวทั้งแอป
+
+```
+4  8  12  16  24  32  48  64
+```
+
+ทุก padding, margin, gap ต้องเป็นค่าใดค่าหนึ่งในนี้ ห้ามมี `13px` `18px` `22px`
+ถ้ารู้สึกว่า `16` แน่นไป `24` ห่างไป — เลือก `16` แล้วแก้อย่างอื่นแทน
+(ปกติปัญหาอยู่ที่ขนาดตัวอักษรหรือความยาวบรรทัด ไม่ใช่ระยะห่าง)
+
+**ชนกับค่าใน skill แพลตฟอร์ม → สเกลนี้ชนะ** — ค่าระยะตัวอย่างที่อยู่นอกสเกล (เช่น `mobile-app-design/references/tokens.md` gap 9 · padding 14 · ขอบ 18) ให้ปัดเป็นค่าใกล้สุดในสเกล (8 · 12 หรือ 16 · 16) ตอนเอาไปใช้
+สเกลนี้คุมแค่ padding · margin · gap — มุมโค้งและขนาดคอมโพเนนต์ (ปุ่ม 38 · มุม 13) skill แพลตฟอร์มเป็นคนกำหนด
+
+**กฎระยะห่างที่คนมองข้ามบ่อยที่สุด:**
+
+> ของที่เกี่ยวข้องกันต้องอยู่ใกล้กันมากกว่าของที่ไม่เกี่ยว
+
+```
+❌ label และ input ห่าง 16px     ❌ ระหว่างฟิลด์ห่าง 16px เท่ากัน
+✅ label และ input ห่าง 8px      ✅ ระหว่างฟิลด์ห่าง 24px
+```
+
+ตาอ่านกลุ่มจากระยะห่าง ไม่ใช่จากเส้น — ถ้าจัดระยะถูก เส้นคั่นส่วนใหญ่จะไม่จำเป็น
+
+**ระยะในการ์ด:** padding การ์ด ≥ gap ระหว่างของข้างใน เสมอ
+การ์ด padding `16` แล้วข้างในห่างกัน `24` จะดูเหมือนของล้นออกนอกกรอบ
+
+---
+
+## 2 · สเกลตัวอักษร
+
+อัตราส่วนคงที่ประมาณ 1.2–1.25 เท่า ต่อขั้น · **ใช้ไม่เกิน 5 ขนาดต่อหน้าจอ**
+
+| ขั้น | ตัวอย่าง (เว็บ) | ใช้กับ |
 |---|---|---|
-| พื้นหน้าต่าง | `#000000` | `#F3F3F3` |
-| ข้อความหลัก / รอง | `#FFFFFF` / `#CCCCCC` | `#1A1A1A` / `#5D5D5D` |
-| accent | `#4CC2FF` | `#005FB8` |
-| ลิงก์ | `#99EBFF` | `#003E92` |
-| พื้นปุ่ม | `#333333` | `#FFFFFF` |
+| lg | 22 | หัวหน้าจอ · มีได้หน้าละ 1 |
+| md | 15 | หัวการ์ด · หัวตาราง |
+| base | 13 | เนื้อหาทั้งหมด |
+| sm | 12 | label · คำอธิบายใต้ฟิลด์ |
+| xs | 11 | timestamp · badge |
 
-> **ค่ากลาง (พื้น ข้อความ เส้น เงา) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — ห้ามคิดเอง ห้ามปรับให้สวยขึ้น**
-> แอปที่สีกลางไม่ตรงกับระบบปฏิบัติการ จะดูเหมือนของแปลกปลอมทันทีที่วางข้างแอปอื่น
->
-> **สีที่เปลี่ยนตามงานมีแค่ accent** — ใช้สีแบรนด์ของลูกค้า หรือเสนอโทนจากเนื้องานแล้วรอยืนยัน
-> (ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
-> ค่า accent ในตารางข้างบนคือค่าเริ่มต้นของ Windows ซึ่งเป็นตัวเลือกที่ปลอดภัยเมื่อยังไม่มีแบรนด์
-> **ไม่ใช่ค่าที่ต้องใช้** · accent ต้องผ่าน contrast ≥ 4.5:1 ทั้งโหมดมืดและสว่าง จึงมักต้องมีคนละค่าต่อโหมด
+**ความสูงบรรทัด (line-height):**
 
-**เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ที่เดียวทั้งแอป
-
-> ⚠️ **ห้ามเขียนค่าสีดิบในคอมโพเนนต์** ต้องอ้าง token เสมอ ไม่งั้นโหมดมืดจะพังเป็นจุด ๆ
-> โดยที่ไม่มีใครเห็นจนกว่าลูกค้าจะเปิดใช้
-
----
-
-## 3 · โครงหน้าต่าง
-
-```
-┌──────────────────────────────────────────────── 48px title bar ─┐
-│ ชื่อแอป (12px)                              ─  □  ✕  (46×48)    │
-├──────────────┬──────────────────────────────────────────────────┤
-│ ☰            │  ชื่อหน้า            Title 28/36                  │
-│ 320px        │  คำอธิบายหนึ่งบรรทัด  Body 14/20 สีรอง             │
-│              │                                                  │
-│ ▍เมนูที่เลือก │  หัวข้อกลุ่ม         Subtitle 20/28    ┌─ rail ─┐ │
-│  เมนูอื่น     │  เนื้อหา…                              │ ลิงก์   │ │
-│              │  ← กว้างไม่เกิน 1064px →                │ ช่วยเหลือ│ │
-│              │                                        └────────┘ │
-│ ⚙ ตั้งค่า     │                                                  │
-└──────────────┴──────────────────────────────────────────────────┘
-   ↑ ล่างสุดเสมอ        ↑ ขอบซ้าย/ขวา 36px · ระยะระหว่าง section 40px
-```
-
-กฎที่คนทำเว็บมักพลาด:
-
-- **เมนูตั้งค่าอยู่ล่างสุดของ nav เสมอ** — ผู้ใช้ Windows หาที่นั่นก่อนที่อื่น
-- **แถบบอกหน้าที่เลือกเป็นขีดเล็ก 3×16px ชิดซ้าย** ไม่ใช่ระบายพื้น accent ทั้งแถว
-- **หน้าละหนึ่ง Title** — ไม่มีสอง
-- **เป้าคลิกเล็กสุด 32×32px** (ไม่ใช่ 48px แบบมือถือ — เดสก์ท็อปมีเมาส์)
-- **ปุ่มสูง 32px กว้างต่ำสุด 120px** ปุ่มเตี้ยกว่านี้ดูเป็นเว็บทันที
-- **มุม 4px สำหรับคอนโทรล / 8px สำหรับการ์ด** — ไม่มีค่าอื่น
-
----
-
-## 4 · คอมโพเนนต์ที่มีให้แล้วใน fluent.css
-
-| องค์ประกอบ | คลาส | หมายเหตุ |
+| ขนาด | line-height | เหตุผล |
 |---|---|---|
-| Title bar + ปุ่มหน้าต่าง | `.win-titlebar` | Electron: มี `-webkit-app-region: drag` ให้แล้ว |
-| NavigationView | `.win-nav` / `.nav-item.selected` | ย่อเป็นไอคอนอัตโนมัติเมื่อ < 1008px |
-| การ์ด | `.win-card` | |
-| แถวตั้งค่าแบบ Windows | `.win-setting` | ไอคอน + ชื่อ + คำอธิบาย + คอนโทรลขวา |
-| InfoBar | `.win-infobar.success/caution/critical` | **ใช้แทน `alert()` เสมอ** |
-| Status pill | `.win-pill.success/caution/critical` | |
-| KPI | `.win-kpis .kpi` | 3–5 ช่อง เกินนั้นตัวเลขเล็กจนไม่มีพลัง |
-| Toggle switch | `.win-toggle` | |
-| ตาราง | `.win-table` | |
-| ลิงก์ | `.win-link` | สี accent-text ไม่ใช่ accent |
+| หัวข้อใหญ่ | 1.2–1.3 | ตัวใหญ่อยู่แล้ว ไม่ต้องการอากาศ |
+| เนื้อหา | 1.5–1.6 | ตาต้องหาต้นบรรทัดถัดไปเจอ |
+| ภาษาไทย | +0.1 จากค่าข้างบน | สระบนล่างชนกัน |
 
-ไอคอนใช้ **Segoe Fluent Icons** (มากับ Windows 11) — 16px ใน nav, 20px หัวข้อ section,
-24px หัวหน้า ห้ามผสมชุดไอคอนอื่น รหัสที่ใช้บ่อยอยู่ท้าย `references/tokens.md`
+**ความยาวบรรทัด:** 45–75 ตัวอักษร ยาวกว่านี้ตาหลงบรรทัด
+บนหน้าจอกว้างให้จำกัดความกว้างคอลัมน์ข้อความ ไม่ใช่ปล่อยเต็มจอ
+
+**ขนาดเล็กสุด 11** สำหรับข้อความที่ต้องอ่าน — สเกลของ skill แพลตฟอร์มมีขนาดให้เลือกมากกว่า 5 ได้ แต่**หนึ่งหน้าจอยังใช้ไม่เกิน 5** (ตัวเลขใหญ่โชว์ค่าหลักนับเป็นหนึ่งขนาด)
+
+**น้ำหนักตัวอักษร:** ใช้ 2 น้ำหนักพอต่อหน้าจอ (ปกติ + หนา) — ฟอนต์มีครบ 400–700 ได้ แต่หน้าเดียวไม่ควรใช้เกิน 2
+อยากเน้นให้เปลี่ยน**สี**หรือ**ขนาด** ก่อนจะเปลี่ยนน้ำหนักเป็นตัวที่ 3
 
 ---
 
-## 5 · ภาษาไทยบนแอป Windows
+## 3 · ลำดับสายตา — หนึ่งหน้าจอ หนึ่งของสำคัญ
 
-- **Segoe UI Variable ไม่มีอักษรไทย** — Windows จะ fallback ไป **Leelawadee UI** ให้เอง
-  แต่บน web-wrapped / Avalonia ต้องเขียน fallback เอง (`fluent.css` ใส่ไว้แล้ว)
-- ระยะบรรทัด 20px ที่ 14px พอสำหรับไทย แต่ถ้าเป็นย่อหน้ายาวให้เพิ่มเป็น 22px
-- **ห้าม justify** — ไทยไม่มีช่องว่างระหว่างคำ จะยืดจนเป็นรู
-- ปุ่มที่มีข้อความไทยกว้างกว่าอังกฤษ ~20% → อย่า fix ความกว้างปุ่มตายตัว
-- ทดสอบด้วยข้อความไทยจริงเสมอ ไม่ใช่ Lorem ipsum
+ถามตัวเองก่อนวางองค์ประกอบ: **ผู้ใช้เปิดหน้านี้มาเพื่อทำอะไร**
+ของชิ้นนั้นได้ความเด่นระดับ 1 ที่เหลือลดหลั่นลงไป
+
+| ระดับ | วิธีทำให้เด่น | มีได้กี่อย่างต่อหน้า |
+|---|---|---|
+| 1 | สีแบรนด์ทึบ + ขนาดใหญ่สุด | **1** |
+| 2 | ตัวหนา หรือ พื้นหลังอ่อน | 2–3 |
+| 3 | สีข้อความปกติ | ไม่จำกัด |
+| 4 | สีข้อความจาง | ไม่จำกัด |
+
+**ทดสอบด้วยตา 2 วินาที:** หรี่ตามองหน้าจอ อะไรเด้งมาก่อน
+ถ้าเด้งมาพร้อมกัน 4 อย่าง = ยังไม่มีลำดับ
+
+**ปุ่มหลักมีได้ปุ่มเดียวต่อหน้าจอ** ที่เหลือเป็นปุ่มรอง (เส้นขอบ) หรือปุ่มเปล่า (ข้อความล้วน)
+ปุ่มอันตราย (ลบ) เป็นปุ่มรองสีแดง ไม่ใช่ปุ่มทึบสีแดง — ไม่งั้นมันแย่งความเด่นไปจากงานหลัก
 
 ---
 
-## 6 · ตรวจงาน — ห้ามข้าม
+## 4 · แยกส่วนด้วยอะไร — เส้น เงา หรือพื้นหลัง
 
-```bash
-python scripts/screenshot.py mockup.html _to_delete/screenshots/                 # 1440px = Large
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900     # Medium
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600     # Small
+เลือกได้ 3 วิธี **ใช้วิธีเดียวต่อหนึ่งระดับความลึก** ปนกันเมื่อไหร่รกทันที
+
+| วิธี | ใช้เมื่อ | ระวัง |
+|---|---|---|
+| ระยะห่างอย่างเดียว | แยกกลุ่มในพื้นที่เดียวกัน | **ลองอันนี้ก่อนเสมอ** |
+| เส้น 1px สีอ่อน | ตาราง · รายการ · คั่นส่วน | เส้นต้องอ่อนกว่าที่คิด |
+| พื้นหลังต่างเฉด | การ์ดบนพื้นหน้า | ต่างกัน 2–4% พอ |
+| เงา | ของที่**ลอยจริง** เท่านั้น | modal · dropdown · toast |
+
+> เงาไม่ใช่เครื่องประดับ มันแปลว่า "สิ่งนี้อยู่เหนือของอื่นและกดที่อื่นเพื่อปิดได้"
+> การ์ดที่อยู่นิ่ง ๆ ในหน้าไม่ได้ลอย — ไม่ต้องมีเงา
+
+**ความลึกมีได้ 3 ระดับพอ:** พื้นหน้า → การ์ด → ของลอย
+เกินนี้ตาแยกไม่ออกแล้ว
+
+**มุมโค้ง:** ใช้ 2–3 ค่า และ**ของข้างในต้องโค้งน้อยกว่าของข้างนอกเสมอ**
+การ์ดโค้ง 14 รูปข้างในโค้ง 14 จะเห็นช่องว่างสามเหลี่ยมที่มุม — ข้างในควรเป็น 8–10
+
+---
+
+## 5 · ความต่างของสี — ตัวเลขที่ต้องผ่าน
+
+| ของ | อัตราส่วนขั้นต่ำ |
+|---|---|
+| ข้อความปกติ | 4.5 : 1 |
+| ข้อความ ≥ 19px หรือหนา | 3 : 1 |
+| ขอบ input · ไอคอนที่สื่อความหมาย | 3 : 1 |
+| เส้นคั่นตกแต่ง | ไม่มีเกณฑ์ |
+
+ตรวจในเบราว์เซอร์: DevTools → เลือก element → ช่องสีใน Styles บอกค่าให้เลย
+ไม่ใช่เบราว์เซอร์ (Flutter · native): คำนวณจากค่าสีใน token ตามสูตร Web Content Accessibility Guidelines (WCAG) — `(L1 + 0.05) / (L2 + 0.05)` เมื่อ L คือ relative luminance ของสีสว่างกว่า (L1) และเข้มกว่า (L2) — เขียนเป็น test สั้น ๆ ที่วนตรวจทุกคู่ข้อความ/พื้นทั้งโหมดสว่างและมืด หรือใช้เครื่องมือตรวจคอนทราสต์ตัวใดก็ได้ (Flutter มี `textContrastGuideline` ใน widget test)
+
+**ข้อที่พลาดกันบ่อย:**
+
+- ❌ ข้อความสีเทาจาง ๆ บนพื้นขาว เพราะ "ดูสะอาดดี" — อ่านไม่ออกบนจอโน้ตบุ๊กกลางแดด
+- ❌ **สีเป็นตัวบอกสถานะอย่างเดียว** — คนตาบอดสีมองไม่เห็น ต้องมีไอคอนหรือข้อความคู่เสมอ
+- ❌ placeholder แทน label — พอพิมพ์แล้วผู้ใช้ลืมว่าช่องนี้คืออะไร
+
+---
+
+## 6 · ห้าสถานะที่ทุกหน้าจอต้องมี
+
+ออกแบบแค่สถานะ "มีข้อมูลครบสวยงาม" = ทำงานเสร็จ 20%
+
+| สถานะ | ต้องมีอะไร | พลาดบ่อย |
+|---|---|---|
+| **ว่าง** | บอกว่าทำไมว่าง + ปุ่มทำอะไรต่อ | ขึ้นแค่ "ไม่มีข้อมูล" |
+| **กำลังโหลด** | โครงร่างเทา (skeleton) ในรูปทรงของจริง | วงกลมหมุนกลางจอ = จอกระพริบ |
+| **ผิดพลาด** | เกิดอะไร + ทำยังไงต่อ + ปุ่มลองใหม่ | โยน error จากระบบให้ผู้ใช้อ่าน |
+| **มีบางส่วน** | ส่วนที่โหลดได้แสดงเลย ส่วนที่พังบอกเฉพาะจุด | ทั้งหน้าพังเพราะ widget เดียวล่ม |
+| **สำเร็จ** | บอกให้รู้ แล้วหายไปเอง | เด้ง modal ให้กด "ตกลง" |
+
+**สถานะว่างครั้งแรก ≠ สถานะว่างเพราะค้นหาไม่เจอ** — คนละข้อความ คนละปุ่ม
+
+**แอปที่อ่าน hardware ใช้ 5 สถานะเดียวกัน แค่ต้นเหตุต่างกัน:**
+
+| สถานะ | ตัวอย่าง (เครื่องวัดแสง) |
+|---|---|
+| ว่าง | ยังไม่ได้ให้สิทธิ์กล้อง → การ์ดอธิบายพร้อมปุ่มเดียว |
+| กำลังโหลด | sensor กำลังอุ่นเครื่อง ยังไม่มีค่าแรก → โครงร่างของตัวเลข ไม่ใช่ `0` |
+| ผิดพลาด | เครื่องไม่มี sensor · สิทธิ์ถูกบล็อก → บอกเหตุ + ทางไปต่อ (ใช้กล้องแทน · เปิดหน้าตั้งค่า) |
+| มีบางส่วน | ค่าเกินช่วงที่วัดได้ (อิ่มตัว) → แสดง "มากกว่า X" ไม่ใช่ตัวเลขผิด ๆ |
+| สำเร็จ | บันทึกจุดวัดแล้ว → SnackBar สั้น ๆ ที่ไม่บังปุ่ม |
+
+**ข้อความ error ที่ใช้ได้:**
+
+```
+❌ Error 500: Internal Server Error
+❌ เกิดข้อผิดพลาด กรุณาลองใหม่
+✅ บันทึกไม่สำเร็จ เพราะเลขที่เอกสารนี้มีอยู่แล้ว
+   เปลี่ยนเลขที่แล้วกดบันทึกอีกครั้ง [ลองใหม่]
 ```
 
-แล้วเปิดภาพดูจริง ตรวจตามนี้:
+---
 
-- [ ] **โหมดมืดและสว่างถูกทั้งคู่** — ไม่มีข้อความจมพื้น ไม่มีกล่องขาวโผล่ในธีมมืด
-- [ ] หน้าต่างแคบแล้ว nav ย่อเป็นไอคอน · คอลัมน์ขวาตกลงมาล่าง · ไม่มีอะไรล้นออกนอกจอ
-- [ ] เนื้อหาไม่กว้างเกิน 1064px บนจอใหญ่
-- [ ] ข้อความไทยไม่ล้นปุ่ม วรรณยุกต์ไม่ชนสระ
-- [ ] เป้าคลิกทุกอันไม่เล็กกว่า 32×32px
-- [ ] คอนทราสต์ข้อความ ≥ 4.5:1 (ข้อความรองบนพื้นการ์ดคือจุดที่พลาดบ่อยที่สุด)
-- [ ] เดินด้วย Tab ได้ครบทุกปุ่ม และ **เห็น focus ring** ทุกจุด
-- [ ] ไม่มีสีดิบหลงเหลือ: `grep -nE "#[0-9a-fA-F]{3,6}" app.css | grep -v "^fluent.css"`
+## 7 · งบการเคลื่อนไหว
+
+| ประเภท | เวลา | เส้นความเร็ว |
+|---|---|---|
+| hover · สีเปลี่ยน | 100–150ms | `ease-out` |
+| เปิด/ปิด dropdown · toast | 150–250ms | `ease-out` |
+| modal · หน้าเปลี่ยน | 250–350ms | `ease-in-out` |
+
+**เกิน 400ms = ผู้ใช้รู้สึกว่าแอปช้า** ไม่ใช่ว่าแอปหรู
+
+- ของที่**เข้ามา**เร็วกว่าของที่**ออกไป** ไม่ได้ — ออกควรเร็วกว่าหรือเท่ากัน
+- อย่าเคลื่อนไหวของที่ผู้ใช้กำลังจะกด (ปุ่มขยับหนีนิ้ว)
+- เคารพ `prefers-reduced-motion` — บางคนเวียนหัวจริง ๆ (Flutter: `MediaQuery.disableAnimationsOf(context)` เป็น `true` → ข้าม animation)
+- **ไม่วาดใหม่เมื่อค่าที่แสดงไม่เปลี่ยน** — แจ้ง UI เมื่อค่าบนจอเปลี่ยนจริง (ค่าจาก sensor ที่สั่น: เปลี่ยนเกิน ~1 %) ค่ารองที่ค่อย ๆ ไหลอัปเดตราว 1 วินาทีครั้ง · วาดไม่หยุดกินแบต ทำให้โปรแกรมอ่านจอพูดซ้ำ และเครื่องมือทดสอบอ่านหน้าจอไม่ได้
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+```
 
 ---
 
-## 7 · Anti-patterns
+## 8 · ความหนาแน่น — เลือกครั้งเดียวแล้วอยู่กับมัน
 
-- ❌ **ระบายพื้น accent ทั้งแถวเมนูที่เลือก** — Windows ใช้ขีดเล็กชิดซ้าย
-- ❌ **มุมโค้ง 12–16px** — นั่นคือหน้าตาเว็บ/มือถือ Windows ใช้ 4 กับ 8
-- ❌ **เงาใต้การ์ด** — Windows 11 ใช้เส้นขอบบาง ๆ เงาสงวนไว้ให้ flyout/dialog เท่านั้น
-- ❌ **`alert()` / `confirm()`** ในแอปที่ห่อเว็บ — ใช้ InfoBar หรือ ContentDialog
-- ❌ **ทำเฉพาะโหมดมืดเพราะภาพต้นแบบเป็นมืด** — ผู้ใช้ Windows ส่วนใหญ่ใช้สว่าง
-- ❌ **ฮาร์ดโค้ดสี accent เป็นน้ำเงิน** — ถ้าอยากตามสีที่ผู้ใช้ตั้งไว้ ต้องอ่านจากระบบ
-  (WinUI: อย่า override `AccentFillColorDefaultBrush` · web: `AccentColor` ของ CSS)
-- ❌ **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
-- ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
+| แบบ | แถวสูง | เหมาะกับ |
+|---|---|---|
+| แน่น | 32–36px | ตารางข้อมูล · คนใช้ทั้งวัน · ต้องเห็นเยอะ ๆ พร้อมกัน |
+| ปกติ | 40–44px | แอปทั่วไป |
+| โปร่ง | 48–56px | หน้า marketing · แอปที่ใช้นาน ๆ ที |
 
----
+**เป้าที่นิ้วกดได้ต้อง ≥ 44×44 pt บน iOS (Apple) · ≥ 48×48 dp บน Android (Material)** ถึงไอคอนจะเล็กกว่านั้นก็ตาม
+(ขยายด้วย padding หรือ pseudo-element ไม่ใช่ขยายไอคอน)
 
-## 8 · ข้อจำกัดที่ต้องรู้
-
-- ไฟล์ `.xaml` / `.axaml` ในนี้ **ยังไม่ผ่านการคอมไพล์ทดสอบ** เป็นชุดค่าโทเคนล้วน ๆ
-  (Color / SolidColorBrush / x:Double / CornerRadius / Thickness) ซึ่งเป็นไวยากรณ์
-  มาตรฐาน แต่ให้ build ครั้งแรกแล้วดูว่ามี key ไหนชนกับของเฟรมเวิร์กหรือไม่
-- WinUI ต้องเมิร์จ `FluentTokens.xaml` **หลัง** `XamlControlsResources` ไม่งั้นค่าถูกทับ
-- ชื่อ theme dictionary ต่างกัน: WinUI ใช้ `Default`/`Light`/`HighContrast`
-  ส่วน Avalonia ใช้ `Default`/`Light`/`Dark`
-- **โหมดคอนทราสต์สูง** ห้ามใส่สีตายตัว ต้องดึงจากสีระบบ (มีตัวอย่างในไฟล์ XAML)
-- Mica / Acrylic ทำได้จริงเฉพาะ WinUI/Avalonia บน Windows — บน web-wrapped
-  ให้ใช้สีทึบตาม token แทน อย่าพยายามเลียนด้วย `backdrop-filter` เพราะได้ไม่เหมือน
-  และกินเครื่อง
+**เลือกแบบแน่นแล้วห้ามมีแถวโปร่งแทรก** — ความหนาแน่นที่ไม่คงที่คือสิ่งที่ทำให้
+หน้าจอ "ดูไม่เป็นระบบ" มากที่สุด และเป็นข้อที่คนมองข้ามมากที่สุด
 
 ---
 
-## 9 · เชื่อมกับ skill อื่น
+## 9 · ตรวจงาน
+
+เรนเดอร์ดูจริงเสมอ (skill แพลตฟอร์มบอกวิธีไว้แล้ว) แล้วไล่ตามนี้:
+
+- [ ] หรี่ตามอง — มีของเด้งมาก่อนอย่างเดียวใช่ไหม
+- [ ] วัดระยะห่าง 5 จุดแบบสุ่ม — อยู่ในสเกล `4 8 12 16 24 32 48 64` ทุกจุดไหม
+- [ ] นับขนาดตัวอักษรในหน้า — เกิน 5 ขนาดไหม
+- [ ] นับปุ่มทึบสีแบรนด์ — เกิน 1 ปุ่มไหม
+- [ ] ของที่เกี่ยวข้องกันอยู่ใกล้กว่าของที่ไม่เกี่ยวไหม
+- [ ] ครบ 5 สถานะไหม (ไม่ใช่แค่สถานะมีข้อมูล)
+- [ ] ข้อความ error บอกว่า**ทำอะไรต่อ**ไหม
+- [ ] contrast ผ่าน 4.5:1 ไหม
+- [ ] สถานะที่บอกด้วยสี มีไอคอนหรือข้อความคู่ไหม
+- [ ] มุมของข้างในโค้งน้อยกว่าของข้างนอกไหม
+- [ ] เงามีเฉพาะของที่ลอยจริงไหม
+- [ ] ย่อจอเหลือครึ่งหนึ่ง (เว็บ) · ตัวอักษรระบบ 200 % + หมุนจอแนวนอน (มือถือ) — พังตรงไหน
+
+---
+
+## 10 · Anti-patterns
+
+- ❌ **แก้ "ดูไม่สวย" ด้วยการเพิ่มสี** — ปัญหาเกือบทุกครั้งคือระยะห่างไม่เป็นระบบ
+- ❌ **เส้นคั่นทุกอย่าง** — ลองลบเส้นแล้วเพิ่มระยะห่างแทน ดีขึ้นเกือบทุกครั้ง
+- ❌ **เงาใต้ทุกการ์ด** — เงาแปลว่าลอย การ์ดที่อยู่นิ่งไม่ได้ลอย
+- ❌ **ตัวหนาเพื่อเน้น จนหนาไปหมดทั้งหน้า** — เมื่อทุกอย่างเน้น = ไม่มีอะไรเน้น
+- ❌ **ขนาดตัวอักษรใหม่ทุกครั้งที่รู้สึกว่าไม่พอดี** — จบที่ 9 ขนาดในหน้าเดียว
+- ❌ **สร้าง state ตอนเจอ bug** — ออกแบบทั้ง 5 สถานะตั้งแต่แรก
+- ❌ **placeholder แทน label**
+- ❌ **สีอย่างเดียวบอกสถานะ**
+- ❌ **animation 600ms เพราะดูนุ่มนวลดี** — ผู้ใช้อ่านว่า "ช้า"
+- ❌ **จัดกึ่งกลางข้อความยาว ๆ** — ตาหาต้นบรรทัดไม่เจอ ชิดซ้ายเสมอสำหรับเนื้อหา
+- ❌ **ส่งงานโดยไม่เคยย่อจอดู** (มือถือ: ไม่เคยขยายตัวอักษรระบบดู)
+
+---
+
+## 11 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| user flow / wireframe ก่อนลงสี | agent `ux-designer` |
-| กราฟในแดชบอร์ด | `markdown-visuals` (ออกแบบ) แล้ว render เป็น SVG |
-| เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
-| เลือกสถาปัตยกรรมแอป | `architecture-patterns` |
-| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
-| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+| สี ฟอนต์ คอมโพเนนต์จริงของเว็บ | `web-app-design` |
+| แอป Windows | `windows-app-design` |
+| แอปมือถือ | `mobile-app-design` |
+| user flow ก่อนลงมือวาด | agent `ux-designer` |
+| ไดอะแกรมประกอบ spec | `software-diagrams` |
+| สไลด์นำเสนอ | `presentation-design` |
+| ตัดของที่ไม่จำเป็นออก | `simplicity-first` |
+| โลโก้ · โปสเตอร์ · โพสต์ · งานพิมพ์ | `graphic-design` |
 
 ---
 
@@ -582,118 +741,3 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
 หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: tokens.md
-
-# Token map — ค่าเดียวกัน สามสแต็ก
-
-> **ค่ากลาง (พื้น ข้อความ เส้น เงา ขนาด ระยะ) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — คัดลอกไปใช้ได้เลย ห้ามปรับเอง**
-> **`accent` เป็นสีเดียวที่เปลี่ยนตามงาน** — ใช้สีแบรนด์ของลูกค้า หรือเสนอโทนจากเนื้องานแล้วรอยืนยัน
-> ค่า accent ที่อยู่ในไฟล์นี้คือค่าเริ่มต้นของ Windows ใช้ได้เมื่อยังไม่มีแบรนด์ ไม่ใช่ค่าบังคับ
-
-ค่าทั้งหมดวัดจาก Windows 11 dark theme จริง (สุ่มพิกเซลจากหน้า Windows Security)
-แก้ที่ `assets/fluent.css` แล้วแก้ให้ตรงกันในไฟล์ XAML/AXAML ด้วยเสมอ
-
-## สารบัญ
-
-1. [สี — dark / light](#สี--dark--light)
-2. [สถานะ](#สถานะ)
-3. [Type ramp (Fluent 2) — ห้ามคิดขนาดใหม่นอกชุดนี้](#type-ramp-fluent-2--ห้ามคิดขนาดใหม่นอกชุดนี้)
-4. [รูปทรง · ระยะ · เลย์เอาต์](#รูปทรง--ระยะ--เลย์เอาต์)
-5. [จุดตัดขนาดหน้าต่าง (Fluent breakpoints)](#จุดตัดขนาดหน้าต่าง-fluent-breakpoints)
-6. [ไอคอน](#ไอคอน)
-
----
-
-## สี — dark / light
-
-| ความหมาย | Dark | Light | CSS | WinUI 3 | Avalonia |
-|---|---|---|---|---|---|
-| พื้นหน้าต่าง | `#000000` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
-| พื้น nav / เนื้อหา | `#000000` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
-| การ์ด | `#0F0F0F` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
-| ข้อความหลัก | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
-| ข้อความรอง | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
-| ข้อความจาง | `#8B8B8B` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
-| accent (พื้นปุ่ม, แถบเลือก) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
-| accent (ตัวหนังสือ/ลิงก์) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
-| ตัวอักษรบนพื้น accent | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
-| พื้นปุ่มปกติ | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
-| แถวที่เลือกใน nav | `#0F0F0F` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
-| เส้นคั่น | `#2D2D2D` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
-
-✱ = key มาตรฐานของเฟรมเวิร์ก — override แล้วคอนโทรลสำเร็จรูปเปลี่ยนตามทั้งแอป
-ส่วน key ที่ขึ้นต้น `App*` เป็นของเราเอง ต้องอ้างเองใน XAML
-
-## สถานะ
-
-| สถานะ | Dark fg / bg | Light fg / bg | CSS |
-|---|---|---|---|
-| สำเร็จ | `#6CCB5F` / `#393D1B` | `#0F7B0F` / `#DFF6DD` | `--win-success` / `-bg` |
-| เตือน | `#FCE100` / `#433519` | `#9D5D00` / `#FFF4CE` | `--win-caution` / `-bg` |
-| ผิดพลาด | `#FF99A4` / `#442726` | `#C42B1C` / `#FDE7E9` | `--win-critical` / `-bg` |
-| ข้อมูล | `#60CDFF` / `#2E2E2E` | `#005FB8` / `#F4F9FF` | `--win-info` / `-bg` |
-
-> พื้นของ InfoBar ในโหมดมืดเป็นโทน **กลาง** ไม่ใช่สีอิ่มตัว — ถ้าใช้สีจัดเป็นพื้น
-> แถบเดียวจะแย่งสายตาจากทั้งหน้า
-
-## Type ramp (Fluent 2) — ห้ามคิดขนาดใหม่นอกชุดนี้
-
-| ระดับ | ขนาด/บรรทัด | น้ำหนัก | CSS class | WinUI style | ใช้กับ |
-|---|---|---|---|---|---|
-| Caption | 12 / 16 | 400 | `.win-caption` | `CaptionTextBlockStyle` | ป้ายกำกับ, คำอธิบายในแถวตั้งค่า |
-| Body | 14 / 20 | 400 | `.win-body` | `BodyTextBlockStyle` | เนื้อความทั้งหมด |
-| Body Strong | 14 / 20 | 600 | `.win-body-strong` | `BodyStrongTextBlockStyle` | หัวข้อย่อยในการ์ด |
-| Body Large | 18 / 24 | 400 | `.win-body-large` | `BodyLargeTextBlockStyle` | ข้อความนำ |
-| Subtitle | 20 / 28 | 600 | `.win-subtitle` | `SubtitleTextBlockStyle` | หัวข้อกลุ่มในหน้า |
-| Title | 28 / 36 | 600 | `.win-title` | `TitleTextBlockStyle` | ชื่อหน้า (หน้าละหนึ่ง) |
-| Title Large | 40 / 52 | 600 | `.win-title-large` | `TitleLargeTextBlockStyle` | หน้า hero เท่านั้น |
-
-ฟอนต์: **Segoe UI Variable** (Text สำหรับ ≤18px, Display สำหรับ ≥20px)
-Segoe UI Variable **ไม่มีอักษรไทย** → Windows fallback ไป **Leelawadee UI** ให้เอง
-บน web-wrapped ต้องเขียน fallback เองใน `font-family`
-
-## รูปทรง · ระยะ · เลย์เอาต์
-
-| ค่า | ตัวเลข | ใช้กับ |
-|---|---|---|
-| มุมคอนโทรล | 4px | ปุ่ม, textbox, checkbox, combo |
-| มุมการ์ด | 8px | card, expander, flyout, dialog |
-| Title bar | 48px | แบบ Windows 11 (32px = แบบคลาสสิก) |
-| ปุ่มหน้าต่าง | 46 × 48px | ย่อ/ขยาย/ปิด — ห้ามเปลี่ยนขนาด |
-| NavigationView เปิด | 320px | ค่ามาตรฐาน |
-| NavigationView ย่อ | 48px | เหลือไอคอน |
-| แถวเมนู nav | สูง 40px | ไอคอน 16px · ช่องไฟไอคอน–ข้อความ 16px |
-| แถบบอกหน้าที่เลือก | 3 × 16px มุมมน 2px | ชิดซ้ายสุด สี accent |
-| ความกว้างเนื้อหาสูงสุด | 1064px | เกินนี้ตาไล่บรรทัดไม่ไหว |
-| ขอบเนื้อหาซ้าย/ขวา | 36px | 16px เมื่อหน้าต่างแคบกว่า 640px |
-| ระยะระหว่าง section | 40px | |
-| ปุ่ม | สูง 32px · กว้างต่ำสุด 120px | |
-| ปุ่ม/เป้าคลิกเล็กสุด | 32 × 32px | เดสก์ท็อป (ไม่ใช่ 48px แบบมือถือ) |
-
-## จุดตัดขนาดหน้าต่าง (Fluent breakpoints)
-
-| ช่วง | ชื่อ | พฤติกรรม |
-|---|---|---|
-| < 640px | Small | nav เป็น overlay · ขอบ 16px · คอลัมน์เดียว |
-| 641–1007px | Medium | nav ย่อเหลือไอคอน · คอลัมน์ขวาตกลงมาล่าง |
-| ≥ 1008px | Large | nav เปิดเต็ม · สองคอลัมน์ |
-
-## ไอคอน
-
-ใช้ **Segoe Fluent Icons** (มากับ Windows 11) ขนาด 16px ใน nav, 20px ในหัวข้อ section,
-24px ในหัวหน้า — ห้ามผสมชุดไอคอนอื่นในแอปเดียวกัน
-
-| ใช้ | โค้ด | | ใช้ | โค้ด |
-|---|---|---|---|---|
-| หน้าแรก | `E80F` | | ตั้งค่า | `E713` |
-| แฮมเบอร์เกอร์ | `E700` | | ย้อนกลับ | `E72B` |
-| ย่อ / ขยาย / ปิด | `E921` `E922` `E8BB` | | รีเฟรช | `E72C` |
-| โล่ (ความปลอดภัย) | `EA18` | | เตือน | `E7BA` |
-| ผู้ใช้ | `E77B` | | ประวัติ | `E81C` |
-| เครือข่าย | `EC05` | | อัปเดต | `E895` |
-
-ดูรายการเต็ม: Microsoft Learn → "Segoe Fluent Icons font"
-บนเครื่องที่ไม่ใช่ Windows ฟอนต์นี้ไม่มี ไอคอนจะกลายเป็นสี่เหลี่ยม — mockup ที่จะให้
-คนดูบน Mac/Linux ต้องสลับไปใช้ inline SVG แทน

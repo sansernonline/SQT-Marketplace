@@ -1,0 +1,2 @@
+description = "Work out a selling price, or check the profit on a current price, after platform commission, transaction fee, shipping, VAT and target margin."
+prompt = "Run `marketplace-fees-pricing` with the `shop-manager` agent for: **{{args}}**\n\nShow the full cost table in baht and the margin %. Mark every fee rate that was not confirmed in the seller's own Seller Centre as (รอยืนยัน).\n"

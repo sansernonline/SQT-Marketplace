@@ -1,0 +1,2 @@
+description = "Show the current portfolio snapshot — allocation, P/L, concentration flags, top contributors and drags — refreshed with current prices."
+prompt = "Run the `portfolio-snapshot` skill: **{{args}}**\n\nIf no portfolio file is known, ask where holdings are tracked. Mark stale prices honestly when a data plugin is missing for a market.\n"

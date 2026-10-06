@@ -1,0 +1,2 @@
+description = "Write a product listing for Shopee, Lazada, TikTok Shop, LINE or Facebook — platform title, keywords, photo checklist, description and a prohibited-claims check."
+prompt = "Run `product-listing` with the `shop-manager` agent for: **{{args}}**\n\nProduce one title per platform inside its length limit, the description from the template, and the photo checklist. For food, supplements or cosmetics, run the prohibited-claims check and list every phrase removed.\n"

@@ -1,0 +1,8 @@
+---
+name: "subscriptions"
+description: "Audit recurring charges from bank and credit-card statements — find every subscription, build a cost-per-use table, decide cancel, downgrade, rotate or keep, and give the exact cancellation steps plus trial-end reminders."
+---
+
+Run the `subscription-audit` skill with the `life-admin` agent on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
+
+Produces the cost-per-use table, a decision per line, cancellation steps by billing channel (App Store, Google Play, merchant, bank auto-debit), the annual-versus-monthly break-even for anything kept, and a calendar reminder 2 days before every free trial ends. The result is appended to `subscriptions.md` with the next audit date.

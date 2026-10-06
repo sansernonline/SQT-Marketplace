@@ -1,0 +1,2 @@
+description = "Write a complete image generation brief — subject, style, palette, lighting, composition, negatives — ready to paste into whichever image generation plugin is installed."
+prompt = "Run `brief-to-image` with the `art-director` agent for: **{{args}}**\n\nSaves the brief to the project briefs folder; generation and consistency checks use the same written brief.\n"

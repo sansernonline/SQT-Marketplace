@@ -1,6 +1,147 @@
+# skill: answer-shape
+
+Use when an answer has structure (comparing options, trade-offs, how parts connect, several numbers). Decides prose, table, small diagram or short list, and keeps it readable.
+
+# รูปทรงของคำตอบ
+
+> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
+> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+
+---
+
+## เลือกรูปทรงจากสัญญาณในคำถาม
+
+| สัญญาณ | รูปทรง |
+|---|---|
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
+| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
+| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
+| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
+| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+
+**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่สองตัวขึ้นไป** — มีเมื่อไหร่ใช้ตาราง
+เขียนเป็นย่อหน้าแล้วผู้อ่านต้องจำของตัวแรกไว้ในหัวระหว่างอ่านตัวที่สอง
+
+---
+
+## ตารางที่อ่านง่าย
+
+- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
+- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน · แถวไม่เกิน 8 แถวในคำตอบแชต
+- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ให้เขียนว่า "ไม่มี" ตรง ๆ
+- **ช่องละไม่เกินหนึ่งบรรทัด** ยาวกว่านั้นยกออกไปเป็นข้อความใต้ตาราง
+- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
+- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+
+```
+❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
+✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
+```
+
+**ปิดท้ายตารางด้วยข้อสรุปหนึ่งบรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+
+---
+
+## เมื่อไหร่รูปชนะตาราง
+
+ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+
+| ใช้รูป | ใช้ตาราง |
+|---|---|
+| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
+| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
+| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+
+ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+
+```
+กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
+                    │
+                    └──▶ ที่เก็บถาวร
+```
+
+รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ไปที่ `software-diagrams` หรือ `svg-diagram-system`
+
+---
+
+## เมื่อไหร่ประโยคชนะทั้งคู่
+
+- คำตอบสั้นกว่าสามบรรทัด — ตารางสองแถวคือการตกแต่ง ไม่ใช่การอธิบาย
+- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผลหนึ่งประโยค
+- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+
+> ตารางที่มีแถวเดียวหรือสองแถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
+
+---
+
+## ความยาวของคำตอบ
+
+- **คำตอบอยู่บรรทัดแรก** เหตุผลตามหลัง — ไม่ใช่ไล่เหตุผลมาก่อนแล้วค่อยเฉลย
+- ไม่ต้องทวนคำถาม ไม่ต้องเกริ่น ไม่ต้องสรุปซ้ำตอนจบ
+- **สิ่งที่ยังไม่ได้ทำหรือยังไม่แน่ใจ ต้องบอก** แม้จะทำให้คำตอบยาวขึ้น
+- คำตอบยาวเกินหน้าจอ ให้ถามก่อนว่าต้องการละเอียดแค่ไหน แทนที่จะเทให้หมด
+
+---
+
+## ตัดกลิ่น AI
+
+อ่านทวนก่อนส่งทุกคำตอบและเอกสาร — เจอแบบไหนแก้ทันที
+
+| เจอ | แก้เป็น |
+|---|---|
+| เปิดด้วย "แน่นอน" · "คำถามดีมาก" · ทวนคำถาม | ขึ้นต้นด้วยคำตอบ |
+| ปิดด้วย "หวังว่าจะช่วยได้" · "ถ้ามีอะไรถามได้" | ตัดทิ้ง หรือเสนอขั้นต่อไปที่มีจริงหนึ่งข้อ |
+| คำขยายใหญ่โต — สำคัญมาก · ครอบคลุม · ทรงพลัง · ไร้รอยต่อ | ตัด หรือแทนด้วยตัวเลขหรือข้อเท็จจริง |
+| "ไม่ใช่แค่ X แต่ยัง Y" · ไล่สามคำเพื่อจังหวะ | พูดตรง ๆ ทีละเรื่อง |
+| "หลาย" · "บางส่วน" · "ค่อนข้าง" ทั้งที่รู้ตัวเลข | ใส่ตัวเลข |
+| ออกตัวซ้อนกันหลายชั้น — อาจจะ · น่าจะ · ในบางกรณี | ออกตัวครั้งเดียวที่จุดที่ไม่แน่ใจจริง พร้อมป้าย `อนุมาน` หรือ `เดา` |
+| หัวข้อและ bullet ในคำตอบสั้น | ประโยคธรรมดา |
+| ประโยคยาวหลายความคิด | หนึ่งประโยค หนึ่งความคิด |
+
+**ผู้ใช้บอก "งง" · "พูดง่าย ๆ" · "แปลเป็นภาษาคน"** → เขียนคำตอบล่าสุดใหม่ สั้นลงครึ่งหนึ่ง ไม่มีศัพท์เทคนิคที่ไม่ได้อธิบาย ไม่เพิ่มเนื้อหาใหม่
+
+---
+
+## Anti-patterns
+
+- ❌ **ย่อหน้ายาวเปรียบเทียบสามตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
+- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
+- ❌ **ตารางสองแถวเพื่อให้ดูเป็นระเบียบ**
+- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
+- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเองทั้งที่เขาถามเพราะอยากได้คำแนะนำ
+- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
+- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
+
+---
+
+## เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ถ้อยคำในคำตอบ — ตัวย่อและศัพท์เฉพาะ | `spell-out-abbreviations` |
+| รูปที่ต้องเป็นไฟล์จริง | `software-diagrams` · `svg-diagram-system` |
+| ภาพในเอกสาร markdown | `markdown-visuals` |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
+
+---
+
+## ตัวย่อ
+
+- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
+- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+
+---
+
+**ถ้าสิ่งที่จะพูดคือของที่เจอระหว่างทำงาน แล้วต้องให้ผู้ใช้ตัดสินใจก่อนไปต่อ** →
+`flag-and-propose` (เปิดด้วยผลกระทบ · ตารางเทียบ · ข้อเสนอ · ปิดด้วยคำถามเดียว)
+
+
+---
+
 # skill: temp-file-discipline
 
-Use on every task that writes files into someone's project folder. Sends every temporary file to one `_to_delete/` folder at the project root instead of leaving archives, extracted folders, previews, backups and one-off scripts where the real work lives. Load it before the first file is written, not while cleaning up afterwards.
+Use on every task that writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to one _to_delete/ folder at the root. Load before the first file is written.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -9,13 +150,17 @@ Use on every task that writes files into someone's project folder. Sends every t
 
 ---
 
-## ลำดับความสำคัญ — ดีที่สุดคือไม่เขียนลงโปรเจกต์เลย
+## เลือกที่วาง
 
-| ไฟล์นั้นต้องอยู่บนเครื่องผู้ใช้ไหม | ทำอย่างไร |
+| ไฟล์นั้นคืออะไร | วางที่ |
 |---|---|
-| ไม่ต้อง — เป็นแค่ขั้นกลางระหว่างคิด | ทำในพื้นที่ทำงานของเซสชัน ไม่แตะโฟลเดอร์โปรเจกต์ |
-| ต้อง เพราะต้องแตกไฟล์หรือรันที่เครื่องนั้น | `_to_delete/` |
-| เป็นผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/` ที่รากโปรเจกต์ — ผู้ใช้ตรวจย้อนได้ |
+| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
+| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+
+**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย** — ไฟล์ชั่วคราวที่ agent สร้างแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ย้ายเข้า `_to_delete/` ทันที ·
+ไฟล์ที่ไม่แน่ใจว่าผู้ใช้สร้างหรือใช้อยู่ ไม่ย้ายเอง ให้บอกผู้ใช้ ·
+คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ต้องเขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
 
 ---
 
@@ -42,6 +187,7 @@ Use on every task that writes files into someone's project folder. Sends every t
 - ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
   **ปีหน้าต้องแก้ ต้องมีไฟล์ต้นทาง** เก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
 - ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
+- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง ตรวจว่าอยู่ใน `.gitignore` · ห้ามย้ายเข้า `_to_delete/`
 
 ---
 
@@ -56,6 +202,15 @@ Use on every task that writes files into someone's project folder. Sends every t
 ```
 
 - โฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแตกย่อยตามวันที่ นอกจากของเยอะจริง
+- โฟลเดอร์ย่อยมาตรฐานที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
+
+  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
+  |---|---|---|
+  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
+  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
+  | `security/` | ผลสแกนดิบ | `security-gate` |
+  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
+  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ — งานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
 - ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
 - โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ใช้ของเดิม อย่าสร้างซ้ำ
 
@@ -74,7 +229,8 @@ Use on every task that writes files into someone's project folder. Sends every t
 - ❌ **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
 - ❌ **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
 - ❌ **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- ❌ **เขียนไฟล์ชั่วคราวลงโฟลเดอร์ผู้ใช้ทั้งที่ทำในพื้นที่ของเซสชันได้**
+- ❌ **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
+- ❌ **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
 - ❌ **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
 - ❌ **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
 
@@ -90,7 +246,7 @@ Use on every task that writes files into someone's project folder. Sends every t
 
 # skill: status-report
 
-Use at the END of every task that produces or checks project work — a document, a mockup, a review, a code round, a fix, a release. Writes one status table (what passed, what stage each item has reached, what is still pending, what comes next) into `docs/BUILD-PLAN.md` and shows the same table in the reply. Keeps one living snapshot plus a one-line history so anyone opening the project knows where it stands without reading the conversation. Load it before reporting "done", not after.
+Use at the end of every task that produces or checks project work (document, mockup, review, code round, fix, release). Writes one status table into docs/BUILD-PLAN.md and shows it in the reply. Load before reporting done.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -106,10 +262,12 @@ Use at the END of every task that produces or checks project work — a document
 | สถานการณ์ | ทำอย่างไร |
 |---|---|
 | มีไฟล์อยู่แล้ว | แก้เฉพาะสองหัวข้อด้านล่าง — **ห้ามแตะตารางงานหรือหัวข้ออื่น** |
-| ยังไม่มีไฟล์ | สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ + สองหัวข้อด้านล่าง — ตารางงานจะถูกเพิ่มภายหลังเมื่อเริ่มเขียนโค้ด |
+| ยังไม่มีไฟล์ | สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ + สองหัวข้อด้านล่าง — ตารางงาน (`spec-to-code-loop`) เพิ่มทีหลังเมื่อเริ่มเขียนโค้ด **ระหว่าง** สองหัวข้อนี้ |
 | มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** ตัวหลักเป็นคนเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
 
-สองหัวข้อที่ skill นี้ดูแล (วางไว้บนสุดของไฟล์ ต่อจากชื่อโปรเจกต์):
+ลำดับหัวข้อในไฟล์ (ต่อจากชื่อโปรเจกต์): `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
+
+สองหัวข้อที่ skill นี้ดูแล:
 
 - `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว ไม่ใช่ต่อท้าย
 - `## ประวัติสถานะ` — **เพิ่มหนึ่งบรรทัดบนสุด** ต่องานหนึ่งงาน ไม่ลบของเดิม
@@ -133,19 +291,26 @@ Use at the END of every task that produces or checks project work — a document
 **ค้างอยู่ (ต้องมีคนตัดสิน):**
 1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
 
+**รออนุมัติ:**
+1. push branch `feat/search` — `git push -u origin feat/search`
+
 **ถัดไป:** แก้ปุ่มหลอกใน mockup → เขียน architecture
+
+**ข้อเสนอ:**
+1. ย้ายตัวตรวจ input ไปไว้จุดเดียวที่ขอบ API — ลด if ซ้ำ 14 จุด · แรงกลาง
 ```
 
 ### ค่าที่ใช้ในแต่ละคอลัมน์ — ใช้เฉพาะค่าเหล่านี้
 
 | คอลัมน์ | ค่าที่ใช้ได้ |
 |---|---|
-| ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `ส่งมอบ` |
+| ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` = ไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) · `ส่งมอบ` = ถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` |
+| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` · รหัสงานใช้รหัส FR ของ SRS ถ้ามี |
 | ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
 - **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู · ไม่ได้รันหรือไม่ได้ตรวจ เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
+- **แอปมือถือ** หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` · ยังไม่ได้ลองเครื่องจริง เขียนไว้ในช่อง ค้าง
 - `APPROVED` มีแต่คนเปลี่ยนได้ — agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
 - ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ — รายการที่รอบนี้ไม่ได้แตะ คัดลอกค่าเดิมมา
 - หนึ่งแถวต่อเอกสารหนึ่งฉบับ · โค้ดรวมเป็นช่วงรหัส (`FR-001 ถึง FR-012`) ได้ถ้าสถานะเท่ากัน อย่าทำตารางยาวเกิน 25 แถว
@@ -153,7 +318,9 @@ Use at the END of every task that produces or checks project work — a document
 ### "ค้างอยู่" กับ "ถัดไป"
 
 - **ค้างอยู่** = สิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน · เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร · ไม่มีให้เขียน `ไม่มี`
+- **รออนุมัติ** = งานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (agent-team หัวข้อ 6) · บอกคำสั่งหรือไฟล์ที่พร้อมใช้ · ไม่มีไม่ต้องใส่หัวข้อ
 - **ถัดไป** = งานลำดับถัดไปไม่เกิน 3 อย่าง
+- **ข้อเสนอ** = ปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกได้อะไรและแรงที่ใช้ · ไม่มีไม่ต้องใส่หัวข้อ
 
 ---
 
@@ -168,13 +335,15 @@ Use at the END of every task that produces or checks project work — a document
 - 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด
 ```
 
-รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกินหนึ่งบรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว
+รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกินหนึ่งบรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว · รอบนั้นมีการตัดสินใจเอง ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
+
+หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` — skill นี้ไม่แก้ แต่ไม่ลบ
 
 ---
 
 ## 4 · ในคำตอบ
 
-แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
+แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
 
 ---
 
@@ -186,7 +355,7 @@ Use at the END of every task that produces or checks project work — a document
 - [ ] ไม่ได้ตั้ง `APPROVED` เอง
 - [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` หนึ่งบรรทัด
 - [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + ถัดไป
+- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
 
 ---
 
@@ -209,873 +378,114 @@ Use at the END of every task that produces or checks project work — a document
 | ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` |
 | ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` |
 | บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `work-session-context` |
+| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
+| เลือก playbook และจบงานทุกชนิด | `agent-team` |
 | รูปแบบตารางและเอกสาร | `polished-document-style` |
 | ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
 
 
 ---
 
-# skill: database-design
+# skill: security-gate
 
-Use when designing or changing a database schema — tables, columns, indexes, relationships or a migration. Covers relational versus document, naming, identifier choice, the four data types teams get wrong, where indexes help, constraints, expand-and-contract migrations and multi-tenant layouts. Load it before the first CREATE TABLE.
+Use before shipping, merging, releasing or handing over code, after adding a dependency, on a schedule, or when the user says security check. Secret, dependency and static scans in the sandbox; blocks on unresolved critical or high.
 
-# ออกแบบฐานข้อมูล
+# security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
-> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
-> โค้ดผิดแก้วันนี้จบวันนี้ · schema ผิดอยู่กับมันสามปี พร้อมข้อมูลจริงอีกสิบล้านแถวที่ต้องย้ายตาม
+> เครื่องมือสแกนหาเจอเร็ว แต่แจ้งผิดเยอะ · คนตรวจเข้าใจบริบท แต่ช้า
+> ประตูนี้ให้เครื่องหาก่อน แล้ว agent ยืนยันทุกข้อกับโค้ดจริง ก่อนจะถึงมือคน
 
-## เมื่อไหร่ใช้ skill นี้
+ใช้ร่วมกับ [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) · รายงานเชิงลึกใช้ agent `security-engineer`
 
-- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
-- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
-- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
-- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
+## ขั้นตอน
 
-## เมื่อไหร่ **ไม่** ใช้
+1. **รันในห้อง** — โปรเจกต์มี `.sandbox/` ทำทุกคำสั่งผ่าน `sandbox.ps1 exec` · เครื่องมือที่ยังไม่มีในห้อง ติดตั้งในห้องได้เลย ไม่ติดตั้งบนเครื่อง
+2. **สแกนสามด้าน** (เลือกตามที่โปรเจกต์มี)
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| รัน migration ใน pipeline | `cicd-and-release` |
+   | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
+   |---|---|---|
+   | ค่าลับหลุด (รวมประวัติ git) | gitleaks | `gitleaks detect --source . --redact` |
+   | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
+   | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
+   | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
+   | Dockerfile · compose · IaC (ถ้ามี) | trivy | `trivy config .` · แอป Android ไม่มีส่วนนี้ ให้อ่าน `android/app/build.gradle*` ด้วยตาแทน (signingConfig ไม่ฝังรหัสผ่าน · release เปิด minify) |
+   | แอป Android (ถ้ามี) | ตรวจด้วยตาตามรายการข้างล่าง · เชิงลึกใช้ MobSF (Mobile Security Framework) | — |
 
----
+   **รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้วใน `build/app/intermediates/merged_manifests/` ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง
+   - `android:exported` — มีแค่ activity หลักที่เป็น `true` · ตัวอื่นต้องมีเหตุผล
+   - `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
+   - `android:debuggable` ไม่มีใน release · `usesCleartextTraffic` ไม่เป็น `true`
+   - permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` · ตรวจตัวที่ plugin เติมมาด้วย
+   - `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
 
-## 1 · เลือกชนิดฐานข้อมูลก่อน
+   เก็บผลดิบใน `_to_delete/security/`
+   - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
+   - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) · พิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด · เครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
+   - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** — โปรเจกต์ Flutter ที่ semgrep ไม่เจออะไร ไม่ได้แปลว่าปลอดภัย · รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
+3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) · ติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล
+4. **จัดระดับและตัดสิน**
 
-| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
-|---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✅ | ❌ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ⚠️ ใช้คอลัมน์ JSON | ✅ |
-| ต้องการ transaction ข้ามหลายตาราง | ✅ | ⚠️ ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✅ | ❌ |
-| เขียนหนักมาก log/telemetry | ⚠️ | ✅ หรือใช้ time-series |
+   | ระดับ | ทำอะไร |
+   |---|---|
+   | ค่าลับจริงหลุด | **หยุดทันที บอกผู้ใช้** — ต้องเปลี่ยนค่าลับที่ผู้ให้บริการ · ลบจากไฟล์อย่างเดียวไม่พอ · agent ไม่แก้ประวัติ git เอง |
+   | critical · high ที่ยืนยันแล้ว | **ห้ามส่ง** จนกว่าจะแก้ หรือผู้ใช้ยอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log` |
+   | medium | แก้ในรอบนี้ถ้าเล็ก · ไม่เล็กเปิดเป็นงานแยก |
+   | low · แจ้งผิด | บันทึกเหตุผล ไม่ต้องแก้ |
 
-> **ค่าเริ่มต้นคือ relational** — เลือก document เมื่อ**ตอบได้ว่าทำไม**
-> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แปลว่ายังไม่ได้ออกแบบ
-> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
+5. **แก้** — ช่องโหว่ใน dependency อัปเดตเวอร์ชันที่แก้แล้วแล้วรัน test · ช่องโหว่ในโค้ดใช้ playbook `bug-fix` (หาต้นเหตุ + test ที่ล้มก่อนแก้ + ค้นหาจุดอื่นที่เขียนแบบเดียวกัน) · รูปแบบที่เจอซ้ำส่งต่อ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ให้เป็นกฎ lint
+6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` + คำตัดสินหนึ่งบรรทัด `ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน` · ห้ามคัดค่าลับลงรายงาน (ใช้ผลแบบ `--redact`) · `status-report` ประเภท `ตรวจ`
 
-**ผสมกันได้** — ใช้ relational เป็นหลัก แล้วเก็บของที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
-ตัวเลือกนี้ดีกว่าแยกฐานข้อมูลสองตัวเกือบทุกกรณี
+## เมื่อไรต้องรัน
 
----
+- ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
+- หลังเพิ่มหรืออัปเดต dependency
+- โปรเจกต์ที่ยังใช้งานอยู่ — สัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
 
-## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
+## ไม่ใช่หน้าที่ของ skill นี้
 
-| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
-|---|---|---|
-| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
-| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
-| primary key | `id` | `id` |
-| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` → `user_roles` |
-| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
-| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
-| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
-| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
+- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น — ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
+- รับรองว่าปลอดภัย 100% — รายงานบอกว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
 
-**สิ่งที่ห้ามทำ:**
-
-- ❌ ใส่ชนิดข้อมูลในชื่อ — `name_varchar`, `is_active_bit`
-- ❌ ใส่ชื่อตารางนำหน้าคอลัมน์ — `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ❌ ใช้คำสงวน — `user`, `order`, `group`, `key` ต้องใส่เครื่องหมายคำพูดทุกครั้ง ใช้ `users`, `orders` แทน
-- ❌ ตัวย่อที่คนอ่านไม่ออก — `cst_nm` ประหยัดได้ 8 ตัวอักษร แลกกับความสับสนสามปี
-
-> SQL Server ที่ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
-> **ความสม่ำเสมอสำคัญกว่ารูปแบบไหนถูก** — อย่าเปลี่ยนกลางทาง
 
 ---
 
-## 3 · คอลัมน์ที่ทุกตารางต้องมี
+# skill: code-gardener
 
-```sql
-id           bigint / uuid   PRIMARY KEY
-created_at   timestamptz     NOT NULL DEFAULT now()
-updated_at   timestamptz     NOT NULL DEFAULT now()
+Use when a codebase should be patrolled for patterns that mislead agents and people (duplication, wrong-layer calls, dead code, naming drift) or the user says garden or tidy patrol. Logs findings, then turns themes into structural fixes.
+
+# code-gardener — คนสวนที่จดก่อน ยังไม่ตัด
+
+> ถ้าแก้ทุกอย่างทันทีที่เห็น จะได้การแก้ร้อยครั้งที่ไม่เห็นภาพรวม
+> จดไว้ก่อน แล้ววันหลังค่อยมองรวม จะเห็นว่าร้อยข้อนั้นจริง ๆ คือสามเรื่อง
+
+## ไฟล์เดียวที่ใช้ — `docs/GARDEN.md`
+
+```markdown
+## บันทึก (ต่อท้ายทุกรอบ ไม่แก้ของเก่า)
+| วันที่ | ไฟล์:บรรทัด | สิ่งที่เห็น | ทำไมน่ากังวล | รูปแบบ |
+
+## ทบทวนแล้ว
+| วันที่ | ธีม | จำนวนข้อ | ทำอะไรต่อ | ไฟล์งาน |
 ```
 
-เพิ่มตามความจำเป็น:
-
-| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
-|---|---|---|
-| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
-| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
-| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
-| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
-
-> 🚨 **soft delete ไม่ใช่ของฟรี** — ทุก unique constraint ต้องคิดใหม่
-> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
-> แก้ด้วย partial index — `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
-
----
-
-## 4 · เลือกชนิด identifier
-
-| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
-|---|---|---|---|
-| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
-| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
-| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
-
-> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
-> ค่าสุ่มล้วนทำให้ทุกการ insert ไปแทรกกลางโครงสร้าง index
-> ตอนข้อมูลหลักหมื่นไม่รู้สึก ตอนหลักสิบล้านคือช้าจนต้องรื้อ
-> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
-
-**เลขที่คนเห็น ≠ primary key** — เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
-ให้เป็นคอลัมน์ต่างหากที่มี unique constraint ไม่ใช่เอา primary key ไปโชว์
-
----
-
-## 5 · normalisation แค่ไหนพอ
-
-**เริ่มที่ 3NF เสมอ** — ข้อเท็จจริงหนึ่งอย่างเก็บที่เดียว
-
-denormalise ได้เมื่อครบสามข้อนี้เท่านั้น:
-
-1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
-2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
-3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
-
-**ยกเว้นที่ยอมรับกันทั่วไป** — ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง:
-ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
-ไม่ใช่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
-
----
-
-## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
-
-### เงิน
-
-```sql
-total_amount   numeric(19,4)   NOT NULL      -- ✅
-currency       char(3)         NOT NULL      -- ✅ ISO 4217 เช่น THB
-total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่ากับ 0.3
-```
-
-> ❌ **float กับเงินคือบั๊กที่หาไม่เจอ** — ยอดรวมเพี้ยนไปสตางค์เดียวต่อรายการ
-> พอปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
-
-### เวลา
-
-| เก็บ | ใช้ | เหตุผล |
-|---|---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` (SQL Server ใช้ `datetimeoffset`) เก็บเป็น UTC | ประเทศไทยไม่มี daylight saving แต่ระบบที่ขายต่างประเทศมี |
-| วันเกิด วันครบกำหนด | `date` | ไม่มีเวลา ไม่มีโซนเวลา |
-| ช่วงเวลาเปิดร้าน | `time` + คอลัมน์โซนเวลาแยก | |
-
-**กฎ:** เก็บ UTC · แปลงเป็น `+07:00` ตอนแสดงผลเท่านั้น · ห้ามเก็บเวลาไทยดิบ ๆ ใน `timestamp` ที่ไม่มีโซน
-
-**พุทธศักราช** — เก็บเป็น ค.ศ. เสมอ แปลงเป็น พ.ศ. ตอนแสดงผล
-ฐานข้อมูลที่เก็บปี 2569 จะคำนวณช่วงเวลาผิดทุกฟังก์ชัน
-
-### enum / สถานะ
-
-| วิธี | ดีเมื่อ | เสียเมื่อ |
-|---|---|---|
-| ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy · มีชื่อไทย/อังกฤษ · มีลำดับการแสดง | ต้อง join |
-| `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
-| ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
-| `int` ดิบ ๆ | — | ❌ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
-
-### boolean
-
-- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก — `is_active` ✅ · `is_not_disabled` ❌
-- **ถ้าอาจมีสถานะที่สามในอนาคต อย่าใช้ boolean** — `is_approved` จะกลายเป็น `approval_status`
-  ในหกเดือน เมื่อมี "รออนุมัติ" เพิ่มมา
-
----
-
-## 7 · index — วางตรงไหนถึงได้ผล
-
-**ต้องมี:**
-
-- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
-- คอลัมน์ที่ปรากฏใน `WHERE` ของ query ที่วิ่งบ่อย
-- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
-
-**composite index — ลำดับคอลัมน์สำคัญ:**
-
-```sql
--- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
-CREATE INDEX ix_orders_tenant_status_created
-  ON orders (tenant_id, status, created_at DESC);
-```
-
-ลำดับคือ **เท่ากับ → ช่วง → เรียงลำดับ**
-index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
-
-**อย่าใส่ index เมื่อ:**
-
-- ตารางเล็กกว่าไม่กี่พันแถว — ฐานข้อมูลอ่านทั้งตารางเร็วกว่า
-- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
-- ตารางเขียนหนักกว่าอ่านมาก — ทุก index คือต้นทุนที่จ่ายทุกครั้งที่เขียน
-
-> **วัดก่อนเดา** — `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
-> บอกได้ว่า index ถูกใช้จริงไหม การเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
-
----
-
-## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
-
-| กฎ | ที่ควรอยู่ |
-|---|---|
-| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
-| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
-| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
-| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
-
-> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล — ยังมี script แก้ข้อมูลด่วน
-> งาน import ตอนตีสาม และ service ตัวที่สองที่เขียนทีหลัง
-> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
-
-**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
-
-| ตัวเลือก | ความหมาย | ใช้กับ |
-|---|---|---|
-| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
-| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
-| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
-
-`CASCADE` ผิดที่เดียว = ลบลูกค้าหนึ่งคนแล้วประวัติการซื้อสิบปีหายตาม
-
----
-
-## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
-
-**กฎสามข้อ:**
-
-1. **เดินหน้าอย่างเดียว** — migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
-2. **หนึ่ง migration ทำเรื่องเดียว** — ไล่ปัญหาง่าย rollback ตรงจุด
-3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องอยู่ด้วยกันได้** — ระหว่าง deploy มีทั้งสองเวอร์ชันวิ่งพร้อมกันเสมอ
-
-### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
-
-ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
-
-| รอบ deploy | ฐานข้อมูล | โค้ด |
-|:--:|---|---|
-| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้งสองคอลัมน์ · อ่านจาก `name` |
-| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
-| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
-
-ทำสามรอบดูเสียเวลา แต่แต่ละรอบ rollback ได้โดยไม่เสียข้อมูล
-การทำรอบเดียวคือการยอมรับว่าจะปิดระบบ
-
-**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
-
-- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน — PostgreSQL รุ่นใหม่ทำได้เร็ว แต่ MySQL ยังเขียนใหม่ทั้งตาราง
-- เปลี่ยนชนิดข้อมูล
-- สร้าง index ธรรมดา → ใช้ `CREATE INDEX CONCURRENTLY` (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
-
-**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** — migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
-อาจใช้ 40 นาทีบน production พร้อมล็อกตารางไว้ตลอด
-
----
-
-## 10 · ระบบหลายผู้เช่า (multi-tenant)
-
-| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
-|---|---|---|---|
-| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ — พลาดที่เดียวข้อมูลรั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
-| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
-| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
-
-> 🚨 ถ้าเลือกแบบ `tenant_id` — **บังคับที่ชั้นล่างสุด ไม่ใช่ที่ query แต่ละตัว**
-> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
-> เพราะ query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว คือข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
-> และมันจะไม่มี error ให้เห็นเลย
-
----
-
-## 11 · ข้อมูลส่วนบุคคล
-
-- ทำรายการไว้ว่า **คอลัมน์ไหนคือข้อมูลส่วนบุคคล** — ตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้ถ้าไม่มีรายการนี้
-- เลขบัตรประชาชน หมายเลขบัตรเครดิต ข้อมูลสุขภาพ — เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
-- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
-- ต้องลบได้เมื่อเจ้าของขอ — soft delete อย่างเดียวไม่นับว่าลบ
-- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
-
----
-
-## 12 · Anti-patterns
-
-- ❌ **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) — query อะไรก็ยากไปหมด
-- ❌ **`varchar(255)` ทุกคอลัมน์** — ตัวเลขนี้ไม่ได้มีความหมายอะไรเลย กำหนดจากข้อมูลจริง
-- ❌ **เก็บหลายค่าในคอลัมน์เดียว** — `"1,4,7"` ค้นไม่ได้ constraint ไม่ได้ ใช้ตารางเชื่อม
-- ❌ **ไม่มี foreign key เพราะ "แอปดูแลเอง"** — แล้ววันหนึ่งก็มีแถวกำพร้า
-- ❌ **index ทุกคอลัมน์เผื่อไว้** — เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- ❌ **`SELECT *` ในโค้ดจริง** — เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- ❌ **ตรรกะธุรกิจใน trigger** — ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง — rollback แล้วข้อมูลหาย
-- ❌ **แก้ schema บน production ด้วยมือ** — รอบหน้าที่ deploy จะไม่ตรงกัน
-
----
-
-## 13 · ตัวย่อ
-
-- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริงหนึ่งอย่างเก็บที่เดียว)
-- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
-- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
-- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-
-## 14 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
-| รัน migration ตอน deploy | `cicd-and-release` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| ตาราง user, role, session | `auth-implementation-patterns` |
-| วาดผัง ER | `svg-diagram-system` หรือ `markdown-visuals` |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
-
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** → `references/per-stack.md`
-
-
-## reference: per-stack.md
-
-# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
-
-1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
-2. [PostgreSQL](#2--postgresql)
-3. [SQL Server](#3--sql-server)
-4. [MySQL / MariaDB](#4--mysql--mariadb)
-5. [MongoDB](#5--mongodb)
-6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
-7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
-8. [Alembic (Python)](#8--alembic-python)
-9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
-
----
-
-## 1 · ชนิดข้อมูลเทียบกัน
-
-| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
-|---|---|---|---|
-| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
-| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
-| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
-| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
-| วันที่ล้วน | `date` | `date` | `DATE` |
-| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
-| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
-| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
-| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
-| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
-
-> 🚨 **SQL Server + ภาษาไทย** — `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
-> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
->
-> 🚨 **MySQL ต้องเป็น `utf8mb4`** — ชุดอักขระที่ชื่อ `utf8` เฉย ๆ ของ MySQL
-> เก็บได้แค่ 3 ไบต์ ทำให้อีโมจิและอักขระบางตัวหาย
-
----
-
-## 2 · PostgreSQL
-
-```sql
-CREATE TABLE orders (
-  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  order_no      varchar(20)  NOT NULL,
-  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
-  status        varchar(20)  NOT NULL DEFAULT 'draft',
-  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
-  currency      char(3)      NOT NULL DEFAULT 'THB',
-  meta          jsonb,
-  created_at    timestamptz  NOT NULL DEFAULT now(),
-  updated_at    timestamptz  NOT NULL DEFAULT now(),
-  deleted_at    timestamptz,
-  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
-  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
-);
-
-CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
-CREATE INDEX ix_orders_customer_id ON orders (customer_id);
-CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
-```
-
-**สร้าง index โดยไม่ล็อกตาราง:**
-
-```sql
-CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
--- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
-```
-
-**อัปเดต `updated_at` อัตโนมัติ:**
-
-```sql
-CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
-BEGIN NEW.updated_at = now(); RETURN NEW; END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
-FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
-```
-
-**row-level security สำหรับระบบหลายผู้เช่า:**
-
-```sql
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON orders
-  USING (tenant_id = current_setting('app.tenant_id')::bigint);
--- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
-```
-
----
-
-## 3 · SQL Server
-
-```sql
-CREATE TABLE orders (
-  id            bigint IDENTITY(1,1) PRIMARY KEY,
-  order_no      nvarchar(20)   NOT NULL,
-  customer_id   bigint         NOT NULL,
-  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
-  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
-  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
-  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
-  row_version   rowversion,
-  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
-  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
-);
-
-CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
-  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
-```
-
-- `rowversion` ใช้เป็น ETag สำหรับตรวจการแก้ชนกันได้ตรง ๆ
-- เรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
-- `datetime` แบบเก่ามีความละเอียดแค่ 3.33 มิลลิวินาที — ใช้ `datetime2` / `datetimeoffset` แทน
-
----
-
-## 4 · MySQL / MariaDB
-
-```sql
-CREATE TABLE orders (
-  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
-  order_no     VARCHAR(20)   NOT NULL,
-  customer_id  BIGINT        NOT NULL,
-  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
-  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY ux_orders_order_no (order_no),
-  KEY ix_orders_customer_id (customer_id),
-  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-```
-
-- `ALTER TABLE` ส่วนใหญ่เขียนตารางใหม่ทั้งตาราง — ตารางใหญ่ให้ใช้ `pt-online-schema-change` หรือ `gh-ost`
-- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
-
----
-
-## 5 · MongoDB
-
-```js
-db.createCollection("orders", {
-  validator: { $jsonSchema: {
-    bsonType: "object",
-    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
-    properties: {
-      orderNo:     { bsonType: "string" },
-      customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
-      createdAt:   { bsonType: "date" }
-    }
-  }}
-});
-db.orders.createIndex({ orderNo: 1 }, { unique: true });
-db.orders.createIndex({ customerId: 1, createdAt: -1 });
-```
-
-- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอและไม่โตไม่จำกัด** · นอกนั้นให้อ้างอิง
-- เอกสารหนึ่งใบมีเพดาน 16 MB — อาเรย์ที่โตเรื่อย ๆ จะชนเพดานวันหนึ่ง
-- `Decimal128` เท่านั้นสำหรับเงิน
-
----
-
-## 6 · Entity Framework Core (.NET)
-
-```bash
-dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
-dotnet ef database update                                # dev เท่านั้น
-```
-
-> **บน production ให้รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
-> คำสั่งนั้นต้องการสิทธิ์แก้ schema จาก connection ของแอป ซึ่งไม่ควรมีอยู่แล้ว
-
-```csharp
-modelBuilder.Entity<Order>(e => {
-    e.ToTable("orders");
-    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
-    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
-    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
-    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
-});
-```
-
----
-
-## 7 · Prisma / Drizzle (Node)
-
-```prisma
-model Order {
-  id          BigInt   @id @default(autoincrement())
-  orderNo     String   @unique @map("order_no") @db.VarChar(20)
-  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
-  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
-  customer    Customer @relation(fields: [customerId], references: [id])
-  customerId  BigInt   @map("customer_id")
-
-  @@index([status, createdAt], name: "ix_orders_status_created")
-  @@map("orders")
-}
-```
-
-```bash
-npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
-npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
-```
-
-- `Decimal` ของ Prisma กลับมาเป็น object ไม่ใช่ number — คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
-- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
-
----
-
-## 8 · Alembic (Python)
-
-```bash
-alembic revision --autogenerate -m "add order status"
-alembic upgrade head
-alembic downgrade -1
-```
-
-```python
-def upgrade():
-    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
-    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
-    op.alter_column("orders", "status", nullable=False)
-    op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
-                    postgresql_concurrently=True)
-```
-
-> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ = ข้อมูลหาย)
-> อ่านไฟล์ที่มันสร้างทุกครั้งก่อน commit
-
----
-
-## 9 · คำสั่งตรวจ query ช้า
-
-| ฐานข้อมูล | คำสั่ง |
-|---|---|
-| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
-| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
-| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
-| MongoDB | `db.orders.find(...).explain("executionStats")` |
-
-**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
-จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกินสิบเท่า · `Nested Loop` ที่วนหลักแสนรอบ
-
-
----
-
-# skill: api-conventions
-
-Use when starting an API, adding endpoints, or reviewing one for consistency. The project-wide rulebook decided once and applied everywhere — URL naming, versioning and what counts as a breaking change, pagination, how dates, money, identifiers and nulls are represented, validation errors, idempotency and deprecation. Ships a fillable conventions document.
-
-# ข้อตกลงของ API
-
-> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
-> API ที่ทุก endpoint ทำเหมือนกันแบบ "ไม่ค่อยถูกตามทฤษฎี" ใช้งานง่ายกว่า
-> API ที่แต่ละ endpoint ถูกต้องคนละแบบ — เพราะฝั่งเรียกต้องเดาใหม่ทุกครั้ง
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
-- จะเพิ่ม endpoint ในของเดิม และอยากให้เข้ากันได้
-- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
-- ต้องตอบว่า "การเปลี่ยนนี้ทำให้ client พังไหม"
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| โจทย์ | ไปที่ |
-|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
-| health check, error envelope, graceful shutdown | `web-service-essentials` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` |
-
----
-
-## 1 · เอกสารข้อตกลงต้องมีจริง
-
-วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
-ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
-
-> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
-
----
-
-## 2 · ตั้งชื่อ URL
-
-```
-GET    /v1/orders                 รายการ
-POST   /v1/orders                 สร้าง
-GET    /v1/orders/{id}            รายตัว
-PATCH  /v1/orders/{id}            แก้บางส่วน
-PUT    /v1/orders/{id}            แทนที่ทั้งตัว
-DELETE /v1/orders/{id}            ลบ
-GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
-```
-
-| กฎ | ✅ | ❌ |
-|---|---|---|
-| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
-| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
-| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
-| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
-
-**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
-อย่าดัดให้เป็น `PATCH` ที่มี `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์
-
-**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ — ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`) เป็นค่าเริ่มต้นที่แนะนำ
-และต้องตอบให้ได้ว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
-
----
-
-## 3 · versioning
-
-| วิธี | ข้อดี | ข้อเสีย |
-|---|---|---|
-| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
-| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
-
-> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
-
-**อะไรคือการเปลี่ยนที่ทำให้ฝั่งเรียกพัง:**
-
-| การเปลี่ยน | พังไหม |
-|---|:--:|
-| เพิ่ม endpoint ใหม่ | ไม่ |
-| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
-| เพิ่มฟิลด์ใน response | ไม่* |
-| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
-| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
-| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
-| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
-| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
-| ทำให้กฎ validation เข้มขึ้น | **พัง** |
-
-\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
-ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
-
-**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** — แต่ละเวอร์ชันที่ยังเปิดอยู่คือโค้ดที่ต้องดูแลอีกชุด
-
----
-
-## 4 · pagination
-
-**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
-รายการที่ "มีไม่กี่รายการหรอก" คือรายการที่จะมีหมื่นรายการในสองปี
-
-| วิธี | ใช้เมื่อ | ข้อจำกัด |
-|---|---|---|
-| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีการเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
-| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ช้าลงเรื่อย ๆ · ข้อมูลซ้ำ/หายเมื่อมีการแทรกระหว่างหน้า |
-
-```jsonc
-// GET /v1/orders?limit=2 → 200
-{
-  "data": [ { "id": "1042" }, { "id": "1041" } ],
-  "page": {
-    "limit": 2,
-    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
-    "hasMore": true
-  }
-}
-```
-
-- ห่อรายการไว้ใน `data` เสมอ — ตอบเป็นอาเรย์เปล่า ๆ แล้ววันหนึ่งจะเติมข้อมูลหน้าไม่ได้
-- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
-- `totalCount` เป็นของแพง — ทำเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
-- **cursor ต้องทึบ** — ฝั่งเรียกห้ามแกะหรือประกอบเอง
-
----
-
-## 5 · filtering · sorting · ฟิลด์ที่ขอ
-
-```
-GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
-```
-
-| เรื่อง | ข้อตกลง |
-|---|---|
-| กรองค่าเท่ากับ | `?status=confirmed` |
-| หลายค่า | `?status=confirmed,shipped` |
-| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
-| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
-| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
-| เลือกฟิลด์ | `?fields=id,orderNo` |
-
-- **อนุญาตเฉพาะฟิลด์ที่กำหนดไว้** — รับชื่อฟิลด์อะไรก็ได้ = ช่องโหว่และ query ที่ไม่มี index
-- พารามิเตอร์ที่ไม่รู้จัก ให้ตอบ `400` ดีกว่าเงียบ ๆ ข้าม — ฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
-
----
-
-## 6 · รูปแบบข้อมูล
-
-| ข้อมูล | รูปแบบ | ตัวอย่าง |
-|---|---|---|
-| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
-| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
-| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
-| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
-| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
-| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
-| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
-| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
-
-> 🚨 **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
-> `bigint` ที่โตเกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และเปลี่ยนเป็นสตริงทีหลังคือ breaking change
->
-> 🚨 **เงินเป็น float ใน JSON** — `1250.10` ที่วิ่งผ่านสองภาษาอาจกลายเป็น `1250.0999999999999`
-
-**`null` กับ "ไม่มีฟิลด์" ต้องต่างกันอย่างชัดเจน:**
-
-- ใน response — ฟิลด์ที่มีอยู่แต่ไม่มีค่า ให้ส่ง `null` ไม่ใช่ตัดออก ฝั่งเรียกจะได้ไม่ต้องเช็คสองแบบ
-- ใน `PATCH` — `{"note": null}` = ล้างค่า · ไม่ส่งคีย์ `note` เลย = ไม่แตะ
-
-**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** — ฝั่งเรียกจะได้วนลูปได้เลย
-
----
-
-## 7 · error
-
-รูปแบบ error envelope อยู่ที่ `web-service-essentials` (RFC 9457) — ใช้ตัวเดียวกัน
-สิ่งที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
-
-```jsonc
-// 422 Unprocessable Content
-{
-  "type": "https://api.acme.co/errors/validation",
-  "title": "Validation failed",
-  "status": 422,
-  "traceId": "01J9Z8...",
-  "errors": [
-    { "field": "email",          "code": "invalid_format", "message": "รูปแบบอีเมลไม่ถูกต้อง" },
-    { "field": "items[0].qty",   "code": "min_value",      "message": "ต้องมากกว่า 0" }
-  ]
-}
-```
-
-- **`code` คือของที่โปรแกรมอ่าน · `message` คือของที่คนอ่าน** — อย่าให้ฝั่งเรียกต้องแปลงข้อความเป็นเงื่อนไข
-- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
-- **คืน error ให้ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่งห้ารอบ
-- ข้อความภาษาไทยหรืออังกฤษ เลือกจาก `Accept-Language` ถ้ารองรับหลายภาษา
-
-**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
-`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
-
----
-
-## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
-
-### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
-
-**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
-
-```
-POST /v1/payments
-Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
-```
-
-- เซิร์ฟเวอร์เก็บคู่ (key, ผลลัพธ์) ไว้อย่างน้อย 24 ชั่วโมง
-- key เดิม + เนื้อหาเดิม → คืนผลเดิม ไม่ทำงานซ้ำ
-- key เดิม + เนื้อหา**ต่าง** → `422` ไม่ใช่ทำงานใหม่
-- เครือข่ายขาดตอนรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ — ฝั่งเรียก retry เสมอ
-
-### แก้ชนกัน (optimistic concurrency)
-
-```
-GET   /v1/orders/1042        → 200  ETag: "v7"
-PATCH /v1/orders/1042        If-Match: "v7"
-                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
-```
-
-ถ้าไม่มีสิ่งนี้ คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
-
----
-
-## 9 · rate limit
-
-```
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 997
-X-RateLimit-Reset: 1758790000
-Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
-```
-
-`429` ที่ไม่มี `Retry-After` ทำให้ฝั่งเรียกเดาเอง แล้วส่วนใหญ่จะเดาว่า "ลองใหม่ทันที"
-
----
-
-## 10 · การเลิกใช้ endpoint
-
-1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
-2. ส่ง header ในทุก response ของ endpoint นั้น:
-   ```
-   Deprecation: true
-   Sunset: Wed, 31 Dec 2026 23:59:59 GMT
-   Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
-   ```
-3. **ดูจาก log ว่ายังมีใครเรียกอยู่** — ติดต่อไปตรง ๆ อย่ารอให้เงียบไปเอง
-4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
-
-ระยะเวลาที่สมเหตุสมผล: API ภายใน 1 รอบ release · API ที่คนนอกใช้ อย่างน้อย 6 เดือน
-
----
-
-## 11 · Anti-patterns
-
-- ❌ **`200 OK` พร้อม `{"success": false}`** — ทำให้ตัวตรวจสอบและ log ทั้งระบบตาบอด
-- ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
-- ❌ **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูลห้าหมื่นแถวพร้อมกัน
-- ❌ **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
-- ❌ **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงหลุดข้อมูลภายใน
-- ❌ **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
-- ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงให้เองโดยไม่มีใครกด
-- ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
-- ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
-
----
-
-## 12 · ตัวย่อ
-
-- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
-- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
-- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
-- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
-- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
-- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| health check · error envelope · timeout | `web-service-essentials` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
-| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
-| token · scope · สิทธิ์ | `auth-implementation-patterns` |
-| correlation id ที่โผล่ใน error | `logging-standards` |
-| test สัญญาระหว่างระบบ | `testing-standards` |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
-
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
+## รอบสำรวจ (ทุกวัน หรือหลังมี commit ใหม่)
+
+1. อ่าน `docs/GARDEN.md` ส่วน "ทบทวนแล้ว" — ธีมที่ตัดสินแล้วไม่ต้องจดซ้ำ
+2. ดูเฉพาะไฟล์ที่เปลี่ยนตั้งแต่รอบก่อน (`git log --since`) · ทั้ง repo ทำแค่สัปดาห์ละครั้ง · งานใหญ่แบ่งด้วย [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)
+3. มองหา — logic ซ้ำ · เรียกข้ามชั้น (หน้าจอคุยฐานข้อมูลตรง) · กับดักของ framework ที่ใช้ · โค้ดตาย · ชื่อที่ไม่ตรงกับ `readable-code` · test ที่ผ่านทั้งที่โค้ดผิด · ของที่ขัดกับ `docs/AGENT-RULES.md`
+4. **ต่อท้ายลงตารางบันทึก ห้ามแก้โค้ด** · ใส่ "รูปแบบ" เป็นคำสั้นที่ใช้ซ้ำได้ เพื่อให้รวมกลุ่มง่าย
+5. ไม่เจออะไร ไม่ต้องเขียน
+
+## รอบทบทวน (ทุก 2–3 วัน หรือบันทึกเกิน 20 แถว)
+
+1. จัดกลุ่มบันทึกที่ยังไม่ทบทวนตาม "รูปแบบ" และต้นเหตุ
+2. ทุกธีมเลือกทางเดียว
+   - เกิดซ้ำได้อีก → [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ทำเป็นโครงสร้าง type หรือ lint
+   - ของที่มีอยู่แล้วต้องจัดใหม่ → playbook `refactor` ของ [`agent-team`](../agent-team/SKILL.md)
+   - ไม่คุ้มแก้ → เขียนเหตุผล
+3. ลงตาราง "ทบทวนแล้ว" แล้วเสนอให้ผู้ใช้ดูว่าจะทำธีมไหนก่อน — งานแก้จริงเริ่มเมื่อผู้ใช้เลือก
+4. `status-report`
+
+## ตั้งให้รันเอง
+
+scheduled task ในแอป Claude หรือ Windows Task Scheduler รัน `claude -p "ใช้ code-gardener รอบสำรวจ"` ทุกวัน และ `"... รอบทบทวน"` ทุกวันจันทร์และพฤหัส · ใช้ห้อง `-Isolated` ถ้ามี `.sandbox/`

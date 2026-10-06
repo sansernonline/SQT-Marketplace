@@ -75,7 +75,7 @@ function updateReadme(plugins, totals) {
     const addOnSkills = totals.skills - core.skills.length;
     text = text.replace(
       /\*\*รวม \d+ agents · \d+ skills · \d+ commands\*\* — core \d+ skills \+ add-on \d+ skills/,
-      `**รวม ${totals.agents} agents · ${totals.skills} skills · ${totals.commands} commands** — core ${core.skills.length} skills + add-on ${addOnSkills} skills`
+      `**รวม ${totals.agents} agents · ${totals.skills} skills · ${totals.commands} commands** — ${plugins.length === 1 ? "plugin เดียว ทุกสาขารวมไว้แล้ว" : `core ${core.skills.length} skills + add-on ${addOnSkills} skills`}`
     );
     text = text.replace(/\*\*14 plugins\*\*/g, `**${plugins.length} plugins**`);
     for (const p of plugins) {
@@ -117,7 +117,7 @@ function updateGlobalReadme(core) {
   const version = JSON.parse(
     readFileSync(join(ROOT, "plugins", CORE, ".claude-plugin", "plugin.json"), "utf8")
   ).version;
-  edit("docs/CLAUDE-WEB.md", (text) =>
+  edit("docs/INSTALL.md", (text) =>
     text.replace(
       /\*\*ในไฟล์:\*\* \d+ skills · \d+ agents · \d+ commands · `plugin\.json` v[\d.]+/,
       `**ในไฟล์:** ${core.skills.length} skills · ${core.agents.length} agents · ${core.commands.length} commands · \`plugin.json\` v${version}`

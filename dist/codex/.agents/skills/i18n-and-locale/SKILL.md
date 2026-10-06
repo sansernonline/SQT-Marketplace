@@ -1,6 +1,6 @@
 ---
 name: i18n-and-locale
-description: Use when a system shows text, dates, numbers or money to people, especially Thai and English together. Stores UTC and Gregorian years and converts only at display, handles Buddhist-year input, Thai sorting and search, Thai text that has no spaces between words, and the layout headroom other languages need.
+description: Use when a system shows text, dates, numbers or money, especially Thai with English. UTC and Gregorian storage, Buddhist-year input, Thai sorting, search and word breaking, layout headroom for other languages.
 ---
 
 # ภาษาและรูปแบบท้องถิ่น
@@ -36,6 +36,11 @@ locales/
   th.json        ← ภาษาหลัก เป็นแหล่งความจริง
   en.json
 ```
+
+| Stack | ไฟล์ข้อความแปล | รูปแบบคีย์ |
+|---|---|---|
+| เว็บ / ไลบรารีที่ใช้ JSON | `locales/th.json` · `en.json` | จุดคั่นตามที่อยู่ `order.cancel.confirmTitle` |
+| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` ที่รากของโฟลเดอร์โค้ด | **camelCase ไม่มีจุด** `orderCancelConfirmTitle` — คีย์ ARB กลายเป็นชื่อ getter ของ Dart จุดจึงใช้ไม่ได้ |
 
 **ตั้งชื่อคีย์ตามที่มันอยู่ ไม่ใช่ตามเนื้อความ:**
 
@@ -103,6 +108,7 @@ locales/
 | ต้องการ | ทำยังไง |
 |---|---|
 | เรียงชื่อไทย | ใช้ collation ของภาษาไทย — PostgreSQL `th-TH-x-icu` · SQL Server `Thai_100_CI_AS` |
+| เรียงชื่อไทยในแอป Flutter | Dart ไม่มี collation ไทยในตัว (`compareTo` เรียงตามรหัสอักขระ) — ใช้ `Collator` ของ platform ผ่าน plugin หรือ platform channel · ถ้าไม่คุ้ม เรียงตามเวลาที่สร้างแทนแล้วบอกผู้ใช้ (ยังไม่ได้ตรวจ package ที่ทำเรื่องนี้) |
 | ค้นหาไม่สนตัวพิมพ์และวรรณยุกต์ | normalize ก่อนเก็บลงคอลัมน์ค้นหาแยกต่างหาก |
 | ค้นหาคำกลางประโยค | ภาษาไทยไม่มีเว้นวรรค — full-text search แบบแบ่งคำด้วยเว้นวรรคใช้ไม่ได้ |
 
@@ -111,6 +117,9 @@ locales/
 >
 > ตัดบรรทัดให้ใส่ `word-break: normal; line-break: strict;` และทดสอบด้วยข้อความไทยจริง
 > อย่าทดสอบด้วย Lorem ipsum ซึ่งมีเว้นวรรคทุกคำ
+>
+> Flutter `Text` ตัดบรรทัดไทยด้วยตัวตัดคำของ engine เอง ไม่มี CSS ให้ตั้ง —
+> ตรวจด้วยข้อความไทยยาวจริงบนเครื่องจริงทั้งสองขนาดจอ แล้วเผื่อ `maxLines` + `overflow: TextOverflow.ellipsis`
 
 ---
 
@@ -137,7 +146,8 @@ locales/
 | ความสูงบรรทัด | ไทยต้องการมากกว่า เพราะมีสระบนและวรรณยุกต์ซ้อนกันสองชั้น |
 | ฟอนต์ | ต้องมีน้ำหนักครบทั้งไทยและอังกฤษ ไม่งั้นตัวหนาจะเป็นการปลอมแปลง |
 | ทดสอบ | ทดสอบด้วยข้อความจริงของทั้งสองภาษา **ไม่ใช่ Lorem ipsum** |
-| สลับภาษา | จำค่าไว้ที่โปรไฟล์ผู้ใช้ ไม่ใช่แค่ใน session |
+| สลับภาษา | จำค่าไว้ที่โปรไฟล์ผู้ใช้ ไม่ใช่แค่ใน session · แอปที่ไม่มีบัญชีผู้ใช้ (แอปมือถือออฟไลน์) เก็บค่าในเครื่อง และค่าเริ่มต้นคือ "ตามภาษาของเครื่อง" |
+| ส่งออก CSV ให้คนไทยเปิดใน Excel | UTF-8 **มี BOM** (ไม่งั้นไทยเพี้ยน) · ทศนิยมใช้ `.` · เวลาเป็น ISO 8601 UTC เช่น `2026-10-05T03:15:00Z` · ดู `data-import-export` |
 
 ---
 
@@ -164,6 +174,8 @@ locales/
 - **UTC** — Coordinated Universal Time (เวลามาตรฐานสากล ไทยคือ UTC+7)
 - **ICU** — International Components for Unicode (ไลบรารีมาตรฐานสำหรับกฎภาษาและการเรียงลำดับ)
 - **BCP 47** — มาตรฐานรหัสภาษา เช่น `th-TH`, `en-US`
+- **ARB** — Application Resource Bundle (ไฟล์ข้อความแปลแบบ JSON ที่ Flutter `gen-l10n` ใช้)
+- **BOM** — Byte Order Mark (สามไบต์ต้นไฟล์ที่บอก Excel ว่าเป็น UTF-8)
 
 ## 9 · เชื่อมกับ skill อื่น
 
@@ -174,5 +186,5 @@ locales/
 | ข้อความ error ที่ต้องแปล | `error-handling-patterns` |
 | ฟอนต์ไทยบนหน้าจอ | `ui-craft` + skill แพลตฟอร์ม |
 | ฟอนต์ไทยในเอกสารและสไลด์ | `branded-document-design` · `presentation-design` |
-| นำเข้าไฟล์ที่ปีเป็น พ.ศ. | `data-import-export` |
+| นำเข้าไฟล์ที่ปีเป็น พ.ศ. · ส่งออก CSV ที่ Excel เปิดแล้วไทยไม่เพี้ยน | `data-import-export` |
 | แม่แบบข้อความแจ้งเตือนหลายภาษา | `notifications` |

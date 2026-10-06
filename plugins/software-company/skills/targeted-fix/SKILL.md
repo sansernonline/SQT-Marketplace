@@ -1,7 +1,9 @@
 ---
 name: targeted-fix
-description: Use when feedback says something is wrong — an error message, stack trace, failing test, regression, broken-output screenshot, or that is not what I asked for. Finds the exact spot causing the problem, makes the smallest correct fix, and verifies it without touching unrelated code.
+description: Use when feedback says something is wrong (error, stack trace, failing test, regression, broken screenshot, not what I asked). Smallest correct fix at the exact spot, verified, nothing unrelated. Pairs with principle-fix-root-cause.
 ---
+
+> **ใน A-Team:** งานแก้บั๊กเริ่มจาก playbook [`bug-fix`](../agent-team/references/playbook-bug-fix.md) · skill นี้คือขั้น "แก้ให้เล็กที่สุด" ส่วนการหาสาเหตุจริงใช้ [`principle-fix-root-cause`](../principle-fix-root-cause/SKILL.md)
 
 # Targeted Fix
 

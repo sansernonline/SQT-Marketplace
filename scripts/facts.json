@@ -1,0 +1,70 @@
+{
+  "$comment": "ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง — อัตราเปลี่ยน แก้ value และ checked ที่นี่ แล้วรัน validate-marketplace จะชี้ทุกไฟล์ที่ต้องตามแก้ · เพิ่มไฟล์ใหม่ที่อ้างค่าเหล่านี้ลงใน files ด้วย",
+  "facts": {
+    "sso-wage-cap-2569": {
+      "value": "17,500",
+      "checked": "2026-10-06",
+      "note": "ฐานค่าจ้างสูงสุดประกันสังคม 17,500 บาท (เงินสมทบ 875) ตั้งแต่ 1 ม.ค. 2569",
+      "files": [
+        "plugins/career/skills/salary-negotiation/SKILL.md",
+        "plugins/thai-workplace/skills/payroll-th/SKILL.md",
+        "plugins/thai-workplace/skills/social-security-th/SKILL.md",
+        "plugins/trading-finance/skills/emergency-fund/SKILL.md",
+        "plugins/trading-finance/skills/personal-budget/SKILL.md",
+        "plugins/trading-finance/skills/retirement-plan/SKILL.md",
+        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md"
+      ]
+    },
+    "maternity-leave": {
+      "value": "120",
+      "checked": "2026-10-06",
+      "note": "ลาคลอด 120 วัน (นายจ้างจ่าย 60) · ลาไปช่วยภรรยาคลอด 15 วัน — พ.ร.บ.คุ้มครองแรงงาน ฉบับที่ 9",
+      "files": [
+        "plugins/thai-workplace/skills/labour-law-basics/references/leave-and-severance.md",
+        "plugins/thai-workplace/skills/labour-law-basics/SKILL.md"
+      ]
+    },
+    "vat-threshold": {
+      "value": "1.8",
+      "checked": "2026-10-06",
+      "note": "จดทะเบียน VAT เมื่อรายได้เกิน 1.8 ล้านบาท/ปี",
+      "files": [
+        "plugins/online-seller/skills/seller-tax-basics/SKILL.md",
+        "plugins/thai-workplace/skills/doc-quotation/SKILL.md",
+        "plugins/thai-workplace/skills/tax-vat-th/SKILL.md"
+      ]
+    },
+    "deposit-protection": {
+      "value": "1,000,000",
+      "checked": "2026-10-06",
+      "note": "คุ้มครองเงินฝาก 1 ล้านบาทต่อผู้ฝากต่อธนาคาร",
+      "files": [
+        "plugins/trading-finance/skills/emergency-fund/SKILL.md"
+      ]
+    },
+    "aoc-hotline": {
+      "value": "1441",
+      "checked": "2026-10-06",
+      "note": "สายด่วนศูนย์ AOC แจ้งอายัดบัญชีมิจฉาชีพ 24 ชั่วโมง",
+      "files": [
+        "plugins/consumer-rights/skills/refund-request/SKILL.md",
+        "plugins/personal-life/agents/life-admin.md",
+        "plugins/personal-life/skills/digital-hygiene/references/scams-and-takeover.md",
+        "plugins/personal-life/skills/digital-hygiene/SKILL.md",
+        "plugins/thai-workplace/skills/pdpa-workflow/references/pdpa-templates.md",
+        "plugins/trading-finance/skills/scam-check/references/red-flags-and-evidence.md",
+        "plugins/trading-finance/skills/scam-check/SKILL.md"
+      ]
+    },
+    "pit-top-bracket": {
+      "value": "35%",
+      "checked": "2026-10-06",
+      "note": "อัตราภาษีเงินได้บุคคลธรรมดาขั้นสูงสุด 35% (เงินได้สุทธิเกิน 5 ล้าน)",
+      "files": [
+        "plugins/online-seller/skills/seller-tax-basics/SKILL.md",
+        "plugins/thai-workplace/skills/payroll-th/SKILL.md",
+        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md"
+      ]
+    }
+  }
+}

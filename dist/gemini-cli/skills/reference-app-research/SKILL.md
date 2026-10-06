@@ -1,6 +1,6 @@
 ---
 name: reference-app-research
-description: Use when someone says "I want an app like X" — names an existing product (with or without a link) as the model for what to build. Researches that product in depth from official pages, documentation, changelogs, user reviews and close competitors, then writes one research document covering its features, user interface, user experience, strengths, weaknesses and — the most important part — concrete improvements our version should make, each backed by evidence and mapped to the requirement and screen it will become. The output feeds the BRD, SRS and mockup. Requires web search and fetch tools.
+description: Use when someone says I want an app like X. Researches that product from official pages, docs, changelogs, reviews and competitors, and writes one evidence-backed research doc ending in improvements for our version.
 ---
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร

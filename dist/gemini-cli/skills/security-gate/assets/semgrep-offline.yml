@@ -1,0 +1,45 @@
+# Offline baseline rules for security-gate — used when semgrep.dev is unreachable
+# (locked sandbox, no internet). Small on purpose: patterns that are almost never safe.
+rules:
+  - id: js-eval-or-function
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: eval / new Function runs text as code — parse the input instead
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+      - pattern: setTimeout("...", ...)
+  - id: js-html-sink
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: Writing HTML from a variable can inject script — use textContent or the framework's escaping
+    pattern-either:
+      - pattern: $EL.innerHTML = $X
+      - pattern: $EL.outerHTML = $X
+      - pattern: document.write(...)
+      - pattern: $EL.insertAdjacentHTML(..., $X)
+  - id: js-shell-with-variable
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Shell command built from a variable — pass arguments as an array to spawn/execFile
+    pattern-either:
+      - pattern: require('child_process').exec($CMD, ...)
+      - pattern: exec(`...${$X}...`, ...)
+      - pattern: execSync(`...${$X}...`, ...)
+  - id: sql-string-concat
+    languages: [javascript, typescript, python, csharp]
+    severity: ERROR
+    message: SQL built by string concatenation — use parameters
+    pattern-regex: (?i)(select|insert|update|delete)\s[^;]*["'`]\s*\+\s*\w
+  - id: python-eval-exec
+    languages: [python]
+    severity: ERROR
+    message: eval / exec runs text as code
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+  - id: hardcoded-secret-assignment
+    languages: [generic]
+    severity: WARNING
+    message: Looks like a hard-coded secret — move it to an environment variable or secret store
+    pattern-regex: (?i)(password|passwd|secret|api[_-]?key|token)\s*[:=]\s*["'][^"'\s]{8,}["']

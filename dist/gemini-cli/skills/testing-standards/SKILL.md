@@ -1,6 +1,6 @@
 ---
 name: testing-standards
-description: Use when adding, reviewing or setting up automated tests in .NET, Node, Python or Angular. Asks which framework to use rather than assuming, then sets what deserves a test, how to name it, how to keep it deterministic and what coverage number is honest. Load it before the first test, or when a suite is slow, flaky or ignored.
+description: Use when adding, reviewing or setting up automated tests in .NET, Node, Python, Angular or Flutter, or when a test suite is slow or flaky. Uses the project's existing framework and sets what to test, naming and honest coverage.
 ---
 
 # Testing Standards
@@ -17,16 +17,18 @@ description: Use when adding, reviewing or setting up automated tests in .NET, N
 ## เมื่อไหร่ **ไม่** ใช้
 
 - E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) → `e2e-testing-patterns`
+- ขับแอปมือถือจริงบน emulator → `app-verifier-setup` (`references/android-native.md`)
 - ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน → `test-case-template`
 
 ---
 
-## 1 · ขั้นแรก: ถามก่อนว่าจะใช้ตัวไหน
+## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
 
-**ห้ามเลือก framework ให้ผู้ใช้เอง** ถ้าโปรเจกต์ยังไม่มี test ให้ถามผู้ใช้
-ก่อนเขียนบรรทัดแรก (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ให้ใช้ตัวนั้น) — เพราะการเลือกผิดแล้วย้ายทีหลังแพงมาก
+- **โปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) → ใช้เลย ไม่ต้องถาม
+- **ต้องลงแพ็กเกจ test ตัวใหม่** → ใส่คำถามนี้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ให้ใช้ตัวนั้น) — เพราะการเลือกผิดแล้วย้ายทีหลังแพงมาก
+- เริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก → เลือกตัว**แนะนำ**ในตาราง ทำต่อ แล้วบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่หยุดถามกลางทาง
 
-ถามสองข้อนี้:
+สองเรื่องที่ต้องตกลง:
 
 **ข้อ 1 — framework**
 
@@ -36,6 +38,7 @@ description: Use when adding, reviewing or setting up automated tests in .NET, N
 | Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
 | Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
 | Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
+| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
 
 **ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
 
@@ -59,7 +62,9 @@ description: Use when adding, reviewing or setting up automated tests in .NET, N
    ╱_________╲
 ```
 
-**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** ถ้าเกินนี้คนจะเลิกรันก่อน commit
+**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E — สร้างหน้าจอจริงในหน่วยความจำ กดและอ่านได้โดยไม่ต้องมี emulator · เป็นชั้นกลางหลักของแอปมือถือแทน integration ที่ต่อ DB ซึ่งแอปส่วนใหญ่ไม่มี
+
+**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ — การเริ่ม `flutter test` เองก็กินหลายวินาที (รอยืนยันตัวเลขบนเครื่องจริง)) ถ้าเกินนี้คนจะเลิกรันก่อน commit
 แล้ว test จะกลายเป็นด่านที่ CI เท่านั้นที่เจอ — ซึ่งช้าเกินไป
 
 ---
@@ -95,6 +100,8 @@ CalculateDiscount_WhenMemberIsGold_Returns15Percent
 CreateOrder_WhenStockIsZero_ThrowsOutOfStock
 ParseDate_WhenInputIsEmpty_ReturnsNull
 ```
+
+ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
 
 **โครง AAA** — เว้นบรรทัดคั่นสามส่วนให้เห็นชัด
 
@@ -148,8 +155,8 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 
 ## 7 · ตรวจงาน
 
-- [ ] ถามผู้ใช้แล้วว่าจะใช้ framework ไหน (หรือใช้ของเดิมที่โปรเจกต์มี)
-- [ ] `npm test` / `dotnet test` / `pytest` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
+- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก · ถ้าลงตัวใหม่ ถามแล้วหรือบันทึกใน "ตัดสินใจเอง"
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
 - [ ] ชุด unit รันจบใน 10 วินาที
 - [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
 - [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
@@ -179,6 +186,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 | ต้องการ | ใช้คู่กับ |
 |---|---|
 | E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
+| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
 | ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
 | ทดสอบ endpoint health/ping | `web-service-essentials` |
 | log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |

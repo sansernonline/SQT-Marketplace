@@ -1,985 +1,2145 @@
-# skill: project-doc-set
+# skill: principle-prove-it-works
 
-Use when a new project needs its document set decided — which documents to write, in what order, who reads each one, and where docs, assets, mockups and qa sit beside the code. Scales the set to project size so a two-week job does not get a twelve-document package.
+Use before saying anything is done, fixed, passing or working (code, fix, mockup, document, migration, measurement). Verify against the real artifact, never a proxy like it compiles or the subagent said so.
 
-# ชุดเอกสารโปรเจกต์
+# principle · prove it works — พิสูจน์กับของจริง
 
-> **กฎข้อเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่า **ใครอ่าน** และ **อ่านแล้วตัดสินใจอะไร**
-> ตอบไม่ได้ = ไม่ต้องเขียน
+> "เสร็จแล้ว" ที่ไม่มีหลักฐาน คือการโยนงานตรวจไปให้คนอื่น
 
----
+## กฎ
 
-## เมื่อไหร่ใช้ skill นี้
+ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้
 
-- เปิดโปรเจกต์ใหม่ แล้วต้องตัดสินว่าจะมีเอกสารอะไรบ้าง
-- โปรเจกต์เดิมมีเอกสารกระจัดกระจาย ไม่รู้ว่าอันไหนเป็นตัวจริง
-- ลูกค้าถามว่า "ส่งมอบเอกสารอะไรบ้าง"
-- จะเริ่มเขียนเอกสารสักชิ้น แต่ไม่แน่ใจว่าต้องมีอะไรมาก่อน
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| สถานการณ์ | ใช้แทน |
-|---|---|
-| โครงโฟลเดอร์ของ**โค้ด** · README · CHANGELOG · linter · โครงเอกสารแบบ A | `project-bootstrap` |
-| ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
-| ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
-| จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
-
----
-
-## 1 · เอกสารอยู่ในหรืออยู่นอก repo
-
-**ตัดสินข้อนี้ก่อน** เพราะย้ายทีหลังคือ rewrite ลิงก์ทั้งโปรเจกต์
-
-| | **แบบ A — เอกสารอยู่ใน repo** | **แบบ B — เอกสารอยู่นอก repo** |
+| งาน | หลักฐานที่นับ | ไม่นับ |
 |---|---|---|
-| เลือกเมื่อ | เอกสารเป็น markdown ทั้งหมด · ผู้อ่านคือทีมพัฒนา | มี `.docx` / `.xlsx` / mockup / รูป PNG ที่ลูกค้าต้องเห็น |
-| ตรงกับชุด | S · M | M · L |
-| โครง | ดู **`project-bootstrap` ข้อ 1** — เป็นเจ้าของโครงนี้ | ดูโครงข้างล่าง |
-| ข้อดี | เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน | pull request ไม่เต็มไปด้วยไฟล์ binary |
+| ฟีเจอร์ | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
+| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator + ค่าที่ฉีดเข้า = พิสูจน์**เส้นทางโค้ด** ติดป้าย `emulator` · ความแม่นยำต้องลองเครื่องจริง ติดป้าย `เครื่องจริง <รุ่น>` | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
+| แก้บั๊ก | กรณีที่เคยล้ม รันแล้วผ่าน บนพื้นผิวเดิม | test อื่นผ่าน |
+| test | test ล้มเมื่อโค้ดผิด (ลองทำให้ผิดดูหนึ่งครั้ง) | test ผ่าน |
+| mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
+| เอกสาร | เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ | เขียนไฟล์สำเร็จ |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง · ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) เทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว — ไม่มีเครื่องมือ เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
-> โปรเจกต์ที่เริ่มเป็นแบบ A แล้วโตจนมีเอกสารส่งมอบ ให้ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว**
-> ห้ามอยู่กึ่งกลาง — เอกสารสองที่คือเอกสารสองเวอร์ชัน
+## วิธีทำ
 
-### โครงของแบบ B
+1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" เป็นสิ่งที่ตรวจได้
+2. หลังทำ ตรวจตามนั้นกับของจริง บันทึกผลดิบ (ตัวเลข · ภาพ · output)
+3. ตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) → บอกตรง ๆ ว่า `ยังไม่ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
 
-```
-<ชื่อโปรเจกต์>/
-├─ ref/                 ของที่ได้รับมา — TOR · บันทึกประชุม · ภาพหน้าจอระบบเดิม · ไฟล์จากลูกค้า  **อ่านอย่างเดียว ห้ามแก้**
-├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
-│  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
-│  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR — หนึ่งการตัดสินใจต่อไฟล์              [ทางเลือก]
-│  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
-├─ mockup/              .html ที่เปิดแล้วกดได้จริง
-├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
-├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
-├─ _to_delete/          ของชั่วคราวทุกอย่าง
-└─ <repo>/              repo โค้ด — โครงข้างในเป็นของ `project-bootstrap`
-```
+## สัญญาณว่ากำลังข้าม
 
-**โฟลเดอร์เหล่านี้สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:**
+- คำว่า "น่าจะ" · "ควรจะ" · "ในทางทฤษฎี" ในรายงานจบงาน
+- ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้
+- ตรวจแค่ส่วนที่ง่าย แล้วสรุปรวมว่าผ่านทั้งหมด
 
-| โฟลเดอร์ | สร้างเมื่อ | ถ้าไม่มี ของไปอยู่ไหน |
-|---|---|---|
-| `ref/` | ได้รับไฟล์จากลูกค้าหรือจากระบบเดิม | ไม่มีอะไรให้เก็บ — ห้ามเอาไฟล์ลูกค้าไปปนใน `docs/` เพราะจะแยกไม่ออกว่าอะไรเราเขียน |
-| `docs/figures/` | มีรูปที่วาดเองและไปอยู่ในเอกสารส่งมอบ | รูปฝังอยู่ในไฟล์ `.docx` อย่างเดียว — แก้ทีหลังไม่ได้ |
-| `docs/decisions/` | มีการตัดสินใจทางเทคนิคที่ต้องอธิบายทีหลัง | เหตุผลอยู่ใน Architecture หัวข้อเดียว |
-| `docs/research/` | ผู้ใช้บอกว่าอยากได้แอปแบบเดียวกับแอปที่มีอยู่ | ไม่มี research |
-| `qa/` | มี test case (เกือบทุกโปรเจกต์) — test case อยู่ที่นี่เสมอ `.md` หรือ `.xlsx` สำหรับขนาด L | — `docs/test-plan.md` มีแค่แผน ไม่มีรายการ test case |
-| `assets/` | มีโลโก้หรือไอคอนของโปรเจกต์ | — |
-
-**กฎของโฟลเดอร์ (ใช้ได้ทั้งสองแบบ):**
-
-- **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ — นามสกุลบอกอยู่แล้วว่าใครอ่าน
-- **ไฟล์ต้นทางของรูปห้ามหาย** — ปีหน้าต้องแก้รูป ถ้าเหลือแต่ PNG คือวาดใหม่ทั้งใบ
-- **ทุกปุ่มใน mockup ต้องกดได้จริง** ปุ่มหลอกทำให้รีวิวผิด
-- **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
-- **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
-- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ — รูปแบบตารางอยู่ใน `project-bootstrap` ข้อ 1
 
 ---
 
-## 2 · เลือกชุดเอกสารตามขนาดงาน
+# skill: decision-log
 
-ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
+Use whenever an agent makes a judgment call on its own during long or unattended work (choosing an approach, filling a gap, resolving conflicting docs, skipping something). Appends one auditable row to docs/BUILD-PLAN.md.
 
-| ขนาด | ความหมาย |
+# decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
+
+> ให้ agent ทำต่อเองโดยไม่ถามได้ ก็ต่อเมื่อคนกลับมาเห็นได้ว่ามันเลือกอะไรไปบ้าง และกลับคำตัดสินทีละข้อได้
+
+มาจาก `show-me-your-work` ของ pstack · ปรับให้ใช้ไฟล์เดียวกับ [`status-report`](../status-report/SKILL.md)
+
+## เขียนที่ไหน
+
+`docs/BUILD-PLAN.md` หัวข้อ `## ตัดสินใจเอง` — หัวข้อสุดท้ายของไฟล์ · ลำดับเต็ม: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` · ไม่มีหัวข้อหรือไม่มีไฟล์ ให้สร้าง
+subagent ไม่เขียนเอง — **รายงานการตัดสินใจกลับมา** ตัวหลักเป็นคนลงตาราง
+
+```markdown
+## ตัดสินใจเอง
+
+| วันที่ | งาน | เรื่อง | เลือก | ไม่เลือก | เหตุผล · หลักฐาน |
+|---|---|---|---|---|---|
+| 2026-10-04 15:40 | SRS | เวลาตอบสนองหน้าค้นหา | ≤ 2 วินาที (รอยืนยัน) | ≤ 1 วินาที | BRD ไม่ระบุ · ใช้ค่าที่ระบบเดิมทำได้ (วัดจริง 1.6 วินาที) |
+| 2026-10-04 16:05 | FR-012 | เก็บไฟล์แนบ | ดิสก์ในเครื่อง + path ในฐานข้อมูล | object storage | ขนาดงาน S · ย้ายทีหลังได้ · ADR-004 |
+```
+
+## ต้องลงเมื่อ
+
+- เลือกระหว่างหลายทางที่ใช้ได้ทั้งคู่
+- เอกสารไม่ได้บอก แล้ว agent เติมค่าเอง
+- เอกสารสองฉบับขัดกัน แล้วเลือกยึดฉบับหนึ่ง
+- ข้ามขั้นตอนหรือฉบับที่สั่ง เพราะทำไม่ได้หรือไม่จำเป็น
+- ผลทดลองตัดสินทางเลือก (จาก playbook `prototype` หรือ `parallel-attempts-pick-best`)
+
+**ไม่ต้องลง** — เรื่องที่ skill หรือเอกสารสั่งไว้ชัดแล้ว · การตั้งชื่อตัวแปรทั่วไป
+
+## หลักการเลือกเมื่อต้องตัดสินเอง
+
+เลือกทางที่ผลกระทบน้อยสุด — ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
+**ข้อเท็จจริง** (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา — ใส่ค่าที่ใช้ชั่วคราวพร้อม `(รอยืนยัน)` แล้วลงคำถามใน "ค้างอยู่" ของ `status-report` · งานที่ย้อนไม่ได้ เตรียมคำสั่งหรือ diff ไว้ใน "รออนุมัติ" — ไม่ทำเอง
+
+## กติกาของแถว
+
+- หนึ่งแถวต่อหนึ่งการตัดสินใจ · ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
+- "ไม่เลือก" ต้องมีอย่างน้อยหนึ่งทาง — ถ้าไม่มีทางอื่นเลย ไม่ใช่การตัดสินใจ
+- "เหตุผล · หลักฐาน" ระบุที่มา — ไฟล์ · ADR · ตัวเลขที่วัด · ติดป้าย `วัดจริง` / `อนุมาน` เมื่อเป็นตัวเลข
+- ไม่ลบแถวเก่า · ผู้ใช้ไม่เห็นด้วย แก้ที่แถวนั้นแล้วสั่งทำใหม่เฉพาะงานนั้น
+- **ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงจาก `security-gate`) ลงตารางเดียวกัน แล้วเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` = `agent` · `ผู้ใช้` · ไม่มีคอลัมน์นี้ = agent ตัดสินทุกแถว
+
+## ในคำตอบตอนจบ
+
+หัวข้อ **ตัดสินใจเอง** ท้ายคำตอบ แสดง**ทุกแถวของรอบนี้** (เลือกอะไร · ไม่เลือกอะไร · ทำไม หนึ่งบรรทัด) แล้วชี้ไปที่ตารางเต็ม
+เกิน 15 แถว สรุปเป็นกลุ่มได้ (เช่น "เลือก dependency 6 ตัว") แต่ต้องบอกจำนวนรวมและลิงก์ไปที่ตาราง · แถวที่กระทบผลมากยังต้องแสดงเต็ม
+
+
+---
+
+# skill: saas-platform
+
+Use when building B2B SaaS — multi-tenancy and tenant isolation, enterprise SSO (SAML/OIDC) and SCIM, webhooks, subscription billing, usage metering and revenue metrics, or customer onboarding and adoption.
+
+# saas-platform
+
+SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิดเงินรายเดือน · onboarding ลูกค้า
+
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+
+## หัวข้อ
+
+| ใช้เมื่อ | อ่าน |
 |---|---|
-| **S** | ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น |
-| **M** | 1–3 เดือน · มีผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ |
-| **L** | > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา |
+| implementing multi-tenancy in SaaS — row-level isolation, schema-per-tenant, DB-per-tenant, tenant context propagation, noisy neighbor mitigation. Concrete implementation patterns | [`references/multi-tenancy-patterns.md`](references/multi-tenancy-patterns.md) |
+| integrating with enterprise systems — SSO (SAML/OIDC), SCIM provisioning, webhooks, iPaaS (Zapier, Workato), API client design, or building robust integration platforms | [`references/enterprise-integration.md`](references/enterprise-integration.md) |
+| implementing subscription billing — Stripe Billing/Chargebee setup, usage metering, dunning, revenue recognition, multi-currency, proration. Covers production patterns for B2B SaaS | [`references/subscription-billing.md`](references/subscription-billing.md) |
 
-### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
+## คู่มือบทบาท
 
-| เอกสาร | รูปแบบ | ผู้อ่าน | S | M | L |
-|---|---|---|:-:|:-:|:-:|
-| Project Plan | `.docx` | ผู้ว่าจ้าง · ทีม | ○ | ● | ● |
-| SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
-| Architecture | `.docx` | dev · ops | ○ | ● | ● |
-| Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
-| User Guide | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
-| FSD | `.docx` | dev · QA | ○ | ○ | ● |
-| BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
-| Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
-| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
-● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
-**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** และนั่นถูกแล้ว — งานสองสัปดาห์ที่มาพร้อม BRD คือเอกสารที่เขียนให้ตัวเองอ่าน
-
----
-
-### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
-
-กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
-
-| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
-|---|---|---|---|
-| README | `<repo>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
-| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
-| Runbook | `docs/runbook.md` | ระบบล่มตอนตีสองต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
-
-> **สี่ตัวล่างที่มีเงื่อนไข LLM/API/ฐานข้อมูล เป็นตัวที่คนลืมบ่อยที่สุด**
-> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
-
----
-
-## 3 · ลำดับการเขียน
-
-**สายส่งมอบ** — ห้ามข้ามขั้น
-
-```
-Project Plan ─► BRD ─► SRS ─┬─► mockup
-                            └─► Architecture ─► FSD
-                                                 │
-              User Guide ◄─ Test Cases ◄─ Test Plan
-```
-
-**ห้ามเขียนชิ้นถัดไปก่อนชิ้นก่อนหน้าได้รับการยืนยัน** — เขียนล่วงหน้าแล้วต้องรื้อทั้งสาย
-ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
-
-**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร
-
-| เขียนเมื่อ | เอกสาร |
-|---|---|
-| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
-| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
-| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
-| ตอนออกแบบ endpoint แรก | API-SPEC |
-| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
-| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
-| ก่อนขึ้นระบบจริง | Runbook |
-
-> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
-> เขียนย้อนหลังได้แต่เหตุผลจริงหายไปแล้ว
-
----
-
-## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
-
-| เอกสาร | agent | skill ที่ใช้ |
+| บทบาท | อ่าน | agent |
 |---|---|---|
-| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
-| Project Plan | `project-manager` | `branded-document-design` |
-| BRD · user story | `business-analyst` | `user-story-writer` |
-| SRS | `system-analyst` | `srs-writing` |
-| FSD | `system-analyst` | `fsd-writing` |
-| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
-| ADR | `solution-architect` | `adr-writer` |
-| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| User Guide | `technical-writer` | `polished-document-style` |
-| Runbook | `devops-engineer` | `incident-runbook-template` |
-| BUILD-PLAN | `project-manager` | `simplicity-first` |
-| AGENT-LOOP | `developer` | `spec-to-code-loop` |
-| API-SPEC | `system-analyst` | `api-conventions` |
-| DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ plugin `software-company-ai`) |
+| designing customer onboarding flows, building in-product help, configuring usage analytics for adoption tracking, building self-service portals, or designing CS tooling | [`references/agent-customer-success-engineer.md`](references/agent-customer-success-engineer.md) | `growth-specialist` |
+| designing B2B SaaS systems — multi-tenancy patterns, tenant isolation, scalability strategies, region deployment, or evaluating tenant data architectures | [`references/agent-saas-architect.md`](references/agent-saas-architect.md) | `solution-architect` |
+| building enterprise integrations — SSO (SAML/OIDC), SCIM provisioning, webhooks, API clients, ETL connectors, or any system-to-system integration in B2B SaaS context | [`references/agent-integration-engineer.md`](references/agent-integration-engineer.md) | `solution-architect` |
 
----
+## agent ของสายนี้
 
-## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
+`growth-specialist` · `solution-architect` · `revops-analyst`
 
-| รูปนี้ใครเห็น | วาดด้วย | เก็บที่ |
-|---|---|---|
-| อยู่ใน README · PR · เอกสารในทีม | Mermaid (`software-diagrams`) | ฝังในไฟล์ `.md` |
-| อยู่ในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ | `diagram-figures` | `docs/figures/` + ต้นทางใน `src/` |
+## ที่มา
 
-> **รูป Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** — สีที่สุ่มตามชนิด node ไม่ได้แปลว่าอะไร
-> ตัวหนังสือภาษาไทยล้นกรอบ และย่อลงหน้า A4 แล้วอ่านไม่ออก
+รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
 
-**หัวรูปทุกใบต้องมีครบห้าอย่าง** — ชื่อ · คำขยายหนึ่งบรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
-รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
 
----
+## reference: agent-customer-success-engineer.md
 
-## 6 · ธีมสีของชุดเอกสาร
+> เดิมคือ agent `customer-success-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `growth-specialist` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
 
-ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
+**สารบัญ:** 
 
-```markdown
-<!-- doc-theme: accent=#5B4BE8 -->
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery](#initial-discovery)
+- [📊 CS Engineering Quality Standards](#cs-engineering-quality-standards)
+- [Activation Milestones](#activation-milestones)
+- [Health Score Components](#health-score-components)
+- [In-Product Engagement Tools](#in-product-engagement-tools)
+- [Self-Service Patterns](#self-service-patterns)
+- [Adoption Tracking](#adoption-tracking)
+- [Churn Signal Engineering](#churn-signal-engineering)
+- [Expansion Signal Engineering](#expansion-signal-engineering)
+- [CS Tool Integration](#cs-tool-integration)
+- [Skills You Use](#skills-you-use)
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+
+You are a **Customer Success Engineer**. You build the technical foundation that turns first-time users into long-term advocates.
+
+## Your Responsibilities
+
+1. **Onboarding Engineering** — Time-to-value optimization
+2. **In-Product Help** — Contextual guidance, walkthroughs
+3. **Adoption Tracking** — Activation milestones, health scores
+4. **Self-Service Portal** — Docs, account mgmt, billing
+5. **CS Tooling** — CRM integration, ticketing
+6. **Churn Signals** — Detect at-risk accounts
+7. **Expansion Signals** — Detect upgrade opportunities
+
+## 🔍 Initial Discovery
+
+1. **Product maturity** — early, growth, scale stage
+2. **Customer segments** — SMB to enterprise
+3. **Time to value** — current vs target
+4. **Activation definition** — what = "got value"
+5. **CS team size** — affects tool needs
+6. **Churn pattern** — voluntary vs involuntary
+
+## 📊 CS Engineering Quality Standards
+
+- **Time to first value:** measured + improving
+- **Activation rate:** > 60% to first key action
+- **Self-service success:** > 70% of questions self-served
+- **Health score accuracy:** correlates with renewal
+- **CS tooling coverage:** complete account view
+- **Customer data privacy:** PDPA/GDPR respected
+
+## Activation Milestones
+
+```
+Define 3-5 milestones per product:
+1. Account created
+2. First [key action]
+3. Invited team
+4. First [habit-forming action]
+5. Recurring usage pattern
+
+Track conversion rate at each step
+Optimize the worst-performing transition
 ```
 
-`branded-document-design` · `presentation-design` · `diagram-figures` · `svg-diagram-system`
-อ่านค่านี้แทนการเลือกสีเอง — เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
+## Health Score Components
 
-**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — มีสีแบรนด์แล้วใช้สีแบรนด์ · ยังไม่มีให้เสนอโทนแล้วรอยืนยัน
-ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · เทาโครงสร้าง · เขียวผ่าน/แดงไม่ผ่าน
+```python
+def health_score(account):
+    return weighted_sum([
+        ('login_frequency', 0.3),        # active?
+        ('feature_adoption', 0.2),       # using what we shipped
+        ('user_growth', 0.15),           # expanding internally
+        ('support_load', -0.1),          # too many tickets = bad
+        ('payment_history', 0.1),        # paying on time
+        ('engagement_score', 0.15),      # email opens, NPS, etc.
+    ])
 
----
-
-## 7 · รายการตรวจก่อนส่งมอบชุดเอกสาร
-
-- [ ] ทุกไฟล์ `.docx` เปิด Navigation Pane แล้ว**เห็นหัวข้อครบ** (ใช้ Heading style จริง ไม่ใช่ตัวหนา)
-- [ ] ทุกเอกสารมีหน้าประวัติการแก้ไข · เลขเวอร์ชัน · วันที่ · ผู้จัดทำ
-- [ ] ทุกรูปมีเลขรูปและถูกอ้างในเนื้อความอย่างน้อยหนึ่งครั้ง
-- [ ] ไฟล์ต้นทางของทุกรูปอยู่ใน `docs/figures/src/` (ถ้ามีโฟลเดอร์นี้)
-- [ ] เอกสารเชิงเทคนิคที่เข้าเงื่อนไขในข้อ 2.2 มีครบ — มี API ต้องมี API-SPEC · ใช้ LLM ต้องมี PROMPT-LIBRARY
-- [ ] ตัวย่อทุกตัวกางเต็มครั้งแรกที่ปรากฏ
-- [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
-- [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
-- [ ] `_to_delete/` ว่าง หรือถูกลบไปแล้ว
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **เขียน BRD ให้งานสองสัปดาห์** — ข้อ 2
-- ❌ **เอกสาร `.docx` ที่ไม่มี Heading style สักอัน** — navigation pane ว่าง หา TOC ไม่ได้ ไม่มีลำดับชั้น
-- ❌ **เก็บแต่ PNG ไม่เก็บไฟล์ต้นทาง** — ข้อ 1
-- ❌ **เก็บ `.docx` และ mockup ไว้ใน repo โค้ด** เพราะ "จะได้อยู่ที่เดียว" — pull request จะเต็มไปด้วย binary · ถ้าถึงจุดนี้แปลว่าต้องย้ายเป็นแบบ B (ข้อ 1)
-- ❌ **เอกสารอยู่สองที่พร้อมกัน** — ครึ่งหนึ่งใน repo ครึ่งหนึ่งนอก repo คือเอกสารสองเวอร์ชัน
-- ❌ **เขียน FSD ก่อน SRS ได้รับการยืนยัน**
-- ❌ **มี mockup ที่ปุ่มกดไม่ได้** — ผู้รีวิวเข้าใจว่าทำได้แล้ว
-- ❌ **ใช้ LLM แต่ไม่มี PROMPT-LIBRARY** — prompt ตัวจริงอยู่ในโค้ด แก้แล้วไม่มีใครรู้ว่าเปลี่ยนอะไร
-- ❌ **สร้าง `qa/` `decisions/` `figures/` ทิ้งไว้ว่าง ๆ** เพราะ "ในแบบมี" — โฟลเดอร์ว่างทำให้คนคิดว่าของหาย
-- ❌ **เอกสารชิ้นเดียวตอบทุกคำถาม** — SRS ที่มีทั้ง timeline ทั้ง test case คือเอกสารที่ไม่มีใครอ่านจบ
-
----
-
-## 9 · ตัวย่อ
-
-- **ADR** — Architecture Decision Record
-- **BRD** — Business Requirements Document
-- **FSD** — Functional Specification Document
-- **QA** — Quality Assurance
-- **SRS** — Software Requirements Specification
-- **TOC** — Table of Contents
-
----
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| โครงโฟลเดอร์ของโค้ด · README · สารบัญ `docs/README.md` | `project-bootstrap` |
-| ตั้งชื่อไฟล์และจัดเวอร์ชัน | `document-naming` |
-| จัดรูปแบบหน้าเอกสาร | `branded-document-design` · `polished-document-style` |
-| วาดรูปให้ดูออกแบบมา | `diagram-figures` |
-| เลือกว่าจะวาดรูปด้วยอะไร | `software-diagrams` |
-| ของชั่วคราวและการเก็บกวาด | `temp-file-discipline` |
-| ตารางสถานะเอกสารและงานเมื่อจบแต่ละฉบับ (ลง `docs/BUILD-PLAN.md`) | `status-report` |
-| รายการตรวจฉบับพิมพ์ | `assets/doc-set-checklist.md` |
-
-
----
-
-# skill: polished-document-style
-
-Use when producing stakeholder-facing or human-readable documents (BRD, FSD, ADR, status reports, audit reports, postmortems, etc.) that need polished formatting. Provides Rich Markdown + Mermaid conventions for consistent, professional output that renders well in GitHub, Notion, VSCode, and Obsidian.
-
-# Polished Document Style
-
-## When to use this skill
-
-- Output is meant for **non-developers** to read (PMs, executives, clients)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
-
-## When NOT to use
-
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
-
-> ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
-
----
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# 📋 <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** 🟡 Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
+# Output: 0-100 score
+# Bucket: red (< 40), yellow (40-70), green (70+)
 ```
 
-Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
+## In-Product Engagement Tools
+
+| Tool | Purpose |
+|------|---------|
+| Pendo / Userpilot | Walkthroughs, in-product messaging |
+| Intercom / Help Scout | Live chat, knowledge base |
+| Appcues | Feature announcements, tooltips |
+| Stonly | Interactive guides |
+| Custom built-in | Tight integration, brand fit |
+
+## Self-Service Patterns
+
+### Knowledge Base
+- Search-first
+- Articles tied to product context (deep links)
+- Updated with each release
+- Multi-modal: text + video + code
+
+### Status Page
+- Real-time service status
+- Subscriber notifications
+- Incident history
+- Tools: Statuspage, Atlassian, custom
+
+### Admin Portal
+- Account settings
+- User management
+- Billing + invoices
+- Usage dashboards
+- API key management
+- Audit log access
+
+## Adoption Tracking
 
----
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## 📑 Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
----
-
-## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
-
-เอกสารหนึ่งฉบับผ่านมือหลาย skill — markdown ตัวนี้ · รูปจาก `software-diagrams` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
-
-**markdown คือ source of truth ธีมจึงประกาศไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน
-(ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
-
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
-|---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `svg-diagram-system` · `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
-
-**สีสถานะไม่นับรวม** — 🔴 วิกฤต 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
-
----
-
-## Emoji Vocabulary
-
-ใช้ให้**คงที่ทั้งเอกสาร** และใช้เพื่อ**หาของเจอเร็วขึ้น** ไม่ใช่เพื่อความน่ารัก
-
-| ใช้ทำอะไร | ชุดที่ใช้ |
-|---|---|
-| ระดับความสำคัญ | 🔴 วิกฤต · 🟠 สูง · 🟡 กลาง · 🟢 ต่ำ |
-| สถานะ | ✅ เสร็จ · 🚧 กำลังทำ · ⏳ รอ · ❌ ไม่ผ่าน · ⚠️ ต้องระวัง |
-| ชนิดกล่องข้อความ | 💡 ข้อแนะนำ · 📌 ข้อควรจำ · 🚨 อันตราย · 📋 รายการตรวจ |
-| หมวดเนื้อหา | 🎯 เป้าหมาย · 🏗️ สถาปัตยกรรม · 🔐 ความปลอดภัย · 📊 ตัวเลข · 🧪 การทดสอบ |
-
-**หนึ่งอิโมจิต่อหัวข้อ ไม่ใช่ต่อบรรทัด** — เอกสารที่ทุกบรรทัดมีอิโมจิอ่านยากกว่าเอกสารที่ไม่มีเลย
-
----
-
-## Callout Boxes
-
-Use blockquotes with emoji prefix:
-
-```markdown
-> 💡 **Tip:** Brief actionable insight.
-
-> ⚠️ **Warning:** Important caveat or limitation.
-
-> 🚨 **Critical:** Must-read before proceeding.
-
-> ℹ️ **Note:** Additional context or background.
-
-> ❓ **Open Question:** Needs decision/clarification.
-```
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
----
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-❌ Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-✅ Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✅       | —       | Unique login email|
-| age   | number | ❌       | —       | Optional          |
-| role  | enum   | ✅       | `user`  | Access level      |
-```
-
-### Table formatting tips
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
----
-
-## Mermaid Diagrams
-
-**ตัวเลือกชนิดไดอะแกรม กติกาความอ่านง่าย ธีม และการจัดการป้ายภาษาไทย อยู่ใน `software-diagrams`**
-skill นี้คุมเฉพาะเรื่องการวางไดอะแกรมลงในเอกสาร markdown
-
-- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
-- ทุกรูปมีคำบรรยายใต้รูปหนึ่งบรรทัด ขึ้นต้นด้วย **รูปที่ N —**
-- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
-- รูปที่ต้องส่งให้คนนอกทีมหรือใส่สไลด์ ใช้ `svg-diagram-system` แล้วฝังเป็นไฟล์ภาพ
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
-```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
-
----
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk Level:** 🟡 Medium
-**SLA:** ⚡ < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> 🟢 **Approved** · 🔴 **High Priority** · 👤 @alice · 🗓️ Due 2025-03-15
-```
-
----
-
-## Cover Block Pattern
-
-For formal documents (BRD, FSD, ADR, postmortem):
-
-```markdown
-# 📋 <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | 🟢 Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
----
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, PM, SEO recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B      | 💰   | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C      | 💰💰💰| 🔴 High| 🟢 Low | 🔴 Slow | ⚪ Future consideration |
-```
-
----
-
-## Lists — When to nest, when to flatten
-
-### ✅ Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### ❌ Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-**Rule:** Max 2 levels of nesting. More nesting = use a table.
-
----
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
 ```typescript
-const user: User = { id: 1, email: 'a@b.com' };
+// Track meaningful events (not every click)
+track('feature_used', {
+  account_id,
+  user_id,
+  feature: 'workflow_builder',
+  context: { workflow_count: 3 },
+});
+
+// Compute adoption per feature
+const adoption = sql`
+  SELECT
+    account_id,
+    COUNT(DISTINCT feature) as features_used,
+    MAX(timestamp) as last_active
+  FROM events
+  WHERE event = 'feature_used'
+  GROUP BY account_id
+`;
+
+// Surface to CS team
+// Flag accounts with declining adoption
+// Suggest features they haven't tried
 ```
 
-```bash
-npm install
+## Churn Signal Engineering
+
+```python
+# Leading indicators (weeks before churn)
+churn_signals = {
+    'declining_login_frequency': sessions_last_7d < 0.5 * sessions_7d_ago,
+    'admin_change': new_admin_within_30d,
+    'support_ticket_spike': tickets_30d > 3 * tickets_avg,
+    'feature_abandonment': stopped_using_key_feature,
+    'cancellation_query': visited_cancel_page,
+    'license_underuse': active_users < 0.3 * licensed_users,
+}
+
+# Composite risk score
+def churn_risk(account):
+    signals = sum(1 for signal in detect_signals(account))
+    return 'high' if signals >= 3 else 'medium' if signals >= 1 else 'low'
 ```
+
+## Expansion Signal Engineering
+
+```python
+# Look for upsell readiness
+expansion_signals = {
+    'hitting_limits': usage > 0.85 * plan_limit,
+    'multiple_seats_active': active_seats > licensed_seats,
+    'enterprise_features_attempted': hit_feature_gate,
+    'high_engagement': nps > 8 OR engagement > 0.8,
+    'new_team_onboarded': team_size_growth_30d > 30%,
+    'integration_added': connected_3+_integrations,
+}
+```
+
+## CS Tool Integration
+
+```mermaid
+flowchart LR
+    P[Product] --> E[Event Stream]
+    E --> DW[(Warehouse)]
+    DW --> CS[CS Platform - Gainsight/ChurnZero/Custom]
+    CRM[(CRM)] --> CS
+    SUP[(Support tickets)] --> CS
+    BIL[(Billing)] --> CS
+    CS --> HS[Health Scores]
+    CS --> PB[Playbooks]
+```
+
+## Skills You Use
+
+- `polished-document-style` (from software-company) — for docs/portals
+- `saas-platform` — for CS tool connections
+
+## Things You Don't Do
+
+- ❌ Track everything (event noise)
+- ❌ Build in-house when SaaS tools work
+- ❌ Ignore CS team workflows
+- ❌ Surface signals without action playbook
+- ❌ Health score as black box (must explain)
+
+## When to Hand Off
+
+- Multi-tenant infrastructure → `solution-architect`
+- Integrations → `solution-architect`
+- Billing/usage analysis → `revops-analyst`
+- Product design changes → `product-manager` (from software-company)
+
+## Common Pitfalls
+
+- ❌ **Vanity metrics** — DAU goes up, churn doesn't change
+- ❌ **No baseline** — can't measure improvement
+- ❌ **Tool sprawl** — too many places for CS to look
+- ❌ **Late signals** — by time we know, customer's gone
+- ❌ **Action-less alerts** — flagged but no playbook
+
+
+## reference: agent-integration-engineer.md
+
+> เดิมคือ agent `integration-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery](#initial-discovery)
+- [📊 Integration Quality Standards](#integration-quality-standards)
+- [SSO Patterns](#sso-patterns)
+- [SCIM Provisioning](#scim-provisioning)
+- [Webhook Patterns](#webhook-patterns)
+- [Data Sync Patterns](#data-sync-patterns)
+- [API Client Best Practices](#api-client-best-practices)
+- [Skills You Use](#skills-you-use)
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+
+You are an **Integration Engineer**. You connect enterprise systems where every customer's stack is different.
+
+## Your Responsibilities
+
+1. **SSO** — SAML, OIDC, OAuth integration
+2. **User Provisioning** — SCIM, JIT, manual
+3. **Webhook Systems** — Both directions
+4. **API Clients** — Strong, versioned, documented
+5. **Data Sync** — ETL/ELT to enterprise warehouses
+6. **iPaaS Integration** — Zapier, Make, n8n, Workato
+7. **Reliability** — Retry, dead letter, idempotency
+
+## 🔍 Initial Discovery
+
+1. **Target system** — what we integrate with
+2. **Direction** — read, write, both
+3. **Volume** — events per day
+4. **Latency** — real-time, near, batch?
+5. **Customer count** — affects pattern choice
+6. **Compliance** — data handling needs
+
+## 📊 Integration Quality Standards
+
+- **Idempotent** — safe to retry
+- **Observable** — every integration event tracked
+- **Documented** — customer-facing setup guides
+- **Versioned** — backward compatibility
+- **Resilient** — handles partner outages
+- **Secure** — credentials in vault, scoped
+
+## SSO Patterns
+
+### SAML 2.0 (Enterprise SSO)
+
+```typescript
+// Receive SAML response from IdP
+const samlResponse = req.body.SAMLResponse;
+const decoded = decodeBase64(samlResponse);
+
+// Verify signature against IdP cert
+verifySignature(decoded, customer.idp.cert);
+
+// Extract user attributes
+const user = {
+  email: getAttribute(decoded, 'email'),
+  groups: getAttribute(decoded, 'groups'),
+  externalId: getAttribute(decoded, 'NameID'),
+};
+
+// JIT provision or update
+await provisionUser(customer.id, user);
+```
+
+### OIDC (Modern SSO)
+
+```typescript
+// Authorization code + PKCE
+const authUrl = oidc.buildAuthUrl({
+  client_id,
+  redirect_uri,
+  scope: 'openid profile email',
+  code_challenge,
+  state,
+});
+
+// After redirect, exchange code
+const tokens = await oidc.exchangeCode(code, code_verifier);
+const userInfo = decodeIdToken(tokens.id_token);
+```
+
+## SCIM Provisioning
+
+```
+SCIM v2.0 standard endpoints:
+GET    /Users
+POST   /Users
+GET    /Users/{id}
+PUT    /Users/{id}
+PATCH  /Users/{id}
+DELETE /Users/{id}
+GET    /Groups
+POST   /Groups
+...
+```
+
+```typescript
+// SCIM PATCH operation
+PATCH /Users/abc123
+{
+  "Operations": [
+    { "op": "replace", "path": "active", "value": false }
+  ]
+}
+
+// Sync from IdP:
+// - User joins → SCIM POST → create account
+// - User changes group → SCIM PATCH → update perms
+// - User leaves → SCIM PATCH active=false → deactivate
+```
+
+## Webhook Patterns
+
+### Outbound (we send to customer)
+
+```typescript
+// Signed delivery
+async function deliver(webhook: Webhook, event: Event) {
+  const body = JSON.stringify(event);
+  const signature = hmac256(webhook.secret, body);
+
+  const response = await fetch(webhook.url, {
+    method: 'POST',
+    headers: {
+      'X-Webhook-Signature': signature,
+      'X-Webhook-Timestamp': Date.now().toString(),
+      'Content-Type': 'application/json',
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    await queueRetry(webhook, event, response.status);
+  }
+}
+
+// Retry with exponential backoff
+// After N failures, mark webhook unhealthy, alert customer
+```
+
+### Inbound (customer sends to us)
+
+```typescript
+// Verify signature
+const signature = req.headers['x-signature'];
+const computed = hmac256(secret, req.rawBody);
+if (signature !== computed) {
+  return 401;
+}
+
+// Idempotency check
+const eventId = req.headers['x-event-id'];
+if (await db.processedEvents.exists(eventId)) {
+  return { received: true, duplicate: true };
+}
+
+// Persist first
+await db.events.create({ id: eventId, raw: req.body });
+res.json({ received: true });
+
+// Process async
+await queue.enqueue('process', eventId);
+```
+
+## Data Sync Patterns
+
+### Pull (we pull from customer)
+```
+Use when: customer has stable API
+Schedule: hourly/daily
+Watermark: last synced ID/timestamp
+```
+
+### Push (customer pushes to us)
+```
+Use when: real-time needed
+Mechanism: webhooks, API calls
+Idempotent + deduped
+```
+
+### Reverse ETL (we push to customer warehouse)
+```
+We → Snowflake/BigQuery/Redshift
+Schedule: customer-defined
+Tools: Fivetran, Hightouch, custom
+```
+
+## API Client Best Practices
+
+```typescript
+// Each customer's external system credentials in vault
+const creds = await vault.get(`tenant/${tenantId}/integrations/salesforce`);
+
+const client = new SalesforceClient({
+  ...creds,
+  retries: 3,
+  retryDelay: 'exponential',
+  rateLimitAware: true,
+  observability: { traceId: req.traceId },
+});
+
+// All calls instrumented
+try {
+  const result = await client.upsertContact(data);
+  metrics.increment('integration.salesforce.success');
+  return result;
+} catch (err) {
+  metrics.increment('integration.salesforce.error', { code: err.code });
+  if (isTransient(err)) {
+    await queueRetry(tenant, operation);
+  }
+  throw err;
+}
+```
+
+## Skills You Use
+
+- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `saas-platform` — patterns for common integrations
+- `polished-document-style` (from software-company) — for integration docs
+
+## Things You Don't Do
+
+- ❌ Hardcode customer credentials
+- ❌ Skip webhook signature verification
+- ❌ No idempotency on writes
+- ❌ Synchronous webhook processing (always async)
+- ❌ Ignore rate limits of partner APIs
+
+## When to Hand Off
+
+- Multi-tenant architecture → `solution-architect`
+- Customer onboarding flow → `growth-specialist`
+- Billing integration → `revops-analyst`
+- Security review → `security-engineer` (from software-company)
+
+## Common Pitfalls
+
+- ❌ **No retry/dead letter** — lose events silently
+- ❌ **No webhook versioning** — break customers on change
+- ❌ **Synchronous external calls** — partner outage = our outage
+- ❌ **Trust client-sent webhook payload** — replay/spoof
+- ❌ **No customer-facing visibility** — they can't debug
+
+
+## reference: agent-saas-architect.md
+
+> เดิมคือ agent `saas-architect` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+
+**สารบัญ:** 
+
+- [Your Responsibilities](#your-responsibilities)
+- [🔍 Initial Discovery](#initial-discovery)
+- [📊 SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
+- [Multi-Tenancy Models](#multi-tenancy-models)
+- [Data Isolation Patterns](#data-isolation-patterns)
+- [Tenant Context Propagation](#tenant-context-propagation)
+- [Noisy Neighbor Mitigation](#noisy-neighbor-mitigation)
+- [Per-Tenant Configuration](#per-tenant-configuration)
+- [Tenant Lifecycle](#tenant-lifecycle)
+- [Multi-Region Strategy](#multi-region-strategy)
+- [Observability Per Tenant](#observability-per-tenant)
+- [Skills You Use](#skills-you-use)
+- [Things You Don't Do](#things-you-dont-do)
+- [When to Hand Off](#when-to-hand-off)
+- [Common Pitfalls](#common-pitfalls)
+
+You are a **SaaS Architect**. You design multi-tenant systems where one bug can affect every customer — or just one.
+
+## Your Responsibilities
+
+1. **Tenant Model** — Shared vs isolated, hybrid
+2. **Data Isolation** — How tenant data stays separate
+3. **Per-Tenant Customization** — Without code forks
+4. **Scaling Architecture** — Noisy neighbor mitigation
+5. **Multi-Region** — Data residency, latency
+6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
+7. **Tenant Operations** — Per-tenant management
+
+## 🔍 Initial Discovery
+
+1. **Tenant profile** — # tenants, size distribution, growth
+2. **Workload characteristics** — bursty? steady? batch?
+3. **Compliance** — data residency, isolation requirements
+4. **Customization scope** — config, branding, code?
+5. **Pricing tiers** — affects resource allocation
+6. **Per-tenant SLAs** — varying or uniform?
+
+## 📊 SaaS Architecture Quality Standards
+
+- **Tenant isolation:** zero cross-tenant data leakage
+- **Noisy neighbor mitigation:** one tenant can't degrade others
+- **Per-tenant observability:** debug + support possible
+- **Tenant offboarding:** complete deletion verifiable
+- **Region compliance:** data stays in tenant's region
+- **Upgrade strategy:** safe rolling without downtime
+
+## Multi-Tenancy Models
+
+### Single-Tenant (Dedicated)
+```
+Tenant A: dedicated infra
+Tenant B: dedicated infra
+...
+
+Pros: Maximum isolation, customization
+Cons: Expensive, complex ops, slow to provision
+Use: Enterprise, regulated
+```
+
+### Pool (Shared Everything)
+```
+All tenants on shared infra
+tenant_id filter on every query
+
+Pros: Cost-efficient, easy ops
+Cons: Noisy neighbor, isolation complexity
+Use: SMB SaaS, freemium
+```
+
+### Silo (Shared Compute, Isolated Data)
+```
+Shared app servers
+Tenant-specific DB / schema
+
+Pros: Better isolation than pool
+Cons: More DBs to manage
+Use: Mid-market
+```
+
+### Hybrid (Tiered)
+```
+Free/SMB: pool model
+Enterprise: silo or single-tenant
+
+Pros: Optimize per tier
+Cons: Architectural complexity
+Use: Multi-tier products
+```
+
+## Data Isolation Patterns
+
+### Pattern 1: Row-Level (Shared Schema)
 
 ```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
+-- Every table has tenant_id
+CREATE TABLE orders (
+    id UUID PRIMARY KEY,
+    tenant_id UUID NOT NULL,
+    -- ...
+);
 
-For long blocks, add file name as comment on first line:
+-- Row-level security (Postgres)
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+    USING (tenant_id = current_setting('app.tenant_id')::uuid);
+
+-- App sets tenant context per session
+SET app.tenant_id = 'tenant-uuid';
+```
+
+**Pros:** Simple to manage, efficient
+**Cons:** Trust in app to set context, single bug = leak
+
+### Pattern 2: Schema-Per-Tenant
+
+```sql
+-- Each tenant has own schema
+CREATE SCHEMA tenant_abc;
+CREATE SCHEMA tenant_xyz;
+
+-- Connect with schema search path
+SET search_path TO tenant_abc;
+```
+
+**Pros:** Strong isolation, easy backup per-tenant
+**Cons:** Schema sprawl, migration complexity
+
+### Pattern 3: Database-Per-Tenant
+
+```
+tenant_abc → DB instance A
+tenant_xyz → DB instance B
+```
+
+**Pros:** Maximum isolation, easy delete
+**Cons:** Expensive, ops complexity
+
+## Tenant Context Propagation
 
 ```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
+// Middleware extracts + validates tenant
+app.use(async (req, res, next) => {
+  const token = req.headers.authorization;
+  const claims = await verifyToken(token);
+
+  req.tenant = {
+    id: claims.tenant_id,
+    tier: claims.tier,
+    region: claims.region,
+  };
+
+  // Set DB session var for RLS
+  await db.query(`SET app.tenant_id = '${req.tenant.id}'`);
+
+  next();
+});
+```
+
+## Noisy Neighbor Mitigation
+
+```
+Rate limiting per tenant (per tier):
+- Free: 100 req/min
+- Pro: 1000 req/min
+- Enterprise: custom
+
+Compute isolation:
+- Worker pools per tier
+- CPU/memory limits per request
+- Slow query killers
+
+DB isolation:
+- Connection pool limits per tenant
+- Query timeout per tier
+- Materialized views per heavy tenant
+```
+
+## Per-Tenant Configuration
+
+```typescript
+// Centralized config store
+interface TenantConfig {
+  tenantId: string;
+  features: Record<string, boolean>;
+  limits: { storage: number; users: number; apiCalls: number };
+  branding: { logo: string; colors: object };
+  integrations: { slack?: SlackConfig; salesforce?: SalesforceConfig };
+}
+
+// Code reads from config, not hardcoded
+if (config.features['advanced_analytics']) {
   // ...
 }
 ```
 
----
+## Tenant Lifecycle
 
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## ✍️ Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | 🟢 Approved | 2025-01-15 |
-| Tech Lead | @bob | 🔵 Reviewing | — |
-| QA Lead | @charlie | ⚪ Not started | — |
-| Security | @dave | ❌ Rejected | 2025-01-14 |
+### Onboarding
+```
+1. Provision tenant record
+2. Create isolated resources (if silo)
+3. Generate admin credentials
+4. Send welcome / setup
+5. Provision integrations
+6. Track activation milestones
 ```
 
----
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## 📖 Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
+### Offboarding
+```
+1. Receive deletion request
+2. Disable access immediately
+3. Schedule data deletion (30-90 day grace)
+4. Delete from all systems
+5. Verify deletion
+6. Provide attestation
 ```
 
-Define acronyms on first use, then add to glossary.
+### Migration (region change, tier upgrade)
+```
+- Data export
+- Validate at destination
+- Cutover with brief lock
+- Verify
+- Decommission source
+```
 
----
+## Multi-Region Strategy
 
-## Quality Checklist
+### Data Residency
+```
+EU customers → EU region
+US customers → US region
+APAC customers → APAC region
 
-Before delivering any polished doc:
+Routing: at sign-up, based on customer choice
+Movement: rare, complex (data export/import)
+```
 
-- [ ] H1 title with emoji marker
-- [ ] Cover block with version, date, status, authors
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] At least one Mermaid diagram for any flow/relationship
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum)
-- [ ] Tested rendering in GitHub preview
+### Cross-Region (Within Tenant)
+```
+Tenant has presence in 3 regions
+Each region has local cache
+Source of truth in primary region
+Eventual consistency for cross-region
+```
 
----
+## Observability Per Tenant
 
-> ไดอะแกรมในเอกสาร: ชนิดไหนตอบคำถามไหน และธีม Mermaid ชุดเดียวกันทั้งโปรเจกต์
-> อยู่ใน `software-diagrams` · เอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
+```typescript
+// Tag every metric with tenant
+metrics.increment('api.request', {
+  tenant_id: req.tenant.id,
+  tier: req.tenant.tier,
+  endpoint: req.path,
+});
 
-## Anti-patterns
+// Tag every log
+log.info('Order created', {
+  tenant_id: req.tenant.id,
+  order_id: order.id,
+});
+
+// Per-tenant dashboards possible
+// Per-tenant alerting possible
+```
+
+## Skills You Use
+
+- `saas-platform` — implementation patterns
+- `architecture-patterns` (from software-company) — system design
+- `polished-document-style` (from software-company)
+
+## Things You Don't Do
+
+- ❌ Hardcode tenant assumptions
+- ❌ Skip per-tenant rate limiting
+- ❌ Trust client for tenant_id (always from token)
+- ❌ Allow tenant data in shared cache without keying
+- ❌ Schema migrations without per-tenant testing
+
+## When to Hand Off
+
+- Enterprise integration → `solution-architect`
+- Subscription billing → `revops-analyst`
+- Customer adoption → `growth-specialist`
+- Production deployment → `devops-engineer` (from software-company)
+
+## Common Pitfalls
+
+- ❌ **No tenant context in queries** — eventual leak
+- ❌ **Shared caches without tenant key** — leak
+- ❌ **No per-tenant limits** — noisy neighbor
+- ❌ **Schema migrations break some tenants** — silent failure
+- ❌ **Logs leak across tenants** — privacy issue
+- ❌ **Can't offboard cleanly** — long-tail data
 
 
-- ❌ **Emoji spam** — emoji in every heading just for decoration
-- ❌ **All emoji, no labels** — `🔴 High` reads better than `🔴` alone
-- ❌ **Deep nesting** — bullets 4+ levels deep, use tables instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
-- ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
-- ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
+## reference: enterprise-integration.md
 
----
+> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
-## ตัวย่อ
+**สารบัญ:** 
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+- [When to use this skill](#when-to-use-this-skill)
+- [SSO Implementation](#sso-implementation)
+- [SCIM v2.0 Implementation](#scim-v20-implementation)
+- [Webhook Patterns (Outbound)](#webhook-patterns-outbound)
+- [Webhook Patterns (Inbound)](#webhook-patterns-inbound)
+- [iPaaS Integration](#ipaas-integration)
+- [API Client Best Practices](#api-client-best-practices)
+- [Things You Don't Do](#things-you-dont-do)
+- [Reference](#reference)
 
-
----
-
-# skill: markdown-visuals
-
-Use when a markdown document needs a picture — wireframe, UI state, architecture diagram, flow or data viz. Picks the format (inline SVG, image file, ASCII, Mermaid) and embeds it so it renders in GitHub, Notion, VS Code and Obsidian. For any document where prose alone will not carry the idea.
-
-# Markdown Visuals
-
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+# Enterprise Integration Patterns
 
 ## When to use this skill
 
-- Producing **any** design mockup, wireframe, or UI spec
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
+- Adding SSO to your SaaS
+- Building SCIM provisioning
+- Designing webhook system
+- Building integration framework
+- Connecting to specific enterprise systems
 
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+## SSO Implementation
+
+### SAML 2.0 (Enterprise Standard)
+
+```typescript
+// 1. Receive SAMLResponse (POST from IdP)
+app.post('/auth/saml/callback', async (req, res) => {
+  const samlResponse = req.body.SAMLResponse;
+
+  // 2. Decode + validate
+  const decoded = await samlParser.parse(samlResponse, {
+    audience: 'urn:our-app',
+    issuer: customer.idpIssuer,
+    cert: customer.idpCert,
+    requireSignature: true,
+    requireAudience: true,
+  });
+
+  // 3. Extract user attributes
+  const externalId = decoded.subject.nameId;
+  const email = decoded.attributes.email[0];
+  const groups = decoded.attributes.groups || [];
+
+  // 4. JIT provision or update
+  const user = await provisionUserFromSAML(customer.tenantId, {
+    externalId, email, groups
+  });
+
+  // 5. Create session
+  const sessionToken = await createSession(user);
+  res.cookie('session', sessionToken).redirect('/dashboard');
+});
+```
+
+### OIDC (Modern Standard)
+
+```typescript
+// Authorization Code Flow with PKCE
+async function login(req, res) {
+  const { codeVerifier, codeChallenge } = generatePKCE();
+
+  // Store verifier in session for callback
+  req.session.codeVerifier = codeVerifier;
+
+  const authUrl = new URL(customer.idp.authEndpoint);
+  authUrl.searchParams.set('response_type', 'code');
+  authUrl.searchParams.set('client_id', customer.idp.clientId);
+  authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
+  authUrl.searchParams.set('scope', 'openid profile email');
+  authUrl.searchParams.set('state', generateState());
+  authUrl.searchParams.set('code_challenge', codeChallenge);
+  authUrl.searchParams.set('code_challenge_method', 'S256');
+
+  res.redirect(authUrl.toString());
+}
+
+async function callback(req, res) {
+  const { code, state } = req.query;
+
+  // Verify state (CSRF)
+  if (state !== req.session.state) return res.status(400).end();
+
+  // Exchange code for tokens
+  const tokenResponse = await fetch(customer.idp.tokenEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: REDIRECT_URI,
+      client_id: customer.idp.clientId,
+      code_verifier: req.session.codeVerifier,
+    }),
+  });
+
+  const { id_token, access_token } = await tokenResponse.json();
+
+  // Verify id_token signature (using IdP's JWKS)
+  const claims = await verifyIdToken(id_token, customer.idp.jwksUri);
+
+  // Provision/login
+  const user = await provisionUserFromOIDC(customer.tenantId, claims);
+  // ...
+}
+```
+
+## SCIM v2.0 Implementation
+
+```typescript
+// CRUD endpoints for User + Group resources
+app.get('/scim/v2/Users', authenticateScim, async (req, res) => {
+  const { filter, startIndex, count } = parseScimQuery(req.query);
+
+  const users = await db.users.find({
+    tenant_id: req.tenant.id,
+    filter,
+    limit: count,
+    offset: startIndex - 1,
+  });
+
+  res.json({
+    schemas: ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
+    totalResults: await db.users.count({ tenant_id: req.tenant.id }),
+    Resources: users.map(toScimUser),
+    startIndex,
+    itemsPerPage: count,
+  });
+});
+
+app.patch('/scim/v2/Users/:id', authenticateScim, async (req, res) => {
+  const { Operations } = req.body;
+
+  for (const op of Operations) {
+    if (op.op === 'replace' && op.path === 'active') {
+      if (op.value === false) {
+        await deactivateUser(req.params.id, req.tenant.id);
+      }
+    }
+  }
+
+  const updated = await db.users.findById(req.params.id);
+  res.json(toScimUser(updated));
+});
+```
+
+## Webhook Patterns (Outbound)
+
+### Signed Delivery
+
+```typescript
+async function deliverWebhook(webhook: WebhookSubscription, event: Event) {
+  const body = JSON.stringify({
+    id: event.id,
+    type: event.type,
+    timestamp: event.timestamp,
+    data: event.data,
+  });
+
+  const timestamp = Date.now().toString();
+  const signature = hmac('sha256', webhook.secret, `${timestamp}.${body}`);
+
+  try {
+    const response = await fetch(webhook.url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Webhook-Id': event.id,
+        'X-Webhook-Timestamp': timestamp,
+        'X-Webhook-Signature': `t=${timestamp},v1=${signature}`,
+      },
+      body,
+      signal: AbortSignal.timeout(10_000),
+    });
+
+    await logDelivery(webhook, event, response);
+
+    if (!response.ok) {
+      await scheduleRetry(webhook, event, response.status);
+    }
+  } catch (err) {
+    await scheduleRetry(webhook, event, err);
+  }
+}
+```
+
+### Retry Strategy
+
+```typescript
+const RETRY_DELAYS_MS = [
+  0,           // immediate
+  60_000,      // 1 min
+  300_000,     // 5 min
+  900_000,     // 15 min
+  3_600_000,   // 1 hour
+  14_400_000,  // 4 hour
+  43_200_000,  // 12 hour
+];
+
+async function scheduleRetry(webhook, event, error) {
+  const attempt = await db.deliveries.getAttempt(webhook.id, event.id);
+
+  if (attempt >= RETRY_DELAYS_MS.length) {
+    await markWebhookFailing(webhook);
+    return;
+  }
+
+  await queue.scheduleIn(RETRY_DELAYS_MS[attempt], 'deliver', {
+    webhook_id: webhook.id,
+    event_id: event.id,
+  });
+}
+```
+
+## Webhook Patterns (Inbound)
+
+```typescript
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  // 1. Verify signature
+  const signature = req.headers['x-signature'];
+  const computed = hmac('sha256', SECRET, req.body);
+  if (!constantTimeEquals(signature, computed)) {
+    return res.status(401).end();
+  }
+
+  // 2. Parse
+  const event = JSON.parse(req.body);
+
+  // 3. Idempotency check
+  if (await db.processedEvents.exists(event.id)) {
+    return res.json({ received: true, duplicate: true });
+  }
+
+  // 4. Persist raw + ack quickly
+  await db.events.create({ id: event.id, raw: event });
+  res.json({ received: true });
+
+  // 5. Process async
+  await queue.enqueue('process_event', event.id);
+});
+```
+
+## iPaaS Integration
+
+```typescript
+// Provide pre-built connectors for popular iPaaS:
+
+// Zapier Trigger (POST when event happens)
+async function fireZapierTrigger(triggerKey: string, event: any) {
+  const webhookUrls = await db.zapierTriggers.findActive(
+    customer.tenant_id,
+    triggerKey
+  );
+
+  await Promise.all(
+    webhookUrls.map(url => fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(event),
+    }))
+  );
+}
+
+// Zapier Action (called by Zapier to do something)
+app.post('/zapier/actions/create-order', authenticate, async (req, res) => {
+  const order = await createOrder(req.tenant.id, req.body);
+  res.json(order);
+});
+```
+
+## API Client Best Practices
+
+```typescript
+class SalesforceClient {
+  constructor(private creds: SalesforceCredentials, private tenantId: string) {}
+
+  async request(method: string, path: string, body?: any) {
+    const headers = {
+      'Authorization': `Bearer ${await this.getAccessToken()}`,
+      'Content-Type': 'application/json',
+    };
+
+    return retry({
+      attempts: 3,
+      backoff: 'exponential',
+      retryOn: [502, 503, 504, 'ECONNRESET'],
+    }, async () => {
+      const response = await fetch(`${this.creds.instance}/services/data/v60/${path}`, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : undefined,
+        signal: AbortSignal.timeout(30_000),
+      });
+
+      // Instrument
+      metrics.timing('salesforce.request', response.duration, {
+        path, status: response.status, tenant: this.tenantId
+      });
+
+      if (response.status === 401) {
+        // Token expired, refresh
+        await this.refreshToken();
+        throw new RetryableError('Token expired');
+      }
+
+      if (!response.ok) {
+        throw new SalesforceError(response);
+      }
+
+      return response.json();
+    });
+  }
+}
+```
+
+## Things You Don't Do
+
+- ❌ Trust SAML/OIDC without signature verification
+- ❌ Synchronous webhook delivery to customer
+- ❌ Single retry attempt
+- ❌ No idempotency on inbound webhooks
+- ❌ Hardcode customer credentials
+- ❌ No partner rate limit awareness
+
+## Reference
+
+- [SAML 2.0 Specification](https://docs.oasis-open.org/security/saml/v2.0/)
+- [OpenID Connect Spec](https://openid.net/connect/)
+- [SCIM 2.0 RFC](https://datatracker.ietf.org/doc/html/rfc7644)
+- [WorkOS Integration Patterns](https://workos.com/docs)
+- [Standard Webhooks](https://standardwebhooks.com/)
+
+
+## reference: multi-tenancy-patterns.md
+
+> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [Tenancy Model Selection](#tenancy-model-selection)
+- [Row-Level Multi-Tenancy](#row-level-multi-tenancy)
+- [Tenant Context Propagation](#tenant-context-propagation)
+- [Schema-Per-Tenant](#schema-per-tenant)
+- [Database-Per-Tenant](#database-per-tenant)
+- [Noisy Neighbor Mitigation](#noisy-neighbor-mitigation)
+- [Per-Tenant Feature Flags](#per-tenant-feature-flags)
+- [Caching With Tenants](#caching-with-tenants)
+- [Background Jobs](#background-jobs)
+- [Tenant Offboarding](#tenant-offboarding)
+- [Common Pitfalls](#common-pitfalls)
+- [Reference](#reference)
+
+# Multi-Tenancy Implementation Patterns
+
+## When to use this skill
+
+- Building SaaS from scratch
+- Adding tenants to existing single-tenant app
+- Refactoring to better isolation
+- Designing per-tenant features
+- Mitigating noisy neighbor issues
+
+## Tenancy Model Selection
+
+```
+Strict isolation required (regulated)?
+├─ Yes → Database-per-tenant or Single-tenant
+└─ No → Continue
+   │
+   Cost-sensitive (free/SMB tier)?
+   ├─ Yes → Pool (shared everything)
+   └─ No → Consider Silo (shared compute, isolated data)
+```
+
+## Row-Level Multi-Tenancy
+
+### Schema
+```sql
+-- Every business table has tenant_id
+CREATE TABLE orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tenant_id UUID NOT NULL,
+    customer_id UUID NOT NULL,
+    total NUMERIC,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Composite index includes tenant
+CREATE INDEX idx_orders_tenant_customer ON orders (tenant_id, customer_id);
+
+-- Foreign keys preserve tenant
+ALTER TABLE orders ADD CONSTRAINT fk_customer
+    FOREIGN KEY (tenant_id, customer_id) REFERENCES customers (tenant_id, id);
+```
+
+### Postgres Row-Level Security
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY tenant_isolation ON orders
+    FOR ALL
+    USING (tenant_id = current_setting('app.tenant_id')::uuid);
+
+-- App sets context per request
+SET LOCAL app.tenant_id = 'tenant-uuid';
+```
+
+### Application Enforcement (defense in depth)
+```typescript
+// Repository pattern with mandatory tenant
+class OrderRepository {
+  constructor(private tenantId: string) {}
+
+  findAll() {
+    return db.query`
+      SELECT * FROM orders
+      WHERE tenant_id = ${this.tenantId}
+    `;
+  }
+
+  // No method exists that DOESN'T filter by tenant
+}
+```
+
+## Tenant Context Propagation
+
+### Pattern: Middleware Sets Context
+
+```typescript
+app.use(async (req, res, next) => {
+  // Extract from JWT
+  const token = req.headers.authorization;
+  const claims = await verifyJWT(token);
+
+  // Validate tenant access
+  if (!claims.tenant_id) return res.status(401).end();
+
+  // Attach to request
+  req.tenant = {
+    id: claims.tenant_id,
+    tier: claims.tier,
+    features: await loadFeatures(claims.tenant_id),
+  };
+
+  // Set DB session var (for RLS)
+  await db.query(`SET LOCAL app.tenant_id = '${req.tenant.id}'`);
+
+  next();
+});
+```
+
+### Pattern: Tenant in Async Context
+
+```typescript
+import { AsyncLocalStorage } from 'async_hooks';
+
+const tenantStorage = new AsyncLocalStorage<TenantContext>();
+
+// Set at request entry
+tenantStorage.run({ id: tenantId }, async () => {
+  await processRequest();
+});
+
+// Access anywhere in async chain
+function getTenantId(): string {
+  return tenantStorage.getStore()?.id ?? throwError();
+}
+```
+
+## Schema-Per-Tenant
+
+```sql
+-- One schema per tenant
+CREATE SCHEMA tenant_abc;
+CREATE SCHEMA tenant_xyz;
+
+-- Tables in tenant schema
+CREATE TABLE tenant_abc.orders (...);
+CREATE TABLE tenant_xyz.orders (...);
+
+-- Connect with search path
+SET search_path TO tenant_abc;
+```
+
+```typescript
+// Per-tenant connection pool
+async function getConnection(tenantId: string) {
+  const conn = await pool.connect();
+  await conn.query(`SET search_path TO tenant_${tenantId}`);
+  return conn;
+}
+```
+
+### Migrations
+```python
+# Apply migration to all tenant schemas
+async def migrate_all_tenants():
+    tenants = await get_active_tenants()
+
+    for tenant in tenants:
+        try:
+            await run_migration(tenant.schema)
+        except MigrationError as e:
+            await mark_tenant_migration_failed(tenant, e)
+            continue
+```
+
+## Database-Per-Tenant
+
+```typescript
+// Tenant routing layer
+async function getDb(tenantId: string): Promise<DbClient> {
+  const tenant = await tenantCache.get(tenantId);
+  return dbPool.connect(tenant.dbConnectionString);
+}
+
+// Usage
+const db = await getDb(req.tenant.id);
+await db.query(`SELECT * FROM orders`);  // tenant_id NOT needed in WHERE
+```
+
+### Tenant Provisioning
+```python
+async def provision_tenant(tenant_id: str, region: str):
+    # Create DB
+    db_name = f'tenant_{tenant_id}'
+    await admin_db.query(f'CREATE DATABASE {db_name}')
+
+    # Run migrations
+    await run_migrations(db_name)
+
+    # Seed initial data
+    await seed_tenant(db_name, tenant_id)
+
+    # Register in tenant routing table
+    await save_tenant_routing({
+        'id': tenant_id,
+        'db_host': pick_db_host(region),
+        'db_name': db_name,
+    })
+```
+
+## Noisy Neighbor Mitigation
+
+### Rate Limiting Per Tenant
+
+```typescript
+// Distributed rate limiter (Redis)
+async function rateLimit(req) {
+  const limit = req.tenant.tier === 'enterprise' ? 10000 : 100;
+  const key = `rate:${req.tenant.id}`;
+
+  const count = await redis.incr(key);
+  if (count === 1) await redis.expire(key, 60);
+
+  if (count > limit) {
+    throw new RateLimitError({ retryAfter: 60 });
+  }
+}
+```
+
+### Connection Pool Per Tenant Group
+
+```typescript
+// Tier-based pools
+const pools = {
+  free: new ConnectionPool({ max: 5 }),
+  pro: new ConnectionPool({ max: 20 }),
+  enterprise: new ConnectionPool({ max: 100 }),
+};
+
+async function query(tenantId: string, sql: string) {
+  const tier = await getTier(tenantId);
+  return pools[tier].query(sql);
+}
+```
+
+### Query Cost Limits
+
+```typescript
+// Kill slow queries per tenant
+async function queryWithBudget(tenantId: string, sql: string) {
+  const budget = tierLimits[await getTier(tenantId)].queryMs;
+
+  return await db.query(sql, { timeout: budget });
+}
+```
+
+## Per-Tenant Feature Flags
+
+```typescript
+// Feature config per tenant
+interface TenantFeatures {
+  advanced_analytics: boolean;
+  api_rate_limit: number;
+  custom_branding: boolean;
+  sso: boolean;
+}
+
+// Read from config
+function hasFeature(tenant: Tenant, feature: keyof TenantFeatures) {
+  return tenant.features[feature];
+}
+
+// Use in code
+if (hasFeature(req.tenant, 'advanced_analytics')) {
+  // ...
+}
+```
+
+## Caching With Tenants
+
+```typescript
+// MUST key by tenant
+const cacheKey = `tenant:${tenantId}:order:${orderId}`;
+await cache.set(cacheKey, order);
+
+// ❌ NEVER share cache across tenants
+const cacheKey = `order:${orderId}`;  // BAD
+```
+
+## Background Jobs
+
+```typescript
+// Include tenant in job payload
+await queue.enqueue('process_export', {
+  tenantId: req.tenant.id,
+  exportId,
+});
+
+// Worker re-establishes tenant context
+async function processExport(job) {
+  const { tenantId, exportId } = job.data;
+  await tenantStorage.run({ id: tenantId }, async () => {
+    await doExport(exportId);
+  });
+}
+```
+
+## Tenant Offboarding
+
+```python
+async def offboard_tenant(tenant_id):
+    # 1. Disable access
+    await disable_tenant_access(tenant_id)
+
+    # 2. Schedule deletion (grace period for accidental)
+    await schedule_deletion(tenant_id, days=30)
+
+    # 3. After grace period, delete from all systems
+    async def delete():
+        await delete_from_db(tenant_id)
+        await delete_from_search(tenant_id)
+        await delete_from_blob_storage(tenant_id)
+        await delete_from_cache(tenant_id)
+        await delete_backups(tenant_id, retain_for=legal_minimum)
+
+    # 4. Provide attestation
+    await issue_deletion_certificate(tenant_id)
+```
+
+## Common Pitfalls
+
+- ❌ **Missing tenant_id in queries** — silent data leak
+- ❌ **Shared cache without tenant key** — cross-tenant leak
+- ❌ **Background jobs without tenant** — wrong context
+- ❌ **No rate limit per tenant** — noisy neighbor
+- ❌ **Hardcoded tenant assumptions** — early tenant breaks
+- ❌ **Per-tenant migrations not tested** — production surprises
+
+## Reference
+
+- [AWS SaaS Lens](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/)
+- [Building Multi-Tenant SaaS Architectures (book)](https://www.oreilly.com/library/view/building-multi-tenant-saas/9781098140632/)
+- [Stripe's Multi-Tenant Sharding](https://stripe.com/blog/online-migrations)
+- [PostgreSQL Row-Level Security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
+
+
+## reference: subscription-billing.md
+
+> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+
+**สารบัญ:** 
+
+- [When to use this skill](#when-to-use-this-skill)
+- [Choose Tool, Don't Build](#choose-tool-dont-build)
+- [Pricing Model Implementation](#pricing-model-implementation)
+- [Usage Metering Pipeline](#usage-metering-pipeline)
+- [Dunning Workflow](#dunning-workflow)
+- [Revenue Recognition (ASC 606)](#revenue-recognition-asc-606)
+- [MRR / ARR Calculation](#mrr--arr-calculation)
+- [Multi-Currency](#multi-currency)
+- [Proration](#proration)
+- [Trial Patterns](#trial-patterns)
+- [Webhook Events to Handle](#webhook-events-to-handle)
+- [Things You Don't Do](#things-you-dont-do)
+- [Reference](#reference)
+
+# Subscription Billing Patterns
+
+## When to use this skill
+
+- Setting up new billing system
+- Implementing usage-based pricing
+- Building dunning workflows
+- Revenue recognition for accounting
+- Multi-currency / multi-jurisdiction
+- Migrating between billing platforms
+
+## Choose Tool, Don't Build
+
+```
+Stripe Billing       — modern, easy, $$$
+Chargebee            — flexible, mid-market
+Maxio                — B2B SaaS specialist
+Recurly              — mature
+Paddle / Lemon Squeezy — Merchant of Record (global tax done)
+Custom               — only for special needs
+```
+
+> 💡 **Never** build billing primitives. Use a platform.
+
+## Pricing Model Implementation
+
+### Flat Subscription
+
+```typescript
+// Simple: one plan, fixed price
+await stripe.subscriptions.create({
+  customer: customer.stripeId,
+  items: [{ price: 'price_pro_monthly' }],
+});
+```
+
+### Per-Seat
+
+```typescript
+// Quantity = active users
+async function syncSeats(subscription_id: string, accountId: string) {
+  const activeUsers = await countActiveUsers(accountId);
+
+  await stripe.subscriptionItems.update(itemId, {
+    quantity: activeUsers,
+    proration_behavior: 'create_prorations',
+  });
+}
+```
+
+### Usage-Based
+
+```typescript
+// Report usage to Stripe
+async function reportUsage(accountId: string, units: number) {
+  const subscription_item_id = await getMeteredItem(accountId);
+
+  await stripe.subscriptionItems.createUsageRecord(subscription_item_id, {
+    quantity: units,
+    timestamp: Math.floor(Date.now() / 1000),
+    action: 'increment',  // or 'set'
+  });
+}
+
+// Customer gets billed at end of period
+```
+
+### Tiered (Volume Pricing)
+
+```typescript
+// Stripe handles via "tiered" price model
+const price = await stripe.prices.create({
+  product: 'prod_api_calls',
+  currency: 'usd',
+  recurring: { interval: 'month', usage_type: 'metered' },
+  billing_scheme: 'tiered',
+  tiers_mode: 'graduated',
+  tiers: [
+    { up_to: 10000,  unit_amount: 0 },      // first 10k free
+    { up_to: 100000, unit_amount: 1 },      // next 90k @ $0.01
+    { up_to: 'inf',  unit_amount: 0.5 },    // beyond @ $0.005
+  ],
+});
+```
+
+## Usage Metering Pipeline
+
+```mermaid
+flowchart LR
+    A[App emits event] --> B[Event Stream Kafka/Kinesis]
+    B --> C[Aggregator]
+    C --> D[(Aggregated Usage Table)]
+    D --> E[Bill Calculator]
+    E --> F[Billing System Stripe/Chargebee]
+    F --> G[Invoice]
+```
+
+### Idempotent Reporting
+
+```python
+async def report_usage_idempotent(account_id, event):
+    # Dedup key
+    dedup_key = f"{account_id}:{event.timestamp}:{event.id}"
+
+    if await db.usage_reported.exists(dedup_key):
+        return  # already reported
+
+    await stripe.usage_records.create(
+        subscription_item=event.subscription_item,
+        quantity=event.quantity,
+        timestamp=event.timestamp,
+        action='increment',
+    )
+
+    await db.usage_reported.create({dedup_key})
+```
+
+## Dunning Workflow
+
+```typescript
+// Stripe handles retries by default
+// But you should override for customer experience
+
+const subscription = await stripe.subscriptions.create({
+  customer,
+  items,
+  payment_settings: {
+    payment_method_types: ['card'],
+    save_default_payment_method: 'on_subscription',
+  },
+  collection_method: 'charge_automatically',
+});
+
+// Customize retry behavior in Dashboard or via API
+// Default: 4 retries over 3 weeks
+
+// Listen for events:
+//   invoice.payment_failed → email customer
+//   customer.subscription.paused → restrict features
+//   customer.subscription.deleted → final action
+```
+
+### Dunning Communications
+
+```python
+async def handle_payment_failed(event):
+    invoice = event['data']['object']
+    attempt = invoice['attempt_count']
+
+    customer = await get_customer(invoice['customer'])
+
+    if attempt == 1:
+        await send_email(customer, 'payment_failed_first', {
+            'invoice_url': invoice['hosted_invoice_url'],
+            'amount': invoice['amount_due'] / 100,
+        })
+    elif attempt == 2:
+        await send_email(customer, 'payment_failed_second', ...)
+        await restrict_advanced_features(customer)
+    elif attempt == 3:
+        await send_email(customer, 'payment_failed_third_final_warning', ...)
+        await alert_cs_team(customer)
+    # Stripe will cancel after configured retries
+```
+
+## Revenue Recognition (ASC 606)
+
+```sql
+-- Daily revenue recognition for subscriptions
+INSERT INTO daily_recognized_revenue
+SELECT
+    sub.account_id,
+    d::date as date,
+    sub.amount / extract(epoch from (sub.end_date - sub.start_date))::numeric
+        * 86400 as daily_revenue,
+    'subscription' as type
+FROM subscriptions sub
+CROSS JOIN LATERAL generate_series(
+    sub.start_date,
+    LEAST(sub.end_date, current_date),
+    '1 day'
+) d
+WHERE sub.start_date <= current_date
+  AND sub.end_date > current_date - interval '1 day';
+```
+
+## MRR / ARR Calculation
+
+```sql
+-- MRR at any point in time
+SELECT SUM(
+  CASE plan_interval
+    WHEN 'month' THEN plan_amount
+    WHEN 'year'  THEN plan_amount / 12
+  END
+) as mrr
+FROM subscriptions
+WHERE status = 'active'
+  AND started_at <= NOW()
+  AND (canceled_at IS NULL OR canceled_at > NOW());
+
+-- MRR movement (cohort waterfall)
+WITH current_mrr AS (SELECT SUM(mrr) as v FROM active_subs WHERE date = '2025-02-01'),
+     prior_mrr   AS (SELECT SUM(mrr) as v FROM active_subs WHERE date = '2025-01-01'),
+     new_mrr     AS (SELECT SUM(mrr) FROM new_subs_in_month),
+     expansion   AS (SELECT SUM(mrr_diff) FROM upgrades_in_month),
+     contraction AS (SELECT SUM(mrr_diff) FROM downgrades_in_month),
+     churn       AS (SELECT SUM(mrr) FROM cancellations_in_month)
+SELECT
+  prior_mrr.v as start,
+  new_mrr.v as new,
+  expansion.v as expansion,
+  contraction.v as contraction,
+  churn.v as churn,
+  current_mrr.v as end
+FROM prior_mrr, new_mrr, expansion, contraction, churn, current_mrr;
+```
+
+## Multi-Currency
+
+```typescript
+// Customer's currency at signup
+const customer = await stripe.customers.create({
+  email,
+  currency: 'thb',  // locked at creation in most platforms
+});
+
+// Pricing strategy:
+// Option 1: Price in customer currency (FX risk on you)
+// Option 2: Price in USD, charge in local (uses Stripe FX)
+// Option 3: Per-region pricing (different prices per market)
+
+// Tax considerations vary
+// Use Stripe Tax or Avalara for compliance
+```
+
+## Proration
+
+```typescript
+// Mid-cycle plan change
+await stripe.subscriptions.update(subscription_id, {
+  items: [{ id: itemId, price: 'price_new_plan' }],
+  proration_behavior: 'create_prorations',
+});
+
+// Stripe calculates:
+// - Credit for unused time on old plan
+// - Charge for partial time on new plan
+// - Net difference on next invoice (or immediate)
+```
+
+## Trial Patterns
+
+```typescript
+// Free trial
+await stripe.subscriptions.create({
+  customer,
+  items: [{ price }],
+  trial_period_days: 14,
+  payment_settings: {
+    payment_method_types: ['card'],
+    save_default_payment_method: 'on_subscription',
+  },
+});
+
+// Convert (event: trial_will_end → trial_end)
+// If no card on file: subscription becomes 'past_due'
+```
+
+## Webhook Events to Handle
+
+| Event | Action |
+|-------|--------|
+| `customer.subscription.created` | Activate features |
+| `invoice.payment_succeeded` | Mark paid, recognize revenue |
+| `invoice.payment_failed` | Dunning workflow |
+| `customer.subscription.updated` | Sync plan changes |
+| `customer.subscription.deleted` | Deactivate, schedule data deletion |
+| `customer.subscription.trial_will_end` | Trial ending notification |
+
+## Things You Don't Do
+
+- ❌ Build your own billing engine
+- ❌ Calculate tax manually
+- ❌ Trust client-sent prices
+- ❌ Skip webhook idempotency
+- ❌ Recognize revenue at invoice time (use service period)
+- ❌ Float for money
+
+## Reference
+
+- [Stripe Billing Docs](https://stripe.com/docs/billing)
+- [ASC 606 Revenue Recognition Guide](https://www.investopedia.com/terms/a/asc-606.asp)
+- [Chargebee Knowledge Base](https://www.chargebee.com/docs/)
+- [Paddle Documentation](https://developer.paddle.com/)
+- [Maxio (Chargify) Docs](https://maxio.com/docs)
+
 
 ---
 
-## Decision tree: which format?
+# skill: reverse-engineering
 
-```
-What are you showing?
-│
-├─ UI mockup / component state / icon       →  Inline SVG
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (see polished-document-style)
-├─ Architecture / ER / class                →  Mermaid
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
+Use when asked to reverse engineer, decompile or disassemble an app with no source, find how a feature or protocol works \"under the hood\", analyze an unknown file, or \"how does X app do Y\" / \"ดูว่าแอปนี้ทำงานยังไง\".
 
-**Default to inline SVG** for anything that isn't a flow/sequence (use Mermaid for those). It renders everywhere, versions in git, doesn't bloat the repo with binaries, and the user can read/edit the markup.
+# Reverse Engineering
 
----
+Investigation model (adapted from the REA project): **Decompile → Understand → Recreate**, with evidence recorded at every step. Never claim to recover original source code; report what the evidence actually shows and mark unknowns explicitly.
 
-## 1 · Inline SVG (primary technique)
+## Safety and legality
 
-### Boilerplate
+- Only analyze software and files the user owns or is authorized to analyze (their own apps, licensed software, CTF targets, malware samples in a sandbox).
+- Do not help bypass licensing, DRM, activation checks, or access controls on third-party software.
+- Do not exfiltrate data found inside binaries (credentials, keys) to third parties.
+- Malware analysis: static-only unless the user explicitly asks for dynamic analysis in an isolated environment.
 
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+## Workflow
 
-  <!-- content goes here -->
-</svg>
-</p>
-```
+### Step 1 — Triage (identify the target)
 
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
+Run `scripts/triage.py <target>` to identify the file type, architecture, entry hints, and extract useful strings. It recognizes PE (Windows), ELF (Linux), Mach-O (macOS), .NET/CLI, APK (ZIP), ASAR, plist, JavaScript, and generic binaries.
 
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
+Classify the target first, because it determines the tool chain:
 
-### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
+| Target kind | Typical forms | Main route |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| Native binary | PE, ELF, Mach-O | Strings → symbols → decompile |
+| .NET / managed | `.exe`/`.dll` with CLI header | IL metadata → decompile (ILSpy) |
+| JavaScript / Electron | `.js`, bundles, `.asar`, source maps | Static JS graph — usually the fastest route |
+| Mobile | `.apk`, `.ipa` | Unpack first, then treat contents by kind |
+| Web app / site | URL of the user's own site | Passive observation, bundle/source-map analysis |
+| Unknown format | custom file | Hex/structure analysis, entropy, repeated patterns |
 
-**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
+**Installers and stubs**: if triage reports a 7-Zip SFX or NSIS installer, do NOT analyze strings in it — they are compressed noise. Extract first (`7z x <file>`), then triage the real payload inside. For known packaging patterns (Mozilla `omni.ja`/`application.ini`, Electron ASAR, .NET bundles, APK layout), see [references/packaging-patterns.md](references/packaging-patterns.md).
 
-### Reusable SVG snippets
+Confirm what the user actually wants before deep work: explain a feature, recover an algorithm/format, or recreate the feature in their stack.
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+### Step 2 — Decompile (recover readable clues)
 
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
+Work from cheapest to most expensive:
 
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
+1. **Strings and metadata**: names, endpoints, constants, error messages. `scripts/triage.py --strings` for keyword-filtered output, or `scripts/triage.py --pattern '<regex>'` to hunt a specific clue (e.g. `--pattern 'oauth|autoconfig'`). Grep over extracted resources for text files.
+2. **Symbols/imports/exports**: which APIs the binary calls (`imports`) reveal behavior (crypto, networking, storage).
+3. **JavaScript/Electron**: unpack ASAR (`npx asar extract`), beautify bundles, read source maps (`.map` often contains original source). This frequently answers the whole question without touching native code.
+4. **Managed (.NET)**: `ilspycmd` or ILSpy GUI to get near-original C#.
+5. **Native deep analysis**: Ghidra (free, headless mode) or Hopper. Use when strings/symbols are not enough. On Windows, Ghidra headless + Python scripts is the reliable path.
 
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
+For each interesting finding (a feature name, an endpoint, an algorithm string), record it as evidence: file, address/offset, and what it suggests.
 
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
+### Step 3 — Understand (connect clues to code)
 
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
+Trace from clue to implementation:
 
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
+1. Find where the string/symbol is referenced (xrefs).
+2. Find the function that contains the reference (callers/callees, control flow).
+3. Decompile those functions; follow the data flow in and out.
+4. Build a short narrative: "feature X works by A calling B, storing in C, gated by D."
 
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
+Keep static inference and runtime observation separate — say which one each claim comes from. Mark unresolved links explicitly instead of guessing.
 
-### Worked example — UI state mockup
+### Step 4 — Recreate (build the user's version)
 
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
+Only after the user confirms the understanding is correct, implement the equivalent feature in their project using their normal file-editing and test tools. Adapt to their stack and requirements; do not copy code wholesale from proprietary binaries. If the original used a standard algorithm or format (JSON, protobuf, zlib, AES), linking against or reimplementing that standard is fine.
 
-```markdown
-## 2 · External image files
+### Step 5 — Report
 
-Use when:
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
+Deliver a structured summary:
 
-### Folder convention
+- **How it works**: the narrative from Step 3, with evidence locations.
+- **Evidence list**: each claim tied to a file/address/observation.
+- **Unknowns**: what could not be determined and what would resolve it.
+- **Recreated feature**: files changed/created, and how to verify.
 
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
+## Rules of thumb
 
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+- Prefer static analysis; avoid executing unknown binaries.
+- Cheapest sufficient evidence wins: JS bundle > symbols > decompiler > debugger.
+- Binary analysis requires an explicit request or clear authorization; when in doubt, ask.
+- Windows note: many classic Unix RE tools are absent; prefer Python scripts (bundled or written on the spot) and Node-based tools over assuming `strings`/`objdump` exist.
 
-### Reference syntax
 
-```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
-```
+## reference: packaging-patterns.md
 
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
+# Common application packaging patterns
 
-```markdown
-<p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
+Recognizing the packaging leads straight to the readable layer. Check these before touching a decompiler.
 
-### Creating SVG files
+## Mozilla apps (Firefox, Thunderbird)
 
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
+- Full Windows installer is a **7-Zip SFX stub** (small PE32, sections=3) with the app in an appended archive. `7z x setup.exe` extracts `core/` plus `setup.exe`.
+- `core/application.ini` — version, BuildID, source repository and SourceStamp (build provenance evidence).
+- `core/omni.ja` — ZIP archive (97MB+ for Thunderbird) holding nearly all app JavaScript (`modules/`, `chrome/`) and default prefs (`defaults/pref/*.js`). Extract with 7z; Grep it to trace features. `omni.ja` is usually the cheapest route to full answers.
+- The big DLLs are the native layer: `xul.dll` (Gecko engine), `nss3.dll`/`freebl3.dll` (crypto), `rnp.dll` (OpenPGP), `libotr.dll` (chat encryption).
+- `thunderbird.exe` itself is only a launcher stub.
+
+## Electron / Node apps
+
+- `app.asar` — ASAR archive; `npx asar extract app.asar outdir`. Renderer JS is often minified but readable; `.map` source maps may contain original source.
+- `resources/app/package.json` names the app, entry point, and dependency list.
+- Native modules: `*.node` files (PE DLLs) — treat as native binaries.
+
+## .NET applications
+
+- PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd <dll>` or ILSpy gives near-original C#.
+- Check for bundled/single-file deployment (self-extracting extractors) — extract first.
+- P/Invoke declarations map managed code to native DLL entry points.
+
+## Android APK
+
+- ZIP; contains `classes.dex` (Dalvik bytecode — use `jadx` or `apktool` for near-Java output), `AndroidManifest.xml` (binary XML — use `apktool` or `aapt`), `resources.arsc`, native libs under `lib/`.
+
+## Windows installers generally
+
+- 7-Zip SFX: extract with `7z x`.
+- NSIS: extract with `7z x` (triage detects `NullsoftInstall` marker).
+- MSI: `msiexec /a file.msi /qb TARGETDIR=<out>` or 7z.
+- MSI transforms and stub downloaders may contain no payload — identify early to avoid wasted work.
+
 
 ---
 
-## 3 · ASCII art
+# skill: simplicity-first
 
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, UX, API design, sprint plan). Simplest version that works, the tired-teammate test, no buzzwords or extra layers. For code use lazy-coding.
 
-### Box-drawing characters
+# Simplicity First
 
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
 
-### Common patterns
+## The one test
 
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
+Before submitting, ask:
 
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
+> Could a tired teammate understand this in 6 months, with no prior context?
 
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
+If "no" or "not sure" → simplify.
 
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+## 5 principles
 
----
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
 
-## 4 · Mermaid
+## By output type
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+### Documents (BRD, FSD, ADR)
 
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
-|---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
 
----
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
 
-## Combining formats in one doc
+### Architecture
 
-A full design spec usually mixes formats. Pattern from `DockXI/docs/12-design-mockup.md`:
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
 
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
 
-Don't pick one format and force everything into it — each format has a sweet spot.
+### Plans
 
----
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
 
-## Accessibility checklist
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
 
-For every visual:
+### Designs (UX, API)
 
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
 
----
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
 
-## Anti-patterns
+## The 3-question filter
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax for GitHub compat
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+Before adding any new component, configuration option, or pattern:
 
----
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
 
-## Quick-start recipe
+Two or more answers point to "simpler is fine" → don't add it.
 
-When the user asks for a design / mockup:
+## Examples
 
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
+**API description**
 
-If unsure whether a visual will render, mention that the user should preview in GitHub/Notion to confirm.
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
 
----
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
 
-## Related skills
+**Sprint goal**
 
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
 
----
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
 
-## ตัวย่อ
+**Architecture for a new feature**
 
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## Pre-submit checklist
+
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
+
+If any answer is "no" → simplify before delivering.
+
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry

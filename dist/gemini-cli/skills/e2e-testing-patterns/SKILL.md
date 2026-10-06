@@ -1,7 +1,9 @@
 ---
 name: e2e-testing-patterns
-description: Use when designing end-to-end (E2E) tests, choosing testing frameworks (Playwright, Cypress), structuring test suites, dealing with flaky tests, or setting up CI for E2E. Covers test pyramid, page object pattern, test data strategy, and parallelization.
+description: Use when designing end-to-end tests (Playwright, Cypress), structuring suites, fixing flaky tests or running E2E in CI. To give an agent a way to run and check the app itself, use app-verifier-setup.
 ---
+
+> **ใน A-Team:** ให้ agent รันแอปและพิสูจน์ผลเองใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) · skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 
 # End-to-End Testing Patterns
 

@@ -1,7 +1,9 @@
 ---
 name: svg-diagram-system
-description: Use when an architecture diagram has to come out as a high-quality image file for a specification, a slide or a client deliverable — Python that emits SVG and renders through a headless browser, with real product logos, every box on a grid and orthogonal connectors. Sets no colours of its own and asks for one accent before drawing.
+description: Use when an architecture diagram must be a high-quality image file for a spec, slide or client deliverable. Python emits SVG on a grid with real logos and orthogonal connectors. Asks for one accent colour first.
 ---
+
+> **สีเริ่มต้น = ชุดประจำบ้าน** ถ้า `doc-theme` ไม่ได้ประกาศ accent เฉพาะงาน ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") — brand `#2A78D6` และชุดเดียวกับสไลด์/เอกสาร
 
 # ระบบวาดไดอะแกรมด้วย SVG
 

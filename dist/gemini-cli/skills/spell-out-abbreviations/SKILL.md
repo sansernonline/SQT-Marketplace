@@ -1,6 +1,6 @@
 ---
 name: spell-out-abbreviations
-description: Use in every piece of writing produced for a person — documents, code comments, commit messages, chat replies, interface text, diagram labels. Each abbreviation is written out in full the first time with the short form in brackets, for example Model Context Protocol (MCP), and a specialist term gets a short plain-language gloss.
+description: Use in every piece of writing for a person (docs, comments, commits, replies, UI text, diagram labels). Spell out each abbreviation the first time, e.g. Model Context Protocol (MCP), and gloss specialist terms.
 ---
 
 # Spell Out Abbreviations

@@ -1,426 +1,62 @@
-# 📦 Plugins ใน SQT Marketplace
+# 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **14 plugins** — core 1 ตัว + add-on ตามอุตสาหกรรม 13 ตัว
+ทั้งหมด **11 plugins** — `software-company` ตัวเดียว ทุกสาขารวมไว้แล้วตั้งแต่ v2.0.0
 
 ---
 
-## 🏢 `software-company` (Core, Required)
+## 🏢 `software-company`
 
-Plugin หลัก — จำลองทีมพัฒนาซอฟต์แวร์ครบ SDLC
+จำลองบริษัทซอฟต์แวร์ครบ SDLC ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**13 agents · 61 skills · 15 commands**
-
-Agents: product-manager, project-manager, business-analyst, solution-architect, system-analyst, ux-designer, developer, qa-tester, devops-engineer, security-engineer, technical-writer, seo-specialist
+**38 agents · 101 skills · 28 commands**
 
 ### ติดตั้ง
 ```
+/plugin marketplace add sansernonline/SQT-Marketplace
 /plugin install software-company@sqt-marketplace
 ```
 
-### เหมาะกับ
-- ✅ บริษัทซอฟต์แวร์ทั่วไป
-- ✅ Startup ทุกขนาด
-- ✅ Foundation สำหรับ plugin อื่นใน marketplace นี้
+---
+
+## 🏭 สาขาเฉพาะทาง — รวมอยู่ใน `software-company` แล้ว
+
+ก่อน v2.0.0 แต่ละสาขาเป็น plugin แยก ตอนนี้อยู่ในตัวเดียว ไม่ต้องติดตั้งเพิ่ม
+
+| เดิม (plugin) | เรื่อง | agent | skill | command |
+|---|---|---|---|---|
+| `software-company-ai` | AI / ML · LLM · RAG | `ai-engineer` · `data-engineer` | `llm-engineering` | `/software-company:llm-design` |
+| `software-company-cybersecurity` | SOC · threat hunting · incident response | `security-analyst` | `security-operations` | `/software-company:security-ops-design` |
+| `software-company-devtools` | SDK · DevRel · docs | `devrel-engineer` | `developer-experience` | `/software-company:dx-design` |
+| `software-company-ecommerce` | checkout · inventory · recommendation | `growth-specialist` · `ecommerce-engineer` · `recommendation-engineer` | `ecommerce-patterns` | `/software-company:ecommerce-design` |
+| `software-company-fintech` | payment · KYC/AML · PCI-DSS | `fintech-engineer` · `fintech-compliance-officer` · `quant-analyst` | `fintech-payments` | `/software-company:fintech-design` |
+| `software-company-gaming` | game engine · multiplayer · live-ops | `game-developer` · `game-designer` | `game-development` | `/software-company:game-design` |
+| `software-company-healthcare` | FHIR · HIPAA · clinical | `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst` | `healthcare-systems` | `/software-company:healthcare-design` |
+| `software-company-insurtech` | claims · underwriting · insurance law | `insurance-engineer` · `insurance-analyst` · `insurance-compliance-officer` | `insurance-systems` | `/software-company:insurance-design` |
+| `software-company-iot` | firmware · MQTT · edge · fleet | `iot-engineer` | `iot-systems` | `/software-company:iot-design` |
+| `software-company-legaltech` | contract · document automation · e-signature | `legaltech-engineer` · `legal-compliance-officer` | `legal-document-systems` | `/software-company:legal-doc-design` |
+| `software-company-mobile` | iOS / Android / Flutter · ASO | `growth-specialist` · `mobile-engineer` | `mobile-engineering` | `/software-company:mobile-design` |
+| `software-company-saas-b2b` | multi-tenancy · SSO/SCIM · billing | `growth-specialist` · `solution-architect` · `revops-analyst` | `saas-platform` | `/software-company:saas-design` |
+| `software-company-web3` | smart contract · DeFi · tokenomics | `blockchain-engineer` | `smart-contracts` | `/software-company:web3-design` |
+
+**รวมแบบนี้:**
+- agent ที่ทำงานคล้ายกันรวมเป็นตัวเดียว (เช่น android · ios · cross-platform → `mobile-engineer`) — คู่มือบทบาทเดิมทุกตัวอยู่ครบใน `references/agent-<ชื่อเดิม>.md` ของ skill สาขานั้น
+- skill สามตัวของแต่ละสาขารวมเป็น skill เดียว — เนื้อหาเดิมอยู่ครบใน `references/<ชื่อเดิม>.md`
+- command สองตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-company:fintech-design pci-audit <ขอบเขต>`
 
 ---
 
-## 🏦 `software-company-fintech` (Add-on)
+## 🔄 ย้ายจากรุ่นก่อน v2.0.0
 
-FinTech — payments, compliance, risk
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| fintech-engineer | pci-dss-compliance | /pci-audit |
-| payment-integration | kyc-aml-patterns | /transaction-flow-design |
-| compliance-officer | payment-gateway-integration | |
-| quant-analyst | | |
-
-### ติดตั้ง
-```
-/plugin install software-company-fintech@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ Banking / E-money / Payments
-- ✅ Trading / Lending / Insurance tech
-- ✅ Crypto exchanges
-
----
-
-## 🤖 `software-company-ai` (Add-on)
-
-AI/ML — model engineering, LLM systems, MLOps
-
-### มีอะไรบ้าง
-**5 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| ml-engineer | rag-architecture | /rag-design |
-| data-engineer | prompt-engineering-patterns | /llm-eval |
-| prompt-engineer | llm-evaluation-patterns | |
-| llm-architect | | |
-| mlops-engineer | | |
-
-### ติดตั้ง
-```
-/plugin install software-company-ai@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ AI product teams
-- ✅ Production LLM applications
-- ✅ MLOps teams
-- ✅ Data science teams
-
----
-
-## 🏥 `software-company-healthcare` (Add-on)
-
-Healthcare — HIPAA compliance, FHIR/HL7, clinical workflows
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| healthcare-engineer | hipaa-compliance | /hipaa-audit |
-| hipaa-officer | fhir-implementation | /fhir-design |
-| fhir-specialist | clinical-workflows | |
-| clinical-data-analyst | | |
-
-### ติดตั้ง
-```
-/plugin install software-company-healthcare@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ Health tech / EHR vendors
-- ✅ Telemedicine platforms
-- ✅ Clinical research software
-- ✅ Healthcare analytics
-- ✅ บริษัทที่ต้อง HIPAA/PDPA compliant
-
----
-
-## 🛒 `software-company-ecommerce` (Add-on)
-
-E-commerce — checkout, recommendations, inventory, conversion
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| ecommerce-engineer | checkout-optimization | /checkout-audit |
-| recommendation-engineer | recommendation-systems | /recommendation-design |
-| inventory-specialist | inventory-management | |
-| cro-specialist | | |
-
-### ติดตั้ง
-```
-/plugin install software-company-ecommerce@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ E-commerce stores (D2C, B2B, marketplace)
-- ✅ Retail tech
-- ✅ Marketplace platforms (Lazada/Shopee-like)
-- ✅ Subscription commerce
-
----
-
-## 🎮 `software-company-gaming` (Add-on)
-
-Gaming — game dev, multiplayer, design, live ops
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| game-developer | game-architecture | /game-design |
-| multiplayer-engineer | multiplayer-netcode | /multiplayer-architecture |
-| game-designer | live-ops-patterns | |
-| live-ops-specialist | | |
-
-### ติดตั้ง
-```
-/plugin install software-company-gaming@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ Game studios (indie to AAA)
-- ✅ Mobile F2P
-- ✅ Esports platforms
-- ✅ Web3 gaming
-- ✅ Game backend services
-
----
-
-## 🌐 `software-company-iot` (Add-on)
-
-IoT — edge computing, firmware, device fleet
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| edge-architect | device-fleet-management | /device-fleet-design |
-| firmware-engineer | edge-computing-architecture | /iot-architecture |
-| iot-engineer | mqtt-protocol-patterns |  |
-| mqtt-specialist |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-iot@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ โรงงาน/อุตสาหกรรมที่มีเซนเซอร์จำนวนมาก
-- ✅ Smart home / smart building
-- ✅ Fleet ของอุปกรณ์ที่ต้อง OTA update
-- ✅ ระบบที่ต้องประมวลผลที่ edge
-
----
-
-## 🔒 `software-company-cybersecurity` (Add-on)
-
-Cybersecurity — SOC, threat hunting, incident response
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| incident-responder | security-incident-response | /soc-design |
-| security-architect | soc-operations | /threat-hunt |
-| soc-analyst | threat-detection-patterns |  |
-| threat-hunter |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-cybersecurity@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ ทีม SOC / Blue team
-- ✅ องค์กรที่ต้องทำ threat detection เอง
-- ✅ ระบบที่ต้องรับมือ incident บ่อย
-- ✅ งานที่ต้องออกแบบ security architecture
-
----
-
-## 🏢 `software-company-saas-b2b` (Add-on)
-
-SaaS B2B — multi-tenancy, billing, enterprise integration
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| customer-success-engineer | enterprise-integration | /integration-design |
-| integration-engineer | multi-tenancy-patterns | /saas-architecture-review |
-| revops-analyst | subscription-billing |  |
-| saas-architect |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-saas-b2b@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ ผลิตภัณฑ์ SaaS ที่ขายองค์กร
-- ✅ ระบบที่ต้องแยก tenant
-- ✅ Subscription billing / usage-based pricing
-- ✅ ต้องเชื่อมระบบลูกค้าองค์กร (SSO, SCIM, webhook)
-
----
-
-## 🔧 `software-company-devtools` (Add-on)
-
-Developer tools — SDK, DX, DevRel, technical content
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| devrel-engineer | developer-experience | /dx-audit |
-| docs-engineer | sdk-design-patterns | /sdk-design |
-| dx-engineer | technical-content |  |
-| sdk-builder |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-devtools@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ บริษัทที่ขาย API/SDK
-- ✅ ทีม DevRel
-- ✅ งานที่ต้องเขียน docs ให้นักพัฒนาอ่าน
-- ✅ ปรับ onboarding ของนักพัฒนาให้เร็วขึ้น
-
----
-
-## 📱 `software-company-mobile` (Add-on)
-
-Mobile — iOS, Android, cross-platform, ASO
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| android-engineer | app-store-optimization | /aso-audit |
-| aso-specialist | mobile-architecture-patterns | /mobile-architecture |
-| cross-platform-engineer | mobile-performance |  |
-| ios-engineer |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-mobile@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ แอปมือถือ native หรือ cross-platform
-- ✅ ทีมที่ต้องดูแลทั้ง 2 store
-- ✅ งานปรับ performance บนมือถือ
-- ✅ ต้องทำ App Store Optimization
-
----
-
-## 🌐 `software-company-web3` (Add-on)
-
-Web3 — smart contracts, DeFi, tokenomics
-
-### มีอะไรบ้าง
-**4 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| blockchain-architect | defi-patterns | /smart-contract-audit |
-| defi-engineer | smart-contract-testing | /tokenomics-design |
-| smart-contract-developer | solidity-security |  |
-| tokenomics-designer |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-web3@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ โปรเจกต์ on-chain
-- ✅ DeFi protocol
-- ✅ งานที่ต้อง audit smart contract
-- ✅ ออกแบบ token economy
-
----
-
-## ⚖️ `software-company-legaltech` (Add-on)
-
-LegalTech — contract analysis, e-signature, document automation
-
-### มีอะไรบ้าง
-**5 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| contract-analyzer | contract-parsing-patterns | /contract-analysis-design |
-| document-automation-engineer | document-automation-patterns | /esignature-audit |
-| e-signature-specialist | e-signature-compliance |  |
-| legal-compliance-officer |  |  |
-| legaltech-engineer |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-legaltech@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ ระบบจัดการสัญญา
-- ✅ e-Signature ที่ต้องอ้างอิงกฎหมาย
-- ✅ งาน document automation
-- ✅ ทีม compliance ด้านกฎหมาย
-
----
-
-## 🛡️ `software-company-insurtech` (Add-on)
-
-InsurTech — claims, underwriting, actuarial
-
-### มีอะไรบ้าง
-**5 agents · 3 skills · 2 commands**
-
-| Agents | Skills | Commands |
-|--------|--------|----------|
-| actuarial-engineer | claims-workflow-patterns | /claims-flow-design |
-| claims-processing-specialist | insurance-compliance | /underwriting-model-design |
-| insurance-compliance-officer | underwriting-models |  |
-| insurance-engineer |  |  |
-| underwriting-analyst |  |  |
-
-### ติดตั้ง
-```
-/plugin install software-company-insurtech@sqt-marketplace
-```
-
-### เหมาะกับ
-- ✅ บริษัทประกัน / โบรกเกอร์
-- ✅ ระบบเคลม
-- ✅ โมเดล underwriting และคำนวณเบี้ย
-- ✅ งาน compliance ของธุรกิจประกัน
-
----
-
-## 🎯 ติดตั้งชุดไหนดี
+ถ้าเคยติดตั้ง plugin สาขาไว้ ให้ถอดออกแล้วอัปเดตตัวหลัก
 
 ```
-สถานการณ์                          → ติดตั้ง
-═══════════════════════════════════════════════════════════════════
-ทีม software ทั่วไป                  → software-company
-บริษัท FinTech                       → core + fintech
-ทีม AI product                       → core + ai
-Healthcare startup                   → core + healthcare
-E-commerce store                     → core + ecommerce
-Game studio                          → core + gaming
-FinTech ที่ใช้ AI fraud detection   → core + fintech + ai
-Healthcare ที่ใช้ ML                  → core + healthcare + ai
-E-commerce ที่ใช้ ML recsys         → core + ecommerce + ai
-Game studio + esports analytics      → core + gaming + ai
-Startup ทดลอง (เลือกทีหลัง)        → core เท่านั้น
-```
-
-## 📊 Marketplace Total
-
-```
-14 plugins
-68 agents (13 core + 55 add-on)
-100 skills (61 core + 39 add-on)
-41 commands (15 core + 26 add-on)
-```
-
-## 🔄 อัปเดต Plugins
-
-```
+/plugin uninstall software-company-fintech     # ทำกับทุกตัวที่เคยติดตั้ง
 /plugin marketplace update sqt-marketplace
-/plugin update software-company
-/plugin update <other-plugins>
+/plugin update software-company@sqt-marketplace
 ```
 
-## ❌ ถอนการติดตั้ง
-
-```
-/plugin uninstall software-company-gaming
-/plugin uninstall software-company         # ระวัง: add-ons จะใช้ skill ไม่ได้
-```
+ชื่อที่เปลี่ยน — command `/software-company-<สาขา>:<ชื่อ>` กลายเป็น `/software-company:<สาขา>-design <ชื่อเดิม>` · ชื่อ agent และ skill ใหม่ดูตารางข้างบน · แผนที่ชื่อเก่า→ใหม่ทั้งหมดอยู่ใน skill ของสาขานั้นหัวข้อ "ที่มา"
 
 ---
 
@@ -428,36 +64,175 @@ Startup ทดลอง (เลือกทีหลัง)        → core เ�
 
 ```
 SQT-Marketplace/
-├── .claude-plugin/
-│   └── marketplace.json
-├── plugins/
-│   ├── software-company/              ← core (REQUIRED)
-│   ├── software-company-fintech/      ← add-on
-│   ├── software-company-ai/           ← add-on
-│   ├── software-company-healthcare/   ← add-on
-│   ├── software-company-ecommerce/    ← add-on
-│   └── software-company-gaming/       ← add-on
-├── docs/
-│   ├── INSTALL.md
-│   ├── USAGE.md
-│   ├── REFERENCE.md
-│   └── PLUGINS.md     ← you are here
+├── .claude-plugin/marketplace.json
+├── plugins/software-company/
+│   ├── agents/      38 บทบาท
+│   ├── skills/      101 skill (skill สาขาเก็บรายละเอียดใน references/)
+│   ├── commands/    28 command
+│   └── hooks/       hook ของ A-Team — เขียน .a-team/log และแจ้ง inbox
+├── docs/            INSTALL · USAGE · REFERENCE · PLUGINS (ไฟล์นี้)
 └── README.md
 ```
 
-## 💡 ทำไม add-on ต้องพึ่ง software-company
+---
 
-Plugins add-on **อ้างอิง shared skills** จาก software-company (เพื่อ DRY):
+## 🗺️ Roadmap — plugin ชีวิตประจำวัน
 
-```
-software-company-fintech / healthcare / ecommerce / gaming / ai
-  └── ทุก agent + command → ใช้ polished-document-style + branded-document-design
-                                         ↓
-                                ⚠️ skill นี้อยู่ใน software-company
-```
+_ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอดจาก software-company ที่ครอบฝั่ง "สร้างซอฟต์แวร์" แล้ว_
 
-ไม่ติด software-company:
-- ❌ Output จะไม่สวย (ไม่มี polished format)
-- ❌ ไม่มี shared skills (commit format, code review, etc.)
+หลักการเลือก: (1) ไม่ซ้ำกับ 101 skills ที่มี — ของเดิมเอนไปทางออกแบบ/สร้าง ของใหม่เอนไปทาง "ใช้ในชีวิต" (2) ตลาดจีน/สากลยังไม่ทำหรือทำไม่ตรงบริบทไทย (3) ทำเป็น skills ล้วนได้ก่อน ไม่ผูก MCP server ตั้งแต่ต้น
 
-→ **ติดตั้ง software-company ก่อนเสมอ**
+---
+
+### สารบัญ
+
+| # | Plugin | กลุ่มเป้าหมาย | น้ำหนัก |
+|---|---|---|---|
+| 1 | [trading-finance](#1--trading-finance) | คนสนใจเงิน/เทรด | ⭐ ทำก่อน |
+| 2 | [personal-life](#2--personal-life) | ทุกคน | ⭐ ทำก่อน |
+| 3 | [thai-workplace](#3--thai-workplace) | SME/บริษัทไทย | ทำต่อ |
+| 4 | [graphic-design](#4--graphic-design) | งานครีเอทีฟ | ทำต่อ |
+| 5 | [dev-learning](#5--dev-learning-สำรอง--ทำทีหลัง) | programmer | สำรอง |
+
+---
+
+### 1 · trading-finance
+
+**จุดต่างจากตลาด:** ตลาดมีแต่ของสถาบัน (DCF, 研报, IC deck — institutional-finance-kit, xtt-public-markets-investing) แต่ไม่มีของ **retail trader ธรรมดา** — ดูกราฟ วางแผนเทรด บันทึกเทรดดิ้ง สัญญาณเตือน
+
+**Agents (4):** market-analyst (วิเคราะห์หุ้นที่สนใจ), trade-journal-coach (อ่าน journal แล้วชี้พฤติกรรมซ้ำ ๆ), risk-manager (คำนวณ position sizing, max drawdown), alert-dispatcher (เฝ้าราคา+ข่าวแจ้งเตือน)
+
+**Skills (12):**
+- watchlist-setup — ตั้งวอทช์ลิสต์หุ้นไทย/ฮ่องกง/US พร้อมเหตุผล
+- technical-signals — RSI/MACD/MA/volume breakout อธิบายเป็นภาษาคน
+- paper-trading — เทรดจำลองก่อนด้วยเงินเสมือน เก็บสถิติ win/loss
+- trade-journal — บันทึกทุกออเดอร์: setup, เหตุผล, อารมณ์ตอนเข้า, ผลลัพธ์
+- post-trade-review — ทบทวนรายสัปดาห์ หาจุดซ้ำที่เสียเงิน
+- position-sizing — คำนวณขนาดลงทุนจากเงินทุน/ความเสี่ยงต่อไม้
+- portfolio-snapshot — สรุปพอร์ตปัจจุบัน (Excel/HTML)
+- dividend-tracker — ปันผล/ดอกเบี้ยที่จะได้รับปีนี้
+- news-impact — ข่าววันนี้กระทบหุ้นใน watchlist ตัวไหนบ้าง
+- tax-basics-th — ภาษีเงินได้จากหุ้น/ดอกเบี้ย/เงินปันผล เบื้องต้น
+- personal-budget — บัญชีรายรับรายจ่าย+แผนออม
+- scam-check — ตรวจสัญญาณหุ้นล็อก/forexหลอก/แชร์ลูกโซ่ ก่อนโอนเงิน
+
+**Commands (6):** /watch, /paper-trade, /journal, /review-week, /alert-set, /portfolio
+
+**ข้อมูล:** ดึงผ่าน data plugin ที่มีอยู่ (yahoo_finance, Gildata ฯลฯ) — plugin นี้ไม่พก data source เอง ระบุไว้ใน skill ว่าถ้าไม่มี plugin พวกนั้นให้ลดขั้นลง fetch ฟรีอย่างไร
+
+---
+
+### 2 · personal-life
+
+**จุดต่างจากตลาด:** ตลาดมี connector แยกชิ้น (email, gmail, google-calendar, obsidian) แต่ไม่มีชุด **ความรู้การจัดชีวิต** — plugin นี้เน้น workflow + เอกสาร ไม่ทำ connector ซ้ำกับของสำเร็จ
+
+**Agents (3):** life-admin (จัดการธุระซ้ำ ๆ), meeting-prep (เตรียมก่อนประชุม สรุปหลังประชุม), doc-caretaker (เอกสารสำคัญในชีวิต)
+
+**Skills (10):**
+- weekly-review — ทบทวนสัปดาห์: อะไรคุ้ม อะไรเสียเวลา
+- meeting-prep-card — การ์ดเตรียมประชุม 1 หน้า (เป้าหมาย/คำถาม/ข้อมูล)
+- meeting-summary — สรุปประชุม → action items ตามเจ้าของ
+- inbox-triage — วิธีคัดอีเมลที่ต้องตอบวันนี้ (ใช้กับ plugin อีเมลที่มีอยู่)
+- calendar-audit — ตรวจปฏิทินว่าเวลาไปอยู่ไหน แนะนำบล็อกเวลา
+- personal-kb — ระบบจดโน้ตส่วนตัวที่ค้นหาเจอ (ชื่อคน/สัญญา/รหัสผ่านไม่ใช่ — อ้างอิงไปยัง password manager)
+- important-docs — ทะเบียนสำคัญ: บัตร สัญญา ประกัน หมดอายุเมื่อไร
+- travel-prep — เช็กลิสต์เดินทาง วีซ่า ประกัน เอกสาร
+- gift-idea-tracker — จำวันเกิด/ของขวัญที่เคยให้คนรอบตัว
+- decision-journal — บันทึกการตัดสินใจใหญ่ รอผลแล้วกลับมาเรียนรู้
+
+**Commands (5):** /week-review, /meeting, /triage-mail, /travel, /decide
+
+---
+
+### 3 · thai-workplace
+
+**จุดต่างจากตลาด:** ตลาดมีแต่ Feishu/WeCom/Slack — ไม่มีอะไรของไทยเลย ทั้งที่ LINE เป็นช่องทางหลักของ SME ไทย
+
+**Agents (4):** line-admin (LINE OA + Messaging API), thai-doc-writer (เอกสารไทย), compliance-helper (PDPA/แรงงาน เบื้องต้น), tax-helper (ภาษี SME ไทยเบื้องต้น)
+
+**Skills (12):**
+- line-oa-setup — ตั้ง LINE OA + Messaging API: webhook, channel token
+- line-chatbot — บอทตอบคำถามลูกค้าจาก knowledge base บริษัท
+- line-broadcast — ส่งข่าวสาร/โปรโมชัน ภายใต้โควต้าแพ็กเกจ
+- line-richmenu — ออกแบบเมนูปุ่มใต้แชท
+- doc-quotation — ใบเสนอราคา/ใบวางบิล/ใบแจ้งหนี้ ถูกรูปแบบ
+- doc-thai-official — หนังสือราชการ/หนังสือบริษัท ภาษา+รูปแบบถูกต้อง
+- doc-contract-th — สัญญาจ้าง/สัญญาเช่า เบื้องต้น + ช่องที่ต้องให้ทนายดู
+- doc-leave — ระบบใบลา/ใบลาเพื่อช่วยเหลือบุตร ฯลฯ ตามกฎแรงงาน
+- pdpa-workflow — ขยายจาก `pdpa-compliance` ที่มี: ฟอร์มยินยอม, บันทึกเหตุละเมิด, แจ้งเจ้าของข้อมูล
+- tax-vat-th — ภ.พ. 30 / ภ.ง.ด. 1/3/53 ใครยื่นอะไรเมื่อไร
+- thai-holidays — วันหยุดนักขัตฤกษ์+วันสำคัญธุรกิจไทย
+- social-security-th — ประกันสังคม/กองทุนสำรองเลี้ยงชีพ ฐานคำนวณ
+
+**Commands (6):** /line-setup, /line-bot, /quotation, /contract, /pdpa, /tax-due
+
+**ข้อจำกัดต้องเขียนใน skill:** tax/law เป็น "เบื้องต้น ไม่ใช่คำปรึกษาทนาย/นักบัญชี" และต้องอ้างอิงกรม/หน่วยงานทุกครั้ง; LINE Messaging API มีค่าใช้จ่ายรายเดือนตามแพ็กเกจของ LINE
+
+---
+
+### 4 · graphic-design
+
+**จุดต่างจากตลาดและของเดิม:** software-company มี graphic-design skill แต่เอนทาง product UI/เอกสาร; kimi-design ที่ผู้ใช้ติดตั้งมีอยู่ทำ infographic/poster DSL — plugin นี้เน้น **วิดีโอ + ระบบแบรนด์ + วิจารณ์งาน** ที่ไม่มีใครครอบ
+
+**Agents (4):** art-director (บรีฟภาพ/วิดีโอ AI ให้ได้รสเดียวกัน), brand-keeper (brand kit ชุดเดียวใช้ทุกงาน), social-creator (งานโพสต์/โฆษณา), design-critic (วิจารณ์ตาดี)
+
+**Skills (10):**
+- brand-kit — โลโก้ สี ฟอนต์ tone บันทึกเป็นไฟล์ชุดเดียว เรียกใช้ซ้ำได้
+- brief-to-image — แปลง brief งาน → prompt ภาพ รุ่น/สไตล์/แสง ครบ
+- style-consistency — กฎทำภาพชุดให้ดูเป็นคนเดียวทำ (palette, composition, mood)
+- image-editing-brief — บรีฟแก้ภาพต่อเนื่อง: เอาอะไร ใส่อะไร คงอะไรไว้
+- video-script-to-clip — สคริปต์วิดีโอสั้น: hook 3 วิ, shot list, caption
+- motion-basics — หลัก motion graphics สำหรับคนไม่ใช่ designer
+- social-formats — ขนาดมาตรฐานทุกแพลตฟอร์ม + safe zone
+- design-review — รายการตรวจงาน: hierarchy, contrast, spacing, ความสะอาด
+- campaign-set — ชุดงานหลายชิ้นจากแคมเปญเดียว (feed/story/banner/ปก)
+- asset-organize — ตั้งชื่อ+จัดโฟลเดอร์ไฟล์งานดีไซน์ให้หาเจอ
+
+**Commands (6):** /brand-init, /brief, /video, /review-design, /campaign, /resize-all
+
+---
+
+### 5 · dev-learning (สำรอง — ทำทีหลัง)
+
+**เหตุผล:** programmer ต้องอัปเดตตลอด แต่มีของ built-in คลอบคลุมพอสมควร (scholar, deep-research) จึงให้เป็นลำดับท้าย
+
+**Skills ที่วางไว้:** tech-radar (สรุป release notes/library ที่ตามอยู่รายสัปดาห์), paper-to-practice (แปลง paper/blogs เป็นโค้ดตัวอย่าง), learning-path (แผนเรียนเทคใหม่จากโปรเจกต์จริง), english-tech-reading (อ่านเอกสารอังกฤษให้เข้าใจเร็ว)
+
+---
+
+### ลำดับทำ
+
+1. **trading-finance** — ผู้ใช้สนใจเอง ทดสอบกับตัวเองได้ทันที ตลาด retail ยังว่าง
+2. **personal-life** — ใช้ได้กว้างสุด ไม่ต้องพึ่ง API ภายนอกเลย
+3. **thai-workplace** — ต้องเช็ก LINE Messaging API + กฎหมาย/ภาษีปัจจุบันก่อนลงมือ
+4. **graphic-design** — เสริม kimi-design ที่มีอยู่
+5. **dev-learning** — เมื่อที่ 1–4 เสร็จ
+
+กฎเดิมของ marketplace ทุกตัว: ผ่าน `scripts/validate-marketplace.mjs` ก่อน commit · เพิ่มใน `marketplace.json` · บวก `README.md` ตาราง plugin · ทดลองกับ `/doctor` หลังติดตั้ง
+
+---
+
+### รอบสอง (6 ต.ค. 2569) — ทำให้ลึก และเพิ่ม plugin ชีวิตประจำวัน
+
+**ปัญหาที่พบในรอบแรก:** skill ส่วนใหญ่ยาวประมาณ 25 บรรทัด มีแต่หัวข้อ ยังไม่มีตัวเลข แบบฟอร์ม หรือกำหนดเวลาจริง · รอบนี้ทุก skill ต้องมีข้อมูลที่ตรวจกับแหล่งทางการแล้ว (ระบุวันที่ตรวจและลิงก์) ตัวเลขที่ยืนยันไม่ได้ใส่ `(รอยืนยัน)`
+
+#### เติม skill ใน plugin เดิม
+
+| Plugin | ทำให้ลึก | skill ใหม่ |
+|---|---|---|
+| trading-finance → 0.2.0 | `tax-basics-th` | `tax-deduction-planner` · `mutual-fund-picker` · `retirement-plan` · `debt-payoff` · `insurance-review` · `emergency-fund` |
+| thai-workplace → 0.2.0 | `tax-vat-th` · `social-security-th` · `doc-thai-official` | `payroll-th` · `e-tax-invoice` · `dbd-annual-filing` · `labour-law-basics` · `promptpay-qr` |
+| personal-life → 0.2.0 | — | `subscription-audit` · `digital-hygiene` · `goal-and-habit` · `polite-message-th-en` |
+| dev-learning → 0.2.0 | skill เดิมที่สั้นกว่า 30 บรรทัด | `cert-prep` · `side-project-picker` |
+
+#### plugin ใหม่
+
+| # | Plugin | สำหรับ | skill |
+|---|---|---|---|
+| 6 | **online-seller** | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE | `product-listing` · `marketplace-fees-pricing` · `multi-shop-stock` · `chat-reply-templates` · `live-selling-script` · `shipping-compare` · `returns-and-bad-reviews` · `seller-tax-basics` |
+| 7 | **home-family** | ทุกบ้าน | `household-bills` · `home-maintenance` · `vehicle-care` · `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` |
+| 8 | **career** | คนทำงาน | `resume-th-en` · `interview-prep` · `salary-negotiation` · `performance-self-review` · `linkedin-profile` |
+| 9 | **health-wellness** | ทุกคน — จัดระเบียบและเตรียมคำถาม ไม่วินิจฉัย ไม่สั่งยา | `exercise-plan` · `sleep-log` · `annual-checkup` · `medication-schedule` · `doctor-visit-prep` |
+| 10 | **consumer-rights** | ผู้ซื้อ | `buy-compare` · `warranty-tracker` · `complaint-letter-th` · `refund-request` |
+
+**ขั้นต่อไป:** ไล่ตรวจรายการ `(รอยืนยัน)` ทั้งชุดทุกต้นปีภาษี และเมื่อหน่วยงานประกาศอัตราใหม่

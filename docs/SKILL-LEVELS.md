@@ -199,8 +199,10 @@ SQT-Marketplace\
         │       └── assets\
         ├── agents\               ← sub agent (มีได้เฉพาะระดับนี้)
         │   └── business-analyst.md
-        └── commands\             ← slash command (ของเก่า ทยอยย้ายไป skills/)
-            └── feature-kickoff.md
+        ├── commands\             ← slash command (ของเก่า ทยอยย้ายไป skills/)
+        │   └── feature-kickoff.md
+        └── hooks\                ← hook (มีได้เฉพาะระดับนี้)
+            └── hooks.json
 ```
 
 #### สิ่งที่มีได้เฉพาะระดับนี้
@@ -208,6 +210,7 @@ SQT-Marketplace\
 | | |
 |---|---|
 | **agents/** | sub agent — ระดับอื่นไม่มี |
+| **hooks/** | hook ของ A-Team เขียน `.a-team/log/` และแจ้ง `.a-team/inbox/` — คัดลอก skill ไปไว้ระดับเครื่องหรือโปรเจกต์ ได้ A-Team ที่**ไม่มี log และไม่แจ้ง inbox** |
 | **commands/** | slash command — ของเก่า เอกสารแนะนำให้ย้ายไป `skills/` ที่ตั้ง `disable-model-invocation: true` แทน |
 | **เลขรุ่น** | `plugin.json` มี `version` · **ต้องเพิ่มเลขทุกครั้งที่แก้ ไม่งั้นเครื่องปลายทางไม่ดึงของใหม่** |
 | **ชื่อนำหน้า** | skill ถูกเรียกเป็น `<plugin>:<skill>` จึงไม่มีทางชนกับระดับอื่น |
@@ -399,6 +402,7 @@ Claude เห็นแค่ `description` ตอนเลือก
 | ต้องรีสตาร์ทหลังเพิ่ม | ❌ เปิดแชตใหม่ | ✅ | ❌ `/reload-plugins` | ✅ |
 | เช็กด้วย | หน้า Customize → Skills | `/doctor` | `/plugin` | `/doctor` |
 | มี agent / command ได้ | ❌ | ❌ | ✅ | ❌ |
+| มี hooks (log · inbox ของ A-Team) | (รอยืนยัน) Cowork เท่านั้น | ❌ | ✅ | ❌ |
 | แชร์ให้ทีม | ❌ | ❌ | ✅ | ✅ (ผ่าน git) |
 | แก้แล้วเห็นผลทันที | ❌ ต้องอัปโหลดใหม่ | ต้องคัดลอกทับ | ✅ `/reload-plugins` | ✅ |
 | มีเลขรุ่น | ❌ | ❌ | ✅ | ผ่าน git |

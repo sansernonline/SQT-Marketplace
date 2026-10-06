@@ -1,0 +1,2 @@
+description = "Derive every needed platform format from a master asset — sizes, crops, safe zones, correct naming — ready to export."
+prompt = "Run `social-formats` and `campaign-set` derivation steps on: **{{args}}**\n\nNever stretches; every derived file carries the platform and format in its name.\n"

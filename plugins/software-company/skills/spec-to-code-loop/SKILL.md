@@ -1,7 +1,9 @@
 ---
 name: spec-to-code-loop
-description: Use when building software from a specification and mockups as a repeating agent loop rather than one long conversation — plan, write a failing test for one requirement, write code until it passes, check the screen, record progress, repeat. Gives the loop a machine-checkable stop condition, a state file and a retry ceiling.
+description: Use when building from a spec and mockups as a repeating loop (failing test, code, check screen, record progress) with a stop condition, state file and retry ceiling. Inside agent-team this is the feature and new-project playbooks.
 ---
+
+> **ใน A-Team:** ลูปนี้คือแกนของ playbook [`feature`](../agent-team/references/playbook-feature.md) และ [`new-project`](../agent-team/references/playbook-new-project.md) · ถ้าเปิด agent-team อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
 
 # วงรอบจากข้อกำหนดไปเป็นโค้ด
 
@@ -35,7 +37,7 @@ description: Use when building software from a specification and mockups as a re
 | 2 | FR-AUTH-020 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | รอทำ | |
 ```
 
-**ข้อไหนกำกวมจนเขียน test ไม่ได้ ห้ามเดา** — รวมเป็นรายการคำถามท้ายไฟล์ แล้ว**หยุดถามผู้ใช้**
+**ข้อไหนกำกวมจนเขียน test ไม่ได้ ห้ามเดา** — รวมเป็นรายการคำถามท้ายไฟล์ และใน **"ค้างอยู่"** ครั้งเดียว แล้วทำข้ออื่นต่อ
 
 > คำถามที่ต้องถาม ไม่ใช่เดา: ค่าขอบเขตเป็นเท่าไหร่ · ผิดแล้วต้องเกิดอะไร ·
 > ใครเห็นข้อมูลนี้ได้บ้าง · ถ้าของเดิมมีอยู่แล้วจะทับหรือจะเตือน

@@ -1,6 +1,6 @@
 ---
 name: branded-document-design
-description: Use when the deliverable is a rendered document a stakeholder will look at — a Word file, a deck, or a PDF for sign-off — and it must look designed rather than like default Word. Ships a token palette, a type scale and a tested python-docx and python-pptx builder. Covers Thai typography. Pair with polished-document-style for markdown.
+description: Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look at and it must look designed. Token palette, type scale, tested python-docx and python-pptx builders, Thai typography.
 ---
 
 # Branded Document Design
@@ -71,6 +71,19 @@ description: Use when the deliverable is a rendered document a stakeholder will 
 **สีสถานะ 6 ตัว** (คู่ พื้น/ตัวอักษร) — สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
 สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
 พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
+
+**ความหมายของแต่ละสี — ใช้ให้สื่ออารมณ์เสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
+
+| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
+|---|---|---|
+| 🔴 แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
+| 🟠 เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
+| 🟢 เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
+| 🔵 น้ำเงิน | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก (brand) |
+| 🟣 ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
+| ⚪ เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
+
+กฎเดียว: **สีต้องตรงกับความหมาย ไม่ใช่ตรงกับความสวย** — อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่อมันอันตรายหรือผิดจริง · ไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `svg-diagram-system` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
 
 > **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
 > พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก — ถ้าไม่ผ่านให้ปรับความเข้ม ไม่ใช่ปรับสี

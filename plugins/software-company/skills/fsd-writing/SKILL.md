@@ -1,6 +1,6 @@
 ---
 name: fsd-writing
-description: Use when writing or reviewing a Functional Specification Document — the level a developer builds a screen from and a tester writes cases from, below an SRS. Covers use cases with alternative and exception flows, screen specs with validation and the exact error message, state machines, business rules and traceability. For the level above use srs-writing.
+description: Use when writing or reviewing a Functional Specification Document, the level developers build screens from and testers write cases from. Use cases, screen specs, exact error messages, state machines, business rules, traceability.
 ---
 
 # เขียน Functional Specification Document (FSD)

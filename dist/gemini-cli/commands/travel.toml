@@ -1,0 +1,2 @@
+description = "Build the full travel checklist and one-file itinerary for an upcoming trip — documents, insurance, money, connectivity, bookings with confirmation numbers in one place."
+prompt = "Run the `travel-prep` skill for: **{{args}}**\n\nProduces the checklist plus an itinerary file with every confirmation number, and a day-before four-thing check list.\n"

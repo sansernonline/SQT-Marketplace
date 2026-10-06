@@ -1,6 +1,6 @@
 ---
 name: flag-and-propose
-description: Use when reporting something found mid-task that changes what happens next — a stale file, a number that no longer matches, a blocked step, a risk — and a decision is needed before carrying on. Opens with the consequence, puts conflicting numbers in a recorded-versus-actual table, and closes with one short question.
+description: Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step, risk) and a decision is needed. Lead with the consequence, show recorded vs actual, end with one short question.
 ---
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป

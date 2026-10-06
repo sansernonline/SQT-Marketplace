@@ -1,6 +1,6 @@
 # ตั้งค่าและตัวอย่างต่อสแต็ก
 
-> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** เป็นการตั้งค่ามาตรฐานของแต่ละ framework
+> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ซึ่งมาจากแอปจริง Lumio) เป็นการตั้งค่ามาตรฐานของแต่ละ framework
 > ให้รันครั้งแรกแล้วดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงหรือไม่
 
 ---
@@ -11,7 +11,8 @@
 2. [Node / TypeScript — Vitest](#node--typescript--vitest)
 3. [Python — pytest](#python--pytest)
 4. [Angular](#angular)
-5. [ตารางเทียบ](#ตารางเทียบ)
+5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
+6. [ตารางเทียบ](#ตารางเทียบ)
 
 ---
 
@@ -248,14 +249,70 @@ ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำห�
 
 ---
 
+## Flutter / Dart — flutter_test
+
+มากับ SDK ไม่ต้องลงอะไร · ไฟล์อยู่ใน `test/` ล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) · ชื่อไฟล์ snake_case ตามธรรมเนียม Dart
+
+```dart
+// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
+class FakeDeviceLight implements DeviceLight {
+  final _lux = StreamController<double>.broadcast();
+  void emitSensor(double lux) => _lux.add(lux);
+  @override
+  Stream<double> sensorLux() => _lux.stream;
+  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
+}
+
+void main() {
+  group('measure screen', () {
+    testWidgets('shows live lux and verdict', (tester) async {
+      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+
+      final device = FakeDeviceLight();
+      final meter = MeterController(device);
+      await tester.pumpWidget(App(meter: meter));
+      device.emitSensor(420);
+      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
+
+      expect(find.textContaining('420 lux'), findsOneWidget);
+      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
+    });
+  });
+}
+```
+
+| เรื่อง | ทำอย่างนี้ |
+|---|---|
+| ชั้น test | unit (`test`) สำหรับตรรกะล้วน · widget (`testWidgets`) สำหรับหน้าจอ — เป็นชั้นกลางหลัก · E2E บนเครื่อง: `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
+| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง · ลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
+| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง · มี Timer หรือ animation วนตลอด → ไม่มีวันนิ่ง (หมดเวลา) ใช้ `pump(duration)` |
+| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เอง ก่อนบรรทัดสุดท้าย — Timer ที่ยังวิ่งอยู่ตอนจบทำให้ test ล้ม |
+| จอเล็ก | test แยกหนึ่งชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
+| SnackBar บังปุ่ม | widget test จับได้ — กดปุ่มล่างหลัง SnackBar ขึ้นแล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
+| golden test | ไม่บังคับ · ภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
+| coverage | `flutter test --coverage` → `coverage/lcov.info` |
+| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิดหนึ่งจุด รันแล้วต้องแดง แล้วคืนค่า |
+
+```bash
+flutter test                              # ทั้งหมด
+flutter test test/features/measure        # โฟลเดอร์เดียว
+flutter test --coverage
+flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+```
+
+---
+
 ## ตารางเทียบ
 
-| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) |
-|---|---|---|---|---|
-| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` |
-| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` |
-| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` |
-| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` |
-| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — |
-| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` |
-| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` |
+| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
+|---|---|---|---|---|---|
+| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
+| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
+| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
+| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
+| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
+| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
+| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |

@@ -1,0 +1,39 @@
+# One project = one sandbox stack. sandbox.ps1 adds compose.isolated / locked / browser .yaml when asked.
+# Extra services this project needs (database, cache) go in this file, in the same stack.
+# Never add: privileged, /var/run/docker.sock, network_mode: host, pid: host,
+# or mounts of the host home folder, .ssh, .aws, .azure or browser profiles.
+name: ${SANDBOX_FULL:?run through sandbox.ps1}
+services:
+  dev:
+    build:
+      context: .
+      args:
+        INSTALL_DOTNET: ${INSTALL_DOTNET:-0}
+    image: sqt-sandbox-${SANDBOX_NAME}
+    hostname: sandbox
+    init: true
+    command: sleep infinity
+    user: vscode
+    working_dir: /work
+    labels:
+      sqt.sandbox: "true"
+      sqt.project: ${SANDBOX_NAME}
+      sqt.created: ${SANDBOX_CREATED:-unknown}
+      sqt.by: agent
+    environment:
+      CLAUDE_CONFIG_DIR: /home/vscode/.claude
+      # the port sandbox.ps1 picked and published on 127.0.0.1 — start the app on it to open it from the host
+      APP_PORT: ${APP_PORT:-3000}
+      PORT: ${APP_PORT:-3000}
+      # inside the container the app must listen on all interfaces; the port is still published to 127.0.0.1 only
+      HOST: 0.0.0.0
+    volumes:
+      - ..:/work
+      - home:/home/vscode
+    ports:
+      - "127.0.0.1:${APP_PORT:-3000}:${APP_PORT:-3000}"
+    cpus: ${SANDBOX_CPUS:-4}
+    mem_limit: ${SANDBOX_MEMORY:-8g}
+    pids_limit: 1024
+volumes:
+  home:

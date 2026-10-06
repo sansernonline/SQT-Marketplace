@@ -19,7 +19,7 @@
 
 ## เริ่มใช้งาน
 
-    git clone <url> && cd <project>
+    git clone <url> <project-name> && cd <project-name>
     cp .env.example .env        # กรอกค่าตามคอมเมนต์ในไฟล์
     npm ci
     docker compose up -d db
@@ -48,6 +48,31 @@
 |---|---|
 | `ECONNREFUSED` ตอนรัน | ยังไม่ได้ `docker compose up -d db` |
 | `missing env APP_...` | ยังกรอก `.env` ไม่ครบ ดู `.env.example` |
+```
+
+## README ส่วนเริ่มใช้งาน — Flutter / Android
+
+ใช้แทนสองส่วน "ต้องมีบนเครื่อง" และ "เริ่มใช้งาน" ข้างบน เมื่อเป็นแอป Flutter
+
+```markdown
+## ต้องมีบนเครื่อง
+
+| เครื่องมือ | เวอร์ชัน | หมายเหตุ |
+|---|---|---|
+| Flutter SDK | <ตามที่ใช้จริง> | channel stable · `flutter --version` |
+| JDK | 17 | ที่ Android Gradle Plugin ต้องการ |
+| Android SDK | platform + build-tools ตาม `android/app/build.gradle.kts` (Flutter รุ่นเก่าใช้ `build.gradle`) | ติดตั้งผ่าน Android Studio หรือ `sdkmanager` |
+| อีมูเลเตอร์หรือเครื่องจริง | API ≥ minSdk ของแอป | เปิด USB debugging ถ้าใช้เครื่องจริง |
+
+## เริ่มใช้งาน
+
+    git clone <url> <project-name> && cd <project-name>
+    flutter doctor                        # ต้องไม่มี ✗ ในส่วน Flutter และ Android toolchain
+    flutter pub get --enforce-lockfile
+    flutter run                           # เลือกอีมูเลเตอร์หรือเครื่องที่ต่ออยู่
+
+รัน test:  flutter test
+ไม่มีค่าตั้งภายนอก — ไม่มี `.env`
 ```
 
 ## docs/README.md
@@ -107,7 +132,23 @@ indent_style = tab
 *.xlsx binary
 *.pptx binary
 *.zip  binary
+*.webp binary
+*.ttf  binary
+*.otf  binary
 ```
+
+เพิ่มบล็อกนี้**เฉพาะโปรเจกต์ Flutter / Android**:
+
+```
+# gradle/wrapper/gradle-wrapper.jar
+*.jar       binary
+*.jks       binary
+*.keystore  binary
+# ถ้าเป็น lf ไฟล์ .bat บน Windows รันพัง
+gradlew.bat text eol=crlf
+```
+
+> `.gitattributes` ไม่รองรับคอมเมนต์ท้ายบรรทัด — คอมเมนต์ต้องอยู่บรรทัดของตัวเอง
 
 ## .gitignore — ส่วนที่คนลืมบ่อย
 
@@ -127,6 +168,19 @@ bin/
 obj/
 __pycache__/
 .venv/
+```
+
+เพิ่มบล็อกนี้**เฉพาะโปรเจกต์ Flutter / Android** — ไฟล์ keystore หลุดคือความเสี่ยงหลักของแอปมือถือ:
+
+```
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+android/local.properties
+android/key.properties
+*.jks
+*.keystore
 ```
 
 ## CHANGELOG.md

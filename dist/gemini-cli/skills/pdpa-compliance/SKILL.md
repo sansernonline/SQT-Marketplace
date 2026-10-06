@@ -1,6 +1,6 @@
 ---
 name: pdpa-compliance
-description: Use when a system holds personal data about people in Thailand. Covers an inventory of what is held and why, choosing a lawful basis instead of asking consent for everything, recorded and withdrawable consent, data subject rights, collecting only what is needed, retention that actually deletes, processors and the first hours of a breach. Engineering guidance, not legal advice.
+description: Use when a system holds personal data about people in Thailand. Data inventory, lawful basis, withdrawable consent, subject rights, minimisation, retention that deletes, processors, breach first hours. Not legal advice.
 ---
 
 # PDPA — ข้อมูลส่วนบุคคล
@@ -10,6 +10,18 @@ description: Use when a system holds personal data about people in Thailand. Cov
 
 > ⚠️ นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
 > เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
+
+## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
+
+ไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี ไม่ส่งข้อมูลออก → ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ เหลือตรวจ 3 เรื่องนี้
+
+| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
+|---|---|---|
+| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ · ลงเหตุผลใน `decision-log` |
+| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก · ไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
+| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บ ก็ตอบว่าไม่เก็บ) · ขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` — เตรียมหน้าสั้น ๆ ไว้ก่อน |
+
+ภายหลังเพิ่ม analytics · crash report · บัญชีผู้ใช้ = ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว กลับไปใช้ทั้ง skill
 
 ## เมื่อไหร่ใช้ skill นี้
 
@@ -41,7 +53,7 @@ description: Use when a system holds personal data about people in Thailand. Cov
 | เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
 
 **ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
-ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง
+ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
 
 ---
 

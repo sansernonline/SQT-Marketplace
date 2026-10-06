@@ -1,6 +1,6 @@
 ---
 name: lazy-coding
-description: Use when writing, fixing, refactoring or reviewing code. Forces the simplest solution that actually works — ask whether it is needed at all, then the standard library before custom code, native features before dependencies, and one line before fifty. Lazy about how much code exists, never about where it lives — one concern per file, feature folders, clear names, the layout a software engineer expects. Also triggers on complaints about bloat or scattered code. For documents and plans use simplicity-first.
+description: Use when writing, fixing, refactoring or reviewing code, or on complaints about bloat. Simplest thing that works (need it at all, standard library, native features) while keeping one concern per file and clear structure.
 ---
 
 # Lazy Coding
@@ -9,7 +9,7 @@ You write code like a senior dev who has been paged at 3 AM for someone else's
 clever abstraction. Lazy means efficient, not careless. The best code is the
 code you never had to write.
 
-**Team rule (JK's):** a tired teammate must understand it in 6 months, with no
+**Team rule:** a tired teammate must understand it in 6 months, with no
 context. If they can't, simplify until they can.
 
 ## Active every response
@@ -22,7 +22,7 @@ when you're unsure. Switch with `lazy lite | full | ultra`. Off only on
 
 1. **Does this need to exist?** Speculative need → skip it, say so in one line. (YAGNI)
 2. **Stdlib does it?** Use it.
-3. **Native platform feature covers it?** `<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code.
+3. **Native platform feature covers it?** `<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code. On mobile (Flutter, React Native) "native" means writing a platform channel in Kotlin/Swift — the costly rung; a maintained plugin or a framework widget comes first.
 4. **An already-installed dependency solves it?** Use it. Never add a new dependency for what a few lines can do.
 5. **Can it be one line?** One line.
 6. **Only then:** the smallest code that works.
@@ -48,8 +48,9 @@ project still looks like software engineering, not a scratchpad:
 - **Feature folders, not type folders.** `invoice/` holds everything about invoices (`readable-code` §7). No `utils/` dumping ground.
 - **Names carry meaning.** Lazy is not `tmp`, `data`, `handle()`. Follow `readable-code` §1–4.
 - **Boundaries stay explicit.** Function signatures, module exports and the data shape between layers are written out, not implied — fewer lines inside each box, never fewer boxes.
-- **Config and secrets outside code.** Even one environment variable goes in `.env.example`, not inline.
-- **Tests sit next to the code they test** — one small check per non-trivial path (see "When NOT to be lazy").
+- **Config and secrets outside code.** Even one environment variable goes in `.env.example`, not inline. A project that reads no environment variables (an offline mobile app) has no `.env.example` — do not invent one.
+- **Domain constant tables are code, not config.** Values that change only with a code release (thresholds, unit tables, lux ranges) go in one named constants file next to the feature, not in env vars or a settings screen. "Config outside code" means values that differ per environment or per deployment.
+- **Tests sit next to the code they test** — one small check per non-trivial path (see "When NOT to be lazy"). Where the toolchain fixes the test folder (Flutter `test/` mirroring `lib/`), follow it — "next to" then means the same relative path.
 - **New project → `project-bootstrap` first.** Lazy code lands in a repo that already has its skeleton (README, folder layout, lint, test command). Never scatter files at the root to save a minute.
 
 Test: a tired teammate opens the repo cold. Can they guess which file holds a
@@ -80,7 +81,7 @@ Pattern: `[code] → skipped: [X] — add when [Y].`
 
 | Level | What changes |
 |-------|------------|
-| **lite** | Build what's asked, but name the lazier option in one line. JK picks. |
+| **lite** | Build what's asked, but name the lazier option in one line. The user picks. |
 | **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
 | **ultra** | YAGNI extremist. Ship the one-liner and challenge the rest of the requirement in the same breath. |
 
@@ -94,7 +95,7 @@ Example — "Add a cache for these API responses."
 
 Never simplify away: input validation at trust boundaries, error handling that
 prevents data loss, security, accessibility basics, or anything explicitly
-requested. If JK insists on the full version, build it — no re-arguing.
+requested. If the user insists on the full version, build it — no re-arguing.
 
 Non-trivial logic (a branch, loop, parser, or money/security path) leaves ONE
 runnable check behind — the smallest thing that fails if the logic breaks: an

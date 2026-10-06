@@ -1,0 +1,24 @@
+{
+  "name": "trading-finance",
+  "version": "0.3.0",
+  "description": "Retail trader and personal finance toolkit for Thai investors — watchlists, technical signals, paper trading, trade journal with behavior review, position sizing, dividend tracking, budget planning and scam checks, plus verified Thai money skills: investment tax and filing (dividend credit, crypto exemption, foreign income), year-end tax deduction planner with /tax-plan, mutual fund picking, retirement planning with social security pension, debt payoff and คลินิกแก้หนี้, insurance review with co-payment rules, and emergency fund sizing. Data comes from whatever market-data plugins the user already has.",
+  "author": {
+    "name": "Square Tech Solutions Co., Ltd."
+  },
+  "keywords": [
+    "trading",
+    "investing",
+    "personal-finance",
+    "thai-stock",
+    "portfolio",
+    "trade-journal",
+    "paper-trading",
+    "thai-tax",
+    "tax-deduction",
+    "retirement",
+    "mutual-fund",
+    "debt",
+    "insurance",
+    "emergency-fund"
+  ]
+}

@@ -33,7 +33,7 @@ from dataclasses import dataclass, field
 
 from docx import Document
 from docx.enum.section import WD_SECTION
-from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
@@ -162,6 +162,11 @@ def cell_margins(table, top=50, left=90, bottom=50, right=90):
         mar.append(_el("w:" + tag, w=val, type="dxa"))
     tblpr.append(mar)
 
+
+
+def vcenter(cell):
+    """จัดข้อความให้อยู่กึ่งกลางแนวตั้งของช่องตาราง"""
+    cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
 
 def set_borders(table, color="line", size=4, inside=True):
     """เส้นตาราง: บาง สีเทาอ่อน — ไม่ใช่เส้นดำหนาแบบ default"""
@@ -302,37 +307,64 @@ class BrandDoc:
 
     # -- บล็อกระดับหน้า ----------------------------------------------------
     def cover(self, title, subtitle=None, meta=None, note=None, logo=None,
-              logo_width_cm=2.6, top_space_pt=150, page_break=True):
-        """หน้าปก: โลโก้กลาง → ชื่อเอกสารสีแบรนด์ → ชื่อระบบ → บรรทัด meta → หมายเหตุ"""
-        spacer = self.doc.add_paragraph()
-        spacer.paragraph_format.space_after = Pt(top_space_pt)
+              logo_width_cm=2.6, eyebrow=None, meta_rows=None,
+              top_space_pt=24, page_break=True):
+        """หน้าปกแบบมีแถบสี: eyebrow + ชื่อเอกสาร + ชื่อระบบ บนแถบสีแบรนด์ (ตัวอักษรขาว)
+        แล้วกล่อง metadata (เวอร์ชัน/วันที่/ผู้จัดทำ/สถานะ) ช่วงล่างของหน้า
+        meta_rows = [("เวอร์ชัน", "3.5"), ("ปรับปรุง", "19 ก.ค. 2026"), ...]
+        ถ้าไม่ส่ง meta_rows จะ fallback ไปใช้บรรทัด meta เดิม"""
+        self._spacer(10)
+
+        # --- แถบสีหัวปก ---
+        band = self.doc.add_table(rows=1, cols=1)
+        fixed_widths(band, [9360]); no_borders(band)
+        cell = band.rows[0].cells[0]
+        shade(cell, "brand")
+        cell_margins(band, top=260, left=340, bottom=300, right=340)
+        cell.paragraphs[0].text = ""
 
         if logo:
-            p = self.doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            p.add_run().add_picture(logo, width=Cm(logo_width_cm))
-            p.paragraph_format.space_after = Pt(14)
-
-        p = self.doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.space_after = Pt(4)
-        style_run(p.add_run(title), size=SIZE["cover_title"], color="brand", bold=True)
-
+            pl = cell.paragraphs[0]
+            pl.add_run().add_picture(logo, width=Cm(logo_width_cm))
+            pl.paragraph_format.space_after = Pt(10)
+            pe = cell.add_paragraph()
+        else:
+            pe = cell.paragraphs[0]
+        if eyebrow:
+            style_run(pe.add_run(eyebrow.upper()), size=SIZE["cover_meta"],
+                      color="FFFFFF", bold=True)
+            pe.paragraph_format.space_after = Pt(6)
+            pt_ = cell.add_paragraph()
+        else:
+            pt_ = pe
+        style_run(pt_.add_run(title), size=SIZE["cover_title"], color="FFFFFF", bold=True)
+        pt_.paragraph_format.space_after = Pt(4)
         if subtitle:
-            p = self.doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            p.paragraph_format.space_after = Pt(18)
-            style_run(p.add_run(subtitle), size=SIZE["cover_subtitle"],
-                      color="text", bold=True)
-        if meta:
-            p = self.doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            p.paragraph_format.space_after = Pt(2)
-            style_run(p.add_run(meta), size=SIZE["cover_meta"], color="text_body")
+            ps = cell.add_paragraph()
+            style_run(ps.add_run(subtitle), size=SIZE["cover_subtitle"],
+                      color="D9E6F8", bold=True)
+
+        self._spacer(top_space_pt)
+
+        # --- กล่อง metadata ล่างหน้า ---
+        rows = meta_rows
+        if not rows and meta:
+            rows = [("รายละเอียด", meta)]
+        if rows:
+            mt = self.doc.add_table(rows=len(rows), cols=2)
+            fixed_widths(mt, [2400, 6960]); set_borders(mt, color="line", size=4)
+            cell_margins(mt, top=70, left=360, bottom=70, right=360)  # ให้ตัวอักษรตรงแนวกับแถบหัวปก
+            for i, (label, value) in enumerate(rows):
+                lc, vc = mt.rows[i].cells
+                shade(lc, "brand_tint"); vcenter(lc); vcenter(vc)
+                lp = lc.paragraphs[0]
+                style_run(lp.add_run(str(label)), size=SIZE["small"], color="brand_deep", bold=True)
+                vp = vc.paragraphs[0]
+                style_run(vp.add_run(str(value)), size=SIZE["small"], color="text_body")
         if note:
-            p = self.doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            style_run(p.add_run(note), size=SIZE["cover_note"],
+            pn = self.doc.add_paragraph()
+            pn.paragraph_format.space_before = Pt(10)
+            style_run(pn.add_run(note), size=SIZE["cover_note"],
                       color="text_muted", italic=True)
         if page_break:
             self.doc.add_page_break()
@@ -450,6 +482,7 @@ class BrandDoc:
         for i, text in enumerate(headers):
             c = hdr.cells[i]
             shade(c, "brand_tint")
+            vcenter(c)
             p = c.paragraphs[0]
             p.paragraph_format.space_after = Pt(0)
             style_run(p.add_run(str(text)), size=size, color="brand_deep", bold=True)
@@ -458,6 +491,7 @@ class BrandDoc:
             cells = t.add_row().cells
             for ci, val in enumerate(row):
                 c = cells[ci]
+                vcenter(c)
                 if zebra and ri % 2 == 1:
                     shade(c, "brand_tint_2")
                 p = c.paragraphs[0]
@@ -481,7 +515,7 @@ class BrandDoc:
         cell_margins(t, 120, 120, 120, 120)
         for i, (value, label) in enumerate(items):
             c = t.cell(0, i)
-            shade(c, "brand_tint")
+            shade(c, "brand_tint"); vcenter(c)
             c.width = Pt(width_twips / 20 / len(items))
             p = c.paragraphs[0]
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER

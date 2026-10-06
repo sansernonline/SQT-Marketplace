@@ -1,6 +1,6 @@
 ---
 name: cicd-and-release
-description: Use when setting up or fixing a build and deploy pipeline, or deciding how a project ships. Covers pipeline stages and what each blocks on, build once and promote the same artifact, versions that trace back to a commit, branches, environments and gates, release patterns, feature flags and a rehearsed rollback. Ships starter pipelines.
+description: Use when setting up or fixing a build and deploy pipeline or deciding how a project ships. Stages and gates, build once and promote, traceable versions, environments, release patterns, flags, rehearsed rollback.
 ---
 
 # CI/CD และการปล่อยของ
@@ -76,7 +76,8 @@ commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี
 
 - **tag ใน git คือแหล่งความจริง** — `v1.4.0` ชี้ commit เดียวเท่านั้น
 - artifact แปะ commit hash ไว้ด้วย — `1.4.0+abc1234`
-- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`)
+- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`) · แอปมือถือไม่มี endpoint ให้แสดงในหน้า "เกี่ยวกับ" แทน
+- **ยกเว้น Flutter / Android** — `+` ใน `pubspec.yaml` คือ versionCode ต้องเป็นจำนวนเต็ม ใส่ hash ไม่ได้ ดูหัวข้อ "แอป Android / Flutter"
 - ก่อน 1.0.0 ให้ใช้ `0.x` และยอมรับว่ายังเปลี่ยนแรงได้
 
 ---
@@ -134,6 +135,8 @@ deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy
 - ใช้บัญชีที่มีสิทธิ์แก้ schema เฉพาะขั้นนี้ บัญชีที่แอปใช้รันต้องไม่มีสิทธิ์นั้น
 - migration ต้องเข้ากันได้กับโค้ดเวอร์ชันก่อนหน้า — ไม่งั้น rollback โค้ดแล้วระบบพัง
 - สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
+- **ข้อยกเว้น: ฐานข้อมูลในเครื่องผู้ใช้** (SQLite · sqflite · drift บนมือถือ) migrate ตอนแอปเปิดเป็นทางเดียวที่มี —
+  กฎข้างบนใช้กับฐานข้อมูลบนเซิร์ฟเวอร์ที่หลาย instance ใช้ร่วมกัน · migration ในเครื่องต้องมี test ไล่จากทุกเวอร์ชัน schema ที่เคยปล่อย
 
 วิธี expand/contract → `database-design` ข้อ 9
 
@@ -190,6 +193,18 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 
 ---
 
+## แอป Android / Flutter — ข้อที่ต่างจากเซิร์ฟเวอร์
+
+| เรื่อง | กฎ |
+|---|---|
+| เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
+| build ครั้งเดียว | `flutter build appbundle --release` ได้ AAB ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
+| ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
+| rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** — versionCode ลดไม่ได้และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ · ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า · ซ้อมขั้นตอนนี้แทนข้อ 9 |
+| กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อยหนึ่งที่** — ทำหาย = อัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
+
+---
+
 ## 11 · Anti-patterns
 
 - ❌ **build ใหม่ตอนขึ้น production** — ของที่ทดสอบไม่ใช่ของที่ปล่อย
@@ -197,7 +212,7 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 - ❌ **secret ในไฟล์ pipeline** — ใครอ่านโค้ดได้ก็อ่าน secret ได้
 - ❌ **test ที่ตกแล้วปล่อยผ่าน** — ทำครั้งเดียวก็เลิกเชื่อผลไปตลอด
 - ❌ **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
-- ❌ **migration รันตอนแอปบูต** — หลาย instance ชนกัน
+- ❌ **migration ของฐานข้อมูลบนเซิร์ฟเวอร์รันตอนแอปบูต** — หลาย instance ชนกัน (ฐานข้อมูลในเครื่องมือถือยกเว้น ดูข้อ 7)
 - ❌ **ไม่มี artifact เก็บไว้** — rollback กลายเป็นการ build ย้อนจาก commit เก่า
 - ❌ **environment ที่ config ต่างกันจนคาดเดาไม่ได้** — "บน staging ผ่านนะ"
 - ❌ **feature flag ที่ไม่มีวันลบ**
@@ -213,6 +228,8 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 - **artifact** — ไฟล์ผลลัพธ์จากการ build ที่นำไป deploy ได้จริง
 - **canary** — การปล่อยของใหม่ให้ผู้ใช้ส่วนน้อยก่อนเพื่อดูอาการ
 - **UAT** — User Acceptance Testing (การทดสอบโดยผู้ใช้ก่อนรับมอบ)
+- **AAB** — Android App Bundle (ไฟล์ที่อัปโหลดขึ้น Google Play แล้ว Play แตกเป็น APK ตามเครื่อง)
+- **versionCode** — เลขจำนวนเต็มที่ Android ใช้ตัดสินว่าเวอร์ชันไหนใหม่กว่า
 
 ## 13 · เชื่อมกับ skill อื่น
 

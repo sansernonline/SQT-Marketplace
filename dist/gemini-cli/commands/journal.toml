@@ -1,0 +1,2 @@
+description = "Log a live trade entry or exit into the trade journal, or read recent entries back."
+prompt = "Use the `trade-journal` skill: **{{args}}**\n\n- `entry` — log symbol, size, entry, stop, target, setup, one-sentence reason, one-word emotion\n- `exit` — log exit price, R-multiple result, one-sentence what happened\n- `read` — show recent entries for review\n"

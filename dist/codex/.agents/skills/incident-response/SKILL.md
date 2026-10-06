@@ -3,6 +3,8 @@ name: "incident-response"
 description: "Guide live incident response using devops-engineer agent. Structures detection→triage→mitigation→resolution and prepares postmortem."
 ---
 
+> **ทางลัดเข้า A-Team:** เปิด skill `agent-team` ด้วย playbook `bug-fix` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน · ขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ใช้ประกอบ playbook ไม่ใช่แทนที่
+
 Use the `devops-engineer` agent to coordinate incident response for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 > 🚨 **Critical:** Speed matters. Don't over-document during active incident. Focus on stopping the bleed.

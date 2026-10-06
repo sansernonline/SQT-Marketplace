@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when building a slide deck someone will present or read. Covers a story order chosen by purpose, headlines that state the finding instead of naming the topic, a text budget per slide, six layouts that cover almost any deck, data slides annotated with their own takeaway, type sizes readable from the back of a room and Thai typography.
+description: Use when building a slide deck someone will present or read. Story order by purpose, headlines that state the finding, text budget, six layouts, annotated data slides, readable type sizes, Thai typography.
 ---
 
 # Presentation Design

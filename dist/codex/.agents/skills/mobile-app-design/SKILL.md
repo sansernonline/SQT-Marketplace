@@ -1,6 +1,6 @@
 ---
 name: mobile-app-design
-description: Use when designing or building a phone app user interface for a progressive web app, a web-wrapped app, React Native or Flutter. Ships a token contract, a four-family typography system, a phone-frame mockup template, safe-area handling, Thai-English font switching and a render-and-look loop at real phone sizes. Not for desktop or Windows.
+description: Use when designing or building a phone app UI (PWA, web-wrapped, React Native, Flutter). Token contract, typography, phone-frame mockup, safe areas, Thai-English fonts, render-and-look at real sizes. Not for desktop.
 ---
 
 # Mobile App Design
@@ -35,6 +35,8 @@ description: Use when designing or building a phone app user interface for a pro
 5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
 ```
 
+Flutter / Android native → ข้ามไปทำตาม **ข้อ 4.1** ได้เลย mockup HTML เป็นทางเลือก แต่ภาพที่ตรวจต้องมาจากแอปจริง
+
 เปิด mockup บนจอคอมกว้างกว่า 560px จะเห็นเป็น **กรอบเครื่องลอยบนพื้นเข้ม**
 ส่งลิงก์ให้ลูกค้าดูได้เลยโดยไม่ต้องอธิบายว่านี่คือหน้าจอมือถือ
 
@@ -42,8 +44,8 @@ description: Use when designing or building a phone app user interface for a pro
 
 ## 2 · Design tokens
 
-> **สีมาจากเนื้องาน — ถามก่อนเริ่ม**
-> มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+> **สีมาจากเนื้องาน — เสนอแล้วทำต่อ**
+> มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องาน ใส่ `(รอยืนยัน)` ไว้ แล้วทำต่อ ไม่หยุดรอ — สีอยู่ใน token ที่เดียว เปลี่ยนทีหลังแก้ค่าเดียว
 > (ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
 
 อยู่ครบใน `assets/speakgo.css` · ตารางเต็มใน **`references/tokens.md`**
@@ -67,7 +69,10 @@ description: Use when designing or building a phone app user interface for a pro
 
 ---
 
-## 3 · ฟอนต์ 4 ตระกูล — หัวใจของระบบนี้
+## 3 · ฟอนต์ 4 ตระกูล — หัวใจของระบบนี้ (สำหรับแอปที่มีเนื้อหาให้อ่าน)
+
+> แอปเครื่องมือที่ไม่มีเนื้อหาให้อ่านยาว ๆ (เครื่องวัด เครื่องคิดเลข ตัวจับเวลา) ใช้ฟอนต์ระบบได้
+> อย่างมากเพิ่มตระกูลเดียวสำหรับตัวเลขใหญ่ — ไม่ต้อง bundle 4 ตระกูลให้ไฟล์แอปโตเปล่า ๆ
 
 | Token | ฟอนต์ | หน้าที่ |
 |---|---|---|
@@ -76,7 +81,7 @@ description: Use when designing or building a phone app user interface for a pro
 | `--text` | Source Serif 4 | เนื้อหาที่ผู้ใช้ต้อง **อ่าน** — บับเบิล ประโยคตัวอย่าง |
 | `--mono` | system mono | ป้ายกำกับพิมพ์ใหญ่ + `letter-spacing:.14em` — META · LEVEL · TURN 5/12 |
 
-**อย่ายุบให้เหลือตระกูลเดียว** — การแยกฟอนต์ทำให้ผู้ใช้แยก "สิ่งที่แอปพูด"
+**แอปที่มีเนื้อหาให้อ่าน อย่ายุบให้เหลือตระกูลเดียว** — การแยกฟอนต์ทำให้ผู้ใช้แยก "สิ่งที่แอปพูด"
 ออกจาก "ปุ่มของแอป" ได้ทันทีโดยไม่ต้องพึ่งสี ซึ่งสำคัญมากบนจอเล็ก
 
 `body[data-lang="en"]` สลับ `--ui` เป็น Space Grotesk เมื่อ UI เป็นอังกฤษล้วน
@@ -112,8 +117,23 @@ description: Use when designing or building a phone app user interface for a pro
 - **เลื่อนที่ `.screen` ไม่ใช่ที่ `body`** — `body{overflow:hidden}` แถบบน/ล่างจะได้อยู่นิ่ง
 - **ไม่มี hover บนมือถือ** — สถานะที่ผู้ใช้เห็นได้มีแค่ `:active` ทุกอย่างที่กดได้ต้องยุบ
   (`transform:scale(.98)`) และตั้ง `-webkit-tap-highlight-color:transparent`
-- **เป้าแตะ ≥ 44×44px** (แนวทาง Apple) — ปุ่มไอคอน 38px ต้องมี padding รอบให้ถึง 44
+- **เป้าแตะ ≥ 44×44 pt บน iOS (แนวทาง Apple) · ≥ 48×48 dp บน Android (Material)** — ปุ่มไอคอน 38px ต้องมี padding รอบให้ถึง · แอปที่ลงทั้งสองระบบใช้ 48
 - **แท็บล่าง 3–5 อัน** เกินนั้นนิ้วโป้งเอื้อมไม่ถึงและป้ายจะตัดคำ
+
+### 4.1 · Flutter / Android native
+
+| เรื่อง | ทำอย่างนี้ |
+|---|---|
+| token | สีหลักใน `ColorScheme` (`ColorScheme.fromSeed` แล้ว `copyWith`) · สีตามความหมายที่ Material ไม่มีอยู่ใน `ThemeExtension` ของเราเอง · ระยะห่างเป็นค่าคงที่ในไฟล์ theme ไฟล์เดียว — ตัวอย่างจริง: `lib/core/theme.dart` ของแอป Lumio |
+| ตรวจสีดิบ | ตัวตรวจของ `web-app-design` ไม่จับ Dart — ใช้ `grep -rn -e "Color(0x" -e "Colors\.[a-z]" lib --include=*.dart` แล้วต้องเจอเฉพาะในไฟล์ theme |
+| โหมดมืด | ชุด token ที่สองครบทุกตัว (ไม่ใช่กลับสีอัตโนมัติ) · ตรวจคอนทราสต์ทุกคู่ข้อความ/พื้นให้ผ่าน AA (≥ 4.5:1) ทั้งสองชุด · ค่าเริ่ม `ThemeMode.system` |
+| ภาพหน้าจอ | ภาพจากแอปจริง `adb exec-out screencap -p > _to_delete/screenshots/<ชื่อ>.png` ทั้งโหมดสว่างและมืด · จอ 360×800 dp เป็นจอเล็กสุดที่ต้องดู |
+| ขอบจอ | edge-to-edge (Android 15 ขึ้นไปบังคับ) — ห่อเนื้อหาด้วย `SafeArea` · สีไอคอนแถบสถานะและแถบนำทางตามธีม (`SystemUiOverlayStyle`) |
+| ระบบ | ปัดย้อนกลับของระบบต้องไปหน้าก่อนหน้า ไม่ปิดแอปกลางงาน (`PopScope`) · หมุนจอแล้วไม่พัง หรือล็อกแนวตั้งโดยตั้งใจ · ขนาดตัวอักษรระบบ 200 % (`textScaler`) ไม่ล้น ไม่ตัดตัวเลขสำคัญ |
+| สิทธิ์ | อธิบายในหน้าก่อน (การ์ดหนึ่งใบ ปุ่มเดียว) → ขอสิทธิ์เมื่อผู้ใช้กดเท่านั้น → แยก "ปฏิเสธ" (ขอใหม่ได้) กับ "ถูกบล็อก" (ปุ่มเปิดหน้าตั้งค่าแอป) → ตรวจใหม่เมื่อกลับเข้าแอป |
+| hardware ไม่มี | เครื่องไม่มี sensor หรือกล้องใช้ไม่ได้ ต้องมีหน้าจอบอกและทางเลือกอื่น ไม่ใช่จอว่างหรือ 0 |
+| SnackBar | Scaffold ซ้อนกัน (แท็บอยู่ใน Scaffold หลัก) SnackBar จะขึ้นที่ Scaffold ราก แล้วบังปุ่มล่างของหน้าแท็บ → ให้แต่ละแท็บมี `ScaffoldMessenger` ของตัวเอง หรือย้ายปุ่มไปไว้ `bottomNavigationBar` ของหน้านั้น |
+| ตัวเลือกแบบแบ่งช่อง | Material 3 `SegmentedButton` ป้ายไทย 3 ช่องบนจอ 360 dp ต้องใช้ `showSelectedIcon: false` และป้ายสั้น |
 
 ---
 
@@ -169,12 +189,13 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
 - [ ] แถบบน/ล่างไม่โดนรอยบากหรือ home indicator ทับ
 - [ ] เลื่อนแล้วแถบบน/ล่างอยู่นิ่ง ไม่เลื่อนตาม
 - [ ] จอ 360px (Android เล็ก) ป้ายแท็บไม่ตัดคำ · ไทล์ไม่ล้น
-- [ ] ปุ่มทุกอันแตะได้จริง ≥ 44×44px
+- [ ] ปุ่มทุกอันแตะได้จริง ≥ 44×44 pt (iOS) · 48×48 dp (Android)
 - [ ] ข้อความไทยไม่ล้นปุ่ม วรรณยุกต์ไม่ชนสระ
 - [ ] คอนทราสต์ ≥ 4.5:1 (`--faint` บนพื้นขาวคือจุดที่เฉียดสุด — ใช้กับข้อความประกอบเท่านั้น)
 - [ ] มี empty state (`.blank`) ทุกที่ที่รายการอาจว่าง
-- [ ] สลับทั้งธีมเรียบและธีมไล่สีแล้วไม่มีข้อความกลืนพื้น
-- [ ] ทางเลือก "พิมพ์แทนพูด" ยังอยู่ (ผู้ใช้อาจอยู่ในที่ที่พูดไม่ได้)
+- [ ] สลับทุกธีมที่แอปมี (เช่น สว่าง/มืด · ธีมเรียบ/ไล่สี) แล้วไม่มีข้อความกลืนพื้น
+- [ ] ทุกช่องทางป้อนข้อมูลที่พึ่ง hardware มีทางเลือกสำรอง (เช่น แอปพูด → "พิมพ์แทนพูด" · แอปใช้ sensor → ใช้กล้องหรือป้อนเอง)
+- [ ] สิทธิ์ที่ถูกปฏิเสธและ hardware ที่ไม่มี มีหน้าจอบอกพร้อมทางไปต่อ
 
 ---
 
@@ -184,7 +205,7 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
 - ❌ **ลืม `env(safe-area-inset-*)`** หรือลืม `viewport-fit=cover`
 - ❌ **ยัด 6+ แท็บในแถบล่าง** — 3–5 พอ ที่เหลือไปอยู่ในหน้า "เพิ่มเติม"
 - ❌ **modal เล็ก ๆ สำหรับงานที่ใช้เวลานาน** — ใช้ `.overlay` เต็มจอ
-- ❌ **ยุบฟอนต์เหลือตระกูลเดียว** — เสียกลไกแยกเนื้อหาออกจาก chrome
+- ❌ **ยุบฟอนต์เหลือตระกูลเดียวในแอปที่มีเนื้อหาให้อ่าน** — เสียกลไกแยกเนื้อหาออกจาก chrome
 - ❌ **ไล่สีหลังข้อความยาว** — ไล่สีอยู่บน chrome และปุ่มหลักเท่านั้น
 - ❌ **พึ่งสีอย่างเดียวบอกความหมาย** — `del`/`ins` มีรูปแบบขีดของตัวเองอยู่แล้ว
 - ❌ **ไม่มี `:active` feedback** — มือถือไม่มี hover ถ้ากดแล้วไม่ขยับ ผู้ใช้จะกดซ้ำ
@@ -194,13 +215,13 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
 
 ## 9 · ข้อจำกัดที่ต้องรู้
 
-- ค่าทั้งหมด **ตรวจแล้วบน HTML/CSS** — ตาราง React Native / Flutter ใน
-  `references/tokens.md` เป็นการเทียบกลไก **ยังไม่ได้ build ทดสอบ**
+- ค่าทั้งหมด **ตรวจแล้วบน HTML/CSS** — ตาราง React Native ใน `references/tokens.md`
+  **ยังไม่ได้ build ทดสอบ** · Flutter ใช้แนวข้อ 4.1 ทำแอปจริงแล้วหนึ่งตัว (Lumio)
   ค่าโอนได้ตรง ๆ แต่ให้ดูหน้าจอจริงบนเครื่องอีกรอบ
 - ฟอนต์โหลดจาก Google Fonts ใน mockup — แอปจริงควร bundle ไฟล์ฟอนต์ไปเลย
   ไม่งั้นเปิดครั้งแรกตอนเน็ตช้าจะเห็นฟอนต์ระบบก่อนแล้วค่อยกระตุก
-- ระบบนี้ออกแบบมาสำหรับ **โหมดสว่าง** ถ้าต้องมีโหมดมืดต้องเพิ่มชุด token ใหม่
-  (พื้น `--bg`/`--surface` สลับลำดับ และ `--ink` ต้องไม่ใช่ขาวสนิท)
+- `assets/speakgo.css` มีแค่ **โหมดสว่าง** — โหมดมืดต้องเพิ่มชุด token ใหม่ครบทุกตัว
+  (พื้น `--bg`/`--surface` สลับลำดับ และ `--ink` ต้องไม่ใช่ขาวสนิท) แล้วตรวจคอนทราสต์ AA ทุกคู่
 
 ---
 
@@ -212,7 +233,7 @@ node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
 | เว็บแอปเดสก์ท็อปของระบบเดียวกัน | `web-app-design` |
 | ตัวตรวจ hardcode สีใน CI | `web-app-design` → `scripts/check-design-tokens.mjs` |
 | เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
-| App Store Optimization | `software-company-mobile` → `app-store-optimization` |
+| App Store Optimization | `mobile-engineering` |
 | กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
 | ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
 

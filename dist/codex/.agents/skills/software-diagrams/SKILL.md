@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a software question needs a picture — architecture, how a request flows, what states a record moves through, how tables relate, or what runs where. Picks the diagram type that answers the question and draws it in Mermaid with one shared theme. Routes vendor icons to the Python diagrams library and designed figures to diagram-figures.
+description: Use when a software question needs a picture (architecture, request flow, states, table relations, deployment). Picks the right diagram type and draws it in Mermaid with one shared theme.
 ---
 
 # Software Diagrams
@@ -10,7 +10,15 @@ description: Use when a software question needs a picture — architecture, how 
 
 ---
 
+> **เลือกเครื่องมือตามปลายทางก่อน:**
+> - รูปที่ต้อง**ดูสวยเหมือนออกแบบ** — ขึ้นสไลด์ ส่งลูกค้า พิมพ์ลงเอกสารเป็นทางการ → [`diagram-figures`](../diagram-figures/SKILL.md) (จัดวางด้วยมือแล้วถ่ายภาพ) หรือ [`svg-diagram-system`](../svg-diagram-system/SKILL.md) (ไฟล์ภาพความละเอียดสูง)
+> - รูป**ร่างเร็ว**ในเอกสาร/README ที่แก้ง่ายกว่าความสวย → Mermaid ตาม skill นี้
+> - ค่าสีเริ่มต้นของทุกทางคือชุดประจำบ้านใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") — ไม่เลือกสีเองรายรูป
+
 > **ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น** — อย่าเลือกสีใหม่รายรูป
+>
+> **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** (ชุดเดียวกับเอกสาร ดู `branded-document-design` หัวข้อ "ความหมายของแต่ละสี"):
+> 🔵 น้ำเงิน = เส้นทาง/องค์ประกอบปกติ · 🟠 ส้ม = ทางที่ไม่ผ่านเส้นหลัก/ข้อยกเว้น · 🔴 แดง = จุดพัง/อันตราย/ลบข้อมูล · 🟢 เขียว = จุดที่ยืนยันแล้ว/สำเร็จ · ⚪ เทา = ระบบภายนอก/ปิดอยู่
 > (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 
 ## เมื่อไหร่ใช้ skill นี้
@@ -167,7 +175,7 @@ dot -V                   # ตรวจว่าติดตั้งแล้�
 
 **เจ็ดกล่อง** — เกินนี้คนอ่านเลิกอ่าน (นับกล่องจริง ไม่นับ subgraph)
 
-**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — เกินเจ็ดเมื่อไหร่ **หยุด แล้วเสนอการแยกรูปให้ผู้ใช้เลือก**
+**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — เกินเจ็ดเมื่อไหร่ **แยกรูปตามลำดับเรื่องก่อนวาด** ลง `decision-log` แล้วบอกการแยกในคำตอบ
 ห้ามวาดต่อจนครบแล้วค่อยบอกทีหลัง
 
 ```
@@ -175,7 +183,7 @@ dot -V                   # ตรวจว่าติดตั้งแล้�
   รูปที่ 1 — ตอนทดลอง: อะไรเข้า อะไรออก
   รูปที่ 2 — ตอนรันชุดการทดลอง
   รูปที่ 3 — ตอนออกรายงาน
-ตกลงตามนี้ไหม หรือจะแบ่งแบบอื่น
+อยากแบ่งแบบอื่น บอกได้ — แยกใหม่ได้
 ```
 
 > **"แยกคนละไฟล์ก็ได้" = ต้องแยก** — ถ้าคำขอเปิดช่องให้แยก และเนื้อหาเกินเพดาน
@@ -264,7 +272,7 @@ mmdc -i diagram.mmd -o diagram.png -b white -s 2
 ## 7 · Anti-patterns
 
 - ❌ **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
-- ❌ **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องหยุดถามตอนนับได้ว่าเกิน
+- ❌ **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องแยกตั้งแต่นับได้ว่าเกิน
 - ❌ **ยัดตัวเลือกบรรทัดคำสั่งลงในกล่อง** — กล่องบาน ตัวอักษรเล็ก อ่านไม่ออกทั้งรูป
 - ❌ **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
 - ❌ **ผสมระดับรายละเอียด** — `Kubernetes` อยู่ข้าง ๆ `UserService.validate()`

@@ -1,6 +1,6 @@
 ---
 name: ui-craft
-description: Use on any task that produces a screen or a screen spec, alongside the platform skill. Covers the craft rules that make a screen look modern and minimal regardless of brand — one spacing scale, one type scale, one hierarchy per screen, contrast that passes accessibility, and the five states every screen needs. Sets no colours and no fonts.
+description: Use on any task that produces a screen or screen spec, alongside the platform skill. One spacing scale, one type scale, one hierarchy per screen, accessible contrast, five screen states. Sets no colours or fonts.
 ---
 
 # UI Craft
@@ -41,6 +41,9 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 ถ้ารู้สึกว่า `16` แน่นไป `24` ห่างไป — เลือก `16` แล้วแก้อย่างอื่นแทน
 (ปกติปัญหาอยู่ที่ขนาดตัวอักษรหรือความยาวบรรทัด ไม่ใช่ระยะห่าง)
 
+**ชนกับค่าใน skill แพลตฟอร์ม → สเกลนี้ชนะ** — ค่าระยะตัวอย่างที่อยู่นอกสเกล (เช่น `mobile-app-design/references/tokens.md` gap 9 · padding 14 · ขอบ 18) ให้ปัดเป็นค่าใกล้สุดในสเกล (8 · 12 หรือ 16 · 16) ตอนเอาไปใช้
+สเกลนี้คุมแค่ padding · margin · gap — มุมโค้งและขนาดคอมโพเนนต์ (ปุ่ม 38 · มุม 13) skill แพลตฟอร์มเป็นคนกำหนด
+
 **กฎระยะห่างที่คนมองข้ามบ่อยที่สุด:**
 
 > ของที่เกี่ยวข้องกันต้องอยู่ใกล้กันมากกว่าของที่ไม่เกี่ยว
@@ -80,7 +83,9 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 **ความยาวบรรทัด:** 45–75 ตัวอักษร ยาวกว่านี้ตาหลงบรรทัด
 บนหน้าจอกว้างให้จำกัดความกว้างคอลัมน์ข้อความ ไม่ใช่ปล่อยเต็มจอ
 
-**น้ำหนักตัวอักษร:** ใช้ 2 น้ำหนักพอ (ปกติ + หนา)
+**ขนาดเล็กสุด 11** สำหรับข้อความที่ต้องอ่าน — สเกลของ skill แพลตฟอร์มมีขนาดให้เลือกมากกว่า 5 ได้ แต่**หนึ่งหน้าจอยังใช้ไม่เกิน 5** (ตัวเลขใหญ่โชว์ค่าหลักนับเป็นหนึ่งขนาด)
+
+**น้ำหนักตัวอักษร:** ใช้ 2 น้ำหนักพอต่อหน้าจอ (ปกติ + หนา) — ฟอนต์มีครบ 400–700 ได้ แต่หน้าเดียวไม่ควรใช้เกิน 2
 อยากเน้นให้เปลี่ยน**สี**หรือ**ขนาด** ก่อนจะเปลี่ยนน้ำหนักเป็นตัวที่ 3
 
 ---
@@ -137,6 +142,7 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 | เส้นคั่นตกแต่ง | ไม่มีเกณฑ์ |
 
 ตรวจในเบราว์เซอร์: DevTools → เลือก element → ช่องสีใน Styles บอกค่าให้เลย
+ไม่ใช่เบราว์เซอร์ (Flutter · native): คำนวณจากค่าสีใน token ตามสูตร Web Content Accessibility Guidelines (WCAG) — `(L1 + 0.05) / (L2 + 0.05)` เมื่อ L คือ relative luminance ของสีสว่างกว่า (L1) และเข้มกว่า (L2) — เขียนเป็น test สั้น ๆ ที่วนตรวจทุกคู่ข้อความ/พื้นทั้งโหมดสว่างและมืด หรือใช้เครื่องมือตรวจคอนทราสต์ตัวใดก็ได้ (Flutter มี `textContrastGuideline` ใน widget test)
 
 **ข้อที่พลาดกันบ่อย:**
 
@@ -159,6 +165,16 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 | **สำเร็จ** | บอกให้รู้ แล้วหายไปเอง | เด้ง modal ให้กด "ตกลง" |
 
 **สถานะว่างครั้งแรก ≠ สถานะว่างเพราะค้นหาไม่เจอ** — คนละข้อความ คนละปุ่ม
+
+**แอปที่อ่าน hardware ใช้ 5 สถานะเดียวกัน แค่ต้นเหตุต่างกัน:**
+
+| สถานะ | ตัวอย่าง (เครื่องวัดแสง) |
+|---|---|
+| ว่าง | ยังไม่ได้ให้สิทธิ์กล้อง → การ์ดอธิบายพร้อมปุ่มเดียว |
+| กำลังโหลด | sensor กำลังอุ่นเครื่อง ยังไม่มีค่าแรก → โครงร่างของตัวเลข ไม่ใช่ `0` |
+| ผิดพลาด | เครื่องไม่มี sensor · สิทธิ์ถูกบล็อก → บอกเหตุ + ทางไปต่อ (ใช้กล้องแทน · เปิดหน้าตั้งค่า) |
+| มีบางส่วน | ค่าเกินช่วงที่วัดได้ (อิ่มตัว) → แสดง "มากกว่า X" ไม่ใช่ตัวเลขผิด ๆ |
+| สำเร็จ | บันทึกจุดวัดแล้ว → SnackBar สั้น ๆ ที่ไม่บังปุ่ม |
 
 **ข้อความ error ที่ใช้ได้:**
 
@@ -183,7 +199,8 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 
 - ของที่**เข้ามา**เร็วกว่าของที่**ออกไป** ไม่ได้ — ออกควรเร็วกว่าหรือเท่ากัน
 - อย่าเคลื่อนไหวของที่ผู้ใช้กำลังจะกด (ปุ่มขยับหนีนิ้ว)
-- เคารพ `prefers-reduced-motion` — บางคนเวียนหัวจริง ๆ
+- เคารพ `prefers-reduced-motion` — บางคนเวียนหัวจริง ๆ (Flutter: `MediaQuery.disableAnimationsOf(context)` เป็น `true` → ข้าม animation)
+- **ไม่วาดใหม่เมื่อค่าที่แสดงไม่เปลี่ยน** — แจ้ง UI เมื่อค่าบนจอเปลี่ยนจริง (ค่าจาก sensor ที่สั่น: เปลี่ยนเกิน ~1 %) ค่ารองที่ค่อย ๆ ไหลอัปเดตราว 1 วินาทีครั้ง · วาดไม่หยุดกินแบต ทำให้โปรแกรมอ่านจอพูดซ้ำ และเครื่องมือทดสอบอ่านหน้าจอไม่ได้
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -204,7 +221,7 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 | ปกติ | 40–44px | แอปทั่วไป |
 | โปร่ง | 48–56px | หน้า marketing · แอปที่ใช้นาน ๆ ที |
 
-**เป้าที่นิ้วกดได้ต้อง ≥ 44×44px บนมือถือ** ถึงไอคอนจะเล็กกว่านั้นก็ตาม
+**เป้าที่นิ้วกดได้ต้อง ≥ 44×44 pt บน iOS (Apple) · ≥ 48×48 dp บน Android (Material)** ถึงไอคอนจะเล็กกว่านั้นก็ตาม
 (ขยายด้วย padding หรือ pseudo-element ไม่ใช่ขยายไอคอน)
 
 **เลือกแบบแน่นแล้วห้ามมีแถวโปร่งแทรก** — ความหนาแน่นที่ไม่คงที่คือสิ่งที่ทำให้
@@ -227,7 +244,7 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 - [ ] สถานะที่บอกด้วยสี มีไอคอนหรือข้อความคู่ไหม
 - [ ] มุมของข้างในโค้งน้อยกว่าของข้างนอกไหม
 - [ ] เงามีเฉพาะของที่ลอยจริงไหม
-- [ ] ย่อจอเหลือครึ่งหนึ่ง — พังตรงไหน
+- [ ] ย่อจอเหลือครึ่งหนึ่ง (เว็บ) · ตัวอักษรระบบ 200 % + หมุนจอแนวนอน (มือถือ) — พังตรงไหน
 
 ---
 
@@ -243,7 +260,7 @@ description: Use on any task that produces a screen or a screen spec, alongside 
 - ❌ **สีอย่างเดียวบอกสถานะ**
 - ❌ **animation 600ms เพราะดูนุ่มนวลดี** — ผู้ใช้อ่านว่า "ช้า"
 - ❌ **จัดกึ่งกลางข้อความยาว ๆ** — ตาหาต้นบรรทัดไม่เจอ ชิดซ้ายเสมอสำหรับเนื้อหา
-- ❌ **ส่งงานโดยไม่เคยย่อจอดู**
+- ❌ **ส่งงานโดยไม่เคยย่อจอดู** (มือถือ: ไม่เคยขยายตัวอักษรระบบดู)
 
 ---
 

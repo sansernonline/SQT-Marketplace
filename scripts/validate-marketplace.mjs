@@ -21,6 +21,7 @@ const STRICT = process.argv.includes('--warn');
 
 const errors = [];
 const warns  = [];
+const DESC_SOFT_MAX = 250;
 let inspected = 0;
 
 const err  = (file, msg) => errors.push(`${file}\n      ${msg}`);
@@ -34,6 +35,7 @@ const warn = (file, msg) => warns.push(`${file}\n      ${msg}`);
  * และไม่มี error ให้เห็น
  */
 function parseFrontmatter(file, text) {
+  text = text.replace(/\r\n/g, '\n'); // Windows checkouts use CRLF — same file, not a broken one
   if (!text.startsWith('---\n')) { err(file, 'ไม่มี frontmatter (ต้องขึ้นต้นด้วย ---)'); return null; }
   const end = text.indexOf('\n---', 3);
   if (end === -1) { err(file, 'frontmatter ไม่มีบรรทัดปิด ---'); return null; }
@@ -87,6 +89,8 @@ function checkSkill(dir) {
   if (!description) err(file, 'ไม่มี description');
   else {
     if (description.length > 1024) err(file, `description ยาว ${description.length} ตัว เกิน 1024 — จะถูกตัด`);
+    // คำอธิบายทุกตัวถูกโหลดเข้า context ทุก session — ยาวเกินจะดันตัวอื่นตกโควตา
+    if (description.length > DESC_SOFT_MAX) warn(file, `description ยาว ${description.length} ตัว เกิน ${DESC_SOFT_MAX} — ตัดรายการเนื้อหาออก เหลือแค่ "ใช้เมื่อไหร่"`);
     if (description.length < 60)   warn(file, `description สั้นแค่ ${description.length} ตัว — บอก "ใช้เมื่อไหร่" ให้ครบ ไม่งั้น skill จะไม่ถูกเรียก`);
     if (/<[a-zA-Z/]/.test(description)) err(file, 'description มีแท็ก < > — ไม่อนุญาต');
     // หมายเหตุ: \b ใช้กับอักษรไทยไม่ได้ใน JavaScript regex — ตรวจแบบไม่มี word boundary
@@ -122,6 +126,7 @@ function checkAgent(file) {
   if (!fm.name) err(file, 'ไม่มี name');
   else if (fm.name !== stem) err(file, `name "${fm.name}" ไม่ตรงกับชื่อไฟล์ "${stem}"`);
   if (!fm.description) err(file, 'ไม่มี description');
+  else if (fm.description.length > DESC_SOFT_MAX) warn(file, `description ยาว ${fm.description.length} ตัว เกิน ${DESC_SOFT_MAX}`);
   // agent ใช้คีย์ tools: ส่วน skill/command ใช้ allowed-tools: — ใส่ผิดคีย์ loader จะเงียบ ๆ ไม่สนใจ
   if (fm['allowed-tools']) err(file, 'agent ต้องใช้คีย์ "tools:" ไม่ใช่ "allowed-tools:" — ใส่ผิดคีย์จะถูกเมินเงียบ ๆ');
 }
@@ -150,6 +155,18 @@ function checkPlugin(dir) {
   }
 }
 
+// ---------------------------------------------------------------- shared facts
+function checkFacts(facts, read) {
+  for (const [id, fact] of Object.entries(facts)) {
+    for (const rel of fact.files) {
+      const body = read(rel);
+      if (body === null) { err(rel, `${id}: ไม่มีไฟล์นี้ — ลบออกจาก scripts/facts.json หรือแก้ path`); continue; }
+      for (const v of [].concat(fact.value))
+        if (!body.includes(v)) err(rel, `${id}: ไม่มีค่าปัจจุบัน "${v}" (ตรวจล่าสุด ${fact.checked}) — แก้ไฟล์นี้ หรือแก้ scripts/facts.json`);
+    }
+  }
+}
+
 // ---------------------------------------------------------------- self-test
 // กฎ: ตัวตรวจที่ไม่เคยเจออะไรเลย ต้องถือว่าพัง ไม่ใช่ผ่าน
 // self-test พิสูจน์ว่ากฎแต่ละข้อยัง "ยิงโดน" เป้าของมันจริง ไม่ได้เขียว ๆ ไปวัน ๆ
@@ -159,6 +176,7 @@ function selfTest() {
     ['name ไม่ตรง',     '---\nname: other\ndescription: Use when something happens in a project\n---\n', /ไม่ตรงกับชื่อโฟลเดอร์/],
     ['ไม่มี frontmatter','# hello\n', /ไม่มี frontmatter/],
     ['description ยาว', `---\nname: x\ndescription: Use ${'a'.repeat(1100)}\n---\n`, /เกิน 1024/],
+    ['CRLF ไม่ใช่ error', '---\r\nname: x\r\ndescription: Use when something happens in a project\r\n---\r\n', null],
   ];
   let ok = 0;
   for (const [label, text, expect] of cases) {
@@ -168,13 +186,21 @@ function selfTest() {
       if (fm.name && fm.name !== 'x') err('x/SKILL.md', `name "${fm.name}" ไม่ตรงกับชื่อโฟลเดอร์ "x"`);
       if (fm.description?.length > 1024) err('x/SKILL.md', `description ยาว ${fm.description.length} ตัว เกิน 1024`);
     }
-    const hit = errors.some(e => expect.test(e));
+    const hit = expect ? errors.some(e => expect.test(e)) : errors.length === 0;
     console.log(`  ${hit ? '✅' : '❌'} ${label}`);
     if (hit) ok++;
   }
+  // facts: ไฟล์ที่ค่าเก่าค้างต้องโดนจับ ไฟล์ที่ค่าตรงต้องผ่าน
+  const facts = { cap: { value: '17,500', checked: 'test', files: ['old.md', 'new.md'] } };
   errors.length = 0;
-  console.log(`\nself-test ${ok}/${cases.length} ผ่าน`);
-  process.exit(ok === cases.length ? 0 : 1);
+  checkFacts(facts, (rel) => (rel === 'old.md' ? 'ฐาน 15,000' : 'ฐาน 17,500'));
+  const factHit = errors.length === 1 && errors[0].startsWith('old.md');
+  console.log(`  ${factHit ? '✅' : '❌'} facts ค่าเก่าค้าง`);
+  if (factHit) ok++;
+  errors.length = 0;
+  const total = cases.length + 1;
+  console.log(`\nself-test ${ok}/${total} ผ่าน`);
+  process.exit(ok === total ? 0 : 1);
 }
 
 // ---------------------------------------------------------------- run
@@ -204,6 +230,14 @@ if (existsSync(readme)) {
   const t = readFileSync(readme, 'utf8');
   for (const p of plugins) if (!t.includes(p)) warn(readme, `ไม่ได้พูดถึง plugin "${p}"`);
 }
+
+// ข้อเท็จจริงที่ใช้ร่วมกันหลายไฟล์ (อัตราภาษี ฐานประกันสังคม ฯลฯ) — ไฟล์ที่ลงทะเบียนไว้ต้องมีค่าปัจจุบัน
+// อัตราเปลี่ยน → แก้ค่าใน facts.json ที่เดียว แล้วตัวตรวจจะชี้ทุกไฟล์ที่ต้องตามแก้
+const factsFile = join(ROOT, 'scripts', 'facts.json');
+if (existsSync(factsFile)) checkFacts(JSON.parse(readFileSync(factsFile, 'utf8')).facts, (rel) => {
+  const p = join(ROOT, rel);
+  return existsSync(p) ? readFileSync(p, 'utf8') : null;
+});
 
 // ---------------------------------------------------------------- report
 console.log();

@@ -3,6 +3,8 @@ name: code-review-checklist
 description: Use when reviewing pull requests, doing self-review before submitting code, or auditing code quality. Provides a structured checklist covering correctness, design, security, testing, and maintainability.
 ---
 
+> **ใน A-Team:** รีวิวเริ่มจาก playbook [`review`](../agent-team/references/playbook-review.md) · ใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md)
+
 # Code Review Checklist
 
 ## When to use this skill

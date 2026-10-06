@@ -1,6 +1,6 @@
 # scripts/
 
-สคริปต์ให้คนรันเอง ไม่ใช่ส่วนหนึ่งของ plugin — Claude ไม่ได้โหลดไฟล์ในโฟลเดอร์นี้
+สคริปต์ให้คนรันเอง และกฎประจำตัวระดับเครื่อง — ไม่ใช่ส่วนหนึ่งของ plugin · Claude ไม่ได้โหลดไฟล์ในโฟลเดอร์นี้
 
 | ไฟล์ | ทำอะไร | รันเมื่อไหร่ |
 |------|--------|---|
@@ -8,6 +8,10 @@
 | `sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | `build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
 | `install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
+| `build-dist.cmd` | รัน validate → sync-docs → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
+| `install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
+| `facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
+| `CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่สคริปต์ข้างบนติดตั้ง | แก้ที่นี่ที่เดียว |
 
 ---
 
@@ -26,8 +30,8 @@ node scripts/validate-marketplace.mjs               # แล้วค่อย�
 
 | ระดับ | รายการ |
 |---|---|
-| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` เกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` |
-| warning | `description` สั้นกว่า 60 ตัว หรือไม่บอกว่าใช้เมื่อไหร่ · เนื้อหาเกิน 400 บรรทัด · ไฟล์ใน `references/` เกิน 100 บรรทัดแต่ไม่มีสารบัญ · README ไม่พูดถึง plugin บางตัว |
+| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` เกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` · ไฟล์ใน `facts.json` ไม่มีค่าปัจจุบัน |
+| warning | `description` ยาวเกิน 250 ตัว (โหลดเข้า context ทุก session) · `description` สั้นกว่า 60 ตัว หรือไม่บอกว่าใช้เมื่อไหร่ · เนื้อหาเกิน 400 บรรทัด · ไฟล์ใน `references/` เกิน 100 บรรทัดแต่ไม่มีสารบัญ · README ไม่พูดถึง plugin บางตัว |
 
 ### กับดักหลักที่มันมีไว้จับ
 
@@ -105,7 +109,7 @@ node scripts/sync-docs.mjs           # เขียนทับให้ตร�
 | `README.md` | บรรทัดยอดรวม และตัวเลขสามคอลัมน์ในตาราง plugin ทุกแถว |
 | `docs/PLUGINS.md` | จำนวน plugin · ตัวเลขของแต่ละ plugin · บล็อก Marketplace Total |
 | `docs/REFERENCE.md` | เลขในหัวข้อ Agents/Skills/Commands · บล็อก skill ทั้งหมด พร้อมเลขลำดับและบรรทัด `**ใช้กับ:**` |
-| `docs/CLAUDE-WEB.md` | บรรทัด "ในไฟล์:" พร้อมเลขเวอร์ชันจาก `plugin.json` |
+| `docs/INSTALL.md` (หัวข้อ claude.ai) | บรรทัด "ในไฟล์:" พร้อมเลขเวอร์ชันจาก `plugin.json` |
 
 **บรรทัดคำอธิบายที่เขียนมือใน `docs/REFERENCE.md` ไม่หาย** — สคริปต์เก็บทุกบรรทัดที่ขึ้นต้นด้วย `**`
 (เช่น `**Includes:**` `**Anti-patterns ที่กันไว้:**`) แล้วย้ายตามไปให้เอง
@@ -124,14 +128,38 @@ skill ใหม่ที่ยังไม่มีบล็อกใน `REFERE
 node scripts/build-targets.mjs
 ```
 
-ลบ `dist/` แล้วสร้างใหม่จาก `plugins/` ทุกครั้ง · ไม่ใช้ dependency ภายนอก · วิธีติดตั้งฝั่งปลายทางอยู่ใน [docs/OTHER-LLMS.md](../docs/OTHER-LLMS.md)
+ลบ `dist/` แล้วสร้างใหม่จาก `plugins/` ทุกครั้ง · ไม่ใช้ dependency ภายนอก · วิธีติดตั้งฝั่งปลายทางอยู่ใน [docs/OTHER-LLMS.md](../docs/INSTALL.md#ใช้ชุดนี้กับ-llm-ตัวอื่น)
 
 | ปลายทาง | skill | agent | command |
 |---|---|---|---|
-| `dist/claude-web/` | `software-company.zip` — plugin หลักทั้งโฟลเดอร์ตามเดิม ([วิธีอัปโหลด](../docs/CLAUDE-WEB.md)) | ← | ← |
+| `dist/claude-web/` | `software-company.zip` — plugin หลักทั้งโฟลเดอร์ตามเดิม ([วิธีอัปโหลด](../docs/INSTALL.md#claudeai--อัปโหลด-software-companyzip)) | ← | ← |
 | `dist/codex/` | คัดลอกไป `.agents/skills/` | `.codex/agents/<name>.toml` | แปลงเป็น skill (Codex เลิกใช้ custom prompt) · `$ARGUMENTS` → ข้อความบอกให้ใช้สิ่งที่ผู้ใช้ระบุ |
 | `dist/gemini-cli/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง | `commands/<name>.toml` · `$ARGUMENTS` → `{{args}}` |
 | `dist/chat-web/` | รวมเป็นไฟล์ความรู้ไม่เกิน 10 ไฟล์ต่อบทบาท | `instructions.md` · ถ้าเกิน 8000 ตัวอักษรย้ายไป `knowledge/00-role.md` | ไม่มี (หน้าเว็บไม่มี slash command) |
 
 skill ที่บทบาทหนึ่งได้รับคือชื่อ skill ที่เขียนใน backtick ในไฟล์ agent นั้น
 
+
+---
+
+## 5 · กฎประจำตัว — CLAUDE.global.md + install-global-rules
+
+ปลั๊กอินตามบัญชีไปเอง แต่ `~/.claude/CLAUDE.md` เป็นไฟล์บนเครื่อง ต้องติดตั้งใหม่ทุกครั้งที่ย้ายเครื่อง
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .scriptsinstall-global-rules.ps1   # Windows
+bash scripts/install-global-rules.sh                                         # macOS / Linux
+```
+
+สคริปต์สำรองไฟล์เดิมไว้เป็น `CLAUDE.md.bak-<วันเวลา>` ก่อนเขียนทับ
+
+### อะไรควรอยู่ไฟล์ไหน
+
+| อยู่ใน `CLAUDE.global.md` | อยู่ใน skill |
+|---|---|
+| กฎสั้น ๆ ที่ต้องเห็นตลอดเวลา | ตาราง เกณฑ์ ตัวอย่าง รายละเอียด |
+| อยู่ใน context ทุกเซสชัน = มีต้นทุน | โหลดเมื่อตรงงานเท่านั้น = ฟรีจนกว่าจะใช้ |
+
+**เกณฑ์:** ถ้ากฎนั้นต้องเตือนตอนที่โมเดลกำลังจะพลาด ให้อยู่ที่นี่ · ถ้าเป็นความรู้ที่ไปเปิดอ่านได้ทัน ให้อยู่ใน skill
+
+ไฟล์นี้ควรยาวไม่เกิน **40 บรรทัด** — ทุกบรรทัดจ่ายต้นทุนทุกเซสชันของทุกโปรเจกต์

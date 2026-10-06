@@ -1,6 +1,166 @@
+# skill: bug-report-template
+
+Use when reporting a bug, documenting a defect found during testing, or converting a user complaint into a trackable bug report. Ensures all reproducible steps, environment details, and evidence are captured.
+
+# Bug Report Template
+
+## Where bug reports live
+
+One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNN>/` — redact personal data first.
+
+## When to use this skill
+
+- Filing a new bug during testing
+- Converting user complaints into bug tickets
+- Reproducing an issue and documenting findings
+
+## Severity vs Priority
+
+These are **different**:
+
+| | Severity | Priority |
+|---|----------|----------|
+| What it measures | Technical impact | Business urgency |
+| Set by | QA / Engineering | PM / PO |
+
+| Severity | Definition |
+|----------|------------|
+| **S1 Critical** | System unusable, data loss, no workaround |
+| **S2 High** | Major feature broken, workaround exists |
+| **S3 Medium** | Feature partially broken |
+| **S4 Low** | Cosmetic, minor inconvenience |
+
+| Priority | Definition |
+|----------|------------|
+| **P1** | Fix immediately, block release |
+| **P2** | Fix in current sprint |
+| **P3** | Fix in next sprint |
+| **P4** | Fix when convenient / backlog |
+
+## Output Template
+
+```markdown
+# Bug: <concise, descriptive title>
+
+**ID:** BUG-XXXX
+**Severity:** S1 | S2 | S3 | S4
+**Priority:** P1 | P2 | P3 | P4
+**Reporter:** <name>
+**Date:** YYYY-MM-DD
+**Affected Component:** <module/feature>
+**Affected Version:** <build/release>
+
+## Environment
+- OS: ...
+- Browser: ... (version)
+- Device: Desktop | Mobile | Tablet
+- Screen size: ...
+- Network: WiFi | Mobile data | VPN
+- User role: ...
+
+## Steps to Reproduce
+1. Navigate to ...
+2. Click ...
+3. Enter ...
+4. Observe ...
+
+## Expected Result
+<what should happen>
+
+## Actual Result
+<what actually happens>
+
+## Frequency
+Always (100%) | Often (>50%) | Sometimes (<50%) | Rare (<10%)
+
+## Evidence
+- Screenshot: [link]
+- Video: [link]
+- Console errors: \`\`\`<paste>\`\`\`
+- Network trace: ...
+- Log excerpt: ...
+
+## Impact
+- Users affected: All | Specific role | Edge case
+- Business impact: ...
+- Data integrity: Compromised | At risk | Not affected
+
+## Workaround
+<temporary fix users can do, or "None">
+
+## Possible Root Cause (optional)
+<if you have a hypothesis>
+
+## Related
+- Related bugs: BUG-XXXX
+- User story: US-XXX
+- Test case: TC-XXX-NNN
+```
+
+## Title Writing Guide
+
+❌ Bad titles:
+- "Login broken"
+- "Bug in checkout"
+- "It doesn't work"
+
+✅ Good titles (action + condition + result):
+- "Login fails with 500 error when email contains apostrophe"
+- "Checkout total shows NaN when quantity is decimal"
+- "Search returns no results for queries longer than 100 chars"
+
+**Formula:** `<Action> + <Condition> + <Unexpected result>`
+
+## Steps to Reproduce Rules
+
+- [ ] Start from a known state (logged out, fresh browser, etc.)
+- [ ] Each step is one action
+- [ ] Anyone can follow without prior knowledge
+- [ ] Include exact data used (not "some user")
+- [ ] No skipped steps (even "obvious" ones)
+- [ ] Numbered sequentially
+
+## Quality Checklist
+
+Before submitting:
+
+- [ ] Title clearly summarizes the issue
+- [ ] Severity AND priority both set
+- [ ] Steps are reproducible by someone else
+- [ ] Expected vs actual is clearly different
+- [ ] At least one piece of evidence attached
+- [ ] Environment info complete
+- [ ] Searched for duplicates first
+
+## Anti-patterns
+
+- ❌ "Same as last week's bug" — describe it fully
+- ❌ Multiple bugs in one report — split them
+- ❌ "Bug" without steps — provide reproduction
+- ❌ Including fix proposal in title — that's for the dev
+- ❌ Marking everything as P1 — be honest about priority
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.
+
+
+---
+
 # skill: polished-document-style
 
-Use when producing stakeholder-facing or human-readable documents (BRD, FSD, ADR, status reports, audit reports, postmortems, etc.) that need polished formatting. Provides Rich Markdown + Mermaid conventions for consistent, professional output that renders well in GitHub, Notion, VSCode, and Obsidian.
+Use when producing stakeholder-facing documents (BRD, FSD, ADR, status reports, audits, postmortems) that need polished formatting. Rich Markdown and Mermaid conventions that render well in GitHub, Notion, VS Code and Obsidian.
 
 # Polished Document Style
 
@@ -90,6 +250,24 @@ Status values:
 | สไลด์ | `presentation-design` | `doc-theme` |
 
 **สีสถานะไม่นับรวม** — 🔴 วิกฤต 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
+
+### ค่าตั้งต้นประจำบ้าน (house default)
+
+ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
+
+| token | ค่า | ใช้กับ |
+|---|---|---|
+| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
+| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
+| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
+| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
+| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
+| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
+| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
+| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
+| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
+
+ประกาศ accent เฉพาะงานเมื่อไร ให้ค่านั้นทับ brand ส่วนที่เหลือคำนวณจาก accent เดียว
 
 ---
 
@@ -379,7 +557,7 @@ Before delivering any polished doc:
 
 # skill: markdown-visuals
 
-Use when a markdown document needs a picture — wireframe, UI state, architecture diagram, flow or data viz. Picks the format (inline SVG, image file, ASCII, Mermaid) and embeds it so it renders in GitHub, Notion, VS Code and Obsidian. For any document where prose alone will not carry the idea.
+Use when a markdown document needs a picture (wireframe, UI state, architecture, flow, data viz). Picks inline SVG, image, ASCII or Mermaid and embeds it so it renders in GitHub, Notion, VS Code and Obsidian.
 
 # Markdown Visuals
 
@@ -710,3 +888,521 @@ If unsure whether a visual will render, mention that the user should preview in 
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
 หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+
+
+---
+
+# skill: testing-standards
+
+Use when adding, reviewing or setting up automated tests in .NET, Node, Python, Angular or Flutter, or when a test suite is slow or flaky. Uses the project's existing framework and sets what to test, naming and honest coverage.
+
+# Testing Standards
+
+> **กฎข้อเดียว:** test ที่ไม่มีใครเชื่อถือ แย่กว่าไม่มี test
+> test ที่แดงสลับเขียวเองจะถูก `skip` ภายในสองสัปดาห์ แล้วทั้งชุดจะตายตามกันไป
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่มวาง test ในโปรเจกต์ใหม่ หรือเพิ่ม test ให้โค้ดที่มีอยู่
+- มีคนขอ "ให้มี unit test / automate test"
+- ชุด test เดิมช้า แดง ๆ เขียว ๆ หรือไม่มีใครดูแล้ว
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) → `e2e-testing-patterns`
+- ขับแอปมือถือจริงบน emulator → `app-verifier-setup` (`references/android-native.md`)
+- ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน → `test-case-template`
+
+---
+
+## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
+
+- **โปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) → ใช้เลย ไม่ต้องถาม
+- **ต้องลงแพ็กเกจ test ตัวใหม่** → ใส่คำถามนี้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ให้ใช้ตัวนั้น) — เพราะการเลือกผิดแล้วย้ายทีหลังแพงมาก
+- เริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก → เลือกตัว**แนะนำ**ในตาราง ทำต่อ แล้วบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่หยุดถามกลางทาง
+
+สองเรื่องที่ต้องตกลง:
+
+**ข้อ 1 — framework**
+
+| สแต็ก | ตัวเลือกที่ควรเสนอ |
+|---|---|
+| .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
+| Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
+| Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
+| Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
+| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
+
+**ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
+
+- unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
+- unit + integration (แตะ DB จริงผ่าน Testcontainers / SQLite in-memory)
+- ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
+
+> ถ้าโปรเจกต์**มี framework อยู่แล้ว** ไม่ต้องถาม — ใช้ของเดิม การมีสองระบบในโปรเจกต์เดียว
+> แย่กว่าการใช้ของที่ไม่ถูกใจนัก
+
+---
+
+## 2 · พีระมิด — สัดส่วนที่ยั่งยืน
+
+```
+        ▲  E2E  5%      ช้า เปราะ แพง — เอาไว้ทดสอบ "เส้นทางที่ทำเงิน" เท่านั้น
+       ╱ ╲
+      ╱   ╲ Integration 20%   ต่อ DB/API จริง ทดสอบว่าชิ้นส่วนคุยกันรู้เรื่อง
+     ╱     ╲
+    ╱       ╲ Unit 75%        ไม่แตะอะไรข้างนอก รันจบใน < 100ms ต่อตัว
+   ╱_________╲
+```
+
+**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E — สร้างหน้าจอจริงในหน่วยความจำ กดและอ่านได้โดยไม่ต้องมี emulator · เป็นชั้นกลางหลักของแอปมือถือแทน integration ที่ต่อ DB ซึ่งแอปส่วนใหญ่ไม่มี
+
+**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ — การเริ่ม `flutter test` เองก็กินหลายวินาที (รอยืนยันตัวเลขบนเครื่องจริง)) ถ้าเกินนี้คนจะเลิกรันก่อน commit
+แล้ว test จะกลายเป็นด่านที่ CI เท่านั้นที่เจอ — ซึ่งช้าเกินไป
+
+---
+
+## 3 · อะไรควรมี test / อะไรไม่ต้อง
+
+**ต้องมี**
+- ตรรกะทางธุรกิจ: การคำนวณ, เงื่อนไขสิทธิ์, การเปลี่ยนสถานะ
+- ทุกกรณีขอบ: ค่าว่าง, ศูนย์, ติดลบ, ขอบเขตล่าง/บน, ค่าซ้ำ
+- **ทุกบั๊กที่เคยเกิด** — เขียน test ที่แดงก่อน แล้วค่อยแก้ (regression test)
+- สัญญาที่คนอื่นพึ่งพา: รูปแบบ response ของ API, schema ของ event
+
+**ไม่ต้องมี**
+- getter/setter, DTO, mapping ตรง ๆ
+- โค้ดของเฟรมเวิร์ก (ไม่ต้อง test ว่า EF Core บันทึกได้ไหม)
+- ไลบรารีของคนอื่น
+- UI ที่แค่แสดงผลโดยไม่มีตรรกะ
+
+> **Coverage ที่ซื่อสัตย์: 70–80% ของ business logic** ไม่ใช่ 100% ของทั้งโปรเจกต์
+> ไล่ตาม 100% จะได้ test ปลอม ๆ ที่เขียนเพื่อให้ตัวเลขสวยเต็มไปหมด
+> ตั้ง gate ที่ "ห้ามลดลงจากเดิม" มีประโยชน์กว่าตั้งเลขเป้า
+
+---
+
+## 4 · เขียนยังไง
+
+**ตั้งชื่อ** — อ่านชื่อแล้วต้องรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
+
+```
+MethodName_Scenario_ExpectedResult
+
+CalculateDiscount_WhenMemberIsGold_Returns15Percent
+CreateOrder_WhenStockIsZero_ThrowsOutOfStock
+ParseDate_WhenInputIsEmpty_ReturnsNull
+```
+
+ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
+
+**โครง AAA** — เว้นบรรทัดคั่นสามส่วนให้เห็นชัด
+
+```
+// Arrange   เตรียมข้อมูลและ dependency
+// Act       เรียกสิ่งที่ทดสอบ — บรรทัดเดียว
+// Assert    ตรวจผล
+```
+
+**หนึ่ง test = หนึ่งเหตุผลที่จะพัง** ถ้ามี assert 5 อันที่ไม่เกี่ยวกัน ให้แยกเป็น 5 test
+
+**ห้ามมี logic ใน test** — ไม่มี `if`, ไม่มีลูปที่คำนวณค่าคาดหวัง
+ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
+
+**ทำให้ผลเหมือนเดิมทุกครั้ง**
+- เวลา: inject `IClock`/`now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
+- สุ่ม: fix seed
+- ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
+- **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
+
+**Mock เท่าที่จำเป็น** — mock ขอบเขตนอกระบบ (HTTP, คิว, เวลา, ไฟล์)
+ไม่ mock คลาสของตัวเองที่คำนวณล้วน ๆ mock เยอะเกินไปแปลว่า test ผูกกับวิธีเขียน
+พอ refactor ทีเดียวแดงทั้งชุดทั้งที่พฤติกรรมไม่เปลี่ยน
+
+---
+
+## 5 · Integration test
+
+- ใช้ **DB จริงชนิดเดียวกับ production** (Testcontainers) ไม่ใช่ SQLite แทน PostgreSQL
+  เพราะ SQL ที่ผ่านบน SQLite อาจพังบนของจริง
+- แต่ละ test เริ่มจากสถานะที่รู้แน่ — transaction rollback หรือ truncate ทุกครั้ง
+- แยก command ออกจาก unit เพื่อให้รันแยกกันได้ (`npm run test:unit` / `test:integration`)
+- ทดสอบ **สัญญา** ของ API: status code, รูปร่าง JSON, header สำคัญ — ไม่ใช่แค่ "ไม่ error"
+
+---
+
+## 6 · CI
+
+```
+push / PR → lint → unit (< 10 วินาที) → integration → build
+```
+
+- **test แดง = merge ไม่ได้** ไม่มีข้อยกเว้น
+- ห้ามมี `skip`/`ignore` ค้างในสาขาหลัก — ถ้าจะ skip ต้องมีลิงก์ issue กำกับ
+- test ที่ flaky ให้ **แก้หรือลบ** ห้าม retry จนกว่าจะเขียว นั่นคือการซ่อนบั๊ก
+- รายงาน coverage ในหน้า PR ให้เห็นว่าเพิ่มหรือลด
+
+รายละเอียดคำสั่งและไฟล์ config ของแต่ละ framework อยู่ใน `references/per-stack.md`
+
+---
+
+## 7 · ตรวจงาน
+
+- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก · ถ้าลงตัวใหม่ ถามแล้วหรือบันทึกใน "ตัดสินใจเอง"
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
+- [ ] ชุด unit รันจบใน 10 วินาที
+- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
+- [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
+- [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
+- [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
+- [ ] ไม่มี `sleep` / `Thread.Sleep` ในชุด test
+- [ ] ไม่มี test ที่ถูก skip ค้างโดยไม่มีเหตุผลกำกับ
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
+  ไม่ใช่สิ่งที่มันควรทำ
+- ❌ **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
+- ❌ **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
+- ❌ **mock ทุกอย่างจน test ทดสอบแค่ mock**
+- ❌ **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
+- ❌ **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
+- ❌ **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
+- ❌ **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
+| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
+| ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
+| ทดสอบ endpoint health/ping | `web-service-essentials` |
+| log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |
+| review โค้ด test | `code-review-checklist` |
+
+
+## reference: per-stack.md
+
+# ตั้งค่าและตัวอย่างต่อสแต็ก
+
+> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ซึ่งมาจากแอปจริง Lumio) เป็นการตั้งค่ามาตรฐานของแต่ละ framework
+> ให้รันครั้งแรกแล้วดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงหรือไม่
+
+---
+
+## สารบัญ
+
+1. [.NET — xUnit](#net--xunit)
+2. [Node / TypeScript — Vitest](#node--typescript--vitest)
+3. [Python — pytest](#python--pytest)
+4. [Angular](#angular)
+5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
+6. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## .NET — xUnit
+
+```bash
+dotnet new xunit -o tests/MyApp.Tests
+dotnet add tests/MyApp.Tests reference src/MyApp
+dotnet add tests/MyApp.Tests package FluentAssertions      # assert ที่อ่านเป็นประโยค
+dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
+dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
+dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
+```
+
+```csharp
+public class DiscountCalculatorTests
+{
+    [Fact]
+    public void CalculateDiscount_WhenMemberIsGold_Returns15Percent()
+    {
+        // Arrange
+        var sut = new DiscountCalculator();
+
+        // Act
+        var result = sut.Calculate(new Order { Total = 1000m }, MemberTier.Gold);
+
+        // Assert
+        result.Should().Be(150m);
+    }
+
+    // Theory = ทดสอบหลายเคสด้วยโค้ดชุดเดียว — ห้ามเขียนลูปเอง
+    [Theory]
+    [InlineData(MemberTier.None, 0)]
+    [InlineData(MemberTier.Silver, 50)]
+    [InlineData(MemberTier.Gold, 150)]
+    public void CalculateDiscount_ByTier_ReturnsExpected(MemberTier tier, decimal expected)
+        => new DiscountCalculator().Calculate(new Order { Total = 1000m }, tier)
+               .Should().Be(expected);
+}
+```
+
+Integration ผ่าน `WebApplicationFactory` — ยิง HTTP จริงเข้า pipeline จริงโดยไม่ต้องเปิดพอร์ต:
+
+```csharp
+public class OrdersApiTests(WebApplicationFactory<Program> factory)
+    : IClassFixture<WebApplicationFactory<Program>>
+{
+    [Fact]
+    public async Task GetOrders_WhenNotAuthenticated_Returns401()
+    {
+        var res = await factory.CreateClient().GetAsync("/api/v1/orders");
+        res.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+}
+```
+
+```bash
+dotnet test                                        # ทั้งหมด
+dotnet test --filter "FullyQualifiedName!~Integration"   # เฉพาะ unit
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+---
+
+## Node / TypeScript — Vitest
+
+```bash
+npm i -D vitest @vitest/coverage-v8
+```
+
+`vitest.config.ts`:
+
+```ts
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+    // ไฟล์ setup ใช้ตั้ง fake timer / ล้าง mock ให้ทุกไฟล์เหมือนกัน
+    setupFiles: ['./test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.dto.ts', 'src/**/index.ts'],
+      thresholds: { lines: 70, functions: 70, branches: 60 },
+    },
+  },
+});
+```
+
+```ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { DiscountCalculator } from '../src/discount';
+
+describe('DiscountCalculator', () => {
+  beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
+
+  it('calculateDiscount_whenMemberIsGold_returns15Percent', () => {
+    const sut = new DiscountCalculator();
+    expect(sut.calculate({ total: 1000 }, 'gold')).toBe(150);
+  });
+
+  it.each([
+    ['none', 0], ['silver', 50], ['gold', 150],
+  ])('calculateDiscount_byTier_%s', (tier, expected) => {
+    expect(new DiscountCalculator().calculate({ total: 1000 }, tier)).toBe(expected);
+  });
+});
+```
+
+คุมเวลาแทนการ `sleep`:
+
+```ts
+vi.useFakeTimers();
+vi.setSystemTime(new Date('2026-01-15T10:00:00+07:00'));
+await vi.advanceTimersByTimeAsync(5000);   // เดินเวลา 5 วิ ทันที
+vi.useRealTimers();
+```
+
+```json
+{ "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
+} }
+```
+
+> **Jest แทน Vitest:** API เกือบเหมือนกัน (`jest.fn` ↔ `vi.fn`) แต่ต้องตั้ง `ts-jest`
+> หรือ babel เพิ่มสำหรับ TypeScript · เลือก Jest เมื่อทีมคุ้นอยู่แล้วหรือมี preset ที่ต้องใช้
+
+---
+
+## Python — pytest
+
+```bash
+pip install pytest pytest-cov pytest-randomly
+```
+
+`pyproject.toml`:
+
+```toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers --cov=src --cov-report=term-missing"
+markers = ["integration: ต้องมี DB/network — รันแยกจาก unit"]
+```
+
+```python
+import pytest
+from src.discount import calculate_discount
+
+def test_calculate_discount_when_member_is_gold_returns_15_percent():
+    assert calculate_discount(total=1000, tier="gold") == 150
+
+@pytest.mark.parametrize("tier,expected", [("none", 0), ("silver", 50), ("gold", 150)])
+def test_calculate_discount_by_tier(tier, expected):
+    assert calculate_discount(total=1000, tier=tier) == expected
+
+@pytest.mark.integration
+def test_create_order_persists_to_db(db_session):
+    ...
+```
+
+`conftest.py` — fixture ที่ใช้ร่วมกัน (คืนสถานะเดิมทุก test):
+
+```python
+import pytest
+
+@pytest.fixture
+def db_session(engine):
+    conn = engine.connect()
+    tx = conn.begin()
+    yield Session(bind=conn)
+    tx.rollback()          # ทุก test เริ่มจากฐานสะอาดเสมอ
+    conn.close()
+```
+
+```bash
+pytest                        # ทั้งหมด (pytest-randomly สลับลำดับให้เอง = จับ test ที่พึ่งกัน)
+pytest -m "not integration"   # เฉพาะ unit
+pytest --lf                   # เฉพาะที่แดงรอบก่อน
+```
+
+---
+
+## Angular
+
+**Vitest + Testing Library** (โปรเจกต์ใหม่ — เร็วกว่า Karma มาก ไม่ต้องเปิดเบราว์เซอร์จริง)
+
+```bash
+npm i -D vitest @analogjs/vite-plugin-angular jsdom \
+         @testing-library/angular @testing-library/user-event
+```
+
+```ts
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
+import { OrderFormComponent } from './order-form.component';
+
+it('orderForm_whenSubmitWithEmptyName_showsRequiredError', async () => {
+  await render(OrderFormComponent);
+
+  await userEvent.click(screen.getByRole('button', { name: /บันทึก/ }));
+
+  expect(await screen.findByText(/กรุณากรอกชื่อ/)).toBeTruthy();
+});
+```
+
+> ทดสอบจาก**มุมผู้ใช้** — หาปุ่มด้วยข้อความที่คนเห็น (`getByRole`, `getByText`)
+> ไม่ใช่ `By.css('.btn-primary')` เพราะพอเปลี่ยนคลาส CSS test จะแดงทั้งที่ UI ยังทำงานถูก
+
+**Jasmine + Karma** (ค่าเริ่มต้นเดิมของ Angular — ใช้ต่อได้ถ้าโปรเจกต์มีอยู่แล้ว):
+
+```ts
+describe('DiscountService', () => {
+  let service: DiscountService;
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [DiscountService] });
+    service = TestBed.inject(DiscountService);
+  });
+
+  it('calculate_whenMemberIsGold_returns15Percent', () => {
+    expect(service.calculate(1000, 'gold')).toBe(150);
+  });
+});
+```
+
+```bash
+ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำหรับ CI
+```
+
+---
+
+## Flutter / Dart — flutter_test
+
+มากับ SDK ไม่ต้องลงอะไร · ไฟล์อยู่ใน `test/` ล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) · ชื่อไฟล์ snake_case ตามธรรมเนียม Dart
+
+```dart
+// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
+class FakeDeviceLight implements DeviceLight {
+  final _lux = StreamController<double>.broadcast();
+  void emitSensor(double lux) => _lux.add(lux);
+  @override
+  Stream<double> sensorLux() => _lux.stream;
+  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
+}
+
+void main() {
+  group('measure screen', () {
+    testWidgets('shows live lux and verdict', (tester) async {
+      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+
+      final device = FakeDeviceLight();
+      final meter = MeterController(device);
+      await tester.pumpWidget(App(meter: meter));
+      device.emitSensor(420);
+      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
+
+      expect(find.textContaining('420 lux'), findsOneWidget);
+      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
+    });
+  });
+}
+```
+
+| เรื่อง | ทำอย่างนี้ |
+|---|---|
+| ชั้น test | unit (`test`) สำหรับตรรกะล้วน · widget (`testWidgets`) สำหรับหน้าจอ — เป็นชั้นกลางหลัก · E2E บนเครื่อง: `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
+| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง · ลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
+| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง · มี Timer หรือ animation วนตลอด → ไม่มีวันนิ่ง (หมดเวลา) ใช้ `pump(duration)` |
+| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เอง ก่อนบรรทัดสุดท้าย — Timer ที่ยังวิ่งอยู่ตอนจบทำให้ test ล้ม |
+| จอเล็ก | test แยกหนึ่งชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
+| SnackBar บังปุ่ม | widget test จับได้ — กดปุ่มล่างหลัง SnackBar ขึ้นแล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
+| golden test | ไม่บังคับ · ภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
+| coverage | `flutter test --coverage` → `coverage/lcov.info` |
+| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิดหนึ่งจุด รันแล้วต้องแดง แล้วคืนค่า |
+
+```bash
+flutter test                              # ทั้งหมด
+flutter test test/features/measure        # โฟลเดอร์เดียว
+flutter test --coverage
+flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
+|---|---|---|---|---|---|
+| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
+| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
+| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
+| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
+| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
+| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
+| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |

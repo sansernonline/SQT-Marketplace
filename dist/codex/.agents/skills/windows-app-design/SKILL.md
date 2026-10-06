@@ -1,6 +1,6 @@
 ---
 name: windows-app-design
-description: Use when designing or building a desktop app that must look like a native Windows 11 app — WinUI 3, Avalonia, .NET MAUI or a web-wrapped shell. Ships the Fluent 2 tokens measured from real Windows 11, a drop-in stylesheet, matching resource dictionaries and a render-and-look loop. Not for web sites or mobile apps.
+description: Use when building a desktop app that must look native on Windows 11 (WinUI 3, Avalonia, MAUI, web shell). Fluent 2 tokens, drop-in stylesheet, resource dictionaries, render-and-look loop. Not for web or mobile.
 ---
 
 # Windows App Design

@@ -1,0 +1,17 @@
+{
+  "name": "consumer-rights",
+  "version": "0.1.0",
+  "description": "Consumer toolkit for buyers in Thailand — compare purchases with a decision matrix and total cost of ownership, spot fake reviews, keep a warranty and receipt registry, write complaint letters in Thai with the escalation ladder from seller to platform to the Office of the Consumer Protection Board (hotline 1166) to the consumer court, and request refunds using the direct-marketing cooling-off right, platform disputes and credit-card chargebacks. General information, not legal advice.",
+  "author": {
+    "name": "Square Tech Solutions Co., Ltd."
+  },
+  "keywords": [
+    "consumer-rights",
+    "complaint",
+    "refund",
+    "warranty",
+    "chargeback",
+    "ocpb",
+    "thailand"
+  ]
+}

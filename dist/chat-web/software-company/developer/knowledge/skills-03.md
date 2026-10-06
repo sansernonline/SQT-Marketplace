@@ -1,6 +1,709 @@
+# skill: pr-description-template
+
+Use when writing a pull request description, preparing a PR for review, or documenting changes for merge. Provides reviewers with context, testing details, and screenshots needed to review effectively.
+
+# Pull Request Description Template
+
+## When to use this skill
+
+- Opening any pull request
+- Updating a PR description after major changes
+- Onboarding team to consistent PR practices
+
+## Output Template
+
+```markdown
+## Summary
+<2-4 sentence explanation of what this PR does and why>
+
+## Linked Issues
+- Closes #XXX
+- Refs #YYY
+
+## Changes
+- ✨ Added: ...
+- 🔧 Changed: ...
+- 🐛 Fixed: ...
+- 🗑️ Removed: ...
+
+## Type of Change
+- [ ] 🐛 Bug fix (non-breaking change)
+- [ ] ✨ New feature (non-breaking change)
+- [ ] 💥 Breaking change (fix or feature that breaks existing behavior)
+- [ ] 📚 Documentation update
+- [ ] 🔧 Refactor (no functional change)
+- [ ] ⚡ Performance improvement
+- [ ] 🧪 Test additions/updates
+- [ ] 🏗️ Build/CI changes
+
+## How to Test
+1. Pull this branch
+2. Run `<command>`
+3. Verify ...
+4. Try edge case: ...
+
+## Screenshots / Demos
+| Before | After |
+|--------|-------|
+| <img>  | <img> |
+
+## Checklist
+- [ ] My code follows the project style guide
+- [ ] I have performed self-review of my code
+- [ ] I have added tests that prove my fix/feature works
+- [ ] New and existing unit tests pass locally
+- [ ] I have updated documentation as needed
+- [ ] No new linter warnings
+- [ ] No console.log / debug code left
+- [ ] Breaking changes are documented
+
+## Breaking Changes
+<describe what breaks and migration path, OR write "None">
+
+## Performance Impact
+<measurements if applicable, OR write "No significant impact">
+
+## Security Considerations
+<note any security implications, OR write "None">
+
+## Deployment Notes
+<env var changes, migrations, feature flags needed, OR "Standard deployment">
+
+## Notes for Reviewer
+<anything reviewer should pay attention to, gotchas, alternative approaches considered>
+```
+
+## Size Guidelines
+
+| Lines changed | Review difficulty | Recommendation |
+|--------------|-------------------|----------------|
+| < 100 | Easy | ✅ Ideal size |
+| 100-400 | Moderate | ✅ Acceptable |
+| 400-800 | Hard | ⚠️ Consider splitting |
+| > 800 | Very hard | ❌ Should be split |
+
+If your PR is huge, split into:
+1. Refactoring PR (no behavior change)
+2. Feature PR (small, focused)
+3. Test PR (adding coverage)
+
+## Summary Writing
+
+❌ Bad summaries:
+- "Fixes bug"
+- "Updates code"
+- "See ticket"
+
+✅ Good summaries:
+- "Prevents double-charging customers when payment provider times out, by adding idempotency key to charge API calls"
+- "Adds email verification step during signup to reduce spam accounts; sends 6-digit code via existing email service"
+
+**Structure:** What changed + Why it matters + Brief how
+
+## Screenshots Best Practices
+
+- Always for UI changes
+- Show before AND after side-by-side
+- Highlight the actual change with arrows/circles
+- Include mobile view if responsive
+- Use GIFs for interactions (max 30 sec)
+
+## Reviewer-Friendly Tips
+
+- Tag specific people for areas they know
+- Mention if breaking change requires coordination
+- Note non-obvious decisions in code comments
+- Reply to your own PR with "Self-review notes" for tricky parts
+- Mark draft PRs as Draft until ready
+
+## Anti-patterns
+
+- ❌ Empty description: "see code"
+- ❌ Linking ticket without explanation in PR
+- ❌ Massive PR with 1000+ lines mixed concerns
+- ❌ No screenshots for UI changes
+- ❌ "Testing: tested locally" with no detail
+- ❌ Pushing right before merge deadline with no time to review
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.
+
+
+---
+
+# skill: markdown-visuals
+
+Use when a markdown document needs a picture (wireframe, UI state, architecture, flow, data viz). Picks inline SVG, image, ASCII or Mermaid and embeds it so it renders in GitHub, Notion, VS Code and Obsidian.
+
+# Markdown Visuals
+
+> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- Producing **any** design mockup, wireframe, or UI spec
+- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user said "make a mockup," "show me how it looks," or "design X"
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+---
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI mockup / component state / icon       →  Inline SVG
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / sequence / decision tree          →  Mermaid (see polished-document-style)
+├─ Architecture / ER / class                →  Mermaid
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
+
+**Default to inline SVG** for anything that isn't a flow/sequence (use Mermaid for those). It renders everywhere, versions in git, doesn't bloat the repo with binaries, and the user can read/edit the markup.
+
+---
+
+## 1 · Inline SVG (primary technique)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background -->
+  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+
+**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
+ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
+
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+
+| Token | หน้าที่ | ได้มาจาก |
+|---|---|---|
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+
+**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
+
+### Reusable SVG snippets
+
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
+
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
+
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+### Worked example — UI state mockup
+
+This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
+
+```markdown
+## 2 · External image files
+
+Use when:
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
+
+---
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+### Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+### Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+---
+
+## 4 · Mermaid
+
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+|---|---|
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
+
+---
+
+## Combining formats in one doc
+
+A full design spec usually mixes formats. Pattern from `DockXI/docs/12-design-mockup.md`:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't pick one format and force everything into it — each format has a sweet spot.
+
+---
+
+## Accessibility checklist
+
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+---
+
+## Anti-patterns
+
+- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
+- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- ❌ **PNG screenshots of text** — use the text, in a code block
+- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
+- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax for GitHub compat
+- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+
+---
+
+## Quick-start recipe
+
+When the user asks for a design / mockup:
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+If unsure whether a visual will render, mention that the user should preview in GitHub/Notion to confirm.
+
+---
+
+## Related skills
+
+- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
+- [[simplicity-first]] — don't over-design the diagram; show what's needed
+- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
+- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+
+
+---
+
+# skill: spec-to-code-loop
+
+Use when building from a spec and mockups as a repeating loop (failing test, code, check screen, record progress) with a stop condition, state file and retry ceiling. Inside agent-team this is the feature and new-project playbooks.
+
+> **ใน A-Team:** ลูปนี้คือแกนของ playbook [`feature`](../agent-team/references/playbook-feature.md) และ [`new-project`](../agent-team/references/playbook-new-project.md) · ถ้าเปิด agent-team อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
+
+# วงรอบจากข้อกำหนดไปเป็นโค้ด
+
+> **กฎข้อเดียว:** วงรอบต้องมีเงื่อนไขหยุดที่**รันแล้วรู้ผลทันที**
+> "ทำตามข้อกำหนดให้เสร็จ" เครื่องตรวจไม่ได้ · "test ทั้ง 47 ตัวเขียว" ตรวจได้
+
+---
+
+## ต้องมีครบก่อนเริ่ม
+
+| สิ่งที่ต้องมี | ถ้าไม่มี |
+|---|---|
+| ข้อกำหนดที่แต่ละข้อทดสอบได้ มีรหัสกำกับ เช่น `FR-AUTH-010` | หยุด ใช้ `srs-writing` ทำให้ทดสอบได้ก่อน |
+| คำสั่งรัน test ที่รันได้จริงหนึ่งบรรทัด | หยุด ตั้งค่าโครง test ก่อน ใช้ `testing-standards` |
+| คำสั่งรันแอปขึ้นมาดูได้ (ถ้ามีหน้าจอ) | ข้ามขั้นเทียบภาพไปก่อน แล้วบอกผู้ใช้ว่าข้าม |
+| ภาพ mockup ที่ตั้งชื่อตรงกับหน้าจอ | UI จะไม่มีวันตรง — ขอจากผู้ใช้ |
+
+**ไม่ครบแล้วยังเริ่ม = เขียนโค้ดที่ไม่มีใครรู้ว่าถูกหรือผิด**
+
+---
+
+## 1 · รอบที่ศูนย์ — วางแผน ยังไม่เขียนโค้ด
+
+อ่านข้อกำหนดและ mockup ให้ครบก่อน แล้วแตกเป็นงานย่อย **งานละหนึ่งข้อกำหนด**
+เขียนลง `docs/BUILD-PLAN.md`
+
+```markdown
+| # | รหัส | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
+|---|---|---|---|---|---|---|
+| 1 | FR-AUTH-010 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | รอทำ | |
+| 2 | FR-AUTH-020 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | รอทำ | |
+```
+
+**ข้อไหนกำกวมจนเขียน test ไม่ได้ ห้ามเดา** — รวมเป็นรายการคำถามท้ายไฟล์ และใน **"ค้างอยู่"** ครั้งเดียว แล้วทำข้ออื่นต่อ
+
+> คำถามที่ต้องถาม ไม่ใช่เดา: ค่าขอบเขตเป็นเท่าไหร่ · ผิดแล้วต้องเกิดอะไร ·
+> ใครเห็นข้อมูลนี้ได้บ้าง · ถ้าของเดิมมีอยู่แล้วจะทับหรือจะเตือน
+
+จบรอบที่ศูนย์ **ต้องหยุด** ให้ผู้ใช้อ่านแผนก่อน — อย่าไหลต่อไปเขียนโค้ดเอง
+
+---
+
+## 2 · วงรอบต่อหนึ่งข้อกำหนด
+
+```
+อ่าน BUILD-PLAN.md  →  หยิบข้อแรกที่ยังไม่ทำ
+  1. เขียน test ก่อน  ชื่อ test มีรหัสข้อกำหนดอยู่ในชื่อ
+  2. รัน test ให้เห็นว่า "แดง"        ← ข้ามขั้นนี้ไม่ได้
+  3. เขียนโค้ดจน test เขียว
+  4. รัน test ทั้งชุด                  ← กันของเดิมพัง
+  5. หน้าจอ: ถ่ายภาพจริงเทียบ mockup   ← ข้อ 5 ข้างล่าง
+  6. อัปเดตสถานะใน BUILD-PLAN.md + commit หนึ่งข้อต่อหนึ่ง commit
+  →  วนข้อถัดไป
+```
+
+**ขั้นที่ 2 คือขั้นที่คนข้ามบ่อยที่สุดและแพงที่สุด** — test ที่ไม่เคยเห็นแดง
+คือ test ที่อาจผ่านตลอดไม่ว่าโค้ดจะถูกหรือผิด
+
+---
+
+## 3 · กฎเหล็ก
+
+1. **ห้ามแก้หรือลบ test เพื่อให้ผ่าน** — test แดงแปลว่าโค้ดผิด ไม่ใช่ test ผิด
+   จะแก้ test ได้ต่อเมื่อพิสูจน์ได้ว่า test เขียนผิดจากข้อกำหนด และต้องบอกผู้ใช้ทุกครั้ง
+2. **หนึ่งข้อต่อหนึ่งรอบ** — ห้ามรวบหลายข้อเพราะ "มันคล้ายกัน"
+3. **เพดานการลองซ้ำคือ 3 ครั้ง** — ติดข้อเดียวเกินสามรอบ ให้**หยุดแล้วรายงาน**
+   ว่าติดอะไร ลองอะไรไปแล้ว และคิดว่าปัญหาอยู่ที่ไหน · อย่าลองต่อไปเรื่อย ๆ
+4. **ห้าม mock สิ่งที่กำลังทดสอบ** — mock ของข้างนอกได้ mock ตัวเองไม่ได้
+5. **ห้ามข้ามไปทำข้อที่ง่ายกว่า** เพราะข้อปัจจุบันติด — ลำดับในแผนคือลำดับจริง
+
+---
+
+## 4 · ไฟล์สถานะ — context หมดแน่นอน
+
+วงรอบยาวกว่าหน่วยความจำของรอบสนทนาเสมอ **สถานะต้องอยู่ในไฟล์ ไม่ใช่ในหัว**
+
+- `docs/BUILD-PLAN.md` — แผนและสถานะ · **อ่านไฟล์นี้ก่อนเริ่มทุกรอบ**
+  นี่คือไฟล์เดียวที่วงรอบนี้เพิ่มเข้าไปในโฟลเดอร์เอกสารหลัก
+- สถานะมีสี่ค่าเท่านั้น: `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด`
+- `ติด` ต้องมีเหตุผลต่อท้ายหนึ่งบรรทัด
+- ทุกข้อที่ `เสร็จ` ต้องมีเลข commit — ไม่มีเลข แปลว่ายังไม่เสร็จจริง
+- จบทุกรอบ อัปเดตหัวข้อ `## สถานะล่าสุด` และ `## ประวัติสถานะ` บนสุดของไฟล์ตาม `status-report` — ตารางงานกับตารางสถานะอยู่ไฟล์เดียวกันแต่คนละหัวข้อ
+
+**เริ่มรอบใหม่แล้วไม่อ่านไฟล์นี้ก่อน คือสาเหตุอันดับหนึ่งที่งานย้อนกลับไปทำซ้ำ**
+
+### ไฟล์ที่วงรอบสร้างขึ้นระหว่างทาง — ไปที่ `_to_delete/` ทั้งหมด
+
+เอกสารข้อกำหนดมักเป็น `.docx` หรือ `.pdf` ที่ต้องแปลงเป็นข้อความก่อนถึงจะอ่านซ้ำได้ถูก
+**ไฟล์ที่แปลงออกมาไม่ใช่เอกสาร** เป็นของใช้ชั่วคราวของวงรอบ
+
+```
+_to_delete/
+  extracted/       ← .docx .pdf ที่แปลงเป็น .md แล้ว
+  check/           ← ภาพหน้าจอที่ถ่ายไว้เทียบ mockup
+  logs/            ← ผลรัน test ที่เก็บไว้ดูย้อนหลัง
+```
+
+| ไฟล์ | ไปไหน |
+|---|---|
+| เอกสารที่แปลงรูปแบบมาให้อ่านง่าย | `_to_delete/extracted/` |
+| ภาพหน้าจอที่ถ่ายไว้ตรวจ | `_to_delete/check/` |
+| ผลรัน test · log | `_to_delete/logs/` |
+| แผนและสถานะ `BUILD-PLAN.md` | `docs/` — เป็นเอกสารจริง |
+| โค้ดและ test | โฟลเดอร์โปรเจกต์ |
+
+**ห้ามเขียนไฟล์แปลงลง `docs/` ปนกับเอกสารต้นฉบับ** — อีกสามเดือนไม่มีใครรู้ว่า
+ไฟล์ไหนคือของจริงที่ลูกค้าเซ็นรับ และไฟล์ไหนคือของที่เครื่องแปลงมา
+
+รายละเอียดเต็มอยู่ใน `temp-file-discipline`
+
+---
+
+## 5 · เทียบ mockup ด้วยภาพจริง
+
+อ่านโค้ดแล้วบอกว่า "ตรงแล้ว" ใช้ไม่ได้ ต้องเปิดจริงแล้วดู
+
+```python
+page.set_viewport_size({"width": 1280, "height": 900})   # ให้เท่ากับความกว้าง mockup
+page.goto(url); page.wait_for_timeout(500)
+page.screenshot(path="_to_delete/check/login.png")
+```
+
+แล้วเปิดทั้งสองภาพดูเทียบกัน ห้าข้อนี้:
+
+- [ ] ลำดับและการจัดกลุ่มขององค์ประกอบตรงกันไหม
+- [ ] ระยะห่างและขนาดตัวอักษรใกล้เคียงไหม (ไม่ต้องเป๊ะพิกเซล)
+- [ ] สถานะที่ mockup แสดงไว้ มีครบไหม — ว่าง · กำลังโหลด · ผิดพลาด
+- [ ] ข้อความตรงกับ mockup ไหม หรือไปแต่งเอง
+- [ ] ภาษาไทยตกบรรทัดหรือสระหายไหม
+
+ต่างตรงไหน**บอกเป็นรายการ** อย่าเงียบแล้วเคลมว่าเสร็จ
+ภาพที่ถ่ายไว้ตรวจเป็นไฟล์ชั่วคราว — ไปที่ `_to_delete/` ตาม `temp-file-discipline`
+
+---
+
+## 6 · การสืบย้อน
+
+ชื่อ test ต้องมีรหัสข้อกำหนดอยู่ในชื่อ เช่น `test_lockout_after_5_failures_FR_AUTH_020`
+เพราะทำให้ค้นได้ด้วยคำสั่งเดียวว่าข้อไหนยังไม่มี test ครอบ
+
+ปิดงานด้วยตารางสืบย้อน: ข้อกำหนดทุกข้อ → test ที่ครอบ → ผลล่าสุด
+
+> **ข้อไหนไม่มี test ครอบ ให้บอกตรง ๆ ว่าไม่มี** — ห้ามเขียน test ตื้น ๆ มาเติมให้ตารางเต็ม
+> ตารางที่เต็มเพราะเติมเอง อันตรายกว่าตารางที่มีช่องว่าง
+
+---
+
+## 7 · เมื่อไหร่แตกหลาย agent
+
+**เกณฑ์เดียว: ไฟล์ที่จะแตะต้องไม่ทับกันเลย** — ดูคอลัมน์ "ไฟล์ที่จะแตะ" ในแผน
+
+| แตกได้ | แตกไม่ได้ |
+|---|---|
+| คนละโมดูล คนละหน้าจอ ไฟล์ไม่ทับกัน | แตะไฟล์เดียวกันแม้แต่ไฟล์เดียว — งานจะทับกัน |
+| agent ตรวจงานแบบ**อ่านอย่างเดียว** วิ่งคู่กับ agent ที่เขียนโค้ด | งานที่ต้องรอผลจากอีกงานอยู่แล้ว |
+| แปลงข้อกำหนดเป็น test หลายโมดูลพร้อมกัน | ตอนยังไม่มีแผน — ต้องมีแผนก่อนถึงจะรู้ว่าแตกตรงไหนได้ |
+
+ทุก agent ที่แตกออกไปต้องได้รับ: รหัสข้อที่รับผิดชอบ · รายการไฟล์ที่แตะได้ ·
+คำสั่งรัน test · และกฎข้อ 3 ทั้งหมด
+
+**ห้ามให้ agent ที่แตกออกไปแก้ `BUILD-PLAN.md` เอง** — ให้รายงานกลับ แล้วตัวหลักเขียนไฟล์เดียว
+ไม่งั้นไฟล์สถานะจะพังก่อนโค้ด
+
+---
+
+## 8 · สัญญาณว่าวงรอบกำลังพัง
+
+| อาการ | ความหมายจริง |
+|---|---|
+| test เขียวหมดตั้งแต่รอบแรกโดยไม่เคยแดง | test ไม่ได้ทดสอบอะไร |
+| จำนวน test เพิ่มเร็วกว่าจำนวนข้อกำหนดที่ปิด | กำลังเขียน test ให้ตัวเองผ่าน |
+| commit เดียวแตะ 15 ไฟล์ | รวบหลายข้อ ย้อนกลับไม่ได้แล้วเมื่อพัง |
+| ข้อเดิมวนเกิน 3 รอบ | ข้อกำหนดกำกวม ไม่ใช่โค้ดยาก — กลับไปถาม |
+| ไม่มีใครอัปเดต `BUILD-PLAN.md` มาสองรอบ | สถานะอยู่ในหัว รอบหน้าจะทำซ้ำ |
+
+---
+
+## 9 · Anti-patterns
+
+- ❌ **โยนข้อกำหนดทั้งฉบับให้รอบเดียว** — เหตุผลอันดับหนึ่งที่ได้โค้ดมั่ว
+- ❌ **เขียนโค้ดก่อนแล้วค่อยเขียน test ตาม** — ได้ test ที่ยืนยันสิ่งที่เพิ่งเขียน ไม่ใช่สิ่งที่ต้องการ
+- ❌ **เดาเมื่อข้อกำหนดกำกวม** — ผิดตั้งแต่ต้น แต่จะรู้ตอนส่งมอบ
+- ❌ **แก้ test ให้ผ่าน** แล้วรายงานว่าเสร็จ
+- ❌ **แตก agent ขนานบนไฟล์เดียวกัน**
+- ❌ **เคลมว่า UI ตรง mockup โดยไม่เคยเปิดดู**
+- ❌ **ปิดงานโดยไม่มีตารางสืบย้อน** — ไม่มีใครรู้ว่าอะไรยังไม่ได้ทำ
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ทำข้อกำหนดให้ทดสอบได้ก่อน | `srs-writing` |
+| แปลงข้อกำหนดเป็น test case | `test-case-template` |
+| โครง test กรอบทดสอบ ชื่อ ความครอบคลุม | `testing-standards` |
+| test ระดับเปิดเบราว์เซอร์จริง | `e2e-testing-patterns` |
+| เขียนโค้ดให้เรียบง่ายที่สุดที่ใช้ได้ | `lazy-coding` |
+| แก้เมื่อ test แดงหรือผลไม่ตรง | `targeted-fix` |
+| รูปแบบข้อความ commit | `commit-message-format` |
+| ไฟล์ภาพที่ถ่ายไว้ตรวจ | `temp-file-discipline` |
+| บันทึกสถานะข้ามรอบสนทนา | `work-session-context` |
+| ตารางสรุปสถานะเมื่อจบรอบ | `status-report` |
+
+---
+
+## ตัวย่อ
+
+- **test** — ชุดทดสอบอัตโนมัติ
+- **mockup** — ภาพต้นแบบหน้าจอ
+- **commit** — การบันทึกการเปลี่ยนแปลงลงระบบควบคุมเวอร์ชัน
+- **UI** — User Interface (ส่วนติดต่อผู้ใช้)
+
+
+---
+
 # skill: testing-standards
 
-Use when adding, reviewing or setting up automated tests in .NET, Node, Python or Angular. Asks which framework to use rather than assuming, then sets what deserves a test, how to name it, how to keep it deterministic and what coverage number is honest. Load it before the first test, or when a suite is slow, flaky or ignored.
+Use when adding, reviewing or setting up automated tests in .NET, Node, Python, Angular or Flutter, or when a test suite is slow or flaky. Uses the project's existing framework and sets what to test, naming and honest coverage.
 
 # Testing Standards
 
@@ -16,16 +719,18 @@ Use when adding, reviewing or setting up automated tests in .NET, Node, Python o
 ## เมื่อไหร่ **ไม่** ใช้
 
 - E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) → `e2e-testing-patterns`
+- ขับแอปมือถือจริงบน emulator → `app-verifier-setup` (`references/android-native.md`)
 - ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน → `test-case-template`
 
 ---
 
-## 1 · ขั้นแรก: ถามก่อนว่าจะใช้ตัวไหน
+## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
 
-**ห้ามเลือก framework ให้ผู้ใช้เอง** ถ้าโปรเจกต์ยังไม่มี test ให้ถามผู้ใช้
-ก่อนเขียนบรรทัดแรก (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ให้ใช้ตัวนั้น) — เพราะการเลือกผิดแล้วย้ายทีหลังแพงมาก
+- **โปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) → ใช้เลย ไม่ต้องถาม
+- **ต้องลงแพ็กเกจ test ตัวใหม่** → ใส่คำถามนี้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ให้ใช้ตัวนั้น) — เพราะการเลือกผิดแล้วย้ายทีหลังแพงมาก
+- เริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก → เลือกตัว**แนะนำ**ในตาราง ทำต่อ แล้วบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่หยุดถามกลางทาง
 
-ถามสองข้อนี้:
+สองเรื่องที่ต้องตกลง:
 
 **ข้อ 1 — framework**
 
@@ -35,6 +740,7 @@ Use when adding, reviewing or setting up automated tests in .NET, Node, Python o
 | Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
 | Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
 | Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
+| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
 
 **ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
 
@@ -58,7 +764,9 @@ Use when adding, reviewing or setting up automated tests in .NET, Node, Python o
    ╱_________╲
 ```
 
-**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** ถ้าเกินนี้คนจะเลิกรันก่อน commit
+**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E — สร้างหน้าจอจริงในหน่วยความจำ กดและอ่านได้โดยไม่ต้องมี emulator · เป็นชั้นกลางหลักของแอปมือถือแทน integration ที่ต่อ DB ซึ่งแอปส่วนใหญ่ไม่มี
+
+**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ — การเริ่ม `flutter test` เองก็กินหลายวินาที (รอยืนยันตัวเลขบนเครื่องจริง)) ถ้าเกินนี้คนจะเลิกรันก่อน commit
 แล้ว test จะกลายเป็นด่านที่ CI เท่านั้นที่เจอ — ซึ่งช้าเกินไป
 
 ---
@@ -94,6 +802,8 @@ CalculateDiscount_WhenMemberIsGold_Returns15Percent
 CreateOrder_WhenStockIsZero_ThrowsOutOfStock
 ParseDate_WhenInputIsEmpty_ReturnsNull
 ```
+
+ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
 
 **โครง AAA** — เว้นบรรทัดคั่นสามส่วนให้เห็นชัด
 
@@ -147,8 +857,8 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 
 ## 7 · ตรวจงาน
 
-- [ ] ถามผู้ใช้แล้วว่าจะใช้ framework ไหน (หรือใช้ของเดิมที่โปรเจกต์มี)
-- [ ] `npm test` / `dotnet test` / `pytest` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
+- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก · ถ้าลงตัวใหม่ ถามแล้วหรือบันทึกใน "ตัดสินใจเอง"
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
 - [ ] ชุด unit รันจบใน 10 วินาที
 - [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
 - [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
@@ -178,6 +888,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 | ต้องการ | ใช้คู่กับ |
 |---|---|
 | E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
+| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
 | ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
 | ทดสอบ endpoint health/ping | `web-service-essentials` |
 | log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |
@@ -188,7 +899,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 
 # ตั้งค่าและตัวอย่างต่อสแต็ก
 
-> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** เป็นการตั้งค่ามาตรฐานของแต่ละ framework
+> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ซึ่งมาจากแอปจริง Lumio) เป็นการตั้งค่ามาตรฐานของแต่ละ framework
 > ให้รันครั้งแรกแล้วดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงหรือไม่
 
 ---
@@ -199,7 +910,8 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 2. [Node / TypeScript — Vitest](#node--typescript--vitest)
 3. [Python — pytest](#python--pytest)
 4. [Angular](#angular)
-5. [ตารางเทียบ](#ตารางเทียบ)
+5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
+6. [ตารางเทียบ](#ตารางเทียบ)
 
 ---
 
@@ -436,24 +1148,82 @@ ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำห�
 
 ---
 
+## Flutter / Dart — flutter_test
+
+มากับ SDK ไม่ต้องลงอะไร · ไฟล์อยู่ใน `test/` ล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) · ชื่อไฟล์ snake_case ตามธรรมเนียม Dart
+
+```dart
+// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
+class FakeDeviceLight implements DeviceLight {
+  final _lux = StreamController<double>.broadcast();
+  void emitSensor(double lux) => _lux.add(lux);
+  @override
+  Stream<double> sensorLux() => _lux.stream;
+  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
+}
+
+void main() {
+  group('measure screen', () {
+    testWidgets('shows live lux and verdict', (tester) async {
+      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+
+      final device = FakeDeviceLight();
+      final meter = MeterController(device);
+      await tester.pumpWidget(App(meter: meter));
+      device.emitSensor(420);
+      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
+
+      expect(find.textContaining('420 lux'), findsOneWidget);
+      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
+    });
+  });
+}
+```
+
+| เรื่อง | ทำอย่างนี้ |
+|---|---|
+| ชั้น test | unit (`test`) สำหรับตรรกะล้วน · widget (`testWidgets`) สำหรับหน้าจอ — เป็นชั้นกลางหลัก · E2E บนเครื่อง: `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
+| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง · ลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
+| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง · มี Timer หรือ animation วนตลอด → ไม่มีวันนิ่ง (หมดเวลา) ใช้ `pump(duration)` |
+| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เอง ก่อนบรรทัดสุดท้าย — Timer ที่ยังวิ่งอยู่ตอนจบทำให้ test ล้ม |
+| จอเล็ก | test แยกหนึ่งชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
+| SnackBar บังปุ่ม | widget test จับได้ — กดปุ่มล่างหลัง SnackBar ขึ้นแล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
+| golden test | ไม่บังคับ · ภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
+| coverage | `flutter test --coverage` → `coverage/lcov.info` |
+| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิดหนึ่งจุด รันแล้วต้องแดง แล้วคืนค่า |
+
+```bash
+flutter test                              # ทั้งหมด
+flutter test test/features/measure        # โฟลเดอร์เดียว
+flutter test --coverage
+flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+```
+
+---
+
 ## ตารางเทียบ
 
-| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) |
-|---|---|---|---|---|
-| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` |
-| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` |
-| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` |
-| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` |
-| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — |
-| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` |
-| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` |
+| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
+|---|---|---|---|---|---|
+| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
+| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
+| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
+| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
+| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
+| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
+| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
 
 
 ---
 
 # skill: e2e-testing-patterns
 
-Use when designing end-to-end (E2E) tests, choosing testing frameworks (Playwright, Cypress), structuring test suites, dealing with flaky tests, or setting up CI for E2E. Covers test pyramid, page object pattern, test data strategy, and parallelization.
+Use when designing end-to-end tests (Playwright, Cypress), structuring suites, fixing flaky tests or running E2E in CI. To give an agent a way to run and check the app itself, use app-verifier-setup.
+
+> **ใน A-Team:** ให้ agent รันแอปและพิสูจน์ผลเองใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) · skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 
 # End-to-End Testing Patterns
 
@@ -786,438 +1556,3 @@ async function login(page, user) {
 | Assert text | `expect(page.getByText(...))` | `cy.contains(...)` |
 | Wait for response | `page.waitForResponse(...)` | `cy.intercept(...).as(...)` |
 | Screenshot | `page.screenshot()` | `cy.screenshot()` |
-
-
----
-
-# skill: targeted-fix
-
-Use when feedback says something is wrong — an error message, stack trace, failing test, regression, broken-output screenshot, or that is not what I asked for. Finds the exact spot causing the problem, makes the smallest correct fix, and verifies it without touching unrelated code.
-
-# Targeted Fix
-
-Feedback came in. Find the one spot that's wrong, fix exactly that, prove it.
-Resist the urge to rewrite, "improve while you're here", or guess.
-
-## The rule
-
-Fix what was reported — no more, no less. A fix that also changes three other
-things is a new bug waiting to happen and a diff nobody can review.
-
-## Steps
-
-1. **Pin the symptom.** Quote the exact error / failing test / wrong output. Don't paraphrase — exact text points to the exact line.
-2. **Reproduce.** Find the smallest input that triggers it. Can't reproduce? Say so and ask for the missing piece (input, env, steps) before changing code.
-3. **Locate the root cause.** Trace from symptom to line. Stop at the cause, not the first suspicious line.
-4. **Confirm intent.** Restate in one line what "correct" means here. If the feedback is ambiguous ("it's wrong"), ask what they expected — don't guess.
-5. **Smallest fix.** Change only what's needed. Match the surrounding style.
-6. **Prove it.** Re-run the failing case → it passes. Re-run nearby cases → still pass. Show the before/after of the one thing that changed.
-
-## Locate fast
-
-- Stack trace: read bottom-up (your code first), not top-down (framework first).
-- Grep the literal error string — it usually appears exactly once.
-- "Worked before?" → check the last change to this path (`git log -p <file>`, `git blame <line>`).
-- Use scope clues to cut the search: "only large payloads", "only in prod", "only after login" each narrow it hard.
-
-## Don't
-
-- Don't patch the symptom and leave the cause (a `try/except` that swallows the real error).
-- Don't refactor unrelated code inside a fix.
-- Don't widen scope: "fix the date bug" ≠ "replace the date library".
-- Don't say it's fixed without re-running the exact failing case.
-
-## Output
-
-`Cause: [the one reason]. Fix: [what changed]. Verified: [the case that now passes].`
-
-Keep the diff small enough to read on one screen. If it isn't, the fix grew too
-big — split it.
-
-## Pairs with
-
-- `lazy-coding` — the fix is the smallest correct diff.
-- `code-review-checklist` — confirm the fix introduced nothing new.
-
-
----
-
-# skill: logging-standards
-
-Use when writing or reviewing code that records what it did. Defines one log line format shared across .NET, Node, Python and Angular, with rules for levels, correlation ids, rotating files, retention, secret redaction and log-injection safety. Ships tested drop-in loggers. Load it before the first log line.
-
-# Logging Standards
-
-> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
-> ถ้าบรรทัดนั้นไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" — อย่าเขียนมันลงไป
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
-- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบ log / ระดับ log
-- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ต้องการ metrics/tracing (Prometheus, OpenTelemetry) → คนละเรื่องกับ log
-- endpoint สุขภาพของ service → `web-service-essentials`
-
----
-
-## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
-
-```
-2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
-└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
-```
-
-| ส่วน | กฎ |
-|---|---|
-| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
-| level | ชิดซ้าย กว้าง 5 (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัว ในวงเล็บเหลี่ยม · ไม่มีให้ใส่ `[------]` |
-| source | โมดูล/คลาสที่ log ไม่ใช่ชื่อไฟล์ |
-| ข้อความ | ประโยคเดียว ไม่มีตัวแปรฝังใน string |
-| context | `key=value` คั่นด้วยช่องว่าง · ค่ามีช่องว่างให้ครอบ `"` |
-
-**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "cid=a3f9c1b2"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้า Loki/ELK ค่อยเปิด JSON เพิ่มอีก sink หนึ่ง — **อย่าทิ้งไฟล์ข้อความ**
-
-**หนึ่ง event = หนึ่งบรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
-
----
-
-## 2 · ระดับ log — เขียนให้ตรงความหมาย
-
-| ระดับ | ใช้เมื่อ | ตัวอย่าง |
-|---|---|---|
-| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
-| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
-| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
-| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
-| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
-| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
-
-> ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
-> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
-
-ค่าเริ่มต้น: dev = `DEBUG` · production = `INFO` · ปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
-
----
-
-## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
-
-หนึ่ง request = หนึ่ง id ตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นแบก id เดียวกัน
-
-```
-Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
-                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
-```
-
-- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้าง (`uuid v4` ตัด 8 ตัวแรก)
-- **ส่งกลับใน response header เสมอ** — ลูกค้าแจ้งปัญหาแล้วส่ง id มาให้ ตามได้ทันที
-- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
-- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
-  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
-
----
-
-## 4 · ไฟล์ log
-
-```
-logs/
-  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
-  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
-  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
-```
-
-- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
-- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่งั้นดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
-- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
-- `logs/` ต้องอยู่ใน `.gitignore`
-
----
-
-## 5 · สิ่งที่ห้ามลง log เด็ดขาด
-
-รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
-**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
-
-ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction ตรวจ**ชื่อคีย์แบบ contains** (`userPassword`, `pwd`,
-`accessToken` โดนหมด) แล้วแทนด้วย `***` ทำงานลึกถึง 4 ชั้นของ object
-
-> 🚨 **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
-> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาตัด `\r\n\t` ทิ้งทุกค่า
-
----
-
-## 6 · โค้ดที่พร้อมใช้
-
-| ไฟล์ | สแต็ก | สถานะ |
-|---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✅ รันทดสอบแล้ว |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✅ รันทดสอบแล้ว |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
-
-```js
-// Node
-const { withCorrelation } = require('./logger.node');
-const log = withCorrelation(req.id).child({ source: 'orders' });
-log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
-log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
-```
-
-```python
-# Python
-from logger_py import setup_logging, get_logger, set_correlation_id
-setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
-log = get_logger("orders")
-log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
-log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
-```
-
----
-
-## 7 · ตรวจงาน
-
-```bash
-# ไม่มี print/console.log หลงเหลือในโค้ด production
-grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
-  --include="*.js" --include="*.cs" --include="*.py" | grep -v test
-
-# log ที่ออกมาอ่านได้จริงและ grep ได้
-tail -f logs/app-*.log
-grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
-```
-
-- [ ] ทุกบรรทัดมี เวลา+timezone / level / cid / source ครบ
-- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
-- [ ] ไม่มีความลับหลุด — ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
-- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
-- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
-- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
-- [ ] `logs/` อยู่ใน `.gitignore`
-- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- ❌ **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อยหนึ่งบรรทัด
-- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดที่จัดการจริง
-- ❌ **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
-  ใช้ข้อความคงที่ + context แทน
-- ❌ **log ในลูปที่วนหลายพันรอบ** — สรุปทีเดียวตอนจบ
-- ❌ **timestamp ไม่มี timezone** — server UTC, คนไทยอ่าน +07:00 เทียบเวลาผิด 7 ชั่วโมง
-- ❌ **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
-
----
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| endpoint health/ping/version | `web-service-essentials` |
-| เขียน test ให้ครอบคลุม | `testing-standards` |
-| runbook ตอน incident | `incident-runbook-template` |
-| postmortem หลังเหตุ | `postmortem-template` |
-
-
-## reference: per-stack.md
-
-# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
-
-> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
-> `assets/logger_py.py` ที่รันจริงแล้ว) เป็นการตั้งค่ามาตรฐานของไลบรารีแต่ละตัว —
-> ให้ build ครั้งแรกแล้วเทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
-
----
-
-## สารบัญ
-
-1. [.NET / C# — Serilog](#net--c--serilog)
-2. [Angular / frontend](#angular--frontend)
-3. [ตารางเทียบ](#ตารางเทียบ)
-
----
-
-## .NET / C# — Serilog
-
-```bash
-dotnet add package Serilog.AspNetCore
-dotnet add package Serilog.Sinks.File
-```
-
-`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
-
-```json
-{
-  "Serilog": {
-    "MinimumLevel": {
-      "Default": "Information",
-      "Override": {
-        "Microsoft.AspNetCore": "Warning",
-        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
-      }
-    }
-  }
-}
-```
-
-`Program.cs`:
-
-```csharp
-using Serilog;
-using Serilog.Events;
-
-const string LineTemplate =
-    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
-    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context}{NewLine}{Exception}";
-
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "------")   // ค่าตั้งต้นเมื่อไม่มี request
-    .WriteTo.Console(outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 30,
-        fileSizeLimitBytes: 100 * 1024 * 1024,
-        rollOnFileSizeLimit: true,
-        outputTemplate: LineTemplate)
-    .WriteTo.File(
-        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
-        restrictedToMinimumLevel: LogEventLevel.Error,
-        rollingInterval: RollingInterval.Day,
-        retainedFileCountLimit: 90,
-        outputTemplate: LineTemplate)
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-```
-
-> `{Level:u5}` = ตัวพิมพ์ใหญ่กว้าง 5 → `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` = ไม่ครอบ string ด้วย `"` ซ้ำซ้อน
-
-### Middleware correlation id
-
-```csharp
-public sealed class CorrelationIdMiddleware(RequestDelegate next)
-{
-    public const string Header = "X-Request-Id";
-
-    public async Task Invoke(HttpContext ctx)
-    {
-        var cid = ctx.Request.Headers[Header].FirstOrDefault();
-        if (string.IsNullOrWhiteSpace(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];
-
-        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
-
-        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", cid))
-            await next(ctx);
-    }
-}
-```
-
-### เขียน log
-
-```csharp
-// ✅ ข้อความคงที่ + ตัวแปรเป็น property — group log ได้ ค้นหาได้
-_logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ {OrderId} {Ms}", orderId, sw.ElapsedMilliseconds);
-
-// ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
-_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
-```
-
-### ปิดข้อมูลลับ
-
-Serilog ไม่ redact ให้อัตโนมัติ — ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
-ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
-หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
-
----
-
-## Angular / frontend
-
-หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญต้องส่งขึ้น backend
-
-```ts
-// core/logger.service.ts
-import { Injectable, inject, isDevMode } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
-@Injectable({ providedIn: 'root' })
-export class LoggerService {
-  private http = inject(HttpClient);
-  private buffer: unknown[] = [];
-
-  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
-    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
-    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (isDevMode() && level === 'INFO')) return;
-
-    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
-    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
-  }
-
-  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
-  flush() {
-    if (!this.buffer.length) return;
-    const batch = this.buffer.splice(0);
-    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
-  }
-
-  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
-  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
-  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
-  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
-}
-```
-
-จับ error ที่หลุดทุกตัว:
-
-```ts
-// core/global-error.handler.ts
-@Injectable()
-export class GlobalErrorHandler implements ErrorHandler {
-  private log = inject(LoggerService);
-  handleError(err: unknown) {
-    const e = err as Error;
-    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
-    if (isDevMode()) console.error(err);
-  }
-}
-// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
-```
-
-ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
-
-```ts
-export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
-  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
-```
-
-**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
-- จำกัดขนาด body และ rate limit — ไม่งั้นกลายเป็นช่องให้ยิง log ถล่ม
-- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
-- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** ตัด `\r\n` ทุกค่าเหมือนกับ log ปกติ
-
----
-
-## ตารางเทียบ
-
-| เรื่อง | .NET | Node | Python | Angular |
-|---|---|---|---|---|
-| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
-| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
-| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
-| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
-| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |

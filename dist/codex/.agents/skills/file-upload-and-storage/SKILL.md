@@ -1,6 +1,6 @@
 ---
 name: file-upload-and-storage
-description: Use when users upload files or the system stores and serves them. Covers validating type by content rather than extension, size limits on the server, where files belong, names that cannot collide or escape the directory, virus scanning, private files served through short-lived links, image resizing, and deletion without orphans.
+description: Use when users upload files or the system stores and serves them. Content-based type checks, server size limits, safe names, virus scanning, private files via short-lived links, resizing, deletion without orphans.
 ---
 
 # รับไฟล์อัปโหลดและการเก็บไฟล์

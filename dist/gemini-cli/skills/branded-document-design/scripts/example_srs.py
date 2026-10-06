@@ -8,7 +8,13 @@ doc = BrandDoc()
 doc.cover(
     "เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
     subtitle="ระบบ Apps Track — Project Control & Monitor",
-    meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
+    eyebrow="Square Tech Solutions",
+    meta_rows=[
+        ("เวอร์ชัน", "3.5"),
+        ("ปรับปรุง", "19 กรกฎาคม 2026"),
+        ("สถานะ", "ฉบับร่างเพื่อทบทวน (Draft for review)"),
+        ("ผู้จัดทำ", "ทีมพัฒนา Square Tech Solutions"),
+    ],
     note="v3.5: เพิ่มไอคอน Apps Track บนหน้าปกและระบุไฟล์แนบ",
 )
 

@@ -1,6 +1,6 @@
 ---
 name: prior-art-review
-description: Use before building something that might already exist — a library, a model, a product, or an approach for a thesis. Compares candidates on what actually decides the outcome rather than on feature lists, and ends in one of four decisions — adopt, fork, build our own, or drop it. Always checks the licence and whether the project is maintained.
+description: Use before building something that may already exist (library, model, product, thesis approach). Compares candidates on what decides the outcome and ends in adopt, fork, build or drop. Always checks licence and maintenance.
 ---
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ

@@ -1,1195 +1,908 @@
-# skill: config-and-secrets
+# skill: docker-sandbox
 
-Use when a project needs settings that differ between environments, or holds anything that must not be committed — connection strings, keys, certificates. Separates config from secrets, validates every setting at start-up, names variables consistently, picks a secret store, makes rotation possible, and gives the order of steps for a leaked credential.
+Use when a project should run in its own Docker container instead of on the host (installs, builds, tests, dev servers, unattended agents) or the user says sandbox or container. One sandbox per project; the host commands.
 
-# Config และ Secret
+# docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
-> **กฎสองข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment — ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ไม่เคยอยู่ใน git · ไม่เคยอยู่ใน log · ไม่เคยอยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
+> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
+> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
+> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+
+ใช้คู่กับ [`agent-team`](../agent-team/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+
+---
+
+## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+
+- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`) · ตั้งครั้งเดียวตอน `up` แรก แล้วเก็บไว้ในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน · prefix `sandbox-agent-` บอกว่าเป็นห้องที่ agent สร้าง ไม่ใช่คนตั้ง · วันที่สร้างเก็บซ้ำใน label `sqt.created` · ฐานข้อมูล cache หรือเบราว์เซอร์ของโปรเจกต์นั้น เป็น service เพิ่มใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกเป็นห้องใหม่
+- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว · image ของแต่ละโปรเจกต์มีแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
+- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ · จบงานแล้ว `stop` · เลิกงานทั้งวัน `stop-all`
+- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกัน แล้ว `destroy` ทิ้งทันทีที่เลือกได้
+- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — ของที่ติดตั้งชนกัน · โปรเจกต์หนึ่งพังลามอีกโปรเจกต์ · ล้างทีละโปรเจกต์ไม่ได้
+
+## 2 · สองแบบ เลือกตามงาน
+
+| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
+|---|---|---|
+| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
+| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
+| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
+| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
+| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางพร้อมกัน (ห้องละทาง) |
+
+เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
+
+---
+
+## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
+
+1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server · ไม่เห็น บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
+2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/`
+3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์) — `INSTALL_DOTNET=1` สำหรับ .NET · เพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้ · **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน · ฐานข้อมูลทดสอบเพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
+4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
+5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) · โปรเจกต์แรกของเครื่องจะ build image ฐานก่อน นานราว 5–15 นาที โปรเจกต์ถัดไปเร็วขึ้นมาก
+6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` · โปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` หนึ่งครั้ง · โหมด `-Locked` ต้องเห็นบรรทัด `check passed`
+7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
+
+**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้อง · unit test 15/15 · e2e บน Chromium 14/14 ผ่านในห้อง · บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว (PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน) · พังบนเครื่องอื่นให้ใช้ playbook `bug-fix` กับตัวสคริปต์
+
+**พอร์ต** — `up` หาพอร์ตว่างเองเริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน · ในห้องมีตัวแปร `APP_PORT` และ `PORT` เป็นค่านั้น และ `HOST=0.0.0.0` · แอปต้องฟังที่ `HOST` (ถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง) · ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม แล้วเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
+
+**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด · โปรเจกต์ที่ล็อก Playwright รุ่นอื่นให้รัน `npx playwright install chromium` ในห้องหนึ่งครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` ระบบมีให้แล้ว)
+
+---
+
+## 4 · ใช้ทุกวัน
+
+| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+|---|---|
+| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
+| ให้ Claude Code ทำงานในห้องเต็มที่ | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้) |
+| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
+| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
+| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
+| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
+| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+
+**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
+- install · build · test · dev server · migration · สคริปต์ใด ๆ → ผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
+- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
+- ห้องหยุดอยู่ → `up` เองได้ (ย้อนได้) · ห้องพังแก้ไม่ได้ → `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อน reset
+
+---
+
+## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+
+| แบบ | ใช้เมื่อ | วิธี |
+|---|---|---|
+| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
+| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` · Playwright ในห้องขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
+| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+
+- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
+- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
+- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+
+## 6 · CAPTCHA
+
+- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น · ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ให้ผ่านทุกครั้ง (reCAPTCHA · hCaptcha · Cloudflare Turnstile มีทั้งหมด ดูค่าจากเอกสารผู้ให้บริการ) หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`) · **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่การตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
+- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) · เจอ CAPTCHA = หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ · ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
+- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบคือการฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+
+## 7 · ในห้องทำได้เต็มที่
+
+ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+
+เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
+- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
+- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
+- push ขึ้น remote · deploy
+- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+
+---
+
+## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+
+| ห้าม | เพราะ |
+|---|---|
+| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
+| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
+| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
+| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
+| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
+| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
+
+เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+
+---
+
+## 9 · หมายเหตุ Windows
+
+- Docker Desktop ใช้ WSL 2 · ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปช้ากว่าไฟล์ใน volume — build หรือ test ช้ามาก ให้ใช้ `-Isolated` (วัดจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
+- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ · ใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
+- รัน `sandbox.ps1` ไม่ได้ → `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
+- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+
+## เชื่อมกับ skill อื่น
+
+- [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) — ผู้แข่งแต่ละตัวได้ห้อง isolated ของตัวเอง (`-Name <โปรเจกต์>-a1` …)
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
+- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
+- playbook `housekeeping` ของ `agent-team` — เก็บกวาดห้องและ image เก่า
+
+
+---
+
+# skill: principle-fix-root-cause
+
+Use when debugging or fixing anything broken (error, crash, wrong value, flaky test, slow page). Reproduce first, ask why until the cause, fix there instead of a null check, retry or catch that hides the symptom.
+
+# principle · fix root cause — แก้ที่ต้นเหตุ
+
+> การดัก null ที่หน้าจอ ทำให้ error หายไปจากสายตา แต่ข้อมูลผิดยังไหลอยู่ในระบบ
+
+## กฎ
+
+1. **ทำให้เกิดซ้ำก่อนแก้** — ทำซ้ำไม่ได้ = ยังไม่รู้ว่าแก้อะไร · ใช้ skill ตรวจแอปของโปรเจกต์ หรือคำสั่งที่รันได้
+2. **ถาม "ทำไม" จนถึงจุดที่ค่าผิดเกิดขึ้นครั้งแรก** — ไม่ใช่จุดที่มันระเบิด
+3. **แก้ที่จุดนั้น** แล้วรันกรณีเดิมให้ผ่าน
+
+## ตัวอย่าง
+
+| อาการ | แก้ที่อาการ (ห้าม) | แก้ที่ต้นเหตุ |
+|---|---|---|
+| หน้ารายงานพังเพราะ `date` เป็น null | `if (date) ...` ที่หน้าจอ | หาว่าทำไม import ไม่ใส่วันที่ → แก้ parser ที่อ่านปี พ.ศ. ไม่ได้ |
+| test ล้มบ้างผ่านบ้าง | ใส่ retry 3 ครั้ง | หาว่าแข่งกันที่ไหน → รอสถานะที่ถูกแทนการรอเวลา |
+| API ช้า | เพิ่ม cache | วัดก่อนว่าช้าที่ไหน → query ไม่มี index |
+
+## ข้อยกเว้น
+
+แก้ชั่วคราวที่อาการได้ เมื่อระบบจริงกำลังเสียหายและต้องหยุดเลือดก่อน — แต่ต้องลง `decision-log` ว่าเป็นการแก้ชั่วคราว และเปิดงานแก้ต้นเหตุต่อทันที
+
+## ใช้คู่กับ
+
+`targeted-fix` (ขั้นตอนแก้แบบเล็กที่สุด) · playbook `bug-fix` ของ [`agent-team`](../agent-team/SKILL.md)
+
+
+---
+
+# skill: principle-build-a-tool-not-handwork
+
+Use when work has a mechanical part (same edit in many files, checking every screen, migrating data, repeated documents, verifying a claim). Build the script, codemod or checker instead of doing it by hand.
+
+# principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
+
+> งานมีสองปลาย — ปลายที่ต้องใช้วิจารณญาณ กับปลายที่เป็นกลไกล้วน
+> ปลายกลไกไม่ต้องให้ agent คิดวิธีใหม่ทุกครั้ง เขียนเป็นโปรแกรมครั้งเดียว แล้วเก็บสมองไว้กับส่วนที่ต้องตัดสิน
+
+## เมื่อไรต้องทำเครื่องมือ
+
+| สัญญาณ | เครื่องมือ |
+|---|---|
+| แก้รูปแบบเดียวกันเกิน 10 จุด | codemod · สคริปต์แก้ผ่าน syntax tree (AST) · `sed` ที่ทดสอบแล้ว |
+| ตรวจทุกหน้าจอหรือทุกไฟล์ | สคริปต์วนตรวจที่พิมพ์ตารางผล |
+| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup`) |
+| ย้ายข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
+| ข้ออ้างว่า "ทุกที่ทำแบบนี้แล้ว" | คำสั่ง grep หรือสคริปต์ที่พิสูจน์ได้ |
+| ทำงานเดิมเป็นครั้งที่สาม | ทำเป็นคำสั่งหรือ skill |
+
+## กฎของเครื่องมือ
+
+- **รันซ้ำได้ผลเดิม** — รันสองครั้งต้องไม่พัง และไม่แก้ซ้ำซ้อน
+- **พิมพ์ผลที่ตรวจได้** — นับจำนวนที่แก้ · รายการที่ข้าม · ที่ล้ม
+- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding`)
+- **เก็บให้ถูกที่** — ใช้ครั้งเดียวไว้ `_to_delete/` · ใช้ซ้ำไว้ `scripts/` พร้อมบรรทัดเดียวใน README ว่ารันเมื่อไร
+- **skill เหลือแค่คำอธิบายบาง ๆ** — ขั้นตอนตายตัวอยู่ในสคริปต์ SKILL.md บอกแค่เมื่อไรเรียกและอ่านผลอย่างไร
+
+## ไม่ต้องทำเมื่อ
+
+งานแก้ 2–3 จุดที่ต่างกันจริง — เขียนสคริปต์ใช้เวลามากกว่าแก้เอง
+
+
+---
+
+# skill: app-verifier-setup
+
+Use when a project has no scripted way for an agent to run the app and see the result, or before the first feature or fix on a new project. Builds a project-local verify skill so agents prove work on the real app.
+
+# app-verifier-setup — ให้ agent มีมือและตา
+
+> ถ้า agent มองไม่เห็นผลงานตัวเอง มันวนปรับปรุงไม่ได้ และคนจะกลายเป็น "คนส่งข้อมูล" ระหว่าง agent กับหน้าจอ
+> skill นี้สร้างเครื่องมือครั้งเดียว ให้ agent ทุกตัวหลังจากนี้ใช้ซ้ำ
+
+**ผลลัพธ์:** สองชิ้น — สคริปต์อยู่กับ test ของโปรเจกต์ · skill เป็นแค่คู่มือสั้น ๆ ให้ agent
+
+```
+<โปรเจกต์>/
+├─ <project-name>/test/e2e/verify.*         สคริปต์ขับแอปจริง เปิดและปิดแอปเอง (อยู่ในโฟลเดอร์โค้ด ดู project-bootstrap)
+│                                           รายการฟีเจอร์และ check อยู่ในไฟล์นี้ที่เดียว (แผนที่ฟีเจอร์)
+├─ .claude/skills/verify-<โปรเจกต์>/SKILL.md   รันอย่างไร · อ่านผลอย่างไร · ข้อห้าม (ที่ราก — ที่ Claude Code เปิด)
+└─ _to_delete/verify-runs/                  หลักฐานแต่ละรอบ — สคริปต์หา path จากที่อยู่ของตัวเอง ไม่ขึ้นกับโฟลเดอร์ที่รัน
+```
+
+(Codex · Gemini ใช้ `.agents/skills/` · `skills/` แทน `.claude/skills/`) · ตัวอย่างที่ทำจริงแล้ว: โปรเจกต์ `calculator-demo` (เว็บ) · แอป Flutter Android `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node ขับ `adb` สรุปไว้ใน [`references/android-native.md`](references/android-native.md))
+
+**ทำไมไม่แยกขั้นตอนเป็นไฟล์ร้อยแก้ว** — ลองแล้วในโปรเจกต์ตัวอย่าง ขั้นตอนในไฟล์ `.md` กับใน script ไม่ตรงกันตั้งแต่รอบแรก · ให้ข้อมูลในสคริปต์เป็นแหล่งเดียว แล้ว skill ชี้ไปหา
+
+---
+
+## ขั้นตอน
+
+1. **หาวิธีรันที่มีอยู่แล้ว** — README · `package.json` · `Makefile` · `docker-compose` · launch config (`.vscode/launch.json`) · `pubspec.yaml` (Flutter) · `build.gradle(.kts)` / `gradlew` (Android) · ใช้ของเดิม ไม่สร้างใหม่ถ้ามี
+2. **เลือกวิธีขับตามชนิดแอป**
+
+   | ชนิด | ขับด้วย | อ่านผลจาก |
+   |---|---|---|
+   | เว็บ | Playwright (Chromium ที่ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่ถ้ามี) | ภาพหน้าจอ · DOM · console · network |
+   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ WinAppDriver หรือ pywinauto | ภาพหน้าจอ · log |
+   | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
+   | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
+   | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
+   | มือถือ native · Flutter (Android) | สคริปต์ Node/Python เรียก `adb` + `uiautomator dump` (แบบ Lumio) · หรือ `integration_test` ของ Flutter · หรือ Maestro — Playwright ขับ APK ไม่ได้ | ภาพ `adb exec-out screencap -p` · ข้อความ/Semantics label จาก `uiautomator` · `dumpsys` · `logcat` |
+
+   - โปรเจกต์มี `.sandbox/` → ขับเบราว์เซอร์ในห้อง · headless เป็นค่าเริ่ม · อยากให้คนดูได้ เปิด `up -Browser` (ดู [`docker-sandbox`](../docker-sandbox/SKILL.md) ข้อ 5) · Android emulator รันใน Docker บน Windows ไม่ได้ (ต้องมี KVM) → รัน emulator บนเครื่อง host แล้วบอกในรายงาน
+   - หน้าที่มี CAPTCHA → ใช้ค่าทดสอบของผู้ให้บริการหรือปิดใน environment ทดสอบ ห้ามเขียนสคริปต์แก้ CAPTCHA
+   - แอปที่อ่าน hardware (sensor · กล้อง · GPS) → ป้อนค่าที่รู้ล่วงหน้า: emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build · ติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` — ความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ยังไม่ได้รันบนเครื่องจริงให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
+
+3. **เขียน `test/e2e/verify.*`** — เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) · ใส่ข้อมูลทดสอบ (seed) · รอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ไม่ขึ้นใน 10 วินาที = ล้ม · มือถือ: แยกเวลา build · boot emulator · เปิดแอป · ต่อ check — ดู reference) · ปิดแอปเมื่อจบเสมอ · รันซ้ำได้ผลเดิม ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
+4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** — ไล่จากเมนู · route · command list · SRS · หนึ่งกลุ่มต่อฟีเจอร์ หนึ่งบรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) · อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาดหนึ่งกรณีต่อฟีเจอร์ · **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ · ผลพิมพ์ `PASS/FAIL` พร้อม expected กับ actual
+5. **สคริปต์ต้องไม่ผ่านลอย ๆ** — ชื่อฟีเจอร์ที่ไม่มีจริง → exit 1 · แอปไม่ขึ้น → exit 1 · ไม่มี check ไหนได้รัน → exit 1 (ตรวจศูนย์รายการคือพัง ไม่ใช่ผ่าน)
+   - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นผ่านลอย ๆ · รอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
+   - **อ่านหน้าจอแล้วต้องรู้ว่าสด** — ลบไฟล์ผลเก่าก่อนอ่านใหม่ · กดเมื่อตำแหน่งเป้าหมายนิ่งสองรอบติด · อ่านหน้าจอไม่ได้เพราะแอปวาดไม่หยุด = บั๊กของแอป ไม่ใช่ของสคริปต์
+6. **พิสูจน์ว่าสคริปต์จับของผิดได้** — แก้แอปให้ผิดหนึ่งจุดชั่วคราว รันแล้วต้อง `FAIL` แล้วค่อยคืนค่า
+7. **พิสูจน์ว่า skill ใช้ได้จริง** — ส่ง agent `qa-tester` ตัวใหม่ที่ไม่เคยเห็นโค้ด ให้ใช้แค่ skill นี้ทดสอบ 1 ฟีเจอร์ตั้งแต่เปิดแอปจนถ่ายภาพผล · ติดตรงไหน แก้ skill ตรงนั้น
+8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** — ภาพหน้าจอ · log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ลบได้เมื่อส่งงานแล้ว)
+
+## SKILL.md ของ verify skill ต้องมี
+
+- description บอกว่าใช้เมื่อ "ต้องพิสูจน์ว่าฟีเจอร์ใช้ได้บนแอปจริง · ทำบั๊กให้เกิดซ้ำ · ตรวจก่อนส่ง"
+- คำสั่งเริ่ม · หยุด · ข้อมูลทดสอบ (บัญชีทดสอบอยู่ไฟล์ไหน — **ห้ามใส่รหัสผ่านจริง**)
+- ลิงก์ไปแผนที่ฟีเจอร์
+- ข้อห้าม — ไม่แตะฐานข้อมูลจริง · ไม่เรียก API ภายนอกที่เสียเงินหรือส่งข้อความจริง
+
+## สิ่งที่ห้ามทำ
+
+| อย่าทำ | เพราะ |
+|---|---|
+| เขียนขั้นตอนทดสอบเป็นภาษาคนอย่างเดียว ไม่มีสคริปต์ | agent แต่ละตัวจะสร้างวิธีรันใหม่เองทุกครั้ง และแต่ละครั้งไม่เหมือนกัน |
+| ใส่ทุกฟีเจอร์ตั้งแต่วันแรก | แผนที่ใหญ่ที่ไม่ได้ทดสอบ เสียเร็วกว่าแผนที่เล็กที่ใช้ได้จริง |
+| ให้ verify skill ชี้ไปที่ระบบจริง | การตรวจจะกลายเป็นการแก้ข้อมูลลูกค้า |
+| บอกว่าเสร็จโดยไม่ได้ทำข้อ 7 | ยังไม่รู้ว่า agent ตัวอื่นใช้ได้หรือไม่ |
+
+## เชื่อมกับ skill อื่น
+
+- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — แก้เมื่อแอปเปลี่ยนจนแผนที่ไม่ตรง
+- `e2e-testing-patterns` — ถ้าจะยกขั้นตอนบางส่วนขึ้นเป็น test อัตโนมัติใน continuous integration (CI)
+- [`agent-team`](../agent-team/SKILL.md) — playbook `bug-fix` และ `feature` เรียกใช้ skill ที่สร้างจากที่นี่
+
+
+## reference: android-native.md
+
+# ขับแอป Android native / Flutter บน emulator
+
+> สรุปจากแอปจริง `Lumio - Light Meter` (Flutter · Android) — สคริปต์ที่รันผ่านแล้วคือ `lumio-light-meter/test/e2e/verify.mjs`
+> ค่าที่ระบุว่า "วัดแล้ว" มาจาก emulator บน Windows ที่ใช้ GPU แบบซอฟต์แวร์ เครื่องอื่นอาจเร็วกว่า
+
+## เลือกวิธีขับ
+
+| วิธี | ดีตรงไหน | ข้อจำกัด | ใช้เมื่อ |
+|---|---|---|---|
+| Node/Python เรียก `adb` + `uiautomator dump` | ไม่ต้องลงอะไรเพิ่ม · ขับ sensor และกล้องเสมือนได้ · ตรวจ `dumpsys` ได้ | อ่านหน้าจอ 3–4 วินาทีต่อครั้ง (วัดแล้ว) | ค่าเริ่ม — ทดสอบทั้งเส้นทาง hardware → native → Dart → จอ |
+| Flutter `integration_test` (`flutter test integration_test/`) | หา widget ด้วย `find` ได้ตรง · เร็ว | ป้อนค่า sensor จริงไม่ได้ ต้องใช้แหล่งข้อมูลปลอม · ตรวจสถานะระบบ (กล้องถูกปล่อยไหม) ไม่ได้ | ลำดับหน้าจอยาว ๆ ที่ไม่แตะ hardware |
+| Maestro | เขียน flow เป็น YAML อ่านง่าย | ต้องติดตั้งเพิ่ม · ยังไม่ได้ทดสอบในชุดนี้ | ทีมมี Maestro อยู่แล้ว |
+
+## โครงสคริปต์ (แบบ verify.mjs)
+
+1. **ตรวจก่อนเริ่ม** — มีเครื่องต่ออยู่ (`adb devices`) · มี APK (`build/app/outputs/flutter-apk/app-debug.apk`) · ไม่ครบ → exit 1 พร้อมบอกคำสั่งที่ต้องรัน
+2. **ติดตั้ง** `adb install -r <apk>` แล้ว **เริ่มสะอาดทุกฟีเจอร์** `adb shell pm clear <package>` → `adb shell am start -n <package>/.MainActivity` → รอข้อความหน้าแรก
+3. **อ่านหน้าจอ** — `rm -f /sdcard/ui.xml` → `uiautomator dump /sdcard/ui.xml` → `exec-out cat` → ดึง `text` และ `content-desc` พร้อมจุดกึ่งกลางจาก `bounds`
+4. **กด** `adb shell input tap x y` · **ป้อนค่า** `adb emu sensor set light <lux>` · **ถ่ายภาพ** `adb exec-out screencap -p > shot.png`
+5. **ผล** `PASS/FAIL` พร้อม expected กับ actual · exit 0 เฉพาะเมื่อมี check ได้รันอย่างน้อยหนึ่งข้อและผ่านทั้งหมด
+
+## กฎที่ได้จากการรันจริง
+
+| เรื่อง | ทำอย่างนี้ | เพราะ |
+|---|---|---|
+| ข้อความใน Flutter | ใส่ `Semantics(label: ...)` ให้ค่าที่ต้องตรวจ | label ขึ้นเป็น `content-desc` ใน `uiautomator dump` — ได้ทั้งการตรวจและผู้ใช้โปรแกรมอ่านจอ |
+| ไฟล์ dump เก่า | ลบ `/sdcard/ui.xml` ก่อน dump ทุกครั้ง | dump ล้มแล้ว**ไม่เขียนทับ**ไฟล์เดิม จะอ่านได้หน้าจอเก่าโดยไม่รู้ตัว |
+| "could not get idle state" | ถือเป็นบั๊กของแอป แก้ที่แอป | แอปวาดใหม่ตลอด (Lumio วาด 5 ครั้ง/วินาทีทั้งที่ค่าไม่เปลี่ยน) — เปลืองแบตและ TalkBack พูดซ้ำ · แก้โดยแจ้ง UI เมื่อค่าที่แสดงเปลี่ยนจริง (sensor ที่สั่น: เปลี่ยนเกิน 1 %) ค่ารองที่ค่อย ๆ ไหลให้อัปเดตราว 1 วินาทีครั้ง |
+| ตำแหน่งที่ขยับ | กดเมื่ออ่านสองครั้งติดได้ตำแหน่งเดียวกัน | dialog เลื่อนขึ้นตอนคีย์บอร์ดเปิด กดตำแหน่งเก่าจะโดนฉากหลังแล้ว dialog ปิด (น่าจะเป็นต้นเหตุ flake ที่เหลือหนึ่งครั้ง — ยังไม่ได้ตรวจซ้ำ) |
+| สิทธิ์ | `adb shell pm grant <package> android.permission.CAMERA` ก่อน check ที่ไม่ได้ทดสอบหน้าขอสิทธิ์ | หน้าต่างขอสิทธิ์ของระบบไม่ใช่สิ่งที่ check นั้นตรวจ |
+| check "ปล่อยแล้ว" | ตรวจเงื่อนไขก่อน (กล้องถูกถืออยู่) → กด Home → วนตรวจ `dumpsys media.camera` หา "Active Camera Clients" ทุก 1 วินาที นานสุด 20 วินาที | emulator ปล่อยกล้อง 5–8 วินาที (วัดแล้ว) · ไม่ตรวจเงื่อนไขก่อน check จะผ่านลอย ๆ |
+| Git Bash | เรียก `adb` จาก Node/Python (`execFile`) หรือตั้ง `MSYS_NO_PATHCONV=1` | Git Bash แปลง `/sdcard/...` เป็น `C:/Program Files/Git/sdcard/...` |
+
+## ป้อนค่า hardware
+
+| สิ่งที่ป้อน | บน emulator | หมายเหตุ |
+|---|---|---|
+| sensor แสง | `adb emu sensor set light <lux>` — แอปได้ผ่าน `Sensor.TYPE_LIGHT` (วัดแล้ว) | sensor อื่นใช้ `adb emu sensor set <ชื่อ> <ค่า>` (ยังไม่ได้ตรวจทีละตัว) |
+| กล้อง | กล้องหน้าเสมือนส่งภาพพร้อม ISO และเวลาเปิดรับแสง (วัดแล้ว) | ภาพเป็นฉากสังเคราะห์ ตรวจได้แค่ว่า "มีค่าออกมา" ไม่ใช่ความแม่น |
+| อื่น ๆ หรือ emulator ทำไม่ได้ | แหล่งข้อมูลปลอมที่ compile เข้าเฉพาะ debug build | ห้ามหลุดไป release build |
+
+ติดป้ายทุก check: `emulator` = ทางเดินข้อมูลถูก · `เครื่องจริง` = ค่าถูก · check ที่ต้องใช้เครื่องจริงแต่ยังไม่ได้รัน ให้รายงานว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
+
+## เวลาและหน่วยความจำ
+
+| ขั้น | เวลาที่วัดได้ | ตั้ง timeout แยก |
+|---|---|---|
+| Gradle build ครั้งแรก (ดาวน์โหลด NDK · platform) | ~10 นาที | 20 นาที |
+| Gradle build ครั้งต่อไป | 1–2 นาที | 5 นาที |
+| boot emulator | หลายนาที (รอยืนยัน — ไม่ได้จับเวลา) | วนตรวจ `adb shell getprop sys.boot_completed` = 1 |
+| เปิดแอปจนเห็นหน้าแรก | ไม่กี่วินาที | 20 วินาที |
+| ต่อ check (รอค่าบนจอ) | 3–4 วินาทีต่อการอ่าน | 15–20 วินาที |
+
+- emulator + Gradle กินหน่วยความจำมาก — Claude Code เคยปิด emulator ที่รันเบื้องหลังเพราะหน่วยความจำไม่พอ
+- เปิด emulator ตัวเดียว · หยุด Gradle daemon หลัง build (`gradlew --stop` ใน `android/`)
+- emulator ถูกปิดกลางทาง → รายงานว่า "ยังไม่ได้รันซ้ำ" พร้อมรายชื่อ check ที่ไม่ได้รัน ห้ามลองใหม่เงียบ ๆ แล้วรายงานเฉพาะผลรอบหลัง
+- ไม่มี Docker: emulator ใน Docker ต้องมี KVM ซึ่ง Docker Desktop บน Windows ไม่มี → รันบน host
+
+
+---
+
+# skill: database-design
+
+Use when designing or changing a database schema (tables, columns, indexes, relationships, migrations). Naming, identifiers, data types, indexes, constraints, expand-and-contract migrations, multi-tenancy. Load before CREATE TABLE.
+
+# ออกแบบฐานข้อมูล
+
+> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
+> โค้ดผิดแก้วันนี้จบวันนี้ · schema ผิดอยู่กับมันสามปี พร้อมข้อมูลจริงอีกสิบล้านแถวที่ต้องย้ายตาม
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด → ข้อ 8 ทันที
+- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
+- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
+- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
+- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
 
 ## เมื่อไหร่ **ไม่** ใช้
 
 | โจทย์ | ไปที่ |
 |---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
+| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
+| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
+| ที่เก็บ connection string | `config-and-secrets` |
+| รัน migration ใน pipeline | `cicd-and-release` |
 
 ---
 
-## 1 · แยก config กับ secret ให้ออกก่อน
+## 1 · เลือกชนิดฐานข้อมูลก่อน
 
-| | config | secret |
+| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✅ ได้ | ❌ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
+| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✅ | ❌ ต้องทำมือ |
+| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ⚠️ ใช้คอลัมน์ JSON | ✅ |
+| ต้องการ transaction ข้ามหลายตาราง | ✅ | ⚠️ ได้แต่แพงกว่า |
+| รายงาน ผลรวม การวิเคราะห์ | ✅ | ❌ |
+| เขียนหนักมาก log/telemetry | ⚠️ | ✅ หรือใช้ time-series |
 
-> **ถ้าตัดสินใจไม่ได้ว่าอันไหน ให้ถือว่าเป็น secret** — ต้นทุนของการระวังเกินไปคือความรำคาญเล็กน้อย
-> ต้นทุนของการเดาผิดคือการที่กุญแจอยู่ในประวัติ git ตลอดไป
+> **ค่าเริ่มต้นคือ relational** — เลือก document เมื่อ**ตอบได้ว่าทำไม**
+> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แปลว่ายังไม่ได้ออกแบบ
+> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
 
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** — ถ้าลืมตั้งค่า ระบบต้องทำงานในแบบที่เข้มงวดที่สุด
-`DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
+**ผสมกันได้** — ใช้ relational เป็นหลัก แล้วเก็บของที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
+ตัวเลือกนี้ดีกว่าแยกฐานข้อมูลสองตัวเกือบทุกกรณี
 
 ---
 
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
+## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
 
-> 🚨 นี่คือข้อที่ให้ผลตอบแทนสูงที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตีสองที่ฟังก์ชันซึ่งนาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตอน deploy ซึ่งยัง rollback ได้
-
-```ts
-// Node — zod
-const Env = z.object({
-  NODE_ENV:      z.enum(['development', 'staging', 'production']),
-  PORT:          z.coerce.number().int().positive().default(3000),
-  DATABASE_URL:  z.string().url(),
-  JWT_SECRET:    z.string().min(32),
-  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
-});
-
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
-```
-
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
-
-**พิมพ์สรุป config ตอนบูต** — ชื่อค่าและค่าที่ไม่ใช่ secret
-ส่วน secret ให้พิมพ์แค่ว่า "มีค่าแล้ว" หรือสี่ตัวท้าย ไม่ใช่ค่าเต็ม
-
----
-
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
-
-```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
-
-APP_DB_HOST          APP_DB_PASSWORD
-APP_REDIS_URL        APP_SMTP_PASSWORD
-APP_FEATURE_NEW_CHECKOUT
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ❌ `APP_PROD_DB_HOST` |
-
----
-
-## 5 · `.env` และ `.env.example`
-
-| ไฟล์ | อยู่ใน git | หน้าที่ |
-|---|:--:|---|
-| `.env.example` | ✅ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ❌ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ❌ | **ไม่ควรมีไฟล์นี้เลย** — production ใช้ secret store |
-
-```bash
-# .gitignore
-.env
-.env.*
-!.env.example
-```
-
-```bash
-# .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # ❗ ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # ❗ สร้างด้วย: openssl rand -base64 48
-APP_LOG_LEVEL=debug
-```
-
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
-
-> 🚨 **`.env` ที่ `.gitignore` ไม่ทัน** — ถ้าไฟล์ถูก track ไปแล้วครั้งหนึ่ง
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
-
----
-
-## 6 · เก็บ secret ไว้ที่ไหน
-
-| สถานการณ์ | ใช้ | หมายเหตุ |
+| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
 |---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git · .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
+| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
+| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| primary key | `id` | `id` |
+| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` → `user_roles` |
+| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
+| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
+| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
+| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
 
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง · environment แยกกันสนิท ·
-ไม่มีบัญชีไหนอ่านได้ทุกอัน นอกจากบัญชีดูแลระบบที่มีการบันทึกการเข้าถึง
+**สิ่งที่ห้ามทำ:**
 
----
+- ❌ ใส่ชนิดข้อมูลในชื่อ — `name_varchar`, `is_active_bit`
+- ❌ ใส่ชื่อตารางนำหน้าคอลัมน์ — `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
+- ❌ ใช้คำสงวน — `user`, `order`, `group`, `key` ต้องใส่เครื่องหมายคำพูดทุกครั้ง ใช้ `users`, `orders` แทน
+- ❌ ตัวย่อที่คนอ่านไม่ออก — `cst_nm` ประหยัดได้ 8 ตัวอักษร แลกกับความสับสนสามปี
 
-## 7 · การหมุนเวียน (rotation)
-
-**ออกแบบให้รองรับตั้งแต่วันแรก** — ไม่ใช่ตอนที่ต้องหมุนจริง
-
-| ต้องมี | รายละเอียด |
-|---|---|
-| ใช้สองค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy รอบหนึ่ง และเขียนไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | งานที่ต้องจำเองคืองานที่ไม่มีใครทำ |
-
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้ตรวจ token เก่าที่ยังไม่หมดอายุได้
-ระหว่างที่ token ใหม่เซ็นด้วยกุญแจใหม่แล้ว
+> SQL Server ที่ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
+> **ความสม่ำเสมอสำคัญกว่ารูปแบบไหนถูก** — อย่าเปลี่ยนกลางทาง
 
 ---
 
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
+## 3 · คอลัมน์ที่ทุกตารางต้องมี
 
-1. **เพิกถอนค่าเดิมก่อน** — ปิดการใช้งาน key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีการใช้จากที่ไหนที่ไม่ใช่ของเรา
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
-5. บันทึกเหตุการณ์ → `postmortem-template`
-
-> 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** — การลบ commit ไม่ได้ทำให้กุญแจปลอดภัยขึ้นเลย
-> ใครก็ตามที่ fork หรือ clone ไปแล้ว รวมถึงตัวสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
-
----
-
-## 9 · อย่าให้ secret ไหลออกทางอื่น
-
-| ทางรั่ว | วิธีปิด |
-|---|---|
-| log | รายการคำที่ต้องปิดบัง → `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `traceId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build — ใช้ mount ตอนรัน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
-
----
-
-## 10 · config ของ frontend — ไม่มีอะไรลับ
-
-> 🚨 ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
-
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
-|---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
-
-**ต้องการเปลี่ยนค่าโดยไม่ build ใหม่** — ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ซึ่งล็อกค่าติดไปกับไฟล์ที่ได้
-
----
-
-## 11 · Anti-patterns
-
-- ❌ **connection string ในโค้ด** แม้จะเป็นของ dev — วันหนึ่งจะมีคนคัดลอกแบบแผนนี้ไปใช้กับ production
-- ❌ **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** — ใครเข้าเครื่องได้ก็อ่านได้ ไม่มีบันทึกว่าใครอ่าน
-- ❌ **secret เดียวกันทุก environment** — staging หลุดเท่ากับ production หลุด
-- ❌ **ส่ง secret ทางแชตหรืออีเมล** — อยู่ในนั้นตลอดไป และค้นเจอด้วย
-- ❌ **ไม่มี `.env.example`** — คนใหม่เสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
-- ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
----
-
-## 12 · ตัวย่อ
-
-- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
-- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
-- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
-- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
-- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
-- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
-- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
-| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
-| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
-| connection string ของฐานข้อมูล | `database-design` |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** → `references/per-stack.md`
-
-
-## reference: per-stack.md
-
-# วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
-
-1. [.NET / ASP.NET Core](#1--net--aspnet-core)
-2. [Node.js](#2--nodejs)
-3. [Python](#3--python)
-4. [Angular และ frontend ทั่วไป](#4--angular-และ-frontend-ทั่วไป)
-5. [Docker และ Kubernetes](#5--docker-และ-kubernetes)
-6. [เครื่องมือตรวจ secret ที่หลุดเข้า git](#6--เครื่องมือตรวจ-secret-ที่หลุดเข้า-git)
-7. [คำสั่งสร้างค่าสุ่มที่ปลอดภัย](#7--คำสั่งสร้างค่าสุ่มที่ปลอดภัย)
-
----
-
-## 1 · .NET / ASP.NET Core
-
-**บนเครื่องนักพัฒนา — เก็บนอกโฟลเดอร์โปรเจกต์ จึงไม่มีทางเข้า git:**
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
-dotnet user-secrets list
+```sql
+id           bigint / uuid   PRIMARY KEY
+created_at   timestamptz     NOT NULL DEFAULT now()
+updated_at   timestamptz     NOT NULL DEFAULT now()
 ```
 
-**ตรวจตอนบูต:**
+เพิ่มตามความจำเป็น:
 
-```csharp
-public sealed class AppOptions
-{
-    public const string Section = "App";
-
-    [Required, Url]                       public string ApiBaseUrl { get; init; } = "";
-    [Required, MinLength(32)]             public string JwtSecret  { get; init; } = "";
-    [Range(1, 300)]                       public int TimeoutSeconds { get; init; } = 30;
-}
-
-builder.Services
-    .AddOptions<AppOptions>()
-    .Bind(builder.Configuration.GetSection(AppOptions.Section))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
-```
-
-**ลำดับที่ ASP.NET Core อ่าน (ค่าหลังทับค่าก่อน):**
-
-```
-appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
-→ environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
-```
-
-ตัวแปรสภาพแวดล้อมใช้ `__` แทนลำดับชั้น — `ConnectionStrings__Default`
-
-**Azure Key Vault:**
-
-```csharp
-builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://{vaultName}.vault.azure.net/"),
-    new DefaultAzureCredential());        // ใช้ managed identity ไม่ต้องมี key อีกอัน
-```
-
----
-
-## 2 · Node.js
-
-```ts
-// config/env.ts — ไฟล์เดียวที่แตะ process.env ได้ทั้งโปรเจกต์
-import { z } from 'zod';
-
-const Env = z.object({
-  NODE_ENV:     z.enum(['development','test','staging','production']),
-  PORT:         z.coerce.number().int().positive().default(3000),
-  DATABASE_URL: z.string().url(),
-  JWT_SECRET:   z.string().min(32),
-  SMTP_PASSWORD: z.string().optional(),
-}).superRefine((v, ctx) => {
-  if (v.NODE_ENV === 'production' && v.JWT_SECRET.startsWith('dev-'))
-    ctx.addIssue({ code: 'custom', message: 'ห้ามใช้ JWT_SECRET ของ dev บน production' });
-});
-
-const parsed = Env.safeParse(process.env);
-if (!parsed.success) {
-  console.error('config ไม่ถูกต้อง:', z.treeifyError(parsed.error));
-  process.exit(1);
-}
-export const env = parsed.data;
-```
-
-> **ห้ามอ่าน `process.env` กระจายทั่วโค้ด** — รวมไว้ที่ไฟล์เดียว
-> ทำให้ตอบได้ว่าระบบใช้ค่าอะไรบ้าง โดยไม่ต้องไล่ grep ทั้งโปรเจกต์
-
-Node 20 ขึ้นไปโหลด `.env` ได้เองด้วย `node --env-file=.env` ไม่ต้องพึ่ง `dotenv`
-
----
-
-## 3 · Python
-
-```python
-# settings.py
-from pydantic import Field, PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="APP_", env_file=".env")
-
-    env: str = Field(pattern="^(development|staging|production)$")
-    database_url: PostgresDsn
-    jwt_secret: str = Field(min_length=32)
-    timeout_seconds: int = Field(default=30, ge=1, le=300)
-
-settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
-```
-
-- อ่าน `APP_DATABASE_URL`, `APP_JWT_SECRET` ตาม `env_prefix`
-- import ที่ระดับบนสุดของแอป เพื่อให้ error เกิดตอนบูต ไม่ใช่ตอนเรียกใช้ครั้งแรก
-
----
-
-## 4 · Angular และ frontend ทั่วไป
-
-> 🚨 **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** — ไม่มีข้อยกเว้น
-
-**แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`) —
-ค่าติดไปกับไฟล์ที่ได้ เปลี่ยนต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียว
-
-**แบบโหลดตอนรัน (แนะนำ):**
-
-```ts
-// main.ts — โหลดก่อนแอปเริ่ม
-fetch('/config.json', { cache: 'no-store' })
-  .then(r => r.json())
-  .then(cfg => {
-    (window as any).__APP_CONFIG__ = cfg;
-    return bootstrapApplication(AppComponent, appConfig);
-  });
-```
-
-```json
-// config.json — ไฟล์นี้วางแยกต่อ environment ไม่ต้อง build ใหม่
-{ "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
-```
-
-ตั้ง header `Cache-Control: no-store` ให้ `/config.json` ไม่งั้นเบราว์เซอร์จะใช้ค่าเก่า
-
----
-
-## 5 · Docker และ Kubernetes
-
-**Docker — อย่าใส่ secret ตอน build:**
-
-```dockerfile
-# ❌ ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
-ARG NPM_TOKEN
-ENV NPM_TOKEN=$NPM_TOKEN
-
-# ✅ mount เฉพาะตอนใช้ ไม่ติดไปกับ image
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
-```
-
-```bash
-docker build --secret id=npmrc,src=$HOME/.npmrc .
-docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
-```
-
-**Kubernetes:**
-
-```yaml
-env:
-  - name: APP_DB_PASSWORD
-    valueFrom:
-      secretKeyRef: { name: app-secrets, key: db-password }
-```
-
-> 🚨 **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
-> ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
-> ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
-> ทางที่ดีกว่าคือให้ External Secrets Operator ดึงจาก Key Vault / Secrets Manager มาสร้างให้
-
----
-
-## 6 · เครื่องมือตรวจ secret ที่หลุดเข้า git
-
-```bash
-# ตรวจทั้งประวัติ
-gitleaks detect --source . --redact
-
-# กันไว้ก่อน commit
-pip install pre-commit detect-secrets
-detect-secrets scan > .secrets.baseline
-```
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
-    hooks: [{ id: gitleaks }]
-```
-
-**ลบออกจากประวัติ** (ทำหลังเพิกถอนค่าเดิมแล้วเท่านั้น):
-
-```bash
-pip install git-filter-repo
-git filter-repo --path .env --invert-paths
-git push --force --all      # ทุกคนต้อง clone ใหม่
-```
-
----
-
-## 7 · คำสั่งสร้างค่าสุ่มที่ปลอดภัย
-
-```bash
-openssl rand -base64 48                 # กุญแจทั่วไป
-openssl rand -hex 32                    # กุญแจ 256 บิตเป็นเลขฐานสิบหก
-uuidgen                                 # id ไม่ลับ
-
-node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-```powershell
-# Windows
-[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
-```
-
-> ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
-> มันคาดเดาได้ ต้องใช้ตัวสุ่มเชิงรหัสลับตามคำสั่งข้างบน
-
-
----
-
-# skill: fsd-writing
-
-Use when writing or reviewing a Functional Specification Document — the level a developer builds a screen from and a tester writes cases from, below an SRS. Covers use cases with alternative and exception flows, screen specs with validation and the exact error message, state machines, business rules and traceability. For the level above use srs-writing.
-
-# เขียน Functional Specification Document (FSD)
-
-> **กฎข้อเดียว:** FSD เสร็จเมื่อ developer เปิดอ่านแล้ว**เขียนโค้ดได้โดยไม่ต้องเดาและไม่ต้องถาม**
-> ทุกจุดที่ต้องเดา คือจุดที่จะกลายเป็นงานแก้หลังส่งมอบ
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เขียน FSD หรือ Functional Spec ของฟีเจอร์ โมดูล หรือทั้งระบบ
-- แปลง Software Requirements Specification (SRS) หรือ Business Requirements Document (BRD) ให้ละเอียดพอลงมือทำ
-- รีวิว FSD ของคนอื่น แล้วต้องบอกให้ได้ว่าขาดอะไร
-- developer ถามคำถามเดิมซ้ำ ๆ ระหว่างทำ — แปลว่า FSD ยังไม่ครบ
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ข้อกำหนดระดับที่ลูกค้าเซ็นรับ | `srs-writing` |
-| user story สำหรับ sprint | `user-story-writer` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง | command `/api-design` |
-| ข้อตกลงกลางของ API ทั้งระบบ | `api-conventions` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| หน้าตาหน้าจอ ระยะห่าง สถานะ | `ui-craft` + skill แพลตฟอร์ม |
-| รูปแบบ markdown และธีมเอกสาร | `polished-document-style` |
-| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-
----
-
-## 1 · FSD ต่างจาก SRS ยังไง — เส้นแบ่งที่ต้องชัด
-
-เอกสารสองฉบับนี้ปนกันบ่อยที่สุด ผลคือ SRS ยาวจนลูกค้าไม่อ่าน และ FSD ตื้นจน developer ต้องถาม
-
-| | SRS | FSD |
+| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
 |---|---|---|
-| ตอบคำถาม | ระบบ**ต้องทำอะไรได้** | ระบบ**ทำสิ่งนั้นอย่างไร** |
-| คนอ่านหลัก | ลูกค้า · ผู้บริหาร · คนเซ็นรับ | developer · tester · ux |
-| ระดับรายละเอียด | "ระบบต้องให้ผู้ใช้ยกเลิกคำสั่งซื้อได้" | ปุ่มอยู่ตรงไหน · ยกเลิกได้ในสถานะไหนบ้าง · ใครมีสิทธิ์ · ยืนยันด้วยอะไร · ข้อความตอนทำไม่ได้ว่าอะไร · ระบบทำอะไรต่อ |
-| เปลี่ยนแปลง | ต้องผ่านการอนุมัติ มีผลต่อสัญญา | เปลี่ยนได้ในทีม ตราบใดที่ยังตอบ SRS ข้อเดิม |
-| หน่วยเนื้อหา | ข้อกำหนด (`FR-…`) | use case (`UC-…`) + ข้อกำหนดหน้าจอ (`SC-…`) |
-| ตัวเลข | มาจากลูกค้า | มาจาก SRS ห้ามคิดใหม่ |
+| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
+| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
+| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
+| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
 
-> 🚨 **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ถามกลับ**
-> แล้วเพิ่มใน SRS ก่อน ไม่ใช่เขียนลง FSD เงียบ ๆ
-> ข้อที่โผล่มาใน FSD โดยไม่มีที่มา คือข้อที่ลูกค้าจะปฏิเสธจ่ายตอนตรวจรับ
+> 🚨 **soft delete ไม่ใช่ของฟรี** — ทุก unique constraint ต้องคิดใหม่
+> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
+> แก้ด้วย partial index — `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
 
 ---
 
-## 2 · ลำดับการทำงาน
+## 4 · เลือกชนิด identifier
 
-1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามให้หมดในรอบเดียว
-2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว หรือมีลูกค้าอ่านด้วย
-3. ไล่ทีละ use case ไม่ใช่ทีละหน้าจอ — หน้าจอเกิดจาก use case ไม่ใช่ทางกลับกัน
-4. เขียนกฎทางธุรกิจแยกออกมาก่อน แล้วค่อยอ้างถึงจากขั้นตอน (ข้อ 7)
-5. ทำตารางสอบย้อนกลับไปพร้อมกัน ไม่ใช่ทำตอนจบ
-6. รีวิวตามข้อ 11 ก่อนส่ง
-
----
-
-## 3 · โครงเอกสาร
-
-โครงเต็มพร้อมคำใบ้ว่าแต่ละหัวข้อต้องมีอะไร อยู่ใน **`assets/fsd-outline.md`**
-
-| # | หัวข้อ | ตอบคำถามว่า | ข้ามได้ไหม |
+| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
 |---|---|---|---|
-| 1 | บทนำ · ขอบเขต · เอกสารอ้างอิง | ฉบับนี้ครอบคลุมส่วนไหน อ้างอิง SRS ข้อไหน | ไม่ได้ |
-| 2 | ผู้ใช้และสิทธิ์ | ใครทำอะไรได้บ้าง | ไม่ได้ |
-| 3 | ภาพรวมกระบวนการ | งานไหลจากต้นจนจบยังไง | ไม่ได้ |
-| 4 | use case รายตัว | แต่ละงานทำทีละขั้นยังไง | ไม่ได้ |
-| 5 | ข้อกำหนดหน้าจอ | หน้าจอมีอะไร ฟิลด์ตรวจอะไร | ถ้าไม่มีหน้าจอ |
-| 6 | ผังสถานะ | ของชิ้นนี้เปลี่ยนสถานะไปไหนได้บ้าง | ถ้าไม่มีสถานะ |
-| 7 | กฎทางธุรกิจ | กฎอะไรบังคับอยู่ | ไม่ได้ |
-| 8 | ข้อมูลและการเชื่อมต่อ | ใช้ข้อมูลอะไร ต่อกับระบบไหน | ไม่ได้ |
-| 9 | ข้อผิดพลาดและกรณีขอบ | พังแบบไหนได้บ้าง แล้วผู้ใช้เห็นอะไร | ไม่ได้ |
-| 10 | ตารางสอบย้อนกลับ | ข้อนี้มาจาก SRS ข้อไหน ทดสอบด้วยอะไร | ไม่ได้ |
-| 11 | ประวัติการแก้ไข | ใครแก้อะไรเมื่อไหร่ | ไม่ได้ |
+| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
+| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
+| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
+
+> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
+> ค่าสุ่มล้วนทำให้ทุกการ insert ไปแทรกกลางโครงสร้าง index
+> ตอนข้อมูลหลักหมื่นไม่รู้สึก ตอนหลักสิบล้านคือช้าจนต้องรื้อ
+> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+
+**เลขที่คนเห็น ≠ primary key** — เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
+ให้เป็นคอลัมน์ต่างหากที่มี unique constraint ไม่ใช่เอา primary key ไปโชว์
 
 ---
 
-## 4 · use case — รูปแบบเดียวทั้งเอกสาร
+## 5 · normalisation แค่ไหนพอ
 
-```markdown
-### UC-ORD-010 · ยกเลิกคำสั่งซื้อ
+**เริ่มที่ 3NF เสมอ** — ข้อเท็จจริงหนึ่งอย่างเก็บที่เดียว
 
-| | |
+denormalise ได้เมื่อครบสามข้อนี้เท่านั้น:
+
+1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
+2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
+3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
+
+**ยกเว้นที่ยอมรับกันทั่วไป** — ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง:
+ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
+ไม่ใช่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+
+---
+
+## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+
+### เงิน
+
+```sql
+total_amount   numeric(19,4)   NOT NULL      -- ✅
+currency       char(3)         NOT NULL      -- ✅ ISO 4217 เช่น THB
+total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่ากับ 0.3
+```
+
+> ❌ **float กับเงินคือบั๊กที่หาไม่เจอ** — ยอดรวมเพี้ยนไปสตางค์เดียวต่อรายการ
+> พอปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
+
+### เวลา
+
+| เก็บ | ใช้ | เหตุผล |
+|---|---|---|
+| เวลาที่เกิดเหตุการณ์ | `timestamptz` (SQL Server ใช้ `datetimeoffset`) เก็บเป็น UTC | ประเทศไทยไม่มี daylight saving แต่ระบบที่ขายต่างประเทศมี |
+| วันเกิด วันครบกำหนด | `date` | ไม่มีเวลา ไม่มีโซนเวลา |
+| ช่วงเวลาเปิดร้าน | `time` + คอลัมน์โซนเวลาแยก | |
+
+**กฎ:** เก็บ UTC · แปลงเป็น `+07:00` ตอนแสดงผลเท่านั้น · ห้ามเก็บเวลาไทยดิบ ๆ ใน `timestamp` ที่ไม่มีโซน
+
+**พุทธศักราช** — เก็บเป็น ค.ศ. เสมอ แปลงเป็น พ.ศ. ตอนแสดงผล
+ฐานข้อมูลที่เก็บปี 2569 จะคำนวณช่วงเวลาผิดทุกฟังก์ชัน
+
+### enum / สถานะ
+
+| วิธี | ดีเมื่อ | เสียเมื่อ |
+|---|---|---|
+| ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy · มีชื่อไทย/อังกฤษ · มีลำดับการแสดง | ต้อง join |
+| `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
+| ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
+| `int` ดิบ ๆ | — | ❌ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
+
+### boolean
+
+- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก — `is_active` ✅ · `is_not_disabled` ❌
+- **ถ้าอาจมีสถานะที่สามในอนาคต อย่าใช้ boolean** — `is_approved` จะกลายเป็น `approval_status`
+  ในหกเดือน เมื่อมี "รออนุมัติ" เพิ่มมา
+
+---
+
+## 7 · index — วางตรงไหนถึงได้ผล
+
+**ต้องมี:**
+
+- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
+- คอลัมน์ที่ปรากฏใน `WHERE` ของ query ที่วิ่งบ่อย
+- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+
+**composite index — ลำดับคอลัมน์สำคัญ:**
+
+```sql
+-- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
+CREATE INDEX ix_orders_tenant_status_created
+  ON orders (tenant_id, status, created_at DESC);
+```
+
+ลำดับคือ **เท่ากับ → ช่วง → เรียงลำดับ**
+index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
+
+**อย่าใส่ index เมื่อ:**
+
+- ตารางเล็กกว่าไม่กี่พันแถว — ฐานข้อมูลอ่านทั้งตารางเร็วกว่า
+- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
+- ตารางเขียนหนักกว่าอ่านมาก — ทุก index คือต้นทุนที่จ่ายทุกครั้งที่เขียน
+
+> **วัดก่อนเดา** — `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
+> บอกได้ว่า index ถูกใช้จริงไหม การเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+
+---
+
+## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+
+| กฎ | ที่ควรอยู่ |
 |---|---|
-| **มาจาก** | FR-ORD-040 |
-| **ผู้ทำ** | ลูกค้า · เจ้าหน้าที่ฝ่ายขาย |
-| **เงื่อนไขก่อนเริ่ม** | เข้าสู่ระบบแล้ว · คำสั่งซื้ออยู่ในสถานะ `confirmed` |
-| **ผลเมื่อสำเร็จ** | คำสั่งซื้อเป็น `cancelled` · คืนจำนวนสินค้าเข้าคลัง · ส่งอีเมลแจ้ง |
-| **ความถี่** | ประมาณ 30 ครั้งต่อวัน |
+| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
+| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
+| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
+| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
 
-**ขั้นตอนหลัก**
+> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล — ยังมี script แก้ข้อมูลด่วน
+> งาน import ตอนตีสาม และ service ตัวที่สองที่เขียนทีหลัง
+> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
 
-| # | ผู้ทำ | การกระทำ | ระบบทำอะไรต่อ |
-|:--:|---|---|---|
-| 1 | ลูกค้า | เปิดหน้ารายละเอียดคำสั่งซื้อ | แสดงปุ่ม "ยกเลิก" เฉพาะเมื่อ BR-030 ผ่าน |
-| 2 | ลูกค้า | กด "ยกเลิก" | เปิดกล่องยืนยัน พร้อมช่องเหตุผล (บังคับ) |
-| 3 | ลูกค้า | เลือกเหตุผล แล้วกดยืนยัน | ตรวจ BR-030 อีกครั้งที่ฝั่งเซิร์ฟเวอร์ |
-| 4 | ระบบ | — | เปลี่ยนสถานะ · คืนสต็อก · บันทึกผู้ทำและเวลา · ส่งอีเมล |
-| 5 | ระบบ | — | แสดงข้อความสำเร็จ และปุ่มยกเลิกหายไป |
+**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
 
-**ทางเลือกอื่น**
+| ตัวเลือก | ความหมาย | ใช้กับ |
+|---|---|---|
+| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
+| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
+| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
 
-| รหัส | แยกที่ขั้น | เงื่อนไข | ผลลัพธ์ |
-|---|:--:|---|---|
-| 010-A1 | 3 | ผู้ทำเป็นเจ้าหน้าที่ | ข้ามช่องเหตุผล แต่บังคับกรอกหมายเหตุภายใน |
-
-**กรณีผิดพลาด**
-
-| รหัส | เกิดที่ขั้น | สาเหตุ | ผู้ใช้เห็นอะไร | ระบบทำอะไร |
-|---|:--:|---|---|---|
-| 010-E1 | 3 | มีคนเปลี่ยนสถานะไปก่อนแล้ว | "คำสั่งซื้อนี้ถูกจัดส่งแล้ว ยกเลิกไม่ได้" | ไม่เปลี่ยนอะไร · โหลดหน้าใหม่ |
-| 010-E2 | 4 | คืนสต็อกไม่สำเร็จ | "ระบบขัดข้อง กรุณาลองใหม่" + รหัสอ้างอิง | ย้อนกลับทั้งรายการ · บันทึก log ระดับ error |
-```
-
-**กฎของ use case:**
-
-- **หนึ่ง use case = หนึ่งเป้าหมายของผู้ใช้** ไม่ใช่หนึ่งหน้าจอ
-- ทุก use case ต้องมี **ทางเลือกอื่น** และ **กรณีผิดพลาด** อย่างน้อยอย่างละหนึ่ง —
-  use case ที่มีแต่ทางที่ทุกอย่างราบรื่น คือ use case ที่ยังเขียนไม่เสร็จ
-- คอลัมน์ "ระบบทำอะไรต่อ" ห้ามว่าง — ถ้าว่างแปลว่ายังไม่ได้คิดว่าระบบตอบสนองยังไง
-- **เงื่อนไขก่อนเริ่มต้องตรวจซ้ำที่ฝั่งเซิร์ฟเวอร์เสมอ** การซ่อนปุ่มไม่ใช่การควบคุมสิทธิ์
-- เขียนเป็น "ผู้ใช้ทำ → ระบบตอบ" สลับกัน ไม่ใช่เล่าเป็นย่อหน้า
+`CASCADE` ผิดที่เดียว = ลบลูกค้าหนึ่งคนแล้วประวัติการซื้อสิบปีหายตาม
 
 ---
 
-## 5 · ข้อกำหนดหน้าจอ
+## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
 
-```markdown
-### SC-ORD-020 · หน้ารายละเอียดคำสั่งซื้อ
+**กฎสามข้อ:**
 
-**เส้นทาง:** `/orders/{id}` · **ใช้ใน:** UC-ORD-010, UC-ORD-020
+1. **เดินหน้าอย่างเดียว** — migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
+2. **หนึ่ง migration ทำเรื่องเดียว** — ไล่ปัญหาง่าย rollback ตรงจุด
+3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องอยู่ด้วยกันได้** — ระหว่าง deploy มีทั้งสองเวอร์ชันวิ่งพร้อมกันเสมอ
 
-| ฟิลด์ | ชนิด | บังคับ | กฎตรวจ | ข้อความเมื่อไม่ผ่าน | ค่าเริ่มต้น |
-|---|---|:--:|---|---|---|
-| เหตุผลที่ยกเลิก | เลือกจากรายการ | ✅ | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
-| หมายเหตุ | ข้อความยาว | ❌ | ไม่เกิน 500 ตัวอักษร | "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
-| วันที่ต้องการรับ | วันที่ | ✅ | ไม่ก่อนวันนี้ · ไม่เกิน 90 วัน | "เลือกวันที่ตั้งแต่วันนี้ถึง <วันที่>" | วันนี้ + 3 |
-```
+### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
 
-**ทุกหน้าจอต้องระบุครบ 6 อย่าง:**
+ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
 
-| ต้องมี | รายละเอียด |
-|---|---|
-| ตารางฟิลด์ | ชนิด · บังคับไหม · กฎตรวจ · **ข้อความ error ตามจริง** · ค่าเริ่มต้น |
-| สิทธิ์ต่อบทบาท | บทบาทไหนเห็น · แก้ได้ · แค่อ่าน · ไม่เห็นเลย |
-| ห้าสถานะของหน้าจอ | ว่าง · กำลังโหลด · ผิดพลาด · มีบางส่วน · สำเร็จ (ดู `ui-craft`) |
-| การกระทำและผลลัพธ์ | ปุ่มไหนพาไปไหน · ปุ่มไหนเปิดกล่องยืนยัน |
-| กฎการแสดงผล | รูปแบบวันที่ · ทศนิยมของเงิน · การปัดเศษ · เขตเวลา |
-| ที่มาของข้อมูล | ฟิลด์นี้มาจาก endpoint ไหนหรือตารางไหน |
+| รอบ deploy | ฐานข้อมูล | โค้ด |
+|:--:|---|---|
+| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้งสองคอลัมน์ · อ่านจาก `name` |
+| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
+| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
 
-> **"ข้อความ error ตามจริง" คือคำที่ผู้ใช้จะเห็นจริง ๆ** ไม่ใช่ "แสดงข้อความแจ้งเตือน"
-> ถ้าไม่เขียน developer จะแต่งเอง แล้วทั้งระบบจะมีสำนวนคนละแบบสิบแบบ
->
-> **กฎการแสดงผลต้องเขียนไว้** — "ยอดรวม" ที่ไม่บอกว่าปัดเศษยังไง
-> คือบั๊กที่จะเจอตอนกระทบยอดสิ้นเดือน
+ทำสามรอบดูเสียเวลา แต่แต่ละรอบ rollback ได้โดยไม่เสียข้อมูล
+การทำรอบเดียวคือการยอมรับว่าจะปิดระบบ
 
----
+**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
 
-## 6 · ผังสถานะ — จุดที่ FSD ลืมบ่อยที่สุด
+- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน — PostgreSQL รุ่นใหม่ทำได้เร็ว แต่ MySQL ยังเขียนใหม่ทั้งตาราง
+- เปลี่ยนชนิดข้อมูล
+- สร้าง index ธรรมดา → ใช้ `CREATE INDEX CONCURRENTLY` (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
 
-ของที่มี "สถานะ" (คำสั่งซื้อ ใบลา ตั๋วงาน เอกสาร) ต้องมีตารางนี้ **ห้ามมีแค่รูป**
-
-| จาก | ไป | ใครทำได้ | เงื่อนไข | ผลข้างเคียง |
-|---|---|---|---|---|
-| `draft` | `confirmed` | ลูกค้า | มีสินค้าอย่างน้อย 1 รายการ · ที่อยู่ครบ | ตัดสต็อก · ส่งอีเมล |
-| `confirmed` | `cancelled` | ลูกค้า · เจ้าหน้าที่ | BR-030 | คืนสต็อก · ส่งอีเมล |
-| `confirmed` | `shipped` | เจ้าหน้าที่คลัง | มีเลขพัสดุ | ส่ง SMS |
-| `shipped` | `cancelled` | — | **ทำไม่ได้** | — |
-
-**กฎ:**
-
-- **การเปลี่ยนที่ไม่อยู่ในตาราง คือการเปลี่ยนที่ต้องถูกปฏิเสธ** เขียนบรรทัด "ทำไม่ได้" ไว้ให้ชัด
-  เพราะสิ่งที่ห้ามทำคือสิ่งที่ทดสอบได้ยากที่สุดถ้าไม่มีใครเขียนไว้
-- ทุกสถานะต้องมีทางออก ยกเว้นสถานะปลายทางที่ตั้งใจให้จบ
-- ผลข้างเคียงที่เกิดกับระบบอื่น (อีเมล สต็อก บัญชี) ต้องอยู่ในตารางนี้ ไม่ใช่ซ่อนอยู่ในขั้นตอน
+**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** — migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
+อาจใช้ 40 นาทีบน production พร้อมล็อกตารางไว้ตลอด
 
 ---
 
-## 7 · กฎทางธุรกิจแยกออกมาจากขั้นตอน
+## 10 · ระบบหลายผู้เช่า (multi-tenant)
 
-```markdown
-**BR-030 · ยกเลิกคำสั่งซื้อได้เมื่อไหร่**
-ยกเลิกได้เมื่อสถานะเป็น `confirmed` และยังไม่เกิน 24 ชั่วโมงนับจากเวลายืนยัน
-เจ้าหน้าที่ระดับหัวหน้าขึ้นไปยกเลิกได้โดยไม่จำกัดเวลา แต่ต้องกรอกหมายเหตุ
-**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.2
-```
+| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+|---|---|---|---|
+| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ — พลาดที่เดียวข้อมูลรั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
+| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
+| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
 
-- **กฎหนึ่งข้อเขียนที่เดียว** แล้วอ้างด้วยรหัสจากทุกที่ที่ใช้ — ลอกไปวางสามที่ วันหนึ่งจะแก้ไม่ครบ
-- ทุกกฎต้องมี**ที่มา** กฎที่ไม่มีที่มาคือกฎที่ทีมคิดเอง
-- กฎที่เปลี่ยนตามเวลา (อัตราภาษี ค่าธรรมเนียม) ต้องระบุว่า**เก็บไว้ที่ไหน** —
-  ในโค้ด ในตารางตั้งค่า หรือให้ผู้ดูแลระบบแก้ได้เอง
-
----
-
-## 8 · ข้อผิดพลาดและกรณีขอบที่ต้องตอบให้ครบ
-
-ตารางนี้คือสิ่งที่ทีมทดสอบจะใช้ และคือสิ่งที่ FSD ส่วนใหญ่ขาด
-
-| กรณี | คำถามที่ต้องตอบ |
-|---|---|
-| ไม่มีข้อมูล | หน้าจอว่างเปล่าแสดงอะไร มีปุ่มพาไปทำอะไรต่อไหม |
-| ข้อมูลเยอะมาก | กี่รายการต่อหน้า · เรียงยังไง · ค้นหาได้ไหม |
-| กดปุ่มรัว ๆ | กันงานซ้ำยังไง (ดู idempotency key ใน `api-conventions`) |
-| สองคนแก้พร้อมกัน | ใครชนะ · อีกคนเห็นอะไร (ดู ETag ใน `api-conventions`) |
-| เน็ตหลุดกลางทาง | ข้อมูลที่กรอกหายไหม · ลองใหม่แล้วซ้ำไหม |
-| หมดเวลา session | เด้งออกทันที หรือเก็บสิ่งที่กรอกไว้ |
-| ค่าที่ขอบเขต | 0 · ค่าติดลบ · วันนี้ · วันสุดท้ายของเดือน · ปีอธิกสุรทิน |
-| ข้อความยาวผิดปกติ | ชื่อ 200 ตัวอักษรทำให้เลย์เอาต์พังไหม |
-| ภาษาไทยและอักขระพิเศษ | เรียงลำดับถูกไหม · ค้นหาเจอไหม · อีโมจิพังไหม |
-| ระบบภายนอกไม่ตอบ | รอกี่วินาที · ลองใหม่กี่ครั้ง · ผู้ใช้เห็นอะไรระหว่างนั้น |
-| สิทธิ์ไม่พอ | เห็นแต่กดไม่ได้ หรือไม่เห็นเลย — **ต้องเลือกให้ชัด** |
+> 🚨 ถ้าเลือกแบบ `tenant_id` — **บังคับที่ชั้นล่างสุด ไม่ใช่ที่ query แต่ละตัว**
+> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
+> เพราะ query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว คือข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
+> และมันจะไม่มี error ให้เห็นเลย
 
 ---
 
-## 9 · รหัสและการสอบย้อนกลับ
+## 11 · ข้อมูลส่วนบุคคล
 
-```
-UC-<โมดูล>-<เลข 3 หลัก>      use case              UC-ORD-010
-SC-<โมดูล>-<เลข 3 หลัก>      ข้อกำหนดหน้าจอ         SC-ORD-020
-BR-<เลข 3 หลัก>              กฎทางธุรกิจ            BR-030
-```
-
-ใช้ระบบเดียวกับ `srs-writing` — **เว้นเลขทีละ 10** และ **รหัสที่ออกไปแล้วห้ามใช้ซ้ำ**
-
-| SRS | FSD | หน้าจอ | test case | สถานะ |
-|---|---|---|---|---|
-| FR-ORD-040 | UC-ORD-010 | SC-ORD-020 | TC-ORD-010..014 | ทำแล้ว |
-| FR-ORD-040 | UC-ORD-010 · 010-E1 | SC-ORD-020 | TC-ORD-015 | ทำแล้ว |
-
-- **ทุก use case ต้องชี้กลับไปที่ข้อกำหนดใน SRS ได้** — ชี้ไม่ได้แปลว่ามีของแถมที่ไม่มีใครสั่ง
-- **ทุกข้อกำหนดใน SRS ต้องมี use case อย่างน้อยหนึ่งตัว** — ไม่มีแปลว่าลืมทำ
-- ทางเลือกอื่นและกรณีผิดพลาดก็ต้องมี test case ของตัวเอง ไม่ใช่นับรวมกับทางหลัก
-
----
-
-## 10 · รูปในเอกสาร
-
-| หัวข้อ | รูปที่ควรมี |
-|---|---|
-| 3 ภาพรวมกระบวนการ | ผังขั้นตอนงานตั้งแต่ต้นจนจบ |
-| 4 use case ที่มีหลายฝ่าย | sequence diagram |
-| 5 หน้าจอ | ภาพร่างหน้าจอ พร้อมหมายเลขชี้ไปที่ตารางฟิลด์ |
-| 6 สถานะ | state diagram — **คู่กับตาราง ไม่ใช่แทนตาราง** |
-| 8 ข้อมูล | ER diagram เฉพาะตารางที่เกี่ยวกับโมดูลนี้ |
-
-เลือกเครื่องมือตามปลายทางของเอกสาร — markdown ใช้ `software-diagrams` (Mermaid) ·
-ไฟล์ที่ลูกค้าเซ็นรับใช้ `svg-diagram-system` · ภาพร่างหน้าจอใช้ `markdown-visuals`
-**ทุกรูปในฉบับเดียวใช้ธีมสีชุดเดียวกัน** ตาม `doc-theme` (ดู `polished-document-style`)
-
----
-
-## 11 · รีวิวความครบถ้วนก่อนส่ง
-
-**ความครบ**
-
-- [ ] ทุกข้อกำหนดใน SRS มี use case อย่างน้อยหนึ่งตัว
-- [ ] ทุก use case มีทางเลือกอื่นและกรณีผิดพลาดอย่างน้อยอย่างละหนึ่ง
-- [ ] ทุกหน้าจอมีตารางฟิลด์ครบ 5 คอลัมน์ และห้าสถานะ
-- [ ] ทุกของที่มีสถานะ มีตารางการเปลี่ยนสถานะ รวมบรรทัดที่ "ทำไม่ได้"
-- [ ] ตอบตารางกรณีขอบในข้อ 8 ครบทุกแถวที่เกี่ยวข้อง
-
-**ความชัด**
-
-- [ ] ไม่มีคำว่า "ตามความเหมาะสม" "โดยอัตโนมัติ" "ที่จำเป็น" โดยไม่บอกว่าคืออะไร
-- [ ] ข้อความ error ทุกอันเขียนเป็นคำจริง ไม่ใช่ "แสดงข้อความแจ้งเตือน"
-- [ ] ตัวเลขทุกตัวมีหน่วย และมีที่มา
-- [ ] ชื่อฟิลด์ ชื่อสถานะ ชื่อ endpoint ใช้ภาษาอังกฤษตรงกับที่จะใช้ในโค้ดจริง
-
-**ความสอดคล้อง**
-
-- [ ] คำเดียวกันหมายถึงของเดียวกันทั้งเล่ม (มีอภิธานศัพท์)
-- [ ] ชื่อสถานะในผัง ในตาราง และใน use case ตรงกันหมด
-- [ ] ไม่มีข้อกำหนดใหม่ที่ไม่มีใน SRS
-
-> **ทดสอบขั้นสุดท้าย:** ให้ developer ที่ไม่ได้อยู่ในที่ประชุมอ่านหนึ่งคน
-> ทุกคำถามที่เขาถาม คือหนึ่งช่องว่างที่ต้องเติมก่อนส่ง
+- ทำรายการไว้ว่า **คอลัมน์ไหนคือข้อมูลส่วนบุคคล** — ตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้ถ้าไม่มีรายการนี้
+- เลขบัตรประชาชน หมายเลขบัตรเครดิต ข้อมูลสุขภาพ — เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
+- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
+- ต้องลบได้เมื่อเจ้าของขอ — soft delete อย่างเดียวไม่นับว่าลบ
+- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
 
 ---
 
 ## 12 · Anti-patterns
 
-- ❌ **คัดลอก SRS มาแล้วเติมคำว่า "ระบบจะ"** — ได้เอกสารสองฉบับที่พูดเรื่องเดียวกัน
-- ❌ **use case ที่มีแต่ทางที่ราบรื่น** — ทางที่พังคือสิ่งที่ FSD มีไว้เพื่อบอก
-- ❌ **"แสดงข้อความแจ้งเตือน"** โดยไม่บอกว่าข้อความว่าอะไร
-- ❌ **"ระบบจะคำนวณโดยอัตโนมัติ"** โดยไม่บอกสูตรและการปัดเศษ
-- ❌ **ผังสถานะเป็นรูปอย่างเดียว** — รูปบอกไม่ได้ว่าใครมีสิทธิ์และมีผลข้างเคียงอะไร
-- ❌ **คุมสิทธิ์ด้วยการซ่อนปุ่ม** โดยไม่ระบุการตรวจฝั่งเซิร์ฟเวอร์
-- ❌ **กฎทางธุรกิจกระจายอยู่ในขั้นตอน** — แก้ทีหลังแล้วตกหล่น
-- ❌ **หน้าจอที่ไม่บอกว่าข้อมูลมาจากไหน** — developer จะเดา endpoint เอง
-- ❌ **เอา wireframe มาแทนข้อกำหนด** — รูปบอกไม่ได้ว่าอะไรบังคับ กฎตรวจคืออะไร
-- ❌ **ไม่มีตารางสอบย้อนกลับ** — แล้วไม่มีใครรู้ว่าทำครบหรือยัง
+- ❌ **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) — query อะไรก็ยากไปหมด
+- ❌ **`varchar(255)` ทุกคอลัมน์** — ตัวเลขนี้ไม่ได้มีความหมายอะไรเลย กำหนดจากข้อมูลจริง
+- ❌ **เก็บหลายค่าในคอลัมน์เดียว** — `"1,4,7"` ค้นไม่ได้ constraint ไม่ได้ ใช้ตารางเชื่อม
+- ❌ **ไม่มี foreign key เพราะ "แอปดูแลเอง"** — แล้ววันหนึ่งก็มีแถวกำพร้า
+- ❌ **index ทุกคอลัมน์เผื่อไว้** — เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
+- ❌ **`SELECT *` ในโค้ดจริง** — เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
+- ❌ **ตรรกะธุรกิจใน trigger** — ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
+- ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง — rollback แล้วข้อมูลหาย
+- ❌ **แก้ schema บน production ด้วยมือ** — รอบหน้าที่ deploy จะไม่ตรงกัน
 
 ---
 
 ## 13 · ตัวย่อ
 
-- **FSD** — Functional Specification Document (เอกสารข้อกำหนดเชิงหน้าที่ ระดับที่ลงมือทำได้)
-- **SRS** — Software Requirements Specification (เอกสารข้อกำหนดซอฟต์แวร์ ระดับที่ลูกค้าเซ็นรับ)
-- **BRD** — Business Requirements Document (เอกสารความต้องการทางธุรกิจ)
-- **use case** — กรณีการใช้งาน หนึ่งเป้าหมายของผู้ใช้ตั้งแต่เริ่มจนจบ
-- **state machine** — ผังสถานะ ของที่ระบุว่าของชิ้นหนึ่งเปลี่ยนจากสถานะไหนไปไหนได้บ้าง
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
+- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริงหนึ่งอย่างเก็บที่เดียว)
+- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
+- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
+- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
+- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
 
 ## 14 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| ระดับข้อกำหนดที่ลูกค้าเซ็นรับ | `srs-writing` |
-| รูปแบบ markdown และธีมสีของเอกสาร | `polished-document-style` |
-| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` · `svg-diagram-system` · `markdown-visuals` |
-| ข้อตกลงของ API ที่ FSD อ้างถึง | `api-conventions` |
-| แบบจำลองข้อมูลที่ FSD อ้างถึง | `database-design` |
-| ห้าสถานะของหน้าจอ และกฎงานออกแบบ | `ui-craft` + skill แพลตฟอร์ม |
-| แปลง use case เป็น test case | `test-case-template` |
-| แตกเป็น user story ตอนเริ่ม sprint | `user-story-writer` |
-| ตัดสิ่งที่ไม่จำเป็นออกจากเอกสาร | `simplicity-first` |
+| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
+| รัน migration ตอน deploy | `cicd-and-release` |
+| ที่เก็บ connection string | `config-and-secrets` |
+| ตาราง user, role, session | `auth-implementation-patterns` |
+| วาดผัง ER | `svg-diagram-system` หรือ `markdown-visuals` |
+| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
 
-**โครงเอกสารที่คัดลอกไปกรอกต่อได้ทันที** → `assets/fsd-outline.md`
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** → `references/per-stack.md`
 
 
----
+## reference: per-stack.md
 
-# skill: flag-and-propose
+# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
 
-Use when reporting something found mid-task that changes what happens next — a stale file, a number that no longer matches, a blocked step, a risk — and a decision is needed before carrying on. Opens with the consequence, puts conflicting numbers in a recorded-versus-actual table, and closes with one short question.
-
-# แจ้งสิ่งที่เจอ แล้วเสนอทางไป
-
-> **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
-> ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
-- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
-- เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| สถานการณ์ | ใช้ตัวนี้แทน |
-|---|---|
-| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
-| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
-| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
+1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+2. [PostgreSQL](#2--postgresql)
+3. [SQL Server](#3--sql-server)
+4. [MySQL / MariaDB](#4--mysql--mariadb)
+5. [MongoDB](#5--mongodb)
+6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
+7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
+8. [Alembic (Python)](#8--alembic-python)
+9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
 
 ---
 
-## 1 · โครงคำตอบ 4 บล็อก
+## 1 · ชนิดข้อมูลเทียบกัน
 
-| บล็อก | ความยาว | กฎ |
-|---|---|---|
-| 1 · สิ่งที่เจอ + ผลถ้าไม่แก้ | 1–2 บรรทัด | **ขึ้นก่อนเสมอ** ไม่มีคำเกริ่น ไม่ทวนคำถาม |
-| 2 · หลักฐาน | ตาราง ≤ 5 แถว | ตัวเลขที่ขัดกันเท่านั้น ไม่ต้องเล่าวิธีตรวจ |
-| 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
-| 4 · คำถามปิด | 1 บรรทัด | คำถามเดียว ตอบได้ด้วยไม่กี่คำ |
+| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+|---|---|---|---|
+| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
+| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
+| วันที่ล้วน | `date` | `date` | `DATE` |
+| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
+| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
 
-บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข · บล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
-**บล็อก 1 กับ 4 ตัดไม่ได้**
-
-**ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
-
----
-
-## 2 · บล็อกที่ 1 — สูตรประโยคเดียว
-
-```
-<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
-```
-
-| ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
-|---|---|
-| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
-
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
-- ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
-- ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
+> 🚨 **SQL Server + ภาษาไทย** — `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
+> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+>
+> 🚨 **MySQL ต้องเป็น `utf8mb4`** — ชุดอักขระที่ชื่อ `utf8` เฉย ๆ ของ MySQL
+> เก็บได้แค่ 3 ไบต์ ทำให้อีโมจิและอักขระบางตัวหาย
 
 ---
 
-## 3 · ตัวเลขที่ขัดกัน = ตารางเทียบเสมอ
+## 2 · PostgreSQL
 
-สองค่าขึ้นไปที่ไม่ตรงกัน อ่านจากประโยคยากกว่าอ่านจากตารางทุกครั้ง
+```sql
+CREATE TABLE orders (
+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_no      varchar(20)  NOT NULL,
+  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status        varchar(20)  NOT NULL DEFAULT 'draft',
+  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
+  currency      char(3)      NOT NULL DEFAULT 'THB',
+  meta          jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT now(),
+  updated_at    timestamptz  NOT NULL DEFAULT now(),
+  deleted_at    timestamptz,
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
+  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
+);
 
-```markdown
-| | ที่บันทึกไว้ | ของจริง |
-|---|---|---|
-| FR ถึง | 13.9 | **14.12** |
-| Test case | 214 | **245** |
-| PLT | ไม่มี | **มี** |
+CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
+CREATE INDEX ix_orders_customer_id ON orders (customer_id);
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
 ```
 
-- หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
-- ตัวหนาที่ฝั่งที่ถูกต้อง เพื่อให้กวาดตาแล้วรู้ทันทีว่าต้องยึดอะไร
-- แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
+**สร้าง index โดยไม่ล็อกตาราง:**
 
-**คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
-
----
-
-## 4 · ข้อเสนอเป็นตาราง "ทำอะไร → ได้อะไร"
-
-```markdown
-| ไฟล์ | ได้อะไร |
-|---|---|
-| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
+```sql
+CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
+-- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
 ```
 
-- คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
-- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ
-- **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
-- เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
+**อัปเดต `updated_at` อัตโนมัติ:**
 
----
+```sql
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
 
-## 5 · บอกสิ่งที่**ไม่**ทำด้วย
-
-หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
-
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
-
-บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
-และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
-
----
-
-## 6 · ปิดด้วยคำถามเดียว
-
-```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
 ```
 
-| กฎ | เหตุผล |
-|---|---|
-| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | สองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
-| ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
-| มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
-| ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
+**row-level security สำหรับระบบหลายผู้เช่า:**
 
-**ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
-
----
-
-## 7 · ตัวอย่างเต็ม
-
-**❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
-
-> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
-> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
-> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
-> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
-> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
-> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
-
-**✅ หลัง — โครงเดียวกัน 4 บล็อก**
-
-> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
->
-> | | ที่บันทึกไว้ | ของจริง |
-> |---|---|---|
-> | FR ถึง | 13.9 | **14.12** |
-> | Test case | 214 | **245** |
-> | PLT | ไม่มี | **มี** |
->
-> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
->
-> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
->
-> | ไฟล์ | ได้อะไร |
-> |---|---|
-> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
-> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
->
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
->
-> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
-
-**สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
-ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
-รายละเอียดวิธีทำของแต่ละข้อเสนอ
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+```
 
 ---
 
-## 8 · Anti-patterns
+## 3 · SQL Server
 
-- ❌ **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
-- ❌ **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
-- ❌ **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
-- ❌ **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
-- ❌ **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
-- ❌ **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
-- ❌ **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
-- ❌ **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
+```sql
+CREATE TABLE orders (
+  id            bigint IDENTITY(1,1) PRIMARY KEY,
+  order_no      nvarchar(20)   NOT NULL,
+  customer_id   bigint         NOT NULL,
+  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
+  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
+  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
+  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
+  row_version   rowversion,
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
+);
 
----
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+```
 
-## 9 · ตัวย่อ
-
-- **FR** — Functional Requirement (ข้อกำหนดเชิงหน้าที่)
-- **TC** — Test Case (กรณีทดสอบ)
-- **ADR** — Architecture Decision Record (บันทึกเหตุผลของการตัดสินใจเชิงสถาปัตยกรรม)
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
-| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
-| สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |
-
+- `rowversion` ใช้เป็น ETag สำหรับตรวจการแก้ชนกันได้ตรง ๆ
+- เรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
+- `datetime` แบบเก่ามีความละเอียดแค่ 3.33 มิลลิวินาที — ใช้ `datetime2` / `datetimeoffset` แทน
 
 ---
 
-# skill: error-handling-patterns
+## 4 · MySQL / MariaDB
 
-Use when writing or reviewing code that can fail — anything calling a network, a database or another service. Decides where to catch and where to let through, separates the user message from the log detail, classifies failures into retry and do-not-retry, and sets timeout, backoff and circuit-breaker numbers.
+```sql
+CREATE TABLE orders (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no     VARCHAR(20)   NOT NULL,
+  customer_id  BIGINT        NOT NULL,
+  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY ux_orders_order_no (order_no),
+  KEY ix_orders_customer_id (customer_id),
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
 
-# จัดการข้อผิดพลาด
-
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` |
+- `ALTER TABLE` ส่วนใหญ่เขียนตารางใหม่ทั้งตาราง — ตารางใหญ่ให้ใช้ `pt-online-schema-change` หรือ `gh-ost`
+- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 5 · MongoDB
 
-| ชั้น | ทำอะไร |
-|---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log หนึ่งครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+```js
+db.createCollection("orders", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
+    properties: {
+      orderNo:     { bsonType: "string" },
+      customerId:  { bsonType: "objectId" },
+      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
+      createdAt:   { bsonType: "date" }
+    }
+  }}
+});
+db.orders.createIndex({ orderNo: 1 }, { unique: true });
+db.orders.createIndex({ customerId: 1, createdAt: -1 });
+```
 
-> **log ที่เดียว ที่ชั้นนอกสุด** — catch แล้ว log แล้ว throw ต่อทุกชั้น
-> ทำให้ error หนึ่งตัวกลายเป็นสิบบรรทัดใน log แล้วไม่มีใครรู้ว่ามันคือเรื่องเดียวกัน
+- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอและไม่โตไม่จำกัด** · นอกนั้นให้อ้างอิง
+- เอกสารหนึ่งใบมีเพดาน 16 MB — อาเรย์ที่โตเรื่อย ๆ จะชนเพดานวันหนึ่ง
+- `Decimal128` เท่านั้นสำหรับเงิน
 
-**สามอย่างที่ห้ามทำเด็ดขาด:**
+---
+
+## 6 · Entity Framework Core (.NET)
+
+```bash
+dotnet ef migrations add AddOrderStatus
+dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
+dotnet ef database update                                # dev เท่านั้น
+```
+
+> **บน production ให้รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
+> คำสั่งนั้นต้องการสิทธิ์แก้ schema จาก connection ของแอป ซึ่งไม่ควรมีอยู่แล้ว
 
 ```csharp
-try { ... } catch { }                      // ❌ กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ❌ ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ❌ log ซ้ำทุกชั้น
+modelBuilder.Entity<Order>(e => {
+    e.ToTable("orders");
+    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
+    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
+    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+});
 ```
 
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+---
 
-```csharp
-catch (SmtpException ex)
-{
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
+## 7 · Prisma / Drizzle (Node)
+
+```prisma
+model Order {
+  id          BigInt   @id @default(autoincrement())
+  orderNo     String   @unique @map("order_no") @db.VarChar(20)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  BigInt   @map("customer_id")
+
+  @@index([status, createdAt], name: "ix_orders_status_created")
+  @@map("orders")
 }
 ```
 
----
-
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
-
-| | ผู้ใช้เห็น | log เก็บ |
-|---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อมสองฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
-
-```
-❌ "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-❌ "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-✅ "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+```bash
+npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
+npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
 ```
 
-**ข้อความที่ดีมีสามส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+- `Decimal` ของ Prisma กลับมาเป็น object ไม่ใช่ number — คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
+- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 8 · Alembic (Python)
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
-|---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+```bash
+alembic revision --autogenerate -m "add order status"
+alembic upgrade head
+alembic downgrade -1
+```
 
-> 🚨 **retry กับสิ่งที่ retry ไปก็ไม่หาย คือการยิงซ้ำให้ระบบที่ล้มอยู่แล้วล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีกร้อยครั้งก็ได้คำตอบเดิม
+```python
+def upgrade():
+    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+    op.alter_column("orders", "status", nullable=False)
+    op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                    postgresql_concurrently=True)
+```
+
+> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ = ข้อมูลหาย)
+> อ่านไฟล์ที่มันสร้างทุกครั้งก่อน commit
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 9 · คำสั่งตรวจ query ช้า
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
-
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+| ฐานข้อมูล | คำสั่ง |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
+| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
+| MongoDB | `db.orders.find(...).explain("executionStats")` |
 
-**สูตรการลองใหม่:**
-
-```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
-```
-
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงินสองรอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
-
----
-
-## 5 · ตัดวงจร (circuit breaker)
-
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
-
-```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
-```
-
-ค่าเริ่มต้นที่ใช้ได้: ล้ม 5 ครั้งติดใน 30 วินาที → เปิด 60 วินาที
-
-**ใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
-
----
-
-## 6 · ล้มบางส่วน
-
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
-
-| แบบ | เหมาะกับ |
-|---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
-
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
-
-**งานทำความสะอาดต้องรันเสมอ** ไม่ว่าจะสำเร็จหรือไม่ — ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ใช้ `finally` / `using` / `with` / `defer` ไม่ใช่เขียนซ้ำในทุกทางออก
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- ❌ **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- ❌ **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- ❌ **log แล้ว throw ต่อทุกชั้น** — error หนึ่งตัวได้สิบบรรทัด
-- ❌ **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- ❌ **ส่ง stack trace ให้ผู้ใช้** — หลุดโครงสร้างภายในให้คนที่กำลังหาช่อง
-- ❌ **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- ❌ **retry การเขียนโดยไม่มี idempotency key** — รายการซ้ำ
-- ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
-
----
-
-## 8 · ตัวย่อ
-
-- **retry** — การลองใหม่เมื่อครั้งแรกล้มเหลว
-- **exponential backoff** — การหน่วงแบบทวีคูณ รอนานขึ้นทุกครั้งที่ลองใหม่
-- **jitter** — ค่าสุ่มที่บวกเข้าไปในเวลาหน่วง เพื่อไม่ให้ทุกเครื่องลองใหม่พร้อมกัน
-- **circuit breaker** — ตัวตัดวงจร หยุดเรียกปลายทางที่กำลังล้มชั่วคราว
-- **idempotency key** — รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ
-- **correlation id** — รหัสที่ติดไปกับคำขอหนึ่งตลอดทาง ใช้ไล่ log ข้ามระบบ
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` |
-| test กรณีล้มเหลว | `testing-standards` |
-| ขั้นตอนเมื่อระบบล่มจริง | `incident-runbook-template` |
+**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
+จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกินสิบเท่า · `Nested Loop` ที่วนหลักแสนรอบ

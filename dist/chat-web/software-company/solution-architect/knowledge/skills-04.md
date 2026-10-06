@@ -1,6 +1,182 @@
+# skill: prior-art-review
+
+Use before building something that may already exist (library, model, product, thesis approach). Compares candidates on what decides the outcome and ends in adopt, fork, build or drop. Always checks licence and maintenance.
+
+# สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
+
+> **กฎข้อเดียว:** จบที่**การตัดสินใจ** ไม่ใช่จบที่รายงาน
+> ถ้าอ่านจบแล้วยังไม่รู้ว่าจะใช้ตัวไหน แปลว่ายังไม่เสร็จ
+
+---
+
+## ต่างจาก `reference-app-research` อย่างไร
+
+| | `reference-app-research` | skill นี้ |
+|---|---|---|
+| ผลลัพธ์ | รายงาน feature · UI · UX + ข้อเสนอปรับปรุง | ตารางเทียบ + การตัดสินใจ + สิ่งที่ยอมแลก |
+| คำถามตั้งต้น | "แอปนี้ดีและพังตรงไหน ของเราจะดีกว่าอย่างไร" | "ควรหยิบตัวไหนมาใช้ หรือทำเอง" |
+| ใช้ร่วมกัน | แกะแอปต้นแบบที่จะสร้างแบบเดียวกัน | ตัดสินเรื่องไลบรารี เครื่องมือ หรือของที่จะนำมาใช้ แล้วบันทึก |
+
+---
+
+## 1 · ตั้งคำถามให้แคบก่อนค้น
+
+คำถามกว้างได้รายชื่อยาวที่เทียบกันไม่ได้
+
+```
+❌ มีเครื่องมือถอดเสียงอะไรบ้าง
+✅ ตัวไหนถอดเสียงไทยยาว 2 ชั่วโมงได้ แยกผู้พูดได้ รันบนเครื่องตัวเองได้
+   และสัญญาอนุญาตให้ขายต่อได้
+```
+
+คำถามต้องมี **3 อย่าง** เสมอ: สิ่งที่ต้องทำได้ · ข้อจำกัดที่ยอมไม่ได้ · เงื่อนไขการนำไปใช้
+
+**เขียนคำถามลงไฟล์ก่อนค้น** — ไม่งั้นพอเจอของสวย ๆ จะเปลี่ยนคำถามให้เข้ากับของที่เจอ
+
+---
+
+## 2 · ดูให้ครบสี่แหล่ง
+
+| แหล่ง | หาอะไร | สัญญาณที่ต้องเก็บ |
+|---|---|---|
+| โค้ดโอเพนซอร์ส | ของที่หยิบมาใช้ได้ทันที | สัญญาอนุญาต · commit ล่าสุด · จำนวนผู้ดูแล |
+| ผลิตภัณฑ์ที่ขายอยู่ | ตลาดยอมจ่ายเท่าไหร่ ของเขาขาดอะไร | ราคา · สิ่งที่เขาไม่ทำ · คำบ่นของผู้ใช้ |
+| งานวิจัย | วิธีที่ดีกว่าที่ยังไม่มีใครทำเป็นผลิตภัณฑ์ | ปีที่ตีพิมพ์ · มีโค้ดให้ไหม · ทำซ้ำได้ไหม |
+| มาตรฐานและข้อกำหนด | สิ่งที่ห้ามคิดเอง | หมายเลขมาตรฐาน · ฉบับล่าสุด |
+
+**แหล่งที่คนลืมบ่อยที่สุดคือมาตรฐาน** — เขียนรูปแบบไฟล์เองทั้งที่มีมาตรฐานอยู่แล้ว
+คือการสร้างงานให้ตัวเองและปิดทางเชื่อมกับระบบอื่น
+
+---
+
+## 3 · ตารางเทียบ — หกคอลัมน์นี้ต้องมีเสมอ
+
+| ตัวเลือก | ทำสิ่งที่เราต้องได้ไหม | สัญญาอนุญาต | โครงการยังมีชีวิตไหม | ต้องยอมแลกอะไร | ต้นทุนจริง |
+|---|---|---|---|---|---|
+
+- **คอลัมน์ "ทำสิ่งที่เราต้องได้ไหม" ไม่ใช่รายการความสามารถ** — ตอบเฉพาะข้อที่เราถามในข้อ 1
+- **ต้นทุนจริง** รวมค่าเรียนรู้ ค่าดูแล และค่าย้ายออกถ้าวันหนึ่งต้องเลิกใช้ ไม่ใช่แค่ค่าลิขสิทธิ์
+- แถวเรียงตามความเหมาะสม ตัวที่แนะนำอยู่บนสุด
+- **ปิดท้ายด้วยข้อสรุปหนึ่งบรรทัดเสมอ**
+
+---
+
+## 4 · สัญญาอนุญาต — ตรวจก่อน อย่าตรวจทีหลัง
+
+**เรื่องนี้รู้ช้าแล้วเจ็บที่สุด** เพราะรู้ตอนใกล้ส่งมอบ แปลว่าต้องรื้อ
+
+| กลุ่ม | ตัวอย่าง | ใช้ในของที่ขายได้ไหม |
+|---|---|---|
+| ปล่อยเสรี | MIT · Apache-2.0 · BSD | ได้ · Apache-2.0 มีเงื่อนไขเรื่องสิทธิบัตรเพิ่ม |
+| ต้องเปิดโค้ดต่อ | GPL-3.0 · AGPL-3.0 | ได้แต่**ต้องเปิดโค้ดของเรา** · AGPL นับรวมการให้บริการผ่านเครือข่ายด้วย |
+| ห้ามเชิงพาณิชย์ | CC BY-NC · โมเดลที่เขียนว่า research only | **ขายไม่ได้** ใช้ทดลองและเทียบผลได้ |
+| เฉพาะราย | ต้องอ่านสัญญาจริง | ขึ้นกับข้อสัญญา |
+
+**กฎสองข้อที่พลาดกันบ่อย**
+
+1. **โมเดลปัญญาประดิษฐ์มีสัญญาแยกจากโค้ด** — โค้ดเป็น MIT แต่น้ำหนักโมเดลเป็น non-commercial ได้
+2. **สืบสายด้วย** — โมเดลที่ fine-tune มาจากโมเดล non-commercial ก็ยัง non-commercial
+
+ทุกตัวที่จะใช้จริง ต้อง**เขียนชื่อสัญญาอนุญาตลงไฟล์** ไม่ใช่จำไว้
+
+---
+
+## 5 · โครงการยังมีชีวิตไหม
+
+| สัญญาณ | ตีความ |
+|---|---|
+| commit ล่าสุดเกิน 12 เดือน | ตายแล้ว เว้นแต่เป็นของที่นิ่งจริง เช่นไลบรารีคณิตศาสตร์เล็ก ๆ |
+| ผู้ดูแลคนเดียว | ความเสี่ยงสูง คนนั้นหายไปคือจบ |
+| issue ค้างเป็นร้อยไม่มีใครตอบ | ไม่มีใครดูแลจริง |
+| ไม่มีการออกรุ่นเลยในปีที่ผ่านมา | เหมือนข้อแรก |
+| เอกสารตรงกับโค้ดรุ่นเก่า | จะเสียเวลาเดามาก |
+| ไม่มี test ในโครงการ | ยกรุ่นทีไรพังทุกที |
+
+**ของที่ตายแล้วยังใช้ได้** ถ้ายอมรับว่าจะต้องดูแลเอง — แต่ต้องรู้ตัวตั้งแต่ต้น ไม่ใช่รู้ตอนติด
+
+---
+
+## 6 · จบด้วยหนึ่งในสี่ทาง
+
+| ทาง | เมื่อไหร่ | สิ่งที่ต้องบันทึก |
+|---|---|---|
+| **ใช้เลย** | ตรงความต้องการ ≥80% · สัญญาอนุญาตผ่าน · ยังมีชีวิต | รุ่นที่ล็อกไว้ · สิ่งที่มันทำไม่ได้ |
+| **แยกไปแก้เอง** | ใกล้เคียงมากแต่ขาดบางอย่าง และสัญญาอนุญาตให้แก้ได้ | แก้อะไรบ้าง · จะตามรุ่นต้นทางอย่างไร |
+| **ทำเอง** | ไม่มีตัวไหนผ่านข้อจำกัดที่ยอมไม่ได้ | ตัวที่ใกล้ที่สุดคือตัวไหน และขาดอะไร |
+| **ไม่ทำ** | มีของที่ดีกว่าอยู่แล้วในราคาที่ถูกกว่าทำเอง | เหตุผล และเงื่อนไขที่จะกลับมาคิดใหม่ |
+
+**"ทำเอง" ต้องมีเหตุผลที่เขียนออกมาได้** — "อยากคุมเอง" ไม่ใช่เหตุผล
+ต้องบอกได้ว่าคุมเองแล้วได้อะไรที่หยิบของเขามาใช้แล้วไม่ได้
+
+---
+
+## 7 · บันทึกสิ่งที่ยอมแลก
+
+ทุกทางเลือกแลกบางอย่างไป **ไม่บันทึกวันนี้ อีกหกเดือนไม่มีใครจำได้**
+บันทึกเป็น Architecture Decision Record ด้วย `adr-writer` — อย่างน้อยสามบรรทัด
+
+```
+เลือก: <ตัวเลือก>  เพราะ <เหตุผลหลักข้อเดียว>
+ยอมแลก: <สิ่งที่เสียไป>
+จะกลับมาคิดใหม่เมื่อ: <เงื่อนไขที่วัดได้>
+```
+
+---
+
+## 8 · ฉบับงานวิจัย
+
+ผลลัพธ์ไม่ใช่ "ใช้ตัวไหน" แต่คือ **"ช่องว่างอยู่ตรงไหน"**
+
+- ตารางเทียบเปลี่ยนคอลัมน์เป็น: งาน · ปี · วิธีที่ใช้ · ชุดข้อมูล · ผลที่รายงาน · ข้อจำกัดที่เขาบอกเอง
+- **คอลัมน์ "ข้อจำกัดที่เขาบอกเอง" คือที่มาของช่องว่าง** — ส่วนใหญ่ผู้เขียนบอกไว้เองในหัวข้อสุดท้าย
+- ช่องว่างที่ใช้ได้ต้องเป็นอย่างใดอย่างหนึ่ง: ยังไม่มีใครทดสอบกับบริบทนี้ · วิธีเดิมใช้ไม่ได้เมื่อเงื่อนไขเปลี่ยน · ผลที่รายงานทำซ้ำไม่ได้
+- **ห้ามอ้างงานที่ยังไม่ได้อ่านตัวเต็ม** — อ่านแค่บทคัดย่อแล้วอ้าง คือความผิดพลาดที่กรรมการจับได้เร็วที่สุด
+- งานที่หาโค้ดหรือชุดข้อมูลไม่ได้ ให้ระบุไว้ว่าทำซ้ำไม่ได้ อย่าเงียบ
+
+---
+
+## 9 · Anti-patterns
+
+- ❌ **ค้นจนได้รายชื่อ 20 ตัวแล้วไม่ตัดสินใจ** — รายชื่อไม่ใช่ผลงาน
+- ❌ **เทียบด้วยรายการความสามารถ** — ทุกตัวจะดูดีหมด เพราะทุกคนเขียนหน้าแรกเก่ง
+- ❌ **ตรวจสัญญาอนุญาตหลังเขียนโค้ดไปแล้ว**
+- ❌ **เชื่อหน้าแรกของโครงการ** — ต้องดู commit และ issue จริง
+- ❌ **"ทำเองเร็วกว่า" โดยไม่เคยลองของที่มี**
+- ❌ **ไม่บันทึกสิ่งที่ยอมแลก** — ทีมจะถกเรื่องเดิมซ้ำทุกหกเดือน
+- ❌ **ลืมมาตรฐานที่มีอยู่แล้ว** แล้วประดิษฐ์รูปแบบข้อมูลเอง
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| แกะแอปต้นแบบที่จะทำแบบเดียวกัน — feature · UI · UX · ข้อเสนอปรับปรุง | `reference-app-research` |
+| บันทึกการตัดสินใจ | `adr-writer` |
+| เทียบรูปแบบสถาปัตยกรรม ไม่ใช่เทียบเครื่องมือ | `architecture-patterns` |
+| รูปทรงของตารางเทียบในคำตอบ | `answer-shape` |
+| ตัดข้อเสนอให้เหลือเท่าที่จำเป็น | `simplicity-first` |
+| ไฟล์ที่ดาวน์โหลดหรือแปลงระหว่างสำรวจ | `temp-file-discipline` |
+
+---
+
+## ตัวย่อ
+
+- **MIT** — Massachusetts Institute of Technology License (สัญญาอนุญาตแบบปล่อยเสรี)
+- **GPL** — General Public License (ใช้ได้แต่ต้องเปิดโค้ดที่ต่อยอด)
+- **AGPL** — Affero General Public License (เหมือน GPL และนับรวมการให้บริการผ่านเครือข่าย)
+- **BSD** — Berkeley Software Distribution License
+- **CC BY-NC** — Creative Commons Attribution-NonCommercial (ห้ามใช้เชิงพาณิชย์)
+- **ADR** — Architecture Decision Record (บันทึกการตัดสินใจเชิงสถาปัตยกรรม)
+
+
+---
+
 # skill: svg-diagram-system
 
-Use when an architecture diagram has to come out as a high-quality image file for a specification, a slide or a client deliverable — Python that emits SVG and renders through a headless browser, with real product logos, every box on a grid and orthogonal connectors. Sets no colours of its own and asks for one accent before drawing.
+Use when an architecture diagram must be a high-quality image file for a spec, slide or client deliverable. Python emits SVG on a grid with real logos and orthogonal connectors. Asks for one accent colour first.
+
+> **สีเริ่มต้น = ชุดประจำบ้าน** ถ้า `doc-theme` ไม่ได้ประกาศ accent เฉพาะงาน ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") — brand `#2A78D6` และชุดเดียวกับสไลด์/เอกสาร
 
 # ระบบวาดไดอะแกรมด้วย SVG
 
@@ -249,7 +425,9 @@ python render.py d01.svg ../01-architecture.png 1400 860
 
 # skill: diagram-figures
 
-Use when an architecture picture has to look designed rather than generated — a figure for a client proposal, a slide, a printed document or a sign-off package. Lays the figure out by hand as an HTML page and photographs it, which buys control automatic layout cannot give. Ships three tested layouts and the official cloud vendor icon sets.
+Use when an architecture picture must look designed, not generated (proposal, slide, print, sign-off). Lays it out by hand as an HTML page and screenshots it. Three tested layouts plus official cloud icon sets.
+
+> **สีเริ่มต้น = ชุดประจำบ้าน** ถ้า `doc-theme` ไม่ได้ประกาศ accent เฉพาะงาน ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") — brand `#2A78D6` และชุดเดียวกับสไลด์/เอกสาร
 
 # Diagram Figures
 
@@ -582,7 +760,7 @@ python assets/render-figure.py figure.html figure.png 2
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP service, REST API or backend — the baseline every service needs before feature work starts. Defines the four operational endpoints with exact response shapes, an error envelope based on RFC 9457, request-id propagation, graceful shutdown, timeouts and the security headers that are not optional.
+Use when building or reviewing any HTTP service or backend. Four operational endpoints, an RFC 9457 error envelope, request ids, graceful shutdown, timeouts and mandatory security headers.
 
 # Web Service Essentials
 
@@ -1007,3 +1185,82 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | security headers | `UseHsts()` | `helmet` | `secure` middleware |
 | OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
+
+
+---
+
+# skill: spell-out-abbreviations
+
+Use in every piece of writing for a person (docs, comments, commits, replies, UI text, diagram labels). Spell out each abbreviation the first time, e.g. Model Context Protocol (MCP), and gloss specialist terms.
+
+# Spell Out Abbreviations
+
+> **กฎที่หนึ่ง:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
+> **กฎที่สอง:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายต้องไม่ต้องเดา
+
+## รูปแบบ
+
+```
+✅ Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
+❌ MCP ทำให้ Claude ต่อกับระบบอื่นได้
+```
+
+- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็ม + วงเล็บ · ครั้งต่อไปใช้ตัวย่อล้วน
+- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
+- ตารางหรือหัวข้อที่ที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
+- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
+
+## ยกเว้น — ไม่ต้องขยาย
+
+คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
+และนามสกุลไฟล์ (`.docx`, `.pptx`) · ถ้าไม่แน่ใจ **ให้ขยาย** เสียเปล่าดีกว่าคนอ่านไม่รู้เรื่อง
+
+## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
+
+ตัวย่อขยายแล้วยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
+ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
+
+```
+❌ ใช้ idempotency key กันงานซ้ำ
+✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
+
+❌ ต้องทำ expand-contract ตอน migrate
+✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
+```
+
+**คำอธิบายต้องสั้นกว่าหนึ่งบรรทัด** ยาวกว่านั้นแปลว่าควรแยกเป็นประโยคของตัวเอง
+
+**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
+อ่านแล้วเดาความหมายได้ไหม เดาไม่ได้คือต้องอธิบาย
+
+| ระดับผู้อ่าน | อธิบายแค่ไหน |
+|---|---|
+| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
+| ทีมพัฒนาแต่คนละส่วน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
+
+---
+
+## ใช้กับอะไรบ้าง
+
+เอกสารทุกชนิด · คอมเมนต์ในโค้ด · ข้อความ commit · ข้อความบนหน้าจอ · คำอธิบายไดอะแกรม ·
+คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+
+## ตัวอย่างที่เจอบ่อย
+
+Model Context Protocol (MCP) · Application Programming Interface (API) ·
+Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
+Software Development Life Cycle (SDLC) · Single Sign-On (SSO) ·
+Continuous Integration / Continuous Deployment (CI/CD) ·
+Software Requirements Specification (SRS) · Key Performance Indicator (KPI) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC) ·
+Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
+Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
+
+## Anti-patterns
+
+- ❌ ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
+- ❌ วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
+- ❌ ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
+- ❌ ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่ามันวัดอะไร
+- ❌ อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค

@@ -1,0 +1,2 @@
+description = "Record a significant decision in the decision journal — options, reasoning, expected outcome, check-in date — and schedule the revisit so outcomes actually teach something."
+prompt = "Run the `decision-journal` skill for: **{{args}}**\n\nConfirms options considered and expected outcome, writes the dated entry, and sets the check-in reminder.\n"

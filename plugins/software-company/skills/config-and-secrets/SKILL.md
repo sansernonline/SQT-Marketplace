@@ -1,6 +1,6 @@
 ---
 name: config-and-secrets
-description: Use when a project needs settings that differ between environments, or holds anything that must not be committed — connection strings, keys, certificates. Separates config from secrets, validates every setting at start-up, names variables consistently, picks a secret store, makes rotation possible, and gives the order of steps for a leaked credential.
+description: Use when settings differ between environments or something must never be committed (connection strings, keys, certificates). Config vs secrets, start-up validation, naming, secret store, rotation, leaked-credential steps.
 ---
 
 # Config และ Secret

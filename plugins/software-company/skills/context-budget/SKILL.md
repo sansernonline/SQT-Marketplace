@@ -1,6 +1,6 @@
 ---
 name: context-budget
-description: Use when a task will read files, search a codebase, run commands with long output, or work through a repository — before the first read, not after the context window is full. Decides when to send a subagent instead of reading directly, how to read part of a file rather than all of it, how to bound a search, when to write intermediate results to disk, and which project notes are worth keeping so the next session does not re-explore the same code.
+description: Use before a task reads many files, searches a codebase or runs commands with long output. Decides when to send a subagent, how to read part of a file, how to bound a search, and what to write to disk.
 ---
 
 # งบ context

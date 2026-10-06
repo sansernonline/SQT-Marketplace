@@ -1,6 +1,148 @@
+# skill: status-report
+
+Use at the end of every task that produces or checks project work (document, mockup, review, code round, fix, release). Writes one status table into docs/BUILD-PLAN.md and shows it in the reply. Load before reporting done.
+
+# รายงานสถานะเมื่อจบงาน
+
+> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
+> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
+
+---
+
+## 1 · เขียนที่ไหน — `docs/BUILD-PLAN.md` เสมอ
+
+ทุกงาน ทั้งเอกสาร โค้ด การตรวจ การส่งมอบ เขียนที่ไฟล์เดียวนี้ เพื่อให้มีที่ดูสถานะที่เดียว
+
+| สถานการณ์ | ทำอย่างไร |
+|---|---|
+| มีไฟล์อยู่แล้ว | แก้เฉพาะสองหัวข้อด้านล่าง — **ห้ามแตะตารางงานหรือหัวข้ออื่น** |
+| ยังไม่มีไฟล์ | สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ + สองหัวข้อด้านล่าง — ตารางงาน (`spec-to-code-loop`) เพิ่มทีหลังเมื่อเริ่มเขียนโค้ด **ระหว่าง** สองหัวข้อนี้ |
+| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** ตัวหลักเป็นคนเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
+
+ลำดับหัวข้อในไฟล์ (ต่อจากชื่อโปรเจกต์): `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
+
+สองหัวข้อที่ skill นี้ดูแล:
+
+- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว ไม่ใช่ต่อท้าย
+- `## ประวัติสถานะ` — **เพิ่มหนึ่งบรรทัดบนสุด** ต่องานหนึ่งงาน ไม่ลบของเดิม
+
+---
+
+## 2 · ตาราง `## สถานะล่าสุด`
+
+```markdown
+## สถานะล่าสุด
+
+อัปเดต: 2026-10-01 14:20 · งานล่าสุด: เขียน SRS
+
+| รายการ | ประเภท | สถานะ | ผลตรวจ | ค้าง / หมายเหตุ |
+|---|---|---|---|---|
+| SRS (`docs/srs.md`) | เอกสาร | DRAFT | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
+| mockup (`mockup/`) | เอกสาร | REVIEW | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
+| FSD | เอกสาร | ยังไม่เริ่ม | — | รอ architecture |
+| FR-001 ถึง FR-012 | โค้ด | เสร็จ | ผ่าน — test 48/48 | — |
+
+**ค้างอยู่ (ต้องมีคนตัดสิน):**
+1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
+
+**รออนุมัติ:**
+1. push branch `feat/search` — `git push -u origin feat/search`
+
+**ถัดไป:** แก้ปุ่มหลอกใน mockup → เขียน architecture
+
+**ข้อเสนอ:**
+1. ย้ายตัวตรวจ input ไปไว้จุดเดียวที่ขอบ API — ลด if ซ้ำ 14 จุด · แรงกลาง
+```
+
+### ค่าที่ใช้ในแต่ละคอลัมน์ — ใช้เฉพาะค่าเหล่านี้
+
+| คอลัมน์ | ค่าที่ใช้ได้ |
+|---|---|
+| ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` = ไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) · `ส่งมอบ` = ถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
+| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
+| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` · รหัสงานใช้รหัส FR ของ SRS ถ้ามี |
+| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
+
+- **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู · ไม่ได้รันหรือไม่ได้ตรวจ เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
+- **แอปมือถือ** หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` · ยังไม่ได้ลองเครื่องจริง เขียนไว้ในช่อง ค้าง
+- `APPROVED` มีแต่คนเปลี่ยนได้ — agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
+- ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ — รายการที่รอบนี้ไม่ได้แตะ คัดลอกค่าเดิมมา
+- หนึ่งแถวต่อเอกสารหนึ่งฉบับ · โค้ดรวมเป็นช่วงรหัส (`FR-001 ถึง FR-012`) ได้ถ้าสถานะเท่ากัน อย่าทำตารางยาวเกิน 25 แถว
+
+### "ค้างอยู่" กับ "ถัดไป"
+
+- **ค้างอยู่** = สิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน · เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร · ไม่มีให้เขียน `ไม่มี`
+- **รออนุมัติ** = งานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (agent-team หัวข้อ 6) · บอกคำสั่งหรือไฟล์ที่พร้อมใช้ · ไม่มีไม่ต้องใส่หัวข้อ
+- **ถัดไป** = งานลำดับถัดไปไม่เกิน 3 อย่าง
+- **ข้อเสนอ** = ปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกได้อะไรและแรงที่ใช้ · ไม่มีไม่ต้องใส่หัวข้อ
+
+---
+
+## 3 · บรรทัดใน `## ประวัติสถานะ`
+
+หนึ่งบรรทัดต่องาน ใหม่สุดอยู่บน:
+
+```markdown
+## ประวัติสถานะ
+
+- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ค้าง 1
+- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด
+```
+
+รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกินหนึ่งบรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว · รอบนั้นมีการตัดสินใจเอง ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
+
+หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` — skill นี้ไม่แก้ แต่ไม่ลบ
+
+---
+
+## 4 · ในคำตอบ
+
+แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
+
+---
+
+## 5 · รายการตรวจก่อนบอกว่าจบ
+
+- [ ] อ่าน `docs/BUILD-PLAN.md` จากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
+- [ ] `## สถานะล่าสุด` เขียนทับ ไม่ได้ต่อท้าย · มีวันที่เวลา
+- [ ] ทุกแถวที่เขียนว่า `ผ่าน` มีหลักฐาน
+- [ ] ไม่ได้ตั้ง `APPROVED` เอง
+- [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` หนึ่งบรรทัด
+- [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
+- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
+
+---
+
+## 6 · สิ่งที่ห้ามทำ
+
+| อย่าทำ | เพราะ |
+|---|---|
+| เขียนว่า `ผ่าน` โดยไม่ได้รัน test หรือไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
+| ต่อท้าย `## สถานะล่าสุด` ทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
+| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
+| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
+| ให้ subagent เขียน `BUILD-PLAN.md` เอง | เขียนชนกันแล้วไฟล์พัง |
+
+---
+
+## เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` |
+| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` |
+| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `work-session-context` |
+| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
+| เลือก playbook และจบงานทุกชนิด | `agent-team` |
+| รูปแบบตารางและเอกสาร | `polished-document-style` |
+| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
+
+
+---
+
 # skill: reference-app-research
 
-Use when someone says "I want an app like X" — names an existing product (with or without a link) as the model for what to build. Researches that product in depth from official pages, documentation, changelogs, user reviews and close competitors, then writes one research document covering its features, user interface, user experience, strengths, weaknesses and — the most important part — concrete improvements our version should make, each backed by evidence and mapped to the requirement and screen it will become. The output feeds the BRD, SRS and mockup. Requires web search and fetch tools.
+Use when someone says I want an app like X. Researches that product from official pages, docs, changelogs, reviews and competitors, and writes one evidence-backed research doc ending in improvements for our version.
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร
 
@@ -205,7 +347,7 @@ Use when someone says "I want an app like X" — names an existing product (with
 
 # skill: flag-and-propose
 
-Use when reporting something found mid-task that changes what happens next — a stale file, a number that no longer matches, a blocked step, a risk — and a decision is needed before carrying on. Opens with the consequence, puts conflicting numbers in a recorded-versus-actual table, and closes with one short question.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step, risk) and a decision is needed. Lead with the consequence, show recorded vs actual, end with one short question.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

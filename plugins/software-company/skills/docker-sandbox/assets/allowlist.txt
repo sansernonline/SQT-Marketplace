@@ -1,0 +1,21 @@
+# One host per line. Used only in locked mode (sandbox.ps1 up -Locked).
+# Claude Code needs its own hosts — check the current list at
+# https://code.claude.com/docs/en/network-config before relying on this file.
+api.anthropic.com
+claude.ai
+# package registries
+registry.npmjs.org
+pypi.org
+files.pythonhosted.org
+api.nuget.org
+# source and OS packages
+github.com
+api.github.com
+codeload.github.com
+objects.githubusercontent.com
+deb.nodesource.com
+archive.ubuntu.com
+security.ubuntu.com
+# Playwright browser downloads
+cdn.playwright.dev
+playwright.download.prss.microsoft.com

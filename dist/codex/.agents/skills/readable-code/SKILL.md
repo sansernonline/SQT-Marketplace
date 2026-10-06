@@ -1,6 +1,6 @@
 ---
 name: readable-code
-description: Use when writing or reviewing code and the question is whether a person can read it — names, function shape, comments, and where a file lives. Gives verb prefixes that each mean one thing, the words to ban, name length by lifespan, feature-based file layout and the newcomer test. For writing less code use lazy-coding.
+description: Use when writing or reviewing code and the question is whether a person can read it (names, function shape, comments, file location). Verb prefixes, banned words, name length, feature folders, the newcomer test.
 ---
 
 # โค้ดที่คนอ่านรู้เรื่อง
@@ -101,7 +101,9 @@ description: Use when writing or reviewing code and the question is whether a pe
 | `temp` · `tmp` · `foo` · `test2` | อยู่ในโค้ดอีกสามปี | หน้าที่ของมัน |
 | ตัวย่อที่คิดขึ้นเอง (`usrMgr` · `calcAmt`) | ประหยัดตัวอักษร แลกกับเวลาคนอ่าน | เขียนเต็ม |
 
-**ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง
+**ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง ·
+ชื่อที่ platform หรือ framework ตั้งมาแล้ว (`SensorManager` · Android `Service` · `ChangeNotifier`) ใช้ตามนั้น —
+คำต้องห้ามใช้กับชื่อที่**เราตั้งเอง**เท่านั้น
 
 ---
 
@@ -110,7 +112,8 @@ description: Use when writing or reviewing code and the question is whether a pe
 - **หนึ่งฟังก์ชัน หนึ่งระดับนามธรรม** — ฟังก์ชันที่มีทั้ง "ส่งอีเมล" และ "ต่อสตริง SQL" อ่านยากเพราะสมองต้องสลับระดับ
 - **พารามิเตอร์ไม่เกิน 3 ตัว** เกินนั้นรับเป็น object ที่มีชื่อฟิลด์
 - **ห้ามรับ boolean เป็นพารามิเตอร์** — `render(true)` ที่จุดเรียกอ่านไม่ออกว่า `true` คืออะไร
-  แยกเป็น `renderDraft()` กับ `renderFinal()` หรือรับ `{ mode: "draft" }`
+  แยกเป็น `renderDraft()` กับ `renderFinal()` หรือรับ `{ mode: "draft" }` ·
+  **ยกเว้น named parameter** ที่จุดเรียกเห็นชื่อ — `TextField(obscureText: true)` ใน Dart หรือ `enabled: true` อ่านออกอยู่แล้ว
 - **คืนค่าก่อนดีกว่าซ้อน `else`** — เงื่อนไขที่ตัดจบได้ ให้ `return` ทันที เหลือทางหลักไม่เยื้อง
 - **เยื้องเกิน 3 ชั้น = ต้องแตกฟังก์ชัน** ไม่ใช่เพราะกฎ แต่เพราะสมองตามเงื่อนไขซ้อนสี่ชั้นไม่ไหว
 
@@ -136,9 +139,22 @@ description: Use when writing or reviewing code and the question is whether a pe
 | ข้อจำกัดจากภายนอก | ข้อกำหนดของ API ที่เรียก · กฎหมาย · ข้อจำกัดของฮาร์ดแวร์ |
 | การตัดสินใจที่ดูแปลกแต่ตั้งใจ | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" |
 | สูตรหรือกฎธุรกิจที่มีที่มา | อ้างเลขข้อในเอกสาร ไม่ใช่เล่าสูตรซ้ำ |
-| `TODO` ที่มีเจ้าของและเงื่อนไข | `TODO(jk): ย้ายไป Redis เมื่อรันเกิน 1 process` |
+| `TODO` ที่มีเจ้าของและเงื่อนไข | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` |
 
 > **คอมเมนต์ที่โกหกอันตรายกว่าไม่มีคอมเมนต์** — แก้โค้ดแล้วต้องแก้คอมเมนต์ในรอบเดียวกัน
+
+### รอบคัดคอมเมนต์ก่อนรีวิว
+
+ก่อนส่งรีวิว ไล่ทุกคอมเมนต์ที่ diff เพิ่มหรือแก้ แล้วจัดเข้าหนึ่งในสี่ทาง · diff ใหญ่ส่ง subagent ระดับกลางแบบอ่านอย่างเดียวทำรายการ แล้วตัวหลักตัดสิน
+
+| คอมเมนต์ | ทำ |
+|---|---|
+| แปลโค้ดเป็นภาษาคน · ล้าสมัย · โค้ดที่ถูกคอมเมนต์ทิ้ง | ลบ |
+| อธิบายว่าตัวแปรหรือฟังก์ชันคืออะไร | เปลี่ยนชื่อให้บอกเอง แล้วลบ |
+| อ้างข้อจำกัด ("ห้าม null" · "ต้องเรียกหลัง init" · "ค่าไม่เกิน 100") | เปลี่ยนเป็นของที่ตรวจได้ — type · assert · test · lint (`principle-rules-as-checks-not-text`) แล้วลบ |
+| สี่แบบในตารางข้างบน | เก็บ |
+
+รายงานผลเป็นตัวเลข: ลบกี่อัน · เปลี่ยนชื่อกี่อัน · กลายเป็นการตรวจกี่อัน · เก็บกี่อัน
 
 ---
 
@@ -168,7 +184,10 @@ src/
 **กฎ:**
 
 - **ชื่อไฟล์คือชื่อของสิ่งที่มัน export เป็นหลัก** — `InvoiceRenderer` อยู่ใน `invoice-renderer.ts`
-- **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่
+  รูปแบบตัวพิมพ์ตามธรรมเนียมของภาษา: Dart/Python ใช้ snake_case (`invoice_renderer.dart`) · .NET ใช้ `InvoiceRenderer.cs`
+- **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่ —
+  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป)
+  ให้ใช้โครงโฟลเดอร์ใน `test/` เหมือน `lib/` เป๊ะ — `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
 - **ไม่มี `utils/` ก้อนเดียว** — ถ้าของสองชิ้นไม่เกี่ยวกัน มันไม่ควรอยู่ไฟล์เดียวกัน
   `shared/` ยอมได้ แต่ข้างในต้องแตกตามเรื่อง ไม่ใช่กองรวม
 - **`index` ที่ re-export ทั้งโฟลเดอร์ ทำให้ "ไปที่นิยาม" ในเครื่องมือแก้โค้ดพัง** — ใช้เท่าที่จำเป็นจริง

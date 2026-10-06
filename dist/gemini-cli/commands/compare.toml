@@ -1,0 +1,2 @@
+description = "Compare products or services before buying — decision matrix, total cost of ownership, review trust check."
+prompt = "Run the `consumer-advocate` agent with the `buy-compare` skill: **{{args}}**\n\n1. Ask for the must-haves, budget, how long the user plans to keep it.\n2. Build the weighted decision matrix (5–7 criteria).\n3. Calculate total cost of ownership over the expected life.\n4. Check reviews with the trust signals and fake-review red flags.\n5. Recommend one option with the reason, and note warranty terms to log in `warranty-tracker`.\n"

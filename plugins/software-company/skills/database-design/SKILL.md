@@ -1,6 +1,6 @@
 ---
 name: database-design
-description: Use when designing or changing a database schema — tables, columns, indexes, relationships or a migration. Covers relational versus document, naming, identifier choice, the four data types teams get wrong, where indexes help, constraints, expand-and-contract migrations and multi-tenant layouts. Load it before the first CREATE TABLE.
+description: Use when designing or changing a database schema (tables, columns, indexes, relationships, migrations). Naming, identifiers, data types, indexes, constraints, expand-and-contract migrations, multi-tenancy. Load before CREATE TABLE.
 ---
 
 # ออกแบบฐานข้อมูล

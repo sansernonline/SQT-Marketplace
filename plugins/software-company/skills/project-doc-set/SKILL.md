@@ -1,6 +1,6 @@
 ---
 name: project-doc-set
-description: Use when a new project needs its document set decided — which documents to write, in what order, who reads each one, and where docs, assets, mockups and qa sit beside the code. Scales the set to project size so a two-week job does not get a twelve-document package.
+description: Use when a new project needs its document set decided (which docs, in what order, who reads each, where docs, assets, mockups and qa sit). Scales the set to project size.
 ---
 
 # ชุดเอกสารโปรเจกต์
@@ -32,6 +32,8 @@ description: Use when a new project needs its document set decided — which doc
 
 **ตัดสินข้อนี้ก่อน** เพราะย้ายทีหลังคือ rewrite ลิงก์ทั้งโปรเจกต์
 
+**ค่าเริ่มต้นคือแบบ B** — โค้ดอยู่ในโฟลเดอร์ `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`) แม้เอกสารจะเป็น markdown ล้วน · แบบ A ใช้เมื่อผู้ใช้ขอเท่านั้น
+
 | | **แบบ A — เอกสารอยู่ใน repo** | **แบบ B — เอกสารอยู่นอก repo** |
 |---|---|---|
 | เลือกเมื่อ | เอกสารเป็น markdown ทั้งหมด · ผู้อ่านคือทีมพัฒนา | มี `.docx` / `.xlsx` / mockup / รูป PNG ที่ลูกค้าต้องเห็น |
@@ -56,7 +58,8 @@ description: Use when a new project needs its document set decided — which doc
 ├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
 ├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
 ├─ _to_delete/          ของชั่วคราวทุกอย่าง
-└─ <repo>/              repo โค้ด — โครงข้างในเป็นของ `project-bootstrap`
+├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
+└─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
 ```
 
 **โฟลเดอร์เหล่านี้สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:**
@@ -116,7 +119,7 @@ description: Use when a new project needs its document set decided — which doc
 
 | เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
 |---|---|---|---|
-| README | `<repo>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
+| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
 | BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
 | AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
 | API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
@@ -181,7 +184,7 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |
 | API-SPEC | `system-analyst` | `api-conventions` |
 | DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ plugin `software-company-ai`) |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
 
 ---
 

@@ -1,1174 +1,647 @@
-# skill: cicd-and-release
+# skill: web-service-essentials
 
-Use when setting up or fixing a build and deploy pipeline, or deciding how a project ships. Covers pipeline stages and what each blocks on, build once and promote the same artifact, versions that trace back to a commit, branches, environments and gates, release patterns, feature flags and a rehearsed rollback. Ships starter pipelines.
+Use when building or reviewing any HTTP service or backend. Four operational endpoints, an RFC 9457 error envelope, request ids, graceful shutdown, timeouts and mandatory security headers.
 
-# CI/CD และการปล่อยของ
+# Web Service Essentials
 
-> **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
-> ถ้า build ใหม่ตอนขึ้น production แปลว่าของที่ทดสอบผ่าน กับของที่ลูกค้าใช้ ไม่ใช่ตัวเดียวกัน
+> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
+> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะเดาล้วน ๆ
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ตั้ง pipeline ให้โปรเจกต์ใหม่ หรือรื้อของเดิมที่ช้า/ไม่น่าเชื่อถือ
-- ต้องตัดสินใจเรื่อง branch, เวอร์ชัน, environment, หรือวิธีปล่อยของ
-- deploy แล้วพังบ่อย หรือ rollback ไม่ได้
-- มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
+- เริ่ม service / REST API / microservice ใหม่
+- มีคนขอ health check, ping, readiness, liveness, version endpoint
+- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
+- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` |
-| สัดส่วนและขอบเขตของ test | `testing-standards` |
-| เขียน migration | `database-design` |
-| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` |
-| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` |
+- ออกแบบ endpoint ทางธุรกิจ → command `/api-design`
+- รูปแบบ log → `logging-standards`
+- เลือกสถาปัตยกรรม → `architecture-patterns`
 
 ---
 
-## 1 · ขั้นตอนใน pipeline
+## 1 · endpoint พื้นฐาน 4 ตัว
 
-| ลำดับ | ขั้น | บล็อกเมื่อ | เวลาที่ยอมรับได้ |
-|:--:|---|---|---|
-| 1 | ตรวจรูปแบบโค้ด + lint | ผิดกฎ | < 1 นาที |
-| 2 | build | คอมไพล์ไม่ผ่าน · มี warning ที่ตั้งเป็น error | < 3 นาที |
-| 3 | unit test | มี test ตก · ความครอบคลุมต่ำกว่าเกณฑ์ | < 5 นาที |
-| 4 | ตรวจ dependency + secret ที่หลุดเข้า git | พบช่องโหว่ระดับสูง · พบ secret | < 2 นาที |
-| 5 | สร้าง artifact + ประทับเวอร์ชัน | — | < 2 นาที |
-| 6 | deploy ลง staging | — | |
-| 7 | integration + end-to-end test | test ตก | < 15 นาที |
-| 8 | **ด่านคน** (เฉพาะ production) | ยังไม่มีคนกดอนุมัติ | |
-| 9 | deploy ลง production | — | |
-| 10 | ตรวจหลัง deploy | health check ไม่ผ่าน → rollback อัตโนมัติ | < 2 นาที |
+| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+|---|---|:---:|:---:|---|
+| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
+| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
+| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
+| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
 
-**ขั้น 1–5 คือ CI ต้องวิ่งกับทุก pull request** ไม่ใช่เฉพาะตอน merge
-**รวมขั้น 1–5 ควรจบใน 10 นาที** — เกินกว่านั้นคนจะเริ่มหาทางข้าม
+> 🚨 **live ห้ามเช็ค dependency** — นี่คือความผิดพลาดที่เจอบ่อยที่สุด
+> ถ้า `/health/live` เช็ค DB แล้ว DB ล่มชั่วคราว Kubernetes จะ **ฆ่า pod ทิ้งทั้งหมด**
+> ทั้งที่แอปยังปกติดี พอ DB กลับมา ก็ไม่มี pod เหลือให้รับ traffic แล้ว
+> ของพวกนี้ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัดออกจาก pool ชั่วคราว
 
----
+\* `/version` ถ้าไม่อยากเปิด commit hash สาธารณะ ให้จำกัดเฉพาะเครือข่ายภายใน
 
-## 2 · build ครั้งเดียว แล้วเลื่อนขั้น
+### รูปร่าง response (เหมือนกันทุกภาษา)
 
-```
-commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี้)
-                                           ├→ uat      (ตัวเดิม)
-                                           └→ production (ตัวเดิม)
-```
-
-- artifact คือไฟล์ที่ deploy ได้จริง — container image, ไฟล์ zip ที่ publish แล้ว, แพ็กเกจ
-- **ความต่างระหว่าง environment ต้องมาจาก config ตอนรันเท่านั้น** ไม่ใช่จากการ build ใหม่
-- เก็บ artifact ไว้ให้ย้อนกลับได้อย่างน้อย 30 วัน — rollback คือการ deploy artifact เก่า ไม่ใช่การ build ย้อน
-
-> ❌ **`git pull` บนเครื่อง production แล้ว build ตรงนั้น** — ของที่รันอยู่ไม่มีใครรู้ว่าคือ commit ไหน
-> และ dependency ที่ดึงตอนนั้นอาจไม่ใช่ชุดเดียวกับที่ทดสอบ
-
----
-
-## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
-
-ใช้ SemVer — `MAJOR.MINOR.PATCH`
-
-| ขึ้นเลขไหน | เมื่อ |
-|---|---|
-| MAJOR | เปลี่ยนแล้วฝั่งที่เรียกใช้พัง (ดูตารางใน `api-conventions`) |
-| MINOR | เพิ่มความสามารถ ของเดิมยังใช้ได้ |
-| PATCH | แก้บั๊ก |
-
-- **tag ใน git คือแหล่งความจริง** — `v1.4.0` ชี้ commit เดียวเท่านั้น
-- artifact แปะ commit hash ไว้ด้วย — `1.4.0+abc1234`
-- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`)
-- ก่อน 1.0.0 ให้ใช้ `0.x` และยอมรับว่ายังเปลี่ยนแรงได้
-
----
-
-## 4 · branch
-
-| แบบ | วิธี | เหมาะกับ |
-|---|---|---|
-| **trunk-based** (แนะนำ) | branch อายุสั้น 1–2 วัน merge เข้า `main` บ่อย · ของยังไม่เสร็จซ่อนด้วย feature flag | ทีมส่วนใหญ่ · ปล่อยของบ่อย |
-| release branch | `main` + `release/1.4` สำหรับแก้ด่วน | ซอฟต์แวร์ที่ลูกค้าติดตั้งเอง · ต้องดูแลหลายเวอร์ชันพร้อมกัน |
-| gitflow | `develop` + `feature` + `release` + `hotfix` | ปล่อยของเป็นรอบใหญ่ ๆ นาน ๆ ครั้ง · ส่วนใหญ่ซับซ้อนเกินจำเป็น |
-
-**กฎที่ไม่ขึ้นกับแบบที่เลือก:**
-
-- `main` ต้อง deploy ได้ตลอดเวลา
-- ป้องกัน `main` ไว้ — ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
-- branch ที่อายุเกินหนึ่งสัปดาห์ = merge conflict ที่รออยู่
-
----
-
-## 5 · environment และด่าน
-
-| environment | ข้อมูล | ใครกด deploy | ต้องผ่านอะไร |
-|---|---|---|---|
-| dev | ปลอม | อัตโนมัติทุก commit | build ผ่าน |
-| staging | คล้ายจริง (ปิดบังแล้ว) | อัตโนมัติเมื่อ merge เข้า `main` | unit + integration |
-| uat | คล้ายจริง | ทีมกด | ผู้ใช้ทดสอบผ่าน |
-| production | จริง | **คนกดอนุมัติ** | ทุกอย่างข้างบน |
-
-- staging ต้องใกล้เคียง production ให้มากที่สุด — เวอร์ชันฐานข้อมูล ระบบปฏิบัติการ ค่า config
-- **ห้ามคัดลอกข้อมูลจริงลง staging โดยไม่ปิดบังข้อมูลส่วนบุคคล**
-- ถ้ามี environment เดียวเพราะงบจำกัด ให้บอกตรง ๆ ในเอกสาร และเพิ่ม feature flag ทดแทน
-
----
-
-## 6 · secret ใน pipeline
-
-- เก็บใน secret store ของแพลตฟอร์ม ไม่ใช่ในไฟล์ pipeline
-- ให้สิทธิ์เท่าที่ขั้นนั้นต้องใช้ — ขั้น build ไม่ต้องรู้รหัสฐานข้อมูล production
-- pipeline ที่วิ่งจาก fork ของคนนอก **ห้ามเห็น secret**
-- ตัวตรวจ secret ที่หลุดเข้า git ต้องอยู่ในขั้นที่ 4 ไม่ใช่ตรวจปีละครั้ง
-
-รายละเอียดทั้งหมด → `config-and-secrets`
-
----
-
-## 7 · migration ฐานข้อมูลใน pipeline
-
-```
-deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy schema (บีบ) รอบถัดไป
-```
-
-- migration รันเป็น**ขั้นของตัวเอง** ก่อน deploy โค้ด ไม่ใช่รันตอนแอปบูต
-  (แอปหลาย instance บูตพร้อมกันแล้วรัน migration ชนกันคือหายนะ)
-- ใช้บัญชีที่มีสิทธิ์แก้ schema เฉพาะขั้นนี้ บัญชีที่แอปใช้รันต้องไม่มีสิทธิ์นั้น
-- migration ต้องเข้ากันได้กับโค้ดเวอร์ชันก่อนหน้า — ไม่งั้น rollback โค้ดแล้วระบบพัง
-- สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
-
-วิธี expand/contract → `database-design` ข้อ 9
-
----
-
-## 8 · วิธีปล่อยของ
-
-| วิธี | ทำงานยังไง | ต้องมี | เหมาะกับ |
-|---|---|---|---|
-| หยุดแล้วเปลี่ยน | ปิด → เปลี่ยน → เปิด | ไม่มี | ระบบภายใน · ปิดได้ตอนกลางคืน |
-| **rolling** | ทยอยเปลี่ยนทีละเครื่อง | health check ที่เชื่อถือได้ · เข้ากันได้ทั้งสองเวอร์ชัน | ค่าเริ่มต้นของระบบที่รันหลาย instance |
-| blue-green | ยกชุดใหม่ขึ้นครบ แล้วสลับ traffic | ทรัพยากรสองเท่าชั่วคราว | ต้อง rollback ได้ในไม่กี่วินาที |
-| canary | ปล่อยให้ผู้ใช้ 5% ก่อน แล้วค่อยขยาย | ตัวชี้วัดที่แยกตามเวอร์ชันได้ | ระบบใหญ่ · ความเสี่ยงสูง |
-
-> **rolling ต้องการสิ่งที่คนมักลืม** — ระหว่าง deploy เวอร์ชันเก่าและใหม่ให้บริการพร้อมกัน
-> API และ schema จึงต้องเข้ากันได้ทั้งสองทาง ถ้าออกแบบไม่เผื่อไว้ ผู้ใช้บางคนจะเจอ error ทุกครั้งที่ deploy
-
-**feature flag** — แยก "ปล่อยโค้ด" ออกจาก "เปิดใช้ฟีเจอร์"
-
-- merge โค้ดที่ยังไม่เสร็จเข้า `main` ได้ โดยปิด flag ไว้
-- เปิดให้คนบางกลุ่มก่อน ปิดได้ทันทีโดยไม่ต้อง deploy
-- 🚨 **flag ต้องมีวันหมดอายุ** — flag ที่ค้างหนึ่งปีคือโค้ดสองเส้นทางที่ไม่มีใครกล้าลบ
-  กำหนดให้ลบภายใน 2 sprint หลังเปิดใช้เต็มร้อย
-
----
-
-## 9 · rollback
-
-**เกณฑ์ที่ต้องกำหนดล่วงหน้า:** rollback เมื่ออัตรา error เกิน X% หรือเวลาตอบสนองเกิน Y วินาที
-ไม่ใช่ตอนที่ทุกคนกำลังตกใจแล้วเถียงกันว่าควรรอดูอีกหน่อยไหม
-
-| ต้องมี | เกณฑ์ |
-|---|---|
-| คำสั่ง rollback | ทำได้ด้วยคำสั่งเดียว |
-| เวลาที่ใช้ | ต่ำกว่า 5 นาที |
-| **ซ้อมจริง** | อย่างน้อยไตรมาสละครั้ง บน staging |
-| ข้อมูล | migration ที่ทำไปแล้วต้องไม่ทำให้โค้ดเก่าพัง |
-
-> **rollback ที่ไม่เคยซ้อม = ไม่มี rollback** — จะรู้ว่ามันใช้ไม่ได้ตอนที่ต้องใช้พอดี
-
----
-
-## 10 · pipeline ต้องเร็วและน่าเชื่อถือ
-
-| ปัญหา | วิธีแก้ |
-|---|---|
-| ช้า | แคช dependency · รัน test แบบขนาน · แยก test ที่ช้าไปวิ่งกลางคืน |
-| test ที่ผลไม่คงที่ (flaky) | **แยกออกทันที** แล้วตั้งงานตามแก้ — test ที่ตกบ้างผ่านบ้างทำให้คนเลิกอ่านผล |
-| ทุกคนรอคิว | เพิ่มตัวรันขนาน · ให้ pull request วิ่งเฉพาะที่เกี่ยวข้อง |
-| build ไม่เหมือนเดิมทุกครั้ง | ล็อกเวอร์ชัน dependency (lock file) · ปักหมุดเวอร์ชัน image ด้วย digest |
-
-**ตัวชี้วัดที่ควรดู:** ปล่อยของบ่อยแค่ไหน · จากคอมมิตถึงขึ้นจริงใช้เวลาเท่าไร ·
-deploy แล้วพังกี่เปอร์เซ็นต์ · กู้คืนใช้เวลาเท่าไร
-
----
-
-## 11 · Anti-patterns
-
-- ❌ **build ใหม่ตอนขึ้น production** — ของที่ทดสอบไม่ใช่ของที่ปล่อย
-- ❌ **deploy ด้วยมือตามขั้นตอนใน Word** — วันที่คนเขียนลาป่วยคือวันที่ deploy ไม่ได้
-- ❌ **secret ในไฟล์ pipeline** — ใครอ่านโค้ดได้ก็อ่าน secret ได้
-- ❌ **test ที่ตกแล้วปล่อยผ่าน** — ทำครั้งเดียวก็เลิกเชื่อผลไปตลอด
-- ❌ **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
-- ❌ **migration รันตอนแอปบูต** — หลาย instance ชนกัน
-- ❌ **ไม่มี artifact เก็บไว้** — rollback กลายเป็นการ build ย้อนจาก commit เก่า
-- ❌ **environment ที่ config ต่างกันจนคาดเดาไม่ได้** — "บน staging ผ่านนะ"
-- ❌ **feature flag ที่ไม่มีวันลบ**
-- ❌ **pipeline ใช้เวลา 45 นาที** — คนจะเริ่ม merge โดยไม่รอผล
-
----
-
-## 12 · ตัวย่อ
-
-- **CI** — Continuous Integration (รวมโค้ดเข้าด้วยกันบ่อย ๆ พร้อมตรวจอัตโนมัติทุกครั้ง)
-- **CD** — Continuous Delivery/Deployment (พาโค้ดที่ผ่านการตรวจไปถึงผู้ใช้อัตโนมัติ)
-- **SemVer** — Semantic Versioning (มาตรฐานเลขเวอร์ชัน MAJOR.MINOR.PATCH)
-- **artifact** — ไฟล์ผลลัพธ์จากการ build ที่นำไป deploy ได้จริง
-- **canary** — การปล่อยของใหม่ให้ผู้ใช้ส่วนน้อยก่อนเพื่อดูอาการ
-- **UAT** — User Acceptance Testing (การทดสอบโดยผู้ใช้ก่อนรับมอบ)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret และ config ต่อ environment | `config-and-secrets` |
-| migration ที่ deploy ได้โดยไม่ปิดระบบ | `database-design` |
-| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` |
-| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` |
-| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` |
-| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` |
-
-**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** → `references/per-platform.md`
-
-
-## reference: per-platform.md
-
-# ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
-
-1. [GitHub Actions](#1--github-actions)
-2. [Azure DevOps](#2--azure-devops)
-3. [GitLab CI](#3--gitlab-ci)
-4. [Dockerfile หลายขั้น](#4--dockerfile-หลายขั้น)
-5. [ตารางเทียบความสามารถ](#5--ตารางเทียบความสามารถ)
-
----
-
-## 1 · GitHub Actions
-
-`.github/workflows/ci.yml` — วิ่งกับทุก pull request
-
-```yaml
-name: ci
-on:
-  pull_request:
-  push: { branches: [main] }
-
-concurrency:                       # ยกเลิกรอบเก่าเมื่อ push ซ้ำ
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions: { contents: read }
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }   # ต้องมีประวัติครบเพื่อคำนวณเวอร์ชัน
-
-      - uses: actions/setup-node@v4
-        with: { node-version: '22', cache: 'npm' }
-
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test -- --coverage
-
-      - name: ตรวจ dependency
-        run: npm audit --audit-level=high
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: app-${{ github.sha }}
-          path: dist/
-          retention-days: 30
-```
-
-`.github/workflows/deploy.yml` — เลื่อนขั้น artifact ตัวเดิม
-
-```yaml
-name: deploy
-on:
-  workflow_run:
-    workflows: [ci]
-    types: [completed]
-    branches: [main]
-
-jobs:
-  staging:
-    if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
-    environment: staging
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: app-${{ github.event.workflow_run.head_sha }}
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ./scripts/deploy.sh staging
-
-  production:
-    needs: staging
-    runs-on: ubuntu-latest
-    environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
-    steps:
-      - run: ./scripts/deploy.sh production
-      - name: ตรวจหลัง deploy
-        run: |
-          for i in $(seq 1 10); do
-            curl -fsS https://api.example.co/health/ready && exit 0
-            sleep 6
-          done
-          ./scripts/rollback.sh && exit 1
-```
-
-**ข้อควรระวัง:**
-
-- `pull_request_target` เห็น secret และรันโค้ดจาก fork — **อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
-- ตั้ง `permissions` ให้แคบที่สุดในทุก workflow ค่าเริ่มต้นของบางองค์กรคือเขียนได้ทั้ง repo
-- ปักหมุด action ด้วย tag เวอร์ชัน (`@v4`) อย่างน้อย · ถ้าเข้มงวดให้ปักด้วย commit hash
-- `environment:` คือที่ตั้ง required reviewers และ secret เฉพาะ environment
-
----
-
-## 2 · Azure DevOps
-
-`azure-pipelines.yml`
-
-```yaml
-trigger:
-  branches: { include: [main] }
-
-variables:
-  buildConfiguration: Release
-
-stages:
-- stage: build
-  jobs:
-  - job: build
-    pool: { vmImage: ubuntu-latest }
-    steps:
-    - task: UseDotNet@2
-      inputs: { version: '8.x' }
-    - script: dotnet restore
-    - script: dotnet build -c $(buildConfiguration) --no-restore
-    - script: dotnet test -c $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"
-    - script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
-    - publish: $(Build.ArtifactStagingDirectory)
-      artifact: app
-
-- stage: staging
-  dependsOn: build
-  jobs:
-  - deployment: staging
-    environment: staging
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: app
-          - script: ./scripts/deploy.sh staging
-
-- stage: production
-  dependsOn: staging
-  jobs:
-  - deployment: production
-    environment: production        # ← ตั้ง approval ที่หน้า Environments
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: app          # artifact ตัวเดิมจาก stage build
-          - script: ./scripts/deploy.sh production
-```
-
-- `deployment` job ต่างจาก `job` ธรรมดาตรงที่ผูกกับ environment จึงมีประวัติและ approval ให้
-- ตัวแปรลับเก็บใน variable group ที่ผูกกับ Azure Key Vault อย่าพิมพ์ลงไฟล์
-- ตัวแปรลับ**ไม่ถูกส่งเข้า script โดยอัตโนมัติ** ต้อง map ผ่าน `env:` ทีละตัว
-
----
-
-## 3 · GitLab CI
-
-`.gitlab-ci.yml`
-
-```yaml
-stages: [test, build, deploy]
-
-default:
-  interruptible: true
-
-variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
-cache:
-  key: { files: [requirements.txt] }
-  paths: [.cache/pip]
-
-test:
-  stage: test
-  image: python:3.12
-  script:
-    - pip install -r requirements.txt
-    - ruff check .
-    - pytest --cov --cov-fail-under=70
-  coverage: '/TOTAL.*\s+(\d+%)$/'
-
-build:
-  stage: build
-  image: docker:27
-  services: [docker:27-dind]
-  script:
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-
-deploy:staging:
-  stage: deploy
-  environment: { name: staging, url: https://staging.example.co }
-  script: ./scripts/deploy.sh staging $CI_COMMIT_SHA
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-
-deploy:production:
-  stage: deploy
-  environment: { name: production, url: https://example.co }
-  when: manual                     # ← ด่านคน
-  script: ./scripts/deploy.sh production $CI_COMMIT_SHA
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-```
-
-- ตั้งตัวแปรลับเป็น `Masked` และ `Protected` ที่หน้า Settings → CI/CD
-- `when: manual` คู่กับ protected environment คือด่านอนุมัติที่ใช้ได้จริง
-
----
-
-## 4 · Dockerfile หลายขั้น
-
-```dockerfile
-# ---- ขั้น build ----
-FROM node:22-alpine AS build
-WORKDIR /src
-COPY package*.json ./
-RUN npm ci                      # ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
-COPY . .
-RUN npm run build
-
-# ---- ขั้นรัน ----
-FROM node:22-alpine
-ENV NODE_ENV=production
-WORKDIR /app
-COPY --from=build /src/dist ./dist
-COPY --from=build /src/node_modules ./node_modules
-USER node                       # ❌ อย่ารันเป็น root
-EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
-CMD ["node", "dist/main.js"]
-```
-
-**กฎ:**
-
-- คัดลอกไฟล์ที่เปลี่ยนน้อยก่อน เพื่อให้ชั้นแคชได้ผล
-- อย่าคัดลอก `.env`, `.git`, `node_modules` เข้า image — ใช้ `.dockerignore`
-- ปักหมุด base image ด้วย digest ถ้าต้องการให้ build ได้ผลเดิมทุกครั้ง
-- ตั้งชื่อ tag ด้วย commit hash เสมอ · `latest` ใช้เป็นชื่อเล่นได้ แต่ห้าม deploy ด้วย `latest`
-
----
-
-## 5 · ตารางเทียบความสามารถ
-
-| สิ่งที่ต้องการ | GitHub Actions | Azure DevOps | GitLab CI |
-|---|---|---|---|
-| ด่านอนุมัติโดยคน | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
-| เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
-| แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
-| secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
-| ยกเลิกรอบเก่า | `concurrency` | `batch: true` | `interruptible: true` |
-| วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
-| รันเอง (self-hosted) | ได้ | ได้ | ได้ |
-
-> **ทุกแพลตฟอร์มทำสิ่งเดียวกันได้** — อย่าเลือกด้วยรายการความสามารถ
-> เลือกตัวที่อยู่ที่เดียวกับ repo แล้วลงแรงกับเนื้อหาของ pipeline แทน
-
-
----
-
-# skill: config-and-secrets
-
-Use when a project needs settings that differ between environments, or holds anything that must not be committed — connection strings, keys, certificates. Separates config from secrets, validates every setting at start-up, names variables consistently, picks a secret store, makes rotation possible, and gives the order of steps for a leaked credential.
-
-# Config และ Secret
-
-> **กฎสองข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment — ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ไม่เคยอยู่ใน git · ไม่เคยอยู่ใน log · ไม่เคยอยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด → ข้อ 8 ทันที
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| โจทย์ | ไปที่ |
-|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
-
----
-
-## 1 · แยก config กับ secret ให้ออกก่อน
-
-| | config | secret |
-|---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✅ ได้ | ❌ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
-
-> **ถ้าตัดสินใจไม่ได้ว่าอันไหน ให้ถือว่าเป็น secret** — ต้นทุนของการระวังเกินไปคือความรำคาญเล็กน้อย
-> ต้นทุนของการเดาผิดคือการที่กุญแจอยู่ในประวัติ git ตลอดไป
-
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** — ถ้าลืมตั้งค่า ระบบต้องทำงานในแบบที่เข้มงวดที่สุด
-`DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
-
----
-
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
-
-> 🚨 นี่คือข้อที่ให้ผลตอบแทนสูงที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตีสองที่ฟังก์ชันซึ่งนาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตอน deploy ซึ่งยัง rollback ได้
-
-```ts
-// Node — zod
-const Env = z.object({
-  NODE_ENV:      z.enum(['development', 'staging', 'production']),
-  PORT:          z.coerce.number().int().positive().default(3000),
-  DATABASE_URL:  z.string().url(),
-  JWT_SECRET:    z.string().min(32),
-  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
-});
-
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
-```
-
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
-
-**พิมพ์สรุป config ตอนบูต** — ชื่อค่าและค่าที่ไม่ใช่ secret
-ส่วน secret ให้พิมพ์แค่ว่า "มีค่าแล้ว" หรือสี่ตัวท้าย ไม่ใช่ค่าเต็ม
-
----
-
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
-
-```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
-
-APP_DB_HOST          APP_DB_PASSWORD
-APP_REDIS_URL        APP_SMTP_PASSWORD
-APP_FEATURE_NEW_CHECKOUT
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ❌ `APP_PROD_DB_HOST` |
-
----
-
-## 5 · `.env` และ `.env.example`
-
-| ไฟล์ | อยู่ใน git | หน้าที่ |
-|---|:--:|---|
-| `.env.example` | ✅ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ❌ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ❌ | **ไม่ควรมีไฟล์นี้เลย** — production ใช้ secret store |
-
-```bash
-# .gitignore
-.env
-.env.*
-!.env.example
-```
-
-```bash
-# .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # ❗ ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # ❗ สร้างด้วย: openssl rand -base64 48
-APP_LOG_LEVEL=debug
-```
-
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
-
-> 🚨 **`.env` ที่ `.gitignore` ไม่ทัน** — ถ้าไฟล์ถูก track ไปแล้วครั้งหนึ่ง
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
-
----
-
-## 6 · เก็บ secret ไว้ที่ไหน
-
-| สถานการณ์ | ใช้ | หมายเหตุ |
-|---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git · .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
-
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง · environment แยกกันสนิท ·
-ไม่มีบัญชีไหนอ่านได้ทุกอัน นอกจากบัญชีดูแลระบบที่มีการบันทึกการเข้าถึง
-
----
-
-## 7 · การหมุนเวียน (rotation)
-
-**ออกแบบให้รองรับตั้งแต่วันแรก** — ไม่ใช่ตอนที่ต้องหมุนจริง
-
-| ต้องมี | รายละเอียด |
-|---|---|
-| ใช้สองค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy รอบหนึ่ง และเขียนไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | งานที่ต้องจำเองคืองานที่ไม่มีใครทำ |
-
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้ตรวจ token เก่าที่ยังไม่หมดอายุได้
-ระหว่างที่ token ใหม่เซ็นด้วยกุญแจใหม่แล้ว
-
----
-
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
-
-1. **เพิกถอนค่าเดิมก่อน** — ปิดการใช้งาน key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีการใช้จากที่ไหนที่ไม่ใช่ของเรา
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
-5. บันทึกเหตุการณ์ → `postmortem-template`
-
-> 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** — การลบ commit ไม่ได้ทำให้กุญแจปลอดภัยขึ้นเลย
-> ใครก็ตามที่ fork หรือ clone ไปแล้ว รวมถึงตัวสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
-
----
-
-## 9 · อย่าให้ secret ไหลออกทางอื่น
-
-| ทางรั่ว | วิธีปิด |
-|---|---|
-| log | รายการคำที่ต้องปิดบัง → `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `traceId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build — ใช้ mount ตอนรัน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
-
----
-
-## 10 · config ของ frontend — ไม่มีอะไรลับ
-
-> 🚨 ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
-
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
-|---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
-
-**ต้องการเปลี่ยนค่าโดยไม่ build ใหม่** — ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ซึ่งล็อกค่าติดไปกับไฟล์ที่ได้
-
----
-
-## 11 · Anti-patterns
-
-- ❌ **connection string ในโค้ด** แม้จะเป็นของ dev — วันหนึ่งจะมีคนคัดลอกแบบแผนนี้ไปใช้กับ production
-- ❌ **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** — ใครเข้าเครื่องได้ก็อ่านได้ ไม่มีบันทึกว่าใครอ่าน
-- ❌ **secret เดียวกันทุก environment** — staging หลุดเท่ากับ production หลุด
-- ❌ **ส่ง secret ทางแชตหรืออีเมล** — อยู่ในนั้นตลอดไป และค้นเจอด้วย
-- ❌ **ไม่มี `.env.example`** — คนใหม่เสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
-- ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
----
-
-## 12 · ตัวย่อ
-
-- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
-- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
-- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
-- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
-- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
-- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
-- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
-| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
-| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
-| connection string ของฐานข้อมูล | `database-design` |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** → `references/per-stack.md`
-
-
-## reference: per-stack.md
-
-# วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
-
-1. [.NET / ASP.NET Core](#1--net--aspnet-core)
-2. [Node.js](#2--nodejs)
-3. [Python](#3--python)
-4. [Angular และ frontend ทั่วไป](#4--angular-และ-frontend-ทั่วไป)
-5. [Docker และ Kubernetes](#5--docker-และ-kubernetes)
-6. [เครื่องมือตรวจ secret ที่หลุดเข้า git](#6--เครื่องมือตรวจ-secret-ที่หลุดเข้า-git)
-7. [คำสั่งสร้างค่าสุ่มที่ปลอดภัย](#7--คำสั่งสร้างค่าสุ่มที่ปลอดภัย)
-
----
-
-## 1 · .NET / ASP.NET Core
-
-**บนเครื่องนักพัฒนา — เก็บนอกโฟลเดอร์โปรเจกต์ จึงไม่มีทางเข้า git:**
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
-dotnet user-secrets list
-```
-
-**ตรวจตอนบูต:**
-
-```csharp
-public sealed class AppOptions
+```jsonc
+// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
 {
-    public const string Section = "App";
-
-    [Required, Url]                       public string ApiBaseUrl { get; init; } = "";
-    [Required, MinLength(32)]             public string JwtSecret  { get; init; } = "";
-    [Range(1, 300)]                       public int TimeoutSeconds { get; init; } = 30;
+  "status": "up",                       // up | degraded | down
+  "timestamp": "2026-08-31T09:42:13.482Z",
+  "checks": {
+    "db":    { "status": "up",   "durationMs": 12 },
+    "redis": { "status": "up",   "durationMs": 3 },
+    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
+  }
 }
-
-builder.Services
-    .AddOptions<AppOptions>()
-    .Bind(builder.Configuration.GetSection(AppOptions.Section))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
 ```
 
-**ลำดับที่ ASP.NET Core อ่าน (ค่าหลังทับค่าก่อน):**
-
+```jsonc
+// GET /version → 200
+{
+  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
+  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
+}
 ```
-appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
-→ environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
-```
 
-ตัวแปรสภาพแวดล้อมใช้ `__` แทนลำดับชั้น — `ConnectionStrings__Default`
+**สามสถานะ ไม่ใช่สอง:**
+- `up` — ทุกอย่างปกติ → 200
+- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) ยังรับ traffic ได้ → 200
+- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
 
-**Azure Key Vault:**
+**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
+จะทำให้ health endpoint ค้างตาม แล้ว orchestrator จะตัดสินใจผิดทั้งกระดาน
 
-```csharp
-builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://{vaultName}.vault.azure.net/"),
-    new DefaultAzureCredential());        // ใช้ managed identity ไม่ต้องมี key อีกอัน
-```
+**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** — เปิดสาธารณะ
 
 ---
 
-## 2 · Node.js
+## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
 
-```ts
-// config/env.ts — ไฟล์เดียวที่แตะ process.env ได้ทั้งโปรเจกต์
-import { z } from 'zod';
+ยึด **RFC 9457 (`application/problem+json`)** — เป็นมาตรฐานจริง ไม่ต้องคิดเอง
 
-const Env = z.object({
-  NODE_ENV:     z.enum(['development','test','staging','production']),
-  PORT:         z.coerce.number().int().positive().default(3000),
-  DATABASE_URL: z.string().url(),
-  JWT_SECRET:   z.string().min(32),
-  SMTP_PASSWORD: z.string().optional(),
-}).superRefine((v, ctx) => {
-  if (v.NODE_ENV === 'production' && v.JWT_SECRET.startsWith('dev-'))
-    ctx.addIssue({ code: 'custom', message: 'ห้ามใช้ JWT_SECRET ของ dev บน production' });
-});
-
-const parsed = Env.safeParse(process.env);
-if (!parsed.success) {
-  console.error('config ไม่ถูกต้อง:', z.treeifyError(parsed.error));
-  process.exit(1);
+```jsonc
+// 400
+{
+  "type": "https://api.example.com/errors/validation",
+  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
+  "status": 400,
+  "detail": "จำนวนสินค้าต้องมากกว่า 0",
+  "instance": "/api/v1/orders",
+  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
+  "errors": { "quantity": ["ต้องมากกว่า 0"] }   // เฉพาะ validation
 }
-export const env = parsed.data;
 ```
 
-> **ห้ามอ่าน `process.env` กระจายทั่วโค้ด** — รวมไว้ที่ไฟล์เดียว
-> ทำให้ตอบได้ว่าระบบใช้ค่าอะไรบ้าง โดยไม่ต้องไล่ grep ทั้งโปรเจกต์
+| สถานะ | ใช้เมื่อ |
+|---|---|
+| 400 | ข้อมูลผิดรูป |
+| 401 | ยังไม่ได้ยืนยันตัวตน |
+| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
+| 404 | ไม่มีสิ่งนี้ |
+| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
+| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
+| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
+| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
 
-Node 20 ขึ้นไปโหลด `.env` ได้เองด้วย `node --env-file=.env` ไม่ต้องพึ่ง `dotenv`
+> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
+> การส่ง stack trace ออกไปคือการแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
 
 ---
 
-## 3 · Python
+## 3 · Request id
+
+- รับจาก header **`X-Request-Id`** ไม่มีก็สร้าง (uuid ตัด 8 ตัว)
+- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
+- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
+- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+
+ลูกค้าโทรมาบอก "มันพัง" → ขอ requestId → `grep` ครั้งเดียวเจอทั้งเรื่อง
+
+---
+
+## 4 · Graceful shutdown
+
+ตอน deploy ใหม่ orchestrator ส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+
+```
+SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
+          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
+          3. ปิด DB pool / คิว / ไฟล์
+          4. exit(0)
+```
+
+> ข้อ 1 สำคัญกว่าที่คิด — ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
+> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+
+---
+
+## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+
+- **Timeout ทุกทาง** — request เข้า, การเรียกออก, query DB · ไม่มี timeout = แขวนทั้งระบบเมื่อปลายทางช้า
+- **จำกัดขนาด body** (เช่น 1MB) — กัน memory ระเบิดจาก payload ใหญ่
+- **CORS ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
+- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่ง OTP/อีเมล
+- **Security headers**: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+  `Strict-Transport-Security` (helmet / `UseHsts()` ทำให้ครบในบรรทัดเดียว)
+- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
+- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก ย้ายทีหลังแพงกว่ามาก
+- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+
+---
+
+## 6 · โค้ดที่พร้อมใช้
+
+| ไฟล์ | สแต็ก | สถานะ |
+|---|---|---|
+| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
 
 ```python
-# settings.py
-from pydantic import Field, PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="APP_", env_file=".env")
-
-    env: str = Field(pattern="^(development|staging|production)$")
-    database_url: PostgresDsn
-    jwt_secret: str = Field(min_length=32)
-    timeout_seconds: int = Field(default=30, ge=1, le=300)
-
-settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
 ```
-
-- อ่าน `APP_DATABASE_URL`, `APP_JWT_SECRET` ตาม `env_prefix`
-- import ที่ระดับบนสุดของแอป เพื่อให้ error เกิดตอนบูต ไม่ใช่ตอนเรียกใช้ครั้งแรก
 
 ---
 
-## 4 · Angular และ frontend ทั่วไป
-
-> 🚨 **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** — ไม่มีข้อยกเว้น
-
-**แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`) —
-ค่าติดไปกับไฟล์ที่ได้ เปลี่ยนต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียว
-
-**แบบโหลดตอนรัน (แนะนำ):**
-
-```ts
-// main.ts — โหลดก่อนแอปเริ่ม
-fetch('/config.json', { cache: 'no-store' })
-  .then(r => r.json())
-  .then(cfg => {
-    (window as any).__APP_CONFIG__ = cfg;
-    return bootstrapApplication(AppComponent, appConfig);
-  });
-```
-
-```json
-// config.json — ไฟล์นี้วางแยกต่อ environment ไม่ต้อง build ใหม่
-{ "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
-```
-
-ตั้ง header `Cache-Control: no-store` ให้ `/config.json` ไม่งั้นเบราว์เซอร์จะใช้ค่าเก่า
-
----
-
-## 5 · Docker และ Kubernetes
-
-**Docker — อย่าใส่ secret ตอน build:**
-
-```dockerfile
-# ❌ ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
-ARG NPM_TOKEN
-ENV NPM_TOKEN=$NPM_TOKEN
-
-# ✅ mount เฉพาะตอนใช้ ไม่ติดไปกับ image
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
-```
+## 7 · ตรวจงาน
 
 ```bash
-docker build --secret id=npmrc,src=$HOME/.npmrc .
-docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
+curl -i localhost:8080/ping                    # 200 pong
+curl -s localhost:8080/health/live  | jq
+curl -s localhost:8080/health/ready | jq
+curl -s localhost:8080/version      | jq
+
+# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
 ```
 
-**Kubernetes:**
-
-```yaml
-env:
-  - name: APP_DB_PASSWORD
-    valueFrom:
-      secretKeyRef: { name: app-secrets, key: db-password }
-```
-
-> 🚨 **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
-> ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
-> ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
-> ทางที่ดีกว่าคือให้ External Secrets Operator ดึงจาก Key Vault / Secrets Manager มาสร้างให้
-
----
-
-## 6 · เครื่องมือตรวจ secret ที่หลุดเข้า git
-
-```bash
-# ตรวจทั้งประวัติ
-gitleaks detect --source . --redact
-
-# กันไว้ก่อน commit
-pip install pre-commit detect-secrets
-detect-secrets scan > .secrets.baseline
-```
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
-    hooks: [{ id: gitleaks }]
-```
-
-**ลบออกจากประวัติ** (ทำหลังเพิกถอนค่าเดิมแล้วเท่านั้น):
-
-```bash
-pip install git-filter-repo
-git filter-repo --path .env --invert-paths
-git push --force --all      # ทุกคนต้อง clone ใหม่
-```
-
----
-
-## 7 · คำสั่งสร้างค่าสุ่มที่ปลอดภัย
-
-```bash
-openssl rand -base64 48                 # กุญแจทั่วไป
-openssl rand -hex 32                    # กุญแจ 256 บิตเป็นเลขฐานสิบหก
-uuidgen                                 # id ไม่ลับ
-
-node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-```powershell
-# Windows
-[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
-```
-
-> ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
-> มันคาดเดาได้ ต้องใช้ตัวสุ่มเชิงรหัสลับตามคำสั่งข้างบน
-
-
----
-
-# skill: flag-and-propose
-
-Use when reporting something found mid-task that changes what happens next — a stale file, a number that no longer matches, a blocked step, a risk — and a decision is needed before carrying on. Opens with the consequence, puts conflicting numbers in a recorded-versus-actual table, and closes with one short question.
-
-# แจ้งสิ่งที่เจอ แล้วเสนอทางไป
-
-> **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
-> ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
-- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
-- เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| สถานการณ์ | ใช้ตัวนี้แทน |
-|---|---|
-| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
-| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
-| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
-
----
-
-## 1 · โครงคำตอบ 4 บล็อก
-
-| บล็อก | ความยาว | กฎ |
-|---|---|---|
-| 1 · สิ่งที่เจอ + ผลถ้าไม่แก้ | 1–2 บรรทัด | **ขึ้นก่อนเสมอ** ไม่มีคำเกริ่น ไม่ทวนคำถาม |
-| 2 · หลักฐาน | ตาราง ≤ 5 แถว | ตัวเลขที่ขัดกันเท่านั้น ไม่ต้องเล่าวิธีตรวจ |
-| 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
-| 4 · คำถามปิด | 1 บรรทัด | คำถามเดียว ตอบได้ด้วยไม่กี่คำ |
-
-บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข · บล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
-**บล็อก 1 กับ 4 ตัดไม่ได้**
-
-**ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
-
----
-
-## 2 · บล็อกที่ 1 — สูตรประโยคเดียว
-
-```
-<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
-```
-
-| ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
-|---|---|
-| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
-
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
-- ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
-- ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
-
----
-
-## 3 · ตัวเลขที่ขัดกัน = ตารางเทียบเสมอ
-
-สองค่าขึ้นไปที่ไม่ตรงกัน อ่านจากประโยคยากกว่าอ่านจากตารางทุกครั้ง
-
-```markdown
-| | ที่บันทึกไว้ | ของจริง |
-|---|---|---|
-| FR ถึง | 13.9 | **14.12** |
-| Test case | 214 | **245** |
-| PLT | ไม่มี | **มี** |
-```
-
-- หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
-- ตัวหนาที่ฝั่งที่ถูกต้อง เพื่อให้กวาดตาแล้วรู้ทันทีว่าต้องยึดอะไร
-- แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
-
-**คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
-
----
-
-## 4 · ข้อเสนอเป็นตาราง "ทำอะไร → ได้อะไร"
-
-```markdown
-| ไฟล์ | ได้อะไร |
-|---|---|
-| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
-```
-
-- คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
-- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ
-- **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
-- เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
-
----
-
-## 5 · บอกสิ่งที่**ไม่**ทำด้วย
-
-หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
-
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
-
-บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
-และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
-
----
-
-## 6 · ปิดด้วยคำถามเดียว
-
-```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | สองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
-| ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
-| มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
-| ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-
-**ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
-
----
-
-## 7 · ตัวอย่างเต็ม
-
-**❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
-
-> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
-> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
-> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
-> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
-> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
-> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
-
-**✅ หลัง — โครงเดียวกัน 4 บล็อก**
-
-> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
->
-> | | ที่บันทึกไว้ | ของจริง |
-> |---|---|---|
-> | FR ถึง | 13.9 | **14.12** |
-> | Test case | 214 | **245** |
-> | PLT | ไม่มี | **มี** |
->
-> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
->
-> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
->
-> | ไฟล์ | ได้อะไร |
-> |---|---|
-> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
-> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
->
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
->
-> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
-
-**สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
-ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
-รายละเอียดวิธีทำของแต่ละข้อเสนอ
+- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
+- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
+- [ ] dependency ที่ไม่ critical ล่ม → `degraded` + 200 (ยังรับ traffic)
+- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
+- [ ] `/version` ตรงกับ commit ที่ deploy จริง
+- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
+- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
+- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
+- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
 
 ---
 
 ## 8 · Anti-patterns
 
-- ❌ **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
-- ❌ **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
-- ❌ **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
-- ❌ **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
-- ❌ **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
-- ❌ **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
-- ❌ **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
-- ❌ **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
+- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
+- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
+- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
 
 ---
 
-## 9 · ตัวย่อ
-
-- **FR** — Functional Requirement (ข้อกำหนดเชิงหน้าที่)
-- **TC** — Test Case (กรณีทดสอบ)
-- **ADR** — Architecture Decision Record (บันทึกเหตุผลของการตัดสินใจเชิงสถาปัตยกรรม)
-
-## 10 · เชื่อมกับ skill อื่น
+## 9 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
-| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
-| สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |
+| รูปแบบ log และ correlation id | `logging-standards` |
+| test ให้ endpoint พวกนี้ | `testing-standards` |
+| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
+| runbook ตอน service ล่ม | `incident-runbook-template` |
+| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |
+
+
+## reference: per-stack.md
+
+# .NET และ Angular
+
+> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
+> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) เป็นการตั้งค่ามาตรฐานของ
+> ASP.NET Core — ให้รันครั้งแรกแล้วเทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+
+---
+
+## สารบัญ
+
+1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
+2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## ASP.NET Core — health checks
+
+```bash
+dotnet add package AspNetCore.HealthChecks.NpgSql
+dotnet add package AspNetCore.HealthChecks.Redis
+```
+
+```csharp
+builder.Services.AddHealthChecks()
+    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
+    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddSmtpHealthCheck(o => { }, name: "mail",
+        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
+        tags: ["ready"]);
+```
+
+```csharp
+// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
+app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
+
+// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
+// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false,
+    ResponseWriter = WriteLive,
+});
+
+// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = c => c.Tags.Contains("ready"),
+    ResponseWriter = WriteReady,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+    },
+});
+
+app.MapGet("/version", () => Results.Ok(new
+{
+    name = "orders-api",
+    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
+    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
+    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
+    env = app.Environment.EnvironmentName,
+    host = Environment.MachineName,
+}));
+```
+
+ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+
+```csharp
+static Task WriteReady(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new
+    {
+        status = report.Status switch
+        {
+            HealthStatus.Healthy  => "up",
+            HealthStatus.Degraded => "degraded",
+            _                     => "down",
+        },
+        timestamp = DateTimeOffset.UtcNow,
+        checks = report.Entries.ToDictionary(
+            e => e.Key,
+            e => new
+            {
+                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
+                durationMs = (int)e.Value.Duration.TotalMilliseconds,
+                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
+                error = e.Value.Exception?.Message,
+            }),
+    });
+}
+
+static Task WriteLive(HttpContext ctx, HealthReport _)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
+}
+```
+
+### Error envelope (RFC 9457)
+
+ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว — ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+
+```csharp
+builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
+{
+    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
+    ctx.ProblemDetails.Extensions["requestId"] =
+        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
+});
+
+app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
+app.UseStatusCodePages();
+```
+
+### Graceful shutdown
+
+```csharp
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+
+// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
+// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
+app.Lifetime.ApplicationStopping.Register(() =>
+{
+    ReadinessState.IsShuttingDown = true;
+    Thread.Sleep(TimeSpan.FromSeconds(5));
+});
+```
+
+### สิ่งที่ต้องเปิดก่อน deploy
+
+```csharp
+app.UseHsts();
+app.UseHttpsRedirection();
+builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
+builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
+     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+```
+
+---
+
+## Angular — ฝั่งที่เรียกใช้
+
+**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
+
+```ts
+export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
+  const id = crypto.randomUUID().slice(0, 8);
+  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
+};
+```
+
+**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+
+```ts
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const toast = inject(ToastService);
+  return next(req).pipe(
+    catchError((e: HttpErrorResponse) => {
+      const p = e.error;                       // ProblemDetails
+      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
+      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
+      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
+      return throwError(() => e);
+    }),
+  );
+};
+```
+
+**หน้าสถานะระบบ** — ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+
+```ts
+this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
+// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node/Express | Python/FastAPI |
+|---|---|---|---|
+| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
+| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
+| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
+| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` | `helmet` | `secure` middleware |
+| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
+
+
+---
+
+# skill: spell-out-abbreviations
+
+Use in every piece of writing for a person (docs, comments, commits, replies, UI text, diagram labels). Spell out each abbreviation the first time, e.g. Model Context Protocol (MCP), and gloss specialist terms.
+
+# Spell Out Abbreviations
+
+> **กฎที่หนึ่ง:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
+> **กฎที่สอง:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายต้องไม่ต้องเดา
+
+## รูปแบบ
+
+```
+✅ Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
+❌ MCP ทำให้ Claude ต่อกับระบบอื่นได้
+```
+
+- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็ม + วงเล็บ · ครั้งต่อไปใช้ตัวย่อล้วน
+- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
+- ตารางหรือหัวข้อที่ที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
+- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
+
+## ยกเว้น — ไม่ต้องขยาย
+
+คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
+และนามสกุลไฟล์ (`.docx`, `.pptx`) · ถ้าไม่แน่ใจ **ให้ขยาย** เสียเปล่าดีกว่าคนอ่านไม่รู้เรื่อง
+
+## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
+
+ตัวย่อขยายแล้วยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
+ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
+
+```
+❌ ใช้ idempotency key กันงานซ้ำ
+✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
+
+❌ ต้องทำ expand-contract ตอน migrate
+✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
+```
+
+**คำอธิบายต้องสั้นกว่าหนึ่งบรรทัด** ยาวกว่านั้นแปลว่าควรแยกเป็นประโยคของตัวเอง
+
+**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
+อ่านแล้วเดาความหมายได้ไหม เดาไม่ได้คือต้องอธิบาย
+
+| ระดับผู้อ่าน | อธิบายแค่ไหน |
+|---|---|
+| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
+| ทีมพัฒนาแต่คนละส่วน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
+
+---
+
+## ใช้กับอะไรบ้าง
+
+เอกสารทุกชนิด · คอมเมนต์ในโค้ด · ข้อความ commit · ข้อความบนหน้าจอ · คำอธิบายไดอะแกรม ·
+คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+
+## ตัวอย่างที่เจอบ่อย
+
+Model Context Protocol (MCP) · Application Programming Interface (API) ·
+Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
+Software Development Life Cycle (SDLC) · Single Sign-On (SSO) ·
+Continuous Integration / Continuous Deployment (CI/CD) ·
+Software Requirements Specification (SRS) · Key Performance Indicator (KPI) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC) ·
+Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
+Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
+
+## Anti-patterns
+
+- ❌ ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
+- ❌ วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
+- ❌ ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
+- ❌ ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่ามันวัดอะไร
+- ❌ อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค
+
+
+---
+
+# skill: answer-shape
+
+Use when an answer has structure (comparing options, trade-offs, how parts connect, several numbers). Decides prose, table, small diagram or short list, and keeps it readable.
+
+# รูปทรงของคำตอบ
+
+> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
+> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+
+---
+
+## เลือกรูปทรงจากสัญญาณในคำถาม
+
+| สัญญาณ | รูปทรง |
+|---|---|
+| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
+| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
+| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
+| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
+| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
+| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+
+**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่สองตัวขึ้นไป** — มีเมื่อไหร่ใช้ตาราง
+เขียนเป็นย่อหน้าแล้วผู้อ่านต้องจำของตัวแรกไว้ในหัวระหว่างอ่านตัวที่สอง
+
+---
+
+## ตารางที่อ่านง่าย
+
+- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
+- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน · แถวไม่เกิน 8 แถวในคำตอบแชต
+- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ให้เขียนว่า "ไม่มี" ตรง ๆ
+- **ช่องละไม่เกินหนึ่งบรรทัด** ยาวกว่านั้นยกออกไปเป็นข้อความใต้ตาราง
+- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
+- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+
+```
+❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
+✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
+```
+
+**ปิดท้ายตารางด้วยข้อสรุปหนึ่งบรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+
+---
+
+## เมื่อไหร่รูปชนะตาราง
+
+ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+
+| ใช้รูป | ใช้ตาราง |
+|---|---|
+| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
+| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
+| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+
+ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+
+```
+กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
+                    │
+                    └──▶ ที่เก็บถาวร
+```
+
+รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ไปที่ `software-diagrams` หรือ `svg-diagram-system`
+
+---
+
+## เมื่อไหร่ประโยคชนะทั้งคู่
+
+- คำตอบสั้นกว่าสามบรรทัด — ตารางสองแถวคือการตกแต่ง ไม่ใช่การอธิบาย
+- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผลหนึ่งประโยค
+- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+
+> ตารางที่มีแถวเดียวหรือสองแถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
+
+---
+
+## ความยาวของคำตอบ
+
+- **คำตอบอยู่บรรทัดแรก** เหตุผลตามหลัง — ไม่ใช่ไล่เหตุผลมาก่อนแล้วค่อยเฉลย
+- ไม่ต้องทวนคำถาม ไม่ต้องเกริ่น ไม่ต้องสรุปซ้ำตอนจบ
+- **สิ่งที่ยังไม่ได้ทำหรือยังไม่แน่ใจ ต้องบอก** แม้จะทำให้คำตอบยาวขึ้น
+- คำตอบยาวเกินหน้าจอ ให้ถามก่อนว่าต้องการละเอียดแค่ไหน แทนที่จะเทให้หมด
+
+---
+
+## ตัดกลิ่น AI
+
+อ่านทวนก่อนส่งทุกคำตอบและเอกสาร — เจอแบบไหนแก้ทันที
+
+| เจอ | แก้เป็น |
+|---|---|
+| เปิดด้วย "แน่นอน" · "คำถามดีมาก" · ทวนคำถาม | ขึ้นต้นด้วยคำตอบ |
+| ปิดด้วย "หวังว่าจะช่วยได้" · "ถ้ามีอะไรถามได้" | ตัดทิ้ง หรือเสนอขั้นต่อไปที่มีจริงหนึ่งข้อ |
+| คำขยายใหญ่โต — สำคัญมาก · ครอบคลุม · ทรงพลัง · ไร้รอยต่อ | ตัด หรือแทนด้วยตัวเลขหรือข้อเท็จจริง |
+| "ไม่ใช่แค่ X แต่ยัง Y" · ไล่สามคำเพื่อจังหวะ | พูดตรง ๆ ทีละเรื่อง |
+| "หลาย" · "บางส่วน" · "ค่อนข้าง" ทั้งที่รู้ตัวเลข | ใส่ตัวเลข |
+| ออกตัวซ้อนกันหลายชั้น — อาจจะ · น่าจะ · ในบางกรณี | ออกตัวครั้งเดียวที่จุดที่ไม่แน่ใจจริง พร้อมป้าย `อนุมาน` หรือ `เดา` |
+| หัวข้อและ bullet ในคำตอบสั้น | ประโยคธรรมดา |
+| ประโยคยาวหลายความคิด | หนึ่งประโยค หนึ่งความคิด |
+
+**ผู้ใช้บอก "งง" · "พูดง่าย ๆ" · "แปลเป็นภาษาคน"** → เขียนคำตอบล่าสุดใหม่ สั้นลงครึ่งหนึ่ง ไม่มีศัพท์เทคนิคที่ไม่ได้อธิบาย ไม่เพิ่มเนื้อหาใหม่
+
+---
+
+## Anti-patterns
+
+- ❌ **ย่อหน้ายาวเปรียบเทียบสามตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
+- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
+- ❌ **ตารางสองแถวเพื่อให้ดูเป็นระเบียบ**
+- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
+- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเองทั้งที่เขาถามเพราะอยากได้คำแนะนำ
+- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
+- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
+
+---
+
+## เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ถ้อยคำในคำตอบ — ตัวย่อและศัพท์เฉพาะ | `spell-out-abbreviations` |
+| รูปที่ต้องเป็นไฟล์จริง | `software-diagrams` · `svg-diagram-system` |
+| ภาพในเอกสาร markdown | `markdown-visuals` |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
+
+---
+
+## ตัวย่อ
+
+- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
+- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+
+---
+
+**ถ้าสิ่งที่จะพูดคือของที่เจอระหว่างทำงาน แล้วต้องให้ผู้ใช้ตัดสินใจก่อนไปต่อ** →
+`flag-and-propose` (เปิดด้วยผลกระทบ · ตารางเทียบ · ข้อเสนอ · ปิดด้วยคำถามเดียว)

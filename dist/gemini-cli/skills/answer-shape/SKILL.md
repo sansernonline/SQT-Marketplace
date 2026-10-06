@@ -1,6 +1,6 @@
 ---
 name: answer-shape
-description: Use when answering a question and the content has structure — comparing options, listing trade-offs, explaining how parts connect, or reporting several numbers side by side. Decides whether the answer should be prose, a comparison table, a small diagram or a short list, and keeps the chosen shape readable.
+description: Use when an answer has structure (comparing options, trade-offs, how parts connect, several numbers). Decides prose, table, small diagram or short list, and keeps it readable.
 ---
 
 # รูปทรงของคำตอบ
@@ -82,6 +82,25 @@ description: Use when answering a question and the content has structure — com
 - ไม่ต้องทวนคำถาม ไม่ต้องเกริ่น ไม่ต้องสรุปซ้ำตอนจบ
 - **สิ่งที่ยังไม่ได้ทำหรือยังไม่แน่ใจ ต้องบอก** แม้จะทำให้คำตอบยาวขึ้น
 - คำตอบยาวเกินหน้าจอ ให้ถามก่อนว่าต้องการละเอียดแค่ไหน แทนที่จะเทให้หมด
+
+---
+
+## ตัดกลิ่น AI
+
+อ่านทวนก่อนส่งทุกคำตอบและเอกสาร — เจอแบบไหนแก้ทันที
+
+| เจอ | แก้เป็น |
+|---|---|
+| เปิดด้วย "แน่นอน" · "คำถามดีมาก" · ทวนคำถาม | ขึ้นต้นด้วยคำตอบ |
+| ปิดด้วย "หวังว่าจะช่วยได้" · "ถ้ามีอะไรถามได้" | ตัดทิ้ง หรือเสนอขั้นต่อไปที่มีจริงหนึ่งข้อ |
+| คำขยายใหญ่โต — สำคัญมาก · ครอบคลุม · ทรงพลัง · ไร้รอยต่อ | ตัด หรือแทนด้วยตัวเลขหรือข้อเท็จจริง |
+| "ไม่ใช่แค่ X แต่ยัง Y" · ไล่สามคำเพื่อจังหวะ | พูดตรง ๆ ทีละเรื่อง |
+| "หลาย" · "บางส่วน" · "ค่อนข้าง" ทั้งที่รู้ตัวเลข | ใส่ตัวเลข |
+| ออกตัวซ้อนกันหลายชั้น — อาจจะ · น่าจะ · ในบางกรณี | ออกตัวครั้งเดียวที่จุดที่ไม่แน่ใจจริง พร้อมป้าย `อนุมาน` หรือ `เดา` |
+| หัวข้อและ bullet ในคำตอบสั้น | ประโยคธรรมดา |
+| ประโยคยาวหลายความคิด | หนึ่งประโยค หนึ่งความคิด |
+
+**ผู้ใช้บอก "งง" · "พูดง่าย ๆ" · "แปลเป็นภาษาคน"** → เขียนคำตอบล่าสุดใหม่ สั้นลงครึ่งหนึ่ง ไม่มีศัพท์เทคนิคที่ไม่ได้อธิบาย ไม่เพิ่มเนื้อหาใหม่
 
 ---
 

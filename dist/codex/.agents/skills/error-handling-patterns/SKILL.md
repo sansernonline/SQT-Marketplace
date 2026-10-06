@@ -1,6 +1,6 @@
 ---
 name: error-handling-patterns
-description: Use when writing or reviewing code that can fail — anything calling a network, a database or another service. Decides where to catch and where to let through, separates the user message from the log detail, classifies failures into retry and do-not-retry, and sets timeout, backoff and circuit-breaker numbers.
+description: Use when writing or reviewing code that can fail (network, database, other services). Where to catch, user message vs log detail, retry vs do-not-retry, timeout, backoff and circuit-breaker numbers.
 ---
 
 # จัดการข้อผิดพลาด

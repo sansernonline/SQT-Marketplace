@@ -36,7 +36,7 @@
     .\scripts\install-marketplace.ps1 -WhatIf
     .\scripts\install-marketplace.ps1
     .\scripts\install-marketplace.ps1 -All
-    .\scripts\install-marketplace.ps1 -Plugins software-company,software-company-healthcare
+    .\scripts\install-marketplace.ps1 -Plugins software-company
     .\scripts\install-marketplace.ps1 -Scope project
 #>
 [CmdletBinding(SupportsShouldProcess)]

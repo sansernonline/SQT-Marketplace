@@ -1,208 +1,173 @@
-# skill: answer-shape
+# skill: decision-log
 
-Use when answering a question and the content has structure — comparing options, listing trade-offs, explaining how parts connect, or reporting several numbers side by side. Decides whether the answer should be prose, a comparison table, a small diagram or a short list, and keeps the chosen shape readable.
+Use whenever an agent makes a judgment call on its own during long or unattended work (choosing an approach, filling a gap, resolving conflicting docs, skipping something). Appends one auditable row to docs/BUILD-PLAN.md.
 
-# รูปทรงของคำตอบ
+# decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+> ให้ agent ทำต่อเองโดยไม่ถามได้ ก็ต่อเมื่อคนกลับมาเห็นได้ว่ามันเลือกอะไรไปบ้าง และกลับคำตัดสินทีละข้อได้
 
----
+มาจาก `show-me-your-work` ของ pstack · ปรับให้ใช้ไฟล์เดียวกับ [`status-report`](../status-report/SKILL.md)
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+## เขียนที่ไหน
 
-| สัญญาณ | รูปทรง |
-|---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+`docs/BUILD-PLAN.md` หัวข้อ `## ตัดสินใจเอง` — หัวข้อสุดท้ายของไฟล์ · ลำดับเต็ม: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` · ไม่มีหัวข้อหรือไม่มีไฟล์ ให้สร้าง
+subagent ไม่เขียนเอง — **รายงานการตัดสินใจกลับมา** ตัวหลักเป็นคนลงตาราง
 
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่สองตัวขึ้นไป** — มีเมื่อไหร่ใช้ตาราง
-เขียนเป็นย่อหน้าแล้วผู้อ่านต้องจำของตัวแรกไว้ในหัวระหว่างอ่านตัวที่สอง
+```markdown
+## ตัดสินใจเอง
 
----
-
-## ตารางที่อ่านง่าย
-
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน · แถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ให้เขียนว่า "ไม่มี" ตรง ๆ
-- **ช่องละไม่เกินหนึ่งบรรทัด** ยาวกว่านั้นยกออกไปเป็นข้อความใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
-
-```
-❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
+| วันที่ | งาน | เรื่อง | เลือก | ไม่เลือก | เหตุผล · หลักฐาน |
+|---|---|---|---|---|---|
+| 2026-10-04 15:40 | SRS | เวลาตอบสนองหน้าค้นหา | ≤ 2 วินาที (รอยืนยัน) | ≤ 1 วินาที | BRD ไม่ระบุ · ใช้ค่าที่ระบบเดิมทำได้ (วัดจริง 1.6 วินาที) |
+| 2026-10-04 16:05 | FR-012 | เก็บไฟล์แนบ | ดิสก์ในเครื่อง + path ในฐานข้อมูล | object storage | ขนาดงาน S · ย้ายทีหลังได้ · ADR-004 |
 ```
 
-**ปิดท้ายตารางด้วยข้อสรุปหนึ่งบรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+## ต้องลงเมื่อ
 
----
+- เลือกระหว่างหลายทางที่ใช้ได้ทั้งคู่
+- เอกสารไม่ได้บอก แล้ว agent เติมค่าเอง
+- เอกสารสองฉบับขัดกัน แล้วเลือกยึดฉบับหนึ่ง
+- ข้ามขั้นตอนหรือฉบับที่สั่ง เพราะทำไม่ได้หรือไม่จำเป็น
+- ผลทดลองตัดสินทางเลือก (จาก playbook `prototype` หรือ `parallel-attempts-pick-best`)
 
-## เมื่อไหร่รูปชนะตาราง
+**ไม่ต้องลง** — เรื่องที่ skill หรือเอกสารสั่งไว้ชัดแล้ว · การตั้งชื่อตัวแปรทั่วไป
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+## หลักการเลือกเมื่อต้องตัดสินเอง
 
-| ใช้รูป | ใช้ตาราง |
-|---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+เลือกทางที่ผลกระทบน้อยสุด — ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
+**ข้อเท็จจริง** (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา — ใส่ค่าที่ใช้ชั่วคราวพร้อม `(รอยืนยัน)` แล้วลงคำถามใน "ค้างอยู่" ของ `status-report` · งานที่ย้อนไม่ได้ เตรียมคำสั่งหรือ diff ไว้ใน "รออนุมัติ" — ไม่ทำเอง
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+## กติกาของแถว
 
-```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
+- หนึ่งแถวต่อหนึ่งการตัดสินใจ · ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
+- "ไม่เลือก" ต้องมีอย่างน้อยหนึ่งทาง — ถ้าไม่มีทางอื่นเลย ไม่ใช่การตัดสินใจ
+- "เหตุผล · หลักฐาน" ระบุที่มา — ไฟล์ · ADR · ตัวเลขที่วัด · ติดป้าย `วัดจริง` / `อนุมาน` เมื่อเป็นตัวเลข
+- ไม่ลบแถวเก่า · ผู้ใช้ไม่เห็นด้วย แก้ที่แถวนั้นแล้วสั่งทำใหม่เฉพาะงานนั้น
+- **ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงจาก `security-gate`) ลงตารางเดียวกัน แล้วเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` = `agent` · `ผู้ใช้` · ไม่มีคอลัมน์นี้ = agent ตัดสินทุกแถว
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ไปที่ `software-diagrams` หรือ `svg-diagram-system`
+## ในคำตอบตอนจบ
 
----
-
-## เมื่อไหร่ประโยคชนะทั้งคู่
-
-- คำตอบสั้นกว่าสามบรรทัด — ตารางสองแถวคือการตกแต่ง ไม่ใช่การอธิบาย
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผลหนึ่งประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
-
-> ตารางที่มีแถวเดียวหรือสองแถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
-
----
-
-## ความยาวของคำตอบ
-
-- **คำตอบอยู่บรรทัดแรก** เหตุผลตามหลัง — ไม่ใช่ไล่เหตุผลมาก่อนแล้วค่อยเฉลย
-- ไม่ต้องทวนคำถาม ไม่ต้องเกริ่น ไม่ต้องสรุปซ้ำตอนจบ
-- **สิ่งที่ยังไม่ได้ทำหรือยังไม่แน่ใจ ต้องบอก** แม้จะทำให้คำตอบยาวขึ้น
-- คำตอบยาวเกินหน้าจอ ให้ถามก่อนว่าต้องการละเอียดแค่ไหน แทนที่จะเทให้หมด
-
----
-
-## Anti-patterns
-
-- ❌ **ย่อหน้ายาวเปรียบเทียบสามตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
-- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
-- ❌ **ตารางสองแถวเพื่อให้ดูเป็นระเบียบ**
-- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
-- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเองทั้งที่เขาถามเพราะอยากได้คำแนะนำ
-- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
-- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
-
----
-
-## เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ถ้อยคำในคำตอบ — ตัวย่อและศัพท์เฉพาะ | `spell-out-abbreviations` |
-| รูปที่ต้องเป็นไฟล์จริง | `software-diagrams` · `svg-diagram-system` |
-| ภาพในเอกสาร markdown | `markdown-visuals` |
-| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
-
----
-
-## ตัวย่อ
-
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-
----
-
-**ถ้าสิ่งที่จะพูดคือของที่เจอระหว่างทำงาน แล้วต้องให้ผู้ใช้ตัดสินใจก่อนไปต่อ** →
-`flag-and-propose` (เปิดด้วยผลกระทบ · ตารางเทียบ · ข้อเสนอ · ปิดด้วยคำถามเดียว)
+หัวข้อ **ตัดสินใจเอง** ท้ายคำตอบ แสดง**ทุกแถวของรอบนี้** (เลือกอะไร · ไม่เลือกอะไร · ทำไม หนึ่งบรรทัด) แล้วชี้ไปที่ตารางเต็ม
+เกิน 15 แถว สรุปเป็นกลุ่มได้ (เช่น "เลือก dependency 6 ตัว") แต่ต้องบอกจำนวนรวมและลิงก์ไปที่ตาราง · แถวที่กระทบผลมากยังต้องแสดงเต็ม
 
 
 ---
 
-# skill: temp-file-discipline
+# skill: simplicity-first
 
-Use on every task that writes files into someone's project folder. Sends every temporary file to one `_to_delete/` folder at the project root instead of leaving archives, extracted folders, previews, backups and one-off scripts where the real work lives. Load it before the first file is written, not while cleaning up afterwards.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, UX, API design, sprint plan). Simplest version that works, the tired-teammate test, no buzzwords or extra layers. For code use lazy-coding.
 
-# ระเบียบไฟล์ชั่วคราว
+# Simplicity First
 
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
----
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
 
-## ลำดับความสำคัญ — ดีที่สุดคือไม่เขียนลงโปรเจกต์เลย
+## The one test
 
-| ไฟล์นั้นต้องอยู่บนเครื่องผู้ใช้ไหม | ทำอย่างไร |
-|---|---|
-| ไม่ต้อง — เป็นแค่ขั้นกลางระหว่างคิด | ทำในพื้นที่ทำงานของเซสชัน ไม่แตะโฟลเดอร์โปรเจกต์ |
-| ต้อง เพราะต้องแตกไฟล์หรือรันที่เครื่องนั้น | `_to_delete/` |
-| เป็นผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+Before submitting, ask:
 
----
+> Could a tired teammate understand this in 6 months, with no prior context?
 
-## อะไรคือไฟล์ชั่วคราว
+If "no" or "not sure" → simplify.
 
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ตัวที่แปลงคือของชั่วคราว · **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีกสามเดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
+## 5 principles
 
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — แทนที่ไฟล์เก่าด้วยของใหม่ ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ใช่ทิ้งไว้ข้าง ๆ กัน
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
 
----
+## By output type
 
-## อะไรไม่ใช่
+### Documents (BRD, FSD, ADR)
 
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าต้องแก้ ต้องมีไฟล์ต้นทาง** เก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
 
----
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
 
-## วิธีใช้
+### Architecture
 
-```
-โปรเจกต์/
-├── ผลงานจริง
-└── _to_delete/
-    ├── transfer.zip
-    └── render-check/
-```
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
 
-- โฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแตกย่อยตามวันที่ นอกจากของเยอะจริง
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ใช้ของเดิม อย่าสร้างซ้ำ
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
 
----
+### Plans
 
-## ตอนจบงาน
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
 
-1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ลบไม่ได้เพราะไม่มีสิทธิ์ ก็ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ — อย่าทิ้งไว้ที่เดิม
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
 
----
+### Designs (UX, API)
 
-## Anti-patterns
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
 
-- ❌ **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- ❌ **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- ❌ **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- ❌ **เขียนไฟล์ชั่วคราวลงโฟลเดอร์ผู้ใช้ทั้งที่ทำในพื้นที่ของเซสชันได้**
-- ❌ **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- ❌ **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
 
----
+## The 3-question filter
 
-## ตัวย่อ
+Before adding any new component, configuration option, or pattern:
 
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
+
+Two or more answers point to "simpler is fine" → don't add it.
+
+## Examples
+
+**API description**
+
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
+
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
+
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## Pre-submit checklist
+
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
+
+If any answer is "no" → simplify before delivering.
+
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry

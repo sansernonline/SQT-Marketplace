@@ -1,509 +1,197 @@
-# skill: context-budget
+# skill: simplicity-first
 
-Use when a task will read files, search a codebase, run commands with long output, or work through a repository — before the first read, not after the context window is full. Decides when to send a subagent instead of reading directly, how to read part of a file rather than all of it, how to bound a search, when to write intermediate results to disk, and which project notes are worth keeping so the next session does not re-explore the same code.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, UX, API design, sprint plan). Simplest version that works, the tired-teammate test, no buzzwords or extra layers. For code use lazy-coding.
 
-# งบ context
+# Simplicity First
 
-> **กฎข้อเดียว:** ตัดสินใจ**ก่อน**อ่าน ไม่ใช่หลังอ่านแล้วค่อยเสียดาย
-> token ที่เข้า context แล้วเอาออกไม่ได้ จนกว่าจะ `/clear` ซึ่งทิ้งทุกอย่างไปด้วย
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
-## เมื่อไหร่ใช้ skill นี้
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
 
-- กำลังจะอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว
-- เริ่มงานในโปรเจกต์ที่ยังไม่รู้จักโครงสร้าง
-- context เต็มเร็วผิดปกติ หรือโดน `/compact` บ่อย
-- จะวางกฎให้ทั้งทีมหรือทุกโปรเจกต์
+## The one test
 
-## เมื่อไหร่ **ไม่** ใช้
+Before submitting, ask:
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ทำให้**คำตอบ**สั้นลง | `answer-shape` |
-| เก็บสรุปงานข้ามเซสชัน | `work-session-context` |
-| ที่วางไฟล์ชั่วคราว | `temp-file-discipline` |
-| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` |
+> Could a tired teammate understand this in 6 months, with no prior context?
+
+If "no" or "not sure" → simplify.
+
+## 5 principles
+
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
+
+## By output type
+
+### Documents (BRD, FSD, ADR)
+
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+
+### Architecture
+
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
+
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
+
+### Plans
+
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
+
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
+
+### Designs (UX, API)
+
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
+
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
+
+## The 3-question filter
+
+Before adding any new component, configuration option, or pattern:
+
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
+
+Two or more answers point to "simpler is fine" → don't add it.
+
+## Examples
+
+**API description**
+
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
+
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
+
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## Pre-submit checklist
+
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
+
+If any answer is "no" → simplify before delivering.
+
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry
+
 
 ---
 
-## 1 · อะไรกิน context จริง ๆ
+# skill: spell-out-abbreviations
 
-| แหล่ง | ขนาดโดยประมาณ | คุมได้ไหม |
-|---|---|---|
-| **output ของ tool** (อ่านไฟล์ · grep · bash) | ใหญ่สุด — ไฟล์เดียวเป็นหมื่น token ได้ | ✅ คุมได้เต็มที่ — เนื้อหาทั้งหน้านี้ |
-| schema ของ tool จาก MCP server | ต่อ server หลักพัน token ทุกเซสชัน | ✅ ปิดตัวที่ไม่ใช้ |
-| `CLAUDE.md` | ตามที่เขียน | ✅ เขียนให้สั้น |
-| description ของ skill | ~100 token ต่อ skill | ✅ ตัดให้กระชับ |
-| ประวัติบทสนทนา | โตเรื่อย ๆ | ⚠️ `/clear` เมื่อเปลี่ยนเรื่อง |
+Use in every piece of writing for a person (docs, comments, commits, replies, UI text, diagram labels). Spell out each abbreviation the first time, e.g. Model Context Protocol (MCP), and gloss specialist terms.
 
-> **ลำดับความสำคัญชัดเจน** — ตัด description ของ skill ทั้งชุดได้ไม่กี่พัน token
-> แต่ `cat` ไฟล์ 3,000 บรรทัดครั้งเดียวกินมากกว่านั้น
-> **ที่ต้องวินัยที่สุดคือแถวบนสุดของตาราง**
+# Spell Out Abbreviations
 
----
+> **กฎที่หนึ่ง:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
+> **กฎที่สอง:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายต้องไม่ต้องเดา
 
-## 2 · ต้นไม้ตัดสินใจก่อนอ่าน
+## รูปแบบ
 
 ```
-ต้องรู้อะไรจากไฟล์/โฟลเดอร์นี้
-├─ รู้ชื่อไฟล์และบรรทัดอยู่แล้ว        → อ่านเฉพาะช่วง (ข้อ 3)
-├─ ต้องหาว่าอยู่ตรงไหน                → grep แบบมีขอบเขต (ข้อ 4)
-├─ ต้องเปิดดูมากกว่า 3 ไฟล์           → ส่ง subagent (ข้อ 5)
-└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก     → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 6)
+✅ Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
+❌ MCP ทำให้ Claude ต่อกับระบบอื่นได้
 ```
 
-**เช็กขนาดก่อนเสมอ** เมื่อไม่รู้ว่าไฟล์ใหญ่แค่ไหน:
+- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็ม + วงเล็บ · ครั้งต่อไปใช้ตัวย่อล้วน
+- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
+- ตารางหรือหัวข้อที่ที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
+- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
 
-```bash
-wc -l path/to/file          # กี่บรรทัด
-du -h path/to/file          # กี่ไบต์
-```
+## ยกเว้น — ไม่ต้องขยาย
 
----
+คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
+และนามสกุลไฟล์ (`.docx`, `.pptx`) · ถ้าไม่แน่ใจ **ให้ขยาย** เสียเปล่าดีกว่าคนอ่านไม่รู้เรื่อง
 
-## 3 · อ่านเฉพาะช่วง
+## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
 
-| ต้องการ | คำสั่ง |
-|---|---|
-| ดูว่าไฟล์เกี่ยวกับอะไร | `head -40 file.ts` |
-| ดูโครงสร้าง | `rg -n '^(export |class |def |function )' file.ts` |
-| อ่านรอบ ๆ บรรทัดที่สนใจ | `sed -n '120,180p' file.ts` |
-| ด้วย Read tool | ใส่ `offset` และ `limit` |
-
-**เกณฑ์:** ไฟล์เกิน **300 บรรทัด** ให้ถือว่าต้องอ่านเฉพาะช่วง เว้นแต่จะแก้ทั้งไฟล์จริง ๆ
-
-**ยอมอ่านทั้งไฟล์ได้เมื่อ** — กำลังจะเขียนทับทั้งไฟล์ · ไฟล์ตั้งค่าสั้น ๆ ·
-ต้องเข้าใจไฟล์ทั้งไฟล์เพื่อแก้ให้ถูก และไฟล์ไม่เกิน ~300 บรรทัด
-
----
-
-## 4 · ค้นแบบมีขอบเขต
-
-```bash
-# ❌ คืนมาเป็นพัน ๆ บรรทัด
-rg 'user'
-
-# ✅ จำกัดชนิดไฟล์ · จำกัดบริบท · จำกัดจำนวน
-rg -n 'createUser' --glob '*.ts' -C2 | head -50
-
-# ✅ อยากรู้แค่ว่าอยู่ไฟล์ไหน
-rg -l 'createUser' --glob '*.ts'
-
-# ✅ อยากรู้แค่จำนวน
-rg -c 'TODO' --glob '*.ts' | head -20
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| ใส่ `--glob` เสมอ | กัน `node_modules` และไฟล์ build |
-| `-l` ก่อน แล้วค่อยเจาะ | รู้ว่าอยู่ไฟล์ไหนก่อน ค่อยอ่านเฉพาะไฟล์นั้น |
-| ปิดท้าย `| head -N` | กันกรณีที่ pattern กว้างกว่าที่คิด |
-| `-C2` พอ ไม่ต้อง `-C10` | บริบทสองบรรทัดพอให้รู้ว่าใช่ไหม |
-
----
-
-## 5 · ส่ง subagent ไปแทน
-
-**นี่คือข้อที่ประหยัดได้มากที่สุดในหน้านี้**
-
-subagent มี context ของตัวเอง — มันอ่านไปยี่สิบไฟล์ได้
-แล้วคืนกลับมาที่บทสนทนาหลักแค่ย่อหน้าเดียว ส่วนที่มันอ่านไม่เข้ามาด้วย
-
-| ใช้ subagent เมื่อ | ทำเองเมื่อ |
-|---|---|
-| ต้องเปิดดูเกิน 3 ไฟล์เพื่อตอบคำถามเดียว | รู้ไฟล์และบรรทัดอยู่แล้ว |
-| สำรวจโปรเจกต์ที่ยังไม่รู้จัก | แก้ไฟล์ที่กำลังเปิดอยู่ |
-| ตรวจ/รีวิวข้ามหลายไฟล์ | งานที่ต้องเห็นรายละเอียดเต็มเพื่อแก้ต่อ |
-
-**สั่งให้ดี = บอกว่าจะเอาอะไรกลับมา:**
+ตัวย่อขยายแล้วยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
+ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
 
 ```
-❌ "ดูโค้ดส่วน auth ให้หน่อย"
-   → มันอาจคืนมาทั้งไฟล์
+❌ ใช้ idempotency key กันงานซ้ำ
+✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
 
-✅ "หาว่า flow การเข้าสู่ระบบเริ่มที่ไหนและผ่านอะไรบ้าง
-    คืนกลับมาแค่ รายการ ไฟล์:บรรทัด ตามลำดับการเรียก
-    ไม่ต้องแปะโค้ด ไม่เกิน 15 บรรทัด"
+❌ ต้องทำ expand-contract ตอน migrate
+✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
 ```
 
-> 🚨 **กำหนดรูปร่างและความยาวของผลลัพธ์เสมอ** — subagent ที่ไม่ได้ถูกบอกว่าจะเอาอะไร
-> จะคืนรายงานยาว ๆ กลับมา แล้วก็ไม่ได้ประหยัดอะไรเลย
+**คำอธิบายต้องสั้นกว่าหนึ่งบรรทัด** ยาวกว่านั้นแปลว่าควรแยกเป็นประโยคของตัวเอง
 
----
+**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
+อ่านแล้วเดาความหมายได้ไหม เดาไม่ได้คือต้องอธิบาย
 
-## 6 · เขียนลงไฟล์ แทนถือไว้ในบทสนทนา
-
-```bash
-# ❌ output ทั้งหมดเข้า context
-npm test
-
-# ✅ เข้า context แค่บรรทัดสรุป
-npm test > _to_delete/test.log 2>&1; tail -20 _to_delete/test.log
-
-# ✅ ข้อมูลใหญ่ ประมวลผลในไฟล์ เอาเข้ามาแค่ผลลัพธ์
-jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
-```
-
-**ใช้กับ** — ผลรัน test · log · ผลลัพธ์จากการแปลงไฟล์ · ข้อมูลที่ต้องกรอง/นับ
-ที่เก็บคือ `_to_delete/` ตาม `temp-file-discipline`
-
----
-
-## 7 · ทำให้เซสชันหน้าไม่ต้องสำรวจซ้ำ
-
-โปรเจกต์ที่กลับมาทำบ่อย ควรมีแผนที่สั้น ๆ ที่ **ถูกโหลดอัตโนมัติ**
-
-| ไฟล์ | โหลดเอง | เหมาะกับ |
-|---|:--:|---|
-| **`<project>/CLAUDE.md`** | ✅ | แผนที่โปรเจกต์ · คำสั่งที่ใช้บ่อย · กฎเฉพาะโปรเจกต์ |
-| `<project>/<โฟลเดอร์ใหญ่>/CLAUDE.md` | ✅ เมื่อทำงานในโฟลเดอร์นั้น | โมดูลที่ซับซ้อนเป็นพิเศษ |
-| `context.md` · `notes.md` ชื่ออื่น | ❌ | **ต้องสั่งให้อ่านทุกครั้ง = เสียเปล่า** |
-
-> 🚨 **อย่าตั้งชื่อไฟล์แผนที่เป็นอย่างอื่น** — `CLAUDE.md` ถูกอ่านให้อัตโนมัติ
-> ไฟล์ชื่ออื่นต้องมีคนสั่งให้อ่าน ซึ่งแปลว่าจ่าย token เพิ่มเพื่อไปอ่านสิ่งที่ควรฟรี
-
-**สิ่งที่ควรอยู่ในแผนที่ของโปรเจกต์** — สั้น ๆ ไม่เกิน 40 บรรทัด:
-
-```markdown
-## แผนที่
-- API อยู่ที่ `src/api/` · หน้าจอ `src/pages/` · ชนิดข้อมูลร่วม `src/types.ts`
-- ตรรกะการคิดราคาทั้งหมดอยู่ใน `src/pricing/` ที่เดียว
-- `legacy/` ไม่ได้ใช้แล้ว **ห้ามอ่าน**
-
-## คำสั่ง
-- รัน `npm run dev` · test `npm test` · migrate `npm run db:migrate`
-
-## กฎเฉพาะที่นี่
-- ห้ามแก้ `generated/` เป็นไฟล์ที่สร้างอัตโนมัติ
-```
-
-**ไม่ควรมี** — เนื้อหาที่อ่านจากโค้ดได้อยู่แล้ว · รายการไฟล์ทั้งหมด · ประวัติการเปลี่ยนแปลง
-แผนที่ที่ล้าสมัยแย่กว่าไม่มีแผนที่ เพราะมันพาไปผิดที่โดยมั่นใจ
-
----
-
-## 8 · ค่าตั้งที่ช่วยได้อีก
-
-| ทำอะไร | ได้อะไร |
+| ระดับผู้อ่าน | อธิบายแค่ไหน |
 |---|---|
-| **ปิด MCP server ที่ไม่ได้ใช้ในโปรเจกต์นั้น** | schema ของทุก tool โหลดทุกเซสชัน — ตัดได้หลักพัน token |
-| ปิดปลั๊กอินที่ไม่เกี่ยวกับงานนั้น | description ของ skill ทุกตัวอยู่ใน context เสมอ |
-| `permissions.deny` ใน `.claude/settings.json` สำหรับโฟลเดอร์ที่ไม่ควรอ่าน | กันพลาดเชิงระบบ ไม่ต้องพึ่งวินัย |
-| `/clear` เมื่อเปลี่ยนเรื่อง · `/compact` เมื่อใกล้เต็ม | คืนที่ว่าง |
-| `CLAUDE.md` ยาวไม่เกิน 40 บรรทัด | ทุกบรรทัดจ่ายต้นทุนทุกเซสชัน |
+| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
+| ทีมพัฒนาแต่คนละส่วน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
 
 ---
 
-## 9 · Anti-patterns
-
-- ❌ **`cat` ไฟล์ใหญ่เพื่อ "ดูก่อนว่ามีอะไร"** — `head -40` ตอบคำถามเดียวกันด้วย 1% ของต้นทุน
-- ❌ **`rg` โดยไม่ใส่ `--glob`** — ได้ `node_modules` มาเต็ม
-- ❌ **อ่านสิบไฟล์เองเพื่อตอบคำถามเดียว** — งานของ subagent
-- ❌ **สั่ง subagent แบบไม่บอกว่าจะเอาอะไรกลับมา** — ได้รายงานยาวกลับมา ไม่ได้ประหยัด
-- ❌ **รัน test แล้วปล่อย output เข้า context ทั้งก้อน**
-- ❌ **อ่านไฟล์เดิมซ้ำเพราะลืมว่าเคยอ่านแล้ว** — จดสิ่งที่พบลงไฟล์ตั้งแต่รอบแรก
-- ❌ **`context.md` หรือชื่ออื่นที่ไม่ได้โหลดอัตโนมัติ** — ใช้ `CLAUDE.md`
-- ❌ **`CLAUDE.md` ยาว 300 บรรทัด** — จ่ายทุกเซสชันของทุกคนในทีม
-- ❌ **เปิด MCP server ไว้ครบทุกตัวตลอดเวลา**
-
----
-
-## 10 · ตัวย่อ
-
-- **context window** — พื้นที่จำกัดที่โมเดลเห็นข้อมูลทั้งหมดของบทสนทนานั้น
-- **token** — หน่วยนับข้อความที่โมเดลใช้ ประมาณ 1 คำภาษาอังกฤษ หรือ 2–3 ตัวอักษรไทย
-- **subagent** — agent ย่อยที่มี context ของตัวเอง ทำงานแล้วคืนกลับมาแค่ข้อสรุป
-- **MCP** — Model Context Protocol (มาตรฐานให้เครื่องมือภายนอกต่อเข้ากับโมเดล)
-- **`rg`** — ripgrep เครื่องมือค้นข้อความในไฟล์ที่เร็วกว่า grep
-
-## 11 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ทำให้คำตอบสั้นลง | `answer-shape` |
-| ที่วางไฟล์ระหว่างทาง | `temp-file-discipline` |
-| เก็บสรุปข้ามเซสชัน | `work-session-context` |
-| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` |
-| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` |
-| แก้บั๊กเฉพาะจุดโดยไม่อ่านทั้งโปรเจกต์ | `targeted-fix` |
-
-
----
-
-# skill: product-naming
-
-Use when naming a product, app, module, brand or code name — including when the name is invented rather than descriptive. Generates candidates from nine repeatable formulas instead of free association, screens them against the six tests that kill a name, attaches a meaning to a name that did not start with one and ships a bank of Latin, Greek and borrowed-word roots, keeps a family consistent when there are several products, checks availability before anyone falls in love with one, and covers how a name behaves when Thai speakers say and type it.
-
-# ตั้งชื่อผลิตภัณฑ์
-
-> **กฎข้อเดียว:** ชื่อที่ดีคือชื่อที่คน**พิมพ์ถูกตั้งแต่ครั้งแรก หลังได้ยินครั้งเดียว**
-> ความหมายลึกซึ้งมาทีหลัง — สะกดผิดคือลูกค้าหาไม่เจอ
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ตั้งชื่อผลิตภัณฑ์ แอป โมดูล หรือชื่อโครงการภายใน
-- มีชื่ออยู่แล้วแต่รู้สึกว่าเชย ยาว หรือซ้ำกับคนอื่น
-- มีผลิตภัณฑ์หลายตัวและอยากให้ชื่อเป็นตระกูลเดียวกัน
-- ต้องเลือกจากรายการชื่อที่ระดมมาแล้ว แต่ตัดสินใจไม่ลง
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| โลโก้ สี ตัวอักษรของแบรนด์ | `graphic-design` |
-| ตั้งชื่อไฟล์เอกสาร | `document-naming` |
-| ตั้งชื่อตาราง คอลัมน์ | `database-design` |
-| ตั้งชื่อ endpoint | `api-conventions` |
-
----
-
-## 1 · หกข้อที่ตัดชื่อทิ้งทันที
-
-ทดสอบก่อนคิดต่อ — ตกข้อไหนข้อหนึ่ง ตัดทิ้งเลย ไม่ต้องเสียดาย
-
-| # | ทดสอบ | ตกเมื่อ |
-|:--:|---|---|
-| 1 | **ทดสอบโทรศัพท์** — พูดชื่อให้คนฟังทางโทรศัพท์ เขาพิมพ์ถูกไหม | ต้องสะกดให้ฟัง |
-| 2 | **ความยาว** | เกิน 3 พยางค์ หรือเกิน 12 ตัวอักษร |
-| 3 | **โดเมนและ handle** | `.com` และ `.co` ถูกจับหมด และ handle โซเชียลไม่ว่างสักที่ |
-| 4 | **ชนของที่มีอยู่** | มีผลิตภัณฑ์ซอฟต์แวร์ชื่อเดียวกันหรือใกล้กันมาก |
-| 5 | **ความหมายในภาษาอื่น** | แปลว่าอะไรไม่ดีในภาษาที่ลูกค้าพูด |
-| 6 | **คนไทยออกเสียงได้** | มีเสียงควบที่คนไทยเลี่ยง หรือลงท้ายด้วยเสียงที่กลืนหาย |
-
-> 🚨 **ข้อ 1 คือข้อที่ฆ่าชื่อมากที่สุด** — ชื่อที่สะกดแปลกเพื่อให้ได้โดเมน
-> แลกมาด้วยการที่ลูกค้าทุกคนพิมพ์ผิดตลอดไป
->
-> 🚨 **ข้อ 6 คนมักลืม** — ชื่อที่มี `th` `v` `z` ท้ายคำ หรือควบ `str-` `spl-`
-> คนไทยจะออกเสียงเพี้ยนแล้วพิมพ์ตามที่ได้ยิน
-
----
-
-## 2 · เก้าสูตรผลิตชื่อ
-
-อย่านั่งนึกลอย ๆ — เดินทีละสูตร ผลิตสูตรละ 5–10 ชื่อ แล้วค่อยคัด
-
-| # | สูตร | วิธี | ตัวอย่าง |
-|:--:|---|---|---|
-| 1 | **คำจริง ตัดท้าย** | เอาคำอังกฤษมาตัดพยางค์สุดท้ายทิ้ง | `figure` → **Figma** · `velocity` → **Velo** |
-| 2 | **สองคำชนกัน** | ตัดหัวท้ายสองคำมาต่อกัน | `fold`+`drop` → **Foldrop** · `data`+`dog` → **Datadog** |
-| 3 | **คำ + ปัจจัย** | เติม `-io` `-ly` `-ify` `-o` `-a` `-ex` | `home`+`ify` → **Homify** · `aurum`+`io` → **Aurio** |
-| 4 | **รากละติน/กรีก** | หาคำรากของสิ่งที่ทำ แล้วย่อให้สั้น | `lumen` → **Lumo** · `nexus` → **Nexa** |
-| 5 | **ตัวอักษรตระกูล** | คำบอกหน้าที่ + ตัวต่อท้ายประจำตระกูล | **TradeXI · TelXI · DockXI · SoundXI** |
-| 6 | **คำสั้นไร้ความหมาย** | 4–5 ตัวอักษร พยัญชนะ-สระ-พยัญชนะ อ่านได้ทันที | **Quix · Zeno · Riva · Volt** |
-| 7 | **คำจริงยืมข้ามบริบท** | คำธรรมดาที่ไม่เกี่ยวกับงาน แต่ให้ความรู้สึกตรง | **Slack · Notion · Arc · Linear** |
-| 8 | **สองพยางค์อ่านลื่น** | คำจริงสองคำสั้น ๆ วางคู่กัน | **Speak Go · Cash App** |
-| 9 | **คำเต็มสองคำที่ไม่เกี่ยวกัน** | เอาคำจริงสองคำที่ไม่เกี่ยวกับสินค้าและไม่เกี่ยวกันเอง มาต่อเป็นคำเดียว | **Tailscale · Snowflake · Firebase · Basecamp** |
-
-**สูตรที่ให้ชื่อ "cool + clean" มากที่สุด** คือ 1 · 4 · 6 — สั้น ไร้ความหมายตรงตัว จำง่าย
-**สูตร 7 ได้ชื่อที่ดูโตแล้ว** แต่โดเมนหายากที่สุด
-
-**ตัวอักษรที่ให้ความรู้สึกทันสมัย** — `x` `z` `q` `v` ต้นคำ · ลงท้าย `-o` `-a` `-ix` `-ex`
-**ตัวอักษรที่ทำให้ดูเชย** — `-soft` `-tech` `-sys` `-pro` `-plus` `-max` ต่อท้าย
-
----
-
-
-### สูตร 9 ลงลึก — แบบที่ให้ชื่อดูเท่าที่สุดโดยไม่ต้องประดิษฐ์คำ
-
-`Tailscale` = *tail* + *scale* · ทั้งสองคำไม่เกี่ยวกับเครือข่ายส่วนตัวเลย และไม่เกี่ยวกันเองด้วย
-
-| ต่างจากสูตร 2 ตรงไหน | |
-|---|---|
-| สูตร 2 | **ตัด**พยางค์ก่อนต่อ — `fold`+`drop` → Foldrop · คำที่ได้ไม่ใช่คำจริง |
-| สูตร 9 | **ไม่ตัดอะไรเลย** — คำจริงสองคำเต็ม ๆ วางติดกัน |
-
-**ทำไมได้ผล**
-
-| เหตุผล | |
-|---|---|
-| จำง่าย | ผู้ฟังรู้จักทั้งสองคำอยู่แล้ว ไม่ต้องจำการสะกดใหม่ |
-| ไม่ซ้ำใคร | คู่คำที่ไม่มีเหตุผลต้องอยู่ด้วยกัน จึงไม่มีใครเคยจับคู่ไว้ |
-| โดเมนหาง่าย | ง่ายกว่าคำเดี่ยวมาก เพราะไม่มีใครไปจับจอง |
-| ผ่านทดสอบโทรศัพท์ | พูดแล้วพิมพ์ถูกทันที เพราะเป็นคำที่เขารู้จัก |
-
-**กฎของสูตรนี้**
-
-- รวมกันไม่เกิน **3 พยางค์** — `Tailscale` 2 · `Basecamp` 2 · `Snowflake` 2
-- **คำแรกควรเป็นรูปธรรม** — สิ่งที่นึกภาพออก (tail, snow, fire, base, bit, black, cloud)
-- อย่าให้คู่คำอธิบายสินค้า — ถ้าอธิบายได้ มันจะกลายเป็นชื่อเชย ๆ แบบ `DataSync`
-- **ห้ามให้ความหมายรวมกันแล้วแปลก** — ลองอ่านออกเสียงและนึกภาพก่อน
-- ตัวสะกดต้องไม่ชนกันจนอ่านยาก — เลี่ยงคำแรกลงท้ายด้วยตัวเดียวกับที่คำหลังขึ้นต้น
-
-**วิธีผลิต** — ทำสองคลังแยกกัน แล้วสุ่มจับคู่ อ่านออกเสียงทุกคู่
-
-| คลัง A — รูปธรรม | คลัง B — โครงสร้าง/มาตรา |
-|---|---|
-| tail · snow · fire · bit · black · cloud · iron · salt · moon · north · glass · pine | scale · flake · base · bucket · camp · bird · flare · stack · frame · gate · port · line |
-
-ตัวอย่างที่ได้จากการจับคู่ — `Saltframe` · `Pinegate` · `Moonstack` · `Ironport` · `Glassline`
-
-> **ความหมายใส่ทีหลังได้เต็มที่** (ดูข้อ 3) — `Tailscale` ไม่ได้มีความหมายตั้งแต่แรก
-> แต่พอใช้ไปสักพัก คนก็ผูกมันกับเรื่องของเครือข่ายที่ขยายได้ไปเอง
-
-## 3 · ใส่ความหมายให้ชื่อ
-
-ชื่อสั้นและทันสมัยไม่จำเป็นต้องไร้ความหมาย — ความหมายมาได้สองทาง
-
-| ทาง | สูตรที่ให้มา | ตัวอย่าง |
-|---|---|---|
-| **มีมาแต่กำเนิด** | 4 รากละติน/กรีก · 7 คำจริงยืมข้ามบริบท | `Aurio` จาก *aurum* ทอง · `Anchor` ความมั่นคง |
-| **ใส่ทีหลัง** | 6 คำสั้นไร้ความหมาย | `Quix` ตั้งก่อน แล้วค่อยผูกกับความเร็ว |
-
-> **ทางที่สองใช้ได้จริงและปลอดภัยกว่า** — Nike, Kodak, Apple ไม่มีชื่อไหนบอกว่าขายอะไร
-> ความหมายถูกสร้างขึ้นหลังจากนั้นทั้งหมด
-
-**กฎของความหมาย:** หารากจาก**สิ่งที่ผู้ใช้ได้** ไม่ใช่สิ่งที่ระบบทำ
-ระบบจัดการคลังทอง → ราก "ทอง" ไม่ใช่ราก "คลังสินค้า"
-
-**ทดสอบ:** เขียนความหมายเป็น **หนึ่งบรรทัด** ได้ไหม
-"Aurio — จาก aurum ภาษาละตินแปลว่าทอง" จบ · ถ้าต้องอธิบายเกินหนึ่งประโยค แปลว่าความหมายอ่อนเกินไป
-
-### คลังรากละติน/กรีก ที่ใช้ได้จริง
-
-| ความหมาย | ราก | ชื่อที่ได้ |
-|---|---|---|
-| แสง · ความชัด | *lux · lumen* | Lumo · Lumen · Lucent |
-| ทอง · มีค่า | *aurum* | Aurio · Aura |
-| เชื่อมต่อ | *nexus · syn-* | Nexa · Syno · Nexo |
-| พลัง · ไฟฟ้า | *volta · vis* | Volta · Vira |
-| วง · โลก | *orbis · kyklos* | Orbis · Kyklo |
-| เวลา · จังหวะ | *tempus · chronos · kairos* | Tempo · Chrono · Kairo |
-| ไหล · เคลื่อน | *fluxus · kinesis* | Flux · Kinet |
-| เสียง | *sonus · vox* | Sona · Voxa |
-| เก็บ · หีบ | *arca* | Arca · Arka |
-| ปกป้อง · โล่ | *aegis · scutum* | Aegis · Scuto |
-| ดูแล · รักษา | *cura* | Cura · Curo |
-| จุดเริ่ม | *arche* | Arka · Archo |
-| รูปแบบ | *morphe* | Morpho · Forma |
-| คำ · ภาษา | *lexis · verbum* | Lexi · Verba |
-| มอง · ตรวจ | *specto* | Specta · Scopo |
-| ใหม่ | *nova* | Nova · Novo |
-| จริง | *veritas* | Vera · Verio |
-| งาน · ผลงาน | *opus* | Opus · Opero |
-| ท่า · ประตู | *portus · porta* | Porta · Portio |
-
-### คลังคำจริงยืมข้ามบริบท แยกตามความรู้สึก
-
-| ความรู้สึก | คำ |
-|---|---|
-| เร็ว · คล่อง | Arc · Bolt · Dash · Swift · Rush · Skim |
-| มั่นคง · ปลอดภัย | Anchor · Vault · Keel · Bastion · Forge · Bedrock |
-| ชัดเจน · เห็นได้ | Prism · Lens · Beacon · Signal · Facet |
-| เป็นระเบียบ | Grid · Frame · Ledger · Atlas · Index · Stack |
-| เชื่อมโยง | Bridge · Relay · Mesh · Loom · Thread · Weave |
-| นำทาง | Compass · Pilot · Helm · North · Trail |
-| เงียบ · เรียบ | Slate · Quill · Linen · Drift · Still |
-
-> ⚠️ **คำจริงหาโดเมนยากที่สุด** — เตรียมแผนสำรอง เช่น เติมคำบอกหมวด (`arc.app`, `getprism.com`)
-> หรือใช้โดเมนสั้นแบบอื่น
-
-### เรื่องเล่าที่ดีกับที่แย่
-
-| | ตัวอย่าง |
-|---|---|
-| ✅ ดี | "Aegis คือโล่ของเทพซุส — ระบบนี้มีไว้ปกป้อง" — สั้น จำได้ เล่าต่อได้ |
-| ❌ แย่ | "A มาจาก Advanced, U มาจาก Unified, R มาจาก Realtime…" — ไม่มีใครจำ |
-| ❌ แย่ | "ชื่อนี้มาจากชื่อหมาที่บ้าน" — ความหมายส่วนตัว ลูกค้าไม่รู้สึกด้วย |
-
-**เขียนความหมายลงเอกสารแบรนด์** ตั้งแต่วันเลือกชื่อ ไม่ใช่รอให้มีคนถาม —
-ทีมขายจะได้เล่าเหมือนกันทุกคน
-
----
-
-## 4 · ตระกูลชื่อ เมื่อมีหลายผลิตภัณฑ์
-
-เลือกแบบเดียว แล้วใช้ทั้งตระกูล
-
-| แบบ | หน้าตา | ดี | เสีย |
-|---|---|---|---|
-| **ต่อท้ายเหมือนกัน** | `TradeXI` `TelXI` `DockXI` | รู้ทันทีว่าบ้านเดียวกัน · ตั้งชื่อตัวใหม่ง่าย | ตัวเดียวเสียชื่อ กระทบทั้งตระกูล |
-| **นำหน้าเหมือนกัน** | `QuixChat` `QuixFlow` | แบรนด์แม่เด่น | ชื่อยาวขึ้นทุกตัว |
-| **อิสระ** | `Aurio` `Homify` `Foldrop` | แต่ละตัวขายตัวเองได้ · ขายแยกได้ | ต้องสร้างแบรนด์ใหม่ทุกตัว |
-
-**เกณฑ์เลือก:** ขายรวมเป็นชุด → ตระกูลเดียวกัน · อาจขายแยกหรือขายกิจการทีหลัง → อิสระ
-
-> **จดชื่อตระกูลไว้เป็นเอกสาร** พร้อมกฎการตั้งชื่อตัวถัดไป
-> ไม่งั้นตัวที่ห้าจะหลุดแบบ แล้วทั้งชุดดูมั่ว
-
----
-
-## 5 · ตรวจของว่างก่อนตกหลุมรัก
-
-**ตรวจตอนเหลือ 5 ชื่อ ไม่ใช่ตอนเหลือชื่อเดียว** — ชื่อที่ชอบมากแล้วใช้ไม่ได้ เจ็บกว่า
-
-| ตรวจอะไร | ที่ไหน | ตกเมื่อ |
-|---|---|---|
-| โดเมน | ผู้ให้บริการจดโดเมน | `.com` และ `.co` ถูกจับ และตัวสำรองก็ไม่เหลือ |
-| เครื่องหมายการค้าไทย | กรมทรัพย์สินทางปัญญา | มีของจดไว้ในหมวดซอฟต์แวร์ |
-| เครื่องหมายการค้าสากล | ฐานข้อมูล WIPO | เหมือนกัน ถ้าจะขายต่างประเทศ |
-| ชื่อแพ็กเกจ | npm · PyPI · NuGet | ถูกใช้แล้วในระบบนิเวศที่จะเผยแพร่ |
-| ชื่อในแอปสโตร์ | App Store · Play Store | มีแอปชื่อเดียวกันในหมวดเดียวกัน |
-| handle โซเชียล | X · Instagram · GitHub · LINE | ไม่ว่างสักที่ |
-| ค้นหาธรรมดา | เสิร์ชเอนจิน | หน้าแรกเต็มไปด้วยของคนอื่น |
-
-**เกณฑ์ตัดสิน:** โดเมนหลักต้องได้ · handle ต้องว่างอย่างน้อยครึ่งหนึ่ง ·
-เครื่องหมายการค้าในหมวดซอฟต์แวร์ต้องไม่ชน — สามข้อนี้ไม่มีข้อยกเว้น
-
----
-
-## 6 · เสียงและการพิมพ์ในบริบทไทย
-
-| เรื่อง | กฎ |
-|---|---|
-| ลูกค้าไทยจะเขียนชื่อเป็นภาษาไทยแน่นอน | ลองเขียนดูเองก่อน — `Aurio` → "ออริโอ" อ่านลื่นไหม |
-| เสียงที่คนไทยกลืน | `-th` `-v` `-s` ท้ายคำ หายเกือบทุกครั้ง |
-| เสียงควบที่เลี่ยงกัน | `str-` `spl-` `thr-` |
-| ชื่อที่พิมพ์ผิดง่ายบนแป้นไทย | เลี่ยงตัวที่อยู่ใกล้กันจนสลับได้ |
-| ความยาวเมื่อเขียนไทย | ไม่ควรเกิน 5 พยางค์ไทย |
-
-**ทดสอบจริง** — พูดชื่อให้คนไทยสามคนฟังทางโทรศัพท์ แล้วให้เขาพิมพ์ลงไลน์ส่งกลับมา
-ถ้าได้ชื่อไม่ตรงกันสักคน ชื่อนั้นตก
-
----
-
-## 7 · ห้าข้อทดสอบก่อนตัดสินใจครั้งสุดท้าย
-
-| # | ทดสอบ | ผ่านเมื่อ |
-|:--:|---|---|
-| 1 | เขียนในประโยคจริง | "ลองใช้ ___ ดูสิ" ฟังแล้วไม่ขัด |
-| 2 | เขียนคู่กับคำบอกหมวด | "___ — ระบบจัดการคลังทอง" อ่านแล้วเข้าใจ |
-| 3 | ย่อเป็นไอคอน | ตัวแรกหรือสองตัวแรกทำเป็นสัญลักษณ์ได้ |
-| 4 | อยู่รอดเมื่อขอบเขตโต | ชื่อที่มีคำว่า "ทอง" จะพังวันที่ขายเงินด้วย |
-| 5 | ทนต่อการล้อ | ลองคิดมุกล้อชื่อตัวเอง ถ้าคิดออกง่ายเกินไป ระวัง |
-
-**ข้อ 4 สำคัญที่สุดสำหรับซอฟต์แวร์** — ชื่อที่บอกความสามารถวันนี้
-คือกรงขังของวันที่ผลิตภัณฑ์โตขึ้น ชื่อไร้ความหมายจึงปลอดภัยกว่าในระยะยาว
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **สะกดแปลกเพื่อให้ได้โดเมน** — `Kleen` `Fyre` `Qwik` ลูกค้าพิมพ์ผิดตลอดไป
-- ❌ **ต่อท้ายด้วย `-soft` `-tech` `-sys` `-solutions`** — ดูเป็นปี 2005
-- ❌ **ใส่ตัวเลขในชื่อ** — `App360` `Pro24` ตกรุ่นทันทีที่เปลี่ยนรุ่น
-- ❌ **ชื่อที่บอกความสามารถเฉพาะ** — `InvoiceMaster` แล้ววันที่ทำเรื่องอื่นด้วย
-- ❌ **สามคำขึ้นไป** — ไม่มีใครพูดเต็ม จะถูกย่อจนจำไม่ได้
-- ❌ **คำไทยทับศัพท์ที่ฝรั่งอ่านไม่ออก** ถ้าคิดจะขายต่างประเทศ
-- ❌ **ชื่อที่ต้องอธิบายว่าทำไมถึงตั้งชื่อนี้** — ลูกค้าไม่มีเวลาฟัง
-- ❌ **เลือกชื่อก่อนตรวจโดเมนและเครื่องหมายการค้า** — เสียเวลาสองรอบ
-- ❌ **ระดมชื่อคนเดียวในหัว** — ได้ชื่อจากมุมเดียว ให้เดินตามแปดสูตรแทน
-
----
-
-## 9 · ตัวย่อ
-
-- **portmanteau** — คำที่เกิดจากการเอาสองคำมาตัดต่อกัน
-- **handle** — ชื่อบัญชีบนโซเชียล เช่น `@quixapp`
-- **WIPO** — World Intellectual Property Organization (องค์การทรัพย์สินทางปัญญาโลก)
-- **npm · PyPI · NuGet** — คลังแพ็กเกจของ Node, Python และ .NET ตามลำดับ
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| โลโก้ สี ตัวอักษรของชื่อที่เลือกแล้ว | `graphic-design` |
-| เช็กว่ามีคนทำของแบบเดียวกันชื่อนี้อยู่แล้วไหม | `prior-art-review` |
-| ชื่อที่ใช้ในเอกสารและไฟล์ส่งมอบ | `document-naming` |
-| คำที่ใช้เรียกฟีเจอร์ในตัวผลิตภัณฑ์ | `i18n-and-locale` |
-| นำเสนอชื่อที่คัดแล้วให้ผู้มีอำนาจตัดสินใจ | `presentation-design` |
-
-**ตารางคัดชื่อที่กรอกต่อได้ทันที** → `assets/name-shortlist.md`
+## ใช้กับอะไรบ้าง
+
+เอกสารทุกชนิด · คอมเมนต์ในโค้ด · ข้อความ commit · ข้อความบนหน้าจอ · คำอธิบายไดอะแกรม ·
+คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+
+## ตัวอย่างที่เจอบ่อย
+
+Model Context Protocol (MCP) · Application Programming Interface (API) ·
+Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
+Software Development Life Cycle (SDLC) · Single Sign-On (SSO) ·
+Continuous Integration / Continuous Deployment (CI/CD) ·
+Software Requirements Specification (SRS) · Key Performance Indicator (KPI) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC) ·
+Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
+Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
+
+## Anti-patterns
+
+- ❌ ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
+- ❌ วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
+- ❌ ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
+- ❌ ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่ามันวัดอะไร
+- ❌ อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค
