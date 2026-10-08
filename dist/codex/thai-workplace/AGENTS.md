@@ -1,10 +1,10 @@
 # SQT thai-workplace — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/thai-workplace/ โดย scripts/build/build-targets.mjs (v0.4.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/thai-workplace/ โดย scripts/build/build-targets.mjs (v0.4.1) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai workplace toolkit for SMEs — LINE OA setup and chatbots, Thai business documents (quotation, official letters per the สารบรรณ regulation, contracts, leave forms), PDPA workflows, VAT and withholding tax with a rate table and filing calendar, payroll with PIT withholding and 50 ทวิ, social security under the 2026 wage cap, e-Tax Invoice, year-end DBD and corporate tax filing, Labour Protection Act basics (OT, leave, severance), PromptPay QR payloads and Thai public holidays. General information only, not legal or tax advice.
 
-ชุดนี้มี skill 20 ตัว · บทบาท 5 บทบาท · คำสั่งสำเร็จรูป 8 คำสั่ง
+ชุดนี้มี skill 21 ตัว · บทบาท 5 บทบาท · คำสั่งสำเร็จรูป 8 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `$ชื่อคำสั่ง`

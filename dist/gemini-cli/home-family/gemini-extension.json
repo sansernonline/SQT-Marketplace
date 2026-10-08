@@ -1,6 +1,6 @@
 {
   "name": "sqt-home-family",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Household admin for Thai families — reading electricity (MEA/PEA, Ft) and water bills with a monthly tracker, a seasonal home-maintenance schedule for the Thai climate, vehicle tax, compulsory insurance and inspection reminders, weekly meal plans with grocery lists, school terms and enrolment documents, elder-care rights and medication tables, and pet vaccination records. General information only, not legal, tax or medical advice.",
   "contextFileName": "GEMINI.md"
 }

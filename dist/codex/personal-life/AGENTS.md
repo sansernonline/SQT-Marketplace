@@ -1,10 +1,10 @@
 # SQT personal-life — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.4.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.4.1) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Personal life administration for busy adults — weekly reviews, meeting prep and summaries, inbox triage method, calendar audits, personal knowledge notes, important-document registry with expiry tracking, travel checklists, gift tracking, a decision journal, subscription audits from Thai bank statements, family digital hygiene and scam defence, quarterly goals and habit design, and polite Thai-English message templates. Knowledge and workflow only; it complements email/calendar/note plugins instead of duplicating their connectors.
 
-ชุดนี้มี skill 17 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
+ชุดนี้มี skill 18 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `$ชื่อคำสั่ง`

@@ -1,6 +1,6 @@
 # SQT software-company — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.1.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.1.1) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Simulates a complete software development company — 39 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 107 skills and 28 slash commands for the whole SDLC.
 
