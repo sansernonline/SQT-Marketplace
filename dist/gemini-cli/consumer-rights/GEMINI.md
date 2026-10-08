@@ -1,6 +1,6 @@
 # SQT consumer-rights — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/consumer-rights/ โดย scripts/build/build-targets.mjs (v0.1.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/consumer-rights/ โดย scripts/build/build-targets.mjs (v0.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Consumer toolkit for buyers in Thailand — compare purchases with a decision matrix and total cost of ownership, spot fake reviews, keep a warranty and receipt registry, write complaint letters in Thai with the escalation ladder from seller to platform to the Office of the Consumer Protection Board (hotline 1166) to the consumer court, and request refunds using the direct-marketing cooling-off right, platform disputes and credit-card chargebacks. General information, not legal advice.
 

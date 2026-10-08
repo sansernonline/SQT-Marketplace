@@ -1,6 +1,6 @@
 # SQT personal-life — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.3.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.4.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Personal life administration for busy adults — weekly reviews, meeting prep and summaries, inbox triage method, calendar audits, personal knowledge notes, important-document registry with expiry tracking, travel checklists, gift tracking, a decision journal, subscription audits from Thai bank statements, family digital hygiene and scam defence, quarterly goals and habit design, and polite Thai-English message templates. Knowledge and workflow only; it complements email/calendar/note plugins instead of duplicating their connectors.
 

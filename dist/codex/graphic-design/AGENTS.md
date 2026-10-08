@@ -1,6 +1,6 @@
 # SQT graphic-design — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.3.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.
 

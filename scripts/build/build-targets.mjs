@@ -53,7 +53,10 @@ const plugins = listDir(join(ROOT, "plugins")).map((plugin) => {
   const dir = join(ROOT, "plugins", plugin);
   const read = (sub, toItem) => listDir(join(dir, sub)).map((n) => toItem(n, join(dir, sub, n)));
   const meta = JSON.parse(readFileSync(join(dir, ".claude-plugin", "plugin.json"), "utf8"));
-  const skills = read("skills", (name, path) => ({ name, path, ...parse(join(path, "SKILL.md")) }));
+  const all = read("skills", (name, path) => ({ name, path, ...parse(join(path, "SKILL.md")) }));
+  // skill ที่มี disable-model-invocation: true = คำสั่งที่ผู้ใช้พิมพ์เอง → แปลงเป็นคำสั่งของปลายทาง
+  const isCommand = (s) => s.fields["disable-model-invocation"] === "true";
+  const skills = all.filter((s) => !isCommand(s));
   return {
     plugin,
     dir,
@@ -62,7 +65,7 @@ const plugins = listDir(join(ROOT, "plugins")).map((plugin) => {
     skills,
     skillByName: new Map(skills.map((s) => [s.name, s])),
     agents: read("agents", (n, path) => ({ name: n.replace(/\.md$/, ""), ...parse(path) })),
-    commands: read("commands", (n, path) => ({ name: n.replace(/\.md$/, ""), ...parse(path) })),
+    commands: all.filter(isCommand),
   };
 });
 

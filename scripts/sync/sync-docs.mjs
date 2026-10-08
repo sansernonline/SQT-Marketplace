@@ -28,7 +28,7 @@ function readFrontmatter(file) {
   if (!match) return {};
   const fields = {};
   for (const line of match[1].split(/\r?\n/)) {
-    const pair = line.match(/^(\w+):\s*(.*)$/);
+    const pair = line.match(/^([\w-]+):\s*(.*)$/);
     if (pair) fields[pair[1]] = pair[2].replace(/^["']|["']$/g, "");
   }
   return fields;
@@ -37,15 +37,16 @@ function readFrontmatter(file) {
 function scanPlugins() {
   return listDir(join(ROOT, "plugins")).map((name) => {
     const dir = join(ROOT, "plugins", name);
-    const skills = listDir(join(dir, "skills")).map((skillName) => ({
-      name: skillName,
-      description: readFrontmatter(join(dir, "skills", skillName, "SKILL.md")).description ?? "",
-    }));
+    // skill ที่มี disable-model-invocation: true = คำสั่งที่ผู้ใช้พิมพ์เอง (slash command) · นับแยกจาก skill
+    const all = listDir(join(dir, "skills")).map((skillName) => {
+      const fm = readFrontmatter(join(dir, "skills", skillName, "SKILL.md"));
+      return { name: skillName, description: fm.description ?? "", command: String(fm["disable-model-invocation"]) === "true" };
+    });
     return {
       name,
       agents: listDir(join(dir, "agents")).map((f) => f.replace(/\.md$/, "")),
-      commands: listDir(join(dir, "commands")).map((f) => f.replace(/\.md$/, "")),
-      skills,
+      commands: all.filter((s) => s.command).map((s) => s.name),
+      skills: all.filter((s) => !s.command),
     };
   });
 }
@@ -119,8 +120,8 @@ function updateGlobalReadme(core) {
   ).version;
   edit("docs/INSTALL.md", (text) =>
     text.replace(
-      /\*\*ในไฟล์:\*\* \d+ skills · \d+ agents · \d+ commands · `plugin\.json` v[\d.]+/,
-      `**ในไฟล์:** ${core.skills.length} skills · ${core.agents.length} agents · ${core.commands.length} commands · \`plugin.json\` v${version}`
+      /(\*\*ในไฟล์:\*\*|\*\*`software-company\.zip`:\*\*) \d+ skills · \d+ agents · \d+ commands · `plugin\.json` v[\d.]+/,
+      (_, head) => `${head} ${core.skills.length} skills · ${core.agents.length} agents · ${core.commands.length} commands · \`plugin.json\` v${version}`
     )
   );
 }

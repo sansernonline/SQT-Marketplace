@@ -1,6 +1,6 @@
 {
   "name": "online-seller",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — platform-specific listing titles and descriptions, prohibited health and beauty claims, marketplace fee structures and a price formula, one master stock sheet across shops, Thai chat reply templates, live-selling scripts, courier and COD comparison, returns and bad-review handling, and online-seller tax basics (40(8), 60% deemed expense, VAT threshold, platform income reporting). General information only, not tax or legal advice.",
   "author": {
     "name": "Square Tech Solutions Co., Ltd."

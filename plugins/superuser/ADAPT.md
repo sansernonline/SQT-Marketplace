@@ -31,7 +31,7 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 
 ## 2 · ขั้นตอนทำ superuser ของสาขาใหม่
 
-1. สร้างโครง plugin: `.claude-plugin/plugin.json` · `skills/` · `agents/` · `commands/` (ถ้ามี)
+1. สร้างโครง plugin: `.claude-plugin/plugin.json` · `skills/` · `agents/` · คำสั่ง (ถ้ามี) ให้เป็น skill ที่ตั้ง `disable-model-invocation: true`
 2. คัดลอก `skills/superuser/` ทั้งโฟลเดอร์จาก `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` ให้ของกลางที่เหลือตามไปครบ
 3. แก้นอกบล็อก ตามตารางข้อ 3
 4. รัน `node scripts/check/validate-marketplace.mjs` ให้ผ่าน แล้ว `node scripts/sync/sync-docs.mjs`

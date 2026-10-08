@@ -92,10 +92,13 @@ function checkSkill(dir) {
     if (description.length > 1024) err(file, `description ยาว ${description.length} ตัว เกิน 1024 — จะถูกตัด`);
     // คำอธิบายทุกตัวถูกโหลดเข้า context ทุก session — ยาวเกินจะดันตัวอื่นตกโควตา
     if (description.length > DESC_SOFT_MAX) warn(file, `description ยาว ${description.length} ตัว เกิน ${DESC_SOFT_MAX} — ตัดรายการเนื้อหาออก เหลือแค่ "ใช้เมื่อไหร่"`);
-    if (description.length < 60)   warn(file, `description สั้นแค่ ${description.length} ตัว — บอก "ใช้เมื่อไหร่" ให้ครบ ไม่งั้น skill จะไม่ถูกเรียก`);
+    // คำสั่งที่ผู้ใช้พิมพ์เอง (disable-model-invocation: true) — Claude ไม่ได้ใช้ description เลือก จึงไม่ต้องบอก "ใช้เมื่อไหร่"
+    const userOnly = String(fm['disable-model-invocation']) === 'true';
+    if (userOnly) { /* ตรวจแค่ความยาวกับแท็กด้านบนและล่าง */ }
+    else if (description.length < 60)   warn(file, `description สั้นแค่ ${description.length} ตัว — บอก "ใช้เมื่อไหร่" ให้ครบ ไม่งั้น skill จะไม่ถูกเรียก`);
     if (/<[a-zA-Z/]/.test(description)) err(file, 'description มีแท็ก < > — ไม่อนุญาต');
     // หมายเหตุ: \b ใช้กับอักษรไทยไม่ได้ใน JavaScript regex — ตรวจแบบไม่มี word boundary
-    if (!/(^|[^a-z])use\s|ใช้/i.test(description)) warn(file, 'description ไม่ได้บอกว่าใช้เมื่อไหร่ — ขึ้นต้นด้วย "Use when …" หรือ "ใช้เมื่อ …"');
+    if (!userOnly && !/(^|[^a-z])use\s|ใช้/i.test(description)) warn(file, 'description ไม่ได้บอกว่าใช้เมื่อไหร่ — ขึ้นต้นด้วย "Use when …" หรือ "ใช้เมื่อ …"');
   }
 
   const bodyLines = text.slice(text.indexOf('\n---', 3) + 4).split('\n').length;

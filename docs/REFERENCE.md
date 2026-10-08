@@ -1137,9 +1137,8 @@ SQT-Marketplace/
 │   └── software-company/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
-│       ├── agents/         (38 files)
-│       ├── skills/         (101 folders)
-│       ├── commands/       (28 files)
+│       ├── agents/         (39 files)
+│       ├── skills/         (107 skill + 28 คำสั่ง)
 │       └── hooks/          (hooks.json · superuser-hook.mjs)
 ├── docs/
 │   ├── INSTALL.md

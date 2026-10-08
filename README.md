@@ -145,9 +145,8 @@ SQT-Marketplace/
 ├── plugins/
 │   └── software-company/
 │       ├── .claude-plugin/plugin.json
-│       ├── agents/     (38)
-│       ├── skills/     (101)
-│       ├── commands/   (28)
+│       ├── agents/     (39)
+│       ├── skills/     (107 skill + 28 คำสั่ง)
 │       └── hooks/      ← hook ของ SuperUser (log · inbox)
 ├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
@@ -165,9 +164,9 @@ SQT-Marketplace/
 |---|---|
 | agent | `plugins/<plugin>/agents/<name>.md` |
 | skill | `plugins/<plugin>/skills/<name>/SKILL.md` |
-| command | `plugins/<plugin>/commands/<name>.md` |
+| คำสั่ง (slash command) | `plugins/<plugin>/skills/<name>/SKILL.md` ใส่ `disable-model-invocation: true` |
 
-`name` ใน frontmatter ต้องตรงกับชื่อโฟลเดอร์ (skill) หรือชื่อไฟล์ (agent, command) · agent ใช้คีย์ `tools:` ส่วน skill ใช้ `allowed-tools:`
+`name` ใน frontmatter ต้องตรงกับชื่อโฟลเดอร์ (skill และคำสั่ง) หรือชื่อไฟล์ (agent) · agent ใช้คีย์ `tools:` ส่วน skill ใช้ `allowed-tools:`
 
 แก้แล้วรัน `node scripts\check\validate-marketplace.mjs` ก่อน commit ทุกครั้ง
 แล้วเพิ่มเลข `version` ใน `plugin.json` · ไม่เพิ่ม → เครื่องที่ติดตั้งไว้จะไม่ดึงของใหม่

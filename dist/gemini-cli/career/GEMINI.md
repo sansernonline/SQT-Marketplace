@@ -1,6 +1,6 @@
 # SQT career — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/career/ โดย scripts/build/build-targets.mjs (v0.1.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/career/ โดย scripts/build/build-targets.mjs (v0.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Career toolkit for people working in Thailand — Thai and international CV conventions with ATS-friendly templates in both languages, interview preparation with a STAR story bank and the questions Thai HR always asks, salary negotiation with total-compensation maths (bonus months, provident fund match, social security, insurance) and scripts in Thai and English, self-review and promotion cases, and LinkedIn profiles tuned for the Thai market.
 

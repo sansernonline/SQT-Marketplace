@@ -1,6 +1,6 @@
 # SQT thai-workplace — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/thai-workplace/ โดย scripts/build/build-targets.mjs (v0.3.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/thai-workplace/ โดย scripts/build/build-targets.mjs (v0.4.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai workplace toolkit for SMEs — LINE OA setup and chatbots, Thai business documents (quotation, official letters per the สารบรรณ regulation, contracts, leave forms), PDPA workflows, VAT and withholding tax with a rate table and filing calendar, payroll with PIT withholding and 50 ทวิ, social security under the 2026 wage cap, e-Tax Invoice, year-end DBD and corporate tax filing, Labour Protection Act basics (OT, leave, severance), PromptPay QR payloads and Thai public holidays. General information only, not legal or tax advice.
 

@@ -1,6 +1,6 @@
 # SQT home-family — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/home-family/ โดย scripts/build/build-targets.mjs (v0.1.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/home-family/ โดย scripts/build/build-targets.mjs (v0.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Household admin for Thai families — reading electricity (MEA/PEA, Ft) and water bills with a monthly tracker, a seasonal home-maintenance schedule for the Thai climate, vehicle tax, compulsory insurance and inspection reminders, weekly meal plans with grocery lists, school terms and enrolment documents, elder-care rights and medication tables, and pet vaccination records. General information only, not legal, tax or medical advice.
 

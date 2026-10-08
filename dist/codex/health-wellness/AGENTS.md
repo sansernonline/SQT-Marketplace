@@ -1,6 +1,6 @@
 # SQT health-wellness — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/health-wellness/ โดย scripts/build/build-targets.mjs (v0.1.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/health-wellness/ โดย scripts/build/build-targets.mjs (v0.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Personal health organiser for people in Thailand — beginner exercise plans built on WHO activity guidance, a sleep diary, annual checkup planning with Thai social security and gold-card preventive rights, a medication schedule and refill reminders for medicines a doctor already prescribed, and doctor-visit preparation. Strict scope - it organises, reminds and prepares questions; it never diagnoses or changes doses, and sends emergencies to 1669.
 

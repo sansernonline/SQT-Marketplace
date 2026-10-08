@@ -62,7 +62,7 @@ claude
 
 **5. รีสตาร์ท Claude Code** (สำคัญ)
 
-ออกแล้วเปิดใหม่ เพื่อให้โหลด agents, skills, commands และ hooks
+ออกแล้วเปิดใหม่ เพื่อให้โหลด agents, skills (รวมคำสั่ง) และ hooks
 
 ---
 
@@ -82,19 +82,17 @@ cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agen
 your-project/
 └── .claude/
     ├── agents/
-    ├── skills/
-    └── commands/
+    └── skills/      (รวมคำสั่ง)
 ```
 
 ### User level (ใช้ทุก project)
 
 ```bash
-mkdir -p ~/.claude/agents ~/.claude/skills ~/.claude/commands
+mkdir -p ~/.claude/agents ~/.claude/skills
 
 # Windows (Git Bash)
 cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/agents/." ~/.claude/agents/
 cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/skills/." ~/.claude/skills/
-cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/commands/." ~/.claude/commands/
 ```
 
 **ข้อเสีย:** อัปเดตทีหลังต้อง copy ทับเอง · **ไม่มี hooks** → SuperUser ใช้ได้ แต่ไม่มี log และไม่แจ้งข้อความใน inbox (ดู [SKILL-LEVELS.md](SKILL-LEVELS.md))
@@ -199,8 +197,8 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 ### Copy ตรงๆ (วิธีที่ 2)
 ลบโฟลเดอร์ที่ copy ไป:
-- `<project>/.claude/agents/`, `skills/`, `commands/`
-- หรือ `~/.claude/agents/`, `skills/`, `commands/`
+- `<project>/.claude/agents/`, `skills/`
+- หรือ `~/.claude/agents/`, `skills/`
 
 ---
 
@@ -234,7 +232,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-company.zip`:** 102 skills · 38 agents · 28 commands · `plugin.json` v2.0.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-company.zip`:** 107 skills · 39 agents · 28 commands · `plugin.json` v2.1.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 

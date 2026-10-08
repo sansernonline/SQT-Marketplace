@@ -43,7 +43,7 @@
 
 ## agent-loop
 
-ไม่มี prompt agent-loop (prompt ที่สั่ง agent เขียนโปรแกรมวนจนเสร็จ) แบบสำเร็จรูป · ฉบับที่ 10 ของ `prompt-new-project.md` **สร้าง `docs/AGENT-LOOP.md` เฉพาะโปรเจกต์นั้น** จากเอกสารที่ทำไว้ (ข้อกำหนด · คำสั่ง test · path ของ mockup) แล้วค่อยนำ prompt นั้นไปใช้เขียนโปรแกรมใน repo ของโปรเจกต์
+ไม่มี prompt agent-loop (prompt ที่สั่ง agent เขียนโปรแกรมวนจนเสร็จ) แบบสำเร็จรูป · ฉบับที่ 10 ของ `prompt-new-project.md` **สร้าง `docs/AGENT-LOOP.md` เฉพาะโปรเจกต์นั้น** จากเอกสารที่ทำไว้ (ข้อกำหนด · คำสั่ง test · path ของ mockup) แล้วค่อยนำ prompt นั้นไปใช้เขียนโปรแกรม · รอบแรกของ loop ตั้ง git ให้เอง (`git init` · branch `build/loop` · commit แรก) ทุก commit อยู่บนเครื่อง ไม่ push และไม่ merge เข้า branch หลัก
 
 ## หมายเหตุ
 

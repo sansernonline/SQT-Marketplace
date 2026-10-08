@@ -211,7 +211,7 @@ SQT-Marketplace\
 |---|---|
 | **agents/** | sub agent — ระดับอื่นไม่มี |
 | **hooks/** | hook (สคริปต์ที่รันอัตโนมัติ) ของ SuperUser เขียน `.superuser/log/` และแจ้งเมื่อมีข้อความใน `.superuser/inbox/` · คัดลอก skill ไปไว้ระดับเครื่องหรือโปรเจกต์ → ได้ SuperUser ที่**ไม่มี log และไม่แจ้ง inbox** |
-| **commands/** | slash command — ของเก่า เอกสารแนะนำให้ย้ายไป `skills/` ที่ตั้ง `disable-model-invocation: true` แทน |
+| **คำสั่ง (slash command)** | ชุดนี้ไม่ใช้โฟลเดอร์ `commands/` แบบเก่าแล้ว · คำสั่งทุกตัวอยู่ใน `skills/` และตั้ง `disable-model-invocation: true` ให้ผู้ใช้พิมพ์ `/ชื่อ` เองเท่านั้น |
 | **เลขรุ่น** | `plugin.json` มี `version` · **ต้องเพิ่มเลขทุกครั้งที่แก้ ไม่งั้นเครื่องปลายทางไม่ดึงของใหม่** |
 | **ชื่อนำหน้า** | skill ถูกเรียกเป็น `<plugin>:<skill>` จึงไม่มีทางชนกับระดับอื่น |
 

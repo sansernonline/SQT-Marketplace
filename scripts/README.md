@@ -149,6 +149,8 @@ node scripts/build/build-targets.mjs
 
 skill ที่บทบาทหนึ่งได้รับคือชื่อ skill ที่เขียนใน backtick ในไฟล์ agent นั้น
 
+คำสั่ง (slash command) คือ skill ที่ตั้ง `disable-model-invocation: true` — สคริปต์แยกออกมาแปลงเป็นคำสั่งของแต่ละปลายทาง
+
 
 ---
 
