@@ -1,6 +1,6 @@
 {
   "name": "software-company",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Simulates a complete software development company — 39 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 107 skills and 28 slash commands for the whole SDLC.",
   "author": {
     "name": "Square Tech Solutions Co., Ltd."

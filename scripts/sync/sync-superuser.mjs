@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 
 export const SHARED_FILES = [
   "skills/agent-patterns/SKILL.md",
+  "skills/answer-shape/SKILL.md",
   "skills/human-writing/SKILL.md",
   "skills/superuser/references/playbook-learn-from-session.md",
   "skills/superuser/references/playbook-template.md",
