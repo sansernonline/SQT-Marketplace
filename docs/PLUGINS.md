@@ -1,15 +1,15 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **11 plugins** — `software-company` ตัวเดียว ทุกสาขารวมไว้แล้วตั้งแต่ v2.0.0
+ทั้งหมด **12 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
 
 ---
 
 ## 🏢 `software-company`
 
-จำลองบริษัทซอฟต์แวร์ครบ SDLC ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
+จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**38 agents · 101 skills · 28 commands**
+**39 agents · 107 skills · 28 commands**
 
 ### ติดตั้ง
 ```
@@ -41,8 +41,8 @@
 
 **รวมแบบนี้:**
 - agent ที่ทำงานคล้ายกันรวมเป็นตัวเดียว (เช่น android · ios · cross-platform → `mobile-engineer`) — คู่มือบทบาทเดิมทุกตัวอยู่ครบใน `references/agent-<ชื่อเดิม>.md` ของ skill สาขานั้น
-- skill สามตัวของแต่ละสาขารวมเป็น skill เดียว — เนื้อหาเดิมอยู่ครบใน `references/<ชื่อเดิม>.md`
-- command สองตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-company:fintech-design pci-audit <ขอบเขต>`
+- skill 3 ตัวของแต่ละสาขารวมเป็น skill เดียว — เนื้อหาเดิมอยู่ครบใน `references/<ชื่อเดิม>.md`
+- command 2 ตัวของแต่ละสาขารวมเป็นตัวเดียวที่เลือกโหมดได้ เช่น `/software-company:fintech-design pci-audit <ขอบเขต>`
 
 ---
 
@@ -56,7 +56,10 @@
 /plugin update software-company@sqt-marketplace
 ```
 
-ชื่อที่เปลี่ยน — command `/software-company-<สาขา>:<ชื่อ>` กลายเป็น `/software-company:<สาขา>-design <ชื่อเดิม>` · ชื่อ agent และ skill ใหม่ดูตารางข้างบน · แผนที่ชื่อเก่า→ใหม่ทั้งหมดอยู่ใน skill ของสาขานั้นหัวข้อ "ที่มา"
+ชื่อที่เปลี่ยน:
+- command `/software-company-<สาขา>:<ชื่อ>` เปลี่ยนเป็น `/software-company:<สาขา>-design <ชื่อเดิม>`
+- ชื่อ agent และ skill ใหม่ ดูตารางข้างบน
+- รายการจับคู่ชื่อเก่า → ชื่อใหม่ทั้งหมด อยู่ในหัวข้อ "ที่มา" ของ skill สาขานั้น
 
 ---
 
@@ -69,7 +72,7 @@ SQT-Marketplace/
 │   ├── agents/      38 บทบาท
 │   ├── skills/      101 skill (skill สาขาเก็บรายละเอียดใน references/)
 │   ├── commands/    28 command
-│   └── hooks/       hook ของ A-Team — เขียน .a-team/log และแจ้ง inbox
+│   └── hooks/       hook ของ SuperUser — เขียน .superuser/log และแจ้ง inbox
 ├── docs/            INSTALL · USAGE · REFERENCE · PLUGINS (ไฟล์นี้)
 └── README.md
 ```
@@ -78,9 +81,12 @@ SQT-Marketplace/
 
 ## 🗺️ Roadmap — plugin ชีวิตประจำวัน
 
-_ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอดจาก software-company ที่ครอบฝั่ง "สร้างซอฟต์แวร์" แล้ว_
+_ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบงาน "สร้างซอฟต์แวร์" แล้ว ชุดนี้จึงเสนอ plugin สำหรับใช้ในชีวิตประจำวัน_
 
-หลักการเลือก: (1) ไม่ซ้ำกับ 101 skills ที่มี — ของเดิมเอนไปทางออกแบบ/สร้าง ของใหม่เอนไปทาง "ใช้ในชีวิต" (2) ตลาดจีน/สากลยังไม่ทำหรือทำไม่ตรงบริบทไทย (3) ทำเป็น skills ล้วนได้ก่อน ไม่ผูก MCP server ตั้งแต่ต้น
+หลักการเลือก:
+1. ไม่ซ้ำกับ 101 skills ที่มี · ของเดิมเน้นออกแบบและสร้าง ของใหม่เน้น "ใช้ในชีวิต"
+2. ตลาดจีนและตลาดสากลยังไม่มี หรือมีแต่ไม่ตรงบริบทไทย
+3. เริ่มจาก skill ล้วนได้ ไม่ต้องผูก Model Context Protocol (MCP) server ตั้งแต่ต้น
 
 ---
 
@@ -98,7 +104,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอด�
 
 ### 1 · trading-finance
 
-**จุดต่างจากตลาด:** ตลาดมีแต่ของสถาบัน (DCF, 研报, IC deck — institutional-finance-kit, xtt-public-markets-investing) แต่ไม่มีของ **retail trader ธรรมดา** — ดูกราฟ วางแผนเทรด บันทึกเทรดดิ้ง สัญญาณเตือน
+**จุดต่างจากตลาด:** ในตลาดมีแต่ของสำหรับสถาบัน (Discounted Cash Flow (DCF), 研报, IC deck — institutional-finance-kit, xtt-public-markets-investing) · ยังไม่มีของสำหรับ **นักเทรดรายย่อย (retail trader)** ที่ดูกราฟ วางแผนเทรด จดบันทึกการเทรด และรับสัญญาณเตือน
 
 **Agents (4):** market-analyst (วิเคราะห์หุ้นที่สนใจ), trade-journal-coach (อ่าน journal แล้วชี้พฤติกรรมซ้ำ ๆ), risk-manager (คำนวณ position sizing, max drawdown), alert-dispatcher (เฝ้าราคา+ข่าวแจ้งเตือน)
 
@@ -118,13 +124,13 @@ _ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอด�
 
 **Commands (6):** /watch, /paper-trade, /journal, /review-week, /alert-set, /portfolio
 
-**ข้อมูล:** ดึงผ่าน data plugin ที่มีอยู่ (yahoo_finance, Gildata ฯลฯ) — plugin นี้ไม่พก data source เอง ระบุไว้ใน skill ว่าถ้าไม่มี plugin พวกนั้นให้ลดขั้นลง fetch ฟรีอย่างไร
+**ข้อมูล:** ดึงผ่าน data plugin ที่มีอยู่แล้ว (yahoo_finance, Gildata ฯลฯ) · plugin นี้ไม่มีแหล่งข้อมูลของตัวเอง · ใน skill ระบุว่าถ้าไม่มี data plugin พวกนั้น จะดึงข้อมูลจากแหล่งฟรีแทนอย่างไร
 
 ---
 
 ### 2 · personal-life
 
-**จุดต่างจากตลาด:** ตลาดมี connector แยกชิ้น (email, gmail, google-calendar, obsidian) แต่ไม่มีชุด **ความรู้การจัดชีวิต** — plugin นี้เน้น workflow + เอกสาร ไม่ทำ connector ซ้ำกับของสำเร็จ
+**จุดต่างจากตลาด:** ตลาดมี connector แยกเป็นชิ้น (email, gmail, google-calendar, obsidian) แต่ไม่มีชุด **ความรู้เรื่องจัดการชีวิต** · plugin นี้เน้นขั้นตอนการทำงานและเอกสาร ไม่ทำ connector ซ้ำกับที่มีอยู่แล้ว
 
 **Agents (3):** life-admin (จัดการธุระซ้ำ ๆ), meeting-prep (เตรียมก่อนประชุม สรุปหลังประชุม), doc-caretaker (เอกสารสำคัญในชีวิต)
 
@@ -166,13 +172,13 @@ _ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอด�
 
 **Commands (6):** /line-setup, /line-bot, /quotation, /contract, /pdpa, /tax-due
 
-**ข้อจำกัดต้องเขียนใน skill:** tax/law เป็น "เบื้องต้น ไม่ใช่คำปรึกษาทนาย/นักบัญชี" และต้องอ้างอิงกรม/หน่วยงานทุกครั้ง; LINE Messaging API มีค่าใช้จ่ายรายเดือนตามแพ็กเกจของ LINE
+**ข้อจำกัดที่ต้องเขียนไว้ใน skill:** เรื่องภาษีและกฎหมายต้องบอกว่า "เบื้องต้น ไม่ใช่คำปรึกษาทนาย/นักบัญชี" และต้องอ้างกรมหรือหน่วยงานทุกครั้ง · LINE Messaging API มีค่าใช้จ่ายรายเดือนตามแพ็กเกจของ LINE
 
 ---
 
 ### 4 · graphic-design
 
-**จุดต่างจากตลาดและของเดิม:** software-company มี graphic-design skill แต่เอนทาง product UI/เอกสาร; kimi-design ที่ผู้ใช้ติดตั้งมีอยู่ทำ infographic/poster DSL — plugin นี้เน้น **วิดีโอ + ระบบแบรนด์ + วิจารณ์งาน** ที่ไม่มีใครครอบ
+**จุดต่างจากตลาดและของเดิม:** software-company มี skill graphic-design แต่เน้นหน้าจอ product และเอกสาร · kimi-design ที่ผู้ใช้ติดตั้งไว้ทำ infographic และโปสเตอร์ด้วย Domain-Specific Language (DSL) · plugin นี้เน้น **วิดีโอ · ระบบแบรนด์ · วิจารณ์งาน** ที่ยังไม่มีตัวไหนทำ
 
 **Agents (4):** art-director (บรีฟภาพ/วิดีโอ AI ให้ได้รสเดียวกัน), brand-keeper (brand kit ชุดเดียวใช้ทุกงาน), social-creator (งานโพสต์/โฆษณา), design-critic (วิจารณ์ตาดี)
 
@@ -194,7 +200,7 @@ _ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอด�
 
 ### 5 · dev-learning (สำรอง — ทำทีหลัง)
 
-**เหตุผล:** programmer ต้องอัปเดตตลอด แต่มีของ built-in คลอบคลุมพอสมควร (scholar, deep-research) จึงให้เป็นลำดับท้าย
+**เหตุผล:** programmer ต้องตามข่าวตลอด แต่ skill ที่มีมากับระบบ (scholar, deep-research) ครอบคลุมพอสมควรแล้ว จึงไว้ลำดับท้าย
 
 **Skills ที่วางไว้:** tech-radar (สรุป release notes/library ที่ตามอยู่รายสัปดาห์), paper-to-practice (แปลง paper/blogs เป็นโค้ดตัวอย่าง), learning-path (แผนเรียนเทคใหม่จากโปรเจกต์จริง), english-tech-reading (อ่านเอกสารอังกฤษให้เข้าใจเร็ว)
 
@@ -202,19 +208,19 @@ _ร่างเมื่อ 6 ต.ค. 2569 · เสนอต่อยอด�
 
 ### ลำดับทำ
 
-1. **trading-finance** — ผู้ใช้สนใจเอง ทดสอบกับตัวเองได้ทันที ตลาด retail ยังว่าง
-2. **personal-life** — ใช้ได้กว้างสุด ไม่ต้องพึ่ง API ภายนอกเลย
-3. **thai-workplace** — ต้องเช็ก LINE Messaging API + กฎหมาย/ภาษีปัจจุบันก่อนลงมือ
+1. **trading-finance** — ผู้ใช้สนใจเอง ลองกับตัวเองได้ทันที และตลาดนักเทรดรายย่อยยังว่าง
+2. **personal-life** — ใช้ได้กว้างที่สุด ไม่ต้องพึ่ง API ภายนอกเลย
+3. **thai-workplace** — ต้องเช็ก LINE Messaging API และกฎหมายกับภาษีปัจจุบันก่อนลงมือ
 4. **graphic-design** — เสริม kimi-design ที่มีอยู่
 5. **dev-learning** — เมื่อที่ 1–4 เสร็จ
 
-กฎเดิมของ marketplace ทุกตัว: ผ่าน `scripts/validate-marketplace.mjs` ก่อน commit · เพิ่มใน `marketplace.json` · บวก `README.md` ตาราง plugin · ทดลองกับ `/doctor` หลังติดตั้ง
+กฎเดิมที่ใช้กับทุก plugin: ผ่าน `scripts/check/validate-marketplace.mjs` ก่อน commit · เพิ่มชื่อใน `marketplace.json` · เพิ่มแถวในตาราง plugin ของ `README.md` · ติดตั้งแล้วตรวจด้วย `/doctor`
 
 ---
 
 ### รอบสอง (6 ต.ค. 2569) — ทำให้ลึก และเพิ่ม plugin ชีวิตประจำวัน
 
-**ปัญหาที่พบในรอบแรก:** skill ส่วนใหญ่ยาวประมาณ 25 บรรทัด มีแต่หัวข้อ ยังไม่มีตัวเลข แบบฟอร์ม หรือกำหนดเวลาจริง · รอบนี้ทุก skill ต้องมีข้อมูลที่ตรวจกับแหล่งทางการแล้ว (ระบุวันที่ตรวจและลิงก์) ตัวเลขที่ยืนยันไม่ได้ใส่ `(รอยืนยัน)`
+**ปัญหาที่พบในรอบแรก:** skill ส่วนใหญ่ยาวราว 25 บรรทัด มีแต่หัวข้อ ยังไม่มีตัวเลข แบบฟอร์ม หรือกำหนดเวลาจริง · รอบนี้ทุก skill ต้องมีข้อมูลที่ตรวจกับแหล่งทางการแล้ว (ระบุวันที่ตรวจและลิงก์) · ตัวเลขที่ยืนยันไม่ได้ใส่ป้าย `(รอยืนยัน)`
 
 #### เติม skill ใน plugin เดิม
 

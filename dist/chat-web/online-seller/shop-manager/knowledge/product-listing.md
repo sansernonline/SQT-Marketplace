@@ -1,6 +1,6 @@
 # skill: product-listing
 
-Use when writing or fixing a product listing for Shopee, Lazada, TikTok Shop, LINE or Facebook in Thailand — title formula, keywords, photo checklist, description, and claims อย. and สคบ. forbid.
+Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook. Title formula, keywords, photos, claims Thai FDA and OCPB forbid.
 
 # Product Listing (Thai marketplaces)
 

@@ -1,415 +1,18 @@
-# skill: polished-document-style
-
-Use when producing stakeholder-facing documents (BRD, FSD, ADR, status reports, audits, postmortems) that need polished formatting. Rich Markdown and Mermaid conventions that render well in GitHub, Notion, VS Code and Obsidian.
-
-# Polished Document Style
-
-## When to use this skill
-
-- Output is meant for **non-developers** to read (PMs, executives, clients)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
-
-## When NOT to use
-
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
-
-> ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
-
----
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# 📋 <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** 🟡 Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
-```
-
-Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
-
----
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## 📑 Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
----
-
-## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
-
-เอกสารหนึ่งฉบับผ่านมือหลาย skill — markdown ตัวนี้ · รูปจาก `software-diagrams` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
-
-**markdown คือ source of truth ธีมจึงประกาศไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-มีสีแบรนด์อยู่แล้วใช้สีนั้น · ยังไม่มีให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน
-(ตารางเนื้องาน → โทน อยู่ใน `svg-diagram-system` ข้อ 0)
-
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
-|---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `svg-diagram-system` · `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
-
-**สีสถานะไม่นับรวม** — 🔴 วิกฤต 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
-
-### ค่าตั้งต้นประจำบ้าน (house default)
-
-ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
-
-| token | ค่า | ใช้กับ |
-|---|---|---|
-| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
-| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
-| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
-| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
-| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
-| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
-| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
-| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
-| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
-
-ประกาศ accent เฉพาะงานเมื่อไร ให้ค่านั้นทับ brand ส่วนที่เหลือคำนวณจาก accent เดียว
-
----
-
-## Emoji Vocabulary
-
-ใช้ให้**คงที่ทั้งเอกสาร** และใช้เพื่อ**หาของเจอเร็วขึ้น** ไม่ใช่เพื่อความน่ารัก
-
-| ใช้ทำอะไร | ชุดที่ใช้ |
-|---|---|
-| ระดับความสำคัญ | 🔴 วิกฤต · 🟠 สูง · 🟡 กลาง · 🟢 ต่ำ |
-| สถานะ | ✅ เสร็จ · 🚧 กำลังทำ · ⏳ รอ · ❌ ไม่ผ่าน · ⚠️ ต้องระวัง |
-| ชนิดกล่องข้อความ | 💡 ข้อแนะนำ · 📌 ข้อควรจำ · 🚨 อันตราย · 📋 รายการตรวจ |
-| หมวดเนื้อหา | 🎯 เป้าหมาย · 🏗️ สถาปัตยกรรม · 🔐 ความปลอดภัย · 📊 ตัวเลข · 🧪 การทดสอบ |
-
-**หนึ่งอิโมจิต่อหัวข้อ ไม่ใช่ต่อบรรทัด** — เอกสารที่ทุกบรรทัดมีอิโมจิอ่านยากกว่าเอกสารที่ไม่มีเลย
-
----
-
-## Callout Boxes
-
-Use blockquotes with emoji prefix:
-
-```markdown
-> 💡 **Tip:** Brief actionable insight.
-
-> ⚠️ **Warning:** Important caveat or limitation.
-
-> 🚨 **Critical:** Must-read before proceeding.
-
-> ℹ️ **Note:** Additional context or background.
-
-> ❓ **Open Question:** Needs decision/clarification.
-```
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
----
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-❌ Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-✅ Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✅       | —       | Unique login email|
-| age   | number | ❌       | —       | Optional          |
-| role  | enum   | ✅       | `user`  | Access level      |
-```
-
-### Table formatting tips
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
----
-
-## Mermaid Diagrams
-
-**ตัวเลือกชนิดไดอะแกรม กติกาความอ่านง่าย ธีม และการจัดการป้ายภาษาไทย อยู่ใน `software-diagrams`**
-skill นี้คุมเฉพาะเรื่องการวางไดอะแกรมลงในเอกสาร markdown
-
-- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
-- ทุกรูปมีคำบรรยายใต้รูปหนึ่งบรรทัด ขึ้นต้นด้วย **รูปที่ N —**
-- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
-- รูปที่ต้องส่งให้คนนอกทีมหรือใส่สไลด์ ใช้ `svg-diagram-system` แล้วฝังเป็นไฟล์ภาพ
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
-```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
-
----
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk Level:** 🟡 Medium
-**SLA:** ⚡ < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> 🟢 **Approved** · 🔴 **High Priority** · 👤 @alice · 🗓️ Due 2025-03-15
-```
-
----
-
-## Cover Block Pattern
-
-For formal documents (BRD, FSD, ADR, postmortem):
-
-```markdown
-# 📋 <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | 🟢 Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
----
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, PM, SEO recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B      | 💰   | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C      | 💰💰💰| 🔴 High| 🟢 Low | 🔴 Slow | ⚪ Future consideration |
-```
-
----
-
-## Lists — When to nest, when to flatten
-
-### ✅ Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### ❌ Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-**Rule:** Max 2 levels of nesting. More nesting = use a table.
-
----
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
-```typescript
-const user: User = { id: 1, email: 'a@b.com' };
-```
-
-```bash
-npm install
-```
-
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
-
-For long blocks, add file name as comment on first line:
-
-```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
-  // ...
-}
-```
-
----
-
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## ✍️ Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | 🟢 Approved | 2025-01-15 |
-| Tech Lead | @bob | 🔵 Reviewing | — |
-| QA Lead | @charlie | ⚪ Not started | — |
-| Security | @dave | ❌ Rejected | 2025-01-14 |
-```
-
----
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## 📖 Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
-```
-
-Define acronyms on first use, then add to glossary.
-
----
-
-## Quality Checklist
-
-Before delivering any polished doc:
-
-- [ ] H1 title with emoji marker
-- [ ] Cover block with version, date, status, authors
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] At least one Mermaid diagram for any flow/relationship
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum)
-- [ ] Tested rendering in GitHub preview
-
----
-
-> ไดอะแกรมในเอกสาร: ชนิดไหนตอบคำถามไหน และธีม Mermaid ชุดเดียวกันทั้งโปรเจกต์
-> อยู่ใน `software-diagrams` · เอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
-
-## Anti-patterns
-
-
-- ❌ **Emoji spam** — emoji in every heading just for decoration
-- ❌ **All emoji, no labels** — `🔴 High` reads better than `🔴` alone
-- ❌ **Deep nesting** — bullets 4+ levels deep, use tables instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
-- ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
-- ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
-
-
----
-
 # skill: architecture-patterns
 
-Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven communication, or patterns like CQRS, Event Sourcing and Saga. Reference with concrete decision guidance.
+Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, or patterns like CQRS, Event Sourcing and Saga.
 
 # Architecture Patterns
 
 ## When to use this skill
 
-- Greenfield architecture decisions
+- Architecture decisions for a new system
 - Choosing communication patterns between services
-- Refactoring monolith → modular or microservices
+- Splitting a monolith into modules or microservices
 - Designing event-driven systems
-- Implementing CQRS, Event Sourcing, Saga
+- Implementing Command Query Responsibility Segregation (CQRS), Event Sourcing or Saga
 - Reviewing existing architecture
-- Making ADR-level decisions
+- Making decisions big enough for an Architecture Decision Record (ADR)
 
 ---
 
@@ -437,7 +40,7 @@ How many engineers? Team count? Domain complexity?
 
 ## Pattern 1: Modular Monolith
 
-**The 2026 default for most teams.**
+**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
 
 ```
 ┌─────────────────────────────────────┐
@@ -456,20 +59,20 @@ How many engineers? Team count? Domain complexity?
 
 **When to use:**
 - ✅ Small/medium team (< 30 engineers)
-- ✅ Need fast iteration
-- ✅ Simple ops requirements
-- ✅ Can deploy together
+- ✅ You need to ship changes fast
+- ✅ Operations needs are simple
+- ✅ All parts can deploy together
 
 **When NOT to use:**
 - ❌ Multiple teams needing independent deploys
-- ❌ Wildly different scaling needs per feature
-- ❌ Different tech stacks needed
+- ❌ Features need very different scaling
+- ❌ Parts need different tech stacks
 
 **Implementation tips:**
 - Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
 - Each module exposes a public interface
-- Avoid cross-module DB access
-- One DB but logical schema separation
+- Don't let one module read another module's tables
+- One DB, with a separate schema per module
 
 ---
 
@@ -492,23 +95,23 @@ How many engineers? Team count? Domain complexity?
 **When to use:**
 - ✅ Independent teams (Conway's Law)
 - ✅ Different scaling needs per service
-- ✅ Need polyglot tech stacks
-- ✅ Mature CI/CD + observability
+- ✅ Services need different languages or stacks
+- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
 
 **When NOT to use (most projects):**
-- ❌ Small team — overhead kills velocity
-- ❌ No K8s/IaC expertise
+- ❌ Small team — the extra overhead slows everyone down
+- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
 - ❌ Can't afford distributed tracing
-- ❌ Don't have strong domain boundaries yet
+- ❌ Business areas don't have clear boundaries yet
 
 **Hidden costs:**
-- 💸 Operational complexity (5x ops effort)
+- 💸 Much harder to operate (about 5x the ops effort)
 - 💸 Network latency between services
-- 💸 Distributed transactions hard
-- 💸 Debug-ability suffers
-- 💸 Need service mesh, observability stack
+- 💸 Transactions across services are hard
+- 💸 Bugs are harder to trace
+- 💸 You need a service mesh and a monitoring stack
 
-> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt only when team coordination is the bottleneck.
+> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
 
 ---
 
@@ -520,7 +123,7 @@ How many engineers? Team count? Domain complexity?
 Event ──► Function ──► Service / DB / Queue
 ```
 
-**Sweet spots:**
+**Good fits:**
 - ✅ Async background processing
 - ✅ Scheduled tasks (cron)
 - ✅ Glue code between services
@@ -528,10 +131,10 @@ Event ──► Function ──► Service / DB / Queue
 - ✅ Image/video processing pipelines
 
 **Bad fits:**
-- ❌ Long-running processes (15 min limit usually)
-- ❌ Stateful processing
-- ❌ High-frequency low-latency (cold starts)
-- ❌ Massive sustained traffic (cost spikes)
+- ❌ Long-running processes (the limit is usually 15 min)
+- ❌ Processing that must keep state between calls
+- ❌ Frequent calls that need a fast response (cold starts add delay)
+- ❌ Heavy traffic all day (the bill climbs fast)
 
 ---
 
@@ -551,8 +154,8 @@ Client ──HTTP/gRPC──► Server
 | gRPC | Internal service-to-service |
 | WebSocket | Real-time bidirectional |
 
-**Pros:** Simple mental model, easy debugging
-**Cons:** Coupling, cascading failures, hard to scale independently
+**Pros:** Easy to reason about and debug
+**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
 
 ### Asynchronous (Event-Driven)
 
@@ -567,10 +170,10 @@ Producer ──► Topic/Queue ──► Consumer(s)
 | RabbitMQ | Traditional queuing, work distribution |
 | SQS/SNS | AWS-native, simpler than Kafka |
 | NATS | Lightweight, low-latency |
-| Redis Pub/Sub | Simple, ephemeral |
+| Redis Pub/Sub | Simple, messages are not stored |
 
-**Pros:** Decoupling, resilience, scalability
-**Cons:** Eventual consistency, harder debugging, ordering challenges
+**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
+**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
 
 ### When to choose which
 
@@ -589,7 +192,7 @@ Multiple consumers? ─Yes─► Async (pub/sub)
 
 ## Patterns 4–8: CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig
 
-Full detail for each is in [references/advanced-patterns.md](references/advanced-patterns.md). Load it when the decision involves one of these:
+Details for each are in [references/advanced-patterns.md](references/advanced-patterns.md). Load that file when the decision involves one of these:
 
 - Pattern 4: CQRS (Command Query Responsibility Segregation)
 - Pattern 5: Event Sourcing
@@ -606,7 +209,7 @@ Full detail for each is in [references/advanced-patterns.md](references/advanced
 | | Shared DB | DB per service |
 |---|-----------|----------------|
 | Coupling | 🔴 High | 🟢 Low |
-| Consistency | 🟢 ACID | 🟡 Eventual |
+| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
 | Schema changes | 🔴 Coordinate | 🟢 Independent |
 | Performance | 🟢 Easy joins | 🔴 Network calls |
 | Use when | Monolith | Microservices |
@@ -620,19 +223,19 @@ Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) 
        Closest to user (fastest)              Furthest (last resort)
 ```
 
-Each tier ~10x faster than the next.
+Each tier is roughly 10x faster than the next. CDN = content delivery network.
 
 ### Idempotency
 
-**Always design APIs to handle duplicate requests:**
+**Always design APIs so a repeated request does no extra harm:**
 ```
 Client retries → Server detects duplicate → Same result, no side effect
 ```
 
 Methods:
 - Idempotency key header (Stripe pattern)
-- Deduplication window
-- Natural idempotency (PUT vs POST)
+- A time window in which the server drops duplicates
+- Methods that are safe to repeat by nature (PUT, unlike POST)
 
 ---
 
@@ -655,13 +258,13 @@ When proposing architecture, compare options:
 
 ## Anti-patterns
 
-- ❌ **Microservices premature** — monolith first
+- ❌ **Microservices too early** — start with a monolith
 - ❌ **Distributed monolith** — services that must deploy together
 - ❌ **God service** — one service that does everything
-- ❌ **Chatty interfaces** — N+1 service calls
-- ❌ **Shared database across microservices** — coupling without isolation
+- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
+- ❌ **Shared database across microservices** — all the coupling, none of the isolation
 - ❌ **Synchronous calls in critical path** — cascading failures
-- ❌ **No bulkheading** — one slow service kills everything
+- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
 - ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
 
 ---
@@ -674,7 +277,7 @@ When proposing architecture, compare options:
 | Independent team deploys | Microservices |
 | Spiky background jobs | Serverless |
 | High write throughput, complex reads | CQRS |
-| Full audit trail, time-travel | Event Sourcing |
+| Full audit trail, view state at any past time | Event Sourcing |
 | Multi-service transaction | Saga |
 | Reduce service-to-service complexity | Service mesh |
 | Multiple external clients | API Gateway |
@@ -684,14 +287,14 @@ When proposing architecture, compare options:
 
 ## Always Reference
 
-When you make a decision, document it with **adr-writer** skill. Architecture decisions are about trade-offs, and future-you (or your replacement) needs to understand why.
+When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
 
 
 ## reference: advanced-patterns.md
 
 # Architecture Patterns — Advanced Pattern Catalogue
 
-Detailed patterns moved from [SKILL.md](../SKILL.md). Load when the decision involves one of these patterns.
+Details moved out of [SKILL.md](../SKILL.md). Load this file when the decision involves one of these patterns.
 
 ## Contents
 
@@ -705,7 +308,7 @@ Detailed patterns moved from [SKILL.md](../SKILL.md). Load when the decision inv
 
 ## Pattern 4: CQRS (Command Query Responsibility Segregation)
 
-**Split write model from read model.**
+**Use one model for writes and a separate model for reads.**
 
 ```
 Commands ──► Write Model ──► Event Store
@@ -718,19 +321,19 @@ Queries ◄── Read Models (denormalized for query)
 ```
 
 **When to use:**
-- ✅ Vastly different read vs write loads
+- ✅ Read load and write load are very different
 - ✅ Complex reporting / dashboards
 - ✅ Multiple read views from same data
 
 **When NOT to use:**
-- ❌ Simple CRUD (massive overkill)
-- ❌ Strong consistency required for reads
+- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
+- ❌ Reads must always show the latest write
 
 ---
 
 ## Pattern 5: Event Sourcing
 
-**Store events, not state.**
+**Store every change as an event, not just the current state.**
 
 ```
 Instead of:           Store:
@@ -746,22 +349,22 @@ State is computed from events
 **When to use:**
 - ✅ Strong audit/compliance requirements
 - ✅ Need to replay history
-- ✅ Temporal queries ("balance at date X")
+- ✅ Questions about the past ("balance at date X")
 - ✅ Complex business logic with many state transitions
 
 **When NOT to use:**
-- ❌ Simple state apps (overkill)
+- ❌ Apps with simple state (too much)
 - ❌ No team experience with it
 - ❌ Don't need history/audit
-- ❌ Hard to delete data (GDPR considerations)
+- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
 
-> ⚠️ **Both CQRS and Event Sourcing add MASSIVE complexity. Use sparingly.**
+> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
 
 ---
 
 ## Pattern 6: Saga (Distributed Transactions)
 
-**When you need atomicity across services.**
+**When several services must all succeed or all roll back.**
 
 ### Orchestration (centralized)
 ```
@@ -806,13 +409,13 @@ Clients ──► API Gateway ──► Multiple Services
 
 **Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
 
-**Use when:** External clients, multiple services, need cross-cutting concerns
+**Use when:** external clients call many services, and you want auth, rate limits and logging in one place
 
 ---
 
 ## Pattern 8: Strangler Fig (Migration)
 
-**Migrate monolith → modular gradually.**
+**Move off a monolith step by step.**
 
 ```
 Phase 1:    Phase 2:           Phase 3:
@@ -823,10 +426,124 @@ Phase 1:    Phase 2:           Phase 3:
 ```
 
 **Steps:**
-1. Identify bounded context to extract
+1. Pick one business area (bounded context) to pull out
 2. Build new service for that context
-3. Add proxy/feature flag to route portion of traffic
+3. Add a proxy or feature flag that routes part of the traffic
 4. Gradually shift traffic to new service
 5. Delete old code when fully migrated
 
-> 💡 **Beats big-bang rewrites every time.**
+> 💡 **Safer than rewriting everything at once.**
+
+
+---
+
+# skill: human-writing
+
+Use when writing anything a person will read (chat answer, report, status update, document, slide, diagram label) in Thai or English. Answer first, plain words.
+
+# human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
+
+ใช้กับทุกอย่างที่คนจะอ่าน: คำตอบในแชต · รายงานสถานะ · เอกสาร (BRD · SRS · FSD · คู่มือ · proposal · paper) · สไลด์ · สคริปต์พูด · หัวตาราง · ป้ายใน diagram · คำอธิบาย skill และ agent
+
+ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace ต้นฉบับอยู่ที่ plugin `superuser` ถ้าจะแก้ให้แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
+
+---
+
+## 1 · หลักใหญ่
+
+- เขียนเหมือนอธิบายให้เพื่อนร่วมงานที่เก่งแต่ไม่ได้อยู่ในโปรเจกต์ฟัง ถ้าอ่านออกเสียงแล้วสะดุดให้เขียนใหม่
+- คำตอบหรือข้อสรุปขึ้นก่อน แล้วค่อยเหตุผล ไม่เกริ่น ไม่ทวนคำถาม
+- 1 ประโยค 1 ความคิด ถ้าประโยคต่อด้วย "ซึ่ง" "โดย" "จึง" หลายชั้น ให้แยกเป็นหลายประโยค
+- ภาษาอังกฤษใช้หลักเดียวกัน: ประโยคไม่เกิน 25 คำ · ใครทำอะไร (active voice) · คำธรรมดา (buy ไม่ใช่ purchase)
+
+## 2 · สัญลักษณ์และตัวเลข
+
+สัญลักษณ์ใช้ได้ แต่คำที่อยู่รอบสัญลักษณ์ต้องเป็นภาษาคน
+
+| ใช้ | เมื่อไร | ตัวอย่าง |
+|---|---|---|
+| `→` | ลำดับขั้น · ผลที่ตามมา | เข้าใจ → วางแผน → ลงมือ |
+| `·` | คั่นรายการคำนามสั้น ๆ ในบรรทัดเดียว | ทำอะไร · ได้อะไร · ใช้แรงแค่ไหน |
+| `:` | ตามด้วยรายละเอียดหรือรายการ | แยกโค้ด 3 ชั้น: รับข้อมูล → กฎธุรกิจ → เก็บข้อมูล |
+| ตัวเลข | จำนวนทุกชนิด เขียนเป็นเลข ไม่สะกด | 3 ชั้น · 12 คำ · 1 ระดับ |
+
+- **เงื่อนไขและคำสั่งเขียนเป็นประโยคเต็ม มีคำเชื่อม** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ) ไม่ใช้ `→` หรือ `·` ต่อประโยคเป็นท่อน ๆ:
+  - ก่อน: `ไม่แน่ใจว่าขนาดไหน → ถือเป็นขนาดที่ใหญ่กว่า 1 ขั้น`
+  - หลัง: `ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น`
+  - ก่อน: `ย้อนได้ → ทำเลย · ไม่รู้ → ค้นเอง · ย้อนไม่ได้ → เตรียมไว้ใน "รออนุมัติ"`
+  - หลัง: `งานที่ย้อนได้ให้ทำเลย ไม่รู้ให้ค้นเอง ส่วนงานที่ย้อนไม่ได้ให้เตรียมไว้ใน "รออนุมัติ"`
+- ในตารางใช้ข้อความสั้นได้ แต่ยังต้องอ่านเป็นภาษาคน ไม่ใช่รหัส
+- สัญลักษณ์ช่วยให้สั้น แต่ห้ามแทนคำจนต้องถอดรหัส ถ้าคนนอกอ่านแล้วต้องเดาว่าลูกศรหมายถึงอะไร ให้เติมคำ
+- ทุกตัวเลขบอกว่าหมายถึงอะไร: "กำไร 32% ของราคาขาย" ไม่ใช่ "margin 32%" ลอย ๆ
+- เทียบให้เห็นภาพ: "เร็วขึ้น 3.2 เท่า" อ่านง่ายกว่า "ลดลง 69%"
+- ถ้าผลยังไม่แน่นอน ให้บอกตรง ๆ ว่าเพราะอะไร: "รันรอบเดียว ยังสรุปไม่ได้"
+
+## 3 · คำ
+
+- ใช้คำที่คนพูดจริง ไม่ใช้คำราชการหรือศัพท์แปลตรงตัว: "ยกระดับ" → "ส่งต่อ" · "ผลสุดท้ายขัดกฎ" → "คำตอบไม่ผ่านกฎ"
+- ศัพท์ที่คนในวงการใช้กันอยู่แล้ว (token · prompt · API · OCR) ให้คงภาษาอังกฤษไว้
+- ตัวย่อเขียนเต็มครั้งแรกแล้ววงเล็บ: Large Language Model (LLM) จากนั้นใช้ตัวย่อ
+- คำที่ตั้งขึ้นเองหรือคำที่ทำให้งง ให้อธิบายครั้งแรกที่ใช้: "hook (สคริปต์จด log อัตโนมัติ)"
+- สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
+- ตัดคำฟุ่มเฟือย: "ทำการตรวจสอบ" → "ตรวจ" · "มีการนำเข้า" → "นำเข้า" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ" → ตัด
+- เลี่ยงท่าที่ทำให้ดูเหมือน AI เขียน: คำคมเปิดเรื่อง · "ไม่ใช่แค่… แต่ยัง…" · จัดทุกอย่างเป็นชุดละ 3 · ชมว่าสำคัญเกินจริง · ตัวหนาทุกบรรทัด · สรุปซ้ำตอนจบ
+
+## 4 · ตอบในแชต
+
+- ประโยคแรกตอบตรง ๆ: ถ้าถามว่า "ใส่ในรายงานดีไหม" ให้ตอบ "ควรใส่ครับ" แล้วค่อยเหตุผล
+- คำถามสั้นให้ตอบสั้น 2–3 ประโยค ไม่ต้องมีหัวข้อหรือตาราง
+- ใช้ตารางเมื่อเทียบตั้งแต่ 2 ตัวเลือกหรือหลายตัวเลข ส่วนรายการใช้เมื่อมีหลายข้อที่ต้องไล่อ่าน
+- งานที่ทำแล้วบอกด้วยผล ไม่เล่าขั้นตอน: "แก้แล้ว 8 จุด เปิดไฟล์ได้ปกติ"
+- ถ้าเคยบอกผิด ให้บอกตรง ๆ ว่าผิดตรงไหน ที่ถูกคืออะไร ไม่ขอโทษยืดยาว
+- ถ้าไม่แน่ใจ ให้บอกว่าไม่แน่ใจตรงไหน ตรวจได้อย่างไร ไม่เดาให้ฟังดูมั่นใจ
+- ถ้าต้องให้ผู้ใช้ตัดสินใจ ให้เสนอตัวเลือก บอกว่าแนะนำข้อไหนเพราะอะไร แล้วปิดด้วยคำถามเดียวที่ตอบง่าย
+- ลงท้ายด้วยสิ่งที่ทำต่อได้จริง 1 อย่าง ไม่สรุปซ้ำ
+
+## 5 · เอกสารและรายงาน
+
+- ย่อหน้าแรกของเอกสารคือข้อสรุปหรือสิ่งที่ผู้อ่านต้องรู้ คนที่อ่านแค่ย่อหน้านี้ต้องได้เรื่อง
+- หัวข้อบอกเนื้อหา ไม่ใช่ชื่อหมวด: "ระบบส่งต่อลดการเรียก LLM ได้ครึ่งหนึ่ง" ดีกว่า "ผลการทดลอง"
+- ย่อหน้าละไม่เกิน 5 ประโยค
+- หัวคอลัมน์บอกว่าวัดอะไร: "เรียก LLM" · "คำตอบไม่ผ่านกฎ" · 1 คอลัมน์ 1 ความหมาย
+- เชิงอรรถมีไว้สำหรับนิยามและที่มาของตัวเลข · ข้อสรุปสำคัญห้ามซ่อนในเชิงอรรถ
+- รายงานสถานะ: ผลต่อคนใช้ก่อน → ตารางสถานะ → สิ่งที่รออนุมัติ และทุกข้ออ้างต้องบอกว่าตรวจแล้วหรือคาดเอา
+- เอกสารทางการตามแบบ (หนังสือราชการ · สัญญา · ใบกำกับภาษี) ให้ใช้ถ้อยคำตามแบบที่กำหนด ส่วนหลักในไฟล์นี้ใช้กับส่วนที่เขียนเองได้
+
+## 6 · สไลด์
+
+- หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ: "ยิ่ง Tier 1 เติมค่าเอง Gate ยิ่งมองไม่เห็นค่าผิด"
+- โครงหน้า: ปัญหา → วิธีแก้ → ผล · แต่ละส่วนอ่านจบในแวบเดียว
+- สคริปต์พูดเขียนแบบที่พูดจริง อ่านออกเสียงได้ไม่สะดุด
+
+## 7 · Diagram
+
+- ป้ายในกล่องเป็นคำนามสั้น 1–4 คำ ที่คนเข้าใจ: "รับข้อมูลเข้า" ไม่ใช่ "Ingress Layer Handler"
+- ป้ายบนลูกศรเป็นกริยา: "ส่งไฟล์" · "ตรวจสิทธิ์" · ลูกศรที่ไม่มีป้ายต้องเดาไม่ผิด
+- คำในรูปต้องตรงกับคำในเอกสารทุกคำ
+- ชื่อรูปเป็นข้อสรุป เหมือนหัวสไลด์ · ใต้รูปมี 1 ประโยคบอกว่าควรดูอะไร
+- ถ้าโปรเจกต์มีแบบรูปประจำ (house style) ให้ใช้ตามนั้น ส่วนวิธีวาดดูใน skill รูปของ plugin นั้น
+
+## 8 · ตัวอย่าง ก่อน → หลัง
+
+| ก่อน | หลัง |
+|---|---|
+| ขอบระบบ (รับ input) → service (กฎธุรกิจ) → data | แยกโค้ด 3 ชั้น: รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล |
+| ตรวจ input ที่ขอบ · พังแบบปิด | ตรวจข้อมูลจากภายนอกทันทีที่เข้ามา ถ้าเกิดข้อผิดพลาดให้ปฏิเสธไว้ก่อน |
+| เล็กพลาดหรือตรวจไม่ผ่าน → ขยับขึ้นหนึ่งระดับ | ถ้าโมเดลเล็กทำพลาด ให้ขยับขึ้น 1 ระดับ ไม่ลองซ้ำกับตัวเดิม |
+| มีผลเหนือค่าเริ่มของ playbook แต่ไม่เหนือรายการ "รออนุมัติ" | ถ้าไฟล์นี้กับ playbook ขัดกัน ให้ทำตามไฟล์นี้ ยกเว้นเรื่องที่ต้องรออนุมัติ |
+| เมื่อความต้องการมีการนำเข้าหรือส่งออกไฟล์ | เมื่องานต้องนำเข้าหรือส่งออกไฟล์ |
+| ทีมที่ดีไม่ได้เก่งเพราะแต่ละคนเก่ง แต่เพราะ… | วิธีทำงานของทีม: เลือกแผน → แจกงาน → ตรวจผล → จดบันทึก |
+| คำค้น 12/12 จากประกาศงานอยู่ใน CV | คำค้นจากประกาศงานอยู่ใน CV ครบ 12 คำ · ตรวจแล้ว |
+| margin 32–35% หลังทุกค่าธรรมเนียม | หักค่าธรรมเนียมแล้วเหลือกำไร 32–35% ของราคาขาย |
+| hook จะทำงานเฉพาะโฟลเดอร์ที่มีการสร้างโฟลเดอร์ .superuser ไว้แล้วเท่านั้น | hook (สคริปต์จด log) ทำงานเฉพาะโฟลเดอร์ที่มี `.superuser/` |
+| ตรวจด้วย validate ผ่าน ไม่มี error และ warning แต่ยังต้อง build ใหม่ | ตัวตรวจผ่านหมด · เหลือ build ใหม่บนเครื่องคุณ |
+
+## 9 · ตรวจก่อนส่ง 5 ข้อ
+
+1. อ่านออกเสียงแล้วลื่นไหม
+2. คนนอกโปรเจกต์อ่านแล้วเข้าใจโดยไม่ต้องถามไหม · สัญลักษณ์ทุกตัวอ่านออกไหม
+3. ประโยคแรกตอบคำถามหรือบอกข้อสรุปแล้วหรือยัง
+4. ศัพท์และตัวเลขตรงกันทุกไฟล์ในชุดเดียวกันไหม (แชต · สไลด์ · เอกสาร · diagram)
+5. มีคำไหนตัดออกได้โดยความหมายไม่เปลี่ยนไหม ถ้ามีให้ตัด
+
+ที่มา: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย

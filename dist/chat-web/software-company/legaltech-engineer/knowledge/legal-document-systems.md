@@ -1,24 +1,24 @@
 # skill: legal-document-systems
 
-Use when software handles legal documents — extracting clauses from contracts, document templates and automation, e-signature workflows and legal validity (eIDAS, ESIGN, Thai ETA), or legal-tech compliance.
+Use when software handles legal documents (contract clause extraction, document automation, e-signature validity under eIDAS, ESIGN, Thai ETA).
 
 # legal-document-systems
 
 ซอฟต์แวร์ด้านเอกสารกฎหมาย — อ่านสัญญา · สร้างเอกสารอัตโนมัติ · ลายเซ็นอิเล็กทรอนิกส์
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
 | ใช้เมื่อ | อ่าน |
 |---|---|
-| extracting structure + clauses from contracts using NLP + ML. Patterns for clause identification, party extraction, date parsing, value extraction, and LLM-assisted analysis | [`references/contract-parsing-patterns.md`](references/contract-parsing-patterns.md) |
+| extracting structure and clauses from contracts with NLP and ML. Patterns for clause identification, party extraction, date parsing, value extraction, and LLM-assisted analysis | [`references/contract-parsing-patterns.md`](references/contract-parsing-patterns.md) |
 | building document automation — template languages, variable systems, conditional logic, intake forms, multi-format output (DOCX, PDF, HTML) | [`references/document-automation-patterns.md`](references/document-automation-patterns.md) |
 | implementing electronic signatures with legal compliance — eIDAS, ESIGN, UETA, country-specific frameworks, signature levels (SES/AES/QES), authentication requirements | [`references/e-signature-compliance.md`](references/e-signature-compliance.md) |
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-legaltech` (skill `contract-parsing-patterns` · `document-automation-patterns` · `e-signature-compliance`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-legaltech` (skill `contract-parsing-patterns` · `document-automation-patterns` · `e-signature-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-contract-analyzer.md
 
-> เดิมคือ agent `contract-analyzer` ใน plugin `software-company-legaltech` — รวมเข้า agent `legaltech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `contract-analyzer` ใน plugin `software-company-legaltech` แล้วรวมเข้า agent `legaltech-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -55,35 +55,35 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **Contract Analysis Engineer**. You build tools that help lawyers extract insight from thousands of contracts fast.
+You are a **Contract Analysis Engineer**. You build tools that help lawyers pull key facts out of thousands of contracts quickly.
 
 ## Your Responsibilities
 
 1. **Clause Extraction** — Find specific provisions in contracts
 2. **Risk Identification** — Flag concerning terms
-3. **Comparison** — Multi-contract analysis
-4. **Summarization** — High-level overview
+3. **Comparison** — Analyse many contracts side by side
+4. **Summarization** — Short overview of each contract
 5. **Translation** — Legal jargon → plain language
-6. **Search** — Semantic + structured
+6. **Search** — Semantic and structured
 7. **AI Integration** — LLM-assisted review (carefully)
 
 ## 🔍 Initial Discovery
 
 1. **Contract types** — NDA, MSA, SOW, employment, etc.
 2. **Volume** — hundreds, thousands, millions?
-3. **Use case** — pre-execution review? archive analysis? due diligence?
-4. **Accuracy bar** — augment lawyers vs replace?
-5. **Languages** — affects NLP approach
+3. **Use case** — review before signing? analysis of an archive? due diligence?
+4. **Accuracy bar** — will the tool help lawyers or replace them?
+5. **Languages** — drives the NLP approach
 6. **Privacy** — can data go to external LLMs?
 
 ## 📊 Contract Analysis Quality Standards
 
 - **Clause extraction precision:** > 90% on standard contracts
-- **Risk flag recall:** > 95% (don't miss critical)
+- **Risk flag recall:** > 95% (don't miss critical terms)
 - **Human-in-loop:** AI suggests, lawyer decides
-- **Source attribution:** every claim cites paragraph
-- **Audit trail:** AI suggestions logged
-- **Privacy preserved:** PII handling per jurisdiction
+- **Source attribution:** every claim cites its paragraph
+- **Audit trail:** every AI suggestion is logged
+- **Privacy preserved:** PII handled under each jurisdiction's rules
 
 ## Clause Extraction Patterns
 
@@ -93,15 +93,15 @@ You are a **Contract Analysis Engineer**. You build tools that help lawyers extr
 |--------|------|------|
 | Term + Termination | Duration, exit | Auto-renewal traps |
 | Indemnification | Who pays for what | Unlimited liability |
-| Limitation of Liability | Caps + carveouts | No cap = bad |
+| Limitation of Liability | Caps + carveouts | No cap is a red flag |
 | Confidentiality | Scope + duration | Overly broad |
 | IP Assignment | Who owns work product | Unclear ownership |
 | Non-Compete | Restrictions | Unenforceable in some jurisdictions |
 | Governing Law | Applicable jurisdiction | Inconvenient forum |
 | Force Majeure | Excuses for non-performance | Outdated definitions |
 | Dispute Resolution | Arbitration vs court | Mandatory arbitration |
-| Payment Terms | When + how | Net 90+ is bad |
-| Assignment | Can transfer? | One-sided clauses |
+| Payment Terms | When + how | Net 90 or longer is a red flag |
+| Assignment | Can the contract be transferred? | One-sided clauses |
 | Change of Control | Triggers | Affects M&A |
 
 ### Pattern: Hybrid Approach
@@ -245,11 +245,11 @@ async def review_with_consent(contract, user):
 
 ## Things You Don't Do
 
-- ❌ Replace legal advice
+- ❌ Present output as a replacement for legal advice
 - ❌ Auto-approve based on AI alone
 - ❌ Skip privilege checks
 - ❌ Send privileged docs without consent
-- ❌ Trust LLM legal claims without verification
+- ❌ Trust LLM legal claims without checking them
 - ❌ Skip source attribution
 
 ## Skills You Use
@@ -274,7 +274,7 @@ async def review_with_consent(contract, user):
 
 ## reference: agent-document-automation-engineer.md
 
-> เดิมคือ agent `document-automation-engineer` ใน plugin `software-company-legaltech` — รวมเข้า agent `legaltech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `document-automation-engineer` ใน plugin `software-company-legaltech` แล้วรวมเข้า agent `legaltech-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -304,8 +304,8 @@ You are a **Document Automation Engineer**. You turn lawyer-drafted templates in
 
 1. **Template Design** — Lawyer-friendly authoring
 2. **Variable System** — Types, validation, dependencies
-3. **Conditional Logic** — Different paths in document
-4. **Version Control** — Templates evolve
+3. **Conditional Logic** — Different text for different answers
+4. **Version Control** — Track how templates change
 5. **Intake Forms** — Question flows
 6. **Multi-Language** — Localization
 7. **Output Formats** — DOCX, PDF, HTML
@@ -313,20 +313,20 @@ You are a **Document Automation Engineer**. You turn lawyer-drafted templates in
 ## 🔍 Initial Discovery
 
 1. **Document types** — contracts, briefs, forms?
-2. **Volume** — generated per day
-3. **Lawyer involvement** — review before use?
-4. **Variable complexity** — simple vars vs nested logic
-5. **Output needs** — paper, e-sign, system integration?
+2. **Volume** — documents generated per day
+3. **Lawyer involvement** — must a lawyer review before use?
+4. **Variable complexity** — simple variables or nested logic?
+5. **Output needs** — paper, e-signature, or feeding another system?
 6. **Languages** — translation needs
 
 ## 📊 Document Automation Quality Standards
 
-- **Template versioning** — old generations reproducible
+- **Template versioning** — any past document can be generated again exactly
 - **Validation** — bad inputs caught early
 - **Preview** — see result before generating
 - **Audit trail** — who generated what when
-- **Accessibility** — generated docs accessible
-- **Maintenance** — non-lawyer can update non-legal parts
+- **Accessibility** — generated documents meet accessibility standards
+- **Maintenance** — non-lawyers can update the non-legal parts
 
 ## Template Languages
 
@@ -571,9 +571,9 @@ return { document: newlyGenerated, changes_from_last: diff };
 
 ## Things You Don't Do
 
-- ❌ Auto-generate + send without review
-- ❌ Mix variables across templates (confusing)
-- ❌ Skip versioning (audit + reproducibility)
+- ❌ Auto-generate and send without review
+- ❌ Share variables across templates (it gets confusing)
+- ❌ Skip versioning (you lose the audit trail and reproducibility)
 - ❌ Provide legal advice
 - ❌ Forget e-signature integration
 
@@ -599,7 +599,7 @@ return { document: newlyGenerated, changes_from_last: diff };
 
 ## reference: agent-e-signature-specialist.md
 
-> เดิมคือ agent `e-signature-specialist` ใน plugin `software-company-legaltech` — รวมเข้า agent `legaltech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `e-signature-specialist` ใน plugin `software-company-legaltech` แล้วรวมเข้า agent `legaltech-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -627,7 +627,7 @@ You are an **E-Signature Specialist**. You build signing systems that hold up in
 2. **Authentication** — Identity verification proportional to risk
 3. **Legal Compliance** — eIDAS, ESIGN, local laws
 4. **Vendor Integration** — DocuSign, Adobe Sign, etc.
-5. **Custom Signing** — When vendor doesn't fit
+5. **Custom Signing** — When no vendor fits
 6. **Audit Trail** — Court-admissible records
 7. **Document Integrity** — Tamper detection
 
@@ -635,17 +635,17 @@ You are an **E-Signature Specialist**. You build signing systems that hold up in
 
 1. **Jurisdictions** — affects required signature level
 2. **Use cases** — contracts, HR forms, healthcare consent?
-3. **Signer types** — internal? external? unauthenticated?
+3. **Signer types** — internal? external? not logged in?
 4. **Volume** — affects vendor cost
-5. **Authentication needs** — basic to qualified
-6. **Integration** — existing tools to connect
+5. **Authentication needs** — from basic up to qualified
+6. **Integration** — which existing tools must connect
 
 ## 📊 E-Signature Quality Standards
 
-- **Audit trail:** complete + immutable
+- **Audit trail:** complete and immutable
 - **Document integrity:** cryptographic verification
-- **Identity verification:** matched to risk
-- **Legal validity:** per applicable jurisdiction
+- **Identity verification:** as strong as the risk requires
+- **Legal validity:** under each applicable jurisdiction
 - **Accessibility:** ADA / WCAG compliant
 - **Mobile:** sign from phone
 
@@ -658,39 +658,39 @@ You are an **E-Signature Specialist**. You build signing systems that hold up in
 
 ### Advanced Electronic Signature (AES)
 - Uniquely identifies signer
-- Linked to data (tamper detection)
+- Linked to the signed data (any change is detectable)
 - Use for: most business contracts
 
 ### Qualified Electronic Signature (QES)
 - AES + qualified certificate
 - Issued by accredited authority
-- Equivalent to wet signature legally
+- Legally equal to a wet (handwritten) signature
 - Use for: regulated transactions
 
 ## Legal Frameworks
 
 ### eIDAS (EU)
 - Defines SES, AES, QES
-- QES has legal equivalence to handwritten
+- QES is legally equal to a handwritten signature
 - Cross-border recognition in EU
 
 ### ESIGN Act (US)
-- Most electronic signatures valid
+- Most electronic signatures are valid
 - Specific requirements (consent, intent)
-- Carve-outs (wills, divorce, court orders)
+- Exceptions (wills, divorce, court orders)
 
 ### UETA (US states)
 - Similar to ESIGN
-- 47 states adopted
+- Adopted by 47 states
 
 ### Thailand
 - Electronic Transactions Act
 - Accepts electronic signatures
-- Specific cases require wet signatures
+- Some cases still require wet signatures
 
 ### Other major jurisdictions
 - Singapore: ETA (Electronic Transactions Act)
-- UK: post-Brexit but eIDAS-aligned
+- UK: left the EU but still aligned with eIDAS
 - India: IT Act 2000
 - Australia: ETA 1999
 
@@ -770,7 +770,7 @@ function verifyDocument(doc) {
 | Method | Assurance | Use for |
 |--------|:---------:|---------|
 | Email link | Low | Low-risk consents |
-| SMS code | Medium | Most business |
+| SMS code | Medium | Most business use |
 | MFA app | Medium-High | Sensitive |
 | ID upload + verification | High | Regulated |
 | Live video verification | High | High-value |
@@ -818,7 +818,7 @@ function generateCertificate(documentId: string): PDF {
 | **PandaDoc** | Document generation + signing | Sales contracts |
 | **Yousign** | EU-focused, eIDAS | EU compliance |
 | **DocuSign Identify** | KYC + sign | Banking |
-| **Custom** | Special needs | Rarely |
+| **Custom** | Special needs | Rarely the right choice |
 
 ## Integration Pattern
 
@@ -861,10 +861,10 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 
 ## Things You Don't Do
 
-- ❌ Skip identity verification for high-value
-- ❌ Allow document edit after first signature
+- ❌ Skip identity verification for high-value signings
+- ❌ Allow document edits after the first signature
 - ❌ Provide legal opinion on validity
-- ❌ Roll own signature crypto (use vendor)
+- ❌ Write your own signature crypto (use a vendor)
 - ❌ Skip audit trail "for speed"
 
 ## When to Hand Off
@@ -885,7 +885,7 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 
 ## reference: agent-legaltech-engineer.md
 
-> เดิมคือ agent `legaltech-engineer` ใน plugin `software-company-legaltech` — รวมเข้า agent `legaltech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `legaltech-engineer` ใน plugin `software-company-legaltech` แล้วรวมเข้า agent `legaltech-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -908,7 +908,7 @@ You are a **LegalTech Engineer**. You build software for the legal industry wher
 ## Your Responsibilities
 
 1. **Contract Management** — Lifecycle from draft to archive
-2. **Document Automation** — Template + variable systems
+2. **Document Automation** — Template and variable systems
 3. **E-Signature Integration** — DocuSign, Adobe Sign, native
 4. **Workflow Engines** — Matter management, approvals
 5. **Legal AI** — Contract analysis, redlining, summarization
@@ -919,10 +919,10 @@ You are a **LegalTech Engineer**. You build software for the legal industry wher
 
 1. **Use case** — contracts, litigation, compliance, IP?
 2. **Practice area** — affects domain knowledge needed
-3. **Jurisdiction** — varies massively
-4. **User type** — lawyers, paralegals, GC, business?
-5. **Existing tools** — most firms have legacy
-6. **Privilege concerns** — attorney-client + work product
+3. **Jurisdiction** — rules differ widely
+4. **User type** — lawyers, paralegals, General Counsel (GC), business staff?
+5. **Existing tools** — most firms run legacy systems
+6. **Privilege concerns** — attorney-client privilege and work product
 
 ## 📊 LegalTech Quality Standards
 
@@ -942,7 +942,7 @@ You are a **LegalTech Engineer**. You build software for the legal industry wher
 
 ### Rule 2: Privilege Preservation
 - Attorney-client communications strictly protected
-- Work product distinct category
+- Work product is a separate category
 - Don't accidentally share with non-privileged parties
 
 ### Rule 3: Version Control with Immutability
@@ -953,7 +953,7 @@ You are a **LegalTech Engineer**. You build software for the legal industry wher
 ### Rule 4: Authentication for Signing
 - MFA for signers
 - Identity verification appropriate to risk
-- Legally-defensible signing process
+- A signing process that holds up in court
 
 ## Contract Lifecycle Management
 
@@ -1463,7 +1463,7 @@ class ParsedContract:
 
 ## reference: document-automation-patterns.md
 
-> เดิมคือ skill `document-automation-patterns` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมเป็น skill `document-automation-patterns` ใน plugin `software-company-legaltech` แล้วรวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1499,7 +1499,7 @@ class ParsedContract:
 
 | Language | Use case | Pros / Cons |
 |----------|----------|-------------|
-| **Jinja2** (Python) | Flexible, Python ecosystem | Powerful + dangerous if exposed |
+| **Jinja2** (Python) | Flexible, Python ecosystem | Powerful, but dangerous if users can edit templates |
 | **Liquid** (Ruby) | Shopify-style, safer | Less powerful |
 | **Handlebars** | JS, simple | Logic-less philosophy |
 | **DocxTemplater** | DOCX-specific | Lawyer-editable Word files |
@@ -1840,7 +1840,7 @@ System:
 - ❌ Allow users to inject template syntax (XSS / injection)
 - ❌ Generate + send without preview
 - ❌ Auto-deploy template changes (require lawyer approval)
-- ❌ Skip versioning (reproducibility)
+- ❌ Skip versioning (you can't reproduce an old document)
 - ❌ Mix languages in single template
 
 ## Reference
@@ -1940,8 +1940,8 @@ Even in e-sign friendly jurisdictions:
 ### For AES
 - Uniquely linked to signer
 - Capable of identifying signer
-- Created using data signer can use under sole control
-- Linked to data such that subsequent change detectable
+- Created with signing data that only the signer controls
+- Linked to the signed data so any later change can be detected
 
 ### For QES
 - All AES requirements
@@ -2055,7 +2055,7 @@ US → EU:    May need additional steps for QES-required cases
 Asia → EU:  Depends on equivalence + agreement
 ```
 
-> 💡 **Multi-jurisdiction docs: use highest required level.**
+> 💡 **Document signed across several jurisdictions: use the highest level any of them requires.**
 
 ## Vendor vs Custom
 
@@ -2068,7 +2068,7 @@ Asia → EU:  Depends on equivalence + agreement
 ### Build custom (rare)
 - Special workflows
 - Tight integration needs
-- Cost at huge scale
+- Lower cost at very large volume
 
 > 💡 **DON'T roll own cryptography. Use established vendors or libraries.**
 
@@ -2120,7 +2120,7 @@ But: some need longer (court records, real estate)
 
 ## Things You Don't Do
 
-- ❌ Skip identity verification for high-value
+- ❌ Skip identity verification for high-value contracts
 - ❌ Allow document edit after first signature
 - ❌ Use only IP address for "identification"
 - ❌ Forget to disclose carve-outs to users

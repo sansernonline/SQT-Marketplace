@@ -1,6 +1,6 @@
 # skill: digital-hygiene
 
-Use when setting up or checking a family's digital safety — password manager, two-factor and passkeys, moving LINE to a new phone, photo backups, SIM-swap and call-centre scams, or the first hour after an account takeover.
+Use when securing family accounts (password manager, 2FA, passkeys, LINE to a new phone, photo backup, SIM swap) or after an account takeover.
 
 # Digital Hygiene
 
@@ -142,7 +142,7 @@ Related: `important-docs` (where the recovery-code envelope is kept), `subscript
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://thailand.prd.go.th/en/content/category/detail/id/2078/iid/327803 · https://www.thebangkokinsight.com/news/the-bangkok-insight-th/899307/
 
-**Family rule**: if a call asks for money, an OTP, or an app install → hang up, then call back on a number you already know.
+**Family rule**: if a call asks for money, an OTP, or an app install, hang up, then call back on a number you already know.
 
 ## The first hour after an account takeover or a scam transfer
 

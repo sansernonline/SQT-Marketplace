@@ -1,3268 +1,672 @@
-# skill: saas-platform
+# skill: branded-document-design
 
-Use when building B2B SaaS — multi-tenancy and tenant isolation, enterprise SSO (SAML/OIDC) and SCIM, webhooks, subscription billing, usage metering and revenue metrics, or customer onboarding and adoption.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Token palette, type scale, tested python-docx and python-pptx builders, Thai typography.
 
-# saas-platform
+# Branded Document Design
 
-SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิดเงินรายเดือน · onboarding ลูกค้า
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
+> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
 
-## หัวข้อ
+## เมื่อไหร่ใช้ skill นี้
 
-| ใช้เมื่อ | อ่าน |
-|---|---|
-| implementing multi-tenancy in SaaS — row-level isolation, schema-per-tenant, DB-per-tenant, tenant context propagation, noisy neighbor mitigation. Concrete implementation patterns | [`references/multi-tenancy-patterns.md`](references/multi-tenancy-patterns.md) |
-| integrating with enterprise systems — SSO (SAML/OIDC), SCIM provisioning, webhooks, iPaaS (Zapier, Workato), API client design, or building robust integration platforms | [`references/enterprise-integration.md`](references/enterprise-integration.md) |
-| implementing subscription billing — Stripe Billing/Chargebee setup, usage metering, dunning, revenue recognition, multi-currency, proration. Covers production patterns for B2B SaaS | [`references/subscription-billing.md`](references/subscription-billing.md) |
+- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
+- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
+- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
+- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
 
-## คู่มือบทบาท
+## เมื่อไหร่ **ไม่** ใช้
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
+- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
 
-| บทบาท | อ่าน | agent |
+**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
+→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
+
+---
+
+## 0 · สีมาจากเนื้องาน — ถามก่อนเริ่ม
+
+**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
+(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
+
+ถ้ายังไม่มี **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ให้ถามผู้ใช้ว่าจะใช้สีอะไร
+ถ้าผู้ใช้ยังไม่ระบุ ให้เสนอจากเนื้องาน รอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
+
+| เนื้องาน | โทนที่เสนอ | เหตุผล |
 |---|---|---|
-| designing customer onboarding flows, building in-product help, configuring usage analytics for adoption tracking, building self-service portals, or designing CS tooling | [`references/agent-customer-success-engineer.md`](references/agent-customer-success-engineer.md) | `growth-specialist` |
-| designing B2B SaaS systems — multi-tenancy patterns, tenant isolation, scalability strategies, region deployment, or evaluating tenant data architectures | [`references/agent-saas-architect.md`](references/agent-saas-architect.md) | `solution-architect` |
-| building enterprise integrations — SSO (SAML/OIDC), SCIM provisioning, webhooks, API clients, ETL connectors, or any system-to-system integration in B2B SaaS context | [`references/agent-integration-engineer.md`](references/agent-integration-engineer.md) | `solution-architect` |
+| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
+| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
+| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
+| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
+| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
+| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
+| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
 
-## agent ของสายนี้
+ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
 
-`growth-specialist` · `solution-architect` · `revops-analyst`
+**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
+สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
 
-## ที่มา
+---
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
 
+ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
+ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
 
-## reference: agent-customer-success-engineer.md
+| Token | หน้าที่ | ได้มาจาก |
+|-------|---------|----------|
+| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีหลักที่ผู้ใช้เลือก |
+| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
+| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
+| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
+| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
+| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
+| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
+| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
+| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
 
-> เดิมคือ agent `customer-success-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `growth-specialist` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
+สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
+พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
 
-**สารบัญ:** 
+**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
 
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 CS Engineering Quality Standards](#cs-engineering-quality-standards)
-- [Activation Milestones](#activation-milestones)
-- [Health Score Components](#health-score-components)
-- [In-Product Engagement Tools](#in-product-engagement-tools)
-- [Self-Service Patterns](#self-service-patterns)
-- [Adoption Tracking](#adoption-tracking)
-- [Churn Signal Engineering](#churn-signal-engineering)
-- [Expansion Signal Engineering](#expansion-signal-engineering)
-- [CS Tool Integration](#cs-tool-integration)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
+| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
+|---|---|---|
+| 🔴 แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
+| 🟠 เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
+| 🟢 เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
+| 🔵 น้ำเงิน | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก (brand) |
+| 🟣 ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
+| ⚪ เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
 
-You are a **Customer Success Engineer**. You build the technical foundation that turns first-time users into long-term advocates.
+กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
 
-## Your Responsibilities
+> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
+> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
+>
+> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
 
-1. **Onboarding Engineering** — Time-to-value optimization
-2. **In-Product Help** — Contextual guidance, walkthroughs
-3. **Adoption Tracking** — Activation milestones, health scores
-4. **Self-Service Portal** — Docs, account mgmt, billing
-5. **CS Tooling** — CRM integration, ticketing
-6. **Churn Signals** — Detect at-risk accounts
-7. **Expansion Signals** — Detect upgrade opportunities
+> 💡 **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
+> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
 
-## 🔍 Initial Discovery
+### สเกลตัวอักษร (pt)
 
-1. **Product maturity** — early, growth, scale stage
-2. **Customer segments** — SMB to enterprise
-3. **Time to value** — current vs target
-4. **Activation definition** — what = "got value"
-5. **CS team size** — affects tool needs
-6. **Churn pattern** — voluntary vs involuntary
+| ระดับ | Word | Slide | น้ำหนัก · สี |
+|-------|------|-------|--------------|
+| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
+| H1 | 16 | 26 | bold · `brand` |
+| H2 | 12.5 | — | bold · `brand_deep` |
+| H3 | 11.5 | — | bold · `text` |
+| เนื้อความ | 11 | 17 | regular · `text_body` |
+| ตาราง | 11 | 12.5 | regular · `text_body` |
+| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
 
-## 📊 CS Engineering Quality Standards
+**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
 
-- **Time to first value:** measured + improving
-- **Activation rate:** > 60% to first key action
-- **Self-service success:** > 70% of questions self-served
-- **Health score accuracy:** correlates with renewal
-- **CS tooling coverage:** complete account view
-- **Customer data privacy:** PDPA/GDPR respected
+---
 
-## Activation Milestones
+## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
+
+ใช้ **Tahoma** เป็นค่าเริ่มต้น: มีทุกเครื่อง Windows/Office · วรรณยุกต์ไม่ชนสระ ·
+bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
+
+> 🚨 **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
+> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม**
+> ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
+> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว **ห้ามตั้งฟอนต์เองด้วยมือ**
+
+กฎอื่นสำหรับเอกสารไทย:
+
+- ระยะบรรทัด **1.3–1.35** (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์และสระบน–ล่าง ต้องเว้นที่)
+- **ห้ามจัดชิดขอบ 2 ด้าน (justify)** กับย่อหน้าไทย เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
+- LibreOffice ตัดคำไทยไม่เหมือน Word ถ้าจะส่ง PDF ให้ export จาก Word จริง
+  หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
+- สร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
+  (ReportLab จัดวรรณยุกต์ไทยผิด ให้ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
+- เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
+  ไม่ใช่บั๊กของขนาดฟอนต์ บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน จึงให้ตรวจรอบสุดท้ายจาก Word
+
+---
+
+## 3 · โครงหน้าเอกสาร Word
 
 ```
-Define 3-5 milestones per product:
-1. Account created
-2. First [key action]
-3. Invited team
-4. First [habit-forming action]
-5. Recurring usage pattern
-
-Track conversion rate at each step
-Optimize the worst-performing transition
+หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
+              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
+              → ขึ้นหน้าใหม่
+สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
+เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
+              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
+ท้ายเอกสาร    ตารางลงนามอนุมัติ
+footer        "หน้า N" กลางหน้า สีเทา 9pt
 ```
 
-## Health Score Components
+หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา ≈ **9360 twips**
+(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
 
-```python
-def health_score(account):
-    return weighted_sum([
-        ('login_frequency', 0.3),        # active?
-        ('feature_adoption', 0.2),       # using what we shipped
-        ('user_growth', 0.15),           # expanding internally
-        ('support_load', -0.1),          # too many tickets = bad
-        ('payment_history', 0.1),        # paying on time
-        ('engagement_score', 0.15),      # email opens, NPS, etc.
-    ])
+---
 
-# Output: 0-100 score
-# Bucket: red (< 40), yellow (40-70), green (70+)
-```
+## 4 · องค์ประกอบที่ใช้ซ้ำ
 
-## In-Product Engagement Tools
+| องค์ประกอบ | หน้าตา | เมธอด |
+|-----------|--------|-------|
+| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
+| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` เส้นเทาบาง หัวซ้ำทุกหน้า | `table()` |
+| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
+| แถบตัวเลขสรุป | การ์ดพื้นฟ้าอ่อน ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
+| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
+| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
+| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
+| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
 
-| Tool | Purpose |
-|------|---------|
-| Pendo / Userpilot | Walkthroughs, in-product messaging |
-| Intercom / Help Scout | Live chat, knowledge base |
-| Appcues | Feature announcements, tooltips |
-| Stonly | Interactive guides |
-| Custom built-in | Tight integration, brand fit |
+**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
+ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
 
-## Self-Service Patterns
+---
 
-### Knowledge Base
-- Search-first
-- Articles tied to product context (deep links)
-- Updated with each release
-- Multi-modal: text + video + code
-
-### Status Page
-- Real-time service status
-- Subscriber notifications
-- Incident history
-- Tools: Statuspage, Atlassian, custom
-
-### Admin Portal
-- Account settings
-- User management
-- Billing + invoices
-- Usage dashboards
-- API key management
-- Audit log access
-
-## Adoption Tracking
-
-```typescript
-// Track meaningful events (not every click)
-track('feature_used', {
-  account_id,
-  user_id,
-  feature: 'workflow_builder',
-  context: { workflow_count: 3 },
-});
-
-// Compute adoption per feature
-const adoption = sql`
-  SELECT
-    account_id,
-    COUNT(DISTINCT feature) as features_used,
-    MAX(timestamp) as last_active
-  FROM events
-  WHERE event = 'feature_used'
-  GROUP BY account_id
-`;
-
-// Surface to CS team
-// Flag accounts with declining adoption
-// Suggest features they haven't tried
-```
-
-## Churn Signal Engineering
+## 5 · วิธีใช้ brandkit
 
 ```python
-# Leading indicators (weeks before churn)
-churn_signals = {
-    'declining_login_frequency': sessions_last_7d < 0.5 * sessions_7d_ago,
-    'admin_change': new_admin_within_30d,
-    'support_ticket_spike': tickets_30d > 3 * tickets_avg,
-    'feature_abandonment': stopped_using_key_feature,
-    'cancellation_query': visited_cancel_page,
-    'license_underuse': active_users < 0.3 * licensed_users,
-}
+import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
+from brandkit import BrandDoc, use_brand, to_pdf
 
-# Composite risk score
-def churn_risk(account):
-    signals = sum(1 for signal in detect_signals(account))
-    return 'high' if signals >= 3 else 'medium' if signals >= 1 else 'low'
+doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
+doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
+          subtitle="ระบบ Apps Track — Project Control & Monitor",
+          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
+          logo="asset/AppsTrack_Logo_Badge.png")
+doc.toc()
+
+doc.h1("1. ภาพรวมระบบ")
+doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
+doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
+doc.table(["หัวข้อ", "รายละเอียด"],
+          [["URL ระบบ", "https://project.eitaccount.cloud"]],
+          widths=[2600, 6760])                  # รวม = 9360
+doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
+doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
+doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
+               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
+doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
+doc.save("SRS.docx")
 ```
 
-## Expansion Signal Engineering
+สไลด์ใช้ `brandkit_pptx.py` ซึ่งกินโทเคนชุดเดียวกัน:
 
 ```python
-# Look for upsell readiness
-expansion_signals = {
-    'hitting_limits': usage > 0.85 * plan_limit,
-    'multiple_seats_active': active_seats > licensed_seats,
-    'enterprise_features_attempted': hit_feature_gate,
-    'high_engagement': nps > 8 OR engagement > 0.8,
-    'new_team_onboarded': team_size_growth_30d > 30%,
-    'integration_added': connected_3+_integrations,
-}
+from brandkit_pptx import BrandDeck
+d = BrandDeck()                                  # 16:9
+d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
+d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
+d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
+d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
+              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
+d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
+d.save("deck.pptx")
 ```
 
-## CS Tool Integration
+เมธอดทั้งหมดอยู่ใน `references/api.md` ส่วนไฟล์ตัวอย่างที่รันได้จริงคือ
+`scripts/example_srs.py`
 
-```mermaid
-flowchart LR
-    P[Product] --> E[Event Stream]
-    E --> DW[(Warehouse)]
-    DW --> CS[CS Platform - Gainsight/ChurnZero/Custom]
-    CRM[(CRM)] --> CS
-    SUP[(Support tickets)] --> CS
-    BIL[(Billing)] --> CS
-    CS --> HS[Health Scores]
-    CS --> PB[Playbooks]
-```
-
-## Skills You Use
-
-- `polished-document-style` (from software-company) — for docs/portals
-- `saas-platform` — for CS tool connections
-
-## Things You Don't Do
-
-- ❌ Track everything (event noise)
-- ❌ Build in-house when SaaS tools work
-- ❌ Ignore CS team workflows
-- ❌ Surface signals without action playbook
-- ❌ Health score as black box (must explain)
-
-## When to Hand Off
-
-- Multi-tenant infrastructure → `solution-architect`
-- Integrations → `solution-architect`
-- Billing/usage analysis → `revops-analyst`
-- Product design changes → `product-manager` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **Vanity metrics** — DAU goes up, churn doesn't change
-- ❌ **No baseline** — can't measure improvement
-- ❌ **Tool sprawl** — too many places for CS to look
-- ❌ **Late signals** — by time we know, customer's gone
-- ❌ **Action-less alerts** — flagged but no playbook
-
-
-## reference: agent-integration-engineer.md
-
-> เดิมคือ agent `integration-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Integration Quality Standards](#integration-quality-standards)
-- [SSO Patterns](#sso-patterns)
-- [SCIM Provisioning](#scim-provisioning)
-- [Webhook Patterns](#webhook-patterns)
-- [Data Sync Patterns](#data-sync-patterns)
-- [API Client Best Practices](#api-client-best-practices)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are an **Integration Engineer**. You connect enterprise systems where every customer's stack is different.
-
-## Your Responsibilities
-
-1. **SSO** — SAML, OIDC, OAuth integration
-2. **User Provisioning** — SCIM, JIT, manual
-3. **Webhook Systems** — Both directions
-4. **API Clients** — Strong, versioned, documented
-5. **Data Sync** — ETL/ELT to enterprise warehouses
-6. **iPaaS Integration** — Zapier, Make, n8n, Workato
-7. **Reliability** — Retry, dead letter, idempotency
-
-## 🔍 Initial Discovery
-
-1. **Target system** — what we integrate with
-2. **Direction** — read, write, both
-3. **Volume** — events per day
-4. **Latency** — real-time, near, batch?
-5. **Customer count** — affects pattern choice
-6. **Compliance** — data handling needs
-
-## 📊 Integration Quality Standards
-
-- **Idempotent** — safe to retry
-- **Observable** — every integration event tracked
-- **Documented** — customer-facing setup guides
-- **Versioned** — backward compatibility
-- **Resilient** — handles partner outages
-- **Secure** — credentials in vault, scoped
-
-## SSO Patterns
-
-### SAML 2.0 (Enterprise SSO)
-
-```typescript
-// Receive SAML response from IdP
-const samlResponse = req.body.SAMLResponse;
-const decoded = decodeBase64(samlResponse);
-
-// Verify signature against IdP cert
-verifySignature(decoded, customer.idp.cert);
-
-// Extract user attributes
-const user = {
-  email: getAttribute(decoded, 'email'),
-  groups: getAttribute(decoded, 'groups'),
-  externalId: getAttribute(decoded, 'NameID'),
-};
-
-// JIT provision or update
-await provisionUser(customer.id, user);
-```
-
-### OIDC (Modern SSO)
-
-```typescript
-// Authorization code + PKCE
-const authUrl = oidc.buildAuthUrl({
-  client_id,
-  redirect_uri,
-  scope: 'openid profile email',
-  code_challenge,
-  state,
-});
-
-// After redirect, exchange code
-const tokens = await oidc.exchangeCode(code, code_verifier);
-const userInfo = decodeIdToken(tokens.id_token);
-```
-
-## SCIM Provisioning
-
-```
-SCIM v2.0 standard endpoints:
-GET    /Users
-POST   /Users
-GET    /Users/{id}
-PUT    /Users/{id}
-PATCH  /Users/{id}
-DELETE /Users/{id}
-GET    /Groups
-POST   /Groups
-...
-```
-
-```typescript
-// SCIM PATCH operation
-PATCH /Users/abc123
-{
-  "Operations": [
-    { "op": "replace", "path": "active", "value": false }
-  ]
-}
-
-// Sync from IdP:
-// - User joins → SCIM POST → create account
-// - User changes group → SCIM PATCH → update perms
-// - User leaves → SCIM PATCH active=false → deactivate
-```
-
-## Webhook Patterns
-
-### Outbound (we send to customer)
-
-```typescript
-// Signed delivery
-async function deliver(webhook: Webhook, event: Event) {
-  const body = JSON.stringify(event);
-  const signature = hmac256(webhook.secret, body);
-
-  const response = await fetch(webhook.url, {
-    method: 'POST',
-    headers: {
-      'X-Webhook-Signature': signature,
-      'X-Webhook-Timestamp': Date.now().toString(),
-      'Content-Type': 'application/json',
-    },
-    body,
-  });
-
-  if (!response.ok) {
-    await queueRetry(webhook, event, response.status);
-  }
-}
-
-// Retry with exponential backoff
-// After N failures, mark webhook unhealthy, alert customer
-```
-
-### Inbound (customer sends to us)
-
-```typescript
-// Verify signature
-const signature = req.headers['x-signature'];
-const computed = hmac256(secret, req.rawBody);
-if (signature !== computed) {
-  return 401;
-}
-
-// Idempotency check
-const eventId = req.headers['x-event-id'];
-if (await db.processedEvents.exists(eventId)) {
-  return { received: true, duplicate: true };
-}
-
-// Persist first
-await db.events.create({ id: eventId, raw: req.body });
-res.json({ received: true });
-
-// Process async
-await queue.enqueue('process', eventId);
-```
-
-## Data Sync Patterns
-
-### Pull (we pull from customer)
-```
-Use when: customer has stable API
-Schedule: hourly/daily
-Watermark: last synced ID/timestamp
-```
-
-### Push (customer pushes to us)
-```
-Use when: real-time needed
-Mechanism: webhooks, API calls
-Idempotent + deduped
-```
-
-### Reverse ETL (we push to customer warehouse)
-```
-We → Snowflake/BigQuery/Redshift
-Schedule: customer-defined
-Tools: Fivetran, Hightouch, custom
-```
-
-## API Client Best Practices
-
-```typescript
-// Each customer's external system credentials in vault
-const creds = await vault.get(`tenant/${tenantId}/integrations/salesforce`);
-
-const client = new SalesforceClient({
-  ...creds,
-  retries: 3,
-  retryDelay: 'exponential',
-  rateLimitAware: true,
-  observability: { traceId: req.traceId },
-});
-
-// All calls instrumented
-try {
-  const result = await client.upsertContact(data);
-  metrics.increment('integration.salesforce.success');
-  return result;
-} catch (err) {
-  metrics.increment('integration.salesforce.error', { code: err.code });
-  if (isTransient(err)) {
-    await queueRetry(tenant, operation);
-  }
-  throw err;
-}
-```
-
-## Skills You Use
-
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `saas-platform` — patterns for common integrations
-- `polished-document-style` (from software-company) — for integration docs
-
-## Things You Don't Do
-
-- ❌ Hardcode customer credentials
-- ❌ Skip webhook signature verification
-- ❌ No idempotency on writes
-- ❌ Synchronous webhook processing (always async)
-- ❌ Ignore rate limits of partner APIs
-
-## When to Hand Off
-
-- Multi-tenant architecture → `solution-architect`
-- Customer onboarding flow → `growth-specialist`
-- Billing integration → `revops-analyst`
-- Security review → `security-engineer` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **No retry/dead letter** — lose events silently
-- ❌ **No webhook versioning** — break customers on change
-- ❌ **Synchronous external calls** — partner outage = our outage
-- ❌ **Trust client-sent webhook payload** — replay/spoof
-- ❌ **No customer-facing visibility** — they can't debug
-
-
-## reference: agent-saas-architect.md
-
-> เดิมคือ agent `saas-architect` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
-- [Multi-Tenancy Models](#multi-tenancy-models)
-- [Data Isolation Patterns](#data-isolation-patterns)
-- [Tenant Context Propagation](#tenant-context-propagation)
-- [Noisy Neighbor Mitigation](#noisy-neighbor-mitigation)
-- [Per-Tenant Configuration](#per-tenant-configuration)
-- [Tenant Lifecycle](#tenant-lifecycle)
-- [Multi-Region Strategy](#multi-region-strategy)
-- [Observability Per Tenant](#observability-per-tenant)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **SaaS Architect**. You design multi-tenant systems where one bug can affect every customer — or just one.
-
-## Your Responsibilities
-
-1. **Tenant Model** — Shared vs isolated, hybrid
-2. **Data Isolation** — How tenant data stays separate
-3. **Per-Tenant Customization** — Without code forks
-4. **Scaling Architecture** — Noisy neighbor mitigation
-5. **Multi-Region** — Data residency, latency
-6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
-7. **Tenant Operations** — Per-tenant management
-
-## 🔍 Initial Discovery
-
-1. **Tenant profile** — # tenants, size distribution, growth
-2. **Workload characteristics** — bursty? steady? batch?
-3. **Compliance** — data residency, isolation requirements
-4. **Customization scope** — config, branding, code?
-5. **Pricing tiers** — affects resource allocation
-6. **Per-tenant SLAs** — varying or uniform?
-
-## 📊 SaaS Architecture Quality Standards
-
-- **Tenant isolation:** zero cross-tenant data leakage
-- **Noisy neighbor mitigation:** one tenant can't degrade others
-- **Per-tenant observability:** debug + support possible
-- **Tenant offboarding:** complete deletion verifiable
-- **Region compliance:** data stays in tenant's region
-- **Upgrade strategy:** safe rolling without downtime
-
-## Multi-Tenancy Models
-
-### Single-Tenant (Dedicated)
-```
-Tenant A: dedicated infra
-Tenant B: dedicated infra
-...
-
-Pros: Maximum isolation, customization
-Cons: Expensive, complex ops, slow to provision
-Use: Enterprise, regulated
-```
-
-### Pool (Shared Everything)
-```
-All tenants on shared infra
-tenant_id filter on every query
-
-Pros: Cost-efficient, easy ops
-Cons: Noisy neighbor, isolation complexity
-Use: SMB SaaS, freemium
-```
-
-### Silo (Shared Compute, Isolated Data)
-```
-Shared app servers
-Tenant-specific DB / schema
-
-Pros: Better isolation than pool
-Cons: More DBs to manage
-Use: Mid-market
-```
-
-### Hybrid (Tiered)
-```
-Free/SMB: pool model
-Enterprise: silo or single-tenant
-
-Pros: Optimize per tier
-Cons: Architectural complexity
-Use: Multi-tier products
-```
-
-## Data Isolation Patterns
-
-### Pattern 1: Row-Level (Shared Schema)
-
-```sql
--- Every table has tenant_id
-CREATE TABLE orders (
-    id UUID PRIMARY KEY,
-    tenant_id UUID NOT NULL,
-    -- ...
-);
-
--- Row-level security (Postgres)
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON orders
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
-
--- App sets tenant context per session
-SET app.tenant_id = 'tenant-uuid';
-```
-
-**Pros:** Simple to manage, efficient
-**Cons:** Trust in app to set context, single bug = leak
-
-### Pattern 2: Schema-Per-Tenant
-
-```sql
--- Each tenant has own schema
-CREATE SCHEMA tenant_abc;
-CREATE SCHEMA tenant_xyz;
-
--- Connect with schema search path
-SET search_path TO tenant_abc;
-```
-
-**Pros:** Strong isolation, easy backup per-tenant
-**Cons:** Schema sprawl, migration complexity
-
-### Pattern 3: Database-Per-Tenant
-
-```
-tenant_abc → DB instance A
-tenant_xyz → DB instance B
-```
-
-**Pros:** Maximum isolation, easy delete
-**Cons:** Expensive, ops complexity
-
-## Tenant Context Propagation
-
-```typescript
-// Middleware extracts + validates tenant
-app.use(async (req, res, next) => {
-  const token = req.headers.authorization;
-  const claims = await verifyToken(token);
-
-  req.tenant = {
-    id: claims.tenant_id,
-    tier: claims.tier,
-    region: claims.region,
-  };
-
-  // Set DB session var for RLS
-  await db.query(`SET app.tenant_id = '${req.tenant.id}'`);
-
-  next();
-});
-```
-
-## Noisy Neighbor Mitigation
-
-```
-Rate limiting per tenant (per tier):
-- Free: 100 req/min
-- Pro: 1000 req/min
-- Enterprise: custom
-
-Compute isolation:
-- Worker pools per tier
-- CPU/memory limits per request
-- Slow query killers
-
-DB isolation:
-- Connection pool limits per tenant
-- Query timeout per tier
-- Materialized views per heavy tenant
-```
-
-## Per-Tenant Configuration
-
-```typescript
-// Centralized config store
-interface TenantConfig {
-  tenantId: string;
-  features: Record<string, boolean>;
-  limits: { storage: number; users: number; apiCalls: number };
-  branding: { logo: string; colors: object };
-  integrations: { slack?: SlackConfig; salesforce?: SalesforceConfig };
-}
-
-// Code reads from config, not hardcoded
-if (config.features['advanced_analytics']) {
-  // ...
-}
-```
-
-## Tenant Lifecycle
-
-### Onboarding
-```
-1. Provision tenant record
-2. Create isolated resources (if silo)
-3. Generate admin credentials
-4. Send welcome / setup
-5. Provision integrations
-6. Track activation milestones
-```
-
-### Offboarding
-```
-1. Receive deletion request
-2. Disable access immediately
-3. Schedule data deletion (30-90 day grace)
-4. Delete from all systems
-5. Verify deletion
-6. Provide attestation
-```
-
-### Migration (region change, tier upgrade)
-```
-- Data export
-- Validate at destination
-- Cutover with brief lock
-- Verify
-- Decommission source
-```
-
-## Multi-Region Strategy
-
-### Data Residency
-```
-EU customers → EU region
-US customers → US region
-APAC customers → APAC region
-
-Routing: at sign-up, based on customer choice
-Movement: rare, complex (data export/import)
-```
-
-### Cross-Region (Within Tenant)
-```
-Tenant has presence in 3 regions
-Each region has local cache
-Source of truth in primary region
-Eventual consistency for cross-region
-```
-
-## Observability Per Tenant
-
-```typescript
-// Tag every metric with tenant
-metrics.increment('api.request', {
-  tenant_id: req.tenant.id,
-  tier: req.tenant.tier,
-  endpoint: req.path,
-});
-
-// Tag every log
-log.info('Order created', {
-  tenant_id: req.tenant.id,
-  order_id: order.id,
-});
-
-// Per-tenant dashboards possible
-// Per-tenant alerting possible
-```
-
-## Skills You Use
-
-- `saas-platform` — implementation patterns
-- `architecture-patterns` (from software-company) — system design
-- `polished-document-style` (from software-company)
-
-## Things You Don't Do
-
-- ❌ Hardcode tenant assumptions
-- ❌ Skip per-tenant rate limiting
-- ❌ Trust client for tenant_id (always from token)
-- ❌ Allow tenant data in shared cache without keying
-- ❌ Schema migrations without per-tenant testing
-
-## When to Hand Off
-
-- Enterprise integration → `solution-architect`
-- Subscription billing → `revops-analyst`
-- Customer adoption → `growth-specialist`
-- Production deployment → `devops-engineer` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **No tenant context in queries** — eventual leak
-- ❌ **Shared caches without tenant key** — leak
-- ❌ **No per-tenant limits** — noisy neighbor
-- ❌ **Schema migrations break some tenants** — silent failure
-- ❌ **Logs leak across tenants** — privacy issue
-- ❌ **Can't offboard cleanly** — long-tail data
-
-
-## reference: enterprise-integration.md
-
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [SSO Implementation](#sso-implementation)
-- [SCIM v2.0 Implementation](#scim-v20-implementation)
-- [Webhook Patterns (Outbound)](#webhook-patterns-outbound)
-- [Webhook Patterns (Inbound)](#webhook-patterns-inbound)
-- [iPaaS Integration](#ipaas-integration)
-- [API Client Best Practices](#api-client-best-practices)
-- [Things You Don't Do](#things-you-dont-do)
-- [Reference](#reference)
-
-# Enterprise Integration Patterns
-
-## When to use this skill
-
-- Adding SSO to your SaaS
-- Building SCIM provisioning
-- Designing webhook system
-- Building integration framework
-- Connecting to specific enterprise systems
-
-## SSO Implementation
-
-### SAML 2.0 (Enterprise Standard)
-
-```typescript
-// 1. Receive SAMLResponse (POST from IdP)
-app.post('/auth/saml/callback', async (req, res) => {
-  const samlResponse = req.body.SAMLResponse;
-
-  // 2. Decode + validate
-  const decoded = await samlParser.parse(samlResponse, {
-    audience: 'urn:our-app',
-    issuer: customer.idpIssuer,
-    cert: customer.idpCert,
-    requireSignature: true,
-    requireAudience: true,
-  });
-
-  // 3. Extract user attributes
-  const externalId = decoded.subject.nameId;
-  const email = decoded.attributes.email[0];
-  const groups = decoded.attributes.groups || [];
-
-  // 4. JIT provision or update
-  const user = await provisionUserFromSAML(customer.tenantId, {
-    externalId, email, groups
-  });
-
-  // 5. Create session
-  const sessionToken = await createSession(user);
-  res.cookie('session', sessionToken).redirect('/dashboard');
-});
-```
-
-### OIDC (Modern Standard)
-
-```typescript
-// Authorization Code Flow with PKCE
-async function login(req, res) {
-  const { codeVerifier, codeChallenge } = generatePKCE();
-
-  // Store verifier in session for callback
-  req.session.codeVerifier = codeVerifier;
-
-  const authUrl = new URL(customer.idp.authEndpoint);
-  authUrl.searchParams.set('response_type', 'code');
-  authUrl.searchParams.set('client_id', customer.idp.clientId);
-  authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
-  authUrl.searchParams.set('scope', 'openid profile email');
-  authUrl.searchParams.set('state', generateState());
-  authUrl.searchParams.set('code_challenge', codeChallenge);
-  authUrl.searchParams.set('code_challenge_method', 'S256');
-
-  res.redirect(authUrl.toString());
-}
-
-async function callback(req, res) {
-  const { code, state } = req.query;
-
-  // Verify state (CSRF)
-  if (state !== req.session.state) return res.status(400).end();
-
-  // Exchange code for tokens
-  const tokenResponse = await fetch(customer.idp.tokenEndpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      redirect_uri: REDIRECT_URI,
-      client_id: customer.idp.clientId,
-      code_verifier: req.session.codeVerifier,
-    }),
-  });
-
-  const { id_token, access_token } = await tokenResponse.json();
-
-  // Verify id_token signature (using IdP's JWKS)
-  const claims = await verifyIdToken(id_token, customer.idp.jwksUri);
-
-  // Provision/login
-  const user = await provisionUserFromOIDC(customer.tenantId, claims);
-  // ...
-}
-```
-
-## SCIM v2.0 Implementation
-
-```typescript
-// CRUD endpoints for User + Group resources
-app.get('/scim/v2/Users', authenticateScim, async (req, res) => {
-  const { filter, startIndex, count } = parseScimQuery(req.query);
-
-  const users = await db.users.find({
-    tenant_id: req.tenant.id,
-    filter,
-    limit: count,
-    offset: startIndex - 1,
-  });
-
-  res.json({
-    schemas: ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
-    totalResults: await db.users.count({ tenant_id: req.tenant.id }),
-    Resources: users.map(toScimUser),
-    startIndex,
-    itemsPerPage: count,
-  });
-});
-
-app.patch('/scim/v2/Users/:id', authenticateScim, async (req, res) => {
-  const { Operations } = req.body;
-
-  for (const op of Operations) {
-    if (op.op === 'replace' && op.path === 'active') {
-      if (op.value === false) {
-        await deactivateUser(req.params.id, req.tenant.id);
-      }
-    }
-  }
-
-  const updated = await db.users.findById(req.params.id);
-  res.json(toScimUser(updated));
-});
-```
-
-## Webhook Patterns (Outbound)
-
-### Signed Delivery
-
-```typescript
-async function deliverWebhook(webhook: WebhookSubscription, event: Event) {
-  const body = JSON.stringify({
-    id: event.id,
-    type: event.type,
-    timestamp: event.timestamp,
-    data: event.data,
-  });
-
-  const timestamp = Date.now().toString();
-  const signature = hmac('sha256', webhook.secret, `${timestamp}.${body}`);
-
-  try {
-    const response = await fetch(webhook.url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Id': event.id,
-        'X-Webhook-Timestamp': timestamp,
-        'X-Webhook-Signature': `t=${timestamp},v1=${signature}`,
-      },
-      body,
-      signal: AbortSignal.timeout(10_000),
-    });
-
-    await logDelivery(webhook, event, response);
-
-    if (!response.ok) {
-      await scheduleRetry(webhook, event, response.status);
-    }
-  } catch (err) {
-    await scheduleRetry(webhook, event, err);
-  }
-}
-```
-
-### Retry Strategy
-
-```typescript
-const RETRY_DELAYS_MS = [
-  0,           // immediate
-  60_000,      // 1 min
-  300_000,     // 5 min
-  900_000,     // 15 min
-  3_600_000,   // 1 hour
-  14_400_000,  // 4 hour
-  43_200_000,  // 12 hour
-];
-
-async function scheduleRetry(webhook, event, error) {
-  const attempt = await db.deliveries.getAttempt(webhook.id, event.id);
-
-  if (attempt >= RETRY_DELAYS_MS.length) {
-    await markWebhookFailing(webhook);
-    return;
-  }
-
-  await queue.scheduleIn(RETRY_DELAYS_MS[attempt], 'deliver', {
-    webhook_id: webhook.id,
-    event_id: event.id,
-  });
-}
-```
-
-## Webhook Patterns (Inbound)
-
-```typescript
-app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  // 1. Verify signature
-  const signature = req.headers['x-signature'];
-  const computed = hmac('sha256', SECRET, req.body);
-  if (!constantTimeEquals(signature, computed)) {
-    return res.status(401).end();
-  }
-
-  // 2. Parse
-  const event = JSON.parse(req.body);
-
-  // 3. Idempotency check
-  if (await db.processedEvents.exists(event.id)) {
-    return res.json({ received: true, duplicate: true });
-  }
-
-  // 4. Persist raw + ack quickly
-  await db.events.create({ id: event.id, raw: event });
-  res.json({ received: true });
-
-  // 5. Process async
-  await queue.enqueue('process_event', event.id);
-});
-```
-
-## iPaaS Integration
-
-```typescript
-// Provide pre-built connectors for popular iPaaS:
-
-// Zapier Trigger (POST when event happens)
-async function fireZapierTrigger(triggerKey: string, event: any) {
-  const webhookUrls = await db.zapierTriggers.findActive(
-    customer.tenant_id,
-    triggerKey
-  );
-
-  await Promise.all(
-    webhookUrls.map(url => fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(event),
-    }))
-  );
-}
+---
 
-// Zapier Action (called by Zapier to do something)
-app.post('/zapier/actions/create-order', authenticate, async (req, res) => {
-  const order = await createOrder(req.tenant.id, req.body);
-  res.json(order);
-});
-```
-
-## API Client Best Practices
-
-```typescript
-class SalesforceClient {
-  constructor(private creds: SalesforceCredentials, private tenantId: string) {}
-
-  async request(method: string, path: string, body?: any) {
-    const headers = {
-      'Authorization': `Bearer ${await this.getAccessToken()}`,
-      'Content-Type': 'application/json',
-    };
-
-    return retry({
-      attempts: 3,
-      backoff: 'exponential',
-      retryOn: [502, 503, 504, 'ECONNRESET'],
-    }, async () => {
-      const response = await fetch(`${this.creds.instance}/services/data/v60/${path}`, {
-        method,
-        headers,
-        body: body ? JSON.stringify(body) : undefined,
-        signal: AbortSignal.timeout(30_000),
-      });
-
-      // Instrument
-      metrics.timing('salesforce.request', response.duration, {
-        path, status: response.status, tenant: this.tenantId
-      });
-
-      if (response.status === 401) {
-        // Token expired, refresh
-        await this.refreshToken();
-        throw new RetryableError('Token expired');
-      }
-
-      if (!response.ok) {
-        throw new SalesforceError(response);
-      }
-
-      return response.json();
-    });
-  }
-}
-```
-
-## Things You Don't Do
-
-- ❌ Trust SAML/OIDC without signature verification
-- ❌ Synchronous webhook delivery to customer
-- ❌ Single retry attempt
-- ❌ No idempotency on inbound webhooks
-- ❌ Hardcode customer credentials
-- ❌ No partner rate limit awareness
-
-## Reference
-
-- [SAML 2.0 Specification](https://docs.oasis-open.org/security/saml/v2.0/)
-- [OpenID Connect Spec](https://openid.net/connect/)
-- [SCIM 2.0 RFC](https://datatracker.ietf.org/doc/html/rfc7644)
-- [WorkOS Integration Patterns](https://workos.com/docs)
-- [Standard Webhooks](https://standardwebhooks.com/)
-
-
-## reference: multi-tenancy-patterns.md
-
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [Tenancy Model Selection](#tenancy-model-selection)
-- [Row-Level Multi-Tenancy](#row-level-multi-tenancy)
-- [Tenant Context Propagation](#tenant-context-propagation)
-- [Schema-Per-Tenant](#schema-per-tenant)
-- [Database-Per-Tenant](#database-per-tenant)
-- [Noisy Neighbor Mitigation](#noisy-neighbor-mitigation)
-- [Per-Tenant Feature Flags](#per-tenant-feature-flags)
-- [Caching With Tenants](#caching-with-tenants)
-- [Background Jobs](#background-jobs)
-- [Tenant Offboarding](#tenant-offboarding)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference](#reference)
-
-# Multi-Tenancy Implementation Patterns
-
-## When to use this skill
-
-- Building SaaS from scratch
-- Adding tenants to existing single-tenant app
-- Refactoring to better isolation
-- Designing per-tenant features
-- Mitigating noisy neighbor issues
-
-## Tenancy Model Selection
-
-```
-Strict isolation required (regulated)?
-├─ Yes → Database-per-tenant or Single-tenant
-└─ No → Continue
-   │
-   Cost-sensitive (free/SMB tier)?
-   ├─ Yes → Pool (shared everything)
-   └─ No → Consider Silo (shared compute, isolated data)
-```
-
-## Row-Level Multi-Tenancy
-
-### Schema
-```sql
--- Every business table has tenant_id
-CREATE TABLE orders (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL,
-    customer_id UUID NOT NULL,
-    total NUMERIC,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Composite index includes tenant
-CREATE INDEX idx_orders_tenant_customer ON orders (tenant_id, customer_id);
-
--- Foreign keys preserve tenant
-ALTER TABLE orders ADD CONSTRAINT fk_customer
-    FOREIGN KEY (tenant_id, customer_id) REFERENCES customers (tenant_id, id);
-```
-
-### Postgres Row-Level Security
-```sql
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY tenant_isolation ON orders
-    FOR ALL
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
-
--- App sets context per request
-SET LOCAL app.tenant_id = 'tenant-uuid';
-```
-
-### Application Enforcement (defense in depth)
-```typescript
-// Repository pattern with mandatory tenant
-class OrderRepository {
-  constructor(private tenantId: string) {}
-
-  findAll() {
-    return db.query`
-      SELECT * FROM orders
-      WHERE tenant_id = ${this.tenantId}
-    `;
-  }
-
-  // No method exists that DOESN'T filter by tenant
-}
-```
-
-## Tenant Context Propagation
-
-### Pattern: Middleware Sets Context
-
-```typescript
-app.use(async (req, res, next) => {
-  // Extract from JWT
-  const token = req.headers.authorization;
-  const claims = await verifyJWT(token);
-
-  // Validate tenant access
-  if (!claims.tenant_id) return res.status(401).end();
-
-  // Attach to request
-  req.tenant = {
-    id: claims.tenant_id,
-    tier: claims.tier,
-    features: await loadFeatures(claims.tenant_id),
-  };
-
-  // Set DB session var (for RLS)
-  await db.query(`SET LOCAL app.tenant_id = '${req.tenant.id}'`);
-
-  next();
-});
-```
-
-### Pattern: Tenant in Async Context
-
-```typescript
-import { AsyncLocalStorage } from 'async_hooks';
-
-const tenantStorage = new AsyncLocalStorage<TenantContext>();
-
-// Set at request entry
-tenantStorage.run({ id: tenantId }, async () => {
-  await processRequest();
-});
-
-// Access anywhere in async chain
-function getTenantId(): string {
-  return tenantStorage.getStore()?.id ?? throwError();
-}
-```
-
-## Schema-Per-Tenant
-
-```sql
--- One schema per tenant
-CREATE SCHEMA tenant_abc;
-CREATE SCHEMA tenant_xyz;
-
--- Tables in tenant schema
-CREATE TABLE tenant_abc.orders (...);
-CREATE TABLE tenant_xyz.orders (...);
-
--- Connect with search path
-SET search_path TO tenant_abc;
-```
-
-```typescript
-// Per-tenant connection pool
-async function getConnection(tenantId: string) {
-  const conn = await pool.connect();
-  await conn.query(`SET search_path TO tenant_${tenantId}`);
-  return conn;
-}
-```
-
-### Migrations
-```python
-# Apply migration to all tenant schemas
-async def migrate_all_tenants():
-    tenants = await get_active_tenants()
-
-    for tenant in tenants:
-        try:
-            await run_migration(tenant.schema)
-        except MigrationError as e:
-            await mark_tenant_migration_failed(tenant, e)
-            continue
-```
-
-## Database-Per-Tenant
-
-```typescript
-// Tenant routing layer
-async function getDb(tenantId: string): Promise<DbClient> {
-  const tenant = await tenantCache.get(tenantId);
-  return dbPool.connect(tenant.dbConnectionString);
-}
-
-// Usage
-const db = await getDb(req.tenant.id);
-await db.query(`SELECT * FROM orders`);  // tenant_id NOT needed in WHERE
-```
+## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
 
-### Tenant Provisioning
-```python
-async def provision_tenant(tenant_id: str, region: str):
-    # Create DB
-    db_name = f'tenant_{tenant_id}'
-    await admin_db.query(f'CREATE DATABASE {db_name}')
+เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
+วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
 
-    # Run migrations
-    await run_migrations(db_name)
-
-    # Seed initial data
-    await seed_tenant(db_name, tenant_id)
-
-    # Register in tenant routing table
-    await save_tenant_routing({
-        'id': tenant_id,
-        'db_host': pick_db_host(region),
-        'db_name': db_name,
-    })
+```bash
+soffice --headless --convert-to pdf --outdir out SRS.docx
+pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.png ...
 ```
 
-## Noisy Neighbor Mitigation
+แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
 
-### Rate Limiting Per Tenant
+- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
+- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
+- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
+- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ
+- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
+- [ ] footer เลขหน้าครบทุกหน้า
+- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ
 
-```typescript
-// Distributed rate limiter (Redis)
-async function rateLimit(req) {
-  const limit = req.tenant.tier === 'enterprise' ? 10000 : 100;
-  const key = `rate:${req.tenant.id}`;
-
-  const count = await redis.incr(key);
-  if (count === 1) await redis.expire(key, 60);
-
-  if (count > limit) {
-    throw new RateLimitError({ retryAfter: 60 });
-  }
-}
-```
+---
 
-### Connection Pool Per Tenant Group
+## 7 · Anti-patterns
 
-```typescript
-// Tier-based pools
-const pools = {
-  free: new ConnectionPool({ max: 5 }),
-  pro: new ConnectionPool({ max: 20 }),
-  enterprise: new ConnectionPool({ max: 100 }),
-};
+- ❌ **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
+  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
+- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
+- ❌ **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
+- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
+- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
+  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
+- ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
+- ❌ **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
+- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
 
-async function query(tenantId: string, sql: string) {
-  const tier = await getTier(tenantId);
-  return pools[tier].query(sql);
-}
-```
+---
 
-### Query Cost Limits
+## 8 · เชื่อมกับ skill อื่น
 
-```typescript
-// Kill slow queries per tenant
-async function queryWithBudget(tenantId: string, sql: string) {
-  const budget = tierLimits[await getTier(tenantId)].queryMs;
+| ต้องการ | ใช้คู่กับ |
+|---------|-----------|
+| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
+| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `markdown-visuals` → export PNG → `figure()` |
+| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
+| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
+| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
+| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
+| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
+| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
 
-  return await db.query(sql, { timeout: budget });
-}
-```
+---
 
-## Per-Tenant Feature Flags
+## ตัวย่อ
 
-```typescript
-// Feature config per tenant
-interface TenantFeatures {
-  advanced_analytics: boolean;
-  api_rate_limit: number;
-  custom_branding: boolean;
-  sso: boolean;
-}
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
 
-// Read from config
-function hasFeature(tenant: Tenant, feature: keyof TenantFeatures) {
-  return tenant.features[feature];
-}
 
-// Use in code
-if (hasFeature(req.tenant, 'advanced_analytics')) {
-  // ...
-}
-```
+## reference: api.md
 
-## Caching With Tenants
+# brandkit API — อ้างอิงเมธอด
 
-```typescript
-// MUST key by tenant
-const cacheKey = `tenant:${tenantId}:order:${orderId}`;
-await cache.set(cacheKey, order);
+ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้
 
-// ❌ NEVER share cache across tenants
-const cacheKey = `order:${orderId}`;  // BAD
-```
+## สารบัญ
 
-## Background Jobs
+1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
+2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
+3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
 
-```typescript
-// Include tenant in job payload
-await queue.enqueue('process_export', {
-  tenantId: req.tenant.id,
-  exportId,
-});
+---
 
-// Worker re-establishes tenant context
-async function processExport(job) {
-  const { tenantId, exportId } = job.data;
-  await tenantStorage.run({ id: tenantId }, async () => {
-    await doExport(exportId);
-  });
-}
-```
+## brandkit.py — Word (.docx)
 
-## Tenant Offboarding
+### สร้างเอกสาร
 
 ```python
-async def offboard_tenant(tenant_id):
-    # 1. Disable access
-    await disable_tenant_access(tenant_id)
-
-    # 2. Schedule deletion (grace period for accidental)
-    await schedule_deletion(tenant_id, days=30)
-
-    # 3. After grace period, delete from all systems
-    async def delete():
-        await delete_from_db(tenant_id)
-        await delete_from_search(tenant_id)
-        await delete_from_blob_storage(tenant_id)
-        await delete_from_cache(tenant_id)
-        await delete_backups(tenant_id, retain_for=legal_minimum)
-
-    # 4. Provide attestation
-    await issue_deletion_certificate(tenant_id)
+BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
+         footer_text="หน้า")
 ```
 
-## Common Pitfalls
+| พารามิเตอร์ | ความหมาย |
+|-------------|----------|
+| `path_template` | ไฟล์ .docx/.dotx ที่ใช้เป็นแม่แบบ (มี header/logo ขององค์กรอยู่แล้ว) |
+| `page` | `"A4"` หรือ `"Letter"` |
+| `margins_cm` | (บน, ขวา, ล่าง, ซ้าย) |
+| `footer_text` | คำนำหน้าเลขหน้า · `""` = เลขเปล่า |
 
-- ❌ **Missing tenant_id in queries** — silent data leak
-- ❌ **Shared cache without tenant key** — cross-tenant leak
-- ❌ **Background jobs without tenant** — wrong context
-- ❌ **No rate limit per tenant** — noisy neighbor
-- ❌ **Hardcoded tenant assumptions** — early tenant breaks
-- ❌ **Per-tenant migrations not tested** — production surprises
+### บล็อกระดับหน้า
 
-## Reference
+| เมธอด | หมายเหตุ |
+|-------|----------|
+| `cover(title, subtitle, meta, note, logo, logo_width_cm=2.6, top_space_pt=150, page_break=True)` | โลโก้รับได้ทั้ง .png และ .emf แต่ **.svg ใช้ไม่ได้ใน python-docx** ต้องแปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
+| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC แล้วใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
+| `page_break()` | |
+| `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
 
-- [AWS SaaS Lens](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/)
-- [Building Multi-Tenant SaaS Architectures (book)](https://www.oreilly.com/library/view/building-multi-tenant-saas/9781098140632/)
-- [Stripe's Multi-Tenant Sharding](https://stripe.com/blog/online-migrations)
-- [PostgreSQL Row-Level Security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
+### หัวข้อและข้อความ
 
+| เมธอด | ผลลัพธ์ |
+|-------|---------|
+| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · ตั้ง `outlineLvl` ให้ TOC เห็น |
+| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (ไทยอย่าใช้ justify) |
+| `rich([(text, opts), ...])` | หลายรูปแบบในย่อหน้าเดียว เช่น `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
+| `bullets([...], style="List Bullet")` | `style="List Number"` สำหรับเลขลำดับ |
+| `code(text)` | บล็อกโค้ดพื้นเทา |
 
-## reference: subscription-billing.md
+### ตารางและข้อมูล
 
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+| เมธอด | หมายเหตุ |
+|-------|----------|
+| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False)` | `widths` หน่วย twips รวม **9360** สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ |
+| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · โทนที่ใช้ได้: green blue amber red violet grey |
+| `kpi_row([(value, label), ...])` | 3–5 ช่องพอดี |
+| `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
 
-**สารบัญ:** 
+### อื่น ๆ
 
-- [When to use this skill](#when-to-use-this-skill)
-- [Choose Tool, Don't Build](#choose-tool-dont-build)
-- [Pricing Model Implementation](#pricing-model-implementation)
-- [Usage Metering Pipeline](#usage-metering-pipeline)
-- [Dunning Workflow](#dunning-workflow)
-- [Revenue Recognition (ASC 606)](#revenue-recognition-asc-606)
-- [MRR / ARR Calculation](#mrr--arr-calculation)
-- [Multi-Currency](#multi-currency)
-- [Proration](#proration)
-- [Trial Patterns](#trial-patterns)
-- [Webhook Events to Handle](#webhook-events-to-handle)
-- [Things You Don't Do](#things-you-dont-do)
-- [Reference](#reference)
+| เมธอด | หมายเหตุ |
+|-------|----------|
+| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
+| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` จะขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
+| `save(path)` | |
 
-# Subscription Billing Patterns
+### ฟังก์ชันระดับโมดูล
 
-## When to use this skill
+| ฟังก์ชัน | ใช้เมื่อ |
+|----------|---------|
+| `use_brand(**tokens)` | เปลี่ยนชุดสีทั้งชุด ต้องเรียก **ก่อน** สร้าง `BrandDoc` |
+| `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
+| `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
+| `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
+| `set_borders(table)` · `no_borders(table)` | |
+| `repeat_header(row)` · `keep_with_next(paragraph)` | |
+| `add_field(paragraph, "PAGE")` | แทรก field ของ Word |
+| `to_pdf(docx_path, outdir)` | เรียก LibreOffice แปลงเป็น PDF |
 
-- Setting up new billing system
-- Implementing usage-based pricing
-- Building dunning workflows
-- Revenue recognition for accounting
-- Multi-currency / multi-jurisdiction
-- Migrating between billing platforms
+---
 
-## Choose Tool, Don't Build
-
-```
-Stripe Billing       — modern, easy, $$$
-Chargebee            — flexible, mid-market
-Maxio                — B2B SaaS specialist
-Recurly              — mature
-Paddle / Lemon Squeezy — Merchant of Record (global tax done)
-Custom               — only for special needs
-```
-
-> 💡 **Never** build billing primitives. Use a platform.
-
-## Pricing Model Implementation
-
-### Flat Subscription
-
-```typescript
-// Simple: one plan, fixed price
-await stripe.subscriptions.create({
-  customer: customer.stripeId,
-  items: [{ price: 'price_pro_monthly' }],
-});
-```
-
-### Per-Seat
-
-```typescript
-// Quantity = active users
-async function syncSeats(subscription_id: string, accountId: string) {
-  const activeUsers = await countActiveUsers(accountId);
-
-  await stripe.subscriptionItems.update(itemId, {
-    quantity: activeUsers,
-    proration_behavior: 'create_prorations',
-  });
-}
-```
-
-### Usage-Based
-
-```typescript
-// Report usage to Stripe
-async function reportUsage(accountId: string, units: number) {
-  const subscription_item_id = await getMeteredItem(accountId);
-
-  await stripe.subscriptionItems.createUsageRecord(subscription_item_id, {
-    quantity: units,
-    timestamp: Math.floor(Date.now() / 1000),
-    action: 'increment',  // or 'set'
-  });
-}
-
-// Customer gets billed at end of period
-```
-
-### Tiered (Volume Pricing)
-
-```typescript
-// Stripe handles via "tiered" price model
-const price = await stripe.prices.create({
-  product: 'prod_api_calls',
-  currency: 'usd',
-  recurring: { interval: 'month', usage_type: 'metered' },
-  billing_scheme: 'tiered',
-  tiers_mode: 'graduated',
-  tiers: [
-    { up_to: 10000,  unit_amount: 0 },      // first 10k free
-    { up_to: 100000, unit_amount: 1 },      // next 90k @ $0.01
-    { up_to: 'inf',  unit_amount: 0.5 },    // beyond @ $0.005
-  ],
-});
-```
-
-## Usage Metering Pipeline
-
-```mermaid
-flowchart LR
-    A[App emits event] --> B[Event Stream Kafka/Kinesis]
-    B --> C[Aggregator]
-    C --> D[(Aggregated Usage Table)]
-    D --> E[Bill Calculator]
-    E --> F[Billing System Stripe/Chargebee]
-    F --> G[Invoice]
-```
-
-### Idempotent Reporting
+## brandkit_pptx.py — สไลด์ (.pptx)
 
 ```python
-async def report_usage_idempotent(account_id, event):
-    # Dedup key
-    dedup_key = f"{account_id}:{event.timestamp}:{event.id}"
-
-    if await db.usage_reported.exists(dedup_key):
-        return  # already reported
-
-    await stripe.usage_records.create(
-        subscription_item=event.subscription_item,
-        quantity=event.quantity,
-        timestamp=event.timestamp,
-        action='increment',
-    )
-
-    await db.usage_reported.create({dedup_key})
+BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
 ```
 
-## Dunning Workflow
+| เมธอด | สไลด์ที่ได้ |
+|-------|-------------|
+| `title_slide(title, subtitle, meta)` | พื้นฟ้าอ่อน + เส้นแบรนด์คั่น |
+| `section(title, kicker=None)` | แถบแบรนด์แนวตั้งซ้าย + ชื่อส่วน |
+| `bullets_slide(title, items, subtitle=None)` | หัวข้อ + ขีดม่วงใต้หัวข้อ + bullet 17pt |
+| `kpi_slide(title, items, subtitle=None)` | การ์ดตัวเลข |
+| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` เป็นสัดส่วน เช่น `[1, 4, 2, 2]` |
+| `image_slide(title, image_path, caption, subtitle)` | รูปกลางสไลด์ พอดีกรอบอัตโนมัติ |
+| `quote_slide(text, source)` | สไลด์คำพูด/ข้อสรุป |
+| `save(path)` | |
 
-```typescript
-// Stripe handles retries by default
-// But you should override for customer experience
+**ข้อจำกัดที่ต้องรู้**
 
-const subscription = await stripe.subscriptions.create({
-  customer,
-  items,
-  payment_settings: {
-    payment_method_types: ['card'],
-    save_default_payment_method: 'on_subscription',
-  },
-  collection_method: 'charge_automatically',
-});
+- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) จึงไม่มีช่อง placeholder ให้แก้ใน PowerPoint
+  แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
+- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ ถ้าอยากได้ตารางไม่มีเส้น ให้เรียงกล่องข้อความแทน
+- ความสูงแถวตารางเป็นค่าต่ำสุด ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
 
-// Customize retry behavior in Dashboard or via API
-// Default: 4 retries over 3 weeks
+---
 
-// Listen for events:
-//   invoice.payment_failed → email customer
-//   customer.subscription.paused → restrict features
-//   customer.subscription.deleted → final action
-```
+## สูตรความกว้างคอลัมน์ (Word)
 
-### Dunning Communications
+| จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9360) |
+|:---:|---|
+| 2 | `[2600, 6760]` — หัวข้อ/รายละเอียด |
+| 3 | `[1400, 5960, 2000]` — รหัส/รายการ/ผู้รับผิดชอบ |
+| 4 | `[1100, 4200, 1900, 2160]` — รหัส/รายการ/ผู้รับผิดชอบ/สถานะ |
+| 5 | `[1000, 1800, 2560, 2000, 2000]` |
+| 6 ขึ้นไป | ใช้ `landscape_section()` (พื้นที่ ≈ 14700 twips) |
+
+
+## reference: palette-examples.md
+
+# ตัวอย่างชุดสีที่เคยใช้จริง
+
+> ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
+> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
+> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+
+## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
+
+โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
 
 ```python
-async def handle_payment_failed(event):
-    invoice = event['data']['object']
-    attempt = invoice['attempt_count']
-
-    customer = await get_customer(invoice['customer'])
-
-    if attempt == 1:
-        await send_email(customer, 'payment_failed_first', {
-            'invoice_url': invoice['hosted_invoice_url'],
-            'amount': invoice['amount_due'] / 100,
-        })
-    elif attempt == 2:
-        await send_email(customer, 'payment_failed_second', ...)
-        await restrict_advanced_features(customer)
-    elif attempt == 3:
-        await send_email(customer, 'payment_failed_third_final_warning', ...)
-        await alert_cs_team(customer)
-    # Stripe will cancel after configured retries
+use_brand(
+    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
+    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
+    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
+)
 ```
 
-## Revenue Recognition (ASC 606)
+## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
 
-```sql
--- Daily revenue recognition for subscriptions
-INSERT INTO daily_recognized_revenue
-SELECT
-    sub.account_id,
-    d::date as date,
-    sub.amount / extract(epoch from (sub.end_date - sub.start_date))::numeric
-        * 86400 as daily_revenue,
-    'subscription' as type
-FROM subscriptions sub
-CROSS JOIN LATERAL generate_series(
-    sub.start_date,
-    LEAST(sub.end_date, current_date),
-    '1 day'
-) d
-WHERE sub.start_date <= current_date
-  AND sub.end_date > current_date - interval '1 day';
+```python
+use_brand(
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
+    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
+    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
+)
 ```
 
-## MRR / ARR Calculation
+## ชุด C — กรมท่า (ราชการ · กฎหมาย)
 
-```sql
--- MRR at any point in time
-SELECT SUM(
-  CASE plan_interval
-    WHEN 'month' THEN plan_amount
-    WHEN 'year'  THEN plan_amount / 12
-  END
-) as mrr
-FROM subscriptions
-WHERE status = 'active'
-  AND started_at <= NOW()
-  AND (canceled_at IS NULL OR canceled_at > NOW());
-
--- MRR movement (cohort waterfall)
-WITH current_mrr AS (SELECT SUM(mrr) as v FROM active_subs WHERE date = '2025-02-01'),
-     prior_mrr   AS (SELECT SUM(mrr) as v FROM active_subs WHERE date = '2025-01-01'),
-     new_mrr     AS (SELECT SUM(mrr) FROM new_subs_in_month),
-     expansion   AS (SELECT SUM(mrr_diff) FROM upgrades_in_month),
-     contraction AS (SELECT SUM(mrr_diff) FROM downgrades_in_month),
-     churn       AS (SELECT SUM(mrr) FROM cancellations_in_month)
-SELECT
-  prior_mrr.v as start,
-  new_mrr.v as new,
-  expansion.v as expansion,
-  contraction.v as contraction,
-  churn.v as churn,
-  current_mrr.v as end
-FROM prior_mrr, new_mrr, expansion, contraction, churn, current_mrr;
+```python
+use_brand(
+    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
+    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
+    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
+)
 ```
 
-## Multi-Currency
+## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
 
-```typescript
-// Customer's currency at signup
-const customer = await stripe.customers.create({
-  email,
-  currency: 'thb',  // locked at creation in most platforms
-});
+accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
 
-// Pricing strategy:
-// Option 1: Price in customer currency (FX risk on you)
-// Option 2: Price in USD, charge in local (uses Stripe FX)
-// Option 3: Per-region pricing (different prices per market)
-
-// Tax considerations vary
-// Use Stripe Tax or Avalara for compliance
+```python
+use_brand(
+    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
+    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
+    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
+)
 ```
 
-## Proration
+## สีสถานะ — ชุดเดียวกันทุกแบรนด์
 
-```typescript
-// Mid-cycle plan change
-await stripe.subscriptions.update(subscription_id, {
-  items: [{ id: itemId, price: 'price_new_plan' }],
-  proration_behavior: 'create_prorations',
-});
+สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
 
-// Stripe calculates:
-// - Credit for unused time on old plan
-// - Charge for partial time on new plan
-// - Net difference on next invoice (or immediate)
-```
+| สถานะ | พื้น | ตัวอักษร |
+|---|---|---|
+| สำเร็จ | `E9F7EF` | `17794A` |
+| ข้อมูล | `EAF2FD` | `2160AB` |
+| เตือน | `FDF5E4` | `96660D` |
+| ผิดพลาด | `FDEDEC` | `A63A34` |
+| เน้น | `F1EEFC` | `52439F` |
+| เป็นกลาง | `F2F4F8` | `626A7A` |
 
-## Trial Patterns
+> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
+> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
 
-```typescript
-// Free trial
-await stripe.subscriptions.create({
-  customer,
-  items: [{ price }],
-  trial_period_days: 14,
-  payment_settings: {
-    payment_method_types: ['card'],
-    save_default_payment_method: 'on_subscription',
-  },
-});
+## วิธีตรวจก่อนใช้
 
-// Convert (event: trial_will_end → trial_end)
-// If no card on file: subscription becomes 'past_due'
-```
-
-## Webhook Events to Handle
-
-| Event | Action |
-|-------|--------|
-| `customer.subscription.created` | Activate features |
-| `invoice.payment_succeeded` | Mark paid, recognize revenue |
-| `invoice.payment_failed` | Dunning workflow |
-| `customer.subscription.updated` | Sync plan changes |
-| `customer.subscription.deleted` | Deactivate, schedule data deletion |
-| `customer.subscription.trial_will_end` | Trial ending notification |
-
-## Things You Don't Do
-
-- ❌ Build your own billing engine
-- ❌ Calculate tax manually
-- ❌ Trust client-sent prices
-- ❌ Skip webhook idempotency
-- ❌ Recognize revenue at invoice time (use service period)
-- ❌ Float for money
-
-## Reference
-
-- [Stripe Billing Docs](https://stripe.com/docs/billing)
-- [ASC 606 Revenue Recognition Guide](https://www.investopedia.com/terms/a/asc-606.asp)
-- [Chargebee Knowledge Base](https://www.chargebee.com/docs/)
-- [Paddle Documentation](https://developer.paddle.com/)
-- [Maxio (Chargify) Docs](https://maxio.com/docs)
+1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
+2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
+3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
 
 
 ---
 
-# skill: fintech-payments
+# skill: flag-and-propose
 
-Use when money moves through the system — integrating payment gateways (Stripe, Omise, 2C2P, PromptPay), webhooks, refunds and reconciliation, KYC and AML checks, reducing PCI-DSS scope, or modelling financial risk and pricing.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
 
-# fintech-payments
+# แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
-ระบบที่มีเงินไหลผ่าน — payment gateway · KYC/AML · PCI-DSS · โมเดลความเสี่ยงการเงิน
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+> **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
+> ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
 
-## หัวข้อ
+## เมื่อไหร่ใช้ skill นี้
 
-| ใช้เมื่อ | อ่าน |
+- เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
+- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
+- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
+- เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| สถานการณ์ | ใช้ตัวนี้แทน |
 |---|---|
-| integrating with payment gateways (Stripe, Adyen, Omise, 2C2P, PromptPay), implementing checkout flows, handling 3D Secure / SCA, managing payment retries, or building robust webhook processing | [`references/payment-gateway-integration.md`](references/payment-gateway-integration.md) |
-| implementing customer identification (KYC), anti-money laundering (AML) controls, sanctions screening, PEP checks, transaction monitoring, or suspicious activity reporting. Covers risk-based approach, vendor integration, and ongoing monitoring | [`references/kyc-aml-patterns.md`](references/kyc-aml-patterns.md) |
-| handling card data, reducing PCI scope, selecting SAQ type, designing CDE (Cardholder Data Environment), preparing for PCI assessment, or implementing PCI-DSS v4 controls. Provides concrete guidance on the 12 requirements with implementation patterns | [`references/pci-dss-compliance.md`](references/pci-dss-compliance.md) |
+| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
+| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
+| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
 
-## คู่มือบทบาท
+---
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+## 1 · โครงคำตอบ 4 บล็อก
 
-| บทบาท | อ่าน | agent |
+| บล็อก | ความยาว | กฎ |
 |---|---|---|
-| building financial technology applications — banking integrations, payment systems, lending platforms, trading systems, or any product handling money. Specializes in financial domain logic, regulatory awareness, and high-accuracy requirements | [`references/agent-fintech-engineer.md`](references/agent-fintech-engineer.md) | `fintech-engineer` |
-| integrating payment gateways (Stripe, Adyen, Omise, 2C2P, PromptPay), handling card payments, implementing webhooks, managing refunds/chargebacks, or designing payment flows. Specializes in PCI scope reduction and reliable payment processing | [`references/agent-payment-integration.md`](references/agent-payment-integration.md) | `fintech-engineer` |
+| 1 · สิ่งที่เจอ + ผลถ้าไม่แก้ | 1–2 บรรทัด | **ขึ้นก่อนเสมอ** ไม่มีคำเกริ่น ไม่ทวนคำถาม |
+| 2 · หลักฐาน | ตาราง ≤ 5 แถว | ตัวเลขที่ขัดกันเท่านั้น ไม่ต้องเล่าวิธีตรวจ |
+| 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
+| 4 · คำถามปิด | 1 บรรทัด | คำถามเดียว ตอบได้ด้วยไม่กี่คำ |
 
-## agent ของสายนี้
+บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข ส่วนบล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
+**บล็อก 1 กับ 4 ตัดไม่ได้**
 
-`fintech-engineer` · `fintech-compliance-officer` · `quant-analyst`
+**ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
 
-## ที่มา
+---
 
-รวมจาก plugin `software-company-fintech` (skill `payment-gateway-integration` · `kyc-aml-patterns` · `pci-dss-compliance`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
-
-
-## reference: agent-fintech-engineer.md
-
-> เดิมคือ agent `fintech-engineer` ใน plugin `software-company-fintech` — รวมเข้า agent `fintech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 FinTech Quality Standards](#fintech-quality-standards)
-- [Critical FinTech Rules](#critical-fintech-rules)
-- [Skills You Use](#skills-you-use)
-- [Common Patterns](#common-patterns)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference Standards](#reference-standards)
-
-You are a **FinTech Engineer**. You build software that handles money, where bugs cost real money and regulators ask questions.
-
-## Your Responsibilities
-
-1. **Financial Domain Logic** — Calculations, accounting, currency handling
-2. **Banking Integrations** — Open banking, BaaS, card networks
-3. **Money Movement** — Transfers, settlements, reconciliation
-4. **Audit & Compliance** — Immutable logs, regulatory reporting
-5. **Precision & Accuracy** — No floating point money math, ever
-6. **Risk Awareness** — Idempotency, replay, fraud signals
-
-## 🔍 Initial Discovery (Always Start Here)
-
-Before writing any financial code, gather:
-
-1. **Money type** — currency, custody, settlement timing
-2. **Regulatory scope** — PDPA, GDPR, PSD2, PCI-DSS, BoT, SEC
-3. **Integration partners** — banks, processors, networks (Visa/MC/local)
-4. **Accuracy tolerance** — usually ZERO drift in totals
-5. **Audit requirements** — what regulators will ask for
-6. **Reconciliation cadence** — daily? real-time?
-
-If unclear about regulatory scope, **escalate to fintech-compliance-officer**.
-
-## 📊 FinTech Quality Standards
-
-- **Money precision:** decimal/integer arithmetic ONLY (no float)
-- **Idempotency:** every money-moving API endpoint
-- **Audit trail:** 100% of financial transactions logged immutably
-- **Reconciliation:** daily zero-drift between internal + bank records
-- **Transaction monotonicity:** chronological, immutable sequence
-- **Reversal capability:** every operation must be reversible OR explicitly final
-- **Test coverage:** ≥ 95% for money math, edge cases included
-- **Failed transaction rate:** < 0.1% from technical causes
-
-## Critical FinTech Rules
-
-### Rule 1: Never use floats for money
-```typescript
-// ❌ FORBIDDEN
-const total = price * quantity * 1.07; // floating point drift
-
-// ✅ Use decimal libraries or integer cents
-import Decimal from 'decimal.js';
-const total = new Decimal(price).times(quantity).times('1.07');
-
-// ✅ Or use integer cents/satoshis
-const totalCents = priceCents * quantity * 107 / 100; // be careful with rounding
-```
-
-### Rule 2: All money moves are idempotent
-```typescript
-// Use idempotency keys
-POST /api/transfer
-Idempotency-Key: txn_abc123  ← client provides
-```
-
-### Rule 3: Double-entry accounting
-```
-Every transaction has DEBIT + CREDIT
-Always balances to zero
-Never delete, only reverse
-```
-
-### Rule 4: Atomic state transitions
-```
-PENDING → PROCESSING → SUCCEEDED
-       ↘            ↘
-        FAILED        REVERSED
-
-NEVER skip states
-NEVER go backwards (except via reversal record)
-```
-
-## Skills You Use
-
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `fintech-payments` — when integrating Stripe, Adyen, Omise, etc.
-- `fintech-payments` — when handling card data
-- `fintech-payments` — when verifying customer identity
-- `polished-document-style` (from software-company) — for spec docs
-- `commit-message-format` (from software-company) — for commits
-
-## Common Patterns
-
-### Pattern: Money Transfer
-
-```typescript
-interface Transfer {
-  id: string;              // UUID
-  idempotencyKey: string;  // unique per business operation
-  fromAccount: string;
-  toAccount: string;
-  amount: bigint;          // integer cents
-  currency: 'THB' | 'USD' | ...;
-  status: TransferStatus;
-  createdAt: Date;
-  reversalOf?: string;     // if this reverses another transfer
-}
-
-async function transfer(req: TransferRequest): Promise<Transfer> {
-  // 1. Idempotency check
-  const existing = await db.transfers.findByKey(req.idempotencyKey);
-  if (existing) return existing;
-
-  // 2. Validate (account exists, has funds, currency match)
-  await validateTransfer(req);
-
-  // 3. Single atomic DB transaction
-  return await db.transaction(async (tx) => {
-    const transfer = await tx.transfers.create({...});
-    await tx.ledger.debit(req.fromAccount, req.amount, transfer.id);
-    await tx.ledger.credit(req.toAccount, req.amount, transfer.id);
-    return transfer;
-  });
-}
-```
-
-### Pattern: Reconciliation
-
-```typescript
-// Daily job
-async function reconcile(date: Date) {
-  const ourTotal = await db.ledger.totalByDate(date);
-  const bankTotal = await bankApi.statementTotal(date);
-
-  if (ourTotal !== bankTotal) {
-    await alerts.fire({
-      severity: 'P1',
-      message: `Reconciliation mismatch: us=${ourTotal} bank=${bankTotal}`,
-      diff: ourTotal - bankTotal
-    });
-  }
-}
-```
-
-### Pattern: Audit Log
-
-```typescript
-// EVERY financial operation creates an immutable audit record
-interface AuditEvent {
-  id: string;
-  timestamp: Date;
-  actor: string;        // user/system that initiated
-  action: string;       // 'transfer.created', 'transfer.failed', ...
-  resourceId: string;
-  before: object;       // state before
-  after: object;        // state after
-  metadata: object;
-}
-
-// Append-only table, no UPDATE/DELETE allowed
-```
-
-## Things You Don't Do
-
-- ❌ Use floats for money (EVER)
-- ❌ Allow non-idempotent money operations
-- ❌ Mutate financial records (only append/reverse)
-- ❌ Skip audit logging "for performance"
-- ❌ Implement crypto from scratch (use proven libraries)
-- ❌ Roll your own KYC/AML (use compliance providers)
-- ❌ Make business compliance decisions (defer to fintech-compliance-officer)
-
-## When to Hand Off
-
-- Regulatory interpretation → `fintech-compliance-officer`
-- Payment gateway specifics → `fintech-engineer` agent
-- Quantitative modeling → `quant-analyst`
-- Security review → `security-engineer` (from software-company)
-- Architecture decisions → `solution-architect` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **Floating point math** — $0.10 + $0.20 = $0.30000000000000004
-- ❌ **Race conditions on balance** — read-update-write without lock
-- ❌ **Optimistic UI for money** — show success before bank confirms
-- ❌ **No reversal mechanism** — can't undo when wrong
-- ❌ **Soft delete of transactions** — should be append-only
-- ❌ **Timezone bugs** — settlement is timezone-sensitive
-- ❌ **Currency rounding inconsistency** — banker's vs half-up
-- ❌ **Untested edge cases** — leap year, daylight saving, currency switching
-
-## Reference Standards
-
-| Domain | Standard |
-|--------|----------|
-| Cards | PCI-DSS v4 |
-| Banking (EU) | PSD2, SCA |
-| Banking (Thailand) | BoT (ธปท.) guidelines |
-| Securities | SEC Thailand, MAS Singapore |
-| AML | FATF, AMLO Thailand |
-| Crypto | MiCA (EU), local registrations |
-| Accounting | IFRS, GAAP, double-entry |
-
-
-## reference: agent-payment-integration.md
-
-> เดิมคือ agent `payment-integration` ใน plugin `software-company-fintech` — รวมเข้า agent `fintech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Payment Quality Standards](#payment-quality-standards)
-- [Gateway Comparison (Asia-Pacific)](#gateway-comparison-asia-pacific)
-- [Critical Payment Patterns](#critical-payment-patterns)
-- [Webhook Best Practices](#webhook-best-practices)
-- [Settlement Reconciliation](#settlement-reconciliation)
-- [Chargeback Management](#chargeback-management)
-- [Things You Don't Do](#things-you-dont-do)
-- [Skills You Use](#skills-you-use)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference](#reference)
-
-You are a **Payment Integration Specialist**. You handle the hard parts of payments: gateways, webhooks, idempotency, chargebacks, and PCI scope.
-
-## Your Responsibilities
-
-1. **Gateway Integration** — Stripe, Adyen, Omise, 2C2P, PromptPay, TrueMoney
-2. **Payment Flows** — Card, e-wallet, bank transfer, BNPL
-3. **Webhook Handling** — Reliable async event processing
-4. **Refunds & Reversals** — Partial, full, with audit
-5. **Chargeback Management** — Dispute response automation
-6. **PCI Scope Reduction** — Hosted fields, tokenization
-7. **Multi-currency** — Conversion, FX, local methods
-
-## 🔍 Initial Discovery (Always Start Here)
-
-Before integration, gather:
-
-1. **Geographic scope** — Thailand-only? Global? Multi-region?
-2. **Payment methods needed** — cards, wallets, bank, BNPL, crypto
-3. **Settlement requirements** — instant? T+1? T+3?
-4. **PCI tolerance** — SAQ A (hosted) or SAQ D (custom)
-5. **Volume + average ticket** — affects fee structure
-6. **Existing gateway** — migration vs greenfield
-
-## 📊 Payment Quality Standards
-
-- **Successful payment rate:** > 95% (technical success)
-- **Webhook reliability:** 100% eventual processing
-- **Idempotency:** 100% on all payment endpoints
-- **Refund SLA:** ≤ 24h for valid requests
-- **Chargeback win rate:** > 60% with proper evidence
-- **Settlement reconciliation:** zero drift daily
-- **PCI scope:** minimum possible (prefer SAQ A)
-
-## Gateway Comparison (Asia-Pacific)
-
-| Gateway | Best for | Card | Wallets | Local methods | Settlement |
-|---------|----------|:----:|:-------:|:-------------:|:----------:|
-| **Stripe** | Global SaaS | ✅ | ✅ | 🟡 limited TH | T+2-7 |
-| **Adyen** | Enterprise global | ✅ | ✅ | ✅ comprehensive | T+1 |
-| **Omise** | Thailand | ✅ | ✅ TH wallets | ✅ PromptPay, internet banking | T+1 |
-| **2C2P** | SEA | ✅ | ✅ | ✅ SEA-specific | T+1-2 |
-| **TrueMoney** | TH wallet only | ❌ | ✅ | ❌ | Real-time |
-| **PromptPay direct** | TH instant | ❌ | ❌ | ✅ QR + ID | Real-time |
-
-## Critical Payment Patterns
-
-### Pattern 1: Use Hosted Fields (Reduce PCI Scope)
-
-❌ **Avoid:** Card data touches your server
-```html
-<!-- Bad: card number in your form -->
-<input name="cardNumber" />  <!-- → server → gateway → PCI SAQ D -->
-```
-
-✅ **Use:** Gateway-hosted fields
-```html
-<!-- Good: Stripe Elements (iframe) -->
-<div id="card-element"></div>
-<script>
-  const elements = stripe.elements();
-  const card = elements.create('card');
-  card.mount('#card-element');
-</script>
-```
-
-→ Card data goes Browser → Gateway directly, never your server.
-→ PCI SAQ A (vs SAQ D for full custom — 350 vs 12 controls!)
-
-### Pattern 2: Idempotent Charge
-
-```typescript
-async function charge(req: ChargeRequest): Promise<Payment> {
-  // Idempotency-Key prevents double-charge on retries
-  const response = await stripe.paymentIntents.create({
-    amount: req.amountCents,
-    currency: req.currency,
-    payment_method: req.paymentMethodId,
-    confirm: true,
-    // KEY:
-    idempotency_key: req.idempotencyKey, // unique per business operation
-  });
-
-  // Store gateway's payment ID in YOUR DB
-  await db.payments.create({
-    id: req.id,
-    gatewayPaymentId: response.id,
-    status: mapStatus(response.status),
-    ...
-  });
-
-  return ...;
-}
-```
-
-### Pattern 3: Webhook Handler (Reliable)
-
-```typescript
-app.post('/webhooks/stripe', async (req, res) => {
-  // 1. Verify signature (prevent fakes)
-  const event = stripe.webhooks.constructEvent(
-    req.rawBody,
-    req.headers['stripe-signature'],
-    process.env.STRIPE_WEBHOOK_SECRET
-  );
-
-  // 2. Idempotency: check if processed
-  const existing = await db.webhookEvents.findById(event.id);
-  if (existing) return res.json({ received: true });
-
-  // 3. Persist event FIRST (before processing)
-  await db.webhookEvents.create({
-    id: event.id,
-    type: event.type,
-    rawData: event,
-    status: 'PENDING',
-  });
-
-  // 4. Ack quickly (must be < 5s)
-  res.json({ received: true });
-
-  // 5. Process async (separate worker)
-  await queue.enqueue('process-webhook', { eventId: event.id });
-});
-```
-
-### Pattern 4: Refund Flow
-
-```typescript
-async function refund(paymentId: string, amountCents?: bigint): Promise<Refund> {
-  const payment = await db.payments.findById(paymentId);
-  if (payment.status !== 'SUCCEEDED') {
-    throw new Error('Cannot refund: payment not successful');
-  }
-
-  // Default to full refund
-  const refundAmount = amountCents ?? payment.amount;
-
-  if (refundAmount > payment.amount - payment.refundedAmount) {
-    throw new Error('Refund exceeds available');
-  }
-
-  const idempotencyKey = `refund_${paymentId}_${refundAmount}`;
-  const refund = await gateway.refunds.create({
-    payment_intent: payment.gatewayPaymentId,
-    amount: Number(refundAmount),
-    idempotency_key: idempotencyKey,
-  });
-
-  return await db.refunds.create({...});
-}
-```
-
-## Webhook Best Practices
-
-- ✅ Verify signature ALWAYS
-- ✅ Respond fast (< 5s), process async
-- ✅ Idempotent processing (event ID dedup)
-- ✅ Persist raw event before processing
-- ✅ Retry policy: exponential backoff
-- ✅ Dead letter queue for unprocessable events
-- ✅ Monitor lag (events behind real-time)
-- ❌ Don't trust amount/state from webhook alone — verify via API
-- ❌ Don't process inline (slow webhook = retry storm)
-
-## Settlement Reconciliation
+## 2 · บล็อกที่ 1 — สูตรประโยคเดียว
 
 ```
-Daily job:
-1. Pull settlement report from gateway
-2. Compare each transaction to YOUR DB
-3. Mismatches → alert + create ticket
-4. Net settlement → match bank deposit
+<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
 ```
 
-## Chargeback Management
+| ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
+|---|---|
+| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
 
-| Stage | Action |
-|-------|--------|
-| Notification | Auto-alert team |
-| Evidence collection | Gather: receipt, IP, delivery proof, communications |
-| Response submission | Within deadline (usually 7-10 days) |
-| Outcome | Won → return funds; Lost → write off |
-| Pattern detection | Repeat patterns → fraud action |
+- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
+- ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
+- ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
 
-## Things You Don't Do
+---
 
-- ❌ Store card numbers in your DB (use tokens)
-- ❌ Log card data anywhere (CVV especially)
-- ❌ Trust client-sent amount
-- ❌ Skip webhook signature verification
-- ❌ Block webhook processing inline (causes retries)
-- ❌ Build your own gateway
+## 3 · ตัวเลขที่ขัดกัน = ตารางเทียบเสมอ
 
-## Skills You Use
+สองค่าขึ้นไปที่ไม่ตรงกัน อ่านจากประโยคยากกว่าอ่านจากตารางทุกครั้ง
 
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-
-## When to Hand Off
-
-- PCI compliance documentation → `fintech-compliance-officer`
-- Custom card flow needed → `fintech-engineer`
-- Security review → `security-engineer` (from software-company)
-- High-volume queue design → `solution-architect` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **Webhook timeout** — taking > 5s, gateway retries, duplicates
-- ❌ **Replay attack** — accepting old webhooks without timestamp check
-- ❌ **Trust client amount** — frontend says $1, gateway charges $100
-- ❌ **No idempotency** — network glitch → double charge
-- ❌ **PCI scope creep** — accidentally logging card data
-- ❌ **Webhook order** — assuming events arrive in order (they don't)
-- ❌ **No reconciliation** — small daily drift → big monthly loss
-
-## Reference
-
-- [Stripe Webhooks Best Practices](https://stripe.com/docs/webhooks)
-- [PCI-DSS SAQ Selection Guide](https://www.pcisecuritystandards.org/)
-- [Omise Documentation](https://www.omise.co/docs)
-- [PromptPay Standard](https://www.bot.or.th/)
-
-
-## reference: kyc-aml-patterns.md
-
-> เดิมคือ skill `kyc-aml-patterns` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [The 5 Pillars of AML Program](#the-5-pillars-of-aml-program)
-- [Customer Due Diligence (CDD) Tiers](#customer-due-diligence-cdd-tiers)
-- [Onboarding Flow Pattern](#onboarding-flow-pattern)
-- [Vendor Selection](#vendor-selection)
-- [Sanctions Screening](#sanctions-screening)
-- [PEP (Politically Exposed Persons)](#pep-politically-exposed-persons)
-- [Transaction Monitoring Rules](#transaction-monitoring-rules)
-- [Suspicious Activity Report (SAR) Workflow](#suspicious-activity-report-sar-workflow)
-- [Data Retention](#data-retention)
-- [Risk-Based Approach](#risk-based-approach)
-- [Common Pitfalls](#common-pitfalls)
-- [Quality Targets](#quality-targets)
-- [Reference](#reference)
-
-# KYC / AML Implementation Patterns
-
-## When to use this skill
-
-- Onboarding customers in financial products
-- Building transaction monitoring
-- Implementing sanctions/PEP screening
-- Designing suspicious activity workflow
-- Choosing KYC vendors (Sumsub, Jumio, Onfido, etc.)
-- Building risk-based customer due diligence
-
-## The 5 Pillars of AML Program
-
-```
-1. ✅ Internal controls (policies, procedures)
-2. ✅ Designated compliance officer
-3. ✅ Ongoing training
-4. ✅ Independent audit
-5. ✅ Customer Due Diligence (CDD)
+```markdown
+| | ที่บันทึกไว้ | ของจริง |
+|---|---|---|
+| FR ถึง | 13.9 | **14.12** |
+| Test case | 214 | **245** |
+| PLT | ไม่มี | **มี** |
 ```
 
-This skill focuses on engineering implementation of #5.
+- หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
+- ตัวหนาที่ฝั่งที่ถูกต้อง เพื่อให้กวาดตาแล้วรู้ทันทีว่าต้องยึดอะไร
+- แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
 
-## Customer Due Diligence (CDD) Tiers
+**คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
+เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
 
-### Tier 1: Customer Identification Program (CIP) — All customers
+---
 
-**Required for everyone:**
-- Full legal name
-- Date of birth
-- Address
-- ID number (national ID, passport)
-- ID document verification
+## 4 · ข้อเสนอเป็นตาราง "ทำอะไร → ได้อะไร"
 
-### Tier 2: Enhanced Due Diligence (EDD) — High-risk customers
-
-**Required for:**
-- Politically Exposed Persons (PEP)
-- High-risk jurisdictions (FATF grey/black list)
-- High net-worth individuals
-- Cash-intensive businesses
-- Sanctions list matches (after investigation)
-
-**Additional:**
-- Source of funds documentation
-- Source of wealth (for high-net-worth)
-- Beneficial ownership for entities
-- Higher monitoring threshold
-
-### Tier 3: Ongoing Monitoring — Everyone
-
-**Continuous:**
-- Sanctions list rescreening (daily)
-- PEP list rescreening (weekly)
-- Transaction monitoring (real-time)
-- Adverse media (monthly)
-
-## Onboarding Flow Pattern
-
-```mermaid
-flowchart TD
-    A[User signs up] --> B[Collect identity info]
-    B --> C[Submit ID document]
-    C --> D[Document verification - vendor]
-    D --> E{Pass?}
-    E -->|No| F[Manual review]
-    F --> G{Approve?}
-    G -->|No| Z[Reject]
-    G -->|Yes| H[Sanctions/PEP screen]
-    E -->|Yes| H
-    H --> I{Match?}
-    I -->|Yes| F
-    I -->|No| J[Risk score]
-    J --> K{Risk level}
-    K -->|Low/Med| L[Activate account - standard]
-    K -->|High| M[EDD required]
-    M --> N[Collect additional info]
-    N --> F
+```markdown
+| ไฟล์ | ได้อะไร |
+|---|---|
+| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
+| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
-## Vendor Selection
+- คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
+- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ
+- **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
+- เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
 
-| Vendor | Best for | Coverage |
-|--------|----------|----------|
-| **Sumsub** | Global, comprehensive | 220+ countries |
-| **Jumio** | Mature, enterprise | Global |
-| **Onfido** | UK/EU focus, dev-friendly | Global, EU strong |
-| **Veriff** | Real-time video, modern | Global |
-| **Trulioo** | Many data sources | Global |
-| **Persona** | Customizable workflows | Global, US strong |
-| **AuthBridge** | India, SEA | Asia focus |
+---
 
-**Choose based on:**
-- Geographic coverage of YOUR customers
-- Available ID types (national ID specific to country)
-- Integration ease
-- Cost per check (often $1-5)
-- Manual review SLA
+## 5 · บอกสิ่งที่**ไม่**ทำด้วย
 
-## Sanctions Screening
+หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
 
-### Lists to check
-- **OFAC SDN** (US Treasury) — global, mandatory if US connection
-- **UN Consolidated** — global
-- **EU Consolidated** — for EU connection
-- **UK HM Treasury** — for UK connection
-- **Local lists** (e.g., AMLO Thailand sanctions)
+> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
 
-### Matching strategy
+บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
+และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
 
-```typescript
-// Use fuzzy matching with thresholds
-// Don't rely on exact match (names spelling varies)
+---
 
-const match = await sanctionsApi.screen({
-  name: customer.fullName,
-  dob: customer.dateOfBirth,
-  nationality: customer.nationality,
-  threshold: 0.85, // 0-1 score
-});
-
-if (match.score > 0.95) {
-  // Likely match — auto-block + escalate
-  await escalate(match);
-} else if (match.score > 0.85) {
-  // Possible match — manual review
-  await queueForReview(match);
-}
-```
-
-### Anti-patterns
-- ❌ Exact match only (misses 80% of real hits)
-- ❌ One-time check only (lists update daily)
-- ❌ Blocking on every fuzzy match (false positive flood)
-- ❌ Manual lists in spreadsheets (use API services)
-
-## PEP (Politically Exposed Persons)
-
-Categories:
-- **Domestic PEPs** — local government officials
-- **Foreign PEPs** — foreign government officials
-- **International organization PEPs** — UN, IMF, etc.
-- **Family/Close associates** — extends to relatives
-
-**Implementation:**
-- Use commercial database (Refinitiv, Dow Jones, ComplyAdvantage)
-- Auto-screen on onboarding
-- Rescreen monthly
-- PEP = EDD required (not auto-reject)
-- Document approval at appropriate seniority
-
-## Transaction Monitoring Rules
-
-### Rule categories
-
-**Velocity rules:**
-- Cumulative volume per period
-- Transaction count per period
-- Sudden spike from baseline
-
-**Threshold rules:**
-- Single transaction > $10,000 (US CTR)
-- Aggregated transactions just under threshold (structuring)
-
-**Pattern rules:**
-- Round amounts ($1000, $5000, $10000)
-- Repeated small transactions (smurfing)
-- Geographic risk (high-risk jurisdiction)
-- Time patterns (always at 3am)
-
-**Behavioral rules:**
-- Deviation from customer baseline
-- Activity inconsistent with stated purpose
-- New connections (sudden many counterparties)
-
-### Implementation tiers
+## 6 · ปิดด้วยคำถามเดียว
 
 ```
-Tier 1: Static rules
-  - Fast, deterministic
-  - Easy to explain
-  - Use for hard limits
-
-Tier 2: Statistical models
-  - Anomaly detection
-  - Per-customer baseline
-  - Catches subtle patterns
-
-Tier 3: ML models
-  - Network analysis
-  - Embedding-based similarity
-  - Hardest to explain
+เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
 ```
 
-## Suspicious Activity Report (SAR) Workflow
-
-```
-1. Alert fires (rule or model)
-   ↓
-2. Investigator reviews (within 5 days)
-   ↓
-3. Decision:
-   - False positive → close, document reasoning
-   - Need more info → request from customer
-   - Suspicious → escalate to compliance officer
-   ↓
-4. Compliance officer reviews
-   ↓
-5. If reportable: file SAR within regulatory deadline
-   - Thailand (AMLO): within 7 days of decision
-   - US (FinCEN): within 30 days of detection
-   ↓
-6. Continue customer relationship per legal advice
-   (often: continue normally, don't tip off)
-```
-
-## Data Retention
-
-| Data | Retention | Reason |
-|------|-----------|--------|
-| KYC documents | 5 years post-relationship | AML regulations |
-| Sanctions screening results | 5 years | Audit trail |
-| SARs | 5 years | Regulatory |
-| Transaction monitoring alerts | 5 years | Audit |
-| Customer communications | 5 years | Dispute resolution |
-
-> ⚠️ Conflicts with GDPR "right to erasure"? AML obligations usually override.
-
-## Risk-Based Approach
-
-Don't treat all customers equally:
-
-```typescript
-function calculateRiskScore(customer: Customer): RiskLevel {
-  let score = 0;
-
-  // Geography
-  if (highRiskJurisdictions.includes(customer.country)) score += 30;
-
-  // Customer type
-  if (customer.type === 'business') score += 10;
-  if (customer.industry === 'crypto') score += 20;
-  if (customer.industry === 'cash-intensive') score += 15;
-
-  // Politics
-  if (customer.isPEP) score += 25;
-
-  // Sanctions proximity
-  if (customer.sanctionsMatchScore > 0.7) score += 40;
-
-  if (score < 20) return 'LOW';
-  if (score < 50) return 'MEDIUM';
-  return 'HIGH';
-}
-
-// Adjust monitoring frequency, transaction limits, etc. by risk level
-```
-
-## Common Pitfalls
-
-- ❌ **One-time checks** — must be ongoing
-- ❌ **Treating low-risk = no monitoring**
-- ❌ **Over-reliance on vendor** — you're still responsible
-- ❌ **Alert fatigue** — too many false positives → real ones missed
-- ❌ **No documentation** — regulator: "show me your reasoning"
-- ❌ **Mixing fraud + AML** — different goals, different rules
-- ❌ **Auto-block on PEP** — PEP ≠ criminal, requires EDD
-
-## Quality Targets
-
-- False positive rate < 5% (after tuning)
-- Alert resolution time < 5 days median
-- SAR filing within regulatory deadline 100%
-- Quarterly rule review + tuning
-- Annual program independent audit
-
-## Reference
-
-- [FATF Recommendations](https://www.fatf-gafi.org/)
-- [AMLO Thailand](https://www.amlo.go.th/)
-- [FinCEN US](https://www.fincen.gov/)
-- [Wolfsberg Group standards](https://www.wolfsberg-principles.com/)
-- [OFAC SDN List](https://sanctionssearch.ofac.treas.gov/)
-
-
-## reference: payment-gateway-integration.md
-
-> เดิมคือ skill `payment-gateway-integration` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [Gateway Selection (Detailed)](#gateway-selection-detailed)
-- [Card Payment Flow (Generic)](#card-payment-flow-generic)
-- [Critical Patterns](#critical-patterns)
-- [Retry Strategy](#retry-strategy)
-- [Multi-Currency Handling](#multi-currency-handling)
-- [Settlement Reconciliation](#settlement-reconciliation)
-- [Refund Edge Cases](#refund-edge-cases)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference](#reference)
-
-# Payment Gateway Integration Patterns
-
-## When to use this skill
-
-- Adding payments to a new product
-- Migrating gateways
-- Implementing 3D Secure / SCA
-- Building reliable webhook processing
-- Handling multi-currency payments
-- Implementing recurring billing / subscriptions
-
-## Gateway Selection (Detailed)
-
-### Comparison Matrix
-
-| Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
-|---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
-| **Stripe** | ✅ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
-| **Adyen** | ✅ Excellent | All major | ✅ | ✅ | T+1 | Enterprise, global retail |
-| **Omise** | ✅ | ✅ TH-specific | ✅ Comprehensive | 🟡 | T+1 | Thailand-first |
-| **2C2P** | ✅ | ✅ | ✅ | ✅ SEA-strong | T+1-2 | SEA regional |
-| **Braintree** | ✅ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
-| **Razorpay** | ✅ | UPI | ❌ | 🟡 | T+2 | India |
-| **Square** | ✅ | Cash App | ❌ | ❌ | T+1 | US/CA in-person |
-
-## Card Payment Flow (Generic)
-
-```mermaid
-sequenceDiagram
-    actor User
-    participant Browser
-    participant Backend
-    participant Gateway
-    participant Issuer as Card Issuer
-
-    User->>Browser: Enter card info (hosted field)
-    Browser->>Gateway: Tokenize (skip backend)
-    Gateway-->>Browser: Token
-    Browser->>Backend: Create payment with token
-    Backend->>Gateway: Charge token (+ idempotency key)
-    Gateway->>Issuer: Authorization request
-
-    alt 3DS required
-        Issuer-->>Gateway: 3DS challenge
-        Gateway-->>Backend: Action required
-        Backend-->>Browser: Redirect to 3DS
-        Browser->>Issuer: Complete 3DS challenge
-        Issuer-->>Gateway: Authorized
-    end
-
-    Gateway-->>Backend: Payment intent succeeded
-    Backend->>Backend: Update DB
-    Backend-->>Browser: Success page
-
-    Gateway-->>Backend: Webhook (async confirmation)
-    Backend->>Backend: Verify, idempotent update
-```
-
-## Critical Patterns
-
-### Pattern 1: Use Idempotency Keys ALWAYS
-
-```typescript
-// Generate ONCE per business operation, reuse on retry
-const idempotencyKey = `order_${orderId}_charge_v1`;
-
-const paymentIntent = await stripe.paymentIntents.create({
-  amount: orderTotal,
-  currency: 'thb',
-  payment_method: paymentMethodId,
-  confirm: true,
-}, {
-  idempotencyKey: idempotencyKey, // ← prevents double-charge
-});
-
-// On retry, gateway returns same payment intent
-```
-
-### Pattern 2: Handle 3D Secure / SCA
-
-```typescript
-// Strong Customer Authentication required in EU/UK
-// Many TH banks also enforce 3DS
-
-const paymentIntent = await stripe.paymentIntents.create({
-  amount: 1000,
-  currency: 'thb',
-  payment_method: 'pm_xxx',
-  confirm: true,
-  return_url: 'https://yourapp.com/payment-return',
-});
-
-if (paymentIntent.status === 'requires_action') {
-  // 3DS challenge needed
-  return {
-    requires_action: true,
-    client_secret: paymentIntent.client_secret,
-    next_action: paymentIntent.next_action,
-  };
-  // Frontend uses Stripe.js to handle the challenge
-}
-```
-
-### Pattern 3: Reliable Webhook Processing
-
-```typescript
-// 1. Receive webhook
-app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
-  try {
-    // 2. Verify signature (CRITICAL)
-    const event = stripe.webhooks.constructEvent(
-      req.body,
-      req.headers['stripe-signature']!,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
-
-    // 3. Idempotency check
-    const existing = await db.webhookEvents.findById(event.id);
-    if (existing) {
-      return res.json({ received: true, duplicate: true });
-    }
-
-    // 4. Store raw event FIRST
-    await db.webhookEvents.create({
-      id: event.id,
-      type: event.type,
-      payload: event,
-      status: 'PENDING',
-    });
-
-    // 5. Ack within 5s
-    res.json({ received: true });
-
-    // 6. Process async
-    await queue.enqueue('process-webhook', { eventId: event.id });
-  } catch (err) {
-    if (err instanceof stripe.errors.StripeSignatureVerificationError) {
-      return res.status(400).send('Invalid signature');
-    }
-    log.error('Webhook error', err);
-    res.status(500).send('Error');
-  }
-});
-
-// Worker (separate):
-async function processWebhook(eventId: string) {
-  const evt = await db.webhookEvents.findById(eventId);
-
-  try {
-    switch (evt.type) {
-      case 'payment_intent.succeeded':
-        await handlePaymentSucceeded(evt.payload.data.object);
-        break;
-      case 'payment_intent.payment_failed':
-        await handlePaymentFailed(evt.payload.data.object);
-        break;
-      case 'charge.refunded':
-        await handleRefund(evt.payload.data.object);
-        break;
-      // ... other handlers
-    }
-
-    await db.webhookEvents.update(eventId, { status: 'PROCESSED' });
-  } catch (err) {
-    await db.webhookEvents.update(eventId, {
-      status: 'FAILED',
-      error: err.message,
-      attempts: { increment: 1 },
-    });
-    throw err; // re-throw for retry
-  }
-}
-```
-
-### Pattern 4: Verify Webhook with API (Belt + Suspenders)
-
-```typescript
-// Webhook says payment succeeded — but verify via API
-async function handlePaymentSucceeded(eventPayload: any) {
-  // Don't trust webhook payload alone
-  const intent = await stripe.paymentIntents.retrieve(eventPayload.id);
-
-  if (intent.status !== 'succeeded') {
-    log.warn('Webhook claimed success but API disagrees', { id: intent.id });
-    return; // Don't take action
-  }
-
-  // Now we can safely update our DB
-  await db.payments.update(intent.metadata.orderId, {
-    status: 'PAID',
-    paidAt: new Date(intent.created * 1000),
-  });
-}
-```
-
-### Pattern 5: Subscription Billing
-
-```typescript
-// Initial setup
-const customer = await stripe.customers.create({
-  email: user.email,
-  metadata: { userId: user.id },
-});
-
-const subscription = await stripe.subscriptions.create({
-  customer: customer.id,
-  items: [{ price: 'price_xxx' }],
-  payment_behavior: 'default_incomplete', // prevent immediate charge
-  expand: ['latest_invoice.payment_intent'],
-});
-
-// Handle webhooks:
-// - invoice.paid → activate features
-// - invoice.payment_failed → dunning flow
-// - customer.subscription.updated → sync state
-// - customer.subscription.deleted → revoke access
-```
-
-## Retry Strategy
-
-```typescript
-// Webhook retries — gateway will retry, so:
-// - Don't fail fast
-// - Be idempotent
-// - Log everything
-
-// Manual retries (e.g., failed authorization):
-const retryDelays = [0, 60_000, 300_000, 3_600_000]; // 0s, 1min, 5min, 1hr
-
-async function retryPayment(paymentId: string, attempt: number = 0) {
-  if (attempt >= retryDelays.length) {
-    await markAsFailed(paymentId);
-    return;
-  }
-
-  await sleep(retryDelays[attempt]);
-
-  try {
-    await chargePayment(paymentId);
-  } catch (err) {
-    if (isRetryable(err)) {
-      await retryPayment(paymentId, attempt + 1);
-    } else {
-      await markAsFailed(paymentId);
-    }
-  }
-}
-```
-
-## Multi-Currency Handling
-
-```typescript
-// Always store currency with amount
-interface Money {
-  amount: bigint;        // integer (cents/satoshis)
-  currency: string;      // ISO 4217 code
-}
-
-// Never assume USD
-// Never mix currencies in calculations
-// Always use FX rate at transaction time
-
-// Display formatting (per locale):
-function format(money: Money, locale: string): string {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: money.currency,
-  }).format(Number(money.amount) / 100);
-}
-```
-
-## Settlement Reconciliation
-
-```typescript
-// Daily job
-async function reconcileSettlement(date: Date) {
-  // 1. Pull settlement report from gateway
-  const settlement = await stripe.balanceTransactions.list({
-    created: { gte: startOfDay(date), lte: endOfDay(date) },
-  });
-
-  // 2. Sum gateway's view
-  const gatewayTotal = settlement.data
-    .filter((t) => t.type === 'payout')
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  // 3. Sum our DB
-  const ourTotal = await db.payments.sumPaidOnDate(date);
-
-  // 4. Compare
-  if (gatewayTotal !== ourTotal) {
-    await alerts.fire({
-      severity: 'P1',
-      title: 'Settlement reconciliation mismatch',
-      data: { date, gatewayTotal, ourTotal, diff: gatewayTotal - ourTotal },
-    });
-  }
-
-  // 5. Match to bank deposit
-  const bankDeposit = await bankApi.getDeposit(date);
-  if (gatewayTotal !== bankDeposit.amount) {
-    // Gateway → Bank mismatch
-    await alerts.fire({ severity: 'P2', title: 'Bank deposit mismatch' });
-  }
-}
-```
-
-## Refund Edge Cases
-
-```typescript
-// 1. Refund must equal or be less than captured amount
-// 2. Cannot refund a refund
-// 3. Some methods can't be refunded (e.g., PromptPay QR — manual process)
-// 4. Refund timing varies by method
-//    - Card: 5-10 business days for customer to see
-//    - Bank transfer: 1-3 days
-//    - Wallet: usually instant
-
-// Partial refund pattern:
-async function refundPayment(paymentId: string, amountCents?: bigint) {
-  const payment = await db.payments.findById(paymentId);
-
-  const refundAmount = amountCents ?? (payment.amount - payment.refunded);
-
-  if (refundAmount <= 0n) throw new Error('Already fully refunded');
-  if (refundAmount > payment.amount - payment.refunded) {
-    throw new Error('Refund exceeds available');
-  }
-
-  const refund = await stripe.refunds.create({
-    payment_intent: payment.gatewayId,
-    amount: Number(refundAmount),
-  }, {
-    idempotencyKey: `refund_${paymentId}_${Date.now()}`,
-  });
-
-  await db.payments.update(paymentId, {
-    refunded: payment.refunded + refundAmount,
-    status: refundAmount === payment.amount ? 'REFUNDED' : 'PARTIALLY_REFUNDED',
-  });
-}
-```
-
-## Common Pitfalls
-
-- ❌ **Trust webhook order** — they don't come in order
-- ❌ **Trust webhook amount** — verify via API
-- ❌ **No idempotency** — network glitch = double charge
-- ❌ **Process webhook inline** — gateway retries = duplicates
-- ❌ **Store card numbers** — even encrypted, it's still in scope
-- ❌ **Skip 3DS** — high decline rate in EU
-- ❌ **Hard-code currency** — breaks when expanding
-- ❌ **Sync state from gateway only on demand** — drift accumulates
-- ❌ **Mix gateway IDs with internal IDs** — use both, separately
-- ❌ **No reconciliation** — small drift → big monthly loss
-
-## Reference
-
-- [Stripe Webhooks](https://stripe.com/docs/webhooks)
-- [Adyen Webhooks](https://docs.adyen.com/development-resources/webhooks)
-- [Omise Webhooks](https://www.omise.co/webhooks)
-- [PCI-DSS Tokenization](https://www.pcisecuritystandards.org/)
-- [3D Secure 2.0 Spec](https://www.emvco.com/emv-technologies/3d-secure/)
-
-
-## reference: pci-dss-compliance.md
-
-> เดิมคือ skill `pci-dss-compliance` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [Scope Reduction First (Most Important)](#scope-reduction-first-most-important)
-- [SAQ Selection (Critical Decision)](#saq-selection-critical-decision)
-- [The 12 Requirements (Cheat Sheet)](#the-12-requirements-cheat-sheet)
-- [Common Anti-patterns](#common-anti-patterns)
-- [Tokenization Pattern](#tokenization-pattern)
-- [Network Segmentation Pattern](#network-segmentation-pattern)
-- [Logging Requirements](#logging-requirements)
-- [Quarterly Scan Checklist](#quarterly-scan-checklist)
-- [Pre-Assessment Checklist](#pre-assessment-checklist)
-- [Anti-patterns Specific to PCI](#anti-patterns-specific-to-pci)
-- [Reference](#reference)
-
-# PCI-DSS v4 Compliance Patterns
-
-## When to use this skill
-
-- Starting a project that touches card data
-- Choosing SAQ type for assessment
-- Reducing PCI scope through tokenization
-- Implementing CDE controls
-- Preparing for QSA assessment
-- Responding to scan findings
-
-## Scope Reduction First (Most Important)
-
-> 💡 **The cheapest control is the one you don't need.** Reduce scope first.
-
-### What's "in scope"?
-
-Anything that stores, processes, or transmits **CHD** (Cardholder Data):
-- 💳 PAN (Primary Account Number)
-- 📅 Expiration date
-- 👤 Cardholder name
-- 🔢 Service code
-
-Or **SAD** (Sensitive Authentication Data) — NEVER store these:
-- 🔐 Full magnetic stripe / chip data
-- 🔢 CVV/CVC2/CID
-- 🔢 PIN/PIN block
-
-### Scope reduction techniques
-
-```
-Card data path: Browser → Server → Gateway
-
-Anywhere card data goes, that system is in scope.
-
-✅ Hosted fields:    Browser → Gateway (skip your server)
-✅ Tokenization:     Server stores TOKEN, not PAN
-✅ Network segmentation:  CDE isolated from rest of infra
-```
-
-## SAQ Selection (Critical Decision)
-
-| SAQ | Use when | Controls | Effort |
-|:---:|----------|:--------:|:------:|
-| **A** ⭐ | Fully outsourced (Stripe Elements, hosted page) | 24 | 🟢 Low |
-| **A-EP** | E-commerce, hosted with some your server interaction | 191 | 🟡 Med |
-| **B** | Imprint machines only | 41 | 🟡 Med |
-| **B-IP** | Stand-alone IP terminals | 79 | 🟡 Med |
-| **C** | Payment app + isolated network | 162 | 🔴 High |
-| **D** | Everything else (full CDE) | 329 | 🔴 Very High |
-
-> 🎯 **Aim for SAQ A.** Difference between SAQ A and D = 305 controls. Architect to enable SAQ A.
-
-## The 12 Requirements (Cheat Sheet)
-
-### 1. Network security controls
-- Firewall + segmentation
-- DMZ for inbound
-- Default deny
-
-### 2. Apply secure configurations
-- No vendor defaults
-- Hardened baselines
-- Documented config
-
-### 3. Protect stored account data
-- Encryption (AES-256 minimum)
-- Key management (KMS, HSM)
-- Truncation/masking when displaying
-
-### 4. Protect data in transit
-- TLS 1.2+ (1.3 preferred)
-- Strong ciphers only
-- Validated certificates
-
-### 5. Protect against malware
-- EDR/AV deployed
-- Logged + monitored
-- Coverage 100%
-
-### 6. Develop secure software
-- SAST in CI
-- Vulnerability management
-- Patch management
-
-### 7. Restrict access by need-to-know
-- RBAC
-- Least privilege
-- Documented justifications
-
-### 8. Authenticate users
-- Unique IDs
-- MFA for admin + remote
-- Strong password policy
-
-### 9. Restrict physical access
-- Cloud provider attestation
-- Workstation controls
-- Media handling
-
-### 10. Log + monitor everything
-- Centralized logs
-- 12-month retention (3 months readily available)
-- Daily review of critical events
-
-### 11. Test security regularly
-- Quarterly vulnerability scans (ASV)
-- Annual pen test (internal + external)
-- Quarterly internal scans
-- Authenticated scanning
-
-### 12. Information security policy
-- InfoSec policy approved annually
-- Risk assessment documented
-- Incident response plan
-- Training for all employees
-
-## Common Anti-patterns
-
-### ❌ Storing CVV
-**Never.** Period. Not even encrypted. PCI-DSS forbids it.
-
-### ❌ Card data in logs
-```typescript
-// 💥 BAD — logs may contain card number
-log.info(`Processing payment: ${JSON.stringify(req.body)}`);
-
-// ✅ GOOD — mask sensitive fields
-log.info(`Processing payment`, { last4: req.body.card?.last4 });
-```
-
-### ❌ Card data in URL
-```
-❌ /process-payment?pan=4111111111111111  ← in proxy logs forever
-✅ POST /process-payment (body, TLS, masked logs)
-```
-
-### ❌ Custom encryption
-```typescript
-// 💥 NEVER
-function "encrypt"(pan: string): string {
-  return Buffer.from(pan).toString('base64'); // not encryption!
-}
-
-// ✅ Use proven libraries
-import { createCipheriv } from 'crypto';
-// AES-256-GCM with KMS-managed key
-```
-
-### ❌ Local key storage
-Keys in `.env` file or codebase = audit failure.
-→ Use KMS (AWS, Azure, GCP) or HSM.
-
-## Tokenization Pattern
-
-```typescript
-// Use gateway's tokenization
-// Card NEVER touches your server
-
-// Browser side (Stripe.js example):
-const { token } = await stripe.createToken(cardElement);
-// `token.id` = 'tok_xxx', safe to send
-
-// Server side:
-const charge = await stripe.charges.create({
-  amount: 1000,
-  currency: 'thb',
-  source: token.id,  // ← token, not PAN
-});
-
-// Store in your DB:
-await db.payments.create({
-  paymentMethodToken: charge.payment_method,  // e.g., 'pm_xxx'
-  last4: charge.payment_method_details.card.last4,  // ok to store
-  // NEVER: full PAN, CVV
-});
-```
-
-## Network Segmentation Pattern
-
-```
-Internet
-   │
-   ▼
-[WAF]
-   │
-   ▼
-[Load Balancer]
-   │
-   ├──► [Public app servers]  ← NOT in CDE if hosted fields
-   │
-   └──► [CDE network]         ← isolated, restricted
-            │
-            ├── [App server with card token only]
-            ├── [Token vault]
-            └── [Audit log destination]
-```
-
-**Rules:**
-- CDE has its own VPC/subnet
-- Firewall denies all by default, allows specific ports
-- Documented rationale for every allowed flow
-- Quarterly review of rules
-
-## Logging Requirements
-
-| Event type | Log what |
-|------------|----------|
-| Access to CHD | Who, when, what, from where |
-| Admin actions | All privileged commands |
-| Auth events | Success + failures |
-| Config changes | Before + after |
-| Logging failures | Yes, log when logging fails |
-
-**Retention:** 12 months total, 3 months readily available
-
-## Quarterly Scan Checklist
-
-- [ ] ASV scan from approved vendor
-- [ ] Internal vulnerability scan
-- [ ] Penetration test (annual + post-significant-change)
-- [ ] Wireless network scan
-- [ ] Remediate all High + Critical
-- [ ] Document all findings + remediation
-- [ ] Re-scan to confirm closure
-
-## Pre-Assessment Checklist
-
-Before QSA arrives:
-
-- [ ] Scope documented (data flow diagrams)
-- [ ] Network diagrams current
-- [ ] Asset inventory current
-- [ ] All policies signed, dated
-- [ ] Training records for last 12 months
-- [ ] Risk assessment current
-- [ ] Vulnerability scans (last quarter passing)
-- [ ] Pen test report (last 12 months)
-- [ ] Incident response plan tested
-- [ ] Vendor management documentation
-- [ ] Evidence portal organized by requirement
-
-## Anti-patterns Specific to PCI
-
-- ❌ **Believing SAQ-A is automatic** — still need controls + attestation
-- ❌ **Mixing CHD with other data** — increases scope
-- ❌ **Allowing developer access to prod** — even read-only includes PCI data
-- ❌ **Skipping rotation** — keys, passwords, certificates
-- ❌ **One-time compliance** — it's continuous
-- ❌ **Treating QSA as adversary** — they're trying to help
-
-## Reference
-
-- [PCI-DSS v4.0 Standard](https://www.pcisecuritystandards.org/document_library/?category=pcidss)
-- [SAQ Selection Tool](https://www.pcisecuritystandards.org/)
-- [Tokenization Best Practices](https://www.pcisecuritystandards.org/document_library/?category=guidance)
+| กฎ | เหตุผล |
+|---|---|
+| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | ถ้าถามสองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
+| ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
+| มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
+| ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
+
+**ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
+
+---
+
+## 7 · ตัวอย่างเต็ม
+
+**❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
+
+> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
+> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
+> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
+> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
+> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
+> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
+> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
+> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
+
+**✅ หลัง — โครงเดียวกัน 4 บล็อก**
+
+> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
+> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
+>
+> | | ที่บันทึกไว้ | ของจริง |
+> |---|---|---|
+> | FR ถึง | 13.9 | **14.12** |
+> | Test case | 214 | **245** |
+> | PLT | ไม่มี | **มี** |
+>
+> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
+>
+> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
+>
+> | ไฟล์ | ได้อะไร |
+> |---|---|
+> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
+> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
+> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
+> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
+>
+> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+>
+> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+
+**สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
+ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
+รายละเอียดวิธีทำของแต่ละข้อเสนอ
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
+- ❌ **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
+- ❌ **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
+- ❌ **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
+- ❌ **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
+- ❌ **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
+- ❌ **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
+- ❌ **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
+
+---
+
+## 9 · ตัวย่อ
+
+- **FR** — Functional Requirement (ข้อกำหนดเชิงหน้าที่)
+- **TC** — Test Case (กรณีทดสอบ)
+- **ADR** — Architecture Decision Record (บันทึกเหตุผลของการตัดสินใจเชิงสถาปัตยกรรม)
+
+## 10 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
+| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
+| สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |

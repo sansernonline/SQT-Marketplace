@@ -8,14 +8,14 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 | Mode | What it does |
 |---|---|
-| `iot-architecture` | Design IoT system architecture using iot-engineer + iot-engineer agents. Covers connectivity, data flow, edge tier. |
+| `iot-architecture` | Design IoT system architecture using the iot-engineer agent. Covers connectivity, data flow, edge tier. |
 | `device-fleet-design` | Design device fleet management — provisioning, OTA, monitoring, config. Uses iot-engineer agent. |
 
 ---
 
 ## Mode: `iot-architecture`
 
-Use the `iot-engineer` and `iot-engineer` agents to design IoT architecture for: **$ARGUMENTS**
+Use the `iot-engineer` agent to design IoT architecture for: **$ARGUMENTS**
 
 Workflow:
 

@@ -6,4 +6,4 @@ argument-hint: <path to master asset> [platforms needed]
 
 Run `social-formats` and `campaign-set` derivation steps on: **$ARGUMENTS**
 
-Never stretches; every derived file carries the platform and format in its name.
+Never stretches an image. Every derived file has the platform and format in its name.

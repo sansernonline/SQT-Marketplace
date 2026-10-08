@@ -10,15 +10,15 @@ Marketplace สำหรับ Claude Code · **11 plugins** — ทีมพั
 
 ## ⚙️ ค่าตั้งระดับเครื่อง และสคริปต์ — `scripts/`
 
-ปลั๊กอินตามบัญชีไปเอง แต่ `~/.claude/CLAUDE.md` เป็นไฟล์บนเครื่อง ต้องติดตั้งใหม่ทุกครั้งที่ย้ายเครื่อง
+ปลั๊กอินผูกกับบัญชี ย้ายเครื่องแล้วตามไปเอง · แต่ `~/.claude/CLAUDE.md` (กฎประจำตัว) เป็นไฟล์บนเครื่อง ย้ายเครื่องต้องติดตั้งใหม่ทุกครั้ง
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\install-global-rules.ps1 # Windows
-bash scripts/install-global-rules.sh                                         # macOS / Linux
+powershell -ExecutionPolicy Bypass -File .\scripts\install\install-global-rules.ps1 # Windows
+bash scripts/install/install-global-rules.sh                                         # macOS / Linux
 scripts\build-dist.cmd                                                       # ตรวจ → ซิงก์เอกสาร → สร้าง dist/ ในคำสั่งเดียว
 ```
 
-ต้นฉบับกฎอยู่ที่ `scripts/CLAUDE.global.md` — แก้ที่นั่นที่เดียว แล้วรันสคริปต์ติดตั้งใหม่
+ต้นฉบับกฎอยู่ที่ `scripts/install/CLAUDE.global.md` — แก้ที่นั่นที่เดียว แล้วรันสคริปต์ติดตั้งใหม่
 สคริปต์ทั้งหมดและวิธีใช้ → [`scripts/README.md`](scripts/README.md)
 
 ---
@@ -27,26 +27,27 @@ scripts\build-dist.cmd                                                       # �
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`software-company`** | 38 | 101 | 28 | บริษัทซอฟต์แวร์ครบทุกสาขา |
-| **`trading-finance`** | 4 | 18 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
-| **`personal-life`** | 3 | 14 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
-| **`thai-workplace`** | 4 | 17 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
-| **`online-seller`** | 3 | 8 | 4 | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE |
-| **`home-family`** | 2 | 7 | 3 | บ้านและครอบครัว: บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง |
-| **`career`** | 2 | 5 | 3 | เรซูเม่ สัมภาษณ์ ต่อรองเงินเดือน LinkedIn |
-| **`health-wellness`** | 1 | 5 | 2 | จัดระเบียบสุขภาพ (ไม่วินิจฉัย ไม่สั่งยา) |
-| **`consumer-rights`** | 1 | 4 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
-| **`graphic-design`** | 4 | 10 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
-| **`dev-learning`** | 1 | 6 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก |
+| **`superuser`** | 1 | 3 | 0 | ต้นฉบับ SuperUser — ใช้เดี่ยวกับงานทั่วไป หรือเป็นแม่แบบให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
+| **`software-company`** | 39 | 107 | 28 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`trading-finance`** | 5 | 21 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
+| **`personal-life`** | 4 | 17 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
+| **`thai-workplace`** | 5 | 20 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
+| **`online-seller`** | 4 | 11 | 4 | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE |
+| **`home-family`** | 3 | 10 | 3 | บ้านและครอบครัว: บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง |
+| **`career`** | 3 | 8 | 3 | เรซูเม่ สัมภาษณ์ ต่อรองเงินเดือน LinkedIn |
+| **`health-wellness`** | 2 | 8 | 2 | จัดระเบียบสุขภาพ (ไม่วินิจฉัย ไม่สั่งยา) |
+| **`consumer-rights`** | 2 | 7 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
+| **`graphic-design`** | 5 | 13 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
+| **`dev-learning`** | 2 | 9 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก |
 
-> plugin ชีวิตประจำวัน 10 ตัวหลัง software-company อยู่ในช่วง v0.x — ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการเมื่อ 6 ต.ค. 2569 ตัวที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) — ดู spec ที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
-> ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ในตัวเดียว — ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
+> plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
+> ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
 
 ---
 
 ## ⚡ Install
 
-**เลือกทางให้ตรงกับสิ่งที่จะทำ** — ต่างกันที่ Claude Code อ่านไฟล์จากไหน
+**มี 2 ทาง เลือกตามสิ่งที่จะทำ** · 2 ทางนี้ต่างกันที่ Claude Code อ่านไฟล์จากที่ไหน
 
 | | ทาง ก · ใช้งาน | ทาง ข · พัฒนาต่อ |
 |---|---|---|
@@ -54,7 +55,7 @@ scripts\build-dist.cmd                                                       # �
 | อ่านจาก | สำเนาที่ดาวน์โหลดมา | **โฟลเดอร์นี้โดยตรง** |
 | แก้ `SKILL.md` แล้ว | commit → push → `/plugin marketplace update` | `/reload-plugins` เห็นผลทันที |
 
-> ⚠️ อย่าเพิ่มทั้งสองแบบพร้อมกัน — จะแก้ไฟล์แล้วไม่เห็นเปลี่ยน เพราะตัวที่ทำงานคือสำเนาจาก GitHub
+> ⚠️ อย่าเพิ่มทั้ง 2 ทางพร้อมกัน · ถ้าเพิ่มทั้งคู่ ตัวที่ทำงานคือสำเนาจาก GitHub แก้ไฟล์ในโฟลเดอร์นี้แล้วจะไม่เห็นผล
 > พิมพ์ `/plugin` ดูว่าตอนนี้มาจากไหน
 
 ### ทาง ก · ใช้งาน
@@ -64,18 +65,18 @@ scripts\build-dist.cmd                                                       # �
 /plugin install software-company@sqt-marketplace
 ```
 
-เคยติดตั้ง plugin สาขาจากรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-company-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
+เคยติดตั้ง plugin สาขาของรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-company-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
 
 ### ทาง ข · พัฒนาต่อ
 
 ```powershell
-.\scripts\install-marketplace.ps1
+.\scripts\install\install-marketplace.ps1
 ```
 
-อ่านรายชื่อ plugin จาก `marketplace.json` เอง · รัน validator ก่อน · รันซ้ำได้
+สคริปต์อ่านรายชื่อ plugin จาก `marketplace.json` เอง · ตรวจไฟล์ด้วย validator ก่อนติดตั้ง · รันซ้ำได้ไม่เสียหาย
 รายละเอียดใน [scripts/README.md](scripts/README.md)
 
-ตอนติดตั้งมันถามขอบเขต — **เลือก user** จะได้ใช้ได้ทุกโปรเจกต์บนเครื่องนี้
+ตอนติดตั้ง ระบบจะถามขอบเขต (scope) → **เลือก user** เพื่อใช้ได้ทุกโปรเจกต์บนเครื่องนี้
 
 **แล้วรีสตาร์ท Claude Code ทั้งสองทาง**
 
@@ -85,7 +86,7 @@ scripts\build-dist.cmd                                                       # �
 
 | ติดตั้งแบบ | ทำอะไร |
 |---|---|
-| ทาง ข | `/reload-plugins` — จบ ไม่ต้อง commit |
+| ทาง ข | `/reload-plugins` เท่านั้น ไม่ต้อง commit |
 | ทาง ก | `git push` ก่อน แล้ว `/plugin marketplace update sqt-marketplace` + `/plugin update software-company@sqt-marketplace` |
 
 ### ไม่เห็น skill ที่เพิ่งเพิ่ม
@@ -100,7 +101,7 @@ scripts\build-dist.cmd                                                       # �
 | ขึ้นแต่ไม่ทำงาน | `SKILL.md` ไม่มี `name` / `description` |
 | ชื่อไม่ตรง | `name` ต้องตรงกับชื่อโฟลเดอร์ |
 | แก้ไฟล์แล้วไม่เปลี่ยน | ติดตั้งไว้แบบทาง ก · พิมพ์ `/plugin` เช็กที่มา |
-| skill หายทั้งตัวแบบไม่มี error | `frontmatter` พัง — `node scripts\validate-marketplace.mjs` |
+| skill หายทั้งตัวแบบไม่มี error | `frontmatter` พัง · ตรวจด้วย `node scripts\check\validate-marketplace.mjs` |
 
 ---
 
@@ -115,10 +116,10 @@ scripts\build-dist.cmd                                                       # �
 ```
 
 ```
-/software-company:agent-team เพิ่มหน้าจอค้นหาลูกค้า
+/software-company:superuser เพิ่มหน้าจอค้นหาลูกค้า
 ```
 
-agent-team (A-Team) ทำงานอย่างไร → [docs/agent-team-software-company.png](docs/agent-team-software-company.png) · วิธีใช้ → [docs/USAGE.md](docs/USAGE.md)
+SuperUser ทำงานอย่างไร → [docs/superuser-software-company.png](docs/superuser-software-company.png) · plugin อื่น → `docs/superuser-<plugin>.png` · วิธีใช้ → [docs/USAGE.md](docs/USAGE.md)
 
 ---
 
@@ -127,7 +128,7 @@ agent-team (A-Team) ทำงานอย่างไร → [docs/agent-team-so
 | ไฟล์ | เนื้อหา |
 |------|---------|
 | [docs/INSTALL.md](docs/INSTALL.md) | ติดตั้งบน Claude Code · อัปโหลดเข้า claude.ai · ใช้กับ Codex CLI / Gemini CLI / ChatGPT / Gemini Gem |
-| [docs/USAGE.md](docs/USAGE.md) | วิธีใช้ · A-Team · workflow จริง · cheatsheet คำสั่งที่ใช้บ่อย |
+| [docs/USAGE.md](docs/USAGE.md) | วิธีใช้ · SuperUser · workflow จริง · cheatsheet คำสั่งที่ใช้บ่อย |
 | [docs/PLUGINS.md](docs/PLUGINS.md) | สรุป plugin ทั้งหมด · ย้ายจากรุ่นเก่า · roadmap |
 | [docs/REFERENCE.md](docs/REFERENCE.md) | รายละเอียดทุก agent / skill / command ของ software-company |
 | [docs/SKILL-LEVELS.md](docs/SKILL-LEVELS.md) | 4 ระดับที่เก็บ skill ได้ และเรียกใช้ยังไง |
@@ -147,7 +148,7 @@ SQT-Marketplace/
 │       ├── agents/     (38)
 │       ├── skills/     (101)
 │       ├── commands/   (28)
-│       └── hooks/      ← hook ของ A-Team (log · inbox)
+│       └── hooks/      ← hook ของ SuperUser (log · inbox)
 ├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
 ├── assets/     ← ไอคอนและรูปที่ใช้ร่วม
@@ -166,7 +167,7 @@ SQT-Marketplace/
 | skill | `plugins/<plugin>/skills/<name>/SKILL.md` |
 | command | `plugins/<plugin>/commands/<name>.md` |
 
-`name` ใน frontmatter ต้องตรงกับชื่อโฟลเดอร์หรือชื่อไฟล์ · agent ใช้คีย์ `tools:` ส่วน skill ใช้ `allowed-tools:`
+`name` ใน frontmatter ต้องตรงกับชื่อโฟลเดอร์ (skill) หรือชื่อไฟล์ (agent, command) · agent ใช้คีย์ `tools:` ส่วน skill ใช้ `allowed-tools:`
 
-แก้แล้วรัน `node scripts\validate-marketplace.mjs` ก่อน commit เสมอ
-และบวกเลข `version` ใน `plugin.json` ไม่งั้นเครื่องปลายทางไม่ดึงของใหม่
+แก้แล้วรัน `node scripts\check\validate-marketplace.mjs` ก่อน commit ทุกครั้ง
+แล้วเพิ่มเลข `version` ใน `plugin.json` · ไม่เพิ่ม → เครื่องที่ติดตั้งไว้จะไม่ดึงของใหม่

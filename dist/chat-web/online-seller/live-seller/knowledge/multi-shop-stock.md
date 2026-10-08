@@ -1,6 +1,6 @@
 # skill: multi-shop-stock
 
-Use when one Thai seller sells the same stock on several of Shopee, Lazada, TikTok Shop, LINE and Facebook and oversells or loses count. Master stock sheet, SKU naming, sync rules, buffer, reorder point.
+Use when one seller lists the same stock on several marketplaces and oversells or loses count. Master stock sheet, SKU naming, sync rules, reorder point.
 
 # Multi-shop Stock
 

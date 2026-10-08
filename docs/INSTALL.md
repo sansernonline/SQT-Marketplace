@@ -3,27 +3,27 @@
 | ปลายทาง | ไปที่ |
 |---|---|
 | Claude Code | หัวข้อ "วิธีที่ 1–3" ด้านล่าง |
-| claude.ai (Cowork / แชทเว็บ) | [claude.ai — อัปโหลด software-company.zip](#claudeai--อัปโหลด-software-companyzip) |
+| claude.ai (Cowork / แชทเว็บ) | [claude.ai — อัปโหลด zip ของแต่ละ plugin](#claudeai--อัปโหลด-zip-ของแต่ละ-plugin) |
 | Codex CLI · Gemini CLI · ChatGPT · Gemini Gem | [ใช้ชุดนี้กับ LLM ตัวอื่น](#ใช้ชุดนี้กับ-llm-ตัวอื่น) |
 
-มี 3 วิธี เลือกตามสถานการณ์
+สำหรับ Claude Code มี 3 วิธี เลือกตามสถานการณ์
 
 ---
 
 ## ✅ ก่อนเริ่ม: ตรวจสอบ Claude Code version
 
-Plugin system ต้องการ Claude Code version ใหม่พอ ตรวจด้วย:
+ระบบ plugin ต้องใช้ Claude Code รุ่นใหม่พอ ตรวจรุ่นด้วย:
 
 ```bash
 claude --version
 ```
 
-ถ้าเก่าให้อัปเดต:
+รุ่นเก่า → อัปเดต:
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-**Node.js 16 ขึ้นไป ใน PATH** — hook ของ A-Team รันด้วย `node` · ไม่มีก็ใช้งานหลักได้ปกติ แค่ไม่มี log ใน `.a-team/log/` และไม่มีแจ้งข้อความใน inbox (`node --version` ตรวจได้)
+**ต้องมี Node.js 16 ขึ้นไปใน PATH** เพราะ hook ของ SuperUser (สคริปต์ที่รันเองอัตโนมัติ) รันด้วย `node` · ไม่มี Node.js ก็ใช้งานหลักได้ปกติ แต่จะไม่มี log ใน `.superuser/log/` และไม่มีแจ้งข้อความใน inbox · ตรวจด้วย `node --version`
 
 ---
 
@@ -62,7 +62,7 @@ claude
 
 **5. รีสตาร์ท Claude Code** (สำคัญ)
 
-ออกแล้วเปิดใหม่ เพื่อให้ agents, skills, commands, hooks โหลด
+ออกแล้วเปิดใหม่ เพื่อให้โหลด agents, skills, commands และ hooks
 
 ---
 
@@ -97,7 +97,7 @@ cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agen
 cp -r "C:/Users/sanse/OneDrive/WORK/_KK/Projects/Agent Skill - Sub Agents & Agent Skills/SQT-Marketplace/plugins/software-company/commands/." ~/.claude/commands/
 ```
 
-**ข้อเสีย:** อัปเดตทีหลังต้อง copy ทับเอง · **ไม่มี hooks** — A-Team ใช้ได้ แต่ไม่มี log และไม่แจ้งข้อความใน inbox (ดู [SKILL-LEVELS.md](SKILL-LEVELS.md))
+**ข้อเสีย:** อัปเดตทีหลังต้อง copy ทับเอง · **ไม่มี hooks** → SuperUser ใช้ได้ แต่ไม่มี log และไม่แจ้งข้อความใน inbox (ดู [SKILL-LEVELS.md](SKILL-LEVELS.md))
 
 ---
 
@@ -170,18 +170,18 @@ Claude ควรเรียก skill `user-story-writer` มาใช้อั�
 /hooks
 ```
 
-ควรเห็น hook ของ software-company (`a-team-hook.mjs`) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
+ควรเห็น hook ของ software-company (`superuser-hook.mjs`) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
 
-### 5. เปิด A-Team ในโปรเจกต์
+### 5. เปิด SuperUser ในโปรเจกต์
 
-พูดว่า "ใช้ a-team" แล้วหัวหน้าทีมตั้งให้เอง หรือทำเอง:
+พูดว่า "ใช้ superuser" แล้วหัวหน้าทีมตั้งให้เอง หรือทำเอง:
 
 ```bash
-mkdir -p .a-team/log .a-team/inbox/done
-echo ".a-team/" >> .gitignore
+mkdir -p .superuser/log .superuser/inbox/done
+echo ".superuser/" >> .gitignore
 ```
 
-hook เขียน log เฉพาะโปรเจกต์ที่มี `.a-team/` — โฟลเดอร์อื่นไม่ถูกแตะ
+hook เขียน log เฉพาะโปรเจกต์ที่มี `.superuser/` — โฟลเดอร์อื่นไม่ถูกแตะ
 
 ---
 
@@ -230,11 +230,11 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 ---
 
-## claude.ai — อัปโหลด software-company.zip
+## claude.ai — อัปโหลด zip ของแต่ละ plugin
 
-`dist/claude-web/software-company.zip` คือ plugin `software-company` ที่บีบอัดไว้สำหรับ **อัปโหลดเข้า claude.ai** เพื่อให้ใช้ skill ได้ใน Cowork และแชทบนเว็บ/เดสก์ท็อป — ไม่ใช่เฉพาะ Claude Code
+`dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**ในไฟล์:** 101 skills · 38 agents · 28 commands · `plugin.json` v2.0.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-company.zip`:** 102 skills · 38 agents · 28 commands · `plugin.json` v2.0.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 
@@ -242,11 +242,11 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 1. เปิด **claude.ai บนเว็บ** (เมนูนี้ยังไม่มีในแอปเดสก์ท็อป)
 2. **Customize → Plugins → `+`** → Upload custom plugin
-3. เลือก `software-company.zip`
+3. เลือก `<plugin>.zip` ทีละไฟล์ · จำนวน skill ของทุก plugin ดูได้ใน `dist/README.md`
 
-**ถ้าเคยอัปโหลดตัวเก่าไว้แล้ว** ต้องลบตัวเก่าออกก่อนแล้วอัปโหลดใหม่ ไม่งั้นจะเป็น skill ชุดเดิม
+**ถ้าเคยอัปโหลดตัวเก่าไว้แล้ว** ต้องลบตัวเก่าออกก่อนแล้วอัปโหลดใหม่ ไม่งั้นจะยังได้ skill ชุดเดิม
 
-ข้อจำกัด: ไฟล์ ≤ 50 MB · 1 marketplace เก็บได้ ≤ 100 plugins
+ข้อจำกัด: ไฟล์ละไม่เกิน 50 MB · 1 marketplace เก็บได้ไม่เกิน 100 plugins
 
 ---
 
@@ -257,7 +257,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 | Cowork | ✅ | ✅ | ✅ | ✅ (รอยืนยัน) |
 | แชทเว็บ / แท็บ Chat ในเดสก์ท็อป | ✅ | ✅ | ⛔ เทา | ⛔ เทา |
 
-skill ทำงานทุกที่ · agent กับ hook จะเป็นสีเทาในหน้าแชทธรรมดา
+skill ทำงานทุกที่ · agent กับ hook จะเป็นสีเทา (ใช้ไม่ได้) ในหน้าแชทธรรมดา
 
 ---
 
@@ -266,12 +266,12 @@ skill ทำงานทุกที่ · agent กับ hook จะเป็�
 แก้ไฟล์ใน `plugins/software-company/` แล้วสำเนาที่อัปโหลดไว้จะ **ไม่อัปเดตตาม** ต้อง build ใหม่แล้วอัปโหลดทับ
 
 ```bash
-node scripts/validate-marketplace.mjs   # ตรวจก่อนเสมอ
-node scripts/build-targets.mjs          # สร้าง dist/ ทั้งหมด รวม zip นี้
+node scripts/check/validate-marketplace.mjs   # ตรวจก่อนเสมอ
+node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้งหมด รวม zip นี้
 ```
 
-สคริปต์เขียน zip เอง ไม่ต้องมีคำสั่ง `zip` หรือ Python · path ในไฟล์ใช้ `/` และโฟลเดอร์หลักเป็น `software-company/` ให้อัตโนมัติ ·
-วันที่ในไฟล์คงที่ ถ้าเนื้อหาไม่เปลี่ยน zip ก็ไม่เปลี่ยน git จึงไม่เห็นว่ามีการแก้
+สคริปต์สร้าง zip เอง ไม่ต้องมีคำสั่ง `zip` หรือ Python · ตั้ง path ในไฟล์เป็น `/` และโฟลเดอร์หลักเป็น `software-company/` ให้อัตโนมัติ
+วันที่ของไฟล์ใน zip คงที่ · เนื้อหาไม่เปลี่ยน → zip ไม่เปลี่ยน → git ไม่เห็นเป็นไฟล์ที่ถูกแก้
 
 ---
 
@@ -304,16 +304,16 @@ node scripts/build-targets.mjs          # สร้าง dist/ ทั้งห�
 
 ## ใช้ชุดนี้กับ LLM ตัวอื่น
 
-ต้นฉบับอยู่ที่ `plugins/` ในรูปแบบของ Claude แล้ว `scripts/build-targets.mjs` จะสร้าง `dist/` ให้ปลายทางแต่ละตัว
+ต้นฉบับอยู่ที่ `plugins/` ในรูปแบบของ Claude แล้ว `scripts/build/build-targets.mjs` จะสร้าง `dist/` ให้ปลายทางแต่ละตัว
 ถ้าจะแก้ ให้แก้ที่ `plugins/` แล้วรันสคริปต์ใหม่ ห้ามแก้ใน `dist/`
 
 | ปลายทาง | โฟลเดอร์ | ได้อะไร | ไม่ได้อะไร |
 |---|---|---|---|
 | Claude Code | `plugins/` (ติดตั้งตาม [หัวข้อแรกของไฟล์นี้](#วิธีที่-1-local-marketplace-แนะนำสำหรับทดลอง)) | ครบทุกอย่าง | — |
-| claude.ai (Cowork / แชทเว็บ) | `dist/claude-web/software-company.zip` (อัปโหลดตาม [CLAUDE-WEB.md](#claudeai--อัปโหลด-software-companyzip)) | plugin หลักทั้งตัว | agent ในหน้าแชทธรรมดา · plugin เสริมตามสายงาน |
-| OpenAI Codex CLI | `dist/codex/` | skill · subagent · คำสั่งสำเร็จรูป (แปลงเป็น skill) | ส่วน `model:` ของ agent |
-| Gemini CLI | `dist/gemini-cli/` | skill · subagent · slash command | ส่วน `tools:` `model:` ของ agent |
-| ChatGPT Custom GPT | `dist/chat-web/` | หนึ่งบทบาทต่อหนึ่ง GPT พร้อม skill ที่บทบาทนั้นใช้ | script ใน skill · slash command |
+| claude.ai (Cowork / แชทเว็บ) | `dist/claude-web/<plugin>.zip` (อัปโหลดตาม [หัวข้อนี้](#claudeai--อัปโหลด-zip-ของแต่ละ-plugin)) | plugin ทั้งตัว 1 ไฟล์ต่อ plugin | agent ในหน้าแชทธรรมดา · คลังไอคอน .zip |
+| OpenAI Codex CLI | `dist/codex/<plugin>/` | skill · subagent · คำสั่งสำเร็จรูป (แปลงเป็น skill) | ส่วน `model:` ของ agent |
+| Gemini CLI | `dist/gemini-cli/<plugin>/` | skill · subagent · slash command | ส่วน `tools:` `model:` ของ agent |
+| ChatGPT Custom GPT | `dist/chat-web/` | 1 บทบาทต่อ 1 GPT พร้อม skill ที่บทบาทนั้นใช้ | script ใน skill · slash command |
 | Gemini Gem | `dist/chat-web/` | เหมือน Custom GPT | เหมือน Custom GPT |
 
 > ข้อมูลรูปแบบไฟล์และขีดจำกัดตรวจจากเอกสารทางการเมื่อ 2026-10-01 · ยังไม่ได้ลองติดตั้งจริงกับทุกเครื่องมือ
@@ -322,36 +322,37 @@ node scripts/build-targets.mjs          # สร้าง dist/ ทั้งห�
 
 ### OpenAI Codex CLI
 
-คัดลอกเนื้อหาใน `dist/codex/` ไปไว้ที่รากโปรเจกต์ (ใช้เฉพาะโปรเจกต์นั้น) หรือที่ home (ใช้ทุกโปรเจกต์):
+คัดลอกเนื้อหาใน `dist/codex/<plugin>/` ไปไว้ที่รากโปรเจกต์ (ใช้เฉพาะโปรเจกต์นั้น) หรือที่ home (ใช้ทุกโปรเจกต์):
 
-| ไฟล์ใน `dist/codex/` | ระดับโปรเจกต์ | ระดับผู้ใช้ |
+| ไฟล์ใน `dist/codex/<plugin>/` | ระดับโปรเจกต์ | ระดับผู้ใช้ |
 |---|---|---|
 | `.agents/skills/` | `<repo>/.agents/skills/` | `~/.agents/skills/` |
 | `.codex/agents/` | `<repo>/.codex/agents/` | `~/.codex/agents/` |
 | `AGENTS.md` | `<repo>/AGENTS.md` (ถ้ามีอยู่แล้วให้ต่อท้าย) | `~/.codex/AGENTS.md` |
 
+- บาง skill มีชื่อซ้ำกันในหลาย plugin (`superuser` · `human-writing`) → 1 โปรเจกต์ใช้ชุดของ plugin เดียว หรือคัดลอกทีละ plugin แล้วเก็บ `superuser` ของ plugin งานหลักไว้
 - เรียก skill หรือคำสั่งด้วย `$ชื่อ` เช่น `$code-review src/app.ts` หรือปล่อยให้ Codex เลือกเอง
-- Codex จำกัดขนาด `AGENTS.md` ที่รวมกันทั้งหมดไว้ที่ 32 KiB ไฟล์ของชุดนี้ใช้ราว 18 KiB
-- ไม่มี hook ของเรา → `.a-team/log/` ช่วงนั้นว่าง · Codex อ่าน `AGENTS.md` ของโปรเจกต์แล้วไป `CONTEXT.md` — ก่อนจบให้มันเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md`
+- Codex จำกัดขนาด `AGENTS.md` รวมทุกไฟล์ไว้ที่ 32 KiB · ไฟล์ของชุดนี้ใช้ราว 18 KiB
+- Codex ไม่รัน hook ของเรา → ช่วงที่ใช้ Codex จะไม่มี log ใน `.superuser/log/` · Codex อ่าน `AGENTS.md` ของโปรเจกต์ แล้วตามไปอ่าน `CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md`
 
 ### Gemini CLI
 
-`dist/gemini-cli/` เป็น extension ที่ติดตั้งได้ทั้งโฟลเดอร์:
+`dist/gemini-cli/<plugin>/` เป็น extension 1 ตัวต่อ 1 plugin ติดตั้งได้ทั้งโฟลเดอร์:
 
 ```bash
-gemini extensions install ./dist/gemini-cli
+gemini extensions install ./dist/gemini-cli/software-company
 ```
 
 - คำสั่งเรียกด้วย `/ชื่อ` เช่น `/code-review src/app.ts`
 - skill และ subagent ถูกโหลดเองเมื่องานตรงกับคำอธิบาย
-- ไม่มี hook ของเรา → `.a-team/log/` ช่วงนั้นว่าง · Gemini อ่าน `GEMINI.md` ของโปรเจกต์แล้วไป `CONTEXT.md` — ก่อนจบให้มันเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md`
+- Gemini ไม่รัน hook ของเรา → ช่วงที่ใช้ Gemini จะไม่มี log ใน `.superuser/log/` · Gemini อ่าน `GEMINI.md` ของโปรเจกต์ แล้วตามไปอ่าน `CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md`
 
 > ⚠ Google ประกาศว่า Gemini CLI ถูกแทนด้วย Antigravity CLI ตั้งแต่ 18 มิถุนายน 2026 สำหรับผู้ใช้ระดับฟรีและ Google One
 > ยังไม่ได้ตรวจว่า Antigravity CLI อ่าน extension รูปแบบนี้ได้หรือไม่
 
 ### ChatGPT Custom GPT และ Gemini Gem
 
-หนึ่งโฟลเดอร์ `dist/chat-web/<plugin>/<role>/` = หนึ่ง GPT หรือ Gem
+1 โฟลเดอร์ `dist/chat-web/<plugin>/<role>/` = 1 GPT หรือ 1 Gem
 
 1. สร้าง GPT หรือ Gem ใหม่ ตั้งชื่อตามบทบาท
 2. วาง `instructions.md` ในช่อง Instructions
@@ -364,14 +365,14 @@ gemini extensions install ./dist/gemini-cli
 
 ### ชุด prompt (`prompt/`)
 
-ใช้ร่วมกันได้ไม่ต้องแปลง — เป็นข้อความธรรมดาที่เรียก agent และ skill ด้วยชื่อ ซึ่งมีอยู่ใน `dist/` ทุกชุด
+ใช้ได้เลยไม่ต้องแปลง · prompt เป็นข้อความธรรมดาที่เรียก agent และ skill ด้วยชื่อ และชื่อเหล่านั้นมีอยู่ใน `dist/` ทุกชุด
 
 | ปลายทาง | ใช้ได้ไหม | หมายเหตุ |
 |---|---|---|
 | Claude Code · Codex CLI · Gemini CLI | ✅ | วางทั้งไฟล์ที่รากโฟลเดอร์โปรเจกต์ตาม [prompt/README.md](../prompt/README.md) |
-| ChatGPT · Gemini บนเว็บ | ❌ เกือบทั้งหมด | prompt ต้องอ่าน/เขียนไฟล์ในโปรเจกต์ รัน test และใช้ git ซึ่งหน้าเว็บทำไม่ได้ |
+| ChatGPT · Gemini บนเว็บ | ❌ เกือบทั้งหมด | prompt ต้องอ่านและเขียนไฟล์ในโปรเจกต์ รัน test และใช้ git · หน้าเว็บทำไม่ได้ |
 
 ส่วนที่มีเฉพาะ Claude:
 
-- `/loop` ใน `docs/AGENT-LOOP.md` (ฉบับ 10 ของ `prompt-new-project.md`) — เครื่องมืออื่นใช้วิธีวางทีละรอบในหน้าต่างใหม่
-- `anthropic-skills:docx` / `anthropic-skills:pdf` ในฉบับ 13 — ไม่มีให้ใช้ `branded-document-design` อย่างเดียว ซึ่งต้องรัน Python ได้
+- `/loop` ใน `docs/AGENT-LOOP.md` (ฉบับ 10 ของ `prompt-new-project.md`) · เครื่องมืออื่นไม่มีคำสั่งนี้ → วาง prompt ทีละรอบในหน้าต่างใหม่แทน
+- `anthropic-skills:docx` / `anthropic-skills:pdf` ในฉบับ 13 · เครื่องมืออื่นไม่มี 2 ตัวนี้ → ใช้ `branded-document-design` อย่างเดียว และเครื่องต้องรัน Python ได้

@@ -1,6 +1,6 @@
 # skill: salary-negotiation
 
-Use when the user gets a job offer, is asked expected salary (เงินเดือนที่คาดหวัง), wants a raise, compares offers or gets a counter-offer in Thailand. Converts offers to total yearly pay and drafts the words in Thai and English.
+Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand. Total yearly pay, Thai and English wording.
 
 # Salary Negotiation (Thailand)
 
@@ -21,7 +21,7 @@ General information, not professional advice — for tax effects ask a นัก
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.robertwalters.co.th/salarysurvey.html · https://adecco.co.th/en/knowledge-center/detail/salary-guide/download-adecco-thailand-salary-guide-2025
 
-Use at least two sources; write the range as low / mid / high with source and year. Recruiter guides skew to multinationals — Thai SMEs often pay below the range.
+Use at least 2 sources; write the range as low / mid / high with source and year. Recruiter guides skew to multinationals — Thai SMEs often pay below the range.
 
 ## Step 2 — total compensation
 

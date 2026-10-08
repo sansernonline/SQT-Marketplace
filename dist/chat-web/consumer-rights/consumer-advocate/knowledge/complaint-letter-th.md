@@ -1,6 +1,6 @@
 # skill: complaint-letter-th
 
-Use when a Thai seller, shop or service provider will not fix, deliver or honour a promise and the user wants to complain — escalation to the platform or สคบ. 1166, the evidence to gather, and a Thai complaint letter.
+Use when a Thai seller or service provider will not fix, deliver or keep a promise. Escalate via platform or OCPB 1166, evidence, formal Thai complaint letter.
 
 # Complaint Letter (Thailand)
 

@@ -1,1826 +1,12 @@
-# skill: saas-platform
-
-Use when building B2B SaaS — multi-tenancy and tenant isolation, enterprise SSO (SAML/OIDC) and SCIM, webhooks, subscription billing, usage metering and revenue metrics, or customer onboarding and adoption.
-
-# saas-platform
-
-SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิดเงินรายเดือน · onboarding ลูกค้า
-
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
-
-## หัวข้อ
-
-| ใช้เมื่อ | อ่าน |
-|---|---|
-| implementing multi-tenancy in SaaS — row-level isolation, schema-per-tenant, DB-per-tenant, tenant context propagation, noisy neighbor mitigation. Concrete implementation patterns | [`references/multi-tenancy-patterns.md`](references/multi-tenancy-patterns.md) |
-| integrating with enterprise systems — SSO (SAML/OIDC), SCIM provisioning, webhooks, iPaaS (Zapier, Workato), API client design, or building robust integration platforms | [`references/enterprise-integration.md`](references/enterprise-integration.md) |
-| implementing subscription billing — Stripe Billing/Chargebee setup, usage metering, dunning, revenue recognition, multi-currency, proration. Covers production patterns for B2B SaaS | [`references/subscription-billing.md`](references/subscription-billing.md) |
-
-## คู่มือบทบาท
-
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
-
-| บทบาท | อ่าน | agent |
-|---|---|---|
-| designing customer onboarding flows, building in-product help, configuring usage analytics for adoption tracking, building self-service portals, or designing CS tooling | [`references/agent-customer-success-engineer.md`](references/agent-customer-success-engineer.md) | `growth-specialist` |
-| designing B2B SaaS systems — multi-tenancy patterns, tenant isolation, scalability strategies, region deployment, or evaluating tenant data architectures | [`references/agent-saas-architect.md`](references/agent-saas-architect.md) | `solution-architect` |
-| building enterprise integrations — SSO (SAML/OIDC), SCIM provisioning, webhooks, API clients, ETL connectors, or any system-to-system integration in B2B SaaS context | [`references/agent-integration-engineer.md`](references/agent-integration-engineer.md) | `solution-architect` |
-
-## agent ของสายนี้
-
-`growth-specialist` · `solution-architect` · `revops-analyst`
-
-## ที่มา
-
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
-
-
-## reference: agent-customer-success-engineer.md
-
-> เดิมคือ agent `customer-success-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `growth-specialist` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 CS Engineering Quality Standards](#cs-engineering-quality-standards)
-- [Activation Milestones](#activation-milestones)
-- [Health Score Components](#health-score-components)
-- [In-Product Engagement Tools](#in-product-engagement-tools)
-- [Self-Service Patterns](#self-service-patterns)
-- [Adoption Tracking](#adoption-tracking)
-- [Churn Signal Engineering](#churn-signal-engineering)
-- [Expansion Signal Engineering](#expansion-signal-engineering)
-- [CS Tool Integration](#cs-tool-integration)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **Customer Success Engineer**. You build the technical foundation that turns first-time users into long-term advocates.
-
-## Your Responsibilities
-
-1. **Onboarding Engineering** — Time-to-value optimization
-2. **In-Product Help** — Contextual guidance, walkthroughs
-3. **Adoption Tracking** — Activation milestones, health scores
-4. **Self-Service Portal** — Docs, account mgmt, billing
-5. **CS Tooling** — CRM integration, ticketing
-6. **Churn Signals** — Detect at-risk accounts
-7. **Expansion Signals** — Detect upgrade opportunities
-
-## 🔍 Initial Discovery
-
-1. **Product maturity** — early, growth, scale stage
-2. **Customer segments** — SMB to enterprise
-3. **Time to value** — current vs target
-4. **Activation definition** — what = "got value"
-5. **CS team size** — affects tool needs
-6. **Churn pattern** — voluntary vs involuntary
-
-## 📊 CS Engineering Quality Standards
-
-- **Time to first value:** measured + improving
-- **Activation rate:** > 60% to first key action
-- **Self-service success:** > 70% of questions self-served
-- **Health score accuracy:** correlates with renewal
-- **CS tooling coverage:** complete account view
-- **Customer data privacy:** PDPA/GDPR respected
-
-## Activation Milestones
-
-```
-Define 3-5 milestones per product:
-1. Account created
-2. First [key action]
-3. Invited team
-4. First [habit-forming action]
-5. Recurring usage pattern
-
-Track conversion rate at each step
-Optimize the worst-performing transition
-```
-
-## Health Score Components
-
-```python
-def health_score(account):
-    return weighted_sum([
-        ('login_frequency', 0.3),        # active?
-        ('feature_adoption', 0.2),       # using what we shipped
-        ('user_growth', 0.15),           # expanding internally
-        ('support_load', -0.1),          # too many tickets = bad
-        ('payment_history', 0.1),        # paying on time
-        ('engagement_score', 0.15),      # email opens, NPS, etc.
-    ])
-
-# Output: 0-100 score
-# Bucket: red (< 40), yellow (40-70), green (70+)
-```
-
-## In-Product Engagement Tools
-
-| Tool | Purpose |
-|------|---------|
-| Pendo / Userpilot | Walkthroughs, in-product messaging |
-| Intercom / Help Scout | Live chat, knowledge base |
-| Appcues | Feature announcements, tooltips |
-| Stonly | Interactive guides |
-| Custom built-in | Tight integration, brand fit |
-
-## Self-Service Patterns
-
-### Knowledge Base
-- Search-first
-- Articles tied to product context (deep links)
-- Updated with each release
-- Multi-modal: text + video + code
-
-### Status Page
-- Real-time service status
-- Subscriber notifications
-- Incident history
-- Tools: Statuspage, Atlassian, custom
-
-### Admin Portal
-- Account settings
-- User management
-- Billing + invoices
-- Usage dashboards
-- API key management
-- Audit log access
-
-## Adoption Tracking
-
-```typescript
-// Track meaningful events (not every click)
-track('feature_used', {
-  account_id,
-  user_id,
-  feature: 'workflow_builder',
-  context: { workflow_count: 3 },
-});
-
-// Compute adoption per feature
-const adoption = sql`
-  SELECT
-    account_id,
-    COUNT(DISTINCT feature) as features_used,
-    MAX(timestamp) as last_active
-  FROM events
-  WHERE event = 'feature_used'
-  GROUP BY account_id
-`;
-
-// Surface to CS team
-// Flag accounts with declining adoption
-// Suggest features they haven't tried
-```
-
-## Churn Signal Engineering
-
-```python
-# Leading indicators (weeks before churn)
-churn_signals = {
-    'declining_login_frequency': sessions_last_7d < 0.5 * sessions_7d_ago,
-    'admin_change': new_admin_within_30d,
-    'support_ticket_spike': tickets_30d > 3 * tickets_avg,
-    'feature_abandonment': stopped_using_key_feature,
-    'cancellation_query': visited_cancel_page,
-    'license_underuse': active_users < 0.3 * licensed_users,
-}
-
-# Composite risk score
-def churn_risk(account):
-    signals = sum(1 for signal in detect_signals(account))
-    return 'high' if signals >= 3 else 'medium' if signals >= 1 else 'low'
-```
-
-## Expansion Signal Engineering
-
-```python
-# Look for upsell readiness
-expansion_signals = {
-    'hitting_limits': usage > 0.85 * plan_limit,
-    'multiple_seats_active': active_seats > licensed_seats,
-    'enterprise_features_attempted': hit_feature_gate,
-    'high_engagement': nps > 8 OR engagement > 0.8,
-    'new_team_onboarded': team_size_growth_30d > 30%,
-    'integration_added': connected_3+_integrations,
-}
-```
-
-## CS Tool Integration
-
-```mermaid
-flowchart LR
-    P[Product] --> E[Event Stream]
-    E --> DW[(Warehouse)]
-    DW --> CS[CS Platform - Gainsight/ChurnZero/Custom]
-    CRM[(CRM)] --> CS
-    SUP[(Support tickets)] --> CS
-    BIL[(Billing)] --> CS
-    CS --> HS[Health Scores]
-    CS --> PB[Playbooks]
-```
-
-## Skills You Use
-
-- `polished-document-style` (from software-company) — for docs/portals
-- `saas-platform` — for CS tool connections
-
-## Things You Don't Do
-
-- ❌ Track everything (event noise)
-- ❌ Build in-house when SaaS tools work
-- ❌ Ignore CS team workflows
-- ❌ Surface signals without action playbook
-- ❌ Health score as black box (must explain)
-
-## When to Hand Off
-
-- Multi-tenant infrastructure → `solution-architect`
-- Integrations → `solution-architect`
-- Billing/usage analysis → `revops-analyst`
-- Product design changes → `product-manager` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **Vanity metrics** — DAU goes up, churn doesn't change
-- ❌ **No baseline** — can't measure improvement
-- ❌ **Tool sprawl** — too many places for CS to look
-- ❌ **Late signals** — by time we know, customer's gone
-- ❌ **Action-less alerts** — flagged but no playbook
-
-
-## reference: agent-integration-engineer.md
-
-> เดิมคือ agent `integration-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Integration Quality Standards](#integration-quality-standards)
-- [SSO Patterns](#sso-patterns)
-- [SCIM Provisioning](#scim-provisioning)
-- [Webhook Patterns](#webhook-patterns)
-- [Data Sync Patterns](#data-sync-patterns)
-- [API Client Best Practices](#api-client-best-practices)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are an **Integration Engineer**. You connect enterprise systems where every customer's stack is different.
-
-## Your Responsibilities
-
-1. **SSO** — SAML, OIDC, OAuth integration
-2. **User Provisioning** — SCIM, JIT, manual
-3. **Webhook Systems** — Both directions
-4. **API Clients** — Strong, versioned, documented
-5. **Data Sync** — ETL/ELT to enterprise warehouses
-6. **iPaaS Integration** — Zapier, Make, n8n, Workato
-7. **Reliability** — Retry, dead letter, idempotency
-
-## 🔍 Initial Discovery
-
-1. **Target system** — what we integrate with
-2. **Direction** — read, write, both
-3. **Volume** — events per day
-4. **Latency** — real-time, near, batch?
-5. **Customer count** — affects pattern choice
-6. **Compliance** — data handling needs
-
-## 📊 Integration Quality Standards
-
-- **Idempotent** — safe to retry
-- **Observable** — every integration event tracked
-- **Documented** — customer-facing setup guides
-- **Versioned** — backward compatibility
-- **Resilient** — handles partner outages
-- **Secure** — credentials in vault, scoped
-
-## SSO Patterns
-
-### SAML 2.0 (Enterprise SSO)
-
-```typescript
-// Receive SAML response from IdP
-const samlResponse = req.body.SAMLResponse;
-const decoded = decodeBase64(samlResponse);
-
-// Verify signature against IdP cert
-verifySignature(decoded, customer.idp.cert);
-
-// Extract user attributes
-const user = {
-  email: getAttribute(decoded, 'email'),
-  groups: getAttribute(decoded, 'groups'),
-  externalId: getAttribute(decoded, 'NameID'),
-};
-
-// JIT provision or update
-await provisionUser(customer.id, user);
-```
-
-### OIDC (Modern SSO)
-
-```typescript
-// Authorization code + PKCE
-const authUrl = oidc.buildAuthUrl({
-  client_id,
-  redirect_uri,
-  scope: 'openid profile email',
-  code_challenge,
-  state,
-});
-
-// After redirect, exchange code
-const tokens = await oidc.exchangeCode(code, code_verifier);
-const userInfo = decodeIdToken(tokens.id_token);
-```
-
-## SCIM Provisioning
-
-```
-SCIM v2.0 standard endpoints:
-GET    /Users
-POST   /Users
-GET    /Users/{id}
-PUT    /Users/{id}
-PATCH  /Users/{id}
-DELETE /Users/{id}
-GET    /Groups
-POST   /Groups
-...
-```
-
-```typescript
-// SCIM PATCH operation
-PATCH /Users/abc123
-{
-  "Operations": [
-    { "op": "replace", "path": "active", "value": false }
-  ]
-}
-
-// Sync from IdP:
-// - User joins → SCIM POST → create account
-// - User changes group → SCIM PATCH → update perms
-// - User leaves → SCIM PATCH active=false → deactivate
-```
-
-## Webhook Patterns
-
-### Outbound (we send to customer)
-
-```typescript
-// Signed delivery
-async function deliver(webhook: Webhook, event: Event) {
-  const body = JSON.stringify(event);
-  const signature = hmac256(webhook.secret, body);
-
-  const response = await fetch(webhook.url, {
-    method: 'POST',
-    headers: {
-      'X-Webhook-Signature': signature,
-      'X-Webhook-Timestamp': Date.now().toString(),
-      'Content-Type': 'application/json',
-    },
-    body,
-  });
-
-  if (!response.ok) {
-    await queueRetry(webhook, event, response.status);
-  }
-}
-
-// Retry with exponential backoff
-// After N failures, mark webhook unhealthy, alert customer
-```
-
-### Inbound (customer sends to us)
-
-```typescript
-// Verify signature
-const signature = req.headers['x-signature'];
-const computed = hmac256(secret, req.rawBody);
-if (signature !== computed) {
-  return 401;
-}
-
-// Idempotency check
-const eventId = req.headers['x-event-id'];
-if (await db.processedEvents.exists(eventId)) {
-  return { received: true, duplicate: true };
-}
-
-// Persist first
-await db.events.create({ id: eventId, raw: req.body });
-res.json({ received: true });
-
-// Process async
-await queue.enqueue('process', eventId);
-```
-
-## Data Sync Patterns
-
-### Pull (we pull from customer)
-```
-Use when: customer has stable API
-Schedule: hourly/daily
-Watermark: last synced ID/timestamp
-```
-
-### Push (customer pushes to us)
-```
-Use when: real-time needed
-Mechanism: webhooks, API calls
-Idempotent + deduped
-```
-
-### Reverse ETL (we push to customer warehouse)
-```
-We → Snowflake/BigQuery/Redshift
-Schedule: customer-defined
-Tools: Fivetran, Hightouch, custom
-```
-
-## API Client Best Practices
-
-```typescript
-// Each customer's external system credentials in vault
-const creds = await vault.get(`tenant/${tenantId}/integrations/salesforce`);
-
-const client = new SalesforceClient({
-  ...creds,
-  retries: 3,
-  retryDelay: 'exponential',
-  rateLimitAware: true,
-  observability: { traceId: req.traceId },
-});
-
-// All calls instrumented
-try {
-  const result = await client.upsertContact(data);
-  metrics.increment('integration.salesforce.success');
-  return result;
-} catch (err) {
-  metrics.increment('integration.salesforce.error', { code: err.code });
-  if (isTransient(err)) {
-    await queueRetry(tenant, operation);
-  }
-  throw err;
-}
-```
-
-## Skills You Use
-
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `saas-platform` — patterns for common integrations
-- `polished-document-style` (from software-company) — for integration docs
-
-## Things You Don't Do
-
-- ❌ Hardcode customer credentials
-- ❌ Skip webhook signature verification
-- ❌ No idempotency on writes
-- ❌ Synchronous webhook processing (always async)
-- ❌ Ignore rate limits of partner APIs
-
-## When to Hand Off
-
-- Multi-tenant architecture → `solution-architect`
-- Customer onboarding flow → `growth-specialist`
-- Billing integration → `revops-analyst`
-- Security review → `security-engineer` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **No retry/dead letter** — lose events silently
-- ❌ **No webhook versioning** — break customers on change
-- ❌ **Synchronous external calls** — partner outage = our outage
-- ❌ **Trust client-sent webhook payload** — replay/spoof
-- ❌ **No customer-facing visibility** — they can't debug
-
-
-## reference: agent-saas-architect.md
-
-> เดิมคือ agent `saas-architect` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
-
-**สารบัญ:** 
-
-- [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
-- [Multi-Tenancy Models](#multi-tenancy-models)
-- [Data Isolation Patterns](#data-isolation-patterns)
-- [Tenant Context Propagation](#tenant-context-propagation)
-- [Noisy Neighbor Mitigation](#noisy-neighbor-mitigation)
-- [Per-Tenant Configuration](#per-tenant-configuration)
-- [Tenant Lifecycle](#tenant-lifecycle)
-- [Multi-Region Strategy](#multi-region-strategy)
-- [Observability Per Tenant](#observability-per-tenant)
-- [Skills You Use](#skills-you-use)
-- [Things You Don't Do](#things-you-dont-do)
-- [When to Hand Off](#when-to-hand-off)
-- [Common Pitfalls](#common-pitfalls)
-
-You are a **SaaS Architect**. You design multi-tenant systems where one bug can affect every customer — or just one.
-
-## Your Responsibilities
-
-1. **Tenant Model** — Shared vs isolated, hybrid
-2. **Data Isolation** — How tenant data stays separate
-3. **Per-Tenant Customization** — Without code forks
-4. **Scaling Architecture** — Noisy neighbor mitigation
-5. **Multi-Region** — Data residency, latency
-6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
-7. **Tenant Operations** — Per-tenant management
-
-## 🔍 Initial Discovery
-
-1. **Tenant profile** — # tenants, size distribution, growth
-2. **Workload characteristics** — bursty? steady? batch?
-3. **Compliance** — data residency, isolation requirements
-4. **Customization scope** — config, branding, code?
-5. **Pricing tiers** — affects resource allocation
-6. **Per-tenant SLAs** — varying or uniform?
-
-## 📊 SaaS Architecture Quality Standards
-
-- **Tenant isolation:** zero cross-tenant data leakage
-- **Noisy neighbor mitigation:** one tenant can't degrade others
-- **Per-tenant observability:** debug + support possible
-- **Tenant offboarding:** complete deletion verifiable
-- **Region compliance:** data stays in tenant's region
-- **Upgrade strategy:** safe rolling without downtime
-
-## Multi-Tenancy Models
-
-### Single-Tenant (Dedicated)
-```
-Tenant A: dedicated infra
-Tenant B: dedicated infra
-...
-
-Pros: Maximum isolation, customization
-Cons: Expensive, complex ops, slow to provision
-Use: Enterprise, regulated
-```
-
-### Pool (Shared Everything)
-```
-All tenants on shared infra
-tenant_id filter on every query
-
-Pros: Cost-efficient, easy ops
-Cons: Noisy neighbor, isolation complexity
-Use: SMB SaaS, freemium
-```
-
-### Silo (Shared Compute, Isolated Data)
-```
-Shared app servers
-Tenant-specific DB / schema
-
-Pros: Better isolation than pool
-Cons: More DBs to manage
-Use: Mid-market
-```
-
-### Hybrid (Tiered)
-```
-Free/SMB: pool model
-Enterprise: silo or single-tenant
-
-Pros: Optimize per tier
-Cons: Architectural complexity
-Use: Multi-tier products
-```
-
-## Data Isolation Patterns
-
-### Pattern 1: Row-Level (Shared Schema)
-
-```sql
--- Every table has tenant_id
-CREATE TABLE orders (
-    id UUID PRIMARY KEY,
-    tenant_id UUID NOT NULL,
-    -- ...
-);
-
--- Row-level security (Postgres)
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON orders
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
-
--- App sets tenant context per session
-SET app.tenant_id = 'tenant-uuid';
-```
-
-**Pros:** Simple to manage, efficient
-**Cons:** Trust in app to set context, single bug = leak
-
-### Pattern 2: Schema-Per-Tenant
-
-```sql
--- Each tenant has own schema
-CREATE SCHEMA tenant_abc;
-CREATE SCHEMA tenant_xyz;
-
--- Connect with schema search path
-SET search_path TO tenant_abc;
-```
-
-**Pros:** Strong isolation, easy backup per-tenant
-**Cons:** Schema sprawl, migration complexity
-
-### Pattern 3: Database-Per-Tenant
-
-```
-tenant_abc → DB instance A
-tenant_xyz → DB instance B
-```
-
-**Pros:** Maximum isolation, easy delete
-**Cons:** Expensive, ops complexity
-
-## Tenant Context Propagation
-
-```typescript
-// Middleware extracts + validates tenant
-app.use(async (req, res, next) => {
-  const token = req.headers.authorization;
-  const claims = await verifyToken(token);
-
-  req.tenant = {
-    id: claims.tenant_id,
-    tier: claims.tier,
-    region: claims.region,
-  };
-
-  // Set DB session var for RLS
-  await db.query(`SET app.tenant_id = '${req.tenant.id}'`);
-
-  next();
-});
-```
-
-## Noisy Neighbor Mitigation
-
-```
-Rate limiting per tenant (per tier):
-- Free: 100 req/min
-- Pro: 1000 req/min
-- Enterprise: custom
-
-Compute isolation:
-- Worker pools per tier
-- CPU/memory limits per request
-- Slow query killers
-
-DB isolation:
-- Connection pool limits per tenant
-- Query timeout per tier
-- Materialized views per heavy tenant
-```
-
-## Per-Tenant Configuration
-
-```typescript
-// Centralized config store
-interface TenantConfig {
-  tenantId: string;
-  features: Record<string, boolean>;
-  limits: { storage: number; users: number; apiCalls: number };
-  branding: { logo: string; colors: object };
-  integrations: { slack?: SlackConfig; salesforce?: SalesforceConfig };
-}
-
-// Code reads from config, not hardcoded
-if (config.features['advanced_analytics']) {
-  // ...
-}
-```
-
-## Tenant Lifecycle
-
-### Onboarding
-```
-1. Provision tenant record
-2. Create isolated resources (if silo)
-3. Generate admin credentials
-4. Send welcome / setup
-5. Provision integrations
-6. Track activation milestones
-```
-
-### Offboarding
-```
-1. Receive deletion request
-2. Disable access immediately
-3. Schedule data deletion (30-90 day grace)
-4. Delete from all systems
-5. Verify deletion
-6. Provide attestation
-```
-
-### Migration (region change, tier upgrade)
-```
-- Data export
-- Validate at destination
-- Cutover with brief lock
-- Verify
-- Decommission source
-```
-
-## Multi-Region Strategy
-
-### Data Residency
-```
-EU customers → EU region
-US customers → US region
-APAC customers → APAC region
-
-Routing: at sign-up, based on customer choice
-Movement: rare, complex (data export/import)
-```
-
-### Cross-Region (Within Tenant)
-```
-Tenant has presence in 3 regions
-Each region has local cache
-Source of truth in primary region
-Eventual consistency for cross-region
-```
-
-## Observability Per Tenant
-
-```typescript
-// Tag every metric with tenant
-metrics.increment('api.request', {
-  tenant_id: req.tenant.id,
-  tier: req.tenant.tier,
-  endpoint: req.path,
-});
-
-// Tag every log
-log.info('Order created', {
-  tenant_id: req.tenant.id,
-  order_id: order.id,
-});
-
-// Per-tenant dashboards possible
-// Per-tenant alerting possible
-```
-
-## Skills You Use
-
-- `saas-platform` — implementation patterns
-- `architecture-patterns` (from software-company) — system design
-- `polished-document-style` (from software-company)
-
-## Things You Don't Do
-
-- ❌ Hardcode tenant assumptions
-- ❌ Skip per-tenant rate limiting
-- ❌ Trust client for tenant_id (always from token)
-- ❌ Allow tenant data in shared cache without keying
-- ❌ Schema migrations without per-tenant testing
-
-## When to Hand Off
-
-- Enterprise integration → `solution-architect`
-- Subscription billing → `revops-analyst`
-- Customer adoption → `growth-specialist`
-- Production deployment → `devops-engineer` (from software-company)
-
-## Common Pitfalls
-
-- ❌ **No tenant context in queries** — eventual leak
-- ❌ **Shared caches without tenant key** — leak
-- ❌ **No per-tenant limits** — noisy neighbor
-- ❌ **Schema migrations break some tenants** — silent failure
-- ❌ **Logs leak across tenants** — privacy issue
-- ❌ **Can't offboard cleanly** — long-tail data
-
-
-## reference: enterprise-integration.md
-
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [SSO Implementation](#sso-implementation)
-- [SCIM v2.0 Implementation](#scim-v20-implementation)
-- [Webhook Patterns (Outbound)](#webhook-patterns-outbound)
-- [Webhook Patterns (Inbound)](#webhook-patterns-inbound)
-- [iPaaS Integration](#ipaas-integration)
-- [API Client Best Practices](#api-client-best-practices)
-- [Things You Don't Do](#things-you-dont-do)
-- [Reference](#reference)
-
-# Enterprise Integration Patterns
-
-## When to use this skill
-
-- Adding SSO to your SaaS
-- Building SCIM provisioning
-- Designing webhook system
-- Building integration framework
-- Connecting to specific enterprise systems
-
-## SSO Implementation
-
-### SAML 2.0 (Enterprise Standard)
-
-```typescript
-// 1. Receive SAMLResponse (POST from IdP)
-app.post('/auth/saml/callback', async (req, res) => {
-  const samlResponse = req.body.SAMLResponse;
-
-  // 2. Decode + validate
-  const decoded = await samlParser.parse(samlResponse, {
-    audience: 'urn:our-app',
-    issuer: customer.idpIssuer,
-    cert: customer.idpCert,
-    requireSignature: true,
-    requireAudience: true,
-  });
-
-  // 3. Extract user attributes
-  const externalId = decoded.subject.nameId;
-  const email = decoded.attributes.email[0];
-  const groups = decoded.attributes.groups || [];
-
-  // 4. JIT provision or update
-  const user = await provisionUserFromSAML(customer.tenantId, {
-    externalId, email, groups
-  });
-
-  // 5. Create session
-  const sessionToken = await createSession(user);
-  res.cookie('session', sessionToken).redirect('/dashboard');
-});
-```
-
-### OIDC (Modern Standard)
-
-```typescript
-// Authorization Code Flow with PKCE
-async function login(req, res) {
-  const { codeVerifier, codeChallenge } = generatePKCE();
-
-  // Store verifier in session for callback
-  req.session.codeVerifier = codeVerifier;
-
-  const authUrl = new URL(customer.idp.authEndpoint);
-  authUrl.searchParams.set('response_type', 'code');
-  authUrl.searchParams.set('client_id', customer.idp.clientId);
-  authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
-  authUrl.searchParams.set('scope', 'openid profile email');
-  authUrl.searchParams.set('state', generateState());
-  authUrl.searchParams.set('code_challenge', codeChallenge);
-  authUrl.searchParams.set('code_challenge_method', 'S256');
-
-  res.redirect(authUrl.toString());
-}
-
-async function callback(req, res) {
-  const { code, state } = req.query;
-
-  // Verify state (CSRF)
-  if (state !== req.session.state) return res.status(400).end();
-
-  // Exchange code for tokens
-  const tokenResponse = await fetch(customer.idp.tokenEndpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      redirect_uri: REDIRECT_URI,
-      client_id: customer.idp.clientId,
-      code_verifier: req.session.codeVerifier,
-    }),
-  });
-
-  const { id_token, access_token } = await tokenResponse.json();
-
-  // Verify id_token signature (using IdP's JWKS)
-  const claims = await verifyIdToken(id_token, customer.idp.jwksUri);
-
-  // Provision/login
-  const user = await provisionUserFromOIDC(customer.tenantId, claims);
-  // ...
-}
-```
-
-## SCIM v2.0 Implementation
-
-```typescript
-// CRUD endpoints for User + Group resources
-app.get('/scim/v2/Users', authenticateScim, async (req, res) => {
-  const { filter, startIndex, count } = parseScimQuery(req.query);
-
-  const users = await db.users.find({
-    tenant_id: req.tenant.id,
-    filter,
-    limit: count,
-    offset: startIndex - 1,
-  });
-
-  res.json({
-    schemas: ['urn:ietf:params:scim:api:messages:2.0:ListResponse'],
-    totalResults: await db.users.count({ tenant_id: req.tenant.id }),
-    Resources: users.map(toScimUser),
-    startIndex,
-    itemsPerPage: count,
-  });
-});
-
-app.patch('/scim/v2/Users/:id', authenticateScim, async (req, res) => {
-  const { Operations } = req.body;
-
-  for (const op of Operations) {
-    if (op.op === 'replace' && op.path === 'active') {
-      if (op.value === false) {
-        await deactivateUser(req.params.id, req.tenant.id);
-      }
-    }
-  }
-
-  const updated = await db.users.findById(req.params.id);
-  res.json(toScimUser(updated));
-});
-```
-
-## Webhook Patterns (Outbound)
-
-### Signed Delivery
-
-```typescript
-async function deliverWebhook(webhook: WebhookSubscription, event: Event) {
-  const body = JSON.stringify({
-    id: event.id,
-    type: event.type,
-    timestamp: event.timestamp,
-    data: event.data,
-  });
-
-  const timestamp = Date.now().toString();
-  const signature = hmac('sha256', webhook.secret, `${timestamp}.${body}`);
-
-  try {
-    const response = await fetch(webhook.url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Id': event.id,
-        'X-Webhook-Timestamp': timestamp,
-        'X-Webhook-Signature': `t=${timestamp},v1=${signature}`,
-      },
-      body,
-      signal: AbortSignal.timeout(10_000),
-    });
-
-    await logDelivery(webhook, event, response);
-
-    if (!response.ok) {
-      await scheduleRetry(webhook, event, response.status);
-    }
-  } catch (err) {
-    await scheduleRetry(webhook, event, err);
-  }
-}
-```
-
-### Retry Strategy
-
-```typescript
-const RETRY_DELAYS_MS = [
-  0,           // immediate
-  60_000,      // 1 min
-  300_000,     // 5 min
-  900_000,     // 15 min
-  3_600_000,   // 1 hour
-  14_400_000,  // 4 hour
-  43_200_000,  // 12 hour
-];
-
-async function scheduleRetry(webhook, event, error) {
-  const attempt = await db.deliveries.getAttempt(webhook.id, event.id);
-
-  if (attempt >= RETRY_DELAYS_MS.length) {
-    await markWebhookFailing(webhook);
-    return;
-  }
-
-  await queue.scheduleIn(RETRY_DELAYS_MS[attempt], 'deliver', {
-    webhook_id: webhook.id,
-    event_id: event.id,
-  });
-}
-```
-
-## Webhook Patterns (Inbound)
-
-```typescript
-app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  // 1. Verify signature
-  const signature = req.headers['x-signature'];
-  const computed = hmac('sha256', SECRET, req.body);
-  if (!constantTimeEquals(signature, computed)) {
-    return res.status(401).end();
-  }
-
-  // 2. Parse
-  const event = JSON.parse(req.body);
-
-  // 3. Idempotency check
-  if (await db.processedEvents.exists(event.id)) {
-    return res.json({ received: true, duplicate: true });
-  }
-
-  // 4. Persist raw + ack quickly
-  await db.events.create({ id: event.id, raw: event });
-  res.json({ received: true });
-
-  // 5. Process async
-  await queue.enqueue('process_event', event.id);
-});
-```
-
-## iPaaS Integration
-
-```typescript
-// Provide pre-built connectors for popular iPaaS:
-
-// Zapier Trigger (POST when event happens)
-async function fireZapierTrigger(triggerKey: string, event: any) {
-  const webhookUrls = await db.zapierTriggers.findActive(
-    customer.tenant_id,
-    triggerKey
-  );
-
-  await Promise.all(
-    webhookUrls.map(url => fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(event),
-    }))
-  );
-}
-
-// Zapier Action (called by Zapier to do something)
-app.post('/zapier/actions/create-order', authenticate, async (req, res) => {
-  const order = await createOrder(req.tenant.id, req.body);
-  res.json(order);
-});
-```
-
-## API Client Best Practices
-
-```typescript
-class SalesforceClient {
-  constructor(private creds: SalesforceCredentials, private tenantId: string) {}
-
-  async request(method: string, path: string, body?: any) {
-    const headers = {
-      'Authorization': `Bearer ${await this.getAccessToken()}`,
-      'Content-Type': 'application/json',
-    };
-
-    return retry({
-      attempts: 3,
-      backoff: 'exponential',
-      retryOn: [502, 503, 504, 'ECONNRESET'],
-    }, async () => {
-      const response = await fetch(`${this.creds.instance}/services/data/v60/${path}`, {
-        method,
-        headers,
-        body: body ? JSON.stringify(body) : undefined,
-        signal: AbortSignal.timeout(30_000),
-      });
-
-      // Instrument
-      metrics.timing('salesforce.request', response.duration, {
-        path, status: response.status, tenant: this.tenantId
-      });
-
-      if (response.status === 401) {
-        // Token expired, refresh
-        await this.refreshToken();
-        throw new RetryableError('Token expired');
-      }
-
-      if (!response.ok) {
-        throw new SalesforceError(response);
-      }
-
-      return response.json();
-    });
-  }
-}
-```
-
-## Things You Don't Do
-
-- ❌ Trust SAML/OIDC without signature verification
-- ❌ Synchronous webhook delivery to customer
-- ❌ Single retry attempt
-- ❌ No idempotency on inbound webhooks
-- ❌ Hardcode customer credentials
-- ❌ No partner rate limit awareness
-
-## Reference
-
-- [SAML 2.0 Specification](https://docs.oasis-open.org/security/saml/v2.0/)
-- [OpenID Connect Spec](https://openid.net/connect/)
-- [SCIM 2.0 RFC](https://datatracker.ietf.org/doc/html/rfc7644)
-- [WorkOS Integration Patterns](https://workos.com/docs)
-- [Standard Webhooks](https://standardwebhooks.com/)
-
-
-## reference: multi-tenancy-patterns.md
-
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [Tenancy Model Selection](#tenancy-model-selection)
-- [Row-Level Multi-Tenancy](#row-level-multi-tenancy)
-- [Tenant Context Propagation](#tenant-context-propagation)
-- [Schema-Per-Tenant](#schema-per-tenant)
-- [Database-Per-Tenant](#database-per-tenant)
-- [Noisy Neighbor Mitigation](#noisy-neighbor-mitigation)
-- [Per-Tenant Feature Flags](#per-tenant-feature-flags)
-- [Caching With Tenants](#caching-with-tenants)
-- [Background Jobs](#background-jobs)
-- [Tenant Offboarding](#tenant-offboarding)
-- [Common Pitfalls](#common-pitfalls)
-- [Reference](#reference)
-
-# Multi-Tenancy Implementation Patterns
-
-## When to use this skill
-
-- Building SaaS from scratch
-- Adding tenants to existing single-tenant app
-- Refactoring to better isolation
-- Designing per-tenant features
-- Mitigating noisy neighbor issues
-
-## Tenancy Model Selection
-
-```
-Strict isolation required (regulated)?
-├─ Yes → Database-per-tenant or Single-tenant
-└─ No → Continue
-   │
-   Cost-sensitive (free/SMB tier)?
-   ├─ Yes → Pool (shared everything)
-   └─ No → Consider Silo (shared compute, isolated data)
-```
-
-## Row-Level Multi-Tenancy
-
-### Schema
-```sql
--- Every business table has tenant_id
-CREATE TABLE orders (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    tenant_id UUID NOT NULL,
-    customer_id UUID NOT NULL,
-    total NUMERIC,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Composite index includes tenant
-CREATE INDEX idx_orders_tenant_customer ON orders (tenant_id, customer_id);
-
--- Foreign keys preserve tenant
-ALTER TABLE orders ADD CONSTRAINT fk_customer
-    FOREIGN KEY (tenant_id, customer_id) REFERENCES customers (tenant_id, id);
-```
-
-### Postgres Row-Level Security
-```sql
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY tenant_isolation ON orders
-    FOR ALL
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
-
--- App sets context per request
-SET LOCAL app.tenant_id = 'tenant-uuid';
-```
-
-### Application Enforcement (defense in depth)
-```typescript
-// Repository pattern with mandatory tenant
-class OrderRepository {
-  constructor(private tenantId: string) {}
-
-  findAll() {
-    return db.query`
-      SELECT * FROM orders
-      WHERE tenant_id = ${this.tenantId}
-    `;
-  }
-
-  // No method exists that DOESN'T filter by tenant
-}
-```
-
-## Tenant Context Propagation
-
-### Pattern: Middleware Sets Context
-
-```typescript
-app.use(async (req, res, next) => {
-  // Extract from JWT
-  const token = req.headers.authorization;
-  const claims = await verifyJWT(token);
-
-  // Validate tenant access
-  if (!claims.tenant_id) return res.status(401).end();
-
-  // Attach to request
-  req.tenant = {
-    id: claims.tenant_id,
-    tier: claims.tier,
-    features: await loadFeatures(claims.tenant_id),
-  };
-
-  // Set DB session var (for RLS)
-  await db.query(`SET LOCAL app.tenant_id = '${req.tenant.id}'`);
-
-  next();
-});
-```
-
-### Pattern: Tenant in Async Context
-
-```typescript
-import { AsyncLocalStorage } from 'async_hooks';
-
-const tenantStorage = new AsyncLocalStorage<TenantContext>();
-
-// Set at request entry
-tenantStorage.run({ id: tenantId }, async () => {
-  await processRequest();
-});
-
-// Access anywhere in async chain
-function getTenantId(): string {
-  return tenantStorage.getStore()?.id ?? throwError();
-}
-```
-
-## Schema-Per-Tenant
-
-```sql
--- One schema per tenant
-CREATE SCHEMA tenant_abc;
-CREATE SCHEMA tenant_xyz;
-
--- Tables in tenant schema
-CREATE TABLE tenant_abc.orders (...);
-CREATE TABLE tenant_xyz.orders (...);
-
--- Connect with search path
-SET search_path TO tenant_abc;
-```
-
-```typescript
-// Per-tenant connection pool
-async function getConnection(tenantId: string) {
-  const conn = await pool.connect();
-  await conn.query(`SET search_path TO tenant_${tenantId}`);
-  return conn;
-}
-```
-
-### Migrations
-```python
-# Apply migration to all tenant schemas
-async def migrate_all_tenants():
-    tenants = await get_active_tenants()
-
-    for tenant in tenants:
-        try:
-            await run_migration(tenant.schema)
-        except MigrationError as e:
-            await mark_tenant_migration_failed(tenant, e)
-            continue
-```
-
-## Database-Per-Tenant
-
-```typescript
-// Tenant routing layer
-async function getDb(tenantId: string): Promise<DbClient> {
-  const tenant = await tenantCache.get(tenantId);
-  return dbPool.connect(tenant.dbConnectionString);
-}
-
-// Usage
-const db = await getDb(req.tenant.id);
-await db.query(`SELECT * FROM orders`);  // tenant_id NOT needed in WHERE
-```
-
-### Tenant Provisioning
-```python
-async def provision_tenant(tenant_id: str, region: str):
-    # Create DB
-    db_name = f'tenant_{tenant_id}'
-    await admin_db.query(f'CREATE DATABASE {db_name}')
-
-    # Run migrations
-    await run_migrations(db_name)
-
-    # Seed initial data
-    await seed_tenant(db_name, tenant_id)
-
-    # Register in tenant routing table
-    await save_tenant_routing({
-        'id': tenant_id,
-        'db_host': pick_db_host(region),
-        'db_name': db_name,
-    })
-```
-
-## Noisy Neighbor Mitigation
-
-### Rate Limiting Per Tenant
-
-```typescript
-// Distributed rate limiter (Redis)
-async function rateLimit(req) {
-  const limit = req.tenant.tier === 'enterprise' ? 10000 : 100;
-  const key = `rate:${req.tenant.id}`;
-
-  const count = await redis.incr(key);
-  if (count === 1) await redis.expire(key, 60);
-
-  if (count > limit) {
-    throw new RateLimitError({ retryAfter: 60 });
-  }
-}
-```
-
-### Connection Pool Per Tenant Group
-
-```typescript
-// Tier-based pools
-const pools = {
-  free: new ConnectionPool({ max: 5 }),
-  pro: new ConnectionPool({ max: 20 }),
-  enterprise: new ConnectionPool({ max: 100 }),
-};
-
-async function query(tenantId: string, sql: string) {
-  const tier = await getTier(tenantId);
-  return pools[tier].query(sql);
-}
-```
-
-### Query Cost Limits
-
-```typescript
-// Kill slow queries per tenant
-async function queryWithBudget(tenantId: string, sql: string) {
-  const budget = tierLimits[await getTier(tenantId)].queryMs;
-
-  return await db.query(sql, { timeout: budget });
-}
-```
-
-## Per-Tenant Feature Flags
-
-```typescript
-// Feature config per tenant
-interface TenantFeatures {
-  advanced_analytics: boolean;
-  api_rate_limit: number;
-  custom_branding: boolean;
-  sso: boolean;
-}
-
-// Read from config
-function hasFeature(tenant: Tenant, feature: keyof TenantFeatures) {
-  return tenant.features[feature];
-}
-
-// Use in code
-if (hasFeature(req.tenant, 'advanced_analytics')) {
-  // ...
-}
-```
-
-## Caching With Tenants
-
-```typescript
-// MUST key by tenant
-const cacheKey = `tenant:${tenantId}:order:${orderId}`;
-await cache.set(cacheKey, order);
-
-// ❌ NEVER share cache across tenants
-const cacheKey = `order:${orderId}`;  // BAD
-```
-
-## Background Jobs
-
-```typescript
-// Include tenant in job payload
-await queue.enqueue('process_export', {
-  tenantId: req.tenant.id,
-  exportId,
-});
-
-// Worker re-establishes tenant context
-async function processExport(job) {
-  const { tenantId, exportId } = job.data;
-  await tenantStorage.run({ id: tenantId }, async () => {
-    await doExport(exportId);
-  });
-}
-```
-
-## Tenant Offboarding
-
-```python
-async def offboard_tenant(tenant_id):
-    # 1. Disable access
-    await disable_tenant_access(tenant_id)
-
-    # 2. Schedule deletion (grace period for accidental)
-    await schedule_deletion(tenant_id, days=30)
-
-    # 3. After grace period, delete from all systems
-    async def delete():
-        await delete_from_db(tenant_id)
-        await delete_from_search(tenant_id)
-        await delete_from_blob_storage(tenant_id)
-        await delete_from_cache(tenant_id)
-        await delete_backups(tenant_id, retain_for=legal_minimum)
-
-    # 4. Provide attestation
-    await issue_deletion_certificate(tenant_id)
-```
-
-## Common Pitfalls
-
-- ❌ **Missing tenant_id in queries** — silent data leak
-- ❌ **Shared cache without tenant key** — cross-tenant leak
-- ❌ **Background jobs without tenant** — wrong context
-- ❌ **No rate limit per tenant** — noisy neighbor
-- ❌ **Hardcoded tenant assumptions** — early tenant breaks
-- ❌ **Per-tenant migrations not tested** — production surprises
-
-## Reference
-
-- [AWS SaaS Lens](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/)
-- [Building Multi-Tenant SaaS Architectures (book)](https://www.oreilly.com/library/view/building-multi-tenant-saas/9781098140632/)
-- [Stripe's Multi-Tenant Sharding](https://stripe.com/blog/online-migrations)
-- [PostgreSQL Row-Level Security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
-
-
-## reference: subscription-billing.md
-
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
-
-**สารบัญ:** 
-
-- [When to use this skill](#when-to-use-this-skill)
-- [Choose Tool, Don't Build](#choose-tool-dont-build)
-- [Pricing Model Implementation](#pricing-model-implementation)
-- [Usage Metering Pipeline](#usage-metering-pipeline)
-- [Dunning Workflow](#dunning-workflow)
-- [Revenue Recognition (ASC 606)](#revenue-recognition-asc-606)
-- [MRR / ARR Calculation](#mrr--arr-calculation)
-- [Multi-Currency](#multi-currency)
-- [Proration](#proration)
-- [Trial Patterns](#trial-patterns)
-- [Webhook Events to Handle](#webhook-events-to-handle)
-- [Things You Don't Do](#things-you-dont-do)
-- [Reference](#reference)
-
-# Subscription Billing Patterns
-
-## When to use this skill
-
-- Setting up new billing system
-- Implementing usage-based pricing
-- Building dunning workflows
-- Revenue recognition for accounting
-- Multi-currency / multi-jurisdiction
-- Migrating between billing platforms
-
-## Choose Tool, Don't Build
-
-```
-Stripe Billing       — modern, easy, $$$
-Chargebee            — flexible, mid-market
-Maxio                — B2B SaaS specialist
-Recurly              — mature
-Paddle / Lemon Squeezy — Merchant of Record (global tax done)
-Custom               — only for special needs
-```
-
-> 💡 **Never** build billing primitives. Use a platform.
-
-## Pricing Model Implementation
-
-### Flat Subscription
-
-```typescript
-// Simple: one plan, fixed price
-await stripe.subscriptions.create({
-  customer: customer.stripeId,
-  items: [{ price: 'price_pro_monthly' }],
-});
-```
-
-### Per-Seat
-
-```typescript
-// Quantity = active users
-async function syncSeats(subscription_id: string, accountId: string) {
-  const activeUsers = await countActiveUsers(accountId);
-
-  await stripe.subscriptionItems.update(itemId, {
-    quantity: activeUsers,
-    proration_behavior: 'create_prorations',
-  });
-}
-```
-
-### Usage-Based
-
-```typescript
-// Report usage to Stripe
-async function reportUsage(accountId: string, units: number) {
-  const subscription_item_id = await getMeteredItem(accountId);
-
-  await stripe.subscriptionItems.createUsageRecord(subscription_item_id, {
-    quantity: units,
-    timestamp: Math.floor(Date.now() / 1000),
-    action: 'increment',  // or 'set'
-  });
-}
-
-// Customer gets billed at end of period
-```
-
-### Tiered (Volume Pricing)
-
-```typescript
-// Stripe handles via "tiered" price model
-const price = await stripe.prices.create({
-  product: 'prod_api_calls',
-  currency: 'usd',
-  recurring: { interval: 'month', usage_type: 'metered' },
-  billing_scheme: 'tiered',
-  tiers_mode: 'graduated',
-  tiers: [
-    { up_to: 10000,  unit_amount: 0 },      // first 10k free
-    { up_to: 100000, unit_amount: 1 },      // next 90k @ $0.01
-    { up_to: 'inf',  unit_amount: 0.5 },    // beyond @ $0.005
-  ],
-});
-```
-
-## Usage Metering Pipeline
-
-```mermaid
-flowchart LR
-    A[App emits event] --> B[Event Stream Kafka/Kinesis]
-    B --> C[Aggregator]
-    C --> D[(Aggregated Usage Table)]
-    D --> E[Bill Calculator]
-    E --> F[Billing System Stripe/Chargebee]
-    F --> G[Invoice]
-```
-
-### Idempotent Reporting
-
-```python
-async def report_usage_idempotent(account_id, event):
-    # Dedup key
-    dedup_key = f"{account_id}:{event.timestamp}:{event.id}"
-
-    if await db.usage_reported.exists(dedup_key):
-        return  # already reported
-
-    await stripe.usage_records.create(
-        subscription_item=event.subscription_item,
-        quantity=event.quantity,
-        timestamp=event.timestamp,
-        action='increment',
-    )
-
-    await db.usage_reported.create({dedup_key})
-```
-
-## Dunning Workflow
-
-```typescript
-// Stripe handles retries by default
-// But you should override for customer experience
-
-const subscription = await stripe.subscriptions.create({
-  customer,
-  items,
-  payment_settings: {
-    payment_method_types: ['card'],
-    save_default_payment_method: 'on_subscription',
-  },
-  collection_method: 'charge_automatically',
-});
-
-// Customize retry behavior in Dashboard or via API
-// Default: 4 retries over 3 weeks
-
-// Listen for events:
-//   invoice.payment_failed → email customer
-//   customer.subscription.paused → restrict features
-//   customer.subscription.deleted → final action
-```
-
-### Dunning Communications
-
-```python
-async def handle_payment_failed(event):
-    invoice = event['data']['object']
-    attempt = invoice['attempt_count']
-
-    customer = await get_customer(invoice['customer'])
-
-    if attempt == 1:
-        await send_email(customer, 'payment_failed_first', {
-            'invoice_url': invoice['hosted_invoice_url'],
-            'amount': invoice['amount_due'] / 100,
-        })
-    elif attempt == 2:
-        await send_email(customer, 'payment_failed_second', ...)
-        await restrict_advanced_features(customer)
-    elif attempt == 3:
-        await send_email(customer, 'payment_failed_third_final_warning', ...)
-        await alert_cs_team(customer)
-    # Stripe will cancel after configured retries
-```
-
-## Revenue Recognition (ASC 606)
-
-```sql
--- Daily revenue recognition for subscriptions
-INSERT INTO daily_recognized_revenue
-SELECT
-    sub.account_id,
-    d::date as date,
-    sub.amount / extract(epoch from (sub.end_date - sub.start_date))::numeric
-        * 86400 as daily_revenue,
-    'subscription' as type
-FROM subscriptions sub
-CROSS JOIN LATERAL generate_series(
-    sub.start_date,
-    LEAST(sub.end_date, current_date),
-    '1 day'
-) d
-WHERE sub.start_date <= current_date
-  AND sub.end_date > current_date - interval '1 day';
-```
-
-## MRR / ARR Calculation
-
-```sql
--- MRR at any point in time
-SELECT SUM(
-  CASE plan_interval
-    WHEN 'month' THEN plan_amount
-    WHEN 'year'  THEN plan_amount / 12
-  END
-) as mrr
-FROM subscriptions
-WHERE status = 'active'
-  AND started_at <= NOW()
-  AND (canceled_at IS NULL OR canceled_at > NOW());
-
--- MRR movement (cohort waterfall)
-WITH current_mrr AS (SELECT SUM(mrr) as v FROM active_subs WHERE date = '2025-02-01'),
-     prior_mrr   AS (SELECT SUM(mrr) as v FROM active_subs WHERE date = '2025-01-01'),
-     new_mrr     AS (SELECT SUM(mrr) FROM new_subs_in_month),
-     expansion   AS (SELECT SUM(mrr_diff) FROM upgrades_in_month),
-     contraction AS (SELECT SUM(mrr_diff) FROM downgrades_in_month),
-     churn       AS (SELECT SUM(mrr) FROM cancellations_in_month)
-SELECT
-  prior_mrr.v as start,
-  new_mrr.v as new,
-  expansion.v as expansion,
-  contraction.v as contraction,
-  churn.v as churn,
-  current_mrr.v as end
-FROM prior_mrr, new_mrr, expansion, contraction, churn, current_mrr;
-```
-
-## Multi-Currency
-
-```typescript
-// Customer's currency at signup
-const customer = await stripe.customers.create({
-  email,
-  currency: 'thb',  // locked at creation in most platforms
-});
-
-// Pricing strategy:
-// Option 1: Price in customer currency (FX risk on you)
-// Option 2: Price in USD, charge in local (uses Stripe FX)
-// Option 3: Per-region pricing (different prices per market)
-
-// Tax considerations vary
-// Use Stripe Tax or Avalara for compliance
-```
-
-## Proration
-
-```typescript
-// Mid-cycle plan change
-await stripe.subscriptions.update(subscription_id, {
-  items: [{ id: itemId, price: 'price_new_plan' }],
-  proration_behavior: 'create_prorations',
-});
-
-// Stripe calculates:
-// - Credit for unused time on old plan
-// - Charge for partial time on new plan
-// - Net difference on next invoice (or immediate)
-```
-
-## Trial Patterns
-
-```typescript
-// Free trial
-await stripe.subscriptions.create({
-  customer,
-  items: [{ price }],
-  trial_period_days: 14,
-  payment_settings: {
-    payment_method_types: ['card'],
-    save_default_payment_method: 'on_subscription',
-  },
-});
-
-// Convert (event: trial_will_end → trial_end)
-// If no card on file: subscription becomes 'past_due'
-```
-
-## Webhook Events to Handle
-
-| Event | Action |
-|-------|--------|
-| `customer.subscription.created` | Activate features |
-| `invoice.payment_succeeded` | Mark paid, recognize revenue |
-| `invoice.payment_failed` | Dunning workflow |
-| `customer.subscription.updated` | Sync plan changes |
-| `customer.subscription.deleted` | Deactivate, schedule data deletion |
-| `customer.subscription.trial_will_end` | Trial ending notification |
-
-## Things You Don't Do
-
-- ❌ Build your own billing engine
-- ❌ Calculate tax manually
-- ❌ Trust client-sent prices
-- ❌ Skip webhook idempotency
-- ❌ Recognize revenue at invoice time (use service period)
-- ❌ Float for money
-
-## Reference
-
-- [Stripe Billing Docs](https://stripe.com/docs/billing)
-- [ASC 606 Revenue Recognition Guide](https://www.investopedia.com/terms/a/asc-606.asp)
-- [Chargebee Knowledge Base](https://www.chargebee.com/docs/)
-- [Paddle Documentation](https://developer.paddle.com/)
-- [Maxio (Chargify) Docs](https://maxio.com/docs)
-
-
----
-
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data — clinical workflows such as orders and medication, FHIR APIs and EHR integration, SMART on FHIR, HIPAA safeguards and audits, or clinical analytics.
+Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, SMART on FHIR, HIPAA safeguards, clinical analytics).
 
 # healthcare-systems
 
 ซอฟต์แวร์ที่แตะข้อมูลผู้ป่วย — workflow ทางคลินิก · FHIR · HIPAA · การวิเคราะห์ข้อมูลคลินิก
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
@@ -1832,7 +18,7 @@ Use when software handles patient or clinical data — clinical workflows such a
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -1845,12 +31,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fhir-specialist.md
 
-> เดิมคือ agent `fhir-specialist` ใน plugin `software-company-healthcare` — รวมเข้า agent `healthcare-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `fhir-specialist` ใน plugin `software-company-healthcare` แล้วถูกรวมเข้า agent `healthcare-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -1873,28 +59,28 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **FHIR Specialist**. You build healthcare interoperability through HL7 FHIR — the modern standard for healthcare data exchange.
+You are a **FHIR Specialist**. You connect healthcare systems with HL7 FHIR, the current standard for exchanging health data.
 
 ## Your Responsibilities
 
-1. **FHIR Resource Design** — Use right resources for the data
+1. **FHIR Resource Design** — Pick the right resource for each kind of data
 2. **FHIR API Design** — RESTful FHIR endpoints
 3. **SMART on FHIR** — OAuth-based EHR apps
-4. **Profiling** — Constrain FHIR to your context
-5. **Validation** — Resources conform to spec
+4. **Profiling** — Narrow FHIR to fit your use case
+5. **Validation** — Check that resources match the spec
 6. **Mapping** — Legacy → FHIR transformations
 7. **Interoperability Testing** — Touchstone, Inferno
 
 ## 🔍 Initial Discovery (Always Start Here)
 
-Before FHIR work, gather:
+Before any FHIR work, find out:
 
 1. **FHIR version** — R4 (most common), R5 (newer)
-2. **Use case** — read EHR data? write? bulk export?
+2. **Use case** — read EHR data, write it, or bulk export?
 3. **Target EHRs** — different EHRs interpret FHIR differently
 4. **Implementation Guides (IGs)** — US Core, IPS, country-specific
 5. **Authentication** — SMART on FHIR, system-to-system
-6. **Compliance scope** — HIPAA, GDPR, local regs
+6. **Compliance scope** — HIPAA, GDPR, local rules
 
 ## 📊 FHIR Quality Standards
 
@@ -1903,8 +89,8 @@ Before FHIR work, gather:
 - **Versioning:** explicit FHIR version in capability statement
 - **Conformance:** capability statement (`/metadata`) accurate
 - **Search compliance:** required parameters supported
-- **Bundle integrity:** transactions atomic
-- **Audit:** AuditEvent resource for every PHI access
+- **Bundle integrity:** a transaction succeeds or fails as a whole
+- **Audit:** one AuditEvent resource for every access to protected health information (PHI)
 
 ## FHIR Core Concepts
 
@@ -2067,7 +253,7 @@ if not result.valid:
 }
 ```
 
-→ All resources created atomically, references resolved server-side.
+→ The server creates all resources together or none, and resolves the references itself.
 
 ## Bulk Data Export
 
@@ -2144,13 +330,13 @@ GET <content-location-url>
 
 ## Common Pitfalls
 
-- ❌ **Treating FHIR like generic REST** — read the spec, semantics matter
+- ❌ **Treating FHIR like generic REST** — read the spec; the meaning of each field matters
 - ❌ **Ignoring profiles** — bare FHIR vs US Core differ significantly
-- ❌ **Not validating** — invalid resources break interop
+- ❌ **Not validating** — invalid resources break data exchange
 - ❌ **Storing references as strings** — use proper Reference type
 - ❌ **Mixing FHIR versions** — pick one (R4 for production usually)
 - ❌ **Skipping AuditEvent** — required for HIPAA
-- ❌ **Custom extensions everywhere** — defeats interoperability
+- ❌ **Custom extensions everywhere** — other systems can no longer read your data
 
 ## Things You Don't Do
 
@@ -2182,7 +368,7 @@ GET <content-location-url>
 
 ## reference: agent-healthcare-engineer.md
 
-> เดิมคือ agent `healthcare-engineer` ใน plugin `software-company-healthcare` — รวมเข้า agent `healthcare-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `healthcare-engineer` ใน plugin `software-company-healthcare` แล้วถูกรวมเข้า agent `healthcare-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -2203,57 +389,57 @@ You are a **Healthcare Engineer**. You build software for clinical environments 
 ## Your Responsibilities
 
 1. **EHR/EMR Integration** — Epic, Cerner, Allscripts, AthenaHealth
-2. **Clinical Workflows** — Translate clinical processes to software
-3. **PHI Handling** — Protected Health Information lifecycle
+2. **Clinical Workflows** — Turn clinical processes into software
+3. **Protected Health Information (PHI) Handling** — How PHI is created, used, stored and deleted
 4. **Patient Portals** — Self-service, scheduling, results
 5. **Telemedicine** — Video consultations, async messaging
-6. **Clinical Decision Support** — Evidence-based prompts
-7. **Audit & Safety** — Every PHI access logged
+6. **Clinical Decision Support** — Alerts and suggestions based on medical evidence
+7. **Audit & Safety** — Log every PHI access
 
 ## 🔍 Initial Discovery (Always Start Here)
 
-Before writing healthcare code, gather:
+Before writing healthcare code, find out:
 
 1. **PHI scope** — what health data is involved?
 2. **User types** — providers, patients, admins, payers
 3. **Integration targets** — which EHRs, labs, pharmacies?
 4. **Regulatory scope** — HIPAA (US), PDPA (TH), GDPR (EU), local
 5. **Clinical stakeholders** — physicians, nurses, pharmacists
-6. **Safety class** — Is this an SaMD (Software as Medical Device)?
+6. **Safety class** — Is this Software as a Medical Device (SaMD)?
 
-If clinical workflow is unclear, **shadow a clinician before designing**.
+If the clinical workflow is unclear, **watch a clinician at work before you design**.
 
 ## 📊 Healthcare Quality Standards
 
-- **PHI access logging:** 100% of accesses logged
-- **Encryption:** all PHI encrypted at rest + transit
+- **PHI access logging:** log 100% of accesses
+- **Encryption:** encrypt all PHI when stored and when sent
 - **Authentication:** MFA mandatory for clinical users
-- **Session timeout:** 15 min inactive in clinical setting
+- **Session timeout:** after 15 min of inactivity in a clinical setting
 - **Audit log retention:** 6 years (HIPAA) or local equivalent
-- **Uptime SLA:** matches clinical criticality (often 99.95%+)
+- **Uptime SLA:** match how critical the clinical use is (often 99.95%+)
 - **Data accuracy:** zero tolerance for wrong-patient errors
 
 ## Critical Healthcare Rules
 
 ### Rule 1: Right patient, every time
-- Display patient identifiers in 2+ ways (name + DOB + MRN)
-- Confirm before any action affects patient record
-- Visual cues when context switches between patients
+- Show 2+ patient identifiers (name + date of birth (DOB) + medical record number (MRN))
+- Ask for confirmation before any action changes the patient record
+- Show a clear visual cue when the screen switches to another patient
 
 ### Rule 2: PHI is never test data
 - Never use real PHI in dev/staging
-- Synthetic data generators (e.g., Synthea)
-- De-identification per HIPAA Safe Harbor when required
+- Use synthetic data generators (e.g., Synthea)
+- De-identify data under HIPAA Safe Harbor when required
 
 ### Rule 3: Audit trail is sacred
-- Every PHI view, modification, export logged
+- Log every PHI view, change and export
 - Append-only, tamper-evident
-- Includes: who, when, what, from where
+- Record who, when, what and from where
 
 ### Rule 4: Fail safe, not silent
 - Critical alerts must be acknowledged
 - No silent data loss
-- Degraded mode > broken mode
+- A system running with reduced features beats a broken one
 
 ## Skills You Use
 
@@ -2399,13 +585,13 @@ async function prescribeMedication(rx: Prescription) {
 
 ## Common Pitfalls
 
-- ❌ **Wrong patient errors** — most dangerous bug in healthcare
-- ❌ **No medication reconciliation** — patient on 10 drugs, system knows 3
-- ❌ **Silent PHI exposure** — accidentally indexing in search engine
-- ❌ **Logging PHI to logs** — log aggregator becomes PHI store
-- ❌ **No break-the-glass** — providers can't access in emergency
+- ❌ **Wrong patient errors** — the most dangerous bug in healthcare
+- ❌ **No medication reconciliation** — the patient takes 10 drugs, the system knows of 3
+- ❌ **Silent PHI exposure** — a search engine indexes it by accident
+- ❌ **Logging PHI to logs** — the log aggregator turns into a PHI store
+- ❌ **No break-the-glass** (emergency access) — providers can't open the record in an emergency
 - ❌ **Audit log mutable** — should be append-only
-- ❌ **No clinical context** — building features clinicians won't use
+- ❌ **No clinical context** — features that clinicians won't use
 
 ## Reference
 
@@ -2439,34 +625,34 @@ async function prescribeMedication(rx: Prescription) {
 
 ## When to use this skill
 
-- Designing CPOE (computerized provider order entry)
+- Designing computerized provider order entry (CPOE)
 - Building clinical decision support
-- Implementing medication workflow
+- Building a medication workflow
 - Designing patient handoff
-- Care plan management
+- Managing care plans
 - Shift change / signout tools
 
 ## Clinical Software Principles
 
 ### 1. Software supports the clinician, never replaces judgment
-- Alerts must be acknowledged, not auto-dismissed
-- Final decision = human
-- Document override reasons
+- A person must acknowledge each alert; never dismiss it automatically
+- A human makes the final decision
+- Record the reason for every override
 
 ### 2. Right info, right time, right format
-- Don't bury critical info in walls of text
-- Highlight changes from baseline
-- Color/icon for severity (consistent across system)
+- Don't bury critical info in long blocks of text
+- Highlight what changed from the patient's baseline
+- Use one color and icon per severity level across the whole system
 
 ### 3. Workflow > features
-- Map current clinical workflow first
-- New process must be FASTER than paper
-- Friction = abandonment + workarounds
+- Map the current clinical workflow first
+- The new process must be FASTER than paper
+- If it adds friction, staff stop using it or work around it
 
 ### 4. Cognitive load matters
-- Doctors see 20+ patients/shift
-- Every extra click = patient safety issue
-- Default common actions
+- Doctors see 20+ patients per shift
+- Every extra click is a patient safety issue
+- Make common actions the default
 
 ## Order Entry Pattern (CPOE)
 
@@ -2492,10 +678,10 @@ flowchart TD
 ```
 
 ### Critical principles
-- **Patient context lock** — confirm before order, lock during entry
-- **Allergy/interaction checks** — at entry, not after
-- **Override documentation** — required, reviewed by pharmacy
-- **Order set support** — protocol bundles (e.g., sepsis bundle)
+- **Patient context lock** — confirm the patient before the order, and lock the patient while the order is entered
+- **Allergy/interaction checks** — run them during entry, not after
+- **Override documentation** — required, and pharmacy reviews it
+- **Order set support** — ready-made groups of orders for a protocol (e.g., sepsis bundle)
 
 ## Medication Workflow
 
@@ -2515,7 +701,7 @@ Each step:
 4. Right route
 5. Right time
 
-Software MUST enforce all 5.
+The software MUST enforce all 5.
 
 ### Pattern: Bedside Medication Administration
 
@@ -2696,22 +882,22 @@ interface PlannedActivity {
 - Lock patient context during sensitive operations
 
 ### Medication safety
-- Five rights enforced
-- Look-alike/sound-alike (LASA) drug pairs flagged
-- Pediatric/geriatric dose ranges
-- Allergy + DDI checks at order entry
+- Enforce the 5 rights
+- Flag look-alike/sound-alike (LASA) drug pairs
+- Check dose ranges for children and older adults
+- Check allergies and drug-drug interactions (DDI) at order entry
 
 ### Critical results
-- Hard limit on time to notify provider (e.g., 1 hour for critical labs)
-- Auto-escalation if not acknowledged
-- Closed-loop confirmation
+- Set a hard time limit to notify the provider (e.g., 1 hour for critical labs)
+- Escalate automatically if nobody acknowledges
+- Confirm the loop is closed: the provider confirms receipt
 
 ## Workflow Design Heuristics
 
 ### Reduce clicks
-- Default common values
-- Smart suggestions based on history
-- Bulk actions where appropriate
+- Pre-fill common values
+- Suggest values based on history
+- Offer bulk actions where they fit
 
 ### Match real workflow
 - Tab through fields in clinical order, not data model order
@@ -2719,9 +905,9 @@ interface PlannedActivity {
 - Allow non-linear entry
 
 ### Forgive interruptions
-- Save state frequently
-- Resume where left off
-- Don't punish phone calls during entry
+- Save state often
+- Let the user resume where they left off
+- A phone call during entry must not lose their work
 
 ### Build for the worst case
 - Tired nurse at 3am
@@ -2730,11 +916,11 @@ interface PlannedActivity {
 
 ## Common Pitfalls
 
-- ❌ **Designing for ideal workflow** — clinicians work in chaos
-- ❌ **Alert fatigue** — users blind to all alerts
-- ❌ **No patient context lock** — wrong-patient errors
-- ❌ **Treating medication like any other transaction** — much higher stakes
-- ❌ **No override documentation** — can't review patterns
+- ❌ **Designing for an ideal workflow** — real clinical work is chaotic
+- ❌ **Alert fatigue** — users stop seeing any alert
+- ❌ **No patient context lock** — leads to wrong-patient errors
+- ❌ **Treating medication like any other transaction** — the stakes are much higher
+- ❌ **No override documentation** — nobody can review override patterns
 - ❌ **One-size-fits-all UX** — ICU ≠ outpatient ≠ ED
 
 ## Reference
@@ -2767,11 +953,11 @@ interface PlannedActivity {
 
 ## When to use this skill
 
-- Building FHIR API
+- Building a FHIR API
 - Integrating with EHRs (Epic, Cerner, Athena)
 - Mapping legacy data to FHIR
-- SMART on FHIR app development
-- US Core / IPS / DaVinci compliance
+- Building a SMART on FHIR app
+- Meeting US Core / IPS / DaVinci rules
 - Validating FHIR resources
 
 ## FHIR Quick Reference
@@ -2815,7 +1001,7 @@ Audit                          → AuditEvent
 }
 ```
 
-**Rule:** Always use `system + value` for identifiers. Never bare strings.
+**Rule:** Always give an identifier as `system + value`. Never as a bare string.
 
 ## References
 
@@ -3050,18 +1236,18 @@ Key profiles you'll likely use:
 - US Core Vital Signs
 - US Core MedicationRequest
 
-**Must support concept:** Server must support, but clients can fall back if not present.
+**Must support concept:** the server must support the element. If the data is missing, clients must still work without it.
 
 ## Common Pitfalls
 
 - ❌ **Bare strings instead of system+value** for identifiers/codes
-- ❌ **String references** without typing
+- ❌ **String references** with no resource type
 - ❌ **Mixing FHIR versions** (R4 client vs R5 server)
-- ❌ **Custom extensions for everything** — defeats interop
+- ❌ **Custom extensions for everything** — other systems can no longer read your data
 - ❌ **Ignoring CapabilityStatement** — clients can't discover features
 - ❌ **No AuditEvent** — required for HIPAA
-- ❌ **Loose validation** — accepting non-conformant data
-- ❌ **Using FHIR for non-clinical data** — wrong tool
+- ❌ **Loose validation** — accepting data that doesn't match the spec
+- ❌ **Using FHIR for non-clinical data** — it's the wrong tool
 
 ## Resource Selection Cheatsheet
 
@@ -3119,10 +1305,10 @@ Key profiles you'll likely use:
 
 - Setting up HIPAA-compliant infrastructure
 - Implementing required safeguards
-- Conducting risk assessment
-- Selecting BAA-eligible vendors
-- Designing PHI access controls
-- Preparing for compliance audit
+- Running a risk assessment
+- Choosing vendors that sign a Business Associate Agreement (BAA)
+- Designing access controls for protected health information (PHI)
+- Preparing for a compliance audit
 
 ## Three Safeguard Categories (Security Rule)
 
@@ -3148,8 +1334,8 @@ HIPAA Security Rule
 - ✅ Information system activity review (audit log review)
 
 ### 2. Assigned Security Responsibility
-- ✅ Named Security Officer (job description)
-- ✅ Named Privacy Officer
+- ✅ A named Security Officer (with a job description)
+- ✅ A named Privacy Officer
 
 ### 3. Workforce Security
 ```
@@ -3163,7 +1349,7 @@ Each step has procedure:
 ```
 
 ### 4. Information Access Management
-- ✅ Isolating clearinghouse functions
+- ✅ Keep clearinghouse functions separate
 - ✅ Access authorization
 - ✅ Access establishment + modification
 
@@ -3174,23 +1360,23 @@ Each step has procedure:
 - ✅ Password management
 
 ### 6. Security Incident Procedures
-- ✅ Response + reporting plan
-- ✅ Documented + tested
+- ✅ A plan to respond and report
+- ✅ The plan is written down and tested
 
 ### 7. Contingency Plan
 - ✅ Data backup plan
 - ✅ Disaster recovery plan
 - ✅ Emergency mode operation
 - ✅ Testing + revision
-- ✅ Applications + data criticality analysis
+- ✅ Analysis of how critical each application and data set is
 
 ### 8. Evaluation
-- ✅ Periodic technical + non-technical evaluation
-- ✅ Document changes triggering re-evaluation
+- ✅ Regular technical and non-technical evaluation
+- ✅ Record which changes trigger a new evaluation
 
 ### 9. Business Associate Contracts
 - ✅ Written contracts (BAAs)
-- ✅ Track all vendors with PHI access
+- ✅ Track every vendor with PHI access
 
 ## Physical Safeguards
 
@@ -3304,7 +1490,7 @@ Addressable (effectively required):
 | **Anthropic** | ✅ via API on AWS | |
 | **Various startups** | ❌ Often no | Check before using |
 
-**Critical:** PHI on a non-BAA service = breach.
+**Critical:** putting PHI on a service without a BAA counts as a breach.
 
 ## Encryption Patterns
 
@@ -3398,7 +1584,7 @@ raise Exception(f"Invalid SSN {ssn} for patient")
 raise Exception(f"Invalid SSN for patient {patient_id}")
 ```
 
-**Audit logs themselves contain PHI references** (patient IDs). Treat them with same protections.
+**Audit logs themselves point to PHI** (patient IDs). Protect them the same way.
 
 ## Breach Notification Thresholds
 
@@ -3447,12 +1633,12 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 
 ## Common Pitfalls
 
-- ❌ **Treating HIPAA as security-only** — Privacy Rule is separate
-- ❌ **Using non-BAA cloud services** — instant breach
-- ❌ **PHI in test data** — entire test infra becomes PHI
-- ❌ **No DR/backup** — required by Security Rule
-- ❌ **Encryption as "addressable"** — effectively required, defensible only with documented alternative
-- ❌ **One-time compliance** — continuous obligation
+- ❌ **Treating HIPAA as security only** — the Privacy Rule is a separate set of rules
+- ❌ **Using cloud services without a BAA** — an immediate breach
+- ❌ **PHI in test data** — the whole test environment then holds PHI
+- ❌ **No disaster recovery (DR)/backup** — the Security Rule requires it
+- ❌ **Treating "addressable" encryption as optional** — it is effectively required; skipping it holds up only with a documented alternative
+- ❌ **One-time compliance** — the obligation never ends
 
 ## Reference
 
@@ -3460,3 +1646,219 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 - [NIST SP 800-66 Rev 2](https://csrc.nist.gov/publications/detail/sp/800-66/rev-2/draft)
 - [AWS HIPAA Compliance](https://aws.amazon.com/compliance/hipaa-compliance/)
 - [OCR Breach Portal](https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf)
+
+
+---
+
+# skill: pdpa-compliance
+
+Use when software stores personal data of people in Thailand. Data inventory, lawful basis, consent, subject rights, retention, processors, breach response.
+
+# PDPA — ข้อมูลส่วนบุคคล
+
+> **กฎข้อเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
+> คำถามแรกเสมอคือ "จำเป็นต้องเก็บไหม" ไม่ใช่ "เก็บยังไงให้ปลอดภัย"
+
+> ⚠️ นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
+> เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
+
+## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
+
+ถ้าแอปไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี และไม่ส่งข้อมูลออก ให้ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ แล้วตรวจแค่ 3 เรื่องนี้
+
+| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
+|---|---|---|
+| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ แล้วลงเหตุผลไว้ใน `decision-log` |
+| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก และไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
+| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บก็ตอบว่าไม่เก็บ) ส่วนเรื่องที่ว่าขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` ให้เตรียมหน้าสั้น ๆ ไว้ก่อน |
+
+ถ้าภายหลังเพิ่ม analytics · crash report หรือบัญชีผู้ใช้ แอปนี้ก็ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว ให้กลับไปใช้ทั้ง skill
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ระบบเก็บชื่อ เบอร์โทร อีเมล ที่อยู่ เลขบัตร รูป หรือข้อมูลอื่นที่ระบุตัวบุคคลได้
+- ลูกค้าหรือฝ่ายกฎหมายถามเรื่องความสอดคล้องกับ PDPA
+- ต้องทำหน้าขอความยินยอม หรือหน้าให้ผู้ใช้ขอลบข้อมูล
+- จะส่งข้อมูลให้ผู้ให้บริการภายนอก
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ร่องรอยว่าใครทำอะไรกับข้อมูล | `audit-trail` |
+| ตารางและการเข้ารหัสระดับคอลัมน์ | `database-design` |
+| การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
+| ปิดบังข้อมูลใน log | `logging-standards` |
+| ที่เก็บกุญแจ | `config-and-secrets` |
+
+---
+
+## 1 · ทำรายการก่อน
+
+**ตอบคำถาม "ข้อมูลของฉันอยู่ที่ไหนบ้าง" ไม่ได้ ถ้าไม่มีรายการนี้**
+
+| ข้อมูล | เก็บที่ไหน | เก็บทำไม | ฐานทางกฎหมาย | เก็บนานเท่าไหร่ | ใครเห็นได้ | ส่งให้ใครบ้าง |
+|---|---|---|---|---|---|---|
+| ชื่อ-นามสกุล | `users.name` | ระบุตัวลูกค้า | สัญญา | 5 ปีหลังปิดบัญชี | ฝ่ายขาย · ผู้ดูแล | — |
+| เบอร์โทร | `users.phone` | แจ้งสถานะจัดส่ง | สัญญา | เหมือนแถวบน | เหมือนแถวบน | ผู้ให้บริการ SMS |
+| เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
+
+**ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
+ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
+
+---
+
+## 2 · ฐานทางกฎหมาย — ไม่ใช่ทุกอย่างต้องขอความยินยอม
+
+| ฐาน | ใช้เมื่อ | ตัวอย่าง |
+|---|---|---|
+| **สัญญา** | จำเป็นเพื่อให้บริการตามที่ตกลง | ที่อยู่สำหรับจัดส่ง |
+| **หน้าที่ตามกฎหมาย** | กฎหมายบังคับให้เก็บ | เอกสารภาษี |
+| **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
+| **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
+
+> 🚨 **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
+> ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
+> **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
+>
+> การกดปุ่ม "ยอมรับทั้งหมด" ที่ทำให้ใช้งานต่อไม่ได้ถ้าไม่กด ไม่ถือว่าเป็นความยินยอมโดยอิสระ
+
+---
+
+## 3 · ความยินยอมที่ใช้ได้จริง
+
+| ต้องมี | รายละเอียด |
+|---|---|
+| **แยกเป็นเรื่อง ๆ** | การตลาดทางอีเมล · การติดตามพฤติกรรม · การส่งต่อให้พันธมิตร — แยกช่องกัน |
+| ไม่ติ๊กมาให้ล่วงหน้า | ต้องเป็นการกระทำของผู้ใช้เอง |
+| ข้อความที่คนทั่วไปอ่านเข้าใจ | ไม่ใช่ย่อหน้ากฎหมาย 500 คำ |
+| **บันทึกไว้** | ใคร · เรื่องอะไร · เมื่อไหร่ · ข้อความเวอร์ชันไหน · จากช่องทางไหน |
+| ถอนได้ง่ายเท่าที่ให้ | ถ้าให้ได้ด้วย 1 คลิก ก็ต้องถอนได้ด้วย 1 คลิก |
+| ถอนแล้วมีผลจริง | **ต้องมีโค้ดที่หยุดใช้ข้อมูลนั้นจริง** ไม่ใช่แค่เก็บค่าไว้ |
+
+ตารางที่ต้องมี: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
+`policy_version` · `source` · `ip`
+**เก็บเป็นประวัติ ไม่ใช่เขียนทับ** — ต้องพิสูจน์ย้อนหลังได้ว่าตอนนั้นเขายินยอมอะไรไว้
+
+---
+
+## 4 · สิทธิของเจ้าของข้อมูล
+
+ระบบต้อง**ทำได้จริง** ไม่ใช่รอทำมือทุกครั้ง โดยทั่วไปต้องตอบสนองภายใน 30 วัน
+
+| สิทธิ | ระบบต้องทำอะไรได้ |
+|---|---|
+| ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
+| ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
+| **ขอลบ** | ลบจริงจากทุกที่ที่มี รวม log และไฟล์สำรอง |
+| ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
+| ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
+| คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
+
+> 🚨 **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
+> และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
+>
+> soft delete อย่างเดียว**ไม่นับว่าลบ** ส่วนข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)
+> เก็บได้ แต่ต้องบอกเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร
+
+---
+
+## 5 · เก็บเท่าที่จำเป็น
+
+| หลัก | ตัวอย่าง |
+|---|---|
+| **ไม่ถามสิ่งที่ไม่ได้ใช้** | ขายของออนไลน์ ไม่ต้องขอเลขบัตรประชาชน |
+| เก็บช่วงแทนค่าจริง | เก็บช่วงอายุ ไม่ใช่วันเกิด ถ้าใช้แค่แบ่งกลุ่ม |
+| **แฮชหรือทำให้ไม่ระบุตัวตน** สำหรับงานวิเคราะห์ | ระบบสถิติไม่ต้องรู้ว่าใครเป็นใคร |
+| เข้ารหัสระดับคอลัมน์ | เลขบัตร ข้อมูลสุขภาพ |
+| ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
+| **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
+
+**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** — เชื้อชาติ ศาสนา ความคิดเห็นทางการเมือง พฤติกรรมทางเพศ
+ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ข้อมูลชีวภาพ จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ
+
+**ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
+
+---
+
+## 6 · อายุการเก็บ
+
+- กำหนด**ต่อประเภทข้อมูล** ไม่ใช่ทั้งระบบเป็นค่าเดียว
+- **มีงานลบจริงที่รันตามรอบ** — นโยบายที่ไม่มีงานรันคือนโยบายที่ไม่มีอยู่จริง
+- log ที่มีข้อมูลบุคคลก็มีอายุเช่นกัน (ดู `logging-standards`)
+- ไฟล์สำรองข้อมูลต้องมีรอบหมุนเวียนที่ทำให้ข้อมูลเก่าหายไปเองในที่สุด
+- ก่อนลบจริงครั้งแรก ให้แสดงรายการที่จะถูกลบและให้คนอนุมัติ
+
+---
+
+## 7 · ผู้ให้บริการภายนอกและการส่งข้อมูลออกนอกประเทศ
+
+| เรื่อง | ต้องทำ |
+|---|---|
+| รายชื่อผู้ประมวลผล | ทำรายการว่าส่งข้อมูลอะไรให้ใคร — คลาวด์ · SMS · อีเมล · วิเคราะห์ · แชต |
+| สัญญา | มีข้อตกลงการประมวลผลข้อมูลกับทุกราย |
+| ส่งออกนอกประเทศ | ตรวจว่าประเทศปลายทางมีมาตรฐานเพียงพอ หรือมีข้อสัญญามาตรฐานรองรับ |
+| ตัววัดสถิติและโฆษณา | นับเป็นการส่งข้อมูลออกไป — **ต้องมีฐานทางกฎหมายรองรับ** |
+| ยกเลิกใช้บริการ | ต้องได้ข้อมูลคืนและให้เขาลบจริง |
+
+> **จุดที่คนลืมบ่อยที่สุด** — ปลั๊กอินวัดสถิติที่ใส่ไว้ตั้งแต่วันแรก ส่งข้อมูลพฤติกรรม
+> ผู้ใช้ออกไปต่างประเทศทุกวัน โดยไม่เคยมีใครใส่ไว้ในรายการ
+
+---
+
+## 8 · เมื่อข้อมูลรั่ว — 72 ชั่วโมงแรก
+
+| ลำดับ | ทำอะไร |
+|---|---|
+| 1 | **หยุดการรั่วก่อน** — เพิกถอนกุญแจ ปิดช่องทาง |
+| 2 | ประเมินขอบเขต — ข้อมูลอะไร กี่คน อ่อนไหวไหม |
+| 3 | เก็บหลักฐาน — log และสถานะระบบ **ก่อน**ที่จะแก้ทับ |
+| 4 | แจ้งผู้รับผิดชอบภายในและที่ปรึกษากฎหมายทันที |
+| 5 | **แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง** เมื่อเข้าเงื่อนไข |
+| 6 | แจ้งเจ้าของข้อมูล เมื่อมีความเสี่ยงสูงต่อเขา |
+| 7 | บันทึกเหตุการณ์ด้วย `postmortem-template` |
+
+**เตรียมไว้ล่วงหน้า ไม่ใช่ตอนเกิดเรื่อง** — ใครเป็นคนตัดสินใจแจ้ง · เบอร์ที่ปรึกษากฎหมาย ·
+แม่แบบข้อความแจ้ง · วิธีดึงรายชื่อผู้ได้รับผลกระทบ
+
+---
+
+## 9 · Anti-patterns
+
+- ❌ **ขอความยินยอมสำหรับทุกอย่าง** — พอเขาถอน ระบบทำงานต่อไม่ได้
+- ❌ **ช่องติ๊กที่ติ๊กมาให้แล้ว** — ไม่ถือเป็นความยินยอม
+- ❌ **เก็บความยินยอมเป็นค่าเดียว `accepted_terms = true`** — พิสูจน์ย้อนหลังไม่ได้ว่ายินยอมอะไร
+- ❌ **soft delete แล้วบอกว่าลบแล้ว**
+- ❌ **นโยบายอายุการเก็บที่ไม่มีงานลบจริง**
+- ❌ **ใช้ข้อมูลจริงบน staging** — และคัดลอกลงเครื่อง developer
+- ❌ **เก็บเลขบัตรประชาชนเพราะ "เผื่อใช้"**
+- ❌ **ข้อมูลส่วนบุคคลใน log และในรายงาน crash**
+- ❌ **ไม่มีรายการผู้ให้บริการภายนอก** — ตอบไม่ได้ว่าข้อมูลไปที่ไหนบ้าง
+- ❌ **ส่งออก Excel ที่มีข้อมูลเต็ม** ให้คนที่ต้องการแค่ยอดรวม
+- ❌ **นโยบายความเป็นส่วนตัวที่ไม่ตรงกับสิ่งที่ระบบทำจริง**
+
+---
+
+## 10 · ตัวย่อ
+
+- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
+- **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
+- **ข้อมูลอ่อนไหว** — ข้อมูลส่วนบุคคลกลุ่มพิเศษ เช่น สุขภาพ เชื้อชาติ ศาสนา
+- **ผู้ควบคุมข้อมูล** — ผู้ตัดสินใจว่าจะเก็บและใช้ข้อมูลอย่างไร (โดยทั่วไปคือเจ้าของระบบ)
+- **ผู้ประมวลผลข้อมูล** — ผู้ที่ประมวลผลข้อมูลตามคำสั่งของผู้ควบคุม เช่น ผู้ให้บริการคลาวด์
+- **เจ้าของข้อมูล** — บุคคลที่ข้อมูลนั้นเป็นของเขา
+
+## 11 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ร่องรอยว่าใครดูหรือแก้ข้อมูล | `audit-trail` |
+| ตาราง การเข้ารหัส และ soft delete | `database-design` |
+| ปิดบังข้อมูลใน log | `logging-standards` |
+| สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
+| ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
+| ความยินยอมสำหรับการตลาด | `notifications` |
+| ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
+| อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
+| งานลบข้อมูลที่หมดอายุ | `background-jobs` |
+| บันทึกเหตุการณ์หลังข้อมูลรั่ว | `postmortem-template` · `incident-runbook-template` |

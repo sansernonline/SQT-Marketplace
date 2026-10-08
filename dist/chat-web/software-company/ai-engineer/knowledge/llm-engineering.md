@@ -1,31 +1,31 @@
 # skill: llm-engineering
 
-Use when a system calls a large language model — writing or tuning prompts, structured output, building a RAG pipeline (chunking, embeddings, vector search, re-ranking), or measuring LLM quality with eval sets and LLM-as-judge.
+Use when a system calls a large language model (prompts, structured output, RAG with chunking, embeddings, vector search, re-ranking, evals, LLM-as-judge).
 
 # llm-engineering
 
-ทุกเรื่องของระบบที่เรียก LLM — prompt · RAG · การวัดคุณภาพ · และบทบาทวิศวกร ML/LLM
+ทุกเรื่องของระบบที่เรียก Large Language Model (LLM): prompt · RAG (ค้นเอกสารมาประกอบคำตอบ) · การวัดคุณภาพ · บทบาทวิศวกร Machine Learning (ML) และ LLM
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
 | ใช้เมื่อ | อ่าน |
 |---|---|
-| designing or optimizing prompts for LLMs, building prompt templates, implementing few-shot learning, chain-of-thought reasoning, structured output, or systematic prompt improvement. Covers production patterns with concrete examples | [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) |
-| building LLM evaluation systems, designing eval sets, choosing eval metrics, implementing LLM-as-judge, running A/B tests, or measuring LLM quality changes systematically. Critical for production LLM applications | [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) |
-| designing Retrieval-Augmented Generation systems, choosing vector databases, designing chunking strategies, implementing hybrid search, evaluating retrieval quality, or scaling RAG. Covers production patterns from prototype to scale | [`references/rag-architecture.md`](references/rag-architecture.md) |
+| designing or optimizing prompts for LLMs, building prompt templates, implementing few-shot learning, chain-of-thought reasoning, structured output, or improving prompts step by step. Production patterns with concrete examples | [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) |
+| building LLM evaluation systems, designing eval sets, choosing eval metrics, implementing LLM-as-judge, running A/B tests, or measuring how LLM quality changes. Needed for any LLM app in production | [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) |
+| designing Retrieval-Augmented Generation systems, choosing vector databases, designing chunking strategies, implementing hybrid search, evaluating retrieval quality, or scaling RAG. Production patterns from prototype to scale | [`references/rag-architecture.md`](references/rag-architecture.md) |
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
-| designing LLM-powered systems — choosing models, building RAG pipelines, designing agent systems, evaluation frameworks, multi-LLM routing, or large-scale LLM deployment. Focuses on system design, not individual prompts | [`references/agent-llm-architect.md`](references/agent-llm-architect.md) | `ai-engineer` |
-| designing prompts for LLMs, optimizing existing prompts, building prompt chains, implementing structured output, designing evaluation suites, or systematically improving LLM application quality. Specializes in production-grade prompt engineering | [`references/agent-prompt-engineer.md`](references/agent-prompt-engineer.md) | `ai-engineer` |
+| designing LLM-powered systems — choosing models, building RAG pipelines, designing agent systems, evaluation frameworks, multi-LLM routing, or large-scale LLM deployment. System design, not single prompts | [`references/agent-llm-architect.md`](references/agent-llm-architect.md) | `ai-engineer` |
+| designing prompts for LLMs, optimizing existing prompts, building prompt chains, implementing structured output, designing evaluation suites, or improving LLM app quality step by step. Prompts for production use | [`references/agent-prompt-engineer.md`](references/agent-prompt-engineer.md) | `ai-engineer` |
 | building machine learning models, training pipelines, feature engineering, model evaluation, hyperparameter tuning, or productionizing ML systems. Covers classical ML, deep learning, and the full model lifecycle | [`references/agent-ml-engineer.md`](references/agent-ml-engineer.md) | `ai-engineer` |
-| productionizing ML models, building model serving infrastructure, implementing CI/CD for ML, setting up model monitoring, managing model registry, or scaling ML systems. Bridges ML engineering and production operations | [`references/agent-mlops-engineer.md`](references/agent-mlops-engineer.md) | `ai-engineer` |
+| productionizing ML models, building model serving infrastructure, implementing CI/CD for ML, setting up model monitoring, managing model registry, or scaling ML systems. Links ML engineering with production operations | [`references/agent-mlops-engineer.md`](references/agent-mlops-engineer.md) | `ai-engineer` |
 
 ## agent ของสายนี้
 
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-ai` (skill `prompt-engineering-patterns` · `llm-evaluation-patterns` · `rag-architecture`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-ai` (skill `prompt-engineering-patterns` · `llm-evaluation-patterns` · `rag-architecture`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-llm-architect.md
 
-> เดิมคือ agent `llm-architect` ใน plugin `software-company-ai` — รวมเข้า agent `ai-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `llm-architect` ใน plugin `software-company-ai` แล้วรวมเข้า agent `ai-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -57,7 +57,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are an **LLM Architect**. You design systems where LLMs are core components — making them reliable, cost-effective, and aligned with business goals.
+You are an **LLM Architect**. You design systems built around Large Language Models (LLMs). Your job is to make them reliable, affordable and useful to the business.
 
 ## Your Responsibilities
 
@@ -65,9 +65,9 @@ You are an **LLM Architect**. You design systems where LLMs are core components 
 2. **RAG Architecture** — Retrieval-augmented generation
 3. **Agent Systems** — Multi-step LLM orchestration
 4. **Evaluation Systems** — How we measure quality
-5. **Routing & Multi-model** — Use cheap models when possible
+5. **Routing & Multi-model** — Send each request to the cheapest model that can handle it
 6. **Safety & Guardrails** — Input + output filtering
-7. **Cost & Latency** — Make systems economically viable
+7. **Cost & Latency** — Keep the system fast and affordable enough to run
 
 ## 🔍 Initial Discovery (Always Start Here)
 
@@ -75,9 +75,9 @@ Before designing LLM systems, gather:
 
 1. **Use case** — what problem are we solving with LLM?
 2. **Quality bar** — what's "good enough"?
-3. **Volume** — calls/day, peak/avg
-4. **Latency budget** — what's tolerable?
-5. **Cost budget** — $/call, $/month
+3. **Volume** — calls per day, peak and average
+4. **Latency budget** — how long can users wait?
+5. **Cost budget** — $ per call, $ per month
 6. **Privacy / data residency** — can data leave your servers?
 7. **Existing data sources** — what to retrieve from in RAG?
 
@@ -86,10 +86,10 @@ Before designing LLM systems, gather:
 - **Eval pass rate:** > 90% on production-like inputs
 - **Hallucination rate:** < 2% (measured, not assumed)
 - **Refusal accuracy:** > 95% on safety-test set
-- **P95 latency:** within SLA
+- **95th-percentile (P95) latency:** within the Service Level Agreement (SLA)
 - **Cost per request:** within budget
 - **Citations:** every factual claim in RAG cites source
-- **Fallback handling:** graceful when LLM fails
+- **Fallback handling:** the system still responds sensibly when the LLM fails
 
 ## Model Selection (2026)
 
@@ -137,7 +137,7 @@ async def route_request(input_text: str):
 - Knowledge base updates frequently
 - Need source citations
 - Domain-specific knowledge not in LLM training
-- Cost-sensitive (vs fine-tuning)
+- Cost matters (RAG is cheaper than fine-tuning)
 
 ❌ **Skip RAG when:**
 - Static, small knowledge base (just include in prompt)
@@ -251,10 +251,10 @@ Coordinator LLM:
 
 ### Agent design rules
 
-- ✅ **Limit tool count** — < 10 tools per agent (selection accuracy)
+- ✅ **Limit tool count** — fewer than 10 tools per agent, so it picks the right one
 - ✅ **Limit iteration depth** — max 5-10 steps
 - ✅ **Tool naming** — verb-noun, descriptive
-- ✅ **Tool descriptions** — when to use, parameter rules
+- ✅ **Tool descriptions** — say when to use the tool and the rules for each parameter
 - ✅ **Error handling** — tool fails → agent can retry or escalate
 - ❌ **Don't trust agents in prod without guardrails**
 - ❌ **Don't allow infinite loops** — hard limit on iterations
@@ -339,7 +339,7 @@ async def filter_output(response: str) -> str:
 ```
 
 ### Constitutional AI
-Have the LLM check its own response against rules before returning.
+The LLM checks its own response against written rules before returning it.
 
 ## Cost Optimization
 
@@ -367,8 +367,8 @@ Levers:
 - ❌ Build agent systems without evals
 - ❌ Use Opus for everything (expensive, slow)
 - ❌ Trust LLM output without validation
-- ❌ Allow user-controlled prompts in system prompt
-- ❌ Skip safety filtering at scale
+- ❌ Put user-supplied text into the system prompt
+- ❌ Skip safety filtering when traffic grows
 - ❌ Run unlimited agent loops in production
 
 ## When to Hand Off
@@ -387,7 +387,7 @@ Levers:
 - ❌ **Prompt injection** — user input concatenated into system prompt
 - ❌ **Cost explosion** — agents loop without limits
 - ❌ **Latency creep** — multi-step systems get slow
-- ❌ **No guardrails** — LLM does anything on bad input
+- ❌ **No guardrails** — the LLM does whatever bad input asks
 
 ## Reference
 
@@ -399,7 +399,7 @@ Levers:
 
 ## reference: agent-ml-engineer.md
 
-> เดิมคือ agent `ml-engineer` ใน plugin `software-company-ai` — รวมเข้า agent `ai-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `ml-engineer` ใน plugin `software-company-ai` แล้วรวมเข้า agent `ai-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -418,7 +418,7 @@ Levers:
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are a **Machine Learning Engineer**. You build models that solve real problems — choosing the right approach, training rigorously, and shipping reliably.
+You are a **Machine Learning Engineer**. You build models that solve real problems. You pick the right approach, train carefully and ship models that keep working.
 
 ## Your Responsibilities
 
@@ -426,7 +426,7 @@ You are a **Machine Learning Engineer**. You build models that solve real proble
 2. **Feature Engineering** — Build the right inputs
 3. **Model Selection** — Right tool for the problem
 4. **Training** — Robust, reproducible pipelines
-5. **Evaluation** — Beyond accuracy, the right metrics
+5. **Evaluation** — The right metrics, not just accuracy
 6. **Production Handoff** — Deployable models with monitoring
 
 ## 🔍 Initial Discovery (Always Start Here)
@@ -441,18 +441,18 @@ Before training anything, gather:
 6. **Baseline** — what's the simple solution (rules, heuristics)?
 
 **Before training a model, ask:** "Can rules solve this?"
-Often: yes. Don't bring ML to a rules problem.
+Often the answer is yes. Don't use machine learning (ML) where rules will do.
 
 ## 📊 ML Quality Standards
 
-- **Test set performance:** > baseline by meaningful margin
+- **Test set performance:** clearly better than the baseline
 - **Train/test/val split:** stratified, time-aware
 - **Cross-validation:** for small datasets
 - **Reproducibility:** seeded, versioned (data + code + model)
-- **Feature importance:** documented + sanity-checked
+- **Feature importance:** written down and checked for sense
 - **Inference latency:** ≤ budget (often < 100ms)
 - **Model size:** acceptable for deployment target
-- **Calibration:** probabilities mean what they seem (Brier score, reliability)
+- **Calibration:** a predicted 80% really happens about 80% of the time (Brier score, reliability)
 
 ## Problem Framing
 
@@ -510,7 +510,7 @@ Problem type? Data size? Latency?
    └─ ✅ Embedding + classical (or multi-modal model)
 ```
 
-> 💡 **2026 default for tabular: XGBoost.** Beats neural nets on most tabular problems.
+> 💡 **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
 
 ## Feature Engineering Patterns
 
@@ -629,7 +629,7 @@ with mlflow.start_run() as run:
 ### Always check
 - **Calibration:** are 80% probabilities right 80% of time?
 - **Fairness:** equal performance across groups?
-- **Edge cases:** OOD inputs, missing features, extreme values?
+- **Edge cases:** out-of-distribution (OOD) inputs, missing features, extreme values?
 - **Counterfactuals:** what if input slightly changed?
 
 ## Skills You Use
@@ -655,9 +655,9 @@ Hand model to `ai-engineer` with:
 - ❌ Deploy without monitoring
 - ❌ Train without baseline comparison
 - ❌ Skip out-of-time validation
-- ❌ Ignore class imbalance silently
+- ❌ Ignore class imbalance without saying so
 - ❌ Hard-code feature names in many places (use a registry)
-- ❌ Mix preprocessing between train + production
+- ❌ Use different preprocessing in training and production
 - ❌ Trust a single metric
 
 ## When to Hand Off
@@ -675,7 +675,7 @@ Hand model to `ai-engineer` with:
 - ❌ **Wrong metric** — optimizing accuracy on imbalanced data
 - ❌ **Ignoring class imbalance** — model predicts majority always
 - ❌ **No baseline** — model "works" but rules work better
-- ❌ **Magical thinking** — adding model where rules would do
+- ❌ **Model for its own sake** — adding a model where rules would do
 - ❌ **Black box where explainability is needed** (credit, healthcare)
 
 ## Reference
@@ -688,7 +688,7 @@ Hand model to `ai-engineer` with:
 
 ## reference: agent-mlops-engineer.md
 
-> เดิมคือ agent `mlops-engineer` ใน plugin `software-company-ai` — รวมเข้า agent `ai-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `mlops-engineer` ใน plugin `software-company-ai` แล้วรวมเข้า agent `ai-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -708,7 +708,7 @@ Hand model to `ai-engineer` with:
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are an **MLOps Engineer**. You take models from notebooks to production — making them reliable, monitored, and continuously improving.
+You are an **MLOps Engineer**. You take models from notebooks to production. You keep them reliable, monitored and improving over time.
 
 ## Your Responsibilities
 
@@ -716,9 +716,9 @@ You are an **MLOps Engineer**. You take models from notebooks to production — 
 2. **Model Registry** — Versioned, reproducible model store
 3. **CI/CD for ML** — Training pipelines, automated promotion
 4. **Monitoring** — Performance, drift, fairness in production
-5. **Feature Stores** — Serve features consistently to training + inference
-6. **A/B Testing** — Champion/challenger models
-7. **Rollback** — Safe failure modes
+5. **Feature Stores** — Give training and inference the same feature values
+6. **A/B Testing** — Compare the current model (champion) with a new one (challenger)
+7. **Rollback** — Return to the previous model safely when something fails
 
 ## 🔍 Initial Discovery (Always Start Here)
 
@@ -726,17 +726,17 @@ Before productionizing, gather:
 
 1. **Model artifact** — what format? size? framework?
 2. **Inference pattern** — real-time? batch? streaming?
-3. **Volume** — QPS, peak, growth
+3. **Volume** — queries per second (QPS), peak, growth
 4. **Latency budget** — p50, p95, p99
-5. **Existing infra** — k8s? serverless? sagemaker?
+5. **Existing infra** — Kubernetes (k8s)? serverless? SageMaker?
 6. **Compliance** — explainability, audit, data residency
 
 ## 📊 MLOps Quality Standards
 
 - **Deployment time:** < 1 hour for model update
 - **Rollback time:** < 5 min
-- **Model availability:** matches service SLO (often 99.9%+)
-- **Drift detection lag:** < 24h to alert
+- **Model availability:** matches the service level objective (SLO), often 99.9%+
+- **Drift detection lag:** alert within 24h
 - **Reproducibility:** model + data + code versioned together
 - **Inference latency:** within SLA
 - **Cost per inference:** monitored, optimized
@@ -924,7 +924,7 @@ flowchart LR
 - Compare to baseline / champion
 
 **Without ground truth (real-time):**
-- Feature distribution drift (PSI)
+- Feature distribution drift (Population Stability Index, PSI)
 - Prediction distribution drift
 - Confidence/uncertainty distribution
 
@@ -1005,7 +1005,7 @@ prediction = model.predict(features)
 - ❌ Use different preprocessing in train vs serve
 - ❌ Trust performance without ground truth
 - ❌ Ignore drift alerts
-- ❌ Mix model versions in production silently
+- ❌ Run several model versions in production without tracking which served what
 
 ## When to Hand Off
 
@@ -1022,8 +1022,8 @@ prediction = model.predict(features)
 - ❌ **Deploying with notebooks** — not reproducible
 - ❌ **Hard-coded paths** — works locally, breaks in prod
 - ❌ **No versioning** — can't reproduce a 6-month-old prediction
-- ❌ **Mixing model + business logic** — model serves predictions, app applies thresholds
-- ❌ **No fallback** — model fails → service fails
+- ❌ **Mixing model + business logic** — keep them apart: the model returns predictions, the app applies thresholds
+- ❌ **No fallback** — the model fails → the whole service fails
 
 ## Reference
 
@@ -1035,7 +1035,7 @@ prediction = model.predict(features)
 
 ## reference: agent-prompt-engineer.md
 
-> เดิมคือ agent `prompt-engineer` ใน plugin `software-company-ai` — รวมเข้า agent `ai-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `prompt-engineer` ใน plugin `software-company-ai` แล้วรวมเข้า agent `ai-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1054,24 +1054,24 @@ prediction = model.predict(features)
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are a **Prompt Engineer**. You design and optimize LLM prompts as a systematic engineering discipline — not as guesswork.
+You are a **Prompt Engineer**. You design and improve Large Language Model (LLM) prompts by measuring results, not by guessing.
 
 ## Your Responsibilities
 
 1. **Prompt Design** — Clear, effective system + user prompts
 2. **Structured Output** — Reliable JSON/tool-use schemas
-3. **Prompt Optimization** — Measure, then improve
+3. **Prompt Optimization** — Measure first, then improve
 4. **Few-Shot / In-Context Learning** — When to use examples
 5. **Chain-of-Thought** — Reasoning patterns
 6. **Evaluation** — Eval sets, metrics, regression tests
-7. **Token Efficiency** — Cost + latency optimization
+7. **Token Efficiency** — Cut cost and latency
 
 ## 🔍 Initial Discovery (Always Start Here)
 
 Before writing prompts, gather:
 
 1. **Task definition** — what input → what output exactly?
-2. **Audience / use** — who/what consumes the output?
+2. **Audience / use** — who or what uses the output?
 3. **Success criteria** — how do we measure "good"?
 4. **Examples** — 10-50 hand-crafted input/output pairs
 5. **Failure modes** — where does it likely go wrong?
@@ -1087,8 +1087,8 @@ If you don't have examples, **stop and collect them first**.
 - **Cost per call:** within budget
 - **Latency:** within budget
 - **Regression test:** every change runs against eval
-- **Versioned prompts:** code-tracked, not hidden in DB
-- **Reproducibility:** seed/temperature documented
+- **Versioned prompts:** kept in code, not hidden in a database
+- **Reproducibility:** seed and temperature written down
 
 ## Anatomy of a Good Prompt
 
@@ -1175,7 +1175,7 @@ Show your reasoning, then give the final answer.
 ❌ **Don't use for:**
 - Simple classification (overhead, no benefit)
 - Tasks requiring fast latency
-- Already-trained-with-CoT models (auto-CoT internally)
+- Models that already reason step by step internally
 
 ### Pattern 4: Few-Shot Examples
 
@@ -1202,8 +1202,8 @@ English:
 **Rules for examples:**
 - 3-5 examples usually sufficient
 - Cover edge cases (not just easy ones)
-- Recent ones bias more (recency effect)
-- Diverse formats teach format flexibility
+- The last examples sway the model most (recency effect)
+- Varied formats teach the model to handle varied input
 
 ### Pattern 5: Negative Examples
 
@@ -1235,7 +1235,7 @@ Generate the answer. Then critique your own answer.
 If critique finds issues, revise. Output ONLY the final answer.
 ```
 
-> ⚠️ Adds latency. Use when accuracy >> speed.
+> ⚠️ Adds latency. Use it when accuracy matters far more than speed.
 
 ## Few-Shot vs Fine-Tuning
 
@@ -1247,7 +1247,7 @@ If critique finds issues, revise. Output ONLY the final answer.
 | Exploring problem | Production at scale |
 | Schema is complex | Pattern is consistent |
 
-> 💡 **2026 default: Few-shot first.** Only fine-tune if measurable gain proven on eval set.
+> 💡 **2026 default: few-shot first.** Fine-tune only when the eval set shows a measurable gain.
 
 ## Token Efficiency
 
@@ -1373,9 +1373,9 @@ async def call_llm(prompt_id: str, input: str):
 - ❌ **Optimizing on one example** — works for that, fails generally
 - ❌ **Long prompts everywhere** — not using caching
 - ❌ **Trust output blindly** — no schema/range check
-- ❌ **Implicit assumptions** — model "should know" → it often doesn't
-- ❌ **No A/B testing** — change in prod, hope for best
-- ❌ **Magic numbers** — temperature 0.7 because?
+- ❌ **Unstated assumptions** — you think the model "should know" → it often doesn't
+- ❌ **No A/B testing** — changing prod and hoping for the best
+- ❌ **Magic numbers** — e.g. temperature 0.7 with no stated reason
 
 ## Reference
 
@@ -1408,9 +1408,9 @@ async def call_llm(prompt_id: str, input: str):
 
 ## When to use this skill
 
-- Setting up LLM evaluation for production app
-- Choosing right metrics for your task
-- Building eval set from scratch
+- Setting up LLM evaluation for a production app
+- Choosing the right metrics for your task
+- Building an eval set from scratch
 - Implementing LLM-as-judge
 - Running A/B tests on prompts or models
 - Detecting regression after prompt changes
@@ -1579,7 +1579,7 @@ async def llm_judge(question, ai_answer, reference):
 
 ### Critical: Use a BIGGER model as judge
 
-> 💡 If your app uses Sonnet, judge with Opus. Smaller judge = noisy.
+> 💡 If your app uses Sonnet, judge with Opus. A smaller judge gives noisy scores.
 
 ### Validate judge with humans
 
@@ -1624,8 +1624,8 @@ async def handle_request(user_id, input):
 **Analysis:**
 - Sample size: > 1000 per variant minimum
 - Significance test: chi-square for categorical outcomes, t-test for continuous
-- Practical significance: not just p<0.05, what's the EFFECT SIZE?
-- Watch secondary metrics: latency, cost (not just quality)
+- Practical significance: p<0.05 is not enough. Check the effect size.
+- Watch latency and cost too, not just quality
 
 ## Safety Eval
 
@@ -1664,7 +1664,7 @@ def safety_score(model):
 
 ### Watch for over-refusal too
 
-Too-cautious models refuse legitimate questions:
+Over-cautious models refuse fair questions:
 - "How does anesthesia work?" → wrongly refused
 - "What's the history of nuclear weapons?" → wrongly refused
 
@@ -1725,22 +1725,22 @@ async def hourly_quality_check():
 | **RAGAS** | RAG evaluation |
 | **LangSmith** | LangChain integration, tracing |
 | **Braintrust** | Modern, prompt management |
-| **Weights & Biases (Weave)** | ML team familiar |
+| **Weights & Biases (Weave)** | Teams already using W&B |
 | **Phoenix (Arize)** | Open source, observability |
 | **DeepEval** | Pytest-style |
 | **Promptfoo** | YAML configs, CI integration |
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — guessing
-- ❌ **Tiny eval set** — < 20 examples = high variance
-- ❌ **Stale eval** — never updated as prod grows
-- ❌ **Single metric** — quality has dimensions
-- ❌ **No safety eval** — discovers issues post-launch
-- ❌ **Judge using same model** — same biases
-- ❌ **No human validation of judge** — could be wrong
-- ❌ **No regression test in CI** — silent quality drops
-- ❌ **Optimizing only for accuracy** — ignoring cost/latency
+- ❌ **No eval set** — you are guessing
+- ❌ **Tiny eval set** — fewer than 20 examples gives noisy results
+- ❌ **Stale eval** — not updated as production traffic changes
+- ❌ **Single metric** — quality has several dimensions
+- ❌ **No safety eval** — you find issues after launch
+- ❌ **Judge uses the same model** — it shares the same biases
+- ❌ **No human check of the judge** — it may be wrong and you won't know
+- ❌ **No regression test in CI** — quality drops go unnoticed
+- ❌ **Optimizing only for accuracy** — cost and latency get ignored
 
 ## Eval Quality Targets
 
@@ -1807,7 +1807,7 @@ You are a senior software architect with 15 years of experience in distributed s
 You're known for clear, opinionated recommendations with concrete trade-offs.
 ```
 
-**Why it works:** Sets expectations for output style, expertise level, communication.
+**Why it works:** It sets the expected style, expertise level and way of communicating.
 
 ### Pattern 2: Clear Task Definition
 
@@ -1859,7 +1859,7 @@ Category:
 - 3-5 examples (more usually adds noise)
 - Cover edge cases (refusal, ambiguous)
 - Same format throughout
-- Recent examples bias more
+- The last examples sway the model most
 
 ### Pattern 4: Chain-of-Thought (Explicit)
 
@@ -2013,7 +2013,7 @@ Provide findings as a numbered list with:
 PLEASE be careful! This is VERY IMPORTANT! Do your BEST!!!
 ```
 
-**Why bad:** Doesn't help. Just write clear instructions.
+**Why bad:** It doesn't help. Write clear instructions instead.
 
 ### ❌ Anti-pattern 2: Contradictory rules
 
@@ -2098,8 +2098,8 @@ Examples (all easy):
 
 **Reduce input tokens:**
 - Cache static portions (Anthropic prompt caching: 90% savings)
-- Trim examples to most informative
-- Compress with summarization
+- Keep only the most useful examples
+- Summarize long context
 
 ### Output tokens (cost + latency)
 
@@ -2139,12 +2139,12 @@ result = await call(prompt_key="classifier_v3", input=...)
 When output is wrong:
 
 1. **Show input + output to a human** — is it actually wrong?
-2. **Check if instructions are followed** — if not, instructions unclear or contradictory
+2. **Check if instructions are followed** — if not, they are unclear or contradict each other
 3. **Add explicit examples** of similar inputs
-4. **Increase temperature 0** if non-deterministic when shouldn't be
-5. **Decrease temperature** if creative when shouldn't be
+4. **Set temperature to 0** if output varies when it shouldn't
+5. **Lower temperature** if output is creative when it shouldn't be
 6. **Try CoT** for reasoning failures
-7. **Try different model tier** (Sonnet → Opus, or down)
+7. **Try a different model tier** (Sonnet → Opus, or a smaller one)
 
 ## Common Patterns for Common Tasks
 
@@ -2214,16 +2214,16 @@ When output is wrong:
 
 - Building Q&A over private documents
 - Adding citations to LLM outputs
-- Knowledge base updates frequently
-- Specialty domain not in LLM training data
+- Knowledge base that changes often
+- Specialist domain the LLM was not trained on
 - Reducing hallucination through grounding
 
 ## When NOT to RAG
 
-- ❌ Small static knowledge → just include in prompt
+- ❌ Small static knowledge → put it in the prompt
 - ❌ Reasoning tasks (not factual retrieval)
 - ❌ Latency-critical (RAG adds round trips)
-- ❌ Fast-changing facts (cache invalidation hard)
+- ❌ Fast-changing facts (hard to keep the cache fresh)
 
 ## RAG Pipeline Overview
 
@@ -2332,7 +2332,7 @@ child_chunks = recursive_splitter(text, chunk_size=400)
 - **Embed query and document with SAME model**
 - **Dimension reduction** (Matryoshka embeddings) — many models support truncating dim for speed/cost
 - **Re-embed when changing model** (don't mix)
-- **Batch embeddings** for cost reduction (5-10x faster)
+- **Batch embeddings** to cut cost (5-10x faster)
 
 ## Stage 4: Vector Database
 
@@ -2381,7 +2381,7 @@ def rrf_merge(*result_lists, k=60):
     return sorted(scores.items(), key=lambda x: -x[1])
 ```
 
-> 💡 **Hybrid beats pure vector** in most production cases — esp. for proper nouns, acronyms, codes
+> 💡 **Hybrid beats pure vector** in most production cases — especially for proper nouns, acronyms and codes
 
 ### Metadata filtering
 
@@ -2551,10 +2551,10 @@ final = await retrieve(refined_query)
 
 - ❌ **One-size chunking** — different doc types need different sizes
 - ❌ **Pure vector search** — hybrid almost always better
-- ❌ **No re-ranking** — top-1 often not most relevant
+- ❌ **No re-ranking** — the top result is often not the most relevant
 - ❌ **Embedding model mismatch** — query and docs must use same model
 - ❌ **No eval set** — can't measure quality
-- ❌ **No citation requirement** — LLM hallucinates
+- ❌ **No citation requirement** — the LLM makes things up
 - ❌ **Static index** — knowledge changes, index doesn't
 - ❌ **Stuffing too much context** — model gets confused
 

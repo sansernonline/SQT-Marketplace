@@ -1,6 +1,6 @@
 # skill: marketplace-fees-pricing
 
-Use when a Thai seller asks what to charge, why a product loses money, or how Shopee, Lazada and TikTok Shop fees compare. Fee table, price formula from cost, fees, shipping, VAT and margin, worked example.
+Use when a Thai seller asks what to charge, why a product loses money, or how Shopee, Lazada and TikTok Shop fees compare. Price formula with VAT and margin.
 
 # Marketplace Fees and Pricing
 

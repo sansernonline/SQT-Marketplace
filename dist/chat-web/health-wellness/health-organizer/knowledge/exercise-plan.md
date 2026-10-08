@@ -1,6 +1,6 @@
 # skill: exercise-plan
 
-Use when someone wants to start, restart or structure regular exercise — a beginner walking or strength plan, a week that meets WHO guidance, desk breaks, or whether to see a doctor first. Does not treat injuries.
+Use when starting, restarting or structuring regular exercise. Beginner walking or strength plan, WHO weekly target, desk breaks, when to see a doctor first.
 
 # Exercise Plan
 

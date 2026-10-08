@@ -1,6 +1,6 @@
 # skill: live-selling-script
 
-Use when preparing a live-commerce session (ไลฟ์ขายของ) on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, 3-second hook, flash-deal timing, Thai CTA lines, backstage checklist, claim rules.
+Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, 3-second hook, flash-deal timing, Thai call-to-action lines.
 
 # Live Selling Script
 
@@ -15,7 +15,7 @@ Viewers arrive and leave every few seconds. A live that works repeats a short lo
 5. **Write host lines** from [host lines](references/host-lines.md) — hook, proof, price, call to action per product
 6. **Compliance pass** — every claim against `product-listing` prohibited claims; every price on air = price in the system
 7. **Rehearse 5 minutes** with the backstage person: who pins products, who answers comments, who watches stock
-8. **After the live**: record viewers, peak viewers, orders, sales, top question; three lessons for next time
+8. **After the live**: record viewers, peak viewers, orders, sales, top question; 3 lessons for next time
 
 ## Run sheet — 60 minutes, two products + one flash deal
 

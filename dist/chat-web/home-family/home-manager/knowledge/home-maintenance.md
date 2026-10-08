@@ -1,6 +1,6 @@
 # skill: home-maintenance
 
-Use when a Thai household wants a yearly maintenance schedule for the hot, rainy and cool seasons — aircon cleaning, water pump, termites, roof before the rains — or must compare contractor quotes before paying a deposit.
+Use when a Thai household needs a seasonal maintenance schedule (aircon, water pump, termites, roof before rains) or must compare contractor quotes.
 
 # Home Maintenance (Thai climate)
 
@@ -41,7 +41,7 @@ General information, not engineering advice. Electrical, gas, structural and roo
 | Smoke detector battery, fire extinguisher gauge | 6 months / yearly | | |
 | Exterior repaint, waterproof coating | 5–7 years, in cool season | Walls crack and absorb rain | |
 
-Costs vary by city and size — get two quotes; a figure marked (รอยืนยัน) is a planning guess, not a price.
+Costs vary by city and size — get 2 quotes; a figure marked (รอยืนยัน) is a planning guess, not a price.
 
 ## Contractor quote checklist
 
@@ -54,7 +54,7 @@ Before paying anything, every quote must show:
 - [ ] Payment schedule tied to finished stages — deposit ≤ 30% (common practice), final payment after inspection
 - [ ] Warranty on workmanship (e.g. 6–12 months on leaks) in writing
 - [ ] Who pays if they damage something; insurance for high work
-- [ ] Two to three quotes for anything over ~10,000 บาท; compare in one table (scope · price · warranty · timeline · reviews)
+- [ ] 2–3 quotes for anything over ~10,000 บาท; compare in one table (scope · price · warranty · timeline · reviews)
 
 For a formal quotation format see `thai-workplace` `doc-quotation`; for a written agreement on a big job see `thai-workplace` `doc-contract-th`.
 

@@ -1,6 +1,6 @@
 # skill: vehicle-care
 
-Use when a Thai family owns a car or motorbike and needs พ.ร.บ. compulsory insurance, annual tax at the กรมการขนส่งทางบก, ตรอ. inspection, a voluntary insurance class, servicing by kilometres, or licence renewal.
+Use when a Thai family owns a car or motorbike. Compulsory insurance, annual tax at the DLT, inspection, voluntary insurance class, servicing, licence renewal.
 
 # Vehicle Care (Thailand)
 
@@ -78,7 +78,7 @@ Motorbike: oil every 1,000–3,000 km by manual, chain slack and lube monthly, b
 1. **Record each vehicle** in the table in [references/vehicle-record.md](references/vehicle-record.md) — plate, first registration date, tax expiry, พ.ร.บ. expiry, voluntary policy expiry, licence expiry for each driver
 2. **Compute:** inspection needed this year? (current year − first registration year > 7 for cars / > 5 for motorbikes)
 3. **Calendar:** reminder 90 days before tax expiry and 30 days before every policy and licence expiry
-4. **Quote** voluntary insurance 45 days before expiry — at least three quotes, same sum insured and excess
+4. **Quote** voluntary insurance 45 days before expiry — at least 3 quotes, same sum insured and excess
 5. **Service** — log odometer at each service; next service = whichever comes first, km or months
 
 ## Worked example

@@ -1,0 +1,6 @@
+{
+  "name": "sqt-graphic-design",
+  "version": "0.2.0",
+  "description": "Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.",
+  "contextFileName": "GEMINI.md"
+}

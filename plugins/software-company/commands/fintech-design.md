@@ -90,15 +90,15 @@ The compliance officer should:
 
 1. **Initial Discovery** — gather:
    - Current PCI level (1-4 based on volume)
-   - Existing SAQ type
-   - Recent QSA findings
+   - Existing Self-Assessment Questionnaire (SAQ) type
+   - Recent Qualified Security Assessor (QSA) findings
    - Data flow diagrams
    - In-scope systems
 
 2. **Apply `fintech-payments` skill** for the 12 requirements:
    - Network security (Req 1)
    - Secure configurations (Req 2)
-   - Protect stored CHD (Req 3)
+   - Protect stored cardholder data (CHD) (Req 3)
    - Encryption in transit (Req 4)
    - Anti-malware (Req 5)
    - Secure development (Req 6)

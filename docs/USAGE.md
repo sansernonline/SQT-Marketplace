@@ -10,31 +10,60 @@
 
 ---
 
-## agent-team (A-Team) — ประตูหน้าเดียวของงานหลายขั้น
+## SuperUser — ประตูหน้าเดียวของงานหลายขั้น
 
-![การทำงานของ agent-team](agent-team-software-company.png)
+![การทำงานของ superuser](superuser-software-company.png)
 
 ```
-/software-company:agent-team แก้บั๊กหน้ารายงาน วันที่ขึ้นเป็นค่าว่าง
-ใช้ a-team ทำฟีเจอร์ export Excel ตาม FR-012
-ใช้ a-team ทำไมโค้ดนี้ทำแบบนี้ สอนผมหน่อย
-ใช้ a-team ทำ API นี้ให้เร็วขึ้นจน p95 ต่ำกว่า 200 ms
+/software-company:superuser แก้บั๊กหน้ารายงาน วันที่ขึ้นเป็นค่าว่าง
+ใช้ superuser ทำฟีเจอร์ export Excel ตาม FR-012
+ใช้ superuser ทำไมโค้ดนี้ทำแบบนี้ สอนผมหน่อย
+ใช้ superuser ทำ API นี้ให้เร็วขึ้นจน p95 ต่ำกว่า 200 ms
 ```
 
-เลือก 1 ใน 16 playbook (ครอบคลุม 22 playbook ของ pstack) แล้วคัดขั้นตอนลง todo · เดินห้าขั้น เข้าใจ → ออกแบบ → ลงมือ → พิสูจน์ → รายงาน · ผลลง `docs/BUILD-PLAN.md`
+หัวหน้าทีมเลือก 1 ใน 16 playbook (ครอบคลุมงานของ 22 playbook ใน pstack) แล้วคัดขั้นตอนลง todo · ทำงาน 5 ขั้น: เข้าใจ → ออกแบบ → ลงมือ → พิสูจน์ → รายงาน · บันทึกผลลง `docs/BUILD-PLAN.md`
 
 | เรื่อง | ทำงานอย่างไร |
 |---|---|
 | หัวหน้าทีม | ตัวที่คุยกับผู้ใช้ มีคนเดียวต่อโปรเจกต์ — แบ่งงาน สั่ง subagent ตรวจผลก่อนรับ และเขียนไฟล์กลางคนเดียว |
-| ระดับโมเดล | ใหญ่ = `opus` · กลาง = `sonnet` (ค่าเริ่มต้น) · เล็ก = `haiku` — หัวหน้าเลือกตามงาน · สลับกลางทางได้ ทั้งค่ายเดียวกันและข้ามค่าย หลังเขียนจุดส่งต่อใน `CONTEXT.md` |
-| ไม่หยุดถาม | งานย้อนได้ทำเลย · งานย้อนไม่ได้ (deploy · ลบข้อมูลจริง · push · ส่งข้อความถึงคนนอก) เตรียมไว้ในหัวข้อ "รออนุมัติ" แล้วทำส่วนอื่นต่อ · อนุญาตล่วงหน้าได้ใน `~/.claude/a-team-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) |
-| ค้นเอง | ไม่รู้วิธีที่ถูก ค้นเอง ใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน · ไม่ครบ → เลือกทางที่ย้อนง่ายสุด ป้าย `(รอยืนยัน)` |
-| ความจำกลาง | `CONTEXT.md` (หัวข้อ "รับงานต่อ") · `.a-team/inbox/` คิวข้อความ · `.a-team/log/` log ที่ hook เขียน · `IMPROVEMENTS.md` สิ่งที่ทีมเจอ รอรวมเข้า skill — วิธีส่งข้อความดู [Tips ข้อ 3](#3-ใช้-contextmd--inbox--log-รับงานต่อ) |
+| ระดับโมเดล | ใหญ่ = `opus` · กลาง = `sonnet` (ค่าเริ่มต้น) · เล็ก = `haiku` — หัวหน้าทีมเลือกตามงาน · สลับโมเดลกลางทางได้ ทั้งค่ายเดียวกันและข้ามค่าย · ก่อนสลับต้องเขียนจุดส่งต่อใน `CONTEXT.md` |
+| ไม่หยุดถาม | งานที่ย้อนกลับได้ → ทำเลย · งานที่ย้อนกลับไม่ได้ (deploy · ลบข้อมูลจริง · push · ส่งข้อความถึงคนนอก) → เตรียมไว้ในหัวข้อ "รออนุมัติ" แล้วทำส่วนอื่นต่อ · อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) |
+| ค้นเอง | ไม่รู้วิธีที่ถูก → ค้นเอง · ใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน · ได้ไม่ถึง 3 แหล่ง → เลือกทางที่ย้อนกลับง่ายสุด แล้วติดป้าย `(รอยืนยัน)` |
+| ความจำกลาง | `CONTEXT.md` (หัวข้อ "รับงานต่อ") · `.superuser/inbox/` (คิวข้อความถึงทีม) · `.superuser/log/` (log ที่ hook เขียน · hook คือสคริปต์ที่รันอัตโนมัติ) · `IMPROVEMENTS.md` (สิ่งที่ทีมเจอ รอรวมเข้า skill) — วิธีส่งข้อความดู [Tips ข้อ 3](#3-ใช้-contextmd--inbox--log-รับงานต่อ) |
 | คำตอบตอนจบ | ผลต่อคนใช้ก่อน · ทุกข้ออ้างมีป้าย `วัดจริง` · `อนุมาน` · `เดา` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ |
 
-เปิดค้างทั้งแชต พิมพ์ `ปิด a-team` เมื่อไม่ต้องการ · โปรเจกต์ใหม่สั่ง `ใช้ app-verifier-setup กับโปรเจกต์นี้` ก่อน · อยากให้ทำงานใน Docker สั่ง `ใช้ docker-sandbox กับโปรเจกต์นี้` · รายละเอียด → [`plugins/software-company/skills/agent-team/SKILL.md`](../plugins/software-company/skills/agent-team/SKILL.md)
+เรียกครั้งเดียว SuperUser ทำงานไปทั้งแชต · ไม่ต้องการแล้ว → พิมพ์ `ปิด superuser` · โปรเจกต์ใหม่ → สั่ง `ใช้ app-verifier-setup กับโปรเจกต์นี้` ก่อน · อยากให้ทำงานใน Docker → สั่ง `ใช้ docker-sandbox กับโปรเจกต์นี้` · รายละเอียด → [`plugins/software-company/skills/superuser/SKILL.md`](../plugins/software-company/skills/superuser/SKILL.md)
 
-![pstack vs A-Team](agent-team-vs-pstack.png)
+![pstack vs SuperUser](superuser-vs-pstack.png)
+
+### SuperUser ใน plugin อื่น
+
+ทุก plugin มี `superuser` ของตัวเอง — แนวคิดเดียวกัน (หัวหน้าทีมคนเดียว · เข้าใจงานและจัดขนาด · เลือกหรือประกอบ playbook · ไม่หยุดถาม · พิสูจน์ผล · `CONTEXT.md` · รอบเรียนรู้) ที่ต่างคือ playbook · เกณฑ์งาน 3 ข้อ และรายการ "รออนุมัติ" ปรับตามงาน
+
+**ต้นฉบับอยู่ที่ plugin `superuser`** — ของกลาง (skill `agent-patterns` · `human-writing` · agent `learning-reviewer` · hook · playbook `learn-from-session` · บล็อก `superuser:begin` ใน superuser) แก้ที่ `plugins/superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` · ทำ plugin สาขาใหม่ → [`plugins/superuser/ADAPT.md`](../plugins/superuser/ADAPT.md)
+
+| plugin | playbook | ไม่ทำเองเด็ดขาด | รูป |
+|---|---|---|---|
+| `superuser` | research · document | ส่งข้อความ · จ่ายเงิน · ลบข้อมูลจริง | [ดูรูป](superuser-core.png) |
+| `career` | job-application · interview · offer-negotiation · promotion-case · profile-refresh | ส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก | [ดูรูป](superuser-career.png) |
+| `consumer-rights` | buy-decision · complaint · refund · warranty-claim | ส่งร้องเรียน · ยื่นฟ้อง · โพสต์สาธารณะ | [ดูรูป](superuser-consumer-rights.png) |
+| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](superuser-dev-learning.png) |
+| `graphic-design` | brand-setup · campaign · image-series · video · asset-cleanup | โพสต์ · ยิงแอด · ใช้งานที่ลิขสิทธิ์ไม่ชัด | [ดูรูป](superuser-graphic-design.png) |
+| `health-wellness` | checkup-cycle · doctor-visit · medication-routine · habit-tracking | วินิจฉัย · ปรับยา · ส่งข้อมูลสุขภาพ (ฉุกเฉิน → หยุดงาน บอก 1669) | [ดูรูป](superuser-health-wellness.png) |
+| `home-family` | bills · maintenance · vehicle · family-week · care-setup | จ่ายเงิน · ส่งข้อความในนามผู้ใช้ | [ดูรูป](superuser-home-family.png) |
+| `online-seller` | new-product · pricing-check · stock-sync · customer-issue · live-session | ส่งข้อความถึงลูกค้า · คืนเงิน · ซื้อโฆษณา | [ดูรูป](superuser-online-seller.png) |
+| `personal-life` | weekly-reset · meeting · documents · subscriptions · trip · digital-safety · decide-and-goals | ส่งข้อความ · เปลี่ยนรหัสผ่าน · จองหรือยกเลิกบริการ | [ดูรูป](superuser-personal-life.png) |
+| `thai-workplace` | monthly-close · year-end · business-doc · pdpa-setup · line-oa | ยื่นหรือชำระภาษี · broadcast · ลงนาม | [ดูรูป](superuser-thai-workplace.png) |
+| `trading-finance` | pre-trade · trade-review · portfolio-check · money-plan · tax-season · scam-check | ส่งคำสั่งซื้อขาย · โอนเงิน · ซื้อกองทุน | [ดูรูป](superuser-trading-finance.png) |
+
+ทุกตัวมี `review` และ `unattended-run` เพิ่ม · งานข้ามสาขา → หัวหน้าทีมส่งต่อให้ `/<plugin>:superuser` ของ plugin นั้น
+
+```
+/online-seller:superuser ลงเสื้อยืดรุ่นใหม่ 3 แพลตฟอร์ม
+ใช้ superuser ทำเงินเดือนเดือนนี้      ← thai-workplace
+ใช้ superuser เตรียมสมัครงานตำแหน่งนี้   ← career
+```
+
 
 ---
 
@@ -49,7 +78,7 @@
 Claude จะ:
 1. เรียก `business-analyst` agent (จาก description ที่ตรงกับงาน)
 2. BA ใช้ skill `user-story-writer`
-3. คืนค่าเป็น user story ตาม format มาตรฐาน
+3. ได้ user story ตาม format มาตรฐาน
 
 ---
 
@@ -71,7 +100,7 @@ Step 1: Business Analyst
 ├─ สร้าง BRD
 └─ เขียน user stories + acceptance criteria
 
-[หยุดถามว่าไปต่อไหม — ผ่าน agent-team ไม่หยุด ใส่ไว้ใน "รออนุมัติ" แทน]
+[หยุดถามว่าไปต่อไหม — ผ่าน superuser ไม่หยุด ใส่ไว้ใน "รออนุมัติ" แทน]
 
 Step 2: Solution Architect
 ├─ เสนอ architecture 2-3 ตัวเลือก
@@ -79,14 +108,14 @@ Step 2: Solution Architect
 ├─ บันทึก ADR (ใช้ adr-writer skill)
 └─ แนะนำ tech stack
 
-[หยุดถาม — ผ่าน agent-team ไม่หยุด]
+[หยุดถาม — ผ่าน superuser ไม่หยุด]
 
 Step 3: System Analyst
 ├─ เขียน FSD พร้อม use cases
 ├─ ออกแบบ API endpoints
 └─ ออกแบบ data model
 
-[หยุดถาม — ผ่าน agent-team ไม่หยุด]
+[หยุดถาม — ผ่าน superuser ไม่หยุด]
 
 Step 4: Project Manager
 ├─ ประเมิน effort
@@ -310,15 +339,15 @@ Step 4: Project Manager
 3. สุดท้าย developer ลอง implement
 ```
 
-### 3. ให้หัวหน้าทีม (a-team) คุม agents
+### 3. ให้หัวหน้าทีม (superuser) คุม agents
 ```
-ใช้ a-team ทำระบบ notification
+ใช้ superuser ทำระบบ notification
 ```
 
-หัวหน้าทีมเลือก playbook แบ่งงานให้ agents และตรวจผลเอง — ดู [agent-team](#agent-team-a-team--ประตูหน้าเดียวของงานหลายขั้น)
+หัวหน้าทีมเลือก playbook แบ่งงานให้ agents และตรวจผลเอง — ดู [superuser](#superuser--ประตูหน้าเดียวของงานหลายขั้น)
 
 ### 4. ทำงานทีละ phase
-ไม่ต้องเร่งใช้ slash command ทีเดียวจบ ค่อยๆ ทำทีละ phase จะได้ผลลัพธ์ละเอียดกว่า
+ไม่ต้องรีบใช้ slash command ให้จบในครั้งเดียว · ทำทีละ phase ได้ผลละเอียดกว่า
 
 ---
 
@@ -340,9 +369,9 @@ Step 4: Project Manager
 
 ## ⚡ Commands Cheatsheet — คำสั่งที่ใช้บ่อย
 
-Quick reference for commands ที่ใช้บ่อยที่สุด — แยกตามจังหวะ workflow
+สรุปคำสั่งที่ใช้บ่อยที่สุด แยกตามจังหวะงาน
 
-> 💡 **อ่านแบบเร็ว:** ดู Top 10 ก่อน, แล้วค่อยขยายตามอุตสาหกรรม
+> 💡 **อ่านแบบเร็ว:** ดู Top 10 ก่อน แล้วค่อยดูคำสั่งตามอุตสาหกรรม
 
 ---
 
@@ -370,7 +399,7 @@ Quick reference for commands ที่ใช้บ่อยที่สุด �
 #### 📅 Daily
 
 ```
-เช้า:        เปิด CONTEXT.md หัวข้อ "รับงานต่อ" + ดู .a-team/inbox/ (ทำงานต่อจากเมื่อวาน)
+เช้า:        เปิด CONTEXT.md หัวข้อ "รับงานต่อ" + ดู .superuser/inbox/ (ทำงานต่อจากเมื่อวาน)
              /sprint-plan ถ้าวันแรกของ sprint
 
 ระหว่างวัน:  /code-review เมื่อเปิด PR
@@ -378,7 +407,7 @@ Quick reference for commands ที่ใช้บ่อยที่สุด �
              /api-design ก่อนเขียน endpoint
 
 ก่อนเลิก:    หัวหน้าทีมอัปเดต "รับงานต่อ" ใน CONTEXT.md
-             ดูหัวข้อ "รออนุมัติ" ในรายงาน · log ของวันอยู่ใน .a-team/log/
+             ดูหัวข้อ "รออนุมัติ" ในรายงาน · log ของวันอยู่ใน .superuser/log/
 ```
 
 #### 📊 Weekly
@@ -572,37 +601,37 @@ Quick reference for commands ที่ใช้บ่อยที่สุด �
 
 ### 💎 Top 5 Hidden Gems
 
-คำสั่งที่ underrated แต่ใช้แล้วช่วยมาก
+คำสั่งที่คนไม่ค่อยใช้ แต่ช่วยได้มาก
 
 #### 1. `/onboard`
 ```
 /onboard backend developer
 ```
-ช่วยมากตอน hire ใหม่ — 30/60/90 day plan ครบ ไม่ต้องเริ่มจากศูนย์
+ช่วยมากตอนรับคนใหม่ — ได้แผน 30/60/90 วันครบ ไม่ต้องเริ่มจากศูนย์
 
 #### 2. `/threat-model`
 ```
 /threat-model feature payment
 ```
-ใช้ก่อนสร้าง feature ที่มี risk — STRIDE analysis ครบ
+ใช้ก่อนสร้าง feature ที่มีความเสี่ยง — วิเคราะห์ภัยครบตามแบบ STRIDE
 
 #### 3. `/architecture-review`
 ```
 /architecture-review payment service
 ```
-ทุก quarter ทบทวน — เห็น tech debt + bottlenecks ก่อนเจอปัญหา
+ทบทวนทุก quarter — เห็น tech debt และคอขวดก่อนเจอปัญหาจริง
 
 #### 4. `/release-notes`
 ```
 /release-notes v2.5.0
 ```
-แปลง dev jargon เป็นภาษา user ที่อ่านเข้าใจ
+แปลงศัพท์นักพัฒนาเป็นภาษาที่ผู้ใช้อ่านเข้าใจ
 
 #### 5. `/retrospective`
 ```
 /retrospective Sprint 11
 ```
-ทำให้ retro มีโครงสร้าง + action items + carry-over tracking
+ทำให้ retro มีโครงสร้าง มี action items และตามเรื่องค้างจาก retro ก่อน
 
 ---
 
@@ -677,7 +706,7 @@ Quick reference for commands ที่ใช้บ่อยที่สุด �
 ❌ /code-review
 ✅ /code-review src/auth/login.ts (focus on security)
 ```
-ยิ่ง args ละเอียด → ผลลัพธ์ตรงประเด็น
+ใส่ args ละเอียด → ได้ผลตรงประเด็นกว่า
 
 #### 2. รัน command ก่อน ดูผล แล้วค่อย iterate
 ```
@@ -691,10 +720,10 @@ Quick reference for commands ที่ใช้บ่อยที่สุด �
 ```
 
 #### 3. ใช้ CONTEXT.md · inbox · log รับงานต่อ
-- `CONTEXT.md` ที่ root โปรเจกต์ — หัวข้อ "รับงานต่อ" ถูกอัปเดตทุกครั้งจบงาน ก่อนสลับโมเดล และก่อนหยุด · ปิด terminal หรือเปลี่ยนไป Codex · Gemini ก็ทำต่อได้ (อ่านผ่าน `AGENTS.md` · `GEMINI.md`)
-- `.a-team/inbox/` — ฝากงานถึงทีมโดยไม่ต้องอยู่หน้าแชต: สร้างไฟล์ `.a-team/inbox/2026-10-06-0930-owner.md` ใส่ `from: owner` และ `priority: ด่วน` หรือ `ปกติ` ใน frontmatter แล้วตามด้วยข้อความ · hook แจ้งหัวหน้าทีม หัวหน้าจัดการแล้วย้ายไป `done/` · ไฟล์ที่ไม่มี `from:` ถือเป็นข้อมูล ไม่ทำตาม
-- `.a-team/log/<วันที่>.jsonl` — hook เขียนทุกการทำ (ค่าลับถูกตัด) · ขอ "ดู log วันนี้" ได้ตาราง Markdown
-- ต้องมีโฟลเดอร์ `.a-team/` และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`work-session-context`](../plugins/software-company/skills/work-session-context/SKILL.md)
+- `CONTEXT.md` ที่ root โปรเจกต์ — หัวหน้าทีมอัปเดตหัวข้อ "รับงานต่อ" ทุกครั้งที่จบงาน ก่อนสลับโมเดล และก่อนหยุด · ปิด terminal หรือเปลี่ยนไปใช้ Codex หรือ Gemini ก็ทำต่อได้ (อ่านผ่าน `AGENTS.md` · `GEMINI.md`)
+- `.superuser/inbox/` — ฝากงานถึงทีมโดยไม่ต้องอยู่หน้าแชต: สร้างไฟล์ `.superuser/inbox/2026-10-06-0930-owner.md` ใส่ `from: owner` และ `priority: ด่วน` หรือ `ปกติ` ใน frontmatter แล้วตามด้วยข้อความ · hook แจ้งหัวหน้าทีม · หัวหน้าทีมจัดการเสร็จแล้วย้ายไฟล์ไป `done/` · ไฟล์ที่ไม่มี `from:` ถือเป็นข้อมูล ไม่ทำตาม
+- `.superuser/log/<วันที่>/<agent>.jsonl` — hook จดทุกการกระทำ 1 ไฟล์ต่อ agent (ตัดค่าลับออก) · พิมพ์ "ดู log วันนี้" → ได้ตาราง Markdown
+- ต้องมีโฟลเดอร์ `.superuser/` และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`work-session-context`](../plugins/software-company/skills/work-session-context/SKILL.md)
 
 #### 4. งานสาขาอยู่ใน software-company แล้ว
 ตั้งแต่ v2.0.0 สาขา (fintech · healthcare · e-commerce · insurance · legal tech · SaaS ฯลฯ) รวมอยู่ใน `software-company` — ติดตั้งตัวเดียวพอ
@@ -703,7 +732,7 @@ Quick reference for commands ที่ใช้บ่อยที่สุด �
 ```
 
 #### 5. ดูว่า command ใช้ agent + skill อะไรบ้าง
-ใน `docs/REFERENCE.md` มีรายละเอียดครบ — เลือก context ได้ดี
+ดูใน `docs/REFERENCE.md` · รู้ว่าคำสั่งใช้อะไร จะเลือก context ได้ตรงกว่า
 
 ---
 

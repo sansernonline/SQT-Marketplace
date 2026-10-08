@@ -1,6 +1,6 @@
 # skill: shipping-compare
 
-Use when a Thai online seller compares couriers — Flash, Kerry (KEX), J&T, ไปรษณีย์ไทย/EMS, SPX. Cost on the real parcel mix, COD fees and payout timing, volumetric weight, size limits, damage claims.
+Use when a Thai online seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX). Cost on real parcel mix, COD fees and payout, volumetric weight.
 
 # Shipping Compare
 

@@ -1,370 +1,41 @@
-# skill: markdown-visuals
-
-Use when a markdown document needs a picture (wireframe, UI state, architecture, flow, data viz). Picks inline SVG, image, ASCII or Mermaid and embeds it so it renders in GitHub, Notion, VS Code and Obsidian.
-
-# Markdown Visuals
-
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
-
-## When to use this skill
-
-- Producing **any** design mockup, wireframe, or UI spec
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
-
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
-
----
-
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI mockup / component state / icon       →  Inline SVG
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (see polished-document-style)
-├─ Architecture / ER / class                →  Mermaid
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
-
-**Default to inline SVG** for anything that isn't a flow/sequence (use Mermaid for those). It renders everywhere, versions in git, doesn't bloat the repo with binaries, and the user can read/edit the markup.
-
----
-
-## 1 · Inline SVG (primary technique)
-
-### Boilerplate
-
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
-```
-
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
-
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
-|---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
-
-**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
-
-### Reusable SVG snippets
-
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-### Worked example — UI state mockup
-
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
-
-```markdown
-## 2 · External image files
-
-Use when:
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
-
----
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-### Box-drawing characters
-
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
-
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-### Common patterns
-
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
----
-
-## 4 · Mermaid
-
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
-
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
-|---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
-
----
-
-## Combining formats in one doc
-
-A full design spec usually mixes formats. Pattern from `DockXI/docs/12-design-mockup.md`:
-
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
-
-Don't pick one format and force everything into it — each format has a sweet spot.
-
----
-
-## Accessibility checklist
-
-For every visual:
-
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
-
----
-
-## Anti-patterns
-
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax for GitHub compat
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
-
----
-
-## Quick-start recipe
-
-When the user asks for a design / mockup:
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-If unsure whether a visual will render, mention that the user should preview in GitHub/Notion to confirm.
-
----
-
-## Related skills
-
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
-
-
----
-
 # skill: incident-runbook-template
 
-Use when writing operational runbooks, on-call documentation, incident response playbooks, or "what to do when X breaks" guides. Provides a structured format that helps on-call engineers act fast during incidents.
+Use when writing an operational runbook, on-call guide or what to do when X breaks playbook, so on-call engineers act fast in an incident.
 
 # Incident Runbook Template
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 ## When to use this skill
 
 - Writing a runbook for a known failure mode
 - Documenting on-call procedures
 - Creating playbooks for common alerts
-- After a postmortem identifies "we need a runbook for X"
+- After a postmortem finds "we need a runbook for X"
 - Onboarding new on-call engineers
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/runbook-template.md](references/runbook-template.md) | ทุกครั้งที่เริ่มเขียน runbook ใหม่ ให้คัดลอกแม่แบบเต็มจากไฟล์นี้ไปกรอก |
+| [references/index-and-alert-links.md](references/index-and-alert-links.md) | ถ้าทีมยังไม่มีหน้ารวม runbook หรือ alert ยังไม่มีลิงก์ไปหา runbook ให้เปิดดูตัวอย่างในไฟล์นี้ |
+| [references/game-days.md](references/game-days.md) | ตอนวางแผนซ้อมรับมือเหตุขัดข้องเพื่อทดสอบว่า runbook ใช้ได้จริง |
 
 ## What's a Runbook?
 
 A **runbook** answers: "Alert X fired. What do I do?"
 
 It's NOT:
-- ❌ A postmortem (that's analysis after)
-- ❌ Architecture documentation (that's the bigger picture)
-- ❌ Training material (too detailed)
+- ❌ A postmortem (that analyses the incident afterwards)
+- ❌ Architecture documentation (that explains the bigger picture)
+- ❌ Training material (that goes into too much detail)
 
 It IS:
 - ✅ Step-by-step actions
 - ✅ Decision flowcharts
 - ✅ Commands to copy-paste
 - ✅ Escalation paths
-
----
 
 ## Runbook Quality Standards
 
@@ -375,15 +46,158 @@ A good runbook is:
 | **Actionable** | Can a tired engineer at 3am follow it? |
 | **Concrete** | Are commands copy-pasteable? |
 | **Tested** | Has someone followed it during a real incident? |
-| **Updated** | Is the last-reviewed date < 6 months? |
+| **Updated** | Was it last reviewed less than 6 months ago? |
 | **Discoverable** | Can on-call find it from the alert link? |
-| **Concise** | < 1 page for common cases |
-
----
+| **Concise** | Under 1 page for common cases |
 
 ## Runbook Template
 
+แม่แบบเต็มอยู่ใน [references/runbook-template.md](references/runbook-template.md) ทุกฉบับมีส่วนตามลำดับนี้ และแต่ละส่วนต้องมีของต่อไปนี้
+
+| ส่วน | ต้องมี |
+|---|---|
+| ส่วนหัว | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
+| 🎯 TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
+| 📊 How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
+| 🔍 Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
+| 🩹 Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work |
+| 📞 Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
+| 🔁 Verification | รายการตรวจว่าแก้แล้วจริง |
+| 📝 After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
+| 🤝 Related Runbooks · 📚 Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
+
+**ลำดับ mitigation ในแม่แบบ:** 🟢 Reduce load (low risk) → 🟡 Scale up (medium risk) → 🟠 Rollback recent deploy (higher risk) → 🔴 Failover to backup region (last resort)
+
+**ลำดับ escalation ในแม่แบบ:** ถ้าแก้ไม่ได้ใน 15 นาที ให้เรียก secondary on-call ถ้าสองคนแก้ไม่ได้ใน 30 นาที ให้เรียกทีมเจ้าของ service ถ้ายังเป็น SEV1 หลัง 45 นาที ให้เรียก incident commander (IC) และถ้า SEV1 เกิน 1 ชั่วโมง ให้เรียกผู้บริหารฝ่ายวิศวกรรม
+
+**ถือว่าแก้แล้วเมื่อ** error rate กลับสู่ระดับปกติ · latency p95 ต่ำกว่าเกณฑ์ · หน้าสถานะเป็น "Operational" · ไม่มี alert ใหม่ · ลูกค้าหยุดแจ้งปัญหา และเฝ้าดูต่ออีก 30 นาทีแล้ว
+
+> 💡 Use `postmortem-template` skill for the full analysis
+
+## Runbook Index and Alert Links
+
+ทำหน้ารวม runbook ไว้ที่เดียว ให้ค้นได้ทั้งตาม service ตามชื่อ alert และตามเหตุที่เกิดบ่อยใน 90 วันล่าสุด
+
+alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ่าน annotation `runbook:` ของ alert และควรใส่ `dashboard:` คู่กันด้วย ส่วนตัวอย่างหน้ารวมและตัวอย่าง AlertManager อยู่ใน [references/index-and-alert-links.md](references/index-and-alert-links.md)
+
+## What Makes Runbooks Fail
+
+| Problem | Fix |
+|---------|-----|
+| Out of date | Review every 6 months, update after every incident |
+| Too long | Split into 1 runbook per failure mode |
+| Too generic | Be specific to YOUR service |
+| No commands | Include actual copy-paste commands |
+| Not discoverable | Link it from the alert and the index page |
+| No ownership | Each runbook has a team owner |
+| Not tested | Run game days, and follow it during real incidents |
+
+## Game Days
+
+ทดสอบ runbook ด้วยการจำลองเหตุขัดข้องโดยตั้งใจ ทุกไตรมาสให้เลือก runbook หนึ่งฉบับ จำลองเหตุใน staging แล้วให้ on-call ทำตาม จากนั้นอัปเดต runbook ตามช่องโหว่ที่เจอ รายการตรวจเต็มอยู่ใน [references/game-days.md](references/game-days.md)
+
+## Anti-patterns
+
+- ❌ **Theoretical runbooks** written by someone who never saw the failure
+- ❌ **Long background text** before the first action
+- ❌ **"Contact the team"** without saying who or how
+- ❌ **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
+- ❌ **Runbook in a wiki nobody can find** — link from alert
+- ❌ **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks** —
+load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral — it reads as unfinished work.
+
+
+## reference: game-days.md
+
+# Game Days
+
+รายการตรวจของการซ้อมรับมือเหตุขัดข้องเพื่อทดสอบ runbook ใช้ตอนวางแผนซ้อมรายไตรมาส
+
+Test runbooks by faking failures on purpose:
+
 ```markdown
+## Game Day Checklist
+
+Quarterly:
+- [ ] Pick a runbook to test
+- [ ] Simulate the failure in staging (chaos engineering)
+- [ ] On-call engineer follows runbook
+- [ ] Identify gaps
+- [ ] Update runbook based on learnings
+- [ ] Repeat with different runbook next quarter
+```
+
+
+## reference: index-and-alert-links.md
+
+# Runbook Index และการผูก runbook กับ alert
+
+ตัวอย่างหน้ารวม runbook และตัวอย่างการใส่ลิงก์ runbook ลงใน alert ใช้ตอนตั้งระบบ runbook ของทีมครั้งแรก
+
+## Runbook Index Pattern
+
+Maintain a central index:
+
+```markdown
+# 📚 Runbook Index
+
+## By Service
+- [API Service](runbooks/api/)
+  - [High error rate](runbooks/api/high-error-rate.md)
+  - [Memory leak](runbooks/api/memory-leak.md)
+- [Database](runbooks/db/)
+  - [Connection pool exhausted](runbooks/db/conn-pool.md)
+  - [Replication lag](runbooks/db/repl-lag.md)
+
+## By Alert Name
+| Alert | Runbook |
+|-------|---------|
+| `api_5xx_rate_high` | [API: High error rate](link) |
+| `db_connections_high` | [DB: Connection pool](link) |
+| `disk_full_warn` | [Generic: Disk full](link) |
+
+## Most Common Incidents (last 90 days)
+1. High error rate on payment service — [runbook](link) (12 times)
+2. DB replication lag — [runbook](link) (8 times)
+3. Cache invalidation storm — [runbook](link) (5 times)
+```
+
+## Linking Runbook to Alert
+
+Every alert MUST link to a runbook:
+
+```yaml
+# Prometheus AlertManager
+- alert: APIHighErrorRate
+  expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+  annotations:
+    summary: "API error rate > 5%"
+    runbook: "https://runbooks.example.com/api/high-error-rate"
+    dashboard: "https://grafana.example.com/d/api-overview"
+```
+
+
+## reference: runbook-template.md
+
+# Runbook Template
+
+- [แม่แบบทั้งไฟล์](#runbook-template) อยู่ในบล็อกเดียว ให้คัดลอกทั้งบล็อกไปเป็นไฟล์ runbook ใหม่
+
+แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
+
+````markdown
 # 🚨 Runbook: <Alert Name or Failure Mode>
 
 | | |
@@ -538,134 +352,30 @@ Confirm the issue is resolved:
 
 Optional section: brief context on why this failure mode exists.
 Useful for new on-call engineers.
-```
-
----
-
-## Runbook Index Pattern
-
-Maintain a central index:
-
-```markdown
-# 📚 Runbook Index
-
-## By Service
-- [API Service](runbooks/api/)
-  - [High error rate](runbooks/api/high-error-rate.md)
-  - [Memory leak](runbooks/api/memory-leak.md)
-- [Database](runbooks/db/)
-  - [Connection pool exhausted](runbooks/db/conn-pool.md)
-  - [Replication lag](runbooks/db/repl-lag.md)
-
-## By Alert Name
-| Alert | Runbook |
-|-------|---------|
-| `api_5xx_rate_high` | [API: High error rate](link) |
-| `db_connections_high` | [DB: Connection pool](link) |
-| `disk_full_warn` | [Generic: Disk full](link) |
-
-## Most Common Incidents (last 90 days)
-1. High error rate on payment service — [runbook](link) (12 times)
-2. DB replication lag — [runbook](link) (8 times)
-3. Cache invalidation storm — [runbook](link) (5 times)
-```
-
----
-
-## Linking Runbook to Alert
-
-Every alert MUST link to a runbook:
-
-```yaml
-# Prometheus AlertManager
-- alert: APIHighErrorRate
-  expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
-  annotations:
-    summary: "API error rate > 5%"
-    runbook: "https://runbooks.example.com/api/high-error-rate"
-    dashboard: "https://grafana.example.com/d/api-overview"
-```
-
----
-
-## What Makes Runbooks Fail
-
-| Problem | Fix |
-|---------|-----|
-| Out of date | Review every 6 months, update after every incident |
-| Too long | Split into multiple runbooks per failure mode |
-| Too generic | Be specific to YOUR service |
-| No commands | Include actual copy-paste commands |
-| Not discoverable | Link from alerts, index page |
-| No ownership | Each runbook has a team owner |
-| Not tested | Run game days, follow during real incidents |
-
----
-
-## Game Days
-
-Test runbooks by simulating failures:
-
-```markdown
-## Game Day Checklist
-
-Quarterly:
-- [ ] Pick a runbook to test
-- [ ] Simulate the failure in staging (chaos engineering)
-- [ ] On-call engineer follows runbook
-- [ ] Identify gaps
-- [ ] Update runbook based on learnings
-- [ ] Repeat with different runbook next quarter
-```
-
----
-
-## Anti-patterns
-
-- ❌ **Theoretical runbooks** written without experiencing the failure
-- ❌ **Walls of context** before any actionable step
-- ❌ **"Contact the team"** without specifying who/how
-- ❌ **Mitigation = root-cause fix** (mitigation should be FAST, fix is later)
-- ❌ **Runbook in a wiki nobody can find** — link from alert
-- ❌ **Update postmortems but not runbooks** — postmortems → runbook updates
-
----
-
-## Document Look
-
-This skill decides **what goes in** the document. It does not decide **how it looks** —
-load the matching skill before writing, not after:
-
-| What is being handed over | Load |
-|---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
-| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.
+````
 
 
 ---
 
 # skill: logging-standards
 
-Use when writing or reviewing code that records what it did. One log format across .NET, Node, Python and Angular, with levels, correlation ids, rotation, retention, redaction and log-injection safety. Drop-in loggers.
+Use when writing or reviewing code that logs. One format across .NET, Node, Python and Angular, levels, correlation ids, rotation, redaction.
 
 # Logging Standards
 
 > **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
-> ถ้าบรรทัดนั้นไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" — อย่าเขียนมันลงไป
+> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
 
 ## เมื่อไหร่ใช้ skill นี้
 
 - เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
-- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบ log / ระดับ log
+- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
 - ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- ต้องการ metrics/tracing (Prometheus, OpenTelemetry) → คนละเรื่องกับ log
-- endpoint สุขภาพของ service → `web-service-essentials`
+- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log
+- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
 
 ---
 
@@ -679,17 +389,17 @@ Use when writing or reviewing code that records what it did. One log format acro
 | ส่วน | กฎ |
 |---|---|
 | เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
-| level | ชิดซ้าย กว้าง 5 (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัว ในวงเล็บเหลี่ยม · ไม่มีให้ใส่ `[------]` |
-| source | โมดูล/คลาสที่ log ไม่ใช่ชื่อไฟล์ |
-| ข้อความ | ประโยคเดียว ไม่มีตัวแปรฝังใน string |
-| context | `key=value` คั่นด้วยช่องว่าง · ค่ามีช่องว่างให้ครอบ `"` |
+| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
+| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[------]` |
+| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
+| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
+| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
 
 **ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
 `grep "cid=a3f9c1b2"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้า Loki/ELK ค่อยเปิด JSON เพิ่มอีก sink หนึ่ง — **อย่าทิ้งไฟล์ข้อความ**
+วันที่ต้องส่งเข้า Loki/ELK ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
 
-**หนึ่ง event = หนึ่งบรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
+**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
 
 ---
 
@@ -707,13 +417,13 @@ Use when writing or reviewing code that records what it did. One log format acro
 > ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
 > คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
 
-ค่าเริ่มต้น: dev = `DEBUG` · production = `INFO` · ปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
+ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
 
 ---
 
 ## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
 
-หนึ่ง request = หนึ่ง id ตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นแบก id เดียวกัน
+1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
 
 ```
 Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
@@ -721,7 +431,7 @@ Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
 ```
 
 - รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้าง (`uuid v4` ตัด 8 ตัวแรก)
-- **ส่งกลับใน response header เสมอ** — ลูกค้าแจ้งปัญหาแล้วส่ง id มาให้ ตามได้ทันที
+- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
 - ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
 - เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
   · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
@@ -738,7 +448,7 @@ logs/
 ```
 
 - โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
-- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่งั้นดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
 - ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
 - `logs/` ต้องอยู่ใน `.gitignore`
 
@@ -749,11 +459,11 @@ logs/
 รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
 **เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
 
-ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction ตรวจ**ชื่อคีย์แบบ contains** (`userPassword`, `pwd`,
-`accessToken` โดนหมด) แล้วแทนด้วย `***` ทำงานลึกถึง 4 ชั้นของ object
+ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
+`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
 
 > 🚨 **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
-> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาตัด `\r\n\t` ทิ้งทุกค่า
+> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่า
 
 ---
 
@@ -796,9 +506,9 @@ tail -f logs/app-*.log
 grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
 ```
 
-- [ ] ทุกบรรทัดมี เวลา+timezone / level / cid / source ครบ
+- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
 - [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
-- [ ] ไม่มีความลับหลุด — ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
+- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
 - [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
 - [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
 - [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
@@ -811,12 +521,12 @@ grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวไ�
 
 - ❌ **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
 - ❌ **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อยหนึ่งบรรทัด
-- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดที่จัดการจริง
+- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
+- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
 - ❌ **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
   ใช้ข้อความคงที่ + context แทน
-- ❌ **log ในลูปที่วนหลายพันรอบ** — สรุปทีเดียวตอนจบ
-- ❌ **timestamp ไม่มี timezone** — server UTC, คนไทยอ่าน +07:00 เทียบเวลาผิด 7 ชั่วโมง
+- ❌ **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
+- ❌ **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
 - ❌ **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
 
 ---
@@ -836,8 +546,8 @@ grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวไ�
 # ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
 
 > ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
-> `assets/logger_py.py` ที่รันจริงแล้ว) เป็นการตั้งค่ามาตรฐานของไลบรารีแต่ละตัว —
-> ให้ build ครั้งแรกแล้วเทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
+> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
+> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
 
 ---
 
@@ -905,8 +615,8 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 ```
 
-> `{Level:u5}` = ตัวพิมพ์ใหญ่กว้าง 5 → `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` = ไม่ครอบ string ด้วย `"` ซ้ำซ้อน
+> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
+> `{Message:lj}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
 
 ### Middleware correlation id
 
@@ -942,7 +652,7 @@ _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId}
 
 ### ปิดข้อมูลลับ
 
-Serilog ไม่ redact ให้อัตโนมัติ — ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
+Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
 ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
 หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
 
@@ -950,7 +660,7 @@ Serilog ไม่ redact ให้อัตโนมัติ — ทางท�
 
 ## Angular / frontend
 
-หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญต้องส่งขึ้น backend
+หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
 
 ```ts
 // core/logger.service.ts
@@ -1011,9 +721,9 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
 ```
 
 **ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
-- จำกัดขนาด body และ rate limit — ไม่งั้นกลายเป็นช่องให้ยิง log ถล่ม
+- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
 - เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
-- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** ตัด `\r\n` ทุกค่าเหมือนกับ log ปกติ
+- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
 
 ---
 
@@ -1026,3 +736,434 @@ export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
 | correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
 | ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
 | ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
+
+
+---
+
+# skill: web-service-essentials
+
+Use when building or reviewing any HTTP service or backend. Four operational endpoints, RFC 9457 errors, request ids, graceful shutdown, security headers.
+
+# Web Service Essentials
+
+> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
+> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่ม service / REST API / microservice ใหม่
+- มีคนขอ health check, ping, readiness, liveness, version endpoint
+- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
+- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
+- รูปแบบ log ให้ใช้ `logging-standards`
+- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
+
+---
+
+## 1 · endpoint พื้นฐาน 4 ตัว
+
+| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+|---|---|:---:|:---:|---|
+| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
+| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
+| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
+| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+
+> 🚨 **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
+> ถ้า `/health/live` เช็ค DB แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
+> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
+> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
+
+\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
+
+### รูปร่าง response (เหมือนกันทุกภาษา)
+
+```jsonc
+// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+{
+  "status": "up",                       // up | degraded | down
+  "timestamp": "2026-08-31T09:42:13.482Z",
+  "checks": {
+    "db":    { "status": "up",   "durationMs": 12 },
+    "redis": { "status": "up",   "durationMs": 3 },
+    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
+  }
+}
+```
+
+```jsonc
+// GET /version → 200
+{
+  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
+  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
+}
+```
+
+**3 สถานะ ไม่ใช่ 2:**
+- `up` — ทุกอย่างปกติ → 200
+- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
+- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+
+**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
+จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
+
+**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
+
+---
+
+## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+
+ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
+
+```jsonc
+// 400
+{
+  "type": "https://api.example.com/errors/validation",
+  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
+  "status": 400,
+  "detail": "จำนวนสินค้าต้องมากกว่า 0",
+  "instance": "/api/v1/orders",
+  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
+  "errors": { "quantity": ["ต้องมากกว่า 0"] }   // เฉพาะ validation
+}
+```
+
+| สถานะ | ใช้เมื่อ |
+|---|---|
+| 400 | ข้อมูลผิดรูป |
+| 401 | ยังไม่ได้ยืนยันตัวตน |
+| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
+| 404 | ไม่มีสิ่งนี้ |
+| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
+| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
+| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
+| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
+
+> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
+> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
+
+---
+
+## 3 · Request id
+
+- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้างเอง (uuid ตัด 8 ตัว)
+- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
+- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
+- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+
+พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
+
+---
+
+## 4 · Graceful shutdown
+
+ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+
+```
+SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
+          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
+          3. ปิด DB pool / คิว / ไฟล์
+          4. exit(0)
+```
+
+> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
+> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+
+---
+
+## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+
+- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
+- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
+- **CORS ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
+- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่ง OTP/อีเมล
+- **Security headers**: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+  `Strict-Transport-Security` (helmet / `UseHsts()` ทำให้ครบในบรรทัดเดียว)
+- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
+- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
+- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+
+---
+
+## 6 · โค้ดที่พร้อมใช้
+
+| ไฟล์ | สแต็ก | สถานะ |
+|---|---|---|
+| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
+
+---
+
+## 7 · ตรวจงาน
+
+```bash
+curl -i localhost:8080/ping                    # 200 pong
+curl -s localhost:8080/health/live  | jq
+curl -s localhost:8080/health/ready | jq
+curl -s localhost:8080/version      | jq
+
+# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
+```
+
+- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
+- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
+- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
+- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
+- [ ] `/version` ตรงกับ commit ที่ deploy จริง
+- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
+- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
+- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
+- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
+- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
+- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| รูปแบบ log และ correlation id | `logging-standards` |
+| test ให้ endpoint พวกนี้ | `testing-standards` |
+| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
+| runbook ตอน service ล่ม | `incident-runbook-template` |
+| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |
+
+
+## reference: per-stack.md
+
+# .NET และ Angular
+
+> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
+> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
+> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+
+---
+
+## สารบัญ
+
+1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
+2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## ASP.NET Core — health checks
+
+```bash
+dotnet add package AspNetCore.HealthChecks.NpgSql
+dotnet add package AspNetCore.HealthChecks.Redis
+```
+
+```csharp
+builder.Services.AddHealthChecks()
+    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
+    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddSmtpHealthCheck(o => { }, name: "mail",
+        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
+        tags: ["ready"]);
+```
+
+```csharp
+// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
+app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
+
+// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
+// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false,
+    ResponseWriter = WriteLive,
+});
+
+// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = c => c.Tags.Contains("ready"),
+    ResponseWriter = WriteReady,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+    },
+});
+
+app.MapGet("/version", () => Results.Ok(new
+{
+    name = "orders-api",
+    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
+    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
+    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
+    env = app.Environment.EnvironmentName,
+    host = Environment.MachineName,
+}));
+```
+
+ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+
+```csharp
+static Task WriteReady(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new
+    {
+        status = report.Status switch
+        {
+            HealthStatus.Healthy  => "up",
+            HealthStatus.Degraded => "degraded",
+            _                     => "down",
+        },
+        timestamp = DateTimeOffset.UtcNow,
+        checks = report.Entries.ToDictionary(
+            e => e.Key,
+            e => new
+            {
+                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
+                durationMs = (int)e.Value.Duration.TotalMilliseconds,
+                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
+                error = e.Value.Exception?.Message,
+            }),
+    });
+}
+
+static Task WriteLive(HttpContext ctx, HealthReport _)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
+}
+```
+
+### Error envelope (RFC 9457)
+
+ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+
+```csharp
+builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
+{
+    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
+    ctx.ProblemDetails.Extensions["requestId"] =
+        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
+});
+
+app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
+app.UseStatusCodePages();
+```
+
+### Graceful shutdown
+
+```csharp
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+
+// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
+// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
+app.Lifetime.ApplicationStopping.Register(() =>
+{
+    ReadinessState.IsShuttingDown = true;
+    Thread.Sleep(TimeSpan.FromSeconds(5));
+});
+```
+
+### สิ่งที่ต้องเปิดก่อน deploy
+
+```csharp
+app.UseHsts();
+app.UseHttpsRedirection();
+builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
+builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
+     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+```
+
+---
+
+## Angular — ฝั่งที่เรียกใช้
+
+**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
+
+```ts
+export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
+  const id = crypto.randomUUID().slice(0, 8);
+  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
+};
+```
+
+**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+
+```ts
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const toast = inject(ToastService);
+  return next(req).pipe(
+    catchError((e: HttpErrorResponse) => {
+      const p = e.error;                       // ProblemDetails
+      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
+      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
+      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
+      return throwError(() => e);
+    }),
+  );
+};
+```
+
+**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+
+```ts
+this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
+// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node/Express | Python/FastAPI |
+|---|---|---|---|
+| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
+| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
+| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
+| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` | `helmet` | `secure` middleware |
+| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |

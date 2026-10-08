@@ -6,4 +6,4 @@ argument-hint: <what the image must show> [where it will be used]
 
 Run `brief-to-image` with the `art-director` agent for: **$ARGUMENTS**
 
-Saves the brief to the project briefs folder; generation and consistency checks use the same written brief.
+Saves the brief to the project briefs folder. Generation and the consistency check both use this same brief.

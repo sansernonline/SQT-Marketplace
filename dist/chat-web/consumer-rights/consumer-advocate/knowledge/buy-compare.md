@@ -1,6 +1,6 @@
 # skill: buy-compare
 
-Use before buying anything significant in Thailand — appliance, phone, laptop, car, course — when choosing between options, weighing total cost of ownership, or wondering which Shopee, Lazada or Google reviews to trust.
+Use when about to buy something big in Thailand (appliance, phone, laptop, car, course). Compare options, total cost of ownership, which reviews to trust.
 
 # Buy and Compare
 
@@ -9,7 +9,7 @@ The cheapest price tag is often not the cheapest thing to own.
 ## Workflow
 
 1. **Define the job** — what must it do, for how long, for whom. Write 2–3 must-haves (a "no" on any of these removes the option).
-2. **Shortlist 2–4 options** — not ten.
+2. **Shortlist 2–4 options** — not 10.
 3. **Decision matrix** — weighted scores (below).
 4. **Total cost of ownership (TCO)** over the expected life.
 5. **Review trust check** — the signals below.

@@ -1,6 +1,6 @@
 # skill: returns-and-bad-reviews
 
-Use when a Thai online seller gets a return, refund request, dispute or 1–3 star review on Shopee, Lazada, TikTok Shop, LINE or Facebook. Return windows, refund vs replace vs dispute, review replies.
+Use when a Thai online seller gets a return, refund request, dispute or 1-3 star review. Return windows, refund vs replace vs dispute, public review replies.
 
 # Returns and Bad Reviews
 

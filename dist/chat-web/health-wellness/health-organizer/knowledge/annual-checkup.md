@@ -1,6 +1,6 @@
 # skill: annual-checkup
 
-Use when planning a yearly health checkup in Thailand (ตรวจสุขภาพประจำปี), checking what social security or บัตรทอง covers free, comparing hospital packages, or tracking results across years. Never interprets results.
+Use when planning a yearly health checkup in Thailand, what social security or gold card covers free, or comparing hospital packages. Never reads results.
 
 # Annual Checkup
 

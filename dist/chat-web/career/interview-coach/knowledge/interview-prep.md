@@ -1,6 +1,6 @@
 # skill: interview-prep
 
-Use when preparing for a job interview in Thailand or abroad — HR screening, hiring-manager, technical or final round. STAR story bank, answers to Thai HR questions (expected salary, why leaving), questions to ask, thank-you note.
+Use when preparing for a job interview (HR screen, technical, final round). STAR story bank, Thai HR questions, questions to ask, thank-you note.
 
 # Interview Prep
 
@@ -9,8 +9,8 @@ Prepare for **this** interview: this company, this role, this round.
 ## Workflow
 
 1. **Collect** — job post, company, round type, language, interviewer names if known, date and format (on-site, Teams/Zoom, phone).
-2. **Research (15 minutes)** — what the company sells, who the customers are, one recent news item, size and parent company. Write three facts the user can mention.
-3. **Map requirements** — take the job post's top 6–8 requirements; each needs one story.
+2. **Research (15 minutes)** — what the company sells, who the customers are, one recent news item, size and parent company. Write 3 facts the user can mention.
+3. **Map requirements** — take the job post's top 6–8 requirements and match one story to each.
 4. **Build the story bank** (STAR, below).
 5. **Prepare the hard answers** — the Thai HR list below.
 6. **Mock round** — one question at a time, scored (the `interview-coach` agent does this).
@@ -47,7 +47,7 @@ One story can answer several themes — tag each story with the themes it covers
 | เริ่มงานได้เมื่อไร / Notice period | Timeline | State your contract notice. Under the Civil and Commercial Code §582 the default is one pay period ahead — check your own contract, which may say 30 days or more |
 | จุดอ่อน / Weakness | Self-awareness | Real but non-fatal weakness + what you do about it + evidence it is improving |
 | มีแฟน / แต่งงานหรือยัง / วางแผนมีลูกไหม | (Should not be asked) | You may answer briefly or redirect: "That won't affect my availability for this role" |
-| ทำไมเลือกบริษัทเรา / Why us | Did you research | Use the three facts from Step 2 |
+| ทำไมเลือกบริษัทเรา / Why us | Did you research | Use the 3 facts from Step 2 |
 | เห็นตัวเองอีก 5 ปีเป็นอย่างไร | Will you stay | Growth inside this kind of role, not "your job" or "my own business" |
 | มีคำถามไหม / Any questions | Interest | Always ask 2–3 (below) |
 
@@ -160,7 +160,7 @@ Thai (email or LINE to HR):
 [ชื่อ นามสกุล]
 ```
 
-No reply after the stated timeline + 3 working days → one polite follow-up, then move on.
+If there is no reply 3 working days after the stated timeline, send one polite follow-up, then move on.
 
 ## 5. Debrief template
 

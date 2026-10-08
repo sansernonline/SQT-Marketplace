@@ -1,6 +1,6 @@
 # skill: subscription-audit
 
-Use when the user wants to find and cut recurring charges — streaming, App Store or Google Play, gym, cloud storage, software — from Thai bank or credit-card statements, or set reminders before free trials end.
+Use when finding and cutting recurring charges (streaming, app stores, gym, cloud storage, software) from Thai bank or card statements, or tracking free trials.
 
 # Subscription Audit
 

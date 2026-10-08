@@ -1,6 +1,6 @@
 # skill: refund-request
 
-Use when the user wants money back in Thailand (ขอคืนเงิน) — changed mind after a direct-sales purchase, a wrong, fake or broken item online, paid but never delivered, or an unknown or duplicate card charge.
+Use when the user wants money back in Thailand (broken, fake or undelivered item, 7-day direct-sales cancellation, unknown card charge). Route and deadline.
 
 # Refund Request (Thailand)
 
@@ -67,7 +67,7 @@ Send so the date is provable: email + registered mail (ไปรษณีย์�
 3. Fill the bank's dispute form; attach order, evidence of non-delivery or defect, your request to the seller.
 4. Ask whether the disputed amount is suspended from your payment while investigated; pay the rest of the statement on time.
 5. Note the case number and expected timeline; follow up in writing.
-6. Bank refuses or no response → ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน ธปท. 1213.
+6. If the bank refuses or does not respond, contact ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน ธปท. 1213.
 
 Unauthorised card transactions: under BOT measures announced in 2022, banks refund debit-card holders within 5 days and do not bill credit-card holders for the amount and interest, once it is reasonable that the cardholder was not at fault.
 

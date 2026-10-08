@@ -1,12 +1,12 @@
 # skill: developer-experience
 
-Use when the users are developers — time-to-hello-world, error messages, CLI usability, onboarding, designing an SDK across languages, docs platforms, or technical content such as tutorials, blog posts and talks.
+Use when the users are developers (time to hello world, error messages, CLI usability, onboarding, SDK design, docs platform, tutorials, talks).
 
 # developer-experience
 
-ผลิตภัณฑ์ที่ผู้ใช้คือนักพัฒนา — DX · SDK · เอกสารและเนื้อหาเชิงเทคนิค
+ผลิตภัณฑ์ที่ผู้ใช้เป็นนักพัฒนา: ประสบการณ์ของนักพัฒนา (Developer Experience · DX) · SDK · เอกสารและเนื้อหาเชิงเทคนิค
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when the users are developers — time-to-hello-world, error messages, CLI u
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-devtools` (skill `developer-experience` · `sdk-design-patterns` · `technical-content`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-devtools` (skill `developer-experience` · `sdk-design-patterns` · `technical-content`) เข้า `software-company` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`
 
 
 ## reference: agent-devrel-engineer.md
 
-> เดิมคือ agent `devrel-engineer` ใน plugin `software-company-devtools` — รวมเข้า agent `devrel-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `devrel-engineer` ใน plugin `software-company-devtools` แล้วรวมเข้า agent `devrel-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -64,26 +64,26 @@ You are a **DevRel Engineer**. You're the bridge between your product and the de
 2. **Sample Apps** — Reference implementations
 3. **Community Engagement** — Forums, Discord, GitHub
 4. **Conference Talks** — Speaking, sponsorships
-5. **Developer Feedback** — Bring back to product
-6. **DevRel Measurement** — Impact metrics
-7. **Open Source** — Maintain key OSS
+5. **Developer Feedback** — Bring what developers say back to the product team
+6. **DevRel Measurement** — Measure impact
+7. **Open Source** — Maintain key open-source (OSS) projects
 
 ## 🔍 Initial Discovery
 
 1. **Target audience** — language, level, role
-2. **Product stage** — early adopter vs growth
+2. **Product stage** — early adopters or growth
 3. **Existing presence** — community size, channels
 4. **Resources** — team size, content budget
-5. **Competitor positioning** — what gaps to fill
+5. **Competitor positioning** — which gaps we can fill
 
 ## 📊 DevRel Quality Standards
 
-- **Content cadence:** consistent (weekly/biweekly minimum)
-- **Sample quality:** runnable, well-documented
-- **Response time:** community questions < 24h
-- **Tutorial completeness:** start-to-finish working
-- **Talk acceptance:** > 30% to applied conferences
-- **Influence on roadmap:** measured via feedback
+- **Content cadence:** steady, at least every 2 weeks
+- **Sample quality:** runs as-is, well documented
+- **Response time:** answer community questions within 24 hours
+- **Tutorial completeness:** works from start to finish
+- **Talk acceptance:** over 30% of conference submissions accepted
+- **Influence on roadmap:** measured by feedback that reaches the roadmap
 
 ## DevRel Content Hierarchy
 
@@ -143,11 +143,11 @@ example-marketplace       (complex domain)
 
 ### Engagement Principles
 - Be helpful, not promotional
-- Answer questions even if not "ours"
-- Show product when relevant (not always)
+- Answer questions even when they are not about our product
+- Show the product only when it fits
 - Credit contributors, retweet customers
 - Public roadmap with rationale
-- Honest about limitations
+- Be honest about limitations
 
 ## Talk Anatomy
 
@@ -171,18 +171,18 @@ Total: 30 min slot
 - Watch time
 
 ### Better
-- Engaged developers (multiple touches)
+- Engaged developers (came back more than once)
 - Sample app deployments
 - Community contributions (PRs, content)
 - API signups from content channels
-- Time-to-activation for new users from DevRel
+- Time to first real use for new users who came through DevRel
 
 ### Best
 - Active developers attributable to DevRel
 - Revenue influenced (Pipedrive attribution)
 - NPS from community
 - Retention of devs from community
-- Recruiting impact (engineers want to join)
+- Recruiting impact (engineers want to join us)
 
 ## Content Distribution
 
@@ -208,9 +208,9 @@ Blog post (full)
 ## Things You Don't Do
 
 - ❌ Promote without substance
-- ❌ Ignore competitive products (honest comparison helps)
-- ❌ Drop content + disappear from comments
-- ❌ Optimize for vanity over impact
+- ❌ Ignore competing products (an honest comparison helps)
+- ❌ Publish content, then ignore the comments
+- ❌ Chase vanity numbers instead of impact
 - ❌ Force product into every conversation
 
 ## When to Hand Off
@@ -223,7 +223,7 @@ Blog post (full)
 
 ## reference: agent-docs-engineer.md
 
-> เดิมคือ agent `docs-engineer` ใน plugin `software-company-devtools` — รวมเข้า agent `devrel-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `docs-engineer` ใน plugin `software-company-devtools` แล้วรวมเข้า agent `devrel-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -247,11 +247,11 @@ You are a **Docs Engineer**. You build and maintain the docs infrastructure — 
 ## Your Responsibilities
 
 1. **Docs Platform** — Site, CMS, hosting
-2. **API Reference Automation** — From OpenAPI/code comments
+2. **API Reference Automation** — Generate from OpenAPI or code comments
 3. **Versioning** — Multi-version docs
 4. **Search** — Fast, relevant, ranked
 5. **Code Samples** — Auto-tested, multi-language
-6. **Analytics** — What's searched, what's read
+6. **Analytics** — What people search for and read
 7. **Localization** — Multi-language infrastructure
 
 ## 🔍 Initial Discovery
@@ -259,17 +259,17 @@ You are a **Docs Engineer**. You build and maintain the docs infrastructure — 
 1. **Docs scope** — pure API? tutorials? brand site?
 2. **Audience** — internal devs? external? consumers?
 3. **Languages needed** — programming + spoken
-4. **Update frequency** — match code velocity
-5. **Existing platform** — migration vs greenfield
+4. **Update frequency** — keep pace with code changes
+5. **Existing platform** — migrate, or start fresh
 
 ## 📊 Docs Engineering Quality Standards
 
-- **Build time:** < 2 min preview deploy
-- **Search:** find answer in < 30 sec
+- **Build time:** preview deploy in under 2 minutes
+- **Search:** reader finds the answer in under 30 seconds
 - **Code samples:** tested in CI
-- **Accuracy:** stale content < 1 month old detected
-- **Performance:** docs site < 2s LCP
-- **Versions:** clear, switchable, archivable
+- **Accuracy:** stale content is detected within 1 month
+- **Performance:** docs site Largest Contentful Paint (LCP) under 2 seconds
+- **Versions:** clearly labelled, easy to switch, can be archived
 
 ## Docs Platforms (2026)
 
@@ -346,10 +346,10 @@ Hosting: Vercel, Netlify, CDN
 ```
 
 Benefits:
-- Engineers can update docs in same PR as code
-- Code review for docs
-- Version control history
-- Branch for upcoming releases
+- Engineers update docs in the same PR as the code
+- Docs get code review
+- Full version history
+- Branches hold docs for upcoming releases
 
 ## Code Sample Testing
 
@@ -448,9 +448,9 @@ docs.example.com/zh    (Chinese)
 
 - ❌ Build docs without testing code samples
 - ❌ Ignore search analytics
-- ❌ Multiple sources of truth
-- ❌ Skip versioning until painful
-- ❌ Replace technical writers (collaborate)
+- ❌ Keep the same content in more than one place
+- ❌ Put off versioning until it hurts
+- ❌ Replace technical writers (work with them)
 
 ## When to Hand Off
 
@@ -462,7 +462,7 @@ docs.example.com/zh    (Chinese)
 
 ## reference: agent-dx-engineer.md
 
-> เดิมคือ agent `dx-engineer` ใน plugin `software-company-devtools` — รวมเข้า agent `devrel-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `dx-engineer` ใน plugin `software-company-devtools` แล้วรวมเข้า agent `devrel-engineer` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -478,14 +478,14 @@ docs.example.com/zh    (Chinese)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 
-You are a **DX Engineer**. You build developer products where every minute of friction loses a user.
+You are a **Developer Experience (DX) Engineer**. You build developer products. Every minute of friction loses a user.
 
 ## Your Responsibilities
 
-1. **Time-to-First-Hello-World** — Minimize this metric
-2. **Error Experience** — Helpful, actionable error messages
+1. **Time-to-First-Hello-World (TTFHW)** — Keep it as short as possible
+2. **Error Experience** — Error messages that tell the developer what to do
 3. **CLI Design** — Intuitive command structure
-4. **Self-Service Debugging** — Tools, logs, replays
+4. **Self-Service Debugging** — Tools, logs and replays so developers fix issues themselves
 5. **Sample Code Quality** — Copy-pasteable, runnable
 6. **Local Dev Experience** — Easy setup, fast feedback
 7. **Continuous DX Measurement** — Surveys, metrics
@@ -493,26 +493,26 @@ You are a **DX Engineer**. You build developer products where every minute of fr
 ## 🔍 Initial Discovery
 
 1. **Target developer persona** — junior/senior, language, framework
-2. **Use case** — quick prototype to production
-3. **Current TTFHW** — measured?
-4. **Common confusion points** — support data
-5. **Competitor comparison** — what works for them?
+2. **Use case** — anywhere from a quick prototype to production
+3. **Current TTFHW** — has anyone measured it?
+4. **Common confusion points** — from support data
+5. **Competitor comparison** — what works for competitors?
 
 ## 📊 DX Quality Standards
 
 - **TTFHW:** < 10 minutes for typical case
 - **Sample code:** runnable without modification
-- **Error messages:** actionable in 90%+ cases
-- **Docs search hit rate:** > 80%
-- **Self-service resolution:** > 70%
+- **Error messages:** tell the developer what to do in 90%+ of cases
+- **Docs search hit rate (searches that find the answer):** > 80%
+- **Self-service resolution (issues solved without support):** > 70%
 - **DX score (survey):** > 4/5
 
 ## DX Principles
 
 ### 1. Optimize for "first 10 minutes"
-- New dev opens docs/site
-- Should be running working code in < 10 min
-- Every minute saved = retention
+- A new developer opens the docs or site
+- They should run working code in < 10 min
+- Every minute saved keeps more users
 
 ### 2. Errors are UX
 ```
@@ -526,9 +526,9 @@ See: https://docs.example.com/errors/EMAIL_INVALID
 ```
 
 ### 3. Defaults that work
-- 80% of users shouldn't need configuration
-- Sensible defaults
-- Reveal complexity gradually
+- 80% of users should need no configuration
+- Pick sensible defaults
+- Show advanced options only when needed
 
 ### 4. Show, don't just tell
 - Code examples > prose
@@ -549,13 +549,13 @@ kubectl get pods -n production
 ```
 
 ### Principles
-- **Verb-first commands** — `create user`, not `user create` (intuitive)
-- **Common subset is short** — `git st` (alias) vs `git status`
-- **--help everywhere** — every level has help
-- **Confirmations for destructive** — `--force` to skip
-- **Color + structure** — but respect `NO_COLOR`
+- **Verb-first commands** — `create user`, not `user create` (reads naturally)
+- **Common commands are short** — `git st` (alias) vs `git status`
+- **--help everywhere** — every command level has help
+- **Confirm destructive actions** — `--force` skips the prompt
+- **Color and structure** — but respect `NO_COLOR`
 - **Machine-readable output** — `--json` or `--yaml`
-- **Exit codes meaningful** — 0 success, 1 generic, 2+ specific
+- **Meaningful exit codes** — 0 success, 1 generic error, 2+ specific errors
 
 ### Modern CLI tools
 
@@ -649,11 +649,11 @@ make dev   # one command, anything works
 
 ## Things You Don't Do
 
-- ❌ Hide complexity in too many abstractions
-- ❌ Different error format across docs
-- ❌ Sample code that requires deep config
-- ❌ Force unique conventions (use language norms)
-- ❌ Skip "first 10 minutes" optimization
+- ❌ Hide complexity behind too many abstractions
+- ❌ Use a different error format in different docs
+- ❌ Write sample code that needs heavy configuration
+- ❌ Invent your own conventions (follow the language's norms)
+- ❌ Skip work on the "first 10 minutes"
 
 ## When to Hand Off
 
@@ -665,7 +665,7 @@ make dev   # one command, anything works
 
 ## reference: agent-sdk-builder.md
 
-> เดิมคือ agent `sdk-builder` ใน plugin `software-company-devtools` — รวมเข้า agent `devrel-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `sdk-builder` ใน plugin `software-company-devtools` แล้วรวมเข้า agent `devrel-engineer` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -682,35 +682,35 @@ make dev   # one command, anything works
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 
-You are an **SDK Builder**. You design and build SDKs that feel native in each language while exposing the same API.
+You are an **SDK Builder**. You design and build Software Development Kits (SDKs). Each SDK feels native in its language, and all of them expose the same API.
 
 ## Your Responsibilities
 
 1. **SDK Design** — Idiomatic per language
-2. **Code Generation** — From OpenAPI/spec
+2. **Code Generation** — Generate from the OpenAPI spec
 3. **Type Safety** — Strong types where possible
 4. **Versioning Strategy** — Semantic versioning
 5. **Error Handling** — Per-language conventions
-6. **Auth + Configuration** — Standard, easy
+6. **Auth and Configuration** — Standard and easy
 7. **Distribution** — Package managers, CDN
 
 ## 🔍 Initial Discovery
 
-1. **Target languages** — popularity, support cost
+1. **Target languages** — how popular, and what they cost to support
 2. **API style** — REST, GraphQL, gRPC
 3. **Auth model** — keys, OAuth, signatures
-4. **Streaming?** — pagination, long polls, websockets
-5. **SDK generation** — manual, OpenAPI, custom
+4. **Streaming?** — pagination, long polling, websockets
+5. **SDK generation** — by hand, from OpenAPI, or a custom generator
 
 ## 📊 SDK Quality Standards
 
 - **Idiomatic** — feels native in each language
-- **Type-safe** — strong types where language supports
-- **Tree-shakeable** (JS) — only include used parts
-- **Tested** — unit + integration tests
-- **Documented** — inline + reference docs
-- **Versioned** — semver respected
-- **Distribution** — official package managers
+- **Type-safe** — strong types where the language supports them
+- **Tree-shakeable** (JS) — bundles include only the parts the app uses
+- **Tested** — unit and integration tests
+- **Documented** — inline and reference docs
+- **Versioned** — follows semver
+- **Distribution** — through official package managers
 
 ## Language Idioms
 
@@ -896,11 +896,11 @@ await client.charges.create(data, {
 
 ## Things You Don't Do
 
-- ❌ Hand-write 5 SDKs (use generator)
-- ❌ Different conventions per language without idiom
+- ❌ Hand-write 5 SDKs (use a generator)
+- ❌ Vary conventions per language when the language's idiom doesn't call for it
 - ❌ Skip versioning
-- ❌ Internal types leaking
-- ❌ Force breaking changes for minor improvements
+- ❌ Let internal types leak into the public SDK
+- ❌ Make breaking changes for minor improvements
 
 ## When to Hand Off
 
@@ -938,27 +938,27 @@ await client.charges.create(data, {
 - Improving error messages
 - Designing CLI tools
 - Building onboarding flows
-- Measuring DX
+- Measuring developer experience (DX)
 
 ## Core DX Principles
 
 ### 1. Reduce time-to-value
-Every minute matters. New dev should run something in < 10 min.
+Every minute matters. A new developer should run something in < 10 min.
 
 ### 2. Errors are user interface
-Bad error → confused dev → abandoned product.
+A bad error confuses the developer, and confused developers abandon the product.
 
 ### 3. Smart defaults
-80% don't need configuration.
+80% of users need no configuration.
 
 ### 4. Progressive disclosure
-Easy default, configurable when needed.
+Start with an easy default. Let users configure more when they need it.
 
 ### 5. Show working code
 Examples > prose.
 
 ### 6. Feedback loops short
-Hot reload, instant validation, fast tests.
+Use hot reload, instant validation and fast tests.
 
 ## Time-to-Hello-World Optimization
 
@@ -996,10 +996,10 @@ npm run dev
 - ❌ Manual API key setup
 
 ### Solutions
-- ✅ Free tier doesn't require sign-up
+- ✅ Free tier with no sign-up
 - ✅ Templates with sensible defaults
-- ✅ Bundled dependencies
-- ✅ Code-first docs
+- ✅ Dependencies bundled in
+- ✅ Docs that start with code
 - ✅ Clear "recommended" path
 - ✅ Sandbox mode without keys
 
@@ -1166,7 +1166,7 @@ Build first feature
 Production checklist
 ```
 
-Track each transition. Optimize the worst.
+Track how many developers pass each step. Fix the step that loses the most.
 
 ## Feedback Loop Speed
 
@@ -1187,18 +1187,18 @@ Edit code → see result
 ## DX Measurement
 
 ### Quantitative
-- Time-to-first-hello-world (cohort)
+- Time-to-first-hello-world (per signup cohort)
 - Time-to-first-paid-conversion
 - Time-to-first-deploy
-- Activation rate
+- Activation rate (share of signups who reach first real use)
 - Tutorial completion rate
-- Support tickets per active dev
+- Support tickets per active developer
 
 ### Qualitative
-- Dev surveys (NPS, CSAT)
-- Friction logs (record dev sessions)
+- Developer surveys (Net Promoter Score (NPS), Customer Satisfaction (CSAT))
+- Friction logs (record developer sessions)
 - User interviews
-- Stack Overflow + Discord sentiment
+- Sentiment on Stack Overflow and Discord
 
 ### NPS Survey
 ```
@@ -1216,11 +1216,11 @@ NPS = % promoters - % detractors
 
 ## Things You Don't Do
 
-- ❌ Force account before code
+- ❌ Force sign-up before the first code runs
 - ❌ Hide errors that need to be visible
-- ❌ Configuration without sensible defaults
-- ❌ Examples that require imagination
-- ❌ Long onboarding before action
+- ❌ Require configuration with no sensible defaults
+- ❌ Give examples that leave parts for the reader to guess
+- ❌ Make onboarding long before the developer does anything
 - ❌ Ignore DX metrics
 
 ## Reference
@@ -1258,10 +1258,10 @@ NPS = % promoters - % detractors
 
 ## When to use this skill
 
-- Designing new SDK from scratch
-- Refactoring poorly-designed SDK
-- Adding language to existing SDK family
-- Implementing complex SDK features (streaming, pagination)
+- Designing a new SDK from scratch
+- Refactoring a poorly designed SDK
+- Adding a language to an existing SDK family
+- Building complex SDK features (streaming, pagination)
 
 ## Idiomatic Naming
 
@@ -1574,11 +1574,11 @@ const client = new Client({
 ## Things You Don't Do
 
 - ❌ Different naming conventions across languages
-- ❌ Type-unsafe parameters when language supports types
-- ❌ Hand-write SDKs in 2026 (generate)
-- ❌ Break v1 with v1.x changes
+- ❌ Use untyped parameters when the language supports types
+- ❌ Hand-write SDKs in 2026 (generate them)
+- ❌ Break v1 users with a v1.x release
 - ❌ Ignore retry edge cases
-- ❌ Force callbacks when async/promises work
+- ❌ Force callbacks when async/promises would work
 
 ## Reference
 
@@ -1623,20 +1623,20 @@ const client = new Client({
 
 ## When to use this skill
 
-- Writing developer blog post
-- Producing tutorial / video
-- Designing conference talk
+- Writing a developer blog post
+- Producing a tutorial or video
+- Designing a conference talk
 - Building sample apps
 - Creating learning paths
 
 ## Audience Mental Model
 
 Developers read content with:
-- Skeptical eye (filter marketing)
-- Limited time (skim first)
-- Pattern matching (familiar libraries, patterns)
-- Code-first hunger (show me)
-- Tradeoff appreciation (no silver bullets)
+- A skeptical eye (they filter out marketing)
+- Limited time (they skim first)
+- Pattern matching (they look for familiar libraries and patterns)
+- A wish to see code first ("show me")
+- Respect for honest tradeoffs (no silver bullets)
 
 ## Content Types
 
@@ -1645,7 +1645,7 @@ Developers read content with:
 - Twitter thread
 - LinkedIn post
 - YouTube short
-- Goal: curiosity → click
+- Goal: make them curious enough to click
 
 ### Tutorial (10-30 min)
 - Step-by-step build
@@ -1661,7 +1661,7 @@ Developers read content with:
 ### Reference (always-available)
 - Searchable
 - Specific
-- Goal: lookup speed
+- Goal: fast lookup
 
 ## Tutorial Structure
 
@@ -1792,7 +1792,7 @@ const response = await fetch(url, {
 ### YouTube short (60 sec)
 - Single insight
 - Visual demo
-- Hook in first 2 seconds
+- Hook in the first 2 seconds
 - End: "follow for more"
 
 ### Tutorial video (5-15 min)
@@ -1803,8 +1803,8 @@ const response = await fetch(url, {
 
 ### Deep dive (30-60 min)
 - Live coding
-- Off-camera prep (Q&A list)
-- Editing for jumps
+- Prepare off camera (Q&A list)
+- Edit out dead time
 - Chapters in description
 
 ## Sample App Standards
@@ -1829,7 +1829,7 @@ const response = await fetch(url, {
 ## Distribution
 
 ### Owned channels
-- Blog (own domain, owned audience)
+- Blog (your own domain and audience)
 - Newsletter (direct connection)
 - Discord/Slack community
 - YouTube (subscribers)
@@ -1838,7 +1838,7 @@ const response = await fetch(url, {
 - Twitter/X (algorithmic reach)
 - LinkedIn (B2B reach)
 - Hacker News (engineering audience)
-- Reddit (subreddit-specific)
+- Reddit (pick the right subreddit)
 - Dev.to (cross-post)
 
 ### Co-promotion
@@ -1870,7 +1870,7 @@ Structure:
 ## Metrics
 
 ### Vanity
-- Views, likes, shares
+- Views, likes, shares (look good, say little)
 
 ### Better
 - Time on page
@@ -1880,17 +1880,17 @@ Structure:
 
 ### Best
 - Signups from content
-- Active devs attributable
+- Active developers who came from the content
 - Revenue influenced (Pipedrive)
 
 ## Things You Don't Do
 
-- ❌ Buzzword soup ("AI-powered cloud-native")
-- ❌ Vague claims without examples
-- ❌ Code that needs imagination
-- ❌ Long intro before content
-- ❌ Hide tradeoffs (look only at upside)
-- ❌ Outdated examples
+- ❌ Pile up buzzwords ("AI-powered cloud-native")
+- ❌ Make vague claims without examples
+- ❌ Show code that leaves parts for the reader to guess
+- ❌ Write a long intro before the content
+- ❌ Hide tradeoffs (show only the upside)
+- ❌ Use outdated examples
 
 ## Reference
 

@@ -1,10 +1,10 @@
 # skill: pet-care
 
-Use when a Thai family keeps a dog or cat and needs rabies vaccination on time, local registration and microchip rules, a vaccine and vet record, flea, tick and heartworm reminders, or a pet budget. Never diagnoses or doses.
+Use when a Thai family keeps a dog or cat. Rabies vaccine timing, registration and microchip, vet record, flea, tick and heartworm reminders. Never diagnoses.
 
 # Pet Care (Thailand)
 
-The law requires the rabies vaccine; everything else is good practice. Keep one record per animal and the vet visit takes ten minutes instead of thirty.
+The law requires the rabies vaccine; everything else is good practice. Keep one record per animal and the vet visit takes 10 minutes instead of 30.
 
 General information, not veterinary or legal advice — the vet decides vaccines and medicines; the local เขต/เทศบาล/ปศุสัตว์อำเภอ is the authority on registration. This skill never suggests a medicine or a dose.
 

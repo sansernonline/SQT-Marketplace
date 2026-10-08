@@ -5,9 +5,14 @@
   },
   "plugins": [
     {
+      "name": "superuser",
+      "source": "./plugins/superuser",
+      "description": "SuperUser core and master copy — a lead agent that sizes the task, picks or builds a playbook, hands parts to subagents, proves the result, keeps one shared CONTEXT.md, logs every action and learns after every task. Install alone, or adapt it into a domain plugin with ADAPT.md."
+    },
+    {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company in one plugin — 38 roles (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 101 skills and 28 slash commands. Industry add-ons are merged in since v2.0.0."
+      "description": "Complete software development company in one plugin — 39 roles (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 107 skills and 28 slash commands. Industry add-ons are merged in since v2.0.0."
     },
     {
       "name": "trading-finance",

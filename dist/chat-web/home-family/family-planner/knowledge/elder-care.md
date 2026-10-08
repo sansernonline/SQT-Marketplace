@@ -1,6 +1,6 @@
 # skill: elder-care
 
-Use when a Thai family cares for an elderly parent — doctor visits and questions, welfare and coverage rights (เบี้ยยังชีพ, บัตรทอง, สิทธิข้าราชการ, ประกันสังคม), fall-proofing the home, or a caregiver handoff note.
+Use when a Thai family cares for an elderly parent. Doctor visits, elderly allowance and coverage rights, fall-proofing the home, caregiver handoff note.
 
 # Elder Care (Thailand)
 
@@ -15,7 +15,7 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 3. **Appointments** — put every ใบนัด in the family calendar with who drives; note fasting instructions (งดน้ำงดอาหาร)
 4. **Questions for the doctor** — collect during the month: new symptoms with date, falls, sleep, appetite, side effects noticed. Ask: what is each medicine for, what side effects to watch, what to do if a dose is missed, when to come back sooner
 5. **Rights check** — the table below, once a year and when anything changes
-6. **Home safety** — run the checklist once, then every six months
+6. **Home safety** — run the checklist once, then every 6 months
 7. **Handoff note** — whenever someone else takes over for a day or more
 
 ## Rights and welfare
@@ -45,7 +45,7 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 
 ## Worked example
 
-Mother, 78, Bangkok, บัตรทอง at a district hospital, blood pressure and diabetes, five medicines. Family set-up: medicine table copied from the hospital list; pill organiser filled Sunday by the eldest; appointments every 3 months — the second child drives and brings the medicine bag and the question list (dizzy when standing up, twice this month, dates noted). Rights: เบี้ยยังชีพ 700 บาท/เดือน (age 70–79) paid on the 10th; turns 80 next year → amount moves to 800 automatically by age band (confirm with the เขต office). Tax: the daughter who supports her claims ลดหย่อนบิดามารดา 30,000 (one child per parent).
+Mother, 78, Bangkok, บัตรทอง at a district hospital, blood pressure and diabetes, 5 medicines. Family set-up: medicine table copied from the hospital list; pill organiser filled Sunday by the eldest; appointments every 3 months — the second child drives and brings the medicine bag and the question list (dizzy when standing up, twice this month, dates noted). Rights: เบี้ยยังชีพ 700 บาท/เดือน (age 70–79) paid on the 10th; turns 80 next year → amount moves to 800 automatically by age band (confirm with the เขต office). Tax: the daughter who supports her claims ลดหย่อนบิดามารดา 30,000 (one child per parent).
 
 ## Related
 

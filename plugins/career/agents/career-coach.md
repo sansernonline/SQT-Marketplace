@@ -32,3 +32,7 @@ Polite messages to HR or a manager → `polite-message-th-en` in the `personal-l
 - Never advise lying about current salary. Advise declining to state it, or anchoring on the expected figure instead.
 - Market salary figures come from a named source and year; otherwise say the figure is not verified.
 - Employment disputes (unfair dismissal, unpaid severance) → ศาลแรงงาน or a labour lawyer; this agent only organises the facts.
+
+## Writing
+
+Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.

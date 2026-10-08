@@ -6,4 +6,4 @@ argument-hint: <the message> [target platform and length]
 
 Run `video-script-to-clip` with the `social-creator` agent for: **$ARGUMENTS**
 
-Storyboard is reviewed as thumbnails before any generation starts.
+Review the storyboard as thumbnails before generating anything.

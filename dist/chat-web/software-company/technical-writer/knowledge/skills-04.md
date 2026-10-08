@@ -1,187 +1,39 @@
-# skill: commit-message-format
-
-Use when writing git commit messages. Enforces Conventional Commits format with type, scope, description, body, and footer. Helps maintain consistent commit history and enables automated changelog generation.
-
-# Conventional Commit Message Format
-
-## When to use this skill
-
-- Writing any git commit message
-- Reviewing commits in a PR for consistency
-- Setting up commitlint / semantic-release
-
-## Format
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
-```
-
-## Types
-
-| Type | Use for | Triggers release? |
-|------|---------|-------------------|
-| `feat` | New feature | minor version bump |
-| `fix` | Bug fix | patch version bump |
-| `docs` | Documentation only | no |
-| `style` | Formatting, no code change | no |
-| `refactor` | Refactor without behavior change | no |
-| `perf` | Performance improvement | patch |
-| `test` | Adding/updating tests | no |
-| `build` | Build system, dependencies | no |
-| `ci` | CI/CD changes | no |
-| `chore` | Maintenance tasks | no |
-| `revert` | Revert previous commit | depends |
-
-## Subject Rules
-
-- **Imperative mood** — "add" not "added" or "adds"
-- **Lowercase** — start with lowercase letter
-- **No period at end**
-- **Max 50 characters**
-- **Complete this sentence:** "If applied, this commit will _____"
-
-## Examples
-
-### Simple commit
-```
-feat(auth): add password reset via email
-```
-
-### With scope
-```
-fix(checkout): prevent double-charge on slow networks
-```
-
-### With body
-```
-feat(api): add rate limiting to public endpoints
-
-Implement token bucket algorithm with 100 req/min limit per IP.
-Returns 429 status with Retry-After header when exceeded.
-Cache state stored in Redis to handle multi-instance deployments.
-```
-
-### Breaking change
-```
-feat(api)!: change auth response shape
-
-BREAKING CHANGE: The /auth endpoint now returns tokens nested under
-"data" key instead of root level. Update clients accordingly.
-
-Before: { "access_token": "..." }
-After:  { "data": { "access_token": "..." } }
-```
-
-### With issue reference
-```
-fix(login): handle email with leading whitespace
-
-Closes #1234
-Refs #5678
-```
-
-### Revert
-```
-revert: feat(auth): add password reset via email
-
-This reverts commit a1b2c3d4.
-Reverting due to security issue found in production.
-
-Refs INCIDENT-42
-```
-
-## Body Rules
-
-- Separate from subject with blank line
-- Wrap at 72 characters
-- Explain **why**, not just **what** (diff shows what)
-- Use bullet points if multiple points
-- Reference issues/tickets at the end
-
-## Footer Conventions
-
-```
-Closes #123              ← closes the issue
-Refs #456                ← references but doesn't close
-BREAKING CHANGE: ...     ← breaking change notice
-Co-authored-by: ...      ← attribution
-```
-
-## Quality Checklist
-
-- [ ] Type matches the change (not just "chore" for everything)
-- [ ] Scope is meaningful (component/module name)
-- [ ] Subject is imperative and ≤50 chars
-- [ ] Body explains WHY (if change isn't obvious)
-- [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
-- [ ] Linked to issue/ticket when applicable
-
-## Anti-patterns
-
-- ❌ `update code`
-- ❌ `fix bug`
-- ❌ `WIP`
-- ❌ `final commit` / `final final`
-- ❌ Mixed changes: don't combine feature + refactor + fix in one commit
-- ❌ Past tense: `added feature` (use `add feature`)
-- ❌ Vague scope: `fix(misc): ...` (be specific)
-
-## Splitting Commits
-
-If your change is hard to summarize in one subject, split it:
-
-```bash
-# Instead of one big commit
-feat(profile): redesign UI, add export, fix bug
-
-# Split into focused commits
-refactor(profile): extract user info component
-feat(profile): redesign user info layout
-feat(profile): add CSV export
-fix(profile): correct date format in display
-```
-
-
----
-
 # skill: branded-document-design
 
-Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look at and it must look designed. Token palette, type scale, tested python-docx and python-pptx builders, Thai typography.
+Use when a Word, PowerPoint or PDF deliverable must look designed. Token palette, type scale, tested python-docx and python-pptx builders, Thai typography.
 
 # Branded Document Design
 
-> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้อง "ดูตั้งใจ" — มีระบบสี ระบบขนาดตัวอักษร
-> และจังหวะช่องไฟที่ซ้ำเดิมทุกหน้า ไม่ใช่ Word ที่เปิดมาแล้วพิมพ์เลย
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
+> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
 
 ## เมื่อไหร่ใช้ skill นี้
 
 - ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
 - เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
-- เอกสารไทย–อังกฤษปนกัน (ซึ่งพังง่ายมากถ้าตั้งฟอนต์ไม่ครบ)
-- ต้องออกเอกสารชุดเดียวกันซ้ำ ๆ แล้วอยากให้ทุกฉบับหน้าตาเหมือนกัน
+- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
+- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- ผลลัพธ์เป็น markdown ในรีโป → ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา → ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- ไดอะแกรมในเอกสาร markdown → ใช้ `markdown-visuals`
+- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
+- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
+- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
 
 **ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
-→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ · markdown คือ source of truth เสมอ
+→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
 
 ---
 
 ## 0 · สีมาจากเนื้องาน — ถามก่อนเริ่ม
 
-**ถ้า markdown ต้นทางประกาศ `doc-theme` ไว้แล้ว ใช้ค่านั้น — อย่าถามซ้ำ อย่าตั้งใหม่**
+**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
 (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 
-ถ้ายังไม่มี — **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ถามผู้ใช้ว่าจะใช้สีอะไร
-ถ้ายังไม่ระบุ ให้เสนอจากเนื้องานแล้วรอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
+ถ้ายังไม่มี **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ให้ถามผู้ใช้ว่าจะใช้สีอะไร
+ถ้าผู้ใช้ยังไม่ระบุ ให้เสนอจากเนื้องาน รอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
 
 | เนื้องาน | โทนที่เสนอ | เหตุผล |
 |---|---|---|
@@ -193,10 +45,10 @@ Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look
 | ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
 | ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
 
-ถ้าลูกค้ามีแบรนด์อยู่แล้ว ใช้สีแบรนด์เป็นตัวตั้ง — ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
+ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
 
-**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่ใช่เลือกเพิ่มทีละสี
-สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ซึ่งต้องคงความหมายเดิมเสมอ
+**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
+สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
 
 ---
 
@@ -213,15 +65,15 @@ Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look
 | `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
 | `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
 | `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` หนึ่งขั้น — **ไม่ใช่ดำสนิท ดำสนิทล้าตา** |
+| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
 | `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
 | `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
 
-**สีสถานะ 6 ตัว** (คู่ พื้น/ตัวอักษร) — สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
+**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
 สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
 พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
 
-**ความหมายของแต่ละสี — ใช้ให้สื่ออารมณ์เสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
+**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
 
 | สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
 |---|---|---|
@@ -232,10 +84,10 @@ Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look
 | 🟣 ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
 | ⚪ เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
 
-กฎเดียว: **สีต้องตรงกับความหมาย ไม่ใช่ตรงกับความสวย** — อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่อมันอันตรายหรือผิดจริง · ไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `svg-diagram-system` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
+กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
 
 > **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก — ถ้าไม่ผ่านให้ปรับความเข้ม ไม่ใช่ปรับสี
+> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
 >
 > **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
 
@@ -254,7 +106,7 @@ Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look
 | ตาราง | 11 | 12.5 | regular · `text_body` |
 | คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
 
-**อย่าเพิ่มขนาดใหม่นอกสเกลนี้** — ทุกขนาดที่เพิ่มคือความไม่สม่ำเสมอที่ตาจับได้
+**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
 
 ---
 
@@ -264,20 +116,20 @@ Use when the deliverable is a rendered Word, deck or PDF a stakeholder will look
 bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
 
 > 🚨 **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
-> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม** —
+> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม**
 > ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
-> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว — **ห้ามตั้งฟอนต์เองแบบ manual**
+> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว **ห้ามตั้งฟอนต์เองด้วยมือ**
 
 กฎอื่นสำหรับเอกสารไทย:
 
-- ระยะบรรทัด **1.3–1.35** (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์บน–ล่าง ต้องหายใจ)
-- **ห้ามใช้ justify** กับย่อหน้าไทย — ไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
-- ตัดคำไทยของ LibreOffice ไม่เหมือน Word — ถ้าจะส่ง PDF ให้ export จาก Word จริง
+- ระยะบรรทัด **1.3–1.35** (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์และสระบน–ล่าง ต้องเว้นที่)
+- **ห้ามจัดชิดขอบ 2 ด้าน (justify)** กับย่อหน้าไทย เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
+- LibreOffice ตัดคำไทยไม่เหมือน Word ถ้าจะส่ง PDF ให้ export จาก Word จริง
   หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
-- ถ้าสร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
-  (ReportLab จัดวรรณยุกต์ไทยผิด — ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
+- สร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
+  (ReportLab จัดวรรณยุกต์ไทยผิด ให้ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
 - เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
-  ไม่ใช่บั๊กของขนาดฟอนต์ — บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน ให้ตรวจครั้งสุดท้ายจาก Word
+  ไม่ใช่บั๊กของขนาดฟอนต์ บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน จึงให้ตรวจรอบสุดท้ายจาก Word
 
 ---
 
@@ -294,7 +146,7 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 footer        "หน้า N" กลางหน้า สีเทา 9pt
 ```
 
-หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. → ความกว้างเนื้อหา ≈ **9360 twips**
+หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา ≈ **9360 twips**
 (ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
 
 ---
@@ -312,7 +164,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 | บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
 | ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
 
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · KPI strip 3–5 ช่อง (6 ช่องขึ้นไปตัวเลขจะเล็กจนไม่มีพลัง) ·
+**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
 ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
 
 ---
@@ -359,15 +211,15 @@ d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption=
 d.save("deck.pptx")
 ```
 
-รายละเอียดเมธอดทั้งหมดอยู่ใน `references/api.md` · ไฟล์ตัวอย่างที่รันได้จริงคือ
+เมธอดทั้งหมดอยู่ใน `references/api.md` ส่วนไฟล์ตัวอย่างที่รันได้จริงคือ
 `scripts/example_srs.py`
 
 ---
 
 ## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
 
-เอกสารที่ไม่เคยถูก "มอง" คือเอกสารที่ยังไม่เสร็จ ตารางล้นขอบ หัวข้อค้างท้ายหน้า
-วรรณยุกต์ลอย — สิ่งเหล่านี้ไม่มีทางเห็นจากโค้ด
+เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
+วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
 
 ```bash
 soffice --headless --convert-to pdf --outdir out SRS.docx
@@ -376,7 +228,7 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 
 แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
 
-- [ ] ไม่มีตารางล้นออกนอกขอบกระดาษ · คอลัมน์กว้างสมเหตุสมผล ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
+- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
 - [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
 - [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
 - [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ
@@ -388,11 +240,11 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 
 ## 7 · Anti-patterns
 
-- ❌ **ใช้ built-in Heading style ของ Word** — จะทับสีที่เราตั้ง ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เองเพื่อให้ TOC ยังเห็นหัวข้อ
-- ❌ **เส้นตารางดำหนา default** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
-- ❌ **ตัวอักษรสีดำสนิท** — ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตาจะไม่รู้ว่าตารางเริ่มตรงไหนเวลาข้ามหน้า
+- ❌ **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
+  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
+- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
+- ❌ **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
+- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
 - ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
   ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
 - ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
@@ -419,14 +271,14 @@ pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.p
 ## ตัวย่อ
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
 
 
 ## reference: api.md
 
 # brandkit API — อ้างอิงเมธอด
 
-ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้เสมอ
+ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้
 
 ## สารบัญ
 
@@ -456,8 +308,8 @@ BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
 
 | เมธอด | หมายเหตุ |
 |-------|----------|
-| `cover(title, subtitle, meta, note, logo, logo_width_cm=2.6, top_space_pt=150, page_break=True)` | โลโก้รับได้ทั้ง .png และ .emf — **.svg ใช้ไม่ได้ใน python-docx** ให้แปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
-| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC · ใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
+| `cover(title, subtitle, meta, note, logo, logo_width_cm=2.6, top_space_pt=150, page_break=True)` | โลโก้รับได้ทั้ง .png และ .emf แต่ **.svg ใช้ไม่ได้ใน python-docx** ต้องแปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
+| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC แล้วใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
 | `page_break()` | |
 | `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
 
@@ -476,8 +328,8 @@ BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
 | เมธอด | หมายเหตุ |
 |-------|----------|
 | `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False)` | `widths` หน่วย twips รวม **9360** สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ |
-| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` — โทนที่ใช้ได้: green blue amber red violet grey |
-| `kpi_row([(value, label), ...])` | 3–5 ช่องกำลังดี |
+| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · โทนที่ใช้ได้: green blue amber red violet grey |
+| `kpi_row([(value, label), ...])` | 3–5 ช่องพอดี |
 | `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
 
 ### อื่น ๆ
@@ -485,14 +337,14 @@ BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
 | เมธอด | หมายเหตุ |
 |-------|----------|
 | `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
-| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` → ขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
+| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` จะขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
 | `save(path)` | |
 
 ### ฟังก์ชันระดับโมดูล
 
 | ฟังก์ชัน | ใช้เมื่อ |
 |----------|---------|
-| `use_brand(**tokens)` | เปลี่ยน palette ทั้งชุด — เรียก **ก่อน** สร้าง `BrandDoc` |
+| `use_brand(**tokens)` | เปลี่ยนชุดสีทั้งชุด ต้องเรียก **ก่อน** สร้าง `BrandDoc` |
 | `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
 | `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
 | `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
@@ -522,10 +374,10 @@ BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
 
 **ข้อจำกัดที่ต้องรู้**
 
-- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) — ไม่มี placeholder ให้แก้ใน PowerPoint
+- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) จึงไม่มีช่อง placeholder ให้แก้ใน PowerPoint
   แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
-- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ · ถ้าต้องการตารางไร้เส้นให้ใช้กล่องข้อความเรียงแทน
-- ความสูงแถวตารางเป็นค่าต่ำสุด — ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
+- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ ถ้าอยากได้ตารางไม่มีเส้น ให้เรียงกล่องข้อความแทน
+- ความสูงแถวตารางเป็นค่าต่ำสุด ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
 
 ---
 
@@ -619,12 +471,14 @@ use_brand(
 
 # skill: spell-out-abbreviations
 
-Use in every piece of writing for a person (docs, comments, commits, replies, UI text, diagram labels). Spell out each abbreviation the first time, e.g. Model Context Protocol (MCP), and gloss specialist terms.
+Use when writing anything for a person (docs, comments, commits, replies, UI text, labels). Spell out each abbreviation on first use, gloss jargon.
 
 # Spell Out Abbreviations
 
-> **กฎที่หนึ่ง:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
-> **กฎที่สอง:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายต้องไม่ต้องเดา
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
+> **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา
 
 ## รูปแบบ
 
@@ -633,19 +487,19 @@ Use in every piece of writing for a person (docs, comments, commits, replies, UI
 ❌ MCP ทำให้ Claude ต่อกับระบบอื่นได้
 ```
 
-- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็ม + วงเล็บ · ครั้งต่อไปใช้ตัวย่อล้วน
+- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็มแล้ววงเล็บตัวย่อ ครั้งต่อไปใช้ตัวย่อล้วน
 - เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
-- ตารางหรือหัวข้อที่ที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
+- ตารางหรือหัวข้อที่มีที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
 - เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
 
 ## ยกเว้น — ไม่ต้องขยาย
 
 คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
-และนามสกุลไฟล์ (`.docx`, `.pptx`) · ถ้าไม่แน่ใจ **ให้ขยาย** เสียเปล่าดีกว่าคนอ่านไม่รู้เรื่อง
+และนามสกุลไฟล์ (`.docx`, `.pptx`) ถ้าไม่แน่ใจ **ให้ขยาย** เพราะขยายเกินไม่เสียหาย แต่คนอ่านไม่รู้เรื่องเสียหาย
 
 ## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
 
-ตัวย่อขยายแล้วยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
+ขยายตัวย่อแล้วอาจยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
 ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
 
 ```
@@ -656,10 +510,10 @@ Use in every piece of writing for a person (docs, comments, commits, replies, UI
 ✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
 ```
 
-**คำอธิบายต้องสั้นกว่าหนึ่งบรรทัด** ยาวกว่านั้นแปลว่าควรแยกเป็นประโยคของตัวเอง
+**คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
 
 **วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
-อ่านแล้วเดาความหมายได้ไหม เดาไม่ได้คือต้องอธิบาย
+อ่านแล้วเดาความหมายได้ไหม ถ้าเดาไม่ได้ก็ต้องอธิบาย
 
 | ระดับผู้อ่าน | อธิบายแค่ไหน |
 |---|---|

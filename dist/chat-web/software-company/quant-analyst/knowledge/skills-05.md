@@ -1,345 +1,10 @@
-# skill: markdown-visuals
-
-Use when a markdown document needs a picture (wireframe, UI state, architecture, flow, data viz). Picks inline SVG, image, ASCII or Mermaid and embeds it so it renders in GitHub, Notion, VS Code and Obsidian.
-
-# Markdown Visuals
-
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
-
-## When to use this skill
-
-- Producing **any** design mockup, wireframe, or UI spec
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
-
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
-
----
-
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI mockup / component state / icon       →  Inline SVG
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (see polished-document-style)
-├─ Architecture / ER / class                →  Mermaid
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
-
-**Default to inline SVG** for anything that isn't a flow/sequence (use Mermaid for those). It renders everywhere, versions in git, doesn't bloat the repo with binaries, and the user can read/edit the markup.
-
----
-
-## 1 · Inline SVG (primary technique)
-
-### Boilerplate
-
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
-```
-
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
-
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
-|---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
-
-**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
-
-### Reusable SVG snippets
-
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-### Worked example — UI state mockup
-
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
-
-```markdown
-## 2 · External image files
-
-Use when:
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
-
----
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-### Box-drawing characters
-
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
-
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-### Common patterns
-
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
----
-
-## 4 · Mermaid
-
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
-
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
-|---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
-
----
-
-## Combining formats in one doc
-
-A full design spec usually mixes formats. Pattern from `DockXI/docs/12-design-mockup.md`:
-
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
-
-Don't pick one format and force everything into it — each format has a sweet spot.
-
----
-
-## Accessibility checklist
-
-For every visual:
-
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
-
----
-
-## Anti-patterns
-
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax for GitHub compat
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
-
----
-
-## Quick-start recipe
-
-When the user asks for a design / mockup:
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-If unsure whether a visual will render, mention that the user should preview in GitHub/Notion to confirm.
-
----
-
-## Related skills
-
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
-
-
----
-
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step, risk) and a decision is needed. Lead with the consequence, show recorded vs actual, end with one short question.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
 > ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
@@ -372,7 +37,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 | 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
 | 4 · คำถามปิด | 1 บรรทัด | คำถามเดียว ตอบได้ด้วยไม่กี่คำ |
 
-บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข · บล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
+บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข ส่วนบล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
 **บล็อก 1 กับ 4 ตัดไม่ได้**
 
 **ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
@@ -451,7 +116,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 | กฎ | เหตุผล |
 |---|---|
-| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | สองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
+| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | ถ้าถามสองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
 | ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
 | มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
 | ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
@@ -534,3 +199,234 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 | แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
 | สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
 | สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |
+
+
+---
+
+# skill: context-budget
+
+Use when a task will read many files, search a codebase or run long-output commands. When to use a subagent, partial reads, bounded searches.
+
+# งบ context
+
+> **กฎข้อเดียว:** ตัดสินใจ**ก่อน**อ่าน ไม่ใช่อ่านแล้วค่อยเสียดาย
+> token ที่เข้า context แล้วเอาออกไม่ได้ ยกเว้นสั่ง `/clear` ซึ่งทิ้งทุกอย่างไปด้วย
+
+## เมื่อไหร่ใช้ skill นี้
+
+- กำลังจะอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว
+- เริ่มงานในโปรเจกต์ที่ยังไม่รู้จักโครงสร้าง
+- context เต็มเร็วผิดปกติ หรือโดน `/compact` บ่อย
+- จะวางกฎให้ทั้งทีมหรือทุกโปรเจกต์
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ทำให้**คำตอบ**สั้นลง | `answer-shape` |
+| เก็บสรุปงานข้ามเซสชัน | `work-session-context` |
+| ที่วางไฟล์ชั่วคราว | `temp-file-discipline` |
+| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` |
+
+---
+
+## 1 · อะไรกิน context จริง ๆ
+
+| แหล่ง | ขนาดโดยประมาณ | คุมได้ไหม |
+|---|---|---|
+| **output ของ tool** (อ่านไฟล์ · grep · bash) | ใหญ่สุด ไฟล์เดียวเป็นหมื่น token ได้ | ✅ คุมได้เต็มที่ ทั้งหน้านี้พูดถึงเรื่องนี้ |
+| schema ของ tool จาก MCP server | หลักพัน token ต่อ server ทุกเซสชัน | ✅ ปิดตัวที่ไม่ใช้ |
+| `CLAUDE.md` | ตามที่เขียน | ✅ เขียนให้สั้น |
+| description ของ skill | ~100 token ต่อ skill | ✅ ตัดให้กระชับ |
+| ประวัติบทสนทนา | โตเรื่อย ๆ | ⚠️ `/clear` เมื่อเปลี่ยนเรื่อง |
+
+> **เห็นชัดว่าควรคุมอะไรก่อน**: ตัด description ของ skill ทั้งชุดได้แค่ไม่กี่พัน token
+> แต่ `cat` ไฟล์ 3,000 บรรทัดครั้งเดียวกินมากกว่านั้น
+> **ต้องมีวินัยที่สุดกับแถวบนสุดของตาราง**
+
+---
+
+## 2 · ต้นไม้ตัดสินใจก่อนอ่าน
+
+```
+ต้องรู้อะไรจากไฟล์/โฟลเดอร์นี้
+├─ รู้ชื่อไฟล์และบรรทัดอยู่แล้ว        → อ่านเฉพาะช่วง (ข้อ 3)
+├─ ต้องหาว่าอยู่ตรงไหน                → grep แบบมีขอบเขต (ข้อ 4)
+├─ ต้องเปิดดูมากกว่า 3 ไฟล์           → ส่ง subagent (ข้อ 5)
+└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก     → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 6)
+```
+
+ถ้าไม่รู้ว่าไฟล์ใหญ่แค่ไหน ให้**เช็กขนาดก่อนเสมอ**:
+
+```bash
+wc -l path/to/file          # กี่บรรทัด
+du -h path/to/file          # กี่ไบต์
+```
+
+---
+
+## 3 · อ่านเฉพาะช่วง
+
+| ต้องการ | คำสั่ง |
+|---|---|
+| ดูว่าไฟล์เกี่ยวกับอะไร | `head -40 file.ts` |
+| ดูโครงสร้าง | `rg -n '^(export |class |def |function )' file.ts` |
+| อ่านรอบ ๆ บรรทัดที่สนใจ | `sed -n '120,180p' file.ts` |
+| ด้วย Read tool | ใส่ `offset` และ `limit` |
+
+**เกณฑ์:** ไฟล์ที่เกิน **300 บรรทัด** ให้อ่านเฉพาะช่วง เว้นแต่จะแก้ทั้งไฟล์จริง ๆ
+
+**อ่านทั้งไฟล์ได้เมื่อ**: กำลังจะเขียนทับทั้งไฟล์ · ไฟล์ตั้งค่าสั้น ๆ ·
+ต้องเข้าใจไฟล์ทั้งไฟล์เพื่อแก้ให้ถูก และไฟล์ไม่เกิน ~300 บรรทัด
+
+---
+
+## 4 · ค้นแบบมีขอบเขต
+
+```bash
+# ❌ คืนมาเป็นพัน ๆ บรรทัด
+rg 'user'
+
+# ✅ จำกัดชนิดไฟล์ · จำกัดบริบท · จำกัดจำนวน
+rg -n 'createUser' --glob '*.ts' -C2 | head -50
+
+# ✅ อยากรู้แค่ว่าอยู่ไฟล์ไหน
+rg -l 'createUser' --glob '*.ts'
+
+# ✅ อยากรู้แค่จำนวน
+rg -c 'TODO' --glob '*.ts' | head -20
+```
+
+| กฎ | เหตุผล |
+|---|---|
+| ใส่ `--glob` เสมอ | กัน `node_modules` และไฟล์ build |
+| `-l` ก่อน แล้วค่อยเจาะ | รู้ว่าอยู่ไฟล์ไหนก่อน ค่อยอ่านเฉพาะไฟล์นั้น |
+| ปิดท้าย `| head -N` | กันกรณีที่ pattern กว้างกว่าที่คิด |
+| `-C2` พอ ไม่ต้อง `-C10` | บริบท 2 บรรทัดพอให้รู้ว่าใช่ไหม |
+
+---
+
+## 5 · ส่ง subagent ไปแทน
+
+**นี่คือข้อที่ประหยัดได้มากที่สุดในหน้านี้**
+
+subagent มี context ของตัวเอง จึงอ่านไป 20 ไฟล์ได้
+แล้วส่งกลับมาที่บทสนทนาหลักแค่ย่อหน้าเดียว โดยเนื้อหาที่มันอ่านไม่เข้ามาด้วย
+
+| ใช้ subagent เมื่อ | ทำเองเมื่อ |
+|---|---|
+| ต้องเปิดดูเกิน 3 ไฟล์เพื่อตอบคำถามเดียว | รู้ไฟล์และบรรทัดอยู่แล้ว |
+| สำรวจโปรเจกต์ที่ยังไม่รู้จัก | แก้ไฟล์ที่กำลังเปิดอยู่ |
+| ตรวจ/รีวิวข้ามหลายไฟล์ | งานที่ต้องเห็นรายละเอียดเต็มเพื่อแก้ต่อ |
+
+**สั่งให้ดีคือบอกว่าต้องการอะไรกลับมา:**
+
+```
+❌ "ดูโค้ดส่วน auth ให้หน่อย"
+   → มันอาจคืนมาทั้งไฟล์
+
+✅ "หาว่า flow การเข้าสู่ระบบเริ่มที่ไหนและผ่านอะไรบ้าง
+    คืนกลับมาแค่ รายการ ไฟล์:บรรทัด ตามลำดับการเรียก
+    ไม่ต้องแปะโค้ด ไม่เกิน 15 บรรทัด"
+```
+
+> 🚨 **กำหนดรูปแบบและความยาวของผลลัพธ์เสมอ** ถ้าไม่บอกว่าต้องการอะไร
+> subagent จะส่งรายงานยาว ๆ กลับมา แล้วก็ไม่ได้ประหยัดอะไรเลย
+
+---
+
+## 6 · เขียนลงไฟล์ แทนถือไว้ในบทสนทนา
+
+```bash
+# ❌ output ทั้งหมดเข้า context
+npm test
+
+# ✅ เข้า context แค่บรรทัดสรุป
+npm test > _to_delete/test.log 2>&1; tail -20 _to_delete/test.log
+
+# ✅ ข้อมูลใหญ่ ประมวลผลในไฟล์ เอาเข้ามาแค่ผลลัพธ์
+jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
+```
+
+**ใช้กับ**: ผลรัน test · log · ผลลัพธ์จากการแปลงไฟล์ · ข้อมูลที่ต้องกรอง/นับ
+เก็บไว้ที่ `_to_delete/` ตาม `temp-file-discipline`
+
+---
+
+## 7 · ทำให้เซสชันหน้าไม่ต้องสำรวจซ้ำ
+
+โปรเจกต์ที่กลับมาทำบ่อย ควรมีแผนที่โปรเจกต์สั้น ๆ ที่ **โหลดอัตโนมัติ**
+
+| ไฟล์ | โหลดเอง | เหมาะกับ |
+|---|:--:|---|
+| **`<project>/CLAUDE.md`** | ✅ | แผนที่โปรเจกต์ · คำสั่งที่ใช้บ่อย · กฎเฉพาะโปรเจกต์ |
+| `<project>/<โฟลเดอร์ใหญ่>/CLAUDE.md` | ✅ เมื่อทำงานในโฟลเดอร์นั้น | โมดูลที่ซับซ้อนเป็นพิเศษ |
+| `context.md` · `notes.md` ชื่ออื่น | ❌ | **ต้องสั่งให้อ่านทุกครั้ง จึงเสียเปล่า** |
+
+> 🚨 **อย่าตั้งชื่อไฟล์แผนที่เป็นอย่างอื่น** เพราะ `CLAUDE.md` ถูกอ่านให้อัตโนมัติ
+> ส่วนไฟล์ชื่ออื่นต้องมีคนสั่งให้อ่าน เท่ากับจ่าย token เพิ่มเพื่ออ่านสิ่งที่ควรได้ฟรี
+
+**สิ่งที่ควรอยู่ในแผนที่ของโปรเจกต์** สั้น ๆ ไม่เกิน 40 บรรทัด:
+
+```markdown
+## แผนที่
+- API อยู่ที่ `src/api/` · หน้าจอ `src/pages/` · ชนิดข้อมูลร่วม `src/types.ts`
+- ตรรกะการคิดราคาทั้งหมดอยู่ใน `src/pricing/` ที่เดียว
+- `legacy/` ไม่ได้ใช้แล้ว **ห้ามอ่าน**
+
+## คำสั่ง
+- รัน `npm run dev` · test `npm test` · migrate `npm run db:migrate`
+
+## กฎเฉพาะที่นี่
+- ห้ามแก้ `generated/` เป็นไฟล์ที่สร้างอัตโนมัติ
+```
+
+**ไม่ควรมี**: เนื้อหาที่อ่านจากโค้ดได้อยู่แล้ว · รายการไฟล์ทั้งหมด · ประวัติการเปลี่ยนแปลง
+แผนที่ล้าสมัยแย่กว่าไม่มีแผนที่ เพราะมันพาไปผิดที่อย่างมั่นใจ
+
+---
+
+## 8 · ค่าตั้งที่ช่วยได้อีก
+
+| ทำอะไร | ได้อะไร |
+|---|---|
+| **ปิด MCP server ที่ไม่ได้ใช้ในโปรเจกต์นั้น** | schema ของทุก tool โหลดทุกเซสชัน จึงตัดได้หลักพัน token |
+| ปิดปลั๊กอินที่ไม่เกี่ยวกับงานนั้น | description ของ skill ทุกตัวอยู่ใน context เสมอ |
+| `permissions.deny` ใน `.claude/settings.json` สำหรับโฟลเดอร์ที่ไม่ควรอ่าน | ระบบกันพลาดให้ ไม่ต้องพึ่งวินัย |
+| `/clear` เมื่อเปลี่ยนเรื่อง · `/compact` เมื่อใกล้เต็ม | คืนที่ว่าง |
+| `CLAUDE.md` ยาวไม่เกิน 40 บรรทัด | ทุกบรรทัดกิน token ทุกเซสชัน |
+
+---
+
+## 9 · Anti-patterns
+
+- ❌ **`cat` ไฟล์ใหญ่เพื่อ "ดูก่อนว่ามีอะไร"** ทั้งที่ `head -40` ตอบคำถามเดียวกันได้ด้วยต้นทุน 1%
+- ❌ **`rg` โดยไม่ใส่ `--glob`** ได้ `node_modules` มาเต็ม
+- ❌ **อ่าน 10 ไฟล์เองเพื่อตอบคำถามเดียว** ทั้งที่ควรส่ง subagent
+- ❌ **สั่ง subagent แบบไม่บอกว่าต้องการอะไรกลับมา** ได้รายงานยาวกลับมา ไม่ได้ประหยัด
+- ❌ **รัน test แล้วปล่อย output เข้า context ทั้งก้อน**
+- ❌ **อ่านไฟล์เดิมซ้ำเพราะลืมว่าเคยอ่านแล้ว** ให้จดสิ่งที่พบลงไฟล์ตั้งแต่รอบแรก
+- ❌ **`context.md` หรือชื่ออื่นที่ไม่ได้โหลดอัตโนมัติ** ให้ใช้ `CLAUDE.md`
+- ❌ **`CLAUDE.md` ยาว 300 บรรทัด** ทุกคนในทีมต้องจ่าย token ทุกเซสชัน
+- ❌ **เปิด MCP server ไว้ครบทุกตัวตลอดเวลา**
+
+---
+
+## 10 · ตัวย่อ
+
+- **context window** — พื้นที่จำกัดที่โมเดลเห็นข้อมูลทั้งหมดของบทสนทนานั้น
+- **token** — หน่วยนับข้อความที่โมเดลใช้ ประมาณ 1 คำภาษาอังกฤษ หรือ 2–3 ตัวอักษรไทย
+- **subagent** — agent ย่อยที่มี context ของตัวเอง ทำงานแล้วคืนกลับมาแค่ข้อสรุป
+- **MCP** — Model Context Protocol (มาตรฐานให้เครื่องมือภายนอกต่อเข้ากับโมเดล)
+- **`rg`** — ripgrep เครื่องมือค้นข้อความในไฟล์ที่เร็วกว่า grep
+
+## 11 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ทำให้คำตอบสั้นลง | `answer-shape` |
+| ที่วางไฟล์ระหว่างทาง | `temp-file-discipline` |
+| เก็บสรุปข้ามเซสชัน | `work-session-context` |
+| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` |
+| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` |
+| แก้บั๊กเฉพาะจุดโดยไม่อ่านทั้งโปรเจกต์ | `targeted-fix` |

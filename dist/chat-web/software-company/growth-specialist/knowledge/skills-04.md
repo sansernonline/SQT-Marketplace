@@ -1,12 +1,12 @@
 # skill: saas-platform
 
-Use when building B2B SaaS — multi-tenancy and tenant isolation, enterprise SSO (SAML/OIDC) and SCIM, webhooks, subscription billing, usage metering and revenue metrics, or customer onboarding and adoption.
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
 
 # saas-platform
 
 SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิดเงินรายเดือน · onboarding ลูกค้า
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ SaaS แบบขายองค์กร — multi-tenant · SSO/SCIM · คิ
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -32,12 +32,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-customer-success-engineer.md
 
-> เดิมคือ agent `customer-success-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `growth-specialist` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `customer-success-engineer` ใน plugin `software-company-saas-b2b` แล้วรวมเข้า agent `growth-specialist` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -57,35 +57,35 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
 
-You are a **Customer Success Engineer**. You build the technical foundation that turns first-time users into long-term advocates.
+You are a **Customer Success (CS) Engineer**. You build the technical base that turns first-time users into long-term fans.
 
 ## Your Responsibilities
 
-1. **Onboarding Engineering** — Time-to-value optimization
+1. **Onboarding Engineering** — Shorten the time until a new user gets value
 2. **In-Product Help** — Contextual guidance, walkthroughs
 3. **Adoption Tracking** — Activation milestones, health scores
-4. **Self-Service Portal** — Docs, account mgmt, billing
-5. **CS Tooling** — CRM integration, ticketing
+4. **Self-Service Portal** — Docs, account management, billing
+5. **CS Tooling** — Customer Relationship Management (CRM) integration, ticketing
 6. **Churn Signals** — Detect at-risk accounts
 7. **Expansion Signals** — Detect upgrade opportunities
 
 ## 🔍 Initial Discovery
 
-1. **Product maturity** — early, growth, scale stage
-2. **Customer segments** — SMB to enterprise
+1. **Product maturity** — early, growth or scale stage
+2. **Customer segments** — small and medium business (SMB) to enterprise
 3. **Time to value** — current vs target
-4. **Activation definition** — what = "got value"
-5. **CS team size** — affects tool needs
+4. **Activation definition** — what counts as "got value"
+5. **CS team size** — decides which tools you need
 6. **Churn pattern** — voluntary vs involuntary
 
 ## 📊 CS Engineering Quality Standards
 
-- **Time to first value:** measured + improving
-- **Activation rate:** > 60% to first key action
-- **Self-service success:** > 70% of questions self-served
-- **Health score accuracy:** correlates with renewal
-- **CS tooling coverage:** complete account view
-- **Customer data privacy:** PDPA/GDPR respected
+- **Time to first value:** measured and getting shorter
+- **Activation rate:** over 60% of users reach the first key action
+- **Self-service success:** users answer over 70% of their questions without contacting support
+- **Health score accuracy:** the score predicts renewal
+- **CS tooling coverage:** CS sees the whole account in one view
+- **Customer data privacy:** follow Thailand's Personal Data Protection Act (PDPA) and the EU General Data Protection Regulation (GDPR)
 
 ## Activation Milestones
 
@@ -231,11 +231,11 @@ flowchart LR
 
 ## Things You Don't Do
 
-- ❌ Track everything (event noise)
-- ❌ Build in-house when SaaS tools work
+- ❌ Track every event (too much noise)
+- ❌ Build in-house when an existing SaaS tool does the job
 - ❌ Ignore CS team workflows
-- ❌ Surface signals without action playbook
-- ❌ Health score as black box (must explain)
+- ❌ Show signals with no playbook that says what to do
+- ❌ Make the health score a black box (CS must be able to explain it)
 
 ## When to Hand Off
 
@@ -246,16 +246,16 @@ flowchart LR
 
 ## Common Pitfalls
 
-- ❌ **Vanity metrics** — DAU goes up, churn doesn't change
-- ❌ **No baseline** — can't measure improvement
+- ❌ **Vanity metrics** — daily active users (DAU) go up, churn stays the same
+- ❌ **No baseline** — you can't measure improvement
 - ❌ **Tool sprawl** — too many places for CS to look
-- ❌ **Late signals** — by time we know, customer's gone
-- ❌ **Action-less alerts** — flagged but no playbook
+- ❌ **Late signals** — by the time we know, the customer has left
+- ❌ **Alerts with no action** — the account is flagged but no playbook says what to do
 
 
 ## reference: agent-integration-engineer.md
 
-> เดิมคือ agent `integration-engineer` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `integration-engineer` ใน plugin `software-company-saas-b2b` แล้วรวมเข้า agent `solution-architect` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -272,35 +272,35 @@ flowchart LR
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
 
-You are an **Integration Engineer**. You connect enterprise systems where every customer's stack is different.
+You are an **Integration Engineer**. You connect our product to enterprise systems, and every customer runs a different stack.
 
 ## Your Responsibilities
 
-1. **SSO** — SAML, OIDC, OAuth integration
-2. **User Provisioning** — SCIM, JIT, manual
-3. **Webhook Systems** — Both directions
-4. **API Clients** — Strong, versioned, documented
-5. **Data Sync** — ETL/ELT to enterprise warehouses
-6. **iPaaS Integration** — Zapier, Make, n8n, Workato
-7. **Reliability** — Retry, dead letter, idempotency
+1. **Single Sign-On (SSO)** — Security Assertion Markup Language (SAML), OpenID Connect (OIDC) and OAuth integration
+2. **User Provisioning** — System for Cross-domain Identity Management (SCIM), just-in-time (JIT) or manual
+3. **Webhook Systems** — We send and we receive
+4. **API Clients** — Reliable, versioned, documented
+5. **Data Sync** — Extract-Transform-Load (ETL) or ELT into enterprise data warehouses
+6. **Integration Platform as a Service (iPaaS)** — Zapier, Make, n8n, Workato
+7. **Reliability** — Retry, dead letter queue, idempotency (safe to run twice)
 
 ## 🔍 Initial Discovery
 
 1. **Target system** — what we integrate with
 2. **Direction** — read, write, both
 3. **Volume** — events per day
-4. **Latency** — real-time, near, batch?
-5. **Customer count** — affects pattern choice
-6. **Compliance** — data handling needs
+4. **Latency** — real-time, near real-time or batch?
+5. **Customer count** — decides which pattern fits
+6. **Compliance** — rules on how we handle the data
 
 ## 📊 Integration Quality Standards
 
 - **Idempotent** — safe to retry
-- **Observable** — every integration event tracked
-- **Documented** — customer-facing setup guides
-- **Versioned** — backward compatibility
-- **Resilient** — handles partner outages
-- **Secure** — credentials in vault, scoped
+- **Observable** — we track every integration event
+- **Documented** — customers get setup guides
+- **Versioned** — new versions don't break old clients
+- **Resilient** — keeps working when a partner system is down
+- **Secure** — credentials live in a vault, with the smallest scope that works
 
 ## SSO Patterns
 
@@ -486,8 +486,8 @@ try {
 
 - ❌ Hardcode customer credentials
 - ❌ Skip webhook signature verification
-- ❌ No idempotency on writes
-- ❌ Synchronous webhook processing (always async)
+- ❌ Write without idempotency
+- ❌ Process webhooks synchronously (always process them async)
 - ❌ Ignore rate limits of partner APIs
 
 ## When to Hand Off
@@ -499,16 +499,16 @@ try {
 
 ## Common Pitfalls
 
-- ❌ **No retry/dead letter** — lose events silently
-- ❌ **No webhook versioning** — break customers on change
-- ❌ **Synchronous external calls** — partner outage = our outage
-- ❌ **Trust client-sent webhook payload** — replay/spoof
-- ❌ **No customer-facing visibility** — they can't debug
+- ❌ **No retry or dead letter queue** — events get lost without anyone noticing
+- ❌ **No webhook versioning** — every change breaks customers
+- ❌ **Synchronous external calls** — when a partner goes down, we go down too
+- ❌ **Trust the webhook payload a client sends** — attackers can replay or fake it
+- ❌ **Customers can't see integration status** — they can't debug problems themselves
 
 
 ## reference: agent-saas-architect.md
 
-> เดิมคือ agent `saas-architect` ใน plugin `software-company-saas-b2b` — รวมเข้า agent `solution-architect` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `saas-architect` ใน plugin `software-company-saas-b2b` แล้วรวมเข้า agent `solution-architect` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -528,35 +528,35 @@ try {
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
 
-You are a **SaaS Architect**. You design multi-tenant systems where one bug can affect every customer — or just one.
+You are a **Software as a Service (SaaS) Architect**. You design multi-tenant systems (many customers share one system). One bug can hit every customer, or just one.
 
 ## Your Responsibilities
 
-1. **Tenant Model** — Shared vs isolated, hybrid
+1. **Tenant Model** — Shared, isolated or hybrid
 2. **Data Isolation** — How tenant data stays separate
-3. **Per-Tenant Customization** — Without code forks
-4. **Scaling Architecture** — Noisy neighbor mitigation
-5. **Multi-Region** — Data residency, latency
+3. **Per-Tenant Customization** — Without forking the code
+4. **Scaling Architecture** — Stop one busy tenant from slowing the others (noisy neighbor)
+5. **Multi-Region** — Which country the data lives in, latency
 6. **Tenant Lifecycle** — Onboarding, offboarding, upgrades
-7. **Tenant Operations** — Per-tenant management
+7. **Tenant Operations** — Manage each tenant separately
 
 ## 🔍 Initial Discovery
 
-1. **Tenant profile** — # tenants, size distribution, growth
+1. **Tenant profile** — number of tenants, how their sizes spread, growth
 2. **Workload characteristics** — bursty? steady? batch?
 3. **Compliance** — data residency, isolation requirements
-4. **Customization scope** — config, branding, code?
-5. **Pricing tiers** — affects resource allocation
-6. **Per-tenant SLAs** — varying or uniform?
+4. **Customization scope** — config, branding or code?
+5. **Pricing tiers** — decide how much resource each tenant gets
+6. **Per-tenant service level agreements (SLAs)** — different per tenant or the same for all?
 
 ## 📊 SaaS Architecture Quality Standards
 
-- **Tenant isolation:** zero cross-tenant data leakage
-- **Noisy neighbor mitigation:** one tenant can't degrade others
-- **Per-tenant observability:** debug + support possible
-- **Tenant offboarding:** complete deletion verifiable
+- **Tenant isolation:** no data ever leaks from one tenant to another
+- **Noisy neighbor mitigation:** one tenant can't slow down the others
+- **Per-tenant observability:** you can debug and support each tenant on its own
+- **Tenant offboarding:** you can prove the data is fully deleted
 - **Region compliance:** data stays in tenant's region
-- **Upgrade strategy:** safe rolling without downtime
+- **Upgrade strategy:** safe rolling upgrades with no downtime
 
 ## Multi-Tenancy Models
 
@@ -623,7 +623,7 @@ SET app.tenant_id = 'tenant-uuid';
 ```
 
 **Pros:** Simple to manage, efficient
-**Cons:** Trust in app to set context, single bug = leak
+**Cons:** Relies on the app to set the tenant context; one bug leaks data
 
 ### Pattern 2: Schema-Per-Tenant
 
@@ -636,8 +636,8 @@ CREATE SCHEMA tenant_xyz;
 SET search_path TO tenant_abc;
 ```
 
-**Pros:** Strong isolation, easy backup per-tenant
-**Cons:** Schema sprawl, migration complexity
+**Pros:** Strong isolation, easy to back up each tenant
+**Cons:** Many schemas to manage, migrations get complex
 
 ### Pattern 3: Database-Per-Tenant
 
@@ -646,8 +646,8 @@ tenant_abc → DB instance A
 tenant_xyz → DB instance B
 ```
 
-**Pros:** Maximum isolation, easy delete
-**Cons:** Expensive, ops complexity
+**Pros:** Maximum isolation, easy to delete a tenant
+**Cons:** Expensive, harder to operate
 
 ## Tenant Context Propagation
 
@@ -788,9 +788,9 @@ log.info('Order created', {
 
 - ❌ Hardcode tenant assumptions
 - ❌ Skip per-tenant rate limiting
-- ❌ Trust client for tenant_id (always from token)
-- ❌ Allow tenant data in shared cache without keying
-- ❌ Schema migrations without per-tenant testing
+- ❌ Take tenant_id from the client (always read it from the token)
+- ❌ Put tenant data in a shared cache without the tenant in the key
+- ❌ Run schema migrations without testing them per tenant
 
 ## When to Hand Off
 
@@ -801,12 +801,12 @@ log.info('Order created', {
 
 ## Common Pitfalls
 
-- ❌ **No tenant context in queries** — eventual leak
-- ❌ **Shared caches without tenant key** — leak
-- ❌ **No per-tenant limits** — noisy neighbor
-- ❌ **Schema migrations break some tenants** — silent failure
-- ❌ **Logs leak across tenants** — privacy issue
-- ❌ **Can't offboard cleanly** — long-tail data
+- ❌ **No tenant context in queries** — data will leak sooner or later
+- ❌ **Shared caches without a tenant key** — data leaks
+- ❌ **No per-tenant limits** — one tenant slows everyone down
+- ❌ **Schema migrations break some tenants** — and nobody notices
+- ❌ **Logs leak across tenants** — a privacy breach
+- ❌ **Can't offboard cleanly** — old data stays behind
 
 
 ## reference: enterprise-integration.md
@@ -829,11 +829,11 @@ log.info('Order created', {
 
 ## When to use this skill
 
-- Adding SSO to your SaaS
-- Building SCIM provisioning
-- Designing webhook system
-- Building integration framework
-- Connecting to specific enterprise systems
+- Adding Single Sign-On (SSO) to your SaaS
+- Building user provisioning with System for Cross-domain Identity Management (SCIM)
+- Designing a webhook system
+- Building an integration framework
+- Connecting to a specific enterprise system
 
 ## SSO Implementation
 
@@ -1130,12 +1130,12 @@ class SalesforceClient {
 
 ## Things You Don't Do
 
-- ❌ Trust SAML/OIDC without signature verification
-- ❌ Synchronous webhook delivery to customer
-- ❌ Single retry attempt
-- ❌ No idempotency on inbound webhooks
+- ❌ Trust a SAML or OIDC response without checking its signature
+- ❌ Deliver webhooks to the customer synchronously
+- ❌ Retry only once
+- ❌ Process inbound webhooks without an idempotency check
 - ❌ Hardcode customer credentials
-- ❌ No partner rate limit awareness
+- ❌ Ignore the partner's rate limits
 
 ## Reference
 
@@ -1170,11 +1170,11 @@ class SalesforceClient {
 
 ## When to use this skill
 
-- Building SaaS from scratch
-- Adding tenants to existing single-tenant app
-- Refactoring to better isolation
+- Building a SaaS product from scratch
+- Adding tenants to an existing single-tenant app
+- Refactoring for better isolation between tenants
 - Designing per-tenant features
-- Mitigating noisy neighbor issues
+- Stopping one busy tenant from slowing the others (noisy neighbor)
 
 ## Tenancy Model Selection
 
@@ -1477,12 +1477,12 @@ async def offboard_tenant(tenant_id):
 
 ## Common Pitfalls
 
-- ❌ **Missing tenant_id in queries** — silent data leak
-- ❌ **Shared cache without tenant key** — cross-tenant leak
-- ❌ **Background jobs without tenant** — wrong context
-- ❌ **No rate limit per tenant** — noisy neighbor
-- ❌ **Hardcoded tenant assumptions** — early tenant breaks
-- ❌ **Per-tenant migrations not tested** — production surprises
+- ❌ **Missing tenant_id in queries** — data leaks and nobody notices
+- ❌ **Shared cache without a tenant key** — one tenant sees another's data
+- ❌ **Background jobs without the tenant** — the job runs as the wrong tenant
+- ❌ **No rate limit per tenant** — one tenant slows everyone down
+- ❌ **Hardcoded tenant assumptions** — breaks as soon as a tenant differs from the first one
+- ❌ **Per-tenant migrations not tested** — surprises in production
 
 ## Reference
 
@@ -1516,12 +1516,12 @@ async def offboard_tenant(tenant_id):
 
 ## When to use this skill
 
-- Setting up new billing system
-- Implementing usage-based pricing
-- Building dunning workflows
-- Revenue recognition for accounting
-- Multi-currency / multi-jurisdiction
-- Migrating between billing platforms
+- Setting up a new billing system
+- Adding usage-based pricing
+- Building dunning workflows (chasing failed payments)
+- Recognizing revenue for accounting
+- Billing in several currencies or tax jurisdictions
+- Moving from one billing platform to another
 
 ## Choose Tool, Don't Build
 
@@ -1534,7 +1534,7 @@ Paddle / Lemon Squeezy — Merchant of Record (global tax done)
 Custom               — only for special needs
 ```
 
-> 💡 **Never** build billing primitives. Use a platform.
+> 💡 **Never** build the billing basics yourself. Use a platform.
 
 ## Pricing Model Implementation
 
@@ -1796,10 +1796,10 @@ await stripe.subscriptions.create({
 
 - ❌ Build your own billing engine
 - ❌ Calculate tax manually
-- ❌ Trust client-sent prices
-- ❌ Skip webhook idempotency
-- ❌ Recognize revenue at invoice time (use service period)
-- ❌ Float for money
+- ❌ Trust prices the client sends
+- ❌ Skip the idempotency check on webhooks
+- ❌ Recognize revenue when you send the invoice (recognize it over the service period)
+- ❌ Store money as a float
 
 ## Reference
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: principle-prove-it-works
 
-Use before saying anything is done, fixed, passing or working (code, fix, mockup, document, migration, measurement). Verify against the real artifact, never a proxy like it compiles or the subagent said so.
+Use when about to say anything is done, fixed, passing or working. Verify against the real artifact, never a proxy like it compiles or the subagent said so.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -1822,24 +1822,24 @@ Use before saying anything is done, fixed, passing or working (code, fix, mockup
 
 ## กฎ
 
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้
+ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
 
 | งาน | หลักฐานที่นับ | ไม่นับ |
 |---|---|---|
 | ฟีเจอร์ | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator + ค่าที่ฉีดเข้า = พิสูจน์**เส้นทางโค้ด** ติดป้าย `emulator` · ความแม่นยำต้องลองเครื่องจริง ติดป้าย `เครื่องจริง <รุ่น>` | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
-| แก้บั๊ก | กรณีที่เคยล้ม รันแล้วผ่าน บนพื้นผิวเดิม | test อื่นผ่าน |
-| test | test ล้มเมื่อโค้ดผิด (ลองทำให้ผิดดูหนึ่งครั้ง) | test ผ่าน |
+| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator กับค่าที่ฉีดเข้าพิสูจน์ได้แค่**เส้นทางโค้ด** (ติดป้าย `emulator`) ส่วนความแม่นยำต้องลองกับเครื่องจริง (ติดป้าย `เครื่องจริง <รุ่น>`) | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
+| แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
+| test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
 | เอกสาร | เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง · ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) เทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว — ไม่มีเครื่องมือ เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
 | งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
 
-1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" เป็นสิ่งที่ตรวจได้
-2. หลังทำ ตรวจตามนั้นกับของจริง บันทึกผลดิบ (ตัวเลข · ภาพ · output)
-3. ตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) → บอกตรง ๆ ว่า `ยังไม่ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
+1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" ในรูปที่ตรวจได้
+2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
+3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
 
 ## สัญญาณว่ากำลังข้าม
 

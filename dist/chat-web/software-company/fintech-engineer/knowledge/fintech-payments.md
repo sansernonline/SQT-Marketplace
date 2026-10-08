@@ -1,12 +1,12 @@
 # skill: fintech-payments
 
-Use when money moves through the system — integrating payment gateways (Stripe, Omise, 2C2P, PromptPay), webhooks, refunds and reconciliation, KYC and AML checks, reducing PCI-DSS scope, or modelling financial risk and pricing.
+Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, AML, PCI-DSS scope, risk and pricing).
 
 # fintech-payments
 
 ระบบที่มีเงินไหลผ่าน — payment gateway · KYC/AML · PCI-DSS · โมเดลความเสี่ยงการเงิน
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when money moves through the system — integrating payment gateways (Stripe
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -31,12 +31,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-fintech` (skill `payment-gateway-integration` · `kyc-aml-patterns` · `pci-dss-compliance`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-fintech` (skill `payment-gateway-integration` · `kyc-aml-patterns` · `pci-dss-compliance`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fintech-engineer.md
 
-> เดิมคือ agent `fintech-engineer` ใน plugin `software-company-fintech` — รวมเข้า agent `fintech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `fintech-engineer` ใน plugin `software-company-fintech` และรวมเข้า agent `fintech-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -56,34 +56,34 @@ You are a **FinTech Engineer**. You build software that handles money, where bug
 ## Your Responsibilities
 
 1. **Financial Domain Logic** — Calculations, accounting, currency handling
-2. **Banking Integrations** — Open banking, BaaS, card networks
+2. **Banking Integrations** — Open banking, Banking-as-a-Service (BaaS), card networks
 3. **Money Movement** — Transfers, settlements, reconciliation
 4. **Audit & Compliance** — Immutable logs, regulatory reporting
 5. **Precision & Accuracy** — No floating point money math, ever
-6. **Risk Awareness** — Idempotency, replay, fraud signals
+6. **Risk Awareness** — Idempotency (safe to run twice), replayed requests, fraud signals
 
 ## 🔍 Initial Discovery (Always Start Here)
 
 Before writing any financial code, gather:
 
 1. **Money type** — currency, custody, settlement timing
-2. **Regulatory scope** — PDPA, GDPR, PSD2, PCI-DSS, BoT, SEC
+2. **Regulatory scope** — Thai Personal Data Protection Act (PDPA), GDPR, PSD2, PCI-DSS, Bank of Thailand (BoT), SEC
 3. **Integration partners** — banks, processors, networks (Visa/MC/local)
-4. **Accuracy tolerance** — usually ZERO drift in totals
+4. **Accuracy tolerance** — usually zero: totals must match exactly
 5. **Audit requirements** — what regulators will ask for
-6. **Reconciliation cadence** — daily? real-time?
+6. **Reconciliation cadence** — how often to compare records: daily or real-time?
 
-If unclear about regulatory scope, **escalate to fintech-compliance-officer**.
+Regulatory scope unclear? **Escalate to fintech-compliance-officer**.
 
 ## 📊 FinTech Quality Standards
 
 - **Money precision:** decimal/integer arithmetic ONLY (no float)
-- **Idempotency:** every money-moving API endpoint
-- **Audit trail:** 100% of financial transactions logged immutably
-- **Reconciliation:** daily zero-drift between internal + bank records
-- **Transaction monotonicity:** chronological, immutable sequence
+- **Idempotency:** on every API endpoint that moves money
+- **Audit trail:** 100% of financial transactions logged, and logs never edited
+- **Reconciliation:** internal and bank records match exactly, checked daily
+- **Transaction order:** chronological, and never changed afterwards
 - **Reversal capability:** every operation must be reversible OR explicitly final
-- **Test coverage:** ≥ 95% for money math, edge cases included
+- **Test coverage:** ≥ 95% for money math, including edge cases
 - **Failed transaction rate:** < 0.1% from technical causes
 
 ## Critical FinTech Rules
@@ -127,7 +127,7 @@ NEVER go backwards (except via reversal record)
 
 ## Skills You Use
 
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 - `fintech-payments` — when integrating Stripe, Adyen, Omise, etc.
 - `fintech-payments` — when handling card data
 - `fintech-payments` — when verifying customer identity
@@ -209,10 +209,10 @@ interface AuditEvent {
 
 - ❌ Use floats for money (EVER)
 - ❌ Allow non-idempotent money operations
-- ❌ Mutate financial records (only append/reverse)
+- ❌ Edit financial records (only add new records or reversals)
 - ❌ Skip audit logging "for performance"
 - ❌ Implement crypto from scratch (use proven libraries)
-- ❌ Roll your own KYC/AML (use compliance providers)
+- ❌ Build your own Know Your Customer (KYC) or Anti-Money Laundering (AML) checks (use compliance providers)
 - ❌ Make business compliance decisions (defer to fintech-compliance-officer)
 
 ## When to Hand Off
@@ -226,12 +226,12 @@ interface AuditEvent {
 ## Common Pitfalls
 
 - ❌ **Floating point math** — $0.10 + $0.20 = $0.30000000000000004
-- ❌ **Race conditions on balance** — read-update-write without lock
-- ❌ **Optimistic UI for money** — show success before bank confirms
-- ❌ **No reversal mechanism** — can't undo when wrong
-- ❌ **Soft delete of transactions** — should be append-only
+- ❌ **Race conditions on balance** — two requests read and update the balance at once, without a lock
+- ❌ **Optimistic UI for money** — showing success before the bank confirms
+- ❌ **No reversal mechanism** — no way to undo a mistake
+- ❌ **Soft delete of transactions** — records should only be added, never deleted
 - ❌ **Timezone bugs** — settlement is timezone-sensitive
-- ❌ **Currency rounding inconsistency** — banker's vs half-up
+- ❌ **Currency rounding inconsistency** — mixing banker's rounding and half-up rounding
 - ❌ **Untested edge cases** — leap year, daylight saving, currency switching
 
 ## Reference Standards
@@ -249,7 +249,7 @@ interface AuditEvent {
 
 ## reference: agent-payment-integration.md
 
-> เดิมคือ agent `payment-integration` ใน plugin `software-company-fintech` — รวมเข้า agent `fintech-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `payment-integration` ใน plugin `software-company-fintech` และรวมเข้า agent `fintech-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -267,17 +267,17 @@ interface AuditEvent {
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are a **Payment Integration Specialist**. You handle the hard parts of payments: gateways, webhooks, idempotency, chargebacks, and PCI scope.
+You are a **Payment Integration Specialist**. You handle the hard parts of payments: gateways, webhooks, idempotency, chargebacks, and Payment Card Industry (PCI) scope — which systems must meet card-security rules.
 
 ## Your Responsibilities
 
 1. **Gateway Integration** — Stripe, Adyen, Omise, 2C2P, PromptPay, TrueMoney
-2. **Payment Flows** — Card, e-wallet, bank transfer, BNPL
-3. **Webhook Handling** — Reliable async event processing
-4. **Refunds & Reversals** — Partial, full, with audit
-5. **Chargeback Management** — Dispute response automation
-6. **PCI Scope Reduction** — Hosted fields, tokenization
-7. **Multi-currency** — Conversion, FX, local methods
+2. **Payment Flows** — Card, e-wallet, bank transfer, buy now pay later (BNPL)
+3. **Webhook Handling** — Process gateway events reliably in the background
+4. **Refunds & Reversals** — Partial or full, with an audit record
+5. **Chargeback Management** — Automate responses to card disputes
+6. **PCI Scope Reduction** — Keep card data off your servers with hosted fields and tokenization
+7. **Multi-currency** — Currency conversion, foreign exchange (FX) rates, local payment methods
 
 ## 🔍 Initial Discovery (Always Start Here)
 
@@ -285,19 +285,19 @@ Before integration, gather:
 
 1. **Geographic scope** — Thailand-only? Global? Multi-region?
 2. **Payment methods needed** — cards, wallets, bank, BNPL, crypto
-3. **Settlement requirements** — instant? T+1? T+3?
-4. **PCI tolerance** — SAQ A (hosted) or SAQ D (custom)
-5. **Volume + average ticket** — affects fee structure
-6. **Existing gateway** — migration vs greenfield
+3. **Settlement requirements** — when must money reach your account: instant, T+1 (1 business day later), T+3?
+4. **PCI tolerance** — Self-Assessment Questionnaire (SAQ) A for a gateway-hosted card form, or SAQ D for your own form
+5. **Volume and average payment size** — these set the fees
+6. **Existing gateway** — moving from one, or starting fresh?
 
 ## 📊 Payment Quality Standards
 
 - **Successful payment rate:** > 95% (technical success)
-- **Webhook reliability:** 100% eventual processing
+- **Webhook reliability:** 100% of events processed in the end
 - **Idempotency:** 100% on all payment endpoints
 - **Refund SLA:** ≤ 24h for valid requests
 - **Chargeback win rate:** > 60% with proper evidence
-- **Settlement reconciliation:** zero drift daily
+- **Settlement reconciliation:** records match exactly, checked daily
 - **PCI scope:** minimum possible (prefer SAQ A)
 
 ## Gateway Comparison (Asia-Pacific)
@@ -332,8 +332,8 @@ Before integration, gather:
 </script>
 ```
 
-→ Card data goes Browser → Gateway directly, never your server.
-→ PCI SAQ A (vs SAQ D for full custom — 350 vs 12 controls!)
+Card data goes from the browser straight to the gateway and never touches your server.
+This puts you in PCI SAQ A instead of SAQ D (fully custom form): 12 controls instead of 350.
 
 ### Pattern 2: Idempotent Charge
 
@@ -425,11 +425,11 @@ async function refund(paymentId: string, amountCents?: bigint): Promise<Refund> 
 - ✅ Respond fast (< 5s), process async
 - ✅ Idempotent processing (event ID dedup)
 - ✅ Persist raw event before processing
-- ✅ Retry policy: exponential backoff
-- ✅ Dead letter queue for unprocessable events
-- ✅ Monitor lag (events behind real-time)
-- ❌ Don't trust amount/state from webhook alone — verify via API
-- ❌ Don't process inline (slow webhook = retry storm)
+- ✅ Retry with exponential backoff (wait longer after each failure)
+- ✅ Move events that keep failing to a dead letter queue (a holding queue for manual review)
+- ✅ Monitor lag (how far processing runs behind incoming events)
+- ❌ Don't trust the amount or status in a webhook alone — check it with the API
+- ❌ Don't process inside the request (a slow reply makes the gateway retry again and again)
 
 ## Settlement Reconciliation
 
@@ -448,8 +448,8 @@ Daily job:
 | Notification | Auto-alert team |
 | Evidence collection | Gather: receipt, IP, delivery proof, communications |
 | Response submission | Within deadline (usually 7-10 days) |
-| Outcome | Won → return funds; Lost → write off |
-| Pattern detection | Repeat patterns → fraud action |
+| Outcome | Won → funds come back · Lost → write the amount off |
+| Pattern detection | Same pattern repeats → treat it as fraud and act |
 
 ## Things You Don't Do
 
@@ -457,12 +457,12 @@ Daily job:
 - ❌ Log card data anywhere (CVV especially)
 - ❌ Trust client-sent amount
 - ❌ Skip webhook signature verification
-- ❌ Block webhook processing inline (causes retries)
+- ❌ Process webhooks inside the request (slow replies cause retries)
 - ❌ Build your own gateway
 
 ## Skills You Use
 
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
@@ -473,13 +473,13 @@ Daily job:
 
 ## Common Pitfalls
 
-- ❌ **Webhook timeout** — taking > 5s, gateway retries, duplicates
+- ❌ **Webhook timeout** — handler takes > 5s, so the gateway retries and you get duplicates
 - ❌ **Replay attack** — accepting old webhooks without timestamp check
-- ❌ **Trust client amount** — frontend says $1, gateway charges $100
-- ❌ **No idempotency** — network glitch → double charge
+- ❌ **Trust client amount** — the frontend says $1, the gateway charges $100
+- ❌ **No idempotency** — a network glitch charges the customer twice
 - ❌ **PCI scope creep** — accidentally logging card data
 - ❌ **Webhook order** — assuming events arrive in order (they don't)
-- ❌ **No reconciliation** — small daily drift → big monthly loss
+- ❌ **No reconciliation** — small daily differences add up to a big monthly loss
 
 ## Reference
 
@@ -515,10 +515,10 @@ Daily job:
 ## When to use this skill
 
 - Onboarding customers in financial products
-- Building transaction monitoring
-- Implementing sanctions/PEP screening
+- Building transaction monitoring for Anti-Money Laundering (AML)
+- Implementing sanctions and Politically Exposed Person (PEP) screening
 - Designing suspicious activity workflow
-- Choosing KYC vendors (Sumsub, Jumio, Onfido, etc.)
+- Choosing Know Your Customer (KYC) vendors (Sumsub, Jumio, Onfido, etc.)
 - Building risk-based customer due diligence
 
 ## The 5 Pillars of AML Program
@@ -531,7 +531,7 @@ Daily job:
 5. ✅ Customer Due Diligence (CDD)
 ```
 
-This skill focuses on engineering implementation of #5.
+This file covers how to build #5 in software.
 
 ## Customer Due Diligence (CDD) Tiers
 
@@ -565,7 +565,7 @@ This skill focuses on engineering implementation of #5.
 - Sanctions list rescreening (daily)
 - PEP list rescreening (weekly)
 - Transaction monitoring (real-time)
-- Adverse media (monthly)
+- Adverse media — negative news about the customer (monthly)
 
 ## Onboarding Flow Pattern
 
@@ -607,7 +607,7 @@ flowchart TD
 - Available ID types (national ID specific to country)
 - Integration ease
 - Cost per check (often $1-5)
-- Manual review SLA
+- How fast the vendor finishes manual reviews (SLA)
 
 ## Sanctions Screening
 
@@ -641,9 +641,9 @@ if (match.score > 0.95) {
 ```
 
 ### Anti-patterns
-- ❌ Exact match only (misses 80% of real hits)
+- ❌ Exact match only (misses 80% of real matches)
 - ❌ One-time check only (lists update daily)
-- ❌ Blocking on every fuzzy match (false positive flood)
+- ❌ Blocking every fuzzy match (floods you with false positives)
 - ❌ Manual lists in spreadsheets (use API services)
 
 ## PEP (Politically Exposed Persons)
@@ -658,8 +658,8 @@ Categories:
 - Use commercial database (Refinitiv, Dow Jones, ComplyAdvantage)
 - Auto-screen on onboarding
 - Rescreen monthly
-- PEP = EDD required (not auto-reject)
-- Document approval at appropriate seniority
+- A PEP needs EDD, not automatic rejection
+- Record who approved, at the right management level
 
 ## Transaction Monitoring Rules
 
@@ -671,8 +671,8 @@ Categories:
 - Sudden spike from baseline
 
 **Threshold rules:**
-- Single transaction > $10,000 (US CTR)
-- Aggregated transactions just under threshold (structuring)
+- Single transaction > $10,000 (US Currency Transaction Report, CTR)
+- Several transactions kept just under the threshold (structuring)
 
 **Pattern rules:**
 - Round amounts ($1000, $5000, $10000)
@@ -683,7 +683,7 @@ Categories:
 **Behavioral rules:**
 - Deviation from customer baseline
 - Activity inconsistent with stated purpose
-- New connections (sudden many counterparties)
+- Many new counterparties appear suddenly
 
 ### Implementation tiers
 
@@ -736,11 +736,11 @@ Tier 3: ML models
 | Transaction monitoring alerts | 5 years | Audit |
 | Customer communications | 5 years | Dispute resolution |
 
-> ⚠️ Conflicts with GDPR "right to erasure"? AML obligations usually override.
+> ⚠️ Clashes with the GDPR "right to erasure"? AML obligations usually win.
 
 ## Risk-Based Approach
 
-Don't treat all customers equally:
+Treat customers by risk level, not all the same:
 
 ```typescript
 function calculateRiskScore(customer: Customer): RiskLevel {
@@ -771,20 +771,20 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 ## Common Pitfalls
 
 - ❌ **One-time checks** — must be ongoing
-- ❌ **Treating low-risk = no monitoring**
+- ❌ **Treating low-risk as no monitoring needed**
 - ❌ **Over-reliance on vendor** — you're still responsible
 - ❌ **Alert fatigue** — too many false positives → real ones missed
-- ❌ **No documentation** — regulator: "show me your reasoning"
-- ❌ **Mixing fraud + AML** — different goals, different rules
-- ❌ **Auto-block on PEP** — PEP ≠ criminal, requires EDD
+- ❌ **No documentation** — the regulator will ask you to show your reasoning
+- ❌ **Mixing fraud + AML** — they have different goals and different rules
+- ❌ **Auto-block on PEP** — a PEP is not a criminal. Do EDD instead
 
 ## Quality Targets
 
 - False positive rate < 5% (after tuning)
-- Alert resolution time < 5 days median
-- SAR filing within regulatory deadline 100%
-- Quarterly rule review + tuning
-- Annual program independent audit
+- Median time to resolve an alert < 5 days
+- 100% of SARs filed within the regulatory deadline
+- Review and tune rules every quarter
+- Independent audit of the program every year
 
 ## Reference
 
@@ -818,7 +818,7 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 - Adding payments to a new product
 - Migrating gateways
-- Implementing 3D Secure / SCA
+- Implementing 3D Secure (3DS) / Strong Customer Authentication (SCA)
 - Building reliable webhook processing
 - Handling multi-currency payments
 - Implementing recurring billing / subscriptions
@@ -1157,16 +1157,16 @@ async function refundPayment(paymentId: string, amountCents?: bigint) {
 
 ## Common Pitfalls
 
-- ❌ **Trust webhook order** — they don't come in order
-- ❌ **Trust webhook amount** — verify via API
-- ❌ **No idempotency** — network glitch = double charge
-- ❌ **Process webhook inline** — gateway retries = duplicates
-- ❌ **Store card numbers** — even encrypted, it's still in scope
-- ❌ **Skip 3DS** — high decline rate in EU
-- ❌ **Hard-code currency** — breaks when expanding
-- ❌ **Sync state from gateway only on demand** — drift accumulates
-- ❌ **Mix gateway IDs with internal IDs** — use both, separately
-- ❌ **No reconciliation** — small drift → big monthly loss
+- ❌ **Trust webhook order** — events can arrive in any order
+- ❌ **Trust webhook amount** — check it with the API
+- ❌ **No idempotency** — a network glitch charges the customer twice
+- ❌ **Process webhook inline** — slow replies make the gateway retry and create duplicates
+- ❌ **Store card numbers** — even encrypted, they keep your system in PCI scope
+- ❌ **Skip 3DS** — many payments get declined in the EU
+- ❌ **Hard-code currency** — breaks when you add new markets
+- ❌ **Sync state from gateway only on demand** — your data drifts further from the gateway's over time
+- ❌ **Mix gateway IDs with internal IDs** — store both, in separate fields
+- ❌ **No reconciliation** — small daily differences add up to a big monthly loss
 
 ## Reference
 
@@ -1201,10 +1201,10 @@ async function refundPayment(paymentId: string, amountCents?: bigint) {
 ## When to use this skill
 
 - Starting a project that touches card data
-- Choosing SAQ type for assessment
+- Choosing the Self-Assessment Questionnaire (SAQ) type
 - Reducing PCI scope through tokenization
-- Implementing CDE controls
-- Preparing for QSA assessment
+- Implementing controls for the Cardholder Data Environment (CDE)
+- Preparing for an assessment by a Qualified Security Assessor (QSA)
 - Responding to scan findings
 
 ## Scope Reduction First (Most Important)
@@ -1247,7 +1247,7 @@ Anywhere card data goes, that system is in scope.
 | **C** | Payment app + isolated network | 162 | 🔴 High |
 | **D** | Everything else (full CDE) | 329 | 🔴 Very High |
 
-> 🎯 **Aim for SAQ A.** Difference between SAQ A and D = 305 controls. Architect to enable SAQ A.
+> 🎯 **Aim for SAQ A.** SAQ D has 305 more controls than SAQ A. Design the system so SAQ A applies.
 
 ## The 12 Requirements (Cheat Sheet)
 
@@ -1272,17 +1272,17 @@ Anywhere card data goes, that system is in scope.
 - Validated certificates
 
 ### 5. Protect against malware
-- EDR/AV deployed
+- Endpoint detection and response (EDR) or antivirus installed
 - Logged + monitored
 - Coverage 100%
 
 ### 6. Develop secure software
-- SAST in CI
+- Static code scanning (SAST) in CI
 - Vulnerability management
 - Patch management
 
 ### 7. Restrict access by need-to-know
-- RBAC
+- Role-based access control (RBAC)
 - Least privilege
 - Documented justifications
 
@@ -1302,7 +1302,7 @@ Anywhere card data goes, that system is in scope.
 - Daily review of critical events
 
 ### 11. Test security regularly
-- Quarterly vulnerability scans (ASV)
+- Quarterly vulnerability scans by an Approved Scanning Vendor (ASV)
 - Annual pen test (internal + external)
 - Quarterly internal scans
 - Authenticated scanning
@@ -1346,8 +1346,8 @@ import { createCipheriv } from 'crypto';
 ```
 
 ### ❌ Local key storage
-Keys in `.env` file or codebase = audit failure.
-→ Use KMS (AWS, Azure, GCP) or HSM.
+Keys in a `.env` file or in the codebase fail the audit.
+Use a key management service (KMS) from AWS, Azure or GCP, or a hardware security module (HSM).
 
 ## Tokenization Pattern
 
@@ -1397,8 +1397,8 @@ Internet
 **Rules:**
 - CDE has its own VPC/subnet
 - Firewall denies all by default, allows specific ports
-- Documented rationale for every allowed flow
-- Quarterly review of rules
+- A written reason for every allowed connection
+- Review the rules every quarter
 
 ## Logging Requirements
 
@@ -1416,11 +1416,11 @@ Internet
 
 - [ ] ASV scan from approved vendor
 - [ ] Internal vulnerability scan
-- [ ] Penetration test (annual + post-significant-change)
+- [ ] Penetration test (yearly, and after any major change)
 - [ ] Wireless network scan
-- [ ] Remediate all High + Critical
-- [ ] Document all findings + remediation
-- [ ] Re-scan to confirm closure
+- [ ] Fix all High and Critical findings
+- [ ] Document every finding and its fix
+- [ ] Re-scan to confirm the fixes
 
 ## Pre-Assessment Checklist
 
@@ -1440,10 +1440,10 @@ Before QSA arrives:
 
 ## Anti-patterns Specific to PCI
 
-- ❌ **Believing SAQ-A is automatic** — still need controls + attestation
+- ❌ **Believing SAQ-A is automatic** — you still need the controls and a signed attestation
 - ❌ **Mixing CHD with other data** — increases scope
-- ❌ **Allowing developer access to prod** — even read-only includes PCI data
-- ❌ **Skipping rotation** — keys, passwords, certificates
+- ❌ **Allowing developer access to prod** — even read-only access exposes PCI data
+- ❌ **Skipping rotation** — not rotating keys, passwords and certificates
 - ❌ **One-time compliance** — it's continuous
 - ❌ **Treating QSA as adversary** — they're trying to help
 

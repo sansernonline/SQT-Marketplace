@@ -9,7 +9,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 | Mode | What it does |
 |---|---|
 | `claims-flow-design` | Design claims processing flow using insurance-engineer agent. |
-| `underwriting-model-design` | Design underwriting model using insurance-analyst + insurance-analyst agents. |
+| `underwriting-model-design` | Design an underwriting model using the insurance-analyst agent. |
 
 ---
 
@@ -33,7 +33,7 @@ Workflow:
 
 ## Mode: `underwriting-model-design`
 
-Use `insurance-analyst` + `insurance-analyst` agents for: **$ARGUMENTS**
+Use the `insurance-analyst` agent for: **$ARGUMENTS**
 
 Workflow:
 1. **Discovery:** LOB, data availability, regulatory regime, auto-bind target

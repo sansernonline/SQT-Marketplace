@@ -1,10 +1,10 @@
 # skill: e-tax-invoice
 
-Use when a Thai VAT-registered business issues or checks tax invoices — full ใบกำกับภาษี fields under ม.86/4, abbreviated invoices, e-Tax Invoice and e-Receipt vs by Email, claimable input VAT.
+Use when a Thai VAT-registered business issues or checks tax invoices. Section 86/4 fields, abbreviated invoices, e-Tax Invoice and e-Receipt, input VAT claims.
 
 # Thai Tax Invoice and e-Tax Invoice
 
-A tax invoice missing one required field means the buyer cannot claim the input VAT. General information, not tax advice — the Revenue Department (etax.rd.go.th) and the company accountant are the authority.
+If a tax invoice misses even 1 required field, the buyer cannot claim the input VAT. This is general information, not tax advice. The Revenue Department (etax.rd.go.th) and the company accountant have the final say.
 
 ## 1. Who must issue what
 
@@ -57,7 +57,7 @@ Retail to consumers only, with permission. Must show: "ใบกำกับภ�
 1. Confirm VAT registration (ภ.พ.20) and annual revenue → pick the scheme from section 4.
 2. Build the template with every field in section 2; number by branch.
 3. For by Email: register, generate PDF/A-3, send to buyer with cc to the central mailbox — the time-stamped reply is the proof.
-4. For incoming invoices: check all 8 fields before booking input VAT on the ภ.พ.30 purchase report (รายงานภาษีซื้อ); missing ones — ask the supplier for a re-issue.
+4. For incoming invoices: check all 8 fields before booking input VAT on the ภ.พ.30 purchase report (รายงานภาษีซื้อ). If a field is missing, ask the supplier to re-issue.
 5. Add a PromptPay QR on the invoice for faster payment (`promptpay-qr`).
 
 ## Worked example (header block)

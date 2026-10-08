@@ -1,6 +1,6 @@
 # skill: warranty-tracker
 
-Use when the user buys something with a warranty, wants to file receipts and warranty cards (ใบรับประกัน), asks whether an item is still covered, is offered an extended warranty, or prepares a warranty claim in Thailand.
+Use when buying something with a warranty, filing receipts and warranty cards, checking if an item is still covered, or preparing a warranty claim.
 
 # Warranty Tracker
 

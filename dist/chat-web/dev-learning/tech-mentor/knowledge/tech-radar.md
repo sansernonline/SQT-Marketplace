@@ -1,19 +1,19 @@
 # skill: tech-radar
 
-Use weekly to catch up on what changed in the libraries, frameworks and tools the user follows. Short radar report — what changed, what matters, what to ignore — from official release notes and changelogs, not social media.
+Use when catching up weekly on changes in followed libraries, frameworks and tools. Act, know, skip report from official release notes and changelogs.
 
 # Tech Radar
 
-One weekly pass over what you follow, filtered to what matters.
+Once a week, check what you follow and keep only what matters.
 
 ## Steps
 
-1. **Radar list** — the user's tracked projects (from `radar.md`; create on first run with their stack, max ~15 entries)
-2. **Sweep** — for each project, pull the latest release notes / changelog from official sources; note version, date, and breaking changes
-3. **Triage into three buckets**:
-   - **Act** — affects the user's projects; concrete upgrade or fix steps
-   - **Know** — worth understanding; one-paragraph plain-language summary
-   - **Skip** — everything else; listed by title only so nothing feels hidden
+1. **Radar list** — the projects the user tracks, from `radar.md`. On the first run, create it from their stack, about 15 entries at most
+2. **Sweep** — for each project, get the latest release notes or changelog from official sources. Note the version, date and breaking changes
+3. **Sort into 3 groups**:
+   - **Act** — affects the user's projects. Give concrete upgrade or fix steps
+   - **Know** — worth understanding. Give a 1-paragraph plain-language summary
+   - **Skip** — everything else. List by title only, so nothing feels hidden
 4. **Write** the radar report to `radar/reports/YYYY-Www.md`
 
 ## Worked example — one weekly report
@@ -41,10 +41,10 @@ The `radar.md` tracking list and the report skeleton are in [references/radar-te
 
 ## Rules
 
-- Official release notes and changelogs only; blog summaries are pointers, not sources
+- Use official release notes and changelogs only. Blog summaries can point you there, but they are not sources
 - Breaking changes go first, always
-- One page maximum — a radar you do not read is worse than none
-- Monthly: prune the radar list; entries nobody acted on in three months leave the list
+- 1 page at most — a radar you do not read is worse than none
+- Monthly: prune the radar list. Remove entries nobody acted on in 3 months
 
 
 ## reference: radar-templates.md

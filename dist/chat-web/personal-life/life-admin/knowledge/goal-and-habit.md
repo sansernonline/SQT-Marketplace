@@ -1,6 +1,6 @@
 # skill: goal-and-habit
 
-Use when the user sets goals for a quarter or new year, wants to start or stop a habit, or keeps abandoning goals by February — at most three measurable goals, habit design with the 2-minute rule, and a tracker.
+Use when setting quarterly or new-year goals, starting or stopping a habit, or goals fade by February. Up to three measurable goals, habit design, tracker.
 
 # Goals and Habits
 

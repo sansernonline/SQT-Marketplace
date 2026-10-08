@@ -1,6 +1,6 @@
 # skill: polite-message-th-en
 
-Use when the user must write an awkward message in Thai, English or both — asking a favour, declining, chasing payment, apologising, complaining, or following up after silence — at the right register (ครับ/ค่ะ, รบกวน).
+Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment, apology, follow-up) in the right register. Not complaints.
 
 # Polite Messages in Thai and English
 

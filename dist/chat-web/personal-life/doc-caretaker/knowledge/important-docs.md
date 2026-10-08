@@ -1,10 +1,10 @@
 # skill: important-docs
 
-Use at year start, when something expired unnoticed, or a document is needed fast — one registry of ID, passport, property, vehicle, insurance, contract, education and health papers with where each lives and when it expires.
+Use when tracking ID card, passport, house, vehicle, insurance, contract or education papers, where each is kept and when it expires. Not product warranties.
 
 # Important Docs Registry (ทะเบียนเอกสารสำคัญ)
 
-Everything critical, indexed, with a death date and a place.
+Every critical document in one list, with where it is kept and when it expires.
 
 Renewal rules for Thai documents and the fill-in CSV: [references/registry-template.md](references/registry-template.md).
 

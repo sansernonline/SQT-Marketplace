@@ -1,6 +1,6 @@
 # skill: cert-prep
 
-Use when preparing for a cloud or developer certification — AWS, Azure, Google Cloud, Kubernetes CKA or CKAD, Scrum PSM. Week-by-week plan from the official exam guide, gap map, practice-exam loop, labs and online-proctoring rules.
+Use when preparing for a cloud or developer certification (AWS, Azure, Google Cloud, CKA, CKAD, PSM). Week plan, gap map, practice exams, labs.
 
 # Certification Prep
 
@@ -10,13 +10,13 @@ Study what the exam guide weighs, prove it with practice scores, and book the da
 
 1. **Get the official exam guide.** Download it from the vendor's page, not from a course site. Record the exam code and version (for example SAA-C03), the domains and their weights, the question count, the time limit, the passing score and the price. The current facts for common exams are in [references/exam-facts.md](references/exam-facts.md). Re-check them on the vendor page, because exam versions change
 2. **Gap map.** For each domain, the user rates themselves 0–3 (0 = never heard of it, 3 = do it at work). **Priority = weight × (3 − rating)**. Study the highest priority first
-3. **Baseline practice exam** in week 1, before studying, timed. This is the real gap map; the self-rating is the guess
+3. **Baseline practice exam** in week 1, before studying, timed. This is the real gap map. The self-rating is only a guess
 4. **Week-by-week plan.** Use the template below. Size: 6–10 hours a week for 4–8 weeks for an associate-level exam with some experience. Double it for a first exam in a new area
 5. **Each study session**: read or watch (40%) → hands-on lab (40%) → write flashcards from your mistakes (20%)
 6. **Spaced repetition**: review cards on day 1, 3, 7, 14 and 30 after they are written (Anki or any SRS app). 15 minutes a day beats a 3-hour weekend cram
-7. **Practice-exam loop**: one full timed exam per week. For **every** wrong *and* every guessed answer, write why the right answer is right and why yours was wrong, then make one card. Track the score per domain
-8. **Booking rule**: book the exam when **two consecutive** practice exams score at least **10 points above** the pass mark (for example ≥ 80% where 72% is needed), with no domain below the pass mark. Book 2–3 weeks out, so the date creates focus
-9. **Final week**: no new topics. Weak-domain review, one last practice exam 3 days before, then the exam-day checklist below
+7. **Practice-exam loop**: 1 full timed exam per week. For **every** wrong *and* every guessed answer, write why the right answer is right and why yours was wrong, then make 1 card. Track the score per domain
+8. **Booking rule**: book the exam when **2 practice exams in a row** score at least **10 points above** the pass mark (for example ≥ 80% where 72% is needed), with no domain below the pass mark. Book 2–3 weeks out, so the date creates focus
+9. **Final week**: no new topics. Weak-domain review, 1 last practice exam 3 days before, then the exam-day checklist below
 10. **After**: record the result, the score per domain and the renewal date in `learning-log.md`, and set a renewal reminder 3 months before expiry
 
 ## Gap map example (AWS SAA-C03)
@@ -52,7 +52,7 @@ Booking rule: two consecutive practice scores ≥ pass + 10, no domain below pas
 
 - Labs run in a **sandbox account with a budget alert** (AWS Budgets, Azure cost alert or a GCP budget at ฿300 or less). Delete everything at the end of the session
 - For CKA and CKAD, practise only in a terminal with `kubectl` against a real cluster (kind, minikube or a killer.sh session). The exam is all hands-on, and the speed comes from typing, not reading
-- One lab per domain at minimum, from the exam guide's task statements
+- At least 1 lab per domain, taken from the exam guide's task statements
 
 ## Exam-day rules (online proctoring)
 
@@ -83,7 +83,7 @@ Always re-check on the vendor page before booking. Exam versions, prices and pas
 |---|---|---:|---:|---|---:|---|
 | AWS Solutions Architect – Associate (SAA-C03) | Multiple choice / multiple response | 65 (50 scored + 15 unscored) | 130 min | 720 / 1000 (scaled, compensatory) | 150 (รอยืนยัน) | 3 years (รอยืนยัน) |
 | Microsoft Azure Administrator (AZ-104) | Mixed, may include case studies | 40–60 | 100 min | 700 / 1000 | 165 (price varies by country, รอยืนยัน for Thailand) | 1 year, renewed by a free online assessment on Microsoft Learn (opens 6 months before expiry) |
-| Certified Kubernetes Administrator (CKA) | Performance-based, live terminal, kubernetes.io/docs allowed | 15–25 tasks (รอยืนยัน) | 2 hours | 66% (รอยืนยัน) | 445 (includes one retake and two killer.sh simulator sessions) | 2 years |
+| Certified Kubernetes Administrator (CKA) | Performance-based, live terminal, kubernetes.io/docs allowed | 15–25 tasks (รอยืนยัน) | 2 hours | 66% (รอยืนยัน) | 445 (includes 1 retake and 2 killer.sh simulator sessions) | 2 years |
 | Certified Kubernetes Application Developer (CKAD) | Performance-based | (รอยืนยัน) | 2 hours (รอยืนยัน) | 66% (รอยืนยัน) | 445 (รอยืนยัน) | 2 years (รอยืนยัน) |
 | Google Cloud Associate Cloud Engineer | Multiple choice / multiple select | (รอยืนยัน) | 2 hours (รอยืนยัน) | Not published (รอยืนยัน) | 125 (รอยืนยัน) | 3 years (รอยืนยัน) |
 | Scrum.org Professional Scrum Master I (PSM I) | Multiple choice, multiple answer, true/false | 80 | 60 min | 85% | 200 | Does not expire. The attempt password does not expire either |
@@ -94,6 +94,6 @@ Always re-check on the vendor page before booking. Exam versions, prices and pas
 
 **CKA**: Troubleshooting 30% · Cluster Architecture, Installation & Configuration 25% · Services & Networking 20% · Workloads & Scheduling 15% · Storage 10%.
 
-**AZ-104**: five domains — identities and governance, storage, compute, virtual networking, monitoring (weights: รอยืนยัน, take them from the current study guide).
+**AZ-104**: 5 domains — identities and governance, storage, compute, virtual networking, monitoring (weights: รอยืนยัน, take them from the current study guide).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://docs.aws.amazon.com/aws-certification/latest/examguides/solutions-architect-associate-03.html · https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/ · https://www.scrum.org/assessments/professional-scrum-master-i-certification (figures confirmed via scrum.org forum pages) · AZ-104 figures from secondary sources (https://trainingcamp.com/what-is-azure-administrator/), so confirm them on learn.microsoft.com

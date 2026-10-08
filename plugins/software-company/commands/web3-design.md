@@ -8,7 +8,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 | Mode | What it does |
 |---|---|
-| `smart-contract-audit` | Audit smart contracts using blockchain-engineer + blockchain-engineer agents. |
+| `smart-contract-audit` | Audit smart contracts using the blockchain-engineer agent. |
 | `tokenomics-design` | Design tokenomics using blockchain-engineer agent. |
 
 ---

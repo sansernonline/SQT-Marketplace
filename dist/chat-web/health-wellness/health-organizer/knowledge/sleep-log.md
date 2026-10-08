@@ -1,6 +1,6 @@
 # skill: sleep-log
 
-Use when someone sleeps badly, feels tired despite sleeping, wants to track sleep, or will see a doctor about sleep — a two-week sleep diary, hygiene checklist and what to bring. Does not diagnose or recommend sleep medicine.
+Use when someone sleeps badly, wakes tired, or will see a doctor about sleep. Two-week sleep diary, hygiene checklist, what to bring. No diagnosis.
 
 # Sleep Log
 
@@ -56,7 +56,7 @@ What to bring: the 2-week diary · medicine and supplement list (`medication-sch
 
 1. Copy the diary table; fill for 14 days.
 2. Compute averages: bed time, wake time, total sleep, efficiency.
-3. Tick the hygiene checklist; pick **two** changes only for the next 2 weeks.
+3. Tick the hygiene checklist; pick only **2** changes for the next 2 weeks.
 4. Compare the next 2 weeks.
 5. Any "bring to the doctor" item → `doctor-visit-prep`.
 

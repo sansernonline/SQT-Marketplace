@@ -1,10 +1,10 @@
 # skill: promptpay-qr
 
-Use when a Thai business needs a PromptPay QR on an invoice, counter or checkout, or a developer builds or debugs the Thai QR payload — tag 29 vs 30, static vs dynamic amount, CRC16.
+Use when a Thai business needs a PromptPay QR on an invoice or counter, or a developer builds or debugs the Thai QR payload (tag 29 vs 30, CRC16).
 
 # PromptPay QR (Thai QR Payment)
 
-A PromptPay QR is a text string in EMVCo QR Code Specification for Payment Systems — Merchant-Presented Mode, rendered as a QR image. Get one field wrong and banking apps reject it as "QR ไม่ถูกต้อง".
+A PromptPay QR is a text string in EMVCo QR Code Specification for Payment Systems — Merchant-Presented Mode, rendered as a QR image. If even 1 field is wrong, banking apps reject it as "QR ไม่ถูกต้อง".
 
 ## 1. Payload structure
 
@@ -73,7 +73,7 @@ Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010
 2. Place it near the total, at least **2.5 × 2.5 cm** printed, with a quiet zone of 4 modules; label "สแกนชำระผ่าน PromptPay" and the account name the payer will see.
 3. Print the invoice number next to it and ask payers to send the slip — for tag 29 there is no reference in the transfer.
 4. Quotations: amount may change — use a static QR or regenerate on the invoice. Template in `doc-quotation`; tax invoice fields in `e-tax-invoice`.
-5. Re-scan the printed PDF with two different bank apps before sending.
+5. Re-scan the printed PDF with 2 different bank apps before sending.
 
 ## Rules
 

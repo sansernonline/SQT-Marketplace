@@ -2,24 +2,34 @@
 
 สคริปต์ให้คนรันเอง และกฎประจำตัวระดับเครื่อง — ไม่ใช่ส่วนหนึ่งของ plugin · Claude ไม่ได้โหลดไฟล์ในโฟลเดอร์นี้
 
-| ไฟล์ | ทำอะไร | รันเมื่อไหร่ |
-|------|--------|---|
-| `validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
-| `sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
-| `build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
-| `install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
-| `build-dist.cmd` | รัน validate → sync-docs → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
-| `install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
-| `facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
-| `CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่สคริปต์ข้างบนติดตั้ง | แก้ที่นี่ที่เดียว |
+```
+scripts/
+├─ build-dist.cmd      ← ตัวที่รันบ่อยสุด: ตรวจ → sync → build ในคลิกเดียว
+├─ check/              ตรวจว่าของในรีโปถูกต้อง
+├─ sync/               ทำให้ไฟล์ที่ต้องเหมือนกันตรงกัน
+├─ build/              สร้าง dist/ สำหรับเครื่องมืออื่น
+└─ install/            ติดตั้งลงเครื่อง
+```
+
+| กลุ่ม | ไฟล์ | ทำอะไร | รันเมื่อไหร่ |
+|---|---|---|---|
+| — | `build-dist.cmd` | รัน validate → sync-docs → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
+| **check** | `check/validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
+| check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
+| **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
+| sync | `sync/sync-superuser.mjs` | คัดลอกของกลาง SuperUser จาก `plugins/superuser` ไปทุก plugin (skill กลาง · learning-reviewer · hook · บล็อก `superuser:begin`) · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser`** |
+| **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
+| **install** | `install/install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
+| install | `install/install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
+| install | `install/CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่ `install-global-rules` ติดตั้ง | แก้ที่นี่ที่เดียว |
 
 ---
 
 ## 1 · validate-marketplace.mjs
 
 ```bash
-node scripts/validate-marketplace.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับบั๊กได้
-node scripts/validate-marketplace.mjs               # แล้วค่อยตรวจจริง
+node scripts/check/validate-marketplace.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับบั๊กได้
+node scripts/check/validate-marketplace.mjs               # แล้วค่อยตรวจจริง
 ```
 
 ออก exit code 1 เมื่อเจอ error — ใช้เป็นประตูใน continuous integration (CI) ได้ · ไม่ใช้ dependency ภายนอก
@@ -54,8 +64,8 @@ loader ทิ้ง field ทุกตัว → **skill ไม่เคยถ�
 ## 2 · install-marketplace.ps1
 
 ```powershell
-.\scripts\install-marketplace.ps1
-.\scripts\install-marketplace.ps1 -WhatIf     # ดูก่อนว่าจะทำอะไร
+.\scripts\install\install-marketplace.ps1
+.\scripts\install\install-marketplace.ps1 -WhatIf     # ดูก่อนว่าจะทำอะไร
 ```
 
 เพิ่ม marketplace ด้วย **path ของโฟลเดอร์นี้** (ไม่ใช่ชื่อรีโปบน GitHub) แล้วติดตั้งทุก plugin
@@ -80,8 +90,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps
 ## ใส่ใน CI
 
 ```yaml
-- run: node scripts/validate-marketplace.mjs --self-test
-- run: node scripts/validate-marketplace.mjs
+- run: node scripts/check/validate-marketplace.mjs --self-test
+- run: node scripts/check/validate-marketplace.mjs
 ```
 
 ---
@@ -98,8 +108,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps
 ## 3 · sync-docs.mjs
 
 ```bash
-node scripts/sync-docs.mjs --check   # ตรวจว่าเอกสารตรงกับของจริงไหม (CI)
-node scripts/sync-docs.mjs           # เขียนทับให้ตรง
+node scripts/sync/sync-docs.mjs --check   # ตรวจว่าเอกสารตรงกับของจริงไหม (CI)
+node scripts/sync/sync-docs.mjs           # เขียนทับให้ตรง
 ```
 
 **แหล่งความจริงคือโฟลเดอร์ `plugins/` เท่านั้น** เอกสารทุกไฟล์เป็นผลลัพธ์ที่สร้างจากที่นั่น
@@ -125,7 +135,7 @@ skill ใหม่ที่ยังไม่มีบล็อกใน `REFERE
 ## 4 · build-targets.mjs
 
 ```bash
-node scripts/build-targets.mjs
+node scripts/build/build-targets.mjs
 ```
 
 ลบ `dist/` แล้วสร้างใหม่จาก `plugins/` ทุกครั้ง · ไม่ใช้ dependency ภายนอก · วิธีติดตั้งฝั่งปลายทางอยู่ใน [docs/OTHER-LLMS.md](../docs/INSTALL.md#ใช้ชุดนี้กับ-llm-ตัวอื่น)
@@ -147,8 +157,8 @@ skill ที่บทบาทหนึ่งได้รับคือชื�
 ปลั๊กอินตามบัญชีไปเอง แต่ `~/.claude/CLAUDE.md` เป็นไฟล์บนเครื่อง ต้องติดตั้งใหม่ทุกครั้งที่ย้ายเครื่อง
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .scriptsinstall-global-rules.ps1   # Windows
-bash scripts/install-global-rules.sh                                         # macOS / Linux
+powershell -ExecutionPolicy Bypass -File .\scripts\install\install-global-rules.ps1   # Windows
+bash scripts/install/install-global-rules.sh                                         # macOS / Linux
 ```
 
 สคริปต์สำรองไฟล์เดิมไว้เป็น `CLAUDE.md.bak-<วันเวลา>` ก่อนเขียนทับ

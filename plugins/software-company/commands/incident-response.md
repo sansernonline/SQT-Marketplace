@@ -4,7 +4,7 @@ description: Guide live incident response using devops-engineer agent. Structure
 argument-hint: <incident description, e.g., "users can't login since 14:00 UTC">
 ---
 
-> **ทางลัดเข้า A-Team:** เปิด skill `agent-team` ด้วย playbook `bug-fix` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน · ขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ใช้ประกอบ playbook ไม่ใช่แทนที่
+> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `bug-fix` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
 
 Use the `devops-engineer` agent to coordinate incident response for: **$ARGUMENTS**
 
@@ -53,7 +53,7 @@ The DevOps engineer should follow this structured response:
 
 ## 🩹 Phase 3: Mitigation (stop the bleeding)
 
-> 💡 Mitigation ≠ fix. Goal is reduce user impact NOW.
+> 💡 Mitigation ≠ fix. The goal is to cut user impact NOW.
 
 Common mitigations:
 - **Rollback** recent deploy
@@ -87,7 +87,7 @@ Document what worked AND what didn't.
 1. **Schedule postmortem** within 48 hours
 2. **Use `postmortem-template` skill** for blameless analysis
 3. **Track action items** in real tickets
-4. **Share learnings** broader than just affected team
+4. **Share learnings** beyond the affected team
 
 ## Output Required
 

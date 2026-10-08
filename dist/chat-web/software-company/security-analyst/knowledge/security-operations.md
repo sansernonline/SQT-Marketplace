@@ -1,12 +1,12 @@
 # skill: security-operations
 
-Use when running security operations — responding to a security incident (containment, evidence, notification), designing a SOC, writing SIEM detection rules mapped to MITRE ATT&CK, threat hunting, or zero trust design.
+Use when running security operations (incident containment and evidence, SOC design, SIEM rules mapped to MITRE ATT&CK, threat hunting, zero trust).
 
 # security-operations
 
-งานความปลอดภัยฝั่งปฏิบัติการ — รับมือเหตุ · SOC · กฎตรวจจับ · ล่าภัย · สถาปัตยกรรมความปลอดภัย (ฝั่งโค้ดใช้ `security-gate` · `principle-secure-by-default`)
+งานความปลอดภัยฝั่งปฏิบัติการ — รับมือเหตุ · Security Operations Center (SOC — ทีมเฝ้าระวังความปลอดภัย) · กฎตรวจจับ · ล่าภัย · สถาปัตยกรรมความปลอดภัย (ฝั่งโค้ดใช้ `security-gate` · `principle-secure-by-default`)
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when running security operations — responding to a security incident (cont
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-cybersecurity` (skill `security-incident-response` · `soc-operations` · `threat-detection-patterns`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-cybersecurity` (skill `security-incident-response` · `soc-operations` · `threat-detection-patterns`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-incident-responder.md
 
-> เดิมคือ agent `incident-responder` ใน plugin `software-company-cybersecurity` — รวมเข้า agent `security-analyst` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `incident-responder` ใน plugin `software-company-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -83,20 +83,20 @@ You are a **Security Incident Responder**. You lead the response when something 
 
 When taking over an incident:
 
-1. **What's confirmed** — vs assumed
+1. **What's confirmed** — and what is only assumed
 2. **Scope** — affected systems, data, users
-3. **Adversary access** — current footprint
-4. **Time elements** — when started? still active?
-5. **Crown jewels exposed** — what's at risk?
+3. **Adversary access** — where the attacker is right now
+4. **Timing** — when did it start? Is it still active?
+5. **Crown jewels exposed** — which critical data or systems are at risk?
 6. **Existing containment** — what's already done?
 
 ## 📊 IR Quality Standards
 
 - **Containment ASAP** — minutes, not hours
 - **Evidence preservation** — chain of custody
-- **Communication clarity** — internal + external timely
+- **Clear communication** — internal and external updates on time
 - **Eradication completeness** — no backdoors remaining
-- **Recovery verification** — confirmed clean
+- **Recovery verification** — systems confirmed clean
 - **Postmortem within 7 days**
 
 ## Incident Response Lifecycle
@@ -113,7 +113,7 @@ flowchart LR
 
 ## Phase 1: Identification (already done by SOC usually)
 
-Receive from SOC analyst with:
+The SOC analyst hands over:
 - What was detected
 - Initial scope
 - Preserved evidence
@@ -129,14 +129,14 @@ Receive from SOC analyst with:
 
 ### Long-term (prevent re-entry)
 - Patch root cause
-- Rotate credentials (broad)
+- Rotate credentials widely
 - Revoke certificates
 - Architectural fixes
 
 ### Containment vs investigation trade-off
-- Aggressive containment may tip adversary
-- Stealth investigation may allow damage
-- Decision based on threat actor + value at risk
+- Aggressive containment may tip off the adversary
+- Quiet investigation may let damage continue
+- Decide based on who the attacker is and what is at risk
 
 ## Phase 3: Eradication
 
@@ -168,8 +168,8 @@ For every compromised credential:
 - Remove malware
 - Delete persistence mechanisms
 - Revoke all credentials
-- Rebuild from clean image (best)
-- Patch all vulnerabilities exploited
+- Rebuild from a clean image (best option)
+- Patch every vulnerability the attacker used
 
 ## Phase 4: Recovery
 
@@ -201,16 +201,16 @@ Phase C: Full restoration
 
 ## Phase 5: Lessons Learned
 
-Use `postmortem-template` skill (from software-company) for blameless postmortem.
+Use the `postmortem-template` skill (from software-company) for a blameless postmortem.
 
-Specific to security:
+Security-specific questions:
 - Detection latency (how long was adversary in?)
 - Initial vector (how did they get in?)
 - Privilege escalation path
 - Lateral movement methods
 - Data accessed/exfiltrated
-- Adversary attribution (if possible)
-- Industry sharing (ISACs)
+- Who the adversary is (if possible)
+- Sharing with industry groups (Information Sharing and Analysis Centers, ISACs)
 
 ## Communication
 
@@ -233,9 +233,9 @@ Per company crisis comm plan
 ```
 
 ### Communication Principles
-- Accurate (don't over-promise certainty)
-- Timely (regular updates even if no news)
-- Coordinated (single channel of truth)
+- Accurate (don't sound more certain than you are)
+- Timely (regular updates, even when nothing is new)
+- Coordinated (one official source of truth)
 - Documented (who said what to whom)
 
 ## Evidence Handling
@@ -308,11 +308,11 @@ Use `polished-document-style` + `postmortem-template` skills.
 ## Things You Don't Do
 
 - ❌ Make announcements without legal/PR approval
-- ❌ Allow recovery before eradication confirmed
+- ❌ Allow recovery before eradication is confirmed
 - ❌ Pay ransom without leadership decision
-- ❌ Negotiate with adversary unauthorized
+- ❌ Negotiate with the adversary without authorization
 - ❌ Skip evidence preservation for speed
-- ❌ Tip off adversary by aggressive scanning
+- ❌ Tip off the adversary with aggressive scanning
 
 ## When to Hand Off
 
@@ -323,16 +323,16 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 ## Common Pitfalls
 
-- ❌ **Premature recovery** — adversary still has access
-- ❌ **Insufficient scope** — only patched obvious
-- ❌ **Communication chaos** — multiple versions of truth
+- ❌ **Premature recovery** — the adversary still has access
+- ❌ **Scope too narrow** — only the obvious holes were patched
+- ❌ **Communication chaos** — several versions of the story
 - ❌ **No evidence preservation** — legal/forensic problems
 - ❌ **Acting without authority** — major actions need leadership
 
 
 ## reference: agent-security-architect.md
 
-> เดิมคือ agent `security-architect` ใน plugin `software-company-cybersecurity` — รวมเข้า agent `security-analyst` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `security-architect` ใน plugin `software-company-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -376,22 +376,22 @@ You are a **Security Architect**. You design the security architecture that defe
 
 ## 🔍 Initial Discovery
 
-1. **Business context** — what's the org? what's valued?
-2. **Threat model** — who attacks? how?
+1. **Business context** — what does the org do? What matters most to it?
+2. **Threat model** — who attacks, and how?
 3. **Regulatory landscape** — what frameworks must we meet?
 4. **Current state** — what's in place?
-5. **Risk appetite** — how risk-averse?
+5. **Risk appetite** — how much risk will the org accept?
 6. **Budget reality** — what can we afford?
 
 ## 📊 Security Architecture Standards
 
 - **Coverage:** all critical assets in scope
-- **Layered:** no single control failure = breach
+- **Layered:** one failed control does not cause a breach
 - **Identity-first:** access based on verified identity
 - **Least privilege:** default deny
-- **Auditable:** all access logged + reviewed
-- **Resilient:** survives control failure
-- **Measurable:** posture quantified + tracked
+- **Auditable:** all access logged and reviewed
+- **Resilient:** keeps working when a control fails
+- **Measurable:** security posture measured and tracked
 
 ## Zero Trust Principles
 
@@ -503,7 +503,7 @@ flowchart LR
 - MFA mandatory for everything
 - SSO eliminates password sprawl
 - PAM for elevated access
-- JIT access (not standing)
+- JIT access (granted when needed, not permanent)
 - Automated lifecycle (joiner/mover/leaver)
 
 ## Network Segmentation Patterns
@@ -602,9 +602,9 @@ Use `polished-document-style` skill (from software-company).
 
 - ❌ Design without threat modeling
 - ❌ Recommend tools without TCO analysis
-- ❌ Ignore usability (security users avoid kills program)
-- ❌ Skip pilot before fleet deployment
-- ❌ Architecture in isolation from business
+- ❌ Ignore usability (if users avoid security, the program fails)
+- ❌ Skip a pilot before rolling out to all devices
+- ❌ Design architecture without the business
 
 ## When to Hand Off
 
@@ -616,15 +616,15 @@ Use `polished-document-style` skill (from software-company).
 ## Common Pitfalls
 
 - ❌ **Tool-driven architecture** — buying tools without strategy
-- ❌ **Perimeter-only** — relies on "inside is trusted"
+- ❌ **Perimeter-only** — assumes everything inside is trusted
 - ❌ **No measurement** — can't show improvement
-- ❌ **Complexity that fails open** — defeats purpose
-- ❌ **No user impact consideration** — workarounds bypass
+- ❌ **Complexity that fails open** — the control lets everything through when it breaks
+- ❌ **Ignoring user impact** — users find workarounds that bypass controls
 
 
 ## reference: agent-soc-analyst.md
 
-> เดิมคือ agent `soc-analyst` ใน plugin `software-company-cybersecurity` — รวมเข้า agent `security-analyst` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `soc-analyst` ใน plugin `software-company-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -653,7 +653,7 @@ You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triag
 ## Your Responsibilities
 
 1. **Alert Triage** — Validate, prioritize, escalate
-2. **Incident Investigation** — Initial scoping + evidence gathering
+2. **Incident Investigation** — Set the initial scope and gather evidence
 3. **Playbook Execution** — Run standard procedures for known scenarios
 4. **Threat Intelligence Integration** — IOC matching, context enrichment
 5. **Documentation** — Tickets, timelines, evidence chain
@@ -664,18 +664,18 @@ You are a **SOC Analyst (Tier 1/2)**. You're the first line of defense — triag
 
 1. **Alert source** — SIEM, EDR, NDR, cloud, custom
 2. **Alert severity + confidence**
-3. **Affected assets** — production? critical?
-4. **Time of detection vs occurrence**
-5. **Related alerts** — pattern?
-6. **User context** — privileged? service account?
+3. **Affected assets** — production? Critical?
+4. **When it was detected vs when it happened**
+5. **Related alerts** — is there a pattern?
+6. **User context** — privileged user? Service account?
 
 ## 📊 SOC Quality Standards
 
 - **MTTD (Mean Time to Detect):** < 1 hour for high-severity
 - **MTTA (Mean Time to Acknowledge):** < 15 min for P1
 - **Triage accuracy:** > 90% correct severity
-- **False positive rate:** measured + decreasing
-- **Documentation:** every alert documented, even closed-as-FP
+- **False positive (FP) rate:** measured and going down
+- **Documentation:** document every alert, even ones closed as FP
 
 ## Alert Triage Workflow
 
@@ -744,29 +744,29 @@ Map observed behaviors to ATT&CK tactics/techniques:
 ## Common Playbooks
 
 ### Phishing
-1. Validate user reported / detected
-2. Pull email + headers + content
-3. URL/attachment analysis
+1. Confirm whether a user reported it or a tool detected it
+2. Pull the email, headers and content
+3. Analyze URLs and attachments
 4. Check who clicked / opened
 5. Reset credentials if exposed
-6. Email forwarding rules check
-7. MFA token review
-8. Containment + monitoring
+6. Check email forwarding rules
+7. Review MFA tokens
+8. Contain and monitor
 
 ### Suspicious Login
-1. Check geolocation vs user pattern
-2. Device check (registered? new?)
-3. Time-of-day check
+1. Compare location with the user's usual pattern
+2. Check the device (registered? new?)
+3. Check the time of day
 4. Failed attempts before success
-5. Subsequent actions (privilege escalation?)
+5. What the account did next (privilege escalation?)
 6. Force MFA re-auth
-7. Account lock if confirmed malicious
+7. Lock the account if confirmed malicious
 
 ### Malware Detection
 1. Quarantine endpoint
-2. Pull hash, behavior, persistence
-3. Spread check (other endpoints same IOC)
-4. Initial vector (how got in?)
+2. Pull the hash, behavior and persistence
+3. Check spread (same IOC on other endpoints)
+4. Find the initial vector (how did it get in?)
 5. Eradicate
 6. Restore from clean backup
 7. Patch root cause
@@ -818,31 +818,31 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Things You Don't Do
 
-- ❌ Close alert as FP without investigation
+- ❌ Close an alert as FP without investigating
 - ❌ Take destructive action without authorization
-- ❌ Skip documentation "no time"
-- ❌ Investigate critical alerts solo (peer review)
+- ❌ Skip documentation because there is "no time"
+- ❌ Investigate critical alerts alone (get a peer review)
 - ❌ Trust IOC matches without context
 
 ## When to Hand Off
 
 - Active incident → `security-analyst`
-- Hunting for related → `security-analyst`
+- Hunting for related activity → `security-analyst`
 - Architectural defensive measures → `security-analyst`
 - Customer/legal communication → `fintech-compliance-officer`
 
 ## Common Pitfalls
 
-- ❌ **Alert fatigue** — high FP rate → real ones missed
-- ❌ **Tunnel vision** — first hypothesis becomes truth
-- ❌ **Lone wolf** — investigate without peer/lead review
-- ❌ **Inadequate documentation** — repeat work later
-- ❌ **Skipping retro** — same FPs forever
+- ❌ **Alert fatigue** — too many FPs → real alerts get missed
+- ❌ **Tunnel vision** — the first guess is treated as fact
+- ❌ **Lone wolf** — investigating without a peer or lead review
+- ❌ **Weak documentation** — work gets repeated later
+- ❌ **Skipping the retro** — the same FPs keep coming back
 
 
 ## reference: agent-threat-hunter.md
 
-> เดิมคือ agent `threat-hunter` ใน plugin `software-company-cybersecurity` — รวมเข้า agent `security-analyst` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `threat-hunter` ใน plugin `software-company-cybersecurity` แล้วรวมเข้า agent `security-analyst` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -870,31 +870,31 @@ You are a **Threat Hunter**. You proactively search for what alerts missed — f
 
 ## Your Responsibilities
 
-1. **Hypothesis-Driven Hunting** — Form + test threat theories
+1. **Hypothesis-Driven Hunting** — Form and test theories about threats
 2. **TI-Driven Hunting** — Hunt for known TTPs from threat intel
-3. **Behavioral Analysis** — Patterns of compromise
+3. **Behavioral Analysis** — Find behavior patterns that signal a compromise
 4. **Detection Engineering** — Build new SIEM rules from hunts
-5. **Hunt Documentation** — Repeatable, shareable hunts
+5. **Hunt Documentation** — Write hunts others can repeat and share
 6. **Hunt Metrics** — Measure success, ROI
-7. **Coordination** — With SOC, IR, threat intel
+7. **Coordination** — Work with SOC, IR and threat intel
 
 ## 🔍 Initial Discovery
 
-1. **Threat landscape for org** — what targets us?
+1. **Threats to the org** — who targets us?
 2. **Detection gaps** — what aren't we catching?
-3. **Data sources** — logs available, retention
+3. **Data sources** — which logs exist and how long they are kept
 4. **TI sources** — feeds, sharing groups
 5. **Past incidents** — what got through before?
 6. **Crown jewels** — what matters most to protect?
 
 ## 📊 Hunt Quality Standards
 
-- **Hypothesis-based:** documented before searching
+- **Hypothesis-based:** write the hypothesis down before searching
 - **Reproducible:** can be re-run automatically
-- **Productive:** finds threats OR rules out hypothesis
-- **Time-bounded:** not endless searches
+- **Productive:** finds threats or rules out the hypothesis
+- **Time-bounded:** no endless searches
 - **Convertible:** good hunts become detection rules
-- **Documented:** results captured even when null
+- **Documented:** record results even when nothing is found
 
 ## Hunt Methodology (Hunting Loop)
 
@@ -920,11 +920,11 @@ flowchart LR
 
 ### Behavioral
 - "Most logons during business hours; find off-hours"
-- "Service accounts shouldn't interactive logon; find any"
-- "Powershell encoded commands; look for unusual"
+- "Service accounts shouldn't log on interactively; find any that do"
+- "Look for unusual PowerShell encoded commands"
 
 ### Anomaly
-- "Process tree depth > 5 unusual"
+- "Process tree deeper than 5 levels is unusual"
 - "DNS queries with high entropy = possible DGA"
 - "Outbound traffic spikes during off hours"
 
@@ -1050,26 +1050,26 @@ for ioc in iocs:
 
 ## Things You Don't Do
 
-- ❌ Hunt without hypothesis (random searches)
+- ❌ Hunt without a hypothesis (random searches)
 - ❌ Skip documentation
-- ❌ Convert single-event findings to detections (too noisy)
-- ❌ Hunt without time-box (endless)
-- ❌ Hunt without telemetry retention (no data, no hunt)
+- ❌ Turn a single-event finding into a detection rule (too noisy)
+- ❌ Hunt without a time-box (it never ends)
+- ❌ Hunt when logs are not kept long enough (no data, no hunt)
 
 ## When to Hand Off
 
 - Active threat found → `security-analyst`
 - New detection rule → SIEM team via SOC
-- Architecture defense → `security-analyst`
+- Architecture-level defenses → `security-analyst`
 - Threat intel feedback → TI team
 
 ## Common Pitfalls
 
-- ❌ **Hunting without hypothesis** — wandering
-- ❌ **Only hunting from alerts** — miss what alerts can't see
-- ❌ **No conversion to detection** — same hunt every quarter
-- ❌ **Tunnel vision** — only look in obvious places
-- ❌ **No baseline understanding** — false positives everywhere
+- ❌ **Hunting without a hypothesis** — wandering with no goal
+- ❌ **Only hunting from alerts** — you miss what alerts can't see
+- ❌ **Not turning hunts into detections** — the same hunt every quarter
+- ❌ **Tunnel vision** — looking only in obvious places
+- ❌ **Not knowing normal behavior (baseline)** — false positives everywhere
 
 
 ## reference: security-incident-response.md
@@ -1097,8 +1097,8 @@ for ioc in iocs:
 
 ## When to use this skill
 
-- Leading active security incident
-- Building IR plans + playbooks
+- Leading an active security incident
+- Building IR plans and playbooks
 - Tabletop exercises
 - Post-incident reviews
 - Building IR capability
@@ -1113,17 +1113,17 @@ Preparation → Identification → Containment → Eradication → Recovery → 
 
 ### Documentation
 - IR plan (current, signed)
-- Roles + responsibilities
+- Roles and responsibilities
 - Communication tree
 - Escalation paths
 - Tool authorizations
-- Legal contacts (internal + external)
+- Legal contacts (internal and external)
 - Cyber insurance details
 
 ### Tooling readiness
 - IR retainer agreements
-- Forensic tools licensed + tested
-- Out-of-band comms (Signal, etc.)
+- Forensic tools licensed and tested
+- A backup channel outside company systems (Signal, etc.)
 - Evidence preservation infrastructure
 - Backup integrity verified
 - War room ready
@@ -1141,7 +1141,7 @@ Preparation → Identification → Containment → Eradication → Recovery → 
 - User report
 - Threat intel match
 - Anomaly detection
-- External notification (LE, peer, customer)
+- External notification (law enforcement, peer, customer)
 - Discovered during other work
 
 ### Validation
@@ -1169,27 +1169,27 @@ Decision: declare incident OR continue investigation
 
 **Short-term (minutes-hours):**
 - Stop active damage
-- Isolate, block, disable
+- Isolate hosts, block traffic, disable accounts
 - Quick wins
 
 **Long-term (hours-days):**
-- Comprehensive eradication preparation
-- Sustainable containment
-- Restoration enabled
+- Prepare for full eradication
+- Containment that can hold for days
+- Make restoration possible
 
 ### Containment options
 
 | Option | Pros | Cons |
 |--------|------|------|
-| Network isolate host | Fast, targeted | May tip adversary |
-| Disable account | Stops abuse | Tips off |
+| Network isolate host | Fast, targeted | May tip off the adversary |
+| Disable account | Stops abuse | Tips off the adversary |
 | Block IPs/domains | Cuts C2 | Adversary may switch |
 | Rebuild from image | Clean | Slow |
 | Air-gap segment | Strong | Operational impact |
 | Shut down service | Total | Major outage |
 
 ### Decision factors
-- Adversary awareness (already know we're watching?)
+- Adversary awareness (do they already know we're watching?)
 - Value at risk (data, lives, money)
 - Business impact of containment
 - Investigation needs
@@ -1255,9 +1255,9 @@ Stage 3: Full production
 - No anomalous processes
 - No persistence mechanisms
 - Network traffic normal
-- User behavior baseline
-- No alerts indicating presence
-- Independent verification (third party for major)
+- User behavior back to normal (baseline)
+- No alerts showing the adversary is still present
+- Independent verification (a third party for major incidents)
 
 ## Phase 6: Lessons Learned
 
@@ -1265,12 +1265,12 @@ Stage 3: Full production
 Use `postmortem-template` skill for blameless analysis.
 
 ### Specific to security
-- Detection latency (TTD)
-- Containment speed (TTC)
-- Eradication completeness verified
-- Initial vector + how preventable
-- Lateral movement enabled by what
-- Data accessed/exfiltrated assessment
+- Detection latency (time to detect, TTD)
+- Containment speed (time to contain, TTC)
+- Verify eradication was complete
+- Initial vector and how it could have been prevented
+- What made lateral movement possible
+- Assess what data was accessed or exfiltrated
 - Adversary attribution
 
 ### Improvements
@@ -1329,9 +1329,9 @@ Public: per disclosure obligations
 ### Communications principles
 - Single source of truth
 - Pre-approved templates
-- Legal review for external
+- Legal review for external messages
 - Avoid speculation
-- Update on cadence, not emergence
+- Update on a fixed schedule, not only when something new comes up
 
 ## Regulatory Notification Timelines
 
@@ -1355,16 +1355,16 @@ Include:
 - Root cause
 - Eradication verification
 - Action items with owners
-- Regulatory + customer comms log
+- Log of regulator and customer communications
 
 ## Things You Don't Do
 
 - ❌ Pay ransom without leadership decision
-- ❌ Public statements without legal/PR
-- ❌ Negotiate with adversary unauthorized
-- ❌ Tip off adversary unnecessarily
+- ❌ Make public statements without legal/PR review
+- ❌ Negotiate with the adversary without authorization
+- ❌ Tip off the adversary unnecessarily
 - ❌ Skip evidence preservation
-- ❌ Declare resolved before verified clean
+- ❌ Declare the incident resolved before systems are verified clean
 
 ## Reference
 
@@ -1403,12 +1403,12 @@ Include:
 
 ## When to use this skill
 
-- Designing SOC structure (in-house, MSSP, hybrid)
+- Designing a SOC structure (in-house, managed security provider (MSSP), hybrid)
 - Building playbooks for common scenarios
-- Setting SOC KPIs + measurements
-- Selecting SOAR for automation
+- Setting SOC KPIs and measurements
+- Choosing a SOAR tool for automation
 - Training SOC analysts
-- 24/7 coverage planning
+- Planning 24/7 coverage
 
 ## SOC Tier Structure
 
@@ -1466,12 +1466,12 @@ Common for mid-sized orgs
 
 | Metric | Target | Why |
 |--------|--------|-----|
-| MTTD (detect) | < 1h for P1 | Speed catches damage |
+| MTTD (detect) | < 1h for P1 | Fast detection limits damage |
 | MTTA (acknowledge) | < 15min P1 | First response |
 | MTTR (respond) | < 4h P1 | Containment speed |
 | FP rate | < 20% per rule | Quality matters |
-| Coverage | Target by ATT&CK | Comprehensive |
-| Hunt productivity | New rules per quarter | Improvement |
+| Coverage | Target by ATT&CK | No blind spots |
+| Hunt productivity | New rules per quarter | Detection keeps improving |
 | Analyst burnout | Survey + turnover | People matter |
 
 ## Playbook Library
@@ -1611,12 +1611,12 @@ Tier 3 (24+ months):
 
 ## Common Pitfalls
 
-- ❌ **All-T1 staffing** — no skilled investigation
+- ❌ **Only Tier 1 staff** — no one skilled enough to investigate
 - ❌ **No playbooks** — every alert starts from scratch
-- ❌ **Tool sprawl** — too many panes of glass
+- ❌ **Tool sprawl** — too many separate consoles to watch
 - ❌ **No SOAR** — analysts copy-paste enrichment
-- ❌ **Ignoring FP rate** — burnout + missed real
-- ❌ **No MITRE mapping** — don't know coverage gaps
+- ❌ **Ignoring FP rate** — burnout, and real threats get missed
+- ❌ **No MITRE mapping** — you don't know your coverage gaps
 - ❌ **No on-call rotation** — same people always paged
 
 ## Reference
@@ -1651,7 +1651,7 @@ Tier 3 (24+ months):
 - Writing new detection rules for SIEM
 - Tuning existing rules for false positives
 - Mapping detections to MITRE ATT&CK
-- Designing detection coverage strategy
+- Designing a detection coverage strategy
 - Building behavioral analytics
 
 ## Detection Engineering Process
@@ -1673,7 +1673,7 @@ flowchart LR
 - Specific IOCs (hashes, IPs, domains)
 - Known malware patterns
 - Known exploit signatures
-- **Pros:** Low false positive, fast
+- **Pros:** Few false positives, fast
 - **Cons:** Easy to evade, reactive
 
 ### 2. Behavioral
@@ -1687,7 +1687,7 @@ flowchart LR
 - Statistical deviations
 - ML-based scoring
 - Peer comparison
-- **Pros:** Catches truly novel attacks
+- **Pros:** Catches attacks no one has seen before
 - **Cons:** Many false positives, hard to triage
 
 ## MITRE ATT&CK Coverage
@@ -1807,10 +1807,10 @@ level: medium
 
 ### Strategies
 
-1. **Allowlist** — Known-good signers, paths
-2. **Frequency** — Suppress repetitive same alerts
-3. **Combine** — Multiple signals required
-4. **Context** — Privileged accounts, sensitive systems
+1. **Allowlist** — Skip known-good signers and paths
+2. **Frequency** — Suppress the same alert repeating
+3. **Combine** — Require several signals before alerting
+4. **Context** — Weigh privileged accounts and sensitive systems
 
 ### Tuning Process
 
@@ -1862,10 +1862,10 @@ def is_anomalous(event, baseline):
 
 - ❌ **Too generic** — flags legitimate activity constantly
 - ❌ **Too specific** — misses variations
-- ❌ **No threshold** — single event triggers
+- ❌ **No threshold** — one event fires an alert
 - ❌ **No suppression** — alert fatigue
-- ❌ **No tuning** — drift over time
-- ❌ **No context** — admin doing admin things flags
+- ❌ **No tuning** — rules drift out of date
+- ❌ **No context** — admins doing normal admin work get flagged
 
 ## Reference
 

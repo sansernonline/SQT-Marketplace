@@ -4,7 +4,7 @@ description: Start a new feature by coordinating BA → SA → Architect → pla
 argument-hint: <feature description>
 ---
 
-> **ทางลัดเข้า A-Team:** เปิด skill `agent-team` ด้วย playbook `feature` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน · ขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ใช้ประกอบ playbook ไม่ใช่แทนที่
+> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `feature` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
 
 You will run a complete feature kickoff workflow. The feature is:
 
@@ -14,16 +14,16 @@ Execute these steps **in order**, using sub-agents:
 
 1. **Business Analyst** — Use the `business-analyst` agent to:
    - Ask clarifying questions to the user
-   - Produce a BRD with objective, scope, stakeholders, business rules
+   - Produce a Business Requirements Document (BRD) with objective, scope, stakeholders, business rules
    - Write user stories with acceptance criteria
 
 2. **Solution Architect** — Use the `solution-architect` agent to:
    - Propose high-level architecture
    - Recommend tech stack with trade-offs (use the `adr-writer` skill)
-   - Identify NFRs
+   - Identify non-functional requirements (NFRs)
 
 3. **System Analyst** — Use the `system-analyst` agent to:
-   - Write FSD with use cases
+   - Write a Functional Specification Document (FSD) with use cases
    - Define API endpoints
    - Create data model
 

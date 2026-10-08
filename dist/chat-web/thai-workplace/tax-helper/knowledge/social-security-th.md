@@ -1,10 +1,10 @@
 # skill: social-security-th
 
-Use when someone in Thailand asks about ประกันสังคม — contributions under ม.33, 39, 40, the 2569 wage cap, benefits, กองทุนเงินทดแทน, provident fund, or the employer's monthly SSO filings.
+Use when someone asks about Thai social security (sections 33, 39, 40), the wage cap, benefits, compensation fund, provident fund, or employer SSO filings.
 
 # Thai Social Security (ประกันสังคม)
 
-Who pays how much, what it buys, what the employer must file by when. General information, not legal advice — the Social Security Office (สำนักงานประกันสังคม, SSO, hotline 1506) is the authority.
+Who pays how much, what the money buys, and what the employer must file by when. This is general information, not legal advice. The Social Security Office (สำนักงานประกันสังคม, SSO, hotline 1506) has the final say.
 
 ## 1. The three kinds of insured person
 

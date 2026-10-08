@@ -1,10 +1,10 @@
 # skill: labour-law-basics
 
-Use when a Thai employer or employee asks about พ.ร.บ.คุ้มครองแรงงาน — probation, hours, OT and holiday pay, leave days (maternity 120, paternity 15), notice, severance under ม.118, minimum wage.
+Use when a Thai employer or employee asks about the Labour Protection Act. Probation, hours, OT and holiday pay, leave days, notice, severance, minimum wage.
 
 # Thai Labour Law Basics (พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 และที่แก้ไขเพิ่มเติม)
 
-The numbers HR gets asked every week. General information, not legal advice — disputes go to the labour inspector (สำนักงานสวัสดิการและคุ้มครองแรงงาน, hotline 1546) or a labour lawyer. The Act sets a floor; a contract or work rules may give more, never less.
+These are the numbers HR is asked about every week. This is general information, not legal advice. Disputes go to the labour inspector (สำนักงานสวัสดิการและคุ้มครองแรงงาน, hotline 1546) or a labour lawyer. The Act sets a floor; a contract or work rules may give more, never less.
 
 ## 1. Working time
 

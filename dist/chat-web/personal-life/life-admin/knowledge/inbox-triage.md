@@ -1,6 +1,6 @@
 # skill: inbox-triage
 
-Use when the inbox is overwhelming, the user asks what actually needs answering today, or wants an inbox-zero routine — sorts mail into today, this week, delegate, verify and archive, alongside any email plugin.
+Use when a personal or work email inbox is overwhelming or the user asks what mail needs a reply today. Sorts into today, week, delegate, verify, archive.
 
 # Inbox Triage
 

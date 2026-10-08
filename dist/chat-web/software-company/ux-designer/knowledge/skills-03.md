@@ -1,465 +1,6 @@
-# skill: simplicity-first
-
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, UX, API design, sprint plan). Simplest version that works, the tired-teammate test, no buzzwords or extra layers. For code use lazy-coding.
-
-# Simplicity First
-
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
-
-This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`.
-
-## The one test
-
-Before submitting, ask:
-
-> Could a tired teammate understand this in 6 months, with no prior context?
-
-If "no" or "not sure" → simplify.
-
-## 5 principles
-
-1. **Start with the simplest thing that works.** Add complexity only when something breaks.
-2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
-3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
-4. **Optimize for reading.** It's read far more often than written.
-5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
-
-## By output type
-
-### Documents (BRD, FSD, ADR)
-
-Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
-example for every abstract point, tables for structured data.
-
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
-jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
-
-### Architecture
-
-Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
-
-Avoid: microservices for small teams, distributed-everything, multi-master
-databases before you must, event-driven by default (sync is simpler).
-
-### Plans
-
-Do: 3-5 priorities (not 20), a named owner per item, measurable success
-criteria, realistic timelines with buffer, cut scope to fit time.
-
-Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
-aspirational dates with no buffer, plans without success metrics.
-
-### Designs (UX, API)
-
-Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
-across screens, defaults that work for 80%, progressive disclosure.
-
-Avoid: novel interactions where a standard one works, 10-step flows when 3
-work, required fields with no smart default, hidden features needing tutorials.
-
-## The 3-question filter
-
-Before adding any new component, configuration option, or pattern:
-
-1. Is there real evidence we need this **now** (not "might need")?
-2. Is there a simpler way? (Sleep on it. Often yes.)
-3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
-
-Two or more answers point to "simpler is fine" → don't add it.
-
-## Examples
-
-**API description**
-
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-❌ "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
-
-## Pre-submit checklist
-
-- [ ] A tired teammate would understand this in 6 months.
-- [ ] Nothing can be deleted without losing meaning.
-- [ ] No jargon the audience won't know.
-- [ ] Every abstract claim has an example.
-- [ ] I could explain the whole thing in two sentences.
-
-If any answer is "no" → simplify before delivering.
-
-> "Perfection is achieved not when there is nothing more to add, but when there
-> is nothing left to take away." — Saint-Exupéry
-
-
----
-
-# skill: markdown-visuals
-
-Use when a markdown document needs a picture (wireframe, UI state, architecture, flow, data viz). Picks inline SVG, image, ASCII or Mermaid and embeds it so it renders in GitHub, Notion, VS Code and Obsidian.
-
-# Markdown Visuals
-
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
-
-## When to use this skill
-
-- Producing **any** design mockup, wireframe, or UI spec
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
-
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
-
----
-
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI mockup / component state / icon       →  Inline SVG
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (see polished-document-style)
-├─ Architecture / ER / class                →  Mermaid
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
-
-**Default to inline SVG** for anything that isn't a flow/sequence (use Mermaid for those). It renders everywhere, versions in git, doesn't bloat the repo with binaries, and the user can read/edit the markup.
-
----
-
-## 1 · Inline SVG (primary technique)
-
-### Boilerplate
-
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
-```
-
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
-
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน `svg-diagram-system` ข้อ 0)
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
-|---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
-
-**หนึ่งเอกสารใช้หนึ่งชุด** — รูปสิบรูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปที่ไม่สวยแต่สีตรงกัน
-
-### Reusable SVG snippets
-
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-### Worked example — UI state mockup
-
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states:
-
-```markdown
-## 2 · External image files
-
-Use when:
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
-
----
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-### Box-drawing characters
-
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
-
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-### Common patterns
-
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
----
-
-## 4 · Mermaid
-
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
-
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
-|---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ต้องคุมตำแหน่งเอง → SVG หรือ `svg-diagram-system` |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง → ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ → ไฟล์ภาพ |
-
----
-
-## Combining formats in one doc
-
-A full design spec usually mixes formats. Pattern from `DockXI/docs/12-design-mockup.md`:
-
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
-
-Don't pick one format and force everything into it — each format has a sweet spot.
-
----
-
-## Accessibility checklist
-
-For every visual:
-
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
-
----
-
-## Anti-patterns
-
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax for GitHub compat
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
-
----
-
-## Quick-start recipe
-
-When the user asks for a design / mockup:
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-If unsure whether a visual will render, mention that the user should preview in GitHub/Notion to confirm.
-
----
-
-## Related skills
-
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
-
-
----
-
 # skill: ui-craft
 
-Use on any task that produces a screen or screen spec, alongside the platform skill. One spacing scale, one type scale, one hierarchy per screen, accessible contrast, five screen states. Sets no colours or fonts.
+Use when a task produces a screen or screen spec, alongside the platform skill. Spacing and type scales, one hierarchy, contrast, five screen states.
 
 # UI Craft
 
@@ -499,8 +40,8 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 ถ้ารู้สึกว่า `16` แน่นไป `24` ห่างไป — เลือก `16` แล้วแก้อย่างอื่นแทน
 (ปกติปัญหาอยู่ที่ขนาดตัวอักษรหรือความยาวบรรทัด ไม่ใช่ระยะห่าง)
 
-**ชนกับค่าใน skill แพลตฟอร์ม → สเกลนี้ชนะ** — ค่าระยะตัวอย่างที่อยู่นอกสเกล (เช่น `mobile-app-design/references/tokens.md` gap 9 · padding 14 · ขอบ 18) ให้ปัดเป็นค่าใกล้สุดในสเกล (8 · 12 หรือ 16 · 16) ตอนเอาไปใช้
-สเกลนี้คุมแค่ padding · margin · gap — มุมโค้งและขนาดคอมโพเนนต์ (ปุ่ม 38 · มุม 13) skill แพลตฟอร์มเป็นคนกำหนด
+**ถ้าค่าใน skill แพลตฟอร์มขัดกับสเกลนี้ ให้ใช้สเกลนี้** ค่าระยะตัวอย่างที่อยู่นอกสเกล (เช่น `mobile-app-design/references/tokens.md` gap 9 · padding 14 · ขอบ 18) ให้ปัดเป็นค่าใกล้สุดในสเกล (8 · 12 หรือ 16 · 16) ตอนเอาไปใช้
+สเกลนี้คุมแค่ padding · margin · gap ส่วนมุมโค้งและขนาดคอมโพเนนต์ (ปุ่ม 38 · มุม 13) skill แพลตฟอร์มเป็นคนกำหนด
 
 **กฎระยะห่างที่คนมองข้ามบ่อยที่สุด:**
 
@@ -520,7 +61,7 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 
 ## 2 · สเกลตัวอักษร
 
-อัตราส่วนคงที่ประมาณ 1.2–1.25 เท่า ต่อขั้น · **ใช้ไม่เกิน 5 ขนาดต่อหน้าจอ**
+แต่ละขั้นใหญ่ขึ้นในอัตราส่วนคงที่ประมาณ 1.2–1.25 เท่า และ**ใช้ไม่เกิน 5 ขนาดต่อหน้าจอ**
 
 | ขั้น | ตัวอย่าง (เว็บ) | ใช้กับ |
 |---|---|---|
@@ -541,10 +82,10 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 **ความยาวบรรทัด:** 45–75 ตัวอักษร ยาวกว่านี้ตาหลงบรรทัด
 บนหน้าจอกว้างให้จำกัดความกว้างคอลัมน์ข้อความ ไม่ใช่ปล่อยเต็มจอ
 
-**ขนาดเล็กสุด 11** สำหรับข้อความที่ต้องอ่าน — สเกลของ skill แพลตฟอร์มมีขนาดให้เลือกมากกว่า 5 ได้ แต่**หนึ่งหน้าจอยังใช้ไม่เกิน 5** (ตัวเลขใหญ่โชว์ค่าหลักนับเป็นหนึ่งขนาด)
+**ขนาดเล็กสุด 11** สำหรับข้อความที่ต้องอ่าน — สเกลของ skill แพลตฟอร์มมีขนาดให้เลือกมากกว่า 5 ได้ แต่**1 หน้าจอยังใช้ไม่เกิน 5** (ตัวเลขใหญ่ที่โชว์ค่าหลักนับเป็น 1 ขนาด)
 
 **น้ำหนักตัวอักษร:** ใช้ 2 น้ำหนักพอต่อหน้าจอ (ปกติ + หนา) — ฟอนต์มีครบ 400–700 ได้ แต่หน้าเดียวไม่ควรใช้เกิน 2
-อยากเน้นให้เปลี่ยน**สี**หรือ**ขนาด** ก่อนจะเปลี่ยนน้ำหนักเป็นตัวที่ 3
+ถ้าอยากเน้น ให้เปลี่ยน**สี**หรือ**ขนาด**ก่อน อย่าเพิ่งเพิ่มน้ำหนักตัวที่ 3
 
 ---
 
@@ -561,7 +102,7 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 | 4 | สีข้อความจาง | ไม่จำกัด |
 
 **ทดสอบด้วยตา 2 วินาที:** หรี่ตามองหน้าจอ อะไรเด้งมาก่อน
-ถ้าเด้งมาพร้อมกัน 4 อย่าง = ยังไม่มีลำดับ
+ถ้าเด้งมาพร้อมกัน 4 อย่าง แปลว่ายังไม่มีลำดับ
 
 **ปุ่มหลักมีได้ปุ่มเดียวต่อหน้าจอ** ที่เหลือเป็นปุ่มรอง (เส้นขอบ) หรือปุ่มเปล่า (ข้อความล้วน)
 ปุ่มอันตราย (ลบ) เป็นปุ่มรองสีแดง ไม่ใช่ปุ่มทึบสีแดง — ไม่งั้นมันแย่งความเด่นไปจากงานหลัก
@@ -570,7 +111,7 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 
 ## 4 · แยกส่วนด้วยอะไร — เส้น เงา หรือพื้นหลัง
 
-เลือกได้ 3 วิธี **ใช้วิธีเดียวต่อหนึ่งระดับความลึก** ปนกันเมื่อไหร่รกทันที
+เลือกได้ 3 วิธี แต่**ใช้วิธีเดียวต่อ 1 ระดับความลึก** เพราะปนกันเมื่อไหร่จะรกทันที
 
 | วิธี | ใช้เมื่อ | ระวัง |
 |---|---|---|
@@ -600,7 +141,8 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 | เส้นคั่นตกแต่ง | ไม่มีเกณฑ์ |
 
 ตรวจในเบราว์เซอร์: DevTools → เลือก element → ช่องสีใน Styles บอกค่าให้เลย
-ไม่ใช่เบราว์เซอร์ (Flutter · native): คำนวณจากค่าสีใน token ตามสูตร Web Content Accessibility Guidelines (WCAG) — `(L1 + 0.05) / (L2 + 0.05)` เมื่อ L คือ relative luminance ของสีสว่างกว่า (L1) และเข้มกว่า (L2) — เขียนเป็น test สั้น ๆ ที่วนตรวจทุกคู่ข้อความ/พื้นทั้งโหมดสว่างและมืด หรือใช้เครื่องมือตรวจคอนทราสต์ตัวใดก็ได้ (Flutter มี `textContrastGuideline` ใน widget test)
+ถ้าไม่ใช่เบราว์เซอร์ (Flutter · native) ให้คำนวณจากค่าสีใน token ตามสูตร Web Content Accessibility Guidelines (WCAG) `(L1 + 0.05) / (L2 + 0.05)` โดย L คือ relative luminance (ความสว่างสัมพัทธ์) ของสีที่สว่างกว่า (L1) และเข้มกว่า (L2)
+เขียนเป็น test สั้น ๆ ที่วนตรวจทุกคู่ข้อความกับพื้น ทั้งโหมดสว่างและมืด หรือใช้เครื่องมือตรวจคอนทราสต์ตัวไหนก็ได้ (Flutter มี `textContrastGuideline` ใน widget test)
 
 **ข้อที่พลาดกันบ่อย:**
 
@@ -628,11 +170,11 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 
 | สถานะ | ตัวอย่าง (เครื่องวัดแสง) |
 |---|---|
-| ว่าง | ยังไม่ได้ให้สิทธิ์กล้อง → การ์ดอธิบายพร้อมปุ่มเดียว |
-| กำลังโหลด | sensor กำลังอุ่นเครื่อง ยังไม่มีค่าแรก → โครงร่างของตัวเลข ไม่ใช่ `0` |
-| ผิดพลาด | เครื่องไม่มี sensor · สิทธิ์ถูกบล็อก → บอกเหตุ + ทางไปต่อ (ใช้กล้องแทน · เปิดหน้าตั้งค่า) |
-| มีบางส่วน | ค่าเกินช่วงที่วัดได้ (อิ่มตัว) → แสดง "มากกว่า X" ไม่ใช่ตัวเลขผิด ๆ |
-| สำเร็จ | บันทึกจุดวัดแล้ว → SnackBar สั้น ๆ ที่ไม่บังปุ่ม |
+| ว่าง | ยังไม่ได้ให้สิทธิ์กล้อง ให้แสดงการ์ดอธิบายพร้อมปุ่มเดียว |
+| กำลังโหลด | sensor กำลังอุ่นเครื่องและยังไม่มีค่าแรก ให้แสดงโครงร่างของตัวเลข ไม่ใช่ `0` |
+| ผิดพลาด | เครื่องไม่มี sensor หรือสิทธิ์ถูกบล็อก ให้บอกเหตุและทางไปต่อ (ใช้กล้องแทน · เปิดหน้าตั้งค่า) |
+| มีบางส่วน | ค่าเกินช่วงที่วัดได้ (อิ่มตัว) ให้แสดง "มากกว่า X" ไม่ใช่ตัวเลขผิด ๆ |
+| สำเร็จ | บันทึกจุดวัดแล้ว ให้ขึ้น SnackBar สั้น ๆ ที่ไม่บังปุ่ม |
 
 **ข้อความ error ที่ใช้ได้:**
 
@@ -657,8 +199,8 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 
 - ของที่**เข้ามา**เร็วกว่าของที่**ออกไป** ไม่ได้ — ออกควรเร็วกว่าหรือเท่ากัน
 - อย่าเคลื่อนไหวของที่ผู้ใช้กำลังจะกด (ปุ่มขยับหนีนิ้ว)
-- เคารพ `prefers-reduced-motion` — บางคนเวียนหัวจริง ๆ (Flutter: `MediaQuery.disableAnimationsOf(context)` เป็น `true` → ข้าม animation)
-- **ไม่วาดใหม่เมื่อค่าที่แสดงไม่เปลี่ยน** — แจ้ง UI เมื่อค่าบนจอเปลี่ยนจริง (ค่าจาก sensor ที่สั่น: เปลี่ยนเกิน ~1 %) ค่ารองที่ค่อย ๆ ไหลอัปเดตราว 1 วินาทีครั้ง · วาดไม่หยุดกินแบต ทำให้โปรแกรมอ่านจอพูดซ้ำ และเครื่องมือทดสอบอ่านหน้าจอไม่ได้
+- เคารพ `prefers-reduced-motion` — บางคนเวียนหัวจริง ๆ (Flutter: ถ้า `MediaQuery.disableAnimationsOf(context)` เป็น `true` ให้ข้าม animation)
+- **ไม่วาดใหม่เมื่อค่าที่แสดงไม่เปลี่ยน** ให้แจ้ง UI เฉพาะเมื่อค่าบนจอเปลี่ยนจริง (ค่าจาก sensor ที่สั่น: เปลี่ยนเกิน ~1 %) ส่วนค่ารองที่ค่อย ๆ ไหล ให้อัปเดตราว 1 วินาทีครั้ง เพราะถ้าวาดไม่หยุด จะกินแบต โปรแกรมอ่านจอพูดซ้ำ และเครื่องมือทดสอบอ่านหน้าจอไม่ได้
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -682,8 +224,8 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 **เป้าที่นิ้วกดได้ต้อง ≥ 44×44 pt บน iOS (Apple) · ≥ 48×48 dp บน Android (Material)** ถึงไอคอนจะเล็กกว่านั้นก็ตาม
 (ขยายด้วย padding หรือ pseudo-element ไม่ใช่ขยายไอคอน)
 
-**เลือกแบบแน่นแล้วห้ามมีแถวโปร่งแทรก** — ความหนาแน่นที่ไม่คงที่คือสิ่งที่ทำให้
-หน้าจอ "ดูไม่เป็นระบบ" มากที่สุด และเป็นข้อที่คนมองข้ามมากที่สุด
+**เลือกแบบแน่นแล้วห้ามมีแถวโปร่งแทรก** — ความหนาแน่นที่ไม่คงที่ทำให้
+หน้าจอ "ดูไม่เป็นระบบ" มากที่สุด และคนมองข้ามมากที่สุด
 
 ---
 
@@ -740,4 +282,332 @@ Use on any task that produces a screen or screen spec, alongside the platform sk
 ## ตัวย่อ
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ · รายละเอียดใน skill `spell-out-abbreviations`
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+---
+
+# skill: web-app-design
+
+Use when designing or building a web app UI (dashboard, admin panel, internal tool, SaaS). Token contract, drop-in stylesheet, mockup template, themes.
+
+# Web App Design
+
+> **กฎข้อเดียว:** สีทุกสีในโค้ดคอมโพเนนต์ต้องมาจาก token
+> ถ้า `#hex` โผล่นอกไฟล์ token แปลว่าระบบดีไซน์เริ่มพังแล้ว และพังแบบเงียบ ๆ
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ทำหน้าจอเว็บแอป: แดชบอร์ด, admin panel, เครื่องมือภายใน, SaaS
+- ต้องการให้ทุกหน้าที่คนละคนทำออกมาหน้าตาเป็นชุดเดียวกัน
+- ต้องรองรับหลายแบรนด์/หลายธีมโดยไม่แตะโค้ดคอมโพเนนต์
+- ใช้ได้กับ Angular / React / Vue / Svelte / HTML เปล่า — CSS ล้วน ไม่ผูกเฟรมเวิร์ก
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- แอปเดสก์ท็อป Windows ให้ใช้ `windows-app-design`
+- เอกสาร .docx/.pptx ให้ใช้ `branded-document-design`
+- เว็บไซต์การตลาด/landing page เพราะระบบนี้ออกแบบมาสำหรับ **แอป** ที่ต้องอัดข้อมูล
+  ตัวหนังสือฐาน 12.5px จึงเล็กเกินไปสำหรับหน้าขาย
+
+---
+
+## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
+
+```
+1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน
+2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
+3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 1440
+   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900
+   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 420
+4. เปิดภาพดูจริงทุกความกว้าง แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
+5. อนุมัติแล้วจึงแปลงเป็นคอมโพเนนต์ — copy คลาสเดิม ไม่เขียน CSS ใหม่
+6. ต่อ scripts/check-design-tokens.mjs เข้า CI ตั้งแต่วันแรก
+```
+
+ข้อ 6 สำคัญกว่าที่คิด เพราะระบบดีไซน์ที่ไม่มีตัวตรวจบังคับจะค่อย ๆ เพี้ยนจาก
+"ขอ hardcode แค่ครั้งเดียว" ภายใน 3 สัปดาห์ และไม่มีใครรู้ตัวจนเปลี่ยนธีมแล้วพัง
+
+---
+
+## 2 · Design tokens
+
+> **สีมาจากเนื้องาน — ถามก่อนเริ่ม**
+> ถ้าลูกค้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+> (การแพทย์เขียว · การเงินน้ำเงินเข้ม · อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า ·
+> ตารางเต็มอยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md)
+> **ห้ามเริ่มด้วยธีมเริ่มต้นแล้วค่อยเปลี่ยนทีหลัง** เพราะ mockup ที่ผู้ใช้เห็นครั้งแรกคือสีที่เขาจะจำ
+
+93 token อยู่ในบล็อก `:root` ของ `assets/appstrack.css` ส่วนรายละเอียดครบอยู่ใน
+**`references/tokens.md`** โครงที่ต้องจำได้มีดังนี้ (ค่าสีมาจากข้อบนนี้ ไม่ใช่จากตาราง):
+
+| | หน้าที่ | ได้มาจาก |
+|---|---|---|
+| `--brand` / `--brand-2` | สีหลัก · ปลายไล่สี 135deg ใน `--grad-accent` | สีที่ผู้ใช้เลือก + เพื่อนบ้านบนวงล้อสี |
+| `--brand-50` / `--brand-100` | พื้นอ่อนของ chip การ์ด และแถวที่เลือก | สีหลักผสมขาว 96% / 90% |
+| พื้นหน้า / การ์ด | พื้นหลังเทาอ่อนมาก / การ์ดขาว | เทากลาง ๆ อมโทนเดียวกับสีหลักได้เล็กน้อย |
+| ข้อความ 4 ระดับ | หัวข้อ · เนื้อ · รอง · จาง | เทาเข้ม → เทาอ่อน · เนื้อความ contrast ≥ 4.5:1 |
+| เส้น 2 ระดับ | เส้นในการ์ด (อ่อนกว่า) · ขอบ input | เทาอ่อนมาก |
+| มุม | `14px` การ์ด · `9px` ปุ่ม/input · `99px` pill | **ค่าคงที่ ไม่เปลี่ยนตามแบรนด์** |
+| เลย์เอาต์ | sidebar `232px` · topbar `56px` · เนื้อหา `1160px` | **ค่าคงที่ ไม่เปลี่ยนตามแบรนด์** |
+
+**เปลี่ยนแบรนด์ทั้งแอป = แก้ 5 ค่า** (`--grad-accent --brand --brand-2 --brand-50 --brand-100`)
+ที่เหลือคำนวณหรืออ้างอิงจาก 5 ค่านี้ทั้งหมด ถ้าต้องแก้ค่าที่ 6 แปลว่ามีที่ไหน hardcode อยู่
+
+`assets/appstrack.css` มีชุดสีตัวอย่างมาให้ 5 ชุด (ocean · emerald · sunset · plum · graphite)
+สลับด้วย `body[data-theme]` และ sidebar สว่าง/เข้มด้วย `body[data-side='dark']`
+**ชุดพวกนี้คือตัวอย่างให้ดูว่าระบบรองรับการเปลี่ยนสีได้จริง ไม่ใช่ตัวเลือกที่ต้องเลือกใช้**
+ถ้าเนื้องานไม่เข้ากับทั้ง 5 ชุด ให้สร้างชุดที่ 6 จากสีของงานนั้น
+
+**สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่าน เสมอ
+
+---
+
+## 3 · โครงหน้าจอ
+
+```
+┌──────────┬─────────────────────────────────────────────────┐
+│ 232px    │ topbar 56px · โปร่ง · sticky                     │
+│ sidebar  ├─────────────────────────────────────────────────┤
+│          │  ชื่อหน้า h1 19px          [ปุ่มรอง] [ปุ่มหลัก]   │
+│ • เมนู   │  คำอธิบาย 11.5px สีรอง                           │
+│ • เมนู   │                                                 │
+│          │  ┌─ stat-grid: การ์ดตัวเลข auto-fit 190px ─────┐ │
+│  ─────   │  └─────────────────────────────────────────────┘ │
+│ กลุ่มที่2 │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
+│ • เมนู   │  │ ตาราง / ฟอร์ม          │ │ กิจกรรม / สรุป  │  │
+│          │  └───────────────────────┘ └─────────────────┘  │
+│ ⚙ ตั้งค่า │             ← เนื้อหากว้างสุด 1160px จัดกลาง →     │
+└──────────┴─────────────────────────────────────────────────┘
+```
+
+- **เมนูตั้งค่าอยู่ล่างสุดของ sidebar** (`.foot` มี `margin-top:auto`)
+- **หน้าละ 1 h1** และมีคำอธิบายใต้ h1 เสมอ — หน้าที่ไม่บอกว่าตัวเองทำอะไร = หน้าที่ยังไม่เสร็จ
+- **ปุ่มหลัก 1 ปุ่มต่อหน้า** (`.btn-primary` มี gradient + เงาแบรนด์) ที่เหลือเป็น `.btn` หรือ `.btn-ghost`
+- **KPI 3–5 ใบ** ถ้าเกินนั้นตัวเลขจะเล็กจนไม่เด่น
+- ตัวเลขทุกตัวที่เรียงเป็นคอลัมน์ต้องมีคลาส `.num` ไม่งั้นหลักไม่ตรง
+
+---
+
+## 4 · คอมโพเนนต์ที่มีให้แล้ว
+
+โครง `.app-shell/.app-sidebar/.app-topbar/.app-main` · การ์ด `.card/.card-head/.card-body` ·
+KPI `.stat-grid > .card.stat` · สถานะ `.pill-*` 7 โทน · ปุ่ม 4 แบบ ·
+ฟอร์ม `.field/.input/.select/.textarea` · ตาราง `.tb-wrap > .tb` ·
+ตัวกรอง `.chips/.tabs` · `.prog` · `.ava` · `.md-html` · `.empty` · `.spinner` ·
+`.toasts/.toast` · `.backdrop + .modal` · ยูทิลิตี `.row/.col/.grow/.ellipsis/.num`
+
+รายการเต็มพร้อมคำอธิบายอยู่ท้าย `references/tokens.md`
+
+**ไอคอน:** inline SVG stroke 2 ขนาด 15px ใน sidebar / 14px ในปุ่ม / 11px ใน pill
+ใช้ `stroke="currentColor"` เสมอ แล้วไอคอนจะเปลี่ยนสีตาม state ให้เอง
+
+---
+
+## 5 · ภาษาไทย
+
+- `Inter` ไม่มีอักษรไทย — ต้องมี `Noto Sans Thai` ต่อท้ายใน `--font` เสมอ
+- ระยะบรรทัด 1.6 (เนื้อความ) / 1.85 (`.md-html`) — ไทยต้องการมากกว่าอังกฤษ
+- **ห้าม justify** · **ห้าม `text-transform: uppercase` กับข้อความไทย** (ไม่มีผล แต่
+  `letter-spacing` ที่มากับมันจะดันวรรณยุกต์เพี้ยน) — หัวตารางที่เป็นไทยให้เอา uppercase ออก
+- ปุ่มไทยกว้างกว่าอังกฤษ ~20% อย่า fix ความกว้างปุ่ม
+- ทดสอบด้วยข้อความไทยจริง ไม่ใช่ Lorem ipsum
+
+---
+
+## 6 · ตรวจงาน
+
+```bash
+# 1. ระบบดีไซน์ยังสะอาดอยู่ไหม
+node scripts/check-design-tokens.mjs src/styles.css src/app
+
+# 2. หน้าตายังถูกทุกความกว้างไหม
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 1440
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900
+python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 420
+```
+
+แล้วเปิดภาพดูจริง ตรวจ:
+
+- [ ] ไม่มีสี hardcode (ตัวตรวจต้องขึ้น ✓)
+- [ ] ที่ 1024px sidebar หดเหลือไอคอน ส่วนที่ 720px กลายเป็น drawer และมีปุ่มเปิด
+- [ ] ตารางกว้างเกินจอเลื่อนเฉพาะในกรอบ **ไม่ใช่ทั้งหน้า** (ลากดูแนวนอนแล้ว sidebar ต้องไม่ขยับ)
+- [ ] สลับครบทั้ง 5 ธีม + sidebar สว่าง/เข้ม แล้วไม่มีข้อความกลืนพื้น
+- [ ] ข้อความไทยไม่ล้นปุ่ม · วรรณยุกต์ไม่ชนสระ
+- [ ] คอนทราสต์ ≥ 4.5:1 (`--text-faint` บนพื้นขาวคือจุดที่เฉียดที่สุด — ใช้กับข้อความ
+      ประกอบเท่านั้น ห้ามใช้กับข้อมูลที่ต้องอ่าน)
+- [ ] เดินด้วย Tab ได้ครบและเห็นวงแหวนโฟกัสทุกจุด
+- [ ] มี empty state ทุกที่ที่รายการอาจว่าง (`.empty`) และ loading ทุกที่ที่ต้องรอ (`.spinner`)
+
+---
+
+## 7 · Anti-patterns
+
+- ❌ **`#hex` ในไฟล์คอมโพเนนต์** — ต้นเหตุอันดับ 1 ของธีมพัง ให้ตัวตรวจจับไว้
+- ❌ **gradient บนกราฟ** — ค่าสีต้องคงที่ ไม่งั้นตาอ่านค่าผิด ใช้ `--c-*` ทึบ
+- ❌ **เงาหนา ๆ ใต้ทุกอย่าง** — ระบบนี้ใช้เงาบางมาก 2 ชั้น เงาลึก (`--shadow-lg`)
+  สงวนไว้ให้ modal/toast/เมนูลอยเท่านั้น
+- ❌ **ปุ่มหลักหลายปุ่มในหน้าเดียว** — ผู้ใช้ไม่รู้ว่าต้องกดอะไร
+- ❌ **`overflow-x` ที่ `<body>`** เพื่อแก้ตารางล้น — ต้องแก้ที่ `.tb-wrap`
+- ❌ **`alert()` / `confirm()`** — ใช้ `.toast` และ `.modal`
+- ❌ **สร้างขนาดตัวอักษรใหม่** นอกสเกล 10.5/11/12/12.5/13/15/19/22
+- ❌ **`.modal` ที่ไม่ตั้ง `position`** — จะจมอยู่ใต้ `.backdrop` แล้วคลิกอะไรไม่ได้เลย
+  (มีคอมเมนต์อธิบายไว้ใน CSS แล้ว อย่าลบ)
+- ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดู**
+
+---
+
+## 8 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| user flow / IA ก่อนลงสี | agent `ux-designer` |
+| แอปเดสก์ท็อป Windows โทนเดียวกัน | `windows-app-design` |
+| เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
+| ไดอะแกรมประกอบ spec | `markdown-visuals` |
+| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
+| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+
+---
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: tokens.md
+
+# Token reference — ระบบดีไซน์เว็บแอปสไตล์ Apps Track
+
+> ⚠️ **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
+> เลือกสีจากเนื้องานก่อนเสมอ (ดูข้อ "สีมาจากเนื้องาน" ใน `SKILL.md`)
+> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่าสี
+> ส่วนขนาด ระยะ มุม และ breakpoint เป็นค่าคงที่ คัดลอกไปใช้ได้เลย
+
+นิยามทั้งหมดอยู่ใน `assets/appstrack.css` บล็อก `:root`
+**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** เพราะตัวตรวจใช้บรรทัดนั้นเป็นเส้นแบ่ง
+
+## สารบัญ
+
+1. [แบรนด์ / gradient](#แบรนด์--gradient)
+2. [พื้นผิว · เส้น · เงา](#พื้นผิว--เส้น--เงา)
+3. [ตัวอักษร](#ตัวอักษร)
+4. [สีข้อมูล (กราฟ) — ทึบเสมอ](#สีข้อมูล-กราฟ--ทึบเสมอ)
+5. [Pill (สถานะ) — สามค่าเป็นชุด](#pill-สถานะ--สามค่าเป็นชุด)
+6. [เลย์เอาต์](#เลย์เอาต์)
+7. [เปลี่ยนธีม / เปลี่ยนแบรนด์](#เปลี่ยนธีม--เปลี่ยนแบรนด์)
+8. [คลาสคอมโพเนนต์ที่มีให้แล้ว](#คลาสคอมโพเนนต์ที่มีให้แล้ว)
+
+---
+
+## แบรนด์ / gradient
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--brand` | `#2a78d6` | ลิงก์ · แท็บที่เลือก · ไอคอน active · เส้นขอบตอนโฟกัส |
+| `--brand-2` | `#6a5cd6` | ปลายไล่สี · accent รอง |
+| `--brand-50` | `#eef4fd` | พื้นเมนู active · พื้น avatar · วงแหวนโฟกัส |
+| `--brand-100` | `#dde9fb` | รางของ spinner |
+| `--grad-accent` | `135deg #2a78d6 → #6a5cd6` | ปุ่มหลัก · chip ที่เลือก · แถบ progress |
+| `--grad-primary` | `#14264a → #25498c → #4b63c9` | sidebar โหมดเข้ม |
+| `--grad-page` | `160deg #f3f6fc → #f8f9fc → #f6f3fb` | พื้นหลังหน้า (fixed) |
+
+> gradient ใช้กับ **ปุ่ม/chip/progress** เท่านั้น — **ห้ามใช้บนกราฟ** เพราะค่าสีจะสื่อความหมายผิด
+
+## พื้นผิว · เส้น · เงา
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--bg` | `#f6f7fb` | พื้นหน้า |
+| `--surface` | `#ffffff` | การ์ด · input · ปุ่มปกติ |
+| `--surface-glass` | `rgba(255,255,255,.82)` | topbar โปร่ง (คู่กับ backdrop-filter) |
+| `--line` | `#eef0f5` | เส้นในการ์ด · เส้นตาราง |
+| `--line-strong` | `#e4e7ee` | ขอบ input · ขอบปุ่ม |
+| `--shadow` | เงา 2 ชั้นบางมาก | การ์ดปกติ |
+| `--shadow-lg` | เงา 2 ชั้นลึก | modal · toast · เมนูลอย |
+| `--shadow-brand` | เงาโทนน้ำเงิน | ปุ่มหลักเท่านั้น |
+| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | การ์ด / ปุ่ม·input / pill·chip |
+
+## ตัวอักษร
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--text` | `#333b4a` | หัวข้อ · ตัวเลข KPI |
+| `--text-body` | `#414957` | เนื้อความ (ค่าเริ่มต้นของ body) |
+| `--text-muted` | `#7d8492` | label · คำอธิบาย · เมนูที่ไม่ active |
+| `--text-faint` | `#a9aeb9` | หัวตาราง · timestamp · empty state |
+
+สเกล (ตั้งใจให้เล็กกว่าเว็บทั่วไป เพราะเป็นแอปที่ต้องอัดข้อมูล):
+
+| ระดับ | ขนาด | |
+|---|---|---|
+| h1 | 19px / 500 | ชื่อหน้า |
+| h2 | 15px / 500 | หัวการ์ด |
+| h3 | 13px / 500 | หัวข้อย่อย |
+| body | 12.5px / 1.6 | เนื้อความ · input · tab |
+| ปุ่ม · pill row | 12px | |
+| label · muted | 11px | |
+| faint · หัวตาราง | 10.5px | หัวตารางเป็นตัวพิมพ์ใหญ่ letter-spacing .4px |
+| ตัวเลข KPI | 22px / 600 | `letter-spacing:-.4px` + `tabular-nums` |
+
+ฟอนต์ใช้ `Inter` + `Noto Sans Thai` เพราะ **Inter ไม่มีอักษรไทย** ถ้าลืมใส่ Noto Sans Thai
+เบราว์เซอร์จะใช้ฟอนต์ระบบแทน (fallback) ซึ่งความสูงไม่เข้ากัน ตัวไทยจะดูเล็กและเตี้ยกว่าอังกฤษ
+
+ตัวเลขทุกที่ที่เรียงเป็นคอลัมน์ต้องใส่ `.num` (`tabular-nums`) ไม่งั้นหลักจะไม่ตรงกัน
+
+## สีข้อมูล (กราฟ) — ทึบเสมอ
+
+`--c-blue #4a8ee0` · `--c-teal #2bbd8a` · `--c-amber #f0ad2e` · `--c-green #1f9d3f` ·
+`--c-violet #6a5cc9` · `--c-red #e87f7c` · `--c-grey #c8ced9`
+คู่แผน/จริง: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · เลยกำหนด `--c-late #e58079`
+
+## Pill (สถานะ) — สามค่าเป็นชุด
+
+| โทน | พื้น | ตัวอักษร | เส้น | ใช้กับ |
+|---|---|---|---|---|
+| green | `#e9f7ef` | `#17794a` | `#d6efe1` | เสร็จ · ปกติ |
+| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | รีวิว · กำลังดำเนินการ |
+| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | รอ · เตือน |
+| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | ใกล้เกินกำหนด |
+| red | `#fdedec` | `#a63a34` | `#f8d9d7` | ค้าง · ผิดพลาด |
+| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | ประเภทพิเศษ |
+| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | ปิด · ยังไม่เริ่ม |
+
+## เลย์เอาต์
+
+| Token | ค่า |
+|---|---|
+| `--sidebar-w` | `232px` (≤1024px หด 64px · ≤720px เป็น drawer 240px) |
+| `--topbar-h` | `56px` |
+| `--content-max` | `1160px` |
+
+จุดตัด: **1024px** sidebar หดเหลือไอคอน · **720px** sidebar เป็น drawer (`body.nav-open`)
+ถ้าตารางกว้างเกินจอ ให้เลื่อนแนวนอน**เฉพาะใน `.tb-wrap`** ห้ามให้ทั้งหน้าเลื่อน
+
+## เปลี่ยนธีม / เปลี่ยนแบรนด์
+
+**สลับ accent ทั้งแอป** — `body[data-theme]`: ว่าง (ocean) · `emerald` · `sunset` · `plum` · `graphite`
+แต่ละธีมแก้แค่ 5 token (`--grad-accent --brand --brand-2 --brand-50 --brand-100`)
+
+**sidebar สว่าง/เข้ม** — `body[data-side='dark']` เปลี่ยน 8 token ของ sidebar
+เมนู active ในโหมดเข้มใช้แผ่นทับโปร่ง `--on-brand-veil` **ไม่ใช่** `--brand-50`
+เพราะสีอ่อนบนพื้นเข้มจะกลืนหายไปเลย
+
+**แบรนด์ลูกค้าใหม่** ให้คัดลอกบล็อก `body[data-theme='…']` แล้วใส่ 5 ค่าของลูกค้า
+ไม่ต้องแตะคอมโพเนนต์แม้แต่บรรทัดเดียว
+
+## คลาสคอมโพเนนต์ที่มีให้แล้ว
+
+| กลุ่ม | คลาส |
+|---|---|
+| โครง | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
+| การ์ด | `.card` `.card-head` `.card-body` |
+| KPI | `.stat-grid` `.card.stat` (`.label` `.value` `.foot`) |
+| สถานะ | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
+| ปุ่ม | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
+| ฟอร์ม | `.field > label` `.input` `.select` `.textarea` `.err` |
+| ตาราง | `.tb-wrap > .tb` (`.right`) |
+| ตัวกรอง | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
+| อื่น | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.spinner` `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
+| ยูทิลิตี | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |

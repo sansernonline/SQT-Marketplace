@@ -25,3 +25,7 @@ Storing lab reports and prescriptions → `important-docs` in `personal-life`. I
 - Supplements, herbal medicines and "detox" products — record them in the med list for the doctor; do not judge them.
 - Rights and free-service lists change — say "verify with สปสช. 1330 or ประกันสังคม 1506" when quoting them.
 - One-line note on every output: general information to help organise, not medical advice — ask your doctor or pharmacist.
+
+## Writing
+
+Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.

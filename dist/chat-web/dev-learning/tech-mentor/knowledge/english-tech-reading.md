@@ -1,6 +1,6 @@
 # skill: english-tech-reading
 
-Use when the user hits an English error message, RFC section or documentation chapter and wants it explained in Thai fast and accurately — sentence structure, RFC keywords like MUST and SHOULD, and error-message anatomy.
+Use when an English error message, RFC section or documentation passage needs explaining in Thai. Sentence structure, MUST and SHOULD, error anatomy.
 
 # English Tech Reading
 
@@ -8,15 +8,15 @@ Read it like an engineer, explain it in Thai.
 
 ## Error messages
 
-- Anatomy: what failed (the exception), where (file:line), why (the cause chain) — decode each part, keep the original terms in parentheses so searching stays possible
+- Anatomy: what failed (the exception), where (file:line), why (the cause chain). Decode each part. Keep the original terms in parentheses so the user can still search for them
 - "Expected X, found Y" — translate the expectation, not just the words
-- Never paraphrase away technical terms — gloss them (จับคู่คำเดิมไว้เสมอ)
+- Never replace technical terms with a paraphrase — explain them next to the original (จับคู่คำเดิมไว้เสมอ)
 
 ## Documentation and RFCs
 
 - RFC 2119 keywords decoded precisely: MUST = ต้องทำ ไม่มีข้อยกเว้น · SHOULD = ควรทำ เว้นแต่มีเหตุผล · MAY = ทำได้ ไม่บังคับ
-- Conditionals first: "if A and B, then C" — map the branches before reading details
-- Skip the intro and conclusion on first read; the contract is in the middle
+- Read the conditions first: "if A and B, then C". Map the branches before reading details
+- Skip the intro and conclusion on first read. The actual rules are in the middle
 
 ## Worked example — an error message
 
@@ -50,7 +50,7 @@ Use [references/decode-template.md](references/decode-template.md) for every err
 
 - Speed comes from structure, not vocabulary lists
 - When a sentence resists decoding, quote the original back and decode clause by clause
-- Encourage re-reading the original after the explanation — the goal is independence, not dependence
+- Encourage the user to re-read the original after the explanation. The goal is to read it alone next time
 
 
 ## reference: decode-template.md

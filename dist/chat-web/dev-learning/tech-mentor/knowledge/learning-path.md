@@ -1,18 +1,18 @@
 # skill: learning-path
 
-Use when the user wants to learn a new language, framework or paradigm properly. Builds small milestones anchored to the user's real projects, each producing something runnable, with honest checkpoints on whether to continue.
+Use when the user wants to learn a new language, framework or paradigm properly. Milestones tied to real projects, each runnable, honest checkpoints.
 
 # Learning Path
 
-Learn it on your own battlefield, in small wins.
+Learn on your own real project, in small wins.
 
 ## Steps
 
-1. **Goal and depth** — what "learned" means here (working knowledge vs mastery) and why; depth chosen explicitly
-2. **Baseline check** — ten quick questions to find what the user already knows; skip everything below the baseline
-3. **Milestones** — 4–7 steps, each: concept → tiny exercise → applied to the user's real project; each step under two hours
+1. **Goal and depth** — what "learned" means here (working knowledge or mastery) and why. Choose the depth out loud
+2. **Baseline check** — 10 quick questions to find what the user already knows. Skip everything they already know
+3. **Milestones** — 4–7 steps, each: concept → tiny exercise → applied to the user's real project. Each step takes under 2 hours
 4. **Anchoring rule** — at least half the milestones modify or extend something the user already owns, not toy examples
-5. **Checkpoints** — after milestone 3 and at the end: can the user do the thing unaided? If not, loop back; if yes, the path ends even if topics remain — the rest is reference material
+5. **Checkpoints** — after milestone 3 and at the end: can the user do the thing without help? If not, go back. If yes, the path ends even if topics remain. The rest is reference material
 
 ## Worked example — Docker to working knowledge, anchored to the user's project
 
@@ -38,7 +38,7 @@ Use [references/path-template.md](references/path-template.md) for the plan file
 
 - The path ends on competence, not exhaustion — knowing when you know enough is the skill
 - Each milestone's deliverable is visible in the project (a feature, a refactor, a test)
-- Re-plan freely when reality disagrees with the plan; the path serves the learner
+- Re-plan freely when reality differs from the plan. The path serves the learner
 - Record finished paths in a `learning-log.md` with dates — future-you will want the map
 
 

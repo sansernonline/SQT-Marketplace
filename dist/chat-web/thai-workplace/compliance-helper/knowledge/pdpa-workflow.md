@@ -1,10 +1,10 @@
 # skill: pdpa-workflow
 
-Use when a Thai SME must run PDPA in practice — consent form, ROPA, data-subject requests within 30 days, breach notice to สคส. within 72 hours, vendor checks. General information, not legal advice.
+Use when a Thai SME runs PDPA paperwork (consent form, ROPA, data-subject requests in 30 days, 72-hour breach notice, vendor checks). Not legal advice.
 
 # PDPA Workflow for Thai SMEs
 
-พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. General information, not legal advice — disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a DPO (เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-company) covers designing systems that hold personal data.
+พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a DPO (เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-company) covers designing systems that hold personal data.
 
 ## 1. Deadlines that matter
 
@@ -41,7 +41,7 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 
 ### B. Privacy notice and consent
 1. Privacy notice (ประกาศความเป็นส่วนตัว) at every collection point — what, why, basis, retention, rights, contact.
-2. Consent form only for consent-based purposes, one tick per purpose, version and timestamp stored.
+2. Consent form only for consent-based purposes, 1 tick per purpose, version and timestamp stored.
 3. Withdrawal channel (LINE keyword, email) that works the same day.
 
 ### C. Data-subject request (DSR)
@@ -55,7 +55,7 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 |---|---|
 | 0–4 | contain (reset passwords, revoke links, isolate device); start the incident log |
 | 4–24 | scope: what data, how many people, sensitive?, likely harm |
-| 24–48 | decide: risk to rights? → notify สคส.; high risk? → notify people too |
+| 24–48 | decide: if there is a risk to people's rights, notify สคส.; if the risk is high, notify the people too |
 | ≤ 72 | file the notification with สคส. (online at pdpc.or.th, รอยืนยัน the current channel); if late, file anyway and explain the delay |
 | after | fix root cause; update ROPA and vendor terms |
 
@@ -67,7 +67,7 @@ What data, why, where stored (country), sub-processors, security measures, breac
 ## Worked example
 
 A clinic's LINE OA admin sends a patient list (120 names + phone + diagnosis) to the wrong group at 10:00 Monday.
-Health data = sensitive → high risk. Contain: delete message, ask group to delete, log at 10:15. Notify สคส. by **10:00 Thursday**; notify the 120 patients without delay with what happened and a contact. Root cause: admin rights for too many staff → reduce, add a two-person check for files.
+Health data is sensitive, so the risk is high. Contain: delete the message, ask the group to delete it, log at 10:15. Notify สคส. by **10:00 Thursday**; notify the 120 patients without delay with what happened and a contact. Root cause: too many staff had admin rights. Reduce them and add a 2-person check for files.
 
 ## Rules
 

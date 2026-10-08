@@ -1,6 +1,6 @@
 # skill: meal-plan-grocery
 
-Use when a Thai family wants a weekly meal plan within a budget per head, a grocery list for the market or supermarket, batch cooking for busy weekdays, or less food waste — Thai home cooking, child and elder diets.
+Use when a Thai family wants a weekly meal plan on a per-head budget, a grocery list, weekday batch cooking or less food waste, incl. child and elder diets.
 
 # Meal Plan and Grocery List
 

@@ -1,10 +1,10 @@
 # skill: dbd-annual-filing
 
-Use when a Thai company or partnership must file after year end — AGM, audited financial statements via DBD e-Filing, บอจ.5, ภ.ง.ด.50 within 150 days. Builds the timeline back from the year-end date and flags late fines.
+Use when a Thai company or partnership files after year end. AGM, audited statements via DBD e-Filing, BOJ 5, PND 50 in 150 days, deadline timeline, late fines.
 
 # Year-End Filing — DBD and Revenue Department
 
-One year end, two authorities, four deadlines. General information, not legal or accounting advice — the auditor (ผู้สอบบัญชีรับอนุญาต) and accountant run the actual filing.
+Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Department). This is general information, not legal or accounting advice. The auditor (ผู้สอบบัญชีรับอนุญาต) and the accountant do the actual filing.
 
 ## 1. The timeline (company limited, บริษัทจำกัด)
 
@@ -59,10 +59,10 @@ One year end, two authorities, four deadlines. General information, not legal or
 ## Workflow
 
 1. Ask: entity type, accounting year end, auditor booked, any dormant period.
-2. Build the timeline backward from section 1 (or section 2 for a partnership); shift weekends/holidays (`thai-holidays`).
+2. Build the timeline backward from section 1 (section 2 for a partnership). Move dates that fall on weekends or holidays (`thai-holidays`).
 3. Checklist per step: trial balance, bank confirmations, stock count, fixed-asset register, AGM notice and minutes, shareholder register, ส.บช.3, ภ.ง.ด.50 with ภ.ง.ด.51 credit.
-4. Book the auditor at least 2 months before the AGM — auditor capacity in March–April is the usual bottleneck.
-5. If already late: file now, then settle the fine; fines grow with days late.
+4. Book the auditor at least 2 months before the AGM. Auditors are usually fully booked in March–April.
+5. Already late? File now, then settle the fine. The fine grows with each day late.
 
 ## Related
 

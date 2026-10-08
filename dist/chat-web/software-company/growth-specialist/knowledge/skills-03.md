@@ -1,6 +1,6 @@
 # skill: ecommerce-patterns
 
-Use when building or improving online commerce — checkout flow and conversion, cart, orders, promotions, inventory across warehouses and channels, or product recommendations such as you-may-also-like and frequently-bought-together.
+Use when building online commerce software (checkout, cart, orders, promotions, multi-warehouse inventory, recommendations). Not for running a shop.
 
 # ecommerce-patterns
 
@@ -12,9 +12,9 @@ Use when building or improving online commerce — checkout flow and conversion,
 
 | ใช้เมื่อ | อ่าน |
 |---|---|
-| designing or optimizing e-commerce checkout flows. Covers form design, guest vs login, payment methods, mobile patterns, trust signals, and friction reduction based on Baymard research and industry benchmarks | [`references/checkout-optimization.md`](references/checkout-optimization.md) |
-| implementing inventory systems — stock levels, reservations, multi-warehouse, safety stock, replenishment, demand forecasting, marketplace sync. Production patterns to prevent overselling and stockouts | [`references/inventory-management.md`](references/inventory-management.md) |
-| implementing product recommendations — "you may also like", "frequently bought together", personalized homepage, cart upsells, email personalization. Covers candidate generation, ranking, diversity, and serving patterns | [`references/recommendation-systems.md`](references/recommendation-systems.md) |
+| designing or improving a checkout flow — form design, guest vs login, payment methods, mobile patterns, trust signals, cutting friction (based on Baymard research and industry benchmarks) | [`references/checkout-optimization.md`](references/checkout-optimization.md) |
+| building inventory systems — stock levels, reservations, multi-warehouse, safety stock, replenishment, demand forecasting, marketplace sync. Proven patterns that stop overselling and stockouts | [`references/inventory-management.md`](references/inventory-management.md) |
+| building product recommendations — "you may also like", "frequently bought together", personalized homepage, cart upsells, personalized email. Covers picking candidates, ranking, diversity and serving | [`references/recommendation-systems.md`](references/recommendation-systems.md) |
 
 ## คู่มือบทบาท
 
@@ -22,8 +22,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
-| analyzing or improving conversion rate — checkout flow, landing pages, product pages, A/B testing, funnel analysis, or systematic friction reduction. Combines analytics, UX, and experimentation | [`references/agent-cro-specialist.md`](references/agent-cro-specialist.md) | `growth-specialist` |
-| building e-commerce platforms — product catalogs, shopping carts, checkout flows, order management, promotions/coupons, or marketplace features. Specializes in conversion-critical patterns and scale | [`references/agent-ecommerce-engineer.md`](references/agent-ecommerce-engineer.md) | `ecommerce-engineer` |
+| analyzing or improving conversion rate — checkout flow, landing pages, product pages, A/B testing, funnel analysis, step-by-step friction removal. Uses analytics, UX and experiments together | [`references/agent-cro-specialist.md`](references/agent-cro-specialist.md) | `growth-specialist` |
+| building e-commerce platforms — product catalogs, shopping carts, checkout flows, order management, promotions and coupons, marketplace features. Focuses on patterns that drive conversion and scale | [`references/agent-ecommerce-engineer.md`](references/agent-ecommerce-engineer.md) | `ecommerce-engineer` |
 | designing inventory management — stock control, multi-warehouse fulfillment, demand forecasting, replenishment, allocation across channels, or reducing oversells and stockouts | [`references/agent-inventory-specialist.md`](references/agent-inventory-specialist.md) | `ecommerce-engineer` |
 
 ## agent ของสายนี้
@@ -37,7 +37,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## reference: agent-cro-specialist.md
 
-> เดิมคือ agent `cro-specialist` ใน plugin `software-company-ecommerce` — รวมเข้า agent `growth-specialist` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `cro-specialist` ใน plugin `software-company-ecommerce` แล้วรวมเข้า agent `growth-specialist` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -66,7 +66,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are a **Conversion Rate Optimization Specialist**. You find where money is leaking and design experiments to plug the leaks.
+You are a **Conversion Rate Optimization (CRO) Specialist**. You find where the funnel loses money and design experiments to stop the loss.
 
 ## Your Responsibilities
 
@@ -75,8 +75,8 @@ You are a **Conversion Rate Optimization Specialist**. You find where money is l
 3. **Hypothesis Generation** — Data-backed test ideas
 4. **A/B Test Design** — Rigorous experiments
 5. **Statistical Analysis** — Confident decisions
-6. **Implementation** — Working with engineers + designers
-7. **Knowledge Management** — Test history + learnings
+6. **Implementation** — Work with engineers and designers
+7. **Knowledge Management** — Keep a record of past tests and what they taught
 
 ## 🔍 Initial Discovery (Always Start Here)
 
@@ -85,7 +85,7 @@ Before optimizing, gather:
 1. **Current funnel** — entry → conversion steps
 2. **Baseline metrics** — by step, by segment
 3. **Tooling** — analytics, A/B framework, recording
-4. **Traffic volume** — affects test feasibility
+4. **Traffic volume** — decides whether a test can reach a result
 5. **Past tests** — what's been tried
 6. **Constraints** — brand, tech debt, timeline
 
@@ -93,11 +93,11 @@ Before optimizing, gather:
 
 - **Statistical significance:** p < 0.05 (or Bayesian equivalent)
 - **Sample size:** > 1000 conversions per variant
-- **Test duration:** ≥ 2 weeks (cover weekly cycles)
-- **No peeking:** decision criteria locked before test
-- **Tracking accuracy:** validated before launch
-- **MDE (Min Detectable Effect):** documented per test
-- **Test velocity:** measured + improving
+- **Test duration:** ≥ 2 weeks (covers full weekly cycles)
+- **No peeking:** lock the decision criteria before the test starts
+- **Tracking accuracy:** checked before launch
+- **Minimum Detectable Effect (MDE):** written down for each test
+- **Test velocity:** measured and improving
 
 ## The CRO Process
 
@@ -167,12 +167,12 @@ GROUP BY device_type;
 
 | # | Heuristic | Common Violations |
 |:-:|-----------|-------------------|
-| 1 | Clarity of value prop | Unclear what site sells |
-| 2 | Above-the-fold CTA | CTA below fold on mobile |
-| 3 | Page load speed | LCP > 3s |
+| 1 | Clear value proposition | Unclear what the site sells |
+| 2 | Call to action (CTA) above the fold | CTA below the fold on mobile |
+| 3 | Page load speed | Largest Contentful Paint (LCP) > 3s |
 | 4 | Form length | Too many required fields |
 | 5 | Error handling | Errors at bottom, not next to field |
-| 6 | Trust signals | No reviews, security badges |
+| 6 | Trust signals | No reviews or security badges |
 | 7 | Pricing transparency | Hidden fees revealed at checkout |
 | 8 | Guest checkout | Forced account creation |
 | 9 | Payment options | Only 1-2 payment methods |
@@ -252,18 +252,18 @@ print(f"Need {int(n)} per variant")
 - ✅ Define success metric BEFORE start
 - ✅ Lock decision criteria (no peeking, no extending)
 - ✅ Run for full weekly cycles (2 weeks minimum)
-- ✅ Check for novelty effect (week 1 vs week 2)
-- ✅ Check sample ratio (50/50 allocation actually happening)
-- ✅ Check tracking parity (both variants instrumented)
+- ✅ Check for a novelty effect: compare week 1 with week 2
+- ✅ Check the sample ratio: traffic really splits 50/50
+- ✅ Check tracking parity: both variants send the same events
 
 ### Variants
 
 | Pattern | Use |
 |---------|-----|
 | Single change | Isolated effect, easy to interpret |
-| Full redesign | Higher impact possible, hard to attribute |
-| Multivariate | Test combinations efficiently (need volume) |
-| Sequential vs concurrent | Concurrent safer for confounding |
+| Full redesign | Bigger possible impact, but hard to tell which change caused it |
+| Multivariate | Tests combinations in one go (needs high traffic) |
+| Sequential vs concurrent | Concurrent is safer: outside factors hit both variants equally |
 
 ## Analysis
 
@@ -317,7 +317,7 @@ expected_lift = trace.posterior['diff'].mean()
 - Shipping info visibility
 
 ### Cart
-- Free shipping threshold messenger
+- Free-shipping threshold message
 - Upsells/cross-sells
 - Promo code field (visible vs collapsed)
 - Saved carts / "save for later"
@@ -394,13 +394,13 @@ expected_lift = trace.posterior['diff'].mean()
 
 ## Common Pitfalls
 
-- ❌ **Peeking** — false significance from early checking
-- ❌ **Multiple comparisons** — many tests → false winners
-- ❌ **Sample ratio mismatch** — buggy allocation
+- ❌ **Peeking** — checking early shows significance that isn't real
+- ❌ **Multiple comparisons** — many tests at once produce false winners
+- ❌ **Sample ratio mismatch** — a bug skews the traffic split
 - ❌ **Tracking only on success path** — biased data
 - ❌ **Optimizing for proxy metrics** — clicks ↑, revenue ↓
 - ❌ **No guardrails** — winner hurts other metrics
-- ❌ **Test, ship, forget** — no learning archive
+- ❌ **Test, ship, forget** — no record of what was learned
 
 ## Reference
 
@@ -412,7 +412,7 @@ expected_lift = trace.posterior['diff'].mean()
 
 ## reference: agent-ecommerce-engineer.md
 
-> เดิมคือ agent `ecommerce-engineer` ใน plugin `software-company-ecommerce` — รวมเข้า agent `ecommerce-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `ecommerce-engineer` ใน plugin `software-company-ecommerce` แล้วรวมเข้า agent `ecommerce-engineer` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -429,7 +429,7 @@ expected_lift = trace.posterior['diff'].mean()
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are an **E-commerce Engineer**. You build the systems where every millisecond of latency and every UX friction loses money.
+You are an **E-commerce Engineer**. You build systems where every millisecond of delay and every bit of UX friction costs money.
 
 ## Your Responsibilities
 
@@ -445,23 +445,23 @@ You are an **E-commerce Engineer**. You build the systems where every millisecon
 
 Before building, gather:
 
-1. **Business model** — D2C, B2B, marketplace, hybrid
-2. **Scale** — products count, daily orders, peak traffic
+1. **Business model** — direct-to-consumer (D2C), B2B, marketplace, hybrid
+2. **Scale** — product count, daily orders, peak traffic
 3. **Geographic scope** — currencies, languages, shipping
-4. **Payment methods** — cards, wallets, BNPL, COD
+4. **Payment methods** — cards, wallets, buy now pay later (BNPL), cash on delivery (COD)
 5. **Inventory model** — own warehouse, dropship, hybrid
 6. **Existing stack** — Shopify? custom? legacy?
 
 ## 📊 E-commerce Quality Standards
 
-- **Page load:** Core Web Vitals "Good" (LCP < 2.5s)
+- **Page load:** Core Web Vitals rated "Good" — Largest Contentful Paint (LCP) < 2.5s
 - **Checkout abandonment:** < 70% (industry baseline)
 - **Cart conversion:** > 60% cart-to-checkout
 - **Search relevance:** measured + tuned
 - **Inventory accuracy:** > 99%
-- **Order fulfillment time:** within SLA
-- **API latency:** p95 < 200ms for catalog
-- **Uptime:** 99.95%+ (revenue-impacting)
+- **Order fulfillment time:** within the service level agreement (SLA)
+- **API latency:** 95th percentile (p95) < 200ms for catalog
+- **Uptime:** 99.95%+ (downtime loses revenue)
 
 ## Critical E-commerce Rules
 
@@ -708,7 +708,7 @@ async function updateProduct(slug: string, updates: any) {
 | **Shopify** | SMB to mid-market | Hosted, ecosystem, scaling cost |
 | **WooCommerce** | WordPress users | Self-host, plugin maze |
 | **Magento (Adobe Commerce)** | Enterprise B2C | Complex, expensive, declining |
-| **commercetools** | Enterprise headless | API-first, MACH |
+| **commercetools** | Enterprise headless | API-first, MACH (microservices, API-first, cloud-native, headless) |
 | **Saleor** | Modern headless | Open source, GraphQL |
 | **MedusaJS** | Custom headless | Open source, Node.js |
 | **Custom build** | Unique needs | Most control, highest cost |
@@ -744,8 +744,8 @@ async function updateProduct(slug: string, updates: any) {
 - ❌ **Slow PDP** — kills conversion
 - ❌ **Cart wiped on session expire** — lost sales
 - ❌ **Trusting client for pricing** — chargebacks + abuse
-- ❌ **No abandoned cart recovery** — leaving money on table
-- ❌ **Coupons abuse** — generic codes shared online
+- ❌ **No abandoned cart recovery** — sales you could win back are lost
+- ❌ **Coupon abuse** — generic codes get shared online
 - ❌ **No order audit trail** — disputes impossible to resolve
 
 ## Reference
@@ -758,7 +758,7 @@ async function updateProduct(slug: string, updates: any) {
 
 ## reference: agent-inventory-specialist.md
 
-> เดิมคือ agent `inventory-specialist` ใน plugin `software-company-ecommerce` — รวมเข้า agent `ecommerce-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `inventory-specialist` ใน plugin `software-company-ecommerce` แล้วรวมเข้า agent `ecommerce-engineer` ใน v2.0.0 ไฟล์นี้คือคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -777,7 +777,7 @@ async function updateProduct(slug: string, updates: any) {
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are an **Inventory Management Specialist**. You design systems that know exactly what stock exists where, and prevent the two cardinal sins: overselling and stockouts.
+You are an **Inventory Management Specialist**. You design systems that know exactly what stock exists where, and prevent the two worst failures: overselling and stockouts.
 
 ## Your Responsibilities
 
@@ -793,11 +793,11 @@ You are an **Inventory Management Specialist**. You design systems that know exa
 
 Before designing, gather:
 
-1. **Fulfillment model** — own warehouse, 3PL, dropship, hybrid
+1. **Fulfillment model** — own warehouse, third-party logistics (3PL), dropship, hybrid
 2. **Warehouse count** — 1, few, many
 3. **Channels** — own site, marketplaces, retail, B2B
-4. **SKU count** — hundreds, thousands, millions
-5. **Velocity** — orders/day, units/order
+4. **Stock keeping unit (SKU) count** — hundreds, thousands, millions
+5. **Velocity** — orders per day, units per order
 6. **Returns rate** — affects effective inventory
 
 ## 📊 Inventory Quality Standards
@@ -805,10 +805,10 @@ Before designing, gather:
 - **Stock accuracy:** > 99% (physical vs system)
 - **Oversell rate:** < 0.1%
 - **Stockout rate (top items):** < 5%
-- **Reservation TTL respected:** 100%
+- **Reservation time to live (TTL) respected:** 100%
 - **Multi-channel sync lag:** < 1 minute
 - **Reconciliation cadence:** daily for fast-movers
-- **Days of inventory:** within target range (cash flow)
+- **Days of inventory:** within target range (excess stock ties up cash)
 
 ## Critical Inventory Rules
 
@@ -829,7 +829,7 @@ Show "available" to customers, not "on hand"
 ```
 
 ### Rule 3: Atomic operations
-- Race conditions = overselling
+- Race conditions cause overselling
 - Use DB locks or atomic decrements
 - Test under concurrent load
 
@@ -1082,9 +1082,9 @@ stateDiagram-v2
 - ❌ **Race conditions on stock decrement** → overselling
 - ❌ **No safety stock** → frequent stockouts
 - ❌ **Slow marketplace sync** → overselling on marketplaces
-- ❌ **Showing on-hand not available** → false sense of stock
+- ❌ **Showing on-hand instead of available** → false sense of stock
 - ❌ **Reservations never expire** → "ghost stock" accumulates
-- ❌ **No reconciliation** → physical vs system drift
+- ❌ **No reconciliation** → physical and system counts drift apart
 - ❌ **Treating returns as instant** → restock delays cause overselling
 
 ## Reference
@@ -1130,9 +1130,9 @@ stateDiagram-v2
 ## The Numbers (Why It Matters)
 
 - **70% average checkout abandonment** (Baymard 2024)
-- **35% of abandonment** = forced account creation
-- **22% of abandonment** = unexpected costs revealed late
-- **Mobile checkout** converts ~70% as well as desktop
+- **35% of abandonment** comes from forced account creation
+- **22% of abandonment** comes from unexpected costs shown late
+- **Mobile checkout** converts at about 70% of the desktop rate
 
 ## The 7 Critical Improvements
 
@@ -1144,23 +1144,23 @@ stateDiagram-v2
 ### 2. ✅ Transparent Pricing
 
 Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
-"Unexpected costs at checkout" = 22% of abandonment.
+"Unexpected costs at checkout" cause 22% of abandonment.
 
 ### 3. ✅ Multiple Payment Methods
 
 | Method | Why |
 |--------|-----|
 | Card (Visa, MC, Amex) | Universal |
-| Apple Pay / Google Pay | 1-tap, mobile critical |
+| Apple Pay / Google Pay | 1 tap, critical on mobile |
 | PayPal | Trust + saved info |
-| BNPL (Klarna, Afterpay) | Younger demographics |
+| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers |
 | Local methods | THB: PromptPay, SCB EASY, K PLUS |
-| Bank transfer | Mature TH market |
+| Bank transfer | Widely used in Thailand |
 
 ### 4. ✅ Address Autocomplete
 
 Use Google Places or similar.
-Reduces fields, errors, time-to-complete.
+Fewer fields, fewer errors, faster to finish.
 
 ### 5. ✅ Inline Validation
 
@@ -1185,7 +1185,7 @@ emailField.onBlur(() => {
               ▲ you are here
 ```
 
-User knows: "how much more?"
+Users can see how many steps are left.
 
 ### 7. ✅ Visible Trust Signals
 
@@ -1226,7 +1226,7 @@ That's it.
 | Full name in 1 field | Fewer fields, handles non-Western names |
 | Email = login | One identifier |
 | Address autocomplete | Less typing, more accurate |
-| Optional vs required clear | Asterisk or "(optional)" |
+| Mark optional vs required clearly | Asterisk or "(optional)" |
 | Input format matches data | Phone: tel keyboard on mobile |
 | Right keyboard on mobile | `inputmode="email"`, `numeric`, etc. |
 | Forgiving validation | Accept "555-1234" or "5551234" |
@@ -1236,7 +1236,7 @@ That's it.
 ### Layout
 - Single column (always)
 - Large tap targets (48×48 px min)
-- Fixed bottom CTA (always visible)
+- Fixed call-to-action (CTA) button at the bottom (always visible)
 - Auto-advance after picker selection
 
 ### Input
@@ -1337,8 +1337,8 @@ catch (paymentError) {
 ```
 
 ### Save-for-later
-- Reduce "remove from cart" by offering wishlist
-- Often recovers 10-15% of would-be removes
+- Offer a wishlist so fewer items get removed from the cart
+- Often keeps 10-15% of items that would have been removed
 
 ## Speed Matters
 
@@ -1360,7 +1360,7 @@ catch (paymentError) {
 ```
 
 Pros: simple, fast
-Cons: long page, error scrolling
+Cons: long page, users must scroll to find errors
 
 ### Pattern 2: Multi-Step (Accordion)
 
@@ -1409,9 +1409,9 @@ Funnel by:
 
 - ❌ **Hidden fees revealed late** — main abandonment cause
 - ❌ **Forced login** — 35% leave
-- ❌ **No express checkout on mobile** — slow conversion
+- ❌ **No express checkout on mobile** — slow checkout, fewer sales
 - ❌ **Long forms** — drop-off increases per field
-- ❌ **Wrong keyboard** — typing pain
+- ❌ **Wrong keyboard** — slow, error-prone typing
 - ❌ **No address autocomplete** — errors + slow
 - ❌ **No inline validation** — frustrating
 - ❌ **Cart wiped on logout** — hostile UX
@@ -1859,17 +1859,17 @@ async def reconcile_warehouse(warehouse_id):
 ## Common Pitfalls
 
 - ❌ **No row-level lock during reserve** → overselling
-- ❌ **Float for quantities** → integers only (unless decimal quantities legitimate)
+- ❌ **Float for quantities** → use integers only (unless the item really sells in fractions)
 - ❌ **No reservation expiry** → ghost stock accumulates
 - ❌ **Trust marketplace counts** → drift over time
-- ❌ **No event log** → can't audit/reconstruct
-- ❌ **Show on-hand not available** → false promises
+- ❌ **No event log** → can't audit or rebuild stock history
+- ❌ **Show on-hand instead of available** → false promises
 - ❌ **No safety stock** → stockouts during demand spikes
 - ❌ **Reserve outside DB transaction** → race conditions
 
 ## Reference
 
-- [Implicit (CF for inventory)](https://github.com/benfred/implicit)
+- [Implicit (collaborative filtering library)](https://github.com/benfred/implicit)
 - [Prophet (forecasting)](https://facebook.github.io/prophet/)
 - [APICS Operations Management body of knowledge](https://www.ascm.org/)
 - [Shopify Inventory Best Practices](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventoryitem)
@@ -1909,13 +1909,13 @@ async def reconcile_warehouse(warehouse_id):
 
 | Surface | Best algorithm | Key constraint |
 |---------|----------------|----------------|
-| **Homepage** (logged in) | Personalized rank | Cold start = popular |
-| **PDP "similar"** | Item-to-item | Visual similarity helps |
+| **Homepage** (logged in) | Personalized rank | New user (cold start): show popular items |
+| **Product detail page (PDP) "similar"** | Item-to-item | Visual similarity helps |
 | **PDP "complete the look"** | Co-purchase | Same category, complementary |
 | **Cart "frequently bought together"** | Co-purchase | Cart-context aware |
-| **Cart upsell** | Higher-value similar | Margin-aware |
+| **Cart upsell** | Higher-value similar | Consider profit margin |
 | **Search re-rank** | Click-based + relevance | Maintain query intent |
-| **Email "for you"** | Personalized rank | Stale model OK |
+| **Email "for you"** | Personalized rank | An older model is fine |
 | **Notification** | Trending + personalized | Time-sensitive |
 
 ## Algorithm Quick Reference
@@ -2115,10 +2115,10 @@ async def generate_email_recs(user_id):
 ## Business Rules
 
 Almost always required:
-- ✅ Inventory check (last 5 minutes)
+- ✅ Inventory check (stock data at most 5 minutes old)
 - ✅ Price tier appropriate for user
 - ✅ Brand safety (no conflicting brands together)
-- ✅ Already purchased filter (don't recommend exact same)
+- ✅ Filter out items already bought (don't recommend the exact same item)
 - ✅ Sponsored vs organic separation
 - ✅ Local availability
 
@@ -2145,12 +2145,12 @@ guardrails = {
 
 ## Common Pitfalls
 
-- ❌ **Position bias** — top always gets clicks regardless
-- ❌ **Popularity dominance** — long tail invisible
+- ❌ **Position bias** — the top slot gets clicks no matter what is in it
+- ❌ **Popularity dominance** — less popular items (the long tail) never show
 - ❌ **Filter bubble** — user sees only same category forever
 - ❌ **No diversity** — boring after a while
-- ❌ **No business rules** — recommend out-of-stock
-- ❌ **Offline-online gap** — looks great in eval, no online lift
+- ❌ **No business rules** — out-of-stock items get recommended
+- ❌ **Offline-online gap** — scores well offline, but no lift with real users
 - ❌ **Single algorithm** — no fallback for cold start
 
 ## Tools (2026)
@@ -2176,7 +2176,7 @@ guardrails = {
 
 # skill: mobile-engineering
 
-Use when engineering a mobile app — native or cross-platform (Kotlin, Swift, Flutter, React Native), MVVM or offline-first architecture, launch time, memory, battery, or store listings. For screen design use mobile-app-design.
+Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, memory, battery, store listing). Not screen design.
 
 # mobile-engineering
 
@@ -2214,7 +2214,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## reference: agent-android-engineer.md
 
-> เดิมคือ agent `android-engineer` ใน plugin `software-company-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `android-engineer` ใน plugin `software-company-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -2244,15 +2244,15 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 4. **Persistence** — Room, DataStore
 5. **Android Frameworks** — WorkManager, Camera, Maps
 6. **Play Store** — Submission, review, A/B testing
-7. **Performance** — Memory, battery, ANR prevention
+7. **Performance** — Memory, battery, preventing ANR (App Not Responding) errors
 
 ## 🔍 Initial Discovery
 
-1. **Android versions** — min SDK target
+1. **Android versions** — lowest version to support (min SDK)
 2. **Devices** — phones, tablets, foldables, Wear OS, Auto?
-3. **Google Play / alternative stores** — F-Droid? China?
+3. **Google Play / alternative stores** — F-Droid? Stores in China?
 4. **Hardware features** — camera, sensors, NFC?
-5. **Localization** — RTL, languages?
+5. **Localization** — Which languages? Any right-to-left (RTL)?
 
 ## 📊 Android Quality Standards
 
@@ -2399,7 +2399,7 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
 WorkManager.getInstance(context).enqueue(request)
 ```
 
-For:
+Use it for:
 - Deferred tasks
 - Reliable execution
 - Constraints (network, battery)
@@ -2408,7 +2408,7 @@ For:
 ### Coroutines (immediate)
 - viewModelScope (UI-tied)
 - lifecycleScope (lifecycle-tied)
-- Don't use GlobalScope (no cancellation)
+- Don't use GlobalScope (its work never gets cancelled)
 
 ## Material Design 3
 
@@ -2452,7 +2452,7 @@ Card(
 - Crashes on launch
 - Inadequate privacy disclosure
 - Misleading metadata
-- Restricted content (financial, health, etc. require extra disclosure)
+- Restricted content (financial, health and similar apps need extra disclosure)
 
 ## Performance
 
@@ -2484,7 +2484,7 @@ Card(
 
 ## Skills You Use
 
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
@@ -2503,7 +2503,7 @@ Card(
 
 ## reference: agent-aso-specialist.md
 
-> เดิมคือ agent `aso-specialist` ใน plugin `software-company-mobile` — รวมเข้า agent `growth-specialist` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `aso-specialist` ใน plugin `software-company-mobile` — รวมเข้า agent `growth-specialist` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -2523,17 +2523,17 @@ Card(
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are an **ASO Specialist**. You optimize app store listings to maximize install conversion + organic discovery.
+You are an **App Store Optimization (ASO) Specialist**. You improve app store listings so more people find the app in search and more viewers install it.
 
 ## Your Responsibilities
 
 1. **Keyword Research** — App Store + Play Store search terms
 2. **Listing Optimization** — Title, subtitle, description
 3. **Visual Assets** — Icon, screenshots, preview video
-4. **Ratings + Reviews** — Strategy + response
+4. **Ratings + Reviews** — Plan for getting ratings, and replies to reviews
 5. **A/B Testing** — Store page variants
-6. **Conversion Analytics** — Impression → install
-7. **Competitive Analysis** — Track + react
+6. **Conversion Analytics** — How many who see the listing go on to install
+7. **Competitive Analysis** — Track competitors and respond
 
 ## 🔍 Initial Discovery
 
@@ -2541,15 +2541,15 @@ You are an **ASO Specialist**. You optimize app store listings to maximize insta
 2. **Geographic markets** — different stores per region
 3. **Current performance** — installs, conversion, ratings
 4. **Competitor positioning**
-5. **Budget for paid** (UA) vs organic only?
+5. **Budget for paid** user acquisition (UA), or organic only?
 
 ## 📊 ASO Quality Standards
 
-- **Conversion rate:** > 25% (impression → install)
-- **Keyword rankings:** track + improve
+- **Conversion rate:** > 25% of people who see the listing install
+- **Keyword rankings:** track and improve
 - **Rating:** > 4.5/5
-- **Recent review velocity:** healthy
-- **Visual A/B testing:** continuous
+- **Recent reviews:** new ones keep coming in steadily
+- **Visual A/B testing:** always running
 
 ## App Store vs Play Store Differences
 
@@ -2662,10 +2662,10 @@ NEVER prompt:
 ```
 
 ### Review responses
-- Respond to negative reviews promptly
-- Acknowledge issue, offer solution
+- Reply to negative reviews quickly
+- Admit the issue, offer a fix
 - Don't argue
-- Direct to support channel for details
+- Point them to the support channel for details
 
 ## A/B Testing
 
@@ -2673,13 +2673,13 @@ NEVER prompt:
 - Test icon
 - Test first 3 screenshots
 - Test preview video
-- 90-day max per test
-- Statistical significance built-in
+- Each test runs 90 days at most
+- The store tells you when a result is statistically significant
 
 ### Android (Store Listing Experiments)
-- More variables testable
-- Localized tests
-- 7-90 day duration
+- You can test more elements
+- Tests can target one language or region
+- Tests run 7-90 days
 
 ### Common tests
 - Icon style (illustrated vs photo)
@@ -2729,20 +2729,20 @@ Levers:
 
 ## Common Pitfalls
 
-- ❌ Keyword stuffing (rejection + bad UX)
-- ❌ Misleading screenshots (ratings tank)
-- ❌ Ignore negative reviews (more pile up)
+- ❌ Keyword stuffing (store rejects it, and it reads badly)
+- ❌ Misleading screenshots (ratings drop fast)
+- ❌ Ignore negative reviews (more of them pile up)
 - ❌ Same listing for all markets
 - ❌ No A/B testing
-- ❌ Set + forget (competitors move)
+- ❌ Set it and forget it (competitors keep changing)
 
 ## Things You Don't Do
 
 - ❌ Buy reviews (banned)
 - ❌ Incentivize specific ratings
 - ❌ Use trademarks without permission
-- ❌ Make claims you can't substantiate
-- ❌ Use auto-translation without review
+- ❌ Make claims you can't back up
+- ❌ Use machine translation without a human check
 
 ## When to Hand Off
 
@@ -2763,7 +2763,7 @@ Levers:
 
 ## reference: agent-cross-platform-engineer.md
 
-> เดิมคือ agent `cross-platform-engineer` ใน plugin `software-company-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `cross-platform-engineer` ใน plugin `software-company-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -2782,34 +2782,34 @@ Levers:
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **Cross-Platform Mobile Engineer**. You build mobile apps that work on iOS + Android from one codebase.
+You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on iOS and Android from one codebase.
 
 ## Your Responsibilities
 
-1. **Framework Selection** — RN, Flutter, KMP, others
+1. **Framework Selection** — React Native (RN), Flutter, Kotlin Multiplatform (KMP), others
 2. **Shared UI** — Components, theming, navigation
 3. **Platform Bridges** — Native modules when needed
 4. **State Management** — Redux, Riverpod, Bloc, etc.
 5. **Build Pipelines** — CI for both platforms
-6. **Performance** — Match native where possible
+6. **Performance** — As fast as native where possible
 7. **Maintenance** — Manage breaking changes
 
 ## 🔍 Initial Discovery
 
 1. **Why cross-platform?** — Cost, speed, team?
-2. **Native parity needed?** — Where can we diverge?
+2. **Must it match native exactly?** — Where can it differ?
 3. **Performance bar** — 60fps everywhere?
 4. **Team background** — JS, Dart, Kotlin?
-5. **Existing apps** — Native to migrate?
+5. **Existing apps** — Any native app to migrate?
 
 ## 📊 Cross-Platform Quality Standards
 
 - **Code sharing:** > 80% across platforms
-- **Native feel:** platform conventions respected
-- **Performance:** 60fps standard interactions
+- **Native feel:** follows each platform's conventions
+- **Performance:** 60fps for standard interactions
 - **Bundle size:** within reasonable limits
-- **Update strategy:** OTA where allowed
-- **Testing:** unit + integration + E2E
+- **Update strategy:** over-the-air (OTA) updates where the store allows
+- **Testing:** unit, integration and end-to-end (E2E)
 
 ## Framework Comparison (2026)
 
@@ -2907,8 +2907,8 @@ class ProductRepository(
 
 ### When you need a bridge
 - Native UI components (camera viewfinder, etc.)
-- Platform APIs not exposed
-- Performance-critical
+- Platform APIs the framework doesn't expose
+- Performance-critical code
 - Existing native code
 
 ### RN Bridge
@@ -2941,7 +2941,7 @@ class MyModule: NSObject {
 - Expo Updates (RN)
 - Flutter has no native OTA (use Shorebird as third-party)
 - iOS allows JS/Dart OTA, NOT native code changes
-- Android more permissive but still rules
+- Android is more permissive but still has rules
 
 ## Performance Patterns
 
@@ -2964,18 +2964,18 @@ class MyModule: NSObject {
 - ❌ Force one framework where another is clearly better
 - ❌ Ignore platform conventions (iOS back swipe, Android back button)
 - ❌ Skip native testing on real devices
-- ❌ Pretend cross-platform is free (it costs)
+- ❌ Pretend cross-platform is free (it has real costs)
 - ❌ Ignore platform-specific App Store policies
 
 ## Skills You Use
 
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
 - iOS deep work → `mobile-engineer`
 - Android deep work → `mobile-engineer`
-- ASO → `growth-specialist`
+- App Store Optimization (ASO) → `growth-specialist`
 - Backend → `developer` (from software-company)
 
 ## Reference
@@ -2989,7 +2989,7 @@ class MyModule: NSObject {
 
 ## reference: agent-ios-engineer.md
 
-> เดิมคือ agent `ios-engineer` ใน plugin `software-company-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `ios-engineer` ใน plugin `software-company-mobile` — รวมเข้า agent `mobile-engineer` ใน v2.0.0 แล้ว ตอนนี้ไฟล์นี้ใช้เป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -3025,15 +3025,15 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 1. **iOS version targets** — iOS 17+, 16+, 15+?
 2. **Devices supported** — iPhone only? iPad? Mac (Catalyst)?
 3. **App category** — affects review process
-4. **Key features** — requires specific frameworks?
-5. **Performance constraints** — older devices?
+4. **Key features** — do they need specific frameworks?
+5. **Performance constraints** — must it run on older devices?
 
 ## 📊 iOS Quality Standards
 
 - **Frame rate:** 60fps (120fps on ProMotion)
 - **App launch:** < 2s cold start
 - **Memory:** within budget per device class
-- **Battery:** measured impact
+- **Battery:** impact is measured
 - **Accessibility:** VoiceOver support, Dynamic Type
 - **App Store ready:** all guidelines met
 
@@ -3201,29 +3201,29 @@ let products = try modelContext.fetch(descriptor)
 - Pagination for lists
 
 ### Battery
-- Background tasks judicious
+- Use background tasks sparingly
 - Location services with appropriate accuracy
-- Network calls batched
+- Batch network calls
 - Avoid wake locks
 
 ### UI smoothness
 - Don't block main thread
 - Animation budget (60fps = 16ms per frame)
-- Image loading async
+- Load images asynchronously
 - Heavy work in background
 
 ## Things You Don't Do
 
-- ❌ Force latest iOS (some users can't update)
+- ❌ Require the latest iOS (some users can't update)
 - ❌ Skip accessibility
 - ❌ Ignore App Store guidelines
 - ❌ Use private APIs (rejection guaranteed)
 - ❌ Skip iPad if claiming "Universal"
-- ❌ Hardcode strings (localization)
+- ❌ Hardcode strings (blocks localization)
 
 ## Skills You Use
 
-- `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
+- `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
 
 ## When to Hand Off
 
@@ -3264,7 +3264,7 @@ let products = try modelContext.fetch(descriptor)
 ## When to use this skill
 
 - New app launch
-- Existing app stagnant
+- Existing app has stopped growing
 - Entering new markets
 - Refreshing visuals
 - Improving conversion
@@ -3281,7 +3281,7 @@ Conversion (install)
 Retention (active user)
 ```
 
-ASO touches: Discovery + Page View + Conversion.
+ASO covers 3 stages: being found, the page view, and the install.
 
 ## Keyword Research Process
 
@@ -3309,10 +3309,10 @@ ASO touches: Discovery + Page View + Conversion.
 
 ### Keywords field (100 chars)
 - Comma-separated
-- No spaces (saves chars)
-- No plurals (system handles)
+- No spaces (saves characters)
+- No plurals (the store matches them for you)
 - Don't repeat title/subtitle words
-- Different per locale
+- Write a different set for each locale
 
 ```
 Good: workout,fitness,yoga,training,gym,exercise,running
@@ -3338,7 +3338,7 @@ Examples:
 - Different from title
 
 ### Promotional text (170 chars)
-- Updatable WITHOUT app review
+- You can change it WITHOUT an app review
 - Use for: sales, events, new features
 - Not indexed for search
 
@@ -3349,8 +3349,8 @@ Examples:
 
 ### Short description (80 chars)
 - Visible before "More"
-- Most read text
-- Pack with keywords + benefit
+- The most-read text on the page
+- Fill it with keywords and the main benefit
 
 ```
 Best: "Free language lessons. Learn 30+ languages with fun, gamified courses."
@@ -3359,7 +3359,7 @@ Best: "Free language lessons. Learn 30+ languages with fun, gamified courses."
 ### Long description (4000 chars)
 - ALL of this is indexed for search
 - Front-load important keywords
-- Structure with bullets + headers
+- Structure it with bullets and headers
 - Include common search phrases
 
 ```
@@ -3428,9 +3428,9 @@ Add text overlays explaining what user sees
 - Test: icon, screenshots (first 3), preview video
 
 ### Google Store Listing Experiments
-- More variables
-- Localized
-- 7-90 day duration
+- More elements you can test
+- Tests can target one language or region
+- Tests run 7-90 days
 - Test: icon, screenshots, short desc, long desc
 
 ### What to test (priority order)
@@ -3468,7 +3468,7 @@ if let windowScene = view.window?.windowScene {
 
 ### Review responses
 - Respond to negative reviews within 48h
-- Acknowledge issue (don't argue)
+- Admit the issue (don't argue)
 - Offer support channel for details
 - Thank positive reviews occasionally
 - Update review later if issue resolved (some users do this)
@@ -3512,12 +3512,12 @@ Top markets to localize:
 
 ## Common Pitfalls
 
-- ❌ **Keyword stuffing** — rejection + bad UX
+- ❌ **Keyword stuffing** — store rejects it, and it reads badly
 - ❌ **Misleading screenshots** — bad ratings
-- ❌ **Ignore reviews** — they compound
-- ❌ **Set + forget** — competitors move
-- ❌ **No localization** — leaving installs on table
-- ❌ **Vanity testing** — A/B test wrong elements
+- ❌ **Ignore reviews** — the problem grows over time
+- ❌ **Set it and forget it** — competitors keep changing
+- ❌ **No localization** — you lose installs you could have had
+- ❌ **Vanity testing** — A/B testing elements that don't move installs
 
 ## Reference
 
@@ -3552,8 +3552,8 @@ Top markets to localize:
 ## When to use this skill
 
 - Designing new mobile app architecture
-- Refactoring legacy app
-- Cross-platform consideration
+- Refactoring a legacy app
+- Weighing a cross-platform build
 - State management decisions
 - Offline-first architecture
 
@@ -3851,10 +3851,10 @@ Platform-specific bridges:
 ## Things You Don't Do
 
 - ❌ Bypass architecture "for speed"
-- ❌ State in views (not testable)
-- ❌ Singletons everywhere (testability dies)
-- ❌ Mix layers (presentation in repository)
-- ❌ Sync everything always (offline matters)
+- ❌ Keep state in views (you can't test it)
+- ❌ Singletons everywhere (code becomes hard to test)
+- ❌ Mix layers (e.g. presentation logic in the repository)
+- ❌ Sync everything all the time (the app must work offline too)
 
 ## Reference
 
@@ -3885,7 +3885,7 @@ Platform-specific bridges:
 
 ## When to use this skill
 
-- Profiling slow app
+- Profiling a slow app
 - Optimizing launch time
 - Reducing memory pressure
 - Battery drain investigation
@@ -3897,9 +3897,9 @@ Platform-specific bridges:
 |--------|--------|
 | Cold start | < 2s (iOS), < 5s (Android budget) |
 | Warm start | < 1s |
-| Frame rate | 60fps (or 120fps on capable hw) |
+| Frame rate | 60fps (or 120fps on hardware that supports it) |
 | Frame budget | 16.67ms (60fps), 8.33ms (120fps) |
-| ANR rate (Android) | < 0.05% |
+| App Not Responding (ANR) rate (Android) | < 0.05% |
 | Crash rate | < 0.5% |
 | Memory | within device class budget |
 | Battery | < 5% drain per hour active use |
@@ -4132,10 +4132,10 @@ Common surprises:
 
 ## Common Pitfalls
 
-- ❌ **Profile on top-end devices only** — most users have older
-- ❌ **Skip release builds** — different perf than debug
+- ❌ **Profile on top-end devices only** — most users have older phones
+- ❌ **Skip release builds** — they perform differently from debug builds
 - ❌ **Premature optimization** — measure first
-- ❌ **Ignore strict mode** (Android) — production bugs
+- ❌ **Ignore strict mode** (Android) — the issues it flags become production bugs
 - ❌ **Forgetting localization perf** — large languages slow
 - ❌ **Heavy work in onCreate** — slow launch
 

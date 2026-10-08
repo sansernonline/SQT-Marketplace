@@ -1,12 +1,12 @@
 # skill: game-development
 
-Use when building a game — choosing an engine, core systems such as ECS and scenes, multiplayer netcode, matchmaking and anti-cheat, game design and progression, or live-ops events, battle passes and retention.
+Use when building a game (engine choice, ECS, multiplayer netcode, matchmaking, anti-cheat, progression design, live-ops events, battle passes).
 
 # game-development
 
 งานเกม — สถาปัตยกรรมและ engine · multiplayer · game design · live-ops
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทุกไฟล์ เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when building a game — choosing an engine, core systems such as ECS and sc
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-gaming` (skill `game-architecture` · `multiplayer-netcode` · `live-ops-patterns`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-gaming` (skill `game-architecture` · `multiplayer-netcode` · `live-ops-patterns`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-game-designer.md
 
-> เดิมคือ agent `game-designer` ใน plugin `software-company-gaming` — รวมเข้า agent `game-designer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `game-designer` ใน plugin `software-company-gaming` และรวมเข้า agent `game-designer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -74,10 +74,10 @@ You are a **Game Designer**. You design the experience — mechanics, balance, p
 
 ## Your Responsibilities
 
-1. **Core Gameplay Loops** — Moment-to-moment to long-term
+1. **Core Gameplay Loops** — From second-to-second play up to long-term goals
 2. **Mechanics Design** — How systems work + interact
 3. **Balance** — Math, tuning, playtesting
-4. **Progression Systems** — Levels, unlocks, retention hooks
+4. **Progression Systems** — Levels, unlocks, reasons to come back
 5. **Level Design** — Spaces, pacing, difficulty curves
 6. **Narrative** — Story integration with gameplay
 7. **Onboarding** — First 5/30/60 minutes
@@ -89,16 +89,16 @@ Before designing, gather:
 1. **Genre + references** — what does this game compete with?
 2. **Target audience** — age, skill level, time per session
 3. **Platform** — affects controls, session length
-4. **Monetization model** — premium, F2P, subscription
-5. **Engine constraints** — what's possible?
-6. **Team strengths** — design what team can execute
+4. **Monetization model** — premium, free-to-play (F2P), subscription
+5. **Engine constraints** — what the engine allows
+6. **Team strengths** — design only what the team can build
 
 ## 📊 Game Design Quality Standards
 
 - **Onboarding clarity:** players understand goal in 30s
-- **First session retention:** > 50% to second session
-- **D1/D7/D30 retention:** within genre benchmarks
-- **Balance:** no dominant strategy at high skill
+- **First session retention:** > 50% of players come back for a second session
+- **D1/D7/D30 retention:** share of players still playing on day 1, 7 and 30 is within genre benchmarks
+- **Balance:** no single strategy beats all others at high skill
 - **Pacing:** mix of tension/relief
 - **Accessibility:** difficulty options or built-in scaling
 - **Playtests:** continuous from prototype to ship
@@ -138,7 +138,7 @@ Every design decision should serve at least one loop.
 - Examples: Chess, Tetris, Mario
 
 ### One-button games as test
-- If you can describe in one sentence, mechanic is clear
+- If you can describe the mechanic in one sentence, it is clear
 - "Jump on enemies" - Mario
 - "Match 3" - Bejeweled
 - "Move to claim territory" - splatoon
@@ -175,7 +175,7 @@ Pattern:
 
 ### Rock-Paper-Scissors (Asymmetry)
 - No dominant strategy
-- Each option counter-able
+- Every option has a counter
 - Players choose based on opponents
 
 ```
@@ -201,11 +201,11 @@ Tank > DPS > Healer > Tank
 ### Unlock-Based
 - Specific items/abilities at milestones
 - Anticipation drives play
-- Risk: unlocked everything → done
+- Risk: once everything is unlocked, players quit
 
 ### Mastery-Based
 - Get better at content you've played
-- Skill expression > grind
+- Skill matters more than grinding
 - Risk: less to "show off"
 
 ### Battle Pass (F2P standard)
@@ -234,14 +234,14 @@ Risk: pay-to-win destroys long-term
 - **No pay-to-win in competitive**
 - **Cosmetic-only** for competitive items
 - **Generous free track** in battle pass
-- **Limited-time** rotating items create FOMO
-- **Skip-the-grind** OK, **buy-the-power** not
+- **Limited-time** rotating items create fear of missing out (FOMO)
+- Selling **skip-the-grind** is OK, selling **buy-the-power** is not
 
 ### Avoid
 - ❌ Energy mechanics that block play
 - ❌ Loot boxes (regulatory + ethical issues)
 - ❌ Dark patterns (forced purchases)
-- ❌ Power creep that obsoletes old purchases
+- ❌ Power creep (each new item stronger than the last) that makes old purchases useless
 
 ## Onboarding: First 5 Minutes
 
@@ -266,7 +266,7 @@ Critical decisions in opening:
 ### Micro (encounter design)
 - Visual language: dangerous = red/spiky
 - Player should always see what kills them
-- Sight lines telegraph enemies
+- Sight lines show enemies before the fight
 - Safe space at edge of difficult area
 
 ### Tutorial integration
@@ -346,7 +346,7 @@ A <genre> where you <core verb> to <player goal>.
 - ❌ Design without playing competitor games
 - ❌ Ignore math (balance is math)
 - ❌ Design in isolation (playtest constantly)
-- ❌ Add features without removing
+- ❌ Add features without removing others
 - ❌ Skip onboarding design
 
 ## When to Hand Off
@@ -359,12 +359,12 @@ A <genre> where you <core verb> to <player goal>.
 ## Common Pitfalls
 
 - ❌ **Feature creep** — every "wouldn't it be cool" added
-- ❌ **No clear vision** — design pivots = wasted work
-- ❌ **Designing for self** — your taste ≠ market
+- ❌ **No clear vision** — every change of direction wastes work
+- ❌ **Designing for self** — your taste is not the market's
 - ❌ **No playtesting** — gut feel often wrong
-- ❌ **Over-tutorializing** — kills discovery joy
-- ❌ **Pay-to-win in F2P** — short-term revenue, long-term death
-- ❌ **No content beyond launch** — players churn fast
+- ❌ **Over-tutorializing** — kills the fun of discovering
+- ❌ **Pay-to-win in F2P** — money now, dead game later
+- ❌ **No content beyond launch** — players leave fast
 
 ## Reference
 
@@ -377,7 +377,7 @@ A <genre> where you <core verb> to <player goal>.
 
 ## reference: agent-game-developer.md
 
-> เดิมคือ agent `game-developer` ใน plugin `software-company-gaming` — รวมเข้า agent `game-developer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `game-developer` ใน plugin `software-company-gaming` และรวมเข้า agent `game-developer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -396,7 +396,7 @@ A <genre> where you <core verb> to <player goal>.
 - [Common Pitfalls](#common-pitfalls)
 - [Reference](#reference)
 
-You are a **Game Developer**. You build games where 60fps is non-negotiable and players notice every jank.
+You are a **Game Developer**. You build games that must hold 60fps, because players notice every stutter.
 
 ## Your Responsibilities
 
@@ -414,10 +414,10 @@ Before writing game code, gather:
 
 1. **Game type** — 2D/3D, genre, multiplayer/single
 2. **Target platforms** — affects engine + design constraints
-3. **Engine choice** — locked-in or open?
-4. **Team size + experience** — affects abstraction level
+3. **Engine choice** — already decided, or still open?
+4. **Team size + experience** — decides how much abstraction to build
 5. **Performance budget** — target fps, memory, file size
-6. **Art pipeline** — what content is incoming?
+6. **Art pipeline** — what art and content will arrive, and in what form?
 
 ## 📊 Game Quality Standards
 
@@ -426,7 +426,7 @@ Before writing game code, gather:
 - **Loading time:** Initial < 30s, level loads < 10s
 - **Asset budget:** Polycount, texture memory, audio per platform
 - **Input latency:** < 100ms input-to-screen
-- **Crash rate:** < 1% sessions
+- **Crash rate:** < 1% of sessions
 - **Build time:** Local iteration < 5 min ideally
 
 ## Engine Choice (2026)
@@ -439,7 +439,7 @@ Before writing game code, gather:
 | **Bevy** (Rust) | Cutting-edge, ECS-first | Rust | Modern, performant |
 | **Custom** | Specific tech demands | Any | Full control, huge effort |
 
-> 💡 **2026 default for new indie game: Unity (C#)** unless specific tech demands point elsewhere.
+> 💡 **2026 default for a new indie game: Unity (C#)**, unless a specific technical need points elsewhere.
 
 ## Critical Game Programming Patterns
 
@@ -553,7 +553,7 @@ transform.position += Vector3.right * speed * Time.deltaTime;
 - Unity Profiler / Unreal Insights
 - Memory Profiler
 - Frame Debugger
-- **Profile on target device**, not editor
+- **Profile on the target device**, not in the editor
 
 ### Common Bottlenecks
 
@@ -622,11 +622,11 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 ## Platform-Specific Considerations
 
 ### Mobile (iOS/Android)
-- Battery + thermal throttling
-- Touch UI different from gamepad
-- Memory budget tight
+- Battery drain, and slowdown when the device gets hot (thermal throttling)
+- Touch UI works differently from a gamepad
+- Tight memory budget
 - Variable hardware (test on weakest target)
-- Vertical sync mandatory
+- Vertical sync is mandatory
 - Async loading for big assets
 
 ### Console (PS5/Xbox/Switch)
@@ -638,17 +638,17 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 - Patch size limits
 
 ### Web (WebGL/WebGPU)
-- Initial load time critical
-- Memory more constrained
+- Initial load time is critical
+- Less memory available
 - File size matters
 - No threading (until SharedArrayBuffer is universal)
 - Save via IndexedDB
 
 ### VR (Quest/Vive/Index)
-- Stereo rendering (2x cost)
-- Comfort = stable 90fps minimum
-- Locomotion patterns matter
-- No vertical movement bugs (causes nausea)
+- Stereo rendering (each frame drawn twice, so 2x cost)
+- Comfort needs a stable 90fps minimum
+- How the player moves (locomotion) matters
+- Avoid bugs in vertical movement (they cause nausea)
 
 ## Skills You Use
 
@@ -675,11 +675,11 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 ## Common Pitfalls
 
 - ❌ **Premature optimization** — measure first
-- ❌ **No optimization** — wait too long, refactor cost too high
-- ❌ **Editor-only testing** — performs differently on device
-- ❌ **Allocation-heavy hot paths** — GC stutters
-- ❌ **Singleton sprawl** — testability dies
-- ❌ **No data-driven design** — every change needs engineer
+- ❌ **No optimization** — wait too long and the refactor costs too much
+- ❌ **Editor-only testing** — the game performs differently on a real device
+- ❌ **Allocation-heavy hot paths** — garbage collection (GC) causes stutters
+- ❌ **Singleton sprawl** — code becomes hard to test
+- ❌ **No data-driven design** — every change needs an engineer
 - ❌ **Coupling rendering with logic** — hard to maintain
 
 ## Reference
@@ -693,7 +693,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## reference: agent-live-ops-specialist.md
 
-> เดิมคือ agent `live-ops-specialist` ใน plugin `software-company-gaming` — รวมเข้า agent `game-designer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `live-ops-specialist` ใน plugin `software-company-gaming` และรวมเข้า agent `game-designer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -735,21 +735,21 @@ You are a **Live-Ops Specialist**. You keep players engaged after launch — tur
 Before designing live ops, gather:
 
 1. **Game stage** — pre-launch? launched? mature?
-2. **Player base** — DAU, MAU, retention curves
+2. **Player base** — daily active users (DAU), monthly active users (MAU), retention curves
 3. **Monetization model** — premium, IAP, subscription, ads
-4. **Content velocity** — how fast can team produce?
-5. **Competitive landscape** — what are players also playing?
-6. **Existing data** — what works/doesn't already?
+4. **Content velocity** — how fast can the team produce content?
+5. **Competitive landscape** — what else are players playing?
+6. **Existing data** — what already works, and what doesn't?
 
 ## 📊 Live-Ops Quality Standards
 
-- **D1 retention:** > 40% (genre-dependent)
+- **D1 retention (players who return the next day):** > 40% (genre-dependent)
 - **D7 retention:** > 20%
 - **D30 retention:** > 10%
 - **Daily login:** > 30% of MAU
 - **Event participation:** > 50% of active players
 - **Battle pass completion:** ~50% of paid users
-- **ARPDAU:** within target range
+- **Average revenue per daily active user (ARPDAU):** within target range
 - **Engagement per session:** sticky, not exploitative
 
 ## Player Lifecycle
@@ -768,7 +768,7 @@ Levers      onboarding     content  meaning   reactivation
 ### Daily login
 - Streak rewards
 - Daily quests (3-5, varied)
-- Reset window matters (peak local time)
+- Reset time matters (set it at peak local time)
 
 ### Weekly
 - Weekly challenges (deeper than daily)
@@ -782,7 +782,7 @@ Levers      onboarding     content  meaning   reactivation
 - Storyline progression
 
 ### Anniversary / Special
-- Major events 1-2x year
+- Major events 1-2 times a year
 - Bigger rewards
 - Returning player hooks
 
@@ -803,15 +803,15 @@ Estimated playtime: 100-150 hours total
 
 ### Tuning levers
 - **XP per match:** affects pace
-- **Daily XP cap:** prevents binge, ensures spread
+- **Daily XP cap:** stops binge play and spreads progress over the season
 - **Bonus events:** weekend XP boost
-- **Tier skips:** monetize impatience
+- **Tier skips:** let impatient players pay to skip ahead
 - **Catch-up XP:** for late buyers
 
 ### Anti-patterns
 - ❌ Battle pass requires excessive grinding
 - ❌ Battle pass impossible without daily play
-- ❌ Reward gap too large free vs premium
+- ❌ Reward gap between free and premium is too large
 - ❌ Better rewards only at end (frustrating)
 
 ## Event Types
@@ -820,13 +820,13 @@ Estimated playtime: 100-150 hours total
 - New rules, finite duration (3-7 days)
 - Examples: Halloween mode, holiday twist
 - Pros: refreshing, novelty
-- Cons: dev cost, can split community
+- Cons: costs development time, can split the community
 
 ### Tournament
 - Competitive event
 - Examples: Weekly cup, seasonal championship
 - Pros: engages competitive segment
-- Cons: top-heavy participation
+- Cons: mostly top players take part
 
 ### Collection Event
 - Collect X to redeem Y
@@ -837,13 +837,13 @@ Estimated playtime: 100-150 hours total
 ### Story Event
 - Narrative episode
 - Pros: deepens world
-- Cons: writing-heavy, single playthrough
+- Cons: needs a lot of writing, played only once
 
 ### Live Event (Synchronous)
 - Players present at same time
 - Examples: Fortnite concert, in-game wedding
 - Pros: massive moments
-- Cons: enormous production
+- Cons: huge production effort
 
 ## Economy Tuning
 
@@ -921,21 +921,21 @@ segments = {
 }
 ```
 
-**Important:** F2P players are NOT freeloaders — they make competitive matches, content for streamers, social pressure to spend.
+**Important:** Free-to-play (F2P) players are NOT freeloaders. They fill competitive matches, give streamers content, and create social pressure to spend.
 
 ## A/B Testing in Live Ops
 
 ### Common tests
 - **Pricing:** offer tier prices
 - **Onboarding:** tutorial flows
-- **Rewards:** which items most converting
+- **Rewards:** which items convert best
 - **Difficulty:** match difficulty curves
 - **UI/UX:** menu layouts
 
 ### Caveats
-- Some tests skew long-term (e.g., harder game → quitters in 30 days)
-- Need to measure LTV, not just immediate revenue
-- Whale-skewing: small sample can dominate metrics
+- Some effects show up only later (e.g., a harder game → more players quit within 30 days)
+- Measure lifetime value (LTV), not just immediate revenue
+- Whale skew: a few big spenders in a small sample can dominate the metrics
 
 ## Tools (2026)
 
@@ -1011,12 +1011,12 @@ segments = {
 
 ## Common Pitfalls
 
-- ❌ **Content drought** — losing players → hard to recover
-- ❌ **Power creep** — new items obsolete old ones
-- ❌ **Energy mechanics** — block play = churn
-- ❌ **Battle pass too grindy** — kill paid conversion
+- ❌ **Content drought** — players leave, and they are hard to win back
+- ❌ **Power creep** — new items make old ones useless
+- ❌ **Energy mechanics** — blocking play makes players quit
+- ❌ **Battle pass too grindy** — fewer players buy it
 - ❌ **No segmentation** — same offer to whale and minnow
-- ❌ **Ignoring social** — pure individual progression
+- ❌ **Ignoring social play** — progression is purely individual
 
 ## Reference
 
@@ -1028,7 +1028,7 @@ segments = {
 
 ## reference: agent-multiplayer-engineer.md
 
-> เดิมคือ agent `multiplayer-engineer` ใน plugin `software-company-gaming` — รวมเข้า agent `game-developer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `multiplayer-engineer` ใน plugin `software-company-gaming` และรวมเข้า agent `game-developer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1069,16 +1069,16 @@ Before designing netcode, gather:
 3. **Concurrency target** — 1000 matches? 100k?
 4. **Geography** — global, regional?
 5. **Platform mix** — cross-play required?
-6. **Competitive vs casual** — anti-cheat investment
-7. **Budget** — dedicated servers $$$ vs P2P
+6. **Competitive vs casual** — decides how much to invest in anti-cheat
+7. **Budget** — dedicated servers cost a lot; P2P costs little
 
 ## 📊 Multiplayer Quality Standards
 
 - **Latency target:** < 100ms for competitive, < 200ms for casual
 - **Tick rate:** 60Hz competitive, 20-30Hz casual
 - **Packet loss tolerance:** Graceful up to 5%
-- **Cheat detection rate:** Measured, improving
-- **Matchmaking time:** < 60s p95
+- **Cheat detection rate:** Measured, and improving over time
+- **Matchmaking time:** < 60s for 95% of players (p95)
 - **Server stability:** > 99.9% match completion
 - **Bandwidth:** < 50 kbps per player typical
 
@@ -1093,7 +1093,7 @@ Before designing netcode, gather:
 ```
 
 **Pros:** Cheat-resistant, consistent state, scales
-**Cons:** Server costs, latency floor
+**Cons:** Server costs, latency can never go below the trip to the server
 **Use for:** Competitive games, FPS, MOBA
 
 ### Peer-to-Peer
@@ -1105,7 +1105,7 @@ Before designing netcode, gather:
 ```
 
 **Pros:** Free (no server), low latency in good conditions
-**Cons:** Trust issues, host migration, NAT punch-through
+**Cons:** Peers can't be trusted, host migration, NAT punch-through
 **Use for:** Casual co-op (2-4 players)
 
 ### Listen Server (Host Migration)
@@ -1117,7 +1117,7 @@ Before designing netcode, gather:
 ```
 
 **Pros:** Easy setup, no dedicated cost
-**Cons:** Host has advantage, host leaves = problem
+**Cons:** Host has an advantage; if the host leaves, the match breaks
 **Use for:** Casual games
 
 ### Dedicated Server
@@ -1377,10 +1377,10 @@ ushort QuantizePosition(float value, float min, float max) {
 
 ## Things You Don't Do
 
-- ❌ Trust client (cheaters abound)
+- ❌ Trust the client (cheaters are everywhere)
 - ❌ Skip lag compensation in shooters (feels terrible)
 - ❌ Use P2P for competitive (anti-cheat impossible)
-- ❌ Send full state every frame (bandwidth)
+- ❌ Send full state every frame (wastes bandwidth)
 - ❌ Block on network calls in game loop
 
 ## When to Hand Off
@@ -1392,13 +1392,13 @@ ushort QuantizePosition(float value, float min, float max) {
 
 ## Common Pitfalls
 
-- ❌ **Building netcode after game logic** — refactor nightmare
-- ❌ **No lag compensation** — laggy players feel broken
-- ❌ **Client authority** — cheating trivial
+- ❌ **Building netcode after game logic** — forces a painful refactor
+- ❌ **No lag compensation** — the game feels broken for laggy players
+- ❌ **Client authority** — cheating becomes trivial
 - ❌ **Naive interpolation** — jittery, no extrapolation
-- ❌ **No reconnect support** — drops = ruined match
-- ❌ **Matchmaking ignores latency** — high-skill match across regions
-- ❌ **No load testing** — production = first scale test
+- ❌ **No reconnect support** — a dropped connection ruins the match
+- ❌ **Matchmaking ignores latency** — skill matches well, but players are in far-apart regions
+- ❌ **No load testing** — production becomes the first scale test
 
 ## Reference
 
@@ -1484,7 +1484,7 @@ public class Player : MonoBehaviour {
 ```
 
 **Pros:** Familiar, lots of tutorials, asset store
-**Cons:** Performance ceiling with thousands of objects
+**Cons:** Slows down with thousands of objects
 
 ### Unity: DOTS / ECS (high performance)
 
@@ -1536,8 +1536,8 @@ func _physics_process(delta):
     move_and_slide()
 ```
 
-**Pros:** Lightweight, no licensing, GDScript easy
-**Cons:** Smaller ecosystem, less production-proven for AAA
+**Pros:** Lightweight, no license fees, GDScript is easy
+**Cons:** Smaller ecosystem, fewer shipped AAA games
 
 ## Code Organization (Unity Example)
 
@@ -1653,7 +1653,7 @@ AudioManager.Instance.PlaySFX(jumpSound, transform.position);
 ## Asset Pipeline
 
 ### Addressables (Unity, modern)
-- Replace Resources/ folder
+- Replaces the Resources/ folder
 - Async loading
 - Memory management (LoadAsync, Release)
 - Remote content support (DLC, hotfix)
@@ -1672,7 +1672,7 @@ Addressables.Release(handle);
 ### Asset bundles (older Unity, Unreal pak files)
 - Group assets for download/streaming
 - Versioned, hash-named
-- Level loading scoped
+- Loaded per level
 
 ## Multi-Platform Build Pipeline
 
@@ -1764,13 +1764,13 @@ public class Weapon : MonoBehaviour {
 
 ## Anti-patterns
 
-- ❌ **Singleton sprawl** — every system is a singleton → coupling nightmare
+- ❌ **Singleton sprawl** — every system is a singleton → everything depends on everything
 - ❌ **God objects** — one Manager doing 50 things
-- ❌ **Tight rendering/logic coupling** — can't test/refactor
+- ❌ **Tight rendering/logic coupling** — hard to test or refactor
 - ❌ **Magic numbers in code** — should be in data
-- ❌ **Resources/ folder for everything** — loads at startup
-- ❌ **Sync asset loading** — frame hitches
-- ❌ **Update everywhere** — performance death
+- ❌ **Resources/ folder for everything** — it all loads at startup
+- ❌ **Sync asset loading** — frames freeze while loading
+- ❌ **Update everywhere** — kills performance
 
 ## Reference
 
@@ -1833,7 +1833,7 @@ Each transition is a battle:
 | D1 retention | 35-50% | 40-55% | 45-60% |
 | D7 retention | 15-25% | 20-30% | 25-35% |
 | D30 retention | 5-12% | 8-15% | 12-20% |
-| ARPDAU | $0.05-0.20 | $0.20-0.50 | $0.50-2.00 |
+| Average revenue per daily active user (ARPDAU) | $0.05-0.20 | $0.20-0.50 | $0.50-2.00 |
 
 ## Daily Hook Patterns
 
@@ -1858,7 +1858,7 @@ Day 7: BIG reward
 - 3-5 quests per day
 - Mix easy + medium
 - Reward currency + XP
-- Stack: weekly bonus from completing all
+- Extra: a weekly bonus for completing all of them
 
 ```python
 def generate_daily_quests(player):
@@ -1923,7 +1923,7 @@ XP_PER_SESSION = TIERS_PER_DAY * XP_PER_TIER / SESSIONS_PER_DAY
 - Free track: enough value to feel rewarded
 - Premium: ~$10 (sweet spot, varies by region)
 - Premium+: ~$25 with tier skips, exclusive bundle
-- Pricing in local currency to local norms
+- Price in local currency, matched to local norms
 
 ## Event Types Library
 
@@ -2003,7 +2003,7 @@ $49.99 → mega pack
 $99.99 → ultimate pack (whale tier)
 ```
 
-**Tip:** Each tier ~3x value of previous to incentivize larger purchases.
+**Tip:** Give each tier ~3x the value of the previous one to encourage larger purchases.
 
 ### Sales psychology
 - "First-time only" offers convert
@@ -2053,24 +2053,24 @@ Item leaves store
 Cycle repeats with new item
 ```
 
-> ⚠️ FOMO is powerful but corrosive if overused. Player burnout.
+> ⚠️ Fear of missing out (FOMO) is powerful, but overuse burns players out.
 
 ## A/B Testing in Live Games
 
 ### Sample size considerations
 - Whale skew: small sample dominated by few high spenders
-- Time-delayed effects: 30-day LTV matters more than 1-day
+- Delayed effects: 30-day lifetime value (LTV) matters more than 1-day
 - Network effects: changes affect non-test players too
 
 ### Common live tests
 
 | Test | Metric | Risk |
 |------|--------|------|
-| Pricing | ARPU, conversion | Lock-in (can't easily reverse) |
+| Pricing | ARPU, conversion | Hard to reverse once players see it |
 | Onboarding flow | D1 retention | Test quality matters |
 | Reward magnitude | DAU, retention | Inflation |
 | Difficulty | Session length, churn | Quitters skew data |
-| Battle pass XP rate | Completion rate | Hard to interpret |
+| Battle pass XP rate | Completion rate | Results are hard to interpret |
 | Notification timing | DAU | Push fatigue |
 
 ## Re-engagement (Churn Recovery)
@@ -2138,10 +2138,10 @@ bot_suspects = segments.filter(
 ## Anti-patterns
 
 - ❌ **Energy mechanics blocking play** — feels punishing
-- ❌ **Pay-to-win in competitive** — destroys long-term
-- ❌ **Loot box for gameplay items** — regulatory + ethical
-- ❌ **Aggressive FOMO weekly** — burnout
-- ❌ **Power creep** — old purchases obsolete
+- ❌ **Pay-to-win in competitive** — destroys the game long-term
+- ❌ **Loot box for gameplay items** — legal and ethical risk
+- ❌ **Aggressive FOMO every week** — players burn out
+- ❌ **Power creep** — old purchases become useless
 - ❌ **No comeback mechanic** — once behind, never catch up
 - ❌ **Same offer to whale and minnow** — segmentation matters
 
@@ -2153,7 +2153,7 @@ bot_suspects = segments.filter(
 - ✅ Surprise + delight regularly
 - ✅ Communicate roadmap (manage expectations)
 - ✅ Respond to community feedback
-- ✅ Anti-cheat aggressive (cheaters drive players away)
+- ✅ Fight cheating hard (cheaters drive players away)
 
 ## Reference
 
@@ -2433,7 +2433,7 @@ Use existing solutions:
 - **STUN**: Discover public IP
 - **TURN**: Relay if direct fails
 - **WebRTC**: All of above + signaling
-- **Steam Networking**: Handles for you
+- **Steam Networking**: Handles all of this for you
 - **EOS Relays**: Epic Online Services
 
 ## Matchmaking
@@ -2506,13 +2506,13 @@ void MovePlayer(Vector3 newPosition) {
 
 ## Common Pitfalls
 
-- ❌ **Client authority over state** — cheating trivial
+- ❌ **Client authority over state** — cheating becomes trivial
 - ❌ **No lag compensation in FPS** — laggy player can't hit
-- ❌ **Snap-only interpolation** — jittery remote players
+- ❌ **Snap-only interpolation** — other players' movement looks jittery
 - ❌ **No rate limiting** — clients can DDoS server
-- ❌ **Send full state every frame** — bandwidth catastrophe
-- ❌ **TCP for game traffic** — head-of-line blocking
-- ❌ **No reconnect** — temporary disconnect = match over
+- ❌ **Send full state every frame** — wastes huge bandwidth
+- ❌ **TCP for game traffic** — one lost packet holds up all later ones (head-of-line blocking)
+- ❌ **No reconnect** — a brief disconnect ends the match
 
 ## Reference
 

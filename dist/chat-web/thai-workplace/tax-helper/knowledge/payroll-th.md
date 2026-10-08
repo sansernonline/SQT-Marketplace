@@ -1,10 +1,10 @@
 # skill: payroll-th
 
-Use when running Thai monthly payroll — PIT withholding on salary by annualisation, social security, provident fund, ภ.ง.ด.1, ภ.ง.ด.1ก and หนังสือรับรอง 50 ทวิ. Worked example included.
+Use when running Thai monthly payroll. Salary tax withholding by annualisation, social security, provident fund, PND 1, PND 1 Kor, 50 Tawi certificate.
 
 # Thai Payroll
 
-Gross → minus SSO, PVD, PIT → net. Then file and remit. General information, not tax advice — check unusual cases (bonus, stock, foreign staff) with an accountant.
+Gross pay minus SSO, PVD and PIT = net pay. Then file and remit. This is general information, not tax advice. Check unusual cases (bonus, stock, foreign staff) with an accountant.
 
 ## 1. Monthly payroll steps
 
@@ -68,7 +68,7 @@ Compute tax on (annual salary + bonus) and on annual salary alone; the differenc
 
 ## 3. ภ.ง.ด.1 and ภ.ง.ด.1ก
 
-- **ภ.ง.ด.1** monthly — one line per employee paid: tax ID, name, pay date, amount paid, tax withheld. Nil months: no return needed if nothing was paid.
+- **ภ.ง.ด.1** monthly — 1 line per employee paid: tax ID, name, pay date, amount paid, tax withheld. Nil months: no return needed if nothing was paid.
 - **ภ.ง.ด.1ก** yearly — totals per employee for the calendar year; must agree with the 12 ภ.ง.ด.1 returns and the 50 ทวิ issued. Differences are the usual audit question.
 
 ## 4. หนังสือรับรองการหักภาษี ณ ที่จ่าย (50 ทวิ)

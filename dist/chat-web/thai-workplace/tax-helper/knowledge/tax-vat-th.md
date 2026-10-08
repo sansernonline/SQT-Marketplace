@@ -1,10 +1,10 @@
 # skill: tax-vat-th
 
-Use when a Thai company asks what to file this month, whether to register for VAT, how much tax to withhold, or what late filing costs — ภ.พ.30, ภ.ง.ด.1/3/53/54, ภ.ง.ด.50/51, e-WHT, surcharges.
+Use when a Thai company asks what to file this month, whether to register for VAT, how much to withhold or late penalties. PP 30, PND 1, 3, 53, 50, 51, e-WHT.
 
 # Thai VAT, Withholding Tax and Company Filing Calendar
 
-Which form, which date, how much to withhold, what late costs. General information, not tax advice — a licensed accountant (ผู้สอบบัญชี / สำนักงานบัญชี) signs off real filings.
+Which form, which date, how much to withhold, and what filing late costs. This is general information, not tax advice. A licensed accountant (ผู้สอบบัญชี / สำนักงานบัญชี) signs off real filings.
 
 ## 1. Do you have to register for VAT?
 
@@ -55,7 +55,7 @@ Full table with legal basis and edge cases: [references/wht-rates.md](references
 | Professional fees (วิชาชีพอิสระ — lawyer, accountant, architect, doctor) | 3% | 3% |
 | Prizes / lucky draws | 5% | 5% |
 
-- Withhold only when a single payment is **1,000 baht or more** (or smaller payments under one contract that add up to 1,000+).
+- Withhold only when a single payment is **1,000 baht or more** (or smaller payments under 1 contract that add up to 1,000+).
 - The base is the amount **before VAT**.
 - Give the payee **หนังสือรับรองการหักภาษี ณ ที่จ่าย (50 ทวิ)** — fields in `payroll-th`.
 
@@ -80,7 +80,7 @@ Pay through a bank that supports e-WHT and the bank deducts, files and remits �
 2. Build the calendar from section 2 — only the forms that apply. Shift dates for weekends/holidays.
 3. For each payment the user mentions, give the WHT rate, form and 50 ทวิ obligation.
 4. Document checklist per form: sales tax report (รายงานภาษีขาย), purchase tax report (รายงานภาษีซื้อ) with original tax invoices, payment vouchers, 50 ทวิ copies, payroll register.
-5. If anything is late, compute the surcharge from section 4 and say file now — the cost grows monthly.
+5. If anything is late, compute the surcharge from section 4 and tell the user to file now. The cost grows every month.
 6. End with the handoff list for the accountant.
 
 ## Worked example — a service payment
@@ -101,7 +101,7 @@ Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
 
 # Withholding tax rates by payment type
 
-Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50, ม.69 ทวิ, ม.70 and คำสั่งกรมสรรพากร ท.ป.4/2528. General information, not tax advice — confirm unusual cases with an accountant.
+Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50, ม.69 ทวิ, ม.70 and คำสั่งกรมสรรพากร ท.ป.4/2528. This is general information, not tax advice. Confirm unusual cases with an accountant.
 
 ## 1. Payments to Thai companies and individuals
 
@@ -136,7 +136,7 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 
 ## 4. Rules that trip people up
 
-- **1,000-baht rule** — no withholding on a single payment under 1,000 baht unless it is one of several payments under one contract totalling 1,000+.
+- **1,000-baht rule** — no withholding on a single payment under 1,000 baht unless it is 1 of several payments under 1 contract that total 1,000+.
 - **Base excludes VAT** — withhold on the price before VAT when VAT is shown separately.
 - **Gross-up** — if you agree to bear the payee's tax, the tax itself is income: tax = payment × rate ÷ (1 − rate). Example: net 10,000 at 3% → tax 309.28, gross 10,309.28.
 - **Wrong form** — individual on ภ.ง.ด.3, juristic person on ภ.ง.ด.53, employee on ภ.ง.ด.1. Mixing them up means amending both.

@@ -1,10 +1,10 @@
 # skill: linkedin-profile
 
-Use when creating or improving a LinkedIn profile for job search or personal branding in Thailand — headline, About, Featured, experience, skills and the keywords Thai recruiters search for.
+Use when creating or improving a LinkedIn profile for job search in Thailand. Headline, About, Featured, experience, recruiter keywords.
 
 # LinkedIn Profile (Thai market)
 
-Recruiters in Thailand search LinkedIn mostly in English, by job title + skill + location. The profile must match those searches and then convince in the first two lines.
+Recruiters in Thailand search LinkedIn mostly in English, by job title + skill + location. The profile must match those searches and then convince in the first 2 lines.
 
 ## Workflow
 
@@ -28,7 +28,7 @@ Recruiters in Thailand search LinkedIn mostly in English, by job title + skill +
 | Looking for opportunities | Data Analyst \| SQL · Power BI · Python \| Retail & e-commerce analytics \| Bangkok |
 | วิศวกร | Project Engineer \| EPC & Solar PV \| 12 MW delivered on time \| PMP \| EEC Thailand |
 
-Do not write "unemployed", "seeking", or only the employer name. English headline even if the About has Thai — searches are mostly English.
+Do not write "unemployed", "seeking", or only the employer name. Write the headline in English even if the About has Thai, because most searches are in English.
 
 ## About section — 4 short paragraphs
 
@@ -71,7 +71,7 @@ Pin 2–4: a portfolio link, a public case study or article, a presentation, a c
 ## Checklist
 
 - [ ] Headline has target title + 2 keywords + proof
-- [ ] About first two lines stand alone
+- [ ] About first 2 lines stand alone
 - [ ] Each role has 2–4 result bullets
 - [ ] Top 5 skills match job-post keywords
 - [ ] Profile and CV dates and titles match exactly

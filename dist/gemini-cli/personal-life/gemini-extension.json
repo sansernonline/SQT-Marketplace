@@ -1,0 +1,6 @@
+{
+  "name": "sqt-personal-life",
+  "version": "0.3.0",
+  "description": "Personal life administration for busy adults — weekly reviews, meeting prep and summaries, inbox triage method, calendar audits, personal knowledge notes, important-document registry with expiry tracking, travel checklists, gift tracking, a decision journal, subscription audits from Thai bank statements, family digital hygiene and scam defence, quarterly goals and habit design, and polite Thai-English message templates. Knowledge and workflow only; it complements email/calendar/note plugins instead of duplicating their connectors.",
+  "contextFileName": "GEMINI.md"
+}

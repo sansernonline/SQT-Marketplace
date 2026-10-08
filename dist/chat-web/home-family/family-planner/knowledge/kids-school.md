@@ -1,10 +1,10 @@
 # skill: kids-school
 
-Use when a Thai family organises a child's school year — term dates, fees and what free education covers, tutoring, uniforms, enrolment or transfer documents, child tax deductions and the child support grant.
+Use when a Thai family organises a child school year (term dates, fees, free education, tutoring, enrolment or transfer papers, child tax deduction).
 
 # Kids and School (Thailand)
 
-A school year has three money peaks (enrolment, term 1 start, term 2 start) and one paperwork peak (enrolment or transfer). Plan for those four dates and the rest is routine.
+A school year has 3 money peaks (enrolment, term 1 start, term 2 start) and 1 paperwork peak (enrolment or transfer). Plan for those 4 dates; the rest is routine.
 
 General information, not tax or legal advice — the school, เขตพื้นที่การศึกษา and กรมสรรพากร are the authorities.
 
@@ -68,7 +68,7 @@ Ask before paying: what exact gap (subject, grade, test)? For how many weeks? Ho
 
 ## Worked example
 
-Two children, public school, ป.3 and ม.1 (EP programme). Term 1 May: EP fee for ม.1 15,000 (example, รอยืนยัน the school's figure) + uniforms 2,500 + supplies 1,500; ป.3 extras 1,200. Monthly sinking fund: (15,000 × 2 terms + 4,000 extras × 2 + tutoring 8 weeks × 800 × 2) ÷ 12 ≈ 4,233 บาท/เดือน put aside from June. Tax: older child born 2557 → 30,000; younger born 2562 (second child, after 2561) → 60,000.
+2 children, public school, ป.3 and ม.1 (EP programme). Term 1 May: EP fee for ม.1 15,000 (example, รอยืนยัน the school's figure) + uniforms 2,500 + supplies 1,500; ป.3 extras 1,200. Monthly sinking fund: (15,000 × 2 terms + 4,000 extras × 2 + tutoring 8 weeks × 800 × 2) ÷ 12 ≈ 4,233 บาท/เดือน put aside from June. Tax: older child born 2557 → 30,000; younger born 2562 (second child, after 2561) → 60,000.
 
 ## Related
 

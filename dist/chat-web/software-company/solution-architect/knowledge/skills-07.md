@@ -1,943 +1,1599 @@
-# skill: error-handling-patterns
+# skill: database-design
 
-Use when writing or reviewing code that can fail (network, database, other services). Where to catch, user message vs log detail, retry vs do-not-retry, timeout, backoff and circuit-breaker numbers.
+Use when designing or changing a database schema (tables, columns, indexes, relations, migrations). Naming, keys, types, constraints, multi-tenancy.
 
-# จัดการข้อผิดพลาด
+# ออกแบบฐานข้อมูล
 
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
+> โค้ดผิดแก้วันนี้จบวันนี้ แต่ schema ผิดต้องอยู่กับมัน 3 ปี พร้อมข้อมูลจริงอีก 10 ล้านแถวที่ต้องย้ายตาม
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
+- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
+- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
+- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-| งาน | ใช้ตัวนี้แทน |
+| โจทย์ | ไปที่ |
 |---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` |
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
+| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
+| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
+| ที่เก็บ connection string | `config-and-secrets` |
+| รัน migration ใน pipeline | `cicd-and-release` |
 
 ---
 
-## 1 · จับที่ไหน ปล่อยที่ไหน
+## 1 · เลือกชนิดฐานข้อมูลก่อน
 
-| ชั้น | ทำอะไร |
-|---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log หนึ่งครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
-
-> **log ที่เดียว ที่ชั้นนอกสุด** — catch แล้ว log แล้ว throw ต่อทุกชั้น
-> ทำให้ error หนึ่งตัวกลายเป็นสิบบรรทัดใน log แล้วไม่มีใครรู้ว่ามันคือเรื่องเดียวกัน
-
-**สามอย่างที่ห้ามทำเด็ดขาด:**
-
-```csharp
-try { ... } catch { }                      // ❌ กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ❌ ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ❌ log ซ้ำทุกชั้น
-```
-
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
-
-```csharp
-catch (SmtpException ex)
-{
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
-}
-```
-
----
-
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
-
-| | ผู้ใช้เห็น | log เก็บ |
+| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อมสองฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✅ | ❌ ต้องทำมือ |
+| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ⚠️ ใช้คอลัมน์ JSON | ✅ |
+| ต้องการ transaction ข้ามหลายตาราง | ✅ | ⚠️ ได้แต่แพงกว่า |
+| รายงาน ผลรวม การวิเคราะห์ | ✅ | ❌ |
+| เขียนหนักมาก log/telemetry | ⚠️ | ✅ หรือใช้ time-series |
 
-```
-❌ "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-❌ "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-✅ "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
-```
+> **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
+> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
+> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
 
-**ข้อความที่ดีมีสามส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+**ผสมกันได้**: ใช้ relational เป็นหลัก แล้วเก็บข้อมูลที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
+เกือบทุกกรณี ทางนี้ดีกว่าแยกฐานข้อมูล 2 ตัว
 
 ---
 
-## 3 · แยกประเภทก่อนตัดสินใจ
+## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
 
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
+|---|---|---|
+| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
+| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| primary key | `id` | `id` |
+| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` → `user_roles` |
+| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
+| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
+| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
+| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
+
+**สิ่งที่ห้ามทำ:**
+
+- ❌ ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
+- ❌ ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
+- ❌ ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
+- ❌ ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+
+> SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
+> **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
+
+---
+
+## 3 · คอลัมน์ที่ทุกตารางต้องมี
+
+```sql
+id           bigint / uuid   PRIMARY KEY
+created_at   timestamptz     NOT NULL DEFAULT now()
+updated_at   timestamptz     NOT NULL DEFAULT now()
+```
+
+เพิ่มตามความจำเป็น:
+
+| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
+|---|---|---|
+| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
+| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
+| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
+| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
+
+> 🚨 **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
+> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
+> แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+
+---
+
+## 4 · เลือกชนิด identifier
+
+| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
 |---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
+| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
+| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
 
-> 🚨 **retry กับสิ่งที่ retry ไปก็ไม่หาย คือการยิงซ้ำให้ระบบที่ล้มอยู่แล้วล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีกร้อยครั้งก็ได้คำตอบเดิม
+> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
+> ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
+> ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
+> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+
+**เลขที่คนเห็นไม่ใช่ primary key**: เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
+ให้เก็บเป็นคอลัมน์ต่างหากที่มี unique constraint และไม่เอา primary key ไปโชว์
 
 ---
 
-## 4 · timeout และการลองใหม่
+## 5 · normalisation แค่ไหนพอ
 
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+**เริ่มที่ 3NF เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
 
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
+
+1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
+2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
+3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
+
+**ข้อยกเว้นที่ยอมรับกันทั่วไป**: ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง
+ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
+ไม่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+
+---
+
+## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+
+รายละเอียด 4 ชนิดข้อมูลที่พลาดกันประจำ (เงิน · เวลา · enum หรือสถานะ · boolean) พร้อมตัวอย่าง อยู่ใน [`data-types`](references/data-types.md)
+
+## 7 · index — วางตรงไหนถึงได้ผล
+
+**ต้องมี:**
+
+- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
+- คอลัมน์ที่อยู่ใน `WHERE` ของ query ที่รันบ่อย
+- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+
+**composite index (index หลายคอลัมน์): ลำดับคอลัมน์สำคัญ**
+
+```sql
+-- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
+CREATE INDEX ix_orders_tenant_status_created
+  ON orders (tenant_id, status, created_at DESC);
+```
+
+เรียงคอลัมน์ตามเงื่อนไข: **เท่ากับ → ช่วง → เรียงลำดับ**
+index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
+
+**อย่าใส่ index เมื่อ:**
+
+- ตารางเล็กกว่าไม่กี่พันแถว เพราะฐานข้อมูลอ่านทั้งตารางเร็วกว่า
+- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
+- ตารางเขียนบ่อยกว่าอ่านมาก เพราะทุก index เพิ่มต้นทุนทุกครั้งที่เขียน
+
+> **วัดก่อนเดา**: `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
+> บอกได้ว่า index ถูกใช้จริงไหม ส่วนการเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+
+---
+
+## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+
+| กฎ | ที่ควรอยู่ |
 |---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
+| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
+| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
+| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
 
-**สูตรการลองใหม่:**
+> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล ยังมี script แก้ข้อมูลด่วน
+> งาน import ตอนตี 3 และ service ตัวที่ 2 ที่เขียนทีหลัง
+> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
 
-```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
-```
+**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
 
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงินสองรอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
+| ตัวเลือก | ความหมาย | ใช้กับ |
+|---|---|---|
+| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
+| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
+| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
 
----
-
-## 5 · ตัดวงจร (circuit breaker)
-
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
-
-```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
-```
-
-ค่าเริ่มต้นที่ใช้ได้: ล้ม 5 ครั้งติดใน 30 วินาที → เปิด 60 วินาที
-
-**ใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+ถ้าใส่ `CASCADE` ผิดที่เดียว ลบลูกค้า 1 คน แล้วประวัติการซื้อ 10 ปีจะหายตาม
 
 ---
 
-## 6 · ล้มบางส่วน
+## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
 
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
 
-| แบบ | เหมาะกับ |
-|---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+## 10 · ระบบหลายผู้เช่า (multi-tenant)
 
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+|---|---|---|---|
+| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ พลาดที่เดียวข้อมูลก็รั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
+| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
+| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
 
-**งานทำความสะอาดต้องรันเสมอ** ไม่ว่าจะสำเร็จหรือไม่ — ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ใช้ `finally` / `using` / `with` / `defer` ไม่ใช่เขียนซ้ำในทุกทางออก
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- ❌ **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- ❌ **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- ❌ **log แล้ว throw ต่อทุกชั้น** — error หนึ่งตัวได้สิบบรรทัด
-- ❌ **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- ❌ **ส่ง stack trace ให้ผู้ใช้** — หลุดโครงสร้างภายในให้คนที่กำลังหาช่อง
-- ❌ **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- ❌ **retry การเขียนโดยไม่มี idempotency key** — รายการซ้ำ
-- ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+> 🚨 ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
+> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
+> query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
+> และไม่มี error ให้เห็นเลย
 
 ---
 
-## 8 · ตัวย่อ
+## 11 · ข้อมูลส่วนบุคคล
 
-- **retry** — การลองใหม่เมื่อครั้งแรกล้มเหลว
-- **exponential backoff** — การหน่วงแบบทวีคูณ รอนานขึ้นทุกครั้งที่ลองใหม่
-- **jitter** — ค่าสุ่มที่บวกเข้าไปในเวลาหน่วง เพื่อไม่ให้ทุกเครื่องลองใหม่พร้อมกัน
-- **circuit breaker** — ตัวตัดวงจร หยุดเรียกปลายทางที่กำลังล้มชั่วคราว
-- **idempotency key** — รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ
-- **correlation id** — รหัสที่ติดไปกับคำขอหนึ่งตลอดทาง ใช้ไล่ log ข้ามระบบ
+- ทำรายการว่า **คอลัมน์ไหนเป็นข้อมูลส่วนบุคคล** ถ้าไม่มีรายการนี้จะตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้
+- เลขบัตรประชาชน หมายเลขบัตรเครดิต และข้อมูลสุขภาพ ให้เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
+- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
+- ต้องลบได้เมื่อเจ้าของขอ และ soft delete อย่างเดียวไม่นับว่าลบ
+- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
 
-## 9 · เชื่อมกับ skill อื่น
+---
+
+## 12 · Anti-patterns
+
+- ❌ **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
+- ❌ **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
+- ❌ **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
+- ❌ **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
+- ❌ **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
+- ❌ **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
+- ❌ **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
+- ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
+- ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+
+---
+
+## 13 · ตัวย่อ
+
+- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริง 1 อย่างเก็บที่เดียว)
+- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
+- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
+- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
+- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
+
+## 14 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| รูปร่าง error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` |
-| test กรณีล้มเหลว | `testing-standards` |
-| ขั้นตอนเมื่อระบบล่มจริง | `incident-runbook-template` |
+| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
+| รัน migration ตอน deploy | `cicd-and-release` |
+| ที่เก็บ connection string | `config-and-secrets` |
+| ตาราง user, role, session | `auth-implementation-patterns` |
+| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` |
+| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
+
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
+
+
+## reference: data-types.md
+
+# 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+
+ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
+
+### เงิน
+
+```sql
+total_amount   numeric(19,4)   NOT NULL      -- ✅
+currency       char(3)         NOT NULL      -- ✅ ISO 4217 เช่น THB
+total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่ากับ 0.3
+```
+
+> ❌ **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
+> ปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
+
+### เวลา
+
+| เก็บ | ใช้ | เหตุผล |
+|---|---|---|
+| เวลาที่เกิดเหตุการณ์ | `timestamptz` (SQL Server ใช้ `datetimeoffset`) เก็บเป็น UTC | ประเทศไทยไม่มี daylight saving แต่ระบบที่ขายต่างประเทศมี |
+| วันเกิด วันครบกำหนด | `date` | ไม่มีเวลา ไม่มีโซนเวลา |
+| ช่วงเวลาเปิดร้าน | `time` + คอลัมน์โซนเวลาแยก | |
+
+**กฎ:** เก็บ UTC แล้วแปลงเป็น `+07:00` ตอนแสดงผลเท่านั้น ห้ามเก็บเวลาไทยดิบ ๆ ใน `timestamp` ที่ไม่มีโซน
+
+**พุทธศักราช**: เก็บเป็น ค.ศ. เสมอ แล้วแปลงเป็น พ.ศ. ตอนแสดงผล
+ถ้าเก็บปี 2569 ลงฐานข้อมูล ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
+
+### enum / สถานะ
+
+| วิธี | ดีเมื่อ | เสียเมื่อ |
+|---|---|---|
+| ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy มีชื่อไทย/อังกฤษ และมีลำดับการแสดง | ต้อง join |
+| `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
+| ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
+| `int` ดิบ ๆ | — | ❌ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
+
+### boolean
+
+- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` ✅ · `is_not_disabled` ❌
+- **ถ้าอาจมีสถานะที่ 3 ในอนาคต อย่าใช้ boolean** เพราะ `is_approved` จะกลายเป็น `approval_status`
+  ภายใน 6 เดือน เมื่อมี "รออนุมัติ" เพิ่มมา
+
+---
+
+
+## reference: migrations.md
+
+# 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+
+ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
+
+**กฎ 3 ข้อ:**
+
+1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
+2. **1 migration ทำเรื่องเดียว**: ไล่ปัญหาง่าย และ rollback ได้ตรงจุด
+3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องทำงานด้วยกันได้** เพราะระหว่าง deploy มีโค้ดทั้ง 2 เวอร์ชันรันพร้อมกันเสมอ
+
+### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
+
+ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
+
+| รอบ deploy | ฐานข้อมูล | โค้ด |
+|:--:|---|---|
+| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้ง 2 คอลัมน์ · อ่านจาก `name` |
+| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
+| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
+
+ทำ 3 รอบดูเสียเวลา แต่ทุกรอบ rollback ได้โดยไม่เสียข้อมูล
+ถ้าทำรอบเดียว ก็ต้องยอมรับว่าต้องปิดระบบ
+
+**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
+
+- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว แต่ MySQL ยังเขียนใหม่ทั้งตาราง
+- เปลี่ยนชนิดข้อมูล
+- สร้าง index ธรรมดา ให้ใช้ `CREATE INDEX CONCURRENTLY` แทน (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
+
+**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** เพราะ migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
+อาจใช้ 40 นาทีบน production และล็อกตารางไว้ตลอด
+
+---
+
+
+## reference: per-stack.md
+
+# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+
+1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+2. [PostgreSQL](#2--postgresql)
+3. [SQL Server](#3--sql-server)
+4. [MySQL / MariaDB](#4--mysql--mariadb)
+5. [MongoDB](#5--mongodb)
+6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
+7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
+8. [Alembic (Python)](#8--alembic-python)
+9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
+
+---
+
+## 1 · ชนิดข้อมูลเทียบกัน
+
+| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+|---|---|---|---|
+| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
+| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
+| วันที่ล้วน | `date` | `date` | `DATE` |
+| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
+| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
+
+> 🚨 **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
+> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+>
+> 🚨 **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
+> เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
+
+---
+
+## 2 · PostgreSQL
+
+```sql
+CREATE TABLE orders (
+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_no      varchar(20)  NOT NULL,
+  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status        varchar(20)  NOT NULL DEFAULT 'draft',
+  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
+  currency      char(3)      NOT NULL DEFAULT 'THB',
+  meta          jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT now(),
+  updated_at    timestamptz  NOT NULL DEFAULT now(),
+  deleted_at    timestamptz,
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
+  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
+);
+
+CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
+CREATE INDEX ix_orders_customer_id ON orders (customer_id);
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
+```
+
+**สร้าง index โดยไม่ล็อกตาราง:**
+
+```sql
+CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
+-- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
+```
+
+**อัปเดต `updated_at` อัตโนมัติ:**
+
+```sql
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+```
+
+**row-level security สำหรับระบบหลายผู้เช่า:**
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+```
+
+---
+
+## 3 · SQL Server
+
+```sql
+CREATE TABLE orders (
+  id            bigint IDENTITY(1,1) PRIMARY KEY,
+  order_no      nvarchar(20)   NOT NULL,
+  customer_id   bigint         NOT NULL,
+  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
+  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
+  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
+  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
+  row_version   rowversion,
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
+);
+
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+```
+
+- `rowversion` ใช้เป็น ETag ตรวจว่ามีคนแก้ชนกันได้ตรง ๆ
+- ถ้าต้องเรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
+- `datetime` แบบเก่าละเอียดแค่ 3.33 มิลลิวินาที ให้ใช้ `datetime2` / `datetimeoffset` แทน
+
+---
+
+## 4 · MySQL / MariaDB
+
+```sql
+CREATE TABLE orders (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no     VARCHAR(20)   NOT NULL,
+  customer_id  BIGINT        NOT NULL,
+  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY ux_orders_order_no (order_no),
+  KEY ix_orders_customer_id (customer_id),
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+- `ALTER TABLE` ส่วนใหญ่เขียนตารางใหม่ทั้งตาราง ตารางใหญ่จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
+- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
+
+---
+
+## 5 · MongoDB
+
+```js
+db.createCollection("orders", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
+    properties: {
+      orderNo:     { bsonType: "string" },
+      customerId:  { bsonType: "objectId" },
+      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
+      createdAt:   { bsonType: "date" }
+    }
+  }}
+});
+db.orders.createIndex({ orderNo: 1 }, { unique: true });
+db.orders.createIndex({ customerId: 1, createdAt: -1 });
+```
+
+- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอ และไม่โตไม่จำกัด** นอกนั้นใช้การอ้างอิง
+- เอกสาร 1 ใบมีเพดาน 16 MB อาเรย์ที่โตเรื่อย ๆ จึงชนเพดานสักวัน
+- เงินใช้ `Decimal128` เท่านั้น
+
+---
+
+## 6 · Entity Framework Core (.NET)
+
+```bash
+dotnet ef migrations add AddOrderStatus
+dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
+dotnet ef database update                                # dev เท่านั้น
+```
+
+> **บน production รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
+> คำสั่งนั้นต้องให้ connection ของแอปมีสิทธิ์แก้ schema ซึ่งไม่ควรมีตั้งแต่แรก
+
+```csharp
+modelBuilder.Entity<Order>(e => {
+    e.ToTable("orders");
+    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
+    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
+    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+});
+```
+
+---
+
+## 7 · Prisma / Drizzle (Node)
+
+```prisma
+model Order {
+  id          BigInt   @id @default(autoincrement())
+  orderNo     String   @unique @map("order_no") @db.VarChar(20)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  BigInt   @map("customer_id")
+
+  @@index([status, createdAt], name: "ix_orders_status_created")
+  @@map("orders")
+}
+```
+
+```bash
+npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
+npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
+```
+
+- `Decimal` ของ Prisma คืนค่าเป็น object ไม่ใช่ number ให้คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
+- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
+
+---
+
+## 8 · Alembic (Python)
+
+```bash
+alembic revision --autogenerate -m "add order status"
+alembic upgrade head
+alembic downgrade -1
+```
+
+```python
+def upgrade():
+    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+    op.alter_column("orders", "status", nullable=False)
+    op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                    postgresql_concurrently=True)
+```
+
+> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
+> อ่านไฟล์ที่มันสร้างก่อน commit ทุกครั้ง
+
+---
+
+## 9 · คำสั่งตรวจ query ช้า
+
+| ฐานข้อมูล | คำสั่ง |
+|---|---|
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
+| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
+| MongoDB | `db.orders.find(...).explain("executionStats")` |
+
+**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
+จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
 
 
 ---
 
-# skill: observability-basics
+# skill: api-conventions
 
-Use when a system has real users and someone must know it is healthy before complaints. Four signals, metric naming, metric vs log vs trace, user-facing alerts, dashboards and business metrics.
+Use when starting an API, adding endpoints or checking API consistency. Rulebook for URLs, versioning, pagination, dates, money, ids, errors, idempotency.
 
-# วัดผลและเฝ้าระบบ
+# ข้อตกลงของ API
 
-> **กฎข้อเดียว:** ถ้าลูกค้าเป็นคนบอกเราว่าระบบล่ม แปลว่าการเฝ้าระวังล้มเหลว
-> ไม่ใช่ว่าลูกค้าใจดี
+> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
+> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
+> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ระบบมีผู้ใช้จริงแล้ว
-- มีคนถามว่า "ตอนนี้ระบบปกติดีไหม" แล้วต้องไปเปิด log ดูถึงจะตอบได้
-- ถูกปลุกกลางดึกด้วยการแจ้งเตือนที่ไม่ต้องทำอะไร
-- ระบบช้าแล้วไม่รู้ว่าช้าตรงไหน
+- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
+- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
+- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
+- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-| งาน | ใช้ตัวนี้แทน |
+| โจทย์ | ไปที่ |
 |---|---|
-| รูปแบบบรรทัด log และการปิดบัง | `logging-standards` |
-| ร่องรอยว่าใครทำอะไร | `audit-trail` |
-| endpoint health check | `web-service-essentials` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
+| health check, error envelope, graceful shutdown | `web-service-essentials` |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` |
 
 ---
 
-## 1 · สามอย่างนี้ตอบคนละคำถาม
+## 1 · เอกสารข้อตกลงต้องมีจริง
 
-| | ตอบคำถาม | ตัวอย่าง | ต้นทุน |
-|---|---|---|---|
-| **metric** (ตัวชี้วัด) | "ตอนนี้แย่ไหม แย่ขึ้นหรือลง" | error 2.3% · p95 = 840 ms | ถูกสุด เก็บได้นาน |
-| **log** (บันทึก) | "คำขอนั้นเกิดอะไรขึ้น" | ข้อความ + stack trace + id | แพงกลาง |
-| **trace** (การไล่รอย) | "ช้าที่ขั้นตอนไหน" | คำขอเดียว ผ่าน 5 service | แพงสุด สุ่มเก็บ |
+วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
 
-**ลำดับการใช้เวลาเกิดเหตุ:** metric บอกว่า**มีปัญหา** → trace บอกว่า**ตรงไหน** → log บอกว่า**ทำไม**
-ทั้งสามต้องเชื่อมกันด้วย correlation id ตัวเดียวกัน (ดู `logging-standards`)
+> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
 
 ---
 
-## 2 · สี่สัญญาณที่ต้องวัด
-
-| สัญญาณ | วัดอะไร | ตัวเลขที่ดู |
-|---|---|---|
-| **อัตราคำขอ** | มีงานเข้ามาเท่าไหร่ | ต่อวินาที แยกตาม endpoint |
-| **อัตราความผิดพลาด** | ล้มกี่เปอร์เซ็นต์ | แยก 4xx (ผู้ใช้ผิด) กับ 5xx (เราผิด) |
-| **เวลาตอบสนอง** | ช้าแค่ไหน | **p50 · p95 · p99** |
-| **ทรัพยากร** | ใกล้เต็มไหม | CPU · หน่วยความจำ · พื้นที่ · connection pool |
-
-> 🚨 **ห้ามดูค่าเฉลี่ยของเวลาตอบสนอง** — เฉลี่ย 200 ms ฟังดูดี
-> ทั้งที่ผู้ใช้ 5% รอ 9 วินาที ค่าเฉลี่ยกลบคนที่เจอปัญหาเสมอ **ดู p95 และ p99**
-
-**สำหรับคิวและงานเบื้องหลัง** เพิ่มอีกสาม — งานค้างในคิว · เวลารอในคิว · งานที่ล้มถาวร
-(ดู `background-jobs`)
-
----
-
-## 3 · ตั้งชื่อตัวชี้วัด
+## 2 · ตั้งชื่อ URL
 
 ```
-<โดเมน>_<สิ่งที่วัด>_<หน่วย>
+GET    /v1/orders                 รายการ
+POST   /v1/orders                 สร้าง
+GET    /v1/orders/{id}            รายตัว
+PATCH  /v1/orders/{id}            แก้บางส่วน
+PUT    /v1/orders/{id}            แทนที่ทั้งตัว
+DELETE /v1/orders/{id}            ลบ
+GET    /v1/orders/{id}/items      ทรัพยากรลูก
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
+```
 
-http_requests_total              จำนวนสะสม
-http_request_duration_seconds    ระยะเวลา
-orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth                      ค่า ณ ขณะนั้น
+| กฎ | ✅ | ❌ |
+|---|---|---|
+| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
+| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
+
+**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
+อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
+
+**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
+และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
+
+---
+
+## 3 · versioning
+
+| วิธี | ข้อดี | ข้อเสีย |
+|---|---|---|
+| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
+| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
+
+> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
+
+**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
+
+| การเปลี่ยน | พังไหม |
+|---|:--:|
+| เพิ่ม endpoint ใหม่ | ไม่ |
+| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
+| เพิ่มฟิลด์ใน response | ไม่* |
+| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
+| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
+| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
+| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
+| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
+| ทำให้กฎ validation เข้มขึ้น | **พัง** |
+
+\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
+ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
+
+**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
+
+---
+
+## 4 · pagination
+
+**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
+รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
+
+| วิธี | ใช้เมื่อ | ข้อจำกัด |
+|---|---|---|
+| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
+| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
+
+```jsonc
+// GET /v1/orders?limit=2 → 200
+{
+  "data": [ { "id": "1042" }, { "id": "1041" } ],
+  "page": {
+    "limit": 2,
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "hasMore": true
+  }
+}
+```
+
+- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
+- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
+- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
+- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
+
+---
+
+## 5 · filtering · sorting · ฟิลด์ที่ขอ
+
+```
+GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
+```
+
+| เรื่อง | ข้อตกลง |
+|---|---|
+| กรองค่าเท่ากับ | `?status=confirmed` |
+| หลายค่า | `?status=confirmed,shipped` |
+| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
+| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
+| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
+| เลือกฟิลด์ | `?fields=id,orderNo` |
+
+- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
+- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+
+---
+
+## 6 · รูปแบบข้อมูล
+
+| ข้อมูล | รูปแบบ | ตัวอย่าง |
+|---|---|---|
+| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
+| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
+| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
+| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
+| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
+| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
+| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+
+> 🚨 **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
+> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+>
+> 🚨 **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+
+**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+
+- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
+- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+
+**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
+
+---
+
+## 7 · error
+
+รูปแบบ error envelope (โครงข้อความ error) อยู่ที่ `web-service-essentials` (RFC 9457) ให้ใช้แบบเดียวกัน
+ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
+
+```jsonc
+// 422 Unprocessable Content
+{
+  "type": "https://api.acme.co/errors/validation",
+  "title": "Validation failed",
+  "status": 422,
+  "traceId": "01J9Z8...",
+  "errors": [
+    { "field": "email",          "code": "invalid_format", "message": "รูปแบบอีเมลไม่ถูกต้อง" },
+    { "field": "items[0].qty",   "code": "min_value",      "message": "ต้องมากกว่า 0" }
+  ]
+}
+```
+
+- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
+- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
+- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
+- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
+
+**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
+`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+
+---
+
+## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+
+### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+
+**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+
+```
+POST /v1/payments
+Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
+```
+
+- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
+- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
+- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
+- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
+
+### แก้ชนกัน (optimistic concurrency)
+
+```
+GET   /v1/orders/1042        → 200  ETag: "v7"
+PATCH /v1/orders/1042        If-Match: "v7"
+                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
+```
+
+ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+
+---
+
+## 9 · rate limit
+
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 997
+X-RateLimit-Reset: 1758790000
+Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
+```
+
+ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+
+---
+
+## 10 · การเลิกใช้ endpoint
+
+1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
+2. ส่ง header ในทุก response ของ endpoint นั้น:
+   ```
+   Deprecation: true
+   Sunset: Wed, 31 Dec 2026 23:59:59 GMT
+   Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
+   ```
+3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
+4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+
+ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+
+---
+
+## 11 · Anti-patterns
+
+- ❌ **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
+- ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
+- ❌ **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
+- ❌ **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
+- ❌ **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
+- ❌ **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
+- ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
+- ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
+- ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+
+---
+
+## 12 · ตัวย่อ
+
+- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
+- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
+- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
+- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
+- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
+- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
+- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
+
+## 13 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| health check · error envelope · timeout | `web-service-essentials` |
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
+| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
+| token · scope · สิทธิ์ | `auth-implementation-patterns` |
+| correlation id ที่โผล่ใน error | `logging-standards` |
+| test สัญญาระหว่างระบบ | `testing-standards` |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
+
+
+---
+
+# skill: cicd-and-release
+
+Use when setting up or fixing a build and deploy pipeline or deciding how a project ships. Stages, gates, build once and promote, flags, rehearsed rollback.
+
+# CI/CD และการปล่อยของ
+
+> **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
+> ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ตั้ง pipeline ให้โปรเจกต์ใหม่ หรือรื้อของเดิมที่ช้าหรือผลไม่น่าเชื่อ
+- ต้องตัดสินใจเรื่อง branch, เวอร์ชัน, environment, หรือวิธีปล่อยของ
+- deploy แล้วพังบ่อย หรือ rollback ไม่ได้
+- มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| โจทย์ | ไปที่ |
+|---|---|
+| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` |
+| สัดส่วนและขอบเขตของ test | `testing-standards` |
+| เขียน migration | `database-design` |
+| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` |
+| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` |
+
+---
+
+## 1 · ขั้นตอนใน pipeline
+
+| ลำดับ | ขั้น | บล็อกเมื่อ | เวลาที่ยอมรับได้ |
+|:--:|---|---|---|
+| 1 | ตรวจรูปแบบโค้ด + lint | ผิดกฎ | < 1 นาที |
+| 2 | build | คอมไพล์ไม่ผ่าน · มี warning ที่ตั้งเป็น error | < 3 นาที |
+| 3 | unit test | มี test ตก · ความครอบคลุมต่ำกว่าเกณฑ์ | < 5 นาที |
+| 4 | ตรวจ dependency + secret ที่หลุดเข้า git | พบช่องโหว่ระดับสูง · พบ secret | < 2 นาที |
+| 5 | สร้าง artifact + ประทับเวอร์ชัน | — | < 2 นาที |
+| 6 | deploy ลง staging | — | |
+| 7 | integration + end-to-end test | test ตก | < 15 นาที |
+| 8 | **ด่านคน** (เฉพาะ production) | ยังไม่มีคนกดอนุมัติ | |
+| 9 | deploy ลง production | — | |
+| 10 | ตรวจหลัง deploy | health check ไม่ผ่านจะ rollback อัตโนมัติ | < 2 นาที |
+
+**ขั้น 1–5 คือ CI ต้องรันกับทุก pull request** ไม่ใช่เฉพาะตอน merge
+**ขั้น 1–5 รวมกันควรจบใน 10 นาที** ถ้านานกว่านั้นคนจะเริ่มหาทางข้าม
+
+---
+
+## 2 · build ครั้งเดียว แล้วเลื่อนขั้น
+
+```
+commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี้)
+                                           ├→ uat      (ตัวเดิม)
+                                           └→ production (ตัวเดิม)
+```
+
+- artifact คือไฟล์ที่ deploy ได้จริง: container image · ไฟล์ zip ที่ publish แล้ว · แพ็กเกจ
+- **environment ต่างกันได้แค่ที่ config ตอนรัน** ไม่ใช่ build ใหม่
+- เก็บ artifact ไว้ให้ย้อนกลับได้อย่างน้อย 30 วัน เพราะ rollback คือ deploy artifact เก่า ไม่ใช่ build ย้อนจาก commit เก่า
+
+> ❌ **`git pull` บนเครื่อง production แล้ว build ตรงนั้น** ทำให้ไม่มีใครรู้ว่าของที่รันอยู่คือ commit ไหน
+> และ dependency ที่ดึงตอนนั้นอาจไม่ใช่ชุดเดียวกับที่ทดสอบ
+
+---
+
+## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
+
+ใช้ SemVer: `MAJOR.MINOR.PATCH`
+
+| ขึ้นเลขไหน | เมื่อ |
+|---|---|
+| MAJOR | เปลี่ยนแล้วฝั่งที่เรียกใช้พัง (ดูตารางใน `api-conventions`) |
+| MINOR | เพิ่มความสามารถ ของเดิมยังใช้ได้ |
+| PATCH | แก้บั๊ก |
+
+- **ยึด tag ใน git เป็นหลัก** · `v1.4.0` ชี้ commit เดียวเท่านั้น
+- artifact แปะ commit hash ไว้ด้วย เช่น `1.4.0+abc1234`
+- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`) ส่วนแอปมือถือที่ไม่มี endpoint ให้แสดงในหน้า "เกี่ยวกับ" แทน
+- **ยกเว้น Flutter / Android** ตัวเลขหลัง `+` ใน `pubspec.yaml` คือ versionCode ซึ่งต้องเป็นจำนวนเต็ม จึงใส่ hash ไม่ได้ (ดูหัวข้อ "แอป Android / Flutter")
+- ก่อน 1.0.0 ใช้ `0.x` และถือว่ายังเปลี่ยนใหญ่ได้
+
+---
+
+## 4 · branch
+
+| แบบ | วิธี | เหมาะกับ |
+|---|---|---|
+| **trunk-based** (แนะนำ) | branch อายุสั้น 1–2 วัน merge เข้า `main` บ่อย · งานที่ยังไม่เสร็จซ่อนไว้ด้วย feature flag | ทีมส่วนใหญ่ · ปล่อยของบ่อย |
+| release branch | `main` + `release/1.4` สำหรับแก้ด่วน | ซอฟต์แวร์ที่ลูกค้าติดตั้งเอง · ต้องดูแลหลายเวอร์ชันพร้อมกัน |
+| gitflow | `develop` + `feature` + `release` + `hotfix` | ปล่อยของเป็นรอบใหญ่ นาน ๆ ครั้ง · ส่วนใหญ่ซับซ้อนเกินจำเป็น |
+
+**กฎที่ไม่ขึ้นกับแบบที่เลือก:**
+
+- `main` ต้อง deploy ได้ตลอดเวลา
+- ป้องกัน `main` ไว้ ให้ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
+- branch ที่อายุเกิน 1 สัปดาห์ให้เตรียมเจอ merge conflict
+
+---
+
+## 5 · environment และด่าน
+
+| environment | ข้อมูล | ใครกด deploy | ต้องผ่านอะไร |
+|---|---|---|---|
+| dev | ปลอม | อัตโนมัติทุก commit | build ผ่าน |
+| staging | คล้ายจริง (ปิดบังแล้ว) | อัตโนมัติเมื่อ merge เข้า `main` | unit + integration |
+| uat | คล้ายจริง | ทีมกด | ผู้ใช้ทดสอบผ่าน |
+| production | จริง | **คนกดอนุมัติ** | ทุกอย่างข้างบน |
+
+- staging ต้องใกล้เคียง production ให้มากที่สุด: เวอร์ชันฐานข้อมูล ระบบปฏิบัติการ ค่า config
+- **ห้ามคัดลอกข้อมูลจริงลง staging โดยไม่ปิดบังข้อมูลส่วนบุคคล**
+- ถ้ามี environment เดียวเพราะงบจำกัด ให้บอกตรง ๆ ในเอกสาร และใช้ feature flag ช่วยแทน
+
+---
+
+## 6 · secret ใน pipeline
+
+- เก็บใน secret store ของแพลตฟอร์ม ไม่ใช่ในไฟล์ pipeline
+- ให้สิทธิ์เท่าที่ขั้นนั้นต้องใช้ เช่น ขั้น build ไม่ต้องรู้รหัสฐานข้อมูล production
+- pipeline ที่รันจาก fork ของคนนอก **ห้ามเห็น secret**
+- ตัวตรวจ secret ที่หลุดเข้า git ต้องอยู่ในขั้นที่ 4 ไม่ใช่ตรวจปีละครั้ง
+
+รายละเอียดทั้งหมดอยู่ใน `config-and-secrets`
+
+---
+
+## 7 · migration ฐานข้อมูลใน pipeline
+
+```
+deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy schema (บีบ) รอบถัดไป
+```
+
+- migration รันเป็น**ขั้นของตัวเอง** ก่อน deploy โค้ด ไม่ใช่รันตอนแอปบูต
+  (ถ้าแอปหลาย instance บูตพร้อมกัน migration จะรันชนกันจนข้อมูลพังได้)
+- ใช้บัญชีที่แก้ schema ได้เฉพาะขั้นนี้ ส่วนบัญชีที่แอปใช้รันต้องแก้ schema ไม่ได้
+- migration ต้องใช้ได้กับโค้ดเวอร์ชันก่อนหน้าด้วย ไม่งั้น rollback โค้ดแล้วระบบจะพัง
+- สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
+- **ข้อยกเว้น: ฐานข้อมูลในเครื่องผู้ใช้** (SQLite · sqflite · drift บนมือถือ) ต้อง migrate ตอนแอปเปิด เพราะไม่มีทางอื่น
+  กฎข้างบนใช้กับฐานข้อมูลบนเซิร์ฟเวอร์ที่หลาย instance ใช้ร่วมกัน ส่วน migration ในเครื่องต้องมี test ไล่จากทุกเวอร์ชัน schema ที่เคยปล่อย
+
+วิธี expand/contract ดูที่ `database-design` ข้อ 9
+
+---
+
+## 8 · วิธีปล่อยของ
+
+| วิธี | ทำงานยังไง | ต้องมี | เหมาะกับ |
+|---|---|---|---|
+| หยุดแล้วเปลี่ยน | ปิด → เปลี่ยน → เปิด | ไม่มี | ระบบภายใน · ปิดได้ตอนกลางคืน |
+| **rolling** | ทยอยเปลี่ยนทีละเครื่อง | health check ที่เชื่อถือได้ · ใช้ร่วมกันได้ทั้ง 2 เวอร์ชัน | ค่าเริ่มต้นของระบบที่รันหลาย instance |
+| blue-green | ยกชุดใหม่ขึ้นครบ แล้วสลับ traffic | ทรัพยากร 2 เท่าชั่วคราว | ต้อง rollback ได้ในไม่กี่วินาที |
+| canary | ปล่อยให้ผู้ใช้ 5% ก่อน แล้วค่อยขยาย | ตัวชี้วัดที่แยกตามเวอร์ชันได้ | ระบบใหญ่ · ความเสี่ยงสูง |
+
+> **rolling มีเรื่องที่คนมักลืม** คือระหว่าง deploy เวอร์ชันเก่าและใหม่ให้บริการพร้อมกัน
+> API และ schema จึงต้องใช้ได้กับทั้ง 2 เวอร์ชัน ถ้าไม่ได้ออกแบบเผื่อไว้ ผู้ใช้บางคนจะเจอ error ทุกครั้งที่ deploy
+
+**feature flag** (สวิตช์เปิดปิดฟีเจอร์) ช่วยแยก "ปล่อยโค้ด" ออกจาก "เปิดใช้ฟีเจอร์"
+
+- merge โค้ดที่ยังไม่เสร็จเข้า `main` ได้ โดยปิด flag ไว้
+- เปิดให้คนบางกลุ่มก่อน ปิดได้ทันทีโดยไม่ต้อง deploy
+- 🚨 **flag ต้องมีวันหมดอายุ** เพราะ flag ที่ค้าง 1 ปีจะกลายเป็นโค้ด 2 เส้นทางที่ไม่มีใครกล้าลบ
+  กำหนดให้ลบภายใน 2 sprint หลังเปิดใช้ 100%
+
+---
+
+## 9 · rollback
+
+**เกณฑ์ที่ต้องกำหนดล่วงหน้า:** rollback เมื่ออัตรา error เกิน X% หรือเวลาตอบสนองเกิน Y วินาที
+ไม่ใช่มาตัดสินตอนทุกคนกำลังตกใจ แล้วเถียงกันว่าควรรอดูอีกหน่อยไหม
+
+| ต้องมี | เกณฑ์ |
+|---|---|
+| คำสั่ง rollback | ทำได้ด้วยคำสั่งเดียว |
+| เวลาที่ใช้ | ต่ำกว่า 5 นาที |
+| **ซ้อมจริง** | อย่างน้อยไตรมาสละ 1 ครั้ง บน staging |
+| ข้อมูล | migration ที่ทำไปแล้วต้องไม่ทำให้โค้ดเก่าพัง |
+
+> **rollback ที่ไม่เคยซ้อม เท่ากับไม่มี rollback** เพราะจะรู้ว่าใช้ไม่ได้ก็ตอนที่ต้องใช้พอดี
+
+---
+
+## 10 · pipeline ต้องเร็วและน่าเชื่อถือ
+
+| ปัญหา | วิธีแก้ |
+|---|---|
+| ช้า | แคช dependency · รัน test พร้อมกันหลายชุด · แยก test ที่ช้าไปรันกลางคืน |
+| test ที่ผลไม่คงที่ (flaky) | **แยกออกทันที** แล้วเปิดงานตามแก้ เพราะ test ที่ตกบ้างผ่านบ้างทำให้คนเลิกอ่านผล |
+| ทุกคนรอคิว | เพิ่มตัวรัน · ให้ pull request รันเฉพาะส่วนที่เกี่ยวข้อง |
+| build ไม่เหมือนเดิมทุกครั้ง | ล็อกเวอร์ชัน dependency (lock file) · ปักหมุดเวอร์ชัน image ด้วย digest |
+
+**ตัวชี้วัดที่ควรดู:** ปล่อยของบ่อยแค่ไหน · จาก commit ถึงขึ้นจริงใช้เวลาเท่าไร ·
+deploy แล้วพังกี่เปอร์เซ็นต์ · กู้คืนใช้เวลาเท่าไร
+
+---
+
+## แอป Android / Flutter — ข้อที่ต่างจากเซิร์ฟเวอร์
+
+| เรื่อง | กฎ |
+|---|---|
+| เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
+| build ครั้งเดียว | `flutter build appbundle --release` ได้ AAB ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
+| ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
+| rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
+| กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
+
+---
+
+## 11 · Anti-patterns
+
+- ❌ **build ใหม่ตอนขึ้น production** ทำให้ของที่ทดสอบไม่ใช่ของที่ปล่อย
+- ❌ **deploy ด้วยมือตามขั้นตอนใน Word** · วันไหนคนเขียนลาป่วย วันนั้น deploy ไม่ได้
+- ❌ **secret ในไฟล์ pipeline** · ใครอ่านโค้ดได้ก็อ่าน secret ได้
+- ❌ **test ตกแล้วปล่อยผ่าน** ทำครั้งเดียว คนก็เลิกเชื่อผลไปตลอด
+- ❌ **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
+- ❌ **migration ของฐานข้อมูลบนเซิร์ฟเวอร์รันตอนแอปบูต** · หลาย instance ชนกัน (ฐานข้อมูลในเครื่องมือถือยกเว้น ดูข้อ 7)
+- ❌ **ไม่มี artifact เก็บไว้** ทำให้ rollback กลายเป็นการ build ย้อนจาก commit เก่า
+- ❌ **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
+- ❌ **feature flag ที่ไม่มีวันลบ**
+- ❌ **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
+
+---
+
+## 12 · ตัวย่อ
+
+- **CI** — Continuous Integration (รวมโค้ดเข้าด้วยกันบ่อย ๆ พร้อมตรวจอัตโนมัติทุกครั้ง)
+- **CD** — Continuous Delivery/Deployment (พาโค้ดที่ผ่านการตรวจไปถึงผู้ใช้อัตโนมัติ)
+- **SemVer** — Semantic Versioning (มาตรฐานเลขเวอร์ชัน MAJOR.MINOR.PATCH)
+- **artifact** — ไฟล์ผลลัพธ์จากการ build ที่นำไป deploy ได้จริง
+- **canary** — การปล่อยของใหม่ให้ผู้ใช้ส่วนน้อยก่อนเพื่อดูอาการ
+- **UAT** — User Acceptance Testing (การทดสอบโดยผู้ใช้ก่อนรับมอบ)
+- **AAB** — Android App Bundle (ไฟล์ที่อัปโหลดขึ้น Google Play แล้ว Play แตกเป็น APK ตามเครื่อง)
+- **versionCode** — เลขจำนวนเต็มที่ Android ใช้ตัดสินว่าเวอร์ชันไหนใหม่กว่า
+
+## 13 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| secret และ config ต่อ environment | `config-and-secrets` |
+| migration ที่ deploy ได้โดยไม่ปิดระบบ | `database-design` |
+| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` |
+| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` |
+| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` |
+| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` |
+
+**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
+
+
+## reference: per-platform.md
+
+# ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
+
+1. [GitHub Actions](#1--github-actions)
+2. [Azure DevOps](#2--azure-devops)
+3. [GitLab CI](#3--gitlab-ci)
+4. [Dockerfile หลายขั้น](#4--dockerfile-หลายขั้น)
+5. [ตารางเทียบความสามารถ](#5--ตารางเทียบความสามารถ)
+
+---
+
+## 1 · GitHub Actions
+
+`.github/workflows/ci.yml` รันทุก pull request
+
+```yaml
+name: ci
+on:
+  pull_request:
+  push: { branches: [main] }
+
+concurrency:                       # ยกเลิกรอบเก่าเมื่อ push ซ้ำ
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: { contents: read }
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }   # ต้องมีประวัติครบเพื่อคำนวณเวอร์ชัน
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test -- --coverage
+
+      - name: ตรวจ dependency
+        run: npm audit --audit-level=high
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ github.sha }}
+          path: dist/
+          retention-days: 30
+```
+
+`.github/workflows/deploy.yml` เอา artifact ตัวเดิมจาก ci ไป deploy ต่อทีละ environment
+
+```yaml
+name: deploy
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  staging:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-${{ github.event.workflow_run.head_sha }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ./scripts/deploy.sh staging
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
+    steps:
+      - run: ./scripts/deploy.sh production
+      - name: ตรวจหลัง deploy
+        run: |
+          for i in $(seq 1 10); do
+            curl -fsS https://api.example.co/health/ready && exit 0
+            sleep 6
+          done
+          ./scripts/rollback.sh && exit 1
+```
+
+**ข้อควรระวัง:**
+
+- `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
+- ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
+- ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
+- `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
+
+---
+
+## 2 · Azure DevOps
+
+`azure-pipelines.yml`
+
+```yaml
+trigger:
+  branches: { include: [main] }
+
+variables:
+  buildConfiguration: Release
+
+stages:
+- stage: build
+  jobs:
+  - job: build
+    pool: { vmImage: ubuntu-latest }
+    steps:
+    - task: UseDotNet@2
+      inputs: { version: '8.x' }
+    - script: dotnet restore
+    - script: dotnet build -c $(buildConfiguration) --no-restore
+    - script: dotnet test -c $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"
+    - script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: app
+
+- stage: staging
+  dependsOn: build
+  jobs:
+  - deployment: staging
+    environment: staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app
+          - script: ./scripts/deploy.sh staging
+
+- stage: production
+  dependsOn: staging
+  jobs:
+  - deployment: production
+    environment: production        # ← ตั้ง approval ที่หน้า Environments
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app          # artifact ตัวเดิมจาก stage build
+          - script: ./scripts/deploy.sh production
+```
+
+- `deployment` job ต่างจาก `job` ธรรมดาตรงที่ผูกกับ environment จึงได้ประวัติการ deploy และขั้นอนุมัติมาด้วย
+- ตัวแปรลับเก็บใน variable group ที่ผูกกับ Azure Key Vault อย่าพิมพ์ลงไฟล์
+- ตัวแปรลับ**ไม่ถูกส่งเข้า script เอง** ต้อง map ผ่าน `env:` ทีละตัว
+
+---
+
+## 3 · GitLab CI
+
+`.gitlab-ci.yml`
+
+```yaml
+stages: [test, build, deploy]
+
+default:
+  interruptible: true
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: { files: [requirements.txt] }
+  paths: [.cache/pip]
+
+test:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - ruff check .
+    - pytest --cov --cov-fail-under=70
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+
+build:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:staging:
+  stage: deploy
+  environment: { name: staging, url: https://staging.example.co }
+  script: ./scripts/deploy.sh staging $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:production:
+  stage: deploy
+  environment: { name: production, url: https://example.co }
+  when: manual                     # ← ด่านคน
+  script: ./scripts/deploy.sh production $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+```
+
+- ตั้งตัวแปรลับเป็น `Masked` และ `Protected` ที่หน้า Settings → CI/CD
+- `when: manual` ใช้คู่กับ protected environment จึงจะเป็นด่านอนุมัติที่กันได้จริง
+
+---
+
+## 4 · Dockerfile หลายขั้น
+
+```dockerfile
+# ---- ขั้น build ----
+FROM node:22-alpine AS build
+WORKDIR /src
+COPY package*.json ./
+RUN npm ci                      # ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+COPY . .
+RUN npm run build
+
+# ---- ขั้นรัน ----
+FROM node:22-alpine
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=build /src/dist ./dist
+COPY --from=build /src/node_modules ./node_modules
+USER node                       # ❌ อย่ารันเป็น root
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
+CMD ["node", "dist/main.js"]
+```
+
+**กฎ:**
+
+- คัดลอกไฟล์ที่เปลี่ยนน้อยก่อน ชั้นแรก ๆ จะได้ใช้แคชซ้ำ
+- อย่าคัดลอก `.env`, `.git`, `node_modules` เข้า image ให้กันไว้ด้วย `.dockerignore`
+- ถ้าต้องการให้ build ได้ผลเดิมทุกครั้ง ให้ปักหมุด base image ด้วย digest
+- ตั้งชื่อ tag ด้วย commit hash เสมอ ส่วน `latest` ใช้เป็นชื่อเล่นได้ แต่ห้าม deploy ด้วย `latest`
+
+---
+
+## 5 · ตารางเทียบความสามารถ
+
+| สิ่งที่ต้องการ | GitHub Actions | Azure DevOps | GitLab CI |
+|---|---|---|---|
+| ด่านอนุมัติโดยคน | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
+| เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
+| แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
+| secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
+| ยกเลิกรอบเก่า | `concurrency` | `batch: true` | `interruptible: true` |
+| วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
+| รันเอง (self-hosted) | ได้ | ได้ | ได้ |
+
+> **ทุกแพลตฟอร์มทำสิ่งเดียวกันได้** จึงอย่าเลือกจากรายการความสามารถ
+> เลือกตัวที่อยู่ที่เดียวกับ repo แล้วลงแรงกับเนื้อหาของ pipeline แทน
+
+
+---
+
+# skill: flag-and-propose
+
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
+
+# แจ้งสิ่งที่เจอ แล้วเสนอทางไป
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อเดียว:** เปิดด้วย**ผลกระทบ** ปิดด้วย**คำถามเดียว**
+> ตรงกลางคือหลักฐานกับข้อเสนอ ไม่ใช่การเล่าว่าเจอมาได้ยังไง
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
+- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
+- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
+- เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| สถานการณ์ | ใช้ตัวนี้แทน |
+|---|---|
+| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
+| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
+| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
+
+---
+
+## 1 · โครงคำตอบ 4 บล็อก
+
+| บล็อก | ความยาว | กฎ |
+|---|---|---|
+| 1 · สิ่งที่เจอ + ผลถ้าไม่แก้ | 1–2 บรรทัด | **ขึ้นก่อนเสมอ** ไม่มีคำเกริ่น ไม่ทวนคำถาม |
+| 2 · หลักฐาน | ตาราง ≤ 5 แถว | ตัวเลขที่ขัดกันเท่านั้น ไม่ต้องเล่าวิธีตรวจ |
+| 3 · ข้อเสนอ | ตาราง ≤ 5 แถว | ทำอะไร → **ได้อะไร** ไม่ใช่ทำอะไร → ทำยังไง |
+| 4 · คำถามปิด | 1 บรรทัด | คำถามเดียว ตอบได้ด้วยไม่กี่คำ |
+
+บล็อก 2 ตัดได้ถ้าไม่มีตัวเลข ส่วนบล็อก 3 ตัดได้ถ้ายังไม่มีข้อเสนอจริง ๆ
+**บล็อก 1 กับ 4 ตัดไม่ได้**
+
+**ทั้งคำตอบควรจบใน 1 หน้าจอ** — ยาวกว่านั้นแปลว่ากำลังอธิบายกระบวนการ ไม่ใช่ขอการตัดสินใจ
+
+---
+
+## 2 · บล็อกที่ 1 — สูตรประโยคเดียว
+
+```
+<อะไรผิด> เพราะ <สาเหตุสั้น ๆ> · ต้อง <ทำอะไร> ก่อน <ขั้นถัดไป> ไม่งั้น <ผลเสียที่เป็นรูปธรรม>
+```
+
+| ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
+|---|---|
+| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
+
+- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
+- ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
+- ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
+
+---
+
+## 3 · ตัวเลขที่ขัดกัน = ตารางเทียบเสมอ
+
+สองค่าขึ้นไปที่ไม่ตรงกัน อ่านจากประโยคยากกว่าอ่านจากตารางทุกครั้ง
+
+```markdown
+| | ที่บันทึกไว้ | ของจริง |
+|---|---|---|
+| FR ถึง | 13.9 | **14.12** |
+| Test case | 214 | **245** |
+| PLT | ไม่มี | **มี** |
+```
+
+- หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
+- ตัวหนาที่ฝั่งที่ถูกต้อง เพื่อให้กวาดตาแล้วรู้ทันทีว่าต้องยึดอะไร
+- แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
+
+**คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
+เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+
+---
+
+## 4 · ข้อเสนอเป็นตาราง "ทำอะไร → ได้อะไร"
+
+```markdown
+| ไฟล์ | ได้อะไร |
+|---|---|
+| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
+| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
+```
+
+- คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
+- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ
+- **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
+- เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
+
+---
+
+## 5 · บอกสิ่งที่**ไม่**ทำด้วย
+
+หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
+
+> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+
+บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
+และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
+
+---
+
+## 6 · ปิดด้วยคำถามเดียว
+
+```
+เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
 ```
 
 | กฎ | เหตุผล |
 |---|---|
-| ลงท้ายด้วยหน่วยเสมอ | `_seconds` ไม่ใช่ `_time` ที่ไม่มีใครรู้ว่าวินาทีหรือมิลลิวินาที |
-| ค่าสะสมลงท้าย `_total` | บอกว่าเป็นค่าที่เพิ่มขึ้นเรื่อย ๆ ไม่ใช่ค่าปัจจุบัน |
-| ใช้ label แทนการสร้างชื่อใหม่ | `http_requests_total{route,status}` ไม่ใช่ชื่อแยกต่อ endpoint |
-| **label ห้ามมีค่าที่ไม่จำกัด** | ใส่ user id หรือ order id เป็น label = ระบบเก็บ metric ระเบิด |
+| **หนึ่งคำถาม** ต่อหนึ่งคำตอบ | ถ้าถามสองคำถามขึ้นไป จะได้คำตอบแค่ข้อเดียว |
+| ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
+| มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
+| ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
+
+**ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
 
 ---
 
-## 4 · การแจ้งเตือน
-
-> **แจ้งเตือนทุกครั้งต้องมีอะไรให้ทำ** — ถ้าคนรับอ่านแล้วไม่ต้องทำอะไร
-> อีกสามสัปดาห์เขาจะปิดเสียงแจ้งเตือน แล้ววันที่ของจริงเกิดก็จะไม่มีใครเห็น
-
-**แจ้งเตือนจากสิ่งที่ผู้ใช้รู้สึก ไม่ใช่จากตัวเลขของเครื่อง**
-
-| ❌ เตือนแบบนี้ | ✅ เตือนแบบนี้ |
-|---|---|
-| CPU เกิน 80% | อัตรา error เกิน 2% นาน 5 นาที |
-| หน่วยความจำเกิน 70% | p95 ของหน้าชำระเงินเกิน 3 วินาที นาน 10 นาที |
-| pod restart | คำสั่งซื้อสำเร็จลดลงเกิน 50% เทียบกับสัปดาห์ก่อน |
-| disk 60% | **disk จะเต็มใน 4 ชั่วโมงตามอัตราปัจจุบัน** |
-
-| ระดับ | ตัวอย่าง | ส่งไปไหน |
-|---|---|---|
-| **ปลุกคน** | ผู้ใช้ใช้งานไม่ได้ · ข้อมูลกำลังเสียหาย | โทร · push |
-| **ดูในเวลางาน** | disk จะเต็มในสามวัน · error เพิ่มแต่ยังไม่มาก | แชตของทีม |
-| **แค่บันทึกไว้** | ทุกอย่างที่เหลือ | แดชบอร์ด |
-
-**ทุกการแจ้งเตือนต้องมี:** อะไรพัง · กระทบใคร · **ลิงก์ไป runbook** · ลิงก์ไปแดชบอร์ด
-**ตั้งช่วงเวลา (นาน N นาที) เสมอ** ไม่ใช่เตือนทันทีที่ค่าพุ่งครั้งเดียว
-
----
-
-## 5 · แดชบอร์ด
-
-ทำสองหน้าพอ
-
-| หน้า | ตอบคำถาม | มีอะไร |
-|---|---|---|
-| **ภาพรวม** | "ตอนนี้ปกติไหม" | สี่สัญญาณของทั้งระบบ · สถานะ dependency · การปล่อยของล่าสุด |
-| **เจาะลึกต่อ service** | "พังตรงไหน" | สี่สัญญาณแยกตาม endpoint · คิว · ฐานข้อมูล |
-
-- **เส้นแนวตั้งบอกเวลาที่ deploy** — ปัญหาส่วนใหญ่เริ่มหลังเส้นนี้ และเห็นได้ในวินาทีเดียว
-- หน้าภาพรวมต้องอ่านจบใน 10 วินาที — ไม่เกิน 6 กราฟ
-- ใส่เส้นเกณฑ์ที่ตั้งแจ้งเตือนไว้ในกราฟ จะได้รู้ว่าห่างจากเส้นแค่ไหน
-
----
-
-## 6 · ตัวชี้วัดทางธุรกิจ
-
-ตัวชี้วัดทางเทคนิคเขียวหมดแต่ธุรกิจหยุดเดิน เป็นเรื่องที่เกิดขึ้นจริงและตรวจไม่เจอถ้าไม่วัด
-
-| ตัวอย่าง | จับอะไรได้ |
-|---|---|
-| คำสั่งซื้อสำเร็จต่อชั่วโมง | ปุ่มชำระเงินพังแม้ทุก endpoint คืน 200 |
-| อัตราเข้าสู่ระบบสำเร็จ | ผู้ให้บริการยืนยันตัวตนภายนอกมีปัญหา |
-| งานเบื้องหลังที่รอเกิน N นาที | คิวตัน แต่ API ยังตอบปกติ |
-| อีเมลส่งไม่สำเร็จ | ลูกค้าไม่ได้รับใบเสร็จ โดยไม่มี error ที่ไหนเลย |
-
-**เลือก 3–5 ตัวที่เป็นหัวใจของธุรกิจ** แล้วเตือนเมื่อมันตกผิดปกติเทียบกับช่วงเดียวกันของสัปดาห์ก่อน
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
-- ❌ **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
-- ❌ **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
-- ❌ **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
-- ❌ **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
-- ❌ **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
-- ❌ **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
-- ❌ **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
-- ❌ **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตีสาม
-
----
-
-## 8 · ตัวย่อ
-
-- **metric** — ตัวชี้วัด ตัวเลขที่เก็บตามเวลา
-- **trace** — การไล่รอยคำขอหนึ่งตลอดเส้นทางที่มันวิ่งผ่าน
-- **p95 / p99** — เปอร์เซ็นไทล์ที่ 95 และ 99 (ช้ากว่านี้มีแค่ 5% หรือ 1% ของคำขอ)
-- **label / tag** — ป้ายกำกับที่แนบกับตัวชี้วัด ใช้แยกดูเป็นกลุ่ม
-- **on-call** — เวรรับแจ้งเหตุนอกเวลาทำการ
-- **SLO** — Service Level Objective (เป้าหมายระดับบริการที่ตั้งไว้เอง เช่น สำเร็จ 99.5%)
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปแบบ log และ correlation id | `logging-standards` |
-| health check ที่ระบบเฝ้าใช้ | `web-service-essentials` |
-| ตัวชี้วัดของคิวและงานเบื้องหลัง | `background-jobs` |
-| อัตรา error และการตัดวงจร | `error-handling-patterns` |
-| ขั้นตอนเมื่อการแจ้งเตือนดัง | `incident-runbook-template` |
-| สรุปหลังเหตุการณ์ | `postmortem-template` |
-| ตัวเลขเป้าหมายที่ตกลงกับลูกค้า | `srs-writing` |
-
-
----
-
-# skill: background-jobs
-
-Use when work runs outside the user's request (mail, reports, imports, slow third parties, schedules). Queue choice, jobs safe to run twice, capped retries, dead letter queue, multi-instance schedules, metrics.
-
-# งานเบื้องหลัง
-
-> **กฎข้อเดียว:** งานเบื้องหลังทุกตัวต้อง**รันซ้ำได้โดยไม่เกิดผลซ้ำ**
-> เพราะมันจะถูกรันซ้ำแน่นอน — เครื่องดับกลางทาง คนกดใหม่ ระบบ retry ให้เอง
-
-## เมื่อไหร่ใช้ skill นี้
-
-- งานที่ผู้ใช้ไม่ควรต้องนั่งรอ — ส่งอีเมล สร้างรายงาน นำเข้าไฟล์
-- งานตามเวลา — สรุปรายวัน ปิดยอดสิ้นเดือน ลบข้อมูลที่หมดอายุ
-- เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
-- คิวตันหรือมีงานหายแล้วไม่มีใครรู้
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` |
-
----
-
-## 1 · อะไรควรไปอยู่เบื้องหลัง
-
-| เอาไปเบื้องหลัง | ทำในคำขอเลย |
-|---|---|
-| ใช้เวลาเกิน 1–2 วินาที | เร็วและผู้ใช้ต้องเห็นผลทันที |
-| เรียกระบบภายนอกที่ล้มได้ | ตรวจสิทธิ์ · ตรวจข้อมูล |
-| ผู้ใช้ไม่ต้องรอผล (อีเมล แจ้งเตือน) | ผลลัพธ์คือสิ่งที่เขากดมาดู |
-| งานหลายรายการเป็นชุด | |
-
-> **อย่าเอาไปเบื้องหลังเพียงเพราะมันช้า** — ถ้าผู้ใช้ต้องเห็นผลก่อนไปต่อ
-> การย้ายไปเบื้องหลังแปลว่าต้องเพิ่มหน้าจอรอ การแจ้งเตือน และที่เก็บผลลัพธ์
-> บางครั้งแก้ให้เร็วขึ้นถูกกว่ามาก (ดู `lazy-coding`)
-
----
-
-## 2 · เลือกกลไก
-
-| กลไก | เหมาะกับ | ระวัง |
-|---|---|---|
-| **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวจับงานเอง ระวังแย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · SQS) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
-| ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** — ดูข้อ 5 |
-| ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
-
-**เริ่มจากตารางในฐานข้อมูลก่อนเสมอ** ถ้าระบบยังเล็ก — `SELECT ... FOR UPDATE SKIP LOCKED`
-ของ PostgreSQL ทำให้หลาย worker แย่งงานกันได้อย่างปลอดภัย โดยไม่ต้องเพิ่มระบบใหม่
-
-**ทุกงานต้องมีอย่างน้อย:** `id` · `type` · `payload` · `status` · `attempts` ·
-`run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
-
----
-
-## 3 · รันซ้ำแล้วต้องไม่เกิดผลซ้ำ
-
-ระบบคิวเกือบทั้งหมดรับประกันแค่ว่า "ส่งถึงอย่างน้อยหนึ่งครั้ง" **ไม่ใช่ครั้งเดียว**
-
-| วิธี | ใช้ยังไง |
-|---|---|
-| **กุญแจกันซ้ำ** | unique constraint บน `(job_type, business_key)` — งานซ้ำจะ insert ไม่ผ่าน |
-| **ตรวจสถานะก่อนทำ** | "ถ้าใบสั่งซื้อนี้ส่งอีเมลไปแล้ว ให้จบเลย" |
-| **ส่งต่อ idempotency key** | เวลาเรียก API ภายนอก (ดู `api-conventions`) |
-| **ทำให้ผลลัพธ์เป็นการตั้งค่า ไม่ใช่การเพิ่ม** | `set status = 'paid'` ปลอดภัยกว่า `balance = balance + 100` |
-
-> 🚨 **งานที่บวกค่าหรือส่งของออกไปข้างนอก คือจุดที่การรันซ้ำทำให้เสียเงินจริง**
-> อีเมลสองฉบับคือความรำคาญ · การโอนเงินสองครั้งคือเรื่องใหญ่
-
----
-
-## 4 · retry และงานที่ตายแล้ว
-
-```
-ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
-```
-
-| กฎ | รายละเอียด |
-|---|---|
-| **มีเพดานเสมอ** | 3–5 ครั้ง · retry ไม่จำกัดคือคิวที่ตันด้วยงานเดียว |
-| หน่วงแบบทวีคูณ + สุ่ม | เหมือน `error-handling-patterns` |
-| ไม่ retry กับความผิดของข้อมูล | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
-| **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter — เก็บ payload เต็มและ error ล่าสุด |
-| ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |
-| เอากลับมารันใหม่ได้ | แก้ต้นเหตุแล้วสั่งรันใหม่จาก dead letter ได้ โดยไม่ต้องเขียนสคริปต์ |
-
-**งานที่ค้างเพราะ worker ตาย** — ต้องมีตัวปลดล็อก
-งานที่ `locked_at` เก่ากว่า N นาที ให้ถือว่าไม่มีใครทำอยู่แล้ว ปลดล็อกให้คนอื่นหยิบไปทำต่อ
-
----
-
-## 5 · งานตามเวลา
-
-> 🚨 **หลาย instance = งานตามเวลาจะรันหลายรอบพร้อมกัน**
-> รายงานสรุปยอดถูกส่งสามฉบับ หรือหักเงินสามครั้ง เป็นผลที่เกิดจากข้อนี้
-
-| วิธี | ใช้เมื่อ |
-|---|---|
-| ล็อกที่ฐานข้อมูล (advisory lock) | ทำได้ทันที ไม่ต้องเพิ่มของ |
-| ตัวตั้งเวลาของแพลตฟอร์มยิงเข้ามาที่ endpoint | บนคลาวด์ · Kubernetes CronJob |
-| ตัวตั้งเวลาที่รองรับหลาย instance โดยตรง | Quartz · Hangfire |
-
-**กฎของงานตามเวลา:**
-
-- **เขียนให้รับช่วงเวลาเป็นพารามิเตอร์** — รันย้อนหลังวันที่พลาดได้โดยไม่ต้องแก้โค้ด
-- ตกรอบหนึ่งแล้วต้องตามเก็บได้ ไม่ใช่ข้ามไปเลย
-- ระบุเขตเวลาให้ชัด — "ทุกเที่ยงคืน" ของเขตเวลาไหน (ดู `i18n-and-locale`)
-- **บันทึกว่ารันรอบไหนสำเร็จแล้ว** ไม่ใช่ดูจาก log
-
----
-
-## 6 · งานยาวที่ผู้ใช้รออยู่
-
-| ต้องมี | รายละเอียด |
-|---|---|
-| id ของงาน | คืนให้ทันทีที่รับงาน ผู้ใช้เอาไว้ถามความคืบหน้า |
-| สถานะ | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| ความคืบหน้า | "ทำแล้ว 340 จาก 1,200 รายการ" ไม่ใช่หมุนเปล่า ๆ |
-| ยกเลิกได้ | งานต้องเช็คสัญญาณยกเลิกเป็นระยะ |
-| ผลลัพธ์ | เก็บไว้ให้ดาวน์โหลดได้ พร้อมวันหมดอายุ |
-| แจ้งเมื่อเสร็จ | อีเมลหรือแจ้งเตือนในระบบ (ดู `notifications`) |
-
-**แบ่งงานใหญ่เป็นชิ้นเล็ก** — นำเข้า 50,000 แถวควรเป็นงานย่อยละ 500 แถว
-งานเดียวที่ใช้เวลา 40 นาที ถ้าล้มที่นาทีที่ 39 จะต้องเริ่มใหม่ทั้งหมด
-
----
-
-## 7 · วัดอะไร
-
-| ตัวชี้วัด | เตือนเมื่อ |
-|---|---|
-| จำนวนงานค้างในคิว | โตขึ้นเรื่อย ๆ ไม่ลดลง |
-| เวลารอในคิว (p95) | เกินที่สัญญาไว้ |
-| อัตราความล้มเหลว | เกินเกณฑ์ |
-| **จำนวนใน dead letter** | **เพิ่มขึ้นแม้แค่ตัวเดียว** |
-| รอบของงานตามเวลาที่ไม่ได้รัน | ข้ามรอบ |
-| งานที่ค้างอยู่ในสถานะ running นานผิดปกติ | เกิน N เท่าของค่าปกติ |
-
-> **คิวที่ตันจะเงียบสนิท** — API ยังตอบ 200 ทุกคำขอ health check เขียวหมด
-> แต่ไม่มีอีเมลออกไปสามชั่วโมงแล้ว ต้องวัดถึงจะเห็น
+## 7 · ตัวอย่างเต็ม
+
+**❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
+
+> เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
+> `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
+> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
+> ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
+> BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
+> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
+> เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
+> ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
+
+**✅ หลัง — โครงเดียวกัน 4 บล็อก**
+
+> **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
+> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
+>
+> | | ที่บันทึกไว้ | ของจริง |
+> |---|---|---|
+> | FR ถึง | 13.9 | **14.12** |
+> | Test case | 214 | **245** |
+> | PLT | ไม่มี | **มี** |
+>
+> คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
+>
+> **ทำเป็นแม่แบบ: 4 ไฟล์ที่คุ้มสุด**
+>
+> | ไฟล์ | ได้อะไร |
+> |---|---|
+> | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
+> | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
+> | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
+> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
+>
+> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+>
+> เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+
+**สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
+ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
+รายละเอียดวิธีทำของแต่ละข้อเสนอ
 
 ---
 
 ## 8 · Anti-patterns
 
-- ❌ **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
-- ❌ **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
-- ❌ **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
-- ❌ **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
-- ❌ **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
-- ❌ **ส่งข้อมูลทั้งก้อนใน payload** — ส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
-- ❌ **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
-- ❌ **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
-- ❌ **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
+- ❌ **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
+- ❌ **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
+- ❌ **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
+- ❌ **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
+- ❌ **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
+- ❌ **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
+- ❌ **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
+- ❌ **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
 
 ---
 
 ## 9 · ตัวย่อ
 
-- **queue** — คิว ที่พักงานที่รอให้ worker หยิบไปทำ
-- **worker** — process ที่หยิบงานจากคิวไปทำ
-- **dead letter queue (DLQ)** — ที่เก็บงานที่ล้มจนหมดสิทธิ์ลองใหม่
-- **idempotent** — รันซ้ำแล้วผลลัพธ์เหมือนเดิม ไม่เกิดผลซ้ำ
-- **advisory lock** — ล็อกที่ฐานข้อมูลให้ใช้ โดยไม่ผูกกับตารางใดตารางหนึ่ง
-- **cron** — รูปแบบการกำหนดตารางเวลาของงานอัตโนมัติ
+- **FR** — Functional Requirement (ข้อกำหนดเชิงหน้าที่)
+- **TC** — Test Case (กรณีทดสอบ)
+- **ADR** — Architecture Decision Record (บันทึกเหตุผลของการตัดสินใจเชิงสถาปัตยกรรม)
 
 ## 10 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| retry · timeout · การตัดวงจร | `error-handling-patterns` |
-| ตารางงานและ index | `database-design` |
-| ตัวชี้วัดและการแจ้งเตือนของคิว | `observability-basics` |
-| log ของ worker และ correlation id | `logging-standards` |
-| แจ้งผู้ใช้เมื่องานเสร็จ | `notifications` |
-| นำเข้าไฟล์เป็นงานเบื้องหลัง | `data-import-export` |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` |
-
-
----
-
-# skill: audit-trail
-
-Use when a system must answer who did what and when (approvals, money, permissions, personal data). Required fields, events worth recording, a separate append-only log, and what personal data must never go in it.
-
-# ร่องรอยการใช้งาน (audit trail)
-
-> **กฎข้อเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
-> วันที่ลูกค้าถามว่า "ใครเปลี่ยนราคาอันนี้" ถ้ายังไม่ได้เก็บไว้ ก็คือตอบไม่ได้ตลอดไป
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ระบบมีการอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
-- ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
-- มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องมีการตรวจสอบย้อนหลัง
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` |
-
----
-
-## 1 · audit log ≠ application log
-
-| | application log | **audit log** |
-|---|---|---|
-| มีไว้ให้ใครอ่าน | developer ตอนไล่ปัญหา | ผู้ตรวจสอบ · ลูกค้า · ฝ่ายกฎหมาย |
-| เขียนอะไร | อะไรก็ได้ที่ช่วยไล่ปัญหา | **เฉพาะเหตุการณ์ที่มีความหมายทางธุรกิจ** |
-| เก็บที่ไหน | ไฟล์ · ระบบรวบรวม log | **ตารางในฐานข้อมูล** หรือที่เก็บที่เขียนทับไม่ได้ |
-| อายุ | 7–90 วัน | **เป็นปี ตามที่กฎหมายหรือสัญญากำหนด** |
-| แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
-| หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
-
-> 🚨 **สองอย่างนี้แยกกันเสมอ** — audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
-> จะถูกลบตาม retention ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
-
----
-
-## 2 · ฟิลด์ที่ทุกรายการต้องมี
-
-| ฟิลด์ | ตัวอย่าง | หมายเหตุ |
-|---|---|---|
-| `id` | UUIDv7 | เรียงตามเวลาได้ |
-| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC** · เวลาที่เกิด ไม่ใช่เวลาที่บันทึก |
-| `actor_id` | `1042` | id ผู้ใช้ ไม่ใช่ชื่อ — ชื่อเปลี่ยนได้ |
-| `actor_type` | `user` · `system` · `api_client` | งานอัตโนมัติก็ต้องมีตัวตน |
-| `actor_ip` · `user_agent` | | เก็บเมื่อจำเป็นต่อการตรวจสอบเท่านั้น |
-| `action` | `order.cancelled` | **คำกริยาในรูปอดีต** ระบบเดียวกันทั้งระบบ |
-| `entity_type` · `entity_id` | `order` · `1042` | ของที่ถูกกระทำ |
-| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | เฉพาะฟิลด์ที่เปลี่ยน |
-| `reason` | "ลูกค้าโทรแจ้งยกเลิก" | บังคับกับการกระทำที่ต้องมีเหตุผล |
-| `correlation_id` | `01J9Z8…` | เชื่อมกลับไปที่ application log |
-| `result` | `success` · `denied` | **ต้องบันทึกครั้งที่ถูกปฏิเสธด้วย** |
-
-> **การกระทำที่ถูกปฏิเสธมีค่ามากกว่าที่สำเร็จ** — คนพยายามเข้าถึงสิ่งที่ไม่มีสิทธิ์
-> คือสิ่งที่ผู้ตรวจสอบอยากเห็นมากที่สุด และเป็นสัญญาณเตือนที่ดีที่สุดที่มี
-
----
-
-## 3 · เก็บเหตุการณ์ไหน
-
-**เก็บ:**
-
-| กลุ่ม | ตัวอย่าง |
-|---|---|
-| เงินและสัญญา | สร้าง/ยกเลิก/คืนเงิน · เปลี่ยนราคา · เปลี่ยนส่วนลด |
-| การอนุมัติ | อนุมัติ · ปฏิเสธ · ส่งกลับแก้ |
-| สิทธิ์และตัวตน | ให้/เพิกถอนสิทธิ์ · สร้าง/ปิดบัญชี · เปลี่ยนรหัสผ่าน · เข้าสู่ระบบล้มเหลวติดกัน |
-| ข้อมูลส่วนบุคคล | ดู · แก้ · ส่งออก · ลบ |
-| ค่าตั้งของระบบ | เปลี่ยนค่าที่กระทบทั้งระบบ |
-| การเข้าถึงข้อมูลจำนวนมาก | ส่งออกรายงาน · ดาวน์โหลดรายชื่อ |
-
-**ไม่เก็บ:** การเปิดดูหน้าจอทั่วไป · การค้นหา · การเรียงลำดับ · การกดปุ่มที่ไม่เปลี่ยนอะไร
-audit log ที่มีทุกอย่าง มีค่าเท่ากับไม่มีอะไรเลย เพราะค้นไม่เจอ
-
-**ตั้งชื่อ action เป็นระบบเดียว:** `<entity>.<กริยาอดีต>` — `order.cancelled` · `user.role_granted` ·
-`invoice.exported` · `patient_record.viewed`
-
----
-
-## 4 · เก็บ "เปลี่ยนอะไร" ยังไง
-
-| วิธี | ดี | เสีย |
-|---|---|---|
-| **เก็บเฉพาะฟิลด์ที่เปลี่ยน (from/to)** ✅ | เล็ก อ่านรู้เรื่องทันที | ประกอบภาพรวมต้องไล่ย้อน |
-| เก็บทั้งแถวก่อนและหลัง | ได้ภาพเต็ม | โตเร็วมาก และเสี่ยงเก็บข้อมูลอ่อนไหวเกินจำเป็น |
-| เก็บเฉพาะว่า "แก้แล้ว" | เล็กสุด | **ตอบคำถามไม่ได้** ไม่ควรใช้ |
-
-```jsonc
-"changes": {
-  "status":       { "from": "confirmed", "to": "cancelled" },
-  "total_amount": { "from": "1250.00",   "to": "0.00" }
-}
-```
-
-**ฟิลด์อ่อนไหวเก็บแค่ว่าเปลี่ยน ไม่เก็บค่า:**
-
-```jsonc
-"changes": { "password_hash": { "changed": true } }
-```
-
----
-
-## 5 · เขียนแล้วห้ามแก้
-
-- ตาราง audit ให้สิทธิ์แค่ **INSERT และ SELECT** — บัญชีที่แอปใช้ต้องไม่มีสิทธิ์ UPDATE หรือ DELETE
-- เขียนใน transaction เดียวกับการเปลี่ยนแปลงจริง — **เขียน audit ไม่สำเร็จ ธุรกรรมต้องล้มตาม**
-- ห้ามแก้ประวัติเพื่อ "จัดระเบียบ" — ผิดแล้วให้บันทึกรายการแก้ไขเพิ่ม ไม่ใช่เขียนทับ
-- ระบบที่เข้มงวดขึ้นไปอีก ให้ทำ hash ต่อกันเป็นสาย เพื่อพิสูจน์ว่าไม่มีใครแทรกหรือลบ
-
-**อายุการเก็บ** — ตั้งตามกฎหมายหรือสัญญา เอกสารทางบัญชีในไทยมักต้องเก็บ 5 ปี
-ครบอายุแล้วให้ย้ายไปที่เก็บราคาถูก ไม่ใช่ลบทิ้งโดยไม่มีใครอนุมัติ
-
----
-
-## 6 · ใครดูได้ และห้ามเก็บอะไร
-
-| เรื่อง | กฎ |
-|---|---|
-| สิทธิ์อ่าน | เฉพาะบทบาทที่ต้องตรวจสอบ — **และการอ่าน audit log ก็ต้องถูก audit เอง** |
-| การส่งออก | บันทึกทุกครั้งว่าใครส่งออกช่วงไหน |
-| **ห้ามเก็บ** | รหัสผ่าน · token · เลขบัตร · ข้อมูลสุขภาพ · เนื้อหาของข้อมูลส่วนบุคคล |
-| เก็บได้แทน | ชี้ว่า**ของชิ้นไหน**ถูกดูหรือถูกแก้ ไม่ใช่เนื้อหาข้างใน |
-
-> `patient_record.viewed` + `entity_id` พอแล้ว — **ห้ามคัดลอกผลตรวจลงไปใน audit log**
-> ไม่งั้น audit log จะกลายเป็นที่รวมข้อมูลอ่อนไหวที่สุดในระบบ โดยที่ไม่มีใครตั้งใจ
-
----
-
-## 7 · แสดงให้คนอ่าน
-
-หน้าจอประวัติต้องกรองได้อย่างน้อย 4 อย่าง — **ช่วงเวลา · ผู้ทำ · ประเภทการกระทำ · ของชิ้นไหน**
-
-แสดงเป็นประโยคที่คนอ่านรู้เรื่อง ไม่ใช่ JSON ดิบ:
-
-```
-25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
-                    สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
-```
-
-แสดงเวลาตามเขตเวลาของผู้ดู แต่เก็บเป็น UTC (ดู `i18n-and-locale`)
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **เก็บ audit ในไฟล์ log ทั่วไป** — ถูกลบตาม retention ภายในเดือนเดียว
-- ❌ **เก็บชื่อผู้ทำแทน id** — เขาเปลี่ยนนามสกุล ประวัติเก่ากลายเป็นคนละคน
-- ❌ **บันทึกเฉพาะที่สำเร็จ** — ครั้งที่ถูกปฏิเสธคือสิ่งที่ผู้ตรวจสอบตามหา
-- ❌ **บันทึกแค่ "แก้ไขข้อมูล"** โดยไม่บอกว่าจากอะไรเป็นอะไร
-- ❌ **แอปมีสิทธิ์ UPDATE ตาราง audit** — ร่องรอยที่แก้ได้ ไม่ใช่ร่องรอย
-- ❌ **เขียน audit นอก transaction** — ธุรกรรมสำเร็จแต่ไม่มีบันทึก
-- ❌ **บันทึกทุกการคลิก** — ค้นไม่เจอของจริงในกองขยะ
-- ❌ **คัดลอกข้อมูลอ่อนไหวลง audit** — สร้างช่องรั่วใหม่โดยไม่ตั้งใจ
-- ❌ **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
-
----
-
-## 9 · ตัวย่อ
-
-- **audit trail** — ร่องรอยการใช้งาน บันทึกว่าใครทำอะไรกับข้อมูลชิ้นไหนเมื่อไหร่
-- **append only** — เขียนต่อท้ายได้อย่างเดียว แก้หรือลบของเดิมไม่ได้
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-- **UUIDv7** — รหัสสุ่มที่ขึ้นต้นด้วยเวลา จึงเรียงตามเวลาได้
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางและ index ของ audit | `database-design` |
-| correlation id ที่เชื่อมกลับไป log | `logging-standards` |
-| ใครเป็นใคร มีสิทธิ์อะไร | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิขอลบ | `pdpa-compliance` |
-| การแจ้งเตือนเมื่อมีพฤติกรรมผิดปกติ | `observability-basics` |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` |
-
-
----
-
-# skill: pdpa-compliance
-
-Use when a system holds personal data about people in Thailand. Data inventory, lawful basis, withdrawable consent, subject rights, minimisation, retention that deletes, processors, breach first hours. Not legal advice.
-
-# PDPA — ข้อมูลส่วนบุคคล
-
-> **กฎข้อเดียว:** ข้อมูลที่ไม่ได้เก็บ คือข้อมูลที่ไม่รั่ว ไม่ต้องดูแล และไม่ต้องลบ
-> คำถามแรกเสมอคือ "จำเป็นต้องเก็บไหม" ไม่ใช่ "เก็บยังไงให้ปลอดภัย"
-
-> ⚠️ นี่คือแนวทางสำหรับคนทำระบบ **ไม่ใช่คำแนะนำทางกฎหมาย**
-> เรื่องที่มีผลทางกฎหมายต้องให้ที่ปรึกษากฎหมายตัดสิน
-
-## ทางลัด — แอปที่ข้อมูลอยู่ในเครื่องผู้ใช้เท่านั้น
-
-ไม่มีเซิร์ฟเวอร์ ไม่มีบัญชี ไม่ส่งข้อมูลออก → ข้ามหัวข้อเรื่องผู้ประมวลผลและฐานข้อมูลได้ เหลือตรวจ 3 เรื่องนี้
-
-| เรื่อง | ทำไมยังเกี่ยว | ทำอะไร |
-|---|---|---|
-| Android Auto Backup | ระบบสำรองข้อมูลแอปขึ้น Google Drive เองโดยค่าเริ่มต้น | ตั้ง `android:allowBackup` และ `android:dataExtractionRules` ให้ตรงกับที่ตั้งใจ · ลงเหตุผลใน `decision-log` |
-| ส่งออก · share sheet (หน้าต่างแชร์ของระบบ) | ข้อมูลออกจากเครื่องทางนี้ทางเดียว | ส่งเฉพาะที่ผู้ใช้เลือก · ไม่แนบตำแหน่งหรือ metadata ของภาพโดยไม่บอก |
-| ข้อมูลที่ร้านค้าบังคับให้แจ้ง | Google Play บังคับกรอกแบบฟอร์ม Data safety ทุกแอป | กรอกตามจริง (ไม่เก็บ ก็ตอบว่าไม่เก็บ) · ขอสิทธิ์กล้องแล้วต้องมีนโยบายความเป็นส่วนตัวไหม `(รอยืนยัน)` — เตรียมหน้าสั้น ๆ ไว้ก่อน |
-
-ภายหลังเพิ่ม analytics · crash report · บัญชีผู้ใช้ = ไม่ใช่แอปในเครื่องอย่างเดียวแล้ว กลับไปใช้ทั้ง skill
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ระบบเก็บชื่อ เบอร์โทร อีเมล ที่อยู่ เลขบัตร รูป หรือข้อมูลอื่นที่ระบุตัวบุคคลได้
-- ลูกค้าหรือฝ่ายกฎหมายถามเรื่องความสอดคล้องกับ PDPA
-- ต้องทำหน้าขอความยินยอม หรือหน้าให้ผู้ใช้ขอลบข้อมูล
-- จะส่งข้อมูลให้ผู้ให้บริการภายนอก
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ร่องรอยว่าใครทำอะไรกับข้อมูล | `audit-trail` |
-| ตารางและการเข้ารหัสระดับคอลัมน์ | `database-design` |
-| การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| ที่เก็บกุญแจ | `config-and-secrets` |
-
----
-
-## 1 · ทำรายการก่อน
-
-**ตอบคำถาม "ข้อมูลของฉันอยู่ที่ไหนบ้าง" ไม่ได้ ถ้าไม่มีรายการนี้**
-
-| ข้อมูล | เก็บที่ไหน | เก็บทำไม | ฐานทางกฎหมาย | เก็บนานเท่าไหร่ | ใครเห็นได้ | ส่งให้ใครบ้าง |
-|---|---|---|---|---|---|---|
-| ชื่อ-นามสกุล | `users.name` | ระบุตัวลูกค้า | สัญญา | 5 ปีหลังปิดบัญชี | ฝ่ายขาย · ผู้ดูแล | — |
-| เบอร์โทร | `users.phone` | แจ้งสถานะจัดส่ง | สัญญา | เท่ากัน | เท่ากัน | ผู้ให้บริการ SMS |
-| เลขบัตรประชาชน | `kyc.id_number` | ยืนยันตัวตนตามกฎหมาย | หน้าที่ตามกฎหมาย | 10 ปี | ฝ่ายปฏิบัติตามกฎเกณฑ์ | — |
-
-**ทำรายการนี้ให้ครบทุกที่จริง ๆ** — ฐานข้อมูลหลัก · ที่สำรอง · log · ระบบวิเคราะห์ ·
-ที่เก็บไฟล์ · สเปรดชีตที่ทีมทำเอง · แอปมือถือ: Android Auto Backup และไฟล์ที่ส่งออกผ่าน share sheet
-
----
-
-## 2 · ฐานทางกฎหมาย — ไม่ใช่ทุกอย่างต้องขอความยินยอม
-
-| ฐาน | ใช้เมื่อ | ตัวอย่าง |
-|---|---|---|
-| **สัญญา** | จำเป็นเพื่อให้บริการตามที่ตกลง | ที่อยู่สำหรับจัดส่ง |
-| **หน้าที่ตามกฎหมาย** | กฎหมายบังคับให้เก็บ | เอกสารภาษี |
-| **ประโยชน์อันชอบธรรม** | จำเป็นและไม่กระทบสิทธิเกินควร | log ความปลอดภัย · ป้องกันการฉ้อโกง |
-| **ความยินยอม** | ทำไม่ได้ด้วยฐานอื่น | การตลาด · cookie ติดตามพฤติกรรม |
-
-> 🚨 **ความยินยอมคือฐานที่อ่อนที่สุด เพราะถอนเมื่อไหร่ก็ได้**
-> ถ้าขอความยินยอมสำหรับที่อยู่จัดส่ง แล้วเขาถอน ระบบจะส่งของไม่ได้
-> **ที่อยู่จัดส่งใช้ฐานสัญญา** ไม่ใช่ความยินยอม
->
-> การกดปุ่ม "ยอมรับทั้งหมด" ที่ทำให้ใช้งานต่อไม่ได้ถ้าไม่กด ไม่ถือว่าเป็นความยินยอมโดยอิสระ
-
----
-
-## 3 · ความยินยอมที่ใช้ได้จริง
-
-| ต้องมี | รายละเอียด |
-|---|---|
-| **แยกเป็นเรื่อง ๆ** | การตลาดทางอีเมล · การติดตามพฤติกรรม · การส่งต่อให้พันธมิตร — แยกช่องกัน |
-| ไม่ติ๊กมาให้ล่วงหน้า | ต้องเป็นการกระทำของผู้ใช้เอง |
-| ข้อความที่คนทั่วไปอ่านเข้าใจ | ไม่ใช่ย่อหน้ากฎหมาย 500 คำ |
-| **บันทึกไว้** | ใคร · เรื่องอะไร · เมื่อไหร่ · ข้อความเวอร์ชันไหน · จากช่องทางไหน |
-| ถอนได้ง่ายเท่าที่ให้ | ถ้าให้ด้วยหนึ่งคลิก ต้องถอนด้วยหนึ่งคลิก |
-| ถอนแล้วมีผลจริง | **ต้องมีโค้ดที่หยุดใช้ข้อมูลนั้นจริง** ไม่ใช่แค่เก็บค่าไว้ |
-
-ตารางที่ต้องมี: `consent` — `user_id` · `purpose` · `granted` · `granted_at` · `withdrawn_at` ·
-`policy_version` · `source` · `ip`
-**เก็บเป็นประวัติ ไม่ใช่เขียนทับ** — ต้องพิสูจน์ย้อนหลังได้ว่าตอนนั้นเขายินยอมอะไรไว้
-
----
-
-## 4 · สิทธิของเจ้าของข้อมูล
-
-ระบบต้อง**ทำได้จริง** ไม่ใช่รอทำมือทุกครั้ง โดยทั่วไปต้องตอบสนองภายใน 30 วัน
-
-| สิทธิ | ระบบต้องทำอะไรได้ |
-|---|---|
-| ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
-| ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
-| **ขอลบ** | ลบจริงจากทุกที่ที่มี รวม log และไฟล์สำรอง |
-| ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
-| ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
-| คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
-
-> 🚨 **"ขอลบ" คือข้อที่ทำยากที่สุด** — ข้อมูลอยู่ในฐานข้อมูล ที่สำรอง log ระบบวิเคราะห์
-> และผู้ให้บริการภายนอก **ออกแบบให้ลบได้ตั้งแต่วันแรก** ไม่ใช่มาไล่หาทีหลัง
->
-> soft delete อย่างเดียว**ไม่นับว่าลบ** · ข้อมูลที่กฎหมายบังคับให้เก็บต่อ (เช่นเอกสารภาษี)
-> เก็บได้ แต่ต้องบอกเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร
-
----
-
-## 5 · เก็บเท่าที่จำเป็น
-
-| หลัก | ตัวอย่าง |
-|---|---|
-| **ไม่ถามสิ่งที่ไม่ได้ใช้** | ขายของออนไลน์ ไม่ต้องขอเลขบัตรประชาชน |
-| เก็บช่วงแทนค่าจริง | เก็บช่วงอายุ ไม่ใช่วันเกิด ถ้าใช้แค่แบ่งกลุ่ม |
-| **แฮชหรือทำให้ไม่ระบุตัวตน** สำหรับงานวิเคราะห์ | ระบบสถิติไม่ต้องรู้ว่าใครเป็นใคร |
-| เข้ารหัสระดับคอลัมน์ | เลขบัตร ข้อมูลสุขภาพ |
-| ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
-| **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
-
-**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** — เชื้อชาติ ศาสนา ความคิดเห็นทางการเมือง พฤติกรรมทางเพศ
-ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ข้อมูลชีวภาพ · เก็บเมื่อจำเป็นจริงและมีมาตรการเข้มกว่าปกติ
-
-**ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
-
----
-
-## 6 · อายุการเก็บ
-
-- กำหนด**ต่อประเภทข้อมูล** ไม่ใช่ทั้งระบบเป็นค่าเดียว
-- **มีงานลบจริงที่รันตามรอบ** — นโยบายที่ไม่มีงานรันคือนโยบายที่ไม่มีอยู่จริง
-- log ที่มีข้อมูลบุคคลก็มีอายุเช่นกัน (ดู `logging-standards`)
-- ไฟล์สำรองข้อมูลต้องมีรอบหมุนเวียนที่ทำให้ข้อมูลเก่าหายไปเองในที่สุด
-- ก่อนลบจริงครั้งแรก ให้แสดงรายการที่จะถูกลบและให้คนอนุมัติ
-
----
-
-## 7 · ผู้ให้บริการภายนอกและการส่งข้อมูลออกนอกประเทศ
-
-| เรื่อง | ต้องทำ |
-|---|---|
-| รายชื่อผู้ประมวลผล | ทำรายการว่าส่งข้อมูลอะไรให้ใคร — คลาวด์ · SMS · อีเมล · วิเคราะห์ · แชต |
-| สัญญา | มีข้อตกลงการประมวลผลข้อมูลกับทุกราย |
-| ส่งออกนอกประเทศ | ตรวจว่าประเทศปลายทางมีมาตรฐานเพียงพอ หรือมีข้อสัญญามาตรฐานรองรับ |
-| ตัววัดสถิติและโฆษณา | นับเป็นการส่งข้อมูลออกไป — **ต้องมีฐานทางกฎหมายรองรับ** |
-| ยกเลิกใช้บริการ | ต้องได้ข้อมูลคืนและให้เขาลบจริง |
-
-> **จุดที่คนลืมบ่อยที่สุด** — ปลั๊กอินวัดสถิติที่ใส่ไว้ตั้งแต่วันแรก ส่งข้อมูลพฤติกรรม
-> ผู้ใช้ออกไปต่างประเทศทุกวัน โดยไม่เคยมีใครใส่ไว้ในรายการ
-
----
-
-## 8 · เมื่อข้อมูลรั่ว — 72 ชั่วโมงแรก
-
-| ลำดับ | ทำอะไร |
-|---|---|
-| 1 | **หยุดการรั่วก่อน** — เพิกถอนกุญแจ ปิดช่องทาง |
-| 2 | ประเมินขอบเขต — ข้อมูลอะไร กี่คน อ่อนไหวไหม |
-| 3 | เก็บหลักฐาน — log และสถานะระบบ **ก่อน**ที่จะแก้ทับ |
-| 4 | แจ้งผู้รับผิดชอบภายในและที่ปรึกษากฎหมายทันที |
-| 5 | **แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง** เมื่อเข้าเงื่อนไข |
-| 6 | แจ้งเจ้าของข้อมูล เมื่อมีความเสี่ยงสูงต่อเขา |
-| 7 | บันทึกเหตุการณ์ → `postmortem-template` |
-
-**เตรียมไว้ล่วงหน้า ไม่ใช่ตอนเกิดเรื่อง** — ใครเป็นคนตัดสินใจแจ้ง · เบอร์ที่ปรึกษากฎหมาย ·
-แม่แบบข้อความแจ้ง · วิธีดึงรายชื่อผู้ได้รับผลกระทบ
-
----
-
-## 9 · Anti-patterns
-
-- ❌ **ขอความยินยอมสำหรับทุกอย่าง** — พอเขาถอน ระบบทำงานต่อไม่ได้
-- ❌ **ช่องติ๊กที่ติ๊กมาให้แล้ว** — ไม่ถือเป็นความยินยอม
-- ❌ **เก็บความยินยอมเป็นค่าเดียว `accepted_terms = true`** — พิสูจน์ย้อนหลังไม่ได้ว่ายินยอมอะไร
-- ❌ **soft delete แล้วบอกว่าลบแล้ว**
-- ❌ **นโยบายอายุการเก็บที่ไม่มีงานลบจริง**
-- ❌ **ใช้ข้อมูลจริงบน staging** — และคัดลอกลงเครื่อง developer
-- ❌ **เก็บเลขบัตรประชาชนเพราะ "เผื่อใช้"**
-- ❌ **ข้อมูลส่วนบุคคลใน log และในรายงาน crash**
-- ❌ **ไม่มีรายการผู้ให้บริการภายนอก** — ตอบไม่ได้ว่าข้อมูลไปที่ไหนบ้าง
-- ❌ **ส่งออก Excel ที่มีข้อมูลเต็ม** ให้คนที่ต้องการแค่ยอดรวม
-- ❌ **นโยบายความเป็นส่วนตัวที่ไม่ตรงกับสิ่งที่ระบบทำจริง**
-
----
-
-## 10 · ตัวย่อ
-
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
-- **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
-- **ข้อมูลอ่อนไหว** — ข้อมูลส่วนบุคคลกลุ่มพิเศษ เช่น สุขภาพ เชื้อชาติ ศาสนา
-- **ผู้ควบคุมข้อมูล** — ผู้ตัดสินใจว่าจะเก็บและใช้ข้อมูลอย่างไร (โดยทั่วไปคือเจ้าของระบบ)
-- **ผู้ประมวลผลข้อมูล** — ผู้ที่ประมวลผลข้อมูลตามคำสั่งของผู้ควบคุม เช่น ผู้ให้บริการคลาวด์
-- **เจ้าของข้อมูล** — บุคคลที่ข้อมูลนั้นเป็นของเขา
-
-## 11 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ร่องรอยว่าใครดูหรือแก้ข้อมูล | `audit-trail` |
-| ตาราง การเข้ารหัส และ soft delete | `database-design` |
-| ปิดบังข้อมูลใน log | `logging-standards` |
-| สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
-| ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
-| ความยินยอมสำหรับการตลาด | `notifications` |
-| ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
-| อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
-| งานลบข้อมูลที่หมดอายุ | `background-jobs` |
-| บันทึกเหตุการณ์หลังข้อมูลรั่ว | `postmortem-template` · `incident-runbook-template` |
+| เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
+| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
+| สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |

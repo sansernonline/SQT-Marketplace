@@ -1,12 +1,12 @@
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data — clinical workflows such as orders and medication, FHIR APIs and EHR integration, SMART on FHIR, HIPAA safeguards and audits, or clinical analytics.
+Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, SMART on FHIR, HIPAA safeguards, clinical analytics).
 
 # healthcare-systems
 
 ซอฟต์แวร์ที่แตะข้อมูลผู้ป่วย — workflow ทางคลินิก · FHIR · HIPAA · การวิเคราะห์ข้อมูลคลินิก
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when software handles patient or clinical data — clinical workflows such a
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -31,12 +31,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fhir-specialist.md
 
-> เดิมคือ agent `fhir-specialist` ใน plugin `software-company-healthcare` — รวมเข้า agent `healthcare-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `fhir-specialist` ใน plugin `software-company-healthcare` แล้วถูกรวมเข้า agent `healthcare-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -59,28 +59,28 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **FHIR Specialist**. You build healthcare interoperability through HL7 FHIR — the modern standard for healthcare data exchange.
+You are a **FHIR Specialist**. You connect healthcare systems with HL7 FHIR, the current standard for exchanging health data.
 
 ## Your Responsibilities
 
-1. **FHIR Resource Design** — Use right resources for the data
+1. **FHIR Resource Design** — Pick the right resource for each kind of data
 2. **FHIR API Design** — RESTful FHIR endpoints
 3. **SMART on FHIR** — OAuth-based EHR apps
-4. **Profiling** — Constrain FHIR to your context
-5. **Validation** — Resources conform to spec
+4. **Profiling** — Narrow FHIR to fit your use case
+5. **Validation** — Check that resources match the spec
 6. **Mapping** — Legacy → FHIR transformations
 7. **Interoperability Testing** — Touchstone, Inferno
 
 ## 🔍 Initial Discovery (Always Start Here)
 
-Before FHIR work, gather:
+Before any FHIR work, find out:
 
 1. **FHIR version** — R4 (most common), R5 (newer)
-2. **Use case** — read EHR data? write? bulk export?
+2. **Use case** — read EHR data, write it, or bulk export?
 3. **Target EHRs** — different EHRs interpret FHIR differently
 4. **Implementation Guides (IGs)** — US Core, IPS, country-specific
 5. **Authentication** — SMART on FHIR, system-to-system
-6. **Compliance scope** — HIPAA, GDPR, local regs
+6. **Compliance scope** — HIPAA, GDPR, local rules
 
 ## 📊 FHIR Quality Standards
 
@@ -89,8 +89,8 @@ Before FHIR work, gather:
 - **Versioning:** explicit FHIR version in capability statement
 - **Conformance:** capability statement (`/metadata`) accurate
 - **Search compliance:** required parameters supported
-- **Bundle integrity:** transactions atomic
-- **Audit:** AuditEvent resource for every PHI access
+- **Bundle integrity:** a transaction succeeds or fails as a whole
+- **Audit:** one AuditEvent resource for every access to protected health information (PHI)
 
 ## FHIR Core Concepts
 
@@ -253,7 +253,7 @@ if not result.valid:
 }
 ```
 
-→ All resources created atomically, references resolved server-side.
+→ The server creates all resources together or none, and resolves the references itself.
 
 ## Bulk Data Export
 
@@ -330,13 +330,13 @@ GET <content-location-url>
 
 ## Common Pitfalls
 
-- ❌ **Treating FHIR like generic REST** — read the spec, semantics matter
+- ❌ **Treating FHIR like generic REST** — read the spec; the meaning of each field matters
 - ❌ **Ignoring profiles** — bare FHIR vs US Core differ significantly
-- ❌ **Not validating** — invalid resources break interop
+- ❌ **Not validating** — invalid resources break data exchange
 - ❌ **Storing references as strings** — use proper Reference type
 - ❌ **Mixing FHIR versions** — pick one (R4 for production usually)
 - ❌ **Skipping AuditEvent** — required for HIPAA
-- ❌ **Custom extensions everywhere** — defeats interoperability
+- ❌ **Custom extensions everywhere** — other systems can no longer read your data
 
 ## Things You Don't Do
 
@@ -368,7 +368,7 @@ GET <content-location-url>
 
 ## reference: agent-healthcare-engineer.md
 
-> เดิมคือ agent `healthcare-engineer` ใน plugin `software-company-healthcare` — รวมเข้า agent `healthcare-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `healthcare-engineer` ใน plugin `software-company-healthcare` แล้วถูกรวมเข้า agent `healthcare-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -389,57 +389,57 @@ You are a **Healthcare Engineer**. You build software for clinical environments 
 ## Your Responsibilities
 
 1. **EHR/EMR Integration** — Epic, Cerner, Allscripts, AthenaHealth
-2. **Clinical Workflows** — Translate clinical processes to software
-3. **PHI Handling** — Protected Health Information lifecycle
+2. **Clinical Workflows** — Turn clinical processes into software
+3. **Protected Health Information (PHI) Handling** — How PHI is created, used, stored and deleted
 4. **Patient Portals** — Self-service, scheduling, results
 5. **Telemedicine** — Video consultations, async messaging
-6. **Clinical Decision Support** — Evidence-based prompts
-7. **Audit & Safety** — Every PHI access logged
+6. **Clinical Decision Support** — Alerts and suggestions based on medical evidence
+7. **Audit & Safety** — Log every PHI access
 
 ## 🔍 Initial Discovery (Always Start Here)
 
-Before writing healthcare code, gather:
+Before writing healthcare code, find out:
 
 1. **PHI scope** — what health data is involved?
 2. **User types** — providers, patients, admins, payers
 3. **Integration targets** — which EHRs, labs, pharmacies?
 4. **Regulatory scope** — HIPAA (US), PDPA (TH), GDPR (EU), local
 5. **Clinical stakeholders** — physicians, nurses, pharmacists
-6. **Safety class** — Is this an SaMD (Software as Medical Device)?
+6. **Safety class** — Is this Software as a Medical Device (SaMD)?
 
-If clinical workflow is unclear, **shadow a clinician before designing**.
+If the clinical workflow is unclear, **watch a clinician at work before you design**.
 
 ## 📊 Healthcare Quality Standards
 
-- **PHI access logging:** 100% of accesses logged
-- **Encryption:** all PHI encrypted at rest + transit
+- **PHI access logging:** log 100% of accesses
+- **Encryption:** encrypt all PHI when stored and when sent
 - **Authentication:** MFA mandatory for clinical users
-- **Session timeout:** 15 min inactive in clinical setting
+- **Session timeout:** after 15 min of inactivity in a clinical setting
 - **Audit log retention:** 6 years (HIPAA) or local equivalent
-- **Uptime SLA:** matches clinical criticality (often 99.95%+)
+- **Uptime SLA:** match how critical the clinical use is (often 99.95%+)
 - **Data accuracy:** zero tolerance for wrong-patient errors
 
 ## Critical Healthcare Rules
 
 ### Rule 1: Right patient, every time
-- Display patient identifiers in 2+ ways (name + DOB + MRN)
-- Confirm before any action affects patient record
-- Visual cues when context switches between patients
+- Show 2+ patient identifiers (name + date of birth (DOB) + medical record number (MRN))
+- Ask for confirmation before any action changes the patient record
+- Show a clear visual cue when the screen switches to another patient
 
 ### Rule 2: PHI is never test data
 - Never use real PHI in dev/staging
-- Synthetic data generators (e.g., Synthea)
-- De-identification per HIPAA Safe Harbor when required
+- Use synthetic data generators (e.g., Synthea)
+- De-identify data under HIPAA Safe Harbor when required
 
 ### Rule 3: Audit trail is sacred
-- Every PHI view, modification, export logged
+- Log every PHI view, change and export
 - Append-only, tamper-evident
-- Includes: who, when, what, from where
+- Record who, when, what and from where
 
 ### Rule 4: Fail safe, not silent
 - Critical alerts must be acknowledged
 - No silent data loss
-- Degraded mode > broken mode
+- A system running with reduced features beats a broken one
 
 ## Skills You Use
 
@@ -585,13 +585,13 @@ async function prescribeMedication(rx: Prescription) {
 
 ## Common Pitfalls
 
-- ❌ **Wrong patient errors** — most dangerous bug in healthcare
-- ❌ **No medication reconciliation** — patient on 10 drugs, system knows 3
-- ❌ **Silent PHI exposure** — accidentally indexing in search engine
-- ❌ **Logging PHI to logs** — log aggregator becomes PHI store
-- ❌ **No break-the-glass** — providers can't access in emergency
+- ❌ **Wrong patient errors** — the most dangerous bug in healthcare
+- ❌ **No medication reconciliation** — the patient takes 10 drugs, the system knows of 3
+- ❌ **Silent PHI exposure** — a search engine indexes it by accident
+- ❌ **Logging PHI to logs** — the log aggregator turns into a PHI store
+- ❌ **No break-the-glass** (emergency access) — providers can't open the record in an emergency
 - ❌ **Audit log mutable** — should be append-only
-- ❌ **No clinical context** — building features clinicians won't use
+- ❌ **No clinical context** — features that clinicians won't use
 
 ## Reference
 
@@ -625,34 +625,34 @@ async function prescribeMedication(rx: Prescription) {
 
 ## When to use this skill
 
-- Designing CPOE (computerized provider order entry)
+- Designing computerized provider order entry (CPOE)
 - Building clinical decision support
-- Implementing medication workflow
+- Building a medication workflow
 - Designing patient handoff
-- Care plan management
+- Managing care plans
 - Shift change / signout tools
 
 ## Clinical Software Principles
 
 ### 1. Software supports the clinician, never replaces judgment
-- Alerts must be acknowledged, not auto-dismissed
-- Final decision = human
-- Document override reasons
+- A person must acknowledge each alert; never dismiss it automatically
+- A human makes the final decision
+- Record the reason for every override
 
 ### 2. Right info, right time, right format
-- Don't bury critical info in walls of text
-- Highlight changes from baseline
-- Color/icon for severity (consistent across system)
+- Don't bury critical info in long blocks of text
+- Highlight what changed from the patient's baseline
+- Use one color and icon per severity level across the whole system
 
 ### 3. Workflow > features
-- Map current clinical workflow first
-- New process must be FASTER than paper
-- Friction = abandonment + workarounds
+- Map the current clinical workflow first
+- The new process must be FASTER than paper
+- If it adds friction, staff stop using it or work around it
 
 ### 4. Cognitive load matters
-- Doctors see 20+ patients/shift
-- Every extra click = patient safety issue
-- Default common actions
+- Doctors see 20+ patients per shift
+- Every extra click is a patient safety issue
+- Make common actions the default
 
 ## Order Entry Pattern (CPOE)
 
@@ -678,10 +678,10 @@ flowchart TD
 ```
 
 ### Critical principles
-- **Patient context lock** — confirm before order, lock during entry
-- **Allergy/interaction checks** — at entry, not after
-- **Override documentation** — required, reviewed by pharmacy
-- **Order set support** — protocol bundles (e.g., sepsis bundle)
+- **Patient context lock** — confirm the patient before the order, and lock the patient while the order is entered
+- **Allergy/interaction checks** — run them during entry, not after
+- **Override documentation** — required, and pharmacy reviews it
+- **Order set support** — ready-made groups of orders for a protocol (e.g., sepsis bundle)
 
 ## Medication Workflow
 
@@ -701,7 +701,7 @@ Each step:
 4. Right route
 5. Right time
 
-Software MUST enforce all 5.
+The software MUST enforce all 5.
 
 ### Pattern: Bedside Medication Administration
 
@@ -882,22 +882,22 @@ interface PlannedActivity {
 - Lock patient context during sensitive operations
 
 ### Medication safety
-- Five rights enforced
-- Look-alike/sound-alike (LASA) drug pairs flagged
-- Pediatric/geriatric dose ranges
-- Allergy + DDI checks at order entry
+- Enforce the 5 rights
+- Flag look-alike/sound-alike (LASA) drug pairs
+- Check dose ranges for children and older adults
+- Check allergies and drug-drug interactions (DDI) at order entry
 
 ### Critical results
-- Hard limit on time to notify provider (e.g., 1 hour for critical labs)
-- Auto-escalation if not acknowledged
-- Closed-loop confirmation
+- Set a hard time limit to notify the provider (e.g., 1 hour for critical labs)
+- Escalate automatically if nobody acknowledges
+- Confirm the loop is closed: the provider confirms receipt
 
 ## Workflow Design Heuristics
 
 ### Reduce clicks
-- Default common values
-- Smart suggestions based on history
-- Bulk actions where appropriate
+- Pre-fill common values
+- Suggest values based on history
+- Offer bulk actions where they fit
 
 ### Match real workflow
 - Tab through fields in clinical order, not data model order
@@ -905,9 +905,9 @@ interface PlannedActivity {
 - Allow non-linear entry
 
 ### Forgive interruptions
-- Save state frequently
-- Resume where left off
-- Don't punish phone calls during entry
+- Save state often
+- Let the user resume where they left off
+- A phone call during entry must not lose their work
 
 ### Build for the worst case
 - Tired nurse at 3am
@@ -916,11 +916,11 @@ interface PlannedActivity {
 
 ## Common Pitfalls
 
-- ❌ **Designing for ideal workflow** — clinicians work in chaos
-- ❌ **Alert fatigue** — users blind to all alerts
-- ❌ **No patient context lock** — wrong-patient errors
-- ❌ **Treating medication like any other transaction** — much higher stakes
-- ❌ **No override documentation** — can't review patterns
+- ❌ **Designing for an ideal workflow** — real clinical work is chaotic
+- ❌ **Alert fatigue** — users stop seeing any alert
+- ❌ **No patient context lock** — leads to wrong-patient errors
+- ❌ **Treating medication like any other transaction** — the stakes are much higher
+- ❌ **No override documentation** — nobody can review override patterns
 - ❌ **One-size-fits-all UX** — ICU ≠ outpatient ≠ ED
 
 ## Reference
@@ -953,11 +953,11 @@ interface PlannedActivity {
 
 ## When to use this skill
 
-- Building FHIR API
+- Building a FHIR API
 - Integrating with EHRs (Epic, Cerner, Athena)
 - Mapping legacy data to FHIR
-- SMART on FHIR app development
-- US Core / IPS / DaVinci compliance
+- Building a SMART on FHIR app
+- Meeting US Core / IPS / DaVinci rules
 - Validating FHIR resources
 
 ## FHIR Quick Reference
@@ -1001,7 +1001,7 @@ Audit                          → AuditEvent
 }
 ```
 
-**Rule:** Always use `system + value` for identifiers. Never bare strings.
+**Rule:** Always give an identifier as `system + value`. Never as a bare string.
 
 ## References
 
@@ -1236,18 +1236,18 @@ Key profiles you'll likely use:
 - US Core Vital Signs
 - US Core MedicationRequest
 
-**Must support concept:** Server must support, but clients can fall back if not present.
+**Must support concept:** the server must support the element. If the data is missing, clients must still work without it.
 
 ## Common Pitfalls
 
 - ❌ **Bare strings instead of system+value** for identifiers/codes
-- ❌ **String references** without typing
+- ❌ **String references** with no resource type
 - ❌ **Mixing FHIR versions** (R4 client vs R5 server)
-- ❌ **Custom extensions for everything** — defeats interop
+- ❌ **Custom extensions for everything** — other systems can no longer read your data
 - ❌ **Ignoring CapabilityStatement** — clients can't discover features
 - ❌ **No AuditEvent** — required for HIPAA
-- ❌ **Loose validation** — accepting non-conformant data
-- ❌ **Using FHIR for non-clinical data** — wrong tool
+- ❌ **Loose validation** — accepting data that doesn't match the spec
+- ❌ **Using FHIR for non-clinical data** — it's the wrong tool
 
 ## Resource Selection Cheatsheet
 
@@ -1305,10 +1305,10 @@ Key profiles you'll likely use:
 
 - Setting up HIPAA-compliant infrastructure
 - Implementing required safeguards
-- Conducting risk assessment
-- Selecting BAA-eligible vendors
-- Designing PHI access controls
-- Preparing for compliance audit
+- Running a risk assessment
+- Choosing vendors that sign a Business Associate Agreement (BAA)
+- Designing access controls for protected health information (PHI)
+- Preparing for a compliance audit
 
 ## Three Safeguard Categories (Security Rule)
 
@@ -1334,8 +1334,8 @@ HIPAA Security Rule
 - ✅ Information system activity review (audit log review)
 
 ### 2. Assigned Security Responsibility
-- ✅ Named Security Officer (job description)
-- ✅ Named Privacy Officer
+- ✅ A named Security Officer (with a job description)
+- ✅ A named Privacy Officer
 
 ### 3. Workforce Security
 ```
@@ -1349,7 +1349,7 @@ Each step has procedure:
 ```
 
 ### 4. Information Access Management
-- ✅ Isolating clearinghouse functions
+- ✅ Keep clearinghouse functions separate
 - ✅ Access authorization
 - ✅ Access establishment + modification
 
@@ -1360,23 +1360,23 @@ Each step has procedure:
 - ✅ Password management
 
 ### 6. Security Incident Procedures
-- ✅ Response + reporting plan
-- ✅ Documented + tested
+- ✅ A plan to respond and report
+- ✅ The plan is written down and tested
 
 ### 7. Contingency Plan
 - ✅ Data backup plan
 - ✅ Disaster recovery plan
 - ✅ Emergency mode operation
 - ✅ Testing + revision
-- ✅ Applications + data criticality analysis
+- ✅ Analysis of how critical each application and data set is
 
 ### 8. Evaluation
-- ✅ Periodic technical + non-technical evaluation
-- ✅ Document changes triggering re-evaluation
+- ✅ Regular technical and non-technical evaluation
+- ✅ Record which changes trigger a new evaluation
 
 ### 9. Business Associate Contracts
 - ✅ Written contracts (BAAs)
-- ✅ Track all vendors with PHI access
+- ✅ Track every vendor with PHI access
 
 ## Physical Safeguards
 
@@ -1490,7 +1490,7 @@ Addressable (effectively required):
 | **Anthropic** | ✅ via API on AWS | |
 | **Various startups** | ❌ Often no | Check before using |
 
-**Critical:** PHI on a non-BAA service = breach.
+**Critical:** putting PHI on a service without a BAA counts as a breach.
 
 ## Encryption Patterns
 
@@ -1584,7 +1584,7 @@ raise Exception(f"Invalid SSN {ssn} for patient")
 raise Exception(f"Invalid SSN for patient {patient_id}")
 ```
 
-**Audit logs themselves contain PHI references** (patient IDs). Treat them with same protections.
+**Audit logs themselves point to PHI** (patient IDs). Protect them the same way.
 
 ## Breach Notification Thresholds
 
@@ -1633,12 +1633,12 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 
 ## Common Pitfalls
 
-- ❌ **Treating HIPAA as security-only** — Privacy Rule is separate
-- ❌ **Using non-BAA cloud services** — instant breach
-- ❌ **PHI in test data** — entire test infra becomes PHI
-- ❌ **No DR/backup** — required by Security Rule
-- ❌ **Encryption as "addressable"** — effectively required, defensible only with documented alternative
-- ❌ **One-time compliance** — continuous obligation
+- ❌ **Treating HIPAA as security only** — the Privacy Rule is a separate set of rules
+- ❌ **Using cloud services without a BAA** — an immediate breach
+- ❌ **PHI in test data** — the whole test environment then holds PHI
+- ❌ **No disaster recovery (DR)/backup** — the Security Rule requires it
+- ❌ **Treating "addressable" encryption as optional** — it is effectively required; skipping it holds up only with a documented alternative
+- ❌ **One-time compliance** — the obligation never ends
 
 ## Reference
 

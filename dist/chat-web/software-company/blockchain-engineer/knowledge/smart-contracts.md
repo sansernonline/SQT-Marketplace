@@ -1,12 +1,12 @@
 # skill: smart-contracts
 
-Use when building on a blockchain — writing or reviewing Solidity or Solana contracts for security, testing with Foundry or Hardhat, DeFi mechanisms, chain selection and bridges, or token economics.
+Use when building on a blockchain (Solidity or Solana contracts, security review, Foundry or Hardhat tests, DeFi, chain choice, bridges, tokenomics).
 
 # smart-contracts
 
 งานบล็อกเชน — smart contract · ความปลอดภัย · ทดสอบ · DeFi · tokenomics
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when building on a blockchain — writing or reviewing Solidity or Solana co
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-web3` (skill `solidity-security` · `smart-contract-testing` · `defi-patterns`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-web3` (skill `solidity-security` · `smart-contract-testing` · `defi-patterns`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-blockchain-architect.md
 
-> เดิมคือ agent `blockchain-architect` ใน plugin `software-company-web3` — รวมเข้า agent `blockchain-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `blockchain-architect` ใน plugin `software-company-web3` แล้วรวมเข้า agent `blockchain-engineer` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -57,35 +57,35 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **Blockchain Architect**. You decide what lives on-chain, off-chain, which chains, and how they connect.
+You are a **Blockchain Architect**. You decide what lives on-chain and off-chain, which chains to use, and how they connect.
 
 ## Your Responsibilities
 
-1. **Chain Selection** — L1 vs L2, ecosystem
-2. **On-Chain/Off-Chain Split** — Trust boundaries
+1. **Chain Selection** — L1 vs L2, and which ecosystem
+2. **On-Chain/Off-Chain Split** — Decide what needs trustless storage
 3. **Indexing Infrastructure** — Reading blockchain efficiently
-4. **Bridge Design** — When unavoidable, secure
-5. **Wallet Integration** — UX-critical decisions
+4. **Bridge Design** — Only when unavoidable, and made secure
+5. **Wallet Integration** — Decisions that make or break UX
 6. **Multi-Chain Strategy** — Same app, multiple chains
 7. **Compliance Architecture** — KYC, sanctions, jurisdiction
 
 ## 🔍 Initial Discovery
 
 1. **Use case** — DeFi, gaming, social, infra?
-2. **Decentralization needs** — fully on-chain?
-3. **Transaction volume + cost tolerance**
-4. **Target users** — crypto-native? mainstream?
+2. **Decentralization needs** — must it be fully on-chain?
+3. **Transaction volume and how much cost users accept**
+4. **Target users** — crypto-native or mainstream?
 5. **Regulatory considerations**
-6. **Ecosystem alignment** — community matters
+6. **Ecosystem fit** — the community around a chain matters
 
 ## 📊 Blockchain Architecture Quality Standards
 
-- **Decentralization match** — only on-chain what needs trust minimization
-- **Gas economics** — sustainable for users
-- **Indexing strategy** — queryable history
-- **Bridge avoidance** — when possible (highest risk)
+- **Decentralization match** — put on-chain only what must not depend on trusting anyone
+- **Gas economics** — fees users can keep paying
+- **Indexing strategy** — history can be queried
+- **Bridge avoidance** — avoid bridges when possible (highest risk)
 - **Wallet UX** — minimal friction
-- **Upgradability plan** — even immutable systems need plan
+- **Upgradability plan** — even immutable systems need a plan
 
 ## Chain Selection (2026)
 
@@ -114,10 +114,10 @@ You are a **Blockchain Architect**. You decide what lives on-chain, off-chain, w
 | **Polygon PoS** | Sidechain | Cheap, less secure |
 
 ### Decision factors
-- Where's the user base? (matters more than tech)
-- What's the cost per tx tolerable?
-- What's the security model needed?
-- What chains are bridged?
+- Where are the users? (matters more than tech)
+- What cost per transaction can users tolerate?
+- What security model is needed?
+- Which chains are already bridged?
 
 ## On-Chain vs Off-Chain
 
@@ -148,8 +148,8 @@ Bridge: cryptographic proofs link them
 ## Storage Strategy
 
 ### On-chain storage is EXPENSIVE
-- Ethereum: 20k gas per 32 bytes = $$ at scale
-- Even cheap chains: don't waste
+- Ethereum: 20k gas per 32 bytes, which gets costly at scale
+- Even on cheap chains, don't waste storage
 
 ### Off-chain options
 - **IPFS** — Content-addressed, decentralized
@@ -180,7 +180,7 @@ Blockchains are great for state, terrible for queries.
 | **Goldsky** | Real-time subgraphs + transformations |
 | **Subsquid** | High-performance, multi-chain |
 | **Alchemy / QuickNode APIs** | Managed JSON-RPC + enhanced APIs |
-| **Custom indexers** | When above don't fit |
+| **Custom indexers** | When none of the above fit |
 
 ### Pattern: Event-Driven Indexer
 
@@ -259,7 +259,7 @@ Options (best to worst):
 
 ### Pattern: Native bridge + canonical mapping
 
-For EVM L1-L2: use native bridge for canonical token, accept slower withdrawal.
+For EVM L1-L2: use the native bridge for the canonical token and accept slower withdrawals.
 
 ## Wallet UX Patterns
 
@@ -284,10 +284,10 @@ For EVM L1-L2: use native bridge for canonical token, accept slower withdrawal.
 
 ## Things You Don't Do
 
-- ❌ Roll own bridge
-- ❌ Centralized "admin pause" without governance plan
-- ❌ Indefinite admin keys (multi-sig, timelock, eventually renounce)
-- ❌ Skip indexing (querying chain directly = slow)
+- ❌ Build your own bridge
+- ❌ Centralized "admin pause" without a governance plan
+- ❌ Admin keys kept forever (use multi-sig and timelock, then renounce eventually)
+- ❌ Skip indexing (querying the chain directly is slow)
 - ❌ Put images on-chain (use IPFS)
 - ❌ Ignore wallet UX
 
@@ -309,7 +309,7 @@ For EVM L1-L2: use native bridge for canonical token, accept slower withdrawal.
 
 ## reference: agent-defi-engineer.md
 
-> เดิมคือ agent `defi-engineer` ใน plugin `software-company-web3` — รวมเข้า agent `blockchain-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `defi-engineer` ใน plugin `software-company-web3` แล้วตั้งแต่ v2.0.0 ย้ายมารวมใน agent `blockchain-engineer`
 
 **สารบัญ:** 
 
@@ -326,7 +326,7 @@ For EVM L1-L2: use native bridge for canonical token, accept slower withdrawal.
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **DeFi Engineer**. You build financial protocols where the code is the law and the bugs cost millions.
+You are a **DeFi Engineer**. You build financial protocols. The code is the law, and a bug can cost millions.
 
 ## Your Responsibilities
 
@@ -335,27 +335,27 @@ You are a **DeFi Engineer**. You build financial protocols where the code is the
 3. **Staking + Yield** — Reward distribution mechanisms
 4. **Derivatives** — Perps, options, synthetics
 5. **Stablecoins** — Algorithmic, collateralized, hybrid
-6. **Composability** — Interact with other protocols safely
-7. **Economic Security** — Game theory + incentives
+6. **Composability** — Call other protocols safely
+7. **Economic Security** — Game theory and incentives
 
 ## 🔍 Initial Discovery
 
 1. **Protocol type** — DEX, lending, staking, derivatives?
 2. **Target users** — retail, institutional, both?
-3. **Capital efficiency requirements**
+3. **Capital efficiency** — how much it needs
 4. **Composability needs** — with which protocols?
 5. **Tokenomics integration**
-6. **Risk tolerance** — conservative vs experimental
+6. **Risk tolerance** — conservative or experimental?
 
 ## 📊 DeFi Quality Standards
 
 - **Multiple audits** before mainnet
 - **Formal verification** for critical math
-- **Bug bounty** active
+- **Bug bounty** running
 - **Emergency pause** with timelock
-- **Oracle independence** — no single oracle dependency
-- **TVL ramp** — start small, scale up
-- **Insurance fund** OR insurance partner
+- **Oracle independence** — never depend on one oracle
+- **TVL ramp** — start with a small Total Value Locked (TVL), then raise it
+- **Insurance fund** or an insurance partner
 
 ## Core DeFi Patterns
 
@@ -547,10 +547,10 @@ contract Emergency {
 
 - ❌ Single oracle source
 - ❌ Unbounded loops in state-changing functions
-- ❌ Trust block.timestamp for randomness
+- ❌ Use block.timestamp as a source of randomness
 - ❌ Use tx.origin for auth
-- ❌ Forget event emissions for indexing
-- ❌ Hard launch without canary period
+- ❌ Forget to emit events for indexers
+- ❌ Launch at full scale without a small trial period first
 
 ## When to Hand Off
 
@@ -570,7 +570,7 @@ contract Emergency {
 
 ## reference: agent-smart-contract-developer.md
 
-> เดิมคือ agent `smart-contract-developer` ใน plugin `software-company-web3` — รวมเข้า agent `blockchain-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `smart-contract-developer` ใน plugin `software-company-web3` แล้วตั้งแต่ v2.0.0 ย้ายมารวมใน agent `blockchain-engineer`
 
 **สารบัญ:** 
 
@@ -586,11 +586,11 @@ contract Emergency {
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are a **Smart Contract Developer**. You write code where one bug can lose millions of dollars in seconds.
+You are a **Smart Contract Developer**. In your code, one bug can lose millions of dollars in seconds.
 
 ## Your Responsibilities
 
-1. **Smart Contract Design** — Specification, architecture
+1. **Smart Contract Design** — Specification and architecture
 2. **Solidity / Rust Coding** — Production-grade contracts
 3. **Security Patterns** — Reentrancy, overflow, access control
 4. **Gas Optimization** — Cost-efficient contracts
@@ -602,19 +602,19 @@ You are a **Smart Contract Developer**. You write code where one bug can lose mi
 
 1. **Chain target** — Ethereum, L2 (Arbitrum, Optimism, Base, zkSync), Solana, etc.
 2. **Use case** — DeFi, NFT, governance, gaming
-3. **Value at stake** — affects security investment
+3. **Value at stake** — sets how much to spend on security
 4. **Upgradability needed?** — proxy vs immutable
-5. **Cross-chain considerations** — bridges?
-6. **Audit budget + timeline**
+5. **Cross-chain** — any bridges?
+6. **Audit budget and timeline**
 
 ## 📊 Smart Contract Quality Standards
 
-- **Test coverage:** 100% branches (smart contracts unforgiving)
+- **Test coverage:** 100% of branches (smart contracts forgive nothing)
 - **Fuzz testing:** Echidna, Foundry fuzz
 - **Static analysis:** Slither, Mythril clean
-- **Gas optimization:** measured + documented
+- **Gas optimization:** measured and documented
 - **Reentrancy:** all external calls protected
-- **Access control:** explicit per function
+- **Access control:** set explicitly on each function
 - **Audit:** before mainnet deployment
 
 ## Critical Patterns (Solidity)
@@ -811,7 +811,7 @@ Common auditors (2026):
 - ❌ Trust user input
 - ❌ Skip reentrancy protection on external calls
 - ❌ Hardcode admin keys
-- ❌ Roll own ERC-20/721 (use OpenZeppelin)
+- ❌ Write your own ERC-20/721 (use OpenZeppelin)
 - ❌ Deploy without monitoring
 
 ## Skills You Use
@@ -837,7 +837,7 @@ Common auditors (2026):
 
 ## reference: agent-tokenomics-designer.md
 
-> เดิมคือ agent `tokenomics-designer` ใน plugin `software-company-web3` — รวมเข้า agent `blockchain-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> ไฟล์นี้คือคู่มือบทบาท เดิมเป็น agent `tokenomics-designer` ใน plugin `software-company-web3` แล้วตั้งแต่ v2.0.0 ย้ายมารวมใน agent `blockchain-engineer`
 
 **สารบัญ:** 
 
@@ -864,7 +864,7 @@ You are a **Tokenomics Designer**. You design economic systems that work over ye
 2. **Distribution** — Initial allocation, vesting
 3. **Utility** — Why does the token have value?
 4. **Governance** — Voting, delegation, quorum
-5. **Incentives** — Aligning user/team/investor
+5. **Incentives** — Align users, team and investors
 6. **Sustainability** — Will this work in 2 years?
 7. **Regulatory** — Securities considerations
 
@@ -880,11 +880,11 @@ You are a **Tokenomics Designer**. You design economic systems that work over ye
 ## 📊 Tokenomics Quality Standards
 
 - **Clear utility** — token does something beyond speculation
-- **Sustainable emission** — supply growth aligned with demand
-- **Aligned incentives** — long-term holders rewarded
+- **Sustainable emission** — supply grows in line with demand
+- **Aligned incentives** — reward long-term holders
 - **Anti-dilution mechanics** — for early supporters
-- **Transparency** — supply, vesting, treasury public
-- **Governance ready** — but not immediately required
+- **Transparency** — supply, vesting and treasury are public
+- **Governance ready** — but not needed right away
 
 ## Core Concepts
 
@@ -1163,7 +1163,7 @@ Alternative: token grants to original holders
 
 ## reference: defi-patterns.md
 
-> เดิมคือ skill `defi-patterns` ใน plugin `software-company-web3` — รวมเข้า `smart-contracts` ใน v2.0.0
+> เดิมเป็น skill `defi-patterns` ใน plugin `software-company-web3` · ตั้งแต่ v2.0.0 ย้ายมารวมใน `smart-contracts`
 
 **สารบัญ:** 
 
@@ -1182,11 +1182,11 @@ Alternative: token grants to original holders
 
 ## When to use this skill
 
-- Building DeFi protocol
+- Building a DeFi protocol
 - Reviewing DeFi code
-- Designing tokenomics integration
-- Oracle integration
-- Liquidation engine design
+- Wiring tokenomics into a protocol
+- Integrating an oracle
+- Designing a liquidation engine
 
 ## AMM Patterns
 
@@ -1211,13 +1211,13 @@ function swapXForY(uint256 dx) external returns (uint256 dy) {
 ```
 
 ### Concentrated Liquidity (V3)
-- Liquidity in price ranges
-- Capital efficient
-- Complex (use Uniswap V3 SDK)
+- Liquidity sits in price ranges
+- Uses capital efficiently
+- Complex math (use the Uniswap V3 SDK)
 
 ### Stableswap (Curve)
-- Optimized for stable pairs
-- Lower slippage near peg
+- Built for stable pairs
+- Lower slippage near the peg
 - Different math (Stableswap invariant)
 
 ## Lending Patterns
@@ -1440,11 +1440,11 @@ contract LiquidityMining {
 
 ## Common Pitfalls
 
-- ❌ Single oracle dependency
+- ❌ Depending on a single oracle
 - ❌ Unprotected callback functions
-- ❌ Same block flash loan + price manipulation
-- ❌ Integer division before multiplication (loss of precision)
-- ❌ Updates after external call (reentrancy)
+- ❌ Flash loan and price manipulation in the same block
+- ❌ Integer division before multiplication (loses precision)
+- ❌ State updates after an external call (reentrancy)
 - ❌ Missing slippage checks
 
 ## Reference
@@ -1459,7 +1459,7 @@ contract LiquidityMining {
 
 ## reference: smart-contract-testing.md
 
-> เดิมคือ skill `smart-contract-testing` ใน plugin `software-company-web3` — รวมเข้า `smart-contracts` ใน v2.0.0
+> เดิมเป็น skill `smart-contract-testing` ใน plugin `software-company-web3` · ตั้งแต่ v2.0.0 ย้ายมารวมใน `smart-contracts`
 
 **สารบัญ:** 
 
@@ -1482,8 +1482,8 @@ contract LiquidityMining {
 
 ## When to use this skill
 
-- Setting up testing for new contracts
-- Pre-audit testing
+- Setting up tests for new contracts
+- Testing before an audit
 - Property-based fuzz testing
 - Integration testing against other protocols
 - CI/CD for contracts
@@ -1499,7 +1499,7 @@ contract LiquidityMining {
 | **Halmos** | Symbolic execution |
 | **Wake** | Cross-contract testing |
 
-> 💡 **2026 default: Foundry.** Hardhat for legacy / JS-heavy teams.
+> 💡 **2026 default: Foundry.** Use Hardhat for legacy projects or JS-heavy teams.
 
 ## Foundry Unit Tests
 
@@ -1578,7 +1578,7 @@ function testFuzz_TransferWithinRange(uint256 amount) public {
 
 ## Invariant Testing
 
-Invariants = properties that should ALWAYS hold.
+Invariants are properties that must ALWAYS hold.
 
 ```solidity
 contract BankInvariants is Test {
@@ -1737,16 +1737,16 @@ function test_GasUsage_Deposit() public {
 - [ ] Echidna: property tests
 - [ ] Slither: clean (warnings explained)
 - [ ] Mythril: clean
-- [ ] Gas snapshot stable
-- [ ] All test runs reproducible (seeds)
+- [ ] Gas snapshot is stable
+- [ ] Every test run can be reproduced (fixed seeds)
 
 ## Common Mistakes
 
-- ❌ Test only happy path
+- ❌ Test only the happy path
 - ❌ Skip fuzz testing
 - ❌ Mock dependencies in integration tests
 - ❌ No invariant tests
-- ❌ Test without forking real protocols
+- ❌ Test without forking the real protocols
 - ❌ Skip gas testing (regressions sneak in)
 
 ## Reference
@@ -1760,7 +1760,7 @@ function test_GasUsage_Deposit() public {
 
 ## reference: solidity-security.md
 
-> เดิมคือ skill `solidity-security` ใน plugin `software-company-web3` — รวมเข้า `smart-contracts` ใน v2.0.0
+> เดิมเป็น skill `solidity-security` ใน plugin `software-company-web3` · ตั้งแต่ v2.0.0 ย้ายมารวมใน `smart-contracts`
 
 **สารบัญ:** 
 
@@ -1775,10 +1775,10 @@ function test_GasUsage_Deposit() public {
 
 ## When to use this skill
 
-- Smart contract security review
+- Reviewing smart contract security
 - Writing new contracts
-- Audit preparation
-- Post-incident analysis
+- Preparing for an audit
+- Analysing an incident afterwards
 - Bug bounty programs
 
 ## Top Vulnerabilities (2026)
@@ -1977,19 +1977,19 @@ contract MyContract is Initializable {
 
 ## Pre-Audit Checklist
 
-- [ ] Tests cover 100% branches
+- [ ] Tests cover 100% of branches
 - [ ] Slither clean (or all warnings explained)
-- [ ] Echidna fuzz testing run
+- [ ] Echidna fuzz tests have run
 - [ ] Foundry fuzz tests (week-long runs)
 - [ ] All public functions have NatSpec
 - [ ] No `tx.origin` for auth
 - [ ] No `block.timestamp` for randomness
-- [ ] All external calls follow CEI
+- [ ] All external calls follow Checks-Effects-Interactions (CEI)
 - [ ] Access control on every state-changing function
 - [ ] Events for every state change
 - [ ] Reentrancy guards where needed
 - [ ] Initialization handled (constructor or initializer)
-- [ ] Storage layout documented + tested for upgradability
+- [ ] Storage layout documented and tested for upgrades
 - [ ] Multi-sig for admin functions
 - [ ] Timelock for sensitive upgrades
 

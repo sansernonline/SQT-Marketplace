@@ -1,6 +1,6 @@
 # skill: performance-self-review
 
-Use when writing a mid-year or year-end self-assessment (ประเมินผลงาน), keeping a brag document of wins, framing work as business impact, or building a case for a promotion or raise.
+Use when writing a mid-year or year-end self-assessment, keeping a brag document, framing work as impact, or making a promotion or raise case.
 
 # Performance Self-Review
 
@@ -9,10 +9,10 @@ Managers forget most of what you did by review season. Your record is the eviden
 ## Workflow
 
 1. **Keep a brag document** all year — 5 minutes every Friday (template below).
-2. **Two weeks before the review** — pull the year's entries, group them by the company's review criteria or your KPIs.
+2. **2 weeks before the review** — pull the year's entries, group them by the company's review criteria or your KPIs.
 3. **Frame each item as impact** (formula below). Pick the top 3–5.
 4. **Fill the self-assessment** — the company form or the template in [references/templates.md](references/templates.md).
-5. **Rate yourself honestly** — one level above where your manager will likely land is fine; two levels is not credible.
+5. **Rate yourself honestly** — 1 level above where your manager will likely land is fine; 2 levels is not credible.
 6. **Prepare the conversation** — 3 wins, 1 growth area with a plan, 1 ask (training, scope, promotion, raise).
 7. **After the meeting** — send a short written recap of what was agreed.
 
@@ -49,7 +49,7 @@ Impact categories that land with Thai management: money (revenue, cost, ลด�
 Promotion is usually "already doing the next level's work", not "deserve it for time served".
 
 1. Get the next level's job description or competency framework from HR.
-2. Map evidence: for each requirement, one or two brag-doc items showing you already do it.
+2. Map evidence: for each requirement, 1 or 2 brag-doc items showing you already do it.
 3. Find the gap honestly; propose how to close it in 3–6 months.
 4. Ask your manager early (not at the review meeting itself): "What would you need to see from me to be promoted to [level] in the next cycle?"
 5. Agree measurable criteria and a date; confirm by email.

@@ -1,6 +1,6 @@
 # skill: doctor-visit-prep
 
-Use before a doctor or hospital visit in Thailand to build a symptom timeline, medicine and allergy list and top questions, and afterwards to record what was said, prescriptions and follow-up. Never suggests a diagnosis.
+Use when preparing for a doctor or hospital visit (symptom timeline, medicine and allergy list, questions) or recording what was said. No diagnosis.
 
 # Doctor Visit Prep
 

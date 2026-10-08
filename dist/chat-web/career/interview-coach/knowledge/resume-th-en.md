@@ -1,10 +1,10 @@
 # skill: resume-th-en
 
-Use when writing, rewriting or reviewing a CV or resume in Thai or English for a job in Thailand or abroad — which convention applies, what personal data to leave out, ATS-readable layout, bullets as action plus result plus number.
+Use when writing or reviewing a CV or resume in Thai or English. Thai vs international convention, data to omit, ATS layout, result-plus-number bullets.
 
 # Resume — Thai and International
 
-A CV gets a few seconds of a recruiter's first look, and it has to survive two readers: the applicant tracking system (ATS) that parses it, and the person who skims it.
+A CV gets a few seconds of a recruiter's first look, and it has to survive 2 readers: the applicant tracking system (ATS) that parses it, and the person who skims it.
 
 General information, not professional advice — for visa or licence claims on a CV, ask the employer's HR.
 
@@ -27,7 +27,7 @@ General information, not professional advice — for visa or licence claims on a
 ## Step 2 — ATS-friendly structure
 
 1. **Header** — name, phone, email, LinkedIn URL, city. Not inside a Word header/footer or text box (many ATS skip those).
-2. **Summary** — 2–3 lines: role + years + two strongest results + target.
+2. **Summary** — 2–3 lines: role + years + 2 strongest results + target.
 3. **Experience** — reverse chronological; company, title, month-year range, 3–6 bullets each.
 4. **Skills** — plain comma list using the exact words of the job post.
 5. **Education** — degree, university, year. GPA only if ≥ 3.25 or the post asks, and only within ~3 years of graduating.
@@ -54,8 +54,8 @@ English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiate
 
 ## Step 4 — the one-page rule
 
-- Under ~10 years' experience → one page. Roles older than 10–15 years → one line each.
-- One line per bullet where possible, two at most.
+- Under ~10 years' experience → 1 page. Roles older than 10–15 years → 1 line each.
+- 1 line per bullet where possible, 2 at most.
 - Remove: "References available on request", objective statements, hobbies with no signal, high-school details.
 - Margins at least 1.5 cm — white space is readability.
 

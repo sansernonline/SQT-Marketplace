@@ -1,10 +1,10 @@
 # skill: household-bills
 
-Use when a Thai household wants to read an electricity or water bill (MEA, PEA, MWA, PWA), understand the Ft charge, track utility, internet and mobile bills monthly, set up auto-debit, or find why a bill jumped.
+Use when reading an electricity or water bill (MEA, PEA, MWA, PWA) or Ft charge, tracking utility, internet and mobile bills, or finding why a bill jumped.
 
 # Household Bills (Thailand)
 
-Know what each line on the bill means, log it every month, and catch a spike in the month it happens rather than three months later.
+Know what each line on the bill means, log it every month, and catch a spike in the month it happens rather than 3 months later.
 
 General information, not financial advice. Tariffs change — the utility's own page is the authority.
 
@@ -18,11 +18,11 @@ General information, not financial advice. Tariffs change — the utility's own 
 
 ## Reading an electricity bill
 
-The bill (ใบแจ้งค่าไฟฟ้า) adds four parts:
+The bill (ใบแจ้งค่าไฟฟ้า) adds 4 parts:
 
 1. **ค่าพลังงานไฟฟ้า** — units (หน่วย = kWh) × the tiered base tariff for your type (residential ประเภท 1.1.1 ≤150 units/month on a ≤5 A meter, 1.1.2 above that)
 2. **ค่าบริการ** — a fixed monthly service charge
-3. **ค่า Ft** — units × the Ft rate for the current four-month period (can be positive or negative)
+3. **ค่า Ft** — units × the Ft rate for the current 4-month period (can be positive or negative)
 4. **ภาษีมูลค่าเพิ่ม 7%** on the sum of 1–3
 
 Units used = เลขอ่านครั้งนี้ − เลขอ่านครั้งก่อน. Check the two readings are printed and the reading date (วันที่จดเลขอ่าน) is roughly 30 days after the last one — a 35-day period inflates the bill and can push units into a higher tier.
@@ -35,11 +35,11 @@ Units used = เลขอ่านครั้งนี้ − เลขอ่�
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.erc.or.th (ประกาศค่า Ft งวด ก.ย.–ธ.ค. 2569), https://www.naewna.com/business/979048
 
-Ft is reset every four months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย.–ธ.ค.). When comparing months across a reset, compare **units**, not baht.
+Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย.–ธ.ค.). When comparing months across a reset, compare **units**, not baht.
 
 ## Reading a water bill
 
-ค่าน้ำประปา = units (ลูกบาศก์เมตร, ลบ.ม.) × progressive rate + ค่าบริการรายเดือน (by meter size, ½ inch for most homes) + VAT 7%. Rates differ between กปน. and กปภ. — use the rate table on the bill's back or mwa.co.th / pwa.co.th (รอยืนยัน for any figure you quote). A family of four in a house typically uses 15–30 ลบ.ม./month (รอยืนยัน — compare against your own last 6 months, which is the better baseline).
+ค่าน้ำประปา = units (ลูกบาศก์เมตร, ลบ.ม.) × progressive rate + ค่าบริการรายเดือน (by meter size, ½ inch for most homes) + VAT 7%. Rates differ between กปน. and กปภ. — use the rate table on the bill's back or mwa.co.th / pwa.co.th (รอยืนยัน for any figure you quote). A family of 4 in a house typically uses 15–30 ลบ.ม./month (รอยืนยัน — compare against your own last 6 months, which is the better baseline).
 
 ## Workflow
 
@@ -48,7 +48,7 @@ Ft is reset every four months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.
 3. **Set due dates** in the family calendar 3 days before each due date; note the disconnection date printed on the electricity bill (it is later than the due date — do not plan on it)
 4. **Auto-debit** (หักบัญชีอัตโนมัติ) for fixed-ish bills: set it up in the bank app or the utility app; keep one account just for bills and check the debit on the statement each month
 5. **Spike check** — if a bill is >20% above the 3-month average in units, run the checklist below
-6. **Monthly review** — five minutes on the 5th of each month; totals feed `trading-finance` `personal-budget`
+6. **Monthly review** — 5 minutes on the 5th of each month; totals feed `trading-finance` `personal-budget`
 
 ## Spike investigation
 
@@ -66,7 +66,7 @@ Ft is reset every four months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.
 
 ## Worked example
 
-A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (average 318). 412 / 318 = +30% → spike. Billing period 30 days, read not estimated. Night leak test: meter still. May is peak heat and two aircons were last cleaned 9 months ago. Action: clean both aircons (see `home-maintenance`), set them to 26 °C, re-check June units. June came in at 352 — the residual over April is seasonal.
+A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (average 318). 412 / 318 = +30% → spike. Billing period 30 days, read not estimated. Night leak test: meter still. May is peak heat and 2 aircons were last cleaned 9 months ago. Action: clean both aircons (see `home-maintenance`), set them to 26 °C, re-check June units. June came in at 352 — the residual over April is seasonal.
 
 ## Internet and mobile
 

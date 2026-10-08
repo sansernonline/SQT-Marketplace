@@ -1,6 +1,6 @@
 # skill: seller-tax-basics
 
-Use when a Thai individual selling online asks about tax — income 40(8), 60% deemed vs actual expenses, ภ.ง.ด.94/90, the 1.8 million baht VAT threshold, e-Payment platform reporting, records to keep.
+Use when a Thai individual selling online asks about tax. Income 40(8), 60 percent deemed expenses, PND 94 and 90, 1.8 million baht VAT threshold.
 
 # Seller Tax Basics (Thai individual online seller)
 

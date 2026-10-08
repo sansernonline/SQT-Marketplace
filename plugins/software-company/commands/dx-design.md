@@ -8,7 +8,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 | Mode | What it does |
 |---|---|
-| `dx-audit` | Audit developer experience using devrel-engineer agent. Measures TTFHW, error UX, sample quality, onboarding flow. |
+| `dx-audit` | Audit developer experience using devrel-engineer agent. Measures time to first hello world (TTFHW), error UX, sample quality, onboarding flow. |
 | `sdk-design` | Design SDK using devrel-engineer agent. Covers multi-language, idioms, types, errors. |
 
 ---

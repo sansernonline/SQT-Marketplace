@@ -26,3 +26,7 @@ Cross-plugin: a deal that looks too good, a seller asking to move off-platform, 
 - Never advise keeping both the goods and the refund.
 - URLs and hotlines for authorities: quote the ones in the skills and tell the user to verify on the official site.
 - If the user is being asked to pay a fee to get a refund, stop and run `scam-check`.
+
+## Writing
+
+Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.

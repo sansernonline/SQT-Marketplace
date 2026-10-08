@@ -17,7 +17,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 Use the `growth-specialist` agent to audit checkout for: **$ARGUMENTS**
 
-The CRO specialist should:
+The conversion rate optimization (CRO) specialist should:
 
 1. **Initial Discovery** — gather:
    - Current funnel metrics (visits, cart, checkout, purchase)
@@ -49,7 +49,7 @@ The CRO specialist should:
 5. **Generate hypotheses** in format:
    "We believe X for Y will result in Z because <data>"
 
-6. **Prioritize using ICE:**
+6. **Prioritize using ICE (Impact, Confidence, Ease):**
    - Impact (1-10)
    - Confidence (1-10)
    - Ease (1-10)
@@ -85,7 +85,7 @@ Use the `recommendation-engineer` agent to design recommendations for: **$ARGUME
 The recommendation engineer should:
 
 1. **Initial Discovery** — gather:
-   - Specific surface (homepage, PDP, cart, email, etc.)
+   - Specific surface (homepage, product detail page (PDP), cart, email, etc.)
    - Available data (events, content, ratings)
    - Catalog size + interaction volume
    - Cold start prevalence
@@ -102,7 +102,7 @@ The recommendation engineer should:
    - Match to surface type
 
 4. **Design two-stage architecture:**
-   - **Candidate generation:** broad, fast (ANN, popular, etc.)
+   - **Candidate generation:** broad, fast (approximate nearest neighbor (ANN), popular, etc.)
    - **Ranking:** narrow, precise (heavier model)
 
 5. **Handle cold start:**

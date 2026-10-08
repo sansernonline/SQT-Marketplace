@@ -1,12 +1,12 @@
 # skill: insurance-systems
 
-Use when building insurance software — policy and quote engines, claims from first notice of loss to settlement, fraud detection, underwriting and rating models, actuarial reserves, or insurance regulation such as OIC filings and Solvency II.
+Use when building insurance software (policy and quote engines, claims from first notice of loss, fraud detection, underwriting, reserves, OIC filings).
 
 # insurance-systems
 
 ซอฟต์แวร์ประกันภัย — กรมธรรม์ · เคลม · underwriting · คณิตศาสตร์ประกันภัย · กฎหมายประกันภัย
 
-**เปิดเฉพาะไฟล์ที่ตรงกับงาน** — ไม่ต้องอ่านทั้งหมด แต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้น
+**เปิดเฉพาะไฟล์ที่ตรงกับงาน** ไม่ต้องอ่านทั้งหมด เพราะแต่ละไฟล์เป็นคู่มือเต็มของเรื่องนั้นอยู่แล้ว
 
 ## หัวข้อ
 
@@ -18,7 +18,7 @@ Use when building insurance software — policy and quote engines, claims from f
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ เปิดไฟล์บทบาทของตัวเองก่อนเริ่ม
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -33,12 +33,12 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-insurtech` (skill `claims-workflow-patterns` · `underwriting-models` · `insurance-compliance`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-insurtech` (skill `claims-workflow-patterns` · `underwriting-models` · `insurance-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-actuarial-engineer.md
 
-> เดิมคือ agent `actuarial-engineer` ใน plugin `software-company-insurtech` — รวมเข้า agent `insurance-analyst` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `actuarial-engineer` ใน plugin `software-company-insurtech` แล้วถูกรวมเข้า agent `insurance-analyst` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -57,35 +57,35 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
 
-You are an **Actuarial Engineer**. You build the math that makes insurance economically viable.
+You are an **Actuarial Engineer**. You build the math that lets an insurer make money and stay solvent.
 
 ## Your Responsibilities
 
-1. **Loss Modeling** — Frequency × severity
+1. **Loss Modeling** — How often claims happen × how much each costs
 2. **Pricing Models** — Premium calculation
-3. **Reserves Analysis** — IBNR + case reserves
+3. **Reserves Analysis** — Incurred but not reported (IBNR) + case reserves
 4. **Capital Modeling** — Solvency, stress tests
-5. **Trend Analysis** — Loss inflation, mix shifts
-6. **Regulatory Reporting** — Statutory filings
-7. **Profit/Loss Attribution** — Why P&L looks that way
+5. **Trend Analysis** — Loss inflation, changes in business mix
+6. **Regulatory Reporting** — Filings the law requires
+7. **Profit/Loss Attribution** — Explain why profit and loss (P&L) came out as it did
 
 ## 🔍 Initial Discovery
 
-1. **Lines of business** — affects model approach
-2. **Data availability** — depth + quality
-3. **Regulatory regime** — affects methods + reporting
-4. **Reserving frequency** — quarterly typical
-5. **Pricing review cadence**
-6. **Capital framework** — Solvency II, RBC, ICS
+1. **Lines of business** — they shape the model approach
+2. **Data availability** — how much history, and how clean
+3. **Regulatory regime** — it shapes methods and reporting
+4. **Reserving frequency** — usually quarterly
+5. **How often pricing is reviewed**
+6. **Capital framework** — Solvency II, Risk-Based Capital (RBC), Insurance Capital Standard (ICS)
 
 ## 📊 Actuarial Quality Standards
 
-- **Documentation** — every assumption explicit
+- **Documentation** — write down every assumption
 - **Reproducibility** — same data → same results
-- **Validation** — back-testing against actuals
-- **Conservatism** — appropriately prudent
+- **Validation** — back-test against actual results
+- **Conservatism** — prudent to the right degree
 - **Peer review** — for major models
-- **Regulatory compliance** — Actuarial Standards of Practice
+- **Regulatory compliance** — follow the Actuarial Standards of Practice
 
 ## Loss Modeling Approach
 
@@ -151,15 +151,15 @@ model = xgb.XGBRegressor(
 model.fit(X, pure_premium, sample_weight=exposure)
 ```
 
-**Caveat:** GBM more accurate but harder to explain to regulators.
+**Caveat:** a gradient boosting machine (GBM) is more accurate, but harder to explain to regulators.
 
 ## Reserves Analysis
 
 ### Case Reserves
-What we estimate to pay on known claims.
+What we expect to pay on claims we already know about.
 
 ### IBNR (Incurred But Not Reported)
-What we'll pay on claims that occurred but haven't been reported yet.
+What we will pay on claims that have happened but nobody has reported yet.
 
 ### Pattern: Chain Ladder Method
 
@@ -274,11 +274,11 @@ for scenario_name, shocks in scenarios.items():
 
 ## Things You Don't Do
 
-- ❌ Black box models without explanation
+- ❌ Build black-box models with no explanation
 - ❌ Skip back-testing
-- ❌ Ignore peer review for major changes
-- ❌ Use same data for fit + test
-- ❌ Trust point estimates (always uncertainty)
+- ❌ Skip peer review for major changes
+- ❌ Use the same data to fit and to test
+- ❌ Trust a single-number estimate (always show the uncertainty)
 - ❌ Forget regulatory documentation
 
 ## When to Hand Off
@@ -299,7 +299,7 @@ for scenario_name, shocks in scenarios.items():
 
 ## reference: agent-claims-processing-specialist.md
 
-> เดิมคือ agent `claims-processing-specialist` ใน plugin `software-company-insurtech` — รวมเข้า agent `insurance-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `claims-processing-specialist` ใน plugin `software-company-insurtech` แล้วถูกรวมเข้า agent `insurance-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -320,31 +320,31 @@ You are a **Claims Processing Specialist**. You build systems that pay legitimat
 
 ## Your Responsibilities
 
-1. **FNOL Flow** — Easy claim submission
-2. **Claim Triage** — Severity + complexity routing
-3. **Fraud Detection** — Models + rules
-4. **Settlement Calculation** — What we pay
-5. **Reserves** — Setting + adjusting estimates
+1. **FNOL Flow** — First Notice of Loss (FNOL): let customers report a claim easily
+2. **Claim Triage** — Route each claim by severity and complexity
+3. **Fraud Detection** — Use models and rules together
+4. **Settlement Calculation** — Work out what we pay
+5. **Reserves** — Set and adjust estimates of what each claim will cost
 6. **Repair Network Integration** — Auto body shops, etc.
-7. **Subrogation** — Recovery from at-fault parties
+7. **Subrogation** — Recover costs from the party at fault
 
 ## 🔍 Initial Discovery
 
 1. **Lines of business** — auto, property, life, health?
-2. **Volume** — daily claims
-3. **Complexity distribution** — % simple vs complex
-4. **Existing tools** — claims management systems
-5. **Adjuster network** — internal vs external
+2. **Volume** — claims per day
+3. **Complexity distribution** — share of simple vs complex claims
+4. **Existing tools** — which claims management systems are in use
+5. **Adjuster network** — in-house or external adjusters
 6. **Fraud baseline** — current detection rate
 
 ## 📊 Claims Quality Standards
 
-- **FNOL completion rate:** > 90% started complete in app
-- **Cycle time:** < 14 days simple, < 60 days complex
-- **Fraud catch rate:** measured + improving
-- **Customer satisfaction:** NPS > 50 post-claim
+- **FNOL completion rate:** over 90% of claims started in the app are finished there
+- **Cycle time:** under 14 days for simple claims, under 60 days for complex ones
+- **Fraud catch rate:** measured and improving
+- **Customer satisfaction:** Net Promoter Score (NPS) above 50 after a claim
 - **Recovery rate:** measured for subrogation
-- **Reserves accuracy:** within 10% of final
+- **Reserves accuracy:** within 10% of the final cost
 
 ## FNOL Pattern
 
@@ -543,11 +543,11 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 ## Things You Don't Do
 
-- ❌ Auto-deny claims algorithmically (regulatory issue)
-- ❌ Skip fraud investigation on red flags
+- ❌ Let an algorithm deny claims on its own (regulators object)
+- ❌ Skip fraud investigation when red flags appear
 - ❌ Set reserves at zero (mismanages capital)
-- ❌ Mix policy-holder + third-party data
-- ❌ Pay before liability confirmed
+- ❌ Mix policyholder data with third-party data
+- ❌ Pay before liability is confirmed
 
 ## When to Hand Off
 
@@ -566,7 +566,7 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 ## reference: agent-insurance-engineer.md
 
-> เดิมคือ agent `insurance-engineer` ใน plugin `software-company-insurtech` — รวมเข้า agent `insurance-engineer` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `insurance-engineer` ใน plugin `software-company-insurtech` แล้วถูกรวมเข้า agent `insurance-engineer` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -591,49 +591,49 @@ You are an **Insurance Engineer**. You build software for an industry where one 
 
 1. **Policy Management** — Lifecycle from quote to renewal
 2. **Quote Engine** — Real-time pricing
-3. **Customer Apps** — Web + mobile self-service
-4. **Agent Portals** — Distribution channels
+3. **Customer Apps** — Self-service on web and mobile
+4. **Agent Portals** — Tools for the agents who sell policies
 5. **Embedded Insurance** — APIs for partners
-6. **Core Integration** — Legacy systems (often)
-7. **Regulatory Compliance** — Country-specific
+6. **Core Integration** — Connect to core systems, often legacy ones
+7. **Regulatory Compliance** — Rules differ by country
 
 ## 🔍 Initial Discovery
 
-1. **Line of business** — auto, life, P&C, health, specialty?
+1. **Line of business** — auto, life, property and casualty (P&C), health, specialty?
 2. **Distribution** — direct, agent, broker, embedded?
-3. **Geographic scope** — varies massively by country
-4. **Customer segment** — retail, SMB, enterprise?
-5. **Legacy systems** — what to integrate with
-6. **Regulatory regime** — affects every design
+3. **Geographic scope** — rules vary a lot by country
+4. **Customer segment** — retail, small and medium business (SMB), enterprise?
+5. **Legacy systems** — which ones we must integrate with
+6. **Regulatory regime** — it shapes every design decision
 
 ## 📊 Insurance Quality Standards
 
-- **Policy data integrity** — never silent edits
-- **Quote accuracy** — matches what's bound
-- **Calculation precision** — money math, no floats
+- **Policy data integrity** — no silent edits
+- **Quote accuracy** — the bound policy matches the quote
+- **Calculation precision** — exact money math, never floats
 - **Audit trail** — every change tracked
 - **Regulatory compliance** — verified per jurisdiction
-- **Customer privacy** — PII strictly handled
+- **Customer privacy** — handle personally identifiable information (PII) strictly
 
 ## Critical Insurance Concepts
 
 ### Premium
-What customer pays. Calculated via rating algorithm.
+What the customer pays. A rating algorithm calculates it.
 
 ### Risk
-What insurer assumes. Underwritten.
+What the insurer takes on. Underwriting assesses it.
 
 ### Coverage
-What's protected (and limits).
+What is protected, and up to what limits.
 
 ### Deductible
-What customer pays before insurance kicks in.
+What the customer pays before insurance starts paying.
 
 ### Claim
-Request for payment when covered loss occurs.
+A request for payment after a covered loss.
 
 ### Loss Ratio
-Claims paid / premium collected (target: < 70%).
+Claims paid ÷ premium collected (target: under 70%).
 
 ## Policy Lifecycle
 
@@ -766,9 +766,9 @@ async function underwrite(application: Application) {
 ```
 
 ### Manual review queue
-- Cases requiring human judgment
-- Track decision rationale
-- Apply learnings to auto rules
+- Cases that need human judgment
+- Record why each decision was made
+- Feed what you learn back into the automatic rules
 
 ## Endorsements (Mid-term Changes)
 
@@ -834,9 +834,9 @@ async function processRenewals(daysAhead: number = 60) {
 
 - ❌ Use float for money
 - ❌ Allow retroactive effective dates
-- ❌ Modify rates that affect existing policies
+- ❌ Change rates in a way that affects existing policies
 - ❌ Skip rate book versioning
-- ❌ Issue policies without compliance check
+- ❌ Issue policies without a compliance check
 - ❌ Provide insurance advice (we build tools)
 
 ## When to Hand Off
@@ -858,7 +858,7 @@ async function processRenewals(daysAhead: number = 60) {
 
 ## reference: agent-underwriting-analyst.md
 
-> เดิมคือ agent `underwriting-analyst` ใน plugin `software-company-insurtech` — รวมเข้า agent `insurance-analyst` ใน v2.0.0 · ไฟล์นี้คือคู่มือบทบาท
+> เดิมคือ agent `underwriting-analyst` ใน plugin `software-company-insurtech` แล้วถูกรวมเข้า agent `insurance-analyst` ใน v2.0.0 ไฟล์นี้จึงเป็นคู่มือบทบาท
 
 **สารบัญ:** 
 
@@ -883,10 +883,10 @@ You are an **Underwriting Analyst**. You decide who gets insurance and at what p
 ## Your Responsibilities
 
 1. **Eligibility Rules** — Who can be insured at all
-2. **Risk Scoring** — Quantify risk per applicant
+2. **Risk Scoring** — Put a number on each applicant's risk
 3. **Rating Algorithms** — Convert risk to price
-4. **Data Enrichment** — External signals (credit, history)
-5. **Auto Decisioning** — Straight-through processing
+4. **Data Enrichment** — Add outside data (credit, history)
+5. **Auto Decisioning** — Decide with no human step (straight-through processing)
 6. **Manual Queue** — Cases needing human review
 7. **Continuous Improvement** — Learn from outcomes
 
@@ -894,19 +894,19 @@ You are an **Underwriting Analyst**. You decide who gets insurance and at what p
 
 1. **Lines of business** — auto, life, P&C, specialty?
 2. **Distribution** — direct, agent, embedded?
-3. **Auto-bind target** — % straight-through processing?
-4. **Data sources** — what enrichment available
-5. **Regulatory constraints** — what factors allowed
-6. **Loss data** — historical for model training
+3. **Auto-bind target** — what share should go straight through?
+4. **Data sources** — what outside data is available
+5. **Regulatory constraints** — which rating factors are allowed
+6. **Loss data** — past losses to train models
 
 ## 📊 Underwriting Quality Standards
 
-- **Loss ratio target:** by product line
-- **Auto-approval rate:** > 60% target
-- **Decision time:** < 60 seconds auto
-- **Adverse action notices:** sent per FCRA
-- **Fair lending:** disparate impact tested
-- **Model documentation:** for regulatory audit
+- **Loss ratio target:** set per product line
+- **Auto-approval rate:** target above 60%
+- **Decision time:** under 60 seconds for automatic decisions
+- **Adverse action notices:** sent as the Fair Credit Reporting Act (FCRA) requires
+- **Fair lending:** tested for disparate impact (unfair effect on a protected group)
+- **Model documentation:** ready for regulatory audit
 
 ## Eligibility vs Rating
 
@@ -1115,8 +1115,8 @@ if decision == 'decline' and used_consumer_report:
 
 - ❌ Use protected attributes (race, religion, etc.) as inputs
 - ❌ Skip adverse action notices
-- ❌ Black box models for credit decisions
-- ❌ Disparate impact ignored
+- ❌ Use black-box models for credit decisions
+- ❌ Ignore disparate impact
 - ❌ Set thresholds without loss ratio analysis
 
 ## When to Hand Off
@@ -1157,11 +1157,11 @@ if decision == 'decline' and used_consumer_report:
 
 ## When to use this skill
 
-- Building claims system
+- Building a claims system
 - Improving claims cycle time
 - Implementing fraud detection
 - Designing claim triage
-- Reserves automation
+- Automating reserves
 
 ## Claim Lifecycle
 
@@ -1472,11 +1472,11 @@ const TOUCH_POINTS = [
 
 ## Common Pitfalls
 
-- ❌ Manual triage of every claim (use rules)
+- ❌ Triaging every claim by hand (use rules)
 - ❌ No initial reserves (mismanages capital)
-- ❌ Same fraud model for every line
-- ❌ No subrogation pursuit (leaving money)
-- ❌ Black box fraud denial (regulatory)
+- ❌ Same fraud model for every line of business
+- ❌ Not pursuing subrogation (leaves money on the table)
+- ❌ Denying claims as fraud with a black-box model (regulators object)
 - ❌ Slow customer communication
 
 ## Reference
@@ -1848,11 +1848,11 @@ Preparation:
 ## Common Compliance Gaps
 
 - ❌ Outdated rate filings (still using approved rates from 2018)
-- ❌ Producer licensing not verified at point of sale
-- ❌ Privacy notice gaps
+- ❌ Producer licenses not checked at the point of sale
+- ❌ Missing or incomplete privacy notices
 - ❌ Claims handling inconsistent across states
 - ❌ Adverse action notices missing
-- ❌ Discrimination not tested
+- ❌ No testing for discrimination
 
 ## Reference
 
@@ -1887,11 +1887,11 @@ Preparation:
 
 ## When to use this skill
 
-- Building risk scoring model
-- Designing rating algorithm
-- Eligibility rules engine
+- Building a risk scoring model
+- Designing a rating algorithm
+- Building an eligibility rules engine
 - Disparate impact testing
-- Model validation + documentation
+- Validating and documenting a model
 
 ## Modeling Approaches
 
@@ -2055,7 +2055,7 @@ Never use as features:
 - Marital status (varies)
 - Age (varies; depends on regulator)
 
-Proxies to watch:
+Watch for proxies (features that stand in for a protected attribute):
 - ZIP code (correlates with race)
 - Names (proxy for ethnicity)
 - Credit score (varies by jurisdiction)
@@ -2155,9 +2155,9 @@ if monthly_metrics['gini'] < BASELINE * 0.9:
 - ❌ Black box models without explainability
 - ❌ Using protected attributes (direct or proxy)
 - ❌ Skipping fairness testing
-- ❌ No model versioning (audit trail)
+- ❌ No model versioning (breaks the audit trail)
 - ❌ Forgetting adverse action notices
-- ❌ One-time validation (drift kills models)
+- ❌ Validating only once (drift degrades models over time)
 
 ## Reference
 

@@ -8,14 +8,14 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 | Mode | What it does |
 |---|---|
-| `soc-design` | Design SOC structure, processes, and tooling using security-analyst + security-analyst agents. |
+| `soc-design` | Design SOC structure, processes, and tooling using the security-analyst agent. |
 | `threat-hunt` | Conduct hypothesis-driven threat hunt using security-analyst agent. |
 
 ---
 
 ## Mode: `soc-design`
 
-Use `security-analyst` + `security-analyst` agents to design SOC for: **$ARGUMENTS**
+Use the `security-analyst` agent to design a SOC for: **$ARGUMENTS**
 
 Workflow:
 

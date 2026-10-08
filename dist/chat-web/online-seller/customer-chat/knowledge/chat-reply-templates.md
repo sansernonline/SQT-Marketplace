@@ -1,6 +1,6 @@
 # skill: chat-reply-templates
 
-Use when a Thai online seller must answer a buyer in chat on Shopee, Lazada, TikTok Shop, LINE or Facebook — price, stock, size, late or damaged parcel, refund, discount. Thai templates and policy-safe rules.
+Use when a Thai online seller answers everyday buyer chat (price, stock, size, late parcel, discount) on Shopee, Lazada, TikTok Shop, LINE or Facebook.
 
 # Chat Reply Templates (Thai)
 
@@ -13,7 +13,7 @@ Response time and chat rate count toward shop ratings on the big platforms, and 
 3. **Fill every `<...>`** with real facts; never send a template with a blank or a guessed date
 4. **Match the voice** — ค่ะ or ครับ consistently; the shop's name for itself (แอดมิน / ร้าน <name>)
 5. **Say the next step and when** — "แอดมินจะแจ้งกลับภายใน 17:00 วันนี้ค่ะ" and then actually do it
-6. **Log** recurring questions; three of the same question in a week means the listing or FAQ auto-reply is missing it
+6. **Log** recurring questions; 3 of the same question in a week means the listing or FAQ auto-reply is missing it
 
 ## Which template
 
@@ -34,7 +34,7 @@ Response time and chat rate count toward shop ratings on the big platforms, and 
 - Never blame the courier or the buyer; state facts and the fix
 - Never promise a delivery date the courier has not shown
 - Never paste another buyer's details, and never ask for a buyer's ID card or bank account in chat (refunds go through the platform)
-- Keep emoji to one or two per message; no stickers in complaint chats
+- Keep emoji to 1–2 per message; no stickers in complaint chats
 - Quotation or tax invoice for a business buyer → `thai-workplace` `doc-quotation`
 - LINE shop auto-replies and rich menu → `thai-workplace` `line-oa-setup`
 

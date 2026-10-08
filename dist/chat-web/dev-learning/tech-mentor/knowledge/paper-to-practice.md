@@ -1,6 +1,6 @@
 # skill: paper-to-practice
 
-Use when the user wants to understand a paper, RFC or long technical article well enough to use it. Produces a minimal working example of the core idea plus a plain-language brief.
+Use when the user wants to understand and apply a paper, RFC or long technical article. Minimal working example plus a plain-language brief.
 
 # Paper to Practice
 
@@ -8,16 +8,16 @@ From "I read it" to "it runs on my machine".
 
 ## Steps
 
-1. **Brief** — what problem, what is the core idea in one paragraph, why it beats the alternative, one line on limitations the authors admit
-2. **Scope the example** — the smallest program that exercises the core idea; not a reproduction of everything
-3. **Build it** — runnable code in the user's language of choice, standard library first, one dependency maximum unless the idea needs more
-4. **Run and verify** — actually execute it; the output is part of the deliverable
-5. **Note** — one page: the idea, the example, where it applies in the user's world, where it does not
+1. **Brief** — the problem, the core idea in 1 paragraph, why it beats the alternative, and 1 line on limitations the authors admit
+2. **Scope the example** — the smallest program that shows the core idea. Do not reproduce the whole paper
+3. **Build it** — runnable code in the user's language of choice, standard library first, at most 1 dependency unless the idea needs more
+4. **Run and verify** — actually run it. The output is part of the deliverable
+5. **Note** — 1 page: the idea, the example, where it applies in the user's world, where it does not
 
 ## Worked example — "bloom filters" from the original idea to running code
 
 1. **Brief** — Problem: test membership in a huge set without storing the set. Core idea: k hash functions set k bits in an m-bit array; a lookup checks the k bits. It can say "maybe present" wrongly (a false positive) but never "absent" wrongly. Beats a hash set on memory. Limitation: no deletion in the basic form; the false-positive rate grows as it fills
-2. **Scope** — one class, `add` and `might_contain`, and a measurement of the false-positive rate
+2. **Scope** — 1 class, `add` and `might_contain`, and a measurement of the false-positive rate
 3. **Build** (standard library only):
 
 ```python
@@ -53,9 +53,9 @@ Use [references/practice-note-template.md](references/practice-note-template.md)
 ## Rules
 
 - The example runs, or the deliverable says why it could not and what was tried
-- Math is translated into code or concrete numbers; a formula nobody evaluated teaches nothing
+- Turn math into code or concrete numbers. A formula nobody calculated teaches nothing
 - Credit the source with title, authors, and date in the note
-- If the core idea needs infrastructure the user lacks, downgrade to a simulation and say so
+- If the core idea needs infrastructure the user lacks, use a simulation instead and say so
 
 
 ## reference: practice-note-template.md
