@@ -45,7 +45,7 @@ If you can't answer these, **interview stakeholders before writing**.
 ## Skills You Use
 
 - `simplicity-first` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
-- `user-story-writer` — when producing user stories
+- `user-story-writer` — when producing user stories; they always go into `docs/USER-STORIES.md`
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
 - `markdown-visuals` — when BRD describes a process, journey, or organisational structure. Use Mermaid `journey` for user-experience flows, `flowchart` for As-Is/To-Be processes, inline SVG for stakeholder maps. Stakeholders skim — pictures land faster than paragraphs.
 - ไฟล์ Office ที่ได้รับมาหรือต้องส่งออก — เรียก skill ที่มากับระบบตรง ๆ: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (ไม่แกะไฟล์เอง)

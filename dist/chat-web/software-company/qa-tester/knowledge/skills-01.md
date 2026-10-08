@@ -13,7 +13,7 @@ Use when writing test cases, scenarios or a feature test plan, or turning accept
 
 ## Where test cases live
 
-Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where QA fills in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`.
+Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where QA fills in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`. Stories and their AC live in `docs/USER-STORIES.md` — the **Related** line cites those IDs exactly (`US-012, AC2`), so a changed AC there points to the test cases that must change.
 
 ## Test Case ID Convention
 

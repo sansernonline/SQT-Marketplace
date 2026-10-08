@@ -21,7 +21,7 @@
 | `home-family` | 0.2.1 | 11 | 3 | 3 | 0.1 MB |
 | `online-seller` | 0.2.2 | 12 | 4 | 4 | 0.1 MB |
 | `personal-life` | 0.4.2 | 18 | 4 | 6 | 0.1 MB |
-| `software-company` | 2.2.1 | 108 | 39 | 29 | 3.7 MB |
+| `software-company` | 2.3.0 | 108 | 39 | 29 | 3.7 MB |
 | `superuser` | 1.0.1 | 4 | 1 | 0 | 0.0 MB |
 | `thai-workplace` | 0.4.2 | 21 | 5 | 8 | 0.1 MB |
 | `trading-finance` | 0.4.2 | 22 | 5 | 7 | 0.1 MB |

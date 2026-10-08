@@ -16,7 +16,7 @@ Execute these steps **in order**, using sub-agents:
 1. **Business Analyst** — Use the `business-analyst` agent to:
    - Ask clarifying questions to the user
    - Produce a Business Requirements Document (BRD) with objective, scope, stakeholders, business rules
-   - Write user stories with acceptance criteria
+   - Write user stories with acceptance criteria into `docs/USER-STORIES.md` (`user-story-writer` — read the file first, continue its IDs, update the index table)
 
 2. **Solution Architect** — Use the `solution-architect` agent to:
    - Propose high-level architecture
