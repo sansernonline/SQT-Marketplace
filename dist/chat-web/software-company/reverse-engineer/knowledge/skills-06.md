@@ -54,105 +54,140 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 ---
 
-# skill: temp-file-discipline
+# skill: legacy-spec-recovery
 
-Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
+Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
 
-# ระเบียบไฟล์ชั่วคราว
+# Legacy Spec Recovery
 
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
+Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
----
+Use `reverse-engineering` instead when there is no source code, only binaries.
 
-## เลือกที่วาง
+## The four rules
 
-| ไฟล์นั้นคืออะไร | วางที่ |
+1. **Every claim has a source.** `path:line`, a table name, a manual page — or it is not written down.
+2. **Every claim has a label.**
+
+   | Label | Meaning | Example |
+   |---|---|---|
+   | ✅ code | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
+   | 📄 doc | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
+   | 🟡 inferred | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
+   | ❓ ask | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
+
+   When 📄 and ✅ disagree, record both and raise a ❓. That disagreement is often the most valuable finding.
+3. **Wide and shallow first, deep only where a change will land.** Map the whole system at module level; write screen-level detail only for modules a change request touches. Coverage grows one change request at a time.
+4. **Read only, outside the source tree.** Never edit, build, run migrations or execute the legacy system to "see what happens". Write output next to the code (`docs/as-is/`), not inside it. Never copy secrets: name a connection string or key, never its value.
+
+## Where the evidence hides
+
+Look in every layer — business rules in legacy systems are spread thin, not kept in one place.
+
+| Layer | What to pull out |
 |---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/` ที่รากโปรเจกต์ ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
+| Routes, controllers, forms | Screen list, actions, who may call them |
+| Data access code, stored procedures, views, triggers | The real rules: filters, status changes, calculations |
+| Schema scripts, ORM models, `INFORMATION_SCHEMA` exports | Tables, keys, status code columns |
+| Views and client scripts (`.cshtml`, `.aspx`, `.js`) | Validation the server never repeats, hidden fields, labels that name the business concept |
+| Config files | Integrations, feature switches, environment names |
+| Reports (`.rpt`, `.rdl`, `.pbix`) and ETL packages (SSIS, cron, jobs) | Calculations that exist only there, schedules |
+| Enums and constant classes | The status vocabulary — decode it once, reuse everywhere |
+| User manuals, old emails, ticket history | 📄 intent, to compare with ✅ behaviour |
+| Commented-out code, `_old`, `Copy of` files | Previous rules; note them, do not treat as current |
 
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
+Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md).
 
----
+## Workflow
 
-## อะไรคือไฟล์ชั่วคราว
+### Step 1 — Inventory (one pass, no reading of logic)
 
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
+Count before reading. File counts by type, projects or modules, largest files, generated folders to ignore (`bin/`, `obj/`, `node_modules/`, publish output, vendored plugins). Write it to `docs/as-is/README.md` as a coverage table: every module listed, depth = none.
 
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
+**Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be 🟡 or ❓, and the coverage table must say so.
 
----
+If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. Seven layers worked in practice: screens and permissions · data and status codes · one deep-dive module · rules for each half of the modules · integrations, jobs, reports and ETL · manuals. Then one analyst assembles. Budget for it: a system of about 55,000 lines took 8 subagents and about 2 million tokens.
 
-## อะไรไม่ใช่
+### Step 2 — System map (whole system, shallow)
 
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+Produce, using the existing skills for format:
 
----
+| File | Content | Skill |
+|---|---|---|
+| `01-system-overview.md` | Purpose in one paragraph, context diagram, components, integrations, tech stack and versions | `software-diagrams` |
+| `02-module-inventory.md` | Module → screens / endpoints / reports / jobs → main tables | — |
+| `03-data-dictionary.md` | Tables grouped by module, key columns, status codes decoded, core ER diagram | `database-design` |
+| `04-business-rules.md` | Rule register — [assets/business-rule-register.md](assets/business-rule-register.md) | — |
+| `05-open-questions.md` | Every ❓, grouped by who can answer, top 5 first | — |
+| `06-findings.md` | Defects and security weaknesses found on the way — not rules | `security-gate` severity |
 
-## วิธีใช้
+**Documenting a legacy system always turns up bugs and security holes.** Keep them out of the rule register: a rule is what the system does on purpose, a finding is what it does wrong. When unsure which, it is a ❓. `06-findings.md` gives location and a one-line fix, never exploitation steps or secret values, and is marked for the system owner only. Check these in every legacy web system, they are nearly always present: permission enforced only by hiding buttons, server never re-checking status order, SQL built by joining user input, secrets in config files under version control, document numbers issued without a lock.
 
-```
-โปรเจกต์/
-├── ผลงานจริง
-└── _to_delete/
-    ├── transfer.zip
-    └── render-check/
-```
+### Step 3 — Deep dive (only the module a change touches)
 
-- มีโฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแยกย่อยตามวันที่ ยกเว้นของเยอะจริง
-- โฟลเดอร์ย่อยมาตรฐานที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
+`modules/<module>.md` at the level of `fsd-writing`: each screen, its fields and validation with the exact error text, status transitions as a state diagram, the queries behind each list, and every rule found added to the register with its ID. Keep the label on each line.
 
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
-  |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
+Then propose **characterization tests** — tests that record what the system does today so a change that breaks something else is caught. For legacy code that cannot be unit-tested, record at the edge: fixed inputs to a stored procedure, view or report, and the output saved as a golden file to compare after the change. List them; build them only when asked, and never against production data.
 
----
+### Step 4 — Change request
 
-## ตอนจบงาน
+For each request, fill [assets/change-request.md](assets/change-request.md):
 
-1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
+1. Restate the request as a before/after against the as-is spec: which rule IDs, screens and tables change.
+2. Impact: search the code for every table, column, procedure and status code touched, and list each hit. Callers outside the main application — reports, ETL, mobile clients, other systems reading the same database — are the ones usually missed.
+3. Open ❓ items that block the change go to the requester first.
+4. The characterization tests for the touched area must pass before and after.
+5. After the change ships, update the as-is spec — it is now the to-be.
 
----
+## Rules of thumb
 
-## Anti-patterns
+- Name things the way the users do. Take screen titles and menu labels from the views, not class names.
+- Decode a status code once in the data dictionary and link to it; never re-explain it per screen.
+- Dead code is a finding, not a rule. Check whether a route is reachable from the menu before documenting the screen.
+- Copy-pasted logic that differs slightly between modules is a ❓, not two rules — ask which one is right.
+- Stop a module at the depth the change needs. A finished spec of a module nobody will change is waste.
+- Report what was not read. The coverage table in the README is part of the deliverable.
+- Status values hard-coded as strings with no enum are common. Harvest them with a search for quoted upper-case literals next to status columns, then decode them once in the data dictionary.
+- Manuals lie by omission. Check for one manual that is a copy of another, or a cover page with nothing behind it. Scanned Thai PDFs often have no text layer, so they have to be read page by page as images — slow, so give them their own subagent.
+- The order of the process across screens is rarely written anywhere. Rebuild it from which status each screen lists, not from the manual's table of contents.
 
-- ❌ **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- ❌ **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- ❌ **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- ❌ **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- ❌ **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- ❌ **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- ❌ **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
 
----
+## reference: evidence-by-stack.md
 
-## ตัวย่อ
+# Where evidence lives, by stack
 
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
+Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, `node_modules/`, `packages/`, `vendor/`, minified `*.min.js`, and third-party plugin folders. They duplicate source and can triple every count.
+
+## ASP.NET MVC / Web API (.NET Framework)
+
+| Look at | For |
+|---|---|
+| `Controllers/*.cs` — each public method returning `ActionResult` / `JsonResult` | Screen and endpoint list; `[Authorize(Roles=...)]` and custom filters for permissions |
+| `Models/*Context.cs`, `*Repository.cs`, any `SqlCommand` / `ExecuteReader` / Dapper call | Inline SQL and stored procedure names — the real rules |
+| `Views/<Controller>/*.cshtml` | Screen title, field labels, client validation, which actions the form posts to |
+| `Views/Shared/_Layout.cshtml`, menu partials | Which screens are reachable, and by which role |
+| `Web.config` — `connectionStrings`, `appSettings`, `system.serviceModel` | Databases, integrations (SAP RFC, SOAP, mail), switches. Names only, never values |
+| `App_Start/RouteConfig.cs`, `FilterConfig.cs`, `Startup.Auth.cs` | Routing quirks, global filters, login method |
+| `*.asmx`, `*.svc` | SOAP services other systems call into |
+| `*.rpt` (Crystal Reports) | Formulas and record selection hidden inside the binary; list them, ask for an export if needed |
+
+## SQL Server
+
+| Look at | For |
+|---|---|
+| Schema scripts, `INFORMATION_SCHEMA.COLUMNS` exports | Data dictionary |
+| Stored procedures, views, functions, triggers | Rules that run regardless of which application writes |
+| SSIS packages (`.dtsx`) | Imports, exports, schedules, transformations — open as XML, search `SqlCommand` and connection names |
+| SQL Agent jobs | When batch rules run |
+
+## Other common stacks
+
+| Stack | First places to look |
+|---|---|
+| Classic ASP / Web Forms | `.aspx` + code-behind, `Page_Load`, `Button_Click`, `include` files |
+| PHP | Entry scripts, `include`/`require` chains, raw `mysqli_query` strings |
+| Java EE / Spring | `@Controller`/`@RequestMapping`, `*Mapper.xml` (MyBatis), `persistence.xml`, `@Scheduled` |
+| VB6 / Access / Delphi | Forms, modules, embedded queries — often only the database is readable; start there |
+| COBOL / RPG | Copybooks for record layouts, JCL for job flow |
+| Node / JavaScript SPA | Router config, API client module, form schemas, `.env.example` |
+| Mobile (Xamarin, native) | API base URL and endpoint list, offline storage schema |

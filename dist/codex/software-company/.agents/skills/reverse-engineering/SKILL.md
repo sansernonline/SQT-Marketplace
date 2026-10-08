@@ -1,79 +1,92 @@
 ---
 name: reverse-engineering
-description: Use when asked to reverse engineer, decompile or disassemble an app without source, find how a feature or protocol works, or analyze an unknown file.
+description: Use when there is a compiled app or unknown file but no usable source — lost source, a deployed build that may differ from the repository, or a feature, format or protocol to understand. Decompiles, traces and reports with evidence.
 ---
 
 # Reverse Engineering
 
-Investigation model (adapted from the REA project): **Decompile → Understand → Recreate**, with evidence recorded at every step. Never claim to recover original source code; report what the evidence actually shows and mark unknowns explicitly.
+**Decompile → Understand → Recreate**, with evidence at every step. Never claim the original source was recovered; report what the evidence shows and mark what is unknown.
+
+Source code is available but there are no documents → use `legacy-spec-recovery` instead. Once this skill has recovered readable code, `legacy-spec-recovery` turns it into a spec.
+
+## What works in practice
+
+Effort depends almost entirely on what the target was built with. Classify first, then set expectations with the user.
+
+| Target | Result to expect | Effort | Route |
+|---|---|---|---|
+| .NET (C#, VB.NET, Xamarin) | Near-original source: same logic, same SQL strings; comments and local names lost | Minutes | `ilspycmd` |
+| Java, Kotlin, Android | Near-original source | Minutes | jadx, CFR, Vineflower |
+| JavaScript, Electron | The code itself, often minified; source maps may give the original | Minutes | unpack, beautify |
+| Python `.pyc`, PyInstaller | Usually recoverable for Python ≤ 3.8, partial after | Hours | pyinstxtractor, decompyle3 / pycdc |
+| Native C, C++, Go, Rust | Pseudo-C only; names gone unless symbols exist | Days per feature | strings → imports → Ghidra |
+| Obfuscated or packed | Depends on the protector; can stop the job | Unknown | identify the tool first, then ask |
+
+Field test (2026-10, ASP.NET MVC app of about 55,000 lines): `ilspycmd` produced a C# project of 51,700 lines in 9 seconds. Compared against the real source, a cancel method matched statement for statement, and all 1,431 methods matched by name.
 
 ## Safety and legality
 
-- Only analyze software and files the user owns or is authorized to analyze (their own apps, licensed software, CTF targets, malware samples in a sandbox).
-- Do not help bypass licensing, DRM, activation checks, or access controls on third-party software.
-- Do not exfiltrate data found inside binaries (credentials, keys) to third parties.
-- Malware analysis: static-only unless the user explicitly asks for dynamic analysis in an isolated environment.
+- Analyse only software the user owns or is authorised to analyse: their own or their client's systems, licensed software where the licence allows it, CTF targets, malware samples in a sandbox.
+- Do not help bypass licensing, DRM, activation or access controls in third-party software.
+- **Secrets come out with the code.** Connection strings, passwords and API keys sit in decompiled code and `.config` files. Name them, never paste their values — `triage.py` masks them in its output.
+- Malware: static analysis only, unless the user explicitly asks for dynamic analysis in an isolated environment.
+- Work on copies in a scratch folder. Never write decompiled output into the user's source tree; it is not the source of record.
 
 ## Workflow
 
-### Step 1 — Triage (identify the target)
+### Step 1 — Triage
 
-Run `scripts/triage.py <target>` to identify the file type, architecture, entry hints, and extract useful strings. It recognizes PE (Windows), ELF (Linux), Mach-O (macOS), .NET/CLI, APK (ZIP), ASAR, plist, JavaScript, and generic binaries.
+```bash
+python -I scripts/triage.py <file>                          # format, architecture, next step
+python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # hunt a clue in strings (secrets masked)
+```
 
-Classify the target first, because it determines the tool chain:
+It recognises PE, .NET, ELF, Mach-O, APK, IPA, JAR, ASAR, Power BI, Office, OLE (Crystal Reports, MSI), SSIS and config XML. For a .NET assembly it also reports a `.pdb` or `.config` lying beside it and known obfuscator markers.
 
-| Target kind | Typical forms | Main route |
-|---|---|---|
-| Native binary | PE, ELF, Mach-O | Strings → symbols → decompile |
-| .NET / managed | `.exe`/`.dll` with CLI header | IL metadata → decompile (ILSpy) |
-| JavaScript / Electron | `.js`, bundles, `.asar`, source maps | Static JS graph — usually the fastest route |
-| Mobile | `.apk`, `.ipa` | Unpack first, then treat contents by kind |
-| Web app / site | URL of the user's own site | Passive observation, bundle/source-map analysis |
-| Unknown format | custom file | Hex/structure analysis, entropy, repeated patterns |
+Installers (7-Zip SFX, NSIS, MSI): extract first — strings inside are compressed noise. Packaging layouts and report and ETL formats: [references/packaging-patterns.md](references/packaging-patterns.md).
 
-**Installers and stubs**: if triage reports a 7-Zip SFX or NSIS installer, do NOT analyze strings in it — they are compressed noise. Extract first (`7z x <file>`), then triage the real payload inside. For known packaging patterns (Mozilla `omni.ja`/`application.ini`, Electron ASAR, .NET bundles, APK layout), see [references/packaging-patterns.md](references/packaging-patterns.md).
+Confirm what the user wants before deep work: explain one feature, recover a format or algorithm, recover lost source, or check a deployed build against the repository.
 
-Confirm what the user actually wants before deep work: explain a feature, recover an algorithm/format, or recreate the feature in their stack.
+### Step 2 — Decompile, cheapest first
 
-### Step 2 — Decompile (recover readable clues)
+1. **Strings and metadata.** Often enough on their own. In the field test, SQL statements embedded in a .NET dll — including commented-out ones — came out of the strings alone.
+2. **Managed code (.NET, Java)** — go straight to the decompiler; it is cheap.
+   ```bash
+   dotnet tool install ilspycmd --tool-path <scratch>/tools --version <x>
+   <scratch>/tools/ilspycmd -p -o <scratch>/out <file.dll>
+   ```
+   The newest `ilspycmd` needs the newest .NET SDK. If installation fails with *"DotnetToolSettings.xml was not found"*, pin an older version that matches an installed SDK (`dotnet --list-sdks`); for example, 9.1.0.7988 works with SDK 9. Install into the scratch folder, not globally.
+3. **JavaScript/Electron** — `npx @electron/asar extract app.asar <out>`, beautify, look for `.map` files.
+4. **Native** — imports and exports first (they reveal crypto, network and storage use), then Ghidra headless for the functions that matter. On Windows, prefer Python and Node scripts over assuming Unix tools exist.
 
-Work from cheapest to most expensive:
+Record each finding as evidence: file, offset, type or method, and what it suggests.
 
-1. **Strings and metadata**: names, endpoints, constants, error messages. `scripts/triage.py --strings` for keyword-filtered output, or `scripts/triage.py --pattern '<regex>'` to hunt a specific clue (e.g. `--pattern 'oauth|autoconfig'`). Grep over extracted resources for text files.
-2. **Symbols/imports/exports**: which APIs the binary calls (`imports`) reveal behavior (crypto, networking, storage).
-3. **JavaScript/Electron**: unpack ASAR (`npx asar extract`), beautify bundles, read source maps (`.map` often contains original source). This frequently answers the whole question without touching native code.
-4. **Managed (.NET)**: `ilspycmd` or ILSpy GUI to get near-original C#.
-5. **Native deep analysis**: Ghidra (free, headless mode) or Hopper. Use when strings/symbols are not enough. On Windows, Ghidra headless + Python scripts is the reliable path.
+### Step 3 — Understand
 
-For each interesting finding (a feature name, an endpoint, an algorithm string), record it as evidence: file, address/offset, and what it suggests.
+Trace from clue to implementation: who references the string, which function contains it, what flows in and out. Write a short narrative: "feature X works by A calling B, storing in C, gated by D". Keep static reading separate from runtime observation, and mark unresolved links instead of guessing.
 
-### Step 3 — Understand (connect clues to code)
+### Step 4 — Use the result
 
-Trace from clue to implementation:
+| Goal | Do this |
+|---|---|
+| Explain a feature | Narrative + evidence list (Step 5) |
+| Lost source | Decompiled project goes to the user as a recovery, clearly labelled; then `legacy-spec-recovery` for the spec |
+| **Deployed build vs repository (drift check)** | Decompile the production binary, then `python -I scripts/compare_members.py <decompiled> <source>` — lists methods only in the binary (hot-fixes never committed) or only in the source (not deployed). Then diff the bodies of the methods it flags. |
+| Recreate in the user's stack | Only after the user confirms the understanding. Reimplement, do not copy proprietary code; standard algorithms and formats (JSON, zlib, AES) are fine to reuse |
 
-1. Find where the string/symbol is referenced (xrefs).
-2. Find the function that contains the reference (callers/callees, control flow).
-3. Decompile those functions; follow the data flow in and out.
-4. Build a short narrative: "feature X works by A calling B, storing in C, gated by D."
-
-Keep static inference and runtime observation separate — say which one each claim comes from. Mark unresolved links explicitly instead of guessing.
-
-### Step 4 — Recreate (build the user's version)
-
-Only after the user confirms the understanding is correct, implement the equivalent feature in their project using their normal file-editing and test tools. Adapt to their stack and requirements; do not copy code wholesale from proprietary binaries. If the original used a standard algorithm or format (JSON, protobuf, zlib, AES), linking against or reimplementing that standard is fine.
+`compare_members.py` was field-tested both ways: on a matching build it reported 1,431 shared methods and no differences, and a method renamed in a copy of the source was caught.
 
 ### Step 5 — Report
 
-Deliver a structured summary:
-
-- **How it works**: the narrative from Step 3, with evidence locations.
-- **Evidence list**: each claim tied to a file/address/observation.
+- **How it works**: the narrative, with evidence locations.
+- **Evidence**: each claim tied to a file, offset or method.
 - **Unknowns**: what could not be determined and what would resolve it.
-- **Recreated feature**: files changed/created, and how to verify.
+- **Secrets seen**: key names and locations only — and tell the user they should be rotated if the binary or config has left their control.
+- **Output**: where the decompiled files are, and how to verify any recreated feature.
 
 ## Rules of thumb
 
-- Prefer static analysis; avoid executing unknown binaries.
-- Cheapest sufficient evidence wins: JS bundle > symbols > decompiler > debugger.
-- Binary analysis requires an explicit request or clear authorization; when in doubt, ask.
-- Windows note: many classic Unix RE tools are absent; prefer Python scripts (bundled or written on the spot) and Node-based tools over assuming `strings`/`objdump` exist.
+- Cheapest sufficient evidence wins: strings > managed decompiler > native decompiler > debugger.
+- Prefer static analysis; do not run unknown binaries.
+- Decompiled code is evidence, not the source. Label it that way wherever it is handed over.
+- If triage reports an obfuscator, stop and tell the user what that means for effort before going on.

@@ -12,13 +12,16 @@ Recognizing the packaging leads straight to the readable layer. Check these befo
 
 ## Electron / Node apps
 
-- `app.asar` — ASAR archive; `npx asar extract app.asar outdir`. Renderer JS is often minified but readable; `.map` source maps may contain original source.
+- `app.asar` — ASAR archive; `npx @electron/asar extract app.asar outdir` (the old `asar` package name is deprecated). Renderer JS is often minified but readable; `.map` source maps may contain original source.
 - `resources/app/package.json` names the app, entry point, and dependency list.
 - Native modules: `*.node` files (PE DLLs) — treat as native binaries.
 
 ## .NET applications
 
-- PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd <dll>` or ILSpy gives near-original C#.
+- PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd -p -o <out> <dll>` gives a near-original C# project — field-tested: identical logic, SQL strings intact, only comments and local names lost.
+- A `.pdb` beside the dll restores original file names and line numbers; a `.dll.config` holds settings (and often secrets).
+- ASP.NET MVC with precompiled views: `.cshtml` come back as classes under `<Assembly>.Views.<Controller>`.
+- Xamarin APK: the C# lives in `assemblies/*.dll` inside the APK (sometimes LZ4-compressed `XALZ`) — decompile those, not `classes.dex`.
 - Check for bundled/single-file deployment (self-extracting extractors) — extract first.
 - P/Invoke declarations map managed code to native DLL entry points.
 
@@ -32,3 +35,15 @@ Recognizing the packaging leads straight to the readable layer. Check these befo
 - NSIS: extract with `7z x` (triage detects `NullsoftInstall` marker).
 - MSI: `msiexec /a file.msi /qb TARGETDIR=<out>` or 7z.
 - MSI transforms and stub downloaders may contain no payload — identify early to avoid wasted work.
+
+## Enterprise report and ETL files
+
+Often the only place a calculation lives. None need a decompiler.
+
+| File | What it is | Readable layer |
+|---|---|---|
+| `.rpt` Crystal Reports | OLE compound file | `strings` shows SQL, table and field names; formulas need Crystal Designer or an RptToXml export |
+| `.pbix` Power BI | ZIP | `Report/Layout` is UTF-16 JSON (pages, visuals, filters); measures in `DataModel` need pbi-tools or Tabular Editor |
+| `.dtsx` SSIS | XML | Search `SqlCommand`, `ConnectionManager`, `DTS:ObjectName`; package order in the master package |
+| `.rdl` SSRS | XML | `CommandText` per dataset |
+| `.mdb` / `.accdb` | Access database | Queries and VBA modules; open with mdbtools or Access |

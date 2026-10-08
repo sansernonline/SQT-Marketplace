@@ -20,6 +20,63 @@ FAT_MAGIC = 0xCafeBabe
 PKZIP = b"PK\x03\x04"
 
 
+OLE_MAGIC = b"\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1"
+
+# (marker found in first 4 KB, label) — checked in order
+XML_KINDS = (
+    (b"DTS:Executable", "SSIS package (.dtsx XML) — open as XML, search SqlCommand and ConnectionManager"),
+    (b"<Project", "MSBuild project XML"),
+    (b"<configuration", "config XML (.NET) — names only, never copy secret values"),
+    (b"<!DOCTYPE plist", "Apple plist XML"),
+)
+
+# (entry name or prefix inside the zip, label, next step) — checked in order
+ZIP_KINDS = (
+    ("AndroidManifest.xml", "APK (Android app)", "jadx for Java/Kotlin; assemblies/ → .NET (Xamarin)"),
+    ("Payload/", "IPA (iOS app)", "unzip, then triage the Mach-O inside Payload/*.app"),
+    ("Report/Layout", "Power BI .pbix", "Report/Layout is UTF-16 JSON (visuals, filters); DataModel needs pbi-tools or Tabular Editor"),
+    ("word/", "Word .docx", "read word/document.xml"),
+    ("xl/", "Excel .xlsx", "read xl/sharedStrings.xml and worksheets"),
+    ("META-INF/MANIFEST.MF", "Java .jar/.war", "decompile with jadx, CFR or Vineflower"),
+    ("[Content_Types].xml", "OPC package (.nupkg/.vsix/Office)", "unzip and triage contents"),
+)
+
+
+def zip_kind(data):
+    import io
+    import zipfile
+    try:
+        names = zipfile.ZipFile(io.BytesIO(data)).namelist()
+    except zipfile.BadZipFile:
+        return "ZIP archive (damaged or split)", ""
+    for entry, label, step in ZIP_KINDS:
+        if any(n == entry or n.startswith(entry) for n in names):
+            return label, f"{len(names)} entries; next: {step}"
+    return "ZIP archive", f"{len(names)} entries"
+
+
+# attribute names left behind by common .NET obfuscators
+OBFUSCATORS = ("ConfusedByAttribute", "DotfuscatorAttribute", "SmartAssembly", "BabelAttribute",
+               "ObfuscatedByGoliath", "Eazfuscator")
+
+_SECRET_WORD = r"\w*(?:pass|pwd|secret|api[_-]?key|token)\w*"
+SECRETS = None  # compiled lazily in redact()
+
+
+def redact(s):
+    """Mask values of password-like keys so triage output can be pasted safely.
+    Covers Password=x; · PASSWD="x" · key="SMTPPass" value="x"."""
+    global SECRETS
+    if SECRETS is None:
+        SECRETS = (
+            _re.compile(r'(?i)(key\s*=\s*"' + _SECRET_WORD + r'"\s+value\s*=\s*")([^"]*)'),
+            _re.compile(r"(?i)\b(" + _SECRET_WORD + r"\s*[=:]\s*[\"']?)([^;\"'\s]+)"),
+        )
+    for rx in SECRETS:
+        s = rx.sub(lambda m: m.group(1) + "***", s)
+    return s
+
+
 import re as _re
 
 _ASCII_RX = {n: _re.compile(rb"[\x20-\x7e]{%d,}" % n) for n in range(4, 33)}
@@ -81,22 +138,29 @@ def identify(data):
             info["format"] = "Mach-O fat/universal binary"
             info["detail"] = f"{n} architectures"
         elif data[:4] == PKZIP:
-            info["format"] = "ZIP archive"
-            if b"AndroidManifest.xml" in data[:200000]:
-                info["format"] = "APK (Android app)"
-                info["detail"] = "unpack, then triage classes.dex and resources"
-        elif data.lstrip()[:1] in (b"{",) or data[:5] == b"<?xml":
-            info["format"] = "plist/XML/JSON text"
-    # Electron ASAR: 4-byte LE header size, then JSON containing "files"
+            info["format"], info["detail"] = zip_kind(data)
+        elif data[:8] == OLE_MAGIC:
+            info["format"] = "OLE compound file"
+            info["detail"] = ("Crystal Reports .rpt, legacy Office .doc/.xls or .msi — "
+                              "for .rpt export via Crystal/RptToXml; strings still show SQL and field names")
+        else:
+            head = data[:4096].lstrip(b"\xef\xbb\xbf\r\n\t ")
+            if head[:1] == b"{" or head[:5] == b"<?xml" or head[:1] == b"<":
+                info["format"] = "plist/XML/JSON text"
+                for marker, kind in XML_KINDS:
+                    if marker in head:
+                        info["format"] = kind
+                        break
+    # Electron ASAR is a Chromium pickle: uint32 4, uint32 header size,
+    # uint32 pickle payload size, uint32 JSON length, then JSON with "files"
     if len(data) > 16 and info["format"] == "unknown":
-        hsize = struct.unpack_from("<I", data, 0)[0]
-        if 4 < hsize < len(data) and data[4] == ord("{"):
+        first, _, _, jlen = struct.unpack_from("<IIII", data, 0)
+        if first == 4 and 0 < jlen < len(data) and data[16:17] == b"{":
             try:
-                header = json.loads(data[4:4 + hsize])
-                if "files" in header:
+                if "files" in json.loads(data[16:16 + jlen]):
                     info["format"] = "ASAR (Electron archive)"
-                    info["detail"] = "use: npx asar extract <file> <outdir>"
-            except Exception:
+                    info["detail"] = "use: npx @electron/asar extract <file> <outdir>"
+            except ValueError:
                 pass
     if info["format"] == "unknown":
         sample = data[:4096]
@@ -158,6 +222,17 @@ def main():
     import hashlib
     print(hashlib.sha256(data).hexdigest())
 
+    if info["format"].startswith(".NET"):
+        import os
+        base = os.path.splitext(args.file)[0]
+        side = [ext for ext in (".pdb", ".dll.config", ".exe.config", ".xml") if os.path.exists(base + ext)]
+        if side:
+            print(f"beside: {', '.join(side)} (.pdb gives original file names and line numbers; "
+                  f".config holds settings — names only)")
+        obf = [n for n in OBFUSCATORS if n.encode() in data]
+        print(f"obfuscation: {', '.join(obf) if obf else 'no known marker'}")
+        print("next:   ilspycmd -p -o <outdir> <file>   (see SKILL.md for version pinning)")
+
     if args.strings or args.pattern:
         import re
         found = ascii_strings(data, args.min_len)
@@ -178,7 +253,7 @@ def main():
         print(f"\n--- matching strings ({len(interesting)} of "
               f"{len(all_strings)} total) ---")
         for s in interesting[:args.limit]:
-            print(s)
+            print(redact(s))
 
 
 if __name__ == "__main__":

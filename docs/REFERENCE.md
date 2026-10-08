@@ -195,7 +195,7 @@
 
 ---
 
-## 🛠️ Skills (107)
+## 🛠️ Skills (108)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -968,7 +968,13 @@
 
 ---
 
-## ⚡ Commands (28)
+### 108. legacy-spec-recovery
+**ใช้กับ:** business-analyst, reverse-engineer, system-analyst
+**Description:** Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
+
+---
+
+## ⚡ Commands (29)
 
 ### 1. /feature-kickoff `<feature description>`
 **Workflow:** BA → Solution Architect → System Analyst → PM

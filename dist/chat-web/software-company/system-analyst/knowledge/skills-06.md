@@ -1,3 +1,144 @@
+# skill: legacy-spec-recovery
+
+Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
+
+# Legacy Spec Recovery
+
+Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
+
+Use `reverse-engineering` instead when there is no source code, only binaries.
+
+## The four rules
+
+1. **Every claim has a source.** `path:line`, a table name, a manual page — or it is not written down.
+2. **Every claim has a label.**
+
+   | Label | Meaning | Example |
+   |---|---|---|
+   | ✅ code | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
+   | 📄 doc | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
+   | 🟡 inferred | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
+   | ❓ ask | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
+
+   When 📄 and ✅ disagree, record both and raise a ❓. That disagreement is often the most valuable finding.
+3. **Wide and shallow first, deep only where a change will land.** Map the whole system at module level; write screen-level detail only for modules a change request touches. Coverage grows one change request at a time.
+4. **Read only, outside the source tree.** Never edit, build, run migrations or execute the legacy system to "see what happens". Write output next to the code (`docs/as-is/`), not inside it. Never copy secrets: name a connection string or key, never its value.
+
+## Where the evidence hides
+
+Look in every layer — business rules in legacy systems are spread thin, not kept in one place.
+
+| Layer | What to pull out |
+|---|---|
+| Routes, controllers, forms | Screen list, actions, who may call them |
+| Data access code, stored procedures, views, triggers | The real rules: filters, status changes, calculations |
+| Schema scripts, ORM models, `INFORMATION_SCHEMA` exports | Tables, keys, status code columns |
+| Views and client scripts (`.cshtml`, `.aspx`, `.js`) | Validation the server never repeats, hidden fields, labels that name the business concept |
+| Config files | Integrations, feature switches, environment names |
+| Reports (`.rpt`, `.rdl`, `.pbix`) and ETL packages (SSIS, cron, jobs) | Calculations that exist only there, schedules |
+| Enums and constant classes | The status vocabulary — decode it once, reuse everywhere |
+| User manuals, old emails, ticket history | 📄 intent, to compare with ✅ behaviour |
+| Commented-out code, `_old`, `Copy of` files | Previous rules; note them, do not treat as current |
+
+Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md).
+
+## Workflow
+
+### Step 1 — Inventory (one pass, no reading of logic)
+
+Count before reading. File counts by type, projects or modules, largest files, generated folders to ignore (`bin/`, `obj/`, `node_modules/`, publish output, vendored plugins). Write it to `docs/as-is/README.md` as a coverage table: every module listed, depth = none.
+
+**Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be 🟡 or ❓, and the coverage table must say so.
+
+If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. Seven layers worked in practice: screens and permissions · data and status codes · one deep-dive module · rules for each half of the modules · integrations, jobs, reports and ETL · manuals. Then one analyst assembles. Budget for it: a system of about 55,000 lines took 8 subagents and about 2 million tokens.
+
+### Step 2 — System map (whole system, shallow)
+
+Produce, using the existing skills for format:
+
+| File | Content | Skill |
+|---|---|---|
+| `01-system-overview.md` | Purpose in one paragraph, context diagram, components, integrations, tech stack and versions | `software-diagrams` |
+| `02-module-inventory.md` | Module → screens / endpoints / reports / jobs → main tables | — |
+| `03-data-dictionary.md` | Tables grouped by module, key columns, status codes decoded, core ER diagram | `database-design` |
+| `04-business-rules.md` | Rule register — [assets/business-rule-register.md](assets/business-rule-register.md) | — |
+| `05-open-questions.md` | Every ❓, grouped by who can answer, top 5 first | — |
+| `06-findings.md` | Defects and security weaknesses found on the way — not rules | `security-gate` severity |
+
+**Documenting a legacy system always turns up bugs and security holes.** Keep them out of the rule register: a rule is what the system does on purpose, a finding is what it does wrong. When unsure which, it is a ❓. `06-findings.md` gives location and a one-line fix, never exploitation steps or secret values, and is marked for the system owner only. Check these in every legacy web system, they are nearly always present: permission enforced only by hiding buttons, server never re-checking status order, SQL built by joining user input, secrets in config files under version control, document numbers issued without a lock.
+
+### Step 3 — Deep dive (only the module a change touches)
+
+`modules/<module>.md` at the level of `fsd-writing`: each screen, its fields and validation with the exact error text, status transitions as a state diagram, the queries behind each list, and every rule found added to the register with its ID. Keep the label on each line.
+
+Then propose **characterization tests** — tests that record what the system does today so a change that breaks something else is caught. For legacy code that cannot be unit-tested, record at the edge: fixed inputs to a stored procedure, view or report, and the output saved as a golden file to compare after the change. List them; build them only when asked, and never against production data.
+
+### Step 4 — Change request
+
+For each request, fill [assets/change-request.md](assets/change-request.md):
+
+1. Restate the request as a before/after against the as-is spec: which rule IDs, screens and tables change.
+2. Impact: search the code for every table, column, procedure and status code touched, and list each hit. Callers outside the main application — reports, ETL, mobile clients, other systems reading the same database — are the ones usually missed.
+3. Open ❓ items that block the change go to the requester first.
+4. The characterization tests for the touched area must pass before and after.
+5. After the change ships, update the as-is spec — it is now the to-be.
+
+## Rules of thumb
+
+- Name things the way the users do. Take screen titles and menu labels from the views, not class names.
+- Decode a status code once in the data dictionary and link to it; never re-explain it per screen.
+- Dead code is a finding, not a rule. Check whether a route is reachable from the menu before documenting the screen.
+- Copy-pasted logic that differs slightly between modules is a ❓, not two rules — ask which one is right.
+- Stop a module at the depth the change needs. A finished spec of a module nobody will change is waste.
+- Report what was not read. The coverage table in the README is part of the deliverable.
+- Status values hard-coded as strings with no enum are common. Harvest them with a search for quoted upper-case literals next to status columns, then decode them once in the data dictionary.
+- Manuals lie by omission. Check for one manual that is a copy of another, or a cover page with nothing behind it. Scanned Thai PDFs often have no text layer, so they have to be read page by page as images — slow, so give them their own subagent.
+- The order of the process across screens is rarely written anywhere. Rebuild it from which status each screen lists, not from the manual's table of contents.
+
+
+## reference: evidence-by-stack.md
+
+# Where evidence lives, by stack
+
+Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, `node_modules/`, `packages/`, `vendor/`, minified `*.min.js`, and third-party plugin folders. They duplicate source and can triple every count.
+
+## ASP.NET MVC / Web API (.NET Framework)
+
+| Look at | For |
+|---|---|
+| `Controllers/*.cs` — each public method returning `ActionResult` / `JsonResult` | Screen and endpoint list; `[Authorize(Roles=...)]` and custom filters for permissions |
+| `Models/*Context.cs`, `*Repository.cs`, any `SqlCommand` / `ExecuteReader` / Dapper call | Inline SQL and stored procedure names — the real rules |
+| `Views/<Controller>/*.cshtml` | Screen title, field labels, client validation, which actions the form posts to |
+| `Views/Shared/_Layout.cshtml`, menu partials | Which screens are reachable, and by which role |
+| `Web.config` — `connectionStrings`, `appSettings`, `system.serviceModel` | Databases, integrations (SAP RFC, SOAP, mail), switches. Names only, never values |
+| `App_Start/RouteConfig.cs`, `FilterConfig.cs`, `Startup.Auth.cs` | Routing quirks, global filters, login method |
+| `*.asmx`, `*.svc` | SOAP services other systems call into |
+| `*.rpt` (Crystal Reports) | Formulas and record selection hidden inside the binary; list them, ask for an export if needed |
+
+## SQL Server
+
+| Look at | For |
+|---|---|
+| Schema scripts, `INFORMATION_SCHEMA.COLUMNS` exports | Data dictionary |
+| Stored procedures, views, functions, triggers | Rules that run regardless of which application writes |
+| SSIS packages (`.dtsx`) | Imports, exports, schedules, transformations — open as XML, search `SqlCommand` and connection names |
+| SQL Agent jobs | When batch rules run |
+
+## Other common stacks
+
+| Stack | First places to look |
+|---|---|
+| Classic ASP / Web Forms | `.aspx` + code-behind, `Page_Load`, `Button_Click`, `include` files |
+| PHP | Entry scripts, `include`/`require` chains, raw `mysqli_query` strings |
+| Java EE / Spring | `@Controller`/`@RequestMapping`, `*Mapper.xml` (MyBatis), `persistence.xml`, `@Scheduled` |
+| VB6 / Access / Delphi | Forms, modules, embedded queries — often only the database is readable; start there |
+| COBOL / RPG | Copybooks for record layouts, JCL for job flow |
+| Node / JavaScript SPA | Router config, API client module, form schemas, `.env.example` |
+| Mobile (Xamarin, native) | API base URL and endpoint list, offline storage schema |
+
+
+---
+
 # skill: flag-and-propose
 
 Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
@@ -367,196 +508,3 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 | สารบัญว่าเอกสารไหนอยู่ที่ไหน | `project-bootstrap` |
 
 **แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
-
-
----
-
-# skill: i18n-and-locale
-
-Use when a system shows text, dates, numbers or money in Thai and English. UTC and Gregorian storage, Buddhist-year input, Thai sorting and word breaking.
-
-# ภาษาและรูปแบบท้องถิ่น
-
-> **กฎข้อเดียว:** เก็บเป็นค่ากลาง แปลงตอนแสดงผล
-> เวลาเก็บเป็น UTC ปีเก็บเป็น ค.ศ. ส่วนเงินเก็บเป็นตัวเลขคู่กับรหัสสกุลเงิน
-> อะไรที่ "แปลงไว้ก่อนแล้วค่อยเก็บ" จะกลายเป็นข้อมูลที่แปลงกลับไม่ได้
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ระบบมีผู้ใช้ทั้งไทยและอังกฤษ หรืออาจมีในอนาคต
-- ต้องแสดงวันที่แบบ พ.ศ. ควบคู่กับการเก็บ ค.ศ.
-- เรียงชื่อภาษาไทยแล้วลำดับไม่ถูก หรือค้นหาแล้วไม่เจอ
-- ข้อความไทยตัดบรรทัดกลางคำ หรือล้นออกนอกปุ่ม
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ชนิดข้อมูลวันเวลาในฐานข้อมูล | `database-design` |
-| รูปแบบวันเวลาใน JSON | `api-conventions` |
-| ฟอนต์ไทยและการจัดหน้าเอกสาร | `branded-document-design` |
-| ฟอนต์ไทยบนหน้าจอ | skill แพลตฟอร์ม + `ui-craft` |
-
----
-
-## 1 · ข้อความแปล
-
-**ห้ามมีข้อความที่ผู้ใช้เห็นฝังอยู่ในโค้ด** แม้โครงการจะมีภาษาเดียววันนี้
-
-```
-locales/
-  th.json        ← ภาษาหลัก เป็นแหล่งความจริง
-  en.json
-```
-
-| Stack | ไฟล์ข้อความแปล | รูปแบบคีย์ |
-|---|---|---|
-| เว็บ / ไลบรารีที่ใช้ JSON | `locales/th.json` · `en.json` | จุดคั่นตามที่อยู่ `order.cancel.confirmTitle` |
-| Flutter (`gen-l10n`) | `lib/l10n/app_th.arb` · `app_en.arb` + `l10n.yaml` ที่รากของโฟลเดอร์โค้ด | **camelCase ไม่มีจุด** `orderCancelConfirmTitle` — คีย์ ARB กลายเป็นชื่อ getter ของ Dart จุดจึงใช้ไม่ได้ |
-
-**ตั้งชื่อคีย์ตามที่มันอยู่ ไม่ใช่ตามเนื้อความ:**
-
-```jsonc
-// ✅ เปลี่ยนคำได้โดยไม่ต้องแก้คีย์
-"order.cancel.confirmTitle": "ยืนยันการยกเลิกคำสั่งซื้อ"
-// ❌ พอเปลี่ยนคำ คีย์กับเนื้อหาก็ไม่ตรงกัน
-"ยืนยันการยกเลิก": "ยืนยันการยกเลิกคำสั่งซื้อ"
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| ตัวแปรใช้ชื่อ ไม่ใช่ลำดับ — `"เหลือ {count} รายการ"` | ลำดับคำแต่ละภาษาไม่เหมือนกัน |
-| **ห้ามต่อประโยคจากชิ้นส่วน** | ภาษาอื่นเรียงคำคนละแบบ ประโยคที่ได้จะผิดไวยากรณ์ |
-| คีย์ที่ขาดให้แสดงคีย์ ไม่ใช่ค่าว่าง | ค่าว่างทำให้ปุ่มไม่มีข้อความ และไม่มีใครเห็นว่าพัง |
-| ตรวจใน CI ว่าทุกภาษามีคีย์ครบ | ไม่งั้นจะรู้ตอนลูกค้าเห็นแล้ว |
-
-```
-❌ t("มีทั้งหมด") + count + t("รายการ")
-✅ t("list.total", { count })
-```
-
----
-
-## 2 · เวลา — เก็บ UTC แสดงตามเขตเวลาผู้ดู
-
-```
-เก็บ:   2026-09-25T02:42:13.482Z          (UTC เสมอ)
-แสดง:   25 ก.ย. 2569 09:42                (Asia/Bangkok ของผู้ดู)
-```
-
-| เรื่อง | กฎ |
-|---|---|
-| เวลาที่เกิดเหตุการณ์ | `timestamptz` เก็บเป็น UTC แล้วแปลงตอนแสดง |
-| วันเกิด วันครบกำหนด | `date` ล้วน **ห้ามมีเวลาและโซนเวลา** |
-| "วันนี้" ในรายงาน | ต้องระบุว่าเป็นวันนี้ของเขตเวลาไหน รายงานยอดขายรายวันเพี้ยนเพราะข้อนี้บ่อยมาก |
-| ช่วงเวลาทำการ | เก็บเป็น `time` + เขตเวลาของสาขา |
-
-> 🚨 **ไทยไม่มี daylight saving (ปรับเวลาตามฤดู) จึงไม่เคยเจอปัญหา จนถึงวันที่ขายให้ลูกค้าต่างประเทศ**
-> โค้ดที่บวก 7 ชั่วโมงเองจะผิดทันทีที่มีผู้ใช้นอกประเทศ จึงต้องใช้ไลบรารีเขตเวลาเสมอ
-
----
-
-## 3 · พุทธศักราช
-
-**เก็บ ค.ศ. เสมอ แปลงเป็น พ.ศ. ตอนแสดงผลเท่านั้น** (`พ.ศ. = ค.ศ. + 543`)
-
-| จุดที่ต้องระวัง | ทำยังไง |
-|---|---|
-| ผู้ใช้กรอก "2569" | รับเข้ามาแล้วแปลงเป็น 2026 ทันทีที่ชั้นรับข้อมูล |
-| ปี 2 หลัก "69" | **ห้ามเดา** ให้บังคับกรอก 4 หลัก หรือถามให้ชัด |
-| นำเข้าไฟล์ Excel | ตรวจก่อนว่าคอลัมน์ปีเป็น พ.ศ. หรือ ค.ศ. ถ้าพลาด ปีจะเพี้ยน 543 ปีโดยไม่มี error |
-| ส่งออกให้ระบบอื่น | ส่งเป็น ค.ศ. เสมอ เว้นแต่ปลายทางระบุว่าต้องการ พ.ศ. |
-| เลขไทย ๒๕๖๙ | ใช้แสดงได้ แต่**ห้ามเก็บ** |
-
-**ถ้าระบบมีผู้ใช้ทั้ง 2 แบบ ให้ผู้ใช้เลือกปฏิทินได้** แต่ค่าที่เก็บยังเป็นแบบเดิม
-
----
-
-## 4 · การเรียงลำดับและการค้นหาภาษาไทย
-
-การเรียงแบบมาตรฐาน (ตามรหัสอักขระ) **ผิดสำหรับภาษาไทย** เพราะสระหน้าอย่าง เ แ โ ใ ไ
-อยู่หน้าพยัญชนะที่มันออกเสียงตาม
-
-| ต้องการ | ทำยังไง |
-|---|---|
-| เรียงชื่อไทย | ใช้ collation ของภาษาไทย เช่น PostgreSQL `th-TH-x-icu` และ SQL Server `Thai_100_CI_AS` |
-| เรียงชื่อไทยในแอป Flutter | Dart ไม่มี collation ไทยในตัว (`compareTo` เรียงตามรหัสอักขระ) จึงต้องใช้ `Collator` ของ platform ผ่าน plugin หรือ platform channel ถ้าไม่คุ้มให้เรียงตามเวลาที่สร้างแทนแล้วบอกผู้ใช้ (ยังไม่ได้ตรวจ package ที่ทำเรื่องนี้) |
-| ค้นหาไม่สนตัวพิมพ์และวรรณยุกต์ | normalize ข้อความก่อน แล้วเก็บลงคอลัมน์ค้นหาที่แยกไว้ต่างหาก |
-| ค้นหาคำกลางประโยค | ภาษาไทยไม่มีเว้นวรรค full-text search ที่แบ่งคำด้วยเว้นวรรคจึงใช้ไม่ได้ |
-
-> 🚨 **ภาษาไทยเขียนติดกันไม่มีเว้นวรรคระหว่างคำ** จึงกระทบ 3 เรื่อง:
-> ค้นหา (ต้องมีตัวตัดคำ) · ตัดบรรทัด (เบราว์เซอร์ตัดกลางคำ) · ตัดข้อความด้วย `...`
->
-> เรื่องตัดบรรทัดให้ใส่ `word-break: normal; line-break: strict;` แล้วทดสอบด้วยข้อความไทยจริง
-> อย่าทดสอบด้วย Lorem ipsum เพราะมีเว้นวรรคทุกคำ
->
-> Flutter `Text` ตัดบรรทัดไทยด้วยตัวตัดคำของ engine เอง และไม่มี CSS ให้ตั้ง
-> จึงต้องตรวจด้วยข้อความไทยยาวจริงบนเครื่องจริงทั้ง 2 ขนาดจอ แล้วเผื่อ `maxLines` + `overflow: TextOverflow.ellipsis`
-
----
-
-## 5 · ตัวเลข เงิน และหน่วย
-
-| ข้อมูล | เก็บ | แสดง |
-|---|---|---|
-| เงิน | ตัวเลขทศนิยมคงที่ + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
-| ตัวคั่นหลักพันและจุดทศนิยม | ไม่เก็บ | ตามท้องถิ่น บางประเทศใช้สลับกับไทย |
-| เปอร์เซ็นต์ | เก็บเป็นสัดส่วนหรือจำนวนเต็ม **เลือกแบบเดียวทั้งระบบ** | |
-| ที่อยู่ | แยกฟิลด์ตามโครงของไทย (แขวง/เขต หรือ ตำบล/อำเภอ) | |
-| เบอร์โทร | เก็บรูปแบบสากล `+66812345678` | แสดง `081-234-5678` |
-
-**พหูพจน์และเพศ** — ภาษาไทยไม่มีรูปพหูพจน์ แต่ภาษาอังกฤษมี
-จึงควรให้ไลบรารีจัดการ อย่าเขียน `if (count > 1)` เอง เพราะบางภาษามีมากกว่า 2 รูป
-
----
-
-## 6 · หน้าจอ
-
-| เรื่อง | กฎ |
-|---|---|
-| ความยาวข้อความ | อังกฤษยาวกว่าไทยได้ถึง 1.5 เท่า จึงต้อง**เผื่อที่ อย่าตรึงความกว้างปุ่ม** |
-| ความสูงบรรทัด | ไทยต้องการมากกว่า เพราะมีสระบนและวรรณยุกต์ซ้อนกัน 2 ชั้น |
-| ฟอนต์ | ต้องมีน้ำหนักครบทั้งไทยและอังกฤษ ไม่งั้นระบบจะวาดตัวหนาปลอมขึ้นเอง |
-| ทดสอบ | ทดสอบด้วยข้อความจริงของทั้ง 2 ภาษา **ไม่ใช่ Lorem ipsum** |
-| สลับภาษา | จำค่าไว้ที่โปรไฟล์ผู้ใช้ ไม่ใช่แค่ใน session ส่วนแอปที่ไม่มีบัญชีผู้ใช้ (แอปมือถือออฟไลน์) ให้เก็บค่าในเครื่อง โดยค่าเริ่มต้นคือ "ตามภาษาของเครื่อง" |
-| ส่งออก CSV ให้คนไทยเปิดใน Excel | ใช้ UTF-8 แบบ**มี BOM** (ไม่งั้นไทยเพี้ยน) ทศนิยมใช้ `.` และเวลาเป็น ISO 8601 UTC เช่น `2026-10-05T03:15:00Z` ดูเพิ่มที่ `data-import-export` |
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **ข้อความฝังในโค้ด** เพราะ "ตอนนี้มีภาษาเดียว"
-- ❌ **ต่อประโยคจากชิ้นส่วน** — ภาษาอื่นเรียงคำคนละแบบ
-- ❌ **เก็บ พ.ศ. ลงฐานข้อมูล** — ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
-- ❌ **บวก 7 ชั่วโมงเองในโค้ด** — พังทันทีที่มีผู้ใช้นอกเขตเวลาไทย
-- ❌ **เรียงชื่อไทยด้วย collation มาตรฐาน** — ลำดับผิดโดยไม่มี error
-- ❌ **ทดสอบหน้าจอด้วย Lorem ipsum** — ไม่เจอปัญหาการตัดบรรทัดของไทยเลย
-- ❌ **`if (count > 1) "s"`** — ใช้ได้แค่ภาษาอังกฤษ
-- ❌ **ปี 2 หลัก** — "69" คือ 1969, 2069 หรือ 2569
-- ❌ **นำเข้า Excel โดยไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** — ปีเพี้ยน 543 ปีโดยไม่มีอะไรเตือน
-- ❌ **คีย์แปลที่หายแล้วแสดงค่าว่าง** — ได้ปุ่มเปล่าที่ไม่มีใครสังเกต
-
----
-
-## 8 · ตัวย่อ
-
-- **i18n** — internationalization (การทำให้รองรับหลายภาษาและท้องถิ่น ที่ย่อแบบนี้เพราะมีตัวอักษร 18 ตัวระหว่าง i กับ n)
-- **locale** — ชุดค่าประจำท้องถิ่น ได้แก่ ภาษา รูปแบบวันที่ ตัวเลข และสกุลเงิน
-- **collation** — กฎการเรียงลำดับและเปรียบเทียบข้อความของฐานข้อมูล
-- **UTC** — Coordinated Universal Time (เวลามาตรฐานสากล ไทยคือ UTC+7)
-- **ICU** — International Components for Unicode (ไลบรารีมาตรฐานสำหรับกฎภาษาและการเรียงลำดับ)
-- **BCP 47** — มาตรฐานรหัสภาษา เช่น `th-TH`, `en-US`
-- **ARB** — Application Resource Bundle (ไฟล์ข้อความแปลแบบ JSON ที่ Flutter `gen-l10n` ใช้)
-- **BOM** — Byte Order Mark (3 ไบต์ต้นไฟล์ที่บอก Excel ว่าเป็น UTF-8)
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ชนิดข้อมูลวันเวลาและ collation | `database-design` |
-| รูปแบบวันเวลาและเงินใน JSON | `api-conventions` |
-| ข้อความ error ที่ต้องแปล | `error-handling-patterns` |
-| ฟอนต์ไทยบนหน้าจอ | `ui-craft` + skill แพลตฟอร์ม |
-| ฟอนต์ไทยในเอกสารและสไลด์ | `branded-document-design` · `presentation-design` |
-| นำเข้าไฟล์ที่ปีเป็น พ.ศ. · ส่งออก CSV ที่ Excel เปิดแล้วไทยไม่เพี้ยน | `data-import-export` |
-| แม่แบบข้อความแจ้งเตือนหลายภาษา | `notifications` |
