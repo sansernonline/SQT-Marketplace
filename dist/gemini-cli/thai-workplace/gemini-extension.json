@@ -1,6 +1,6 @@
 {
   "name": "sqt-thai-workplace",
-  "version": "0.4.1",
-  "description": "Thai workplace toolkit for SMEs — LINE OA setup and chatbots, Thai business documents (quotation, official letters per the สารบรรณ regulation, contracts, leave forms), PDPA workflows, VAT and withholding tax with a rate table and filing calendar, payroll with PIT withholding and 50 ทวิ, social security under the 2026 wage cap, e-Tax Invoice, year-end DBD and corporate tax filing, Labour Protection Act basics (OT, leave, severance), PromptPay QR payloads and Thai public holidays. General information only, not legal or tax advice.",
+  "version": "0.4.2",
+  "description": "Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (quotations, สารบรรณ letters, contracts), PDPA, VAT and withholding tax with a filing calendar, payroll and 50 ทวิ, social security, e-Tax Invoice, year-end DBD and corporate tax, Labour Protection Act basics, PromptPay QR and public holidays. General information only, not legal or tax advice.",
   "contextFileName": "GEMINI.md"
 }

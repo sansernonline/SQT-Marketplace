@@ -1,8 +1,8 @@
 # SQT online-seller — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/online-seller/ โดย scripts/build/build-targets.mjs (v0.2.1) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/online-seller/ โดย scripts/build/build-targets.mjs (v0.2.2) · ห้ามแก้ไฟล์นี้โดยตรง
 
-Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — platform-specific listing titles and descriptions, prohibited health and beauty claims, marketplace fee structures and a price formula, one master stock sheet across shops, Thai chat reply templates, live-selling scripts, courier and COD comparison, returns and bad-review handling, and online-seller tax basics (40(8), 60% deemed expense, VAT threshold, platform income reporting). General information only, not tax or legal advice.
+Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — listings that avoid prohibited claims, fees and pricing, one stock sheet across shops, chat replies, live-selling scripts, couriers and COD, returns and bad reviews, and seller tax basics (40(8), VAT threshold). General information only, not tax or legal advice.
 
 ชุดนี้มี skill 12 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 4 คำสั่ง
 

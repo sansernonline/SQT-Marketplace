@@ -1,8 +1,8 @@
 # SQT trading-finance — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.4.1) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.4.2) · ห้ามแก้ไฟล์นี้โดยตรง
 
-Retail trader and personal finance toolkit for Thai investors — watchlists, technical signals, paper trading, trade journal with behavior review, position sizing, dividend tracking, budget planning and scam checks, plus verified Thai money skills: investment tax and filing (dividend credit, crypto exemption, foreign income), year-end tax deduction planner with /tax-plan, mutual fund picking, retirement planning with social security pension, debt payoff and คลินิกแก้หนี้, insurance review with co-payment rules, and emergency fund sizing. Data comes from whatever market-data plugins the user already has.
+Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have.
 
 ชุดนี้มี skill 22 ตัว · บทบาท 5 บทบาท · คำสั่งสำเร็จรูป 7 คำสั่ง
 
