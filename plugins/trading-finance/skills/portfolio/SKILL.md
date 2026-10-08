@@ -1,7 +1,7 @@
 ---
 name: portfolio
 description: Show the current portfolio snapshot — allocation, P/L, concentration flags, top contributors and drags — refreshed with current prices.
-argument-hint: [--file <path>] [--verbose]
+argument-hint: '[--file <path>] [--verbose]'
 disable-model-invocation: true
 ---
 

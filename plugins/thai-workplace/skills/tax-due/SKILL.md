@@ -1,7 +1,7 @@
 ---
 name: tax-due
 description: Build the Thai filing calendar for a company or individual — which form, which month, what documents to prepare, verified against the Revenue Department for the current year.
-argument-hint: [company|personal] [--month <n>]
+argument-hint: '[company|personal] [--month <n>]'
 disable-model-invocation: true
 ---
 

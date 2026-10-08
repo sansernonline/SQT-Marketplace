@@ -1,7 +1,7 @@
 ---
 name: payroll
 description: Run monthly Thai payroll — gross to net with SSO, provident fund and PIT withholding by annualisation, then the ภ.ง.ด.1 and สปส.1-10 filings, or the year-end ภ.ง.ด.1ก and 50 ทวิ.
-argument-hint: [month|year-end] [--employees <file>]
+argument-hint: '[month|year-end] [--employees <file>]'
 disable-model-invocation: true
 ---
 

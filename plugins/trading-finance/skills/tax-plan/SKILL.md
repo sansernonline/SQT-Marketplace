@@ -1,7 +1,7 @@
 ---
 name: tax-plan
 description: Plan year-end Thai tax deductions (ลดหย่อน) — tax before and after, room left in RMF, ThaiESG and the 500,000 retirement cap, and what to buy by 31 December.
-argument-hint: [yearly income and what you already have, e.g. "salary 60k/month, PVD 5%, life 20k"]
+argument-hint: '[yearly income and what you already have, e.g. "salary 60k/month, PVD 5%, life 20k"]'
 disable-model-invocation: true
 ---
 

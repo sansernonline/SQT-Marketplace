@@ -23,6 +23,12 @@ const STRICT = process.argv.includes('--warn');
 const errors = [];
 const warns  = [];
 const DESC_SOFT_MAX = 250;
+// claude.ai ไม่รับ plugin ที่ description ใน plugin.json ยาวเกิน 500 ตัว (ทดสอบอัปโหลด 2026-10-08: ≤488 ผ่าน · ≥516 ไม่ผ่าน)
+const PLUGIN_DESC_MAX = 500;
+function checkPluginDescription(file, description) {
+  if (description && description.length > PLUGIN_DESC_MAX)
+    err(file, `description ยาว ${description.length} ตัว เกิน ${PLUGIN_DESC_MAX} — claude.ai ไม่รับ plugin นี้ตอนอัปโหลด`);
+}
 let inspected = 0;
 
 const err  = (file, msg) => errors.push(`${file}\n      ${msg}`);
@@ -59,6 +65,11 @@ function parseFrontmatter(file, text) {
       err(file, `YAML พัง: "${currentKey}" มี ": " อยู่ในค่าที่ไม่ได้ครอบด้วยเครื่องหมายคำพูด\n` +
                 `      → YAML parse ไม่ผ่าน ทุก field หายหมด skill จะไม่ถูกเรียกเลยโดยไม่มี error\n` +
                 `      แก้: เปลี่ยน ": " เป็น " — " หรือครอบค่าทั้งหมดด้วย "..."`);
+    }
+    if (!quoted && /^[\[{*&!%@`]/.test(value)) {
+      err(file, `YAML พัง: "${currentKey}" ขึ้นต้นด้วย ${value[0]} โดยไม่มีเครื่องหมายคำพูด\n` +
+                `      → YAML อ่านเป็น list/object หรือ parse ไม่ผ่าน (เช่น [month|year-end] [--x]) · claude.ai ไม่รับ plugin นี้\n` +
+                `      แก้: ครอบค่าด้วย '...' เช่น ${currentKey}: '${value.slice(0, 30)}'`);
     }
     if (!quoted && /^[>|]/.test(value)) warn(file, `"${currentKey}" ใช้ block scalar — loader บางตัวอ่านไม่ได้`);
     fields[currentKey] = quoted ? value.slice(1, -1) : value;
@@ -147,6 +158,7 @@ function checkPlugin(dir) {
   if (j.name !== slug) err(pj, `name "${j.name}" ไม่ตรงกับชื่อโฟลเดอร์ "${slug}"`);
   if (!/^\d+\.\d+\.\d+$/.test(j.version ?? '')) err(pj, `version "${j.version}" ต้องเป็น x.y.z`);
   if (!j.description) warn(pj, 'ไม่มี description');
+  checkPluginDescription(pj, j.description);
 
   for (const sub of ['skills', 'agents', 'commands']) {
     const d = join(dir, sub);
@@ -180,6 +192,8 @@ function selfTest() {
     ['name ไม่ตรง',     '---\nname: other\ndescription: Use when something happens in a project\n---\n', /ไม่ตรงกับชื่อโฟลเดอร์/],
     ['ไม่มี frontmatter','# hello\n', /ไม่มี frontmatter/],
     ['description ยาว', `---\nname: x\ndescription: Use ${'a'.repeat(1100)}\n---\n`, /เกิน 1024/],
+    ['ค่าขึ้นต้นด้วย [', "---\nname: x\ndescription: Use when something happens in a project\nargument-hint: [month|year-end] [--x]\n---\n", /ขึ้นต้นด้วย \[/],
+    ['ค่า [ ที่ครอบคำพูดผ่าน', "---\nname: x\ndescription: Use when something happens in a project\nargument-hint: '[--deep]'\n---\n", null],
     ['CRLF ไม่ใช่ error', '---\r\nname: x\r\ndescription: Use when something happens in a project\r\n---\r\n', null],
   ];
   let ok = 0;
@@ -201,8 +215,15 @@ function selfTest() {
   const factHit = errors.length === 1 && errors[0].startsWith('old.md');
   console.log(`  ${factHit ? '✅' : '❌'} facts ค่าเก่าค้าง`);
   if (factHit) ok++;
+  // plugin description: 516 ตัวต้องโดนจับ 488 ตัวต้องผ่าน
   errors.length = 0;
-  const total = cases.length + 1;
+  checkPluginDescription('x/plugin.json', 'a'.repeat(516));
+  checkPluginDescription('y/plugin.json', 'a'.repeat(488));
+  const descHit = errors.length === 1 && errors[0].startsWith('x/');
+  console.log(`  ${descHit ? '✅' : '❌'} plugin description เกิน 500`);
+  if (descHit) ok++;
+  errors.length = 0;
+  const total = cases.length + 2;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }

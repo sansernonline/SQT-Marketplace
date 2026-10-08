@@ -1,7 +1,7 @@
 ---
 name: review-week
 description: Run the weekly or monthly trade review — statistics, the one repeating mistake, one new rule, and last month's rule verdict.
-argument-hint: [week|month]
+argument-hint: '[week|month]'
 disable-model-invocation: true
 ---
 

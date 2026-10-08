@@ -1,7 +1,7 @@
 ---
 name: line-setup
 description: Set up a LINE OA Messaging API channel end to end — provider, channel, webhook with signature verification, access token handling, and a working echo test.
-argument-hint: [company or OA name]
+argument-hint: '[company or OA name]'
 disable-model-invocation: true
 ---
 

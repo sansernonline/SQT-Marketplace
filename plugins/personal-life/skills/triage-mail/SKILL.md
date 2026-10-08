@@ -1,7 +1,7 @@
 ---
 name: triage-mail
 description: Triage the inbox into answer-today, this-week, delegate, and archive using the two-minute rule, working through whichever email plugin the user has installed.
-argument-hint: [--days 7]
+argument-hint: '[--days 7]'
 disable-model-invocation: true
 ---
 

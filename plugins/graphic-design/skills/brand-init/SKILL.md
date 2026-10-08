@@ -1,7 +1,7 @@
 ---
 name: brand-init
 description: Create or rebuild the brand kit — logo rules, colors, typography, imagery style, voice, and the 5 working templates, in one folder you can read in 5 minutes.
-argument-hint: [brand or company name]
+argument-hint: '[brand or company name]'
 disable-model-invocation: true
 ---
 

@@ -17,22 +17,22 @@
     {
       "name": "trading-finance",
       "source": "./plugins/trading-finance",
-      "description": "Retail trader and personal finance toolkit for Thai investors — watchlists, technical signals, paper trading, trade journal with behavior review, position sizing, dividend tracking, budget planning and scam checks, plus verified Thai money skills: investment tax and filing (dividend credit, crypto exemption, foreign income), year-end tax deduction planner with /tax-plan, mutual fund picking, retirement planning with social security pension, debt payoff and คลินิกแก้หนี้, insurance review with co-payment rules, and emergency fund sizing. Data comes from whatever market-data plugins the user already has."
+      "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have."
     },
     {
       "name": "personal-life",
       "source": "./plugins/personal-life",
-      "description": "Personal life administration for busy adults — weekly reviews, meeting prep and summaries, inbox triage method, calendar audits, personal knowledge notes, important-document registry with expiry tracking, travel checklists, gift tracking, a decision journal, subscription audits from Thai bank statements, family digital hygiene and scam defence, quarterly goals and habit design, and polite Thai-English message templates. Knowledge and workflow only; it complements email/calendar/note plugins instead of duplicating their connectors."
+      "description": "Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, and polite Thai-English messages. Works alongside email, calendar and note plugins."
     },
     {
       "name": "thai-workplace",
       "source": "./plugins/thai-workplace",
-      "description": "Thai workplace toolkit for SMEs — LINE OA setup and chatbots, Thai business documents (quotation, official letters per the สารบรรณ regulation, contracts, leave forms), PDPA workflows, VAT and withholding tax with a rate table and filing calendar, payroll with PIT withholding and 50 ทวิ, social security under the 2026 wage cap, e-Tax Invoice, year-end DBD and corporate tax filing, Labour Protection Act basics (OT, leave, severance), PromptPay QR payloads and Thai public holidays. General information only, not legal or tax advice."
+      "description": "Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (quotations, สารบรรณ letters, contracts), PDPA, VAT and withholding tax with a filing calendar, payroll and 50 ทวิ, social security, e-Tax Invoice, year-end DBD and corporate tax, Labour Protection Act basics, PromptPay QR and public holidays. General information only, not legal or tax advice."
     },
     {
       "name": "online-seller",
       "source": "./plugins/online-seller",
-      "description": "Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — platform-specific listing titles and descriptions, prohibited health and beauty claims, marketplace fee structures and a price formula, one master stock sheet across shops, Thai chat reply templates, live-selling scripts, courier and COD comparison, returns and bad-review handling, and online-seller tax basics (40(8), 60% deemed expense, VAT threshold, platform income reporting). General information only, not tax or legal advice."
+      "description": "Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — listings that avoid prohibited claims, fees and pricing, one stock sheet across shops, chat replies, live-selling scripts, couriers and COD, returns and bad reviews, and seller tax basics (40(8), VAT threshold). General information only, not tax or legal advice."
     },
     {
       "name": "home-family",
