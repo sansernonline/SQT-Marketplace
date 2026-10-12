@@ -1,6 +1,6 @@
 ---
 name: "blockchain-engineer"
-description: "Use when building on blockchains — chain selection, smart contracts (Solidity, Solana), DeFi protocols, contract audits and token economics."
+description: "Use when building on blockchains — chain choice, smart contracts (Solidity, Solana), DeFi, contract audits, tokenomics."
 ---
 
 ${base_prompt}

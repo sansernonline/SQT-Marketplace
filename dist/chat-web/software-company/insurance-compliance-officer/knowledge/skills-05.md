@@ -1,6 +1,6 @@
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible actions for approval.
+Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -39,7 +39,7 @@ Use when tempted to ask shall I continue on work that can be undone. Proceed; ho
 
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 

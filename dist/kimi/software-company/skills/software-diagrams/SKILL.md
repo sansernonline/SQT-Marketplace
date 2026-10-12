@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a markdown doc, README or pull request needs a technical diagram (architecture, sequence, state, ER, deployment) in Mermaid.
+description: Use when a markdown doc, README or PR needs a technical diagram (architecture, sequence, ER) in Mermaid.
 ---
 
 # Software Diagrams

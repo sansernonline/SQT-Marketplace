@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 
 # Polished Document Style
 
@@ -424,7 +424,7 @@ Define acronyms on first use, then add to glossary.
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
 
 # Markdown Visuals
 
@@ -703,7 +703,7 @@ Don't force everything into one format. Each format is best at something differe
 
 # Inline SVG snippets
 
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 

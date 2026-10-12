@@ -1,6 +1,6 @@
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
+Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -106,7 +106,7 @@ Use when a task writes temporary files (archives, extracts, previews, backups, o
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

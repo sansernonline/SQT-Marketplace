@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -38,7 +38,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
 
 # Simplicity First
 

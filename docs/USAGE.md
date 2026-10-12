@@ -40,7 +40,7 @@
 
 ทุก plugin มี `superuser` ของตัวเอง — แนวคิดเดียวกัน (หัวหน้าทีมคนเดียว · เข้าใจงานและจัดขนาด · เลือกหรือประกอบ playbook · ไม่หยุดถาม · พิสูจน์ผล · `CONTEXT.md` · รอบเรียนรู้) ที่ต่างคือ playbook · เกณฑ์งาน 3 ข้อ และรายการ "รออนุมัติ" ปรับตามงาน
 
-**ต้นฉบับอยู่ที่ plugin `superuser`** — ของกลาง (skill `agent-patterns` · `human-writing` · agent `learning-reviewer` · hook · playbook `learn-from-session` · บล็อก `superuser:begin` ใน superuser) แก้ที่ `plugins/superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` · ทำ plugin สาขาใหม่ → [`plugins/superuser/ADAPT.md`](../plugins/superuser/ADAPT.md)
+**ต้นฉบับอยู่ที่ plugin `superuser`** — ของกลาง (skill `agent-patterns` · `human-writing` · agent `brainstormer` · `reviewer` · `learning-reviewer` · hook · playbook `learn-from-session` · บล็อก `superuser:begin` ใน superuser) แก้ที่ `plugins/superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` · ทำ plugin สาขาใหม่ → [`plugins/superuser/ADAPT.md`](../plugins/superuser/ADAPT.md)
 
 | plugin | playbook | ไม่ทำเองเด็ดขาด | รูป |
 |---|---|---|---|

@@ -1,6 +1,6 @@
 ---
 name: parallel-split-and-merge
-description: Use when work splits into independent slices (modules, screens, files, test cases) or the user says swarm or fan out. No shared writes.
+description: Use when work splits into independent slices (modules, screens, files) or the user says swarm or fan out.
 ---
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว

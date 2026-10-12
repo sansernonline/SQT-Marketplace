@@ -1,6 +1,6 @@
 ---
 name: developer
-description: Use when implementing features, writing code, fixing bugs, refactoring, writing unit tests, or reviewing code. Concise, readable, well-tested.
+description: Use when implementing features, writing code, fixing bugs, refactoring, writing unit tests or self-reviewing code.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, TodoWrite
 model: sonnet
 ---

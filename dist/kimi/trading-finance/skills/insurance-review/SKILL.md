@@ -1,6 +1,6 @@
 ---
 name: insurance-review
-description: Use when checking if life, health, critical illness or accident cover is enough, or asking about co-payment or an OIC complaint.
+description: Use when checking if life, health, critical illness or accident cover is enough, or an OIC complaint.
 ---
 
 # Insurance Review (ทบทวนประกันภัย)

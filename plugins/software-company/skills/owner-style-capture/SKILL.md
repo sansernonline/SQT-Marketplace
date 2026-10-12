@@ -1,6 +1,6 @@
 ---
 name: owner-style-capture
-description: Use when the user wants agents to work their way (learn my style, capture how I work) or keeps correcting the same preferences.
+description: Use when the user wants agents to work their way (learn my style) or keeps correcting the same preferences.
 ---
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง

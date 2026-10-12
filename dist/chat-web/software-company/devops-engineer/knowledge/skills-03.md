@@ -221,7 +221,7 @@ Default formatting is not neutral — it reads as unfinished work.
 
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 
 # Polished Document Style
 
@@ -645,7 +645,7 @@ Define acronyms on first use, then add to glossary.
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 

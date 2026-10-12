@@ -1,6 +1,6 @@
 # skill: windows-app-design
 
-Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, Avalonia, MAUI, web shell).
+Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, MAUI).
 
 # Windows App Design
 
@@ -543,7 +543,7 @@ Segoe UI Variable **ไม่มีอักษรไทย** แต่ Windows 
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
 
 # Markdown Visuals
 
@@ -822,7 +822,7 @@ Don't force everything into one format. Each format is best at something differe
 
 # Inline SVG snippets
 
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 
@@ -906,7 +906,7 @@ This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the 
 
 # skill: diagram-figures
 
-Use when an architecture, data-flow or concept figure must look designed for a proposal, slide, print or sign-off.
+Use when an architecture or concept figure must look designed for a proposal, slide, print or sign-off.
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
 
@@ -1076,6 +1076,7 @@ python assets/render-figure.py figure.html figure.png 2
 
 ```bash
 python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
+python scripts/check-figure-source.py docs/figures/src       # ทุกรูปเริ่มจากโครงของ skill นี้
 ```
 
 จากนั้นเปิดไฟล์ภาพดูด้วยตา แล้วไล่ตามนี้:

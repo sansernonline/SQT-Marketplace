@@ -1,6 +1,6 @@
 # skill: polite-message-th-en
 
-Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment, apology). Not complaints.
+Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment).
 
 # Polite Messages in Thai and English
 

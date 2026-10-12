@@ -17,7 +17,9 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 
 | Task | Use instead |
 |---|---|
-| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` |
+| Second look at a finished piece inside a team | a new `reviewer` agent (it applies this checklist to code) |
+| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` (several `reviewer` agents) |
+| Reviewing a visual (image, poster, screen look) | (if plugin `graphic-design` is installed) `graphic-design:design-review`, else `ui-craft` checks |
 | Writing or updating the PR description itself | `pr-description-template` |
 | Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 
@@ -145,7 +147,7 @@ As a reviewer:
 
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
 
 # Simplicity First
 

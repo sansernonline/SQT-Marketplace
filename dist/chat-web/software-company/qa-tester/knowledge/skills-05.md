@@ -1,6 +1,6 @@
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, other services). Catch, retry, timeout, circuit breaker.
+Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
 
 # จัดการข้อผิดพลาด
 
@@ -189,7 +189,7 @@ catch (SmtpException ex)
 
 # skill: app-verifier-setup
 
-Use when a project has no scripted way for an agent to run the app and see results, or before the first feature.
+Use when a project has no scripted way for an agent to run the app and see results, or before feature one.
 
 # app-verifier-setup — ให้ agent มีมือและตา
 
@@ -327,7 +327,7 @@ Use when a project has no scripted way for an agent to run the app and see resul
 
 # skill: app-verifier-upkeep
 
-Use when a project verify skill has drifted from the real app (steps fail, screens missing) or after several releases.
+Use when a project verify skill has drifted from the real app (steps fail, screens missing).
 
 # app-verifier-upkeep — ดูแลมือและตาให้ตรงกับแอป
 
@@ -356,7 +356,7 @@ Use when a project verify skill has drifted from the real app (steps fail, scree
 
 # skill: docker-sandbox
 
-Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
+Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 

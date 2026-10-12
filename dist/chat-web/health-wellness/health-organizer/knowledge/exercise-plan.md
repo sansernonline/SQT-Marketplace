@@ -1,6 +1,6 @@
 # skill: exercise-plan
 
-Use when starting, restarting or structuring regular exercise. Beginner walking or strength plan, desk breaks.
+Use when starting, restarting or structuring regular exercise. Walking or strength plan, desk breaks.
 
 # Exercise Plan
 

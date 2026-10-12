@@ -1,6 +1,6 @@
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Prose, table, diagram or list.
+Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
 
 # รูปทรงของคำตอบ
 
@@ -87,7 +87,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 
 # Polished Document Style
 

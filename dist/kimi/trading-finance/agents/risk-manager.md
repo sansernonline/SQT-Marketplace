@@ -1,6 +1,6 @@
 ---
 name: "risk-manager"
-description: "Use before opening a position, when asked how much to buy, or when the portfolio has drifted. Sizes from capital and risk; refuses to size without a stop-loss."
+description: "Use before opening a position, asking how much to buy, or when a portfolio drifts. Never sizes without a stop-loss."
 ---
 
 ${base_prompt}

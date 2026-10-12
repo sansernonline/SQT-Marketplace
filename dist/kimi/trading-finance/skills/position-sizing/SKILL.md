@@ -1,6 +1,6 @@
 ---
 name: position-sizing
-description: Use when about to enter a trade and asking how many shares to buy, where the stop goes or if a position is too big.
+description: Use when about to enter a trade and asking how many shares, where the stop goes or if it is too big.
 ---
 
 # Position Sizing (คำนวณขนาดไม้)

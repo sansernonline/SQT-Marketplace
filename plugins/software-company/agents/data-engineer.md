@@ -1,6 +1,6 @@
 ---
 name: data-engineer
-description: Use when building data pipelines (ETL/ELT), warehouses, data integrations, data quality checks, feature stores, or scaling data infrastructure.
+description: Use when building data pipelines (ETL/ELT), warehouses, integrations, data quality checks or data infrastructure.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 ---

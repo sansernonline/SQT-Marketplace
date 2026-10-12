@@ -1,6 +1,6 @@
 # skill: presentation-design
 
-Use when building a slide deck someone will present or read (story order, headlines, layouts, Thai typography).
+Use when building a slide deck someone will present or read (story, headlines, layouts, Thai type).
 
 # Presentation Design
 
@@ -258,7 +258,7 @@ Use when building a slide deck someone will present or read (story order, headli
 
 # skill: product-naming
 
-Use when naming a product, app, module, brand or code name, or checking how a name sounds to Thai speakers.
+Use when naming a product, app, module or brand, or checking how a name sounds in Thai.
 
 # ตั้งชื่อผลิตภัณฑ์
 

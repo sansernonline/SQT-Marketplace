@@ -1,6 +1,6 @@
 ---
 name: principle-data-shape-first
-description: Use when about to write logic that crosses functions or modules (feature, table, API, state). Settle the data shape first.
+description: Use when about to write logic that crosses functions or modules. Settle the data shape first.
 ---
 
 # principle · data shape first — ได้รูปข้อมูลก่อน โค้ดจะตามมาเอง

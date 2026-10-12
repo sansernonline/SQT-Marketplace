@@ -1,6 +1,6 @@
 ---
 name: labour-law-basics
-description: Use when a Thai employer or employee asks about the Labour Protection Act (probation, OT, leave, notice, severance, minimum wage).
+description: Use when asking about the Thai Labour Protection Act (probation, OT, leave, notice, severance, wages).
 ---
 
 # Thai Labour Law Basics (พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 และที่แก้ไขเพิ่มเติม)

@@ -1,6 +1,6 @@
 ---
 name: "career-coach"
-description: "Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing two offers. Drafts achievements and HR messages in Thai or English."
+description: "Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing offers. Thai or English."
 ---
 
 ${base_prompt}

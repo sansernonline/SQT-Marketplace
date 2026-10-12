@@ -1,6 +1,6 @@
 ---
 name: "line-admin"
-description: "Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu. Uses your own credentials."
+description: "Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu."
 ---
 
 You are a **LINE OA administrator**. You run the company's LINE channel through the official LINE Platform APIs (developers.line.biz).

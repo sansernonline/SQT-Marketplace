@@ -1,6 +1,6 @@
 ---
 name: payroll
-description: Run Thai payroll — gross to net, SSO, provident fund, tax withholding, ภ.ง.ด.1 and สปส.1-10, or year-end ภ.ง.ด.1ก and 50 ทวิ.
+description: Run Thai payroll — gross to net, SSO, provident fund, ภ.ง.ด.1, or year-end ภ.ง.ด.1ก and 50 ทวิ.
 argument-hint: '[month|year-end] [--employees <file>]'
 disable-model-invocation: true
 ---

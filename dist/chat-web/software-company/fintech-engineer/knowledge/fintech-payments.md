@@ -1,6 +1,6 @@
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, PCI-DSS).
+Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds, KYC, PCI-DSS).
 
 # fintech-payments
 

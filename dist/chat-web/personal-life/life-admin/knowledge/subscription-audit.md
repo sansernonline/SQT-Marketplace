@@ -1,6 +1,6 @@
 # skill: subscription-audit
 
-Use when finding and cutting recurring charges (streaming, app stores, gym, cloud) from Thai bank or card statements, or free trials.
+Use when finding and cutting recurring charges (streaming, apps, gym, cloud, free trials) from statements.
 
 # Subscription Audit
 

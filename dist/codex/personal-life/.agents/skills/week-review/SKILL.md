@@ -1,6 +1,6 @@
 ---
 name: "week-review"
-description: "Run the 20-minute weekly review — done, slipped, owed to people, three priorities — appended to the review file."
+description: "Run the 20-minute weekly review — done, slipped, owed to people, three priorities."
 ---
 
 Run the `weekly-review` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

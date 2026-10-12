@@ -1,6 +1,6 @@
 ---
 name: multi-shop-stock
-description: Use when one seller lists the same stock on several marketplaces and oversells or loses count. Master stock sheet, SKUs.
+description: Use when one seller lists the same stock on several marketplaces and oversells. Master stock sheet, SKUs.
 ---
 
 # Multi-shop Stock

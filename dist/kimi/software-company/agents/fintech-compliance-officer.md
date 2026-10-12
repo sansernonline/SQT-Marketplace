@@ -1,6 +1,6 @@
 ---
 name: "fintech-compliance-officer"
-description: "Use for financial regulation (PCI-DSS, PSD2, BoT, SEC, AML/KYC), audit preparation and compliance programs. PDPA and GDPR go to legal-compliance-officer."
+description: "Use for financial regulation (PCI-DSS, PSD2, BoT, AML/KYC) and audit prep. PDPA, GDPR → legal-compliance-officer."
 ---
 
 ${base_prompt}

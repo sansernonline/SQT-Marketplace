@@ -1,6 +1,6 @@
 # skill: marketplace-fees-pricing
 
-Use when a Thai seller asks what to charge, why a product loses money, or how Shopee, Lazada and TikTok Shop fees compare.
+Use when a Thai seller asks what to charge, why a product loses money, or how marketplace fees compare.
 
 # Marketplace Fees and Pricing
 

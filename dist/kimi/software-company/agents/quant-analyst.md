@@ -1,6 +1,6 @@
 ---
 name: "quant-analyst"
-description: "Use when modeling financial risk, pricing algorithms, credit scoring, backtesting strategies, exposures, or any quantitative analysis of financial data."
+description: "Use when modeling financial risk, pricing, credit scoring, backtesting strategies or other quantitative finance work."
 ---
 
 ${base_prompt}

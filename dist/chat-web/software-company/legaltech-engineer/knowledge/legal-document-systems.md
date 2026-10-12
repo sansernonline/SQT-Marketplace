@@ -1,6 +1,6 @@
 # skill: legal-document-systems
 
-Use when software handles legal documents (clause extraction, document automation, e-signature under eIDAS, ESIGN, Thai ETA).
+Use when software handles legal documents (clause extraction, automation, e-signature, Thai ETA).
 
 # legal-document-systems
 

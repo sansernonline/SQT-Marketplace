@@ -1,6 +1,6 @@
 ---
 name: compliance-helper
-description: Use when a Thai company handles personal data under PDPA — consent forms, breach response, data-subject requests, ROPA. SME workflows; not legal advice.
+description: Use when a Thai SME handles personal data under PDPA — consent forms, breach response, data-subject requests, ROPA.
 tools: Read, Write, Edit, Grep, Glob, Skill
 model: sonnet
 ---

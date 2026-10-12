@@ -1,6 +1,6 @@
 ---
 name: "meeting"
-description: "Prepare or summarize a meeting — a one-page prep card before; decisions, action items and open questions after."
+description: "Prepare or summarize a meeting — a prep card before; decisions, action items, open questions after."
 disableModelInvocation: true
 ---
 

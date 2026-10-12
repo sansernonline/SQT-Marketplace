@@ -1,6 +1,6 @@
 ---
 name: prior-art-review
-description: Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
+description: Use when about to build something that may already exist (library, model, product). Adopt or build.
 ---
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
@@ -25,6 +25,7 @@ description: Use when about to build something that may already exist (library, 
 | แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` |
 | เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` |
 | ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | `adr-writer` |
+| ค้นคว้าเรื่องทั่วไป (เทคโนโลยี · ตลาด) ที่ไม่ได้จบที่การเลือกของมาใช้ | (ถ้าติดตั้ง plugin `superuser`) playbook `research` ไม่มีก็ใช้ skill นี้หรือ `reference-app-research` ตามที่ใกล้กว่า |
 
 ---
 

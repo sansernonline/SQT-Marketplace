@@ -1,6 +1,6 @@
 ---
 name: iot-engineer
-description: Use when building connected-device systems — firmware on microcontrollers, MQTT messaging, edge computing, telemetry pipelines and fleets of devices.
+description: Use when building connected devices — microcontroller firmware, MQTT, edge computing, telemetry, device fleets.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 ---

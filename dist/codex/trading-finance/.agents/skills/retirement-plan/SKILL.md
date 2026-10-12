@@ -1,6 +1,6 @@
 ---
 name: retirement-plan
-description: Use when the user asks how much they need to retire in Thailand, if they are on track, or how PVD, RMF and ThaiESG fit.
+description: Use when the user asks how much they need to retire in Thailand or how PVD, RMF and ThaiESG fit.
 ---
 
 # Retirement Plan (วางแผนเกษียณ)

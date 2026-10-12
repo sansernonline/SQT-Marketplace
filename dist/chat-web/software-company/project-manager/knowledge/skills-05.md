@@ -1,6 +1,6 @@
 # skill: decision-log
 
-Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step).
+Use when an agent makes its own judgment call in long or unattended work (approach, gap, skipped step).
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -56,7 +56,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: parallel-split-and-merge
 
-Use when work splits into independent slices (modules, screens, files, test cases) or the user says swarm or fan out. No shared writes.
+Use when work splits into independent slices (modules, screens, files) or the user says swarm or fan out.
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
 
@@ -88,7 +88,7 @@ Use when work splits into independent slices (modules, screens, files, test case
 
 # skill: repeated-mistakes-to-checks
 
-Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again.
+Use when the user corrects the same mistake twice or reviews keep flagging one issue. Make it a check.
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 

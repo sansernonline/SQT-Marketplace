@@ -1,6 +1,6 @@
 # skill: code-orientation
 
-Use when about to change code not yet read this session. Maps how it runs and why, and the repo conventions.
+Use when about to change code not yet read this session. Maps how it runs, why, and repo conventions.
 
 # code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ
 
@@ -19,6 +19,7 @@ Use when about to change code not yet read this session. Maps how it runs and wh
 |---|---|
 | ระบบเดิมทั้งระบบไม่มีเอกสาร ต้องกู้ spec ก่อนรับงานแก้ | `legacy-spec-recovery` |
 | ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว | `reverse-engineering` |
+| คนใหม่ต้องรู้จักทั้ง repo (ติดตั้ง รัน โครงทั้งหมด) ไม่ใช่แค่ส่วนที่จะแก้ | `/onboard` |
 
 ## 1 · How — โค้ดทำงานยังไง
 
@@ -357,7 +358,7 @@ src/
 
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest thing that works.
+Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
 
 # Lazy Coding
 
@@ -470,7 +471,7 @@ unless asked. Trivial one-liners need no test.
 
 # skill: testing-standards
 
-Use when adding or setting up automated tests in .NET, Node, Python, Angular or Flutter, or a suite is slow or flaky.
+Use when adding or setting up automated tests (.NET, Node, Python, Angular, Flutter) or a suite is flaky.
 
 # Testing Standards
 
@@ -1005,7 +1006,9 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 
 | Task | Use instead |
 |---|---|
-| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` |
+| Second look at a finished piece inside a team | a new `reviewer` agent (it applies this checklist to code) |
+| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` (several `reviewer` agents) |
+| Reviewing a visual (image, poster, screen look) | (if plugin `graphic-design` is installed) `graphic-design:design-review`, else `ui-craft` checks |
 | Writing or updating the PR description itself | `pr-description-template` |
 | Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 

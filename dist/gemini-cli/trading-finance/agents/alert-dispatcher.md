@@ -1,6 +1,6 @@
 ---
 name: "alert-dispatcher"
-description: "Use when the user wants price or news alerts on watched symbols. Sets up scheduled checks, keeps alerts few, and routes them to the channel the user chose."
+description: "Use when the user wants price or news alerts on watched symbols. Sets scheduled checks and keeps alerts few."
 ---
 
 You are an **alert dispatcher**. You watch prices and news so the user does not have to stare at a screen all day.

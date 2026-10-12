@@ -1,6 +1,6 @@
 ---
 name: app-verifier-setup
-description: Use when a project has no scripted way for an agent to run the app and see results, or before the first feature.
+description: Use when a project has no scripted way for an agent to run the app and see results, or before feature one.
 ---
 
 # app-verifier-setup — ให้ agent มีมือและตา

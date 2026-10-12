@@ -1,6 +1,6 @@
 ---
 name: brand-kit
-description: Use when starting or redoing a business brand, or posts look inconsistent. Logo rules, colour roles, type scale, Thai-Latin fonts.
+description: Use when starting or redoing a brand, or posts look inconsistent. Logo rules, colour roles, Thai-Latin fonts.
 ---
 
 # Brand Kit

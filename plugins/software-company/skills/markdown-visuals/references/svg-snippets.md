@@ -1,6 +1,6 @@
 # Inline SVG snippets
 
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 

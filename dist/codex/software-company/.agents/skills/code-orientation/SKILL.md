@@ -1,6 +1,6 @@
 ---
 name: code-orientation
-description: Use when about to change code not yet read this session. Maps how it runs and why, and the repo conventions.
+description: Use when about to change code not yet read this session. Maps how it runs, why, and repo conventions.
 ---
 
 # code-orientation — อ่านโค้ดเดิมให้เข้าใจก่อนแตะ
@@ -20,6 +20,7 @@ description: Use when about to change code not yet read this session. Maps how i
 |---|---|
 | ระบบเดิมทั้งระบบไม่มีเอกสาร ต้องกู้ spec ก่อนรับงานแก้ | `legacy-spec-recovery` |
 | ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว | `reverse-engineering` |
+| คนใหม่ต้องรู้จักทั้ง repo (ติดตั้ง รัน โครงทั้งหมด) ไม่ใช่แค่ส่วนที่จะแก้ | `/onboard` |
 
 ## 1 · How — โค้ดทำงานยังไง
 

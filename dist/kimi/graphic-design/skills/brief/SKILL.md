@@ -1,6 +1,6 @@
 ---
 name: "brief"
-description: "Write an image generation brief — subject, style, palette, light, composition, negatives — ready for an image plugin."
+description: "Write an image generation brief — subject, style, palette, light, composition, negatives."
 disableModelInvocation: true
 ---
 

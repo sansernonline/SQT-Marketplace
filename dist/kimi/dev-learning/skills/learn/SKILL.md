@@ -1,6 +1,6 @@
 ---
 name: "learn"
-description: "Learn a technology through milestones tied to the user's real projects, or turn a paper into runnable code."
+description: "Learn a technology through milestones tied to the user's real projects, or turn a paper into code."
 disableModelInvocation: true
 ---
 

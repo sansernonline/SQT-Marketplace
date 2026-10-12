@@ -1,6 +1,6 @@
 ---
 name: legal-doc-design
-description: Design a contract analysis system or audit e-signature compliance (contract-analysis-design or esignature-audit).
+description: Design a contract analysis system or audit e-signature compliance.
 argument-hint: <contract-analysis-design | esignature-audit> <details>
 disable-model-invocation: true
 ---

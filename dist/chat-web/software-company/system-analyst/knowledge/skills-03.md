@@ -1,6 +1,6 @@
 # skill: srs-writing
 
-Use when writing or reviewing a Software Requirements Specification (SRS) — ISO/IEC/IEEE 29148, testable requirements, ids, traceability.
+Use when writing or reviewing a Software Requirements Specification (SRS) — ISO 29148, testable ids, tracing.
 
 # SRS Writing
 
@@ -284,7 +284,7 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 # skill: diagram-figures
 
-Use when an architecture, data-flow or concept figure must look designed for a proposal, slide, print or sign-off.
+Use when an architecture or concept figure must look designed for a proposal, slide, print or sign-off.
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
 
@@ -454,6 +454,7 @@ python assets/render-figure.py figure.html figure.png 2
 
 ```bash
 python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
+python scripts/check-figure-source.py docs/figures/src       # ทุกรูปเริ่มจากโครงของ skill นี้
 ```
 
 จากนั้นเปิดไฟล์ภาพดูด้วยตา แล้วไล่ตามนี้:
@@ -962,7 +963,7 @@ Kubernetes ของจริง แบบผังอ้างอิงที�
 
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
+Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
 
 # Spell Out Abbreviations
 

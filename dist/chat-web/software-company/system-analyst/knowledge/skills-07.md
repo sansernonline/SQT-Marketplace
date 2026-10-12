@@ -1,6 +1,6 @@
 # skill: document-naming
 
-Use when creating, renaming or filing a document a team or client keeps (format, file name pattern, version vs status).
+Use when creating, renaming or filing a document a team or client keeps (file name, version, status).
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 
@@ -168,7 +168,7 @@ Use when creating, renaming or filing a document a team or client keeps (format,
 
 # skill: i18n-and-locale
 
-Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, Thai sorting, time zones).
+Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, sorting).
 
 # ภาษาและรูปแบบท้องถิ่น
 
@@ -361,7 +361,7 @@ locales/
 
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data). Append-only audit log.
+Use when a system must show who did what and when (approvals, money, permissions, personal data).
 
 # ร่องรอยการใช้งาน (audit trail)
 

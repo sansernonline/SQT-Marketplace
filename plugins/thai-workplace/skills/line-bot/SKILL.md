@@ -1,6 +1,6 @@
 ---
 name: line-bot
-description: Build or improve the customer-reply bot on the company LINE OA — intents, knowledge-base answers, human handoff.
+description: Build or improve the customer-reply bot on the company LINE OA — intents, answers, human handoff.
 argument-hint: '[what customers ask about, or "improve existing"]'
 disable-model-invocation: true
 ---

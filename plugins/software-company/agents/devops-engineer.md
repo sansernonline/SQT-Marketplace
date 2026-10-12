@@ -1,6 +1,6 @@
 ---
 name: devops-engineer
-description: Use when setting up CI/CD, Dockerfiles, Kubernetes, monitoring and logging, automated deployments, infrastructure-as-code, or troubleshooting production.
+description: Use when setting up CI/CD, Docker, Kubernetes, monitoring, deployments, infrastructure-as-code or SDK/toolchain setup.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---
@@ -80,7 +80,7 @@ If touching production, **always have rollback plan ready first**.
 - `incident-runbook-template` — เมื่อเขียน runbook ให้คนเข้าเวรที่ถูกปลุกตอนตี 3 ทำตามได้
 - `logging-standards` — เมื่อวาง log pipeline, retention หรือ redaction
 - `web-service-essentials` — เมื่อตั้ง health check, probe, timeout หรือ graceful shutdown
-- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (impact first, one question) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
+- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
 - `docker-sandbox` — ตั้ง sandbox แยกต่อโปรเจกต์บน Docker Desktop: โหมด mount · isolated · locked และสิ่งที่ห้าม mount
 - `cicd-and-release` — เมื่อตั้งหรือรื้อ pipeline เลือกวิธีปล่อยเวอร์ชันใหม่ หรือซ้อม rollback
 - `config-and-secrets` — เมื่อวางที่เก็บ secret กำหนดสิทธิ์เข้าถึง หรือรอบเปลี่ยนค่า secret

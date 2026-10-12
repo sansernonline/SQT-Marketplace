@@ -1,6 +1,6 @@
 # skill: background-jobs
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries, dead letter queue.
+Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries.
 
 # งานเบื้องหลัง
 
@@ -186,7 +186,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data). Append-only audit log.
+Use when a system must show who did what and when (approvals, money, permissions, personal data).
 
 # ร่องรอยการใช้งาน (audit trail)
 
@@ -371,7 +371,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
+Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -588,7 +588,7 @@ Use when software stores personal data of people in Thailand (PDPA — consent, 
 
 # skill: cicd-and-release
 
-Use when setting up or fixing a build and deploy pipeline or deciding how a project ships (gates, promotion, rollback).
+Use when setting up or fixing a build and deploy pipeline or deciding how a project ships.
 
 # CI/CD และการปล่อยของ
 

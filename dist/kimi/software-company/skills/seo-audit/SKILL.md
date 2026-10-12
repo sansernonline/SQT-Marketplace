@@ -1,6 +1,6 @@
 ---
 name: "seo-audit"
-description: "Run an SEO audit with the seo-specialist agent and seo-audit-checklist skill — technical, on-page, content, off-page."
+description: "Run an SEO audit with the seo-specialist agent — technical, on-page, content, off-page."
 disableModelInvocation: true
 ---
 

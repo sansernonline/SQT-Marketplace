@@ -185,7 +185,7 @@ def test_refund_limit(amount_satang: int, allowed: bool) -> None:
 
 # skill: stack-sql
 
-Use when writing or reviewing SQL queries, stored procedures or data-change scripts for SQL Server or PostgreSQL.
+Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
@@ -410,7 +410,7 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
+Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
 # ข้อตกลงของ API
 
@@ -694,7 +694,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: data-import-export
 
-Use when a system imports or exports Excel or CSV data. Validate before write, row errors, Thai data and Buddhist years.
+Use when a system imports or exports Excel or CSV. Validate before write, row errors, Buddhist years.
 
 # นำเข้าและส่งออกข้อมูล
 

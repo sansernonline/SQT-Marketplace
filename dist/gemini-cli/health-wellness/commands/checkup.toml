@@ -1,2 +1,2 @@
-description = "Plan an annual checkup by age and sex, check what social security or gold card covers, log results for trends."
+description = "Plan an annual checkup by age and sex, check social security or gold card cover, log results."
 prompt = "Run the `health-organizer` agent with the `annual-checkup` skill: **{{args}}**\n\n- `plan` — list the checkup items for the age/sex band, mark which are free under the user's scheme (verify), and draft the booking checklist\n- `log` — add this year's results (value, unit, reference range printed on the report) to the results table\n- `trend` — show the results table across years and list questions for the doctor; never label a result normal or abnormal\n\nEmergency symptoms → 1669 first.\n"

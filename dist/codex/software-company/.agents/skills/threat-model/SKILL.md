@@ -1,6 +1,6 @@
 ---
 name: "threat-model"
-description: "Run STRIDE threat modelling on a feature or system with the security-engineer agent, with mitigations."
+description: "Run STRIDE threat modelling on a feature or system with the security-engineer agent."
 ---
 
 Use the `security-engineer` agent to perform STRIDE threat modeling on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

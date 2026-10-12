@@ -185,7 +185,7 @@ def test_refund_limit(amount_satang: int, allowed: bool) -> None:
 
 # skill: stack-sql
 
-Use when writing or reviewing SQL queries, stored procedures or data-change scripts for SQL Server or PostgreSQL.
+Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
@@ -410,7 +410,7 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 # skill: e2e-testing-patterns
 
-Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running them in CI.
+Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in CI.
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 
@@ -805,7 +805,7 @@ test('user sees orders', async ({ page, request }) => {
 
 # skill: spec-to-code-loop
 
-Use when building from a spec and mockups as a loop (failing test, code, check screen, record progress).
+Use when building from a spec and mockups as a loop (failing test, code, check screen, record).
 
 > **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
 
@@ -1026,7 +1026,7 @@ page.screenshot(path="_to_delete/check/login.png")
 
 # skill: app-verifier-setup
 
-Use when a project has no scripted way for an agent to run the app and see results, or before the first feature.
+Use when a project has no scripted way for an agent to run the app and see results, or before feature one.
 
 # app-verifier-setup — ให้ agent มีมือและตา
 
@@ -1164,7 +1164,7 @@ Use when a project has no scripted way for an agent to run the app and see resul
 
 # skill: principle-build-a-tool-not-handwork
 
-Use when work has a mechanical part (same edit in many files, checking every screen, data migration). Build a script instead.
+Use when work has a mechanical part (same edit in many files, every screen, migration). Script it.
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
 

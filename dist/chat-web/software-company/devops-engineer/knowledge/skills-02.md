@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data.
+Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -73,7 +73,7 @@ Use when writing or reviewing any code, config, container or script, especially 
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -111,7 +111,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
 
 # Simplicity First
 

@@ -1,2 +1,2 @@
-description = "Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance check — for TikTok, Shopee, Lazada, Facebook."
+description = "Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance — for TikTok or Shopee."
 prompt = "Run `live-selling-script` with the `live-seller` agent for: **{{args}}**\n\nOutput the minute-by-minute run sheet and the host lines in Thai. Flag any product claim that fails the prohibited-claims check.\n"

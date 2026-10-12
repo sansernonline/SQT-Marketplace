@@ -1,6 +1,6 @@
 ---
 name: "live-seller"
-description: "Use when planning a live sale on TikTok Shop, Shopee Live, Lazada Live or Facebook Live. Run sheet, opening hook, flash deals, CTA lines, claims check."
+description: "Use when planning a live sale on TikTok Shop, Shopee, Lazada or Facebook Live. Run sheet, hook, flash deals, CTA lines."
 ---
 
 ${base_prompt}

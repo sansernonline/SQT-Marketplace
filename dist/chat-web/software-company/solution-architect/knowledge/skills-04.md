@@ -1,6 +1,6 @@
 # skill: prior-art-review
 
-Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
+Use when about to build something that may already exist (library, model, product). Adopt or build.
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 
@@ -24,6 +24,7 @@ Use when about to build something that may already exist (library, model, produc
 | แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` |
 | เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` |
 | ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | `adr-writer` |
+| ค้นคว้าเรื่องทั่วไป (เทคโนโลยี · ตลาด) ที่ไม่ได้จบที่การเลือกของมาใช้ | (ถ้าติดตั้ง plugin `superuser`) playbook `research` ไม่มีก็ใช้ skill นี้หรือ `reference-app-research` ตามที่ใกล้กว่า |
 
 ---
 
@@ -182,13 +183,15 @@ Use when about to build something that may already exist (library, model, produc
 
 # skill: parallel-attempts-pick-best
 
-Use when one attempt could lock in the wrong shape (design, interface, algorithm, mockup) or the user says try several or bake-off.
+Use when one attempt could lock in the wrong shape (design, interface, mockup) or the user says bake-off.
 
 # parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด
 
 > ทางแรกที่คิดได้มักไม่ใช่ทางที่ดีที่สุด แต่ถ้าลงมือไปแล้วจะไม่มีใครย้อนกลับมาลองทางอื่น
 
 มาจาก `arena` ของ pstack
+
+แค่อยากได้ทางเลือกบนกระดาษก่อนลงมือ ไม่ต้องสร้างจริง → agent `brainstormer`
 
 ก่อนเริ่มให้เปิด todo 1 ข้อต่อ 1 ขั้น
 
@@ -238,7 +241,7 @@ Use when one attempt could lock in the wrong shape (design, interface, algorithm
 
 # skill: adversarial-review-panel
 
-Use when asked for adversarial review, stress test or blind spots, or before shipping a contested design or large diff.
+Use when asked for adversarial review, stress test or blind spots, or before shipping a contested diff.
 
 # adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
 
@@ -251,7 +254,7 @@ Use when asked for adversarial review, stress test or blind spots, or before shi
 
 1. **ขอบเขต** — diff (`git diff main...HEAD`) หรือไฟล์ที่ระบุ รวมไฟล์รอบข้างที่ต้องอ่านประกอบ ถ้ายังไม่มี commit (โปรเจกต์ใหม่ หรือผู้ใช้ห้าม commit) ให้ใช้รายการไฟล์ที่สร้างหรือแก้ในรอบนี้ (`git status --short` หรือรายการไฟล์ใต้ `lib/` `src/` `test/`) แทน diff
 2. **เจตนา** — เขียน 1 ย่อหน้าว่างานนี้ตั้งใจทำอะไร โดยดูจากคำขอ · commit · PR · โค้ด ถ้าไม่แน่ใจให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วจดลง [`decision-log`](../decision-log/SKILL.md) โดยไม่หยุดถาม
-3. **ตั้งคณะ 3 คน ต่างมุมกัน** — ใน Claude Code โมเดลทุกตัวมาจากค่ายเดียวกัน ความต่างจึงต้องมาจากมุมที่สั่งให้ดู และการผสมโมเดลหลายขนาด
+3. **ตั้งคณะ 3 คน ต่างมุมกัน** (แต่ละคนคือ agent `reviewer` ตัวใหม่ อ่านอย่างเดียว · งานชิ้นเดียวที่ไม่เสี่ยงใช้ `reviewer` ตัวเดียวพอ) — ใน Claude Code โมเดลทุกตัวมาจากค่ายเดียวกัน ความต่างจึงต้องมาจากมุมที่สั่งให้ดู และการผสมโมเดลหลายขนาด
 
    | รีวิวเวอร์ | มุม | ระดับโมเดล |
    |---|---|---|
@@ -267,7 +270,7 @@ Use when asked for adversarial review, stress test or blind spots, or before shi
 4. **ปล่อยพร้อมกัน อ่านอย่างเดียว** — ทุกคนได้ prompt และเจตนาเดียวกัน ต่างกันแค่มุม ให้ส่งผลเป็นตาราง `| ปัญหา | ไฟล์:บรรทัด | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` และ **ห้ามแก้ไฟล์**
 5. **ยืนยันทุกข้อ** — อ่านโค้ดจริงหรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติด `PLAUSIBLE` (เป็นไปได้ แต่ยังพิสูจน์ไม่ได้) หรือทิ้งพร้อมเหตุผล ส่วนข้อ `PLAUSIBLE` ให้ตัดสินเองโดยเลือกทางที่ผลกระทบน้อยสุด แล้วจดลงรายการ ยกเว้นเรื่องในรายการ "รออนุมัติ" ของ `superuser` (ลบหรือเขียนทับของผู้ใช้ · commit/push · ส่งออกนอกเครื่อง) ให้เตรียมไว้และจดลงรายการ ไม่ทำเอง
 6. **ให้น้ำหนัก** — ถ้า 2 คนขึ้นไปเจอเรื่องเดียวกัน ถือเป็นสัญญาณแรง ถ้าเจอคนเดียวแต่มีขั้นตอนทำให้พังชัด ก็ถือว่าจริง ส่วนความเห็นเรื่องรสนิยมเป็นแค่ข้อสังเกต
-7. **คำตัดสิน** — 1 บรรทัด: `ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง` แล้วตามด้วยรายการ: ต้องแก้ · ควรแก้ · ข้อสังเกต · ข้อที่ทิ้งพร้อมเหตุผล
+7. **คำตัดสิน** — 1 บรรทัด: `ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง` แล้วตามด้วยรายการ: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) · ข้อที่ทิ้งพร้อมเหตุผล
 8. การสั่งแก้ต่อเป็นหน้าที่ของผู้ใช้หรือ playbook ส่วน skill นี้หยุดที่คำตัดสิน
 
 ## ข้อควรระวัง

@@ -78,7 +78,7 @@ playbook `learning-path` · agent `tech-mentor` · skill `learning-path` · `eng
 
 ## 3. เริ่มจากศูนย์หรือเปลี่ยนสายมาเขียนโปรแกรม ยังเลือกสายไม่ได้
 
-ไม่มี playbook ที่ตรง → ทำตาม skill `superuser` หัวข้อ 2 แถว "ใหญ่ หรือโจทย์ไม่ชัด" (brainstorm 2–3 ทาง → ให้คะแนน → `docs/BRIEF.md`) แล้วใช้ playbook `learning-path` กับทางที่เลือก · agent `tech-mentor` · skill `learning-path` · `answer-shape`
+ไม่มี playbook ที่ตรง → ทำตาม skill `superuser` หัวข้อ 2 แถว "ใหญ่ หรือโจทย์ไม่ชัด" (`brainstormer` ตัวใหม่เสนอ 2–3 ทาง → `docs/BRIEF.md`) แล้วใช้ playbook `learning-path` กับทางที่เลือก · agent `tech-mentor` · skill `learning-path` · `answer-shape`
 **ผลลัพธ์:** `docs/BRIEF.md` (ทางที่เลือกและเหตุผล) · `paths/<สาย>/README.md` · **รออนุมัติ:** สมัครคอร์สหรือ bootcamp ที่เสียเงิน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -107,7 +107,7 @@ playbook `learning-path` · agent `tech-mentor` · skill `learning-path` · `eng
 
 ## 4. ตรวจงานเรียนรู้ก่อนใช้
 
-playbook `review` · agent `tech-mentor` + agent ตัวใหม่
+playbook `review` · agent `reviewer` ตัวใหม่ (ความรู้เฉพาะเรื่องจาก `tech-mentor` ตัวใหม่ ถ้าต้องใช้)
 **ผลลัพธ์:** คำตัดสิน `ผ่าน / แก้ก่อนใช้` · **ไม่แก้ไฟล์เอง**
 
 ### ข้อมูล (ผู้ใช้กรอก)

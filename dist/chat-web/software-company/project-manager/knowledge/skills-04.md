@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
+Use when a task that produces or checks project work ends (document, review, code, fix, release).
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -146,7 +146,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 # skill: owner-style-capture
 
-Use when the user wants agents to work their way (learn my style, capture how I work) or keeps correcting the same preferences.
+Use when the user wants agents to work their way (learn my style) or keeps correcting the same preferences.
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง
 
@@ -192,7 +192,7 @@ Use when the user wants agents to work their way (learn my style, capture how I 
 
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible actions for approval.
+Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 

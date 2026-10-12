@@ -1,6 +1,6 @@
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
+Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
 
 # Spell Out Abbreviations
 
@@ -81,7 +81,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 
@@ -312,7 +312,7 @@ jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
+Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 

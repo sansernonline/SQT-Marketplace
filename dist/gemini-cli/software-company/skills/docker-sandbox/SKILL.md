@@ -1,6 +1,6 @@
 ---
 name: docker-sandbox
-description: Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
+description: Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
 ---
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์

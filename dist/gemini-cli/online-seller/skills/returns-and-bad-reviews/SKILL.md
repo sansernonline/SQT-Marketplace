@@ -1,6 +1,6 @@
 ---
 name: returns-and-bad-reviews
-description: Use when a Thai online seller gets a return, refund request, dispute or 1-3 star review. Refund vs replace vs dispute.
+description: Use when a Thai online seller gets a return, refund request, dispute or 1-3 star review.
 ---
 
 # Returns and Bad Reviews

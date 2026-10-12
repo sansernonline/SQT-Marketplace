@@ -1,6 +1,6 @@
 ---
 name: product-listing
-description: Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, keywords, banned claims).
+description: Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop or LINE (title, banned claims).
 ---
 
 # Product Listing (Thai marketplaces)

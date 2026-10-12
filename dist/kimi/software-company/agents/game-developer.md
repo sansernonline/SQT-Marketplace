@@ -1,6 +1,6 @@
 ---
 name: "game-developer"
-description: "Use when programming games — Unity, Unreal, Godot or custom engines, gameplay, rendering, ECS, multiplayer netcode, matchmaking and anti-cheat."
+description: "Use when programming games — Unity, Unreal, Godot, gameplay, rendering, ECS, multiplayer netcode, anti-cheat."
 ---
 
 ${base_prompt}

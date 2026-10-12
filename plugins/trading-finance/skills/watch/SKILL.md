@@ -1,6 +1,6 @@
 ---
 name: watch
-description: Add, review or clean the stock watchlist with the watchlist-setup skill — thesis, entry zone and alerts per symbol.
+description: Add, review or clean the stock watchlist — thesis, entry zone and alerts per symbol.
 argument-hint: <add|review|clean> [symbol or notes]
 disable-model-invocation: true
 ---

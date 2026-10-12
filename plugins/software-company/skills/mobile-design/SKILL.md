@@ -1,6 +1,6 @@
 ---
 name: mobile-design
-description: Design mobile app architecture or audit an App Store or Play Store listing (mobile-architecture or aso-audit).
+description: Design mobile app architecture or audit an App Store or Play Store listing.
 argument-hint: <mobile-architecture | aso-audit> <details>
 disable-model-invocation: true
 ---

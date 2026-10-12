@@ -1,6 +1,6 @@
 ---
 name: "quotation"
-description: "Draft a Thai quotation, invoice or receipt — VAT, total in digits and Thai words, payment terms — as .docx."
+description: "Draft a Thai quotation, invoice or receipt — VAT, total in Thai words, payment terms — as .docx."
 disableModelInvocation: true
 ---
 

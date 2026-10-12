@@ -1,6 +1,6 @@
 ---
 name: "subscriptions"
-description: "Audit recurring charges from statements — cost per use, cancel, downgrade or keep, exact cancel steps, trial-end reminders."
+description: "Audit recurring charges — cost per use, cancel, downgrade or keep, cancel steps, trial-end reminders."
 ---
 
 Run the `subscription-audit` skill with the `life-admin` agent on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

@@ -1,6 +1,6 @@
 ---
 name: polished-document-style
-description: Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+description: Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 ---
 
 # Polished Document Style

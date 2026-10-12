@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
+Use when a task that produces or checks project work ends (document, review, code, fix, release).
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -146,7 +146,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 
@@ -588,7 +588,7 @@ Word วาดเส้นขอบไล่สีไม่ได้ ถ้า�
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

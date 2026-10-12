@@ -1,6 +1,6 @@
 # skill: shipping-compare
 
-Use when a Thai online seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX) on cost, COD and volumetric weight.
+Use when a Thai seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX) on cost, COD, weight.
 
 # Shipping Compare
 

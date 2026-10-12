@@ -1,6 +1,6 @@
 ---
 name: reference-app-research
-description: Use when someone says I want an app like X. Researches that product and its competitors into one doc.
+description: Use when someone says I want an app like X. Researches it and its competitors into one doc.
 ---
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร
@@ -15,6 +15,7 @@ description: Use when someone says I want an app like X. Researches that product
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | เลือกไลบรารี เครื่องมือ หรือโมเดลที่จะหยิบมาใช้ แทนการทำเอง | `prior-art-review` |
+| ค้นคว้าเรื่องทั่วไป (เทคโนโลยี · ตลาด) ที่ไม่ใช่แอปตัวเดียว | (ถ้าติดตั้ง plugin `superuser`) playbook `research` ไม่มีก็ใช้ skill นี้หรือ `prior-art-review` ตามที่ใกล้กว่า |
 
 ## 1 · ก่อนค้น — ตั้งกรอบให้แคบ
 

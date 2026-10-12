@@ -1,6 +1,6 @@
 ---
 name: marketplace-fees-pricing
-description: Use when a Thai seller asks what to charge, why a product loses money, or how Shopee, Lazada and TikTok Shop fees compare.
+description: Use when a Thai seller asks what to charge, why a product loses money, or how marketplace fees compare.
 ---
 
 # Marketplace Fees and Pricing

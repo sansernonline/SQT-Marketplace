@@ -1,6 +1,6 @@
 ---
 name: test-case-template
-description: Use when writing test cases, scenarios or a feature test plan, or turning acceptance criteria into tests.
+description: Use when writing test cases or a feature test plan, or turning acceptance criteria into tests.
 ---
 
 # Test Case Template

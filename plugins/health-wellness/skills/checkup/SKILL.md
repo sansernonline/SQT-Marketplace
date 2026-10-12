@@ -1,6 +1,6 @@
 ---
 name: checkup
-description: Plan an annual checkup by age and sex, check what social security or gold card covers, log results for trends.
+description: Plan an annual checkup by age and sex, check social security or gold card cover, log results.
 argument-hint: <plan|log|trend> [age] [sex] [scheme — sso|gold|civil|private]
 disable-model-invocation: true
 ---

@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when building a slide deck someone will present or read (story order, headlines, layouts, Thai typography).
+description: Use when building a slide deck someone will present or read (story, headlines, layouts, Thai type).
 ---
 
 # Presentation Design

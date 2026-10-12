@@ -1,6 +1,6 @@
 ---
 name: file-upload-and-storage
-description: Use when users upload files or the system stores and serves them (type and size checks, virus scan, private links).
+description: Use when users upload files or the system stores and serves them (type checks, virus scan, links).
 ---
 
 # รับไฟล์อัปโหลดและการเก็บไฟล์

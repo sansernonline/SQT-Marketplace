@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
+description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
 ---
 
 # Markdown Visuals

@@ -1,6 +1,6 @@
 ---
 name: code-gardener
-description: Use when patrolling a codebase for misleading patterns (duplication, wrong-layer calls, dead code, naming drift) or the user says garden.
+description: Use when patrolling a codebase for misleading patterns (duplication, dead code, naming drift) or says garden.
 ---
 
 # code-gardener — คนสวนที่จดก่อน ยังไม่ตัด

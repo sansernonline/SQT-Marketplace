@@ -10,7 +10,7 @@ Use the `qa-tester` agent to create a complete bug report for: **สิ่งท
 The tester should:
 
 1. Apply the `bug-report-template` skill
-2. Ask clarifying questions to gather missing info:
+2. Gather missing info in one question at the start (unknown → `(รอยืนยัน)`, keep going):
    - Steps to reproduce (exact)
    - Environment details
    - Expected vs actual behavior

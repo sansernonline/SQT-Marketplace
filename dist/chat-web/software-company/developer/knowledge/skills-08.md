@@ -1,6 +1,6 @@
 # skill: project-doc-set
 
-Use when a new project needs its document set decided (which docs, order, readers, where docs, mockups and QA live).
+Use when a new project needs its document set decided (which docs, order, where docs and mockups live).
 
 # ชุดเอกสารโปรเจกต์
 
@@ -508,7 +508,7 @@ Thanks to: @alice, @bob, @charlie
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
+Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -614,7 +614,7 @@ Use when a task writes temporary files (archives, extracts, previews, backups, o
 
 # skill: code-gardener
 
-Use when patrolling a codebase for misleading patterns (duplication, wrong-layer calls, dead code, naming drift) or the user says garden.
+Use when patrolling a codebase for misleading patterns (duplication, dead code, naming drift) or says garden.
 
 # code-gardener — คนสวนที่จดก่อน ยังไม่ตัด
 
@@ -1410,7 +1410,7 @@ erDiagram
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -1617,7 +1617,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible actions for approval.
+Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 

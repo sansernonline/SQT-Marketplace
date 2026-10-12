@@ -1,6 +1,6 @@
 ---
 name: incident-response
-description: Guide a live incident with the devops-engineer agent — detect, triage, mitigate, resolve, then the postmortem.
+description: Guide a live incident with the devops-engineer agent — triage, mitigate, resolve, postmortem.
 argument-hint: <incident description, e.g., "users can't login since 14:00 UTC">
 disable-model-invocation: true
 ---

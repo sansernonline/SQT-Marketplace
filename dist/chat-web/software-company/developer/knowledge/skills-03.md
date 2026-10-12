@@ -1,6 +1,6 @@
 # skill: decision-log
 
-Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step).
+Use when an agent makes its own judgment call in long or unattended work (approach, gap, skipped step).
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -56,7 +56,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: status-report
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
+Use when a task that produces or checks project work ends (document, review, code, fix, release).
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -202,7 +202,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 # skill: work-session-context
 
-Use when project work starts or ends, before switching AI model, handing work to a person or bot, or an inbox message lands.
+Use when project work starts or ends, before switching model, handing work over, or an inbox message lands.
 
 > **ใน SuperUser:** หัวหน้าทีมเป็นคนเดียวที่เขียน `CONTEXT.md` · `IMPROVEMENTS.md` และย้ายไฟล์ใน `inbox/` (log เขียนโดย hook · `learn/` โดย `learning-reviewer` ตามตารางข้อ 1) ส่วนการหยุดและรับงานต่อให้เดินตาม playbook [`pickup-and-pause`](../superuser/references/playbook-pickup-and-pause.md)
 
@@ -355,7 +355,7 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 

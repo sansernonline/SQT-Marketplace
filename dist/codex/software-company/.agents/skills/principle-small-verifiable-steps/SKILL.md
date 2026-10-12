@@ -1,6 +1,6 @@
 ---
 name: principle-small-verifiable-steps
-description: Use when work has many steps (migration, sweep, many similar edits, unattended run) or stacking commits or PRs.
+description: Use when work has many steps (migration, sweep, many similar edits, unattended run, stacked PRs).
 ---
 
 # principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น

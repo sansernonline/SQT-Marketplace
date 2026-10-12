@@ -1,6 +1,6 @@
 ---
 name: pdpa-workflow
-description: Use when a Thai SME runs PDPA paperwork (consent form, ROPA, data-subject requests, breach notice, vendor checks). Not legal advice.
+description: Use when a Thai SME runs PDPA paperwork (consent, ROPA, data-subject requests, breach notice).
 ---
 
 # PDPA Workflow for Thai SMEs

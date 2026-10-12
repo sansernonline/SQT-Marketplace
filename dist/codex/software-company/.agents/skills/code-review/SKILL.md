@@ -1,13 +1,13 @@
 ---
 name: "code-review"
-description: "Run a code review with the developer agent and the code-review-checklist skill."
+description: "Run a code review with a fresh reviewer agent and the code-review-checklist skill."
 ---
 
 > **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `review` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
 
-Use the `developer` agent to perform a thorough code review of: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
+Use a new `reviewer` agent (read-only) to perform a thorough code review of: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง** · high-stakes or contested change → `adversarial-review-panel`
 
-The developer should:
+The reviewer should:
 
 1. Read the file(s) or diff to understand the change
 2. Apply the `code-review-checklist` skill systematically

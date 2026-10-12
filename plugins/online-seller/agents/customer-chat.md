@@ -1,6 +1,6 @@
 ---
 name: customer-chat
-description: Use when a Thai online seller must answer a customer — price, stock, late or damaged parcel, refund, haggling, bad review. Polite Thai replies, platform-safe.
+description: Use when a Thai online seller must answer a customer — price, stock, late parcel, refund, haggling, bad review.
 tools: Read, Write, Edit, Skill
 model: sonnet
 ---

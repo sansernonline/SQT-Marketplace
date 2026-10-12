@@ -1,6 +1,6 @@
 ---
 name: "maintenance"
-description: "Build or update the home maintenance schedule for the next 12 months, or compare contractor quotes for one job."
+description: "Build the home maintenance schedule for the next 12 months, or compare contractor quotes."
 ---
 
 Run `home-maintenance` with the `home-manager` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

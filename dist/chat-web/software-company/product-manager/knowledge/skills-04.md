@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
 
 # Markdown Visuals
 
@@ -279,7 +279,7 @@ Don't force everything into one format. Each format is best at something differe
 
 # Inline SVG snippets
 
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 
@@ -363,7 +363,7 @@ This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the 
 
 # skill: prior-art-review
 
-Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
+Use when about to build something that may already exist (library, model, product). Adopt or build.
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 
@@ -387,6 +387,7 @@ Use when about to build something that may already exist (library, model, produc
 | แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` |
 | เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` |
 | ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | `adr-writer` |
+| ค้นคว้าเรื่องทั่วไป (เทคโนโลยี · ตลาด) ที่ไม่ได้จบที่การเลือกของมาใช้ | (ถ้าติดตั้ง plugin `superuser`) playbook `research` ไม่มีก็ใช้ skill นี้หรือ `reference-app-research` ตามที่ใกล้กว่า |
 
 ---
 

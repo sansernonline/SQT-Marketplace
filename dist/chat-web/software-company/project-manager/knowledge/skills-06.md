@@ -1,6 +1,6 @@
 # skill: session-lessons-to-skills
 
-Use when a long or hard task has landed, the user says reflect or what did we learn, or a skill misled.
+Use when a hard task has landed, the user says reflect or what did we learn, or a skill misled.
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
 
@@ -49,7 +49,7 @@ Use when a long or hard task has landed, the user says reflect or what did we le
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -256,7 +256,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 # skill: document-naming
 
-Use when creating, renaming or filing a document a team or client keeps (format, file name pattern, version vs status).
+Use when creating, renaming or filing a document a team or client keeps (file name, version, status).
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 

@@ -1,2 +1,2 @@
-description = "Record a big decision in the decision journal — options, reasoning, expected outcome — and schedule the revisit."
+description = "Record a big decision in the decision journal — options, reasoning, expected outcome, revisit date."
 prompt = "Run the `decision-journal` skill for: **{{args}}**\n\nConfirms options considered and expected outcome, writes the dated entry, and sets the check-in reminder.\n"

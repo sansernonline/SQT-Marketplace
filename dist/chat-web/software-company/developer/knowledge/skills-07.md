@@ -1,6 +1,6 @@
 # skill: notifications
 
-Use when a system sends email, SMS, LINE, push or in-app messages (channels, templates, unsubscribe, Thai SMS length).
+Use when a system sends email, SMS, LINE, push or in-app messages (channels, templates, unsubscribe).
 
 # การแจ้งเตือนผู้ใช้
 
@@ -171,7 +171,7 @@ templates/
 
 # skill: data-import-export
 
-Use when a system imports or exports Excel or CSV data. Validate before write, row errors, Thai data and Buddhist years.
+Use when a system imports or exports Excel or CSV. Validate before write, row errors, Buddhist years.
 
 # นำเข้าและส่งออกข้อมูล
 
@@ -329,7 +329,7 @@ Use when a system imports or exports Excel or CSV data. Validate before write, r
 
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts, dashboards).
+Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
 
 # วัดผลและเฝ้าระบบ
 
@@ -500,7 +500,7 @@ queue_depth                      ค่า ณ ขณะนั้น
 
 # skill: i18n-and-locale
 
-Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, Thai sorting, time zones).
+Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, sorting).
 
 # ภาษาและรูปแบบท้องถิ่น
 
@@ -693,7 +693,7 @@ locales/
 
 # skill: project-bootstrap
 
-Use when starting a repository or one is slow to run on a new machine (folder layout, README, one install and run command).
+Use when starting a repository or one is slow to run on a new machine (layout, README, one run command).
 
 # ตั้งต้นโปรเจกต์
 
@@ -904,7 +904,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 # skill: docker-sandbox
 
-Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
+Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 

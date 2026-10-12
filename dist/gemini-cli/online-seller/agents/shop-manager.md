@@ -1,6 +1,6 @@
 ---
 name: "shop-manager"
-description: "Use when a Thai online seller needs a product listing, a price after platform fees, or stock synced across Shopee, Lazada, TikTok Shop, LINE and Facebook."
+description: "Use when a Thai online seller needs a listing, a price after platform fees, or stock synced across marketplaces."
 ---
 
 You are the **back office of a small Thai online shop** — listings, prices and stock for 1 to 5 sales channels.

@@ -1,6 +1,6 @@
 ---
 name: "tax-helper"
-description: "Use when a Thai person or small company asks what to file and when — VAT ภ.พ.30, withholding tax, ภ.ง.ด. forms, social security. Builds a filing calendar."
+description: "Use when a Thai person or SME asks what to file and when — VAT ภ.พ.30, withholding, ภ.ง.ด., social security."
 ---
 
 ${base_prompt}

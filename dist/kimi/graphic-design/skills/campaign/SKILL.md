@@ -1,6 +1,6 @@
 ---
 name: "campaign"
-description: "Plan and produce a campaign set from one concept — asset matrix, master asset first, derivation order, check per asset."
+description: "Plan and produce a campaign set from one concept — asset matrix, master asset first, check per asset."
 disableModelInvocation: true
 ---
 

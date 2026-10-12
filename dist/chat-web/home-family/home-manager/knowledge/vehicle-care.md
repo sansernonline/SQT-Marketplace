@@ -1,6 +1,6 @@
 # skill: vehicle-care
 
-Use when a Thai family owns a car or motorbike (compulsory insurance, annual tax, inspection, servicing, licence renewal).
+Use when a Thai family owns a car or motorbike (compulsory insurance, annual tax, inspection, servicing).
 
 # Vehicle Care (Thailand)
 

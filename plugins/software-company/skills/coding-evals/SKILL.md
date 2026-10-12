@@ -1,6 +1,6 @@
 ---
 name: coding-evals
-description: Use when changing coding skills, playbooks or the developer agent, or asked whether the team codes better.
+description: Use when changing coding skills, playbooks or the developer agent, or asked if the team codes better.
 ---
 
 # coding-evals — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริง

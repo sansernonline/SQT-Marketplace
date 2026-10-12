@@ -1,6 +1,6 @@
 # skill: salary-negotiation
 
-Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand.
+Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers.
 
 # Salary Negotiation (Thailand)
 

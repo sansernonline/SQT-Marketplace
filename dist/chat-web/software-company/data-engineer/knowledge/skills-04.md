@@ -1,6 +1,6 @@
 # skill: background-jobs
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries, dead letter queue.
+Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries.
 
 # งานเบื้องหลัง
 
@@ -186,7 +186,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts, dashboards).
+Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
 
 # วัดผลและเฝ้าระบบ
 
@@ -357,7 +357,7 @@ queue_depth                      ค่า ณ ขณะนั้น
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

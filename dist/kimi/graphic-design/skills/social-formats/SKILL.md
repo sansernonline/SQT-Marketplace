@@ -1,6 +1,6 @@
 ---
 name: social-formats
-description: Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA, X or LinkedIn. Sizes, ratios and safe zones.
+description: Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA or X. Sizes, ratios, safe zones.
 ---
 
 # Social Formats

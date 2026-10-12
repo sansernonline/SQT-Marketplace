@@ -1,6 +1,6 @@
 ---
 name: branded-document-design
-description: Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+description: Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 ---
 
 # Branded Document Design

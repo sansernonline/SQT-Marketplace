@@ -1,6 +1,6 @@
 ---
 name: project-doc-set
-description: Use when a new project needs its document set decided (which docs, order, readers, where docs, mockups and QA live).
+description: Use when a new project needs its document set decided (which docs, order, where docs and mockups live).
 ---
 
 # ชุดเอกสารโปรเจกต์

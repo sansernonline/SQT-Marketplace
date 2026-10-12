@@ -1,6 +1,6 @@
 # skill: seller-tax-basics
 
-Use when a Thai individual selling online asks about tax (40(8) income, deemed expenses, PND 90 and 94, VAT threshold).
+Use when a Thai individual selling online asks about tax (40(8), deemed expenses, PND 90 and 94, VAT).
 
 # Seller Tax Basics (Thai individual online seller)
 

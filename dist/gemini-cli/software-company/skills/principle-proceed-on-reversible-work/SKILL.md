@@ -1,6 +1,6 @@
 ---
 name: principle-proceed-on-reversible-work
-description: Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible actions for approval.
+description: Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
 ---
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย

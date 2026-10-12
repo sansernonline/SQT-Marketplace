@@ -13,7 +13,7 @@ The technical writer should:
    - Channel (in-app, email, blog, GitHub)
    - Time period covered (date range or version range)
 
-2. **Gather inputs:**
+2. **Gather inputs** — source is the commits since the last tag (written per `commit-message-format`) plus `CHANGELOG.md`:
    - Commit log since last release (`git log`)
    - Merged PRs with their descriptions
    - Closed issues/tickets

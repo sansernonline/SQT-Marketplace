@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 
@@ -588,7 +588,7 @@ Word วาดเส้นขอบไล่สีไม่ได้ ถ้า�
 
 # skill: user-story-writer
 
-Use when writing user stories, turning business requirements into stories or refining them (Given-When-Then criteria).
+Use when writing user stories or turning requirements into stories (Given-When-Then criteria).
 
 # User Story Writer
 

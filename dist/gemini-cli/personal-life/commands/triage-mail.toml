@@ -1,2 +1,2 @@
-description = "Triage the inbox into today, this week, delegate and archive with the two-minute rule, via the installed email plugin."
+description = "Triage the inbox into today, this week, delegate and archive, via the installed email plugin."
 prompt = "Run the `inbox-triage` skill over the user's email via their installed email plugin: **{{args}}**\n\nOutput is four buckets with counts; answer-today items get drafted replies one by one, only on request.\n"

@@ -1,6 +1,6 @@
 ---
 name: tax-due
-description: Build the Thai filing calendar for a company or person — which form, which month, which documents — checked with the Revenue Department.
+description: Build the Thai filing calendar for a company or person — which form, which month, which documents.
 argument-hint: '[company|personal] [--month <n>]'
 disable-model-invocation: true
 ---

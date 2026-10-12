@@ -1,6 +1,6 @@
 ---
 name: parallel-attempts-pick-best
-description: Use when one attempt could lock in the wrong shape (design, interface, algorithm, mockup) or the user says try several or bake-off.
+description: Use when one attempt could lock in the wrong shape (design, interface, mockup) or the user says bake-off.
 ---
 
 # parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด
@@ -8,6 +8,8 @@ description: Use when one attempt could lock in the wrong shape (design, interfa
 > ทางแรกที่คิดได้มักไม่ใช่ทางที่ดีที่สุด แต่ถ้าลงมือไปแล้วจะไม่มีใครย้อนกลับมาลองทางอื่น
 
 มาจาก `arena` ของ pstack
+
+แค่อยากได้ทางเลือกบนกระดาษก่อนลงมือ ไม่ต้องสร้างจริง → agent `brainstormer`
 
 ก่อนเริ่มให้เปิด todo 1 ข้อต่อ 1 ขั้น
 

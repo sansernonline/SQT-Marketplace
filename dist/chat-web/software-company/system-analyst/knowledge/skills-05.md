@@ -588,7 +588,7 @@ def upgrade():
 
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
+Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
 # ข้อตกลงของ API
 

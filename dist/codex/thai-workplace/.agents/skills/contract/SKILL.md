@@ -1,6 +1,6 @@
 ---
 name: "contract"
-description: "Draft a basic Thai contract — hire, rent or services — with standard sections and lawyer-review flags."
+description: "Draft a basic Thai contract — hire, rent or services — with standard sections and lawyer flags."
 ---
 
 Run `doc-contract-th` with the `thai-doc-writer` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

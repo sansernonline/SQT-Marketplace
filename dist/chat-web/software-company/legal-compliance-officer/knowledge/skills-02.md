@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
 
 # saas-platform
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: legal-document-systems
 
-Use when software handles legal documents (clause extraction, document automation, e-signature under eIDAS, ESIGN, Thai ETA).
+Use when software handles legal documents (clause extraction, automation, e-signature, Thai ETA).
 
 # legal-document-systems
 

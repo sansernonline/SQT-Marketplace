@@ -1,6 +1,6 @@
 ---
 name: live-script
-description: Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance check — for TikTok, Shopee, Lazada, Facebook.
+description: Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance — for TikTok or Shopee.
 argument-hint: <platform> <length in minutes> <products with price and stock>
 disable-model-invocation: true
 ---

@@ -1,6 +1,6 @@
 ---
 name: "fintech-design"
-description: "Design a financial transaction flow or run a PCI-DSS readiness audit (transaction-flow-design or pci-audit)."
+description: "Design a financial transaction flow or run a PCI-DSS readiness audit."
 disableModelInvocation: true
 ---
 

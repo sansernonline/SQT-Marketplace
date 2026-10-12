@@ -1,6 +1,6 @@
 ---
 name: legacy-spec-recovery
-description: Use when a legacy system has code but no spec and someone wants to change it. As-is spec with evidence, then impact analysis.
+description: Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
 ---
 
 # Legacy Spec Recovery

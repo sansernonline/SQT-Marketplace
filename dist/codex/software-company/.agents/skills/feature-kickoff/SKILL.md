@@ -1,6 +1,6 @@
 ---
 name: "feature-kickoff"
-description: "Start a feature by coordinating BA → SA → Architect → planning. Produces requirements, FSD and architecture."
+description: "Start a feature by coordinating BA → SA → Architect → planning. Requirements, FSD, architecture."
 ---
 
 > **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `feature` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
@@ -12,7 +12,7 @@ You will run a complete feature kickoff workflow. The feature is:
 Execute these steps **in order**, using sub-agents:
 
 1. **Business Analyst** — Use the `business-analyst` agent to:
-   - Ask clarifying questions to the user
+   - Ask the user once at the start, only what would change the whole BRD (other unknowns → `(รอยืนยัน)`, keep going)
    - Produce a Business Requirements Document (BRD) with objective, scope, stakeholders, business rules
    - Write user stories with acceptance criteria into `docs/USER-STORIES.md` (`user-story-writer` — read the file first, continue its IDs, update the index table)
 

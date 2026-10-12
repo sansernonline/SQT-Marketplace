@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 
@@ -588,7 +588,7 @@ Word วาดเส้นขอบไล่สีไม่ได้ ถ้า�
 
 # skill: srs-writing
 
-Use when writing or reviewing a Software Requirements Specification (SRS) — ISO/IEC/IEEE 29148, testable requirements, ids, traceability.
+Use when writing or reviewing a Software Requirements Specification (SRS) — ISO 29148, testable ids, tracing.
 
 # SRS Writing
 
@@ -872,7 +872,7 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
+Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
 
 # Spell Out Abbreviations
 

@@ -1,6 +1,6 @@
 ---
 name: "brand-init"
-description: "Create or rebuild the brand kit — logo rules, colours, type, imagery, voice and 5 templates in one folder."
+description: "Create or rebuild the brand kit — logo rules, colours, type, imagery, voice and 5 templates."
 disableModelInvocation: true
 ---
 

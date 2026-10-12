@@ -1,6 +1,6 @@
 ---
 name: "checkup"
-description: "Plan an annual checkup by age and sex, check what social security or gold card covers, log results for trends."
+description: "Plan an annual checkup by age and sex, check social security or gold card cover, log results."
 ---
 
 Run the `health-organizer` agent with the `annual-checkup` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

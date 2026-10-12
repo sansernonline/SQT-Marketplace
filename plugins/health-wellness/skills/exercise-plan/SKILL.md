@@ -1,6 +1,6 @@
 ---
 name: exercise-plan
-description: Use when starting, restarting or structuring regular exercise. Beginner walking or strength plan, desk breaks.
+description: Use when starting, restarting or structuring regular exercise. Walking or strength plan, desk breaks.
 ---
 
 # Exercise Plan

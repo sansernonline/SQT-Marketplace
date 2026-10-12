@@ -1,6 +1,6 @@
 ---
 name: buy-compare
-description: Use when about to buy something big in Thailand (appliance, phone, laptop, car, course). Total cost, which reviews to trust.
+description: Use when about to buy something big in Thailand (appliance, phone, car, course). Total cost, trusted reviews.
 ---
 
 # Buy and Compare

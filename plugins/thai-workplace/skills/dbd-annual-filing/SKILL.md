@@ -1,6 +1,6 @@
 ---
 name: dbd-annual-filing
-description: Use when a Thai company or partnership files after year end (AGM, audited statements via DBD e-Filing, BOJ 5, PND 50).
+description: Use when a Thai company files after year end (AGM, audited statements via DBD e-Filing, BOJ 5, PND 50).
 ---
 
 # Year-End Filing — DBD and Revenue Department

@@ -1,6 +1,6 @@
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
+Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -217,7 +217,7 @@ Use when software stores personal data of people in Thailand (PDPA — consent, 
 
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data). Append-only audit log.
+Use when a system must show who did what and when (approvals, money, permissions, personal data).
 
 # ร่องรอยการใช้งาน (audit trail)
 

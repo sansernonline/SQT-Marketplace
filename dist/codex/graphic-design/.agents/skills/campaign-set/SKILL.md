@@ -1,6 +1,6 @@
 ---
 name: campaign-set
-description: Use when one campaign (launch, sale, event, festival) needs assets for several platforms from one master concept.
+description: Use when one campaign (launch, sale, event, festival) needs assets for several platforms from one concept.
 ---
 
 # Campaign Set

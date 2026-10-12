@@ -1,6 +1,6 @@
 ---
 name: status-report
-description: Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
+description: Use when a task that produces or checks project work ends (document, review, code, fix, release).
 ---
 
 # รายงานสถานะเมื่อจบงาน

@@ -1,6 +1,6 @@
 # skill: learning-path
 
-Use when the user wants to learn a new language, framework or paradigm properly. Milestones tied to real projects.
+Use when the user wants to learn a new language, framework or paradigm properly, with real-project milestones.
 
 # Learning Path
 

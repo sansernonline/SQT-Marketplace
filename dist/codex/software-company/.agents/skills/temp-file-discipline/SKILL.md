@@ -1,6 +1,6 @@
 ---
 name: temp-file-discipline
-description: Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
+description: Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
 ---
 
 # ระเบียบไฟล์ชั่วคราว

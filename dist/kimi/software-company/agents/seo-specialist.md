@@ -1,6 +1,6 @@
 ---
 name: "seo-specialist"
-description: "Use when improving search ranking — SEO audits, keyword research, meta tags and titles, content planning, URL structure, structured data, competitor SEO."
+description: "Use when improving search ranking — SEO audits, keywords, meta tags, URL structure, structured data, competitor SEO."
 ---
 
 ${base_prompt}

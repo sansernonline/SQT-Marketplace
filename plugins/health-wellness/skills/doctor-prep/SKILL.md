@@ -1,6 +1,6 @@
 ---
 name: doctor-prep
-description: Prepare for a doctor visit — symptom timeline, medicines, allergies, questions — or write the after-visit summary.
+description: Prepare for a doctor visit — symptom timeline, medicines, allergies, questions — or the after-visit summary.
 argument-hint: <before|after> [reason for visit]
 disable-model-invocation: true
 ---

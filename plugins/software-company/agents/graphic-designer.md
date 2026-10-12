@@ -1,6 +1,6 @@
 ---
 name: graphic-designer
-description: Use for visual work that is not a screen — logo, brand colours, poster, flyer, social post, LINE rich menu, label, cover. Screens go to ux-designer.
+description: Use for visuals that are not screens — logo, brand colours, poster, social post, LINE rich menu. Screens → ux-designer.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---
@@ -63,7 +63,7 @@ For brand kits, social posts, visual review and AI image sets (ถ้าติ�
 - `graphic-design` — **ทุกงาน**: 4 แกนทิศทาง · ทดสอบโลโก้ 7 บริบท · ตัวอักษรไทย · สิ่งที่ห้ามทำพร้อมทางแทน · ขนาดโซเชียลและงานพิมพ์ · ไม่มีสีแบรนด์ → ใช้ค่าตั้งต้นของ skill ใส่ `(รอยืนยัน)` แล้วทำต่อ
 - `ui-craft` (หลายองค์ประกอบ: ระยะห่าง ลำดับสายตา ความแน่น) · `presentation-design` (งานคือสไลด์) · `product-naming` (งานคือชื่อ → ตั้งชื่อก่อนโลโก้) · `simplicity-first` (ก่อนส่งทุกครั้ง ตัดสิ่งที่ไม่ช่วยให้เข้าใจเร็วขึ้น)
 - เอกสารที่ส่งออก: `branded-document-design` · ไฟล์ Office → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- วิธีทำงาน: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` · `flag-and-propose` · `status-report` (ในทีม SuperUser ใส่ตารางในรายงาน หัวหน้าทีมเขียน `docs/BUILD-PLAN.md`) · `work-session-context` (จบงานบันทึกทิศทางที่ตกลงและงานค้าง)
+- วิธีทำงาน: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` · `flag-and-propose` (เฉพาะทางแยกที่ย้อนไม่ได้ แพง หรือถึงคนนอก · ที่ย้อนได้ทำตาม `principle-proceed-on-reversible-work`) · `status-report` (ในทีม SuperUser ใส่ตารางในรายงาน หัวหน้าทีมเขียน `docs/BUILD-PLAN.md`) · `work-session-context` (จบงานบันทึกทิศทางที่ตกลงและงานค้าง)
 
 ## Standard Outputs
 

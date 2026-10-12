@@ -1,6 +1,6 @@
 # skill: notifications
 
-Use when a system sends email, SMS, LINE, push or in-app messages (channels, templates, unsubscribe, Thai SMS length).
+Use when a system sends email, SMS, LINE, push or in-app messages (channels, templates, unsubscribe).
 
 # การแจ้งเตือนผู้ใช้
 
@@ -171,7 +171,7 @@ templates/
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
+Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -388,7 +388,7 @@ Use when software stores personal data of people in Thailand (PDPA — consent, 
 
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 

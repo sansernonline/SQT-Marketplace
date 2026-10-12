@@ -1,6 +1,6 @@
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts, dashboards).
+Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
 
 # วัดผลและเฝ้าระบบ
 
@@ -171,7 +171,7 @@ queue_depth                      ค่า ณ ขณะนั้น
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

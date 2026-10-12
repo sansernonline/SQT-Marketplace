@@ -1,6 +1,6 @@
 # skill: refund-request
 
-Use when the user wants money back in Thailand (broken, fake or undelivered item, direct-sales cancellation, unknown card charge).
+Use when the user wants money back (broken, fake or undelivered item, direct-sales cancel, unknown charge).
 
 # Refund Request (Thailand)
 

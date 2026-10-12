@@ -1,6 +1,6 @@
 ---
 name: markdown-report-docx
-description: Use when a project or course report must ship as a polished .docx from one Markdown source (cover, contents, figures).
+description: Use when a project or course report must ship as a polished .docx from one Markdown source.
 ---
 
 # Markdown Report → .docx

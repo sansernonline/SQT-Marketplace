@@ -1,6 +1,6 @@
 # skill: calendar-audit
 
-Use when there is never time for real work, or monthly. Audits four weeks of calendar and proposes focus blocks.
+Use when there is never time for real work, or monthly. Audits the calendar, proposes focus blocks.
 
 # Calendar Audit
 

@@ -1,6 +1,6 @@
 ---
 name: legaltech-engineer
-description: Use when building legal technology — contract management and clause extraction, document templates and automation, e-signature workflows and legal validity.
+description: Use when building legal tech — contract management, clause extraction, document automation, e-signature validity.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 ---

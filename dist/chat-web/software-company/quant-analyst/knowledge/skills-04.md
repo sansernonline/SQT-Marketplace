@@ -1,6 +1,6 @@
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, PCI-DSS).
+Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds, KYC, PCI-DSS).
 
 # fintech-payments
 
@@ -1458,7 +1458,7 @@ Before QSA arrives:
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
 
 # Markdown Visuals
 
@@ -1737,7 +1737,7 @@ Don't force everything into one format. Each format is best at something differe
 
 # Inline SVG snippets
 
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 

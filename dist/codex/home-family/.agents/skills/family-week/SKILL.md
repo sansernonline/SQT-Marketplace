@@ -1,6 +1,6 @@
 ---
 name: "family-week"
-description: "Plan the family week — meals, groceries, school items, elder appointments, pet care — in one shareable table."
+description: "Plan the family week — meals, groceries, school items, elder appointments, pets — in one table."
 ---
 
 Run the `family-planner` agent with `meal-plan-grocery`, plus `kids-school`, `elder-care` and `pet-care` for whatever applies to: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

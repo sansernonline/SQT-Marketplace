@@ -1,6 +1,6 @@
 ---
 name: maintenance
-description: Build or update the home maintenance schedule for the next 12 months, or compare contractor quotes for one job.
+description: Build the home maintenance schedule for the next 12 months, or compare contractor quotes.
 argument-hint: <"schedule" | job to quote> [house type, aircon count, car details]
 disable-model-invocation: true
 ---

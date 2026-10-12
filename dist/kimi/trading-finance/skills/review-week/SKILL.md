@@ -1,6 +1,6 @@
 ---
 name: "review-week"
-description: "Run the weekly or monthly trade review — statistics, the one repeating mistake, one new rule, last rule's verdict."
+description: "Run the weekly or monthly trade review — statistics, the repeating mistake, one new rule."
 disableModelInvocation: true
 ---
 

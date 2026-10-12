@@ -1,6 +1,6 @@
 ---
 name: "solution-architect"
-description: "Use when designing system architecture, picking a tech stack, high-level designs, trade-offs, ADRs, or architecture review. Endpoint specs go to system-analyst."
+description: "Use for system architecture, stack choice, trade-offs, ADRs or architecture review. Endpoint specs → system-analyst."
 ---
 
 ${base_prompt}
@@ -71,7 +71,7 @@ Not for: endpoint-level API specs and per-use-case sequence diagrams → system-
 | Guardrails and legacy | `repeated-mistakes-to-checks` (rules repeated often → types or lint) · `reverse-engineering` (assess a system without source; real extraction → agent `reverse-engineer`) |
 
 - Documents for people outside the team: `polished-document-style` (any architecture doc that goes beyond the engineering team) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
-- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (impact first, one question) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
+- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of architecture sessions, save decisions + open questions for resume
 
 ## Standard Outputs
 

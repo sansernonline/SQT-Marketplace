@@ -1,6 +1,6 @@
 ---
 name: mobile-engineering
-description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, battery). Not screen design.
+description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
 ---
 
 # mobile-engineering

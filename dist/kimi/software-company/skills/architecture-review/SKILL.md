@@ -1,6 +1,6 @@
 ---
 name: "architecture-review"
-description: "Review existing or proposed architecture with the solution-architect agent against non-functional requirements and risks."
+description: "Review existing or proposed architecture with the solution-architect agent against NFRs and risks."
 disableModelInvocation: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: smart-contracts
-description: Use when building on a blockchain (Solidity or Solana contracts, security review, Foundry or Hardhat, DeFi, bridges, tokenomics).
+description: Use when building on a blockchain (Solidity or Solana contracts, audits, Foundry, DeFi, tokenomics).
 ---
 
 # smart-contracts

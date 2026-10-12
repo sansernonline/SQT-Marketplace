@@ -1,6 +1,6 @@
 ---
 name: "listing"
-description: "Write a product listing for Shopee, Lazada, TikTok Shop, LINE or Facebook — title, keywords, photos, banned-claims check."
+description: "Write a product listing for Shopee, Lazada, TikTok Shop, LINE or Facebook — title, keywords, banned claims."
 disableModelInvocation: true
 ---
 

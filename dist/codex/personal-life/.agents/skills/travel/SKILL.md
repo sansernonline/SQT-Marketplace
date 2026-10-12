@@ -1,6 +1,6 @@
 ---
 name: "travel"
-description: "Build the travel checklist and one-file itinerary — documents, insurance, money, connectivity, bookings in one place."
+description: "Build the travel checklist and one-file itinerary — documents, insurance, money, bookings."
 ---
 
 Run the `travel-prep` skill for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

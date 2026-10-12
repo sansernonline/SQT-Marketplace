@@ -1,6 +1,6 @@
 ---
 name: "paper-trade"
-description: "Log or review virtual-money trades with the paper-trading ledger. Log before entry, review monthly statistics."
+description: "Log or review virtual-money trades in the paper-trading ledger, then monthly statistics."
 disableModelInvocation: true
 ---
 

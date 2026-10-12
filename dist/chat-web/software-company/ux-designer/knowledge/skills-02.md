@@ -1,6 +1,6 @@
 # skill: ui-craft
 
-Use when a task produces a screen, screen spec or mockup, alongside the platform skill (spacing, type, hierarchy, screen states).
+Use when a task produces a screen, screen spec or mockup, alongside the platform skill.
 
 # UI Craft
 
@@ -526,7 +526,7 @@ Use when designing or building a web app UI or mockup (dashboard, admin panel, i
 
 | | หน้าที่ | ได้มาจาก |
 |---|---|---|
-| `--brand` / `--brand-2` | สีหลัก · ปลายไล่สี 135deg ใน `--grad-accent` | สีที่ผู้ใช้เลือก + เพื่อนบ้านบนวงล้อสี |
+| `--brand` / `--brand-2` | สีหลัก · ปลายไล่สี 135deg ใน `--grad-accent` | สีแบรนด์ หรือค่าประจำบ้าน `#2A78D6` `(รอยืนยัน)` + เพื่อนบ้านบนวงล้อสี |
 | `--brand-50` / `--brand-100` | พื้นอ่อนของ chip การ์ด และแถวที่เลือก | สีหลักผสมขาว 96% / 90% |
 | พื้นหน้า / การ์ด | พื้นหลังเทาอ่อนมาก / การ์ดขาว | เทากลาง ๆ อมโทนเดียวกับสีหลักได้เล็กน้อย |
 | ข้อความ 4 ระดับ | หัวข้อ · เนื้อ · รอง · จาง | เทาเข้ม → เทาอ่อน · เนื้อความ contrast ≥ 4.5:1 |

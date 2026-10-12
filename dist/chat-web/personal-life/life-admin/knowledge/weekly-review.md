@@ -1,6 +1,6 @@
 # skill: weekly-review
 
-Use when the week ends, on Sunday evening, or the user feels busy but not productive. 20-minute review, three next priorities.
+Use when the week ends, on Sunday evening, or the user feels busy but not productive. Weekly review.
 
 # Weekly Review (ทบทวนประจำสัปดาห์)
 

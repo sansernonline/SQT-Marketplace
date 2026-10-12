@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
 
 # saas-platform
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: insurance-systems
 
-Use when building insurance software (policy and quote engines, claims, fraud detection, underwriting, reserves, OIC filings).
+Use when building insurance software (policy, quotes, claims, fraud, underwriting, OIC filings).
 
 # insurance-systems
 

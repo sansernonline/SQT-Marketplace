@@ -1,6 +1,6 @@
 # skill: security-gate
 
-Use when about to ship, merge, release or hand over code, after adding a dependency, or the user says security check.
+Use when about to ship, merge or hand over code, after adding a dependency, or the user says security check.
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
@@ -66,7 +66,7 @@ Use when about to ship, merge, release or hand over code, after adding a depende
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
 
 # Markdown Visuals
 
@@ -345,7 +345,7 @@ Don't force everything into one format. Each format is best at something differe
 
 # Inline SVG snippets
 
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 
@@ -429,7 +429,7 @@ This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the 
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors, request ids, shutdown).
+Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors).
 
 # Web Service Essentials
 
@@ -864,7 +864,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
+Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
 # ข้อตกลงของ API
 
@@ -1148,7 +1148,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, other services). Catch, retry, timeout, circuit breaker.
+Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
 
 # จัดการข้อผิดพลาด
 
@@ -1337,7 +1337,7 @@ catch (SmtpException ex)
 
 # skill: logging-standards
 
-Use when writing or reviewing code that logs (format, levels, correlation ids, redaction) in .NET, Node, Python or Angular.
+Use when writing or reviewing code that logs (format, levels, correlation ids, redaction).
 
 # Logging Standards
 

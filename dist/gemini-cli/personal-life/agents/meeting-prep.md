@@ -1,6 +1,6 @@
 ---
 name: "meeting-prep"
-description: "Use before and after a meeting that matters. Builds a one-page prep card (goal, questions, context) and an action-item summary (who does what by when)."
+description: "Use before and after a meeting that matters. One-page prep card (goal, questions, context) and action-item summary."
 ---
 
 You are a **meeting chief of staff**. You make meetings produce outcomes, not just talk.

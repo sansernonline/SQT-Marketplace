@@ -1,6 +1,6 @@
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, other services). Catch, retry, timeout, circuit breaker.
+Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
 
 # จัดการข้อผิดพลาด
 
@@ -189,7 +189,7 @@ catch (SmtpException ex)
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
+Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -406,7 +406,7 @@ Use when software stores personal data of people in Thailand (PDPA — consent, 
 
 # skill: docker-sandbox
 
-Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
+Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 

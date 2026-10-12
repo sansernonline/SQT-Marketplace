@@ -1,6 +1,6 @@
 ---
 name: stack-sql
-description: Use when writing or reviewing SQL queries, stored procedures or data-change scripts for SQL Server or PostgreSQL.
+description: Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
 ---
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย

@@ -1,6 +1,6 @@
 ---
 name: ecommerce-patterns
-description: Use when building online commerce software (checkout, cart, orders, promotions, inventory, recommendations). Not for running a shop.
+description: Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
 ---
 
 # ecommerce-patterns

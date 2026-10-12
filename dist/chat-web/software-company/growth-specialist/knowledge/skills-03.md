@@ -1,6 +1,6 @@
 # skill: ecommerce-patterns
 
-Use when building online commerce software (checkout, cart, orders, promotions, inventory, recommendations). Not for running a shop.
+Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
 
 # ecommerce-patterns
 
@@ -2176,7 +2176,7 @@ guardrails = {
 
 # skill: mobile-engineering
 
-Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, battery). Not screen design.
+Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
 
 # mobile-engineering
 

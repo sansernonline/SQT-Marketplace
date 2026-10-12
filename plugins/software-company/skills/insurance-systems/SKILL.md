@@ -1,6 +1,6 @@
 ---
 name: insurance-systems
-description: Use when building insurance software (policy and quote engines, claims, fraud detection, underwriting, reserves, OIC filings).
+description: Use when building insurance software (policy, quotes, claims, fraud, underwriting, OIC filings).
 ---
 
 # insurance-systems

@@ -1,6 +1,6 @@
 ---
 name: scam-check
-description: Use when about to send money to an investment, trading or loan app, crypto scheme, LINE group or caller, or just after.
+description: Use when about to send money to an investment or loan app, crypto scheme, LINE group or caller.
 ---
 
 # Scam Check (เช็กก่อนโอน · โดนหลอกแล้วทำอะไรก่อน)

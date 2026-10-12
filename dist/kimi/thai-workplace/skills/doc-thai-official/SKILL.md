@@ -1,6 +1,6 @@
 ---
 name: doc-thai-official
-description: Use when drafting a formal Thai letter or internal memo to a government agency or company. Saraban rules.
+description: Use when drafting a formal Thai letter or memo to a government agency or company. Saraban rules.
 ---
 
 # Thai Official Letter (หนังสือราชการ / หนังสือแบบราชการ)

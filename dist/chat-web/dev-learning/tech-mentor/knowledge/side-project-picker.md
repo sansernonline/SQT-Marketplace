@@ -1,6 +1,6 @@
 # skill: side-project-picker
 
-Use when the user wants a practice or portfolio project and has too many ideas or none. Scores ideas, cuts scope.
+Use when the user wants a practice or portfolio project and has too many ideas or none. Scores, cuts scope.
 
 # Side Project Picker
 

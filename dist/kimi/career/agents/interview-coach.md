@@ -1,6 +1,6 @@
 ---
 name: "interview-coach"
-description: "Use when an interview is coming — mock interview, STAR stories, hard Thai HR questions (expected salary, why leaving). Runs mock rounds and scores each answer."
+description: "Use when an interview is coming — mock rounds, STAR stories, hard Thai HR questions (salary, why leaving), scoring."
 ---
 
 ${base_prompt}

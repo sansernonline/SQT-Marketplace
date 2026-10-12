@@ -1,6 +1,6 @@
 # skill: decision-log
 
-Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step).
+Use when an agent makes its own judgment call in long or unattended work (approach, gap, skipped step).
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -56,7 +56,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: legacy-spec-recovery
 
-Use when a legacy system has code but no spec and someone wants to change it. As-is spec with evidence, then impact analysis.
+Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
 
 # Legacy Spec Recovery
 

@@ -1,6 +1,6 @@
 ---
 name: legacy-onboard
-description: Recover an as-is spec from a legacy system with code but no documents, ready for change requests.
+description: Use when a legacy system has code but no documents and needs an as-is spec for change requests.
 argument-hint: <path to legacy code> [module to go deep on | CR text]
 disable-model-invocation: true
 ---

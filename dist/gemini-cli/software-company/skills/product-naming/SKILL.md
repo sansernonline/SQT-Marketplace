@@ -1,6 +1,6 @@
 ---
 name: product-naming
-description: Use when naming a product, app, module, brand or code name, or checking how a name sounds to Thai speakers.
+description: Use when naming a product, app, module or brand, or checking how a name sounds in Thai.
 ---
 
 # ตั้งชื่อผลิตภัณฑ์

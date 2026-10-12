@@ -1,6 +1,6 @@
 ---
 name: "legacy-onboard"
-description: "Recover an as-is spec from a legacy system with code but no documents, ready for change requests."
+description: "Use when a legacy system has code but no documents and needs an as-is spec for change requests."
 disableModelInvocation: true
 ---
 

@@ -1,6 +1,6 @@
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 
@@ -231,7 +231,7 @@ jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
 
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
+Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
 
 # Spell Out Abbreviations
 

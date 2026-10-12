@@ -1,6 +1,6 @@
 ---
 name: security-operations
-description: Use when running security operations (incident containment, SOC design, SIEM rules, MITRE ATT&CK, threat hunting, zero trust).
+description: Use when running security operations (incident containment, SOC, SIEM rules, threat hunting).
 ---
 
 # security-operations

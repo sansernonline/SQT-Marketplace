@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -38,7 +38,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
 
 # saas-platform
 

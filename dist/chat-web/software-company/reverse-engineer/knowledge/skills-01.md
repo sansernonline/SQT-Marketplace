@@ -1,6 +1,6 @@
 # skill: docker-sandbox
 
-Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
+Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -152,7 +152,7 @@ Use when a project should run in its own Docker container, not on the host (inst
 
 # skill: reverse-engineering
 
-Use when there is a compiled app or unknown file format or protocol but no usable source, or a deployed build may differ from the repo.
+Use when there is a compiled app or unknown file format or protocol but no source, or a build may differ.
 
 # Reverse Engineering
 

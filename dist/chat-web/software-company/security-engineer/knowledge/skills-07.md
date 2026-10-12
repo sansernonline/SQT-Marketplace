@@ -1,6 +1,6 @@
 # skill: security-operations
 
-Use when running security operations (incident containment, SOC design, SIEM rules, MITRE ATT&CK, threat hunting, zero trust).
+Use when running security operations (incident containment, SOC, SIEM rules, threat hunting).
 
 # security-operations
 
@@ -1880,7 +1880,7 @@ def is_anomalous(event, baseline):
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -2087,7 +2087,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible actions for approval.
+Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 

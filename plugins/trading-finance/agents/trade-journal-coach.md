@@ -1,6 +1,6 @@
 ---
 name: trade-journal-coach
-description: Use when reviewing past trades, keeping a trade journal, or asking why you keep losing the same way. Finds repeated patterns, turns them into one rule to test.
+description: Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---

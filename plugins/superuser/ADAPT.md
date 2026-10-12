@@ -14,7 +14,7 @@ plugin `superuser` คือต้นฉบับของวิธีทำง�
 | `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `team` (5) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
 | playbook และ reference | `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) · `triggers.md` · `examples.md` |
 | skill | `agent-patterns` · `answer-shape` · `human-writing` | skill ของสาขา |
-| agent | `learning-reviewer` | agent ตามบทบาทของสาขา |
+| agent | `brainstormer` · `reviewer` · `learning-reviewer` | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทางของสาขา (playbook ใช้แทน `reviewer` ได้ · เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
 | hook | `hooks/superuser-hook.mjs` · `hooks/hooks.json` | — |
 | ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาเดิม 10 ตัวเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |
 
@@ -46,7 +46,7 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 | frontmatter `description` | งานของสาขา ≤ 250 ตัวอักษร · ขึ้นต้น "Use at the start of any multi-step <สาขา> task" | "...career task (job application, CV plus LinkedIn, interview, offer, promotion case)..." |
 | หัวเรื่อง และบรรทัดใต้ | ทีมนี้ทำงานอะไร · ส่งต่อเรื่องไหนให้ผู้เชี่ยวชาญ | ข้อพิพาทแรงงาน → จัดข้อเท็จจริงแล้วส่งต่อศาลแรงงานหรือทนาย |
 | 1 · กฎ | ใต้บล็อก `rules`: "ของจริงที่ใช้ตรวจตามข้อ 2" และกฎเฉพาะสาขา 1–3 ข้อ เลข 10 ขึ้นไป · ที่จดการตัดสินใจถ้าไม่ใช่ `CONTEXT.md` | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
-| 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` | `job-application` · `interview` · `offer-negotiation` |
+| 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` · ทุกขั้นของทุก playbook จบด้วย `ใคร:` ตาม `playbook-template` (validator ตรวจ) | `job-application` · `interview` · `offer-negotiation` · "ร่าง CV · ใคร: `career-coach` ตัวใหม่" |
 | 3 · ตัวกระตุ้น | ตารางสถานการณ์ → skill ของสาขา · งานข้ามสาขา → plugin อื่น ใน `references/triggers.md` (SKILL.md เหลือลิงก์ 1 บรรทัด) | มีนัดสัมภาษณ์ → `interview-prep` + agent `interview-coach` |
 | 4 · เกณฑ์งาน | 3 ข้อที่ "เสร็จ" ของสาขานี้ต้องผ่าน + skill ที่ใช้ตรวจ | จริง · ตรงเป้า · พร้อมใช้ |
 | 5 · agent | แถว agent ตามบทบาท · งานข้ามสาขา เหนือบล็อก `team` · ตัวอย่างระดับโมเดลใน `references/examples.md` | CV → `career-coach` · สัมภาษณ์ → `interview-coach` |

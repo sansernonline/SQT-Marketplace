@@ -1,6 +1,6 @@
 ---
 name: doc-caretaker
-description: Use when an important document is missing, about to expire, or the paper pile needs order. Keeps one registry of ID, property, vehicle, insurance, contracts.
+description: Use when an important document is missing, expiring or piled up. Keeps one registry of ID, property, vehicle, insurance.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---

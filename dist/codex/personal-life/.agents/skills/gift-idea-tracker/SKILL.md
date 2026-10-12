@@ -1,6 +1,6 @@
 ---
 name: gift-idea-tracker
-description: Use when a birthday, wedding, New Year or Mothers Day is near or the user is stuck on a gift. Past gifts, budget shortlist.
+description: Use when a birthday, wedding or holiday is near or the user is stuck on a gift. Past gifts, budget list.
 ---
 
 # Gift Idea Tracker (ของขวัญและของฝาก)

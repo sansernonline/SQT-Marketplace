@@ -1,6 +1,6 @@
 ---
 name: "family-week"
-description: "Plan the family week — meals, groceries, school items, elder appointments, pet care — in one shareable table."
+description: "Plan the family week — meals, groceries, school items, elder appointments, pets — in one table."
 disableModelInvocation: true
 ---
 

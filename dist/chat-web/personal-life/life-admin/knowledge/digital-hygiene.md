@@ -1,6 +1,6 @@
 # skill: digital-hygiene
 
-Use when securing family accounts (password manager, 2FA, passkeys, LINE on a new phone, backup, SIM swap) or after a takeover.
+Use when securing family accounts (password manager, 2FA, passkeys, backup, SIM swap) or after a takeover.
 
 # Digital Hygiene
 

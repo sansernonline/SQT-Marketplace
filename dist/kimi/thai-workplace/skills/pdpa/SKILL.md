@@ -1,6 +1,6 @@
 ---
 name: "pdpa"
-description: "Run PDPA workflows for a Thai SME — consent forms, breach response, data-subject requests, vendor checks."
+description: "Run PDPA workflows for a Thai SME — consent forms, breach response, data-subject requests."
 disableModelInvocation: true
 ---
 

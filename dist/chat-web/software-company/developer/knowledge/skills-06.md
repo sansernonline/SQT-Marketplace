@@ -938,7 +938,7 @@ def upgrade():
 
 # skill: config-and-secrets
 
-Use when settings differ by environment or something must never be committed (connection strings, keys, certificates).
+Use when settings differ by environment or something must never be committed (keys, connection strings).
 
 # Config และ Secret
 
@@ -1418,7 +1418,7 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 # skill: background-jobs
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries, dead letter queue.
+Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries.
 
 # งานเบื้องหลัง
 
@@ -1604,7 +1604,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data). Append-only audit log.
+Use when a system must show who did what and when (approvals, money, permissions, personal data).
 
 # ร่องรอยการใช้งาน (audit trail)
 
@@ -1789,7 +1789,7 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 
 # skill: file-upload-and-storage
 
-Use when users upload files or the system stores and serves them (type and size checks, virus scan, private links).
+Use when users upload files or the system stores and serves them (type checks, virus scan, links).
 
 # รับไฟล์อัปโหลดและการเก็บไฟล์
 

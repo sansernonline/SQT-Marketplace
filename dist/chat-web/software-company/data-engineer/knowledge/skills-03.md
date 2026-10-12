@@ -1,6 +1,6 @@
 # skill: llm-engineering
 
-Use when a system calls a large language model (prompts, structured output, RAG, embeddings, vector search, evals).
+Use when a system calls a large language model (prompts, structured output, RAG, embeddings, evals).
 
 # llm-engineering
 
@@ -3158,7 +3158,7 @@ def upgrade():
 
 # skill: data-import-export
 
-Use when a system imports or exports Excel or CSV data. Validate before write, row errors, Thai data and Buddhist years.
+Use when a system imports or exports Excel or CSV. Validate before write, row errors, Buddhist years.
 
 # นำเข้าและส่งออกข้อมูล
 

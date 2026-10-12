@@ -1,6 +1,6 @@
 ---
 name: "product-roadmap"
-description: "Build a product roadmap with the product-manager agent — quarterly plan, RICE scoring, success metrics."
+description: "Build a product roadmap with the product-manager agent — quarterly plan, RICE, success metrics."
 disableModelInvocation: true
 ---
 

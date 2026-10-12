@@ -1,6 +1,6 @@
 ---
 name: growth-specialist
-description: Use when improving conversion and adoption — checkout and landing pages, A/B tests, store listings, onboarding. Search ranking goes to seo-specialist.
+description: Use when improving conversion and adoption — landing pages, checkout, A/B tests, onboarding. Search → seo-specialist.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: sonnet
 ---

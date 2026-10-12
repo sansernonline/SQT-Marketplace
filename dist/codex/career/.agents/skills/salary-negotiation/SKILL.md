@@ -1,6 +1,6 @@
 ---
 name: salary-negotiation
-description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand.
+description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers.
 ---
 
 # Salary Negotiation (Thailand)

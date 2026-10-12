@@ -1,6 +1,6 @@
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Prose, table, diagram or list.
+Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
 
 # รูปทรงของคำตอบ
 

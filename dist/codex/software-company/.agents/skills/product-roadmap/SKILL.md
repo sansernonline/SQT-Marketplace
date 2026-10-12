@@ -1,6 +1,6 @@
 ---
 name: "product-roadmap"
-description: "Build a product roadmap with the product-manager agent — quarterly plan, RICE scoring, success metrics."
+description: "Build a product roadmap with the product-manager agent — quarterly plan, RICE, success metrics."
 ---
 
 Use the `product-manager` agent to build a product roadmap for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

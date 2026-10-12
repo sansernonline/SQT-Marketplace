@@ -1,6 +1,6 @@
 ---
 name: "thai-doc-writer"
-description: "Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form. Right format and register; flags legal points."
+description: "Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form."
 ---
 
 ${base_prompt}

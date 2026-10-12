@@ -1,6 +1,6 @@
 ---
 name: paper-trading
-description: Use when testing a strategy or learning order types without real money. Virtual ledger with real SET rules and costs.
+description: Use when testing a strategy or learning order types without real money, with real SET rules.
 ---
 
 # Paper Trading (พอร์ตจำลอง)

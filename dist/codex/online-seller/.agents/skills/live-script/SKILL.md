@@ -1,6 +1,6 @@
 ---
 name: "live-script"
-description: "Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance check — for TikTok, Shopee, Lazada, Facebook."
+description: "Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance — for TikTok or Shopee."
 ---
 
 Run `live-selling-script` with the `live-seller` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

@@ -1,6 +1,6 @@
 # skill: chat-reply-templates
 
-Use when a Thai online seller answers everyday buyer chat (price, stock, size, late parcel, discount) on Shopee, Lazada, TikTok, LINE.
+Use when a Thai online seller answers buyer chat (price, stock, size, late parcel) on Shopee, Lazada, TikTok.
 
 # Chat Reply Templates (Thai)
 

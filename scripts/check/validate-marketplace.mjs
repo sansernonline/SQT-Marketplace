@@ -23,7 +23,12 @@ const STRICT = process.argv.includes('--warn');
 
 const errors = [];
 const warns  = [];
-const DESC_SOFT_MAX = 250;
+// คำอธิบายทุกตัวโหลดทุก session: skill และ command เตือนเกิน 150 · agent เตือนเกิน 120 · เกิน 160 = error (D14 · R4)
+const DESC_HARD_MAX = 160, SKILL_DESC_SOFT = 150, AGENT_DESC_SOFT = 120;
+function checkDescLength(file, len, soft) {
+  if (len > DESC_HARD_MAX) err(file, `description ยาว ${len} ตัว เกิน ${DESC_HARD_MAX} — ตัดให้เหลือ "ใช้เมื่อไหร่" + งานหลัก`);
+  else if (len > soft) warn(file, `description ยาว ${len} ตัว เกิน ${soft}`);
+}
 // claude.ai ไม่รับ plugin ที่ description ใน plugin.json ยาวเกิน 500 ตัว (ทดสอบอัปโหลด 2026-10-08: ≤488 ผ่าน · ≥516 ไม่ผ่าน)
 const PLUGIN_DESC_MAX = 500;
 function checkPluginDescription(file, description) {
@@ -103,7 +108,7 @@ function checkSkill(dir) {
   else {
     if (description.length > 1024) err(file, `description ยาว ${description.length} ตัว เกิน 1024 — จะถูกตัด`);
     // คำอธิบายทุกตัวถูกโหลดเข้า context ทุก session — ยาวเกินจะดันตัวอื่นตกโควตา
-    if (description.length > DESC_SOFT_MAX) warn(file, `description ยาว ${description.length} ตัว เกิน ${DESC_SOFT_MAX} — ตัดรายการเนื้อหาออก เหลือแค่ "ใช้เมื่อไหร่"`);
+    checkDescLength(file, description.length, SKILL_DESC_SOFT);
     // คำสั่งที่ผู้ใช้พิมพ์เอง (disable-model-invocation: true) — Claude ไม่ได้ใช้ description เลือก จึงไม่ต้องบอก "ใช้เมื่อไหร่"
     const userOnly = String(fm['disable-model-invocation']) === 'true';
     if (userOnly) { /* ตรวจแค่ความยาวกับแท็กด้านบนและล่าง */ }
@@ -134,7 +139,7 @@ function checkSkill(dir) {
 }
 
 // ---------------------------------------------------------------- agent
-function checkAgent(file) {
+function checkAgent(file, soft = AGENT_DESC_SOFT) {
   inspected++;
   const stem = basename(file, '.md');
   const fm = parseFrontmatter(file, readFileSync(file, 'utf8'));
@@ -142,7 +147,7 @@ function checkAgent(file) {
   if (!fm.name) err(file, 'ไม่มี name');
   else if (fm.name !== stem) err(file, `name "${fm.name}" ไม่ตรงกับชื่อไฟล์ "${stem}"`);
   if (!fm.description) err(file, 'ไม่มี description');
-  else if (fm.description.length > DESC_SOFT_MAX) warn(file, `description ยาว ${fm.description.length} ตัว เกิน ${DESC_SOFT_MAX}`);
+  else checkDescLength(file, fm.description.length, soft);
   // agent ใช้คีย์ tools: ส่วน skill/command ใช้ allowed-tools: — ใส่ผิดคีย์ loader จะเงียบ ๆ ไม่สนใจ
   if (fm['allowed-tools']) err(file, 'agent ต้องใช้คีย์ "tools:" ไม่ใช่ "allowed-tools:" — ใส่ผิดคีย์จะถูกเมินเงียบ ๆ');
 }
@@ -167,7 +172,7 @@ function checkPlugin(dir) {
     for (const e of readdirSync(d)) {
       const p = join(d, e);
       if (sub === 'skills' && statSync(p).isDirectory()) checkSkill(p);
-      if (sub !== 'skills' && e.endsWith('.md')) checkAgent(p);
+      if (sub !== 'skills' && e.endsWith('.md')) checkAgent(p, sub === 'agents' ? AGENT_DESC_SOFT : SKILL_DESC_SOFT);
     }
   }
 }
@@ -182,6 +187,57 @@ function checkFacts(facts, read) {
         if (!body.includes(v)) err(rel, `${id}: ไม่มีค่าปัจจุบัน "${v}" (ตรวจล่าสุด ${fact.checked}) — แก้ไฟล์นี้ หรือแก้ scripts/check/facts.json`);
     }
   }
+}
+
+// ---------------------------------------------------------------- playbook
+// ทุกขั้นของ playbook บอก "ใคร:" · ชื่อ agent ใน backtick ต้องมีจริง · ขั้นตรวจต้องอยู่หลังขั้นสุดท้ายที่ลงมือทำ
+// คนตรวจ = `reviewer` ตัวใหม่ · ผู้ตรวจเฉพาะทางตัวใหม่ที่บรรทัดเขียน READ_ONLY · ผู้ใช้อนุมัติ/ตรวจ (การเลือกทางไม่ใช่การตรวจ)
+// คนทำที่ชื่ออยู่หลังคนตรวจในบรรทัดเดียวกัน = ยังไม่ได้ตรวจ · ขั้นของหัวหน้าทีมที่ขึ้นต้นด้วย แก้/เขียน/ร่าง/สร้าง = ลงมือ (ยกเว้นขั้นรายงาน/บันทึก)
+// "ตัวเดิม" ได้เฉพาะ "ตัวเดิม (ถือ …)" ไม่เปลี่ยนระดับโมเดล · ผู้ใช้ไม่ทำขั้นกลางงานและไม่มีขั้นรอคำตอบ · ข้อความหลัง "ไม่ต้อง · ห้าม · ไม่ให้" ไม่นับ
+const BUILTIN_AGENTS = new Set(['general-purpose', 'Explore', 'Plan']);
+const SPECIALISTS = ['design-critic', 'brand-keeper', 'qa-tester', 'security-engineer', 'risk-manager'];
+const READ_ONLY = 'อ่านอย่างเดียว · ไม่แก้ไฟล์';
+const NEGATED = /(ไม่ต้อง|ห้าม|ไม่ให้)[^·)]*/g;
+const USER_WAIT = /(?<!ไม่)รอ(คำตอบ|ผู้ใช้|ให้ผู้ใช้)|(?<!คำ|ไม่)ถาม(?!รวม)[^·]{0,20}ผู้ใช้/;   // "ถามรวมครั้งเดียวตอนเริ่ม" ได้
+const LEAD_MAKES = /^\d+\. (\*\*)?(แก้|เขียน|ร่าง|สร้าง)|ใคร: หัวหน้าทีม(แก้|เขียน|ร่าง|สร้าง)/;
+const LEAD_RECORDS = /รายงาน|สรุป|บันทึก|CONTEXT\.md|BUILD-PLAN|IMPROVEMENTS|log/;
+function checkPlaybook(file, text, hasAgent) {
+  const lines = text.replace(/\r\n/g, '\n').split('\n');
+  if (!lines.some(l => /^## ขั้นตอน/.test(l))) { err(file, 'playbook ไม่มีหัวข้อ "## ขั้นตอน"'); return; }
+  let steps = 0, lastCheck = 0, lastWork = 0, inSteps = false, inFence = false;
+  const userSteps = [];
+  for (const line of lines) {
+    if (/^\s*```/.test(line)) { inFence = !inFence; continue; }
+    if (inFence) continue;
+    if (/^## /.test(line)) { inSteps = /^## ขั้นตอน/.test(line); continue; }
+    const m = inSteps && line.match(/^(\d+)\. /);
+    if (!m) continue;
+    steps++;
+    const at = line.indexOf('ใคร:');
+    if (at < 0) { err(file, `ขั้น ${m[1]} ไม่บอก "ใคร:" — ใส่ท้ายบรรทัด: หัวหน้าทีม · ผู้ใช้ · หรือ \`agent\``); continue; }
+    const who = line.slice(at + 4);
+    const said = who.replace(NEGATED, '');   // "(ไม่ต้องให้ผู้ใช้ตรวจ)" ไม่นับ
+    const plain = line.replace(NEGATED, '');
+    let checkAt = said.search(/ผู้ใช้(อนุมัติ|ตรวจ)/), workAt = -1;
+    if (/^\s*หัวหน้าทีม/.test(who) && LEAD_MAKES.test(plain) && !LEAD_RECORDS.test(plain)) workAt = 0;
+    for (const a of said.matchAll(/`([A-Za-z][\w-]*(?::[\w-]+)?)`( ตัวใหม่)?/g)) {   // มีจุด = ชื่อไฟล์ ไม่ใช่ agent
+      const name = a[1], base = name.split(':').pop();
+      if (!BUILTIN_AGENTS.has(name) && !hasAgent(name)) err(file, `ขั้น ${m[1]}: ไม่มี agent "${name}" ใน plugin นี้`);
+      if (name.includes(':') && !line.includes('ถ้าติดตั้ง')) warn(file, `ขั้น ${m[1]}: "${name}" อยู่ plugin อื่น — เขียน "(ถ้าติดตั้ง plugin …)" พร้อมทางสำรอง`);
+      const reviews = a[2] && (base === 'reviewer' || (SPECIALISTS.includes(base) && line.includes(READ_ONLY)));
+      if (reviews) checkAt = a.index; else workAt = a.index;
+    }
+    if (workAt >= 0) lastWork = steps;
+    if (checkAt >= 0 && workAt < checkAt) lastCheck = steps;
+    const kept = [...plain.matchAll(/ตัวเดิม(\s*\([^)]*\))?[^·]*/g)].map(k => k[0]);
+    if (kept.some(k => !k.startsWith('ตัวเดิม (ถือ') || /opus|sonnet|haiku/.test(k)))
+      err(file, `ขั้น ${m[1]}: "ตัวเดิม" — ใช้ตัวใหม่แล้วส่งงานต่อ ยกเว้นถือของที่ย้ายยาก "ตัวเดิม (ถือ …)" และห้ามเปลี่ยนระดับโมเดล`);
+    if (/^\s*ผู้ใช้(?!อนุมัติ|ตรวจ)|ผู้ใช้ตอบ/.test(said) || USER_WAIT.test(plain)) userSteps.push(m[1]);
+  }
+  if (steps === 0) { err(file, 'playbook ไม่มีขั้นตอนแบบเลขข้อ'); return; }
+  if (!lastCheck) err(file, `ไม่มีขั้นที่คนตรวจไม่ใช่คนทำ — ใส่ "ใคร: \`reviewer\` ตัวใหม่" (หรือผู้ตรวจเฉพาะทางที่เขียน "${READ_ONLY}") ในขั้นตรวจ`);
+  else if (lastCheck < lastWork) err(file, `ขั้นตรวจสุดท้าย (ขั้น ${lastCheck}) อยู่ก่อนขั้นสุดท้ายที่ลงมือ (ขั้น ${lastWork}) — เพิ่ม "ใคร: \`reviewer\` ตัวใหม่" หลังขั้นนั้น`);
+  for (const n of userSteps) err(file, `ขั้น ${n}: ผู้ใช้ทำขั้นกลางงานหรือขั้นนี้รอคำตอบผู้ใช้ — ถามรวมตอนเริ่ม หรือใส่ (รอยืนยัน) แล้วลง "รออนุมัติ" ตอนจบ`);
 }
 
 // ---------------------------------------------------------------- self-test
@@ -223,8 +279,60 @@ function selfTest() {
   const descHit = errors.length === 1 && errors[0].startsWith('x/');
   console.log(`  ${descHit ? '✅' : '❌'} plugin description เกิน 500`);
   if (descHit) ok++;
-  errors.length = 0;
-  const total = cases.length + 2;
+  // playbook: ขาด ใคร: · agent ไม่มีจริง · ไม่มีคนตรวจ ต้องโดนจับ · แบบถูกต้องต้องผ่าน
+  const has = (n) => ['reviewer', 'developer', 'qa-tester', 'x:writer'].includes(n);
+  const pb = (steps) => `# playbook\n\n## ขั้นตอน\n\n${steps}\n\n## จบเมื่อ\n`;
+  const pbCases = [
+    [pb('1. ทำ · ใคร: หัวหน้าทีม\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 0],
+    [pb('1. ทำ\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: `ghost`\n2. ตรวจ · ใคร: ผู้ใช้อนุมัติ'), 1],
+    [pb('1. ทำ · ใคร: ผู้ใช้ให้ข้อมูล\n2. ตรวจ · ใคร: หัวหน้าทีม (ไม่ต้องให้ผู้ใช้ตรวจ · ไม่ต้องเรียก `reviewer` ตัวใหม่)'), 2],
+    // ขั้นตรวจต้องอยู่หลังขั้นสุดท้ายที่ลงมือ · การเลือกทางไม่ใช่การตรวจ · ตัวเดิม · ผู้ใช้กลางงาน
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. แก้ต่อ · ใคร: `developer` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจ\n2. รายงาน · ใคร: หัวหน้าทีม'), 0],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. เลือกทาง · ใคร: หัวหน้าทีม (ผู้ใช้เลือก · ผู้ใช้ตัดสิน)'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวเดิม\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวเดิม (ถือ server ที่รันอยู่)\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 0],
+    [pb('1. ทำ · ใคร: `developer` ตัวเดิม (ถือไฟล์ · `model: opus`)\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตั้งเป้า · ใคร: ผู้ใช้\n3. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: หัวหน้าทีม (ห้ามให้ผู้ใช้ตรวจ)\n2. ตรวจ · ใคร: หัวหน้าทีม (ไม่ให้ `reviewer` ตัวใหม่ดู)'), 1],
+    [pb('1. ทำ · ใคร: หัวหน้าทีม\n   ```\n2. x\n   ```\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 0],
+    [pb('1. ทำ · ใคร: หัวหน้าทีม\n2. ตรวจ · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. ทำ · ใคร: `general-purpose` ตัวใหม่\n2. ตรวจ · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. ทำ · ใคร: หัวหน้าทีม (ไม่ต้องถามผู้ใช้)\n2. ตรวจ · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. ทำ · ใคร: หัวหน้าทีม เขียน `CONTEXT.md`\n2. ตรวจ · ใคร: ผู้ใช้อนุมัติ'), 0],
+    [pb('```\n1. ตัวอย่าง\n```\n1. ทำ · ใคร: หัวหน้าทีม\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 0],
+    // ผู้ตรวจเฉพาะทางนับเมื่อเขียนว่าอ่านอย่างเดียว · คนทำหลังคนตรวจในบรรทัดเดียว · หัวหน้าทีมลงมือ · ตัวเดิม/รอผู้ใช้ทั้งบรรทัด
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. เขียน test · ใคร: `qa-tester` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. วัดผล · ใคร: `qa-tester` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)'), 0],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจแล้วแก้ · ใคร: `reviewer` ตัวใหม่ตรวจ · `developer` ตัวใหม่แก้'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. แก้ตามผลตรวจ · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. เขียนรายงาน · ใคร: หัวหน้าทีม'), 0],
+    [pb('1. ให้ `developer` ตัวเดิมแก้ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. เลือกทาง · ใคร: หัวหน้าทีม ถามผู้ใช้ให้เลือก แล้วรอคำตอบ\n3. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. รวมคำถาม · ใคร: หัวหน้าทีมถาม · ผู้ใช้ตอบ\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
+    [pb('1. คำถามที่ต้องให้ผู้ใช้ตอบลง "ค้างอยู่" · ใคร: หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 0],
+  ];
+  const pbHit = pbCases.every(([text, n]) => { errors.length = 0; checkPlaybook('p.md', text, has); return errors.length === n; });
+  console.log(`  ${pbHit ? '✅' : '❌'} playbook ใคร: · agent มีจริง · มีคนตรวจ`);
+  if (pbHit) ok++;
+  // agent ข้าม plugin ต้องเขียน "ถ้าติดตั้ง" (D13)
+  const xpb = (who) => pb(`1. ทำ · ใคร: ${who}\n2. ตรวจ · ใคร: \`reviewer\` ตัวใหม่`);
+  warns.length = 0; checkPlaybook('p.md', xpb('`x:writer` ตัวใหม่'), has);
+  const xBad = warns.length === 1;
+  warns.length = 0; checkPlaybook('p.md', xpb('`x:writer` ตัวใหม่ (ถ้าติดตั้ง plugin `x` ไม่มีก็ `general-purpose`)'), has);
+  const xHit = xBad && warns.length === 0;
+  console.log(`  ${xHit ? '✅' : '❌'} playbook agent ข้าม plugin ต้องบอก "ถ้าติดตั้ง"`);
+  if (xHit) ok++;
+  // description: agent เตือนเกิน 120 · skill เตือนเกิน 150 · ทุกชนิด error เกิน 160
+  errors.length = 0; warns.length = 0;
+  checkDescLength('a', 121, AGENT_DESC_SOFT); checkDescLength('s', 151, SKILL_DESC_SOFT);
+  checkDescLength('ok', 150, SKILL_DESC_SOFT); checkDescLength('big', 161, SKILL_DESC_SOFT);
+  const lenHit = warns.length === 2 && errors.length === 1 && errors[0].startsWith('big');
+  console.log(`  ${lenHit ? '✅' : '❌'} description agent 120 · skill 150 · error 160`);
+  if (lenHit) ok++;
+  errors.length = 0; warns.length = 0;
+  const total = cases.length + 5;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -249,6 +357,20 @@ if (existsSync(mp)) {
     for (const n of listed) if (!plugins.includes(n)) err(mp, `ประกาศ plugin "${n}" ที่ไม่มีโฟลเดอร์จริง`);
   } catch (e) { err(mp, `JSON พัง: ${e.message}`); }
 } else err(mp, 'ไม่มี marketplace.json');
+
+// playbook ของ superuser ทุก plugin — playbook-template เป็นแม่แบบ ไม่ตรวจ
+for (const p of plugins) {
+  const refDir = join(pluginsDir, p, 'skills', 'superuser', 'references');
+  if (!existsSync(refDir)) continue;
+  const hasAgent = (name) => {
+    const [plug, agent] = name.includes(':') ? name.split(':') : [p, name];
+    return existsSync(join(pluginsDir, plug, 'agents', `${agent}.md`));
+  };
+  for (const f of readdirSync(refDir).filter(n => /^playbook-.+\.md$/.test(n) && n !== 'playbook-template.md')) {
+    inspected++;
+    checkPlaybook(join(refDir, f), readFileSync(join(refDir, f), 'utf8'), hasAgent);
+  }
+}
 
 // README ต้องพูดถึงทุก plugin ไม่งั้นคนหาไม่เจอว่ามีอะไรบ้าง
 const readme = join(ROOT, 'README.md');

@@ -1,6 +1,6 @@
 # skill: project-doc-set
 
-Use when a new project needs its document set decided (which docs, order, readers, where docs, mockups and QA live).
+Use when a new project needs its document set decided (which docs, order, where docs and mockups live).
 
 # ชุดเอกสารโปรเจกต์
 
@@ -508,7 +508,7 @@ Thanks to: @alice, @bob, @charlie
 
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 
@@ -739,7 +739,7 @@ jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
 
 # skill: work-session-context
 
-Use when project work starts or ends, before switching AI model, handing work to a person or bot, or an inbox message lands.
+Use when project work starts or ends, before switching model, handing work over, or an inbox message lands.
 
 > **ใน SuperUser:** หัวหน้าทีมเป็นคนเดียวที่เขียน `CONTEXT.md` · `IMPROVEMENTS.md` และย้ายไฟล์ใน `inbox/` (log เขียนโดย hook · `learn/` โดย `learning-reviewer` ตามตารางข้อ 1) ส่วนการหยุดและรับงานต่อให้เดินตาม playbook [`pickup-and-pause`](../superuser/references/playbook-pickup-and-pause.md)
 

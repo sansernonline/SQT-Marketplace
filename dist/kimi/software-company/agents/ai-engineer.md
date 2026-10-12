@@ -1,6 +1,6 @@
 ---
 name: "ai-engineer"
-description: "Use when designing or building with LLMs or machine learning — model choice, RAG, prompts, evaluation, training pipelines, model serving and monitoring."
+description: "Use when building with LLMs or machine learning — model choice, RAG, prompts, evaluation, training, serving, monitoring."
 ---
 
 ${base_prompt}

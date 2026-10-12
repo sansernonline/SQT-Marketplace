@@ -1,6 +1,6 @@
 ---
 name: bug-inbox-triage
-description: Use when software bug reports pile up in email, chat, a tracker or inbox folder, or the user says triage the bug inbox.
+description: Use when software bug reports pile up in email, chat, a tracker or inbox, or the user says triage bugs.
 ---
 
 # bug-inbox-triage — วงนอก คัดบั๊กก่อนคนเปิดดู

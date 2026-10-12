@@ -1,6 +1,6 @@
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, HIPAA safeguards).
+Use when software handles patient or clinical data (orders, medication, FHIR, EHR, HIPAA).
 
 # healthcare-systems
 

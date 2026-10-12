@@ -1,6 +1,6 @@
 ---
 name: "portfolio"
-description: "Show the portfolio snapshot — allocation, P/L, concentration flags, top contributors and drags — at current prices."
+description: "Show the portfolio snapshot — allocation, P/L, concentration flags, top contributors — at current prices."
 ---
 
 Run the `portfolio-snapshot` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

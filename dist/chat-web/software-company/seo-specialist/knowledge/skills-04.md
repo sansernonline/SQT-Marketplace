@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 
@@ -588,7 +588,7 @@ Word วาดเส้นขอบไล่สีไม่ได้ ถ้า�
 
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
+Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
 
 # Spell Out Abbreviations
 

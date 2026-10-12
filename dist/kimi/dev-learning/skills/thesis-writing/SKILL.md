@@ -1,6 +1,6 @@
 ---
 name: thesis-writing
-description: Use when writing a thesis, IS or journal paper (วิทยานิพนธ์ · สารนิพนธ์ · บทความวิจัย) — proposal, literature review, chapters, citations, defense.
+description: Use when writing a thesis, IS or paper (วิทยานิพนธ์ · บทความวิจัย) — proposal, literature review, citations, defense.
 ---
 
 # Thesis and Paper Writing

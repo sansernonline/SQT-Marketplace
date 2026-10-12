@@ -1,6 +1,6 @@
 ---
 name: "healthcare-engineer"
-description: "Use when building healthcare software — EHR/EMR integration, FHIR APIs and SMART on FHIR, clinical workflows, telemedicine and patient portals."
+description: "Use when building healthcare software — EHR integration, FHIR and SMART on FHIR, clinical workflows, telemedicine."
 ---
 
 ${base_prompt}

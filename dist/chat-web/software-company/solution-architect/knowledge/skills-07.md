@@ -1,6 +1,6 @@
 # skill: repeated-mistakes-to-checks
 
-Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again.
+Use when the user corrects the same mistake twice or reviews keep flagging one issue. Make it a check.
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 
@@ -60,7 +60,7 @@ Use when the user corrects the same mistake twice, reviews keep flagging one iss
 
 # skill: reverse-engineering
 
-Use when there is a compiled app or unknown file format or protocol but no usable source, or a deployed build may differ from the repo.
+Use when there is a compiled app or unknown file format or protocol but no source, or a build may differ.
 
 # Reverse Engineering
 
@@ -215,7 +215,7 @@ Often the only place a calculation lives. None need a decompiler.
 
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 
 # Polished Document Style
 
@@ -639,7 +639,7 @@ Define acronyms on first use, then add to glossary.
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 

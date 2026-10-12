@@ -1,6 +1,6 @@
 ---
 name: security-engineer
-description: Use for security reviews, threat modeling, vulnerability assessment, secure code review, and auth design. Incidents and SOC go to security-analyst.
+description: Use for security reviews, threat modeling, vulnerability assessment, secure code, auth design. SOC → security-analyst.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 ---

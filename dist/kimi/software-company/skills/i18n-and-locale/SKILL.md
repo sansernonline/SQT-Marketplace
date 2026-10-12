@@ -1,6 +1,6 @@
 ---
 name: i18n-and-locale
-description: Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, Thai sorting, time zones).
+description: Use when a system shows text, dates, numbers or money in Thai and English (Buddhist years, sorting).
 ---
 
 # ภาษาและรูปแบบท้องถิ่น

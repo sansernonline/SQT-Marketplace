@@ -1,6 +1,6 @@
 # skill: ecommerce-patterns
 
-Use when building online commerce software (checkout, cart, orders, promotions, inventory, recommendations). Not for running a shop.
+Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
 
 # ecommerce-patterns
 
@@ -2176,7 +2176,7 @@ guardrails = {
 
 # skill: llm-engineering
 
-Use when a system calls a large language model (prompts, structured output, RAG, embeddings, vector search, evals).
+Use when a system calls a large language model (prompts, structured output, RAG, embeddings, evals).
 
 # llm-engineering
 

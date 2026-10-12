@@ -1,6 +1,6 @@
 ---
 name: "social-creator"
-description: "Use when creating posts, ads or campaign assets for social media. Knows platform formats and safe zones, and ships campaign sets, not one-off images."
+description: "Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets."
 ---
 
 ${base_prompt}

@@ -19,8 +19,11 @@ export const SHARED_FILES = [
   "skills/superuser/references/learning-loop.md",
   "skills/superuser/references/brief-template.md",
   "skills/superuser/references/team-files.md",
+  "skills/superuser/references/team-roles.md",
   "skills/superuser/templates/improvements-queue.md",
   "agents/learning-reviewer.md",
+  "agents/brainstormer.md",
+  "agents/reviewer.md",
   "hooks/superuser-hook.mjs",
   "hooks/hooks.json",
 ];

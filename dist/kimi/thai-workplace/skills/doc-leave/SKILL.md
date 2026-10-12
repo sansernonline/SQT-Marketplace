@@ -1,6 +1,6 @@
 ---
 name: doc-leave
-description: Use when an employee or HR needs a Thai leave form (sick, annual, personal, maternity), a leave balance or an approval flow.
+description: Use when an employee or HR needs a Thai leave form (sick, annual, personal, maternity) or leave balance.
 ---
 
 # Thai Leave Forms and Balances

@@ -1,7 +1,7 @@
 """md_to_docx.py — เปลี่ยนรายงาน Markdown 1 ไฟล์เป็น .docx ที่จัดหน้าแล้ว (ปกโลโก้กลาง · สารบัญ · ตารางสีแบรนด์)
 
     python md_to_docx.py report.md                     # → report.docx ข้างไฟล์ต้นทาง
-    python md_to_docx.py report.md -o out/Report_v1.0.docx --pdf
+    python md_to_docx.py report.md -o _to_delete/Report_v1.0.docx --pdf
 
 Markdown คือต้นฉบับ แก้ที่ .md แล้วรันใหม่ · ไม่แก้ .docx ด้วยมือ
 ต้องมี python-docx >= 1.1 · ใช้ brandkit.py จาก skill branded-document-design (โฟลเดอร์ข้างกัน)

@@ -1,6 +1,6 @@
 ---
 name: reverse-engineering
-description: Use when there is a compiled app or unknown file format or protocol but no usable source, or a deployed build may differ from the repo.
+description: Use when there is a compiled app or unknown file format or protocol but no source, or a build may differ.
 ---
 
 # Reverse Engineering

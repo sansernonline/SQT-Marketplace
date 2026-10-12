@@ -1,6 +1,6 @@
 ---
 name: api-conventions
-description: Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
+description: Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 ---
 
 # ข้อตกลงของ API

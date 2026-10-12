@@ -1,6 +1,6 @@
 # skill: pet-care
 
-Use when a Thai family keeps a dog or cat (rabies vaccine, registration, microchip, vet record, flea and tick). Never diagnoses.
+Use when a Thai family keeps a dog or cat (rabies vaccine, registration, microchip, vet record). No diagnosis.
 
 # Pet Care (Thailand)
 

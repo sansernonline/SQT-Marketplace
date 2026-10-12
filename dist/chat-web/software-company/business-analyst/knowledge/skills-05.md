@@ -752,7 +752,7 @@ erDiagram
 
 # skill: legacy-spec-recovery
 
-Use when a legacy system has code but no spec and someone wants to change it. As-is spec with evidence, then impact analysis.
+Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
 
 # Legacy Spec Recovery
 
@@ -900,7 +900,7 @@ Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, 
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
+Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 

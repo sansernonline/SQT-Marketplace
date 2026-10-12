@@ -1,6 +1,6 @@
 ---
 name: tech-mentor
-description: Use to keep up with tech, learn a new technology, turn reading into working knowledge, prepare for a certification, or pick a side project, sized to a week.
+description: Use to keep up with tech, learn a new technology, prepare for a certification, or pick a week-sized side project.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebSearch
 model: sonnet
 ---

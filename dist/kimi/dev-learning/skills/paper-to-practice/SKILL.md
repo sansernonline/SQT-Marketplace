@@ -1,6 +1,6 @@
 ---
 name: paper-to-practice
-description: Use when the user wants to understand and apply a paper, RFC or long technical article. Minimal working example.
+description: Use when the user wants to understand and apply a paper, RFC or long article. Minimal working example.
 ---
 
 # Paper to Practice

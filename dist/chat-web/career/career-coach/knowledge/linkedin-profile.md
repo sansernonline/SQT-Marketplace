@@ -1,6 +1,6 @@
 # skill: linkedin-profile
 
-Use when creating or improving a LinkedIn profile for a job search in Thailand (headline, About, recruiter keywords).
+Use when creating or improving a LinkedIn profile for a Thai job search (headline, About, keywords).
 
 # LinkedIn Profile (Thai market)
 

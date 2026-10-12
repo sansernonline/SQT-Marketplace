@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data.
+Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -73,7 +73,7 @@ Use when writing or reviewing any code, config, container or script, especially 
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -111,7 +111,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: testing-standards
 
-Use when adding or setting up automated tests in .NET, Node, Python, Angular or Flutter, or a suite is slow or flaky.
+Use when adding or setting up automated tests (.NET, Node, Python, Angular, Flutter) or a suite is flaky.
 
 # Testing Standards
 
@@ -629,7 +629,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 # skill: e2e-testing-patterns
 
-Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running them in CI.
+Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in CI.
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 

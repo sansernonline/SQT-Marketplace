@@ -1,6 +1,6 @@
 ---
 name: bug-report-template
-description: Use when writing a report for one software defect found in testing or from a user complaint (repro steps, severity vs priority).
+description: Use when writing a report for one software defect from testing or a user complaint (repro, severity).
 ---
 
 # Bug Report Template

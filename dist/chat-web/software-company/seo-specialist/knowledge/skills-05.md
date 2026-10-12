@@ -1,6 +1,6 @@
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Prose, table, diagram or list.
+Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
 
 # รูปทรงของคำตอบ
 
@@ -87,7 +87,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
+Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 

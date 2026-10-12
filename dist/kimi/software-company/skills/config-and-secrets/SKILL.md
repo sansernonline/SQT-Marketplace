@@ -1,6 +1,6 @@
 ---
 name: config-and-secrets
-description: Use when settings differ by environment or something must never be committed (connection strings, keys, certificates).
+description: Use when settings differ by environment or something must never be committed (keys, connection strings).
 ---
 
 # Config และ Secret

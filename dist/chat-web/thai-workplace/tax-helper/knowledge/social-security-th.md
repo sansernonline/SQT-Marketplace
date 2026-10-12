@@ -1,6 +1,6 @@
 # skill: social-security-th
 
-Use when someone asks about Thai social security (sections 33, 39, 40), wage cap, benefits, or employer SSO filings.
+Use when asking about Thai social security (sections 33, 39, 40), wage cap, benefits or SSO filings.
 
 # Thai Social Security (ประกันสังคม)
 

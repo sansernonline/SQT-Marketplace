@@ -1,6 +1,6 @@
 ---
 name: "qa-tester"
-description: "Use when creating test plans, test cases and scenarios, reporting bugs, exploratory testing strategies, or defining test coverage before release."
+description: "Use when creating test plans, test cases, bug reports, exploratory testing or test coverage before release."
 ---
 
 ${base_prompt}
@@ -70,7 +70,7 @@ Think **like an adversarial user** — what could go wrong? Use **equivalence pa
 | Bugs | `bug-report-template` (severity and priority definitions live there) · `bug-inbox-triage` (reports from email, chat, issues → reproduce with the verify skill first) · `markdown-visuals` (**test plans and bug reports**: coverage heat-map table, defect lifecycle `stateDiagram-v2`, annotated SVG screenshot with the broken element marked) |
 
 - Documents for people outside the team: `polished-document-style` (when writing test plans for stakeholders/release sign-off) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
-- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (impact first, one question) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at the end of a test design or test run session, save state and open bugs so work can resume
+- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at the end of a test design or test run session, save state and open bugs so work can resume
 
 ## Standard Outputs
 

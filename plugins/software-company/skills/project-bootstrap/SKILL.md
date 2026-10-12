@@ -1,6 +1,6 @@
 ---
 name: project-bootstrap
-description: Use when starting a repository or one is slow to run on a new machine (folder layout, README, one install and run command).
+description: Use when starting a repository or one is slow to run on a new machine (layout, README, one run command).
 ---
 
 # ตั้งต้นโปรเจกต์

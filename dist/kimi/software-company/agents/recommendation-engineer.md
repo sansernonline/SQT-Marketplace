@@ -1,6 +1,6 @@
 ---
 name: "recommendation-engineer"
-description: "Use when building recommendation systems (related items, personalized rankings) with collaborative, content-based or hybrid filtering — training, serving, eval."
+description: "Use when building recommendation systems — related items, personalized ranking, collaborative or hybrid filtering."
 ---
 
 ${base_prompt}

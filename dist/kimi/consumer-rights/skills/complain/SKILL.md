@@ -1,6 +1,6 @@
 ---
 name: "complain"
-description: "Draft a complaint and escalation plan for a faulty product, bad service or refused refund — seller, platform, สคบ. 1166, court."
+description: "Draft a complaint and escalation plan for a faulty product, bad service or refused refund — up to สคบ. 1166."
 disableModelInvocation: true
 ---
 

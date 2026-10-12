@@ -1,6 +1,6 @@
 ---
 name: "health-organizer"
-description: "Use to organise your own or a family member's health admin — checkups, results, medication, sleep, exercise, doctor questions. Never diagnoses; emergency 1669."
+description: "Use to organise family health admin — checkups, results, medication, sleep, doctor questions. Never diagnoses; 1669."
 ---
 
 ${base_prompt}

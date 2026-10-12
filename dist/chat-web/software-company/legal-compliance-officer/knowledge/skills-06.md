@@ -1,6 +1,6 @@
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
+Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
 
 # Spell Out Abbreviations
 
@@ -81,7 +81,7 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Prose, table, diagram or list.
+Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
 
 # รูปทรงของคำตอบ
 

@@ -1,6 +1,6 @@
 ---
 name: portfolio-snapshot
-description: Use when the user asks how their portfolio looks or how much they are up or down. Allocation, gain or loss, concentration.
+description: Use when the user asks how their portfolio looks or how much they are up or down. Allocation, P/L.
 ---
 
 # Portfolio Snapshot (สรุปพอร์ตหน้าเดียว)

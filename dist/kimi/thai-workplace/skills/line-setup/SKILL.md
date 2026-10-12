@@ -1,6 +1,6 @@
 ---
 name: "line-setup"
-description: "Set up a LINE OA Messaging API channel end to end — webhook with signature check, token handling, echo test."
+description: "Set up a LINE OA Messaging API channel end to end — webhook, signature check, tokens, echo test."
 disableModelInvocation: true
 ---
 

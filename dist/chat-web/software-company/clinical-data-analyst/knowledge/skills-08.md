@@ -1,6 +1,6 @@
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 
 # Polished Document Style
 
@@ -424,7 +424,7 @@ Define acronyms on first use, then add to glossary.
 
 # skill: architecture-patterns
 
-Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, CQRS, Event Sourcing, Saga.
+Use when choosing system architecture (monolith, microservices, serverless, event-driven, CQRS, Saga).
 
 # Architecture Patterns
 

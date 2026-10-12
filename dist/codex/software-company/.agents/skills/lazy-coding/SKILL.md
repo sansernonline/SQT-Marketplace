@@ -1,6 +1,6 @@
 ---
 name: lazy-coding
-description: Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest thing that works.
+description: Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
 ---
 
 # Lazy Coding

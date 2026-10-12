@@ -1,18 +1,13 @@
 ---
 name: superuser
-description: Use when a non-trivial software task starts (feature, bug, refactor, investigation, docs, review, unattended run) or the user says superuser.
+description: Use when a non-trivial software task starts (feature, bug, refactor, investigation, review) or says superuser.
 ---
 
 # SuperUser — ประตูหน้าเดียวของทีม agent
 
-> วิธีทำงานของทีม: เลือก playbook → แจกงานให้ skill และ agent ตามบทบาท → พิสูจน์ผลกับของจริง → จดบันทึกไว้ให้รอบหน้า
-> ทุกตัวรู้บทของตัวเอง เดินตามแผนเดียวกัน และตรวจงานกันเองก่อนส่ง
-
 เรียกได้ทั้ง `/software-company:superuser` หรือพูดว่า "ใช้ superuser" กับงานซอฟต์แวร์
 
-plugin อื่นในชุดก็มี `superuser` ของตัวเอง (`/<plugin>:superuser`) ใช้แนวคิดเดียวกัน แต่ playbook เกณฑ์งาน และรายการ "รออนุมัติ" ปรับตามงานของ plugin นั้น · รายชื่อ plugin อยู่ใน [`agents`](references/agents.md)
-
-แนวคิดมาจาก pstack ของ Lauren Tan (poteto) แห่ง Cursor แล้วปรับให้เข้ากับ plugin `software-company`
+plugin อื่นมี `superuser` ของตัวเอง (`/<plugin>:superuser`) · รายชื่อใน [`agents`](references/agents.md)
 
 ---
 
@@ -33,11 +28,10 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 
 **กฎเฉพาะของ plugin นี้**
 
-- **ที่จด** — การตัดสินใจลง [`decision-log`](../decision-log/SKILL.md) ใน `docs/BUILD-PLAN.md` แทนตารางใน `CONTEXT.md` · ตารางสถานะใช้ [`status-report`](../status-report/SKILL.md) · `CONTEXT.md` และจุดส่งต่อตาม [`work-session-context`](../work-session-context/SKILL.md) · ไฟล์ style สร้างด้วย [`owner-style-capture`](../owner-style-capture/SKILL.md)
-- **principle ที่อยู่หลังกฎ** — ข้อ 2 [`principle-prove-it-works`](../principle-prove-it-works/SKILL.md) · ข้อ 3 [`principle-proceed-on-reversible-work`](../principle-proceed-on-reversible-work/SKILL.md) · playbook อ่านอย่างเดียวของ plugin นี้คือ `investigation` · `review`
+- **ที่จด** — การตัดสินใจลง [`decision-log`](../decision-log/SKILL.md) ใน `docs/BUILD-PLAN.md` แทนตารางใน `CONTEXT.md` · ตารางสถานะใช้ `status-report` · `CONTEXT.md` และจุดส่งต่อตาม [`work-session-context`](../work-session-context/SKILL.md) · ไฟล์ style สร้างด้วย [`owner-style-capture`](../owner-style-capture/SKILL.md)
+- **principle ที่อยู่หลังกฎ** — ข้อ 2 `principle-prove-it-works` · ข้อ 3 `principle-proceed-on-reversible-work` · playbook อ่านอย่างเดียว: `investigation` · `review`
 
 10. **เกณฑ์ 3 ข้อในข้อ 7 คือเกณฑ์โค้ด (หัวข้อ 4)** — เรียบง่าย · โครงแบบวิศวกร · ปลอดภัยตั้งแต่ต้น
-11. **บอก principle เฉพาะข้อที่เปลี่ยนการตัดสินใจ และเปลี่ยนอะไร** — อ้างได้เฉพาะข้อที่เปิดอ่าน SKILL.md จริงในรอบนี้
 
 ---
 
@@ -55,38 +49,32 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 |---|---|---|
 | **เล็ก** | คำถามเดียว · แก้จุดเดียว · ย้อนได้ทันที | ทำเลยโดยไม่เปิด playbook แต่ยังต้องตรวจผลก่อนตอบ |
 | **กลาง** | หลายขั้น แต่รู้ทางแล้ว | playbook ที่ตรงที่สุดจากตารางด้านล่าง · เพิ่ม ตัด หรือสลับขั้นได้แต่จดเหตุผล · ไม่มีตัวตรง → ประกอบเองตาม [`playbook-template`](references/playbook-template.md) |
-| **ใหญ่ หรือโจทย์ไม่ชัด** | ไปได้หลายทาง · เลือกผิดแล้วแพง · ผู้ใช้ยังไม่รู้ว่าอยากได้แบบไหน | brainstorm 2–3 ทาง (ข้อดี · ข้อเสีย · แรง) → ให้คะแนนตามเป้าและความเสี่ยง (ทางสำคัญมากใช้ MoA) → เลือก 1 ทาง → brief ภาษาคนตาม [`brief-template`](references/brief-template.md) ส่งผู้ใช้อ่านและเก็บที่ `docs/BRIEF.md` → เลือกหรือประกอบ playbook · ทางที่ย้อนไม่ได้หรือใช้เงิน → เสนอผู้ใช้อนุมัติ ระหว่างรอเตรียมส่วนที่ย้อนได้ |
+| **ใหญ่ หรือโจทย์ไม่ชัด** | ไปได้หลายทาง · เลือกผิดแล้วแพง · ผู้ใช้ยังไม่รู้ว่าอยากได้แบบไหน | `brainstormer` ตัวใหม่เสนอ 2–3 ทาง → หัวหน้าทีมเลือก 1 ทาง → brief ที่ `docs/BRIEF.md` → เลือกหรือประกอบ playbook · ขั้นตอนเต็มใน [`team-roles`](references/team-roles.md) |
 
 - ถ้าไม่แน่ใจว่างานขนาดไหน ให้ถือว่าใหญ่ขึ้นอีก 1 ขั้น
 - ถ้าใช้ playbook ที่ประกอบเองหรือปรับเยอะ ให้บอกในรายงานตอนจบ ถ้าแบบเดียวกันใช้ซ้ำ 2 ครั้งขึ้นไป รอบเรียนรู้จะเสนอให้ทำเป็น playbook ถาวร
 <!-- superuser:end start -->
 
-งานขนาดกลางขึ้นไปให้อ่านคำขอ แล้วเลือก **1** ตัวจาก 16 ตัวนี้ หรือประกอบเองตาม `playbook-template` จากนั้นเปิดไฟล์ playbook อ่านทั้งไฟล์ก่อนเริ่ม
+งานขนาดกลางขึ้นไป เลือก **1** ตัว หรือประกอบตาม `playbook-template` แล้วอ่านทั้งไฟล์ก่อนเริ่ม · เข้าได้ 2 ตัว → ท้าย [`triggers`](references/triggers.md)
 
-| กลุ่ม | playbook | ใช้เมื่อ |
-|---|---|---|
-| เข้าใจ | [`investigation`](references/playbook-investigation.md) | คำถามอ่านอย่างเดียว — X ทำงานอย่างไร · ทำไมถึงทำแบบนี้ · ควรวางไว้ที่ไหน |
-| เข้าใจ | [`pickup-and-pause`](references/playbook-pickup-and-pause.md) | ทำต่อจากที่ค้าง · รับงานต่อจาก agent อื่น · หยุดงานให้รับต่อได้ |
-| สร้างและแก้ | [`new-project`](references/playbook-new-project.md) | เริ่มโปรเจกต์ใหม่ที่ยังไม่มีโค้ด จนรันและพิสูจน์ได้ |
-| สร้างและแก้ | [`feature`](references/playbook-feature.md) | เพิ่มหรือเปลี่ยนพฤติกรรมของโปรแกรมที่มีอยู่ |
-| สร้างและแก้ | [`bug-fix`](references/playbook-bug-fix.md) | มีของพัง — error · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · ผู้ใช้แจ้ง |
-| สร้างและแก้ | [`refactor`](references/playbook-refactor.md) | เปลี่ยนโครงสร้างโดยพฤติกรรมเท่าเดิม · ย้ายระบบ |
-| สร้างและแก้ | [`performance`](references/playbook-performance.md) | ช้า · กินเครื่อง · อยากให้ตัวเลขตัวหนึ่งดีขึ้นถึงเป้า |
-| สร้างและแก้ | [`visual-parity`](references/playbook-visual-parity.md) | หน้าจอจริงต้องตรงกับ mockup หรือระบบเดิม |
-| สร้างและแก้ | [`prototype`](references/playbook-prototype.md) | มีทางเลือกที่ตอบได้ด้วยการลองรันจริง ไม่ต้องถามคน |
-| ตรวจและส่ง | [`review`](references/playbook-review.md) | ตรวจโค้ด ดีไซน์ หรือเอกสาร ก่อนส่ง |
-| ตรวจและส่ง | [`ship`](references/playbook-ship.md) | เปิด PR · ดูแลจน CI เขียว · แก้ตามรีวิว · เตรียม merge |
-| งานชุดและงานยาว | [`project-docs`](references/playbook-project-docs.md) | ทำเอกสารโปรเจกต์ตามชุด prompt ใน `prompt/software-company/` ของ repo SQT-Marketplace (ไม่ใช่โฟลเดอร์ในโปรเจกต์) — BRD · SRS · mockup · FSD · คู่มือ |
-| งานชุดและงานยาว | [`unattended-run`](references/playbook-unattended-run.md) | งานยาวหรือหลายเฟสที่คนไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ทำทั้งคืน" |
-| ดูแลระบบ | [`skill-authoring`](references/playbook-skill-authoring.md) | เขียนหรือแก้ skill · agent · prompt แล้วทดสอบว่าช่วยจริง |
-| ดูแลระบบ | [`learn-from-session`](references/playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
-| ดูแลระบบ | [`housekeeping`](references/playbook-housekeeping.md) | เก็บกวาด worktree · branch · sandbox · image เก่า |
-
-คำขอที่เข้าได้ 2 ตัว:
-- พังหรือรั่วทั้งที่ไม่ควรเกิด (error · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง) → `bug-fix` · ใช้ได้อยู่แต่อยากให้ตัวเลขดีขึ้นถึงเป้า → `performance`
-- หน้าจอต้องเหมือน mockup หรือระบบเดิม → จบด้วย `visual-parity` · ย้ายโครงภายในโดยหน้าตาไม่เปลี่ยน → `refactor`
-- โปรเจกต์ใหม่ที่ต้องมีเอกสาร BRD · SRS → โค้ดใช้ `new-project` · เอกสารใช้ `project-docs`
-- `unattended-run` ห่อ playbook อื่น ไม่ได้เลือกแทน — ข้างในยังเลือก playbook ตามงานทีละชิ้น
+| playbook | ใช้เมื่อ |
+|---|---|
+| [`investigation`](references/playbook-investigation.md) | คำถามอ่านอย่างเดียว — X ทำงานอย่างไร · ทำไมถึงทำแบบนี้ · ควรวางไว้ที่ไหน · เรื่องนอกโค้ด → `prior-art-review` · `reference-app-research` ([`triggers`](references/triggers.md)) |
+| [`pickup-and-pause`](references/playbook-pickup-and-pause.md) | ทำต่อจากที่ค้าง · รับงานต่อจาก agent อื่น · หยุดงานให้รับต่อได้ |
+| [`new-project`](references/playbook-new-project.md) | เริ่มโปรเจกต์ใหม่ที่ยังไม่มีโค้ด จนรันและพิสูจน์ได้ |
+| [`feature`](references/playbook-feature.md) | เพิ่มหรือเปลี่ยนพฤติกรรมของโปรแกรมที่มีอยู่ |
+| [`bug-fix`](references/playbook-bug-fix.md) | มีของพัง — error · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · ผู้ใช้แจ้ง |
+| [`refactor`](references/playbook-refactor.md) | เปลี่ยนโครงสร้างโดยพฤติกรรมเท่าเดิม · ย้ายระบบ |
+| [`performance`](references/playbook-performance.md) | ช้า · กินเครื่อง · อยากให้ตัวเลขตัวหนึ่งดีขึ้นถึงเป้า |
+| [`visual-parity`](references/playbook-visual-parity.md) | หน้าจอจริงต้องตรงกับ mockup หรือระบบเดิม |
+| [`prototype`](references/playbook-prototype.md) | มีทางเลือกที่ตอบได้ด้วยการลองรันจริง ไม่ต้องถามคน |
+| [`review`](references/playbook-review.md) | ตรวจโค้ด ดีไซน์ หรือเอกสาร ก่อนส่ง |
+| [`ship`](references/playbook-ship.md) | เปิด PR · ดูแลจน CI เขียว · แก้ตามรีวิว · เตรียม merge |
+| [`project-docs`](references/playbook-project-docs.md) | เอกสารโปรเจกต์ตามชุด prompt ของ SQT-Marketplace — BRD · SRS · mockup · FSD · คู่มือ |
+| [`unattended-run`](references/playbook-unattended-run.md) | งานยาวหรือหลายเฟสที่คนไม่อยู่ดู — "ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ทำทั้งคืน" |
+| [`skill-authoring`](references/playbook-skill-authoring.md) | เขียนหรือแก้ skill · agent · prompt แล้วทดสอบว่าช่วยจริง |
+| [`learn-from-session`](references/playbook-learn-from-session.md) | ผู้ใช้สั่ง "รวมบทเรียน" · "reflect" · แก้ทีมเรื่องเดิมซ้ำ |
+| [`housekeeping`](references/playbook-housekeeping.md) | เก็บกวาด worktree · branch · sandbox · image เก่า |
 
 ---
 
@@ -98,46 +86,29 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 
 ## 4 · เกณฑ์โค้ด และดัชนี principle
 
-**เกณฑ์โค้ด — ทุก diff ต้องผ่านทั้ง 3 ข้อ** (เกณฑ์เต็มทีละข้ออยู่ต้น [`principles`](references/principles.md))
+**เกณฑ์โค้ด — ทุก diff ต้องผ่านทั้ง 3 ข้อ** (เกณฑ์เต็มและดัชนี principle ทุกกลุ่มอยู่ใน [`principles`](references/principles.md))
 - **เรียบง่าย** — ไม่มีของที่ยังไม่ต้องใช้ · diff สั้นที่สุดที่ยังถูก · `lazy-coding`
 - **โครงแบบวิศวกร** — โฟลเดอร์ตามฟีเจอร์ · 1 ไฟล์ 1 หน้าที่ · ค่าตั้งนอกโค้ด · test ข้างโค้ด · `readable-code`
 - **ปลอดภัยตั้งแต่ต้น** — ตรวจ input ทันที · SQL ใช้ parameter · ตรวจสิทธิ์ฝั่งเซิร์ฟเวอร์ · ค่าลับนอกโค้ด · [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md)
-- 3 ข้อไปด้วยกัน ไม่ใช่ยัดไฟล์เดียว ไม่ใช่ชั้นเผื่ออนาคต · diff สั้นกว่าแต่ผู้ใช้ลำบากขึ้น → [`principle-user-experience-first`](../principle-user-experience-first/SKILL.md) ชนะ
-
-**ดัชนี principle** — รายการ principle ทั้งหมดแยกตามกลุ่ม (ความปลอดภัย · ออกแบบ · พิสูจน์ · ความเรียบง่าย · การทำงาน) อยู่ใน [`principles`](references/principles.md)
+- 3 ข้อไปด้วยกัน · diff สั้นกว่าแต่ผู้ใช้ลำบากขึ้น → `principle-user-experience-first` ชนะ
 
 ---
 
 ## 5 · หัวหน้าทีมและ subagent
 
-**ตัวที่ผู้ใช้คุยด้วยคือหัวหน้าทีม** — มีตัวเดียวต่อโปรเจกต์ และอยู่เหนือ agent ทุกตัว หัวหน้าทีมรับงานแทนผู้ใช้ แล้วสั่งและคุมลูกทีม ส่วนผู้ใช้อยู่เหนือหัวหน้า และยังเป็นเจ้าของรายการ "รออนุมัติ"
-
-| หัวหน้าทีม | ลูกทีม (subagent) |
-|---|---|
-| คุยกับผู้ใช้ · อ่านและจัดการ `.claude/superuser/inbox/` · เลือก playbook · แบ่งงาน · เลือก agent และระดับโมเดล | ทำชิ้นที่ได้รับ ภายในขอบเขตที่ส่งมาเท่านั้น |
-| ตรวจผลของลูกทีมกับของจริงก่อนรับ ถ้าไม่ผ่านก็ส่งกลับให้แก้ | รายงานกลับหัวหน้า — ไม่คุยกับผู้ใช้ ไม่สั่ง agent ตัวอื่นต่อ |
-| เขียนไฟล์กลางคนเดียว — `CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · ย้ายไฟล์ inbox | ใส่สิ่งที่ควรจดไว้ในรายงาน ให้หัวหน้าตัดสินว่าจะจดหรือไม่ |
-| ถ้าลูกทีมขัดกัน หัวหน้าตัดสินแล้วลง `decision-log` | — |
-
-งานใหญ่หรืองานยาว หัวหน้าทำหน้าที่ประสานงานและตรวจ ไม่ลงมือเขียนโค้ดเอง ถ้า context ใกล้เต็มหรือต้องสลับโมเดล ให้ทำจุดส่งต่อตาม [`work-session-context`](../work-session-context/SKILL.md) ข้อ 4 ก่อน
-
-| กติกา | รายละเอียด |
-|---|---|
-| **เลือก agent ตามบทบาท** | โค้ด → `developer` · test และตรวจแอป → `qa-tester` · ดีไซน์ระบบ → `solution-architect` · spec → `system-analyst` · เอกสาร → `technical-writer` |
-| **งานเฉพาะสาขาและงานชีวิตประจำวัน** | แอปมือถือ · LLM · ข้อมูล · การเงิน · สุขภาพ · ร้านค้า · ประกัน · กฎหมาย · เกม · IoT · บล็อกเชน · แกะของที่ไม่มีซอร์ส มี agent ของตัวเอง ส่วนงานภาษี เงิน ร้านค้า บ้าน อาชีพ สุขภาพ ให้ส่งต่อ plugin สาขานั้น ดูรายชื่อเต็มใน [`agents`](references/agents.md) |
+**หัวหน้าทีม** คือตัวที่ผู้ใช้คุยด้วย ตัวเดียวต่อโปรเจกต์ · งานใหญ่ประสานและตรวจ ไม่เขียนโค้ดเอง · เลือก agent: โค้ด → `developer` · test และตรวจแอป → `qa-tester` · ดีไซน์ระบบ → `solution-architect` · spec → `system-analyst` · เอกสาร → `technical-writer` · หน้าที่เต็มและ agent สาขาใน [`agents`](references/agents.md)
 
 <!-- superuser:begin team -->
-- **ลูกทีมตัวใหม่ทุกงาน** (งานใหม่ · รอบแก้ · ลองใหม่) — ส่งคำสั่งเดิม + คำสั่งที่เพิ่มทีหลัง + รายงานของตัวก่อน · ส่ง path ให้อ่านเอง ไม่ยัดเนื้อหา
+- **ลูกทีมตัวใหม่ทุกงาน** (งานใหม่ · รอบแก้ · ลองใหม่ · เปลี่ยนระดับโมเดล) — ส่งคำสั่งเดิม + คำสั่งที่เพิ่มทีหลัง + รายงานของตัวก่อน · ส่ง path ให้อ่านเอง ไม่ยัดเนื้อหา · ตัวเดิมได้เฉพาะเมื่อถือของที่ย้ายยาก (ไฟล์ยังไม่บันทึก · server ที่รันอยู่)
 - **ระดับโมเดล** — ใหญ่ `opus` วางกลยุทธ์ · หาจุดผิด · ตัดสินใจ · กลาง `sonnet` ค่าเริ่มต้น · เล็ก `haiku` งานกลไกที่คำตอบชัด · ไม่แน่ใจใช้กลาง · พลาดขยับขึ้น 1 ระดับ ไม่ลองซ้ำระดับเดิม · สลับกลางทางหลังอัปเดต "รับงานต่อ"
 - **งานขนานไม่เขียนที่เดียวกัน** · ไฟล์กลางหัวหน้าทีมเขียนคนเดียว
 - **ผลของลูกทีม หัวหน้ารับผิดชอบ** — อ่านและตรวจกับเกณฑ์หัวข้อ 4 เอง ไม่ส่งต่อคำพูดตรง ๆ · "เสร็จแล้ว" จากลูกทีมยังไม่ใช่หลักฐาน
-- **รอบเรียนรู้ใช้ `learning-reviewer` ตัวใหม่ระดับกลาง** — ตัวที่ทำงานไม่ตรวจวิธีทำงานของตัวเอง
+- **บทบาทกลาง** `brainstormer` (คิดทางก่อนเริ่ม) · `reviewer` (ตรวจงานเสร็จ อ่านอย่างเดียว) · `learning-reviewer` (ตรวจวิธีทำงานตอนจบ) — ตัวใหม่ทุกครั้ง · รายละเอียดใน [`team-roles`](references/team-roles.md)
+- **playbook ทุกขั้นบอก `ใคร:`** — ทำตามนั้น ถ้าเปลี่ยนตัวให้จดเหตุผล · ผู้ใช้ไม่เป็นคนทำขั้นกลางงาน (ถามรวมตอนเริ่ม)
 <!-- superuser:end team -->
 
 **เพิ่มเติมของงานโค้ด**
-- ใช้ลูกทีมตัวเดิมต่อเฉพาะเมื่อมันถือของที่ย้ายยาก (ไฟล์ที่ยังไม่บันทึก · dev server ที่รันอยู่) · งานขนานแยก worktree · `docs/BUILD-PLAN.md` หัวหน้าทีมเขียนคนเดียว · อ่าน diff เองก่อนรับ
-- ใหญ่ `opus` = ดีไซน์ข้ามระบบ · concurrency · อัลกอริทึมละเอียด · root cause ที่ยาก · รีวิว — agent ที่ตั้ง `sonnet` (เช่น `developer`) ส่ง `model: opus` ตอนเรียก · กลาง = โค้ดและเอกสารทั่วไป · bug fix ที่รู้สาเหตุ · เล็ก = แก้ชื่อหลายจุด · สรุป log — ยังไม่มี agent ที่ตั้ง `haiku` ให้ส่ง `model: haiku` เอง
-- โมเดลใหม่ออกให้แก้บล็อก `team` (ต้นฉบับใน plugin `superuser`) และ `model:` ใน `agents/*.md` · สลับโมเดลข้ามค่ายได้หลังทำจุดส่งต่อตาม [`work-session-context`](../work-session-context/SKILL.md) ข้อ 5
+- งานขนานแยก worktree · `docs/BUILD-PLAN.md` หัวหน้าทีมเขียนคนเดียว · อ่าน diff เองก่อนรับ · ระดับโมเดลของงานโค้ดใน [`agents`](references/agents.md)
 - **งานอ่านอย่างเดียว** — agent ทุกตัวมีเครื่องมือเขียนไฟล์ ส่งงานตรวจหรืองานหาคำตอบให้เขียนในคำขอว่า "ห้ามเขียนหรือแก้ไฟล์"
 
 ---
@@ -169,9 +140,7 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 - ใส่ค่าลับจริง · จ่ายเงิน · ยอมรับเงื่อนไขในนามผู้ใช้
 - เจอ CAPTCHA บนเว็บของคนอื่น — ไม่แก้ ไม่หาทางหลบ ให้บอกผู้ใช้ทำเอง ส่วนระบบของเราเองให้ใช้ค่าทดสอบของผู้ให้บริการแทน (ดู `docker-sandbox` ข้อ 6)
 
-**อนุญาตไว้ล่วงหน้า** — เขียนใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` ของโปรเจกต์ เช่น "commit และ push ใน branch งานได้เลย" · "deploy ขึ้น staging ได้" ข้อนั้นจะออกจาก "รออนุมัติ" เฉพาะขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** deploy production · ลบข้อมูลจริง · force-push branch ที่คนอื่นใช้ · จ่ายเงิน · ส่งข้อความในนามผู้ใช้ · CAPTCHA
-
-**ใน Docker sandbox ของโปรเจกต์ ([`docker-sandbox`](../docker-sandbox/SKILL.md))** — ติดตั้งโปรแกรม · ลบไฟล์ใน sandbox · รันเซิร์ฟเวอร์ · ล้าง sandbox แล้วสร้างใหม่ ทำได้เต็มที่ เพราะพังแล้วสร้างใหม่ได้ ส่วนสิ่งที่ออกนอก sandbox (ส่งข้อมูล · บัญชีจริง · push · deploy) ยังอยู่ใน "รออนุมัติ"
+อนุญาตไว้ล่วงหน้า · ทำได้เต็มที่ใน Docker sandbox → [`approvals`](references/approvals.md)
 
 **กฎ commit** — ผู้ใช้สั่ง หรือเขียนอนุญาตไว้ชัดใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` → commit เป็นชิ้นเล็กตาม `commit-message-format` บน branch งาน ไม่ลง branch หลัก · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำไว้ในคำตอบ · ไม่เดาว่าได้รับอนุญาตจากเอกสารอื่น · playbook ทุกตัวอ้างกฎนี้
 
@@ -183,12 +152,11 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 - **เขียนตาม `human-writing`** — ผลต่อผู้ใช้ก่อน (ได้อะไร ต้องทำอะไรต่อ) · ภาษาคน · ตัวเลขเป็นเลข · ไม่สรุปซ้ำตอนท้าย
 - **ทุกข้ออ้างมีป้าย** `ตรวจจริง` · `อนุมาน` · `เดา` · ที่ยังไม่ได้ตรวจเขียน `ยังไม่ตรวจ` · ห้ามโยนงานตรวจที่ทำเองได้ให้ผู้ใช้
 - **ไม่แต่งลิงก์ ไม่แต่งตัวเลข** — อ้างเฉพาะไฟล์ แหล่ง และผลที่เห็นจริงในรอบนี้
-- **ข้อเสนอปรับปรุง ≤ 3 ข้อ** (ทำอะไร · ได้อะไร · แรงเล็ก/กลาง/ใหญ่) และ **ควรปรับ skill ≤ 3 ข้อ** จาก `learning-reviewer` (skill · เดิม → ใหม่ · หลักฐาน) · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
+- **ข้อเสนอปรับปรุง ≤ 3 ข้อ** (ทำอะไร · ได้อะไร · แรงเล็ก/กลาง/ใหญ่) และ **ควรปรับทีม ≤ 3 ข้อ** จาก `learning-reviewer` (ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน) ให้ผู้ใช้ตัดสินทีละข้อตามหัวข้อ 9 · ไม่มีเรื่องจริงไม่ต้องใส่ · ไม่ลงมือเองจนกว่าผู้ใช้สั่ง
 - **ปิดท้ายงานที่เกิน 1 ขั้น** ด้วยตารางสถานะ แล้วเฉพาะหัวข้อที่มีของ: **ตัดสินใจเอง** (เลือก · ไม่เลือก · ทำไม) · **รออนุมัติ** · **ค้างอยู่**
 <!-- superuser:end answer -->
 
-- **บอก principle เมื่อมันเปลี่ยนการตัดสินใจ** — "ใช้ `principle-fix-root-cause` จึงแก้ที่ตัว parser แทนการดัก null ที่หน้าจอ" · ไม่ได้เปลี่ยนอะไรไม่ต้องบอก
-- ตารางสถานะใช้รูปแบบและคำสถานะของ [`status-report`](../status-report/SKILL.md) — เป็นชุดคำของงานโค้ด ต่างจาก plugin อื่นโดยตั้งใจ
+- บอก principle เฉพาะเมื่อมันเปลี่ยนการตัดสินใจ · ตารางสถานะใช้คำของ [`status-report`](../status-report/SKILL.md) (ชุดคำงานโค้ด ต่างจาก plugin อื่นโดยตั้งใจ)
 
 ---
 
@@ -204,7 +172,7 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 ## 9 · ไฟล์กลาง — `CONTEXT.md` · `IMPROVEMENTS.md`
 
 <!-- superuser:begin where -->
-ไฟล์ทำงานอยู่ใน `.claude/superuser/` ของโฟลเดอร์งาน: `CONTEXT.md` (≤ 150 บรรทัด เขียนทับหัวข้อ) · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` · brief ไป `docs/BRIEF.md` · ของชั่วคราวไป `_to_delete/` · หัวหน้าทีมเขียนคนเดียว · `log/` `inbox/` `learn/` ไม่ commit (กติกาเต็มใน `team-files`) · โปรเจกต์เก่าที่มี `CONTEXT.md` กับ `.superuser/` ที่รากใช้ต่อได้ · รายละเอียดใน [`team-files`](references/team-files.md)
+ไฟล์ทำงานอยู่ใน `.claude/superuser/` ของโฟลเดอร์งาน: `CONTEXT.md` (≤ 150 บรรทัด เขียนทับหัวข้อ) · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` `inbox/` `learn/` (ไม่ commit) · brief ไป `docs/BRIEF.md` · ของชั่วคราวไป `_to_delete/` · หัวหน้าทีมเขียนคนเดียว · `CONTEXT.md` กับ `.superuser/` ที่รากของโปรเจกต์เก่าใช้ต่อได้ · กติกาเต็มใน [`team-files`](references/team-files.md)
 <!-- superuser:end where -->
 
 งานซอฟต์แวร์ใช้ `docs/BUILD-PLAN.md` (ตารางสถานะและ `decision-log`) แทน `HISTORY.md` · สร้าง `CONTEXT.md` ตาม [`work-session-context`](../work-session-context/SKILL.md) ข้อ 2
@@ -214,27 +182,28 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 <!-- superuser:end improvements -->
 
 <!-- superuser:begin learning -->
-### รอบเรียนรู้ตอนจบงาน
+### รอบเรียนรู้ — ระหว่างงานและตอนจบ
 
 งานที่เกิน 1 ขั้น (ข้าม: คำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว):
-1. ระหว่างงาน hook จด log เองและติดธงเมื่อผู้ใช้แก้ · ผู้ใช้เปลี่ยนทิศ → จดการตัดสินใจ เหตุผลขึ้นต้น `ผู้ใช้แก้ —` · ได้ผล reviewer → ต่อบรรทัด `review` ท้าย `log/<วันที่>/main.jsonl`
-2. ก่อนตอบตอนจบ ส่ง `learning-reviewer` ตัวใหม่ (ระดับกลาง) พร้อมสรุปงาน 5–10 บรรทัด → มันเขียน `.claude/superuser/learn/<วันที่>-<งาน>.md`
-3. หัวหน้าทีมตรวจหลักฐานทีละข้อ ข้อที่ผ่าน ≤ 3 ใส่ "ควรปรับ skill" + 1 แถวในคิวกลาง `~/.claude/superuser/improvements.md` (เรื่องเดิมบวกช่อง "ครั้ง")
-4. skill เปลี่ยนเมื่อผู้ใช้สั่ง "รวมบทเรียน" หรือ "reflect" เท่านั้น ([`learn-from-session`](references/playbook-learn-from-session.md))
+1. **ระหว่างงาน — ใช้บทเรียนทันที** (hook จด log และติดธงเมื่อผู้ใช้แก้) · ผู้ใช้แก้หรือเปลี่ยนทิศ → แก้ชิ้นที่ผิดแบบเดียวกันให้หมด ใช้กับขั้นที่เหลือ ส่งต่อให้ลูกทีมตัวถัดไป · จดการตัดสินใจขึ้นต้น `ผู้ใช้แก้ —` · ผล reviewer ลงบรรทัด `review` ใน `log/<วันที่>/main.jsonl`
+2. **ก่อนตอบตอนจบ** ส่ง `learning-reviewer` ตัวใหม่ (ระดับกลาง) พร้อมสรุปงาน 5–10 บรรทัด → มันเขียน `.claude/superuser/learn/<วันที่>-<งาน>.md` พร้อมข้อเสนอ ≤ 3 ข้อ
+3. **หัวหน้าทีมตรวจหลักฐานทีละข้อ** ข้อที่ผ่าน ≤ 3 ใส่ "ควรปรับทีม" ในคำตอบ
+4. **ผู้ใช้ตรวจ** — ถามครั้งเดียวตอนจบ ให้เลือกทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ทุกข้อลงคิวกลาง `~/.claude/superuser/improvements.md` ตาม `learning-loop`
+5. ไฟล์ skill · agent · playbook เปลี่ยนเมื่อผู้ใช้สั่ง "รวมบทเรียน" หรือ "reflect" เท่านั้น ([`learn-from-session`](references/playbook-learn-from-session.md))
 
-เปิด [`learning-loop`](references/learning-loop.md) เฉพาะตอนตั้งโฟลเดอร์ทีม · เขียนบรรทัด `review` หรือคิวกลางครั้งแรก · ผู้ใช้สั่ง "รวมบทเรียน"
+เปิด [`learning-loop`](references/learning-loop.md) เมื่อตั้งโฟลเดอร์ทีม หรือเขียนบรรทัด `review` และคิวกลางครั้งแรก
 <!-- superuser:end learning -->
 
 ---
 
 ## 10 · รูปแบบการทำงานของทีม
 
-หัวหน้าทีมเลือกรูปแบบตอนวางแผน · วิธีทำ ต้นทุน และกับดักอยู่ใน [`agent-patterns`](../agent-patterns/SKILL.md) · ตัวอย่างในงานของ plugin นี้อยู่ใน [`examples`](references/examples.md)
+เลือกตอนวางแผน · วิธีทำ ต้นทุน กับดัก → [`agent-patterns`](../agent-patterns/SKILL.md) · ตัวอย่าง → [`examples`](references/examples.md)
 
 <!-- superuser:begin patterns -->
-- งานที่เกิน 1 ขั้น: Planning → ReAct ทุกขั้น → Reflection ก่อนส่ง · MoA ใช้แรง 3–5 เท่า ใช้เฉพาะเรื่องที่เลือกผิดแล้วแพง
-- Reflection บังคับเมื่องานถึงมือคนอื่น หรือใช้ตัดสินเรื่องเงิน สุขภาพ กฎหมาย · คนตรวจเป็น subagent ตัวใหม่เสมอ
-- ตรวจไม่ผ่าน → แก้ → reviewer **ตัวใหม่**ดูข้อเดิมทุกข้อ + จุดที่เปลี่ยน · วนจนไม่เหลือข้อระดับสูงและกลาง (ข้อต่ำลงรายงาน) · ห้ามปิดงานด้วยรายงานของตัวที่แก้ · ครบ 5 รอบยังไม่ผ่าน → หยุดวน ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือตอนจบ (ไม่หยุดถามกลางงาน) · ทุกรอบลงบรรทัด `review` (รอบ · ผู้ตรวจ · ผล · จำนวนแต่ละระดับ) ใน `log/<วันที่>/main.jsonl`
+- งานที่เกิน 1 ขั้น: Planning → ReAct ทุกขั้น → Reflection ก่อนส่ง · MoA (หลายตัวคนละมุม ตัวใหม่รวมเป็นตาราง หัวหน้าทีมเลือก ดู [`team-roles`](references/team-roles.md)) ใช้แรง 3–5 เท่า ใช้เฉพาะเรื่องที่เลือกผิดแล้วแพง
+- Reflection บังคับเมื่องานถึงมือคนอื่น หรือใช้ตัดสินเรื่องเงิน สุขภาพ กฎหมาย · คนตรวจเป็น `reviewer` (หรือผู้ตรวจเฉพาะทางที่อ่านอย่างเดียว) ตัวใหม่เสมอ
+- ขั้นตรวจอยู่หลังขั้นสุดท้ายที่ลงมือ · หัวหน้าทีมยืนยันทุกข้อที่พบเอง · ไม่ผ่าน → แก้ → `reviewer` **ตัวใหม่** ตรวจซ้ำ ไม่เกิน 5 รอบ แล้วติดป้าย `ติด` ([`team-roles`](references/team-roles.md))
 - รอบเรียนรู้ตอนจบ = Reflection ของทั้งทีม: ตรวจวิธีทำงาน ไม่ใช่ตัวงาน
 - คำตอบตอนจบบอกรูปแบบที่ใช้เฉพาะเมื่อมันเปลี่ยนการตัดสินใจ
 <!-- superuser:end patterns -->

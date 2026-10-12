@@ -1,6 +1,6 @@
 ---
 name: "campaign"
-description: "Plan and produce a campaign set from one concept — asset matrix, master asset first, derivation order, check per asset."
+description: "Plan and produce a campaign set from one concept — asset matrix, master asset first, check per asset."
 ---
 
 Run `campaign-set` with the `social-creator` and `brand-keeper` agents for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

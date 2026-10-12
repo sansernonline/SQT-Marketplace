@@ -1,6 +1,6 @@
 # skill: api-conventions
 
-Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
+Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
 # ข้อตกลงของ API
 
@@ -284,7 +284,7 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 # skill: web-service-essentials
 
-Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors, request ids, shutdown).
+Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors).
 
 # Web Service Essentials
 
@@ -719,7 +719,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 # skill: error-handling-patterns
 
-Use when writing or reviewing code that can fail (network, database, other services). Catch, retry, timeout, circuit breaker.
+Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
 
 # จัดการข้อผิดพลาด
 
@@ -908,7 +908,7 @@ catch (SmtpException ex)
 
 # skill: observability-basics
 
-Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts, dashboards).
+Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
 
 # วัดผลและเฝ้าระบบ
 

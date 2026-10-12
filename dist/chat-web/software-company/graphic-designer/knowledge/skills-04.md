@@ -1,6 +1,6 @@
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
 
 # Simplicity First
 
@@ -122,7 +122,7 @@ If any answer is "no" → simplify before delivering.
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole Markdown reports → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
 
 # Branded Document Design
 

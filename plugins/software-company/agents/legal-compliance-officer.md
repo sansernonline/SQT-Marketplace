@@ -1,6 +1,6 @@
 ---
 name: legal-compliance-officer
-description: Use for compliance in legal tech — GDPR and PDPA privacy, data residency, records retention, e-discovery, attorney advertising rules, multi-jurisdiction rules.
+description: Use for legal-tech compliance — GDPR, PDPA, data residency, records retention, e-discovery, multi-jurisdiction rules.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: opus
 ---

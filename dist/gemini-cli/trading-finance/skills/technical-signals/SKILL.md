@@ -1,6 +1,6 @@
 ---
 name: technical-signals
-description: Use when the user asks what a chart says, if now is a good entry, or what RSI, MACD, moving averages or volume mean.
+description: Use when the user asks what a chart says, if now is a good entry, or what RSI, MACD or volume mean.
 ---
 
 # Technical Signals (อ่านสัญญาณกราฟ)

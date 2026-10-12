@@ -1,2 +1,2 @@
-description = "Prepare or summarize a meeting — a one-page prep card before; decisions, action items and open questions after."
+description = "Prepare or summarize a meeting — a prep card before; decisions, action items, open questions after."
 prompt = "Use `meeting-prep-card` or `meeting-summary` with the `meeting-prep` agent: **{{args}}**\n\n- `prep` — build the one-page card before the meeting\n- `summary` — capture decisions and action items right after\n"

@@ -5,6 +5,8 @@ description: Use when a visual is about to ship or looks off for no clear reason
 
 # Design Review
 
+Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
+
 8 points, 3 fixes, then ship. A review that lists 20 nitpicks is a redesign request. A review that only says "feels busy" is not a review.
 
 ## Workflow

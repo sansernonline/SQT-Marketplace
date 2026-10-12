@@ -1,6 +1,6 @@
 ---
 name: observability-basics
-description: Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts, dashboards).
+description: Use when a live system must be known healthy before users complain (metrics, logs, traces, alerts).
 ---
 
 # วัดผลและเฝ้าระบบ

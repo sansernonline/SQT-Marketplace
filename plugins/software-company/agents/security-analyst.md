@@ -1,6 +1,6 @@
 ---
 name: security-analyst
-description: Use for security operations — leading incidents, alert triage, threat hunting, SOC design, detection rules, zero trust. App code security — security-engineer.
+description: Use for security operations — incidents, alert triage, threat hunting, SOC, detections. App code → security-engineer.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, Bash
 model: opus
 ---

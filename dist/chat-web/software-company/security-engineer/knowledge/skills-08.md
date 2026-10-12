@@ -1,6 +1,6 @@
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands.
 
 # งบ context
 
@@ -231,7 +231,7 @@ jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
+Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -337,7 +337,7 @@ Use when a task writes temporary files (archives, extracts, previews, backups, o
 
 # skill: status-report
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
+Use when a task that produces or checks project work ends (document, review, code, fix, release).
 
 # รายงานสถานะเมื่อจบงาน
 

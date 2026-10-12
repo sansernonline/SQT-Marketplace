@@ -1,6 +1,6 @@
 # skill: mobile-engineering
 
-Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, battery). Not screen design.
+Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
 
 # mobile-engineering
 

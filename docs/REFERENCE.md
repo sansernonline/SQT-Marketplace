@@ -4,7 +4,7 @@
 
 ---
 
-## 🧑‍💼 Agents (39)
+## 🧑‍💼 Agents (41)
 
 > `model:` ใน frontmatter ของแต่ละ agent เป็นแค่ค่าเริ่มต้น · ถ้างานสั่งผ่าน SuperUser หัวหน้าทีมจะเลือกขนาดโมเดลตามงานเอง (งานใหญ่ = opus · กลาง = sonnet · เล็ก = haiku) · ดู [superuser](#62-superuser)
 
@@ -212,7 +212,7 @@
 ---
 
 ### 3. code-review-checklist
-**ใช้กับ:** developer, security-engineer
+**ใช้กับ:** developer, reviewer, security-engineer
 **Output:** Structured code review พร้อม severity levels
 **Covers:** Correctness, design, tests, security, performance, readability, docs, maintainability
 
@@ -443,7 +443,7 @@
 ---
 
 ### 32. graphic-design
-**ใช้กับ:** graphic-designer
+**ใช้กับ:** graphic-designer, reviewer
 **ครอบคลุม:** โลโก้ · ระบบสีและตัวอักษรของแบรนด์ · โปสเตอร์ · ใบปลิว · โพสต์โซเชียล · LINE OA rich menu · ฉลากสินค้า · นามบัตร
 **Includes:** แกนตัดสินใจ 4 แกน, ทดสอบโลโก้ 7 บริบท (favicon/ปัก/ขาวดำ/กลับสี/ป้าย/โปรไฟล์), กฎภาษาไทยบนงานกราฟิก, ตารางขนาดงานโซเชียลและงานพิมพ์พร้อมตัดตก, `assets/brand-direction.md` ที่กรอกต่อได้
 **Anti-patterns ที่กันไว้:** โลโก้ที่อ่านไม่ออกตอนย่อ, ไล่สีในมาร์ก, ฟอนต์ไทยที่ไม่มีน้ำหนักให้ใช้, งานพิมพ์ที่ลืมตัดตก
@@ -684,14 +684,14 @@
 ---
 
 ### 61. adversarial-review-panel
-**ใช้กับ:** qa-tester, solution-architect
+**ใช้กับ:** qa-tester, reviewer, solution-architect
 **Description:** Use for adversarial review, stress test this, find blind spots, challenge this design, or tear this apart — and before shipping a contested design or a large diff. Spawns several independent reviewers that each try to break the change from a different lens, verifies every finding against the real code, and returns one synthesized verdict without applying any fixes on its own.
 **รีวิวเวอร์ค่ายอื่น:** เครื่องมี CLI ของค่ายอื่น (`codex` · `gemini`) ใช้แทนรีวิวเวอร์ 1 คน ในโหมดอ่านอย่างเดียว · โค้ดจะถูกส่งออกไปที่ผู้ให้บริการนั้น จึงต้องอนุญาตไว้ล่วงหน้าใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` · ข้อที่ต้องทำย้อนไม่ได้เตรียมไว้ใน "รออนุมัติ"
 
 ---
 
 ### 62. superuser
-**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
 **ไม่หยุดถาม:** งานที่ย้อนกลับไม่ได้ → เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ผู้ใช้อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) · ค้นเองใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน
@@ -719,7 +719,7 @@
 ---
 
 ### 66. parallel-attempts-pick-best
-**ใช้กับ:** solution-architect
+**ใช้กับ:** brainstormer, solution-architect
 **Description:** Use when one attempt at a non-trivial artifact could lock in the wrong shape — a new design, a public interface, a tricky algorithm, a mockup, a document structure — or when the user says try several, compare options, or bake-off. Runs N parallel candidates on the same brief, scores each against a rubric written beforehand, picks one as the base, and grafts the strongest ideas from the others into it before verifying the result.
 
 ---
@@ -743,7 +743,7 @@
 ---
 
 ### 70. principle-proceed-on-reversible-work
-**ใช้กับ:** business-analyst, clinical-data-analyst, data-engineer, developer, fintech-compliance-officer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, project-manager, quant-analyst, recommendation-engineer, revops-analyst, security-engineer, seo-specialist, system-analyst, ux-designer
+**ใช้กับ:** business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, revops-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use when tempted to stop and ask the user should I do X, which approach do you prefer, or shall I continue — on work that can be undone. Proceed, show the result, and let the person correct it afterwards; reserve confirmation for irreversible or outward-facing actions such as deploys, data deletion, merges to the main branch, and messages to customers.
 
 ---
@@ -923,7 +923,7 @@
 ---
 
 ### 100. human-writing
-**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use for anything a person will read — chat answers, reports, status updates, documents, slides and diagram labels, in Thai or English. Answer first, human words, short sentences, digits for numbers, one term per thing.
 
 ---

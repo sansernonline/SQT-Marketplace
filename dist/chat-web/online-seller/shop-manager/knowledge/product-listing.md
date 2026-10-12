@@ -1,6 +1,6 @@
 # skill: product-listing
 
-Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, keywords, banned claims).
+Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop or LINE (title, banned claims).
 
 # Product Listing (Thai marketplaces)
 

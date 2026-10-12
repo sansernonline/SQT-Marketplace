@@ -1,6 +1,6 @@
 # skill: warranty-tracker
 
-Use when filing receipts and warranty cards, checking if an item is still covered, or preparing a warranty claim.
+Use when filing receipts and warranty cards, checking if an item is covered, or preparing a claim.
 
 # Warranty Tracker
 

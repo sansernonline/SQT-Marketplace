@@ -1,6 +1,6 @@
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
 
 # Simplicity First
 
@@ -122,7 +122,7 @@ If any answer is "no" → simplify before delivering.
 
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, postmortem) needs polished formatting.
+Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
 
 # Polished Document Style
 

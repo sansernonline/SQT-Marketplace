@@ -1,6 +1,6 @@
 ---
 name: consumer-advocate
-description: Use for a big purchase, a faulty or wrong product, a refused refund, a complaint to a seller, platform or สคบ., a card dispute, or warranty tracking.
+description: Use for a big purchase, faulty product, refused refund, complaint to a seller, platform or สคบ., card dispute, warranty.
 tools: Read, Write, Edit, Skill, WebSearch, WebFetch
 model: sonnet
 ---

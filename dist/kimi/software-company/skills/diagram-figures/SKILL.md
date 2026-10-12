@@ -1,6 +1,6 @@
 ---
 name: diagram-figures
-description: Use when an architecture, data-flow or concept figure must look designed for a proposal, slide, print or sign-off.
+description: Use when an architecture or concept figure must look designed for a proposal, slide, print or sign-off.
 ---
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
@@ -171,6 +171,7 @@ python assets/render-figure.py figure.html figure.png 2
 
 ```bash
 python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
+python scripts/check-figure-source.py docs/figures/src       # ทุกรูปเริ่มจากโครงของ skill นี้
 ```
 
 จากนั้นเปิดไฟล์ภาพดูด้วยตา แล้วไล่ตามนี้:

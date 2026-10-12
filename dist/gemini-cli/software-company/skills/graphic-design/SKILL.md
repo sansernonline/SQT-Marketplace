@@ -1,6 +1,6 @@
 ---
 name: graphic-design
-description: Use when a software project needs visuals besides app screens (logo, poster, flyer, social post, rich menu art, cover).
+description: Use when a software project needs visuals besides app screens (logo, poster, social post, rich menu).
 ---
 
 # Graphic Design

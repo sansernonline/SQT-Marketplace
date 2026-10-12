@@ -1,6 +1,6 @@
 ---
 name: annual-checkup
-description: Use when planning a yearly health checkup in Thailand, social security or gold card cover, or comparing packages. Never reads results.
+description: Use when planning a yearly checkup in Thailand, social security or gold card cover, or comparing packages.
 ---
 
 # Annual Checkup

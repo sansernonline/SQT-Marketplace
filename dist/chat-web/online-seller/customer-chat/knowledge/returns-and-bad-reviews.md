@@ -1,6 +1,6 @@
 # skill: returns-and-bad-reviews
 
-Use when a Thai online seller gets a return, refund request, dispute or 1-3 star review. Refund vs replace vs dispute.
+Use when a Thai online seller gets a return, refund request, dispute or 1-3 star review.
 
 # Returns and Bad Reviews
 

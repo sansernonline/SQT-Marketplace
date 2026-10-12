@@ -1,6 +1,6 @@
 ---
 name: developer-experience
-description: Use when the users are developers (time to hello world, error messages, CLI, onboarding, SDK design, docs, tutorials).
+description: Use when the users are developers (time to hello world, error messages, CLI, SDK design, docs).
 ---
 
 # developer-experience

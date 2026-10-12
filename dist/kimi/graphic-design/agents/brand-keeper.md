@@ -1,6 +1,6 @@
 ---
 name: "brand-keeper"
-description: "Use when starting a new brand or when designs look like different companies. Maintains the brand kit (logo, colors, type, tone) and checks assets against it."
+description: "Use when starting a brand or when designs look inconsistent. Keeps the brand kit (logo, colours, type, tone)."
 ---
 
 ${base_prompt}

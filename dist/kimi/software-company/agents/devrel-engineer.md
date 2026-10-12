@@ -1,6 +1,6 @@
 ---
 name: "devrel-engineer"
-description: "Use when the product is for developers — developer experience audits, SDK design across languages, docs platforms, developer content and community."
+description: "Use when the product is for developers — developer experience audits, SDK design, docs platforms, developer content."
 ---
 
 ${base_prompt}

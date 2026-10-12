@@ -1,6 +1,6 @@
 ---
 name: "subscriptions"
-description: "Audit recurring charges from statements — cost per use, cancel, downgrade or keep, exact cancel steps, trial-end reminders."
+description: "Audit recurring charges — cost per use, cancel, downgrade or keep, cancel steps, trial-end reminders."
 disableModelInvocation: true
 ---
 

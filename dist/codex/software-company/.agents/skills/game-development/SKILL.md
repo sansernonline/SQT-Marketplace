@@ -1,6 +1,6 @@
 ---
 name: game-development
-description: Use when building a game (engine choice, ECS, multiplayer netcode, matchmaking, anti-cheat, progression, live-ops).
+description: Use when building a game (engine choice, ECS, netcode, matchmaking, anti-cheat, live-ops).
 ---
 
 # game-development

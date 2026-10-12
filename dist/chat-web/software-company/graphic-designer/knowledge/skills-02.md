@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -38,7 +38,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: ui-craft
 
-Use when a task produces a screen, screen spec or mockup, alongside the platform skill (spacing, type, hierarchy, screen states).
+Use when a task produces a screen, screen spec or mockup, alongside the platform skill.
 
 # UI Craft
 

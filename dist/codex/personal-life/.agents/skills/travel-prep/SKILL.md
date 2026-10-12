@@ -1,6 +1,6 @@
 ---
 name: travel-prep
-description: Use when a trip is one to two weeks away or a Thai passport is near expiry. Visa, travel insurance, money, one itinerary file.
+description: Use when a trip is one to two weeks away or a passport is near expiry. Visa, insurance, money, itinerary.
 ---
 
 # Travel Prep (เตรียมเดินทาง)

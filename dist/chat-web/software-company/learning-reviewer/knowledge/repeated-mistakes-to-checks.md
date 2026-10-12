@@ -1,6 +1,6 @@
 # skill: repeated-mistakes-to-checks
 
-Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again.
+Use when the user corrects the same mistake twice or reviews keep flagging one issue. Make it a check.
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 

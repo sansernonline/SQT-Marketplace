@@ -1,6 +1,6 @@
 ---
 name: payroll-th
-description: Use when running Thai monthly payroll (tax withholding, social security, provident fund, PND 1, PND 1 Kor, 50 Tawi).
+description: Use when running Thai monthly payroll (tax withholding, social security, provident fund, PND 1).
 ---
 
 # Thai Payroll

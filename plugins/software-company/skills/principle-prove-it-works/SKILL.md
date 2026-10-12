@@ -1,6 +1,6 @@
 ---
 name: principle-prove-it-works
-description: Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
+description: Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 ---
 
 # principle · prove it works — พิสูจน์กับของจริง

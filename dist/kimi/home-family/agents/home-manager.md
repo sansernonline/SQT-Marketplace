@@ -1,6 +1,6 @@
 ---
 name: "home-manager"
-description: "Use when a Thai household needs bills and upkeep in order — electricity and water, maintenance, contractor quotes, vehicle tax, พ.ร.บ. and licence renewals."
+description: "Use for Thai household bills and upkeep — utilities, repairs, contractor quotes, vehicle tax, พ.ร.บ., renewals."
 ---
 
 ${base_prompt}

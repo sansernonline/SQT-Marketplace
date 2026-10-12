@@ -1,6 +1,6 @@
 ---
 name: reverse-engineer
-description: Use when the team must understand or recreate software without source (binary, .NET, Electron, APK/IPA, JS bundle, file format, site). Authorized targets only.
+description: Use to understand or recreate software without source (binary, .NET, Electron, APK, JS bundle). Authorized targets only.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 ---

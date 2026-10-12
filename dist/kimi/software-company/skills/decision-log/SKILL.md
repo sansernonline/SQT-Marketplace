@@ -1,6 +1,6 @@
 ---
 name: decision-log
-description: Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step).
+description: Use when an agent makes its own judgment call in long or unattended work (approach, gap, skipped step).
 ---
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้

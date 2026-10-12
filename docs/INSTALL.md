@@ -140,7 +140,7 @@ git push -u origin main
 /agents
 ```
 
-ควรเห็น 38 agents ของ software-company เช่น project-manager · business-analyst · solution-architect · system-analyst · developer · qa-tester · devops-engineer
+ควรเห็น 41 agents ของ software-company เช่น project-manager · business-analyst · solution-architect · system-analyst · developer · qa-tester · devops-engineer
 
 ### 2. ดู slash commands
 ```
@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-company.zip`:** 110 skills · 39 agents · 29 commands · `plugin.json` v2.3.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-company.zip`:** 110 skills · 41 agents · 29 commands · `plugin.json` v2.4.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: motion-basics
-description: Use when a non-designer makes motion graphics, animated text, transitions or a moving logo. Timing and easing.
+description: Use when a non-designer makes motion graphics, animated text, transitions or a moving logo.
 ---
 
 # Motion Basics

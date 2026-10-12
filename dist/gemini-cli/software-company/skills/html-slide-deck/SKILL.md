@@ -1,6 +1,6 @@
 ---
 name: html-slide-deck
-description: Use when a slide deck is asked for as HTML or with animation — one offline animated file with menu and speaker notes.
+description: Use when a slide deck is asked for as HTML or with animation — one offline file with speaker notes.
 ---
 
 # HTML Slide Deck

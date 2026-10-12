@@ -1,6 +1,6 @@
 # skill: live-selling-script
 
-Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, hook, flash-deal timing.
+Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, hook.
 
 # Live Selling Script
 
