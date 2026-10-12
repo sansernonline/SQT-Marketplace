@@ -189,6 +189,33 @@ function checkFacts(facts, read) {
   }
 }
 
+// ---------------------------------------------------------------- retired words
+// คำที่เลิกใช้แล้ว (facts.json → retired) ห้ามค้างในไฟล์ที่คนและ agent อ่าน · แจ้งทุกไฟล์ที่เจอในครั้งเดียว ไม่ให้ตามแก้ทีละไฟล์
+function checkRetired(retired, files) {
+  for (const r of retired) {
+    const hits = files.filter(([, text]) => text.includes(r.old)).map(([rel]) => rel);
+    if (hits.length) err(hits.join('\n      '), `คำที่เลิกใช้ "${r.old}" ยังค้าง ${hits.length} ไฟล์ — ใช้ ${r.new} (${r.why})`);
+  }
+}
+
+// ---------------------------------------------------------------- markdown tables
+// ทุกแถวมีจำนวนช่องเท่าหัวตาราง · แถวที่ขึ้นต้นด้วย | ต้องอยู่ใต้หัวและแถวคั่น |---| (แถวหลุดเพราะบรรทัดว่างคั่นจะแสดงเป็นข้อความ)
+// ตาม GFM | ใน `code` ก็คั่นช่อง ต้องเขียน \|
+const cellCount = (row) => row.replace(/\\\|/g, '').trim().replace(/^\||\|$/g, '').split('|').length;
+function checkTables(file, text) {
+  const lines = text.replace(/\r\n/g, '\n').split('\n');
+  const isRow = (l) => /^\s*\|/.test(l ?? '');
+  let inFence = false;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^\s*(```|~~~)/.test(lines[i])) { inFence = !inFence; continue; }   // ไม่รู้จัก: โค้ดย่อหน้า 4 ช่อง · HTML comment · ตารางใน blockquote · fence 4 backtick ที่มี ``` ข้างใน
+    if (inFence || !isRow(lines[i]) || isRow(lines[i - 1])) continue;
+    if (!/^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1] ?? '')) { err(`${file}:${i + 1}`, 'แถวตารางไม่มีหัวและแถวคั่น |---| — มักเป็นแถวที่หลุดเพราะมีบรรทัดว่างคั่น'); continue; }
+    const want = cellCount(lines[i]);
+    for (let j = i + 1; isRow(lines[j]); j++)
+      if (cellCount(lines[j]) !== want) err(`${file}:${j + 1}`, `แถวมี ${cellCount(lines[j])} ช่อง แต่หัวตารางมี ${want} ช่อง`);
+  }
+}
+
 // ---------------------------------------------------------------- playbook
 // ทุกขั้นของ playbook บอก "ใคร:" · ชื่อ agent ใน backtick ต้องมีจริง · ขั้นตรวจต้องอยู่หลังขั้นสุดท้ายที่ลงมือทำ
 // คนตรวจ = `reviewer` ตัวใหม่ · ผู้ตรวจเฉพาะทางตัวใหม่ที่บรรทัดเขียน READ_ONLY · ผู้ใช้อนุมัติ/ตรวจ (การเลือกทางไม่ใช่การตรวจ)
@@ -197,6 +224,17 @@ function checkFacts(facts, read) {
 const BUILTIN_AGENTS = new Set(['general-purpose', 'Explore', 'Plan']);
 const SPECIALISTS = ['design-critic', 'brand-keeper', 'qa-tester', 'security-engineer', 'risk-manager'];
 const READ_ONLY = 'อ่านอย่างเดียว · ไม่แก้ไฟล์';
+const CHECKER_NAMES = ['reviewer', ...SPECIALISTS];
+const CHECKER_TAIL = new RegExp('`(?:[\\w-]+:)?(' +CHECKER_NAMES.join('|') + ')`( ตัวใหม่)?([^·]*)', 'g');   // [1] ชื่อ · [3] คำหลังชื่อ
+// งานลงมือ (สรุปผลตรวจให้หัวหน้าทีมเป็นงานของคนตรวจเอง จึงไม่อยู่ในรายการ)
+// "จดผล" คือรายงานผลตรวจ · "ทำงาน/ทำตาม" คือสิ่งที่ถูกตรวจ จึงไม่นับ
+const MAKE_VERBS = 'เขียน|ร่าง|แก้|เตรียม|คัด|ทิ้ง|จด(?!ผล)|สร้าง|ปรับ|เพิ่ม|ลบ|ทำ(?!งาน|ตาม)|ส่ง|ย้าย|อัปเดต|กรอก|นัด';
+const REVIEWER_MAKES = new RegExp('(^|แล้ว|และ|ซึ่ง|ช่วย|\\(|\\s)(' + MAKE_VERBS + ')');   // คำหลังชื่อคนตรวจ
+const THEN_MAKES = new RegExp('(แล้ว|และ)\\s*(' + MAKE_VERBS + ')');   // ในเนื้อขั้น: "ตรวจ…แล้วเตรียม" (ไม่นับ "· นัด" ที่เป็นรายการคำนาม)
+// ขั้นที่มีแต่คนตรวจ: ต้องมีงานตรวจใน 80 ตัวอักษรแรก (ตัดปลายทางลิงก์ออกก่อน) และไม่ขึ้นต้นด้วยงานลงมือ (รายการที่อนุญาต เพราะรายการที่ห้ามเลี่ยงด้วยการเลือกคำได้)
+// ข้อจำกัดที่ยังเหลือ: คำกริยานอกรายการหลัง "แล้ว · และ" ยังหลุดได้ — reviewer ตัวใหม่เป็นด่านสุดท้าย
+const CHECK_NEAR = /^.{0,80}(ตรวจ|พิสูจน์|รีวิว|ทวน|ยืนยัน|รัน|วัด|เทียบ|ทดสอบ|ให้คะแนน|สแกน|อ่าน|ลอง|กด|เช็ก)/;
+const MAKE_START = /^\d+\. (\*\*)?(เขียน|ร่าง|แก้|เตรียม|คัด|ทิ้ง|จด|สร้าง|ปรับ|เพิ่ม|ลบ|ทำ|สรุป)/;   // ไม่มี "ส่ง" เพราะ "ส่ง `reviewer`" คือหัวหน้าทีมส่งงาน
 const NEGATED = /(ไม่ต้อง|ห้าม|ไม่ให้)[^·)]*/g;
 const USER_WAIT = /(?<!ไม่)รอ(คำตอบ|ผู้ใช้|ให้ผู้ใช้)|(?<!คำ|ไม่)ถาม(?!รวม)[^·]{0,20}ผู้ใช้/;   // "ถามรวมครั้งเดียวตอนเริ่ม" ได้
 const LEAD_MAKES = /^\d+\. (\*\*)?(แก้|เขียน|ร่าง|สร้าง)|ใคร: หัวหน้าทีม(แก้|เขียน|ร่าง|สร้าง)/;
@@ -207,7 +245,7 @@ function checkPlaybook(file, text, hasAgent) {
   let steps = 0, lastCheck = 0, lastWork = 0, inSteps = false, inFence = false;
   const userSteps = [];
   for (const line of lines) {
-    if (/^\s*```/.test(line)) { inFence = !inFence; continue; }
+    if (/^\s*(```|~~~)/.test(line)) { inFence = !inFence; continue; }
     if (inFence) continue;
     if (/^## /.test(line)) { inSteps = /^## ขั้นตอน/.test(line); continue; }
     const m = inSteps && line.match(/^(\d+)\. /);
@@ -218,6 +256,15 @@ function checkPlaybook(file, text, hasAgent) {
     const who = line.slice(at + 4);
     const said = who.replace(NEGATED, '');   // "(ไม่ต้องให้ผู้ใช้ตรวจ)" ไม่นับ
     const plain = line.replace(NEGATED, '');
+    // คนตรวจอ่านอย่างเดียว: ขั้นที่มีแต่คนตรวจ หรือคำหลังชื่อคนตรวจ ต้องไม่ใช่งานลงมือ (คำในกลุ่ม "ตรวจ…" ไม่นับ เช่น "ตรวจร่าง")
+    const isChecker = (n) => n === 'reviewer' || (SPECIALISTS.includes(n) && line.includes(READ_ONLY));
+    const actors = [...plain.matchAll(/`([A-Za-z][\w-]*(?::[\w-]+)?)`/g)].map(a => a[1].split(':').pop()).filter(n => hasAgent(n) || BUILTIN_AGENTS.has(n));
+    const onlyCheckers = actors.length > 0 && actors.every(isChecker) && !/หัวหน้าทีม/.test(said);
+    const checkerSays = [...said.matchAll(CHECKER_TAIL)].filter(t => isChecker(t[1])).map(t => t[3]).join(' ');
+    const body = line.slice(0, at).replace(NEGATED, '').replace(/\]\([^)]*\)/g, ']');
+    const afterCheck = checkerSays.replace(/ตรวจว่า[^·]*/g, '').replace(/ตรวจ(ร่าง|ผล|ซ้ำ)?/g, '');   // หลัง "ตรวจว่า" คือสิ่งที่ถูกตรวจ · "ตรวจร่าง" คือตรวจ ไม่ใช่ร่าง
+    if ((onlyCheckers && (MAKE_START.test(body) || !CHECK_NEAR.test(body) || THEN_MAKES.test(body))) || REVIEWER_MAKES.test(afterCheck))
+      err(file, `ขั้น ${m[1]}: คนตรวจ (\`reviewer\` หรือผู้ตรวจเฉพาะทาง) ได้งานลงมือ — ขั้นที่มีแต่คนตรวจต้องเป็นงานตรวจ (ตรวจ · พิสูจน์ · รีวิว · รัน · วัด … ในต้นขั้น ไม่ขึ้นต้นด้วยงานลงมือ) และไม่มี "แล้ว/และ + ${MAKE_VERBS.replace(/\|/g, ' · ')}" · งานลงมือให้ agent สาขาทำ แล้วคนตรวจตรวจ`);
     let checkAt = said.search(/ผู้ใช้(อนุมัติ|ตรวจ)/), workAt = -1;
     if (/^\s*หัวหน้าทีม/.test(who) && LEAD_MAKES.test(plain) && !LEAD_RECORDS.test(plain)) workAt = 0;
     for (const a of said.matchAll(/`([A-Za-z][\w-]*(?::[\w-]+)?)`( ตัวใหม่)?/g)) {   // มีจุด = ชื่อไฟล์ ไม่ใช่ agent
@@ -331,8 +378,45 @@ function selfTest() {
   const lenHit = warns.length === 2 && errors.length === 1 && errors[0].startsWith('big');
   console.log(`  ${lenHit ? '✅' : '❌'} description agent 120 · skill 150 · error 160`);
   if (lenHit) ok++;
+  // บทเรียน 2026-10-12 — กรณีทดสอบคือข้อความจริงจากเหตุการณ์ ต้องล้มกับของเดิม และผ่านกับที่แก้แล้ว
+  // คนตรวจได้งานลงมือ: warranty-claim ขั้น 3 · side-project ขั้น 3 (ข้อความก่อนแก้)
+  const rv = (step) => { errors.length = 0; checkPlaybook('p.md', pb(`1. ทำ · ใคร: \`developer\` ตัวใหม่\n${step}`), has); return errors.some(e => /ได้งานลงมือ/.test(e)); };
+  const rvHit = rv('2. ถ้าจะเคลม ให้ตรวจว่ายังอยู่ในประกัน อ่านเงื่อนไขยกเว้น แล้วเตรียมเอกสาร · ใคร: `reviewer` ตัวใหม่')
+    && rv('2. เขียนนิยาม "เสร็จ" ที่ตรวจได้ 3–5 ข้อ · ใคร: `reviewer` ตัวใหม่')
+    && !rv('2. เขียนนิยาม "เสร็จ" ที่ตรวจได้ 3–5 ข้อ · ใคร: `developer` ตัวใหม่เขียน · `reviewer` ตัวใหม่ตรวจว่าทุกข้อวัดได้')
+    && !rv('2. ตรวจทั้งชุด — การแก้ที่เก็บ · ค่าดิบ · ใคร: `reviewer` ตัวใหม่')
+    // ทางเลี่ยงที่ reviewer รอบ 1 ลองแล้วหลุด · และถ้อยคำตรวจที่ต้องไม่โดนจับ
+    && rv('2. ทำเอกสารแจ้งศูนย์ · ใคร: `reviewer` ตัวใหม่')
+    && rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ตรวจแล้วแก้ไฟล์ที่ผิด')
+    && rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ตรวจและเขียนสรุปส่งผู้ใช้')
+    && !rv('2. ตรวจว่ารายการที่ให้แก้ครบทุกข้อ · ใคร: `reviewer` ตัวใหม่')
+    && !rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ตรวจผลแล้วสรุปข้อที่เจอให้หัวหน้าทีม')
+    // reviewer รอบ 2: จับเกินหลัง "ตรวจว่า" · ถ้อยคำตรวจที่เป็นธรรมชาติ · ทางเลี่ยงด้วยคำกริยาอื่น
+    && !rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ตรวจว่าแก้ครบ')
+    && !rv('2. ลองกดทุกปุ่มใน mockup · ใคร: `reviewer` ตัวใหม่')
+    && !rv('2. รันเทสต์แล้วจดผลลงตาราง · ใคร: `reviewer` ตัวใหม่')
+    && rv('2. ตรวจเอกสาร แล้วส่งอีเมลถึงลูกค้า · ใคร: `reviewer` ตัวใหม่')
+    && rv('2. รอบตรวจ · ใคร: `reviewer` ตัวใหม่ (เขียนไฟล์แก้เอง)');
+  console.log(`  ${rvHit ? '✅' : '❌'} คนตรวจได้งานลงมือ (warranty-claim · side-project)`);
+  if (rvHit) ok++;
+  // แถวหลุดตารางเพราะบรรทัดว่างคั่น: brainstormer แถว "ไม่ทำ" · จำนวนช่องไม่ตรงหัว
+  const tb = (text) => { errors.length = 0; checkTables('t.md', text); return errors.length; };
+  const head = '| ทาง | แรง |\n|---|---|\n| ก. | เล็ก |\n';
+  const tbHit = tb(head + '\n| ไม่ทำ | ไม่มี |\n') === 1 && tb(head + '| ไม่ทำ | ไม่มี |\n') === 0
+    && tb(head + '| ไม่ทำ |\n') === 1 && tb('```\n| a |\n```\n' + head) === 0 && tb('~~~\n| a |\n~~~\n' + head) === 0
+    && tb('| `a\\|b` | x |\n|---|---|\n| 1 | 2 |\n') === 0 && tb('| `a|b` | x |\n|---|---|\n| 1 | 2 |\n') >= 1;   // GFM: | ใน code ก็คั่นช่อง
+  console.log(`  ${tbHit ? '✅' : '❌'} ตาราง markdown แถวหลุด · จำนวนช่อง`);
+  if (tbHit) ok++;
+  // คำที่เลิกใช้: docs/USAGE.md ก่อนแก้ (commit 24dbac3) ต้องโดนจับ หลังแก้ต้องผ่าน
+  errors.length = 0;
+  checkRetired([{ old: '`ตรวจจริง` · `อนุมาน` · `เดา`', new: 'ป้าย 4 คำ', why: 'test' }], [
+    ['old.md', '| คำตอบตอนจบ | ทุกข้ออ้างมีป้าย `ตรวจจริง` · `อนุมาน` · `เดา` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ |'],
+    ['new.md', '| คำตอบตอนจบ | ทุกข้ออ้างมีป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ตรวจ` |']]);
+  const reHit = errors.length === 1 && errors[0].startsWith('old.md') && !errors[0].includes('new.md');
+  console.log(`  ${reHit ? '✅' : '❌'} คำที่เลิกใช้ (ป้าย \`เดา\` ใน docs)`);
+  if (reHit) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 5;
+  const total = cases.length + 8;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -386,6 +470,21 @@ if (existsSync(factsFile)) checkFacts(JSON.parse(readFileSync(factsFile, 'utf8')
   const p = join(ROOT, rel);
   return existsSync(p) ? readFileSync(p, 'utf8') : null;
 });
+
+// ไฟล์ .md ที่คนและ agent อ่าน (ไม่นับ dist/ ซึ่ง build มาจากที่นี่ และ _to_delete/) — ตรวจตาราง และคำที่เลิกใช้
+function markdownFiles(dir, out = []) {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    if (['dist', '_to_delete', 'node_modules', '.git'].includes(e.name)) continue;
+    const p = join(dir, e.name);
+    if (e.isDirectory()) markdownFiles(p, out);
+    else if (e.name.endsWith('.md')) out.push([p.slice(ROOT.length + 1).replace(/\\/g, '/'), readFileSync(p, 'utf8')]);
+  }
+  return out;
+}
+const docFiles = ['plugins', 'prompt', 'docs'].filter(d => existsSync(join(ROOT, d))).flatMap(d => markdownFiles(join(ROOT, d)))
+  .concat(existsSync(readme) ? [['README.md', readFileSync(readme, 'utf8')]] : []);
+for (const [rel, text] of docFiles) checkTables(rel, text);
+if (existsSync(factsFile)) checkRetired(JSON.parse(readFileSync(factsFile, 'utf8')).retired ?? [], docFiles);
 
 // skill กลางที่ต้องเหมือนกันทุก plugin (human-writing · agent-patterns) · ทุก agent ต้องชี้ไปที่ human-writing
 // ของกลางของ SuperUser: ต้นฉบับอยู่ที่ plugins/superuser · ทุก plugin ต้องตรงกับต้นฉบับ (sync-superuser.mjs)

@@ -22,6 +22,7 @@ The lead sends: what was asked (the user's words) · done-when from the playbook
 4. **Ready to use** — the user can act on it now: no placeholders left except `(รอยืนยัน)`, files open, links work, steps run. Where something can be run, run it with Bash and quote the result. Bash is for read-only commands only; a test or build that writes files (cache, output) runs only in a throwaway copy under `_to_delete/`, never in the working tree.
 5. **The skill's own checklist** — open the skill with the Skill tool (or Read the SKILL.md path the lead sends); if it has a check-before-sending list, go through it.
 6. **Safe** — nothing sent, paid, deleted or accepted on the user's behalf · no secrets, ID or account numbers, health details or other people's data where they do not belong · no wording that threatens or defames.
+   - **Old wording left behind** — when the work renames a term, label, number or rule, search the whole repository for the old wording (not only the files you were given) and report every path still holding it in one row, with the count. Copies outside the synced shared files are where it hides.
 7. Round 2 and later: every issue from the previous report — fixed, still open, or fixed but broke something next to it.
 
 ## Severity
