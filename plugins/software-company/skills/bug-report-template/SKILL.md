@@ -90,7 +90,7 @@ Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not w
 Before submitting:
 
 - [ ] Title clearly summarizes the issue
-- [ ] Severity AND priority both set
+- [ ] Severity set · priority set, or `(รอยืนยัน)` until the PM/PO sets it
 - [ ] Steps are reproducible by someone else
 - [ ] Expected and actual results clearly differ
 - [ ] At least one piece of evidence attached

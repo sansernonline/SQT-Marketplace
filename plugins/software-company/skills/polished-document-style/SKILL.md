@@ -19,6 +19,7 @@ description: Use when a stakeholder Markdown document (BRD, FSD, ADR, status rep
 - Internal developer-only specs (keep them concise)
 - Quick scratch notes
 - Code comments / inline docs
+- A whole Markdown report that must come out as one .docx → `markdown-report-docx`
 
 > ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
 > rendered **.docx / .pptx / .pdf** that a stakeholder will open, use

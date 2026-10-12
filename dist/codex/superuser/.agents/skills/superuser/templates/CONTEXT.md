@@ -32,4 +32,4 @@
 - **ระวัง:** ...
 
 ## ไฟล์อื่น
-`HISTORY.md` งานที่เสร็จแล้ว · `IMPROVEMENTS.md` · `.superuser/log/` · `.superuser/learn/` · `.superuser/inbox/`
+`HISTORY.md` งานที่เสร็จแล้ว · `IMPROVEMENTS.md` · `log/` · `learn/` · `inbox/` (ทั้งหมดอยู่ใน `.claude/superuser/`)

@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 
 export const SHARED_FILES = [
   "skills/agent-patterns/SKILL.md",
+  "skills/agent-patterns/references/pattern-details.md",
   "skills/answer-shape/SKILL.md",
   "skills/human-writing/SKILL.md",
   "skills/human-writing/references/headings-and-examples.md",
@@ -18,6 +19,7 @@ export const SHARED_FILES = [
   "skills/superuser/references/learning-loop.md",
   "skills/superuser/references/brief-template.md",
   "skills/superuser/references/team-files.md",
+  "skills/superuser/templates/improvements-queue.md",
   "agents/learning-reviewer.md",
   "hooks/superuser-hook.mjs",
   "hooks/hooks.json",

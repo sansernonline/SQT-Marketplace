@@ -289,3 +289,5 @@ When proposing architecture, compare options:
 ## Always Reference
 
 When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/architecture-overview-template.md`](references/architecture-overview-template.md) — แม่แบบภาพรวมสถาปัตยกรรม

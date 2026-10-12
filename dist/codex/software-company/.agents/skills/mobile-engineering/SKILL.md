@@ -1,6 +1,6 @@
 ---
 name: mobile-engineering
-description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, memory, battery, store listing). Not screen design.
+description: Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, battery). Not screen design.
 ---
 
 # mobile-engineering
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-mobile` (skill `mobile-architecture-patterns` · `mobile-performance` · `app-store-optimization`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-mobile` (เดิมชื่อ mobile-architecture-patterns → `references/mobile-architecture-patterns.md` · mobile-performance → `references/mobile-performance.md` · app-store-optimization → `references/app-store-optimization.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`

@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Writes the status table in docs/BUILD-PLAN.md.
+Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -8,6 +8,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 > **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
 > งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
+> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`investigation` · `review`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
 
 ---
 
@@ -62,7 +63,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 |---|---|
 | ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี |
+| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี · ต่างจาก 5 คำของ `superuser` ใน plugin อื่นโดยตั้งใจ ส่วน "รออนุมัติ" กับ "ค้างอยู่" อยู่เป็นหัวข้อท้ายคำตอบ |
 | ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
 - **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
@@ -145,7 +146,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 # skill: owner-style-capture
 
-Use when the user wants agents to work their way (learn my style, capture how I work) or keeps correcting the same preferences. Drafts a style file.
+Use when the user wants agents to work their way (learn my style, capture how I work) or keeps correcting the same preferences.
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง
 
@@ -153,6 +154,13 @@ Use when the user wants agents to work their way (learn my style, capture how I 
 > 2 อย่างนี้แยกกัน เพื่อให้ plugin แจกหรือขายต่อได้ โดยสไตล์ส่วนตัวไม่ติดไปด้วย
 
 **ผลลัพธ์:** `~/.claude/superuser-style.md` (ระดับผู้ใช้ ใช้กับทุกโปรเจกต์) ถ้ามีไฟล์นี้ `superuser` จะอ่านก่อนเริ่มงานทุกครั้ง
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ความผิดที่เกิดซ้ำและตรวจด้วยเครื่องได้ | `repeated-mistakes-to-checks` |
+| บทเรียนจากงานที่ทำให้ skill หรือ agent ต้องแก้ | `session-lessons-to-skills` |
 
 ## แหล่งหลักฐาน (อ่านเท่านั้น)
 
@@ -184,7 +192,7 @@ Use when the user wants agents to work their way (learn my style, capture how I 
 
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; prepare irreversible actions (deploy, delete data, merge to main) for approval.
+Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible actions for approval.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -206,9 +214,11 @@ Use when tempted to ask shall I continue on work that can be undone. Proceed; pr
 
 1. **ดูได้จากการรันไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลอง (playbook `prototype`) ไม่ใช่ถาม
 2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
-3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ งบ สีแบรนด์ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
+3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
 
 ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง diff หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+
+**ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในข้อความนั้น เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
 
 ## สิ่งที่ห้ามทำ
 

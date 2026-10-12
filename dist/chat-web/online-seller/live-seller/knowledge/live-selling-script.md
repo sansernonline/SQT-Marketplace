@@ -1,6 +1,6 @@
 # skill: live-selling-script
 
-Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, 3-second hook, flash-deal timing, Thai call-to-action lines.
+Use when preparing a live selling session on TikTok Shop, Shopee, Lazada or Facebook. Run sheet, hook, flash-deal timing.
 
 # Live Selling Script
 
@@ -41,7 +41,7 @@ Flash-deal rules of thumb: first deal after viewers have built up (around minute
 - [ ] Phone on charger, stable Wi-Fi or 5G, ring light, clean background with the shop name
 - [ ] Products in run-sheet order on the table, price cards written large
 - [ ] Comment moderator ready; banned-word list set (competitor names, abuse)
-- [ ] Thumbnail and teaser posted 1–3 hours before (`graphic-design` `social-formats`)
+- [ ] Thumbnail and teaser posted 1–3 hours before (`graphic-design` `social-formats` (if installed))
 
 ## Compliance
 

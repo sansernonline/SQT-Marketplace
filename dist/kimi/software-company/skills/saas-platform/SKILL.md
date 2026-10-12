@@ -1,6 +1,6 @@
 ---
 name: saas-platform
-description: Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
+description: Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
 ---
 
 # saas-platform
@@ -33,4 +33,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

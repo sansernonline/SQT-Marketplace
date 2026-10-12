@@ -1,984 +1,6 @@
-# skill: branded-document-design
-
-Use when a Word, PowerPoint or PDF deliverable must look designed. Token palette, type scale, tested python-docx and python-pptx builders, Thai typography.
-
-# Branded Document Design
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
-> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
-- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
-- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
-- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
-
-**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
-→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
-
----
-
-## 0 · สีมาจากเนื้องาน — ถามก่อนเริ่ม
-
-**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-
-ถ้ายังไม่มี **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ให้ถามผู้ใช้ว่าจะใช้สีอะไร
-ถ้าผู้ใช้ยังไม่ระบุ ให้เสนอจากเนื้องาน รอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
-
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
-|---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
-
-ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
-
-**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
-สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
-
----
-
-## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
-
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
-ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
-
-| Token | หน้าที่ | ได้มาจาก |
-|-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีหลักที่ผู้ใช้เลือก |
-| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
-| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
-| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
-| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
-| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
-| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
-
-**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
-พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
-
-**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
-
-| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
-|---|---|---|
-| 🔴 แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
-| 🟠 เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
-| 🟢 เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
-| 🔵 น้ำเงิน | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก (brand) |
-| 🟣 ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
-| ⚪ เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
-
-กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
-
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
->
-> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
-
-> 💡 **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
-> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
-
-### สเกลตัวอักษร (pt)
-
-| ระดับ | Word | Slide | น้ำหนัก · สี |
-|-------|------|-------|--------------|
-| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
-| H1 | 16 | 26 | bold · `brand` |
-| H2 | 12.5 | — | bold · `brand_deep` |
-| H3 | 11.5 | — | bold · `text` |
-| เนื้อความ | 11 | 17 | regular · `text_body` |
-| ตาราง | 11 | 12.5 | regular · `text_body` |
-| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
-
-**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
-
----
-
-## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
-
-ใช้ **Tahoma** เป็นค่าเริ่มต้น: มีทุกเครื่อง Windows/Office · วรรณยุกต์ไม่ชนสระ ·
-bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
-
-> 🚨 **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
-> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม**
-> ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
-> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว **ห้ามตั้งฟอนต์เองด้วยมือ**
-
-> 🚨 **กับดักฟอนต์คู่:** ถ้าใช้ฟอนต์ละตินกับฟอนต์ไทยคนละตัว เช่น Noto Sans + Noto Sans Thai
-> การตั้งช่อง `cs` อย่างเดียวไม่พอ Word จะวาดตัวไทยด้วยฟอนต์ช่องละตินถ้าฟอนต์นั้นมีตัวไทย ถ้าไม่มีจะตกไปใช้ Browallia New แบบเงียบ ๆ
-> ให้ตั้ง `bk.FONT` (ไทย) กับ `bk.LATIN_FONT` (ละติน) แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header และ footer ก่อน `save()`
-> ฟังก์ชันนี้แยกข้อความไทยออกเป็น run ของตัวเอง และตั้งทั้ง 4 ช่องเป็นฟอนต์ไทย
-> ฟอนต์ที่ไม่ได้มีทุกเครื่องให้เรียก `bk.embed_fonts(doc)` เพื่อฝังฟอนต์ในไฟล์ ซึ่งทำได้เฉพาะฟอนต์ที่สัญญาอนุญาตยอมให้ฝัง เช่น OFL แต่ไฟล์จะใหญ่ขึ้นหลาย MB
-> ฟอนต์ variable เช่น Cascadia Mono จะกลายเป็น Calibri เมื่อ Word export เป็น PDF ให้ใช้ Consolas กับโค้ด
-
-กฎอื่นสำหรับเอกสารไทย:
-
-- ระยะบรรทัด **1.3–1.35** สำหรับ Tahoma (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์และสระบน–ล่าง ต้องเว้นที่) · ฟอนต์ตระกูล Noto มีความสูงบรรทัดในตัว 1.36–1.51 em จึงใช้ **1.1–1.15** ก็ได้ระยะเท่ากัน — ตัดสินจากหน้า PDF จริง ไม่ใช่จากตัวเลข
-- **ห้ามจัดชิดขอบ 2 ด้าน (justify)** กับย่อหน้าไทย เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
-- LibreOffice ตัดคำไทยไม่เหมือน Word ถ้าจะส่ง PDF ให้ export จาก Word จริง
-  หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
-- สร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
-  (ReportLab จัดวรรณยุกต์ไทยผิด ให้ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
-- เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
-  ไม่ใช่บั๊กของขนาดฟอนต์ บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน จึงให้ตรวจรอบสุดท้ายจาก Word
-
----
-
-## 3 · โครงหน้าเอกสาร Word
-
-```
-หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
-              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
-              → ขึ้นหน้าใหม่
-สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
-เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
-              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
-ท้ายเอกสาร    ตารางลงนามอนุมัติ
-footer        "หน้า N" กลางหน้า สีเทา 9pt
-```
-
-**แบบปกเข้ม (เมื่อแอปหรือแบรนด์ใช้หน้าจอสีเข้ม):** ปกเต็มหน้าสีเทาเข้มเกือบดำแบบกลาง ๆ (เช่น `#1C1C22`) มีแสงเรืองสีแบรนด์จางมาก (ไม่เกิน 15%) — แสงม่วงเข้มเต็มมุมทำให้ปกดูเป็นสีม่วง เจ้าของงานขอกลับเป็นเทาเข้ม ·
-ชื่อเอกสาร ชื่อรอง และเส้นใต้ชื่อ วาง**ชิดใต้โลโก้** ไม่ใช่กลางหรือล่างหน้า ส่วนตารางข้อมูลเอกสารอยู่ค่อนไปทางล่าง ·
-โลโก้แบบตัวอักษรสว่าง (light-on-dark) มุมซ้ายบน · ชื่อเอกสาร 28–32pt · ตารางข้อมูลเอกสาร 4 ช่อง
-(รหัสเอกสาร · เวอร์ชัน · วันที่ · สถานะ) · หน้าในเป็นพื้นขาว บล็อกโค้ดสีเข้ม header มีโลโก้เล็ก ชื่อเอกสาร และรหัสเอกสาร
-footer มีชื่อระบบกับ "หน้า / ทั้งหมด" — สีเข้มอยู่ที่ปกหน้าเดียว จึงยังพิมพ์ได้ ขนาดชื่อเอกสารบนปกแบบนี้เกินสเกลข้อ 1 ได้
-โลโก้บนปกใช้**ขนาดเล็ก (กว้างราว 4.5 ซม.) มุมซ้ายบน เหนือชื่อเอกสาร** — เคยลองขยายสัญลักษณ์เป็นภาพหลักกลางปก เจ้าของงานขอกลับเป็นขนาดเล็ก
-ถ้าต้องการลูกเล่น ให้ลากแสงสีของโลโก้เป็นเส้นพาดเต็มความกว้างหน้าแทนเส้นใต้ชื่อเอกสาร (ยึดภาพเส้นกับย่อหน้าใต้ชื่อ เพื่อให้ตามได้ทั้งชื่อ 1 และ 2 บรรทัด) · เส้นต้องเป็น**ภาพเดียวต่อเนื่อง** ความหนาและแสงเท่ากันตลอด ไล่สีแบบ smoothstep ปลายสองข้างจางลงนุ่ม ๆ และวาดที่ 300 dpi — ห้ามวางแถบสั้นซ้อนบนเส้นยาว เพราะจะเห็นเป็นก้อนหนาที่สีไม่ต่อกัน (เจ้าของงานทักว่า "เส้นสีไม่ smooth")
-ตัวหนังสือเล็กบนปกเข้ม (ป้ายกำกับ ข้อมูลผู้เขียน หมายเหตุ) ใช้ขนาด**อย่างน้อย 8.5pt** และสีเทาอ่อน `#CFCCDE` ขึ้นไป ชื่อรองใช้สีอ่อนเกือบขาว — ตัว 7.5pt สีเทากลางบนพื้นเข้มดูจาง
-
-**หัวตารางในหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** แม้ปกจะสีเข้มก็ตาม เพราะตารางมีทุกหน้า สีเข้มจึงหนักตาและเปลืองหมึก (เจ้าของงานขอเปลี่ยนจริงในงานหนึ่ง)
-ให้ใช้พื้นอ่อนของสีแบรนด์ที่ยังเห็นชัดว่าเป็นแถวหัว เช่น `#E4DCFD` (พื้นที่อ่อนกว่านี้อย่าง `#F5F3FF` เจ้าของงานบอกว่าจางไป) ตัวหนังสือสีเข้มของแบรนด์ตัวหนา
-เส้นขอบมีเส้นเดียว คือเส้นสีแบรนด์ 1.5pt ใต้แถวหัว ไม่มีเส้นด้านบน (เส้นดำด้านบนดูหนักและถูกขอให้ปรับ) และไม่เว้นช่องขาวระหว่างช่องหัว เพราะจะทำให้เส้นใต้หัวขาดเป็นช่วง
-Word วาดเส้นขอบไล่สีไม่ได้ ถ้าใส่ไล่สี สีจะเปลี่ยนเป็นช่วงตามคอลัมน์
-
-หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา **17 ซม. = 9638 twips** (`BODY_TWIPS`)
-(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
-
----
-
-## 4 · องค์ประกอบที่ใช้ซ้ำ
-
-| องค์ประกอบ | หน้าตา | เมธอด |
-|-----------|--------|-------|
-| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
-| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` เส้นเทาบาง หัวซ้ำทุกหน้า | `table()` |
-| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
-| แถบตัวเลขสรุป | การ์ดพื้นฟ้าอ่อน ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
-| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
-| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
-| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
-| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
-
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
-ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
-
----
-
-## 5 · วิธีใช้ brandkit
-
-```python
-import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
-from brandkit import BrandDoc, use_brand, to_pdf
-
-doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
-doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-          subtitle="ระบบ Apps Track — Project Control & Monitor",
-          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-          logo="asset/AppsTrack_Logo_Badge.png")
-doc.toc()
-
-doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
-doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
-doc.table(["หัวข้อ", "รายละเอียด"],
-          [["URL ระบบ", "https://project.eitaccount.cloud"]],
-          widths=[2600, 7038])                  # รวม = 9638
-doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
-doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
-doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
-               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
-doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
-doc.save("SRS.docx")
-```
-
-สไลด์ใช้ `brandkit_pptx.py` ซึ่งกินโทเคนชุดเดียวกัน:
-
-```python
-from brandkit_pptx import BrandDeck
-d = BrandDeck()                                  # 16:9
-d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
-d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
-d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
-d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
-d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
-              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
-d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
-d.save("deck.pptx")
-```
-
-เมธอดทั้งหมดอยู่ใน `references/api.md` ส่วนไฟล์ตัวอย่างที่รันได้จริงคือ
-`scripts/example_srs.py`
-
-
-### เด็ค "Stage" — ค่าเริ่มต้นของเด็คที่ใช้พูด
-
-`brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบ: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
-
-```python
-from brandkit_stage import StageDeck
-d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")   # สีหลัก · สีพื้นของโปรเจกต์
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
-        meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
-d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
-         "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
-d.save("deck.pptx")
-```
-
-- **สีมาจากดีไซน์ของโปรเจกต์ 2 ค่า** คือ `accent` (สีหลัก) กับ `bg` (สีพื้น) หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → ดีไซน์ในโค้ด เช่น `--primary` · `--background` · ธีม Tailwind · โหมดมืด/สว่างของแอป → โลโก้และชุดแบรนด์ → เสนอจาก colour-by-domain) ห้ามใช้สีของต้นแบบ
-- เทาทุกระดับคำนวณจาก `bg` (พื้นเข้มผสมขาว พื้นสว่างผสมดำ) จึงอมโทนเดียวกับพื้นของโปรเจกต์ · `accent_hi` คือสีหลักที่ปรับความสว่างจนอ่านออกบนพื้นนั้น ใช้กับตัวเลขใหญ่ เลขลำดับ และคำเน้น · โปรเจกต์ที่กำหนดสีตัวหนังสือไว้แล้ว ส่งทับได้ เช่น `text="1B2430"`
-- ฟอนต์ใช้ของโปรเจกต์ได้ (`head_font=` · `body_font=`) ถ้าโปรเจกต์ยังไม่มี ใช้ Chakra Petch + IBM Plex Sans Thai
-- **รูปผังต้องใช้สีพื้นเดียวกับเด็ค** — เรนเดอร์ `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` (ตอนนี้มีใน `figure-flow.html`)
-- **ต้องติดตั้งฟอนต์ Chakra Petch และ IBM Plex Sans Thai** (Google Fonts · ใช้ฟรี) ในเครื่องที่เปิดไฟล์ ถ้าเครื่องปลายทางไม่มี ให้ส่ง PDF คู่ไปด้วย หรือสร้างใหม่ด้วย `head_font="Tahoma", body_font="Tahoma"`
-- ถ้าจะพิมพ์ ให้สร้างอีกชุดด้วย `bg="FFFFFF"` แทนการใช้พื้นเข้มเปลืองหมึก · `BrandDeck` (แถบสีด้านบน) ยังใช้ได้กับรายงานที่ส่งให้อ่านเอง
----
-
-## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
-
-เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
-วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
-
-```bash
-soffice --headless --convert-to pdf --outdir out SRS.docx
-pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.png ...
-```
-
-แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
-
-- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
-- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
-- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
-- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ · **หน้า 2 ไม่ว่าง** (ปกเต็มหน้าแล้วย่อหน้าตัวแบ่งหน้าตกไปหน้า 2 — `cover()` ใส่ตัวแบ่งไว้ท้ายย่อหน้าสุดท้ายแล้ว ถ้าเขียนปกเองต้องทำแบบเดียวกัน)
-- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
-- [ ] footer เลขหน้าครบทุกหน้า
-- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
-- ❌ **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- ❌ **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
-
----
-
-## 8 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---------|-----------|
-| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `markdown-visuals` → export PNG → `figure()` |
-| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
-| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
-| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
-| รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) | `markdown-report-docx` |
-| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: api.md
-
-# brandkit API — อ้างอิงเมธอด
-
-ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้
-
-## สารบัญ
-
-1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
-3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
-
----
-
-## brandkit.py — Word (.docx)
-
-### สร้างเอกสาร
-
-```python
-BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
-         footer_text="หน้า")
-```
-
-| พารามิเตอร์ | ความหมาย |
-|-------------|----------|
-| `path_template` | ไฟล์ .docx/.dotx ที่ใช้เป็นแม่แบบ (มี header/logo ขององค์กรอยู่แล้ว) |
-| `page` | `"A4"` หรือ `"Letter"` |
-| `margins_cm` | (บน, ขวา, ล่าง, ซ้าย) |
-| `footer_text` | คำนำหน้าเลขหน้า · `""` = เลขเปล่า |
-
-### บล็อกระดับหน้า
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `cover(title, subtitle, meta, note, logo, logo_width_cm=2.6, top_space_pt=150, page_break=True)` | โลโก้รับได้ทั้ง .png และ .emf แต่ **.svg ใช้ไม่ได้ใน python-docx** ต้องแปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
-| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC แล้วใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
-| `page_break()` | |
-| `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
-
-### หัวข้อและข้อความ
-
-| เมธอด | ผลลัพธ์ |
-|-------|---------|
-| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · ตั้ง `outlineLvl` ให้ TOC เห็น |
-| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (ไทยอย่าใช้ justify) |
-| `rich([(text, opts), ...])` | หลายรูปแบบในย่อหน้าเดียว เช่น `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
-| `bullets([...], style="List Bullet")` | `style="List Number"` สำหรับเลขลำดับ |
-| `code(text)` | บล็อกโค้ดพื้นเทา |
-
-### ตารางและข้อมูล
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False)` | `widths` หน่วย twips รวม **9638** (`BODY_TWIPS`) สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ |
-| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · โทนที่ใช้ได้: green blue amber red violet grey |
-| `kpi_row([(value, label), ...])` | 3–5 ช่องพอดี |
-| `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
-
-### อื่น ๆ
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
-| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` จะขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
-| `save(path)` | |
-
-### ฟังก์ชันระดับโมดูล
-
-| ฟังก์ชัน | ใช้เมื่อ |
-|----------|---------|
-| `use_brand(**tokens)` | เปลี่ยนชุดสีทั้งชุด ต้องเรียก **ก่อน** สร้าง `BrandDoc` |
-| `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
-| `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
-| `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
-| `set_borders(table)` · `no_borders(table)` | |
-| `repeat_header(row)` · `keep_with_next(paragraph)` | |
-| `add_field(paragraph, "PAGE")` | แทรก field ของ Word |
-| `to_pdf(docx_path, outdir)` | เรียก LibreOffice แปลงเป็น PDF |
-
----
-
-## brandkit_pptx.py — สไลด์ (.pptx)
-
-```python
-BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
-```
-
-| เมธอด | สไลด์ที่ได้ |
-|-------|-------------|
-| `title_slide(title, subtitle, meta)` | พื้นฟ้าอ่อน + เส้นแบรนด์คั่น |
-| `section(title, kicker=None)` | แถบแบรนด์แนวตั้งซ้าย + ชื่อส่วน |
-| `bullets_slide(title, items, subtitle=None)` | หัวข้อ + ขีดม่วงใต้หัวข้อ + bullet 17pt |
-| `kpi_slide(title, items, subtitle=None)` | การ์ดตัวเลข |
-| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` เป็นสัดส่วน เช่น `[1, 4, 2, 2]` |
-| `image_slide(title, image_path, caption, subtitle)` | รูปกลางสไลด์ พอดีกรอบอัตโนมัติ |
-| `quote_slide(text, source)` | สไลด์คำพูด/ข้อสรุป |
-| `save(path)` | |
-
-**ข้อจำกัดที่ต้องรู้**
-
-- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) จึงไม่มีช่อง placeholder ให้แก้ใน PowerPoint
-  แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
-- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ ถ้าอยากได้ตารางไม่มีเส้น ให้เรียงกล่องข้อความแทน
-- ความสูงแถวตารางเป็นค่าต่ำสุด ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
-
----
-
-## brandkit_stage.py — เด็ค Stage (.pptx)
-
-```python
-StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
-          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", **colors)
-# accent / bg = สีหลักกับสีพื้นจากดีไซน์ของโปรเจกต์ · colors = สีที่โปรเจกต์กำหนดไว้แล้ว เช่น text="1B2430"
-```
-
-ทุกแผ่นยกเว้นปกและคั่นบทมี: สี่เหลี่ยมสีหลัก + ชื่อหมวด (`kicker`) · หัวสไลด์ 28 pt · เส้นท้ายกระดาษ · `PROJECT · หมวด` · เลขหน้า 2 หลัก
-
-| เมธอด | สไลด์ที่ได้ |
-|-------|-------------|
-| `cover(title, lines, meta, logo=None, mark=None)` | ชื่อ 60 pt + ขีดสีหลัก · `lines[1]` เป็นสีหลัก · `mark` = สัญลักษณ์ใหญ่จางทางขวา (ไม่ใส่ = วงแหวนจาง) |
-| `section(number, title, note)` | คั่นบท — เลขใหญ่สีหลัก |
-| `figure(kicker, title, image, caption, subtitle)` | รูปผังเต็มแผ่น (เรนเดอร์ด้วย `#bg=` เดียวกับเด็ค) |
-| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | ตารางเส้นคั่นแถว · คอลัมน์ 1 เทา 2 หนาขาว 3 เนื้อความ · ไม่เกิน 5 แถว |
-| `stats(kicker, title, items, subtitle)` | ตัวเลขใหญ่ 2–4 ช่อง + ตัวอย่างถาม/ตอบใต้ตัวเลข |
-| `steps(kicker, title, rows, example_head, note)` | ขั้นตอนมีเลข · `rows = [(ชื่อ, ทำอะไร, ตัวอย่าง)]` ไม่เกิน 6 ขั้น |
-| `points(kicker, title, points, image, caption, side, side_caption)` | ภาพซ้าย + ใจความมีขีดสีหลัก · `side` = ภาพเล็กขวา เช่น QR |
-| `statement(kicker, text, sub)` | ข้อความเดียวกลางแผ่น |
-| `save(path)` | |
-
-ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
-
-
-| จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
-|:---:|---|
-| 2 | `[2600, 7038]` — หัวข้อ/รายละเอียด |
-| 3 | `[1400, 6238, 2000]` — รหัส/รายการ/ผู้รับผิดชอบ |
-| 4 | `[1100, 4478, 1900, 2160]` — รหัส/รายการ/ผู้รับผิดชอบ/สถานะ |
-| 5 | `[1000, 1800, 2838, 2000, 2000]` |
-| 6 ขึ้นไป | ใช้ `landscape_section()` (พื้นที่ 14570 twips) |
-
-
-## reference: palette-examples.md
-
-# ตัวอย่างชุดสีที่เคยใช้จริง
-
-> ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
-
-## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
-
-โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
-
-```python
-use_brand(
-    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
-    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
-    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
-)
-```
-
-## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
-
-```python
-use_brand(
-    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
-    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
-    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
-)
-```
-
-## ชุด C — กรมท่า (ราชการ · กฎหมาย)
-
-```python
-use_brand(
-    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
-    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
-    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
-)
-```
-
-## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
-
-accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
-
-```python
-use_brand(
-    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
-    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
-    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
-)
-```
-
-## สีสถานะ — ชุดเดียวกันทุกแบรนด์
-
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
-
-| สถานะ | พื้น | ตัวอักษร |
-|---|---|---|
-| สำเร็จ | `E9F7EF` | `17794A` |
-| ข้อมูล | `EAF2FD` | `2160AB` |
-| เตือน | `FDF5E4` | `96660D` |
-| ผิดพลาด | `FDEDEC` | `A63A34` |
-| เน้น | `F1EEFC` | `52439F` |
-| เป็นกลาง | `F2F4F8` | `626A7A` |
-
-> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
-> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
-
-## วิธีตรวจก่อนใช้
-
-1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
-2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
-3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
-
-
----
-
-# skill: architecture-patterns
-
-Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, or patterns like CQRS, Event Sourcing and Saga.
-
-# Architecture Patterns
-
-## When to use this skill
-
-- Architecture decisions for a new system
-- Choosing communication patterns between services
-- Splitting a monolith into modules or microservices
-- Designing event-driven systems
-- Implementing Command Query Responsibility Segregation (CQRS), Event Sourcing or Saga
-- Reviewing existing architecture
-- Making decisions big enough for an Architecture Decision Record (ADR)
-
----
-
-## High-Level Architecture Choice
-
-### Decision tree
-
-```
-How many engineers? Team count? Domain complexity?
-│
-├─ <10 engineers, 1 team
-│  └─ ✅ Monolith (modular monolith)
-│
-├─ 10-50 engineers, 2-5 teams
-│  └─ ✅ Modular monolith OR few services
-│
-├─ 50+ engineers, 5+ teams
-│  └─ Consider microservices (only if needed)
-│
-└─ Any size + spiky/event-driven workload
-   └─ Add serverless for that piece
-```
-
----
-
-## Pattern 1: Modular Monolith
-
-**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
-
-```
-┌─────────────────────────────────────┐
-│   Single deployable application     │
-│ ┌───────┐ ┌───────┐ ┌───────────┐  │
-│ │Module │ │Module │ │  Module   │  │
-│ │  A    │ │  B    │ │     C     │  │
-│ └───────┘ └───────┘ └───────────┘  │
-│   ▲           ▲           ▲         │
-│   └── Strict module boundaries ──┘  │
-└─────────────────────────────────────┘
-         │
-         ▼
-    Single DB (or per-module schemas)
-```
-
-**When to use:**
-- ✅ Small/medium team (< 30 engineers)
-- ✅ You need to ship changes fast
-- ✅ Operations needs are simple
-- ✅ All parts can deploy together
-
-**When NOT to use:**
-- ❌ Multiple teams needing independent deploys
-- ❌ Features need very different scaling
-- ❌ Parts need different tech stacks
-
-**Implementation tips:**
-- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
-- Each module exposes a public interface
-- Don't let one module read another module's tables
-- One DB, with a separate schema per module
-
----
-
-## Pattern 2: Microservices
-
-**When you've outgrown the monolith.**
-
-```
-┌──────┐  ┌──────┐  ┌──────┐
-│ Svc A│  │ Svc B│  │ Svc C│
-└──┬───┘  └──┬───┘  └──┬───┘
-   │ ▲      │ ▲      │ ▲
-   │ │      │ │      │ │     ← Each owns its DB
-   ▼ │      ▼ │      ▼ │
-  ┌──┴┐    ┌──┴┐    ┌──┴┐
-  │DB │    │DB │    │DB │
-  └───┘    └───┘    └───┘
-```
-
-**When to use:**
-- ✅ Independent teams (Conway's Law)
-- ✅ Different scaling needs per service
-- ✅ Services need different languages or stacks
-- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
-
-**When NOT to use (most projects):**
-- ❌ Small team — the extra overhead slows everyone down
-- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
-- ❌ Can't afford distributed tracing
-- ❌ Business areas don't have clear boundaries yet
-
-**Hidden costs:**
-- 💸 Much harder to operate (about 5x the ops effort)
-- 💸 Network latency between services
-- 💸 Transactions across services are hard
-- 💸 Bugs are harder to trace
-- 💸 You need a service mesh and a monitoring stack
-
-> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
-
----
-
-## Pattern 3: Serverless / Functions
-
-**For spiky, event-driven workloads.**
-
-```
-Event ──► Function ──► Service / DB / Queue
-```
-
-**Good fits:**
-- ✅ Async background processing
-- ✅ Scheduled tasks (cron)
-- ✅ Glue code between services
-- ✅ Spiky / unpredictable traffic
-- ✅ Image/video processing pipelines
-
-**Bad fits:**
-- ❌ Long-running processes (the limit is usually 15 min)
-- ❌ Processing that must keep state between calls
-- ❌ Frequent calls that need a fast response (cold starts add delay)
-- ❌ Heavy traffic all day (the bill climbs fast)
-
----
-
-## Communication Patterns
-
-### Synchronous (Request-Response)
-
-```
-Client ──HTTP/gRPC──► Server
-       ◄──Response───
-```
-
-| Protocol | When |
-|----------|------|
-| REST | Public APIs, simple CRUD |
-| GraphQL | Mobile clients, multiple read patterns |
-| gRPC | Internal service-to-service |
-| WebSocket | Real-time bidirectional |
-
-**Pros:** Easy to reason about and debug
-**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
-
-### Asynchronous (Event-Driven)
-
-```
-Producer ──► Topic/Queue ──► Consumer(s)
-         (publish)         (subscribe)
-```
-
-| Tech | When |
-|------|------|
-| Kafka | High throughput, event sourcing, replay needed |
-| RabbitMQ | Traditional queuing, work distribution |
-| SQS/SNS | AWS-native, simpler than Kafka |
-| NATS | Lightweight, low-latency |
-| Redis Pub/Sub | Simple, messages are not stored |
-
-**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
-**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
-
-### When to choose which
-
-```
-Need immediate response? ─Yes─► Sync
-                         └─No──► Async
-
-Is producer impacted by consumer? ─Yes─► Sync
-                                  └─No──► Async
-
-Multiple consumers? ─Yes─► Async (pub/sub)
-                   └─No──► Either
-```
-
----
-
-## Patterns 4–8: CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig
-
-Details for each are in [references/advanced-patterns.md](references/advanced-patterns.md). Load that file when the decision involves one of these:
-
-- Pattern 4: CQRS (Command Query Responsibility Segregation)
-- Pattern 5: Event Sourcing
-- Pattern 6: Saga (Distributed Transactions)
-- Pattern 7: API Gateway
-- Pattern 8: Strangler Fig (Migration)
-
----
-
-## Cross-Cutting Decisions
-
-### Database per service vs Shared DB
-
-| | Shared DB | DB per service |
-|---|-----------|----------------|
-| Coupling | 🔴 High | 🟢 Low |
-| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
-| Schema changes | 🔴 Coordinate | 🟢 Independent |
-| Performance | 🟢 Easy joins | 🔴 Network calls |
-| Use when | Monolith | Microservices |
-
-### Caching tiers
-
-```
-Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
-       1                  2                       3                4
-       ▲                                                           ▲
-       Closest to user (fastest)              Furthest (last resort)
-```
-
-Each tier is roughly 10x faster than the next. CDN = content delivery network.
-
-### Idempotency
-
-**Always design APIs so a repeated request does no extra harm:**
-```
-Client retries → Server detects duplicate → Same result, no side effect
-```
-
-Methods:
-- Idempotency key header (Stripe pattern)
-- A time window in which the server drops duplicates
-- Methods that are safe to repeat by nature (PUT, unlike POST)
-
----
-
-## Decision Matrix Template
-
-When proposing architecture, compare options:
-
-```markdown
-| Factor | Weight | Option A | Option B | Option C |
-|--------|:------:|:--------:|:--------:|:--------:|
-| Performance | 30% | 8 | 9 | 7 |
-| Cost | 20% | 9 | 6 | 8 |
-| Team skill | 20% | 9 | 5 | 7 |
-| Operations | 15% | 8 | 5 | 7 |
-| Future-proof | 15% | 6 | 9 | 7 |
-| **Total** | 100% | **7.95** | 7.10 | 7.20 |
-```
-
----
-
-## Anti-patterns
-
-- ❌ **Microservices too early** — start with a monolith
-- ❌ **Distributed monolith** — services that must deploy together
-- ❌ **God service** — one service that does everything
-- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
-- ❌ **Shared database across microservices** — all the coupling, none of the isolation
-- ❌ **Synchronous calls in critical path** — cascading failures
-- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
-- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
-
----
-
-## Quick Reference: When to Use What
-
-| Need | Pattern |
-|------|---------|
-| Small team, fast iteration | Modular monolith |
-| Independent team deploys | Microservices |
-| Spiky background jobs | Serverless |
-| High write throughput, complex reads | CQRS |
-| Full audit trail, view state at any past time | Event Sourcing |
-| Multi-service transaction | Saga |
-| Reduce service-to-service complexity | Service mesh |
-| Multiple external clients | API Gateway |
-| Migrate legacy system | Strangler Fig |
-
----
-
-## Always Reference
-
-When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
-
-
-## reference: advanced-patterns.md
-
-# Architecture Patterns — Advanced Pattern Catalogue
-
-Details moved out of [SKILL.md](../SKILL.md). Load this file when the decision involves one of these patterns.
-
-## Contents
-
-- [Pattern 4: CQRS (Command Query Responsibility Segregation)](#pattern-4-cqrs-command-query-responsibility-segregation)
-- [Pattern 5: Event Sourcing](#pattern-5-event-sourcing)
-- [Pattern 6: Saga (Distributed Transactions)](#pattern-6-saga-distributed-transactions)
-- [Pattern 7: API Gateway](#pattern-7-api-gateway)
-- [Pattern 8: Strangler Fig (Migration)](#pattern-8-strangler-fig-migration)
-
----
-
-## Pattern 4: CQRS (Command Query Responsibility Segregation)
-
-**Use one model for writes and a separate model for reads.**
-
-```
-Commands ──► Write Model ──► Event Store
-                              │
-                              ▼
-                          Projector
-                              │
-                              ▼
-Queries ◄── Read Models (denormalized for query)
-```
-
-**When to use:**
-- ✅ Read load and write load are very different
-- ✅ Complex reporting / dashboards
-- ✅ Multiple read views from same data
-
-**When NOT to use:**
-- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
-- ❌ Reads must always show the latest write
-
----
-
-## Pattern 5: Event Sourcing
-
-**Store every change as an event, not just the current state.**
-
-```
-Instead of:           Store:
-Account                Events:
-  balance: $100        ├─ AccountOpened
-                       ├─ Deposit($50)
-                       ├─ Deposit($75)
-                       └─ Withdraw($25)
-
-State is computed from events
-```
-
-**When to use:**
-- ✅ Strong audit/compliance requirements
-- ✅ Need to replay history
-- ✅ Questions about the past ("balance at date X")
-- ✅ Complex business logic with many state transitions
-
-**When NOT to use:**
-- ❌ Apps with simple state (too much)
-- ❌ No team experience with it
-- ❌ Don't need history/audit
-- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
-
-> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
-
----
-
-## Pattern 6: Saga (Distributed Transactions)
-
-**When several services must all succeed or all roll back.**
-
-### Orchestration (centralized)
-```
-Orchestrator
-   │
-   ├──► Service A (do step 1)
-   │    [if fail → Orchestrator triggers compensations]
-   ├──► Service B (do step 2)
-   └──► Service C (do step 3)
-```
-
-### Choreography (decentralized)
-```
-Service A ──Event──► Service B ──Event──► Service C
-   ▲                                            │
-   └──────────── Compensation Event ────────────┘
-```
-
-| | Orchestration | Choreography |
-|---|--------------|--------------|
-| Visibility | 🟢 Central | 🔴 Distributed |
-| Coupling | 🟡 Coupled to orchestrator | 🟢 Loosely coupled |
-| Debugging | 🟢 Easier | 🔴 Hard |
-| Adding services | 🟡 Update orchestrator | 🟢 Add subscriber |
-
-**Choose orchestration** when: complex flow, need clear visibility
-**Choose choreography** when: simple flow, many independent teams
-
----
-
-## Pattern 7: API Gateway
-
-```
-Clients ──► API Gateway ──► Multiple Services
-              │
-              ├─ Routing
-              ├─ Auth
-              ├─ Rate limit
-              ├─ Logging
-              └─ Aggregation
-```
-
-**Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
-
-**Use when:** external clients call many services, and you want auth, rate limits and logging in one place
-
----
-
-## Pattern 8: Strangler Fig (Migration)
-
-**Move off a monolith step by step.**
-
-```
-Phase 1:    Phase 2:           Phase 3:
-[Monolith]  [Mono] [NewSvc]    [NewSvc1] [NewSvc2]
-                ▲    │              ▲
-                └────┘ Proxy routes  └── Old Monolith deprecated
-                  selective traffic
-```
-
-**Steps:**
-1. Pick one business area (bounded context) to pull out
-2. Build new service for that context
-3. Add a proxy or feature flag that routes part of the traffic
-4. Gradually shift traffic to new service
-5. Delete old code when fully migrated
-
-> 💡 **Safer than rewriting everything at once.**
-
-
----
-
 # skill: prior-art-review
 
-Use when about to build something that may already exist (library, model, product, thesis approach). Compares candidates, licence, upkeep, adopt or build.
+Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 
@@ -994,6 +16,14 @@ Use when about to build something that may already exist (library, model, produc
 | ผลลัพธ์ | รายงาน feature · UI · UX + ข้อเสนอปรับปรุง | ตารางเทียบ + การตัดสินใจ + สิ่งที่ยอมแลก |
 | คำถามตั้งต้น | "แอปนี้ดีและพังตรงไหน ของเราจะดีกว่าอย่างไร" | "ควรหยิบตัวไหนมาใช้ หรือทำเอง" |
 | ใช้ร่วมกัน | แกะแอปต้นแบบที่จะสร้างแบบเดียวกัน | ตัดสินเรื่องไลบรารี เครื่องมือ หรือของที่จะนำมาใช้ แล้วบันทึก |
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` |
+| เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` |
+| ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | `adr-writer` |
 
 ---
 
@@ -1150,676 +180,685 @@ Use when about to build something that may already exist (library, model, produc
 
 ---
 
-# skill: diagram-figures
+# skill: parallel-attempts-pick-best
 
-Use when an architecture, numbered data-flow or concept figure must look designed for a proposal, slide, print or sign-off. Hand-laid HTML or SVG in the project's colour.
+Use when one attempt could lock in the wrong shape (design, interface, algorithm, mockup) or the user says try several or bake-off.
 
-> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
+# parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด
 
-# Diagram Figures
+> ทางแรกที่คิดได้มักไม่ใช่ทางที่ดีที่สุด แต่ถ้าลงมือไปแล้วจะไม่มีใครย้อนกลับมาลองทางอื่น
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+มาจาก `arena` ของ pstack
 
-skill นี้คือ house style เดียวของรูปที่ต้องดู "ออกแบบมา" ไม่ใช่ "generate มา" มี 3 engine ซึ่งใช้สี ไอคอน และกติกาชุดเดียวกัน
+ก่อนเริ่มให้เปิด todo 1 ข้อต่อ 1 ขั้น
 
-## เลือกทาง
+## 1 · ตั้งโจทย์
 
-| ต้องการ | ไปที่ |
+1. บอกให้ชัดว่าทุกตัวต้องส่งอะไร (ไฟล์ · ฟังก์ชัน · หน้าจอ · เอกสาร) — ทุกตัวได้โจทย์เดียวกัน เพราะโจทย์คือสัญญา
+2. เขียนเกณฑ์ให้คะแนน 3–6 ข้อที่ตรวจได้ เช่น โค้ดน้อย · อ่านง่าย · ผ่าน test · เร็วกว่า X · ทำตามข้อกำหนด FR-xx ได้ครบ — **เกณฑ์เก็บไว้กับตัวเลือก ไม่ส่งให้ผู้แข่ง**
+3. เลือกจำนวน ปกติใช้ 3 ตัว ส่วนงานใหญ่หรือแพงใช้ไม่เกิน 4
+4. ความต่างต้องมาจากที่ไหนสักแห่ง เพราะใน Claude Code โมเดลมาจากค่ายเดียวกัน
+   - ผสมระดับโมเดล (ใหญ่ · กลาง — ชื่อจริงดูหัวข้อ Subagent ใน superuser) และ/หรือ
+   - ให้แต่ละตัวมีข้อจำกัดต่างกัน เช่น "ใช้ไลบรารีมาตรฐานเท่านั้น" · "ข้อมูลไหลทางเดียว" · "จำนวนไฟล์น้อยที่สุด"
+5. กำหนดที่ส่งงานแยกกัน — git worktree ต่อตัว หรือ `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน
+
+## 2 · ปล่อยพร้อมกัน
+
+ส่ง subagent ทุกตัวในข้อความเดียว รันเบื้องหลัง แต่ละตัวได้รับ: โจทย์ · ตำแหน่งไฟล์อ้างอิง · ที่ส่งงานของตัวเอง
+ให้ส่งงานพร้อมเหตุผลสั้น ๆ ว่าคิดทางไหนไว้บ้าง และตัดทางไหนทิ้งเพราะอะไร ถ้าตัวไหนไม่ส่งงาน ให้ไปต่อกับตัวที่เหลือแล้วจดไว้
+
+## 3 · ให้คนกลางตัดสินอีกเสียง
+
+หลังทุกตัวเสร็จ ส่ง subagent ตัวใหม่ (อ่านอย่างเดียว · ไม่ใช่ผู้แข่ง) ให้คะแนนตามเกณฑ์ทีละข้อ
+
+## 4 · เลือกฐาน
+
+อ่านทุกตัวจนจบก่อนตัดสิน ให้คะแนนทีละเกณฑ์ ไม่ใช่ตามความรู้สึกรวม แล้วเทียบกับคะแนนของคนกลาง
+- ถ้าตรงกัน ถือว่ายืนยันแล้ว
+- ถ้าไม่ตรงกัน แปลว่าเกณฑ์กำกวมหรือมีฝ่ายลำเอียง ให้อ่านเหตุผลของทั้ง 2 ฝ่ายก่อนตัดสิน
+- ถ้าคะแนนใกล้กัน ให้เลือกตัวที่คนดูแลต่อขยายได้ง่ายที่สุด คือขอบเขตสะอาดกว่าและ API เล็กกว่า (`lazy-coding`)
+
+## 5 · ยกส่วนเด่นมาใส่
+
+ไล่ดูตัวที่แพ้อีกรอบ หาสิ่งที่ควรยกมา — ปกติตัวละ 1–2 อย่าง ไม่ใช่เกือบทั้งหมด
+เขียนเข้าไปในฐานเองให้กลมกลืน ห้ามแปะทั้งก้อน ผลต้องอ่านแล้วเป็นความคิดเดียว
+
+## 6 · ตรวจ
+
+ตรวจผลที่รวมแล้วด้วยเกณฑ์ข้อ 1 อีกครั้ง และด้วยวิธีจริงของงานนั้น (test · skill ตรวจแอป · เปิดดู)
+ลง [`decision-log`](../decision-log/SKILL.md) — ฐานคือตัวไหน · ยกอะไรมาจากตัวไหน · ทิ้งอะไรเพราะอะไร · คนกลางว่าอย่างไร
+
+## ไม่ควรใช้เมื่อ
+
+- งานกลไกที่มีคำตอบเดียว เพราะเปลืองแรงเปล่า
+- งานที่ตัดสินได้ด้วยการวัดตัวเลขตัวเดียว ให้ใช้ playbook `prototype` ของ [`superuser`](../superuser/SKILL.md) แทน
+
+
+---
+
+# skill: adversarial-review-panel
+
+Use when asked for adversarial review, stress test or blind spots, or before shipping a contested design or large diff.
+
+# adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
+
+> รีวิวเวอร์คนเดียวเห็นแค่มุมเดียว ส่วนคณะที่ถูกสั่งให้ "พยายามทำให้มันพัง" คนละมุม จะจับสิ่งที่คนเดียวมองข้ามได้
+> ผลลัพธ์คือคำตัดสิน **ไม่ใช่การแก้โค้ด**
+
+มาจาก `interrogate` ของ pstack
+
+## ขั้นตอน
+
+1. **ขอบเขต** — diff (`git diff main...HEAD`) หรือไฟล์ที่ระบุ รวมไฟล์รอบข้างที่ต้องอ่านประกอบ ถ้ายังไม่มี commit (โปรเจกต์ใหม่ หรือผู้ใช้ห้าม commit) ให้ใช้รายการไฟล์ที่สร้างหรือแก้ในรอบนี้ (`git status --short` หรือรายการไฟล์ใต้ `lib/` `src/` `test/`) แทน diff
+2. **เจตนา** — เขียน 1 ย่อหน้าว่างานนี้ตั้งใจทำอะไร โดยดูจากคำขอ · commit · PR · โค้ด ถ้าไม่แน่ใจให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วจดลง [`decision-log`](../decision-log/SKILL.md) โดยไม่หยุดถาม
+3. **ตั้งคณะ 3 คน ต่างมุมกัน** — ใน Claude Code โมเดลทุกตัวมาจากค่ายเดียวกัน ความต่างจึงต้องมาจากมุมที่สั่งให้ดู และการผสมโมเดลหลายขนาด
+
+   | รีวิวเวอร์ | มุม | ระดับโมเดล |
+   |---|---|---|
+   | ก | ความถูกต้อง — กรณีขอบ · ข้อมูลว่าง · ทำงานพร้อมกัน · error ที่ถูกกลืน · รันซ้ำแล้วได้ผลต่างกัน | ใหญ่ |
+   | ข | ความปลอดภัยและข้อมูล — input ที่ไม่ได้ตรวจ · สิทธิ์ · ค่าลับ · ข้อมูลส่วนบุคคล · การกระทำที่ย้อนกลับไม่ได้ | ใหญ่ |
+   | ค | ความเรียบง่ายและคนดูแลต่อ — โค้ดเกินจำเป็น · ชั้นที่ไม่ต้องมี · ชื่อที่ชวนเข้าใจผิด · test ที่ผ่านทั้งที่โค้ดผิด | กลาง |
+
+   ถ้ารีวิวแอปมือถือ ให้รีวิวเวอร์ ก เพิ่มมุม **วงจรชีวิตแอป** — process ถูกฆ่าแล้วกลับมา (state หาย) · แอปไปอยู่เบื้องหลังแต่เซนเซอร์หรือกล้องยังเปิด (แบตหมด) · ผู้ใช้ถอนสิทธิ์กลางทาง · หมุนจอ
+
+   **รีวิวเวอร์จากค่ายอื่น (ถ้ามี)** — ถ้าเครื่องมี CLI ของโมเดลค่ายอื่นติดตั้งไว้แล้ว (เช่น `codex` · `gemini`) ให้ใช้แทนรีวิวเวอร์ ค ด้วย prompt และมุมเดิม ในโหมดอ่านอย่างเดียว เพราะโมเดลต่างค่ายพลาดไม่เหมือนกัน จึงจับจุดบอดได้มากกว่า แต่ **โค้ดจะถูกส่งออกไปยังผู้ให้บริการนั้น** จึงใช้ได้เฉพาะเมื่ออนุญาตไว้ล่วงหน้าใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` ถ้าไม่มี CLI หรือไม่ได้อนุญาต ให้ใช้คณะค่ายเดียวตามตาราง
+
+   ถ้าเป็นงานเอกสารหรือดีไซน์ ให้เปลี่ยนมุมเป็น: ครบตามข้อกำหนดไหม · ขัดกันเองไหม · คนอ่านจริงจะติดตรงไหน
+4. **ปล่อยพร้อมกัน อ่านอย่างเดียว** — ทุกคนได้ prompt และเจตนาเดียวกัน ต่างกันแค่มุม ให้ส่งผลเป็นตาราง `| ปัญหา | ไฟล์:บรรทัด | ทำให้พังอย่างไร (ขั้นตอนหรือ input) | ความรุนแรง |` และ **ห้ามแก้ไฟล์**
+5. **ยืนยันทุกข้อ** — อ่านโค้ดจริงหรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติด `PLAUSIBLE` (เป็นไปได้ แต่ยังพิสูจน์ไม่ได้) หรือทิ้งพร้อมเหตุผล ส่วนข้อ `PLAUSIBLE` ให้ตัดสินเองโดยเลือกทางที่ผลกระทบน้อยสุด แล้วจดลงรายการ ยกเว้นเรื่องในรายการ "รออนุมัติ" ของ `superuser` (ลบหรือเขียนทับของผู้ใช้ · commit/push · ส่งออกนอกเครื่อง) ให้เตรียมไว้และจดลงรายการ ไม่ทำเอง
+6. **ให้น้ำหนัก** — ถ้า 2 คนขึ้นไปเจอเรื่องเดียวกัน ถือเป็นสัญญาณแรง ถ้าเจอคนเดียวแต่มีขั้นตอนทำให้พังชัด ก็ถือว่าจริง ส่วนความเห็นเรื่องรสนิยมเป็นแค่ข้อสังเกต
+7. **คำตัดสิน** — 1 บรรทัด: `ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง` แล้วตามด้วยรายการ: ต้องแก้ · ควรแก้ · ข้อสังเกต · ข้อที่ทิ้งพร้อมเหตุผล
+8. การสั่งแก้ต่อเป็นหน้าที่ของผู้ใช้หรือ playbook ส่วน skill นี้หยุดที่คำตัดสิน
+
+## ข้อควรระวัง
+
+- คณะรีวิวใช้ token เยอะ งานเล็กหรือรีวิว PR ทั่วไปใช้ `code-review-checklist` ตัวเดียวพอ · เขียนคำอธิบาย PR ใช้ `pr-description-template`
+- รีวิวเวอร์ AI ก็แจ้งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงต้องผ่านข้อ 5 ก่อนเข้ารายงาน
+
+
+---
+
+# skill: database-design
+
+Use when designing or changing a database schema (tables, columns, indexes, relations, migrations).
+
+# ออกแบบฐานข้อมูล
+
+> **กฎข้อเดียว:** schema คือของที่แก้ยากที่สุดในระบบ
+> โค้ดผิดแก้วันนี้จบวันนี้ แต่ schema ผิดต้องอยู่กับมัน 3 ปี พร้อมข้อมูลจริงอีก 10 ล้านแถวที่ต้องย้ายตาม
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ออกแบบฐานข้อมูลของระบบใหม่ หรือ module ใหม่
+- จะเพิ่ม/แก้ตาราง คอลัมน์ ความสัมพันธ์ หรือ index
+- จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
+- query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| โจทย์ | ไปที่ |
 |---|---|
-| รูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
-| รูปแบบเดียวกัน แต่ต้อง generate จากข้อมูลหรือโค้ด เช่น ออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือต้องคุมพิกัดบนกริดเอง | **skill นี้ — SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
-| บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ PDF ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
-| ไดอะแกรมที่อยู่ในเอกสาร markdown · README · Pull Request · เอกสารในทีม | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
-| ตัดสินใจว่าจะฝังรูปในไฟล์ markdown แบบไหน (inline SVG · ไฟล์ภาพ · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
+| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
+| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
+| ที่เก็บ connection string | `config-and-secrets` |
+| รัน migration ใน pipeline | `cicd-and-release` |
 
-ต้นทุนของ skill นี้คือ **เวลา** เพราะ 1 รูปต้องแก้หลายรอบ
-ดังนั้นให้ใช้กับรูปที่คนนอกทีมจะเห็น และเห็นซ้ำหลายครั้งเท่านั้น
+---
 
-## 1 · ตอบสามข้อก่อนเปิดไฟล์
+## 1 · เลือกชนิดฐานข้อมูลก่อน
 
-1. **รูปนี้ไปอยู่ที่ไหน** — สไลด์ 16:9 · หน้า A4 · หน้าจอ
-   แล้วกำหนด `.sheet{width:...}` ตามนั้น: สไลด์ 1600px · A4 แนวตั้ง 1240px · A4 แนวนอน 1750px
-2. **ผู้อ่านคือใคร** — ถ้าเป็นลูกค้าที่ไม่ใช่ช่าง ให้เขียนชื่อกล่องเป็นภาษาไทย ส่วนทีมเทคนิคอ่านชื่อจริงของ service
-3. **คำถามเดียวที่รูปนี้ตอบคืออะไร** — กฎข้อเดียวของ `software-diagrams` ยังใช้อยู่
-
-## 2 · เลือกโครง
-
-มี 4 โครงในโฟลเดอร์ `assets/` ให้**คัดลอกไปแก้ อย่าเริ่มเขียนเอง** ส่วนรายละเอียดของแต่ละโครงอยู่ในไฟล์ที่ลิงก์ไว้
-
-| คำถามที่รูปตอบ | โครง | รายละเอียด |
+| เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" — C4 ระดับ 1 | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
-| "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" — deployment · container | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
-| "ใช้บริการอะไรของคลาวด์บ้าง" — ต้องมีโลโก้ AWS · Azure · Google Cloud ของจริง | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
-| "ข้อความ 1 ชิ้นวิ่งผ่านอะไรบ้าง ตามลำดับไหน" — ผังสถาปัตยกรรมแบบมีเลขลำดับ ①–⑥ · ผู้ใช้ → ช่องทาง → ชั้นในระบบ → บริการภายนอกและข้อมูล | [`figure-flow.html`](assets/figure-flow.html) · [ตัวอย่าง](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
+| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✅ | ❌ ต้องทำมือ |
+| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ⚠️ ใช้คอลัมน์ JSON | ✅ |
+| ต้องการ transaction ข้ามหลายตาราง | ✅ | ⚠️ ได้แต่แพงกว่า |
+| รายงาน ผลรวม การวิเคราะห์ | ✅ | ❌ |
+| เขียนหนักมาก log/telemetry | ⚠️ | ✅ หรือใช้ time-series |
 
-ทุกโครงใช้สี ขนาด ฟอนต์ และสคริปต์ลากเส้นชุดเดียวกัน ต่างกันแค่การจัดวาง
+> **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
+> "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
+> ระบบส่วนใหญ่ที่เลือก document เพราะยืดหยุ่น สุดท้ายเขียนโค้ด join เองในแอป
 
-## 3 · หัวรูปต้องมีครบหกอย่าง
+**ผสมกันได้**: ใช้ relational เป็นหลัก แล้วเก็บข้อมูลที่รูปร่างไม่แน่นอนเป็นคอลัมน์ `jsonb`
+เกือบทุกกรณี ทางนี้ดีกว่าแยกฐานข้อมูล 2 ตัว
 
-โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+---
 
-โลโก้อยู่หน้าชื่อรูป โครงทุกตัวมีช่อง `<img class="logo">` ชี้ไปที่ `assets/logo/` ของโปรเจกต์อยู่แล้ว ให้แก้แค่ชื่อไฟล์ ถ้าโปรเจกต์ยังไม่มีโลโก้ ช่องนี้จะหายไปเอง แต่ต้องจดไว้ในรายงานว่ายังขาดโลโก้ เพราะรูปที่ไม่มีโลโก้ถูกถามเสมอว่า "โลโก้อยู่ไหน"
+## 2 · กฎตั้งชื่อ — เลือกครั้งเดียว ใช้ทั้งระบบ
 
-เหตุผลไม่ใช่ความสวย แต่เป็นเพราะรูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมล ในสไลด์ ในเอกสารสัญญา
-แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้และไม่มีใครกล้าเชื่อ**
+| สิ่งที่ตั้งชื่อ | รูปแบบ | ตัวอย่าง |
+|---|---|---|
+| ตาราง | `snake_case` **พหูพจน์** | `orders`, `order_items` |
+| คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
+| primary key | `id` | `id` |
+| foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` → `user_roles` |
+| index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
+| unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
+| foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
+| check constraint | `ck_<ตาราง>_<เรื่อง>` | `ck_orders_total_non_negative` |
 
-คำขยายบอกว่า "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ:
+**สิ่งที่ห้ามทำ:**
 
+- ❌ ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
+- ❌ ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
+- ❌ ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
+- ❌ ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+
+> SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
+> **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
+
+---
+
+## 3 · คอลัมน์ที่ทุกตารางต้องมี
+
+```sql
+id           bigint / uuid   PRIMARY KEY
+created_at   timestamptz     NOT NULL DEFAULT now()
+updated_at   timestamptz     NOT NULL DEFAULT now()
 ```
-❌ ภาพรวมระบบ Dr Screening
-✅ เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
+
+เพิ่มตามความจำเป็น:
+
+| คอลัมน์ | ใส่เมื่อ | หมายเหตุ |
+|---|---|---|
+| `deleted_at timestamptz` | ต้องกู้ข้อมูลคืนได้ หรือกฎหมายบังคับให้เก็บ | **ทุก query ต้องกรอง** ไม่งั้นข้อมูลที่ลบแล้วโผล่ |
+| `created_by` / `updated_by` | ต้องตอบได้ว่าใครแก้ | เก็บ id ผู้ใช้ ไม่ใช่ชื่อ |
+| `row_version` / `xmin` | มีคนแก้พร้อมกันได้ | ใช้คู่กับ ETag ใน `api-conventions` |
+| `tenant_id` | ระบบหลายผู้เช่า | ดูข้อ 10 |
+
+> 🚨 **soft delete (ลบโดยแค่ติดป้าย) มีต้นทุน** คือทุก unique constraint ต้องคิดใหม่
+> `ux_users_email` จะกันไม่ให้สมัครอีเมลเดิมซ้ำ แม้บัญชีเก่าถูกลบไปแล้ว
+> แก้ด้วย partial index: `CREATE UNIQUE INDEX ... WHERE deleted_at IS NULL`
+
+---
+
+## 4 · เลือกชนิด identifier
+
+| ชนิด | ข้อดี | ข้อเสีย | ใช้เมื่อ |
+|---|---|---|---|
+| `bigint` เรียงเพิ่ม | เล็ก เร็ว index ไม่แตก อ่านง่ายตอนไล่ปัญหา | เดา id ถัดไปได้ · รวมข้อมูลหลายที่แล้วชนกัน | ค่าเริ่มต้น ระบบเดียว ฐานข้อมูลเดียว |
+| **UUIDv7 / ULID** | เรียงตามเวลา · สร้างจากฝั่งแอปได้ · ไม่ชนกัน | 16 ไบต์ · อ่านด้วยตายาก | ระบบกระจาย · ต้องสร้าง id ก่อนบันทึก · id โผล่ใน URL |
+| `UUIDv4` สุ่มล้วน | ไม่ชนกัน เดาไม่ได้ | **index แตกกระจาย เขียนช้าลงชัดเจนเมื่อข้อมูลเยอะ** | เลี่ยงถ้าเลือกได้ |
+
+> 🚨 **UUIDv4 เป็น primary key คือกับดักที่เจอบ่อยที่สุด**
+> ค่าสุ่มล้วนทำให้ทุก insert ไปแทรกกลางโครงสร้าง index
+> ข้อมูลหลักหมื่นยังไม่รู้สึก แต่พอถึงหลักสิบล้านจะช้าจนต้องรื้อ
+> ถ้าต้องใช้ UUID ให้ใช้ **v7** ซึ่งขึ้นต้นด้วยเวลา จึงเรียงเพิ่มเหมือน bigint
+
+**เลขที่คนเห็นไม่ใช่ primary key**: เลขใบสั่งซื้อ `SO-2026-00042` ที่ลูกค้าอ้างถึง
+ให้เก็บเป็นคอลัมน์ต่างหากที่มี unique constraint และไม่เอา primary key ไปโชว์
+
+---
+
+## 5 · normalisation แค่ไหนพอ
+
+**เริ่มที่ 3NF เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
+
+denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
+
+1. วัดแล้วว่าช้าจริง (มีตัวเลข ไม่ใช่ความรู้สึก)
+2. รู้ว่าข้อมูลซ้ำจะถูกอัปเดตยังไงให้ตรงกัน
+3. เขียนเหตุผลไว้ในคอมเมนต์ของตาราง
+
+**ข้อยกเว้นที่ยอมรับกันทั่วไป**: ข้อมูลที่ต้อง "แช่แข็ง" ณ เวลาหนึ่ง
+ราคาสินค้าในใบสั่งซื้อต้องคัดลอกลง `order_items.unit_price`
+ไม่ join ไปหา `products.price` เพราะราคาวันนี้ไม่ใช่ราคาวันที่ลูกค้าซื้อ
+
+---
+
+## 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
+
+รายละเอียด 4 ชนิดข้อมูลที่พลาดกันประจำ (เงิน · เวลา · enum หรือสถานะ · boolean) พร้อมตัวอย่าง อยู่ใน [`data-types`](references/data-types.md)
+
+## 7 · index — วางตรงไหนถึงได้ผล
+
+**ต้องมี:**
+
+- ทุก foreign key (ฐานข้อมูลส่วนใหญ่ **ไม่สร้างให้อัตโนมัติ**)
+- คอลัมน์ที่อยู่ใน `WHERE` ของ query ที่รันบ่อย
+- คอลัมน์ที่ใช้ `ORDER BY` คู่กับ pagination
+
+**composite index (index หลายคอลัมน์): ลำดับคอลัมน์สำคัญ**
+
+```sql
+-- query: WHERE tenant_id = ? AND status = ? ORDER BY created_at DESC
+CREATE INDEX ix_orders_tenant_status_created
+  ON orders (tenant_id, status, created_at DESC);
 ```
 
-## 4 · ระบบขนาด
+เรียงคอลัมน์ตามเงื่อนไข: **เท่ากับ → ช่วง → เรียงลำดับ**
+index `(a, b)` ใช้กับ query ที่กรองด้วย `a` อย่างเดียวได้ แต่กรองด้วย `b` อย่างเดียว**ไม่ได้**
 
-**ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว อย่าตั้งค่าใหม่เอง**
-ตัวเลขพวกนี้ปรับจนรูปดูตั้งใจแล้ว ถ้าขยับเมื่อไหร่ รูปในเอกสารเดียวกันจะดูไม่เท่ากัน
+**อย่าใส่ index เมื่อ:**
 
-| อย่าง | ค่า |
+- ตารางเล็กกว่าไม่กี่พันแถว เพราะฐานข้อมูลอ่านทั้งตารางเร็วกว่า
+- คอลัมน์มีค่าซ้ำเยอะ เช่น `is_active` ที่ 95% เป็น true
+- ตารางเขียนบ่อยกว่าอ่านมาก เพราะทุก index เพิ่มต้นทุนทุกครั้งที่เขียน
+
+> **วัดก่อนเดา**: `EXPLAIN ANALYZE` (PostgreSQL) หรือ execution plan (SQL Server)
+> บอกได้ว่า index ถูกใช้จริงไหม ส่วนการเดาว่า "น่าจะช่วย" ผิดบ่อยกว่าถูก
+
+---
+
+## 8 · constraint อยู่ที่ฐานข้อมูล ไม่ใช่แค่ที่แอป
+
+| กฎ | ที่ควรอยู่ |
 |---|---|
-| ตัวอักษร | ชื่อรูป 30 · ชื่อกล่อง 16 · คำอธิบาย 13.5 · ป้ายกลุ่ม 12 ตัวใหญ่ |
-| ไอคอน | กรอบ 66px · มุม 18px · ไอคอน 29px · เส้น 1.6px |
-| กล่อง | มุม 20px · ขอบ 1px เทาอ่อน · กล่องซ้อนใน มุม 16px พื้นเทาอ่อนมาก |
-| กล่อง `.focus` | ขอบ 2px สี `--accent` เฉดเข้ม · มุม 22px |
-| เส้นเชื่อม | แนวตั้งหรือแนวนอนเท่านั้น · หักมุมฉากด้วยมุมโค้งรัศมี 10px (SVG/Python engine ใช้ 12–14) · ห้ามเส้นเฉียง ห้ามเส้นโค้งอิสระ ห้ามมุมแหลม |
-| ระยะ | 12 · 20 · 26 · 34 · 48 · ช่องว่างระหว่างคอลัมน์ 130 |
+| อีเมลห้ามซ้ำ | `UNIQUE` ที่ฐานข้อมูล **และ** ตรวจในแอปเพื่อให้ข้อความ error สวย |
+| ยอดเงินห้ามติดลบ | `CHECK (total_amount >= 0)` |
+| ใบสั่งซื้อต้องมีลูกค้าจริง | `FOREIGN KEY` |
+| สถานะต้องเป็นค่าที่กำหนด | `CHECK` หรือ lookup table |
 
-> **กรอบไอคอนต้องใหญ่** — 66px คือจุดที่รูปเริ่มดูตั้งใจ ไม่ใช่ผังที่ generate มา
-> ถ้าต่ำกว่า 56px ไอคอนจะกลายเป็นจุดเล็ก ๆ ในกล่องใหญ่ และรูปจะดูโหวง
+> **เหตุผล:** แอปไม่ใช่ทางเดียวที่แตะข้อมูล ยังมี script แก้ข้อมูลด่วน
+> งาน import ตอนตี 3 และ service ตัวที่ 2 ที่เขียนทีหลัง
+> constraint ที่ฐานข้อมูลคือด่านสุดท้ายที่ไม่มีใครข้ามได้
 
-## 5 · ระบบสี
+**`ON DELETE` ต้องเลือกอย่างตั้งใจ:**
 
-**สีหลักของรูปคือสีหลักของโปรเจกต์** ห้ามใช้สีจากตัวอย่างหรือจากรูปอ้างอิง หาตามลำดับนี้ เจอที่ไหนหยุดที่นั่น:
+| ตัวเลือก | ความหมาย | ใช้กับ |
+|---|---|---|
+| `RESTRICT` (ค่าเริ่มต้นที่ควรใช้) | ลบไม่ได้ถ้ายังมีลูก | เกือบทุกกรณี |
+| `CASCADE` | ลบลูกตามทั้งหมด | ของที่เป็นส่วนประกอบจริง ๆ เช่น `order_items` |
+| `SET NULL` | ลูกกลายเป็นไม่มีพ่อ | ความสัมพันธ์ที่ไม่บังคับ |
 
-1. `doc-theme` ในเอกสารของโปรเจกต์ (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-2. สีแบรนด์ที่โปรเจกต์ใช้จริง — ตัวแปรสีหลักในโค้ด (`--primary` · `--brand` · `--accent` ใน CSS · `primary` ใน Tailwind / ธีม UI · `colorPrimary` ในแอปมือถือ) · ชุดแบรนด์ (brand kit) · สีหลักในโลโก้
-   ดูสีพื้นจากที่เดียวกันด้วย (`--background` · `--bg` · `background` ใน Tailwind · โหมดมืดหรือสว่างที่แอปใช้เป็นหลัก) เพราะรูปและเด็คใช้สีพื้นตามดีไซน์ของโปรเจกต์
-3. ยังไม่มีเลย → เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) แล้วรอยืนยัน · ถ้าทำงานต่อโดยไม่หยุดถาม ให้ใช้ชุดสีประจำบ้าน `#2A78D6` แล้วเขียนไว้ในรายงานว่ายังไม่มีสีหลัก
+ถ้าใส่ `CASCADE` ผิดที่เดียว ลบลูกค้า 1 คน แล้วประวัติการซื้อ 10 ปีจะหายตาม
 
-เจอสีจากข้อ 2 แล้วแต่ยังไม่มี `doc-theme` ให้ประกาศ `doc-theme` ด้วยค่านั้น เพื่อให้รูป เอกสาร และสไลด์ของโปรเจกต์ใช้สีเดียวกัน
+---
 
-ในโครง HTML ให้แก้ที่ `--accent` ใน `:root` ที่เดียว แล้วเฉดอ่อนและเข้มจะคำนวณจากค่านั้น (ส่วน SVG/Python engine แก้ที่ `ACCENT` ใน `theme.py`)
+## 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
 
-**สีพื้นของรูปตามดีไซน์ของโปรเจกต์** — ต่อท้ายชื่อไฟล์ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` ให้ตรงกับเด็คหรือแอป พื้นเข้มหรือสว่างก็ได้ เทาทุกระดับคำนวณจากสีพื้น (ตอนนี้มีใน `figure-flow.html`) ถ้าไม่ใส่ `bg` ได้พื้นขาว
+ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
 
-ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์:
+## 10 · ระบบหลายผู้เช่า (multi-tenant)
 
-- **สีโลโก้ผู้ให้บริการ** — AWS ส้ม Azure ฟ้า ต้องเป็นสีจริงของเขา ไม่ใช่สีแบรนด์เรา
-- **เทาโครงสร้าง** — เส้นขอบและพื้นกล่องต้องจางพอที่จะไม่แย่งสายตากับเนื้อหา
+| แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
+|---|---|---|---|
+| คอลัมน์ `tenant_id` ในทุกตาราง | ต่ำ พลาดที่เดียวข้อมูลก็รั่วข้ามผู้เช่า | ถูกสุด | ผู้เช่าเยอะ ข้อมูลต่อรายไม่ใหญ่ |
+| schema แยกต่อผู้เช่า | กลาง | migration ต้องวนทุก schema | ผู้เช่าหลักสิบถึงหลักร้อย |
+| ฐานข้อมูลแยกต่อผู้เช่า | สูงสุด | แพงสุด | ลูกค้าองค์กรที่บังคับให้แยก |
 
-**สีไอคอนมี 7 กลุ่ม และแต่ละกลุ่มต้องมีความหมาย**
+> 🚨 ถ้าเลือกแบบ `tenant_id` ให้**บังคับที่ชั้นล่างสุด ไม่ใช่ใส่ใน query ทีละตัว**
+> ใช้ row-level security ของฐานข้อมูล หรือ global filter ของ ORM
+> query ที่ลืมใส่ `WHERE tenant_id = ?` แค่ตัวเดียว ก็ทำให้ข้อมูลลูกค้ารายหนึ่งโผล่ให้อีกรายเห็น
+> และไม่มี error ให้เห็นเลย
 
-| คลาส | ใช้กับ |
-|---|---|
-| `t-neutral` | คน อุปกรณ์ ของนอกระบบ ที่เก็บไฟล์ธรรมดา |
-| `t-edge` | ทางเข้า-ออก · gateway · API |
-| `t-app` | เครื่องมือที่ผู้ใช้ทำงานด้วย |
-| `t-view` | ส่วนที่ผู้ใช้ใช้ดูหรืออ่านผล |
-| `t-data` | ฐานข้อมูล · สำรองข้อมูล |
-| `t-alert` | คิว งานที่ค้างได้ ของที่พังแล้วเจ็บ |
-| `t-warn` | ของที่มีเงื่อนไข — สัญญาอนุญาต ข้อจำกัดทางกฎหมาย |
+---
 
-ทุกกรอบมี**พื้นอ่อนกับขอบในโทนเดียวกัน** ไม่ใช่พื้นสีทึบ เพราะสีทึบจะดึงสายตาไปจากเนื้อหา
-ถ้าอยากได้สีที่ 8 แปลว่ากำลังใช้สีเพื่อความสวย ไม่ใช่เพื่อสื่อความหมาย
+## 11 · ข้อมูลส่วนบุคคล
 
-## 6 · ไอคอน — ใช้ของทางการจากคลัง และวาดเองเฉพาะเมื่อไม่มี
+- ทำรายการว่า **คอลัมน์ไหนเป็นข้อมูลส่วนบุคคล** ถ้าไม่มีรายการนี้จะตอบคำถาม "ข้อมูลฉันอยู่ที่ไหนบ้าง" ไม่ได้
+- เลขบัตรประชาชน หมายเลขบัตรเครดิต และข้อมูลสุขภาพ ให้เข้ารหัสระดับคอลัมน์ หรือไม่เก็บเลยถ้าไม่จำเป็น
+- กำหนด **อายุการเก็บ** ต่อตาราง และมีงานลบจริงตามนั้น
+- ต้องลบได้เมื่อเจ้าของขอ และ soft delete อย่างเดียวไม่นับว่าลบ
+- ห้ามคัดลอกข้อมูลจริงลงเครื่อง developer โดยไม่ปิดบัง
 
-**มีไอคอนทางการของบริการนั้นหรือไม่** เป็นตัวตัดสิน
+---
 
-- **ถ้ามี** (AWS · Azure · Google Cloud · Kubernetes · เครื่องมือโอเพนซอร์สส่วนใหญ่) ให้ใช้ของทางการจาก `assets/`
-  คือ 205 ตัวที่คัดไว้ใน `assets/icons/` หรือคลังเต็มผ่าน `python assets/find-icon.py <ชื่อ>` ชุดเหล่านี้เผยแพร่มาเพื่อวาดผังสถาปัตยกรรมโดยเฉพาะ ส่วนรายการกลุ่ม คำสั่ง และสัญญาอนุญาตอยู่ใน [references/icons.md](references/icons.md)
-- **ถ้าไม่มี** หรือเป็นของที่เราสร้างเอง ให้วาดไอคอนเส้นเอง แล้วเขียนที่เชิงอรรถว่า
-  ไอคอนไม่ใช่โลโก้ทางการ (โครง `figure-template.html` มีบรรทัดนี้ให้แล้ว)
-- **ห้ามปนกัน**ในรูปเดียว เพราะโลโก้สีจัดข้าง ๆ ไอคอนเส้นบางทำให้รูปดูไม่เสร็จ
+## 12 · Anti-patterns
 
-ไอคอนเส้นที่วาดเอง: `viewBox 0 0 24 24` · `stroke-width 1.6` · ไม่มีพื้น · ปลายเส้นมน
-รูปทรงต้องอ่านออกที่ขนาด 24px เพราะลายละเอียดเกิน 3 เส้นจะกลายเป็นก้อนดำ
+- ❌ **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
+- ❌ **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
+- ❌ **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
+- ❌ **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
+- ❌ **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
+- ❌ **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
+- ❌ **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
+- ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
+- ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
 
-## 7 · สายเชื่อม
+---
 
-**ในคอลัมน์เดียวกัน** ให้ใช้ลูกศรลง `.down` ระหว่างกล่อง โดยไม่ต้องเขียนอะไรเพิ่ม
+## 13 · ตัวย่อ
 
-**ข้ามคอลัมน์** ให้ใช้รายการ `WIRES` ท้ายไฟล์ แล้วสคริปต์จะลากเส้นให้หลังจัดหน้าเสร็จ:
+- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริง 1 อย่างเก็บที่เดียว)
+- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
+- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
+- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
+- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
 
-```js
-{from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
-//    ^id ต้นทาง   ^ด้านออก  ^id ปลายทาง  ^ด้านเข้า ^ตำแหน่งบนขอบ 0=บน 1=ล่าง
-```
-
-ที่ต้องคำนวณหลังจัดหน้า เพราะตำแหน่งกล่องขึ้นกับความยาวข้อความไทย
-ถ้าเขียนพิกัดตายตัวไว้ พอแก้ข้อความทีเดียวเส้นจะหลุดทั้งรูป
-
-**กติกา:**
-
-- **เส้นวิ่งแนวตั้งหรือแนวนอนเท่านั้น และหักมุมด้วยมุมโค้ง** — ฟังก์ชัน `elbow()` ในโครงทำให้เอง (นอน → ตั้ง → นอน) ใช้ `mx` เลื่อนช่วงหักเมื่อหลายเส้นใช้ช่องเดียวกัน อย่าเขียน `path` เป็นเส้นตรงจากจุดถึงจุด เพราะกล่องสองข้างสูงไม่เท่ากันแล้วเส้นจะเฉียง
-- **ป้ายต้องแคบกว่าช่องว่างระหว่างคอลัมน์** ไม่อย่างนั้นป้ายจะทับกล่องหรือบังเส้นจนหาย ถ้าป้ายยาวขึ้น ต้องเพิ่ม `gap` ของ `.stage` ตามไปด้วย
-- เลื่อนป้ายไปตามเส้นได้ด้วย `lp` (0 = ต้นทาง · 1 = ปลายทาง · ไม่ใส่ = กลางเส้น)
-- เส้นที่ยังไม่ได้เชื่อมจริง ให้ใช้ `planned:true` เพื่อได้เส้นประ แล้ว**เขียนความหมายไว้ที่เชิงอรรถ**
-- เส้นข้ามคอลัมน์ **ไม่เกิน 5 เส้น** ต่อรูป เพราะเกินนี้รูปจะกลายเป็นใยแมงมุม
-- ต่อเข้า**กล่องเล็กที่สุดที่ถูกต้อง** ไม่ใช่กล่องใหญ่ที่ครอบอยู่ ถ้ากล่องสูงมาก ให้ใส่ `tp` เพื่อเลี่ยงไม่ให้เส้นจ่อกลางกล่อง
-- ป้ายบนเส้นบอกว่า**อะไรไหลผ่าน** เช่น `HTTPS 443` ไม่ใช่ `เชื่อมต่อ` ส่วนเส้นที่ไม่มีอะไรจะบอก ไม่ต้องใส่ป้ายเลยดีกว่าใส่คำว่า "ใช้"
-
-## 8 · ภาษาไทย
-
-- **`line-height` ต่ำกว่า 1.5 ไม่ได้** เพราะสระบนกับวรรณยุกต์ซ้อนกัน 2 ชั้นจะโดนตัด ด้วยเหตุผลเดียวกันจึง **ห้ามกำหนดความสูงตายตัวให้กล่องข้อความ**
-- ฟอนต์เรียงตามนี้ `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` ซึ่งตั้งไว้ในโครงแล้ว
-  ถ้าเครื่องไม่มีสักตัว จะตกไปใช้ฟอนต์ที่วางสระผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
-- **ไทยไม่เว้นวรรคระหว่างคำ** เบราว์เซอร์จึงตัดบรรทัดกลางคำ ถ้าข้อความยาวให้ใส่ `<br>` เอง
-- ตัวอักษรไทยดูเล็กกว่าอังกฤษที่ขนาดเท่ากัน ดังนั้นคำอธิบายอย่าต่ำกว่า 12px
-
-## 9 · เรนเดอร์แล้วเปิดดู — ห้ามข้าม
-
-```bash
-pip install playwright && playwright install chromium
-python assets/render-figure.py figure.html figure.png 2
-```
-
-ใช้ตัวคูณ **2** เสมอ เพราะตัวคูณ 1 ได้ภาพเบลอเมื่อเอาไปขยายในสไลด์
-
-แล้วรันตัวตรวจเรขาคณิต ซึ่งจับเส้นเฉียง มุมที่ไม่ใช่มุมโค้ง ป้ายทับกัน และเส้นพาดผ่านตัวหนังสือ:
-
-```bash
-python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
-```
-
-จากนั้นเปิดไฟล์ภาพดูด้วยตา แล้วไล่ตามนี้:
-
-- [ ] สายข้ามคอลัมน์มีหัวลูกศรครบทุกเส้นไหม · เส้นพาดทับกล่องหรือทับตัวหนังสือไหม
-- [ ] ป้ายบนเส้นอ่านออกไหม และไม่ทับกันเองไหม
-- [ ] ข้อความไทยครบไหม สระหรือวรรณยุกต์หายไหม มีคำไหนถูกตัดกลางคำไหม
-- [ ] กล่อง `.focus` มีกล่องเดียวจริงไหม · หัวรูปมีครบ 6 อย่างไหม · โลโก้ขึ้นจริงไหม
-- [ ] ย่อรูปลงเหลือความกว้าง 25% แล้วยังแยกออกไหมว่าอะไรอยู่ตรงไหน
-- [ ] คนที่ไม่เคยเห็นระบบนี้ ตอบคำถามต้นทางได้ไหม
-
-## 10 · กับดักที่เจอจริง
-
-ถ้ารูปออกมาผิด เช่น หัวลูกศรหาย เส้นลากผิดกล่อง สระไทยหาย หรือป้ายทับกล่อง ให้เปิดตารางอาการ → สาเหตุ → ทางแก้ใน [references/pitfalls.md](references/pitfalls.md) ก่อนแก้เอง
-
-## 11 · Anti-patterns
-
-- ❌ **ใช้ skill นี้กับรูปในทีม** — เสียเวลา 10 เท่าเพื่อความสวยที่ไม่มีใครต้องการ
-- ❌ **ใช้โลโก้ทางการในลักษณะที่ดูเหมือนผู้ให้บริการรับรอง** — ข้อ 6 และ [icons.md](references/icons.md)
-- ❌ **กล่อง `.focus` 2 กล่อง** — แปลว่ารูปตอบ 2 คำถาม
-- ❌ **ส่งไฟล์ HTML ให้ลูกค้า** — ให้ส่ง PNG ส่วนไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
-- ❌ **ไม่เก็บไฟล์ HTML** — ปีหน้าต้องแก้รูป แล้วต้องวาดใหม่ทั้งใบ
-- ❌ **รูปไม่มีวันที่และเจ้าของ**
-- ❌ **เส้นเฉียงหรือมุมแหลม** — เส้นต้องตั้งหรือนอน หักด้วยมุมโค้ง (ข้อ 4 และ 7)
-- ❌ **ไอคอนต่างสไตล์ปนกัน** — เส้นบางปนเส้นหนา ปนไอคอนทึบ
-
-## 12 · เชื่อมกับ skill อื่น
+## 14 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| ไดอะแกรมในเอกสาร markdown | `software-diagrams` |
-| เลือกวิธีฝังรูปในไฟล์ markdown | `markdown-visuals` |
-| เอารูปไปวางในสไลด์ | `presentation-design` |
-| เอารูปไปวางในไฟล์ Word / PDF | `branded-document-design` |
-| รูปในเอกสาร SRS | `srs-writing` |
-| สีและระยะห่างของหน้าจอแอป (คนละระบบกับรูปนี้) | `ui-craft` |
+| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
+| รัน migration ตอน deploy | `cicd-and-release` |
+| ที่เก็บ connection string | `config-and-secrets` |
+| ตาราง user, role, session | `auth-implementation-patterns` |
+| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` |
+| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
 
-## ตัวย่อ
-
-HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG — Scalable Vector Graphics · CSS — Cascading Style Sheets
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
 
 
-## reference: colour-by-domain.md
+## reference: data-types.md
 
-# ตารางเนื้องาน → โทนสี
+# 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
 
-ใช้เมื่อเอกสารยังไม่มี `doc-theme` และยังไม่มีสีแบรนด์ ให้เสนอโทนจากตารางนี้แล้วรอผู้ใช้ยืนยัน ห้ามเลือกสีเองเงียบ ๆ ตารางนี้ใช้ร่วมกันทั้ง 2 engine ของ `diagram-figures` และทุก skill ที่วาดรูป
+ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
 
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
+### เงิน
+
+```sql
+total_amount   numeric(19,4)   NOT NULL      -- ✅
+currency       char(3)         NOT NULL      -- ✅ ISO 4217 เช่น THB
+total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่ากับ 0.3
+```
+
+> ❌ **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
+> ปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
+
+### เวลา
+
+| เก็บ | ใช้ | เหตุผล |
 |---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+| เวลาที่เกิดเหตุการณ์ | `timestamptz` (SQL Server ใช้ `datetimeoffset`) เก็บเป็น UTC | ประเทศไทยไม่มี daylight saving แต่ระบบที่ขายต่างประเทศมี |
+| วันเกิด วันครบกำหนด | `date` | ไม่มีเวลา ไม่มีโซนเวลา |
+| ช่วงเวลาเปิดร้าน | `time` + คอลัมน์โซนเวลาแยก | |
 
+**กฎ:** เก็บ UTC แล้วแปลงเป็น `+07:00` ตอนแสดงผลเท่านั้น ห้ามเก็บเวลาไทยดิบ ๆ ใน `timestamp` ที่ไม่มีโซน
 
-## reference: engine-mermaid.md
+**พุทธศักราช**: เก็บเป็น ค.ศ. เสมอ แล้วแปลงเป็น พ.ศ. ตอนแสดงผล
+ถ้าเก็บปี 2569 ลงฐานข้อมูล ทุกฟังก์ชันจะคำนวณช่วงเวลาผิด
 
-# Mermaid → รูปเส้นตั้งฉากมุมโค้ง
+### enum / สถานะ
 
-ทางที่ 3 ของ `diagram-figures` ใช้เมื่อเอกสารมีบล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) แล้วต้องส่งเป็นไฟล์ Word หรือ PDF ที่ดูออกแบบมา
-ถ้าใช้ภาพที่ Mermaid วาดเอง เส้นจะโค้งอิสระและเฉียง สีจะไม่ตรงกับรูปที่วาดด้วยมือ ตัวนี้จึงอ่านบล็อกเดิมแล้ววาดใหม่ด้วยกติกาเดียวกับโครง HTML
-
-## ได้อะไร
-
-- เส้นตั้งหรือนอนเท่านั้น หักมุมด้วยมุมโค้ง (รัศมีอยู่ใน `theme.py`: `WIRE_R` 12 · กล่อง `BOX_R` 10)
-- ป้ายบนเส้นเป็นป้ายขาวขอบอ่อน และมีตัวตรวจว่าป้ายไม่ทับกล่องหรือเส้น
-- กล่องหลักกล่องเดียวเป็นการ์ดเข้มขอบไล่สี ตรงกับกล่อง `.focus`
-- จัดวางด้วย ELK (`elkjs` แบบ layered + orthogonal) จึงไม่ต้องวางพิกัดเอง
-
-## ใช้
-
-1. คัดลอกโฟลเดอร์ `assets/mermaid-engine/` ไปไว้ที่ `docs/figures/src/gen/`
-2. แก้ `figures.json`:
-   - `prefix` คือรหัสโปรเจกต์ (`document-naming`)
-   - `drafts` คือโฟลเดอร์ไฟล์ `.md` ที่มีบล็อก Mermaid
-   - `skip` คือบล็อกที่มีรูปวาดมือแล้ว
-   - `captions` ใช้แทนคำบรรยายที่สร้างจากหัวข้อ
-3. แก้ `theme.py`: ให้ `ACCENT` และ `SECOND` ตรงกับ `doc-theme` ของโปรเจกต์ ส่วน `MEASURE_FONTS` ต้องชี้ไฟล์ฟอนต์จริงในเครื่อง
-4. รัน `python build.py` จะได้ `docs/figures/<prefix>-<ไฟล์>-m<N>.png` และ `map.md` ที่บอกว่าบล็อกไหนกลายเป็นไฟล์ไหน
-   - ถ้ายังไม่มี `elkjs` ตัว `elk.py` จะติดตั้งรุ่น 0.9.3 ลงโฟลเดอร์ `node_modules` ที่ตั้งไว้ให้เอง
-5. ต้องดู output ทุกครั้ง:
-   - บรรทัด `PROBLEM` คือเส้นเฉียง ป้ายทับ หรือบล็อกที่อ่านไม่ออก ห้ามส่งงานถ้ายังมีบรรทัดนี้
-   - เปิดดูด้วยตาอย่างน้อย 1 รูปต่อชนิด
-
-## ข้อจำกัด
-
-- ใช้ได้ 4 ชนิด: `sequenceDiagram` · `stateDiagram-v2` · `erDiagram` · `gantt` ส่วน flowchart ให้วาดเป็นโครง HTML (ข้อ 2 ของ SKILL.md) เพราะ flowchart คือรูปที่คนอ่านมากที่สุด
-- รูปกว้าง 1240px ตามหน้า A4 แนวตั้ง ถ้ารูปมีคนเกี่ยวข้องเกิน 7 คน ตัวหนังสือจะเล็ก ให้แยกรูป หรือวางรูปนั้นในหน้าแนวนอน
-
-
-## reference: engine-svg-python.md
-
-# SVG/Python engine — รูปที่ generate จากข้อมูลหรือโค้ด
-
-ทางที่ 2 ของ `diagram-figures` ใช้แทนโครง HTML เมื่อรูปต้องสร้างจากข้อมูลหรือโค้ด เช่น รูปหลายใบที่ต้องออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือรูปที่ต้องคุมตำแหน่งทุกจุดเองบนกริดด้วยเส้นตั้งฉากมุมโค้ง
-Python เขียน SVG ลงกริดแล้วเรนเดอร์เป็น PNG ส่วนไอคอนและโลโก้มาจากคลังเดียวกับโครง HTML ([icons.md](icons.md))
-
-ข้อเสียคือใช้เวลา เพราะ 1 รูปต้องแก้หลายรอบ ดังนั้นให้ใช้เฉพาะรูปที่คนนอกทีมจะเห็นและเห็นซ้ำ
-
-> **สีเริ่มต้น = ชุดประจำบ้าน** · ถ้า `doc-theme` ไม่ได้กำหนดสีเน้น (accent) เฉพาะงาน ให้ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") ซึ่งเป็น brand `#2A78D6` ชุดเดียวกับสไลด์และเอกสาร
-
----
-
-**สารบัญ**
-- [0 · สีมาจากเนื้องาน — ถามก่อนวาด](#0--สีมาจากเนื้องาน--ถามก่อนวาด)
-- [1 · ลำดับการทำงาน](#1--ลำดับการทำงาน)
-- [2 · โครงไฟล์](#2--โครงไฟล์)
-- [3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง](#3--กฎข้อที่หนึ่ง--กริดก่อน-เส้นทีหลัง)
-- [4 · เส้นเชื่อม](#4--เส้นเชื่อม)
-- [5 · ป้ายบนเส้น — สองบทบาทเท่านั้น](#5--ป้ายบนเส้น--สองบทบาทเท่านั้น)
-- [6 · โซน](#6--โซน)
-- [7 · ไอคอนและโลโก้](#7--ไอคอนและโลโก้)
-- [8 · เรนเดอร์](#8--เรนเดอร์)
-- [9 · วงจรตรวจงาน — ห้ามข้าม](#9--วงจรตรวจงาน--ห้ามข้าม)
-- [10 · ค่าคงที่ที่ใช้ได้จริง](#10--ค่าคงที่ที่ใช้ได้จริง)
-- [11 · แถบสัญลักษณ์](#11--แถบสัญลักษณ์)
-- [ตัวย่อ](#ตัวย่อ)
-
-## 0 · สีมาจากเนื้องาน — ถามก่อนวาด
-
-**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้นและอย่าถามซ้ำ**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ให้ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
-
-**ห้ามเลือกสีเอง และห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ให้ถามผู้ใช้ว่าจะใช้สีอะไร
-ถ้าผู้ใช้ยังไม่ระบุ ให้เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) แล้วรอยืนยัน
-
-ใส่**สีหลักสีเดียว**ที่ `ACCENT` ใน `assets/svg-engine/theme.py` แล้วเฉดอ่อนและเข้มทั้งหมด
-จะคำนวณจากสีนั้นด้วย `tint()` โค้ดวาดรูปจึงไม่มีสีอื่นฝังอยู่
-
-สีเดียวที่ไม่ผูกกับ `ACCENT` คือ `EXCEPT_HUE` สำหรับป้าย "ข้อยกเว้น" ซึ่งต้องต่างจากสีหลักเสมอ
-ถ้าสีหลักเป็นส้มอยู่แล้ว ให้เปลี่ยน `EXCEPT_HUE` เป็นสีอื่นที่ตัดกัน
-
----
-
-## 1 · ลำดับการทำงาน
-
-1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน แล้วถามว่า**รูปนี้ตอบคำถามอะไร** — 1 รูปตอบ 1 คำถาม
-2. ถามสีตามข้อ 0
-3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อนี้สำคัญที่สุด ดูข้อ 3
-4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
-5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่แค่เช็กว่าสคริปต์รันผ่าน
-6. เมื่อได้รูปที่สะอาดแล้ว จึงเขียนลงโฟลเดอร์ปลายทาง ส่วนรูปเก่าให้ย้ายไป `_to_delete/`
-
----
-
-## 2 · โครงไฟล์
-
-```
-architecture/
-  01-system-context.png      ← ผลลัพธ์ เลขนำหน้าเรียงตามลำดับการอ่าน
-  _src/
-    theme.py                 ← สีทั้งหมด — แก้ที่นี่ที่เดียว
-    ref.py                   ← ภาษาภาพ: โซน หน่วย เส้น ป้าย แถบสัญลักษณ์
-    render.py                ← SVG → PNG ด้วย Playwright ที่ 2 เท่า
-    d01.py … dNN.py          ← หนึ่งไฟล์ต่อหนึ่งรูป มีแต่การจัดวาง
-    logos/                   ← โลโก้ผลิตภัณฑ์ + colors.json
-```
-
-ให้คัดลอกทั้งโฟลเดอร์ [`assets/svg-engine/`](../assets/svg-engine/) ไปเป็น `_src/` แล้วเริ่มงาน — [`d01.py`](../assets/svg-engine/d01.py) เป็นรูปตัวอย่างที่เรนเดอร์ได้จริง
-
----
-
-## 3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง
-
-เส้นเฉียงทำให้อ่านยาก แต่การดัดเส้นทีหลังไม่ช่วย **ต้องแก้ที่ตำแหน่ง**
-
-```python
-CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # คอลัมน์
-R1,R2,R3          = 288,458,624                  # แถว ห่างกัน ~170
-```
-
-ทุกกล่องอยู่บนจุดตัดของคอลัมน์กับแถว และไม่มีตัวไหนหลุดกริด
-เมื่อทุกจุดอยู่บนเส้นเดียวกัน เส้นเชื่อมก็ตั้งฉากได้เองโดยไม่ต้องดัด
-
-### กฎจุดกึ่งกลาง
-
-ตัวที่รับหลายทางต้องอยู่**กึ่งกลางของทางเหล่านั้น** ไม่ใช่เกาะแถวใดแถวหนึ่ง
-และถ้าส่งต่อหลายทาง ก็ต้องอยู่กึ่งกลางของทางที่ส่งออกด้วย
-
-ให้ใช้**จุดรวมเดียวและจุดแยกเดียว** เพื่อให้เส้นสมมาตร
-
-```python
-RM = (R1+R2)//2      # Nginx อยู่กึ่งกลางของสองแถวที่รับเข้ามา
-J1, J2 = CB-74, CB+86
-
-flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # เข้าจากบน
-flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # เข้าจากล่าง
-flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # ออกขึ้นบน
-flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # ออกลงล่าง
-```
-
-### ช่องเดินสาย
-
-เส้นที่ต้องข้ามกริด **ห้ามวิ่งทับแถวที่มีกล่อง** ให้จองช่องว่างไว้เฉพาะ
-
-```python
-TB = 238        # ช่องบน — ห่างจากขอบโซนอย่างน้อย 36
-MB = R3-48      # ช่องกลาง — ระหว่างแถว
-```
-
----
-
-## 4 · เส้นเชื่อม
-
-เส้นตั้งฉากทั้งหมดและมุมโค้งรัศมี 14 — จุดนี้ทำให้ดูประณีตขึ้นมากโดยไม่เสียความชัดเจน
-`ref.flow(pts, dashed=False, arrow=True)` คำนวณมุมโค้งให้เอง
-
-**หัวลูกศรต้องจบที่ขอบไอคอน ไม่ใช่ที่ป้ายชื่อ** — เช่น `CD-30` เมื่อไอคอนกว้าง 46
-
----
-
-## 5 · ป้ายบนเส้น — สองบทบาทเท่านั้น
-
-| บทบาท | สี | ใช้กับ |
+| วิธี | ดีเมื่อ | เสียเมื่อ |
 |---|---|---|
-| ปกติ | เฉดอ่อนของ `ACCENT` | สิ่งที่ไหลผ่านเส้นตามปกติ |
-| ข้อยกเว้น | `EXCEPT_HUE` | ทางที่ไม่ผ่านประตูหน้า · กรณีพิเศษ |
+| ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy มีชื่อไทย/อังกฤษ และมีลำดับการแสดง | ต้อง join |
+| `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
+| ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
+| `int` ดิบ ๆ | — | ❌ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
 
-**ข้อยกเว้นมีได้ป้ายเดียวต่อรูป** ถ้ามีตั้งแต่ 2 ป้าย แปลว่าไม่มีป้ายไหนเด่นจริง
+### boolean
 
-ป้ายบอกว่า**อะไรไหลผ่าน** เช่น `SQL` `/api/` `DICOM 11112` ไม่ใช่ `เชื่อมต่อ`
+- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` ✅ · `is_not_disabled` ❌
+- **ถ้าอาจมีสถานะที่ 3 ในอนาคต อย่าใช้ boolean** เพราะ `is_approved` จะกลายเป็น `approval_status`
+  ภายใน 6 เดือน เมื่อมี "รออนุมัติ" เพิ่มมา
 
 ---
 
-## 6 · โซน
 
-โซนเป็นกรอบพื้นสีอ่อนมาก ส่วนป้ายชื่อเป็นแคปซูลพื้นขาวคร่อมเส้นขอบและมีจุดสีนำหน้า
+## reference: migrations.md
 
-```python
-zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
+# 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
+
+ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
+
+**กฎ 3 ข้อ:**
+
+1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
+2. **1 migration ทำเรื่องเดียว**: ไล่ปัญหาง่าย และ rollback ได้ตรงจุด
+3. **โค้ดเวอร์ชันเก่ากับ schema เวอร์ชันใหม่ต้องทำงานด้วยกันได้** เพราะระหว่าง deploy มีโค้ดทั้ง 2 เวอร์ชันรันพร้อมกันเสมอ
+
+### expand / contract — ขั้นตอนมาตรฐานสำหรับการเปลี่ยนที่ทำลายของเดิม
+
+ตัวอย่าง: เปลี่ยนชื่อคอลัมน์ `name` → `full_name`
+
+| รอบ deploy | ฐานข้อมูล | โค้ด |
+|:--:|---|---|
+| **1 · ขยาย** | เพิ่ม `full_name` (nullable) | เขียนลงทั้ง 2 คอลัมน์ · อ่านจาก `name` |
+| **2 · ย้าย** | คัดลอกข้อมูลเก่าเป็นชุด ๆ | อ่านจาก `full_name` ถ้าไม่มีค่อยดู `name` |
+| **3 · บีบ** | ตั้ง `NOT NULL` · ลบ `name` | อ่านและเขียน `full_name` อย่างเดียว |
+
+ทำ 3 รอบดูเสียเวลา แต่ทุกรอบ rollback ได้โดยไม่เสียข้อมูล
+ถ้าทำรอบเดียว ก็ต้องยอมรับว่าต้องปิดระบบ
+
+**คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
+
+- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว แต่ MySQL ยังเขียนใหม่ทั้งตาราง
+- เปลี่ยนชนิดข้อมูล
+- สร้าง index ธรรมดา ให้ใช้ `CREATE INDEX CONCURRENTLY` แทน (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
+
+**ทดสอบ migration กับสำเนาข้อมูลจริงเสมอ** เพราะ migration ที่รัน 0.2 วินาทีบนเครื่องตัวเอง
+อาจใช้ 40 นาทีบน production และล็อกตารางไว้ตลอด
+
+---
+
+
+## reference: per-stack.md
+
+# ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+
+1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
+2. [PostgreSQL](#2--postgresql)
+3. [SQL Server](#3--sql-server)
+4. [MySQL / MariaDB](#4--mysql--mariadb)
+5. [MongoDB](#5--mongodb)
+6. [Entity Framework Core (.NET)](#6--entity-framework-core-net)
+7. [Prisma / Drizzle (Node)](#7--prisma--drizzle-node)
+8. [Alembic (Python)](#8--alembic-python)
+9. [คำสั่งตรวจ query ช้า](#9--คำสั่งตรวจ-query-ช้า)
+
+---
+
+## 1 · ชนิดข้อมูลเทียบกัน
+
+| ต้องการเก็บ | PostgreSQL | SQL Server | MySQL |
+|---|---|---|---|
+| id เรียงเพิ่ม | `bigint GENERATED ALWAYS AS IDENTITY` | `bigint IDENTITY(1,1)` | `BIGINT AUTO_INCREMENT` |
+| UUID | `uuid` | `uniqueidentifier` | `BINARY(16)` หรือ `CHAR(36)` |
+| เงิน | `numeric(19,4)` | `decimal(19,4)` | `DECIMAL(19,4)` |
+| เวลา + โซนเวลา | `timestamptz` | `datetimeoffset(3)` | `TIMESTAMP` (เก็บ UTC) |
+| วันที่ล้วน | `date` | `date` | `DATE` |
+| ข้อความยาวไม่จำกัด | `text` | `nvarchar(max)` | `TEXT` / `LONGTEXT` |
+| ข้อความไทย | `text` (UTF-8 อยู่แล้ว) | **`nvarchar` เท่านั้น** | `utf8mb4` |
+| จริง/เท็จ | `boolean` | `bit` | `TINYINT(1)` |
+| JSON | `jsonb` (มี index ได้) | `nvarchar(max)` + `JSON_VALUE` | `JSON` |
+| ไฟล์ไบนารี | `bytea` (หรือเก็บนอกฐานข้อมูล) | `varbinary(max)` | `BLOB` |
+
+> 🚨 **SQL Server + ภาษาไทย**: `varchar` ทำให้ตัวอักษรไทยกลายเป็น `?`
+> ต้องใช้ `nvarchar` และเขียนค่าคงที่เป็น `N'ข้อความ'` เสมอ
+>
+> 🚨 **MySQL ต้องเป็น `utf8mb4`** เพราะชุดอักขระชื่อ `utf8` เฉย ๆ ของ MySQL
+> เก็บได้แค่ 3 ไบต์ต่อตัว อีโมจิและอักขระบางตัวจึงหาย
+
+---
+
+## 2 · PostgreSQL
+
+```sql
+CREATE TABLE orders (
+  id            bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  order_no      varchar(20)  NOT NULL,
+  customer_id   bigint       NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status        varchar(20)  NOT NULL DEFAULT 'draft',
+  total_amount  numeric(19,4) NOT NULL DEFAULT 0,
+  currency      char(3)      NOT NULL DEFAULT 'THB',
+  meta          jsonb,
+  created_at    timestamptz  NOT NULL DEFAULT now(),
+  updated_at    timestamptz  NOT NULL DEFAULT now(),
+  deleted_at    timestamptz,
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0),
+  CONSTRAINT ck_orders_status CHECK (status IN ('draft','confirmed','shipped','cancelled'))
+);
+
+CREATE UNIQUE INDEX ux_orders_order_no ON orders (order_no) WHERE deleted_at IS NULL;
+CREATE INDEX ix_orders_customer_id ON orders (customer_id);
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC);
 ```
 
-| ชนิด | เส้น | ความหมาย |
-|---|---|---|
-| `physical` | ทึบ | ขอบเขตของจริงทางกายภาพ — ห้อง อาคาร เครื่อง |
-| `logical` | ประ | ขอบเขตเชิงตรรกะ — Docker Compose · namespace · VPC |
-| `outside` | ประ | นอกระบบที่เราดูแล |
+**สร้าง index โดยไม่ล็อกตาราง:**
 
-ผู้อ่านจะเห็นทันทีว่าอันไหนมีอยู่จริง และซ้อนโซนได้ไม่เกิน 3 ชั้น
-
----
-
-## 7 · ไอคอนและโลโก้
-
-ไอคอน**ลอยบนพื้น ไม่มีกรอบ ไม่มีไทล์** ส่วนชื่อและคำอธิบายอยู่ใต้ภาพ
-
-```python
-unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
-#  มี logos/<slug>.svg → ใช้โลโก้จริง เติมสีจาก colors.json
-#  ไม่มี              → ใช้สัญลักษณ์เส้นที่ออกแบบเอง
+```sql
+CREATE INDEX CONCURRENTLY ix_orders_status ON orders (status);
+-- ห้ามอยู่ใน transaction · ถ้าล้มจะเหลือ index สถานะ invalid ต้อง DROP แล้วทำใหม่
 ```
 
-ค่าที่ใช้ได้จริง: ไอคอน 46 · ชื่อ 11.5 ตัวหนา ห่างจากกึ่งกลาง `size/2+20` · คำอธิบาย 10 ห่าง `size/2+35`
+**อัปเดต `updated_at` อัตโนมัติ:**
 
-โลโก้เอามาจากคลังไอคอนของ skill นี้ ([icons.md](icons.md)) ให้รัน `python assets/find-icon.py --group brands <ชื่อ>` จากโฟลเดอร์ `diagram-figures/` แล้ว `--copy` ไปไว้ใน `_src/logos/`
-Simple Icons ให้ SVG สีเดียว `viewBox 0 0 24 24` และมาพร้อม `colors.json` ที่เก็บรหัสสีทางการของแต่ละแบรนด์
+```sql
+CREATE OR REPLACE FUNCTION touch_updated_at() RETURNS trigger AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$ LANGUAGE plpgsql;
 
-### เรื่องเครื่องหมายการค้า — ห้ามข้าม
+CREATE TRIGGER trg_orders_touch BEFORE UPDATE ON orders
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();
+```
 
-- โลโก้เป็นของเจ้าของ ใช้เพื่ออ้างถึงตัวผลิตภัณฑ์ในผังได้
-  แต่**ห้ามดัดแปลงรูปทรง ห้ามยืดบีบ และห้ามทำให้ดูเหมือนเจ้าของมารับรอง**
-- ถ้าตัวไหนไม่มีไฟล์โลโก้ ให้ใช้สัญลักษณ์แทน แล้ว**ระบุชื่อตัวนั้นไว้ในหมายเหตุท้ายรูป**
-- อย่าไปดาวน์โหลดโลโก้ใหม่มาเอง ให้ใช้จากชุดที่มีอยู่ หรือให้ผู้ใช้หาจากหน้า brand ของโครงการนั้น
+**row-level security สำหรับระบบหลายผู้เช่า:**
+
+```sql
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON orders
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
+```
 
 ---
 
-## 8 · เรนเดอร์
+## 3 · SQL Server
+
+```sql
+CREATE TABLE orders (
+  id            bigint IDENTITY(1,1) PRIMARY KEY,
+  order_no      nvarchar(20)   NOT NULL,
+  customer_id   bigint         NOT NULL,
+  status        nvarchar(20)   NOT NULL CONSTRAINT df_orders_status DEFAULT N'draft',
+  total_amount  decimal(19,4)  NOT NULL CONSTRAINT df_orders_total DEFAULT 0,
+  created_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_created DEFAULT sysdatetimeoffset(),
+  updated_at    datetimeoffset(3) NOT NULL CONSTRAINT df_orders_updated DEFAULT sysdatetimeoffset(),
+  row_version   rowversion,
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id),
+  CONSTRAINT ck_orders_total_non_negative CHECK (total_amount >= 0)
+);
+
+CREATE INDEX ix_orders_status_created ON orders (status, created_at DESC)
+  WITH (ONLINE = ON);   -- Enterprise / Azure SQL เท่านั้น
+```
+
+- `rowversion` ใช้เป็น ETag ตรวจว่ามีคนแก้ชนกันได้ตรง ๆ
+- ถ้าต้องเรียงลำดับภาษาไทย ให้ตั้ง collation `Thai_100_CI_AS` ที่ระดับคอลัมน์หรือฐานข้อมูล
+- `datetime` แบบเก่าละเอียดแค่ 3.33 มิลลิวินาที ให้ใช้ `datetime2` / `datetimeoffset` แทน
+
+---
+
+## 4 · MySQL / MariaDB
+
+```sql
+CREATE TABLE orders (
+  id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+  order_no     VARCHAR(20)   NOT NULL,
+  customer_id  BIGINT        NOT NULL,
+  total_amount DECIMAL(19,4) NOT NULL DEFAULT 0,
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY ux_orders_order_no (order_no),
+  KEY ix_orders_customer_id (customer_id),
+  CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+```
+
+- `ALTER TABLE` ส่วนใหญ่เขียนตารางใหม่ทั้งตาราง ตารางใหญ่จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
+- ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
+
+---
+
+## 5 · MongoDB
+
+```js
+db.createCollection("orders", {
+  validator: { $jsonSchema: {
+    bsonType: "object",
+    required: ["orderNo", "customerId", "totalAmount", "createdAt"],
+    properties: {
+      orderNo:     { bsonType: "string" },
+      customerId:  { bsonType: "objectId" },
+      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
+      createdAt:   { bsonType: "date" }
+    }
+  }}
+});
+db.orders.createIndex({ orderNo: 1 }, { unique: true });
+db.orders.createIndex({ customerId: 1, createdAt: -1 });
+```
+
+- ฝัง (embed) เมื่อข้อมูลลูก **อ่านคู่กับพ่อเสมอ และไม่โตไม่จำกัด** นอกนั้นใช้การอ้างอิง
+- เอกสาร 1 ใบมีเพดาน 16 MB อาเรย์ที่โตเรื่อย ๆ จึงชนเพดานสักวัน
+- เงินใช้ `Decimal128` เท่านั้น
+
+---
+
+## 6 · Entity Framework Core (.NET)
 
 ```bash
-pip install playwright && playwright install chromium
-python render.py d01.svg ../01-architecture.png 1400 860
+dotnet ef migrations add AddOrderStatus
+dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
+dotnet ef database update                                # dev เท่านั้น
 ```
 
-เรนเดอร์ที่ 2 เท่าเสมอ เพราะ 1 เท่าได้ภาพเบลอเมื่อขยายในสไลด์
+> **บน production รัน script ที่ตรวจแล้ว ไม่ใช่ `database update`**
+> คำสั่งนั้นต้องให้ connection ของแอปมีสิทธิ์แก้ schema ซึ่งไม่ควรมีตั้งแต่แรก
 
-ภาษาไทยต้องมีฟอนต์ไทยในเครื่องที่เรนเดอร์ แล้วประกาศไว้ใน `font-family` ของ `<svg>`
-**อย่าใช้ Python Imaging Library (PIL) วาดข้อความไทยปนอังกฤษ** เพราะจะได้กล่องสี่เหลี่ยมแทนตัวอักษร
-
----
-
-## 9 · วงจรตรวจงาน — ห้ามข้าม
-
-เรนเดอร์ → เปิดไฟล์ภาพดูจริง → แก้ → เรนเดอร์ใหม่ จนกว่าจะสะอาด
-**6 ข้อนี้เจอซ้ำทุกครั้ง ให้ตรวจทุกรอบ:**
-
-1. **ป้ายบนเส้นทับไอคอนหรือชื่อ** — ย้ายไปกึ่งกลางช่วงที่ยาวที่สุด หรือย้ายไปบนขาตั้ง
-2. **เส้นที่ออกจากไอคอนตัดคำอธิบายของตัวเอง** — เริ่มเส้นที่ `cy+58` ไม่ใช่ `cy+32`
-3. **ขอบโซนตัดคำอธิบายแถวล่างสุด** — ขอบล่างโซนต้อง ≥ `R_ล่างสุด + 58 + 24`
-4. **ข้อความกำกับโซนนั่งทับเส้นขอบ** — รวมกับชื่อในแคปซูลเดียว
-5. **หัวลูกศรไปจบที่ป้ายชื่อ ไม่ใช่ที่ไอคอน** — ให้จบที่ขอบไอคอน
-6. **ข้อความล้นกรอบ** — ไทย 11.5px ≈ 6.0 px/ตัว · หัวเรื่อง 15px ≈ 7.5 px/ตัว
-   ถ้าที่ไม่พอ ให้ตัดคำ **อย่าลดขนาดตัวอักษร**
-
----
-
-## 10 · ค่าคงที่ที่ใช้ได้จริง
-
-```
-ความกว้าง 1400 · ขอบ 56
-หัวเรื่องกลางหน้า 22 · คำอธิบายใต้หัว 12.5
-ชื่อหน่วย 11.5 ตัวหนา · คำอธิบาย 10 · ป้ายบนเส้น 10.5
-เส้นเชื่อม 1.6 · ขอบโซน 1.4 · รัศมีมุมโค้ง 14 · ป้ายสูง 21
+```csharp
+modelBuilder.Entity<Order>(e => {
+    e.ToTable("orders");
+    e.Property(x => x.TotalAmount).HasColumnType("decimal(19,4)");
+    e.HasIndex(x => new { x.Status, x.CreatedAt }).HasDatabaseName("ix_orders_status_created");
+    e.HasQueryFilter(x => x.DeletedAt == null);          // soft delete ทั้งระบบ
+    e.Property(x => x.RowVersion).IsRowVersion();        // ตรวจการแก้ชนกัน
+});
 ```
 
 ---
 
-## 11 · แถบสัญลักษณ์
+## 7 · Prisma / Drizzle (Node)
 
-ทุกรูปปิดท้ายด้วยแถบเดียวที่บอกว่ากรอบแต่ละแบบคืออะไร และป้าย 2 สีต่างกันตรงไหน
-แล้วต่อด้วยหมายเหตุ 2–4 บรรทัด ซึ่งรวมบรรทัดเรื่องเครื่องหมายการค้า และการอ้างถึงรูปอื่นที่เกี่ยวข้อง
+```prisma
+model Order {
+  id          BigInt   @id @default(autoincrement())
+  orderNo     String   @unique @map("order_no") @db.VarChar(20)
+  totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  customer    Customer @relation(fields: [customerId], references: [id])
+  customerId  BigInt   @map("customer_id")
 
----
-
-## ตัวย่อ
-
-- **SVG** — Scalable Vector Graphics
-- **PNG** — Portable Network Graphics
-- **PIL** — Python Imaging Library
-
-
-## reference: icons.md
-
-# คลังไอคอน — ใช้ร่วมกันทั้งโครง HTML และ SVG/Python engine
-
-**ไอคอนมีให้แล้ว 205 ตัวใน `assets/icons/`** ไม่ต้องติดตั้งอะไรเพิ่ม —
-เป็น PNG พื้นโปร่ง 160×160 ซึ่งเป็นไอคอนทางการของผู้ให้บริการและเครื่องมือ แบ่งเป็น 9 กลุ่ม
-
-| โฟลเดอร์ | มีอะไร |
-|---|---|
-| `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
-| `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
-| `icons/gcp/` | 21 — Compute Engine · GKE · Cloud Run · BigQuery · Pub/Sub · Firestore … |
-| `icons/k8s/` | 16 — Pod · Deployment · Service · Ingress · ConfigMap · Secret · Node … |
-| `icons/data/` | 18 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
-| `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
-| `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
-| `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
-| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · ผู้ใช้ … |
-
-รายชื่อทั้งหมดอยู่ใน [`assets/icons/INDEX.md`](../assets/icons/INDEX.md) และเปิด [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) เพื่อดูรูปทั้งหมดในหน้าเดียว
-
-**ถ้าต้องการตัวที่ไม่มีใน 205 ตัวนี้** ให้ค้นในคลังเต็ม `assets/tech-icons.zip` (8,602 ไอคอน · 5 กลุ่ม) ด้วย [`find-icon.py`](../assets/find-icon.py) ซึ่งไม่ต้องติดตั้งอะไรและไม่ต้องแตกทั้งก้อน
-
-| กลุ่ม | มีอะไร |
-|---|---|
-| `cloud/` | 1,986 PNG · AWS · Azure · Google Cloud · IBM · Oracle · Alibaba · DigitalOcean · Firebase … |
-| `platform/` | 471 PNG · ฐานข้อมูล · คิว · CI/CD · เฝ้าระวัง · Kubernetes · ภาษาโปรแกรม · GIS |
-| `brands/` | 3,461 SVG สีเดียว · โลโก้แบรนด์ + รหัสสีทางการใน `colors.json` |
-| `devtools/` | 572 SVG มีสี · โลโก้เครื่องมือนักพัฒนา |
-| `ui/` | 2,112 SVG ไอคอนเส้นทั่วไป (Lucide) ไม่ใช่โลโก้ |
+  @@index([status, createdAt], name: "ix_orders_status_created")
+  @@map("orders")
+}
+```
 
 ```bash
-python assets/find-icon.py kafka redis                       # ค้นชื่อ
-python assets/find-icon.py --group ui user                    # ค้นเฉพาะกลุ่ม
-python assets/find-icon.py --copy cloud/aws/compute/ec2.png brands/docker.svg --to docs/figures/icons
-python assets/find-icon.py --colors docker                    # สีทางการของโลโก้
+npx prisma migrate dev --name add_order_status   # dev — สร้างไฟล์ migration
+npx prisma migrate deploy                        # production — รันเฉพาะที่มีอยู่แล้ว
 ```
 
-ให้ดึงมาเฉพาะตัวที่ใช้แล้ววางไว้ข้างไฟล์รูป ห้ามแตกทั้งคลังลงโปรเจกต์ สัญญาอนุญาตของคลังคือ MIT · CC0 · ISC (ดู `--groups`) แต่โลโก้ยังเป็นเครื่องหมายการค้าของเจ้าของ
+- `Decimal` ของ Prisma คืนค่าเป็น object ไม่ใช่ number ให้คำนวณด้วย `decimal.js` อย่าแปลงเป็น float
+- `BigInt` แปลงเป็น JSON ตรง ๆ ไม่ได้ ต้องแปลงเป็น string ที่ชั้น API
 
-> **เรื่องสัญญาอนุญาต** — ชุดไอคอนสถาปัตยกรรมของ AWS · Azure · Google Cloud
-> เผยแพร่มาเพื่อใช้วาดผังสถาปัตยกรรมโดยเฉพาะ จึงใช้ในเอกสารข้อเสนอได้
-> สิ่งที่ทำไม่ได้คือใช้โลโก้ในลักษณะที่ทำให้เข้าใจว่าผู้ให้บริการรับรองหรือร่วมงานด้วย
-> และใช้เป็นส่วนหนึ่งของแบรนด์ตัวเอง ส่วนถ้าไม่มีไอคอนทางการของเครื่องมือนั้น ให้วาดไอคอนเส้นเองตาม [SKILL.md](../SKILL.md) ข้อ 6
+---
 
+## 8 · Alembic (Python)
 
-## reference: layout-cloud.md
-
-# โครง `figure-cloud.html` — ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ
-
-โครงนี้ตอบคำถาม "ใช้บริการอะไรของคลาวด์บ้าง" ไฟล์โครงอยู่ที่ [`assets/figure-cloud.html`](../assets/figure-cloud.html)
-
-ใช้เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Google Cloud ·
-Kubernetes ของจริง แบบผังอ้างอิงที่ผู้ให้บริการเผยแพร่ ไอคอนหาได้จากคลังตาม [icons.md](icons.md)
-
-```html
-<div class="unit"><img src="icons/aws/ec2.png" alt="">
-  <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
+```bash
+alembic revision --autogenerate -m "add order status"
+alembic upgrade head
+alembic downgrade -1
 ```
 
-**กติกาเฉพาะโครงนี้:**
-
-- **สายที่ข้ามขอบเขต ให้ออกจากขอบของกล่องขอบเขต** (`n-region`) ไม่ใช่จากกล่องข้างใน
-  — เพราะถ้าต่อจากกล่องข้างใน เส้นจะพาดทะแยงทับทุกอย่างที่ขวางทาง
-- **เส้นประ = ขอบเขตที่ผู้ให้บริการจัดการให้** ส่วนเส้นทึบสีส้ม = เครื่องที่เราดูแลเอง
-  และให้ใส่ความหมายไว้ในคำอธิบายสัญลักษณ์เสมอ
-- ไอคอนแสดงเปล่า ๆ ไม่ต้องมีกรอบ เพราะโลโก้มีสีและรูปทรงของตัวเองอยู่แล้ว
-- ชื่อบริการใช้ชื่อทางการ (`Amazon RDS`) ส่วนคำอธิบายใต้ชื่อเป็นภาษาไทยได้
-
-
-## reference: layout-context.md
-
-# โครง `figure-context.html` — ระบบกับโลกภายนอก
-
-ตอบคำถาม "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" (C4 ระดับ 1) ไฟล์โครงอยู่ที่ [`assets/figure-context.html`](../assets/figure-context.html)
-
-```
-┌─ หัวรูป ────────────────────────────────────────────────────────┐
-│  ผู้ใช้งาน (แถบนอน)   →   ระบบที่อธิบาย (การ์ดใหญ่)   ←   ระบบภายนอก  │
-│  ─ เจ้าหน้าที่           ─ ชื่อ + คำขยาย                ─ external system │
-│  ─ แพทย์                ─ หน้าที่ 3-6 ข้อ               ─ ชื่อ + สถานะ    │
-│  ─ ผู้ดูแล               ─ ป้ายข้อจำกัด                                │
-├─ คำอธิบายสัญลักษณ์ ─────────────────────────────────────────────┤
-│  เชิงอรรถ — ความหมายเส้นประ · ตัวย่อทั้งหมด · รูปถัดไป              │
-└────────────────────────────────────────────────────────────────┘
+```python
+def upgrade():
+    op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+    op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+    op.alter_column("orders", "status", nullable=False)
+    op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                    postgresql_concurrently=True)
 ```
 
-- **ผู้ใช้งานอยู่ซ้าย ส่วนระบบภายนอกอยู่ขวา** และไม่ปนกัน เพราะคนกับเครื่องเป็นคนละชนิด
-- **หน้าที่ในการ์ดกลางมี 3 ถึง 6 ข้อ** ถ้าเกินนี้ แปลว่ากำลังเขียน SRS ไม่ใช่วาดรูป
-- **ระบบภายนอกที่ยังไม่ได้เชื่อม** ให้ใช้เส้นประ (`planned:true`) แล้วเขียนไว้ในการ์ดว่าอยู่ในแผนเวอร์ชันไหน
-  — เพราะรูปที่วาดเฉพาะของที่มีแล้วจะถูกถามซ้ำทุกรอบว่า "แล้วเชื่อม HIS หรือยัง"
-- **มีคำอธิบายสัญลักษณ์เสมอ** เมื่อรูปทรงหรือเส้นสื่อความหมาย
-- **ตัวย่อเขียนเต็มที่เชิงอรรถ** เพราะผู้อ่านฝั่งลูกค้าไม่รู้ว่า SEG คืออะไร
+> `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
+> อ่านไฟล์ที่มันสร้างก่อน commit ทุกครั้ง
 
+---
 
-## reference: layout-deployment.md
+## 9 · คำสั่งตรวจ query ช้า
 
-# โครง `figure-template.html` — deployment · ข้างในเครื่อง
-
-ตอบคำถาม "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" ไฟล์โครงอยู่ที่ [`assets/figure-template.html`](../assets/figure-template.html)
-
-โครงนี้มี 3 คอลัมน์ เรียงซ้ายไปขวาตามทิศที่ข้อมูลไหล:
-
-```
-┌─ หัวรูป ───────────────────────────────────────────────┐
-│  ชื่อ + คำขยาย                    เลขรูป · เวอร์ชัน · เจ้าของ  │
-├────────────┬──────────────────────────┬────────────────┤
-│ นอกระบบ    │  ⬅ กล่อง .focus           │ ปลายทาง        │
-│ คน อุปกรณ์  │  สิ่งที่เอกสารนี้อธิบาย       │ ข้อบังคับ       │
-│ ระบบอื่น    │  ซ้อนได้อีก 1 ชั้น          │ ของที่ไหลออก    │
-├────────────┴──────────────────────────┴────────────────┤
-│ เชิงอรรถ — รูปอื่นที่เกี่ยวข้อง · ที่มาของไอคอน              │
-└────────────────────────────────────────────────────────┘
-```
-
-**ซ้อนกล่องได้ไม่เกิน 3 ชั้น** คือ คอลัมน์ → กล่องใหญ่ → กล่องย่อย
-ถ้ามีชั้นที่ 4 แปลว่ารูปนี้ตอบ 2 คำถาม ให้แยกเป็น 2 รูป
-
-**กล่อง `.focus` มีได้กล่องเดียวต่อรูป** ถ้ามี 2 กล่อง แปลว่ายังไม่ได้ตัดสินใจว่ารูปนี้เรื่องอะไร
-
-
-## reference: layout-flow.md
-
-# โครง `figure-flow.html` — ข้อมูลไหลผ่านอะไร ตามลำดับไหน
-
-ตอบคำถาม "ข้อความ 1 ชิ้น (คำขอ · งาน · เอกสาร) วิ่งผ่านอะไรบ้าง ตามลำดับไหน" ไฟล์โครงอยู่ที่ [`assets/figure-flow.html`](../assets/figure-flow.html) · ตัวอย่างที่เรนเดอร์แล้ว [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
-
-```
-┌─ หัวรูป ──────────────────────────────────── ①–⑥ ความหมายเลขลำดับ ┐
-│ ┌ผู้ใช้┐   ┌ช่องทาง┐    ┌ เครื่องที่รัน (เทา) ─────────┐   ┌ บริการภายนอก ┐ │
-│ │ คน  │①→│ เว็บ   │②→ │ ┌ ระบบ .focus (สีหลัก) ┐ │③→ │ AI · API     │ │
-│ │ คน  │①→│ LINE  │②→ │ │ ชั้น · หน้าที่         │ │   └─────────────┘ │
-│ │ คน  │ →│ หลังบ้าน│ → │ │ ชั้น · หน้าที่         │ │④→ ┌ ข้อมูล ──────┐ │
-│ └────┘   └──────┘    │ └──────────────────────┘ │   │ ไฟล์ · DB    │ │
-│                       └─────────────────────────┘   └─────────────┘ │
-├─ เชิงอรรถ: ความหมายพื้นสีอ่อน · เส้นประ · ตัวย่อทั้งหมด ───────────────┤
-```
-
-## สี — มาจากสีหลักของโปรเจกต์ตัวเดียว
-
-- แก้ `--accent` ใน `:root` ที่เดียว แล้วเฉดเข้ม พื้นอ่อน และสีตัวหนังสือบนพื้นสีหลักคำนวณให้เอง (สีสว่างเช่นเหลือง สคริปต์จะสลับตัวหนังสือเป็นสีเข้มให้อ่านออก)
-- หาสีหลักตามลำดับใน SKILL.md ข้อ 5 · ลองสีอื่นโดยไม่แก้ไฟล์: เปิด `figure-flow.html#accent=0F8B8D`
-- **สีหลักใช้กับ 4 อย่างเท่านั้น:** ขอบกล่อง `.focus` · ป้ายชื่อระบบ · เส้นทางข้อมูลกับเลขลำดับ · ชื่อโปรเจกต์ในหัวรูป
-- โครงที่เหลือเป็นเทากลาง — กลุ่มเส้นประ กล่องเครื่องที่รัน การ์ด ส่วนไอคอนใช้ 7 สีความหมายเดิม (ข้อ 5)
-
-## กติกา
-
-- **ทิศเดียว ซ้าย → ขวา**: ผู้ใช้ → ช่องทาง → ระบบ → ของที่ระบบเรียกใช้ ถ้ามีเส้นย้อนกลับ ให้บอกในคำอธิบายชั้น (เช่น "push คำตอบกลับ LINE") แทนการลากเส้นย้อน
-- **เลขลำดับ = เส้นทางของ 1 ข้อความ** ไม่ใช่เลขเส้น เส้นที่เกิดพร้อมกันใช้เลขเดียวกัน (สองช่องทางเข้า = ② ทั้งคู่) · เส้นทางแยกที่ไม่ได้เกิดทุกครั้ง (เช่นอ่านภาพ) ไม่ต้องมีเลข
-- **ชั้นในกล่องระบบ 5–9 ชั้น** เรียงตามลำดับที่ข้อความผ่าน · ชื่อชั้นสั้น หน้าที่ 1–2 บรรทัด ถ้าเกิน 9 ชั้น แยกเป็นรูปข้างในระบบอีกรูป
-- **ชั้นเน้น `.guard` ไม่เกิน 2 ชั้น** และเขียนความหมายไว้ที่เชิงอรรถ
-- **เส้นต่อเข้าชั้นที่ทำงานนั้นจริง** ไม่ใช่ขอบกล่องใหญ่ — เส้นวาดอยู่บนกล่อง หัวลูกศรจึงถึงชั้นข้างใน
-- **เส้นที่ใช้ช่องว่างเดียวกันต้องไม่ตัดกัน** — เลื่อนช่วงหักด้วย `mx` (เส้นที่ปลายอยู่สูงกว่าให้ `mx` น้อยกว่า) แล้วเรนเดอร์ดูทุกครั้ง
-- ป้ายบนเส้นเป็นคำสั้น 1–3 คำบอกว่าอะไรไหลผ่าน (`HTTPS` · `webhook` · `ถาม LLM`) · ต้นเส้นมีเลขลำดับ ให้ใช้ `lp:"start"` เมื่อช่วงท้ายสั้นเกิน
-
-
-## reference: pitfalls.md
-
-# กับดักที่เจอจริง — โครง HTML
-
-อาการที่เจอซ้ำเมื่อทำรูปด้วยโครงใน `assets/` พร้อมสาเหตุและทางแก้ ส่วนกับดักของ SVG/Python engine อยู่ใน [engine-svg-python.md](engine-svg-python.md) ข้อ 9
-
-| อาการ | สาเหตุ · ทางแก้ |
+| ฐานข้อมูล | คำสั่ง |
 |---|---|
-| หัวลูกศรหายทั้งรูป | สคริปต์ลบ `path` ทุกตัวก่อนวาดใหม่ รวมถึงสามเหลี่ยมหัวลูกศรที่อยู่ใน `<defs>` — ลบเฉพาะ `path.wire` (โครงแก้ไว้แล้ว) |
-| เส้นลากไปผิดกล่อง | `id` ไปติดกล่องอื่นที่หน้าตาเหมือนกัน — เปิด console ดู `wire: ไม่พบ id` และตรวจว่า `id` ไม่ซ้ำ |
-| เส้นจ่อกลางกล่องสูง แล้วพาดทับของข้างใน | ใส่ `tp` / `fp` ให้เส้นเข้าใกล้ขอบบน |
-| สระไทยหาย | เครื่องไม่มีฟอนต์ไทยในรายการ — ติดตั้ง Noto Sans Thai หรือเพิ่มฟอนต์ที่มีเข้าไปในรายการ |
-| ภาพเบลอในสไลด์ | เรนเดอร์ด้วยตัวคูณ 1 |
-| รูปมีขอบขาวเยอะ | ถ่ายทั้งหน้าแทนที่จะถ่ายเฉพาะ `.sheet` |
-| แก้ข้อความแล้วเส้นหลุด | เขียนพิกัดเส้นตายตัวแทนที่จะใช้ `WIRES` |
-| ป้ายบนเส้นทับกล่อง หรือบังเส้นจนมองไม่เห็น | ป้ายกว้างกว่าช่องว่างระหว่างคอลัมน์ — เพิ่ม `gap` หรือตัดคำในป้ายให้สั้นลง |
-| ชื่อกล่องภาษาไทยตกบรรทัดสอง | คอลัมน์แคบไป — เพิ่มความกว้างคอลัมน์นั้น อย่าลดขนาดตัวอักษร |
-| ใช้ไอคอนเป็นไฟล์ภาพแล้วเส้นลากผิดตำแหน่งทั้งรูป | สคริปต์คำนวณก่อนรูปโหลดเสร็จ — เรียก `draw()` ใน `window.onload` ไม่ใช่ตอนอ่านสคริปต์ (`figure-cloud.html` ทำไว้แล้ว) |
-| เส้นหักมุมใน `figure-flow.html` ตัดกันเอง | หลายเส้นใช้ช่องว่างเดียวกัน — ตั้ง `mx` ให้เส้นที่ปลายอยู่สูงกว่ามีค่าน้อยกว่า แล้วเรนเดอร์ดูใหม่ |
-| ลูกศรหายเข้าไปใต้กล่องระบบ | ชั้น `.wires` ไม่มี `z-index` — โครง flow ตั้งไว้แล้ว ถ้าก๊อปไปใช้โครงอื่นต้องตั้งตาม |
-| รูปออกมาเป็นสีของรูปตัวอย่าง | ลืมแก้ `--accent` — หาสีหลักของโปรเจกต์ตาม SKILL.md ข้อ 5 ก่อนเรนเดอร์ |
-| เส้นพาดทะแยงทับทั้งรูป | ต่อเส้นจากกล่องข้างในกล่องขอบเขต — ต่อจากขอบของกล่องขอบเขตแทน |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) <query>;` · ส่วนขยาย `pg_stat_statements` |
+| SQL Server | เปิด "Include Actual Execution Plan" · `sys.dm_exec_query_stats` |
+| MySQL | `EXPLAIN ANALYZE <query>;` · `performance_schema` |
+| MongoDB | `db.orders.find(...).explain("executionStats")` |
+
+**สัญญาณอันตรายที่ต้องแก้:** `Seq Scan` / `Table Scan` บนตารางใหญ่ ·
+จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ

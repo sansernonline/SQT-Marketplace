@@ -1,6 +1,6 @@
 # skill: ecommerce-patterns
 
-Use when building online commerce software (checkout, cart, orders, promotions, multi-warehouse inventory, recommendations). Not for running a shop.
+Use when building online commerce software (checkout, cart, orders, promotions, inventory, recommendations). Not for running a shop.
 
 # ecommerce-patterns
 
@@ -32,7 +32,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-ecommerce` (skill `checkout-optimization` · `inventory-management` · `recommendation-systems`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-ecommerce` (เดิมชื่อ checkout-optimization → `references/checkout-optimization.md` · inventory-management → `references/inventory-management.md` · recommendation-systems → `references/recommendation-systems.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
 
 
 ## reference: agent-cro-specialist.md
@@ -1097,7 +1097,7 @@ stateDiagram-v2
 
 ## reference: checkout-optimization.md
 
-> เดิมคือ skill `checkout-optimization` ใน plugin `software-company-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
+> เดิมชื่อ checkout-optimization (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1426,7 +1426,7 @@ Funnel by:
 
 ## reference: inventory-management.md
 
-> เดิมคือ skill `inventory-management` ใน plugin `software-company-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
+> เดิมชื่อ inventory-management (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1877,7 +1877,7 @@ async def reconcile_warehouse(warehouse_id):
 
 ## reference: recommendation-systems.md
 
-> เดิมคือ skill `recommendation-systems` ใน plugin `software-company-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
+> เดิมชื่อ recommendation-systems (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ecommerce` — รวมเข้า `ecommerce-patterns` ใน v2.0.0
 
 **สารบัญ:** 
 

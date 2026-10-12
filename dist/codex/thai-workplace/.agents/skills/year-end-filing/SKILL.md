@@ -1,6 +1,6 @@
 ---
 name: "year-end-filing"
-description: "Build the year-end filing timeline for a Thai company or partnership — AGM, บอจ.5, financial statements via DBD e-Filing, and ภ.ง.ด.50 — counted back from the accounting year end."
+description: "Build the year-end filing timeline for a Thai company — AGM, บอจ.5, statements via DBD e-Filing, ภ.ง.ด.50."
 ---
 
 Run `dbd-annual-filing` with the `tax-helper` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

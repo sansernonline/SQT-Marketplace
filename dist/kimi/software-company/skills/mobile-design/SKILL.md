@@ -1,6 +1,6 @@
 ---
 name: "mobile-design"
-description: "Design mobile app architecture or audit an App Store / Play Store listing. Two modes — mobile-architecture or aso-audit."
+description: "Design mobile app architecture or audit an App Store or Play Store listing (mobile-architecture or aso-audit)."
 disableModelInvocation: true
 ---
 

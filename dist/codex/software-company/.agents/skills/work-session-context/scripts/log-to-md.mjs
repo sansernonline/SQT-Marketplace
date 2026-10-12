@@ -1,16 +1,18 @@
 #!/usr/bin/env node
-// รวม .superuser/log/<วันที่>/<agent>.jsonl ทุกไฟล์ เรียงตามเวลา เป็นตาราง Markdown ให้คนอ่านย้อนหลัง
+// รวม .claude/superuser/log/<วันที่>/<agent>.jsonl ทุกไฟล์ เรียงตามเวลา เป็นตาราง Markdown ให้คนอ่านย้อนหลัง
 //   node log-to-md.mjs 2026-10-06 --agent=developer → เฉพาะ agent ตัวเดียว
 //   node log-to-md.mjs                 → log วันนี้ ของโปรเจกต์ในโฟลเดอร์ปัจจุบัน
 //   node log-to-md.mjs 2026-10-06      → log วันที่ระบุ
-//   node log-to-md.mjs 2026-10-06 --out → เขียนเป็น .superuser/log/2026-10-06.md แทนพิมพ์ออกจอ
+//   node log-to-md.mjs 2026-10-06 --out → เขียนเป็น .claude/superuser/log/2026-10-06.md แทนพิมพ์ออกจอ
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const args = process.argv.slice(2);
 const day = args.find((a) => /^\d{4}-\d{2}-\d{2}$/.test(a)) ?? new Date().toLocaleDateString("sv-SE");
 const only = args.find((a) => a.startsWith("--agent="))?.slice(8);
-const logDir = join(process.cwd(), ".superuser", "log");
+// .claude/superuser/ คือที่ใหม่ · .superuser/ คือที่เดิมของโปรเจกต์เก่า
+const teamDir = [join(".claude", "superuser"), ".superuser"].map((rel) => join(process.cwd(), rel)).find(existsSync) ?? join(process.cwd(), ".claude", "superuser");
+const logDir = join(teamDir, "log");
 const dayDir = join(logDir, day);
 
 // ไฟล์ของวันนั้น: 1 ไฟล์ต่อ agent ใน <วันที่>/ · ไฟล์รวมแบบเก่า <วันที่>.jsonl ก็อ่านด้วย

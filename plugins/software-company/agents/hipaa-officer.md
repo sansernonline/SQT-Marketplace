@@ -119,7 +119,7 @@ Not for: GDPR/PDPA → legal-compliance-officer. PCI-DSS → fintech-compliance-
 - `audit-trail` — access to patient data
 - `branded-document-design` — audit reports that leave the team
 - `principle-prove-it-works` — verify against the real thing before saying done
-- `flag-and-propose` — a finding that changes what happens next
+- `flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `spell-out-abbreviations` · `answer-shape` — every document or reply to a person
 

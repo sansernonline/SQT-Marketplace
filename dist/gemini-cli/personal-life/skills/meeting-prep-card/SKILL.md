@@ -1,6 +1,6 @@
 ---
 name: meeting-prep-card
-description: Use when a meeting that matters is about 15 minutes away. One-page card with goal, three questions, context, your asks and a walk-away line.
+description: Use when a meeting that matters is about 15 minutes away. One-page card with goal, three questions and your asks.
 ---
 
 # Meeting Prep Card

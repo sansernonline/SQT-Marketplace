@@ -1,6 +1,6 @@
 ---
 name: "fintech-design"
-description: "Design an end-to-end financial transaction flow or run a PCI-DSS readiness audit. Two modes — transaction-flow-design or pci-audit."
+description: "Design a financial transaction flow or run a PCI-DSS readiness audit (transaction-flow-design or pci-audit)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

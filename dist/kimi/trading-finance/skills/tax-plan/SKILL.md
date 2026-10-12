@@ -1,6 +1,6 @@
 ---
 name: "tax-plan"
-description: "Plan year-end Thai tax deductions (ลดหย่อน) — tax before and after, room left in RMF, ThaiESG and the 500,000 retirement cap, and what to buy by 31 December."
+description: "Plan year-end Thai tax deductions (ลดหย่อน) — tax before and after, RMF and ThaiESG room, what to buy by 31 December."
 disableModelInvocation: true
 ---
 

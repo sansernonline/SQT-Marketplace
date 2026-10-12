@@ -1,6 +1,6 @@
 ---
 name: motion-basics
-description: Use when a non-designer makes motion graphics, animated text, transitions or a moving logo. Timing in milliseconds, easing curves, text hold times.
+description: Use when a non-designer makes motion graphics, animated text, transitions or a moving logo. Timing and easing.
 ---
 
 # Motion Basics

@@ -1,12 +1,20 @@
 ---
 name: bug-inbox-triage
-description: Use when software bug reports pile up in email, chat, a tracker or inbox folder, or the user says triage the bug inbox. Reproduces, groups by cause, files bugs.
+description: Use when software bug reports pile up in email, chat, a tracker or inbox folder, or the user says triage the bug inbox.
 ---
 
 # bug-inbox-triage — วงนอก คัดบั๊กก่อนคนเปิดดู
 
 > agent ในโปรเจกต์รู้แค่สภาพเมื่อวาน ส่วนเรื่องใหม่เข้ามาทางอีเมล แชต และ issue
 > skill นี้ทำหน้าที่รับเรื่อง: อ่านทุกเรื่องที่เข้ามา ลองทำซ้ำบนโค้ดล่าสุด แล้ววางรายงานที่ยืนยันแล้วไว้ให้คนตัดสิน
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| บั๊กเรื่องเดียวที่เจอเอง ต้องเขียนรายงาน | `bug-report-template` |
+| เขียนกรณีทดสอบจากข้อกำหนด | `test-case-template` |
+| รู้แล้วว่าบั๊กอยู่ตรงไหน ต้องแก้ | `targeted-fix` |
 
 ## ต้องมีก่อน
 

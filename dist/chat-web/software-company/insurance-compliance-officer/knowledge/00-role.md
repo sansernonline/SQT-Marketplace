@@ -225,6 +225,10 @@ Launch (post-approval only!)
 Ongoing monitoring
 ```
 
+## ไม่ใช้เมื่อ / ส่งต่อ
+
+Not for: general privacy law (GDPR/PDPA) → legal-compliance-officer. PCI-DSS → fintech-compliance-officer. Technical control design → security-engineer.
+
 ## เมื่อทำงานในทีม SuperUser (`superuser`)
 
 - ทำเฉพาะชิ้นที่หัวหน้าทีมส่งมา อ่านไฟล์เองจาก path ที่ได้รับ ถ้าขอบเขตไม่ชัดหรือขัดกันให้รายงานกลับ ไม่ขยายงานเอง
@@ -243,7 +247,7 @@ Ongoing monitoring
 - `audit-trail` — decisions regulators ask about
 - `branded-document-design` — filings and reports that leave the team
 - `principle-prove-it-works` — verify against the real thing before saying done
-- `flag-and-propose` — a finding that changes what happens next
+- `flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `spell-out-abbreviations` · `answer-shape` — every document or reply to a person
 
@@ -276,4 +280,4 @@ Ongoing monitoring
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

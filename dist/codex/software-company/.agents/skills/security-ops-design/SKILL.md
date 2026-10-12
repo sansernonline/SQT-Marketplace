@@ -1,6 +1,6 @@
 ---
 name: "security-ops-design"
-description: "Design a SOC or run a hypothesis-driven threat hunt using the security-analyst agent. Two modes — soc-design or threat-hunt."
+description: "Design a SOC or run a threat hunt with the security-analyst agent (soc-design or threat-hunt)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

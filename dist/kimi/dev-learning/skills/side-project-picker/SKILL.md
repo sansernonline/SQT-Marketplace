@@ -1,6 +1,6 @@
 ---
 name: side-project-picker
-description: Use when the user wants a practice or portfolio project and has too many ideas or none. Scores ideas, cuts scope to two weekends, sets done.
+description: Use when the user wants a practice or portfolio project and has too many ideas or none. Scores ideas, cuts scope.
 ---
 
 # Side Project Picker

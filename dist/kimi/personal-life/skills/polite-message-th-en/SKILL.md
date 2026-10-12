@@ -1,6 +1,6 @@
 ---
 name: polite-message-th-en
-description: Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment, apology, follow-up) in the right register. Not complaints.
+description: Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment, apology). Not complaints.
 ---
 
 # Polite Messages in Thai and English
@@ -32,7 +32,7 @@ Notes:
 - **รบกวน** literally means "to disturb". It is the default polite opener for a request: รบกวนส่ง...ภายในวันศุกร์ได้ไหมครับ
 - **ขออนุญาต** before doing something to someone: ขออนุญาตทวงถาม... (permission to follow up) softens a payment chase
 - **ท่าน** sounds stiff in LINE between peers. Keep it for seniors and for formal letters
-- For formal letters (หนังสือราชการ), use `doc-thai-official` in `thai-workplace`
+- For formal letters (หนังสือราชการ), use `doc-thai-official` in `thai-workplace` (if installed)
 
 ## English register in brief
 

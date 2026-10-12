@@ -18,6 +18,7 @@ scripts/
 | check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
 | **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | sync | `sync/sync-superuser.mjs` | คัดลอกของกลาง SuperUser จาก `plugins/superuser` ไปทุก plugin (skill กลาง · learning-reviewer · hook · บล็อก `superuser:begin`) · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser`** |
+| sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
 | **install** | `install/install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 | install | `install/install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
@@ -40,7 +41,7 @@ node scripts/check/validate-marketplace.mjs               # แล้วค่�
 
 | ระดับ | รายการ |
 |---|---|
-| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` เกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` · ไฟล์ใน `facts.json` ไม่มีค่าปัจจุบัน |
+| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` เกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` · ไฟล์ใน `facts.json` ไม่มีค่าปัจจุบัน · ของกลาง SuperUser ไม่ตรง (`sync-superuser`) · บล็อกกฎร่วมของ prompt ไม่ตรง (`sync-prompt-rules`) |
 | warning | `description` ยาวเกิน 250 ตัว (โหลดเข้า context ทุก session) · `description` สั้นกว่า 60 ตัว หรือไม่บอกว่าใช้เมื่อไหร่ · เนื้อหาเกิน 400 บรรทัด · ไฟล์ใน `references/` เกิน 100 บรรทัดแต่ไม่มีสารบัญ · README ไม่พูดถึง plugin บางตัว |
 
 ### กับดักหลักที่มันมีไว้จับ

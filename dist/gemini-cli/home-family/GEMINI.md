@@ -12,6 +12,6 @@ Household admin for Thai families — reading electricity (MEA/PEA, Ft) and wate
 
 ## บทบาททั้งหมด
 
-- **family-planner** — Use when a Thai family needs its week or term organised — meal plan and grocery list, school terms, fees and documents, an elderly parent's appointments and rights, or a pet's vaccine record — as shareable checklists.
-- **home-manager** — Use when a Thai household needs running costs and upkeep in order — reading or tracking electricity, water and other bills, seasonal maintenance, comparing contractor quotes, or vehicle tax, พ.ร.บ. and licence renewals.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
+- **family-planner** — Use when a Thai family needs its week or term organised — meals and groceries, school fees, an elder's appointments, pet vaccines — as shareable checklists.
+- **home-manager** — Use when a Thai household needs bills and upkeep in order — electricity and water, maintenance, contractor quotes, vehicle tax, พ.ร.บ. and licence renewals.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.

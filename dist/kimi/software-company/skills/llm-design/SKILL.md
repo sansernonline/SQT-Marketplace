@@ -1,6 +1,6 @@
 ---
 name: "llm-design"
-description: "Design a RAG system or an LLM evaluation suite using the ai-engineer agent. Two modes — rag-design or llm-eval."
+description: "Design a RAG system or an LLM evaluation suite with the ai-engineer agent (rag-design or llm-eval)."
 disableModelInvocation: true
 ---
 

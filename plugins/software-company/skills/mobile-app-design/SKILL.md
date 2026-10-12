@@ -23,16 +23,16 @@ description: Use when designing or building a phone app UI or mockup (PWA, React
 
 ---
 
-## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
+## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ (ยกเว้น Flutter / native ดูข้อ 4.1)
 
 > **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
 
 ```
 1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
-   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
-   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
+3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
+   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
+   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
 4. เปิดภาพดูจริงทุกขนาด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
 5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
 ```
@@ -48,8 +48,8 @@ description: Use when designing or building a phone app UI or mockup (PWA, React
 
 ## 2 · Design tokens
 
-> **สีมาจากเนื้องาน — เสนอแล้วทำต่อ**
-> ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้เสนอโทนจากเนื้องาน ใส่ `(รอยืนยัน)` แล้วทำต่อโดยไม่หยุดรอ เพราะสีอยู่ใน token ที่เดียว เปลี่ยนทีหลังก็แก้แค่ค่าเดียว
+> **ไม่มีสีแบรนด์ → ใช้ค่าประจำบ้าน แล้วทำต่อ**
+> ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ใช้ค่าประจำบ้าน accent เขียวน้ำทะเล `#0E7C86` (`--signal` ใน `assets/speakgo.css`) เขียน `(รอยืนยัน)` แล้วทำต่อ และเสนอโทนจากเนื้องานไว้ในรายงานให้เลือกทีหลัง สีอยู่ใน token ที่เดียว เปลี่ยนทีหลังก็แก้แค่ค่าเดียว
 > (ตารางจับคู่เนื้องานกับโทนสีอยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
 
 token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วนตารางเต็มอยู่ใน **`references/tokens.md`**
@@ -58,7 +58,7 @@ token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วน�
 |---|---|---|
 | พื้นหน้าจอ / การ์ด | พื้นเป็น**เทาอ่อน ไม่ใช่ขาว** การ์ดจะได้ลอยขึ้นมาโดยไม่ต้องมีเงา | เทาอ่อนมาก / ขาว |
 | ข้อความ 3 ระดับ | หลัก · รอง · จาง | ไล่จากเข้มไปอ่อน ข้อความหลักต้อง contrast ≥ 4.5:1 |
-| `--accent` | แท็บที่เลือก · ความคืบหน้า · ปุ่มหลัก | **สีหลักที่ผู้ใช้เลือก** |
+| `--signal` (accent) | แท็บที่เลือก · ความคืบหน้า · ปุ่มหลัก | สีแบรนด์ ถ้าไม่มีใช้ `#0E7C86` + `(รอยืนยัน)` |
 | ไทล์ไล่สี | ปลายสองข้างของ gradient | สีหลัก → สีข้างเคียงบนวงล้อสี |
 | สีบอกสถานะของเนื้อหา | ต้องแก้ · คำใบ้ · ถูกใจ — **มีสีพื้นอ่อนคู่กันทุกตัว** | ตามความหมาย ไม่ตามแบรนด์ |
 
@@ -68,8 +68,8 @@ token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วน�
 **ชื่อ token ตั้งตามหน้าที่ ไม่ใช่ตามสี** — `--repair` ไม่ใช่ `--red`
 วันที่เปลี่ยนใจว่าจุดที่ต้องแก้ควรเป็นสีส้ม แก้ค่าเดียวโดยชื่อยังถูกอยู่
 
-`assets/speakgo.css` มาพร้อมชุดสีหนึ่งชุดเป็น**ตัวอย่างที่ประกอบครบแล้ว** ไม่ใช่ค่ามาตรฐาน
-เปลี่ยนค่าใน `:root` ให้ตรงกับเนื้องานก่อนทำ mockup แรก
+`assets/speakgo.css` มาพร้อมชุดสีหนึ่งชุดที่**ประกอบครบแล้ว** ใช้เป็นค่าประจำบ้านได้เลย
+มีสีแบรนด์เมื่อไหร่ เปลี่ยนค่าใน `:root` ที่เดียว
 
 ---
 

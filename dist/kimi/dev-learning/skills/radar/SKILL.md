@@ -1,6 +1,6 @@
 ---
 name: "radar"
-description: "Run the weekly tech radar — what changed in tracked libraries, what matters for the user's projects, and what can be ignored."
+description: "Run the weekly tech radar — what changed in tracked libraries, what matters, what to ignore."
 disableModelInvocation: true
 ---
 

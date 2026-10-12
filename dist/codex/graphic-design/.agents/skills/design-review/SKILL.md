@@ -1,6 +1,6 @@
 ---
 name: design-review
-description: Use when a visual is about to ship or looks off for no clear reason. 8-point pass or fail check (hierarchy, contrast, spacing, type) and top 3 fixes.
+description: Use when a visual is about to ship or looks off for no clear reason. 8-point check and the top 3 fixes.
 ---
 
 # Design Review

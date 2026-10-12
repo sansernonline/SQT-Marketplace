@@ -1,13 +1,13 @@
 ---
 name: salary-negotiation
-description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand. Total yearly pay, Thai and English wording.
+description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand.
 ---
 
 # Salary Negotiation (Thailand)
 
 Negotiate on **total compensation per year**, not base salary per month.
 
-General information, not professional advice — for tax effects ask a นักบัญชี or check `tax-basics-th` in `trading-finance`; for contract disputes ask a labour lawyer.
+General information, not professional advice — for tax effects ask a นักบัญชี or check `tax-basics-th` in `trading-finance` (if installed); for contract disputes ask a labour lawyer.
 
 ## Step 1 — market data
 
@@ -85,13 +85,13 @@ Then **stop talking** and wait.
 2. Is it a real base change in writing, or a promise ("next review")? Only written counts.
 3. Will your manager trust you the same way after you nearly left?
 4. Never use a fake offer to get a counter — it is easily called.
-5. If you accept the new offer: resign in writing, give the contract notice, and keep it polite — `polite-message-th-en` in `personal-life`.
+5. If you accept the new offer: resign in writing, give the contract notice, and keep it polite — `polite-message-th-en` in `personal-life` (if installed).
 
 ## Rules
 
 - Never inflate current salary — HR may ask for a payslip or 50 ทวิ.
 - Get the final offer in writing (offer letter: base, bonus terms, allowances, PVD, probation length, notice period, start date) before resigning.
 - Probation: under the Labour Protection Act §118, severance starts after 120 days of continuous work regardless of probation label — check the offer letter does not imply otherwise.
-- Keep every offer letter in `important-docs` (`personal-life`).
+- Keep every offer letter in `important-docs` (`personal-life`, if installed).
 
 Related: `performance-self-review` (evidence for a raise) · `interview-prep` · `personal-budget` in `trading-finance` (what the raise does to the monthly budget).

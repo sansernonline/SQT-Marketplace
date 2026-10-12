@@ -1,6 +1,6 @@
 # skill: legal-document-systems
 
-Use when software handles legal documents (contract clause extraction, document automation, e-signature validity under eIDAS, ESIGN, Thai ETA).
+Use when software handles legal documents (clause extraction, document automation, e-signature under eIDAS, ESIGN, Thai ETA).
 
 # legal-document-systems
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-legaltech` (skill `contract-parsing-patterns` · `document-automation-patterns` · `e-signature-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-legaltech` (เดิมชื่อ contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-contract-analyzer.md
@@ -1136,7 +1136,7 @@ async function checkRetention() {
 
 ## reference: contract-parsing-patterns.md
 
-> เดิมคือ skill `contract-parsing-patterns` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมชื่อ contract-parsing-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1854,7 +1854,7 @@ System:
 
 ## reference: e-signature-compliance.md
 
-> เดิมคือ skill `e-signature-compliance` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมชื่อ e-signature-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

@@ -41,7 +41,7 @@ Use [references/school-year-planner.md](references/school-year-planner.md) to la
 | Vaccination record (สมุดสีชมพู) | often requested for อนุบาล | |
 | Name/surname change certificate, guardianship papers if applicable | ✔ | ✔ |
 
-Sign every copy "สำเนาถูกต้อง" and keep the originals in `personal-life` `important-docs`.
+Sign every copy "สำเนาถูกต้อง" and keep the originals in `personal-life` `important-docs` (if installed).
 
 ## Tutoring decision
 
@@ -56,7 +56,7 @@ Ask before paying: what exact gap (subject, grade, test)? For how many weeks? Ho
 | Pregnancy and childbirth (ฝากครรภ์และคลอดบุตร) | up to 60,000 บาท/ครรภ์ | Receipts from hospital |
 | เงินอุดหนุนเพื่อการเลี้ยงดูเด็กแรกเกิด (child support grant) | 600 บาท/เดือน to age 6 (รอยืนยัน) | Household income test; register at the local อปท. / district (รอยืนยัน current criteria) |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://www.dailynews.co.th/news/5278292/ — for planning which parent claims which child, and the full list, use `trading-finance` `tax-deduction-planner`.
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://www.dailynews.co.th/news/5278292/ — for planning which parent claims which child, and the full list, use `trading-finance` `tax-deduction-planner` (if installed).
 
 ## Workflow
 
@@ -65,7 +65,7 @@ Ask before paying: what exact gap (subject, grade, test)? For how many weeks? Ho
 3. **Documents** — 2 months before enrolment, run the checklist above; make 3 sets of signed copies
 4. **Health** — check the vaccination record against the school's request; dental and eye checks in the April break
 5. **Tutoring** — use the decision questions; review at the end of each block
-6. **Tax** — at year end, collect birth certificates and hospital receipts for `trading-finance` `tax-deduction-planner`
+6. **Tax** — at year end, collect birth certificates and hospital receipts for `trading-finance` `tax-deduction-planner` (if installed)
 
 ## Worked example
 
@@ -73,4 +73,4 @@ Ask before paying: what exact gap (subject, grade, test)? For how many weeks? Ho
 
 ## Related
 
-`meal-plan-grocery` (lunch boxes) · `elder-care` (grandparent pick-up roster in the handoff note) · `trading-finance` `tax-deduction-planner` · `trading-finance` `personal-budget` · `personal-life` `important-docs`
+`meal-plan-grocery` (lunch boxes) · `elder-care` (grandparent pick-up roster in the handoff note) · `trading-finance` `tax-deduction-planner` (if installed) · `trading-finance` `personal-budget` (if installed) · `personal-life` `important-docs` (if installed)

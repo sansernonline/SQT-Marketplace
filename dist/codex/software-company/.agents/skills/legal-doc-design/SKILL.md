@@ -1,6 +1,6 @@
 ---
 name: "legal-doc-design"
-description: "Design a contract analysis system or audit e-signature compliance. Two modes — contract-analysis-design or esignature-audit."
+description: "Design a contract analysis system or audit e-signature compliance (contract-analysis-design or esignature-audit)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

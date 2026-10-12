@@ -335,13 +335,15 @@ sequenceDiagram
 
 #### Error Responses
 
-| Code | When | Body |
+Every error body is `application/problem+json` (RFC 9457): `type` · `title` · `status` · `detail` · `requestId`, plus `errors[]` for validation. Shape and status rules: `web-service-essentials` §2.
+
+| Code | When | `type` (suffix) |
 |:----:|:-----|:-----|
-| 🔴 400 | Validation failed | `{ "error": "validation", "fields": {...} }` |
-| 🔴 401 | Missing/invalid token | `{ "error": "unauthorized" }` |
-| 🟡 402 | Payment declined | `{ "error": "payment_declined", "reason": "..." }` |
-| 🟡 409 | Inventory unavailable | `{ "error": "out_of_stock", "items": [...] }` |
-| 🔴 429 | Rate limit exceeded | `{ "error": "rate_limited", "retry_after": 30 }` |
+| 🔴 401 | Missing/invalid token | `unauthorized` |
+| 🟡 402 | Payment declined | `payment-declined` |
+| 🟡 409 | Inventory unavailable | `out-of-stock` |
+| 🔴 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
+| 🔴 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
 ```
 
 ## Data Model Template (Mode B)

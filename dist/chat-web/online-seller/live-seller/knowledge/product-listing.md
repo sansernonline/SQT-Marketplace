@@ -1,6 +1,6 @@
 # skill: product-listing
 
-Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook. Title formula, keywords, photos, claims Thai FDA and OCPB forbid.
+Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, keywords, banned claims).
 
 # Product Listing (Thai marketplaces)
 
@@ -61,7 +61,7 @@ Same product, TikTok Shop:
 - [ ] No other shop's watermark, no stock photo without rights, no before/after body photos for cosmetics or slimming
 - [ ] Same main photo on every platform so returning buyers recognise it
 
-Image sizes per platform and banner formats → `graphic-design` `social-formats`.
+Image sizes per platform and banner formats → `graphic-design` `social-formats` (if installed).
 
 ## Rules
 
@@ -74,8 +74,8 @@ Image sizes per platform and banner formats → `graphic-design` `social-formats
 ## Related
 
 - `marketplace-fees-pricing`, `multi-shop-stock`, `live-selling-script` (the same claims rules apply on air)
-- `graphic-design` `social-formats` — image and banner sizes
-- `thai-workplace` `line-oa-setup` — when the LINE shop is the channel
+- `graphic-design` `social-formats` (if installed) — image and banner sizes
+- `thai-workplace` `line-oa-setup` (if installed) — when the LINE shop is the channel
 
 
 ## reference: description-template.md

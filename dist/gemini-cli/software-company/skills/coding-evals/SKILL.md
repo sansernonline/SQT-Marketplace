@@ -1,6 +1,6 @@
 ---
 name: coding-evals
-description: Use when changing coding skills, playbooks or the developer agent, or asked whether the team codes better. Runs fixed coding tasks before and after, compares.
+description: Use when changing coding skills, playbooks or the developer agent, or asked whether the team codes better.
 ---
 
 # coding-evals — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริง
@@ -63,7 +63,7 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 
 - ทีมห้ามเห็น `hidden-tests/` และคำตอบอ้างอิง ส่วนคนให้คะแนนต้องเป็น subagent ตัวใหม่เสมอ
 - ห้ามแก้ชุดงานให้ผ่านง่ายขึ้นระหว่างเทียบ เพิ่มงานใหม่ได้ แต่เทียบเฉพาะงานที่มีทั้ง 2 รอบ
-- บั๊กจริงที่ทีมเคยพลาด (จาก `.superuser/learn/`) แปลงเป็นงานใหม่ในชุดนี้ได้ หลังตัดข้อมูลลูกค้าออก
+- บั๊กจริงที่ทีมเคยพลาด (จาก `.claude/superuser/learn/`) แปลงเป็นงานใหม่ในชุดนี้ได้ หลังตัดข้อมูลลูกค้าออก
 
 ## 6 · เชื่อมกับ skill อื่น
 

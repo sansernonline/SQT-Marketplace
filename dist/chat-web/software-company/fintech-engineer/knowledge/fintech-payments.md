@@ -1,6 +1,6 @@
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, AML, PCI-DSS scope, risk and pricing).
+Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, PCI-DSS).
 
 # fintech-payments
 
@@ -31,7 +31,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-company-fintech` (skill `payment-gateway-integration` · `kyc-aml-patterns` · `pci-dss-compliance`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-fintech` (เดิมชื่อ payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fintech-engineer.md
@@ -491,7 +491,7 @@ Daily job:
 
 ## reference: kyc-aml-patterns.md
 
-> เดิมคือ skill `kyc-aml-patterns` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
+> เดิมชื่อ kyc-aml-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -797,7 +797,7 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ## reference: payment-gateway-integration.md
 
-> เดิมคือ skill `payment-gateway-integration` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
+> เดิมชื่อ payment-gateway-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1179,7 +1179,7 @@ async function refundPayment(paymentId: string, amountCents?: bigint) {
 
 ## reference: pci-dss-compliance.md
 
-> เดิมคือ skill `pci-dss-compliance` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
+> เดิมชื่อ pci-dss-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
 
 **สารบัญ:** 
 

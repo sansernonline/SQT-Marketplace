@@ -1,6 +1,6 @@
 ---
 name: "game-design"
-description: "Write a game design document or design multiplayer architecture. Two modes — game-design or multiplayer-architecture."
+description: "Write a game design document or design multiplayer architecture (game-design or multiplayer-architecture)."
 disableModelInvocation: true
 ---
 

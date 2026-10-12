@@ -1,6 +1,6 @@
 # skill: elder-care
 
-Use when a Thai family cares for an elderly parent. Doctor visits, elderly allowance and coverage rights, fall-proofing the home, caregiver handoff note.
+Use when a Thai family cares for an elderly parent (doctor visits, elderly allowance, fall-proofing, caregiver handoff).
 
 # Elder Care (Thailand)
 
@@ -26,8 +26,8 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 | Eligibility condition | Under the ระเบียบกระทรวงมหาดไทย พ.ศ. 2566 the allowance is for people without other state pensions/welfare; the "ไม่มีรายได้เพียงพอ" criterion and later amendments (รอยืนยัน the current rule with the อปท.) | |
 | บัตรทอง / หลักประกันสุขภาพแห่งชาติ (UCS) | Thai citizens without another scheme | สปสช. hotline 1330; check or change the registered hospital in the สปสช. app / LINE @nhso |
 | สิทธิข้าราชการ (CSMBS) | Parents of a government officer are covered via the officer | กรมบัญชีกลาง; register the parents in the officer's family data |
-| ประกันสังคม | Insured under มาตรา 33 / 39 continue their own cover; pension or lump sum at 55+ after leaving work | สำนักงานประกันสังคม hotline 1506 — see `thai-workplace` `social-security-th` |
-| Children's tax deduction for parents | ลดหย่อนบิดามารดา 30,000 บาท/คน (parent 60+, income ≤ 30,000/yr); parents' health insurance premium up to 15,000 | `trading-finance` `tax-deduction-planner` |
+| ประกันสังคม | Insured under มาตรา 33 / 39 continue their own cover; pension or lump sum at 55+ after leaving work | สำนักงานประกันสังคม hotline 1506 — see `thai-workplace` `social-security-th` (if installed) |
+| Children's tax deduction for parents | ลดหย่อนบิดามารดา 30,000 บาท/คน (parent 60+, income ≤ 30,000/yr); parents' health insurance premium up to 15,000 | `trading-finance` `tax-deduction-planner` (if installed) |
 | Other | ศูนย์ช่วยเหลือสังคม 1300; disability card (บัตรคนพิการ) if eligible; travel discounts (รอยืนยัน current list) | |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.dop.go.th · https://www.prd.go.th/th/content/category/detail/id/31/iid/484396 · https://www.thairath.co.th/lifestyle/lifestyle45plus/2717071 · https://www.rd.go.th

@@ -1,6 +1,6 @@
 ---
 name: "line-setup"
-description: "Set up a LINE OA Messaging API channel end to end — provider, channel, webhook with signature verification, access token handling, and a working echo test."
+description: "Set up a LINE OA Messaging API channel end to end — webhook with signature check, token handling, echo test."
 ---
 
 Run `line-oa-setup` with the `line-admin` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

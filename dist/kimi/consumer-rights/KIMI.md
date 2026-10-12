@@ -12,5 +12,5 @@ Consumer toolkit for buyers in Thailand — compare purchases with a decision ma
 
 ## บทบาททั้งหมด
 
-- **consumer-advocate** — Use when the user is about to make a big purchase, got a faulty or wrong product, cannot get a refund, wants to complain to a seller, platform or สคบ., dispute a card charge, or track warranties.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
+- **consumer-advocate** — Use for a big purchase, a faulty or wrong product, a refused refund, a complaint to a seller, platform or สคบ., a card dispute, or warranty tracking.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.

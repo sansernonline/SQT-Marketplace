@@ -87,4 +87,4 @@ A decoder or parser checks size before every read (header shorter than expected 
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

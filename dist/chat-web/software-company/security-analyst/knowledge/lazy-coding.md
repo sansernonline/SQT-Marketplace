@@ -1,6 +1,6 @@
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest thing that works, standard library first, one concern per file.
+Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest thing that works.
 
 # Lazy Coding
 

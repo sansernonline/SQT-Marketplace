@@ -1,6 +1,6 @@
 # skill: promptpay-qr
 
-Use when a Thai business needs a PromptPay QR on an invoice or counter, or a developer builds or debugs the Thai QR payload (tag 29 vs 30, CRC16).
+Use when a Thai business needs a PromptPay QR on an invoice or counter, or a developer builds or debugs the Thai QR payload.
 
 # PromptPay QR (Thai QR Payment)
 

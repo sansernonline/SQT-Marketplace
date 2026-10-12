@@ -1,6 +1,6 @@
 ---
 name: markdown-report-docx
-description: Use when a project or course report must ship as a polished .docx from one Markdown source. Logo cover, table of contents, brand-tinted tables, callouts, numbered figures, page-safe layout.
+description: Use when a project or course report must ship as a polished .docx from one Markdown source (cover, contents, figures).
 ---
 
 # Markdown Report → .docx
@@ -57,7 +57,7 @@ brand_tint_2: FEF6F6   # พื้นแถวสลับ (ตารางเ�
 
 ค่าเสริม: `brand_2` (สี accent รอง) · `toc: no` (ไม่ใส่สารบัญ) · `footer: Page` (คำหน้าเลขหน้า ค่าเริ่มต้น "หน้า") · `figure_width_cm` (ค่าเริ่มต้น 17) · `cover_top_pt` (ระยะจากขอบบนถึงโลโก้ ค่าเริ่มต้น 150)
 
-**สีมาจากเจ้าของงาน** — ดูดสีจากโลโก้หรือหน้าเว็บของลูกค้า ไม่มี → ถามครั้งเดียวก่อนเริ่ม · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 4.5:1)
+**สีมาจากเจ้าของงาน** — ดูดสีจากโลโก้หรือหน้าเว็บของลูกค้า ไม่มี → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 4.5:1)
 
 ## 3 · Markdown แต่ละแบบกลายเป็นอะไร
 
@@ -98,8 +98,8 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 - [ ] สารบัญมีเลขหน้าครบ (ว่าง → เปิดใน Word กด F9 หรือใช้ `--pdf` บน Windows)
 - [ ] ไม่มีหน้าที่เกือบว่าง · ไม่มีหัวข้อค้างท้ายหน้า · คำบรรยายรูปไม่หลุดไปหน้าถัดไป
 - [ ] คอลัมน์ตารางไม่ตัดชื่อหรือรหัสกลางคำ — ถ้าตัด ย่อข้อความในคอลัมน์ที่ยาวที่สุด
-- [ ] สีแบรนด์ตรงกับโลโก้ · ไม่มีสีฟ้าค่าเริ่มต้นหลงเหลือ
-- [ ] ไม่มี placeholder `[...]` · `(รอยืนยัน)` ที่ลืมแก้ก่อนส่ง
+- [ ] สีแบรนด์ตรงกับโลโก้ (ไม่มีแบรนด์ → ค่าประจำบ้าน + `(รอยืนยัน)`) · ไม่มีสีฟ้าค่าเริ่มต้นของ Word หลงเหลือ
+- [ ] ไม่มี placeholder `[...]` หลงเหลือ · `(รอยืนยัน)` ไม่ใช่ placeholder ให้คงไว้ และทุกจุดอยู่ในรายการรอยืนยันของรายงาน
 
 ## 6 · Anti-patterns
 

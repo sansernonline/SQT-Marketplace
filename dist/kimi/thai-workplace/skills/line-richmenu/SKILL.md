@@ -1,6 +1,6 @@
 ---
 name: line-richmenu
-description: Use when a LINE OA needs a rich menu built. Image sizes and limits, tap areas, JSON, and API calls to create, upload, set default and link per user.
+description: Use when a LINE OA needs a rich menu built (image sizes, tap areas, JSON, API calls to create and link).
 ---
 
 # LINE Rich Menu
@@ -8,6 +8,8 @@ description: Use when a LINE OA needs a rich menu built. Image sizes and limits,
 The rich menu is the shop front. 6 clear buttons work better than 12 tiny ones.
 
 ## 1. Hard limits
+
+Image sizes are also kept in `graphic-design:social-formats` (if the `graphic-design` plugin is installed) with source and check date — if the two differ, trust that one and re-check the LINE page.
 
 | Item | Limit |
 |---|---|

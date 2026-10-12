@@ -279,7 +279,7 @@ Recommendations must respect:
 - `llm-engineering` — embeddings and evaluation when models are LLM-based
 - `observability-basics` — monitoring recommendation quality in production
 - `principle-prove-it-works` — verify against the real thing before saying done
-- `flag-and-propose` — a finding that changes what happens next
+- `flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `spell-out-abbreviations` · `answer-shape` — every document or reply to a person
 

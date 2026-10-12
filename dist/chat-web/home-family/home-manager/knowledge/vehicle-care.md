@@ -1,6 +1,6 @@
 # skill: vehicle-care
 
-Use when a Thai family owns a car or motorbike. Compulsory insurance, annual tax at the DLT, inspection, voluntary insurance class, servicing, licence renewal.
+Use when a Thai family owns a car or motorbike (compulsory insurance, annual tax, inspection, servicing, licence renewal).
 
 # Vehicle Care (Thailand)
 
@@ -87,7 +87,7 @@ Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. In Oct 2026 th
 
 ## Related
 
-`home-maintenance` (one calendar for house and cars) · `household-bills` · `personal-life` `important-docs` (registration book, policies, licences) · `trading-finance` `personal-budget`
+`home-maintenance` (one calendar for house and cars) · `household-bills` · `personal-life` `important-docs` (if installed) (registration book, policies, licences) · `trading-finance` `personal-budget` (if installed)
 
 
 ## reference: vehicle-record.md

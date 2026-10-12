@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data. Safe defaults now.
+Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data.
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -24,15 +24,7 @@ Use when writing or reviewing any code, config, container or script, especially 
 | 9 | **path · URL · คำสั่ง ที่มาจากผู้ใช้ ห้ามใช้ตรง** | `File.Open(userPath)` → หา path จริงก่อน (`realpath` ตาม symlink) แล้วเช็กว่าอยู่ใต้โฟลเดอร์ที่อนุญาต · เรียก URL ปลายทางจากรายการที่อนุญาต · ไม่ส่ง input เข้า shell · เซิร์ฟเวอร์สำหรับพัฒนาฟังเฉพาะ `127.0.0.1` และรับเฉพาะ Host ที่รู้จัก |
 | 10 | **dependency ใหม่ต้องมีเหตุผล** — ล็อกเวอร์ชัน (lock file) ดูว่ายังมีคนดูแลอยู่ และไม่ติดช่องโหว่ที่รู้แล้ว | เพิ่มแพ็กเกจเพื่อ 5 บรรทัด → เขียน 5 บรรทัด (`lazy-coding` ข้อ 4) |
 
-**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
-
-| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
-|---|---|---|
-| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
-| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
-| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
-| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
-| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+**แอปมือถือหรือแอปที่ไม่มีเซิร์ฟเวอร์** — เปิด [`references/mobile.md`](references/mobile.md) เพิ่ม (กฎ M1–M5: permission · exported · สำรองข้อมูล · ส่งไฟล์ · กุญแจเซ็นแอป)
 
 ## เมื่องานแตะเรื่องเสี่ยง — เปิด skill เฉพาะทาง
 
@@ -60,11 +52,28 @@ Use when writing or reviewing any code, config, container or script, especially 
 - ซ่อน error ทุกอย่างจนแก้บั๊กไม่ได้ ผู้ใช้ควรเห็นข้อความกลาง แต่ log ต้องมีรายละเอียดพอ
 
 
+## reference: mobile.md
+
+# principle-secure-by-default · แอปมือถือและแอปที่ไม่มีเซิร์ฟเวอร์
+
+เปิดไฟล์นี้เมื่องานเป็นแอปมือถือหรือเครื่องมือบนเครื่อง · กฎ 10 ข้อใน [`SKILL.md`](../SKILL.md) ยังใช้ทั้งหมด
+
+**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
+
+| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
+|---|---|---|
+| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
+| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
+| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
+| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
+| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+
+
 ---
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real artifact, never a proxy like it compiles or the subagent said so.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -81,8 +90,8 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 | แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
 | test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
 | งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
@@ -100,345 +109,912 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 ---
 
-# skill: stack-dotnet
+# skill: testing-standards
 
-Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core). Build and test commands, EF queries, async traps, Thai culture.
+Use when adding or setting up automated tests in .NET, Node, Python, Angular or Flutter, or a suite is slow or flaky.
 
-# stack-dotnet — เขียน C# ให้ build สะอาด test ผ่าน ไม่มีกับดักเดิม
+# Testing Standards
 
-ใช้เมื่องานแตะโค้ด C# ทุกแบบ: ASP.NET Core (Web API · MVC · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 บน .NET Framework 4.x ที่ยังดูแลอยู่
+> **กฎข้อเดียว:** test ที่ไม่มีใครเชื่อถือ แย่กว่าไม่มี test
+> test ที่แดงสลับเขียวเองจะถูก `skip` ภายใน 2 สัปดาห์ แล้วทั้งชุดจะตายตามกันไป
 
-ไฟล์นี้มีแค่เรื่องเฉพาะ .NET ส่วนหลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `database-design` · `principle-secure-by-default`
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่มวาง test ในโปรเจกต์ใหม่ หรือเพิ่ม test ให้โค้ดที่มีอยู่
+- มีคนขอ "ให้มี unit test / automate test"
+- ชุด test เดิมช้า แดง ๆ เขียว ๆ หรือไม่มีใครดูแล้ว
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) ให้ใช้ `e2e-testing-patterns`
+- ขับแอปมือถือจริงบน emulator ให้ใช้ `app-verifier-setup` (`references/android-native.md`)
+- ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน ให้ใช้ `test-case-template`
 
 ---
 
-## 1 · เริ่มงาน: อ่านเวอร์ชันก่อน แล้วรันคำสั่งชุดเดียวกันทุกครั้ง
+## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
 
-- เวอร์ชัน SDK ดูที่ `global.json` ส่วนเวอร์ชันที่ target ดูที่ `<TargetFramework>` ใน `*.csproj` หรือ `Directory.Build.props`
-- `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง พ.ย. 2028 ส่วน `net8.0` และ `net9.0` หมดอายุ 10 พ.ย. 2026 ถ้าเจอในงานใหม่ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน
-- ถ้าเจอ `net48` หรือ `v4.x` ใน `<TargetFrameworkVersion>` แปลว่าเป็น .NET Framework ให้ใช้ชุดคำสั่ง legacy ด้านล่าง
+- **ถ้าโปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) ให้ใช้เลย ไม่ต้องถาม
+- **ถ้าต้องลงแพ็กเกจ test ตัวใหม่** ให้ใส่คำถามนี้ไว้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ก็ใช้ตัวนั้น) เพราะถ้าเลือกผิดแล้วย้ายทีหลังจะแพงมาก
+- ถ้าเริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก ให้เลือกตัว**แนะนำ**ในตารางแล้วทำต่อ จากนั้นบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่ต้องหยุดถามกลางทาง
 
-| ขั้น | .NET (Core) 8+ | .NET Framework 4.x (Windows) |
-|---|---|---|
-| ดึงแพ็กเกจ | `dotnet restore` | `msbuild App.sln -t:restore` หรือ `nuget restore App.sln` |
-| build | `dotnet build -warnaserror` (หรือตามนโยบาย repo) | `msbuild App.sln -p:Configuration=Release` |
-| test ทั้งหมด | `dotnet test` | `vstest.console.exe Tests\bin\Release\App.Tests.dll` |
-| จัดรูปแบบ | `dotnet format --verify-no-changes` | ตาม `.editorconfig` ใน Visual Studio |
+2 เรื่องที่ต้องตกลง:
 
-รัน test ตัวเดียว:
+**ข้อ 1 — framework**
+
+| สแต็ก | ตัวเลือกที่ควรเสนอ |
+|---|---|
+| .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
+| Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
+| Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
+| Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
+| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
+
+**ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
+
+- unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
+- unit + integration (แตะ DB จริงผ่าน Testcontainers / SQLite in-memory)
+- ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
+
+> ถ้าโปรเจกต์**มี framework อยู่แล้ว** ก็ไม่ต้องถาม ใช้ของเดิมไป เพราะการมี 2 ระบบในโปรเจกต์เดียว
+> แย่กว่าใช้ของที่ไม่ถูกใจนัก
+
+---
+
+## 2 · พีระมิด — สัดส่วนที่ยั่งยืน
+
+```
+        ▲  E2E  5%      ช้า เปราะ แพง — เอาไว้ทดสอบ "เส้นทางที่ทำเงิน" เท่านั้น
+       ╱ ╲
+      ╱   ╲ Integration 20%   ต่อ DB/API จริง ทดสอบว่าชิ้นส่วนคุยกันรู้เรื่อง
+     ╱     ╲
+    ╱       ╲ Unit 75%        ไม่แตะอะไรข้างนอก รันจบใน < 100ms ต่อตัว
+   ╱_________╲
+```
+
+**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E ชั้นนี้สร้างหน้าจอจริงในหน่วยความจำ แล้วกดและอ่านได้โดยไม่ต้องมี emulator แอปมือถือส่วนใหญ่ไม่มี integration ที่ต่อ DB จึงใช้ชั้นนี้เป็นชั้นกลางหลักแทน
+
+**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ เพราะแค่เริ่ม `flutter test` ก็กินหลายวินาที · ตัวเลขนี้รอยืนยันบนเครื่องจริง)
+ถ้าเกินนี้ คนจะเลิกรันก่อน commit แล้ว test ที่พังจะไปเจอที่ CI เท่านั้น ซึ่งช้าเกินไป
+
+---
+
+## 3 · อะไรควรมี test / อะไรไม่ต้อง
+
+**ต้องมี**
+- ตรรกะทางธุรกิจ: การคำนวณ, เงื่อนไขสิทธิ์, การเปลี่ยนสถานะ
+- ทุกกรณีขอบ: ค่าว่าง, ศูนย์, ติดลบ, ขอบเขตล่าง/บน, ค่าซ้ำ
+- **ทุกบั๊กที่เคยเกิด** — เขียน test ที่แดงก่อน แล้วค่อยแก้ (regression test)
+- สัญญาที่คนอื่นพึ่งพา: รูปแบบ response ของ API, schema ของ event
+
+**ไม่ต้องมี**
+- getter/setter, DTO, mapping ตรง ๆ
+- โค้ดของเฟรมเวิร์ก (ไม่ต้อง test ว่า EF Core บันทึกได้ไหม)
+- ไลบรารีของคนอื่น
+- UI ที่แค่แสดงผลโดยไม่มีตรรกะ
+
+> **Coverage ที่ซื่อสัตย์: 70–80% ของ business logic** ไม่ใช่ 100% ของทั้งโปรเจกต์
+> ไล่ตาม 100% จะได้ test ปลอม ๆ ที่เขียนเพื่อให้ตัวเลขสวยเต็มไปหมด
+> ตั้ง gate ที่ "ห้ามลดลงจากเดิม" มีประโยชน์กว่าตั้งเลขเป้า
+
+---
+
+## 4 · เขียนยังไง
+
+**ตั้งชื่อ** — อ่านชื่อแล้วต้องรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
+
+```
+MethodName_Scenario_ExpectedResult
+
+CalculateDiscount_WhenMemberIsGold_Returns15Percent
+CreateOrder_WhenStockIsZero_ThrowsOutOfStock
+ParseDate_WhenInputIsEmpty_ReturnsNull
+```
+
+ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
+
+**โครง AAA** — เว้นบรรทัดคั่น 3 ส่วนให้เห็นชัด
+
+```
+// Arrange   เตรียมข้อมูลและ dependency
+// Act       เรียกสิ่งที่ทดสอบ — บรรทัดเดียว
+// Assert    ตรวจผล
+```
+
+**1 test = 1 เหตุผลที่จะพัง** ถ้ามี assert 5 อันที่ไม่เกี่ยวกัน ให้แยกเป็น 5 test
+
+**ห้ามมี logic ใน test** — ไม่มี `if`, ไม่มีลูปที่คำนวณค่าคาดหวัง
+ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
+
+**ทำให้ผลเหมือนเดิมทุกครั้ง**
+- เวลา: inject `IClock`/`now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
+- สุ่ม: fix seed
+- ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
+- **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
+
+**Mock เท่าที่จำเป็น** — mock ขอบเขตนอกระบบ (HTTP, คิว, เวลา, ไฟล์)
+ไม่ mock คลาสของตัวเองที่คำนวณล้วน ๆ ถ้า mock เยอะเกินไป แปลว่า test ผูกกับวิธีเขียนโค้ด
+พอ refactor ทีเดียว test แดงทั้งชุด ทั้งที่พฤติกรรมไม่เปลี่ยน
+
+---
+
+## 5 · Integration test
+
+- ใช้ **DB จริงชนิดเดียวกับ production** (Testcontainers) ไม่ใช่ SQLite แทน PostgreSQL
+  เพราะ SQL ที่ผ่านบน SQLite อาจพังบนของจริง
+- แต่ละ test เริ่มจากสถานะที่รู้แน่ — transaction rollback หรือ truncate ทุกครั้ง
+- แยก command ออกจาก unit เพื่อให้รันแยกกันได้ (`npm run test:unit` / `test:integration`)
+- ทดสอบ **สัญญา** ของ API: status code, รูปร่าง JSON, header สำคัญ — ไม่ใช่แค่ "ไม่ error"
+
+---
+
+## 6 · CI
+
+```
+push / PR → lint → unit (< 10 วินาที) → integration → build
+```
+
+- **test แดง = merge ไม่ได้** ไม่มีข้อยกเว้น
+- ห้ามมี `skip`/`ignore` ค้างในสาขาหลัก — ถ้าจะ skip ต้องมีลิงก์ issue กำกับ
+- test ที่ flaky (แดงสลับเขียวเอง) ต้อง**แก้หรือลบ** ห้าม retry จนกว่าจะเขียว เพราะนั่นคือการซ่อนบั๊ก
+- รายงาน coverage ในหน้า PR ให้เห็นว่าเพิ่มหรือลด
+
+รายละเอียดคำสั่งและไฟล์ config ของแต่ละ framework อยู่ใน `references/per-stack.md`
+
+---
+
+## 7 · ตรวจงาน
+
+- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
+- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
+- [ ] ชุด unit รันจบใน 10 วินาที
+- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
+- [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
+- [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
+- [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
+- [ ] ไม่มี `sleep` / `Thread.Sleep` ในชุด test
+- [ ] ไม่มี test ที่ถูก skip ค้างโดยไม่มีเหตุผลกำกับ
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
+  ไม่ใช่สิ่งที่มันควรทำ
+- ❌ **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
+- ❌ **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
+- ❌ **mock ทุกอย่างจน test ทดสอบแค่ mock**
+- ❌ **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
+- ❌ **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
+- ❌ **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
+- ❌ **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
+| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
+| ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
+| ทดสอบ endpoint health/ping | `web-service-essentials` |
+| log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |
+| review โค้ด test | `code-review-checklist` |
+
+
+## reference: per-stack.md
+
+# ตั้งค่าและตัวอย่างต่อสแต็ก
+
+> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ที่มาจากแอปจริง Lumio) ส่วนที่เหลือเป็นการตั้งค่ามาตรฐานของแต่ละ framework
+> ตอนรันครั้งแรกให้ดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงไหม
+
+---
+
+## สารบัญ
+
+1. [.NET — xUnit](#net--xunit)
+2. [Node / TypeScript — Vitest](#node--typescript--vitest)
+3. [Python — pytest](#python--pytest)
+4. [Angular](#angular)
+5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
+6. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## .NET — xUnit
 
 ```bash
-dotnet test --filter "FullyQualifiedName~OrderServiceTests.Cancel"   # VSTest (ค่าเริ่ม)
-dotnet test --filter-method "*Cancel_*"                               # xUnit v3 บน Microsoft Testing Platform (MTP)
-vstest.console.exe App.Tests.dll /TestCaseFilter:"FullyQualifiedName~Cancel"   # .NET Framework
+dotnet new xunit -o tests/MyApp.Tests
+dotnet add tests/MyApp.Tests reference src/MyApp
+dotnet add tests/MyApp.Tests package FluentAssertions      # assert ที่อ่านเป็นประโยค
+dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
+dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
+dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
 ```
-
-- ถ้า repo ตั้ง MTP ไว้ใน `global.json` (`"test": { "runner": "Microsoft.Testing.Platform" }`) ให้ใช้ `--filter-*` แบบบรรทัดที่ 2
-- `msbuild` และ `vstest.console.exe` อยู่ใน Visual Studio หรือ Build Tools ให้เปิดผ่าน Developer PowerShell ส่วนเครื่อง Linux build .NET Framework web project ไม่ได้ จึงต้องบอกตรง ๆ ว่ายังไม่ได้ build
-
-## 2 · โครงและแบบแผน
-
-ตั้งค่าครั้งเดียวที่ `Directory.Build.props` ให้ทุกโปรเจกต์ใน solution:
-
-```xml
-<PropertyGroup>
-  <Nullable>enable</Nullable>
-  <ImplicitUsings>enable</ImplicitUsings>
-  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  <AnalysisLevel>latest-recommended</AnalysisLevel>
-  <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-</PropertyGroup>
-```
-
-- ถ้า repo เก่ามี warning เป็นร้อย อย่าเปิด `TreatWarningsAsErrors` ทั้ง solution ในงานเดียว ให้เปิดเฉพาะโปรเจกต์ใหม่ และไม่เพิ่ม warning ใหม่
-- จัดโฟลเดอร์ตาม feature (`Features/Orders/...`) ตาม `readable-code` แต่ถ้า repo ใช้ `Controllers/ Services/` อยู่แล้ว ให้ตามของเดิม
-- ใช้ file-scoped namespace (`namespace App.Orders;`) ให้ Data Transfer Object (DTO) เป็น `record` และห้ามคืน entity ของ EF ออก API ตรง ๆ
-- async ตลอดสาย: method ที่รอ I/O รับ `CancellationToken ct` แล้วส่งต่อทุกชั้นจนถึง EF และ `HttpClient`
-- จะใช้ minimal API หรือ controller ให้ตามแบบที่ repo ใช้อยู่ ไม่ผสมใน feature เดียวกัน
-
-อายุของ service ใน Dependency Injection (DI):
-
-| lifetime | ใช้กับ | ห้าม |
-|---|---|---|
-| Singleton | ของไม่มี state · cache · `TimeProvider` | รับ Scoped ใน constructor (`DbContext` จะค้างข้าม request) |
-| Scoped | `DbContext` · service ที่ใช้ข้อมูลของ request | เรียกจาก `BackgroundService` ตรง ๆ (ให้ใช้ `IServiceScopeFactory.CreateScope()` แทน) |
-| Transient | ของเบา ไม่มี state | ถือ resource ที่ต้อง dispose แล้วฝากไว้ใน singleton |
-
-ค่า config ใช้ options pattern และตรวจตอนเริ่มแอป:
 
 ```csharp
-builder.Services.AddOptions<SmtpOptions>()
-    .BindConfiguration("Smtp")
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+public class DiscountCalculatorTests
+{
+    [Fact]
+    public void CalculateDiscount_WhenMemberIsGold_Returns15Percent()
+    {
+        // Arrange
+        var sut = new DiscountCalculator();
+
+        // Act
+        var result = sut.Calculate(new Order { Total = 1000m }, MemberTier.Gold);
+
+        // Assert
+        result.Should().Be(150m);
+    }
+
+    // Theory = ทดสอบหลายเคสด้วยโค้ดชุดเดียว — ห้ามเขียนลูปเอง
+    [Theory]
+    [InlineData(MemberTier.None, 0)]
+    [InlineData(MemberTier.Silver, 50)]
+    [InlineData(MemberTier.Gold, 150)]
+    public void CalculateDiscount_ByTier_ReturnsExpected(MemberTier tier, decimal expected)
+        => new DiscountCalculator().Calculate(new Order { Total = 1000m }, tier)
+               .Should().Be(expected);
+}
 ```
 
-## 3 · EF Core
-
-| เรื่อง | ทำแบบนี้ |
-|---|---|
-| อ่านอย่างเดียว | `AsNoTracking()` · ดึงเฉพาะคอลัมน์ที่ใช้ด้วย `Select(o => new OrderDto(...))` |
-| N+1 | ห้ามวนลูปแล้ว query ในลูป ให้ใช้ `Include` หรือ projection ถ้า `Include` หลาย collection ให้เติม `AsSplitQuery()` |
-| แก้หรือลบหลายแถว | ใช้ `ExecuteUpdateAsync` / `ExecuteDeleteAsync` ไม่โหลดมาแก้ทีละตัว แต่คำสั่งนี้ข้าม change tracker |
-| migration | อ่าน SQL ทุกครั้ง: `dotnet ef migrations script --idempotent -o migrate.sql` |
-| production | ห้าม `EnsureCreated()` และห้าม `Database.Migrate()` ตอนแอปเริ่มหลาย instance พร้อมกัน ให้รันสคริปต์ตอน deploy แทน |
-| แก้พร้อมกัน | ใช้ `[Timestamp] byte[] RowVersion` (SQL Server) หรือ `IsConcurrencyToken()` แล้วจับ `DbUpdateConcurrencyException` เพื่อบอกผู้ใช้ |
-| เวลา | เก็บ UTC เสมอ และ PostgreSQL (Npgsql) บังคับ `DateTimeKind.Utc` สำหรับ `timestamptz` |
-
-ดู SQL ที่ EF สร้างจริงก่อนส่งงาน:
-
-```csharp
-var sql = db.Orders.Where(o => o.Status == Status.Open).ToQueryString();
-// หรือใน Development
-options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging();
-```
-
-`EnableSensitiveDataLogging` ใช้ในเครื่อง dev เท่านั้น ส่วน schema และ index ให้ทำตาม `database-design`
-
-## 4 · กับดักที่เจอบ่อย
-
-| กับดัก | ผลที่เกิด | ทำแบบนี้แทน |
-|---|---|---|
-| `async void` | exception ทำ process ล่ม จับไม่ได้ | ใช้ `async Task` ยกเว้น event handler ของ UI |
-| `.Result` · `.Wait()` · `GetAwaiter().GetResult()` | MVC 5 ค้างตาย (deadlock) · Core กิน thread จนแอปช้า | ใช้ `async Task<ActionResult>` ตลอดสาย ส่วน library ใช้ `ConfigureAwait(false)` |
-| `new HttpClient()` ทุกครั้ง | socket หมด และ DNS ไม่อัปเดต | ใช้ `IHttpClientFactory` หรือ typed client ส่วน .NET Framework ใช้ `static readonly HttpClient` |
-| ลืม dispose | connection และไฟล์ค้าง | `using var` · `await using` สำหรับ `IAsyncDisposable` |
-| ต่อ string เป็น SQL | SQL injection | LINQ · `FromSql($"...{id}")` (ใส่พารามิเตอร์ให้) · Dapper ส่ง `new { id }` · ห้าม `FromSqlRaw` กับข้อความที่ต่อเอง |
-| parse หรือ format ด้วย culture ของเครื่อง | เครื่อง `th-TH` ใช้ปฏิทินพุทธ ปีจึงออกมาเป็น 2569 และ parse "2026-01-05" แล้วได้ปีผิด 543 ปี | เก็บและ parse ด้วย `CultureInfo.InvariantCulture` · แสดงผลพุทธศักราชเฉพาะตอนแสดงผล ตาม `i18n-and-locale` |
-| เงินเป็น `double` | 0.1 + 0.2 ≠ 0.3 | ใช้ `decimal` และระบุคอลัมน์เป็น `decimal(18,2)` ให้ชัด |
-| `DateTime.Now` | test ไม่ได้ และเวลาเพี้ยนตาม server | ใช้ `TimeProvider` ผ่าน DI และ `FakeTimeProvider` ใน test |
-| เวลาไทย | server อยู่ UTC | `TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")` ส่วน .NET Framework บน Windows ใช้ `"SE Asia Standard Time"` |
-| array หรือ string ใหญ่ ≥ 85,000 bytes | ลง Large Object Heap (LOH) ทำให้ GC หนัก | stream ข้อมูล · `ArrayPool<T>` · `IAsyncEnumerable<T>` สำหรับรายการยาว |
-| `$"..."` ใน log | ค้นตาม field ไม่ได้ และสร้าง string แม้ระดับ log ปิด | message template: `log.LogInformation("Order {OrderId} paid", id)` ส่วน format อื่นดู `logging-standards` |
-
-จะจับ exception ที่ไหนและ retry อย่างไร ดู `error-handling-patterns` ส่วน ASP.NET Core ใช้ `IExceptionHandler` + `AddProblemDetails()` ที่จุดเดียว
-
-## 5 · test
-
-- ใช้ framework ที่ repo มีอยู่ ถ้าเป็นโปรเจกต์ใหม่ให้ใช้ xUnit (v3 สำหรับ .NET 8+) ตาม `testing-standards`
-- FluentAssertions ตั้งแต่ v8 ต้องซื้อ license ถ้าใช้เชิงพาณิชย์ ส่วน v7 ยังฟรี (Apache 2.0) โปรเจกต์ใหม่ให้ใช้ assert ของ xUnit หรือ AwesomeAssertions (fork ฟรี) ถ้า repo ใช้ v8 อยู่แล้วให้ถามเจ้าของเรื่อง license
-- ชื่อ test: `Method_Condition_Result` เช่น `Cancel_WhenAlreadyShipped_Throws`
-- ถ้าเป็น logic ใหม่หรือ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว และ bug ต้องมี test ที่จำลองอาการจริง
-- test API ทั้งเส้นใช้ `WebApplicationFactory<Program>` ถ้า test มองไม่เห็น `Program` ให้เพิ่ม `public partial class Program;`
-- ฐานข้อมูลจริงใช้ Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`) ห้ามใช้ EF InMemory แทนฐานจริง เพราะไม่ตรวจ constraint และแปล SQL ต่างกัน
+Integration ผ่าน `WebApplicationFactory` — ยิง HTTP จริงเข้า pipeline จริงโดยไม่ต้องเปิดพอร์ต:
 
 ```csharp
 public class OrdersApiTests(WebApplicationFactory<Program> factory)
     : IClassFixture<WebApplicationFactory<Program>>
 {
     [Fact]
-    public async Task Get_WhenNotLoggedIn_Returns401()
+    public async Task GetOrders_WhenNotAuthenticated_Returns401()
     {
-        var res = await factory.CreateClient().GetAsync("/api/orders", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
+        var res = await factory.CreateClient().GetAsync("/api/v1/orders");
+        res.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }
 ```
 
-## 6 · ความปลอดภัยเฉพาะ .NET
+```bash
+dotnet test                                        # ทั้งหมด
+dotnet test --filter "FullyQualifiedName!~Integration"   # เฉพาะ unit
+dotnet test --collect:"XPlat Code Coverage"
+```
 
-| เรื่อง | ASP.NET Core | MVC 5 (.NET Framework) |
-|---|---|---|
-| Cross-Site Request Forgery (CSRF) | MVC ใส่ `AutoValidateAntiforgeryToken` เป็น global filter ส่วน Razor Pages ตรวจให้เอง | `@Html.AntiForgeryToken()` + `[ValidateAntiForgeryToken]` ทุก POST |
-| ต้อง login เป็นค่าเริ่ม | ตั้ง `FallbackPolicy` เป็น `RequireAuthenticatedUser()` แล้วใส่ `[AllowAnonymous]` ทีละจุดในหน้าที่เปิดให้ทุกคน | `GlobalFilters.Filters.Add(new AuthorizeAttribute())` |
-| ส่งฟิลด์เกิน (over-posting) | bind เข้า DTO ที่มีเฉพาะฟิลด์ที่แก้ได้ | ใช้ view model แยก ไม่ bind entity ตรง ๆ |
-| แสดงผล | Razor encode ให้ แต่ห้ามใช้ `Html.Raw` กับข้อมูลผู้ใช้ | เหมือนกัน และระวัง `MvcHtmlString` |
-| Data Protection keys | ถ้ามีหลาย instance หรือ container ให้เก็บ key ไว้ที่เดียวกัน (`PersistKeysToDbContext` หรือ file share) ไม่งั้น cookie หลุดทุกครั้งที่ restart | `machineKey` ใน `web.config` เหมือนกันทุกเครื่อง |
-| secret | dev: `dotnet user-secrets set "Db:Password" "..."` · prod: environment variable หรือ secret store | แยก transform ของ `web.config` และไม่ commit ค่าจริง |
+---
 
-- `appsettings.json` และ `web.config` ที่ commit ห้ามมีรหัสผ่าน connection string จริง หรือ API key ส่วนเรื่องการเก็บ secret ดู `config-and-secrets`
-- เรื่องตรวจ input · upload · การเข้ารหัส ดู `principle-secure-by-default`
+## Node / TypeScript — Vitest
 
-## 7 · ตรวจก่อนส่ง
+```bash
+npm i -D vitest @vitest/coverage-v8
+```
 
-- [ ] `dotnet build -warnaserror` ได้ 0 warning (หรือไม่เพิ่ม warning จากเดิมใน repo เก่า)
-- [ ] `dotnet test` ผ่านหมด และรายงานว่าผ่านกี่ตัวจากกี่ตัว
-- [ ] `dotnet format --verify-no-changes` ไม่มีอะไรต้องแก้
-- [ ] พฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `.Result` · `.Wait()` · `async void` ใหม่: `grep -rnE "\.Result\b|\.Wait\(\)|async void" --include=*.cs`
-- [ ] query ที่แก้ ดู SQL จริงแล้ว ไม่มี N+1
-- [ ] migration มีสคริปต์ `--idempotent` และอ่านแล้ว ไม่มี `DROP` ที่ไม่ได้ตั้งใจ
-- [ ] ถ้า build .NET Framework บนเครื่องไม่ได้ ให้เขียนในรายงานว่ายังไม่ได้ build ไม่บอกว่าผ่าน
+`vitest.config.ts`:
 
-## 8 · เชื่อมกับ skill อื่น
+```ts
+import { defineConfig } from 'vitest/config';
 
-| ต้องการ | ใช้ |
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['src/**/*.test.ts'],
+    // ไฟล์ setup ใช้ตั้ง fake timer / ล้าง mock ให้ทุกไฟล์เหมือนกัน
+    setupFiles: ['./test/setup.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.ts'],
+      exclude: ['src/**/*.dto.ts', 'src/**/index.ts'],
+      thresholds: { lines: 70, functions: 70, branches: 60 },
+    },
+  },
+});
+```
+
+```ts
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { DiscountCalculator } from '../src/discount';
+
+describe('DiscountCalculator', () => {
+  beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
+
+  it('calculateDiscount_whenMemberIsGold_returns15Percent', () => {
+    const sut = new DiscountCalculator();
+    expect(sut.calculate({ total: 1000 }, 'gold')).toBe(150);
+  });
+
+  it.each([
+    ['none', 0], ['silver', 50], ['gold', 150],
+  ])('calculateDiscount_byTier_%s', (tier, expected) => {
+    expect(new DiscountCalculator().calculate({ total: 1000 }, tier)).toBe(expected);
+  });
+});
+```
+
+คุมเวลาแทนการ `sleep`:
+
+```ts
+vi.useFakeTimers();
+vi.setSystemTime(new Date('2026-01-15T10:00:00+07:00'));
+await vi.advanceTimersByTimeAsync(5000);   // เดินเวลา 5 วิ ทันที
+vi.useRealTimers();
+```
+
+```json
+{ "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
+} }
+```
+
+> **Jest แทน Vitest:** API เกือบเหมือนกัน (`jest.fn` ↔ `vi.fn`) แต่ต้องตั้ง `ts-jest`
+> หรือ babel เพิ่มสำหรับ TypeScript เลือก Jest เมื่อทีมคุ้นอยู่แล้วหรือมี preset ที่ต้องใช้
+
+---
+
+## Python — pytest
+
+```bash
+pip install pytest pytest-cov pytest-randomly
+```
+
+`pyproject.toml`:
+
+```toml
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers --cov=src --cov-report=term-missing"
+markers = ["integration: ต้องมี DB/network — รันแยกจาก unit"]
+```
+
+```python
+import pytest
+from src.discount import calculate_discount
+
+def test_calculate_discount_when_member_is_gold_returns_15_percent():
+    assert calculate_discount(total=1000, tier="gold") == 150
+
+@pytest.mark.parametrize("tier,expected", [("none", 0), ("silver", 50), ("gold", 150)])
+def test_calculate_discount_by_tier(tier, expected):
+    assert calculate_discount(total=1000, tier=tier) == expected
+
+@pytest.mark.integration
+def test_create_order_persists_to_db(db_session):
+    ...
+```
+
+`conftest.py` — fixture ที่ใช้ร่วมกัน (คืนสถานะเดิมทุก test):
+
+```python
+import pytest
+
+@pytest.fixture
+def db_session(engine):
+    conn = engine.connect()
+    tx = conn.begin()
+    yield Session(bind=conn)
+    tx.rollback()          # ทุก test เริ่มจากฐานสะอาดเสมอ
+    conn.close()
+```
+
+```bash
+pytest                        # ทั้งหมด (pytest-randomly สลับลำดับให้เอง = จับ test ที่พึ่งกัน)
+pytest -m "not integration"   # เฉพาะ unit
+pytest --lf                   # เฉพาะที่แดงรอบก่อน
+```
+
+---
+
+## Angular
+
+**Vitest + Testing Library** (โปรเจกต์ใหม่ — เร็วกว่า Karma มาก ไม่ต้องเปิดเบราว์เซอร์จริง)
+
+```bash
+npm i -D vitest @analogjs/vite-plugin-angular jsdom \
+         @testing-library/angular @testing-library/user-event
+```
+
+```ts
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
+import { OrderFormComponent } from './order-form.component';
+
+it('orderForm_whenSubmitWithEmptyName_showsRequiredError', async () => {
+  await render(OrderFormComponent);
+
+  await userEvent.click(screen.getByRole('button', { name: /บันทึก/ }));
+
+  expect(await screen.findByText(/กรุณากรอกชื่อ/)).toBeTruthy();
+});
+```
+
+> ทดสอบจาก**มุมผู้ใช้** — หาปุ่มด้วยข้อความที่คนเห็น (`getByRole`, `getByText`)
+> ไม่ใช่ `By.css('.btn-primary')` เพราะพอเปลี่ยนคลาส CSS test จะแดงทั้งที่ UI ยังทำงานถูก
+
+**Jasmine + Karma** (ค่าเริ่มต้นเดิมของ Angular — ใช้ต่อได้ถ้าโปรเจกต์มีอยู่แล้ว):
+
+```ts
+describe('DiscountService', () => {
+  let service: DiscountService;
+  beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [DiscountService] });
+    service = TestBed.inject(DiscountService);
+  });
+
+  it('calculate_whenMemberIsGold_returns15Percent', () => {
+    expect(service.calculate(1000, 'gold')).toBe(150);
+  });
+});
+```
+
+```bash
+ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำหรับ CI
+```
+
+---
+
+## Flutter / Dart — flutter_test
+
+มากับ SDK ไม่ต้องลงอะไร ไฟล์ test อยู่ใน `test/` และล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) ส่วนชื่อไฟล์ใช้ snake_case ตามธรรมเนียม Dart
+
+```dart
+// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
+class FakeDeviceLight implements DeviceLight {
+  final _lux = StreamController<double>.broadcast();
+  void emitSensor(double lux) => _lux.add(lux);
+  @override
+  Stream<double> sensorLux() => _lux.stream;
+  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
+}
+
+void main() {
+  group('measure screen', () {
+    testWidgets('shows live lux and verdict', (tester) async {
+      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 2.75;
+      addTearDown(tester.view.reset);
+
+      final device = FakeDeviceLight();
+      final meter = MeterController(device);
+      await tester.pumpWidget(App(meter: meter));
+      device.emitSensor(420);
+      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
+
+      expect(find.textContaining('420 lux'), findsOneWidget);
+      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
+    });
+  });
+}
+```
+
+| เรื่อง | ทำอย่างนี้ |
 |---|---|
-| ทำให้น้อยที่สุดที่ยังใช้ได้ | `lazy-coding` |
-| ชื่อ · โครงไฟล์ · comment | `readable-code` |
-| ระดับ test · coverage · test ที่แดงสลับเขียว | `testing-standards` |
-| รูปแบบ log · Serilog | `logging-standards` |
-| จับ exception · retry · timeout | `error-handling-patterns` |
-| ตาราง · index · migration แบบ expand-and-contract | `database-design` |
-| ค่าเริ่มที่ปลอดภัย | `principle-secure-by-default` |
-| connection string · secret store | `config-and-secrets` |
-| วันที่ไทย · พุทธศักราช · เรียงภาษาไทย | `i18n-and-locale` |
-| URL · error format ของ API | `api-conventions` |
-| พิสูจน์ว่าใช้ได้จริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |
+| ชั้น test | unit (`test`) ใช้กับตรรกะล้วน ส่วน widget (`testWidgets`) ใช้กับหน้าจอและเป็นชั้นกลางหลัก ถ้าเป็น E2E บนเครื่อง ใช้ `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
+| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง แล้วค่อยลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
+| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง ถ้ามี Timer หรือ animation วนตลอด จอจะไม่มีวันนิ่งจนหมดเวลา ให้ใช้ `pump(duration)` แทน |
+| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เองก่อนบรรทัดสุดท้าย เพราะ Timer ที่ยังวิ่งอยู่ตอนจบจะทำให้ test ล้ม |
+| จอเล็ก | test แยก 1 ชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
+| SnackBar บังปุ่ม | widget test จับได้ โดยกดปุ่มล่างหลัง SnackBar ขึ้น แล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
+| golden test | ไม่บังคับ เพราะภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
+| coverage | `flutter test --coverage` → `coverage/lcov.info` |
+| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิด 1 จุด รันแล้วต้องแดง แล้วแก้กลับ |
+
+```bash
+flutter test                              # ทั้งหมด
+flutter test test/features/measure        # โฟลเดอร์เดียว
+flutter test --coverage
+flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
+|---|---|---|---|---|---|
+| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
+| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
+| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
+| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
+| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
+| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
+| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
 
 
 ---
 
-# skill: stack-typescript
+# skill: e2e-testing-patterns
 
-Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite. Strict types, parsing at the edge, async safety.
+Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running them in CI.
 
-# stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก
+> **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 
-> **กฎข้อเดียว:** ให้ compiler จับ bug แทนคน `tsc` ผ่าน 0 error ไม่ได้แปลว่าเสร็จ แต่ไม่ผ่านแปลว่ายังไม่เริ่ม
+# End-to-End Testing Patterns
 
-ไฟล์นี้มีแค่เรื่องเฉพาะ TypeScript · Node · Angular ส่วนหลักทั่วไปอยู่ใน `lazy-coding` · `readable-code` · `principle-data-shape-first` · `principle-secure-by-default`
+## When to use this skill
 
-## 1 · เริ่มงาน — ดู repo ก่อนพิมพ์คำสั่งแรก
+- Setting up E2E testing in a new project
+- Choosing between Playwright, Cypress, Selenium
+- Structuring a growing E2E test suite
+- Fighting flaky tests
+- Designing test data strategy
+- Adding E2E to a CI/CD pipeline
+- Migrating from one framework to another
 
-| ดูไฟล์ | บอกอะไร | ทำ |
-|---|---|---|
-| `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด (24 ส่วนตัว 26 เข้า LTS ปลาย ต.ค. 2026 ให้ตรวจก่อนใช้) |
-| `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
-| `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
+## When NOT to use
 
-```bash
-npm ci                      # pnpm install --frozen-lockfile · yarn install --immutable
-npx tsc --noEmit            # ตรวจ type ทั้งโปรเจกต์
-npm run lint && npm test && npm run build
-npx vitest run src/order/order.service.test.ts -t "คืนเงินเกินยอด"   # รัน test เดียว
+| Task | Use instead |
+|---|---|
+| Writing manual test cases (steps, expected result) | `test-case-template` |
+| Unit or integration tests, test ratio and scope | `testing-standards` |
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/page-object-model.md](references/page-object-model.md) | ถ้าจะตั้งโครงชุดทดสอบใหม่ หรือเจอเทสต์ที่ลอกขั้นตอนล็อกอินซ้ำกัน ให้เปิดดูโค้ดเทียบแบบไม่ดีกับแบบ Page Object |
+| [references/test-data-strategies.md](references/test-data-strategies.md) | ตอนเลือกวิธีเตรียมข้อมูลทดสอบ และอยากเห็นข้อดีข้อเสียของทั้ง 4 แบบพร้อมโค้ดตัวอย่าง |
+| [references/flaky-tests.md](references/flaky-tests.md) | ถ้าเทสต์ผ่านบ้างไม่ผ่านบ้าง ให้เปิดดูโค้ดเทียบการรอแบบ sleep กับการรอตามเหตุการณ์ |
+| [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
+| [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
+| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
+
+## The Testing Pyramid (Get This Right First)
+
+```
+        ▲
+       ╱E╲       E2E: ~5% of tests (same pyramid as testing-standards)
+      ╱ 2 ╲
+     ╱  E  ╲     - Slow, expensive, flaky
+    ╱───────╲    - Test critical user journeys ONLY
+   ╱  Integ  ╲   Integration: ~20%
+  ╱           ╲  - API contracts, DB interactions
+ ╱─────────────╲ Unit: ~75%
+╱      Unit     ╲ - Fast, deterministic, many
+─────────────────
 ```
 
-- Angular ใช้ `ng test --include=src/app/order/**` และดูขนาด bundle ท้าย output ของ `ng build`
-- `npm install <pkg>` จะเปลี่ยน lockfile จึงต้อง commit lockfile ในรอบเดียวกัน
+> 🚨 **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
+> Result: slow CI, flaky tests, slow debugging
 
-## 2 · TypeScript แบบเข้ม
+## Framework Selection (2026)
 
-| ห้าม | ใช้แทน | เหตุผล |
-|---|---|---|
-| `any` | `unknown` แล้ว narrow ด้วย `typeof` · `in` · type guard | `any` ปิด compiler ทั้งสาย |
-| `value!` เพื่อให้ error เงียบ | เช็ก `if (!value) throw …` หรือแก้ type ต้นทาง | `!` คือการโกหก compiler |
-| `as Order` กับข้อมูลจากข้างนอก | parse ด้วย zod (หรือ library ที่ repo ใช้) | cast ไม่ได้ตรวจอะไรเลย |
-| boolean หลายตัวบอกสถานะ | discriminated union | สถานะที่เป็นไปไม่ได้จะเขียนไม่ได้ |
-| `const x: Config = {...}` จนเสีย literal | `satisfies Config` | ได้ทั้งตรวจ shape และ type แคบ |
+| Framework | Best for | Avoid for |
+|-----------|----------|-----------|
+| **Playwright** ⭐ | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
+| **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
+| **Selenium** | Legacy, language flexibility | Greenfield projects |
+| **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
+| **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
 
-- `tsconfig`: `"strict": true` · `noUncheckedIndexedAccess` · `noImplicitOverride` ถ้า repo เก่าปิด strict อยู่ ให้เปิดทีละ folder ไม่เปิดทั้ง repo ในงานเดียว
-- จะใช้ `enum` หรือ union ของ string ให้ตามที่ repo ใช้ ส่วน repo ใหม่ใช้ `as const` + union (ไม่สร้าง code ตอน runtime)
-- type ของ API ที่ frontend กับ backend ใช้ร่วมกันให้เก็บไว้ที่เดียว (shared package หรือ generate จาก OpenAPI)
+> 💡 **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
 
-```ts
-const Order = z.object({ id: z.string().uuid(), totalSatang: z.number().int().nonnegative() });
-type Order = z.infer<typeof Order>;
+## Test Structure: Page Object Model (POM)
 
-type PayResult =
-  | { status: 'paid'; receiptId: string }
-  | { status: 'failed'; reason: 'declined' | 'timeout' };
-// switch (r.status) ครบทุกกรณี · default: const _never: never = r;
+ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
+
+> 💡 **One Page Object per page or major component.**
+
+## Selectors: Hierarchy of Goodness
+
+```
+Most resilient ─────────────────────────► Most brittle
+
+✅ Role + accessible name      page.getByRole('button', { name: 'Submit' })
+✅ Test IDs                     page.getByTestId('submit-btn')
+🟡 Visible text                 page.getByText('Submit')
+🟡 Label                        page.getByLabel('Email')
+🔴 CSS classes                  page.locator('.btn-primary')
+🔴 Tag + index                  page.locator('button:nth-child(3)')
+❌ XPath                        page.locator('//div[2]/button')
 ```
 
-## 3 · Node backend (Express · Fastify · NestJS)
+**Rule:** Prefer queries that survive refactoring.
 
-- **promise ห้ามลอย** ให้เปิด `@typescript-eslint/no-floating-promises` และ `no-misused-promises` แล้วทุก `async` ต้องถูก `await` หรือ `.catch` ที่ทำอะไรได้จริง
-- Express 4 ไม่ส่ง error จาก `async` handler ต่อเอง จึงต้องใช้ Express 5 หรือห่อ handler ส่วน Fastify และ NestJS จัดการให้แล้ว
-- **config ตรวจตอนเริ่ม** ให้ parse `process.env` ด้วย schema ครั้งเดียว ถ้าขาดหรือผิดก็ไม่ยอม start (รายละเอียดใน `config-and-secrets`)
-- **ปิด server ให้เรียบร้อย**: รับ `SIGTERM` → หยุดรับ request ใหม่ → รอ request ที่ค้าง → ปิด DB pool และตั้งเวลาบังคับปิดไว้
-- ไฟล์ใหญ่ให้ใช้ `stream.pipeline` จาก `node:stream/promises` ห้าม `readFile` ทั้งไฟล์เข้า memory
-- ห้าม `fs.*Sync` · `crypto.*Sync` ที่หนัก · loop ใหญ่ ใน path ของ request เพราะ event loop จะค้างทั้ง server
-- DB ต้อง query แบบ parameter (`$1` · `?`) หรือผ่าน ORM เสมอ ห้ามต่อ string เข้า SQL
-- log แบบมีโครง (pino ใน Fastify · logger ที่ repo มี) ตาม `logging-standards` ไม่ใช้ `console.log` ใน server
+## Test Data Strategy
 
-```ts
-const server = app.listen(port);
-process.on('SIGTERM', () => {
-  server.close(async () => { await db.end(); process.exit(0); });
-  setTimeout(() => process.exit(1), 10_000).unref();
+มี 4 แบบ คือ shared test DB · per-test setup · API setup กับ UI verification · database snapshot กับ rollback
+แบบที่แนะนำคือ **Option 3: API setup, UI verification (best)** — เตรียมข้อมูลผ่าน API ให้เร็วและแน่นอน แล้วค่อยทดสอบ UI จริง ส่วน shared test DB ทำให้เทสต์พึ่งลำดับกัน รันขนานยาก และข้อมูลปนกัน ส่วนข้อดีข้อเสียครบทุกแบบอยู่ใน [references/test-data-strategies.md](references/test-data-strategies.md)
+
+## What to Test E2E (Not Everything!)
+
+### ✅ DO test E2E
+- Critical user journeys (login → checkout → confirmation)
+- Multi-step workflows that span multiple pages
+- Integration with external services (payment, email)
+- "Smoke tests" that verify deployment works
+- Cross-browser specific behavior
+
+### ❌ DON'T test E2E
+- Every form validation (use unit tests)
+- Edge cases of business logic (use unit/integration)
+- Every error message (use unit tests)
+- Performance (use dedicated tools)
+- Visual design (use visual regression tools)
+
+> 💡 **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
+
+ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P0 P1 หรือ P2 ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+
+## Fighting Flaky Tests
+
+| Cause | Fix |
+|-------|-----|
+| Hard-coded sleeps | Use auto-waiting (Playwright/Cypress have this) |
+| Animation timing | Wait for animation to complete OR disable in tests |
+| Network race conditions | `page.waitForResponse(url)` before assertion |
+| Test data leak | Use unique data per test (timestamp/UUID) |
+| Order dependency | Each test fully isolated, parallelizable |
+| Auth race condition | Pre-authenticate via API, inject session |
+| Element not stable | `expect(el).toBeVisible()` before interacting |
+
+ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
+
+### Retry strategy
+- **In CI:** auto-retry failed tests 1-2 times
+- **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
+- **Don't accept flaky tests:** investigate or delete them. Don't ignore them
+
+## Authentication in E2E
+
+อย่าล็อกอินผ่าน UI ในทุกเทสต์ เพราะช้า เปราะ และโค้ดซ้ำ ให้ล็อกอินครั้งเดียวแล้วแชร์สถานะ (`storageState`) หรือดีกว่านั้นคือล็อกอินผ่าน API แล้วฉีด cookie เข้า browser context โค้ดทั้งสามแบบอยู่ใน [references/auth-in-e2e.md](references/auth-in-e2e.md)
+
+## Parallelization and CI
+
+**Requirements for safe parallel:**
+- ✅ Tests don't share state
+- ✅ Unique test data per test
+- ✅ Database/external services support concurrency
+
+แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก PR ที่ล้มแล้วบล็อกการ merge → full ทุกคืนแบบข้าม browser → pre-prod ก่อน deploy ที่ต้องผ่าน P0 และ P1 เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานและรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+
+## Anti-patterns
+
+- ❌ **Testing implementation details** — selectors based on internal structure
+- ❌ **Long monolithic tests** — one test with 50 steps is hard to debug
+- ❌ **Coupled tests** — Test B depends on Test A having run
+- ❌ **Hidden state** — tests behave differently depending on order or data
+- ❌ **Manual cleanup** — relying on people to reset the environment
+- ❌ **No quarantine** — failing tests get merged anyway because "it's flaky"
+- ❌ **Mocking everything** — at this layer, use the real integrations, or it's not E2E
+
+## Quality Targets (from qa-tester agent)
+
+- Critical path coverage: 100%
+- Test runtime: ≤ 10 min for smoke, ≤ 30 min for full
+- Flakiness rate: < 2%
+- Pass rate in main: > 95%
+- Mean time to fix flake: < 2 days
+
+ตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress (Library Quick Reference) อยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+
+
+## reference: auth-in-e2e.md
+
+# Authentication in E2E — ตัวอย่างการล็อกอินในเทสต์
+
+สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
+
+## ❌ Bad: log in via UI every test
+```
+Slow, brittle, duplicate code
+```
+
+## ✅ Good: log in once, share state
+```typescript
+// playwright.config.ts
+{
+  use: { storageState: 'auth.json' },
+  globalSetup: 'global-setup.ts',  // logs in once, saves cookies
+}
+```
+
+## ✅ Better: API login + cookie injection
+```typescript
+async function login(page, user) {
+  const response = await page.request.post('/api/login', { data: user });
+  const cookies = await response.headers();
+  await page.context().addCookies([...]);
+}
+```
+
+
+## reference: ci-and-parallel.md
+
+# Parallelization และ CI Integration
+
+ระดับการรันขนาน รอบการรัน E2E ใน CI และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
+
+## Parallelization
+
+| Level | Speedup | Complexity |
+|-------|--------:|:----------:|
+| File-level parallel | 4-8x | 🟢 Low (just enable) |
+| Test-level within file | 10x+ | 🟡 Med (isolation needed) |
+| Sharded across CI workers | Nx | 🟡 Med (requires sharding config) |
+| Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
+
+**Requirements for safe parallel:**
+- ✅ Tests don't share state
+- ✅ Unique test data per test
+- ✅ Database/external services support concurrency
+
+## CI Integration
+
+### Run E2E tier
+```yaml
+# Smoke (every PR, 2 min)
+- 5-10 critical tests
+- Fail = block merge
+
+# Full (nightly, 30 min)
+- All E2E tests
+- Cross-browser
+- Failures investigated next day
+
+# Pre-prod (before deploy, 10 min)
+- P0 + P1 tests
+- Must pass before prod deploy
+```
+
+### Artifacts to capture
+- ✅ Screenshots on failure
+- ✅ Video on failure
+- ✅ Trace files (Playwright)
+- ✅ Console logs
+- ✅ Network logs
+
+
+## reference: coverage-and-libraries.md
+
+# Critical Path Coverage Matrix และ Library Quick Reference
+
+ตัวอย่างตารางความครอบคลุมของเส้นทางผู้ใช้ และตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress
+
+## Critical Path Coverage Matrix
+
+```markdown
+| User Journey | Coverage | Priority |
+|--------------|:--------:|:--------:|
+| Signup → first action | ✅ | 🔴 P0 |
+| Login → main task | ✅ | 🔴 P0 |
+| Add to cart → checkout → success | ✅ | 🔴 P0 |
+| Search → filter → result | ✅ | 🟡 P1 |
+| Settings → save | ✅ | 🟡 P1 |
+| Admin panel CRUD | ✅ | 🟡 P1 |
+| Password reset | ✅ | 🟢 P2 |
+| Profile edit | 🟡 Sample | 🟢 P2 |
+```
+
+## Library Quick Reference
+
+| Need | Playwright | Cypress |
+|------|-----------|---------|
+| Visit page | `page.goto(url)` | `cy.visit(url)` |
+| Click | `page.click(sel)` | `cy.get(sel).click()` |
+| Type | `page.fill(sel, text)` | `cy.get(sel).type(text)` |
+| Assert text | `expect(page.getByText(...))` | `cy.contains(...)` |
+| Wait for response | `page.waitForResponse(...)` | `cy.intercept(...).as(...)` |
+| Screenshot | `page.screenshot()` | `cy.screenshot()` |
+
+
+## reference: flaky-tests.md
+
+# Fighting Flaky Tests — ตัวอย่างการรอที่ถูกวิธี
+
+โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
+
+## ❌ Bad (sleep hack)
+```typescript
+await page.click('#submit');
+await page.waitForTimeout(2000); // ← flaky
+await expect(page.getByText('Success')).toBeVisible();
+```
+
+## ✅ Good (event-based wait)
+```typescript
+const responsePromise = page.waitForResponse('/api/submit');
+await page.click('#submit');
+await responsePromise; // ← deterministic
+await expect(page.getByText('Success')).toBeVisible();
+```
+
+
+## reference: page-object-model.md
+
+# Page Object Model (POM) — ตัวอย่างโค้ด
+
+ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
+
+## ❌ Bad (no abstraction)
+```typescript
+test('user can login', async ({ page }) => {
+  await page.goto('/login');
+  await page.fill('[data-testid="email"]', 'user@example.com');
+  await page.fill('[data-testid="password"]', 'pass123');
+  await page.click('button[type="submit"]');
+  await expect(page).toHaveURL('/dashboard');
+});
+
+test('user can update profile', async ({ page }) => {
+  await page.goto('/login');
+  await page.fill('[data-testid="email"]', 'user@example.com');  // ← duplicated
+  await page.fill('[data-testid="password"]', 'pass123');
+  await page.click('button[type="submit"]');
+  await page.goto('/profile');
+  // ...
 });
 ```
 
-## 4 · Angular
+## ✅ Good (Page Object)
+```typescript
+// pages/LoginPage.ts
+export class LoginPage {
+  constructor(private page: Page) {}
 
-ตัวล่าสุดคือ v22 (มิ.ย. 2026): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว
+  async goto() { await this.page.goto('/login'); }
 
-| เรื่อง | ทำแบบนี้ | ไม่ทำ |
-|---|---|---|
-| component | standalone · `inject()` | สร้าง NgModule ใหม่ |
-| state | `signal` · `computed` · `input()` · `output()` | `BehaviorSubject` สำหรับ state ใน component |
-| change detection | `OnPush` (v22 เป็นค่าเริ่มต้น) | `Default`/`Eager` โดยไม่มีเหตุผล |
-| template | `@if` · `@for (x of xs; track x.id)` · `@switch` | `*ngIf` · `*ngFor` (deprecated ตั้งแต่ v20) |
-| form | Signal Forms (v22) ส่วน repo เดิมใช้ typed reactive forms | `UntypedFormGroup` |
-| HTTP | `HttpClient` + functional interceptor (`withInterceptors`) | ใส่ header token ทีละที่ |
-| subscription | `async` pipe · `toSignal` · `takeUntilDestroyed()` | `subscribe` แล้วไม่ยกเลิก |
-| route | `loadComponent` · `loadChildren` แบบ lazy | import ทุกหน้าใน route หลัก |
-
-- logic ใน template ให้ย้ายไป `computed` ให้ template มีแค่การแสดงผล และห้ามเรียก function หนักใน binding
-- `DomSanitizer.bypassSecurityTrust*` ห้ามใช้กับข้อมูลที่ผู้ใช้ส่งมา ถ้าต้องใช้จริงให้คอมเมนต์ว่าทำไมปลอดภัย
-- **repo เก่า (v14–19)** ให้เขียนตามแบบที่ repo ใช้อยู่ ใช้ของใหม่ได้เฉพาะที่ version นั้นรองรับ และไม่ migrate ทั้ง repo ในงาน feature ถ้าอยาก migrate ให้เสนอแยกงาน แล้วใช้ `ng generate @angular/core:control-flow` และ schematic อื่นของ Angular
-- React หรือ Vite: เก็บ state ใน component ก่อน `useEffect` ต้องมี cleanup key ใน list เป็น id ไม่ใช่ index และ env ฝั่ง client ใช้ได้เฉพาะ `VITE_*` และถือว่าทุกคนเห็น
-
-```ts
-export class OrderList {
-  private orders = toSignal(inject(OrderApi).list(), { initialValue: [] });
-  readonly unpaid = computed(() => this.orders().filter(o => o.status === 'unpaid'));
+  async login(email: string, password: string) {
+    await this.page.fill('[data-testid="email"]', email);
+    await this.page.fill('[data-testid="password"]', password);
+    await this.page.click('button[type="submit"]');
+  }
 }
-// <ul>@for (o of unpaid(); track o.id) { <li>{{ o.id }}</li> } @empty { <li>ไม่มีรายการค้างจ่าย</li> }</ul>
+
+// tests/login.spec.ts
+test('user can login', async ({ page }) => {
+  const login = new LoginPage(page);
+  await login.goto();
+  await login.login('user@example.com', 'pass123');
+  await expect(page).toHaveURL('/dashboard');
+});
 ```
 
-## 5 · กับดักที่เจอบ่อย
+> 💡 **One Page Object per page or major component.**
 
-| กับดัก | อาการ | ทำแบบนี้ |
-|---|---|---|
-| เวลาและ time zone | วันที่ถอยไป 1 วัน ช่วง 00:00–06:59 เวลาไทย | เก็บและส่ง ISO 8601 แบบ UTC แล้วแสดงด้วย `Intl.DateTimeFormat('th-TH', { timeZone: 'Asia/Bangkok' })` ส่วนปี พ.ศ. ดู `i18n-and-locale` |
-| เงิน | `0.1 + 0.2 !== 0.3` | เก็บเป็นสตางค์ (integer) ถ้าคิดภาษีหรือแปลงสกุลให้ใช้ decimal library ที่ repo ใช้ |
-| `==` | `'0' == false` เป็นจริง | ใช้ `===` เสมอ และเปิด eslint `eqeqeq` |
-| แก้ object ที่แชร์กัน | ค่าเปลี่ยนเองข้ามหน้า | สร้างใหม่ด้วย spread · `structuredClone` · `readonly` ใน type |
-| memory leak | RAM โตเรื่อย ๆ | ยกเลิก subscription · `removeEventListener` · `clearInterval` และ cache ต้องมีเพดาน |
-| import ก้อนใหญ่ | bundle บวมหลายร้อย KB | `import { debounce } from 'lodash-es'` ไม่ใช่ทั้ง lodash แล้วดู bundle หลัง build |
-| เรียงชื่อไทย | สระหน้าเรียงผิด | ใช้ `new Intl.Collator('th').compare` ไม่ใช้ `localeCompare` เปล่า ๆ |
-| `JSON.parse` ไม่มีตรวจ | crash ลึกในโค้ด | parse ด้วย schema ที่ขอบระบบ (ข้อ 2) |
 
-## 6 · test
+## reference: test-data-strategies.md
 
-ใช้ framework ที่ repo มี ถ้าไม่มีให้ดูตาราง `testing-standards` ข้อ 1
+# Test Data Strategy — ทางเลือกทั้ง 4 แบบ
 
-| ชั้น | เครื่องมือ |
-|---|---|
-| logic ล้วน | Vitest หรือ Jest ตาม repo |
-| HTTP API | `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) |
-| Angular component | `TestBed` + component harness หรือ Testing Library ตั้งแต่ v21 ขึ้นไป CLI ใช้ Vitest เป็นค่าเริ่มต้น |
-| ผ่านเบราว์เซอร์ | Playwright (ดู `e2e-testing-patterns`) |
+ข้อดีข้อเสียของการเตรียมข้อมูลทดสอบแต่ละแบบ พร้อมโค้ดตัวอย่างของแบบที่แนะนำ
 
-- logic ใหม่หรือแก้ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว
-- snapshot อย่างเดียวไม่นับเป็น test ต้องมี assert ค่าที่สำคัญ
-- signal ใน test ให้อ่านค่าตรง ๆ `component.unpaid()` ไม่ต้องรอ `fakeAsync` ถ้าไม่มี async จริง
+## Option 1: Shared test DB (popular, problematic)
+```
+❌ All tests share same data
+❌ Order-dependent
+❌ Hard to parallelize
+❌ Pollution between tests
+```
 
-## 7 · ความปลอดภัยเฉพาะ stack
+## Option 2: Per-test setup (slow)
+```
+🟡 Clean slate every test
+🟡 Reliable but slow
+✅ Good for critical flows
+```
 
-- **แพ็กเกจใหม่** ต้องตรวจก่อนลง: ชื่อสะกดถูก (typosquat) · ยอดดาวน์โหลด · ผู้ดูแล · วันที่ออกล่าสุด ส่วนชื่อ scope ภายในองค์กรต้องตั้ง registry ใน `.npmrc` กัน dependency confusion
-- รัน `npm audit --omit=dev` ก่อนส่ง lockfile ต้อง commit และ CI ใช้ `npm ci`
-- Cross-Site Scripting (XSS): ห้ามใช้ `innerHTML` · `[innerHTML]` · `dangerouslySetInnerHTML` กับข้อมูลผู้ใช้ ส่วน Angular escape ให้เองถ้าไม่ bypass
-- login ด้วย cookie ต้องตั้ง cookie `HttpOnly` · `Secure` · `SameSite` + กัน Cross-Site Request Forgery (CSRF) (token หรือ `withXsrfConfiguration` ของ Angular)
-- Cross-Origin Resource Sharing (CORS): ระบุ origin ทีละตัว ห้ามใช้ `*` คู่กับ `credentials`
-- secret ห้ามอยู่ใน frontend เพราะทุกอย่างใน `environment.ts` และ `VITE_*` ถูก build เข้า bundle ให้ทุกคนอ่าน
-- header ความปลอดภัยใช้ `helmet` (Express) · `@fastify/helmet` · NestJS ใช้ `helmet` ใน `main.ts`
+## Option 3: API setup, UI verification (best)
+```typescript
+// ✅ Setup via API (fast), verify via UI (real test)
+test('user sees orders', async ({ page, request }) => {
+  // Setup via API — fast, reliable
+  const user = await api.createUser();
+  await api.createOrder(user.id, { items: [...] });
 
-## 8 · รายการตรวจก่อนส่ง
+  // Test the actual UI flow
+  await page.goto('/orders');
+  await expect(page.getByText('Order #123')).toBeVisible();
+});
+```
 
-- [ ] `tsc --noEmit` 0 error
-- [ ] lint 0 warning ในไฟล์ที่แก้
-- [ ] test ทั้งชุดผ่าน และพฤติกรรมใหม่มี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `any` · `as` กับข้อมูลภายนอก · `!` ใหม่ใน diff
-- [ ] ไม่มี promise ลอย และไม่มี subscription ที่ไม่ยกเลิก
-- [ ] งาน frontend เทียบขนาด bundle ก่อนและหลังแล้ว ถ้าโตเกิน 20 KB (gzip) ให้บอกเหตุผลในรายงาน
-- [ ] ถ้า lockfile เปลี่ยน ได้ตรวจแพ็กเกจใหม่ตามข้อ 7 แล้ว
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| โค้ดน้อยที่สุดที่ใช้ได้ | `lazy-coding` |
-| ชื่อ · โครงไฟล์ · คอมเมนต์ | `readable-code` |
-| ออกแบบ type และรูปข้อมูลก่อนเขียน | `principle-data-shape-first` |
-| จับ error ที่ไหน · retry · timeout | `error-handling-patterns` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| สัดส่วนและการตั้งชื่อ test | `testing-standards` |
-| test ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
-| หน้าจอ · token สี · layout | `web-app-design` |
-| ข้อบังคับความปลอดภัยทุก diff | `principle-secure-by-default` |
-| env และ secret | `config-and-secrets` |
-| วันที่ไทย · พ.ศ. · เรียงคำไทย | `i18n-and-locale` |
+## Option 4: Database snapshot + rollback
+```
+✅ Real production-like data
+✅ Fast (uses snapshots)
+🟡 Requires DB tooling
+```

@@ -1,6 +1,6 @@
 ---
 name: owner-style-capture
-description: Use when the user wants agents to work their way (learn my style, capture how I work) or keeps correcting the same preferences. Drafts a style file.
+description: Use when the user wants agents to work their way (learn my style, capture how I work) or keeps correcting the same preferences.
 ---
 
 # owner-style-capture — ให้ superuser ทำงานแบบเจ้าของเครื่อง
@@ -9,6 +9,13 @@ description: Use when the user wants agents to work their way (learn my style, c
 > 2 อย่างนี้แยกกัน เพื่อให้ plugin แจกหรือขายต่อได้ โดยสไตล์ส่วนตัวไม่ติดไปด้วย
 
 **ผลลัพธ์:** `~/.claude/superuser-style.md` (ระดับผู้ใช้ ใช้กับทุกโปรเจกต์) ถ้ามีไฟล์นี้ `superuser` จะอ่านก่อนเริ่มงานทุกครั้ง
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ความผิดที่เกิดซ้ำและตรวจด้วยเครื่องได้ | `repeated-mistakes-to-checks` |
+| บทเรียนจากงานที่ทำให้ skill หรือ agent ต้องแก้ | `session-lessons-to-skills` |
 
 ## แหล่งหลักฐาน (อ่านเท่านั้น)
 

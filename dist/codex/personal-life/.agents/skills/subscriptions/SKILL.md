@@ -1,6 +1,6 @@
 ---
 name: "subscriptions"
-description: "Audit recurring charges from bank and credit-card statements — find every subscription, build a cost-per-use table, decide cancel, downgrade, rotate or keep, and give the exact cancellation steps plus trial-end reminders."
+description: "Audit recurring charges from statements — cost per use, cancel, downgrade or keep, exact cancel steps, trial-end reminders."
 ---
 
 Run the `subscription-audit` skill with the `life-admin` agent on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

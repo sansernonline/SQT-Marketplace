@@ -17,6 +17,13 @@ description: Use when designing end-to-end tests with Playwright or Cypress, fix
 - Adding E2E to a CI/CD pipeline
 - Migrating from one framework to another
 
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Writing manual test cases (steps, expected result) | `test-case-template` |
+| Unit or integration tests, test ratio and scope | `testing-standards` |
+
 ## อ่านเพิ่มเมื่อ
 
 | ไฟล์ | เปิดเมื่อ |

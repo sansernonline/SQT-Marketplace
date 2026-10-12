@@ -1,6 +1,6 @@
 ---
 name: principle-prove-it-works
-description: Use when about to say anything is done, fixed, passing or working. Verify against the real artifact, never a proxy like it compiles or the subagent said so.
+description: Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
 ---
 
 # principle · prove it works — พิสูจน์กับของจริง
@@ -18,8 +18,8 @@ description: Use when about to say anything is done, fixed, passing or working. 
 | แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
 | test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
 | งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ

@@ -1,6 +1,6 @@
 # skill: security-operations
 
-Use when running security operations (incident containment and evidence, SOC design, SIEM rules mapped to MITRE ATT&CK, threat hunting, zero trust).
+Use when running security operations (incident containment, SOC design, SIEM rules, MITRE ATT&CK, threat hunting, zero trust).
 
 # security-operations
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-cybersecurity` (skill `security-incident-response` · `soc-operations` · `threat-detection-patterns`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-cybersecurity` (เดิมชื่อ security-incident-response → `references/security-incident-response.md` · soc-operations → `references/soc-operations.md` · threat-detection-patterns → `references/threat-detection-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-incident-responder.md
@@ -1074,7 +1074,7 @@ for ioc in iocs:
 
 ## reference: security-incident-response.md
 
-> เดิมคือ skill `security-incident-response` ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
+> เดิมชื่อ security-incident-response (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1376,7 +1376,7 @@ Include:
 
 ## reference: soc-operations.md
 
-> เดิมคือ skill `soc-operations` ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
+> เดิมชื่อ soc-operations (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1629,7 +1629,7 @@ Tier 3 (24+ months):
 
 ## reference: threat-detection-patterns.md
 
-> เดิมคือ skill `threat-detection-patterns` ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
+> เดิมชื่อ threat-detection-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
 
 **สารบัญ:** 
 

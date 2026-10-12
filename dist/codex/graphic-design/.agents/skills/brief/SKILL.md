@@ -1,6 +1,6 @@
 ---
 name: "brief"
-description: "Write a complete image generation brief — subject, style, palette, lighting, composition, negatives — ready to paste into whichever image generation plugin is installed."
+description: "Write an image generation brief — subject, style, palette, light, composition, negatives — ready for an image plugin."
 ---
 
 Run `brief-to-image` with the `art-director` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

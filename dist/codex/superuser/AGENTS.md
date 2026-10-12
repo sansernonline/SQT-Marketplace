@@ -12,4 +12,4 @@ SuperUser core — a lead agent that sizes the task, picks or builds a playbook,
 
 ## บทบาททั้งหมด
 
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.

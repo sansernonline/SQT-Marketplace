@@ -1,6 +1,6 @@
 ---
 name: "price-check"
-description: "Work out a selling price, or check the profit on a current price, after platform commission, transaction fee, shipping, VAT and target margin."
+description: "Work out a selling price, or the profit on a current price, after commission, fees, shipping, VAT and margin."
 disableModelInvocation: true
 ---
 

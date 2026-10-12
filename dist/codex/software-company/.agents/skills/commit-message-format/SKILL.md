@@ -1,6 +1,6 @@
 ---
 name: commit-message-format
-description: Use when writing a git commit message. Conventional Commits with type, scope, description, body and footer, for clean history and changelogs.
+description: Use when writing a git commit message (Conventional Commits — type, scope, body, footer).
 ---
 
 # Conventional Commit Message Format

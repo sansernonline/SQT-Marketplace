@@ -1,6 +1,6 @@
 ---
 name: decision-journal
-description: Use when facing a big personal decision (job change, condo or car, moving, investing a lump sum). Records reasoning and prediction, revisits the result later.
+description: Use when facing a big personal decision (job change, condo or car, moving, investing a lump sum). Records it, revisits later.
 ---
 
 # Decision Journal

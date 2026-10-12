@@ -1,6 +1,6 @@
 ---
 name: "onboard"
-description: "Create comprehensive onboarding documentation for a new team member using technical-writer agent. Produces role-specific guide for first 30/60/90 days."
+description: "Write onboarding docs for a new team member with the technical-writer agent — a role guide for the first 30/60/90 days."
 ---
 
 Use the `technical-writer` agent to create an onboarding guide for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

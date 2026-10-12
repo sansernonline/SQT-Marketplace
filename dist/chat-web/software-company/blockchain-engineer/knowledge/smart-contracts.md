@@ -1,6 +1,6 @@
 # skill: smart-contracts
 
-Use when building on a blockchain (Solidity or Solana contracts, security review, Foundry or Hardhat tests, DeFi, chain choice, bridges, tokenomics).
+Use when building on a blockchain (Solidity or Solana contracts, security review, Foundry or Hardhat, DeFi, bridges, tokenomics).
 
 # smart-contracts
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-web3` (skill `solidity-security` · `smart-contract-testing` · `defi-patterns`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-web3` (เดิมชื่อ solidity-security → `references/solidity-security.md` · smart-contract-testing → `references/smart-contract-testing.md` · defi-patterns → `references/defi-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-blockchain-architect.md

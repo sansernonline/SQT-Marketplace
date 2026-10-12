@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
 
 # saas-platform
 
@@ -32,7 +32,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-customer-success-engineer.md
@@ -811,7 +811,7 @@ log.info('Order created', {
 
 ## reference: enterprise-integration.md
 
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ enterprise-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1148,7 +1148,7 @@ class SalesforceClient {
 
 ## reference: multi-tenancy-patterns.md
 
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ multi-tenancy-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1494,7 +1494,7 @@ async def offboard_tenant(tenant_id):
 
 ## reference: subscription-billing.md
 
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ subscription-billing (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: fintech-payments
 
-Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, AML, PCI-DSS scope, risk and pricing).
+Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, PCI-DSS).
 
 # fintech-payments
 
@@ -1845,7 +1845,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-company-fintech` (skill `payment-gateway-integration` · `kyc-aml-patterns` · `pci-dss-compliance`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-fintech` (เดิมชื่อ payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fintech-engineer.md
@@ -2305,7 +2305,7 @@ Daily job:
 
 ## reference: kyc-aml-patterns.md
 
-> เดิมคือ skill `kyc-aml-patterns` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
+> เดิมชื่อ kyc-aml-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -2611,7 +2611,7 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ## reference: payment-gateway-integration.md
 
-> เดิมคือ skill `payment-gateway-integration` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
+> เดิมชื่อ payment-gateway-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -2993,7 +2993,7 @@ async function refundPayment(paymentId: string, amountCents?: bigint) {
 
 ## reference: pci-dss-compliance.md
 
-> เดิมคือ skill `pci-dss-compliance` ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
+> เดิมชื่อ pci-dss-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
 
 **สารบัญ:** 
 

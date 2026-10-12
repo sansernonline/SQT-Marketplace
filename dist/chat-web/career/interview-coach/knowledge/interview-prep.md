@@ -1,6 +1,6 @@
 # skill: interview-prep
 
-Use when preparing for a job interview (HR screen, technical, final round). STAR story bank, Thai HR questions, questions to ask, thank-you note.
+Use when preparing for a job interview (HR screen, technical, final round). STAR stories, questions to ask, thank-you note.
 
 # Interview Prep
 

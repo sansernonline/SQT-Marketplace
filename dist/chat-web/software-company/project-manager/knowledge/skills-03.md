@@ -1,6 +1,6 @@
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text, labels). Spell out each abbreviation on first use, gloss jargon.
+Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
 
 # Spell Out Abbreviations
 
@@ -81,13 +81,11 @@ Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX
 
 # skill: answer-shape
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Chooses prose, table, small diagram or short list.
+Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Prose, table, diagram or list.
 
 # รูปทรงของคำตอบ
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace ต้นฉบับอยู่ที่ plugin `superuser` ถ้าจะแก้ให้แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
+skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) · ต้นฉบับอยู่ที่ plugin `superuser` (แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`)
 
 > **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
 > เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
@@ -114,7 +112,7 @@ Use when an answer has structure (options, trade-offs, how parts connect, severa
 
 - **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
 - **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ
+- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ · ช่องที่เขียน "ขึ้นอยู่กับ" ทุกช่องก็ไม่มีเนื้อ
 - **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
 - **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
 - **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
@@ -156,26 +154,7 @@ Use when an answer has structure (options, trade-offs, how parts connect, severa
 - คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
 - เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
 
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
-
----
-
-## Anti-patterns
-
-- ❌ **ย่อหน้ายาวเปรียบเทียบ 3 ตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
-- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
-- ❌ **ตาราง 2 แถวเพื่อให้ดูเป็นระเบียบ**
-- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
-- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเอง ทั้งที่เขาถามเพราะอยากได้คำแนะนำ
-- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
-- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
-
----
-
-## เชื่อมกับ skill อื่น
-
-- ถ้อยคำ ความยาว และการตัดกลิ่น AI ใช้ `human-writing`
-- รูปที่ต้องเป็นไฟล์จริง หรือการเปิดเรื่องที่ต้องให้ผู้ใช้ตัดสินใจ ให้ใช้ skill เฉพาะของ plugin นั้นถ้ามี
+> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง · รูปที่วาดสิ่งที่ประโยคเดียวบอกได้ก็เช่นกัน
 
 ---
 
@@ -189,7 +168,7 @@ Use when an answer has structure (options, trade-offs, how parts connect, severa
 
 # skill: temp-file-discipline
 
-Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
+Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
 
 # ระเบียบไฟล์ชั่วคราว
 

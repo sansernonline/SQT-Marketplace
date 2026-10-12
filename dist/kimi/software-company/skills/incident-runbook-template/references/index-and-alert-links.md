@@ -4,18 +4,18 @@
 
 ## Runbook Index Pattern
 
-Maintain a central index:
+Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `document-naming`:
 
 ```markdown
 # 📚 Runbook Index
 
 ## By Service
-- [API Service](runbooks/api/)
-  - [High error rate](runbooks/api/high-error-rate.md)
-  - [Memory leak](runbooks/api/memory-leak.md)
-- [Database](runbooks/db/)
-  - [Connection pool exhausted](runbooks/db/conn-pool.md)
-  - [Replication lag](runbooks/db/repl-lag.md)
+- API Service
+  - [High error rate](runbook-api-high-error-rate.md)
+  - [Memory leak](runbook-api-memory-leak.md)
+- Database
+  - [Connection pool exhausted](runbook-db-conn-pool.md)
+  - [Replication lag](runbook-db-repl-lag.md)
 
 ## By Alert Name
 | Alert | Runbook |

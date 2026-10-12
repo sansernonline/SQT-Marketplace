@@ -14,7 +14,7 @@
 | 16 | Contributions and limitations | 1 min |
 | 17 | Recommendations | 0.5 min |
 
-Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` in `software-company` for layouts.
+Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` in `software-company` (if installed) for layouts.
 
 ## Questions committees often ask — prepare 2–3 sentence answers
 

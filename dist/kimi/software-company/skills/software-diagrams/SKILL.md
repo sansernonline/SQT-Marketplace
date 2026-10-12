@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a markdown doc, README or pull request needs a technical diagram (architecture, sequence, state, ER, deployment) drawn in Mermaid house theme.
+description: Use when a markdown doc, README or pull request needs a technical diagram (architecture, sequence, state, ER, deployment) in Mermaid.
 ---
 
 # Software Diagrams
@@ -31,7 +31,7 @@ description: Use when a markdown doc, README or pull request needs a technical d
 |---|---|
 | เลือกว่าจะใช้ภาพแบบไหน (SVG / ASCII / Mermaid) | `markdown-visuals` |
 | ภาพหน้าจอ · wireframe | `ui-craft` + skill แพลตฟอร์ม |
-| กราฟข้อมูล | `web-app-design` |
+| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
 | ตัดสินใจเลือกสถาปัตยกรรม | `architecture-patterns` |
 
 ## 1 · คำถามไหน วาดแบบไหน

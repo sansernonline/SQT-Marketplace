@@ -1,13 +1,13 @@
 ---
 name: "product-roadmap"
-description: "Build a strategic product roadmap with prioritization using product-manager agent. Produces quarterly plan with RICE scoring and success metrics."
+description: "Build a product roadmap with the product-manager agent — quarterly plan, RICE scoring, success metrics."
 ---
 
 Use the `product-manager` agent to build a product roadmap for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 The product manager should:
 
-1. **Initial Discovery** — ask the user:
+1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
    - Business strategy / company OKRs
    - Target users + key personas
    - Current product state (what exists)
@@ -60,3 +60,5 @@ The product manager should:
    - Detail requirements → `business-analyst`
    - Technical feasibility → `solution-architect`
    - Delivery planning → `project-manager`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/product-doc-templates.md`](references/product-doc-templates.md) — แม่แบบเอกสารผลิตภัณฑ์

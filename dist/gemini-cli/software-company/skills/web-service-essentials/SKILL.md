@@ -1,6 +1,6 @@
 ---
 name: web-service-essentials
-description: Use when building or reviewing any HTTP service or backend. Four operational endpoints, RFC 9457 errors, request ids, graceful shutdown, security headers.
+description: Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors, request ids, shutdown).
 ---
 
 # Web Service Essentials
@@ -79,17 +79,21 @@ description: Use when building or reviewing any HTTP service or backend. Four op
 ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
 
 ```jsonc
-// 400
+// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
 {
   "type": "https://api.example.com/errors/validation",
   "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
-  "status": 400,
+  "status": 422,
   "detail": "จำนวนสินค้าต้องมากกว่า 0",
   "instance": "/api/v1/orders",
   "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
-  "errors": { "quantity": ["ต้องมากกว่า 0"] }   // เฉพาะ validation
+  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
+    { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
+  ]
 }
 ```
+
+- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
 
 | สถานะ | ใช้เมื่อ |
 |---|---|

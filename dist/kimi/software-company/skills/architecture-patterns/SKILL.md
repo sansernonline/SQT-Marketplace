@@ -1,6 +1,6 @@
 ---
 name: architecture-patterns
-description: Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, or patterns like CQRS, Event Sourcing and Saga.
+description: Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, CQRS, Event Sourcing, Saga.
 ---
 
 # Architecture Patterns
@@ -289,3 +289,5 @@ When proposing architecture, compare options:
 ## Always Reference
 
 When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/architecture-overview-template.md`](references/architecture-overview-template.md) — แม่แบบภาพรวมสถาปัตยกรรม

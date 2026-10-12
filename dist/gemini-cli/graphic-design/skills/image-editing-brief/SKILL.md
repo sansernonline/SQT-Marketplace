@@ -1,6 +1,6 @@
 ---
 name: image-editing-brief
-description: Use when an existing or AI image needs a change (remove object, fix colour, swap background, extend canvas, upscale). Keep list and change list.
+description: Use when an existing or AI image needs a change (remove object, fix colour, swap background, extend canvas, upscale).
 ---
 
 # Image Editing Brief

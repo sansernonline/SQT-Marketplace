@@ -1,6 +1,6 @@
 ---
 name: "iot-design"
-description: "Design an IoT system architecture or device fleet management. Two modes — iot-architecture or device-fleet-design."
+description: "Design an IoT system or device fleet management (iot-architecture or device-fleet-design)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

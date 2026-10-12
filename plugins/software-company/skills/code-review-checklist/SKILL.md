@@ -14,6 +14,14 @@ description: Use when reviewing a pull request, self-reviewing before submitting
 - Onboarding new code reviewers
 - Auditing code quality of existing modules
 
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` |
+| Writing or updating the PR description itself | `pr-description-template` |
+| Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
+
 ## Review Process
 
 1. **Understand the intent** — read PR description and linked ticket

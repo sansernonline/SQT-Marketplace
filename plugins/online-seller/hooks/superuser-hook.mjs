@@ -160,8 +160,10 @@ export function inboxNotice(teamDir, event, state, rel = ".claude/superuser") {
   return lines.join("\n");
 }
 
-// plugin หลายตัวได้ข้อมูลเหตุการณ์เดียวกัน → ใครสร้างไฟล์ล็อกได้ก่อนคนนั้นทำ · ล็อกเก่ากว่า 2 นาทีลบทิ้ง
-// ล็อกเป็นของชั่วคราว จึงอยู่ใน _to_delete/ ที่รากโปรเจกต์
+// plugin หลายตัวได้ข้อมูลเหตุการณ์เดียวกันในเสี้ยววินาที → ใครสร้างไฟล์ล็อกได้ก่อนคนนั้นทำ · ล็อกเก่ากว่า 2 นาทีลบทิ้ง
+// ชื่อล็อกมีช่วงเวลาด้วย ผู้ใช้พิมพ์ข้อความเดิมซ้ำ (เช่น "ต่อ") ห่างกันเกิน 2 ช่วงจึงยังถูกจด · ล็อกอยู่ใน _to_delete/ ที่รากโปรเจกต์
+const DUPLICATE_WINDOW_MS = 3000;
+
 export function claimEvent(root, raw, now = Date.now()) {
   const lockDir = join(root, "_to_delete", "superuser-lock");
   mkdirSync(lockDir, { recursive: true });
@@ -169,7 +171,10 @@ export function claimEvent(root, raw, now = Date.now()) {
     try { if (now - statSync(join(lockDir, name)).mtimeMs > 120000) unlinkSync(join(lockDir, name)); } catch { /* อีกตัวลบไปแล้ว */ }
   }
   const id = createHash("sha1").update(raw).digest("hex").slice(0, 16);
-  try { closeSync(openSync(join(lockDir, id), "wx")); return true; } catch { return false; }
+  const bucket = Math.floor(now / DUPLICATE_WINDOW_MS);
+  // hook อีกตัวของเหตุการณ์เดียวกันอาจตกช่วงก่อนหน้า
+  if (existsSync(join(lockDir, `${id}-${bucket - 1}`))) return false;
+  try { closeSync(openSync(join(lockDir, `${id}-${bucket}`), "wx")); return true; } catch { return false; }
 }
 
 function main() {

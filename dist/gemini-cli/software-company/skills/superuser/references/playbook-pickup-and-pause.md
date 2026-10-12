@@ -5,7 +5,7 @@ skill หลัก: `work-session-context` · `status-report` · [`decision-log`
 
 ## รับงานต่อ (คัดลง todo ตรงตัว)
 
-1. อ่าน `CONTEXT.md` หัวข้อ "รับงานต่อ" · ข้อความค้างใน `.superuser/inbox/` · `docs/BUILD-PLAN.md` (สถานะล่าสุด · ค้างอยู่ · ตัดสินใจเอง) · ดู log ล่าสุดใน `.superuser/log/` ว่าตัวก่อนทำอะไรไปจริง
+1. อ่าน `CONTEXT.md` หัวข้อ "รับงานต่อ" · ข้อความค้างใน `.claude/superuser/inbox/` · `docs/BUILD-PLAN.md` (สถานะล่าสุด · ค้างอยู่ · ตัดสินใจเอง) · ดู log ล่าสุดใน `.claude/superuser/log/` ว่าตัวก่อนทำอะไรไปจริง
 2. ดูของจริง ไม่เชื่อบันทึกอย่างเดียว — `git status` · `git log -10` · branch ที่อยู่ · sandbox ที่รันอยู่ (`.sandbox/sandbox.ps1 list`) · test ล่าสุดผ่านไหม
 3. เขียนสรุปสถานะปัจจุบันไม่เกิน 10 บรรทัด — ทำอะไรเสร็จ · ค้างอะไร · ขัดกับบันทึกตรงไหน
 4. เลือก playbook ของงานที่เหลือ แล้วทำต่อ

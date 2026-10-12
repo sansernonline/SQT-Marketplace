@@ -1,6 +1,6 @@
 ---
 name: document-naming
-description: Use when creating, renaming or filing a document a team or client keeps. Format choice, file name pattern, version placement, version vs status.
+description: Use when creating, renaming or filing a document a team or client keeps (format, file name pattern, version vs status).
 ---
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
@@ -29,15 +29,15 @@ description: Use when creating, renaming or filing a document a team or client k
 
 ## 1 · เลือกรูปแบบก่อนตั้งชื่อ
 
-**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่อยู่กับโค้ดให้เป็น markdown ใน repo**
+**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่เปลี่ยนตามโค้ดให้เป็น markdown ใน `docs/`**
 
 | เอกสาร | รูปแบบ | เหตุผล |
 |---|---|---|
 | Project Plan · BRD · SRS · Architecture · FSD · Test Plan (`project-doc-set` ข้อ 2.1) · ข้อเสนอโครงการ · ใบตรวจรับ UAT · สัญญา | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
 | คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
 | สไลด์นำเสนอ | **pptx + PDF** | |
-| ADR · API spec · data dictionary · runbook · README | **markdown ใน repo** | เปลี่ยนพร้อมโค้ด ต้อง diff ได้ |
-| บันทึกประชุม · บันทึกการตัดสินใจ | **markdown ใน repo** | ค้นหาง่าย ไม่ต้องเปิดโปรแกรม |
+| ADR · API spec · data dictionary · runbook · README | **markdown** — ADR `docs/decisions/` และ runbook `docs/` ที่ราก (`project-doc-set` ข้อ 1) · README ในโฟลเดอร์โค้ด | เปลี่ยนตามโค้ด ต้อง diff ได้ |
+| บันทึกประชุม · บันทึกการตัดสินใจ | **markdown** ใน `docs/` | ค้นหาง่าย ไม่ต้องเปิดโปรแกรม |
 
 > 🚨 **เขียนร่างเป็น markdown ใน `_to_delete/drafts/` แล้ว render เป็น docx ลง `docs/`**
 > `docs/` มีเอกสารส่งมอบฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำ
@@ -58,8 +58,8 @@ description: Use when creating, renaming or filing a document a team or client k
 | ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `TRS-SRS-v1.2-APPROVED.docx` |
 | ไฟล์ส่งออกที่มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `TRS-FSD-recording-v0.3-DRAFT.docx` |
 | ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ ISO ท้ายสุด | `TRS-SRS-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสารใน repo | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/runbook-recording.md` |
-| ADR | `ADR-NNNN-<เรื่อง>.md` เรียงเลขต่อเนื่อง ใน `docs/decisions/` | `docs/decisions/ADR-0007-เลือก-whisper.md` |
+| เอกสาร markdown ใน `docs/` | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/runbook-recording.md` |
+| ADR | `ADR-NNNN-<slug>.md` เรียงเลขต่อเนื่อง ใน `docs/decisions/` | `docs/decisions/ADR-0007-choose-whisper.md` |
 | บันทึกประชุม | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
 **กฎชื่อไฟล์:**
@@ -121,7 +121,7 @@ description: Use when creating, renaming or filing a document a team or client k
 
 | เรื่อง | กฎ |
 |---|---|
-| ต้นฉบับ | อยู่ใน repo เสมอ — `docs/` |
+| ต้นฉบับ | อยู่ใน `docs/` ที่รากเสมอ (`project-doc-set` ข้อ 1) |
 | ไฟล์ส่งออก | อยู่ใน `docs/` (ตาม `project-doc-set`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
 | ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
 | ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `temp-file-discipline`) |

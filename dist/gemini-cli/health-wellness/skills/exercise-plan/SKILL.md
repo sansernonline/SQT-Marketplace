@@ -1,6 +1,6 @@
 ---
 name: exercise-plan
-description: Use when starting, restarting or structuring regular exercise. Beginner walking or strength plan, WHO weekly target, desk breaks, when to see a doctor first.
+description: Use when starting, restarting or structuring regular exercise. Beginner walking or strength plan, desk breaks.
 ---
 
 # Exercise Plan

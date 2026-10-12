@@ -1,6 +1,6 @@
 ---
 name: data-import-export
-description: Use when a system imports or exports spreadsheet data. Template, validate before write, row-level error report, Excel traps with Thai data and Buddhist years.
+description: Use when a system imports or exports Excel or CSV data. Validate before write, row errors, Thai data and Buddhist years.
 ---
 
 # นำเข้าและส่งออกข้อมูล

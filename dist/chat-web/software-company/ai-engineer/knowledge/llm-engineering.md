@@ -1,6 +1,6 @@
 # skill: llm-engineering
 
-Use when a system calls a large language model (prompts, structured output, RAG with chunking, embeddings, vector search, re-ranking, evals, LLM-as-judge).
+Use when a system calls a large language model (prompts, structured output, RAG, embeddings, vector search, evals).
 
 # llm-engineering
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-ai` (skill `prompt-engineering-patterns` · `llm-evaluation-patterns` · `rag-architecture`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-ai` (เดิมชื่อ prompt-engineering-patterns → `references/prompt-engineering-patterns.md` · llm-evaluation-patterns → `references/llm-evaluation-patterns.md` · rag-architecture → `references/rag-architecture.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-llm-architect.md
@@ -1386,7 +1386,7 @@ async def call_llm(prompt_id: str, input: str):
 
 ## reference: llm-evaluation-patterns.md
 
-> เดิมคือ skill `llm-evaluation-patterns` ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
+> เดิมชื่อ llm-evaluation-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1761,7 +1761,7 @@ async def hourly_quality_check():
 
 ## reference: prompt-engineering-patterns.md
 
-> เดิมคือ skill `prompt-engineering-patterns` ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
+> เดิมชื่อ prompt-engineering-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -2188,7 +2188,7 @@ When output is wrong:
 
 ## reference: rag-architecture.md
 
-> เดิมคือ skill `rag-architecture` ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
+> เดิมชื่อ rag-architecture (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 

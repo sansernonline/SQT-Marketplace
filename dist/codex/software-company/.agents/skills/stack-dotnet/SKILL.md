@@ -1,6 +1,6 @@
 ---
 name: stack-dotnet
-description: Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core). Build and test commands, EF queries, async traps, Thai culture.
+description: Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core).
 ---
 
 # stack-dotnet — เขียน C# ให้ build สะอาด test ผ่าน ไม่มีกับดักเดิม

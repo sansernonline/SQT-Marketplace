@@ -12,6 +12,6 @@ Career toolkit for people working in Thailand — Thai and international CV conv
 
 ## บทบาททั้งหมด
 
-- **career-coach** — Use when changing jobs, asking for a raise or promotion, writing a CV or LinkedIn profile, or weighing two offers. Turns experience into numbered achievements and drafts what to say to HR in Thai or English.
-- **interview-coach** — Use when the user has an interview coming, wants a mock interview or STAR stories, or must answer hard Thai HR questions (expected salary, why leaving, weaknesses). Runs mock rounds one question at a time and scores each answer.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
+- **career-coach** — Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing two offers. Drafts achievements and HR messages in Thai or English.
+- **interview-coach** — Use when an interview is coming — mock interview, STAR stories, hard Thai HR questions (expected salary, why leaving). Runs mock rounds and scores each answer.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.

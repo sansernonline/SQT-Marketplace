@@ -1,6 +1,6 @@
 ---
 name: insurance-systems
-description: Use when building insurance software (policy and quote engines, claims from first notice of loss, fraud detection, underwriting, reserves, OIC filings).
+description: Use when building insurance software (policy and quote engines, claims, fraud detection, underwriting, reserves, OIC filings).
 ---
 
 # insurance-systems
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-insurtech` (skill `claims-workflow-patterns` · `underwriting-models` · `insurance-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-insurtech` (เดิมชื่อ claims-workflow-patterns → `references/claims-workflow-patterns.md` · underwriting-models → `references/underwriting-models.md` · insurance-compliance → `references/insurance-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

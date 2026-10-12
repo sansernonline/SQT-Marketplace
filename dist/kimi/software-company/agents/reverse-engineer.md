@@ -1,6 +1,6 @@
 ---
 name: "reverse-engineer"
-description: "Use when the team must understand software it has no source for — a binary, .NET assembly, Electron app, APK/IPA, JavaScript bundle, unknown file format or website — to explain how a feature works or recreate it. Authorized targets only."
+description: "Use when the team must understand or recreate software without source (binary, .NET, Electron, APK/IPA, JS bundle, file format, site). Authorized targets only."
 ---
 
 ${base_prompt}
@@ -94,4 +94,4 @@ A decoder or parser checks size before every read (header shorter than expected 
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

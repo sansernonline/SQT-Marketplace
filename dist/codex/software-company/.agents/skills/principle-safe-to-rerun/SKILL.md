@@ -1,6 +1,6 @@
 ---
 name: principle-safe-to-rerun
-description: Use when writing anything that may run twice or stop halfway (migration, script, import, sync, webhook handler, retried job). Same end state on rerun.
+description: Use when writing anything that may run twice or stop halfway (migration, script, import, sync, webhook handler, retried job).
 ---
 
 # principle · safe to rerun — รันกี่รอบก็ได้ผลเหมือนกัน

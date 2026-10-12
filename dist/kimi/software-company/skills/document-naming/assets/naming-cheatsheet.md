@@ -4,13 +4,17 @@
 
 | รหัส | เอกสาร |
 |---|---|
+| `PLAN` | แผนโครงการ (Project Plan) |
 | `BRD` | Business Requirements Document |
 | `SRS` | Software Requirements Specification |
 | `FSD` | Functional Specification Document |
+| `ARCH` | เอกสารสถาปัตยกรรม (Architecture) |
 | `ADR` | Architecture Decision Record |
 | `API` | API Specification |
+| `TESTPLAN` | แผนทดสอบ (Test Plan) |
 | `UAT` | User Acceptance Test Plan / Result |
-| `MAN` | คู่มือผู้ใช้ (Manual) |
+| `MAN` | คู่มือผู้ใช้ (Manual) — แยกบทบาทด้วยเรื่อง เช่น `MAN-admin` |
+| `CHECKLIST` | รายการตรวจเอกสารส่งมอบ (Document Checklist) |
 | `PROP` | ข้อเสนอโครงการ (Proposal) |
 | `RPT` | รายงาน (Report) |
 | `DECK` | สไลด์นำเสนอ |
@@ -27,7 +31,7 @@ TRS-MAN-admin-v1.0-APPROVED.pdf           คู่มือผู้ดูแ�
 TRS-DECK-kickoff-v1.0-2026-08-15.pptx     สไลด์เปิดโครงการ
 
 _to_delete/drafts/srs.md                  ร่าง markdown ก่อน render — ไม่วางใน docs/
-docs/decisions/ADR-0007-เลือก-whisper.md   เอกสารเชิงเทคนิคใน repo — ไม่มีเวอร์ชันในชื่อ
+docs/decisions/ADR-0007-choose-whisper.md เอกสารเชิงเทคนิค (`docs/` ที่ราก) — ไม่มีเวอร์ชันในชื่อ
 docs/meetings/2026-09-25-kickoff.md
 ```
 

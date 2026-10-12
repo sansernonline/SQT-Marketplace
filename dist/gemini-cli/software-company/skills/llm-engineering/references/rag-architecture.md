@@ -1,4 +1,4 @@
-> เดิมคือ skill `rag-architecture` ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
+> เดิมชื่อ rag-architecture (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-ai` — รวมเข้า `llm-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 

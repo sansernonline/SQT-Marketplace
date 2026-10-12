@@ -1,6 +1,6 @@
 ---
 name: "learn"
-description: "Learn a new technology through a milestone path anchored to the user's real projects, or turn a paper or article into runnable example code."
+description: "Learn a technology through milestones tied to the user's real projects, or turn a paper into runnable code."
 ---
 
 With `--depth` or a technology: run `learning-path`. With a paper, RFC, or article: run `paper-to-practice`. Both with the `tech-mentor` agent: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

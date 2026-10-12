@@ -1,6 +1,6 @@
 ---
 name: "incident-response"
-description: "Guide live incident response using devops-engineer agent. Structures detection→triage→mitigation→resolution and prepares postmortem."
+description: "Guide a live incident with the devops-engineer agent — detect, triage, mitigate, resolve, then the postmortem."
 disableModelInvocation: true
 ---
 

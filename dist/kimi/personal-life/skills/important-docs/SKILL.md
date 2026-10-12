@@ -1,6 +1,6 @@
 ---
 name: important-docs
-description: Use when tracking ID card, passport, house, vehicle, insurance, contract or education papers, where each is kept and when it expires. Not product warranties.
+description: Use when tracking ID card, passport, house, vehicle, insurance or contract papers and expiry. Not warranties → warranty-tracker.
 ---
 
 # Important Docs Registry (ทะเบียนเอกสารสำคัญ)

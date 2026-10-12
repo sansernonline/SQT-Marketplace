@@ -51,7 +51,7 @@
 | ADR | `solution-architect` | `adr-writer` |
 | Test Plan · Test Cases | `qa-tester` | `test-case-template` |
 | mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| User Guide | `technical-writer` | `polished-document-style` |
+| คู่มือผู้ใช้ (`MAN`) | `technical-writer` | `polished-document-style` |
 | Runbook | `devops-engineer` | `incident-runbook-template` |
 | BUILD-PLAN | `project-manager` | `simplicity-first` |
 | AGENT-LOOP | `developer` | `spec-to-code-loop` |

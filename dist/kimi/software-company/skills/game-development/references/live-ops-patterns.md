@@ -1,4 +1,4 @@
-> เดิมคือ skill `live-ops-patterns` ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
+> เดิมชื่อ live-ops-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
 
 **สารบัญ:** 
 

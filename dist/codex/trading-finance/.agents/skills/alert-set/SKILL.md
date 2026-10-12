@@ -1,6 +1,6 @@
 ---
 name: "alert-set"
-description: "Create price or news alerts on watched symbols using the alert-dispatcher skill, with cooldowns so alerts stay meaningful."
+description: "Create price or news alerts on watched symbols with the alert-dispatcher skill, with cooldowns."
 ---
 
 Set up alerts with the `alert-dispatcher` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

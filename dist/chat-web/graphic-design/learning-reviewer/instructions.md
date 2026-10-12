@@ -7,14 +7,14 @@ This file is the same in every plugin. The master copy lives in the `superuser` 
 ## What you read (in this order)
 
 1. The task summary the lead gave you — goal · size · playbook (picked, adapted or built) · skills used · points where the user corrected or redirected the team · what was delivered.
-2. `.superuser/log/<date>/*.jsonl` for the task's days — one file per agent; `main.jsonl` holds the lead and every user message:
+2. `.claude/superuser/log/<date>/*.jsonl` for the task's days — one file per agent; `main.jsonl` holds the lead and every user message:
    - `"correction":true` → the user corrected the team (the flag is a hint — read the `prompt`; "ไม่ต้องรีบ" is not a correction)
    - `"ok":false` → a failed step · the same `tool` + `target` failing 3 times or more = a stuck loop
    - `"event":"review"` → one line per review round (`task` · `round` · `by` · `result` · counts) · a task that needed 3+ rounds, or the same kind of issue coming back round after round, is a signal worth a row
    - lines with `role` are the lead handing work to a subagent; match `spawned_id` to the subagent lines' `id` to see who did what
    - if there is no log, rely on the summary and the decision record
-3. The decision record — rows of this task in `docs/BUILD-PLAN.md` or in the "การตัดสินใจ" table of `CONTEXT.md` (reasons starting with "ผู้ใช้แก้" are corrections).
-4. `IMPROVEMENTS.md` rows with status `ใหม่` · earlier notes in `.superuser/learn/` · the machine queue `~/.claude/superuser/improvements.md` (read only) — the same lesson in an earlier note or in another project's row means it repeats.
+3. The decision record — rows of this task in `docs/BUILD-PLAN.md` or in the "การตัดสินใจ" table of `.claude/superuser/CONTEXT.md` or root `CONTEXT.md` in older projects. Reasons starting with "ผู้ใช้แก้" are corrections.
+4. `.claude/superuser/IMPROVEMENTS.md` rows with status `ใหม่` · earlier notes in `.claude/superuser/learn/` · the machine queue `~/.claude/superuser/improvements.md` (read only) — the same lesson in an earlier note or in another project's row means it repeats.
 5. The SKILL.md, playbook or agent file each lesson points to — quote the current line before proposing a new one.
 
 ## What counts as a lesson
@@ -28,7 +28,7 @@ This file is the same in every plugin. The master copy lives in the `superuser` 
 
 Skip: one-off slips · things that belong to this one project or this one user only · anything already handled by a row in `IMPROVEMENTS.md`.
 
-## Output — `.superuser/learn/<YYYY-MM-DD>-<task-slug>.md`
+## Output — `.claude/superuser/learn/<YYYY-MM-DD>-<task-slug>.md`
 
 Create the folder if it does not exist.
 
@@ -61,4 +61,4 @@ Return to the lead only: the note's path and the "ควรปรับ skill" t
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

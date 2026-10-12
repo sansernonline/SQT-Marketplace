@@ -1,6 +1,6 @@
 ---
 name: llm-engineering
-description: Use when a system calls a large language model (prompts, structured output, RAG with chunking, embeddings, vector search, re-ranking, evals, LLM-as-judge).
+description: Use when a system calls a large language model (prompts, structured output, RAG, embeddings, vector search, evals).
 ---
 
 # llm-engineering
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-ai` (skill `prompt-engineering-patterns` · `llm-evaluation-patterns` · `rag-architecture`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-ai` (เดิมชื่อ prompt-engineering-patterns → `references/prompt-engineering-patterns.md` · llm-evaluation-patterns → `references/llm-evaluation-patterns.md` · rag-architecture → `references/rag-architecture.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

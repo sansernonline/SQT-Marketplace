@@ -1,6 +1,6 @@
 # skill: tech-radar
 
-Use when catching up weekly on changes in followed libraries, frameworks and tools. Act, know, skip report from official release notes and changelogs.
+Use when catching up weekly on changes in followed libraries, frameworks and tools, from official release notes.
 
 # Tech Radar
 

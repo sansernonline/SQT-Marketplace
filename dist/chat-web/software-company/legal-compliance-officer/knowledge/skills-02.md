@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
 
 # saas-platform
 
@@ -32,7 +32,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-customer-success-engineer.md
@@ -811,7 +811,7 @@ log.info('Order created', {
 
 ## reference: enterprise-integration.md
 
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ enterprise-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1148,7 +1148,7 @@ class SalesforceClient {
 
 ## reference: multi-tenancy-patterns.md
 
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ multi-tenancy-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1494,7 +1494,7 @@ async def offboard_tenant(tenant_id):
 
 ## reference: subscription-billing.md
 
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ subscription-billing (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: legal-document-systems
 
-Use when software handles legal documents (contract clause extraction, document automation, e-signature validity under eIDAS, ESIGN, Thai ETA).
+Use when software handles legal documents (clause extraction, document automation, e-signature under eIDAS, ESIGN, Thai ETA).
 
 # legal-document-systems
 
@@ -1847,7 +1847,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-legaltech` (skill `contract-parsing-patterns` · `document-automation-patterns` · `e-signature-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-legaltech` (เดิมชื่อ contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-contract-analyzer.md
@@ -2950,7 +2950,7 @@ async function checkRetention() {
 
 ## reference: contract-parsing-patterns.md
 
-> เดิมคือ skill `contract-parsing-patterns` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมชื่อ contract-parsing-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -3668,7 +3668,7 @@ System:
 
 ## reference: e-signature-compliance.md
 
-> เดิมคือ skill `e-signature-compliance` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมชื่อ e-signature-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

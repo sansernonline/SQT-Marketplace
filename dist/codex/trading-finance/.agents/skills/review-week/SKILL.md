@@ -1,6 +1,6 @@
 ---
 name: "review-week"
-description: "Run the weekly or monthly trade review — statistics, the one repeating mistake, one new rule, and last month's rule verdict."
+description: "Run the weekly or monthly trade review — statistics, the one repeating mistake, one new rule, last rule's verdict."
 ---
 
 Run `post-trade-review` with the `trade-journal-coach` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

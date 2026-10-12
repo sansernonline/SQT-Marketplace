@@ -11,6 +11,7 @@
  * ไม่ใช้ dependency ภายนอก
  */
 import { plan as planSuperuser } from '../sync/sync-superuser.mjs';
+import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, basename, dirname } from 'node:path';
@@ -269,6 +270,11 @@ if (existsSync(factsFile)) checkFacts(JSON.parse(readFileSync(factsFile, 'utf8')
 if (existsSync(join(pluginsDir, 'superuser'))) {
   const { problems } = planSuperuser(join(pluginsDir, '..'));
   for (const line of problems) err(line, 'ของกลาง SuperUser ไม่ตรงกับต้นฉบับ — แก้ที่ plugins/superuser แล้วรัน node scripts/sync/sync-superuser.mjs');
+}
+// บล็อกกฎร่วมของ prompt/software-company: ต้นฉบับคือ RULES ใน sync-prompt-rules.mjs
+if (existsSync(join(pluginsDir, '..', PROMPT_DIR))) {
+  const { problems } = planPromptRules(join(pluginsDir, '..'));
+  for (const line of problems) err(line, 'บล็อกกฎร่วมของ prompt ไม่ตรงกับต้นฉบับ — แก้ RULES แล้วรัน node scripts/sync/sync-prompt-rules.mjs');
 }
 for (const shared of ['human-writing']) {
   if (shared === 'human-writing') for (const p of plugins) {

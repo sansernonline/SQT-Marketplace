@@ -1,6 +1,6 @@
 # skill: docker-sandbox
 
-Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or the user says sandbox.
+Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -40,7 +40,7 @@ Use when a project should run in its own Docker container, not on the host (inst
 ## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
 
 1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
-2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/`
+2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/` (ที่ราก) แล้วประกาศ `.sandbox/` เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด ตาม `project-doc-set` ข้อ 1
 3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
    - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
    - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
@@ -135,7 +135,7 @@ Use when a project should run in its own Docker container, not on the host (inst
 
 ## 9 · หมายเหตุ Windows
 
-- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (วัดจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
+- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (ตรวจจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
 - **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
 - ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
 - `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
@@ -152,13 +152,20 @@ Use when a project should run in its own Docker container, not on the host (inst
 
 # skill: reverse-engineering
 
-Use when there is a compiled app or unknown file but no usable source — lost source, a deployed build that may differ from the repository, or a feature, format or protocol to understand. Decompiles, traces and reports with evidence.
+Use when there is a compiled app or unknown file format or protocol but no usable source, or a deployed build may differ from the repo.
 
 # Reverse Engineering
 
 **Decompile → Understand → Recreate**, with evidence at every step. Never claim the original source was recovered; report what the evidence shows and mark what is unknown.
 
 Source code is available but there are no documents → use `legacy-spec-recovery` instead. Once this skill has recovered readable code, `legacy-spec-recovery` turns it into a spec.
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| มีซอร์สโค้ดแต่ไม่มีเอกสาร ต้องการ spec ของระบบเดิม | `legacy-spec-recovery` |
+| มีซอร์สโค้ด แค่ยังไม่ได้อ่านส่วนที่จะแก้ | `code-orientation` |
 
 ## What works in practice
 

@@ -1,6 +1,6 @@
 ---
 name: "ecommerce-design"
-description: "Audit a checkout flow or design a recommendation system for e-commerce. Two modes — checkout-audit or recommendation-design."
+description: "Audit a checkout flow or design a recommendation system (checkout-audit or recommendation-design)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

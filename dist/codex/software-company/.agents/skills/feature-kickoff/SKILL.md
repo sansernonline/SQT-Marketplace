@@ -1,6 +1,6 @@
 ---
 name: "feature-kickoff"
-description: "Start a new feature by coordinating BA → SA → Architect → planning. Produces requirements, FSD, and architecture."
+description: "Start a feature by coordinating BA → SA → Architect → planning. Produces requirements, FSD and architecture."
 ---
 
 > **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `feature` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน

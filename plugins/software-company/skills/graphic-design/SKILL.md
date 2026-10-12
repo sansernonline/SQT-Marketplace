@@ -252,3 +252,5 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
 หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/designer-outputs.md`](references/designer-outputs.md) — รูปแบบงานส่งของนักออกแบบ

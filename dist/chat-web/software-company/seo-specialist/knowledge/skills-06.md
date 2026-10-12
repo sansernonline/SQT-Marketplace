@@ -1,6 +1,6 @@
 # skill: status-report
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Writes the status table in docs/BUILD-PLAN.md.
+Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
 
 # รายงานสถานะเมื่อจบงาน
 
@@ -8,6 +8,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 > **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
 > งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
+> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`investigation` · `review`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
 
 ---
 
@@ -62,7 +63,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 |---|---|
 | ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี |
+| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี · ต่างจาก 5 คำของ `superuser` ใน plugin อื่นโดยตั้งใจ ส่วน "รออนุมัติ" กับ "ค้างอยู่" อยู่เป็นหัวข้อท้ายคำตอบ |
 | ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
 - **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
@@ -145,7 +146,7 @@ Use when a task that produces or checks project work ends (document, mockup, rev
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -158,7 +159,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 - เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
 - ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
+- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน
 - เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
 
 ## เมื่อไหร่ **ไม่** ใช้
@@ -166,8 +167,10 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 | สถานการณ์ | ใช้ตัวนี้แทน |
 |---|---|
 | ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
+| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` |
+| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` |
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
 
@@ -303,7 +306,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 > | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
 > | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
 > | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
+> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
 >
 > FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
 >
@@ -340,7 +343,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 |---|---|
 | เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
 | แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
 | สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
 | สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |

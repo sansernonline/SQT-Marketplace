@@ -1,6 +1,6 @@
 ---
 name: mutual-fund-picker
-description: Use when choosing or comparing Thai mutual funds, reading a factsheet, picking an RMF or ThaiESG, index vs active, or setting up a monthly DCA plan.
+description: Use when choosing or comparing Thai mutual funds, reading a factsheet, picking an RMF or ThaiESG, or setting up monthly DCA.
 ---
 
 # Mutual Fund Picker (เลือกกองทุนรวม)

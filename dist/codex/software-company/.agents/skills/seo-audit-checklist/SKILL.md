@@ -1,6 +1,6 @@
 ---
 name: seo-audit-checklist
-description: Use when auditing a website or page for SEO or doing pre-launch SEO checks. Technical, on-page, content and off-page checklist with priorities.
+description: Use when auditing a website or page for SEO or doing pre-launch SEO checks.
 ---
 
 # SEO Audit Checklist

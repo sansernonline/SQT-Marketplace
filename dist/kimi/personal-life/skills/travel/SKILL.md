@@ -1,6 +1,6 @@
 ---
 name: "travel"
-description: "Build the full travel checklist and one-file itinerary for an upcoming trip — documents, insurance, money, connectivity, bookings with confirmation numbers in one place."
+description: "Build the travel checklist and one-file itinerary — documents, insurance, money, connectivity, bookings in one place."
 disableModelInvocation: true
 ---
 

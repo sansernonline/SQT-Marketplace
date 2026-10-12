@@ -50,3 +50,5 @@ The security engineer should:
    - Implementation needs → `developer`
    - Infrastructure hardening → `devops-engineer`
    - Compliance documentation → `technical-writer`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/security-templates.md`](references/security-templates.md) — แม่แบบเอกสารความปลอดภัย

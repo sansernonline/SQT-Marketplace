@@ -1,6 +1,6 @@
 ---
 name: targeted-fix
-description: Use when feedback says something is wrong (error, stack trace, failing test, regression, not what I asked). Smallest correct fix at the exact spot.
+description: Use when feedback says something is wrong (error, stack trace, failing test, regression, not what I asked). Smallest correct fix.
 ---
 
 > **ใน SuperUser:** งานแก้บั๊กเริ่มจาก playbook [`bug-fix`](../superuser/references/playbook-bug-fix.md) และ skill นี้คือขั้น "แก้ให้เล็กที่สุด" ส่วนการหาสาเหตุจริงใช้ [`principle-fix-root-cause`](../principle-fix-root-cause/SKILL.md)
@@ -10,6 +10,14 @@ description: Use when feedback says something is wrong (error, stack trace, fail
 Feedback came in. Find the one spot that's wrong, fix exactly that, prove it.
 Resist the urge to rewrite, "improve while you're here", or guess.
 
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ยังไม่รู้ว่าพังเพราะอะไร ต้องไล่หาสาเหตุ (error · crash · flaky test) | `principle-fix-root-cause` แล้วค่อยกลับมาแก้ตรงจุดด้วย skill นี้ |
+| แก้โค้ดที่ใช้ร่วมกันหลายที่ (helper · type · schema) | `blast-radius` ก่อนแก้ |
+| ยังไม่เคยอ่านโค้ดส่วนนี้ | `code-orientation` ก่อน |
+
 ## The rule
 
 Fix what was reported — no more, no less. A fix that also changes three other
@@ -18,9 +26,9 @@ things is a new bug waiting to happen and a diff nobody can review.
 ## Steps
 
 1. **Pin the symptom.** Quote the exact error / failing test / wrong output. Don't paraphrase — exact text points to the exact line.
-2. **Reproduce.** Find the smallest input that triggers it. Can't reproduce? Say so and ask for the missing piece (input, env, steps) before changing code.
+2. **Reproduce.** Find the smallest input that triggers it. Can't reproduce? Don't stop to ask: log the gap in `decision-log`, take the most likely reversible path (add a failing test or logging at the suspected spot), and list the missing piece (input, env, steps) in the report.
 3. **Locate the root cause.** Trace from symptom to line. Stop at the cause, not the first suspicious line.
-4. **Confirm intent.** Restate in one line what "correct" means here. If the feedback is ambiguous ("it's wrong"), ask what they expected — don't guess.
+4. **Confirm intent.** Restate in one line what "correct" means here. If the feedback is ambiguous ("it's wrong"), pick the reading that matches the spec or existing behaviour, log it in `decision-log`, and say so in the report. Ask only when readings lead to wholly different, hard-to-undo changes.
 5. **Smallest fix.** Change only what's needed. Match the surrounding style.
 6. **Prove it.** Re-run the failing case → it passes. Re-run nearby cases → still pass. Show the before/after of the one thing that changed.
 

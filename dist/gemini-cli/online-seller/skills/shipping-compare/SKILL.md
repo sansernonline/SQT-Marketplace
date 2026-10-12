@@ -1,6 +1,6 @@
 ---
 name: shipping-compare
-description: Use when a Thai online seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX). Cost on real parcel mix, COD fees and payout, volumetric weight.
+description: Use when a Thai online seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX) on cost, COD and volumetric weight.
 ---
 
 # Shipping Compare
@@ -82,4 +82,4 @@ Near tie — decide on pick-up reliability and COD payout speed, not the rate ca
 ## Related
 
 - `marketplace-fees-pricing` (shipping `S`), `chat-reply-templates` T3 late parcel, `returns-and-bad-reviews`
-- `thai-workplace` `promptpay-qr` — prepaid transfer instead of COD for LINE/Facebook orders cuts COD fees and refused parcels
+- `thai-workplace` `promptpay-qr` (if installed) — prepaid transfer instead of COD for LINE/Facebook orders cuts COD fees and refused parcels

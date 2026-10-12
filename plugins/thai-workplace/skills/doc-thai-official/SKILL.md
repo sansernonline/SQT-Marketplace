@@ -64,7 +64,7 @@ Add the deadline in the body: "ภายในวันที่ 20 ตุลา
 2. Choose the type (section 1) and salutation/closing pair (section 2).
 3. Fill the template from references; write the body ด้วย → facts → request with a date.
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
-5. Output .docx on letterhead (see `branded-document-design` in `software-company` for styling).
+5. Output .docx on letterhead (see `branded-document-design` in `software-company` (if installed) for styling).
 
 ## Worked example (company to Revenue Department)
 

@@ -1,6 +1,6 @@
 # skill: decision-log
 
-Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step). Logs it in docs/BUILD-PLAN.md.
+Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step).
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -18,8 +18,8 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 | วันที่ | งาน | เรื่อง | เลือก | ไม่เลือก | เหตุผล · หลักฐาน |
 |---|---|---|---|---|---|
-| 2026-10-04 15:40 | SRS | เวลาตอบสนองหน้าค้นหา | ≤ 2 วินาที (รอยืนยัน) | ≤ 1 วินาที | BRD ไม่ระบุ · ใช้ค่าที่ระบบเดิมทำได้ (วัดจริง 1.6 วินาที) |
-| 2026-10-04 16:05 | FR-012 | เก็บไฟล์แนบ | ดิสก์ในเครื่อง + path ในฐานข้อมูล | object storage | ขนาดงาน S · ย้ายทีหลังได้ · ADR-004 |
+| 2026-10-04 15:40 | SRS | เวลาตอบสนองหน้าค้นหา | ≤ 2 วินาที (รอยืนยัน) | ≤ 1 วินาที | BRD ไม่ระบุ · ใช้ค่าที่ระบบเดิมทำได้ (ตรวจจริง 1.6 วินาที) |
+| 2026-10-04 16:05 | FR-012 | เก็บไฟล์แนบ | ดิสก์ในเครื่อง + path ในฐานข้อมูล | object storage | ขนาดงาน S · ย้ายทีหลังได้ · ADR-0004 |
 ```
 
 ## ต้องลงเมื่อ
@@ -36,13 +36,13 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 ## หลักการเลือกเมื่อต้องตัดสินเอง
 
 เลือกทางที่กระทบน้อยสุด: ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
-**ข้อเท็จจริง** (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา ให้ใส่ค่าชั่วคราวพร้อม `(รอยืนยัน)` แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่งหรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
+**ข้อเท็จจริง** (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา ใส่ `(รอยืนยัน)` ตรงที่ต้องใช้ (ค่าที่มาจากหลักฐาน เช่น ตัวเลขที่ตรวจจริง ใส่ได้พร้อมป้าย) แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่งหรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
 
 ## กติกาของแถว
 
 - 1 แถวต่อ 1 การตัดสินใจ ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
 - "ไม่เลือก" ต้องมีอย่างน้อย 1 ทาง ถ้าไม่มีทางอื่นเลยก็ไม่ใช่การตัดสินใจ
-- "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `วัดจริง` / `อนุมาน`
+- "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `ตรวจจริง` / `อนุมาน`
 - ไม่ลบแถวเก่า ถ้าผู้ใช้ไม่เห็นด้วยให้แก้ที่แถวนั้น แล้วทำใหม่เฉพาะงานนั้น
 - ถ้า**ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงจาก `security-gate`) ให้ลงตารางเดียวกัน และเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` ใส่ `agent` หรือ `ผู้ใช้` ถ้าตารางไม่มีคอลัมน์นี้ แปลว่า agent ตัดสินทุกแถว
 
@@ -56,7 +56,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: parallel-split-and-merge
 
-Use when work splits into independent slices (modules, screens, files, test cases) or the user says swarm or fan out. No shared writes, one merged report.
+Use when work splits into independent slices (modules, screens, files, test cases) or the user says swarm or fan out. No shared writes.
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
 
@@ -88,7 +88,7 @@ Use when work splits into independent slices (modules, screens, files, test case
 
 # skill: repeated-mistakes-to-checks
 
-Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again. Turns it into a type, lint or test.
+Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again.
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 
@@ -97,9 +97,16 @@ Use when the user corrects the same mistake twice, reviews keep flagging one iss
 
 มาจาก `correct` และ `rules-as-checks` ของ pstack
 
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| บทเรียนจากงานใหญ่ที่ต้องแก้ skill หรือ agent | `session-lessons-to-skills` |
+| ความชอบส่วนตัวของผู้ใช้ ไม่ใช่ความผิด | `owner-style-capture` |
+
 ## ขั้นตอน
 
-1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.superuser/log/` · เรื่องที่ซ้ำใน `.superuser/learn/` · `docs/BUILD-PLAN.md` · ความเห็นในการรีวิว · commit ที่ revert หรือ fix ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
+1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · `docs/BUILD-PLAN.md` · ความเห็นในการรีวิว · commit ที่ revert หรือ fix ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
 2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใส่ปุ่มหลอกใน mockup" · "เรียกฐานข้อมูลจาก controller ตรง" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
 3. **เลือกชั้นที่แก้ — สูงสุดที่ทำได้**
 

@@ -1,6 +1,6 @@
 ---
 name: debt-payoff
-description: Use when the user has several debts (credit cards, cash cards, personal or title loans), asks snowball vs avalanche, refinancing, Thai interest caps.
+description: Use when the user has several debts (credit cards, cash cards, personal or title loans), asks snowball vs avalanche or refinancing.
 ---
 
 # Debt Payoff (ปลดหนี้)

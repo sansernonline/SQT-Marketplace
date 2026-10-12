@@ -1,6 +1,6 @@
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, SMART on FHIR, HIPAA safeguards, clinical analytics).
+Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, HIPAA safeguards).
 
 # healthcare-systems
 
@@ -31,7 +31,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-healthcare` (เดิมชื่อ clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fhir-specialist.md
@@ -604,7 +604,7 @@ async function prescribeMedication(rx: Prescription) {
 
 ## reference: clinical-workflows.md
 
-> เดิมคือ skill `clinical-workflows` ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
+> เดิมชื่อ clinical-workflows (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -933,7 +933,7 @@ interface PlannedActivity {
 
 ## reference: fhir-implementation.md
 
-> เดิมคือ skill `fhir-implementation` ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
+> เดิมชื่อ fhir-implementation (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1280,7 +1280,7 @@ Key profiles you'll likely use:
 
 ## reference: hipaa-compliance.md
 
-> เดิมคือ skill `hipaa-compliance` ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
+> เดิมชื่อ hipaa-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1652,7 +1652,7 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand. Data inventory, lawful basis, consent, subject rights, retention, processors, breach response.
+Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -1690,6 +1690,7 @@ Use when software stores personal data of people in Thailand. Data inventory, la
 | การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
 | ปิดบังข้อมูลใน log | `logging-standards` |
 | ที่เก็บกุญแจ | `config-and-secrets` |
+| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `thai-workplace`) `thai-workplace:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
 
 ---
 

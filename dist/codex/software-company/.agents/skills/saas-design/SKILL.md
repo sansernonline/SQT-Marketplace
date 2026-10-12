@@ -1,6 +1,6 @@
 ---
 name: "saas-design"
-description: "Review B2B SaaS architecture or design an enterprise integration. Two modes — saas-architecture-review or integration-design."
+description: "Review B2B SaaS architecture or design an enterprise integration (saas-architecture-review or integration-design)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

@@ -1,6 +1,6 @@
 ---
 name: "insurance-design"
-description: "Design a claims processing flow or an underwriting model. Two modes — claims-flow-design or underwriting-model-design."
+description: "Design a claims flow or an underwriting model (claims-flow-design or underwriting-model-design)."
 disableModelInvocation: true
 ---
 

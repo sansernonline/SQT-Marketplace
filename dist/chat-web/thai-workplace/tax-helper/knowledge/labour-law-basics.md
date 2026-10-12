@@ -1,6 +1,6 @@
 # skill: labour-law-basics
 
-Use when a Thai employer or employee asks about the Labour Protection Act. Probation, hours, OT and holiday pay, leave days, notice, severance, minimum wage.
+Use when a Thai employer or employee asks about the Labour Protection Act (probation, OT, leave, notice, severance, minimum wage).
 
 # Thai Labour Law Basics (พ.ร.บ.คุ้มครองแรงงาน พ.ศ. 2541 และที่แก้ไขเพิ่มเติม)
 

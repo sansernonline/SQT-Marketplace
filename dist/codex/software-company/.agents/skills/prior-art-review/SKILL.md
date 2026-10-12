@@ -1,6 +1,6 @@
 ---
 name: prior-art-review
-description: Use when about to build something that may already exist (library, model, product, thesis approach). Compares candidates, licence, upkeep, adopt or build.
+description: Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
 ---
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
@@ -17,6 +17,14 @@ description: Use when about to build something that may already exist (library, 
 | ผลลัพธ์ | รายงาน feature · UI · UX + ข้อเสนอปรับปรุง | ตารางเทียบ + การตัดสินใจ + สิ่งที่ยอมแลก |
 | คำถามตั้งต้น | "แอปนี้ดีและพังตรงไหน ของเราจะดีกว่าอย่างไร" | "ควรหยิบตัวไหนมาใช้ หรือทำเอง" |
 | ใช้ร่วมกัน | แกะแอปต้นแบบที่จะสร้างแบบเดียวกัน | ตัดสินเรื่องไลบรารี เครื่องมือ หรือของที่จะนำมาใช้ แล้วบันทึก |
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` |
+| เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` |
+| ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | `adr-writer` |
 
 ---
 

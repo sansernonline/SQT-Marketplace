@@ -1,0 +1,43 @@
+{
+ "product": "Example",
+ "fr_total": 290,
+ "srs": "docs/PRJ-SRS-v0.1-DRAFT.docx",
+ "logo": "<svg class=\"mk\" viewBox=\"0 0 64 64\" aria-hidden=\"true\"><use href=\"#logo-body\"/><g class=\"blink\"><use href=\"#logo-cursor\"/></g></svg>",
+ "links": [
+  {
+   "label": "Open main window",
+   "href": "#s-01-main-window",
+   "primary": true
+  },
+  {
+   "label": "Light theme",
+   "href": "?theme=light#s-start"
+  }
+ ],
+ "topics": [
+  {
+   "name": "Terminal",
+   "screens": [
+    "01",
+    "04",
+    "13",
+    "17",
+    "20"
+   ]
+  },
+  {
+   "name": "Sessions",
+   "screens": [
+    "02",
+    "10",
+    "22",
+    "27"
+   ]
+  }
+ ],
+ "blurbs": {
+  "01": "Tabs, session tree, terminal and status bar",
+  "02": "All saved sessions with a details panel",
+  "03": "Search every command and session"
+ }
+}

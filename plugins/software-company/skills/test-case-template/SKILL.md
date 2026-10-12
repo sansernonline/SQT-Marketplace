@@ -226,3 +226,5 @@ load the matching skill before writing, not after:
 | The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
 
 Default formatting is not neutral — it reads as unfinished work.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/test-plan-template.md`](references/test-plan-template.md) — แม่แบบ

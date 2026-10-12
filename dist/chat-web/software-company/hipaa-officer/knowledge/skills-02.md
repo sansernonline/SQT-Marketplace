@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
 
 # saas-platform
 
@@ -32,7 +32,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-customer-success-engineer.md
@@ -811,7 +811,7 @@ log.info('Order created', {
 
 ## reference: enterprise-integration.md
 
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ enterprise-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1148,7 +1148,7 @@ class SalesforceClient {
 
 ## reference: multi-tenancy-patterns.md
 
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ multi-tenancy-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1494,7 +1494,7 @@ async def offboard_tenant(tenant_id):
 
 ## reference: subscription-billing.md
 
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ subscription-billing (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: healthcare-systems
 
-Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, SMART on FHIR, HIPAA safeguards, clinical analytics).
+Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, HIPAA safeguards).
 
 # healthcare-systems
 
@@ -1845,7 +1845,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-healthcare` (เดิมชื่อ clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-fhir-specialist.md
@@ -2418,7 +2418,7 @@ async function prescribeMedication(rx: Prescription) {
 
 ## reference: clinical-workflows.md
 
-> เดิมคือ skill `clinical-workflows` ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
+> เดิมชื่อ clinical-workflows (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -2747,7 +2747,7 @@ interface PlannedActivity {
 
 ## reference: fhir-implementation.md
 
-> เดิมคือ skill `fhir-implementation` ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
+> เดิมชื่อ fhir-implementation (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -3094,7 +3094,7 @@ Key profiles you'll likely use:
 
 ## reference: hipaa-compliance.md
 
-> เดิมคือ skill `hipaa-compliance` ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
+> เดิมชื่อ hipaa-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-healthcare` — รวมเข้า `healthcare-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

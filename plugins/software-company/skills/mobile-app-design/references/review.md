@@ -6,9 +6,9 @@
 
 ```bash
 # 1. หน้าตาถูกทุกขนาดจอไหม
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android เล็ก
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android เล็ก
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
 
 # 2. ระบบดีไซน์ยังสะอาดอยู่ไหม (ใช้ตัวตรวจของ web-app-design ได้เลย
 #    แต่ต้องส่ง --require เป็น token ชุดของระบบนี้ ไม่ใช่ชุดของเว็บ)

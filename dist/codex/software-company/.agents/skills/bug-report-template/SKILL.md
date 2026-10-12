@@ -1,6 +1,6 @@
 ---
 name: bug-report-template
-description: Use when writing a report for one software defect found in testing or from a user complaint. Repro steps, environment, evidence, severity vs priority.
+description: Use when writing a report for one software defect found in testing or from a user complaint (repro steps, severity vs priority).
 ---
 
 # Bug Report Template
@@ -16,6 +16,14 @@ One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach sc
 - Filing a new bug during testing
 - Converting user complaints into bug tickets
 - Reproducing an issue and documenting findings
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รายงานบั๊กกองอยู่หลายเรื่อง ต้องคัด ทำซ้ำ และจัดกลุ่มก่อน | `bug-inbox-triage` แล้วใช้ skill นี้เขียนทีละใบ |
+| เขียนกรณีทดสอบล่วงหน้าจากข้อกำหนด (ยังไม่มีบั๊ก) | `test-case-template` |
+| ระบบจริงล่มหรือกระทบผู้ใช้จำนวนมาก | `incident-runbook-template` ระหว่างเหตุ · `postmortem-template` หลังเหตุ |
 
 ## Severity vs Priority
 
@@ -82,7 +90,7 @@ Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not w
 Before submitting:
 
 - [ ] Title clearly summarizes the issue
-- [ ] Severity AND priority both set
+- [ ] Severity set · priority set, or `(รอยืนยัน)` until the PM/PO sets it
 - [ ] Steps are reproducible by someone else
 - [ ] Expected and actual results clearly differ
 - [ ] At least one piece of evidence attached

@@ -1,6 +1,6 @@
 ---
 name: english-tech-reading
-description: Use when an English error message, RFC section or documentation passage needs explaining in Thai. Sentence structure, MUST and SHOULD, error anatomy.
+description: Use when an English error message, RFC or documentation passage needs explaining in Thai.
 ---
 
 # English Tech Reading

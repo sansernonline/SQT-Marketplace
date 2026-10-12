@@ -1,6 +1,6 @@
 ---
 name: tax-deduction-planner
-description: Use when cutting Thai personal income tax before year end, checking which deductions remain, how much RMF or ThaiESG to buy, or what a deduction saves.
+description: Use when cutting Thai personal income tax before year end, checking remaining deductions, or how much RMF or ThaiESG to buy.
 ---
 
 # Tax Deduction Planner (วางแผนลดหย่อนภาษีปลายปี)

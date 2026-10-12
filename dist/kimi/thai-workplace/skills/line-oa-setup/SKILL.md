@@ -1,6 +1,6 @@
 ---
 name: line-oa-setup
-description: Use when creating a LINE Official Account or enabling the Messaging API. OA Manager vs Developers console, access tokens, webhook, signature check, quotas.
+description: Use when creating a LINE Official Account or enabling the Messaging API (tokens, webhook, signature check, quotas).
 ---
 
 # LINE OA Setup

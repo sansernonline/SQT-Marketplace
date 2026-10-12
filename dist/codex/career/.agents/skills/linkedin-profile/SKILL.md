@@ -1,6 +1,6 @@
 ---
 name: linkedin-profile
-description: Use when creating or improving a LinkedIn profile for job search in Thailand. Headline, About, Featured, experience, recruiter keywords.
+description: Use when creating or improving a LinkedIn profile for a job search in Thailand (headline, About, recruiter keywords).
 ---
 
 # LinkedIn Profile (Thai market)

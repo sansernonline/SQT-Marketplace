@@ -1,0 +1,24 @@
+# ตัวอย่างของ plugin นี้ — ระดับโมเดล · ความเป็นอิสระ · รูปแบบทีม
+
+ย้ายมาจาก `SKILL.md` หัวข้อ 5 · 6 · 10 · กฎอยู่ใน `SKILL.md` ไฟล์นี้มีแต่ตัวอย่าง
+
+## ความเป็นอิสระ — งานที่ย้อนได้และแหล่งข้อมูล (หัวข้อ 6)
+
+| เจอ | ทำ |
+|---|---|
+| งานที่ย้อนกลับได้ — แก้ไฟล์ · สร้าง branch · รัน test · ร่างเอกสาร | ทำเลย |
+| ต้องเลือกทาง | ถ้าทดลองดูผลจริงได้ให้ใช้ playbook `prototype` ถ้าทดลองไม่ได้ให้เลือกทางที่ผลกระทบน้อยสุด แล้วลง `decision-log` |
+| ไม่รู้ best practice หรือวิธีที่ถูก | ค้นเองตามกฎ 3 แหล่งข้างบน เรียงแหล่ง: เอกสารทางการ → มาตรฐาน (RFC · OWASP · ISO) → repo หรือบล็อกของผู้ดูแลเครื่องมือนั้น · ครบ 3 → ใส่ลิงก์ทั้ง 3 ในเอกสารหรือ `decision-log` พร้อมป้าย `อนุมาน` · ไม่ครบหรือขัดกัน → เลือกทางที่ย้อนง่ายที่สุด แล้วลง `decision-log` พร้อม `(รอยืนยัน)` |
+
+## รูปแบบทีม — ใช้อย่างไรในงานนี้ (หัวข้อ 10)
+
+วิธีทำ ต้นทุน และกับดักของแต่ละแบบอยู่ใน [`agent-patterns`](../../agent-patterns/SKILL.md)
+
+| รูปแบบ | ในงานนี้ใช้อย่างไร |
+|---|---|
+| **Planning** | คัด playbook ลง todo ส่วนงานยาวใช้ `docs/BUILD-PLAN.md` |
+| **ReAct** | รันจริงทุกชิ้น · [`principle-small-verifiable-steps`](../../principle-small-verifiable-steps/SKILL.md) · skill ตรวจแอปของโปรเจกต์ |
+| **Reflection** | reviewer ตัวใหม่ในขั้นรีวิวของ playbook ถ้างานเสี่ยงใช้ [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md) |
+| **Multi-Agent** | ตามหัวข้อ 5 ถ้ามีชิ้นอิสระหลายชิ้นใช้ [`parallel-split-and-merge`](../../parallel-split-and-merge/SKILL.md) ส่วนสายเอกสารใช้ `/software-company:feature-kickoff` |
+| **Mixture-of-Agents (MoA)** | ดีไซน์ · API · mockup ที่อาจล็อกรูปผิด ให้ใช้ [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) |
+| **Reranker** | เลือกไฟล์ที่จะอ่านจากผลค้นทั้ง repo ([`context-budget`](../../context-budget/SKILL.md)) · เลือกแหล่ง best practice · เลือก library จาก [`prior-art-review`](../../prior-art-review/SKILL.md) |

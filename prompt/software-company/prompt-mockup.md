@@ -7,7 +7,7 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำข้อ 1 และ 2` หรือ `ทำข้อ 3`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามครั้งเดียว · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ตัดสินใจเองและสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-company` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → หยุดและบอกผู้ใช้ · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามครั้งเดียว · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ตัดสินใจเองและสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-company` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 <!-- rules:end -->
 
 **ภาษา:** ข้อความบนหน้าจอและรายงานเขียนตาม skill `human-writing`
@@ -20,7 +20,7 @@
 
 ## กฎร่วมของไฟล์นี้
 
-- ไม่มี `docs/README.md` → ถามผู้ใช้ 3 ค่าก่อนเริ่ม: รหัสโปรเจกต์ · แพลตฟอร์ม (web · mobile · windows) · สีแบรนด์ · มีไฟล์แต่ช่องแพลตฟอร์มว่าง → ถามแพลตฟอร์มก่อนเริ่ม แล้วเขียนลง `docs/README.md`
+- ไม่มี `docs/README.md` → ถามผู้ใช้ครั้งเดียวก่อนเริ่ม: รหัสโปรเจกต์ · แพลตฟอร์ม (web · mobile · windows) · สีแบรนด์ใช้ถ้าผู้ใช้ให้มา ไม่มี → ค่าประจำบ้านของ skill แพลตฟอร์ม + `(รอยืนยัน)` ไม่หยุดถาม · มีไฟล์แต่ช่องแพลตฟอร์มว่าง → ถามแพลตฟอร์มก่อนเริ่ม แล้วเขียนลง `docs/README.md`
 - **mockup เป็นไฟล์เดียว** `mockup/<รหัส>-mockup.html`: ทุกหน้าจอเป็น `<section id="s-<หน้าจอ>">` · สลับหน้าจอด้วย hash (`#s-login`) · CSS ของ skill แพลตฟอร์มและ JavaScript ฝังในไฟล์ (ไม่มี `<link>` ไป CSS ภายนอก ยกเว้นฟอนต์) · หน้าแรก `#s-start` มีตาราง "หน้าจอ → FR ที่รองรับ" (มี user story → เพิ่มคอลัมน์ `US-xxx`) ลิงก์ไปทุก section และหัวข้อ "ประวัติการแก้" · id ขึ้นต้น `s-` เสมอ ไม่ให้ชื่ออย่าง `#add` `#feed` ถูกตัวตรวจอ่านเป็นสี
 - ตัวตรวจสี hardcode คือ `skills/web-app-design/scripts/check-design-tokens.mjs` ในโฟลเดอร์ที่ติดตั้ง plugin · token ฝังอยู่ในไฟล์ mockup จึงใช้ไฟล์ mockup เป็นไฟล์ token เอง (สีดิบได้เฉพาะบล็อก token ก่อนเส้นแบ่ง) · คำสั่งตามแพลตฟอร์ม:
   - web → `node <ตัวตรวจ> mockup/<รหัส>-mockup.html mockup --ext html`

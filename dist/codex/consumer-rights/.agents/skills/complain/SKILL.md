@@ -1,6 +1,6 @@
 ---
 name: "complain"
-description: "Draft a complaint and plan the escalation for a faulty product, bad service or refused refund — seller, platform, สคบ. 1166, or consumer court."
+description: "Draft a complaint and escalation plan for a faulty product, bad service or refused refund — seller, platform, สคบ. 1166, court."
 ---
 
 Run the `consumer-advocate` agent with the `complaint-letter-th` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

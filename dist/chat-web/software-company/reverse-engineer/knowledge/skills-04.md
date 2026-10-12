@@ -1,6 +1,6 @@
 # skill: lazy-coding
 
-Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest thing that works, standard library first, one concern per file.
+Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest thing that works.
 
 # Lazy Coding
 
@@ -113,7 +113,7 @@ unless asked. Trivial one-liners need no test.
 
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location). Verb prefixes, banned words, the newcomer test.
+Use when writing or reviewing code for readability (names, function shape, comments, file location).
 
 # โค้ดที่คนอ่านรู้เรื่อง
 

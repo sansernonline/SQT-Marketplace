@@ -1,6 +1,6 @@
 ---
 name: refund-request
-description: Use when the user wants money back in Thailand (broken, fake or undelivered item, 7-day direct-sales cancellation, unknown card charge). Route and deadline.
+description: Use when the user wants money back in Thailand (broken, fake or undelivered item, direct-sales cancellation, unknown card charge).
 ---
 
 # Refund Request (Thailand)
@@ -58,7 +58,7 @@ Send so the date is provable: email + registered mail (ไปรษณีย์�
 1. Record an **unboxing video** for future orders (start before cutting the tape) — the strongest evidence for "wrong/empty/damaged".
 2. Do **not** press "ได้รับสินค้าแล้ว / Order received" until you have checked the item — on several platforms confirming releases payment to the seller and may shorten your window.
 3. Open the return/refund request from the order page, choose the exact reason, upload photos/video.
-4. Keep all communication in the platform chat — never move to LINE or phone with the seller (this is also where scams start → `scam-check` in `trading-finance`).
+4. Keep all communication in the platform chat — never move to LINE or phone with the seller (this is also where scams start → `scam-check` in `trading-finance` (if installed)).
 5. If rejected, escalate to platform customer service within their appeal window, then `complaint-letter-th`.
 
 ## Card dispute (chargeback) — steps

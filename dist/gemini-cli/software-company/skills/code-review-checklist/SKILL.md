@@ -1,6 +1,6 @@
 ---
 name: code-review-checklist
-description: Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality. Correctness, design, security, testing, maintainability.
+description: Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
 ---
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md)
@@ -13,6 +13,14 @@ description: Use when reviewing a pull request, self-reviewing before submitting
 - Self-review before submitting code
 - Onboarding new code reviewers
 - Auditing code quality of existing modules
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` |
+| Writing or updating the PR description itself | `pr-description-template` |
+| Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 
 ## Review Process
 

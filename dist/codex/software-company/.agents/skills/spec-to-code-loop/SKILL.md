@@ -1,6 +1,6 @@
 ---
 name: spec-to-code-loop
-description: Use when building from a spec and mockups as a loop (failing test, code, check screen, record progress) with a stop condition and retry ceiling.
+description: Use when building from a spec and mockups as a loop (failing test, code, check screen, record progress).
 ---
 
 > **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป

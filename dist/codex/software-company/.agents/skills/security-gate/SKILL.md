@@ -1,6 +1,6 @@
 ---
 name: security-gate
-description: Use when about to ship, merge, release or hand over code, after adding a dependency, or the user says security check. Secret, dependency and static scans.
+description: Use when about to ship, merge, release or hand over code, after adding a dependency, or the user says security check.
 ---
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน

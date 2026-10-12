@@ -49,7 +49,7 @@ Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย
 3. **Set due dates** in the family calendar 3 days before each due date; note the disconnection date printed on the electricity bill (it is later than the due date — do not plan on it)
 4. **Auto-debit** (หักบัญชีอัตโนมัติ) for fixed-ish bills: set it up in the bank app or the utility app; keep one account just for bills and check the debit on the statement each month
 5. **Spike check** — if a bill is >20% above the 3-month average in units, run the checklist below
-6. **Monthly review** — 5 minutes on the 5th of each month; totals feed `trading-finance` `personal-budget`
+6. **Monthly review** — 5 minutes on the 5th of each month; totals feed `trading-finance` `personal-budget` (if installed)
 
 ## Spike investigation
 
@@ -77,4 +77,4 @@ A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (aver
 
 ## Related
 
-`home-maintenance` · `trading-finance` `personal-budget` · `personal-life` `important-docs` (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
+`home-maintenance` · `trading-finance` `personal-budget` (if installed) · `personal-life` `important-docs` (if installed) (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)

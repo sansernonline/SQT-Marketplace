@@ -1,6 +1,6 @@
 # skill: thesis-writing
 
-Use when writing a thesis, dissertation, independent study or journal paper (วิทยานิพนธ์ · สารนิพนธ์ · IS · บทความวิจัย) — proposal, chapters 1–5, literature review, citations, abstract, defense, reviewer replies.
+Use when writing a thesis, IS or journal paper (วิทยานิพนธ์ · สารนิพนธ์ · บทความวิจัย) — proposal, literature review, chapters, citations, defense.
 
 # Thesis and Paper Writing
 
@@ -126,7 +126,7 @@ Studies with human participants need approval from the university's human resear
 | 16 | Contributions and limitations | 1 min |
 | 17 | Recommendations | 0.5 min |
 
-Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` in `software-company` for layouts.
+Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` in `software-company` (if installed) for layouts.
 
 ## Questions committees often ask — prepare 2–3 sentence answers
 

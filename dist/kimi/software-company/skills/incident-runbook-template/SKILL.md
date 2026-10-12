@@ -1,6 +1,6 @@
 ---
 name: incident-runbook-template
-description: Use when writing an operational runbook, on-call guide or what to do when X breaks playbook, so on-call engineers act fast in an incident.
+description: Use when writing an operational runbook, on-call guide or what-to-do-when-X-breaks playbook.
 ---
 
 # Incident Runbook Template
@@ -14,6 +14,13 @@ description: Use when writing an operational runbook, on-call guide or what to d
 - Creating playbooks for common alerts
 - After a postmortem finds "we need a runbook for X"
 - Onboarding new on-call engineers
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| เหตุจบแล้ว ต้องสรุปว่าเกิดอะไรและป้องกันยังไง | `postmortem-template` |
+| ตั้ง metric alert หรือ dashboard | `observability-basics` |
 
 ## อ่านเพิ่มเมื่อ
 

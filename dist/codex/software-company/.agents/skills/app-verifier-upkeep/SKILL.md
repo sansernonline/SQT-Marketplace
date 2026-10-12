@@ -1,6 +1,6 @@
 ---
 name: app-verifier-upkeep
-description: Use when a project verify skill has drifted from the real app (steps fail, screens missing) or after several releases. Re-drives each feature, fixes it.
+description: Use when a project verify skill has drifted from the real app (steps fail, screens missing) or after several releases.
 ---
 
 # app-verifier-upkeep — ดูแลมือและตาให้ตรงกับแอป

@@ -1,6 +1,6 @@
 ---
 name: e2e-testing-patterns
-description: Use when designing end-to-end tests with Playwright or Cypress, structuring suites, fixing flaky tests or running E2E in CI.
+description: Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running them in CI.
 ---
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
@@ -17,6 +17,13 @@ description: Use when designing end-to-end tests with Playwright or Cypress, str
 - Adding E2E to a CI/CD pipeline
 - Migrating from one framework to another
 
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Writing manual test cases (steps, expected result) | `test-case-template` |
+| Unit or integration tests, test ratio and scope | `testing-standards` |
+
 ## อ่านเพิ่มเมื่อ
 
 | ไฟล์ | เปิดเมื่อ |
@@ -32,13 +39,13 @@ description: Use when designing end-to-end tests with Playwright or Cypress, str
 
 ```
         ▲
-       ╱E╲       E2E: 5-10% of tests
+       ╱E╲       E2E: ~5% of tests (same pyramid as testing-standards)
       ╱ 2 ╲
      ╱  E  ╲     - Slow, expensive, flaky
     ╱───────╲    - Test critical user journeys ONLY
-   ╱  Integ  ╲   Integration: 15-25%
+   ╱  Integ  ╲   Integration: ~20%
   ╱           ╲  - API contracts, DB interactions
- ╱─────────────╲ Unit: 70-80%
+ ╱─────────────╲ Unit: ~75%
 ╱      Unit     ╲ - Fast, deterministic, many
 ─────────────────
 ```

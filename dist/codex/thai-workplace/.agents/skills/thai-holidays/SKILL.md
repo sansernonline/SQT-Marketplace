@@ -1,6 +1,6 @@
 ---
 name: thai-holidays
-description: Use when planning around Thai public holidays. Government and bank holiday lists for 2569 and 2570, substitution days, no-alcohol days, business flags.
+description: Use when planning around Thai public holidays (government and bank lists, substitution days, no-alcohol days).
 ---
 
 # Thai Holidays Planner

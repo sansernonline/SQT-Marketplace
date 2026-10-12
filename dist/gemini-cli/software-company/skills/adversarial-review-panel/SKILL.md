@@ -1,6 +1,6 @@
 ---
 name: adversarial-review-panel
-description: Use when asked for adversarial review, stress test or blind spots, or before shipping a contested design or large diff. Independent reviewers, one verdict.
+description: Use when asked for adversarial review, stress test or blind spots, or before shipping a contested design or large diff.
 ---
 
 # adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง
@@ -35,5 +35,5 @@ description: Use when asked for adversarial review, stress test or blind spots, 
 
 ## ข้อควรระวัง
 
-- คณะรีวิวใช้ token เยอะ งานเล็กใช้ `code-review-checklist` ตัวเดียวพอ
+- คณะรีวิวใช้ token เยอะ งานเล็กหรือรีวิว PR ทั่วไปใช้ `code-review-checklist` ตัวเดียวพอ · เขียนคำอธิบาย PR ใช้ `pr-description-template`
 - รีวิวเวอร์ AI ก็แจ้งปัญหาที่ไม่มีจริงได้ ทุกข้อจึงต้องผ่านข้อ 5 ก่อนเข้ารายงาน

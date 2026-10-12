@@ -1,365 +1,6 @@
-# skill: answer-shape
-
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Chooses prose, table, small diagram or short list.
-
-# รูปทรงของคำตอบ
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace ต้นฉบับอยู่ที่ plugin `superuser` ถ้าจะแก้ให้แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
-
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
-
----
-
-## เลือกรูปทรงจากสัญญาณในคำถาม
-
-| สัญญาณ | รูปทรง |
-|---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
-
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
-
----
-
-## ตารางที่อ่านง่าย
-
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
-
-```
-❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
-```
-
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
-
----
-
-## เมื่อไหร่รูปชนะตาราง
-
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
-
-| ใช้รูป | ใช้ตาราง |
-|---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
-
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
-
-```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
-
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
-
----
-
-## เมื่อไหร่ประโยคชนะทั้งคู่
-
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
-
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
-
----
-
-## Anti-patterns
-
-- ❌ **ย่อหน้ายาวเปรียบเทียบ 3 ตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
-- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
-- ❌ **ตาราง 2 แถวเพื่อให้ดูเป็นระเบียบ**
-- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
-- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเอง ทั้งที่เขาถามเพราะอยากได้คำแนะนำ
-- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
-- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
-
----
-
-## เชื่อมกับ skill อื่น
-
-- ถ้อยคำ ความยาว และการตัดกลิ่น AI ใช้ `human-writing`
-- รูปที่ต้องเป็นไฟล์จริง หรือการเปิดเรื่องที่ต้องให้ผู้ใช้ตัดสินใจ ให้ใช้ skill เฉพาะของ plugin นั้นถ้ามี
-
----
-
-## ตัวย่อ
-
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-
-
----
-
-# skill: temp-file-discipline
-
-Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
-
-# ระเบียบไฟล์ชั่วคราว
-
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
-
----
-
-## เลือกที่วาง
-
-| ไฟล์นั้นคืออะไร | วางที่ |
-|---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/` ที่รากโปรเจกต์ ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
-
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
-
----
-
-## อะไรคือไฟล์ชั่วคราว
-
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
-
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
-
----
-
-## อะไรไม่ใช่
-
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
-
----
-
-## วิธีใช้
-
-```
-โปรเจกต์/
-├── ผลงานจริง
-└── _to_delete/
-    ├── transfer.zip
-    └── render-check/
-```
-
-- มีโฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแยกย่อยตามวันที่ ยกเว้นของเยอะจริง
-- โฟลเดอร์ย่อยมาตรฐานที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
-
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
-  |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
-
----
-
-## ตอนจบงาน
-
-1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
-
----
-
-## Anti-patterns
-
-- ❌ **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- ❌ **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- ❌ **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- ❌ **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- ❌ **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- ❌ **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- ❌ **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
-
----
-
-## ตัวย่อ
-
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
-
-
----
-
-# skill: status-report
-
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Writes the status table in docs/BUILD-PLAN.md.
-
-# รายงานสถานะเมื่อจบงาน
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-
----
-
-## 1 · เขียนที่ไหน — `docs/BUILD-PLAN.md` เสมอ
-
-ทุกงาน ทั้งเอกสาร โค้ด การตรวจ การส่งมอบ เขียนที่ไฟล์เดียวนี้ เพื่อให้มีที่ดูสถานะที่เดียว
-
-| สถานการณ์ | ทำอย่างไร |
-|---|---|
-| มีไฟล์อยู่แล้ว | แก้เฉพาะ 2 หัวข้อด้านล่าง — **ห้ามแตะตารางงานหรือหัวข้ออื่น** |
-| ยังไม่มีไฟล์ | สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy 2 หัวข้อจาก [`assets/build-plan-status.md`](assets/build-plan-status.md) มาเติม (ห้ามแต่งโครงเอง) แล้วเมื่อเริ่มเขียนโค้ดค่อยเพิ่มตารางงาน (`spec-to-code-loop`) **ระหว่าง** 2 หัวข้อนี้ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้ตัวหลักเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
-
-ลำดับหัวข้อในไฟล์ (ต่อจากชื่อโปรเจกต์): `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
-
-2 หัวข้อที่ skill นี้ดูแล:
-
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว ไม่ใช่ต่อท้าย
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม
-
----
-
-## 2 · ตาราง `## สถานะล่าสุด`
-
-```markdown
-## สถานะล่าสุด
-
-อัปเดต: 2026-10-01 14:20 · งานล่าสุด: เขียน SRS
-
-| รายการ | ประเภท | สถานะ | ผลตรวจ | ค้าง / หมายเหตุ |
-|---|---|---|---|---|
-| SRS (`docs/srs.md`) | เอกสาร | DRAFT | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
-| mockup (`mockup/`) | เอกสาร | REVIEW | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
-| FSD | เอกสาร | ยังไม่เริ่ม | — | รอ architecture |
-| FR-001 ถึง FR-012 | โค้ด | เสร็จ | ผ่าน — test 48/48 | — |
-
-**ค้างอยู่ (ต้องมีคนตัดสิน):**
-1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
-
-**รออนุมัติ:**
-1. push branch `feat/search` — `git push -u origin feat/search`
-
-**ถัดไป:** แก้ปุ่มหลอกใน mockup → เขียน architecture
-
-**ข้อเสนอ:**
-1. ย้ายตัวตรวจ input ไปไว้จุดเดียวที่ขอบ API — ลด if ซ้ำ 14 จุด · แรงกลาง
-```
-
-### ค่าที่ใช้ในแต่ละคอลัมน์ — ใช้เฉพาะค่าเหล่านี้
-
-| คอลัมน์ | ค่าที่ใช้ได้ |
-|---|---|
-| ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
-
-- **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
-- **แอปมือถือ** หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` ถ้ายังไม่ได้ลองเครื่องจริงให้เขียนไว้ในช่อง ค้าง
-- `APPROVED` มีแต่คนที่เปลี่ยนได้ ส่วน agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
-- ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ รายการที่รอบนี้ไม่ได้แตะให้คัดลอกค่าเดิมมา
-- เอกสาร 1 ฉบับใช้ 1 แถว โค้ดที่สถานะเท่ากันรวมเป็นช่วงรหัสได้ (`FR-001 ถึง FR-012`) และตารางไม่ควรยาวเกิน 25 แถว
-
-### "ค้างอยู่" กับ "ถัดไป"
-
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน ให้เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ถ้าไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) ให้บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ถ้าไม่มีก็ไม่ต้องใส่หัวข้อ
-- **ถัดไป** คืองานลำดับถัดไปไม่เกิน 3 อย่าง
-- **ข้อเสนอ** คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ถ้าไม่มีก็ไม่ต้องใส่หัวข้อ
-
----
-
-## 3 · บรรทัดใน `## ประวัติสถานะ`
-
-1 บรรทัดต่อ 1 งาน ใหม่สุดอยู่บน:
-
-```markdown
-## ประวัติสถานะ
-
-- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ค้าง 1
-- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด
-```
-
-รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
-
-หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` ซึ่ง skill นี้ไม่แก้และไม่ลบ
-
----
-
-## 4 · ในคำตอบ
-
-แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
-
----
-
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่าน `docs/BUILD-PLAN.md` จากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] `## สถานะล่าสุด` เขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `ผ่าน` มีหลักฐาน
-- [ ] ไม่ได้ตั้ง `APPROVED` เอง
-- [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด
-- [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
-- [ ] รันตัวตรวจจนผ่าน (path นับจากโฟลเดอร์ skill นี้): `python ../polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
-
----
-
-## 6 · สิ่งที่ห้ามทำ
-
-| อย่าทำ | เพราะ |
-|---|---|
-| เขียนว่า `ผ่าน` โดยไม่ได้รัน test หรือไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้าย `## สถานะล่าสุด` ทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียน `BUILD-PLAN.md` เอง | เขียนชนกันแล้วไฟล์พัง |
-
----
-
-## เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `work-session-context` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
-
-
----
-
 # skill: security-gate
 
-Use when about to ship, merge, release or hand over code, after adding a dependency, or the user says security check. Secret, dependency and static scans.
+Use when about to ship, merge, release or hand over code, after adding a dependency, or the user says security check.
 
 # security-gate — ประตูความปลอดภัยก่อนส่งงาน
 
@@ -423,195 +64,1653 @@ Use when about to ship, merge, release or hand over code, after adding a depende
 
 ---
 
-# skill: code-gardener
+# skill: markdown-visuals
 
-Use when patrolling a codebase for misleading patterns (duplication, wrong-layer calls, dead code, naming drift) or the user says garden. Logs, then fixes.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
 
-# code-gardener — คนสวนที่จดก่อน ยังไม่ตัด
+# Markdown Visuals
 
-> ถ้าแก้ทุกอย่างทันทีที่เห็น จะได้การแก้ 100 ครั้งที่ไม่เห็นภาพรวม
-> ถ้าจดไว้ก่อน แล้ววันหลังค่อยมองรวม จะเห็นว่า 100 ข้อนั้นจริง ๆ คือ 3 เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-## ไฟล์เดียวที่ใช้ — `docs/GARDEN.md`
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-```markdown
-## บันทึก (ต่อท้ายทุกรอบ ไม่แก้ของเก่า)
-| วันที่ | ไฟล์:บรรทัด | สิ่งที่เห็น | ทำไมน่ากังวล | รูปแบบ |
+> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
-## ทบทวนแล้ว
-| วันที่ | ธีม | จำนวนข้อ | ทำอะไรต่อ | ไฟล์งาน |
+## When to use this skill
+
+- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
+- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
+├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-## รอบสำรวจ (ทุกวัน หรือหลังมี commit ใหม่)
+**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
 
-1. อ่าน `docs/GARDEN.md` ส่วน "ทบทวนแล้ว" — ธีมที่ตัดสินแล้วไม่ต้องจดซ้ำ
-2. ดูเฉพาะไฟล์ที่เปลี่ยนตั้งแต่รอบก่อน (`git log --since`) ส่วนการดูทั้ง repo ทำแค่สัปดาห์ละครั้ง และงานใหญ่ให้แบ่งด้วย [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)
-3. มองหา: logic ซ้ำ · เรียกข้ามชั้น (หน้าจอคุยฐานข้อมูลตรง) · กับดักของ framework ที่ใช้ · โค้ดตาย · ชื่อที่ไม่ตรงกับ `readable-code` · test ที่ผ่านทั้งที่โค้ดผิด · ของที่ขัดกับ `docs/AGENT-RULES.md`
-4. **ต่อท้ายลงตารางบันทึก ห้ามแก้โค้ด** ช่อง "รูปแบบ" ให้ใส่คำสั้นที่ใช้ซ้ำได้ จะได้จัดกลุ่มง่าย
-5. ถ้าไม่เจออะไรก็ไม่ต้องเขียน
+## 1 · Inline SVG (primary technique)
 
-## รอบทบทวน (ทุก 2–3 วัน หรือบันทึกเกิน 20 แถว)
+### Boilerplate
 
-1. จัดกลุ่มบันทึกที่ยังไม่ทบทวนตาม "รูปแบบ" และต้นเหตุ
-2. ทุกธีมเลือกทางเดียว
-   - ถ้าเกิดซ้ำได้อีก ให้ใช้ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) เปลี่ยนเป็นตัวกันในโค้ด: โครงสร้าง · type หรือ lint
-   - ถ้าของที่มีอยู่แล้วต้องจัดใหม่ ให้ใช้ playbook `refactor` ของ [`superuser`](../superuser/SKILL.md)
-   - ถ้าไม่คุ้มแก้ ให้เขียนเหตุผลไว้
-3. ลงตาราง "ทบทวนแล้ว" แล้วเสนอผู้ใช้ว่าจะทำธีมไหนก่อน และเริ่มแก้จริงเมื่อผู้ใช้เลือกแล้ว
-4. สรุปผลด้วย `status-report`
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
 
-## ตั้งให้รันเอง
+  <!-- content goes here -->
+</svg>
+</p>
+```
 
-ตั้ง scheduled task ในแอป Claude หรือ Windows Task Scheduler: รัน `claude -p "ใช้ code-gardener รอบสำรวจ"` ทุกวัน และ `"... รอบทบทวน"` ทุกวันจันทร์และพฤหัส ถ้า repo มี `.sandbox/` ให้รันในห้องแยกด้วย `-Isolated`
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
 
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
 
----
+### สี
 
-# skill: docker-sandbox
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
 
-Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or the user says sandbox.
+### Reusable snippets
 
-# docker-sandbox — ห้องทดลองต่อโปรเจกต์
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
 
-> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
-> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
-> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+## 2 · External image files
 
-ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+Use when:
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
 
----
+### Folder convention
 
-## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
 
-- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`)
-  - ตั้งชื่อครั้งเดียวตอน `up` แรก แล้วเก็บในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านชื่อจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน
-  - prefix `sandbox-agent-` บอกว่า agent สร้างห้องนี้ ไม่ใช่คนตั้ง ส่วนวันที่สร้างเก็บซ้ำไว้ใน label `sqt.created`
-  - ถ้าโปรเจกต์ต้องมีฐานข้อมูล cache หรือเบราว์เซอร์ ให้เพิ่มเป็น service ใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกห้องใหม่
-- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว ส่วน image ของแต่ละโปรเจกต์เพิ่มแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
-- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ จบงานแล้วให้ `stop` และเลิกงานทั้งวันให้ `stop-all`
-- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกัน แล้ว `destroy` ทิ้งทันทีที่เลือกได้
-- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — เพราะของที่ติดตั้งจะชนกัน โปรเจกต์หนึ่งพังแล้วลามไปอีกโปรเจกต์ และล้างทีละโปรเจกต์ไม่ได้
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
 
-## 2 · สองแบบ เลือกตามงาน
+### Reference syntax
 
-| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
-|---|---|---|
-| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
-| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
-| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
-| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
-| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางพร้อมกัน (ห้องละทาง) |
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
 
-เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
 
----
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
 
-## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
+### Creating SVG files
 
-1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
-2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/`
-3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
-   - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
-   - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
-   - ถ้าต้องมีฐานข้อมูลทดสอบ ให้เพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
-4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
-5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) โปรเจกต์แรกของเครื่องต้อง build image ฐานก่อน ใช้เวลาราว 5–15 นาที ส่วนโปรเจกต์ถัดไปจะเร็วขึ้นมาก
-6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` ถ้าโปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` 1 ครั้ง ส่วนโหมด `-Locked` ต้องเห็นบรรทัด `check passed`
-7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
 
-**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้องได้ · unit test ผ่าน 15/15 · e2e บน Chromium ผ่าน 14/14 ในห้อง
+## 3 · ASCII art
 
-บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว: PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
 
-ถ้าสคริปต์พังบนเครื่องอื่น ให้ใช้ playbook `bug-fix` กับตัวสคริปต์
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
 
-**พอร์ต** — `up` หาพอร์ตว่างเอง เริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน
-- ในห้องตั้งตัวแปร `APP_PORT` และ `PORT` เป็นพอร์ตนั้น และ `HOST=0.0.0.0`
-- แอปต้องฟังที่ `HOST` เพราะถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง
-- ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม จึงเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
-**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด ถ้าโปรเจกต์ล็อก Playwright รุ่นอื่นไว้ ให้รัน `npx playwright install chromium` ในห้อง 1 ครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` เพราะ image มีให้แล้ว)
+## 4 · Mermaid
 
----
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
-## 4 · ใช้ทุกวัน
-
-| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
 |---|---|
-| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
-| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
-| ให้ Claude Code ทำงานในห้องเต็มที่ | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้) |
-| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
-| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
-| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
-| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
-| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
 
-**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
-- install · build · test · dev server · migration และสคริปต์ใด ๆ ให้รันผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
-- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
-- ถ้าห้องหยุดอยู่ ให้ `up` เองได้เลย (ย้อนได้) ถ้าห้องพังจนแก้ไม่ได้ ก็ `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** ห้อง isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อนแล้วค่อย reset
+## Combining formats in one doc
 
----
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
 
-## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+## Accessibility checklist
 
-| แบบ | ใช้เมื่อ | วิธี |
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+## Anti-patterns
+
+- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
+- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- ❌ **PNG screenshots of text** — use the text, in a code block
+- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+
+## Quick-start recipe
+
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
+
+## Related skills
+
+- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
+- [[simplicity-first]] — don't over-design the diagram; show what's needed
+- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
+- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: ascii-patterns.md
+
+# ASCII patterns
+
+Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+
+## Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+## Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+
+Pattern from `DockXI/docs/12-design-mockup.md`:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: svg-snippets.md
+
+# Inline SVG snippets
+
+Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+
+## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
+ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+
+| Token | หน้าที่ | ได้มาจาก |
 |---|---|---|
-| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
-| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` และ Playwright ในห้องจะขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
-| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
 
-- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
-- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
-- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
 
-## 6 · CAPTCHA
+## Snippets
 
-- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น
-  - ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ ซึ่งผ่านทุกครั้ง reCAPTCHA · hCaptcha · Cloudflare Turnstile มีให้ทุกเจ้า ดูค่าได้จากเอกสารผู้ให้บริการ
-  - หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`)
-  - **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่ตัวตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
-- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) ถ้าเจอ CAPTCHA ให้หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
-- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบจึงเท่ากับฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
 
-## 7 · ในห้องทำได้เต็มที่
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
 
-ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
 
-เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
-- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
-- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
-- push ขึ้น remote · deploy
-- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+## Worked example — UI state mockup
+
+This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+
 
 ---
 
-## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+# skill: web-service-essentials
 
-| ห้าม | เพราะ |
+Use when building or reviewing any HTTP service or backend (health endpoints, RFC 9457 errors, request ids, shutdown).
+
+# Web Service Essentials
+
+> **กฎข้อเดียว:** ก่อนเขียน endpoint ธุรกิจตัวแรก service ต้องตอบได้ว่า
+> "ยังอยู่ไหม · พร้อมรับงานไหม · ตอนนี้รันเวอร์ชันอะไร" ถ้าตอบไม่ได้ วันที่ระบบล่มคุณจะต้องเดาล้วน ๆ
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่ม service / REST API / microservice ใหม่
+- มีคนขอ health check, ping, readiness, liveness, version endpoint
+- จะ deploy ขึ้น production ครั้งแรก หรือย้ายเข้า Docker/Kubernetes
+- ต้องกำหนดรูปแบบ error ของ API ให้เหมือนกันทั้งระบบ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
+- รูปแบบ log ให้ใช้ `logging-standards`
+- เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
+
+---
+
+## 1 · endpoint พื้นฐาน 4 ตัว
+
+| Endpoint | ตอบอะไร | auth | เช็ค dependency | ใครเรียก |
+|---|---|:---:|:---:|---|
+| `GET /ping` | `pong` (text) | ไม่ | ไม่ | load balancer ทุกวินาที |
+| `GET /health/live` | process ยังอยู่ | ไม่ | **ไม่** | orchestrator (restart ถ้าตาย) |
+| `GET /health/ready` | พร้อมรับ traffic | ไม่ | ใช่ | orchestrator (ตัดออกจาก pool) |
+| `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
+
+> 🚨 **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
+> ถ้า `/health/live` เช็ค DB แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
+> ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
+> การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
+
+\* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
+
+### รูปร่าง response (เหมือนกันทุกภาษา)
+
+```jsonc
+// GET /health/ready → 200 ปกติ · 503 เมื่อ dependency ที่ critical ล่ม
+{
+  "status": "up",                       // up | degraded | down
+  "timestamp": "2026-08-31T09:42:13.482Z",
+  "checks": {
+    "db":    { "status": "up",   "durationMs": 12 },
+    "redis": { "status": "up",   "durationMs": 3 },
+    "mail":  { "status": "down", "durationMs": 3001, "error": "smtp timeout" }
+  }
+}
+```
+
+```jsonc
+// GET /version → 200
+{
+  "name": "orders-api", "version": "1.4.0", "commit": "abc1234",
+  "buildTime": "2026-08-31T09:00:00Z", "env": "production", "host": "pod-7f9c"
+}
+```
+
+**3 สถานะ ไม่ใช่ 2:**
+- `up` — ทุกอย่างปกติ → 200
+- `degraded` — dependency ที่**ไม่ critical** ล่ม (เช่น อีเมล) แต่ยังรับ traffic ได้ → 200
+- `down` — dependency ที่ critical ล่ม (เช่น DB) → **503**
+
+**ทุก check ต้องมี timeout** (ค่าเริ่มต้น 3 วินาที) ไม่งั้น dependency ที่ค้าง
+จะทำให้ health endpoint ค้างตาม แล้ว orchestrator ตัดสินใจผิดทั้งระบบ
+
+**ห้ามส่ง stack trace หรือ connection string ออกทาง endpoint นี้** เพราะ endpoint นี้ใครก็เรียกได้
+
+---
+
+## 2 · รูปแบบ error ที่เหมือนกันทั้งระบบ
+
+ยึด **RFC 9457 (`application/problem+json`)** ซึ่งเป็นมาตรฐานจริง ไม่ต้องคิดเอง
+
+```jsonc
+// 422 — รูปแบบถูก แต่ข้อมูลไม่ผ่านกฎ (ดูตารางล่าง)
+{
+  "type": "https://api.example.com/errors/validation",
+  "title": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
+  "status": 422,
+  "detail": "จำนวนสินค้าต้องมากกว่า 0",
+  "instance": "/api/v1/orders",
+  "requestId": "a3f9c1b2",              // ตรงกับ cid ใน log — ตามเรื่องได้ทันที
+  "errors": [                           // เฉพาะ validation · ครบทุกฟิลด์ในครั้งเดียว
+    { "field": "items[0].qty", "code": "min_value", "message": "ต้องมากกว่า 0" }
+  ]
+}
+```
+
+- `field` เป็นเส้นทางเต็มรวมดัชนีอาเรย์ · `code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน
+
+| สถานะ | ใช้เมื่อ |
 |---|---|
-| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
-| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
-| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
-| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
-| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
-| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
+| 400 | ข้อมูลผิดรูป |
+| 401 | ยังไม่ได้ยืนยันตัวตน |
+| 403 | ยืนยันแล้วแต่ไม่มีสิทธิ์ |
+| 404 | ไม่มีสิ่งนี้ |
+| 409 | ชนกับสถานะปัจจุบัน (ซ้ำ, แก้ทับ) |
+| 422 | รูปแบบถูกแต่ผิดกฎธุรกิจ |
+| 429 | เรียกถี่เกิน — ต้องมี `Retry-After` |
+| 500 | ฝั่งเราพัง — **ห้ามส่งรายละเอียดภายในออกไป** ส่ง `requestId` แทน |
 
-เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+> **500 ต้องบอกแค่ "เกิดข้อผิดพลาด กรุณาแจ้ง requestId นี้"** รายละเอียดจริงอยู่ใน log
+> การส่ง stack trace ออกไปก็เหมือนแจกแผนผังระบบให้คนที่กำลังหาช่องโจมตี
 
 ---
 
-## 9 · หมายเหตุ Windows
+## 3 · Request id
 
-- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (วัดจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
-- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
-- ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
-- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้างเอง (uuid ตัด 8 ตัว)
+- **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
+- ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
+- ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
 
-## เชื่อมกับ skill อื่น
+พอลูกค้าโทรมาบอกว่า "มันพัง" ก็ขอ requestId แล้ว `grep` ครั้งเดียวเจอทั้งเรื่อง
 
-- [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) — ผู้แข่งแต่ละตัวได้ห้อง isolated ของตัวเอง (`-Name <โปรเจกต์>-a1` …)
-- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
-- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
-- playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
+---
+
+## 4 · Graceful shutdown
+
+ตอน deploy ใหม่ orchestrator จะส่ง `SIGTERM` มา ถ้าแอปตายทันที request ที่ทำอยู่จะขาดกลางคัน
+
+```
+SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/ready ตอบ down ทันที)
+          2. รอ request ที่ค้างอยู่ทำงานจบ (timeout 15–30 วิ)
+          3. ปิด DB pool / คิว / ไฟล์
+          4. exit(0)
+```
+
+> ข้อ 1 สำคัญกว่าที่คิด ต้องให้ `/health/ready` ตอบ `down` **ก่อน** ปิดจริงสัก 5 วินาที
+> เพื่อให้ load balancer ตัดเราออกจาก pool ทัน ไม่งั้นยังมี traffic วิ่งเข้ามาตอนกำลังปิด
+
+---
+
+## 5 · สิ่งที่ต้องมีก่อน deploy (ไม่ใช่ทางเลือก)
+
+- **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
+- **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
+- **CORS ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
+- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่ง OTP/อีเมล
+- **Security headers**: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+  `Strict-Transport-Security` (helmet / `UseHsts()` ทำให้ครบในบรรทัดเดียว)
+- **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
+- **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
+- **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
+
+---
+
+## 6 · โค้ดที่พร้อมใช้
+
+| ไฟล์ | สแต็ก | สถานะ |
+|---|---|---|
+| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+
+```js
+// Node
+app.use(createHealthRouter({
+  version: { name: 'orders-api', version: '1.4.0', commit: process.env.GIT_SHA },
+  checks: {
+    db:   async () => { await pool.query('SELECT 1'); },          // critical
+    mail: { critical: false, run: async () => { await smtp.verify(); } },
+  },
+}));
+```
+
+```python
+# Python
+app.include_router(make_health_router(
+    version={"name": "orders-api", "version": "1.4.0", "commit": os.getenv("GIT_SHA")},
+    checks={"db": lambda: db.execute("SELECT 1"),
+            "mail": {"critical": False, "run": smtp.verify}},
+))
+```
+
+---
+
+## 7 · ตรวจงาน
+
+```bash
+curl -i localhost:8080/ping                    # 200 pong
+curl -s localhost:8080/health/live  | jq
+curl -s localhost:8080/health/ready | jq
+curl -s localhost:8080/version      | jq
+
+# ปิด DB แล้วยิงซ้ำ — ready ต้องเป็น 503 แต่ live ต้องยัง 200
+docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:8080/health/live
+```
+
+- [ ] `/health/live` **ไม่** แตะ DB — ปิด DB แล้วยังตอบ 200
+- [ ] `/health/ready` ตอบ 503 เมื่อ dependency ที่ critical ล่ม
+- [ ] dependency ที่ไม่ critical ล่มแล้วได้ `degraded` + 200 (ยังรับ traffic)
+- [ ] ทุก check มี timeout — ลองทำให้ dependency ค้าง แล้ว endpoint ต้องตอบภายใน ~3 วิ
+- [ ] `/version` ตรงกับ commit ที่ deploy จริง
+- [ ] ทุก response มี `X-Request-Id` รวมทั้งตอน 500
+- [ ] ยิง 500 แล้วไม่มี stack trace / connection string หลุดออกมา
+- [ ] `SIGTERM` แล้ว request ที่ค้างอยู่ทำงานจบก่อนแอปปิด
+- [ ] `/ping` ไม่ถูกเขียนลง log (ไม่งั้นไฟล์เต็มไปด้วย ping)
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
+- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
+- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| รูปแบบ log และ correlation id | `logging-standards` |
+| test ให้ endpoint พวกนี้ | `testing-standards` |
+| ออกแบบ endpoint ธุรกิจ | command `/api-design` |
+| runbook ตอน service ล่ม | `incident-runbook-template` |
+| ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |
+
+
+## reference: per-stack.md
+
+# .NET และ Angular
+
+> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
+> `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
+> ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
+
+---
+
+## สารบัญ
+
+1. [ASP.NET Core — health checks](#aspnet-core--health-checks)
+2. [Angular — ฝั่งที่เรียกใช้](#angular--ฝั่งที่เรียกใช้)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## ASP.NET Core — health checks
+
+```bash
+dotnet add package AspNetCore.HealthChecks.NpgSql
+dotnet add package AspNetCore.HealthChecks.Redis
+```
+
+```csharp
+builder.Services.AddHealthChecks()
+    // tag "ready" = ตัวที่ /health/ready จะเรียก · ไม่ติด tag = ไม่ถูกเรียกที่ไหนเลย
+    .AddNpgSql(cs, name: "db", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
+    .AddSmtpHealthCheck(o => { }, name: "mail",
+        failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
+        tags: ["ready"]);
+```
+
+```csharp
+// ---- ping: เบาที่สุด ไม่ผ่าน middleware ที่ไม่จำเป็น ----
+app.MapGet("/ping", () => Results.Text("pong")).ExcludeFromDescription();
+
+// ---- liveness: ไม่เรียก check ตัวไหนเลย (predicate = _ => false) ----
+// ถ้าเผลอให้เช็ค DB ตรงนี้ DB สะดุด = Kubernetes ฆ่า pod ยกแถว
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false,
+    ResponseWriter = WriteLive,
+});
+
+// ---- readiness: เฉพาะ check ที่ติด tag "ready" ----
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = c => c.Tags.Contains("ready"),
+    ResponseWriter = WriteReady,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+        [HealthStatus.Degraded]  = StatusCodes.Status200OK,     // ยังรับ traffic ได้
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+    },
+});
+
+app.MapGet("/version", () => Results.Ok(new
+{
+    name = "orders-api",
+    version = typeof(Program).Assembly.GetName().Version?.ToString() ?? "0.0.0",
+    commit = Environment.GetEnvironmentVariable("GIT_SHA") ?? "unknown",
+    buildTime = Environment.GetEnvironmentVariable("BUILD_TIME") ?? "unknown",
+    env = app.Environment.EnvironmentName,
+    host = Environment.MachineName,
+}));
+```
+
+ให้ response ตรงรูปแบบเดียวกับสแต็กอื่น:
+
+```csharp
+static Task WriteReady(HttpContext ctx, HealthReport report)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new
+    {
+        status = report.Status switch
+        {
+            HealthStatus.Healthy  => "up",
+            HealthStatus.Degraded => "degraded",
+            _                     => "down",
+        },
+        timestamp = DateTimeOffset.UtcNow,
+        checks = report.Entries.ToDictionary(
+            e => e.Key,
+            e => new
+            {
+                status = e.Value.Status == HealthStatus.Healthy ? "up" : "down",
+                durationMs = (int)e.Value.Duration.TotalMilliseconds,
+                // ข้อความเท่านั้น ห้ามส่ง exception เต็ม ๆ — endpoint นี้เปิดสาธารณะ
+                error = e.Value.Exception?.Message,
+            }),
+    });
+}
+
+static Task WriteLive(HttpContext ctx, HealthReport _)
+{
+    ctx.Response.ContentType = "application/json; charset=utf-8";
+    return ctx.Response.WriteAsJsonAsync(new { status = "up", timestamp = DateTimeOffset.UtcNow });
+}
+```
+
+### Error envelope (RFC 9457)
+
+ASP.NET Core มี `ProblemDetails` มาให้อยู่แล้ว ให้ใช้ของที่มี อย่าประดิษฐ์รูปแบบเอง
+
+```csharp
+builder.Services.AddProblemDetails(o => o.CustomizeProblemDetails = ctx =>
+{
+    ctx.ProblemDetails.Instance = ctx.HttpContext.Request.Path;
+    ctx.ProblemDetails.Extensions["requestId"] =
+        ctx.HttpContext.Response.Headers["X-Request-Id"].ToString();
+});
+
+app.UseExceptionHandler();      // แปลง exception ที่หลุดเป็น problem+json ให้อัตโนมัติ
+app.UseStatusCodePages();
+```
+
+### Graceful shutdown
+
+```csharp
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+
+// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
+// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
+app.Lifetime.ApplicationStopping.Register(() =>
+{
+    ReadinessState.IsShuttingDown = true;
+    Thread.Sleep(TimeSpan.FromSeconds(5));
+});
+```
+
+### สิ่งที่ต้องเปิดก่อน deploy
+
+```csharp
+app.UseHsts();
+app.UseHttpsRedirection();
+builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
+builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+    p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
+     .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+```
+
+---
+
+## Angular — ฝั่งที่เรียกใช้
+
+**Interceptor ใส่ request id ทุก request** (คู่กับ `logging-standards`):
+
+```ts
+export const requestIdInterceptor: HttpInterceptorFn = (req, next) => {
+  const id = crypto.randomUUID().slice(0, 8);
+  return next(req.clone({ setHeaders: { 'X-Request-Id': id } }));
+};
+```
+
+**แกะ problem+json ให้เป็นข้อความที่ผู้ใช้อ่านรู้เรื่อง**:
+
+```ts
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  const toast = inject(ToastService);
+  return next(req).pipe(
+    catchError((e: HttpErrorResponse) => {
+      const p = e.error;                       // ProblemDetails
+      // 500 ไม่มีรายละเอียดให้แสดง — โชว์ requestId เพื่อให้ผู้ใช้แจ้งทีมได้
+      const msg = p?.detail || p?.title || 'เกิดข้อผิดพลาด';
+      toast.error(p?.requestId ? `${msg} (รหัสอ้างอิง ${p.requestId})` : msg);
+      return throwError(() => e);
+    }),
+  );
+};
+```
+
+**หน้าสถานะระบบ** ให้ทีมซัพพอร์ตเปิดดูเองได้โดยไม่ต้องเรียกนักพัฒนา:
+
+```ts
+this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r));
+// r.status = 'up' | 'degraded' | 'down' → แสดงเป็น pill สีเขียว/เหลือง/แดง
+// (ใช้คลาส .pill-green / .pill-amber / .pill-red จาก web-app-design)
+```
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node/Express | Python/FastAPI |
+|---|---|---|---|
+| health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
+| error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
+| request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
+| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` | `helmet` | `secure` middleware |
+| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
+
+
+---
+
+# skill: api-conventions
+
+Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
+
+# ข้อตกลงของ API
+
+> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
+> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
+> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
+- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
+- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
+- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| โจทย์ | ไปที่ |
+|---|---|
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
+| health check, error envelope, graceful shutdown | `web-service-essentials` |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` |
+
+---
+
+## 1 · เอกสารข้อตกลงต้องมีจริง
+
+วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
+
+> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
+
+---
+
+## 2 · ตั้งชื่อ URL
+
+```
+GET    /v1/orders                 รายการ
+POST   /v1/orders                 สร้าง
+GET    /v1/orders/{id}            รายตัว
+PATCH  /v1/orders/{id}            แก้บางส่วน
+PUT    /v1/orders/{id}            แทนที่ทั้งตัว
+DELETE /v1/orders/{id}            ลบ
+GET    /v1/orders/{id}/items      ทรัพยากรลูก
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
+```
+
+| กฎ | ✅ | ❌ |
+|---|---|---|
+| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
+| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
+
+**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
+อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
+
+**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
+และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
+
+---
+
+## 3 · versioning
+
+| วิธี | ข้อดี | ข้อเสีย |
+|---|---|---|
+| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
+| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
+
+> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
+
+**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
+
+| การเปลี่ยน | พังไหม |
+|---|:--:|
+| เพิ่ม endpoint ใหม่ | ไม่ |
+| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
+| เพิ่มฟิลด์ใน response | ไม่* |
+| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
+| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
+| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
+| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
+| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
+| ทำให้กฎ validation เข้มขึ้น | **พัง** |
+
+\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
+ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
+
+**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
+
+---
+
+## 4 · pagination
+
+**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
+รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
+
+| วิธี | ใช้เมื่อ | ข้อจำกัด |
+|---|---|---|
+| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
+| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
+
+```jsonc
+// GET /v1/orders?limit=2 → 200
+{
+  "data": [ { "id": "1042" }, { "id": "1041" } ],
+  "page": {
+    "limit": 2,
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "hasMore": true
+  }
+}
+```
+
+- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
+- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
+- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
+- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
+
+---
+
+## 5 · filtering · sorting · ฟิลด์ที่ขอ
+
+```
+GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
+```
+
+| เรื่อง | ข้อตกลง |
+|---|---|
+| กรองค่าเท่ากับ | `?status=confirmed` |
+| หลายค่า | `?status=confirmed,shipped` |
+| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
+| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
+| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
+| เลือกฟิลด์ | `?fields=id,orderNo` |
+
+- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
+- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+
+---
+
+## 6 · รูปแบบข้อมูล
+
+| ข้อมูล | รูปแบบ | ตัวอย่าง |
+|---|---|---|
+| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
+| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
+| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
+| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
+| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
+| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
+| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+
+> 🚨 **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
+> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+>
+> 🚨 **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+
+**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+
+- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
+- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+
+**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
+
+---
+
+## 7 · error
+
+รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
+ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
+
+- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
+- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
+- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
+- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
+
+**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
+`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+
+---
+
+## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+
+### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+
+**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+
+```
+POST /v1/payments
+Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
+```
+
+- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
+- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
+- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
+- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
+
+### แก้ชนกัน (optimistic concurrency)
+
+```
+GET   /v1/orders/1042        → 200  ETag: "v7"
+PATCH /v1/orders/1042        If-Match: "v7"
+                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
+```
+
+ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+
+---
+
+## 9 · rate limit
+
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 997
+X-RateLimit-Reset: 1758790000
+Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
+```
+
+ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+
+---
+
+## 10 · การเลิกใช้ endpoint
+
+1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
+2. ส่ง header ในทุก response ของ endpoint นั้น:
+   ```
+   Deprecation: true
+   Sunset: Wed, 31 Dec 2026 23:59:59 GMT
+   Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
+   ```
+3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
+4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+
+ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+
+---
+
+## 11 · Anti-patterns
+
+- ❌ **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
+- ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
+- ❌ **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
+- ❌ **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
+- ❌ **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
+- ❌ **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
+- ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
+- ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
+- ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+
+---
+
+## 12 · ตัวย่อ
+
+- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
+- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
+- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
+- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
+- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
+- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
+- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
+
+## 13 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| health check · error envelope · timeout | `web-service-essentials` |
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
+| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
+| token · scope · สิทธิ์ | `auth-implementation-patterns` |
+| correlation id ที่โผล่ใน error | `logging-standards` |
+| test สัญญาระหว่างระบบ | `testing-standards` |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
+
+
+---
+
+# skill: error-handling-patterns
+
+Use when writing or reviewing code that can fail (network, database, other services). Catch, retry, timeout, circuit breaker.
+
+# จัดการข้อผิดพลาด
+
+> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
+> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
+- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
+- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
+- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
+| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` |
+| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` |
+| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` |
+
+---
+
+## 1 · จับที่ไหน ปล่อยที่ไหน
+
+| ชั้น | ทำอะไร |
+|---|---|
+| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
+| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
+| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+
+> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
+> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+
+**3 อย่างที่ห้ามทำเด็ดขาด:**
+
+```csharp
+try { ... } catch { }                      // ❌ กลืนเงียบ
+try { ... } catch (Exception) { return null; }   // ❌ ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
+catch (Exception ex) { log.Error(ex); throw; }   // ❌ log ซ้ำทุกชั้น
+```
+
+**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+
+```csharp
+catch (SmtpException ex)
+{
+    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
+}
+```
+
+---
+
+## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+
+| | ผู้ใช้เห็น | log เก็บ |
+|---|---|---|
+| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
+| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
+| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
+| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+
+```
+❌ "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
+❌ "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
+✅ "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+```
+
+**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
+รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+
+---
+
+## 3 · แยกประเภทก่อนตัดสินใจ
+
+| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+|---|---|---|---|
+| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
+| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
+| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
+| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
+| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+
+> 🚨 **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
+> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+
+---
+
+## 4 · timeout และการลองใหม่
+
+**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+
+| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+|---|---|
+| ฐานข้อมูล query ปกติ | 5–10 วินาที |
+| HTTP ภายใน | 3–5 วินาที |
+| HTTP ภายนอก | 10–30 วินาที |
+| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+
+**สูตรการลองใหม่:**
+
+```
+ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
+ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+```
+
+- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
+- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
+- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
+- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
+
+---
+
+## 5 · ตัดวงจร (circuit breaker)
+
+เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+
+```
+ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
+           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+```
+
+ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+
+**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
+**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+
+---
+
+## 6 · ล้มบางส่วน
+
+งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+
+| แบบ | เหมาะกับ |
+|---|---|
+| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
+| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+
+แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+
+**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
+ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+
+---
+
+## 7 · Anti-patterns
+
+- ❌ **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
+- ❌ **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
+- ❌ **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
+- ❌ **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
+- ❌ **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
+- ❌ **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
+- ❌ **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
+- ❌ **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
+- ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
+- ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+
+---
+
+## 8 · ตัวย่อ
+
+- **retry** — การลองใหม่เมื่อครั้งแรกล้มเหลว
+- **exponential backoff** — การหน่วงแบบทวีคูณ รอนานขึ้นทุกครั้งที่ลองใหม่
+- **jitter** — ค่าสุ่มที่บวกเข้าไปในเวลาหน่วง เพื่อไม่ให้ทุกเครื่องลองใหม่พร้อมกัน
+- **circuit breaker** — ตัวตัดวงจร หยุดเรียกปลายทางที่กำลังล้มชั่วคราว
+- **idempotency key** — รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ
+- **correlation id** — รหัสที่ติดไปกับคำขอหนึ่งตลอดทาง ใช้ไล่ log ข้ามระบบ
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| รูปร่าง error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
+| รูปแบบ log และ correlation id | `logging-standards` |
+| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` |
+| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` |
+| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` |
+| test กรณีล้มเหลว | `testing-standards` |
+| ขั้นตอนเมื่อระบบล่มจริง | `incident-runbook-template` |
+
+
+---
+
+# skill: logging-standards
+
+Use when writing or reviewing code that logs (format, levels, correlation ids, redaction) in .NET, Node, Python or Angular.
+
+# Logging Standards
+
+> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
+> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
+- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
+- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log
+- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
+
+---
+
+## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
+
+```
+2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
+└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
+```
+
+| ส่วน | กฎ |
+|---|---|
+| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
+| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
+| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[------]` |
+| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
+| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
+| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
+
+**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
+`grep "cid=a3f9c1b2"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
+วันที่ต้องส่งเข้า Loki/ELK ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
+
+**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
+
+---
+
+## 2 · ระดับ log — เขียนให้ตรงความหมาย
+
+| ระดับ | ใช้เมื่อ | ตัวอย่าง |
+|---|---|---|
+| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
+| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
+| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
+| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
+| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
+| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
+
+> ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
+> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
+
+ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
+
+---
+
+## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
+
+1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
+
+```
+Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
+                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
+```
+
+- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้าง (`uuid v4` ตัด 8 ตัวแรก)
+- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
+- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
+  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
+
+---
+
+## 4 · ไฟล์ log
+
+```
+logs/
+  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
+  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
+  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
+```
+
+- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
+- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
+- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
+- `logs/` ต้องอยู่ใน `.gitignore`
+
+---
+
+## 5 · สิ่งที่ห้ามลง log เด็ดขาด
+
+รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
+**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
+
+ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
+`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
+
+> 🚨 **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
+> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่า
+
+---
+
+## 6 · โค้ดที่พร้อมใช้
+
+| ไฟล์ | สแต็ก | สถานะ |
+|---|---|---|
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✅ รันทดสอบแล้ว |
+| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✅ รันทดสอบแล้ว |
+| `references/per-stack.md` | .NET (Serilog) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+
+```js
+// Node
+const { withCorrelation } = require('./logger.node');
+const log = withCorrelation(req.id).child({ source: 'orders' });
+log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
+log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
+```
+
+```python
+# Python
+from logger_py import setup_logging, get_logger, set_correlation_id
+setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
+log = get_logger("orders")
+log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
+log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
+```
+
+---
+
+## 7 · ตรวจงาน
+
+```bash
+# ไม่มี print/console.log หลงเหลือในโค้ด production
+grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
+  --include="*.js" --include="*.cs" --include="*.py" | grep -v test
+
+# log ที่ออกมาอ่านได้จริงและ grep ได้
+tail -f logs/app-*.log
+grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
+```
+
+- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
+- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
+- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
+- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
+- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
+- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
+- [ ] `logs/` อยู่ใน `.gitignore`
+- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
+- ❌ **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
+- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
+- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
+- ❌ **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
+  ใช้ข้อความคงที่ + context แทน
+- ❌ **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
+- ❌ **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
+- ❌ **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| endpoint health/ping/version | `web-service-essentials` |
+| เขียน test ให้ครอบคลุม | `testing-standards` |
+| runbook ตอน incident | `incident-runbook-template` |
+| postmortem หลังเหตุ | `postmortem-template` |
+
+
+## reference: per-stack.md
+
+# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
+
+> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
+> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
+> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
+
+---
+
+## สารบัญ
+
+1. [.NET / C# — Serilog](#net--c--serilog)
+2. [Angular / frontend](#angular--frontend)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## .NET / C# — Serilog
+
+```bash
+dotnet add package Serilog.AspNetCore
+dotnet add package Serilog.Sinks.File
+```
+
+`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
+
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+      }
+    }
+  }
+}
+```
+
+`Program.cs`:
+
+```csharp
+using Serilog;
+using Serilog.Events;
+
+const string LineTemplate =
+    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
+    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context}{NewLine}{Exception}";
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("CorrelationId", "------")   // ค่าตั้งต้นเมื่อไม่มี request
+    .WriteTo.Console(outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        fileSizeLimitBytes: 100 * 1024 * 1024,
+        rollOnFileSizeLimit: true,
+        outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
+        restrictedToMinimumLevel: LogEventLevel.Error,
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 90,
+        outputTemplate: LineTemplate)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+```
+
+> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
+> `{Message:lj}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
+
+### Middleware correlation id
+
+```csharp
+public sealed class CorrelationIdMiddleware(RequestDelegate next)
+{
+    public const string Header = "X-Request-Id";
+
+    public async Task Invoke(HttpContext ctx)
+    {
+        var cid = ctx.Request.Headers[Header].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(cid))
+            cid = Guid.NewGuid().ToString("N")[..8];
+
+        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
+
+        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", cid))
+            await next(ctx);
+    }
+}
+```
+
+### เขียน log
+
+```csharp
+// ✅ ข้อความคงที่ + ตัวแปรเป็น property — group log ได้ ค้นหาได้
+_logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ {OrderId} {Ms}", orderId, sw.ElapsedMilliseconds);
+
+// ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
+_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
+```
+
+### ปิดข้อมูลลับ
+
+Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
+ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
+หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
+
+---
+
+## Angular / frontend
+
+หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
+
+```ts
+// core/logger.service.ts
+import { Injectable, inject, isDevMode } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+
+@Injectable({ providedIn: 'root' })
+export class LoggerService {
+  private http = inject(HttpClient);
+  private buffer: unknown[] = [];
+
+  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
+    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
+    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
+    if (level === 'DEBUG' || (isDevMode() && level === 'INFO')) return;
+
+    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
+    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
+  }
+
+  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
+  flush() {
+    if (!this.buffer.length) return;
+    const batch = this.buffer.splice(0);
+    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
+  }
+
+  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
+  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
+  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
+  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
+}
+```
+
+จับ error ที่หลุดทุกตัว:
+
+```ts
+// core/global-error.handler.ts
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  private log = inject(LoggerService);
+  handleError(err: unknown) {
+    const e = err as Error;
+    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
+    if (isDevMode()) console.error(err);
+  }
+}
+// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
+```
+
+ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
+
+```ts
+export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
+  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
+```
+
+**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
+- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
+- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
+- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node | Python | Angular |
+|---|---|---|---|---|
+| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
+| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
+| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
+| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
+| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |

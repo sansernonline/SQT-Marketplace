@@ -23,7 +23,7 @@ General information, not engineering advice. Electrical, gas, structural and roo
 2. **Generate the 12-month calendar** from the reference, adjusted for the inventory (more aircons → stagger cleanings so the bill is spread)
 3. **Put each job in the family calendar** 2 weeks ahead with the contractor's number
 4. **After each job** record date, cost and who did it — next quote is compared against it
-5. **Warranties** — keep receipt + warranty card photo in `personal-life` `important-docs`; diary the expiry date one month ahead so faults are claimed while covered
+5. **Warranties** — keep receipt + warranty card photo in `personal-life` `important-docs` (if installed); diary the expiry date one month ahead so faults are claimed while covered
 
 ## Core intervals
 
@@ -57,7 +57,7 @@ Before paying anything, every quote must show:
 - [ ] Who pays if they damage something; insurance for high work
 - [ ] 2–3 quotes for anything over ~10,000 บาท; compare in one table (scope · price · warranty · timeline · reviews)
 
-For a formal quotation format see `thai-workplace` `doc-quotation`; for a written agreement on a big job see `thai-workplace` `doc-contract-th`.
+For a formal quotation format see `thai-workplace` `doc-quotation` (if installed); for a written agreement on a big job see `thai-workplace` `doc-contract-th` (if installed).
 
 ## Worked example
 
@@ -65,4 +65,4 @@ House with 3 wall aircons (bedroom 9,000 BTU ×2, living room 18,000 BTU), clean
 
 ## Related
 
-`household-bills` (spike traced to aircon) · `vehicle-care` · `personal-life` `important-docs` · `trading-finance` `personal-budget` (sinking fund: set aside 1% of house value a year for repairs — a common rule of thumb)
+`household-bills` (spike traced to aircon) · `vehicle-care` · `personal-life` `important-docs` (if installed) · `trading-finance` `personal-budget` (if installed) (sinking fund: set aside 1% of house value a year for repairs — a common rule of thumb)

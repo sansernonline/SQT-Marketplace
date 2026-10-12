@@ -1,6 +1,6 @@
 ---
 name: fintech-payments
-description: Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, AML, PCI-DSS scope, risk and pricing).
+description: Use when money moves through software (Stripe, Omise, 2C2P, PromptPay, webhooks, refunds, reconciliation, KYC, PCI-DSS).
 ---
 
 # fintech-payments
@@ -32,4 +32,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-company-fintech` (skill `payment-gateway-integration` · `kyc-aml-patterns` · `pci-dss-compliance`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-fintech` (เดิมชื่อ payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`

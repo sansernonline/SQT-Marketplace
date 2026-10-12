@@ -4,10 +4,10 @@ screenshot.py — เรนเดอร์ mockup แล้วถ่ายภา
 
     pip install playwright && playwright install chromium
 
-    python screenshot.py mockup-template.html out/
-    python screenshot.py mockup-template.html out/ --width 900     # ทดสอบหน้าต่างแคบ
-    python screenshot.py mockup-template.html out/ --full          # เก็บทั้งหน้าที่เลื่อนได้
-    python screenshot.py mockup.html out/ --hide ".mock-strip,.state-switch"   # ซ่อนแถบควบคุมของ mockup
+    python screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/
+    python screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --width 900     # ทดสอบหน้าต่างแคบ
+    python screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --full          # เก็บทั้งหน้าที่เลื่อนได้
+    python screenshot.py mockup/<code>-mockup.html _to_delete/screenshots/ --hide ".mock-strip,.state-switch"   # ซ่อนแถบควบคุมของ mockup
 
 ได้ไฟล์ <ชื่อ>-dark.png และ <ชื่อ>-light.png — ต้องเปิดดูทั้งคู่
 """

@@ -1,6 +1,6 @@
 # skill: pdpa-compliance
 
-Use when software stores personal data of people in Thailand. Data inventory, lawful basis, consent, subject rights, retention, processors, breach response.
+Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
 
 # PDPA — ข้อมูลส่วนบุคคล
 
@@ -38,6 +38,7 @@ Use when software stores personal data of people in Thailand. Data inventory, la
 | การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
 | ปิดบังข้อมูลใน log | `logging-standards` |
 | ที่เก็บกุญแจ | `config-and-secrets` |
+| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `thai-workplace`) `thai-workplace:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
 
 ---
 
@@ -216,7 +217,7 @@ Use when software stores personal data of people in Thailand. Data inventory, la
 
 # skill: audit-trail
 
-Use when a system must show who did what and when (approvals, money, permissions, personal data). Fields, events to record, append-only audit log.
+Use when a system must show who did what and when (approvals, money, permissions, personal data). Append-only audit log.
 
 # ร่องรอยการใช้งาน (audit trail)
 

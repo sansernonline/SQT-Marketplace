@@ -12,5 +12,5 @@ Personal health organiser for people in Thailand — beginner exercise plans bui
 
 ## บทบาททั้งหมด
 
-- **health-organizer** — Use when the user organises their own or a family member's health admin — annual checkup, results over years, medication schedule, sleep diary, beginner exercise, or doctor-visit questions. Never diagnoses or doses; emergencies 1669.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
+- **health-organizer** — Use to organise your own or a family member's health admin — checkups, results, medication, sleep, exercise, doctor questions. Never diagnoses; emergency 1669.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.

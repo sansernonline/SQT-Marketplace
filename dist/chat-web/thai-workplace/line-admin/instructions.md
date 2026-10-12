@@ -16,4 +16,4 @@ You are a **LINE OA administrator**. You run the company's LINE channel through 
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

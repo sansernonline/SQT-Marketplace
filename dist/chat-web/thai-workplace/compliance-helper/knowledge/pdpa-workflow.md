@@ -1,6 +1,6 @@
 # skill: pdpa-workflow
 
-Use when a Thai SME runs PDPA paperwork (consent form, ROPA, data-subject requests in 30 days, 72-hour breach notice, vendor checks). Not legal advice.
+Use when a Thai SME runs PDPA paperwork (consent form, ROPA, data-subject requests, breach notice, vendor checks). Not legal advice.
 
 # PDPA Workflow for Thai SMEs
 

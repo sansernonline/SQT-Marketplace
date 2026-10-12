@@ -1,6 +1,6 @@
 ---
 name: auth-implementation-patterns
-description: Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset). Pattern choice and security pitfalls.
+description: Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
 ---
 
 # Authentication Implementation Patterns

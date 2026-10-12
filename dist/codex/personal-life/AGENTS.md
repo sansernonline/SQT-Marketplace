@@ -12,7 +12,7 @@ Personal life admin for busy adults — weekly reviews, meeting prep and summari
 
 ## บทบาททั้งหมด
 
-- **doc-caretaker** — Use when the user cannot find an important document, something is about to expire, or the paper pile needs organising — keeps one registry of ID, property, vehicle, insurance and contract papers with expiry reminders.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
-- **life-admin** — Use for recurring personal admin — weekly reviews, subscription audits, family digital safety, quarterly goals and habits, awkward polite messages, and the small repeated tasks that eat adult life.
-- **meeting-prep** — Use before and after any meeting the user cares about. Builds a one-page prep card before (goal, questions, context) and an action-item summary after (who does what by when), because meetings without outputs are just conversations.
+- **doc-caretaker** — Use when an important document is missing, about to expire, or the paper pile needs order. Keeps one registry of ID, property, vehicle, insurance, contracts.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.
+- **life-admin** — Use for recurring personal admin — weekly reviews, subscription audits, family digital safety, quarterly goals and habits, and awkward polite messages.
+- **meeting-prep** — Use before and after a meeting that matters. Builds a one-page prep card (goal, questions, context) and an action-item summary (who does what by when).

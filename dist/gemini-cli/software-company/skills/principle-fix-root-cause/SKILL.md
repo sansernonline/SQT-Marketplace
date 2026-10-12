@@ -1,6 +1,6 @@
 ---
 name: principle-fix-root-cause
-description: Use when debugging anything broken (error, crash, wrong value, flaky test, slow page). Reproduce, find the cause, fix there, not a symptom-hiding catch.
+description: Use when debugging anything broken (error, crash, wrong value, flaky test, slow page). Reproduce, then fix the cause.
 ---
 
 # principle · fix root cause — แก้ที่ต้นเหตุ
@@ -12,6 +12,10 @@ description: Use when debugging anything broken (error, crash, wrong value, flak
 1. **ทำให้เกิดซ้ำก่อนแก้** — ถ้าทำให้เกิดซ้ำไม่ได้ แปลว่ายังไม่รู้ว่ากำลังแก้อะไร ให้ใช้ skill ตรวจแอปของโปรเจกต์ หรือคำสั่งที่รันได้
 2. **ถาม "ทำไม" จนถึงจุดที่ค่าผิดเกิดขึ้นครั้งแรก** — ไม่ใช่จุดที่มันระเบิด
 3. **แก้ที่จุดนั้น** แล้วรันกรณีเดิมให้ผ่าน
+
+## ไม่ใช้เมื่อ
+
+รู้สาเหตุแล้ว เหลือแค่แก้ให้เล็กที่สุดตรงจุดที่ผู้ใช้ชี้ (feedback · stack trace ที่ชัด · regression ที่รู้ที่มา) → `targeted-fix`
 
 ## ตัวอย่าง
 

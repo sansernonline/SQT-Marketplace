@@ -1,4 +1,4 @@
-> เดิมคือ skill `e-signature-compliance` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมชื่อ e-signature-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

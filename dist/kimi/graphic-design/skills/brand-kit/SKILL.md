@@ -1,13 +1,13 @@
 ---
 name: brand-kit
-description: Use when starting or redoing a business brand, or posts look inconsistent. Brand kit with logo rules, colour roles, contrast, type scale, Thai-Latin fonts.
+description: Use when starting or redoing a business brand, or posts look inconsistent. Logo rules, colour roles, type scale, Thai-Latin fonts.
 ---
 
 # Brand Kit
 
 One folder, one README, everything the brand needs to look like itself. A small shop needs a kit it can read in 5 minutes, not a 60-page brand book.
 
-For app or product screens, the `software-company` plugin's `graphic-design` and `ui-craft` skills (if installed) cover tokens for code. This skill is for marketing, social and print.
+For app or product screens, the `software-company` plugin's `ui-craft` skill (if installed) covers tokens for code; without it, keep to this skill. This skill is for marketing, social and print. A software project's one-off visuals (logo, poster, LINE art) are lighter work in `software-company:graphic-design`; once the brand needs a full kit or campaign, work here.
 
 ## Workflow
 

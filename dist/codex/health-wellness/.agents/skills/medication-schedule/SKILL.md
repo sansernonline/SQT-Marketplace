@@ -1,6 +1,6 @@
 ---
 name: medication-schedule
-description: Use when someone takes prescribed medicines and needs a daily schedule from Thai drug labels, refill reminders or a medicine and allergy list. No dosing.
+description: Use when someone takes prescribed medicines and needs a daily schedule from Thai drug labels, refills or an allergy list. No dosing.
 ---
 
 # Medication Schedule

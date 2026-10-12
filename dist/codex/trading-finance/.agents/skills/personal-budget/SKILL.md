@@ -1,6 +1,6 @@
 ---
 name: personal-budget
-description: Use when the month starts, salary runs out early, or the user wants a monthly budget. Needs, wants, savings and investing plan from real spending.
+description: Use when the month starts, salary runs out early, or the user wants a monthly budget from real spending.
 ---
 
 # Personal Budget (งบรายเดือน)

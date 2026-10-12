@@ -1,6 +1,6 @@
 ---
 name: "negotiate"
-description: "Compare offers on total compensation and draft what to say to negotiate salary, a raise or a counter-offer."
+description: "Compare offers on total pay and draft what to say for a salary, raise or counter-offer."
 ---
 
 Run the `career-coach` agent with the `salary-negotiation` skill: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

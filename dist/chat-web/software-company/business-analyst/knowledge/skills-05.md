@@ -1,6 +1,6 @@
 # skill: fsd-writing
 
-Use when writing or reviewing a Functional Specification Document that screens are built from. Use cases, screen specs, error messages, state machines.
+Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
 
 # เขียน Functional Specification Document (FSD)
 
@@ -36,6 +36,7 @@ Use when writing or reviewing a Functional Specification Document that screens a
 | [references/worked-examples.md](references/worked-examples.md) | ถ้าจะเขียน use case หน้าจอ ตารางสถานะ หรือกฎทางธุรกิจตัวแรกของเอกสาร ให้เปิดดูตัวอย่างเต็มแล้วลอกรูปแบบไปใช้ |
 | [references/edge-cases.md](references/edge-cases.md) | ตอนเขียนหัวข้อข้อผิดพลาดและกรณีขอบ และตอนรีวิวก่อนส่ง เพื่อไล่ให้ครบทุกกรณี |
 | [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | ถ้ายังไม่แน่ใจว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD ให้เปิดตารางเทียบนี้ |
+| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B) หรือต้องการแม่แบบ use case, API endpoint, data model และตัวอย่าง Mermaid |
 | [references/figures.md](references/figures.md) | ตอนวางแผนว่าหัวข้อไหนต้องมีรูปชนิดไหน |
 | [references/outline-sections.md](references/outline-sections.md) | ถ้าต้องตัดสินว่าหัวข้อไหนข้ามได้ ให้เปิดตารางนี้ ส่วนโครงเต็มที่ลอกไปกรอกได้อยู่ใน [assets/fsd-outline.md](assets/fsd-outline.md) |
 | [references/related-skills.md](references/related-skills.md) | ถ้างานต้องใช้ skill อื่นคู่กัน เช่น รูป ข้อตกลง API หรือ test case ให้เปิดดูว่าใช้ตัวไหน |
@@ -45,13 +46,13 @@ Use when writing or reviewing a Functional Specification Document that screens a
 เอกสารสองฉบับนี้ปนกันบ่อยที่สุด ผลคือ SRS ยาวจนลูกค้าไม่อ่าน และ FSD ตื้นจน developer ต้องถาม
 SRS บอกว่าระบบ**ต้องทำอะไรได้** ส่วน FSD บอกว่าระบบ**ทำสิ่งนั้นอย่างไร** ตารางเทียบทีละมิติอยู่ใน [references/fsd-vs-srs.md](references/fsd-vs-srs.md)
 
-> 🚨 **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ถามกลับ**
-> แล้วเพิ่มใน SRS ก่อน ไม่ใช่เขียนลง FSD เงียบ ๆ
+> 🚨 **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ลงรายการคำถามค้าง** ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ
+> ข้อนั้นต้องเพิ่มใน SRS ก่อน ไม่ใช่เขียนลง FSD เงียบ ๆ
 > ข้อที่โผล่มาใน FSD โดยไม่มีที่มา คือข้อที่ลูกค้าจะปฏิเสธจ่ายตอนตรวจรับ
 
 ## 2 · ลำดับการทำงาน
 
-1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามให้หมดในรอบเดียว
+1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามรวมครั้งเดียวตอนเริ่มเฉพาะข้อที่ตีความต่างแล้วงานออกมาต่างกันทั้งชุด ที่เหลือใส่ `(รอยืนยัน)` แล้วทำต่อ
 2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว หรือมีลูกค้าอ่านด้วย
 3. ไล่ทีละ use case ไม่ใช่ทีละหน้าจอ — หน้าจอเกิดจาก use case ไม่ใช่ทางกลับกัน
 4. เขียนกฎทางธุรกิจแยกออกมาก่อน แล้วค่อยอ้างถึงจากขั้นตอน (ข้อ 7)
@@ -292,6 +293,385 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 **โครงเอกสารที่คัดลอกไปกรอกต่อได้ทันที** → [`../assets/fsd-outline.md`](../assets/fsd-outline.md)
 
 
+## reference: stakeholder-doc-templates.md
+
+# Stakeholder document (Mode B) — style, diagrams, templates
+
+Moved from the system-analyst agent. Read when writing a Mode B document or a use case, API endpoint or data model section.
+
+This is the "beautiful design" mode. Use Rich Markdown + Mermaid.
+
+## Document Structure
+
+Every stakeholder doc MUST follow this structure:
+
+```markdown
+# 📋 <Document Title>
+
+> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
+> **Authors:** ... · **Reviewers:** ...
+
+---
+
+## 📑 Table of Contents
+
+1. [Executive Summary](#executive-summary)
+2. [Scope](#scope)
+3. [Actors & Personas](#actors--personas)
+4. [Use Cases](#use-cases)
+5. [System Flows](#system-flows)
+6. [API Specifications](#api-specifications)
+7. [Data Model](#data-model)
+8. [Business Rules](#business-rules)
+9. [Non-Functional Requirements](#non-functional-requirements)
+10. [Glossary](#glossary)
+
+---
+
+## 1. Executive Summary
+
+> 💡 **For non-technical readers** — 1 paragraph explaining what this feature does and why.
+
+<content>
+
+---
+
+## 2. Scope
+
+### ✅ In Scope
+- ...
+
+### ❌ Out of Scope
+- ...
+
+[... continue all sections ...]
+```
+
+## Formatting Rules
+
+### Hierarchy & Numbering
+- H1 = document title (only ONE)
+- H2 = numbered sections (1., 2., 3.)
+- H3 = sub-sections (1.1, 1.2)
+- Always add TOC for docs with 5+ sections
+- Use anchor links in TOC
+
+### Visual Markers (Emoji)
+
+Use emoji **purposefully**, not decoratively:
+
+| Marker | Meaning |
+|--------|---------|
+| 📋 | Document/list |
+| 📑 | TOC/index |
+| 💡 | Tip/insight |
+| ⚠️ | Warning/caution |
+| 🚨 | Critical |
+| ✅ | Yes/approved/in scope |
+| ❌ | No/rejected/out of scope |
+| 🟢 🟡 🔴 | Status indicators |
+| 🔒 | Security |
+| ⚡ | Performance |
+| 🎯 | Goal/objective |
+| 👤 | Actor/user |
+| 🔄 | Flow/process |
+| 📊 | Data |
+| 🌐 | API/integration |
+
+### Callout Boxes (Blockquotes)
+
+```markdown
+> 💡 **Tip:** Brief insight here.
+
+> ⚠️ **Warning:** Important caveat.
+
+> 🚨 **Critical:** Must read before proceeding.
+
+> 📝 **Note:** Additional context.
+```
+
+### Tables
+
+Prefer tables over bullet lists when data has 2+ attributes:
+
+```markdown
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| email | string | ✅ | User's email |
+| age | number | ❌ | Optional |
+```
+
+Align headers to data when helpful:
+```markdown
+| Field | Type | Required |
+|:------|:-----|:--------:|
+```
+
+### Status Badges (in tables/inline)
+
+```markdown
+**Status:** 🟢 Approved
+**Priority:** 🔴 High
+**Risk:** 🟡 Medium
+```
+
+---
+
+# 🔷 Mermaid Diagrams
+
+Use Mermaid for ALL diagrams. They render in GitHub/Notion/VSCode.
+
+## When to use which diagram
+
+| Diagram | Use for |
+|---------|---------|
+| `flowchart` | Business processes, decision trees |
+| `sequenceDiagram` | Interactions between systems/actors over time |
+| `erDiagram` | Database/data models |
+| `stateDiagram-v2` | Object lifecycle, status transitions |
+| `classDiagram` | Object-oriented design |
+| `gantt` | Timeline/schedule |
+| `journey` | User experience journey |
+| `mindmap` | Concept relationships |
+
+## Example: Sequence Diagram
+
+````markdown
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant FE as Frontend
+    participant API as Backend API
+    participant DB as Database
+
+    User->>FE: Click "Login"
+    FE->>API: POST /auth/login
+    API->>DB: SELECT user WHERE email=?
+    DB-->>API: User row
+    API->>API: Verify bcrypt password
+    alt Valid credentials
+        API-->>FE: 200 { token, user }
+        FE-->>User: Redirect to dashboard
+    else Invalid
+        API-->>FE: 401 { error }
+        FE-->>User: Show error
+    end
+```
+````
+
+## Example: ER Diagram
+
+````markdown
+```mermaid
+erDiagram
+    USER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_ITEM : contains
+    PRODUCT ||--o{ ORDER_ITEM : "appears in"
+
+    USER {
+        uuid id PK
+        string email UK
+        string name
+        timestamp created_at
+    }
+    ORDER {
+        uuid id PK
+        uuid user_id FK
+        decimal total
+        string status
+    }
+```
+````
+
+## Example: State Diagram
+
+````markdown
+```mermaid
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Submitted: submit()
+    Submitted --> Approved: approve()
+    Submitted --> Rejected: reject()
+    Rejected --> Draft: revise()
+    Approved --> [*]
+```
+````
+
+## Example: Flowchart
+
+````markdown
+```mermaid
+flowchart TD
+    A[User submits form] --> B{Valid?}
+    B -->|Yes| C[Save to DB]
+    B -->|No| D[Show errors]
+    C --> E[Send confirmation email]
+    E --> F([End])
+    D --> A
+```
+````
+
+---
+
+# 📋 Templates
+
+## Use Case Template (Mode B)
+
+```markdown
+### UC-001: <Use Case Name>
+
+| Field | Value |
+|-------|-------|
+| **ID** | UC-001 |
+| **Actor** | 👤 Customer |
+| **Priority** | 🔴 High |
+| **Status** | 🟢 Approved |
+| **Trigger** | User clicks "Place Order" |
+
+#### Preconditions
+- ✅ User is authenticated
+- ✅ Cart contains at least 1 item
+
+#### Postconditions
+- ✅ Order created with status `pending`
+- ✅ Inventory reserved
+- ✅ Confirmation email sent
+
+#### Main Flow
+
+| Step | Actor | Action | System Response |
+|:----:|:------|:-------|:----------------|
+| 1 | User | Reviews cart and clicks "Place Order" | Shows order summary |
+| 2 | User | Confirms payment method | Validates payment info |
+| 3 | System | Submits payment to gateway | Receives auth code |
+| 4 | System | Creates order record | Returns order #ORD-XXXX |
+| 5 | System | Sends confirmation email | — |
+| 6 | User | Sees confirmation page | — |
+
+#### Alternative Flows
+
+> **A1: Payment declined at step 3**
+> 3a. Gateway returns decline
+> 3b. System shows error, suggests alternate payment
+> 3c. Returns to step 2
+
+#### Exception Flows
+
+> **E1: Gateway timeout at step 3**
+> 3a. System waits 30s
+> 3b. Logs incident, marks order as `payment_pending`
+> 3c. Sends "We'll retry" email to user
+
+#### Sequence Diagram
+
+\`\`\`mermaid
+sequenceDiagram
+    actor U as Customer
+    participant UI
+    participant API
+    participant Pay as Payment Gateway
+    participant DB
+
+    U->>UI: Click "Place Order"
+    UI->>API: POST /orders
+    API->>Pay: Charge
+    Pay-->>API: Auth code
+    API->>DB: INSERT order
+    DB-->>API: Order ID
+    API-->>UI: 201 Created
+    UI-->>U: Confirmation page
+\`\`\`
+```
+
+## API Endpoint Template (Mode B)
+
+```markdown
+### 🌐 POST `/api/v1/orders`
+
+> Create a new order from cart contents.
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth Required** | ✅ Yes (Bearer token) |
+| **Rate Limit** | 10 req/min per user |
+| **Idempotent** | ✅ Yes (use `Idempotency-Key` header) |
+
+#### Request Headers
+
+| Header | Required | Example |
+|--------|:--------:|---------|
+| `Authorization` | ✅ | `Bearer eyJ...` |
+| `Idempotency-Key` | ⚠️ Recommended | `unique-request-id` |
+| `Content-Type` | ✅ | `application/json` |
+
+#### Request Body
+
+\`\`\`json
+{
+  "items": [
+    { "product_id": "uuid", "quantity": 2 }
+  ],
+  "shipping_address_id": "uuid",
+  "payment_method_id": "uuid"
+}
+\`\`\`
+
+#### Response: 201 Created
+
+\`\`\`json
+{
+  "data": {
+    "id": "ORD-12345",
+    "status": "pending",
+    "total": 1250.00,
+    "created_at": "2025-01-15T10:30:00Z"
+  }
+}
+\`\`\`
+
+#### Error Responses
+
+Every error body is `application/problem+json` (RFC 9457): `type` · `title` · `status` · `detail` · `requestId`, plus `errors[]` for validation. Shape and status rules: `web-service-essentials` §2.
+
+| Code | When | `type` (suffix) |
+|:----:|:-----|:-----|
+| 🔴 401 | Missing/invalid token | `unauthorized` |
+| 🟡 402 | Payment declined | `payment-declined` |
+| 🟡 409 | Inventory unavailable | `out-of-stock` |
+| 🔴 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
+| 🔴 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
+```
+
+## Data Model Template (Mode B)
+
+```markdown
+## 📊 Data Model
+
+### Entity Relationship Diagram
+
+\`\`\`mermaid
+erDiagram
+    USER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_ITEM : contains
+\`\`\`
+
+### Tables
+
+#### `users`
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | UUID | PK | Unique identifier |
+| `email` | VARCHAR(255) | UNIQUE, NOT NULL | Login email |
+| `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
+
+> 🔒 **Security:** `email` is encrypted at rest using AES-256.
+```
+
+---
+
+
 ## reference: worked-examples.md
 
 # ตัวอย่างเต็มของ use case หน้าจอ ผังสถานะ และกฎทางธุรกิจ
@@ -372,13 +752,20 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 
 # skill: legacy-spec-recovery
 
-Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
+Use when a legacy system has code but no spec and someone wants to change it. As-is spec with evidence, then impact analysis.
 
 # Legacy Spec Recovery
 
 Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
 Use `reverse-engineering` instead when there is no source code, only binaries.
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว หรือรูปแบบไฟล์ที่ไม่รู้จัก | `reverse-engineering` |
+| มีโค้ดและเอกสารพอ แค่จะแก้ส่วนเล็ก ๆ ที่ยังไม่ได้อ่าน | `code-orientation` |
 
 ## The four rules
 
@@ -513,7 +900,7 @@ Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, 
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -526,7 +913,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 - เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
 - ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
+- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน
 - เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
 
 ## เมื่อไหร่ **ไม่** ใช้
@@ -534,8 +921,10 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 | สถานการณ์ | ใช้ตัวนี้แทน |
 |---|---|
 | ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
+| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` |
+| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` |
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
 
@@ -671,7 +1060,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 > | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
 > | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
 > | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
+> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
 >
 > FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
 >
@@ -708,7 +1097,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 |---|---|
 | เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
 | แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
 | สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
 | สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |

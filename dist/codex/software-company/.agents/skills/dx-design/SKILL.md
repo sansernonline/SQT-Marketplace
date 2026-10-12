@@ -1,6 +1,6 @@
 ---
 name: "dx-design"
-description: "Audit developer experience or design an SDK using the devrel-engineer agent. Two modes — dx-audit or sdk-design."
+description: "Audit developer experience or design an SDK with the devrel-engineer agent (dx-audit or sdk-design)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

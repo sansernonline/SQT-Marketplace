@@ -1,6 +1,6 @@
 ---
 name: temp-file-discipline
-description: Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
+description: Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
 ---
 
 # ระเบียบไฟล์ชั่วคราว

@@ -1,220 +1,6 @@
-# skill: postmortem-template
-
-Use when writing a post-incident review or blameless postmortem of a production outage. Timeline, impact, systemic causes, action items.
-
-# Blameless Postmortem Template
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-## When to use this skill
-
-- After any incident affecting production (SEV1-SEV3)
-- After a near-miss that could have been a major incident
-- After significant bugs that reached production
-- After a security incident
-
-## Core Principles
-
-1. **Blameless** — focus on systems and processes, not individuals
-2. **Honest** — don't soften facts to protect feelings
-3. **Actionable** — every postmortem produces concrete action items
-4. **Educational** — others should learn from this
-
-## Severity Levels
-
-| Level | Definition | Response Time |
-|-------|-----------|---------------|
-| **SEV1** | Total outage, data loss, security breach | Immediate, 24/7 |
-| **SEV2** | Major feature down, significant user impact | Within 1 hour |
-| **SEV3** | Degraded service, partial impact | Within business hours |
-| **SEV4** | Minor issue, no user impact | Next business day |
-
-## Output Template
-
-```markdown
-# Postmortem: <Short Incident Title>
-
-**Date of Incident:** YYYY-MM-DD
-**Date of Postmortem:** YYYY-MM-DD
-**Severity:** SEV1 | SEV2 | SEV3 | SEV4
-**Duration:** XX hours XX minutes
-**Authors:** <names>
-**Status:** Draft | Final
-
----
-
-## 1. Summary
-
-<3-5 sentences for executives: what happened, impact, what we did, what we learned>
-
-## 2. Impact
-
-- **User-facing:** Yes | No
-- **Users affected:** ~XX,XXX (X%)
-- **Duration:** XX min
-- **Revenue impact:** $XXX (if known)
-- **Data loss:** None | Minor | Significant
-- **SLA breached:** Yes | No
-- **Regulatory implications:** None | <describe>
-
-## 3. Timeline
-
-All times in UTC.
-
-| Time | Event |
-|------|-------|
-| HH:MM | First customer complaint |
-| HH:MM | On-call paged by alert |
-| HH:MM | Investigation started |
-| HH:MM | Root cause identified |
-| HH:MM | Mitigation deployed |
-| HH:MM | Service restored |
-| HH:MM | All clear confirmed |
-
-## 4. What Happened (Detailed)
-
-### Detection
-How was the incident detected? Was it automated alerting or customer report?
-- Time to detect (TTD): XX minutes
-- Could we have detected faster? How?
-
-### Investigation
-What did we look at? What did we rule out?
-- Tools used: ...
-- Wrong turns / red herrings: ...
-
-### Mitigation
-What stopped the bleeding? (Not necessarily the fix)
-- Time to mitigate (TTM): XX minutes
-
-### Resolution
-What was the permanent fix?
-- Time to resolve (TTR): XX minutes
-
-## 5. Root Cause Analysis
-
-Use **5 Whys** technique:
-
-- Why did the service go down? → Database queries timed out
-- Why did queries time out? → Connection pool exhausted
-- Why was the pool exhausted? → A new endpoint didn't release connections
-- Why didn't it release connections? → Missing `finally` block
-- Why wasn't this caught? → No load tests for that endpoint
-
-**Root cause:** <one-sentence statement>
-
-**Contributing factors:**
-- ...
-- ...
-
-## 6. What Went Well
-
-- Monitoring alerted within X minutes
-- Rollback completed quickly thanks to ...
-- Team collaboration on Slack was effective
-- ...
-
-## 7. What Went Wrong
-
-- Took X minutes longer than needed because ...
-- Runbook was outdated
-- Required engineer was offline; no backup
-- ...
-
-## 8. Where We Got Lucky
-
-- Issue happened during business hours; would have been worse at night
-- Customer X didn't notice because they were also having maintenance
-- ...
-
-## 9. Action Items
-
-| # | Action | Owner | Type | Priority | Due Date |
-|---|--------|-------|------|----------|----------|
-| 1 | Add monitoring for X | @alice | Prevent | P1 | YYYY-MM-DD |
-| 2 | Update runbook | @bob | Mitigate | P2 | YYYY-MM-DD |
-| 3 | Add load test for endpoint | @charlie | Prevent | P1 | YYYY-MM-DD |
-
-**Action types:**
-- **Prevent:** stops this from happening again
-- **Detect:** catches it sooner if it happens
-- **Mitigate:** reduces impact when it happens
-- **Process:** improves how we respond
-
-## 10. Lessons Learned
-
-What can other teams learn from this?
-- Lesson 1: ...
-- Lesson 2: ...
-
-## 11. Supporting Information
-
-- Incident channel: #inc-XXX
-- Status page updates: <link>
-- Customer communications: <link>
-- Graphs / dashboards: <link>
-- Related PRs: <links>
-```
-
-## Blameless Language Guide
-
-| ❌ Blameful | ✅ Blameless |
-|------------|--------------|
-| "Alice deployed the bug" | "A bug was deployed in PR #123" |
-| "Bob should have caught this in review" | "The review process didn't catch this; we should add automated checks" |
-| "QA missed this case" | "Our test coverage didn't include this scenario" |
-| "Someone forgot to..." | "The process doesn't ensure that..." |
-| "Human error" | "The system allowed the mistake to happen" |
-
-## Quality Checklist
-
-- [ ] Timeline includes specific times (not vague "morning of")
-- [ ] Root cause goes deep enough (not just "bug in code")
-- [ ] Action items have owners AND due dates
-- [ ] Action items are tracked in actual ticket system
-- [ ] Blameless language throughout
-- [ ] Reviewed by someone NOT involved in incident
-- [ ] Shared with broader team for learning
-
-## Common Mistakes
-
-- ❌ "Lessons learned: be more careful" — not actionable
-- ❌ Single root cause when there are usually multiple factors
-- ❌ Action items without owners → never done
-- ❌ Skipping postmortem because "minor" — near-misses teach us most
-- ❌ Hiding postmortems — share widely for org learning
-- ❌ Blame language even when "talking about systems"
-
-## When to Skip Postmortem
-
-Almost never. Even for SEV4, a short writeup helps. Always do one for:
-- Any SEV1 / SEV2
-- Repeated SEV3+ from same root cause
-- Security incidents
-- Customer-facing incidents
-- Data integrity issues
-
----
-
-## Document Look
-
-This skill decides **what goes in** the document. It does not decide **how it looks** —
-load the matching skill before writing, not after:
-
-| What is being handed over | Load |
-|---|---|
-| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
-| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
-
-Default formatting is not neutral — it reads as unfinished work.
-
-
----
-
 # skill: code-review-checklist
 
-Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality. Correctness, design, security, testing, maintainability.
+Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
 
 > **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md)
 
@@ -226,6 +12,14 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 - Self-review before submitting code
 - Onboarding new code reviewers
 - Auditing code quality of existing modules
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Contested design, large or high-risk diff, "stress test" / "find blind spots" | `adversarial-review-panel` |
+| Writing or updating the PR description itself | `pr-description-template` |
+| Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 
 ## Review Process
 
@@ -349,893 +143,471 @@ As a reviewer:
 
 ---
 
-# skill: markdown-visuals
+# skill: simplicity-first
 
-Use when a markdown doc needs a picture (wireframe, UI state, flow, architecture). Picks inline SVG, image, ASCII or Mermaid so it renders everywhere.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
 
-# Markdown Visuals
+# Simplicity First
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
 
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+## The one test
+
+Before submitting, ask:
+
+> Could a tired teammate understand this in 6 months, with no prior context?
+
+If "no" or "not sure" → simplify.
+
+## 5 principles
+
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
+
+## By output type
+
+### Documents (BRD, FSD, ADR)
+
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+
+### Architecture
+
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
+
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
+
+### Plans
+
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
+
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
+
+### Designs (UX, API)
+
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
+
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
+
+## The 3-question filter
+
+Before adding any new component, configuration option, or pattern:
+
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
+
+Two or more answers point to "simpler is fine" → don't add it.
+
+## Examples
+
+**API description**
+
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
+
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
+
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## Pre-submit checklist
+
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
+
+If any answer is "no" → simplify before delivering.
+
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry
+
+
+---
+
+# skill: auth-implementation-patterns
+
+Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
+
+# Authentication Implementation Patterns
 
 ## When to use this skill
 
-- Producing **any** design mockup, wireframe, or UI spec
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
+- Building login/signup/logout
+- Adding password reset flow
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
+- Choosing session vs token authentication
+- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
+- Implementing single sign-on (SSO) with SAML or OIDC
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
+- Reviewing existing auth code for security issues
 
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+## อ่านเพิ่มเมื่อ
 
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI mockup / component state / icon       →  Inline SVG
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
-├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
-
-**Default to inline SVG**, except for flows and sequences (use Mermaid for those). Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
-
-## 1 · Inline SVG (primary technique)
-
-### Boilerplate
-
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
-```
-
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
-
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี
-
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้เสนอโทนจาก [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md) แล้วรอผู้ใช้ยืนยัน ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
-
-### Reusable snippets
-
-Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
-
-## 2 · External image files
-
-Use when:
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
-## 4 · Mermaid
-
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
-
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| ไฟล์ | เปิดเมื่อ |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| [references/auth-flows.md](references/auth-flows.md) | ถ้าจะลงมือเขียน session · JWT · OAuth กับ PKCE หรือการรีเซ็ตรหัสผ่าน ให้เปิดดูลำดับขั้นทีละข้อ |
+| [references/mfa.md](references/mfa.md) | ตอนเลือกหรือลงมือทำ MFA และต้องการขั้นตั้งค่า TOTP · การใช้ WebAuthn · ข้อจำกัดของ SMS |
+| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
+| [references/libraries-and-code.md](references/libraries-and-code.md) | ตอนเลือกไลบรารีตามภาษา หรือต้องการโค้ดตัวอย่างการ hash รหัสผ่านและเครื่องมือจำกัดจำนวนครั้ง |
 
-## Combining formats in one doc
+## Choose the Right Pattern
 
-A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
+```
+What's authenticating?
+│
+├─ Browser user
+│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
+│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
+│
+├─ Mobile app
+│  └─ Token-based: OAuth 2.0 PKCE flow
+│
+├─ Service-to-service
+│  ├─ Same org → mTLS or service mesh
+│  └─ External → OAuth 2.0 Client Credentials
+│
+└─ Third-party developer
+   └─ API keys (with rotation) OR OAuth
+```
 
-## Accessibility checklist
+## Pattern 1: Session-Based Auth (Most apps)
 
-For every visual:
+**When to use:** server-rendered apps, monoliths, one domain
 
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+**Implementation requirements:**
+- ✅ Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
+- ✅ Session ID: cryptographically random, ≥ 128 bits
+- ✅ Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
+- ✅ Idle timeout: 30 min default
+- ✅ Absolute timeout: 8-12 hours
+- ✅ Issue a new session ID when privileges change (login, role change)
+- ✅ On logout, delete the session from the store
+
+**Pitfalls:**
+- ❌ Storing session in JWT (can't revoke)
+- ❌ Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
+- ❌ Keeping the same ID after login (session fixation)
+
+## Pattern 2: JWT (Stateless Token)
+
+**When to use:** microservices, mobile, single-page app (SPA) with a backend API
+
+> ⚠️ **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+
+**Implementation requirements:**
+- ✅ Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
+- ✅ Short-lived access token: 5-15 min
+- ✅ Refresh token: longer-lived (days), stored separately, revocable
+- ✅ Issue a new refresh token each time one is used
+- ✅ Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
+- ✅ Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
+- ✅ Have a way to cancel tokens (blocklist, short expiry, etc.)
+
+**Pitfalls:**
+- ❌ `alg: none` attacks (check the algorithm explicitly)
+- ❌ Storing JWT in `localStorage` (XSS-stealable)
+- ❌ Long-lived access tokens (you can't cancel them)
+- ❌ Putting sensitive data in JWT (it's base64, not encrypted)
+- ❌ Skipping signature verification
+
+## Pattern 3: OAuth 2.0 / OIDC
+
+**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
+
+ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+**Implementation requirements:**
+- ✅ **Always use PKCE** (even for confidential clients)
+- ✅ Validate `id_token` signature (use IdP's JWKS)
+- ✅ Validate `aud`, `iss`, `exp`, `nonce`
+- ✅ Use the `state` parameter to prevent cross-site request forgery (CSRF)
+- ✅ Match `code_verifier` to `code_challenge`
+- ✅ Use a library, don't write your own (Auth0, Passport.js, etc.)
+
+**Pitfalls:**
+- ❌ Implicit flow (deprecated, insecure)
+- ❌ Resource Owner Password Credentials flow (deprecated)
+- ❌ Skipping `state` validation (CSRF risk)
+- ❌ Trusting `id_token` without verifying signature
+
+## Pattern 4: Multi-Factor Authentication (MFA)
+
+มี 3 แบบ ถ้าเป็นแอปใหม่ให้ใช้ WebAuthn (passkeys) เป็นค่าเริ่มต้น เพราะไม่มีความลับร่วมให้ถูกหลอกเอาไป ถ้าต้องการ 2FA มาตรฐานที่ผู้ใช้ตั้งเองได้ง่ายให้ใช้ TOTP ส่วน SMS หรือ email ให้ใช้เป็นทางสุดท้ายเท่านั้น เพราะ SMS ไม่ปลอดภัยจากการสลับซิม (SIM swap) รายละเอียดทั้ง 3 แบบอยู่ใน [references/mfa.md](references/mfa.md)
+
+## Pattern 5: Password Management
+
+### Storage
+- ✅ **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
+- ❌ Never: MD5, SHA-1, SHA-256 raw, plain text
+
+### Password policy (2026 NIST guidelines)
+- ✅ Minimum 12 characters
+- ✅ Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
+- ✅ Allow long passphrases (any maximum must be at least 64 chars)
+- ✅ Allow special characters (don't restrict them)
+- ❌ Don't force composition rules (uppercase + digit + symbol)
+- ❌ Don't force regular password changes (only when you suspect a breach)
+
+### Password reset flow
+
+ข้อที่ห้ามพลาดในการรีเซ็ตรหัสผ่าน: ข้อความตอบต้องเหมือนกันไม่ว่าอีเมลจะมีในระบบหรือไม่ token ต้องสุ่มอย่างน้อย 256 bits เก็บแบบ hash และหมดอายุใน 15 นาที และเมื่อตั้งรหัสใหม่แล้วต้องยกเลิกทุก session เดิมและส่งอีเมลยืนยัน ลำดับขั้นครบทั้ง 9 ข้ออยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+## Pattern 6: Account Lockout & Rate Limiting
+
+```
+Login attempts:
+- 5 failed attempts in 15 min → lock account 15 min
+- 10 failed attempts in 1 hour → lock 1 hour
+- Use IP + email combo, not just one
+
+Lockout messaging:
+✅ "Too many failed attempts. Try again in 15 minutes."
+❌ "Account locked." (reveals account exists)
+```
+
+ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
+
+## Pattern 7: API Authentication
+
+เลือกตามผู้เรียก: API key สำหรับ server-to-server แบบง่าย · OAuth 2.0 Client Credentials สำหรับ service-to-service · mTLS สำหรับระบบภายในที่ต้องการความปลอดภัยสูง · HMAC signing สำหรับตรวจ webhook ส่วน API key ต้องแสดง secret ครั้งเดียวตอนสร้าง เก็บแบบ hash และให้ผู้ใช้ยกเลิกได้ทันที ตารางเทียบและหลักการครบอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+## Authorization Patterns (after authentication)
+
+ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+### Implementation tip
+- Check authorization at every endpoint
+- Don't trust a role sent by the client
+- Check on the server, using the user from the session or token
+
+## Common Vulnerabilities Checklist
+
+- [ ] Session fixation (regenerate ID on login)
+- [ ] CSRF (token or SameSite cookie)
+- [ ] Brute force (rate limiting)
+- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
+- [ ] Open redirect (allowlist redirect URLs)
+- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
+- [ ] Timing attacks (compare in constant time)
+- [ ] Token in URL (use header or cookie)
+- [ ] Logout that does nothing on the server (invalidate server-side)
+- [ ] Privilege escalation (re-check after role change)
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
-
-## Quick-start recipe
-
-When the user asks for a design / mockup:
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
-
-## Related skills
-
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+- ❌ Writing your own crypto or auth (use libraries)
+- ❌ Storing passwords reversibly
+- ❌ JWT for sessions when you have one backend
+- ❌ Long-lived JWT without rotation
+- ❌ Authentication without authorization checks
+- ❌ Trusting JWT claims as authorization source
+- ❌ Logout that doesn't invalidate token server-side
+- ❌ Allowing weak passwords for compliance "convenience"
 
 
-## reference: ascii-patterns.md
+## reference: api-auth-and-authorization.md
 
-# ASCII patterns
+# API Authentication และ Authorization Patterns
 
-Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+วิธียืนยันตัวตนของ API แต่ละแบบ หลักการจัดการ API key และตัวอย่าง RBAC กับ ABAC
 
-## Box-drawing characters
+## Pattern 7: API Authentication
 
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
 ```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
 ```
 
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-## Common patterns
-
-**Layout sketch:**
+### ABAC (Attribute-Based) — fine-grained
 ```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
+Allow if user.department === resource.department AND action === "read"
 ```
 
 
-## reference: combining-formats.md
+## reference: auth-flows.md
 
-# Combining formats in one doc
+# ลำดับขั้นของแต่ละ flow
 
-Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+ลำดับขั้นทีละข้อของ session · JWT · OAuth กับ PKCE และการรีเซ็ตรหัสผ่าน ใช้ตอนลงมือเขียนโค้ดหรือรีวิวว่าโค้ดทำครบทุกขั้นไหม ส่วนข้อกำหนดและข้อผิดพลาดที่ต้องเลี่ยงอยู่ใน `SKILL.md`
 
-Pattern from `DockXI/docs/12-design-mockup.md`:
+## Pattern 1: Session-Based Auth — Flow
 
 ```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
 ```
 
-Don't force everything into one format. Each format is best at something different.
-
-
-## reference: svg-snippets.md
-
-# Inline SVG snippets
-
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
-
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
-|---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
-
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
-
-## Snippets
-
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-## Worked example — UI state mockup
-
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
-
-
----
-
-# skill: branded-document-design
-
-Use when a Word, PowerPoint or PDF deliverable must look designed. Token palette, type scale, tested python-docx and python-pptx builders, Thai typography.
-
-# Branded Document Design
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
-> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
-- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
-- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
-- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
-
-**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
-→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
-
----
-
-## 0 · สีมาจากเนื้องาน — ถามก่อนเริ่ม
-
-**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-
-ถ้ายังไม่มี **ห้ามเลือกสีเอง ห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ให้ถามผู้ใช้ว่าจะใช้สีอะไร
-ถ้าผู้ใช้ยังไม่ระบุ ให้เสนอจากเนื้องาน รอยืนยัน แล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown
-
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
-|---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
-
-ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
-
-**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
-สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
-
----
-
-## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
-
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
-ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
-
-| Token | หน้าที่ | ได้มาจาก |
-|-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีหลักที่ผู้ใช้เลือก |
-| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
-| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
-| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
-| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
-| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
-| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
-
-**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
-พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
-
-**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
-
-| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
-|---|---|---|
-| 🔴 แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
-| 🟠 เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
-| 🟢 เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
-| 🔵 น้ำเงิน | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก (brand) |
-| 🟣 ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
-| ⚪ เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
-
-กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
-
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
->
-> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
-
-> 💡 **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
-> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
-
-### สเกลตัวอักษร (pt)
-
-| ระดับ | Word | Slide | น้ำหนัก · สี |
-|-------|------|-------|--------------|
-| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
-| H1 | 16 | 26 | bold · `brand` |
-| H2 | 12.5 | — | bold · `brand_deep` |
-| H3 | 11.5 | — | bold · `text` |
-| เนื้อความ | 11 | 17 | regular · `text_body` |
-| ตาราง | 11 | 12.5 | regular · `text_body` |
-| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
-
-**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
-
----
-
-## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
-
-ใช้ **Tahoma** เป็นค่าเริ่มต้น: มีทุกเครื่อง Windows/Office · วรรณยุกต์ไม่ชนสระ ·
-bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
-
-> 🚨 **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
-> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม**
-> ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
-> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว **ห้ามตั้งฟอนต์เองด้วยมือ**
-
-> 🚨 **กับดักฟอนต์คู่:** ถ้าใช้ฟอนต์ละตินกับฟอนต์ไทยคนละตัว เช่น Noto Sans + Noto Sans Thai
-> การตั้งช่อง `cs` อย่างเดียวไม่พอ Word จะวาดตัวไทยด้วยฟอนต์ช่องละตินถ้าฟอนต์นั้นมีตัวไทย ถ้าไม่มีจะตกไปใช้ Browallia New แบบเงียบ ๆ
-> ให้ตั้ง `bk.FONT` (ไทย) กับ `bk.LATIN_FONT` (ละติน) แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header และ footer ก่อน `save()`
-> ฟังก์ชันนี้แยกข้อความไทยออกเป็น run ของตัวเอง และตั้งทั้ง 4 ช่องเป็นฟอนต์ไทย
-> ฟอนต์ที่ไม่ได้มีทุกเครื่องให้เรียก `bk.embed_fonts(doc)` เพื่อฝังฟอนต์ในไฟล์ ซึ่งทำได้เฉพาะฟอนต์ที่สัญญาอนุญาตยอมให้ฝัง เช่น OFL แต่ไฟล์จะใหญ่ขึ้นหลาย MB
-> ฟอนต์ variable เช่น Cascadia Mono จะกลายเป็น Calibri เมื่อ Word export เป็น PDF ให้ใช้ Consolas กับโค้ด
-
-กฎอื่นสำหรับเอกสารไทย:
-
-- ระยะบรรทัด **1.3–1.35** สำหรับ Tahoma (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์และสระบน–ล่าง ต้องเว้นที่) · ฟอนต์ตระกูล Noto มีความสูงบรรทัดในตัว 1.36–1.51 em จึงใช้ **1.1–1.15** ก็ได้ระยะเท่ากัน — ตัดสินจากหน้า PDF จริง ไม่ใช่จากตัวเลข
-- **ห้ามจัดชิดขอบ 2 ด้าน (justify)** กับย่อหน้าไทย เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
-- LibreOffice ตัดคำไทยไม่เหมือน Word ถ้าจะส่ง PDF ให้ export จาก Word จริง
-  หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
-- สร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
-  (ReportLab จัดวรรณยุกต์ไทยผิด ให้ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
-- เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
-  ไม่ใช่บั๊กของขนาดฟอนต์ บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน จึงให้ตรวจรอบสุดท้ายจาก Word
-
----
-
-## 3 · โครงหน้าเอกสาร Word
+## Pattern 2: JWT — Flow
 
 ```
-หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
-              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
-              → ขึ้นหน้าใหม่
-สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
-เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
-              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
-ท้ายเอกสาร    ตารางลงนามอนุมัติ
-footer        "หน้า N" กลางหน้า สีเทา 9pt
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
 ```
 
-**แบบปกเข้ม (เมื่อแอปหรือแบรนด์ใช้หน้าจอสีเข้ม):** ปกเต็มหน้าสีเทาเข้มเกือบดำแบบกลาง ๆ (เช่น `#1C1C22`) มีแสงเรืองสีแบรนด์จางมาก (ไม่เกิน 15%) — แสงม่วงเข้มเต็มมุมทำให้ปกดูเป็นสีม่วง เจ้าของงานขอกลับเป็นเทาเข้ม ·
-ชื่อเอกสาร ชื่อรอง และเส้นใต้ชื่อ วาง**ชิดใต้โลโก้** ไม่ใช่กลางหรือล่างหน้า ส่วนตารางข้อมูลเอกสารอยู่ค่อนไปทางล่าง ·
-โลโก้แบบตัวอักษรสว่าง (light-on-dark) มุมซ้ายบน · ชื่อเอกสาร 28–32pt · ตารางข้อมูลเอกสาร 4 ช่อง
-(รหัสเอกสาร · เวอร์ชัน · วันที่ · สถานะ) · หน้าในเป็นพื้นขาว บล็อกโค้ดสีเข้ม header มีโลโก้เล็ก ชื่อเอกสาร และรหัสเอกสาร
-footer มีชื่อระบบกับ "หน้า / ทั้งหมด" — สีเข้มอยู่ที่ปกหน้าเดียว จึงยังพิมพ์ได้ ขนาดชื่อเอกสารบนปกแบบนี้เกินสเกลข้อ 1 ได้
-โลโก้บนปกใช้**ขนาดเล็ก (กว้างราว 4.5 ซม.) มุมซ้ายบน เหนือชื่อเอกสาร** — เคยลองขยายสัญลักษณ์เป็นภาพหลักกลางปก เจ้าของงานขอกลับเป็นขนาดเล็ก
-ถ้าต้องการลูกเล่น ให้ลากแสงสีของโลโก้เป็นเส้นพาดเต็มความกว้างหน้าแทนเส้นใต้ชื่อเอกสาร (ยึดภาพเส้นกับย่อหน้าใต้ชื่อ เพื่อให้ตามได้ทั้งชื่อ 1 และ 2 บรรทัด) · เส้นต้องเป็น**ภาพเดียวต่อเนื่อง** ความหนาและแสงเท่ากันตลอด ไล่สีแบบ smoothstep ปลายสองข้างจางลงนุ่ม ๆ และวาดที่ 300 dpi — ห้ามวางแถบสั้นซ้อนบนเส้นยาว เพราะจะเห็นเป็นก้อนหนาที่สีไม่ต่อกัน (เจ้าของงานทักว่า "เส้นสีไม่ smooth")
-ตัวหนังสือเล็กบนปกเข้ม (ป้ายกำกับ ข้อมูลผู้เขียน หมายเหตุ) ใช้ขนาด**อย่างน้อย 8.5pt** และสีเทาอ่อน `#CFCCDE` ขึ้นไป ชื่อรองใช้สีอ่อนเกือบขาว — ตัว 7.5pt สีเทากลางบนพื้นเข้มดูจาง
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
 
-**หัวตารางในหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** แม้ปกจะสีเข้มก็ตาม เพราะตารางมีทุกหน้า สีเข้มจึงหนักตาและเปลืองหมึก (เจ้าของงานขอเปลี่ยนจริงในงานหนึ่ง)
-ให้ใช้พื้นอ่อนของสีแบรนด์ที่ยังเห็นชัดว่าเป็นแถวหัว เช่น `#E4DCFD` (พื้นที่อ่อนกว่านี้อย่าง `#F5F3FF` เจ้าของงานบอกว่าจางไป) ตัวหนังสือสีเข้มของแบรนด์ตัวหนา
-เส้นขอบมีเส้นเดียว คือเส้นสีแบรนด์ 1.5pt ใต้แถวหัว ไม่มีเส้นด้านบน (เส้นดำด้านบนดูหนักและถูกขอให้ปรับ) และไม่เว้นช่องขาวระหว่างช่องหัว เพราะจะทำให้เส้นใต้หัวขาดเป็นช่วง
-Word วาดเส้นขอบไล่สีไม่ได้ ถ้าใส่ไล่สี สีจะเปลี่ยนเป็นช่วงตามคอลัมน์
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
 
-หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา **17 ซม. = 9638 twips** (`BODY_TWIPS`)
-(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
-
----
-
-## 4 · องค์ประกอบที่ใช้ซ้ำ
-
-| องค์ประกอบ | หน้าตา | เมธอด |
-|-----------|--------|-------|
-| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
-| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` เส้นเทาบาง หัวซ้ำทุกหน้า | `table()` |
-| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
-| แถบตัวเลขสรุป | การ์ดพื้นฟ้าอ่อน ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
-| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
-| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
-| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
-| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
-
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
-ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
-
----
-
-## 5 · วิธีใช้ brandkit
-
-```python
-import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
-from brandkit import BrandDoc, use_brand, to_pdf
-
-doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
-doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-          subtitle="ระบบ Apps Track — Project Control & Monitor",
-          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-          logo="asset/AppsTrack_Logo_Badge.png")
-doc.toc()
-
-doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
-doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
-doc.table(["หัวข้อ", "รายละเอียด"],
-          [["URL ระบบ", "https://project.eitaccount.cloud"]],
-          widths=[2600, 7038])                  # รวม = 9638
-doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
-doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
-doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
-               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
-doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
-doc.save("SRS.docx")
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
 ```
 
-สไลด์ใช้ `brandkit_pptx.py` ซึ่งกินโทเคนชุดเดียวกัน:
+## Pattern 5: Password reset flow
 
-```python
-from brandkit_pptx import BrandDeck
-d = BrandDeck()                                  # 16:9
-d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
-d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
-d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
-d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
-d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
-              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
-d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
-d.save("deck.pptx")
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
 ```
 
-เมธอดทั้งหมดอยู่ใน `references/api.md` ส่วนไฟล์ตัวอย่างที่รันได้จริงคือ
-`scripts/example_srs.py`
 
+## reference: libraries-and-code.md
 
-### เด็ค "Stage" — ค่าเริ่มต้นของเด็คที่ใช้พูด
+# ไลบรารีและโค้ดตัวอย่าง
 
-`brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบ: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
+โค้ดตัวอย่างการเก็บรหัสผ่าน เครื่องมือจำกัดจำนวนครั้ง และไลบรารีที่แนะนำแยกตามภาษา
 
-```python
-from brandkit_stage import StageDeck
-d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")   # สีหลัก · สีพื้นของโปรเจกต์
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
-        meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
-d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
-         "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
-d.save("deck.pptx")
+## Password storage — code
+
+```typescript
+// ✅ Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// ❌ Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
 ```
 
-- **สีมาจากดีไซน์ของโปรเจกต์ 2 ค่า** คือ `accent` (สีหลัก) กับ `bg` (สีพื้น) หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → ดีไซน์ในโค้ด เช่น `--primary` · `--background` · ธีม Tailwind · โหมดมืด/สว่างของแอป → โลโก้และชุดแบรนด์ → เสนอจาก colour-by-domain) ห้ามใช้สีของต้นแบบ
-- เทาทุกระดับคำนวณจาก `bg` (พื้นเข้มผสมขาว พื้นสว่างผสมดำ) จึงอมโทนเดียวกับพื้นของโปรเจกต์ · `accent_hi` คือสีหลักที่ปรับความสว่างจนอ่านออกบนพื้นนั้น ใช้กับตัวเลขใหญ่ เลขลำดับ และคำเน้น · โปรเจกต์ที่กำหนดสีตัวหนังสือไว้แล้ว ส่งทับได้ เช่น `text="1B2430"`
-- ฟอนต์ใช้ของโปรเจกต์ได้ (`head_font=` · `body_font=`) ถ้าโปรเจกต์ยังไม่มี ใช้ Chakra Petch + IBM Plex Sans Thai
-- **รูปผังต้องใช้สีพื้นเดียวกับเด็ค** — เรนเดอร์ `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` (ตอนนี้มีใน `figure-flow.html`)
-- **ต้องติดตั้งฟอนต์ Chakra Petch และ IBM Plex Sans Thai** (Google Fonts · ใช้ฟรี) ในเครื่องที่เปิดไฟล์ ถ้าเครื่องปลายทางไม่มี ให้ส่ง PDF คู่ไปด้วย หรือสร้างใหม่ด้วย `head_font="Tahoma", body_font="Tahoma"`
-- ถ้าจะพิมพ์ ให้สร้างอีกชุดด้วย `bg="FFFFFF"` แทนการใช้พื้นเข้มเปลืองหมึก · `BrandDeck` (แถบสีด้านบน) ยังใช้ได้กับรายงานที่ส่งให้อ่านเอง
----
+## Rate limiting tools
 
-## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
 
-เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
-วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
+## Library Recommendations
 
-```bash
-soffice --headless --convert-to pdf --outdir out SRS.docx
-pdftoppm -png -r 80 out/SRS.pdf out/page      # ได้ page-01.png, page-02.png ...
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, `lucia-auth` | Lucia is simpler and newer |
+| Python | `authlib`, `python-jose` | authlib for OAuth |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+รายละเอียดของการยืนยันตัวตนหลายขั้นทั้ง 3 แบบ ใช้ตอนเลือกหรือลงมือทำ MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
 ```
 
-แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
-
-- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
-- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
-- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
-- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ · **หน้า 2 ไม่ว่าง** (ปกเต็มหน้าแล้วย่อหน้าตัวแบ่งหน้าตกไปหน้า 2 — `cover()` ใส่ตัวแบ่งไว้ท้ายย่อหน้าสุดท้ายแล้ว ถ้าเขียนปกเองต้องทำแบบเดียวกัน)
-- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
-- [ ] footer เลขหน้าครบทุกหน้า
-- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt
-- ❌ **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- ❌ **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
-
----
-
-## 8 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---------|-----------|
-| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `markdown-visuals` → export PNG → `figure()` |
-| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
-| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
-| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
-| รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) | `markdown-report-docx` |
-| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: api.md
-
-# brandkit API — อ้างอิงเมธอด
-
-ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้
-
-## สารบัญ
-
-1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
-3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
-
----
-
-## brandkit.py — Word (.docx)
-
-### สร้างเอกสาร
-
-```python
-BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
-         footer_text="หน้า")
-```
-
-| พารามิเตอร์ | ความหมาย |
-|-------------|----------|
-| `path_template` | ไฟล์ .docx/.dotx ที่ใช้เป็นแม่แบบ (มี header/logo ขององค์กรอยู่แล้ว) |
-| `page` | `"A4"` หรือ `"Letter"` |
-| `margins_cm` | (บน, ขวา, ล่าง, ซ้าย) |
-| `footer_text` | คำนำหน้าเลขหน้า · `""` = เลขเปล่า |
-
-### บล็อกระดับหน้า
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `cover(title, subtitle, meta, note, logo, logo_width_cm=2.6, top_space_pt=150, page_break=True)` | โลโก้รับได้ทั้ง .png และ .emf แต่ **.svg ใช้ไม่ได้ใน python-docx** ต้องแปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
-| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC แล้วใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
-| `page_break()` | |
-| `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
-
-### หัวข้อและข้อความ
-
-| เมธอด | ผลลัพธ์ |
-|-------|---------|
-| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · ตั้ง `outlineLvl` ให้ TOC เห็น |
-| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (ไทยอย่าใช้ justify) |
-| `rich([(text, opts), ...])` | หลายรูปแบบในย่อหน้าเดียว เช่น `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
-| `bullets([...], style="List Bullet")` | `style="List Number"` สำหรับเลขลำดับ |
-| `code(text)` | บล็อกโค้ดพื้นเทา |
-
-### ตารางและข้อมูล
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False)` | `widths` หน่วย twips รวม **9638** (`BODY_TWIPS`) สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ |
-| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · โทนที่ใช้ได้: green blue amber red violet grey |
-| `kpi_row([(value, label), ...])` | 3–5 ช่องพอดี |
-| `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
-
-### อื่น ๆ
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
-| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` จะขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
-| `save(path)` | |
-
-### ฟังก์ชันระดับโมดูล
-
-| ฟังก์ชัน | ใช้เมื่อ |
-|----------|---------|
-| `use_brand(**tokens)` | เปลี่ยนชุดสีทั้งชุด ต้องเรียก **ก่อน** สร้าง `BrandDoc` |
-| `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
-| `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
-| `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
-| `set_borders(table)` · `no_borders(table)` | |
-| `repeat_header(row)` · `keep_with_next(paragraph)` | |
-| `add_field(paragraph, "PAGE")` | แทรก field ของ Word |
-| `to_pdf(docx_path, outdir)` | เรียก LibreOffice แปลงเป็น PDF |
-
----
-
-## brandkit_pptx.py — สไลด์ (.pptx)
-
-```python
-BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
-```
-
-| เมธอด | สไลด์ที่ได้ |
-|-------|-------------|
-| `title_slide(title, subtitle, meta)` | พื้นฟ้าอ่อน + เส้นแบรนด์คั่น |
-| `section(title, kicker=None)` | แถบแบรนด์แนวตั้งซ้าย + ชื่อส่วน |
-| `bullets_slide(title, items, subtitle=None)` | หัวข้อ + ขีดม่วงใต้หัวข้อ + bullet 17pt |
-| `kpi_slide(title, items, subtitle=None)` | การ์ดตัวเลข |
-| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` เป็นสัดส่วน เช่น `[1, 4, 2, 2]` |
-| `image_slide(title, image_path, caption, subtitle)` | รูปกลางสไลด์ พอดีกรอบอัตโนมัติ |
-| `quote_slide(text, source)` | สไลด์คำพูด/ข้อสรุป |
-| `save(path)` | |
-
-**ข้อจำกัดที่ต้องรู้**
-
-- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) จึงไม่มีช่อง placeholder ให้แก้ใน PowerPoint
-  แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
-- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ ถ้าอยากได้ตารางไม่มีเส้น ให้เรียงกล่องข้อความแทน
-- ความสูงแถวตารางเป็นค่าต่ำสุด ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
-
----
-
-## brandkit_stage.py — เด็ค Stage (.pptx)
-
-```python
-StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
-          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", **colors)
-# accent / bg = สีหลักกับสีพื้นจากดีไซน์ของโปรเจกต์ · colors = สีที่โปรเจกต์กำหนดไว้แล้ว เช่น text="1B2430"
-```
-
-ทุกแผ่นยกเว้นปกและคั่นบทมี: สี่เหลี่ยมสีหลัก + ชื่อหมวด (`kicker`) · หัวสไลด์ 28 pt · เส้นท้ายกระดาษ · `PROJECT · หมวด` · เลขหน้า 2 หลัก
-
-| เมธอด | สไลด์ที่ได้ |
-|-------|-------------|
-| `cover(title, lines, meta, logo=None, mark=None)` | ชื่อ 60 pt + ขีดสีหลัก · `lines[1]` เป็นสีหลัก · `mark` = สัญลักษณ์ใหญ่จางทางขวา (ไม่ใส่ = วงแหวนจาง) |
-| `section(number, title, note)` | คั่นบท — เลขใหญ่สีหลัก |
-| `figure(kicker, title, image, caption, subtitle)` | รูปผังเต็มแผ่น (เรนเดอร์ด้วย `#bg=` เดียวกับเด็ค) |
-| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | ตารางเส้นคั่นแถว · คอลัมน์ 1 เทา 2 หนาขาว 3 เนื้อความ · ไม่เกิน 5 แถว |
-| `stats(kicker, title, items, subtitle)` | ตัวเลขใหญ่ 2–4 ช่อง + ตัวอย่างถาม/ตอบใต้ตัวเลข |
-| `steps(kicker, title, rows, example_head, note)` | ขั้นตอนมีเลข · `rows = [(ชื่อ, ทำอะไร, ตัวอย่าง)]` ไม่เกิน 6 ขั้น |
-| `points(kicker, title, points, image, caption, side, side_caption)` | ภาพซ้าย + ใจความมีขีดสีหลัก · `side` = ภาพเล็กขวา เช่น QR |
-| `statement(kicker, text, sub)` | ข้อความเดียวกลางแผ่น |
-| `save(path)` | |
-
-ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
-
-
-| จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
-|:---:|---|
-| 2 | `[2600, 7038]` — หัวข้อ/รายละเอียด |
-| 3 | `[1400, 6238, 2000]` — รหัส/รายการ/ผู้รับผิดชอบ |
-| 4 | `[1100, 4478, 1900, 2160]` — รหัส/รายการ/ผู้รับผิดชอบ/สถานะ |
-| 5 | `[1000, 1800, 2838, 2000, 2000]` |
-| 6 ขึ้นไป | ใช้ `landscape_section()` (พื้นที่ 14570 twips) |
-
-
-## reference: palette-examples.md
-
-# ตัวอย่างชุดสีที่เคยใช้จริง
-
-> ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
-
-## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
-
-โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
-
-```python
-use_brand(
-    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
-    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
-    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
-)
-```
-
-## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
-
-```python
-use_brand(
-    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
-    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
-    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
-)
-```
-
-## ชุด C — กรมท่า (ราชการ · กฎหมาย)
-
-```python
-use_brand(
-    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
-    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
-    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
-)
-```
-
-## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
-
-accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
-
-```python
-use_brand(
-    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
-    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
-    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
-)
-```
-
-## สีสถานะ — ชุดเดียวกันทุกแบรนด์
-
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
-
-| สถานะ | พื้น | ตัวอักษร |
-|---|---|---|
-| สำเร็จ | `E9F7EF` | `17794A` |
-| ข้อมูล | `EAF2FD` | `2160AB` |
-| เตือน | `FDF5E4` | `96660D` |
-| ผิดพลาด | `FDEDEC` | `A63A34` |
-| เน้น | `F1EEFC` | `52439F` |
-| เป็นกลาง | `F2F4F8` | `626A7A` |
-
-> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
-> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
-
-## วิธีตรวจก่อนใช้
-
-1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
-2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
-3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- ⚠️ SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry

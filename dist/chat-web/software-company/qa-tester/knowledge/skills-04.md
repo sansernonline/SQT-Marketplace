@@ -1,1680 +1,848 @@
-# skill: polished-document-style
+# skill: stack-python
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, audit, postmortem) needs polished formatting for GitHub, Notion or Obsidian.
+Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
 
-# Polished Document Style
+# stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+ใช้เครื่องมือเดียวกับที่ repo ใช้อยู่ และทุก diff ต้องผ่าน ruff · type check · pytest ก่อนส่ง ไฟล์นี้เก็บเฉพาะเรื่องของ Python
+เรื่องทั่วไปอยู่ที่อื่น: เขียนให้น้อยดู `lazy-coding` · ตั้งชื่อดู `readable-code` · log ดู `logging-standards` · จับ error ดู `error-handling-patterns`
 
-## When to use this skill
+## 1 · เริ่มงาน: ดูว่า repo ใช้อะไร แล้วใช้ตัวนั้น
 
-- Output is meant for **non-developers** to read (PMs, executives, clients)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
+| เจอไฟล์ | ติดตั้ง | รันคำสั่ง |
+|---|---|---|
+| `uv.lock` | `uv sync` | `uv run <cmd>` |
+| `poetry.lock` | `poetry install` | `poetry run <cmd>` |
+| `pdm.lock` | `pdm install` | `pdm run <cmd>` |
+| `requirements*.txt` อย่างเดียว | `python -m venv .venv` แล้ว `pip install -r requirements.txt` | เปิด `.venv` ก่อน |
+| ไม่มีอะไรเลย (โปรเจกต์ใหม่) | `uv init` แล้ว `uv add` | `uv run <cmd>` |
 
-## When NOT to use
+- ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
+- ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
+- อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
+- เวอร์ชัน ณ 2026-10: 3.10 หมดอายุเดือนนี้ ส่วน 3.15 กำหนดออก 2026-10-09 โปรเจกต์ใหม่ให้เริ่มที่ 3.13 หรือ 3.14
 
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
-
-> ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
-
-## อ่านเพิ่มเมื่อ
-
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/markdown-patterns.md](references/markdown-patterns.md) | ถ้าจะเขียนส่วนหัว สารบัญ กล่องข้อความ ตาราง ป้ายสถานะ cover block ตารางเทียบตัวเลือก ส่วนเซ็นรับ หรืออภิธานศัพท์ ให้เปิดดูตัวอย่าง markdown แล้วลอกไปใช้ |
-| [scripts/check_outline.py](scripts/check_outline.py) | ถ้า skill ที่เขียนเอกสารมีไฟล์แบบใน `assets/` ให้รัน `python scripts/check_outline.py <แบบ.md> <เอกสาร.md>` ก่อนส่ง — ตรวจหัวข้อครบและเรียงตามแบบ ช่องตัวหนาครบ หัวตารางตรง และไม่มีช่องที่ยังไม่เติม · ในแบบ ใส่ `<!-- optional -->` ท้ายหัวข้อหรือช่องที่ไม่บังคับ · แก้ตัวตรวจแล้วรัน `--self-test` ก่อน |
-| [references/theme-colors.md](references/theme-colors.md) | ถ้าต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์ ให้เปิดดูว่าใครคุมสีส่วนไหน และค่าสีตั้งต้นประจำบ้านคืออะไร |
-
-## Document Header (Always)
-
-Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ที่มีอิโมจิกำกับ ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections และต้องกดลิงก์ในสารบัญแล้วไปถึงหัวข้อจริง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
-
-เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `software-diagrams` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
-
-**markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้เสนอโทนที่เข้ากับเนื้องาน แล้วรอผู้ใช้ยืนยัน
-(ตารางจับคู่เนื้องานกับโทนสีอยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
-
-markdown เองไม่มีสี จึงใช้อิโมจิและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ใน [references/theme-colors.md](references/theme-colors.md)
-
-**สีสถานะไม่ขึ้นกับธีม** — 🔴 วิกฤต · 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
-
-## Emoji Vocabulary
-
-ใช้ให้**คงที่ทั้งเอกสาร** และใช้เพื่อ**หาของเจอเร็วขึ้น** ไม่ใช่เพื่อความน่ารัก
-
-| ใช้ทำอะไร | ชุดที่ใช้ |
-|---|---|
-| ระดับความสำคัญ | 🔴 วิกฤต · 🟠 สูง · 🟡 กลาง · 🟢 ต่ำ |
-| สถานะ | ✅ เสร็จ · 🚧 กำลังทำ · ⏳ รอ · ❌ ไม่ผ่าน · ⚠️ ต้องระวัง |
-| ชนิดกล่องข้อความ | 💡 ข้อแนะนำ · 📌 ข้อควรจำ · 🚨 อันตราย · 📋 รายการตรวจ |
-| หมวดเนื้อหา | 🎯 เป้าหมาย · 🏗️ สถาปัตยกรรม · 🔐 ความปลอดภัย · 📊 ตัวเลข · 🧪 การทดสอบ |
-
-**1 อิโมจิต่อหัวข้อ ไม่ใช่ต่อบรรทัด** — เอกสารที่ทุกบรรทัดมีอิโมจิอ่านยากกว่าเอกสารที่ไม่มีเลย
-
-## Callout Boxes
-
-Use blockquotes with emoji prefix มี 5 ชนิด คือ 💡 **Tip** · ⚠️ **Warning** · 🚨 **Critical** · ℹ️ **Note** · ❓ **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
-## Tables — When and How
-
-Use tables when items have **2+ attributes** ถ้าเขียนเป็น bullet แล้วแต่ละบรรทัดมีหลายค่าคั่นด้วยจุลภาค ให้เปลี่ยนเป็นตาราง ตัวอย่างเทียบกันอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (architect, PM, SEO recommendations) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีศัพท์เทคนิค 5 คำขึ้นไปให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Mermaid Diagrams
-
-**ตัวเลือกชนิดไดอะแกรม กติกาความอ่านง่าย ธีม และการจัดการป้ายภาษาไทย อยู่ใน `software-diagrams`**
-skill นี้คุมเฉพาะเรื่องการวางไดอะแกรมลงในเอกสาร markdown
-
-- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
-- ทุกรูปมีคำบรรยายใต้รูป 1 บรรทัด ขึ้นต้นด้วย **รูปที่ N —**
-- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
-- รูปที่ต้องส่งให้คนนอกทีมหรือใส่สไลด์ ใช้ `diagram-figures` แล้วฝังเป็นไฟล์ภาพ
-
-## Status Badges and Cover Block
-
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะแบบอิโมจิพร้อมคำกำกับ เช่น `**Status:** 🟢 Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Lists and Code Blocks
-
-**Rule:** Max 2 levels of nesting. More nesting = use a table.
-ตัวอย่างรายการที่ดีและรายการที่ซ้อนเกินอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Code blocks ต้องระบุภาษาทุกครั้ง (Always specify language) และถ้าโค้ดยาว ให้ใส่ชื่อไฟล์เป็นคอมเมนต์ในบรรทัดแรก ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Quality Checklist
-
-Before delivering any polished doc:
-
-- [ ] H1 title with emoji marker
-- [ ] Cover block with version, date, status, authors
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] At least one Mermaid diagram for any flow/relationship
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum)
-- [ ] Tested rendering in GitHub preview
-
-> ไดอะแกรมในเอกสาร: ชนิดไหนตอบคำถามไหน และธีม Mermaid ชุดเดียวกันทั้งโปรเจกต์
-> อยู่ใน `software-diagrams` ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
-
-## Anti-patterns
-
-- ❌ **Emoji spam** — emoji in every heading just for decoration
-- ❌ **All emoji, no labels** — `🔴 High` reads better than `🔴` alone
-- ❌ **Deep nesting** — bullets 4+ levels deep, use tables instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
-- ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
-- ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: markdown-patterns.md
-
-# รูปแบบ markdown พร้อมตัวอย่าง
-
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# 📋 <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** 🟡 Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
-```
-
-Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
-
-## Table of Contents
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## 📑 Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
-## Callout Boxes
-
-Use blockquotes with emoji prefix:
-
-```markdown
-> 💡 **Tip:** Brief actionable insight.
-
-> ⚠️ **Warning:** Important caveat or limitation.
-
-> 🚨 **Critical:** Must-read before proceeding.
-
-> ℹ️ **Note:** Additional context or background.
-
-> ❓ **Open Question:** Needs decision/clarification.
-```
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-❌ Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-✅ Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✅       | —       | Unique login email|
-| age   | number | ❌       | —       | Optional          |
-| role  | enum   | ✅       | `user`  | Access level      |
-```
-
-## Mermaid Diagrams
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
-```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk Level:** 🟡 Medium
-**SLA:** ⚡ < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> 🟢 **Approved** · 🔴 **High Priority** · 👤 @alice · 🗓️ Due 2025-03-15
-```
-
-## Cover Block Pattern
-
-For formal documents (BRD, FSD, ADR, postmortem):
-
-```markdown
-# 📋 <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | 🟢 Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, PM, SEO recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B      | 💰   | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C      | 💰💰💰| 🔴 High| 🟢 Low | 🔴 Slow | ⚪ Future consideration |
-```
-
-## Lists — When to nest, when to flatten
-
-### ✅ Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### ❌ Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
-```typescript
-const user: User = { id: 1, email: 'a@b.com' };
-```
+คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
 
 ```bash
-npm install
+ruff check .                      # lint
+ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
+pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
+pytest -q                         # ทั้งชุด
+pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
+pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
 ```
 
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
+- type checker: ถ้า repo มี `[tool.pyright]` หรือ `pyrightconfig.json` ให้ใช้ pyright ถ้ามี `[tool.mypy]` หรือ `mypy.ini` ให้ใช้ mypy ถ้าไม่มีทั้งคู่ให้ถามครั้งเดียว ส่วน ty ของ Astral ใช้เมื่อ repo ตั้งไว้แล้วเท่านั้น
+- ถ้า repo ยังใช้ black · isort · flake8 ให้ใช้ตามนั้น ไม่ย้ายไป ruff ในงานเดียวกัน
 
-For long blocks, put the file name in a comment on the first line:
+## 2 · แบบแผนประจำ
 
-```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
-  // ...
-}
-```
-
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## ✍️ Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | 🟢 Approved | 2025-01-15 |
-| Tech Lead | @bob | 🔵 Reviewing | — |
-| QA Lead | @charlie | ⚪ Not started | — |
-| Security | @dave | ❌ Rejected | 2025-01-14 |
-```
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## 📖 Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
-```
-
-Define acronyms on first use, then add to glossary.
-
-
-## reference: theme-colors.md
-
-# ตารางสีของธีมเอกสาร
-
-ไฟล์นี้บอกว่าส่วนไหนของเอกสารใครเป็นคนคุมสี และค่าสีตั้งต้นประจำบ้านคืออะไร ใช้ตอนต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์
-
-## ใครคุมสีส่วนไหน
-
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
+| เรื่อง | ทำแบบนี้ | ไม่ทำ |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
+| type hint | ใส่ทุกฟังก์ชันและ method ที่เรียกจากนอกไฟล์ ใช้ `list[str]` · `X \| None` | `List` · `Optional` จาก `typing` ในโค้ดใหม่ |
+| รูปร่างข้อมูล | ข้างในใช้ `@dataclass(frozen=True)` ส่วนที่ขอบระบบใช้ pydantic | `dict` ลอย ๆ ส่งข้ามโมดูล |
+| path | `pathlib.Path` | ต่อ string ด้วย `+ "/"` |
+| ข้อความ | f-string | `%` หรือ `.format()` ในโค้ดใหม่ |
+| log | `log.info("ส่งแล้ว order_id=%s", oid)` ให้ logger แทนค่าเอง | f-string ใน log (สร้าง string ทุกครั้งแม้ level ปิด) |
+| ไฟล์ · lock · connection | `with ...:` | เปิดแล้วรอ `close()` เอง |
+| ค่า default | `None` แล้วสร้างใหม่ในตัวฟังก์ชัน | `def f(items=[])` (list เดียวใช้ร่วมทุกครั้งที่เรียก) |
+| ไฟล์ข้อความภาษาไทย | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | ไม่ระบุ (Windows อ่านเป็น cp874 หรือ cp1252) |
+| สคริปต์ | logic อยู่ในฟังก์ชัน แล้วให้ `if __name__ == "__main__":` เรียก `main()` | โค้ดทำงานตอน import |
+| Command Line Interface (CLI) | ใช้ตัวที่ repo ใช้ ถ้าไม่มีให้เริ่มที่ `argparse` ก่อน typer | parse `sys.argv` เอง |
 
-## ค่าตั้งต้นประจำบ้าน (house default)
+```python
+@dataclass(frozen=True)
+class Refund:
+    order_id: int
+    amount_satang: int
 
-ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
+def main() -> int:
+    args = parse_args()
+    return run(args.input_path)
 
-| token | ค่า | ใช้กับ |
-|---|---|---|
-| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
-| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
-| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
-| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
-| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
-| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
-| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
-| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
-| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
-
-เมื่อประกาศ accent เฉพาะงานแล้ว ให้ใช้ค่านั้นแทน brand ส่วนสีอื่นคำนวณจาก accent ตัวนั้น
-
-
----
-
-# skill: markdown-visuals
-
-Use when a markdown doc needs a picture (wireframe, UI state, flow, architecture). Picks inline SVG, image, ASCII or Mermaid so it renders everywhere.
-
-# Markdown Visuals
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
-
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
-
-## When to use this skill
-
-- Producing **any** design mockup, wireframe, or UI spec
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
-
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
-
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI mockup / component state / icon       →  Inline SVG
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
-├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+if __name__ == "__main__":
+    raise SystemExit(main())
 ```
 
-**Default to inline SVG**, except for flows and sequences (use Mermaid for those). Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+## 3 · Web: FastAPI และ Django
 
-## 1 · Inline SVG (primary technique)
+- ข้อมูลเข้าและออกผ่าน pydantic model ที่ขอบ ส่วนข้างในใช้ type ของโดเมน ไม่ส่ง `request.json()` ดิบเข้า service
+- FastAPI: ของที่ต้องเปลี่ยนตอน test (DB session · client ภายนอก · นาฬิกา) รับผ่าน `Depends` แล้วสลับด้วย `app.dependency_overrides`
+- `async def` เฉพาะเมื่อทั้งสายเรียกเป็น async (httpx `AsyncClient` · driver DB แบบ async) ถ้าใช้ไลบรารีที่บล็อก (`requests` · `time.sleep` · driver sync) ให้ใช้ `def` ธรรมดาให้ FastAPI รันใน threadpool หรือห่อด้วย `asyncio.to_thread`
+- DB session 1 ตัวต่อ 1 request ผ่าน dependency ที่ `yield` ห้ามเก็บ session ไว้ระดับโมดูล
+- Django Object-Relational Mapping (ORM): ถ้าวนลูปแล้วแตะ FK ให้ใช้ `select_related` ถ้าแตะ many-to-many หรือ reverse FK ให้ใช้ `prefetch_related` แล้วตรวจจำนวน query ใน test ด้วย `assertNumQueries` หรือ `django_assert_num_queries`
+- migration: อ่านไฟล์ที่ `makemigrations` สร้างทุกครั้งก่อน commit ถ้าลบคอลัมน์หรือเปลี่ยนชนิดบนตารางใหญ่ ให้แยกเป็นหลายขั้นตาม `database-design`
+- endpoint สุขภาพ · timeout · รูป error ที่ส่งออก ดู `web-service-essentials` และ `api-conventions`
 
-### Boilerplate
+```python
+def get_db() -> Iterator[Session]:
+    with SessionLocal() as session:
+        yield session
 
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
+@app.post("/refunds", status_code=201)
+def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
+    return refund_service.create(db, body.to_domain())
 ```
 
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
+## 4 · Data และ AI
 
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี
-
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้เสนอโทนจาก [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md) แล้วรอผู้ใช้ยืนยัน ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
-
-### Reusable snippets
-
-Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
-
-## 2 · External image files
-
-Use when:
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
-## 4 · Mermaid
-
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
-
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+| เรื่อง | ทำแบบนี้ |
 |---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+| แก้ค่าใน DataFrame | ใช้ `df.loc[mask, "col"] = x` เพราะ pandas 3.x เปิด Copy-on-Write เป็นค่าเริ่มต้น ทำให้ `df["col"][mask] = x` ไม่แก้ `df` เลย |
+| ความเร็ว | ใช้ operation ทั้งคอลัมน์ (`df["a"] * df["b"]` · `np.where`) ก่อน `apply` ส่วน `iterrows` ใช้เมื่อไม่มีทางอื่น |
+| เงิน | เก็บเป็นสตางค์ชนิด `int64` หรือ `Decimal` ห้ามใช้ float และปัดเศษครั้งเดียวตอนแสดงผล |
+| CSV ภาษาไทย | ลอง `utf-8-sig` ก่อน (มี BOM จาก Excel) ถ้าไม่ผ่านให้ลอง `cp874` (TIS-620) และระบุ `dtype` ของรหัสที่ขึ้นต้นด้วย 0 เป็น `str` |
+| ผลซ้ำได้ | `rng = np.random.default_rng(42)` ส่งต่อเป็นพารามิเตอร์ ตั้ง seed ของ torch และ `random` ด้วย แล้วจด seed ในผลลัพธ์ |
+| notebook | ใช้ลองไอเดียได้ แต่โค้ดที่จะใช้ซ้ำให้ย้ายเข้าโมดูลพร้อม test ให้ notebook เหลือแค่เรียกฟังก์ชันและวาดกราฟ |
+| ไฟล์ใหญ่ | อ่านทีละส่วน (`chunksize`) หรือใช้ parquet แทน CSV เมื่อคุมรูปแบบได้ |
 
-## Combining formats in one doc
+- เรื่องเรียก LLM · prompt · RAG · วัดผล ดู `llm-engineering`
+- เรื่องนำเข้าหรือส่งออก Excel และปี พ.ศ. ดู `data-import-export`
 
-A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
+## 5 · กับดักที่เจอบ่อย
 
-## Accessibility checklist
-
-For every visual:
-
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
-
-## Anti-patterns
-
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
-
-## Quick-start recipe
-
-When the user asks for a design / mockup:
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
-
-## Related skills
-
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: ascii-patterns.md
-
-# ASCII patterns
-
-Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
-
-## Box-drawing characters
-
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
-
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-## Common patterns
-
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
-
-
-## reference: combining-formats.md
-
-# Combining formats in one doc
-
-Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
-
-Pattern from `DockXI/docs/12-design-mockup.md`:
-
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
-
-Don't force everything into one format. Each format is best at something different.
-
-
-## reference: svg-snippets.md
-
-# Inline SVG snippets
-
-Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
-
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
+| กับดัก | อาการ | แก้ |
 |---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+| datetime ไม่มี timezone | เวลาเพี้ยน 7 ชั่วโมง หรือเทียบกันแล้วได้ `TypeError` | สร้างด้วย `datetime.now(timezone.utc)` (3.11+ ใช้ `datetime.UTC` ได้) เก็บเป็น UTC แสดงด้วย `ZoneInfo("Asia/Bangkok")` และห้ามใช้ `utcnow()` |
+| เงินเป็น float | `0.1 + 0.2 != 0.3` และยอดรวมขาด 1 สตางค์ | ใช้ `int` สตางค์ หรือ `Decimal("0.10")` จาก string |
+| closure ในลูป | callback ทุกตัวได้ค่าสุดท้ายของลูป | ผูกค่าตอนสร้าง `lambda i=i: ...` หรือ `functools.partial` |
+| `except Exception:` กว้าง | error จริงถูกกลืน | จับเฉพาะชนิดที่รู้จัก ตามหลัก `error-handling-patterns` |
+| import วนกัน | `ImportError` แบบ partially initialized | ย้ายของที่ใช้ร่วมไปโมดูลที่ 3 ส่วน import ที่ใช้แค่ใน type ให้ใส่ใต้ `if TYPE_CHECKING:` |
+| งานหนัก CPU ใน thread | ใช้ thread หลายตัวแล้วไม่เร็วขึ้น เพราะ Global Interpreter Lock (GIL) | ใช้ `ProcessPoolExecutor` ส่วน thread ใช้กับงานรอ I/O |
+| `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
+| `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
+| `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
+| blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
 
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+## 6 · test
 
-## Snippets
+หลักทั่วไปอยู่ที่ `testing-standards` ส่วนนี้เป็นเรื่องเฉพาะของ pytest
 
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-## Worked example — UI state mockup
-
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
-
-
----
-
-# skill: testing-standards
-
-Use when adding or setting up automated tests in .NET, Node, Python, Angular or Flutter, or a suite is slow or flaky. What to test, naming, coverage.
-
-# Testing Standards
-
-> **กฎข้อเดียว:** test ที่ไม่มีใครเชื่อถือ แย่กว่าไม่มี test
-> test ที่แดงสลับเขียวเองจะถูก `skip` ภายใน 2 สัปดาห์ แล้วทั้งชุดจะตายตามกันไป
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มวาง test ในโปรเจกต์ใหม่ หรือเพิ่ม test ให้โค้ดที่มีอยู่
-- มีคนขอ "ให้มี unit test / automate test"
-- ชุด test เดิมช้า แดง ๆ เขียว ๆ หรือไม่มีใครดูแล้ว
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- E2E ผ่านเบราว์เซอร์ (Playwright/Cypress) ให้ใช้ `e2e-testing-patterns`
-- ขับแอปมือถือจริงบน emulator ให้ใช้ `app-verifier-setup` (`references/android-native.md`)
-- ออกแบบ test case เชิงธุรกิจก่อนลงมือเขียน ให้ใช้ `test-case-template`
-
----
-
-## 1 · ขั้นแรก: ใช้ของที่มี ถามเฉพาะตอนต้องเพิ่มตัวใหม่
-
-- **ถ้าโปรเจกต์มี framework อยู่แล้ว หรือสแต็กมี test library มากับ SDK** (Flutter `flutter_test` · Angular CLI) ให้ใช้เลย ไม่ต้องถาม
-- **ถ้าต้องลงแพ็กเกจ test ตัวใหม่** ให้ใส่คำถามนี้ไว้ในการถามครั้งเดียวก่อนเริ่มงาน (ถ้าเครื่องมือมีหน้าต่างให้เลือกคำตอบ เช่น `AskUserQuestion` ก็ใช้ตัวนั้น) เพราะถ้าเลือกผิดแล้วย้ายทีหลังจะแพงมาก
-- ถ้าเริ่มงานไปแล้วเพิ่งรู้ว่าต้องเลือก ให้เลือกตัว**แนะนำ**ในตารางแล้วทำต่อ จากนั้นบันทึกไว้ในหัวข้อ "ตัดสินใจเอง" ของรายงาน ไม่ต้องหยุดถามกลางทาง
-
-2 เรื่องที่ต้องตกลง:
-
-**ข้อ 1 — framework**
-
-| สแต็ก | ตัวเลือกที่ควรเสนอ |
+| ต้องการ | ใช้ |
 |---|---|
-| .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
-| Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
-| Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
-| Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
-| Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
+| เตรียมของ · เก็บกวาด | fixture ที่ `yield` ส่วนของที่ใช้หลายไฟล์ให้ไว้ใน `conftest.py` |
+| หลายเคส logic เดียว | `@pytest.mark.parametrize` พร้อม `ids=` ที่อ่านรู้เรื่อง |
+| ไฟล์ชั่วคราว | `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo |
+| เวลา | ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ให้ใช้ `time-machine` (พัฒนาต่อเนื่อง เร็วกว่า) แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ |
+| HTTP ภายนอก | httpx ใช้ `respx` ส่วน requests ใช้ `responses` และห้ามยิงเน็ตจริงใน unit test |
+| ฐานข้อมูลจริง | `testcontainers` (PostgreSQL · MySQL ตัวเดียวกับ production) ไม่ใช้ SQLite แทน Postgres |
+| ค่า environment | `monkeypatch.setenv` |
 
-**ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
-
-- unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
-- unit + integration (แตะ DB จริงผ่าน Testcontainers / SQLite in-memory)
-- ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
-
-> ถ้าโปรเจกต์**มี framework อยู่แล้ว** ก็ไม่ต้องถาม ใช้ของเดิมไป เพราะการมี 2 ระบบในโปรเจกต์เดียว
-> แย่กว่าใช้ของที่ไม่ถูกใจนัก
-
----
-
-## 2 · พีระมิด — สัดส่วนที่ยั่งยืน
-
-```
-        ▲  E2E  5%      ช้า เปราะ แพง — เอาไว้ทดสอบ "เส้นทางที่ทำเงิน" เท่านั้น
-       ╱ ╲
-      ╱   ╲ Integration 20%   ต่อ DB/API จริง ทดสอบว่าชิ้นส่วนคุยกันรู้เรื่อง
-     ╱     ╲
-    ╱       ╲ Unit 75%        ไม่แตะอะไรข้างนอก รันจบใน < 100ms ต่อตัว
-   ╱_________╲
+```python
+@pytest.mark.parametrize(
+    ("amount_satang", "allowed"),
+    [(0, False), (1, True), (500_000, True), (500_001, False)],
+    ids=["zero", "min", "at-limit", "over-limit"],
+)
+def test_refund_limit(amount_satang: int, allowed: bool) -> None:
+    assert is_refund_allowed(amount_satang) is allowed
 ```
 
-**แอปมือถือมีชั้น widget test (Flutter) หรือ component test (React Native)** อยู่ระหว่าง unit กับ E2E ชั้นนี้สร้างหน้าจอจริงในหน่วยความจำ แล้วกดและอ่านได้โดยไม่ต้องมี emulator แอปมือถือส่วนใหญ่ไม่มี integration ที่ต่อ DB จึงใช้ชั้นนี้เป็นชั้นกลางหลักแทน
+- logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
+- coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
 
-**ชุด unit ทั้งหมดต้องรันจบใน 10 วินาที** (Flutter: นับหลังคอมไพล์เสร็จ เพราะแค่เริ่ม `flutter test` ก็กินหลายวินาที · ตัวเลขนี้รอยืนยันบนเครื่องจริง)
-ถ้าเกินนี้ คนจะเลิกรันก่อน commit แล้ว test ที่พังจะไปเจอที่ CI เท่านั้น ซึ่งช้าเกินไป
+## 7 · ความปลอดภัยเฉพาะ Python
 
----
+หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
 
-## 3 · อะไรควรมี test / อะไรไม่ต้อง
+- lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
+- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv ตั้งแต่ 0.11.25 มี `uv audit` แต่ยังเป็น preview จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
+- ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
+- SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
+- ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`
+- ค่าลับอ่านจาก environment (`os.environ["KEY"]` หรือ pydantic-settings) แล้วตรวจตอนเริ่ม ให้ `.env` อยู่ใน `.gitignore` (ดู `config-and-secrets`)
+- Django production: `DEBUG = False` · `ALLOWED_HOSTS` ระบุชื่อจริง · `SECRET_KEY` จาก environment · รัน `python manage.py check --deploy` ก่อนปล่อย
 
-**ต้องมี**
-- ตรรกะทางธุรกิจ: การคำนวณ, เงื่อนไขสิทธิ์, การเปลี่ยนสถานะ
-- ทุกกรณีขอบ: ค่าว่าง, ศูนย์, ติดลบ, ขอบเขตล่าง/บน, ค่าซ้ำ
-- **ทุกบั๊กที่เคยเกิด** — เขียน test ที่แดงก่อน แล้วค่อยแก้ (regression test)
-- สัญญาที่คนอื่นพึ่งพา: รูปแบบ response ของ API, schema ของ event
+## 8 · รายการตรวจก่อนส่ง
 
-**ไม่ต้องมี**
-- getter/setter, DTO, mapping ตรง ๆ
-- โค้ดของเฟรมเวิร์ก (ไม่ต้อง test ว่า EF Core บันทึกได้ไหม)
-- ไลบรารีของคนอื่น
-- UI ที่แค่แสดงผลโดยไม่มีตรรกะ
-
-> **Coverage ที่ซื่อสัตย์: 70–80% ของ business logic** ไม่ใช่ 100% ของทั้งโปรเจกต์
-> ไล่ตาม 100% จะได้ test ปลอม ๆ ที่เขียนเพื่อให้ตัวเลขสวยเต็มไปหมด
-> ตั้ง gate ที่ "ห้ามลดลงจากเดิม" มีประโยชน์กว่าตั้งเลขเป้า
-
----
-
-## 4 · เขียนยังไง
-
-**ตั้งชื่อ** — อ่านชื่อแล้วต้องรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
-
-```
-MethodName_Scenario_ExpectedResult
-
-CalculateDiscount_WhenMemberIsGold_Returns15Percent
-CreateOrder_WhenStockIsZero_ThrowsOutOfStock
-ParseDate_WhenInputIsEmpty_ReturnsNull
-```
-
-ภาษาที่ชื่อ test เป็นข้อความ (Dart · Vitest · Jest) ใช้ `group('<สิ่งที่ทดสอบ>')` + `test('<สถานการณ์> → <ผลที่ต้องได้>')` เป็นประโยค เช่น `group('verdict')` · `test('below 50 lux is too dark for reading')`
-
-**โครง AAA** — เว้นบรรทัดคั่น 3 ส่วนให้เห็นชัด
-
-```
-// Arrange   เตรียมข้อมูลและ dependency
-// Act       เรียกสิ่งที่ทดสอบ — บรรทัดเดียว
-// Assert    ตรวจผล
-```
-
-**1 test = 1 เหตุผลที่จะพัง** ถ้ามี assert 5 อันที่ไม่เกี่ยวกัน ให้แยกเป็น 5 test
-
-**ห้ามมี logic ใน test** — ไม่มี `if`, ไม่มีลูปที่คำนวณค่าคาดหวัง
-ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
-
-**ทำให้ผลเหมือนเดิมทุกครั้ง**
-- เวลา: inject `IClock`/`now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
-- สุ่ม: fix seed
-- ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
-- **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
-
-**Mock เท่าที่จำเป็น** — mock ขอบเขตนอกระบบ (HTTP, คิว, เวลา, ไฟล์)
-ไม่ mock คลาสของตัวเองที่คำนวณล้วน ๆ ถ้า mock เยอะเกินไป แปลว่า test ผูกกับวิธีเขียนโค้ด
-พอ refactor ทีเดียว test แดงทั้งชุด ทั้งที่พฤติกรรมไม่เปลี่ยน
-
----
-
-## 5 · Integration test
-
-- ใช้ **DB จริงชนิดเดียวกับ production** (Testcontainers) ไม่ใช่ SQLite แทน PostgreSQL
-  เพราะ SQL ที่ผ่านบน SQLite อาจพังบนของจริง
-- แต่ละ test เริ่มจากสถานะที่รู้แน่ — transaction rollback หรือ truncate ทุกครั้ง
-- แยก command ออกจาก unit เพื่อให้รันแยกกันได้ (`npm run test:unit` / `test:integration`)
-- ทดสอบ **สัญญา** ของ API: status code, รูปร่าง JSON, header สำคัญ — ไม่ใช่แค่ "ไม่ error"
-
----
-
-## 6 · CI
-
-```
-push / PR → lint → unit (< 10 วินาที) → integration → build
-```
-
-- **test แดง = merge ไม่ได้** ไม่มีข้อยกเว้น
-- ห้ามมี `skip`/`ignore` ค้างในสาขาหลัก — ถ้าจะ skip ต้องมีลิงก์ issue กำกับ
-- test ที่ flaky (แดงสลับเขียวเอง) ต้อง**แก้หรือลบ** ห้าม retry จนกว่าจะเขียว เพราะนั่นคือการซ่อนบั๊ก
-- รายงาน coverage ในหน้า PR ให้เห็นว่าเพิ่มหรือลด
-
-รายละเอียดคำสั่งและไฟล์ config ของแต่ละ framework อยู่ใน `references/per-stack.md`
-
----
-
-## 7 · ตรวจงาน
-
-- [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
-- [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
-- [ ] ชุด unit รันจบใน 10 วินาที
-- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
-- [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
-- [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
-- [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
-- [ ] ไม่มี `sleep` / `Thread.Sleep` ในชุด test
-- [ ] ไม่มี test ที่ถูก skip ค้างโดยไม่มีเหตุผลกำกับ
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
-  ไม่ใช่สิ่งที่มันควรทำ
-- ❌ **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
-- ❌ **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
-- ❌ **mock ทุกอย่างจน test ทดสอบแค่ mock**
-- ❌ **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
-- ❌ **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
-- ❌ **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
-- ❌ **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
-
----
+- [ ] `ruff check` ไม่มีข้อผิดพลาด
+- [ ] `ruff format --check` ผ่าน (หรือ formatter ที่ repo ใช้)
+- [ ] type checker ของ repo ได้ 0 error ในไฟล์ที่แก้
+- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้
+- [ ] พฤติกรรมใหม่ทุกอย่างมี test ที่เคยแดงก่อนแก้
+- [ ] ไม่มี `requests` · `time.sleep` · driver sync หรือ I/O ที่บล็อกอยู่ใน `async def`
+- [ ] เปิดไฟล์ข้อความทุกจุดระบุ `encoding="utf-8"` และ datetime ที่เก็บมี timezone
+- [ ] dependency ที่เพิ่มอยู่ใน lock file และผ่าน `pip-audit`
 
 ## 9 · เชื่อมกับ skill อื่น
 
-| ต้องการ | ใช้คู่กับ |
+| งาน | เปิด |
 |---|---|
-| E2E ผ่านเบราว์เซอร์ | `e2e-testing-patterns` |
-| E2E แอปมือถือ (`integration_test` · `adb`) | `app-verifier-setup` |
-| ออกแบบ test case ก่อนเขียนโค้ด | `test-case-template` |
-| ทดสอบ endpoint health/ping | `web-service-essentials` |
-| log ที่ช่วยไล่ปัญหาตอน test แดง | `logging-standards` |
-| review โค้ด test | `code-review-checklist` |
+| เขียนให้น้อย ไม่เพิ่มของเกิน | `lazy-coding` |
+| ชื่อ · รูปฟังก์ชัน · ที่อยู่ไฟล์ | `readable-code` |
+| เลือก framework test · สัดส่วน · ชื่อ test | `testing-standards` |
+| รูปแบบ log · correlation id · logger Python สำเร็จรูป | `logging-standards` |
+| จับ error · retry · timeout | `error-handling-patterns` |
+| กฎปลอดภัยทุก diff | `principle-secure-by-default` และก่อนส่งใช้ `security-gate` |
+| เรียก LLM · RAG · วัดผล | `llm-engineering` |
+| schema · migration | `database-design` |
+| งานเบื้องหลัง (Celery · RQ · cron) | `background-jobs` |
+| ยืนยันว่าทำงานจริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |
 
-
-## reference: per-stack.md
-
-# ตั้งค่าและตัวอย่างต่อสแต็ก
-
-> ตัวอย่างในไฟล์นี้ **ยังไม่ได้รันทดสอบ** (ยกเว้นหัวข้อ Flutter ที่มาจากแอปจริง Lumio) ส่วนที่เหลือเป็นการตั้งค่ามาตรฐานของแต่ละ framework
-> ตอนรันครั้งแรกให้ดูว่าคำสั่งและ path ตรงกับโครงโปรเจกต์จริงไหม
 
 ---
 
-## สารบัญ
+# skill: stack-sql
 
-1. [.NET — xUnit](#net--xunit)
-2. [Node / TypeScript — Vitest](#node--typescript--vitest)
-3. [Python — pytest](#python--pytest)
-4. [Angular](#angular)
-5. [Flutter / Dart — flutter_test](#flutter--dart--flutter_test)
-6. [ตารางเทียบ](#ตารางเทียบ)
+Use when writing or reviewing SQL queries, stored procedures or data-change scripts for SQL Server or PostgreSQL.
 
----
+# stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
-## .NET — xUnit
+> **กฎข้อเดียว:** query ที่ยังไม่เคยรันกับข้อมูลจำนวนเท่าของจริง ถือว่ายังไม่เสร็จ
 
-```bash
-dotnet new xunit -o tests/MyApp.Tests
-dotnet add tests/MyApp.Tests reference src/MyApp
-dotnet add tests/MyApp.Tests package FluentAssertions      # assert ที่อ่านเป็นประโยค
-dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
-dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
-dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
-```
+ออกแบบตาราง ตั้งชื่อ ชนิดข้อมูล และ migration แบบ expand-and-contract → `database-design`
 
-```csharp
-public class DiscountCalculatorTests
-{
-    [Fact]
-    public void CalculateDiscount_WhenMemberIsGold_Returns15Percent()
-    {
-        // Arrange
-        var sut = new DiscountCalculator();
+## 1 · เริ่มงาน: รู้จักฐานข้อมูลก่อนเขียนบรรทัดแรก
 
-        // Act
-        var result = sut.Calculate(new Order { Total = 1000m }, MemberTier.Gold);
+- engine และรุ่น: `SELECT @@VERSION` (SQL Server) · `SELECT version()` (PostgreSQL) · `SELECT VERSION()` (MySQL) · SQL Server ดู `SERVERPROPERTY('Edition')` ด้วย เพราะหลายความสามารถมีเฉพาะ Enterprise
+- repo รัน migration ด้วยอะไร: `Migrations/` (EF Core) · `db/migration/V1__*.sql` (Flyway) · Liquibase `changelog` · `alembic/` · `prisma/migrations/` · สคริปต์ดิบใน `sql/`
+- collation และ time zone ของ server: `SERVERPROPERTY('Collation')` · `SHOW timezone`
 
-        // Assert
-        result.Should().Be(150m);
-    }
+- ใช้เครื่องมือ migration ที่ repo ใช้อยู่ ห้ามเพิ่มตัวที่ 2 และห้ามแก้ schema ด้วยมือนอกเครื่องมือ
+- ห้ามรันอะไรกับ production ให้เตรียมคำสั่งให้คนอนุมัติแทน (ดู `principle-proceed-on-reversible-work`)
+- ใช้ฐานข้อมูล local หรือ sandbox ที่จำนวนแถวใกล้ของจริง (ตาราง 100 แถวซ่อนปัญหาความเร็วทุกอย่าง) ไม่มีก็สร้างข้อมูลจำลองด้วยสคริปต์ให้จำนวนและการกระจายค่าใกล้จริง
 
-    // Theory = ทดสอบหลายเคสด้วยโค้ดชุดเดียว — ห้ามเขียนลูปเอง
-    [Theory]
-    [InlineData(MemberTier.None, 0)]
-    [InlineData(MemberTier.Silver, 50)]
-    [InlineData(MemberTier.Gold, 150)]
-    public void CalculateDiscount_ByTier_ReturnsExpected(MemberTier tier, decimal expected)
-        => new DiscountCalculator().Calculate(new Order { Total = 1000m }, tier)
-               .Should().Be(expected);
-}
-```
+## 2 · เขียน query ให้ถูก
 
-Integration ผ่าน `WebApplicationFactory` — ยิง HTTP จริงเข้า pipeline จริงโดยไม่ต้องเปิดพอร์ต:
+| เรื่อง | ทำแบบนี้ | กับดัก |
+|---|---|---|
+| ค่าจากผู้ใช้ | ส่งเป็น parameter เสมอ | ต่อ string → SQL injection |
+| คอลัมน์ | เขียนชื่อคอลัมน์ครบ | `SELECT *` → ดึงเกิน · คอลัมน์ใหม่ทำโค้ดพัง · ใช้ covering index ไม่ได้ |
+| NULL | `IS NULL` · `NOT EXISTS` | `= NULL` ไม่เคยจริง · `NOT IN (subquery)` ที่มี NULL 1 ตัว → ได้ 0 แถว |
+| JOIN | นับแถวก่อนและหลัง join | join ฝั่ง 1-ต่อ-หลาย แล้ว `SUM` → ยอดเบิ้ล แก้โดยรวมยอดก่อน join |
+| GROUP BY | ทุกคอลัมน์ที่ไม่ใช่ aggregate ต้องอยู่ใน `GROUP BY` | MySQL ที่ปิด `ONLY_FULL_GROUP_BY` → สุ่มค่าให้เงียบ ๆ |
+| หาร | `CAST(a AS decimal(18,4)) / b` และกันหาร 0 ด้วย `NULLIF(b, 0)` | SQL Server และ PostgreSQL ได้ `5/2 = 2` ส่วน MySQL ได้ `5/2 = 2.5000` |
+| ชนิดข้อมูลไม่ตรง | parameter ชนิดเดียวกับคอลัมน์ | SQL Server ส่ง `nvarchar` ไปเทียบคอลัมน์ `varchar` → `CONVERT_IMPLICIT` → scan ทั้งตาราง |
+| ช่วงวันที่ | `>= start AND < end` (ครึ่งเปิด) | `BETWEEN '2026-01-01' AND '2026-01-31'` → หลุดทั้งวันที่ 31 หลังเที่ยงคืน |
+| time zone | เก็บ UTC แล้วแปลงเป็น Asia/Bangkok ตอนแสดง | เก็บเวลาไทยไม่มี offset → รวมข้อมูลข้ามระบบแล้วเพี้ยน 7 ชั่วโมง |
+| ปี พ.ศ. | เก็บ ค.ศ. เสมอ แล้วแปลงตอนแสดง | เก็บ 2569 → คำนวณอายุ เรียง และ export พังหมด |
+| เงิน | `decimal(19,4)` · `numeric(19,4)` | `float` · `real` → 0.1 + 0.2 ไม่เท่ากับ 0.3 |
+| เรียงชื่อไทย | SQL Server `Thai_100_CI_AS` · PostgreSQL `COLLATE "th-TH-x-icu"` | collation ทั่วไป → สระหน้า (เ แ โ ใ ไ) เรียงผิดโดยไม่มี error |
 
-```csharp
-public class OrdersApiTests(WebApplicationFactory<Program> factory)
-    : IClassFixture<WebApplicationFactory<Program>>
-{
-    [Fact]
-    public async Task GetOrders_WhenNotAuthenticated_Returns401()
-    {
-        var res = await factory.CreateClient().GetAsync("/api/v1/orders");
-        res.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    }
-}
-```
+แปลง UTC เป็นเวลาไทยตอนแสดง: SQL Server `AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'` · PostgreSQL `AT TIME ZONE 'Asia/Bangkok'` (คอลัมน์ `timestamptz`)
 
-```bash
-dotnet test                                        # ทั้งหมด
-dotnet test --filter "FullyQualifiedName!~Integration"   # เฉพาะ unit
-dotnet test --collect:"XPlat Code Coverage"
-```
+- collation ไทยไม่มีทุก server ตรวจก่อนเลือก (คำสั่งใน [`references/snippets.md`](references/snippets.md)) · แสดงวันที่ไทยและรับปี พ.ศ. จากฟอร์ม → `i18n-and-locale`
 
----
+## 3 · ให้เร็ว: อ่าน plan จริง ไม่เดา
 
-## Node / TypeScript — Vitest
+- ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง: SQL Server `SET STATISTICS IO, TIME ON` + Actual Execution Plan · PostgreSQL `EXPLAIN (ANALYZE, BUFFERS)` (รันคำสั่งจริง UPDATE/DELETE ห่อ `BEGIN ... ROLLBACK`) · MySQL 8.0.18+ `EXPLAIN ANALYZE`
+- ใน plan ดู: scan ทั้งตารางใหญ่ · แถวที่คาด vs ได้จริงต่างมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort/hash ล้นลง disk
+- **sargable** — ห้ามครอบคอลัมน์ที่มี index ด้วย function (`YEAR(created_at) = 2026` → ช่วงวันที่ครึ่งเปิด) · `LIKE '%คำ'` ใช้ index ไม่ได้ ใช้ full-text
+- ทุก index ต้องตอบได้ว่ารับ query ไหน (ทำให้เขียนช้าลงทุกตัว) · covering index ใช้ `INCLUDE (...)`
+- แบ่งหน้าลึกใช้ keyset ไม่ใช่ `OFFSET` · N+1 จาก Object-Relational Mapper (ORM) นับ query จาก log แล้วแก้ด้วย eager load
+- parameter sniffing (SQL Server) แก้จากเบาไปหนัก ห้ามล้าง plan cache ทั้ง server · หลังโหลดข้อมูลก้อนใหญ่ update statistics
+- UPDATE/DELETE ก้อนใหญ่ทำทีละชุด (เช่น 5,000 แถว) ไม่งั้น lock ทั้งตาราง log โต rollback นาน
 
-```bash
-npm i -D vitest @vitest/coverage-v8
-```
+ตัวอย่างโค้ด keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
 
-`vitest.config.ts`:
+## 4 · เปลี่ยนข้อมูลอย่างปลอดภัย
 
-```ts
-import { defineConfig } from 'vitest/config';
+ตาราง isolation · upsert · สร้าง index ไม่ล็อกตาราง แยกตาม engine พร้อมตัวอย่างตรวจจำนวนแถว → [`references/safe-changes.md`](references/safe-changes.md)
 
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'node',
-    include: ['src/**/*.test.ts'],
-    // ไฟล์ setup ใช้ตั้ง fake timer / ล้าง mock ให้ทุกไฟล์เหมือนกัน
-    setupFiles: ['./test/setup.ts'],
-    coverage: {
-      provider: 'v8',
-      include: ['src/**/*.ts'],
-      exclude: ['src/**/*.dto.ts', 'src/**/index.ts'],
-      thresholds: { lines: 70, functions: 70, branches: 60 },
-    },
-  },
-});
-```
+- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
+- ก่อนลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
+- นับแถวที่คาดไว้ก่อน แล้วตรวจ `@@ROWCOUNT` (SQL Server) หรือ `GET DIAGNOSTICS` (PostgreSQL) ก่อน `COMMIT` ไม่ตรงให้ ROLLBACK
+- upsert ใช้แบบของ engine (`ON CONFLICT` · `ON DUPLICATE KEY` · SQL Server `UPDATE` + `INSERT ... WHERE NOT EXISTS` ด้วย `UPDLOCK, HOLDLOCK`)
+- deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน transaction สั้นที่สุด ไม่รอ API ภายนอกขณะถือ transaction
+- `ALTER TABLE` ตารางใหญ่: PostgreSQL ตั้ง `SET lock_timeout = '5s'` แล้ว retry · เปลี่ยนชนิดคอลัมน์เขียนตารางใหม่ทั้งก้อน · SQL Server เพิ่ม `NOT NULL` + default ทันทีเฉพาะ Enterprise · เปลี่ยนชนิดหรือย้ายข้อมูลใช้ expand-and-contract ตาม `database-design`
 
-```ts
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { DiscountCalculator } from '../src/discount';
+## 5 · กับดักที่เจอบ่อย
 
-describe('DiscountCalculator', () => {
-  beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
+- `MERGE` (SQL Server) มี bug หลายตัว และไม่ใส่ `HOLDLOCK` แล้ว 2 session insert ซ้ำ → `UPDATE` + `INSERT` แยก หรือ `MERGE ... WITH (HOLDLOCK)` พร้อม test
+- trigger ซ่อนกฎธุรกิจและพังเมื่อ insert หลายแถว → กฎอยู่ในโค้ดแอป trigger ใช้กับ audit เท่านั้น · cursor/loop ทีละแถว → คำสั่งแบบ set-based
+- `WITH (NOLOCK)` อ่านของที่ยังไม่ commit แถวหายหรือซ้ำ → เปิด Read Committed Snapshot Isolation (RCSI) แทน · ต่อ string เป็น SQL → parameter (ข้อ 7)
+- collation ไม่ตรงตอน join → ตั้งให้ตรงที่คอลัมน์ (ใส่ `COLLATE` ใน query ทำให้ไม่ใช้ index)
+- id ไม่เรียงต่อเนื่องเสมอ (identity กระโดด · sequence ไม่ย้อนเมื่อ rollback) → เลขเอกสารที่ห้ามขาดออกเองในตารางนับเลข
+- timestamp ไม่มี time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` ที่ตกลงว่าเป็น UTC หรือ `datetimeoffset`
 
-  it('calculateDiscount_whenMemberIsGold_returns15Percent', () => {
-    const sut = new DiscountCalculator();
-    expect(sut.calculate({ total: 1000 }, 'gold')).toBe(150);
-  });
+## 6 · test
 
-  it.each([
-    ['none', 0], ['silver', 50], ['gold', 150],
-  ])('calculateDiscount_byTier_%s', (tier, expected) => {
-    expect(new DiscountCalculator().calculate({ total: 1000 }, tier)).toBe(expected);
-  });
-});
-```
+- test query กับฐานข้อมูลจริงชนิดเดียวกับ production ห้ามใช้ SQLite หรือ in-memory แทน SQL Server/PostgreSQL เพราะพฤติกรรม NULL collation และ lock ต่างกัน
+- เปิดฐานข้อมูลใหม่ทุกรอบด้วย Testcontainers แล้วใส่ข้อมูลตั้งต้นด้วยสคริปต์ · logic ใน stored procedure ใช้ tSQLt (SQL Server) หรือ pgTAP (PostgreSQL)
+- ตรวจทั้งจำนวนแถวและค่า: กรณีมี NULL · ช่วงวันที่ตรงขอบเที่ยงคืน · ชื่อไทย · ยอดเงินมีเศษ
+- migration ใหม่ให้รันขึ้นบนสำเนา schema ที่เหมือน production พร้อมข้อมูลจำนวนใกล้จริง แล้วจับเวลาและดู lock
+- แก้ bug ให้เขียน test ที่ fail ก่อน แล้วค่อยแก้ (`principle-fix-root-cause`) ส่วนกรอบ test ทั่วไปดู `testing-standards`
 
-คุมเวลาแทนการ `sleep`:
+## 7 · ความปลอดภัยเฉพาะฐานข้อมูล
 
-```ts
-vi.useFakeTimers();
-vi.setSystemTime(new Date('2026-01-15T10:00:00+07:00'));
-await vi.advanceTimersByTimeAsync(5000);   // เดินเวลา 5 วิ ทันที
-vi.useRealTimers();
-```
+- 1 แอป 1 user ฐานข้อมูล ให้สิทธิ์เท่าที่ใช้ แอปห้ามใช้ `sa` · `postgres` · `root` และ user ที่รัน migration ต้องแยกจาก user ที่แอปใช้ตอนทำงาน
+- dynamic SQL ที่มีค่าจากผู้ใช้ให้ส่งค่าเป็น parameter ส่วนชื่อตารางหรือคอลัมน์ให้เลือกจาก allowlist แล้ว quote
 
-```json
-{ "scripts": {
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:cov": "vitest run --coverage",
-    "test:integration": "vitest run --config vitest.integration.config.ts"
-} }
-```
+ตัวอย่าง `sp_executesql` · `QUOTENAME` · plpgsql `format('%I')` → [`references/snippets.md`](references/snippets.md)
 
-> **Jest แทน Vitest:** API เกือบเหมือนกัน (`jest.fn` ↔ `vi.fn`) แต่ต้องตั้ง `ts-jest`
-> หรือ babel เพิ่มสำหรับ TypeScript เลือก Jest เมื่อทีมคุ้นอยู่แล้วหรือมี preset ที่ต้องใช้
+- ถ้ามีข้อมูลหลายบริษัทในตารางเดียว ให้พิจารณา row-level security: SQL Server `CREATE SECURITY POLICY` · PostgreSQL `CREATE POLICY` (เจ้าของตารางข้าม policy ได้ ถ้าไม่ `FORCE ROW LEVEL SECURITY`)
+- คอลัมน์ข้อมูลส่วนบุคคล (เลขบัตรประชาชน · เบอร์โทร · ที่อยู่) ไม่ดึงถ้าไม่ใช้ ส่วน Dynamic Data Masking ของ SQL Server ช่วยซ่อนตอนแสดง แต่ไม่ใช่การกันสิทธิ์ รายละเอียดดู `pdpa-compliance`
+- การแก้ข้อมูลสำคัญต้องมีร่องรอยว่าใครทำ (`audit-trail`)
 
----
+## 8 · รายการตรวจก่อนส่ง
 
-## Python — pytest
+- [ ] ทุกค่าจากภายนอกเป็น parameter · ไม่มี `SELECT *`
+- [ ] ตรวจ NULL · ช่วงวันที่แบบครึ่งเปิด · หาร · ชนิด parameter ตรงกับคอลัมน์
+- [ ] ดู plan จริงบนข้อมูลใกล้ของจริง จด logical reads หรือเวลาก่อน/หลัง · index ใหม่ทุกตัวบอกได้ว่ารับ query ไหน
+- [ ] สคริปต์รันซ้ำได้ และข้อมูลก้อนใหญ่ทำทีละชุด
+- [ ] transaction + ตรวจจำนวนแถวก่อน `COMMIT` · เขียนวิธีย้อนกลับและยืนยัน backup แล้ว
+- [ ] มี test ที่รันกับฐานข้อมูลชนิดเดียวกับ production
 
-```bash
-pip install pytest pytest-cov pytest-randomly
-```
+## 9 · เชื่อมกับ skill อื่น
 
-`pyproject.toml`:
+ออกแบบตารางและ migration แบบ expand-and-contract → `database-design` · สคริปต์รันซ้ำได้ → `principle-safe-to-rerun` · Excel/CSV → `data-import-export` · ใครแก้อะไร → `audit-trail` · injection และสิทธิ์ → `principle-secure-by-default` · วันที่ไทย พ.ศ. การเรียงไทย → `i18n-and-locale` · connection string → `config-and-secrets` · migration ใน pipeline → `cicd-and-release`
 
-```toml
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-q --strict-markers --cov=src --cov-report=term-missing"
-markers = ["integration: ต้องมี DB/network — รันแยกจาก unit"]
-```
 
-```python
-import pytest
-from src.discount import calculate_discount
+## reference: performance.md
 
-def test_calculate_discount_when_member_is_gold_returns_15_percent():
-    assert calculate_discount(total=1000, tier="gold") == 150
+# ให้เร็ว — อ่าน plan · index · แบ่งหน้า · งานก้อนใหญ่ (ฉบับเต็ม)
 
-@pytest.mark.parametrize("tier,expected", [("none", 0), ("silver", 50), ("gold", 150)])
-def test_calculate_discount_by_tier(tier, expected):
-    assert calculate_discount(total=1000, tier=tier) == expected
+อ่านเมื่อ query ช้าหรือกำลังเพิ่ม index · กฎย่ออยู่ใน `SKILL.md` ข้อ 3
 
-@pytest.mark.integration
-def test_create_order_persists_to_db(db_session):
-    ...
-```
-
-`conftest.py` — fixture ที่ใช้ร่วมกัน (คืนสถานะเดิมทุก test):
-
-```python
-import pytest
-
-@pytest.fixture
-def db_session(engine):
-    conn = engine.connect()
-    tx = conn.begin()
-    yield Session(bind=conn)
-    tx.rollback()          # ทุก test เริ่มจากฐานสะอาดเสมอ
-    conn.close()
-```
-
-```bash
-pytest                        # ทั้งหมด (pytest-randomly สลับลำดับให้เอง = จับ test ที่พึ่งกัน)
-pytest -m "not integration"   # เฉพาะ unit
-pytest --lf                   # เฉพาะที่แดงรอบก่อน
-```
-
----
-
-## Angular
-
-**Vitest + Testing Library** (โปรเจกต์ใหม่ — เร็วกว่า Karma มาก ไม่ต้องเปิดเบราว์เซอร์จริง)
-
-```bash
-npm i -D vitest @analogjs/vite-plugin-angular jsdom \
-         @testing-library/angular @testing-library/user-event
-```
-
-```ts
-import { render, screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
-import { OrderFormComponent } from './order-form.component';
-
-it('orderForm_whenSubmitWithEmptyName_showsRequiredError', async () => {
-  await render(OrderFormComponent);
-
-  await userEvent.click(screen.getByRole('button', { name: /บันทึก/ }));
-
-  expect(await screen.findByText(/กรุณากรอกชื่อ/)).toBeTruthy();
-});
-```
-
-> ทดสอบจาก**มุมผู้ใช้** — หาปุ่มด้วยข้อความที่คนเห็น (`getByRole`, `getByText`)
-> ไม่ใช่ `By.css('.btn-primary')` เพราะพอเปลี่ยนคลาส CSS test จะแดงทั้งที่ UI ยังทำงานถูก
-
-**Jasmine + Karma** (ค่าเริ่มต้นเดิมของ Angular — ใช้ต่อได้ถ้าโปรเจกต์มีอยู่แล้ว):
-
-```ts
-describe('DiscountService', () => {
-  let service: DiscountService;
-  beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [DiscountService] });
-    service = TestBed.inject(DiscountService);
-  });
-
-  it('calculate_whenMemberIsGold_returns15Percent', () => {
-    expect(service.calculate(1000, 'gold')).toBe(150);
-  });
-});
-```
-
-```bash
-ng test --watch=false --browsers=ChromeHeadless --code-coverage    # สำหรับ CI
-```
-
----
-
-## Flutter / Dart — flutter_test
-
-มากับ SDK ไม่ต้องลงอะไร ไฟล์ test อยู่ใน `test/` และล้อโครง `lib/` (`lib/features/measure/lux_math.dart` → `test/features/measure/lux_math_test.dart`) ส่วนชื่อไฟล์ใช้ snake_case ตามธรรมเนียม Dart
-
-```dart
-// fake ของสะพานไปฝั่ง native: implements คลาสจริงได้เลย ไม่ต้องสร้าง interface ใหม่
-class FakeDeviceLight implements DeviceLight {
-  final _lux = StreamController<double>.broadcast();
-  void emitSensor(double lux) => _lux.add(lux);
-  @override
-  Stream<double> sensorLux() => _lux.stream;
-  // ...override ที่เหลือคืนค่าที่ test เลือก (มี sensor ไหม · สิทธิ์กล้อง)
-}
-
-void main() {
-  group('measure screen', () {
-    testWidgets('shows live lux and verdict', (tester) async {
-      // จอทดสอบเริ่มต้น 800×600 — ตั้งเป็นขนาดมือถือ ไม่งั้นปุ่มอยู่นอกจอแล้วกดพลาด
-      tester.view.physicalSize = const Size(1080, 2400);
-      tester.view.devicePixelRatio = 2.75;
-      addTearDown(tester.view.reset);
-
-      final device = FakeDeviceLight();
-      final meter = MeterController(device);
-      await tester.pumpWidget(App(meter: meter));
-      device.emitSensor(420);
-      await tester.pump(MeterController.tick);   // ไม่ใช้ pumpAndSettle เมื่อมี Timer วนอยู่
-
-      expect(find.textContaining('420 lux'), findsOneWidget);
-      meter.dispose();   // ปิด Timer ในตัว test เอง ไม่งั้นล้มด้วย "A Timer is still pending"
-    });
-  });
-}
-```
-
-| เรื่อง | ทำอย่างนี้ |
+| engine | คำสั่งดู plan จริง |
 |---|---|
-| ชั้น test | unit (`test`) ใช้กับตรรกะล้วน ส่วน widget (`testWidgets`) ใช้กับหน้าจอและเป็นชั้นกลางหลัก ถ้าเป็น E2E บนเครื่อง ใช้ `integration_test` (`flutter test integration_test/`) หรือสคริปต์ `adb` ตาม `app-verifier-setup` |
-| platform channel | fake ด้วยคลาสที่ `implements` คลาสสะพานของจริง แล้วค่อยลง `mocktail` เมื่อ fake ด้วยมือเริ่มยาวเท่านั้น |
-| `pumpAndSettle` | ใช้ได้เมื่อหน้าจอหยุดนิ่งจริง ถ้ามี Timer หรือ animation วนตลอด จอจะไม่มีวันนิ่งจนหมดเวลา ให้ใช้ `pump(duration)` แทน |
-| Timer ค้าง | dispose controller ที่ถือ Timer ในตัว test เองก่อนบรรทัดสุดท้าย เพราะ Timer ที่ยังวิ่งอยู่ตอนจบจะทำให้ test ล้ม |
-| จอเล็ก | test แยก 1 ชุดที่ 360×800 dp ภาษาไทย + `textScaler` ใหญ่ เพื่อจับข้อความล้น (Flutter ฟ้อง overflow เป็น exception ใน test) |
-| SnackBar บังปุ่ม | widget test จับได้ โดยกดปุ่มล่างหลัง SnackBar ขึ้น แล้ว assert **ผลของการกด** (`tester.tap` ที่โดนของบังแค่พิมพ์คำเตือน ไม่ทำให้ล้ม) |
-| golden test | ไม่บังคับ เพราะภาพต่างกันตามเครื่องและฟอนต์ ใช้เมื่อทีมมีเครื่อง CI ตายตัว |
-| coverage | `flutter test --coverage` → `coverage/lcov.info` |
-| พิสูจน์ว่า test ใช้ได้ | แก้โค้ดให้ผิด 1 จุด รันแล้วต้องแดง แล้วแก้กลับ |
+| SQL Server | `SET STATISTICS IO, TIME ON;` + เปิด Actual Execution Plan (SQL Server Management Studio (SSMS) กด `Ctrl+M`) แล้วดู logical reads |
+| PostgreSQL | `EXPLAIN (ANALYZE, BUFFERS) SELECT ...` ระวังว่า `ANALYZE` รันคำสั่งจริง ถ้าเป็น UPDATE/DELETE ให้ห่อด้วย `BEGIN ... ROLLBACK` |
+| MySQL 8.0.18+ | `EXPLAIN ANALYZE SELECT ...` |
 
-```bash
-flutter test                              # ทั้งหมด
-flutter test test/features/measure        # โฟลเดอร์เดียว
-flutter test --coverage
-flutter test integration_test/            # ต้องมี emulator หรือเครื่องจริงต่ออยู่
+สิ่งที่ต้องดูใน plan: scan ทั้งตารางที่ใหญ่ · จำนวนแถวที่คาด vs ได้จริงต่างกันมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort หรือ hash ที่ล้นลง disk
+
+- **sargable** คือเงื่อนไขที่ใช้ index ได้ ห้ามครอบคอลัมน์ที่มี index ด้วย function
+  - ❌ `WHERE YEAR(created_at) = 2026` → ✅ `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
+  - ❌ `WHERE LOWER(email) = @e` → ✅ เก็บ email ตัวเล็กตั้งแต่แรก หรือทำ index บน expression (PostgreSQL) หรือ computed column + index (SQL Server)
+  - ❌ `WHERE name LIKE '%สมชาย'` ใช้ index ไม่ได้ ถ้าต้องค้นกลางคำให้ใช้ full-text search
+- **covering index**: ใส่คอลัมน์ที่ query อ่านไว้ใน `INCLUDE (...)` (SQL Server · PostgreSQL 11+) จะได้ไม่ต้องย้อนไปอ่านตาราง ส่วน MySQL ไม่มี `INCLUDE` ให้ต่อท้ายใน key แทน
+- ทุก index ที่เพิ่มต้องตอบได้ว่ารับ query ไหน เพราะ index ทำให้ INSERT/UPDATE ช้าลงทุกตัว
+- **แบ่งหน้าลึก** ใช้ keyset แทน `OFFSET` เพราะ `OFFSET 100000` ต้องอ่านทิ้ง 100,000 แถวทุกครั้ง
+
+```sql
+-- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
+SELECT id, created_at, total_amount
+FROM orders
+WHERE (created_at, id) < (@last_created_at, @last_id)   -- PostgreSQL · MySQL
+ORDER BY created_at DESC, id DESC
+LIMIT 50;
+-- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
 ```
 
+- **N+1 จาก Object-Relational Mapper (ORM)**: loop แล้วโหลดลูกทีละแถว → 1 หน้าจอยิง 201 query ให้เปิด log SQL ของ ORM แล้วนับ แล้วแก้ด้วย `Include` (EF Core) · `selectinload` (SQLAlchemy) · `include` (Prisma)
+- **parameter sniffing (SQL Server)**: plan ถูกสร้างจากค่าแรกที่ส่งมา แล้วใช้ซ้ำกับค่าที่กระจายต่างกันมาก → บางลูกค้าเร็ว บางลูกค้าช้า 100 เท่า
+  - ทางแก้เรียงจากเบาไปหนัก: SQL Server 2022+ compatibility level 160 มี Parameter Sensitive Plan optimization · `OPTION (RECOMPILE)` กับ query ที่รันไม่บ่อย · `OPTIMIZE FOR` · บังคับ plan ผ่าน Query Store
+  - ห้ามแก้ด้วยการลบ plan cache ทั้ง server
+- **statistics**: หลังโหลดข้อมูลก้อนใหญ่ให้รัน `UPDATE STATISTICS dbo.orders` หรือ PostgreSQL `ANALYZE orders`
+- **UPDATE/DELETE ก้อนใหญ่** ทำทีละชุด เช่น 5,000 แถว เพราะถ้าทำชุดเดียวล้านแถวจะ lock ทั้งตาราง log โต และ rollback นานเท่ากัน
+
+```sql
+-- SQL Server: ลบทีละ 5,000 แถวจนหมด
+WHILE 1 = 1
+BEGIN
+    DELETE TOP (5000) FROM dbo.audit_logs WHERE created_at < @cutoff;
+    IF @@ROWCOUNT < 5000 BREAK;
+END
+-- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
+```
+
+
+## reference: safe-changes.md
+
+# เปลี่ยนข้อมูลอย่างปลอดภัย — ตารางเทียบ engine และตัวอย่าง (ฉบับเต็ม)
+
+อ่านเมื่อเขียนสคริปต์แก้ข้อมูล upsert หรือ ALTER TABLE · กฎย่ออยู่ใน `SKILL.md` ข้อ 4
+
+| เรื่อง | SQL Server | PostgreSQL | MySQL (InnoDB) |
+|---|---|---|---|
+| isolation เริ่มต้น | READ COMMITTED แบบ lock ส่วน Azure SQL Database เปิด Read Committed Snapshot Isolation (RCSI) ให้แล้ว | READ COMMITTED (อ่านจาก snapshot ไม่บล็อกคนเขียน) | REPEATABLE READ |
+| upsert ที่รันซ้ำได้ | `UPDATE` แล้ว `INSERT ... WHERE NOT EXISTS` ใน transaction พร้อม `UPDLOCK, HOLDLOCK` | `INSERT ... ON CONFLICT (...) DO UPDATE` | `INSERT ... ON DUPLICATE KEY UPDATE` |
+| สร้าง index ไม่ล็อกตาราง | `WITH (ONLINE = ON)` ใช้ได้เฉพาะ Enterprise (รวม 2025) | `CREATE INDEX CONCURRENTLY` แต่รันใน transaction ไม่ได้ | `ALGORITHM=INPLACE, LOCK=NONE` |
+
+- ถ้า SQL Server มีคนอ่านบล็อกคนเขียนบ่อย ให้พิจารณาเปิด `READ_COMMITTED_SNAPSHOT ON` แต่จะเพิ่มภาระ tempdb จึงต้องทดสอบก่อน
+- ป้องกัน deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน ทำ transaction ให้สั้นที่สุด และไม่รอ API ภายนอกขณะถือ transaction
+- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
+- ก่อนคำสั่งที่ลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
+- นับแถวที่คาดไว้ก่อน แล้วตรวจก่อน `COMMIT`:
+
+```sql
+BEGIN TRAN;
+UPDATE dbo.orders SET status = 'cancelled'
+WHERE status = 'pending' AND created_at < @cutoff;
+IF @@ROWCOUNT <> @expected
+BEGIN ROLLBACK; THROW 50001, 'จำนวนแถวไม่ตรงกับที่นับไว้', 1; END
+COMMIT;
+-- PostgreSQL: ใน DO block ใช้ GET DIAGNOSTICS n = ROW_COUNT; ไม่ตรง → RAISE EXCEPTION
+```
+
+- `ALTER TABLE` บนตารางใหญ่:
+  - PostgreSQL ขอ lock `ACCESS EXCLUSIVE` แล้วรอ query ยาวที่ค้างอยู่ ระหว่างรอ query ใหม่ทุกตัวก็ต่อคิวด้วย จึงต้องตั้ง `SET lock_timeout = '5s'` แล้ว retry
+  - PostgreSQL 11+ เพิ่มคอลัมน์ที่มี default คงที่ได้ทันที แต่การเปลี่ยนชนิดคอลัมน์จะเขียนตารางใหม่ทั้งก้อน
+  - SQL Server เพิ่มคอลัมน์ `NOT NULL` พร้อม default ทำได้ทันทีเฉพาะ Enterprise ส่วน edition อื่นต้องเขียนทุกแถว
+  - ถ้าเปลี่ยนชนิดหรือย้ายข้อมูล ให้ทำแบบ expand-and-contract ตาม `database-design`
+
+
+## reference: snippets.md
+
+# ตัวอย่างโค้ดสั้น — เวลาไทย · dynamic SQL
+
+กฎอยู่ใน `SKILL.md` ข้อ 2 และ 7
+
+## แปลงเวลา UTC เป็นเวลาไทยตอนแสดง (ข้อ 2)
+
+```sql
+-- แปลงเวลา UTC เป็นเวลาไทยตอนแสดง
+SELECT created_at AT TIME ZONE 'UTC' AT TIME ZONE 'SE Asia Standard Time'  -- SQL Server (ชื่อโซนแบบ Windows)
+FROM dbo.orders;
+SELECT created_at AT TIME ZONE 'Asia/Bangkok' FROM orders;                  -- PostgreSQL (คอลัมน์ timestamptz)
+```
+
+## dynamic SQL ที่ส่งค่าเป็น parameter (ข้อ 7)
+
+```sql
+-- SQL Server
+EXEC sp_executesql N'SELECT id, name FROM dbo.customers WHERE email = @email',
+                   N'@email nvarchar(320)', @email = @input;
+-- ชื่อคอลัมน์: QUOTENAME(@column) หลังตรวจกับ allowlist
+-- PostgreSQL ใน plpgsql
+EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
+```
+
+## ตรวจว่ามี collation ไทยหรือไม่ (ข้อ 2)
+
+- PostgreSQL มี `th-TH-x-icu` เมื่อ server build ด้วย International Components for Unicode (ICU) ตรวจได้ด้วย `SELECT collname FROM pg_collation WHERE collname LIKE 'th%'`
+- MySQL ตรวจ collation ไทยที่มีด้วย `SHOW COLLATION LIKE '%thai%'` ก่อนเลือก
+
+
 ---
 
-## ตารางเทียบ
+# skill: api-conventions
 
-| เรื่อง | xUnit | Vitest | pytest | Angular (Vitest) | flutter_test |
-|---|---|---|---|---|---|
-| หลายเคส | `[Theory]` + `[InlineData]` | `it.each` | `@pytest.mark.parametrize` | `it.each` | วน `for` สร้าง `test(...)` ใน `group` |
-| mock | NSubstitute `Substitute.For<T>()` | `vi.fn()` / `vi.mock()` | `unittest.mock` / `mocker` | `vi.fn()` + `providers` | คลาส `implements` · `mocktail` |
-| ก่อน/หลังแต่ละ test | constructor / `IDisposable` | `beforeEach` / `afterEach` | fixture | `beforeEach` | `setUp` / `tearDown` / `addTearDown` |
-| คุมเวลา | inject `TimeProvider` | `vi.useFakeTimers()` | `freezegun` | `vi.useFakeTimers()` | `tester.pump(duration)` · `fakeAsync` |
-| DB จริง | Testcontainers | Testcontainers | Testcontainers / `pytest-postgresql` | — | — (`SharedPreferences.setMockInitialValues`) |
-| coverage | `--collect:"XPlat Code Coverage"` | `--coverage` | `--cov` | `--coverage` | `--coverage` |
-| สลับลำดับ | ไม่มีในตัว | `--sequence.shuffle` | `pytest-randomly` | `--sequence.shuffle` | `--test-randomize-ordering-seed random` |
+Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
 
+# ข้อตกลงของ API
 
----
+> **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
+> API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
+> API ที่แต่ละ endpoint ถูกต้องคนละแบบ เพราะแบบหลังฝั่งเรียกต้องเดาใหม่ทุกครั้ง
 
-# skill: e2e-testing-patterns
+## เมื่อไหร่ใช้ skill นี้
 
-Use when designing end-to-end tests with Playwright or Cypress, structuring suites, fixing flaky tests or running E2E in CI.
+- เริ่มออกแบบ API ตัวแรกของโปรเจกต์
+- จะเพิ่ม endpoint ใน API เดิม และอยากให้เข้ากับของเดิม
+- รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
+- ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
 
-> **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
+## เมื่อไหร่ **ไม่** ใช้
 
-# End-to-End Testing Patterns
-
-## When to use this skill
-
-- Setting up E2E testing in a new project
-- Choosing between Playwright, Cypress, Selenium
-- Structuring a growing E2E test suite
-- Fighting flaky tests
-- Designing test data strategy
-- Adding E2E to a CI/CD pipeline
-- Migrating from one framework to another
-
-## อ่านเพิ่มเมื่อ
-
-| ไฟล์ | เปิดเมื่อ |
+| โจทย์ | ไปที่ |
 |---|---|
-| [references/page-object-model.md](references/page-object-model.md) | ถ้าจะตั้งโครงชุดทดสอบใหม่ หรือเจอเทสต์ที่ลอกขั้นตอนล็อกอินซ้ำกัน ให้เปิดดูโค้ดเทียบแบบไม่ดีกับแบบ Page Object |
-| [references/test-data-strategies.md](references/test-data-strategies.md) | ตอนเลือกวิธีเตรียมข้อมูลทดสอบ และอยากเห็นข้อดีข้อเสียของทั้ง 4 แบบพร้อมโค้ดตัวอย่าง |
-| [references/flaky-tests.md](references/flaky-tests.md) | ถ้าเทสต์ผ่านบ้างไม่ผ่านบ้าง ให้เปิดดูโค้ดเทียบการรอแบบ sleep กับการรอตามเหตุการณ์ |
-| [references/auth-in-e2e.md](references/auth-in-e2e.md) | ตอนวางวิธีล็อกอินในชุดทดสอบ และต้องการโค้ด `storageState` หรือการฉีด cookie ผ่าน API |
-| [references/ci-and-parallel.md](references/ci-and-parallel.md) | ตอนตั้งการรันขนานหรือแบ่งรอบการรัน E2E ใน CI และต้องรู้ว่าต้องเก็บไฟล์อะไรเมื่อเทสต์ล้ม |
-| [references/coverage-and-libraries.md](references/coverage-and-libraries.md) | ตอนทำตารางความครอบคลุมของเส้นทางผู้ใช้ หรือย้ายคำสั่งระหว่าง Playwright กับ Cypress |
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
+| health check, error envelope, graceful shutdown | `web-service-essentials` |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` |
 
-## The Testing Pyramid (Get This Right First)
+---
 
-```
-        ▲
-       ╱E╲       E2E: 5-10% of tests
-      ╱ 2 ╲
-     ╱  E  ╲     - Slow, expensive, flaky
-    ╱───────╲    - Test critical user journeys ONLY
-   ╱  Integ  ╲   Integration: 15-25%
-  ╱           ╲  - API contracts, DB interactions
- ╱─────────────╲ Unit: 70-80%
-╱      Unit     ╲ - Fast, deterministic, many
-─────────────────
-```
+## 1 · เอกสารข้อตกลงต้องมีจริง
 
-> 🚨 **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
-> Result: slow CI, flaky tests, slow debugging
+วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
 
-## Framework Selection (2026)
+> ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
 
-| Framework | Best for | Avoid for |
-|-----------|----------|-----------|
-| **Playwright** ⭐ | Modern apps, cross-browser, parallel | Legacy apps with weird patterns |
-| **Cypress** | Developer experience, easy to learn, single-app | Multi-tab, cross-origin tests |
-| **Selenium** | Legacy, language flexibility | Greenfield projects |
-| **Puppeteer** | Chrome-only, scraping | Cross-browser needs |
-| **WebDriverIO** | Mobile + web, BDD style | Simple use cases |
+---
 
-> 💡 **Default recommendation: Playwright** — best developer experience, fast, cross-browser, made by Microsoft
-
-## Test Structure: Page Object Model (POM)
-
-ถ้าทุกเทสต์เขียน `page.fill` และ `page.click` ของหน้าเดียวกันซ้ำ ๆ ให้ย้ายขั้นตอนเหล่านั้นไปไว้ในคลาสของหน้านั้น แล้วให้เทสต์เรียกเมธอดแทน โค้ดเทียบอยู่ใน [references/page-object-model.md](references/page-object-model.md)
-
-> 💡 **One Page Object per page or major component.**
-
-## Selectors: Hierarchy of Goodness
+## 2 · ตั้งชื่อ URL
 
 ```
-Most resilient ─────────────────────────► Most brittle
-
-✅ Role + accessible name      page.getByRole('button', { name: 'Submit' })
-✅ Test IDs                     page.getByTestId('submit-btn')
-🟡 Visible text                 page.getByText('Submit')
-🟡 Label                        page.getByLabel('Email')
-🔴 CSS classes                  page.locator('.btn-primary')
-🔴 Tag + index                  page.locator('button:nth-child(3)')
-❌ XPath                        page.locator('//div[2]/button')
+GET    /v1/orders                 รายการ
+POST   /v1/orders                 สร้าง
+GET    /v1/orders/{id}            รายตัว
+PATCH  /v1/orders/{id}            แก้บางส่วน
+PUT    /v1/orders/{id}            แทนที่ทั้งตัว
+DELETE /v1/orders/{id}            ลบ
+GET    /v1/orders/{id}/items      ทรัพยากรลูก
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
 ```
 
-**Rule:** Prefer queries that survive refactoring.
+| กฎ | ✅ | ❌ |
+|---|---|---|
+| คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
+| ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
+| ความลึกไม่เกิน 2 ชั้น | `/orders/{id}/items` | `/customers/{a}/orders/{b}/items/{c}/logs` |
+| กริยาใช้เมื่อไม่ใช่ CRUD จริง ๆ | `POST /orders/{id}/cancel` | `POST /orders/cancelOrder` |
 
-## Test Data Strategy
+**การกระทำที่ไม่ใช่ CRUD** (อนุมัติ ยกเลิก ส่งซ้ำ) — ใช้ `POST /{resource}/{id}/{action}`
+อย่าดัดให้เป็น `PATCH` ที่แก้ `status` เพราะการเปลี่ยนสถานะมักมีผลข้างเคียงมากกว่าการแก้ฟิลด์ทั่วไป
 
-มี 4 แบบ คือ shared test DB · per-test setup · API setup กับ UI verification · database snapshot กับ rollback
-แบบที่แนะนำคือ **Option 3: API setup, UI verification (best)** — เตรียมข้อมูลผ่าน API ให้เร็วและแน่นอน แล้วค่อยทดสอบ UI จริง ส่วน shared test DB ทำให้เทสต์พึ่งลำดับกัน รันขนานยาก และข้อมูลปนกัน ส่วนข้อดีข้อเสียครบทุกแบบอยู่ใน [references/test-data-strategies.md](references/test-data-strategies.md)
+**วิธี `PATCH`:** เลือกแบบเดียวทั้งระบบ โดยแนะนำให้ส่งเฉพาะฟิลด์ที่แก้ (`merge patch`)
+และต้องกำหนดให้ชัดว่า `null` แปลว่า "ล้างค่า" หรือ "ไม่แตะ" (ดูข้อ 6)
 
-## What to Test E2E (Not Everything!)
+---
 
-### ✅ DO test E2E
-- Critical user journeys (login → checkout → confirmation)
-- Multi-step workflows that span multiple pages
-- Integration with external services (payment, email)
-- "Smoke tests" that verify deployment works
-- Cross-browser specific behavior
+## 3 · versioning
 
-### ❌ DON'T test E2E
-- Every form validation (use unit tests)
-- Edge cases of business logic (use unit/integration)
-- Every error message (use unit tests)
-- Performance (use dedicated tools)
-- Visual design (use visual regression tools)
+| วิธี | ข้อดี | ข้อเสีย |
+|---|---|---|
+| **ใน path** `/v1/orders` | เห็นชัด ทดสอบง่าย แคชง่าย | URL เปลี่ยนตอนขึ้นเวอร์ชัน |
+| ใน header `Accept: application/vnd.acme.v1+json` | URL คงที่ | มองไม่เห็นตอน debug ลืมส่งบ่อย |
 
-> 💡 **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
+> **เลือก path** ถ้าไม่มีเหตุผลเฉพาะ — ทุกคนเห็นเวอร์ชันได้จากบรรทัดเดียวใน log
 
-ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P0 P1 หรือ P2 ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+**เปลี่ยนแบบไหนแล้วฝั่งเรียกพัง:**
 
-## Fighting Flaky Tests
+| การเปลี่ยน | พังไหม |
+|---|:--:|
+| เพิ่ม endpoint ใหม่ | ไม่ |
+| เพิ่มฟิลด์ **ที่ไม่บังคับ** ใน request | ไม่ |
+| เพิ่มฟิลด์ใน response | ไม่* |
+| เพิ่มค่า enum ใหม่ | **พัง** — client ที่ `switch` ครบทุกค่าจะเจอค่าที่ไม่รู้จัก |
+| ลบ/เปลี่ยนชื่อฟิลด์ | **พัง** |
+| เปลี่ยนชนิดข้อมูล (`"12"` → `12`) | **พัง** |
+| ทำให้ฟิลด์ที่เคยไม่บังคับกลายเป็นบังคับ | **พัง** |
+| เปลี่ยน HTTP status ที่คืนในกรณีเดิม | **พัง** |
+| ทำให้กฎ validation เข้มขึ้น | **พัง** |
 
-| Cause | Fix |
-|-------|-----|
-| Hard-coded sleeps | Use auto-waiting (Playwright/Cypress have this) |
-| Animation timing | Wait for animation to complete OR disable in tests |
-| Network race conditions | `page.waitForResponse(url)` before assertion |
-| Test data leak | Use unique data per test (timestamp/UUID) |
-| Order dependency | Each test fully isolated, parallelizable |
-| Auth race condition | Pre-authenticate via API, inject session |
-| Element not stable | `expect(el).toBeVisible()` before interacting |
+\* ต่อเมื่อบอกฝั่งเรียกไว้แต่แรกว่า "ฟิลด์ที่ไม่รู้จักให้ข้ามไป"
+ข้อนี้ต้องเขียนไว้ใน `API-CONVENTIONS.md` ไม่ใช่หวังเอาเอง
 
-ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
+**ขึ้นเวอร์ชันใหญ่เมื่อจำเป็นจริง** เพราะทุกเวอร์ชันที่ยังเปิดอยู่คือโค้ดอีกชุดที่ต้องดูแล
 
-### Retry strategy
-- **In CI:** auto-retry failed tests 1-2 times
-- **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
-- **Don't accept flaky tests:** investigate or delete them. Don't ignore them
+---
 
-## Authentication in E2E
+## 4 · pagination
 
-อย่าล็อกอินผ่าน UI ในทุกเทสต์ เพราะช้า เปราะ และโค้ดซ้ำ ให้ล็อกอินครั้งเดียวแล้วแชร์สถานะ (`storageState`) หรือดีกว่านั้นคือล็อกอินผ่าน API แล้วฉีด cookie เข้า browser context โค้ดทั้งสามแบบอยู่ใน [references/auth-in-e2e.md](references/auth-in-e2e.md)
+**ทุก endpoint ที่คืนรายการต้องมี pagination ตั้งแต่วันแรก** ไม่มีข้อยกเว้น
+รายการที่ "มีไม่กี่รายการหรอก" อีก 2 ปีจะมี 10,000 รายการ
 
-## Parallelization and CI
+| วิธี | ใช้เมื่อ | ข้อจำกัด |
+|---|---|---|
+| **cursor** `?limit=50&cursor=eyJ...` | ค่าเริ่มต้น · ข้อมูลเยอะ · มีข้อมูลเพิ่มระหว่างเปิดดู | กระโดดไปหน้า 7 ไม่ได้ |
+| offset `?limit=50&offset=100` | ต้องมีเลขหน้าให้กด · ข้อมูลไม่เยอะ | ยิ่งหน้าลึกยิ่งช้า · ถ้ามีแถวแทรกระหว่างเปิดดู ข้อมูลจะซ้ำหรือหาย |
 
-**Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
-
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก PR ที่ล้มแล้วบล็อกการ merge → full ทุกคืนแบบข้าม browser → pre-prod ก่อน deploy ที่ต้องผ่าน P0 และ P1 เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานและรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
-
-## Anti-patterns
-
-- ❌ **Testing implementation details** — selectors based on internal structure
-- ❌ **Long monolithic tests** — one test with 50 steps is hard to debug
-- ❌ **Coupled tests** — Test B depends on Test A having run
-- ❌ **Hidden state** — tests behave differently depending on order or data
-- ❌ **Manual cleanup** — relying on people to reset the environment
-- ❌ **No quarantine** — failing tests get merged anyway because "it's flaky"
-- ❌ **Mocking everything** — at this layer, use the real integrations, or it's not E2E
-
-## Quality Targets (from qa-tester agent)
-
-- Critical path coverage: 100%
-- Test runtime: ≤ 10 min for smoke, ≤ 30 min for full
-- Flakiness rate: < 2%
-- Pass rate in main: > 95%
-- Mean time to fix flake: < 2 days
-
-ตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress (Library Quick Reference) อยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
-
-
-## reference: auth-in-e2e.md
-
-# Authentication in E2E — ตัวอย่างการล็อกอินในเทสต์
-
-สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
-
-## ❌ Bad: log in via UI every test
-```
-Slow, brittle, duplicate code
-```
-
-## ✅ Good: log in once, share state
-```typescript
-// playwright.config.ts
+```jsonc
+// GET /v1/orders?limit=2 → 200
 {
-  use: { storageState: 'auth.json' },
-  globalSetup: 'global-setup.ts',  // logs in once, saves cookies
-}
-```
-
-## ✅ Better: API login + cookie injection
-```typescript
-async function login(page, user) {
-  const response = await page.request.post('/api/login', { data: user });
-  const cookies = await response.headers();
-  await page.context().addCookies([...]);
-}
-```
-
-
-## reference: ci-and-parallel.md
-
-# Parallelization และ CI Integration
-
-ระดับการรันขนาน รอบการรัน E2E ใน CI และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
-
-## Parallelization
-
-| Level | Speedup | Complexity |
-|-------|--------:|:----------:|
-| File-level parallel | 4-8x | 🟢 Low (just enable) |
-| Test-level within file | 10x+ | 🟡 Med (isolation needed) |
-| Sharded across CI workers | Nx | 🟡 Med (requires sharding config) |
-| Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
-
-**Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
-
-## CI Integration
-
-### Run E2E tier
-```yaml
-# Smoke (every PR, 2 min)
-- 5-10 critical tests
-- Fail = block merge
-
-# Full (nightly, 30 min)
-- All E2E tests
-- Cross-browser
-- Failures investigated next day
-
-# Pre-prod (before deploy, 10 min)
-- P0 + P1 tests
-- Must pass before prod deploy
-```
-
-### Artifacts to capture
-- ✅ Screenshots on failure
-- ✅ Video on failure
-- ✅ Trace files (Playwright)
-- ✅ Console logs
-- ✅ Network logs
-
-
-## reference: coverage-and-libraries.md
-
-# Critical Path Coverage Matrix และ Library Quick Reference
-
-ตัวอย่างตารางความครอบคลุมของเส้นทางผู้ใช้ และตารางเทียบคำสั่งที่ใช้บ่อยของ Playwright กับ Cypress
-
-## Critical Path Coverage Matrix
-
-```markdown
-| User Journey | Coverage | Priority |
-|--------------|:--------:|:--------:|
-| Signup → first action | ✅ | 🔴 P0 |
-| Login → main task | ✅ | 🔴 P0 |
-| Add to cart → checkout → success | ✅ | 🔴 P0 |
-| Search → filter → result | ✅ | 🟡 P1 |
-| Settings → save | ✅ | 🟡 P1 |
-| Admin panel CRUD | ✅ | 🟡 P1 |
-| Password reset | ✅ | 🟢 P2 |
-| Profile edit | 🟡 Sample | 🟢 P2 |
-```
-
-## Library Quick Reference
-
-| Need | Playwright | Cypress |
-|------|-----------|---------|
-| Visit page | `page.goto(url)` | `cy.visit(url)` |
-| Click | `page.click(sel)` | `cy.get(sel).click()` |
-| Type | `page.fill(sel, text)` | `cy.get(sel).type(text)` |
-| Assert text | `expect(page.getByText(...))` | `cy.contains(...)` |
-| Wait for response | `page.waitForResponse(...)` | `cy.intercept(...).as(...)` |
-| Screenshot | `page.screenshot()` | `cy.screenshot()` |
-
-
-## reference: flaky-tests.md
-
-# Fighting Flaky Tests — ตัวอย่างการรอที่ถูกวิธี
-
-โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
-
-## ❌ Bad (sleep hack)
-```typescript
-await page.click('#submit');
-await page.waitForTimeout(2000); // ← flaky
-await expect(page.getByText('Success')).toBeVisible();
-```
-
-## ✅ Good (event-based wait)
-```typescript
-const responsePromise = page.waitForResponse('/api/submit');
-await page.click('#submit');
-await responsePromise; // ← deterministic
-await expect(page.getByText('Success')).toBeVisible();
-```
-
-
-## reference: page-object-model.md
-
-# Page Object Model (POM) — ตัวอย่างโค้ด
-
-ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
-
-## ❌ Bad (no abstraction)
-```typescript
-test('user can login', async ({ page }) => {
-  await page.goto('/login');
-  await page.fill('[data-testid="email"]', 'user@example.com');
-  await page.fill('[data-testid="password"]', 'pass123');
-  await page.click('button[type="submit"]');
-  await expect(page).toHaveURL('/dashboard');
-});
-
-test('user can update profile', async ({ page }) => {
-  await page.goto('/login');
-  await page.fill('[data-testid="email"]', 'user@example.com');  // ← duplicated
-  await page.fill('[data-testid="password"]', 'pass123');
-  await page.click('button[type="submit"]');
-  await page.goto('/profile');
-  // ...
-});
-```
-
-## ✅ Good (Page Object)
-```typescript
-// pages/LoginPage.ts
-export class LoginPage {
-  constructor(private page: Page) {}
-
-  async goto() { await this.page.goto('/login'); }
-
-  async login(email: string, password: string) {
-    await this.page.fill('[data-testid="email"]', email);
-    await this.page.fill('[data-testid="password"]', password);
-    await this.page.click('button[type="submit"]');
+  "data": [ { "id": "1042" }, { "id": "1041" } ],
+  "page": {
+    "limit": 2,
+    "nextCursor": "eyJpZCI6MTA0MX0",   // null เมื่อหมดแล้ว
+    "hasMore": true
   }
 }
-
-// tests/login.spec.ts
-test('user can login', async ({ page }) => {
-  const login = new LoginPage(page);
-  await login.goto();
-  await login.login('user@example.com', 'pass123');
-  await expect(page).toHaveURL('/dashboard');
-});
 ```
 
-> 💡 **One Page Object per page or major component.**
+- ห่อรายการไว้ใน `data` เสมอ เพราะถ้าตอบเป็นอาเรย์เปล่า ๆ วันหลังจะเติมข้อมูลหน้าไม่ได้
+- `limit` มีค่าเริ่มต้นและ**เพดานที่บังคับฝั่งเซิร์ฟเวอร์** (เช่น เริ่มต้น 20 สูงสุด 100)
+- `totalCount` นับแพง จึงให้ขอเป็นตัวเลือก `?includeTotal=true` อย่านับทุกครั้ง
+- **cursor ต้องทึบ** (ฝั่งเรียกห้ามแกะหรือประกอบเอง)
 
+---
 
-## reference: test-data-strategies.md
+## 5 · filtering · sorting · ฟิลด์ที่ขอ
 
-# Test Data Strategy — ทางเลือกทั้ง 4 แบบ
-
-ข้อดีข้อเสียของการเตรียมข้อมูลทดสอบแต่ละแบบ พร้อมโค้ดตัวอย่างของแบบที่แนะนำ
-
-## Option 1: Shared test DB (popular, problematic)
 ```
-❌ All tests share same data
-❌ Order-dependent
-❌ Hard to parallelize
-❌ Pollution between tests
+GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields=id,orderNo,total
 ```
 
-## Option 2: Per-test setup (slow)
+| เรื่อง | ข้อตกลง |
+|---|---|
+| กรองค่าเท่ากับ | `?status=confirmed` |
+| หลายค่า | `?status=confirmed,shipped` |
+| ช่วง | `?createdAt[gte]=...&createdAt[lt]=...` |
+| เรียง | `?sort=-createdAt,orderNo` — `-` คือมากไปน้อย |
+| ค้นหาข้อความ | `?q=สมชาย` แยกจากการกรอง |
+| เลือกฟิลด์ | `?fields=id,orderNo` |
+
+- **รับเฉพาะฟิลด์ที่กำหนดไว้** ถ้ารับชื่อฟิลด์อะไรก็ได้ จะเกิดช่องโหว่ และ query ที่ไม่มี index
+- พารามิเตอร์ที่ไม่รู้จัก ตอบ `400` ดีกว่าข้ามเงียบ ๆ ไม่งั้นฝั่งเรียกพิมพ์ผิดแล้วได้ข้อมูลผิดโดยไม่รู้ตัว
+
+---
+
+## 6 · รูปแบบข้อมูล
+
+| ข้อมูล | รูปแบบ | ตัวอย่าง |
+|---|---|---|
+| ชื่อฟิลด์ | `camelCase` ทั้งระบบ | `createdAt` |
+| เวลา | RFC 3339 · UTC · ลงท้าย `Z` | `"2026-09-25T09:42:13.482Z"` |
+| วันที่ล้วน | `YYYY-MM-DD` | `"2026-09-25"` |
+| เงิน | ตัวเลขเป็น**สตริง** + สกุลเงินแยก | `{ "amount": "1250.00", "currency": "THB" }` |
+| identifier | **สตริงเสมอ** | `"1042"` ไม่ใช่ `1042` |
+| enum | `SCREAMING_SNAKE` หรือ `lower_snake` เลือกแบบเดียว | `"CONFIRMED"` |
+| ระยะเวลา | วินาทีเป็นตัวเลข ตั้งชื่อให้รู้หน่วย | `"timeoutSeconds": 30` |
+| ประเทศ / สกุลเงิน / ภาษา | ISO 3166 · ISO 4217 · BCP 47 | `"TH"` · `"THB"` · `"th-TH"` |
+
+> 🚨 **id เป็นตัวเลขใน JSON คือระเบิดเวลา** — JavaScript เก็บจำนวนเต็มได้ปลอดภัยถึง 9,007,199,254,740,991
+> `bigint` ที่เกินนั้นจะถูกปัดเศษเงียบ ๆ ตอน `JSON.parse` และถ้าจะเปลี่ยนเป็นสตริงทีหลังก็เป็น breaking change
+>
+> 🚨 **เงินเป็น float ใน JSON** — `1250.10` ที่ผ่าน 2 ภาษาโปรแกรมอาจกลายเป็น `1250.0999999999999`
+
+**`null` กับ "ไม่มีฟิลด์" ต้องหมายถึงคนละอย่าง:**
+
+- ใน response ฟิลด์ที่มีแต่ไม่มีค่าให้ส่ง `null` ไม่ตัดทิ้ง ฝั่งเรียกจะได้ไม่ต้องเช็ค 2 แบบ
+- ใน `PATCH` ถ้าส่ง `{"note": null}` แปลว่าล้างค่า ถ้าไม่ส่งคีย์ `note` เลยแปลว่าไม่แตะ
+
+**อาเรย์ว่างคือ `[]` ไม่ใช่ `null`** ฝั่งเรียกจะวนลูปได้เลย
+
+---
+
+## 7 · error
+
+รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
+ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
+
+- **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
+- ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์
+- **คืน error ครบทุกฟิลด์ในครั้งเดียว** ไม่ใช่ทีละตัว ผู้ใช้จะได้ไม่ต้องกดส่ง 5 รอบ
+- ถ้ารองรับหลายภาษา ให้เลือกข้อความไทยหรืออังกฤษจาก `Accept-Language`
+
+**เลือก status ให้ตรง:** `400` รูปแบบคำขอผิด · `401` ยังไม่ได้ยืนยันตัวตน · `403` ยืนยันแล้วแต่ไม่มีสิทธิ์ ·
+`404` ไม่มีหรือไม่ให้รู้ว่ามี · `409` ชนกับสถานะปัจจุบัน · `422` รูปแบบถูกแต่ข้อมูลไม่ผ่านกฎ · `429` เรียกถี่เกิน
+
+---
+
+## 8 · เรียกซ้ำไม่เกิดผลซ้ำ และการแก้ชนกัน
+
+### idempotency key (รหัสกำกับคำขอ — ส่งซ้ำแล้วไม่ทำงานซ้ำ)
+
+**บังคับกับทุก `POST` ที่มีผลทางการเงินหรือส่งของออกไปข้างนอก**
+
 ```
-🟡 Clean slate every test
-🟡 Reliable but slow
-✅ Good for critical flows
+POST /v1/payments
+Idempotency-Key: 7f3c1e10-...        ← ฝั่งเรียกสร้าง เก็บไว้ใช้ตอน retry
 ```
 
-## Option 3: API setup, UI verification (best)
-```typescript
-// ✅ Setup via API (fast), verify via UI (real test)
-test('user sees orders', async ({ page, request }) => {
-  // Setup via API — fast, reliable
-  const user = await api.createUser();
-  await api.createOrder(user.id, { items: [...] });
+- เซิร์ฟเวอร์เก็บ key คู่กับผลลัพธ์ไว้อย่างน้อย 24 ชั่วโมง
+- key เดิมกับเนื้อหาเดิม ให้คืนผลเดิม ไม่ทำงานซ้ำ
+- key เดิมแต่เนื้อหา**ต่าง** ให้ตอบ `422` ไม่ทำงานใหม่
+- เครือข่ายขาดระหว่างรอคำตอบเป็นเรื่องปกติ ไม่ใช่กรณีพิเศษ ฝั่งเรียกจึง retry เสมอ
 
-  // Test the actual UI flow
-  await page.goto('/orders');
-  await expect(page.getByText('Order #123')).toBeVisible();
-});
+### แก้ชนกัน (optimistic concurrency)
+
+```
+GET   /v1/orders/1042        → 200  ETag: "v7"
+PATCH /v1/orders/1042        If-Match: "v7"
+                             → 200 ปกติ · 412 ถ้ามีคนแก้ไปก่อนแล้ว
 ```
 
-## Option 4: Database snapshot + rollback
+ถ้าไม่มี คนที่กดบันทึกทีหลังจะทับงานของคนแรกโดยไม่มีใครรู้
+
+---
+
+## 9 · rate limit
+
 ```
-✅ Real production-like data
-✅ Fast (uses snapshots)
-🟡 Requires DB tooling
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 997
+X-RateLimit-Reset: 1758790000
+Retry-After: 42                ← ต้องมีคู่กับ 429 เสมอ
 ```
+
+ถ้า `429` ไม่มี `Retry-After` ฝั่งเรียกต้องเดาเอง และส่วนใหญ่เดาว่า "ลองใหม่ทันที"
+
+---
+
+## 10 · การเลิกใช้ endpoint
+
+1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
+2. ส่ง header ในทุก response ของ endpoint นั้น:
+   ```
+   Deprecation: true
+   Sunset: Wed, 31 Dec 2026 23:59:59 GMT
+   Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
+   ```
+3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
+4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
+
+ระยะเวลาที่พอดี: API ภายในให้ 1 รอบ release ส่วน API ที่คนนอกใช้ให้อย่างน้อย 6 เดือน
+
+---
+
+## 11 · Anti-patterns
+
+- ❌ **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
+- ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
+- ❌ **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
+- ❌ **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
+- ❌ **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
+- ❌ **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
+- ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
+- ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
+- ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+
+---
+
+## 12 · ตัวย่อ
+
+- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
+- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
+- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
+- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
+- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
+- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
+- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
+
+## 13 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| health check · error envelope · timeout | `web-service-essentials` |
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
+| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
+| token · scope · สิทธิ์ | `auth-implementation-patterns` |
+| correlation id ที่โผล่ใน error | `logging-standards` |
+| test สัญญาระหว่างระบบ | `testing-standards` |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
+
+
+---
+
+# skill: data-import-export
+
+Use when a system imports or exports Excel or CSV data. Validate before write, row errors, Thai data and Buddhist years.
+
+# นำเข้าและส่งออกข้อมูล
+
+> **กฎข้อเดียว:** ตรวจให้จบก่อน แล้วค่อยเขียน
+> ถ้าเขียนไปครึ่งทางแล้วเจอแถวผิด ข้อมูลจะค้างอยู่ครึ่ง ๆ และไม่มีใครรู้ว่าต้องแก้ตรงไหน
+
+## เมื่อไหร่ใช้ skill นี้
+
+- มีหน้าจอให้ผู้ใช้อัปโหลด Excel หรือ CSV เพื่อนำข้อมูลเข้าระบบ
+- มีปุ่มส่งออกเป็น Excel หรือ CSV
+- ย้ายข้อมูลจากระบบเก่าเข้าระบบใหม่
+- ผู้ใช้อัปโหลดแล้วได้ข้อความว่า "ไฟล์ไม่ถูกต้อง" แล้วไม่รู้ว่าผิดตรงไหน
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` |
+| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` |
+| กลไกคิวและความคืบหน้า | `background-jobs` |
+| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` |
+
+---
+
+## 1 · ให้แม่แบบ อย่าให้เดา
+
+**ทุกหน้าจอนำเข้าต้องมีปุ่มดาวน์โหลดแม่แบบ** ในแม่แบบมี
+
+- หัวคอลัมน์ตรงกับที่ระบบต้องการเป๊ะ
+- **แถวตัวอย่าง 1–2 แถวที่ถูกต้อง**
+- แถวคำอธิบายว่าคอลัมน์ไหนบังคับ รูปแบบอะไร ค่าที่รับได้มีอะไรบ้าง
+- ชีตแยกสำหรับรายการค่าที่เลือกได้ (สถานะ ประเภท หน่วย)
+
+| ไฟล์ต่างจากแม่แบบแบบไหน | ทำ |
+|---|---|
+| ลำดับคอลัมน์สลับ | ✅ อ่านจากชื่อหัวคอลัมน์ ไม่ใช่ตำแหน่ง |
+| หัวคอลัมน์มีเว้นวรรคเกิน ตัวพิมพ์ต่าง | ✅ ตัดช่องว่างและเทียบแบบไม่สนตัวพิมพ์ |
+| มีคอลัมน์เกินที่ไม่รู้จัก | ✅ ข้ามไป แต่**บอกให้รู้ว่าข้ามอะไร** |
+| ขาดคอลัมน์บังคับ | ❌ หยุดทันที บอกว่าขาดคอลัมน์ไหน |
+
+---
+
+## 2 · ตรวจสามชั้น ก่อนเขียนอะไรทั้งนั้น
+
+| ชั้น | ตรวจอะไร | ตัวอย่างข้อความ |
+|:--:|---|---|
+| 1 · ไฟล์ | เปิดได้ · มีชีตที่ต้องการ · คอลัมน์บังคับครบ · ไม่เกินจำนวนแถวสูงสุด | "ไม่พบคอลัมน์ 'รหัสสินค้า'" |
+| 2 · รายแถว | ชนิดข้อมูล · ค่าบังคับ · อยู่ในรายการที่กำหนด · ช่วงตัวเลข | "แถว 42 คอลัมน์ 'จำนวน' ต้องเป็นตัวเลขมากกว่า 0 (พบ '-5')" |
+| 3 · ความสัมพันธ์ | รหัสมีอยู่จริงในระบบ · ไม่ซ้ำกันเองในไฟล์ · กฎทางธุรกิจ | "แถว 88 ไม่พบลูกค้ารหัส C-1042" |
+
+**รายงานความผิดพลาดต้องระบุ: แถว · คอลัมน์ · ค่าที่พบ · ค่าที่ควรเป็น**
+
+```
+❌ "ไฟล์ไม่ถูกต้อง"
+❌ "พบข้อผิดพลาด 37 รายการ"
+✅ ตารางผลตรวจ พร้อมปุ่มดาวน์โหลดไฟล์เดิมที่มีคอลัมน์ "ข้อผิดพลาด" ต่อท้าย
+```
+
+> **รายงานข้อผิดพลาดทั้งหมดในครั้งเดียว ไม่หยุดที่แถวแรกที่ผิด**
+> ผู้ใช้จะได้แก้รอบเดียวจบ ไม่ใช่อัปโหลดใหม่ 37 รอบ
+
+---
+
+## 3 · เขียนลงระบบ
+
+| แบบ | ใช้เมื่อ |
+|---|---|
+| **ทั้งหมดหรือไม่ทำเลย** | ค่าเริ่มต้น ไฟล์ต้องถูกหมดถึงจะนำเข้า |
+| ทำเท่าที่ผ่าน ข้ามแถวที่ผิด | ไฟล์ใหญ่มากและแต่ละแถวไม่เกี่ยวกัน โดย**ผู้ใช้ต้องเลือกเอง ระบบไม่ตัดสินใจแทน** |
+
+- **ทุกครั้งต้องมีหน้าสรุปก่อนยืนยัน** เช่น "จะเพิ่ม 120 · แก้ 45 · ข้าม 3 · ผิด 0" แล้วให้กดยืนยัน
+- ถ้าเจอแถวซ้ำในไฟล์ ให้หยุดและบอก ไม่ใช่ใช้แถวสุดท้ายเงียบ ๆ
+- ถ้าข้อมูลมีอยู่แล้วในระบบ ให้ผู้ใช้เลือก: ข้าม · เขียนทับ · หยุด
+- **นำเข้าทุกครั้งต้องบันทึกใน audit** ว่าใครนำเข้า ไฟล์อะไร กระทบกี่แถว (ดู `audit-trail`)
+- **เก็บไฟล์ต้นฉบับไว้** พอมีปัญหาจะได้ย้อนดูว่าไฟล์ที่ส่งมาหน้าตาอย่างไรจริง ๆ
+- ทำให้ย้อนกลับได้: บันทึก batch id (รหัสรอบนำเข้า) ไว้กับทุกแถวที่นำเข้า
+
+**ไฟล์ใหญ่ทำเป็นงานเบื้องหลัง**: ถ้าเกินประมาณ 1,000 แถวให้เข้าคิว
+แบ่งเป็นชุดละ 500 แถว แสดงความคืบหน้า และยกเลิกได้ (ดู `background-jobs`)
+
+---
+
+## 4 · กับดักของ Excel และ CSV
+
+| กับดัก | ผลที่เกิด | ทางแก้ |
+|---|---|---|
+| **ภาษาไทยใน CSV เพี้ยน** | เปิดใน Excel แล้วตัวอักษรอ่านไม่ออก | บันทึกเป็น UTF-8 **พร้อม BOM** หรือแนะให้ใช้ .xlsx |
+| **รหัสที่ขึ้นต้นด้วย 0 หาย** | `0812345678` กลายเป็น `812345678` | อ่านเป็นข้อความเสมอ ส่วนตอนส่งออกให้ตั้งรูปแบบเซลล์เป็นข้อความ |
+| **เลขยาวกลายเป็นเลขยกกำลัง** | เลขบัตร 13 หลัก → `1.23457E+12` | เหมือนข้างบน |
+| **วันที่ถูกตีความเอง** | `03/04/2026` เป็นมีนาคมหรือเมษายน | บังคับ `YYYY-MM-DD` ในแม่แบบ |
+| **ปี พ.ศ. กับ ค.ศ. ปนกัน** | เพี้ยน 543 ปีเงียบ ๆ | **ถามในหน้าจอนำเข้าว่าไฟล์ใช้ปีแบบไหน** |
+| ช่องว่างท้ายค่า | จับคู่รหัสไม่เจอ | ตัดช่องว่างหัวท้ายทุกค่า |
+| เซลล์ที่เป็นสูตร | ได้สูตรแทนค่า | อ่านค่าที่คำนวณแล้ว |
+| **สูตรที่ขึ้นต้นด้วย `=` `+` `-` `@` ในไฟล์ส่งออก** | ผู้ใช้เปิดแล้ว Excel รันคำสั่ง | เติม `'` นำหน้าค่าที่ขึ้นต้นด้วยอักขระเหล่านี้ |
+
+> 🚨 **ช่องโหว่ที่คนไม่ค่อยรู้**: ชื่อลูกค้าที่เป็น `=cmd|'/c calc'!A1` ถ้าส่งออกดิบ ๆ
+> แล้วมีคนเปิดใน Excel มันจะพยายามรันคำสั่งจริง ตอนส่งออกจึงต้อง escape เสมอ
+
+---
+
+## 5 · ส่งออก
+
+| เรื่อง | กฎ |
+|---|---|
+| ขนาด | ถ้าเกินประมาณ 50,000 แถว ให้ทำเป็นงานเบื้องหลัง แล้วส่งลิงก์ให้ดาวน์โหลด |
+| สิทธิ์ | **ส่งออกได้เฉพาะข้อมูลที่ผู้ใช้คนนั้นมีสิทธิ์เห็นอยู่แล้ว** เพราะนี่คือจุดรั่วที่พบบ่อยที่สุด |
+| audit | บันทึกทุกครั้งว่าใครส่งออกข้อมูลอะไร ช่วงไหน กี่แถว |
+| ข้อมูลส่วนบุคคล | ปิดบังคอลัมน์ที่ไม่จำเป็น (ดู `pdpa-compliance`) |
+| ชื่อไฟล์ | `<เรื่อง>-<ช่วงวันที่>-<เวลาที่ส่งออก>.xlsx` |
+| ส่วนหัวของไฟล์ | ใส่เงื่อนไขกรองที่ใช้ และเวลาที่ส่งออก ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์นี้คือข้อมูลอะไร |
+| ลิงก์ดาวน์โหลด | ต้องหมดอายุ (ดู `file-upload-and-storage`) |
+| รูปแบบ | `.xlsx` สำหรับคนอ่าน · CSV สำหรับเครื่องอ่าน |
+
+---
+
+## 6 · Anti-patterns
+
+- ❌ **"ไฟล์ไม่ถูกต้อง"** ผู้ใช้ทำอะไรต่อไม่ได้
+- ❌ **หยุดที่แถวแรกที่ผิด** ผู้ใช้ต้องอัปโหลดใหม่ 30 รอบ
+- ❌ **เขียนไปตรวจไป** พอล้มกลางทาง ข้อมูลก็ค้างครึ่ง ๆ
+- ❌ **ไม่มีหน้าสรุปก่อนยืนยัน** เขียนทับข้อมูลจริงโดยไม่มีใครทันได้ดู
+- ❌ **ไม่มีแม่แบบให้ดาวน์โหลด** ผู้ใช้ต้องเดาหัวคอลัมน์
+- ❌ **อ่านคอลัมน์ตามตำแหน่ง** ผู้ใช้แทรกคอลัมน์เดียวก็พังทั้งไฟล์
+- ❌ **อ่านรหัสเป็นตัวเลข** เลข 0 นำหน้าหายทุกครั้ง
+- ❌ **ไม่ถามว่าปีเป็น พ.ศ. หรือ ค.ศ.** ปีเพี้ยน 543 ปีโดยไม่มีใครรู้
+- ❌ **ส่งออกโดยไม่ escape สูตร** เปิดไฟล์แล้วรันคำสั่ง
+- ❌ **ส่งออกได้เกินสิทธิ์ที่มี** ข้อมูลรั่วผ่านปุ่มที่เราทำเอง
+- ❌ **ไม่เก็บไฟล์ต้นฉบับ** มีปัญหาแล้วย้อนดูไม่ได้
+
+---
+
+## 7 · ตัวย่อ
+
+- **CSV** — Comma-Separated Values (ไฟล์ข้อความที่คั่นค่าด้วยจุลภาค)
+- **BOM** — Byte Order Mark (ไบต์นำหน้าไฟล์ที่บอกว่าเป็น UTF-8 ทำให้ Excel อ่านภาษาไทยถูก)
+- **UTF-8** — มาตรฐานการเข้ารหัสตัวอักษรที่รองรับทุกภาษา
+- **batch** — ชุดของแถวที่นำเข้าพร้อมกันในครั้งเดียว
+- **CSV injection** — ช่องโหว่ที่ค่าซึ่งขึ้นต้นด้วย `=` ถูก Excel ตีความเป็นสูตรและรันคำสั่ง
+
+## 8 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| รับไฟล์อัปโหลดอย่างปลอดภัย | `file-upload-and-storage` |
+| ทำเป็นงานเบื้องหลังพร้อมความคืบหน้า | `background-jobs` |
+| สร้างไฟล์ Excel ที่จัดรูปแบบแล้ว | `anthropic-skills:xlsx` |
+| ปี พ.ศ. · การเรียงลำดับไทย · การเข้ารหัสตัวอักษร | `i18n-and-locale` |
+| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` |
+| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` |
+| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` |
+| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` |

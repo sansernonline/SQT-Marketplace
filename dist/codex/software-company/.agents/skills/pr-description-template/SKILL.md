@@ -1,6 +1,6 @@
 ---
 name: pr-description-template
-description: Use when writing a pull request description or preparing a PR for review. Summary, linked issues, changes, how to test, screenshots.
+description: Use when writing a pull request description or preparing a PR for review.
 ---
 
 # Pull Request Description Template
@@ -12,6 +12,13 @@ description: Use when writing a pull request description or preparing a PR for r
 - Opening any pull request
 - Updating a PR description after major changes
 - Onboarding team to consistent PR practices
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| Reviewing someone's PR or self-reviewing the code | `code-review-checklist` |
+| Adversarial review of a risky or contested change | `adversarial-review-panel` |
 
 ## Output Template
 

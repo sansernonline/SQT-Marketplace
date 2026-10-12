@@ -1,692 +1,1247 @@
-# skill: project-bootstrap
+# skill: docker-sandbox
 
-Use when starting a repository or one is slow to run on a new machine. Folder layout, newcomer README, one install and one run command, formatter.
+Use when a project should run in its own Docker container, not on the host (installs, builds, tests, unattended agents), or sandbox.
 
-# ตั้งต้นโปรเจกต์
+# docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
-> **กฎข้อเดียว:** คนที่ไม่เคยเห็นโปรเจกต์นี้มาก่อน ต้องรันได้ภายใน **30 นาที**
-> โดยอ่านแค่ `README.md` และไม่ต้องถามใคร
+> เครื่องเราเป็นคนสั่ง ห้องทดลองเป็นที่ลงมือ
+> ข้างในติดตั้ง ลบ รันเซิร์ฟเวอร์ ทำฐานข้อมูลทดสอบได้เต็มที่ เพราะพังแล้วล้างทิ้งสร้างใหม่ได้ในคำสั่งเดียว
+> ข้างนอก (เครื่องจริง · ระบบจริง · บัญชีจริง) แตะไม่ได้ เพราะไม่มีทางเข้าจากข้างใน
+
+ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
+
+---
+
+## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
+
+- **ห้องเดียวต่อโปรเจกต์** ชื่อ `sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่สร้าง>` (เช่น `sandbox-agent-sample-app-20260125`)
+  - ตั้งชื่อครั้งเดียวตอน `up` แรก แล้วเก็บในไฟล์ `.sandbox/.name-<ชื่อโฟลเดอร์>` คำสั่งทีหลังอ่านชื่อจากไฟล์นี้ ชื่อจึงไม่เปลี่ยนตามวัน
+  - prefix `sandbox-agent-` บอกว่า agent สร้างห้องนี้ ไม่ใช่คนตั้ง ส่วนวันที่สร้างเก็บซ้ำไว้ใน label `sqt.created`
+  - ถ้าโปรเจกต์ต้องมีฐานข้อมูล cache หรือเบราว์เซอร์ ให้เพิ่มเป็น service ใน**ห้องเดียวกัน** (stack เดียว) ไม่แยกห้องใหม่
+- **image ฐานใช้ร่วมกันทั้งเครื่อง** — `sqt-sandbox-base:1` (Node · Python · Git · Playwright Chromium · Claude Code) build ครั้งเดียว ส่วน image ของแต่ละโปรเจกต์เพิ่มแค่ชั้นบาง ๆ ที่โปรเจกต์นั้นต้องใช้ จึงไม่กินดิสก์ซ้ำ
+- **ห้องที่หยุดอยู่ไม่กิน CPU และหน่วยความจำ** กินแค่ดิสก์ จบงานแล้วให้ `stop` และเลิกงานทั้งวันให้ `stop-all`
+- **ห้องเพิ่มชั่วคราว** (`-Name <โปรเจกต์>-a1`) ใช้เฉพาะตอนลองหลายทางพร้อมกัน แล้ว `destroy` ทิ้งทันทีที่เลือกได้
+- **ไม่รวมหลายโปรเจกต์ไว้ห้องเดียว** — เพราะของที่ติดตั้งจะชนกัน โปรเจกต์หนึ่งพังแล้วลามไปอีกโปรเจกต์ และล้างทีละโปรเจกต์ไม่ได้
+
+## 2 · สองแบบ เลือกตามงาน
+
+| | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
+|---|---|---|
+| ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
+| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
+| ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
+| ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
+| ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางพร้อมกัน (ห้องละทาง) |
+
+เพิ่ม `-Locked` ได้ทั้งสองแบบ — ปิดอินเทอร์เน็ตขาออก เหลือเฉพาะโฮสต์ใน `allowlist.txt` เหมาะกับงานที่รันโค้ดที่ยังไม่ไว้ใจ
+
+---
+
+## 3 · ตั้งห้องให้โปรเจกต์ (ครั้งแรก)
+
+1. ตรวจว่า Docker Desktop รันอยู่ — `docker version` ต้องเห็นทั้ง Client และ Server ถ้าไม่เห็น ให้บอกผู้ใช้ให้เปิด Docker Desktop แล้วหยุดเฉพาะงานนี้
+2. คัดลอกทุกไฟล์ใน `assets/` ของ skill นี้ไปที่ `<โปรเจกต์>/.sandbox/` (ที่ราก) แล้วประกาศ `.sandbox/` เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด ตาม `project-doc-set` ข้อ 1
+3. ปรับ `Dockerfile` (ชั้นของโปรเจกต์)
+   - ถ้าเป็น .NET ให้ตั้ง `INSTALL_DOTNET=1` แล้วเพิ่ม `apt-get install` ของที่โปรเจกต์ต้องใช้
+   - **อย่าแก้ `base.Dockerfile`** ถ้าไม่จำเป็น เพราะทุกโปรเจกต์ใช้ร่วมกัน
+   - ถ้าต้องมีฐานข้อมูลทดสอบ ให้เพิ่มเป็น service ใหม่ใน `compose.yaml` (ไม่เปิด port ออกนอก)
+4. เพิ่ม `.sandbox/.mode-*` และ `.sandbox/.name-*` ใน `.gitignore`
+5. เปิดห้อง — `.\.sandbox\sandbox.ps1 up` (หรือ `up -Isolated` · `up -Browser`) โปรเจกต์แรกของเครื่องต้อง build image ฐานก่อน ใช้เวลาราว 5–15 นาที ส่วนโปรเจกต์ถัดไปจะเร็วขึ้นมาก
+6. **พิสูจน์ว่าใช้ได้** — `sandbox.ps1 exec "node -v && python3 --version && git status"` ถ้าโปรเจกต์มีคำสั่ง test ให้รันผ่าน `exec` 1 ครั้ง ส่วนโหมด `-Locked` ต้องเห็นบรรทัด `check passed`
+7. ลงใน `docs/README.md` ของโปรเจกต์ — ชื่อห้อง (`sandbox-agent-<ชื่อโฟลเดอร์>-<วันที่>`) · โหมด · port · คำสั่ง test ในห้อง
+
+**ทดสอบจริงแล้ว** บน Windows + Docker Desktop 4.46 (2026-10-05, โปรเจกต์ `sample-app`) — build ห้องได้ · unit test ผ่าน 15/15 · e2e บน Chromium ผ่าน 14/14 ในห้อง
+
+บั๊กที่เจอระหว่างทดสอบแก้ในสคริปต์แล้ว: PowerShell 5.1 กับ stderr · Playwright คนละรุ่นกับ image ฐาน · พอร์ตชน
+
+ถ้าสคริปต์พังบนเครื่องอื่น ให้ใช้ playbook `bug-fix` กับตัวสคริปต์
+
+**พอร์ต** — `up` หาพอร์ตว่างเอง เริ่มที่ 3000 แล้วบอกว่าได้พอร์ตไหน
+- ในห้องตั้งตัวแปร `APP_PORT` และ `PORT` เป็นพอร์ตนั้น และ `HOST=0.0.0.0`
+- แอปต้องฟังที่ `HOST` เพราะถ้าฟังแค่ `127.0.0.1` ในห้อง เครื่องจะเข้าไม่ถึง
+- ฝั่งเครื่องยังเปิดแค่ `127.0.0.1` เหมือนเดิม จึงเข้าจากเครื่องที่ `http://127.0.0.1:<พอร์ต>`
+
+**Playwright คนละรุ่น** — image ฐานมี Chromium รุ่นล่าสุด ถ้าโปรเจกต์ล็อก Playwright รุ่นอื่นไว้ ให้รัน `npx playwright install chromium` ในห้อง 1 ครั้งหลัง `npm ci` (ไม่ต้อง `--with-deps` เพราะ image มีให้แล้ว)
+
+---
+
+## 4 · ใช้ทุกวัน
+
+| ต้องการ | คำสั่ง (รันที่รากโปรเจกต์บนเครื่อง) |
+|---|---|
+| รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
+| เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
+| ให้ Claude Code ทำงานในห้องเต็มที่ | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้) |
+| เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
+| ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
+| ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
+| หยุดทุกห้องในเครื่อง คืนหน่วยความจำ | `.\.sandbox\sandbox.ps1 stop-all` |
+| ห้องหลายห้องของโปรเจกต์เดียว | ใส่ `-Name <โปรเจกต์>-a1` ทุกคำสั่ง |
+
+**กฎของ agent เมื่อโปรเจกต์มี `.sandbox/`**
+- install · build · test · dev server · migration และสคริปต์ใด ๆ ให้รันผ่าน `sandbox.ps1 exec` ไม่รันบนเครื่อง
+- skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) รัน Playwright ในห้องแบบไม่มีหน้าจอ แล้วคัดภาพออกด้วย `docker compose cp` มาไว้ `_to_delete/`
+- ถ้าห้องหยุดอยู่ ให้ `up` เองได้เลย (ย้อนได้) ถ้าห้องพังจนแก้ไม่ได้ ก็ `reset` เองได้ เพราะของในห้องไม่ใช่ของผู้ใช้ — **ยกเว้น** ห้อง isolated ที่ยังไม่ได้ `sync` ต้อง sync ก่อนแล้วค่อย reset
+
+---
+
+## 5 · เบราว์เซอร์เสมือนสำหรับทดสอบ
+
+| แบบ | ใช้เมื่อ | วิธี |
+|---|---|---|
+| headless ในห้อง (ค่าเริ่ม) | test อัตโนมัติ · verify skill · ไม่ต้องมีใครดู | Playwright Chromium มากับ image ฐานแล้ว |
+| **มองเห็นได้** (`up -Browser`) | อยากดู agent กดจริงทีละขั้น · ตรวจหน้าจอด้วยตา · อัดภาพ | เบราว์เซอร์จริงในคอนเทนเนอร์แยก ดูสดที่ `http://127.0.0.1:7900` และ Playwright ในห้องจะขับผ่าน `SELENIUM_REMOTE_URL` ให้เอง (Playwright เรียกความสามารถนี้ว่ายังทดลอง) |
+| ให้ Claude Code ในห้องคุมเบราว์เซอร์เอง | งานสำรวจหน้าเว็บที่ยังไม่มีสคริปต์ | ติดตั้ง Playwright MCP server ในห้อง (`.mcp.json` ของโปรเจกต์) ให้ทำงานแบบ headless |
+
+- เบราว์เซอร์ในห้องไม่มีบัญชี ไม่มีคุกกี้ ไม่มีรหัสผ่านของผู้ใช้ — ล็อกอินด้วยบัญชีทดสอบของโปรเจกต์เท่านั้น
+- ภาพและวิดีโอจากการทดสอบ คัดออกมาที่ `_to_delete/` ด้วย `docker compose cp`
+- เบราว์เซอร์ของผู้ใช้บนเครื่อง (Chrome ที่ล็อกอินอยู่) ใช้กับเว็บจริงที่ต้องใช้บัญชีจริงเท่านั้น และทำตามกติกาของเครื่องมือนั้น ไม่ใช่ที่ทดสอบ
+
+## 6 · CAPTCHA
+
+- **ระบบของเราเอง** — CAPTCHA ไม่ควรขวางการทดสอบตั้งแต่ต้น
+  - ใช้ค่าทดสอบ (test site key) ที่ผู้ให้บริการแจกไว้ ซึ่งผ่านทุกครั้ง reCAPTCHA · hCaptcha · Cloudflare Turnstile มีให้ทุกเจ้า ดูค่าได้จากเอกสารผู้ให้บริการ
+  - หรือปิดด้วยค่าตั้งเฉพาะ environment ทดสอบ (`CAPTCHA_ENABLED=false`)
+  - **ค่าทดสอบต้องไม่หลุดไปถึงระบบจริง** — ใส่ตัวตรวจตอนเริ่มระบบว่า production ห้ามใช้ test key (`config-and-secrets`)
+- **เว็บของคนอื่น** — agent **ไม่แก้ CAPTCHA และไม่หาทางหลบ** (ไม่ใช้บริการรับแก้ ไม่ปลอมตัวเป็นคน) ถ้าเจอ CAPTCHA ให้หยุดขั้นนั้น บอกผู้ใช้ให้ทำเอง แล้วทำส่วนอื่นต่อ ถ้าต้องดึงข้อมูลจากเว็บนั้นบ่อย ให้หา API ทางการแทน
+- เหตุผล — CAPTCHA คือเจ้าของเว็บบอกว่า "ห้ามบอท" การหลบจึงเท่ากับฝ่าข้อตกลงของเขา และทำให้ IP หรือบัญชีถูกแบน
+
+## 7 · ในห้องทำได้เต็มที่
+
+ติดตั้งโปรแกรม (`sudo apt-get` · `npm -g` · `pip`) · ลบไฟล์ในห้อง · รันเซิร์ฟเวอร์และฐานข้อมูลทดสอบ · ดาวน์โหลด dependency · commit ในสำเนาของโหมด isolated · ทดลองทำลายแล้วสร้างใหม่
+
+เรื่องที่ยังอยู่ใน "รออนุมัติ" แม้อยู่ในห้อง (เตรียมไว้ ไม่ทำเอง) — เพราะผลออกไปนอกห้อง:
+- ส่งข้อมูล อีเมล ข้อความ หรือเรียก API ที่มีผลจริงกับคนหรือระบบภายนอก
+- ใช้บัญชีจริง ค่าลับจริง ฐานข้อมูลจริง
+- push ขึ้น remote · deploy
+- ในโหมด mount — ลบหรือเขียนทับไฟล์ของผู้ใช้ใน `/work` ที่ไม่ใช่ผลงานของรอบนี้ (มันคือโฟลเดอร์จริง)
+
+---
+
+## 8 · ห้ามแก้ compose ให้มีสิ่งเหล่านี้
+
+| ห้าม | เพราะ |
+|---|---|
+| `privileged: true` · `pid: host` · `network_mode: host` | ห้องจะมองเห็นและแตะเครื่องจริงได้ |
+| mount `/var/run/docker.sock` หรือ `//./pipe/docker_engine` | คุม Docker ได้ = คุมเครื่องได้ |
+| mount โฟลเดอร์ home · `.ssh` · `.aws` · `.azure` · `.claude` ของเครื่อง · โปรไฟล์เบราว์เซอร์ · ไดรฟ์ทั้งลูก | ค่าลับหลุดได้ทันทีที่โค้ดในห้องอ่าน |
+| เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
+| ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
+| ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
+
+เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
+
+---
+
+## 9 · หมายเหตุ Windows
+
+- Docker Desktop ใช้ WSL 2 ไฟล์บนไดรฟ์ `C:` ที่ mount เข้าไปจึงช้ากว่าไฟล์ใน volume ถ้า build หรือ test ช้ามาก ให้ใช้ `-Isolated` (ตรวจจริง: `npm ci` แค่ 2 แพ็กเกจใช้ 52 วินาทีบนโฟลเดอร์ OneDrive)
+- **โปรเจกต์ในโฟลเดอร์ OneDrive** — โหมด mount จะทำให้ `node_modules` และไฟล์ build ถูก sync ขึ้นคลาวด์ จึงควรใช้ `-Isolated` หรือย้ายโปรเจกต์ออกจาก OneDrive
+- ถ้ารัน `sandbox.ps1` ไม่ได้ ให้ใช้ `powershell -ExecutionPolicy Bypass -File .\.sandbox\sandbox.ps1 <คำสั่ง>`
+- `-Locked` อ่าน IP ของโฮสต์ครั้งเดียวตอนเปิด บริการที่เปลี่ยน IP บ่อยอาจหลุด ให้ `up -Locked` ใหม่
+
+## เชื่อมกับ skill อื่น
+
+- [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) — ผู้แข่งแต่ละตัวได้ห้อง isolated ของตัวเอง (`-Name <โปรเจกต์>-a1` …)
+- [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
+- `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
+- playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
+
+
+---
+
+# skill: cicd-and-release
+
+Use when setting up or fixing a build and deploy pipeline or deciding how a project ships (gates, promotion, rollback).
+
+# CI/CD และการปล่อยของ
+
+> **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
+> ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- เริ่ม repository ใหม่
-- มีคนใหม่เข้าทีม แล้วใช้เวลาครึ่งวันกว่าจะรันได้
-- ทุก pull request มี diff ทั้งไฟล์เพราะตัวจัดรูปแบบตั้งไม่เหมือนกัน
-- ไม่มีใครรู้ว่าเอกสารของโปรเจกต์อยู่ที่ไหนบ้าง
+- ตั้ง pipeline ให้โปรเจกต์ใหม่ หรือรื้อของเดิมที่ช้าหรือผลไม่น่าเชื่อ
+- ต้องตัดสินใจเรื่อง branch, เวอร์ชัน, environment, หรือวิธีปล่อยของ
+- deploy แล้วพังบ่อย หรือ rollback ไม่ได้
+- มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-| งาน | ใช้ตัวนี้แทน |
+| โจทย์ | ไปที่ |
 |---|---|
-| ตั้ง pipeline build และ deploy | `cicd-and-release` |
-| ค่าตั้งต่อ environment และ secret | `config-and-secrets` |
-| เลือกสถาปัตยกรรม | `architecture-patterns` |
-| ตั้ง test framework | `testing-standards` |
-| ตั้งชื่อเอกสาร | `document-naming` |
+| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` |
+| สัดส่วนและขอบเขตของ test | `testing-standards` |
+| เขียน migration | `database-design` |
+| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` |
+| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` |
 
 ---
 
-## 1 · โครงโฟลเดอร์
+## 1 · ขั้นตอนใน pipeline
 
-**โฟลเดอร์โปรเจกต์ (ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B เสมอ** — เอกสารอยู่นอก repo ส่วนโค้ดอยู่ในโฟลเดอร์ชื่อโปรเจกต์:
+| ลำดับ | ขั้น | บล็อกเมื่อ | เวลาที่ยอมรับได้ |
+|:--:|---|---|---|
+| 1 | ตรวจรูปแบบโค้ด + lint | ผิดกฎ | < 1 นาที |
+| 2 | build | คอมไพล์ไม่ผ่าน · มี warning ที่ตั้งเป็น error | < 3 นาที |
+| 3 | unit test | มี test ตก · ความครอบคลุมต่ำกว่าเกณฑ์ | < 5 นาที |
+| 4 | ตรวจ dependency + secret ที่หลุดเข้า git | พบช่องโหว่ระดับสูง · พบ secret | < 2 นาที |
+| 5 | สร้าง artifact + ประทับเวอร์ชัน | — | < 2 นาที |
+| 6 | deploy ลง staging | — | |
+| 7 | integration + end-to-end test | test ตก | < 15 นาที |
+| 8 | **ด่านคน** (เฉพาะ production) | ยังไม่มีคนกดอนุมัติ | |
+| 9 | deploy ลง production | — | |
+| 10 | ตรวจหลัง deploy | health check ไม่ผ่านจะ rollback อัตโนมัติ | < 2 นาที |
 
-```
-<Project Name>/          ← โฟลเดอร์ที่ผู้ใช้เปิด — มีแค่ 8 อย่างนี้ (สร้างเมื่อมีของจริง)
-  ref/                   ← ของที่ได้รับมา (SRS · TOR · ไฟล์ลูกค้า) อ่านอย่างเดียว ไม่เปลี่ยนชื่อ
-  docs/                  ← เอกสารที่เราเขียน — README.md (สารบัญ) · BUILD-PLAN.md · .docx ส่งมอบ
-  mockup/                ← .html ที่เปิดแล้วกดได้จริง
-  assets/                ← โลโก้ · ไอคอน · favicon · รูปของโปรเจกต์ (ต้นทาง .svg + ไฟล์ export)
-  qa/                    ← test case · ผลตรวจ (security-gate · bug-report-template)
-  _to_delete/            ← ของชั่วคราวทั้งหมด (temp-file-discipline)
-  .claude/               ← skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
-  <project-name>/        ← repo โค้ด (โครงข้างในอยู่ข้างล่าง)
-```
-
-> **โปรเจกต์แบบ ecosystem** (หลาย sub-project แต่ละตัวมีเอกสารของตัวเอง) — เพิ่มโฟลเดอร์ `ecosystem/` เป็นอย่างที่ 9 แล้วย้าย `mockup/` · `qa/` · repo โค้ด ไปอยู่ใน `ecosystem/<รหัส>-<SUB>/` ของแต่ละตัว ห้ามตั้งชื่อว่า `projects/` · โครงเต็มอยู่ใน `project-doc-set` ข้อ 1
-
-```
-<project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
-  README.md              ← ข้อ 2 · ติดตั้ง · รัน · test
-  CHANGELOG.md           ← สิ่งที่เปลี่ยนในแต่ละเวอร์ชัน
-  .env.example           ← ค่าที่ต้องมีทั้งหมด (ดู config-and-secrets) · มีเฉพาะเมื่อโปรเจกต์อ่าน environment variable จริง
-  .editorconfig          ← ข้อ 4
-  .gitattributes
-  .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  docs/adr/0001-*.md     ← ADR และ runbook เปลี่ยนพร้อมโค้ด จึงอยู่ใน repo
-  docs/runbook.md
-  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
-  tests/
-  scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
-```
-
-**ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
-`Lumio - Light Meter/` → `lumio-light-meter/`
-คำสั่ง build test และ run ทุกตัวรันจากในโฟลเดอร์นี้ ส่วนชื่อแพ็กเกจในภาษาที่บังคับรูปแบบ (Dart `name:` ใน pubspec · Python package) ยังตั้งตามกฎของภาษา เพราะกฎนี้คุมแค่ชื่อโฟลเดอร์
-
-**กฎของราก (ชั้นบนสุดของโฟลเดอร์โปรเจกต์):**
-- มีแค่ 8 อย่างในผังบน ถ้าโปรเจกต์มีข้อยกเว้นให้ประกาศใน README ของโปรเจกต์
-- README, CHANGELOG และไฟล์ตั้งค่าของโค้ดอยู่ใน repo
-- `.docx` / `.xlsx` ไม่อยู่ที่ราก: ไฟล์ที่ได้รับมาเก็บใน `ref/` ส่วนไฟล์ที่เราเขียนเก็บใน `docs/`
-- **ของชั่วคราวไม่เคยอยู่ที่ราก** — ถ้าไฟล์ชั่วคราวที่ agent สร้างไปตกที่ราก ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้า build แล้วมีโฟลเดอร์งอกที่ราก (เช่น `build/` `lib/` ว่างหลังย้ายโค้ด) แปลว่า cache ของเครื่องมือยังจำ path เก่า ให้ล้าง cache (`flutter clean` · ลบ `obj/`) แล้ว build ใหม่
-- ชื่อโฟลเดอร์และไฟล์ใน repo เป็นตัวพิมพ์เล็กคั่นด้วยขีดกลาง ไม่มีเว้นวรรค **ยกเว้นภาษาที่มีธรรมเนียมของตัวเอง** ให้ตามภาษานั้น
-
-**ข้อยกเว้นตาม stack** — ชื่อโฟลเดอร์โค้ด โฟลเดอร์ทดสอบ และชื่อไฟล์ใน repo ใช้ตามที่เครื่องมือของภาษาคาดไว้
-ไม่ฝืนให้เป็น `src/` `tests/`:
-
-| Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
-|---|---|---|---|
-| ทั่วไป (Node · .NET) | `src/` | `tests/` | `kebab-case` (.NET ใช้ `PascalCase.cs`) |
-| Python | `src/<package>/` | `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
-
-skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
-
-> **แบบ A** (เอกสารทั้งหมดอยู่ใน repo ไม่มีโฟลเดอร์โปรเจกต์ครอบ) ใช้เฉพาะเมื่อผู้ใช้ขอ — ดู `project-doc-set` ข้อ 1
-
-**`docs/README.md` คือสารบัญ ไม่ใช่เนื้อหา:**
-
-```markdown
-| เอกสาร | อ่านเมื่อ | เจ้าของ | อัปเดตล่าสุด |
-|---|---|---|---|
-| [srs.md](srs.md) | ก่อนเริ่มทุกงาน | @ba | 2026-09-25 |
-| [adr/](adr/) | อยากรู้ว่าทำไมเลือกแบบนี้ | @arch | |
-| [runbook.md](runbook.md) | ระบบล่ม | @devops | |
-```
+**ขั้น 1–5 คือ CI ต้องรันกับทุก pull request** ไม่ใช่เฉพาะตอน merge
+**ขั้น 1–5 รวมกันควรจบใน 10 นาที** ถ้านานกว่านั้นคนจะเริ่มหาทางข้าม
 
 ---
 
-## 2 · README ต้องตอบ 5 คำถาม
+## 2 · build ครั้งเดียว แล้วเลื่อนขั้น
 
-| # | คำถาม | ยาวแค่ไหน |
-|:--:|---|---|
-| 1 | โปรเจกต์นี้คืออะไร ทำอะไรให้ใคร | 2–3 บรรทัด |
-| 2 | ต้องมีอะไรบ้างบนเครื่อง (เวอร์ชันด้วย) | ตาราง |
-| 3 | **ติดตั้งและรันยังไง** | คำสั่งที่คัดลอกไปวางแล้วใช้ได้จริง |
-| 4 | รัน test ยังไง | 1 คำสั่ง |
-| 5 | เอกสารและคนที่ต้องถาม อยู่ที่ไหน | ลิงก์ไป `docs/README.md` |
-
-```markdown
-## เริ่มใช้งาน
-
-ต้องมี: Node 22 · PostgreSQL 16 · Docker
-
-    git clone <url> <project-name> && cd <project-name>
-    cp .env.example .env        # กรอกค่าตามคอมเมนต์ในไฟล์
-    npm ci
-    docker compose up -d db
-    npm run db:migrate && npm run db:seed
-    npm run dev                 # เปิด http://localhost:3000
-
-รัน test:  npm test
+```
+commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี้)
+                                           ├→ uat      (ตัวเดิม)
+                                           └→ production (ตัวเดิม)
 ```
 
-แอป Flutter / Android ไม่มี DB หรือ Docker แต่ก็ต้องบอกของบนเครื่องให้ครบ
-ดูแม่แบบ "README ส่วนเริ่มใช้งาน — Flutter / Android" ใน `assets/starter-files.md`
+- artifact คือไฟล์ที่ deploy ได้จริง: container image · ไฟล์ zip ที่ publish แล้ว · แพ็กเกจ
+- **environment ต่างกันได้แค่ที่ config ตอนรัน** ไม่ใช่ build ใหม่
+- เก็บ artifact ไว้ให้ย้อนกลับได้อย่างน้อย 30 วัน เพราะ rollback คือ deploy artifact เก่า ไม่ใช่ build ย้อนจาก commit เก่า
 
-> **ทุกคำสั่งต้องเคยรันจริงบนเครื่องเปล่า** เพราะ README ส่วนใหญ่ผิดตรงที่คนเขียน
-> มีของครบอยู่แล้วบนเครื่องตัวเอง จึงไม่เห็นว่ามีขั้นตอนที่หายไป
->
-> **1 คำสั่งติดตั้ง 1 คำสั่งรัน** — ถ้ามี 12 ขั้นตอน ให้เขียนเป็น `scripts/setup.sh`
+> ❌ **`git pull` บนเครื่อง production แล้ว build ตรงนั้น** ทำให้ไม่มีใครรู้ว่าของที่รันอยู่คือ commit ไหน
+> และ dependency ที่ดึงตอนนั้นอาจไม่ใช่ชุดเดียวกับที่ทดสอบ
 
 ---
 
-## 3 · CHANGELOG
+## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
 
-```markdown
-# Changelog
+ใช้ SemVer: `MAJOR.MINOR.PATCH`
 
-## [ยังไม่ปล่อย]
-### เพิ่ม
-- ส่งออกรายงานเป็น Excel
-
-## [1.2.0] — 2026-09-25
-### เพิ่ม
-- แจ้งเตือนทาง LINE
-### แก้
-- ยอดรวมปัดเศษผิดเมื่อมีส่วนลด
-### เปลี่ยนที่ทำให้ของเดิมพัง
-- `GET /orders` คืน `data` แทนอาเรย์ตรง ๆ — ดู API-CONVENTIONS.md
-```
-
-**ต้องมี CHANGELOG ไหม**
-
-| สถานการณ์ | CHANGELOG |
+| ขึ้นเลขไหน | เมื่อ |
 |---|---|
-| ส่งงานให้ลูกค้า มีรอบ UAT หรือมีเลขเวอร์ชัน | ต้องมี — ลูกค้าและผู้ตรวจรับดูว่ารอบนี้ได้อะไร |
-| คนอื่นเรียกใช้ (API · library · แอปที่มีผู้ใช้) | ต้องมี — เขารู้ว่าต้องแก้อะไรฝั่งตัวเองไหม |
-| ต้นแบบ · สคริปต์ส่วนตัว · ทำคนเดียวและไม่มีรอบปล่อย | ไม่ต้อง — `git log` พอ · เขียนเหตุผลไว้ใน README |
+| MAJOR | เปลี่ยนแล้วฝั่งที่เรียกใช้พัง (ดูตารางใน `api-conventions`) |
+| MINOR | เพิ่มความสามารถ ของเดิมยังใช้ได้ |
+| PATCH | แก้บั๊ก |
 
-**เขียนให้สั้นและอ่านรู้เรื่อง**
-
-- เขียนให้**คนใช้งาน**อ่าน ไม่ใช่คัดลอกรายการ commit มาวาง
-- 1 ข้อ = 1 บรรทัด บอกว่าผู้ใช้ได้อะไรหรือเห็นอะไรเปลี่ยน ไม่ใช่ว่าแก้ไฟล์ไหน
-- ไม่ใส่ชื่อไฟล์ ชื่อฟังก์ชัน หรือเลข ticket ยกเว้นผู้อ่านเป็นนักพัฒนาที่เรียก API นั้น
-- ไม่ใส่งานที่ผู้ใช้มองไม่เห็น เช่น ปรับโครงโค้ด เพิ่ม test หรือแก้ CI · ยกเว้นทำให้เร็วขึ้นหรือเสถียรขึ้นจนรู้สึกได้ ให้เขียนเป็นผลที่ได้ ("รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที")
-- ในแต่ละหัวข้อ เรียงข้อที่กระทบผู้ใช้มากที่สุดไว้บน · หัวข้อไหนไม่มีของให้ตัดหัวข้อนั้นทิ้ง
-
-| ❌ | ✅ |
-|---|---|
-| `- fix(items): change > to >= in withdraw() (#42)` | `- เบิกของเท่ากับจำนวนที่เหลือพอดีได้แล้ว` |
-| `- refactor lowStockReport to read movements once` | `- รายงานของใกล้หมดเปิดได้ในไม่ถึง 1 วินาที (เดิม 50 วินาที)` |
-
-- หัวข้อ "เปลี่ยนที่ทำให้ของเดิมพัง" ต้องอยู่**บนสุด**ของเวอร์ชันนั้นเสมอ
-- เลขเวอร์ชันและกฎการขึ้นเลข ดู `cicd-and-release`
+- **ยึด tag ใน git เป็นหลัก** · `v1.4.0` ชี้ commit เดียวเท่านั้น
+- artifact แปะ commit hash ไว้ด้วย เช่น `1.4.0+abc1234`
+- `/version` endpoint ต้องคืนค่าเดียวกันนี้ (ดู `web-service-essentials`) ส่วนแอปมือถือที่ไม่มี endpoint ให้แสดงในหน้า "เกี่ยวกับ" แทน
+- **ยกเว้น Flutter / Android** ตัวเลขหลัง `+` ใน `pubspec.yaml` คือ versionCode ซึ่งต้องเป็นจำนวนเต็ม จึงใส่ hash ไม่ได้ (ดูหัวข้อ "แอป Android / Flutter")
+- ก่อน 1.0.0 ใช้ `0.x` และถือว่ายังเปลี่ยนใหญ่ได้
 
 ---
 
-## 4 · ตัวจัดรูปแบบและ linter — จบการเถียงเรื่องสไตล์
+## 4 · branch
 
-| ไฟล์ | ทำอะไร | ทุกภาษา |
+| แบบ | วิธี | เหมาะกับ |
 |---|---|---|
-| `.editorconfig` | เว้นวรรค · ตัวขึ้นบรรทัดใหม่ · encoding | ✅ |
-| ตัวจัดรูปแบบ | จัดรูปแบบอัตโนมัติตอนบันทึก | Prettier · dotnet format · black/ruff · `dart format` |
-| linter | จับของที่ผิดจริง ไม่ใช่เรื่องสไตล์ | ESLint · analyzer ของ .NET · ruff · `flutter analyze` (กฎใน `analysis_options.yaml`) |
+| **trunk-based** (แนะนำ) | branch อายุสั้น 1–2 วัน merge เข้า `main` บ่อย · งานที่ยังไม่เสร็จซ่อนไว้ด้วย feature flag | ทีมส่วนใหญ่ · ปล่อยของบ่อย |
+| release branch | `main` + `release/1.4` สำหรับแก้ด่วน | ซอฟต์แวร์ที่ลูกค้าติดตั้งเอง · ต้องดูแลหลายเวอร์ชันพร้อมกัน |
+| gitflow | `develop` + `feature` + `release` + `hotfix` | ปล่อยของเป็นรอบใหญ่ นาน ๆ ครั้ง · ส่วนใหญ่ซับซ้อนเกินจำเป็น |
 
-```ini
-# .editorconfig
-root = true
-[*]
-charset = utf-8
-end_of_line = lf
-insert_final_newline = true
-indent_style = space
-indent_size = 2
-trim_trailing_whitespace = true
+**กฎที่ไม่ขึ้นกับแบบที่เลือก:**
+
+- `main` ต้อง deploy ได้ตลอดเวลา
+- ป้องกัน `main` ไว้ ให้ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
+- branch ที่อายุเกิน 1 สัปดาห์ให้เตรียมเจอ merge conflict
+
+---
+
+## 5 · environment และด่าน
+
+| environment | ข้อมูล | ใครกด deploy | ต้องผ่านอะไร |
+|---|---|---|---|
+| dev | ปลอม | อัตโนมัติทุก commit | build ผ่าน |
+| staging | คล้ายจริง (ปิดบังแล้ว) | อัตโนมัติเมื่อ merge เข้า `main` | unit + integration |
+| uat | คล้ายจริง | ทีมกด | ผู้ใช้ทดสอบผ่าน |
+| production | จริง | **คนกดอนุมัติ** | ทุกอย่างข้างบน |
+
+- staging ต้องใกล้เคียง production ให้มากที่สุด: เวอร์ชันฐานข้อมูล ระบบปฏิบัติการ ค่า config
+- **ห้ามคัดลอกข้อมูลจริงลง staging โดยไม่ปิดบังข้อมูลส่วนบุคคล**
+- ถ้ามี environment เดียวเพราะงบจำกัด ให้บอกตรง ๆ ในเอกสาร และใช้ feature flag ช่วยแทน
+
+---
+
+## 6 · secret ใน pipeline
+
+- เก็บใน secret store ของแพลตฟอร์ม ไม่ใช่ในไฟล์ pipeline
+- ให้สิทธิ์เท่าที่ขั้นนั้นต้องใช้ เช่น ขั้น build ไม่ต้องรู้รหัสฐานข้อมูล production
+- pipeline ที่รันจาก fork ของคนนอก **ห้ามเห็น secret**
+- ตัวตรวจ secret ที่หลุดเข้า git ต้องอยู่ในขั้นที่ 4 ไม่ใช่ตรวจปีละครั้ง
+
+รายละเอียดทั้งหมดอยู่ใน `config-and-secrets`
+
+---
+
+## 7 · migration ฐานข้อมูลใน pipeline
+
+```
+deploy schema (ขยาย) → deploy โค้ด → ตรวจ → deploy schema (บีบ) รอบถัดไป
 ```
 
-> 🚨 **`end_of_line = lf` และ `.gitattributes` ที่มี `* text=auto eol=lf`**
-> ทีมที่ใช้ทั้ง Windows และระบบอื่น ถ้าไม่ตั้งไว้ จะเจอ pull request ที่ diff ทั้งไฟล์
-> ทั้งที่แก้บรรทัดเดียว จนรีวิวไม่ได้เลย
+- migration รันเป็น**ขั้นของตัวเอง** ก่อน deploy โค้ด ไม่ใช่รันตอนแอปบูต
+  (ถ้าแอปหลาย instance บูตพร้อมกัน migration จะรันชนกันจนข้อมูลพังได้)
+- ใช้บัญชีที่แก้ schema ได้เฉพาะขั้นนี้ ส่วนบัญชีที่แอปใช้รันต้องแก้ schema ไม่ได้
+- migration ต้องใช้ได้กับโค้ดเวอร์ชันก่อนหน้าด้วย ไม่งั้น rollback โค้ดแล้วระบบจะพัง
+- สำรองข้อมูลก่อนเสมอ และ**ทดสอบว่ากู้คืนได้จริง**
+- **ข้อยกเว้น: ฐานข้อมูลในเครื่องผู้ใช้** (SQLite · sqflite · drift บนมือถือ) ต้อง migrate ตอนแอปเปิด เพราะไม่มีทางอื่น
+  กฎข้างบนใช้กับฐานข้อมูลบนเซิร์ฟเวอร์ที่หลาย instance ใช้ร่วมกัน ส่วน migration ในเครื่องต้องมี test ไล่จากทุกเวอร์ชัน schema ที่เคยปล่อย
 
-- **ตัวจัดรูปแบบตัดสินใจแทนคน** จะเลือกค่าไหนก็ได้ แต่ต้องเป็นค่าเดียวกันทั้งทีม
-- ให้ CI ตรวจด้วย ไม่ใช่พึ่งว่าทุกคนตั้งเครื่องเหมือนกัน
-- เวลาเปิดใช้กับโปรเจกต์เก่า ให้จัดรูปแบบทั้ง repo ใน **commit เดียวที่ไม่มีอย่างอื่นปน**
-  แล้วใส่ commit นั้นใน `.git-blame-ignore-revs`
+วิธี expand/contract ดูที่ `database-design` ข้อ 9
 
 ---
 
-## 5 · Dependency
+## 8 · วิธีปล่อยของ
 
-| กฎ | เหตุผล |
+| วิธี | ทำงานยังไง | ต้องมี | เหมาะกับ |
+|---|---|---|---|
+| หยุดแล้วเปลี่ยน | ปิด → เปลี่ยน → เปิด | ไม่มี | ระบบภายใน · ปิดได้ตอนกลางคืน |
+| **rolling** | ทยอยเปลี่ยนทีละเครื่อง | health check ที่เชื่อถือได้ · ใช้ร่วมกันได้ทั้ง 2 เวอร์ชัน | ค่าเริ่มต้นของระบบที่รันหลาย instance |
+| blue-green | ยกชุดใหม่ขึ้นครบ แล้วสลับ traffic | ทรัพยากร 2 เท่าชั่วคราว | ต้อง rollback ได้ในไม่กี่วินาที |
+| canary | ปล่อยให้ผู้ใช้ 5% ก่อน แล้วค่อยขยาย | ตัวชี้วัดที่แยกตามเวอร์ชันได้ | ระบบใหญ่ · ความเสี่ยงสูง |
+
+> **rolling มีเรื่องที่คนมักลืม** คือระหว่าง deploy เวอร์ชันเก่าและใหม่ให้บริการพร้อมกัน
+> API และ schema จึงต้องใช้ได้กับทั้ง 2 เวอร์ชัน ถ้าไม่ได้ออกแบบเผื่อไว้ ผู้ใช้บางคนจะเจอ error ทุกครั้งที่ deploy
+
+**feature flag** (สวิตช์เปิดปิดฟีเจอร์) ช่วยแยก "ปล่อยโค้ด" ออกจาก "เปิดใช้ฟีเจอร์"
+
+- merge โค้ดที่ยังไม่เสร็จเข้า `main` ได้ โดยปิด flag ไว้
+- เปิดให้คนบางกลุ่มก่อน ปิดได้ทันทีโดยไม่ต้อง deploy
+- 🚨 **flag ต้องมีวันหมดอายุ** เพราะ flag ที่ค้าง 1 ปีจะกลายเป็นโค้ด 2 เส้นทางที่ไม่มีใครกล้าลบ
+  กำหนดให้ลบภายใน 2 sprint หลังเปิดใช้ 100%
+
+---
+
+## 9 · rollback
+
+**เกณฑ์ที่ต้องกำหนดล่วงหน้า:** rollback เมื่ออัตรา error เกิน X% หรือเวลาตอบสนองเกิน Y วินาที
+ไม่ใช่มาตัดสินตอนทุกคนกำลังตกใจ แล้วเถียงกันว่าควรรอดูอีกหน่อยไหม
+
+| ต้องมี | เกณฑ์ |
 |---|---|
-| **commit lock file เสมอ** | ไม่งั้น build วันนี้กับพรุ่งนี้ได้คนละชุด |
-| ติดตั้งบน CI ด้วยคำสั่งที่ยึด lock (`npm ci` · `flutter pub get --enforce-lockfile`) | ไม่ใช่คำสั่งที่อัปเดต lock ให้เอง |
-| ตรวจช่องโหว่ใน pipeline | ดู `cicd-and-release` |
-| อัปเดตเป็นรอบ ไม่ใช่ตอนที่พังแล้ว | patch เดือนละครั้ง ส่วน minor ไตรมาสละครั้ง |
-| เพิ่ม dependency ใหม่ต้องมีเหตุผลใน pull request | ดู `lazy-coding` |
+| คำสั่ง rollback | ทำได้ด้วยคำสั่งเดียว |
+| เวลาที่ใช้ | ต่ำกว่า 5 นาที |
+| **ซ้อมจริง** | อย่างน้อยไตรมาสละ 1 ครั้ง บน staging |
+| ข้อมูล | migration ที่ทำไปแล้วต้องไม่ทำให้โค้ดเก่าพัง |
 
-**ก่อนเพิ่มไลบรารี ถาม 3 ข้อ** — มาตรฐานของภาษาทำได้ไหม โครงการยังมีชีวิตอยู่ไหม และ
-สัญญาอนุญาตใช้ได้กับงานที่ขายไหม (ดู `prior-art-review`)
+> **rollback ที่ไม่เคยซ้อม เท่ากับไม่มี rollback** เพราะจะรู้ว่าใช้ไม่ได้ก็ตอนที่ต้องใช้พอดี
 
 ---
 
-## 6 · รายการตรวจเมื่อเปิดโปรเจกต์ใหม่
+## 10 · pipeline ต้องเร็วและน่าเชื่อถือ
 
-ติ๊ก `[x]` เฉพาะข้อที่**รันหรือเปิดดูแล้วในรอบนี้** ข้อที่ยังไม่ได้สร้างหรือยังไม่ได้รัน ให้ใส่ `[ ]` พร้อมบอกว่าค้างอะไร ส่วนข้อที่ไม่เกี่ยวกับโปรเจกต์นี้ ให้ใส่ `N/A — <เหตุผล>`
+| ปัญหา | วิธีแก้ |
+|---|---|
+| ช้า | แคช dependency · รัน test พร้อมกันหลายชุด · แยก test ที่ช้าไปรันกลางคืน |
+| test ที่ผลไม่คงที่ (flaky) | **แยกออกทันที** แล้วเปิดงานตามแก้ เพราะ test ที่ตกบ้างผ่านบ้างทำให้คนเลิกอ่านผล |
+| ทุกคนรอคิว | เพิ่มตัวรัน · ให้ pull request รันเฉพาะส่วนที่เกี่ยวข้อง |
+| build ไม่เหมือนเดิมทุกครั้ง | ล็อกเวอร์ชัน dependency (lock file) · ปักหมุดเวอร์ชัน image ด้วย digest |
 
-- [ ] `README.md` ตอบครบ 5 คำถาม และคำสั่งเคยรันจริงบนเครื่องเปล่า
-- [ ] โฟลเดอร์โปรเจกต์มีแค่ `ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · `<project-name>/` (repo ชื่อโปรเจกต์ตัวเล็กคั่น `-`) — หรือ `ecosystem/` แทน `mockup/` · `qa/` · repo ถ้าเป็นโปรเจกต์แบบ ecosystem — และไม่มีไฟล์ชั่วคราวหรือ `.docx` ที่ราก
-- [ ] `.env.example` มีค่าครบทุกตัวพร้อมคอมเมนต์ ถ้าโปรเจกต์ไม่อ่าน environment variable เลย (เช่นแอปมือถือออฟไลน์) ก็ไม่ต้องสร้าง แต่ให้เขียนใน README ว่า "ไม่มีค่าตั้งภายนอก"
-- [ ] `.editorconfig` · `.gitattributes` · ตัวจัดรูปแบบ · linter ตั้งแล้ว และ CI ตรวจ
-- [ ] `.gitignore` ครอบคลุม `.env` · โฟลเดอร์ build · `_to_delete/` · Android: `key.properties` · `*.jks` · `*.keystore`
-- [ ] `docs/README.md` เป็นสารบัญ พร้อมเจ้าของแต่ละเอกสาร
-- [ ] `CHANGELOG.md` มีหัวข้อ "ยังไม่ปล่อย" รออยู่
-- [ ] test อย่างน้อย 1 ตัวที่รันผ่าน เพื่อพิสูจน์ว่าโครงใช้ได้
-- [ ] `main` ถูกป้องกัน ต้องผ่าน pull request และ CI ส่วน repo ที่ยังไม่มี remote หรือทำคนเดียวข้ามข้อนี้ได้ แต่ต้องเขียนเหตุผลไว้ใน README และรัน test กับ linter ก่อน commit แทน
-- [ ] **ให้คนที่ไม่ได้ตั้งโปรเจกต์ลองทำตาม README แล้วจับเวลา**
+**ตัวชี้วัดที่ควรดู:** ปล่อยของบ่อยแค่ไหน · จาก commit ถึงขึ้นจริงใช้เวลาเท่าไร ·
+deploy แล้วพังกี่เปอร์เซ็นต์ · กู้คืนใช้เวลาเท่าไร
 
 ---
 
-## 7 · Anti-patterns
+## แอป Android / Flutter — ข้อที่ต่างจากเซิร์ฟเวอร์
 
-- ❌ **README ที่มีแต่ชื่อโปรเจกต์** — คนใหม่ต้องไปถามทุกอย่าง
-- ❌ **คำสั่งติดตั้งที่ไม่เคยรันบนเครื่องเปล่า** — จะมีขั้นตอนหายเสมอ
-- ❌ **"ขอ `.env` จากพี่คนนั้น"** — การไม่มี `.env.example` คือหนี้ที่ทุกคนต้องจ่ายซ้ำ
-- ❌ **ไม่ commit lock file** — build ไม่เหมือนเดิมทุกครั้ง
-- ❌ **ไม่มี `.editorconfig`** — diff ทั้งไฟล์ในทุก pull request
-- ❌ **linter ที่เถียงเรื่องสไตล์** — สไตล์ให้ตัวจัดรูปแบบจัดการ ส่วน linter มีไว้จับบั๊ก
-- ❌ **ไฟล์ทดลองที่รากโปรเจกต์** — `test.js`, `ลองดู.py`, `backup_final.zip`
-- ❌ **เอกสารกระจายอยู่ในแชตและ Google Drive** — ไม่มีสารบัญเดียว
-- ❌ **CHANGELOG ที่คัดลอกรายการ commit มาวาง** — ไม่มีใครอ่านรู้เรื่อง
+| เรื่อง | กฎ |
+|---|---|
+| เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
+| build ครั้งเดียว | `flutter build appbundle --release` ได้ AAB ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
+| ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
+| rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
+| กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
 
 ---
 
-## 8 · ตัวย่อ
+## 11 · Anti-patterns
 
-- **lock file** — ไฟล์ที่ตรึงเวอร์ชันของ dependency ทุกตัวไว้เป๊ะ ๆ
-- **linter** — เครื่องมือตรวจโค้ดหาของที่น่าจะผิด
-- **formatter** — ตัวจัดรูปแบบโค้ดอัตโนมัติ
-- **LF** — Line Feed (ตัวขึ้นบรรทัดใหม่แบบ Unix ต่างจาก CRLF ของ Windows)
-- **CI** — Continuous Integration (การตรวจอัตโนมัติทุกครั้งที่รวมโค้ด)
+- ❌ **build ใหม่ตอนขึ้น production** ทำให้ของที่ทดสอบไม่ใช่ของที่ปล่อย
+- ❌ **deploy ด้วยมือตามขั้นตอนใน Word** · วันไหนคนเขียนลาป่วย วันนั้น deploy ไม่ได้
+- ❌ **secret ในไฟล์ pipeline** · ใครอ่านโค้ดได้ก็อ่าน secret ได้
+- ❌ **test ตกแล้วปล่อยผ่าน** ทำครั้งเดียว คนก็เลิกเชื่อผลไปตลอด
+- ❌ **deploy วันศุกร์เย็น** ในทีมที่ยัง rollback ไม่ได้ด้วยคำสั่งเดียว
+- ❌ **migration ของฐานข้อมูลบนเซิร์ฟเวอร์รันตอนแอปบูต** · หลาย instance ชนกัน (ฐานข้อมูลในเครื่องมือถือยกเว้น ดูข้อ 7)
+- ❌ **ไม่มี artifact เก็บไว้** ทำให้ rollback กลายเป็นการ build ย้อนจาก commit เก่า
+- ❌ **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
+- ❌ **feature flag ที่ไม่มีวันลบ**
+- ❌ **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
 
-## 9 · เชื่อมกับ skill อื่น
+---
+
+## 12 · ตัวย่อ
+
+- **CI** — Continuous Integration (รวมโค้ดเข้าด้วยกันบ่อย ๆ พร้อมตรวจอัตโนมัติทุกครั้ง)
+- **CD** — Continuous Delivery/Deployment (พาโค้ดที่ผ่านการตรวจไปถึงผู้ใช้อัตโนมัติ)
+- **SemVer** — Semantic Versioning (มาตรฐานเลขเวอร์ชัน MAJOR.MINOR.PATCH)
+- **artifact** — ไฟล์ผลลัพธ์จากการ build ที่นำไป deploy ได้จริง
+- **canary** — การปล่อยของใหม่ให้ผู้ใช้ส่วนน้อยก่อนเพื่อดูอาการ
+- **UAT** — User Acceptance Testing (การทดสอบโดยผู้ใช้ก่อนรับมอบ)
+- **AAB** — Android App Bundle (ไฟล์ที่อัปโหลดขึ้น Google Play แล้ว Play แตกเป็น APK ตามเครื่อง)
+- **versionCode** — เลขจำนวนเต็มที่ Android ใช้ตัดสินว่าเวอร์ชันไหนใหม่กว่า
+
+## 13 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| pipeline build และ deploy | `cicd-and-release` |
-| `.env` และที่เก็บ secret | `config-and-secrets` |
-| ตั้ง test framework | `testing-standards` |
-| โครงและชื่อของเอกสารใน `docs/` | `document-naming` |
-| ของชั่วคราวใน `_to_delete/` | `temp-file-discipline` |
-| รูปแบบข้อความ commit ที่สร้าง CHANGELOG ได้ | `commit-message-format` |
-| ตัดสินใจก่อนเพิ่ม dependency | `lazy-coding` · `prior-art-review` |
+| secret และ config ต่อ environment | `config-and-secrets` |
+| migration ที่ deploy ได้โดยไม่ปิดระบบ | `database-design` |
+| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` |
+| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` |
+| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` |
+| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` |
 
-**แม่แบบ README · docs/README · .editorconfig · .gitattributes** → `assets/starter-files.md`
+**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
+
+
+## reference: deployment-plan-template.md
+
+# แม่แบบแผน deploy
+
+ย้ายมาจาก agent `devops-engineer` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+
+## Standard Output: Polished Deployment Plan
+
+```markdown
+# 🚀 Deployment Plan: <Release vX.Y.Z>
+
+| | |
+|--|--|
+| **Release** | vX.Y.Z |
+| **Type** | 🟢 Routine \| 🟡 Major \| 🔴 Hotfix |
+| **Status** | 🟡 Planned |
+| **Deploy Lead** | @name |
+| **Maintenance Window** | YYYY-MM-DD HH:MM-HH:MM UTC |
+| **Expected Downtime** | ⚡ Zero / ⏸️ 5 min |
+
+---
+
+## 📋 Pre-Deployment Checklist
+
+| # | Item | Owner | Status |
+|:-:|------|:------|:------:|
+| 1 | All tests passing in CI | @dev | ✅ |
+| 2 | Security scan passed | @security | ✅ |
+| 3 | Database migrations reviewed | @dba | ⚪ |
+| 4 | Rollback plan documented | @devops | ⚪ |
+| 5 | Stakeholders notified | @pm | ⚪ |
+| 6 | On-call engineer briefed | @oncall | ⚪ |
+| 7 | Status page prepared | @devops | ⚪ |
+
+## 🔄 Deployment Flow
+
+\`\`\`mermaid
+flowchart TD
+    A[Tag release vX.Y.Z] --> B[Run final CI]
+    B --> C{All green?}
+    C -->|No| D[Abort + Investigate]
+    C -->|Yes| E[Deploy to canary 5%]
+    E --> F{Healthy after 10min?}
+    F -->|No| G[🔄 Rollback]
+    F -->|Yes| H[Deploy to 50%]
+    H --> I{Healthy?}
+    I -->|No| G
+    I -->|Yes| J[Deploy to 100%]
+    J --> K[Smoke tests]
+    K --> L([Done ✅])
+\`\`\`
+
+## 📝 Deployment Steps
+
+| Step | Action | Command/Link | Owner |
+|:----:|--------|--------------|:------|
+| 1 | Tag release | `git tag vX.Y.Z && git push --tags` | @devops |
+| 2 | Trigger CD pipeline | [Pipeline link](#) | @devops |
+| 3 | Deploy canary | Auto via pipeline | — |
+| 4 | Monitor canary | [Grafana](#) | @oncall |
+| 5 | Approve full deploy | Slack `/deploy approve` | @lead |
+| 6 | Verify production | Smoke test suite | @qa |
+
+## ✅ Verification
+
+### Health Checks
+- [ ] `/health` returns 200
+- [ ] All pods/instances running
+- [ ] Database connections OK
+- [ ] No spike in 5xx errors (Grafana dashboard X)
+
+### Smoke Tests
+- [ ] User login works
+- [ ] Critical user journey #1 works
+- [ ] Critical API endpoints return expected response
+
+### Key Metrics (15 min post-deploy)
+| Metric | Baseline | Threshold | Current |
+|--------|---------:|----------:|--------:|
+| ⚡ p95 latency | 150ms | < 200ms | — |
+| 🐛 Error rate | 0.1% | < 0.5% | — |
+| 📊 Throughput | 1000 RPS | > 800 RPS | — |
+
+## 🔄 Rollback Plan
+
+> ⚠️ **Triggers:** Any of the following requires immediate rollback
+> - 5xx error rate > 2% sustained for 5 min
+> - p95 latency > 500ms sustained for 5 min
+> - Customer-impacting bug confirmed
+
+### Rollback Steps
+1. Run: `./scripts/rollback.sh vX.Y.Z-1`
+2. Verify health checks
+3. Post in #incidents channel
+4. Schedule post-mortem within 48h
+
+## 📢 Post-Deployment
+
+- 📊 Monitor for 1 hour post-deploy
+- 📝 Update changelog with release notes
+- 📨 Send announcement to #releases
+- ✅ Close release ticket
+```
+
+
+## reference: per-platform.md
+
+# ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
+
+1. [GitHub Actions](#1--github-actions)
+2. [Azure DevOps](#2--azure-devops)
+3. [GitLab CI](#3--gitlab-ci)
+4. [Dockerfile หลายขั้น](#4--dockerfile-หลายขั้น)
+5. [ตารางเทียบความสามารถ](#5--ตารางเทียบความสามารถ)
+
+---
+
+## 1 · GitHub Actions
+
+`.github/workflows/ci.yml` รันทุก pull request
+
+```yaml
+name: ci
+on:
+  pull_request:
+  push: { branches: [main] }
+
+concurrency:                       # ยกเลิกรอบเก่าเมื่อ push ซ้ำ
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: { contents: read }
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }   # ต้องมีประวัติครบเพื่อคำนวณเวอร์ชัน
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test -- --coverage
+
+      - name: ตรวจ dependency
+        run: npm audit --audit-level=high
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ github.sha }}
+          path: dist/
+          retention-days: 30
+```
+
+`.github/workflows/deploy.yml` เอา artifact ตัวเดิมจาก ci ไป deploy ต่อทีละ environment
+
+```yaml
+name: deploy
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  staging:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-${{ github.event.workflow_run.head_sha }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ./scripts/deploy.sh staging
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
+    steps:
+      - run: ./scripts/deploy.sh production
+      - name: ตรวจหลัง deploy
+        run: |
+          for i in $(seq 1 10); do
+            curl -fsS https://api.example.co/health/ready && exit 0
+            sleep 6
+          done
+          ./scripts/rollback.sh && exit 1
+```
+
+**ข้อควรระวัง:**
+
+- `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
+- ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
+- ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
+- `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
+
+---
+
+## 2 · Azure DevOps
+
+`azure-pipelines.yml`
+
+```yaml
+trigger:
+  branches: { include: [main] }
+
+variables:
+  buildConfiguration: Release
+
+stages:
+- stage: build
+  jobs:
+  - job: build
+    pool: { vmImage: ubuntu-latest }
+    steps:
+    - task: UseDotNet@2
+      inputs: { version: '8.x' }
+    - script: dotnet restore
+    - script: dotnet build -c $(buildConfiguration) --no-restore
+    - script: dotnet test -c $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"
+    - script: dotnet publish -c $(buildConfiguration) -o $(Build.ArtifactStagingDirectory) --no-build
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: app
+
+- stage: staging
+  dependsOn: build
+  jobs:
+  - deployment: staging
+    environment: staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app
+          - script: ./scripts/deploy.sh staging
+
+- stage: production
+  dependsOn: staging
+  jobs:
+  - deployment: production
+    environment: production        # ← ตั้ง approval ที่หน้า Environments
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app          # artifact ตัวเดิมจาก stage build
+          - script: ./scripts/deploy.sh production
+```
+
+- `deployment` job ต่างจาก `job` ธรรมดาตรงที่ผูกกับ environment จึงได้ประวัติการ deploy และขั้นอนุมัติมาด้วย
+- ตัวแปรลับเก็บใน variable group ที่ผูกกับ Azure Key Vault อย่าพิมพ์ลงไฟล์
+- ตัวแปรลับ**ไม่ถูกส่งเข้า script เอง** ต้อง map ผ่าน `env:` ทีละตัว
+
+---
+
+## 3 · GitLab CI
+
+`.gitlab-ci.yml`
+
+```yaml
+stages: [test, build, deploy]
+
+default:
+  interruptible: true
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  key: { files: [requirements.txt] }
+  paths: [.cache/pip]
+
+test:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - ruff check .
+    - pytest --cov --cov-fail-under=70
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+
+build:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:staging:
+  stage: deploy
+  environment: { name: staging, url: https://staging.example.co }
+  script: ./scripts/deploy.sh staging $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy:production:
+  stage: deploy
+  environment: { name: production, url: https://example.co }
+  when: manual                     # ← ด่านคน
+  script: ./scripts/deploy.sh production $CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+```
+
+- ตั้งตัวแปรลับเป็น `Masked` และ `Protected` ที่หน้า Settings → CI/CD
+- `when: manual` ใช้คู่กับ protected environment จึงจะเป็นด่านอนุมัติที่กันได้จริง
+
+---
+
+## 4 · Dockerfile หลายขั้น
+
+```dockerfile
+# ---- ขั้น build ----
+FROM node:22-alpine AS build
+WORKDIR /src
+COPY package*.json ./
+RUN npm ci                      # ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+COPY . .
+RUN npm run build
+
+# ---- ขั้นรัน ----
+FROM node:22-alpine
+ENV NODE_ENV=production
+WORKDIR /app
+COPY --from=build /src/dist ./dist
+COPY --from=build /src/node_modules ./node_modules
+USER node                       # ❌ อย่ารันเป็น root
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
+CMD ["node", "dist/main.js"]
+```
+
+**กฎ:**
+
+- คัดลอกไฟล์ที่เปลี่ยนน้อยก่อน ชั้นแรก ๆ จะได้ใช้แคชซ้ำ
+- อย่าคัดลอก `.env`, `.git`, `node_modules` เข้า image ให้กันไว้ด้วย `.dockerignore`
+- ถ้าต้องการให้ build ได้ผลเดิมทุกครั้ง ให้ปักหมุด base image ด้วย digest
+- ตั้งชื่อ tag ด้วย commit hash เสมอ ส่วน `latest` ใช้เป็นชื่อเล่นได้ แต่ห้าม deploy ด้วย `latest`
+
+---
+
+## 5 · ตารางเทียบความสามารถ
+
+| สิ่งที่ต้องการ | GitHub Actions | Azure DevOps | GitLab CI |
+|---|---|---|---|
+| ด่านอนุมัติโดยคน | Environment + required reviewers | Environment approvals | `when: manual` + protected env |
+| เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
+| แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
+| secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
+| ยกเลิกรอบเก่า | `concurrency` | `batch: true` | `interruptible: true` |
+| วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
+| รันเอง (self-hosted) | ได้ | ได้ | ได้ |
+
+> **ทุกแพลตฟอร์มทำสิ่งเดียวกันได้** จึงอย่าเลือกจากรายการความสามารถ
+> เลือกตัวที่อยู่ที่เดียวกับ repo แล้วลงแรงกับเนื้อหาของ pipeline แทน
 
 
 ---
 
-# skill: background-jobs
+# skill: config-and-secrets
 
-Use when work runs outside the user request (mail, reports, imports, schedules). Queue choice, jobs safe to run twice, capped retries, dead letter queue.
+Use when settings differ by environment or something must never be committed (connection strings, keys, certificates).
 
-# งานเบื้องหลัง
+# Config และ Secret
 
-> **กฎข้อเดียว:** งานเบื้องหลังทุกตัวต้อง**รันซ้ำได้โดยไม่เกิดผลซ้ำ**
-> เพราะมันจะถูกรันซ้ำแน่นอน: เครื่องดับกลางทาง · คนกดใหม่ · ระบบ retry ให้เอง
+> **กฎ 2 ข้อ:**
+> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment ความต่างอยู่ที่ config เท่านั้น
+> 2. secret ต้องไม่อยู่ใน git ไม่อยู่ใน log และไม่อยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- งานที่ผู้ใช้ไม่ควรต้องนั่งรอ: ส่งอีเมล สร้างรายงาน นำเข้าไฟล์
-- งานตามเวลา: สรุปรายวัน ปิดยอดสิ้นเดือน ลบข้อมูลที่หมดอายุ
-- เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
-- คิวตันหรือมีงานหายแล้วไม่มีใครรู้
+- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
+- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
+- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
+- secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-| งาน | ใช้ตัวนี้แทน |
+| โจทย์ | ไปที่ |
 |---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` |
+| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
+| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
+| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
 
 ---
 
-## 1 · อะไรควรไปอยู่เบื้องหลัง
+## 1 · แยก config กับ secret ให้ออกก่อน
 
-| เอาไปเบื้องหลัง | ทำในคำขอเลย |
-|---|---|
-| ใช้เวลาเกิน 1–2 วินาที | เร็วและผู้ใช้ต้องเห็นผลทันที |
-| เรียกระบบภายนอกที่ล้มได้ | ตรวจสิทธิ์ · ตรวจข้อมูล |
-| ผู้ใช้ไม่ต้องรอผล (อีเมล แจ้งเตือน) | ผลลัพธ์คือสิ่งที่เขากดมาดู |
-| งานหลายรายการเป็นชุด | |
-
-> **อย่าเอาไปเบื้องหลังเพียงเพราะมันช้า** ถ้าผู้ใช้ต้องเห็นผลก่อนไปต่อ
-> การย้ายไปเบื้องหลังจะต้องเพิ่มหน้าจอรอ การแจ้งเตือน และที่เก็บผลลัพธ์
-> บางครั้งแก้ให้เร็วขึ้นถูกกว่ามาก (ดู `lazy-coding`)
-
----
-
-## 2 · เลือกกลไก
-
-| กลไก | เหมาะกับ | ระวัง |
+| | config | secret |
 |---|---|---|
-| **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวหยิบงานเอง · ระวัง worker แย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · SQS) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
-| ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** · ดูข้อ 5 |
-| ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
+| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
+| อยู่ใน git ได้ | ✅ ได้ | ❌ ไม่ได้เด็ดขาด |
+| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
+| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
+| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
 
-**ถ้าระบบยังเล็ก ให้เริ่มจากตารางในฐานข้อมูลก่อนเสมอ** เพราะ `SELECT ... FOR UPDATE SKIP LOCKED`
-ของ PostgreSQL ให้หลาย worker หยิบงานพร้อมกันได้อย่างปลอดภัย โดยไม่ต้องเพิ่มระบบใหม่
-
-**ทุกงานต้องมีอย่างน้อย:** `id` · `type` · `payload` · `status` · `attempts` ·
-`run_after` · `locked_by` · `locked_at` · `last_error` · `created_at`
+> **ถ้าตัดสินใจไม่ได้ว่าเป็นแบบไหน ให้ถือว่าเป็น secret** เพราะระวังเกินไปเสียแค่ความรำคาญเล็กน้อย
+> แต่ถ้าเดาผิด กุญแจจะอยู่ในประวัติ git ตลอดไป
 
 ---
 
-## 3 · รันซ้ำแล้วต้องไม่เกิดผลซ้ำ
-
-ระบบคิวเกือบทั้งหมดรับประกันแค่ว่า "ส่งถึงอย่างน้อย 1 ครั้ง" **ไม่ใช่ 1 ครั้งพอดี**
-
-| วิธี | ใช้ยังไง |
-|---|---|
-| **กุญแจกันซ้ำ** | unique constraint บน `(job_type, business_key)` ทำให้งานซ้ำ insert ไม่ผ่าน |
-| **ตรวจสถานะก่อนทำ** | "ถ้าใบสั่งซื้อนี้ส่งอีเมลไปแล้ว ให้จบเลย" |
-| **ส่งต่อ idempotency key** | เวลาเรียก API ภายนอก (ดู `api-conventions`) |
-| **ตั้งค่าให้เป็นค่าใหม่ ไม่บวกเพิ่มจากค่าเดิม** | `set status = 'paid'` ปลอดภัยกว่า `balance = balance + 100` |
-
-> 🚨 **งานที่บวกค่าหรือส่งของออกไปข้างนอก ถ้ารันซ้ำจะเสียเงินจริง**
-> อีเมล 2 ฉบับแค่น่ารำคาญ แต่โอนเงิน 2 ครั้งเป็นเรื่องใหญ่
-
----
-
-## 4 · retry และงานที่ตายแล้ว
+## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
 
 ```
-ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
+1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
+2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
+3. ตัวแปรสภาพแวดล้อม        (environment variable)
+4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
+5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
 ```
 
-| กฎ | รายละเอียด |
-|---|---|
-| **มีเพดานเสมอ** | 3–5 ครั้ง ถ้า retry ไม่จำกัด งานเดียวก็ทำให้คิวตัน |
-| เว้นเวลาเพิ่มเป็นทวีคูณ + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
-| ข้อมูลผิดไม่ต้อง retry | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
-| **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter (ที่เก็บงานที่ล้มจนหมดสิทธิ์) โดยเก็บ payload เต็มและ error ล่าสุด |
-| ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |
-| เอากลับมารันใหม่ได้ | แก้ต้นเหตุแล้วสั่งรันใหม่จาก dead letter ได้ โดยไม่ต้องเขียนสคริปต์ |
-
-**งานที่ค้างเพราะ worker ตาย** ต้องมีตัวปลดล็อก
-งานที่ `locked_at` เก่ากว่า N นาที ให้ถือว่าไม่มีใครทำอยู่แล้ว แล้วปลดล็อกให้ worker อื่นหยิบไปทำต่อ
+**ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
+เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
 
 ---
 
-## 5 · งานตามเวลา
+## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
 
-> 🚨 **ถ้ามีหลาย instance งานตามเวลาจะรันหลายรอบพร้อมกัน**
-> รายงานสรุปยอดถูกส่ง 3 ฉบับ หรือหักเงิน 3 ครั้ง ก็เพราะข้อนี้
+> 🚨 ข้อนี้คุ้มที่สุดในหน้านี้
+> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
+> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
 
-| วิธี | ใช้เมื่อ |
-|---|---|
-| ล็อกที่ฐานข้อมูล (advisory lock) | ทำได้ทันที ไม่ต้องเพิ่มของ |
-| ตัวตั้งเวลาของแพลตฟอร์มยิงเข้ามาที่ endpoint | บนคลาวด์ · Kubernetes CronJob |
-| ตัวตั้งเวลาที่รองรับหลาย instance โดยตรง | Quartz · Hangfire |
+```ts
+// Node — zod
+const Env = z.object({
+  NODE_ENV:      z.enum(['development', 'staging', 'production']),
+  PORT:          z.coerce.number().int().positive().default(3000),
+  DATABASE_URL:  z.string().url(),
+  JWT_SECRET:    z.string().min(32),
+  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
+});
 
-**กฎของงานตามเวลา:**
+export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
+```
 
-- **รับช่วงเวลาเป็นพารามิเตอร์** จะได้รันย้อนหลังวันที่พลาดได้โดยไม่ต้องแก้โค้ด
-- ถ้าตกไป 1 รอบ ต้องตามเก็บได้ ไม่ข้ามไปเลย
-- ระบุเขตเวลาให้ชัดว่า "ทุกเที่ยงคืน" ของเขตเวลาไหน (ดู `i18n-and-locale`)
-- **บันทึกว่ารันรอบไหนสำเร็จแล้ว** ไม่ใช่ดูจาก log
+**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
+กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
+
+**พิมพ์สรุป config ตอนบูต**: ชื่อค่า และค่าที่ไม่ใช่ secret
+ส่วน secret พิมพ์แค่ "มีค่าแล้ว" หรือ 4 ตัวท้าย ไม่พิมพ์ค่าเต็ม
 
 ---
 
-## 6 · งานยาวที่ผู้ใช้รออยู่
+## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
+
+```
+<ระบบ>_<กลุ่ม>_<ชื่อ>
+
+APP_DB_HOST          APP_DB_PASSWORD
+APP_REDIS_URL        APP_SMTP_PASSWORD
+APP_FEATURE_NEW_CHECKOUT
+```
+
+| กฎ | เหตุผล |
+|---|---|
+| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
+| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
+| ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
+| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
+| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ❌ `APP_PROD_DB_HOST` |
+
+---
+
+## 5 · `.env` และ `.env.example`
+
+| ไฟล์ | อยู่ใน git | หน้าที่ |
+|---|:--:|---|
+| `.env.example` | ✅ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
+| `.env` | ❌ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
+| `.env.production` | ❌ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
+
+```bash
+# .gitignore
+.env
+.env.*
+!.env.example
+```
+
+```bash
+# .env.example
+APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
+APP_DB_PASSWORD=change-me          # ❗ ค่าจริงอยู่ใน 1Password ห้องทีม
+APP_JWT_SECRET=                    # ❗ สร้างด้วย: openssl rand -base64 48
+APP_LOG_LEVEL=debug
+```
+
+**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
+ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
+
+> 🚨 **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
+> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
+
+---
+
+## 6 · เก็บ secret ไว้ที่ไหน
+
+| สถานการณ์ | ใช้ | หมายเหตุ |
+|---|---|---|
+| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git ส่วน .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
+| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
+| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
+| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
+| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
+
+**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง environment แยกกันสนิท และ
+ไม่มีบัญชีไหนอ่านได้ทุกอัน ยกเว้นบัญชีดูแลระบบที่บันทึกการเข้าถึง
+
+---
+
+## 7 · การหมุนเวียน (rotation)
+
+**ออกแบบให้รองรับตั้งแต่วันแรก** ไม่ใช่รอถึงตอนต้องหมุนจริง
 
 | ต้องมี | รายละเอียด |
 |---|---|
-| id ของงาน | คืนให้ทันทีที่รับงาน ผู้ใช้เอาไว้ถามความคืบหน้า |
-| สถานะ | `queued` · `running` · `succeeded` · `failed` · `cancelled` |
-| ความคืบหน้า | "ทำแล้ว 340 จาก 1,200 รายการ" ไม่ใช่หมุนเปล่า ๆ |
-| ยกเลิกได้ | งานต้องเช็คสัญญาณยกเลิกเป็นระยะ |
-| ผลลัพธ์ | เก็บไว้ให้ดาวน์โหลดได้ พร้อมวันหมดอายุ |
-| แจ้งเมื่อเสร็จ | อีเมลหรือแจ้งเตือนในระบบ (ดู `notifications`) |
+| ใช้ 2 ค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
+| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy 1 รอบ และจดไว้ว่าต้องทำ |
+| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
+| ทำอัตโนมัติ | เพราะงานที่ต้องจำทำเอง สุดท้ายไม่มีใครทำ |
 
-**แบ่งงานใหญ่เป็นชิ้นเล็ก** เช่น นำเข้า 50,000 แถว ให้แบ่งเป็นงานย่อยละ 500 แถว
-เพราะงานเดียวที่ใช้เวลา 40 นาที ถ้าล้มที่นาทีที่ 39 ต้องเริ่มใหม่ทั้งหมด
+**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้เซ็น token ใหม่ด้วยกุญแจใหม่แล้ว
+ก็ยังตรวจ token เก่าที่ยังไม่หมดอายุได้
 
 ---
 
-## 7 · วัดอะไร
+## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
 
-| ตัวชี้วัด | เตือนเมื่อ |
+1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
+2. ออกค่าใหม่ แล้ว deploy
+3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
+4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
+5. บันทึกเหตุการณ์ด้วย `postmortem-template`
+
+> 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
+> ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
+> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
+
+---
+
+## 9 · อย่าให้ secret ไหลออกทางอื่น
+
+| ทางรั่ว | วิธีปิด |
 |---|---|
-| จำนวนงานค้างในคิว | โตขึ้นเรื่อย ๆ ไม่ลดลง |
-| เวลารอในคิว (p95 · 95% ของงานรอไม่เกินค่านี้) | เกินที่สัญญาไว้ |
-| อัตราความล้มเหลว | เกินเกณฑ์ |
-| **จำนวนใน dead letter** | **เพิ่มขึ้นแม้แค่ตัวเดียว** |
-| รอบของงานตามเวลาที่ไม่ได้รัน | ข้ามรอบ |
-| งานที่ค้างอยู่ในสถานะ running นานผิดปกติ | เกิน N เท่าของค่าปกติ |
-
-> **คิวที่ตันจะเงียบสนิท** API ยังตอบ 200 ทุกคำขอ health check เขียวหมด
-> แต่ไม่มีอีเมลออกไป 3 ชั่วโมงแล้ว ต้องวัดถึงจะเห็น
+| log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
+| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
+| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
+| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
+| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |
+| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
+| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
 
 ---
 
-## 8 · Anti-patterns
+## 10 · config ของ frontend — ไม่มีอะไรลับ
 
-- ❌ **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
-- ❌ **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
-- ❌ **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
-- ❌ **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
-- ❌ **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
-- ❌ **ส่งข้อมูลทั้งก้อนใน payload** — ควรส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
-- ❌ **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
-- ❌ **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
-- ❌ **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
+> 🚨 ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
+> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
+> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
+
+| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
+|---|---|
+| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
+| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
+| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
+| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
+
+**ถ้าต้องการเปลี่ยนค่าโดยไม่ build ใหม่** ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
+แทนการฝังค่าตอน build (`import.meta.env`) ที่ล็อกค่าติดไปกับไฟล์ที่ build ได้
 
 ---
 
-## 9 · ตัวย่อ
+## 11 · Anti-patterns
 
-- **queue** — คิว ที่พักงานที่รอให้ worker หยิบไปทำ
-- **worker** — process ที่หยิบงานจากคิวไปทำ
-- **dead letter queue (DLQ)** — ที่เก็บงานที่ล้มจนหมดสิทธิ์ลองใหม่
-- **idempotent** — รันซ้ำแล้วผลลัพธ์เหมือนเดิม ไม่เกิดผลซ้ำ
-- **advisory lock** — ล็อกที่ฐานข้อมูลให้ใช้ โดยไม่ผูกกับตารางใดตารางหนึ่ง
-- **cron** — รูปแบบการกำหนดตารางเวลาของงานอัตโนมัติ
+- ❌ **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
+- ❌ **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
+- ❌ **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
+- ❌ **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
+- ❌ **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
+- ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
+- ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
+- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
+- ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
 
-## 10 · เชื่อมกับ skill อื่น
+---
+
+## 12 · ตัวย่อ
+
+- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
+- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
+- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
+- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
+- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
+- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
+- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
+
+## 13 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| retry · timeout · การตัดวงจร | `error-handling-patterns` |
-| ตารางงานและ index | `database-design` |
-| ตัวชี้วัดและการแจ้งเตือนของคิว | `observability-basics` |
-| log ของ worker และ correlation id | `logging-standards` |
-| แจ้งผู้ใช้เมื่องานเสร็จ | `notifications` |
-| นำเข้าไฟล์เป็นงานเบื้องหลัง | `data-import-export` |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` |
+| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
+| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
+| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
+| connection string ของฐานข้อมูล | `database-design` |
+| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
+| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
+
+**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 
----
+## reference: per-stack.md
 
-# skill: context-budget
+# วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
 
-Use when a task will read many files, search a codebase or run long-output commands. When to use a subagent, partial reads, bounded searches.
-
-# งบ context
-
-> **กฎข้อเดียว:** ตัดสินใจ**ก่อน**อ่าน ไม่ใช่อ่านแล้วค่อยเสียดาย
-> token ที่เข้า context แล้วเอาออกไม่ได้ ยกเว้นสั่ง `/clear` ซึ่งทิ้งทุกอย่างไปด้วย
-
-## เมื่อไหร่ใช้ skill นี้
-
-- กำลังจะอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว
-- เริ่มงานในโปรเจกต์ที่ยังไม่รู้จักโครงสร้าง
-- context เต็มเร็วผิดปกติ หรือโดน `/compact` บ่อย
-- จะวางกฎให้ทั้งทีมหรือทุกโปรเจกต์
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ทำให้**คำตอบ**สั้นลง | `answer-shape` |
-| เก็บสรุปงานข้ามเซสชัน | `work-session-context` |
-| ที่วางไฟล์ชั่วคราว | `temp-file-discipline` |
-| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` |
+1. [.NET / ASP.NET Core](#1--net--aspnet-core)
+2. [Node.js](#2--nodejs)
+3. [Python](#3--python)
+4. [Angular และ frontend ทั่วไป](#4--angular-และ-frontend-ทั่วไป)
+5. [Docker และ Kubernetes](#5--docker-และ-kubernetes)
+6. [เครื่องมือตรวจ secret ที่หลุดเข้า git](#6--เครื่องมือตรวจ-secret-ที่หลุดเข้า-git)
+7. [คำสั่งสร้างค่าสุ่มที่ปลอดภัย](#7--คำสั่งสร้างค่าสุ่มที่ปลอดภัย)
 
 ---
 
-## 1 · อะไรกิน context จริง ๆ
+## 1 · .NET / ASP.NET Core
 
-| แหล่ง | ขนาดโดยประมาณ | คุมได้ไหม |
-|---|---|---|
-| **output ของ tool** (อ่านไฟล์ · grep · bash) | ใหญ่สุด ไฟล์เดียวเป็นหมื่น token ได้ | ✅ คุมได้เต็มที่ ทั้งหน้านี้พูดถึงเรื่องนี้ |
-| schema ของ tool จาก MCP server | หลักพัน token ต่อ server ทุกเซสชัน | ✅ ปิดตัวที่ไม่ใช้ |
-| `CLAUDE.md` | ตามที่เขียน | ✅ เขียนให้สั้น |
-| description ของ skill | ~100 token ต่อ skill | ✅ ตัดให้กระชับ |
-| ประวัติบทสนทนา | โตเรื่อย ๆ | ⚠️ `/clear` เมื่อเปลี่ยนเรื่อง |
-
-> **เห็นชัดว่าควรคุมอะไรก่อน**: ตัด description ของ skill ทั้งชุดได้แค่ไม่กี่พัน token
-> แต่ `cat` ไฟล์ 3,000 บรรทัดครั้งเดียวกินมากกว่านั้น
-> **ต้องมีวินัยที่สุดกับแถวบนสุดของตาราง**
-
----
-
-## 2 · ต้นไม้ตัดสินใจก่อนอ่าน
-
-```
-ต้องรู้อะไรจากไฟล์/โฟลเดอร์นี้
-├─ รู้ชื่อไฟล์และบรรทัดอยู่แล้ว        → อ่านเฉพาะช่วง (ข้อ 3)
-├─ ต้องหาว่าอยู่ตรงไหน                → grep แบบมีขอบเขต (ข้อ 4)
-├─ ต้องเปิดดูมากกว่า 3 ไฟล์           → ส่ง subagent (ข้อ 5)
-└─ ต้องแปลง/รวม/นับข้อมูลจำนวนมาก     → เขียนลงไฟล์แล้วอ่านเฉพาะสรุป (ข้อ 6)
-```
-
-ถ้าไม่รู้ว่าไฟล์ใหญ่แค่ไหน ให้**เช็กขนาดก่อนเสมอ**:
+**บนเครื่องนักพัฒนา เก็บนอกโฟลเดอร์โปรเจกต์ จึงไม่มีทางเข้า git:**
 
 ```bash
-wc -l path/to/file          # กี่บรรทัด
-du -h path/to/file          # กี่ไบต์
+dotnet user-secrets init
+dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
+dotnet user-secrets list
+```
+
+**ตรวจตอนบูต:**
+
+```csharp
+public sealed class AppOptions
+{
+    public const string Section = "App";
+
+    [Required, Url]                       public string ApiBaseUrl { get; init; } = "";
+    [Required, MinLength(32)]             public string JwtSecret  { get; init; } = "";
+    [Range(1, 300)]                       public int TimeoutSeconds { get; init; } = 30;
+}
+
+builder.Services
+    .AddOptions<AppOptions>()
+    .Bind(builder.Configuration.GetSection(AppOptions.Section))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
+```
+
+**ลำดับที่ ASP.NET Core อ่าน (ค่าหลังทับค่าก่อน):**
+
+```
+appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
+→ environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
+```
+
+ตัวแปรสภาพแวดล้อมใช้ `__` แทนลำดับชั้น เช่น `ConnectionStrings__Default`
+
+**Azure Key Vault:**
+
+```csharp
+builder.Configuration.AddAzureKeyVault(
+    new Uri($"https://{vaultName}.vault.azure.net/"),
+    new DefaultAzureCredential());        // ใช้ managed identity ไม่ต้องมี key อีกอัน
 ```
 
 ---
 
-## 3 · อ่านเฉพาะช่วง
+## 2 · Node.js
 
-| ต้องการ | คำสั่ง |
-|---|---|
-| ดูว่าไฟล์เกี่ยวกับอะไร | `head -40 file.ts` |
-| ดูโครงสร้าง | `rg -n '^(export |class |def |function )' file.ts` |
-| อ่านรอบ ๆ บรรทัดที่สนใจ | `sed -n '120,180p' file.ts` |
-| ด้วย Read tool | ใส่ `offset` และ `limit` |
+```ts
+// config/env.ts — ไฟล์เดียวที่แตะ process.env ได้ทั้งโปรเจกต์
+import { z } from 'zod';
 
-**เกณฑ์:** ไฟล์ที่เกิน **300 บรรทัด** ให้อ่านเฉพาะช่วง เว้นแต่จะแก้ทั้งไฟล์จริง ๆ
+const Env = z.object({
+  NODE_ENV:     z.enum(['development','test','staging','production']),
+  PORT:         z.coerce.number().int().positive().default(3000),
+  DATABASE_URL: z.string().url(),
+  JWT_SECRET:   z.string().min(32),
+  SMTP_PASSWORD: z.string().optional(),
+}).superRefine((v, ctx) => {
+  if (v.NODE_ENV === 'production' && v.JWT_SECRET.startsWith('dev-'))
+    ctx.addIssue({ code: 'custom', message: 'ห้ามใช้ JWT_SECRET ของ dev บน production' });
+});
 
-**อ่านทั้งไฟล์ได้เมื่อ**: กำลังจะเขียนทับทั้งไฟล์ · ไฟล์ตั้งค่าสั้น ๆ ·
-ต้องเข้าใจไฟล์ทั้งไฟล์เพื่อแก้ให้ถูก และไฟล์ไม่เกิน ~300 บรรทัด
+const parsed = Env.safeParse(process.env);
+if (!parsed.success) {
+  console.error('config ไม่ถูกต้อง:', z.treeifyError(parsed.error));
+  process.exit(1);
+}
+export const env = parsed.data;
+```
+
+> **ห้ามอ่าน `process.env` กระจายทั่วโค้ด** ให้รวมไว้ที่ไฟล์เดียว
+> จะได้ตอบได้ว่าระบบใช้ค่าอะไรบ้าง โดยไม่ต้องไล่ grep ทั้งโปรเจกต์
+
+Node 20 ขึ้นไปโหลด `.env` ได้เองด้วย `node --env-file=.env` ไม่ต้องพึ่ง `dotenv`
 
 ---
 
-## 4 · ค้นแบบมีขอบเขต
+## 3 · Python
+
+```python
+# settings.py
+from pydantic import Field, PostgresDsn
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="APP_", env_file=".env")
+
+    env: str = Field(pattern="^(development|staging|production)$")
+    database_url: PostgresDsn
+    jwt_secret: str = Field(min_length=32)
+    timeout_seconds: int = Field(default=30, ge=1, le=300)
+
+settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
+```
+
+- อ่าน `APP_DATABASE_URL`, `APP_JWT_SECRET` ตาม `env_prefix`
+- import ที่ระดับบนสุดของแอป error จะได้เกิดตอนบูต ไม่ใช่ตอนเรียกใช้ครั้งแรก
+
+---
+
+## 4 · Angular และ frontend ทั่วไป
+
+> 🚨 **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
+
+**แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
+ค่าติดไปกับไฟล์ที่ build ได้ เปลี่ยนค่าทีไรต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียวแล้วใช้ทุก environment
+
+**แบบโหลดตอนรัน (แนะนำ):**
+
+```ts
+// main.ts — โหลดก่อนแอปเริ่ม
+fetch('/config.json', { cache: 'no-store' })
+  .then(r => r.json())
+  .then(cfg => {
+    (window as any).__APP_CONFIG__ = cfg;
+    return bootstrapApplication(AppComponent, appConfig);
+  });
+```
+
+```json
+// config.json — ไฟล์นี้วางแยกต่อ environment ไม่ต้อง build ใหม่
+{ "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
+```
+
+ตั้ง header `Cache-Control: no-store` ให้ `/config.json` ไม่งั้นเบราว์เซอร์จะใช้ค่าเก่า
+
+---
+
+## 5 · Docker และ Kubernetes
+
+**Docker อย่าใส่ secret ตอน build:**
+
+```dockerfile
+# ❌ ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
+ARG NPM_TOKEN
+ENV NPM_TOKEN=$NPM_TOKEN
+
+# ✅ mount เฉพาะตอนใช้ ไม่ติดไปกับ image
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
+```
 
 ```bash
-# ❌ คืนมาเป็นพัน ๆ บรรทัด
-rg 'user'
-
-# ✅ จำกัดชนิดไฟล์ · จำกัดบริบท · จำกัดจำนวน
-rg -n 'createUser' --glob '*.ts' -C2 | head -50
-
-# ✅ อยากรู้แค่ว่าอยู่ไฟล์ไหน
-rg -l 'createUser' --glob '*.ts'
-
-# ✅ อยากรู้แค่จำนวน
-rg -c 'TODO' --glob '*.ts' | head -20
+docker build --secret id=npmrc,src=$HOME/.npmrc .
+docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
 ```
 
-| กฎ | เหตุผล |
-|---|---|
-| ใส่ `--glob` เสมอ | กัน `node_modules` และไฟล์ build |
-| `-l` ก่อน แล้วค่อยเจาะ | รู้ว่าอยู่ไฟล์ไหนก่อน ค่อยอ่านเฉพาะไฟล์นั้น |
-| ปิดท้าย `| head -N` | กันกรณีที่ pattern กว้างกว่าที่คิด |
-| `-C2` พอ ไม่ต้อง `-C10` | บริบท 2 บรรทัดพอให้รู้ว่าใช่ไหม |
+**Kubernetes:**
+
+```yaml
+env:
+  - name: APP_DB_PASSWORD
+    valueFrom:
+      secretKeyRef: { name: app-secrets, key: db-password }
+```
+
+> 🚨 **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
+> ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
+> ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
+> ทางที่ดีกว่า: ให้ External Secrets Operator ดึงค่าจาก Key Vault / Secrets Manager มาสร้าง Secret ให้
 
 ---
 
-## 5 · ส่ง subagent ไปแทน
-
-**นี่คือข้อที่ประหยัดได้มากที่สุดในหน้านี้**
-
-subagent มี context ของตัวเอง จึงอ่านไป 20 ไฟล์ได้
-แล้วส่งกลับมาที่บทสนทนาหลักแค่ย่อหน้าเดียว โดยเนื้อหาที่มันอ่านไม่เข้ามาด้วย
-
-| ใช้ subagent เมื่อ | ทำเองเมื่อ |
-|---|---|
-| ต้องเปิดดูเกิน 3 ไฟล์เพื่อตอบคำถามเดียว | รู้ไฟล์และบรรทัดอยู่แล้ว |
-| สำรวจโปรเจกต์ที่ยังไม่รู้จัก | แก้ไฟล์ที่กำลังเปิดอยู่ |
-| ตรวจ/รีวิวข้ามหลายไฟล์ | งานที่ต้องเห็นรายละเอียดเต็มเพื่อแก้ต่อ |
-
-**สั่งให้ดีคือบอกว่าต้องการอะไรกลับมา:**
-
-```
-❌ "ดูโค้ดส่วน auth ให้หน่อย"
-   → มันอาจคืนมาทั้งไฟล์
-
-✅ "หาว่า flow การเข้าสู่ระบบเริ่มที่ไหนและผ่านอะไรบ้าง
-    คืนกลับมาแค่ รายการ ไฟล์:บรรทัด ตามลำดับการเรียก
-    ไม่ต้องแปะโค้ด ไม่เกิน 15 บรรทัด"
-```
-
-> 🚨 **กำหนดรูปแบบและความยาวของผลลัพธ์เสมอ** ถ้าไม่บอกว่าต้องการอะไร
-> subagent จะส่งรายงานยาว ๆ กลับมา แล้วก็ไม่ได้ประหยัดอะไรเลย
-
----
-
-## 6 · เขียนลงไฟล์ แทนถือไว้ในบทสนทนา
+## 6 · เครื่องมือตรวจ secret ที่หลุดเข้า git
 
 ```bash
-# ❌ output ทั้งหมดเข้า context
-npm test
+# ตรวจทั้งประวัติ
+gitleaks detect --source . --redact
 
-# ✅ เข้า context แค่บรรทัดสรุป
-npm test > _to_delete/test.log 2>&1; tail -20 _to_delete/test.log
-
-# ✅ ข้อมูลใหญ่ ประมวลผลในไฟล์ เอาเข้ามาแค่ผลลัพธ์
-jq '[.[] | select(.status=="failed")] | length' _to_delete/report.json
+# กันไว้ก่อน commit
+pip install pre-commit detect-secrets
+detect-secrets scan > .secrets.baseline
 ```
 
-**ใช้กับ**: ผลรัน test · log · ผลลัพธ์จากการแปลงไฟล์ · ข้อมูลที่ต้องกรอง/นับ
-เก็บไว้ที่ `_to_delete/` ตาม `temp-file-discipline`
-
----
-
-## 7 · ทำให้เซสชันหน้าไม่ต้องสำรวจซ้ำ
-
-โปรเจกต์ที่กลับมาทำบ่อย ควรมีแผนที่โปรเจกต์สั้น ๆ ที่ **โหลดอัตโนมัติ**
-
-| ไฟล์ | โหลดเอง | เหมาะกับ |
-|---|:--:|---|
-| **`<project>/CLAUDE.md`** | ✅ | แผนที่โปรเจกต์ · คำสั่งที่ใช้บ่อย · กฎเฉพาะโปรเจกต์ |
-| `<project>/<โฟลเดอร์ใหญ่>/CLAUDE.md` | ✅ เมื่อทำงานในโฟลเดอร์นั้น | โมดูลที่ซับซ้อนเป็นพิเศษ |
-| `context.md` · `notes.md` ชื่ออื่น | ❌ | **ต้องสั่งให้อ่านทุกครั้ง จึงเสียเปล่า** |
-
-> 🚨 **อย่าตั้งชื่อไฟล์แผนที่เป็นอย่างอื่น** เพราะ `CLAUDE.md` ถูกอ่านให้อัตโนมัติ
-> ส่วนไฟล์ชื่ออื่นต้องมีคนสั่งให้อ่าน เท่ากับจ่าย token เพิ่มเพื่ออ่านสิ่งที่ควรได้ฟรี
-
-**สิ่งที่ควรอยู่ในแผนที่ของโปรเจกต์** สั้น ๆ ไม่เกิน 40 บรรทัด:
-
-```markdown
-## แผนที่
-- API อยู่ที่ `src/api/` · หน้าจอ `src/pages/` · ชนิดข้อมูลร่วม `src/types.ts`
-- ตรรกะการคิดราคาทั้งหมดอยู่ใน `src/pricing/` ที่เดียว
-- `legacy/` ไม่ได้ใช้แล้ว **ห้ามอ่าน**
-
-## คำสั่ง
-- รัน `npm run dev` · test `npm test` · migrate `npm run db:migrate`
-
-## กฎเฉพาะที่นี่
-- ห้ามแก้ `generated/` เป็นไฟล์ที่สร้างอัตโนมัติ
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks: [{ id: gitleaks }]
 ```
 
-**ไม่ควรมี**: เนื้อหาที่อ่านจากโค้ดได้อยู่แล้ว · รายการไฟล์ทั้งหมด · ประวัติการเปลี่ยนแปลง
-แผนที่ล้าสมัยแย่กว่าไม่มีแผนที่ เพราะมันพาไปผิดที่อย่างมั่นใจ
+**ลบออกจากประวัติ** (ทำหลังเพิกถอนค่าเดิมแล้วเท่านั้น):
+
+```bash
+pip install git-filter-repo
+git filter-repo --path .env --invert-paths
+git push --force --all      # ทุกคนต้อง clone ใหม่
+```
 
 ---
 
-## 8 · ค่าตั้งที่ช่วยได้อีก
+## 7 · คำสั่งสร้างค่าสุ่มที่ปลอดภัย
 
-| ทำอะไร | ได้อะไร |
-|---|---|
-| **ปิด MCP server ที่ไม่ได้ใช้ในโปรเจกต์นั้น** | schema ของทุก tool โหลดทุกเซสชัน จึงตัดได้หลักพัน token |
-| ปิดปลั๊กอินที่ไม่เกี่ยวกับงานนั้น | description ของ skill ทุกตัวอยู่ใน context เสมอ |
-| `permissions.deny` ใน `.claude/settings.json` สำหรับโฟลเดอร์ที่ไม่ควรอ่าน | ระบบกันพลาดให้ ไม่ต้องพึ่งวินัย |
-| `/clear` เมื่อเปลี่ยนเรื่อง · `/compact` เมื่อใกล้เต็ม | คืนที่ว่าง |
-| `CLAUDE.md` ยาวไม่เกิน 40 บรรทัด | ทุกบรรทัดกิน token ทุกเซสชัน |
+```bash
+openssl rand -base64 48                 # กุญแจทั่วไป
+openssl rand -hex 32                    # กุญแจ 256 บิตเป็นเลขฐานสิบหก
+uuidgen                                 # id ไม่ลับ
 
----
+node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
 
-## 9 · Anti-patterns
+```powershell
+# Windows
+[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
+```
 
-- ❌ **`cat` ไฟล์ใหญ่เพื่อ "ดูก่อนว่ามีอะไร"** ทั้งที่ `head -40` ตอบคำถามเดียวกันได้ด้วยต้นทุน 1%
-- ❌ **`rg` โดยไม่ใส่ `--glob`** ได้ `node_modules` มาเต็ม
-- ❌ **อ่าน 10 ไฟล์เองเพื่อตอบคำถามเดียว** ทั้งที่ควรส่ง subagent
-- ❌ **สั่ง subagent แบบไม่บอกว่าต้องการอะไรกลับมา** ได้รายงานยาวกลับมา ไม่ได้ประหยัด
-- ❌ **รัน test แล้วปล่อย output เข้า context ทั้งก้อน**
-- ❌ **อ่านไฟล์เดิมซ้ำเพราะลืมว่าเคยอ่านแล้ว** ให้จดสิ่งที่พบลงไฟล์ตั้งแต่รอบแรก
-- ❌ **`context.md` หรือชื่ออื่นที่ไม่ได้โหลดอัตโนมัติ** ให้ใช้ `CLAUDE.md`
-- ❌ **`CLAUDE.md` ยาว 300 บรรทัด** ทุกคนในทีมต้องจ่าย token ทุกเซสชัน
-- ❌ **เปิด MCP server ไว้ครบทุกตัวตลอดเวลา**
-
----
-
-## 10 · ตัวย่อ
-
-- **context window** — พื้นที่จำกัดที่โมเดลเห็นข้อมูลทั้งหมดของบทสนทนานั้น
-- **token** — หน่วยนับข้อความที่โมเดลใช้ ประมาณ 1 คำภาษาอังกฤษ หรือ 2–3 ตัวอักษรไทย
-- **subagent** — agent ย่อยที่มี context ของตัวเอง ทำงานแล้วคืนกลับมาแค่ข้อสรุป
-- **MCP** — Model Context Protocol (มาตรฐานให้เครื่องมือภายนอกต่อเข้ากับโมเดล)
-- **`rg`** — ripgrep เครื่องมือค้นข้อความในไฟล์ที่เร็วกว่า grep
-
-## 11 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ทำให้คำตอบสั้นลง | `answer-shape` |
-| ที่วางไฟล์ระหว่างทาง | `temp-file-discipline` |
-| เก็บสรุปข้ามเซสชัน | `work-session-context` |
-| loop เขียนโค้ดที่ต้องรอดจากการสูญเสียบริบท | `spec-to-code-loop` |
-| แผนที่โปรเจกต์และโครงโฟลเดอร์ | `project-bootstrap` |
-| แก้บั๊กเฉพาะจุดโดยไม่อ่านทั้งโปรเจกต์ | `targeted-fix` |
+> ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
+> เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน

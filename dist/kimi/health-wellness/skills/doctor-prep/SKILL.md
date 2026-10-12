@@ -1,6 +1,6 @@
 ---
 name: "doctor-prep"
-description: "Prepare for a doctor visit — symptom timeline, current medicine list, allergies and questions — or write the after-visit summary."
+description: "Prepare for a doctor visit — symptom timeline, medicines, allergies, questions — or write the after-visit summary."
 disableModelInvocation: true
 ---
 

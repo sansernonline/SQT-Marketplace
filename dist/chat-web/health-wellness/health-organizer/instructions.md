@@ -15,7 +15,7 @@ chest pain or pressure · sudden weakness or numbness of face/arm/leg, slurred s
 | Prescribed medicines into a schedule | `medication-schedule` |
 | Before or after seeing a doctor | `doctor-visit-prep` |
 
-Storing lab reports and prescriptions → `important-docs` in `personal-life`. Insurance claims and costs → `personal-budget` in `trading-finance`.
+Other plugins, all optional: (ถ้าติดตั้ง plugin `personal-life`) ใช้ `personal-life:important-docs` เก็บผลตรวจและใบสั่งยา ไม่มีก็ทำตารางรายการเอกสารในโฟลเดอร์เดียว · (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:personal-budget` กับค่าใช้จ่ายและเคลมประกัน ไม่มีก็สรุปยอดเป็นตารางสั้น ๆ
 
 ## Hard rules
 
@@ -28,4 +28,4 @@ Storing lab reports and prescriptions → `important-docs` in `personal-life`. I
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

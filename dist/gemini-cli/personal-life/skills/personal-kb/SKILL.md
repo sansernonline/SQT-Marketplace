@@ -1,6 +1,6 @@
 ---
 name: personal-kb
-description: Use when the user cannot find a note they wrote, or wants a personal knowledge base or second brain. Plain-file notes, naming and tags that search finds.
+description: Use when the user cannot find a note they wrote, or wants a personal knowledge base or second brain.
 ---
 
 # Personal KB (คลังความรู้ส่วนตัว)

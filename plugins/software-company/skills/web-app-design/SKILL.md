@@ -31,9 +31,9 @@ description: Use when designing or building a web app UI or mockup (dashboard, a
 ```
 1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 1440
-   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900
-   python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 420
+3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
+   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900
+   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 420
 4. เปิดภาพดูจริงทุกความกว้าง แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
 5. อนุมัติแล้วจึงแปลงเป็นคอมโพเนนต์ — copy คลาสเดิม ไม่เขียน CSS ใหม่
 6. ต่อ scripts/check-design-tokens.mjs เข้า CI ตั้งแต่วันแรก
@@ -138,9 +138,9 @@ KPI `.stat-grid > .card.stat` · สถานะ `.pill-*` 7 โทน · ปุ
 node scripts/check-design-tokens.mjs src/styles.css src/app
 
 # 2. หน้าตายังถูกทุกความกว้างไหม
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 1440
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 420
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 420
 ```
 
 แล้วเปิดภาพดูจริง ตรวจ:

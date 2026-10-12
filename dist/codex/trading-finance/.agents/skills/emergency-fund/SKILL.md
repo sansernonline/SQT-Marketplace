@@ -1,6 +1,6 @@
 ---
 name: emergency-fund
-description: Use when the user asks how big an emergency fund should be and where to park it in Thailand (savings, fixed deposit, money market), or deposit protection.
+description: Use when the user asks how big an emergency fund should be and where to park it in Thailand, or about deposit protection.
 ---
 
 # Emergency Fund (เงินสำรองฉุกเฉิน)

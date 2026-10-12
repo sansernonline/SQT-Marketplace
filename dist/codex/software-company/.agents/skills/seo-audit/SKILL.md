@@ -1,6 +1,6 @@
 ---
 name: "seo-audit"
-description: "Run a comprehensive SEO audit using the seo-specialist agent + seo-audit-checklist skill. Covers technical, on-page, content, and off-page SEO."
+description: "Run an SEO audit with the seo-specialist agent and seo-audit-checklist skill — technical, on-page, content, off-page."
 ---
 
 Use the `seo-specialist` agent to perform an SEO audit on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

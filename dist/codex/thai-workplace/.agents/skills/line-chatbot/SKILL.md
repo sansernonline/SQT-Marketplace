@@ -1,6 +1,6 @@
 ---
 name: line-chatbot
-description: Use when a company LINE OA should answer customers automatically. Reply vs push quota, reply token, knowledge-base answers, human handoff, PDPA notice.
+description: Use when a company LINE OA should answer customers automatically (reply vs push quota, knowledge base, human handoff).
 ---
 
 # LINE Chatbot

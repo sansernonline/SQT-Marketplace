@@ -1,6 +1,6 @@
 ---
 name: "code-review"
-description: "Run a comprehensive code review using the developer agent + code-review-checklist skill."
+description: "Run a code review with the developer agent and the code-review-checklist skill."
 ---
 
 > **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `review` แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน

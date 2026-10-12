@@ -1,6 +1,6 @@
 ---
 name: "compare"
-description: "Compare products or services before buying — decision matrix, total cost of ownership, review trust check."
+description: "Compare products or services before buying — decision matrix, total cost, review trust check."
 disableModelInvocation: true
 ---
 

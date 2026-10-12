@@ -1,6 +1,6 @@
 ---
 name: post-trade-review
-description: Use when reviewing trading results weekly or monthly. Win rate, expectancy and drawdown from the journal, one repeating mistake turned into a rule.
+description: Use when reviewing trading results weekly or monthly. Win rate, expectancy, drawdown, one mistake turned into a rule.
 ---
 
 # Post-Trade Review (ทบทวนผลการเทรด)

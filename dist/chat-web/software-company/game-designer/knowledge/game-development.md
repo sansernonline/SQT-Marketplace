@@ -1,6 +1,6 @@
 # skill: game-development
 
-Use when building a game (engine choice, ECS, multiplayer netcode, matchmaking, anti-cheat, progression design, live-ops events, battle passes).
+Use when building a game (engine choice, ECS, multiplayer netcode, matchmaking, anti-cheat, progression, live-ops).
 
 # game-development
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-company-gaming` (skill `game-architecture` · `multiplayer-netcode` · `live-ops-patterns`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-gaming` (เดิมชื่อ game-architecture → `references/game-architecture.md` · multiplayer-netcode → `references/multiplayer-netcode.md` · live-ops-patterns → `references/live-ops-patterns.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-game-designer.md
@@ -1411,7 +1411,7 @@ ushort QuantizePosition(float value, float min, float max) {
 
 ## reference: game-architecture.md
 
-> เดิมคือ skill `game-architecture` ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
+> เดิมชื่อ game-architecture (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1782,7 +1782,7 @@ public class Weapon : MonoBehaviour {
 
 ## reference: live-ops-patterns.md
 
-> เดิมคือ skill `live-ops-patterns` ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
+> เดิมชื่อ live-ops-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -2166,7 +2166,7 @@ bot_suspects = segments.filter(
 
 ## reference: multiplayer-netcode.md
 
-> เดิมคือ skill `multiplayer-netcode` ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
+> เดิมชื่อ multiplayer-netcode (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-gaming` — รวมเข้า `game-development` ใน v2.0.0
 
 **สารบัญ:** 
 

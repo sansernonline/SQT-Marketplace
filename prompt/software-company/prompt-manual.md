@@ -7,7 +7,7 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามครั้งเดียว · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ตัดสินใจเองและสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-company` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → หยุดและบอกผู้ใช้ · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามครั้งเดียว · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ตัดสินใจเองและสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-company` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 <!-- rules:end -->
 
 **ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
@@ -16,7 +16,7 @@
 
 | # | เอกสาร | ได้ไฟล์ |
 |---|---|---|
-| 1 | คู่มือผู้ใช้ปลายทาง (User Manual) แยกตามบทบาท | `docs/<รหัส>-GUIDE-<บทบาท>-v<M.m>-<สถานะ>.docx` + `.pdf` 1 ชุดต่อบทบาท (ร่าง `_to_delete/drafts/guide-<บทบาท>.md` → render ตามฉบับ 14 ของ `prompt-new-project.md`) · ภาพหน้าจอใน `docs/figures/<บทบาท>/` |
+| 1 | คู่มือผู้ใช้ปลายทาง (User Manual) แยกตามบทบาท | `docs/<รหัส>-MAN-<บทบาท>-v<M.m>-<สถานะ>.docx` + `.pdf` 1 ชุดต่อบทบาท (ร่าง `_to_delete/drafts/guide-<บทบาท>.md` → render ตามฉบับ 14 ของ `prompt-new-project.md`) · ภาพหน้าจอใน `docs/figures/<บทบาท>/` |
 | 2 | คู่มือฝึกอบรมการใช้งาน (Training Guide) | `docs/training/` |
 
 ---
@@ -25,7 +25,7 @@
 
 agent `technical-writer` · skill `polished-document-style` · `i18n-and-locale` · `branded-document-design` (ตอน render) · `e2e-testing-patterns` (ถ่ายภาพหน้าจอ)
 **ต้องมีก่อน:** โปรแกรมที่รันได้ (คำสั่งรันใน `docs/README.md` · แอปที่มีอยู่แล้วใช้คำสั่งที่ลองจริงแล้วใน `docs/as-is/overview.md` · หรือที่ผู้ใช้ระบุ — README เดิมของแอปอาจไม่ตรงกับโค้ด) · `docs/<รหัส>-SRS-*.docx` (รู้ว่ามีบทบาทอะไร · อ่านด้วย `anthropic-skills:docx`) · แอปเดิมที่ไม่มี SRS ใช้ `docs/as-is/features.md` จาก `prompt-existing-code.md` ฉบับ 1 แทน
-**ผลลัพธ์:** `docs/<รหัส>-GUIDE-<บทบาท>-v<M.m>-<สถานะ>.docx` + `.pdf` 1 ชุดต่อบทบาท (ร่าง `_to_delete/drafts/guide-<บทบาท>.md` → render ตามฉบับ 14 ของ `prompt-new-project.md`) · ภาพหน้าจอใน `docs/figures/<บทบาท>/`
+**ผลลัพธ์:** `docs/<รหัส>-MAN-<บทบาท>-v<M.m>-<สถานะ>.docx` + `.pdf` 1 ชุดต่อบทบาท (ร่าง `_to_delete/drafts/guide-<บทบาท>.md` → render ตามฉบับ 14 ของ `prompt-new-project.md`) · ภาพหน้าจอใน `docs/figures/<บทบาท>/`
 
 ### บทบาทที่ทำคู่มือ (ผู้ใช้กรอก · เว้นว่าง = agent เสนอจาก SRS แล้วติด `(รอยืนยัน)` ทำต่อได้)
 
@@ -62,7 +62,7 @@ agent `technical-writer` · skill `polished-document-style` · `i18n-and-locale`
 ## 2. คู่มือฝึกอบรมการใช้งาน (Training Guide)
 
 agent `technical-writer` + `ux-designer` (ลำดับการเรียนรู้) · skill `polished-document-style` · `presentation-design` (ถ้าทำสไลด์) · `branded-document-design`
-**ต้องมีก่อน:** `docs/<รหัส>-GUIDE-<บทบาท>-*.docx` (ถ้ามี · อ่านด้วย `anthropic-skills:docx` · ใช้เป็นแหล่งขั้นตอน โดยอ้างหัวข้อ ไม่คัดลอกซ้ำ) · โปรแกรมที่รันได้
+**ต้องมีก่อน:** `docs/<รหัส>-MAN-<บทบาท>-*.docx` (ถ้ามี · อ่านด้วย `anthropic-skills:docx` · ใช้เป็นแหล่งขั้นตอน โดยอ้างหัวข้อ ไม่คัดลอกซ้ำ) · โปรแกรมที่รันได้
 **ผลลัพธ์:** `docs/training/` — `training-plan.md` · `facilitator-guide.md` · `exercises.md` (+ `quiz.md` ถ้าเลือก)
 
 ### ข้อมูลการอบรม (ผู้ใช้กรอก)

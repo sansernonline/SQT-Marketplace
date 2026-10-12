@@ -1,6 +1,6 @@
 ---
 name: style-consistency
-description: Use when a series of AI or shot images must look like one set (product line, week of posts, storyboard, recurring character). Style lock sheet and checks.
+description: Use when a series of AI or shot images must look like one set (product line, week of posts, storyboard, recurring character).
 ---
 
 # Style Consistency

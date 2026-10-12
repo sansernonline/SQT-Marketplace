@@ -1,4 +1,4 @@
-> เดิมคือ skill `threat-detection-patterns` ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
+> เดิมชื่อ threat-detection-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
 
 **สารบัญ:** 
 

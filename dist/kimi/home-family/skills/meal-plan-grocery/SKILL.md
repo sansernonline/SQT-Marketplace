@@ -1,6 +1,6 @@
 ---
 name: meal-plan-grocery
-description: Use when a Thai family wants a weekly meal plan on a per-head budget, a grocery list, weekday batch cooking or less food waste, incl. child and elder diets.
+description: Use when a Thai family wants a weekly meal plan on a budget, a grocery list, batch cooking or less food waste.
 ---
 
 # Meal Plan and Grocery List
@@ -23,7 +23,7 @@ General information, not dietary advice — for diabetes, kidney disease or alle
 
 ## Workflow
 
-1. **Budget per head per day** = weekly budget ÷ 7 ÷ people. Compare with what the household actually spent last month (`trading-finance` `personal-budget`)
+1. **Budget per head per day** = weekly budget ÷ 7 ÷ people. Compare with what the household actually spent last month (`trading-finance` `personal-budget` (if installed))
 2. **Pick 4 proteins** for the week (e.g. chicken, pork mince, eggs, fish) and **2 cheap fillers** (tofu, beans/ถั่ว, eggs) — rotating proteins is what keeps cost down
 3. **Fill the week grid** — [references/weekly-plan-template.md](references/weekly-plan-template.md); one "cook once, eat twice" pair per 2–3 days
 4. **Write the grocery list by section** (below) from the grid; check fridge and pantry first and cross off what is there
@@ -72,4 +72,4 @@ Grandparent soft/low-salt: steam or boil, season at the table, not in the pot. S
 
 ## Related
 
-`kids-school` (lunch boxes, school milk) · `elder-care` (diet notes from the doctor) · `household-bills` (gas cylinder and electricity) · `trading-finance` `personal-budget`
+`kids-school` (lunch boxes, school milk) · `elder-care` (diet notes from the doctor) · `household-bills` (gas cylinder and electricity) · `trading-finance` `personal-budget` (if installed)

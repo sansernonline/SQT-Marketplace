@@ -1,6 +1,6 @@
 # skill: readable-code
 
-Use when writing or reviewing code for readability (names, function shape, comments, file location). Verb prefixes, banned words, the newcomer test.
+Use when writing or reviewing code for readability (names, function shape, comments, file location).
 
 # โค้ดที่คนอ่านรู้เรื่อง
 

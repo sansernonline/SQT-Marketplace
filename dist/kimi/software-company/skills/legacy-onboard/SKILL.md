@@ -1,6 +1,6 @@
 ---
 name: "legacy-onboard"
-description: "Recover an as-is spec from a legacy system that has code but no documents, ready for change requests. Uses system-analyst with subagents per layer and the legacy-spec-recovery skill."
+description: "Recover an as-is spec from a legacy system with code but no documents, ready for change requests."
 disableModelInvocation: true
 ---
 

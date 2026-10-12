@@ -1,6 +1,6 @@
 ---
 name: status-report
-description: Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Writes the status table in docs/BUILD-PLAN.md.
+description: Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Status in docs/BUILD-PLAN.md.
 ---
 
 # รายงานสถานะเมื่อจบงาน
@@ -9,6 +9,7 @@ description: Use when a task that produces or checks project work ends (document
 
 > **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
 > งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
+> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`investigation` · `review`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
 
 ---
 
@@ -63,7 +64,7 @@ description: Use when a task that produces or checks project work ends (document
 |---|---|
 | ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี |
+| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี · ต่างจาก 5 คำของ `superuser` ใน plugin อื่นโดยตั้งใจ ส่วน "รออนุมัติ" กับ "ค้างอยู่" อยู่เป็นหัวข้อท้ายคำตอบ |
 | ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
 - **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`

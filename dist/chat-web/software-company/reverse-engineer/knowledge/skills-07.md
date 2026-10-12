@@ -1,6 +1,6 @@
 # skill: temp-file-discipline
 
-Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
+Use when a task writes temporary files (archives, extracts, previews, backups, one-off scripts) into a project folder.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -106,7 +106,7 @@ Use when a task writes files into a project folder. Sends temporary files (archi
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -119,7 +119,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 - เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
 - ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
+- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน
 - เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
 
 ## เมื่อไหร่ **ไม่** ใช้
@@ -127,8 +127,10 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 | สถานการณ์ | ใช้ตัวนี้แทน |
 |---|---|
 | ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
+| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` |
+| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` |
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
 
@@ -264,7 +266,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 > | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
 > | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
 > | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
+> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
 >
 > FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
 >
@@ -301,7 +303,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 |---|---|
 | เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
 | แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
 | สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
 | สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |

@@ -1,6 +1,6 @@
 ---
 name: "bills"
-description: "Read a Thai electricity or water bill, log it in the monthly tracker, and investigate any spike against the last three months."
+description: "Read a Thai electricity or water bill, log it, and check any spike against the last three months."
 ---
 
 Run `household-bills` with the `home-manager` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

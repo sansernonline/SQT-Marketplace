@@ -1,6 +1,6 @@
 ---
 name: stack-python
-description: Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code). Repo tooling (uv, ruff, pyright, pytest), common traps.
+description: Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
 ---
 
 # stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้

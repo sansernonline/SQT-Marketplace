@@ -1,6 +1,6 @@
 ---
 name: meeting-summary
-description: Use when a meeting just ended or notes or a transcript are given. Decisions, action items with owner and due date, open questions, or formal Thai minutes.
+description: Use when a meeting just ended or notes or a transcript are given. Decisions, action items with owners, or formal Thai minutes.
 ---
 
 # Meeting Summary

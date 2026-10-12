@@ -1,6 +1,6 @@
 # โครงในโฟลเดอร์โค้ด — ผังเต็ม
 
-กฎอยู่ใน `SKILL.md` ข้อ 1 · ผังรากอยู่ใน `project-doc-set` ข้อ 1
+กฎอยู่ใน `SKILL.md` ข้อ 1 · ผังรากอยู่ใน `project-doc-set` ข้อ 1 · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ที่นี่
 
 ```
 <project-name>/          ← ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่นด้วย `-`
@@ -10,8 +10,6 @@
   .editorconfig          ← ข้อ 4
   .gitattributes
   .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  docs/decisions/ADR-0001-<slug>.md  ← ADR และ runbook เปลี่ยนพร้อมโค้ด จึงอยู่ใน repo (ชื่อตาม document-naming)
-  docs/runbook-<เรื่อง>.md            ← ไฟล์ละเรื่อง
   src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
   tests/
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน

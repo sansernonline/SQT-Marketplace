@@ -1,6 +1,6 @@
 # skill: reference-app-research
 
-Use when someone says I want an app like X. Researches that product from official pages, docs, reviews and competitors into one doc with improvements.
+Use when someone says I want an app like X. Researches that product and its competitors into one doc.
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร
 
@@ -9,9 +9,15 @@ Use when someone says I want an app like X. Researches that product from officia
 
 ---
 
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| เลือกไลบรารี เครื่องมือ หรือโมเดลที่จะหยิบมาใช้ แทนการทำเอง | `prior-art-review` |
+
 ## 1 · ก่อนค้น — ตั้งกรอบให้แคบ
 
-ถามให้ได้คำตอบก่อน (ข้อไหนผู้ใช้ไม่ได้บอก ให้ถาม ไม่เดา):
+ตอบให้ได้ก่อนค้น — ถามรวมครั้งเดียวตอนเริ่มเฉพาะข้อที่เปลี่ยนขอบเขตทั้งชุด (ชื่อและรุ่นแอปต้นแบบ) ข้อที่เหลือเลือกเองแล้วบอกเหตุผล หรือใส่ `(รอยืนยัน)` แล้วทำต่อ:
 
 | คำถาม | ทำไมต้องรู้ |
 |---|---|
@@ -154,9 +160,9 @@ Use when someone says I want an app like X. Researches that product from officia
 ## 7 · รายการตรวจก่อนส่ง
 
 - [ ] ขอบเขต (รุ่น แพลตฟอร์ม ผู้ใช้ของเรา) ชัดตั้งแต่ต้นเอกสาร
-- [ ] ทุกข้อเท็จจริงมีเลขแหล่ง และแหล่งครบ 4 กลุ่ม
+- [ ] ทุกข้อเท็จจริงมีเลขแหล่ง หรือติดป้าย `อนุมาน` และแหล่งครบ 4 กลุ่ม
 - [ ] เสียงผู้ใช้นับความถี่ ไม่ได้ยกความเห็นเดียวมาเป็นข้อสรุป
-- [ ] ข้อเสนอปรับปรุงมีครบ 6 ช่องทุกข้อ และยาวกว่าส่วน feature
+- [ ] ข้อเสนอปรับปรุงมีครบ 6 ช่องทุกข้อ และเป็นส่วนที่ยาวที่สุดของเอกสาร
 - [ ] มี "ไม่ควรลอก" และ "ยังไม่รู้"
 - [ ] มีตารางส่งต่อไป BRD / SRS / mockup
 - [ ] ไม่มีภาพ ข้อความ หรือโลโก้ของเขาในเอกสาร (มีแค่ลิงก์)
@@ -205,7 +211,7 @@ Use when someone says I want an app like X. Researches that product from officia
 
 # skill: context-budget
 
-Use when a task will read many files, search a codebase or run long-output commands. When to use a subagent, partial reads, bounded searches.
+Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
 
 # งบ context
 

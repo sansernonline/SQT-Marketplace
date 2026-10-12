@@ -1,6 +1,6 @@
 ---
 name: test-case-template
-description: Use when writing test cases, scenarios or a feature test plan, or turning acceptance criteria into tests. Functional, boundary, negative and edge cases.
+description: Use when writing test cases, scenarios or a feature test plan, or turning acceptance criteria into tests.
 ---
 
 # Test Case Template
@@ -12,9 +12,23 @@ description: Use when writing test cases, scenarios or a feature test plan, or t
 - Building a regression test suite
 - Reviewing test coverage gaps
 
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รายงานข้อบกพร่องที่เจอแล้ว 1 เรื่อง | `bug-report-template` |
+| คัดรายงานบั๊กที่กองอยู่ในกล่องข้อความ | `bug-inbox-triage` |
+| ตัดสินสัดส่วน unit · integration · E2E หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
+
 ## Where test cases live
 
 Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where QA fills in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`. Stories and their AC live in `docs/USER-STORIES.md` — the **Related** line cites those IDs exactly (`US-012, AC2`), so a changed AC there points to the test cases that must change.
+
+**The `.xlsx` workbook** — build it with `scripts/build-test-workbook.py` from one flat table (columns `id, module, fr, title, type, result`, others kept):
+- An **Overview** tab, then **one tab per module**. With `--mockup`, tabs follow the mockup screen order, every row gets a `screen` column, and each tab lists its mockup screens under the title. Use the same topics as the mockup start page (`ui-craft` → `references/mockup-start-page.md`).
+- Overview counts Pass / Fail / Blocked / Not run per tab with formulas. **No "all cases" tab** — a result typed in two places drifts.
+- Header: light brand fill, dark brand text, one brand-colour rule under it (the same table look as `branded-document-design`). Pass `--brand --head-fill --ink` from the project's `doc-theme`.
+- Check: open it in Excel; the Overview totals must equal the source row count.
 
 ## Test Case ID Convention
 
@@ -212,3 +226,5 @@ load the matching skill before writing, not after:
 | The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
 
 Default formatting is not neutral — it reads as unfinished work.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/test-plan-template.md`](references/test-plan-template.md) — แม่แบบ

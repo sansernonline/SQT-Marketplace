@@ -1,6 +1,6 @@
 ---
 name: digital-hygiene
-description: Use when securing family accounts (password manager, 2FA, passkeys, LINE to a new phone, photo backup, SIM swap) or after an account takeover.
+description: Use when securing family accounts (password manager, 2FA, passkeys, LINE on a new phone, backup, SIM swap) or after a takeover.
 ---
 
 # Digital Hygiene

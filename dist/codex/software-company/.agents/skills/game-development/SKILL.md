@@ -1,6 +1,6 @@
 ---
 name: game-development
-description: Use when building a game (engine choice, ECS, multiplayer netcode, matchmaking, anti-cheat, progression design, live-ops events, battle passes).
+description: Use when building a game (engine choice, ECS, multiplayer netcode, matchmaking, anti-cheat, progression, live-ops).
 ---
 
 # game-development
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-ย้ายมาจาก plugin `software-company-gaming` (skill `game-architecture` · `multiplayer-netcode` · `live-ops-patterns`) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+ย้ายมาจาก plugin `software-company-gaming` (เดิมชื่อ game-architecture → `references/game-architecture.md` · multiplayer-netcode → `references/multiplayer-netcode.md` · live-ops-patterns → `references/live-ops-patterns.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`

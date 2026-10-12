@@ -17,7 +17,7 @@ description: Use when building a desktop app or mockup that must look native on 
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- เว็บไซต์ หรือแอปมือถือ ให้ใช้ agent `ux-designer` ตามปกติ
+- เว็บแอป ให้ใช้ `web-app-design` · แอปมือถือ ให้ใช้ `mobile-app-design`
 - เอกสาร .docx/.pptx ให้ใช้ `branded-document-design`
 - ไดอะแกรมในเอกสาร ให้ใช้ `markdown-visuals`
 
@@ -31,7 +31,7 @@ description: Use when building a desktop app or mockup that must look native on 
 1. เลือกโครงจากตารางข้อ 0 ใน references/patterns.md แล้วคัดลอก template ที่ตรงกับแอป + assets/fluent.css ไปไว้คู่กัน
    (mockup-template.html = ตั้งค่า/dashboard · tool-app-template.html = แอปเครื่องมือที่ข้อมูลแน่น · หน้าตาของทั้งสองแบบดูได้ที่ assets/templates-preview.webp)
 2. ทำ 3 หน้าหลักก่อน (หน้าที่ผู้ใช้เปิดบ่อยที่สุด) ให้สวยจริง ยังไม่ทำหน้าที่เหลือ
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --hide "<แถบควบคุมของ mockup>"  → ได้ภาพ dark + light
+3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --hide "<แถบควบคุมของ mockup>"  → ได้ภาพ dark + light
 4. เปิดภาพดูจริงทั้งสองโหมด ตรวจตามข้อ 6 รวมถึงตาราง "ตรวจด้วยตา" ท้าย patterns.md
 5. ส่งภาพให้ subagent ที่ไม่ได้ทำงานชิ้นนี้วิจารณ์ (ดูข้อ 6.1) แก้ตามแล้วถ่ายใหม่ · ไม่เกิน 2 รอบ
 6. 3 หน้าหลักผ่านและอนุมัติแล้ว จึงดึงคอมโพเนนต์ออกมาใช้กับหน้าที่เหลือ
@@ -79,7 +79,7 @@ description: Use when building a desktop app or mockup that must look native on 
 
 **พื้นดำสนิท** แบบ Windows Security (`#000000`) ยังมีให้ใช้ด้วย `<html data-backdrop="black">` แต่ไม่ใช่ค่าเริ่มต้น เพราะวางข้างแอป Windows 11 อื่นแล้วดูแข็งและแปลกตา
 
-**เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ที่เดียวทั้งแอป
+**เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ต่อโหมด (มืด · สว่าง) ในไฟล์ token ที่เดียวทั้งแอป
 
 > ⚠️ **ห้ามเขียนค่าสีดิบในคอมโพเนนต์** ต้องอ้าง token เสมอ ไม่งั้นโหมดมืดจะพังเป็นจุด ๆ
 > โดยที่ไม่มีใครเห็นจนกว่าลูกค้าจะเปิดใช้
@@ -129,9 +129,9 @@ description: Use when building a desktop app or mockup that must look native on 
 ## 6 · ตรวจงาน — ห้ามข้าม
 
 ```bash
-python scripts/screenshot.py mockup.html _to_delete/screenshots/                 # 1440px = Large
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900     # Medium
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600     # Small
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/                 # 1440px = Large
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900     # Medium
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 600     # Small
 ```
 
 แล้วเปิดภาพดูจริง ตรวจตามนี้:

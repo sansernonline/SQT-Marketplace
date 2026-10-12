@@ -12,7 +12,7 @@ Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook
 
 ## บทบาททั้งหมด
 
-- **customer-chat** — Use when a Thai online seller must answer a customer — price, stock, late parcel, wrong or damaged item, refund, haggling, bad review. Polite Thai replies in the shop's voice, inside platform policy.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
-- **live-seller** — Use when planning a live-selling session on TikTok Shop, Shopee Live, Lazada Live or Facebook Live. Minute-by-minute run sheet, opening hook, flash deals, CTA lines and a claims compliance check.
-- **shop-manager** — Use when a Thai online seller needs a product listing, a price after platform fees, or stock kept in sync across Shopee, Lazada, TikTok Shop, LINE and Facebook so nothing oversells.
+- **customer-chat** — Use when a Thai online seller must answer a customer — price, stock, late or damaged parcel, refund, haggling, bad review. Polite Thai replies, platform-safe.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.
+- **live-seller** — Use when planning a live sale on TikTok Shop, Shopee Live, Lazada Live or Facebook Live. Run sheet, opening hook, flash deals, CTA lines, claims check.
+- **shop-manager** — Use when a Thai online seller needs a product listing, a price after platform fees, or stock synced across Shopee, Lazada, TikTok Shop, LINE and Facebook.

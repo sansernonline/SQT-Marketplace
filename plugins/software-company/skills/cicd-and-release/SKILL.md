@@ -243,3 +243,5 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 | ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` |
 
 **ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน

@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data. Safe defaults now.
+Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data.
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -24,15 +24,7 @@ Use when writing or reviewing any code, config, container or script, especially 
 | 9 | **path · URL · คำสั่ง ที่มาจากผู้ใช้ ห้ามใช้ตรง** | `File.Open(userPath)` → หา path จริงก่อน (`realpath` ตาม symlink) แล้วเช็กว่าอยู่ใต้โฟลเดอร์ที่อนุญาต · เรียก URL ปลายทางจากรายการที่อนุญาต · ไม่ส่ง input เข้า shell · เซิร์ฟเวอร์สำหรับพัฒนาฟังเฉพาะ `127.0.0.1` และรับเฉพาะ Host ที่รู้จัก |
 | 10 | **dependency ใหม่ต้องมีเหตุผล** — ล็อกเวอร์ชัน (lock file) ดูว่ายังมีคนดูแลอยู่ และไม่ติดช่องโหว่ที่รู้แล้ว | เพิ่มแพ็กเกจเพื่อ 5 บรรทัด → เขียน 5 บรรทัด (`lazy-coding` ข้อ 4) |
 
-**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
-
-| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
-|---|---|---|
-| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
-| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
-| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
-| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
-| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+**แอปมือถือหรือแอปที่ไม่มีเซิร์ฟเวอร์** — เปิด [`references/mobile.md`](references/mobile.md) เพิ่ม (กฎ M1–M5: permission · exported · สำรองข้อมูล · ส่งไฟล์ · กุญแจเซ็นแอป)
 
 ## เมื่องานแตะเรื่องเสี่ยง — เปิด skill เฉพาะทาง
 
@@ -60,11 +52,28 @@ Use when writing or reviewing any code, config, container or script, especially 
 - ซ่อน error ทุกอย่างจนแก้บั๊กไม่ได้ ผู้ใช้ควรเห็นข้อความกลาง แต่ log ต้องมีรายละเอียดพอ
 
 
+## reference: mobile.md
+
+# principle-secure-by-default · แอปมือถือและแอปที่ไม่มีเซิร์ฟเวอร์
+
+เปิดไฟล์นี้เมื่องานเป็นแอปมือถือหรือเครื่องมือบนเครื่อง · กฎ 10 ข้อใน [`SKILL.md`](../SKILL.md) ยังใช้ทั้งหมด
+
+**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
+
+| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
+|---|---|---|
+| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
+| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
+| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
+| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
+| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+
+
 ---
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real artifact, never a proxy like it compiles or the subagent said so.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -81,8 +90,8 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 | แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
 | test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
 | งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ

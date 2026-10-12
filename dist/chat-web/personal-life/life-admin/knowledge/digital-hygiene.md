@@ -1,6 +1,6 @@
 # skill: digital-hygiene
 
-Use when securing family accounts (password manager, 2FA, passkeys, LINE to a new phone, photo backup, SIM swap) or after an account takeover.
+Use when securing family accounts (password manager, 2FA, passkeys, LINE on a new phone, backup, SIM swap) or after a takeover.
 
 # Digital Hygiene
 
@@ -138,7 +138,7 @@ Related: `important-docs` (where the recovery-code envelope is kept), `subscript
 | Fake loan / refund / electricity-bill SMS with a link | "Click to receive your refund" | Agencies do not send links by SMS. The link installs an app that takes over the phone |
 | Remote-control app (screen-sharing APK) | "Install this app to update your details" | Installing anything at a caller's request = hang up |
 | A friend's hacked LINE or Facebook asking to borrow money | "Can you transfer ฿5,000 urgently? I'll return it tonight" | Call the friend on a phone number you already have before sending anything |
-| Investment / job / "like and earn" groups | Small payouts first, then bigger deposits | See `scam-check` in `trading-finance` |
+| Investment / job / "like and earn" groups | Small payouts first, then bigger deposits | See `scam-check` in `trading-finance` (if installed) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://thailand.prd.go.th/en/content/category/detail/id/2078/iid/327803 · https://www.thebangkokinsight.com/news/the-bangkok-insight-th/899307/
 

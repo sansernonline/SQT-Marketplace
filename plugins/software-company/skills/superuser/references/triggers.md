@@ -16,7 +16,7 @@
 | แก้โค้ดที่ใช้ร่วมกัน (helper · type · config · schema) ก่อนส่ง | [`blast-radius`](../../blast-radius/SKILL.md) |
 | เลือกระหว่างทำง่ายกับใช้ดี · ตัด scope | [`principle-user-experience-first`](../../principle-user-experience-first/SKILL.md) |
 | โปรเจกต์ยังไม่มีวิธีให้ agent รันแอปและกดดูผลเอง | [`app-verifier-setup`](../../app-verifier-setup/SKILL.md) — ทำก่อนอย่างอื่น |
-| ต้องติดตั้งของ รัน build · test · server · ฐานข้อมูลทดสอบ | ถ้าโปรเจกต์มี `.sandbox/` ให้ทำใน sandbox ผ่าน `sandbox.ps1 exec` ถ้ายังไม่มีและงานต้องติดตั้งอะไรเพิ่ม ให้เสนอ [`docker-sandbox`](../../docker-sandbox/SKILL.md) |
+| ต้องติดตั้งของ รัน build · test · server · ฐานข้อมูลทดสอบ | ถ้าโปรเจกต์มี `.sandbox/` ให้ทำใน sandbox ผ่าน `sandbox.ps1 exec` ถ้ายังไม่มีและงานต้องติดตั้งอะไรเพิ่ม ให้เสนอ [`docker-sandbox`](../../docker-sandbox/SKILL.md) · `.sandbox/` อยู่ที่รากได้เป็นข้อยกเว้นที่ประกาศใน README ของโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1) |
 | skill ตรวจแอปเริ่มไม่ตรงกับแอปจริง | [`app-verifier-upkeep`](../../app-verifier-upkeep/SKILL.md) |
 | ลองทางเดียวอาจได้รูปแบบผิดแล้วแก้ยาก (ดีไซน์ใหม่ · API ใหม่) | [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) |
 | งานแบ่งเป็นชิ้นอิสระได้หลายชิ้น | [`parallel-split-and-merge`](../../parallel-split-and-merge/SKILL.md) |

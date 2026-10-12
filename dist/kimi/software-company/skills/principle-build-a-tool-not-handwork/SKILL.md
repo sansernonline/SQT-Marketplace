@@ -1,6 +1,6 @@
 ---
 name: principle-build-a-tool-not-handwork
-description: Use when work has a mechanical part (same edit in many files, checking every screen, data migration, repeated documents). Build a script or checker instead.
+description: Use when work has a mechanical part (same edit in many files, checking every screen, data migration). Build a script instead.
 ---
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
@@ -21,7 +21,7 @@ description: Use when work has a mechanical part (same edit in many files, check
 
 ## กฎของเครื่องมือ
 
-- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ
+- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ ([`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md))
 - **พิมพ์ผลที่ตรวจได้** — บอกจำนวนที่แก้ · รายการที่ข้าม · รายการที่ล้ม
 - **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding`)
 - **เก็บให้ถูกที่** — สคริปต์ที่ใช้ครั้งเดียวเก็บไว้ใน `_to_delete/` ส่วนสคริปต์ที่ใช้ซ้ำเก็บใน `scripts/` แล้วเขียนบรรทัดเดียวใน README ว่ารันเมื่อไร

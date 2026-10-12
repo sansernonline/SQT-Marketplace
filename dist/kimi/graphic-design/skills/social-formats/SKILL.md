@@ -1,13 +1,13 @@
 ---
 name: social-formats
-description: Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA, X or LinkedIn. Sizes, ratios and safe zones per placement, checked against help pages.
+description: Use when designing for Facebook, Instagram, TikTok, YouTube, LINE OA, X or LinkedIn. Sizes, ratios and safe zones.
 ---
 
 # Social Formats
 
 Right size first, design second. A beautiful post in the wrong ratio gets cropped by the platform, and the crop always takes the headline.
 
-All pixel sizes and safe zones are in [platform-sizes.md](references/platform-sizes.md), each with its source and check date. Platforms change specs without notice — re-open the source link before a paid campaign.
+All pixel sizes and safe zones are in [platform-sizes.md](references/platform-sizes.md), each with its source and check date. This is the owner of these numbers; `software-company:graphic-design` and `thai-workplace:line-richmenu` (if installed) point here and keep only a fallback copy. Platforms change specs without notice — re-open the source link before a paid campaign.
 
 ## Workflow
 

@@ -11,8 +11,8 @@ plugin `superuser` คือต้นฉบับของวิธีทำง�
 
 | ส่วน | ของกลาง (ห้ามแก้ใน plugin สาขา) | ปรับตามสาขา |
 |---|---|---|
-| `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
-| playbook และ reference | `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) |
+| `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `team` (5) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
+| playbook และ reference | `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) · `triggers.md` · `examples.md` |
 | skill | `agent-patterns` · `answer-shape` · `human-writing` | skill ของสาขา |
 | agent | `learning-reviewer` | agent ตามบทบาทของสาขา |
 | hook | `hooks/superuser-hook.mjs` · `hooks/hooks.json` | — |
@@ -47,13 +47,13 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 | หัวเรื่อง และบรรทัดใต้ | ทีมนี้ทำงานอะไร · ส่งต่อเรื่องไหนให้ผู้เชี่ยวชาญ | ข้อพิพาทแรงงาน → จัดข้อเท็จจริงแล้วส่งต่อศาลแรงงานหรือทนาย |
 | 1 · กฎ | ใต้บล็อก `rules`: "ของจริงที่ใช้ตรวจตามข้อ 2" และกฎเฉพาะสาขา 1–3 ข้อ เลข 10 ขึ้นไป · ที่จดการตัดสินใจถ้าไม่ใช่ `CONTEXT.md` | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
 | 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` | `job-application` · `interview` · `offer-negotiation` |
-| 3 · ตัวกระตุ้น | สถานการณ์ → skill ของสาขา · งานข้ามสาขา → plugin อื่น | มีนัดสัมภาษณ์ → `interview-prep` + agent `interview-coach` |
+| 3 · ตัวกระตุ้น | ตารางสถานการณ์ → skill ของสาขา · งานข้ามสาขา → plugin อื่น ใน `references/triggers.md` (SKILL.md เหลือลิงก์ 1 บรรทัด) | มีนัดสัมภาษณ์ → `interview-prep` + agent `interview-coach` |
 | 4 · เกณฑ์งาน | 3 ข้อที่ "เสร็จ" ของสาขานี้ต้องผ่าน + skill ที่ใช้ตรวจ | จริง · ตรงเป้า · พร้อมใช้ |
-| 5 · agent | agent ตามบทบาท · งานข้ามสาขา · ตัวอย่างระดับโมเดล | CV → `career-coach` · สัมภาษณ์ → `interview-coach` |
-| 6 · รออนุมัติ | ใต้บล็อก `autonomy`: ตัวอย่างงานที่ย้อนได้ · ลำดับแหล่งข้อมูลทางการของสาขา · สิ่งที่ย้อนไม่ได้ของสาขานี้ | กดส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก |
+| 5 · agent | แถว agent ตามบทบาท · งานข้ามสาขา เหนือบล็อก `team` · ตัวอย่างระดับโมเดลใน `references/examples.md` | CV → `career-coach` · สัมภาษณ์ → `interview-coach` |
+| 6 · รออนุมัติ | ใต้บล็อก `autonomy`: สิ่งที่ย้อนไม่ได้ของสาขานี้ · ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการไปที่ `references/examples.md` | กดส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก |
 | 7 · ตัวอย่างตารางสถานะ | 1 แถวที่เป็นงานจริงของสาขา | CV ภาษาอังกฤษ · คำค้นครบ 12 คำ |
 | 9 · ไฟล์กลาง | ใต้บล็อก `where`: ตัวอย่างโฟลเดอร์งาน · แม่แบบ `CONTEXT.md` · ข้อมูลที่ห้ามใส่ | ห้ามใส่เงินเดือนจริงใน CONTEXT |
-| 10 · ตารางรูปแบบ | ตัวอย่าง 6 รูปแบบในงานของสาขา | MoA: ข้อเสนองาน 2 ที่ → 3 มุม แล้วรวม |
+| 10 · ตารางรูปแบบ | ตัวอย่าง 6 รูปแบบในงานของสาขา ใน `references/examples.md` | MoA: ข้อเสนองาน 2 ที่ → 3 มุม แล้วรวม |
 
 ---
 

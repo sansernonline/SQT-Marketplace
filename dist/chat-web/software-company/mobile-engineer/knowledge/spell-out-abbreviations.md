@@ -1,6 +1,6 @@
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text, labels). Spell out each abbreviation on first use, gloss jargon.
+Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
 
 # Spell Out Abbreviations
 

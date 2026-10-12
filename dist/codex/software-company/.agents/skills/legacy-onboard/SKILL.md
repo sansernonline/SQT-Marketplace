@@ -1,6 +1,6 @@
 ---
 name: "legacy-onboard"
-description: "Recover an as-is spec from a legacy system that has code but no documents, ready for change requests. Uses system-analyst with subagents per layer and the legacy-spec-recovery skill."
+description: "Recover an as-is spec from a legacy system with code but no documents, ready for change requests."
 ---
 
 > **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook ที่ใกล้ที่สุด แล้วคัดลอกขั้นตอนด้านล่างลง todo ก่อน ขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน

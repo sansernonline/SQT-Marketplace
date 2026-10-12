@@ -1,6 +1,6 @@
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
 
 # saas-platform
 
@@ -32,7 +32,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-customer-success-engineer.md
@@ -811,7 +811,7 @@ log.info('Order created', {
 
 ## reference: enterprise-integration.md
 
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ enterprise-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1148,7 +1148,7 @@ class SalesforceClient {
 
 ## reference: multi-tenancy-patterns.md
 
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ multi-tenancy-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1494,7 +1494,7 @@ async def offboard_tenant(tenant_id):
 
 ## reference: subscription-billing.md
 
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ subscription-billing (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1814,7 +1814,7 @@ await stripe.subscriptions.create({
 
 # skill: insurance-systems
 
-Use when building insurance software (policy and quote engines, claims from first notice of loss, fraud detection, underwriting, reserves, OIC filings).
+Use when building insurance software (policy and quote engines, claims, fraud detection, underwriting, reserves, OIC filings).
 
 # insurance-systems
 
@@ -1847,7 +1847,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-insurtech` (skill `claims-workflow-patterns` · `underwriting-models` · `insurance-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-insurtech` (เดิมชื่อ claims-workflow-patterns → `references/claims-workflow-patterns.md` · underwriting-models → `references/underwriting-models.md` · insurance-compliance → `references/insurance-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-actuarial-engineer.md
@@ -2950,7 +2950,7 @@ if decision == 'decline' and used_consumer_report:
 
 ## reference: claims-workflow-patterns.md
 
-> เดิมคือ skill `claims-workflow-patterns` ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
+> เดิมชื่อ claims-workflow-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -3303,7 +3303,7 @@ const TOUCH_POINTS = [
 
 ## reference: insurance-compliance.md
 
-> เดิมคือ skill `insurance-compliance` ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
+> เดิมชื่อ insurance-compliance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -3680,7 +3680,7 @@ Preparation:
 
 ## reference: underwriting-models.md
 
-> เดิมคือ skill `underwriting-models` ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
+> เดิมชื่อ underwriting-models (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

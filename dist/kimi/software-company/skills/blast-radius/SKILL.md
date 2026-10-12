@@ -1,6 +1,6 @@
 ---
 name: blast-radius
-description: Use when a small change touches shared code (helper, type, config, schema, CSS class, query) or asked what else it could break. Lists every reach, tests one.
+description: Use when a small change touches shared code (helper, type, config, schema, CSS class, query) or asked what else it could break.
 ---
 
 # blast radius — แก้นิดเดียว กระทบอะไรบ้าง

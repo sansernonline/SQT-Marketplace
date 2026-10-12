@@ -1,6 +1,6 @@
 ---
 name: "insurance-design"
-description: "Design a claims processing flow or an underwriting model. Two modes — claims-flow-design or underwriting-model-design."
+description: "Design a claims flow or an underwriting model (claims-flow-design or underwriting-model-design)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

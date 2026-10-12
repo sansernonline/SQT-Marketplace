@@ -1,6 +1,6 @@
 ---
 name: "release-notes"
-description: "Generate user-facing release notes for a version using technical-writer agent. Translates technical changes into customer-friendly highlights."
+description: "Write user-facing release notes for a version with the technical-writer agent."
 disableModelInvocation: true
 ---
 
@@ -8,7 +8,7 @@ Use the `technical-writer` agent to create release notes for: **$ARGUMENTS**
 
 The technical writer should:
 
-1. **Initial Discovery** — ask the user:
+1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
    - Audience (end users, developers, both?)
    - Tone (formal, friendly, technical)
    - Channel (in-app, email, blog, GitHub)

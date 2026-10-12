@@ -7,7 +7,7 @@
 วางทั้งไฟล์ใน Claude Code, Codex CLI หรือ Gemini CLI ที่รากโฟลเดอร์โปรเจกต์ แล้วพิมพ์ต่อท้ายว่าจะทำฉบับไหน เช่น `ทำทั้งหมด` หรือ `ทำข้อ 3 และ 4`
 
 <!-- rules:begin -->
-**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามครั้งเดียว · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ตัดสินใจเองและสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-company` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → หยุดและบอกผู้ใช้ · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
+**กฎการทำงาน (agent ต้องทำตาม):** เปิด skill `superuser` ก่อนเริ่ม แล้วทำตาม playbook ที่ฉบับนั้นระบุ (ไม่ระบุ → `project-docs`) · กฎร่วม (ถามครั้งเดียว · ทำจบรอบเดียว · ตัดสินใจเอง · รายงานสถานะ) อยู่ใน skill `superuser` และ playbook ที่เดียว · ตัดสินใจเองและสถานะลง `docs/BUILD-PLAN.md` (ยังไม่มี → สร้าง) · ไฟล์ทำงานของ SuperUser (`CONTEXT.md` · `IMPROVEMENTS.md` · log) อยู่ใต้ `.claude/superuser/` ตาม `project-doc-set` ข้อ 1 ไม่วางที่รากโปรเจกต์ · ใช้ skill และ agent ของ plugin `software-company` เท่านั้น (ไม่ใช้ตัวชื่อซ้ำของ plugin อื่น) · เปิด skill ไม่ได้ → อ่าน `skills/<ชื่อ>/SKILL.md` ของ plugin · ไม่มี agent → ใช้ agent ทั่วไปพร้อมเปิด `agents/<ชื่อ>.md` · หาไม่เจอทั้ง 2 ทาง → ข้ามชิ้นนั้น ทำส่วนอื่นให้จบ แล้วรายงานว่าติด · ไม่มี `learning-reviewer` → ข้ามรอบเรียนรู้แล้วจดไว้
 <!-- rules:end -->
 
 **ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้แบบเดียวกันทั้งชุด: ผังระบบ · flow · ผังคลาวด์ → `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
@@ -16,7 +16,7 @@
 |---|---|---|
 | 1 | เอกสารแผน deploy และ CI/CD | `docs/deploy-guide.md` |
 | 2 | บันทึกการออกรุ่น (Release Notes) | `docs/release-notes/v<เวอร์ชัน>.md` |
-| 3 | คู่มือรับมือเหตุการณ์ (Runbook) | `docs/runbook.md` |
+| 3 | คู่มือรับมือเหตุการณ์ (Runbook) | `docs/runbook-<เรื่อง>.md` |
 
 ---
 
@@ -99,7 +99,7 @@ agent `technical-writer` · skill `software-company:release-notes` · `commit-me
 
 agent `devops-engineer` · skill `incident-runbook-template` · `observability-basics` · `logging-standards` · `postmortem-template` (ลิงก์ไปเมื่อเหตุจบ)
 **ต้องมีก่อน:** `docs/architecture.md` (ไม่มี → ใช้ `docs/as-is/overview.md` และ `docs/as-is/config-and-run.md`) · `docs/deploy-guide.md` (ถ้ามี)
-**ผลลัพธ์:** `docs/runbook.md` — เอกสารเท่านั้น ไม่รันคำสั่งที่แตะระบบจริง (คำสั่งในเอกสารเป็นข้อความตัวอย่างที่ผู้เข้าเวรจะรันเอง)
+**ผลลัพธ์:** `docs/runbook-<เรื่อง>.md` — เอกสารเท่านั้น ไม่รันคำสั่งที่แตะระบบจริง (คำสั่งในเอกสารเป็นข้อความตัวอย่างที่ผู้เข้าเวรจะรันเอง)
 
 ### ข้อมูลระบบ (ผู้ใช้กรอก)
 

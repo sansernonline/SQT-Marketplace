@@ -26,7 +26,7 @@
 | SRS | | ● | ● | ☐ | | |
 | Architecture | | ● | ● | ☐ | | |
 | Test Plan | | ● | ● | ☐ | | |
-| User Guide | | ● | ● | ☐ | | |
+| คู่มือผู้ใช้ (`MAN`) | | ● | ● | ☐ | | |
 | FSD | | | ● | ☐ | | |
 | BRD | | | ● | ☐ | | |
 | Document Checklist | | | ● | ☐ | | |

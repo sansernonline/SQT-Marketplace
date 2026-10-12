@@ -1,6 +1,6 @@
 # skill: mobile-engineering
 
-Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, memory, battery, store listing). Not screen design.
+Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first, launch time, battery). Not screen design.
 
 # mobile-engineering
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-mobile` (skill `mobile-architecture-patterns` · `mobile-performance` · `app-store-optimization`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-mobile` (เดิมชื่อ mobile-architecture-patterns → `references/mobile-architecture-patterns.md` · mobile-performance → `references/mobile-performance.md` · app-store-optimization → `references/app-store-optimization.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
 
 
 ## reference: agent-android-engineer.md
@@ -1066,7 +1066,7 @@ let products = try modelContext.fetch(descriptor)
 
 ## reference: app-store-optimization.md
 
-> เดิมคือ skill `app-store-optimization` ใน plugin `software-company-mobile` — รวมเข้า `mobile-engineering` ใน v2.0.0
+> เดิมชื่อ app-store-optimization (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-mobile` — รวมเข้า `mobile-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1354,7 +1354,7 @@ Top markets to localize:
 
 ## reference: mobile-architecture-patterns.md
 
-> เดิมคือ skill `mobile-architecture-patterns` ใน plugin `software-company-mobile` — รวมเข้า `mobile-engineering` ใน v2.0.0
+> เดิมชื่อ mobile-architecture-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-mobile` — รวมเข้า `mobile-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1690,7 +1690,7 @@ Platform-specific bridges:
 
 ## reference: mobile-performance.md
 
-> เดิมคือ skill `mobile-performance` ใน plugin `software-company-mobile` — รวมเข้า `mobile-engineering` ใน v2.0.0
+> เดิมชื่อ mobile-performance (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-mobile` — รวมเข้า `mobile-engineering` ใน v2.0.0
 
 **สารบัญ:** 
 

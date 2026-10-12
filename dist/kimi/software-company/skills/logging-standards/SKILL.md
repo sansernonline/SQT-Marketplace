@@ -1,6 +1,6 @@
 ---
 name: logging-standards
-description: Use when writing or reviewing code that logs. One format across .NET, Node, Python and Angular, levels, correlation ids, rotation, redaction.
+description: Use when writing or reviewing code that logs (format, levels, correlation ids, redaction) in .NET, Node, Python or Angular.
 ---
 
 # Logging Standards

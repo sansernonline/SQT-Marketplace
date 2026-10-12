@@ -1,6 +1,6 @@
 ---
 name: tax-vat-th
-description: Use when a Thai company asks what to file this month, whether to register for VAT, how much to withhold or late penalties. PP 30, PND 1, 3, 53, 50, 51, e-WHT.
+description: Use when a Thai company asks what to file this month, VAT registration, withholding or late penalties (PP 30, PND 1, 3, 53, 50).
 ---
 
 # Thai VAT, Withholding Tax and Company Filing Calendar
@@ -95,4 +95,4 @@ Company pays a design agency (บริษัท) 20,000 baht + VAT 7% = 21,400.
 
 ## Related
 
-`payroll-th` (ภ.ง.ด.1, 50 ทวิ) · `e-tax-invoice` · `dbd-annual-filing` (ภ.ง.ด.50) · `social-security-th` · `thai-holidays` · `doc-quotation` · `tax-basics-th` in `trading-finance` (personal investment tax).
+`payroll-th` (ภ.ง.ด.1, 50 ทวิ) · `e-tax-invoice` · `dbd-annual-filing` (ภ.ง.ด.50) · `social-security-th` · `thai-holidays` · `doc-quotation` · `tax-basics-th` in `trading-finance` (if installed) (personal investment tax).

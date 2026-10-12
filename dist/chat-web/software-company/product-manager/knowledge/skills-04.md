@@ -1,355 +1,541 @@
-# skill: answer-shape
+# skill: markdown-visuals
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Chooses prose, table, small diagram or short list.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
 
-# รูปทรงของคำตอบ
+# Markdown Visuals
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace ต้นฉบับอยู่ที่ plugin `superuser` ถ้าจะแก้ให้แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
----
+## When to use this skill
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
+- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
 
-| สัญญาณ | รูปทรง |
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
 |---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
 
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
-
----
-
-## ตารางที่อ่านง่าย
-
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+## Decision tree: which format?
 
 ```
-❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
+├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
 
----
+## 1 · Inline SVG (primary technique)
 
-## เมื่อไหร่รูปชนะตาราง
+### Boilerplate
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
 
-| ใช้รูป | ใช้ตาราง |
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+
+### Reusable snippets
+
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
+
+## 2 · External image files
+
+Use when:
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+## 4 · Mermaid
+
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
 |---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+## Combining formats in one doc
 
-```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+## Accessibility checklist
 
----
+For every visual:
 
-## เมื่อไหร่ประโยคชนะทั้งคู่
-
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
-
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
-
----
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
 
 ## Anti-patterns
 
-- ❌ **ย่อหน้ายาวเปรียบเทียบ 3 ตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
-- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
-- ❌ **ตาราง 2 แถวเพื่อให้ดูเป็นระเบียบ**
-- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
-- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเอง ทั้งที่เขาถามเพราะอยากได้คำแนะนำ
-- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
-- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
+- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
+- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- ❌ **PNG screenshots of text** — use the text, in a code block
+- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
----
+## Quick-start recipe
 
-## เชื่อมกับ skill อื่น
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
 
-- ถ้อยคำ ความยาว และการตัดกลิ่น AI ใช้ `human-writing`
-- รูปที่ต้องเป็นไฟล์จริง หรือการเปิดเรื่องที่ต้องให้ผู้ใช้ตัดสินใจ ให้ใช้ skill เฉพาะของ plugin นั้นถ้ามี
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
 
----
+Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
 
-## ตัวย่อ
+## Related skills
 
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-
-
----
-
-# skill: temp-file-discipline
-
-Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
-
-# ระเบียบไฟล์ชั่วคราว
-
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
-
----
-
-## เลือกที่วาง
-
-| ไฟล์นั้นคืออะไร | วางที่ |
-|---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/` ที่รากโปรเจกต์ ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
-
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
-
----
-
-## อะไรคือไฟล์ชั่วคราว
-
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
-
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
-
----
-
-## อะไรไม่ใช่
-
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
-
----
-
-## วิธีใช้
-
-```
-โปรเจกต์/
-├── ผลงานจริง
-└── _to_delete/
-    ├── transfer.zip
-    └── render-check/
-```
-
-- มีโฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแยกย่อยตามวันที่ ยกเว้นของเยอะจริง
-- โฟลเดอร์ย่อยมาตรฐานที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
-
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
-  |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
-
----
-
-## ตอนจบงาน
-
-1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
-
----
-
-## Anti-patterns
-
-- ❌ **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- ❌ **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- ❌ **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- ❌ **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- ❌ **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- ❌ **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- ❌ **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
-
----
+- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
+- [[simplicity-first]] — don't over-design the diagram; show what's needed
+- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
+- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
 
 ## ตัวย่อ
 
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
 
 
----
+## reference: ascii-patterns.md
 
-# skill: status-report
+# ASCII patterns
 
-Use when a task that produces or checks project work ends (document, mockup, review, code, fix, release). Writes the status table in docs/BUILD-PLAN.md.
+Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
 
-# รายงานสถานะเมื่อจบงาน
+## Box-drawing characters
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-
----
-
-## 1 · เขียนที่ไหน — `docs/BUILD-PLAN.md` เสมอ
-
-ทุกงาน ทั้งเอกสาร โค้ด การตรวจ การส่งมอบ เขียนที่ไฟล์เดียวนี้ เพื่อให้มีที่ดูสถานะที่เดียว
-
-| สถานการณ์ | ทำอย่างไร |
-|---|---|
-| มีไฟล์อยู่แล้ว | แก้เฉพาะ 2 หัวข้อด้านล่าง — **ห้ามแตะตารางงานหรือหัวข้ออื่น** |
-| ยังไม่มีไฟล์ | สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy 2 หัวข้อจาก [`assets/build-plan-status.md`](assets/build-plan-status.md) มาเติม (ห้ามแต่งโครงเอง) แล้วเมื่อเริ่มเขียนโค้ดค่อยเพิ่มตารางงาน (`spec-to-code-loop`) **ระหว่าง** 2 หัวข้อนี้ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้ตัวหลักเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
-
-ลำดับหัวข้อในไฟล์ (ต่อจากชื่อโปรเจกต์): `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
-
-2 หัวข้อที่ skill นี้ดูแล:
-
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว ไม่ใช่ต่อท้าย
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม
-
----
-
-## 2 · ตาราง `## สถานะล่าสุด`
-
-```markdown
-## สถานะล่าสุด
-
-อัปเดต: 2026-10-01 14:20 · งานล่าสุด: เขียน SRS
-
-| รายการ | ประเภท | สถานะ | ผลตรวจ | ค้าง / หมายเหตุ |
-|---|---|---|---|---|
-| SRS (`docs/srs.md`) | เอกสาร | DRAFT | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
-| mockup (`mockup/`) | เอกสาร | REVIEW | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
-| FSD | เอกสาร | ยังไม่เริ่ม | — | รอ architecture |
-| FR-001 ถึง FR-012 | โค้ด | เสร็จ | ผ่าน — test 48/48 | — |
-
-**ค้างอยู่ (ต้องมีคนตัดสิน):**
-1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
-
-**รออนุมัติ:**
-1. push branch `feat/search` — `git push -u origin feat/search`
-
-**ถัดไป:** แก้ปุ่มหลอกใน mockup → เขียน architecture
-
-**ข้อเสนอ:**
-1. ย้ายตัวตรวจ input ไปไว้จุดเดียวที่ขอบ API — ลด if ซ้ำ 14 จุด · แรงกลาง
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
 ```
 
-### ค่าที่ใช้ในแต่ละคอลัมน์ — ใช้เฉพาะค่าเหล่านี้
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
 
-| คอลัมน์ | ค่าที่ใช้ได้ |
-|---|---|
-| ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
+## Common patterns
 
-- **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
-- **แอปมือถือ** หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` ถ้ายังไม่ได้ลองเครื่องจริงให้เขียนไว้ในช่อง ค้าง
-- `APPROVED` มีแต่คนที่เปลี่ยนได้ ส่วน agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
-- ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ รายการที่รอบนี้ไม่ได้แตะให้คัดลอกค่าเดิมมา
-- เอกสาร 1 ฉบับใช้ 1 แถว โค้ดที่สถานะเท่ากันรวมเป็นช่วงรหัสได้ (`FR-001 ถึง FR-012`) และตารางไม่ควรยาวเกิน 25 แถว
-
-### "ค้างอยู่" กับ "ถัดไป"
-
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน ให้เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ถ้าไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) ให้บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ถ้าไม่มีก็ไม่ต้องใส่หัวข้อ
-- **ถัดไป** คืองานลำดับถัดไปไม่เกิน 3 อย่าง
-- **ข้อเสนอ** คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ถ้าไม่มีก็ไม่ต้องใส่หัวข้อ
-
----
-
-## 3 · บรรทัดใน `## ประวัติสถานะ`
-
-1 บรรทัดต่อ 1 งาน ใหม่สุดอยู่บน:
-
-```markdown
-## ประวัติสถานะ
-
-- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ค้าง 1
-- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
 ```
 
-รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
 
-หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` ซึ่ง skill นี้ไม่แก้และไม่ลบ
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+
+Pattern from `DockXI/docs/12-design-mockup.md`:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: svg-snippets.md
+
+# Inline SVG snippets
+
+Reusable building blocks for inline SVG mockups in markdown docs · used by [SKILL.md](../SKILL.md) §1
+
+## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
+ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+
+| Token | หน้าที่ | ได้มาจาก |
+|---|---|---|
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+
+**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+
+## Snippets
+
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
+
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
+
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+## Worked example — UI state mockup
+
+This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+
 
 ---
 
-## 4 · ในคำตอบ
+# skill: prior-art-review
 
-แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
+Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
 
----
+# สำรวจของที่มีอยู่แล้วก่อนลงมือทำ
 
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่าน `docs/BUILD-PLAN.md` จากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] `## สถานะล่าสุด` เขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `ผ่าน` มีหลักฐาน
-- [ ] ไม่ได้ตั้ง `APPROVED` เอง
-- [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด
-- [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
-- [ ] รันตัวตรวจจนผ่าน (path นับจากโฟลเดอร์ skill นี้): `python ../polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
+> **กฎข้อเดียว:** จบที่**การตัดสินใจ** ไม่ใช่จบที่รายงาน
+> ถ้าอ่านจบแล้วยังไม่รู้ว่าจะใช้ตัวไหน แปลว่ายังไม่เสร็จ
 
 ---
 
-## 6 · สิ่งที่ห้ามทำ
+## ต่างจาก `reference-app-research` อย่างไร
 
-| อย่าทำ | เพราะ |
+| | `reference-app-research` | skill นี้ |
+|---|---|---|
+| ผลลัพธ์ | รายงาน feature · UI · UX + ข้อเสนอปรับปรุง | ตารางเทียบ + การตัดสินใจ + สิ่งที่ยอมแลก |
+| คำถามตั้งต้น | "แอปนี้ดีและพังตรงไหน ของเราจะดีกว่าอย่างไร" | "ควรหยิบตัวไหนมาใช้ หรือทำเอง" |
+| ใช้ร่วมกัน | แกะแอปต้นแบบที่จะสร้างแบบเดียวกัน | ตัดสินเรื่องไลบรารี เครื่องมือ หรือของที่จะนำมาใช้ แล้วบันทึก |
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
 |---|---|
-| เขียนว่า `ผ่าน` โดยไม่ได้รัน test หรือไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้าย `## สถานะล่าสุด` ทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียน `BUILD-PLAN.md` เอง | เขียนชนกันแล้วไฟล์พัง |
+| แกะแอปต้นแบบเพื่อทำแบบเดียวกัน | `reference-app-research` |
+| เลือกรูปแบบสถาปัตยกรรม ไม่ใช่เลือกเครื่องมือ | `architecture-patterns` |
+| ตัดสินใจแล้ว เหลือแค่บันทึกเหตุผล | `adr-writer` |
 
 ---
 
-## เชื่อมกับ skill อื่น
+## 1 · ตั้งคำถามให้แคบก่อนค้น
+
+คำถามกว้างจะได้รายชื่อยาวที่เทียบกันไม่ได้
+
+```
+❌ มีเครื่องมือถอดเสียงอะไรบ้าง
+✅ ตัวไหนถอดเสียงไทยยาว 2 ชั่วโมงได้ แยกผู้พูดได้ รันบนเครื่องตัวเองได้
+   และสัญญาอนุญาตให้ขายต่อได้
+```
+
+คำถามต้องมี **3 อย่าง** เสมอ: สิ่งที่ต้องทำได้ · ข้อจำกัดที่ยอมไม่ได้ · เงื่อนไขการนำไปใช้
+
+**เขียนคำถามลงไฟล์ก่อนค้น** ไม่งั้นพอเจอของสวย ๆ จะเผลอเปลี่ยนคำถามให้เข้ากับของที่เจอ
+
+---
+
+## 2 · ดูให้ครบสี่แหล่ง
+
+| แหล่ง | หาอะไร | สัญญาณที่ต้องเก็บ |
+|---|---|---|
+| โค้ดโอเพนซอร์ส | ของที่หยิบมาใช้ได้ทันที | สัญญาอนุญาต · commit ล่าสุด · จำนวนผู้ดูแล |
+| ผลิตภัณฑ์ที่ขายอยู่ | ตลาดยอมจ่ายเท่าไหร่ ของเขาขาดอะไร | ราคา · สิ่งที่เขาไม่ทำ · คำบ่นของผู้ใช้ |
+| งานวิจัย | วิธีที่ดีกว่าที่ยังไม่มีใครทำเป็นผลิตภัณฑ์ | ปีที่ตีพิมพ์ · มีโค้ดให้ไหม · ทำซ้ำได้ไหม |
+| มาตรฐานและข้อกำหนด | สิ่งที่ห้ามคิดเอง | หมายเลขมาตรฐาน · ฉบับล่าสุด |
+
+**แหล่งที่คนลืมบ่อยที่สุดคือมาตรฐาน** ถ้าเขียนรูปแบบไฟล์เองทั้งที่มีมาตรฐานอยู่แล้ว
+ก็เท่ากับสร้างงานให้ตัวเองและปิดทางเชื่อมกับระบบอื่น
+
+---
+
+## 3 · ตารางเทียบ — หกคอลัมน์นี้ต้องมีเสมอ
+
+| ตัวเลือก | ทำสิ่งที่เราต้องได้ไหม | สัญญาอนุญาต | โครงการยังมีชีวิตไหม | ต้องยอมแลกอะไร | ต้นทุนจริง |
+|---|---|---|---|---|---|
+
+- **คอลัมน์ "ทำสิ่งที่เราต้องได้ไหม" ไม่ใช่รายการความสามารถ** ให้ตอบเฉพาะข้อที่เราถามในข้อ 1
+- **ต้นทุนจริง** รวมค่าเรียนรู้ ค่าดูแล และค่าย้ายออกถ้าวันหนึ่งต้องเลิกใช้ ไม่ใช่แค่ค่าลิขสิทธิ์
+- เรียงแถวตามความเหมาะสม ให้ตัวที่แนะนำอยู่บนสุด
+- **ปิดท้ายด้วยข้อสรุป 1 บรรทัดเสมอ**
+
+---
+
+## 4 · สัญญาอนุญาต — ตรวจก่อน อย่าตรวจทีหลัง
+
+**เรื่องนี้ถ้ารู้ช้าจะเจ็บที่สุด** เพราะถ้ามารู้ตอนใกล้ส่งมอบ ก็ต้องรื้อ
+
+| กลุ่ม | ตัวอย่าง | ใช้ในของที่ขายได้ไหม |
+|---|---|---|
+| ปล่อยเสรี | MIT · Apache-2.0 · BSD | ได้ แต่ Apache-2.0 มีเงื่อนไขเรื่องสิทธิบัตรเพิ่ม |
+| ต้องเปิดโค้ดต่อ | GPL-3.0 · AGPL-3.0 | ได้แต่**ต้องเปิดโค้ดของเรา** และ AGPL นับรวมการให้บริการผ่านเครือข่ายด้วย |
+| ห้ามเชิงพาณิชย์ | CC BY-NC · โมเดลที่เขียนว่า research only | **ขายไม่ได้** แต่ใช้ทดลองและเทียบผลได้ |
+| เฉพาะราย | ต้องอ่านสัญญาจริง | ขึ้นกับข้อสัญญา |
+
+**กฎ 2 ข้อที่พลาดกันบ่อย**
+
+1. **โมเดลปัญญาประดิษฐ์มีสัญญาแยกจากโค้ด** — โค้ดอาจเป็น MIT แต่น้ำหนักโมเดลเป็น non-commercial ก็ได้
+2. **สัญญาตกทอดไปถึงโมเดลที่ต่อยอด** — เช่น โมเดลที่ fine-tune มาจากโมเดล non-commercial ก็ยัง non-commercial
+
+ทุกตัวที่จะใช้จริง ต้อง**เขียนชื่อสัญญาอนุญาตลงไฟล์** ไม่ใช่จำไว้
+
+---
+
+## 5 · โครงการยังมีชีวิตไหม
+
+| สัญญาณ | ตีความ |
+|---|---|
+| commit ล่าสุดเกิน 12 เดือน | ตายแล้ว เว้นแต่เป็นของที่นิ่งจริง เช่นไลบรารีคณิตศาสตร์เล็ก ๆ |
+| ผู้ดูแลคนเดียว | ความเสี่ยงสูง ถ้าคนนั้นหายไปก็จบ |
+| issue ค้างเป็นร้อยไม่มีใครตอบ | ไม่มีใครดูแลจริง |
+| ไม่มีการออกรุ่นเลยในปีที่ผ่านมา | เหมือนข้อแรก |
+| เอกสารตรงกับโค้ดรุ่นเก่า | จะเสียเวลาเดามาก |
+| ไม่มี test ในโครงการ | ยกรุ่นทีไรพังทุกที |
+
+**ของที่ตายแล้วยังใช้ได้** ถ้ายอมรับว่าจะต้องดูแลเอง แต่ต้องรู้ตัวตั้งแต่ต้น ไม่ใช่มารู้ตอนติดปัญหา
+
+---
+
+## 6 · จบด้วยหนึ่งในสี่ทาง
+
+| ทาง | เมื่อไหร่ | สิ่งที่ต้องบันทึก |
+|---|---|---|
+| **ใช้เลย** | ตรงความต้องการ ≥80% สัญญาอนุญาตผ่าน และยังมีชีวิต | รุ่นที่ล็อกไว้ · สิ่งที่มันทำไม่ได้ |
+| **แยกไปแก้เอง** | ใกล้เคียงมากแต่ขาดบางอย่าง และสัญญาอนุญาตให้แก้ได้ | แก้อะไรบ้าง · จะตามรุ่นต้นทางอย่างไร |
+| **ทำเอง** | ไม่มีตัวไหนผ่านข้อจำกัดที่ยอมไม่ได้ | ตัวที่ใกล้ที่สุดคือตัวไหน และขาดอะไร |
+| **ไม่ทำ** | มีของที่ดีกว่าอยู่แล้วในราคาที่ถูกกว่าทำเอง | เหตุผล และเงื่อนไขที่จะกลับมาคิดใหม่ |
+
+**"ทำเอง" ต้องมีเหตุผลที่เขียนออกมาได้** ส่วน "อยากคุมเอง" ไม่ใช่เหตุผล
+ต้องบอกได้ว่าคุมเองแล้วได้อะไรที่หยิบของเขามาใช้แล้วไม่ได้
+
+---
+
+## 7 · บันทึกสิ่งที่ยอมแลก
+
+ทุกทางเลือกต้องแลกบางอย่างไป **ถ้าไม่บันทึกวันนี้ อีก 6 เดือนจะไม่มีใครจำได้**
+ให้บันทึกเป็น Architecture Decision Record ด้วย `adr-writer` อย่างน้อย 3 บรรทัด
+
+```
+เลือก: <ตัวเลือก>  เพราะ <เหตุผลหลักข้อเดียว>
+ยอมแลก: <สิ่งที่เสียไป>
+จะกลับมาคิดใหม่เมื่อ: <เงื่อนไขที่วัดได้>
+```
+
+---
+
+## 8 · ฉบับงานวิจัย
+
+ผลลัพธ์ไม่ใช่ "ใช้ตัวไหน" แต่คือ **"ช่องว่างอยู่ตรงไหน"**
+
+- เปลี่ยนคอลัมน์ของตารางเทียบเป็น: งาน · ปี · วิธีที่ใช้ · ชุดข้อมูล · ผลที่รายงาน · ข้อจำกัดที่เขาบอกเอง
+- **คอลัมน์ "ข้อจำกัดที่เขาบอกเอง" คือที่มาของช่องว่าง** เพราะส่วนใหญ่ผู้เขียนบอกไว้เองในหัวข้อสุดท้าย
+- ช่องว่างที่ใช้ได้ต้องเป็นอย่างใดอย่างหนึ่ง: ยังไม่มีใครทดสอบกับบริบทนี้ · วิธีเดิมใช้ไม่ได้เมื่อเงื่อนไขเปลี่ยน · ผลที่รายงานทำซ้ำไม่ได้
+- **ห้ามอ้างงานที่ยังไม่ได้อ่านตัวเต็ม** เพราะการอ่านแค่บทคัดย่อแล้วอ้าง คือความผิดพลาดที่กรรมการจับได้เร็วที่สุด
+- งานที่หาโค้ดหรือชุดข้อมูลไม่ได้ ให้ระบุไว้ว่าทำซ้ำไม่ได้ อย่าเงียบไว้
+
+---
+
+## 9 · Anti-patterns
+
+- ❌ **ค้นจนได้รายชื่อ 20 ตัวแล้วไม่ตัดสินใจ** — รายชื่อไม่ใช่ผลงาน
+- ❌ **เทียบด้วยรายการความสามารถ** — ทุกตัวจะดูดีหมด เพราะทุกคนเขียนหน้าแรกเก่ง
+- ❌ **ตรวจสัญญาอนุญาตหลังเขียนโค้ดไปแล้ว**
+- ❌ **เชื่อหน้าแรกของโครงการ** — ต้องดู commit และ issue จริง
+- ❌ **"ทำเองเร็วกว่า" โดยไม่เคยลองของที่มี**
+- ❌ **ไม่บันทึกสิ่งที่ยอมแลก** — ทีมจะถกเรื่องเดิมซ้ำทุก 6 เดือน
+- ❌ **ลืมมาตรฐานที่มีอยู่แล้ว** แล้วประดิษฐ์รูปแบบข้อมูลเอง
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `work-session-context` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
+| แกะแอปต้นแบบที่จะทำแบบเดียวกัน — feature · UI · UX · ข้อเสนอปรับปรุง | `reference-app-research` |
+| บันทึกการตัดสินใจ | `adr-writer` |
+| เทียบรูปแบบสถาปัตยกรรม ไม่ใช่เทียบเครื่องมือ | `architecture-patterns` |
+| รูปทรงของตารางเทียบในคำตอบ | `answer-shape` |
+| ตัดข้อเสนอให้เหลือเท่าที่จำเป็น | `simplicity-first` |
+| ไฟล์ที่ดาวน์โหลดหรือแปลงระหว่างสำรวจ | `temp-file-discipline` |
+
+---
+
+## ตัวย่อ
+
+- **MIT** — Massachusetts Institute of Technology License (สัญญาอนุญาตแบบปล่อยเสรี)
+- **GPL** — General Public License (ใช้ได้แต่ต้องเปิดโค้ดที่ต่อยอด)
+- **AGPL** — Affero General Public License (เหมือน GPL และนับรวมการให้บริการผ่านเครือข่าย)
+- **BSD** — Berkeley Software Distribution License
+- **CC BY-NC** — Creative Commons Attribution-NonCommercial (ห้ามใช้เชิงพาณิชย์)
+- **ADR** — Architecture Decision Record (บันทึกการตัดสินใจเชิงสถาปัตยกรรม)

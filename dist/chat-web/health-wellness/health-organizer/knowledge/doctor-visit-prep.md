@@ -1,6 +1,6 @@
 # skill: doctor-visit-prep
 
-Use when preparing for a doctor or hospital visit (symptom timeline, medicine and allergy list, questions) or recording what was said. No diagnosis.
+Use when preparing for a doctor or hospital visit (symptoms, medicines, allergies, questions) or recording what was said. No diagnosis.
 
 # Doctor Visit Prep
 
@@ -69,7 +69,7 @@ Thai phrasing if needed: "ขอถามคำถามสั้น ๆ 3 ข�
 | Cost and what the scheme covered | |
 | Questions for next time | |
 
-Then update `medication-schedule` and the `annual-checkup` results table, and store papers in `important-docs` (`personal-life`).
+Then update `medication-schedule` and the `annual-checkup` results table, and store papers in `important-docs` (`personal-life`, if installed).
 
 ## Worked example — top 3 questions
 

@@ -1,6 +1,6 @@
 ---
 name: "game-design"
-description: "Write a game design document or design multiplayer architecture. Two modes — game-design or multiplayer-architecture."
+description: "Write a game design document or design multiplayer architecture (game-design or multiplayer-architecture)."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.

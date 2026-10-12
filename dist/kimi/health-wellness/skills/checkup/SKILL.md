@@ -1,6 +1,6 @@
 ---
 name: "checkup"
-description: "Plan an annual health checkup by age and sex band, check which items are free under social security or the gold card, and log results to track trends."
+description: "Plan an annual checkup by age and sex, check what social security or gold card covers, log results for trends."
 disableModelInvocation: true
 ---
 

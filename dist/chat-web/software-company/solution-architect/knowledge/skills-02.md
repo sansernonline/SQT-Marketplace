@@ -1,6 +1,6 @@
 # skill: principle-secure-by-default
 
-Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data. Safe defaults now.
+Use when writing or reviewing any code, config, container or script, especially input, database, files, logins, money or personal data.
 
 # principle · secure by default — ปลอดภัยตั้งแต่บรรทัดแรก
 
@@ -24,15 +24,7 @@ Use when writing or reviewing any code, config, container or script, especially 
 | 9 | **path · URL · คำสั่ง ที่มาจากผู้ใช้ ห้ามใช้ตรง** | `File.Open(userPath)` → หา path จริงก่อน (`realpath` ตาม symlink) แล้วเช็กว่าอยู่ใต้โฟลเดอร์ที่อนุญาต · เรียก URL ปลายทางจากรายการที่อนุญาต · ไม่ส่ง input เข้า shell · เซิร์ฟเวอร์สำหรับพัฒนาฟังเฉพาะ `127.0.0.1` และรับเฉพาะ Host ที่รู้จัก |
 | 10 | **dependency ใหม่ต้องมีเหตุผล** — ล็อกเวอร์ชัน (lock file) ดูว่ายังมีคนดูแลอยู่ และไม่ติดช่องโหว่ที่รู้แล้ว | เพิ่มแพ็กเกจเพื่อ 5 บรรทัด → เขียน 5 บรรทัด (`lazy-coding` ข้อ 4) |
 
-**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
-
-| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
-|---|---|---|
-| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
-| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
-| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
-| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
-| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+**แอปมือถือหรือแอปที่ไม่มีเซิร์ฟเวอร์** — เปิด [`references/mobile.md`](references/mobile.md) เพิ่ม (กฎ M1–M5: permission · exported · สำรองข้อมูล · ส่งไฟล์ · กุญแจเซ็นแอป)
 
 ## เมื่องานแตะเรื่องเสี่ยง — เปิด skill เฉพาะทาง
 
@@ -60,11 +52,28 @@ Use when writing or reviewing any code, config, container or script, especially 
 - ซ่อน error ทุกอย่างจนแก้บั๊กไม่ได้ ผู้ใช้ควรเห็นข้อความกลาง แต่ log ต้องมีรายละเอียดพอ
 
 
+## reference: mobile.md
+
+# principle-secure-by-default · แอปมือถือและแอปที่ไม่มีเซิร์ฟเวอร์
+
+เปิดไฟล์นี้เมื่องานเป็นแอปมือถือหรือเครื่องมือบนเครื่อง · กฎ 10 ข้อใน [`SKILL.md`](../SKILL.md) ยังใช้ทั้งหมด
+
+**แอปที่ไม่มีเซิร์ฟเวอร์** (แอปมือถือออฟไลน์ · เครื่องมือบนเครื่อง) ข้อ 2 · 3 · 4 และบัญชีฐานข้อมูลในข้อ 8 มักไม่เกี่ยว แต่ต้องผ่านข้อเพิ่มของมือถือ:
+
+| # | กฎสำหรับแอปมือถือ | ตัวอย่างที่ผิด → ที่ถูก |
+|---|---|---|
+| M1 | **permission เท่าที่ใช้จริง** รวมที่ plugin เติมให้ | แอปออฟไลน์มี `INTERNET` → ลบออก แล้วตรวจ manifest ที่รวมแล้ว (`security-gate`) |
+| M2 | **component ที่ไม่ต้องให้แอปอื่นเรียก ต้อง `exported="false"`** | activity · service · receiver เปิดหมด → เปิดแค่ activity หลัก |
+| M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
+| M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
+| M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
+
+
 ---
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real artifact, never a proxy like it compiles or the subagent said so.
+Use when about to say anything is done, fixed, passing or working. Verify against the real thing, not a proxy.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -81,8 +90,8 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 | แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
 | test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้เขียน `ยังไม่ตรวจความแม่นยำ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
 | งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
@@ -102,7 +111,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: saas-platform
 
-Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO with SAML or OIDC, SCIM, webhooks, subscription billing, usage metering, onboarding).
+Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, webhooks, subscription billing, usage metering).
 
 # saas-platform
 
@@ -134,7 +143,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-saas-b2b` (skill `multi-tenancy-patterns` · `enterprise-integration` · `subscription-billing`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-saas-b2b` (เดิมชื่อ multi-tenancy-patterns → `references/multi-tenancy-patterns.md` · enterprise-integration → `references/enterprise-integration.md` · subscription-billing → `references/subscription-billing.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
 
 
 ## reference: agent-customer-success-engineer.md
@@ -913,7 +922,7 @@ log.info('Order created', {
 
 ## reference: enterprise-integration.md
 
-> เดิมคือ skill `enterprise-integration` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ enterprise-integration (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1250,7 +1259,7 @@ class SalesforceClient {
 
 ## reference: multi-tenancy-patterns.md
 
-> เดิมคือ skill `multi-tenancy-patterns` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ multi-tenancy-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1596,7 +1605,7 @@ async def offboard_tenant(tenant_id):
 
 ## reference: subscription-billing.md
 
-> เดิมคือ skill `subscription-billing` ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
+> เดิมชื่อ subscription-billing (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-saas-b2b` — รวมเข้า `saas-platform` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1914,147 +1923,121 @@ await stripe.subscriptions.create({
 
 ---
 
-# skill: reverse-engineering
+# skill: simplicity-first
 
-Use when there is a compiled app or unknown file but no usable source — lost source, a deployed build that may differ from the repository, or a feature, format or protocol to understand. Decompiles, traces and reports with evidence.
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
 
-# Reverse Engineering
+# Simplicity First
 
-**Decompile → Understand → Recreate**, with evidence at every step. Never claim the original source was recovered; report what the evidence shows and mark what is unknown.
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
 
-Source code is available but there are no documents → use `legacy-spec-recovery` instead. Once this skill has recovered readable code, `legacy-spec-recovery` turns it into a spec.
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
 
-## What works in practice
+## The one test
 
-Effort depends almost entirely on what the target was built with. Classify first, then set expectations with the user.
+Before submitting, ask:
 
-| Target | Result to expect | Effort | Route |
-|---|---|---|---|
-| .NET (C#, VB.NET, Xamarin) | Near-original source: same logic, same SQL strings; comments and local names lost | Minutes | `ilspycmd` |
-| Java, Kotlin, Android | Near-original source | Minutes | jadx, CFR, Vineflower |
-| JavaScript, Electron | The code itself, often minified; source maps may give the original | Minutes | unpack, beautify |
-| Python `.pyc`, PyInstaller | Usually recoverable for Python ≤ 3.8, partial after | Hours | pyinstxtractor, decompyle3 / pycdc |
-| Native C, C++, Go, Rust | Pseudo-C only; names gone unless symbols exist | Days per feature | strings → imports → Ghidra |
-| Obfuscated or packed | Depends on the protector; can stop the job | Unknown | identify the tool first, then ask |
+> Could a tired teammate understand this in 6 months, with no prior context?
 
-Field test (2026-10, ASP.NET MVC app of about 55,000 lines): `ilspycmd` produced a C# project of 51,700 lines in 9 seconds. Compared against the real source, a cancel method matched statement for statement, and all 1,431 methods matched by name.
+If "no" or "not sure" → simplify.
 
-## Safety and legality
+## 5 principles
 
-- Analyse only software the user owns or is authorised to analyse: their own or their client's systems, licensed software where the licence allows it, CTF targets, malware samples in a sandbox.
-- Do not help bypass licensing, DRM, activation or access controls in third-party software.
-- **Secrets come out with the code.** Connection strings, passwords and API keys sit in decompiled code and `.config` files. Name them, never paste their values — `triage.py` masks them in its output.
-- Malware: static analysis only, unless the user explicitly asks for dynamic analysis in an isolated environment.
-- Work on copies in a scratch folder. Never write decompiled output into the user's source tree; it is not the source of record.
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
 
-## Workflow
+## By output type
 
-### Step 1 — Triage
+### Documents (BRD, FSD, ADR)
 
-```bash
-python -I scripts/triage.py <file>                          # format, architecture, next step
-python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # hunt a clue in strings (secrets masked)
-```
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
 
-It recognises PE, .NET, ELF, Mach-O, APK, IPA, JAR, ASAR, Power BI, Office, OLE (Crystal Reports, MSI), SSIS and config XML. For a .NET assembly it also reports a `.pdb` or `.config` lying beside it and known obfuscator markers.
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
 
-Installers (7-Zip SFX, NSIS, MSI): extract first — strings inside are compressed noise. Packaging layouts and report and ETL formats: [references/packaging-patterns.md](references/packaging-patterns.md).
+### Architecture
 
-Confirm what the user wants before deep work: explain one feature, recover a format or algorithm, recover lost source, or check a deployed build against the repository.
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
 
-### Step 2 — Decompile, cheapest first
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
 
-1. **Strings and metadata.** Often enough on their own. In the field test, SQL statements embedded in a .NET dll — including commented-out ones — came out of the strings alone.
-2. **Managed code (.NET, Java)** — go straight to the decompiler; it is cheap.
-   ```bash
-   dotnet tool install ilspycmd --tool-path <scratch>/tools --version <x>
-   <scratch>/tools/ilspycmd -p -o <scratch>/out <file.dll>
-   ```
-   The newest `ilspycmd` needs the newest .NET SDK. If installation fails with *"DotnetToolSettings.xml was not found"*, pin an older version that matches an installed SDK (`dotnet --list-sdks`); for example, 9.1.0.7988 works with SDK 9. Install into the scratch folder, not globally.
-3. **JavaScript/Electron** — `npx @electron/asar extract app.asar <out>`, beautify, look for `.map` files.
-4. **Native** — imports and exports first (they reveal crypto, network and storage use), then Ghidra headless for the functions that matter. On Windows, prefer Python and Node scripts over assuming Unix tools exist.
+### Plans
 
-Record each finding as evidence: file, offset, type or method, and what it suggests.
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
 
-### Step 3 — Understand
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
 
-Trace from clue to implementation: who references the string, which function contains it, what flows in and out. Write a short narrative: "feature X works by A calling B, storing in C, gated by D". Keep static reading separate from runtime observation, and mark unresolved links instead of guessing.
+### Designs (UX, API)
 
-### Step 4 — Use the result
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
 
-| Goal | Do this |
-|---|---|
-| Explain a feature | Narrative + evidence list (Step 5) |
-| Lost source | Decompiled project goes to the user as a recovery, clearly labelled; then `legacy-spec-recovery` for the spec |
-| **Deployed build vs repository (drift check)** | Decompile the production binary, then `python -I scripts/compare_members.py <decompiled> <source>` — lists methods only in the binary (hot-fixes never committed) or only in the source (not deployed). Then diff the bodies of the methods it flags. |
-| Recreate in the user's stack | Only after the user confirms the understanding. Reimplement, do not copy proprietary code; standard algorithms and formats (JSON, zlib, AES) are fine to reuse |
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
 
-`compare_members.py` was field-tested both ways: on a matching build it reported 1,431 shared methods and no differences, and a method renamed in a copy of the source was caught.
+## The 3-question filter
 
-### Step 5 — Report
+Before adding any new component, configuration option, or pattern:
 
-- **How it works**: the narrative, with evidence locations.
-- **Evidence**: each claim tied to a file, offset or method.
-- **Unknowns**: what could not be determined and what would resolve it.
-- **Secrets seen**: key names and locations only — and tell the user they should be rotated if the binary or config has left their control.
-- **Output**: where the decompiled files are, and how to verify any recreated feature.
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
 
-## Rules of thumb
+Two or more answers point to "simpler is fine" → don't add it.
 
-- Cheapest sufficient evidence wins: strings > managed decompiler > native decompiler > debugger.
-- Prefer static analysis; do not run unknown binaries.
-- Decompiled code is evidence, not the source. Label it that way wherever it is handed over.
-- If triage reports an obfuscator, stop and tell the user what that means for effort before going on.
+## Examples
 
+**API description**
 
-## reference: packaging-patterns.md
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
 
-# Common application packaging patterns
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
 
-Recognizing the packaging leads straight to the readable layer. Check these before touching a decompiler.
+**Sprint goal**
 
-## Mozilla apps (Firefox, Thunderbird)
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
 
-- Full Windows installer is a **7-Zip SFX stub** (small PE32, sections=3) with the app in an appended archive. `7z x setup.exe` extracts `core/` plus `setup.exe`.
-- `core/application.ini` — version, BuildID, source repository and SourceStamp (build provenance evidence).
-- `core/omni.ja` — ZIP archive (97MB+ for Thunderbird) holding nearly all app JavaScript (`modules/`, `chrome/`) and default prefs (`defaults/pref/*.js`). Extract with 7z; Grep it to trace features. `omni.ja` is usually the cheapest route to full answers.
-- The big DLLs are the native layer: `xul.dll` (Gecko engine), `nss3.dll`/`freebl3.dll` (crypto), `rnp.dll` (OpenPGP), `libotr.dll` (chat encryption).
-- `thunderbird.exe` itself is only a launcher stub.
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
 
-## Electron / Node apps
+**Architecture for a new feature**
 
-- `app.asar` — ASAR archive; `npx @electron/asar extract app.asar outdir` (the old `asar` package name is deprecated). Renderer JS is often minified but readable; `.map` source maps may contain original source.
-- `resources/app/package.json` names the app, entry point, and dependency list.
-- Native modules: `*.node` files (PE DLLs) — treat as native binaries.
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
 
-## .NET applications
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
 
-- PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd -p -o <out> <dll>` gives a near-original C# project — field-tested: identical logic, SQL strings intact, only comments and local names lost.
-- A `.pdb` beside the dll restores original file names and line numbers; a `.dll.config` holds settings (and often secrets).
-- ASP.NET MVC with precompiled views: `.cshtml` come back as classes under `<Assembly>.Views.<Controller>`.
-- Xamarin APK: the C# lives in `assemblies/*.dll` inside the APK (sometimes LZ4-compressed `XALZ`) — decompile those, not `classes.dex`.
-- Check for bundled/single-file deployment (self-extracting extractors) — extract first.
-- P/Invoke declarations map managed code to native DLL entry points.
+## Anti-patterns to reject
 
-## Android APK
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
 
-- ZIP; contains `classes.dex` (Dalvik bytecode — use `jadx` or `apktool` for near-Java output), `AndroidManifest.xml` (binary XML — use `apktool` or `aapt`), `resources.arsc`, native libs under `lib/`.
+## Pre-submit checklist
 
-## Windows installers generally
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
 
-- 7-Zip SFX: extract with `7z x`.
-- NSIS: extract with `7z x` (triage detects `NullsoftInstall` marker).
-- MSI: `msiexec /a file.msi /qb TARGETDIR=<out>` or 7z.
-- MSI transforms and stub downloaders may contain no payload — identify early to avoid wasted work.
+If any answer is "no" → simplify before delivering.
 
-## Enterprise report and ETL files
-
-Often the only place a calculation lives. None need a decompiler.
-
-| File | What it is | Readable layer |
-|---|---|---|
-| `.rpt` Crystal Reports | OLE compound file | `strings` shows SQL, table and field names; formulas need Crystal Designer or an RptToXml export |
-| `.pbix` Power BI | ZIP | `Report/Layout` is UTF-16 JSON (pages, visuals, filters); measures in `DataModel` need pbi-tools or Tabular Editor |
-| `.dtsx` SSIS | XML | Search `SqlCommand`, `ConnectionManager`, `DTS:ObjectName`; package order in the master package |
-| `.rdl` SSRS | XML | `CommandText` per dataset |
-| `.mdb` / `.accdb` | Access database | Queries and VBA modules; open with mdbtools or Access |
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry

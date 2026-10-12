@@ -9,7 +9,7 @@ Use the `technical-writer` agent to create release notes for: **$ARGUMENTS**
 
 The technical writer should:
 
-1. **Initial Discovery** — ask the user:
+1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
    - Audience (end users, developers, both?)
    - Tone (formal, friendly, technical)
    - Channel (in-app, email, blog, GitHub)

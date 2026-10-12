@@ -1,6 +1,6 @@
 ---
 name: legacy-spec-recovery
-description: Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
+description: Use when a legacy system has code but no spec and someone wants to change it. As-is spec with evidence, then impact analysis.
 ---
 
 # Legacy Spec Recovery
@@ -8,6 +8,13 @@ description: Use when a legacy system has source code but no spec or documents a
 Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
 Use `reverse-engineering` instead when there is no source code, only binaries.
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว หรือรูปแบบไฟล์ที่ไม่รู้จัก | `reverse-engineering` |
+| มีโค้ดและเอกสารพอ แค่จะแก้ส่วนเล็ก ๆ ที่ยังไม่ได้อ่าน | `code-orientation` |
 
 ## The four rules
 

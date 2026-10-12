@@ -42,7 +42,7 @@ Flash-deal rules of thumb: first deal after viewers have built up (around minute
 - [ ] Phone on charger, stable Wi-Fi or 5G, ring light, clean background with the shop name
 - [ ] Products in run-sheet order on the table, price cards written large
 - [ ] Comment moderator ready; banned-word list set (competitor names, abuse)
-- [ ] Thumbnail and teaser posted 1–3 hours before (`graphic-design` `social-formats`)
+- [ ] Thumbnail and teaser posted 1–3 hours before (`graphic-design` `social-formats` (if installed))
 
 ## Compliance
 

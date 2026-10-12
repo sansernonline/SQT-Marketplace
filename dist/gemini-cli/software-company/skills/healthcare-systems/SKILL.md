@@ -1,6 +1,6 @@
 ---
 name: healthcare-systems
-description: Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, SMART on FHIR, HIPAA safeguards, clinical analytics).
+description: Use when software handles patient or clinical data (orders, medication, FHIR APIs, EHR integration, HIPAA safeguards).
 ---
 
 # healthcare-systems
@@ -32,4 +32,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-healthcare` (skill `clinical-workflows` · `fhir-implementation` · `hipaa-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-healthcare` (เดิมชื่อ clinical-workflows → `references/clinical-workflows.md` · fhir-implementation → `references/fhir-implementation.md` · hipaa-compliance → `references/hipaa-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

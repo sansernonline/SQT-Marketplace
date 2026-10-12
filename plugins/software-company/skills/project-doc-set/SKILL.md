@@ -18,7 +18,7 @@ description: Use when a new project needs its document set decided (which docs, 
 
 | สถานการณ์ | ใช้แทน |
 |---|---|
-| โครงโฟลเดอร์ของ**โค้ด** · README · CHANGELOG · linter · โครงเอกสารแบบ A | `project-bootstrap` |
+| โครงโฟลเดอร์ของ**โค้ด** (รวม `docs/` ในโค้ดของแบบ A) · README · CHANGELOG · linter | `project-bootstrap` |
 | ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
 | ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
 | จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
@@ -29,8 +29,8 @@ description: Use when a new project needs its document set decided (which docs, 
 
 **ตัดสินข้อนี้ก่อน** (ย้ายทีหลังต้องแก้ลิงก์ทั้งโปรเจกต์) · **ค่าเริ่มต้นคือแบบ B** แม้เอกสารเป็น markdown ล้วน โค้ดอยู่ใน `<project-name>/` (ตัวพิมพ์เล็กคั่น `-`) · แบบ A เมื่อผู้ใช้ขอเท่านั้น
 
-- **แบบ A** (เอกสารใน repo) — เอกสารเป็น markdown ล้วน ผู้อ่านคือทีมพัฒนา (ชุด S · M) · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · โครงเป็นของ `project-bootstrap` ข้อ 1
-- **แบบ B** (เอกสารนอก repo) — มี `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็น (ชุด M · L) · pull request ไม่เต็มไปด้วย binary
+- **แบบ B** (เอกสารนอก repo) — ใช้กับทุกขนาดชุด (S · M · L) · `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็นไม่ปนใน pull request · ผังรากอยู่ข้างล่าง (ข้อนี้คือเจ้าของผังราก)
+- **แบบ A** (เอกสารใน repo) — เฉพาะเมื่อผู้ใช้ขอ และเอกสารเป็น markdown ล้วน · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · รากเหมือนแบบ B แต่ไม่มี `docs/` ที่ราก — `docs/` อยู่ในโฟลเดอร์โค้ด ผังข้างในเป็นของ `project-bootstrap` ข้อ 1
 - แบบ A ที่โตจนมีเอกสารส่งมอบ → ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว** เอกสารที่อยู่ 2 ที่คือมี 2 เวอร์ชัน
 
 ### โครงของแบบ B
@@ -42,17 +42,22 @@ description: Use when a new project needs its document set decided (which docs, 
 │  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
 │  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
 │  ├─ decisions/        ADR-NNNN-<slug>.md หนึ่งการตัดสินใจต่อไฟล์  [ทางเลือก]
+│  ├─ runbook-<เรื่อง>.md  คู่มือเมื่อระบบมีปัญหา ไฟล์ละเรื่อง        [ทางเลือก]
 │  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
 ├─ mockup/              .html ที่เปิดแล้วกดได้จริง
 ├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
 ├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
 ├─ _to_delete/          ของชั่วคราวทุกอย่าง
 ├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
-│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
 └─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
 ```
 
 **ไฟล์ของ SuperUser — ข้อนี้คือที่เดียวที่กำหนด ไฟล์อื่นอ้างมาที่นี่:** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
+
+**ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
+
+**ข้อยกเว้นของราก:** `.sandbox/` อยู่ที่รากได้เมื่อใช้ `docker-sandbox` · `AGENTS.md` / `GEMINI.md` ตามเงื่อนไขข้างบน — ทุกข้อยกเว้นต้องประกาศใน README ของโฟลเดอร์โค้ด
 
 **โฟลเดอร์สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:** `ref/` เมื่อได้ไฟล์จากลูกค้าหรือระบบเดิม (ห้ามปนใน `docs/`) · `docs/figures/` เมื่อมีรูปวาดเองในเอกสารส่งมอบ (ไม่งั้นรูปติดอยู่ใน `.docx` แก้ไม่ได้) · `docs/decisions/` เมื่อมีการตัดสินใจที่ต้องอธิบายทีหลัง · `docs/research/` เมื่อผู้ใช้อยากได้แอปแบบที่มีอยู่ · `qa/` เมื่อมี test case (test case อยู่ที่นี่เสมอ `docs/test-plan.md` มีแค่แผน) · `assets/` เมื่อมีโลโก้หรือไอคอน
 
@@ -84,7 +89,7 @@ description: Use when a new project needs its document set decided (which docs, 
 | SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
 | Architecture | `.docx` | dev · ops | ○ | ● | ● |
 | Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
-| User Guide | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
+| คู่มือผู้ใช้ (`MAN`) | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
 | FSD | `.docx` | dev · QA | ○ | ○ | ● |
 | BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
 | Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
@@ -107,7 +112,7 @@ description: Use when a new project needs its document set decided (which docs, 
 
 ## 3 · ลำดับการเขียน
 
-**สายส่งมอบ** — ห้ามข้ามขั้น
+**สายส่งมอบ** — ห้ามข้ามขั้นที่อยู่ในชุดของขนาดงานนั้น (ขั้นที่ไม่อยู่ในชุด เช่น BRD · FSD ของชุด M ให้ข้ามไป)
 
 ```
 Project Plan ─► BRD ─► SRS ─┬─► mockup
@@ -116,7 +121,7 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
               User Guide ◄─ Test Cases ◄─ Test Plan
 ```
 
-**ห้ามเขียนชิ้นถัดไปก่อนชิ้นก่อนหน้าได้รับการยืนยัน** เพราะถ้าเขียนล่วงหน้าไปแล้วจะต้องรื้อทั้งสาย
+**ชิ้นถัดไปเขียนต่อบนฉบับ DRAFT ของชิ้นก่อนหน้าได้** ข้อที่ยังไม่ยืนยันใส่ `(รอยืนยัน)` ไว้ทั้งสองชิ้น · ห้ามเปลี่ยนสถานะชิ้นถัดไปเป็น APPROVED ก่อนชิ้นก่อนหน้า เพราะถ้าชิ้นต้นทางเปลี่ยนต้องรื้อทั้งสาย
 ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
 
 **สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
@@ -184,3 +189,5 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 ## 10 · เชื่อมกับ skill อื่น
 
 นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (ส่งมอบ) · `software-diagrams` (ในทีม) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ

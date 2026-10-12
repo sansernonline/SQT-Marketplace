@@ -34,17 +34,17 @@ description: Use when a markdown doc needs a picture (UI state, flow, architectu
 ```
 What are you showing?
 │
-├─ UI mockup / component state / icon       →  Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
 ├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
 ├─ Architecture / ER / class                →  Mermaid (software-diagrams)
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
 ├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Default to inline SVG**, except for flows and sequences (use Mermaid for those). Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
 
 ## 1 · Inline SVG (primary technique)
 
@@ -53,8 +53,8 @@ What are you showing?
 ```markdown
 <p align="center">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
 
   <!-- content goes here -->
 </svg>
@@ -68,7 +68,7 @@ What are you showing?
 - `<p align="center">` wrapper — centers in the rendered page
 
 **Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
 - Component state: `viewBox="0 0 400 300"` (squarer)
 - Icon / chip: `viewBox="0 0 64 64"`
 - Full screen layout: `viewBox="0 0 800 500"`
@@ -107,7 +107,7 @@ docs/
 ### Reference syntax
 
 ```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
 ```
 
 - **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
@@ -116,13 +116,13 @@ docs/
 
 ```markdown
 <p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
 </p>
 ```
 
 ### Creating SVG files
 
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
 
 ## 3 · ASCII art
 
@@ -164,7 +164,7 @@ For every visual:
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
 - ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
+- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export

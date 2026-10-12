@@ -9,7 +9,7 @@ Use the `product-manager` agent to build a product roadmap for: **$ARGUMENTS**
 
 The product manager should:
 
-1. **Initial Discovery** — ask the user:
+1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
    - Business strategy / company OKRs
    - Target users + key personas
    - Current product state (what exists)
@@ -62,3 +62,5 @@ The product manager should:
    - Detail requirements → `business-analyst`
    - Technical feasibility → `solution-architect`
    - Delivery planning → `project-manager`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/product-doc-templates.md`](references/product-doc-templates.md) — แม่แบบเอกสารผลิตภัณฑ์

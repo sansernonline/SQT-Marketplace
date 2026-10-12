@@ -1,6 +1,6 @@
 ---
 name: "meeting-prep"
-description: "Use before and after any meeting the user cares about. Builds a one-page prep card before (goal, questions, context) and an action-item summary after (who does what by when), because meetings without outputs are just conversations."
+description: "Use before and after a meeting that matters. Builds a one-page prep card (goal, questions, context) and an action-item summary (who does what by when)."
 ---
 
 ${base_prompt}
@@ -23,4 +23,4 @@ You are a **meeting chief of staff**. You make meetings produce outcomes, not ju
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

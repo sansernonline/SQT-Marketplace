@@ -1,853 +1,6 @@
-# skill: simplicity-first
-
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works, no buzzwords or layers.
-
-# Simplicity First
-
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
-
-This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`.
-
-## The one test
-
-Before submitting, ask:
-
-> Could a tired teammate understand this in 6 months, with no prior context?
-
-If "no" or "not sure" → simplify.
-
-## 5 principles
-
-1. **Start with the simplest thing that works.** Add complexity only when something breaks.
-2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
-3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
-4. **Optimize for reading.** It's read far more often than written.
-5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
-
-## By output type
-
-### Documents (BRD, FSD, ADR)
-
-Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
-example for every abstract point, tables for structured data.
-
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
-jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
-
-### Architecture
-
-Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
-
-Avoid: microservices for small teams, distributed-everything, multi-master
-databases before you must, event-driven by default (sync is simpler).
-
-### Plans
-
-Do: 3-5 priorities (not 20), a named owner per item, measurable success
-criteria, realistic timelines with buffer, cut scope to fit time.
-
-Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
-aspirational dates with no buffer, plans without success metrics.
-
-### Designs (UX, API)
-
-Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
-across screens, defaults that work for 80%, progressive disclosure.
-
-Avoid: novel interactions where a standard one works, 10-step flows when 3
-work, required fields with no smart default, hidden features needing tutorials.
-
-## The 3-question filter
-
-Before adding any new component, configuration option, or pattern:
-
-1. Is there real evidence we need this **now** (not "might need")?
-2. Is there a simpler way? (Sleep on it. Often yes.)
-3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
-
-Two or more answers point to "simpler is fine" → don't add it.
-
-## Examples
-
-**API description**
-
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-❌ "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
-
-## Pre-submit checklist
-
-- [ ] A tired teammate would understand this in 6 months.
-- [ ] Nothing can be deleted without losing meaning.
-- [ ] No jargon the audience won't know.
-- [ ] Every abstract claim has an example.
-- [ ] I could explain the whole thing in two sentences.
-
-If any answer is "no" → simplify before delivering.
-
-> "Perfection is achieved not when there is nothing more to add, but when there
-> is nothing left to take away." — Saint-Exupéry
-
-
----
-
-# skill: project-doc-set
-
-Use when a new project needs its document set decided (which docs, order, readers, where docs, assets, mockups and QA live). Scales to project size.
-
-# ชุดเอกสารโปรเจกต์
-
-> **กฎข้อเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่า **ใครอ่าน** และ **อ่านแล้วตัดสินใจอะไร**
-> ถ้าตอบไม่ได้ ก็ไม่ต้องเขียน
-
----
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เปิดโปรเจกต์ใหม่ แล้วต้องตัดสินว่าจะมีเอกสารอะไรบ้าง
-- โปรเจกต์เดิมมีเอกสารกระจัดกระจาย ไม่รู้ว่าอันไหนเป็นตัวจริง
-- ลูกค้าถามว่า "ส่งมอบเอกสารอะไรบ้าง"
-- จะเริ่มเขียนเอกสารสักชิ้น แต่ไม่แน่ใจว่าต้องมีอะไรมาก่อน
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| สถานการณ์ | ใช้แทน |
-|---|---|
-| โครงโฟลเดอร์ของ**โค้ด** · README · CHANGELOG · linter · โครงเอกสารแบบ A | `project-bootstrap` |
-| ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
-| ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
-| จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
-
----
-
-## 1 · เอกสารอยู่ในหรืออยู่นอก repo
-
-**ตัดสินข้อนี้ก่อน** เพราะถ้าย้ายทีหลังจะต้องแก้ลิงก์ทั้งโปรเจกต์
-
-**ค่าเริ่มต้นคือแบบ B** — โค้ดอยู่ในโฟลเดอร์ `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`) แม้เอกสารจะเป็น markdown ล้วน ส่วนแบบ A ใช้เมื่อผู้ใช้ขอเท่านั้น
-
-| | **แบบ A — เอกสารอยู่ใน repo** | **แบบ B — เอกสารอยู่นอก repo** |
-|---|---|---|
-| เลือกเมื่อ | เอกสารเป็น markdown ทั้งหมด และผู้อ่านคือทีมพัฒนา | มี `.docx` / `.xlsx` / mockup / รูป PNG ที่ลูกค้าต้องเห็น |
-| ตรงกับชุด | S · M | M · L |
-| โครง | ดู **`project-bootstrap` ข้อ 1** ซึ่งเป็นเจ้าของโครงนี้ | ดูโครงข้างล่าง |
-| ข้อดี | เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน | pull request ไม่เต็มไปด้วยไฟล์ binary |
-
-> โปรเจกต์ที่เริ่มเป็นแบบ A แล้วโตจนมีเอกสารส่งมอบ ให้ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว**
-> ห้ามค้างอยู่ครึ่งทาง เพราะเอกสารที่อยู่ 2 ที่ ก็คือมี 2 เวอร์ชัน
-
-### โครงของแบบ B
-
-```
-<ชื่อโปรเจกต์>/
-├─ ref/                 ของที่ได้รับมา — TOR · บันทึกประชุม · ภาพหน้าจอระบบเดิม · ไฟล์จากลูกค้า  **อ่านอย่างเดียว ห้ามแก้**
-├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
-│  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
-│  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR — หนึ่งการตัดสินใจต่อไฟล์              [ทางเลือก]
-│  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
-├─ mockup/              .html ที่เปิดแล้วกดได้จริง
-├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
-├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
-├─ _to_delete/          ของชั่วคราวทุกอย่าง
-├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
-└─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
-```
-
-**โฟลเดอร์เหล่านี้สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:**
-
-| โฟลเดอร์ | สร้างเมื่อ | ถ้าไม่มี ของไปอยู่ไหน |
-|---|---|---|
-| `ref/` | ได้รับไฟล์จากลูกค้าหรือจากระบบเดิม | ไม่มีอะไรให้เก็บ และห้ามเอาไฟล์ลูกค้าไปปนใน `docs/` เพราะจะแยกไม่ออกว่าอะไรเราเขียน |
-| `docs/figures/` | มีรูปที่วาดเองและไปอยู่ในเอกสารส่งมอบ | รูปฝังอยู่ในไฟล์ `.docx` อย่างเดียว จึงแก้ทีหลังไม่ได้ |
-| `docs/decisions/` | มีการตัดสินใจทางเทคนิคที่ต้องอธิบายทีหลัง | เหตุผลอยู่ใน Architecture หัวข้อเดียว |
-| `docs/research/` | ผู้ใช้บอกว่าอยากได้แอปแบบเดียวกับแอปที่มีอยู่ | ไม่มี research |
-| `qa/` | มี test case (เกือบทุกโปรเจกต์) โดย test case อยู่ที่นี่เสมอ เป็น `.md` หรือ `.xlsx` (ขนาด L) | — ส่วน `docs/test-plan.md` มีแค่แผน ไม่มีรายการ test case |
-| `assets/` | มีโลโก้หรือไอคอนของโปรเจกต์ | — |
-
-### โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
-
-ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
-**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
-
-```
-<ชื่อโปรเจกต์>/
-├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
-├─ ecosystem/
-│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
-│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
-│     ├─ mockup/
-│     ├─ qa/
-│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
-├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
-```
-
-- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
-- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
-- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
-- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
-- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
-
-**กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
-
-- **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
-- **ไฟล์ต้นทางของรูปห้ามหาย** เพราะถ้าปีหน้าต้องแก้รูปแล้วเหลือแต่ PNG ก็ต้องวาดใหม่ทั้งใบ
-- **ทุกปุ่มใน mockup ต้องกดได้จริง** เพราะปุ่มหลอกทำให้รีวิวผิด
-- **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
-- **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
-- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ ส่วนรูปแบบตารางอยู่ใน `project-bootstrap` ข้อ 1
-
----
-
-## 2 · เลือกชุดเอกสารตามขนาดงาน
-
-ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
-
-| ขนาด | ความหมาย |
-|---|---|
-| **S** | ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น |
-| **M** | 1–3 เดือน · มีผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ |
-| **L** | > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา |
-
-### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
-
-| เอกสาร | รูปแบบ | ผู้อ่าน | S | M | L |
-|---|---|---|:-:|:-:|:-:|
-| Project Plan | `.docx` | ผู้ว่าจ้าง · ทีม | ○ | ● | ● |
-| SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
-| Architecture | `.docx` | dev · ops | ○ | ● | ● |
-| Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
-| User Guide | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
-| FSD | `.docx` | dev · QA | ○ | ○ | ● |
-| BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
-| Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
-| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
-
-● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
-**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** และนั่นถูกแล้ว เพราะงาน 2 สัปดาห์ที่มาพร้อม BRD คือเอกสารที่เขียนให้ตัวเองอ่าน
-
----
-
-### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
-
-กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
-
-| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
-|---|---|---|---|
-| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
-| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
-| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
-| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
-| Runbook | `docs/runbook.md` | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
-
-> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
-> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
-
----
-
-## 3 · ลำดับการเขียน
-
-**สายส่งมอบ** — ห้ามข้ามขั้น
-
-```
-Project Plan ─► BRD ─► SRS ─┬─► mockup
-                            └─► Architecture ─► FSD
-                                                 │
-              User Guide ◄─ Test Cases ◄─ Test Plan
-```
-
-**ห้ามเขียนชิ้นถัดไปก่อนชิ้นก่อนหน้าได้รับการยืนยัน** เพราะถ้าเขียนล่วงหน้าไปแล้วจะต้องรื้อทั้งสาย
-ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
-
-**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร
-
-| เขียนเมื่อ | เอกสาร |
-|---|---|
-| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
-| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
-| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
-| ตอนออกแบบ endpoint แรก | API-SPEC |
-| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
-| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
-| ก่อนขึ้นระบบจริง | Runbook |
-
-> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
-> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
-
----
-
-## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
-
-| เอกสาร | agent | skill ที่ใช้ |
-|---|---|---|
-| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
-| Project Plan | `project-manager` | `branded-document-design` |
-| BRD · user story | `business-analyst` | `user-story-writer` |
-| SRS | `system-analyst` | `srs-writing` |
-| FSD | `system-analyst` | `fsd-writing` |
-| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
-| ADR | `solution-architect` | `adr-writer` |
-| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| User Guide | `technical-writer` | `polished-document-style` |
-| Runbook | `devops-engineer` | `incident-runbook-template` |
-| BUILD-PLAN | `project-manager` | `simplicity-first` |
-| AGENT-LOOP | `developer` | `spec-to-code-loop` |
-| API-SPEC | `system-analyst` | `api-conventions` |
-| DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
-
----
-
-## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
-
-| รูปนี้ใครเห็น | วาดด้วย | เก็บที่ |
-|---|---|---|
-| อยู่ใน README · PR · เอกสารในทีม | Mermaid (`software-diagrams`) | ฝังในไฟล์ `.md` |
-| อยู่ในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ | `diagram-figures` | `docs/figures/` + ต้นทางใน `src/` |
-
-> **รูป Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** เพราะสีที่สุ่มตามชนิด node ไม่ได้แปลว่าอะไร
-> ตัวหนังสือภาษาไทยล้นกรอบ และพอย่อลงหน้า A4 แล้วอ่านไม่ออก
-
-**หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
-รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
-
----
-
-## 6 · ธีมสีของชุดเอกสาร
-
-ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
-
-```markdown
-<!-- doc-theme: accent=#5B4BE8 -->
-```
-
-`branded-document-design` · `presentation-design` · `diagram-figures`
-อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
-
-**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — ถ้ามีสีแบรนด์แล้วให้ใช้สีแบรนด์ ถ้ายังไม่มีให้เสนอโทนแล้วรอยืนยัน
-ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · สีเทาของเส้นโครงสร้าง · เขียว = ผ่าน / แดง = ไม่ผ่าน
-
----
-
-## 7 · รายการตรวจก่อนส่งมอบชุดเอกสาร
-
-- [ ] ทุกไฟล์ `.docx` เปิด Navigation Pane แล้ว**เห็นหัวข้อครบ** (ใช้ Heading style จริง ไม่ใช่ตัวหนา)
-- [ ] ทุกเอกสารมีหน้าประวัติการแก้ไข · เลขเวอร์ชัน · วันที่ · ผู้จัดทำ
-- [ ] ทุกรูปมีเลขรูปและถูกอ้างในเนื้อความอย่างน้อย 1 ครั้ง
-- [ ] ไฟล์ต้นทางของทุกรูปอยู่ใน `docs/figures/src/` (ถ้ามีโฟลเดอร์นี้)
-- [ ] เอกสารเชิงเทคนิคที่เข้าเงื่อนไขในข้อ 2.2 มีครบ เช่น ถ้ามี API ต้องมี API-SPEC และถ้าใช้ LLM ต้องมี PROMPT-LIBRARY
-- [ ] ตัวย่อทุกตัวเขียนเต็มครั้งแรกที่ปรากฏ
-- [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
-- [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
-- [ ] `_to_delete/` ว่าง หรือถูกลบไปแล้ว
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **เขียน BRD ให้งาน 2 สัปดาห์** — ข้อ 2
-- ❌ **เอกสาร `.docx` ที่ไม่มี Heading style สักอัน** — navigation pane ว่าง หา TOC ไม่ได้ ไม่มีลำดับชั้น
-- ❌ **เก็บแต่ PNG ไม่เก็บไฟล์ต้นทาง** — ข้อ 1
-- ❌ **เก็บ `.docx` และ mockup ไว้ใน repo โค้ด** เพราะ "จะได้อยู่ที่เดียว" — pull request จะเต็มไปด้วย binary ถ้าถึงจุดนี้แปลว่าต้องย้ายเป็นแบบ B (ข้อ 1)
-- ❌ **เอกสารอยู่ 2 ที่พร้อมกัน** — ครึ่งหนึ่งอยู่ใน repo อีกครึ่งอยู่นอก repo ก็คือมี 2 เวอร์ชัน
-- ❌ **เขียน FSD ก่อน SRS ได้รับการยืนยัน**
-- ❌ **มี mockup ที่ปุ่มกดไม่ได้** — ผู้รีวิวเข้าใจว่าทำได้แล้ว
-- ❌ **ใช้ LLM แต่ไม่มี PROMPT-LIBRARY** — prompt ตัวจริงอยู่ในโค้ด พอแก้แล้วไม่มีใครรู้ว่าเปลี่ยนอะไร
-- ❌ **ตั้งชื่อโฟลเดอร์ sub-project ว่า `projects/` `modules/` หรือ `apps/`** — ใช้ `ecosystem/` (ข้อ 1 โปรเจกต์แบบ ecosystem)
-- ❌ **สร้าง `qa/` `decisions/` `figures/` ทิ้งไว้ว่าง ๆ** เพราะ "ในแบบมี" — โฟลเดอร์ว่างทำให้คนคิดว่าของหาย
-- ❌ **เอกสารชิ้นเดียวตอบทุกคำถาม** — SRS ที่มีทั้ง timeline ทั้ง test case คือเอกสารที่ไม่มีใครอ่านจบ
-
----
-
-## 9 · ตัวย่อ
-
-- **ADR** — Architecture Decision Record
-- **BRD** — Business Requirements Document
-- **FSD** — Functional Specification Document
-- **QA** — Quality Assurance
-- **SRS** — Software Requirements Specification
-- **TOC** — Table of Contents
-
----
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| โครงโฟลเดอร์ของโค้ด · README · สารบัญ `docs/README.md` | `project-bootstrap` |
-| ตั้งชื่อไฟล์และจัดเวอร์ชัน | `document-naming` |
-| จัดรูปแบบหน้าเอกสาร | `branded-document-design` · `polished-document-style` |
-| วาดรูปให้ดูออกแบบมา | `diagram-figures` |
-| เลือกว่าจะวาดรูปด้วยอะไร | `software-diagrams` |
-| ของชั่วคราวและการเก็บกวาด | `temp-file-discipline` |
-| ตารางสถานะเอกสารและงานเมื่อจบแต่ละฉบับ (ลง `docs/BUILD-PLAN.md`) | `status-report` |
-| รายการตรวจฉบับพิมพ์ | `assets/doc-set-checklist.md` |
-
-
----
-
-# skill: polished-document-style
-
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, audit, postmortem) needs polished formatting for GitHub, Notion or Obsidian.
-
-# Polished Document Style
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-## When to use this skill
-
-- Output is meant for **non-developers** to read (PMs, executives, clients)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
-
-## When NOT to use
-
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
-
-> ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
-
-## อ่านเพิ่มเมื่อ
-
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/markdown-patterns.md](references/markdown-patterns.md) | ถ้าจะเขียนส่วนหัว สารบัญ กล่องข้อความ ตาราง ป้ายสถานะ cover block ตารางเทียบตัวเลือก ส่วนเซ็นรับ หรืออภิธานศัพท์ ให้เปิดดูตัวอย่าง markdown แล้วลอกไปใช้ |
-| [scripts/check_outline.py](scripts/check_outline.py) | ถ้า skill ที่เขียนเอกสารมีไฟล์แบบใน `assets/` ให้รัน `python scripts/check_outline.py <แบบ.md> <เอกสาร.md>` ก่อนส่ง — ตรวจหัวข้อครบและเรียงตามแบบ ช่องตัวหนาครบ หัวตารางตรง และไม่มีช่องที่ยังไม่เติม · ในแบบ ใส่ `<!-- optional -->` ท้ายหัวข้อหรือช่องที่ไม่บังคับ · แก้ตัวตรวจแล้วรัน `--self-test` ก่อน |
-| [references/theme-colors.md](references/theme-colors.md) | ถ้าต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์ ให้เปิดดูว่าใครคุมสีส่วนไหน และค่าสีตั้งต้นประจำบ้านคืออะไร |
-
-## Document Header (Always)
-
-Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ที่มีอิโมจิกำกับ ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections และต้องกดลิงก์ในสารบัญแล้วไปถึงหัวข้อจริง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
-
-เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `software-diagrams` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
-
-**markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้เสนอโทนที่เข้ากับเนื้องาน แล้วรอผู้ใช้ยืนยัน
-(ตารางจับคู่เนื้องานกับโทนสีอยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
-
-markdown เองไม่มีสี จึงใช้อิโมจิและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ใน [references/theme-colors.md](references/theme-colors.md)
-
-**สีสถานะไม่ขึ้นกับธีม** — 🔴 วิกฤต · 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
-
-## Emoji Vocabulary
-
-ใช้ให้**คงที่ทั้งเอกสาร** และใช้เพื่อ**หาของเจอเร็วขึ้น** ไม่ใช่เพื่อความน่ารัก
-
-| ใช้ทำอะไร | ชุดที่ใช้ |
-|---|---|
-| ระดับความสำคัญ | 🔴 วิกฤต · 🟠 สูง · 🟡 กลาง · 🟢 ต่ำ |
-| สถานะ | ✅ เสร็จ · 🚧 กำลังทำ · ⏳ รอ · ❌ ไม่ผ่าน · ⚠️ ต้องระวัง |
-| ชนิดกล่องข้อความ | 💡 ข้อแนะนำ · 📌 ข้อควรจำ · 🚨 อันตราย · 📋 รายการตรวจ |
-| หมวดเนื้อหา | 🎯 เป้าหมาย · 🏗️ สถาปัตยกรรม · 🔐 ความปลอดภัย · 📊 ตัวเลข · 🧪 การทดสอบ |
-
-**1 อิโมจิต่อหัวข้อ ไม่ใช่ต่อบรรทัด** — เอกสารที่ทุกบรรทัดมีอิโมจิอ่านยากกว่าเอกสารที่ไม่มีเลย
-
-## Callout Boxes
-
-Use blockquotes with emoji prefix มี 5 ชนิด คือ 💡 **Tip** · ⚠️ **Warning** · 🚨 **Critical** · ℹ️ **Note** · ❓ **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
-## Tables — When and How
-
-Use tables when items have **2+ attributes** ถ้าเขียนเป็น bullet แล้วแต่ละบรรทัดมีหลายค่าคั่นด้วยจุลภาค ให้เปลี่ยนเป็นตาราง ตัวอย่างเทียบกันอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (architect, PM, SEO recommendations) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีศัพท์เทคนิค 5 คำขึ้นไปให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Mermaid Diagrams
-
-**ตัวเลือกชนิดไดอะแกรม กติกาความอ่านง่าย ธีม และการจัดการป้ายภาษาไทย อยู่ใน `software-diagrams`**
-skill นี้คุมเฉพาะเรื่องการวางไดอะแกรมลงในเอกสาร markdown
-
-- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
-- ทุกรูปมีคำบรรยายใต้รูป 1 บรรทัด ขึ้นต้นด้วย **รูปที่ N —**
-- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
-- รูปที่ต้องส่งให้คนนอกทีมหรือใส่สไลด์ ใช้ `diagram-figures` แล้วฝังเป็นไฟล์ภาพ
-
-## Status Badges and Cover Block
-
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะแบบอิโมจิพร้อมคำกำกับ เช่น `**Status:** 🟢 Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Lists and Code Blocks
-
-**Rule:** Max 2 levels of nesting. More nesting = use a table.
-ตัวอย่างรายการที่ดีและรายการที่ซ้อนเกินอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Code blocks ต้องระบุภาษาทุกครั้ง (Always specify language) และถ้าโค้ดยาว ให้ใส่ชื่อไฟล์เป็นคอมเมนต์ในบรรทัดแรก ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Quality Checklist
-
-Before delivering any polished doc:
-
-- [ ] H1 title with emoji marker
-- [ ] Cover block with version, date, status, authors
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] At least one Mermaid diagram for any flow/relationship
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum)
-- [ ] Tested rendering in GitHub preview
-
-> ไดอะแกรมในเอกสาร: ชนิดไหนตอบคำถามไหน และธีม Mermaid ชุดเดียวกันทั้งโปรเจกต์
-> อยู่ใน `software-diagrams` ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
-
-## Anti-patterns
-
-- ❌ **Emoji spam** — emoji in every heading just for decoration
-- ❌ **All emoji, no labels** — `🔴 High` reads better than `🔴` alone
-- ❌ **Deep nesting** — bullets 4+ levels deep, use tables instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
-- ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
-- ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: markdown-patterns.md
-
-# รูปแบบ markdown พร้อมตัวอย่าง
-
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# 📋 <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** 🟡 Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
-```
-
-Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
-
-## Table of Contents
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## 📑 Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
-## Callout Boxes
-
-Use blockquotes with emoji prefix:
-
-```markdown
-> 💡 **Tip:** Brief actionable insight.
-
-> ⚠️ **Warning:** Important caveat or limitation.
-
-> 🚨 **Critical:** Must-read before proceeding.
-
-> ℹ️ **Note:** Additional context or background.
-
-> ❓ **Open Question:** Needs decision/clarification.
-```
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-❌ Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-✅ Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✅       | —       | Unique login email|
-| age   | number | ❌       | —       | Optional          |
-| role  | enum   | ✅       | `user`  | Access level      |
-```
-
-## Mermaid Diagrams
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
-```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk Level:** 🟡 Medium
-**SLA:** ⚡ < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> 🟢 **Approved** · 🔴 **High Priority** · 👤 @alice · 🗓️ Due 2025-03-15
-```
-
-## Cover Block Pattern
-
-For formal documents (BRD, FSD, ADR, postmortem):
-
-```markdown
-# 📋 <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | 🟢 Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, PM, SEO recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B      | 💰   | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C      | 💰💰💰| 🔴 High| 🟢 Low | 🔴 Slow | ⚪ Future consideration |
-```
-
-## Lists — When to nest, when to flatten
-
-### ✅ Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### ❌ Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
-```typescript
-const user: User = { id: 1, email: 'a@b.com' };
-```
-
-```bash
-npm install
-```
-
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
-
-For long blocks, put the file name in a comment on the first line:
-
-```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
-  // ...
-}
-```
-
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## ✍️ Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | 🟢 Approved | 2025-01-15 |
-| Tech Lead | @bob | 🔵 Reviewing | — |
-| QA Lead | @charlie | ⚪ Not started | — |
-| Security | @dave | ❌ Rejected | 2025-01-14 |
-```
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## 📖 Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
-```
-
-Define acronyms on first use, then add to glossary.
-
-
-## reference: theme-colors.md
-
-# ตารางสีของธีมเอกสาร
-
-ไฟล์นี้บอกว่าส่วนไหนของเอกสารใครเป็นคนคุมสี และค่าสีตั้งต้นประจำบ้านคืออะไร ใช้ตอนต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์
-
-## ใครคุมสีส่วนไหน
-
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
-|---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
-
-## ค่าตั้งต้นประจำบ้าน (house default)
-
-ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
-
-| token | ค่า | ใช้กับ |
-|---|---|---|
-| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
-| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
-| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
-| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
-| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
-| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
-| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
-| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
-| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
-
-เมื่อประกาศ accent เฉพาะงานแล้ว ให้ใช้ค่านั้นแทน brand ส่วนสีอื่นคำนวณจาก accent ตัวนั้น
-
-
----
-
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (wireframe, UI state, flow, architecture). Picks inline SVG, image, ASCII or Mermaid so it renders everywhere.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
 
 # Markdown Visuals
 
@@ -859,30 +12,38 @@ Use when a markdown doc needs a picture (wireframe, UI state, flow, architecture
 
 ## When to use this skill
 
-- Producing **any** design mockup, wireframe, or UI spec
+- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
 - Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
+- The user asked "show me how it looks" inside a markdown doc or chat reply
 
 **If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
 
 ```
 What are you showing?
 │
-├─ UI mockup / component state / icon       →  Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
 ├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
 ├─ Architecture / ER / class                →  Mermaid (software-diagrams)
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Default to inline SVG**, except for flows and sequences (use Mermaid for those). Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
 
 ## 1 · Inline SVG (primary technique)
 
@@ -891,8 +52,8 @@ What are you showing?
 ```markdown
 <p align="center">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
 
   <!-- content goes here -->
 </svg>
@@ -906,14 +67,14 @@ What are you showing?
 - `<p align="center">` wrapper — centers in the rendered page
 
 **Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
 - Component state: `viewBox="0 0 400 300"` (squarer)
 - Icon / chip: `viewBox="0 0 64 64"`
 - Full screen layout: `viewBox="0 0 800 500"`
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้เสนอโทนจาก [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md) แล้วรอผู้ใช้ยืนยัน ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
 
 ### Reusable snippets
 
@@ -945,7 +106,7 @@ docs/
 ### Reference syntax
 
 ```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
 ```
 
 - **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
@@ -954,13 +115,13 @@ docs/
 
 ```markdown
 <p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
 </p>
 ```
 
 ### Creating SVG files
 
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
 
 ## 3 · ASCII art
 
@@ -1002,7 +163,7 @@ For every visual:
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
 - ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
+- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
@@ -1010,7 +171,7 @@ For every visual:
 
 ## Quick-start recipe
 
-When the user asks for a design / mockup:
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
 
 1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
 2. **Pick the format(s)** using the decision tree above
@@ -1122,8 +283,8 @@ Reusable building blocks for inline SVG mockups in markdown docs · used by [SKI
 
 ## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
 
-**อย่าเลือกสีเอง** ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้เสนอโทนจากเนื้องานแล้วรอผู้ใช้ยืนยัน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
+ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
 อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
 
 กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
@@ -1133,7 +294,7 @@ Reusable building blocks for inline SVG mockups in markdown docs · used by [SKI
 | `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
 | `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
 | `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีหลักที่ผู้ใช้เลือก** |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
 | `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
 | `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
 | `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
@@ -1196,3 +357,1759 @@ Reusable building blocks for inline SVG mockups in markdown docs · used by [SKI
 ## Worked example — UI state mockup
 
 This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+
+
+---
+
+# skill: diagram-figures
+
+Use when an architecture, data-flow or concept figure must look designed for a proposal, slide, print or sign-off.
+
+> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
+
+# Diagram Figures
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+skill นี้คือ house style เดียวของรูปที่ต้องดู "ออกแบบมา" ไม่ใช่ "generate มา" มี 3 engine ซึ่งใช้สี ไอคอน และกติกาชุดเดียวกัน
+
+## เลือกทาง
+
+| ต้องการ | ไปที่ |
+|---|---|
+| รูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
+| รูปแบบเดียวกัน แต่ต้อง generate จากข้อมูลหรือโค้ด เช่น ออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือต้องคุมพิกัดบนกริดเอง | **skill นี้ — SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
+| บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ PDF ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
+| ไดอะแกรมที่อยู่ในเอกสาร markdown · README · Pull Request · เอกสารในทีม | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
+| ตัดสินใจว่าจะฝังรูปในไฟล์ markdown แบบไหน (inline SVG · ไฟล์ภาพ · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
+
+ต้นทุนของ skill นี้คือ **เวลา** เพราะ 1 รูปต้องแก้หลายรอบ
+ดังนั้นให้ใช้กับรูปที่คนนอกทีมจะเห็น และเห็นซ้ำหลายครั้งเท่านั้น
+
+## 1 · ตอบสามข้อก่อนเปิดไฟล์
+
+1. **รูปนี้ไปอยู่ที่ไหน** — สไลด์ 16:9 · หน้า A4 · หน้าจอ
+   แล้วกำหนด `.sheet{width:...}` ตามนั้น: สไลด์ 1600px · A4 แนวตั้ง 1240px · A4 แนวนอน 1750px
+2. **ผู้อ่านคือใคร** — ถ้าเป็นลูกค้าที่ไม่ใช่ช่าง ให้เขียนชื่อกล่องเป็นภาษาไทย ส่วนทีมเทคนิคอ่านชื่อจริงของ service
+3. **คำถามเดียวที่รูปนี้ตอบคืออะไร** — กฎข้อเดียวของ `software-diagrams` ยังใช้อยู่
+
+## 2 · เลือกโครง
+
+มี 4 โครงในโฟลเดอร์ `assets/` ให้**คัดลอกไปแก้ อย่าเริ่มเขียนเอง** ส่วนรายละเอียดของแต่ละโครงอยู่ในไฟล์ที่ลิงก์ไว้
+
+| คำถามที่รูปตอบ | โครง | รายละเอียด |
+|---|---|---|
+| "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" — C4 ระดับ 1 | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
+| "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" — deployment · container | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
+| "ใช้บริการอะไรของคลาวด์บ้าง" — ต้องมีโลโก้ AWS · Azure · Google Cloud ของจริง | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
+| "ข้อความ 1 ชิ้นวิ่งผ่านอะไรบ้าง ตามลำดับไหน" — ผังสถาปัตยกรรมแบบมีเลขลำดับ ①–⑥ · ผู้ใช้ → ช่องทาง → ชั้นในระบบ → บริการภายนอกและข้อมูล | [`figure-flow.html`](assets/figure-flow.html) · [ตัวอย่าง](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
+
+ทุกโครงใช้สี ขนาด ฟอนต์ และสคริปต์ลากเส้นชุดเดียวกัน ต่างกันแค่การจัดวาง
+
+## 3 · หัวรูปต้องมีครบหกอย่าง
+
+โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+
+โลโก้อยู่หน้าชื่อรูป โครงทุกตัวมีช่อง `<img class="logo">` ชี้ไปที่ `assets/logo/` ของโปรเจกต์อยู่แล้ว ให้แก้แค่ชื่อไฟล์ ถ้าโปรเจกต์ยังไม่มีโลโก้ ช่องนี้จะหายไปเอง แต่ต้องจดไว้ในรายงานว่ายังขาดโลโก้ เพราะรูปที่ไม่มีโลโก้ถูกถามเสมอว่า "โลโก้อยู่ไหน"
+
+เหตุผลไม่ใช่ความสวย แต่เป็นเพราะรูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมล ในสไลด์ ในเอกสารสัญญา
+แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้และไม่มีใครกล้าเชื่อ**
+
+คำขยายบอกว่า "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ:
+
+```
+❌ ภาพรวมระบบ Dr Screening
+✅ เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
+```
+
+## 4 · ระบบขนาด
+
+**ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว อย่าตั้งค่าใหม่เอง**
+ตัวเลขพวกนี้ปรับจนรูปดูตั้งใจแล้ว ถ้าขยับเมื่อไหร่ รูปในเอกสารเดียวกันจะดูไม่เท่ากัน
+
+| อย่าง | ค่า |
+|---|---|
+| ตัวอักษร | ชื่อรูป 30 · ชื่อกล่อง 16 · คำอธิบาย 13.5 · ป้ายกลุ่ม 12 ตัวใหญ่ |
+| ไอคอน | กรอบ 66px · มุม 18px · ไอคอน 29px · เส้น 1.6px |
+| กล่อง | มุม 20px · ขอบ 1px เทาอ่อน · กล่องซ้อนใน มุม 16px พื้นเทาอ่อนมาก |
+| กล่อง `.focus` | ขอบ 2px สี `--accent` เฉดเข้ม · มุม 22px |
+| เส้นเชื่อม | แนวตั้งหรือแนวนอนเท่านั้น · หักมุมฉากด้วยมุมโค้งรัศมี 10px (SVG/Python engine ใช้ 12–14) · ห้ามเส้นเฉียง ห้ามเส้นโค้งอิสระ ห้ามมุมแหลม |
+| ระยะ | 12 · 20 · 26 · 34 · 48 · ช่องว่างระหว่างคอลัมน์ 130 |
+
+> **กรอบไอคอนต้องใหญ่** — 66px คือจุดที่รูปเริ่มดูตั้งใจ ไม่ใช่ผังที่ generate มา
+> ถ้าต่ำกว่า 56px ไอคอนจะกลายเป็นจุดเล็ก ๆ ในกล่องใหญ่ และรูปจะดูโหวง
+
+## 5 · ระบบสี
+
+**สีหลักของรูปคือสีหลักของโปรเจกต์** ห้ามใช้สีจากตัวอย่างหรือจากรูปอ้างอิง หาตามลำดับนี้ เจอที่ไหนหยุดที่นั่น:
+
+1. `doc-theme` ในเอกสารของโปรเจกต์ (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
+2. สีแบรนด์ที่โปรเจกต์ใช้จริง — ตัวแปรสีหลักในโค้ด (`--primary` · `--brand` · `--accent` ใน CSS · `primary` ใน Tailwind / ธีม UI · `colorPrimary` ในแอปมือถือ) · ชุดแบรนด์ (brand kit) · สีหลักในโลโก้
+   ดูสีพื้นจากที่เดียวกันด้วย (`--background` · `--bg` · `background` ใน Tailwind · โหมดมืดหรือสว่างที่แอปใช้เป็นหลัก) เพราะรูปและเด็คใช้สีพื้นตามดีไซน์ของโปรเจกต์
+3. ยังไม่มีเลย → ใช้ชุดสีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
+
+เจอสีจากข้อ 2 แล้วแต่ยังไม่มี `doc-theme` ให้ประกาศ `doc-theme` ด้วยค่านั้น เพื่อให้รูป เอกสาร และสไลด์ของโปรเจกต์ใช้สีเดียวกัน
+
+ในโครง HTML ให้แก้ที่ `--accent` ใน `:root` ที่เดียว แล้วเฉดอ่อนและเข้มจะคำนวณจากค่านั้น (ส่วน SVG/Python engine แก้ที่ `ACCENT` ใน `theme.py`)
+
+**สีพื้นของรูปตามดีไซน์ของโปรเจกต์** — ต่อท้ายชื่อไฟล์ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` ให้ตรงกับเด็คหรือแอป พื้นเข้มหรือสว่างก็ได้ เทาทุกระดับคำนวณจากสีพื้น (ตอนนี้มีใน `figure-flow.html`) ถ้าไม่ใส่ `bg` ได้พื้นขาว
+
+ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์:
+
+- **สีโลโก้ผู้ให้บริการ** — AWS ส้ม Azure ฟ้า ต้องเป็นสีจริงของเขา ไม่ใช่สีแบรนด์เรา
+- **เทาโครงสร้าง** — เส้นขอบและพื้นกล่องต้องจางพอที่จะไม่แย่งสายตากับเนื้อหา
+
+**สีไอคอนมี 7 กลุ่ม และแต่ละกลุ่มต้องมีความหมาย**
+
+| คลาส | ใช้กับ |
+|---|---|
+| `t-neutral` | คน อุปกรณ์ ของนอกระบบ ที่เก็บไฟล์ธรรมดา |
+| `t-edge` | ทางเข้า-ออก · gateway · API |
+| `t-app` | เครื่องมือที่ผู้ใช้ทำงานด้วย |
+| `t-view` | ส่วนที่ผู้ใช้ใช้ดูหรืออ่านผล |
+| `t-data` | ฐานข้อมูล · สำรองข้อมูล |
+| `t-alert` | คิว งานที่ค้างได้ ของที่พังแล้วเจ็บ |
+| `t-warn` | ของที่มีเงื่อนไข — สัญญาอนุญาต ข้อจำกัดทางกฎหมาย |
+
+ทุกกรอบมี**พื้นอ่อนกับขอบในโทนเดียวกัน** ไม่ใช่พื้นสีทึบ เพราะสีทึบจะดึงสายตาไปจากเนื้อหา
+ถ้าอยากได้สีที่ 8 แปลว่ากำลังใช้สีเพื่อความสวย ไม่ใช่เพื่อสื่อความหมาย
+
+## 6 · ไอคอน — ใช้ของทางการจากคลัง และวาดเองเฉพาะเมื่อไม่มี
+
+**มีไอคอนทางการของบริการนั้นหรือไม่** เป็นตัวตัดสิน
+
+- **ถ้ามี** (AWS · Azure · Google Cloud · Kubernetes · เครื่องมือโอเพนซอร์สส่วนใหญ่) ให้ใช้ของทางการจาก `assets/`
+  คือ 205 ตัวที่คัดไว้ใน `assets/icons/` หรือคลังเต็มผ่าน `python assets/find-icon.py <ชื่อ>` ชุดเหล่านี้เผยแพร่มาเพื่อวาดผังสถาปัตยกรรมโดยเฉพาะ ส่วนรายการกลุ่ม คำสั่ง และสัญญาอนุญาตอยู่ใน [references/icons.md](references/icons.md)
+- **ถ้าไม่มี** หรือเป็นของที่เราสร้างเอง ให้วาดไอคอนเส้นเอง แล้วเขียนที่เชิงอรรถว่า
+  ไอคอนไม่ใช่โลโก้ทางการ (โครง `figure-template.html` มีบรรทัดนี้ให้แล้ว)
+- **ห้ามปนกัน**ในรูปเดียว เพราะโลโก้สีจัดข้าง ๆ ไอคอนเส้นบางทำให้รูปดูไม่เสร็จ
+
+ไอคอนเส้นที่วาดเอง: `viewBox 0 0 24 24` · `stroke-width 1.6` · ไม่มีพื้น · ปลายเส้นมน
+รูปทรงต้องอ่านออกที่ขนาด 24px เพราะลายละเอียดเกิน 3 เส้นจะกลายเป็นก้อนดำ
+
+## 7 · สายเชื่อม
+
+**ในคอลัมน์เดียวกัน** ให้ใช้ลูกศรลง `.down` ระหว่างกล่อง โดยไม่ต้องเขียนอะไรเพิ่ม
+
+**ข้ามคอลัมน์** ให้ใช้รายการ `WIRES` ท้ายไฟล์ แล้วสคริปต์จะลากเส้นให้หลังจัดหน้าเสร็จ:
+
+```js
+{from:"n-browser", fs:"r", to:"n-server", ts:"l", tp:0.10, label:"HTTPS 443"}
+//    ^id ต้นทาง   ^ด้านออก  ^id ปลายทาง  ^ด้านเข้า ^ตำแหน่งบนขอบ 0=บน 1=ล่าง
+```
+
+ที่ต้องคำนวณหลังจัดหน้า เพราะตำแหน่งกล่องขึ้นกับความยาวข้อความไทย
+ถ้าเขียนพิกัดตายตัวไว้ พอแก้ข้อความทีเดียวเส้นจะหลุดทั้งรูป
+
+**กติกา:**
+
+- **เส้นวิ่งแนวตั้งหรือแนวนอนเท่านั้น และหักมุมด้วยมุมโค้ง** — ฟังก์ชัน `elbow()` ในโครงทำให้เอง (นอน → ตั้ง → นอน) ใช้ `mx` เลื่อนช่วงหักเมื่อหลายเส้นใช้ช่องเดียวกัน อย่าเขียน `path` เป็นเส้นตรงจากจุดถึงจุด เพราะกล่องสองข้างสูงไม่เท่ากันแล้วเส้นจะเฉียง
+- **ป้ายต้องแคบกว่าช่องว่างระหว่างคอลัมน์** ไม่อย่างนั้นป้ายจะทับกล่องหรือบังเส้นจนหาย ถ้าป้ายยาวขึ้น ต้องเพิ่ม `gap` ของ `.stage` ตามไปด้วย
+- เลื่อนป้ายไปตามเส้นได้ด้วย `lp` (0 = ต้นทาง · 1 = ปลายทาง · ไม่ใส่ = กลางเส้น)
+- เส้นที่ยังไม่ได้เชื่อมจริง ให้ใช้ `planned:true` เพื่อได้เส้นประ แล้ว**เขียนความหมายไว้ที่เชิงอรรถ**
+- เส้นข้ามคอลัมน์ **ไม่เกิน 5 เส้น** ต่อรูป เพราะเกินนี้รูปจะกลายเป็นใยแมงมุม
+- ต่อเข้า**กล่องเล็กที่สุดที่ถูกต้อง** ไม่ใช่กล่องใหญ่ที่ครอบอยู่ ถ้ากล่องสูงมาก ให้ใส่ `tp` เพื่อเลี่ยงไม่ให้เส้นจ่อกลางกล่อง
+- ป้ายบนเส้นบอกว่า**อะไรไหลผ่าน** เช่น `HTTPS 443` ไม่ใช่ `เชื่อมต่อ` ส่วนเส้นที่ไม่มีอะไรจะบอก ไม่ต้องใส่ป้ายเลยดีกว่าใส่คำว่า "ใช้"
+
+## 8 · ภาษาไทย
+
+- **`line-height` ต่ำกว่า 1.5 ไม่ได้** เพราะสระบนกับวรรณยุกต์ซ้อนกัน 2 ชั้นจะโดนตัด ด้วยเหตุผลเดียวกันจึง **ห้ามกำหนดความสูงตายตัวให้กล่องข้อความ**
+- ฟอนต์เรียงตามนี้ `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` ซึ่งตั้งไว้ในโครงแล้ว
+  รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก รูปจะได้ฟอนต์เดียวกับเนื้อความของเด็ค · เอกสาร Word ใช้ Tahoma ตาม `branded-document-design` ข้อ 2 รูปในนั้นต่างฟอนต์ได้
+  ถ้าเครื่องไม่มีสักตัว จะตกไปใช้ฟอนต์ที่วางสระผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
+- **ไทยไม่เว้นวรรคระหว่างคำ** เบราว์เซอร์จึงตัดบรรทัดกลางคำ ถ้าข้อความยาวให้ใส่ `<br>` เอง
+- ตัวอักษรไทยดูเล็กกว่าอังกฤษที่ขนาดเท่ากัน ดังนั้นคำอธิบายอย่าต่ำกว่า 12px
+
+## 9 · เรนเดอร์แล้วเปิดดู — ห้ามข้าม
+
+```bash
+pip install playwright && playwright install chromium
+python assets/render-figure.py figure.html figure.png 2
+```
+
+ใช้ตัวคูณ **2** เสมอ เพราะตัวคูณ 1 ได้ภาพเบลอเมื่อเอาไปขยายในสไลด์
+
+แล้วรันตัวตรวจเรขาคณิต ซึ่งจับเส้นเฉียง มุมที่ไม่ใช่มุมโค้ง ป้ายทับกัน และเส้นพาดผ่านตัวหนังสือ:
+
+```bash
+python scripts/check-figure-geometry.py docs/figures/src     # exit 0 = ผ่าน
+```
+
+จากนั้นเปิดไฟล์ภาพดูด้วยตา แล้วไล่ตามนี้:
+
+- [ ] สายข้ามคอลัมน์มีหัวลูกศรครบทุกเส้นไหม · เส้นพาดทับกล่องหรือทับตัวหนังสือไหม
+- [ ] ป้ายบนเส้นอ่านออกไหม และไม่ทับกันเองไหม
+- [ ] ข้อความไทยครบไหม สระหรือวรรณยุกต์หายไหม มีคำไหนถูกตัดกลางคำไหม
+- [ ] กล่อง `.focus` มีกล่องเดียวจริงไหม · หัวรูปมีครบ 6 อย่างไหม · โลโก้ขึ้นจริงไหม
+- [ ] ย่อรูปลงเหลือความกว้าง 25% แล้วยังแยกออกไหมว่าอะไรอยู่ตรงไหน
+- [ ] คนที่ไม่เคยเห็นระบบนี้ ตอบคำถามต้นทางได้ไหม
+
+## 10 · กับดักที่เจอจริง
+
+ถ้ารูปออกมาผิด เช่น หัวลูกศรหาย เส้นลากผิดกล่อง สระไทยหาย หรือป้ายทับกล่อง ให้เปิดตารางอาการ → สาเหตุ → ทางแก้ใน [references/pitfalls.md](references/pitfalls.md) ก่อนแก้เอง
+
+## 11 · Anti-patterns
+
+- ❌ **ใช้ skill นี้กับรูปในทีม** — เสียเวลา 10 เท่าเพื่อความสวยที่ไม่มีใครต้องการ
+- ❌ **ใช้โลโก้ทางการในลักษณะที่ดูเหมือนผู้ให้บริการรับรอง** — ข้อ 6 และ [icons.md](references/icons.md)
+- ❌ **กล่อง `.focus` 2 กล่อง** — แปลว่ารูปตอบ 2 คำถาม
+- ❌ **ส่งไฟล์ HTML ให้ลูกค้า** — ให้ส่ง PNG ส่วนไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
+- ❌ **ไม่เก็บไฟล์ HTML** — ปีหน้าต้องแก้รูป แล้วต้องวาดใหม่ทั้งใบ
+- ❌ **รูปไม่มีวันที่และเจ้าของ**
+- ❌ **เส้นเฉียงหรือมุมแหลม** — เส้นต้องตั้งหรือนอน หักด้วยมุมโค้ง (ข้อ 4 และ 7)
+- ❌ **ไอคอนต่างสไตล์ปนกัน** — เส้นบางปนเส้นหนา ปนไอคอนทึบ
+
+## 12 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ไดอะแกรมในเอกสาร markdown | `software-diagrams` |
+| เลือกวิธีฝังรูปในไฟล์ markdown | `markdown-visuals` |
+| เอารูปไปวางในสไลด์ | `presentation-design` |
+| เอารูปไปวางในไฟล์ Word / PDF | `branded-document-design` |
+| รูปในเอกสาร SRS | `srs-writing` |
+| สีและระยะห่างของหน้าจอแอป (คนละระบบกับรูปนี้) | `ui-craft` |
+
+## ตัวย่อ
+
+HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG — Scalable Vector Graphics · CSS — Cascading Style Sheets
+
+
+## reference: colour-by-domain.md
+
+# ตารางเนื้องาน → โทนสี
+
+ใช้เมื่อเอกสารยังไม่มี `doc-theme` และยังไม่มีสีแบรนด์ ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากตารางนี้ไว้ในรายงานให้ผู้ใช้เลือกทีหลัง (ลำดับเต็มอยู่ใน `diagram-figures` ข้อ 5) ตารางนี้ใช้ร่วมกันทั้ง 2 engine ของ `diagram-figures` และทุก skill ที่วาดรูป
+
+| เนื้องาน | โทนที่เสนอ | เหตุผล |
+|---|---|---|
+| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
+| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
+| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
+| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
+| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
+| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
+| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
+
+
+## reference: engine-mermaid.md
+
+# Mermaid → รูปเส้นตั้งฉากมุมโค้ง
+
+ทางที่ 3 ของ `diagram-figures` ใช้เมื่อเอกสารมีบล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) แล้วต้องส่งเป็นไฟล์ Word หรือ PDF ที่ดูออกแบบมา
+ถ้าใช้ภาพที่ Mermaid วาดเอง เส้นจะโค้งอิสระและเฉียง สีจะไม่ตรงกับรูปที่วาดด้วยมือ ตัวนี้จึงอ่านบล็อกเดิมแล้ววาดใหม่ด้วยกติกาเดียวกับโครง HTML
+
+## ได้อะไร
+
+- เส้นตั้งหรือนอนเท่านั้น หักมุมด้วยมุมโค้ง (รัศมีอยู่ใน `theme.py`: `WIRE_R` 12 · กล่อง `BOX_R` 10)
+- ป้ายบนเส้นเป็นป้ายขาวขอบอ่อน และมีตัวตรวจว่าป้ายไม่ทับกล่องหรือเส้น
+- กล่องหลักกล่องเดียวเป็นการ์ดเข้มขอบไล่สี ตรงกับกล่อง `.focus`
+- จัดวางด้วย ELK (`elkjs` แบบ layered + orthogonal) จึงไม่ต้องวางพิกัดเอง
+
+## ใช้
+
+1. คัดลอกโฟลเดอร์ `assets/mermaid-engine/` ไปไว้ที่ `docs/figures/src/gen/`
+2. แก้ `figures.json`:
+   - `prefix` คือรหัสโปรเจกต์ (`document-naming`)
+   - `drafts` คือโฟลเดอร์ไฟล์ `.md` ที่มีบล็อก Mermaid
+   - `skip` คือบล็อกที่มีรูปวาดมือแล้ว
+   - `captions` ใช้แทนคำบรรยายที่สร้างจากหัวข้อ
+3. แก้ `theme.py`: ให้ `ACCENT` และ `SECOND` ตรงกับ `doc-theme` ของโปรเจกต์ ส่วน `MEASURE_FONTS` ต้องชี้ไฟล์ฟอนต์จริงในเครื่อง
+4. รัน `python build.py` จะได้ `docs/figures/<prefix>-<ไฟล์>-m<N>.png` และ `map.md` ที่บอกว่าบล็อกไหนกลายเป็นไฟล์ไหน
+   - ถ้ายังไม่มี `elkjs` ตัว `elk.py` จะติดตั้งรุ่น 0.9.3 ลงโฟลเดอร์ `node_modules` ที่ตั้งไว้ให้เอง
+5. ต้องดู output ทุกครั้ง:
+   - บรรทัด `PROBLEM` คือเส้นเฉียง ป้ายทับ หรือบล็อกที่อ่านไม่ออก ห้ามส่งงานถ้ายังมีบรรทัดนี้
+   - เปิดดูด้วยตาอย่างน้อย 1 รูปต่อชนิด
+
+## ข้อจำกัด
+
+- ใช้ได้ 4 ชนิด: `sequenceDiagram` · `stateDiagram-v2` · `erDiagram` · `gantt` ส่วน flowchart ให้วาดเป็นโครง HTML (ข้อ 2 ของ SKILL.md) เพราะ flowchart คือรูปที่คนอ่านมากที่สุด
+- รูปกว้าง 1240px ตามหน้า A4 แนวตั้ง ถ้ารูปมีคนเกี่ยวข้องเกิน 7 คน ตัวหนังสือจะเล็ก ให้แยกรูป หรือวางรูปนั้นในหน้าแนวนอน
+
+
+## reference: engine-svg-python.md
+
+# SVG/Python engine — รูปที่ generate จากข้อมูลหรือโค้ด
+
+ทางที่ 2 ของ `diagram-figures` ใช้แทนโครง HTML เมื่อรูปต้องสร้างจากข้อมูลหรือโค้ด เช่น รูปหลายใบที่ต้องออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือรูปที่ต้องคุมตำแหน่งทุกจุดเองบนกริดด้วยเส้นตั้งฉากมุมโค้ง
+Python เขียน SVG ลงกริดแล้วเรนเดอร์เป็น PNG ส่วนไอคอนและโลโก้มาจากคลังเดียวกับโครง HTML ([icons.md](icons.md))
+
+ข้อเสียคือใช้เวลา เพราะ 1 รูปต้องแก้หลายรอบ ดังนั้นให้ใช้เฉพาะรูปที่คนนอกทีมจะเห็นและเห็นซ้ำ
+
+> **สีเริ่มต้น = ชุดประจำบ้าน** · ถ้า `doc-theme` ไม่ได้กำหนดสีเน้น (accent) เฉพาะงาน ให้ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") ซึ่งเป็น brand `#2A78D6` ชุดเดียวกับสไลด์และเอกสาร
+
+---
+
+**สารบัญ**
+- [0 · สีมาจากเนื้องาน — ไม่หยุดถาม](#0--สีมาจากเนื้องาน--ไม่หยุดถาม)
+- [1 · ลำดับการทำงาน](#1--ลำดับการทำงาน)
+- [2 · โครงไฟล์](#2--โครงไฟล์)
+- [3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง](#3--กฎข้อที่หนึ่ง--กริดก่อน-เส้นทีหลัง)
+- [4 · เส้นเชื่อม](#4--เส้นเชื่อม)
+- [5 · ป้ายบนเส้น — สองบทบาทเท่านั้น](#5--ป้ายบนเส้น--สองบทบาทเท่านั้น)
+- [6 · โซน](#6--โซน)
+- [7 · ไอคอนและโลโก้](#7--ไอคอนและโลโก้)
+- [8 · เรนเดอร์](#8--เรนเดอร์)
+- [9 · วงจรตรวจงาน — ห้ามข้าม](#9--วงจรตรวจงาน--ห้ามข้าม)
+- [10 · ค่าคงที่ที่ใช้ได้จริง](#10--ค่าคงที่ที่ใช้ได้จริง)
+- [11 · แถบสัญลักษณ์](#11--แถบสัญลักษณ์)
+- [ตัวย่อ](#ตัวย่อ)
+
+## 0 · สีมาจากเนื้องาน — ไม่หยุดถาม
+
+**ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้นและอย่าถามซ้ำ**
+(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ให้ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
+
+**ไม่มีสีแบรนด์ → ทำตามลำดับใน `diagram-figures` ข้อ 5:** ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม
+เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
+
+ใส่**สีหลักสีเดียว**ที่ `ACCENT` ใน `assets/svg-engine/theme.py` แล้วเฉดอ่อนและเข้มทั้งหมด
+จะคำนวณจากสีนั้นด้วย `tint()` โค้ดวาดรูปจึงไม่มีสีอื่นฝังอยู่
+
+สีเดียวที่ไม่ผูกกับ `ACCENT` คือ `EXCEPT_HUE` สำหรับป้าย "ข้อยกเว้น" ซึ่งต้องต่างจากสีหลักเสมอ
+ถ้าสีหลักเป็นส้มอยู่แล้ว ให้เปลี่ยน `EXCEPT_HUE` เป็นสีอื่นที่ตัดกัน
+
+---
+
+## 1 · ลำดับการทำงาน
+
+1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน แล้วถามว่า**รูปนี้ตอบคำถามอะไร** — 1 รูปตอบ 1 คำถาม
+2. เลือกสีตามข้อ 0 (ไม่มีสี → ค่าประจำบ้าน + `(รอยืนยัน)`)
+3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อนี้สำคัญที่สุด ดูข้อ 3
+4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
+5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่แค่เช็กว่าสคริปต์รันผ่าน
+6. เมื่อได้รูปที่สะอาดแล้ว จึงเขียนลงโฟลเดอร์ปลายทาง ส่วนรูปเก่าให้ย้ายไป `_to_delete/`
+
+---
+
+## 2 · โครงไฟล์
+
+```
+architecture/
+  01-system-context.png      ← ผลลัพธ์ เลขนำหน้าเรียงตามลำดับการอ่าน
+  _src/
+    theme.py                 ← สีทั้งหมด — แก้ที่นี่ที่เดียว
+    ref.py                   ← ภาษาภาพ: โซน หน่วย เส้น ป้าย แถบสัญลักษณ์
+    render.py                ← SVG → PNG ด้วย Playwright ที่ 2 เท่า
+    d01.py … dNN.py          ← หนึ่งไฟล์ต่อหนึ่งรูป มีแต่การจัดวาง
+    logos/                   ← โลโก้ผลิตภัณฑ์ + colors.json
+```
+
+ให้คัดลอกทั้งโฟลเดอร์ [`assets/svg-engine/`](../assets/svg-engine/) ไปเป็น `_src/` แล้วเริ่มงาน — [`d01.py`](../assets/svg-engine/d01.py) เป็นรูปตัวอย่างที่เรนเดอร์ได้จริง
+
+---
+
+## 3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง
+
+เส้นเฉียงทำให้อ่านยาก แต่การดัดเส้นทีหลังไม่ช่วย **ต้องแก้ที่ตำแหน่ง**
+
+```python
+CA,CB,CC,CD,CE,CF = 178,452,678,896,1080,1312   # คอลัมน์
+R1,R2,R3          = 288,458,624                  # แถว ห่างกัน ~170
+```
+
+ทุกกล่องอยู่บนจุดตัดของคอลัมน์กับแถว และไม่มีตัวไหนหลุดกริด
+เมื่อทุกจุดอยู่บนเส้นเดียวกัน เส้นเชื่อมก็ตั้งฉากได้เองโดยไม่ต้องดัด
+
+### กฎจุดกึ่งกลาง
+
+ตัวที่รับหลายทางต้องอยู่**กึ่งกลางของทางเหล่านั้น** ไม่ใช่เกาะแถวใดแถวหนึ่ง
+และถ้าส่งต่อหลายทาง ก็ต้องอยู่กึ่งกลางของทางที่ส่งออกด้วย
+
+ให้ใช้**จุดรวมเดียวและจุดแยกเดียว** เพื่อให้เส้นสมมาตร
+
+```python
+RM = (R1+R2)//2      # Nginx อยู่กึ่งกลางของสองแถวที่รับเข้ามา
+J1, J2 = CB-74, CB+86
+
+flow([(CA+34,R1),(J1,R1),(J1,RM),(CB-30,RM)])   # เข้าจากบน
+flow([(CA+34,R2),(J1,R2),(J1,RM),(CB-30,RM)])   # เข้าจากล่าง
+flow([(CB+30,RM),(J2,RM),(J2,R1),(CC-30,R1)])   # ออกขึ้นบน
+flow([(CB+30,RM),(J2,RM),(J2,R2),(CC-30,R2)])   # ออกลงล่าง
+```
+
+### ช่องเดินสาย
+
+เส้นที่ต้องข้ามกริด **ห้ามวิ่งทับแถวที่มีกล่อง** ให้จองช่องว่างไว้เฉพาะ
+
+```python
+TB = 238        # ช่องบน — ห่างจากขอบโซนอย่างน้อย 36
+MB = R3-48      # ช่องกลาง — ระหว่างแถว
+```
+
+---
+
+## 4 · เส้นเชื่อม
+
+เส้นตั้งฉากทั้งหมดและมุมโค้งรัศมี 14 — จุดนี้ทำให้ดูประณีตขึ้นมากโดยไม่เสียความชัดเจน
+`ref.flow(pts, dashed=False, arrow=True)` คำนวณมุมโค้งให้เอง
+
+**หัวลูกศรต้องจบที่ขอบไอคอน ไม่ใช่ที่ป้ายชื่อ** — เช่น `CD-30` เมื่อไอคอนกว้าง 46
+
+---
+
+## 5 · ป้ายบนเส้น — สองบทบาทเท่านั้น
+
+| บทบาท | สี | ใช้กับ |
+|---|---|---|
+| ปกติ | เฉดอ่อนของ `ACCENT` | สิ่งที่ไหลผ่านเส้นตามปกติ |
+| ข้อยกเว้น | `EXCEPT_HUE` | ทางที่ไม่ผ่านประตูหน้า · กรณีพิเศษ |
+
+**ข้อยกเว้นมีได้ป้ายเดียวต่อรูป** ถ้ามีตั้งแต่ 2 ป้าย แปลว่าไม่มีป้ายไหนเด่นจริง
+
+ป้ายบอกว่า**อะไรไหลผ่าน** เช่น `SQL` `/api/` `DICOM 11112` ไม่ใช่ `เชื่อมต่อ`
+
+---
+
+## 6 · โซน
+
+โซนเป็นกรอบพื้นสีอ่อนมาก ส่วนป้ายชื่อเป็นแคปซูลพื้นขาวคร่อมเส้นขอบและมีจุดสีนำหน้า
+
+```python
+zone(x, y, w, h, "ห้อง Server ของโรงพยาบาล", "physical")
+```
+
+| ชนิด | เส้น | ความหมาย |
+|---|---|---|
+| `physical` | ทึบ | ขอบเขตของจริงทางกายภาพ — ห้อง อาคาร เครื่อง |
+| `logical` | ประ | ขอบเขตเชิงตรรกะ — Docker Compose · namespace · VPC |
+| `outside` | ประ | นอกระบบที่เราดูแล |
+
+ผู้อ่านจะเห็นทันทีว่าอันไหนมีอยู่จริง และซ้อนโซนได้ไม่เกิน 3 ชั้น
+
+---
+
+## 7 · ไอคอนและโลโก้
+
+ไอคอน**ลอยบนพื้น ไม่มีกรอบ ไม่มีไทล์** ส่วนชื่อและคำอธิบายอยู่ใต้ภาพ
+
+```python
+unit(cx, cy, "Nginx", "ประตูเดียวที่เข้าระบบได้", slug="nginx")
+#  มี logos/<slug>.svg → ใช้โลโก้จริง เติมสีจาก colors.json
+#  ไม่มี              → ใช้สัญลักษณ์เส้นที่ออกแบบเอง
+```
+
+ค่าที่ใช้ได้จริง: ไอคอน 46 · ชื่อ 11.5 ตัวหนา ห่างจากกึ่งกลาง `size/2+20` · คำอธิบาย 10 ห่าง `size/2+35`
+
+โลโก้เอามาจากคลังไอคอนของ skill นี้ ([icons.md](icons.md)) ให้รัน `python assets/find-icon.py --group brands <ชื่อ>` จากโฟลเดอร์ `diagram-figures/` แล้ว `--copy` ไปไว้ใน `_src/logos/`
+Simple Icons ให้ SVG สีเดียว `viewBox 0 0 24 24` และมาพร้อม `colors.json` ที่เก็บรหัสสีทางการของแต่ละแบรนด์
+
+### เรื่องเครื่องหมายการค้า — ห้ามข้าม
+
+- โลโก้เป็นของเจ้าของ ใช้เพื่ออ้างถึงตัวผลิตภัณฑ์ในผังได้
+  แต่**ห้ามดัดแปลงรูปทรง ห้ามยืดบีบ และห้ามทำให้ดูเหมือนเจ้าของมารับรอง**
+- ถ้าตัวไหนไม่มีไฟล์โลโก้ ให้ใช้สัญลักษณ์แทน แล้ว**ระบุชื่อตัวนั้นไว้ในหมายเหตุท้ายรูป**
+- อย่าไปดาวน์โหลดโลโก้ใหม่มาเอง ให้ใช้จากชุดที่มีอยู่ หรือให้ผู้ใช้หาจากหน้า brand ของโครงการนั้น
+
+---
+
+## 8 · เรนเดอร์
+
+```bash
+pip install playwright && playwright install chromium
+python render.py d01.svg ../01-architecture.png 1400 860
+```
+
+เรนเดอร์ที่ 2 เท่าเสมอ เพราะ 1 เท่าได้ภาพเบลอเมื่อขยายในสไลด์
+
+ภาษาไทยต้องมีฟอนต์ไทยในเครื่องที่เรนเดอร์ แล้วประกาศไว้ใน `font-family` ของ `<svg>`
+**อย่าใช้ Python Imaging Library (PIL) วาดข้อความไทยปนอังกฤษ** เพราะจะได้กล่องสี่เหลี่ยมแทนตัวอักษร
+
+---
+
+## 9 · วงจรตรวจงาน — ห้ามข้าม
+
+เรนเดอร์ → เปิดไฟล์ภาพดูจริง → แก้ → เรนเดอร์ใหม่ จนกว่าจะสะอาด
+**6 ข้อนี้เจอซ้ำทุกครั้ง ให้ตรวจทุกรอบ:**
+
+1. **ป้ายบนเส้นทับไอคอนหรือชื่อ** — ย้ายไปกึ่งกลางช่วงที่ยาวที่สุด หรือย้ายไปบนขาตั้ง
+2. **เส้นที่ออกจากไอคอนตัดคำอธิบายของตัวเอง** — เริ่มเส้นที่ `cy+58` ไม่ใช่ `cy+32`
+3. **ขอบโซนตัดคำอธิบายแถวล่างสุด** — ขอบล่างโซนต้อง ≥ `R_ล่างสุด + 58 + 24`
+4. **ข้อความกำกับโซนนั่งทับเส้นขอบ** — รวมกับชื่อในแคปซูลเดียว
+5. **หัวลูกศรไปจบที่ป้ายชื่อ ไม่ใช่ที่ไอคอน** — ให้จบที่ขอบไอคอน
+6. **ข้อความล้นกรอบ** — ไทย 11.5px ≈ 6.0 px/ตัว · หัวเรื่อง 15px ≈ 7.5 px/ตัว
+   ถ้าที่ไม่พอ ให้ตัดคำ **อย่าลดขนาดตัวอักษร**
+
+---
+
+## 10 · ค่าคงที่ที่ใช้ได้จริง
+
+```
+ความกว้าง 1400 · ขอบ 56
+หัวเรื่องกลางหน้า 22 · คำอธิบายใต้หัว 12.5
+ชื่อหน่วย 11.5 ตัวหนา · คำอธิบาย 10 · ป้ายบนเส้น 10.5
+เส้นเชื่อม 1.6 · ขอบโซน 1.4 · รัศมีมุมโค้ง 14 · ป้ายสูง 21
+```
+
+---
+
+## 11 · แถบสัญลักษณ์
+
+ทุกรูปปิดท้ายด้วยแถบเดียวที่บอกว่ากรอบแต่ละแบบคืออะไร และป้าย 2 สีต่างกันตรงไหน
+แล้วต่อด้วยหมายเหตุ 2–4 บรรทัด ซึ่งรวมบรรทัดเรื่องเครื่องหมายการค้า และการอ้างถึงรูปอื่นที่เกี่ยวข้อง
+
+---
+
+## ตัวย่อ
+
+- **SVG** — Scalable Vector Graphics
+- **PNG** — Portable Network Graphics
+- **PIL** — Python Imaging Library
+
+
+## reference: icons.md
+
+# คลังไอคอน — ใช้ร่วมกันทั้งโครง HTML และ SVG/Python engine
+
+**ไอคอนมีให้แล้ว 205 ตัวใน `assets/icons/`** ไม่ต้องติดตั้งอะไรเพิ่ม —
+เป็น PNG พื้นโปร่ง 160×160 ซึ่งเป็นไอคอนทางการของผู้ให้บริการและเครื่องมือ แบ่งเป็น 9 กลุ่ม
+
+| โฟลเดอร์ | มีอะไร |
+|---|---|
+| `icons/aws/` | 39 — EC2 · RDS · S3 · Lambda · ELB · Route 53 · CloudFront · SQS · SNS · IAM · CloudWatch … |
+| `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
+| `icons/gcp/` | 21 — Compute Engine · GKE · Cloud Run · BigQuery · Pub/Sub · Firestore … |
+| `icons/k8s/` | 16 — Pod · Deployment · Service · Ingress · ConfigMap · Secret · Node … |
+| `icons/data/` | 18 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
+| `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
+| `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
+| `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
+| `icons/app/` | 37 — Angular · React · .NET · Spring · Python · LINE · Slack · Stripe · ผู้ใช้ … |
+
+รายชื่อทั้งหมดอยู่ใน [`assets/icons/INDEX.md`](../assets/icons/INDEX.md) และเปิด [`assets/icons/contact-sheet.html`](../assets/icons/contact-sheet.html) เพื่อดูรูปทั้งหมดในหน้าเดียว
+
+**ถ้าต้องการตัวที่ไม่มีใน 205 ตัวนี้** ให้ค้นในคลังเต็ม `assets/tech-icons.zip` (8,602 ไอคอน · 5 กลุ่ม) ด้วย [`find-icon.py`](../assets/find-icon.py) ซึ่งไม่ต้องติดตั้งอะไรและไม่ต้องแตกทั้งก้อน
+
+| กลุ่ม | มีอะไร |
+|---|---|
+| `cloud/` | 1,986 PNG · AWS · Azure · Google Cloud · IBM · Oracle · Alibaba · DigitalOcean · Firebase … |
+| `platform/` | 471 PNG · ฐานข้อมูล · คิว · CI/CD · เฝ้าระวัง · Kubernetes · ภาษาโปรแกรม · GIS |
+| `brands/` | 3,461 SVG สีเดียว · โลโก้แบรนด์ + รหัสสีทางการใน `colors.json` |
+| `devtools/` | 572 SVG มีสี · โลโก้เครื่องมือนักพัฒนา |
+| `ui/` | 2,112 SVG ไอคอนเส้นทั่วไป (Lucide) ไม่ใช่โลโก้ |
+
+```bash
+python assets/find-icon.py kafka redis                       # ค้นชื่อ
+python assets/find-icon.py --group ui user                    # ค้นเฉพาะกลุ่ม
+python assets/find-icon.py --copy cloud/aws/compute/ec2.png brands/docker.svg --to docs/figures/icons
+python assets/find-icon.py --colors docker                    # สีทางการของโลโก้
+```
+
+ให้ดึงมาเฉพาะตัวที่ใช้แล้ววางไว้ข้างไฟล์รูป ห้ามแตกทั้งคลังลงโปรเจกต์ สัญญาอนุญาตของคลังคือ MIT · CC0 · ISC (ดู `--groups`) แต่โลโก้ยังเป็นเครื่องหมายการค้าของเจ้าของ
+
+> **เรื่องสัญญาอนุญาต** — ชุดไอคอนสถาปัตยกรรมของ AWS · Azure · Google Cloud
+> เผยแพร่มาเพื่อใช้วาดผังสถาปัตยกรรมโดยเฉพาะ จึงใช้ในเอกสารข้อเสนอได้
+> สิ่งที่ทำไม่ได้คือใช้โลโก้ในลักษณะที่ทำให้เข้าใจว่าผู้ให้บริการรับรองหรือร่วมงานด้วย
+> และใช้เป็นส่วนหนึ่งของแบรนด์ตัวเอง ส่วนถ้าไม่มีไอคอนทางการของเครื่องมือนั้น ให้วาดไอคอนเส้นเองตาม [SKILL.md](../SKILL.md) ข้อ 6
+
+
+## reference: layout-cloud.md
+
+# โครง `figure-cloud.html` — ผังคลาวด์พร้อมโลโก้ผู้ให้บริการ
+
+โครงนี้ตอบคำถาม "ใช้บริการอะไรของคลาวด์บ้าง" ไฟล์โครงอยู่ที่ [`assets/figure-cloud.html`](../assets/figure-cloud.html)
+
+ใช้เมื่อผู้อ่านคาดหวังจะเห็นไอคอน Amazon Web Services (AWS) · Azure · Google Cloud ·
+Kubernetes ของจริง แบบผังอ้างอิงที่ผู้ให้บริการเผยแพร่ ไอคอนหาได้จากคลังตาม [icons.md](icons.md)
+
+```html
+<div class="unit"><img src="icons/aws/ec2.png" alt="">
+  <div class="name">Web Server</div><div class="desc">AZ-1</div></div>
+```
+
+**กติกาเฉพาะโครงนี้:**
+
+- **สายที่ข้ามขอบเขต ให้ออกจากขอบของกล่องขอบเขต** (`n-region`) ไม่ใช่จากกล่องข้างใน
+  — เพราะถ้าต่อจากกล่องข้างใน เส้นจะพาดทะแยงทับทุกอย่างที่ขวางทาง
+- **เส้นประ = ขอบเขตที่ผู้ให้บริการจัดการให้** ส่วนเส้นทึบสีส้ม = เครื่องที่เราดูแลเอง
+  และให้ใส่ความหมายไว้ในคำอธิบายสัญลักษณ์เสมอ
+- ไอคอนแสดงเปล่า ๆ ไม่ต้องมีกรอบ เพราะโลโก้มีสีและรูปทรงของตัวเองอยู่แล้ว
+- ชื่อบริการใช้ชื่อทางการ (`Amazon RDS`) ส่วนคำอธิบายใต้ชื่อเป็นภาษาไทยได้
+
+
+## reference: layout-context.md
+
+# โครง `figure-context.html` — ระบบกับโลกภายนอก
+
+ตอบคำถาม "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" (C4 ระดับ 1) ไฟล์โครงอยู่ที่ [`assets/figure-context.html`](../assets/figure-context.html)
+
+```
+┌─ หัวรูป ────────────────────────────────────────────────────────┐
+│  ผู้ใช้งาน (แถบนอน)   →   ระบบที่อธิบาย (การ์ดใหญ่)   ←   ระบบภายนอก  │
+│  ─ เจ้าหน้าที่           ─ ชื่อ + คำขยาย                ─ external system │
+│  ─ แพทย์                ─ หน้าที่ 3-6 ข้อ               ─ ชื่อ + สถานะ    │
+│  ─ ผู้ดูแล               ─ ป้ายข้อจำกัด                                │
+├─ คำอธิบายสัญลักษณ์ ─────────────────────────────────────────────┤
+│  เชิงอรรถ — ความหมายเส้นประ · ตัวย่อทั้งหมด · รูปถัดไป              │
+└────────────────────────────────────────────────────────────────┘
+```
+
+- **ผู้ใช้งานอยู่ซ้าย ส่วนระบบภายนอกอยู่ขวา** และไม่ปนกัน เพราะคนกับเครื่องเป็นคนละชนิด
+- **หน้าที่ในการ์ดกลางมี 3 ถึง 6 ข้อ** ถ้าเกินนี้ แปลว่ากำลังเขียน SRS ไม่ใช่วาดรูป
+- **ระบบภายนอกที่ยังไม่ได้เชื่อม** ให้ใช้เส้นประ (`planned:true`) แล้วเขียนไว้ในการ์ดว่าอยู่ในแผนเวอร์ชันไหน
+  — เพราะรูปที่วาดเฉพาะของที่มีแล้วจะถูกถามซ้ำทุกรอบว่า "แล้วเชื่อม HIS หรือยัง"
+- **มีคำอธิบายสัญลักษณ์เสมอ** เมื่อรูปทรงหรือเส้นสื่อความหมาย
+- **ตัวย่อเขียนเต็มที่เชิงอรรถ** เพราะผู้อ่านฝั่งลูกค้าไม่รู้ว่า SEG คืออะไร
+
+
+## reference: layout-deployment.md
+
+# โครง `figure-template.html` — deployment · ข้างในเครื่อง
+
+ตอบคำถาม "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" ไฟล์โครงอยู่ที่ [`assets/figure-template.html`](../assets/figure-template.html)
+
+โครงนี้มี 3 คอลัมน์ เรียงซ้ายไปขวาตามทิศที่ข้อมูลไหล:
+
+```
+┌─ หัวรูป ───────────────────────────────────────────────┐
+│  ชื่อ + คำขยาย                    เลขรูป · เวอร์ชัน · เจ้าของ  │
+├────────────┬──────────────────────────┬────────────────┤
+│ นอกระบบ    │  ⬅ กล่อง .focus           │ ปลายทาง        │
+│ คน อุปกรณ์  │  สิ่งที่เอกสารนี้อธิบาย       │ ข้อบังคับ       │
+│ ระบบอื่น    │  ซ้อนได้อีก 1 ชั้น          │ ของที่ไหลออก    │
+├────────────┴──────────────────────────┴────────────────┤
+│ เชิงอรรถ — รูปอื่นที่เกี่ยวข้อง · ที่มาของไอคอน              │
+└────────────────────────────────────────────────────────┘
+```
+
+**ซ้อนกล่องได้ไม่เกิน 3 ชั้น** คือ คอลัมน์ → กล่องใหญ่ → กล่องย่อย
+ถ้ามีชั้นที่ 4 แปลว่ารูปนี้ตอบ 2 คำถาม ให้แยกเป็น 2 รูป
+
+**กล่อง `.focus` มีได้กล่องเดียวต่อรูป** ถ้ามี 2 กล่อง แปลว่ายังไม่ได้ตัดสินใจว่ารูปนี้เรื่องอะไร
+
+
+## reference: layout-flow.md
+
+# โครง `figure-flow.html` — ข้อมูลไหลผ่านอะไร ตามลำดับไหน
+
+ตอบคำถาม "ข้อความ 1 ชิ้น (คำขอ · งาน · เอกสาร) วิ่งผ่านอะไรบ้าง ตามลำดับไหน" ไฟล์โครงอยู่ที่ [`assets/figure-flow.html`](../assets/figure-flow.html) · ตัวอย่างที่เรนเดอร์แล้ว [`assets/figure-flow-example.png`](../assets/figure-flow-example.png)
+
+```
+┌─ หัวรูป ──────────────────────────────────── ①–⑥ ความหมายเลขลำดับ ┐
+│ ┌ผู้ใช้┐   ┌ช่องทาง┐    ┌ เครื่องที่รัน (เทา) ─────────┐   ┌ บริการภายนอก ┐ │
+│ │ คน  │①→│ เว็บ   │②→ │ ┌ ระบบ .focus (สีหลัก) ┐ │③→ │ AI · API     │ │
+│ │ คน  │①→│ LINE  │②→ │ │ ชั้น · หน้าที่         │ │   └─────────────┘ │
+│ │ คน  │ →│ หลังบ้าน│ → │ │ ชั้น · หน้าที่         │ │④→ ┌ ข้อมูล ──────┐ │
+│ └────┘   └──────┘    │ └──────────────────────┘ │   │ ไฟล์ · DB    │ │
+│                       └─────────────────────────┘   └─────────────┘ │
+├─ เชิงอรรถ: ความหมายพื้นสีอ่อน · เส้นประ · ตัวย่อทั้งหมด ───────────────┤
+```
+
+## สี — มาจากสีหลักของโปรเจกต์ตัวเดียว
+
+- แก้ `--accent` ใน `:root` ที่เดียว แล้วเฉดเข้ม พื้นอ่อน และสีตัวหนังสือบนพื้นสีหลักคำนวณให้เอง (สีสว่างเช่นเหลือง สคริปต์จะสลับตัวหนังสือเป็นสีเข้มให้อ่านออก)
+- หาสีหลักตามลำดับใน SKILL.md ข้อ 5 · ลองสีอื่นโดยไม่แก้ไฟล์: เปิด `figure-flow.html#accent=0F8B8D`
+- **สีหลักใช้กับ 4 อย่างเท่านั้น:** ขอบกล่อง `.focus` · ป้ายชื่อระบบ · เส้นทางข้อมูลกับเลขลำดับ · ชื่อโปรเจกต์ในหัวรูป
+- โครงที่เหลือเป็นเทากลาง — กลุ่มเส้นประ กล่องเครื่องที่รัน การ์ด ส่วนไอคอนใช้ 7 สีความหมายเดิม (ข้อ 5)
+
+## กติกา
+
+- **ทิศเดียว ซ้าย → ขวา**: ผู้ใช้ → ช่องทาง → ระบบ → ของที่ระบบเรียกใช้ ถ้ามีเส้นย้อนกลับ ให้บอกในคำอธิบายชั้น (เช่น "push คำตอบกลับ LINE") แทนการลากเส้นย้อน
+- **เลขลำดับ = เส้นทางของ 1 ข้อความ** ไม่ใช่เลขเส้น เส้นที่เกิดพร้อมกันใช้เลขเดียวกัน (สองช่องทางเข้า = ② ทั้งคู่) · เส้นทางแยกที่ไม่ได้เกิดทุกครั้ง (เช่นอ่านภาพ) ไม่ต้องมีเลข
+- **ชั้นในกล่องระบบ 5–9 ชั้น** เรียงตามลำดับที่ข้อความผ่าน · ชื่อชั้นสั้น หน้าที่ 1–2 บรรทัด ถ้าเกิน 9 ชั้น แยกเป็นรูปข้างในระบบอีกรูป
+- **ชั้นเน้น `.guard` ไม่เกิน 2 ชั้น** และเขียนความหมายไว้ที่เชิงอรรถ
+- **เส้นต่อเข้าชั้นที่ทำงานนั้นจริง** ไม่ใช่ขอบกล่องใหญ่ — เส้นวาดอยู่บนกล่อง หัวลูกศรจึงถึงชั้นข้างใน
+- **เส้นที่ใช้ช่องว่างเดียวกันต้องไม่ตัดกัน** — เลื่อนช่วงหักด้วย `mx` (เส้นที่ปลายอยู่สูงกว่าให้ `mx` น้อยกว่า) แล้วเรนเดอร์ดูทุกครั้ง
+- ป้ายบนเส้นเป็นคำสั้น 1–3 คำบอกว่าอะไรไหลผ่าน (`HTTPS` · `webhook` · `ถาม LLM`) · ต้นเส้นมีเลขลำดับ ให้ใช้ `lp:"start"` เมื่อช่วงท้ายสั้นเกิน
+
+
+## reference: pitfalls.md
+
+# กับดักที่เจอจริง — โครง HTML
+
+อาการที่เจอซ้ำเมื่อทำรูปด้วยโครงใน `assets/` พร้อมสาเหตุและทางแก้ ส่วนกับดักของ SVG/Python engine อยู่ใน [engine-svg-python.md](engine-svg-python.md) ข้อ 9
+
+| อาการ | สาเหตุ · ทางแก้ |
+|---|---|
+| หัวลูกศรหายทั้งรูป | สคริปต์ลบ `path` ทุกตัวก่อนวาดใหม่ รวมถึงสามเหลี่ยมหัวลูกศรที่อยู่ใน `<defs>` — ลบเฉพาะ `path.wire` (โครงแก้ไว้แล้ว) |
+| เส้นลากไปผิดกล่อง | `id` ไปติดกล่องอื่นที่หน้าตาเหมือนกัน — เปิด console ดู `wire: ไม่พบ id` และตรวจว่า `id` ไม่ซ้ำ |
+| เส้นจ่อกลางกล่องสูง แล้วพาดทับของข้างใน | ใส่ `tp` / `fp` ให้เส้นเข้าใกล้ขอบบน |
+| สระไทยหาย | เครื่องไม่มีฟอนต์ไทยในรายการ — ติดตั้ง Noto Sans Thai หรือเพิ่มฟอนต์ที่มีเข้าไปในรายการ |
+| ภาพเบลอในสไลด์ | เรนเดอร์ด้วยตัวคูณ 1 |
+| รูปมีขอบขาวเยอะ | ถ่ายทั้งหน้าแทนที่จะถ่ายเฉพาะ `.sheet` |
+| แก้ข้อความแล้วเส้นหลุด | เขียนพิกัดเส้นตายตัวแทนที่จะใช้ `WIRES` |
+| ป้ายบนเส้นทับกล่อง หรือบังเส้นจนมองไม่เห็น | ป้ายกว้างกว่าช่องว่างระหว่างคอลัมน์ — เพิ่ม `gap` หรือตัดคำในป้ายให้สั้นลง |
+| ชื่อกล่องภาษาไทยตกบรรทัดสอง | คอลัมน์แคบไป — เพิ่มความกว้างคอลัมน์นั้น อย่าลดขนาดตัวอักษร |
+| ใช้ไอคอนเป็นไฟล์ภาพแล้วเส้นลากผิดตำแหน่งทั้งรูป | สคริปต์คำนวณก่อนรูปโหลดเสร็จ — เรียก `draw()` ใน `window.onload` ไม่ใช่ตอนอ่านสคริปต์ (`figure-cloud.html` ทำไว้แล้ว) |
+| เส้นหักมุมใน `figure-flow.html` ตัดกันเอง | หลายเส้นใช้ช่องว่างเดียวกัน — ตั้ง `mx` ให้เส้นที่ปลายอยู่สูงกว่ามีค่าน้อยกว่า แล้วเรนเดอร์ดูใหม่ |
+| ลูกศรหายเข้าไปใต้กล่องระบบ | ชั้น `.wires` ไม่มี `z-index` — โครง flow ตั้งไว้แล้ว ถ้าก๊อปไปใช้โครงอื่นต้องตั้งตาม |
+| รูปออกมาเป็นสีของรูปตัวอย่าง | ลืมแก้ `--accent` — หาสีหลักของโปรเจกต์ตาม SKILL.md ข้อ 5 ก่อนเรนเดอร์ |
+| เส้นพาดทะแยงทับทั้งรูป | ต่อเส้นจากกล่องข้างในกล่องขอบเขต — ต่อจากขอบของกล่องขอบเขตแทน |
+
+
+---
+
+# skill: project-doc-set
+
+Use when a new project needs its document set decided (which docs, order, readers, where docs, mockups and QA live).
+
+# ชุดเอกสารโปรเจกต์
+
+> **กฎข้อเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่า **ใครอ่าน** และ **อ่านแล้วตัดสินใจอะไร**
+> ถ้าตอบไม่ได้ ก็ไม่ต้องเขียน
+
+---
+
+## เมื่อไหร่ใช้ skill นี้
+
+เปิดโปรเจกต์ใหม่แล้วต้องตัดสินว่ามีเอกสารอะไร · เอกสารกระจัดกระจายไม่รู้ว่าอันไหนตัวจริง · ลูกค้าถามว่าส่งมอบอะไรบ้าง · จะเขียนเอกสารแต่ไม่แน่ใจว่าต้องมีอะไรก่อน
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| สถานการณ์ | ใช้แทน |
+|---|---|
+| โครงโฟลเดอร์ของ**โค้ด** (รวม `docs/` ในโค้ดของแบบ A) · README · CHANGELOG · linter | `project-bootstrap` |
+| ตั้ง**ชื่อไฟล์** และเลขเวอร์ชันของเอกสาร | `document-naming` |
+| ลงมือเขียนเอกสารชิ้นใดชิ้นหนึ่ง | skill ของเอกสารนั้น (ตารางข้อ 4) |
+| จัดรูปแบบหน้าเอกสารให้สวย | `branded-document-design` |
+
+---
+
+## 1 · เอกสารอยู่ในหรืออยู่นอก repo
+
+**ตัดสินข้อนี้ก่อน** (ย้ายทีหลังต้องแก้ลิงก์ทั้งโปรเจกต์) · **ค่าเริ่มต้นคือแบบ B** แม้เอกสารเป็น markdown ล้วน โค้ดอยู่ใน `<project-name>/` (ตัวพิมพ์เล็กคั่น `-`) · แบบ A เมื่อผู้ใช้ขอเท่านั้น
+
+- **แบบ B** (เอกสารนอก repo) — ใช้กับทุกขนาดชุด (S · M · L) · `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็นไม่ปนใน pull request · ผังรากอยู่ข้างล่าง (ข้อนี้คือเจ้าของผังราก)
+- **แบบ A** (เอกสารใน repo) — เฉพาะเมื่อผู้ใช้ขอ และเอกสารเป็น markdown ล้วน · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · รากเหมือนแบบ B แต่ไม่มี `docs/` ที่ราก — `docs/` อยู่ในโฟลเดอร์โค้ด ผังข้างในเป็นของ `project-bootstrap` ข้อ 1
+- แบบ A ที่โตจนมีเอกสารส่งมอบ → ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว** เอกสารที่อยู่ 2 ที่คือมี 2 เวอร์ชัน
+
+### โครงของแบบ B
+
+```
+<ชื่อโปรเจกต์>/
+├─ ref/                 ของที่ได้รับมา — TOR · บันทึกประชุม · ภาพหน้าจอระบบเดิม · ไฟล์จากลูกค้า  **อ่านอย่างเดียว ห้ามแก้**
+├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
+│  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
+│  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
+│  ├─ decisions/        ADR-NNNN-<slug>.md หนึ่งการตัดสินใจต่อไฟล์  [ทางเลือก]
+│  ├─ runbook-<เรื่อง>.md  คู่มือเมื่อระบบมีปัญหา ไฟล์ละเรื่อง        [ทางเลือก]
+│  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
+├─ mockup/              .html ที่เปิดแล้วกดได้จริง
+├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
+├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
+├─ _to_delete/          ของชั่วคราวทุกอย่าง
+├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
+│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · HISTORY.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
+└─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
+```
+
+**ไฟล์ของ SuperUser — ข้อนี้คือที่เดียวที่กำหนด ไฟล์อื่นอ้างมาที่นี่:** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
+
+**ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
+
+**ข้อยกเว้นของราก:** `.sandbox/` อยู่ที่รากได้เมื่อใช้ `docker-sandbox` · `AGENTS.md` / `GEMINI.md` ตามเงื่อนไขข้างบน — ทุกข้อยกเว้นต้องประกาศใน README ของโฟลเดอร์โค้ด
+
+**โฟลเดอร์สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:** `ref/` เมื่อได้ไฟล์จากลูกค้าหรือระบบเดิม (ห้ามปนใน `docs/`) · `docs/figures/` เมื่อมีรูปวาดเองในเอกสารส่งมอบ (ไม่งั้นรูปติดอยู่ใน `.docx` แก้ไม่ได้) · `docs/decisions/` เมื่อมีการตัดสินใจที่ต้องอธิบายทีหลัง · `docs/research/` เมื่อผู้ใช้อยากได้แอปแบบที่มีอยู่ · `qa/` เมื่อมี test case (test case อยู่ที่นี่เสมอ `docs/test-plan.md` มีแค่แผน) · `assets/` เมื่อมีโลโก้หรือไอคอน
+
+**โปรเจกต์แบบ ecosystem** (sub-project ≥ 2 ตัว แต่ละตัวมีเอกสารชุดของตัวเอง) → โฟลเดอร์ชื่อ `ecosystem/` เสมอ (ห้าม `projects/` `modules/` `apps/`) · `ecosystem/<รหัส>-<SUB>/` มี `docs/` `mockup/` `qa/` และ repo ของตัวเอง · เอกสารที่ครอบทุกตัวอยู่ `docs/` ที่รากที่เดียว · ผังและกฎเต็ม → [`references/ecosystem.md`](references/ecosystem.md)
+
+
+**กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
+
+- **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
+- **ไฟล์ต้นทางของรูปห้ามหาย** เพราะถ้าปีหน้าต้องแก้รูปแล้วเหลือแต่ PNG ก็ต้องวาดใหม่ทั้งใบ
+- **ทุกปุ่มใน mockup ต้องกดได้จริง** เพราะปุ่มหลอกทำให้รีวิวผิด
+- **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
+- **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
+- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ (แม่แบบใน `project-bootstrap` → `assets/starter-files.md`)
+
+---
+
+## 2 · เลือกชุดเอกสารตามขนาดงาน
+
+ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
+
+**S** ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น — **M** 1–3 เดือน · ผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ — **L** > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา
+
+### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
+
+| เอกสาร | รูปแบบ | ผู้อ่าน | S | M | L |
+|---|---|---|:-:|:-:|:-:|
+| Project Plan | `.docx` | ผู้ว่าจ้าง · ทีม | ○ | ● | ● |
+| SRS | `.docx` | dev · ผู้ว่าจ้าง | ○ | ● | ● |
+| Architecture | `.docx` | dev · ops | ○ | ● | ● |
+| Test Plan | `.docx` | QA · ผู้ว่าจ้าง | ○ | ● | ● |
+| คู่มือผู้ใช้ (`MAN`) | `.docx` → `.pdf` | ผู้ใช้ปลายทาง | ○ | ● | ● |
+| FSD | `.docx` | dev · QA | ○ | ○ | ● |
+| BRD | `.docx` | ฝ่ายธุรกิจ | ○ | ○ | ● |
+| Document Checklist | `.docx` | ทุกฝ่าย | ○ | ○ | ● |
+| Test Cases | `.xlsx` | QA | ○ | ○ | ● |
+
+● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
+**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** — ถูกแล้ว
+
+---
+
+### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
+
+เป็น markdown ทั้งหมด และ**ขึ้นกับว่าโปรเจกต์มีอะไร** ไม่ใช่ขนาดงาน · ตารางเต็ม (ไฟล์ · ตอบคำถามอะไร) → [`references/technical-docs.md`](references/technical-docs.md)
+
+- **เสมอ:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **มีเงื่อนไข:** USER-STORIES และ `docs/sprints/sprint-NN.md` (ทำงานเป็น sprint) · AGENT-LOOP (agent เขียนโค้ดเป็นรอบ) · API-SPEC (มี API ที่คนอื่นเรียก) · DATA-DICTIONARY (มีฐานข้อมูล) · EVALUATION-POLICY และ PROMPT-LIBRARY (ใช้ LLM) · `docs/decisions/ADR-NNNN-<slug>.md` (การตัดสินใจที่จะถูกถามซ้ำ) · `docs/runbook-<เรื่อง>.md` (ระบบรันจริงและมีคนอยู่เวร)
+- ตัวที่คนลืมบ่อยสุดคือ 4 ตัวเรื่อง LLM · API · ฐานข้อมูล แล้วต้องถาม agent ซ้ำทุกรอบว่า prompt ตัวไหนคือตัวจริง
+
+---
+
+## 3 · ลำดับการเขียน
+
+**สายส่งมอบ** — ห้ามข้ามขั้นที่อยู่ในชุดของขนาดงานนั้น (ขั้นที่ไม่อยู่ในชุด เช่น BRD · FSD ของชุด M ให้ข้ามไป)
+
+```
+Project Plan ─► BRD ─► SRS ─┬─► mockup
+                            └─► Architecture ─► FSD
+                                                 │
+              User Guide ◄─ Test Cases ◄─ Test Plan
+```
+
+**ชิ้นถัดไปเขียนต่อบนฉบับ DRAFT ของชิ้นก่อนหน้าได้** ข้อที่ยังไม่ยืนยันใส่ `(รอยืนยัน)` ไว้ทั้งสองชิ้น · ห้ามเปลี่ยนสถานะชิ้นถัดไปเป็น APPROVED ก่อนชิ้นก่อนหน้า เพราะถ้าชิ้นต้นทางเปลี่ยนต้องรื้อทั้งสาย
+ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
+
+**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
+
+---
+
+## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
+
+ตารางเต็ม (agent · skill ต่อเอกสาร 16 ชนิด) → [`references/technical-docs.md`](references/technical-docs.md) · หลัก ๆ: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
+
+---
+
+## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
+
+- รูปใน README · PR · เอกสารในทีม → Mermaid (`software-diagrams`) ฝังใน `.md`
+- รูปในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ → `diagram-figures` เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
+
+**หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
+
+---
+
+## 6 · ธีมสีของชุดเอกสาร
+
+ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
+
+```markdown
+<!-- doc-theme: accent=#5B4BE8 -->
+```
+
+`branded-document-design` · `presentation-design` · `diagram-figures`
+อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
+
+**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — มีสีแบรนด์ใช้สีแบรนด์ · ยังไม่มีใช้สีประจำบ้านของ `branded-document-design` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
+ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · สีเทาของเส้นโครงสร้าง · เขียว = ผ่าน / แดง = ไม่ผ่าน
+
+---
+
+## 7 · รายการตรวจก่อนส่งมอบชุดเอกสาร
+
+- [ ] ทุกไฟล์ `.docx` เปิด Navigation Pane แล้ว**เห็นหัวข้อครบ** (ใช้ Heading style จริง ไม่ใช่ตัวหนา)
+- [ ] ทุกเอกสารมีหน้าประวัติการแก้ไข · เลขเวอร์ชัน · วันที่ · ผู้จัดทำ
+- [ ] ทุกรูปมีเลขรูปและถูกอ้างในเนื้อความอย่างน้อย 1 ครั้ง
+- [ ] ไฟล์ต้นทางของทุกรูปอยู่ใน `docs/figures/src/` (ถ้ามีโฟลเดอร์นี้)
+- [ ] เอกสารเชิงเทคนิคที่เข้าเงื่อนไขในข้อ 2.2 มีครบ เช่น ถ้ามี API ต้องมี API-SPEC และถ้าใช้ LLM ต้องมี PROMPT-LIBRARY
+- [ ] ตัวย่อทุกตัวเขียนเต็มครั้งแรกที่ปรากฏ
+- [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
+- [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
+- [ ] `_to_delete/` ว่าง หรือถูกลบไปแล้ว
+
+---
+
+## 8 · Anti-patterns
+
+❌ `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
+
+---
+
+## 9 · ตัวย่อ
+
+ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
+
+---
+
+## 10 · เชื่อมกับ skill อื่น
+
+นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (ส่งมอบ) · `software-diagrams` (ในทีม) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ
+
+
+## reference: ecosystem.md
+
+# โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
+
+อ่านเมื่อโปรเจกต์มี sub-project ตั้งแต่ 2 ตัวและแต่ละตัวมีเอกสารชุดของตัวเอง · กฎย่ออยู่ใน `SKILL.md` ข้อ 1
+
+ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
+**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
+
+```
+<ชื่อโปรเจกต์>/
+├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
+```
+
+- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
+- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
+- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
+- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
+- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
+
+
+## reference: technical-docs.md
+
+# เอกสารเชิงเทคนิค — ตาราง ลำดับเขียน และใครเขียน
+
+อ่านเมื่อเลือกชุดเอกสารเชิงเทคนิค หรือกำลังจะเขียนชิ้นใดชิ้นหนึ่ง · สรุปอยู่ใน `SKILL.md` ข้อ 2.2–4
+
+## เอกสารเชิงเทคนิค (ข้อ 2.2)
+
+กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
+
+| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
+|---|---|---|---|
+| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
+| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
+| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
+| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
+| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
+| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
+| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
+| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
+| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
+| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
+| Runbook | `docs/runbook-<เรื่อง>.md` ไฟล์ละเรื่อง | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
+
+> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
+> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
+
+## สายเทคนิค — เขียนเมื่อไหร่ (ข้อ 3)
+
+| เขียนเมื่อ | เอกสาร |
+|---|---|
+| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
+| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
+| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
+| ตอนออกแบบ endpoint แรก | API-SPEC |
+| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
+| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
+| ก่อนขึ้นระบบจริง | Runbook |
+
+> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
+> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
+
+## ใครเขียนชิ้นไหน ด้วย skill อะไร (ข้อ 4)
+
+| เอกสาร | agent | skill ที่ใช้ |
+|---|---|---|
+| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
+| Project Plan | `project-manager` | `branded-document-design` |
+| BRD · user story | `business-analyst` | `user-story-writer` |
+| SRS | `system-analyst` | `srs-writing` |
+| FSD | `system-analyst` | `fsd-writing` |
+| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
+| ADR | `solution-architect` | `adr-writer` |
+| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
+| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
+| คู่มือผู้ใช้ (`MAN`) | `technical-writer` | `polished-document-style` |
+| Runbook | `devops-engineer` | `incident-runbook-template` |
+| BUILD-PLAN | `project-manager` | `simplicity-first` |
+| AGENT-LOOP | `developer` | `spec-to-code-loop` |
+| API-SPEC | `system-analyst` | `api-conventions` |
+| DATA-DICTIONARY | `system-analyst` | `database-design` |
+| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
+
+
+## reference: writer-templates.md
+
+# แม่แบบของ technical-writer — README · tutorial · API reference · release notes
+
+ย้ายมาจาก agent `technical-writer` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+
+## Standard Outputs
+
+### README Template
+
+```markdown
+# Project Name
+
+> One-line description that fits in a tweet.
+
+[![badges]](#)
+
+**Demo:** [link] · **Docs:** [link] · **Discord:** [link]
+
+---
+
+## ✨ Features
+
+- 🚀 What makes this special — feature 1
+- ⚡ Killer feature 2
+- 🔒 Reassuring feature 3
+
+## 🚀 Quick Start
+
+\`\`\`bash
+npm install package-name
+\`\`\`
+
+\`\`\`typescript
+import { thing } from 'package-name';
+
+const result = thing({ option: 'value' });
+\`\`\`
+
+That's it. You're done.
+
+## 📚 Documentation
+
+- [Getting Started](#) — 10-minute tutorial
+- [How-To Guides](#) — Solve specific problems
+- [API Reference](#) — Full API spec
+- [Concepts](#) — Why and how it works
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](#).
+
+## 📄 License
+
+MIT
+```
+
+### Tutorial Template
+
+```markdown
+# 🎓 Tutorial: Build Your First X in 10 Minutes
+
+> 💡 **What you'll learn:** by the end, you'll have built Y and understand Z.
+
+## What You'll Need
+
+- ✅ Node.js 18+
+- ✅ A free account at example.com
+- ⏱️ 10 minutes
+
+## Step 1: Set Up
+
+Run:
+\`\`\`bash
+npx create-thing my-project
+cd my-project
+\`\`\`
+
+> 💡 **What just happened?** Brief explanation.
+
+You should see:
+\`\`\`
+✓ Project created
+\`\`\`
+
+## Step 2: Configure
+
+...
+
+## Step 3: Run It
+
+...
+
+## ✅ Congratulations!
+
+You've built X. Try these next:
+
+- [Add feature A](#how-to-add-a) (how-to)
+- [Understand B](#concept-b) (explanation)
+- [Full API](#reference) (reference)
+```
+
+### API Reference Template (per endpoint)
+
+```markdown
+## POST `/api/v1/resource`
+
+Create a new resource.
+
+### Authentication
+
+🔒 Required. Bearer token in `Authorization` header.
+
+### Request
+
+\`\`\`http
+POST /api/v1/resource HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "name": "string (required)",
+  "tags": ["string (optional)"]
+}
+\`\`\`
+
+### Parameters
+
+| Field | Type | Required | Description |
+|-------|------|:--------:|-------------|
+| `name` | string | ✅ | Display name, 1-100 chars |
+| `tags` | string[] | ❌ | Up to 10 tags |
+
+### Response: 201 Created
+
+\`\`\`json
+{
+  "id": "res_abc123",
+  "name": "...",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+\`\`\`
+
+### Errors
+
+| Code | When |
+|:----:|------|
+| 400 | Validation failed (see body) |
+| 401 | Missing/invalid token |
+| 429 | Rate limit (60 req/min) |
+
+### Code Examples
+
+\`\`\`typescript
+const res = await fetch('/api/v1/resource', {
+  method: 'POST',
+  headers: { Authorization: `Bearer ${token}` },
+  body: JSON.stringify({ name: 'My Resource' })
+});
+\`\`\`
+```
+
+### Release Notes Template
+
+```markdown
+# 🚀 Release v2.1.0 — YYYY-MM-DD
+
+## ✨ Highlights
+
+> The TL;DR for busy readers.
+
+- **New:** X feature — try it: `command`
+- **Improved:** Y is now 50% faster
+- **Fixed:** Z bug affecting users on platform A
+
+## 🆕 New Features
+
+### Feature Name
+
+Description with user-facing benefit.
+
+\`\`\`bash
+# Example usage
+command --new-flag
+\`\`\`
+
+📖 [Read the docs](#)
+
+## 🔧 Improvements
+
+- Faster initial load time
+- Better error messages for X
+
+## 🐛 Bug Fixes
+
+- Fix issue where ... ([#1234](#))
+- Resolve crash when ... ([#5678](#))
+
+## ⚠️ Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+\`\`\`typescript
+api.oldMethod(arg)
+\`\`\`
+
+**After:**
+\`\`\`typescript
+api.newMethod({ arg })
+\`\`\`
+
+📖 [Migration guide](#)
+
+## 🙏 Contributors
+
+Thanks to: @alice, @bob, @charlie
+```
+
+
+---
+
+# skill: architecture-patterns
+
+Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, CQRS, Event Sourcing, Saga.
+
+# Architecture Patterns
+
+## When to use this skill
+
+- Architecture decisions for a new system
+- Choosing communication patterns between services
+- Splitting a monolith into modules or microservices
+- Designing event-driven systems
+- Implementing Command Query Responsibility Segregation (CQRS), Event Sourcing or Saga
+- Reviewing existing architecture
+- Making decisions big enough for an Architecture Decision Record (ADR)
+
+---
+
+## High-Level Architecture Choice
+
+### Decision tree
+
+```
+How many engineers? Team count? Domain complexity?
+│
+├─ <10 engineers, 1 team
+│  └─ ✅ Monolith (modular monolith)
+│
+├─ 10-50 engineers, 2-5 teams
+│  └─ ✅ Modular monolith OR few services
+│
+├─ 50+ engineers, 5+ teams
+│  └─ Consider microservices (only if needed)
+│
+└─ Any size + spiky/event-driven workload
+   └─ Add serverless for that piece
+```
+
+---
+
+## Pattern 1: Modular Monolith
+
+**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
+
+```
+┌─────────────────────────────────────┐
+│   Single deployable application     │
+│ ┌───────┐ ┌───────┐ ┌───────────┐  │
+│ │Module │ │Module │ │  Module   │  │
+│ │  A    │ │  B    │ │     C     │  │
+│ └───────┘ └───────┘ └───────────┘  │
+│   ▲           ▲           ▲         │
+│   └── Strict module boundaries ──┘  │
+└─────────────────────────────────────┘
+         │
+         ▼
+    Single DB (or per-module schemas)
+```
+
+**When to use:**
+- ✅ Small/medium team (< 30 engineers)
+- ✅ You need to ship changes fast
+- ✅ Operations needs are simple
+- ✅ All parts can deploy together
+
+**When NOT to use:**
+- ❌ Multiple teams needing independent deploys
+- ❌ Features need very different scaling
+- ❌ Parts need different tech stacks
+
+**Implementation tips:**
+- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
+- Each module exposes a public interface
+- Don't let one module read another module's tables
+- One DB, with a separate schema per module
+
+---
+
+## Pattern 2: Microservices
+
+**When you've outgrown the monolith.**
+
+```
+┌──────┐  ┌──────┐  ┌──────┐
+│ Svc A│  │ Svc B│  │ Svc C│
+└──┬───┘  └──┬───┘  └──┬───┘
+   │ ▲      │ ▲      │ ▲
+   │ │      │ │      │ │     ← Each owns its DB
+   ▼ │      ▼ │      ▼ │
+  ┌──┴┐    ┌──┴┐    ┌──┴┐
+  │DB │    │DB │    │DB │
+  └───┘    └───┘    └───┘
+```
+
+**When to use:**
+- ✅ Independent teams (Conway's Law)
+- ✅ Different scaling needs per service
+- ✅ Services need different languages or stacks
+- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
+
+**When NOT to use (most projects):**
+- ❌ Small team — the extra overhead slows everyone down
+- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- ❌ Can't afford distributed tracing
+- ❌ Business areas don't have clear boundaries yet
+
+**Hidden costs:**
+- 💸 Much harder to operate (about 5x the ops effort)
+- 💸 Network latency between services
+- 💸 Transactions across services are hard
+- 💸 Bugs are harder to trace
+- 💸 You need a service mesh and a monitoring stack
+
+> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
+
+---
+
+## Pattern 3: Serverless / Functions
+
+**For spiky, event-driven workloads.**
+
+```
+Event ──► Function ──► Service / DB / Queue
+```
+
+**Good fits:**
+- ✅ Async background processing
+- ✅ Scheduled tasks (cron)
+- ✅ Glue code between services
+- ✅ Spiky / unpredictable traffic
+- ✅ Image/video processing pipelines
+
+**Bad fits:**
+- ❌ Long-running processes (the limit is usually 15 min)
+- ❌ Processing that must keep state between calls
+- ❌ Frequent calls that need a fast response (cold starts add delay)
+- ❌ Heavy traffic all day (the bill climbs fast)
+
+---
+
+## Communication Patterns
+
+### Synchronous (Request-Response)
+
+```
+Client ──HTTP/gRPC──► Server
+       ◄──Response───
+```
+
+| Protocol | When |
+|----------|------|
+| REST | Public APIs, simple CRUD |
+| GraphQL | Mobile clients, multiple read patterns |
+| gRPC | Internal service-to-service |
+| WebSocket | Real-time bidirectional |
+
+**Pros:** Easy to reason about and debug
+**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
+
+### Asynchronous (Event-Driven)
+
+```
+Producer ──► Topic/Queue ──► Consumer(s)
+         (publish)         (subscribe)
+```
+
+| Tech | When |
+|------|------|
+| Kafka | High throughput, event sourcing, replay needed |
+| RabbitMQ | Traditional queuing, work distribution |
+| SQS/SNS | AWS-native, simpler than Kafka |
+| NATS | Lightweight, low-latency |
+| Redis Pub/Sub | Simple, messages are not stored |
+
+**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
+**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
+
+### When to choose which
+
+```
+Need immediate response? ─Yes─► Sync
+                         └─No──► Async
+
+Is producer impacted by consumer? ─Yes─► Sync
+                                  └─No──► Async
+
+Multiple consumers? ─Yes─► Async (pub/sub)
+                   └─No──► Either
+```
+
+---
+
+## Patterns 4–8: CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig
+
+Details for each are in [references/advanced-patterns.md](references/advanced-patterns.md). Load that file when the decision involves one of these:
+
+- Pattern 4: CQRS (Command Query Responsibility Segregation)
+- Pattern 5: Event Sourcing
+- Pattern 6: Saga (Distributed Transactions)
+- Pattern 7: API Gateway
+- Pattern 8: Strangler Fig (Migration)
+
+---
+
+## Cross-Cutting Decisions
+
+### Database per service vs Shared DB
+
+| | Shared DB | DB per service |
+|---|-----------|----------------|
+| Coupling | 🔴 High | 🟢 Low |
+| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
+| Schema changes | 🔴 Coordinate | 🟢 Independent |
+| Performance | 🟢 Easy joins | 🔴 Network calls |
+| Use when | Monolith | Microservices |
+
+### Caching tiers
+
+```
+Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
+       1                  2                       3                4
+       ▲                                                           ▲
+       Closest to user (fastest)              Furthest (last resort)
+```
+
+Each tier is roughly 10x faster than the next. CDN = content delivery network.
+
+### Idempotency
+
+**Always design APIs so a repeated request does no extra harm:**
+```
+Client retries → Server detects duplicate → Same result, no side effect
+```
+
+Methods:
+- Idempotency key header (Stripe pattern)
+- A time window in which the server drops duplicates
+- Methods that are safe to repeat by nature (PUT, unlike POST)
+
+---
+
+## Decision Matrix Template
+
+When proposing architecture, compare options:
+
+```markdown
+| Factor | Weight | Option A | Option B | Option C |
+|--------|:------:|:--------:|:--------:|:--------:|
+| Performance | 30% | 8 | 9 | 7 |
+| Cost | 20% | 9 | 6 | 8 |
+| Team skill | 20% | 9 | 5 | 7 |
+| Operations | 15% | 8 | 5 | 7 |
+| Future-proof | 15% | 6 | 9 | 7 |
+| **Total** | 100% | **7.95** | 7.10 | 7.20 |
+```
+
+---
+
+## Anti-patterns
+
+- ❌ **Microservices too early** — start with a monolith
+- ❌ **Distributed monolith** — services that must deploy together
+- ❌ **God service** — one service that does everything
+- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
+- ❌ **Shared database across microservices** — all the coupling, none of the isolation
+- ❌ **Synchronous calls in critical path** — cascading failures
+- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
+
+---
+
+## Quick Reference: When to Use What
+
+| Need | Pattern |
+|------|---------|
+| Small team, fast iteration | Modular monolith |
+| Independent team deploys | Microservices |
+| Spiky background jobs | Serverless |
+| High write throughput, complex reads | CQRS |
+| Full audit trail, view state at any past time | Event Sourcing |
+| Multi-service transaction | Saga |
+| Reduce service-to-service complexity | Service mesh |
+| Multiple external clients | API Gateway |
+| Migrate legacy system | Strangler Fig |
+
+---
+
+## Always Reference
+
+When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/architecture-overview-template.md`](references/architecture-overview-template.md) — แม่แบบภาพรวมสถาปัตยกรรม
+
+
+## reference: advanced-patterns.md
+
+# Architecture Patterns — Advanced Pattern Catalogue
+
+Details moved out of [SKILL.md](../SKILL.md). Load this file when the decision involves one of these patterns.
+
+## Contents
+
+- [Pattern 4: CQRS (Command Query Responsibility Segregation)](#pattern-4-cqrs-command-query-responsibility-segregation)
+- [Pattern 5: Event Sourcing](#pattern-5-event-sourcing)
+- [Pattern 6: Saga (Distributed Transactions)](#pattern-6-saga-distributed-transactions)
+- [Pattern 7: API Gateway](#pattern-7-api-gateway)
+- [Pattern 8: Strangler Fig (Migration)](#pattern-8-strangler-fig-migration)
+
+---
+
+## Pattern 4: CQRS (Command Query Responsibility Segregation)
+
+**Use one model for writes and a separate model for reads.**
+
+```
+Commands ──► Write Model ──► Event Store
+                              │
+                              ▼
+                          Projector
+                              │
+                              ▼
+Queries ◄── Read Models (denormalized for query)
+```
+
+**When to use:**
+- ✅ Read load and write load are very different
+- ✅ Complex reporting / dashboards
+- ✅ Multiple read views from same data
+
+**When NOT to use:**
+- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
+- ❌ Reads must always show the latest write
+
+---
+
+## Pattern 5: Event Sourcing
+
+**Store every change as an event, not just the current state.**
+
+```
+Instead of:           Store:
+Account                Events:
+  balance: $100        ├─ AccountOpened
+                       ├─ Deposit($50)
+                       ├─ Deposit($75)
+                       └─ Withdraw($25)
+
+State is computed from events
+```
+
+**When to use:**
+- ✅ Strong audit/compliance requirements
+- ✅ Need to replay history
+- ✅ Questions about the past ("balance at date X")
+- ✅ Complex business logic with many state transitions
+
+**When NOT to use:**
+- ❌ Apps with simple state (too much)
+- ❌ No team experience with it
+- ❌ Don't need history/audit
+- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
+
+> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+
+---
+
+## Pattern 6: Saga (Distributed Transactions)
+
+**When several services must all succeed or all roll back.**
+
+### Orchestration (centralized)
+```
+Orchestrator
+   │
+   ├──► Service A (do step 1)
+   │    [if fail → Orchestrator triggers compensations]
+   ├──► Service B (do step 2)
+   └──► Service C (do step 3)
+```
+
+### Choreography (decentralized)
+```
+Service A ──Event──► Service B ──Event──► Service C
+   ▲                                            │
+   └──────────── Compensation Event ────────────┘
+```
+
+| | Orchestration | Choreography |
+|---|--------------|--------------|
+| Visibility | 🟢 Central | 🔴 Distributed |
+| Coupling | 🟡 Coupled to orchestrator | 🟢 Loosely coupled |
+| Debugging | 🟢 Easier | 🔴 Hard |
+| Adding services | 🟡 Update orchestrator | 🟢 Add subscriber |
+
+**Choose orchestration** when: complex flow, need clear visibility
+**Choose choreography** when: simple flow, many independent teams
+
+---
+
+## Pattern 7: API Gateway
+
+```
+Clients ──► API Gateway ──► Multiple Services
+              │
+              ├─ Routing
+              ├─ Auth
+              ├─ Rate limit
+              ├─ Logging
+              └─ Aggregation
+```
+
+**Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
+
+**Use when:** external clients call many services, and you want auth, rate limits and logging in one place
+
+---
+
+## Pattern 8: Strangler Fig (Migration)
+
+**Move off a monolith step by step.**
+
+```
+Phase 1:    Phase 2:           Phase 3:
+[Monolith]  [Mono] [NewSvc]    [NewSvc1] [NewSvc2]
+                ▲    │              ▲
+                └────┘ Proxy routes  └── Old Monolith deprecated
+                  selective traffic
+```
+
+**Steps:**
+1. Pick one business area (bounded context) to pull out
+2. Build new service for that context
+3. Add a proxy or feature flag that routes part of the traffic
+4. Gradually shift traffic to new service
+5. Delete old code when fully migrated
+
+> 💡 **Safer than rewriting everything at once.**
+
+
+## reference: architecture-overview-template.md
+
+# แม่แบบเอกสารภาพรวมสถาปัตยกรรม
+
+ย้ายมาจาก agent `solution-architect` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+
+## Standard Output: Polished Architecture Overview
+
+```markdown
+# 🏗️ Architecture: <System Name>
+
+| | |
+|--|--|
+| **Document Type** | Architecture Overview |
+| **Version** | 1.0 |
+| **Status** | 🟡 Draft |
+| **Date** | YYYY-MM-DD |
+| **Architect** | @name |
+| **Related ADRs** | ADR-0001 (`docs/decisions/ADR-0001-database-choice.md`), ADR-0002 (`docs/decisions/ADR-0002-api-style.md`) |
+
+---
+
+## 📑 Table of Contents
+
+1. [Context](#1-context)
+2. [Quality Attributes](#2-quality-attributes)
+3. [High-Level Architecture](#3-high-level-architecture)
+4. [Components](#4-components)
+5. [Data Flow](#5-data-flow)
+6. [Tech Stack](#6-tech-stack)
+7. [Cross-Cutting Concerns](#7-cross-cutting-concerns)
+8. [Trade-offs](#8-trade-offs)
+
+---
+
+## 1. Context
+
+> 💡 What problem does this solve? Why now?
+
+## 2. 🎯 Quality Attributes (Priority Order)
+
+| Rank | Attribute | Target | Why |
+|:----:|-----------|--------|-----|
+| 1 | ⚡ Performance | < 200ms p95 | Customer-facing |
+| 2 | 🔒 Security | PDPA compliant | Legal req |
+| 3 | 📈 Scalability | 10k RPS | Growth plan |
+| 4 | 💰 Cost | < $5k/month | Budget |
+
+## 3. High-Level Architecture
+
+\`\`\`mermaid
+flowchart LR
+    User([👤 User]) --> CDN[🌐 CDN]
+    CDN --> LB[⚖️ Load Balancer]
+    LB --> API[🔷 API Gateway]
+    API --> Auth[🔒 Auth Service]
+    API --> App[⚙️ App Service]
+    App --> Cache[(⚡ Redis)]
+    App --> DB[(💾 PostgreSQL)]
+    App --> Queue[📨 Message Queue]
+    Queue --> Worker[👷 Background Worker]
+\`\`\`
+
+## 4. 🧩 Components
+
+| Component | Responsibility | Technology | Owner |
+|-----------|----------------|------------|-------|
+| API Gateway | Routing, rate-limit | Kong | Platform |
+| Auth Service | JWT, OAuth | Node.js | Security |
+| App Service | Business logic | Node.js + NestJS | App Team |
+| Database | Persistence | PostgreSQL 16 | DBA |
+| Cache | Session, hot data | Redis 7 | Platform |
+
+## 5. 🔄 Data Flow
+
+\`\`\`mermaid
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant API
+    participant App
+    participant DB
+
+    U->>API: Request
+    API->>App: Validate + forward
+    App->>DB: Query
+    DB-->>App: Result
+    App-->>API: Response
+    API-->>U: 200 OK
+\`\`\`
+
+## 6. 🛠️ Tech Stack
+
+| Layer | Technology | Rationale |
+|-------|-----------|-----------|
+| Frontend | React 18 + Next.js 14 | SSR, ecosystem |
+| Backend | Node.js + NestJS | Team expertise |
+| Database | PostgreSQL 16 | ACID + JSON |
+| Cache | Redis 7 | Standard |
+| Infra | AWS (ECS Fargate) | Cost + ops simplicity |
+| CI/CD | GitHub Actions | Already in use |
+
+## 7. 🔗 Cross-Cutting Concerns
+
+| Concern | Approach |
+|---------|----------|
+| 🔒 Authentication | JWT with refresh tokens |
+| 📝 Logging | Structured JSON → CloudWatch |
+| 📊 Monitoring | Prometheus + Grafana |
+| 🚨 Alerting | PagerDuty (P1), Slack (P2-P3) |
+| ⚠️ Error Handling | Standard error envelope, Sentry |
+
+## 8. ⚖️ Trade-offs
+
+| Decision | Chose | Over | Reason |
+|----------|-------|------|--------|
+| Database | PostgreSQL | MongoDB | Strong consistency needed |
+| Hosting | ECS Fargate | EKS | Lower ops burden |
+| API Style | REST | GraphQL | Simpler caching, client maturity |
+
+> ⚠️ **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
+
+## 📖 References
+
+- ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
+- ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)
+```

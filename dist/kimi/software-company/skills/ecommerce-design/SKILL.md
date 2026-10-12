@@ -1,6 +1,6 @@
 ---
 name: "ecommerce-design"
-description: "Audit a checkout flow or design a recommendation system for e-commerce. Two modes — checkout-audit or recommendation-design."
+description: "Audit a checkout flow or design a recommendation system (checkout-audit or recommendation-design)."
 disableModelInvocation: true
 ---
 

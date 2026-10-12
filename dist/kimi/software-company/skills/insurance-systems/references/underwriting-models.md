@@ -1,4 +1,4 @@
-> เดิมคือ skill `underwriting-models` ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
+> เดิมชื่อ underwriting-models (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-insurtech` — รวมเข้า `insurance-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

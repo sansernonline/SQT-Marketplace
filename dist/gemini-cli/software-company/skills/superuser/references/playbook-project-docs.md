@@ -1,6 +1,7 @@
 # playbook · project-docs — เอกสารโปรเจกต์ตามชุด prompt
 
-ใช้เมื่อ: ผู้ใช้วางไฟล์จาก `prompt/` (new-project · change · quality · release · existing-code · handover · manual) หรือขอเอกสารโปรเจกต์ BRD · SRS · mockup · FSD · คู่มือ
+ใช้เมื่อ: ผู้ใช้วางไฟล์ใดก็ได้จาก `prompt/software-company/` หรือขอเอกสารโปรเจกต์ BRD · SRS · mockup · FSD · คู่มือ
+ที่จด: สถานะและการตัดสินใจอยู่ใน `docs/BUILD-PLAN.md` · ไฟล์ทีม (`CONTEXT.md` · `IMPROVEMENTS.md`) อยู่ใน `.claude/superuser/` ไม่วางที่รากโปรเจกต์
 skill หลัก: `project-doc-set` · `document-naming` · `polished-document-style` · `status-report` · [`decision-log`](../../decision-log/SKILL.md) · `context-budget`
 
 ไฟล์ prompt มีแค่ส่วนเฉพาะของแต่ละฉบับ ส่วนกฎการทำงานร่วมทั้งหมดอยู่ที่นี่ที่เดียว จะแก้กฎก็แก้ที่นี่ ไม่ต้องแก้ทุก prompt

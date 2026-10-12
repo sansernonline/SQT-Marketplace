@@ -1,6 +1,6 @@
 ---
 name: "portfolio"
-description: "Show the current portfolio snapshot — allocation, P/L, concentration flags, top contributors and drags — refreshed with current prices."
+description: "Show the portfolio snapshot — allocation, P/L, concentration flags, top contributors and drags — at current prices."
 disableModelInvocation: true
 ---
 

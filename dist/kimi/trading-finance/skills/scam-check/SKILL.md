@@ -1,6 +1,6 @@
 ---
 name: scam-check
-description: Use when about to send money to an investment, trading or loan app, crypto scheme, LINE group or caller claiming authority, or just after. First-hour steps.
+description: Use when about to send money to an investment, trading or loan app, crypto scheme, LINE group or caller, or just after.
 ---
 
 # Scam Check (เช็กก่อนโอน · โดนหลอกแล้วทำอะไรก่อน)
@@ -45,7 +45,7 @@ A calm second look before an irreversible transfer — and a first-hour plan if 
 2. **Call 1441** — Anti-Online Scam Operation Center (AOC), 24 hours. Give: receiving bank, account number, account name, amount, time of each transfer.
 3. **Report online at www.thaipoliceonline.go.th** (or at any police station) — this is the police report the bank hold depends on. Keep the case number.
 4. **Keep evidence** — do not delete chats or block yet: screenshots with dates of the chat, profile, group, website URL, app name; transfer slips; the receiving accounts; phone numbers. List in the reference file.
-5. **Secure accounts** if you gave any code, password, ID card photo or installed an app: uninstall the app, change banking passwords from a clean device, ask the bank to block mobile banking if remote control is suspected. If you installed an app, follow `digital-hygiene` (personal-life) for the full account-takeover steps.
+5. **Secure accounts** if you gave any code, password, ID card photo or installed an app: uninstall the app, change banking passwords from a clean device, ask the bank to block mobile banking if remote control is suspected. If you installed an app, follow `digital-hygiene` (personal-life ถ้าติดตั้ง) for the full account-takeover steps.
 6. **Never pay a "recovery" service** — anyone asking for money to get money back is the second scam.
 7. Investment scams also: report to SEC **1207**; Ponzi schemes: DSI (กรมสอบสวนคดีพิเศษ) **1202**.
 

@@ -1,6 +1,6 @@
 ---
 name: graphic-design
-description: Use when a software project needs visuals besides app screens (logo, poster, flyer, social post, rich menu art, label, cover). Direction first, real sizes.
+description: Use when a software project needs visuals besides app screens (logo, poster, flyer, social post, rich menu art, cover).
 ---
 
 # Graphic Design
@@ -26,6 +26,8 @@ rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค�
 | หน้าตาไฟล์ Word / PowerPoint | `branded-document-design` |
 | ไดอะแกรมซอฟต์แวร์ | `software-diagrams` |
 | กราฟข้อมูล | `web-app-design` หัวข้อ chart colors |
+
+**ติดตั้ง plugin `graphic-design` อยู่:** งานออกแบบลึก ๆ (ชุดแบรนด์ · ชุดแคมเปญ · ภาพ AI · วิดีโอ · ตรวจงานออกแบบ) ใช้ `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review` และขนาดแต่ละแพลตฟอร์มจาก `graphic-design:social-formats` · ไม่มี plugin นั้น → ทำตาม skill นี้ต่อไป
 
 ---
 
@@ -59,6 +61,8 @@ rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค�
 
 **วิธีเลือก:** ดูว่าคู่แข่งในหมวดเดียวกันอยู่ตรงไหน แล้วเลือกให้ต่าง —
 ถ้าทั้งหมวดดูน่าเบื่อ ความขี้เล่นคือความต่าง ส่วนถ้าทั้งหมวดตะโกนแข่งกัน ความเรียบคือความต่าง
+
+**งานที่เป็นแอป** ให้เทียบตำแหน่งที่เลือกกับบุคลิกแอป 6 แบบใน `ui-craft` → `references/app-character.md` เช่น แอปการเงินไม่ควรอยู่ตำแหน่ง "ขี้เล่น"
 
 **คู่ที่ขัดกันเอง** ให้ทักก่อนทำ: ใช้งานได้ + ท้าทาย · ผู้รู้ + ใช้งานได้ (มักออกมาเป็นน้ำเสียงสั่งสอน)
 
@@ -125,9 +129,10 @@ rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค�
 1. **ให้อย่างน้อย 1 แนวมาจากสิ่งที่ผู้ใช้เห็นทุกวันในตัวงาน** เช่น เคอร์เซอร์ขีดล่างของ terminal สำหรับแอป telnet/SSH เพราะเจ้าของงานมักผูกแบรนด์กับภาพนั้น (เจ้าของงานจริงเลือกแนวเคอร์เซอร์หลังผ่านมาแล้ว 2 รอบ)
 2. **ทำ 3 แนวพร้อมกัน** แต่ละแนวมีความคิดคนละแบบ เช่น เส้นเชื่อมต่อ · ตัวอักษรนูนเป็นชั้น · สัญลักษณ์แสง แล้วเลือกจากภาพจริงที่วางเทียบกัน (`parallel-attempts-pick-best`)
 3. **มีมิติ** ด้วยชั้นแสงในตัว แสงเรือง และการไล่สีที่คุมไว้ แต่ที่ 16px ต้องยังเหลือเงาที่อ่านออก
-4. **ทำแผ่นตัวอย่าง (preview sheet) ทุกรอบ** — ขนาด 16 · 24 · 32 · 48 · 64 · 128 · 256 บนพื้นเข้มและพื้นขาว · ชุดโลโก้คู่ชื่อทั้ง 2 พื้น · แบบสีเดียว · ในแถบงานของ Windows และแถบชื่อหน้าต่างแอป แล้วเปิดดูด้วยตาและแก้อย่างน้อย 3 รอบ
+4. **ทำแผ่นตัวอย่าง (preview sheet) ทุกรอบ** — ขนาด 16 · 24 · 32 · 48 · 64 · 128 · 256 บนพื้นเข้มและพื้นขาว · ชุดโลโก้คู่ชื่อทั้ง 2 พื้น · แบบสีเดียว · ในแถบงานของ Windows และแถบชื่อหน้าต่างแอป แล้วเปิดดูด้วยตาและแก้อย่างน้อย 3 รอบ (ตัวอย่างแผ่นที่ผ่านแล้ว: `assets/logo-preview-sheet-example.webp`)
 5. **ชื่อแบรนด์แปลงเป็นเส้นจากฟอนต์เปิด** (OFL เช่น Space Grotesk · Inter · Manrope) ด้วย fontTools และเก็บไฟล์สัญญาอนุญาตไว้ด้วย ห้ามใช้ฟอนต์ของระบบปฏิบัติการ เช่น Segoe เพราะสัญญาอนุญาตไม่ครอบคลุมการทำโลโก้
 6. **ส่งออกครบชุดเดียวกันทุกครั้ง** — `.svg` ต้นทาง · `.png` 64/256/512 · ชุดโลโก้คู่ชื่อ @2x · `.ico` ที่ทำจากภาพ raster (16–256) ส่วนแสงที่ต้องใช้ filter ให้ใช้ไฟล์ PNG ในที่ที่ตัววาดภาพไม่รองรับ filter เช่น Word
+7. **โลโก้ที่มีส่วนเคลื่อนไหวได้** (เช่น เคอร์เซอร์) ใน sprite SVG ให้แยก `<g id="…-body">` กับ `<g id="…-cursor">` แล้วให้ symbol หลักใช้ทั้งสองส่วน หน้าแรกจะได้กระพริบเฉพาะเคอร์เซอร์ได้ ส่วนที่อื่นยังใช้ symbol เดิม ให้กระพริบเฉพาะในหน้าแรก และหยุดเมื่อเครื่องตั้งลดการเคลื่อนไหว (`prefers-reduced-motion`)
 
 ### รูปทรงแท่ง — เหลี่ยมขอบมน ไม่ใช่ปลายมน
 
@@ -147,7 +152,7 @@ rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค�
 
 ## 5 · ขนาดงานพิมพ์และโซเชียล
 
-ตัวเลขทั้งหมดอยู่ใน **`references/sizes-and-print.md`** — LINE OA, TikTok, Facebook,
+ตัวเลขทั้งหมดอยู่ใน **`references/sizes-and-print.md`** (ฉบับสำรอง — ติดตั้ง plugin `graphic-design` อยู่ → ต้นฉบับขนาดแพลตฟอร์มคือ `graphic-design:social-formats`) — LINE OA, TikTok, Facebook,
 Instagram, งานพิมพ์ (ระยะตัดตก ความละเอียด ระบบสี)
 
 **3 ข้อที่พลาดบ่อยสุด:**
@@ -247,3 +252,5 @@ Instagram, งานพิมพ์ (ระยะตัดตก ความล
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
 หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/designer-outputs.md`](references/designer-outputs.md) — รูปแบบงานส่งของนักออกแบบ

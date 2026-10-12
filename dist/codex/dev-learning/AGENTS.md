@@ -12,5 +12,5 @@ Stay-current toolkit for developers — a weekly tech radar over followed librar
 
 ## บทบาททั้งหมด
 
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
-- **tech-mentor** — Use when the user wants to keep up with tech, learn a new technology, turn reading into working knowledge, prepare for a certification, or pick a side project. Designs learning loops that end in working code, sized to a working week.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.
+- **tech-mentor** — Use to keep up with tech, learn a new technology, turn reading into working knowledge, prepare for a certification, or pick a side project, sized to a week.

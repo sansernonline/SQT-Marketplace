@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a markdown doc needs a picture (wireframe, UI state, flow, architecture). Picks inline SVG, image, ASCII or Mermaid so it renders everywhere.
+description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
 ---
 
 # Markdown Visuals
@@ -13,30 +13,38 @@ description: Use when a markdown doc needs a picture (wireframe, UI state, flow,
 
 ## When to use this skill
 
-- Producing **any** design mockup, wireframe, or UI spec
+- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
 - Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
+- The user asked "show me how it looks" inside a markdown doc or chat reply
 
 **If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
 
 ```
 What are you showing?
 │
-├─ UI mockup / component state / icon       →  Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
 ├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
 ├─ Architecture / ER / class                →  Mermaid (software-diagrams)
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Default to inline SVG**, except for flows and sequences (use Mermaid for those). Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
 
 ## 1 · Inline SVG (primary technique)
 
@@ -45,8 +53,8 @@ What are you showing?
 ```markdown
 <p align="center">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background -->
-  <rect width="640" height="280" rx="14" fill="#1c2230"/>
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
 
   <!-- content goes here -->
 </svg>
@@ -60,14 +68,14 @@ What are you showing?
 - `<p align="center">` wrapper — centers in the rendered page
 
 **Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Mockup of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
 - Component state: `viewBox="0 0 400 300"` (squarer)
 - Icon / chip: `viewBox="0 0 64 64"`
 - Full screen layout: `viewBox="0 0 800 500"`
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้เสนอโทนจาก [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md) แล้วรอผู้ใช้ยืนยัน ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
 
 ### Reusable snippets
 
@@ -99,7 +107,7 @@ docs/
 ### Reference syntax
 
 ```markdown
-![Hover state showing magnified Projects tile](assets/01-hover-state.svg)
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
 ```
 
 - **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
@@ -108,13 +116,13 @@ docs/
 
 ```markdown
 <p align="center">
-  <img src="assets/01-hover-state.svg" alt="Hover state" width="640"/>
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
 </p>
 ```
 
 ### Creating SVG files
 
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file alongside the doc.
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
 
 ## 3 · ASCII art
 
@@ -156,7 +164,7 @@ For every visual:
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
 - ❌ **SVG without `xmlns`** — GitHub silently fails to render
-- ❌ **Inline SVG with 200+ lines** — extract to `assets/x.svg` and reference it
+- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
 - ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
@@ -164,7 +172,7 @@ For every visual:
 
 ## Quick-start recipe
 
-When the user asks for a design / mockup:
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
 
 1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
 2. **Pick the format(s)** using the decision tree above

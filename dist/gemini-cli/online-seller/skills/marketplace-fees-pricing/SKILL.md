@@ -1,6 +1,6 @@
 ---
 name: marketplace-fees-pricing
-description: Use when a Thai seller asks what to charge, why a product loses money, or how Shopee, Lazada and TikTok Shop fees compare. Price formula with VAT and margin.
+description: Use when a Thai seller asks what to charge, why a product loses money, or how Shopee, Lazada and TikTok Shop fees compare.
 ---
 
 # Marketplace Fees and Pricing
@@ -62,11 +62,11 @@ Same bag, **VAT-registered** shop on Shopee: formula price ฿228.50 → ฿229.
 - Joining a free-shipping or cashback programme adds a percentage fee; price it as part of `r`
 - Affiliate commission (TikTok Shop, Shopee, Lazada affiliate) is another percentage — add it to `r` for SKUs sold through creators
 - A promotion is a new price — re-run the formula; a 20% discount on a 20% margin is a loss
-- Prices on LINE and Facebook carry no platform fee but do carry payment fees (card/QR gateway) and the seller's own shipping — price them separately; payment by `thai-workplace` `promptpay-qr` has no gateway fee for a personal account (รอยืนยัน for business accounts)
+- Prices on LINE and Facebook carry no platform fee but do carry payment fees (card/QR gateway) and the seller's own shipping — price them separately; payment by `thai-workplace` `promptpay-qr` (if installed) has no gateway fee for a personal account (รอยืนยัน for business accounts)
 
 ## Related
 
 - `shipping-compare` — `S` per parcel size
 - `seller-tax-basics` — when to register VAT (sets `v`)
 - `multi-shop-stock` — same SKU codes in the price sheet
-- `thai-workplace` `doc-quotation` — B2B buyers who need a quotation with VAT
+- `thai-workplace` `doc-quotation` (if installed) — B2B buyers who need a quotation with VAT

@@ -1,6 +1,6 @@
 ---
 name: html-slide-deck
-description: Use when a slide deck is asked for as HTML or with animation — one offline file in the X Fitness style, animated, with menu, speaker notes, presenter clock, diagram tour and chat replay.
+description: Use when a slide deck is asked for as HTML or with animation — one offline animated file with menu and speaker notes.
 ---
 
 # HTML Slide Deck
@@ -34,7 +34,7 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 2. **โปรเจกต์มี `docs/deck/` หรือเด็ค .html อยู่แล้ว → เพิ่ม `<section>` ใน `slides.html` เดิม และใช้ shell · css · `--brand` ชุดเดิม ไม่เริ่มไฟล์ใหม่** (หลักเดียวกับ `ui-craft` ข้อ 0) · ยังไม่มี → คัดลอก `assets/slides-example.html` ไปไว้ใน `docs/deck/slides.html` ของโปรเจกต์ · เก็บเฉพาะ `<section>` ของเลย์เอาต์ที่ใช้ (ข้อ 3) แล้วใส่เนื้อหา
 3. สร้างไฟล์:
    ```bash
-   python scripts/build_deck.py docs/deck/slides.html -o docs/<Project>_Presentation-v1.0.html \
+   python scripts/build_deck.py docs/deck/slides.html -o docs/<PRJ>-DECK-v1.0-DRAFT.html \
           --title "<ชื่อเด็ค>" --brand E10613,FF2536
    ```
    `--css` / `--js` สำหรับของเฉพาะเด็คนี้ · `--data` ใส่ JSON ให้ JS เพิ่มเติมอ่าน · รูปที่อ้างด้วย path ในเครื่องถูกฝังให้เอง
@@ -50,13 +50,15 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 | `--accent` | `#e10613` | แถบใต้ชื่อปก · ฟองแชตผู้ใช้ |
 | `--accent2` | `#ff2536` | kicker · ตัวเลขใหญ่ · เลขหน้าเปิดส่วน · ของที่เลือกอยู่ |
 | `--accent-deep` · `--accent-tint` | `#2a0a0d` · `#1d0d10` | พื้นไล่สีปก/หน้าเปิดส่วน · พื้นของที่เลือก |
-| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตามแบรนด์ |
+| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตามแบรนด์ เด็ค .html เป็นพื้นเข้มเสมอ |
 
 - `--brand สีหลัก,สีสว่าง` คำนวณ deep/tint ให้ · สีสว่างต้องอ่านชัดบนพื้นดำ (contrast ≥ 4.5:1)
 - ฟอนต์: หัวข้อ **Chakra Petch** · เนื้อความ **IBM Plex Sans Thai** · โค้ด **JetBrains Mono** (Google Fonts · ไม่มีเน็ต → Tahoma)
 - **สีแบรนด์มีสีเดียว** · เขียว `ok` น้ำเงิน `blue` ส้ม `warn` ใช้เฉพาะความหมาย (ผ่าน · ข้อมูล · เตือน)
 
 ## 3 · เลย์เอาต์ (ทุกแบบอยู่ใน `slides-example.html`)
+
+หน้าตาของ 4 หน้าแรกที่สร้างด้วย `build_deck.py` ดูได้ที่ `assets/slides-example-preview.webp`
 
 | # | เลย์เอาต์ | class / attribute | ใช้เมื่อ |
 |---|---|---|---|

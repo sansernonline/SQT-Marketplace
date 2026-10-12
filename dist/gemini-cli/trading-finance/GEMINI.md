@@ -12,8 +12,8 @@ Trading and personal finance toolkit for Thai investors — watchlists, signals,
 
 ## บทบาททั้งหมด
 
-- **alert-dispatcher** — Use when the user wants price or news alerts on watched symbols. Sets up scheduled checks through the platform's automation features, keeps alerts few and meaningful, and routes notifications to the channel the user chose.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
-- **market-analyst** — Use when the user asks about a specific stock, a market trend, or wants a watchlist analysed before buying or selling. Explains price data and news in plain language, never as financial advice.
-- **risk-manager** — Use before opening any new position, when the user asks how much to buy, or when the portfolio has drifted. Computes position size from capital and per-trade risk, checks concentration and drawdown, and refuses to size a trade with no stop-loss.
-- **trade-journal-coach** — Use when reviewing past trades, keeping a trade journal, or asking why the user keeps losing money in the same way. Finds repeated behavior patterns in the journal and turns them into one concrete rule to test next month.
+- **alert-dispatcher** — Use when the user wants price or news alerts on watched symbols. Sets up scheduled checks, keeps alerts few, and routes them to the channel the user chose.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.
+- **market-analyst** — Use when asked about a stock, a market trend, or a watchlist before buying or selling. Explains price data and news in plain words, never as financial advice.
+- **risk-manager** — Use before opening a position, when asked how much to buy, or when the portfolio has drifted. Sizes from capital and risk; refuses to size without a stop-loss.
+- **trade-journal-coach** — Use when reviewing past trades, keeping a trade journal, or asking why you keep losing the same way. Finds repeated patterns, turns them into one rule to test.

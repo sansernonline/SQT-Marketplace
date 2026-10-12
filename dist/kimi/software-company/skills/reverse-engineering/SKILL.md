@@ -1,6 +1,6 @@
 ---
 name: reverse-engineering
-description: Use when there is a compiled app or unknown file but no usable source — lost source, a deployed build that may differ from the repository, or a feature, format or protocol to understand. Decompiles, traces and reports with evidence.
+description: Use when there is a compiled app or unknown file format or protocol but no usable source, or a deployed build may differ from the repo.
 ---
 
 # Reverse Engineering
@@ -8,6 +8,13 @@ description: Use when there is a compiled app or unknown file but no usable sour
 **Decompile → Understand → Recreate**, with evidence at every step. Never claim the original source was recovered; report what the evidence shows and mark what is unknown.
 
 Source code is available but there are no documents → use `legacy-spec-recovery` instead. Once this skill has recovered readable code, `legacy-spec-recovery` turns it into a spec.
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| มีซอร์สโค้ดแต่ไม่มีเอกสาร ต้องการ spec ของระบบเดิม | `legacy-spec-recovery` |
+| มีซอร์สโค้ด แค่ยังไม่ได้อ่านส่วนที่จะแก้ | `code-orientation` |
 
 ## What works in practice
 

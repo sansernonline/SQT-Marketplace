@@ -1,6 +1,6 @@
 ---
 name: user-story-writer
-description: Use when writing user stories, turning business requirements into stories or refining existing ones. Acceptance criteria in Given-When-Then form.
+description: Use when writing user stories, turning business requirements into stories or refining them (Given-When-Then criteria).
 ---
 
 # User Story Writer

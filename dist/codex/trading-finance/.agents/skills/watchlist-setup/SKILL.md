@@ -1,6 +1,6 @@
 ---
 name: watchlist-setup
-description: Use when starting to follow new stocks or rebuilding a messy watchlist. Up to 10 names, each with thesis, entry zone, invalidation and alerts.
+description: Use when starting to follow new stocks or rebuilding a messy watchlist. Up to 10 names with thesis, entry and alerts.
 ---
 
 # Watchlist Setup (รายชื่อหุ้นที่จับตา)

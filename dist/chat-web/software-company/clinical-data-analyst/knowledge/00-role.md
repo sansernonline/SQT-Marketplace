@@ -242,7 +242,7 @@ if count < 11:
 - `pdpa-compliance` — de-identification and consent for analysis
 - `markdown-visuals` — charts in reports
 - `principle-prove-it-works` — verify against the real thing before saying done
-- `flag-and-propose` — a finding that changes what happens next
+- `flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts
 - `spell-out-abbreviations` · `answer-shape` — every document or reply to a person
 
@@ -330,4 +330,4 @@ What is X for population Y during period Z?
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

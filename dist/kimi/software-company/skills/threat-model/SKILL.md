@@ -1,6 +1,6 @@
 ---
 name: "threat-model"
-description: "Run STRIDE threat modeling on a feature or system using security-engineer agent. Produces structured threat model with mitigations."
+description: "Run STRIDE threat modelling on a feature or system with the security-engineer agent, with mitigations."
 disableModelInvocation: true
 ---
 
@@ -49,3 +49,5 @@ The security engineer should:
    - Implementation needs → `developer`
    - Infrastructure hardening → `devops-engineer`
    - Compliance documentation → `technical-writer`
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/security-templates.md`](references/security-templates.md) — แม่แบบเอกสารความปลอดภัย

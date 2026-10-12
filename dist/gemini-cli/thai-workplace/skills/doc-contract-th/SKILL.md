@@ -1,6 +1,6 @@
 ---
 name: doc-contract-th
-description: Use when drafting or checking a Thai contract (employment, lease, hire of work, services). Clause checklists, stamp duty, red flags, when a lawyer is needed.
+description: Use when drafting or checking a Thai contract (employment, lease, hire of work, services). Stamp duty, red flags.
 ---
 
 # Thai Basic Contract Draft

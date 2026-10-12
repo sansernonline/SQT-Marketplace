@@ -1,6 +1,6 @@
 # skill: performance-self-review
 
-Use when writing a mid-year or year-end self-assessment, keeping a brag document, framing work as impact, or making a promotion or raise case.
+Use when writing a mid-year or year-end self-review, a brag document, or a promotion or raise case.
 
 # Performance Self-Review
 

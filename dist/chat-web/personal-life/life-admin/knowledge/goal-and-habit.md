@@ -1,6 +1,6 @@
 # skill: goal-and-habit
 
-Use when setting quarterly or new-year goals, starting or stopping a habit, or goals fade by February. Up to three measurable goals, habit design, tracker.
+Use when setting quarterly or new-year goals, starting or stopping a habit, or goals fade by February.
 
 # Goals and Habits
 

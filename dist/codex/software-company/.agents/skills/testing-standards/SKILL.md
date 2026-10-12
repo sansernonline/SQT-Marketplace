@@ -1,6 +1,6 @@
 ---
 name: testing-standards
-description: Use when adding or setting up automated tests in .NET, Node, Python, Angular or Flutter, or a suite is slow or flaky. What to test, naming, coverage.
+description: Use when adding or setting up automated tests in .NET, Node, Python, Angular or Flutter, or a suite is slow or flaky.
 ---
 
 # Testing Standards

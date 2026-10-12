@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when building a slide deck someone will present or read. Story order, finding headlines, text budget, six layouts, data slides, Thai typography.
+description: Use when building a slide deck someone will present or read (story order, headlines, layouts, Thai typography).
 ---
 
 # Presentation Design
@@ -12,7 +12,7 @@ description: Use when building a slide deck someone will present or read. Story 
 
 ---
 
-> **สีของเด็ค = สีหลักของโปรเจกต์** หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → สีแบรนด์ในโค้ดหรือโลโก้ → เสนอจาก colour-by-domain) อย่าเลือกสีใหม่ให้เด็ค
+> **สีของเด็ค = สีหลักของโปรเจกต์** หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → สีแบรนด์ในโค้ดหรือโลโก้ → ยังไม่มีใช้สีประจำบ้าน `#2A78D6` แล้วเขียน `(รอยืนยัน)`) อย่าเลือกสีใหม่ให้เด็ค
 >
 > **ไฟล์ที่ส่งมอบ — ต้นแบบทั้งคู่คือเด็ค X Fitness Chatbot**
 >
@@ -20,7 +20,7 @@ description: Use when building a slide deck someone will present or read. Story 
 > |---|---|---|
 > | "ทำ slide deck" · "ทำสไลด์" · "ทำ presentation" (ไม่ระบุชนิด) | **.pptx** | `branded-document-design` · `StageDeck` |
 > | "slide deck html" · "เด็ค html" · "มี animation" · "นำเสนอจากเบราว์เซอร์" | **.html ไฟล์เดียว พร้อม animation** | `html-slide-deck` |
-> | ขอทั้ง 2 | .pptx + .html เรื่องเดียวกัน สีเดียวกัน หัวสไลด์ชุดเดียวกัน | เขียนโครงเรื่องครั้งเดียวตามข้อ 1 แล้วสร้างทั้ง 2 ไฟล์ |
+> | ขอทั้ง 2 | .pptx + .html เรื่องเดียวกัน สีหลักเดียวกัน หัวสไลด์ชุดเดียวกัน · .html เป็นพื้นเข้มเสมอ จึงสร้าง .pptx ด้วย `bg="09090A"` ให้พื้นตรงกัน | เขียนโครงเรื่องครั้งเดียวตามข้อ 1 แล้วสร้างทั้ง 2 ไฟล์ |
 >
 > ไม่ถามซ้ำว่าจะเอาชนิดไหน — ไม่ระบุ = .pptx · ท้ายคำตอบบอก 1 บรรทัดว่าทำแบบ .html มี animation ได้ด้วย
 >
@@ -114,7 +114,7 @@ description: Use when building a slide deck someone will present or read. Story 
 
 ## 4 · หกเลย์เอาต์ที่พอสำหรับเกือบทุกเด็ค
 
-ไฟล์ `assets/slide-mockup.html` มีครบ 6 แบบ **เรนเดอร์ที่ 1280×720 และเปิดตรวจด้วยตาแล้ว**
+ภาพรวมทั้ง 6 แบบอยู่ที่ `assets/slide-mockup-preview.webp` · ไฟล์ `assets/slide-mockup.html` มีครบ 6 แบบ **เรนเดอร์ที่ 1280×720 และเปิดตรวจด้วยตาแล้ว**
 เปิดในเบราว์เซอร์เพื่อดูของจริง หรือใช้เป็นต้นแบบตอนสร้าง `.pptx`
 
 | # | เลย์เอาต์ | ใช้เมื่อ |

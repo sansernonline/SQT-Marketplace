@@ -1,6 +1,6 @@
 # skill: repeated-mistakes-to-checks
 
-Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again. Turns it into a type, lint or test.
+Use when the user corrects the same mistake twice, reviews keep flagging one issue, or a rule is written again.
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 
@@ -9,9 +9,16 @@ Use when the user corrects the same mistake twice, reviews keep flagging one iss
 
 มาจาก `correct` และ `rules-as-checks` ของ pstack
 
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| บทเรียนจากงานใหญ่ที่ต้องแก้ skill หรือ agent | `session-lessons-to-skills` |
+| ความชอบส่วนตัวของผู้ใช้ ไม่ใช่ความผิด | `owner-style-capture` |
+
 ## ขั้นตอน
 
-1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.superuser/log/` · เรื่องที่ซ้ำใน `.superuser/learn/` · `docs/BUILD-PLAN.md` · ความเห็นในการรีวิว · commit ที่ revert หรือ fix ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
+1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · `docs/BUILD-PLAN.md` · ความเห็นในการรีวิว · commit ที่ revert หรือ fix ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
 2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใส่ปุ่มหลอกใน mockup" · "เรียกฐานข้อมูลจาก controller ตรง" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
 3. **เลือกชั้นที่แก้ — สูงสุดที่ทำได้**
 

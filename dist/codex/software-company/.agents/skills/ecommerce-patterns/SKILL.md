@@ -1,6 +1,6 @@
 ---
 name: ecommerce-patterns
-description: Use when building online commerce software (checkout, cart, orders, promotions, multi-warehouse inventory, recommendations). Not for running a shop.
+description: Use when building online commerce software (checkout, cart, orders, promotions, inventory, recommendations). Not for running a shop.
 ---
 
 # ecommerce-patterns
@@ -33,4 +33,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 
 ## ที่มา
 
-รวมจาก plugin `software-company-ecommerce` (skill `checkout-optimization` · `inventory-management` · `recommendation-systems`) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-ecommerce` (เดิมชื่อ checkout-optimization → `references/checkout-optimization.md` · inventory-management → `references/inventory-management.md` · recommendation-systems → `references/recommendation-systems.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 — เนื้อหาเดิมอยู่ครบใน `references/`

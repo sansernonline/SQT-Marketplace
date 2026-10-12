@@ -1,6 +1,6 @@
 ---
 name: line-broadcast
-description: Use when sending a broadcast or targeted message to LINE OA friends. Quota math per package, narrowcast segments, send frequency, template, send log.
+description: Use when sending a broadcast or targeted message to LINE OA friends. Quota per package, narrowcast segments, frequency.
 ---
 
 # LINE Broadcast

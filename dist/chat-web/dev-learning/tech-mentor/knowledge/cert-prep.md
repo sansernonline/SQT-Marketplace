@@ -1,6 +1,6 @@
 # skill: cert-prep
 
-Use when preparing for a cloud or developer certification (AWS, Azure, Google Cloud, CKA, CKAD, PSM). Week plan, gap map, practice exams, labs.
+Use when preparing for a cloud or developer certification (AWS, Azure, Google Cloud, CKA, CKAD, PSM). Week plan, practice exams.
 
 # Certification Prep
 

@@ -247,7 +247,7 @@
 ---
 
 ### 8. postmortem-template
-**ใช้กับ:** devops-engineer, security-engineer
+**ใช้กับ:** devops-engineer
 **Output:** Blameless postmortem
 **Includes:** Timeline, root cause (5 Whys), action items with owners
 
@@ -290,7 +290,7 @@
 ---
 
 ### 14. incident-runbook-template
-**ใช้กับ:** devops-engineer, security-engineer
+**ใช้กับ:** devops-engineer
 **Output:** Operational runbook for on-call engineers
 **Covers:** Detection, diagnosis (with Mermaid flowchart), mitigation steps (ordered by risk), escalation paths, post-incident actions, game days
 
@@ -313,7 +313,7 @@
 ---
 
 ### 17. branded-document-design
-**ใช้กับ:** business-analyst, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
+**ใช้กับ:** business-analyst, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
 **Output:** .docx / .pptx / .pdf ที่มีระบบสี ระบบขนาดตัวอักษร และช่องไฟสม่ำเสมอทั้งฉบับ
 **Includes:** Design tokens (สกัดจาก Apps Track), typography scale, กฎ typography ภาษาไทย (กับดัก complex script), `scripts/brandkit.py` + `scripts/brandkit_pptx.py` ที่ทำหน้าปก/ตารางแบรนด์/KPI strip/callout/status pill/คำบรรยายรูป/footer ให้พร้อม, loop ตรวจงานด้วยการ render เป็นภาพแล้วดูจริง
 **คู่กับ:** `polished-document-style` (คุมเนื้อหา markdown) — skill นี้คุมหน้าตาไฟล์ที่ render ออกมา
@@ -644,7 +644,7 @@
 ---
 
 ### 56. project-doc-set
-**ใช้กับ:** project-manager, solution-architect, technical-writer
+**ใช้กับ:** developer, project-manager, solution-architect, technical-writer
 **กฎเดียว:** เอกสารทุกชิ้นต้องตอบได้ว่าใครอ่าน และอ่านแล้วตัดสินใจอะไร — ตอบไม่ได้ก็ไม่ต้องเขียน
 **Includes:** **ตารางตัดสินว่าเอกสารอยู่ใน repo (แบบ A) หรืออยู่นอก repo (แบบ B)** พร้อมโครงโฟลเดอร์ของแบบ B และตารางว่าโฟลเดอร์ไหนเป็นทางเลือก (`figures/` · `decisions/` · `qa/`) พร้อมคำตอบว่าถ้าไม่มีแล้วของไปอยู่ไหน, **ชุดเอกสารแยก 2 กลุ่ม** — กลุ่มส่งมอบ 9 ชิ้นเลือกตามขนาดงาน S/M/L และ**กลุ่มเชิงเทคนิค 9 ชิ้นที่เลือกตามเงื่อนไขไม่ใช่ตามขนาด** (README · BUILD-PLAN · AGENT-LOOP · API-SPEC · DATA-DICTIONARY · EVALUATION-POLICY · PROMPT-LIBRARY · ADR · Runbook), สายลำดับการเขียนแยกสายส่งมอบกับสายเทคนิค, ตารางว่า agent ไหนเขียนชิ้นไหนด้วย skill อะไร 16 แถว, เกณฑ์เลือกว่ารูปนี้ใช้ Mermaid หรือ `diagram-figures`, การประกาศ `doc-theme` ครั้งเดียวต่อโปรเจกต์, รายการตรวจ 9 ข้อก่อนส่งมอบ
 **Output:** `assets/doc-set-checklist.md` — ใบตรวจชุดเอกสารที่กรอกส่งได้ทันที
@@ -743,7 +743,7 @@
 ---
 
 ### 70. principle-proceed-on-reversible-work
-**ใช้กับ:** project-manager
+**ใช้กับ:** business-analyst, clinical-data-analyst, data-engineer, developer, fintech-compliance-officer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, project-manager, quant-analyst, recommendation-engineer, revops-analyst, security-engineer, seo-specialist, system-analyst, ux-designer
 **Description:** Use when tempted to stop and ask the user should I do X, which approach do you prefer, or shall I continue — on work that can be undone. Proceed, show the result, and let the person correct it afterwards; reserve confirmation for irreversible or outward-facing actions such as deploys, data deletion, merges to the main branch, and messages to customers.
 
 ---

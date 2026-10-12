@@ -1,6 +1,6 @@
 # skill: multi-shop-stock
 
-Use when one seller lists the same stock on several marketplaces and oversells or loses count. Master stock sheet, SKU naming, sync rules, reorder point.
+Use when one seller lists the same stock on several marketplaces and oversells or loses count. Master stock sheet, SKUs.
 
 # Multi-shop Stock
 

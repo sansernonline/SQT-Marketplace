@@ -1,6 +1,6 @@
 ---
 name: "security-scan"
-description: "Run a security audit on code, dependencies, or infrastructure using security-engineer agent. Identifies vulnerabilities with OWASP-aligned findings."
+description: "Run a security audit on code, dependencies or infrastructure with the security-engineer agent (OWASP-aligned)."
 ---
 
 > **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `review` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ขั้น security gate ให้ใช้ skill `security-gate` ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่

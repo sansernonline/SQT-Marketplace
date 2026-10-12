@@ -1,6 +1,6 @@
 # skill: decision-log
 
-Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step). Logs it in docs/BUILD-PLAN.md.
+Use when an agent makes its own judgment call in long or unattended work (approach, gap, conflicting docs, skipped step).
 
 # decision-log — ทุกการตัดสินใจเองต้องตรวจย้อนได้
 
@@ -18,8 +18,8 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 | วันที่ | งาน | เรื่อง | เลือก | ไม่เลือก | เหตุผล · หลักฐาน |
 |---|---|---|---|---|---|
-| 2026-10-04 15:40 | SRS | เวลาตอบสนองหน้าค้นหา | ≤ 2 วินาที (รอยืนยัน) | ≤ 1 วินาที | BRD ไม่ระบุ · ใช้ค่าที่ระบบเดิมทำได้ (วัดจริง 1.6 วินาที) |
-| 2026-10-04 16:05 | FR-012 | เก็บไฟล์แนบ | ดิสก์ในเครื่อง + path ในฐานข้อมูล | object storage | ขนาดงาน S · ย้ายทีหลังได้ · ADR-004 |
+| 2026-10-04 15:40 | SRS | เวลาตอบสนองหน้าค้นหา | ≤ 2 วินาที (รอยืนยัน) | ≤ 1 วินาที | BRD ไม่ระบุ · ใช้ค่าที่ระบบเดิมทำได้ (ตรวจจริง 1.6 วินาที) |
+| 2026-10-04 16:05 | FR-012 | เก็บไฟล์แนบ | ดิสก์ในเครื่อง + path ในฐานข้อมูล | object storage | ขนาดงาน S · ย้ายทีหลังได้ · ADR-0004 |
 ```
 
 ## ต้องลงเมื่อ
@@ -36,13 +36,13 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 ## หลักการเลือกเมื่อต้องตัดสินเอง
 
 เลือกทางที่กระทบน้อยสุด: ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
-**ข้อเท็จจริง** (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา ให้ใส่ค่าชั่วคราวพร้อม `(รอยืนยัน)` แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่งหรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
+**ข้อเท็จจริง** (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา ใส่ `(รอยืนยัน)` ตรงที่ต้องใช้ (ค่าที่มาจากหลักฐาน เช่น ตัวเลขที่ตรวจจริง ใส่ได้พร้อมป้าย) แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่งหรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
 
 ## กติกาของแถว
 
 - 1 แถวต่อ 1 การตัดสินใจ ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
 - "ไม่เลือก" ต้องมีอย่างน้อย 1 ทาง ถ้าไม่มีทางอื่นเลยก็ไม่ใช่การตัดสินใจ
-- "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `วัดจริง` / `อนุมาน`
+- "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `ตรวจจริง` / `อนุมาน`
 - ไม่ลบแถวเก่า ถ้าผู้ใช้ไม่เห็นด้วยให้แก้ที่แถวนั้น แล้วทำใหม่เฉพาะงานนั้น
 - ถ้า**ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงจาก `security-gate`) ให้ลงตารางเดียวกัน และเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` ใส่ `agent` หรือ `ผู้ใช้` ถ้าตารางไม่มีคอลัมน์นี้ แปลว่า agent ตัดสินทุกแถว
 
@@ -56,13 +56,20 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 
 # skill: legacy-spec-recovery
 
-Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
+Use when a legacy system has code but no spec and someone wants to change it. As-is spec with evidence, then impact analysis.
 
 # Legacy Spec Recovery
 
 Turn an undocumented system into an as-is spec that a change request can be measured against. The code says **what** the system does; it cannot say whether that was **intended**. Every claim therefore carries a source and a confidence label, and everything the code cannot answer becomes a question for a person.
 
 Use `reverse-engineering` instead when there is no source code, only binaries.
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ไม่มีซอร์สโค้ด มีแต่ไฟล์ที่ compile แล้ว หรือรูปแบบไฟล์ที่ไม่รู้จัก | `reverse-engineering` |
+| มีโค้ดและเอกสารพอ แค่จะแก้ส่วนเล็ก ๆ ที่ยังไม่ได้อ่าน | `code-orientation` |
 
 ## The four rules
 

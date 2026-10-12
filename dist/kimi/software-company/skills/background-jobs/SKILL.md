@@ -1,6 +1,6 @@
 ---
 name: background-jobs
-description: Use when work runs outside the user request (mail, reports, imports, schedules). Queue choice, jobs safe to run twice, capped retries, dead letter queue.
+description: Use when work runs outside the user request (mail, reports, imports, schedules). Queues, retries, dead letter queue.
 ---
 
 # งานเบื้องหลัง

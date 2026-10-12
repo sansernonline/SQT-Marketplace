@@ -1,291 +1,284 @@
-# skill: spell-out-abbreviations
+# skill: commit-message-format
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text, labels). Spell out each abbreviation on first use, gloss jargon.
+Use when writing a git commit message (Conventional Commits — type, scope, body, footer).
 
-# Spell Out Abbreviations
+# Conventional Commit Message Format
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+## When to use this skill
 
-> **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
-> **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา
+- Writing any git commit message
+- Reviewing commits in a PR for consistency
+- Setting up commitlint / semantic-release
 
-## รูปแบบ
-
-```
-✅ Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
-❌ MCP ทำให้ Claude ต่อกับระบบอื่นได้
-```
-
-- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็มแล้ววงเล็บตัวย่อ ครั้งต่อไปใช้ตัวย่อล้วน
-- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
-- ตารางหรือหัวข้อที่มีที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
-- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
-
-## ยกเว้น — ไม่ต้องขยาย
-
-คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
-และนามสกุลไฟล์ (`.docx`, `.pptx`) ถ้าไม่แน่ใจ **ให้ขยาย** เพราะขยายเกินไม่เสียหาย แต่คนอ่านไม่รู้เรื่องเสียหาย
-
-## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
-
-ขยายตัวย่อแล้วอาจยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
-ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
+## Format
 
 ```
-❌ ใช้ idempotency key กันงานซ้ำ
-✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
+<type>(<scope>): <subject>
 
-❌ ต้องทำ expand-contract ตอน migrate
-✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
+<body>
+
+<footer>
 ```
 
-**คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
+## Types
 
-**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
-อ่านแล้วเดาความหมายได้ไหม ถ้าเดาไม่ได้ก็ต้องอธิบาย
+| Type | Use for | Triggers release? |
+|------|---------|-------------------|
+| `feat` | New feature | minor version bump |
+| `fix` | Bug fix | patch version bump |
+| `docs` | Documentation only | no |
+| `style` | Formatting, no code change | no |
+| `refactor` | Refactor without behavior change | no |
+| `perf` | Performance improvement | patch |
+| `test` | Adding/updating tests | no |
+| `build` | Build system, dependencies | no |
+| `ci` | CI/CD changes | no |
+| `chore` | Maintenance tasks | no |
+| `revert` | Revert previous commit | depends |
 
-| ระดับผู้อ่าน | อธิบายแค่ไหน |
+## Subject Rules
+
+- **Imperative mood** — "add" not "added" or "adds"
+- **Lowercase** — start with lowercase letter
+- **No period at end**
+- **Max 50 characters**
+- **Complete this sentence:** "If applied, this commit will _____"
+
+## Short and readable (applies to every commit)
+
+Someone scanning `git log --oneline` should understand each line without opening the diff.
+
+- **Language follows the repo** — check `git log -10` first. A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
+- **Subject says what changed for the reader**, not which file was touched: `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว`, not `fix: แก้ items.js บรรทัด 42`
+- **One line is enough** for most commits. Add a body only when *why* is not obvious from the subject — at most 3 short lines or bullets
+- **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
+- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit
+
+| ❌ Hard to read | ✅ Short and clear |
 |---|---|
-| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
-| ทีมพัฒนาแต่คนละส่วน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
-| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
+| `update items.js, server.js, add test, fix bug` | `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` |
+| `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
+| `refactor: แก้โค้ดให้ดีขึ้น` | `refactor(report): อ่านประวัติเบิกครั้งเดียวแทนทุกสินค้า` |
 
----
+## Examples
 
-## ใช้กับอะไรบ้าง
+### Simple commit
+```
+feat(auth): add password reset via email
+```
 
-เอกสารทุกชนิด · คอมเมนต์ในโค้ด · ข้อความ commit · ข้อความบนหน้าจอ · คำอธิบายไดอะแกรม ·
-คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+### With scope
+```
+fix(checkout): prevent double-charge on slow networks
+```
 
-## ตัวอย่างที่เจอบ่อย
+### With body
+```
+feat(api): add rate limiting to public endpoints
 
-Model Context Protocol (MCP) · Application Programming Interface (API) ·
-Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
-Software Development Life Cycle (SDLC) · Single Sign-On (SSO) ·
-Continuous Integration / Continuous Deployment (CI/CD) ·
-Software Requirements Specification (SRS) · Key Performance Indicator (KPI) ·
-Personally Identifiable Information (PII) · Proof of Concept (POC) ·
-Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
-Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
+Implement token bucket algorithm with 100 req/min limit per IP.
+Returns 429 status with Retry-After header when exceeded.
+Cache state stored in Redis to handle multi-instance deployments.
+```
+
+### Breaking change
+```
+feat(api)!: change auth response shape
+
+BREAKING CHANGE: The /auth endpoint now returns tokens nested under
+"data" key instead of root level. Update clients accordingly.
+
+Before: { "access_token": "..." }
+After:  { "data": { "access_token": "..." } }
+```
+
+### With issue reference
+```
+fix(login): handle email with leading whitespace
+
+Closes #1234
+Refs #5678
+```
+
+### Revert
+```
+revert: feat(auth): add password reset via email
+
+This reverts commit a1b2c3d4.
+Reverting due to security issue found in production.
+
+Refs INCIDENT-42
+```
+
+## Body Rules
+
+- Separate from subject with blank line
+- Wrap at 72 characters
+- Explain **why**, not just **what** (diff shows what)
+- Use bullet points if multiple points
+- Reference issues/tickets at the end
+
+## Footer Conventions
+
+```
+Closes #123              ← closes the issue
+Refs #456                ← references but doesn't close
+BREAKING CHANGE: ...     ← breaking change notice
+Co-authored-by: ...      ← attribution
+```
+
+## Quality Checklist
+
+- [ ] Type matches the change (not just "chore" for everything)
+- [ ] Scope is meaningful (component/module name)
+- [ ] Subject is imperative and ≤50 chars
+- [ ] Body explains WHY (if change isn't obvious)
+- [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
+- [ ] Linked to issue/ticket when applicable
 
 ## Anti-patterns
 
-- ❌ ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
-- ❌ วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
-- ❌ ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
-- ❌ ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่ามันวัดอะไร
-- ❌ อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค
+- ❌ `update code`
+- ❌ `fix bug`
+- ❌ `WIP`
+- ❌ `final commit` / `final final`
+- ❌ Mixed changes: don't combine feature + refactor + fix in one commit
+- ❌ Past tense: `added feature` (use `add feature`)
+- ❌ Vague scope: `fix(misc): ...` (be specific)
+
+## Splitting Commits
+
+If your change is hard to summarize in one subject, split it:
+
+```bash
+# Instead of one big commit
+feat(profile): redesign UI, add export, fix bug
+
+# Split into focused commits
+refactor(profile): extract user info component
+feat(profile): redesign user info layout
+feat(profile): add CSV export
+fix(profile): correct date format in display
+```
 
 
 ---
 
-# skill: answer-shape
+# skill: markdown-report-docx
 
-Use when an answer has structure (options, trade-offs, how parts connect, several numbers). Chooses prose, table, small diagram or short list.
+Use when a project or course report must ship as a polished .docx from one Markdown source (cover, contents, figures).
 
-# รูปทรงของคำตอบ
+# Markdown Report → .docx
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace ต้นฉบับอยู่ที่ plugin `superuser` ถ้าจะแก้ให้แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
+> **กฎข้อเดียวของ skill นี้:** Markdown คือต้นฉบับ .docx คือผลที่สร้างจากต้นฉบับ
+> แก้ที่ .md แล้วรันสคริปต์ใหม่ทุกครั้ง ไม่เปิด Word แก้มือ เพราะรอบหน้าจะหายหมด
 
-> **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
-> เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
+ต้นแบบมาจากรายงานโครงงาน X Fitness Chatbot (29 หน้า): ปกโลโก้กลางหน้า · สารบัญ · ตารางหัวสีแบรนด์อ่อน · กล่องหมายเหตุ · รูปพื้นเข้มพร้อมคำบรรยาย · ตารางสั้นไม่ขาดข้ามหน้า
 
----
+## เมื่อไหร่ใช้
 
-## เลือกรูปทรงจากสัญญาณในคำถาม
+- รายงานโครงงาน รายงานส่งอาจารย์ รายงานผลทดสอบ เอกสารส่งมอบที่เนื้อหาเขียนเป็น Markdown อยู่แล้ว
+- ต้องสร้างรายงานซ้ำหลายรอบ (ผลทดสอบเปลี่ยน → รันใหม่ ได้ไฟล์หน้าตาเดิม)
 
-| สัญญาณ | รูปทรง |
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ |
 |---|---|
-| "แบบไหนดีกว่า" · "ต่างกันยังไง" · "มีทางเลือกอะไรบ้าง" | **ตารางเปรียบเทียบ** |
-| "อะไรต่อกับอะไร" · "ข้อมูลไหลยังไง" · "ลำดับเป็นยังไง" | **รูป** |
-| "มีอะไรบ้าง" ที่ไม่ได้เทียบกัน | **รายการหัวข้อย่อย** |
-| "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
-| ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
-| ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
-
-**สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
-เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
+| เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (SRS · BRD · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
+| สไลด์นำเสนอ | `html-slide-deck` หรือ `presentation-design` |
+| เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
 
 ---
 
-## ตารางที่อ่านง่าย
+## 1 · ขั้นตอน
 
-- **คอลัมน์แรกคือสิ่งที่ถูกเทียบ** คอลัมน์ถัดไปคือแง่มุมที่เทียบ
-- **3–5 คอลัมน์** เกินนี้อ่านไม่ทัน ส่วนแถวไม่เกิน 8 แถวในคำตอบแชต
-- **ทุกช่องต้องมีเนื้อ** — ช่องว่างแปลว่าคอลัมน์นั้นไม่ควรมี หรือข้อมูลยังไม่ครบ ถ้าไม่มีข้อมูลให้เขียนว่า "ไม่มี" ตรง ๆ
-- **ช่องละไม่เกิน 1 บรรทัด** ถ้ายาวกว่านั้นให้ยกไปเขียนใต้ตาราง
-- **เรียงแถวตามน้ำหนัก** ตัวที่แนะนำหรือตัวที่ใช้บ่อยที่สุดอยู่บนสุด ไม่ใช่เรียงตามตัวอักษร
-- **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
+1. เขียนเนื้อหาใน `docs/<ชื่อ>.md` ตาม [`polished-document-style`](../polished-document-style/SKILL.md) · ใส่ front matter (ข้อ 2)
+2. รัน `python scripts/md_to_docx.py docs/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
+   - สคริปต์ใช้ `brandkit.py` จาก `branded-document-design/scripts/` ที่อยู่ข้างกัน ต้องมี `python-docx`
+   - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice
+3. แปลง PDF เป็นภาพแล้ว**เปิดดูทุกหน้า** ตามข้อ 5 · เจอปัญหา → แก้ที่ .md แล้วรันใหม่
+4. ตั้งชื่อไฟล์ส่งมอบตาม [`document-naming`](../document-naming/SKILL.md) เช่น `XFitness-Chatbot_Project-Report-v1.0.docx`
 
-```
-❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
-```
+ลองดูตัวอย่างครบทุกองค์ประกอบ: `python scripts/md_to_docx.py assets/example-report.md --pdf`
 
-**ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
+## 2 · Front matter
 
+```yaml
 ---
+title: X Fitness Chatbot                      # ชื่อใหญ่สีแบรนด์บนปก
+subtitle: เอกสารการพัฒนาโครงงานและผลการทดสอบ   # บรรทัดรองตัวหนา
+meta: วิชา 06048308 · ฉบับ 1.2 · 10 ตุลาคม 2569 # บรรทัดเล็กใต้ชื่อรอง
+note: ผู้พัฒนา 68076040 ชื่อ นามสกุล            # ตัวเอียงสีเทา (ไม่บังคับ)
+logo: ../assets/logo-on-light.png             # path เทียบกับไฟล์ .md (ไม่บังคับ)
+logo_width_cm: 6.5
+brand: E10613          # สีหลัก: หัวข้อ H1 ชื่อปก เลขข้อ
+brand_deep: 8E0A12     # หัวข้อ H2 ตัวหนังสือหัวตาราง โค้ดในบรรทัด
+brand_tint: FDECEC     # พื้นหัวตาราง
+brand_tint_2: FEF6F6   # พื้นแถวสลับ (ตารางเกิน 6 แถว)
+---
+```
 
-## เมื่อไหร่รูปชนะตาราง
+ค่าเสริม: `brand_2` (สี accent รอง) · `toc: no` (ไม่ใส่สารบัญ) · `footer: Page` (คำหน้าเลขหน้า ค่าเริ่มต้น "หน้า") · `figure_width_cm` (ค่าเริ่มต้น 17) · `cover_top_pt` (ระยะจากขอบบนถึงโลโก้ ค่าเริ่มต้น 150)
 
-ใช้รูปเมื่อ**ความสัมพันธ์คือคำตอบ** — ตารางบอกคุณสมบัติได้ แต่บอกไม่ได้ว่าอะไรต่อกับอะไร
+**สีมาจากเจ้าของงาน** — ดูดสีจากโลโก้หรือหน้าเว็บของลูกค้า ไม่มี → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 4.5:1)
 
-| ใช้รูป | ใช้ตาราง |
+## 3 · Markdown แต่ละแบบกลายเป็นอะไร
+
+| เขียนใน .md | ได้ใน .docx |
 |---|---|
-| อะไรต่อกับอะไร · อะไรอยู่ในอะไร | ตัวไหนดีกว่าตัวไหนในแง่ใด |
-| ลำดับที่มีทางแยกหรือวนกลับ | ขั้นตอนเรียงตรงไม่มีแขนง (ใช้รายการมีเลขพอ) |
-| สิ่งเดียวกันในหลายสถานะ | สิ่งต่างกันในแง่มุมเดียวกัน |
+| `# 1. หัวข้อ` · `##` · `###` | หัวข้อ 3 ระดับ สีแบรนด์ อยู่ในสารบัญ ไม่ค้างท้ายหน้า · **ใส่เลขข้อเอง** |
+| ย่อหน้า มี `**ตัวหนา**` · `` `โค้ด` `` | เนื้อความเทาเข้ม · ตัวหนาสีเข้ม · โค้ดฟอนต์ monospace สี `brand_deep` |
+| ตาราง `\| … \|` | หัวพื้น `brand_tint` · คอลัมน์แรกตัวหนา · กว้างตามความยาวข้อความ · เกิน 6 แถวมีแถวสลับสี · ไม่เกิน 8 แถวอยู่หน้าเดียวกันทั้งตาราง · หัวตารางซ้ำเมื่อข้ามหน้า |
+| `> ข้อความ` | กล่อง "หมายเหตุ" พื้นเทา |
+| `> [!TIP]` · `[!WARNING]` · `[!IMPORTANT]` · `[!CAUTION]` · `[!NOTE]` | กล่องข้อแนะนำ · ข้อควรระวัง · สำคัญ · อันตราย · หมายเหตุ |
+| `![คำบรรยาย](path.png)` | รูปกลางหน้า + "รูปที่ N — คำบรรยาย" ตัวเอียง อยู่หน้าเดียวกับรูป |
+| `1. …` | เลขข้อสีแบรนด์ ตั้งเลขใหม่ทุกรายการ |
+| `- …` | bullet |
+| ```` ``` ```` | กล่องโค้ดพื้นเทา |
+| `<!-- pagebreak -->` | ขึ้นหน้าใหม่ |
+| `---` · `<!-- อื่น ๆ -->` | ข้าม |
 
-ในแชต **รูปเล็ก ๆ แบบ ASCII หรือ Mermaid สั้น ๆ ก็พอ** — ไม่ต้องเปิดเครื่องมือวาด
+บรรทัดที่อยู่ก่อนตาราง (ย่อหน้านำหรือกล่องหมายเหตุ) ถูกผูกให้อยู่หน้าเดียวกับตาราง
 
+## 4 · กฎเขียนให้ออกมาสวย
+
+- **ตารางคือเครื่องมือหลัก** — ข้อมูลที่มีหัวข้อ + รายละเอียดเขียนเป็นตาราง 2 คอลัมน์ ดีกว่าย่อหน้ายาว
+- **เซลล์ตารางไม่เกิน ~170 ตัวอักษร** — ยาวกว่านั้นตัดไปเขียนใต้ตาราง
+- **รูปพื้นเข้มหรือพื้นขาวเลือกแบบเดียวทั้งเล่ม** · กว้าง 1600–2000 px · วาดด้วย [`diagram-figures`](../diagram-figures/SKILL.md) แล้ว export PNG
+- **ผลทดสอบมาจากไฟล์ผลจริง** — สร้างตารางผลด้วยสคริปต์แล้วแทรกระหว่าง `<!-- RESULTS:START -->` กับ `<!-- RESULTS:END -->` ใน .md ก่อนรัน ไม่พิมพ์ตัวเลขเอง
+- **ข้อมูลจำลองต้องบอก** — กล่องหมายเหตุ 1 บรรทัดตั้งแต่หน้าแรกของเนื้อหา
+- **หัวข้อไม่ใส่อีโมจิ** · กล่องละ 1 สัญลักษณ์ที่สคริปต์ใส่ให้แล้ว
+
+## 5 · ตรวจด้วยตา — ห้ามข้าม
+
+```bash
+python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).save(f'_to_delete/p{i+1:02}.png') for i,p in enumerate(d)]"
 ```
-กล้อง ──DICOM──▶ Orthanc ──▶ API ──▶ รายงาน
-                    │
-                    └──▶ ที่เก็บถาวร
-```
 
-รูปที่ต้องเป็นไฟล์จริงเพื่อใส่เอกสารหรือสไลด์ ให้ใช้ skill วาดรูปของ plugin นั้น (ถ้ามี)
+เปิดภาพทุกหน้า (Read tool) แล้วไล่เช็ก:
 
----
+- [ ] ปก: โลโก้ไม่แตก ชื่อไม่ขึ้นบรรทัดใหม่กลางคำ
+- [ ] สารบัญมีเลขหน้าครบ (ว่าง → เปิดใน Word กด F9 หรือใช้ `--pdf` บน Windows)
+- [ ] ไม่มีหน้าที่เกือบว่าง · ไม่มีหัวข้อค้างท้ายหน้า · คำบรรยายรูปไม่หลุดไปหน้าถัดไป
+- [ ] คอลัมน์ตารางไม่ตัดชื่อหรือรหัสกลางคำ — ถ้าตัด ย่อข้อความในคอลัมน์ที่ยาวที่สุด
+- [ ] สีแบรนด์ตรงกับโลโก้ (ไม่มีแบรนด์ → ค่าประจำบ้าน + `(รอยืนยัน)`) · ไม่มีสีฟ้าค่าเริ่มต้นของ Word หลงเหลือ
+- [ ] ไม่มี placeholder `[...]` หลงเหลือ · `(รอยืนยัน)` ไม่ใช่ placeholder ให้คงไว้ และทุกจุดอยู่ในรายการรอยืนยันของรายงาน
 
-## เมื่อไหร่ประโยคชนะทั้งคู่
+## 6 · Anti-patterns
 
-- คำตอบสั้นกว่า 3 บรรทัด — ตาราง 2 แถวเป็นแค่การตกแต่ง ไม่ได้อธิบายอะไร
-- คำถามที่ตอบว่า "ใช่" หรือ "ไม่ใช่" แล้วตามด้วยเหตุผล 1 ประโยค
-- เรื่องที่**เหตุผลสำคัญกว่าตัวเลือก** — ตารางจะตัดเหตุผลทิ้งเพื่อให้พอดีช่อง
+- ❌ **แก้ .docx ใน Word แล้วส่ง** — รันใหม่เมื่อไรก็หาย · แก้ที่ .md
+- ❌ **ใช้ List Number ของ Word** — นับต่อข้ามรายการ สคริปต์จึงใส่เลขเอง
+- ❌ **ภาพหน้าจอขนาดเล็กขยายเต็มหน้า** — แตก ให้ถ่ายใหม่ที่ความกว้าง ≥ 1600 px
+- ❌ **ตารางกว้าง 7 คอลัมน์ขึ้นไปในหน้าแนวตั้ง** — แยกเป็น 2 ตาราง
+- ❌ **ส่งโดยไม่ได้เปิดดู PDF** — ดูข้อ 5
 
-> ตารางที่มีแถวเดียวหรือ 2 แถวสั้น ๆ แปลว่าใช้ผิดรูปทรง
+## 7 · เชื่อมกับ skill อื่น
 
----
-
-## Anti-patterns
-
-- ❌ **ย่อหน้ายาวเปรียบเทียบ 3 ตัวเลือก** — ผู้อ่านต้องจำตัวแรกไว้จนจบ
-- ❌ **ตารางที่มีช่องว่าง** หรือช่องที่เขียนว่า "ขึ้นอยู่กับ" ทุกช่อง
-- ❌ **ตาราง 2 แถวเพื่อให้ดูเป็นระเบียบ**
-- ❌ **รูปที่วาดสิ่งที่ประโยคเดียวบอกได้**
-- ❌ **ตารางที่ไม่มีข้อสรุป** — ทิ้งให้ผู้อ่านตัดสินใจเอง ทั้งที่เขาถามเพราะอยากได้คำแนะนำ
-- ❌ **เรียงแถวตามตัวอักษร** ทั้งที่มีตัวที่แนะนำชัดเจน
-- ❌ **หัวคอลัมน์เป็นศัพท์วิชาการ** ทั้งที่เขียนเป็นคำถามธรรมดาได้
-
----
-
-## เชื่อมกับ skill อื่น
-
-- ถ้อยคำ ความยาว และการตัดกลิ่น AI ใช้ `human-writing`
-- รูปที่ต้องเป็นไฟล์จริง หรือการเปิดเรื่องที่ต้องให้ผู้ใช้ตัดสินใจ ให้ใช้ skill เฉพาะของ plugin นั้นถ้ามี
-
----
-
-## ตัวย่อ
-
-- **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
-- **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
-
-
----
-
-# skill: temp-file-discipline
-
-Use when a task writes files into a project folder. Sends temporary files (archives, extracts, previews, backups, one-off scripts) to _to_delete/.
-
-# ระเบียบไฟล์ชั่วคราว
-
-> **กฎข้อเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` เท่านั้น
-> ห้ามวางไว้ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน
-
----
-
-## เลือกที่วาง
-
-| ไฟล์นั้นคืออะไร | วางที่ |
+| ต้องการ | ใช้ |
 |---|---|
-| ของชั่วคราวของงานในโปรเจกต์ผู้ใช้ (ภาพตรวจ · log · สคริปต์ครั้งเดียว · ผลรัน) | `_to_delete/` ที่รากโปรเจกต์ ผู้ใช้จะได้ตรวจย้อนได้ |
-| ขั้นกลางที่ไม่ผูกกับโปรเจกต์ใด (ไม่ได้ทำงานในโฟลเดอร์ผู้ใช้) | พื้นที่ทำงานของเซสชัน |
-| ผลงานที่ผู้ใช้จะเก็บไว้ | โฟลเดอร์ปลายทางของงานนั้น |
-
-**รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
-- ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
-- ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
-
----
-
-## อะไรคือไฟล์ชั่วคราว
-
-- ไฟล์บีบอัดที่ส่งผ่านแชทเพื่อเอาไฟล์ลงเครื่อง และโฟลเดอร์ที่แตกออกมา
-- ภาพที่เรนเดอร์ไว้ตรวจงาน · ภาพหน้าจอ · ไฟล์ตัวอย่างที่ทำไว้เทียบ
-- สำเนาสำรองของไฟล์ที่กำลังแก้ · ไฟล์ `.bak` `.old` `.tmp` `ไฟล์ (1).xlsx`
-- สคริปต์ที่เขียนขึ้นใช้ครั้งเดียว · ไฟล์ log จากการรันครั้งเดียว
-- ไฟล์รูปแบบกลางระหว่างแปลง เช่น `.svg` ที่แปลงต่อเป็น `.png` แล้ว
-- **เอกสารที่แปลงรูปแบบมาเพื่อให้อ่านหรือประมวลผลง่าย** — `.docx` หรือ `.pdf` ที่แปลงเป็น `.md`
-  ต้นฉบับคือของจริง ส่วนตัวที่แปลงคือของชั่วคราว **ห้ามวางปนกันในโฟลเดอร์เอกสาร**
-  ไม่งั้นอีก 3 เดือนไม่มีใครรู้ว่าไฟล์ไหนคือฉบับที่ลูกค้าเซ็นรับ
-- เวอร์ชันเก่าของไฟล์ที่เพิ่งแทนที่ไป
-
-**ไฟล์ที่เลิกใช้แล้วก็คือไฟล์ชั่วคราว** — เมื่อแทนที่ไฟล์เก่าด้วยของใหม่แล้ว ให้ย้ายตัวเก่าเข้า `_to_delete/`
-ไม่ทิ้งไว้ข้าง ๆ กัน
-
----
-
-## อะไรไม่ใช่
-
-- ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
-  **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
-- ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
-
----
-
-## วิธีใช้
-
-```
-โปรเจกต์/
-├── ผลงานจริง
-└── _to_delete/
-    ├── transfer.zip
-    └── render-check/
-```
-
-- มีโฟลเดอร์เดียวที่**รากของโปรเจกต์** ไม่ต้องแยกย่อยตามวันที่ ยกเว้นของเยอะจริง
-- โฟลเดอร์ย่อยมาตรฐานที่ skill อื่นใช้ — ใช้ชื่อเดียวกันนี้เท่านั้น:
-
-  | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
-  |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
-  | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
-- ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
-
----
-
-## ตอนจบงาน
-
-1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
-2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
-
----
-
-## Anti-patterns
-
-- ❌ **แตกไฟล์ zip ลงรากโปรเจกต์** แล้วค่อยเก็บกวาดทีหลัง — ทีหลังไม่เคยมาถึง
-- ❌ **ตั้งชื่อ `ไฟล์-v2` `ไฟล์-final` `ไฟล์-ใหม่จริง`** วางไว้ข้างของเดิม
-- ❌ **ลบไฟล์ผู้ใช้เพราะคิดว่าไม่ใช้แล้ว**
-- ❌ **ทิ้งไฟล์ชั่วคราวของงานในโปรเจกต์ไว้ในพื้นที่เซสชัน** — เซสชันจบแล้วผู้ใช้ตรวจย้อนไม่ได้
-- ❌ **ตั้งโฟลเดอร์ย่อยชื่อใหม่ให้ของเดิม** (`shots/` `img-check/`) — ใช้ชื่อในตารางข้างบน
-- ❌ **เก็บไฟล์ต้นทางของผลงานไว้ใน `_to_delete/`** — นั่นไม่ใช่ของชั่วคราว
-- ❌ **ทิ้งไฟล์ค้างโดยไม่บอก** — ผู้ใช้จะมาเจอเองอีกหลายเดือนถัดไป
-
----
-
-## ตัวย่อ
-
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
+| เพิ่มองค์ประกอบที่สคริปต์ไม่มี (KPI · pill · ลงนาม · หน้าแนวนอน) | เรียก `BrandDoc` ใน [`branded-document-design`](../branded-document-design/SKILL.md) ต่อจาก `build()` |
+| สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`html-slide-deck`](../html-slide-deck/SKILL.md) |
+| ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
+| รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |

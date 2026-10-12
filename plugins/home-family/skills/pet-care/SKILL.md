@@ -56,7 +56,7 @@ What the vet commonly follows (the vet decides — use this only to know what to
 | Annual check-up and blood test for older pets | (รอยืนยัน) |
 | Emergency fund | target: one surgery-sized bill held aside, or insurance premium |
 
-Fill with your clinic's quotes; numbers marked (รอยืนยัน) are not prices. Add the total to `trading-finance` `personal-budget`.
+Fill with your clinic's quotes; numbers marked (รอยืนยัน) are not prices. Add the total to `trading-finance` `personal-budget` (if installed).
 
 ## Worked example
 
@@ -64,4 +64,4 @@ Puppy adopted 1 July 2026 at 8 weeks. Vet plan: core vaccine 1 July, boosters 29
 
 ## Related
 
-`home-maintenance` (fences, screens, termite and pest treatment safe for pets — ask the contractor) · `meal-plan-grocery` (foods toxic to pets: chocolate, grapes, onion, garlic, xylitol) · `trading-finance` `personal-budget` · `personal-life` `important-docs`
+`home-maintenance` (fences, screens, termite and pest treatment safe for pets — ask the contractor) · `meal-plan-grocery` (foods toxic to pets: chocolate, grapes, onion, garlic, xylitol) · `trading-finance` `personal-budget` (if installed) · `personal-life` `important-docs` (if installed)

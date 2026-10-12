@@ -1,6 +1,6 @@
 # skill: session-lessons-to-skills
 
-Use when a long or hard task has landed, the user says reflect or what did we learn, or a skill misled. Proposes concrete edits to skills or agents.
+Use when a long or hard task has landed, the user says reflect or what did we learn, or a skill misled.
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
 
@@ -12,6 +12,13 @@ Use when a long or hard task has landed, the user says reflect or what did we le
 ## ข้ามได้เมื่อ
 
 งานสั้นหรือง่าย agent ทำตาม skill ที่มีอยู่แล้วได้ถูกต้อง หรือเป็นเรื่องที่เกิดครั้งเดียว
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ผู้ใช้แก้ความผิดเดิมซ้ำ หรือ review เตือนเรื่องเดิมซ้ำ | `repeated-mistakes-to-checks` — ทำเป็น type · lint · test |
+| อยากให้ agent ทำงานตามสไตล์ของผู้ใช้ | `owner-style-capture` |
 
 ## ขั้นตอน
 
@@ -42,7 +49,7 @@ Use when a long or hard task has landed, the user says reflect or what did we le
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision. Consequence first, one question.
+Use when something found mid-task changes what happens next (stale file, mismatched number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -55,7 +62,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 - เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
 - ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทาง และต้องให้ผู้ใช้เลือกก่อนถึงจะทำต่อได้
+- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน
 - เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
 
 ## เมื่อไหร่ **ไม่** ใช้
@@ -63,8 +70,10 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 | สถานการณ์ | ใช้ตัวนี้แทน |
 |---|---|
 | ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `anthropic-skills:direct-answers` |
+| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` |
+| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` |
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
 
@@ -200,7 +209,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 > | `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
 > | ประวัติการแก้ไข หน้าแรกของ docx ทั้ง 4 | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอพอดี |
 > | `docs/DESIGN-SYSTEM.md` | ดึง token ออกจาก mockup มาเขียนเป็นเอกสาร |
-> | `docs/adr/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
+> | `docs/decisions/` | แยก ADR-1..12 เป็นไฟล์ละข้อ |
 >
 > FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
 >
@@ -237,7 +246,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 |---|---|
 | เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `anthropic-skills:short-answers` |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
 | แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
 | สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
 | สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |
@@ -247,7 +256,7 @@ Use when something found mid-task changes what happens next (stale file, mismatc
 
 # skill: document-naming
 
-Use when creating, renaming or filing a document a team or client keeps. Format choice, file name pattern, version placement, version vs status.
+Use when creating, renaming or filing a document a team or client keeps (format, file name pattern, version vs status).
 
 # ตั้งชื่อและจัดเวอร์ชันเอกสาร
 
@@ -275,15 +284,15 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 
 ## 1 · เลือกรูปแบบก่อนตั้งชื่อ
 
-**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่อยู่กับโค้ดให้เป็น markdown ใน repo**
+**เกณฑ์เดียว: ถ้ามีคนเซ็นหรือส่งออกนอกทีม ให้ทำเป็นไฟล์ส่งมอบ ส่วนเอกสารที่เปลี่ยนตามโค้ดให้เป็น markdown ใน `docs/`**
 
 | เอกสาร | รูปแบบ | เหตุผล |
 |---|---|---|
 | Project Plan · BRD · SRS · Architecture · FSD · Test Plan (`project-doc-set` ข้อ 2.1) · ข้อเสนอโครงการ · ใบตรวจรับ UAT · สัญญา | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
 | คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
 | สไลด์นำเสนอ | **pptx + PDF** | |
-| ADR · API spec · data dictionary · runbook · README | **markdown ใน repo** | เปลี่ยนพร้อมโค้ด ต้อง diff ได้ |
-| บันทึกประชุม · บันทึกการตัดสินใจ | **markdown ใน repo** | ค้นหาง่าย ไม่ต้องเปิดโปรแกรม |
+| ADR · API spec · data dictionary · runbook · README | **markdown** — ADR `docs/decisions/` และ runbook `docs/` ที่ราก (`project-doc-set` ข้อ 1) · README ในโฟลเดอร์โค้ด | เปลี่ยนตามโค้ด ต้อง diff ได้ |
+| บันทึกประชุม · บันทึกการตัดสินใจ | **markdown** ใน `docs/` | ค้นหาง่าย ไม่ต้องเปิดโปรแกรม |
 
 > 🚨 **เขียนร่างเป็น markdown ใน `_to_delete/drafts/` แล้ว render เป็น docx ลง `docs/`**
 > `docs/` มีเอกสารส่งมอบฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำ
@@ -304,8 +313,8 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 | ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `TRS-SRS-v1.2-APPROVED.docx` |
 | ไฟล์ส่งออกที่มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `TRS-FSD-recording-v0.3-DRAFT.docx` |
 | ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ ISO ท้ายสุด | `TRS-SRS-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสารใน repo | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/runbook-recording.md` |
-| ADR | `ADR-NNNN-<เรื่อง>.md` เรียงเลขต่อเนื่อง ใน `docs/decisions/` | `docs/decisions/ADR-0007-เลือก-whisper.md` |
+| เอกสาร markdown ใน `docs/` | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/runbook-recording.md` |
+| ADR | `ADR-NNNN-<slug>.md` เรียงเลขต่อเนื่อง ใน `docs/decisions/` | `docs/decisions/ADR-0007-choose-whisper.md` |
 | บันทึกประชุม | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
 **กฎชื่อไฟล์:**
@@ -367,7 +376,7 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 
 | เรื่อง | กฎ |
 |---|---|
-| ต้นฉบับ | อยู่ใน repo เสมอ — `docs/` |
+| ต้นฉบับ | อยู่ใน `docs/` ที่รากเสมอ (`project-doc-set` ข้อ 1) |
 | ไฟล์ส่งออก | อยู่ใน `docs/` (ตาม `project-doc-set`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
 | ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
 | ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `temp-file-discipline`) |

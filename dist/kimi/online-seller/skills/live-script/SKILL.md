@@ -1,6 +1,6 @@
 ---
 name: "live-script"
-description: "Build a live-selling run sheet — opening hook, product rundown, flash-deal timing and compliance check — for TikTok Shop, Shopee, Lazada or Facebook Live."
+description: "Build a live-selling run sheet — hook, product rundown, flash-deal timing, compliance check — for TikTok, Shopee, Lazada, Facebook."
 disableModelInvocation: true
 ---
 

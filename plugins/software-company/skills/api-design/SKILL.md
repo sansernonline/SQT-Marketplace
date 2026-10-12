@@ -9,7 +9,9 @@ Use the `system-analyst` agent to design API specifications for: **$ARGUMENTS**
 
 The system analyst should:
 
-1. **Initial Discovery** — gather:
+0. **Load the rulebooks first** — `api-conventions` (URLs, versioning, pagination, dates, ids, idempotency) and `web-service-essentials` (RFC 9457 error shape, request ids, operational endpoints). The spec follows them; do not invent new rules per document.
+
+1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
    - User stories / use cases this API supports
    - Consumers (web app, mobile, third-party)
    - Existing API conventions in the codebase
@@ -38,13 +40,13 @@ The system analyst should:
    - Plural resource names
    - Lowercase, hyphens (not camelCase) in URLs
    - Standard HTTP status codes
-   - Consistent error envelope
-   - Cursor-based pagination for scale (not offset)
+   - Errors as RFC 9457 `application/problem+json` (`web-service-essentials` §2)
+   - Pagination per `api-conventions`
 
 5. **Plan cross-cutting concerns:**
    - Authentication (Bearer? API key? OAuth?)
    - Rate limiting tiers
-   - Versioning (`/v1/`, `Accept: application/vnd.api+json;version=1`)
+   - Versioning per `api-conventions`
    - CORS (if browser clients)
    - Idempotency keys for mutations
    - Request ID tracing

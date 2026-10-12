@@ -1,6 +1,6 @@
 # skill: srs-writing
 
-Use when writing or reviewing a Software Requirements Specification. ISO/IEC/IEEE 29148 skeleton, testable requirements, ids, traceability.
+Use when writing or reviewing a Software Requirements Specification (SRS) — ISO/IEC/IEEE 29148, testable requirements, ids, traceability.
 
 # SRS Writing
 
@@ -284,7 +284,7 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 # skill: diagram-figures
 
-Use when an architecture, numbered data-flow or concept figure must look designed for a proposal, slide, print or sign-off. Hand-laid HTML or SVG in the project's colour.
+Use when an architecture, data-flow or concept figure must look designed for a proposal, slide, print or sign-off.
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
 
@@ -367,7 +367,7 @@ skill นี้คือ house style เดียวของรูปที่�
 1. `doc-theme` ในเอกสารของโปรเจกต์ (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 2. สีแบรนด์ที่โปรเจกต์ใช้จริง — ตัวแปรสีหลักในโค้ด (`--primary` · `--brand` · `--accent` ใน CSS · `primary` ใน Tailwind / ธีม UI · `colorPrimary` ในแอปมือถือ) · ชุดแบรนด์ (brand kit) · สีหลักในโลโก้
    ดูสีพื้นจากที่เดียวกันด้วย (`--background` · `--bg` · `background` ใน Tailwind · โหมดมืดหรือสว่างที่แอปใช้เป็นหลัก) เพราะรูปและเด็คใช้สีพื้นตามดีไซน์ของโปรเจกต์
-3. ยังไม่มีเลย → เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) แล้วรอยืนยัน · ถ้าทำงานต่อโดยไม่หยุดถาม ให้ใช้ชุดสีประจำบ้าน `#2A78D6` แล้วเขียนไว้ในรายงานว่ายังไม่มีสีหลัก
+3. ยังไม่มีเลย → ใช้ชุดสีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
 
 เจอสีจากข้อ 2 แล้วแต่ยังไม่มี `doc-theme` ให้ประกาศ `doc-theme` ด้วยค่านั้น เพื่อให้รูป เอกสาร และสไลด์ของโปรเจกต์ใช้สีเดียวกัน
 
@@ -436,6 +436,7 @@ skill นี้คือ house style เดียวของรูปที่�
 
 - **`line-height` ต่ำกว่า 1.5 ไม่ได้** เพราะสระบนกับวรรณยุกต์ซ้อนกัน 2 ชั้นจะโดนตัด ด้วยเหตุผลเดียวกันจึง **ห้ามกำหนดความสูงตายตัวให้กล่องข้อความ**
 - ฟอนต์เรียงตามนี้ `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` ซึ่งตั้งไว้ในโครงแล้ว
+  รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก รูปจะได้ฟอนต์เดียวกับเนื้อความของเด็ค · เอกสาร Word ใช้ Tahoma ตาม `branded-document-design` ข้อ 2 รูปในนั้นต่างฟอนต์ได้
   ถ้าเครื่องไม่มีสักตัว จะตกไปใช้ฟอนต์ที่วางสระผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
 - **ไทยไม่เว้นวรรคระหว่างคำ** เบราว์เซอร์จึงตัดบรรทัดกลางคำ ถ้าข้อความยาวให้ใส่ `<br>` เอง
 - ตัวอักษรไทยดูเล็กกว่าอังกฤษที่ขนาดเท่ากัน ดังนั้นคำอธิบายอย่าต่ำกว่า 12px
@@ -499,7 +500,7 @@ HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG �
 
 # ตารางเนื้องาน → โทนสี
 
-ใช้เมื่อเอกสารยังไม่มี `doc-theme` และยังไม่มีสีแบรนด์ ให้เสนอโทนจากตารางนี้แล้วรอผู้ใช้ยืนยัน ห้ามเลือกสีเองเงียบ ๆ ตารางนี้ใช้ร่วมกันทั้ง 2 engine ของ `diagram-figures` และทุก skill ที่วาดรูป
+ใช้เมื่อเอกสารยังไม่มี `doc-theme` และยังไม่มีสีแบรนด์ ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากตารางนี้ไว้ในรายงานให้ผู้ใช้เลือกทีหลัง (ลำดับเต็มอยู่ใน `diagram-figures` ข้อ 5) ตารางนี้ใช้ร่วมกันทั้ง 2 engine ของ `diagram-figures` และทุก skill ที่วาดรูป
 
 | เนื้องาน | โทนที่เสนอ | เหตุผล |
 |---|---|---|
@@ -561,7 +562,7 @@ Python เขียน SVG ลงกริดแล้วเรนเดอร�
 ---
 
 **สารบัญ**
-- [0 · สีมาจากเนื้องาน — ถามก่อนวาด](#0--สีมาจากเนื้องาน--ถามก่อนวาด)
+- [0 · สีมาจากเนื้องาน — ไม่หยุดถาม](#0--สีมาจากเนื้องาน--ไม่หยุดถาม)
 - [1 · ลำดับการทำงาน](#1--ลำดับการทำงาน)
 - [2 · โครงไฟล์](#2--โครงไฟล์)
 - [3 · กฎข้อที่หนึ่ง — กริดก่อน เส้นทีหลัง](#3--กฎข้อที่หนึ่ง--กริดก่อน-เส้นทีหลัง)
@@ -575,13 +576,13 @@ Python เขียน SVG ลงกริดแล้วเรนเดอร�
 - [11 · แถบสัญลักษณ์](#11--แถบสัญลักษณ์)
 - [ตัวย่อ](#ตัวย่อ)
 
-## 0 · สีมาจากเนื้องาน — ถามก่อนวาด
+## 0 · สีมาจากเนื้องาน — ไม่หยุดถาม
 
 **ถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้นและอย่าถามซ้ำ**
 (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร") ถ้ายังไม่มี ให้ทำตามข้างล่างนี้แล้วเขียนกลับลง `doc-theme`
 
-**ห้ามเลือกสีเอง และห้ามใช้ค่าเริ่มต้นเงียบ ๆ** ให้ถามผู้ใช้ว่าจะใช้สีอะไร
-ถ้าผู้ใช้ยังไม่ระบุ ให้เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) แล้วรอยืนยัน
+**ไม่มีสีแบรนด์ → ทำตามลำดับใน `diagram-figures` ข้อ 5:** ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม
+เสนอโทนจากเนื้องานตามตารางใน [colour-by-domain.md](colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
 
 ใส่**สีหลักสีเดียว**ที่ `ACCENT` ใน `assets/svg-engine/theme.py` แล้วเฉดอ่อนและเข้มทั้งหมด
 จะคำนวณจากสีนั้นด้วย `tint()` โค้ดวาดรูปจึงไม่มีสีอื่นฝังอยู่
@@ -594,7 +595,7 @@ Python เขียน SVG ลงกริดแล้วเรนเดอร�
 ## 1 · ลำดับการทำงาน
 
 1. อ่านไดอะแกรมที่มีอยู่ทั้งหมดก่อน แล้วถามว่า**รูปนี้ตอบคำถามอะไร** — 1 รูปตอบ 1 คำถาม
-2. ถามสีตามข้อ 0
+2. เลือกสีตามข้อ 0 (ไม่มีสี → ค่าประจำบ้าน + `(รอยืนยัน)`)
 3. **วางตำแหน่งทุกกล่องลงกริดก่อนลากเส้น** — ข้อนี้สำคัญที่สุด ดูข้อ 3
 4. แก้ `theme.py` และ `ref.py` ให้เสร็จก่อน แล้วค่อยเขียนไฟล์รูป
 5. **เรนเดอร์แล้วเปิดไฟล์ภาพดูจริง** ไม่ใช่แค่เช็กว่าสคริปต์รันผ่าน
@@ -961,7 +962,7 @@ Kubernetes ของจริง แบบผังอ้างอิงที�
 
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, comments, commits, replies, UI text, labels). Spell out each abbreviation on first use, gloss jargon.
+Use when writing anything for a person (docs, comments, commits, replies, UI text). Spell out abbreviations, gloss jargon.
 
 # Spell Out Abbreviations
 

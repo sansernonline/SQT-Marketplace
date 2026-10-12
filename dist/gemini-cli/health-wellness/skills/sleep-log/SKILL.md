@@ -1,6 +1,6 @@
 ---
 name: sleep-log
-description: Use when someone sleeps badly, wakes tired, or will see a doctor about sleep. Two-week sleep diary, hygiene checklist, what to bring. No diagnosis.
+description: Use when someone sleeps badly, wakes tired, or will see a doctor about sleep. Two-week sleep diary. No diagnosis.
 ---
 
 # Sleep Log

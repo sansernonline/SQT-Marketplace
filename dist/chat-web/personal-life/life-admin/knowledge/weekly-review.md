@@ -1,6 +1,6 @@
 # skill: weekly-review
 
-Use when the week ends, on Sunday evening, or the user feels busy but not productive. 20-minute review of done, slipped, owed and due, three next priorities.
+Use when the week ends, on Sunday evening, or the user feels busy but not productive. 20-minute review, three next priorities.
 
 # Weekly Review (ทบทวนประจำสัปดาห์)
 

@@ -1,6 +1,6 @@
 # skill: developer-experience
 
-Use when the users are developers (time to hello world, error messages, CLI usability, onboarding, SDK design, docs platform, tutorials, talks).
+Use when the users are developers (time to hello world, error messages, CLI, onboarding, SDK design, docs, tutorials).
 
 # developer-experience
 
@@ -33,7 +33,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-devtools` (skill `developer-experience` · `sdk-design-patterns` · `technical-content`) เข้า `software-company` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-devtools` (เดิมชื่อ developer-experience → `references/developer-experience.md` · sdk-design-patterns → `references/sdk-design-patterns.md` · technical-content → `references/technical-content.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`
 
 
 ## reference: agent-devrel-engineer.md
@@ -912,7 +912,7 @@ await client.charges.create(data, {
 
 ## reference: developer-experience.md
 
-> เดิมคือ skill `developer-experience` ใน plugin `software-company-devtools` — รวมเข้า `developer-experience` ใน v2.0.0
+> เดิมชื่อ developer-experience (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-devtools` — รวมเข้า `developer-experience` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1234,7 +1234,7 @@ NPS = % promoters - % detractors
 
 ## reference: sdk-design-patterns.md
 
-> เดิมคือ skill `sdk-design-patterns` ใน plugin `software-company-devtools` — รวมเข้า `developer-experience` ใน v2.0.0
+> เดิมชื่อ sdk-design-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-devtools` — รวมเข้า `developer-experience` ใน v2.0.0
 
 **สารบัญ:** 
 
@@ -1591,7 +1591,7 @@ const client = new Client({
 
 ## reference: technical-content.md
 
-> เดิมคือ skill `technical-content` ใน plugin `software-company-devtools` — รวมเข้า `developer-experience` ใน v2.0.0
+> เดิมชื่อ technical-content (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-devtools` — รวมเข้า `developer-experience` ใน v2.0.0
 
 **สารบัญ:** 
 

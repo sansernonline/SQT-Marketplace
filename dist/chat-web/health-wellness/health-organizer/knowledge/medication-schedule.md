@@ -1,6 +1,6 @@
 # skill: medication-schedule
 
-Use when someone takes prescribed medicines and needs a daily schedule from Thai drug labels, refill reminders or a medicine and allergy list. No dosing.
+Use when someone takes prescribed medicines and needs a daily schedule from Thai drug labels, refills or an allergy list. No dosing.
 
 # Medication Schedule
 

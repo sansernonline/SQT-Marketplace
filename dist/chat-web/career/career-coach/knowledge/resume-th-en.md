@@ -1,6 +1,6 @@
 # skill: resume-th-en
 
-Use when writing or reviewing a CV or resume in Thai or English. Thai vs international convention, data to omit, ATS layout, result-plus-number bullets.
+Use when writing or reviewing a CV or resume in Thai or English (ATS layout, what to omit, result-plus-number bullets).
 
 # Resume — Thai and International
 

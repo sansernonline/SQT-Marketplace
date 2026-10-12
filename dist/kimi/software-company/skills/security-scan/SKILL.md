@@ -1,6 +1,6 @@
 ---
 name: "security-scan"
-description: "Run a security audit on code, dependencies, or infrastructure using security-engineer agent. Identifies vulnerabilities with OWASP-aligned findings."
+description: "Run a security audit on code, dependencies or infrastructure with the security-engineer agent (OWASP-aligned)."
 disableModelInvocation: true
 ---
 

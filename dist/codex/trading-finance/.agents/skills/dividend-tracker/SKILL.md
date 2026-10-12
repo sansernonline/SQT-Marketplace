@@ -1,6 +1,6 @@
 ---
 name: dividend-tracker
-description: Use when dividend season comes or the user asks portfolio dividend income, when to buy before the XD date, dividend yield, or 10 percent dividend tax.
+description: Use when dividend season comes or the user asks about dividend income, buying before the XD date, yield or dividend tax.
 ---
 
 # Dividend Tracker (ติดตามเงินปันผล)

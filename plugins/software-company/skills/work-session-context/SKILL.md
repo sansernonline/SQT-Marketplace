@@ -3,7 +3,7 @@ name: work-session-context
 description: Use when project work starts or ends, before switching AI model, handing work to a person or bot, or an inbox message lands.
 ---
 
-> **ใน SuperUser:** หัวหน้าทีมเป็นคนดูแลไฟล์ในหัวข้อนี้คนเดียว ส่วนการหยุดและรับงานต่อให้เดินตาม playbook [`pickup-and-pause`](../superuser/references/playbook-pickup-and-pause.md)
+> **ใน SuperUser:** หัวหน้าทีมเป็นคนเดียวที่เขียน `CONTEXT.md` · `IMPROVEMENTS.md` และย้ายไฟล์ใน `inbox/` (log เขียนโดย hook · `learn/` โดย `learning-reviewer` ตามตารางข้อ 1) ส่วนการหยุดและรับงานต่อให้เดินตาม playbook [`pickup-and-pause`](../superuser/references/playbook-pickup-and-pause.md)
 
 # work-session-context — ความจำกลางของทีม
 
@@ -12,24 +12,26 @@ description: Use when project work starts or ends, before switching AI model, ha
 
 ## 1 · ไฟล์ทั้งหมด
 
-| ไฟล์ | มีไว้ทำอะไร | ใครเขียน | commit |
-|---|---|---|---|
-| `.claude/superuser/CONTEXT.md` | ไฟล์กลาง — โปรเจกต์คืออะไร · กติกา · ของอยู่ไหน · **รับงานต่อ** | หัวหน้าทีม | ใช่ |
-| `docs/BUILD-PLAN.md` | สถานะ · ประวัติ · การตัดสินใจ | `status-report` · `decision-log` | ใช่ |
-| `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` | ใช่ |
-| `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม | ใช่ |
-| `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ | ไม่ |
-| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม | ไม่ (อยู่นอกโปรเจกต์) |
-| `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` | ไม่ |
-| `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` | ไม่ |
-| `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก | ใช่ |
+| ไฟล์ | มีไว้ทำอะไร | ใครเขียน |
+|---|---|---|
+| `.claude/superuser/CONTEXT.md` | ไฟล์กลาง — โปรเจกต์คืออะไร · กติกา · ของอยู่ไหน · **รับงานต่อ** | หัวหน้าทีม |
+| `docs/BUILD-PLAN.md` | สถานะ · ประวัติ · การตัดสินใจ | `status-report` · `decision-log` |
+| `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` |
+| `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
+| `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
+| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
+| `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` |
+| `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` |
+| `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก |
+
+อะไร commit อะไรไม่ commit มีกติกาที่เดียวใน [`team-files`](../superuser/references/team-files.md) · `docs/` และ `AGENTS.md` / `GEMINI.md` เป็นเอกสารปกติของโปรเจกต์
 
 รากโปรเจกต์เก็บแค่โฟลเดอร์มาตรฐาน ไฟล์ของทีมจึงอยู่ใน `.claude/superuser/` · โปรเจกต์เก่าที่มี `CONTEXT.md` · `IMPROVEMENTS.md` ที่รากและ `.superuser/` ใช้ต่อได้ (hook ยังอ่าน `.superuser/`) แล้วย้ายเข้า `.claude/superuser/` เมื่อสะดวก
 
 ## 2 · เปิดใช้ในโปรเจกต์ (ครั้งแรก)
 
 1. สร้าง `.claude/superuser/log/` · `learn/` และ `inbox/done/` เพราะ hook (สคริปต์จด log อัตโนมัติ) เขียน log เฉพาะโปรเจกต์ที่มี `.claude/superuser/` และไม่สร้างโฟลเดอร์นี้เอง
-2. เพิ่ม `.claude/superuser/log/` · `learn/` · `inbox/` · `state.json` และ `_to_delete/` ลง `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน · `CONTEXT.md` กับ `IMPROVEMENTS.md` commit ได้
+2. ใส่ `.gitignore` ตามกติกา commit ใน [`team-files`](../superuser/references/team-files.md)
 3. สร้าง `.claude/superuser/CONTEXT.md` จากแม่แบบข้อ 3 กรอกจากของจริง (README · ไฟล์ package · `git log`) ไม่เดา ส่วนที่ไม่รู้ให้ใส่ `(รอยืนยัน)`
 4. โปรเจกต์ที่ใช้ Codex หรือ Gemini จริงเท่านั้น: สร้าง `AGENTS.md` · `GEMINI.md` ที่รากไฟล์ละ 2 บรรทัด `# อ่านก่อนทำงาน` และ `อ่าน .claude/superuser/CONTEXT.md แล้วทำตามกติกาในนั้น · ก่อนจบ อัปเดตหัวข้อ "รับงานต่อ"` แล้วประกาศไฟล์นี้เป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · ถ้ามีอยู่แล้วแต่ยังไม่อ้าง `CONTEXT.md` ให้เพิ่ม 2 บรรทัดนี้ท้ายไฟล์
 5. ถ้ามี `.claude/context/` รูปแบบเก่า ให้ย้ายสาระที่ยังใช้ได้เข้า `CONTEXT.md` แล้วย้ายโฟลเดอร์เก่าไป `_to_delete/`

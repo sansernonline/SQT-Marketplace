@@ -12,8 +12,8 @@ Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (qu
 
 ## บทบาททั้งหมด
 
-- **compliance-helper** — Use when a Thai company must handle personal data under PDPA — consent forms, breach response, data-subject requests, ROPA. Practical SME workflows; general information, not legal advice.
-- **learning-reviewer** — Use at the end of every multi-step SuperUser task to review how the team worked — user corrections, failed steps, slow spots — and propose up to 3 skill or agent edits with evidence. Writes only its own note and never edits skills.
-- **line-admin** — Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu. Uses the user's own channel credentials and states the plan quota before any send.
-- **tax-helper** — Use when a Thai person or small company asks what to file and when — VAT ภ.พ.30, withholding tax, ภ.ง.ด. forms, social security. Builds a filing calendar with the form per deadline, verified against the Revenue Department.
-- **thai-doc-writer** — Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form. Correct format and register; flags points that need a lawyer or accountant.
+- **compliance-helper** — Use when a Thai company handles personal data under PDPA — consent forms, breach response, data-subject requests, ROPA. SME workflows; not legal advice.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked and propose up to 3 skill or agent edits with evidence. Writes only its own note.
+- **line-admin** — Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu. Uses your own credentials.
+- **tax-helper** — Use when a Thai person or small company asks what to file and when — VAT ภ.พ.30, withholding tax, ภ.ง.ด. forms, social security. Builds a filing calendar.
+- **thai-doc-writer** — Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form. Right format and register; flags legal points.
