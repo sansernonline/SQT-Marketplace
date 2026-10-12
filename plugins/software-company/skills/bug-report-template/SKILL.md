@@ -1,6 +1,6 @@
 ---
 name: bug-report-template
-description: Use when writing a report for one software defect found in testing or from a user complaint. Repro steps, environment, evidence, severity vs priority.
+description: Use when writing a report for one software defect found in testing or from a user complaint (repro steps, severity vs priority).
 ---
 
 # Bug Report Template
@@ -16,6 +16,14 @@ One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach sc
 - Filing a new bug during testing
 - Converting user complaints into bug tickets
 - Reproducing an issue and documenting findings
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รายงานบั๊กกองอยู่หลายเรื่อง ต้องคัด ทำซ้ำ และจัดกลุ่มก่อน | `bug-inbox-triage` แล้วใช้ skill นี้เขียนทีละใบ |
+| เขียนกรณีทดสอบล่วงหน้าจากข้อกำหนด (ยังไม่มีบั๊ก) | `test-case-template` |
+| ระบบจริงล่มหรือกระทบผู้ใช้จำนวนมาก | `incident-runbook-template` ระหว่างเหตุ · `postmortem-template` หลังเหตุ |
 
 ## Severity vs Priority
 
@@ -42,63 +50,17 @@ These are **different**:
 
 ## Output Template
 
-```markdown
-# Bug: <concise, descriptive title>
+Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not write the outline from memory.
 
-**ID:** BUG-XXXX
-**Severity:** S1 | S2 | S3 | S4
-**Priority:** P1 | P2 | P3 | P4
-**Reporter:** <name>
-**Date:** YYYY-MM-DD
-**Affected Component:** <module/feature>
-**Affected Version:** <build/release>
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
-## Environment
-- OS: ...
-- Browser: ... (version)
-- Device: Desktop | Mobile | Tablet
-- Screen size: ...
-- Network: WiFi | Mobile data | VPN
-- User role: ...
+  ```bash
+  python ../polished-document-style/scripts/check_outline.py assets/bug-report.md <your bug file>
+  ```
 
-## Steps to Reproduce
-1. Navigate to ...
-2. Click ...
-3. Enter ...
-4. Observe ...
-
-## Expected Result
-<what should happen>
-
-## Actual Result
-<what actually happens>
-
-## Frequency
-Always (100%) | Often (>50%) | Sometimes (<50%) | Rare (<10%)
-
-## Evidence
-- Screenshot: [link]
-- Video: [link]
-- Console errors: \`\`\`<paste>\`\`\`
-- Network trace: ...
-- Log excerpt: ...
-
-## Impact
-- Users affected: All | Specific role | Edge case
-- Business impact: ...
-- Data integrity: Compromised | At risk | Not affected
-
-## Workaround
-<temporary fix users can do, or "None">
-
-## Possible Root Cause (optional)
-<if you have a hypothesis>
-
-## Related
-- Related bugs: BUG-XXXX
-- User story: US-XXX
-- Test case: TC-XXX-NNN
-```
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
 ## Title Writing Guide
 
@@ -134,6 +96,7 @@ Before submitting:
 - [ ] At least one piece of evidence attached
 - [ ] Environment info complete
 - [ ] Searched for duplicates first
+- [ ] `check_outline.py` passes
 
 ## Anti-patterns
 

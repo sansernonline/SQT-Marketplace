@@ -1,6 +1,6 @@
 ---
 name: shipping-compare
-description: Use when a Thai online seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX). Cost on real parcel mix, COD fees and payout, volumetric weight.
+description: Use when a Thai online seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX) on cost, COD and volumetric weight.
 ---
 
 # Shipping Compare

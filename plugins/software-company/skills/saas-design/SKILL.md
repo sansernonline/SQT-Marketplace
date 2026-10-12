@@ -1,6 +1,6 @@
 ---
 name: saas-design
-description: Review B2B SaaS architecture or design an enterprise integration. Two modes — saas-architecture-review or integration-design.
+description: Review B2B SaaS architecture or design an enterprise integration (saas-architecture-review or integration-design).
 argument-hint: <saas-architecture-review | integration-design> <details>
 disable-model-invocation: true
 ---

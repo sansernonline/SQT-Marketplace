@@ -1,6 +1,6 @@
 ---
 name: product-listing
-description: Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook. Title formula, keywords, photos, claims Thai FDA and OCPB forbid.
+description: Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, keywords, banned claims).
 ---
 
 # Product Listing (Thai marketplaces)

@@ -1,6 +1,6 @@
 ---
 name: data-engineer
-description: Use when building data pipelines (ETL/ELT), designing data warehouses, integrating data sources, ensuring data quality, building feature stores, or scaling data infrastructure. Specializes in reliable, scalable data movement.
+description: Use when building data pipelines (ETL/ELT), warehouses, data integrations, data quality checks, feature stores, or scaling data infrastructure.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 ---
@@ -334,4 +334,4 @@ For every table, document:
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

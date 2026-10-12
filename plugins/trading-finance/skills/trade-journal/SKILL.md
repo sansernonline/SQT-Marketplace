@@ -1,6 +1,6 @@
 ---
 name: trade-journal
-description: Use when a trade was just entered or exited, or the user forgets why they traded. Logs setup, reason, emotion, plan, outcome and R-multiple in a minute.
+description: Use when a trade was just entered or exited, or the user forgets why they traded. Logs setup, reason, emotion, outcome.
 ---
 
 # Trade Journal (บันทึกการเทรด)

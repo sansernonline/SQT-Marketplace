@@ -1,6 +1,6 @@
 ---
 name: windows-app-design
-description: Use when building a desktop app that must look native on Windows 11 (WinUI 3, Avalonia, MAUI, web shell). Fluent 2 tokens, resource dictionaries.
+description: Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, Avalonia, MAUI, web shell).
 ---
 
 # Windows App Design
@@ -25,13 +25,23 @@ description: Use when building a desktop app that must look native on Windows 11
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
 
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ template ใหม่** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+
 ```
-1. คัดลอก assets/mockup-template.html + assets/fluent.css ไปไว้คู่กัน
-2. แก้เนื้อหาใน mockup ให้เป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/     → ได้ภาพ dark + light
-4. เปิดภาพดูจริงทั้งสองโหมด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
-5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดียวกัน ไม่ออกแบบใหม่
+1. เลือกโครงจากตารางข้อ 0 ใน references/patterns.md แล้วคัดลอก template ที่ตรงกับแอป + assets/fluent.css ไปไว้คู่กัน
+   (mockup-template.html = ตั้งค่า/dashboard · tool-app-template.html = แอปเครื่องมือที่ข้อมูลแน่น · หน้าตาของทั้งสองแบบดูได้ที่ assets/templates-preview.webp)
+2. ทำ 3 หน้าหลักก่อน (หน้าที่ผู้ใช้เปิดบ่อยที่สุด) ให้สวยจริง ยังไม่ทำหน้าที่เหลือ
+3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --hide "<แถบควบคุมของ mockup>"  → ได้ภาพ dark + light
+4. เปิดภาพดูจริงทั้งสองโหมด ตรวจตามข้อ 6 รวมถึงตาราง "ตรวจด้วยตา" ท้าย patterns.md
+5. ส่งภาพให้ subagent ที่ไม่ได้ทำงานชิ้นนี้วิจารณ์ (ดูข้อ 6.1) แก้ตามแล้วถ่ายใหม่ · ไม่เกิน 2 รอบ
+6. 3 หน้าหลักผ่านและอนุมัติแล้ว จึงดึงคอมโพเนนต์ออกมาใช้กับหน้าที่เหลือ
+7. อนุมัติทั้งชุดแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดียวกัน ไม่ออกแบบใหม่
 ```
+
+**ทำไมทำ 3 หน้าก่อน:** ทำทุกหน้าในรอบเดียว (เช่น 32 หน้า) แต่ละหน้าได้ความใส่ใจด้านหน้าตาน้อย
+งานจะไปเน้นว่าครอบคลุม requirement ครบไหม จนได้ wireframe ที่ลงสีแล้ว ส่วนหน้าหลักที่สวยแล้วจะเป็นแบบให้หน้าที่เหลือลอก
+
+**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `fluent.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง · ระหว่างทำวางคู่กันได้
 
 **ทำไมต้อง mockup ก่อน:** แก้ HTML ใช้เวลาเป็นนาที แต่แก้ XAML ที่ผูกกับ ViewModel แล้ว
 ใช้เวลาเป็นชั่วโมง และถ้าเขียนโค้ดไปแล้ว การคุยเรื่องหน้าตาจะกลายเป็นการคุยเรื่องต้นทุน
@@ -53,7 +63,7 @@ description: Use when building a desktop app that must look native on Windows 11
 
 | | Dark | Light |
 |---|---|---|
-| พื้นหน้าต่าง | `#000000` | `#F3F3F3` |
+| พื้นหน้าต่าง / การ์ด | `#202020` / `#2B2B2B` | `#F3F3F3` / `#FFFFFF` |
 | ข้อความหลัก / รอง | `#FFFFFF` / `#CCCCCC` | `#1A1A1A` / `#5D5D5D` |
 | accent | `#4CC2FF` | `#005FB8` |
 | ลิงก์ | `#99EBFF` | `#003E92` |
@@ -62,10 +72,12 @@ description: Use when building a desktop app that must look native on Windows 11
 > **ค่ากลาง (พื้น ข้อความ เส้น เงา) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — ห้ามคิดเอง ห้ามปรับให้สวยขึ้น**
 > แอปที่สีกลางไม่ตรงกับระบบปฏิบัติการ จะดูเหมือนของแปลกปลอมทันทีที่วางข้างแอปอื่น
 >
-> **สีที่เปลี่ยนตามงานมีแค่ accent** ให้ใช้สีแบรนด์ของลูกค้า หรือเสนอโทนจากเนื้องานแล้วรอยืนยัน
+> **สีที่เปลี่ยนตามงานมีแค่ accent** ให้ใช้สีแบรนด์ของลูกค้า ถ้ายังไม่มีให้ใช้ค่าเริ่มต้นของ Windows ในตารางข้างบน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจากเนื้องานไว้ในรายงาน
 > (ตารางเลือกโทนสีตามเนื้องาน อยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
 > ค่า accent ในตารางข้างบนคือค่าเริ่มต้นของ Windows ซึ่งเป็นตัวเลือกที่ปลอดภัยเมื่อยังไม่มีแบรนด์
 > **ไม่ใช่ค่าที่ต้องใช้** และ accent ต้องผ่าน contrast ≥ 4.5:1 ทั้งโหมดมืดและสว่าง จึงมักต้องมีคนละค่าต่อโหมด
+
+**พื้นดำสนิท** แบบ Windows Security (`#000000`) ยังมีให้ใช้ด้วย `<html data-backdrop="black">` แต่ไม่ใช่ค่าเริ่มต้น เพราะวางข้างแอป Windows 11 อื่นแล้วดูแข็งและแปลกตา
 
 **เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ที่เดียวทั้งแอป
 
@@ -76,21 +88,7 @@ description: Use when building a desktop app that must look native on Windows 11
 
 ## 3 · โครงหน้าต่าง
 
-```
-┌──────────────────────────────────────────────── 48px title bar ─┐
-│ ชื่อแอป (12px)                              ─  □  ✕  (46×48)    │
-├──────────────┬──────────────────────────────────────────────────┤
-│ ☰            │  ชื่อหน้า            Title 28/36                  │
-│ 320px        │  คำอธิบายหนึ่งบรรทัด  Body 14/20 สีรอง             │
-│              │                                                  │
-│ ▍เมนูที่เลือก │  หัวข้อกลุ่ม         Subtitle 20/28    ┌─ rail ─┐ │
-│  เมนูอื่น     │  เนื้อหา…                              │ ลิงก์   │ │
-│              │  ← กว้างไม่เกิน 1064px →                │ ช่วยเหลือ│ │
-│              │                                        └────────┘ │
-│ ⚙ ตั้งค่า     │                                                  │
-└──────────────┴──────────────────────────────────────────────────┘
-   ↑ ล่างสุดเสมอ        ↑ ขอบซ้าย/ขวา 36px · ระยะระหว่าง section 40px
-```
+ภาพโครงหน้าต่างพร้อมขนาด (title bar 48px · nav 320px · Title 28/36 · ขอบซ้ายขวา 36px · ระยะระหว่าง section 40px · เนื้อหากว้างไม่เกิน 1064px) อยู่ใน [`references/frame-and-components.md`](references/frame-and-components.md)
 
 กฎที่คนทำเว็บมักพลาด:
 
@@ -98,28 +96,22 @@ description: Use when building a desktop app that must look native on Windows 11
 - **แถบบอกหน้าที่เลือกเป็นขีดเล็ก 3×16px ชิดซ้าย** ไม่ใช่ระบายพื้น accent ทั้งแถว
 - **หน้าละ 1 Title** — ห้ามมี 2
 - **เป้าคลิกเล็กสุด 32×32px** (ไม่ใช่ 48px แบบมือถือ — เดสก์ท็อปมีเมาส์)
-- **ปุ่มสูง 32px กว้างต่ำสุด 120px** ปุ่มเตี้ยกว่านี้ดูเป็นเว็บทันที
+- **ปุ่มสูง 32px กว้างต่ำสุด 120px** ปุ่มเตี้ยกว่านี้ดูเป็นเว็บทันที (ยกเว้นปุ่มไอคอน 32×32 และปุ่ม subtle ใน command bar)
 - **มุม 4px สำหรับคอนโทรล / 8px สำหรับการ์ด** — ไม่มีค่าอื่น
+
+โครงข้างบนเป็นของหน้าตั้งค่าและ dashboard · **แอปเครื่องมือที่ข้อมูลแน่น** (terminal client, file manager, admin tool)
+ใช้ icon rail 48px + รายการ + แผงรายละเอียด 360px แทน ดูแบบทั้งหมดใน **`references/patterns.md`**
+(ปุ่มในแถว · list-detail · command bar · หัวกลุ่ม · tab ใน title bar · status bar · หน้าเริ่มต้น · ไอคอนต้องมีที่ไหน)
 
 ---
 
 ## 4 · คอมโพเนนต์ที่มีให้แล้วใน fluent.css
 
-| องค์ประกอบ | คลาส | หมายเหตุ |
-|---|---|---|
-| Title bar + ปุ่มหน้าต่าง | `.win-titlebar` | Electron: มี `-webkit-app-region: drag` ให้แล้ว |
-| NavigationView | `.win-nav` / `.nav-item.selected` | ย่อเป็นไอคอนอัตโนมัติเมื่อ < 1008px |
-| การ์ด | `.win-card` | |
-| แถวตั้งค่าแบบ Windows | `.win-setting` | ไอคอน + ชื่อ + คำอธิบาย + คอนโทรลขวา |
-| InfoBar | `.win-infobar.success/caution/critical` | **ใช้แทน `alert()` เสมอ** |
-| Status pill | `.win-pill.success/caution/critical` | |
-| KPI | `.win-kpis .kpi` | 3–5 ช่อง · เกินนั้นตัวเลขเล็กจนไม่เด่น |
-| Toggle switch | `.win-toggle` | |
-| ตาราง | `.win-table` | |
-| ลิงก์ | `.win-link` | สี accent-text ไม่ใช่ accent |
+ตารางคลาสพร้อมหมายเหตุอยู่ใน [`references/frame-and-components.md`](references/frame-and-components.md): title bar · nav · การ์ด · แถวตั้งค่า · InfoBar · pill · KPI · toggle · ตาราง · ลิงก์ — **InfoBar ใช้แทน `alert()` เสมอ** · KPI 3–5 ช่อง · ลิงก์ใช้สี accent-text ไม่ใช่ accent
 
 ไอคอนใช้ **Segoe Fluent Icons** (มากับ Windows 11) ขนาด 16px ใน nav, 20px หัวข้อ section,
-24px หัวหน้า ห้ามผสมชุดไอคอนอื่น ส่วนรหัสที่ใช้บ่อยอยู่ท้าย `references/tokens.md`
+24px หัวหน้า ห้ามผสมชุดไอคอนอื่น ส่วนรหัสที่ใช้บ่อยอยู่ท้าย `references/tokens.md` และ `references/patterns.md`
+**ไอคอนไม่ใช่ของตกแต่ง** — หน้าจอที่ปุ่มและเมนูเป็นข้อความล้วนจะดูเหมือน wireframe ทันที ดูตาราง "ต้องมีที่ไหน" ใน patterns.md ข้อ 9
 
 ---
 
@@ -151,36 +143,31 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
 - [ ] เป้าคลิกทุกอันไม่เล็กกว่า 32×32px
 - [ ] คอนทราสต์ข้อความ ≥ 4.5:1 (ข้อความรองบนพื้นการ์ดคือจุดที่พลาดบ่อยที่สุด)
 - [ ] เดินด้วย Tab ได้ครบทุกปุ่ม และ **เห็น focus ring** ทุกจุด
-- [ ] ไม่มีสีดิบหลงเหลือ: `grep -nE "#[0-9a-fA-F]{3,6}" app.css | grep -v "^fluent.css"`
+- [ ] ไม่มีสีดิบหลงเหลือ และทุก `var(--win-…)` มีนิยามจริง — รันตัวตรวจของ `web-app-design` (ต้องส่ง `--require` เป็น token ชุด Fluent เพราะค่าเริ่มต้นเป็นชื่อของเว็บ และ `--marker "Type ramp"` เพราะ `fluent.css` ไม่มีเส้น `base`):
+
+  คำสั่งทั้ง 2 แบบ (ไฟล์ token แยก · mockup ไฟล์เดียว) อยู่ใน [`references/review.md`](references/review.md) · แอปเพิ่ม token ของตัวเอง → ต่อท้าย `--require` · ตั้งชื่อ section ในหน้า mockup ขึ้นต้น `s-`
+
+**เช็กลิสต์ข้างบนวัดแค่ความถูกต้อง ผ่านครบแล้วหน้าจอยังอาจไม่สวย** ตรวจต่อด้วยตาราง "ตรวจด้วยตา" ท้าย `references/patterns.md` (ปุ่มทึบ · ไอคอน · พื้นที่ว่าง · ความสูงแถว · จำนวนกล่อง)
+
+### 6.1 · ให้คนอื่นวิจารณ์
+
+คนที่ทำเองจะเห็นว่างานตัวเองดีกว่าความจริง ให้ส่งภาพให้ subagent ที่ไม่ได้ทำชิ้นนี้ (ถ้าติดตั้ง plugin `graphic-design` ใช้ `graphic-design:design-critic` ไม่มีก็ใช้ general-purpose ที่สั่งให้วิจารณ์อย่างเดียว) พร้อมบอกเป้าหมาย:
+
+ข้อความสั่งงานผู้วิจารณ์ (เป้า · 2–3 ปัญหาต่อหน้า · วิธีแก้ระดับ CSS · ไม่ชม · ≤ 250 คำ) อยู่ใน [`references/review.md`](references/review.md)
+
+แก้ตามข้อที่เห็นด้วย (ข้อที่วิจารณ์ผิดเพราะอ่านภาพผิด ไม่ต้องแก้ แต่จดไว้) แล้วถ่ายใหม่ · **ไม่เกิน 2 รอบ** รอบที่ 3 ได้ผลน้อยและเริ่มแก้ไปมา
 
 ---
 
 ## 7 · Anti-patterns
 
-- ❌ **ระบายพื้น accent ทั้งแถวเมนูที่เลือก** — Windows ใช้ขีดเล็กชิดซ้าย
-- ❌ **มุมโค้ง 12–16px** — นั่นคือหน้าตาเว็บ/มือถือ ส่วน Windows ใช้ 4px กับ 8px
-- ❌ **เงาใต้การ์ด** — Windows 11 ใช้เส้นขอบบาง ๆ เงาสงวนไว้ให้ flyout/dialog เท่านั้น
-- ❌ **`alert()` / `confirm()`** ในแอปที่ห่อเว็บ — ใช้ InfoBar หรือ ContentDialog
-- ❌ **ทำเฉพาะโหมดมืดเพราะภาพต้นแบบเป็นมืด** — ผู้ใช้ Windows ส่วนใหญ่ใช้สว่าง
-- ❌ **ฮาร์ดโค้ดสี accent เป็นน้ำเงิน** — ถ้าอยากตามสีที่ผู้ใช้ตั้งไว้ ต้องอ่านจากระบบ
-  (WinUI: อย่า override `AccentFillColorDefaultBrush` · web: `AccentColor` ของ CSS)
-- ❌ **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
-- ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
+ข้อห้าม 16 ข้อ (ระบายพื้น accent ทั้งแถวเมนู · มุม 12–16px · เงาใต้การ์ด · `alert()` · ทำแค่โหมดมืด · ปุ่มทึบทุกแถว · ปุ่มไม่มีไอคอน ฯลฯ) อยู่ใน [`references/review.md`](references/review.md)
 
 ---
 
 ## 8 · ข้อจำกัดที่ต้องรู้
 
-- ไฟล์ `.xaml` / `.axaml` ในนี้ **ยังไม่ผ่านการคอมไพล์ทดสอบ** ในไฟล์มีแต่ค่า token
-  (Color / SolidColorBrush / x:Double / CornerRadius / Thickness) ที่ใช้ไวยากรณ์
-  มาตรฐาน ตอน build ครั้งแรกให้ดูว่ามี key ไหนชนกับของเฟรมเวิร์กหรือไม่
-- WinUI ต้องเมิร์จ `FluentTokens.xaml` **หลัง** `XamlControlsResources` ไม่งั้นค่าถูกทับ
-- ชื่อ theme dictionary ต่างกัน: WinUI ใช้ `Default`/`Light`/`HighContrast`
-  ส่วน Avalonia ใช้ `Default`/`Light`/`Dark`
-- **โหมดคอนทราสต์สูง** ห้ามใส่สีตายตัว ต้องดึงจากสีระบบ (มีตัวอย่างในไฟล์ XAML)
-- Mica / Acrylic ทำได้จริงเฉพาะ WinUI/Avalonia บน Windows ส่วนบน web-wrapped
-  ให้ใช้สีทึบตาม token แทน อย่าเลียนแบบด้วย `backdrop-filter` เพราะได้ไม่เหมือน
-  และกินเครื่อง
+ข้อจำกัด 5 ข้ออยู่ใน [`references/review.md`](references/review.md) — สำคัญสุด: `.xaml`/`.axaml` ยังไม่ผ่านการคอมไพล์ทดสอบ และ WinUI ต้องเมิร์จ `FluentTokens.xaml` **หลัง** `XamlControlsResources`
 
 ---
 
@@ -189,7 +176,7 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
 | ต้องการ | ใช้คู่กับ |
 |---|---|
 | user flow / wireframe ก่อนลงสี | agent `ux-designer` |
-| กราฟในแดชบอร์ด | `markdown-visuals` (ออกแบบ) แล้ว render เป็น SVG |
+| กราฟในแดชบอร์ด | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
 | เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
 | เลือกสถาปัตยกรรมแอป | `architecture-patterns` |
 | กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |

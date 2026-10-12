@@ -23,7 +23,7 @@ claude --version
 npm install -g @anthropic-ai/claude-code
 ```
 
-**ต้องมี Node.js 16 ขึ้นไปใน PATH** เพราะ hook ของ SuperUser (สคริปต์ที่รันเองอัตโนมัติ) รันด้วย `node` · ไม่มี Node.js ก็ใช้งานหลักได้ปกติ แต่จะไม่มี log ใน `.superuser/log/` และไม่มีแจ้งข้อความใน inbox · ตรวจด้วย `node --version`
+**ต้องมี Node.js 16 ขึ้นไปใน PATH** เพราะ hook ของ SuperUser (สคริปต์ที่รันเองอัตโนมัติ) รันด้วย `node` · ไม่มี Node.js ก็ใช้งานหลักได้ปกติ แต่จะไม่มี log ใน `.claude/superuser/log/` และไม่มีแจ้งข้อความใน inbox · ตรวจด้วย `node --version`
 
 ---
 
@@ -168,18 +168,21 @@ Claude ควรเรียก skill `user-story-writer` มาใช้อั�
 /hooks
 ```
 
-ควรเห็น hook ของ software-company (`superuser-hook.mjs`) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
+ควรเห็น hook `superuser-hook.mjs` (ทุก plugin มีตัวเดียวกัน ติดตั้งหลาย plugin ก็จด log ครั้งเดียว) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
 
 ### 5. เปิด SuperUser ในโปรเจกต์
 
 พูดว่า "ใช้ superuser" แล้วหัวหน้าทีมตั้งให้เอง หรือทำเอง:
 
 ```bash
-mkdir -p .superuser/log .superuser/inbox/done
-echo ".superuser/" >> .gitignore
+mkdir -p .claude/superuser/log .claude/superuser/inbox/done
+printf ".claude/superuser/log/
+.claude/superuser/inbox/
+.claude/superuser/learn/
+" >> .gitignore
 ```
 
-hook เขียน log เฉพาะโปรเจกต์ที่มี `.superuser/` — โฟลเดอร์อื่นไม่ถูกแตะ
+hook เขียน log เฉพาะโปรเจกต์ที่มี `.claude/superuser/` (หาขึ้นไปทางโฟลเดอร์แม่ได้ · โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และไม่สร้างโฟลเดอร์นี้เอง — โฟลเดอร์อื่นไม่ถูกแตะ · `CONTEXT.md` `HISTORY.md` `IMPROVEMENTS.md` commit ได้ ส่วน `log/` `inbox/` `learn/` ไม่ commit
 
 ---
 
@@ -232,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-company.zip`:** 108 skills · 39 agents · 29 commands · `plugin.json` v2.3.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-company.zip`:** 110 skills · 39 agents · 29 commands · `plugin.json` v2.3.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 
@@ -311,6 +314,7 @@ node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้�
 | claude.ai (Cowork / แชทเว็บ) | `dist/claude-web/<plugin>.zip` (อัปโหลดตาม [หัวข้อนี้](#claudeai--อัปโหลด-zip-ของแต่ละ-plugin)) | plugin ทั้งตัว 1 ไฟล์ต่อ plugin | agent ในหน้าแชทธรรมดา · คลังไอคอน .zip |
 | OpenAI Codex CLI | `dist/codex/<plugin>/` | skill · subagent · คำสั่งสำเร็จรูป (แปลงเป็น skill) | ส่วน `model:` ของ agent |
 | Gemini CLI | `dist/gemini-cli/<plugin>/` | skill · subagent · slash command | ส่วน `tools:` `model:` ของ agent |
+| Kimi Code CLI | `dist/kimi/<plugin>/` | skill · subagent · คำสั่งสำเร็จรูป (แปลงเป็น skill เรียกด้วย `/skill:ชื่อ`) | ส่วน `tools:` `model:` ของ agent |
 | ChatGPT Custom GPT | `dist/chat-web/` | 1 บทบาทต่อ 1 GPT พร้อม skill ที่บทบาทนั้นใช้ | script ใน skill · slash command |
 | Gemini Gem | `dist/chat-web/` | เหมือน Custom GPT | เหมือน Custom GPT |
 
@@ -331,7 +335,8 @@ node scripts/build/build-targets.mjs          # สร้าง dist/ ทั้�
 - บาง skill มีชื่อซ้ำกันในหลาย plugin (`superuser` · `human-writing`) → 1 โปรเจกต์ใช้ชุดของ plugin เดียว หรือคัดลอกทีละ plugin แล้วเก็บ `superuser` ของ plugin งานหลักไว้
 - เรียก skill หรือคำสั่งด้วย `$ชื่อ` เช่น `$code-review src/app.ts` หรือปล่อยให้ Codex เลือกเอง
 - Codex จำกัดขนาด `AGENTS.md` รวมทุกไฟล์ไว้ที่ 32 KiB · ไฟล์ของชุดนี้ใช้ราว 18 KiB
-- Codex ไม่รัน hook ของเรา → ช่วงที่ใช้ Codex จะไม่มี log ใน `.superuser/log/` · Codex อ่าน `AGENTS.md` ของโปรเจกต์ แล้วตามไปอ่าน `CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md`
+- `AGENTS.md` (และ `GEMINI.md` ของ Gemini) ที่รากโปรเจกต์เป็นข้อยกเว้นของผังราก สร้างเฉพาะเมื่อใช้ Codex / Gemini จริง แล้วประกาศใน README ของโฟลเดอร์โค้ด
+- Codex ไม่รัน hook ของเรา → ช่วงที่ใช้ Codex จะไม่มี log ใน `.claude/superuser/log/` · Codex อ่าน `AGENTS.md` ของโปรเจกต์ แล้วตามไปอ่าน `.claude/superuser/CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `.claude/superuser/CONTEXT.md`
 
 ### Gemini CLI
 
@@ -343,10 +348,25 @@ gemini extensions install ./dist/gemini-cli/software-company
 
 - คำสั่งเรียกด้วย `/ชื่อ` เช่น `/code-review src/app.ts`
 - skill และ subagent ถูกโหลดเองเมื่องานตรงกับคำอธิบาย
-- Gemini ไม่รัน hook ของเรา → ช่วงที่ใช้ Gemini จะไม่มี log ใน `.superuser/log/` · Gemini อ่าน `GEMINI.md` ของโปรเจกต์ แล้วตามไปอ่าน `CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md`
+- Gemini ไม่รัน hook ของเรา → ช่วงที่ใช้ Gemini จะไม่มี log ใน `.claude/superuser/log/` · Gemini อ่าน `GEMINI.md` ของโปรเจกต์ แล้วตามไปอ่าน `.claude/superuser/CONTEXT.md` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `.claude/superuser/CONTEXT.md`
 
 > ⚠ Google ประกาศว่า Gemini CLI ถูกแทนด้วย Antigravity CLI ตั้งแต่ 18 มิถุนายน 2026 สำหรับผู้ใช้ระดับฟรีและ Google One
 > ยังไม่ได้ตรวจว่า Antigravity CLI อ่าน extension รูปแบบนี้ได้หรือไม่
+
+### Kimi Code CLI
+
+`dist/kimi/<plugin>/` เป็น plugin 1 ตัวต่อ 1 plugin (`kimi.plugin.json`) · ในหน้าจอ Kimi พิมพ์:
+
+```text
+/plugins install ./dist/kimi/software-company
+```
+
+- คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อ` เช่น `/skill:code-review src/app.ts`
+- skill และ subagent ถูกโหลดเองเมื่องานตรงกับคำอธิบาย · `KIMI.md` ถูกต่อท้าย system prompt ตอนเปิด plugin
+- Kimi ไม่รัน hook ของเรา → ช่วงที่ใช้ Kimi จะไม่มี log ใน `.claude/superuser/log/` · ก่อนจบงานให้สั่งมันเขียนหัวข้อ "รับงานต่อ" ใน `.claude/superuser/CONTEXT.md`
+- ตัวเนื้อ agent ถูกแปลงเป็น template (`${ชื่อ}`) → `technical-writer` มี `${token}` ในตัวอย่างโค้ด ยังไม่ได้ลองว่า Kimi แสดงผลถูกไหม (รอยืนยัน)
+
+> รูปแบบไฟล์ตรวจจากเอกสารทางการของ Kimi Code CLI เมื่อ 2026-10-10 · ยังไม่ได้ลองติดตั้งจริง
 
 ### ChatGPT Custom GPT และ Gemini Gem
 
@@ -372,5 +392,5 @@ gemini extensions install ./dist/gemini-cli/software-company
 
 ส่วนที่มีเฉพาะ Claude:
 
-- `/loop` ใน `docs/AGENT-LOOP.md` (ฉบับ 10 ของ `prompt-new-project.md`) · เครื่องมืออื่นไม่มีคำสั่งนี้ → วาง prompt ทีละรอบในหน้าต่างใหม่แทน
-- `anthropic-skills:docx` / `anthropic-skills:pdf` ในฉบับ 13 · เครื่องมืออื่นไม่มี 2 ตัวนี้ → ใช้ `branded-document-design` อย่างเดียว และเครื่องต้องรัน Python ได้
+- `/loop` ใน `docs/AGENT-LOOP.md` (ฉบับ 11 ของ `prompt-new-project.md`) · เครื่องมืออื่นไม่มีคำสั่งนี้ → วาง prompt ทีละรอบในหน้าต่างใหม่แทน
+- `anthropic-skills:docx` / `anthropic-skills:pdf` ในฉบับ 14 · เครื่องมืออื่นไม่มี 2 ตัวนี้ → ใช้ `branded-document-design` อย่างเดียว และเครื่องต้องรัน Python ได้

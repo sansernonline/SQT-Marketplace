@@ -1,6 +1,6 @@
 ---
 name: doc-quotation
-description: Use when issuing a Thai quotation, invoice, billing note or receipt. Which document when, required fields, numbering, VAT and withholding lines, total in words.
+description: Use when issuing a Thai quotation, invoice, billing note or receipt (fields, numbering, VAT and withholding, total in words).
 ---
 
 # Thai Sales Documents — quotation to receipt

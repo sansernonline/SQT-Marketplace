@@ -1,6 +1,6 @@
 ---
 name: home-maintenance
-description: Use when a Thai household needs a seasonal maintenance schedule (aircon, water pump, termites, roof before rains) or must compare contractor quotes.
+description: Use when a Thai household needs a seasonal maintenance schedule (aircon, water pump, termites, roof) or compares contractor quotes.
 ---
 
 # Home Maintenance (Thai climate)

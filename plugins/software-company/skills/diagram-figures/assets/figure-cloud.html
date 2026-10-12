@@ -24,6 +24,9 @@
        -webkit-font-smoothing:antialiased;line-height:1.5}
   .sheet{width:1960px;padding:48px 56px 40px}
 
+  /* โลโก้โปรเจกต์หน้าชื่อรูป — ไม่มีไฟล์ = รูปหายเอง หัวรูปกลับเป็นแบบไม่มีโลโก้ */
+  .head > div:first-child:has(> .logo){display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center}
+  .head .logo{grid-row:span 2;width:48px;height:48px;border-radius:12px;display:block}
   .head{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;
         padding-bottom:20px;border-bottom:1px solid var(--line)}
   .head h1{font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
@@ -56,7 +59,7 @@
   .down{display:grid;place-items:center;height:26px;color:var(--line-strong)}
   .down svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none}
   .wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-  .wires path.wire{fill:none;stroke:var(--line-strong);stroke-width:1.6}
+  .wires path.wire{fill:none;stroke:var(--line-strong);stroke-width:1.6;stroke-linejoin:round}
   .wires path.wire.planned{stroke-dasharray:7 6}
   .wire-label{position:absolute;transform:translate(-50%,-50%);z-index:2}
   .pill{display:inline-block;font-size:12.5px;color:var(--muted);background:var(--paper);
@@ -75,6 +78,7 @@
 
   <div class="head">
     <div>
+      <img class="logo" src="../../../assets/logo/logo-mark.svg" alt="" onerror="this.remove()">
       <h1>Web Application — ผังบริการบน AWS</h1>
       <div class="sub">คำถามที่รูปนี้ตอบ: ระบบนี้ใช้บริการอะไรของ Amazon Web Services บ้าง และต่อกันอย่างไร</div>
     </div>
@@ -218,6 +222,27 @@ function anchor(el, side, box, p){
   const y = {l:r.top+r.height*p, r:r.top+r.height*p, t:r.top, b:r.bottom}[side] - box.top;
   return [x, y];
 }
+/* เส้นหักมุมฉากมุมโค้ง: นอน → ตั้ง → นอน · ห้ามเส้นเฉียง */
+function elbow(x1,y1,x2,y2,mx){
+  const xm = x1 + (x2-x1)*mx, dy = y2-y1;
+  if (Math.abs(dy) < 1) return {d:`M${x1} ${y1} L${x2} ${y2}`, xm};
+  const r = Math.min(10, Math.abs(dy)/2, Math.abs(xm-x1), Math.abs(x2-xm));
+  const sx = Math.sign(x2-x1) || 1, sy = Math.sign(dy);
+  return {xm, d:`M${x1} ${y1} L${xm-sx*r} ${y1} Q${xm} ${y1} ${xm} ${y1+sy*r}
+                 L${xm} ${y2-sy*r} Q${xm} ${y2} ${xm+sx*r} ${y2} L${x2} ${y2}`};
+}
+/* จุดบนเส้นหักที่ระยะ t (0 = ต้นทาง · 1 = ปลายทาง) วัดตามความยาวจริง */
+function along(x1,y1,x2,y2,xm,t){
+  const pts = [[x1,y1],[xm,y1],[xm,y2],[x2,y2]];
+  const len = (a,b) => Math.abs(b[0]-a[0]) + Math.abs(b[1]-a[1]);
+  let rest = t * (len(pts[0],pts[1]) + len(pts[1],pts[2]) + len(pts[2],pts[3]));
+  for (let i = 0; i < 3; i++){
+    const L = len(pts[i],pts[i+1]);
+    if (rest <= L || i === 2){ const k = L ? Math.min(1, rest/L) : 0;
+      return [pts[i][0] + (pts[i+1][0]-pts[i][0])*k, pts[i][1] + (pts[i+1][1]-pts[i][1])*k]; }
+    rest -= L;
+  }
+}
 function draw(){
   const stage = document.getElementById("stage"), svg = document.getElementById("wires");
   const box = stage.getBoundingClientRect();
@@ -229,15 +254,16 @@ function draw(){
     const [x1,y1] = anchor(a, w.fs, box, w.fp), [x2,y2] = anchor(b, w.ts, box, w.tp);
     const p = document.createElementNS("http://www.w3.org/2000/svg","path");
     p.setAttribute("class", "wire" + (w.planned ? " planned" : ""));
-    p.setAttribute("d", `M${x1} ${y1} L${x2} ${y2}`);
+    p.setAttribute("d", elbow(x1, y1, x2, y2, w.mx === undefined ? 0.5 : w.mx).d);
     p.setAttribute("marker-end","url(#ah)");
     svg.appendChild(p);
     if (w.label){
       const t = (w.lp === undefined) ? 0.5 : w.lp;
       const d = document.createElement("div");
       d.className = "wire-label";
-      d.style.left = (x1 + (x2-x1)*t) + "px";
-      d.style.top  = (y1 + (y2-y1)*t) + "px";
+      const [lx, ly] = along(x1, y1, x2, y2, x1 + (x2-x1)*(w.mx === undefined ? 0.5 : w.mx), t);
+      d.style.left = lx + "px";
+      d.style.top  = ly + "px";
       d.innerHTML = `<span class="pill">${w.label}</span>`;
       stage.appendChild(d);
     }

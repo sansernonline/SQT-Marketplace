@@ -1,0 +1,163 @@
+<!-- ตัวอย่างครบ 13 เลย์เอาต์ · คัดลอกเฉพาะ <section> ที่ใช้ แล้วแก้เนื้อหา
+     ทุกหน้า: data-at = เวลาที่ควรถึงหน้านี้ · data-menu = ชื่อในเมนู · data-part = เริ่มส่วนใหม่ · <aside> = บันทึกผู้พูด -->
+
+<!-- 1 · ปก -->
+<section data-at="0:00" id="cover" data-menu="ปก" data-part="เริ่มต้น" class="slide hero">
+<img src="../../markdown-report-docx/assets/example-logo.png" alt="" style="width:420px">
+<p class="kicker" style="font-size:28px">01234567 Software Project · Final Presentation</p>
+<h1>Clinic Booking Assistant</h1>
+<div class="rule"></div>
+<p class="lead">ผู้ช่วยจองคิวคลินิกผ่าน LINE</p>
+<p class="lead" style="font-family:var(--head);font-weight:700;color:var(--accent2)">ตอบจากตารางเวลาจริง และไม่เดาเวลาเอง</p>
+<p class="note" style="position:absolute;left:128px;bottom:96px;font-size:28px">6500001 ชื่อ นามสกุล · 6500002 ชื่อ นามสกุล · ตุลาคม 2569</p>
+<aside><b>ถึงหน้านี้ 0:00</b> บอกชื่องานและประโยคเดียวที่อยากให้จำ · กด <b>T</b> เริ่มนาฬิกา</aside>
+</section>
+
+<!-- 2 · ทีม: การ์ด 2 ใบ -->
+<section data-at="0:08" id="team" data-menu="ผู้จัดทำ" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">ทีมผู้จัดทำ</p><h2>ทีม 2 คน: คนหนึ่งดูฝั่งคลินิก อีกคนดูฝั่งระบบ</h2></div>
+<div class="row">
+ <div class="card grow col" style="gap:12px;padding:40px"><p class="kicker" style="font-size:28px">6500001</p><h3 style="font-size:44px">ชื่อ นามสกุล</h3>
+  <p class="sub">· เก็บความต้องการจากคลินิก<br>· เขียนชุดทดสอบ 10 กรณี<br>· ทำสไลด์และคลิปสาธิต</p></div>
+ <div class="card grow col" style="gap:12px;padding:40px"><p class="kicker" style="font-size:28px">6500002</p><h3 style="font-size:44px">ชื่อ นามสกุล</h3>
+  <p class="sub">· ออกแบบระบบ<br>· เขียน backend และเชื่อม LINE<br>· deploy และทดสอบอัตโนมัติ</p></div>
+</div>
+<p class="foot">CLINIC BOOKING · ผู้จัดทำ</p><p class="pg"></p>
+<aside><b>ถึงหน้านี้ 0:08</b> คนละประโยค</aside>
+</section>
+
+<!-- 3 · สารบัญ: คลิกไปส่วนนั้น เลขหน้าเติมให้เอง -->
+<section data-at="0:18" id="toc" data-menu="สารบัญ" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">สารบัญ · คลิกเพื่อไปหน้านั้น · กด M ดูทุกหน้า</p><h2>สารบัญ</h2></div>
+<div class="toc">
+ <a data-goto="div-1"><span class="n">1</span><div><b>ภาพรวม</b><span>โจทย์ · ระบบทำอะไรได้</span></div><span class="p"></span></a>
+ <a data-goto="div-2"><span class="n">2</span><div><b>สถาปัตยกรรม</b><span>ระบบต่อกันอย่างไร · โค้ดหลัก</span></div><span class="p"></span></a>
+ <a data-goto="demo"><span class="n">3</span><div><b>สาธิต</b><span>จองคิวจริงใน LINE</span></div><span class="p"></span></a>
+ <a data-goto="results"><span class="n">4</span><div><b>ผลทดสอบ</b><span>ผ่าน 9/10 กรณี</span></div><span class="p"></span></a>
+</div>
+<p class="foot">CLINIC BOOKING · สารบัญ</p><p class="pg"></p>
+</section>
+
+<!-- 4 · เปิดส่วน: เลขใหญ่ -->
+<section data-at="0:27" id="div-1" data-menu="เปิดส่วน" data-part="1 · ภาพรวม" class="slide divider">
+<p class="num">01</p><h2 style="font-size:84px">ภาพรวม</h2><p class="sub" style="font-size:34px">โจทย์ · ระบบทำอะไรได้</p><p class="pg"></p>
+</section>
+
+<!-- 5 · ตัวเลขใหญ่ 3 ใบ -->
+<section data-at="0:32" id="problem" data-menu="โจทย์" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">โจทย์ของคลินิก</p><h2>คนไข้โทรจองคิวซ้ำทุกวัน<br>พนักงานต้องเปิดตารางหมอทีละสาย</h2></div>
+<div class="row" style="align-items:flex-start">
+ <div class="card grow col"><p class="big" data-count="120">120</p><h3>สายต่อวัน</h3><p class="note">ช่วง 08:00–10:00 มากที่สุด</p></div>
+ <div class="card grow col"><p class="big" data-count="4">4</p><h3>นาทีต่อสาย</h3><p class="note">เปิดตาราง · ถามซ้ำ · จดมือ</p></div>
+ <div class="card grow col"><p class="big" data-count="0">0</p><h3>เวลาที่ยอมให้ AI เดา</h3><p class="note">ทุกเวลามาจากฐานข้อมูล</p></div>
+</div>
+<p class="foot">CLINIC BOOKING · โจทย์ · ข้อมูลจำลอง</p><p class="pg"></p>
+</section>
+
+<!-- 6 · ตาราง -->
+<section data-at="0:45" id="stack" data-menu="เทคโนโลยี" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">เทคโนโลยีที่ใช้</p><h2>Python ทั้งระบบ ใช้บริการฟรีทั้งหมด</h2></div>
+<table class="tbl">
+<tr><th>ชั้น</th><th>ใช้อะไร</th><th>ทำหน้าที่</th></tr>
+<tr><td>ช่องทาง</td><td class="m">LINE Messaging API</td><td>รับข้อความ ตอบกลับ</td></tr>
+<tr><td>เซิร์ฟเวอร์</td><td class="m">FastAPI · uvicorn</td><td>webhook และ API หลังบ้าน</td></tr>
+<tr><td>ข้อมูล</td><td class="m">SQLite</td><td>ตารางหมอ คิว คนไข้</td></tr>
+<tr><td>ทดสอบ</td><td class="m">pytest · Playwright</td><td>โค้ดและหน้าเว็บหลังบ้าน</td></tr>
+</table>
+<p class="foot">CLINIC BOOKING · เทคโนโลยี</p><p class="pg"></p>
+</section>
+
+<!-- 7 · เปิดส่วน 2 -->
+<section data-at="0:58" id="div-2" data-menu="เปิดส่วน" data-part="2 · สถาปัตยกรรม" class="slide divider">
+<p class="num">02</p><h2 style="font-size:84px">สถาปัตยกรรม</h2><p class="sub" style="font-size:34px">ระบบต่อกันอย่างไร · โค้ดหลัก</p><p class="pg"></p>
+</section>
+
+<!-- 8 · แผนภาพระบบ: กล่องวางตำแหน่ง px + ลูกศร svg -->
+<section data-at="1:03" id="overview" data-menu="ภาพรวมระบบ" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">ภาพรวมระบบ</p><h2>LINE ส่งข้อความเข้าแอปเดียว<br>แอปตรวจตารางหมอในฐานข้อมูลก่อนตอบทุกครั้ง</h2></div>
+<div class="map" style="width:1664px;height:460px">
+ <svg viewBox="0 0 1664 460" width="1664" height="460"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a8a92"/></marker></defs>
+  <path id="e-user-line" d="M250,95 L330,95"/><path id="e-line-api" d="M580,95 L676,95"/><text x="628" y="80" text-anchor="middle">webhook</text>
+  <path id="e-api-core" d="M1362,115 C1440,115 1440,249 1366,249"/><path id="e-core-db" d="M1362,249 C1440,249 1440,383 1366,383"/><text x="1450" y="186">ถามเวลาว่าง</text><text x="1450" y="320">อ่าน slots</text>
+  <path id="e-staff-api" d="M250,385 L520,385 L520,120 L676,120"/><text x="390" y="371" text-anchor="middle">HTTPS · /admin</text>
+ </svg>
+ <div class="box user" data-key="user" style="left:0;top:50px"><b>คนไข้ · LINE</b><span>แอป LINE</span></div>
+ <div class="box ext" data-key="line" style="left:330px;top:50px"><b>LINE Platform</b><span>Messaging API</span></div>
+ <div class="box user" data-key="staff" style="left:0;top:340px"><b>พนักงาน</b><span>หน้าหลังบ้าน</span></div>
+ <div class="group" style="left:660px;top:0;width:700px;height:460px">
+  <p class="gtitle">Render · แพ็กเกจฟรี</p>
+  <div class="layer" data-key="api"><b>API · FastAPI</b><span>/webhook · /admin</span></div>
+  <div class="layer core" data-key="core"><b>แกนจองคิว · book()</b><span>ตรวจเวลาว่าง · ล็อกคิว · ส่งใบนัด</span></div>
+  <div class="layer" data-key="db"><b>ข้อมูล · SQLite</b><span>doctors · slots · bookings</span></div>
+ </div>
+</div>
+<ol class="tour-steps">
+ <li data-on="user line" data-path="e-user-line">① คนไข้พิมพ์ใน LINE → LINE Platform รับข้อความ</li>
+ <li data-on="line api" data-path="e-line-api">② LINE ส่ง webhook เข้า FastAPI · ตรวจลายเซ็นก่อน</li>
+ <li data-on="api core db" data-path="e-api-core e-core-db">③ book() ถามเวลาว่างจาก SQLite · <b>AI ไม่ได้เดาเวลา</b></li>
+ <li data-on="staff api" data-path="e-staff-api">④ พนักงานดูคิวทั้งหมดจากหน้าหลังบ้าน</li>
+</ol>
+<div class="tourbar"></div>
+<p class="foot">CLINIC BOOKING · ภาพรวมระบบ · กรอบเส้นประ = ระบบภายนอก</p><p class="pg"></p>
+<aside><b>ถึงหน้านี้ 1:03</b> กด ▶ แล้วพูดตามข้อความใต้แผนภาพทีละขั้น · กดซ้ำเพื่อหยุดอธิบาย</aside>
+</section>
+
+<!-- 9 · คลิกดูรายละเอียด: รายการซ้าย + แผงขวา -->
+<section data-at="1:20" id="files" data-menu="ไฟล์หลัก" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">ไฟล์หลัก · คลิกเพื่อดูเนื้อไฟล์</p><h2>โค้ดทั้งระบบอยู่ใน 3 ไฟล์</h2></div>
+<div class="row grow">
+ <div class="list" style="width:620px;flex:none">
+  <div data-pick="files"><b>main.py</b>รับ webhook และเส้นทาง API<template><div class="path">app/main.py</div><p>รับข้อความจาก LINE ตรวจลายเซ็น แล้วส่งต่อให้ book()</p><pre>@app.post("/webhook")
+async def webhook(req: Request): ...</pre></template></div>
+  <div data-pick="files"><b>booking.py</b>ตรวจเวลาว่างและล็อกคิว<template><div class="path">app/booking.py</div><p>เวลาที่เสนอทุกช่องมาจากตาราง slots เท่านั้น</p></template></div>
+  <div data-pick="files"><b>db.py</b>อ่านเขียน SQLite<template><div class="path">app/db.py</div><p>ทุก query ใช้ parameter ไม่ต่อสตริง</p></template></div>
+ </div>
+ <div class="detail grow" id="d-files"></div>
+</div>
+<p class="foot">CLINIC BOOKING · ไฟล์หลัก</p><p class="pg"></p>
+</section>
+
+<!-- 10 · โค้ด -->
+<section data-at="1:35" id="code" data-menu="โค้ด book()" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">โค้ดหลัก · app/booking.py</p><h2>ทุกช่องเวลาที่เสนอมาจากฐานข้อมูล ไม่ได้มาจาก AI</h2></div>
+<pre class="code"><em>def</em> book(patient, dept, day):
+    free = db.free_slots(dept, day)          <i># เวลาว่างจริงจาก slots</i>
+    <em>if not</em> free:
+        <em>return</em> reply("วันนี้เต็มแล้ว ขอเสนอวันถัดไป")
+    <em>return</em> reply(offer(free[:3]))         <i># เสนอ 3 ช่วงแรก</i></pre>
+<p class="foot">CLINIC BOOKING · โค้ดหลัก</p><p class="pg"></p>
+</section>
+
+<!-- 11 · สาธิตในโทรศัพท์: แชตเล่นซ้ำเองเมื่อเข้าหน้า -->
+<section data-at="1:50" id="demo" data-menu="สาธิต" data-part="3 · สาธิต" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">สาธิต 1/1</p><h2>จองทันตกรรมพรุ่งนี้เช้า ได้ใบนัดใน 3 ข้อความ</h2></div>
+<div class="row grow">
+ <div class="phone"><div class="bar"><i></i>Clinic Booking · ออนไลน์</div>
+  <div class="chatlog" data-chat><p data-u>จองทันตกรรมพรุ่งนี้เช้าค่ะ</p><p data-a>พรุ่งนี้ (12 ต.ค.) ทันตกรรมว่าง 09:00 · 09:30 · 10:00 สะดวกช่วงไหนคะ</p><p data-u>09:30</p><p data-a>จองแล้วค่ะ 12 ต.ค. 09:30 ทพ.สมชาย ห้อง 2 · มาก่อนเวลา 15 นาที</p></div></div>
+ <div class="col grow">
+  <div class="card col"><p class="tag accent" style="align-self:flex-start">ดูอะไร</p><p class="sub">เวลาที่เสนอตรงกับตาราง slots · คนไข้เลือกแล้วคิวถูกล็อกทันที</p></div>
+  <div class="card col" data-loop><p class="sub">① ตรวจเวลาว่าง</p><p class="sub">② เสนอ 3 ช่วง</p><p class="sub">③ ล็อกคิว + ใบนัด</p></div>
+ </div>
+</div>
+<p class="foot">CLINIC BOOKING · สาธิต · ข้อมูลจำลอง</p><p class="pg"></p>
+</section>
+
+<!-- 12 · ผล: ตัวเลข + กราฟแท่ง -->
+<section data-at="2:20" id="results" data-menu="ผลทดสอบ" data-part="4 · ผล" class="slide">
+<div class="col" style="gap:10px"><p class="kicker">ผลการทดสอบ</p><h2>ผ่าน 9 จาก 10 กรณี ตอบเฉลี่ย 1.4 วินาที</h2></div>
+<div class="row" style="align-items:stretch">
+ <div class="card grow col"><p class="big" data-count="9/10">9/10</p><h3>กรณีผ่าน</h3><p class="note">T10 เสนอเวลานอกเวลาทำการ</p></div>
+ <div class="card grow col"><p class="big">1.4</p><h3>วินาทีเฉลี่ย</h3><p class="note">ช้าสุด 2.1 · เร็วสุด 0.7</p></div>
+</div>
+<div class="card col" style="gap:10px;padding:24px 28px"><p class="note">เวลาตอบรายกรณี (วินาที)</p>
+ <div class="bars"><div data-v="1.2" data-l="T01"></div><div data-v="1.5" data-l="T02"></div><div data-v="0.9" data-l="T03"></div><div data-v="0.8" data-l="T04"></div><div data-v="1.6" data-l="T05"></div><div data-v="0.7" data-l="T06"></div><div data-v="1.3" data-l="T07"></div><div data-v="1.1" data-l="T08"></div><div data-v="1.4" data-l="T09"></div><div data-v="2.1" data-l="T10" data-c="var(--warn)"></div></div></div>
+<p class="foot">CLINIC BOOKING · ผล · qa/results/</p><p class="pg"></p>
+</section>
+
+<!-- 13 · ปิด -->
+<section data-at="2:45" id="close" data-menu="ขอบคุณ · ถาม-ตอบ" class="slide close">
+<h2 style="font-size:72px">ตอบจากตารางจริง · ไม่เดาเวลาเอง</h2>
+<p class="sub" style="font-size:34px">ผ่านทดสอบ 9/10 · แก้ T10 รอบถัดไป</p>
+<p style="font-family:var(--head);font-size:56px;font-weight:700;color:var(--accent2);margin-top:30px">ขอบคุณ · ถาม-ตอบ</p>
+<p class="pg"></p>
+</section>

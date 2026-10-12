@@ -1,6 +1,6 @@
 ---
 name: refund-request
-description: Use when the user wants money back in Thailand (broken, fake or undelivered item, 7-day direct-sales cancellation, unknown card charge). Route and deadline.
+description: Use when the user wants money back in Thailand (broken, fake or undelivered item, direct-sales cancellation, unknown card charge).
 ---
 
 # Refund Request (Thailand)

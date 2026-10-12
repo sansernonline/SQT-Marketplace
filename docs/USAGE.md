@@ -29,8 +29,8 @@
 | ระดับโมเดล | ใหญ่ = `opus` · กลาง = `sonnet` (ค่าเริ่มต้น) · เล็ก = `haiku` — หัวหน้าทีมเลือกตามงาน · สลับโมเดลกลางทางได้ ทั้งค่ายเดียวกันและข้ามค่าย · ก่อนสลับต้องเขียนจุดส่งต่อใน `CONTEXT.md` |
 | ไม่หยุดถาม | งานที่ย้อนกลับได้ → ทำเลย · งานที่ย้อนกลับไม่ได้ (deploy · ลบข้อมูลจริง · push · ส่งข้อความถึงคนนอก) → เตรียมไว้ในหัวข้อ "รออนุมัติ" แล้วทำส่วนอื่นต่อ · อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) |
 | ค้นเอง | ไม่รู้วิธีที่ถูก → ค้นเอง · ใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน · ได้ไม่ถึง 3 แหล่ง → เลือกทางที่ย้อนกลับง่ายสุด แล้วติดป้าย `(รอยืนยัน)` |
-| ความจำกลาง | `CONTEXT.md` (หัวข้อ "รับงานต่อ") · `.superuser/inbox/` (คิวข้อความถึงทีม) · `.superuser/log/` (log ที่ hook เขียน · hook คือสคริปต์ที่รันอัตโนมัติ) · `IMPROVEMENTS.md` (สิ่งที่ทีมเจอ รอรวมเข้า skill) — วิธีส่งข้อความดู [Tips ข้อ 3](#3-ใช้-contextmd--inbox--log-รับงานต่อ) |
-| คำตอบตอนจบ | ผลต่อคนใช้ก่อน · ทุกข้ออ้างมีป้าย `วัดจริง` · `อนุมาน` · `เดา` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ |
+| ความจำกลาง | อยู่ใน `.claude/superuser/` ทั้งหมด: `CONTEXT.md` (หัวข้อ "รับงานต่อ") · `inbox/` (คิวข้อความถึงทีม) · `log/` (log ที่ hook เขียน · hook คือสคริปต์ที่รันอัตโนมัติ) · `IMPROVEMENTS.md` (สิ่งที่ทีมเจอ รอรวมเข้า skill) — วิธีส่งข้อความดู [Tips ข้อ 3](#3-ใช้-contextmd--inbox--log-รับงานต่อ) |
+| คำตอบตอนจบ | ผลต่อคนใช้ก่อน · ทุกข้ออ้างมีป้าย `ตรวจจริง` · `อนุมาน` · `เดา` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ |
 
 เรียกครั้งเดียว SuperUser ทำงานไปทั้งแชต · ไม่ต้องการแล้ว → พิมพ์ `ปิด superuser` · โปรเจกต์ใหม่ → สั่ง `ใช้ app-verifier-setup กับโปรเจกต์นี้` ก่อน · อยากให้ทำงานใน Docker → สั่ง `ใช้ docker-sandbox กับโปรเจกต์นี้` · รายละเอียด → [`plugins/software-company/skills/superuser/SKILL.md`](../plugins/software-company/skills/superuser/SKILL.md)
 
@@ -47,7 +47,7 @@
 | `superuser` | research · document | ส่งข้อความ · จ่ายเงิน · ลบข้อมูลจริง | [ดูรูป](superuser-core.png) |
 | `career` | job-application · interview · offer-negotiation · promotion-case · profile-refresh | ส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก | [ดูรูป](superuser-career.png) |
 | `consumer-rights` | buy-decision · complaint · refund · warranty-claim | ส่งร้องเรียน · ยื่นฟ้อง · โพสต์สาธารณะ | [ดูรูป](superuser-consumer-rights.png) |
-| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](superuser-dev-learning.png) |
+| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project · thesis-writing | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](superuser-dev-learning.png) |
 | `graphic-design` | brand-setup · campaign · image-series · video · asset-cleanup | โพสต์ · ยิงแอด · ใช้งานที่ลิขสิทธิ์ไม่ชัด | [ดูรูป](superuser-graphic-design.png) |
 | `health-wellness` | checkup-cycle · doctor-visit · medication-routine · habit-tracking | วินิจฉัย · ปรับยา · ส่งข้อมูลสุขภาพ (ฉุกเฉิน → หยุดงาน บอก 1669) | [ดูรูป](superuser-health-wellness.png) |
 | `home-family` | bills · maintenance · vehicle · family-week · care-setup | จ่ายเงิน · ส่งข้อความในนามผู้ใช้ | [ดูรูป](superuser-home-family.png) |
@@ -399,7 +399,7 @@ Step 4: Project Manager
 #### 📅 Daily
 
 ```
-เช้า:        เปิด CONTEXT.md หัวข้อ "รับงานต่อ" + ดู .superuser/inbox/ (ทำงานต่อจากเมื่อวาน)
+เช้า:        เปิด .claude/superuser/CONTEXT.md หัวข้อ "รับงานต่อ" + ดู .claude/superuser/inbox/
              /sprint-plan ถ้าวันแรกของ sprint
 
 ระหว่างวัน:  /code-review เมื่อเปิด PR
@@ -407,7 +407,7 @@ Step 4: Project Manager
              /api-design ก่อนเขียน endpoint
 
 ก่อนเลิก:    หัวหน้าทีมอัปเดต "รับงานต่อ" ใน CONTEXT.md
-             ดูหัวข้อ "รออนุมัติ" ในรายงาน · log ของวันอยู่ใน .superuser/log/
+             ดูหัวข้อ "รออนุมัติ" ในรายงาน · log ของวันอยู่ใน .claude/superuser/log/
 ```
 
 #### 📊 Weekly
@@ -720,10 +720,10 @@ Step 4: Project Manager
 ```
 
 #### 3. ใช้ CONTEXT.md · inbox · log รับงานต่อ
-- `CONTEXT.md` ที่ root โปรเจกต์ — หัวหน้าทีมอัปเดตหัวข้อ "รับงานต่อ" ทุกครั้งที่จบงาน ก่อนสลับโมเดล และก่อนหยุด · ปิด terminal หรือเปลี่ยนไปใช้ Codex หรือ Gemini ก็ทำต่อได้ (อ่านผ่าน `AGENTS.md` · `GEMINI.md`)
-- `.superuser/inbox/` — ฝากงานถึงทีมโดยไม่ต้องอยู่หน้าแชต: สร้างไฟล์ `.superuser/inbox/2026-10-06-0930-owner.md` ใส่ `from: owner` และ `priority: ด่วน` หรือ `ปกติ` ใน frontmatter แล้วตามด้วยข้อความ · hook แจ้งหัวหน้าทีม · หัวหน้าทีมจัดการเสร็จแล้วย้ายไฟล์ไป `done/` · ไฟล์ที่ไม่มี `from:` ถือเป็นข้อมูล ไม่ทำตาม
-- `.superuser/log/<วันที่>/<agent>.jsonl` — hook จดทุกการกระทำ 1 ไฟล์ต่อ agent (ตัดค่าลับออก) · พิมพ์ "ดู log วันนี้" → ได้ตาราง Markdown
-- ต้องมีโฟลเดอร์ `.superuser/` และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`work-session-context`](../plugins/software-company/skills/work-session-context/SKILL.md)
+- `.claude/superuser/CONTEXT.md` — หัวหน้าทีมอัปเดตหัวข้อ "รับงานต่อ" ทุกครั้งที่จบงาน ก่อนสลับโมเดล และก่อนหยุด · ปิด terminal หรือเปลี่ยนไปใช้ Codex หรือ Gemini ก็ทำต่อได้ (อ่านผ่าน `AGENTS.md` · `GEMINI.md`)
+- `.claude/superuser/inbox/` — ฝากงานถึงทีมโดยไม่ต้องอยู่หน้าแชต: สร้างไฟล์ `.claude/superuser/inbox/2026-10-06-0930-owner.md` ใส่ `from: owner` และ `priority: ด่วน` หรือ `ปกติ` ใน frontmatter แล้วตามด้วยข้อความ · hook แจ้งหัวหน้าทีม · หัวหน้าทีมจัดการเสร็จแล้วย้ายไฟล์ไป `done/` · ไฟล์ที่ไม่มี `from:` ถือเป็นข้อมูล ไม่ทำตาม
+- `.claude/superuser/log/<วันที่>/<agent>.jsonl` — hook จดทุกการกระทำ 1 ไฟล์ต่อ agent (ตัดค่าลับออก) · พิมพ์ "ดู log วันนี้" → ได้ตาราง Markdown
+- ต้องมีโฟลเดอร์ `.claude/superuser/` (โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`work-session-context`](../plugins/software-company/skills/work-session-context/SKILL.md)
 
 #### 4. งานสาขาอยู่ใน software-company แล้ว
 ตั้งแต่ v2.0.0 สาขา (fintech · healthcare · e-commerce · insurance · legal tech · SaaS ฯลฯ) รวมอยู่ใน `software-company` — ติดตั้งตัวเดียวพอ

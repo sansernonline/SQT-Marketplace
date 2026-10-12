@@ -1,6 +1,6 @@
 ---
 name: session-lessons-to-skills
-description: Use when a long or hard task has landed, the user says reflect or what did we learn, or a skill misled. Proposes concrete edits to skills or agents.
+description: Use when a long or hard task has landed, the user says reflect or what did we learn, or a skill misled.
 ---
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ
@@ -13,6 +13,13 @@ description: Use when a long or hard task has landed, the user says reflect or w
 ## ข้ามได้เมื่อ
 
 งานสั้นหรือง่าย agent ทำตาม skill ที่มีอยู่แล้วได้ถูกต้อง หรือเป็นเรื่องที่เกิดครั้งเดียว
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ผู้ใช้แก้ความผิดเดิมซ้ำ หรือ review เตือนเรื่องเดิมซ้ำ | `repeated-mistakes-to-checks` — ทำเป็น type · lint · test |
+| อยากให้ agent ทำงานตามสไตล์ของผู้ใช้ | `owner-style-capture` |
 
 ## ขั้นตอน
 

@@ -1,6 +1,6 @@
 ---
 name: postmortem-template
-description: Use when writing a post-incident review or blameless postmortem of a production outage. Timeline, impact, systemic causes, action items.
+description: Use when writing a post-incident review or blameless postmortem of a production outage.
 ---
 
 # Blameless Postmortem Template
@@ -13,6 +13,13 @@ description: Use when writing a post-incident review or blameless postmortem of 
 - After a near-miss that could have been a major incident
 - After significant bugs that reached production
 - After a security incident
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| เหตุยังเกิดอยู่ ต้องรู้ว่าจะทำอะไรตอนนี้ | `incident-runbook-template` |
+| บั๊กธรรมดาที่ไม่ได้ทำให้ระบบจริงล่ม | `bug-report-template` |
 
 ## Core Principles
 

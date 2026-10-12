@@ -1,6 +1,6 @@
 ---
 name: tax-vat-th
-description: Use when a Thai company asks what to file this month, whether to register for VAT, how much to withhold or late penalties. PP 30, PND 1, 3, 53, 50, 51, e-WHT.
+description: Use when a Thai company asks what to file this month, VAT registration, withholding or late penalties (PP 30, PND 1, 3, 53, 50).
 ---
 
 # Thai VAT, Withholding Tax and Company Filing Calendar

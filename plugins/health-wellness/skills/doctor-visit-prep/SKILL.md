@@ -1,6 +1,6 @@
 ---
 name: doctor-visit-prep
-description: Use when preparing for a doctor or hospital visit (symptom timeline, medicine and allergy list, questions) or recording what was said. No diagnosis.
+description: Use when preparing for a doctor or hospital visit (symptoms, medicines, allergies, questions) or recording what was said. No diagnosis.
 ---
 
 # Doctor Visit Prep

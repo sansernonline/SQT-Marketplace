@@ -1,6 +1,6 @@
 ---
 name: project-doc-set
-description: Use when a new project needs its document set decided (which docs, order, readers, where docs, assets, mockups and QA live). Scales to project size.
+description: Use when a new project needs its document set decided (which docs, order, readers, where docs, mockups and QA live).
 ---
 
 # ชุดเอกสารโปรเจกต์
@@ -12,10 +12,7 @@ description: Use when a new project needs its document set decided (which docs, 
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- เปิดโปรเจกต์ใหม่ แล้วต้องตัดสินว่าจะมีเอกสารอะไรบ้าง
-- โปรเจกต์เดิมมีเอกสารกระจัดกระจาย ไม่รู้ว่าอันไหนเป็นตัวจริง
-- ลูกค้าถามว่า "ส่งมอบเอกสารอะไรบ้าง"
-- จะเริ่มเขียนเอกสารสักชิ้น แต่ไม่แน่ใจว่าต้องมีอะไรมาก่อน
+เปิดโปรเจกต์ใหม่แล้วต้องตัดสินว่ามีเอกสารอะไร · เอกสารกระจัดกระจายไม่รู้ว่าอันไหนตัวจริง · ลูกค้าถามว่าส่งมอบอะไรบ้าง · จะเขียนเอกสารแต่ไม่แน่ใจว่าต้องมีอะไรก่อน
 
 ## เมื่อไหร่ **ไม่** ใช้
 
@@ -30,19 +27,11 @@ description: Use when a new project needs its document set decided (which docs, 
 
 ## 1 · เอกสารอยู่ในหรืออยู่นอก repo
 
-**ตัดสินข้อนี้ก่อน** เพราะถ้าย้ายทีหลังจะต้องแก้ลิงก์ทั้งโปรเจกต์
+**ตัดสินข้อนี้ก่อน** (ย้ายทีหลังต้องแก้ลิงก์ทั้งโปรเจกต์) · **ค่าเริ่มต้นคือแบบ B** แม้เอกสารเป็น markdown ล้วน โค้ดอยู่ใน `<project-name>/` (ตัวพิมพ์เล็กคั่น `-`) · แบบ A เมื่อผู้ใช้ขอเท่านั้น
 
-**ค่าเริ่มต้นคือแบบ B** — โค้ดอยู่ในโฟลเดอร์ `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`) แม้เอกสารจะเป็น markdown ล้วน ส่วนแบบ A ใช้เมื่อผู้ใช้ขอเท่านั้น
-
-| | **แบบ A — เอกสารอยู่ใน repo** | **แบบ B — เอกสารอยู่นอก repo** |
-|---|---|---|
-| เลือกเมื่อ | เอกสารเป็น markdown ทั้งหมด และผู้อ่านคือทีมพัฒนา | มี `.docx` / `.xlsx` / mockup / รูป PNG ที่ลูกค้าต้องเห็น |
-| ตรงกับชุด | S · M | M · L |
-| โครง | ดู **`project-bootstrap` ข้อ 1** ซึ่งเป็นเจ้าของโครงนี้ | ดูโครงข้างล่าง |
-| ข้อดี | เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน | pull request ไม่เต็มไปด้วยไฟล์ binary |
-
-> โปรเจกต์ที่เริ่มเป็นแบบ A แล้วโตจนมีเอกสารส่งมอบ ให้ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว**
-> ห้ามค้างอยู่ครึ่งทาง เพราะเอกสารที่อยู่ 2 ที่ ก็คือมี 2 เวอร์ชัน
+- **แบบ A** (เอกสารใน repo) — เอกสารเป็น markdown ล้วน ผู้อ่านคือทีมพัฒนา (ชุด S · M) · เอกสารกับโค้ดเปลี่ยนใน pull request เดียวกัน · โครงเป็นของ `project-bootstrap` ข้อ 1
+- **แบบ B** (เอกสารนอก repo) — มี `.docx` / `.xlsx` / mockup / PNG ที่ลูกค้าต้องเห็น (ชุด M · L) · pull request ไม่เต็มไปด้วย binary
+- แบบ A ที่โตจนมีเอกสารส่งมอบ → ย้ายเป็นแบบ B **ทั้งชุดในครั้งเดียว** เอกสารที่อยู่ 2 ที่คือมี 2 เวอร์ชัน
 
 ### โครงของแบบ B
 
@@ -52,26 +41,23 @@ description: Use when a new project needs its document set decided (which docs, 
 ├─ docs/                เอกสารทุกชิ้นที่เราเขียน — .docx ส่งมอบ และ .md เชิงเทคนิค อยู่ด้วยกัน
 │  ├─ figures/          รูปที่ export แล้ว — .png เท่านั้น        [มีเมื่อมีรูปในเอกสารส่งมอบ]
 │  │  └─ src/           ไฟล์ต้นทางของรูป (.html · .mmd · .drawio)
-│  ├─ decisions/        ADR — หนึ่งการตัดสินใจต่อไฟล์              [ทางเลือก]
+│  ├─ decisions/        ADR-NNNN-<slug>.md หนึ่งการตัดสินใจต่อไฟล์  [ทางเลือก]
 │  └─ research/         research แอปต้นแบบ (`reference-app-research`) [ทางเลือก]
 ├─ mockup/              .html ที่เปิดแล้วกดได้จริง
 ├─ qa/                  test case · ผลทดสอบ · bugs/ รายงานบั๊ก
 ├─ assets/              โลโก้ · ไอคอนทุกขนาด · favicon · wordmark (ต้นทาง .svg + ไฟล์ export)
 ├─ _to_delete/          ของชั่วคราวทุกอย่าง
 ├─ .claude/            skill ของโปรเจกต์ (เช่น verify) — ต้องอยู่ที่ที่เปิด Claude Code
+│  └─ superuser/        ไฟล์ทำงานของ SuperUser — CONTEXT.md · IMPROVEMENTS.md · log/ · inbox/ · learn/
 └─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
 ```
 
-**โฟลเดอร์เหล่านี้สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:**
+**ไฟล์ของ SuperUser — ข้อนี้คือที่เดียวที่กำหนด ไฟล์อื่นอ้างมาที่นี่:** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
 
-| โฟลเดอร์ | สร้างเมื่อ | ถ้าไม่มี ของไปอยู่ไหน |
-|---|---|---|
-| `ref/` | ได้รับไฟล์จากลูกค้าหรือจากระบบเดิม | ไม่มีอะไรให้เก็บ และห้ามเอาไฟล์ลูกค้าไปปนใน `docs/` เพราะจะแยกไม่ออกว่าอะไรเราเขียน |
-| `docs/figures/` | มีรูปที่วาดเองและไปอยู่ในเอกสารส่งมอบ | รูปฝังอยู่ในไฟล์ `.docx` อย่างเดียว จึงแก้ทีหลังไม่ได้ |
-| `docs/decisions/` | มีการตัดสินใจทางเทคนิคที่ต้องอธิบายทีหลัง | เหตุผลอยู่ใน Architecture หัวข้อเดียว |
-| `docs/research/` | ผู้ใช้บอกว่าอยากได้แอปแบบเดียวกับแอปที่มีอยู่ | ไม่มี research |
-| `qa/` | มี test case (เกือบทุกโปรเจกต์) โดย test case อยู่ที่นี่เสมอ เป็น `.md` หรือ `.xlsx` (ขนาด L) | — ส่วน `docs/test-plan.md` มีแค่แผน ไม่มีรายการ test case |
-| `assets/` | มีโลโก้หรือไอคอนของโปรเจกต์ | — |
+**โฟลเดอร์สร้างเมื่อมีของจริง ไม่สร้างเผื่อ:** `ref/` เมื่อได้ไฟล์จากลูกค้าหรือระบบเดิม (ห้ามปนใน `docs/`) · `docs/figures/` เมื่อมีรูปวาดเองในเอกสารส่งมอบ (ไม่งั้นรูปติดอยู่ใน `.docx` แก้ไม่ได้) · `docs/decisions/` เมื่อมีการตัดสินใจที่ต้องอธิบายทีหลัง · `docs/research/` เมื่อผู้ใช้อยากได้แอปแบบที่มีอยู่ · `qa/` เมื่อมี test case (test case อยู่ที่นี่เสมอ `docs/test-plan.md` มีแค่แผน) · `assets/` เมื่อมีโลโก้หรือไอคอน
+
+**โปรเจกต์แบบ ecosystem** (sub-project ≥ 2 ตัว แต่ละตัวมีเอกสารชุดของตัวเอง) → โฟลเดอร์ชื่อ `ecosystem/` เสมอ (ห้าม `projects/` `modules/` `apps/`) · `ecosystem/<รหัส>-<SUB>/` มี `docs/` `mockup/` `qa/` และ repo ของตัวเอง · เอกสารที่ครอบทุกตัวอยู่ `docs/` ที่รากที่เดียว · ผังและกฎเต็ม → [`references/ecosystem.md`](references/ecosystem.md)
+
 
 **กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
 
@@ -80,7 +66,7 @@ description: Use when a new project needs its document set decided (which docs, 
 - **ทุกปุ่มใน mockup ต้องกดได้จริง** เพราะปุ่มหลอกทำให้รีวิวผิด
 - **`.docx` / `.xlsx` อยู่ใน `docs/` และ `qa/` เท่านั้น** ไม่กระจายไปรากโปรเจกต์
 - **ของชั่วคราวลง `_to_delete/`** (`temp-file-discipline`)
-- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ ส่วนรูปแบบตารางอยู่ใน `project-bootstrap` ข้อ 1
+- **`docs/README.md` เป็นสารบัญ** บอกว่าอ่านอะไรก่อนและใครเป็นเจ้าของ (แม่แบบใน `project-bootstrap` → `assets/starter-files.md`)
 
 ---
 
@@ -88,11 +74,7 @@ description: Use when a new project needs its document set decided (which docs, 
 
 ขนาดวัดจาก **ระยะเวลา × จำนวนคนที่ต้องเห็นพ้องกัน** ไม่ใช่จำนวนบรรทัดโค้ด
 
-| ขนาด | ความหมาย |
-|---|---|
-| **S** | ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น |
-| **M** | 1–3 เดือน · มีผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ |
-| **L** | > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา |
+**S** ≤ 2 สัปดาห์ · ทีมเดียว · ไม่มีใครนอกทีมต้องเซ็น — **M** 1–3 เดือน · ผู้ว่าจ้างภายใน · ส่งมอบเป็นรอบ — **L** > 3 เดือน · ลูกค้าภายนอกเซ็นรับ · มีข้อผูกพันตามสัญญา
 
 ### 2.1 · เอกสารส่งมอบ — คนอ่านและเซ็น
 
@@ -109,30 +91,17 @@ description: Use when a new project needs its document set decided (which docs, 
 | Test Cases | `.xlsx` | QA | ○ | ○ | ● |
 
 ● ต้องมี · ○ ไม่ต้อง เว้นแต่มีเหตุผลเฉพาะ
-**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** และนั่นถูกแล้ว เพราะงาน 2 สัปดาห์ที่มาพร้อม BRD คือเอกสารที่เขียนให้ตัวเองอ่าน
+**ชุด S ไม่มีเอกสารกลุ่มนี้เลย** — ถูกแล้ว
 
 ---
 
 ### 2.2 · เอกสารเชิงเทคนิค — ทีมและ agent ใช้ระหว่างสร้าง
 
-กลุ่มนี้เป็น **markdown ทั้งหมด** และ**ไม่ได้ขึ้นกับขนาดงาน** แต่ขึ้นกับว่าโปรเจกต์มีอะไร
+เป็น markdown ทั้งหมด และ**ขึ้นกับว่าโปรเจกต์มีอะไร** ไม่ใช่ขนาดงาน · ตารางเต็ม (ไฟล์ · ตอบคำถามอะไร) → [`references/technical-docs.md`](references/technical-docs.md)
 
-| เอกสาร | ไฟล์ | ตอบคำถามว่า | ต้องมีเมื่อ |
-|---|---|---|---|
-| README | `<project-name>/README.md` | ติดตั้งและรันยังไง | **เสมอ** |
-| BUILD-PLAN | `docs/BUILD-PLAN.md` | จะสร้างอะไรก่อนหลัง · ตอนนี้ถึงไหนแล้ว | **เสมอ** |
-| USER-STORIES | `docs/USER-STORIES.md` | จะสร้างอะไรให้ใคร · story ไหนพร้อมเข้า sprint · AC คืออะไร | ทำงานเป็น sprint หรือมี backlog (`user-story-writer`) |
-| Sprint plan | `docs/sprints/sprint-NN.md` | sprint นี้รับ story ไหน · เป้าหมายคืออะไร · เสี่ยงอะไร | ทำงานเป็น sprint (`/sprint-plan`) — ไฟล์ละ sprint ไม่เขียนทับของเก่า |
-| AGENT-LOOP | `docs/AGENT-LOOP.md` | agent ทำงานเป็นวงจรแบบไหน · อะไรคือเงื่อนไขว่าจบ | ให้ agent เขียนโค้ดเป็นรอบ ๆ (`spec-to-code-loop`) |
-| API-SPEC | `docs/API-SPEC.md` | endpoint ไหนรับอะไร คืนอะไร พังยังไง | มี API ที่คนอื่นเรียก (`api-conventions`) |
-| DATA-DICTIONARY | `docs/DATA-DICTIONARY.md` | ฟิลด์นี้แปลว่าอะไร · ค่าที่เป็นไปได้มีอะไรบ้าง | มีฐานข้อมูลหรือสคีมาข้อมูล (`database-design`) |
-| EVALUATION-POLICY | `docs/EVALUATION-POLICY.md` | วัดว่าผลลัพธ์ดีพอหรือยังด้วยอะไร · เกณฑ์ผ่านเท่าไร | ผลลัพธ์มาจากโมเดลหรือ LLM ที่ไม่ได้ถูกเสมอ |
-| PROMPT-LIBRARY | `docs/PROMPT-LIBRARY.md` | prompt ตัวจริงคือตัวไหน เวอร์ชันอะไร เปลี่ยนอะไรไป | ใช้ LLM ในเส้นทางหลักของระบบ |
-| ADR | `docs/decisions/ADR-*.md` | ทำไมถึงเลือกทางนี้ ไม่เลือกทางนั้น | มีการตัดสินใจที่จะถูกถามซ้ำ (`adr-writer`) |
-| Runbook | `docs/runbook.md` | ระบบล่มตอนตี 2 ต้องทำอะไร | มีระบบที่รันอยู่จริงและมีคนอยู่เวร |
-
-> **เอกสาร 4 ตัวที่มีเงื่อนไขเรื่อง LLM · API · ฐานข้อมูล คือตัวที่คนลืมบ่อยที่สุด**
-> แล้วไปจบด้วยการถาม agent ซ้ำทุกรอบว่า "prompt ตัวไหนคือตัวจริง" หรือ "ฟิลด์นี้แปลว่าอะไร"
+- **เสมอ:** `<project-name>/README.md` · `docs/BUILD-PLAN.md`
+- **มีเงื่อนไข:** USER-STORIES และ `docs/sprints/sprint-NN.md` (ทำงานเป็น sprint) · AGENT-LOOP (agent เขียนโค้ดเป็นรอบ) · API-SPEC (มี API ที่คนอื่นเรียก) · DATA-DICTIONARY (มีฐานข้อมูล) · EVALUATION-POLICY และ PROMPT-LIBRARY (ใช้ LLM) · `docs/decisions/ADR-NNNN-<slug>.md` (การตัดสินใจที่จะถูกถามซ้ำ) · `docs/runbook-<เรื่อง>.md` (ระบบรันจริงและมีคนอยู่เวร)
+- ตัวที่คนลืมบ่อยสุดคือ 4 ตัวเรื่อง LLM · API · ฐานข้อมูล แล้วต้องถาม agent ซ้ำทุกรอบว่า prompt ตัวไหนคือตัวจริง
 
 ---
 
@@ -150,55 +119,20 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
 **ห้ามเขียนชิ้นถัดไปก่อนชิ้นก่อนหน้าได้รับการยืนยัน** เพราะถ้าเขียนล่วงหน้าไปแล้วจะต้องรื้อทั้งสาย
 ข้อยกเว้นเดียว: **mockup ทำคู่ไปกับ SRS ได้** เพราะภาพหน้าจอช่วยให้ SRS ถูกยืนยันเร็วขึ้น
 
-**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร
-
-| เขียนเมื่อ | เอกสาร |
-|---|---|
-| ก่อนเขียนโค้ดบรรทัดแรก | README · BUILD-PLAN |
-| ก่อนปล่อย agent ทำงานเป็นรอบ | AGENT-LOOP |
-| ตอนออกแบบตารางแรก | DATA-DICTIONARY |
-| ตอนออกแบบ endpoint แรก | API-SPEC |
-| ตอนเขียน prompt ตัวแรกที่จะใช้จริง | PROMPT-LIBRARY · EVALUATION-POLICY |
-| ตอนตัดสินใจเรื่องที่จะถูกถามซ้ำ | ADR |
-| ก่อนขึ้นระบบจริง | Runbook |
-
-> **ADR กับ DATA-DICTIONARY เขียนตอนที่ตัดสินใจ ไม่ใช่ตอนสรุปท้ายโปรเจกต์**
-> เขียนย้อนหลังก็ได้ แต่ตอนนั้นเหตุผลจริงหายไปแล้ว
+**สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
 
 ---
 
 ## 4 · ใครเขียนชิ้นไหน ด้วย skill อะไร
 
-| เอกสาร | agent | skill ที่ใช้ |
-|---|---|---|
-| README · CHANGELOG | `technical-writer` | `project-bootstrap` |
-| Project Plan | `project-manager` | `branded-document-design` |
-| BRD · user story | `business-analyst` | `user-story-writer` |
-| SRS | `system-analyst` | `srs-writing` |
-| FSD | `system-analyst` | `fsd-writing` |
-| Architecture | `solution-architect` | `architecture-patterns` · `diagram-figures` |
-| ADR | `solution-architect` | `adr-writer` |
-| Test Plan · Test Cases | `qa-tester` | `test-case-template` |
-| mockups | `ux-designer` | `web-app-design` · `ui-craft` |
-| User Guide | `technical-writer` | `polished-document-style` |
-| Runbook | `devops-engineer` | `incident-runbook-template` |
-| BUILD-PLAN | `project-manager` | `simplicity-first` |
-| AGENT-LOOP | `developer` | `spec-to-code-loop` |
-| API-SPEC | `system-analyst` | `api-conventions` |
-| DATA-DICTIONARY | `system-analyst` | `database-design` |
-| PROMPT-LIBRARY · EVALUATION-POLICY | `developer` | — (คู่กับ skill `llm-engineering`) |
+ตารางเต็ม (agent · skill ต่อเอกสาร 16 ชนิด) → [`references/technical-docs.md`](references/technical-docs.md) · หลัก ๆ: SRS → `srs-writing` · FSD → `fsd-writing` · ADR → `adr-writer` · Test → `test-case-template` · mockup → `web-app-design` + `ui-craft` · README → `project-bootstrap`
 
 ---
 
 ## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
 
-| รูปนี้ใครเห็น | วาดด้วย | เก็บที่ |
-|---|---|---|
-| อยู่ใน README · PR · เอกสารในทีม | Mermaid (`software-diagrams`) | ฝังในไฟล์ `.md` |
-| อยู่ในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ | `diagram-figures` | `docs/figures/` + ต้นทางใน `src/` |
-
-> **รูป Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** เพราะสีที่สุ่มตามชนิด node ไม่ได้แปลว่าอะไร
-> ตัวหนังสือภาษาไทยล้นกรอบ และพอย่อลงหน้า A4 แล้วอ่านไม่ออก
+- รูปใน README · PR · เอกสารในทีม → Mermaid (`software-diagrams`) ฝังใน `.md`
+- รูปในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ → `diagram-figures` เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
 
 **หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
 รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
@@ -216,7 +150,7 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
 `branded-document-design` · `presentation-design` · `diagram-figures`
 อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
 
-**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — ถ้ามีสีแบรนด์แล้วให้ใช้สีแบรนด์ ถ้ายังไม่มีให้เสนอโทนแล้วรอยืนยัน
+**สีมาจากเนื้องาน ไม่ใช่จากรสนิยม** — มีสีแบรนด์ใช้สีแบรนด์ · ยังไม่มีใช้สีประจำบ้านของ `branded-document-design` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
 ข้อยกเว้นที่ไม่เปลี่ยนตามธีม: สีโลโก้ผู้ให้บริการ · สีเทาของเส้นโครงสร้าง · เขียว = ผ่าน / แดง = ไม่ผ่าน
 
 ---
@@ -237,39 +171,16 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
 
 ## 8 · Anti-patterns
 
-- ❌ **เขียน BRD ให้งาน 2 สัปดาห์** — ข้อ 2
-- ❌ **เอกสาร `.docx` ที่ไม่มี Heading style สักอัน** — navigation pane ว่าง หา TOC ไม่ได้ ไม่มีลำดับชั้น
-- ❌ **เก็บแต่ PNG ไม่เก็บไฟล์ต้นทาง** — ข้อ 1
-- ❌ **เก็บ `.docx` และ mockup ไว้ใน repo โค้ด** เพราะ "จะได้อยู่ที่เดียว" — pull request จะเต็มไปด้วย binary ถ้าถึงจุดนี้แปลว่าต้องย้ายเป็นแบบ B (ข้อ 1)
-- ❌ **เอกสารอยู่ 2 ที่พร้อมกัน** — ครึ่งหนึ่งอยู่ใน repo อีกครึ่งอยู่นอก repo ก็คือมี 2 เวอร์ชัน
-- ❌ **เขียน FSD ก่อน SRS ได้รับการยืนยัน**
-- ❌ **มี mockup ที่ปุ่มกดไม่ได้** — ผู้รีวิวเข้าใจว่าทำได้แล้ว
-- ❌ **ใช้ LLM แต่ไม่มี PROMPT-LIBRARY** — prompt ตัวจริงอยู่ในโค้ด พอแก้แล้วไม่มีใครรู้ว่าเปลี่ยนอะไร
-- ❌ **สร้าง `qa/` `decisions/` `figures/` ทิ้งไว้ว่าง ๆ** เพราะ "ในแบบมี" — โฟลเดอร์ว่างทำให้คนคิดว่าของหาย
-- ❌ **เอกสารชิ้นเดียวตอบทุกคำถาม** — SRS ที่มีทั้ง timeline ทั้ง test case คือเอกสารที่ไม่มีใครอ่านจบ
+❌ `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
 
 ---
 
 ## 9 · ตัวย่อ
 
-- **ADR** — Architecture Decision Record
-- **BRD** — Business Requirements Document
-- **FSD** — Functional Specification Document
-- **QA** — Quality Assurance
-- **SRS** — Software Requirements Specification
-- **TOC** — Table of Contents
+ADR Architecture Decision Record · BRD Business Requirements Document · FSD Functional Specification Document · QA Quality Assurance · SRS Software Requirements Specification · TOC Table of Contents
 
 ---
 
 ## 10 · เชื่อมกับ skill อื่น
 
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| โครงโฟลเดอร์ของโค้ด · README · สารบัญ `docs/README.md` | `project-bootstrap` |
-| ตั้งชื่อไฟล์และจัดเวอร์ชัน | `document-naming` |
-| จัดรูปแบบหน้าเอกสาร | `branded-document-design` · `polished-document-style` |
-| วาดรูปให้ดูออกแบบมา | `diagram-figures` |
-| เลือกว่าจะวาดรูปด้วยอะไร | `software-diagrams` |
-| ของชั่วคราวและการเก็บกวาด | `temp-file-discipline` |
-| ตารางสถานะเอกสารและงานเมื่อจบแต่ละฉบับ (ลง `docs/BUILD-PLAN.md`) | `status-report` |
-| รายการตรวจฉบับพิมพ์ | `assets/doc-set-checklist.md` |
+นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (ส่งมอบ) · `software-diagrams` (ในทีม) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`

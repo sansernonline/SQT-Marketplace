@@ -1,7 +1,7 @@
 # Token map — ค่าเดียวกัน สามสแต็ก
 
 > **ค่ากลาง (พื้น ข้อความ เส้น เงา ขนาด ระยะ) คือ Fluent 2 ที่วัดจาก Windows 11 จริง — คัดลอกไปใช้ได้เลย ห้ามปรับเอง**
-> **`accent` เป็นสีเดียวที่เปลี่ยนตามงาน** ให้ใช้สีแบรนด์ของลูกค้า หรือเสนอโทนจากเนื้องานแล้วรอยืนยัน
+> **`accent` เป็นสีเดียวที่เปลี่ยนตามงาน** ให้ใช้สีแบรนด์ของลูกค้า ถ้ายังไม่มีให้ใช้ค่าเริ่มต้นของ Windows ในไฟล์นี้ เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม
 > ค่า accent ที่อยู่ในไฟล์นี้คือค่าเริ่มต้นของ Windows ใช้ได้เมื่อยังไม่มีแบรนด์ ไม่ใช่ค่าบังคับ
 
 ค่าทั้งหมดวัดจาก Windows 11 dark theme จริง (สุ่มพิกเซลจากหน้า Windows Security)
@@ -22,18 +22,20 @@
 
 | ความหมาย | Dark | Light | CSS | WinUI 3 | Avalonia |
 |---|---|---|---|---|---|
-| พื้นหน้าต่าง | `#000000` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
-| พื้น nav / เนื้อหา | `#000000` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
-| การ์ด | `#0F0F0F` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
+| พื้นหน้าต่าง | `#202020` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
+| พื้น nav / เนื้อหา | `#272727` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
+| การ์ด | `#2B2B2B` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
 | ข้อความหลัก | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
 | ข้อความรอง | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
-| ข้อความจาง | `#8B8B8B` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
+| ข้อความจาง | `#9D9D9D` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
 | accent (พื้นปุ่ม, แถบเลือก) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
 | accent (ตัวหนังสือ/ลิงก์) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
 | ตัวอักษรบนพื้น accent | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
 | พื้นปุ่มปกติ | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
-| แถวที่เลือกใน nav | `#0F0F0F` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
-| เส้นคั่น | `#2D2D2D` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
+| แถวที่เลือกใน nav | `#FFFFFF15` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
+| เส้นคั่น | `#3A3A3A` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
+
+ค่า Dark คือ Windows 11 ปกติ (Mica) · แบบพื้นดำสนิทของ Windows Security (`#000000` · การ์ด `#0F0F0F` · เส้นคั่น `#2D2D2D`) เปิดด้วย `data-backdrop="black"` ใน `fluent.css`
 
 ✱ = key มาตรฐานของเฟรมเวิร์ก ถ้า override แล้วคอนโทรลสำเร็จรูปจะเปลี่ยนตามทั้งแอป
 ส่วน key ที่ขึ้นต้น `App*` เป็นของเราเอง ต้องอ้างเองใน XAML

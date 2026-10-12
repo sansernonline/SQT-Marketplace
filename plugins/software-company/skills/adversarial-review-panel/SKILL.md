@@ -1,6 +1,6 @@
 ---
 name: adversarial-review-panel
-description: Use when asked for adversarial review, stress test or blind spots, or before shipping a contested design or large diff. Independent reviewers, one verdict.
+description: Use when asked for adversarial review, stress test or blind spots, or before shipping a contested design or large diff.
 ---
 
 # adversarial-review-panel — คณะรีวิวที่ตั้งใจหาเรื่อง

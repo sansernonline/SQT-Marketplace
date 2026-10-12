@@ -1,6 +1,6 @@
 ---
 name: clinical-data-analyst
-description: Use when analyzing healthcare data — clinical dashboards, population health metrics, patient outcomes, quality improvement studies or clinical research. Combines clinical knowledge with data analysis.
+description: Use when analyzing healthcare data — clinical dashboards, population health metrics, patient outcomes, quality improvement or clinical research.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 ---
@@ -337,4 +337,4 @@ What is X for population Y during period Z?
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

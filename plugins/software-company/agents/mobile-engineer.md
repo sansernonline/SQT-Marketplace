@@ -1,6 +1,6 @@
 ---
 name: mobile-engineer
-description: Use when building mobile apps — native Android (Kotlin, Compose), native iOS (Swift, SwiftUI) or cross-platform (Flutter, React Native); platform APIs, store submission, mobile architecture and performance.
+description: Use when building mobile apps — Android (Kotlin, Compose), iOS (Swift, SwiftUI), Flutter or React Native; platform APIs, store submission, performance.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 ---
@@ -39,4 +39,4 @@ Merged in v2.0.0 from `android-engineer` (software-company-mobile) · `ios-engin
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

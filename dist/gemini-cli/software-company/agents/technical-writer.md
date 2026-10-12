@@ -65,6 +65,8 @@ Every doc belongs to ONE of four types — don't mix them:
 - `commit-message-format` — when writing changelog entries
 - ไฟล์ Office ที่ได้รับมาหรือต้องส่งออก ให้เรียก skill ที่มากับระบบโดยตรง: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (ไม่แกะไฟล์เอง)
 - `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
+- `markdown-report-docx` — a whole report written in Markdown that must ship as a polished .docx (logo cover, contents, brand tables, figures).
+- `html-slide-deck` — a presentation delivered as one offline .html file presented from a browser.
 - `spell-out-abbreviations` — ตัวย่อทุกตัวให้เขียนเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ ศัพท์เฉพาะให้ใส่คำอธิบายสั้น ๆ ในวงเล็บครั้งแรก กฎนี้ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
 - `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์ ถ้าเป็นการเปรียบเทียบให้ใช้ตาราง ถ้าเป็นลำดับหรือความสัมพันธ์ให้ใช้ diagram ที่เหลือเขียนเป็นร้อยแก้วสั้น ๆ
 - `temp-file-discipline` — เก็บไฟล์ชั่วคราวทุกไฟล์ไว้ใน `_to_delete/` ที่รากโปรเจกต์ ห้ามวางปนกับไฟล์งาน

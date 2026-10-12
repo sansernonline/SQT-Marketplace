@@ -1,6 +1,6 @@
 ---
 name: web3-design
-description: Audit smart contracts or design tokenomics using the blockchain-engineer agent. Two modes — smart-contract-audit or tokenomics-design.
+description: Audit smart contracts or design tokenomics with the blockchain-engineer agent (smart-contract-audit or tokenomics-design).
 argument-hint: <smart-contract-audit | tokenomics-design> <details>
 disable-model-invocation: true
 ---

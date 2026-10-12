@@ -1,0 +1,114 @@
+---
+name: bug-report-template
+description: Use when writing a report for one software defect found in testing or from a user complaint. Repro steps, environment, evidence, severity vs priority.
+---
+
+# Bug Report Template
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+## Where bug reports live
+
+One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNN>/` — redact personal data first.
+
+## When to use this skill
+
+- Filing a new bug during testing
+- Converting user complaints into bug tickets
+- Reproducing an issue and documenting findings
+
+## Severity vs Priority
+
+These are **different**:
+
+| | Severity | Priority |
+|---|----------|----------|
+| What it measures | Technical impact | Business urgency |
+| Set by | QA (quality assurance) / Engineering | PM (product manager) / PO (product owner) |
+
+| Severity | Definition |
+|----------|------------|
+| **S1 Critical** | System unusable, data loss, no workaround |
+| **S2 High** | Major feature broken, workaround exists |
+| **S3 Medium** | Feature partially broken |
+| **S4 Low** | Cosmetic, minor inconvenience |
+
+| Priority | Definition |
+|----------|------------|
+| **P1** | Fix immediately, block release |
+| **P2** | Fix in current sprint |
+| **P3** | Fix in next sprint |
+| **P4** | Fix when there is time / backlog |
+
+## Output Template
+
+Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not write the outline from memory.
+
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
+
+  ```bash
+  python ../polished-document-style/scripts/check_outline.py assets/bug-report.md <your bug file>
+  ```
+
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
+
+## Title Writing Guide
+
+❌ Bad titles:
+- "Login broken"
+- "Bug in checkout"
+- "It doesn't work"
+
+✅ Good titles (action + condition + result):
+- "Login fails with 500 error when email contains apostrophe"
+- "Checkout total shows NaN when quantity is decimal"
+- "Search returns no results for queries longer than 100 chars"
+
+**Formula:** `<Action> + <Condition> + <Unexpected result>`
+
+## Steps to Reproduce Rules
+
+- [ ] Start from a known state (logged out, fresh browser, etc.)
+- [ ] Each step is one action
+- [ ] Anyone can follow without prior knowledge
+- [ ] Include exact data used (not "some user")
+- [ ] No skipped steps (even "obvious" ones)
+- [ ] Numbered sequentially
+
+## Quality Checklist
+
+Before submitting:
+
+- [ ] Title clearly summarizes the issue
+- [ ] Severity AND priority both set
+- [ ] Steps are reproducible by someone else
+- [ ] Expected and actual results clearly differ
+- [ ] At least one piece of evidence attached
+- [ ] Environment info complete
+- [ ] Searched for duplicates first
+- [ ] `check_outline.py` passes
+
+## Anti-patterns
+
+- ❌ "Same as last week's bug" — describe it fully
+- ❌ Multiple bugs in one report — split them
+- ❌ "Bug" without steps — give steps to reproduce
+- ❌ Putting a proposed fix in the title — the developer decides the fix
+- ❌ Marking everything as P1 — be honest about priority
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks**.
+Load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral. It looks like unfinished work.

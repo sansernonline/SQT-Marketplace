@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8">
+<title>Figure — Flow</title>
+<!--
+  โครงที่ 4 · Flow — ของ skill `diagram-figures`
+  ใช้ตอบคำถาม "ข้อความ 1 ชิ้น (คำขอ · งาน · เอกสาร) วิ่งผ่านอะไรบ้าง ตามลำดับไหน"
+  รายละเอียด: references/layout-flow.md
+
+  สีทั้งรูปมาจาก --accent ตัวเดียว = สีหลักของโปรเจกต์ (ลำดับการหาสีอยู่ใน SKILL.md ข้อ 5)
+  ลองสีอื่นโดยไม่แก้ไฟล์:  figure-flow.html#accent=0F8B8D
+  สีพื้นตามดีไซน์ของโปรเจกต์ (ให้ตรงกับเด็ค):  #accent=E10613&bg=09090A  ·  #bg=F7F3EC
+  พื้นเข้มคำนวณเทาจากขาว พื้นสว่างคำนวณจากดำ · #dark = ย่อของ bg=09090A
+
+  แก้ 6 ที่:  1.--accent  2.หัวรูป + คำอธิบายสัญลักษณ์  3.คอลัมน์ซ้าย (ผู้ใช้ · ช่องทาง)
+             4.กล่อง .focus (ชั้นของระบบ)  5.คอลัมน์ขวา (บริการภายนอก · ข้อมูล)  6.WIRES ท้ายไฟล์
+  เรนเดอร์:  python render-figure.py figure-flow.html figure.png 2
+-->
+<style>
+  :root{
+    /* ① สีหลักของโปรเจกต์ — แก้ที่นี่ที่เดียว เฉดอื่นคำนวณให้เอง */
+    --accent:#2A78D6;
+
+    --accent-deep:color-mix(in srgb, var(--accent) 72%, #000);
+    --accent-tint:color-mix(in srgb, var(--accent) 8%, #fff);
+    --accent-line:color-mix(in srgb, var(--accent) 30%, #fff);
+    --on-accent:#fff;                 /* สคริปต์เปลี่ยนเป็นสีเข้มเองถ้า accent สว่างเกิน */
+    --flow:var(--accent-deep);        /* เส้นทางหลักของข้อมูล */
+
+    --ink:#333B4A; --body:#414957; --muted:#7D8492; --faint:#A9AEB9;
+    --line:#E4E7EE; --line-soft:#F0F2F7; --line-strong:#C6CCD8;
+    --surface:#F8F9FC; --paper:#FFFFFF; --card:#FFFFFF;
+    --font:"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--paper);color:var(--body);
+       -webkit-font-smoothing:antialiased;line-height:1.5}
+  .sheet{width:2000px;padding:48px 56px 40px}
+
+  /* ── หัวรูป ─────────────────────────────── */
+  /* โลโก้โปรเจกต์หน้าชื่อรูป — ไม่มีไฟล์ = รูปหายเอง หัวรูปกลับเป็นแบบไม่มีโลโก้ */
+  .head > div:first-child:has(> .logo){display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center}
+  .head .logo{grid-row:span 2;width:48px;height:48px;border-radius:12px;display:block}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;
+        padding-bottom:20px;border-bottom:1px solid var(--line)}
+  .head h1{font-size:30px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+  .head h1 .brand{color:var(--accent-deep)}
+  .head .sub{font-size:15px;color:var(--muted);margin-top:5px}
+  .meta{text-align:right;font-size:13px;color:var(--muted);line-height:1.75;white-space:nowrap}
+  .meta .tag{color:var(--accent-deep);font-weight:700}
+  .legend{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:6px;color:var(--muted)}
+
+  /* ── โครงหน้า: ผู้ใช้ → ช่องทาง → ระบบ → ภายนอก ── */
+  .stage{position:relative;display:grid;grid-template-columns:250px 290px 1fr 400px;
+         gap:104px;align-items:center;margin-top:44px}
+  .col{display:flex;flex-direction:column;gap:30px}
+
+  /* กลุ่มเส้นประ — ป้ายชื่อนั่งบนขอบ */
+  .group{position:relative;border:1.5px dashed var(--line-strong);border-radius:20px;
+         padding:30px 18px 18px;display:flex;flex-direction:column;gap:16px}
+  .glabel{position:absolute;top:-11px;left:18px;background:var(--paper);padding:0 8px;
+          font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+
+  /* การ์ดในกลุ่ม: ไอคอนซ้าย ชื่อขวา */
+  .card{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);
+        border-radius:16px;background:var(--card);padding:16px}
+  .card .name{font-size:16px;font-weight:700;color:var(--ink);line-height:1.45}
+  .card .desc{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .tile{flex:none;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;border:1px solid}
+  .tile svg{width:26px;height:26px;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+  /* สีไอคอน — ชุดเดียวกับ figure-template.html ต้องแปลว่าอะไรได้ทุกสี */
+  .t-neutral{background:#F1F3F6;border-color:#E2E6EC} .t-neutral svg{stroke:#5C6675}
+  .t-edge   {background:#E9F4EC;border-color:#CFE6D6} .t-edge svg{stroke:#3E8A54}
+  .t-app    {background:#EFEEFB;border-color:#DCDAF3} .t-app svg{stroke:#5B57C4}
+  .t-view   {background:#E9F1FB;border-color:#D3E2F4} .t-view svg{stroke:#2A6FC0}
+  .t-data   {background:#EAF0F7;border-color:#D5E0EC} .t-data svg{stroke:#3C5E85}
+  .t-alert  {background:#FBEBEB;border-color:#F0D4D4} .t-alert svg{stroke:#C0504D}
+  .t-warn   {background:#FCF1E2;border-color:#F0DCC0} .t-warn svg{stroke:#C2831A}
+
+  /* ── สีพื้นจากดีไซน์ของโปรเจกต์ (#bg=xxxxxx) — เทาทุกระดับผสมจากสีพื้น จึงอมโทนเดียวกัน ── */
+  html.dark, html.tinted{ --paper:var(--bg); }
+  html.dark{
+    --card:color-mix(in srgb, var(--bg), #fff 4.5%); --surface:color-mix(in srgb, var(--bg), #fff 2%);
+    --line:color-mix(in srgb, var(--bg), #fff 12%);  --line-soft:color-mix(in srgb, var(--bg), #fff 7%);
+    --line-strong:color-mix(in srgb, var(--bg), #fff 20%);
+    --faint:color-mix(in srgb, var(--bg), #fff 40%); --muted:color-mix(in srgb, var(--bg), #fff 63%);
+    --body:color-mix(in srgb, var(--bg), #fff 82%);  --ink:color-mix(in srgb, var(--bg), #fff 96%);
+    --accent-deep:color-mix(in srgb, var(--accent) 62%, #fff);
+    --accent-tint:color-mix(in srgb, var(--accent) 16%, var(--card));
+    --accent-line:color-mix(in srgb, var(--accent) 50%, var(--card));
+  }
+  html.tinted{
+    --card:color-mix(in srgb, var(--bg), #fff 60%); --surface:color-mix(in srgb, var(--bg), #000 2%);
+    --line:color-mix(in srgb, var(--bg), #0E1116 11%); --line-soft:color-mix(in srgb, var(--bg), #0E1116 6%);
+    --line-strong:color-mix(in srgb, var(--bg), #0E1116 20%);
+  }
+  html.dark .tile{background:color-mix(in srgb, var(--bg), #fff 8%);border-color:color-mix(in srgb, var(--bg), #fff 15%)}
+  html.dark .t-neutral svg{stroke:#B4BAC4} html.dark .t-edge svg{stroke:#7CC495}
+  html.dark .t-app svg{stroke:#A9A6F0}     html.dark .t-view svg{stroke:#7FB2EC}
+  html.dark .t-data svg{stroke:#95B4D8}    html.dark .t-alert svg{stroke:#EC8B88}
+  html.dark .t-warn svg{stroke:#E5B25C}
+
+  /* ── กล่องเครื่องที่รัน (เทา) ครอบกล่อง .focus (สีหลัก) ── */
+  .host{position:relative;border:1.5px solid var(--line-strong);border-radius:24px;
+        background:var(--surface);padding:40px 22px 22px}
+  .tab{position:absolute;top:-15px;left:22px;display:inline-flex;align-items:center;gap:8px;
+       font-size:14px;font-weight:700;border-radius:10px;padding:4px 14px;white-space:nowrap}
+  .host > .tab{background:var(--paper);border:1.5px solid var(--line-strong);color:var(--body)}
+  .tab svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .focus{position:relative;border:2px solid var(--accent);border-radius:20px;background:var(--card);
+         padding:38px 20px 20px;display:flex;flex-direction:column;gap:12px}
+  .focus > .tab{background:var(--accent);color:var(--on-accent);border:0}
+
+  /* ชั้นในระบบ: ชื่อ | หน้าที่ */
+  .layer{display:grid;grid-template-columns:210px 1fr;gap:20px;align-items:center;
+         border:1px solid var(--line);border-radius:12px;padding:12px 18px;background:var(--card)}
+  .layer .lname{font-size:16px;font-weight:700;color:var(--ink)}
+  .layer .ldesc{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .layer.guard{background:var(--accent-tint);border-color:var(--accent-line)}   /* ชั้นที่ต้องเน้น ใช้ไม่เกิน 2 ชั้น */
+
+  /* ── เส้นและลำดับ ───────────────────────── */
+  .wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:1}  /* อยู่บนกล่อง เพื่อให้หัวลูกศรถึงชั้นข้างใน */
+  .wires path.wire{fill:none;stroke:var(--flow);stroke-width:1.8;stroke-linejoin:round}
+  .wires path.wire.planned{stroke-dasharray:7 6;stroke:var(--line-strong)}
+  .wires .head-fill{fill:var(--flow)}
+  .wires .head-fill-planned{fill:var(--line-strong)}
+  .wire-label{position:absolute;transform:translate(-50%,-100%);z-index:2;
+              font-size:13px;font-weight:700;color:var(--accent-deep);white-space:nowrap;
+              background:var(--paper);padding:0 4px;line-height:1.5}
+  .step{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;
+        background:var(--accent);color:var(--on-accent);font-size:13px;font-weight:700;
+        box-shadow:0 0 0 3px var(--paper);line-height:1}
+  .wires-steps{position:absolute;inset:0;pointer-events:none;z-index:3}
+  .wires-steps .step{position:absolute;transform:translate(-50%,-50%);z-index:3}
+
+  .foot{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);
+        font-size:13px;color:var(--faint);line-height:1.8}
+</style></head>
+<body>
+<div class="sheet">
+
+  <!-- ② หัวรูป: ชื่อ · คำขยาย · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ + คำอธิบายเลขลำดับ -->
+  <div class="head">
+    <div>
+      <img class="logo" src="../../../assets/logo/logo-mark.svg" alt="" onerror="this.remove()">
+      <h1><span class="brand">X Fitness Chatbot</span> — ข้อความ 1 ข้อความวิ่งผ่านอะไรบ้าง</h1>
+      <div class="sub">แอปเดียว (FastAPI) รับทั้งหน้าเว็บ LINE OA และหลังบ้าน · ความรู้ของร้านอยู่ในไฟล์ที่ deploy มากับโค้ด · ความฉลาดเรียกใช้ Typhoon ผ่าน API</div>
+    </div>
+    <div class="meta">
+      <div><span class="tag">รูปที่ 2 · Architecture · Flow</span></div>
+      <div>เวอร์ชัน 1.0 · 9 ตุลาคม 2569</div>
+      <div>Square Tech Solutions</div>
+      <div class="legend"><span class="step">1</span>–<span class="step">6</span> ลำดับการไหลของข้อความ 1 ข้อความ</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage">
+    <svg class="wires" id="wires"><defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path class="head-fill" d="M0 0 L10 5 L0 10 z"/></marker>
+      <marker id="ah-planned" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path class="head-fill-planned" d="M0 0 L10 5 L0 10 z"/></marker>
+    </defs></svg>
+    <div class="wires-steps" id="steps"></div>
+
+    <!-- ③a ผู้ใช้ -->
+    <div class="group">
+      <span class="glabel">ผู้ใช้</span>
+      <div class="card" id="u-web">
+        <div class="tile t-neutral"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg></div>
+        <div><div class="name">ลูกค้า</div><div class="desc">มือถือ / คอมพิวเตอร์</div></div>
+      </div>
+      <div class="card" id="u-line">
+        <div class="tile t-neutral"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></div>
+        <div><div class="name">ลูกค้า LINE</div><div class="desc">แอป LINE</div></div>
+      </div>
+      <div class="card" id="u-staff">
+        <div class="tile t-neutral"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><circle cx="12" cy="10" r="2.6"/><path d="M8 17c.6-2 2.1-3 4-3s3.4 1 4 3"/></svg></div>
+        <div><div class="name">พนักงานร้าน</div><div class="desc">รับเรื่องที่ส่งต่อ</div></div>
+      </div>
+    </div>
+
+    <!-- ③b ช่องทาง -->
+    <div class="group">
+      <span class="glabel">ช่องทาง</span>
+      <div class="card" id="c-web">
+        <div class="tile t-edge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.6 3.5 5.4 3.5 8.5s-1.1 5.9-3.5 8.5c-2.4-2.6-3.5-5.4-3.5-8.5s1.1-5.9 3.5-8.5z"/></svg></div>
+        <div><div class="name">หน้าเว็บ + แชต</div><div class="desc">สถานะกำลังประมวลผล · error + ลองใหม่</div></div>
+      </div>
+      <div class="card" id="c-line">
+        <div class="tile t-edge"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8.5 10.5h7"/></svg></div>
+        <div><div class="name">LINE Messaging API</div><div class="desc">webhook · reply · push</div></div>
+      </div>
+      <div class="card" id="c-admin">
+        <div class="tile t-app"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M9 9v11"/></svg></div>
+        <div><div class="name">หน้าหลังบ้าน</div><div class="desc">/admin · กล่องแชต · คลังความรู้</div></div>
+      </div>
+    </div>
+
+    <!-- ④ เครื่องที่รัน → ระบบที่รูปนี้อธิบาย (กล่อง .focus มีกล่องเดียว) -->
+    <div class="host">
+      <span class="tab"><svg viewBox="0 0 24 24"><path d="M7 18h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7 10.5 3.75 3.75 0 0 0 7 18z"/></svg>Render (Cloud) · Python 3.13 · uvicorn</span>
+      <div class="focus" id="sys">
+        <span class="tab">X Fitness backend — FastAPI</span>
+        <div class="layer" id="l-api"><div class="lname">API</div><div class="ldesc">/api/chat · /api/vision · /api/line/webhook · /api/conversations · /api/admin/*</div></div>
+        <div class="layer guard" id="l-gin"><div class="lname">Guardrail ขาเข้า</div><div class="ldesc">prompt injection · อ้างเป็นแอดมิน · ยา/แผนอาหาร · นอกเรื่อง · ข้อมูลคนอื่น</div></div>
+        <div class="layer" id="l-bot"><div class="lname">ตัวบอท answer()</div><div class="ldesc">รวมความรู้ + ประวัติแชต + คำสั่งระบบ แล้วให้ LLM ตอบภาษาไทย</div></div>
+        <div class="layer" id="l-img"><div class="lname">อ่านภาพ read_image()</div><div class="ldesc">OCR → จัดเป็น JSON (สลิป · ใบเสร็จ · ผลวัด · โปสเตอร์)</div></div>
+        <div class="layer" id="l-rag"><div class="lname">LightRAG (hybrid)</div><div class="ldesc">กราฟความรู้ + เวกเตอร์ (hash embedding) + ค้นด้วยคำ</div></div>
+        <div class="layer" id="l-rule"><div class="lname">กฎร้าน · ตรวจสลิป</div><div class="ldesc">ข้อเท็จจริงที่ต้องตอบตาม · ตรวจสลิป 5 ข้อด้วยโค้ด</div></div>
+        <div class="layer guard" id="l-gout"><div class="lname">Guardrail ขาออก</div><div class="ldesc">ราคาที่ไม่มีจริง · "ชำระสำเร็จ" · เบอร์คนอื่น · บัญชีอื่น · ประเมินสุขภาพ</div></div>
+        <div class="layer" id="l-inbox"><div class="lname">กล่องแชต</div><div class="ldesc">ส่งต่อพนักงาน · push คำตอบพนักงานกลับ LINE</div></div>
+      </div>
+    </div>
+
+    <!-- ⑤ ภายนอก: บริการที่เรียกใช้ · ข้อมูล -->
+    <div class="col">
+      <div class="group">
+        <span class="glabel">บริการ AI ภายนอก (Typhoon API)</span>
+        <div class="card" id="x-llm">
+          <div class="tile t-app"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18.5 9l-4.7 1.6L12 15l-1.8-4.4L5.5 9l4.7-1.4z"/><path d="M18 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></div>
+          <div><div class="name">Typhoon LLM</div><div class="desc">typhoon-v2.5-30b-a3b-instruct · ตอบ · แยกคำสำคัญ · สร้างดัชนี</div></div>
+        </div>
+        <div class="card" id="x-ocr">
+          <div class="tile t-app"><svg viewBox="0 0 24 24"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><path d="M8 10h8M8 14h5"/></svg></div>
+          <div><div class="name">Typhoon OCR</div><div class="desc">typhoon-ocr · อ่านข้อความในภาพ</div></div>
+        </div>
+      </div>
+      <div class="group">
+        <span class="glabel">ข้อมูล (deploy มากับโค้ด)</span>
+        <div class="card" id="d-kb">
+          <div class="tile t-data"><svg viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM13 4h5.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H13z"/></svg></div>
+          <div><div class="name">คลังความรู้ 9 เอกสาร + ดัชนี</div><div class="desc">KB-01…09 · rag-index/ (สร้างไว้ล่วงหน้า)</div></div>
+        </div>
+        <div class="card" id="d-json">
+          <div class="tile t-data"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M10 12c-1 0-1 .8-1 1.5s0 1.5-1 1.5c1 0 1 .8 1 1.5s0 1.5 1 1.5M14 12c1 0 1 .8 1 1.5s0 1.5 1 1.5c-1 0-1 .8-1 1.5s0 1.5-1 1.5"/></svg></div>
+          <div><div class="name">ข้อมูลร้าน + สมาชิก</div><div class="desc">JSON 14 ไฟล์ (จำลอง)</div></div>
+        </div>
+        <div class="card" id="d-db">
+          <div class="tile t-data"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></div>
+          <div><div class="name">SQLite</div><div class="desc">แชตทุกช่องทาง</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    พื้นสีอ่อนในกล่องระบบ = ชั้นที่ป้องกันคำตอบผิด · เส้นประเทา = ยังไม่ได้เชื่อมจริง<br>
+    OA — Official Account · API — Application Programming Interface · LLM — Large Language Model · OCR — Optical Character Recognition · RAG — Retrieval-Augmented Generation · REST — Representational State Transfer<br>
+    ไอคอนที่ใช้ไม่ใช่โลโก้ทางการ เป็นสัญลักษณ์ที่ออกแบบขึ้นเพื่อใช้แทน
+  </div>
+</div>
+
+<script>
+/* ⑥ สายเชื่อม — แก้เฉพาะรายการนี้
+   from/to  = id ต้นทาง/ปลายทาง · fs/ts = ด้านที่ออก-เข้า (l r t b) · fp/tp = ตำแหน่งบนขอบ 0..1
+   step     = เลขลำดับ (วงกลมสีหลักที่ต้นเส้น) · label = อะไรไหลผ่าน
+   lp       = "start" | "end" ป้ายอยู่ช่วงต้นหรือช่วงท้ายเส้น (ไม่ใส่ = "end")
+   mx       = ตำแหน่งช่วงหักขึ้น-ลงระหว่างต้นกับปลาย 0..1 (ไม่ใส่ = 0.5) ใช้แยกเส้นที่วิ่งในช่องเดียวกัน
+   planned:true = เส้นประเทา สำหรับของที่ยังไม่ได้เชื่อมจริง */
+const WIRES = [
+  {from:"u-web",   fs:"r", to:"c-web",   ts:"l", step:1},
+  {from:"u-line",  fs:"r", to:"c-line",  ts:"l", step:1},
+  {from:"u-staff", fs:"r", to:"c-admin", ts:"l"},
+  {from:"c-web",   fs:"r", to:"l-api",   ts:"l", step:2, label:"HTTPS", lp:"start", mx:0.55},
+  {from:"c-line",  fs:"r", to:"l-api",   ts:"l", step:2, label:"webhook", lp:"start", mx:0.55},
+  {from:"c-admin", fs:"r", to:"l-inbox", ts:"l", label:"REST + token", lp:"start", mx:0.55},
+  {from:"l-rag",   fs:"r", to:"d-kb",    ts:"l", step:3, label:"ค้น",  mx:0.62},
+  {from:"l-rule",  fs:"r", to:"d-json",  ts:"l", step:4, label:"อ่าน", mx:0.62},
+  {from:"l-bot",   fs:"r", to:"x-llm",   ts:"l", step:5, label:"ถาม LLM", mx:0.24},
+  {from:"l-img",   fs:"r", to:"x-ocr",   ts:"l", label:"อ่านภาพ", mx:0.44},
+  {from:"l-inbox", fs:"r", to:"d-db",    ts:"l", step:6, label:"บันทึก", mx:0.62}
+];
+
+/* สีหลักจาก #accent=xxxxxx (ลองธีมโดยไม่แก้ไฟล์) แล้วเลือกสีตัวหนังสือบนพื้น accent ให้อ่านออก */
+(function theme(){
+  const root = document.documentElement, h = location.hash;
+  const bgm = h.match(/bg=([0-9a-fA-F]{6})/);
+  const bg = bgm ? bgm[1] : (/(^|[#&])dark\b/.test(h) ? "09090A" : null);
+  const lum = x => { const [r,g,b] = [0,2,4].map(i => parseInt(x.substr(i,2),16)/255)
+                       .map(c => c <= .03928 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4));
+                     return .2126*r + .7152*g + .0722*b; };
+  if (bg){
+    root.style.setProperty("--bg", "#" + bg);
+    root.classList.add(lum(bg) < .18 ? "dark" : "tinted");
+  }
+  const m = location.hash.match(/accent=([0-9a-fA-F]{6})/);
+  if (m) document.documentElement.style.setProperty("--accent", "#" + m[1]);
+  const hex = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim().replace("#","");
+  const [r,g,b] = [0,2,4].map(i => parseInt(hex.substr(i,2),16)/255)
+                         .map(c => c <= .03928 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4));
+  const L = .2126*r + .7152*g + .0722*b;
+  if (L > .45) document.documentElement.style.setProperty("--on-accent", "#1F2430");
+})();
+
+function anchor(el, side, box, p){
+  const r = el.getBoundingClientRect();
+  p = (p === undefined) ? 0.5 : p;
+  const x = {l:r.left, r:r.right, t:r.left+r.width*p, b:r.left+r.width*p}[side] - box.left;
+  const y = {l:r.top+r.height*p, r:r.top+r.height*p, t:r.top, b:r.bottom}[side] - box.top;
+  return [x, y];
+}
+/* เส้นหักมุมฉากมุมมน: นอน → ตั้ง → นอน */
+function elbow(x1,y1,x2,y2,mx){
+  const xm = x1 + (x2-x1)*mx, dy = y2-y1;
+  if (Math.abs(dy) < 1) return {d:`M${x1} ${y1} L${x2} ${y2}`, xm};
+  const r = Math.min(10, Math.abs(dy)/2, Math.abs(xm-x1), Math.abs(x2-xm));
+  const sx = Math.sign(x2-x1) || 1, sy = Math.sign(dy);
+  return {xm, d:`M${x1} ${y1} L${xm-sx*r} ${y1} Q${xm} ${y1} ${xm} ${y1+sy*r}
+                 L${xm} ${y2-sy*r} Q${xm} ${y2} ${xm+sx*r} ${y2} L${x2} ${y2}`};
+}
+function draw(){
+  const stage = document.getElementById("stage"), svg = document.getElementById("wires"),
+        steps = document.getElementById("steps");
+  const box = stage.getBoundingClientRect();
+  stage.querySelectorAll(".wire-label").forEach(n=>n.remove());
+  steps.innerHTML = "";
+  svg.querySelectorAll("path.wire").forEach(n=>n.remove());   /* .wire เท่านั้น ไม่งั้นหัวลูกศรใน defs หาย */
+  for (const w of WIRES){
+    const a = document.getElementById(w.from), b = document.getElementById(w.to);
+    if (!a || !b){ console.warn("wire: ไม่พบ id", w.from, w.to); continue; }
+    const [x1,y1] = anchor(a, w.fs, box, w.fp), [x2,y2] = anchor(b, w.ts, box, w.tp);
+    const e = elbow(x1, y1, x2, y2, w.mx === undefined ? 0.5 : w.mx);
+    const p = document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("class", "wire" + (w.planned ? " planned" : ""));
+    p.setAttribute("d", e.d);
+    p.setAttribute("marker-end", w.planned ? "url(#ah-planned)" : "url(#ah)");
+    svg.appendChild(p);
+    if (w.step){
+      const s = document.createElement("span");
+      s.className = "step"; s.textContent = w.step;
+      s.style.left = (x1 + 2) + "px"; s.style.top = y1 + "px";
+      steps.appendChild(s);
+    }
+    if (w.label){
+      const atStart = w.lp === "start";
+      const xa = atStart ? x1 + (w.step ? 16 : 0) : e.xm, xb = atStart ? e.xm : x2 - 8;
+      const d = document.createElement("div");
+      d.className = "wire-label";
+      d.style.left = ((xa + xb) / 2) + "px";
+      d.style.top  = ((atStart ? y1 : y2) - 4) + "px";
+      d.textContent = w.label;
+      stage.appendChild(d);
+    }
+  }
+}
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(draw);
+window.addEventListener("resize", draw);
+</script>
+</body></html>

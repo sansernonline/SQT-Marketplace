@@ -1,6 +1,6 @@
 ---
 name: architecture-patterns
-description: Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, or patterns like CQRS, Event Sourcing and Saga.
+description: Use when choosing system architecture (monolith, microservices, serverless), sync vs event-driven, CQRS, Event Sourcing, Saga.
 ---
 
 # Architecture Patterns

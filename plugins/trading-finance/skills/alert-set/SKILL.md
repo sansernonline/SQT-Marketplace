@@ -1,6 +1,6 @@
 ---
 name: alert-set
-description: Create price or news alerts on watched symbols using the alert-dispatcher skill, with cooldowns so alerts stay meaningful.
+description: Create price or news alerts on watched symbols with the alert-dispatcher skill, with cooldowns.
 argument-hint: <symbol> <price level or news trigger>
 disable-model-invocation: true
 ---

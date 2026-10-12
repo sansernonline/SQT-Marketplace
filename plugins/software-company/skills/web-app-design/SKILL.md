@@ -1,6 +1,6 @@
 ---
 name: web-app-design
-description: Use when designing or building a web app UI (dashboard, admin panel, internal tool, SaaS). Token contract, drop-in stylesheet, mockup template, themes.
+description: Use when designing or building a web app UI or mockup (dashboard, admin panel, internal tool, SaaS).
 ---
 
 # Web App Design
@@ -26,8 +26,10 @@ description: Use when designing or building a web app UI (dashboard, admin panel
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
 
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ appstrack** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+
 ```
-1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน
+1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
 3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 1440
    python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 900
@@ -37,6 +39,8 @@ description: Use when designing or building a web app UI (dashboard, admin panel
 6. ต่อ scripts/check-design-tokens.mjs เข้า CI ตั้งแต่วันแรก
 ```
 
+**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `appstrack.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง · ตรวจ token ด้วยไฟล์ mockup เป็นไฟล์ token เอง: `node scripts/check-design-tokens.mjs mockup/<รหัส>-mockup.html mockup --ext html`
+
 ข้อ 6 สำคัญกว่าที่คิด เพราะระบบดีไซน์ที่ไม่มีตัวตรวจบังคับจะค่อย ๆ เพี้ยนจาก
 "ขอ hardcode แค่ครั้งเดียว" ภายใน 3 สัปดาห์ และไม่มีใครรู้ตัวจนเปลี่ยนธีมแล้วพัง
 
@@ -44,11 +48,11 @@ description: Use when designing or building a web app UI (dashboard, admin panel
 
 ## 2 · Design tokens
 
-> **สีมาจากเนื้องาน — ถามก่อนเริ่ม**
-> ถ้าลูกค้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้เสนอโทนจากเนื้องานแล้วรอยืนยัน
+> **สีมาจากเนื้องาน — ไม่หยุดถาม**
+> ถ้าลูกค้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ใช้ค่าประจำบ้าน `#2A78D6` (ใน `assets/appstrack.css`) เขียน `(รอยืนยัน)` แล้วทำต่อ และเสนอโทนจากเนื้องานไว้ในรายงานให้เลือกทีหลัง
 > (การแพทย์เขียว · การเงินน้ำเงินเข้ม · อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า ·
 > ตารางเต็มอยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md)
-> **ห้ามเริ่มด้วยธีมเริ่มต้นแล้วค่อยเปลี่ยนทีหลัง** เพราะ mockup ที่ผู้ใช้เห็นครั้งแรกคือสีที่เขาจะจำ
+> สีอยู่ใน token ที่เดียว ผู้ใช้เลือกโทนแล้วแก้ค่าเดียวทั้ง mockup
 
 93 token อยู่ในบล็อก `:root` ของ `assets/appstrack.css` ส่วนรายละเอียดครบอยู่ใน
 **`references/tokens.md`** โครงที่ต้องจำได้มีดังนี้ (ค่าสีมาจากข้อบนนี้ ไม่ใช่จากตาราง):

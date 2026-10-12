@@ -9,21 +9,22 @@
 | claude.ai (Cowork / แชทเว็บ) | `claude-web/<plugin>.zip` | อัปโหลดทีละไฟล์ |
 | OpenAI Codex CLI | `codex/<plugin>/` | คัดลอกเนื้อในโฟลเดอร์ไปไว้รากโปรเจกต์ |
 | Gemini CLI | `gemini-cli/<plugin>/` | `gemini extensions install <โฟลเดอร์>` |
+| Kimi Code CLI | `kimi/<plugin>/` | `/plugins install <โฟลเดอร์>` ในหน้าจอ Kimi |
 | ChatGPT Custom GPT / Gemini Gem | `chat-web/<plugin>/<บทบาท>/` | ดู `chat-web/README.md` |
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
 | `career` | 0.2.1 | 9 | 3 | 3 | 0.1 MB |
 | `consumer-rights` | 0.2.1 | 8 | 2 | 2 | 0.1 MB |
-| `dev-learning` | 0.3.2 | 10 | 2 | 2 | 0.1 MB |
+| `dev-learning` | 0.4.0 | 11 | 2 | 2 | 0.1 MB |
 | `graphic-design` | 0.3.2 | 14 | 5 | 6 | 0.1 MB |
 | `health-wellness` | 0.2.1 | 9 | 2 | 2 | 0.1 MB |
 | `home-family` | 0.2.1 | 11 | 3 | 3 | 0.1 MB |
 | `online-seller` | 0.2.2 | 12 | 4 | 4 | 0.1 MB |
 | `personal-life` | 0.4.2 | 18 | 4 | 6 | 0.1 MB |
-| `software-company` | 2.3.0 | 108 | 39 | 29 | 3.7 MB |
+| `software-company` | 2.3.0 | 110 | 39 | 29 | 5.5 MB |
 | `superuser` | 1.0.1 | 4 | 1 | 0 | 0.0 MB |
 | `thai-workplace` | 0.4.2 | 21 | 5 | 8 | 0.1 MB |
 | `trading-finance` | 0.4.2 | 22 | 5 | 7 | 0.1 MB |
 
-ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex และ gemini-cli มีครบ
+ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ

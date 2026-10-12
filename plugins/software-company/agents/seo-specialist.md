@@ -1,6 +1,6 @@
 ---
 name: seo-specialist
-description: Use when improving search engine ranking — SEO audits, keyword research, meta tags and titles, content planning for SEO, URL structure, structured data (Schema.org), or analyzing competitors' SEO.
+description: Use when improving search ranking — SEO audits, keyword research, meta tags and titles, content planning, URL structure, structured data, competitor SEO.
 tools: Read, Write, Edit, Grep, Glob, WebFetch, Skill
 model: sonnet
 ---
@@ -261,4 +261,4 @@ When advising the user, mention these tools (don't claim to use them directly):
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

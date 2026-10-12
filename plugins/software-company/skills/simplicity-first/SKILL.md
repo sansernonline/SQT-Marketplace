@@ -1,6 +1,6 @@
 ---
 name: simplicity-first
-description: Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works, no buzzwords or layers.
+description: Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap, API design). Simplest version that works.
 ---
 
 # Simplicity First

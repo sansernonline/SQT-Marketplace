@@ -38,6 +38,7 @@
   --win-success: #0f7b0f;  --win-success-bg: #dff6dd;
   --win-caution: #9d5d00;  --win-caution-bg: #fff4ce;
   --win-critical: #c42b1c; --win-critical-bg: #fde7e9;
+  --win-close-hover: #c42b1c; --win-on-close: #ffffff;   /* ปุ่มปิดหน้าต่าง — สีเดียวทั้ง 2 ธีม */
   --win-info: #005fb8;     --win-info-bg: #f4f9ff;
 
   /* รูปทรง */
@@ -62,19 +63,19 @@
 }
 
 /* ---- DARK ---------------------------------------------------------------
-   ค่าที่วัดได้จาก Windows Security: พื้น #000000 · เลือกใน nav #0F0F0F
+   พื้นผิวตาม Windows 11 ปกติ (Mica): หน้าต่าง #202020 · เนื้อหา #272727 · การ์ด #2B2B2B
    ปุ่ม #333333 · แถบ accent #4CC2FF · ลิงก์ #99EBFF · เนื้อความ #CCCCCC
-   หมายเหตุ: Windows 11 ปกติใช้พื้น #202020/#272727 (Mica) — ชุดนี้เป็นแบบ
-   พื้นดำสนิทตามภาพต้นแบบ สลับได้ที่ 2 บรรทัดแรก                            */
+   พื้นดำสนิทแบบ Windows Security (วัดจากภาพต้นแบบเดิม) → ใส่ data-backdrop="black"
+   ที่ <html> · ใช้เมื่อแบรนด์ต้องการจริง เพราะวางข้างแอปอื่นแล้วดูแข็งกว่า      */
 :root[data-theme="dark"] {
-  --win-bg: #000000;
-  --win-layer: #000000;
-  --win-card: #0f0f0f;
-  --win-card-secondary: #1c1c1c;
+  --win-bg: #202020;
+  --win-layer: #272727;
+  --win-card: #2b2b2b;
+  --win-card-secondary: #323232;
 
   --win-text: #ffffff;
   --win-text-secondary: #cccccc;
-  --win-text-tertiary: #8b8b8b;
+  --win-text-tertiary: #9d9d9d;
   --win-text-disabled: #767676;
 
   --win-accent: #4cc2ff;
@@ -87,8 +88,8 @@
   --win-control-pressed: #2b2b2b;
   --win-control-stroke: #ffffff14;
   --win-subtle-hover: #ffffff0f;
-  --win-subtle-selected: #0f0f0f;
-  --win-divider: #2d2d2d;
+  --win-subtle-selected: #ffffff15;
+  --win-divider: #3a3a3a;
 
   /* ค่าจริงของ WinUI dark (SystemFillColor*) — พื้นเป็นโทนกลาง ไม่ใช่สีจัด
      ถ้าใช้สีอิ่มตัวเป็นพื้น InfoBar จะแย่งความสนใจจากเนื้อหาทั้งหน้า */
@@ -102,21 +103,33 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --win-bg: #000000;            --win-layer: #000000;
-    --win-card: #0f0f0f;          --win-card-secondary: #1c1c1c;
+    --win-bg: #202020;            --win-layer: #272727;
+    --win-card: #2b2b2b;          --win-card-secondary: #323232;
     --win-text: #ffffff;          --win-text-secondary: #cccccc;
-    --win-text-tertiary: #8b8b8b; --win-text-disabled: #767676;
+    --win-text-tertiary: #9d9d9d; --win-text-disabled: #767676;
     --win-accent: #4cc2ff;        --win-accent-hover: #47b1e8;
     --win-accent-text: #99ebff;   --win-on-accent: #000000;
     --win-control: #333333;       --win-control-hover: #3d3d3d;
     --win-control-pressed: #2b2b2b; --win-control-stroke: #ffffff14;
-    --win-subtle-hover: #ffffff0f; --win-subtle-selected: #0f0f0f;
-    --win-divider: #2d2d2d;
+    --win-subtle-hover: #ffffff0f; --win-subtle-selected: #ffffff15;
+    --win-divider: #3a3a3a;
     --win-success: #6ccb5f;  --win-success-bg: #393d1b;
     --win-caution: #fce100;  --win-caution-bg: #433519;
     --win-critical: #ff99a4; --win-critical-bg: #442726;
     --win-info: #60cdff;     --win-info-bg: #2e2e2e;
     --win-shadow-flyout: 0 8px 16px rgba(0, 0, 0, .4);
+  }
+}
+
+/* พื้นดำสนิทแบบ Windows Security — <html data-backdrop="black"> (มีผลเฉพาะธีมมืด) */
+:root[data-theme="dark"][data-backdrop="black"] {
+  --win-bg: #000000; --win-layer: #000000; --win-card: #0f0f0f; --win-card-secondary: #1c1c1c;
+  --win-subtle-selected: #0f0f0f; --win-divider: #2d2d2d; --win-text-tertiary: #8b8b8b;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-backdrop="black"]:not([data-theme="light"]) {
+    --win-bg: #000000; --win-layer: #000000; --win-card: #0f0f0f; --win-card-secondary: #1c1c1c;
+    --win-subtle-selected: #0f0f0f; --win-divider: #2d2d2d; --win-text-tertiary: #8b8b8b;
   }
 }
 
@@ -170,7 +183,7 @@ body.win-app {
   font-family: var(--win-font-icon); font-size: 10px; cursor: pointer;
 }
 .win-caption-buttons button:hover { background: var(--win-subtle-hover); }
-.win-caption-buttons button.close:hover { background: #c42b1c; color: #fff; }
+.win-caption-buttons button.close:hover { background: var(--win-close-hover); color: var(--win-on-close); }
 
 .win-shell { display: flex; height: calc(100vh - var(--win-titlebar-h)); }
 

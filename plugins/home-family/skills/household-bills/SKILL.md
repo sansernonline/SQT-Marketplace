@@ -1,6 +1,6 @@
 ---
 name: household-bills
-description: Use when reading an electricity or water bill (MEA, PEA, MWA, PWA) or Ft charge, tracking utility, internet and mobile bills, or finding why a bill jumped.
+description: Use when reading an electricity or water bill (MEA, PEA, MWA, PWA, Ft charge), tracking bills, or finding why one jumped.
 ---
 
 # Household Bills (Thailand)

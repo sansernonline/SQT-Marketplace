@@ -1,6 +1,6 @@
 ---
 name: social-security-th
-description: Use when someone asks about Thai social security (sections 33, 39, 40), the wage cap, benefits, compensation fund, provident fund, or employer SSO filings.
+description: Use when someone asks about Thai social security (sections 33, 39, 40), wage cap, benefits, or employer SSO filings.
 ---
 
 # Thai Social Security (ประกันสังคม)

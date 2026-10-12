@@ -13,6 +13,7 @@
  *   dist/claude-web/<plugin>.zip         claude.ai (Cowork / แชทเว็บ) อัปโหลดทีละไฟล์
  *   dist/codex/<plugin>/                 OpenAI Codex CLI → .agents/skills · .codex/agents/*.toml · AGENTS.md
  *   dist/gemini-cli/<plugin>/            Gemini CLI extension → gemini-extension.json · skills · agents · commands/*.toml
+ *   dist/kimi/<plugin>/                  Kimi Code CLI plugin → kimi.plugin.json · skills (คำสั่ง = skill เรียกเอง) · agents · KIMI.md
  *   dist/chat-web/<plugin>/<บทบาท>/      ChatGPT Custom GPT / Gemini Gem → instructions.md + knowledge/
  */
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, cpSync, statSync } from "node:fs";
@@ -151,6 +152,37 @@ function buildGemini(p) {
 
   write(join(out, "GEMINI.md"), contextFile(p, "Gemini CLI",
     "เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`"));
+}
+
+// ── Kimi Code CLI (plugin) ────────────────────────────────────────────
+
+function buildKimi(p) {
+  const out = join(DIST, "kimi", p.plugin);
+  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), { recursive: true });
+
+  // Kimi ไม่มีโฟลเดอร์คำสั่งแยกที่มีเอกสารชัด → เป็น skill ที่ผู้ใช้เรียกเองด้วย /skill:ชื่อ
+  for (const c of p.commands) {
+    write(join(out, "skills", c.name, "SKILL.md"),
+      frontmatter({ name: c.name, description: c.fields.description, disableModelInvocation: true }) + c.body);
+  }
+
+  // ตัด tools/model เหมือน Gemini · ${base_prompt} คงคำสั่งพื้นฐานของ Kimi ไว้ก่อนบทบาท
+  for (const a of p.agents) {
+    write(join(out, "agents", `${a.name}.md`),
+      frontmatter({ name: a.name, description: a.fields.description }) + "${base_prompt}\n\n" + a.body);
+  }
+
+  write(join(out, "kimi.plugin.json"), JSON.stringify({
+    name: `sqt-${p.plugin}`,
+    version: p.version,
+    description: p.description,
+    skills: "./skills/",
+    ...(p.agents.length && { agents: "./agents/" }),
+    systemPromptPath: "./KIMI.md",
+  }, null, 2) + "\n");
+
+  write(join(out, "KIMI.md"), contextFile(p, "Kimi Code CLI",
+    "เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`"));
 }
 
 // ── ChatGPT Custom GPT / Gemini Gem ───────────────────────────────────
@@ -296,13 +328,14 @@ function distReadme(rows) {
 | claude.ai (Cowork / แชทเว็บ) | \`claude-web/<plugin>.zip\` | อัปโหลดทีละไฟล์ |
 | OpenAI Codex CLI | \`codex/<plugin>/\` | คัดลอกเนื้อในโฟลเดอร์ไปไว้รากโปรเจกต์ |
 | Gemini CLI | \`gemini-cli/<plugin>/\` | \`gemini extensions install <โฟลเดอร์>\` |
+| Kimi Code CLI | \`kimi/<plugin>/\` | \`/plugins install <โฟลเดอร์>\` ในหน้าจอ Kimi |
 | ChatGPT Custom GPT / Gemini Gem | \`chat-web/<plugin>/<บทบาท>/\` | ดู \`chat-web/README.md\` |
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
 ${table}
 
-ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน \`claude-web/\` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex และ gemini-cli มีครบ
+ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน \`claude-web/\` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ
 `);
 }
 
@@ -315,6 +348,7 @@ for (const p of plugins) {
   const zip = buildClaudeWeb(p);
   buildCodex(p);
   buildGemini(p);
+  buildKimi(p);
   tooLong.push(...buildChatWeb(p));
   rows.push({ plugin: p.plugin, version: p.version, skills: p.skills.length, agents: p.agents.length, commands: p.commands.length, zip });
   console.log(`  ${p.plugin.padEnd(18)} v${p.version}  ${p.skills.length} skills · ${p.agents.length} agents · ${p.commands.length} commands · zip ${(zip / 1024 / 1024).toFixed(1)} MB`);

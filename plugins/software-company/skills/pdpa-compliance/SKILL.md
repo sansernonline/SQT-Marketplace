@@ -1,6 +1,6 @@
 ---
 name: pdpa-compliance
-description: Use when software stores personal data of people in Thailand. Data inventory, lawful basis, consent, subject rights, retention, processors, breach response.
+description: Use when software stores personal data of people in Thailand (PDPA — consent, subject rights, retention, breach response).
 ---
 
 # PDPA — ข้อมูลส่วนบุคคล

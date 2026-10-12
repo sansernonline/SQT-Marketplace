@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Run a comprehensive code review using the developer agent + code-review-checklist skill.
+description: Run a code review with the developer agent and the code-review-checklist skill.
 argument-hint: <file path or PR description>
 disable-model-invocation: true
 ---

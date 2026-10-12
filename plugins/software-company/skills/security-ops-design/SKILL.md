@@ -1,6 +1,6 @@
 ---
 name: security-ops-design
-description: Design a SOC or run a hypothesis-driven threat hunt using the security-analyst agent. Two modes — soc-design or threat-hunt.
+description: Design a SOC or run a threat hunt with the security-analyst agent (soc-design or threat-hunt).
 argument-hint: <soc-design | threat-hunt> <details>
 disable-model-invocation: true
 ---

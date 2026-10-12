@@ -1,6 +1,6 @@
 ---
 name: developer-experience
-description: Use when the users are developers (time to hello world, error messages, CLI usability, onboarding, SDK design, docs platform, tutorials, talks).
+description: Use when the users are developers (time to hello world, error messages, CLI, onboarding, SDK design, docs, tutorials).
 ---
 
 # developer-experience
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-devtools` (skill `developer-experience` · `sdk-design-patterns` · `technical-content`) เข้า `software-company` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`
+รวมจาก plugin `software-company-devtools` (เดิมชื่อ developer-experience → `references/developer-experience.md` · sdk-design-patterns → `references/sdk-design-patterns.md` · technical-content → `references/technical-content.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 และเนื้อหาเดิมอยู่ครบใน `references/`

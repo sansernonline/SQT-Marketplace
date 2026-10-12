@@ -194,6 +194,29 @@ Use when a new project needs its document set decided (which docs, order, reader
 | `qa/` | มี test case (เกือบทุกโปรเจกต์) โดย test case อยู่ที่นี่เสมอ เป็น `.md` หรือ `.xlsx` (ขนาด L) | — ส่วน `docs/test-plan.md` มีแค่แผน ไม่มีรายการ test case |
 | `assets/` | มีโลโก้หรือไอคอนของโปรเจกต์ | — |
 
+### โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
+
+ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
+**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
+
+```
+<ชื่อโปรเจกต์>/
+├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
+```
+
+- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
+- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
+- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
+- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
+- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
+
 **กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
 
 - **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
@@ -366,6 +389,7 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
 - ❌ **เขียน FSD ก่อน SRS ได้รับการยืนยัน**
 - ❌ **มี mockup ที่ปุ่มกดไม่ได้** — ผู้รีวิวเข้าใจว่าทำได้แล้ว
 - ❌ **ใช้ LLM แต่ไม่มี PROMPT-LIBRARY** — prompt ตัวจริงอยู่ในโค้ด พอแก้แล้วไม่มีใครรู้ว่าเปลี่ยนอะไร
+- ❌ **ตั้งชื่อโฟลเดอร์ sub-project ว่า `projects/` `modules/` หรือ `apps/`** — ใช้ `ecosystem/` (ข้อ 1 โปรเจกต์แบบ ecosystem)
 - ❌ **สร้าง `qa/` `decisions/` `figures/` ทิ้งไว้ว่าง ๆ** เพราะ "ในแบบมี" — โฟลเดอร์ว่างทำให้คนคิดว่าของหาย
 - ❌ **เอกสารชิ้นเดียวตอบทุกคำถาม** — SRS ที่มีทั้ง timeline ทั้ง test case คือเอกสารที่ไม่มีใครอ่านจบ
 
@@ -429,6 +453,7 @@ Use when a stakeholder Markdown document (BRD, FSD, ADR, status report, audit, p
 | ไฟล์ | เปิดเมื่อ |
 |---|---|
 | [references/markdown-patterns.md](references/markdown-patterns.md) | ถ้าจะเขียนส่วนหัว สารบัญ กล่องข้อความ ตาราง ป้ายสถานะ cover block ตารางเทียบตัวเลือก ส่วนเซ็นรับ หรืออภิธานศัพท์ ให้เปิดดูตัวอย่าง markdown แล้วลอกไปใช้ |
+| [scripts/check_outline.py](scripts/check_outline.py) | ถ้า skill ที่เขียนเอกสารมีไฟล์แบบใน `assets/` ให้รัน `python scripts/check_outline.py <แบบ.md> <เอกสาร.md>` ก่อนส่ง — ตรวจหัวข้อครบและเรียงตามแบบ ช่องตัวหนาครบ หัวตารางตรง และไม่มีช่องที่ยังไม่เติม · ในแบบ ใส่ `<!-- optional -->` ท้ายหัวข้อหรือช่องที่ไม่บังคับ · แก้ตัวตรวจแล้วรัน `--self-test` ก่อน |
 | [references/theme-colors.md](references/theme-colors.md) | ถ้าต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์ ให้เปิดดูว่าใครคุมสีส่วนไหน และค่าสีตั้งต้นประจำบ้านคืออะไร |
 
 ## Document Header (Always)

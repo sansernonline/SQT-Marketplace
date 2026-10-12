@@ -7,6 +7,7 @@ screenshot.py — เรนเดอร์ mockup แล้วถ่ายภา
     python screenshot.py mockup-template.html out/
     python screenshot.py mockup-template.html out/ --width 900     # ทดสอบหน้าต่างแคบ
     python screenshot.py mockup-template.html out/ --full          # เก็บทั้งหน้าที่เลื่อนได้
+    python screenshot.py mockup.html out/ --hide ".mock-strip,.state-switch"   # ซ่อนแถบควบคุมของ mockup
 
 ได้ไฟล์ <ชื่อ>-dark.png และ <ชื่อ>-light.png — ต้องเปิดดูทั้งคู่
 """
@@ -17,7 +18,7 @@ import sys
 from pathlib import Path
 
 
-def shoot(html_path, out_dir, width=1440, height=900, full=False, scale=1):
+def shoot(html_path, out_dir, width=1440, height=900, full=False, scale=1, hide=""):
     from playwright.sync_api import sync_playwright
 
     html = Path(html_path).resolve()
@@ -35,6 +36,8 @@ def shoot(html_path, out_dir, width=1440, height=900, full=False, scale=1):
             )
             page.goto(html.as_uri())
             page.evaluate("t => document.documentElement.dataset.theme = t", theme)
+            if hide:                            # ส่วนควบคุมของ mockup ไม่ใช่งานออกแบบ ไม่ให้ติดภาพ
+                page.add_style_tag(content=hide + "{display:none !important}")
             page.wait_for_timeout(300)          # ให้ transition จบก่อน
             target = out / f"{stem}-{theme}.png"
             page.screenshot(path=str(target), full_page=full)
@@ -54,11 +57,12 @@ def main():
     ap.add_argument("--height", type=int, default=900)
     ap.add_argument("--full", action="store_true", help="เก็บทั้งหน้ารวมส่วนที่ต้องเลื่อน")
     ap.add_argument("--scale", type=int, default=1, help="device scale factor (2 = จอ HiDPI)")
+    ap.add_argument("--hide", default="", help="CSS selector ที่ต้องซ่อนก่อนถ่าย เช่น แถบ FR หรือตัวสลับสถานะ")
     a = ap.parse_args()
 
     if not os.path.exists(a.html):
         sys.exit("ไม่พบไฟล์: " + a.html)
-    for f in shoot(a.html, a.outdir, a.width, a.height, a.full, a.scale):
+    for f in shoot(a.html, a.outdir, a.width, a.height, a.full, a.scale, a.hide):
         print(f)
 
 

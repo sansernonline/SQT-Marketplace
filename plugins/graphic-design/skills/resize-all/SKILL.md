@@ -1,6 +1,6 @@
 ---
 name: resize-all
-description: Derive every needed platform format from a master asset — sizes, crops, safe zones, correct naming — ready to export.
+description: Derive every platform format from a master asset — sizes, crops, safe zones, naming.
 argument-hint: <path to master asset> [platforms needed]
 disable-model-invocation: true
 ---

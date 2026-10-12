@@ -32,14 +32,24 @@ const rows = sources.flatMap((file) => readFileSync(file, "utf8").split(/\r?\n/)
   .filter((r) => !only || r.agent === only)
   .sort((a, b) => String(a.ts).localeCompare(String(b.ts)));
 
+// agent พร้อม id ย่อ · แถวส่งงานบอกบทบาทที่ถูกเรียก · แถว review บอกผลตรวจ
+const who = (r) => `${cell(r.agent)}${r.id ? ` · ${cell(r.id)}` : ""}`;
+const what = (r) => {
+  if (r.event === "review") return `ตรวจ ${cell(r.task)} รอบ ${cell(r.round)} โดย ${cell(r.by)}${r.by_id ? ` · ${cell(r.by_id)}` : ""} → ${cell(r.result)} · สูง ${cell(r.high)} กลาง ${cell(r.mid)} ต่ำ ${cell(r.low)}`;
+  const spawn = r.role ? `→ ${cell(r.role)}${r.role_model ? ` (${cell(r.role_model)})` : ""}${r.spawned_id ? ` · ${cell(r.spawned_id)}` : ""} · ` : "";
+  return `${r.correction ? "⚠ แก้ · " : ""}${spawn}${cell(r.target || r.prompt || r.source)}`;
+};
+const reviewOk = (r) => (r.event === "review" ? r.result === "ผ่าน" : r.ok);
+const reviews = rows.filter((r) => r.event === "review");
+
 const lines = [
   `# SuperUser log · ${day}${only ? ` · ${only}` : ""}`,
   "",
-  `${rows.length} รายการ · ล้มเหลว ${rows.filter((r) => r.ok === false).length} · ผู้ใช้แก้ ${rows.filter((r) => r.correction).length}`,
+  `${rows.length} รายการ · ล้มเหลว ${rows.filter((r) => r.ok === false).length} · ผู้ใช้แก้ ${rows.filter((r) => r.correction).length} · รอบตรวจ ${reviews.length} (ไม่ผ่าน ${reviews.filter((r) => r.result !== "ผ่าน").length})`,
   "",
   "| เวลา | session | agent | โมเดล | เหตุการณ์ | เครื่องมือ | เป้าหมาย | ผล |",
   "|---|---|---|---|---|---|---|---|",
-  ...rows.map((r) => `| ${cell(r.ts?.slice(11, 19))} | ${cell(r.session)} | ${cell(r.agent)} | ${cell(r.model)} | ${cell(r.event)} | ${cell(r.tool)} | ${r.correction ? "⚠ แก้ · " : ""}${cell(r.target || r.prompt || r.source)} | ${mark(r.ok)} |`),
+  ...rows.map((r) => `| ${cell(r.ts?.slice(11, 19))} | ${cell(r.session)} | ${who(r)} | ${cell(r.model)} | ${cell(r.event)} | ${cell(r.tool)} | ${what(r)} | ${mark(reviewOk(r))} |`),
   "",
 ];
 

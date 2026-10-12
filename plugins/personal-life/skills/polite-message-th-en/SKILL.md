@@ -1,6 +1,6 @@
 ---
 name: polite-message-th-en
-description: Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment, apology, follow-up) in the right register. Not complaints.
+description: Use when writing an awkward everyday message in Thai or English (favour, decline, chasing payment, apology). Not complaints.
 ---
 
 # Polite Messages in Thai and English

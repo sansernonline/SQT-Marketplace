@@ -26,11 +26,9 @@ TRS-UAT-v1.0-REVIEW.xlsx                  แผนทดสอบตรวจ�
 TRS-MAN-admin-v1.0-APPROVED.pdf           คู่มือผู้ดูแลระบบ
 TRS-DECK-kickoff-v1.0-2026-08-15.pptx     สไลด์เปิดโครงการ
 
-docs/srs.md                               ต้นฉบับใน repo — ไม่มีเวอร์ชันในชื่อ
-docs/fsd-recording.md
-docs/adr/0007-เลือก-whisper.md
+_to_delete/drafts/srs.md                  ร่าง markdown ก่อน render — ไม่วางใน docs/
+docs/decisions/ADR-0007-choose-whisper.md เอกสารเชิงเทคนิคใน repo — ไม่มีเวอร์ชันในชื่อ
 docs/meetings/2026-09-25-kickoff.md
-docs/releases/                            ไฟล์ส่งออกทั้งหมดอยู่ที่นี่
 ```
 
 ## แม่แบบตารางประวัติการแก้ไข

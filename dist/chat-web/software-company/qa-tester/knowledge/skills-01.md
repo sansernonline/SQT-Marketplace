@@ -22,37 +22,19 @@ TC-<MODULE>-<NUMBER>
 Example: TC-LOGIN-001, TC-CHECKOUT-042
 ```
 
-## Test Case Template
+## Output Template
 
-```markdown
-## TC-XXX-NNN: <Short descriptive title>
+Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fill it in. Do not write the outline from memory. One file holds many test cases; the checker finds each `## TC-` block and checks every one.
 
-**Module:** <feature area>
-**Type:** Functional | Boundary | Negative | Integration | Performance | Security
-**Priority:** P1 (critical) | P2 (high) | P3 (medium) | P4 (low)
-**Automation:** Manual | Automated | Candidate
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
-**Preconditions:**
-- ...
-- ...
+  ```bash
+  python ../polished-document-style/scripts/check_outline.py assets/test-case.md <your test-case file>
+  ```
 
-**Test Data:**
-| Field | Value |
-|-------|-------|
-| ...   | ...   |
-
-**Steps:**
-| # | Action | Expected Result |
-|---|--------|----------------|
-| 1 | ...    | ...            |
-| 2 | ...    | ...            |
-| 3 | ...    | ...            |
-
-**Postconditions:**
-- ...
-
-**Related:** US-XXX, AC-X
-```
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
 ## Test Case Categories (Coverage Guide)
 
@@ -154,8 +136,13 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 ```markdown
 ## TC-LOGIN-002: Empty email field
 
+**Module:** Authentication
 **Type:** Negative
 **Priority:** P2
+**Automation:** Automated
+
+**Preconditions:**
+- User is on login page
 
 **Steps:**
 | # | Action                | Expected Result                      |
@@ -164,13 +151,20 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 | 2 | Enter valid password  | Password accepted                    |
 | 3 | Click "Login"         | Error: "Email is required"           |
 | 4 | Verify focus          | Email field gets focus               |
+
+**Related:** US-001, AC2
 ```
 
 ```markdown
 ## TC-LOGIN-003: Account lockout after 5 failed attempts
 
+**Module:** Authentication
 **Type:** Security
 **Priority:** P1
+**Automation:** Candidate
+
+**Preconditions:**
+- User account exists and is not locked
 
 **Steps:**
 | # | Action                              | Expected Result                |
@@ -179,6 +173,8 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 | 2 | Repeat step 1 four more times       | Same error each time          |
 | 3 | Enter valid email + correct password| Error: "Account locked..."    |
 | 4 | Wait 15 minutes                     | Can login successfully        |
+
+**Related:** US-001, AC4
 ```
 
 ## Quality Checklist
@@ -190,6 +186,7 @@ Each test case should:
 - [ ] Be independent (doesn't rely on TC-XXX running first)
 - [ ] Be deterministic (same result every run)
 - [ ] Trace back to a requirement (user story, AC)
+- [ ] `check_outline.py` passes on the whole file
 
 ## Anti-patterns
 
@@ -425,14 +422,15 @@ plugin อื่นในชุดก็มี `superuser` ของตัวเ
 ```markdown
 # IMPROVEMENTS — สิ่งที่ SuperUser เจอ รอรวมเข้า skill และ agent
 
-| วันที่ | เจออะไร | หลักฐาน · แหล่ง | ควรไปรวมที่ | สถานะ |
-|---|---|---|---|---|
-| 2026-10-06 | upsert ของ EF Core 9 ใช้ `ExecuteUpdate` แทนอ่านแล้วเขียน | ลิงก์เอกสาร · test ที่รัน | `principle-safe-to-rerun` | ใหม่ |
+| วันที่ | เจออะไร | ใครเจอ | หลักฐาน · แหล่ง | ควรไปรวมที่ | ควรรวมไหม | รวมแล้ว |
+|---|---|---|---|---|---|---|
+| 2026-10-06 | upsert ของ EF Core 9 ใช้ `ExecuteUpdate` แทนอ่านแล้วเขียน | `<agent>` | ลิงก์เอกสาร · test ที่รัน | `principle-safe-to-rerun` | ใหม่ | ยัง |
 ```
 
-- **สถานะ** — `ใหม่` · `รวมแล้ว (<ไฟล์>)` · `ไม่รวม (<เหตุผล>)` โดยแถวใหม่อยู่บนสุด
+- **ควรรวมไหม** — `ใหม่` (ยังไม่ตัดสิน) · `ควรรวม` · `ไม่รวม (<เหตุผล>)` · **รวมแล้ว** — `ยัง` · `แล้ว <วันที่> (<ไฟล์>)` เมื่อแก้ skill จริงแล้ว · แถวที่ไม่รวมใส่ `—` โดยแถวใหม่อยู่บนสุด
+- **ใครเจอ** — ชื่อ agent ที่เจอเรื่องนี้ เช่น `software-company:qa-tester` · `หัวหน้าทีม` (ตัวที่คุยกับผู้ใช้) · `ผู้ใช้` ถ้าหลายตัวช่วยกันเจอ ให้เรียงตามลำดับด้วย → ส่วนคนจดลงไฟล์คือหัวหน้าทีมเสมอ
 - **เจอเรื่องเดิมซ้ำ** — เพิ่มหลักฐานในแถวเดิม ไม่เพิ่มแถว (ยิ่งเจอซ้ำ ยิ่งควรรวมเข้า skill ก่อน)
-- **รวมเข้า plugin** — playbook `learn-from-session` อ่านคิวกลางก่อน แล้วอ่านไฟล์นี้ จากนั้นเปลี่ยนสถานะแถวที่รวมแล้ว ส่วนระหว่างทำงานอื่น ห้ามแก้ skill ใน SQT-Marketplace เอง
+- **รวมเข้า plugin** — playbook `learn-from-session` อ่านคิวกลางก่อน แล้วอ่านไฟล์นี้ จากนั้นใส่ช่อง "รวมแล้ว" ของแถวที่แก้ skill จริงแล้ว ส่วนระหว่างทำงานอื่น ห้ามแก้ skill ใน SQT-Marketplace เอง
 
 <!-- superuser:begin learning -->
 ### รอบเรียนรู้ตอนจบงาน
@@ -460,6 +458,7 @@ skill จะเปลี่ยนก็ต่อเมื่อผู้ใช�
 <!-- superuser:begin patterns -->
 - ทุกงานที่เกิน 1 ขั้น: Planning → ReAct ทุกขั้น → Reflection ก่อนส่ง
 - ต้องทำ Reflection เมื่องานจะถึงมือคนอื่น หรือใช้ตัดสินเรื่องเงิน สุขภาพ กฎหมาย และคนตรวจต้องเป็น subagent ตัวใหม่เสมอ
+- ตรวจไม่ผ่าน → แก้ → ส่ง reviewer **ตัวใหม่**ตรวจซ้ำ ให้ดูข้อเดิมทุกข้อ + จุดที่เปลี่ยน · วนจนไม่เหลือข้อระดับสูงและกลาง (ข้อต่ำที่เหลือลงรายงาน) · ห้ามปิดงานด้วยรายงานของตัวที่แก้ · ครบ 5 รอบยังไม่ผ่าน → หยุด แล้วส่งผู้ใช้ตัดสิน เพราะมักแปลว่าโจทย์ขัดกันเอง · ทุกรอบลงผล: รอบที่ · agent ที่ตรวจ · ผ่าน/ไม่ผ่าน · จำนวนแต่ละระดับ เป็นบรรทัด `review` ใน `.superuser/log/<วันที่>/main.jsonl` (รูปแบบใน `learning-loop`)
 - MoA ใช้แรง 3–5 เท่า จึงใช้เฉพาะเรื่องที่เลือกผิดแล้วแพง
 - รอบเรียนรู้ตอนจบ = Reflection ของทั้งทีม: ตรวจวิธีทำงาน ไม่ใช่ตัวงาน (หัวข้อ 9)
 - รายงานตอนจบบอกว่าใช้รูปแบบไหน (หัวข้อ 8 ของ `agent-patterns`)
@@ -543,6 +542,9 @@ skill จะเปลี่ยนก็ต่อเมื่อผู้ใช�
 `IMPROVEMENTS.md` จดความรู้ที่เจอระหว่างงาน · รอบเรียนรู้ดูว่าทีมทำงานพลาดตรงไหน แล้วเสนอแก้ skill
 
 1. **ระหว่างงาน** — สร้างโฟลเดอร์ `.superuser/` (ข้างใน `log/` · `inbox/` · `learn/` · `tmp/` · ไม่ commit) พร้อม `CONTEXT.md` ตั้งแต่งานแรก เมื่อมี `.superuser/` แล้ว hook ของ plugin จะจดทุกการทำลง `.superuser/log/<วันที่>/<agent>.jsonl` เอง (1 ไฟล์ต่อ agent ส่วน `main` คือหัวหน้าทีมและข้อความผู้ใช้) และติดธง `correction: true` เมื่อข้อความผู้ใช้ฟังเหมือนการแก้ (ไม่ใช่ · ผิด · อย่า · บอกแล้ว · แก้ใหม่) log อยู่ในเครื่องผู้ใช้เท่านั้นและตัดค่าลับออกแล้ว ถ้าผู้ใช้เปลี่ยนทิศงาน ให้จด 1 แถวในบันทึกการตัดสินใจ (ตาราง "การตัดสินใจ" ใน `CONTEXT.md` หรือ `decision-log` ใน `docs/BUILD-PLAN.md`) ช่องเหตุผลขึ้นต้นว่า `ผู้ใช้แก้ —`
+   - **บรรทัดส่งงาน** — เมื่อหัวหน้าทีมส่งงานให้ subagent hook จดเพิ่ม `role` (ชนิด agent) · `role_model` · `spawned_id` (id ย่อ 8 ตัว) และทุกบรรทัดของ subagent มี `id` ของตัวเอง จึงแยกได้ว่า reviewer รอบไหนทำอะไร แม้ชนิดเดียวกันจะเขียนลงไฟล์เดียวกัน
+   - **บรรทัดผลตรวจ** — hook ไม่รู้ผลตรวจ หัวหน้าทีมจึงเขียนเองทุกครั้งที่ได้ผลจาก reviewer 1 บรรทัดต่อรอบ ต่อท้าย `.superuser/log/<วันที่>/main.jsonl` (เขียนได้แม้ hook ไม่ทำงาน เช่น รันจาก cloud):
+     `{"ts":"<เวลาท้องถิ่น ISO>","event":"review","agent":"main","task":"<งาน>","round":2,"by":"<ชนิด agent ที่ตรวจ>","by_id":"<id ย่อ>","result":"ผ่าน|ไม่ผ่าน","high":0,"mid":4,"low":8,"report":"<path รายงาน>"}`
 2. **ก่อนตอบตอนจบ** — ส่ง agent `learning-reviewer` ตัวใหม่ (ระดับกลาง) พร้อมสรุปงาน 5–10 บรรทัด: เป้า · ขนาด · playbook (เลือก ปรับ หรือประกอบเอง) · skill ที่ใช้ · จุดที่ผู้ใช้แก้ · ผลที่ส่ง agent ตัวนี้จะอ่าน log · บันทึกการตัดสินใจ · `IMPROVEMENTS.md` · บันทึกเก่าใน `.superuser/learn/` แล้วเขียน `.superuser/learn/<วันที่>-<งาน>.md`
 3. **หัวหน้าทีมตรวจหลักฐานทุกข้อ** แล้วใส่ข้อที่ผ่านไม่เกิน 3 ข้อในหัวข้อ "ควรปรับ skill" ของคำตอบตอนจบ ถ้าไม่มีข้อไหนมีหลักฐานก็ไม่ต้องใส่หัวข้อนี้
 4. **ผู้ใช้ตัดสิน** — ถ้าผู้ใช้สั่ง "รวมบทเรียน" หรือ "reflect" ให้ใช้ playbook [`learn-from-session`](playbook-learn-from-session.md) ถ้าไม่สั่ง บันทึกก็รอไว้ และไม่มีใครแก้ skill
@@ -554,18 +556,19 @@ skill จะเปลี่ยนก็ต่อเมื่อผู้ใช�
 - **เขียนเมื่อ** — ทุกครั้งที่จดแถวใหม่ใน `IMPROVEMENTS.md` หรือใส่ข้อ "ควรปรับ skill" ในคำตอบตอนจบ หัวหน้าทีมต้องเพิ่ม 1 แถวในคิวกลางด้วย ถ้ายังไม่มีไฟล์ให้สร้างตามแม่แบบ
 - **เรื่องเดิมซ้ำ** — บวกช่อง "ครั้ง" และต่อที่มาในแถวเดิม ไม่เพิ่มแถว
 - **เก็บแค่ดัชนี** — หลักฐานเต็มอยู่ในไฟล์ของโปรเจกต์ · ห้ามใส่ชื่อลูกค้า ข้อมูลส่วนตัว ตัวเลขเงิน หรือค่าลับ
-- **ใครรวม** — เมื่อผู้ใช้เปิด SQT-Marketplace แล้วสั่ง "รวมบทเรียน" ให้อ่านคิวนี้ก่อน โดยเรียงตามจำนวนครั้ง รวมเสร็จแล้วเปลี่ยนสถานะ ส่วนระหว่างทำงานอื่นห้ามแก้ skill เอง
+- **ใครรวม** — เมื่อผู้ใช้เปิด SQT-Marketplace แล้วสั่ง "รวมบทเรียน" ให้อ่านคิวนี้ก่อน โดยเรียงตามจำนวนครั้ง รวมเสร็จแล้วใส่ช่อง "รวมแล้ว" ส่วนระหว่างทำงานอื่นห้ามแก้ skill เอง
 - Windows: `%USERPROFILE%\.claude\superuser\improvements.md` · Claude Code อาจถามสิทธิ์ครั้งแรกที่เขียนนอกโฟลเดอร์งาน ให้อนุญาตเฉพาะโฟลเดอร์ `~/.claude/superuser/`
 
 ```markdown
 # คิวปรับ skill — SuperUser ทุกโปรเจกต์ในเครื่องนี้
 
-| วันที่ | plugin | skill หรือ agent | เรื่อง | ครั้ง | ที่มา | สถานะ |
-|---|---|---|---|---|---|---|
-| 2026-10-07 | career | `resume-th-en` | ATS อ่านคอลัมน์คู่ใน PDF ผิดลำดับ | 2 | `<โปรเจกต์ A>/IMPROVEMENTS.md` · `<โปรเจกต์ B>/.superuser/learn/2026-10-07-cv.md` | ใหม่ |
+| วันที่ | plugin | skill หรือ agent | เรื่อง | ใครเจอ | ครั้ง | ที่มา | ควรรวมไหม | รวมแล้ว |
+|---|---|---|---|---|---|---|---|---|
+| 2026-10-07 | career | `resume-th-en` | ATS อ่านคอลัมน์คู่ใน PDF ผิดลำดับ | `<agent>` | 2 | `<โปรเจกต์ A>/IMPROVEMENTS.md` · `<โปรเจกต์ B>/.superuser/learn/2026-10-07-cv.md` | ใหม่ | ยัง |
 ```
 
-สถานะ: `ใหม่` · `รวมแล้ว (<ไฟล์>)` · `ไม่รวม (<เหตุผล>)`
+ควรรวมไหม: `ใหม่` (ยังไม่ตัดสิน) · `ควรรวม` · `ไม่รวม (<เหตุผล>)` · รวมแล้ว: `ยัง` · `แล้ว <วันที่> (<ไฟล์>)` · แถวที่ไม่รวมใส่ `—`
+ใครเจอ: ชื่อ agent ที่เจอ เช่น `software-company:qa-tester` · `หัวหน้าทีม` · `ผู้ใช้` · หลายตัวเรียงด้วย →
 
 
 ## reference: playbook-bug-fix.md
@@ -680,9 +683,9 @@ skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · ski
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
 1. **รวบรวม** ตามลำดับ
-   - คิวกลาง `~/.claude/superuser/improvements.md` — แถวสถานะ `ใหม่` เรียงตามช่อง "ครั้ง" จากมากไปน้อย แล้วตามช่อง "ที่มา" ไปเปิดหลักฐานเต็ม
+   - คิวกลาง `~/.claude/superuser/improvements.md` — แถวที่ช่อง "รวมแล้ว" เป็น `ยัง` และช่อง "ควรรวมไหม" ไม่ใช่ `ไม่รวม` เรียงตามช่อง "ครั้ง" จากมากไปน้อย แล้วตามช่อง "ที่มา" ไปเปิดหลักฐานเต็ม
    - `.superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง "ควรปรับ skill" ของทุกไฟล์ ถ้าเรื่องเดียวกันอยู่หลายบันทึก ให้รวมเป็นแถวเดียวแล้วนับครั้ง
-   - `IMPROVEMENTS.md` — แถวสถานะ `ใหม่`
+   - `IMPROVEMENTS.md` — แถวที่ช่อง "รวมแล้ว" เป็น `ยัง` และช่อง "ควรรวมไหม" ไม่ใช่ `ไม่รวม`
 2. **แยกประเภท**
    - **ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ให้ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม ถ้า plugin มี `repeated-mistakes-to-checks` ให้ใช้ skill นั้น ถ้าไม่มีให้เขียนสคริปต์ตรวจ หรือเพิ่มข้อในรายการตรวจก่อนส่งของ skill ที่เกี่ยว
    - **วิธีที่ได้ผล หรือ skill ที่บอกผิด** ให้แก้ย่อหน้าใน SKILL.md ถ้า plugin มี `session-lessons-to-skills` ให้ใช้ skill นั้นรีวิว 3 มุม
@@ -693,11 +696,11 @@ skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · ski
 6. **ผู้ใช้เห็นด้วยแล้วจึงแก้ทีละย่อหน้า** ไม่เขียนทั้งไฟล์ใหม่
    - ของกลาง (ไฟล์ที่มาจาก plugin `superuser` หรือข้อความในบล็อก `superuser:begin`) ให้แก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` (สคริปต์อยู่ใน repo SQT-Marketplace ถ้าติดตั้ง plugin เดี่ยว ให้เสนอข้อความเดิม → ใหม่ให้ผู้ใช้ไปแก้ใน repo)
    - ถ้าแก้ใน repo SQT-Marketplace ให้รัน `node scripts/check/validate-marketplace.mjs` ให้ผ่าน
-7. **ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.superuser/learn/done/` แล้วเปลี่ยนสถานะใน `IMPROVEMENTS.md` และคิวกลางเป็น `รวมแล้ว (<ไฟล์>)` หรือ `ไม่รวม (<เหตุผล>)`
+7. **ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง "ควรรวมไหม" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง "รวมแล้ว" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว
 
 ## จบเมื่อ
 
-ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · สถานะในคิวกลางตรงกับที่ทำจริง
+ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง "ควรรวมไหม" และ "รวมแล้ว" ในคิวกลางตรงกับที่ทำจริง
 
 
 ## reference: playbook-new-project.md
@@ -788,7 +791,7 @@ skill หลัก: `project-doc-set` · `document-naming` · `polished-document
 3. ทำทีละฉบับตามลำดับในตารางของไฟล์ prompt และข้ามฉบับที่ไม่ได้สั่ง อ่านผลของฉบับก่อนจากดิสก์ใหม่ทุกครั้ง เพราะผู้ใช้อาจแก้ไปแล้ว วางไฟล์ตาม `project-doc-set` (`ref/` อ่านอย่างเดียว · `docs/` · `mockup/` · `qa/` · `assets/` · ของชั่วคราว `_to_delete/`) สร้างโฟลเดอร์เมื่อมีของจริงจะใส่ และตั้งชื่อตาม `document-naming`
 4. ถ้าต้องตัดสินใจกลางทาง ไม่ต้องหยุดถาม ให้เลือกทางที่ผลกระทบน้อยสุดตาม `principle-proceed-on-reversible-work` แล้วลง `decision-log` ส่วนข้อเท็จจริง (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา ให้ใส่ `(รอยืนยัน)` ลงคำถามค้าง แล้วทำต่อ
 5. ถ้าเอกสารขัดกัน ให้ยึดฉบับต้นน้ำ (SRS เหนือ FSD เหนือ mockup) ถ้าเอกสารขัดกับโค้ดที่รันอยู่ ให้ยึดโค้ด แล้วลงคำถามค้าง
-6. ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`)
+6. ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`) · ถ้าไม่ผ่าน ให้แก้แล้วตรวจซ้ำตามกติกา Reflection ใน `superuser` (reviewer ตัวใหม่ทุกรอบ · วนจนไม่เหลือข้อสูงและกลาง · ไม่เกิน 5 รอบ) และลงผลทุกรอบในช่องผลตรวจของ `docs/BUILD-PLAN.md` · เขียน `ผ่าน` ได้เมื่อรอบล่าสุดไม่เจอข้อสูงและกลางเท่านั้น
 7. จบแต่ละฉบับแล้วให้ลง `status-report` ใน `docs/BUILD-PLAN.md` แล้วเริ่มฉบับถัดไปทันที ไม่รอ `ต่อ` หยุดก่อนครบได้ 2 กรณีเท่านั้น คือขาดเอกสาร "ต้องมีก่อน" ที่สร้างเองไม่ได้ หรือเจอเงื่อนไขหยุดที่ไฟล์ prompt ระบุ
 8. เมื่อครบทุกฉบับ ให้รายงานครั้งเดียว: แถวที่เปลี่ยน · ค้างอยู่ · ตัดสินใจเอง · ถัดไป แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่คัดลอกเนื้อเอกสารกลับมา
 

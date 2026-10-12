@@ -1,6 +1,6 @@
 ---
 name: growth-specialist
-description: Use when improving conversion and adoption — checkout and landing-page conversion, A/B tests, App Store / Play Store listings, customer onboarding and in-product help. Search-engine work stays with seo-specialist.
+description: Use when improving conversion and adoption — checkout and landing pages, A/B tests, store listings, onboarding. Search ranking goes to seo-specialist.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: sonnet
 ---
@@ -41,4 +41,4 @@ Merged in v2.0.0 from `cro-specialist` (software-company-ecommerce) · `aso-spec
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

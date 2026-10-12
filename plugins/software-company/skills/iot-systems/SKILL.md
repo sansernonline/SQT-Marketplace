@@ -1,6 +1,6 @@
 ---
 name: iot-systems
-description: Use when building connected devices (fleet provisioning, OTA updates, device vs edge vs cloud, MQTT topics and brokers, embedded firmware, RTOS).
+description: Use when building connected devices (fleet provisioning, OTA updates, edge vs cloud, MQTT, embedded firmware, RTOS).
 ---
 
 # iot-systems
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-iot` (skill `device-fleet-management` · `edge-computing-architecture` · `mqtt-protocol-patterns`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-iot` (เดิมชื่อ device-fleet-management → `references/device-fleet-management.md` · edge-computing-architecture → `references/edge-computing-architecture.md` · mqtt-protocol-patterns → `references/mqtt-protocol-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

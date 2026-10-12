@@ -1,4 +1,4 @@
-> เดิมคือ skill `contract-parsing-patterns` ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
+> เดิมชื่อ contract-parsing-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-legaltech` — รวมเข้า `legal-document-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

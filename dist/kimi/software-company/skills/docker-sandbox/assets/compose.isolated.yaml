@@ -1,0 +1,9 @@
+# Isolated mode: the agent works on a copy in a volume. The host folder is read-only at /src.
+# Changes come back only through `sandbox.ps1 sync` as a patch.
+services:
+  dev:
+    volumes:
+      - work:/work
+      - ..:/src:ro
+volumes:
+  work:

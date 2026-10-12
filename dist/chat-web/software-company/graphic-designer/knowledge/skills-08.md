@@ -124,7 +124,9 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 | ฟิลด์ | ค่า |
 |---|---|
 | `ts` · `session` | เวลาท้องถิ่น · รหัส session 8 ตัวแรก |
-| `agent` · `model` | `main` หรือชื่อ subagent · โมเดลที่ใช้อยู่ (ถ้า Claude Code ส่งมา) |
+| `agent` · `id` · `model` | `main` หรือชนิด subagent · id ย่อ 8 ตัวของ subagent (แยกตัวที่ชนิดเดียวกัน) · โมเดลที่ใช้อยู่ (ถ้า Claude Code ส่งมา) |
+| `role` · `role_model` · `spawned_id` | เฉพาะแถวที่หัวหน้าทีมส่งงาน: ชนิด agent ที่ถูกเรียก · โมเดลที่สั่ง · id ย่อของตัวนั้น |
+| `event: review` | หัวหน้าทีมเขียนเอง 1 บรรทัดต่อรอบตรวจ: `task` · `round` · `by` · `by_id` · `result` · `high` · `mid` · `low` · `report` (รูปแบบเต็มใน `superuser` → `learning-loop`) |
 | `event` · `tool` · `target` | เหตุการณ์ · เครื่องมือ · ไฟล์ คำสั่ง หรือ URL ไม่เกิน 2,000 ตัวอักษร |
 | `prompt` | ข้อความผู้ใช้ ไม่เกิน 4,000 ตัวอักษร (เฉพาะใน `main.jsonl`) |
 | `ok` | ✓ สำเร็จ · ✗ ล้ม · ว่าง = ไม่รู้ |
@@ -207,6 +209,15 @@ Use when a markdown doc, README or pull request needs a technical diagram (archi
 บรรทัดธีม ตัวแทนค่าสี คลาส และตัวอย่างที่เรนเดอร์แล้วอยู่ใน [`assets/mermaid-theme.md`](assets/mermaid-theme.md) ส่วนตารางที่จับคู่เนื้องานกับโทนสีอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)
 
 > ⚠️ **`fontFamily` ต้องอยู่นอก `themeVariables`** ถ้าใส่ไว้ข้างใน จะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
+
+**ตรวจด้วยเครื่องก่อนส่งทุกครั้ง** — กฎข้อนี้ถูกลืมบ่อยที่สุด (โปรเจกต์ทดสอบหนึ่งมี 63 จาก 66 รูปที่ไม่มีบรรทัดธีม และไม่มีใครเห็น):
+
+```bash
+node scripts/check-mermaid-theme.mjs docs          # exit 1 พร้อม ไฟล์:บรรทัด ของบล็อกที่ไม่มี %%{init
+node scripts/check-mermaid-theme.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับได้
+```
+
+agent ที่ไม่มี shell รันเองไม่ได้ → agent หลักรันหลังรับงาน
 
 ## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
 

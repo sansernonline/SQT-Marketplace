@@ -1,6 +1,6 @@
 ---
 name: release-notes
-description: Generate user-facing release notes for a version using technical-writer agent. Translates technical changes into customer-friendly highlights.
+description: Write user-facing release notes for a version with the technical-writer agent.
 argument-hint: <version number or release name>
 disable-model-invocation: true
 ---

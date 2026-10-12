@@ -1,6 +1,6 @@
 ---
 name: prior-art-review
-description: Use when about to build something that may already exist (library, model, product, thesis approach). Compares candidates, licence, upkeep, adopt or build.
+description: Use when about to build something that may already exist (library, model, product, thesis approach). Adopt or build.
 ---
 
 # สำรวจของที่มีอยู่แล้วก่อนลงมือทำ

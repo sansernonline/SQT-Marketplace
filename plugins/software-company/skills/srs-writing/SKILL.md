@@ -1,6 +1,6 @@
 ---
 name: srs-writing
-description: Use when writing or reviewing a Software Requirements Specification. ISO/IEC/IEEE 29148 skeleton, testable requirements, ids, traceability.
+description: Use when writing or reviewing a Software Requirements Specification (SRS) — ISO/IEC/IEEE 29148, testable requirements, ids, traceability.
 ---
 
 # SRS Writing

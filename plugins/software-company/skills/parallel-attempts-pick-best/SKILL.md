@@ -1,6 +1,6 @@
 ---
 name: parallel-attempts-pick-best
-description: Use when one attempt could lock in the wrong shape (design, interface, algorithm, mockup) or the user says try several or bake-off. Rubric, pick a base, graft.
+description: Use when one attempt could lock in the wrong shape (design, interface, algorithm, mockup) or the user says try several or bake-off.
 ---
 
 # parallel-attempts-pick-best — ลองหลายทาง เลือกทางที่ดีที่สุด

@@ -24,6 +24,8 @@ Use when designing or building a phone app UI (PWA, React Native, Flutter). Toke
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
 
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+
 ```
 1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน
 2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
@@ -33,6 +35,8 @@ Use when designing or building a phone app UI (PWA, React Native, Flutter). Toke
 4. เปิดภาพดูจริงทุกขนาด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
 5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
 ```
+
+**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `speakgo.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง
 
 ถ้าเป็น Flutter / Android native ให้ข้ามไปทำตาม **ข้อ 4.1** ได้เลย จะทำ mockup HTML ด้วยหรือไม่ก็ได้ แต่ภาพที่ใช้ตรวจต้องมาจากแอปจริง
 
@@ -430,13 +434,23 @@ Use when building a desktop app that must look native on Windows 11 (WinUI 3, Av
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
 
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ template ใหม่** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+
 ```
-1. คัดลอก assets/mockup-template.html + assets/fluent.css ไปไว้คู่กัน
-2. แก้เนื้อหาใน mockup ให้เป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
-3. python scripts/screenshot.py mockup.html _to_delete/screenshots/     → ได้ภาพ dark + light
-4. เปิดภาพดูจริงทั้งสองโหมด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
-5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดียวกัน ไม่ออกแบบใหม่
+1. เลือกโครงจากตารางข้อ 0 ใน references/patterns.md แล้วคัดลอก template ที่ตรงกับแอป + assets/fluent.css ไปไว้คู่กัน
+   (mockup-template.html = ตั้งค่า/dashboard · tool-app-template.html = แอปเครื่องมือที่ข้อมูลแน่น)
+2. ทำ 3 หน้าหลักก่อน (หน้าที่ผู้ใช้เปิดบ่อยที่สุด) ให้สวยจริง ยังไม่ทำหน้าที่เหลือ
+3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --hide "<แถบควบคุมของ mockup>"  → ได้ภาพ dark + light
+4. เปิดภาพดูจริงทั้งสองโหมด ตรวจตามข้อ 6 รวมถึงตาราง "ตรวจด้วยตา" ท้าย patterns.md
+5. ส่งภาพให้ subagent ที่ไม่ได้ทำงานชิ้นนี้วิจารณ์ (ดูข้อ 6.1) แก้ตามแล้วถ่ายใหม่ · ไม่เกิน 2 รอบ
+6. 3 หน้าหลักผ่านและอนุมัติแล้ว จึงดึงคอมโพเนนต์ออกมาใช้กับหน้าที่เหลือ
+7. อนุมัติทั้งชุดแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดียวกัน ไม่ออกแบบใหม่
 ```
+
+**ทำไมทำ 3 หน้าก่อน:** ทำทุกหน้าในรอบเดียว (เช่น 32 หน้า) แต่ละหน้าได้ความใส่ใจด้านหน้าตาน้อย
+งานจะไปเน้นว่าครอบคลุม requirement ครบไหม จนได้ wireframe ที่ลงสีแล้ว ส่วนหน้าหลักที่สวยแล้วจะเป็นแบบให้หน้าที่เหลือลอก
+
+**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `fluent.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง · ระหว่างทำวางคู่กันได้
 
 **ทำไมต้อง mockup ก่อน:** แก้ HTML ใช้เวลาเป็นนาที แต่แก้ XAML ที่ผูกกับ ViewModel แล้ว
 ใช้เวลาเป็นชั่วโมง และถ้าเขียนโค้ดไปแล้ว การคุยเรื่องหน้าตาจะกลายเป็นการคุยเรื่องต้นทุน
@@ -458,7 +472,7 @@ Use when building a desktop app that must look native on Windows 11 (WinUI 3, Av
 
 | | Dark | Light |
 |---|---|---|
-| พื้นหน้าต่าง | `#000000` | `#F3F3F3` |
+| พื้นหน้าต่าง / การ์ด | `#202020` / `#2B2B2B` | `#F3F3F3` / `#FFFFFF` |
 | ข้อความหลัก / รอง | `#FFFFFF` / `#CCCCCC` | `#1A1A1A` / `#5D5D5D` |
 | accent | `#4CC2FF` | `#005FB8` |
 | ลิงก์ | `#99EBFF` | `#003E92` |
@@ -471,6 +485,8 @@ Use when building a desktop app that must look native on Windows 11 (WinUI 3, Av
 > (ตารางเลือกโทนสีตามเนื้องาน อยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
 > ค่า accent ในตารางข้างบนคือค่าเริ่มต้นของ Windows ซึ่งเป็นตัวเลือกที่ปลอดภัยเมื่อยังไม่มีแบรนด์
 > **ไม่ใช่ค่าที่ต้องใช้** และ accent ต้องผ่าน contrast ≥ 4.5:1 ทั้งโหมดมืดและสว่าง จึงมักต้องมีคนละค่าต่อโหมด
+
+**พื้นดำสนิท** แบบ Windows Security (`#000000`) ยังมีให้ใช้ด้วย `<html data-backdrop="black">` แต่ไม่ใช่ค่าเริ่มต้น เพราะวางข้างแอป Windows 11 อื่นแล้วดูแข็งและแปลกตา
 
 **เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ที่เดียวทั้งแอป
 
@@ -503,8 +519,12 @@ Use when building a desktop app that must look native on Windows 11 (WinUI 3, Av
 - **แถบบอกหน้าที่เลือกเป็นขีดเล็ก 3×16px ชิดซ้าย** ไม่ใช่ระบายพื้น accent ทั้งแถว
 - **หน้าละ 1 Title** — ห้ามมี 2
 - **เป้าคลิกเล็กสุด 32×32px** (ไม่ใช่ 48px แบบมือถือ — เดสก์ท็อปมีเมาส์)
-- **ปุ่มสูง 32px กว้างต่ำสุด 120px** ปุ่มเตี้ยกว่านี้ดูเป็นเว็บทันที
+- **ปุ่มสูง 32px กว้างต่ำสุด 120px** ปุ่มเตี้ยกว่านี้ดูเป็นเว็บทันที (ยกเว้นปุ่มไอคอน 32×32 และปุ่ม subtle ใน command bar)
 - **มุม 4px สำหรับคอนโทรล / 8px สำหรับการ์ด** — ไม่มีค่าอื่น
+
+โครงข้างบนเป็นของหน้าตั้งค่าและ dashboard · **แอปเครื่องมือที่ข้อมูลแน่น** (terminal client, file manager, admin tool)
+ใช้ icon rail 48px + รายการ + แผงรายละเอียด 360px แทน ดูแบบทั้งหมดใน **`references/patterns.md`**
+(ปุ่มในแถว · list-detail · command bar · หัวกลุ่ม · tab ใน title bar · status bar · หน้าเริ่มต้น · ไอคอนต้องมีที่ไหน)
 
 ---
 
@@ -524,7 +544,8 @@ Use when building a desktop app that must look native on Windows 11 (WinUI 3, Av
 | ลิงก์ | `.win-link` | สี accent-text ไม่ใช่ accent |
 
 ไอคอนใช้ **Segoe Fluent Icons** (มากับ Windows 11) ขนาด 16px ใน nav, 20px หัวข้อ section,
-24px หัวหน้า ห้ามผสมชุดไอคอนอื่น ส่วนรหัสที่ใช้บ่อยอยู่ท้าย `references/tokens.md`
+24px หัวหน้า ห้ามผสมชุดไอคอนอื่น ส่วนรหัสที่ใช้บ่อยอยู่ท้าย `references/tokens.md` และ `references/patterns.md`
+**ไอคอนไม่ใช่ของตกแต่ง** — หน้าจอที่ปุ่มและเมนูเป็นข้อความล้วนจะดูเหมือน wireframe ทันที ดูตาราง "ต้องมีที่ไหน" ใน patterns.md ข้อ 9
 
 ---
 
@@ -556,7 +577,32 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
 - [ ] เป้าคลิกทุกอันไม่เล็กกว่า 32×32px
 - [ ] คอนทราสต์ข้อความ ≥ 4.5:1 (ข้อความรองบนพื้นการ์ดคือจุดที่พลาดบ่อยที่สุด)
 - [ ] เดินด้วย Tab ได้ครบทุกปุ่ม และ **เห็น focus ring** ทุกจุด
-- [ ] ไม่มีสีดิบหลงเหลือ: `grep -nE "#[0-9a-fA-F]{3,6}" app.css | grep -v "^fluent.css"`
+- [ ] ไม่มีสีดิบหลงเหลือ และทุก `var(--win-…)` มีนิยามจริง — รันตัวตรวจของ `web-app-design` (ต้องส่ง `--require` เป็น token ชุด Fluent เพราะค่าเริ่มต้นเป็นชื่อของเว็บ และ `--marker "Type ramp"` เพราะ `fluent.css` ไม่มีเส้น `base`):
+
+```bash
+# ไฟล์ token แยก (web-wrapped · mockup ที่ยังวางคู่ fluent.css)
+node ../web-app-design/scripts/check-design-tokens.mjs src/fluent.css src --ext html,css,ts,tsx \
+  --marker "Type ramp" \
+  --require "--win-bg,--win-layer,--win-card,--win-text,--win-text-secondary,--win-accent,--win-on-accent,--win-divider,--win-control-stroke,--win-radius,--win-radius-card,--win-font,--win-nav-w,--win-titlebar-h,--win-gutter"
+# mockup ไฟล์เดียว: ใช้ไฟล์ mockup เป็นไฟล์ token เอง (token ฝังอยู่ใน <style>) · --require ชุดเดิม
+node ../web-app-design/scripts/check-design-tokens.mjs mockup/<รหัส>-mockup.html mockup --ext html --marker "Type ramp" --require "…"
+```
+
+  แอปเพิ่ม token ของตัวเอง (เช่น `--telex-…`) → ต่อท้าย `--require` ด้วย · ตั้งชื่อ section ในหน้า mockup ขึ้นต้น `s-` (`#s-login`) ไม่ให้ชื่ออย่าง `#add` `#feed` ถูกอ่านเป็นสี
+
+**เช็กลิสต์ข้างบนวัดแค่ความถูกต้อง ผ่านครบแล้วหน้าจอยังอาจไม่สวย** ตรวจต่อด้วยตาราง "ตรวจด้วยตา" ท้าย `references/patterns.md` (ปุ่มทึบ · ไอคอน · พื้นที่ว่าง · ความสูงแถว · จำนวนกล่อง)
+
+### 6.1 · ให้คนอื่นวิจารณ์
+
+คนที่ทำเองจะเห็นว่างานตัวเองดีกว่าความจริง ให้ส่งภาพให้ subagent ที่ไม่ได้ทำชิ้นนี้ (เช่น `graphic-design:design-critic` · หรือ general-purpose ที่สั่งให้วิจารณ์อย่างเดียว) พร้อมบอกเป้าหมาย:
+
+```
+ดูภาพ <path dark/light> ของแอป Windows 11 (<ชนิดแอป>) เป้าคือดูเหมือน Windows Terminal / Settings / File Explorer
+บอกปัญหาที่สำคัญที่สุด 2–3 ข้อต่อหน้า (ลำดับสายตา ระยะ แนว contrast ความหนาแน่น อะไรที่ดูเป็นเว็บ)
+แต่ละข้อมีวิธีแก้ระดับ CSS (ขนาด px · องค์ประกอบไหน) · ไม่ต้องชม · ไม่เกิน 250 คำ
+```
+
+แก้ตามข้อที่เห็นด้วย (ข้อที่วิจารณ์ผิดเพราะอ่านภาพผิด ไม่ต้องแก้ แต่จดไว้) แล้วถ่ายใหม่ · **ไม่เกิน 2 รอบ** รอบที่ 3 ได้ผลน้อยและเริ่มแก้ไปมา
 
 ---
 
@@ -571,6 +617,13 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
   (WinUI: อย่า override `AccentFillColorDefaultBrush` · web: `AccentColor` ของ CSS)
 - ❌ **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
 - ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
+- ❌ **ปุ่มทึบสี accent ทุกแถวของตาราง** — ปุ่มในแถวเป็นไอคอนที่โผล่เมื่อชี้ ปุ่มหลักอยู่ในแผงรายละเอียด (patterns.md ข้อ 1)
+- ❌ **ปุ่มและเมนูเป็นข้อความล้วน ไม่มีไอคอน** — ดูเป็น wireframe
+- ❌ **เนื้อหาอยู่ครึ่งบน ครึ่งล่างว่าง · ตารางยืดเต็มจอจนคอลัมน์ห่างกัน 400px** — ใช้ list-detail (patterns.md ข้อ 2)
+- ❌ **หัวกลุ่ม 11px ตัวพิมพ์ใหญ่ · ป้ายพื้นสีทึบใน status bar · เส้นสีบน tab** — เป็นแบบเว็บ
+- ❌ **การ์ดใหญ่หลายใบเรียงกันในหน้าเริ่มต้น** — ดูเป็น dashboard ของ SaaS ใช้แถวปุ่มทางลัดแทน
+- ❌ **แถบควบคุมของ mockup (รหัส FR · ตัวสลับสถานะ) ติดในภาพที่ส่งรีวิว** — ใช้ `screenshot.py --hide`
+- ❌ **ทำทุกหน้าในรอบเดียวโดยไม่มีหน้าหลักเป็นแบบ** — ดูข้อ 1
 
 ---
 
@@ -608,6 +661,137 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
 หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
 
 
+## reference: patterns.md
+
+# แบบหน้าจอที่ใช้บ่อย — แอป Windows
+
+> token และกฎขนาดอยู่ใน `tokens.md` · ไฟล์นี้ตอบคำถามว่า **จัดหน้าจอยังไงให้ดูเป็นแอปจริง**
+> ทุกแบบมีตัวอย่างที่กดได้ใน `assets/tool-app-template.html` (แอปเครื่องมือ) หรือ `assets/mockup-template.html` (หน้าตั้งค่า/dashboard)
+
+ที่มา: หน้าจอที่ผ่านเช็กลิสต์ครบทุกข้อ (token ถูก ขนาดถูก contrast ผ่าน) แต่ยังดูเหมือน wireframe
+มักพลาดซ้ำ 6 อย่าง ได้แก่ ปุ่มทึบทุกแถว · ไม่มีไอคอน · จอว่างครึ่งล่าง · หัวกลุ่มตัวพิมพ์ใหญ่เล็กจิ๋ว · ป้ายสีแบบเว็บ · กล่องมีกรอบเต็มหน้า
+แบบในไฟล์นี้แก้ทั้ง 6 อย่าง
+
+**สารบัญ**
+
+- [0 · เลือกโครงก่อนวาด](#0--เลือกโครงก่อนวาด)
+- [1 · รายการที่มีปุ่มในแต่ละแถว](#1--รายการที่มีปุ่มในแต่ละแถว)
+- [2 · รายการ + แผงรายละเอียด](#2--รายการ--แผงรายละเอียด-list-detail)
+- [3 · Command bar](#3--command-bar)
+- [4 · หัวกลุ่มในรายการ](#4--หัวกลุ่มในรายการ)
+- [5 · Tab ใน title bar](#5--tab-ใน-title-bar-แบบ-windows-terminal)
+- [6 · Icon rail](#6--icon-rail)
+- [7 · Status bar](#7--status-bar)
+- [8 · หน้าเริ่มต้น](#8--หน้าเริ่มต้น-welcome--start)
+- [9 · ไอคอน — ต้องมีที่ไหน](#9--ไอคอน--ต้องมีที่ไหน)
+- [ตรวจด้วยตา](#ตรวจด้วยตา--นับได้-ไม่ต้องใช้ความรู้สึก)
+
+---
+
+## 0 · เลือกโครงก่อนวาด
+
+| แอปเป็นแบบไหน | โครง | template |
+|---|---|---|
+| ตั้งค่า · dashboard · แอปที่เปิดนาน ๆ ที | NavigationView 320px + เนื้อหากว้างไม่เกิน 1064px | `mockup-template.html` |
+| เครื่องมือที่ข้อมูลแน่น (terminal client · file manager · admin tool) | icon rail 48px + รายการ + แผงรายละเอียด 360px | `tool-app-template.html` |
+| เอกสารหลายชิ้นเปิดพร้อมกัน (editor · terminal · browser) | tab ใน title bar แบบ Windows Terminal | `tool-app-template.html` ส่วน title bar |
+
+**ห้ามเอา template หน้าตั้งค่าไปทำแอปเครื่องมือ** — ได้หน้าจอที่เนื้อหาลอยอยู่ครึ่งบน และพื้นที่ขวาว่าง
+
+---
+
+## 1 · รายการที่มีปุ่มในแต่ละแถว
+
+```
+❌ ทุกแถวมี [Connect] สีทึบ + [Edit]       → ปุ่มทึบ 8 ปุ่มแย่งกันเด่น
+✅ ชื่อ · ข้อมูล · เวลา         ▷ ✎ ⋯       → ไอคอนโผล่เมื่อชี้หรือเลือกแถว
+   ปุ่มหลัก (สีทึบ) อยู่ที่แผงรายละเอียดของแถวที่เลือก · ดับเบิลคลิก = ทำงานหลัก
+```
+
+- ปุ่มในแถว: `btn subtle icon` 32×32 · ซ่อนด้วย `visibility: hidden` (ไม่ใช่ `display: none` ไม่งั้นคอลัมน์จะขยับ)
+- คอลัมน์ปุ่มกว้างตายตัว (ราว 112px ต่อ 3 ปุ่ม) ไม่งั้นคอลัมน์ "ล่าสุด" จะไม่ตรงกับปุ่ม
+- แถวที่เลือก: พื้น `--win-subtle-selected` + ขีด accent 3px ชิดซ้าย
+
+## 2 · รายการ + แผงรายละเอียด (list-detail)
+
+ใช้เมื่อหน้าต่างกว้าง ≥ 1100px และรายการมีข้อมูลมากกว่าที่แถวเดียวแสดงได้
+
+- แผงขวากว้าง 360px พื้น `--win-card` · padding 24px · ระยะระหว่างส่วน 24px
+- บนลงล่าง: ไอคอน 48px + ชื่อ 20px → ปุ่มหลัก (ยืดเต็มแถว) + ปุ่มรอง → คู่ ชื่อ/ค่า (label 112px) → ประวัติ (แถว 32px มีเส้นคั่น) → หมายเหตุ
+- หน้าต่างแคบกว่า 1100px ให้ซ่อนแผง แล้วเปิดเป็นหน้าใหม่แทน
+
+**จอว่างเกินครึ่งคือสัญญาณว่าควรใช้แบบนี้** ไม่ใช่สัญญาณให้ยืดตาราง
+
+## 3 · Command bar
+
+```
+[+ สร้างใหม่] [📁 กลุ่มใหม่] │ [⇥ นำเข้า] [↦ ส่งออก]          [ทั้งหมด|SSH|RDP]  [🔍 กรอง…]
+```
+
+- ปุ่มทุกปุ่มเป็น subtle + ไอคอน 16px + ข้อความ · คั่นกลุ่มด้วยเส้นตั้ง 1×20px
+- ไม่มีปุ่มทึบใน command bar ถ้าหน้านั้นมีแผงรายละเอียด (ปุ่มหลักอยู่ในแผง)
+- ช่องค้นหาชิดขวา กว้าง 240–320px · มีไอคอนแว่นขยายนำหน้า
+
+## 4 · หัวกลุ่มในรายการ
+
+```
+❌ PRODUCTION · 3      (11px ตัวพิมพ์ใหญ่ สีจาง — แบบเว็บ)
+✅ ⌄ Production  3     (14px semibold · ตัวเลขสีรอง · แถว 32–40px · กดพับได้)
+```
+
+## 5 · Tab ใน title bar (แบบ Windows Terminal)
+
+- tab สูง 32px ชิดล่างของ title bar 40px · มุมบน 8px
+- tab ที่เลือก = พื้นเดียวกับเนื้อหาด้านล่าง (ดูต่อกันเป็นแผ่นเดียว) · tab อื่นพื้นใส
+- สถานะบอกด้วยจุด 8px + ข้อความ/tooltip **ไม่ใช้เส้นสีบน tab** (ดูเหมือน error)
+- ท้าย tab มี `+` และ `⌄` (รายการ tab)
+
+## 6 · Icon rail
+
+- กว้าง 48px · ปุ่ม 40×40 · ไอคอน 18px · ห่างกัน 4px
+- ที่เลือก: พื้น `--win-subtle-selected` + ขีด accent 3×16px ชิดซ้าย
+- ตั้งค่าอยู่ล่างสุดเสมอ · ทุกปุ่มมี `title` (tooltip) เพราะไม่มีข้อความ
+
+## 7 · Status bar
+
+- สูง 24px · ข้อความ 12px สีรอง · ห่างกัน 16px
+- สถานะใช้จุด 6–8px + ข้อความ **ไม่ใช้ป้ายพื้นสีทึบ** (เป็นแบบเว็บ)
+
+## 8 · หน้าเริ่มต้น (welcome / start)
+
+- เนื้อหากว้างไม่เกิน 1064px อยู่กลาง · บนสุดคือช่องค้นหาช่องเดียวที่ทำได้ทั้งค้นหาและเชื่อมต่อ (ไม่แยก 2 ช่อง)
+- ทางลัดเป็นแถวปุ่มสูง 40px (ไอคอน + ข้อความ + ปุ่มลัด) **ไม่ใช่การ์ดใหญ่ 4 ใบ**
+- กล่องมีกรอบได้ไม่เกิน 2 กล่อง (เช่น ล่าสุด · รายการโปรด) · ข่าวสารเป็นแถบ 40px พื้นกลาง ไม่ใช้สีแบรนด์
+
+## 9 · ไอคอน — ต้องมีที่ไหน
+
+| ที่ | ต้องมี | ขนาด |
+|---|---|---|
+| ปุ่มใน nav / rail | ✅ | 16 / 18px |
+| ปุ่มใน command bar | ✅ คู่ข้อความ | 16px |
+| ปุ่มในแถว | ✅ ไอคอนอย่างเดียว + tooltip | 16px |
+| ชนิดของรายการ (SSH · ไฟล์ · RDP) | ✅ ในกล่อง 24px มุม 4px | 14px |
+| หัวแผงรายละเอียด | ✅ กล่อง 48px มุม 8px | 24px |
+| ปุ่มหลักใน dialog | ไม่จำเป็น | — |
+
+รหัสที่ใช้บ่อย (Segoe Fluent Icons): เพิ่ม `E710` · ค้นหา `E721` · ตั้งค่า `E713` · แก้ไข `E70F` · อื่น ๆ `E712` · เล่น/เปิด `E768`
+· โฟลเดอร์ `E8B7` · กลุ่มใหม่ `E8F4` · นำเข้า `E8B5` · ส่งออก `EDE1` · terminal `E756` · จอ `E7F4` · ลิงก์ `E71B` · กุญแจ `E8D7`
+· clipboard `E77F` · ลูกโลก `E774` · ประวัติ `E81C` · ดาว `E734` / `E735` · บ้าน `E80F` · ลูกศรลง `E70D` · ลูกศรขวา `E76C` · ปิด `E8BB`
+
+---
+
+## ตรวจด้วยตา — นับได้ ไม่ต้องใช้ความรู้สึก
+
+| ข้อ | ผ่านเมื่อ |
+|---|---|
+| ปุ่มทึบสี accent | ≤ 1 ต่อหน้าจอ (`grep -c "btn primary"` ต่อ section) |
+| ไอคอน | ครบทุกที่ในตารางข้อ 9 |
+| พื้นที่ว่าง | เนื้อหาใช้พื้นที่ ≥ 60% ของความสูงหน้าต่างที่ 1440×900 หรือมีเหตุผล (หน้าว่างที่ตั้งใจ) |
+| ความสูงแถว | แถวชนิดเดียวกันสูงเท่ากันทุกการ์ดในหน้า |
+| กล่องมีกรอบ | ≤ 3 กล่องต่อหน้า · ไม่มีกล่องซ้อนกล่อง |
+| ส่วนควบคุมของ mockup | ไม่ติดในภาพ (`screenshot.py --hide`) |
+
+
 ## reference: tokens.md
 
 # Token map — ค่าเดียวกัน สามสแต็ก
@@ -634,18 +818,20 @@ python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 600    
 
 | ความหมาย | Dark | Light | CSS | WinUI 3 | Avalonia |
 |---|---|---|---|---|---|
-| พื้นหน้าต่าง | `#000000` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
-| พื้น nav / เนื้อหา | `#000000` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
-| การ์ด | `#0F0F0F` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
+| พื้นหน้าต่าง | `#202020` | `#F3F3F3` | `--win-bg` | `AppBackgroundBrush` | `AppBackgroundBrush` |
+| พื้น nav / เนื้อหา | `#272727` | `#F9F9F9` | `--win-layer` | `AppLayerBrush` | `AppLayerBrush` |
+| การ์ด | `#2B2B2B` | `#FFFFFF` | `--win-card` | `AppCardBrush` | `AppCardBrush` |
 | ข้อความหลัก | `#FFFFFF` | `#1A1A1A` | `--win-text` | `TextFillColorPrimaryBrush` ✱ | `AppTextBrush` |
 | ข้อความรอง | `#CCCCCC` | `#5D5D5D` | `--win-text-secondary` | `TextFillColorSecondaryBrush` ✱ | `AppTextSecondaryBrush` |
-| ข้อความจาง | `#8B8B8B` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
+| ข้อความจาง | `#9D9D9D` | `#8B8B8B` | `--win-text-tertiary` | `TextFillColorTertiaryBrush` ✱ | `AppTextTertiaryBrush` |
 | accent (พื้นปุ่ม, แถบเลือก) | `#4CC2FF` | `#005FB8` | `--win-accent` | `AccentFillColorDefaultBrush` ✱ | `SystemAccentColor` ✱ |
 | accent (ตัวหนังสือ/ลิงก์) | `#99EBFF` | `#003E92` | `--win-accent-text` | `AccentTextFillColorPrimaryBrush` ✱ | `AppAccentTextBrush` |
 | ตัวอักษรบนพื้น accent | `#000000` | `#FFFFFF` | `--win-on-accent` | `TextOnAccentFillColorPrimaryBrush` ✱ | `AppOnAccentBrush` |
 | พื้นปุ่มปกติ | `#333333` | `#FFFFFF` | `--win-control` | `ControlFillColorDefaultBrush` ✱ | `AppControlBrush` |
-| แถวที่เลือกใน nav | `#0F0F0F` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
-| เส้นคั่น | `#2D2D2D` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
+| แถวที่เลือกใน nav | `#FFFFFF15` | `#00000010` | `--win-subtle-selected` | `SubtleFillColorSecondaryBrush` ✱ | `AppSubtleSelectedBrush` |
+| เส้นคั่น | `#3A3A3A` | `#E5E5E5` | `--win-divider` | `AppDividerBrush` | `AppDividerBrush` |
+
+ค่า Dark คือ Windows 11 ปกติ (Mica) · แบบพื้นดำสนิทของ Windows Security (`#000000` · การ์ด `#0F0F0F` · เส้นคั่น `#2D2D2D`) เปิดด้วย `data-backdrop="black"` ใน `fluent.css`
 
 ✱ = key มาตรฐานของเฟรมเวิร์ก ถ้า override แล้วคอนโทรลสำเร็จรูปจะเปลี่ยนตามทั้งแอป
 ส่วน key ที่ขึ้นต้น `App*` เป็นของเราเอง ต้องอ้างเองใน XAML

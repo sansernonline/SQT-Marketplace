@@ -72,6 +72,29 @@ Use when a new project needs its document set decided (which docs, order, reader
 | `qa/` | มี test case (เกือบทุกโปรเจกต์) โดย test case อยู่ที่นี่เสมอ เป็น `.md` หรือ `.xlsx` (ขนาด L) | — ส่วน `docs/test-plan.md` มีแค่แผน ไม่มีรายการ test case |
 | `assets/` | มีโลโก้หรือไอคอนของโปรเจกต์ | — |
 
+### โปรเจกต์แบบ ecosystem — 1 ระบบ แบ่งเป็นหลาย sub-project
+
+ใช้เมื่อโปรเจกต์เป็นชุดผลิตภัณฑ์ที่มี sub-project ตั้งแต่ 2 ตัวขึ้นไป และแต่ละตัวมีเอกสารชุดของตัวเอง (SRS · mockup · สถาปัตยกรรม) เช่น Quanton ที่แบ่งเป็น CONNECT · LAB · INTEL · DESK
+**ชื่อโฟลเดอร์ต้องเป็น `ecosystem/` เสมอ** ห้ามใช้ `projects/` `modules/` หรือ `apps/` เพราะพอเปิดโฟลเดอร์แล้วต้องรู้ทันทีว่าทุกตัวข้างในเป็นชิ้นของระบบเดียวกัน
+
+```
+<ชื่อโปรเจกต์>/
+├─ docs/                เอกสารระดับ ecosystem — README (สารบัญ) · BUILD-PLAN · project-plan · BRD · figures/
+├─ ecosystem/
+│  └─ <รหัส>-<SUB>/     1 โฟลเดอร์ต่อ 1 sub-project เช่น QTN-CONNECT
+│     ├─ docs/          srs.md · architecture.md · decisions/ · figures/ · fsd-*.md · test-plan.md
+│     ├─ mockup/
+│     ├─ qa/
+│     └─ <sub-name>/    repo โค้ดของ sub-project นี้ (ตัวพิมพ์เล็กคั่น `-`)
+├─ ref/ · assets/ · _to_delete/ · .claude/   ใช้ร่วมกันทั้ง ecosystem (กติกาเดียวกับแบบ B)
+```
+
+- เอกสารที่ครอบทุก sub-project (BRD · แผนโครงการ · BUILD-PLAN) อยู่ใน `docs/` ที่รากที่เดียว ห้ามก๊อปไปไว้ในแต่ละ sub-project
+- สร้างโฟลเดอร์ sub-project เมื่อเริ่มเขียนเอกสารของตัวนั้นจริง ไม่สร้างเผื่อ
+- ชื่อโฟลเดอร์ sub-project = รหัสโปรเจกต์ + ชื่อ sub-project ตัวพิมพ์ใหญ่ (`QTN-CONNECT`) ใช้รหัสเดียวกับที่เอกสารอ้าง
+- โปรเจกต์ที่ใช้ `projects/` อยู่แล้ว → เปลี่ยนชื่อเป็น `ecosystem/` แล้วแก้ path ในเอกสารและสคริปต์ทุกไฟล์ในรอบเดียวกัน
+- โปรเจกต์ที่มีผลิตภัณฑ์เดียว ไม่ต้องมี `ecosystem/` ใช้แบบ B ตามปกติ
+
 **กฎของโฟลเดอร์ (ใช้ได้ทั้ง 2 แบบ):**
 
 - **`.docx` กับ `.md` อยู่ใน `docs/` เดียวกันได้** ไม่ต้องแยกโฟลเดอร์ เพราะนามสกุลบอกอยู่แล้วว่าใครอ่าน
@@ -244,6 +267,7 @@ Project Plan ─► BRD ─► SRS ─┬─► mockup
 - ❌ **เขียน FSD ก่อน SRS ได้รับการยืนยัน**
 - ❌ **มี mockup ที่ปุ่มกดไม่ได้** — ผู้รีวิวเข้าใจว่าทำได้แล้ว
 - ❌ **ใช้ LLM แต่ไม่มี PROMPT-LIBRARY** — prompt ตัวจริงอยู่ในโค้ด พอแก้แล้วไม่มีใครรู้ว่าเปลี่ยนอะไร
+- ❌ **ตั้งชื่อโฟลเดอร์ sub-project ว่า `projects/` `modules/` หรือ `apps/`** — ใช้ `ecosystem/` (ข้อ 1 โปรเจกต์แบบ ecosystem)
 - ❌ **สร้าง `qa/` `decisions/` `figures/` ทิ้งไว้ว่าง ๆ** เพราะ "ในแบบมี" — โฟลเดอร์ว่างทำให้คนคิดว่าของหาย
 - ❌ **เอกสารชิ้นเดียวตอบทุกคำถาม** — SRS ที่มีทั้ง timeline ทั้ง test case คือเอกสารที่ไม่มีใครอ่านจบ
 
@@ -633,7 +657,9 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 | ฟิลด์ | ค่า |
 |---|---|
 | `ts` · `session` | เวลาท้องถิ่น · รหัส session 8 ตัวแรก |
-| `agent` · `model` | `main` หรือชื่อ subagent · โมเดลที่ใช้อยู่ (ถ้า Claude Code ส่งมา) |
+| `agent` · `id` · `model` | `main` หรือชนิด subagent · id ย่อ 8 ตัวของ subagent (แยกตัวที่ชนิดเดียวกัน) · โมเดลที่ใช้อยู่ (ถ้า Claude Code ส่งมา) |
+| `role` · `role_model` · `spawned_id` | เฉพาะแถวที่หัวหน้าทีมส่งงาน: ชนิด agent ที่ถูกเรียก · โมเดลที่สั่ง · id ย่อของตัวนั้น |
+| `event: review` | หัวหน้าทีมเขียนเอง 1 บรรทัดต่อรอบตรวจ: `task` · `round` · `by` · `by_id` · `result` · `high` · `mid` · `low` · `report` (รูปแบบเต็มใน `superuser` → `learning-loop`) |
 | `event` · `tool` · `target` | เหตุการณ์ · เครื่องมือ · ไฟล์ คำสั่ง หรือ URL ไม่เกิน 2,000 ตัวอักษร |
 | `prompt` | ข้อความผู้ใช้ ไม่เกิน 4,000 ตัวอักษร (เฉพาะใน `main.jsonl`) |
 | `ok` | ✓ สำเร็จ · ✗ ล้ม · ว่าง = ไม่รู้ |

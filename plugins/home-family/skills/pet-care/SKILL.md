@@ -1,6 +1,6 @@
 ---
 name: pet-care
-description: Use when a Thai family keeps a dog or cat. Rabies vaccine timing, registration and microchip, vet record, flea, tick and heartworm reminders. Never diagnoses.
+description: Use when a Thai family keeps a dog or cat (rabies vaccine, registration, microchip, vet record, flea and tick). Never diagnoses.
 ---
 
 # Pet Care (Thailand)

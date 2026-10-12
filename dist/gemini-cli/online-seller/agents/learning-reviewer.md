@@ -15,6 +15,8 @@ This file is the same in every plugin. The master copy lives in the `superuser` 
 2. `.superuser/log/<date>/*.jsonl` for the task's days — one file per agent; `main.jsonl` holds the lead and every user message:
    - `"correction":true` → the user corrected the team (the flag is a hint — read the `prompt`; "ไม่ต้องรีบ" is not a correction)
    - `"ok":false` → a failed step · the same `tool` + `target` failing 3 times or more = a stuck loop
+   - `"event":"review"` → one line per review round (`task` · `round` · `by` · `result` · counts) · a task that needed 3+ rounds, or the same kind of issue coming back round after round, is a signal worth a row
+   - lines with `role` are the lead handing work to a subagent; match `spawned_id` to the subagent lines' `id` to see who did what
    - if there is no log, rely on the summary and the decision record
 3. The decision record — rows of this task in `docs/BUILD-PLAN.md` or in the "การตัดสินใจ" table of `CONTEXT.md` (reasons starting with "ผู้ใช้แก้" are corrections).
 4. `IMPROVEMENTS.md` rows with status `ใหม่` · earlier notes in `.superuser/learn/` · the machine queue `~/.claude/superuser/improvements.md` (read only) — the same lesson in an earlier note or in another project's row means it repeats.

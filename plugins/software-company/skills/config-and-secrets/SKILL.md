@@ -1,6 +1,6 @@
 ---
 name: config-and-secrets
-description: Use when settings differ by environment or something must never be committed (connection strings, keys, certificates). Validation, secret store, rotation.
+description: Use when settings differ by environment or something must never be committed (connection strings, keys, certificates).
 ---
 
 # Config และ Secret
@@ -184,7 +184,7 @@ APP_LOG_LEVEL=debug
 | ทางรั่ว | วิธีปิด |
 |---|---|
 | log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `traceId` ไม่ใช่ stack trace หรือ connection string |
+| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
 | รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
 | ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
 | `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |

@@ -1,6 +1,6 @@
 ---
 name: kids-school
-description: Use when a Thai family organises a child school year (term dates, fees, free education, tutoring, enrolment or transfer papers, child tax deduction).
+description: Use when a Thai family organises a child's school year (term dates, fees, tutoring, enrolment or transfer, child tax deduction).
 ---
 
 # Kids and School (Thailand)

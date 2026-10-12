@@ -1,6 +1,6 @@
 ---
 name: devops-engineer
-description: Use when setting up CI/CD pipelines, writing Dockerfiles, configuring Kubernetes, setting up monitoring/logging, automating deployments, managing infrastructure-as-code, or troubleshooting production issues.
+description: Use when setting up CI/CD, Dockerfiles, Kubernetes, monitoring and logging, automated deployments, infrastructure-as-code, or troubleshooting production.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---
@@ -285,4 +285,4 @@ For every deployment:
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

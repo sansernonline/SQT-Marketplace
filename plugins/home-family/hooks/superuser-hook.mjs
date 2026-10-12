@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-// SuperUser hook — เขียน log ทุกการทำ แยกไฟล์ต่อ agent (.superuser/log/<วันที่>/<agent>.jsonl) · ติดธงข้อความที่ผู้ใช้แก้งาน · แจ้งข้อความใหม่ใน inbox
+// SuperUser hook — เขียน log ทุกการทำ แยกไฟล์ต่อ agent (.claude/superuser/log/<วันที่>/<agent>.jsonl) · ติดธงข้อความที่ผู้ใช้แก้งาน · แจ้งข้อความใหม่ใน inbox
 // ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace · ติดตั้งหลาย plugin พร้อมกัน → ตัวแรกที่รับเหตุการณ์ทำงาน ตัวอื่นออกเลย (ไม่จดซ้ำ)
-// ทำงานเฉพาะโปรเจกต์ที่มีโฟลเดอร์ .superuser/ เท่านั้น · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
+// ทำงานเฉพาะโปรเจกต์ที่มี .claude/superuser/ (หรือ .superuser/ แบบเก่า) · ไม่สร้างโฟลเดอร์ทีมเอง · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
 import { readFileSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve, relative } from "node:path";
+import { homedir } from "node:os";
 
 // ความยาวสูงสุดที่เก็บ · ข้อความผู้ใช้ยาวกว่าเป้าหมายของเครื่องมือ
 const MAX_TARGET = 2000;
@@ -37,10 +38,20 @@ export function isCorrection(prompt) {
   return CORRECTION.test(String(prompt ?? ""));
 }
 
+// .claude/superuser/ คือที่ใหม่ · .superuser/ คือที่เดิมของโปรเจกต์ที่สร้างไว้ก่อน
+export const TEAM_DIRS = [join(".claude", "superuser"), ".superuser"];
+
+// ~/.claude/superuser/ คือคิวกลางของเครื่อง ไม่ใช่โปรเจกต์ จึงข้ามโฟลเดอร์ home
+export function teamDirOf(root, home = homedir()) {
+  if (resolve(root) === resolve(home)) return null;
+  const found = TEAM_DIRS.find((rel) => existsSync(join(root, rel)));
+  return found ? join(root, found) : null;
+}
+
 export function findProjectRoot(start) {
   let dir = start;
   for (let i = 0; i < 25 && dir; i++) {
-    if (existsSync(join(dir, ".superuser"))) return dir;
+    if (teamDirOf(dir)) return dir;
     const parent = dirname(dir);
     if (parent === dir) return null;
     dir = parent;
@@ -82,6 +93,23 @@ function readJson(path, fallback) {
   try { return JSON.parse(readFileSync(path, "utf8")); } catch { return fallback; }
 }
 
+// agent id ย่อ 8 ตัว · แยก subagent ชนิดเดียวกันที่ถูกเรียกหลายรอบ (เช่น reviewer รอบ 1–5) ซึ่งเขียนลงไฟล์เดียวกัน
+export function shortId(id) {
+  return id ? String(id).slice(0, 8) : null;
+}
+
+// หัวหน้าทีมส่งงานให้ subagent (เครื่องมือ Agent หรือ Task) → จดบทบาท · โมเดล · id ของตัวที่ถูกเรียก
+export function spawnFields(input) {
+  if (!["Agent", "Task"].includes(input.tool_name) || !input.tool_input) return {};
+  const res = input.tool_response;
+  const spawned = res && typeof res === "object" ? (res.agentId ?? res.agent_id ?? null) : null;
+  return {
+    role: input.tool_input.subagent_type ?? "general-purpose",
+    role_model: input.tool_input.model ?? null,
+    ...(spawned ? { spawned_id: shortId(spawned) } : {}),
+  };
+}
+
 export function buildEntry(input, state, now = new Date()) {
   const event = input.hook_event_name ?? "unknown";
   const actor = input.agent_id ? `agent:${input.agent_id}` : `main:${input.session_id ?? "-"}`;
@@ -92,10 +120,12 @@ export function buildEntry(input, state, now = new Date()) {
     session: (input.session_id ?? "").slice(0, 8),
     event,
     agent: input.agent_type ?? input.agent_id ?? "main",
+    id: shortId(input.agent_id),
     model: state.models[actor] ?? null,
     tool: input.tool_name ?? null,
     target: redact(pickTarget(input.tool_input)),
     ok: event === "PostToolUseFailure" ? false : pickOk(input.tool_response),
+    ...spawnFields(input),
     ...(event === "UserPromptSubmit" ? { prompt: redact(input.prompt, MAX_PROMPT), ...(isCorrection(input.prompt) ? { correction: true } : {}) } : {}),
     ...(event === "SessionStart" ? { source: input.source ?? null } : {}),
   };
@@ -106,31 +136,34 @@ export function logFileName(agent) {
   return String(agent || "main").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^[-.]+|[-.]+$/g, "").slice(0, 60) || "main";
 }
 
-export function pendingMessages(root) {
-  const inbox = join(root, ".superuser", "inbox");
+export function pendingMessages(teamDir) {
+  const inbox = join(teamDir, "inbox");
   if (!existsSync(inbox)) return [];
   return readdirSync(inbox).filter((name) => name.endsWith(".md")).sort();
 }
 
-export function inboxNotice(root, event, state) {
-  const pending = pendingMessages(root);
+export function inboxNotice(teamDir, event, state, rel = ".claude/superuser") {
+  const pending = pendingMessages(teamDir);
   const seen = new Set(state.seen ?? []);
   const fresh = pending.filter((name) => !seen.has(name));
   state.seen = pending;
-  const alwaysTell = event === "SessionStart" || event === "UserPromptSubmit";
   const lines = [];
   if (event === "SessionStart") {
-    lines.push("โปรเจกต์นี้ใช้ SuperUser — อ่าน CONTEXT.md หัวข้อ \"รับงานต่อ\" ก่อนเริ่ม");
+    // แบบเก่า (.superuser/) วาง CONTEXT.md ไว้ที่ราก
+    const context = rel === ".superuser" ? "CONTEXT.md" : `${rel}/CONTEXT.md`;
+    lines.push(`โปรเจกต์นี้ใช้ SuperUser — อ่าน ${context} หัวข้อ "รับงานต่อ" ก่อนเริ่ม`);
   }
-  if (pending.length && (alwaysTell || fresh.length)) {
-    lines.push(`มีข้อความรอใน .superuser/inbox/ ${pending.length} ฉบับ${fresh.length ? ` (ใหม่ ${fresh.length}: ${fresh.join(", ")})` : ""} — หัวหน้าทีมอ่าน จัดการ แล้วย้ายไป .superuser/inbox/done/`);
+  // เปิด session บอกทุกครั้ง · เหตุการณ์อื่นบอกเฉพาะเมื่อมีฉบับใหม่ ไม่พูดซ้ำทุกข้อความ
+  if (pending.length && (event === "SessionStart" || fresh.length)) {
+    lines.push(`มีข้อความรอใน ${rel}/inbox/ ${pending.length} ฉบับ${fresh.length ? ` (ใหม่ ${fresh.length}: ${fresh.join(", ")})` : ""} — หัวหน้าทีมอ่าน จัดการ แล้วย้ายไป ${rel}/inbox/done/`);
   }
   return lines.join("\n");
 }
 
 // plugin หลายตัวได้ข้อมูลเหตุการณ์เดียวกัน → ใครสร้างไฟล์ล็อกได้ก่อนคนนั้นทำ · ล็อกเก่ากว่า 2 นาทีลบทิ้ง
-export function claimEvent(teamDir, raw, now = Date.now()) {
-  const lockDir = join(teamDir, "tmp");
+// ล็อกเป็นของชั่วคราว จึงอยู่ใน _to_delete/ ที่รากโปรเจกต์
+export function claimEvent(root, raw, now = Date.now()) {
+  const lockDir = join(root, "_to_delete", "superuser-lock");
   mkdirSync(lockDir, { recursive: true });
   for (const name of readdirSync(lockDir)) {
     try { if (now - statSync(join(lockDir, name)).mtimeMs > 120000) unlinkSync(join(lockDir, name)); } catch { /* อีกตัวลบไปแล้ว */ }
@@ -146,8 +179,8 @@ function main() {
   const root = findProjectRoot(input.cwd ?? process.cwd());
   if (!root) return;
 
-  const teamDir = join(root, ".superuser");
-  if (!claimEvent(teamDir, raw)) return;
+  const teamDir = teamDirOf(root);
+  if (!claimEvent(root, raw)) return;
   const statePath = join(teamDir, "state.json");
   const state = readJson(statePath, { models: {}, seen: [] });
   state.models ??= {};
@@ -162,7 +195,7 @@ function main() {
   let notice = "";
   const isLead = !input.agent_id;
   if (isLead && ["SessionStart", "UserPromptSubmit", "PostToolUse", "PostToolUseFailure"].includes(event)) {
-    notice = inboxNotice(root, event, state);
+    notice = inboxNotice(teamDir, event, state, relative(root, teamDir).replace(/\\/g, "/"));
   }
   const keys = Object.keys(state.models);
   if (keys.length > 40) for (const key of keys.slice(0, keys.length - 40)) delete state.models[key];

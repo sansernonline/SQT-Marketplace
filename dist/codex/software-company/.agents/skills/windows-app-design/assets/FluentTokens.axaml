@@ -29,15 +29,16 @@
       <Color x:Key="SystemAccentColorLight1">#66CDFF</Color>
       <Color x:Key="SystemAccentColorLight2">#99EBFF</Color>
 
-      <SolidColorBrush x:Key="AppBackgroundBrush"    Color="#000000"/>
-      <SolidColorBrush x:Key="AppLayerBrush"         Color="#000000"/>
-      <SolidColorBrush x:Key="AppCardBrush"          Color="#0F0F0F"/>
-      <SolidColorBrush x:Key="AppCardSecondaryBrush" Color="#1C1C1C"/>
-      <SolidColorBrush x:Key="AppDividerBrush"       Color="#2D2D2D"/>
+      <!-- Windows 11 ปกติ (Mica) · แบบดำสนิท Windows Security: #000000 #000000 #0F0F0F #1C1C1C #2D2D2D -->
+      <SolidColorBrush x:Key="AppBackgroundBrush"    Color="#202020"/>
+      <SolidColorBrush x:Key="AppLayerBrush"         Color="#272727"/>
+      <SolidColorBrush x:Key="AppCardBrush"          Color="#2B2B2B"/>
+      <SolidColorBrush x:Key="AppCardSecondaryBrush" Color="#323232"/>
+      <SolidColorBrush x:Key="AppDividerBrush"       Color="#3A3A3A"/>
 
       <SolidColorBrush x:Key="AppTextBrush"          Color="#FFFFFF"/>
       <SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#CCCCCC"/>
-      <SolidColorBrush x:Key="AppTextTertiaryBrush"  Color="#8B8B8B"/>
+      <SolidColorBrush x:Key="AppTextTertiaryBrush"  Color="#9D9D9D"/>
 
       <SolidColorBrush x:Key="AppAccentBrush"     Color="#4CC2FF"/>
       <SolidColorBrush x:Key="AppAccentTextBrush" Color="#99EBFF"/>
@@ -45,8 +46,8 @@
 
       <SolidColorBrush x:Key="AppControlBrush"        Color="#333333"/>
       <SolidColorBrush x:Key="AppControlHoverBrush"   Color="#3D3D3D"/>
-      <SolidColorBrush x:Key="AppSubtleHoverBrush"    Color="#1A1A1A"/>
-      <SolidColorBrush x:Key="AppSubtleSelectedBrush" Color="#0F0F0F"/>
+      <SolidColorBrush x:Key="AppSubtleHoverBrush"    Color="#0FFFFFFF"/>
+      <SolidColorBrush x:Key="AppSubtleSelectedBrush" Color="#15FFFFFF"/>
 
       <SolidColorBrush x:Key="AppSuccessBrush"    Color="#6CCB5F"/>
       <SolidColorBrush x:Key="AppSuccessBgBrush"  Color="#393D1B"/>

@@ -28,7 +28,7 @@ scripts\build-dist.cmd                                                       # �
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
 | **`superuser`** | 1 | 4 | 0 | ต้นฉบับ SuperUser — ใช้เดี่ยวกับงานทั่วไป หรือเป็นแม่แบบให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`software-company`** | 39 | 108 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`software-company`** | 39 | 110 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
 | **`trading-finance`** | 5 | 22 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
 | **`personal-life`** | 4 | 18 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
 | **`thai-workplace`** | 5 | 21 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
@@ -38,7 +38,7 @@ scripts\build-dist.cmd                                                       # �
 | **`health-wellness`** | 2 | 9 | 2 | จัดระเบียบสุขภาพ (ไม่วินิจฉัย ไม่สั่งยา) |
 | **`consumer-rights`** | 2 | 8 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
 | **`graphic-design`** | 5 | 14 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
-| **`dev-learning`** | 2 | 10 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก |
+| **`dev-learning`** | 2 | 11 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก · เขียนวิทยานิพนธ์และบทความวิจัย |
 
 > plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
@@ -127,7 +127,7 @@ SuperUser ทำงานอย่างไร → [docs/superuser-software-comp
 
 | ไฟล์ | เนื้อหา |
 |------|---------|
-| [docs/INSTALL.md](docs/INSTALL.md) | ติดตั้งบน Claude Code · อัปโหลดเข้า claude.ai · ใช้กับ Codex CLI / Gemini CLI / ChatGPT / Gemini Gem |
+| [docs/INSTALL.md](docs/INSTALL.md) | ติดตั้งบน Claude Code · อัปโหลดเข้า claude.ai · ใช้กับ Codex CLI / Gemini CLI / Kimi Code CLI / ChatGPT / Gemini Gem |
 | [docs/USAGE.md](docs/USAGE.md) | วิธีใช้ · SuperUser · workflow จริง · cheatsheet คำสั่งที่ใช้บ่อย |
 | [docs/PLUGINS.md](docs/PLUGINS.md) | สรุป plugin ทั้งหมด · ย้ายจากรุ่นเก่า · roadmap |
 | [docs/REFERENCE.md](docs/REFERENCE.md) | รายละเอียดทุก agent / skill / command ของ software-company |
@@ -146,12 +146,12 @@ SQT-Marketplace/
 │   └── software-company/
 │       ├── .claude-plugin/plugin.json
 │       ├── agents/     (39)
-│       ├── skills/     (107 skill + 28 คำสั่ง)
+│       ├── skills/     (110 skill + 29 คำสั่ง)
 │       └── hooks/      ← hook ของ SuperUser (log · inbox)
 ├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
 ├── assets/     ← ไอคอนและรูปที่ใช้ร่วม
-├── prompt/     ← ชุด prompt — ข้อยกเว้นของ repo นี้ต่อกฎโครงรากโปรเจกต์
+├── prompt/     ← ชุด prompt แยกโฟลเดอร์ตาม plugin — ข้อยกเว้นของ repo นี้ต่อกฎโครงรากโปรเจกต์
 ├── scripts/
 └── README.md
 ```

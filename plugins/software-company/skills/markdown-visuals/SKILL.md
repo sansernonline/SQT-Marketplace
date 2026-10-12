@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a markdown doc needs a picture (wireframe, UI state, flow, architecture). Picks inline SVG, image, ASCII or Mermaid so it renders everywhere.
+description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Not app screens → platform design skills.
 ---
 
 # Markdown Visuals
@@ -13,13 +13,21 @@ description: Use when a markdown doc needs a picture (wireframe, UI state, flow,
 
 ## When to use this skill
 
-- Producing **any** design mockup, wireframe, or UI spec
+- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
 - Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
-- The user said "make a mockup," "show me how it looks," or "design X"
+- The user asked "show me how it looks" inside a markdown doc or chat reply
 
 **If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
 
@@ -31,7 +39,7 @@ What are you showing?
 ├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
 ├─ Architecture / ER / class                →  Mermaid (software-diagrams)
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](assets/x.png)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
@@ -67,7 +75,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้เสนอโทนจาก [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md) แล้วรอผู้ใช้ยืนยัน ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
 
 ### Reusable snippets
 
@@ -164,7 +172,7 @@ For every visual:
 
 ## Quick-start recipe
 
-When the user asks for a design / mockup:
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
 
 1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
 2. **Pick the format(s)** using the decision tree above

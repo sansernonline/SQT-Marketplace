@@ -14,6 +14,8 @@
  *   node check-design-tokens.mjs src/theme.css src --ext ts,tsx,jsx,vue,svelte,html,css
  *   node check-design-tokens.mjs src/styles.css src/app --ignore src/app/vendor
  *   node check-design-tokens.mjs src/theme.css src --require --bg,--ink,--signal
+ *   node check-design-tokens.mjs mockup/ABC-mockup.html mockup --ext html   (mockup ไฟล์เดียว: token ฝังในไฟล์เอง)
+ *   node check-design-tokens.mjs --self-test      พิสูจน์ว่าตัวตรวจยังจับถูกและไม่จับผิด
  *
  * ใส่ใน package.json:  "lint:tokens": "node tools/check-design-tokens.mjs src/styles.css src/app"
  * แล้วต่อเข้า CI — ถ้าไม่บังคับด้วยเครื่อง ระบบดีไซน์จะพังภายในสามสัปดาห์
@@ -21,11 +23,15 @@
  * exit 0 = ผ่าน · exit 1 = พบการละเมิด
  */
 
-import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 /* -------------------------------------------------------------- อ่านอาร์กิวเมนต์ */
 const argv = process.argv.slice(2);
+if (argv[0] === '--self-test') selfTest();
 if (argv.length < 2 || argv.includes('--help')) {
   console.log(readFileSync(new URL(import.meta.url), 'utf8').split('*/')[0].replace(/^\/\*\*?/, ''));
   process.exit(argv.length < 2 ? 1 : 0);
@@ -55,7 +61,8 @@ const REQUIRED = opt('require', '') ? opt('require', '').split(',') : DEFAULT_RE
 /** เส้นแบ่ง: ในไฟล์ token เอง อนุญาตสีดิบเฉพาะ "ก่อน" บรรทัดนี้ */
 const BASE_MARKER = opt('marker', '=========================== base');
 
-const RAW_COLOUR = /#[0-9a-fA-F]{3,8}\b|\brgba?\(\s*[\d.]|\bhsla?\(\s*[\d.]/g;
+/** ไม่นับ HTML entity (&#9734; · &#128193;) และลิงก์ภายในหน้า (href="#add") ว่าเป็นสี */
+const RAW_COLOUR = /(?<!&|href=["'])#[0-9a-fA-F]{3,8}\b|\brgba?\(\s*[\d.]|\bhsla?\(\s*[\d.]/g;
 const VAR_USE = /var\(\s*(--[a-zA-Z0-9-]+)/g;
 
 /**
@@ -138,3 +145,34 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(`✓ ผ่าน — ตรวจ ${files.length} ไฟล์, ไม่มีสี hardcode, token ${defined.size} ตัวถูกอ้างครบถ้วน`);
+
+/* -------------------------------------------------------------- --self-test */
+function selfTest() {
+  const dir = mkdtempSync(join(tmpdir(), 'tokens-test-'));
+  const run = (files, tokenFile) => {
+    rmSync(join(dir, 'src'), { recursive: true, force: true });
+    mkdirSync(join(dir, 'src'));
+    for (const [name, body] of Object.entries(files)) writeFileSync(join(dir, name), body);
+    return spawnSync(process.execPath, [fileURLToPath(import.meta.url), join(dir, tokenFile), join(dir, 'src'),
+      '--require', '--bg'], { encoding: 'utf8' });
+  };
+  const tokens = ':root { --bg: #ffffff; }\n/* =========================== base */\nbody { background: var(--bg); }\n';
+  const oneFile = `<style>${tokens}</style>\n<a href="#s-add">เพิ่ม</a> <p>&#9734;</p>`;
+  const cases = [
+    ['HTML entity ไม่ใช่สี', { 'tokens.css': tokens, 'src/a.html': '<p>&#9734; &#128193; &#xE710;</p>' }, 'tokens.css', 0, ''],
+    ['href="#add" ไม่ใช่สี', { 'tokens.css': tokens, 'src/a.html': '<a href="#add">เพิ่ม</a>' }, 'tokens.css', 0, ''],
+    ['mockup ไฟล์เดียว token ฝังในไฟล์', { 'src/m.html': oneFile }, 'src/m.html', 0, ''],
+    ['สีดิบต้องถูกจับ', { 'tokens.css': tokens, 'src/a.css': '.x { color: #abc; }' }, 'tokens.css', 1, '#abc'],
+    ['token สะกดผิดต้องถูกจับ', { 'tokens.css': tokens, 'src/a.css': '.x { color: var(--bgg); }' }, 'tokens.css', 1, '--bgg'],
+  ];
+  let fail = 0;
+  for (const [name, files, tokenFile, code, needle] of cases) {
+    const r = run(files, tokenFile);
+    const ok = r.status === code && (r.stderr + r.stdout).includes(needle);
+    if (!ok) fail++;
+    console.log(`${ok ? '✓' : '✗'} ${name} (exit ${r.status})`);
+  }
+  rmSync(dir, { recursive: true, force: true });
+  console.log(fail ? `✗ self-test ไม่ผ่าน ${fail}/${cases.length}` : `✓ self-test ผ่าน ${cases.length}/${cases.length}`);
+  process.exit(fail ? 1 : 0);
+}

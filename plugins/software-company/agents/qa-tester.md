@@ -1,6 +1,6 @@
 ---
 name: qa-tester
-description: Use when creating test plans, writing test cases, designing test scenarios, reporting bugs, doing exploratory testing strategies, or defining test coverage. Ensures quality before release.
+description: Use when creating test plans, test cases and scenarios, reporting bugs, exploratory testing strategies, or defining test coverage before release.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---
@@ -225,4 +225,4 @@ gantt
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

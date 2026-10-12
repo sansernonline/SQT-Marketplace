@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="th" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — แอปเครื่องมือ (list-detail)</title>
+<link rel="stylesheet" href="fluent.css">
+<style>
+  /* แบบที่ 2 ของ skill: แอปเครื่องมือที่ข้อมูลแน่น (terminal client, file manager, admin tool)
+     แบบที่ 1 (mockup-template.html) เหมาะกับหน้าตั้งค่าและ dashboard
+     โครง: title bar มี tab → icon rail 48px → รายการ (ตาราง) → แผงรายละเอียด 360px → status bar
+     ห้ามเขียนค่าสีดิบ ใช้ var(--win-*) เสมอ — แบบแยกชิ้นอยู่ใน references/patterns.md */
+  html, body { height: 100%; margin: 0; }
+  body { font-family: var(--win-font); font-size: 14px; line-height: 20px; color: var(--win-text); background: var(--win-bg); }
+  button, input { font: inherit; color: inherit; }
+  .i { font-family: var(--win-font-icon); font-size: 16px; line-height: 1; font-style: normal; }
+  .muted { color: var(--win-text-secondary); }
+  .cap { font-size: 12px; line-height: 16px; }
+  .spacer { flex: 1; }
+  :focus-visible { outline: 2px solid var(--win-text); outline-offset: 1px; border-radius: var(--win-radius); }
+
+  .app { display: grid; grid-template-rows: 40px 1fr 24px; height: 100vh; }
+  .main { display: flex; min-height: 0; }
+
+  /* title bar + tab (แบบ Windows Terminal: tab ที่เลือกพื้นเดียวกับเนื้อหา) */
+  .titlebar { display: flex; align-items: stretch; background: var(--win-bg); user-select: none; }
+  .titlebar .name { display: flex; align-items: center; padding: 0 12px; font-size: 12px; }
+  .tabs { display: flex; align-items: flex-end; gap: 2px; }
+  .tab { height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 12px; border-radius: var(--win-radius-card) var(--win-radius-card) 0 0; color: var(--win-text-secondary); }
+  .tab.on { background: var(--win-layer); color: var(--win-text); }
+  .caps { display: flex; }
+  .caps button { width: 46px; border: 0; background: transparent; font-family: var(--win-font-icon); font-size: 10px; cursor: pointer; }
+  .caps button:hover { background: var(--win-subtle-hover); }
+  .caps button.close:hover { background: var(--win-close-hover); color: var(--win-on-close); }
+
+  /* icon rail — เครื่องมือหลักเป็นไอคอน ตั้งค่าอยู่ล่างสุด */
+  .rail { width: 48px; flex: 0 0 48px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; }
+  .rail button { width: 40px; height: 40px; border: 0; border-radius: var(--win-radius); background: transparent; color: var(--win-text-secondary); cursor: pointer; position: relative; }
+  .rail button:hover { background: var(--win-subtle-hover); color: var(--win-text); }
+  .rail button.on { background: var(--win-subtle-selected); color: var(--win-text); }
+  .rail button.on::before { content: ""; position: absolute; left: -4px; top: 12px; width: 3px; height: 16px; border-radius: 2px; background: var(--win-accent); }
+  .rail .push { margin-top: auto; }
+
+  /* ปุ่ม — สี accent ทึบได้ 1 ปุ่มต่อหน้าจอ */
+  .btn { height: 32px; min-width: 32px; padding: 0 12px; border-radius: var(--win-radius); border: 1px solid var(--win-control-stroke); background: var(--win-control);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; white-space: nowrap; }
+  .btn:hover { background: var(--win-control-hover); }
+  .btn.primary { background: var(--win-accent); color: var(--win-on-accent); border-color: transparent; }
+  .btn.subtle { background: transparent; border-color: transparent; }
+  .btn.subtle:hover { background: var(--win-subtle-hover); }
+  .btn.icon { width: 32px; padding: 0; }
+  .field { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: var(--win-radius); background: var(--win-control);
+    border: 1px solid var(--win-control-stroke); color: var(--win-text-secondary); }
+  .field input { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; color: var(--win-text); }
+
+  /* หน้า: หัว 28px → command bar → แบ่งรายการ/รายละเอียด */
+  .page { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--win-layer); border-top-left-radius: var(--win-radius-card); }
+  .head { display: flex; align-items: baseline; gap: 12px; padding: 24px 32px 16px; }
+  .head h1 { font-family: var(--win-font-display); font-size: 28px; line-height: 36px; font-weight: 600; margin: 0; }
+  .cmdbar { display: flex; align-items: center; gap: 4px; padding: 0 32px 12px; }
+  .cmdbar .sep { width: 1px; height: 20px; background: var(--win-divider); margin: 0 8px; }
+  .split { flex: 1; display: flex; min-height: 0; border-top: 1px solid var(--win-divider); }
+  .list { flex: 1; overflow: auto; padding: 0 24px; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th { height: 32px; text-align: left; font-size: 12px; font-weight: 600; color: var(--win-text-secondary); padding: 0 12px; position: sticky; top: 0; background: var(--win-layer); box-shadow: inset 0 -1px 0 var(--win-divider); }
+  td { height: 40px; padding: 0 12px; border-top: 1px solid var(--win-divider); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  tr.g td { height: 40px; border-top: 0; padding-top: 8px; font-weight: 600; }
+  tr.g .n { font-weight: 400; color: var(--win-text-secondary); margin-left: 8px; }
+  tr.r:hover td { background: var(--win-subtle-hover); }
+  tr.r.on td { background: var(--win-subtle-selected); }
+  tr.r.on td:first-child { box-shadow: inset 3px 0 0 var(--win-accent); }
+  .name { display: flex; align-items: center; gap: 12px; }
+  .kind { width: 24px; height: 24px; flex: 0 0 24px; border-radius: var(--win-radius); display: grid; place-items: center; background: var(--win-card-secondary); color: var(--win-accent-text); }
+  .kind .i { font-size: 14px; }
+  .acts { display: flex; justify-content: flex-end; gap: 4px; visibility: hidden; }        /* ปุ่มในแถวโผล่เมื่อชี้หรือเลือก */
+  tr.r:hover .acts, tr.r.on .acts { visibility: visible; }
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--win-success); }
+  .pill.off .dot { background: var(--win-text-tertiary); }
+
+  .detail { width: 360px; flex: 0 0 360px; border-left: 1px solid var(--win-divider); background: var(--win-card); overflow: auto; padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+  .d-head { display: flex; align-items: center; gap: 12px; }
+  .d-head .kind { width: 48px; height: 48px; flex-basis: 48px; border-radius: var(--win-radius-card); }
+  .d-head .kind .i { font-size: 24px; }
+  .d-head h2 { font-size: 20px; line-height: 28px; font-weight: 600; margin: 0; }
+  .d-acts { display: flex; gap: 8px; } .d-acts .primary { flex: 1; }
+  dl { display: grid; grid-template-columns: 112px 1fr; gap: 8px 12px; margin: 0; }
+  dt { color: var(--win-text-secondary); } dd { margin: 0; }
+  .sec { font-weight: 600; margin: 0 0 8px; }
+  .hist div { display: flex; justify-content: space-between; height: 32px; align-items: center; border-top: 1px solid var(--win-divider); font-size: 12px; color: var(--win-text-secondary); }
+
+  .status { display: flex; align-items: center; gap: 16px; padding: 0 12px; font-size: 12px; color: var(--win-text-secondary); background: var(--win-bg); }
+
+  @media (max-width: 1100px) { .detail { display: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="titlebar">
+    <span class="name">ชื่อแอปของคุณ</span>
+    <nav class="tabs"><div class="tab on"><i class="i" style="font-size:14px">&#xE80F;</i>รายการ</div></nav>
+    <span class="spacer"></span>
+    <div class="caps">
+      <button onclick="toggleTheme()" title="สลับธีม (มีเฉพาะใน mockup)">&#xE793;</button>
+      <button title="ย่อ">&#xE921;</button><button title="ขยาย">&#xE922;</button><button class="close" title="ปิด">&#xE8BB;</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <nav class="rail" aria-label="เครื่องมือ">
+      <button class="on" title="รายการ"><i class="i">&#xE8FD;</i></button>
+      <button title="ไฟล์"><i class="i">&#xE8B7;</i></button>
+      <button title="การเชื่อมต่อ"><i class="i">&#xE71B;</i></button>
+      <button title="กุญแจ"><i class="i">&#xE8D7;</i></button>
+      <button class="push" title="ตั้งค่า"><i class="i">&#xE713;</i></button>
+    </nav>
+
+    <main class="page">
+      <div class="head"><h1>รายการ</h1><span class="muted">12 รายการใน 3 กลุ่ม</span></div>
+
+      <!-- command bar: ไอคอน + ข้อความ ปุ่มแบบ subtle · ปุ่มทึบอยู่ที่แผงรายละเอียด -->
+      <div class="cmdbar">
+        <button class="btn subtle"><i class="i">&#xE710;</i>สร้างใหม่</button>
+        <button class="btn subtle"><i class="i">&#xE8F4;</i>กลุ่มใหม่</button>
+        <span class="sep"></span>
+        <button class="btn subtle"><i class="i">&#xE8B5;</i>นำเข้า</button>
+        <button class="btn subtle"><i class="i">&#xEDE1;</i>ส่งออก</button>
+        <span class="spacer"></span>
+        <label class="field" style="width:280px"><i class="i">&#xE721;</i><input placeholder="กรองด้วยชื่อหรือแท็ก"></label>
+      </div>
+
+      <div class="split">
+        <div class="list">
+          <table>
+            <colgroup><col style="width:34%"><col style="width:30%"><col style="width:18%"><col style="width:18%"><col style="width:112px"></colgroup>
+            <thead><tr><th>ชื่อ</th><th>ที่อยู่</th><th>สถานะ</th><th>ใช้ล่าสุด</th><th></th></tr></thead>
+            <tbody>
+              <tr class="g"><td colspan="5">กลุ่มแรก<span class="n">2</span></td></tr>
+              <tr class="r on"><td><div class="name"><span class="kind"><i class="i">&#xE756;</i></span>รายการที่เลือกอยู่</div></td><td class="muted">10.20.0.11</td><td><span class="pill"><span class="dot"></span>ทำงาน</span></td><td class="muted">วันนี้ 09:12</td>
+                <td><div class="acts"><button class="btn subtle icon" title="เปิด"><i class="i">&#xE768;</i></button><button class="btn subtle icon" title="แก้ไข"><i class="i">&#xE70F;</i></button><button class="btn subtle icon" title="อื่น ๆ"><i class="i">&#xE712;</i></button></div></td></tr>
+              <tr class="r"><td><div class="name"><span class="kind"><i class="i">&#xE756;</i></span>รายการที่สอง</div></td><td class="muted">10.20.0.21</td><td><span class="pill off"><span class="dot"></span>หยุดอยู่</span></td><td class="muted">เมื่อวาน 17:20</td>
+                <td><div class="acts"><button class="btn subtle icon"><i class="i">&#xE768;</i></button><button class="btn subtle icon"><i class="i">&#xE70F;</i></button><button class="btn subtle icon"><i class="i">&#xE712;</i></button></div></td></tr>
+              <tr class="g"><td colspan="5">กลุ่มที่สอง<span class="n">1</span></td></tr>
+              <tr class="r"><td><div class="name"><span class="kind"><i class="i">&#xE8B7;</i></span>รายการที่สาม</div></td><td class="muted">192.168.50.20</td><td><span class="pill"><span class="dot"></span>ทำงาน</span></td><td class="muted">8 ต.ค. 14:03</td>
+                <td><div class="acts"><button class="btn subtle icon"><i class="i">&#xE768;</i></button><button class="btn subtle icon"><i class="i">&#xE70F;</i></button><button class="btn subtle icon"><i class="i">&#xE712;</i></button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- แผงรายละเอียด: ปุ่มหลักปุ่มเดียวของหน้าอยู่ที่นี่ -->
+        <aside class="detail">
+          <div class="d-head"><span class="kind"><i class="i">&#xE756;</i></span><div><h2>รายการที่เลือกอยู่</h2><div class="muted cap">กลุ่มแรก</div></div></div>
+          <div class="d-acts"><button class="btn primary"><i class="i">&#xE768;</i>เปิด</button><button class="btn"><i class="i">&#xE70F;</i>แก้ไข</button><button class="btn icon" title="อื่น ๆ"><i class="i">&#xE712;</i></button></div>
+          <dl><dt>ที่อยู่</dt><dd>10.20.0.11</dd><dt>เจ้าของ</dt><dd>ทีมระบบ</dd><dt>แท็ก</dt><dd>web · prd</dd></dl>
+          <div><p class="sec">ประวัติล่าสุด</p>
+            <div class="hist"><div><span>วันนี้ 09:12</span><span>3 ชม. 14 นาที</span></div><div><span>เมื่อวาน 18:02</span><span>42 นาที</span></div></div></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <footer class="status"><span>12 รายการ · เก็บในเครื่องนี้</span><span class="spacer"></span><span>ดับเบิลคลิกแถวเพื่อเปิด</span></footer>
+</div>
+<script>
+  function toggleTheme() {
+    const r = document.documentElement;
+    r.dataset.theme = r.dataset.theme === 'dark' ? 'light' : 'dark';
+  }
+</script>
+</body>
+</html>

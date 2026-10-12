@@ -1,6 +1,6 @@
 ---
 name: news-impact
-description: Use when the user asks what news matters today for their stocks. Filters headlines against watchlist and portfolio, keeps up to 5 that move earnings, rules or liquidity.
+description: Use when the user asks what news matters today for their stocks. Filters headlines against watchlist and portfolio.
 ---
 
 # News Impact (ข่าวที่กระทบพอร์ตจริง)

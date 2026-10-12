@@ -1,6 +1,6 @@
 ---
 name: recommendation-engineer
-description: "Use when building recommendation systems — \"you may also like\", product recommendations, personalized rankings, related items — with collaborative, content-based or hybrid filtering, including training, serving and evaluation."
+description: Use when building recommendation systems (related items, personalized rankings) with collaborative, content-based or hybrid filtering — training, serving, eval.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
 ---
@@ -322,4 +322,4 @@ Recommendations must respect:
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

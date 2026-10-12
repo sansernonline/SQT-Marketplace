@@ -1,4 +1,4 @@
-> เดิมคือ skill `security-incident-response` ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
+> เดิมชื่อ security-incident-response (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-cybersecurity` — รวมเข้า `security-operations` ใน v2.0.0
 
 **สารบัญ:** 
 

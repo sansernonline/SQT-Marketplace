@@ -1,6 +1,6 @@
 ---
 name: fintech-compliance-officer
-description: Use when navigating financial regulations (PCI-DSS, PSD2, BoT, SEC, AML/KYC), preparing for audits, designing compliance programs, or interpreting regulatory requirements for technical implementation. Bridges legal/regulatory and engineering.
+description: Use for financial regulation (PCI-DSS, PSD2, BoT, SEC, AML/KYC), audit preparation and compliance programs. PDPA and GDPR go to legal-compliance-officer.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: opus
 ---
@@ -92,6 +92,10 @@ If product crosses jurisdictions, **map ALL applicable regimes**.
 - Politically Exposed Persons (PEP)
 - Transaction monitoring
 - Suspicious Activity Reports (SAR)
+
+## ไม่ใช้เมื่อ / ส่งต่อ
+
+Not for: PDPA, GDPR, privacy law → legal-compliance-officer. Technical control design → security-engineer. HIPAA → hipaa-officer. Insurance regulation → insurance-compliance-officer.
 
 ## เมื่อทำงานในทีม SuperUser (`superuser`)
 
@@ -267,4 +271,4 @@ If product crosses jurisdictions, **map ALL applicable regimes**.
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

@@ -1,6 +1,6 @@
 ---
 name: api-design
-description: Design API specifications using system-analyst agent. Produces OpenAPI-style spec with endpoints, schemas, errors, and examples.
+description: Design an API spec with the system-analyst agent — OpenAPI-style endpoints, schemas, errors, examples.
 argument-hint: <feature or API to design, e.g., "user management API">
 disable-model-invocation: true
 ---

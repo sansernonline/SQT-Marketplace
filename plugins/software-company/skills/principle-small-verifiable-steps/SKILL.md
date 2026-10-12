@@ -1,6 +1,6 @@
 ---
 name: principle-small-verifiable-steps
-description: Use when work has many steps (migration, sweep, many similar edits, unattended run) or stacking commits or PRs. Small units, each verified before the next.
+description: Use when work has many steps (migration, sweep, many similar edits, unattended run) or stacking commits or PRs.
 ---
 
 # principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น
@@ -12,7 +12,7 @@ description: Use when work has many steps (migration, sweep, many similar edits,
 
 1. เขียนรายการชิ้นลง todo ก่อนเริ่ม โดยแต่ละชิ้นมีเกณฑ์ "ผ่านเมื่อ" 1 บรรทัด
 2. 1 ชิ้นเปลี่ยนเรื่องเดียว และจบด้วย build ผ่าน · test ผ่าน · แอปยังรันได้
-3. ทำทีละชิ้น ตรวจ แล้ว commit ก่อนขึ้นชิ้นถัดไป แต่ commit เฉพาะเมื่อได้รับอนุญาต ถ้าไม่ได้รับอนุญาตให้บันทึกชิ้นที่ผ่านไว้ใน `docs/BUILD-PLAN.md` แทน
+3. ทำทีละชิ้น ตรวจ แล้ว commit ก่อนขึ้นชิ้นถัดไป โดย commit ตามกฎ commit ใน `superuser` หัวข้อ 6 ถ้าไม่ได้อนุญาตให้บันทึกชิ้นที่ผ่านไว้ใน `docs/BUILD-PLAN.md` แทน
 4. ชิ้นไหนตรวจไม่ผ่าน ให้หยุดแก้ที่ชิ้นนั้น ห้ามข้ามไปชิ้นถัดไปแล้วค่อยกลับมา
 
 ## ลำดับ

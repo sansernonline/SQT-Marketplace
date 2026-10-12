@@ -1,6 +1,6 @@
 ---
 name: cicd-and-release
-description: Use when setting up or fixing a build and deploy pipeline or deciding how a project ships. Stages, gates, build once and promote, flags, rehearsed rollback.
+description: Use when setting up or fixing a build and deploy pipeline or deciding how a project ships (gates, promotion, rollback).
 ---
 
 # CI/CD และการปล่อยของ

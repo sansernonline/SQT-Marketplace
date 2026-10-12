@@ -1,6 +1,6 @@
 ---
 name: api-conventions
-description: Use when starting an API, adding endpoints or checking API consistency. Rulebook for URLs, versioning, pagination, dates, money, ids, errors, idempotency.
+description: Use when starting an API, adding endpoints or checking API consistency (URLs, versioning, pagination, dates, money, ids, idempotency).
 ---
 
 # ข้อตกลงของ API
@@ -172,22 +172,8 @@ GET /v1/orders?status=confirmed&createdAt[gte]=2026-01-01&sort=-createdAt&fields
 
 ## 7 · error
 
-รูปแบบ error envelope (โครงข้อความ error) อยู่ที่ `web-service-essentials` (RFC 9457) ให้ใช้แบบเดียวกัน
+รูปแบบ error (RFC 9457 · `requestId` · `errors` แบบ array `{field, code, message}`) และตัวอย่างอยู่ที่ `web-service-essentials` ข้อ 2 ที่เดียว ใช้ตามนั้น
 ที่ต้องตกลงเพิ่มคือ **error ระดับฟิลด์**:
-
-```jsonc
-// 422 Unprocessable Content
-{
-  "type": "https://api.acme.co/errors/validation",
-  "title": "Validation failed",
-  "status": 422,
-  "traceId": "01J9Z8...",
-  "errors": [
-    { "field": "email",          "code": "invalid_format", "message": "รูปแบบอีเมลไม่ถูกต้อง" },
-    { "field": "items[0].qty",   "code": "min_value",      "message": "ต้องมากกว่า 0" }
-  ]
-}
-```
 
 - **`code` ให้โปรแกรมอ่าน · `message` ให้คนอ่าน** อย่าให้ฝั่งเรียกต้องเอาข้อความไปเขียนเงื่อนไข
 - ชี้ตำแหน่งฟิลด์ด้วยเส้นทางเต็ม รวมดัชนีของอาเรย์

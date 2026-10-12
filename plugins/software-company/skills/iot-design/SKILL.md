@@ -1,6 +1,6 @@
 ---
 name: iot-design
-description: Design an IoT system architecture or device fleet management. Two modes — iot-architecture or device-fleet-design.
+description: Design an IoT system or device fleet management (iot-architecture or device-fleet-design).
 argument-hint: <iot-architecture | device-fleet-design> <details>
 disable-model-invocation: true
 ---

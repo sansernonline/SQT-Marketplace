@@ -1,6 +1,6 @@
 ---
 name: interview
-description: Prepare for a specific interview — story bank, likely questions, mock round, and the thank-you note.
+description: Prepare for one interview — story bank, likely questions, mock round, thank-you note.
 argument-hint: <company> <role> [round — hr|manager|technical|final] [th|en]
 disable-model-invocation: true
 ---

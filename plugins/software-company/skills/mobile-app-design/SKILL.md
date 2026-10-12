@@ -1,6 +1,6 @@
 ---
 name: mobile-app-design
-description: Use when designing or building a phone app UI (PWA, React Native, Flutter). Tokens, type, phone-frame mockup, safe areas, Thai-English fonts. Not desktop.
+description: Use when designing or building a phone app UI or mockup (PWA, React Native, Flutter). Not desktop.
 ---
 
 # Mobile App Design
@@ -25,8 +25,10 @@ description: Use when designing or building a phone app UI (PWA, React Native, F
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
 
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+
 ```
-1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน
+1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
 3. python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
    python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android
@@ -34,6 +36,8 @@ description: Use when designing or building a phone app UI (PWA, React Native, F
 4. เปิดภาพดูจริงทุกขนาด แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
 5. อนุมัติแล้วจึงแปลงเป็นโค้ดจริง — ใช้ token ชุดเดิม ไม่ออกแบบใหม่
 ```
+
+**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `speakgo.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง
 
 ถ้าเป็น Flutter / Android native ให้ข้ามไปทำตาม **ข้อ 4.1** ได้เลย จะทำ mockup HTML ด้วยหรือไม่ก็ได้ แต่ภาพที่ใช้ตรวจต้องมาจากแอปจริง
 
@@ -90,24 +94,7 @@ token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วน�
 
 ## 4 · โครงหน้าจอ
 
-```
-┌─────────────────────────┐  #app  max-width 430px · 100dvh
-│ .appbar                 │  padding-top + safe-area-inset-top
-│   h1 24/700             │
-│   .sub  mono 10 UPPER   │
-├─────────────────────────┤
-│ .screen.on  (เลื่อนได้)  │  ← มีหลาย .screen สลับด้วยคลาส .on
-│   .chips  (เลื่อนขวาได้) │
-│   .tiles  2 คอลัมน์      │
-│   .card / .sg           │
-│   .cta                  │
-├─────────────────────────┤
-│ .tabbar  3–5 แท็บ        │  padding-bottom + safe-area-inset-bottom
-└─────────────────────────┘
-
-.overlay.on = หน้าจอทับเต็ม สำหรับงานที่ใช้เวลานาน (บทสนทนา, แบบทดสอบ)
-              ใช้แทน modal เพราะงานพวกนี้ไม่ได้จบใน 3 วินาที
-```
+ภาพโครงหน้าจอ (`#app` กว้างไม่เกิน 430px · `100dvh` · appbar · `.screen` เลื่อนได้ · tabbar 3–5 แท็บ · `.overlay` เต็มจอแทน modal สำหรับงานที่ใช้เวลานาน) อยู่ใน [`references/screen-and-components.md`](references/screen-and-components.md)
 
 กฎที่คนทำเว็บมาทำมือถือมักพลาด:
 
@@ -122,31 +109,13 @@ token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วน�
 
 ### 4.1 · Flutter / Android native
 
-| เรื่อง | ทำอย่างนี้ |
-|---|---|
-| token | เก็บสีหลักใน `ColorScheme` (`ColorScheme.fromSeed` แล้ว `copyWith`) สีตามความหมายที่ Material ไม่มีให้เก็บใน `ThemeExtension` ของเราเอง ส่วนระยะห่างเป็นค่าคงที่ในไฟล์ theme ไฟล์เดียว — ตัวอย่างจริง: `lib/core/theme.dart` ของแอป Lumio |
-| ตรวจสีดิบ | ตัวตรวจของ `web-app-design` ไม่จับ Dart — ใช้ `grep -rn -e "Color(0x" -e "Colors\.[a-z]" lib --include=*.dart` แล้วต้องเจอเฉพาะในไฟล์ theme |
-| โหมดมืด | ทำชุด token ที่สองให้ครบทุกตัว (ไม่ใช่กลับสีอัตโนมัติ) แล้วตรวจคอนทราสต์ทุกคู่ข้อความ/พื้นให้ผ่าน AA (≥ 4.5:1) ทั้งสองชุด ค่าเริ่มใช้ `ThemeMode.system` |
-| ภาพหน้าจอ | ถ่ายภาพจากแอปจริงด้วย `adb exec-out screencap -p > _to_delete/screenshots/<ชื่อ>.png` ทั้งโหมดสว่างและมืด โดยจอ 360×800 dp เป็นจอเล็กสุดที่ต้องดู |
-| ขอบจอ | edge-to-edge (Android 15 ขึ้นไปบังคับ) ให้ห่อเนื้อหาด้วย `SafeArea` และตั้งสีไอคอนแถบสถานะกับแถบนำทางตามธีม (`SystemUiOverlayStyle`) |
-| ระบบ | ปัดย้อนกลับของระบบต้องไปหน้าก่อนหน้า ไม่ปิดแอปกลางงาน (`PopScope`) หมุนจอแล้วต้องไม่พัง หรือจะล็อกแนวตั้งโดยตั้งใจก็ได้ และเมื่อตั้งขนาดตัวอักษรระบบ 200 % (`textScaler`) ข้อความต้องไม่ล้นและไม่ตัดตัวเลขสำคัญ |
-| สิทธิ์ | อธิบายในหน้าก่อน (การ์ด 1 ใบ ปุ่มเดียว) → ขอสิทธิ์เมื่อผู้ใช้กดเท่านั้น → แยก "ปฏิเสธ" (ขอใหม่ได้) กับ "ถูกบล็อก" (ปุ่มเปิดหน้าตั้งค่าแอป) → ตรวจใหม่เมื่อกลับเข้าแอป |
-| hardware ไม่มี | เครื่องไม่มี sensor หรือกล้องใช้ไม่ได้ ต้องมีหน้าจอบอกและทางเลือกอื่น ไม่ใช่จอว่างหรือ 0 |
-| SnackBar | Scaffold ซ้อนกัน (แท็บอยู่ใน Scaffold หลัก) SnackBar จะขึ้นที่ Scaffold ราก แล้วบังปุ่มล่างของหน้าแท็บ วิธีแก้คือให้แต่ละแท็บมี `ScaffoldMessenger` ของตัวเอง หรือย้ายปุ่มไปไว้ `bottomNavigationBar` ของหน้านั้น |
-| ตัวเลือกแบบแบ่งช่อง | ถ้าใช้ Material 3 `SegmentedButton` ใส่ป้ายไทย 3 ช่องบนจอ 360 dp ต้องใช้ `showSelectedIcon: false` และป้ายสั้น |
+ตาราง 10 เรื่องอยู่ใน [`references/screen-and-components.md`](references/screen-and-components.md): token ใน `ColorScheme` + `ThemeExtension` · ตรวจสีดิบด้วย grep · โหมดมืดชุดที่สอง · ภาพจากแอปจริงด้วย `adb` · edge-to-edge + `SafeArea` · ปัดย้อนกลับ หมุนจอ ตัวอักษร 200 % · ขอสิทธิ์ · hardware ไม่มี · SnackBar ใน Scaffold ซ้อน · `SegmentedButton`
 
 ---
 
 ## 5 · คอมโพเนนต์ที่มีให้แล้ว
 
-| กลุ่ม | คลาสหลัก |
-|---|---|
-| รายการ | `.tile` (ไทล์ไล่สี) · `.card` · `.sg` (แถว + แถบความคืบหน้า) · `.heart` · `.lvl` |
-| ตัวควบคุม | `.chips/.chip` · `.lvlchip` · `.cta` · `.outline` · `.seg` · `.iconbtn` |
-| ตั้งค่า | `.group > .r2 / .rcol` (การ์ดเดียว แถวคั่นด้วยเส้น แบบ iOS) |
-| สนทนา | `.turn.ai/.me > .bub` · `.repair` (`del`/`ins`) · `.hintbox` · `.acts/.actbtn` · `.dots` |
-| แถบไมค์ | `.dock` · `#mic(.live/.busy)` · `.typerow` · `#interim` |
-| สรุปผล | `.score` · `.mini` · `.bar` · `.verdict` · `.wk` · `.stat` |
+ตารางคลาสใน `speakgo.css` (รายการ · ตัวควบคุม · ตั้งค่า · สนทนา · แถบไมค์ · สรุปผล) อยู่ใน [`references/screen-and-components.md`](references/screen-and-components.md)
 
 **บับเบิลสนทนา:** มุม 18px ทุกด้าน ยกเว้นมุมที่ชี้เข้าหาผู้พูดเหลือ **5px** —
 บอกว่าใครพูดโดยไม่ต้องวาดหางบับเบิล
@@ -169,59 +138,19 @@ token ทั้งหมดอยู่ใน `assets/speakgo.css` ส่วน�
 
 ## 7 · ตรวจงาน
 
-```bash
-# 1. หน้าตาถูกทุกขนาดจอไหม
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 360 --height 800   # Android เล็ก
-python scripts/screenshot.py mockup.html _to_delete/screenshots/ --width 430 --height 932   # Pro Max
-
-# 2. ระบบดีไซน์ยังสะอาดอยู่ไหม (ใช้ตัวตรวจของ web-app-design ได้เลย
-#    แต่ต้องส่ง --require เป็น token ชุดของระบบนี้ ไม่ใช่ชุดของเว็บ)
-node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
-  --require "--bg,--surface,--ink,--soft,--faint,--line,--signal,--repair,--hint,--ui,--dis,--text,--mono,--r-tile,--r-card,--app-max,--gutter"
-```
-
-> ข้อยกเว้นเดียวที่ยอมให้มีสีดิบ: `<meta name="theme-color">` ใน `index.html` —
-> เบราว์เซอร์อ่าน meta ก่อน CSS โหลด จึงใช้ `var()` ไม่ได้
-
-เปิดภาพดูจริง ตรวจ:
-
-- [ ] แถบบน/ล่างไม่โดนรอยบากหรือ home indicator ทับ
-- [ ] เลื่อนแล้วแถบบน/ล่างอยู่นิ่ง ไม่เลื่อนตาม
-- [ ] จอ 360px (Android เล็ก) ป้ายแท็บไม่ตัดคำ และไทล์ไม่ล้น
-- [ ] ปุ่มทุกอันแตะได้จริง ≥ 44×44 pt (iOS) · 48×48 dp (Android)
-- [ ] ข้อความไทยไม่ล้นปุ่ม วรรณยุกต์ไม่ชนสระ
-- [ ] คอนทราสต์ ≥ 4.5:1 (`--faint` บนพื้นขาวคือจุดที่เฉียดสุด — ใช้กับข้อความประกอบเท่านั้น)
-- [ ] มี empty state (`.blank`) ทุกที่ที่รายการอาจว่าง
-- [ ] สลับทุกธีมที่แอปมี (เช่น สว่าง/มืด · ธีมเรียบ/ไล่สี) แล้วไม่มีข้อความกลืนพื้น
-- [ ] ทุกช่องทางป้อนข้อมูลที่พึ่ง hardware มีทางเลือกสำรอง (เช่น แอปพูดมีทาง "พิมพ์แทนพูด" ส่วนแอปที่ใช้ sensor ให้ใช้กล้องหรือป้อนเองได้)
-- [ ] สิทธิ์ที่ถูกปฏิเสธและ hardware ที่ไม่มี มีหน้าจอบอกพร้อมทางไปต่อ
+ถ่ายภาพ 3 ขนาด (390×844 · 360×800 · 430×932) และรันตัวตรวจ token ของ `web-app-design` ด้วย `--require` ชุดของระบบนี้ (คำสั่งและเช็กลิสต์ 10 ข้ออยู่ใน [`references/review.md`](references/review.md)) แล้วเปิดภาพดูจริง · สีดิบที่ยอมได้มีแค่ `<meta name="theme-color">`
 
 ---
 
 ## 8 · Anti-patterns
 
-- ❌ **`100vh`** — ใช้ `100dvh`
-- ❌ **ลืม `env(safe-area-inset-*)`** หรือลืม `viewport-fit=cover`
-- ❌ **ยัด 6+ แท็บในแถบล่าง** — 3–5 พอ ที่เหลือไปอยู่ในหน้า "เพิ่มเติม"
-- ❌ **modal เล็ก ๆ สำหรับงานที่ใช้เวลานาน** — ใช้ `.overlay` เต็มจอ
-- ❌ **ยุบฟอนต์เหลือตระกูลเดียวในแอปที่มีเนื้อหาให้อ่าน** — ผู้ใช้แยกเนื้อหาออกจาก chrome (แถบ ปุ่ม เมนูของแอป) ไม่ออก
-- ❌ **ไล่สีหลังข้อความยาว** — ไล่สีอยู่บน chrome และปุ่มหลักเท่านั้น
-- ❌ **พึ่งสีอย่างเดียวบอกความหมาย** — `del`/`ins` มีรูปแบบขีดของตัวเองอยู่แล้ว
-- ❌ **ไม่มี `:active` feedback** — มือถือไม่มี hover ถ้ากดแล้วไม่ขยับ ผู้ใช้จะกดซ้ำ
-- ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดูที่ขนาดจริง**
+ข้อห้าม 9 ข้อ (`100vh` · ลืม safe-area · แท็บ 6+ · modal เล็กสำหรับงานยาว · ยุบฟอนต์ · ไล่สีหลังข้อความยาว · สีอย่างเดียว · ไม่มี `:active` · ไม่เรนเดอร์ดู) อยู่ใน [`references/review.md`](references/review.md)
 
 ---
 
 ## 9 · ข้อจำกัดที่ต้องรู้
 
-- ค่าทั้งหมด **ตรวจแล้วบน HTML/CSS** — ตาราง React Native ใน `references/tokens.md`
-  **ยังไม่ได้ build ทดสอบ** ส่วน Flutter ใช้แนวข้อ 4.1 ทำแอปจริงแล้ว 1 ตัว (Lumio)
-  ค่าโอนได้ตรง ๆ แต่ให้ดูหน้าจอจริงบนเครื่องอีกรอบ
-- ฟอนต์โหลดจาก Google Fonts ใน mockup — แอปจริงควร bundle ไฟล์ฟอนต์ไปเลย
-  ไม่งั้นเปิดครั้งแรกตอนเน็ตช้าจะเห็นฟอนต์ระบบก่อนแล้วค่อยกระตุก
-- `assets/speakgo.css` มีแค่ **โหมดสว่าง** — โหมดมืดต้องเพิ่มชุด token ใหม่ครบทุกตัว
-  (พื้น `--bg`/`--surface` สลับลำดับ และ `--ink` ต้องไม่ใช่ขาวสนิท) แล้วตรวจคอนทราสต์ AA ทุกคู่
+ข้อจำกัด 3 ข้ออยู่ใน [`references/review.md`](references/review.md) — ตาราง React Native ยังไม่ได้ build ทดสอบ · แอปจริงต้อง bundle ฟอนต์ · `speakgo.css` มีแค่โหมดสว่าง
 
 ---
 

@@ -12,7 +12,7 @@
     {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company in one plugin — 39 roles (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 107 skills and 28 slash commands. Industry add-ons are merged in since v2.0.0."
+      "description": "Complete software development company in one plugin — 39 roles (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 110 skills and 29 slash commands. Industry add-ons are merged in since v2.0.0."
     },
     {
       "name": "trading-finance",
@@ -62,7 +62,7 @@
     {
       "name": "dev-learning",
       "source": "./plugins/dev-learning",
-      "description": "Stay-current toolkit for developers — a weekly tech radar over followed libraries and tools, turning papers and long technical articles into working example code, personal learning paths tied to real projects, faster reading of English technical documentation, certification study plans for AWS, Azure, Google Cloud, Kubernetes and Scrum exams, and a scored picker for finishable practice side projects."
+      "description": "Stay-current toolkit for developers — a weekly tech radar over followed libraries and tools, turning papers and long technical articles into working example code, personal learning paths tied to real projects, faster reading of English technical documentation, certification study plans for AWS, Azure, Google Cloud, Kubernetes and Scrum exams, and a scored picker for finishable practice side projects, and thesis and journal-paper writing with verified citations."
     }
   ]
 }

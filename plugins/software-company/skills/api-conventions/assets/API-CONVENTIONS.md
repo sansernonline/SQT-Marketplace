@@ -46,7 +46,7 @@
 
 ## 5 · error
 
-- envelope ตาม RFC 9457 (`type` `title` `status` `detail` `traceId`)
+- envelope ตาม RFC 9457 (`type` `title` `status` `detail` `requestId` · `errors` เมื่อข้อมูลไม่ผ่าน — รูปเต็มตาม `web-service-essentials`)
 - validation error อยู่ในอาเรย์ `errors` แต่ละตัวมี `field` `code` `message`
 - รายการ `code` ที่ใช้ได้: `<รายการ>`
 

@@ -1,6 +1,6 @@
 ---
 name: test-case-template
-description: Use when writing test cases, scenarios or a feature test plan, or turning acceptance criteria into tests. Functional, boundary, negative and edge cases.
+description: Use when writing test cases, scenarios or a feature test plan, or turning acceptance criteria into tests.
 ---
 
 # Test Case Template
@@ -12,9 +12,23 @@ description: Use when writing test cases, scenarios or a feature test plan, or t
 - Building a regression test suite
 - Reviewing test coverage gaps
 
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รายงานข้อบกพร่องที่เจอแล้ว 1 เรื่อง | `bug-report-template` |
+| คัดรายงานบั๊กที่กองอยู่ในกล่องข้อความ | `bug-inbox-triage` |
+| ตัดสินสัดส่วน unit · integration · E2E หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
+
 ## Where test cases live
 
 Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where QA fills in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`. Stories and their AC live in `docs/USER-STORIES.md` — the **Related** line cites those IDs exactly (`US-012, AC2`), so a changed AC there points to the test cases that must change.
+
+**The `.xlsx` workbook** — build it with `scripts/build-test-workbook.py` from one flat table (columns `id, module, fr, title, type, result`, others kept):
+- An **Overview** tab, then **one tab per module**. With `--mockup`, tabs follow the mockup screen order, every row gets a `screen` column, and each tab lists its mockup screens under the title. Use the same topics as the mockup start page (`ui-craft` → `references/mockup-start-page.md`).
+- Overview counts Pass / Fail / Blocked / Not run per tab with formulas. **No "all cases" tab** — a result typed in two places drifts.
+- Header: light brand fill, dark brand text, one brand-colour rule under it (the same table look as `branded-document-design`). Pass `--brand --head-fill --ink` from the project's `doc-theme`.
+- Check: open it in Excel; the Overview totals must equal the source row count.
 
 ## Test Case ID Convention
 
@@ -23,37 +37,19 @@ TC-<MODULE>-<NUMBER>
 Example: TC-LOGIN-001, TC-CHECKOUT-042
 ```
 
-## Test Case Template
+## Output Template
 
-```markdown
-## TC-XXX-NNN: <Short descriptive title>
+Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fill it in. Do not write the outline from memory. One file holds many test cases; the checker finds each `## TC-` block and checks every one.
 
-**Module:** <feature area>
-**Type:** Functional | Boundary | Negative | Integration | Performance | Security
-**Priority:** P1 (critical) | P2 (high) | P3 (medium) | P4 (low)
-**Automation:** Manual | Automated | Candidate
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
-**Preconditions:**
-- ...
-- ...
+  ```bash
+  python ../polished-document-style/scripts/check_outline.py assets/test-case.md <your test-case file>
+  ```
 
-**Test Data:**
-| Field | Value |
-|-------|-------|
-| ...   | ...   |
-
-**Steps:**
-| # | Action | Expected Result |
-|---|--------|----------------|
-| 1 | ...    | ...            |
-| 2 | ...    | ...            |
-| 3 | ...    | ...            |
-
-**Postconditions:**
-- ...
-
-**Related:** US-XXX, AC-X
-```
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
 ## Test Case Categories (Coverage Guide)
 
@@ -155,8 +151,13 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 ```markdown
 ## TC-LOGIN-002: Empty email field
 
+**Module:** Authentication
 **Type:** Negative
 **Priority:** P2
+**Automation:** Automated
+
+**Preconditions:**
+- User is on login page
 
 **Steps:**
 | # | Action                | Expected Result                      |
@@ -165,13 +166,20 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 | 2 | Enter valid password  | Password accepted                    |
 | 3 | Click "Login"         | Error: "Email is required"           |
 | 4 | Verify focus          | Email field gets focus               |
+
+**Related:** US-001, AC2
 ```
 
 ```markdown
 ## TC-LOGIN-003: Account lockout after 5 failed attempts
 
+**Module:** Authentication
 **Type:** Security
 **Priority:** P1
+**Automation:** Candidate
+
+**Preconditions:**
+- User account exists and is not locked
 
 **Steps:**
 | # | Action                              | Expected Result                |
@@ -180,6 +188,8 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 | 2 | Repeat step 1 four more times       | Same error each time          |
 | 3 | Enter valid email + correct password| Error: "Account locked..."    |
 | 4 | Wait 15 minutes                     | Can login successfully        |
+
+**Related:** US-001, AC4
 ```
 
 ## Quality Checklist
@@ -191,6 +201,7 @@ Each test case should:
 - [ ] Be independent (doesn't rely on TC-XXX running first)
 - [ ] Be deterministic (same result every run)
 - [ ] Trace back to a requirement (user story, AC)
+- [ ] `check_outline.py` passes on the whole file
 
 ## Anti-patterns
 

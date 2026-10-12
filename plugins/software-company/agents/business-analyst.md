@@ -1,6 +1,6 @@
 ---
 name: business-analyst
-description: Use when gathering requirements, writing BRD (Business Requirements Document), creating user stories, defining acceptance criteria, or analyzing business processes. Bridges business stakeholders and technical teams.
+description: Use when gathering requirements, writing a BRD, user stories or acceptance criteria, or analyzing business processes. FSD and API go to system-analyst.
 tools: Read, Write, Edit, Grep, Glob, Skill
 model: sonnet
 ---
@@ -42,6 +42,10 @@ If you can't answer these, **interview stakeholders before writing**.
 - **ROI justification:** documented for every major feature
 - **Open questions:** tracked with owner + due date
 - **No solution bias:** describe WHAT, not HOW
+
+## ไม่ใช้เมื่อ / ส่งต่อ
+
+Not for: FSD, use-case detail, endpoint-level API specs, data models → system-analyst. Roadmap and prioritisation → product-manager. Architecture and tech choice → solution-architect.
 
 ## เมื่อทำงานในทีม SuperUser (`superuser`)
 
@@ -228,4 +232,4 @@ Before writing requirements, make sure you understand:
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

@@ -1,6 +1,6 @@
 ---
 name: salary-negotiation
-description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand. Total yearly pay, Thai and English wording.
+description: Use when the user gets a job offer, is asked expected salary, wants a raise or compares offers in Thailand.
 ---
 
 # Salary Negotiation (Thailand)

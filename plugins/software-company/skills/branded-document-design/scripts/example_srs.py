@@ -1,5 +1,5 @@
 """ตัวอย่างเอกสารสั้น ๆ ที่ใช้ทุกองค์ประกอบของ brandkit — ใช้เป็นแบบฝึกหัด/ตรวจสไตล์
-รัน:  python example_srs.py  →  ได้ example_srs.docx
+รัน:  python example_srs.py  →  ได้ example_srs.docx (ปกเข้ม · ต้องมี numpy + pillow)
 """
 from brandkit import BrandDoc
 
@@ -16,6 +16,7 @@ doc.cover(
         ("ผู้จัดทำ", "ทีมพัฒนา Square Tech Solutions"),
     ],
     note="v3.5: เพิ่มไอคอน Apps Track บนหน้าปกและระบุไฟล์แนบ",
+    style="night",              # ปกเข้ม · ไม่ใส่ style = ปกแถบสีแบบเดิม · logo="path.png" ใส่โลโก้มุมซ้ายบน
 )
 
 doc.h1("1. ภาพรวมระบบ")
@@ -33,7 +34,7 @@ doc.table(
      ["ประเภทระบบ", "Web Application (SPA) + รองรับติดตั้งเป็น PWA พร้อม Push Notification"],
      ["การยืนยันตัวตน", "Username / Password (หน้า Sign in ของระบบเอง)"],
      ["ระบบภายนอกที่เชื่อมต่อ", "Git hosting: Gitea (ภายในองค์กร) และ GitHub"]],
-    widths=[2600, 6760],
+    widths=[2600, 7038],
 )
 
 doc.h2("1.1 ผู้ใช้งานและสิทธิ์")

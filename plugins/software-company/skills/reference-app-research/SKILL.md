@@ -1,6 +1,6 @@
 ---
 name: reference-app-research
-description: Use when someone says I want an app like X. Researches that product from official pages, docs, reviews and competitors into one doc with improvements.
+description: Use when someone says I want an app like X. Researches that product and its competitors into one doc.
 ---
 
 # Research แอปต้นแบบ — แกะ feature · UI · UX แล้วหาว่าเราจะทำให้ดีกว่าอย่างไร
@@ -9,6 +9,12 @@ description: Use when someone says I want an app like X. Researches that product
 > ส่วนข้อเสนอปรับปรุงต้องเป็นส่วนที่ยาวและละเอียดที่สุดของเอกสาร
 
 ---
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| เลือกไลบรารี เครื่องมือ หรือโมเดลที่จะหยิบมาใช้ แทนการทำเอง | `prior-art-review` |
 
 ## 1 · ก่อนค้น — ตั้งกรอบให้แคบ
 

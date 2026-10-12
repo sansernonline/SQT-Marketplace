@@ -1,4 +1,4 @@
-> เดิมคือ skill `edge-computing-architecture` ใน plugin `software-company-iot` — รวมเข้า `iot-systems` ใน v2.0.0
+> เดิมชื่อ edge-computing-architecture (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-iot` — รวมเข้า `iot-systems` ใน v2.0.0
 
 **สารบัญ:** 
 

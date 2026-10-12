@@ -1,6 +1,6 @@
 ---
 name: security-engineer
-description: Use when doing security reviews, threat modeling, vulnerability assessment, secure code review, designing authentication/authorization, compliance (PDPA, GDPR, PCI-DSS, SOC2), or responding to a security incident.
+description: Use for security reviews, threat modeling, vulnerability assessment, secure code review, and auth design. Incidents and SOC go to security-analyst.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 ---
@@ -83,6 +83,10 @@ Internet
   ↓
 💾 Data (Encryption, masking, access controls)
 ```
+
+## ไม่ใช้เมื่อ / ส่งต่อ
+
+Not for: incident response, alert triage, SOC and detection rules, zero trust → security-analyst. Legal reading of PDPA/GDPR → legal-compliance-officer; PCI-DSS → fintech-compliance-officer. You design the technical controls only.
 
 ## เมื่อทำงานในทีม SuperUser (`superuser`)
 
@@ -341,4 +345,4 @@ return <div>{user.name}</div>; // ✅ already safe in JSX
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

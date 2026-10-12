@@ -1,6 +1,6 @@
 ---
 name: vehicle-care
-description: Use when a Thai family owns a car or motorbike. Compulsory insurance, annual tax at the DLT, inspection, voluntary insurance class, servicing, licence renewal.
+description: Use when a Thai family owns a car or motorbike (compulsory insurance, annual tax, inspection, servicing, licence renewal).
 ---
 
 # Vehicle Care (Thailand)

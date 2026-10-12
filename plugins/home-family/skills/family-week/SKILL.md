@@ -1,6 +1,6 @@
 ---
 name: family-week
-description: Plan the coming family week — meals and grocery list, school items, elder appointments and medication, pet care — as one shareable table.
+description: Plan the family week — meals, groceries, school items, elder appointments, pet care — in one shareable table.
 argument-hint: <household size and budget> [school, elder, pet notes]
 disable-model-invocation: true
 ---

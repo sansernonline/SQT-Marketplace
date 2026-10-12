@@ -1,6 +1,6 @@
 ---
 name: database-design
-description: Use when designing or changing a database schema (tables, columns, indexes, relations, migrations). Naming, keys, types, constraints, multi-tenancy.
+description: Use when designing or changing a database schema (tables, columns, indexes, relations, migrations).
 ---
 
 # ออกแบบฐานข้อมูล

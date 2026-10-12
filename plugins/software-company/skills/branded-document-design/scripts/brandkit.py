@@ -19,7 +19,7 @@ brandkit.py — ตัวช่วยสร้างเอกสาร Word (.do
     doc.table(["หัวข้อ", "รายละเอียด"],
               [["URL ระบบ", "https://project.eitaccount.cloud"],
                ["ประเภทระบบ", "Web Application (SPA) + PWA"]],
-              widths=[2600, 6760])
+              widths=[2600, 7038])
     doc.callout("tip", "ข้อแนะนำ", "เขียน callout สั้น ๆ 1–3 บรรทัดเท่านั้น")
     doc.save("out.docx")
 
@@ -35,8 +35,8 @@ from docx import Document
 from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_CELL_VERTICAL_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
+from docx.oxml import OxmlElement, parse_xml
+from docx.oxml.ns import nsdecls, qn
 from docx.shared import Cm, Pt, RGBColor
 
 # ---------------------------------------------------------------------------
@@ -69,6 +69,13 @@ TOKENS = {
 # ฟอนต์: Tahoma ปลอดภัยที่สุดสำหรับเอกสารไทย+อังกฤษบน Windows/Word
 # (มีทุกเครื่อง · วรรณยุกต์ไม่ลอย · น้ำหนัก bold อ่านง่าย)
 FONT = "Tahoma"
+# ฟอนต์ช่องละติน (ascii/hAnsi) แยกจากช่องไทย (cs/eastAsia) — ค่าเริ่มต้นเป็นตัวเดียวกัน
+# ถ้าใช้คู่ฟอนต์ เช่น Noto Sans + Noto Sans Thai ให้ตั้ง 2 ค่านี้ แล้วเรียก thai_runs() ก่อน save (ข้อ 2 ของ SKILL.md)
+LATIN_FONT = FONT
+MONO = "Consolas"   # ห้ามใช้ฟอนต์ variable เช่น Cascadia Mono — Word export PDF แล้วตกเป็น Calibri
+
+# ความกว้างเนื้อหา A4 ขอบซ้าย/ขวา 2 ซม. = 17 ซม. = 9638 twips (แนวนอน 25.7 ซม. = 14570)
+BODY_TWIPS = 9638
 
 # ขนาด (pt)
 SIZE = {
@@ -76,6 +83,11 @@ SIZE = {
     "h1": 16, "h2": 12.5, "h3": 11.5,
     "body": 11, "table": 11, "small": 9, "caption": 8.5, "footer": 9,
 }
+
+# ปกเข้ม (style="night")
+NIGHT_BASE, NIGHT_RULE = "1C1C22", "3A3A48"
+NIGHT_LABEL, NIGHT_VALUE = "CFCCDE", "F4F3F8"   # ตัวเล็กบนพื้นเข้ม: ≥ 8.5pt และสีนี้ขึ้นไป
+NIGHT_TITLE_PT, NIGHT_SMALL_PT = 32, 8.5
 
 CALLOUT_KINDS = {
     #  key   : (สี bg, สีขอบซ้าย, สีตัวอักษรหัวข้อ, สัญลักษณ์)
@@ -100,18 +112,19 @@ def _el(tag, **attrs):
 
 
 def style_run(run, *, size=None, color=None, bold=False, italic=False,
-              font=FONT, mono=False):
+              font=None, mono=False):
     """ตั้งฟอนต์ให้ครบทั้ง latin / complex-script — จำเป็นสำหรับภาษาไทย
     ถ้าตั้งแต่ run.font.size อย่างเดียว ตัวอักษรไทยจะไม่เปลี่ยนขนาดตาม
     เพราะ Word ถือว่าไทยเป็น complex script (ต้องตั้ง szCs / bCs / iCs ด้วย)"""
-    name = "Consolas" if mono else font
-    run.font.name = name
+    thai = font or FONT
+    latin = MONO if mono else (font or LATIN_FONT)
+    run.font.name = latin
     rpr = run._r.get_or_add_rPr()
     rfonts = rpr.find(qn("w:rFonts"))
     if rfonts is None:
         rfonts = _el("w:rFonts")
         rpr.insert(0, rfonts)
-    for a in ("ascii", "hAnsi", "cs", "eastAsia"):
+    for a, name in (("ascii", latin), ("hAnsi", latin), ("cs", thai), ("eastAsia", thai)):
         rfonts.set(qn("w:" + a), name)
     if size is not None:
         half = str(int(round(size * 2)))
@@ -200,6 +213,17 @@ def fixed_widths(table, widths):
                 row.cells[ci].width = Pt(w / 20)
 
 
+def row_borders(table, color="line", size=4):
+    """เส้นแนวนอนบางระหว่างแถว ไม่มีเส้นตั้งและไม่มีเส้นกรอบบน"""
+    borders = _el("w:tblBorders")
+    for edge in ("top", "left", "bottom", "right", "insideH", "insideV"):
+        if edge in ("bottom", "insideH"):
+            borders.append(_el("w:" + edge, val="single", sz=size, space=0, color=TOKENS.get(color, color)))
+        else:
+            borders.append(_el("w:" + edge, val="none", sz=0, space=0, color="auto"))
+    table._tbl.tblPr.append(borders)
+
+
 def no_borders(table):
     tblpr = table._tbl.tblPr
     borders = _el("w:tblBorders")
@@ -226,6 +250,59 @@ def repeat_header(row):
 def keep_with_next(paragraph):
     """กันหัวข้อค้างท้ายหน้าโดยที่เนื้อหาไปอยู่หน้าถัดไป"""
     paragraph.paragraph_format.keep_with_next = True
+
+
+def cell_border(cell, edge, color=None, size=4):
+    """เส้นขอบ 1 ด้านของเซลล์ (หน่วย 1/8 pt) · color=None = ไม่มีเส้นด้านนั้น"""
+    tcpr = cell._tc.get_or_add_tcPr()
+    borders = tcpr.find(qn("w:tcBorders"))
+    if borders is None:
+        borders = _el("w:tcBorders")
+        tcpr.append(borders)
+    if color is None:
+        borders.append(_el("w:" + edge, val="nil"))
+    else:
+        borders.append(_el("w:" + edge, val="single", sz=size, space=0, color=TOKENS.get(color, color)))
+
+
+def mix(color, other="FFFFFF", amount=0.5):
+    """ผสมสี `color` เข้ากับ `other` (amount = สัดส่วนของ other) — ใช้ทำสีอ่อน/เข้มจาก palette"""
+    a, b = TOKENS.get(color, color), TOKENS.get(other, other)
+    return "".join("%02X" % round(int(a[i:i + 2], 16) * (1 - amount) + int(b[i:i + 2], 16) * amount)
+                   for i in (0, 2, 4))
+
+
+# ลำดับซ้อนภาพบนปกเข้ม — เลขแบบที่ Word ใช้ (Word จัดเลขน้อย ๆ ใหม่ตอนบันทึก)
+Z_BG, Z_LINE, Z_LOGO = 251658240, 251659264, 251660288
+
+
+def anchor_picture(paragraph, image, x_cm, y_cm, w_cm, h_cm, z, rel_v="page"):
+    """ภาพลอยหลังข้อความ ยึดกับย่อหน้า (ไม่ใช่ header — Word แสดงภาพใน header จางลง)
+    x อิงขอบหน้ากระดาษ · y อิงขอบหน้า (rel_v="page") หรือบนของย่อหน้า (rel_v="paragraph")"""
+    run = paragraph.add_run()
+    run.add_picture(image, width=Cm(w_cm), height=Cm(h_cm))
+    drawing = run._r.find(qn("w:drawing"))
+    inline = drawing.find(qn("wp:inline"))
+    inline.find(qn("wp:docPr")).set("descr", "decor")
+    anchor = parse_xml(
+        f'<wp:anchor {nsdecls("wp")} distT="0" distB="0" distL="0" distR="0" simplePos="0" '
+        f'relativeHeight="{z}" behindDoc="1" locked="1" layoutInCell="1" allowOverlap="1">'
+        f'<wp:simplePos x="0" y="0"/>'
+        f'<wp:positionH relativeFrom="page"><wp:posOffset>{int(x_cm * 360000)}</wp:posOffset></wp:positionH>'
+        f'<wp:positionV relativeFrom="{rel_v}"><wp:posOffset>{int(y_cm * 360000)}</wp:posOffset></wp:positionV>'
+        f'</wp:anchor>')
+    anchor.append(inline.find(qn("wp:extent")))
+    anchor.append(parse_xml(f'<wp:effectExtent {nsdecls("wp")} l="0" t="0" r="0" b="0"/>'))
+    anchor.append(parse_xml(f'<wp:wrapNone {nsdecls("wp")}/>'))
+    anchor.append(inline.find(qn("wp:docPr")))
+    for child in list(inline):
+        if child.tag in (qn("wp:cNvGraphicFramePr"), qn("a:graphic")):
+            anchor.append(child)
+    drawing.remove(inline)
+    drawing.append(anchor)
+    paragraph._p.remove(run._r)          # ต้องอยู่ต้นย่อหน้า เพื่อให้ภาพตกหน้าปก
+    ppr = paragraph._p.find(qn("w:pPr"))
+    paragraph._p.insert(1 if ppr is not None else 0, run._r)
 
 
 def add_field(paragraph, instr, **run_kwargs):
@@ -277,13 +354,13 @@ class BrandDoc:
 
     def _setup_normal_style(self):
         st = self.doc.styles["Normal"]
-        st.font.name = FONT
+        st.font.name = LATIN_FONT
         st.font.size = Pt(SIZE["body"])
         st.font.color.rgb = RGBColor.from_string(TOKENS["text_body"])
         rpr = st.element.get_or_add_rPr()
         rfonts = rpr.get_or_add_rFonts()
         for a in ("ascii", "hAnsi", "cs", "eastAsia"):
-            rfonts.set(qn("w:" + a), FONT)
+            rfonts.set(qn("w:" + a), LATIN_FONT if a in ("ascii", "hAnsi") else FONT)
         rpr.append(_el("w:szCs", val=str(int(SIZE["body"] * 2))))
         pf = st.paragraph_format
         pf.space_after = Pt(6)
@@ -307,17 +384,24 @@ class BrandDoc:
 
     # -- บล็อกระดับหน้า ----------------------------------------------------
     def cover(self, title, subtitle=None, meta=None, note=None, logo=None,
-              logo_width_cm=2.6, eyebrow=None, meta_rows=None,
-              top_space_pt=24, page_break=True):
-        """หน้าปกแบบมีแถบสี: eyebrow + ชื่อเอกสาร + ชื่อระบบ บนแถบสีแบรนด์ (ตัวอักษรขาว)
+              logo_width_cm=None, eyebrow=None, meta_rows=None,
+              top_space_pt=24, page_break=True, style="light", art_colors=None):
+        """style="light" (ค่าเริ่มต้น) = ปกแถบสี · style="night" = ปกเข้มเต็มหน้า (ดู _cover_night)
+        logo_width_cm: light 2.6 ซม. · night 4.6 ซม.
+
+        ปกแบบ light — หน้าปกแบบมีแถบสี: eyebrow + ชื่อเอกสาร + ชื่อระบบ บนแถบสีแบรนด์ (ตัวอักษรขาว)
         แล้วกล่อง metadata (เวอร์ชัน/วันที่/ผู้จัดทำ/สถานะ) ช่วงล่างของหน้า
         meta_rows = [("เวอร์ชัน", "3.5"), ("ปรับปรุง", "19 ก.ค. 2026"), ...]
         ถ้าไม่ส่ง meta_rows จะ fallback ไปใช้บรรทัด meta เดิม"""
+        if style == "night":
+            return self._cover_night(title, subtitle, meta, note, logo, logo_width_cm or 4.6,
+                                     eyebrow, meta_rows, page_break, art_colors)
+        logo_width_cm = logo_width_cm or 2.6
         self._spacer(10)
 
         # --- แถบสีหัวปก ---
         band = self.doc.add_table(rows=1, cols=1)
-        fixed_widths(band, [9360]); no_borders(band)
+        fixed_widths(band, [BODY_TWIPS]); no_borders(band)
         cell = band.rows[0].cells[0]
         shade(cell, "brand")
         cell_margins(band, top=260, left=340, bottom=300, right=340)
@@ -367,8 +451,122 @@ class BrandDoc:
             style_run(pn.add_run(note), size=SIZE["cover_note"],
                       color="text_muted", italic=True)
         if page_break:
-            self.doc.add_page_break()
+            self._break_after_last()
         return self
+
+    def _cover_night(self, title, subtitle, meta, note, logo, logo_width_cm, eyebrow, meta_rows,
+                     page_break, art_colors):
+        """ปกเข้มเต็มหน้า: พื้นเทาเข้ม #1C1C22 + แสงจางสีแบรนด์ · โลโก้ (ถ้ามี) เล็กมุมซ้ายบน
+        ชื่อเอกสารชิดใต้โลโก้ · เส้นแสงใต้ชื่อ · ตารางข้อมูลค่อนไปท้ายหน้า
+        art_colors = (สี 1, สี 2, สี 3) ของเส้นแสงและแสงพื้น · ค่าเริ่มต้นมาจาก brand_2 → brand → brand อ่อน
+        ต้องมี numpy + pillow (cover_art.py อยู่โฟลเดอร์เดียวกับไฟล์นี้)"""
+        import math
+        import cover_art
+
+        sec = self.doc.sections[0]
+        sec.different_first_page_header_footer = True      # ปกไม่มี footer
+        top, right, bottom, left = self.margins_cm
+        text_w = sec.page_width.cm - left - right
+        body_pt, col_pt = (sec.page_height.cm - top - bottom) * 28.35, text_w * 28.35
+        total = int(text_w * 567)
+        c1, c2, c3 = art_colors or (TOKENS["brand_2"], TOKENS["brand"], mix("brand", "FFFFFF", 0.45))
+
+        logo_h = 0
+        if logo:
+            from PIL import Image
+            with Image.open(logo) as im:
+                logo_h = logo_width_cm * im.height / im.width
+        lead = logo_h * 28.35 + 27 if logo else 0
+
+        size = NIGHT_TITLE_PT
+        if math.ceil(len(title) * 0.58 * size / col_pt) > 2:
+            size = NIGHT_TITLE_PT - 6
+        title_lines = math.ceil(len(title) * 0.58 * size / col_pt)
+
+        first = None
+        if eyebrow:
+            first = self.para(None, space_after=6)
+            r = style_run(first.add_run(eyebrow.upper()), size=SIZE["cover_meta"],
+                          color=mix(c1, "FFFFFF", 0.45), bold=True)
+            r._r.get_or_add_rPr().append(_el("w:spacing", val=40))
+            order_rpr(r._r.rPr)
+        pt_ = self.para(None, space_after=4)
+        pt_.paragraph_format.line_spacing = 1.0
+        style_run(pt_.add_run(title), size=size, color="FFFFFF", bold=True)
+        first = first or pt_
+        first.paragraph_format.space_before = Pt(lead)
+        if subtitle:
+            ps = self.para(None, space_after=12)
+            style_run(ps.add_run(subtitle), size=SIZE["cover_subtitle"], color=mix(c2, "FFFFFF", 0.8))
+
+        rule = self.para(None, space_after=0)
+        rule.paragraph_format.space_before = Pt(0 if subtitle else 8)
+        rule.paragraph_format.line_spacing = Pt(6)
+        line, pad = cover_art.light_line(text_w, (c1, c2, c3))
+        anchor_picture(rule, line, left - pad, 0.106 - cover_art.LINE_HEIGHT_CM / 2,
+                       text_w + 2 * pad, cover_art.LINE_HEIGHT_CM, Z_LINE, rel_v="paragraph")
+        anchor_picture(first, cover_art.night_background(c2, c3, NIGHT_BASE), 0, 0,
+                       sec.page_width.cm, sec.page_height.cm, Z_BG)
+        if logo:
+            anchor_picture(first, logo, left, top, logo_width_cm, logo_h, Z_LOGO)
+
+        rows = list(meta_rows or ([("รายละเอียด", meta)] if meta else []))
+        key = [r for r in rows if len(str(r[1])) <= 18][:4]
+        rest = [r for r in rows if r not in key]
+        used = lead + (SIZE["cover_meta"] * 1.6 + 6 if eyebrow else 0) + title_lines * size * 1.4 + 4
+        used += (SIZE["cover_subtitle"] * 1.6 + 12 if subtitle else 8) + 6
+        used += (50 if key else 0) + 8 + len(rest) * 14 + (len(str(note or "")) * 4.7 / col_pt + 1) * 14
+        gap = self._spacer(1)
+        gap.paragraph_format.space_before = Pt(max(10, body_pt - used - 15))
+
+        if key:
+            grid = self.doc.add_table(rows=2, cols=len(key))
+            self._top_rule(grid, NIGHT_RULE)
+            cell_margins(grid, 110, 0, 20, 0)
+            fixed_widths(grid, [total // len(key)] * len(key))
+            for i, (k, v) in enumerate(key):
+                lp = grid.cell(0, i).paragraphs[0]
+                lp.paragraph_format.space_after = Pt(0)
+                style_run(lp.add_run(str(k).upper()), size=NIGHT_SMALL_PT, color=NIGHT_LABEL, bold=True)
+                vp = grid.cell(1, i).paragraphs[0]
+                vp.paragraph_format.space_after = Pt(0)
+                style_run(vp.add_run(str(v)), size=11, color=NIGHT_VALUE, bold=True)
+        if rest:
+            self._spacer(8)
+            mt = self.doc.add_table(rows=len(rest), cols=2)
+            no_borders(mt)
+            cell_margins(mt, 18, 0, 18, 0)
+            fixed_widths(mt, [2409, total - 2409])
+            for row, (k, v) in zip(mt.rows, rest):
+                for cell, text, color in ((row.cells[0], k, NIGHT_LABEL), (row.cells[1], v, NIGHT_VALUE)):
+                    cell.paragraphs[0].paragraph_format.space_after = Pt(0)
+                    style_run(cell.paragraphs[0].add_run(str(text)), size=9, color=color)
+        if note:
+            pn = self.doc.add_paragraph()
+            pn.paragraph_format.space_before = Pt(10)
+            style_run(pn.add_run(note), size=NIGHT_SMALL_PT, color=NIGHT_LABEL)
+        else:
+            self._spacer(1)
+        if page_break:
+            self._break_after_last()
+        return self
+
+    @staticmethod
+    def _top_rule(table, color):
+        no_borders(table)
+        top = table._tbl.tblPr.find(qn("w:tblBorders")).find(qn("w:top"))
+        for k, v in (("val", "single"), ("sz", 6), ("color", color)):
+            top.set(qn("w:" + k), str(v))
+
+    def _break_after_last(self):
+        """ขึ้นหน้าใหม่ต่อท้ายย่อหน้าสุดท้ายของปก แทนการเพิ่มย่อหน้าตัวแบ่งหน้าใหม่
+        เพราะถ้าปกเต็มหน้าพอดี ย่อหน้าตัวแบ่งจะตกไปหน้า 2 แล้วได้หน้าว่าง 1 หน้า"""
+        body = self.doc.element.body
+        kids = [k for k in body if k.tag != qn("w:sectPr")]
+        if kids and kids[-1].tag == qn("w:p"):
+            r = _el("w:r"); r.append(_el("w:br", **{"type": "page"})); kids[-1].append(r)
+        else:
+            self.doc.add_page_break()
 
     def toc(self, heading="สารบัญ", levels="1-3"):
         """แทรก field สารบัญ — ผู้ใช้กด F9 ใน Word เพื่ออัปเดต
@@ -467,21 +665,27 @@ class BrandDoc:
 
     # -- ตาราง --------------------------------------------------------------
     def table(self, headers, rows, widths=None, zebra=False, align=None,
-              first_col_bold=False, size=None):
-        """ตารางมาตรฐาน: หัวพื้นฟ้าอ่อน ตัวหนังสือน้ำเงินเข้ม เส้นเทาบาง
-        widths — รายการความกว้างหน่วย twips (รวมกันประมาณ 9360 สำหรับ A4 margin 2cm)
+              first_col_bold=False, size=None, header_style="tint"):
+        """ตารางมาตรฐาน: หัวพื้นอ่อนของสีแบรนด์ (brand ผสมขาว 80%) ตัวหนา brand_deep
+        ไม่มีเส้นบน มีเส้น brand หนา 1.5pt ใต้แถวหัวเส้นเดียว เส้นแถวเทาบาง
+        header_style="classic" = แบบเดิม (หัว brand_tint · กริดเทาบางครบทุกเส้น)
+        widths — รายการความกว้างหน่วย twips (รวมกัน = BODY_TWIPS 9638 สำหรับ A4 ขอบ 2 ซม.)
         align  — รายการ 'left'|'center'|'right' ต่อคอลัมน์"""
         size = size or SIZE["table"]
         t = self.doc.add_table(rows=1, cols=len(headers))
         t.autofit = widths is None
-        set_borders(t)
+        classic = header_style == "classic"
+        set_borders(t) if classic else row_borders(t)
         cell_margins(t)
 
         hdr = t.rows[0]
         repeat_header(hdr)
         for i, text in enumerate(headers):
             c = hdr.cells[i]
-            shade(c, "brand_tint")
+            shade(c, "brand_tint" if classic else mix("brand", "FFFFFF", 0.8))
+            if not classic:
+                cell_border(c, "top")
+                cell_border(c, "bottom", "brand", 12)
             vcenter(c)
             p = c.paragraphs[0]
             p.paragraph_format.space_after = Pt(0)
@@ -508,7 +712,7 @@ class BrandDoc:
         self._spacer(5)
         return t
 
-    def kpi_row(self, items, width_twips=9360):
+    def kpi_row(self, items, width_twips=BODY_TWIPS):
         """แถบตัวเลขสรุปแนวนอน — items = [("19", "โครงการทั้งหมด"), ...]"""
         t = self.doc.add_table(rows=1, cols=len(items))
         no_borders(t)
@@ -543,7 +747,7 @@ class BrandDoc:
         p.paragraph_format.space_after = Pt(0)
         style_run(p.add_run(f"{icon} {title}  "), size=SIZE["body"], color=fg, bold=True)
         style_run(p.add_run(body), size=SIZE["body"], color="text_body")
-        fixed_widths(t, [9360])
+        fixed_widths(t, [BODY_TWIPS])
         self._spacer(6)
         return t
 
@@ -620,3 +824,54 @@ def use_brand(**overrides):
         use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")"""
     TOKENS.update({k: v.lstrip("#").upper() for k, v in overrides.items()})
     return TOKENS
+
+
+# ---------------------------------------------------------------------------
+# ฟอนต์คู่ (ละติน + ไทยคนละตัว) — Word ไม่ใช้ช่อง cs กับตัวอักษรไทยเสมอ
+# ---------------------------------------------------------------------------
+import copy as _copy
+import re as _re
+
+_THAI = _re.compile(r"([฀-๿]+)")
+
+
+def thai_runs(root):
+    """แยกข้อความไทยในทุก run ออกเป็น run ของตัวเอง แล้วตั้งทั้ง 4 ช่องเป็น FONT (ฟอนต์ไทย)
+    เหตุ: Word วาดไทยด้วยฟอนต์ช่องละตินถ้าฟอนต์นั้นมีตัวไทย ถ้าไม่มีจะตกไป Browallia New
+    การตั้ง cs อย่างเดียวจึงไม่พอเมื่อ LATIN_FONT ไม่ใช่ฟอนต์ไทย
+    ใช้: thai_runs(doc.element.body) และกับ header/footer ทุกส่วน ก่อน doc.save()"""
+    W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+    for r in list(root.iter(W + "r")):
+        kids = [k for k in r if k.tag != W + "rPr"]
+        if len(kids) != 1 or kids[0].tag != W + "t" or not _THAI.search(kids[0].text or ""):
+            continue
+        rpr = r.find(W + "rPr")
+        parts = [x for x in _THAI.split(kids[0].text) if x]
+        parent, idx = r.getparent(), r.getparent().index(r)
+        for j, part in enumerate(parts):
+            nr = _el("w:r")
+            npr = _copy.deepcopy(rpr) if rpr is not None else _el("w:rPr")
+            if _THAI.fullmatch(part):
+                rf = npr.find(W + "rFonts")
+                if rf is None:
+                    rf = _el("w:rFonts")
+                    npr.insert(0, rf)
+                for a in ("ascii", "hAnsi", "cs", "eastAsia"):
+                    rf.set(W + a, FONT)
+                order_rpr(npr)
+            nr.append(npr)
+            t = _el("w:t")
+            t.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+            t.text = part
+            nr.append(t)
+            parent.insert(idx + j, nr)
+        parent.remove(r)
+
+
+def embed_fonts(doc):
+    """ให้ Word ฝังฟอนต์ไว้ในไฟล์ตอนบันทึก — ใช้เมื่อฟอนต์ไม่ได้มีทุกเครื่อง (เช่น Noto)
+    และสัญญาอนุญาตยอมให้ฝัง (OFL ยอม) · ไฟล์ใหญ่ขึ้นหลาย MB"""
+    settings = doc.settings.element
+    settings.insert(0, _el("w:saveSubsetFonts"))
+    settings.insert(0, _el("w:embedTrueTypeFonts"))
+

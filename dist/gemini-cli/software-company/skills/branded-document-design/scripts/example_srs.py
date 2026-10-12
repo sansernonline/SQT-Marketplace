@@ -33,7 +33,7 @@ doc.table(
      ["ประเภทระบบ", "Web Application (SPA) + รองรับติดตั้งเป็น PWA พร้อม Push Notification"],
      ["การยืนยันตัวตน", "Username / Password (หน้า Sign in ของระบบเอง)"],
      ["ระบบภายนอกที่เชื่อมต่อ", "Git hosting: Gitea (ภายในองค์กร) และ GitHub"]],
-    widths=[2600, 6760],
+    widths=[2600, 7038],
 )
 
 doc.h2("1.1 ผู้ใช้งานและสิทธิ์")

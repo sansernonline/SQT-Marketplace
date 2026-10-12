@@ -145,6 +145,8 @@ node scripts/build/build-targets.mjs
 | `dist/claude-web/` | `software-company.zip` — plugin หลักทั้งโฟลเดอร์ตามเดิม ([วิธีอัปโหลด](../docs/INSTALL.md#claudeai--อัปโหลด-software-companyzip)) | ← | ← |
 | `dist/codex/` | คัดลอกไป `.agents/skills/` | `.codex/agents/<name>.toml` | แปลงเป็น skill (Codex เลิกใช้ custom prompt) · `$ARGUMENTS` → ข้อความบอกให้ใช้สิ่งที่ผู้ใช้ระบุ |
 | `dist/gemini-cli/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง | `commands/<name>.toml` · `$ARGUMENTS` → `{{args}}` |
+| `dist/kimi/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง · ขึ้นต้นด้วย `${base_prompt}` | แปลงเป็น skill ที่ตั้ง `disableModelInvocation: true` · `$ARGUMENTS` คงไว้ |
+| `dist/kimi/` | คัดลอกไป `skills/` | `agents/<name>.md` ตัด `tools:` `model:` ทิ้ง · ขึ้นต้นด้วย `${base_prompt}` | แปลงเป็น skill ที่ตั้ง `disableModelInvocation: true` · `$ARGUMENTS` คงไว้ |
 | `dist/chat-web/` | รวมเป็นไฟล์ความรู้ไม่เกิน 10 ไฟล์ต่อบทบาท | `instructions.md` · ถ้าเกิน 8000 ตัวอักษรย้ายไป `knowledge/00-role.md` | ไม่มี (หน้าเว็บไม่มี slash command) |
 
 skill ที่บทบาทหนึ่งได้รับคือชื่อ skill ที่เขียนใน backtick ในไฟล์ agent นั้น

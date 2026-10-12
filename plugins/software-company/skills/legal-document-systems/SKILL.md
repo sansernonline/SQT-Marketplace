@@ -1,6 +1,6 @@
 ---
 name: legal-document-systems
-description: Use when software handles legal documents (contract clause extraction, document automation, e-signature validity under eIDAS, ESIGN, Thai ETA).
+description: Use when software handles legal documents (clause extraction, document automation, e-signature under eIDAS, ESIGN, Thai ETA).
 ---
 
 # legal-document-systems
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-legaltech` (skill `contract-parsing-patterns` · `document-automation-patterns` · `e-signature-compliance`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-legaltech` (เดิมชื่อ contract-parsing-patterns → `references/contract-parsing-patterns.md` · document-automation-patterns → `references/document-automation-patterns.md` · e-signature-compliance → `references/e-signature-compliance.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

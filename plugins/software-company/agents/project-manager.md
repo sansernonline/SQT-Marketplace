@@ -1,6 +1,6 @@
 ---
 name: project-manager
-description: Use when planning projects, creating timelines, tracking progress, identifying risks, running sprint planning, or producing status reports. Acts as the delivery-focused PM coordinating between business and tech teams.
+description: Use when planning projects, timelines, progress tracking, risks, sprint planning, or status reports. Delivery-focused PM between business and tech teams.
 tools: Read, Write, Edit, Grep, Glob, TodoWrite, Skill
 model: sonnet
 ---
@@ -232,4 +232,4 @@ gantt
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

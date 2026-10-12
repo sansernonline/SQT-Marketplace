@@ -1,6 +1,6 @@
 ---
 name: brief-to-image
-description: Use when about to generate an AI image or prompts keep missing. Writes a brief and prompt (subject, composition, lens, light, style, palette, negatives).
+description: Use when about to generate an AI image or prompts keep missing. Writes the brief and the prompt.
 ---
 
 # Brief to Image

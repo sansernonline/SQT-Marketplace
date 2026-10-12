@@ -1,6 +1,6 @@
 ---
 name: subscriptions
-description: Audit recurring charges from bank and credit-card statements — find every subscription, build a cost-per-use table, decide cancel, downgrade, rotate or keep, and give the exact cancellation steps plus trial-end reminders.
+description: Audit recurring charges from statements — cost per use, cancel, downgrade or keep, exact cancel steps, trial-end reminders.
 argument-hint: <statement files or folder> [--months 3|12]
 disable-model-invocation: true
 ---

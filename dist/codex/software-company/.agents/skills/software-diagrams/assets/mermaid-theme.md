@@ -110,6 +110,7 @@ classDef store fill:#FFFFFF,stroke:<LINE>,color:<TEXT>
 ตอบคำถาม *"ข้างในระบบมีอะไรบ้าง แต่ละตัวคุยกันด้วยอะไร"*
 
 ```mermaid
+%%{init: {'theme':'base','fontFamily':'Tahoma, Arial, sans-serif','themeVariables':{'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'#333B4A','primaryBorderColor':'#C6CCD8','lineColor':'#8A93A3','secondaryColor':'#EDF1FB','tertiaryColor':'#F6F7FB','clusterBkg':'#F8F9FC','clusterBorder':'#E4E7EE','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#C6CCD8','actorTextColor':'#333B4A','signalColor':'#8A93A3','signalTextColor':'#414957','noteBkgColor':'#FFF8E1','noteBorderColor':'#E8D48B','labelBoxBkgColor':'#EDF1FB','labelBoxBorderColor':'#C6CCD8','altBackground':'#F8F9FC'},'flowchart':{'curve':'basis','nodeSpacing':40,'rankSpacing':50},'sequence':{'mirrorActors':false,'actorMargin':60}}}%%
 flowchart TB
   classDef focus fill:#EDF1FB,stroke:#2A78D6,stroke-width:1.5px,color:#2A4C86
   classDef ext fill:#F6F7FB,stroke:#C6CCD8,color:#7D8492
@@ -140,6 +141,7 @@ flowchart TB
 ตอบคำถาม *"กดปุ่มนี้แล้วเกิดอะไรขึ้นบ้าง ตามลำดับ"*
 
 ```mermaid
+%%{init: {'theme':'base','fontFamily':'Tahoma, Arial, sans-serif','themeVariables':{'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'#333B4A','primaryBorderColor':'#C6CCD8','lineColor':'#8A93A3','secondaryColor':'#EDF1FB','tertiaryColor':'#F6F7FB','clusterBkg':'#F8F9FC','clusterBorder':'#E4E7EE','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#C6CCD8','actorTextColor':'#333B4A','signalColor':'#8A93A3','signalTextColor':'#414957','noteBkgColor':'#FFF8E1','noteBorderColor':'#E8D48B','labelBoxBkgColor':'#EDF1FB','labelBoxBorderColor':'#C6CCD8','altBackground':'#F8F9FC'},'flowchart':{'curve':'basis','nodeSpacing':40,'rankSpacing':50},'sequence':{'mirrorActors':false,'actorMargin':60}}}%%
 sequenceDiagram
   autonumber
   actor U as ผู้ใช้
@@ -177,6 +179,7 @@ sequenceDiagram
 ตอบคำถาม *"เอกสารนี้เปลี่ยนสถานะยังไงได้บ้าง"*
 
 ```mermaid
+%%{init: {'theme':'base','fontFamily':'Tahoma, Arial, sans-serif','themeVariables':{'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'#333B4A','primaryBorderColor':'#C6CCD8','lineColor':'#8A93A3','secondaryColor':'#EDF1FB','tertiaryColor':'#F6F7FB','clusterBkg':'#F8F9FC','clusterBorder':'#E4E7EE','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#C6CCD8','actorTextColor':'#333B4A','signalColor':'#8A93A3','signalTextColor':'#414957','noteBkgColor':'#FFF8E1','noteBorderColor':'#E8D48B','labelBoxBkgColor':'#EDF1FB','labelBoxBorderColor':'#C6CCD8','altBackground':'#F8F9FC'},'flowchart':{'curve':'basis','nodeSpacing':40,'rankSpacing':50},'sequence':{'mirrorActors':false,'actorMargin':60}}}%%
 stateDiagram-v2
   direction LR
   [*] --> ร่าง
@@ -199,6 +202,7 @@ stateDiagram-v2
 ตอบคำถาม *"ตารางไหนเชื่อมกับตารางไหน"*
 
 ```mermaid
+%%{init: {'theme':'base','fontFamily':'Tahoma, Arial, sans-serif','themeVariables':{'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'#333B4A','primaryBorderColor':'#C6CCD8','lineColor':'#8A93A3','secondaryColor':'#EDF1FB','tertiaryColor':'#F6F7FB','clusterBkg':'#F8F9FC','clusterBorder':'#E4E7EE','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#C6CCD8','actorTextColor':'#333B4A','signalColor':'#8A93A3','signalTextColor':'#414957','noteBkgColor':'#FFF8E1','noteBorderColor':'#E8D48B','labelBoxBkgColor':'#EDF1FB','labelBoxBorderColor':'#C6CCD8','altBackground':'#F8F9FC'},'flowchart':{'curve':'basis','nodeSpacing':40,'rankSpacing':50},'sequence':{'mirrorActors':false,'actorMargin':60}}}%%
 erDiagram
   CUSTOMER ||--o{ ORDER : "สั่ง"
   ORDER ||--|{ ORDER_LINE : "ประกอบด้วย"
@@ -235,6 +239,7 @@ erDiagram
 ตอบคำถาม *"ของจริงรันอยู่บนเครื่องอะไร กี่ตัว"*
 
 ```mermaid
+%%{init: {'theme':'base','fontFamily':'Tahoma, Arial, sans-serif','themeVariables':{'fontSize':'13px','primaryColor':'#FFFFFF','primaryTextColor':'#333B4A','primaryBorderColor':'#C6CCD8','lineColor':'#8A93A3','secondaryColor':'#EDF1FB','tertiaryColor':'#F6F7FB','clusterBkg':'#F8F9FC','clusterBorder':'#E4E7EE','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#C6CCD8','actorTextColor':'#333B4A','signalColor':'#8A93A3','signalTextColor':'#414957','noteBkgColor':'#FFF8E1','noteBorderColor':'#E8D48B','labelBoxBkgColor':'#EDF1FB','labelBoxBorderColor':'#C6CCD8','altBackground':'#F8F9FC'},'flowchart':{'curve':'basis','nodeSpacing':40,'rankSpacing':50},'sequence':{'mirrorActors':false,'actorMargin':60}}}%%
 flowchart TB
   classDef focus fill:#EDF1FB,stroke:#2A78D6,stroke-width:1.5px,color:#2A4C86
   classDef ext   fill:#F6F7FB,stroke:#C6CCD8,color:#7D8492

@@ -1,6 +1,6 @@
 ---
 name: week-review
-description: Run the 20-minute weekly review — what got done, what slipped, open loops owed to people, and exactly three priorities for next week, appended to the rolling review file.
+description: Run the 20-minute weekly review — done, slipped, owed to people, three priorities — appended to the review file.
 argument-hint: '[--deep]'
 disable-model-invocation: true
 ---

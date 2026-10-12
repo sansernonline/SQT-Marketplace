@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="th" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — ชื่อแอปของคุณ</title>
+<link rel="stylesheet" href="fluent.css">
+<style>
+  /* ใส่เฉพาะสิ่งที่เป็นของหน้านี้จริง ๆ — token กลางอยู่ใน fluent.css
+     ห้ามเขียนค่าสีดิบตรงนี้ ให้ใช้ var(--win-*) เสมอ */
+  html, body { height: 100%; }
+</style>
+</head>
+
+<!-- =========================================================================
+     Mockup แอป Windows 11 — คัดลอกไฟล์นี้ + fluent.css ไปไว้คู่กัน แล้วแก้เนื้อหา
+     ปุ่มมุมขวาบนสลับ light/dark ได้ ต้องตรวจทั้งสองโหมดก่อนส่งให้ดู
+     ========================================================================= -->
+<body class="win-app">
+
+<!-- Title bar: สูง 48px ลากได้ · ชื่อแอป 12px · ปุ่มหน้าต่าง 46×48 -->
+<div class="win-titlebar">
+  <span class="app-name">ชื่อแอปของคุณ</span>
+  <span class="spacer"></span>
+  <div class="win-caption-buttons">
+    <button onclick="toggleTheme()" title="สลับธีม (มีเฉพาะใน mockup)" style="width:46px">&#xE793;</button>
+    <button title="ย่อ">&#xE921;</button>
+    <button title="ขยาย">&#xE922;</button>
+    <button class="close" title="ปิด">&#xE8BB;</button>
+  </div>
+</div>
+
+<div class="win-shell">
+
+  <!-- ===== NavigationView =============================================== -->
+  <nav class="win-nav">
+    <button class="nav-toggle" title="ย่อ/ขยายเมนู">&#xE700;</button>
+
+    <a class="nav-item" href="#"><span class="icon">&#xE80F;</span><span>หน้าแรก</span></a>
+    <a class="nav-item selected" href="#"><span class="icon">&#xEA18;</span><span>หน้าที่กำลังดู</span></a>
+    <a class="nav-item" href="#"><span class="icon">&#xE77B;</span><span>เมนูที่สอง</span></a>
+    <a class="nav-item" href="#"><span class="icon">&#xEC05;</span><span>เมนูที่สาม</span></a>
+    <a class="nav-item" href="#"><span class="icon">&#xE774;</span><span>เมนูที่สี่</span></a>
+    <a class="nav-item" href="#"><span class="icon">&#xE7F8;</span><span>เมนูที่ห้า</span></a>
+    <a class="nav-item" href="#"><span class="icon">&#xEB51;</span><span>เมนูที่หก</span></a>
+    <a class="nav-item" href="#"><span class="icon">&#xE81C;</span><span>ประวัติ</span></a>
+
+    <!-- เมนูตั้งค่าอยู่ล่างสุดเสมอ — ผู้ใช้ Windows หาที่นี่ก่อนที่อื่น -->
+    <div class="nav-footer">
+      <a class="nav-item" href="#"><span class="icon">&#xE713;</span><span>การตั้งค่า</span></a>
+    </div>
+  </nav>
+
+  <!-- ===== เนื้อหา ====================================================== -->
+  <main class="win-content">
+    <div class="page-head">
+      <span class="icon">&#xEA18;</span>
+      <h1 class="win-title" style="margin:0">ชื่อหน้า</h1>
+    </div>
+    <p class="page-sub win-body">คำอธิบายหน้านี้หนึ่งบรรทัด บอกว่าผู้ใช้ทำอะไรได้ที่นี่</p>
+
+    <div class="win-columns">
+      <div class="main">
+
+        <!-- section: ไอคอน 20px + หัวข้อ Subtitle -->
+        <section class="win-section">
+          <div class="head">
+            <span class="icon">&#xE72C;</span>
+            <h2 class="win-subtitle" style="margin:0">หัวข้อกลุ่มที่หนึ่ง</h2>
+          </div>
+          <p class="win-body">สถานะปัจจุบันหนึ่งบรรทัด</p>
+          <p class="win-body">รายละเอียดเพิ่มเติม เช่น เวลาที่ทำล่าสุด</p>
+
+          <div class="win-kpis">
+            <div class="kpi"><div class="value">19</div><div class="label">รายการทั้งหมด</div></div>
+            <div class="kpi"><div class="value">115</div><div class="label">กำลังทำ</div></div>
+            <div class="kpi"><div class="value">103</div><div class="label">รอดำเนินการ</div></div>
+            <div class="kpi"><div class="value">14</div><div class="label">ผู้ใช้</div></div>
+          </div>
+
+          <button class="win-btn" style="margin-top:8px">ปุ่มหลักของหน้า</button>
+
+          <div class="win-links">
+            <a class="win-link" href="#">ลิงก์ไปหน้าย่อยที่หนึ่ง</a>
+            <a class="win-link" href="#">ลิงก์ไปหน้าย่อยที่สอง</a>
+            <a class="win-link" href="#">ลิงก์ไปหน้าย่อยที่สาม</a>
+          </div>
+        </section>
+
+        <!-- แถวตั้งค่าแบบ Windows 11 -->
+        <section class="win-section">
+          <div class="head">
+            <span class="icon">&#xE713;</span>
+            <h2 class="win-subtitle" style="margin:0">หัวข้อกลุ่มที่สอง</h2>
+          </div>
+
+          <div class="win-setting">
+            <span class="icon">&#xE72E;</span>
+            <div class="text">
+              <div class="title">ชื่อการตั้งค่า</div>
+              <div class="desc">อธิบายว่าเปิดแล้วเกิดอะไรขึ้น สั้น ๆ ไม่เกินสองบรรทัด</div>
+            </div>
+            <label class="win-toggle"><input type="checkbox" checked><span class="track"></span></label>
+          </div>
+
+          <div class="win-setting">
+            <span class="icon">&#xE895;</span>
+            <div class="text">
+              <div class="title">การตั้งค่าที่ปิดอยู่</div>
+              <div class="desc">สถานะปิดต้องอ่านออกโดยไม่ต้องพึ่งสีอย่างเดียว</div>
+            </div>
+            <label class="win-toggle"><input type="checkbox"><span class="track"></span></label>
+          </div>
+
+          <div class="win-infobar caution" style="margin-top:12px">
+            <span class="icon">&#xE7BA;</span>
+            <div><div class="title">หัวข้อการแจ้งเตือน</div>
+                 <div class="msg">ข้อความบอกว่าเกิดอะไรและต้องทำอะไรต่อ</div></div>
+          </div>
+        </section>
+
+        <!-- ตารางข้อมูล + status pill -->
+        <section class="win-section">
+          <div class="head">
+            <span class="icon">&#xE9D5;</span>
+            <h2 class="win-subtitle" style="margin:0">หัวข้อกลุ่มที่สาม</h2>
+          </div>
+          <table class="win-table">
+            <thead><tr><th>รหัส</th><th>รายการ</th><th>ผู้รับผิดชอบ</th><th>สถานะ</th></tr></thead>
+            <tbody>
+              <tr><td>M-01</td><td>ออกแบบฐานข้อมูล</td><td>SA</td>
+                  <td><span class="win-pill success">เสร็จ</span></td></tr>
+              <tr><td>M-02</td><td>ระบบยืนยันตัวตน</td><td>Dev</td>
+                  <td><span class="win-pill caution">กำลังทำ</span></td></tr>
+              <tr><td>M-03</td><td>เชื่อมต่อ CI</td><td>DevOps</td>
+                  <td><span class="win-pill critical">ค้าง</span></td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+
+      <!-- คอลัมน์ขวา: ลิงก์ช่วยเหลือ / ข้อมูลรอง — ไม่ใส่สิ่งที่ทำงานหลัก -->
+      <aside class="rail">
+        <h3 class="win-body-strong" style="margin:0 0 8px">มีคำถามไหม</h3>
+        <a class="win-link" href="#">ขอความช่วยเหลือ</a>
+
+        <h3 class="win-body-strong" style="margin:28px 0 8px">ใครดูแลอยู่</h3>
+        <a class="win-link" href="#">จัดการผู้ให้บริการ</a>
+
+        <h3 class="win-body-strong" style="margin:28px 0 8px">ช่วยเราปรับปรุง</h3>
+        <a class="win-link" href="#">ส่งความคิดเห็น</a>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<script>
+  // มีเฉพาะใน mockup — แอปจริงอ่านธีมจากระบบ (WinUI/Avalonia ทำให้อัตโนมัติ)
+  function toggleTheme() {
+    const r = document.documentElement;
+    r.dataset.theme = r.dataset.theme === 'dark' ? 'light' : 'dark';
+  }
+</script>
+</body>
+</html>

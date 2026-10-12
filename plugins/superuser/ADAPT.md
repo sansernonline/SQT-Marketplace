@@ -11,9 +11,9 @@ plugin `superuser` คือต้นฉบับของวิธีทำง�
 
 | ส่วน | ของกลาง (ห้ามแก้ใน plugin สาขา) | ปรับตามสาขา |
 |---|---|---|
-| `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin start -->` · `learning` · `patterns` | ทุกอย่างนอกบล็อก |
-| playbook | `playbook-learn-from-session.md` · `playbook-template.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) |
-| skill | `agent-patterns` · `human-writing` | skill ของสาขา |
+| `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
+| playbook และ reference | `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) |
+| skill | `agent-patterns` · `answer-shape` · `human-writing` | skill ของสาขา |
 | agent | `learning-reviewer` | agent ตามบทบาทของสาขา |
 | hook | `hooks/superuser-hook.mjs` · `hooks/hooks.json` | — |
 | ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาเดิม 10 ตัวเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |
@@ -45,14 +45,14 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 |---|---|---|
 | frontmatter `description` | งานของสาขา ≤ 250 ตัวอักษร · ขึ้นต้น "Use at the start of any multi-step <สาขา> task" | "...career task (job application, CV plus LinkedIn, interview, offer, promotion case)..." |
 | หัวเรื่อง และบรรทัดใต้ | ทีมนี้ทำงานอะไร · ส่งต่อเรื่องไหนให้ผู้เชี่ยวชาญ | ข้อพิพาทแรงงาน → จัดข้อเท็จจริงแล้วส่งต่อศาลแรงงานหรือทนาย |
-| 1 · กฎ | เพิ่มกฎเฉพาะสาขา 1–3 ข้อ ต่อท้าย | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
+| 1 · กฎ | ใต้บล็อก `rules`: "ของจริงที่ใช้ตรวจตามข้อ 2" และกฎเฉพาะสาขา 1–3 ข้อ เลข 10 ขึ้นไป · ที่จดการตัดสินใจถ้าไม่ใช่ `CONTEXT.md` | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
 | 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` | `job-application` · `interview` · `offer-negotiation` |
 | 3 · ตัวกระตุ้น | สถานการณ์ → skill ของสาขา · งานข้ามสาขา → plugin อื่น | มีนัดสัมภาษณ์ → `interview-prep` + agent `interview-coach` |
 | 4 · เกณฑ์งาน | 3 ข้อที่ "เสร็จ" ของสาขานี้ต้องผ่าน + skill ที่ใช้ตรวจ | จริง · ตรงเป้า · พร้อมใช้ |
 | 5 · agent | agent ตามบทบาท · งานข้ามสาขา · ตัวอย่างระดับโมเดล | CV → `career-coach` · สัมภาษณ์ → `interview-coach` |
-| 6 · รออนุมัติ | สิ่งที่ย้อนไม่ได้ของสาขานี้ | กดส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก |
+| 6 · รออนุมัติ | ใต้บล็อก `autonomy`: ตัวอย่างงานที่ย้อนได้ · ลำดับแหล่งข้อมูลทางการของสาขา · สิ่งที่ย้อนไม่ได้ของสาขานี้ | กดส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก |
 | 7 · ตัวอย่างตารางสถานะ | 1 แถวที่เป็นงานจริงของสาขา | CV ภาษาอังกฤษ · คำค้นครบ 12 คำ |
-| 9 · ไฟล์กลาง | ตัวอย่างโฟลเดอร์งาน · ข้อมูลที่ห้ามใส่ | ห้ามใส่เงินเดือนจริงใน CONTEXT |
+| 9 · ไฟล์กลาง | ใต้บล็อก `where`: ตัวอย่างโฟลเดอร์งาน · แม่แบบ `CONTEXT.md` · ข้อมูลที่ห้ามใส่ | ห้ามใส่เงินเดือนจริงใน CONTEXT |
 | 10 · ตารางรูปแบบ | ตัวอย่าง 6 รูปแบบในงานของสาขา | MoA: ข้อเสนองาน 2 ที่ → 3 มุม แล้วรวม |
 
 ---
@@ -63,5 +63,5 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 - เข้าใจงานและจัดขนาดก่อนเลือก playbook
 - ทุกขั้นตรวจกับของจริง ข้อเท็จจริงสาธารณะต้องมี ≥ 3 แหล่งยืนยัน
 - งานที่ย้อนไม่ได้ให้เข้า "รออนุมัติ" ส่วนการจ่ายเงิน ใส่รหัสผ่าน ลบข้อมูลจริง และ CAPTCHA อนุญาตล่วงหน้าไม่ได้
-- `CONTEXT.md` เป็นไฟล์กลาง จบทุกงานด้วยรอบเรียนรู้ และไม่แก้ skill เองระหว่างทำงานอื่น
+- ไฟล์ทำงานอยู่ใน `.claude/superuser/` ไม่วางที่รากโปรเจกต์ · `CONTEXT.md` เป็นไฟล์กลาง จบทุกงานด้วยรอบเรียนรู้ และไม่แก้ skill เองระหว่างทำงานอื่น
 - ทุกคำตอบเขียนตาม `human-writing`

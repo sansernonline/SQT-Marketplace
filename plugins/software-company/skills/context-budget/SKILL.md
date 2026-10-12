@@ -1,6 +1,6 @@
 ---
 name: context-budget
-description: Use when a task will read many files, search a codebase or run long-output commands. When to use a subagent, partial reads, bounded searches.
+description: Use when a task will read many files, search a codebase or run long-output commands. Subagents, partial reads, bounded searches.
 ---
 
 # งบ context

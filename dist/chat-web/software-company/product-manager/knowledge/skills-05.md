@@ -442,17 +442,17 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 
 | เอกสาร | รูปแบบ | เหตุผล |
 |---|---|---|
-| SRS · BRD · ข้อเสนอโครงการ · ใบตรวจรับ UAT · สัญญา | **docx + PDF** | มีลายเซ็น ต้องล็อกฉบับ |
-| คู่มือผู้ใช้ · เอกสารส่งมอบ · รายงานผู้บริหาร | **docx + PDF** | คนนอกทีมอ่าน ไม่มี git ให้ดู |
+| Project Plan · BRD · SRS · Architecture · FSD · Test Plan (`project-doc-set` ข้อ 2.1) · ข้อเสนอโครงการ · ใบตรวจรับ UAT · สัญญา | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
+| คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
 | สไลด์นำเสนอ | **pptx + PDF** | |
-| FSD · ADR · API spec · runbook · README · test plan | **markdown ใน repo** | เปลี่ยนพร้อมโค้ด ต้อง diff ได้ |
+| ADR · API spec · data dictionary · runbook · README | **markdown ใน repo** | เปลี่ยนพร้อมโค้ด ต้อง diff ได้ |
 | บันทึกประชุม · บันทึกการตัดสินใจ | **markdown ใน repo** | ค้นหาง่าย ไม่ต้องเปิดโปรแกรม |
 
-> 🚨 **เขียน markdown เป็นต้นฉบับเสมอ แล้ว render เป็น docx ตอนส่ง**
-> ไม่ใช่แก้ใน Word แล้วมี 2 ฉบับที่ค่อย ๆ ไม่ตรงกัน
-> เก็บต้นฉบับไว้ที่เดียว — กฎข้อนี้กันปัญหาได้มากที่สุดในหน้านี้
+> 🚨 **เขียนร่างเป็น markdown ใน `_to_delete/drafts/` แล้ว render เป็น docx ลง `docs/`**
+> `docs/` มีเอกสารส่งมอบฉบับเดียวคือ .docx — ไม่มี .md และ .pdf ของเรื่องเดียวกันวางซ้ำ
+> แก้รอบถัดไป → แก้ร่างแล้ว render ใหม่ · ร่างหายแล้ว → แก้ใน .docx โดยตรงแล้วขึ้นเวอร์ชัน
 
-**ส่งออกเมื่อไหร่ แนบ PDF คู่กับ docx เสมอ** — docx ให้เขาแก้ต่อได้ ส่วน PDF คือฉบับที่หน้าตาไม่เพี้ยน
+**PDF ทำเฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ** — นอกนั้น docx ฉบับเดียว
 
 ---
 
@@ -467,8 +467,8 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 | ไฟล์ส่งออก | `<โปรเจกต์>-<ประเภท>-v<M.m>-<สถานะ>.docx` | `TRS-SRS-v1.2-APPROVED.docx` |
 | ไฟล์ส่งออกที่มีหลายเรื่อง | เติมเรื่องต่อจากประเภท | `TRS-FSD-recording-v0.3-DRAFT.docx` |
 | ฉบับที่ส่งให้ลูกค้าจริง | เติมวันที่ ISO ท้ายสุด | `TRS-SRS-v1.2-APPROVED-2026-09-25.docx` |
-| เอกสารใน repo | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/fsd-recording.md` |
-| ADR | `NNNN-<เรื่อง>.md` เรียงเลขต่อเนื่อง | `docs/adr/0007-เลือก-whisper.md` |
+| เอกสารใน repo | `<ประเภท>-<เรื่อง>.md` ตัวพิมพ์เล็ก ขีดกลาง | `docs/runbook-recording.md` |
+| ADR | `ADR-NNNN-<เรื่อง>.md` เรียงเลขต่อเนื่อง ใน `docs/decisions/` | `docs/decisions/ADR-0007-เลือก-whisper.md` |
 | บันทึกประชุม | `YYYY-MM-DD-<เรื่อง>.md` | `docs/meetings/2026-09-25-kickoff.md` |
 
 **กฎชื่อไฟล์:**
@@ -531,7 +531,7 @@ Use when creating, renaming or filing a document a team or client keeps. Format 
 | เรื่อง | กฎ |
 |---|---|
 | ต้นฉบับ | อยู่ใน repo เสมอ — `docs/` |
-| ไฟล์ส่งออก | อยู่ใน `docs/releases/` หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
+| ไฟล์ส่งออก | อยู่ใน `docs/` (ตาม `project-doc-set`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
 | ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
 | ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `temp-file-discipline`) |
 | ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |

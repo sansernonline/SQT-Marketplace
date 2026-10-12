@@ -1,6 +1,6 @@
 ---
 name: meal-plan-grocery
-description: Use when a Thai family wants a weekly meal plan on a per-head budget, a grocery list, weekday batch cooking or less food waste, incl. child and elder diets.
+description: Use when a Thai family wants a weekly meal plan on a budget, a grocery list, batch cooking or less food waste.
 ---
 
 # Meal Plan and Grocery List

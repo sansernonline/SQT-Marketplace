@@ -29,81 +29,17 @@ Proposed → Accepted → Deprecated/Superseded
 
 ## Output Template
 
-```markdown
-# ADR-XXXX: <Decision Title>
+Copy **[`assets/adr.md`](assets/adr.md)** and fill it in. Do not write the outline from memory.
 
-**Status:** Proposed | Accepted | Deprecated | Superseded by ADR-YYYY
-**Date:** YYYY-MM-DD
-**Deciders:** <names/roles>
-**Tags:** <area, e.g., database, frontend, security>
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
-## Context
+  ```bash
+  python ../polished-document-style/scripts/check_outline.py assets/adr.md <your ADR file>
+  ```
 
-What is the issue we're facing? What forces are at play?
-- Business driver: ...
-- Technical constraint: ...
-- Current state: ...
-
-## Decision
-
-What did we decide to do?
-
-State the decision clearly in 1-2 sentences.
-
-## Options Considered
-
-### Option 1: <name>
-**Description:** ...
-
-**Pros:**
-- ...
-
-**Cons:**
-- ...
-
-**Cost:** $$ | Effort: M
-
-### Option 2: <name>
-**Description:** ...
-
-**Pros:**
-- ...
-
-**Cons:**
-- ...
-
-**Cost:** $$$ | Effort: L
-
-### Option 3: <name>
-...
-
-## Decision Rationale
-
-Why did we choose this option? Reference the forces from Context.
-- Key factor 1: ...
-- Key factor 2: ...
-
-## Consequences
-
-### Positive
-- ...
-
-### Negative
-- ...
-
-### Neutral / Trade-offs Accepted
-- ...
-
-## Implementation Notes
-- Migration path: ...
-- Affected components: ...
-- Timeline: ...
-
-## References
-- Related ADRs: ADR-XXXX
-- External docs: ...
-- Discussion: ...
-```
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
 ## Quality Checklist
 
@@ -115,6 +51,7 @@ Before finalizing:
 - [ ] Trade-offs are honest — every choice has downsides
 - [ ] Consequences include both positive AND negative
 - [ ] Could a new team member understand this in 6 months?
+- [ ] `check_outline.py` passes
 
 ## Anti-patterns
 

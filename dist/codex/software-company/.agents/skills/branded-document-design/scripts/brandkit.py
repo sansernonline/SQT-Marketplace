@@ -19,7 +19,7 @@ brandkit.py — ตัวช่วยสร้างเอกสาร Word (.do
     doc.table(["หัวข้อ", "รายละเอียด"],
               [["URL ระบบ", "https://project.eitaccount.cloud"],
                ["ประเภทระบบ", "Web Application (SPA) + PWA"]],
-              widths=[2600, 6760])
+              widths=[2600, 7038])
     doc.callout("tip", "ข้อแนะนำ", "เขียน callout สั้น ๆ 1–3 บรรทัดเท่านั้น")
     doc.save("out.docx")
 
@@ -69,6 +69,13 @@ TOKENS = {
 # ฟอนต์: Tahoma ปลอดภัยที่สุดสำหรับเอกสารไทย+อังกฤษบน Windows/Word
 # (มีทุกเครื่อง · วรรณยุกต์ไม่ลอย · น้ำหนัก bold อ่านง่าย)
 FONT = "Tahoma"
+# ฟอนต์ช่องละติน (ascii/hAnsi) แยกจากช่องไทย (cs/eastAsia) — ค่าเริ่มต้นเป็นตัวเดียวกัน
+# ถ้าใช้คู่ฟอนต์ เช่น Noto Sans + Noto Sans Thai ให้ตั้ง 2 ค่านี้ แล้วเรียก thai_runs() ก่อน save (ข้อ 2 ของ SKILL.md)
+LATIN_FONT = FONT
+MONO = "Consolas"   # ห้ามใช้ฟอนต์ variable เช่น Cascadia Mono — Word export PDF แล้วตกเป็น Calibri
+
+# ความกว้างเนื้อหา A4 ขอบซ้าย/ขวา 2 ซม. = 17 ซม. = 9638 twips (แนวนอน 25.7 ซม. = 14570)
+BODY_TWIPS = 9638
 
 # ขนาด (pt)
 SIZE = {
@@ -100,18 +107,19 @@ def _el(tag, **attrs):
 
 
 def style_run(run, *, size=None, color=None, bold=False, italic=False,
-              font=FONT, mono=False):
+              font=None, mono=False):
     """ตั้งฟอนต์ให้ครบทั้ง latin / complex-script — จำเป็นสำหรับภาษาไทย
     ถ้าตั้งแต่ run.font.size อย่างเดียว ตัวอักษรไทยจะไม่เปลี่ยนขนาดตาม
     เพราะ Word ถือว่าไทยเป็น complex script (ต้องตั้ง szCs / bCs / iCs ด้วย)"""
-    name = "Consolas" if mono else font
-    run.font.name = name
+    thai = font or FONT
+    latin = MONO if mono else (font or LATIN_FONT)
+    run.font.name = latin
     rpr = run._r.get_or_add_rPr()
     rfonts = rpr.find(qn("w:rFonts"))
     if rfonts is None:
         rfonts = _el("w:rFonts")
         rpr.insert(0, rfonts)
-    for a in ("ascii", "hAnsi", "cs", "eastAsia"):
+    for a, name in (("ascii", latin), ("hAnsi", latin), ("cs", thai), ("eastAsia", thai)):
         rfonts.set(qn("w:" + a), name)
     if size is not None:
         half = str(int(round(size * 2)))
@@ -277,13 +285,13 @@ class BrandDoc:
 
     def _setup_normal_style(self):
         st = self.doc.styles["Normal"]
-        st.font.name = FONT
+        st.font.name = LATIN_FONT
         st.font.size = Pt(SIZE["body"])
         st.font.color.rgb = RGBColor.from_string(TOKENS["text_body"])
         rpr = st.element.get_or_add_rPr()
         rfonts = rpr.get_or_add_rFonts()
         for a in ("ascii", "hAnsi", "cs", "eastAsia"):
-            rfonts.set(qn("w:" + a), FONT)
+            rfonts.set(qn("w:" + a), LATIN_FONT if a in ("ascii", "hAnsi") else FONT)
         rpr.append(_el("w:szCs", val=str(int(SIZE["body"] * 2))))
         pf = st.paragraph_format
         pf.space_after = Pt(6)
@@ -317,7 +325,7 @@ class BrandDoc:
 
         # --- แถบสีหัวปก ---
         band = self.doc.add_table(rows=1, cols=1)
-        fixed_widths(band, [9360]); no_borders(band)
+        fixed_widths(band, [BODY_TWIPS]); no_borders(band)
         cell = band.rows[0].cells[0]
         shade(cell, "brand")
         cell_margins(band, top=260, left=340, bottom=300, right=340)
@@ -367,8 +375,18 @@ class BrandDoc:
             style_run(pn.add_run(note), size=SIZE["cover_note"],
                       color="text_muted", italic=True)
         if page_break:
-            self.doc.add_page_break()
+            self._break_after_last()
         return self
+
+    def _break_after_last(self):
+        """ขึ้นหน้าใหม่ต่อท้ายย่อหน้าสุดท้ายของปก แทนการเพิ่มย่อหน้าตัวแบ่งหน้าใหม่
+        เพราะถ้าปกเต็มหน้าพอดี ย่อหน้าตัวแบ่งจะตกไปหน้า 2 แล้วได้หน้าว่าง 1 หน้า"""
+        body = self.doc.element.body
+        kids = [k for k in body if k.tag != qn("w:sectPr")]
+        if kids and kids[-1].tag == qn("w:p"):
+            r = _el("w:r"); r.append(_el("w:br", **{"type": "page"})); kids[-1].append(r)
+        else:
+            self.doc.add_page_break()
 
     def toc(self, heading="สารบัญ", levels="1-3"):
         """แทรก field สารบัญ — ผู้ใช้กด F9 ใน Word เพื่ออัปเดต
@@ -469,7 +487,7 @@ class BrandDoc:
     def table(self, headers, rows, widths=None, zebra=False, align=None,
               first_col_bold=False, size=None):
         """ตารางมาตรฐาน: หัวพื้นฟ้าอ่อน ตัวหนังสือน้ำเงินเข้ม เส้นเทาบาง
-        widths — รายการความกว้างหน่วย twips (รวมกันประมาณ 9360 สำหรับ A4 margin 2cm)
+        widths — รายการความกว้างหน่วย twips (รวมกัน = BODY_TWIPS 9638 สำหรับ A4 ขอบ 2 ซม.)
         align  — รายการ 'left'|'center'|'right' ต่อคอลัมน์"""
         size = size or SIZE["table"]
         t = self.doc.add_table(rows=1, cols=len(headers))
@@ -508,7 +526,7 @@ class BrandDoc:
         self._spacer(5)
         return t
 
-    def kpi_row(self, items, width_twips=9360):
+    def kpi_row(self, items, width_twips=BODY_TWIPS):
         """แถบตัวเลขสรุปแนวนอน — items = [("19", "โครงการทั้งหมด"), ...]"""
         t = self.doc.add_table(rows=1, cols=len(items))
         no_borders(t)
@@ -543,7 +561,7 @@ class BrandDoc:
         p.paragraph_format.space_after = Pt(0)
         style_run(p.add_run(f"{icon} {title}  "), size=SIZE["body"], color=fg, bold=True)
         style_run(p.add_run(body), size=SIZE["body"], color="text_body")
-        fixed_widths(t, [9360])
+        fixed_widths(t, [BODY_TWIPS])
         self._spacer(6)
         return t
 
@@ -620,3 +638,54 @@ def use_brand(**overrides):
         use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")"""
     TOKENS.update({k: v.lstrip("#").upper() for k, v in overrides.items()})
     return TOKENS
+
+
+# ---------------------------------------------------------------------------
+# ฟอนต์คู่ (ละติน + ไทยคนละตัว) — Word ไม่ใช้ช่อง cs กับตัวอักษรไทยเสมอ
+# ---------------------------------------------------------------------------
+import copy as _copy
+import re as _re
+
+_THAI = _re.compile(r"([฀-๿]+)")
+
+
+def thai_runs(root):
+    """แยกข้อความไทยในทุก run ออกเป็น run ของตัวเอง แล้วตั้งทั้ง 4 ช่องเป็น FONT (ฟอนต์ไทย)
+    เหตุ: Word วาดไทยด้วยฟอนต์ช่องละตินถ้าฟอนต์นั้นมีตัวไทย ถ้าไม่มีจะตกไป Browallia New
+    การตั้ง cs อย่างเดียวจึงไม่พอเมื่อ LATIN_FONT ไม่ใช่ฟอนต์ไทย
+    ใช้: thai_runs(doc.element.body) และกับ header/footer ทุกส่วน ก่อน doc.save()"""
+    W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+    for r in list(root.iter(W + "r")):
+        kids = [k for k in r if k.tag != W + "rPr"]
+        if len(kids) != 1 or kids[0].tag != W + "t" or not _THAI.search(kids[0].text or ""):
+            continue
+        rpr = r.find(W + "rPr")
+        parts = [x for x in _THAI.split(kids[0].text) if x]
+        parent, idx = r.getparent(), r.getparent().index(r)
+        for j, part in enumerate(parts):
+            nr = _el("w:r")
+            npr = _copy.deepcopy(rpr) if rpr is not None else _el("w:rPr")
+            if _THAI.fullmatch(part):
+                rf = npr.find(W + "rFonts")
+                if rf is None:
+                    rf = _el("w:rFonts")
+                    npr.insert(0, rf)
+                for a in ("ascii", "hAnsi", "cs", "eastAsia"):
+                    rf.set(W + a, FONT)
+                order_rpr(npr)
+            nr.append(npr)
+            t = _el("w:t")
+            t.set("{http://www.w3.org/XML/1998/namespace}space", "preserve")
+            t.text = part
+            nr.append(t)
+            parent.insert(idx + j, nr)
+        parent.remove(r)
+
+
+def embed_fonts(doc):
+    """ให้ Word ฝังฟอนต์ไว้ในไฟล์ตอนบันทึก — ใช้เมื่อฟอนต์ไม่ได้มีทุกเครื่อง (เช่น Noto)
+    และสัญญาอนุญาตยอมให้ฝัง (OFL ยอม) · ไฟล์ใหญ่ขึ้นหลาย MB"""
+    settings = doc.settings.element
+    settings.insert(0, _el("w:saveSubsetFonts"))
+    settings.insert(0, _el("w:embedTrueTypeFonts"))
+

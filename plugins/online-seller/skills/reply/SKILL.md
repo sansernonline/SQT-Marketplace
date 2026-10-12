@@ -1,6 +1,6 @@
 ---
 name: reply
-description: Draft a Thai reply to a customer chat or a public review — price or stock question, late parcel, wrong item, refund, discount haggling or bad review.
+description: Draft a Thai reply to a customer chat or public review — stock, late parcel, wrong item, refund, haggling, bad review.
 argument-hint: <platform> <what the customer wrote> [order status, photos, shop voice]
 disable-model-invocation: true
 ---

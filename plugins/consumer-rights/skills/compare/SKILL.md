@@ -1,6 +1,6 @@
 ---
 name: compare
-description: Compare products or services before buying — decision matrix, total cost of ownership, review trust check.
+description: Compare products or services before buying — decision matrix, total cost, review trust check.
 argument-hint: <product category> [option A] [option B] [budget]
 disable-model-invocation: true
 ---

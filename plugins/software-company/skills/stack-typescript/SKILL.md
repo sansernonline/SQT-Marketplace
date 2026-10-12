@@ -1,6 +1,6 @@
 ---
 name: stack-typescript
-description: Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite. Strict types, parsing at the edge, async safety.
+description: Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite.
 ---
 
 # stack-typescript — TypeScript ที่ทีมอ่านง่าย และพังยาก

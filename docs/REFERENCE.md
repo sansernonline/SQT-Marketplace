@@ -195,7 +195,7 @@
 
 ---
 
-## 🛠️ Skills (108)
+## 🛠️ Skills (110)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -298,7 +298,7 @@
 
 ### 15. work-session-context
 **ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
-**Output:** `CONTEXT.md` ที่ root โปรเจกต์ (หัวข้อ "รับงานต่อ") · `.superuser/inbox/` คิวข้อความ · `.superuser/log/<วันที่>.jsonl` ที่ hook เขียน · `AGENTS.md` / `GEMINI.md` ป้ายชี้ไป `CONTEXT.md`
+**Output:** `.claude/superuser/CONTEXT.md` (หัวข้อ "รับงานต่อ") · `.claude/superuser/inbox/` คิวข้อความ · `.claude/superuser/log/<วันที่>/<agent>.jsonl` ที่ hook เขียน · `AGENTS.md` / `GEMINI.md` ป้ายชี้ไป `CONTEXT.md` (เฉพาะเมื่อใช้ Codex / Gemini จริง)
 **Includes:** ขั้นเปิดใช้ในโปรเจกต์, แม่แบบ `CONTEXT.md` ไม่เกิน 150 บรรทัด (เขียนทับ ไม่ต่อท้าย), จุดส่งต่อก่อนสลับโมเดลทั้งค่ายเดียวกันและข้ามค่าย, รูปแบบข้อความ inbox (`from:` · `priority:`) และลำดับรับ, ฟิลด์ของ log และการตัดค่าลับ, `scripts/log-to-md.mjs` แปลง log เป็นตาราง, ย้ายจาก `.claude/context/` รูปแบบเก่า
 **Use at:** ตอนเริ่มงาน → อ่าน "รับงานต่อ" และ inbox · ตอนจบงาน ก่อนสลับโมเดล หรือก่อนหยุด → อัปเดต "รับงานต่อ" · ใน SuperUser หัวหน้าทีมเป็นคนเขียนคนเดียว
 
@@ -695,7 +695,7 @@
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
 **ไม่หยุดถาม:** งานที่ย้อนกลับไม่ได้ → เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ผู้ใช้อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) · ค้นเองใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน
-**ตอนจบ:** ทุกข้ออ้างติดป้าย `วัดจริง` · `อนุมาน` · `เดา` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ · ของใหม่ที่ทีมควรรู้จดลง `IMPROVEMENTS.md` ที่ root
+**ตอนจบ:** ทุกข้ออ้างติดป้าย `ตรวจจริง` · `อนุมาน` · `เดา` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ · ของใหม่ที่ทีมควรรู้จดลง `IMPROVEMENTS.md` ที่ root
 **playbook จาก pstack:** `investigation` ตอบได้ทั้งทำงานอย่างไร · ทำไม · สอนแบบต่อชั้น · `performance` 1 commit ต่อการแก้ 1 ครั้งที่ได้ผล พร้อมตัวเลขก่อน/หลัง
 
 ---
@@ -974,6 +974,18 @@
 
 ---
 
+### 109. html-slide-deck
+**ใช้กับ:** technical-writer
+**Description:** Use when a presentation should be one offline HTML file presented from a browser — dark brand theme, 1920×1080 stage, menu, speaker notes, presenter clock, click-through detail panels and live chat replays.
+
+---
+
+### 110. markdown-report-docx
+**ใช้กับ:** technical-writer
+**Description:** Use when a project or course report must ship as a polished .docx from one Markdown source. Logo cover, table of contents, brand-tinted tables, callouts, numbered figures, page-safe layout.
+
+---
+
 ## ⚡ Commands (29)
 
 ### 1. /feature-kickoff `<feature description>`
@@ -1120,16 +1132,16 @@ User Request
 
 ## 🪝 Hooks
 
-`plugins/software-company/hooks/` — `hooks.json` เรียก `superuser-hook.mjs` (ต้องมี Node.js 16+ ใน PATH) · ทำงานเฉพาะโปรเจกต์ที่มีโฟลเดอร์ `.superuser/` · hook เก็บ error ทุกชนิดไว้เงียบ ๆ งานหลักจึงไม่ล้ม
+`plugins/<plugin>/hooks/` — ทุก plugin มี `hooks.json` เรียก `superuser-hook.mjs` ตัวเดียวกัน (ต้นฉบับใน plugin `superuser` · ต้องมี Node.js 16+ ใน PATH) · ติดตั้งหลาย plugin พร้อมกัน ตัวแรกที่จับเหตุการณ์ได้ทำงาน ตัวอื่นออกเลย (ล็อกชั่วคราวใน `_to_delete/superuser-lock/`) · ทำงานเฉพาะโปรเจกต์ที่มี `.claude/superuser/` (หาขึ้นไปทางโฟลเดอร์แม่ · ยังรับ `.superuser/` แบบเก่า · ข้ามโฟลเดอร์ home) และไม่สร้างโฟลเดอร์นี้เอง · hook เก็บ error ทุกชนิดไว้เงียบ ๆ งานหลักจึงไม่ล้ม
 
 | event | ทำอะไร |
 |---|---|
-| SessionStart | เขียน log · เตือนให้อ่าน `CONTEXT.md` หัวข้อ "รับงานต่อ" · แจ้งข้อความค้างใน inbox |
-| UserPromptSubmit | เขียน log (รวมข้อความผู้ใช้) · แจ้งข้อความค้างใน inbox |
+| SessionStart | เขียน log · เตือนให้อ่าน `.claude/superuser/CONTEXT.md` หัวข้อ "รับงานต่อ" (แบบเก่าคือ `CONTEXT.md` ที่ราก) · แจ้งข้อความค้างใน inbox ทุกครั้ง |
+| UserPromptSubmit | เขียน log (รวมข้อความผู้ใช้ ติดธง `correction: true` เมื่อผู้ใช้กำลังแก้งาน) · แจ้งเมื่อมีข้อความใหม่ใน inbox |
 | PostToolUse | เขียน log การเรียกเครื่องมือ · แจ้งเมื่อมีข้อความใหม่ใน inbox |
-| PostToolUseFailure | เขียน log การเรียกเครื่องมือที่ล้ม |
+| PostToolUseFailure | เขียน log การเรียกเครื่องมือที่ล้ม · แจ้งเมื่อมีข้อความใหม่ใน inbox |
 
-log อยู่ที่ `.superuser/log/<วันที่>.jsonl` 1 บรรทัดต่อ 1 เหตุการณ์ — ไม่เก็บเนื้อไฟล์และผลของเครื่องมือ · ค่าที่ดูเป็นค่าลับถูกแทนด้วย `[ตัด]` · รายละเอียดใน skill `work-session-context`
+การแจ้ง inbox ส่งให้หัวหน้าทีมเท่านั้น ไม่ส่งให้ subagent · log อยู่ที่ `.claude/superuser/log/<วันที่>/<agent>.jsonl` 1 ไฟล์ต่อ agent 1 บรรทัดต่อ 1 เหตุการณ์ — ไม่เก็บเนื้อไฟล์และผลของเครื่องมือ · ค่าที่ดูเป็นค่าลับถูกแทนด้วย `[ตัด]` · รายละเอียดใน skill `work-session-context`
 
 ---
 
@@ -1144,7 +1156,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       ├── agents/         (39 files)
-│       ├── skills/         (107 skill + 28 คำสั่ง)
+│       ├── skills/         (110 skill + 29 คำสั่ง)
 │       └── hooks/          (hooks.json · superuser-hook.mjs)
 ├── docs/
 │   ├── INSTALL.md

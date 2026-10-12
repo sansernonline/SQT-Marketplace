@@ -1,6 +1,6 @@
 ---
 name: software-diagrams
-description: Use when a markdown doc, README or pull request needs a technical diagram (architecture, sequence, state, ER, deployment) drawn in Mermaid house theme.
+description: Use when a markdown doc, README or pull request needs a technical diagram (architecture, sequence, state, ER, deployment) in Mermaid.
 ---
 
 # Software Diagrams
@@ -31,7 +31,7 @@ description: Use when a markdown doc, README or pull request needs a technical d
 |---|---|
 | เลือกว่าจะใช้ภาพแบบไหน (SVG / ASCII / Mermaid) | `markdown-visuals` |
 | ภาพหน้าจอ · wireframe | `ui-craft` + skill แพลตฟอร์ม |
-| กราฟข้อมูล | `web-app-design` |
+| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
 | ตัดสินใจเลือกสถาปัตยกรรม | `architecture-patterns` |
 
 ## 1 · คำถามไหน วาดแบบไหน
@@ -61,6 +61,15 @@ description: Use when a markdown doc, README or pull request needs a technical d
 บรรทัดธีม ตัวแทนค่าสี คลาส และตัวอย่างที่เรนเดอร์แล้วอยู่ใน [`assets/mermaid-theme.md`](assets/mermaid-theme.md) ส่วนตารางที่จับคู่เนื้องานกับโทนสีอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)
 
 > ⚠️ **`fontFamily` ต้องอยู่นอก `themeVariables`** ถ้าใส่ไว้ข้างใน จะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
+
+**ตรวจด้วยเครื่องก่อนส่งทุกครั้ง** — กฎข้อนี้ถูกลืมบ่อยที่สุด (โปรเจกต์ทดสอบหนึ่งมี 63 จาก 66 รูปที่ไม่มีบรรทัดธีม และไม่มีใครเห็น):
+
+```bash
+node scripts/check-mermaid-theme.mjs docs          # exit 1 พร้อม ไฟล์:บรรทัด ของบล็อกที่ไม่มี %%{init
+node scripts/check-mermaid-theme.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับได้
+```
+
+agent ที่ไม่มี shell รันเองไม่ได้ → agent หลักรันหลังรับงาน
 
 ## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
 

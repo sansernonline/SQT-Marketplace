@@ -1,6 +1,6 @@
 ---
 name: learn
-description: Learn a new technology through a milestone path anchored to the user's real projects, or turn a paper or article into runnable example code.
+description: Learn a technology through milestones tied to the user's real projects, or turn a paper into runnable code.
 argument-hint: <technology or paper> [--depth skim|working|mastery]
 disable-model-invocation: true
 ---

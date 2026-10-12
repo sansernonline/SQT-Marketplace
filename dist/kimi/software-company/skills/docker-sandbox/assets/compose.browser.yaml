@@ -1,0 +1,21 @@
+# Virtual browser: a real Chromium in its own container that you can watch.
+# Watch it at http://127.0.0.1:7900 (noVNC). Playwright in the dev container drives it
+# through SELENIUM_REMOTE_URL; plain headless runs need no browser service at all.
+services:
+  dev:
+    environment:
+      SELENIUM_REMOTE_URL: http://browser:4444
+  browser:
+    image: selenium/standalone-chromium:latest
+    shm_size: 2gb
+    environment:
+      SE_VNC_NO_PASSWORD: "true"
+      SE_NODE_MAX_SESSIONS: "2"
+    labels:
+      sqt.sandbox: "true"
+      sqt.project: ${SANDBOX_NAME}
+      sqt.created: ${SANDBOX_CREATED:-unknown}
+      sqt.by: agent
+    ports:
+      - "127.0.0.1:${BROWSER_VIEW_PORT:-7900}:7900"
+    mem_limit: 4g

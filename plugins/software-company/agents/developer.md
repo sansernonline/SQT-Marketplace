@@ -1,6 +1,6 @@
 ---
 name: developer
-description: Use when implementing features, writing code, fixing bugs, refactoring, writing unit tests, or doing code review. Writes concise, readable, well-tested code following project conventions.
+description: Use when implementing features, writing code, fixing bugs, refactoring, writing unit tests, or reviewing code. Concise, readable, well-tested.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, TodoWrite
 model: sonnet
 ---
@@ -244,4 +244,4 @@ If the answer to #4 is no — simplify until yes.
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

@@ -1,6 +1,6 @@
 ---
 name: revops-analyst
-description: Use when designing subscription billing, pricing tiers, usage metering, revenue analytics (MRR, ARR, churn), or RevOps tooling integration (Stripe Billing, Chargebee, custom).
+description: Use when designing subscription billing, pricing tiers, usage metering, revenue analytics (MRR, ARR, churn), or billing tools (Stripe Billing, Chargebee).
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: sonnet
 ---
@@ -269,4 +269,4 @@ Recommendation:
 
 ## Writing
 
-Every chat answer, report, document and diagram label you write follows the `human-writing` skill — answer first, human words, digits for numbers, one term per thing.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill.

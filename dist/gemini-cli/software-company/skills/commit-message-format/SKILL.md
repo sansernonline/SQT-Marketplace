@@ -45,6 +45,22 @@ description: Use when writing a git commit message. Conventional Commits with ty
 - **Max 50 characters**
 - **Complete this sentence:** "If applied, this commit will _____"
 
+## Short and readable (applies to every commit)
+
+Someone scanning `git log --oneline` should understand each line without opening the diff.
+
+- **Language follows the repo** — check `git log -10` first. A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
+- **Subject says what changed for the reader**, not which file was touched: `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว`, not `fix: แก้ items.js บรรทัด 42`
+- **One line is enough** for most commits. Add a body only when *why* is not obvious from the subject — at most 3 short lines or bullets
+- **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
+- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit
+
+| ❌ Hard to read | ✅ Short and clear |
+|---|---|
+| `update items.js, server.js, add test, fix bug` | `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` |
+| `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
+| `refactor: แก้โค้ดให้ดีขึ้น` | `refactor(report): อ่านประวัติเบิกครั้งเดียวแทนทุกสินค้า` |
+
 ## Examples
 
 ### Simple commit

@@ -1,14 +1,14 @@
 # ตัวกระตุ้นทั้งหมด — เจอสถานการณ์นี้ เรียก skill นี้
 
-ตารางเต็มของหัวข้อ 3 ใน `superuser` เปิดดูเมื่อไม่แน่ใจว่างานนี้ควรเรียก skill ไหน
+ตารางตัวกระตุ้นมีที่เดียวคือไฟล์นี้ (`superuser` หัวข้อ 3 ชี้มาที่นี่) เปิดดูเมื่อไม่แน่ใจว่างานนี้ควรเรียก skill ไหน
 
 | สถานการณ์ | เรียก |
 |---|---|
-| ต้องเข้าใจโค้ดก่อนแก้ | [`code-orientation`](../../code-orientation/SKILL.md) → แผนที่ 10 บรรทัด ถ้าระบบใหญ่หรือมีหลายบริการ ให้ใช้ agent `system-analyst` หรือ `solution-architect` (อ่านอย่างเดียว) |
+| ต้องเข้าใจโค้ดก่อนแก้ | [`code-orientation`](../../code-orientation/SKILL.md) → แผนที่ 10 บรรทัด ถ้าระบบใหญ่หรือมีหลายบริการ ให้ใช้ agent `system-analyst` หรือ `solution-architect` และสั่งในคำขอว่า "อ่านอย่างเดียว ห้ามเขียนหรือแก้ไฟล์" |
 | เขียนหรือตรวจโค้ด C# · TypeScript · Python · SQL | skill ตาม stack: [`stack-dotnet`](../../stack-dotnet/SKILL.md) · [`stack-typescript`](../../stack-typescript/SKILL.md) · [`stack-python`](../../stack-python/SKILL.md) · [`stack-sql`](../../stack-sql/SKILL.md) — คำสั่ง build · test · กับดัก · รายการตรวจก่อนส่ง |
 | แก้ skill หรือ playbook ด้านเขียนโค้ด · อยากรู้ว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม | [`coding-evals`](../../coding-evals/SKILL.md) — รันงานชุดเดิมก่อนและหลังแล้วเทียบคะแนน |
 | ต้องเข้าใจแอปหรือไฟล์ที่ไม่มีซอร์สโค้ด (binary · APK · bundle · รูปแบบไฟล์ไม่มีเอกสาร) | agent `reverse-engineer` + skill `reverse-engineering` ใน playbook `investigation` — เฉพาะของที่ผู้ใช้มีสิทธิ์ |
-| จะถามคนว่า "เลือกแบบไหนดี" | หยุดก่อน ถ้าคำตอบดูได้จากการรันจริง ให้ใช้ playbook `prototype` แทนการถาม ส่วนเรื่องรสนิยมหรือธุรกิจที่ทดลองไม่ได้ ให้ใส่ใน "ค้างอยู่" แล้วทำส่วนอื่นต่อ |
+| จะถามคนว่า "เลือกแบบไหนดี" | อย่าเพิ่งถาม ถ้าคำตอบดูได้จากการรันจริง ให้ใช้ playbook `prototype` แทนการถาม ส่วนเรื่องรสนิยมหรือธุรกิจที่ทดลองไม่ได้ ให้ใส่ใน "ค้างอยู่" แล้วทำส่วนอื่นต่อ |
 | จะเขียนโค้ดที่ข้ามฟังก์ชันหรือโมดูล | [`principle-data-shape-first`](../../principle-data-shape-first/SKILL.md) — กำหนดรูปข้อมูลก่อนเขียนบรรทัดแรก แล้วใช้ `lazy-coding` · `readable-code` |
 | งานหลายขั้น · แก้คล้ายกันหลายจุด · งานยาว | [`principle-small-verifiable-steps`](../../principle-small-verifiable-steps/SKILL.md) |
 | สคริปต์ · migration · import · webhook · job ที่อาจรันซ้ำหรือหยุดกลางทาง | [`principle-safe-to-rerun`](../../principle-safe-to-rerun/SKILL.md) |

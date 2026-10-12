@@ -1,6 +1,6 @@
 ---
 name: security-operations
-description: Use when running security operations (incident containment and evidence, SOC design, SIEM rules mapped to MITRE ATT&CK, threat hunting, zero trust).
+description: Use when running security operations (incident containment, SOC design, SIEM rules, MITRE ATT&CK, threat hunting, zero trust).
 ---
 
 # security-operations
@@ -34,4 +34,4 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 ## ที่มา
 
-รวมจาก plugin `software-company-cybersecurity` (skill `security-incident-response` · `soc-operations` · `threat-detection-patterns`) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`
+รวมจาก plugin `software-company-cybersecurity` (เดิมชื่อ security-incident-response → `references/security-incident-response.md` · soc-operations → `references/soc-operations.md` · threat-detection-patterns → `references/threat-detection-patterns.md` ไม่ใช่ skill แยกแล้ว) เข้า `software-company` ใน v2.0.0 โดยเนื้อหาเดิมยังอยู่ครบใน `references/`

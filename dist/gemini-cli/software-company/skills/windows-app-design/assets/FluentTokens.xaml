@@ -31,16 +31,17 @@
       <Color x:Key="AppAccentTextColor">#99EBFF</Color>
 
       <!-- พื้นผิว -->
-      <SolidColorBrush x:Key="AppBackgroundBrush"      Color="#000000"/>
-      <SolidColorBrush x:Key="AppLayerBrush"           Color="#000000"/>
-      <SolidColorBrush x:Key="AppCardBrush"            Color="#0F0F0F"/>
-      <SolidColorBrush x:Key="AppCardSecondaryBrush"   Color="#1C1C1C"/>
-      <SolidColorBrush x:Key="AppDividerBrush"         Color="#2D2D2D"/>
+      <!-- Windows 11 ปกติ (Mica) · แบบดำสนิท Windows Security: #000000 #000000 #0F0F0F #1C1C1C #2D2D2D -->
+      <SolidColorBrush x:Key="AppBackgroundBrush"      Color="#202020"/>
+      <SolidColorBrush x:Key="AppLayerBrush"           Color="#272727"/>
+      <SolidColorBrush x:Key="AppCardBrush"            Color="#2B2B2B"/>
+      <SolidColorBrush x:Key="AppCardSecondaryBrush"   Color="#323232"/>
+      <SolidColorBrush x:Key="AppDividerBrush"         Color="#3A3A3A"/>
 
       <!-- ตัวอักษร (ทับของ WinUI เพื่อให้ทั้งแอปเหมือนกัน) -->
       <SolidColorBrush x:Key="TextFillColorPrimaryBrush"   Color="#FFFFFF"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#CCCCCC"/>
-      <SolidColorBrush x:Key="TextFillColorTertiaryBrush"  Color="#8B8B8B"/>
+      <SolidColorBrush x:Key="TextFillColorTertiaryBrush"  Color="#9D9D9D"/>
       <SolidColorBrush x:Key="TextFillColorDisabledBrush"  Color="#767676"/>
 
       <!-- accent ของคอนโทรลมาตรฐาน -->

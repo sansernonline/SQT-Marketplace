@@ -1,6 +1,6 @@
 ---
 name: contract
-description: Draft a basic Thai contract — hire, rent, or services — with the standard sections complete and lawyer-review flags on every clause that needs professional eyes.
+description: Draft a basic Thai contract — hire, rent or services — with standard sections and lawyer-review flags.
 argument-hint: <type> <parties> <key terms>
 disable-model-invocation: true
 ---
