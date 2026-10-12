@@ -1,6 +1,6 @@
 ---
 name: quant-analyst
-description: Use when modeling financial risk, pricing, credit scoring, backtesting strategies or other quantitative finance work.
+description: Use for quantitative finance — risk models, pricing, credit scoring, backtesting. Insurance → insurance-analyst.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 ---

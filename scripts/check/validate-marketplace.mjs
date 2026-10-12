@@ -236,8 +236,8 @@ const THEN_MAKES = new RegExp('(แล้ว|และ)\\s*(' + MAKE_VERBS + ')'
 const CHECK_NEAR = /^.{0,80}(ตรวจ|พิสูจน์|รีวิว|ทวน|ยืนยัน|รัน|วัด|เทียบ|ทดสอบ|ให้คะแนน|สแกน|อ่าน|ลอง|กด|เช็ก)/;
 const MAKE_START = /^\d+\. (\*\*)?(เขียน|ร่าง|แก้|เตรียม|คัด|ทิ้ง|จด|สร้าง|ปรับ|เพิ่ม|ลบ|ทำ|สรุป)/;   // ไม่มี "ส่ง" เพราะ "ส่ง `reviewer`" คือหัวหน้าทีมส่งงาน
 const NEGATED = /(ไม่ต้อง|ห้าม|ไม่ให้)[^·)]*/g;
-const USER_WAIT = /(?<!ไม่)รอ(คำตอบ|ผู้ใช้|ให้ผู้ใช้)|(?<!คำ|ไม่)ถาม(?!รวม)[^·]{0,20}ผู้ใช้/;   // "ถามรวมครั้งเดียวตอนเริ่ม" ได้
-const LEAD_MAKES = /^\d+\. (\*\*)?(แก้|เขียน|ร่าง|สร้าง)|ใคร: หัวหน้าทีม(แก้|เขียน|ร่าง|สร้าง)/;
+const USER_WAIT = /(?<!ไม่)รอ(คำตอบ|ผู้ใช้|ให้ผู้ใช้)|คำยืนยัน[^·]{0,15}(ไปต่อ|ค่อย)|(?<!คำ|ไม่)ถาม(?!รวม)[^·]{0,20}ผู้ใช้/;   // "ถามรวมครั้งเดียวตอนเริ่ม" ได้
+const LEAD_MAKES = /^\d+\. (\*\*)?(แก้|เขียน|ร่าง|สร้าง|ปรับ)|ใคร: หัวหน้าทีม[\s—-]*(แก้|เขียน|ร่าง|สร้าง|ปรับ)/;
 const LEAD_RECORDS = /รายงาน|สรุป|บันทึก|CONTEXT\.md|BUILD-PLAN|IMPROVEMENTS|log/;
 function checkPlaybook(file, text, hasAgent) {
   const lines = text.replace(/\r\n/g, '\n').split('\n');
@@ -359,6 +359,10 @@ function selfTest() {
     [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. เลือกทาง · ใคร: หัวหน้าทีม ถามผู้ใช้ให้เลือก แล้วรอคำตอบ\n3. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
     [pb('1. รวมคำถาม · ใคร: หัวหน้าทีมถาม · ผู้ใช้ตอบ\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
     [pb('1. คำถามที่ต้องให้ผู้ใช้ตอบลง "ค้างอยู่" · ใคร: หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 0],
+    // ช่องหลุดที่รอบตรวจ 2026-10-12 เจอ: กริยา "ปรับ" · ขีดหลัง "หัวหน้าทีม" · รอผู้ใช้แบบอ้อม
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. ปรับโค้ดตามผลตรวจ · ใคร: หัวหน้าทีม'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ตรวจ · ใคร: `reviewer` ตัวใหม่\n3. ปิดงาน · ใคร: หัวหน้าทีม — แก้ข้อที่เหลือ'), 1],
+    [pb('1. ทำ · ใคร: `developer` ตัวใหม่\n2. ส่งให้ผู้ใช้ดู ได้คำยืนยันแล้วจึงไปต่อ · ใคร: หัวหน้าทีม\n3. ตรวจ · ใคร: `reviewer` ตัวใหม่'), 1],
   ];
   const pbHit = pbCases.every(([text, n]) => { errors.length = 0; checkPlaybook('p.md', text, has); return errors.length === n; });
   console.log(`  ${pbHit ? '✅' : '❌'} playbook ใคร: · agent มีจริง · มีคนตรวจ`);
@@ -427,7 +431,7 @@ if (process.argv.includes('--self-test')) selfTest();
 const pluginsDir = join(ROOT, 'plugins');
 if (!existsSync(pluginsDir)) { console.error(`ไม่พบ ${pluginsDir}`); process.exit(1); }
 
-const plugins = readdirSync(pluginsDir).filter(d => statSync(join(pluginsDir, d)).isDirectory());
+const plugins = readdirSync(pluginsDir).filter(d => !d.startsWith('.') && statSync(join(pluginsDir, d)).isDirectory());
 plugins.forEach(p => checkPlugin(join(pluginsDir, p)));
 
 // marketplace.json ต้องมี plugin ครบทุกตัวที่มีอยู่จริง
@@ -481,7 +485,7 @@ function markdownFiles(dir, out = []) {
   }
   return out;
 }
-const docFiles = ['plugins', 'prompt', 'docs'].filter(d => existsSync(join(ROOT, d))).flatMap(d => markdownFiles(join(ROOT, d)))
+const docFiles = ['plugins', 'prompt', 'docs', 'scripts/install'].filter(d => existsSync(join(ROOT, d))).flatMap(d => markdownFiles(join(ROOT, d)))
   .concat(existsSync(readme) ? [['README.md', readFileSync(readme, 'utf8')]] : []);
 for (const [rel, text] of docFiles) checkTables(rel, text);
 if (existsSync(factsFile)) checkRetired(JSON.parse(readFileSync(factsFile, 'utf8')).retired ?? [], docFiles);

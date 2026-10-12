@@ -1,6 +1,6 @@
 # SQT Marketplace — Software Company Plugin Suite
 
-Marketplace สำหรับ Claude Code · **11 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน เลือกติดตั้งตามอุตสาหกรรม
+Marketplace สำหรับ Claude Code · **12 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน เลือกติดตั้งตามอุตสาหกรรม
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
@@ -40,7 +40,7 @@ scripts\build-dist.cmd                                                       # �
 | **`graphic-design`** | 7 | 14 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
 | **`dev-learning`** | 4 | 11 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก · เขียนวิทยานิพนธ์และบทความวิจัย |
 
-> plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
+> plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company และ superuser) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
 
 ---
@@ -145,12 +145,11 @@ SQT-Marketplace/
 ├── plugins/
 │   └── software-company/
 │       ├── .claude-plugin/plugin.json
-│       ├── agents/     (39)
+│       ├── agents/     (41)
 │       ├── skills/     (110 skill + 29 คำสั่ง)
 │       └── hooks/      ← hook ของ SuperUser (log · inbox)
 ├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
-├── assets/     ← ไอคอนและรูปที่ใช้ร่วม
 ├── prompt/     ← ชุด prompt แยกโฟลเดอร์ตาม plugin — ข้อยกเว้นของ repo นี้ต่อกฎโครงรากโปรเจกต์
 ├── scripts/
 └── README.md

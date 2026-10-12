@@ -1,7 +1,7 @@
 ---
 name: alert-dispatcher
 description: Use when the user wants price or news alerts on watched symbols. Sets scheduled checks and keeps alerts few.
-tools: Read, Write, Bash, Skill
+tools: Read, Write, Bash, Skill, WebFetch
 model: sonnet
 ---
 

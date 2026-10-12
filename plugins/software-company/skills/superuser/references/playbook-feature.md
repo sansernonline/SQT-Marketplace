@@ -7,7 +7,7 @@ skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · ski
 
 1. อ่านข้อกำหนดที่เกี่ยว (`docs/srs.md` · `docs/fsd-*.md` · mockup) แล้วทำ [`code-orientation`](../../code-orientation/SKILL.md) กับส่วนที่จะแตะ จะได้แผนที่ 10 บรรทัด แล้วเปิด skill ตาม stack ของโปรเจกต์ · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)
 2. **บอกรูปข้อมูลก่อน** — type · ตาราง · state ที่ฟีเจอร์นี้สร้างหรือเปลี่ยน โดยเขียนเป็นโค้ดหรือตารางสั้น ๆ ในคำตอบ · ใคร: หัวหน้าทีม
-   - วางตำแหน่งไฟล์ตามเกณฑ์โค้ดของ `superuser`: โฟลเดอร์ตามฟีเจอร์ · 1 ไฟล์ 1 หน้าที่ · แยก 3 ชั้น (รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล) · ค่าตั้งอยู่นอกโค้ด · test อยู่ข้างโค้ด
+   - แยก 3 ชั้น (รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล)
    - ถ้าแตะ input จากภายนอก · login · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล ให้เปิด [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้รัน `/software-company:threat-model` ก่อนเขียน
 3. ถ้าฟีเจอร์ข้ามหลายโมดูล ให้ร่างลายเซ็นฟังก์ชันและตำแหน่งไฟล์ก่อนเขียนเนื้อ ถ้ายังมีหลายทางที่ดีพอกัน ให้ใช้ [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) หรือ playbook `prototype` · ใคร: หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)
 4. ในจุดที่จะแตะ ลบของที่ไม่ใช้ออกก่อน แล้วค่อยเพิ่ม ([`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md)) · ใคร: `developer` ตัวใหม่

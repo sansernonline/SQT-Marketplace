@@ -47,7 +47,7 @@
 | `superuser` | research · document | ส่งข้อความ · จ่ายเงิน · ลบข้อมูลจริง | [ดูรูป](superuser-core.png) |
 | `career` | job-application · interview · offer-negotiation · promotion-case · profile-refresh | ส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก | [ดูรูป](superuser-career.png) |
 | `consumer-rights` | buy-decision · complaint · refund · warranty-claim | ส่งร้องเรียน · ยื่นฟ้อง · โพสต์สาธารณะ | [ดูรูป](superuser-consumer-rights.png) |
-| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project · thesis-writing | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](superuser-dev-learning.png) |
+| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project (วิทยานิพนธ์ใช้ skill `thesis-writing`) | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](superuser-dev-learning.png) |
 | `graphic-design` | brand-setup · campaign · image-series · video · asset-cleanup | โพสต์ · ยิงแอด · ใช้งานที่ลิขสิทธิ์ไม่ชัด | [ดูรูป](superuser-graphic-design.png) |
 | `health-wellness` | checkup-cycle · doctor-visit · medication-routine · habit-tracking | วินิจฉัย · ปรับยา · ส่งข้อมูลสุขภาพ (ฉุกเฉิน → หยุดงาน บอก 1669) | [ดูรูป](superuser-health-wellness.png) |
 | `home-family` | bills · maintenance · vehicle · family-week · care-setup | จ่ายเงิน · ส่งข้อความในนามผู้ใช้ | [ดูรูป](superuser-home-family.png) |

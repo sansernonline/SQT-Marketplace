@@ -1,6 +1,6 @@
 ---
 name: principle-fix-root-cause
-description: Use when debugging anything broken (error, crash, wrong value, flaky test). Reproduce, fix the cause.
+description: Use when debugging anything broken (error, crash, wrong value, flaky test). Reproduce, fix the cause. Cause known, small fix → targeted-fix.
 ---
 
 # principle · fix root cause — แก้ที่ต้นเหตุ

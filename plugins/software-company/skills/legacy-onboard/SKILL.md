@@ -22,7 +22,7 @@ Load the `legacy-spec-recovery` skill and `context-budget` first. Read only — 
    - integrations, jobs, reports, ETL, mobile or other clients
    - manuals and old documents: what they claim the system does
 
-   Ask the user for a script-out of database objects and the menu/role tables at the same time — they are rarely in the repository.
+   Database objects and the menu/role tables are rarely in the repository: include a request for a script-out of them in the one start question. Not received → mark those rules ❓ and continue.
 
    Then the `system-analyst` agent assembles `01`–`06` from those tables. `06-findings.md` holds defects and security weaknesses, for the system owner only.
 

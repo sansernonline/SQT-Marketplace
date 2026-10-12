@@ -1,6 +1,6 @@
 ---
 name: technical-writer
-description: Use when writing user guides, API docs, tutorials, READMEs, release notes or onboarding docs for a given audience.
+description: Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
 ---

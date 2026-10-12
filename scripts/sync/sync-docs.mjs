@@ -35,7 +35,7 @@ function readFrontmatter(file) {
 }
 
 function scanPlugins() {
-  return listDir(join(ROOT, "plugins")).map((name) => {
+  return listDir(join(ROOT, "plugins")).filter((name) => !name.startsWith(".")).map((name) => {
     const dir = join(ROOT, "plugins", name);
     // skill ที่มี disable-model-invocation: true = คำสั่งที่ผู้ใช้พิมพ์เอง (slash command) · นับแยกจาก skill
     const all = listDir(join(dir, "skills")).map((skillName) => {

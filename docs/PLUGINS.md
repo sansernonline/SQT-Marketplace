@@ -69,7 +69,7 @@
 SQT-Marketplace/
 ├── .claude-plugin/marketplace.json
 ├── plugins/software-company/
-│   ├── agents/      39 บทบาท
+│   ├── agents/      41 บทบาท
 │   ├── skills/      110 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
 │   └── hooks/       hook ของ SuperUser — เขียน .claude/superuser/log และแจ้ง inbox
 ├── docs/            INSTALL · USAGE · REFERENCE · PLUGINS (ไฟล์นี้)

@@ -14,6 +14,8 @@ description: Use when writing user stories or turning requirements into stories 
 - ต้องเขียน acceptance criteria
 - ต้อง review/refine user story เดิมที่ไม่ชัดเจน
 
+ไม่ใช้เมื่อ: ต้องการเอกสาร requirement เต็ม → `srs-writing` · สเปกหน้าจอ → `fsd-writing` · เขียนกรณีทดสอบ → `test-case-template`
+
 ## ขั้นตอนการทำงาน
 
 1. **เก็บข้อมูลให้ครบ** ก่อนเขียน ถ้าขาดอะไรให้ถาม:

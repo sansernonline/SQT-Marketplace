@@ -1,7 +1,7 @@
 ---
 name: tech-mentor
 description: Use to keep up with tech, learn a new technology, prepare for a certification, or pick a week-sized side project.
-tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebSearch
+tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebSearch, WebFetch
 model: sonnet
 ---
 

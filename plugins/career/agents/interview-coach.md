@@ -1,6 +1,6 @@
 ---
 name: interview-coach
-description: Use when an interview is coming — mock rounds, STAR stories, hard Thai HR questions (salary, why leaving), scoring.
+description: Use when an interview is coming — mock rounds, STAR stories, hard Thai HR questions, scoring. Offers → career-coach.
 tools: Read, Write, Edit, Skill, WebSearch, WebFetch
 model: sonnet
 ---

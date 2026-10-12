@@ -1,7 +1,6 @@
 ---
 name: art-director
 description: Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.
-tools: Read, Write, Edit, Bash, Skill
 model: sonnet
 ---
 

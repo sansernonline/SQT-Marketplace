@@ -6,6 +6,8 @@
 
 ## 🧑‍💼 Agents (41)
 
+> หัวข้อด้านล่างอธิบาย 12 ตัวแรกเท่านั้น · หน้าที่ล่าสุดของทุกตัวอยู่ในไฟล์ `plugins/software-company/agents/*.md` · บทบาทกลาง `brainstormer` · `reviewer` · `learning-reviewer` อยู่ที่ [superuser](#62-superuser)
+
 > `model:` ใน frontmatter ของแต่ละ agent เป็นแค่ค่าเริ่มต้น · ถ้างานสั่งผ่าน SuperUser หัวหน้าทีมจะเลือกขนาดโมเดลตามงานเอง (งานใหญ่ = opus · กลาง = sonnet · เล็ก = haiku) · ดู [superuser](#62-superuser)
 
 ### 1. project-manager
@@ -186,7 +188,7 @@
 - Security code review
 - กำหนด authentication / authorization
 - ตรวจสอบ compliance (PDPA, GDPR, PCI-DSS, SOC2)
-- ตอบสนอง security incident
+- ช่วย `security-analyst` ตอนเกิด security incident (security-analyst นำ)
 - Vulnerability assessment
 
 **Framework ใช้:** OWASP Top 10, STRIDE, Defense in Depth
@@ -691,11 +693,11 @@
 ---
 
 ### 62. superuser
-**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
 **ไม่หยุดถาม:** งานที่ย้อนกลับไม่ได้ → เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ผู้ใช้อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) · ค้นเองใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน
-**ตอนจบ:** ทุกข้ออ้างติดป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ตรวจ` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ · ของใหม่ที่ทีมควรรู้จดลง `IMPROVEMENTS.md` ที่ root
+**ตอนจบ:** ทุกข้ออ้างติดป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ตรวจ` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ · ของใหม่ที่ทีมควรรู้จดลง `.claude/superuser/IMPROVEMENTS.md`
 **playbook จาก pstack:** `investigation` ตอบได้ทั้งทำงานอย่างไร · ทำไม · สอนแบบต่อชั้น · `performance` 1 commit ต่อการแก้ 1 ครั้งที่ได้ผล พร้อมตัวเลขก่อน/หลัง
 
 ---
@@ -1081,7 +1083,7 @@
 
 ### 14. /architecture-review `<system>` ⭐ NEW
 **Agent:** solution-architect + architecture-patterns + polished-document-style
-**Use case:** Review existing/proposed architecture vs NFRs
+**Use case:** Review existing/proposed architecture vs non-functional requirements (NFRs)
 **Output:** Quality scorecard + risk register + improvement recommendations
 
 ---
@@ -1094,6 +1096,8 @@
 ---
 
 ## 🔗 Agent Collaboration Map
+
+> ผังนี้เป็นแบบเดิมที่ `project-manager` ประสานงาน · ตอนนี้งานหลายขั้นใช้หัวหน้าทีม SuperUser แจกงานและให้ `reviewer` ตัวใหม่ตรวจ ดู [superuser](#62-superuser)
 
 ```
 User Request
@@ -1155,7 +1159,7 @@ SQT-Marketplace/
 │   └── software-company/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
-│       ├── agents/         (39 files)
+│       ├── agents/         (41 files)
 │       ├── skills/         (110 skill + 29 คำสั่ง)
 │       └── hooks/          (hooks.json · superuser-hook.mjs)
 ├── docs/
