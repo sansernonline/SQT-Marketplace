@@ -26,9 +26,10 @@ description: Use when designing or building a web app UI or mockup (dashboard, a
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
 
-> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ appstrack** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ appstrack** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่ · appstrack คือพื้น ไม่ใช่หน้าตาสุดท้าย
 
 ```
+0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ appstrack.css ในบล็อก token
 1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
 3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
