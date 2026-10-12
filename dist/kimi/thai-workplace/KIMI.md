@@ -16,6 +16,6 @@ Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (qu
 - **compliance-helper** — Use when a Thai SME handles personal data under PDPA — consent forms, breach response, data-subject requests, ROPA.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **line-admin** — Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; specialists go first.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
 - **tax-helper** — Use when a Thai person or SME asks what to file and when — VAT ภ.พ.30, withholding, ภ.ง.ด., social security.
 - **thai-doc-writer** — Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form.

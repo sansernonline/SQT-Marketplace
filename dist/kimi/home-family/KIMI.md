@@ -16,4 +16,4 @@ Household admin for Thai families — reading electricity (MEA/PEA, Ft) and wate
 - **family-planner** — Use when a Thai family needs its week organised — meals, groceries, school fees, elder appointments, pet vaccines.
 - **home-manager** — Use for Thai household bills and upkeep — utilities, repairs, contractor quotes, vehicle tax, พ.ร.บ., renewals.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; specialists go first.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.

@@ -4,6 +4,7 @@ description: Use when work has many steps (migration, sweep, many similar edits,
 ---
 
 # principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น
+> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
 
 > งานยาวที่ตรวจทีเดียวตอนจบ ถ้าพังจะไม่รู้ว่าพังที่ชิ้นไหน
 > ให้ตัดเป็นชิ้นเล็กที่แต่ละชิ้นจบในสภาพที่ตรวจได้ พังเมื่อไรก็รู้ทันทีว่าชิ้นไหน

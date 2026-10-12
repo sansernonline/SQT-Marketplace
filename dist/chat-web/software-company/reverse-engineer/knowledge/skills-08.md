@@ -1,6 +1,6 @@
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
 
 # Markdown Visuals
 

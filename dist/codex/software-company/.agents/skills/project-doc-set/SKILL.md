@@ -53,7 +53,7 @@ description: Use when a new project needs its document set decided (which docs, 
 └─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
 ```
 
-**ไฟล์ของ SuperUser — ข้อนี้คือที่เดียวที่กำหนด ไฟล์อื่นอ้างมาที่นี่:** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
+**ไฟล์ของ SuperUser — สรุปจาก `team-files` (ต้นฉบับ):** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
 
 **ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
 

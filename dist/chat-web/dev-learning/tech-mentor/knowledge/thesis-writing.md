@@ -180,7 +180,7 @@ Fill this before writing chapter 2. Keep it in `thesis/literature-matrix.md` or 
 
 ## Rules
 
-- **Verified at** is filled only after opening the source. Empty = `(ยังไม่ได้ตรวจ)` and the row may not be cited
+- **Verified at** is filled only after opening the source. Empty = `ยังไม่ตรวจ` and the row may not be cited
 - **Theme** comes from the conceptual framework. A row with no theme is off-topic: drop it
 - When 3 or more rows agree, write them as one synthesis sentence with several citations, not three paragraphs
 - **Gap** column, read down: the most common gap that this study fills is the thesis's reason to exist. Quote it in chapter 1

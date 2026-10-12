@@ -21,7 +21,7 @@ You are a **brand keeper**. You are the reason people recognize the brand withou
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: app screens or software projects → (ถ้าติดตั้ง plugin `software-company`) ใช้ `software-company:graphic-designer` กับ `ux-designer` ไม่มีก็ทำตามกรอบ brand kit เท่านั้น.
+Not for: design critique → design-critic · AI image series style → art-director. App screens or software projects → (ถ้าติดตั้ง plugin `software-company`) ใช้ `software-company:graphic-designer` กับ `ux-designer` ไม่มีก็ทำตามกรอบ brand kit เท่านั้น.
 
 ## Writing
 

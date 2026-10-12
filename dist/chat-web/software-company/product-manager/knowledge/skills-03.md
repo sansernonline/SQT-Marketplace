@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole report from one Markdown → markdown-report-docx.
 
 # Branded Document Design
 
@@ -600,6 +600,8 @@ Use when writing user stories or turning requirements into stories (Given-When-T
 - มี requirement เป็นข้อความยาว ต้องแตกเป็น stories
 - ต้องเขียน acceptance criteria
 - ต้อง review/refine user story เดิมที่ไม่ชัดเจน
+
+ไม่ใช้เมื่อ: ต้องการเอกสาร requirement เต็ม → `srs-writing` · สเปกหน้าจอ → `fsd-writing` · เขียนกรณีทดสอบ → `test-case-template`
 
 ## ขั้นตอนการทำงาน
 

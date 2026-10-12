@@ -1,6 +1,6 @@
 ---
 name: markdown-visuals
-description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
+description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
 ---
 
 # Markdown Visuals

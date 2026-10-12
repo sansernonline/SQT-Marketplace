@@ -14,6 +14,6 @@ Career toolkit for people working in Thailand — Thai and international CV conv
 
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **career-coach** — Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing offers. Thai or English.
-- **interview-coach** — Use when an interview is coming — mock rounds, STAR stories, hard Thai HR questions (salary, why leaving), scoring.
+- **interview-coach** — Use when an interview is coming — mock rounds, STAR stories, hard Thai HR questions, scoring. Offers → career-coach.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; specialists go first.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.

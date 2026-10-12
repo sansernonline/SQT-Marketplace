@@ -2,7 +2,7 @@
 
 ใช้เมื่อ: <สถานการณ์ หรือคำที่ผู้ใช้พูด 2–3 แบบ>
 ผลลัพธ์: <ผู้ใช้ได้อะไร · รูปแบบไฟล์>
-รูปแบบหลัก: <Planning · ReAct · Reflection · Multi-Agent · MoA · Reranker ที่ใช้> (`agent-patterns`)
+รูปแบบหลัก: <Planning · ReAct · Reflection · Multi-Agent · MoA (Mixture-of-Agents) · Reranker ที่ใช้> (`agent-patterns`)
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

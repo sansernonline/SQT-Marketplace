@@ -5,7 +5,7 @@ description: Use when dividend season comes or the user asks about dividend inco
 
 # Dividend Tracker (ติดตามเงินปันผล)
 
-Know the income before it arrives. Tracker template: [references/dividend-template.md](references/dividend-template.md). General information, not investment or tax advice — for the tax decision ask a นักบัญชี or RD 1161.
+Know the income before it arrives. Tracker template: [references/dividend-template.md](references/dividend-template.md). General information, not investment or tax advice — for the tax decision ask a นักบัญชี or RD 1161. Tax treatment of dividends: `tax-basics-th`.
 
 ## The dates — SET (T+2 settlement)
 

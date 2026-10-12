@@ -1,6 +1,6 @@
 ---
 name: targeted-fix
-description: Use when feedback says something is wrong (error, failing test, regression, not what I asked). Smallest fix.
+description: Use when feedback says something is wrong (error, failing test, regression, not what I asked). Smallest fix. Cause unknown → principle-fix-root-cause.
 ---
 
 > **ใน SuperUser:** งานแก้บั๊กเริ่มจาก playbook [`bug-fix`](../superuser/references/playbook-bug-fix.md) และ skill นี้คือขั้น "แก้ให้เล็กที่สุด" ส่วนการหาสาเหตุจริงใช้ [`principle-fix-root-cause`](../principle-fix-root-cause/SKILL.md)

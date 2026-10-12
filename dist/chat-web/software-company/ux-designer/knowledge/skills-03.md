@@ -1,6 +1,6 @@
 # skill: windows-app-design
 
-Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, MAUI).
+Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, MAUI). Browser-based → web-app-design.
 
 # Windows App Design
 
@@ -543,7 +543,7 @@ Segoe UI Variable **ไม่มีอักษรไทย** แต่ Windows 
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere.
+Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
 
 # Markdown Visuals
 

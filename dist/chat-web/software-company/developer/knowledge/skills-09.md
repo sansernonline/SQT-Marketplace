@@ -345,7 +345,7 @@ Use when writing anything a person will read (answer, report, document, slide, l
 - ป้ายในกล่องเป็นคำนามสั้น 1–4 คำที่คนเข้าใจ · ป้ายบนลูกศรเป็นกริยา · ลูกศรไม่มีป้ายต้องเดาไม่ผิด
 - คำในรูปตรงกับเอกสาร · ชื่อรูปเป็นข้อสรุป ใต้รูป 1 ประโยคบอกว่าควรดูอะไร · มี house style ให้ใช้ตามนั้น
 
-## 9 · ตรวจก่อนส่ง 6 ข้อ
+## 8 · ตรวจก่อนส่ง 6 ข้อ
 
 1. อ่านออกเสียงแล้วลื่นไหม · ไม่เหมือนภาษาแปล
 2. คนนอกอ่านแล้วเข้าใจโดยไม่ต้องถามไหม · สัญลักษณ์ทุกตัวอ่านออกไหม
@@ -537,7 +537,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: spell-out-abbreviations
 
-Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
+Use for docs, UI text or commits heavy with abbreviations or jargon, or needing a glossary. General writing → human-writing.
 
 # Spell Out Abbreviations
 

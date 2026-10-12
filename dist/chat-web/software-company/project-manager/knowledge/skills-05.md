@@ -10,7 +10,7 @@ Use when an agent makes its own judgment call in long or unattended work (approa
 
 ## เขียนที่ไหน
 
-`docs/BUILD-PLAN.md` หัวข้อ `## ตัดสินใจเอง` ซึ่งเป็นหัวข้อสุดท้ายของไฟล์ ลำดับในไฟล์คือ `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` ถ้ายังไม่มีหัวข้อหรือไฟล์ให้สร้างขึ้น
+`docs/BUILD-PLAN.md` หัวข้อ `## ตัดสินใจเอง` ซึ่งเป็นหัวข้อสุดท้ายของไฟล์ ลำดับในไฟล์คือ `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` ถ้ายังไม่มีหัวข้อให้สร้างขึ้น ถ้าไม่มีไฟล์ `docs/BUILD-PLAN.md` ให้ลงตาราง "การตัดสินใจ" ใน `.claude/superuser/CONTEXT.md` แทน
 subagent ไม่เขียนตารางเอง แต่**รายงานการตัดสินใจกลับมา** ให้ตัวหลักลงตาราง
 
 ```markdown
@@ -59,6 +59,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 Use when work splits into independent slices (modules, screens, files) or the user says swarm or fan out.
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
+> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
 
 > ต่างจาก `parallel-attempts-pick-best` ตรงที่แต่ละตัวทำ**คนละชิ้น** ไม่ใช่แข่งทำชิ้นเดียวกัน
 

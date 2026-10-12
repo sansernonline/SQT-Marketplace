@@ -17,5 +17,5 @@ Creative design beyond product UI — brand kits, AI image and video briefs with
 - **brand-keeper** — Use when starting a brand or when designs look inconsistent. Keeps the brand kit (logo, colours, type, tone).
 - **design-critic** — Use when a design feels off or before visuals ship. Reviews hierarchy, contrast, spacing, alignment; names 2–3 fixes.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; specialists go first.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
 - **social-creator** — Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.

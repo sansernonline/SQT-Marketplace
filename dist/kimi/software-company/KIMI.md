@@ -41,15 +41,15 @@ Simulates a complete software development company — 39 roles from product, ana
 - **product-manager** — Use for product vision, roadmap, feature priorities, user research or market analysis. HOW and WHEN → project-manager.
 - **project-manager** — Use for project plans, timelines, sprints, risks, progress tracking or status reports. WHAT and WHY → product-manager.
 - **qa-tester** — Use when creating test plans, test cases, bug reports, exploratory testing or test coverage before release.
-- **quant-analyst** — Use when modeling financial risk, pricing, credit scoring, backtesting strategies or other quantitative finance work.
+- **quant-analyst** — Use for quantitative finance — risk models, pricing, credit scoring, backtesting. Insurance → insurance-analyst.
 - **recommendation-engineer** — Use when building recommendation systems — related items, personalized ranking, collaborative or hybrid filtering.
 - **reverse-engineer** — Use to understand or recreate software without source (binary, .NET, Electron, APK, JS bundle). Authorized targets only.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; specialists go first.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
 - **revops-analyst** — Use when designing subscription billing, pricing tiers, usage metering or revenue analytics (MRR, ARR, churn).
 - **security-analyst** — Use for security operations — incidents, alert triage, threat hunting, SOC, detections. App code → security-engineer.
 - **security-engineer** — Use for security reviews, threat modeling, vulnerability assessment, secure code, auth design. SOC → security-analyst.
 - **seo-specialist** — Use when improving search ranking — SEO audits, keywords, meta tags, URL structure, structured data, competitor SEO.
 - **solution-architect** — Use for system architecture, stack choice, trade-offs, ADRs or architecture review. Endpoint specs → system-analyst.
 - **system-analyst** — Use for an FSD, use cases, data flows, endpoint API specs or sequence diagrams. Architecture → solution-architect.
-- **technical-writer** — Use when writing user guides, API docs, tutorials, READMEs, release notes or onboarding docs for a given audience.
+- **technical-writer** — Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer.
 - **ux-designer** — Use when designing user flows, wireframes, clickable HTML mockups or UI heuristic reviews. Logos → graphic-designer.

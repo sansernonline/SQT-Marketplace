@@ -23,6 +23,7 @@ description: Use when reviewing a pull request, self-reviewing before submitting
 | Reviewing a visual (image, poster, screen look) | (if plugin `graphic-design` is installed) `graphic-design:design-review`, else `ui-craft` checks |
 | Writing or updating the PR description itself | `pr-description-template` |
 | Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
+| Scanners, secrets or dependency check before ship or after adding a dependency | `security-gate` (run both before merge) |
 
 ## Review Process
 

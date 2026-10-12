@@ -4,6 +4,7 @@ description: Use when work has a mechanical part (same edit in many files, every
 ---
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
+> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
 
 > งานมี 2 ส่วน: ส่วนที่ต้องใช้วิจารณญาณ กับส่วนที่เป็นกลไกล้วน ๆ
 > ส่วนกลไกไม่ต้องให้ agent คิดวิธีใหม่ทุกครั้ง ให้เขียนเป็นโปรแกรมครั้งเดียว แล้วเก็บแรงคิดไว้กับส่วนที่ต้องตัดสินใจ

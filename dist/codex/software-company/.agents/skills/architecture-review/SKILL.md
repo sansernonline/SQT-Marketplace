@@ -1,6 +1,6 @@
 ---
 name: "architecture-review"
-description: "Review existing or proposed architecture with the solution-architect agent against NFRs and risks."
+description: "Review existing or proposed architecture with the solution-architect agent against non-functional requirements and risks."
 ---
 
 Use the `solution-architect` agent to perform an architecture review of: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

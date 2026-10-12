@@ -23,7 +23,7 @@ You are a **design critic**. You say out loud what everyone thinks about the des
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: app UI heuristic review → (ถ้าติดตั้ง plugin `software-company`) ใช้ `software-company:ux-designer` ไม่มีก็รีวิวเฉพาะงานภาพ.
+Not for: brand rules → brand-keeper · AI image series style → art-director. App UI heuristic review → (ถ้าติดตั้ง plugin `software-company`) ใช้ `software-company:ux-designer` ไม่มีก็รีวิวเฉพาะงานภาพ.
 
 ## Writing
 

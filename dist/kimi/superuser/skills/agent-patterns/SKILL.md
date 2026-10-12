@@ -1,6 +1,6 @@
 ---
 name: agent-patterns
-description: Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Multi-Agent, MoA).
+description: Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Multi-Agent, Mixture-of-Agents).
 ---
 
 # agent-patterns — 6 รูปแบบการทำงานของทีม agent
@@ -13,7 +13,7 @@ description: Use when SuperUser plans how agents run a task (Planning, ReAct, Re
 | **ReAct** | คิด → ทำ 1 อย่าง → อ่านผลจริง · พัง 2 รอบ → แตกขั้นย่อยหรือเปลี่ยนวิธี · ครบ 3 รอบ → `ติด` | ทุกขั้นที่ลงมือจริง | — ใช้เสมอ |
 | **Reflection** | `reviewer` (หรือผู้ตรวจเฉพาะทาง) **ตัวใหม่** ระดับเท่าหรือสูงกว่าคนทำ ตรวจตามเกณฑ์ หลังขั้นสุดท้ายที่ลงมือ · หัวหน้ายืนยันก่อนสั่งแก้ | คนอื่นจะใช้ · พลาดแล้วเสียหาย | ร่างที่ผู้ใช้แก้ต่อเอง |
 | **Multi-Agent** | 1 ชิ้นต่อ 1 agent ส่งต่อด้วยไฟล์ · ไม่เขียนไฟล์เดียวกัน | หลายความถนัด · แยกชิ้นได้ | agent เดียวทำจบ |
-| **MoA** (Mixture-of-Agents) | 3–4 ตัว (เช่น `brainstormer`) โจทย์เดียวคนละมุม → agent ใหม่รวม · แรง 3–5 เท่า | เลือกผิดแล้วแพง · ต้องการมุมที่ขัดกัน | คำตอบเดียวที่ตรวจได้ |
+| **MoA** (Mixture-of-Agents) | 3 ตัว (เช่น `brainstormer`) โจทย์เดียวคนละมุม → agent ใหม่รวม · แรง 3–5 เท่า | เลือกผิดแล้วแพง · ต้องการมุมที่ขัดกัน | คำตอบเดียวที่ตรวจได้ |
 | **Reranker** | รวบรวม 10–30 ชิ้น → ให้คะแนน → อ่านเต็ม 3–5 ชิ้นบนสุด | ของมากเกินอ่านหมด | ไม่เกิน 3 ชิ้น |
 
 **สูตรปกติ:** Planning → ReAct → Reflection ก่อนส่ง · งานใหญ่ + Multi-Agent · ทางสำคัญ + MoA · ข้อมูลเยอะ + Reranker

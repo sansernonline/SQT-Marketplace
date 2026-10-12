@@ -4,21 +4,21 @@ description: "Run a sprint retrospective covering what went well, what didn't, a
 disableModelInvocation: true
 ---
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `learn-from-session` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
+> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `project-docs` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
 
 Use the `project-manager` agent to facilitate a retrospective for: **$ARGUMENTS**
 
 The PM should run this structured retro:
 
 ## 1. Set the Stage
-Ask the user about the sprint:
+Ask the user once, at the start, all of the following (sprint facts and the retro input in step 2); do not stop to ask again:
 - What was the sprint goal?
 - Was it achieved? (yes/partial/no)
 - Any major events during sprint?
 
 ## 2. Gather Data (Start/Stop/Continue + Mad/Sad/Glad)
 
-Ask the user to share, then organize into:
+Using the answers from the start question, organize into:
 
 ### 🟢 Went Well (Glad)
 What should we **continue** doing?

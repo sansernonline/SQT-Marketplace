@@ -17,4 +17,4 @@ Personal life admin for busy adults — weekly reviews, meeting prep and summari
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **life-admin** — Use for recurring personal admin — weekly reviews, subscription audits, digital safety, goals, habits, polite messages.
 - **meeting-prep** — Use before and after a meeting that matters. One-page prep card (goal, questions, context) and action-item summary.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; specialists go first.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.

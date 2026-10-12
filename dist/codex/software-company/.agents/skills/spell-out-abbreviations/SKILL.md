@@ -1,6 +1,6 @@
 ---
 name: spell-out-abbreviations
-description: Use when writing anything for a person (docs, commits, replies, UI text). Spell out abbreviations.
+description: Use for docs, UI text or commits heavy with abbreviations or jargon, or needing a glossary. General writing → human-writing.
 ---
 
 # Spell Out Abbreviations

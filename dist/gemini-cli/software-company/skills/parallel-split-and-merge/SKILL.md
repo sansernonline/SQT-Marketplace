@@ -4,6 +4,7 @@ description: Use when work splits into independent slices (modules, screens, fil
 ---
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
+> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
 
 > ต่างจาก `parallel-attempts-pick-best` ตรงที่แต่ละตัวทำ**คนละชิ้น** ไม่ใช่แข่งทำชิ้นเดียวกัน
 

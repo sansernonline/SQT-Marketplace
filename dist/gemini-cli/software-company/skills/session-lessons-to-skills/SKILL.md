@@ -1,6 +1,6 @@
 ---
 name: session-lessons-to-skills
-description: Use when a hard task has landed, the user says reflect or what did we learn, or a skill misled.
+description: Use when the user says reflect or รวมบทเรียน (learn-from-session), or a skill demonstrably misled. Task-end notes → learning-reviewer.
 ---
 
 # session-lessons-to-skills — ทุกงานใหญ่ทิ้งบทเรียนไว้ในเครื่องมือ

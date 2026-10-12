@@ -7,6 +7,8 @@ description: Use when the user wants to understand and apply a paper, RFC or lon
 
 From "I read it" to "it runs on my machine".
 
+Related: reading the paper in English → `english-tech-reading` · writing it up as a thesis or report → `thesis-writing`.
+
 ## Steps
 
 1. **Brief** — the problem, the core idea in 1 paragraph, why it beats the alternative, and 1 line on limitations the authors admit

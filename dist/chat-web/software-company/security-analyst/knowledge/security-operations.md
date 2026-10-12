@@ -27,6 +27,10 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 | triaging security alerts, investigating SIEM findings, analyzing potential incidents, doing first-line security operations work, or building SOC playbooks | [`references/agent-soc-analyst.md`](references/agent-soc-analyst.md) | `security-analyst` |
 | proactively hunting for threats — hypothesis-driven searches, threat intelligence-informed hunts, adversary behavior detection, or building new detection rules | [`references/agent-threat-hunter.md`](references/agent-threat-hunter.md) | `security-analyst` |
 
+## ไม่ใช้เมื่อ
+
+- เขียนคู่มือรับมือเหตุให้ on-call → `incident-runbook-template` · สรุปเหตุหลังจบ → `postmortem-template`
+
 ## agent ของสายนี้
 
 `security-analyst`

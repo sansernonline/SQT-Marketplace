@@ -639,7 +639,7 @@ Define acronyms on first use, then add to glossary.
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts).
+Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole report from one Markdown → markdown-report-docx.
 
 # Branded Document Design
 

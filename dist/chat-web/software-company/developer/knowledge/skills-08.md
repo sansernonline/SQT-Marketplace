@@ -52,7 +52,7 @@ Use when a new project needs its document set decided (which docs, order, where 
 └─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
 ```
 
-**ไฟล์ของ SuperUser — ข้อนี้คือที่เดียวที่กำหนด ไฟล์อื่นอ้างมาที่นี่:** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
+**ไฟล์ของ SuperUser — สรุปจาก `team-files` (ต้นฉบับ):** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
 
 **ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
 
@@ -1423,7 +1423,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 - เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
 - ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
-- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน
+- มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน · ใน SuperUser ทำส่วนอื่นให้ครบก่อน แล้วเขียนเรื่องนี้ใต้ **รออนุมัติ** ตอนจบ ไม่หยุดถามกลางงาน
 - เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
 
 ## เมื่อไหร่ **ไม่** ใช้

@@ -60,6 +60,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
 - ทดสอบเจาะระบบจริงหรือระบบของคนอื่น เพราะ skill นี้ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
 - รับรองว่าปลอดภัย 100% รายงานบอกแค่ว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
+- รีวิวตรรกะและการออกแบบของ diff → `code-review-checklist` (ก่อน merge รันทั้งสองตัว)
 
 
 ---
@@ -111,6 +112,7 @@ Use when asked for adversarial review, stress test or blind spots, or before shi
 Use when work splits into independent slices (modules, screens, files) or the user says swarm or fan out.
 
 # parallel-split-and-merge — แบ่งงาน ทำพร้อมกัน รวมเป็นรายงานเดียว
+> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
 
 > ต่างจาก `parallel-attempts-pick-best` ตรงที่แต่ละตัวทำ**คนละชิ้น** ไม่ใช่แข่งทำชิ้นเดียวกัน
 
