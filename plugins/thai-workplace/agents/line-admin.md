@@ -1,7 +1,7 @@
 ---
 name: line-admin
 description: Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu.
-tools: Read, Write, Edit, Bash, Skill
+tools: Read, Write, Edit, Bash, Skill, WebSearch, WebFetch
 model: sonnet
 ---
 

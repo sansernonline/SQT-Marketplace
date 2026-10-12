@@ -17,7 +17,7 @@
 | # | งาน | playbook | ได้ไฟล์ |
 |---|---|---|---|
 | 1 | ทะเบียนรับประกันและการเคลม | `warranty-claim` | `warranties.csv` · `cases/<ปี-เดือน>-<ของ>/claim.md` |
-| 2 | ของเสียซ้ำหลังซ่อมในประกันหลายครั้ง | `warranty-claim` (ขั้น 1 และ 3) | `cases/<ปี-เดือน>-<ของ>/repeat-defect.md` |
+| 2 | ของเสียซ้ำหลังซ่อมในประกันหลายครั้ง | `warranty-claim` (ขั้น 1, 3 และ 5 ตรวจ) | `cases/<ปี-เดือน>-<ของ>/repeat-defect.md` |
 
 ใช้ต่อกัน: เพิ่งซื้อของ → 1 · ของเสียแต่หมดประกันหรือร้านไม่รับเคลม → `prompt-money-back.md` ฉบับ 1 → `prompt-complaint.md` ฉบับ 1 · ซ่อมแล้วเสียอีก → 2 → `prompt-complaint.md` ฉบับ 1 · ตรวจก่อนส่ง → `prompt-complaint.md` ฉบับ 5
 
@@ -47,7 +47,7 @@ playbook `warranty-claim` · agent `consumer-advocate` · skill `warranty-tracke
 
 ## 2. ของเสียซ้ำหลังซ่อมในประกันหลายครั้ง
 
-playbook `warranty-claim` (ใช้ขั้น 1 เปิดทะเบียน และขั้น 3 ตรวจประกันกับเงื่อนไขยกเว้น · ส่วนขอเปลี่ยนเครื่องหรือคืนเงินเกินขอบเขต playbook นี้ จึงต่อด้วยฉบับ 1 ของ `prompt-complaint.md` ตามหัวข้อ 2 ของ `superuser`) · agent `consumer-advocate` · skill `warranty-tracker` · `complaint-letter-th`
+playbook `warranty-claim` (ใช้ขั้น 1 เปิดทะเบียน · ขั้น 3 ตรวจประกันกับเงื่อนไขยกเว้น · ขั้น 5 reviewer ตัวใหม่ตรวจ · ส่วนขอเปลี่ยนเครื่องหรือคืนเงินเกินขอบเขต playbook นี้ จึงต่อด้วยฉบับ 1 ของ `prompt-complaint.md` ตามหัวข้อ 2 ของ `superuser`) · agent `consumer-advocate` · skill `warranty-tracker` · `complaint-letter-th`
 **ผลลัพธ์:** `cases/<ปี-เดือน>-<ของ>/repeat-defect.md` · **รออนุมัติ:** ส่งเครื่องซ่อมรอบใหม่ · ส่งหนังสือขอเปลี่ยนเครื่องหรือคืนเงิน
 
 ### ข้อมูล (ผู้ใช้กรอก)

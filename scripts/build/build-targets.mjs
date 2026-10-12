@@ -32,6 +32,10 @@ const KNOWLEDGE_FILES_MAX = 10;    // Gem รับ 10 ไฟล์ · Custom GP
 // ไฟล์ที่ไม่ใส่ในชุดสำหรับหน้าเว็บ (ใหญ่เกินและหน้าเว็บรันสคริปต์แตกไฟล์ไม่ได้)
 const WEB_SKIP = [/\.zip$/i];
 
+// ไฟล์ขยะจากการรันสคริปต์ในเครื่อง ไม่ส่งออกทุกชุด
+const JUNK = /(^|[\\/])(__pycache__|\.pytest_cache|node_modules)([\\/]|$)|\.pyc$/;
+const COPY = { recursive: true, filter: (src) => !JUNK.test(src) };
+
 // ── อ่านของจริงจาก plugins/ ────────────────────────────────────────────
 
 function listDir(path) {
@@ -107,7 +111,7 @@ ${roles}
 
 function buildCodex(p) {
   const out = join(DIST, "codex", p.plugin);
-  for (const s of p.skills) cpSync(s.path, join(out, ".agents/skills", s.name), { recursive: true });
+  for (const s of p.skills) cpSync(s.path, join(out, ".agents/skills", s.name), COPY);
 
   // Codex เลิกใช้ custom prompt แล้ว → แปลงคำสั่งเป็น skill ที่เรียกด้วย $ชื่อ
   for (const c of p.commands) {
@@ -129,7 +133,7 @@ function buildCodex(p) {
 
 function buildGemini(p) {
   const out = join(DIST, "gemini-cli", p.plugin);
-  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), { recursive: true });
+  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), COPY);
 
   // ชื่อเครื่องมือของ Claude (Read, Edit, …) ไม่ตรงกับของ Gemini → ตัด tools/model ทิ้งให้ใช้ค่าเริ่มต้น
   for (const a of p.agents) {
@@ -158,7 +162,7 @@ function buildGemini(p) {
 
 function buildKimi(p) {
   const out = join(DIST, "kimi", p.plugin);
-  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), { recursive: true });
+  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), COPY);
 
   // Kimi ไม่มีโฟลเดอร์คำสั่งแยกที่มีเอกสารชัด → เป็น skill ที่ผู้ใช้เรียกเองด้วย /skill:ชื่อ
   for (const c of p.commands) {
@@ -308,7 +312,7 @@ function writeZip(out, files) {
 
 // โฟลเดอร์หลักในไฟล์ zip ต้องเป็น <plugin>/ ไม่ใช่ plugins/<plugin>/
 function buildClaudeWeb(p) {
-  const files = filesUnder(p.dir, `${p.plugin}/`).filter((f) => !WEB_SKIP.some((re) => re.test(f.name)));
+  const files = filesUnder(p.dir, `${p.plugin}/`).filter((f) => !WEB_SKIP.some((re) => re.test(f.name)) && !JUNK.test(f.name));
   const out = join(DIST, "claude-web", `${p.plugin}.zip`);
   writeZip(out, files);
   return statSync(out).size;

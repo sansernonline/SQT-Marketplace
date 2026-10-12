@@ -46,7 +46,7 @@ skill `labour-law-basics` · งานเล็ก ทำเลยไม่ต�
 
 ## 2. รับพนักงานใหม่
 
-playbook `business-doc` (ขั้นทำสัญญาจ้าง) · ขั้นขึ้นทะเบียนและเงินเดือนประกอบเองตาม `playbook-template` (skill `superuser` หัวข้อ 2 งานกลาง) · agent `thai-doc-writer` + `tax-helper` · skill `doc-contract-th` · `labour-law-basics` · `social-security-th` · `payroll-th` · `pdpa-workflow` (ประกาศความเป็นส่วนตัวพนักงาน)
+playbook `business-doc` (ขั้น 3 ร่างสัญญาจ้าง · ขั้น 5 ตรวจ) · ขั้นขึ้นทะเบียนและเงินเดือนประกอบเองตาม `playbook-template` (skill `superuser` หัวข้อ 2 งานกลาง) · agent `thai-doc-writer` + `tax-helper` · skill `doc-contract-th` · `labour-law-basics` · `social-security-th` · `payroll-th` · `pdpa-workflow` (ประกาศความเป็นส่วนตัวพนักงาน)
 **ผลลัพธ์:** `hr/<ชื่อพนักงาน>/` — สัญญาจ้าง `.docx` · รายการวันเริ่มงาน · ข้อมูลกรอกแบบขึ้นทะเบียนผู้ประกันตน · แถวใหม่ในตารางเงินเดือน · **รออนุมัติ:** ลงนามสัญญา · ยื่นขึ้นทะเบียนกับประกันสังคม · เก็บสำเนาบัตรประชาชน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -70,7 +70,7 @@ playbook `business-doc` (ขั้นทำสัญญาจ้าง) · ข�
 
 ## 3. พนักงานลาออก หรือบริษัทเลิกจ้าง
 
-playbook `business-doc` (ขั้นทำหนังสือ) · ขั้นคำนวณเงินและแจ้งออกประกอบเองตาม `playbook-template` (skill `superuser` หัวข้อ 2 งานกลาง) · agent `thai-doc-writer` + `tax-helper` · skill `labour-law-basics` · `social-security-th` · `payroll-th` · `doc-thai-official`
+playbook `business-doc` (ขั้น 3 ร่างหนังสือ · ขั้น 5 ตรวจ) · ขั้นคำนวณเงินและแจ้งออกประกอบเองตาม `playbook-template` (skill `superuser` หัวข้อ 2 งานกลาง) · agent `thai-doc-writer` + `tax-helper` · skill `labour-law-basics` · `social-security-th` · `payroll-th` · `doc-thai-official`
 **ผลลัพธ์:** `hr/<ชื่อพนักงาน>/exit.md` — เงินงวดสุดท้าย · ค่าชดเชย (ถ้ามี) · รายการแจ้งออก · หนังสือรับรองการทำงาน `.docx` · หนังสือเลิกจ้าง `.docx` (ถ้าเลิกจ้าง) · **รออนุมัติ:** ส่งหนังสือเลิกจ้าง · จ่ายเงินงวดสุดท้ายและค่าชดเชย · ยื่นแจ้งลูกจ้างออกกับประกันสังคม
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -94,7 +94,7 @@ playbook `business-doc` (ขั้นทำหนังสือ) · ขั้�
 
 ## 4. ประกาศวันหยุดบริษัทประจำปี · สรุปวันลาคงเหลือ
 
-playbook `business-doc` (ขั้นประกาศและใบลา) · agent `thai-doc-writer` · skill `thai-holidays` · `labour-law-basics` · `doc-leave` · `doc-thai-official`
+playbook `business-doc` (ขั้น 3 ร่างประกาศและใบลา · ขั้น 5 ตรวจ) · agent `thai-doc-writer` · skill `thai-holidays` · `labour-law-basics` · `doc-leave` · `doc-thai-official`
 **ผลลัพธ์:** `hr/<ปี>-holidays.docx` (ประกาศวันหยุดตามประเพณี) · `hr/<ปี>-leave-balance.csv` (วันลาคงเหลือรายคน) · **รออนุมัติ:** ประกาศให้พนักงาน
 
 ### ข้อมูล (ผู้ใช้กรอก)

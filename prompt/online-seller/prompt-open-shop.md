@@ -75,7 +75,7 @@ playbook `new-product` · agent `shop-manager` · skill `product-listing` · `ma
 
 ## 3. สินค้ามีคนเข้าดูแต่ไม่มีคนซื้อ
 
-playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต้องห้าม) · agent `shop-manager` · skill `product-listing` · `marketplace-fees-pricing`
+playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต้องห้าม + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `product-listing` · `marketplace-fees-pricing`
 **ผลลัพธ์:** `products/<SKU>/fix-<ปี-เดือน>.md` (สาเหตุ · listing ฉบับแก้แบบ "เดิม → ใหม่" · วันวัดผล) · **รออนุมัติ:** แก้หน้าสินค้าบนร้านจริง · เปลี่ยนราคา
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -106,7 +106,7 @@ playbook `new-product` (ขั้น 3–5: ราคา · listing · คำต
 
 ## 4. สินค้าถูกระงับ / โดนเตือนเรื่องคำโฆษณา
 
-playbook `new-product` (ขั้น 4–5: listing · คำต้องห้าม) · agent `shop-manager` · skill `product-listing`
+playbook `new-product` (ขั้น 4–5: listing · คำต้องห้าม + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `product-listing`
 **ผลลัพธ์:** `products/<SKU>/appeal-<ปี-เดือน-วัน>.md` (สาเหตุ · listing ฉบับแก้ · ร่างอุทธรณ์) · **รออนุมัติ:** แก้หน้าสินค้าบนร้านจริง · ส่งอุทธรณ์ · ลบสินค้า
 
 ### ข้อมูล (ผู้ใช้กรอก)

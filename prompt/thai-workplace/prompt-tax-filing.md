@@ -116,7 +116,7 @@ skill `tax-vat-th` · `thai-holidays` · agent `tax-helper` · งานกล�
 
 ## 5. ยื่นหรือจ่ายภาษีเลยกำหนด · ได้หนังสือจากสรรพากร
 
-playbook `monthly-close` (ขั้นยื่นแบบและชำระ) · agent `tax-helper` · skill `tax-vat-th` · `payroll-th` · `doc-thai-official` (ถ้าต้องตอบหนังสือ)
+playbook `monthly-close` (ขั้น 4 รายการแบบ · ขั้น 5 ไฟล์ยื่นและขั้นตอนทีละคลิก · ขั้น 6 ตรวจ) · agent `tax-helper` · skill `tax-vat-th` · `payroll-th` · `doc-thai-official` (ถ้าต้องตอบหนังสือ)
 **ผลลัพธ์:** `monthly/<ปี-เดือน>/late-filing.md` — แบบที่ค้าง · ยอดที่ต้องจ่ายรวมเงินเพิ่มและเบี้ยปรับ · ร่างหนังสือชี้แจง (ถ้ามีหนังสือมา) · **รออนุมัติ:** ยื่นแบบ · ชำระภาษี เงินเพิ่ม เบี้ยปรับ · ส่งหนังสือถึงสรรพากร
 
 ### ข้อมูล (ผู้ใช้กรอก)

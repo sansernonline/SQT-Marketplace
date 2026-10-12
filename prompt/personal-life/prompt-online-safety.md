@@ -79,7 +79,7 @@ playbook `digital-safety` (ขั้น 1: ขั้นตอนชั่วโ�
 
 ## 3. เปลี่ยนมือถือใหม่ / มือถือหาย
 
-playbook `digital-safety` (ขั้น 2–4: รายการบัญชี · ตรวจสถานะ · ขั้นตอนทีละคลิก) · agent `life-admin` · skill `digital-hygiene`
+playbook `digital-safety` (ขั้น 2–4: รายการบัญชี · ตรวจสถานะ · ขั้นตอนทีละคลิก + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `life-admin` · skill `digital-hygiene`
 **ผลลัพธ์:** หัวข้อ "ย้ายเครื่อง YYYY-MM-DD" ใน `digital-hygiene.md` (เช็กลิสต์ก่อน ระหว่าง หลัง) · **รออนุมัติ:** ล้างข้อมูลเครื่องเก่า · ระงับซิม · ลบเครื่องออกจากบัญชี — ผู้ใช้กดเอง
 
 ### ข้อมูล (ผู้ใช้กรอก)

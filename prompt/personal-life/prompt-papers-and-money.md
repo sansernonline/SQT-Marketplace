@@ -49,7 +49,7 @@ playbook `documents` · agent `doc-caretaker` · skill `important-docs` · `pers
 
 ## 2. กระเป๋าสตางค์ / บัตรหาย
 
-playbook `documents` (ขั้น 1–2: รายการเอกสารและที่ต่อ) · agent `doc-caretaker` · skill `important-docs` · `digital-hygiene` (ส่วนซิมและบัญชีธนาคาร)
+playbook `documents` (ขั้น 1–2: รายการเอกสารและที่ต่อ + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `doc-caretaker` · skill `important-docs` · `digital-hygiene` (ส่วนซิมและบัญชีธนาคาร)
 **ผลลัพธ์:** `lost/YYYY-MM-DD_<ของที่หาย>.md` (รายการของที่หาย · ลำดับสิ่งที่ต้องทำ · เอกสารที่ต้องใช้ทำใหม่) · **รออนุมัติ:** โทรอายัดบัตร · แจ้งความ · ยื่นทำบัตรใหม่ — ผู้ใช้ทำเองทุกข้อ
 
 ### ข้อมูล (ผู้ใช้กรอก)

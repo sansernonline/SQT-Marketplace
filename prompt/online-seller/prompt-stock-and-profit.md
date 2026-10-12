@@ -99,7 +99,7 @@ playbook `pricing-check` · agent `shop-manager` · skill `marketplace-fees-pric
 
 ## 4. ปิดยอดรายเดือน
 
-playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำไรจริงต่อชิ้น) · agent `shop-manager` · skill `marketplace-fees-pricing` · `seller-tax-basics`
+playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำไรจริงต่อชิ้น + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `shop-manager` · skill `marketplace-fees-pricing` · `seller-tax-basics`
 **ผลลัพธ์:** `reports/<ปี-เดือน>-summary.md` · ตารางยอดสะสมทั้งปีต่อท้ายในไฟล์เดียวกัน
 
 ### ข้อมูล (ผู้ใช้กรอก)

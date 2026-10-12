@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (110)
+## 🛠️ Skills (111)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -436,7 +436,7 @@
 ---
 
 ### 31. presentation-design
-**ใช้กับ:** graphic-designer
+**ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
 **Output:** โครงเรื่อง + เลย์เอาต์ ส่วนไฟล์ `.pptx` ส่งต่อให้ `branded-document-design`
 **Includes:** ลำดับเรื่อง 5 แบบตามจุดประสงค์ (ขออนุมัติ/รายงาน/รีวิว/อบรม/ขายงาน), หัวสไลด์เป็นข้อสรุปไม่ใช่ชื่อหัวข้อ, งบตัวอักษร ≤ 5 บูลเล็ต ≤ 12 คำ ~50 คำต่อแผ่น, ตารางแปลง px → pt, พื้นต่ำสุด 18 pt, กฎสไลด์ข้อมูล, ภาษาไทยบนสไลด์
 **ที่ทดสอบแล้ว:** `assets/slide-mockup.html` — 6 เลย์เอาต์ **เรนเดอร์ที่ 1280×720 แล้วเปิดดูทุกแผ่น** (แก้ไปแล้ว 4 จุดที่การเรนเดอร์เผยให้เห็น)
@@ -675,13 +675,13 @@
 
 ### 59. status-report
 **ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
-**Description:** Use at the END of every task that produces or checks project work — a document, a mockup, a review, a code round, a fix, a release. Writes one status table (what passed, what stage each item has reached, what is still pending, what comes next) into `docs/BUILD-PLAN.md` and shows the same table in the reply. Keeps one living snapshot plus a one-line history so anyone opening the project knows where it stands without reading the conversation. Load it before reporting "done", not after.
+**Description:** Use when a task that produces or checks project work ends (document, review, code, fix, release).
 
 ---
 
 ### 60. reference-app-research
 **ใช้กับ:** product-manager, reverse-engineer
-**Description:** Use when someone says "I want an app like X" — names an existing product (with or without a link) as the model for what to build. Researches that product in depth from official pages, documentation, changelogs, user reviews and close competitors, then writes one research document covering its features, user interface, user experience, strengths, weaknesses and — the most important part — concrete improvements our version should make, each backed by evidence and mapped to the requirement and screen it will become. The output feeds the BRD, SRS and mockup. Requires web search and fetch tools.
+**Description:** Use when someone says I want an app like X. Researches it and its competitors into one doc.
 
 ---
 
@@ -704,187 +704,187 @@
 
 ### 63. app-verifier-setup
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when a project has no scripted way for an agent to run the app and see the result itself — a web or desktop UI, a command-line tool, or a service — or before the first feature or bug fix on a new project. Builds a project-local verify skill with one start command, reusable drive scripts, and a feature map, so every later agent proves its work on the real app instead of asking a person to click and report back.
+**Description:** Use when a project has no scripted way for an agent to run the app and see results, or before feature one.
 
 ---
 
 ### 64. app-verifier-upkeep
 **ใช้กับ:** qa-tester
-**Description:** Use when a project's verify skill has drifted from the real app — a feature step fails because the screen changed, the feature map misses new screens, or agents keep working around the verifier — and as a periodic pass after a batch of releases. Reads the source per feature in parallel, drives every feature once on the real app, and lands at most one change set of proven corrections.
+**Description:** Use when a project verify skill has drifted from the real app (steps fail, screens missing).
 
 ---
 
 ### 65. decision-log
 **ใช้กับ:** developer, project-manager, reverse-engineer
-**Description:** Use whenever an agent makes a judgment call on its own during long, multi-step, or unattended work — choosing between approaches, filling a gap the documents leave open, resolving two documents that disagree, or skipping something — and whenever the user will review the work later. Appends one row per decision (what was chosen, what was not, why, evidence) to the decision table in docs/BUILD-PLAN.md so a person can audit and reverse any single call afterwards.
+**Description:** Use when an agent makes its own judgment call in long or unattended work (approach, gap, skipped step).
 
 ---
 
 ### 66. parallel-attempts-pick-best
 **ใช้กับ:** brainstormer, solution-architect
-**Description:** Use when one attempt at a non-trivial artifact could lock in the wrong shape — a new design, a public interface, a tricky algorithm, a mockup, a document structure — or when the user says try several, compare options, or bake-off. Runs N parallel candidates on the same brief, scores each against a rubric written beforehand, picks one as the base, and grafts the strongest ideas from the others into it before verifying the result.
+**Description:** Use when one attempt could lock in the wrong shape (design, interface, mockup) or the user says bake-off.
 
 ---
 
 ### 67. parallel-split-and-merge
 **ใช้กับ:** project-manager, qa-tester
-**Description:** Use when work splits into independent slices that can run at the same time — auditing many modules, checking every screen, reading many files, testing a matrix of cases, or exploring several leads — or when the user says swarm, fan out, or do these in parallel. Partitions the work so no two workers write the same place, runs them together, drains every result, and returns one merged report the main thread can act on.
+**Description:** Use when work splits into independent slices (modules, screens, files) or the user says swarm or fan out.
 
 ---
 
 ### 68. principle-build-a-tool-not-handwork
 **ใช้กับ:** developer, reverse-engineer
-**Description:** Use when non-trivial work has a mechanical part — editing the same pattern in many files, checking every screen, migrating data, generating repeated documents, or verifying a claim. Build the script, codemod, generator, or checker that does or proves the work instead of doing it by hand, so the deterministic part runs the same every time and a reviewer can rerun it.
+**Description:** Use when work has a mechanical part (same edit in many files, every screen, migration). Script it.
 
 ---
 
 ### 69. principle-fix-root-cause
 **ใช้กับ:** developer
-**Description:** Use when debugging or fixing anything that broke — an error, a crash, a wrong value, a flaky test, a slow page. Reproduce the symptom first, ask why until you reach the cause, and fix it there instead of adding a null check, a retry, or a try-catch that silences the symptom.
+**Description:** Use when debugging anything broken (error, crash, wrong value, flaky test). Reproduce, fix the cause. Cause known, small fix → targeted-fix.
 
 ---
 
 ### 70. principle-proceed-on-reversible-work
 **ใช้กับ:** business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, revops-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
-**Description:** Use when tempted to stop and ask the user should I do X, which approach do you prefer, or shall I continue — on work that can be undone. Proceed, show the result, and let the person correct it afterwards; reserve confirmation for irreversible or outward-facing actions such as deploys, data deletion, merges to the main branch, and messages to customers.
+**Description:** Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
 
 ---
 
 ### 71. principle-prove-it-works
 **ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
-**Description:** Use when a task is finished and before saying it is done, fixed, passing, or working — code, a fix, a mockup, a document, a migration, or a measurement. Verify against the real artifact (run the feature, read the actual value, open the file, inspect the diff), never a proxy such as it compiles, the subagent said so, or it should work.
+**Description:** Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 ---
 
 ### 72. repeated-mistakes-to-checks
 **ใช้กับ:** learning-reviewer, project-manager, solution-architect
-**Description:** Use when the user corrects an agent for the same kind of mistake a second time, says stop doing this again or correct, or when reviews keep flagging the same problem. Finds each repeated mistake class, then makes it impossible at the highest level that works — architecture first, then types, then a lint whose error message names the fix, then a test, and written instructions last — and proves each new check fails on a real past mistake.
+**Description:** Use when the user corrects the same mistake twice or reviews keep flagging one issue. Make it a check.
 
 ---
 
 ### 73. session-lessons-to-skills
 **ใช้กับ:** project-manager
-**Description:** Use when a long or difficult task has just landed, when the user says reflect or what did we learn, or when an existing skill gave wrong or missing guidance during the work. Reviews the finished session from three independent angles, keeps only durable lessons, and routes each one to a concrete proposed edit on an existing skill or agent file — shown to the user before anything is changed.
+**Description:** Use when the user says reflect or รวมบทเรียน (learn-from-session), or a skill demonstrably misled. Task-end notes → learning-reviewer.
 
 ---
 
 ### 74. docker-sandbox
 **ใช้กับ:** developer, devops-engineer, qa-tester, reverse-engineer, security-engineer
-**Description:** Use when a project should run inside its own Docker container on Docker Desktop instead of on the host — installing tools, running builds, tests, dev servers, test databases, or letting an agent work unattended with full freedom — or when the user says sandbox, container, or docker for a project. Sets up a per-project sandbox from the bundled templates, keeps the host as the commander, and lists what is free inside and what must never be mounted or opened.
+**Description:** Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
 
 ---
 
 ### 75. bug-inbox-triage
 **ใช้กับ:** qa-tester
-**Description:** Use when bug reports arrive outside the code — email, LINE or chat messages, an issue tracker, or files dropped in an inbox folder — and should be sorted before a person reads them, usually on a schedule, or when the user says triage the bug inbox. Collects new reports, reproduces each one on the current code with the project's verify skill inside its sandbox, groups reports that share a cause, and files one bug report per confirmed problem without replying to anyone or changing code.
+**Description:** Use when software bug reports pile up in email, chat, a tracker or inbox, or the user says triage bugs.
 
 ---
 
 ### 76. code-gardener
 **ใช้กับ:** developer
-**Description:** Use when a codebase should be checked regularly for patterns that make agents and people go wrong — duplicated logic, wrong-layer calls, risky framework pitfalls, dead code, inconsistent naming — or when the user says garden, tidy patrol, or find bad patterns. Scans on a schedule and appends findings to a buffer file without fixing anything, then every few days reviews the buffer, groups findings into themes, and turns each real theme into one structural fix.
+**Description:** Use when patrolling a codebase for misleading patterns (duplication, dead code, naming drift) or says garden.
 
 ---
 
 ### 77. owner-style-capture
 **ใช้กับ:** project-manager
-**Description:** Use when the user wants agents to work the way they personally do — "capture how I work", "learn my style", "update my superuser style", or after repeatedly correcting agents on the same preferences. Mines the user's own chat history, project rules and memory for corrections and stated preferences, drafts or updates a personal style file that superuser reads at the start of every task, and shows the change with its evidence before saving.
+**Description:** Use when the user wants agents to work their way (learn my style) or keeps correcting the same preferences.
 
 ---
 
 ### 78. principle-secure-by-default
 **ใช้กับ:** ai-engineer, blockchain-engineer, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-engineer, game-designer, game-developer, growth-specialist, healthcare-engineer, insurance-analyst, insurance-engineer, iot-engineer, legaltech-engineer, mobile-engineer, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, security-analyst, security-engineer, solution-architect
-**Description:** Use when writing, changing or reviewing any code, configuration, container or script — especially anything that takes input, talks to a database, handles files, logins, money or personal data, or calls another system. Makes the safe way the default way — guards at the boundary, parameterised queries, server-side permission checks, secrets outside code, least privilege, safe failure — in the same small diff as the feature, not as a later hardening pass.
+**Description:** Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
 
 ---
 
 ### 79. security-gate
 **ใช้กับ:** developer, qa-tester, security-engineer
-**Description:** Use before shipping, merging, releasing or handing over code, after adding a dependency, and on a schedule for long-lived projects — or when the user says security check, scan for secrets, or audit dependencies. Runs automated secret, dependency and static code scans inside the project's sandbox, triages every finding against the real code, and blocks the release on unresolved critical or high findings until they are fixed or explicitly accepted by the user.
+**Description:** Use when about to ship, merge or hand over code, after adding a dependency, or the user says security check.
 
 ---
 
 ### 80. reverse-engineering
 **ใช้กับ:** developer, reverse-engineer, solution-architect
-**Description:** Reverse engineer software — native binaries (PE/ELF/Mach-O), .NET assemblies, Electron/Node apps, mobile apps (APK/IPA), JavaScript bundles, and websites — to understand how a feature works, trace strings/symbols to code, reconstruct undocumented formats, or recreate a feature for the user's own product. Use when the user asks to investigate an app they do not have source for, decompile or disassemble something, find how a feature/algorithm/protocol works "under the hood", analyze an unknown file/binary, or asks questions like "how does X app do Y", "ดูว่าแอปนี้ทำงานยังไง", "reverse engineer", or "decompile".
+**Description:** Use when there is a compiled app or unknown file format or protocol but no source, or a build may differ.
 
 ---
 
 ### 81. developer-experience
 **ใช้กับ:** devrel-engineer
-**Description:** Use when the users are developers — time-to-hello-world, error messages, CLI usability, onboarding, designing an SDK across languages, docs platforms, or technical content such as tutorials, blog posts and talks.
+**Description:** Use when the users are developers (time to hello world, error messages, CLI, SDK design, docs).
 
 ---
 
 ### 82. ecommerce-patterns
 **ใช้กับ:** ecommerce-engineer, growth-specialist, recommendation-engineer
-**Description:** Use when building or improving online commerce — checkout flow and conversion, cart, orders, promotions, inventory across warehouses and channels, or product recommendations such as you-may-also-like and frequently-bought-together.
+**Description:** Use when building commerce software (checkout, cart, orders, promotions, inventory). Not running a shop.
 
 ---
 
 ### 83. fintech-payments
 **ใช้กับ:** fintech-compliance-officer, fintech-engineer, quant-analyst, revops-analyst
-**Description:** Use when money moves through the system — integrating payment gateways (Stripe, Omise, 2C2P, PromptPay), webhooks, refunds and reconciliation, KYC and AML checks, reducing PCI-DSS scope, or modelling financial risk and pricing.
+**Description:** Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds, KYC, PCI-DSS).
 
 ---
 
 ### 84. game-development
 **ใช้กับ:** game-designer, game-developer
-**Description:** Use when building a game — choosing an engine, core systems such as ECS and scenes, multiplayer netcode, matchmaking and anti-cheat, game design and progression, or live-ops events, battle passes and retention.
+**Description:** Use when building a game (engine choice, ECS, netcode, matchmaking, anti-cheat, live-ops).
 
 ---
 
 ### 85. healthcare-systems
 **ใช้กับ:** clinical-data-analyst, healthcare-engineer, hipaa-officer
-**Description:** Use when software handles patient or clinical data — clinical workflows such as orders and medication, FHIR APIs and EHR integration, SMART on FHIR, HIPAA safeguards and audits, or clinical analytics.
+**Description:** Use when software handles patient or clinical data (orders, medication, FHIR, EHR, HIPAA).
 
 ---
 
 ### 86. insurance-systems
 **ใช้กับ:** insurance-analyst, insurance-compliance-officer, insurance-engineer
-**Description:** Use when building insurance software — policy and quote engines, claims from first notice of loss to settlement, fraud detection, underwriting and rating models, actuarial reserves, or insurance regulation such as OIC filings and Solvency II.
+**Description:** Use when building insurance software (policy, quotes, claims, fraud, underwriting, OIC filings).
 
 ---
 
 ### 87. iot-systems
 **ใช้กับ:** iot-engineer
-**Description:** Use when building connected devices — fleet provisioning and OTA updates, device versus edge versus cloud placement, MQTT topics, QoS and brokers, or embedded firmware on microcontrollers and RTOS.
+**Description:** Use when building connected devices (provisioning, OTA updates, edge vs cloud, MQTT, firmware).
 
 ---
 
 ### 88. legal-document-systems
 **ใช้กับ:** legal-compliance-officer, legaltech-engineer
-**Description:** Use when software handles legal documents — extracting clauses from contracts, document templates and automation, e-signature workflows and legal validity (eIDAS, ESIGN, Thai ETA), or legal-tech compliance.
+**Description:** Use when software handles legal documents (clause extraction, automation, e-signature, Thai ETA).
 
 ---
 
 ### 89. llm-engineering
 **ใช้กับ:** ai-engineer, data-engineer, recommendation-engineer
-**Description:** Use when a system calls a large language model — writing or tuning prompts, structured output, building a RAG pipeline (chunking, embeddings, vector search, re-ranking), or measuring LLM quality with eval sets and LLM-as-judge. Router to three detailed references plus ML/LLM role guides.
+**Description:** Use when a system calls a large language model (prompts, structured output, RAG, embeddings, evals).
 
 ---
 
 ### 90. mobile-engineering
 **ใช้กับ:** growth-specialist, mobile-engineer
-**Description:** Use when engineering a mobile app — choosing native or cross-platform (Kotlin, Swift, Flutter, React Native), architecture such as MVVM and offline-first, launch time, memory and battery, or App Store and Play Store listings. For screen design use mobile-app-design.
+**Description:** Use when engineering a mobile app (Kotlin, Swift, Flutter, React Native, offline-first). Not screens.
 
 ---
 
 ### 91. saas-platform
 **ใช้กับ:** clinical-data-analyst, data-engineer, fintech-compliance-officer, growth-specialist, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, quant-analyst, recommendation-engineer, revops-analyst, solution-architect
-**Description:** Use when building B2B SaaS — multi-tenancy and tenant isolation, enterprise SSO (SAML/OIDC) and SCIM, webhooks, subscription billing, usage metering and revenue metrics, or customer onboarding and adoption.
+**Description:** Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
 
 ---
 
 ### 92. security-operations
 **ใช้กับ:** security-analyst, security-engineer
-**Description:** Use when running security operations — responding to a security incident (containment, evidence, notification), designing a SOC (tiers, playbooks, KPIs), writing SIEM detection rules mapped to MITRE ATT&CK, hunting threats, or designing security architecture such as zero trust.
+**Description:** Use when running security operations (incident containment, SOC, SIEM rules, threat hunting).
 
 ---
 
 ### 93. smart-contracts
 **ใช้กับ:** blockchain-engineer
-**Description:** Use when building on a blockchain — writing or reviewing Solidity or Solana contracts for security, testing with Foundry or Hardhat, DeFi mechanisms, chain selection and bridges, or token economics.
+**Description:** Use when building on a blockchain (Solidity or Solana contracts, audits, Foundry, DeFi, tokenomics).
 
 ---
 
@@ -926,65 +926,71 @@
 
 ### 100. human-writing
 **ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
-**Description:** Use for anything a person will read — chat answers, reports, status updates, documents, slides and diagram labels, in Thai or English. Answer first, human words, short sentences, digits for numbers, one term per thing.
+**Description:** Use when writing anything a person will read (answer, report, document, slide, label) in Thai or English.
 
 ---
 
 ### 101. agent-patterns
-**Description:** Use when SuperUser plans how to run a task — Planning, ReAct loop, Reflection, Multi-Agent, Mixture-of-Agents or Reranker. Says which pattern fits, how to run it with subagents, what it costs and when to skip it.
+**Description:** Use when SuperUser plans how agents run a task (Planning, ReAct, Reflection, Multi-Agent, Mixture-of-Agents).
 
 ---
 
 ### 102. code-orientation
 **ใช้กับ:** developer
-**Description:** Use before changing code you have not read this session (feature, bug, refactor, review). Maps how the code runs and why it is written that way, finds the repo's conventions and commands, then writes a 10-line map to work from.
+**Description:** Use when about to change code not yet read this session. Maps how it runs, why, and repo conventions.
 
 ---
 
 ### 103. coding-evals
-**Description:** Use when changing coding skills, playbooks or the developer agent in software-company, or the user asks whether the team codes better. Runs a fixed set of real coding tasks before and after and compares scores.
+**Description:** Use when changing coding skills, playbooks or the developer agent, or asked if the team codes better.
 
 ---
 
 ### 104. stack-dotnet
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing, reviewing or fixing C# and .NET code (ASP.NET Core API or MVC, EF Core, legacy MVC 5 on .NET Framework). Build and test commands, project settings, EF Core queries, async traps, Thai culture, security.
+**Description:** Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core).
 
 ---
 
 ### 105. stack-python
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing, reviewing or testing Python (scripts, CLI tools, FastAPI or Django services, pandas, data and AI code). Repo tooling first (uv, ruff, pyright or mypy, pytest), common traps, Thai text and money, pre-ship checks.
+**Description:** Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
 
 ---
 
 ### 106. stack-sql
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing or reviewing SQL queries, stored procedures or data-change scripts for SQL Server or PostgreSQL (MySQL notes). Correct NULL and date logic, reading real plans, sargable indexes, safe batched changes, tests.
+**Description:** Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
 
 ---
 
 ### 107. stack-typescript
 **ใช้กับ:** developer, qa-tester
-**Description:** Use when writing or reviewing TypeScript in Node backends (Express, Fastify, NestJS) or Angular apps, plus React or Vite repos. Strict types, parsing at the edge, async safety, signals, tests and stack security.
+**Description:** Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Angular, React or Vite.
 
 ---
 
 ### 108. legacy-spec-recovery
 **ใช้กับ:** business-analyst, reverse-engineer, system-analyst
-**Description:** Use when a legacy system has source code but no spec or documents and someone wants to change it — recovers an as-is spec with evidence and confidence labels, then handles change requests with impact analysis.
+**Description:** Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
 
 ---
 
 ### 109. html-slide-deck
 **ใช้กับ:** technical-writer
-**Description:** Use when a presentation should be one offline HTML file presented from a browser — dark brand theme, 1920×1080 stage, menu, speaker notes, presenter clock, click-through detail panels and live chat replays.
+**Description:** Use when a slide deck is asked for as HTML or with animation — one offline file with speaker notes.
 
 ---
 
 ### 110. markdown-report-docx
 **ใช้กับ:** technical-writer
-**Description:** Use when a project or course report must ship as a polished .docx from one Markdown source. Logo cover, table of contents, brand-tinted tables, callouts, numbered figures, page-safe layout.
+**Description:** Use when a project or course report must ship as a polished .docx from one Markdown source.
+
+---
+
+### 111. pptx-to-html-deck
+**ใช้กับ:** technical-writer
+**Description:** Use when a .pptx should play as one animated HTML file, or both .pptx and .html are wanted — click steps, notes, menu, interactive pages.
 
 ---
 

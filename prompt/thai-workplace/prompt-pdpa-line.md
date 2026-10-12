@@ -71,7 +71,7 @@ playbook `line-oa` · agent `line-admin` · skill `line-oa-setup` · `line-chatb
 
 ## 3. แจ้งลูกค้าช่วงวันหยุดยาว ผ่าน LINE OA
 
-playbook `line-oa` (ขั้น broadcast และข้อความตอบกลับ) · agent `line-admin` · skill `line-broadcast` · `line-chatbot` · `thai-holidays`
+playbook `line-oa` (ขั้น 3 chatbot ตอบกลับ · ขั้น 5 broadcast · ขั้น 6 ตรวจ) · agent `line-admin` · skill `line-broadcast` · `line-chatbot` · `thai-holidays`
 **ผลลัพธ์:** `line-oa/holiday-<ปี-เดือน>.md` — ข้อความประกาศ · ข้อความตอบกลับอัตโนมัติช่วงปิด · แผนส่ง · **รออนุมัติ:** ส่ง broadcast · เปลี่ยนข้อความตอบกลับอัตโนมัติ · เปลี่ยนกลับเมื่อเปิดทำการ
 
 ### ข้อมูล (ผู้ใช้กรอก)

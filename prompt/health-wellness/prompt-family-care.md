@@ -79,7 +79,7 @@ playbook `doctor-visit` · agent `health-organizer` · skill `doctor-visit-prep`
 
 ## 3. การ์ดสุขภาพฉุกเฉินของคนในบ้าน
 
-playbook `medication-routine` (ขั้น 4 รายการแพ้ยาและรายการยาสำหรับพก) · agent `health-organizer` · skill `medication-schedule` · `doctor-visit-prep`
+playbook `medication-routine` (ขั้น 4 รายการแพ้ยาและรายการยาสำหรับพก + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · agent `health-organizer` · skill `medication-schedule` · `doctor-visit-prep`
 **ผลลัพธ์:** `emergency-card.md` 1 หน้าต่อคน พิมพ์ติดตู้เย็นหรือเก็บในมือถือ · **รออนุมัติ:** แชร์การ์ดในกลุ่มแชตครอบครัวหรือส่งให้ผู้ดูแล
 
 ### ข้อมูล (ผู้ใช้กรอก)

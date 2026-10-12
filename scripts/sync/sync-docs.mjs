@@ -168,7 +168,11 @@ function updateReference(plugins, totals) {
       const users = findAgentsUsing(core, name);
       const lines = [`### ${index + 1}. ${name}`];
       if (users.length) lines.push(`**ใช้กับ:** ${users.join(", ")}`);
-      lines.push(notes.get(name) ?? `**Description:** ${skill.description}`);
+      // โน้ตที่เขียนเองเก็บไว้ · ถ้ามีแค่บรรทัด Description ที่สคริปต์เคยเขียน ให้เขียนใหม่จาก description ปัจจุบัน
+      // (โน้ตที่เขียนเองบรรทัดเดียว อย่าขึ้นต้นด้วย **Description:** ไม่งั้นถูกเขียนทับ)
+      const note = notes.get(name);
+      const auto = !note || /^\*\*Description:\*\*[^\n]*$/.test(note.trim());
+      lines.push(auto ? `**Description:** ${skill.description}` : note);
       return lines.join("\n");
     });
 

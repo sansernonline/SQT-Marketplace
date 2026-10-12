@@ -77,7 +77,7 @@ playbook `live-session` · agent `live-seller` · skill `live-selling-script`
 
 ## 3. สรุปหลังไลฟ์
 
-playbook `live-session` (ขั้น 1: เลือกสินค้าและดีลรอบหน้า) · ส่วนสรุปตามข้อ "After the live" ของ skill `live-selling-script` · agent `live-seller` · skill `chat-reply-templates`
+playbook `live-session` (ขั้น 1: เลือกสินค้าและดีลรอบหน้า + ขั้นสุดท้าย reviewer ตัวใหม่ตรวจ) · ส่วนสรุปตามข้อ "After the live" ของ skill `live-selling-script` · agent `live-seller` · skill `chat-reply-templates`
 **ผลลัพธ์:** `live/<ปี-เดือน-วัน>-recap.md` · ร่างตอบคำถามที่ค้างในแชต · **รออนุมัติ:** ส่งข้อความตอบลูกค้า
 
 ### ข้อมูล (ผู้ใช้กรอก)
