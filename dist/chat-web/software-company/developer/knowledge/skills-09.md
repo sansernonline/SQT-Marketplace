@@ -207,7 +207,7 @@ Trace from clue to implementation: who references the string, which function con
 ### Step 5 — Report
 
 - **How it works**: the narrative, with evidence locations.
-- **Evidence**: each claim tied to a file, offset or method.
+- **Evidence**: each claim tied to a file, offset or method, using the full record in `superuser` `references/evidence.md` for claims the user will act on. Subject = file name + SHA-256 (`certutil -hashfile <f> SHA256` on Windows, `sha256sum` elsewhere) · decompiled or strings reading = `จากแหล่ง` · observed while running in a sandbox = `ตรวจจริง` · name links = `อนุมาน` pointing to the claims they rest on.
 - **Unknowns**: what could not be determined and what would resolve it.
 - **Secrets seen**: key names and locations only — and tell the user they should be rotated if the binary or config has left their control.
 - **Output**: where the decompiled files are, and how to verify any recreated feature.
@@ -326,7 +326,7 @@ Use when writing anything a person will read (answer, report, document, slide, l
 - หัวข้อบอกเนื้อหา ไม่ใช่ชื่อหมวด · ย่อหน้าละไม่เกิน 5 ประโยค
 - หัวคอลัมน์บอกว่าวัดอะไร · 1 คอลัมน์ 1 ความหมาย
 - เชิงอรรถมีไว้สำหรับนิยามและที่มาของตัวเลข · ข้อสรุปสำคัญห้ามซ่อนในเชิงอรรถ
-- รายงานสถานะ: ผลต่อคนใช้ก่อน → ตารางสถานะ → สิ่งที่รออนุมัติ และทุกข้ออ้างติดป้าย `ตรวจจริง` · `อนุมาน` · `เดา`
+- รายงานสถานะ: ผลต่อคนใช้ก่อน → ตารางสถานะ → สิ่งที่รออนุมัติ และทุกข้ออ้างติดป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ตรวจ` (ความหมายใน `superuser` `references/evidence.md`)
 - เอกสารตามแบบ (หนังสือราชการ · สัญญา · ใบกำกับภาษี) ใช้ถ้อยคำตามแบบ ไฟล์นี้ใช้กับส่วนที่เขียนเองได้
 
 ## 6 · สไลด์ และหัวข้อทุกชนิด

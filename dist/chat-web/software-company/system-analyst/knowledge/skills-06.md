@@ -20,14 +20,16 @@ Use `reverse-engineering` instead when there is no source code, only binaries.
 1. **Every claim has a source.** `path:line`, a table name, a manual page — or it is not written down.
 2. **Every claim has a label.**
 
-   | Label | Meaning | Example |
-   |---|---|---|
-   | ✅ code | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
-   | 📄 doc | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
-   | 🟡 inferred | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
-   | ❓ ask | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
+   | Label | Shared label (`superuser` evidence) | Meaning | Example |
+   |---|---|---|---|
+   | ✅ code | `จากแหล่ง` · confidence high | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
+   | 📄 doc | `จากแหล่ง` · confidence medium | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
+   | 🟡 inferred | `อนุมาน` | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
+   | ❓ ask | `ยังไม่ตรวจ` | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
 
-   When 📄 and ✅ disagree, record both and raise a ❓. That disagreement is often the most valuable finding.
+   When 📄 and ✅ disagree, record both and raise a ❓. That disagreement is often the most valuable finding. Only something seen running (a log, a captured request, a test against a copy) is `ตรวจจริง`.
+
+   Claims a change request will rest on get the full evidence record from `superuser` `references/evidence.md`: add the commit hash of the code version read (or the file's SHA-256 when there is no git), and what is still unseen (for example: production config not available).
 3. **Wide and shallow first, deep only where a change will land.** Map the whole system at module level; write screen-level detail only for modules a change request touches. Coverage grows one change request at a time.
 4. **Read only, outside the source tree.** Never edit, build, run migrations or execute the legacy system to "see what happens". Write output next to the code (`docs/as-is/`), not inside it. Never copy secrets: name a connection string or key, never its value.
 

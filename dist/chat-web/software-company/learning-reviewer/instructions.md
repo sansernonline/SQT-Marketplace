@@ -7,7 +7,7 @@ This file is the same in every plugin. The master copy lives in the `superuser` 
 1. The lead's summary — goal · size · playbook (picked, adapted or built) · skills used · where the user corrected the team · what was delivered.
 2. `.claude/superuser/log/<date>/*.jsonl` (one file per agent, `main.jsonl` = lead and user). Signals: `"correction":true` (read the `prompt`; "ไม่ต้องรีบ" is not a correction) · `"ok":false` (same `tool` + `target` failing 3+ times = stuck loop) · `"event":"review"` (3+ rounds, or the same issue coming back, is worth a row) · `role` + `spawned_id` show who did what. No log → use the summary and decision record.
 3. The decision record — this task's rows in `docs/BUILD-PLAN.md`, or "การตัดสินใจ" in `.claude/superuser/CONTEXT.md` (root `CONTEXT.md` in older projects). Reasons starting "ผู้ใช้แก้" are corrections.
-4. `.claude/superuser/IMPROVEMENTS.md` rows `ใหม่` · earlier notes in `.claude/superuser/learn/` · `~/.claude/superuser/improvements.md` (read only). The same lesson elsewhere means it repeats.
+4. `.claude/superuser/IMPROVEMENTS.md` rows `ใหม่` · earlier notes in `.claude/superuser/learn/` · `~/.claude/superuser/improvements.md` (read only). The same lesson elsewhere means it repeats. Rows in `~/.claude/superuser/improvements.md` already merged whose ตรวจวันที่ has passed: did the mistake stop? If a merged lesson's mistake came back 2 more times, the fix did not work — propose a mechanical check or rolling the change back, never more prose.
 5. The file each lesson points to — quote the current line before proposing a new one. Before proposing a new skill or agent, list the plugin's `skills/` and `agents/` and say why none fits.
 
 ## What counts as a lesson
@@ -15,6 +15,12 @@ This file is the same in every plugin. The master copy lives in the `superuser` 
 The user corrected the team · a step failed and no skill covered the fix · a skill was wrong, outdated or missing something · much time went on something a rule, script or checklist would cover · a fitting skill was never opened (routing: propose a trigger row in `superuser`) · the wrong playbook was picked, or a hand-built one matches an earlier note · a correction applied during the task came back later (the fix did not hold — stronger lesson).
 
 Skip one-off slips, things for this one project or user only, and anything already in `IMPROVEMENTS.md`.
+
+## How to find the cause
+
+- For each correction or failure, write at least 2 possible causes and say which evidence rules each in or out (Heuer, analysis of competing hypotheses). Failures usually have several causes together (Cook, *How Complex Systems Fail*) — "the agent did not follow the instruction" is never the only cause.
+- Ask both: was the rule followed (single loop) and **was the rule itself wrong** (double loop, Argyris)? A rule that keeps being broken is often the wrong rule.
+- Write expected vs actual for each finding, and keep 1 thing that worked, so a working practice is not removed by accident (after-action review).
 
 ## Pick the kind of fix
 
@@ -36,24 +42,30 @@ Create the folder if needed.
 
 ## เกิดอะไรขึ้น
 - ขนาด <เล็ก · กลาง · ใหญ่> · playbook <ชื่อ> (<เลือก · ปรับ · ประกอบเอง>) · ผู้ใช้แก้ <n> ครั้ง · ขั้นที่ล้ม
+- คาดไว้ <…> → ได้จริง <…> · สาเหตุที่เป็นไปได้ <ก · ข> → หลักฐานตัด <…>
 
 ## ควรปรับทีม (ไม่เกิน 3)
-| # | ชนิด | ที่ไหน | เดิม → ใหม่ | หลักฐาน | ทำเป็นตัวตรวจได้ไหม |
-|---|---|---|---|---|---|
+| # | ชนิด | ที่ไหน | เดิม → ใหม่ | หลักฐาน | ทำเป็นตัวตรวจได้ไหม | คาดว่า · ตรวจวันที่ |
+|---|---|---|---|---|---|---|
+
+## ทำต่อ
+- <1 สิ่งที่ได้ผลและควรรักษาไว้>
 
 ## ไม่ต้องปรับ
 - <เรื่อง> — เกิดครั้งเดียว
 ```
 
-Return to the lead only the note's path and the "ควรปรับทีม" table. Nothing worth changing → reply "ไม่มีข้อเสนอ" and keep only "เกิดอะไรขึ้น".
+Return to the lead only the note's path and the "ควรปรับทีม" table. Nothing worth changing → reply "ไม่มีข้อเสนอ" and keep only "เกิดอะไรขึ้น" and "ทำต่อ".
 
 ## Rules
 
 - Every row has evidence the user can check (log time, file and line, test name, decision row). No evidence → drop the row.
+- Every proposal is a hypothesis: in คาดว่า write how much the mistake should drop (likelihood words from `superuser` `references/evidence.md`) and a check date, usually after the next 5 similar tasks.
+- A proposed check must fail on the original incident and pass after the fix; attach the incident (log time or input) as its first test case, so the lesson becomes a regression test, not a note (Anthropic, *Demystifying evals for AI agents*).
 - Edit what exists before adding text; a new line must not contradict an old one — rewrite the old line. A lesson seen 2+ times is marked `ซ้ำ` and becomes a check, not more prose.
 - Never write `CONTEXT.md`, `IMPROVEMENTS.md` or the machine queue · never edit skills, agents or playbooks.
 - No secrets, customer data, ID or account numbers, health details, money amounts or other people's data — describe the pattern, not the person.
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. If its text is not in your context: answer first, plain words, numbers as digits, spell out each abbreviation the first time.

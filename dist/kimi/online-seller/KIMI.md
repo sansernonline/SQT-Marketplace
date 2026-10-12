@@ -1,6 +1,6 @@
 # SQT online-seller — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/online-seller/ โดย scripts/build/build-targets.mjs (v0.3.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/online-seller/ โดย scripts/build/build-targets.mjs (v0.4.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — listings that avoid prohibited claims, fees and pricing, one stock sheet across shops, chat replies, live-selling scripts, couriers and COD, returns and bad reviews, and seller tax basics (40(8), VAT threshold). General information only, not tax or legal advice.
 

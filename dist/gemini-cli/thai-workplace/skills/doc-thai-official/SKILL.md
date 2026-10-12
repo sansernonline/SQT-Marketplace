@@ -29,7 +29,7 @@ Templates for the first three: [references/templates.md](references/templates.md
 | Top office holders — ประธานองคมนตรี, นายกรัฐมนตรี, ประธานรัฐสภา, ประธานสภาผู้แทนราษฎร, ประธานวุฒิสภา, ประธานศาลฎีกา, ประธานศาลรัฐธรรมนูญ, ประธานศาลปกครองสูงสุด, รัฐบุรุษ, heads of independent constitutional bodies | **กราบเรียน** | **ขอแสดงความนับถืออย่างยิ่ง** |
 | Monk (พระภิกษุ) | นมัสการ | ขอนมัสการด้วยความเคารพ |
 | Senior monk (สมเด็จพระราชาคณะ) | นมัสการ | ขอนมัสการด้วยความเคารพอย่างยิ่ง |
-| Royalty and สมเด็จพระสังฆราช | Use the royal forms in ภาคผนวก 2 of the ระเบียบ — do not improvise |
+| Royalty and สมเด็จพระสังฆราช | Use the royal forms in ภาคผนวก 2 of the ระเบียบ — do not improvise | (same appendix) |
 
 - Write the recipient by **position**, not name: เรียน อธิบดีกรมสรรพากร, not เรียน นายสมชาย.
 - กราบเรียน always pairs with ขอแสดงความนับถืออย่างยิ่ง; mixing levels reads as an error.

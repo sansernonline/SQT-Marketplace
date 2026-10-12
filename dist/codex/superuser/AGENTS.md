@@ -1,6 +1,6 @@
 # SQT superuser — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/superuser/ โดย scripts/build/build-targets.mjs (v1.1.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/superuser/ โดย scripts/build/build-targets.mjs (v1.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 SuperUser core — a lead agent that sizes the task, picks or builds a playbook, hands parts to subagents, proves the result, keeps one shared CONTEXT.md, logs every action and learns after every task with a machine-wide improvement queue. Use it alone or as the master copy other plugins adapt.
 

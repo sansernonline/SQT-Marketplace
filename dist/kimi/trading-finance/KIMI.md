@@ -1,6 +1,6 @@
 # SQT trading-finance — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.5.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/trading-finance/ โดย scripts/build/build-targets.mjs (v0.6.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have.
 

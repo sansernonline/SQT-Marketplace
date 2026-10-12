@@ -1,2 +1,2 @@
 description = "Create or rebuild the brand kit — logo rules, colours, type, imagery, voice and 5 templates."
-prompt = "Run `brand-kit` with the `brand-keeper` agent for: **{{args}}**\n\nEnds with a README you can read in 5 minutes and a v1 version tag.\n"
+prompt = "Run `brand-kit` with the `brand-keeper` agent for: **{{args}}**\r\n\r\nEnds with a README you can read in 5 minutes and a v1 version tag.\n"

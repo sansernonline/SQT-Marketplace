@@ -1,2 +1,2 @@
 description = "Log or review virtual-money trades in the paper-trading ledger, then monthly statistics."
-prompt = "Run the virtual trading account with the `paper-trading` skill: **{{args}}**\n\n- `log` — record a planned trade (entry, stop, target, thesis) BEFORE it happens\n- `stats` — monthly summary: trades, win rate, expectancy, rule violations\n- `setup` — create or reset the ledger with virtual capital and rules\n"
+prompt = "Run the virtual trading account with the `paper-trading` skill: **{{args}}**\r\n\r\n- `log` — record a planned trade (entry, stop, target, thesis) BEFORE it happens\r\n- `stats` — monthly summary: trades, win rate, expectancy, rule violations\r\n- `setup` — create or reset the ledger with virtual capital and rules\n"

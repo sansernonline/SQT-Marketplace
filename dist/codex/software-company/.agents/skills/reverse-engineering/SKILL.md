@@ -86,7 +86,7 @@ Trace from clue to implementation: who references the string, which function con
 ### Step 5 — Report
 
 - **How it works**: the narrative, with evidence locations.
-- **Evidence**: each claim tied to a file, offset or method.
+- **Evidence**: each claim tied to a file, offset or method, using the full record in `superuser` `references/evidence.md` for claims the user will act on. Subject = file name + SHA-256 (`certutil -hashfile <f> SHA256` on Windows, `sha256sum` elsewhere) · decompiled or strings reading = `จากแหล่ง` · observed while running in a sandbox = `ตรวจจริง` · name links = `อนุมาน` pointing to the claims they rest on.
 - **Unknowns**: what could not be determined and what would resolve it.
 - **Secrets seen**: key names and locations only — and tell the user they should be rotated if the binary or config has left their control.
 - **Output**: where the decompiled files are, and how to verify any recreated feature.
