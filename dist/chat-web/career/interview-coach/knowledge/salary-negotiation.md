@@ -6,6 +6,8 @@ Use when the user gets a job offer, is asked expected salary, wants a raise or c
 
 Negotiate on **total compensation per year**, not base salary per month.
 
+Not for: writing up what you achieved for a review → `performance-self-review`.
+
 General information, not professional advice — for tax effects ask a นักบัญชี or check `tax-basics-th` in `trading-finance` (if installed); for contract disputes ask a labour lawyer.
 
 ## Step 1 — market data

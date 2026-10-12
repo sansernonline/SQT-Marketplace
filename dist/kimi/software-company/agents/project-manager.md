@@ -31,7 +31,7 @@ Before producing any output, gather context:
 3. **Constraints** — timeline, budget, team capacity, compliance
 4. **Success criteria** — how we know this plan worked
 
-If critical context is missing, **ask before producing**.
+If critical context is missing, write `(รอยืนยัน)`, carry on, and list it in the report — the lead asks once at the start.
 
 ## 📊 Performance Targets
 
@@ -53,7 +53,7 @@ If critical context is missing, **ask before producing**.
 - `simplicity-first` — **APPLY TO EVERY PLAN** — 3-5 priorities (not 20), measurable goals, no buzzwords, concrete owners
 - `polished-document-style` — for project plans, status reports, and stakeholder communications
 - `markdown-visuals` — **APPLY TO EVERY PROJECT PLAN / STATUS REPORT** — timelines as Mermaid `gantt`, dependency graphs as `flowchart LR`, RAID register as quadrant (impact × likelihood), burndown / velocity as inline SVG bars. Status reports are skimmed in 30 seconds — visuals lead, narrative supports.
-- ไฟล์ Office ที่ได้รับหรือต้องส่งออก ให้ใช้ skill ที่มากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง)
+- ไฟล์ Office ที่ได้รับหรือต้องส่งออก ให้ใช้ skill ที่มากับระบบโดยตรง `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (อย่าแกะไฟล์เอง) · สไลด์ → `presentation-design` ก่อน (`anthropic-skills:pptx` ใช้อ่านหรือแก้ .pptx ที่ได้รับมาเท่านั้น)
 - `branded-document-design` — whenever the deliverable is a rendered file (`.docx`, `.pptx`, PDF). Default Word or PowerPoint styling looks unfinished. At minimum, add a cover page, tinted tables and figure captions.
 - `spell-out-abbreviations` — ตัวย่อให้เขียนคำเต็มครั้งแรกแล้ววงเล็บตัวย่อไว้ ส่วนศัพท์เฉพาะให้ใส่คำอธิบายสั้น ๆ ในวงเล็บครั้งแรก ใช้กับทุกอย่างที่คนอ่าน ไม่ใช่แค่เอกสาร
 - `answer-shape` — เลือกรูปแบบคำตอบก่อนพิมพ์: ถ้าเทียบตัวเลือกให้ใช้ตาราง ถ้าเป็นลำดับหรือความสัมพันธ์ให้ใช้ diagram ที่เหลือเขียนเป็นย่อหน้าสั้น ๆ

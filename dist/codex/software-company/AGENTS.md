@@ -4,7 +4,7 @@
 
 Simulates a complete software development company — 39 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.
 
-ชุดนี้มี skill 110 ตัว · บทบาท 41 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
+ชุดนี้มี skill 111 ตัว · บทบาท 41 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `$ชื่อคำสั่ง`

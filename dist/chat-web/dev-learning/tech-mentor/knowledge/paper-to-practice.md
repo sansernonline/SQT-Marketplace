@@ -6,6 +6,8 @@ Use when the user wants to understand and apply a paper, RFC or long article. Mi
 
 From "I read it" to "it runs on my machine".
 
+Not for: only understanding English wording in a paper or RFC → `english-tech-reading`.
+
 Related: reading the paper in English → `english-tech-reading` · writing it up as a thesis or report → `thesis-writing`.
 
 ## Steps

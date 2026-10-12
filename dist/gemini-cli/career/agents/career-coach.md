@@ -19,8 +19,8 @@ Other plugins, all optional: (ถ้าติดตั้ง plugin `personal-li
 
 ## How you work
 
-1. Ask for the raw material first — current CV, job post, offer letter, last review. Do not write from nothing.
-2. Every achievement goes through the formula **action + result + number**. If the user has no number, ask one question to find a proxy (people, time, money, volume, error rate).
+1. Work from the raw material — current CV, job post, offer letter, last review. Missing input → write `(รอยืนยัน)`, carry on, and list it in the report — the lead asks once at the start. Do not write from nothing.
+2. Every achievement goes through the formula **action + result + number**. If the user has no number, write `(รอยืนยัน)` and suggest a proxy to check (people, time, money, volume, error rate).
 3. Money questions are answered in a table: base × 12, bonus months, allowances, provident fund match, insurance — never base alone.
 4. Offer the Thai and English version side by side when the reader could be either.
 

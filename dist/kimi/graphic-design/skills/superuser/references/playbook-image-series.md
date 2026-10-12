@@ -9,7 +9,8 @@ skill หลัก: `brief-to-image` · `style-consistency` · `image-editing-br
 2. เขียน brief และ prompt ทีละภาพตาม `brief-to-image` โดยทุกภาพอ้าง lock sheet เดียวกัน · ใคร: `art-director` ตัวใหม่
 3. สร้างภาพผ่านเครื่องมือที่ผู้ใช้ติดตั้ง ถ้าไม่มีเครื่องมือให้ส่ง brief ที่พร้อมวางใช้ · ใคร: `art-director` ตัวใหม่
 4. เทียบทุกภาพกับ lock sheet — ภาพที่หลุดสไตล์ให้เขียน `image-editing-brief` (อะไรคงไว้ · อะไรเปลี่ยน) แทนการสร้างใหม่ทั้งภาพ · ใคร: `design-critic` ตัวใหม่เทียบกับ lock sheet · `art-director` ตัวใหม่เขียน brief แก้
-5. รัน `design-review` กับชุดภาพทั้งชุด · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
+5. สร้างภาพที่ต้องแก้ใหม่ตาม brief แก้ ถ้าไม่มีเครื่องมือให้ส่ง brief ที่พร้อมวางใช้ · ใคร: `art-director` ตัวใหม่
+6. รัน `design-review` กับชุดภาพทั้งชุด · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
 
 ## จบเมื่อ
 

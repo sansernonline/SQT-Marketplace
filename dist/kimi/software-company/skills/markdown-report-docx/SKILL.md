@@ -22,7 +22,7 @@ description: Use when a project or course report must ship as a polished .docx f
 | งาน | ใช้ |
 |---|---|
 | เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (SRS · BRD · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
-| สไลด์นำเสนอ | `html-slide-deck` หรือ `presentation-design` |
+| สไลด์นำเสนอ | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
 
 ---
@@ -114,6 +114,6 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 | ต้องการ | ใช้ |
 |---|---|
 | เพิ่มองค์ประกอบที่สคริปต์ไม่มี (KPI · pill · ลงนาม · หน้าแนวนอน) | เรียก `BrandDoc` ใน [`branded-document-design`](../branded-document-design/SKILL.md) ต่อจาก `build()` |
-| สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`html-slide-deck`](../html-slide-deck/SKILL.md) |
+| สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`presentation-design`](../presentation-design/SKILL.md) (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
 | รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |

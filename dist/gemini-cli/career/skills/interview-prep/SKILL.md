@@ -14,7 +14,7 @@ Prepare for **this** interview: this company, this role, this round.
 3. **Map requirements** — take the job post's top 6–8 requirements and match one story to each.
 4. **Build the story bank** (STAR, below).
 5. **Prepare the hard answers** — the Thai HR list below.
-6. **Mock round** — one question at a time, scored (the `interview-coach` agent does this).
+6. **Mock round** — the `interview-coach` agent prepares a 10-question practice set with a scoring rubric; the lead runs the live round with the user after the task.
 7. **Logistics** — route and travel time + 20 minutes buffer; for online, test camera, mic, name display and a quiet room the day before.
 8. **After** — thank-you note within 24 hours; debrief notes.
 

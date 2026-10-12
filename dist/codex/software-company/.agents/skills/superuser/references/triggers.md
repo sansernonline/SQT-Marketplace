@@ -33,6 +33,7 @@
 | อ่านไฟล์เยอะ · ผลลัพธ์ยาว · ต้องค้นทั้ง repo | `context-budget` |
 | เขียนไฟล์ชั่วคราวลงโฟลเดอร์ผู้ใช้ | `temp-file-discipline` |
 | เขียนคำตอบ รายงาน เอกสาร หรือป้ายใน diagram | [`human-writing`](../../human-writing/SKILL.md) · `spell-out-abbreviations` · `answer-shape` |
+| สไลด์ · เด็ค · presentation (ทุกชนิดไฟล์) | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลงจาก .pptx) · ทำเป็นงานด้วย `technical-writer` |
 | เขียน commit หรือเปิด PR | `commit-message-format` · `pr-description-template` |
 | งานแตะ login · สิทธิ์ · input จากภายนอก · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) + skill เฉพาะทางในตารางของมัน ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้รัน `/software-company:threat-model` ก่อนเขียน |
 | ก่อน `ship` · ส่งมอบ · เพิ่ม dependency | [`security-gate`](../../security-gate/SKILL.md) |

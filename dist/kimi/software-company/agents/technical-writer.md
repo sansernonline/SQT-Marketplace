@@ -67,7 +67,9 @@ Every doc belongs to ONE of four types — don't mix them:
 - `markdown-visuals` — **APPLY TO TUTORIALS / API DOCS / RELEASE NOTES** — annotated UI screenshots (inline SVG), request/response shape diagrams (Mermaid `sequenceDiagram`), before/after comparisons for breaking changes, conceptual diagrams for "Explanation" docs. Words alone fail learners — pair each non-trivial step with a picture.
 - `commit-message-format` — when writing changelog entries
 - `markdown-report-docx` — a whole report written in Markdown that must ship as a polished .docx (logo cover, contents, brand tables, figures).
+- `presentation-design` — any slide deck: story, headlines, and the file-type table (.pptx default · .html · both) that picks the skill below.
 - `html-slide-deck` — a presentation delivered as one offline .html file presented from a browser.
+- `pptx-to-html-deck` — an existing .pptx, or both .pptx and .html wanted, turned into one animated .html file (click steps, interactive pages).
 - Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume
 - `document-naming` — เมื่อตั้งชื่อ จัดเวอร์ชัน และเลือกว่าเอกสารควรเป็น docx หรือ markdown
 - `project-doc-set` — เมื่อต้องรู้ว่าโปรเจกต์นี้ควรมีเอกสารอะไรบ้าง และชิ้นไหนเป็นของ technical writer

@@ -14,13 +14,14 @@ description: Use when building a slide deck someone will present or read (story,
 
 > **สีของเด็ค = สีหลักของโปรเจกต์** หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → สีแบรนด์ในโค้ดหรือโลโก้ → ยังไม่มีใช้สีประจำบ้าน `#2A78D6` แล้วเขียน `(รอยืนยัน)`) อย่าเลือกสีใหม่ให้เด็ค
 >
-> **ไฟล์ที่ส่งมอบ — ต้นแบบทั้งคู่คือเด็ค X Fitness Chatbot**
+> **ไฟล์ที่ส่งมอบ — ต้นแบบคือเด็ค X Fitness Chatbot และเด็ค IS "Few-shot KIE" (.pptx ที่แปลงเป็น .html)**
 >
 > | ผู้ใช้สั่ง | ได้ไฟล์ | ใช้ |
 > |---|---|---|
 > | "ทำ slide deck" · "ทำสไลด์" · "ทำ presentation" (ไม่ระบุชนิด) | **.pptx** | `branded-document-design` · `StageDeck` |
 > | "slide deck html" · "เด็ค html" · "มี animation" · "นำเสนอจากเบราว์เซอร์" | **.html ไฟล์เดียว พร้อม animation** | `html-slide-deck` |
-> | ขอทั้ง 2 | .pptx + .html เรื่องเดียวกัน สีหลักเดียวกัน หัวสไลด์ชุดเดียวกัน · .html เป็นพื้นเข้มเสมอ จึงสร้าง .pptx ด้วย `bg="09090A"` ให้พื้นตรงกัน | เขียนโครงเรื่องครั้งเดียวตามข้อ 1 แล้วสร้างทั้ง 2 ไฟล์ |
+> | มี .pptx อยู่แล้ว · "แปลง pptx เป็น html" · "animation แบบเด็ค IS" · มี .pptx แล้วอยากได้หน้าโต้ตอบหรือเปิดทีละคลิก | **.html ไฟล์เดียว หน้าตาเหมือน .pptx ทุกหน้า** | `pptx-to-html-deck` |
+> | ขอทั้ง 2 | .pptx + .html จากต้นฉบับเดียว | สร้าง .pptx ด้วย `StageDeck` แล้วแปลงด้วย `pptx-to-html-deck` — หน้าตาตรงกันทุกหน้า แก้ที่ .pptx ที่เดียว |
 >
 > ไม่ถามซ้ำว่าจะเอาชนิดไหน — ไม่ระบุ = .pptx · ท้ายคำตอบบอก 1 บรรทัดว่าทำแบบ .html มี animation ได้ด้วย
 >
@@ -240,6 +241,7 @@ description: Use when building a slide deck someone will present or read (story,
 |---|---|
 | สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
 | เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
+| แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `pptx-to-html-deck` |
 | ชุดสีของกราฟ | `web-app-design` |
 | ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
 | กฎระยะห่างและลำดับสายตา | `ui-craft` |

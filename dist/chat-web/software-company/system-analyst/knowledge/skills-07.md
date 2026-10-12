@@ -34,7 +34,7 @@ Use when creating, renaming or filing a document a team or client keeps (file na
 |---|---|---|
 | Project Plan · BRD · SRS · Architecture · FSD · Test Plan (`project-doc-set` ข้อ 2.1) · ข้อเสนอโครงการ · ใบตรวจรับ UAT · สัญญา | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
 | คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx + PDF** | |
+| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
 | ADR · API spec · data dictionary · runbook · README | **markdown** — ADR `docs/decisions/` และ runbook `docs/` ที่ราก (`project-doc-set` ข้อ 1) · README ในโฟลเดอร์โค้ด | เปลี่ยนตามโค้ด ต้อง diff ได้ |
 | บันทึกประชุม · บันทึกการตัดสินใจ | **markdown** ใน `docs/` | ค้นหาง่าย ไม่ต้องเปิดโปรแกรม |
 

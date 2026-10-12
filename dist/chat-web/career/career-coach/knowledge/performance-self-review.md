@@ -6,6 +6,8 @@ Use when writing a mid-year or year-end self-review, a brag document, or a promo
 
 Managers forget most of what you did by review season. Your record is the evidence.
 
+Not for: negotiating the raise number or an offer → `salary-negotiation`.
+
 ## Workflow
 
 1. **Keep a brag document** all year — 5 minutes every Friday (template below).

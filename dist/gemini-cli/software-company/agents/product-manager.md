@@ -61,7 +61,7 @@ Not for: writing BRD, user stories or acceptance criteria → business-analyst. 
 ## Skills You Use
 
 - `simplicity-first` — **APPLY TO EVERY PRD/ROADMAP** — 3-5 themes (not 20), measurable success metrics, no buzzwords, cut scope over time
-- Documents for people outside the team: `polished-document-style` (for PRDs, roadmaps, strategy docs) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
+- Documents for people outside the team: `polished-document-style` (for PRDs, roadmaps, strategy docs) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself) · slides → `presentation-design` first (`anthropic-skills:pptx` only reads or edits a .pptx you received)
 - `user-story-writer` — when sketching out feature concepts
 - `markdown-visuals` — **APPLY TO EVERY PRD / ROADMAP / STRATEGY DOC** — roadmaps as Mermaid `gantt`, competitive positioning as `quadrantChart`, AARRR funnel as inline SVG, persona maps + journey maps as Mermaid `journey`. Executives skim — visuals carry the argument; paragraphs are footnotes.
 - `prior-art-review` — ใช้ก่อนตัดสินใจสร้างของที่อาจมีคนทำไว้แล้ว ผลที่ได้คือการตัดสินใจ ไม่ใช่รายงาน

@@ -52,6 +52,8 @@ Use [references/decode-template.md](references/decode-template.md) for every err
 - When a sentence resists decoding, quote the original back and decode clause by clause
 - Encourage the user to re-read the original after the explanation. The goal is to read it alone next time
 
+Not for: applying a paper or RFC in code → `paper-to-practice`.
+
 
 ## reference: decode-template.md
 

@@ -116,7 +116,7 @@ plugin อื่นมี `superuser` ของตัวเอง (`/<plugin>:su
 ## 6 · ความเป็นอิสระ — ไม่หยุดงาน
 
 <!-- superuser:begin autonomy -->
-**ถามได้ครั้งเดียวตอนเริ่ม** เฉพาะเมื่อโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด รวมทุกคำถามไว้ในข้อความเดียว · **เริ่มแล้วไม่หยุดถาม** ทำจนจบ แล้วให้ผู้ใช้แก้ทางทีหลัง
+**ถามได้ครั้งเดียวตอนเริ่ม** เฉพาะเมื่อโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด รวมทุกคำถามไว้ในข้อความเดียว · **เริ่มแล้วไม่หยุดถาม** ทำจนจบ แล้วให้ผู้ใช้แก้ทางทีหลัง · ข้อยกเว้น: **เหตุฉุกเฉิน** (มีคนเจ็บ · เงินกำลังถูกโอนหรือถูกหลอกอยู่) → ตอบขั้นตอนเร่งด่วนทันทีก่อน แล้วค่อยถามข้อมูลที่ขาด (plugin ที่มีกฎฉุกเฉินของตัวเอง ใช้กฎนั้น)
 
 - **จบทุกขั้น หัวหน้าทีมทบทวนเองว่าแผนที่เหลือยังใช้ได้ไหม** แล้วแก้ todo · ขั้นเดียวลองได้ไม่เกิน 3 รอบ · พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ติดป้าย `ติด` แล้วทำข้ออื่นต่อ (รอบตรวจของ `reviewer` ไม่เกิน 5 รอบ นับแยก ไม่รวมในเพดานนี้) · ก่อนลองใหม่เขียน 1 บรรทัดว่าพังเพราะอะไรและจะเปลี่ยนอะไร
 - **ย้อนได้** → ทำเลย · ต้องเลือกทาง → ทางที่ย้อนง่ายและกระทบน้อยสุด · เรื่องรสนิยมที่เดาไม่ได้ → ทำแบบกลางที่สุด ใส่ทางอื่นใน **ค้างอยู่** · ทางที่เลือกทุกแบบจดลง **ตัดสินใจเอง**
@@ -826,14 +826,14 @@ skill หลัก: [`decision-log`](../../decision-log/SKILL.md) · [`principle
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
-1. เขียนเงื่อนไขจบที่เครื่องตรวจได้ — test ชุดไหนต้องผ่าน · เอกสารไหนต้องมี · หน้าจอไหนต้องกดได้ · ใคร: หัวหน้าทีม
+1. เขียนเงื่อนไขจบที่เครื่องตรวจได้ — test ชุดไหนต้องผ่าน · เอกสารไหนต้องมี · หน้าจอไหนต้องกดได้ · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม
 2. แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ แล้วเลือก playbook ย่อยต่อชิ้น (feature · bug-fix · refactor · project-docs) · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)
    - งานหลายวันหรือหลายเฟส ให้เขียนแผนเฟสลงตารางงานใน `docs/BUILD-PLAN.md` แต่ละเฟสต้องจบในสภาพที่ตรวจได้ หัวหน้าทีมเป็นผู้ประสานงาน ไม่เขียนโค้ดเอง แต่แจกงานให้ subagent ตัวใหม่ทีละชิ้น แล้วตรวจผลเอง
    - ถ้าโปรเจกต์มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ใช้โหมด `-Isolated` (หรือแยก sandbox ละชิ้นเมื่อทำขนาน) แล้ว `sync` ผลออกมาเป็น patch ตอนจบ
 3. ทำทีละชิ้น ผ่านการตรวจแล้วค่อย commit ใน branch ของงานตามกฎ commit ใน `superuser` หัวข้อ 6 (ไม่ได้อนุญาต → ปล่อยไว้ในไฟล์ แล้วสรุป diff ตอนจบ) ชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงสถานะ `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)
 4. ทุกครั้งที่เลือกทางเอง ให้ลง `decision-log` ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม
 5. ถ้าเจองานในรายการ "รออนุมัติ" (deploy · ลบข้อมูล · merge branch หลัก · ส่งข้อความคนนอก) ให้เตรียมทุกอย่างให้พร้อม (คำสั่ง · diff · ร่างข้อความ) แล้วลง "รออนุมัติ" ห้ามทำเอง ส่วนคำถามที่ต้องให้คนตอบให้ลง "ค้างอยู่" · ใคร: หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ
-6. จบแต่ละชิ้นแล้วให้ทำ `status-report` เขียน "รับงานต่อ" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` เพื่อให้คนที่กลับมากลางทางเห็นสถานะปัจจุบัน · ใคร: หัวหน้าทีม
+6. จบแต่ละชิ้นแล้วให้ทำ `status-report` เขียน "รับงานต่อ" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` เพื่อให้คนที่กลับมากลางทางเห็นสถานะปัจจุบัน · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ "เสร็จเมื่อ" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม
 7. เมื่อจบงาน ให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: ทำเสร็จอะไร · ติดอะไร · **ตัดสินใจเอง** (กี่ข้อ · ชี้ไปที่ decision-log) · รออนุมัติอะไร · ค้างอะไรให้คนตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน
 
 ## จบเมื่อ
@@ -1034,6 +1034,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 | อ่านไฟล์เยอะ · ผลลัพธ์ยาว · ต้องค้นทั้ง repo | `context-budget` |
 | เขียนไฟล์ชั่วคราวลงโฟลเดอร์ผู้ใช้ | `temp-file-discipline` |
 | เขียนคำตอบ รายงาน เอกสาร หรือป้ายใน diagram | [`human-writing`](../../human-writing/SKILL.md) · `spell-out-abbreviations` · `answer-shape` |
+| สไลด์ · เด็ค · presentation (ทุกชนิดไฟล์) | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลงจาก .pptx) · ทำเป็นงานด้วย `technical-writer` |
 | เขียน commit หรือเปิด PR | `commit-message-format` · `pr-description-template` |
 | งานแตะ login · สิทธิ์ · input จากภายนอก · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) + skill เฉพาะทางในตารางของมัน ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้รัน `/software-company:threat-model` ก่อนเขียน |
 | ก่อน `ship` · ส่งมอบ · เพิ่ม dependency | [`security-gate`](../../security-gate/SKILL.md) |
@@ -1084,3 +1085,125 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 - คำว่า "น่าจะ" · "ควรจะ" · "ในทางทฤษฎี" ในรายงานจบงาน
 - ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้
 - ตรวจแค่ส่วนที่ง่าย แล้วสรุปรวมว่าผ่านทั้งหมด
+
+
+---
+
+# skill: simplicity-first
+
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
+
+# Simplicity First
+
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
+
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
+
+## The one test
+
+Before submitting, ask:
+
+> Could a tired teammate understand this in 6 months, with no prior context?
+
+If "no" or "not sure" → simplify.
+
+## 5 principles
+
+1. **Start with the simplest thing that works.** Add complexity only when something breaks.
+2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
+3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
+4. **Optimize for reading.** It's read far more often than written.
+5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
+
+## By output type
+
+### Documents (BRD, FSD, ADR)
+
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+
+### Architecture
+
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
+
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
+
+### Plans
+
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
+
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
+
+### Designs (UX, API)
+
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
+
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
+
+## The 3-question filter
+
+Before adding any new component, configuration option, or pattern:
+
+1. Is there real evidence we need this **now** (not "might need")?
+2. Is there a simpler way? (Sleep on it. Often yes.)
+3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
+
+Two or more answers point to "simpler is fine" → don't add it.
+
+## Examples
+
+**API description**
+
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
+
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
+
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+## Pre-submit checklist
+
+- [ ] A tired teammate would understand this in 6 months.
+- [ ] Nothing can be deleted without losing meaning.
+- [ ] No jargon the audience won't know.
+- [ ] Every abstract claim has an example.
+- [ ] I could explain the whole thing in two sentences.
+
+If any answer is "no" → simplify before delivering.
+
+> "Perfection is achieved not when there is nothing more to add, but when there
+> is nothing left to take away." — Saint-Exupéry

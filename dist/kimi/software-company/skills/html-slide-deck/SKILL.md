@@ -24,6 +24,7 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 |---|---|
 | สั่ง "ทำ slide deck" เฉย ๆ ไม่บอกว่า html · ลูกค้าต้องได้ .pptx ไปแก้ต่อ | `branded-document-design` · `StageDeck` (หน้าตาชุดเดียวกัน ไม่มี animation) — กฎเลือกชนิดไฟล์อยู่ใน `presentation-design` |
 | ยังไม่มีโครงเรื่อง | `presentation-design` ข้อ 1–3 ก่อน แล้วค่อยกลับมา |
+| มี .pptx อยู่แล้ว หรือต้องส่งทั้ง .pptx และ .html หน้าตาเดียวกัน | `pptx-to-html-deck` (แปลงทุกหน้าพร้อม animation และเปิดทีละคลิก) |
 | รายงานคู่กันเป็น .docx | `markdown-report-docx` (ใช้สีชุดเดียวกัน) |
 
 ---
@@ -50,7 +51,7 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 | `--accent` | `#e10613` | แถบใต้ชื่อปก · ฟองแชตผู้ใช้ |
 | `--accent2` | `#ff2536` | kicker · ตัวเลขใหญ่ · เลขหน้าเปิดส่วน · ของที่เลือกอยู่ |
 | `--accent-deep` · `--accent-tint` | `#2a0a0d` · `#1d0d10` | พื้นไล่สีปก/หน้าเปิดส่วน · พื้นของที่เลือก |
-| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตามแบรนด์ เด็ค .html เป็นพื้นเข้มเสมอ |
+| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตามแบรนด์ เด็คจาก skill นี้เป็นพื้นเข้มเสมอ (เด็คที่แปลงจาก .pptx ใช้พื้นตาม .pptx) |
 
 - `--brand สีหลัก,สีสว่าง` คำนวณ deep/tint ให้ · สีสว่างต้องอ่านชัดบนพื้นดำ (contrast ≥ 4.5:1)
 - ฟอนต์: หัวข้อ **Chakra Petch** · เนื้อความ **IBM Plex Sans Thai** · โค้ด **JetBrains Mono** (Google Fonts · ไม่มีเน็ต → Tahoma)
