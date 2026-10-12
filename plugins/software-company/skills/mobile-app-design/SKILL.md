@@ -25,9 +25,10 @@ description: Use when designing or building a phone app UI or mockup (PWA, React
 
 ## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ (ยกเว้น Flutter / native ดูข้อ 4.1)
 
-> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่ · speakgo คือพื้น ไม่ใช่หน้าตาสุดท้าย
 
 ```
+0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ speakgo.css ในบล็อก token
 1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
 3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
