@@ -1,2 +1,2 @@
 description = "Run PDPA workflows for a Thai SME — consent forms, breach response, data-subject requests."
-prompt = "Run `pdpa-workflow` with the `compliance-helper` agent for: **{{args}}**\n\nGeneral information, not legal advice; incidents with legal exposure go to a Thai lawyer.\n"
+prompt = "Run `pdpa-workflow` with the `compliance-helper` agent for: **{{args}}**\r\n\r\nGeneral information, not legal advice; incidents with legal exposure go to a Thai lawyer.\n"
