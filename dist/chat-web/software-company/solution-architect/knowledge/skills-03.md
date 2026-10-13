@@ -495,8 +495,14 @@ skill นี้คือ house style เดียวของรูปที่�
 
 ```bash
 pip install playwright && playwright install chromium
-python assets/render-figure.py figure.html figure.png 2
+cp <skill>/assets/render-figure.py docs/figures/render.py     # ครั้งแรกของโปรเจกต์
+python docs/figures/render.py                  # ทุกรูปใน docs/figures/src/ → docs/figures/*.png + docs/figures/doc/*.png
+python docs/figures/render.py arch-01 --min-px 20             # เฉพาะรูปที่ระบุ · ตัวอักษรขั้นต่ำตามขนาดที่วาง (ข้อ 4)
+python assets/render-figure.py figure.html figure.png 2       # ไฟล์เดียว (สไลด์ · ลองแนว)
 ```
+
+- **script render อยู่ที่ `docs/figures/render.py` ข้างโฟลเดอร์ `src/`** — เป็นเครื่องมือของโปรเจกต์ที่ต้องใช้ทุกครั้งที่แก้รูป ห้ามเก็บไว้ใน `_to_delete/` หรือ scratchpad (ล้างโฟลเดอร์ชั่วคราวแล้วจะเหลือต้นฉบับที่ render ไม่ได้) · ห้ามลบ `docs/figures/src/` เพราะ .png เป็นแค่ผลลัพธ์
+- แบบโฟลเดอร์ได้ 2 ฉบับต่อรูป (ฉบับเต็ม + ฉบับวางในเอกสาร `?embed=1` ตามข้อ 4) และตรวจข้อความให้: ตัวอักษรเล็กกว่า `--min-px` · ชื่อหรือป้ายตกบรรทัด · ข้อความล้นกล่องหรือผ้าใบ · ป้ายทับกัน → `problems: 0` และ exit 0 จึงผ่าน
 
 ใช้ตัวคูณ **2** เสมอ เพราะตัวคูณ 1 ได้ภาพเบลอเมื่อเอาไปขยายในสไลด์
 
