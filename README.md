@@ -119,7 +119,7 @@ scripts\build-dist.cmd                                                       # �
 /software-company:superuser เพิ่มหน้าจอค้นหาลูกค้า
 ```
 
-SuperUser ทำงานอย่างไร → [docs/superuser-software-company.png](docs/superuser-software-company.png) · plugin อื่น → `docs/superuser-<plugin>.png` · วิธีใช้ → [docs/USAGE.md](docs/USAGE.md)
+SuperUser ทำงานอย่างไร → [docs/plugins/software-company/flow.png](docs/plugins/software-company/flow.png) · รูปของทุก plugin (วิธีทำงาน · แผนผัง · ขั้นตอน playbook) → [docs/plugins/](docs/plugins/README.md) · วิธีใช้ → [docs/USAGE.md](docs/USAGE.md)
 
 ---
 

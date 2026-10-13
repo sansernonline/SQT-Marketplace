@@ -1,0 +1,3689 @@
+{
+ "plugin": "software-company",
+ "version": "2.5.0",
+ "description": "Simulates a complete software development company — 39 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.",
+ "cross": [],
+ "skills": [
+  "adr-writer",
+  "adversarial-review-panel",
+  "api-conventions",
+  "app-verifier-setup",
+  "app-verifier-upkeep",
+  "architecture-patterns",
+  "audit-trail",
+  "auth-implementation-patterns",
+  "background-jobs",
+  "blast-radius",
+  "branded-document-design",
+  "bug-inbox-triage",
+  "bug-report-template",
+  "cicd-and-release",
+  "code-gardener",
+  "code-orientation",
+  "code-review-checklist",
+  "coding-evals",
+  "commit-message-format",
+  "config-and-secrets",
+  "context-budget",
+  "data-import-export",
+  "database-design",
+  "decision-log",
+  "developer-experience",
+  "diagram-figures",
+  "docker-sandbox",
+  "document-naming",
+  "e2e-testing-patterns",
+  "ecommerce-patterns",
+  "error-handling-patterns",
+  "file-upload-and-storage",
+  "fintech-payments",
+  "flag-and-propose",
+  "fsd-writing",
+  "game-development",
+  "graphic-design",
+  "healthcare-systems",
+  "html-slide-deck",
+  "i18n-and-locale",
+  "incident-runbook-template",
+  "insurance-systems",
+  "iot-systems",
+  "lazy-coding",
+  "legacy-spec-recovery",
+  "legal-document-systems",
+  "llm-engineering",
+  "logging-standards",
+  "markdown-report-docx",
+  "markdown-visuals",
+  "mobile-app-design",
+  "mobile-engineering",
+  "notifications",
+  "observability-basics",
+  "owner-style-capture",
+  "parallel-attempts-pick-best",
+  "parallel-split-and-merge",
+  "pdpa-compliance",
+  "polished-document-style",
+  "postmortem-template",
+  "pptx-to-html-deck",
+  "pr-description-template",
+  "presentation-design",
+  "principle-build-a-tool-not-handwork",
+  "principle-data-shape-first",
+  "principle-fix-root-cause",
+  "principle-proceed-on-reversible-work",
+  "principle-prove-it-works",
+  "principle-replace-then-delete",
+  "principle-safe-to-rerun",
+  "principle-secure-by-default",
+  "principle-small-verifiable-steps",
+  "principle-user-experience-first",
+  "prior-art-review",
+  "product-naming",
+  "project-bootstrap",
+  "project-doc-set",
+  "readable-code",
+  "reference-app-research",
+  "repeated-mistakes-to-checks",
+  "reverse-engineering",
+  "saas-platform",
+  "security-gate",
+  "security-operations",
+  "seo-audit-checklist",
+  "session-lessons-to-skills",
+  "simplicity-first",
+  "smart-contracts",
+  "software-diagrams",
+  "spec-to-code-loop",
+  "spell-out-abbreviations",
+  "srs-writing",
+  "stack-dotnet",
+  "stack-python",
+  "stack-sql",
+  "stack-typescript",
+  "status-report",
+  "targeted-fix",
+  "temp-file-discipline",
+  "test-case-template",
+  "testing-standards",
+  "ui-craft",
+  "user-story-writer",
+  "web-app-design",
+  "web-service-essentials",
+  "windows-app-design",
+  "work-session-context"
+ ],
+ "core_skills": [
+  "agent-patterns",
+  "answer-shape",
+  "human-writing",
+  "superuser"
+ ],
+ "commands": [
+  "api-design",
+  "architecture-review",
+  "bug-report",
+  "code-review",
+  "dx-design",
+  "ecommerce-design",
+  "feature-kickoff",
+  "fintech-design",
+  "game-design",
+  "healthcare-design",
+  "incident-response",
+  "insurance-design",
+  "iot-design",
+  "legacy-onboard",
+  "legal-doc-design",
+  "llm-design",
+  "mobile-design",
+  "onboard",
+  "product-roadmap",
+  "release-notes",
+  "retrospective",
+  "saas-design",
+  "security-ops-design",
+  "security-scan",
+  "seo-audit",
+  "sprint-plan",
+  "test-design",
+  "threat-model",
+  "web3-design"
+ ],
+ "agents": [
+  {
+   "name": "ai-engineer",
+   "model": "opus",
+   "core": false,
+   "description": "Use when building with LLMs or machine learning — model choice, RAG, prompts, evaluation, training, serving, monitoring.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "llm-engineering",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "blockchain-engineer",
+   "model": "opus",
+   "core": false,
+   "description": "Use when building on blockchains — chain choice, smart contracts (Solidity, Solana), DeFi, contract audits, tokenomics.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "smart-contracts",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "brainstormer",
+   "model": "opus",
+   "core": true,
+   "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
+   "skills": [
+    "parallel-attempts-pick-best",
+    "superuser",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "business-analyst",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when gathering requirements, writing a BRD, user stories or acceptance criteria. FSD and API → system-analyst.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "user-story-writer",
+    "polished-document-style",
+    "markdown-visuals",
+    "presentation-design",
+    "branded-document-design",
+    "srs-writing",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "temp-file-discipline",
+    "status-report",
+    "fsd-writing",
+    "legacy-spec-recovery",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "document-naming",
+    "pdpa-compliance",
+    "data-import-export",
+    "context-budget",
+    "work-session-context",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "clinical-data-analyst",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when analyzing healthcare data — clinical dashboards, population health, patient outcomes, clinical research.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "saas-platform",
+    "healthcare-systems",
+    "pdpa-compliance",
+    "markdown-visuals",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "architecture-patterns",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "data-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building data pipelines (ETL/ELT), warehouses, integrations, data quality checks or data infrastructure.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "saas-platform",
+    "llm-engineering",
+    "database-design",
+    "data-import-export",
+    "background-jobs",
+    "observability-basics",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "architecture-patterns",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "developer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when implementing features, writing code, fixing bugs, refactoring, writing unit tests or self-reviewing code.",
+   "skills": [
+    "code-orientation",
+    "readable-code",
+    "lazy-coding",
+    "testing-standards",
+    "code-review-checklist",
+    "commit-message-format",
+    "pr-description-template",
+    "principle-fix-root-cause",
+    "targeted-fix",
+    "superuser",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "decision-log",
+    "status-report",
+    "work-session-context",
+    "context-budget",
+    "stack-dotnet",
+    "stack-typescript",
+    "stack-python",
+    "stack-sql",
+    "e2e-testing-patterns",
+    "spec-to-code-loop",
+    "app-verifier-setup",
+    "principle-build-a-tool-not-handwork",
+    "security-gate",
+    "markdown-visuals",
+    "web-service-essentials",
+    "api-conventions",
+    "error-handling-patterns",
+    "logging-standards",
+    "auth-implementation-patterns",
+    "database-design",
+    "config-and-secrets",
+    "background-jobs",
+    "audit-trail",
+    "file-upload-and-storage",
+    "notifications",
+    "data-import-export",
+    "observability-basics",
+    "i18n-and-locale",
+    "project-bootstrap",
+    "docker-sandbox",
+    "project-doc-set",
+    "temp-file-discipline",
+    "code-gardener",
+    "fsd-writing",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "simplicity-first",
+    "reverse-engineering",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations"
+   ]
+  },
+  {
+   "name": "devops-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when setting up CI/CD, Docker, Kubernetes, monitoring, deployments, infrastructure-as-code or SDK/toolchain setup.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "postmortem-template",
+    "polished-document-style",
+    "branded-document-design",
+    "markdown-visuals",
+    "incident-runbook-template",
+    "logging-standards",
+    "web-service-essentials",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "status-report",
+    "work-session-context",
+    "docker-sandbox",
+    "cicd-and-release",
+    "config-and-secrets",
+    "observability-basics",
+    "project-bootstrap",
+    "background-jobs"
+   ]
+  },
+  {
+   "name": "devrel-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when the product is for developers — developer experience audits, SDK design, docs platforms, developer content.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "developer-experience",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "ecommerce-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building online stores — catalog, cart, checkout, orders, promotions, marketplace, multi-warehouse inventory.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "ecommerce-patterns",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "fintech-compliance-officer",
+   "model": "opus",
+   "core": false,
+   "description": "Use for financial regulation (PCI-DSS, PSD2, BoT, AML/KYC) and audit prep. PDPA, GDPR → legal-compliance-officer.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "saas-platform",
+    "fintech-payments",
+    "pdpa-compliance",
+    "audit-trail",
+    "branded-document-design",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "threat-model",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "fintech-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building payments — gateways (Stripe, Omise), webhooks, refunds, ledgers, reconciliation. MRR → revops-analyst.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "fintech-payments",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "game-designer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when designing how a game plays — mechanics, balance, progression, onboarding, live-ops, monetisation.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "game-development",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "game-developer",
+   "model": "opus",
+   "core": false,
+   "description": "Use when programming games — Unity, Unreal, Godot, gameplay, rendering, ECS, multiplayer netcode, anti-cheat.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "game-development",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "graphic-designer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for visuals that are not screens — logo, brand colours, poster, social post, LINE rich menu. Screens → ux-designer.",
+   "skills": [
+    "graphic-design",
+    "superuser",
+    "principle-prove-it-works",
+    "ui-craft",
+    "presentation-design",
+    "product-naming",
+    "simplicity-first",
+    "branded-document-design",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "status-report",
+    "work-session-context",
+    "software-diagrams"
+   ]
+  },
+  {
+   "name": "growth-specialist",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when improving conversion and adoption — landing pages, checkout, A/B tests, onboarding. Search → seo-specialist.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "ecommerce-patterns",
+    "mobile-engineering",
+    "saas-platform",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "healthcare-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building healthcare software — EHR integration, FHIR and SMART on FHIR, clinical workflows, telemedicine.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "healthcare-systems",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "hipaa-officer",
+   "model": "opus",
+   "core": false,
+   "description": "Use for HIPAA compliance — Privacy, Security and Breach Rules, business associate agreements, risk assessments, audits.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "saas-platform",
+    "healthcare-systems",
+    "pdpa-compliance",
+    "audit-trail",
+    "branded-document-design",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "insurance-analyst",
+   "model": "opus",
+   "core": false,
+   "description": "Use for insurance numbers — loss and reserve models, IBNR, pricing, underwriting scores, rating algorithms.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "insurance-systems",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "insurance-compliance-officer",
+   "model": "opus",
+   "core": false,
+   "description": "Use for insurance regulation — US state filings, Solvency II, Thailand OIC, licensing, market conduct, privacy.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "saas-platform",
+    "insurance-systems",
+    "pdpa-compliance",
+    "audit-trail",
+    "branded-document-design",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "insurance-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building insurance products — policy admin, quote and rating engines, agent portals, claims intake.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "insurance-systems",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "iot-engineer",
+   "model": "opus",
+   "core": false,
+   "description": "Use when building connected devices — microcontroller firmware, MQTT, edge computing, telemetry, device fleets.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "iot-systems",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "learning-reviewer",
+   "model": "sonnet",
+   "core": true,
+   "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
+   "skills": [
+    "superuser",
+    "repeated-mistakes-to-checks",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "legal-compliance-officer",
+   "model": "opus",
+   "core": false,
+   "description": "Use for legal-tech compliance — GDPR, PDPA, data residency, records retention, e-discovery, multi-jurisdiction rules.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "saas-platform",
+    "legal-document-systems",
+    "pdpa-compliance",
+    "audit-trail",
+    "branded-document-design",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "legaltech-engineer",
+   "model": "opus",
+   "core": false,
+   "description": "Use when building legal tech — contract management, clause extraction, document automation, e-signature validity.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "legal-document-systems",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "mobile-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building mobile apps — Kotlin, Swift, Flutter or React Native; platform APIs, store submission, performance.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "mobile-engineering",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "product-manager",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for product vision, roadmap, feature priorities, user research or market analysis. HOW and WHEN → project-manager.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "polished-document-style",
+    "branded-document-design",
+    "presentation-design",
+    "user-story-writer",
+    "markdown-visuals",
+    "prior-art-review",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "status-report",
+    "work-session-context",
+    "reference-app-research",
+    "document-naming",
+    "product-naming"
+   ]
+  },
+  {
+   "name": "project-manager",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for project plans, timelines, sprints, risks, progress tracking or status reports. WHAT and WHY → product-manager.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "polished-document-style",
+    "markdown-visuals",
+    "presentation-design",
+    "branded-document-design",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "temp-file-discipline",
+    "status-report",
+    "owner-style-capture",
+    "principle-proceed-on-reversible-work",
+    "decision-log",
+    "parallel-split-and-merge",
+    "repeated-mistakes-to-checks",
+    "session-lessons-to-skills",
+    "flag-and-propose",
+    "document-naming",
+    "project-doc-set",
+    "context-budget",
+    "work-session-context",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "qa-tester",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when creating test plans, test cases, bug reports, exploratory testing or test coverage before release.",
+   "skills": [
+    "test-case-template",
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "testing-standards",
+    "e2e-testing-patterns",
+    "fsd-writing",
+    "simplicity-first",
+    "stack-dotnet",
+    "stack-typescript",
+    "stack-python",
+    "stack-sql",
+    "api-conventions",
+    "data-import-export",
+    "error-handling-patterns",
+    "app-verifier-setup",
+    "app-verifier-upkeep",
+    "docker-sandbox",
+    "security-gate",
+    "adversarial-review-panel",
+    "parallel-split-and-merge",
+    "bug-report-template",
+    "bug-inbox-triage",
+    "markdown-visuals",
+    "polished-document-style",
+    "branded-document-design",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "status-report",
+    "work-session-context"
+   ]
+  },
+  {
+   "name": "quant-analyst",
+   "model": "opus",
+   "core": false,
+   "description": "Use for quantitative finance — risk models, pricing, credit scoring, backtesting. Insurance → insurance-analyst.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "saas-platform",
+    "fintech-payments",
+    "markdown-visuals",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "architecture-patterns",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "recommendation-engineer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when building recommendation systems — related items, personalized ranking, collaborative or hybrid filtering.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "saas-platform",
+    "ecommerce-patterns",
+    "llm-engineering",
+    "observability-basics",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "polished-document-style",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "reverse-engineer",
+   "model": "opus",
+   "core": false,
+   "description": "Use to understand or recreate software without source (binary, .NET, Electron, APK, JS bundle). Authorized targets only.",
+   "skills": [
+    "docker-sandbox",
+    "reverse-engineering",
+    "reference-app-research",
+    "context-budget",
+    "principle-build-a-tool-not-handwork",
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "decision-log",
+    "legacy-spec-recovery",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "markdown-visuals",
+    "polished-document-style",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "reviewer",
+   "model": "opus",
+   "core": true,
+   "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
+   "skills": [
+    "code-review-checklist",
+    "adversarial-review-panel",
+    "graphic-design",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "revops-analyst",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when designing subscription billing, pricing tiers, usage metering or revenue analytics (MRR, ARR, churn).",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "saas-platform",
+    "fintech-payments",
+    "markdown-visuals",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "security-analyst",
+   "model": "opus",
+   "core": false,
+   "description": "Use for security operations — incidents, alert triage, threat hunting, SOC, detections. App code → security-engineer.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "security-operations",
+    "principle-prove-it-works",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "security-engineer",
+   "model": "opus",
+   "core": false,
+   "description": "Use for security reviews, threat modeling, vulnerability assessment, secure code, auth design. SOC → security-analyst.",
+   "skills": [
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "security-gate",
+    "code-review-checklist",
+    "simplicity-first",
+    "auth-implementation-patterns",
+    "config-and-secrets",
+    "audit-trail",
+    "file-upload-and-storage",
+    "error-handling-patterns",
+    "pdpa-compliance",
+    "docker-sandbox",
+    "markdown-visuals",
+    "polished-document-style",
+    "branded-document-design",
+    "security-operations",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "temp-file-discipline",
+    "status-report",
+    "work-session-context",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations"
+   ]
+  },
+  {
+   "name": "seo-specialist",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when improving search ranking — SEO audits, keywords, meta tags, URL structure, structured data, competitor SEO.",
+   "skills": [
+    "seo-audit-checklist",
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "polished-document-style",
+    "markdown-visuals",
+    "branded-document-design",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "temp-file-discipline",
+    "status-report",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "context-budget",
+    "work-session-context",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "solution-architect",
+   "model": "opus",
+   "core": false,
+   "description": "Use for system architecture, stack choice, trade-offs, ADRs or architecture review. Endpoint specs → system-analyst.",
+   "skills": [
+    "adr-writer",
+    "superuser",
+    "lazy-coding",
+    "readable-code",
+    "principle-secure-by-default",
+    "principle-prove-it-works",
+    "saas-platform",
+    "simplicity-first",
+    "markdown-visuals",
+    "diagram-figures",
+    "project-doc-set",
+    "architecture-patterns",
+    "prior-art-review",
+    "parallel-attempts-pick-best",
+    "adversarial-review-panel",
+    "database-design",
+    "api-conventions",
+    "web-service-essentials",
+    "error-handling-patterns",
+    "observability-basics",
+    "background-jobs",
+    "audit-trail",
+    "pdpa-compliance",
+    "cicd-and-release",
+    "repeated-mistakes-to-checks",
+    "reverse-engineering",
+    "polished-document-style",
+    "branded-document-design",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "status-report",
+    "work-session-context"
+   ]
+  },
+  {
+   "name": "system-analyst",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for an FSD, use cases, data flows, endpoint API specs or sequence diagrams. Architecture → solution-architect.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "polished-document-style",
+    "markdown-visuals",
+    "branded-document-design",
+    "srs-writing",
+    "diagram-figures",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "temp-file-discipline",
+    "status-report",
+    "database-design",
+    "api-conventions",
+    "fsd-writing",
+    "legacy-spec-recovery",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "document-naming",
+    "i18n-and-locale",
+    "audit-trail",
+    "notifications",
+    "pdpa-compliance",
+    "context-budget",
+    "work-session-context",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "technical-writer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "polished-document-style",
+    "branded-document-design",
+    "markdown-visuals",
+    "commit-message-format",
+    "markdown-report-docx",
+    "presentation-design",
+    "html-slide-deck",
+    "pptx-to-html-deck",
+    "human-writing",
+    "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
+    "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "status-report",
+    "work-session-context",
+    "document-naming",
+    "project-doc-set",
+    "product-naming"
+   ]
+  },
+  {
+   "name": "ux-designer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when designing user flows, wireframes, clickable HTML mockups or UI heuristic reviews. Logos → graphic-designer.",
+   "skills": [
+    "superuser",
+    "principle-prove-it-works",
+    "simplicity-first",
+    "ui-craft",
+    "web-app-design",
+    "mobile-app-design",
+    "windows-app-design",
+    "markdown-visuals",
+    "diagram-figures",
+    "spell-out-abbreviations",
+    "answer-shape",
+    "temp-file-discipline",
+    "status-report",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
+    "i18n-and-locale",
+    "context-budget",
+    "work-session-context",
+    "human-writing"
+   ]
+  }
+ ],
+ "playbooks": [
+  {
+   "name": "bug-fix",
+   "title": "แก้ของพังด้วยหลักฐาน",
+   "when": "error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)",
+   "done": "`ต้นเหตุ: … · แก้: … · พิสูจน์: <กรณีที่เคยล้มและตอนนี้ผ่าน + วิธีที่รัน>`",
+   "steps": [
+    {
+     "n": 1,
+     "text": "คัดอาการตรงตัว — ข้อความ error · ชื่อ test · ภาพหน้าจอ · ขั้นตอนที่ผู้ใช้ทำ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**ทำให้เกิดซ้ำเองในที่เดียวกับที่ผู้ใช้เจอ** — ถ้าเป็นหน้าเว็บ ให้ใช้ skill ตรวจแอปของโปรเจกต์ (ถ้ายังไม่มี ให้ทำ `app-verifier-setup` ก่อน) ถ้าเป็น API ให้ใช้คำสั่งเรียกจริง ถ้าทำซ้ำไม่ได้ ให้บอกว่าขาดอะไร (ข้อมูล · สภาพแวดล้อม · ขั้นตอน) แล้วหยุดเฉพาะบั๊กนี้ ส่วนโปรเจกต์ที่มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ทำซ้ำใน sandbox · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [
+      "อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [
+      "app-verifier-setup",
+      "project-doc-set"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "**เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่",
+     "sub": [
+      "ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "testing-standards",
+      "code-orientation"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "หาต้นเหตุตาม [`principle-fix-root-cause`](../../principle-fix-root-cause/SKILL.md) · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่ (ส่งผลขั้น 3)"
+     },
+     "skills": [
+      "principle-fix-root-cause",
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`Explore` ตัวใหม่"
+     },
+     "skills": [
+      "blast-radius"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "lazy-coding"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "**รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [
+      "code-review-checklist"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ [`repeated-mistakes-to-checks`](../../repeated-mistakes-to-checks/SKILL.md) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "repeated-mistakes-to-checks"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 10,
+     "text": "ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "superuser",
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "feature",
+   "title": "เพิ่มหรือเปลี่ยนพฤติกรรม",
+   "when": "ฟีเจอร์ใหม่ · เปลี่ยนการทำงานเดิม · ทำตามข้อกำหนดใน SRS หรือ FSD",
+   "done": "ทุกเกณฑ์ผ่านของข้อกำหนดมีหลักฐาน — test ที่รันจริง หรือการกดบนแอปจริงพร้อมผลที่เห็น",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่านข้อกำหนดที่เกี่ยว (`docs/srs.md` · `docs/fsd-*.md` · mockup) แล้วทำ [`code-orientation`](../../code-orientation/SKILL.md) กับส่วนที่จะแตะ จะได้แผนที่ 10 บรรทัด แล้วเปิด skill ตาม stack ของโปรเจกต์ · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "brainstormer"
+      ],
+      "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)"
+     },
+     "skills": [
+      "code-orientation"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**บอกรูปข้อมูลก่อน** — type · ตาราง · state ที่ฟีเจอร์นี้สร้างหรือเปลี่ยน โดยเขียนเป็นโค้ดหรือตารางสั้น ๆ ในคำตอบ · ใคร: หัวหน้าทีม",
+     "sub": [
+      "แยก 3 ชั้น (รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล)",
+      "ถ้าแตะ input จากภายนอก · login · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล ให้เปิด [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้รัน `/software-company:threat-model` ก่อนเขียน"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "principle-secure-by-default"
+     ],
+     "commands": [
+      "threat-model"
+     ],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ถ้าฟีเจอร์ข้ามหลายโมดูล ให้ร่างลายเซ็นฟังก์ชันและตำแหน่งไฟล์ก่อนเขียนเนื้อ ถ้ายังมีหลายทางที่ดีพอกัน ให้ใช้ [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) หรือ playbook `prototype` · ใคร: หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)"
+     },
+     "skills": [
+      "parallel-attempts-pick-best"
+     ],
+     "commands": [],
+     "playbooks": [
+      "prototype"
+     ],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ในจุดที่จะแตะ ลบของที่ไม่ใช้ออกก่อน แล้วค่อยเพิ่ม ([`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md)) · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "principle-replace-then-delete"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แบ่งเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น ชิ้นละ 1 ข้อกำหนดหรือ 1 หน้าจอ แล้วส่งแต่ละชิ้นให้ agent `developer` ตัวใหม่ พร้อมแผนที่จากข้อ 1 ตำแหน่งไฟล์ และเกณฑ์ผ่าน · ใคร: `developer` ตัวใหม่ต่อชิ้น",
+     "sub": [
+      "**test ก่อนโค้ด** สำหรับชิ้นที่มี logic (คำนวณ · เงื่อนไข · state): เขียน test ที่ล้มก่อน → รันให้เห็นว่าแดง → เขียนโค้ดให้เขียว → จัดให้สะอาด ส่วนชิ้นที่เป็นหน้าจอล้วนให้ตรวจด้วย skill ตรวจแอปแทน"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่ต่อชิ้น"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ตรวจทุกชิ้นก่อนไปชิ้นถัดไป — test ของชิ้นนั้นต้องผ่าน และกดดูบนแอปจริงด้วย skill ตรวจแอปของโปรเจกต์ · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [
+      "**ทุกพฤติกรรมใหม่และทุกข้อที่ตัดสินใจเอง ต้องมี test ล็อกไว้อย่างน้อย 1 ตัว** และ test ต้องล้มเมื่อโค้ดผิด ([`principle-prove-it-works`](../../principle-prove-it-works/SKILL.md))"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [
+      "principle-prove-it-works"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**รีวิวก่อนบอกว่าเสร็จ — ห้ามข้าม** diff เล็ก: ความถูกต้องและ edge case · logic หรือ state มาก: [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md) อย่างน้อย 2 มุม คือความถูกต้องและความเรียบง่าย ถ้าเพิ่ม dependency หรือแตะเรื่องเสี่ยง ให้ผ่าน [`security-gate`](../../security-gate/SKILL.md) · ใคร: `reviewer` ตัวใหม่ (logic มาก: `reviewer` ตัวใหม่มุมละตัว · เรื่องเสี่ยง: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "sub": [
+      "test ผ่านครบไม่ได้แปลว่าไม่มีบั๊ก — ทุกข้อที่รีวิวยืนยันแล้ว ให้เขียน test ที่ล้มก่อน แล้วค่อยแก้",
+      "หน้าจอที่มี mockup หรือต้องเหมือนระบบเดิม ให้จบขั้นตรวจด้วย playbook `visual-parity`"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer",
+       "reviewer",
+       "security-engineer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ (logic มาก: `reviewer` ตัวใหม่มุมละตัว · เรื่องเสี่ยง: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)"
+     },
+     "skills": [
+      "adversarial-review-panel",
+      "security-gate"
+     ],
+     "commands": [],
+     "playbooks": [
+      "visual-parity"
+     ],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "แก้ข้อที่หัวหน้าทีมยืนยันแล้ว — test ที่ล้มก่อน แล้วค่อยแก้ · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "รอบตรวจ — ดูข้อเดิมทุกข้อและจุดที่เปลี่ยน วนจนไม่เหลือข้อสูงและกลาง ตาม [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 10,
+     "text": "เมื่อผ่านทั้งหมด ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 เปิด PR (`pr-description-template`) เมื่อผู้ใช้สั่ง แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "superuser",
+      "pr-description-template",
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "housekeeping",
+   "title": "เก็บกวาดเครื่องและโปรเจกต์",
+   "when": "ดิสก์เต็ม · worktree หรือ branch ค้างเยอะ · sandbox และ image เก่าสะสม · `_to_delete/` ใหญ่ (รวม `worktree cleanup` ของ pstack)",
+   "done": "ลบเฉพาะสิ่งที่ผู้ใช้อนุมัติ และไม่มีงานของใครหายไปโดยไม่มี patch สำรอง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ทำรายการ ขั้นนี้ยังไม่ลบอะไร · ใคร: หัวหน้าทีม",
+     "sub": [
+      "git worktree และ branch ที่ merge แล้วหรือไม่ได้แตะเกิน 30 วัน (`git worktree list` · `git branch --merged`)",
+      "sandbox ของ SQT (`docker ps -a --filter label=sqt.sandbox=true`) · image และ volume ที่ไม่มีคอนเทนเนอร์ใช้",
+      "ขนาด `_to_delete/` ของแต่ละโปรเจกต์"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "แยกเป็น 2 กลุ่ม คือกลุ่มที่ลบได้แน่ (merge แล้ว · ไม่มีไฟล์ค้าง) และกลุ่มที่ต้องให้คนตัดสิน (มีงานที่ยังไม่ commit · ไม่แน่ใจ) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "แสดงตาราง `| ของ | ขนาด | เหตุผลที่ลบได้ | ความเสี่ยง |` ให้ผู้ใช้ ใต้หัวข้อ **\"รออนุมัติ\"** พร้อมคำสั่งลบที่กดได้ทันที ส่วนข้อที่ไม่แน่ใจให้ลงใน \"ค้างอยู่\" · ใคร: หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีมเสนอ · ผู้ใช้อนุมัติ"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 4,
+     "text": "เมื่อผู้ใช้อนุมัติแล้ว ให้ลบเฉพาะรายการที่อนุมัติ worktree ที่มีไฟล์ค้างให้เก็บ patch ไว้ก่อนลบ ส่วน sandbox ให้ใช้ `.sandbox/sandbox.ps1 destroy` (`.sandbox/` เองอยู่ที่รากต่อได้ตาม `project-doc-set` ข้อ 1) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "project-doc-set"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 5,
+     "text": "รายงานพื้นที่ที่ได้คืน แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "investigation",
+   "title": "ตอบคำถามแบบอ่านอย่างเดียว",
+   "when": "\"X ทำงานอย่างไร\" · \"ทำไมถึงทำแบบนี้\" · \"ควรวางไว้ที่ไหน\" · \"แน่ใจไหมว่า...\"",
+   "done": "ทุกข้ออ้างมีไฟล์:บรรทัด หรือผลการรันกำกับ · ไม่มีไฟล์ในโปรเจกต์ถูกแก้",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนคำถามใหม่เป็นประโยคเดียวที่ตอบได้ว่าใช่หรือไม่ใช่ หรือชี้ได้ว่าอยู่ตรงไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ประเมินขนาด — ถ้าต้องเปิดเกิน 3 ไฟล์ ให้ส่ง agent `system-analyst` ไปค้น โดยสั่งให้อ่านอย่างเดียว (\"ห้ามเขียนหรือแก้ไฟล์\") แล้วรับกลับมาแค่สรุปกับตำแหน่งไฟล์ (`context-budget`) · ใคร: `system-analyst` ตัวใหม่ (ไม่เกิน 3 ไฟล์: หัวหน้าทีม)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "system-analyst"
+      ],
+      "raw": "`system-analyst` ตัวใหม่ (ไม่เกิน 3 ไฟล์: หัวหน้าทีม)"
+     },
+     "skills": [
+      "context-budget"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ไล่จากจุดเข้า (route · command · หน้าจอ) ไปจนถึงข้อมูลที่ถูกอ่านหรือเขียน แล้วจดเส้นทางเป็นลำดับไฟล์:บรรทัด · ใคร: `system-analyst` ตัวใหม่ (งานเล็ก: หัวหน้าทีม)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "system-analyst"
+      ],
+      "raw": "`system-analyst` ตัวใหม่ (งานเล็ก: หัวหน้าทีม)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ถาม \"ทำไม\" แล้วไล่หลักฐานจากทุกแหล่งที่เข้าถึงได้ ถ้าทำพร้อมกันได้ให้ส่ง subagent แหล่งละตัว: `git log -p` · `git blame` · ข้อความ commit · การคุยใน PR (`gh pr view <n> --comments`) · issue ที่ commit อ้างถึง · ADR ใน `docs/decisions/` · เอกสารใน `docs/` · connector ที่ต่อไว้ (issue tracker · แชตทีม · wiki) แล้วเรียงคำตอบตามน้ำหนักหลักฐาน ถ้าไม่มีหลักฐาน ให้เขียนว่า `ไม่พบหลักฐาน` ห้ามเดาเหตุผล · ใคร: `Explore` ตัวใหม่แหล่งละตัว",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`Explore` ตัวใหม่แหล่งละตัว"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ข้ออ้างไหนพิสูจน์ได้ด้วยการรัน (ค่าที่ได้ · เวลาที่ใช้ · ลำดับที่เกิด) ให้รันดู อย่าอนุมานจากการอ่าน ไม่แก้ไฟล์ในโปรเจกต์ (สิ่งที่ต้องเขียนไฟล์ให้รันในสำเนาใต้ `_to_delete/`) · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "**ถ้าผู้ใช้ขอให้สอน หรือบอกว่ายังไม่เข้าใจ** ให้อธิบายแบบต่อชั้น เริ่มจากสิ่งที่เขารู้แล้ว ใช้ 1 ชั้น 1 ภาพ (`software-diagrams`) และแต่ละภาพเพิ่มของใหม่ไม่เกิน 2 อย่าง ผูก \"ทำงานอย่างไร\" กับ \"ทำไมถึงทำแบบนี้\" จากข้อ 4 ไว้ด้วยกัน แล้วปิดด้วยตัวอย่างจริง 1 เส้นทางที่ผ่านทุกชั้น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "software-diagrams"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "ร่างคำตอบ — ขึ้นด้วยคำตอบ 1 ประโยค แล้วตามด้วยเส้นทาง ไฟล์:บรรทัด และป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน` / `ยังไม่ตรวจ` ทุกข้อ ถ้าภาพช่วยได้ ให้ใช้ `software-diagrams` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "software-diagrams"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "ตรวจคำตอบ — ทุกข้ออ้างชี้ไฟล์:บรรทัดหรือผลการรันได้จริง ป้ายตรงกับหลักฐาน และคำตอบ 1 ประโยคตอบคำถามข้อ 1 · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "ส่งคำตอบหลังยืนยันข้อที่ `reviewer` พบเอง (ไม่ผ่าน → แก้แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md)) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "learn-from-session",
+   "title": "ทำให้ทีมเก่งขึ้นทุกรอบ",
+   "when": "ผู้ใช้สั่ง \"รวมบทเรียน\" หรือ \"reflect\" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง \"รวมบทเรียน\" แต่ไม่เริ่มเอง",
+   "done": "ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง \"ควรรวมไหม\" และ \"รวมแล้ว\" ในคิวกลางตรงกับที่ทำจริง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
+     "sub": [
+      "คิวกลาง `~/.claude/superuser/improvements.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
+      "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
+     "sub": [
+      "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
+      "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
+      "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
+      "**แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`",
+      "**กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์",
+      "**ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น",
+      "**skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "repeated-mistakes-to-checks",
+      "session-lessons-to-skills"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "**ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "**ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง \"รออนุมัติ\" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "**แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง \"ควรรวมไหม\" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง \"รวมแล้ว\" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": true
+  },
+  {
+   "name": "new-project",
+   "title": "เริ่มโปรเจกต์ใหม่จนได้ของที่รันและพิสูจน์ได้",
+   "when": "\"ทำแอป X ให้หน่อย\" · \"ลองตั้งโปรเจกต์\" · ยังไม่มีโค้ดหรือมีแค่โฟลเดอร์เปล่า (ถ้าต้องการชุดเอกสารเต็ม BRD · SRS ก่อน ให้ใช้ playbook `project-docs` ก่อน แล้วค่อยกลับมาที่นี่)",
+   "done": "รันได้ด้วยคำสั่งเดียวตาม README · unit test และ verify ผ่านพร้อมหลักฐาน · ข้อที่รีวิวเจอแก้แล้วหรือมีเหตุผล · security-gate ผ่าน · คำถามที่ต้องให้คนตัดสินอยู่ใน \"ค้างอยู่\" · งานที่ย้อนไม่ได้เตรียมไว้ใน \"รออนุมัติ\"",
+   "steps": [
+    {
+     "n": 1,
+     "text": "**ขอบเขตเท่ากระดาษแผ่นเดียว** — ถ้ามี SRS ที่มีรหัส FR อยู่แล้ว ให้ใช้รหัสนั้นเป็นรหัสงานในตารางงานของ `docs/BUILD-PLAN.md` ตาม [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) ถ้าไม่มี ให้ตั้งรหัสสั้นจากขอบเขต (`F-01` …) แล้วเขียนว่าทำอะไร ไม่ทำอะไร และพฤติกรรมไหนตีความได้หลายแบบ (เช่น เครื่องคิดเลขคูณก่อนบวก หรือคิดซ้ายไปขวา) ข้อที่เดาได้และย้อนได้ให้เลือกเองแล้วลง [`decision-log`](../../decision-log/SKILL.md) พร้อม `(รอยืนยัน)` ส่วนข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) ไม่เดาค่า ใส่ `(รอยืนยัน)` ตรงที่ใช้ แล้วรวมไว้ใน \"ค้างอยู่\" ครั้งเดียว · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "brainstormer"
+      ],
+      "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)"
+     },
+     "skills": [
+      "spec-to-code-loop",
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**เลือกเทคโนโลยีน้อยที่สุดที่พอ** — ใช้ของมาตรฐานของภาษาและแพลตฟอร์มก่อน framework ให้ dependency ทุกตัวต้องมีเหตุผลใน `decision-log` และล็อกเวอร์ชัน (lock file) **ตรวจ toolchain ก่อน** (`flutter doctor` · `dotnet --info` · `node -v` ฯลฯ) ถ้าขาด SDK และติดตั้งลงโฟลเดอร์ของผู้ใช้ได้ (ย้อนกลับได้) ให้ติดตั้งเลยแล้วลง `decision-log` พร้อม path แต่ถ้าต้องติดตั้งทั้งเครื่องหรือใช้สิทธิ์ admin ให้เตรียมคำสั่งไว้ใน \"รออนุมัติ\" แล้วทำส่วนอื่นต่อ · ใคร: `solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "solution-architect",
+       "developer"
+      ],
+      "raw": "`solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 3,
+     "text": "**บอกรูปข้อมูลและวางโครงไฟล์** — วางโครงโฟลเดอร์ตาม [`project-doc-set`](../../project-doc-set/SKILL.md) แบบ B: ไฟล์ที่ได้รับมา (SRS) อยู่ `ref/` เอกสารที่เราเขียนอยู่ `docs/` และ source code อยู่ใน `<project-name>/` (ชื่อโปรเจกต์ตัวเล็กคั่น `-`) กฎธุรกิจเป็นฟังก์ชันล้วนที่ไม่แตะหน้าจอหรือฐานข้อมูล แยกชั้นเป็น รับข้อมูลเข้า → กฎธุรกิจ → แสดงผลหรือเก็บข้อมูล จัดโฟลเดอร์ตามหน้าที่ วาง test ข้างโค้ด และให้ README ตอบ \"รันอย่างไร · test อย่างไร · อะไรอยู่ไหน\" (`project-bootstrap`) · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "project-doc-set",
+      "project-bootstrap"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "**ทำ verify ก่อนฟีเจอร์ที่ 2** — verify คือสคริปต์ที่รันแอปจริงแล้วตรวจผล พอมีหน้าจอแรกเมื่อไร ให้สร้าง `<project-name>/test/e2e/verify.*` กับ verify skill ตาม `app-verifier-setup` ทันที ถ้าเป็นแอปมือถือ verify ต้องขับ build จริงบน emulator และฉีดค่าฮาร์ดแวร์เข้าไป (เช่น ค่าเซนเซอร์ของ emulator) แล้วเขียนไว้ว่าข้อไหนยังต้องลองบนเครื่องจริง (`principle-prove-it-works`) ถ้าเป็นโปรเจกต์ที่จะใช้ต่อนาน ให้ตั้ง [`docker-sandbox`](../../docker-sandbox/SKILL.md) ด้วย · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [
+      "app-verifier-setup",
+      "principle-prove-it-works",
+      "docker-sandbox"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**สร้างทีละชิ้นตาม playbook `feature`** — เขียน unit test ของกฎ ลองแก้โค้ดให้ผิด 1 จุดแล้ว test ต้องล้ม ขับหน้าจอจริงด้วย verify และดูภาพหน้าจอเอง · ใคร: `developer` ตัวใหม่ต่อชิ้น",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่ต่อชิ้น"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [
+      "feature"
+     ],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "**คณะรีวิว 3 มุม** ([`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md)) · ใคร: `reviewer` ตัวใหม่มุมละตัว",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่มุมละตัว"
+     },
+     "skills": [
+      "adversarial-review-panel"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — สแกนค่าลับ dependency และโค้ด หัวหน้าทีมเก็บรายงานใน `qa/security/` · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "security-engineer"
+      ],
+      "raw": "`security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)"
+     },
+     "skills": [
+      "security-gate"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "แก้ทุกข้อจากขั้น 6–7 ที่หัวหน้าทีมยืนยันแล้ว — เขียน test ที่ล้มก่อน แล้วค่อยแก้ · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "รอบตรวจ — ดูข้อเดิมทุกข้อและจุดที่เปลี่ยน วนจนไม่เหลือข้อสูงและกลาง ตาม [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 10,
+     "text": "**ส่งมอบ** — `docs/BUILD-PLAN.md` (สถานะ · ประวัติ · ตัดสินใจเอง) · README · ของชั่วคราวอยู่ใน `_to_delete/` เท่านั้น · commit ตามกฎ commit ใน `superuser` หัวข้อ 6 · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "performance",
+   "title": "ช้า วัดก่อน แก้ทีละข้อ วัดซ้ำ",
+   "when": "หน้าช้า · API ช้า · build ช้า · กินหน่วยความจำ · อยากให้ตัวเลขตัวหนึ่งดีขึ้นจนถึงเป้า · ถ้าเป็นอาการที่ไม่ควรเกิดเลย (รั่ว · วิ่งตอนว่าง) → `bug-fix` (รวม `perf` · `hillclimb` · `trace forensics` ของ pstack)",
+   "done": "ตัวเลขถึงเป้าหรือมีเหตุผลว่าทำไมหยุด และทุกการแก้ที่เก็บไว้มีผลวัดก่อน/หลังกำกับ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ตั้งตัวเลขเดียวที่จะดู (เช่น เวลาโหลดหน้ารายงานเป็นวินาที) วิธีวัด และเป้า ถ้าไม่มีเป้า ให้ตั้ง \"ดีขึ้นอย่างน้อย 20%\" แล้วลง `decision-log` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**วัดค่าตั้งต้นอย่างน้อย 3 รอบ** บนข้อมูลชุดเดียวกัน เครื่องเดียวกัน ถ้ามี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้วัดใน sandbox แล้วบันทึกค่าดิบลง `_to_delete/perf/<เรื่อง>.tsv` · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [
+      "project-doc-set"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "หาว่าอะไรจำกัดตัวเลขนั้น — profiler · trace · query plan · log เวลาแต่ละช่วง ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot) ให้อ่านด้วยเครื่องมือ ไม่เดาจากโค้ด · ใคร: `developer` ตัวใหม่ (ต้นเหตุยาก: `model: opus`)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่ (ต้นเหตุยาก: `model: opus`)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตั้งสมมติฐานทีละข้อ เช่น \"ช้าเพราะ X ถ้าแก้ X ตัวเลขควรลดลงประมาณ Y\" · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่ (ส่งผลขั้น 3)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แก้ทีละข้อ (`lazy-coding`) แล้ววัดซ้ำ 3 รอบ ถ้าดีขึ้นจริงเกินความแกว่งของการวัด ให้เก็บไว้ และ commit 1 ครั้งต่อการแก้ที่ได้ผล พร้อมตัวเลขก่อน/หลังในข้อความ (ตามกฎ commit ใน `superuser` หัวข้อ 6 ถ้าไม่ได้อนุญาตให้เก็บเป็น patch แยกใน `_to_delete/perf/`) ถ้าไม่ดีขึ้น ให้ถอยการแก้ทิ้งให้สะอาดก่อนลองข้อถัดไป และไม่ซ้อนการแก้ที่ยังไม่พิสูจน์ · ใคร: `developer` ตัวใหม่แก้ · `qa-tester` ตัวใหม่วัด",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer",
+       "qa-tester"
+      ],
+      "raw": "`developer` ตัวใหม่แก้ · `qa-tester` ตัวใหม่วัด"
+     },
+     "skills": [
+      "lazy-coding",
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ทุกสมมติฐานลงตาราง `| สมมติฐาน | ก่อน | หลัง | เก็บ/ทิ้ง |` ใน `decision-log` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "วนข้อ 4–6 จนถึงเป้า หรือจนสมมติฐานที่เหลือไม่คุ้ม ถ้าล้มเหลว 3 ข้อติดกันในทางเดียวกัน ให้ถอยกลับไปข้อ 3 เพราะสิ่งที่คิดว่าจำกัดอาจผิด · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "ตรวจทั้งชุด — การแก้ที่เก็บ · ค่าดิบ · ตารางสมมติฐาน · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "รายงาน — ตัวเลขก่อน/หลังพร้อมจำนวนรอบที่วัด และบอกว่าอะไรจำกัดตัวเลขอยู่ตอนนี้ แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "pickup-and-pause",
+   "title": "รับงานที่ค้างต่อ · หยุดงานให้คนอื่นรับต่อได้",
+   "when": "\"ทำต่อจากเมื่อวาน\" · \"ค้างไว้ตรงไหน\" · รับงานต่อจาก agent ตัวอื่น · \"พอก่อน เดี๋ยวมาทำต่อ\" (รวม `session pickup` · `pause safely` · skill `recall` ของ pstack)",
+   "done": "คนหรือ bot ที่มารับต่อ จากค่ายไหนก็ได้ อ่านแค่ `CONTEXT.md` แล้วเริ่มงานต่อได้",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่าน `CONTEXT.md` หัวข้อ \"รับงานต่อ\" · ข้อความค้างใน `.claude/superuser/inbox/` · `docs/BUILD-PLAN.md` (สถานะล่าสุด · ค้างอยู่ · ตัดสินใจเอง) · ดู log ล่าสุดใน `.claude/superuser/log/` ว่าตัวก่อนทำอะไรไปจริง · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "รับงานต่อ",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ดูของจริง ไม่เชื่อบันทึกอย่างเดียว — `git status` · `git log -10` · branch ที่อยู่ · sandbox ที่รันอยู่ (`.sandbox/sandbox.ps1 list`) · test ล่าสุดผ่านไหม · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "รับงานต่อ",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เขียนสรุปสถานะปัจจุบันไม่เกิน 10 บรรทัด — ทำอะไรเสร็จ · ค้างอะไร · ขัดกับบันทึกตรงไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "รับงานต่อ",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "เลือก playbook ของงานที่เหลือ แล้วทำต่อ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "รับงานต่อ",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 1,
+     "text": "ทำชิ้นที่กำลังทำให้ถึงจุดที่ตรวจได้ หรือถอยกลับไปจุดตรวจได้ล่าสุด — ไม่ทิ้งโค้ดครึ่งทางที่ test แดงโดยไม่บอก · ใคร: `developer` ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)",
+     "sub": [],
+     "phase": "หยุดงาน",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "งานที่ยังไม่ commit — ถ้าผู้ใช้ไม่อนุญาตให้ commit ให้เก็บ `git diff` ลง `_to_delete/pause-<วันที่>.patch` และบอกในรายงาน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "หยุดงาน",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "หยุด dev server หรือ process ที่เปิดไว้ ส่วน sandbox ปล่อยรันต่อได้ แต่จดชื่อไว้ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "หยุดงาน",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "`status-report` และเขียนหัวข้อ \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ (`work-session-context` ข้อ 4) — เขียนว่า: ขั้นถัดไปต้องทำอะไรก่อน · คำสั่งที่ใช้ทำซ้ำ · ของที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง",
+     "sub": [],
+     "phase": "หยุดงาน",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง"
+     },
+     "skills": [
+      "status-report",
+      "work-session-context"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "project-docs",
+   "title": "เอกสารโปรเจกต์ตามชุด prompt",
+   "when": "ผู้ใช้วางไฟล์ใดก็ได้จาก `prompt/software-company/` หรือขอเอกสารโปรเจกต์ BRD · SRS · mockup · FSD · คู่มือ",
+   "done": "ทุกฉบับที่สั่งมีสถานะใน `docs/BUILD-PLAN.md` และผลตรวจมีหลักฐาน และไม่มีเอกสารใดถูกตั้ง `APPROVED` โดย agent (ผู้ใช้ตั้งเองเท่านั้น)",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่าน `docs/BUILD-PLAN.md` (หัวข้อ `สถานะล่าสุด` และ `ตัดสินใจเอง`) กับ `docs/README.md` ถ้ามี — สถานะงาน รหัสโปรเจกต์ ขนาดงาน ธีมสี อยู่ที่นั่น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "รวมช่อง \"ผู้ใช้กรอก\" ของ**ทุกฉบับที่สั่ง** ที่ยังว่างและหาจาก `docs/` · `ref/` · โค้ดไม่ได้ (รวมค่าที่ข้อ 1 ยังขาด) แล้วถามครั้งเดียว (มี mockup ในฉบับที่สั่ง → ถาม**แอปหรือโปรเจกต์ที่ชอบหน้าตา**และ**เลือกแนวภาพเองไหม**ด้วย · สั่งทำ mockup ใหม่ → ถามว่าคงหน้าตาเดิมหรือออกแบบใหม่) เมื่อเริ่มแล้วไม่ถามอีก ช่องที่ยังว่างให้เสนอค่าเองตามข้อ 4 · ใคร: หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำทีละฉบับตามลำดับในตารางของไฟล์ prompt และข้ามฉบับที่ไม่ได้สั่ง อ่านผลของฉบับก่อนจากดิสก์ใหม่ทุกครั้ง เพราะผู้ใช้อาจแก้ไปแล้ว วางไฟล์ตาม `project-doc-set` (`ref/` อ่านอย่างเดียว · `docs/` · `mockup/` · `qa/` · `assets/` · ของชั่วคราว `_to_delete/`) สร้างโฟลเดอร์เมื่อมีของจริงจะใส่ และตั้งชื่อตาม `document-naming` · ใคร: `business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ตามชนิดฉบับ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "business-analyst",
+       "system-analyst",
+       "ux-designer",
+       "technical-writer"
+      ],
+      "raw": "`business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ตามชนิดฉบับ"
+     },
+     "skills": [
+      "project-doc-set",
+      "document-naming"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ถ้าต้องตัดสินใจกลางทาง ไม่ต้องหยุดถาม ให้เลือกทางที่ผลกระทบน้อยสุดตาม `principle-proceed-on-reversible-work` แล้วลง `decision-log` ส่วนข้อเท็จจริง (ตัวเลข ชื่อ วันที่ งบ) ห้ามเดา ให้ใส่ `(รอยืนยัน)` ลงคำถามค้าง แล้วทำต่อ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "principle-proceed-on-reversible-work",
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าเอกสารขัดกัน ให้ยึดฉบับต้นน้ำ (SRS เหนือ FSD เหนือ mockup) ถ้าเอกสารขัดกับโค้ดที่รันอยู่ ให้ยึดโค้ด แล้วลงคำถามค้าง · **แก้ต้นน้ำหลังปลายน้ำเขียนไปแล้ว → `grep` ค่าเก่าทุกตัวใน `docs/` `qa/` `mockup/` `_to_delete/drafts/` แล้วแก้ครบในรอบเดียว** ลง \"ค่าเก่า → ค่าใหม่ · ไฟล์\" ใน `docs/BUILD-PLAN.md` · **ข้อเท็จจริงจากภายนอก** (คีย์ลัดของแอปอื่น · รุ่นระบบปฏิบัติการ · ขีดจำกัด API · ราคา · กฎหมาย) ตรวจกับเอกสารทางการตั้งแต่ฉบับต้นน้ำ ใส่ลิงก์ + วันที่ ก่อนปล่อยเอกสารปลายน้ำ (subagent ไม่มีเครื่องมือค้นเว็บ → ส่ง `general-purpose` ตรวจแยก) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`) · **ตัวตรวจด้วยเครื่องที่ subagent รันไม่ได้** (`business-analyst` · `system-analyst` · `solution-architect` · `project-manager` · `technical-writer` ไม่มี shell: render รูป · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → สั่งให้ปิดรายงานด้วยรายการคำสั่ง แล้วหัวหน้าทีมรันทันทีที่รับงาน · **mockup มี 2 ด่าน**: ถูกต้อง (`qa-tester` ขับเบราว์เซอร์) **และ** สวย (ด่านสวย 5 แกนของ `ui-craft` ข้อ 9 โดยผู้ตรวจอีกตัว เทียบภาพแอปอ้างอิง) · mockup ใหม่หรือออกแบบใหม่เริ่มจากทิศทางภาพ `ui-craft` ข้อ 0.1 ไม่รวมไฟล์เก่าแล้วคงหน้าตาเดิม · ถ้าไม่ผ่าน agent ที่เขียนฉบับนั้นตัวใหม่เป็นคนแก้ แล้วตรวจซ้ำตามกติกา Reflection ใน `superuser` (reviewer ตัวใหม่ทุกรอบ · วนจนไม่เหลือข้อสูงและกลาง · ไม่เกิน 5 รอบ) และลงผลทุกรอบในช่องผลตรวจของ `docs/BUILD-PLAN.md` · เขียน `ผ่าน` ได้เมื่อรอบล่าสุดไม่เจอข้อสูงและกลางเท่านั้น · ใคร: `reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน"
+     },
+     "skills": [
+      "principle-prove-it-works",
+      "ui-craft",
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "จบแต่ละฉบับแล้วให้ลง `status-report` ใน `docs/BUILD-PLAN.md` แล้วเริ่มฉบับถัดไปทันที ไม่รอ `ต่อ` หยุดก่อนครบได้ 2 กรณีเท่านั้น คือขาดเอกสาร \"ต้องมีก่อน\" ที่สร้างเองไม่ได้ หรือเจอเงื่อนไขหยุดที่ไฟล์ prompt ระบุ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "เมื่อครบทุกฉบับ ให้รายงานครั้งเดียว: แถวที่เปลี่ยน · ค้างอยู่ · ตัดสินใจเอง · ถัดไป แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่คัดลอกเนื้อเอกสารกลับมา · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "prototype",
+   "title": "ทดลองให้ผลรันเป็นคนตัดสิน",
+   "when": "กำลังจะถามคนว่า \"แบบไหนดี\" แต่คำตอบดูได้จากการรัน — ความเร็ว · หน้าตา · พฤติกรรม · ผลลัพธ์",
+   "done": "มีตัวเลขหรือภาพเทียบที่ตอบคำถามข้อ 1 ได้ และการตัดสินถูกบันทึกแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนคำถามที่จะให้การทดลองตอบ และเกณฑ์ตัดสินเป็นตัวเลขหรือสิ่งที่เห็นได้ ก่อนลงมือ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer",
+       "brainstormer"
+      ],
+      "raw": "`developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)"
+     },
+     "skills": [
+      "parallel-attempts-pick-best"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "รันทุกทางด้วยวิธีวัดเดียวกัน — ข้อมูลชุดเดียวกัน เครื่องเดียวกัน แล้วบันทึกผลดิบ · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตัดสินตามเกณฑ์ข้อ 1 ถ้าผลก้ำกึ่ง ให้เลือกทางที่โค้ดน้อยและแก้ทีหลังง่ายกว่า · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจการตัดสิน — ตัวเลขมาจากผลดิบข้อ 3 จริง วัดแบบเดียวกันทุกทาง และเกณฑ์ตรงกับข้อ 1 · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ลงผลใน [`decision-log`](../../decision-log/SKILL.md) — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "กลับไปทำ playbook เดิมต่อด้วยทางที่ชนะ แต่ไม่ย้ายโค้ดทดลองเข้าโปรเจกต์ตรง ๆ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "refactor",
+   "title": "เปลี่ยนโครงสร้าง พฤติกรรมเท่าเดิม",
+   "when": "ย้ายไฟล์ · แยกโมดูล · เปลี่ยนชื่อทั้งระบบ · ยุบชั้นที่ไม่จำเป็น · เปลี่ยน API ภายใน (ย้ายหน้าจอที่หน้าตาต้องเหมือนเดิม → `visual-parity`)",
+   "done": "test ชุดเดิมผ่านเท่าเดิม · ผลลัพธ์ที่เทียบในข้อ 2 ตรงกัน · จำนวนบรรทัดรวมใน diff ลดลง หรือมีเหตุผลชัดว่าทำไมไม่ลด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนพฤติกรรมที่ต้องเท่าเดิมเป็นรายการที่ตรวจได้ แล้วตรวจว่ามี test หรือ skill ตรวจแอปครอบไว้ ถ้าไม่มี ให้เพิ่ม test ที่ล็อกพฤติกรรมเดิมก่อนแตะโค้ด · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "บันทึกผลก่อนเปลี่ยน — test ทั้งชุด · ภาพหน้าจอหรือผลลัพธ์ที่ใช้เทียบ · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ลบโค้ดตายและชั้นที่มีผู้เรียกแค่ที่เดียวก่อน · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "แก้รูปแบบเดียวกันหลายจุด ใช้เครื่องมือตาม [`principle-build-a-tool-not-handwork`](../../principle-build-a-tool-not-handwork/SKILL.md) · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "principle-build-a-tool-not-handwork"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้ามี API ภายในใหม่ ให้ย้ายผู้เรียกทุกตัวแล้วลบของเก่าตาม [`principle-replace-then-delete`](../../principle-replace-then-delete/SKILL.md) · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "principle-replace-then-delete"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "หาผลกระทบนอกจุดที่แก้ตาม [`blast-radius`](../../blast-radius/SKILL.md) — ผู้เรียกทางอ้อม · ข้อมูลที่บันทึกไว้แล้ว · ระบบนอก repo · ใคร: `Explore` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`Explore` ตัวใหม่"
+     },
+     "skills": [
+      "blast-radius"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "รัน test ชุดเดิมและเทียบผลกับข้อ 2 — ต้องเท่ากันทุกข้อ · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "รีวิว diff ตาม `code-review-checklist` — พฤติกรรมเท่าเดิมตามรายการข้อ 1 ผลข้อ 7 ตรงข้อ 2 และไม่มีของใหม่แอบเข้ามา · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [
+      "code-review-checklist"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แต่ละชิ้นต้องผ่าน test แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "superuser",
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "review",
+   "title": "ตรวจก่อนส่ง",
+   "when": "รีวิว PR หรือ diff · ตรวจดีไซน์ · ตรวจเอกสาร · \"ช่วยดูหน่อยว่ามีอะไรพลาด\"",
+   "done": "ทุกข้อในรายงานชี้ไฟล์:บรรทัดได้ และผ่านการยืนยันแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "กำหนดขอบเขต — ไฟล์หรือ diff ที่ตรวจ (`git diff main...HEAD`) และไฟล์รอบข้างที่ต้องอ่านเพื่อเข้าใจ ([`code-orientation`](../../code-orientation/SKILL.md)) ตรวจตามรายการ \"ตรวจก่อนส่ง\" ของ skill ตาม stack ด้วย และหาผลกระทบนอก diff ตาม [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "code-orientation",
+      "blast-radius"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เขียนเจตนาของงาน 1 ย่อหน้า จากคำขอ · commit · PR · โค้ด ถ้าไม่แน่ใจ ให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วเขียนการตีความนั้นไว้ในรายงาน — ไม่หยุดถาม · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ส่ง `reviewer` ตัวใหม่ คู่กับ `code-review-checklist` และรายการ \"ตรวจก่อนส่ง\" ของ skill ตาม stack · งานใหญ่หรือเสี่ยงสูงใช้ [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md) (`reviewer` ตัวใหม่มุมละตัว) · งานภาพ → (ถ้าติดตั้ง plugin `graphic-design`) `design-critic` หรือ `design-review` ไม่มีก็ตรวจตาม [`ui-craft`](../../ui-craft/SKILL.md) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [
+      "code-review-checklist",
+      "adversarial-review-panel",
+      "graphic-design",
+      "ui-craft"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ยืนยันทุกข้อที่พบเอง — อ่านโค้ดจริง หรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ตรวจ` หรือทิ้ง · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แยกเป็น 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) แล้วบอกเหตุผลของข้อที่ทิ้งเพราะไม่ใช่ปัญหาจริง · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ จากนั้นใส่ตารางสถานะประเภท `ตรวจ` ของ `status-report` ไว้ในคำตอบอย่างเดียว ไม่เขียนลงไฟล์ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "ship",
+   "title": "เตรียมส่งงานขึ้น branch หลัก",
+   "when": "\"เปิด PR\" · \"ดูแล PR ให้เขียว\" · \"แก้ตามคอมเมนต์รีวิว\" · \"พร้อม merge หรือยัง\" (รวม `opening a PR` · `babysit` · `shipping` · `autopilot-stack` ของ pstack)",
+   "done": "PR เขียว · ทุกคอมเมนต์มีคำตอบ · ผ่านการตรวจอิสระ และผู้ใช้ตัดสินใจเรื่อง merge แล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ตรวจว่าทุกชิ้นงานผ่านการพิสูจน์แล้ว (test · skill ตรวจแอป) ถ้ายังไม่ผ่าน ให้กลับไป playbook เดิม · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [
+      "รัน [`security-gate`](../../security-gate/SKILL.md) — ถ้า critical หรือ high ที่ยืนยันแล้วยังค้างอยู่ ห้ามส่ง ถ้าค่าลับหลุด ให้หยุดและบอกผู้ใช้"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [
+      "security-gate"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**หาผลกระทบนอก diff** ตาม [`blast-radius`](../../blast-radius/SKILL.md) — ทุกฟังก์ชัน ตาราง หรือ API ที่เปลี่ยน · ใคร: `Explore` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`Explore` ตัวใหม่"
+     },
+     "skills": [
+      "blast-radius"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เรียง commit เป็นชิ้นเล็ก แต่ละชิ้นผ่าน test และอ่านตามลำดับแล้วเข้าใจเป็นเรื่องเดียว ส่วนข้อความเขียนตาม `commit-message-format` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "commit-message-format"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "เขียนคำอธิบาย PR ตาม `pr-description-template` — ผลต่อผู้ใช้ก่อน · วิธีพิสูจน์ · ความเสี่ยง · ภาพหน้าจอถ้ามี · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "pr-description-template"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าผู้ใช้อนุญาต ให้ push และเปิด PR ถ้าไม่อนุญาต ให้ส่งคำสั่งและข้อความ PR ไว้ในคำตอบ · ใคร: หัวหน้าทีม (ผู้ใช้อนุญาต)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม (ผู้ใช้อนุญาต)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "**ดูแลจนเขียว** — ถ้า CI แดง ให้หาต้นเหตุแล้วแก้ (`principle-fix-root-cause`) ห้าม retry หรือปิด test ส่วนคอมเมนต์รีวิวจากคนหรือบอต ให้ประเมินทีละข้อ แก้ข้อที่เป็นปัญหาจริง และตอบข้อที่ไม่ใช่ปัญหาพร้อมเหตุผล · ใคร: `developer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "`developer` ตัวใหม่"
+     },
+     "skills": [
+      "principle-fix-root-cause"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "ก่อน merge ตรวจทั้ง PR อีกรอบตาม playbook [`review`](playbook-review.md) เพราะ CI เขียวไม่ได้แปลว่าปลอดภัย · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [
+      "review"
+     ],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "การ merge เข้า branch หลักต้อง **รออนุมัติ** แม้ทุกอย่างผ่าน (เตรียมคำสั่ง merge ไว้ให้) แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน \"รออนุมัติ\")",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม (merge: ผู้ใช้ ใน \"รออนุมัติ\")"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "skill-authoring",
+   "title": "เขียนหรือแก้ skill แล้วพิสูจน์ว่ามันช่วยจริง",
+   "when": "สร้าง skill ใหม่ · แก้ SKILL.md · แก้ไฟล์ agent · แก้ prompt ใน `prompt/` (รวม `authoring a skill` · `eval` ของ pstack)",
+   "done": "validator ไม่มี error ใหม่ และมีผลทดสอบปิดตาที่บอกว่า skill ช่วยจริง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "หาก่อนว่ามี skill ที่ครอบเรื่องนี้แล้วหรือไม่ — แก้ skill ที่มีอยู่ดีกว่าสร้างใหม่ และชื่อใหม่ต้องบอกว่าทำอะไร ไม่ใช่ชื่อเล่น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เขียน description ให้บอก \"ใช้เมื่อ\" ด้วยคำที่ผู้ใช้พูดจริง และห้ามมี `\": \"` ที่ไม่อยู่ในเครื่องหมายคำพูด · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เนื้อหา — กฎสั้น · ขั้นตอนที่ทำตามได้ · สิ่งที่ห้าม ส่วนที่เป็นกลไกให้ย้ายออกจาก SKILL.md: `scripts/` สำหรับโค้ดที่รัน · `assets/` สำหรับแม่แบบ (SKILL.md เหลือแค่บอกว่าเรียกใช้เมื่อไร) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "เตรียมงานทดสอบ 3–5 งานที่ skill ควรช่วย และ 1 งานที่ไม่ควรถูกเรียก · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**ทดสอบแบบปิดตา** — ส่ง subagent ตัวใหม่ 2 ชุดทำงานเดียวกัน ชุดหนึ่งมี skill อีกชุดไม่มี (หรือใช้ skill รุ่นเก่า) แล้วให้ subagent ตัวที่ 3 ที่ไม่รู้ว่าผลไหนมาจากชุดไหน ให้คะแนนตามเกณฑ์ที่เขียนไว้ก่อน · ใคร: `general-purpose` ตัวใหม่ 2 ตัวทำ · `reviewer` ตัวใหม่ให้คะแนนแบบปิดตา",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`general-purpose` ตัวใหม่ 2 ตัวทำ · `reviewer` ตัวใหม่ให้คะแนนแบบปิดตา"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ถ้า skill ใหม่ไม่ชนะชัด ให้แก้แล้วทดสอบใหม่ หรือไม่เพิ่มเลย แล้วลงผลใน `decision-log` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "ใน repo SQT-Marketplace ให้รัน `node scripts/check/validate-marketplace.mjs --self-test` แล้วตามด้วย `node scripts/check/validate-marketplace.mjs` · `node scripts/sync/sync-docs.mjs` · `node scripts/build/build-targets.mjs` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "`status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "unattended-run",
+   "title": "งานยาวที่คนไม่อยู่ดู",
+   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ทำทั้งคืน\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่คนจะมาตรวจทีเดียว (รวม `autonomous run` · `multi-phase plan` · `orchestrate` · `autopilot-full` ของ pstack)",
+   "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนเงื่อนไขจบที่เครื่องตรวจได้ — test ชุดไหนต้องผ่าน · เอกสารไหนต้องมี · หน้าจอไหนต้องกดได้ · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ แล้วเลือก playbook ย่อยต่อชิ้น (feature · bug-fix · refactor · project-docs) · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)",
+     "sub": [
+      "งานหลายวันหรือหลายเฟส ให้เขียนแผนเฟสลงตารางงานใน `docs/BUILD-PLAN.md` แต่ละเฟสต้องจบในสภาพที่ตรวจได้ หัวหน้าทีมเป็นผู้ประสานงาน ไม่เขียนโค้ดเอง แต่แจกงานให้ subagent ตัวใหม่ทีละชิ้น แล้วตรวจผลเอง",
+      "ถ้าโปรเจกต์มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ใช้โหมด `-Isolated` (หรือแยก sandbox ละชิ้นเมื่อทำขนาน) แล้ว `sync` ผลออกมาเป็น patch ตอนจบ"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "brainstormer"
+      ],
+      "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)"
+     },
+     "skills": [
+      "project-doc-set"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำทีละชิ้น ผ่านการตรวจแล้วค่อย commit ใน branch ของงานตามกฎ commit ใน `superuser` หัวข้อ 6 (ไม่ได้อนุญาต → ปล่อยไว้ในไฟล์ แล้วสรุป diff ตอนจบ) ชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงสถานะ `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer"
+      ],
+      "raw": "ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทุกครั้งที่เลือกทางเอง ให้ลง `decision-log` ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าเจองานในรายการ \"รออนุมัติ\" (deploy · ลบข้อมูล · merge branch หลัก · ส่งข้อความคนนอก) ให้เตรียมทุกอย่างให้พร้อม (คำสั่ง · diff · ร่างข้อความ) แล้วลง \"รออนุมัติ\" ห้ามทำเอง ส่วนคำถามที่ต้องให้คนตอบให้ลง \"ค้างอยู่\" · ใคร: หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "จบแต่ละชิ้นแล้วให้ทำ `status-report` เขียน \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` เพื่อให้คนที่กลับมากลางทางเห็นสถานะปัจจุบัน · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "เมื่อจบงาน ให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: ทำเสร็จอะไร · ติดอะไร · **ตัดสินใจเอง** (กี่ข้อ · ชี้ไปที่ decision-log) · รออนุมัติอะไร · ค้างอะไรให้คนตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "visual-parity",
+   "title": "หน้าจอจริงต้องตรงกับต้นแบบ",
+   "when": "ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า \"ไม่เหมือนแบบ\"",
+   "done": "ทุกคู่มีภาพเทียบล่าสุด และรายการต่างที่เหลือมีเหตุผลกำกับทุกข้อ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ระบุต้นแบบ (ไฟล์ใน `mockup/` หรือหน้าจอระบบเดิม) และหน้าจอจริงที่จะเทียบ เป็นคู่ ๆ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ถ่ายภาพทั้งสองฝั่งด้วยขนาดหน้าต่างเดียวกัน ข้อมูลชุดเดียวกัน ด้วย skill ตรวจแอป แล้วเก็บใน `_to_delete/parity/` · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เทียบด้วยเครื่องมือ — ใช้ภาพต่าง (pixel diff) ถ้ามี ถ้าไม่มีให้เทียบทีละส่วน: ระยะห่าง · ขนาดตัวอักษร · สี · ลำดับ · สถานะว่าง/โหลด/ผิดพลาด · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทำรายการต่างที่พบ `| จุด | ต้นแบบ | ของจริง | แก้ที่ไฟล์ |` เรียงจากที่ผู้ใช้เห็นก่อน · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แก้ทีละกลุ่ม แล้วถ่ายภาพเทียบใหม่ทุกครั้ง · ใคร: `developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "developer",
+       "qa-tester"
+      ],
+      "raw": "`developer` ตัวใหม่ต่อกลุ่ม · `qa-tester` ตัวใหม่ถ่ายเทียบ"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "จุดที่ต่างโดยตั้งใจ (ต้นแบบผิดหลัก `ui-craft` หรือทำจริงไม่ได้) ไม่ต้องแก้ตาม แต่ให้ลงเหตุผลใน `decision-log` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "ui-craft",
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "กดทุกปุ่มบนหน้าจอจริงว่าทำงาน ไม่ดูแค่หน้าตาเหมือน · ใคร: `qa-tester` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "qa-tester"
+      ],
+      "raw": "`qa-tester` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "ตรวจว่ารายการต่างข้อ 4 ปิดครบ ภาพเทียบล่าสุดตรงต้นแบบ และเหตุผลข้อ 6 ฟังขึ้น · ไม่ผ่าน → วนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "จบด้วย `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  }
+ ]
+}

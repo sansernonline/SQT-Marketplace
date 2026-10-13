@@ -1,0 +1,907 @@
+{
+ "plugin": "home-family",
+ "version": "0.4.0",
+ "description": "Household admin for Thai families — reading electricity (MEA/PEA, Ft) and water bills with a monthly tracker, a seasonal home-maintenance schedule for the Thai climate, vehicle tax, compulsory insurance and inspection reminders, weekly meal plans with grocery lists, school terms and enrolment documents, elder-care rights and medication tables, and pet vaccination records. General information only, not legal, tax or medical advice.",
+ "cross": [
+  "health-wellness",
+  "trading-finance",
+  "personal-life",
+  "consumer-rights"
+ ],
+ "skills": [
+  "elder-care",
+  "home-maintenance",
+  "household-bills",
+  "kids-school",
+  "meal-plan-grocery",
+  "pet-care",
+  "vehicle-care"
+ ],
+ "core_skills": [
+  "agent-patterns",
+  "answer-shape",
+  "human-writing",
+  "superuser"
+ ],
+ "commands": [
+  "bills",
+  "family-week",
+  "maintenance"
+ ],
+ "agents": [
+  {
+   "name": "brainstormer",
+   "model": "opus",
+   "core": true,
+   "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
+   "skills": [
+    "superuser",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "family-planner",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a Thai family needs its week organised — meals, groceries, school fees, elder appointments, pet vaccines.",
+   "skills": [
+    "meal-plan-grocery",
+    "kids-school",
+    "elder-care",
+    "pet-care",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "home-manager",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for Thai household bills and upkeep — utilities, repairs, contractor quotes, vehicle tax, พ.ร.บ., renewals.",
+   "skills": [
+    "household-bills",
+    "home-maintenance",
+    "vehicle-care",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "learning-reviewer",
+   "model": "sonnet",
+   "core": true,
+   "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
+   "skills": [
+    "superuser",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "reviewer",
+   "model": "opus",
+   "core": true,
+   "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
+   "skills": [
+    "human-writing"
+   ]
+  }
+ ],
+ "playbooks": [
+  {
+   "name": "bills",
+   "title": "อ่านบิลและติดตามค่าใช้จ่ายรายเดือน",
+   "when": "บิลไฟหรือน้ำแพงขึ้น · อยากติดตามค่าบ้านทุกเดือน · ตั้งตัดบัญชีอัตโนมัติ",
+   "done": "ตารางบิลตรงกับบิลจริง และคำอธิบายเหตุบิลขึ้นที่ตรวจได้",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่านบิลจริงที่ผู้ใช้ส่งมา คัดหน่วย ยอด ค่า Ft วันครบกำหนด ลงตารางติดตาม · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เทียบกับ 3 เดือนก่อน ถ้าขึ้นเกิน 20% ให้ไล่หาเหตุตาม `household-bills` (อัตราใหม่ · จำนวนวันในรอบ · เครื่องใช้ใหม่ · รั่ว) · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [
+      "household-bills"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ตรวจอัตราปัจจุบันจากเว็บการไฟฟ้าหรือการประปาของพื้นที่ · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "สรุปเหตุที่เป็นไปได้เรียงจากน่าจะเป็นที่สุด และสิ่งที่ผู้ใช้ตรวจเองได้ในบ้าน · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตั้งเตือนวันครบกำหนดของทุกบิล · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับบิลจริงและเว็บทางการ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager",
+       "reviewer"
+      ],
+      "raw": "`home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับบิลจริงและเว็บทางการ"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "care-setup",
+   "title": "ตั้งระบบดูแลผู้สูงอายุ เด็ก หรือสัตว์เลี้ยง",
+   "when": "เริ่มดูแลพ่อแม่สูงอายุ · เด็กเข้าเรียนหรือย้ายโรงเรียน · รับสัตว์เลี้ยงใหม่",
+   "done": "บันทึกประจำตัวและรายการสิทธิ์ที่ตรวจกับแหล่งทางการแล้ว พร้อมเตือนครบ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ทำรายการสิทธิ์ที่เกี่ยว (เบี้ยยังชีพ · สิทธิ์รักษา · เงินอุดหนุนเด็ก · ลดหย่อน) ตรวจกับเว็บหน่วยงานทางการ พร้อมเอกสารที่ต้องใช้และขั้นตอนยื่น · ใคร: `family-planner` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "family-planner"
+      ],
+      "raw": "`family-planner` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ทำบันทึกประจำตัว — นัดแพทย์และยาของผู้สูงอายุ · ปฏิทินเทอม · ประวัติวัคซีนสัตว์ · ถ้าดูแลผู้สูงอายุ เพิ่มเช็กลิสต์ป้องกันการหกล้มในบ้านและบันทึกส่งต่อผู้ดูแล · ใคร: `family-planner` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "family-planner"
+      ],
+      "raw": "`family-planner` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำไฟล์เตือน `.ics` ทุกวันครบกำหนด ให้ผู้ใช้นำเข้าปฏิทินเอง · ใคร: `family-planner` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "family-planner"
+      ],
+      "raw": "`family-planner` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตรวจทั้งชุด (สิทธิ์ · ยา · นัด · วันในไฟล์ `.ics`) กับเว็บทางการและเอกสารจริง · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "family-week",
+   "title": "วางแผนสัปดาห์ของครอบครัว",
+   "when": "วางแผนอาหาร ของต้องซื้อ งานโรงเรียน นัดผู้สูงอายุ และสัตว์เลี้ยงของสัปดาห์หน้า",
+   "done": "ตารางสัปดาห์เดียวที่ส่งในกลุ่มครอบครัวได้",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เก็บข้อมูลสัปดาห์ — สมาชิก งบต่อหัว นัดหมาย งานโรงเรียน ยา วัคซีนสัตว์ที่ใกล้ครบ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "วางเมนูและรายการซื้อตาม `meal-plan-grocery` ภายในงบ โดยคิดถึงอาหารของเด็กและผู้สูงอายุด้วย · ใคร: `family-planner` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "family-planner"
+      ],
+      "raw": "`family-planner` ตัวใหม่"
+     },
+     "skills": [
+      "meal-plan-grocery"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ใส่งานโรงเรียน นัดผู้สูงอายุ ยา และงานสัตว์เลี้ยงลงตารางเดียวกัน · ใคร: `family-planner` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "family-planner"
+      ],
+      "raw": "`family-planner` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตรวจว่าทุกงานมีวัน เวลา และคนรับผิดชอบ และยอดรวมของต้องซื้อไม่เกินงบ · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "learn-from-session",
+   "title": "ทำให้ทีมเก่งขึ้นทุกรอบ",
+   "when": "ผู้ใช้สั่ง \"รวมบทเรียน\" หรือ \"reflect\" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง \"รวมบทเรียน\" แต่ไม่เริ่มเอง",
+   "done": "ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง \"ควรรวมไหม\" และ \"รวมแล้ว\" ในคิวกลางตรงกับที่ทำจริง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
+     "sub": [
+      "คิวกลาง `~/.claude/superuser/improvements.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
+      "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
+     "sub": [
+      "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
+      "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
+      "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
+      "**แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`",
+      "**กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์",
+      "**ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น",
+      "**skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "**ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "**ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง \"รออนุมัติ\" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "**แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง \"ควรรวมไหม\" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง \"รวมแล้ว\" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": true
+  },
+  {
+   "name": "maintenance",
+   "title": "แผนดูแลบ้านทั้งปีและเทียบใบเสนอราคาช่าง",
+   "when": "อยากมีตารางดูแลบ้านตามฤดู · จะจ้างช่างและต้องเทียบราคา",
+   "done": "ปฏิทิน 12 เดือนและตารางเทียบราคา (ถ้ามี) ที่คัดตรงจากเอกสาร",
+   "steps": [
+    {
+     "n": 1,
+     "text": "สำรวจบ้านจากที่ผู้ใช้เล่า — แอร์กี่เครื่อง ปั๊มน้ำ หลังคา อายุบ้าน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ทำปฏิทิน 12 เดือนตามฤดูร้อน ฝน หนาว จาก `home-maintenance` · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [
+      "home-maintenance"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เทียบใบเสนอราคาช่าง — ขอบเขตงานเท่ากันไหม วัสดุ ประกันงาน เงื่อนไขมัดจำ · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทำรายการคำถามถึงช่างก่อนจ่ายมัดจำ · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจว่าทุกงานในปฏิทินมีเดือนและคนรับผิดชอบ และตัวเลขในตารางตรงกับใบเสนอราคา · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "review",
+   "title": "ตรวจงานบ้านและครอบครัวก่อนส่ง",
+   "when": "ตรวจงานก่อนส่งหรือก่อนใช้จริง · \"ช่วยดูหน่อยว่ามีอะไรพลาด\" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ",
+   "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (บิล · ใบเสนอราคา · เล่มทะเบียน · ปฏิทินโรงเรียน) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เขียนเจตนาของงาน 1 ย่อหน้า — ใครจะใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ ให้เลือกการตีความที่ผลกระทบน้อยสุด ไม่หยุดถาม · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ตรวจทีละข้อตามเกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` แล้วตามเช็กลิสต์ของ skill หลัก ถ้างานใหญ่หรือเสี่ยงสูง ให้ subagent ตัวใหม่ที่ไม่เห็นงานมาก่อนตรวจอีกรอบแยกกัน ด้วยโมเดลระดับใหญ่ (`model: opus`) และสั่งให้อ่านอย่างเดียว (\"ห้ามเขียนหรือแก้ไฟล์\") · ใคร: `reviewer` ตัวใหม่ (งานใหญ่หรือเสี่ยงสูง: `reviewer` ตัวใหม่อีกตัวที่ไม่เห็นงานมาก่อน ใช้โมเดลใหญ่ อ่านอย่างเดียว)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer",
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ (งานใหญ่หรือเสี่ยงสูง: `reviewer` ตัวใหม่อีกตัวที่ไม่เห็นงานมาก่อน ใช้โมเดลใหญ่ อ่านอย่างเดียว)"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ยืนยันทุกข้อที่พบ ต้องชี้จุดในชิ้นงานได้ และเทียบกับต้นทางหรือแหล่งทางการแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แยกเป็น 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ส่วนข้อที่ตัดทิ้งเพราะไม่ใช่ปัญหาจริง ให้บอกเหตุผลด้วย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ และตารางสถานะ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "unattended-run",
+   "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
+   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น ทำตารางบิลย้อนหลังทั้งปี · วางแผนดูแลบ้าน 12 เดือน",
+   "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ แล้วเลือก playbook ย่อยต่อชิ้น หัวหน้าทีมประสานงานและตรวจ แล้วแจกชิ้นให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำทีละชิ้น ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป ถ้าชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: agent สาขาตัวใหม่ต่อชิ้น (`home-manager` · `family-planner`) · `reviewer` ตัวใหม่ตรวจก่อนไปชิ้นถัดไป",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager",
+       "family-planner",
+       "reviewer"
+      ],
+      "raw": "agent สาขาตัวใหม่ต่อชิ้น (`home-manager` · `family-planner`) · `reviewer` ตัวใหม่ตรวจก่อนไปชิ้นถัดไป"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทุกครั้งที่เลือกทางเอง ให้ลงตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (จ่ายเงิน · ส่งข้อความถึงช่างหรือโรงเรียน · ตั้งตัดบัญชี) ให้เตรียมให้พร้อมกด แล้วลง \"รออนุมัติ\" ห้ามทำเอง ส่วนคำถามที่ต้องให้ผู้ใช้ตอบให้ลง \"ค้างอยู่\" · ใคร: หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "จบแต่ละชิ้นแล้วให้เขียน \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` ถ้ามี ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "ตอนจบให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไรให้ผู้ใช้ตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจเงื่อนไขข้อ 1 · หัวหน้าทีมรายงาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ตรวจเงื่อนไขข้อ 1 · หัวหน้าทีมรายงาน"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "vehicle",
+   "title": "ต่อภาษี พ.ร.บ. ตรวจสภาพ และเช็กระยะรถ",
+   "when": "ภาษีรถหรือ พ.ร.บ. ใกล้หมด · ต้องตรวจสภาพ · เลือกชั้นประกัน · เช็กระยะ",
+   "done": "ลำดับขั้นพร้อมเอกสาร ตรวจกับแหล่งทางการแล้ว และเตือนตั้งครบ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่านข้อมูลจากเล่มทะเบียนหรือกรมธรรม์ — วันหมดอายุภาษี พ.ร.บ. ประกัน ใบขับขี่ · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ตรวจเงื่อนไขปัจจุบันจากเว็บกรมการขนส่งทางบก — ต้องตรวจสภาพไหม ต่อออนไลน์ได้ไหม · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำลำดับขั้น — พ.ร.บ. → ตรวจสภาพ (ถ้าต้อง) → ภาษี พร้อมเอกสารที่ต้องใช้ · ใคร: `home-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager"
+      ],
+      "raw": "`home-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตั้งเตือนก่อนหมดอายุ 30 วัน และเช็กระยะตามกิโลเมตร · ใคร: `home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับเล่มจริงและเว็บทางการ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "home-manager",
+       "reviewer"
+      ],
+      "raw": "`home-manager` ตัวใหม่ · `reviewer` ตัวใหม่ตรวจทั้งชุดกับเล่มจริงและเว็บทางการ"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  }
+ ]
+}

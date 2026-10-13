@@ -1,0 +1,466 @@
+{
+ "tagline": "ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ",
+ "agents": {
+  "ai-engineer": "สร้างระบบ AI และ LLM",
+  "blockchain-engineer": "สร้างงานบนบล็อกเชน",
+  "brainstormer": "คิดทางเลือกเมื่อโจทย์ไม่ชัด",
+  "business-analyst": "เก็บความต้องการและเขียน BRD",
+  "clinical-data-analyst": "วิเคราะห์ข้อมูลทางการแพทย์",
+  "data-engineer": "สร้างท่อข้อมูลและคลังข้อมูล",
+  "developer": "เขียนโค้ด แก้บั๊ก ทำ test",
+  "devops-engineer": "ตั้ง CI/CD และระบบรัน",
+  "devrel-engineer": "ดูแลประสบการณ์นักพัฒนา",
+  "ecommerce-engineer": "สร้างร้านค้าออนไลน์",
+  "fintech-compliance-officer": "ดูกฎการเงินและเตรียมตรวจ",
+  "fintech-engineer": "สร้างระบบจ่ายเงิน",
+  "game-designer": "ออกแบบกติกาและความสนุกเกม",
+  "game-developer": "เขียนโค้ดเกม",
+  "graphic-designer": "ทำงานภาพที่ไม่ใช่หน้าจอ",
+  "growth-specialist": "เพิ่มยอดสมัครและยอดซื้อ",
+  "healthcare-engineer": "สร้างระบบโรงพยาบาล",
+  "hipaa-officer": "ดูกฎ HIPAA",
+  "insurance-analyst": "คำนวณเบี้ยและความเสี่ยงประกัน",
+  "insurance-compliance-officer": "ดูกฎกำกับธุรกิจประกัน",
+  "insurance-engineer": "สร้างระบบประกัน",
+  "iot-engineer": "สร้างงานอุปกรณ์เชื่อมต่อ",
+  "learning-reviewer": "ทบทวนวิธีทำงานตอนจบงาน",
+  "legal-compliance-officer": "ดูกฎหมายข้อมูลและ PDPA",
+  "legaltech-engineer": "สร้างระบบเอกสารกฎหมาย",
+  "mobile-engineer": "สร้างแอปมือถือ",
+  "product-manager": "ตัดสินว่าจะสร้างอะไรและทำไม",
+  "project-manager": "วางแผน ติดตามงาน ดูความเสี่ยง",
+  "qa-tester": "ทำแผนทดสอบและหาบั๊ก",
+  "quant-analyst": "คำนวณความเสี่ยงและราคาการเงิน",
+  "recommendation-engineer": "สร้างระบบแนะนำสินค้า",
+  "reverse-engineer": "ถอดงานที่ไม่มีซอร์สโค้ด",
+  "reviewer": "ตรวจงานที่เสร็จด้วยสายตาใหม่",
+  "revops-analyst": "ออกแบบการเก็บเงินแบบสมาชิก",
+  "security-analyst": "เฝ้าระวังและรับมือเหตุความปลอดภัย",
+  "security-engineer": "ตรวจช่องโหว่และความปลอดภัยโค้ด",
+  "seo-specialist": "ทำให้เว็บขึ้นอันดับค้นหา",
+  "solution-architect": "ออกแบบโครงสร้างระบบ",
+  "system-analyst": "เขียน FSD และสเปก API",
+  "technical-writer": "เขียนคู่มือและเอกสาร",
+  "ux-designer": "ออกแบบหน้าจอและ mockup"
+ },
+ "playbooks": {
+  "bug-fix": {
+   "short": "แก้บั๊ก",
+   "group": "สร้างและแก้โค้ด",
+   "steps": [
+    "จดอาการให้ตรงตัว",
+    "ทำให้เกิดซ้ำเอง",
+    "เขียน test ที่ล้มเพราะบั๊ก",
+    "หาต้นเหตุ",
+    "หาจุดอื่นที่โดนกระทบ",
+    "แก้ให้เล็กที่สุด",
+    "รันพิสูจน์ว่าหายแล้ว",
+    "รีวิว diff ก่อนบอกเสร็จ",
+    "เปลี่ยนบั๊กซ้ำเป็นตัวตรวจ",
+    "ส่งมอบและรายงานสถานะ"
+   ]
+  },
+  "feature": {
+   "short": "เพิ่มฟีเจอร์",
+   "group": "สร้างและแก้โค้ด",
+   "steps": [
+    "อ่านข้อกำหนดแล้วทำแผนที่โค้ด",
+    "บอกรูปข้อมูลก่อนเขียน",
+    "ร่างลายเซ็นฟังก์ชันและไฟล์",
+    "ลบของที่ไม่ใช้ก่อนเพิ่ม",
+    "แบ่งงานเป็นชิ้นเล็ก ๆ",
+    "ตรวจทีละชิ้นบนแอปจริง",
+    "รีวิวก่อนบอกเสร็จ",
+    "เขียน test ที่ล้มก่อน แล้วแก้",
+    "ตรวจรอบสองจนไม่เหลือข้อ",
+    "ส่งมอบและเปิด PR"
+   ]
+  },
+  "housekeeping": {
+   "short": "เก็บกวาดเครื่อง",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "ทำรายการของที่อาจลบ",
+    "แยกกลุ่มลบได้แน่กับต้องถาม",
+    "ส่งตารางให้ผู้ใช้ดูก่อน",
+    "ลบเฉพาะที่อนุมัติ",
+    "รายงานพื้นที่ที่ได้คืน"
+   ]
+  },
+  "investigation": {
+   "short": "สืบหาคำตอบ",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "เขียนคำถามให้ตอบได้ชัด",
+    "ประเมินขนาดงานค้น",
+    "ไล่จากจุดเข้าไปถึงข้อมูล",
+    "ไล่หาหลักฐานว่าทำไม",
+    "รันพิสูจน์ข้ออ้างที่ทดสอบได้",
+    "อธิบายทีละชั้นถ้าผู้ใช้ขอ",
+    "ร่างคำตอบพร้อมที่มา",
+    "ตรวจว่าทุกข้ออ้างมีหลักฐาน",
+    "ส่งคำตอบหลังยืนยันแล้ว"
+   ]
+  },
+  "learn-from-session": {
+   "short": "เรียนรู้จากงานที่ผ่านมา",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "รวบรวมบันทึกที่ค้าง",
+    "แยกประเภทบทเรียน",
+    "ทิ้งเรื่องที่เกิดครั้งเดียว",
+    "เปลี่ยนบทเรียนเป็นการแก้จริง",
+    "เสนอตารางให้ผู้ใช้เลือก",
+    "แก้เฉพาะข้อที่ผู้ใช้รับ",
+    "ปิดรายการที่จัดการแล้ว"
+   ]
+  },
+  "new-project": {
+   "short": "เริ่มโปรเจกต์ใหม่",
+   "group": "เอกสารและโปรเจกต์",
+   "steps": [
+    "กำหนดขอบเขตแผ่นเดียว",
+    "เลือกเทคโนโลยีให้น้อยที่สุด",
+    "วางรูปข้อมูลและโครงไฟล์",
+    "ทำตัวรันแอปตรวจผลก่อน",
+    "สร้างทีละชิ้นตามฟีเจอร์",
+    "รีวิวจาก 3 มุม",
+    "สแกนความปลอดภัย",
+    "แก้ข้อที่ยืนยันแล้ว",
+    "ตรวจรอบสองจนครบ",
+    "ส่งมอบพร้อมเอกสาร"
+   ]
+  },
+  "performance": {
+   "short": "ทำให้เร็วขึ้น",
+   "group": "สร้างและแก้โค้ด",
+   "steps": [
+    "ตั้งตัวเลขเดียวและเป้า",
+    "วัดค่าตั้งต้น 3 รอบ",
+    "หาว่าอะไรจำกัดความเร็ว",
+    "ตั้งสมมติฐานทีละข้อ",
+    "แก้ทีละข้อแล้ววัดซ้ำ",
+    "ลงตารางก่อน/หลัง",
+    "วนจนถึงเป้า",
+    "ตรวจทั้งชุดอีกรอบ",
+    "รายงานตัวเลขก่อนและหลัง"
+   ]
+  },
+  "pickup-and-pause": {
+   "short": "รับงานต่อและพักงาน",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "อ่านบันทึกรับงานต่อ",
+    "ดูสภาพจริงของโปรเจกต์",
+    "สรุปสถานะไม่เกิน 10 บรรทัด",
+    "เลือกวิธีทำงานที่เหลือ",
+    "ทำชิ้นปัจจุบันให้ถึงจุดตรวจได้",
+    "เก็บงานที่ยังไม่ commit",
+    "หยุด process ที่เปิดไว้",
+    "เขียนบันทึกรับงานต่อ"
+   ]
+  },
+  "project-docs": {
+   "short": "เขียนเอกสารโปรเจกต์",
+   "group": "เอกสารและโปรเจกต์",
+   "steps": [
+    "อ่านแผนและสถานะล่าสุด",
+    "ถามช่องที่ว่างครั้งเดียว",
+    "ทำเอกสารทีละฉบับตามลำดับ",
+    "เลือกทางที่กระทบน้อยเมื่อติด",
+    "ถ้าเอกสารขัดกัน ยึดฉบับต้นน้ำ",
+    "ตรวจฉบับที่เพิ่งเขียน",
+    "ลงสถานะแล้วทำฉบับถัดไป",
+    "รายงานรวมครั้งเดียว"
+   ]
+  },
+  "prototype": {
+   "short": "ลองของก่อนตัดสินใจ",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "เขียนคำถามและเกณฑ์ตัดสิน",
+    "สร้างทางเลือก 2–3 ทางแบบเล็ก",
+    "รันทุกทางด้วยวิธีวัดเดียวกัน",
+    "ตัดสินตามเกณฑ์",
+    "ตรวจว่าตัวเลขมาจากผลจริง",
+    "บันทึกผลลงบันทึกตัดสินใจ",
+    "กลับไปทำต่อด้วยทางที่ชนะ"
+   ]
+  },
+  "refactor": {
+   "short": "จัดโค้ดใหม่",
+   "group": "สร้างและแก้โค้ด",
+   "steps": [
+    "เขียนสิ่งที่ต้องเท่าเดิม",
+    "บันทึกผลก่อนเปลี่ยน",
+    "ลบโค้ดตายก่อน",
+    "แก้รูปแบบซ้ำด้วยเครื่องมือ",
+    "ย้ายผู้เรียกแล้วลบของเก่า",
+    "หาผลกระทบนอกจุดที่แก้",
+    "รัน test เทียบกับก่อนเปลี่ยน",
+    "รีวิว diff",
+    "ส่งมอบทีละชิ้น"
+   ]
+  },
+  "review": {
+   "short": "รีวิวโค้ด",
+   "group": "ตรวจและส่งมอบ",
+   "steps": [
+    "กำหนดขอบเขตที่ตรวจ",
+    "เขียนเจตนาของงาน",
+    "ส่งให้ผู้ตรวจสายตาใหม่",
+    "ยืนยันทุกข้อที่พบเอง",
+    "แยกข้อสูง กลาง ต่ำ",
+    "รายงานคำตัดสิน"
+   ]
+  },
+  "ship": {
+   "short": "ส่งมอบงาน",
+   "group": "ตรวจและส่งมอบ",
+   "steps": [
+    "ตรวจว่าทุกชิ้นพิสูจน์แล้ว",
+    "หาผลกระทบนอก diff",
+    "เรียง commit เป็นชิ้นเล็ก",
+    "เขียนคำอธิบาย PR",
+    "push และเปิด PR",
+    "ดูแลจน CI เขียว",
+    "ตรวจ PR อีกรอบก่อน merge",
+    "รออนุมัติก่อน merge"
+   ]
+  },
+  "skill-authoring": {
+   "short": "เขียน skill ใหม่",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "หาว่ามี skill เดิมไหม",
+    "เขียนคำอธิบายว่าใช้เมื่อไร",
+    "เขียนเนื้อหาให้สั้นทำตามได้",
+    "เตรียมงานทดสอบ",
+    "ทดสอบแบบปิดตาเทียบกัน",
+    "แก้หรือไม่เพิ่มถ้าไม่ชนะ",
+    "ตรวจโครงสร้างด้วยสคริปต์",
+    "รายงานสถานะ"
+   ]
+  },
+  "unattended-run": {
+   "short": "ปล่อยให้ทำเองยาว ๆ",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "ตั้งเงื่อนไขจบที่เครื่องตรวจได้",
+    "แตกงานเป็นชิ้นที่ตรวจได้",
+    "ทำทีละชิ้นแล้วค่อย commit",
+    "จดทุกการตัดสินใจทันที",
+    "หยุดรอที่งานต้องอนุมัติ",
+    "จบชิ้นแล้วเขียนรับงานต่อ",
+    "ตรวจเงื่อนไขจบแล้วรายงาน"
+   ]
+  },
+  "visual-parity": {
+   "short": "ทำหน้าจอให้ตรงต้นแบบ",
+   "group": "สร้างและแก้โค้ด",
+   "steps": [
+    "จับคู่ต้นแบบกับหน้าจอจริง",
+    "ถ่ายภาพสองฝั่งแบบเดียวกัน",
+    "เทียบภาพด้วยเครื่องมือ",
+    "ทำรายการจุดที่ต่าง",
+    "แก้ทีละกลุ่มแล้วถ่ายใหม่",
+    "ข้ามจุดที่ต่างโดยตั้งใจ",
+    "กดทุกปุ่มบนหน้าจอจริง",
+    "ตรวจว่ารายการต่างปิดครบ",
+    "รายงานสถานะ"
+   ]
+  }
+ },
+ "agent_groups": {
+  "หัวหน้าและวางแผน": [
+   "product-manager",
+   "project-manager",
+   "business-analyst"
+  ],
+  "ทีมกลาง SuperUser": [
+   "brainstormer",
+   "reviewer",
+   "learning-reviewer"
+  ],
+  "ออกแบบระบบ": [
+   "solution-architect",
+   "system-analyst",
+   "ux-designer",
+   "graphic-designer"
+  ],
+  "เขียนโค้ด": [
+   "developer",
+   "mobile-engineer",
+   "devops-engineer",
+   "game-developer",
+   "game-designer",
+   "devrel-engineer",
+   "reverse-engineer"
+  ],
+  "ตรวจและความปลอดภัย": [
+   "qa-tester",
+   "security-engineer",
+   "security-analyst",
+   "technical-writer",
+   "seo-specialist",
+   "growth-specialist"
+  ],
+  "ข้อมูลและ AI": [
+   "ai-engineer",
+   "data-engineer",
+   "recommendation-engineer",
+   "iot-engineer",
+   "blockchain-engineer"
+  ],
+  "สาขา: การเงินและประกัน": [
+   "fintech-engineer",
+   "fintech-compliance-officer",
+   "quant-analyst",
+   "revops-analyst",
+   "insurance-engineer",
+   "insurance-analyst",
+   "insurance-compliance-officer"
+  ],
+  "สาขา: สุขภาพ": [
+   "healthcare-engineer",
+   "hipaa-officer",
+   "clinical-data-analyst"
+  ],
+  "สาขา: กฎหมายและร้านค้า": [
+   "legaltech-engineer",
+   "legal-compliance-officer",
+   "ecommerce-engineer"
+  ]
+ },
+ "skill_groups": {
+  "หลักการทำงาน": [
+   "principle-build-a-tool-not-handwork",
+   "principle-data-shape-first",
+   "principle-fix-root-cause",
+   "principle-proceed-on-reversible-work",
+   "principle-prove-it-works",
+   "principle-replace-then-delete",
+   "principle-safe-to-rerun",
+   "principle-secure-by-default",
+   "principle-small-verifiable-steps",
+   "principle-user-experience-first",
+   "simplicity-first",
+   "lazy-coding"
+  ],
+  "การทำงานของทีม": [
+   "decision-log",
+   "flag-and-propose",
+   "context-budget",
+   "work-session-context",
+   "temp-file-discipline",
+   "owner-style-capture",
+   "parallel-attempts-pick-best",
+   "parallel-split-and-merge",
+   "docker-sandbox",
+   "status-report"
+  ],
+  "เรียนรู้และปรับปรุงทีม": [
+   "coding-evals",
+   "repeated-mistakes-to-checks",
+   "session-lessons-to-skills",
+   "prior-art-review",
+   "reference-app-research",
+   "code-gardener"
+  ],
+  "อ่านและเข้าใจโค้ด": [
+   "code-orientation",
+   "blast-radius",
+   "legacy-spec-recovery",
+   "reverse-engineering",
+   "readable-code"
+  ],
+  "ตรวจและทดสอบ": [
+   "code-review-checklist",
+   "adversarial-review-panel",
+   "testing-standards",
+   "e2e-testing-patterns",
+   "test-case-template",
+   "bug-report-template",
+   "bug-inbox-triage",
+   "app-verifier-setup",
+   "app-verifier-upkeep",
+   "spec-to-code-loop",
+   "targeted-fix"
+  ],
+  "ความปลอดภัยและข้อมูลส่วนตัว": [
+   "security-gate",
+   "security-operations",
+   "auth-implementation-patterns",
+   "config-and-secrets",
+   "pdpa-compliance",
+   "audit-trail"
+  ],
+  "เขียนโค้ดและภาษา": [
+   "stack-dotnet",
+   "stack-python",
+   "stack-sql",
+   "stack-typescript",
+   "error-handling-patterns",
+   "logging-standards",
+   "commit-message-format",
+   "pr-description-template",
+   "i18n-and-locale"
+  ],
+  "สถาปัตยกรรมและหลังบ้าน": [
+   "architecture-patterns",
+   "adr-writer",
+   "api-conventions",
+   "database-design",
+   "web-service-essentials",
+   "background-jobs",
+   "notifications",
+   "file-upload-and-storage",
+   "data-import-export",
+   "observability-basics",
+   "cicd-and-release",
+   "incident-runbook-template",
+   "postmortem-template",
+   "saas-platform"
+  ],
+  "ออกแบบหน้าจอและภาพ": [
+   "ui-craft",
+   "web-app-design",
+   "mobile-app-design",
+   "windows-app-design",
+   "graphic-design",
+   "diagram-figures",
+   "software-diagrams",
+   "markdown-visuals",
+   "product-naming"
+  ],
+  "เอกสารและสไลด์": [
+   "srs-writing",
+   "fsd-writing",
+   "user-story-writer",
+   "project-doc-set",
+   "project-bootstrap",
+   "document-naming",
+   "polished-document-style",
+   "branded-document-design",
+   "markdown-report-docx",
+   "presentation-design",
+   "html-slide-deck",
+   "pptx-to-html-deck",
+   "spell-out-abbreviations"
+  ],
+  "ความรู้เฉพาะสาขา": [
+   "ecommerce-patterns",
+   "fintech-payments",
+   "game-development",
+   "healthcare-systems",
+   "insurance-systems",
+   "iot-systems",
+   "legal-document-systems",
+   "llm-engineering",
+   "mobile-engineering",
+   "smart-contracts",
+   "developer-experience",
+   "seo-audit-checklist"
+  ]
+ }
+}

@@ -1,0 +1,1083 @@
+{
+ "plugin": "trading-finance",
+ "version": "0.6.0",
+ "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have.",
+ "cross": [
+  "software-company",
+  "thai-workplace",
+  "consumer-rights",
+  "home-family"
+ ],
+ "skills": [
+  "debt-payoff",
+  "dividend-tracker",
+  "emergency-fund",
+  "insurance-review",
+  "mutual-fund-picker",
+  "news-impact",
+  "paper-trading",
+  "personal-budget",
+  "portfolio-snapshot",
+  "position-sizing",
+  "post-trade-review",
+  "retirement-plan",
+  "scam-check",
+  "tax-basics-th",
+  "tax-deduction-planner",
+  "technical-signals",
+  "trade-journal",
+  "watchlist-setup"
+ ],
+ "core_skills": [
+  "agent-patterns",
+  "answer-shape",
+  "human-writing",
+  "superuser"
+ ],
+ "commands": [
+  "alert-set",
+  "journal",
+  "paper-trade",
+  "portfolio",
+  "review-week",
+  "tax-plan",
+  "watch"
+ ],
+ "agents": [
+  {
+   "name": "alert-dispatcher",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when the user wants price or news alerts on watched symbols. Sets scheduled checks and keeps alerts few.",
+   "skills": [
+    "human-writing"
+   ]
+  },
+  {
+   "name": "brainstormer",
+   "model": "opus",
+   "core": true,
+   "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
+   "skills": [
+    "superuser",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "learning-reviewer",
+   "model": "sonnet",
+   "core": true,
+   "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
+   "skills": [
+    "superuser",
+    "human-writing"
+   ]
+  },
+  {
+   "name": "market-analyst",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when asking about a stock, market trend or watchlist before trading. Explains price and news plainly; not advice.",
+   "skills": [
+    "human-writing"
+   ]
+  },
+  {
+   "name": "reviewer",
+   "model": "opus",
+   "core": true,
+   "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
+   "skills": [
+    "human-writing"
+   ]
+  },
+  {
+   "name": "risk-manager",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use before opening a position, asking how much to buy, or when a portfolio drifts. Never sizes without a stop-loss.",
+   "skills": [
+    "human-writing"
+   ]
+  },
+  {
+   "name": "trade-journal-coach",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when reviewing past trades or a trade journal, or asking why you keep losing the same way. Finds one rule to test.",
+   "skills": [
+    "human-writing"
+   ]
+  }
+ ],
+ "playbooks": [
+  {
+   "name": "learn-from-session",
+   "title": "ทำให้ทีมเก่งขึ้นทุกรอบ",
+   "when": "ผู้ใช้สั่ง \"รวมบทเรียน\" หรือ \"reflect\" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง \"รวมบทเรียน\" แต่ไม่เริ่มเอง",
+   "done": "ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง \"ควรรวมไหม\" และ \"รวมแล้ว\" ในคิวกลางตรงกับที่ทำจริง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
+     "sub": [
+      "คิวกลาง `~/.claude/superuser/improvements.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
+      "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
+     "sub": [
+      "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
+      "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
+      "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
+      "**แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`",
+      "**กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์",
+      "**ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น",
+      "**skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "**ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "**ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง \"รออนุมัติ\" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "**แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง \"ควรรวมไหม\" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง \"รวมแล้ว\" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": true
+  },
+  {
+   "name": "money-plan",
+   "title": "แผนการเงินส่วนบุคคล",
+   "when": "ทำงบรายเดือน · เงินสำรองฉุกเฉิน · ปลดหนี้ · วางแผนเกษียณ · ทบทวนประกัน · เลือกกองทุน",
+   "done": "แผนเป็นตารางที่คำนวณซ้ำแล้ว ทุกอัตรามีแหล่ง และทางเลือกพร้อมตัวเลขให้ผู้ใช้ตัดสินเอง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เก็บตัวเลขจริง — รายรับ รายจ่ายจาก statement หนี้ ประกัน เงินออม ตัวไหนไม่มีให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ทำตามลำดับ: งบรายเดือน → เงินสำรองฉุกเฉิน → หนี้ดอกสูง → เกษียณและการลงทุน · ใคร: `general-purpose` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ใช้ skill ของแต่ละเรื่อง และตรวจอัตราและกฎของปีปัจจุบันกับแหล่งทางการ · ใคร: `general-purpose` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทุกทางเลือกแสดงตัวเลขเทียบกัน ไม่ชี้ว่าต้องเลือกทางไหน · ใคร: `general-purpose` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": true,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — สูตรคำนวณซ้ำได้ และยอดรวมรายรับรายจ่ายตรงกับ statement · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "portfolio-check",
+   "title": "ดูพอร์ตและเงินปันผล",
+   "when": "\"พอร์ตตอนนี้เป็นอย่างไร\" · สิ้นเดือน · ฤดูปันผล",
+   "done": "หน้าสรุปพอร์ตที่ตัวเลขรวมตรงกัน ทุกราคามีเวลาอ้างอิง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่านรายการถือครองจากไฟล์ของผู้ใช้ และดึงราคาปัจจุบันพร้อมเวลา · ใคร: `market-analyst` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "market-analyst"
+      ],
+      "raw": "`market-analyst` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ทำหน้าเดียวตาม `portfolio-snapshot` — สัดส่วน กำไรขาดทุน เงินสด รายได้ การกระจุกตัว · ใคร: `market-analyst` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "market-analyst"
+      ],
+      "raw": "`market-analyst` ตัวใหม่"
+     },
+     "skills": [
+      "portfolio-snapshot"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "สรุปปันผลตาม `dividend-tracker`: วันขึ้น XD · วันจ่าย · ยอดหลังภาษี · ใคร: `market-analyst` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "market-analyst"
+      ],
+      "raw": "`market-analyst` ตัวใหม่"
+     },
+     "skills": [
+      "dividend-tracker"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "เลือกข่าวที่กระทบตัวที่ถือ ไม่เกิน 5 ข่าว · ใคร: `market-analyst` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "market-analyst"
+      ],
+      "raw": "`market-analyst` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — มูลค่ารวมตรงกับผลรวมรายตัว และทุกราคามีเวลา · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "pre-trade",
+   "title": "ก่อนเปิดสถานะ",
+   "when": "จะซื้อหรือขายหุ้น · \"ซื้อกี่หุ้นดี\" · \"เข้าตอนนี้ดีไหม\"",
+   "done": "มีใบสั่งพร้อมกดที่มีจุดตัดขาดทุน ขนาดผ่าน `risk-manager` และมีบันทึกก่อนเข้า โดยผู้ใช้เป็นคนส่งคำสั่งเอง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่าน thesis ของหุ้นตัวนี้จาก watchlist ถ้ายังไม่มี ให้เขียน thesis (เหตุผลที่ซื้อ) จุดเข้า และจุดที่ thesis ผิด ตาม `watchlist-setup` · ใคร: หัวหน้าทีม (เหตุผลจากคำตอบตอนเริ่ม ไม่มีก็ใส่ `(รอยืนยัน)`)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม (เหตุผลจากคำตอบตอนเริ่ม ไม่มีก็ใส่ `(รอยืนยัน)`)"
+     },
+     "skills": [
+      "watchlist-setup"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ดูราคาและสัญญาณตาม `technical-signals` และข่าวที่กระทบตาม `news-impact` — ทุกตัวเลขมีเวลาอ้างอิง · ใคร: `market-analyst` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "market-analyst"
+      ],
+      "raw": "`market-analyst` ตัวใหม่"
+     },
+     "skills": [
+      "technical-signals",
+      "news-impact"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ให้ `risk-manager` คำนวณขนาดไม้ตาม `position-sizing` จากทุน ความเสี่ยงต่อไม้ และระยะตัดขาดทุน แล้วตรวจการกระจุกตัวของพอร์ต · ใคร: `risk-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "risk-manager"
+      ],
+      "raw": "`risk-manager` ตัวใหม่"
+     },
+     "skills": [
+      "position-sizing"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ถ้าไม่มีจุดตัดขาดทุน ให้หยุดที่ข้อนี้ ไม่คำนวณขนาด · ใคร: `risk-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "risk-manager"
+      ],
+      "raw": "`risk-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "เขียนใบสั่งที่ผู้ใช้กดเองได้ — ราคา จำนวน จุดตัดขาดทุน เป้า แล้วร่างบันทึกการเทรดตาม `trade-journal` · ใคร: หัวหน้าทีม (การกดส่งคำสั่งอยู่ใน \"รออนุมัติ\" ผู้ใช้กดเองหลังจบ)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม (การกดส่งคำสั่งอยู่ใน \"รออนุมัติ\" ผู้ใช้กดเองหลังจบ)"
+     },
+     "skills": [
+      "trade-journal"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "ตรวจใบสั่ง — ขนาดไม้ตรงผลข้อ 3 มีจุดตัดขาดทุน ตัวเลขทุกตัวมีเวลาอ้างอิง · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "review",
+   "title": "ตรวจงานการเงินและการลงทุนก่อนส่ง",
+   "when": "ตรวจงานก่อนส่งหรือก่อนใช้จริง · \"ช่วยดูหน่อยว่ามีอะไรพลาด\" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ",
+   "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (บันทึกการเทรด · statement · กฎภาษีจากแหล่งทางการ) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เขียนเจตนาของงาน 1 ย่อหน้า — ใครจะใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ ให้เลือกการตีความที่กระทบน้อยที่สุด ไม่หยุดถาม · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ตรวจทีละข้อตามเกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` แล้วตามเช็กลิสต์ของ skill หลัก ถ้างานใหญ่หรือเสี่ยงสูง ให้ subagent ตัวใหม่ที่ไม่เคยเห็นงานตรวจอีกรอบแยกกัน ด้วยโมเดลระดับใหญ่ (`model: opus`) และสั่งให้อ่านอย่างเดียว (\"ห้ามเขียนหรือแก้ไฟล์\") · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · `model: opus`)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · `model: opus`)"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ยืนยันทุกข้อที่พบ — ต้องชี้จุดในชิ้นงานได้ และเทียบกับต้นทางหรือแหล่งทางการแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แยกเป็น 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ส่วนข้อที่ตัดทิ้งเพราะไม่ใช่ปัญหาจริง ให้บอกเหตุผลด้วย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ และตารางสถานะ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "scam-check",
+   "title": "ตรวจก่อนโอน หรือหลังโดนหลอก",
+   "when": "จะโอนเงินให้การลงทุน แอป กลุ่ม LINE หรือคนที่อ้างว่าเป็นเจ้าหน้าที่ · เพิ่งโอนไปแล้วสงสัยว่าโดนหลอก",
+   "done": "ผลตรวจพร้อมหลักฐาน และขั้นตอนถัดไปที่ผู้ใช้ทำได้ทันที",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ถ้าโอนไปแล้ว ให้ทำขั้นตอนเร่งด่วนใน `scam-check` ก่อนอย่างอื่น (แจ้งอายัดบัญชี · ติดต่อธนาคาร · เก็บหลักฐาน) · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม (คุยกับผู้ใช้ทันที)"
+     },
+     "skills": [
+      "scam-check"
+     ],
+     "commands": [],
+     "playbooks": [
+      "scam-check"
+     ],
+     "approval": true
+    },
+    {
+     "n": 2,
+     "text": "ถ้ายังไม่โอน ให้ตรวจสัญญาณอันตรายตาม `scam-check` และตรวจใบอนุญาตจากเว็บหน่วยงานกำกับ · ใคร: `general-purpose` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่"
+     },
+     "skills": [
+      "scam-check"
+     ],
+     "commands": [],
+     "playbooks": [
+      "scam-check"
+     ],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "สรุปผล: ระดับความเสี่ยง · สัญญาณที่เจอ · หลักฐาน · ใคร: `general-purpose` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": true,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`general-purpose` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 4,
+     "text": "ร่างข้อความแจ้งความหรือแจ้งธนาคาร และรายการหลักฐาน · ใคร: หัวหน้าทีมร่าง · `reviewer` ตัวใหม่ตรวจร่าง แล้วผู้ใช้เป็นคนส่ง",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "หัวหน้าทีมร่าง · `reviewer` ตัวใหม่ตรวจร่าง แล้วผู้ใช้เป็นคนส่ง"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "tax-season",
+   "title": "ภาษีเงินได้บุคคลธรรมดาและการลดหย่อน",
+   "when": "ตุลาคมถึงธันวาคม · ถามภาษีปันผล กำไรหุ้น คริปโต รายได้ต่างประเทศ · ยื่นภาษีต้นปี",
+   "done": "ตารางภาษีก่อนและหลังที่คำนวณซ้ำแล้ว พร้อมรายการที่ต้องทำก่อน 31 ธันวาคม",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เก็บรายได้ทั้งปีและลดหย่อนที่ใช้แล้ว จากเอกสารจริง (50 ทวิ · หนังสือรับรอง) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ตรวจกฎและเพดานปีภาษีนี้จากเว็บกรมสรรพากร · ใคร: `general-purpose` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "คำนวณภาษีก่อนและหลังลดหย่อนแต่ละทาง ตาม `tax-deduction-planner` แล้วบอกว่ายังเหลือสิทธิ์ซื้อกองทุนลดหย่อนได้อีกเท่าไร · ใคร: `general-purpose` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่"
+     },
+     "skills": [
+      "tax-deduction-planner"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ภาษีจากการลงทุน ให้บอกแบบที่ต้องยื่น และจะขอเครดิตภาษีปันผลหรือไม่ ตาม `tax-basics-th` · ใคร: `general-purpose` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`general-purpose` ตัวใหม่"
+     },
+     "skills": [
+      "tax-basics-th"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — คำนวณซ้ำด้วยสคริปต์ และทุกเพดานมีแหล่งและปี · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "trade-review",
+   "title": "ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน",
+   "when": "\"สรุปผลเทรด\" · ขาดทุนแบบเดิมซ้ำ · ครบรอบทบทวน",
+   "done": "สถิติที่คำนวณซ้ำแล้ว ความผิดพลาด 1 ข้อ และกฎ 1 ข้อสำหรับเดือนหน้า",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่านบันทึกการเทรดของช่วงนั้นทั้งหมด · ใคร: `trade-journal-coach` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "trade-journal-coach"
+      ],
+      "raw": "`trade-journal-coach` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "คำนวณ win rate expectancy และ drawdown ด้วยสคริปต์ที่รันซ้ำได้ · ใคร: `trade-journal-coach` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "trade-journal-coach"
+      ],
+      "raw": "`trade-journal-coach` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "หารูปแบบความผิดพลาดที่ซ้ำมากที่สุด 1 ข้อ พร้อมตัวอย่างไม้จริง · ใคร: `trade-journal-coach` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "trade-journal-coach"
+      ],
+      "raw": "`trade-journal-coach` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "แปลงเป็นกฎใหม่ 1 ข้อที่ทดสอบได้ในเดือนหน้า และตัดสินกฎของเดือนก่อน (ใช้ต่อ · ปรับ · ทิ้ง) · ใคร: `trade-journal-coach` ตัวใหม่เสนอ แล้วลงใน \"รออนุมัติ\"",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "trade-journal-coach"
+      ],
+      "raw": "`trade-journal-coach` ตัวใหม่เสนอ แล้วลงใน \"รออนุมัติ\""
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — คำนวณสถิติซ้ำแล้วตรงกับบันทึก · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "unattended-run",
+   "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
+   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น ทบทวนเทรดย้อนหลังทั้งปี · ทำแผนภาษีปลายปีพร้อมทุกทางเลือก",
+   "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ แล้วเลือก playbook ย่อยให้แต่ละชิ้น หัวหน้าทีมประสานงานและตรวจ โดยแจกงานให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป ชิ้นที่พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงเป็น `ติด` แล้วไปทำชิ้นอื่น · ใคร: agent สาขาตามบทบาทของชิ้น (`market-analyst` · `risk-manager` · `trade-journal-coach`) ตัวใหม่ต่อชิ้น · ตรวจ: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "market-analyst",
+       "risk-manager",
+       "trade-journal-coach",
+       "reviewer"
+      ],
+      "raw": "agent สาขาตามบทบาทของชิ้น (`market-analyst` · `risk-manager` · `trade-journal-coach`) ตัวใหม่ต่อชิ้น · ตรวจ: `reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทุกครั้งที่เลือกทางเอง ให้ลงตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ส่งคำสั่งซื้อขาย · โอนเงิน · ซื้อกองทุน) ให้เตรียมให้พร้อมกด แล้วลงใน \"รออนุมัติ\" ห้ามทำเอง ส่วนคำถามที่ต้องให้ผู้ใช้ตอบ ให้ลงใน \"ค้างอยู่\" · ใคร: หัวหน้าทีมเตรียม แล้วผู้ใช้อนุมัติเอง",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีมเตรียม แล้วผู้ใช้อนุมัติเอง"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "จบแต่ละชิ้นแล้ว ให้เขียน \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` ถ้ามี ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "ตอนจบ ให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไรให้ผู้ใช้ตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจเงื่อนไขข้อ 1 แล้วหัวหน้าทีมรายงาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่ตรวจเงื่อนไขข้อ 1 แล้วหัวหน้าทีมรายงาน"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  }
+ ]
+}

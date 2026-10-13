@@ -8,6 +8,7 @@ scripts/
 ├─ check/              ตรวจว่าของในรีโปถูกต้อง
 ├─ sync/               ทำให้ไฟล์ที่ต้องเหมือนกันตรงกัน
 ├─ build/              สร้าง dist/ สำหรับเครื่องมืออื่น
+├─ diagrams/           สร้างรูปใน docs/plugins/ จากไฟล์จริง
 └─ install/            ติดตั้งลงเครื่อง
 ```
 
@@ -16,11 +17,12 @@ scripts/
 | — | `build-dist.cmd` | รัน validate → sync-docs → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
 | **check** | `check/validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
 | check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
-| **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | check | `check/audit-plugin-prompt.md` | prompt ให้ Claude Code ตรวจ plugin ในเรื่องที่สคริปต์ตรวจไม่ได้ เลือกได้ 7 หัวข้อ: ยาวเกิน · กระชับได้ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ · วัดผลจริง | หลังเพิ่ม skill หลายตัว · ก่อนขึ้นเลขรุ่น · ทุกไตรมาส |
+| **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | sync | `sync/sync-superuser.mjs` | คัดลอกของกลาง SuperUser จาก `plugins/superuser` ไปทุก plugin (skill กลาง · learning-reviewer · hook · บล็อก `superuser:begin`) · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser`** |
 | sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
+| **diagrams** | `diagrams/make.py` | สร้างรูป 38 รูปและหน้า README ใน `docs/plugins/` จากไฟล์จริง (ดู [หัวข้อ 6](#6--diagrams)) | **หลังเพิ่มหรือแก้ agent · skill · playbook** |
 | **install** | `install/install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 | install | `install/install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
 | install | `install/CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่ `install-global-rules` ติดตั้ง | แก้ที่นี่ที่เดียว |
@@ -179,3 +181,27 @@ bash scripts/install/install-global-rules.sh                                    
 **เกณฑ์:** ถ้ากฎนั้นต้องเตือนตอนที่โมเดลกำลังจะพลาด ให้อยู่ที่นี่ · ถ้าเป็นความรู้ที่ไปเปิดอ่านได้ทัน ให้อยู่ใน skill
 
 ไฟล์นี้ควรยาวไม่เกิน **40 บรรทัด** — ทุกบรรทัดจ่ายต้นทุนทุกเซสชันของทุกโปรเจกต์
+
+---
+
+## 6 · diagrams
+
+```bash
+python scripts/diagrams/make.py            # ทุกรูป → docs/plugins/
+python scripts/diagrams/make.py career     # เฉพาะ plugin เดียว (ภาพรวมกับ hook สร้างใหม่ด้วย)
+```
+
+ต้องมี `pip install playwright` และ `playwright install chromium` · ไฟล์กลางทางอยู่ใน `_to_delete/diagrams/` · รายการรูปอยู่ใน [docs/plugins/README.md](../docs/plugins/README.md)
+
+| ไฟล์ | หน้าที่ |
+|---|---|
+| `make.py` | รันทุกขั้นข้างล่างต่อกัน แล้ววางรูปลง `docs/plugins/<plugin>/` |
+| `extract.py` | อ่าน agent · skill · คำสั่ง · ขั้นของ playbook (ใครทำ · skill ที่อ้าง · ขั้นที่รอผู้ใช้) จากไฟล์จริง ไม่เดา → `data/` |
+| `labels/<plugin>.json` | คำสั้นในกล่อง: หน้าที่ของ agent · ชื่อสั้นและกลุ่มของ playbook · ป้ายของแต่ละขั้น · `software-company` มีกลุ่ม agent และกลุ่ม skill เพิ่ม — **คนหรือ agent เขียน** |
+| `palette.py` | สีและตราประจำ 12 plugin — ที่เดียว ทั้ง `build.py` และ `flow/` ใช้ร่วมกัน |
+| `build.py` + `style.css` | HTML ของ `map` · `playbooks` · ภาพรวม · hook · ขั้นที่ labels ไม่มีหรือจำนวนขั้นไม่ตรง → ใช้ข้อความจริงตัดสั้น แล้วพิมพ์ `เตือน:` |
+| `flow/` | HTML ของ `flow.png` (วิธีทำงานของ SuperUser) · คำสั้นในกล่องอยู่ใน `figdata.py` · หัวภาษาอังกฤษใน `bilingual.py` |
+| `render.py` | HTML → PNG กว้าง 1920 px |
+| `pages.py` | เขียน `docs/plugins/README.md` และ README ของแต่ละ plugin — อย่าแก้หน้าพวกนั้นด้วยมือ |
+
+**แก้ playbook แล้ว build พิมพ์ `เตือน:`** → แก้ `steps` ใน `labels/<plugin>.json` ให้จำนวนเท่ากับขั้นในไฟล์จริง แล้วรันใหม่

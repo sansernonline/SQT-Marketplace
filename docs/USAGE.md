@@ -12,7 +12,7 @@
 
 ## SuperUser — ประตูหน้าเดียวของงานหลายขั้น
 
-![การทำงานของ superuser](superuser-software-company.png)
+![การทำงานของ superuser](plugins/software-company/flow.png)
 
 ```
 /software-company:superuser แก้บั๊กหน้ารายงาน วันที่ขึ้นเป็นค่าว่าง
@@ -44,17 +44,17 @@
 
 | plugin | playbook | ไม่ทำเองเด็ดขาด | รูป |
 |---|---|---|---|
-| `superuser` | research · document | ส่งข้อความ · จ่ายเงิน · ลบข้อมูลจริง | [ดูรูป](superuser-core.png) |
-| `career` | job-application · interview · offer-negotiation · promotion-case · profile-refresh | ส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก | [ดูรูป](superuser-career.png) |
-| `consumer-rights` | buy-decision · complaint · refund · warranty-claim | ส่งร้องเรียน · ยื่นฟ้อง · โพสต์สาธารณะ | [ดูรูป](superuser-consumer-rights.png) |
-| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project (วิทยานิพนธ์ใช้ skill `thesis-writing`) | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](superuser-dev-learning.png) |
-| `graphic-design` | brand-setup · campaign · image-series · video · asset-cleanup | โพสต์ · ยิงแอด · ใช้งานที่ลิขสิทธิ์ไม่ชัด | [ดูรูป](superuser-graphic-design.png) |
-| `health-wellness` | checkup-cycle · doctor-visit · medication-routine · habit-tracking | วินิจฉัย · ปรับยา · ส่งข้อมูลสุขภาพ (ฉุกเฉิน → หยุดงาน บอก 1669) | [ดูรูป](superuser-health-wellness.png) |
-| `home-family` | bills · maintenance · vehicle · family-week · care-setup | จ่ายเงิน · ส่งข้อความในนามผู้ใช้ | [ดูรูป](superuser-home-family.png) |
-| `online-seller` | new-product · pricing-check · stock-sync · customer-issue · live-session | ส่งข้อความถึงลูกค้า · คืนเงิน · ซื้อโฆษณา | [ดูรูป](superuser-online-seller.png) |
-| `personal-life` | weekly-reset · meeting · documents · subscriptions · trip · digital-safety · decide-and-goals | ส่งข้อความ · เปลี่ยนรหัสผ่าน · จองหรือยกเลิกบริการ | [ดูรูป](superuser-personal-life.png) |
-| `thai-workplace` | monthly-close · year-end · business-doc · pdpa-setup · line-oa | ยื่นหรือชำระภาษี · broadcast · ลงนาม | [ดูรูป](superuser-thai-workplace.png) |
-| `trading-finance` | pre-trade · trade-review · portfolio-check · money-plan · tax-season · scam-check | ส่งคำสั่งซื้อขาย · โอนเงิน · ซื้อกองทุน | [ดูรูป](superuser-trading-finance.png) |
+| `superuser` | research · document | ส่งข้อความ · จ่ายเงิน · ลบข้อมูลจริง | [ดูรูป](plugins/superuser/README.md) |
+| `career` | job-application · interview · offer-negotiation · promotion-case · profile-refresh | ส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก | [ดูรูป](plugins/career/README.md) |
+| `consumer-rights` | buy-decision · complaint · refund · warranty-claim | ส่งร้องเรียน · ยื่นฟ้อง · โพสต์สาธารณะ | [ดูรูป](plugins/consumer-rights/README.md) |
+| `dev-learning` | learning-path · paper-to-practice · tech-radar · cert-prep · side-project (วิทยานิพนธ์ใช้ skill `thesis-writing`) | สมัครหรือจ่ายค่าสอบ · โพสต์ | [ดูรูป](plugins/dev-learning/README.md) |
+| `graphic-design` | brand-setup · campaign · image-series · video · asset-cleanup | โพสต์ · ยิงแอด · ใช้งานที่ลิขสิทธิ์ไม่ชัด | [ดูรูป](plugins/graphic-design/README.md) |
+| `health-wellness` | checkup-cycle · doctor-visit · medication-routine · habit-tracking | วินิจฉัย · ปรับยา · ส่งข้อมูลสุขภาพ (ฉุกเฉิน → หยุดงาน บอก 1669) | [ดูรูป](plugins/health-wellness/README.md) |
+| `home-family` | bills · maintenance · vehicle · family-week · care-setup | จ่ายเงิน · ส่งข้อความในนามผู้ใช้ | [ดูรูป](plugins/home-family/README.md) |
+| `online-seller` | new-product · pricing-check · stock-sync · customer-issue · live-session | ส่งข้อความถึงลูกค้า · คืนเงิน · ซื้อโฆษณา | [ดูรูป](plugins/online-seller/README.md) |
+| `personal-life` | weekly-reset · meeting · documents · subscriptions · trip · digital-safety · decide-and-goals | ส่งข้อความ · เปลี่ยนรหัสผ่าน · จองหรือยกเลิกบริการ | [ดูรูป](plugins/personal-life/README.md) |
+| `thai-workplace` | monthly-close · year-end · business-doc · pdpa-setup · line-oa | ยื่นหรือชำระภาษี · broadcast · ลงนาม | [ดูรูป](plugins/thai-workplace/README.md) |
+| `trading-finance` | pre-trade · trade-review · portfolio-check · money-plan · tax-season · scam-check | ส่งคำสั่งซื้อขาย · โอนเงิน · ซื้อกองทุน | [ดูรูป](plugins/trading-finance/README.md) |
 
 ทุกตัวมี `review` และ `unattended-run` เพิ่ม · งานข้ามสาขา → หัวหน้าทีมส่งต่อให้ `/<plugin>:superuser` ของ plugin นั้น
 
