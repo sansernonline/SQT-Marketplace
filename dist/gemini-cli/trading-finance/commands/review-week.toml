@@ -1,2 +1,2 @@
 description = "Run the weekly or monthly trade review — statistics, the repeating mistake, one new rule."
-prompt = "Run `post-trade-review` with the `trade-journal-coach` agent for: **{{args}}**\r\n\r\nDefault period is this month. Output is one page: stats table, the one pattern (quoted from journal), the one new rule, previous rule verdict.\n"
+prompt = "Run `post-trade-review` with the `trade-journal-coach` agent for: **{{args}}**\n\nDefault period is this month. Output is one page: stats table, the one pattern (quoted from journal), the one new rule, previous rule verdict.\n"

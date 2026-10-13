@@ -1,2 +1,2 @@
 description = "Turn a message into a short video — hook, shot script, on-screen text and a video-tool brief."
-prompt = "Run `video-script-to-clip` with the `social-creator` agent for: **{{args}}**\r\n\r\nReview the storyboard as thumbnails before generating anything.\n"
+prompt = "Run `video-script-to-clip` with the `social-creator` agent for: **{{args}}**\n\nReview the storyboard as thumbnails before generating anything.\n"

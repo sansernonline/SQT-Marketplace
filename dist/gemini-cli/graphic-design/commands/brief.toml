@@ -1,2 +1,2 @@
 description = "Write an image generation brief — subject, style, palette, light, composition, negatives."
-prompt = "Run `brief-to-image` with the `art-director` agent for: **{{args}}**\r\n\r\nSaves the brief to the project briefs folder. Generation and the consistency check both use this same brief.\n"
+prompt = "Run `brief-to-image` with the `art-director` agent for: **{{args}}**\n\nSaves the brief to the project briefs folder. Generation and the consistency check both use this same brief.\n"
