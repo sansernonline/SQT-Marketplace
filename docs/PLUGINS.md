@@ -1,6 +1,6 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **12 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
+ทั้งหมด **12 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0 · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
 ---
 
@@ -70,8 +70,8 @@ SQT-Marketplace/
 ├── .claude-plugin/marketplace.json
 ├── plugins/software-company/
 │   ├── agents/      41 บทบาท
-│   ├── skills/      110 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
-│   └── hooks/       hook ของ SuperUser — เขียน .claude/superuser/log และแจ้ง inbox
+│   ├── skills/      111 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
+│   └── hooks/       hook ของ SuperUser — เขียน .claude/superuser/log และแจ้ง inbox (ทุก plugin มีชุดเดียวกัน)
 ├── docs/            INSTALL · USAGE · REFERENCE · PLUGINS (ไฟล์นี้)
 └── README.md
 ```
@@ -81,6 +81,8 @@ SQT-Marketplace/
 ## 🗺️ Roadmap — plugin ชีวิตประจำวัน
 
 _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบงาน "สร้างซอฟต์แวร์" แล้ว ชุดนี้จึงเสนอ plugin สำหรับใช้ในชีวิตประจำวัน_
+
+> **แผนเก่า เก็บไว้ดูที่มา** — ตัวเลขและสถานะในหัวข้อนี้เป็นของวันที่ร่าง (เช่น dev-learning ที่เขียนว่า "สำรอง" ส่งแล้วเป็น v0.6.0) · จำนวนจริงปัจจุบันดูตารางใน [README](../README.md#-plugins)
 
 หลักการเลือก:
 1. ไม่ซ้ำกับ 101 skills ที่มี · ของเดิมเน้นออกแบบและสร้าง ของใหม่เน้น "ใช้ในชีวิต"

@@ -14,7 +14,7 @@ description: Use when writing or reviewing TypeScript in Node (Express, Fastify,
 | ดูไฟล์ | บอกอะไร | ทำ |
 |---|---|---|
 | `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด (24 ส่วนตัว 26 เข้า LTS ปลาย ต.ค. 2026 ให้ตรวจก่อนใช้) |
+| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ |
 | `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
 | `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
 
@@ -114,14 +114,10 @@ export class OrderList {
 
 ## 6 · test
 
-ใช้ framework ที่ repo มี ถ้าไม่มีให้ดูตาราง `testing-standards` ข้อ 1
+ใช้ framework ที่ repo มี · ตั้งค่า Vitest และ Angular พร้อมตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) ส่วนเบราว์เซอร์ดู `e2e-testing-patterns`
 
-| ชั้น | เครื่องมือ |
-|---|---|
-| logic ล้วน | Vitest หรือ Jest ตาม repo |
-| HTTP API | `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) |
-| Angular component | `TestBed` + component harness หรือ Testing Library ตั้งแต่ v21 ขึ้นไป CLI ใช้ Vitest เป็นค่าเริ่มต้น |
-| ผ่านเบราว์เซอร์ | Playwright (ดู `e2e-testing-patterns`) |
+- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) ไม่ต้องเปิดพอร์ตจริง
+- Angular ตั้งแต่ v21 CLI ใช้ Vitest เป็นค่าเริ่มต้น ไม่ใช่ Karma
 
 - logic ใหม่หรือแก้ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว
 - snapshot อย่างเดียวไม่นับเป็น test ต้องมี assert ค่าที่สำคัญ

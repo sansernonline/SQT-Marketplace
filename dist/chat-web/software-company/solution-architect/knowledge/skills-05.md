@@ -15,20 +15,26 @@ Use when starting an API, adding endpoints or checking API consistency (URLs, pa
 - รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
 - ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
-| health check, error envelope, graceful shutdown | `web-service-essentials` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` |
+| งาน | skill | |
+|---|---|---|
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
+| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
+| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
+| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
 
 ---
 
 ## 1 · เอกสารข้อตกลงต้องมีจริง
 
-วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
 ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
 
 > ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
@@ -252,32 +258,6 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
-
----
-
-## 12 · ตัวย่อ
-
-- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
-- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
-- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
-- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
-- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
-- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| health check · error envelope · timeout | `web-service-essentials` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
-| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
-| token · scope · สิทธิ์ | `auth-implementation-patterns` |
-| correlation id ที่โผล่ใน error | `logging-standards` |
-| test สัญญาระหว่างระบบ | `testing-standards` |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
-
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
 
 
 ---
@@ -733,14 +713,19 @@ Use when writing or reviewing code that can fail (network, database, services). 
 - ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
 - ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` |
+| งาน | skill | |
+|---|---|---|
+| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
+| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
+| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
+| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
+| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
+| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
+| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
+| test กรณีล้มเหลว | `testing-standards` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -821,7 +806,7 @@ catch (SmtpException ex)
 | HTTP ภายนอก | 10–30 วินาที |
 | งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
 
-**สูตรการลองใหม่:**
+**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
 
 ```
 ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
@@ -879,29 +864,6 @@ catch (SmtpException ex)
 - ❌ **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
 - ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
 - ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
-
----
-
-## 8 · ตัวย่อ
-
-- **retry** — การลองใหม่เมื่อครั้งแรกล้มเหลว
-- **exponential backoff** — การหน่วงแบบทวีคูณ รอนานขึ้นทุกครั้งที่ลองใหม่
-- **jitter** — ค่าสุ่มที่บวกเข้าไปในเวลาหน่วง เพื่อไม่ให้ทุกเครื่องลองใหม่พร้อมกัน
-- **circuit breaker** — ตัวตัดวงจร หยุดเรียกปลายทางที่กำลังล้มชั่วคราว
-- **idempotency key** — รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ
-- **correlation id** — รหัสที่ติดไปกับคำขอหนึ่งตลอดทาง ใช้ไล่ log ข้ามระบบ
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` |
-| test กรณีล้มเหลว | `testing-standards` |
-| ขั้นตอนเมื่อระบบล่มจริง | `incident-runbook-template` |
 
 
 ---

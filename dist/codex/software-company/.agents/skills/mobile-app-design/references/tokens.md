@@ -31,8 +31,8 @@
 | `--soft` | `#66727E` | ข้อความรอง · คำอธิบาย |
 | `--faint` | `#98A3AD` | ป้ายกำกับ · meta · ไอคอนที่ไม่ active |
 | `--line` | `#E2E7EB` | เส้นขอบ · รางแถบความคืบหน้า |
-| `--signal` | `#0E7C86` | แท็บที่เลือก · ความคืบหน้า · ไมค์ตอนอัด |
-| `--signal-soft` | `#E3F1F2` | พื้นป้ายระดับ |
+| `--signal` | `#2A78D6` (ค่าประจำบ้าน ใช้เมื่อไม่มีสีแบรนด์) | แท็บที่เลือก · ความคืบหน้า · ไมค์ตอนอัด |
+| `--signal-soft` | `#E8F1FB` | พื้นป้ายระดับ |
 | `--repair` / `-bg` | `#C0392B` / `#FBEDEB` | จุดที่ต้องแก้ |
 | `--hint` / `-bg` | `#8A6D1F` / `#FBF4E3` | คำใบ้ |
 | `--fav` | `#D9455F` | หัวใจ / ถูกใจ |
@@ -92,21 +92,20 @@
 | ค่า | ตัวเลข |
 |---|---|
 | ความกว้างแอปสูงสุด | 430px (iPhone Pro Max) |
-| ขอบซ้าย/ขวา | 16px (`--gutter`) · หน้าสรุปผลใช้ 18px |
+| ขอบซ้าย/ขวา | 16px (`--gutter`) ทุกหน้า |
 | ปุ่มไมค์ | 66px |
 | ปุ่มไอคอน | 38px |
-| ไทล์ | สูงต่ำสุด 118px · 2 คอลัมน์ gap 9px |
+| ไทล์ | สูงต่ำสุด 118px · 2 คอลัมน์ gap 8px |
 | แถบแท็บ | ไอคอน 22px + ป้าย 10px |
 
-> ระยะ 9 · 14 · 18 ในไฟล์นี้อยู่นอกสเกลระยะห่างของ `ui-craft` (`4 8 12 16 24 32 48 64`) ซึ่งเป็นกฎหลัก
-> โปรเจกต์ใหม่ให้ปัดเป็น 9 → 8 · 14 → 12 หรือ 16 · 18 → 16 ส่วนตัวอักษร 9–10 ใช้ได้เฉพาะป้าย mono อังกฤษใน mockup เพราะในแอปจริงเล็กสุดคือ 11
+> ตัวอักษร 9–10 ใช้ได้เฉพาะป้าย mono อังกฤษใน mockup เพราะในแอปจริงเล็กสุดคือ 11
 
 **safe area — ห้ามลืม** ไม่อย่างนั้นเนื้อหาจะชนรอยบากด้านบนหรือ home indicator ด้านล่าง:
 
 ```css
-.appbar  { padding-top:    calc(14px + env(safe-area-inset-top)); }
+.appbar  { padding-top:    calc(12px + env(safe-area-inset-top)); }
 .tabbar  { padding-bottom: calc(8px  + env(safe-area-inset-bottom)); }
-.dock    { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+.dock    { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
 ```
 และต้องมี `<meta name="viewport" content="…,viewport-fit=cover">` ไม่งั้น `env()` เป็น 0
 

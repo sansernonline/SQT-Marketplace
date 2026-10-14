@@ -34,6 +34,68 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 
 ## Checklist
 
+House checks first. Each skill holds the full rules, so link to it in the comment:
+
+- [ ] Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
+- [ ] Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) (no unused layers, standard library first, one concern per file)
+- [ ] Readable: [`readable-code`](../readable-code/SKILL.md) (names, file and folder layout, config outside code)
+- [ ] Tests sit next to the code and prove the change: [`testing-standards`](../testing-standards/SKILL.md)
+- [ ] Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR
+- [ ] Commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
+
+The generic list (correctness, design, performance, documentation, maintainability) is in [`references/full-checklist.md`](references/full-checklist.md).
+
+## Comment Templates
+
+### Suggestion (non-blocking)
+```
+nit: Consider X for readability
+```
+
+### Question
+```
+q: Why did you choose X over Y here?
+```
+
+### Blocking issue
+```
+blocking: This will cause Y in production because Z.
+Suggest: <concrete fix>
+```
+
+### Praise
+```
+✨ Nice approach with X — much cleaner than the previous version.
+```
+
+## Review Severity Levels
+
+| Prefix | Meaning |
+|--------|---------|
+| `blocking:` | Must fix before merge |
+| `important:` | Should fix, can be follow-up if urgent |
+| `nit:` | Minor improvement, optional |
+| `q:` | Question, not necessarily a change |
+| `praise:` | Acknowledge good work |
+
+These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน
+
+## Anti-patterns to Avoid
+
+As a reviewer:
+- ❌ Bikeshedding — don't fight over trivial style if there's no convention
+- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
+- ❌ Only criticism — acknowledge good things too
+- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
+- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)
+
+
+## reference: full-checklist.md
+
+# Code review — full generic checklist
+
+Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. The house-specific checks stay in SKILL.md.
+
 ### 🎯 Correctness
 
 - [ ] Does the code do what the PR description says?
@@ -100,45 +162,3 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 - [ ] Easy to modify when requirements change?
 - [ ] No magic numbers / strings (use constants)?
 - [ ] Logging at appropriate levels?
-
-## Comment Templates
-
-### Suggestion (non-blocking)
-```
-nit: Consider X for readability
-```
-
-### Question
-```
-q: Why did you choose X over Y here?
-```
-
-### Blocking issue
-```
-blocking: This will cause Y in production because Z.
-Suggest: <concrete fix>
-```
-
-### Praise
-```
-✨ Nice approach with X — much cleaner than the previous version.
-```
-
-## Review Severity Levels
-
-| Prefix | Meaning |
-|--------|---------|
-| `blocking:` | Must fix before merge |
-| `important:` | Should fix, can be follow-up if urgent |
-| `nit:` | Minor improvement, optional |
-| `q:` | Question, not necessarily a change |
-| `praise:` | Acknowledge good work |
-
-## Anti-patterns to Avoid
-
-As a reviewer:
-- ❌ Bikeshedding — don't fight over trivial style if there's no convention
-- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
-- ❌ Only criticism — acknowledge good things too
-- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
-- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)

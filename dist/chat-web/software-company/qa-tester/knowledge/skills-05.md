@@ -14,14 +14,19 @@ Use when writing or reviewing code that can fail (network, database, services). 
 - ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
 - ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` |
+| งาน | skill | |
+|---|---|---|
+| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
+| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
+| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
+| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
+| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
+| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
+| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
+| test กรณีล้มเหลว | `testing-standards` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -102,7 +107,7 @@ catch (SmtpException ex)
 | HTTP ภายนอก | 10–30 วินาที |
 | งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
 
-**สูตรการลองใหม่:**
+**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
 
 ```
 ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
@@ -161,29 +166,6 @@ catch (SmtpException ex)
 - ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
 - ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
 
----
-
-## 8 · ตัวย่อ
-
-- **retry** — การลองใหม่เมื่อครั้งแรกล้มเหลว
-- **exponential backoff** — การหน่วงแบบทวีคูณ รอนานขึ้นทุกครั้งที่ลองใหม่
-- **jitter** — ค่าสุ่มที่บวกเข้าไปในเวลาหน่วง เพื่อไม่ให้ทุกเครื่องลองใหม่พร้อมกัน
-- **circuit breaker** — ตัวตัดวงจร หยุดเรียกปลายทางที่กำลังล้มชั่วคราว
-- **idempotency key** — รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ
-- **correlation id** — รหัสที่ติดไปกับคำขอหนึ่งตลอดทาง ใช้ไล่ log ข้ามระบบ
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` |
-| รูปแบบ log และ correlation id | `logging-standards` |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` |
-| test กรณีล้มเหลว | `testing-standards` |
-| ขั้นตอนเมื่อระบบล่มจริง | `incident-runbook-template` |
-
 
 ---
 
@@ -220,7 +202,7 @@ Use when a project has no scripted way for an agent to run the app and see resul
    | ชนิด | ขับด้วย | อ่านผลจาก |
    |---|---|---|
    | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ WinAppDriver หรือ pywinauto | ภาพหน้าจอ · log |
+   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver ยังไม่ได้ตรวจว่า Microsoft ยังดูแลอยู่) | ภาพหน้าจอ · log |
    | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
    | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
    | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
@@ -337,12 +319,12 @@ Use when a project verify skill has drifted from the real app (steps fail, scree
 
 ## ขั้นตอน
 
-1. **ทำรายการฟีเจอร์จริง** โดยดึงจาก route · เมนู · command list · SRS ล่าสุด เทียบกับ `features/README.md` แล้วแยกเป็น 3 กลุ่ม: ตรงกัน · หายจากแผนที่ฟีเจอร์ · ไม่มีในแอปแล้ว
-2. **อ่านโค้ดพร้อมกันหลายตัว** ส่ง agent `qa-tester` ตัวใหม่ 1 ตัวต่อกลุ่มฟีเจอร์ (ไม่เกิน 5 ฟีเจอร์ต่อตัว) ให้อ่านอย่างเดียว แล้วรายงานว่าขั้นตอนในไฟล์ `features/*.md` ยังตรงกับโค้ดไหม พร้อมไฟล์และเลขบรรทัด โดยใช้ [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)
-3. **ขับแอปจริงรอบเดียว** ใช้ agent ตัวเดียว เปิดแอปด้วย `scripts/start` แล้วทำทุกฟีเจอร์ตามไฟล์ แล้วบันทึกผ่านหรือล้ม · ภาพหน้าจอ · ขั้นที่ล้ม
+1. **ทำรายการฟีเจอร์จริง** โดยดึงจาก route · เมนู · command list · SRS ล่าสุด เทียบกับแผนที่ฟีเจอร์ในสคริปต์ `<project-name>/test/e2e/verify.*` แล้วแยกเป็น 3 กลุ่ม: ตรงกัน · หายจากแผนที่ฟีเจอร์ · ไม่มีในแอปแล้ว
+2. **อ่านโค้ดพร้อมกันหลายตัว** ส่ง agent `qa-tester` ตัวใหม่ 1 ตัวต่อกลุ่มฟีเจอร์ (ไม่เกิน 5 ฟีเจอร์ต่อตัว) ให้อ่านอย่างเดียว แล้วรายงานว่า check ของแต่ละฟีเจอร์ใน `verify.*` ยังตรงกับโค้ดไหม พร้อมไฟล์และเลขบรรทัด โดยใช้ [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)
+3. **ขับแอปจริงรอบเดียว** ใช้ agent ตัวเดียว รัน `verify.*` (สคริปต์เปิดและปิดแอปเอง) ทุกฟีเจอร์ แล้วบันทึกผ่านหรือล้ม · ภาพหน้าจอ · ขั้นที่ล้ม
 4. **แก้เฉพาะสิ่งที่พิสูจน์แล้ว** ทุกจุดที่แก้ต้องมีหลักฐานจากข้อ 2 หรือ 3 ถ้าฟีเจอร์ล้มเพราะแอปพังจริง ไม่ใช่เพราะขั้นตอนผิด ให้แยกเป็นรายงานบั๊ก (`bug-report-template`) อย่าแก้ขั้นตอนให้ผ่าน
 5. **เพิ่มฟีเจอร์ที่หายจากแผนที่** ตามรูปแบบเดิม และรันจริงอย่างน้อย 1 ครั้งก่อนบันทึก
-6. **รวมการแก้เป็นชุดเดียว** เป็น commit เดียวหรือ PR เดียว และในข้อความบอกจำนวนแต่ละกลุ่ม: ตรงกัน · แก้ · เพิ่ม · ลบ · บั๊กที่พบ
+6. **รวมการแก้เป็นชุดเดียว** เตรียมไว้เป็น commit เดียวหรือ PR เดียว (commit เมื่อผู้ใช้สั่งเท่านั้น) และในข้อความบอกจำนวนแต่ละกลุ่ม: ตรงกัน · แก้ · เพิ่ม · ลบ · บั๊กที่พบ
 7. `status-report` ประเภท `ตรวจ`
 
 ## สิ่งที่ห้ามทำ

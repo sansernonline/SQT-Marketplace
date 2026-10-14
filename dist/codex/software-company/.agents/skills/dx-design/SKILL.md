@@ -26,7 +26,7 @@ Workflow:
 7. **Audit CLI/SDK** if applicable
 8. **Identify quick wins + structural improvements**
 9. **Produce polished DX audit** using `polished-document-style` (from software-company)
-10. **Hand-off:** SDK → `devrel-engineer`, docs → `devrel-engineer`, content → `devrel-engineer`
+10. **Hand-off:** docs → `technical-writer` · SDK and CLI code changes → `developer`
 
 ---
 
@@ -37,7 +37,7 @@ Use `devrel-engineer` agent for: **สิ่งที่ผู้ใช้ระ
 Workflow:
 1. **Discovery:** target languages, API style, auth model, scale
 2. **Apply `developer-experience` skill**
-3. **Choose generator** (Stainless / Fern / Speakeasy) vs hand-build
+3. **Choose generator:** default = generate from the OpenAPI spec with one generator the team already pays for or knows (Stainless / Fern / Speakeasy, check current pricing) · fallback = hand-build a thin client when there are 1–2 languages and under ~20 endpoints
 4. **Design API surface:** resource organization, methods, types
 5. **Design auth + errors per language**
 6. **Plan versioning + distribution**

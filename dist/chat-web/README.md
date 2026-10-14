@@ -11,6 +11,6 @@
 ไฟล์ความรู้ไม่เกิน 10 ไฟล์ (Gem)
 
 บทบาทที่ยาวเกินช่อง Instructions → ย้ายเนื้อหาไปไว้ใน `knowledge/00-role.md`:
-`software-company/business-analyst`, `software-company/clinical-data-analyst`, `software-company/data-engineer`, `software-company/fintech-compliance-officer`, `software-company/hipaa-officer`, `software-company/insurance-compliance-officer`, `software-company/legal-compliance-officer`, `software-company/project-manager`, `software-company/quant-analyst`, `software-company/recommendation-engineer`, `software-company/revops-analyst`, `software-company/seo-specialist`, `software-company/ux-designer`
+ไม่มี
 
 ข้อจำกัด: หน้าเว็บรันสคริปต์ใน skill ไม่ได้ และไม่มีคำสั่งสำเร็จรูป (slash command)

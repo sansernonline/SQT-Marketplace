@@ -53,7 +53,7 @@ description: Use when designing end-to-end tests with Playwright or Cypress, fix
 > 🚨 **Anti-pattern: Ice cream cone** (many E2E tests, few unit tests)
 > Result: slow CI, flaky tests, slow debugging
 
-## Framework Selection (2026)
+## Framework Selection
 
 | Framework | Best for | Avoid for |
 |-----------|----------|-----------|

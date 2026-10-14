@@ -18,14 +18,14 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 | test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
 | เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
+| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ได้ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
 | งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
 
 1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" ในรูปที่ตรวจได้
 2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
-3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
+3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ได้ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
 
 ## สัญญาณว่ากำลังข้าม
 
@@ -48,21 +48,15 @@ Use when producing a document, design, architecture or plan (BRD, FSD, ADR, road
 This skill covers **non-code outputs** — documents, plans, architecture, and
 designs. For code, use `lazy-coding`.
 
-## The one test
+## Check before submitting — 5 items
 
-Before submitting, ask:
+1. **A tired teammate gets it** in 6 months with no prior context.
+2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
+3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
+4. **Nothing can be deleted without losing meaning** — deleting beats adding.
+5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
 
-> Could a tired teammate understand this in 6 months, with no prior context?
-
-If "no" or "not sure" → simplify.
-
-## 5 principles
-
-1. **Start with the simplest thing that works.** Add complexity only when something breaks.
-2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
-3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
-4. **Optimize for reading.** It's read far more often than written.
-5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
+Any "no" or "not sure" → simplify before delivering.
 
 ## By output type
 
@@ -98,16 +92,6 @@ across screens, defaults that work for 80%, progressive disclosure.
 Avoid: novel interactions where a standard one works, 10-step flows when 3
 work, required fields with no smart default, hidden features needing tutorials.
 
-## The 3-question filter
-
-Before adding any new component, configuration option, or pattern:
-
-1. Is there real evidence we need this **now** (not "might need")?
-2. Is there a simpler way? (Sleep on it. Often yes.)
-3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
-
-Two or more answers point to "simpler is fine" → don't add it.
-
 ## Examples
 
 **API description**
@@ -141,16 +125,3 @@ auth middleware. Log to the existing system."
 - **Layer cake** — 6 layers where 90% just pass through.
 - **Resume-driven design** — fancy tech to look sophisticated.
 - **Buzzword stacking** — "cloud-native event-driven AI-powered".
-
-## Pre-submit checklist
-
-- [ ] A tired teammate would understand this in 6 months.
-- [ ] Nothing can be deleted without losing meaning.
-- [ ] No jargon the audience won't know.
-- [ ] Every abstract claim has an example.
-- [ ] I could explain the whole thing in two sentences.
-
-If any answer is "no" → simplify before delivering.
-
-> "Perfection is achieved not when there is nothing more to add, but when there
-> is nothing left to take away." — Saint-Exupéry

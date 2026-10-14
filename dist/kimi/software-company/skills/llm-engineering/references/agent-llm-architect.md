@@ -5,7 +5,7 @@
 - [Your Responsibilities](#your-responsibilities)
 - [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
 - [📊 LLM System Quality Standards](#llm-system-quality-standards)
-- [Model Selection (2026)](#model-selection-2026)
+- [Model Selection](#model-selection)
 - [RAG (Retrieval-Augmented Generation) Architecture](#rag-retrieval-augmented-generation-architecture)
 - [Agent Systems](#agent-systems)
 - [Evaluation System](#evaluation-system)
@@ -51,16 +51,18 @@ Before designing LLM systems, gather:
 - **Citations:** every factual claim in RAG cites source
 - **Fallback handling:** the system still responds sensibly when the LLM fails
 
-## Model Selection (2026)
+## Model Selection
+
+Model names change every few months, so this section names tiers, not versions. Check the provider's current model list before choosing (checked 2026-10-14). For Claude model ids, pricing and limits, open the `claude-api` skill.
 
 ### By tier
 
 | Tier | Use for | Cost | Latency |
 |------|---------|:----:|:-------:|
-| 🚀 **Frontier** (Opus 4.x, GPT-5) | Complex reasoning, agents, code | 💰💰💰 | 🐢 Slow |
-| ⚡ **Workhorse** (Sonnet 4.x, GPT-4o) | Most production tasks | 💰💰 | 🚶 Med |
-| 🏃 **Fast** (Haiku 4.x, GPT-4o-mini) | Classification, simple gen | 💰 | 🏃 Fast |
-| 🦾 **Specialized** (whisper, embed-3) | Specific tasks | varies | varies |
+| 🚀 **Frontier** (Claude Opus tier, OpenAI's top tier) | Complex reasoning, agents, code | 💰💰💰 | 🐢 Slow |
+| ⚡ **Workhorse** (Claude Sonnet tier, OpenAI's mid tier) | Most production tasks | 💰💰 | 🚶 Med |
+| 🏃 **Fast** (Claude Haiku tier, OpenAI's mini tier) | Classification, simple gen | 💰 | 🏃 Fast |
+| 🦾 **Specialized** (speech-to-text, embedding models) | Specific tasks | varies | varies |
 
 ### Decision flow
 
@@ -70,9 +72,9 @@ What's the task?
 ├─ Real-time chat / classification → Fast tier
 ├─ Standard generation / Q&A → Workhorse
 ├─ Complex agents / code / reasoning → Frontier
-├─ Embeddings → text-embedding-3-small
-├─ Speech-to-text → Whisper
-└─ Image generation → DALL-E / Imagen
+├─ Embeddings → see rag-architecture.md Stage 3
+├─ Speech-to-text → a speech model (check the provider list)
+└─ Image generation → an image model (check the provider list)
 ```
 
 ### Multi-model routing
@@ -230,7 +232,7 @@ EVAL_SET = [
         "expected_refusal": False,
         "max_latency_ms": 3000,
     },
-    # ... 50-500 examples
+    # ... 20-50 to start, 50+ before production (llm-evaluation-patterns.md Step 1)
 ]
 
 async def run_eval(prompt_version: str):

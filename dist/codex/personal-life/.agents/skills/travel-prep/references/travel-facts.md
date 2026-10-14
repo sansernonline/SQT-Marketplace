@@ -19,7 +19,7 @@ Department of Consular Affairs list, July 2026 — 35 destinations. Recheck befo
 | 60 days | Cambodia, Samoa |
 | 30 days | China (mutual agreement since 1 Mar 2024; max 90 days in 180), Hong Kong, Macau, Indonesia, Malaysia, Singapore, Vietnam, Laos, Philippines, Maldives, Mongolia, Kazakhstan, Kyrgyz Republic, Tajikistan, Russia, Türkiye, Seychelles, South Africa, Timor-Leste |
 | 15 days | Japan — temporary, extended to 30 June 2027 |
-| 14 days | Brunei, Oman, Myanmar (airport entry only); Taiwan's temporary measure ran to 31 July 2026 — check whether renewed (รอยืนยัน) |
+| 14 days | Brunei, Oman, Myanmar (airport entry only); Taiwan — trial extended 1 Aug 2026 to 31 Jul 2027, no extension of stay (announced by the Taipei Economic and Cultural Office in Thailand 17 Jul 2026; ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.nationthailand.com/news/general/40068763 · https://www.dailynews.co.th/news/6035608/ — official page not found, รอยืนยัน) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.nationthailand.com/news/40068149 · https://www.nationthailand.com/news/40068390 · https://english.beijing.gov.cn/latest/lawsandpolicies/202403/t20240301_3578010.html
 

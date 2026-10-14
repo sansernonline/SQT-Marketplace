@@ -1,6 +1,6 @@
 ---
 name: "web3-design"
-description: "Audit smart contracts or design tokenomics with the blockchain-engineer agent."
+description: "Use when the user asks to audit smart contracts or design tokenomics (user command). Runs the blockchain-engineer agent."
 disableModelInvocation: true
 ---
 
@@ -19,15 +19,13 @@ Use `blockchain-engineer` agent for: **$ARGUMENTS**
 
 Workflow:
 1. **Discovery:** contract scope, chain, value at stake, prior audits
-2. **Apply `smart-contracts` skill** systematically
-3. **Apply `smart-contracts` skill** if DeFi protocol
-4. **Static analysis:** Slither, Mythril
-5. **Test review:** apply `smart-contracts` skill
-6. **Manual review:** access control, reentrancy, oracle, math
-7. **Composability:** interaction with other protocols
-8. **Centralization:** admin functions, multi-sig, timelock
-9. **Produce polished audit report** using `polished-document-style` (from software-company)
-10. **Hand-off:** fixes → `blockchain-engineer`, architecture → `blockchain-engineer`
+2. **Apply `smart-contracts` skill** across the contracts, DeFi parts (if any) and the test suite
+3. **Static analysis:** Slither, Mythril
+4. **Manual review:** access control, reentrancy, oracle, math
+5. **Composability:** interaction with other protocols
+6. **Centralization:** admin functions, multi-sig, timelock
+7. **Produce polished audit report** using `polished-document-style` (from software-company)
+8. **Hand-off:** fixes and architecture changes → `blockchain-engineer`
 
 ---
 

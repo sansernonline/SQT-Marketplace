@@ -114,8 +114,8 @@ What's authenticating?
 - ✅ **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
 - ❌ Never: MD5, SHA-1, SHA-256 raw, plain text
 
-### Password policy (2026 NIST guidelines)
-- ✅ Minimum 12 characters
+### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
+- ✅ Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
 - ✅ Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
 - ✅ Allow long passphrases (any maximum must be at least 64 chars)
 - ✅ Allow special characters (don't restrict them)
@@ -364,15 +364,20 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 - จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
 - query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| รัน migration ใน pipeline | `cicd-and-release` |
+| งาน | skill | |
+|---|---|---|
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
+| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
+| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| ที่เก็บ connection string | `config-and-secrets` | แทน |
+| รัน migration ใน pipeline | `cicd-and-release` | แทน |
+| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` | คู่ |
+| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -541,6 +546,8 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
 
+คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+
 ## 10 · ระบบหลายผู้เช่า (multi-tenant)
 
 | แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
@@ -578,28 +585,145 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 - ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
 - ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
 
----
 
-## 13 · ตัวย่อ
+## reference: data-pipeline-patterns.md
 
-- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริง 1 อย่างเก็บที่เดียว)
-- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
-- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
-- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
+# Data pipeline patterns — incremental, backfill, quality, catalog
 
-## 14 · เชื่อมกับ skill อื่น
+ย้ายมาจาก agent `data-engineer` (2026-10-14) · ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
 
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
-| รัน migration ตอน deploy | `cicd-and-release` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| ตาราง user, role, session | `auth-implementation-patterns` |
-| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
+**สารบัญ:**
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
+- [Pipeline Patterns](#pipeline-patterns)
+- [Data Catalog Pattern](#data-catalog-pattern)
+- [Production Pipeline Checklist](#production-pipeline-checklist)
+
+## Pipeline Patterns
+
+### Pattern 1: Incremental Loading
+
+```sql
+-- dbt incremental model
+{{ config(materialized='incremental', unique_key='id') }}
+
+SELECT
+    id,
+    user_id,
+    event_type,
+    created_at
+FROM {{ source('raw', 'events') }}
+WHERE 1=1
+{% if is_incremental() %}
+    -- Only new since last run
+    AND created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}
+```
+
+### Pattern 2: Late-arriving Data
+
+```sql
+-- Don't just look at last 1 hour, look back further for late events
+WHERE created_at > NOW() - INTERVAL '7 days'  -- buffer
+  AND created_at > (SELECT MAX(created_at) - INTERVAL '1 day' FROM target)
+```
+
+### Pattern 3: Data Quality Tests (dbt)
+
+```yaml
+# models/marts/orders.yml
+version: 2
+
+models:
+  - name: orders
+    description: One row per order
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customers')
+              field: customer_id
+      - name: amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+```
+
+### Pattern 4: Idempotent Backfills
+
+```python
+# Backfill should be safe to re-run
+async def backfill(start_date: date, end_date: date):
+    for d in date_range(start_date, end_date):
+        # DELETE then INSERT in one transaction (idempotent); value passed as a parameter, never in the SQL string
+        async with db.transaction():
+            await db.execute("DELETE FROM target WHERE date = $1", d)
+            await load_for_date(d)
+```
+
+### Pattern 5: Real-time Pipeline
+
+```python
+# Kafka consumer pattern
+from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'events',
+    bootstrap_servers='kafka:9092',
+    enable_auto_commit=False,  # ← manual commit for exactly-once
+    isolation_level='read_committed',
+)
+
+batch = []
+for message in consumer:
+    batch.append(parse(message))
+
+    if len(batch) >= 1000:
+        # Atomic write + commit
+        with db.transaction():
+            db.bulk_insert('events', batch)
+            consumer.commit()  # only after DB write succeeds
+        batch = []
+```
+
+## Data Catalog Pattern
+
+For every table, document:
+
+```yaml
+- table: dim_customer
+  description: Slowly-changing customer master
+  owner: data-team
+  freshness: hourly
+  source: postgres.app.users (CDC)
+  pii: yes
+  retention: 7 years
+  columns:
+    - name: customer_key
+      description: Surrogate key
+    - name: customer_id
+      description: Natural key from source system
+    - name: email
+      pii: yes
+```
+
+## Production Pipeline Checklist
+
+- [ ] Schema validation at ingestion
+- [ ] Schema evolution handled (additive only)
+- [ ] Tests on critical columns (uniqueness, not-null, ranges)
+- [ ] Monitoring on row counts, freshness, error rates
+- [ ] Alerting (PagerDuty / Slack) on failures
+- [ ] Backfill procedure documented + tested
+- [ ] Idempotency verified
+- [ ] Lineage visible (dbt docs, OpenLineage)
+- [ ] PII tagged
+- [ ] Access controls per dataset
+- [ ] Cost monitored (query / storage)
 
 
 ## reference: data-types.md
@@ -934,6 +1058,124 @@ def upgrade():
 จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
 
 
+## reference: warehouse-modeling.md
+
+# Warehouse modeling — ELT, stack, star schema, SCD
+
+สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป — ย้ายมาจาก agent `data-engineer` (2026-10-14)
+
+**สารบัญ:**
+
+- [ELT vs ETL (Modern Default: ELT)](#elt-vs-etl-modern-default-elt)
+- [Tech Stack (2026 Recommendations)](#tech-stack-2026-recommendations)
+- [Schema Design: Star/Snowflake](#schema-design-starsnowflake)
+- [SCD (Slowly Changing Dimensions)](#scd-slowly-changing-dimensions)
+
+## ELT vs ETL (Modern Default: ELT)
+
+```
+ETL (old way):
+Source → Transform → Warehouse
+        ↑
+        Limited compute, slow
+
+ELT (modern):
+Source → Load raw → Transform in warehouse
+                    ↑
+                    Snowflake/BigQuery scale
+```
+
+> 💡 **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+
+## Tech Stack (2026 Recommendations)
+
+> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
+
+### Warehouse / Lake
+| Tool | Best for | Cost |
+|------|----------|------|
+| **Snowflake** | Pure warehouse, separation of compute/storage | 💰💰 |
+| **BigQuery** | Serverless, ad-hoc, GCP shops | 💰💰 |
+| **Databricks** | Unified lake + warehouse, ML-heavy | 💰💰💰 |
+| **DuckDB** | Local dev, embedded analytics | 💰 free |
+| **Redshift** | AWS-native, legacy | 💰💰 |
+| **Postgres** | Small data (<1TB), simplicity | 💰 |
+
+### Transformation
+- **dbt** — SQL-based, version controlled, tested (industry default)
+- **SQLMesh** — newer alternative to dbt, stronger features
+
+### Orchestration
+- **Airflow** — most popular, mature
+- **Prefect** — modern Python-native
+- **Dagster** — software-engineering approach to pipelines
+
+### Stream Processing
+- **Kafka + Flink** — high throughput, exactly-once
+- **Kinesis Streams + Flink** — AWS-native
+- **Pub/Sub + Dataflow** — GCP-native
+- **Materialized views** (Snowflake, BigQuery) — for simple cases
+
+### Ingestion
+- **Airbyte** — open source, many connectors
+- **Fivetran** — managed, expensive but reliable
+- **Estuary** — modern, streaming-first
+- **Custom** — for sources not covered
+
+## Schema Design: Star/Snowflake
+
+```sql
+-- Fact table (events / measurements)
+CREATE TABLE fact_orders (
+    order_key BIGINT PRIMARY KEY,
+    customer_key BIGINT,
+    product_key BIGINT,
+    date_key INT,
+    quantity INT,
+    amount DECIMAL(12,2),
+    -- foreign keys to dimensions
+);
+
+-- Dimension tables (descriptive context)
+CREATE TABLE dim_customer (
+    customer_key BIGINT PRIMARY KEY,
+    customer_id VARCHAR,        -- natural key
+    name VARCHAR,
+    email VARCHAR,
+    country VARCHAR,
+    -- SCD Type 2 tracking:
+    valid_from DATE,
+    valid_to DATE,
+    is_current BOOLEAN
+);
+```
+
+> 💡 **Star = denormalized, query-fast**
+> **Snowflake = normalized dims, save storage**
+> **Wide tables / OBT (One Big Table) = even faster for analytics**
+
+## SCD (Slowly Changing Dimensions)
+
+### Type 1: Overwrite
+```
+Customer Bob lived in Bangkok. Moved to Phuket.
+→ Update row, lose Bangkok history
+```
+
+### Type 2: New row per change (most common)
+```
+| customer_key | id | name | city    | valid_from | valid_to   | is_current |
+| 1            | 42 | Bob  | Bangkok | 2024-01-01 | 2025-06-30 | false      |
+| 2            | 42 | Bob  | Phuket  | 2025-07-01 | 9999-12-31 | true       |
+```
+
+### Type 3: Add column
+```
+Customer table: current_city, previous_city
+→ Only most recent change preserved
+```
+
+
 ---
 
 # skill: config-and-secrets
@@ -953,13 +1195,19 @@ Use when settings differ by environment or something must never be committed (ke
 - เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
 - secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
+| งาน | skill | |
+|---|---|---|
+| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
+| connection string ของฐานข้อมูล | `database-design` | คู่ |
+| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
+| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -1159,31 +1407,6 @@ APP_LOG_LEVEL=debug
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
 - ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
----
-
-## 12 · ตัวย่อ
-
-- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
-- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
-- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
-- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
-- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
-- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
-- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
-| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
-| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
-| connection string ของฐานข้อมูล | `database-design` |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 
 ## reference: per-stack.md
@@ -1432,15 +1655,19 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 - เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
 - คิวตันหรือมีงานหายแล้วไม่มีใครรู้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` |
+| งาน | skill | |
+|---|---|---|
+| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
+| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
+| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
+| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` | แทน |
+| ตารางงานและ index | `database-design` | คู่ |
+| log ของ worker และ correlation id | `logging-standards` | คู่ |
+| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -1493,6 +1720,8 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 ---
 
 ## 4 · retry และงานที่ตายแล้ว
+
+ตัวเลขนี้สำหรับงานในคิว · ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) (3 ครั้ง 1/2/4 วินาที)
 
 ```
 ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
@@ -1576,29 +1805,6 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 - ❌ **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
 - ❌ **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
 
----
-
-## 9 · ตัวย่อ
-
-- **queue** — คิว ที่พักงานที่รอให้ worker หยิบไปทำ
-- **worker** — process ที่หยิบงานจากคิวไปทำ
-- **dead letter queue (DLQ)** — ที่เก็บงานที่ล้มจนหมดสิทธิ์ลองใหม่
-- **idempotent** — รันซ้ำแล้วผลลัพธ์เหมือนเดิม ไม่เกิดผลซ้ำ
-- **advisory lock** — ล็อกที่ฐานข้อมูลให้ใช้ โดยไม่ผูกกับตารางใดตารางหนึ่ง
-- **cron** — รูปแบบการกำหนดตารางเวลาของงานอัตโนมัติ
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| retry · timeout · การตัดวงจร | `error-handling-patterns` |
-| ตารางงานและ index | `database-design` |
-| ตัวชี้วัดและการแจ้งเตือนของคิว | `observability-basics` |
-| log ของ worker และ correlation id | `logging-standards` |
-| แจ้งผู้ใช้เมื่องานเสร็จ | `notifications` |
-| นำเข้าไฟล์เป็นงานเบื้องหลัง | `data-import-export` |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` |
-
 
 ---
 
@@ -1618,15 +1824,17 @@ Use when a system must show who did what and when (approvals, money, permissions
 - มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
 - ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` |
+| งาน | skill | |
+|---|---|---|
+| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
+| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
+| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
+| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
+| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
+| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -1764,26 +1972,6 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 - ❌ **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
 - ❌ **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
 
----
-
-## 9 · ตัวย่อ
-
-- **audit trail** — ร่องรอยการใช้งาน บันทึกว่าใครทำอะไรกับข้อมูลชิ้นไหนเมื่อไหร่
-- **append only** — เขียนต่อท้ายได้อย่างเดียว แก้หรือลบของเดิมไม่ได้
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-- **UUIDv7** — รหัสสุ่มที่ขึ้นต้นด้วยเวลา จึงเรียงตามเวลาได้
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางและ index ของ audit | `database-design` |
-| correlation id ที่เชื่อมกลับไป log | `logging-standards` |
-| ใครเป็นใคร มีสิทธิ์อะไร | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิขอลบ | `pdpa-compliance` |
-| การแจ้งเตือนเมื่อมีพฤติกรรมผิดปกติ | `observability-basics` |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` |
-
 
 ---
 
@@ -1803,14 +1991,19 @@ Use when users upload files or the system stores and serves them (type checks, v
 - ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
 - มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` |
-| รูปแบบ endpoint และ error | `api-conventions` |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` |
+| งาน | skill | |
+|---|---|---|
+| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
+| รูปแบบ endpoint และ error | `api-conventions` | แทน |
+| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
+| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
+| ตาราง metadata ของไฟล์ | `database-design` | คู่ |
+| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` | คู่ |
+| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` | คู่ |
+| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -1925,26 +2118,3 @@ Use when users upload files or the system stores and serves them (type checks, v
 - ❌ **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
 - ❌ **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
 - ❌ **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
-
----
-
-## 8 · ตัวย่อ
-
-- **magic bytes** — ไบต์แรก ๆ ของไฟล์ที่บอกชนิดจริงของมัน
-- **object storage** — ที่เก็บไฟล์บนคลาวด์ เช่น Amazon S3, Azure Blob Storage
-- **signed URL** — ลิงก์ที่มีลายเซ็นและวันหมดอายุติดมาด้วย
-- **EXIF** — Exchangeable Image File Format (ข้อมูลแฝงในรูป เช่น รุ่นกล้องและพิกัด)
-- **CDN** — Content Delivery Network (เครือข่ายกระจายไฟล์ให้ใกล้ผู้ใช้)
-- **checksum** — ค่าตรวจสอบความถูกต้องของไฟล์ เช่น SHA-256
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตาราง metadata ของไฟล์ | `database-design` |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` |
-| ตรวจสิทธิ์ก่อนออกลิงก์ | `auth-implementation-patterns` |
-| ย่อรูปและสแกนไวรัสเป็นงานเบื้องหลัง | `background-jobs` |
-| นำเข้าข้อมูลจากไฟล์ที่อัปโหลด | `data-import-export` |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` |

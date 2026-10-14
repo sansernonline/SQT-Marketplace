@@ -226,7 +226,7 @@ Tier 3: ML models
 4. Compliance officer reviews
    ↓
 5. If reportable: file SAR within regulatory deadline
-   - Thailand (AMLO): within 7 days of decision
+   - Thailand (AMLO): within 7 days of decision `(รอยืนยัน — no source; check amlo.go.th before relying on it)`
    - US (FinCEN): within 30 days of detection
    ↓
 6. Continue customer relationship per legal advice

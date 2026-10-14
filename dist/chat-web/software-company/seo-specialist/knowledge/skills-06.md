@@ -64,9 +64,9 @@ Use when a task that produces or checks project work ends (document, review, cod
 | ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
 | สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี · ต่างจาก 5 คำของ `superuser` ใน plugin อื่นโดยตั้งใจ ส่วน "รออนุมัติ" กับ "ค้างอยู่" อยู่เป็นหัวข้อท้ายคำตอบ |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
+| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
-- **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ตรวจ` ห้ามเขียน `ผ่าน`
+- **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียน `ผ่าน`
 - **แอปมือถือ** หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` ถ้ายังไม่ได้ลองเครื่องจริงให้เขียนไว้ในช่อง ค้าง
 - `APPROVED` มีแต่คนที่เปลี่ยนได้ ส่วน agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
 - ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ รายการที่รอบนี้ไม่ได้แตะให้คัดลอกค่าเดิมมา
@@ -129,6 +129,10 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 ---
 
+## แผนโครงการและรายงานประจำสัปดาห์
+
+แม่แบบแผนโครงการ (gantt · milestone · risk register · RACI) และรายงานสถานะประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง อยู่ใน [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
+
 ## เชื่อมกับ skill อื่น
 
 | ต้องการ | ใช้คู่กับ |
@@ -140,6 +144,161 @@ Use when a task that produces or checks project work ends (document, review, cod
 | เลือก playbook และจบงานทุกชนิด | `superuser` |
 | รูปแบบตารางและเอกสาร | `polished-document-style` |
 | ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
+
+
+## reference: project-plan-and-weekly-status.md
+
+# Project plan and weekly status — stakeholder templates
+
+แม่แบบของ agent `project-manager` — ย้ายมาจากตัว agent (2026-10-14) · ตารางสถานะท้ายงานแบบสั้นอยู่ใน SKILL.md ของ `status-report` ส่วนไฟล์นี้คือแผนโครงการและรายงานประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง
+
+**สารบัญ:**
+
+- [Standard Output: Polished Project Plan](#standard-output-polished-project-plan)
+- [Standard Output: Polished Status Report](#standard-output-polished-status-report)
+
+## Standard Output: Polished Project Plan
+
+```markdown
+# 📋 Project Plan: <Project Name>
+
+| | |
+|--|--|
+| **Project Lead** | @pm-name |
+| **Sponsor** | @sponsor |
+| **Status** | 🟡 Planning |
+| **Start Date** | YYYY-MM-DD |
+| **Target End** | YYYY-MM-DD |
+| **Budget** | $XX,XXX |
+
+---
+
+## 🎯 Objective
+
+> One-sentence goal that fits in a tweet.
+
+## Scope
+
+| ✅ In Scope | ❌ Out of Scope |
+|-------------|-----------------|
+| ... | ... |
+
+## 🗓️ Timeline
+
+\`\`\`mermaid
+gantt
+    title Project Timeline
+    dateFormat YYYY-MM-DD
+    section Discovery
+    Requirements    :a1, 2025-01-01, 14d
+    Architecture    :a2, after a1, 7d
+    section Build
+    Sprint 1        :b1, after a2, 14d
+    Sprint 2        :b2, after b1, 14d
+    Sprint 3        :b3, after b2, 14d
+    section Launch
+    UAT             :c1, after b3, 7d
+    Go-live         :c2, after c1, 3d
+\`\`\`
+
+## 🏁 Milestones
+
+| # | Milestone | Target Date | Owner | Status |
+|:-:|-----------|:-----------:|:------|:------:|
+| 1 | Requirements approved | YYYY-MM-DD | @ba | ⚪ |
+| 2 | Architecture signed off | YYYY-MM-DD | @architect | ⚪ |
+| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | ⚪ |
+| 4 | UAT passed | YYYY-MM-DD | @qa | ⚪ |
+| 5 | Production launch | YYYY-MM-DD | @devops | ⚪ |
+
+## ⚠️ Risk Register
+
+| ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
+|:--:|------|:----------:|:------:|:-----:|------------|:------|
+| R-001 | Payment vendor delay | 🟡 Med | 🔴 High | 6 | Plan B vendor | @architect |
+| R-002 | Resource availability | 🟢 Low | 🟡 Med | 2 | Cross-training | @pm |
+
+> 📊 **Score = Likelihood × Impact** (1-9 scale)
+
+## 🔗 Dependencies
+
+| Type | Dependency | Owner | Status |
+|------|------------|:------|:------:|
+| 🌐 External | Payment gateway API | Vendor X | 🟡 |
+| 👥 Internal | Design team availability | @design-lead | 🟢 |
+| ⚙️ Technical | New cloud account | @devops | 🟢 |
+
+## 👥 RACI Matrix
+
+| Activity | PM | BA | Arch | Dev | QA | DevOps |
+|----------|:--:|:--:|:----:|:---:|:--:|:------:|
+| Requirements | A | R | C | I | C | I |
+| Architecture | A | C | R | C | I | C |
+| Implementation | A | I | C | R | C | C |
+| Testing | A | I | I | C | R | I |
+| Deployment | A | I | C | C | I | R |
+```
+
+## Standard Output: Polished Status Report
+
+```markdown
+# 📊 Status Report: <Project> — Week of YYYY-MM-DD
+
+| | |
+|--|--|
+| **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
+| **Overall Status** | 🟢 On Track |
+| **Health Trend** | 📈 Improving / 📉 Declining / ➡️ Stable |
+
+---
+
+## TL;DR
+
+> 💡 1-2 sentence summary for executives.
+
+## 📊 Status by Track
+
+| Track | Status | Notes |
+|-------|:------:|-------|
+| Scope | 🟢 | On target |
+| Schedule | 🟡 | 3 days behind, recoverable |
+| Budget | 🟢 | 65% spent, on track |
+| Quality | 🟢 | 0 critical bugs open |
+| Team Morale | 🟢 | High |
+
+## ✅ Completed This Period
+
+- ...
+- ...
+
+## 🔄 In Progress
+
+| Item | Owner | Due | % Done |
+|------|:------|:---:|:------:|
+| Feature X | @alice | MM/DD | 75% |
+| Feature Y | @bob | MM/DD | 40% |
+
+## ⏸️ Blocked
+
+| Item | Blocker | Owner | Action |
+|------|---------|:------|--------|
+| ... | Waiting on legal review | @legal | Escalate to CTO |
+
+## 🗓️ Upcoming (Next Period)
+
+- ...
+
+## ⚠️ New Risks / Issues
+
+| Severity | Item | Owner |
+|:--------:|------|:------|
+| 🔴 | ... | ... |
+
+## 💬 Asks for Stakeholders
+
+- ❓ Decision needed on X by MM/DD
+- 👥 Need 1 more QA resource starting next sprint
+```
 
 
 ---
@@ -158,21 +317,23 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ## เมื่อไหร่ใช้ skill นี้
 
 - เจอของที่ทำให้แผนเดิมใช้ไม่ได้ ระหว่างทำงานอย่างอื่นอยู่
-- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน
+- ตัวเลข ไฟล์ หรือเอกสารไม่ตรงกัน แล้วต้องรู้ว่าจะยึดอันไหน — เฉพาะเมื่อเลือกผิดแล้วย้อนไม่ได้ · ถ้าย้อนได้ ให้เลือกเองแล้วลง [`decision-log`](../decision-log/SKILL.md)
 - มีทางไปต่อหลายทางที่ย้อนไม่ได้ เสียเงินหรือเวลามาก หรือส่งออกไปถึงคนนอก และต้องให้ผู้ใช้เลือกก่อน · ใน SuperUser ทำส่วนอื่นให้ครบก่อน แล้วเขียนเรื่องนี้ใต้ **รออนุมัติ** ตอนจบ ไม่หยุดถามกลางงาน
 - เสนอให้เพิ่มหรือเปลี่ยนอะไรบางอย่าง ที่ผู้ใช้ยังไม่ได้ขอ
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| สถานการณ์ | ใช้ตัวนี้แทน |
-|---|---|
-| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` |
-| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` |
-| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม |
-| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
-| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` |
-| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` |
-| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน |
+| งาน | skill | |
+|---|---|---|
+| ตอบคำถามที่ผู้ใช้ถามมา | `answer-shape` | แทน |
+| ทางเลือกที่ย้อนได้ (เปลี่ยนทีหลังได้ไม่เสียอะไร) | `principle-proceed-on-reversible-work` — ทำเลย แล้วลง `decision-log` | แทน |
+| ข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) | ใส่ `(รอยืนยัน)` แล้วทำต่อ ไม่ต้องหยุดถาม | แทน |
+| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` | แทน |
+| อธิบายเรื่องซับซ้อนให้เข้าใจ | `answer-shape` | แทน |
+| เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
+| งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
+| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` | คู่ |
 
 ---
 
@@ -268,14 +429,36 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
 | มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
 | ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ** 2–4 ตัว ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` | กดเลือกได้เลย ไม่ต้องพิมพ์ · ใช้ `AskUserQuestion` ถ้าเครื่องมือมี ไม่มี → รายการเลข `1.` `2.` `3.` |
-| **ทุกตัวเลือกบอกหลักฐาน** (`ไฟล์:บรรทัด` · แหล่งทางการ + วันที่ · ผลคำสั่ง) | ตัวเลือกที่สมมุติขึ้นทำให้ผู้ใช้เลือกผิด · หาหลักฐานไม่ได้ → `(ยังไม่ได้ตรวจ)` และห้ามเป็นตัวแนะนำ |
+| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตามกฎ "ถามครั้งเดียว" ใน `CLAUDE.md` ของผู้ใช้ และ `superuser` §6 | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
 
 **ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
 
 ---
 
 ## 7 · ตัวอย่างเต็ม
+
+ตัวอย่างก่อนและหลังแก้ อยู่ใน [`references/example.md`](references/example.md)
+
+---
+
+
+## 8 · Anti-patterns
+
+- ❌ **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
+- ❌ **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
+- ❌ **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
+- ❌ **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
+- ❌ **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
+- ❌ **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
+- ❌ **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
+- ❌ **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
+
+
+## reference: example.md
+
+# flag-and-propose — ตัวอย่างเต็ม
+
+ย้ายมาจาก [SKILL.md](../SKILL.md) §7
 
 **❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
 
@@ -317,35 +500,3 @@ Use when something found mid-task changes what happens next (stale file, blocked
 **สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
 ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
 รายละเอียดวิธีทำของแต่ละข้อเสนอ
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **เปิดด้วย "ระหว่างตรวจผมพบว่า…"** — ผู้อ่านต้องอ่านถึงท้ายย่อหน้าถึงจะรู้ว่าต้องทำอะไร
-- ❌ **ตัวเลขที่ขัดกันเขียนเป็นประโยค** — "เดิม 214 ตอนนี้ 245" ตาต้องกระโดดไปมา
-- ❌ **อธิบายว่าปัญหาเกิดได้ยังไง** ทั้งที่ไม่เปลี่ยนสิ่งที่ต้องทำ
-- ❌ **ข้อเสนอที่บอกวิธีทำแทนที่จะบอกประโยชน์** — ยังตัดสินใจไม่ได้อยู่ดี
-- ❌ **ถามสามคำถามในย่อหน้าเดียว** — จะได้คำตอบข้อเดียว แล้วต้องถามซ้ำ
-- ❌ **ปิดด้วย "แจ้งได้เลยครับ"** — ไม่ได้ขอการตัดสินใจอะไร
-- ❌ **ขอโทษยาว ๆ ที่พลาด** — บอกว่าอะไรผิดและแก้ยังไง พอแล้ว
-- ❌ **รายงานอย่างเดียวโดยไม่เสนอ** — ผลักภาระคิดกลับไปให้ผู้ใช้ทั้งหมด
-
----
-
-## 9 · ตัวย่อ
-
-- **FR** — Functional Requirement (ข้อกำหนดเชิงหน้าที่)
-- **TC** — Test Case (กรณีทดสอบ)
-- **ADR** — Architecture Decision Record (บันทึกเหตุผลของการตัดสินใจเชิงสถาปัตยกรรม)
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| เลือกว่าจะตอบเป็นตาราง รูป หรือร้อยแก้ว | `answer-shape` |
-| กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` |
-| รายงานผลงานที่ทำเสร็จแล้ว | `human-writing` · `status-report` |
-| แก้ของที่พังทันทีแทนที่จะรายงาน | `targeted-fix` |
-| สิ่งที่เจอใหญ่พอจะเป็นเอกสาร | `polished-document-style` |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` |

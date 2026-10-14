@@ -26,6 +26,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 | analyzing or improving conversion rate — checkout flow, landing pages, product pages, A/B testing, funnel analysis, step-by-step friction removal. Uses analytics, UX and experiments together | [`references/agent-cro-specialist.md`](references/agent-cro-specialist.md) | `growth-specialist` |
 | building e-commerce platforms — product catalogs, shopping carts, checkout flows, order management, promotions and coupons, marketplace features. Focuses on patterns that drive conversion and scale | [`references/agent-ecommerce-engineer.md`](references/agent-ecommerce-engineer.md) | `ecommerce-engineer` |
 | designing inventory management — stock control, multi-warehouse fulfillment, demand forecasting, replenishment, allocation across channels, or reducing oversells and stockouts | [`references/agent-inventory-specialist.md`](references/agent-inventory-specialist.md) | `ecommerce-engineer` |
+| building recommendation systems — collaborative, content-based, two-tower and hybrid models, cold start, two-stage serving, offline and online evaluation, diversity | [`references/agent-recommendation-engineer.md`](references/agent-recommendation-engineer.md) | `recommendation-engineer` |
 
 ## agent ของสายนี้
 

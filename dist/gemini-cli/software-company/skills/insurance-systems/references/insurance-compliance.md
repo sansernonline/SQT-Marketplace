@@ -259,7 +259,7 @@ Reporting:
 
 **NAIC Insurance Data Security Model Law:**
 ```
-~30 states adopted
+~30 states adopted (count not dated — check NAIC before quoting (รอยืนยัน))
 Requirements:
 - Written information security program
 - Risk assessment

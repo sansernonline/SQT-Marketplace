@@ -15,14 +15,19 @@ description: Use when users upload files or the system stores and serves them (t
 - ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
 - มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` |
-| รูปแบบ endpoint และ error | `api-conventions` |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` |
+| งาน | skill | |
+|---|---|---|
+| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
+| รูปแบบ endpoint และ error | `api-conventions` | แทน |
+| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
+| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
+| ตาราง metadata ของไฟล์ | `database-design` | คู่ |
+| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` | คู่ |
+| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` | คู่ |
+| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -137,26 +142,3 @@ description: Use when users upload files or the system stores and serves them (t
 - ❌ **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
 - ❌ **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
 - ❌ **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
-
----
-
-## 8 · ตัวย่อ
-
-- **magic bytes** — ไบต์แรก ๆ ของไฟล์ที่บอกชนิดจริงของมัน
-- **object storage** — ที่เก็บไฟล์บนคลาวด์ เช่น Amazon S3, Azure Blob Storage
-- **signed URL** — ลิงก์ที่มีลายเซ็นและวันหมดอายุติดมาด้วย
-- **EXIF** — Exchangeable Image File Format (ข้อมูลแฝงในรูป เช่น รุ่นกล้องและพิกัด)
-- **CDN** — Content Delivery Network (เครือข่ายกระจายไฟล์ให้ใกล้ผู้ใช้)
-- **checksum** — ค่าตรวจสอบความถูกต้องของไฟล์ เช่น SHA-256
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตาราง metadata ของไฟล์ | `database-design` |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` |
-| ตรวจสิทธิ์ก่อนออกลิงก์ | `auth-implementation-patterns` |
-| ย่อรูปและสแกนไวรัสเป็นงานเบื้องหลัง | `background-jobs` |
-| นำเข้าข้อมูลจากไฟล์ที่อัปโหลด | `data-import-export` |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` |

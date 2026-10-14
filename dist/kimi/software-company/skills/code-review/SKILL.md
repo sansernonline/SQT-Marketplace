@@ -12,14 +12,6 @@ The reviewer should:
 
 1. Read the file(s) or diff to understand the change
 2. Apply the `code-review-checklist` skill systematically
-3. Categorize findings by severity:
-   - `blocking:` — must fix before merge
-   - `important:` — should fix
-   - `nit:` — optional improvement
-   - `q:` — questions
-   - `praise:` — acknowledge good work
-4. Provide concrete suggestions, not just criticism
-5. Produce a summary at the end with overall recommendation:
-   - ✅ Approve
-   - 🔄 Request changes
-   - 💬 Comment only
+3. Rate each finding with the reviewer's own scale: **สูง** (must fix before merge) · **กลาง** (should fix) · **ต่ำ** (optional)
+4. Give a concrete fix for each finding, not just criticism
+5. Use the reviewer's output format: verdict **ผ่าน** / **ไม่ผ่าน** with counts per level. The `blocking:`/`nit:` prefixes in `code-review-checklist` are only for comments posted on a pull request

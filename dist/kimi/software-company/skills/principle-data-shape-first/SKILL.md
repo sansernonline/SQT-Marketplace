@@ -20,7 +20,7 @@ description: Use when about to write logic that crosses functions or modules. Se
 ## กฎ
 
 - **สถานะที่ผิดต้องสร้างไม่ได้** — `{ status: 'paid', paidAt }` ไม่ใช่ `isPaid` + `paidAt?` ที่ขัดกันได้
-- **ค่าที่มีความหมายมี type ของมัน** — `OrderId` ไม่ใช่ `string` เปล่า ส่วนเงินให้เก็บเป็นจำนวนเต็มหน่วยเล็กสุด (สตางค์)
+- **ค่าที่มีความหมายมี type ของมัน** — `OrderId` ไม่ใช่ `string` เปล่า ส่วนเงินใช้ type ทศนิยมแบบตรงตัว (exact decimal) ไม่ใช้ float เด็ดขาด · ในฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql` · จำนวนเต็มสตางค์ใช้ได้เฉพาะในหน่วยความจำหรือ JSON ที่ส่งให้ payment gateway ที่ขอแบบนั้น
 - **กฎธุรกิจอยู่ในโครงสร้าง ไม่กระจายเป็น if** — ใช้ตาราง map · state machine · lookup แทน `if (type === ...)` ซ้ำหลายไฟล์
 - **ตรวจตอนข้อมูลเข้าระบบ แล้วข้างในเชื่อได้** — ข้อมูลจาก CLI · config · request · ไฟล์ · API ภายนอก ให้แปลงด้วย schema ทันทีที่เข้ามา โค้ดข้างในจึงไม่ต้องเช็ก null ซ้ำ
 - **ไม่โกหก compiler** — ไม่ใช้ `any` · `as` · `!` เพื่อให้ compile ผ่าน และ `switch` ต้องครบทุกกรณีโดยมีตัวตรวจ (exhaustive check)

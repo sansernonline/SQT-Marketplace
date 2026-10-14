@@ -38,7 +38,7 @@ Minimum base 1,650 baht (รอยืนยัน still unchanged under the 2569
 | Death (non-work) | Funeral grant 50,000 + survivor's lump sum by contribution years (รอยืนยัน) | 1 month within the last 6 |
 | Child allowance | 1,000 per month per child aged 0–6, up to 3 children | 12 months within the last 36 |
 | Old age | Pension 20% of the average last-60-months wage, +1.5% per year beyond 15 years — if 180+ months paid; otherwise lump sum | 180 months for pension |
-| Unemployment | Laid off: 50% of wage for up to 180 days · resigned or contract ended: 30% for up to 90 days (รอยืนยัน current ministerial rates) · register with กรมการจัดหางาน within 30 days | 6 months within the last 15 |
+| Unemployment | Laid off: 60% of wage for up to 180 days (กฎกระทรวง ฉบับที่ 2 พ.ศ. 2568, effective 28 Jun 2568) · resigned or contract ended: 30% for up to 90 days · register with กรมการจัดหางาน within 30 days | 6 months within the last 15 |
 
 มาตรา 39 gets the same except unemployment. มาตรา 40 benefits depend on the plan (70 = sickness, disability, death · 100 = + old-age lump sum · 300 = + child allowance).
 
@@ -75,7 +75,7 @@ Minimum base 1,650 baht (รอยืนยัน still unchanged under the 2569
 
 ## Worked example
 
-Salary 30,000. Base capped at 17,500 → employee 875, employer 875. Salary 12,000 → 600 each. Employer with 10 staff at 20,000 pays 8,750 SSO by the 15th, plus Workmen's Compensation at, say, 0.2% × (20,000 × 12 × 10) = 4,800 for the year.
+Salary 30,000. Base capped at 17,500 → employee 875, employer 875. Salary 12,000 → 600 each. Employer with 10 staff at 20,000 remits 17,500 SSO by the 15th (8,750 employer share + 8,750 withheld from staff), plus Workmen's Compensation at, say, 0.2% × (20,000 × 12 × 10) = 4,800 for the year.
 
 ## Related
 

@@ -1,3 +1,446 @@
+# skill: simplicity-first
+
+Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
+
+# Simplicity First
+
+> The best architecture has the fewest moving parts. The best plan is the one a
+> teammate can follow with no context.
+
+This skill covers **non-code outputs** — documents, plans, architecture, and
+designs. For code, use `lazy-coding`.
+
+## Check before submitting — 5 items
+
+1. **A tired teammate gets it** in 6 months with no prior context.
+2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
+3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
+4. **Nothing can be deleted without losing meaning** — deleting beats adding.
+5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
+
+Any "no" or "not sure" → simplify before delivering.
+
+## By output type
+
+### Documents (BRD, FSD, ADR)
+
+Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
+example for every abstract point, tables for structured data.
+
+Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
+jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+
+### Architecture
+
+Do: monolith first (split only when a bottleneck is proven), familiar stack,
+standard patterns (REST, queues, caches), single source of truth per data type.
+
+Avoid: microservices for small teams, distributed-everything, multi-master
+databases before you must, event-driven by default (sync is simpler).
+
+### Plans
+
+Do: 3-5 priorities (not 20), a named owner per item, measurable success
+criteria, realistic timelines with buffer, cut scope to fit time.
+
+Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
+aspirational dates with no buffer, plans without success metrics.
+
+### Designs (UX, API)
+
+Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
+across screens, defaults that work for 80%, progressive disclosure.
+
+Avoid: novel interactions where a standard one works, 10-step flows when 3
+work, required fields with no smart default, hidden features needing tutorials.
+
+## Examples
+
+**API description**
+
+❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+authentication to facilitate the seamless retrieval of user profile data."
+
+✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+`?fields=name,email` to limit the response."
+
+**Sprint goal**
+
+❌ "Improve overall product quality and customer satisfaction through various
+initiatives."
+
+✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+transient errors (1d), clearer error messages (1d)."
+
+**Architecture for a new feature**
+
+❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+dedicated auth service."
+
+✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+auth middleware. Log to the existing system."
+
+## Anti-patterns to reject
+
+- **Future-proofing** — abstractions for needs that never arrive.
+- **"It might scale"** — infra for 1M users while you have 1k.
+- **Layer cake** — 6 layers where 90% just pass through.
+- **Resume-driven design** — fancy tech to look sophisticated.
+- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+
+
+---
+
+# skill: auth-implementation-patterns
+
+Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
+
+# Authentication Implementation Patterns
+
+## When to use this skill
+
+- Building login/signup/logout
+- Adding password reset flow
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
+- Choosing session vs token authentication
+- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
+- Implementing single sign-on (SSO) with SAML or OIDC
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
+- Reviewing existing auth code for security issues
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/auth-flows.md](references/auth-flows.md) | ถ้าจะลงมือเขียน session · JWT · OAuth กับ PKCE หรือการรีเซ็ตรหัสผ่าน ให้เปิดดูลำดับขั้นทีละข้อ |
+| [references/mfa.md](references/mfa.md) | ตอนเลือกหรือลงมือทำ MFA และต้องการขั้นตั้งค่า TOTP · การใช้ WebAuthn · ข้อจำกัดของ SMS |
+| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
+| [references/libraries-and-code.md](references/libraries-and-code.md) | ตอนเลือกไลบรารีตามภาษา หรือต้องการโค้ดตัวอย่างการ hash รหัสผ่านและเครื่องมือจำกัดจำนวนครั้ง |
+
+## Choose the Right Pattern
+
+```
+What's authenticating?
+│
+├─ Browser user
+│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
+│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
+│
+├─ Mobile app
+│  └─ Token-based: OAuth 2.0 PKCE flow
+│
+├─ Service-to-service
+│  ├─ Same org → mTLS or service mesh
+│  └─ External → OAuth 2.0 Client Credentials
+│
+└─ Third-party developer
+   └─ API keys (with rotation) OR OAuth
+```
+
+## Pattern 1: Session-Based Auth (Most apps)
+
+**When to use:** server-rendered apps, monoliths, one domain
+
+**Implementation requirements:**
+- ✅ Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
+- ✅ Session ID: cryptographically random, ≥ 128 bits
+- ✅ Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
+- ✅ Idle timeout: 30 min default
+- ✅ Absolute timeout: 8-12 hours
+- ✅ Issue a new session ID when privileges change (login, role change)
+- ✅ On logout, delete the session from the store
+
+**Pitfalls:**
+- ❌ Storing session in JWT (can't revoke)
+- ❌ Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
+- ❌ Keeping the same ID after login (session fixation)
+
+## Pattern 2: JWT (Stateless Token)
+
+**When to use:** microservices, mobile, single-page app (SPA) with a backend API
+
+> ⚠️ **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+
+**Implementation requirements:**
+- ✅ Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
+- ✅ Short-lived access token: 5-15 min
+- ✅ Refresh token: longer-lived (days), stored separately, revocable
+- ✅ Issue a new refresh token each time one is used
+- ✅ Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
+- ✅ Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
+- ✅ Have a way to cancel tokens (blocklist, short expiry, etc.)
+
+**Pitfalls:**
+- ❌ `alg: none` attacks (check the algorithm explicitly)
+- ❌ Storing JWT in `localStorage` (XSS-stealable)
+- ❌ Long-lived access tokens (you can't cancel them)
+- ❌ Putting sensitive data in JWT (it's base64, not encrypted)
+- ❌ Skipping signature verification
+
+## Pattern 3: OAuth 2.0 / OIDC
+
+**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
+
+ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+**Implementation requirements:**
+- ✅ **Always use PKCE** (even for confidential clients)
+- ✅ Validate `id_token` signature (use IdP's JWKS)
+- ✅ Validate `aud`, `iss`, `exp`, `nonce`
+- ✅ Use the `state` parameter to prevent cross-site request forgery (CSRF)
+- ✅ Match `code_verifier` to `code_challenge`
+- ✅ Use a library, don't write your own (Auth0, Passport.js, etc.)
+
+**Pitfalls:**
+- ❌ Implicit flow (deprecated, insecure)
+- ❌ Resource Owner Password Credentials flow (deprecated)
+- ❌ Skipping `state` validation (CSRF risk)
+- ❌ Trusting `id_token` without verifying signature
+
+## Pattern 4: Multi-Factor Authentication (MFA)
+
+มี 3 แบบ ถ้าเป็นแอปใหม่ให้ใช้ WebAuthn (passkeys) เป็นค่าเริ่มต้น เพราะไม่มีความลับร่วมให้ถูกหลอกเอาไป ถ้าต้องการ 2FA มาตรฐานที่ผู้ใช้ตั้งเองได้ง่ายให้ใช้ TOTP ส่วน SMS หรือ email ให้ใช้เป็นทางสุดท้ายเท่านั้น เพราะ SMS ไม่ปลอดภัยจากการสลับซิม (SIM swap) รายละเอียดทั้ง 3 แบบอยู่ใน [references/mfa.md](references/mfa.md)
+
+## Pattern 5: Password Management
+
+### Storage
+- ✅ **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
+- ❌ Never: MD5, SHA-1, SHA-256 raw, plain text
+
+### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
+- ✅ Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
+- ✅ Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
+- ✅ Allow long passphrases (any maximum must be at least 64 chars)
+- ✅ Allow special characters (don't restrict them)
+- ❌ Don't force composition rules (uppercase + digit + symbol)
+- ❌ Don't force regular password changes (only when you suspect a breach)
+
+### Password reset flow
+
+ข้อที่ห้ามพลาดในการรีเซ็ตรหัสผ่าน: ข้อความตอบต้องเหมือนกันไม่ว่าอีเมลจะมีในระบบหรือไม่ token ต้องสุ่มอย่างน้อย 256 bits เก็บแบบ hash และหมดอายุใน 15 นาที และเมื่อตั้งรหัสใหม่แล้วต้องยกเลิกทุก session เดิมและส่งอีเมลยืนยัน ลำดับขั้นครบทั้ง 9 ข้ออยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+## Pattern 6: Account Lockout & Rate Limiting
+
+```
+Login attempts:
+- 5 failed attempts in 15 min → lock account 15 min
+- 10 failed attempts in 1 hour → lock 1 hour
+- Use IP + email combo, not just one
+
+Lockout messaging:
+✅ "Too many failed attempts. Try again in 15 minutes."
+❌ "Account locked." (reveals account exists)
+```
+
+ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
+
+## Pattern 7: API Authentication
+
+เลือกตามผู้เรียก: API key สำหรับ server-to-server แบบง่าย · OAuth 2.0 Client Credentials สำหรับ service-to-service · mTLS สำหรับระบบภายในที่ต้องการความปลอดภัยสูง · HMAC signing สำหรับตรวจ webhook ส่วน API key ต้องแสดง secret ครั้งเดียวตอนสร้าง เก็บแบบ hash และให้ผู้ใช้ยกเลิกได้ทันที ตารางเทียบและหลักการครบอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+## Authorization Patterns (after authentication)
+
+ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+### Implementation tip
+- Check authorization at every endpoint
+- Don't trust a role sent by the client
+- Check on the server, using the user from the session or token
+
+## Common Vulnerabilities Checklist
+
+- [ ] Session fixation (regenerate ID on login)
+- [ ] CSRF (token or SameSite cookie)
+- [ ] Brute force (rate limiting)
+- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
+- [ ] Open redirect (allowlist redirect URLs)
+- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
+- [ ] Timing attacks (compare in constant time)
+- [ ] Token in URL (use header or cookie)
+- [ ] Logout that does nothing on the server (invalidate server-side)
+- [ ] Privilege escalation (re-check after role change)
+
+## Anti-patterns
+
+- ❌ Writing your own crypto or auth (use libraries)
+- ❌ Storing passwords reversibly
+- ❌ JWT for sessions when you have one backend
+- ❌ Long-lived JWT without rotation
+- ❌ Authentication without authorization checks
+- ❌ Trusting JWT claims as authorization source
+- ❌ Logout that doesn't invalidate token server-side
+- ❌ Allowing weak passwords for compliance "convenience"
+
+
+## reference: api-auth-and-authorization.md
+
+# API Authentication และ Authorization Patterns
+
+วิธียืนยันตัวตนของ API แต่ละแบบ หลักการจัดการ API key และตัวอย่าง RBAC กับ ABAC
+
+## Pattern 7: API Authentication
+
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
+```
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
+```
+
+### ABAC (Attribute-Based) — fine-grained
+```
+Allow if user.department === resource.department AND action === "read"
+```
+
+
+## reference: auth-flows.md
+
+# ลำดับขั้นของแต่ละ flow
+
+ลำดับขั้นทีละข้อของ session · JWT · OAuth กับ PKCE และการรีเซ็ตรหัสผ่าน ใช้ตอนลงมือเขียนโค้ดหรือรีวิวว่าโค้ดทำครบทุกขั้นไหม ส่วนข้อกำหนดและข้อผิดพลาดที่ต้องเลี่ยงอยู่ใน `SKILL.md`
+
+## Pattern 1: Session-Based Auth — Flow
+
+```
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
+```
+
+## Pattern 2: JWT — Flow
+
+```
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
+```
+
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
+
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
+
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
+```
+
+## Pattern 5: Password reset flow
+
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
+```
+
+
+## reference: libraries-and-code.md
+
+# ไลบรารีและโค้ดตัวอย่าง
+
+โค้ดตัวอย่างการเก็บรหัสผ่าน เครื่องมือจำกัดจำนวนครั้ง และไลบรารีที่แนะนำแยกตามภาษา
+
+## Password storage — code
+
+```typescript
+// ✅ Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// ❌ Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+```
+
+## Rate limiting tools
+
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
+
+## Library Recommendations
+
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, `lucia-auth` | Lucia is simpler and newer |
+| Python | `authlib`, `python-jose` | authlib for OAuth |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+รายละเอียดของการยืนยันตัวตนหลายขั้นทั้ง 3 แบบ ใช้ตอนเลือกหรือลงมือทำ MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
+```
+
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- ⚠️ SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry
+
+
+---
+
 # skill: config-and-secrets
 
 Use when settings differ by environment or something must never be committed (keys, connection strings).
@@ -15,13 +458,19 @@ Use when settings differ by environment or something must never be committed (ke
 - เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
 - secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
+| งาน | skill | |
+|---|---|---|
+| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
+| connection string ของฐานข้อมูล | `database-design` | คู่ |
+| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
+| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -221,31 +670,6 @@ APP_LOG_LEVEL=debug
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
 - ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
----
-
-## 12 · ตัวย่อ
-
-- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
-- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
-- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
-- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
-- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
-- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
-- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
-| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
-| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
-| connection string ของฐานข้อมูล | `database-design` |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 
 ## reference: per-stack.md
@@ -474,353 +898,3 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 > ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
 > เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน
-
-
----
-
-# skill: audit-trail
-
-Use when a system must show who did what and when (approvals, money, permissions, personal data).
-
-# ร่องรอยการใช้งาน (audit trail)
-
-> **กฎข้อเดียว:** ร่องรอยย้อนหลังสร้างไม่ได้
-> วันที่ลูกค้าถามว่า "ใครเปลี่ยนราคาอันนี้" ถ้าไม่ได้เก็บไว้ก่อน ก็ตอบไม่ได้ตลอดไป
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
-- ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
-- มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` |
-
----
-
-## 1 · audit log ≠ application log
-
-| | application log | **audit log** |
-|---|---|---|
-| มีไว้ให้ใครอ่าน | developer ตอนไล่ปัญหา | ผู้ตรวจสอบ · ลูกค้า · ฝ่ายกฎหมาย |
-| เขียนอะไร | อะไรก็ได้ที่ช่วยไล่ปัญหา | **เฉพาะเหตุการณ์ที่มีความหมายทางธุรกิจ** |
-| เก็บที่ไหน | ไฟล์ · ระบบรวบรวม log | **ตารางในฐานข้อมูล** หรือที่เก็บที่เขียนทับไม่ได้ |
-| อายุ | 7–90 วัน | **เป็นปี ตามที่กฎหมายหรือสัญญากำหนด** |
-| แก้ได้ไหม | ไม่สำคัญ | **ห้ามแก้ ห้ามลบ** |
-| หายได้ไหม | หายบ้างรับได้ | **หายไม่ได้** ถ้าเขียนไม่สำเร็จ ธุรกรรมต้องล้มตาม |
-
-> 🚨 **2 อย่างนี้แยกกันเสมอ** เพราะ audit log ที่ปนอยู่ในไฟล์ log ทั่วไป
-> จะถูกลบตามอายุการเก็บ (retention) ของ log ภายในเดือนเดียว และไม่มีใครค้นเจอตอนที่ต้องใช้
-
----
-
-## 2 · ฟิลด์ที่ทุกรายการต้องมี
-
-| ฟิลด์ | ตัวอย่าง | หมายเหตุ |
-|---|---|---|
-| `id` | UUIDv7 | เรียงตามเวลาได้ |
-| `occurred_at` | `2026-09-25T09:42:13.482Z` | **UTC** และเป็นเวลาที่เกิด ไม่ใช่เวลาที่บันทึก |
-| `actor_id` | `1042` | id ผู้ใช้ ไม่ใช่ชื่อ เพราะชื่อเปลี่ยนได้ |
-| `actor_type` | `user` · `system` · `api_client` | งานอัตโนมัติก็ต้องมีตัวตน |
-| `actor_ip` · `user_agent` | | เก็บเมื่อจำเป็นต่อการตรวจสอบเท่านั้น |
-| `action` | `order.cancelled` | **คำกริยารูปอดีต** แบบเดียวกันทั้งระบบ |
-| `entity_type` · `entity_id` | `order` · `1042` | ของที่ถูกกระทำ |
-| `changes` | `{"status":{"from":"confirmed","to":"cancelled"}}` | เฉพาะฟิลด์ที่เปลี่ยน |
-| `reason` | "ลูกค้าโทรแจ้งยกเลิก" | บังคับกับการกระทำที่ต้องมีเหตุผล |
-| `correlation_id` | `01J9Z8…` | เชื่อมกลับไปที่ application log |
-| `result` | `success` · `denied` | **ต้องบันทึกครั้งที่ถูกปฏิเสธด้วย** |
-
-> **การกระทำที่ถูกปฏิเสธมีค่ามากกว่าที่สำเร็จ** เพราะคนที่พยายามเข้าถึงสิ่งที่ไม่มีสิทธิ์
-> คือสิ่งที่ผู้ตรวจสอบอยากเห็นที่สุด และเป็นสัญญาณเตือนที่ดีที่สุดที่มี
-
----
-
-## 3 · เก็บเหตุการณ์ไหน
-
-**เก็บ:**
-
-| กลุ่ม | ตัวอย่าง |
-|---|---|
-| เงินและสัญญา | สร้าง/ยกเลิก/คืนเงิน · เปลี่ยนราคา · เปลี่ยนส่วนลด |
-| การอนุมัติ | อนุมัติ · ปฏิเสธ · ส่งกลับแก้ |
-| สิทธิ์และตัวตน | ให้/เพิกถอนสิทธิ์ · สร้าง/ปิดบัญชี · เปลี่ยนรหัสผ่าน · เข้าสู่ระบบล้มเหลวติดกัน |
-| ข้อมูลส่วนบุคคล | ดู · แก้ · ส่งออก · ลบ |
-| ค่าตั้งของระบบ | เปลี่ยนค่าที่กระทบทั้งระบบ |
-| การเข้าถึงข้อมูลจำนวนมาก | ส่งออกรายงาน · ดาวน์โหลดรายชื่อ |
-
-**ไม่เก็บ:** เปิดดูหน้าจอทั่วไป · ค้นหา · เรียงลำดับ · กดปุ่มที่ไม่เปลี่ยนอะไร
-audit log ที่เก็บทุกอย่าง มีค่าเท่ากับไม่มีเลย เพราะค้นไม่เจอ
-
-**ตั้งชื่อ action แบบเดียวทั้งระบบ:** `<entity>.<กริยาอดีต>` เช่น `order.cancelled` · `user.role_granted` ·
-`invoice.exported` · `patient_record.viewed`
-
----
-
-## 4 · เก็บ "เปลี่ยนอะไร" ยังไง
-
-| วิธี | ดี | เสีย |
-|---|---|---|
-| **เก็บเฉพาะฟิลด์ที่เปลี่ยน (from/to)** ✅ | เล็ก อ่านรู้เรื่องทันที | อยากเห็นภาพรวมต้องไล่ย้อน |
-| เก็บทั้งแถวก่อนและหลัง | ได้ภาพเต็ม | โตเร็วมาก และเสี่ยงเก็บข้อมูลอ่อนไหวเกินจำเป็น |
-| เก็บเฉพาะว่า "แก้แล้ว" | เล็กสุด | **ตอบคำถามไม่ได้** ไม่ควรใช้ |
-
-```jsonc
-"changes": {
-  "status":       { "from": "confirmed", "to": "cancelled" },
-  "total_amount": { "from": "1250.00",   "to": "0.00" }
-}
-```
-
-**ฟิลด์อ่อนไหวเก็บแค่ว่าเปลี่ยน ไม่เก็บค่า:**
-
-```jsonc
-"changes": { "password_hash": { "changed": true } }
-```
-
----
-
-## 5 · เขียนแล้วห้ามแก้
-
-- ตาราง audit ให้สิทธิ์แค่ **INSERT และ SELECT** · บัญชีที่แอปใช้ต้องไม่มีสิทธิ์ UPDATE หรือ DELETE
-- เขียนใน transaction เดียวกับการเปลี่ยนข้อมูลจริง **ถ้าเขียน audit ไม่สำเร็จ ธุรกรรมต้องล้มตาม**
-- ห้ามแก้ประวัติเพื่อ "จัดระเบียบ" ถ้าบันทึกผิด ให้เพิ่มรายการแก้ไข ไม่เขียนทับ
-- ระบบที่ต้องเข้มกว่านั้นให้ทำ hash ต่อกันเป็นสาย เพื่อพิสูจน์ว่าไม่มีใครแทรกหรือลบ
-
-**อายุการเก็บ** ตั้งตามกฎหมายหรือสัญญา เอกสารทางบัญชีในไทยมักต้องเก็บ 5 ปี
-เมื่อครบอายุให้ย้ายไปที่เก็บราคาถูก ไม่ลบทิ้งโดยไม่มีใครอนุมัติ
-
----
-
-## 6 · ใครดูได้ และห้ามเก็บอะไร
-
-| เรื่อง | กฎ |
-|---|---|
-| สิทธิ์อ่าน | เฉพาะบทบาทที่มีหน้าที่ตรวจสอบ และ**การอ่าน audit log ก็ต้องบันทึกลง audit ด้วย** |
-| การส่งออก | บันทึกทุกครั้งว่าใครส่งออกช่วงไหน |
-| **ห้ามเก็บ** | รหัสผ่าน · token · เลขบัตร · ข้อมูลสุขภาพ · เนื้อหาของข้อมูลส่วนบุคคล |
-| เก็บได้แทน | ชี้ว่า**ของชิ้นไหน**ถูกดูหรือถูกแก้ ไม่ใช่เนื้อหาข้างใน |
-
-> `patient_record.viewed` กับ `entity_id` ก็พอแล้ว **ห้ามคัดลอกผลตรวจลงไปใน audit log**
-> ไม่งั้น audit log จะกลายเป็นที่รวมข้อมูลอ่อนไหวที่สุดในระบบ โดยไม่มีใครตั้งใจ
-
----
-
-## 7 · แสดงให้คนอ่าน
-
-หน้าจอประวัติต้องกรองได้อย่างน้อย 4 อย่าง: **ช่วงเวลา · ผู้ทำ · ประเภทการกระทำ · ของชิ้นไหน**
-
-แสดงเป็นประโยคที่คนอ่านรู้เรื่อง ไม่ใช่ JSON ดิบ:
-
-```
-25 ก.ย. 2569 16:42  สมชาย (ฝ่ายขาย)  ยกเลิกคำสั่งซื้อ SO-2026-00042
-                    สถานะ: ยืนยันแล้ว → ยกเลิก · เหตุผล: ลูกค้าโทรแจ้งยกเลิก
-```
-
-แสดงเวลาตามเขตเวลาของผู้ดู แต่เก็บเป็น UTC (ดู `i18n-and-locale`)
-
----
-
-## 8 · Anti-patterns
-
-- ❌ **เก็บ audit ในไฟล์ log ทั่วไป** — ถูกลบตาม retention ภายในเดือนเดียว
-- ❌ **เก็บชื่อผู้ทำแทน id** — พอเขาเปลี่ยนนามสกุล ประวัติเก่าก็กลายเป็นคนละคน
-- ❌ **บันทึกเฉพาะที่สำเร็จ** — ครั้งที่ถูกปฏิเสธคือสิ่งที่ผู้ตรวจสอบตามหา
-- ❌ **บันทึกแค่ "แก้ไขข้อมูล"** โดยไม่บอกว่าจากอะไรเป็นอะไร
-- ❌ **แอปมีสิทธิ์ UPDATE ตาราง audit** — ร่องรอยที่แก้ได้ ไม่ใช่ร่องรอย
-- ❌ **เขียน audit นอก transaction** — ธุรกรรมสำเร็จแต่ไม่มีบันทึก
-- ❌ **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
-- ❌ **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
-- ❌ **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
-
----
-
-## 9 · ตัวย่อ
-
-- **audit trail** — ร่องรอยการใช้งาน บันทึกว่าใครทำอะไรกับข้อมูลชิ้นไหนเมื่อไหร่
-- **append only** — เขียนต่อท้ายได้อย่างเดียว แก้หรือลบของเดิมไม่ได้
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-- **UUIDv7** — รหัสสุ่มที่ขึ้นต้นด้วยเวลา จึงเรียงตามเวลาได้
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางและ index ของ audit | `database-design` |
-| correlation id ที่เชื่อมกลับไป log | `logging-standards` |
-| ใครเป็นใคร มีสิทธิ์อะไร | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิขอลบ | `pdpa-compliance` |
-| การแจ้งเตือนเมื่อมีพฤติกรรมผิดปกติ | `observability-basics` |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` |
-
-
----
-
-# skill: file-upload-and-storage
-
-Use when users upload files or the system stores and serves them (type checks, virus scan, links).
-
-# รับไฟล์อัปโหลดและการเก็บไฟล์
-
-> **กฎข้อเดียว:** ไฟล์ที่ผู้ใช้ส่งมาคือข้อมูลที่เชื่อไม่ได้
-> ชื่อไฟล์ นามสกุล ชนิดที่เบราว์เซอร์แจ้งมา และขนาดที่บอกไว้ — **ปลอมได้ทั้งหมด**
-
-## เมื่อไหร่ใช้ skill นี้
-
-- มีหน้าจอให้ผู้ใช้แนบไฟล์ รูป หรือเอกสาร
-- ระบบต้องเก็บไฟล์แล้วส่งกลับให้ดูหรือดาวน์โหลด
-- ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
-- มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` |
-| รูปแบบ endpoint และ error | `api-conventions` |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` |
-
----
-
-## 1 · ตรวจก่อนรับ
-
-| ตรวจอะไร | ทำยังไง |
-|---|---|
-| **ชนิดไฟล์** | อ่าน**เนื้อในไฟล์** (magic bytes) ไม่ใช่เชื่อนามสกุลหรือ `Content-Type` |
-| **ขนาด** | บังคับที่เซิร์ฟเวอร์ **และ**ที่ตัวรับคำขอด้านหน้า — ตรวจฝั่งเบราว์เซอร์เป็นแค่ความสะดวก |
-| จำนวนไฟล์ต่อครั้ง | ตั้งเพดาน |
-| ขนาดรวมต่อผู้ใช้ | ตั้งโควตา ไม่งั้นคนเดียวกินพื้นที่หมด |
-| ชนิดที่อนุญาต | **รายการที่อนุญาต ไม่ใช่รายการที่ห้าม** |
-
-```
-รายการที่อนุญาตทั่วไป: jpg · png · webp · pdf · xlsx · docx · csv
-ห้ามเสมอ: ไฟล์รันได้ (exe, sh, bat) · ไฟล์สคริปต์ของเซิร์ฟเวอร์ (php, aspx, jsp) · svg ที่ไม่ได้ทำความสะอาด
-```
-
-> 🚨 **SVG คือ HTML** — มันรันสคริปต์ได้ ถ้าจะรับต้องทำความสะอาดก่อน หรือแปลงเป็น PNG
->
-> 🚨 **ตรวจขนาดก่อนอ่านไฟล์เข้าหน่วยความจำ** — ไม่งั้นไฟล์ 5 GB ทำให้เซิร์ฟเวอร์ตาย
-> ก่อนที่โค้ดตรวจขนาดจะได้ทำงาน
-
-**สแกนไวรัส** สำหรับไฟล์ที่คนอื่นจะดาวน์โหลดต่อ — ระหว่างรอผลสแกนให้สถานะเป็น `pending`
-และยังไม่ให้ใครเข้าถึง
-
----
-
-## 2 · เก็บที่ไหน
-
-| ที่เก็บ | เหมาะกับ | หมายเหตุ |
-|---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | ค่าเริ่มต้นที่ควรใช้ | ขยายได้ · มีลิงก์หมดอายุในตัว |
-| ดิสก์ของเซิร์ฟเวอร์ | ระบบเล็ก เครื่องเดียว | **ต้องอยู่นอกโฟลเดอร์ที่เว็บเสิร์ฟ** และต้องสำรองข้อมูล |
-| ในฐานข้อมูล | ไฟล์เล็กมากและต้องอยู่ใน transaction เดียวกัน | โตเร็ว · สำรองข้อมูลช้าลงมาก |
-
-> ❌ **เก็บไฟล์ในโฟลเดอร์ของแอป** — deploy ทีไรหาย และถ้ามีหลาย instance ก็ไม่เห็นกัน
-> ❌ **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟตรง ๆ** — อัปโหลดไฟล์สคริปต์แล้วเรียกรันได้
-
-**ฐานข้อมูลเก็บแค่ metadata ส่วนตัวไฟล์เก็บที่อื่น** — ตาราง metadata ต้องมีคอลัมน์
-`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
-`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
-
----
-
-## 3 · ตั้งชื่อไฟล์ที่เก็บ
-
-**ห้ามใช้ชื่อไฟล์ที่ผู้ใช้ส่งมาเป็นชื่อจริงที่เก็บ**
-
-```
-❌ uploads/รายงาน (1).xlsx              เว้นวรรค · ภาษาไทย · วงเล็บ
-❌ uploads/../../etc/passwd             หลุดออกนอกโฟลเดอร์
-✅ 2026/09/25/01J9Z8K7X2M4.xlsx         สุ่ม · แยกโฟลเดอร์ตามวันที่
-```
-
-- ชื่อจริงที่เก็บเป็นค่าสุ่ม (UUIDv7 หรือ ULID) + นามสกุลที่**ตรวจแล้ว**
-- ชื่อเดิมของผู้ใช้เก็บไว้ในฐานข้อมูล แล้วส่งกลับตอนดาวน์โหลดผ่าน header
-- แยกโฟลเดอร์ตามวันที่ — โฟลเดอร์เดียวที่มีไฟล์เป็นล้านจะช้าและเปิดดูไม่ไหว
-- เก็บ checksum ไว้ด้วย — ตรวจไฟล์ซ้ำและตรวจว่าไฟล์ไม่เสีย
-
----
-
-## 4 · ส่งไฟล์กลับให้ผู้ใช้
-
-| ไฟล์ | วิธีส่ง |
-|---|---|
-| สาธารณะ (โลโก้ รูปสินค้า) | URL ตรงผ่าน CDN ได้ |
-| **ส่วนตัว** (เอกสาร ใบเสร็จ รูปผู้ใช้) | **ลิงก์ที่มีลายเซ็นและหมดอายุ** 5–15 นาที |
-
-> 🚨 **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ลิงก์ถูกส่งต่อ ถูกบันทึกใน log ของ proxy
-> และติดอยู่ใน `Referer` เสมอ ไฟล์ส่วนตัวต้อง**ตรวจสิทธิ์ทุกครั้ง**แล้วค่อยออกลิงก์ชั่วคราวให้
-
-- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ไม่ต้องผ่านแอป
-- ตอนส่งไฟล์ให้ดาวน์โหลด ต้องตั้ง `Content-Disposition` และ `Content-Type` ให้ถูก
-  และห้ามส่ง HTML ที่ผู้ใช้อัปโหลดกลับมาแบบให้เบราว์เซอร์เรนเดอร์
-- ถ้าทำได้ ให้เสิร์ฟไฟล์ของผู้ใช้จากคนละโดเมนกับแอป เพื่อกันสคริปต์ในไฟล์เข้าถึง cookie ของแอป
-
----
-
-## 5 · รูปภาพ
-
-- **ห้ามส่งรูปต้นฉบับจากกล้องลงหน้าจอ** — รูป 8 MB บนมือถือคือหน้าเว็บที่โหลดไม่ขึ้น
-- สร้างขนาดย่อไว้ล่วงหน้า 2–3 ขนาด (thumbnail · ขนาดกลาง · ขนาดเต็มที่ย่อแล้ว)
-- **ลบ EXIF ออก** — ในรูปมีพิกัดที่ถ่าย ผู้ใช้ไม่รู้ว่ากำลังเผยแพร่ออกไป
-- แปลงเป็น WebP ถ้าเบราว์เซอร์รองรับ
-- หมุนรูปตาม EXIF ก่อนลบ EXIF ทิ้ง ไม่งั้นรูปจากมือถือจะตะแคง
-- ถ้าไฟล์ใหญ่หรือมีหลายไฟล์ ให้ย่อรูปเป็นงานเบื้องหลัง (ดู `background-jobs`)
-
----
-
-## 6 · ลบและอายุการเก็บ
-
-| เรื่อง | กฎ |
-|---|---|
-| ลบข้อมูลต้นเรื่อง | ต้องมีงานคอยตามลบไฟล์กำพร้าที่เหลืออยู่ด้วย |
-| ลำดับการลบ | ลบ metadata ก่อน แล้วค่อยลบไฟล์ — ไฟล์กำพร้าไม่อันตราย แต่ metadata ที่ชี้ไปหาไฟล์ที่หายไปแล้วทำให้หน้าจอพัง |
-| ไฟล์ที่อัปโหลดแล้วไม่ถูกผูกกับอะไร | ลบทิ้งหลัง 24 ชั่วโมง |
-| อายุการเก็บ | กำหนดต่อประเภทไฟล์ · ไฟล์ที่มีข้อมูลบุคคลต้องมีวันหมดอายุ (ดู `pdpa-compliance`) |
-| สำรองข้อมูล | ไฟล์ต้องอยู่ในแผนสำรองเหมือนฐานข้อมูล **และต้องเคยทดสอบกู้คืนจริง** |
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **เชื่อนามสกุลไฟล์** — เปลี่ยนชื่อไฟล์เป็น `.jpg` ใครก็ทำได้
-- ❌ **ตรวจขนาดแค่ฝั่งเบราว์เซอร์** — ข้ามได้ใน 3 วินาที
-- ❌ **ใช้ชื่อไฟล์ของผู้ใช้เป็นเส้นทางจริง** — `../` พาไปไหนก็ได้
-- ❌ **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟ** — อัปโหลดสคริปต์แล้วเรียกรันได้
-- ❌ **"ลิงก์เดายาก" แทนการตรวจสิทธิ์**
-- ❌ **รับ SVG โดยไม่ทำความสะอาด** — สคริปต์ทำงานในเบราว์เซอร์คนอื่น
-- ❌ **ส่งรูปต้นฉบับ 8 MB ลงมือถือ**
-- ❌ **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
-- ❌ **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
-- ❌ **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
-
----
-
-## 8 · ตัวย่อ
-
-- **magic bytes** — ไบต์แรก ๆ ของไฟล์ที่บอกชนิดจริงของมัน
-- **object storage** — ที่เก็บไฟล์บนคลาวด์ เช่น Amazon S3, Azure Blob Storage
-- **signed URL** — ลิงก์ที่มีลายเซ็นและวันหมดอายุติดมาด้วย
-- **EXIF** — Exchangeable Image File Format (ข้อมูลแฝงในรูป เช่น รุ่นกล้องและพิกัด)
-- **CDN** — Content Delivery Network (เครือข่ายกระจายไฟล์ให้ใกล้ผู้ใช้)
-- **checksum** — ค่าตรวจสอบความถูกต้องของไฟล์ เช่น SHA-256
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตาราง metadata ของไฟล์ | `database-design` |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` |
-| ตรวจสิทธิ์ก่อนออกลิงก์ | `auth-implementation-patterns` |
-| ย่อรูปและสแกนไวรัสเป็นงานเบื้องหลัง | `background-jobs` |
-| นำเข้าข้อมูลจากไฟล์ที่อัปโหลด | `data-import-export` |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` |

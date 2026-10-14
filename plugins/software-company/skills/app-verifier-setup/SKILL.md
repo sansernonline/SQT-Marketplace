@@ -32,7 +32,7 @@ description: Use when a project has no scripted way for an agent to run the app 
    | ชนิด | ขับด้วย | อ่านผลจาก |
    |---|---|---|
    | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ WinAppDriver หรือ pywinauto | ภาพหน้าจอ · log |
+   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver ยังไม่ได้ตรวจว่า Microsoft ยังดูแลอยู่) | ภาพหน้าจอ · log |
    | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
    | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
    | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |

@@ -61,6 +61,8 @@ The security engineer should:
    | 🟡 Medium | Hard to exploit OR limited impact | XSS in admin tool |
    | 🟢 Low | Defense in depth | Missing security header |
 
+   Ship or not ship follows [`security-gate`](../security-gate/SKILL.md) step 4: a confirmed Critical or High **blocks shipping** until fixed or the user accepts the risk in writing.
+
 5. **For each finding, provide:**
    - Description (what's wrong)
    - Location (file:line OR component)
@@ -79,7 +81,7 @@ The security engineer should:
    - Executive summary
    - Health score per category
    - Critical findings (must fix)
-   - High findings (this sprint)
+   - High findings (must fix before shipping — `security-gate`)
    - Medium/Low findings (backlog)
    - Compliance gaps (if applicable)
    - Remediation roadmap (30/60/90 days)

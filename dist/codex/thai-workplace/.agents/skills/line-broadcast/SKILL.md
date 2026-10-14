@@ -51,7 +51,7 @@ If blocks pass about 1% of reach after 1 send, you are sending too often or to t
 3. Quota check — reach × sends against quota left; tell the user the numbers before scheduling.
 4. Write from the template: [references/broadcast-template.md](references/broadcast-template.md).
 5. Test send to staff (OA Manager → Test message).
-6. Schedule and write the log line.
+6. **Wait for the user's approval** of the final message, segment and quota numbers; schedule or send only after they say yes, then write the log line.
 7. Next working day: opens, clicks, blocks into the log.
 
 ## Worked example

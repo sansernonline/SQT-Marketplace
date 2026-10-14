@@ -14,15 +14,19 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 - เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
 - คิวตันหรือมีงานหายแล้วไม่มีใครรู้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` |
+| งาน | skill | |
+|---|---|---|
+| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
+| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
+| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
+| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` | แทน |
+| ตารางงานและ index | `database-design` | คู่ |
+| log ของ worker และ correlation id | `logging-standards` | คู่ |
+| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -75,6 +79,8 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 ---
 
 ## 4 · retry และงานที่ตายแล้ว
+
+ตัวเลขนี้สำหรับงานในคิว · ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) (3 ครั้ง 1/2/4 วินาที)
 
 ```
 ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
@@ -158,29 +164,6 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 - ❌ **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
 - ❌ **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
 
----
-
-## 9 · ตัวย่อ
-
-- **queue** — คิว ที่พักงานที่รอให้ worker หยิบไปทำ
-- **worker** — process ที่หยิบงานจากคิวไปทำ
-- **dead letter queue (DLQ)** — ที่เก็บงานที่ล้มจนหมดสิทธิ์ลองใหม่
-- **idempotent** — รันซ้ำแล้วผลลัพธ์เหมือนเดิม ไม่เกิดผลซ้ำ
-- **advisory lock** — ล็อกที่ฐานข้อมูลให้ใช้ โดยไม่ผูกกับตารางใดตารางหนึ่ง
-- **cron** — รูปแบบการกำหนดตารางเวลาของงานอัตโนมัติ
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| retry · timeout · การตัดวงจร | `error-handling-patterns` |
-| ตารางงานและ index | `database-design` |
-| ตัวชี้วัดและการแจ้งเตือนของคิว | `observability-basics` |
-| log ของ worker และ correlation id | `logging-standards` |
-| แจ้งผู้ใช้เมื่องานเสร็จ | `notifications` |
-| นำเข้าไฟล์เป็นงานเบื้องหลัง | `data-import-export` |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` |
-
 
 ---
 
@@ -200,15 +183,17 @@ Use when a system must show who did what and when (approvals, money, permissions
 - มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
 - ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` |
+| งาน | skill | |
+|---|---|---|
+| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
+| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
+| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
+| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
+| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
+| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -345,26 +330,6 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 - ❌ **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
 - ❌ **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
 - ❌ **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
-
----
-
-## 9 · ตัวย่อ
-
-- **audit trail** — ร่องรอยการใช้งาน บันทึกว่าใครทำอะไรกับข้อมูลชิ้นไหนเมื่อไหร่
-- **append only** — เขียนต่อท้ายได้อย่างเดียว แก้หรือลบของเดิมไม่ได้
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-- **UUIDv7** — รหัสสุ่มที่ขึ้นต้นด้วยเวลา จึงเรียงตามเวลาได้
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางและ index ของ audit | `database-design` |
-| correlation id ที่เชื่อมกลับไป log | `logging-standards` |
-| ใครเป็นใคร มีสิทธิ์อะไร | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิขอลบ | `pdpa-compliance` |
-| การแจ้งเตือนเมื่อมีพฤติกรรมผิดปกติ | `observability-basics` |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` |
 
 
 ---
@@ -602,15 +567,23 @@ Use when setting up or fixing a build and deploy pipeline or deciding how a proj
 - deploy แล้วพังบ่อย หรือ rollback ไม่ได้
 - มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` |
-| สัดส่วนและขอบเขตของ test | `testing-standards` |
-| เขียน migration | `database-design` |
-| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` |
-| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` |
+| งาน | skill | |
+|---|---|---|
+| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
+| สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
+| เขียน migration | `database-design` | แทน |
+| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |
+| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` | แทน |
+| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` | คู่ |
+| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` | คู่ |
+| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` | คู่ |
+| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
 
 ---
 
@@ -804,34 +777,6 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 - ❌ **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
 - ❌ **feature flag ที่ไม่มีวันลบ**
 - ❌ **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
-
----
-
-## 12 · ตัวย่อ
-
-- **CI** — Continuous Integration (รวมโค้ดเข้าด้วยกันบ่อย ๆ พร้อมตรวจอัตโนมัติทุกครั้ง)
-- **CD** — Continuous Delivery/Deployment (พาโค้ดที่ผ่านการตรวจไปถึงผู้ใช้อัตโนมัติ)
-- **SemVer** — Semantic Versioning (มาตรฐานเลขเวอร์ชัน MAJOR.MINOR.PATCH)
-- **artifact** — ไฟล์ผลลัพธ์จากการ build ที่นำไป deploy ได้จริง
-- **canary** — การปล่อยของใหม่ให้ผู้ใช้ส่วนน้อยก่อนเพื่อดูอาการ
-- **UAT** — User Acceptance Testing (การทดสอบโดยผู้ใช้ก่อนรับมอบ)
-- **AAB** — Android App Bundle (ไฟล์ที่อัปโหลดขึ้น Google Play แล้ว Play แตกเป็น APK ตามเครื่อง)
-- **versionCode** — เลขจำนวนเต็มที่ Android ใช้ตัดสินว่าเวอร์ชันไหนใหม่กว่า
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret และ config ต่อ environment | `config-and-secrets` |
-| migration ที่ deploy ได้โดยไม่ปิดระบบ | `database-design` |
-| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` |
-| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` |
-| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` |
-| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` |
-
-**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
-
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
 
 
 ## reference: deployment-plan-template.md

@@ -275,16 +275,15 @@ flowchart TB
 ## เรนเดอร์
 
 ```bash
-npm i -g @mermaid-js/mermaid-cli
-mmdc -i diagram.mmd -o diagram.png -b white -s 2      # -s 2 = ความละเอียด 2 เท่า
-mmdc -i diagram.mmd -o diagram.svg -b white           # svg สำหรับฝังในเอกสาร
+npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s 2      # -s 2 = ความละเอียด 2 เท่า
+npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.svg -b white           # svg สำหรับฝังในเอกสาร
 ```
 
 บนเครื่องที่ Chrome ของ puppeteer หาไม่เจอ (เซิร์ฟเวอร์ · คอนเทนเนอร์) ให้ชี้ที่อยู่เอง:
 
 ```bash
 echo '{"executablePath":"/path/to/chrome","args":["--no-sandbox"]}' > pptr.json
-mmdc -i diagram.mmd -o diagram.png -p pptr.json
+npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -p pptr.json
 ```
 
 **แล้วเปิดไฟล์ภาพดูด้วยตา** — ขั้นนี้คือหัวใจของเรื่องทั้งหมด

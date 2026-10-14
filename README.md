@@ -4,7 +4,7 @@ Marketplace สำหรับ Claude Code · **12 plugins** — ทีมพั
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
-**รวม 99 agents · 249 skills · 72 commands** — ตั้งแต่บริษัทซอฟต์แวร์ครบวงจรไปจนถึงเทรดหุ้น งานไทย ขายของออนไลน์ บ้าน อาชีพ สุขภาพ และงานครีเอทีฟ
+**รวม 99 agents · 250 skills · 72 commands** — ตั้งแต่บริษัทซอฟต์แวร์ครบวงจรไปจนถึงเทรดหุ้น งานไทย ขายของออนไลน์ บ้าน อาชีพ สุขภาพ และงานครีเอทีฟ
 
 ---
 
@@ -146,8 +146,8 @@ SQT-Marketplace/
 │   └── software-company/
 │       ├── .claude-plugin/plugin.json
 │       ├── agents/     (41)
-│       ├── skills/     (110 skill + 29 คำสั่ง)
-│       └── hooks/      ← hook ของ SuperUser (log · inbox)
+│       ├── skills/     (111 skill + 29 คำสั่ง)
+│       └── hooks/      ← hook ของ SuperUser (log · inbox) · ทุก plugin มี hooks/ ชุดเดียวกันนี้
 ├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
 ├── prompt/     ← ชุด prompt แยกโฟลเดอร์ตาม plugin — ข้อยกเว้นของ repo นี้ต่อกฎโครงรากโปรเจกต์

@@ -3,7 +3,7 @@
     python build_deck.py slides.html -o docs/Project_Presentation-v1.0.html --title "ชื่อเด็ค"
     python build_deck.py slides.html -o out.html --brand E10613,FF2536 --data data.json --css extra.css --js extra.js
 
-- รูปทุกรูปที่ slides อ้างด้วย path ในเครื่อง (src="...") ถูกฝังเป็น data URI · รูปกว้างเกิน --max-width ถูกย่อเป็น JPEG
+- รูปที่ slides อ้างด้วย path ในเครื่อง (src="...") ถูกฝังเป็น data URI เฉพาะไฟล์รูปที่อยู่ใต้โฟลเดอร์ slides หรือโฟลเดอร์ที่รันคำสั่ง · ไฟล์อื่นถูกข้ามและรายงานว่าหาไม่เจอ · รูปกว้างเกิน --max-width ถูกย่อเป็น JPEG
 - --brand สีหลัก,สีสว่าง → แทน --accent/--accent2 และคำนวณ --accent-deep/--accent-tint ให้
 - --data ไฟล์ JSON ใส่ไว้ที่ตัวแปร DATA ในหน้า สำหรับ JS เพิ่มเติมที่อ่านข้อมูล
 ต้องมี Pillow ถ้าจะย่อรูป
@@ -52,8 +52,10 @@ def embed_images(html: str, base: Path, max_width: int) -> tuple[str, list[str]]
         if re.match(r"(data:|https?:|//)", src):
             return m.group(0)
         path = (base / src).resolve()
-        if not path.exists():
-            missing.append(src)
+        mime = mimetypes.guess_type(path.name)[0] or ""
+        inside = any(path.is_relative_to(root) for root in (base.resolve(), Path.cwd().resolve()))
+        if not path.exists() or not mime.startswith("image/") or not inside:
+            missing.append(src)                          # ฝังเฉพาะรูป ใต้โฟลเดอร์ slides หรือโฟลเดอร์โปรเจกต์
             return m.group(0)
         return f'{m.group(1)}{data_uri(path, max_width)}{m.group(3)}'
 

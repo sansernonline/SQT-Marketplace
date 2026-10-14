@@ -13,6 +13,7 @@ Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refun
 | ใช้เมื่อ | อ่าน |
 |---|---|
 | integrating with payment gateways (Stripe, Adyen, Omise, 2C2P, PromptPay), implementing checkout flows, handling 3D Secure / SCA, managing payment retries, or building robust webhook processing | [`references/payment-gateway-integration.md`](references/payment-gateway-integration.md) |
+| สร้าง payload ของ PromptPay QR (EMVCo) ให้หน้าชำระเงิน | `thai-workplace:promptpay-qr` |
 | implementing customer identification (KYC), anti-money laundering (AML) controls, sanctions screening, PEP checks, transaction monitoring, or suspicious activity reporting. Covers risk-based approach, vendor integration, and ongoing monitoring | [`references/kyc-aml-patterns.md`](references/kyc-aml-patterns.md) |
 | handling card data, reducing PCI scope, selecting SAQ type, designing CDE (Cardholder Data Environment), preparing for PCI assessment, or implementing PCI-DSS v4 controls. Provides concrete guidance on the 12 requirements with implementation patterns | [`references/pci-dss-compliance.md`](references/pci-dss-compliance.md) |
 
@@ -24,6 +25,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 |---|---|---|
 | building financial technology applications — banking integrations, payment systems, lending platforms, trading systems, or any product handling money. Specializes in financial domain logic, regulatory awareness, and high-accuracy requirements | [`references/agent-fintech-engineer.md`](references/agent-fintech-engineer.md) | `fintech-engineer` |
 | integrating payment gateways (Stripe, Adyen, Omise, 2C2P, PromptPay), handling card payments, implementing webhooks, managing refunds/chargebacks, or designing payment flows. Specializes in PCI scope reduction and reliable payment processing | [`references/agent-payment-integration.md`](references/agent-payment-integration.md) | `fintech-engineer` |
+| financial regulation work — regulation map by region, applicability matrix, control mapping, audit readiness report, regulatory review and incident notification workflows | [`references/agent-fintech-compliance-officer.md`](references/agent-fintech-compliance-officer.md) | `fintech-compliance-officer` |
+| quantitative finance — credit scoring, VaR, fraud anomaly models, backtesting, model documentation card and backtest report | [`references/agent-quant-analyst.md`](references/agent-quant-analyst.md) | `quant-analyst` |
 
 ## agent ของสายนี้
 
@@ -32,6 +35,181 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## ที่มา
 
 ย้ายมาจาก plugin `software-company-fintech` (เดิมชื่อ payment-gateway-integration → `references/payment-gateway-integration.md` · kyc-aml-patterns → `references/kyc-aml-patterns.md` · pci-dss-compliance → `references/pci-dss-compliance.md` ไม่ใช่ skill แยกแล้ว) และรวมเข้า `software-company` ใน v2.0.0 เนื้อหาเดิมยังอยู่ครบใน `references/`
+
+
+## reference: agent-fintech-compliance-officer.md
+
+# Fintech Compliance Officer — regulatory map, outputs, workflows
+
+คู่มือบทบาทของ agent `fintech-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
+
+**สารบัญ:**
+
+- [Regulatory Framework Map](#regulatory-framework-map)
+- [Standard Outputs](#standard-outputs)
+- [Common Compliance Workflows](#common-compliance-workflows)
+
+## Regulatory Framework Map
+
+### 🌏 By Region
+
+**Thailand:**
+- 🏦 **BoT (ธปท.)** — banks, payment systems, e-money
+- 💼 **SEC** — securities, digital assets
+- 🛡️ **AMLO** — anti-money laundering, KYC requirements
+- 📋 **PDPA** — personal data protection
+- 💳 **Card scheme rules in Thailand** — (ยังไม่ได้ตรวจ ว่ามีกรอบเฉพาะชื่อนี้) ตรวจกับธนาคารแห่งประเทศไทยและ card scheme ก่อนอ้าง
+
+**Singapore:**
+- 🏦 **MAS** — banking, payments (PSA), capital markets
+- 📋 **PDPA SG** — data protection
+- 🛡️ **AMLA, TSOFA** — AML/CTF
+
+**EU:**
+- 🏦 **EBA, ECB** — banking
+- 💳 **PSD2** — payment services, Strong Customer Authentication
+- 💰 **MiCA** — crypto-assets
+- 📋 **GDPR** — data protection
+- 🛡️ **AMLD6** — AML
+
+**USA:**
+- 🏦 **OCC, Fed, FDIC, CFPB** — banking
+- 💳 **State money transmitter** licenses
+- 📋 **CCPA, state privacy laws**
+- 🛡️ **BSA/FinCEN** — AML
+- 🛍️ **PCI-DSS** — card data (industry-mandated)
+
+### 🛡️ By Domain
+
+**Payments (PCI-DSS):**
+| Level | Annual transactions | Validation |
+|-------|--------------------:|------------|
+| 1 | > 6M | On-site assessment by QSA |
+| 2 | 1-6M | Self-assessment + scans |
+| 3 | 20k-1M | Self-assessment + scans |
+| 4 | < 20k | Self-assessment |
+
+**SAQ types:** see `pci-dss-compliance.md` § SAQ Selection (aim for SAQ A)
+
+**AML/KYC:**
+- Customer identification (CIP)
+- Beneficial ownership
+- Sanctions screening (OFAC, UN, EU)
+- Politically Exposed Persons (PEP)
+- Transaction monitoring
+- Suspicious Activity Reports (SAR)
+
+## Standard Outputs
+
+### Regulatory Applicability Matrix
+
+```markdown
+## Applicable Regulations
+
+| Regulation | Applies? | Reason | Owner | Status |
+|-----------|:--------:|--------|:------|:------:|
+| PCI-DSS v4 | ✅ | We process card data | @sec-lead | 🟡 In progress |
+| PDPA Thailand | ✅ | TH customers | @dpo | 🟢 Compliant |
+| AML (Thailand) | ✅ | Money transmission | @compliance | 🟡 In progress |
+| PSD2 | ❌ | No EU operations yet | — | ⚪ N/A |
+| GDPR | 🟡 Indirect | EU users via web | @dpo | 🟢 Compliant |
+```
+
+### Control Mapping
+
+```markdown
+## Control: Encrypted Data at Rest
+
+**Regulation:** PCI-DSS v4 Req 3.5
+**Scope:** Cardholder data (PAN if stored)
+
+**Implementation:**
+- AES-256 encryption for DB
+- KMS-managed keys
+- Annual key rotation
+
+**Evidence:**
+- KMS configuration screenshot
+- DB encryption verification command output
+- Key rotation log
+
+**Owner:** @devops-lead
+**Last verified:** YYYY-MM-DD
+**Next review:** YYYY-MM-DD
+```
+
+### Audit Readiness Report
+
+```markdown
+# 📋 Audit Readiness: PCI-DSS v4
+
+| | |
+|--|--|
+| **Audit type** | RoC (Report on Compliance) |
+| **QSA** | (auditor name) |
+| **Scope** | Cardholder Data Environment (CDE) |
+| **Target date** | YYYY-MM-DD |
+| **Status** | 🟡 In Progress |
+
+## Readiness by Requirement
+
+| Req | Description | Status | Evidence | Gap |
+|:---:|-------------|:------:|----------|-----|
+| 1 | Network security | 🟢 | Firewall config, network diagram | — |
+| 2 | Secure config | 🟢 | Hardening checklist | — |
+| 3 | Protect stored CHD | 🟡 | Encryption proof | Need key rotation log |
+| 4 | Transmit encryption | 🟢 | TLS config | — |
+| 5 | Malware protection | 🟡 | EDR deployment | Coverage 95%, need 100% |
+| 6 | Secure development | 🟢 | SAST in CI, code review | — |
+| 7 | Restrict access | 🟢 | RBAC matrix | — |
+| 8 | Identify users | 🟢 | MFA enforced | — |
+| 9 | Physical access | 🟢 | Cloud provider attestation | — |
+| 10 | Logging | 🟢 | SIEM, retention 1yr | — |
+| 11 | Test security | 🟡 | Last pen test 7mo ago | Schedule new pen test |
+| 12 | Policy | 🟢 | InfoSec policy current | — |
+
+## Action Items
+
+| ID | Action | Owner | Due | Priority |
+|:--:|--------|:------|:---:|:--------:|
+| 1 | Document key rotation log | @dba | MM/DD | 🔴 H |
+| 2 | Roll out EDR to remaining 5% | @sec | MM/DD | 🟡 M |
+| 3 | Schedule pen test | @sec | MM/DD | 🟡 M |
+```
+
+## Common Compliance Workflows
+
+### Workflow 1: New product → Regulatory review
+```
+1. PM defines product (PRD)
+   ↓
+2. Compliance reviews against framework map
+   ↓
+3. Identify applicable regs
+   ↓
+4. Design required controls
+   ↓
+5. Engineering implements
+   ↓
+6. Compliance verifies
+   ↓
+7. Document for audit trail
+```
+
+### Workflow 2: Incident → Regulatory notification
+```
+1. Incident detected
+   ↓
+2. Assess: is data breach / personal data / financial loss?
+   ↓
+3. Within 24h: Compliance notified
+   ↓
+4. Within 72h: Regulator notified (PDPA → PDPC, see `pdpa-compliance` · GDPR)
+   ↓
+5. Customer notification (when required)
+   ↓
+6. Post-incident review
+```
 
 
 ## reference: agent-fintech-engineer.md
@@ -489,6 +667,201 @@ Daily job:
 - [PromptPay Standard](https://www.bot.or.th/)
 
 
+## reference: agent-quant-analyst.md
+
+# Quant Analyst — models, backtesting, model card, backtest report
+
+คู่มือบทบาทของ agent `quant-analyst` — ย้ายมาจากตัว agent (2026-10-14) · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+
+**สารบัญ:**
+
+- [Common Models](#common-models)
+- [Backtesting Discipline](#backtesting-discipline)
+- [Standard Outputs](#standard-outputs)
+
+## Common Models
+
+### Credit Scoring
+
+```python
+# Logistic regression baseline (interpretable, regulatory-friendly)
+from sklearn.linear_model import LogisticRegression
+import shap
+
+model = LogisticRegression(class_weight='balanced')
+model.fit(X_train, y_train)
+
+# Explainability with SHAP
+explainer = shap.LinearExplainer(model, X_train)
+shap_values = explainer(X_test)
+
+# For each decision, log:
+# - Final probability
+# - Top 3 contributing features
+# - Model version
+# Required for fair-lending audit
+```
+
+### Value at Risk (VaR)
+
+```python
+import numpy as np
+
+def historical_var(returns: np.ndarray, confidence: float = 0.95) -> float:
+    """1-day VaR at confidence level."""
+    return -np.percentile(returns, (1 - confidence) * 100)
+
+def parametric_var(mean: float, std: float, confidence: float = 0.95) -> float:
+    """Assumes normal distribution — VALIDATE this assumption."""
+    from scipy.stats import norm
+    return -(mean + norm.ppf(1 - confidence) * std)
+
+# Always compute BOTH and compare — divergence signals fat tails
+```
+
+### Fraud Detection (Anomaly)
+
+```python
+# Isolation Forest for unsupervised
+from sklearn.ensemble import IsolationForest
+
+model = IsolationForest(
+    contamination=0.001,  # 0.1% fraud rate assumption
+    random_state=42       # reproducibility!
+)
+model.fit(X_train)
+
+# Score new transactions
+scores = model.score_samples(X_new)
+# Lower score = more anomalous
+```
+
+## Backtesting Discipline
+
+```python
+# ❌ Bad: look-ahead bias
+features = compute_features(all_data)  # uses future data!
+model.fit(features[:train_end], target[:train_end])
+
+# ✅ Good: walk-forward
+for date in test_dates:
+    # Only data available at this date
+    historical = data[data.date < date]
+    features = compute_features(historical)
+    model.fit(features, target[features.index])
+    prediction = model.predict_one(today_features)
+    log(date, prediction, actual=target.loc[date])
+```
+
+## Standard Outputs
+
+### Model Documentation Card
+
+```markdown
+# 📊 Model: <Name>
+
+| | |
+|--|--|
+| **Version** | 2.1 |
+| **Purpose** | Credit default prediction |
+| **Type** | Logistic regression (binary classification) |
+| **Owner** | @quant-team |
+| **Status** | 🟢 Production |
+
+## 🎯 Business Purpose
+
+Predict probability of loan default within 12 months.
+
+## 📊 Performance
+
+| Metric | Train | Test | Live |
+|--------|------:|-----:|-----:|
+| AUC | 0.78 | 0.74 | 0.72 |
+| Gini | 0.56 | 0.48 | 0.44 |
+| KS | 0.42 | 0.36 | 0.33 |
+
+## 📈 Features
+
+| Feature | Importance | Source | Refresh |
+|---------|:----------:|--------|---------|
+| credit_history_length | 0.18 | Bureau | Monthly |
+| debt_to_income | 0.15 | Application | Real-time |
+| ... | ... | ... | ... |
+
+## ⚠️ Assumptions & Limitations
+
+- Trained on 2020-2024 (includes COVID period)
+- Population: Thai retail borrowers, age 20-60
+- Income < 100k THB/month
+- ⚠️ NOT validated for new-to-credit segment
+- ⚠️ Performance degrades in interest rate > 5%
+
+## 🔍 Validation
+
+- Out-of-time backtest: 6 months
+- Backtest AUC: 0.74 (vs train 0.78 — acceptable degradation)
+- Fair lending test: disparate impact ratio 0.85 (acceptable)
+- Stress test: stable under 3x default rate scenario
+
+## 🚨 Monitoring
+
+- Drift alerts: PSI > 0.25 on any feature
+- Performance alerts: AUC drop > 5pp
+- Volume alerts: > 50% deviation from baseline
+
+## 📝 Change Log
+
+| Version | Date | Change |
+|---------|------|--------|
+| 2.1 | 2025-Q3 | Added income_volatility feature |
+| 2.0 | 2025-Q1 | Recalibrated post-COVID |
+| 1.0 | 2023-Q4 | Initial production |
+```
+
+### Backtest Report Template
+
+```markdown
+# 📊 Backtest: <Strategy/Model Name>
+
+## Configuration
+- **Period:** YYYY-MM-DD to YYYY-MM-DD
+- **Universe:** ...
+- **Initial capital:** $XXX
+- **Benchmark:** ...
+
+## Results
+
+| Metric | Strategy | Benchmark |
+|--------|---------:|----------:|
+| Total return | XX% | XX% |
+| Annualized return | XX% | XX% |
+| Sharpe ratio | X.XX | X.XX |
+| Max drawdown | XX% | XX% |
+| Win rate | XX% | — |
+
+## ⚠️ Caveats
+
+- Past performance ≠ future
+- Transaction costs included: ✅/❌
+- Slippage: ✅/❌
+- Survivorship bias: ✅/❌
+- Look-ahead bias: ✅/❌
+- Tax treatment: gross/net
+
+## 📊 Equity Curve
+
+[Chart placeholder]
+
+## Stress Scenarios
+
+| Scenario | Strategy P&L | Benchmark P&L |
+|----------|-------------:|--------------:|
+| 2008 GFC | XX% | XX% |
+| 2020 COVID | XX% | XX% |
+| 2022 Rate hike | XX% | XX% |
+```
+
+
 ## reference: kyc-aml-patterns.md
 
 > เดิมชื่อ kyc-aml-patterns (ไม่ใช่ skill แยกแล้ว เนื้อหาอยู่ที่ไฟล์นี้) ใน plugin `software-company-fintech` — รวมเข้า `fintech-payments` ใน v2.0.0
@@ -719,7 +1092,7 @@ Tier 3: ML models
 4. Compliance officer reviews
    ↓
 5. If reportable: file SAR within regulatory deadline
-   - Thailand (AMLO): within 7 days of decision
+   - Thailand (AMLO): within 7 days of decision `(รอยืนยัน — no source; check amlo.go.th before relying on it)`
    - US (FinCEN): within 30 days of detection
    ↓
 6. Continue customer relationship per legal advice
@@ -826,6 +1199,8 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 ## Gateway Selection (Detailed)
 
 ### Comparison Matrix
+
+Settlement times and coverage change often and were not re-checked on 2026-10-14 `(รอยืนยัน)` — confirm on each vendor's current pricing page before quoting them. Omise may now trade under another brand name `(รอยืนยัน)`.
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|

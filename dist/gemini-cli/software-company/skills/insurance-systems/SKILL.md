@@ -27,6 +27,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 | building claims workflows — FNOL (First Notice of Loss), triage, fraud detection, settlement, claim reserves, integration with adjusters and repair networks | [`references/agent-claims-processing-specialist.md`](references/agent-claims-processing-specialist.md) | `insurance-engineer` |
 | building actuarial models for insurance — loss modeling, pricing, reserves analysis, capital modeling, IBNR, regulatory reporting. Combines statistics + insurance domain | [`references/agent-actuarial-engineer.md`](references/agent-actuarial-engineer.md) | `insurance-analyst` |
 | building underwriting systems — risk assessment, rating models, eligibility rules, data enrichment from external sources, automated decisioning, manual review queues | [`references/agent-underwriting-analyst.md`](references/agent-underwriting-analyst.md) | `insurance-analyst` |
+| insurance regulatory compliance — US state filings, Solvency II, Thailand OIC, market conduct, insurance privacy, solvency and regulatory reporting | [`references/agent-insurance-compliance-officer.md`](references/agent-insurance-compliance-officer.md) | `insurance-compliance-officer` |
 
 ## agent ของสายนี้
 

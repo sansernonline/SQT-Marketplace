@@ -6,6 +6,8 @@ Usage:
   python triage.py <file>              # identity + summary
   python triage.py <file> --strings    # identity + ASCII/UTF-16 strings (min 6 chars)
   python triage.py <file> --strings --limit 200
+  python triage.py <file> --strings --pattern 'autoconfig|oauth'   # regex filter on strings
+  python triage.py <file> --strings --min-len 8                  # minimum string length (default 6)
 """
 
 import argparse

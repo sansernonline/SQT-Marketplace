@@ -10,6 +10,7 @@ Markdown คือต้นฉบับ แก้ที่ .md แล้วร�
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import subprocess
 import sys
@@ -202,15 +203,20 @@ def build(md_path: Path, out: Path) -> Path:
     return out
 
 
+WD_EXPORT_FORMAT_PDF = 17   # ค่า wdExportFormatPDF ของ Word
+
+
 # -- PDF สำหรับตรวจด้วยตา ----------------------------------------------------------------------------
 def to_pdf(docx: Path) -> Path:
     """Word บน Windows (อัปเดตสารบัญให้ด้วย) ถ้าไม่มี → LibreOffice"""
     pdf = docx.with_suffix(".pdf")
-    ps = (f"$w=New-Object -ComObject Word.Application;$w.Visible=$false;"
-          f"$d=$w.Documents.Open('{docx.resolve()}');$d.TablesOfContents | % {{$_.Update()}};$d.Save();"
-          f"$d.ExportAsFixedFormat('{pdf.resolve()}',17);$d.Close();$w.Quit()")
+    # path ส่งผ่าน environment variable ไม่ต่อเข้า string คำสั่ง → ชื่อไฟล์ที่มี ' ฉีดคำสั่งไม่ได้
+    ps = ("$w=New-Object -ComObject Word.Application;$w.Visible=$false;"
+          "$d=$w.Documents.Open($env:MD2DOCX_IN);$d.TablesOfContents | % {$_.Update()};$d.Save();"
+          f"$d.ExportAsFixedFormat($env:MD2DOCX_OUT,{WD_EXPORT_FORMAT_PDF});$d.Close();$w.Quit()")
+    env = {**os.environ, "MD2DOCX_IN": str(docx.resolve()), "MD2DOCX_OUT": str(pdf.resolve())}
     try:
-        subprocess.run(["powershell", "-NoProfile", "-Command", ps], check=True, capture_output=True, timeout=300)
+        subprocess.run(["powershell", "-NoProfile", "-Command", ps], env=env, check=True, capture_output=True, timeout=300)
     except (OSError, subprocess.SubprocessError):
         subprocess.run(["soffice", "--headless", "--convert-to", "pdf", "--outdir", str(docx.parent), str(docx)],
                        check=True, capture_output=True, timeout=300)

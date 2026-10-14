@@ -27,7 +27,7 @@ Rule of thumb: payroll date, tax and SSO deadlines, and transfers follow the **b
 
 Full 2569 and 2570 tables with weekdays and sources: [references/holidays-2569-2570.md](references/holidays-2569-2570.md).
 
-Headline for 2569 (2026): 2 Jan special day · Songkran 13–15 Apr · วิสาขบูชา substitution 1 Jun · 16 Oct special government holiday **Bangkok only** (IMF–World Bank meetings) · พ่อแห่งชาติ substitution 7 Dec.
+Headline for 2569 (2026): 2 Jan special day · Songkran 13–15 Apr · วิสาขบูชา substitution 1 Jun · 16 Oct special holiday **Bangkok only** for government and banks (IMF–World Bank meetings) · พ่อแห่งชาติ substitution 7 Dec.
 
 ## 4. Business flags
 

@@ -20,7 +20,7 @@ General information to help organise, not medical advice — dose questions go t
 
 | On the label | Meaning to record | Column |
 |---|---|---|
-| ก่อนอาหาร | Before meal — usually 15–30 min before; copy the label's exact wording if it gives minutes | Before breakfast / lunch / dinner |
+| ก่อนอาหาร | Before meal — copy the minutes if the label gives them; if not, write `[ถามเภสัชกร]` next to the time | Before breakfast / lunch / dinner |
 | หลังอาหาร / หลังอาหารทันที | After meal / immediately after meal | After breakfast / lunch / dinner |
 | ก่อนนอน | At bedtime | Bedtime |
 | ทุก 6 ชั่วโมง / ทุก 8 ชั่วโมง | Every N hours | Exact clock times agreed with the pharmacist |

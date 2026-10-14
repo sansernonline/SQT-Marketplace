@@ -42,11 +42,11 @@ Stop and seek care (1669 if severe) for: chest pain or pressure, fainting, sever
 | 5 | 25 min × 5 | 2 × 10, 2 days | 125 |
 | 6 | 30 min × 5 | 2 × 12, 2 days | **150 — guidance reached** |
 | 7–8 | 30 min × 5, add 2 × 1-min faster intervals | 3 × 10, 2–3 days | 150+ |
-| 9–12 | 40 min × 5 or mix in vigorous days | progress: harder variation | 200–300 |
+| 9–12 | 35–45 min × 5 or mix in vigorous days | progress: harder variation | 165–220 (+10–20% a week) |
 
 Strength set (no equipment): wall or knee push-up · chair squat (sit-to-stand) · glute bridge · standing calf raise · plank on knees (10–30 s) · bird-dog.
 
-Progression rule: increase total weekly time by about 10–20% at most; repeat a week if anything still hurts the next day; every 4th week hold steady.
+Progression rule: from a low base (under 150 min a week) add about 25 min a week at most, as in weeks 1–6; from 150 min up, increase total weekly time by about 10–20% at most; repeat a week if anything still hurts the next day; every 4th week hold steady.
 
 ## Office worker mobility (every 45–60 min of sitting, 2–3 min)
 

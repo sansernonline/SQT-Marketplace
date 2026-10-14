@@ -697,7 +697,7 @@
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
 **ไม่หยุดถาม:** งานที่ย้อนกลับไม่ได้ → เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ผู้ใช้อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) · ค้นเองใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน
-**ตอนจบ:** ทุกข้ออ้างติดป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ตรวจ` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ · ของใหม่ที่ทีมควรรู้จดลง `.claude/superuser/IMPROVEMENTS.md`
+**ตอนจบ:** ทุกข้ออ้างติดป้าย `ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ` · ข้อเสนอปรับปรุงไม่เกิน 3 ข้อ · ตารางสถานะ · ของใหม่ที่ทีมควรรู้จดลง `.claude/superuser/IMPROVEMENTS.md`
 **playbook จาก pstack:** `investigation` ตอบได้ทั้งทำงานอย่างไร · ทำไม · สอนแบบต่อชั้น · `performance` 1 commit ต่อการแก้ 1 ครั้งที่ได้ผล พร้อมตัวเลขก่อน/หลัง
 
 ---
@@ -823,7 +823,7 @@
 ---
 
 ### 83. fintech-payments
-**ใช้กับ:** fintech-compliance-officer, fintech-engineer, quant-analyst, revops-analyst
+**ใช้กับ:** fintech-compliance-officer, fintech-engineer, quant-analyst, revops-analyst, security-engineer
 **Description:** Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refunds, KYC, PCI-DSS).
 
 ---
@@ -835,7 +835,7 @@
 ---
 
 ### 85. healthcare-systems
-**ใช้กับ:** clinical-data-analyst, healthcare-engineer, hipaa-officer
+**ใช้กับ:** clinical-data-analyst, healthcare-engineer, hipaa-officer, security-engineer
 **Description:** Use when software handles patient or clinical data (orders, medication, FHIR, EHR, HIPAA).
 
 ---
@@ -871,7 +871,7 @@
 ---
 
 ### 91. saas-platform
-**ใช้กับ:** clinical-data-analyst, data-engineer, fintech-compliance-officer, growth-specialist, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, quant-analyst, recommendation-engineer, revops-analyst, solution-architect
+**ใช้กับ:** growth-specialist, revops-analyst, solution-architect
 **Description:** Use when building B2B SaaS (multi-tenancy, tenant isolation, SSO, SCIM, billing, usage metering).
 
 ---

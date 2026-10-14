@@ -18,6 +18,7 @@ description: Use when recording an architecture decision or why a tech choice wa
 
 - Sequential: ADR-0001, ADR-0002, ...
 - Never reuse numbers, even if ADR is superseded
+- Save as `docs/decisions/ADR-NNNN-<slug>.md` (see `document-naming` and `project-doc-set`)
 
 ## Status Lifecycle
 

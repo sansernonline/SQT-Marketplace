@@ -35,7 +35,7 @@ Without an eval set, you're guessing. Period.
 
 ## Building an Eval Set
 
-### Step 1: Hand-craft 20-50 examples
+### Step 1: Hand-craft 20-50 examples to start, grow to 50+ before production
 
 ```jsonl
 {"id": 1, "input": "...", "expected": "...", "category": "easy_happy"}

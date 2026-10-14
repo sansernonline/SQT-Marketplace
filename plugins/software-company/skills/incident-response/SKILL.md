@@ -1,6 +1,6 @@
 ---
 name: incident-response
-description: Guide a live incident with the devops-engineer agent — triage, mitigate, resolve, postmortem.
+description: Guide a live incident with devops-engineer (breaches with security-analyst) — triage, mitigate with human approval, resolve, postmortem.
 argument-hint: <incident description, e.g., "users can't login since 14:00 UTC">
 disable-model-invocation: true
 ---
@@ -9,7 +9,9 @@ disable-model-invocation: true
 
 Use the `devops-engineer` agent to coordinate incident response for: **$ARGUMENTS**
 
-> 🚨 **Critical:** Speed matters. Don't over-document during active incident. Focus on stopping the bleed.
+> 🚨 **Critical:** Speed matters. During the incident keep only a plain timestamped log (one line per event). Polish it after the incident. Focus on stopping the bleed.
+>
+> 🔐 **Security breach or leaked personal data?** Hand the lead to the `security-analyst` agent and start `pdpa-compliance` section 8 now: the 72-hour clock to notify the PDPC (Personal Data Protection Committee) office starts when the breach is known.
 
 The DevOps engineer should follow this structured response:
 
@@ -21,11 +23,7 @@ The DevOps engineer should follow this structured response:
    - When did it start (exact UTC time)?
    - How widespread (all users, region, segment)?
 
-2. **Assess severity:**
-   - 🔴 **SEV1** — total outage, data loss, security breach → page everyone
-   - 🟠 **SEV2** — major feature down → page on-call team
-   - 🟡 **SEV3** — degraded service → notify team in business hours
-   - 🟢 **SEV4** — minor issue → tracked but not paged
+2. **Assess severity** with the one severity table in `postmortem-template` (Severity Levels). SEV1 pages everyone; SEV4 is tracked, not paged.
 
 3. **Assemble response team:**
    - Incident Commander (IC)
@@ -56,13 +54,14 @@ The DevOps engineer should follow this structured response:
 
 > 💡 Mitigation ≠ fix. The goal is to cut user impact NOW.
 
-Common mitigations:
-- **Rollback** recent deploy
-- **Failover** to backup region/instance
+Common mitigations, lowest risk first (same order as `incident-runbook-template`):
+- **Disable** broken feature (feature flag) · **Rate limit** abusive traffic
 - **Scale up** capacity
-- **Disable** broken feature (feature flag)
-- **Rate limit** abusive traffic
-- **Block** at WAF/firewall
+- **Rollback** recent deploy
+- **Block** at WAF (web application firewall) or firewall
+- **Failover** to backup region/instance (last resort)
+
+> ✋ **Production changes need a human.** The agent proposes the action, the command and the expected effect. A human on-call runs it or approves it before rollback, failover, WAF or firewall blocks, scaling or flag changes touch production (`principle-proceed-on-reversible-work`).
 
 Document what worked AND what didn't.
 
@@ -92,7 +91,7 @@ Document what worked AND what didn't.
 
 ## Output Required
 
-Throughout the incident, produce a running **incident log** using `polished-document-style` skill with:
+Throughout the incident, keep a running **incident log** as plain timestamped lines. After the all-clear, format it with `polished-document-style`. It covers:
 - Severity + timeline table
 - Affected services + user count
 - Investigation steps + findings
@@ -106,6 +105,6 @@ Use the `postmortem-template` skill afterwards for the full analysis.
 
 - Permanent code fix → `developer`
 - Architecture issue → `solution-architect`
-- Security implication → `security-engineer`
+- Security breach (live) → `security-analyst` + `pdpa-compliance` section 8 · code vulnerability found → `security-engineer`
 - Customer communication → `technical-writer` + `product-manager`
 - Process improvement → `project-manager`

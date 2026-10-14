@@ -41,6 +41,8 @@ These are **different**:
 | **S3 Medium** | Feature partially broken |
 | **S4 Low** | Cosmetic, minor inconvenience |
 
+In a review report (the `reviewer` scale): S1–S2 = สูง · S3 = กลาง · S4 = ต่ำ
+
 | Priority | Definition |
 |----------|------------|
 | **P1** | Fix immediately, block release |

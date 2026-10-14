@@ -115,8 +115,8 @@ What's authenticating?
 - ✅ **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
 - ❌ Never: MD5, SHA-1, SHA-256 raw, plain text
 
-### Password policy (2026 NIST guidelines)
-- ✅ Minimum 12 characters
+### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
+- ✅ Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
 - ✅ Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
 - ✅ Allow long passphrases (any maximum must be at least 64 chars)
 - ✅ Allow special characters (don't restrict them)

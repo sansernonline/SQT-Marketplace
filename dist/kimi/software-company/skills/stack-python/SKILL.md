@@ -21,7 +21,7 @@ description: Use when writing, reviewing or testing Python (scripts, CLIs, FastA
 - ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
 - ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
 - อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
-- เวอร์ชัน ณ 2026-10: 3.10 หมดอายุเดือนนี้ ส่วน 3.15 กำหนดออก 2026-10-09 โปรเจกต์ใหม่ให้เริ่มที่ 3.13 หรือ 3.14
+- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://devguide.python.org/versions/): ตัวล่าสุด 3.15 (ออก 2026-10-09) · 3.14 ยังรับแก้ bug · 3.11–3.13 รับแค่แก้ช่องโหว่ · 3.10 หมดอายุแล้ว (2026-10-01) · ตัวถัดไปที่หมดอายุคือ 3.11 (ต.ค. 2027) · โปรเจกต์ใหม่เริ่มที่ 3.14 หรือ 3.15 ถ้า library ที่ใช้รองรับแล้ว · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
 
 คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
 
@@ -118,28 +118,12 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 ## 6 · test
 
-หลักทั่วไปอยู่ที่ `testing-standards` ส่วนนี้เป็นเรื่องเฉพาะของ pytest
+ตั้งค่า pytest · fixture · `parametrize` และตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest) ส่วนนี้เหลือแค่กับดักเฉพาะ Python
 
-| ต้องการ | ใช้ |
-|---|---|
-| เตรียมของ · เก็บกวาด | fixture ที่ `yield` ส่วนของที่ใช้หลายไฟล์ให้ไว้ใน `conftest.py` |
-| หลายเคส logic เดียว | `@pytest.mark.parametrize` พร้อม `ids=` ที่อ่านรู้เรื่อง |
-| ไฟล์ชั่วคราว | `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo |
-| เวลา | ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ให้ใช้ `time-machine` (พัฒนาต่อเนื่อง เร็วกว่า) แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ |
-| HTTP ภายนอก | httpx ใช้ `respx` ส่วน requests ใช้ `responses` และห้ามยิงเน็ตจริงใน unit test |
-| ฐานข้อมูลจริง | `testcontainers` (PostgreSQL · MySQL ตัวเดียวกับ production) ไม่ใช้ SQLite แทน Postgres |
-| ค่า environment | `monkeypatch.setenv` |
-
-```python
-@pytest.mark.parametrize(
-    ("amount_satang", "allowed"),
-    [(0, False), (1, True), (500_000, True), (500_001, False)],
-    ids=["zero", "min", "at-limit", "over-limit"],
-)
-def test_refund_limit(amount_satang: int, allowed: bool) -> None:
-    assert is_refund_allowed(amount_satang) is allowed
-```
-
+- ไฟล์ชั่วคราวใช้ `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo · ค่า environment ใช้ `monkeypatch.setenv`
+- เวลา: ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ใช้ `time-machine` แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ
+- HTTP ภายนอก: httpx ใช้ `respx` · requests ใช้ `responses` · ห้ามยิงเน็ตจริงใน unit test
+- ฐานข้อมูลจริงใช้ `testcontainers` ตัวเดียวกับ production ไม่ใช้ SQLite แทน Postgres
 - logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
 - coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
 

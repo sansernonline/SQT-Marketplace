@@ -16,7 +16,7 @@ plugin `superuser` คือต้นฉบับของวิธีทำง�
 | skill | `agent-patterns` · `answer-shape` · `human-writing` | skill ของสาขา |
 | agent | `brainstormer` · `reviewer` · `learning-reviewer` | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทางของสาขา (playbook ใช้แทน `reviewer` ได้ · เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
 | hook | `hooks/superuser-hook.mjs` · `hooks/hooks.json` | — |
-| ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` ยกเว้น `improvements-queue.md` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาเดิม 10 ตัวเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |
+| ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` ยกเว้น `improvements-queue.md` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาที่มีอยู่แล้วเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |
 
 ของกลางแก้ที่ plugin `superuser` ที่เดียว แล้วรัน:
 
@@ -43,7 +43,7 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 
 | หัวข้อใน SKILL.md | ปรับอะไร | ตัวอย่างจาก plugin `career` |
 |---|---|---|
-| frontmatter `description` | งานของสาขา ≤ 250 ตัวอักษร · ขึ้นต้น "Use at the start of any multi-step <สาขา> task" | "...career task (job application, CV plus LinkedIn, interview, offer, promotion case)..." |
+| frontmatter `description` | งานของสาขา ≤ 160 ตัวอักษร (`validate-marketplace.mjs` ขึ้น error เกินนี้) · แบบ "Use when <งานสาขา> spans several steps (<งานตัวอย่าง>) or the user says superuser for <สาขา>." · คำว่า superuser ต้องผูกกับสาขา ไม่งั้นติดตั้ง 3 plugin แล้วติดพร้อมกันทั้ง 3 ตัว | "Use when career work spans several steps (application, CV, interview, offer, promotion) or the user says superuser for a career task." |
 | หัวเรื่อง และบรรทัดใต้ | ทีมนี้ทำงานอะไร · ส่งต่อเรื่องไหนให้ผู้เชี่ยวชาญ | ข้อพิพาทแรงงาน → จัดข้อเท็จจริงแล้วส่งต่อศาลแรงงานหรือทนาย |
 | 1 · กฎ | ใต้บล็อก `rules`: "ของจริงที่ใช้ตรวจตามข้อ 2" และกฎเฉพาะสาขา 1–3 ข้อ เลข 10 ขึ้นไป · ที่จดการตัดสินใจถ้าไม่ใช่ `CONTEXT.md` | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
 | 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` · ทุกขั้นของทุก playbook จบด้วย `ใคร:` ตาม `playbook-template` (validator ตรวจ) | `job-application` · `interview` · `offer-negotiation` · "ร่าง CV · ใคร: `career-coach` ตัวใหม่" |

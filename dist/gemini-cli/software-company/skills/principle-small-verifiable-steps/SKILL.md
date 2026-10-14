@@ -4,7 +4,7 @@ description: Use when work has many steps (migration, sweep, many similar edits,
 ---
 
 # principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น
-> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
+> ใช้คู่กัน: `principle-build-a-tool-not-handwork` (เขียนสคริปต์ทำงานซ้ำ) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
 
 > งานยาวที่ตรวจทีเดียวตอนจบ ถ้าพังจะไม่รู้ว่าพังที่ชิ้นไหน
 > ให้ตัดเป็นชิ้นเล็กที่แต่ละชิ้นจบในสภาพที่ตรวจได้ พังเมื่อไรก็รู้ทันทีว่าชิ้นไหน
@@ -13,7 +13,7 @@ description: Use when work has many steps (migration, sweep, many similar edits,
 
 1. เขียนรายการชิ้นลง todo ก่อนเริ่ม โดยแต่ละชิ้นมีเกณฑ์ "ผ่านเมื่อ" 1 บรรทัด
 2. 1 ชิ้นเปลี่ยนเรื่องเดียว และจบด้วย build ผ่าน · test ผ่าน · แอปยังรันได้
-3. ทำทีละชิ้น ตรวจ แล้ว commit ก่อนขึ้นชิ้นถัดไป โดย commit ตามกฎ commit ใน `superuser` หัวข้อ 6 ถ้าไม่ได้อนุญาตให้บันทึกชิ้นที่ผ่านไว้ใน `docs/BUILD-PLAN.md` แทน
+3. ทำทีละชิ้น ตรวจ แล้ว commit ก่อนขึ้นชิ้นถัดไป โดย commit ตามย่อหน้า **กฎ commit** ใน `superuser` หัวข้อ 6 (ความเป็นอิสระ) ถ้าไม่ได้อนุญาตให้บันทึกชิ้นที่ผ่านไว้ใน `docs/BUILD-PLAN.md` แทน
 4. ชิ้นไหนตรวจไม่ผ่าน ให้หยุดแก้ที่ชิ้นนั้น ห้ามข้ามไปชิ้นถัดไปแล้วค่อยกลับมา
 
 ## ลำดับ
@@ -27,7 +27,7 @@ description: Use when work has many steps (migration, sweep, many similar edits,
 ## commit และ PR
 
 - ทุก commit อ่านจบในตัวเองและ build ผ่าน คนรีวิวจึงไล่ทีละ commit แล้วเชื่อได้
-- PR ที่เปลี่ยนเกินราว 400 บรรทัด ให้แบ่งเป็นหลาย PR ต่อกัน
+- PR ที่เปลี่ยนเกิน 400 บรรทัด ให้แบ่งเป็นหลาย PR ต่อกัน (เกณฑ์เดียวกับ `pr-description-template` และ `code-review-checklist`)
 - รูปแบบข้อความใช้ `commit-message-format`
 
 ## งานที่ปล่อยทำเอง

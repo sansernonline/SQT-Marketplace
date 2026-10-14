@@ -44,7 +44,7 @@ If you don't have examples, **stop and collect them first**.
 
 ## 📊 Prompt Quality Standards
 
-- **Eval set:** ≥ 50 examples (more for production)
+- **Eval set:** 20-50 to start, 50+ before production (llm-evaluation-patterns.md Step 1)
 - **Pass rate target:** > 90% on eval
 - **Output validity:** 100% parseable (if structured)
 - **Cost per call:** within budget
@@ -104,7 +104,7 @@ Output as JSON with keys: name, age, email
 ```python
 # Anthropic API
 response = client.messages.create(
-    model="claude-sonnet-4-5",
+    model="<model-id>",  # current id: see the claude-api skill (checked 2026-10-14)
     tools=[{
         "name": "save_user",
         "description": "Save extracted user info",
@@ -290,7 +290,7 @@ PROMPTS = {
     "classifier_v1.2": {
         "system": "...",
         "few_shot_examples": [...],
-        "model": "claude-sonnet-4-5",
+        "model": "<model-id>",  # current id: see the claude-api skill
         "temperature": 0,
         "max_tokens": 100,
     }

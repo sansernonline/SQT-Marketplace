@@ -20,7 +20,7 @@ Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, p
 - ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
 - ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
 - อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
-- เวอร์ชัน ณ 2026-10: 3.10 หมดอายุเดือนนี้ ส่วน 3.15 กำหนดออก 2026-10-09 โปรเจกต์ใหม่ให้เริ่มที่ 3.13 หรือ 3.14
+- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://devguide.python.org/versions/): ตัวล่าสุด 3.15 (ออก 2026-10-09) · 3.14 ยังรับแก้ bug · 3.11–3.13 รับแค่แก้ช่องโหว่ · 3.10 หมดอายุแล้ว (2026-10-01) · ตัวถัดไปที่หมดอายุคือ 3.11 (ต.ค. 2027) · โปรเจกต์ใหม่เริ่มที่ 3.14 หรือ 3.15 ถ้า library ที่ใช้รองรับแล้ว · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
 
 คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
 
@@ -117,28 +117,12 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 ## 6 · test
 
-หลักทั่วไปอยู่ที่ `testing-standards` ส่วนนี้เป็นเรื่องเฉพาะของ pytest
+ตั้งค่า pytest · fixture · `parametrize` และตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest) ส่วนนี้เหลือแค่กับดักเฉพาะ Python
 
-| ต้องการ | ใช้ |
-|---|---|
-| เตรียมของ · เก็บกวาด | fixture ที่ `yield` ส่วนของที่ใช้หลายไฟล์ให้ไว้ใน `conftest.py` |
-| หลายเคส logic เดียว | `@pytest.mark.parametrize` พร้อม `ids=` ที่อ่านรู้เรื่อง |
-| ไฟล์ชั่วคราว | `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo |
-| เวลา | ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ให้ใช้ `time-machine` (พัฒนาต่อเนื่อง เร็วกว่า) แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ |
-| HTTP ภายนอก | httpx ใช้ `respx` ส่วน requests ใช้ `responses` และห้ามยิงเน็ตจริงใน unit test |
-| ฐานข้อมูลจริง | `testcontainers` (PostgreSQL · MySQL ตัวเดียวกับ production) ไม่ใช้ SQLite แทน Postgres |
-| ค่า environment | `monkeypatch.setenv` |
-
-```python
-@pytest.mark.parametrize(
-    ("amount_satang", "allowed"),
-    [(0, False), (1, True), (500_000, True), (500_001, False)],
-    ids=["zero", "min", "at-limit", "over-limit"],
-)
-def test_refund_limit(amount_satang: int, allowed: bool) -> None:
-    assert is_refund_allowed(amount_satang) is allowed
-```
-
+- ไฟล์ชั่วคราวใช้ `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo · ค่า environment ใช้ `monkeypatch.setenv`
+- เวลา: ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ใช้ `time-machine` แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ
+- HTTP ภายนอก: httpx ใช้ `respx` · requests ใช้ `responses` · ห้ามยิงเน็ตจริงใน unit test
+- ฐานข้อมูลจริงใช้ `testcontainers` ตัวเดียวกับ production ไม่ใช้ SQLite แทน Postgres
 - logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
 - coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
 
@@ -425,20 +409,26 @@ Use when starting an API, adding endpoints or checking API consistency (URLs, pa
 - รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
 - ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
-| health check, error envelope, graceful shutdown | `web-service-essentials` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` |
+| งาน | skill | |
+|---|---|---|
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
+| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
+| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
+| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
 
 ---
 
 ## 1 · เอกสารข้อตกลงต้องมีจริง
 
-วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
 ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
 
 > ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
@@ -663,32 +653,6 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
 
----
-
-## 12 · ตัวย่อ
-
-- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
-- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
-- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
-- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
-- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
-- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| health check · error envelope · timeout | `web-service-essentials` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
-| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
-| token · scope · สิทธิ์ | `auth-implementation-patterns` |
-| correlation id ที่โผล่ใน error | `logging-standards` |
-| test สัญญาระหว่างระบบ | `testing-standards` |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
-
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
-
 
 ---
 
@@ -708,14 +672,19 @@ Use when a system imports or exports Excel or CSV. Validate before write, row er
 - ย้ายข้อมูลจากระบบเก่าเข้าระบบใหม่
 - ผู้ใช้อัปโหลดแล้วได้ข้อความว่า "ไฟล์ไม่ถูกต้อง" แล้วไม่รู้ว่าผิดตรงไหน
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` |
-| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` |
-| กลไกคิวและความคืบหน้า | `background-jobs` |
-| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` |
+| งาน | skill | |
+|---|---|---|
+| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` | แทน |
+| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` | แทน |
+| กลไกคิวและความคืบหน้า | `background-jobs` | แทน |
+| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` | แทน |
+| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` | คู่ |
+| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` | คู่ |
+| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` | คู่ |
+| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -823,26 +792,3 @@ Use when a system imports or exports Excel or CSV. Validate before write, row er
 - ❌ **ส่งออกโดยไม่ escape สูตร** เปิดไฟล์แล้วรันคำสั่ง
 - ❌ **ส่งออกได้เกินสิทธิ์ที่มี** ข้อมูลรั่วผ่านปุ่มที่เราทำเอง
 - ❌ **ไม่เก็บไฟล์ต้นฉบับ** มีปัญหาแล้วย้อนดูไม่ได้
-
----
-
-## 7 · ตัวย่อ
-
-- **CSV** — Comma-Separated Values (ไฟล์ข้อความที่คั่นค่าด้วยจุลภาค)
-- **BOM** — Byte Order Mark (ไบต์นำหน้าไฟล์ที่บอกว่าเป็น UTF-8 ทำให้ Excel อ่านภาษาไทยถูก)
-- **UTF-8** — มาตรฐานการเข้ารหัสตัวอักษรที่รองรับทุกภาษา
-- **batch** — ชุดของแถวที่นำเข้าพร้อมกันในครั้งเดียว
-- **CSV injection** — ช่องโหว่ที่ค่าซึ่งขึ้นต้นด้วย `=` ถูก Excel ตีความเป็นสูตรและรันคำสั่ง
-
-## 8 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รับไฟล์อัปโหลดอย่างปลอดภัย | `file-upload-and-storage` |
-| ทำเป็นงานเบื้องหลังพร้อมความคืบหน้า | `background-jobs` |
-| สร้างไฟล์ Excel ที่จัดรูปแบบแล้ว | `anthropic-skills:xlsx` |
-| ปี พ.ศ. · การเรียงลำดับไทย · การเข้ารหัสตัวอักษร | `i18n-and-locale` |
-| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` |
-| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` |
-| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` |
-| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` |

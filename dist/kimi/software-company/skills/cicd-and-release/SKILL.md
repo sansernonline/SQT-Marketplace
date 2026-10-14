@@ -15,15 +15,23 @@ description: Use when setting up or fixing a build and deploy pipeline or decidi
 - deploy แล้วพังบ่อย หรือ rollback ไม่ได้
 - มีคนถามว่า "ตอนนี้ production รันเวอร์ชันอะไร commit ไหน"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` |
-| สัดส่วนและขอบเขตของ test | `testing-standards` |
-| เขียน migration | `database-design` |
-| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` |
-| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` |
+| งาน | skill | |
+|---|---|---|
+| ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
+| สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
+| เขียน migration | `database-design` | แทน |
+| ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |
+| เขียนบันทึกการปล่อยให้ผู้ใช้อ่าน | command `/release-notes` | แทน |
+| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` | คู่ |
+| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` | คู่ |
+| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` | คู่ |
+| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน
 
 ---
 
@@ -217,31 +225,3 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 - ❌ **environment ที่ config ต่างกันจนคาดเดาไม่ได้** · "บน staging ผ่านนะ"
 - ❌ **feature flag ที่ไม่มีวันลบ**
 - ❌ **pipeline ใช้เวลา 45 นาที** คนจะเริ่ม merge โดยไม่รอผล
-
----
-
-## 12 · ตัวย่อ
-
-- **CI** — Continuous Integration (รวมโค้ดเข้าด้วยกันบ่อย ๆ พร้อมตรวจอัตโนมัติทุกครั้ง)
-- **CD** — Continuous Delivery/Deployment (พาโค้ดที่ผ่านการตรวจไปถึงผู้ใช้อัตโนมัติ)
-- **SemVer** — Semantic Versioning (มาตรฐานเลขเวอร์ชัน MAJOR.MINOR.PATCH)
-- **artifact** — ไฟล์ผลลัพธ์จากการ build ที่นำไป deploy ได้จริง
-- **canary** — การปล่อยของใหม่ให้ผู้ใช้ส่วนน้อยก่อนเพื่อดูอาการ
-- **UAT** — User Acceptance Testing (การทดสอบโดยผู้ใช้ก่อนรับมอบ)
-- **AAB** — Android App Bundle (ไฟล์ที่อัปโหลดขึ้น Google Play แล้ว Play แตกเป็น APK ตามเครื่อง)
-- **versionCode** — เลขจำนวนเต็มที่ Android ใช้ตัดสินว่าเวอร์ชันไหนใหม่กว่า
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret และ config ต่อ environment | `config-and-secrets` |
-| migration ที่ deploy ได้โดยไม่ปิดระบบ | `database-design` |
-| สัดส่วน test แต่ละชั้นใน pipeline | `testing-standards` · `e2e-testing-patterns` |
-| health check ที่ pipeline ใช้ตัดสิน | `web-service-essentials` |
-| ขั้นตอนเมื่อ deploy แล้วล่ม | `incident-runbook-template` · `postmortem-template` |
-| ข้อความ commit ที่สร้างบันทึกการปล่อยอัตโนมัติได้ | `commit-message-format` |
-
-**ไฟล์ pipeline ที่ใช้ได้จริงของ GitHub Actions, Azure DevOps และ GitLab** อยู่ใน `references/per-platform.md`
-
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/deployment-plan-template.md`](references/deployment-plan-template.md) — แม่แบบแผน

@@ -34,17 +34,7 @@ The conversion rate optimization (CRO) specialist should:
    - User type (guest, returning)
    - Cart value
 
-4. **Friction audit** (10 heuristics):
-   - Value prop clarity
-   - Above-fold CTA
-   - Page speed
-   - Form length
-   - Error handling
-   - Trust signals
-   - Pricing transparency
-   - Guest checkout
-   - Payment options
-   - Mobile UX
+4. **Friction audit** with the 10 heuristics in `ecommerce-patterns/references/agent-cro-specialist.md` ("Heuristic" table). Page speed counts as friction when Largest Contentful Paint (LCP) is over 2.5 s, the Core Web Vitals "good" limit (web.dev/articles/lcp, checked 2026-10-14)
 
 5. **Generate hypotheses** in format:
    "We believe X for Y will result in Z because <data>"

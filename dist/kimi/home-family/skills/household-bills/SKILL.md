@@ -26,15 +26,15 @@ The bill (ใบแจ้งค่าไฟฟ้า) adds 4 parts:
 3. **ค่า Ft** — units × the Ft rate for the current 4-month period (can be positive or negative)
 4. **ภาษีมูลค่าเพิ่ม 7%** on the sum of 1–3
 
-Units used = เลขอ่านครั้งนี้ − เลขอ่านครั้งก่อน. Check the two readings are printed and the reading date (วันที่จดเลขอ่าน) is roughly 30 days after the last one — a 35-day period inflates the bill and can push units into a higher tier.
+Units used = เลขอ่านครั้งนี้ − เลขอ่านครั้งก่อน. Check the two readings are printed and the reading date (วันที่จดเลขอ่าน) is roughly 30 days after the last one — a period of 33 days or more inflates the bill and can push units into a higher tier.
 
 | Item | Current value | Applies |
 |---|---|---|
 | Ft rate | 16.23 สตางค์/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
-| Average all-in tariff (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
-| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | กกพ. was consulting in 2569 on a new progressive rate for the first 200 units (รอยืนยัน) |
+| Average all-in tariff (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย; with the new tiered home tariff the average for all users is 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | งวด ก.ย.–ธ.ค. 2569 · tiered tariff from Sep 2569 bills |
+| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | กกพ. announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.erc.or.th (ประกาศค่า Ft งวด ก.ย.–ธ.ค. 2569), https://www.naewna.com/business/979048
+ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.erc.or.th/th/news-release/3458 (ค่า Ft งวด ก.ย.–ธ.ค. 2569) · https://erc.or.th/th/news-release/3472 (อัตราแบบขั้นบันได 3.86) · https://www.naewna.com/business/979048
 
 Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย.–ธ.ค.). When comparing months across a reset, compare **units**, not baht.
 

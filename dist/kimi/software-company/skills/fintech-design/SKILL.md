@@ -95,19 +95,7 @@ The compliance officer should:
    - Data flow diagrams
    - In-scope systems
 
-2. **Apply `fintech-payments` skill** for the 12 requirements:
-   - Network security (Req 1)
-   - Secure configurations (Req 2)
-   - Protect stored cardholder data (CHD) (Req 3)
-   - Encryption in transit (Req 4)
-   - Anti-malware (Req 5)
-   - Secure development (Req 6)
-   - Access restriction (Req 7)
-   - User identification (Req 8)
-   - Physical access (Req 9)
-   - Logging & monitoring (Req 10)
-   - Security testing (Req 11)
-   - Information security policy (Req 12)
+2. **Go through the 12 PCI-DSS requirements** in `fintech-payments/references/pci-dss-compliance.md`
 
 3. **Scope analysis**:
    - Map ALL systems that touch CHD

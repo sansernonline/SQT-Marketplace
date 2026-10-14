@@ -15,15 +15,20 @@ description: Use when designing or changing a database schema (tables, columns, 
 - จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
 - query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| รัน migration ใน pipeline | `cicd-and-release` |
+| งาน | skill | |
+|---|---|---|
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
+| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
+| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| ที่เก็บ connection string | `config-and-secrets` | แทน |
+| รัน migration ใน pipeline | `cicd-and-release` | แทน |
+| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` | คู่ |
+| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -192,6 +197,8 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
 
+คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+
 ## 10 · ระบบหลายผู้เช่า (multi-tenant)
 
 | แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
@@ -228,26 +235,3 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 - ❌ **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
 - ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
 - ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
-
----
-
-## 13 · ตัวย่อ
-
-- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริง 1 อย่างเก็บที่เดียว)
-- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
-- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
-- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-
-## 14 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
-| รัน migration ตอน deploy | `cicd-and-release` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| ตาราง user, role, session | `auth-implementation-patterns` |
-| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
-
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`

@@ -58,12 +58,12 @@ The solution architect should:
    - Documentation quality
    - Team familiarity
 
-3. **Apply architecture patterns** (use `architecture-patterns` skill):
+4. **Apply architecture patterns** (use `architecture-patterns` skill):
    - Is the chosen pattern appropriate?
    - Are we suffering from anti-patterns (distributed monolith, etc.)?
    - Would refactoring to a different pattern help?
 
-4. **Identify risks:**
+5. **Identify risks:**
 
    | Severity | Definition |
    |----------|------------|
@@ -72,12 +72,14 @@ The solution architect should:
    | 🟡 Medium | Known limitation, manageable |
    | 🟢 Low | Future consideration |
 
-5. **Propose improvements** with trade-offs:
+   Summary line uses the house review scale: Critical–High = สูง · Medium = กลาง · Low = ต่ำ
+
+6. **Propose improvements** with trade-offs:
    - Quick wins (low effort, high impact)
    - Strategic changes (require investment)
    - Things to NOT do (anti-patterns to avoid)
 
-6. **Produce polished architecture review document** using `polished-document-style` skill:
+7. **Produce polished architecture review document** using `polished-document-style` skill:
    - Executive summary
    - Current state diagrams (Mermaid)
    - Quality attribute scorecard
@@ -86,7 +88,7 @@ The solution architect should:
    - ADRs needed (list for follow-up)
    - Sign-off section
 
-7. **Hand-off suggestions:**
+8. **Hand-off suggestions:**
    - Detailed threat model → `security-engineer`
    - Implementation of changes → `developer`
    - Cost optimization details → `devops-engineer`

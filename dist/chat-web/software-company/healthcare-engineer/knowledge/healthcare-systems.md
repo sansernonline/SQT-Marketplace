@@ -24,6 +24,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 |---|---|---|
 | building healthcare applications — EHR/EMR integration, clinical workflows, telemedicine, patient portals, or any health-tech product handling PHI. Specializes in healthcare interoperability and clinical safety requirements | [`references/agent-healthcare-engineer.md`](references/agent-healthcare-engineer.md) | `healthcare-engineer` |
 | integrating with EHRs via FHIR (HL7 Fast Healthcare Interoperability Resources), designing FHIR APIs, implementing SMART on FHIR apps, validating FHIR resources, or designing healthcare data exchange. Specializes in FHIR R4/R5 standards | [`references/agent-fhir-specialist.md`](references/agent-fhir-specialist.md) | `healthcare-engineer` |
+| analysing clinical data — cohorts, readmission and mortality rates, HEDIS/CMS measures, risk adjustment, small-cell suppression, clinical analysis reports | [`references/clinical-analytics.md`](references/clinical-analytics.md) | `clinical-data-analyst` |
+| HIPAA compliance work — rule map, patient rights, BAAs, breach response workflow, de-identification gotchas, risk analysis report | [`references/agent-hipaa-officer.md`](references/agent-hipaa-officer.md) | `hipaa-officer` |
 
 ## agent ของสายนี้
 
@@ -600,6 +602,425 @@ async function prescribeMedication(rx: Prescription) {
 - [HIPAA Security Rule](https://www.hhs.gov/hipaa/for-professionals/security/index.html)
 - [Synthea (synthetic patient data)](https://synthetichealth.github.io/synthea/)
 - [Epic on FHIR](https://fhir.epic.com/)
+
+
+## reference: agent-hipaa-officer.md
+
+# HIPAA Officer — rules, patient rights, BAAs, breach, risk analysis
+
+คู่มือบทบาทของ agent `hipaa-officer` — ย้ายมาจากตัว agent (2026-10-14) · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
+
+**สารบัญ:**
+
+- [HIPAA Rule Map](#hipaa-rule-map)
+- [Patient Rights (Privacy Rule)](#patient-rights-privacy-rule)
+- [Business Associate Agreements (BAAs)](#business-associate-agreements-baas)
+- [Breach Response Workflow](#breach-response-workflow)
+- [Common HIPAA Gotchas](#common-hipaa-gotchas)
+- [Output: Polished HIPAA Risk Analysis](#output-polished-hipaa-risk-analysis)
+
+## HIPAA Rule Map
+
+```
+HIPAA
+├─ Privacy Rule (45 CFR §164.500-534)
+│  ├─ Uses & disclosures
+│  ├─ Minimum necessary
+│  └─ Patient rights
+│
+├─ Security Rule (45 CFR §164.302-318)
+│  ├─ Administrative safeguards
+│  ├─ Physical safeguards
+│  └─ Technical safeguards
+│
+├─ Breach Notification Rule (§164.400-414)
+│  ├─ Risk assessment
+│  ├─ Notification (individuals, OCR, media)
+│  └─ Documentation
+│
+└─ Enforcement Rule (§160.300-552)
+   └─ Penalties + procedures
+```
+
+## Patient Rights (Privacy Rule)
+
+Patients can:
+- **Access** their PHI (must respond within 30 days)
+- **Amend** their PHI (request, you can decline with reason)
+- **Request restrictions** on uses/disclosures
+- **Request confidential communications** (alternate address, etc.)
+- **Account of disclosures** (last 6 years)
+- **File complaints**
+
+Build features to support all of these.
+
+## Business Associate Agreements (BAAs)
+
+### Who needs a BAA?
+
+```
+You (Covered Entity)
+   │
+   ├──► AWS/Azure/GCP (cloud provider)        ← BAA required
+   ├──► Sentry (error tracking)                ← BAA required (sees PHI in errors)
+   ├──► Stripe (payment processor)             ← BAA likely required
+   ├──► Email provider (SendGrid/SES)          ← BAA required (sends PHI)
+   ├──► CRM (HubSpot/Salesforce)               ← BAA required (stores PHI)
+   ├──► Analytics (Mixpanel/Amplitude)         ← BAA required IF receives PHI
+   └──► Internal contractors                   ← BAA required
+```
+
+### BAA must include
+
+- Permitted/required uses of PHI
+- Subcontractor agreements
+- Breach notification obligations
+- Termination provisions
+- Return/destruction of PHI
+
+## Breach Response Workflow
+
+```mermaid
+flowchart TD
+    A[Potential breach detected] --> B[Stop the bleeding]
+    B --> C[Risk assessment within 24h]
+    C --> D{Was PHI compromised?}
+    D -->|No, low risk| E[Document + close]
+    D -->|Yes, risk to PHI| F[Required notifications]
+    F --> G[Notify individuals within 60 days]
+    F --> H[Notify OCR]
+    F --> I{500+ affected?}
+    I -->|Yes| J[Notify media]
+    I -->|No| K[Annual OCR notification only]
+    J --> L[Document everything]
+    K --> L
+    G --> L
+```
+
+### Risk assessment factors
+
+1. Nature + extent of PHI involved
+2. Unauthorized person who received PHI
+3. Whether PHI actually acquired/viewed
+4. Mitigation taken
+
+## Common HIPAA Gotchas
+
+### "I removed the name, it's de-identified"
+**No.** HIPAA Safe Harbor requires removing **18 identifiers**:
+1. Names
+2. Addresses (smaller than state)
+3. Dates (except year) of birth, death, admission, etc.
+4. Phone numbers
+5. Fax numbers
+6. Email addresses
+7. SSN
+8. Medical record numbers
+9. Health plan IDs
+10. Account numbers
+11. License/certificate numbers
+12. Vehicle identifiers (VIN, plate)
+13. Device identifiers
+14. URLs
+15. IP addresses
+16. Biometric identifiers
+17. Photographs
+18. Any other unique identifier
+
+OR use expert determination (statistical method).
+
+### "It's not in production yet"
+**Still covered** if real PHI. Use synthetic data in non-prod.
+
+### "Vendor said they're HIPAA compliant"
+**Not enough.** Need signed BAA in your records.
+
+### "We log everything for debugging"
+**Audit log of audit logs.** PHI in logs = audit log itself contains PHI.
+
+## Output: Polished HIPAA Risk Analysis
+
+Use `polished-document-style` skill to produce:
+
+```markdown
+# 🔒 HIPAA Risk Analysis
+
+| | |
+|--|--|
+| **Conducted by** | @hipaa-officer |
+| **Date** | YYYY-MM-DD |
+| **Scope** | Full enterprise / Specific system |
+| **Status** | 🟡 In Progress |
+
+## Asset Inventory
+| Asset | PHI? | Location | Owner |
+|-------|:----:|----------|:------|
+
+## Threat × Vulnerability × Likelihood × Impact = Risk
+| Threat | Vuln | L | I | Risk | Mitigation |
+|--------|------|:-:|:-:|:----:|------------|
+
+## Compensating Controls
+...
+
+## Residual Risk Acceptance
+| Risk | Acceptable? | Approver |
+|------|:-----------:|:---------|
+```
+
+
+## reference: clinical-analytics.md
+
+# Clinical analytics — cohorts, measures, risk adjustment, report
+
+คู่มือของ agent `clinical-data-analyst` — ย้ายมาจากตัว agent (2026-10-14) · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
+
+**สารบัญ:**
+
+- [Common Clinical Analyses](#common-clinical-analyses)
+- [Clinical Codes](#clinical-codes)
+- [Quality Measures](#quality-measures)
+- [Risk Stratification](#risk-stratification)
+- [Privacy + Ethics](#privacy--ethics)
+- [Output: Clinical Analysis Report](#output-clinical-analysis-report)
+
+## Common Clinical Analyses
+
+### Cohort Building
+
+```sql
+-- Diabetes patients with poor control, 2024
+WITH diabetes_patients AS (
+  SELECT DISTINCT patient_id
+  FROM conditions
+  WHERE
+    -- ICD-10 codes for diabetes
+    (code LIKE 'E10%' OR code LIKE 'E11%')  -- brackets: AND binds before OR
+    AND onset_date <= '2024-01-01'
+    AND (resolved_date IS NULL OR resolved_date > '2024-12-31')
+),
+recent_a1c AS (
+  -- Most recent HbA1c in 2024
+  SELECT DISTINCT ON (patient_id)
+    patient_id,
+    value as a1c,
+    measured_date
+  FROM observations
+  WHERE
+    loinc_code = '4548-4'  -- HbA1c
+    AND measured_date BETWEEN '2024-01-01' AND '2024-12-31'
+  ORDER BY patient_id, measured_date DESC
+)
+SELECT
+  dp.patient_id,
+  ra.a1c,
+  ra.measured_date
+FROM diabetes_patients dp
+LEFT JOIN recent_a1c ra USING (patient_id)
+WHERE ra.a1c > 9.0;  -- Poor control threshold
+```
+
+### Outcome Measure: 30-Day Readmission
+
+```sql
+-- AMI (Acute MI) readmission rate
+WITH index_admissions AS (
+  SELECT
+    patient_id,
+    encounter_id as index_encounter,
+    discharge_date
+  FROM encounters
+  WHERE
+    primary_diagnosis_code LIKE 'I21%'  -- AMI
+    AND discharge_date BETWEEN '2024-01-01' AND '2024-12-31'
+    AND discharge_disposition NOT IN ('expired', 'hospice')
+),
+readmissions AS (
+  SELECT
+    i.patient_id,
+    i.index_encounter,
+    e.encounter_id as readmit_encounter
+  FROM index_admissions i
+  JOIN encounters e
+    ON i.patient_id = e.patient_id
+    AND e.admit_date > i.discharge_date
+    AND e.admit_date <= i.discharge_date + INTERVAL '30 days'
+    AND e.encounter_type = 'inpatient'
+)
+SELECT
+  COUNT(DISTINCT index_encounter) as total_eligible,
+  COUNT(DISTINCT CASE WHEN r.readmit_encounter IS NOT NULL
+    THEN i.index_encounter END) as readmissions,
+  -- numerator = the readmissions column above (index stays with ≥1 readmit)
+  ROUND(100.0 * COUNT(DISTINCT CASE WHEN r.readmit_encounter IS NOT NULL
+    THEN i.index_encounter END)
+    / COUNT(DISTINCT i.index_encounter), 1) as rate_pct
+FROM index_admissions i
+LEFT JOIN readmissions r USING (index_encounter);
+```
+
+### Standardized Mortality Ratio (SMR)
+
+```python
+# Observed vs expected deaths
+observed = actual_deaths_in_cohort
+
+# Expected based on age/sex standardized rates
+expected = sum(
+    cohort_size_in_stratum[s] * standard_death_rate[s]
+    for s in age_sex_strata
+)
+
+smr = observed / expected
+
+# Confidence interval (assuming Poisson)
+import scipy.stats as stats
+ci_low = stats.chi2.ppf(0.025, 2*observed) / (2 * expected)
+ci_high = stats.chi2.ppf(0.975, 2*(observed+1)) / (2 * expected)
+```
+
+## Clinical Codes
+
+| System | Purpose |
+|--------|---------|
+| **ICD-10-CM** | Diagnoses |
+| **ICD-10-PCS** | Procedures (inpatient US) |
+| **CPT-4** | Procedures (outpatient US) |
+| **LOINC** | Labs + observations |
+| **SNOMED CT** | Clinical terminology (broad) |
+| **RxNorm** | Medications (US) |
+| **NDC** | National Drug Code |
+| **HCPCS** | Healthcare procedures (US Medicare) |
+
+> 💡 **Use code system + code** always (e.g., LOINC|4548-4) — codes alone are ambiguous.
+
+## Quality Measures
+
+### HEDIS (US managed care)
+- Diabetes care (A1c, eye exam, kidney)
+- Cancer screening (breast, cervical, colorectal)
+- Childhood immunizations
+- Medication adherence
+
+### CMS Measures
+- 30-day readmission rates
+- Hospital-acquired conditions
+- HCAHPS (patient satisfaction)
+- Sepsis bundle compliance
+
+### Implementation pattern
+
+```sql
+-- HEDIS measure: BCS (Breast Cancer Screening)
+-- Women 50-74 who had mammogram in last 2 years
+
+WITH denominator AS (
+  SELECT patient_id
+  FROM patients
+  WHERE
+    gender = 'female'
+    AND DATE_PART('year', AGE('2024-12-31', birth_date)) BETWEEN 50 AND 74
+    AND continuous_enrollment(patient_id, '2023-01-01', '2024-12-31')
+),
+numerator AS (
+  SELECT DISTINCT patient_id
+  FROM procedures
+  WHERE
+    cpt_code IN ('77067', '77065', '77066')  -- mammography codes
+    AND service_date BETWEEN '2023-01-01' AND '2024-12-31'
+)
+SELECT
+  COUNT(DISTINCT d.patient_id) as eligible,
+  COUNT(DISTINCT n.patient_id) as screened,
+  ROUND(100.0 * COUNT(DISTINCT n.patient_id) / COUNT(DISTINCT d.patient_id), 1) as rate
+FROM denominator d
+LEFT JOIN numerator n USING (patient_id);
+```
+
+## Risk Stratification
+
+```python
+# Charlson Comorbidity Index (CCI)
+WEIGHTS = {
+    'mi': 1, 'chf': 1, 'pvd': 1, 'cvd': 1, 'dementia': 1,
+    'copd': 1, 'rheum': 1, 'pud': 1, 'mild_liver': 1, 'diabetes': 1,
+    'diabetes_compl': 2, 'paraplegia': 2, 'renal': 2, 'cancer': 2,
+    'severe_liver': 3, 'metastatic_cancer': 6, 'aids': 6,
+}
+
+def cci_score(conditions: set) -> int:
+    return sum(WEIGHTS.get(c, 0) for c in conditions)
+
+# 1-year mortality risk grows with CCI
+# Use for cohort risk-adjustment
+```
+
+## Privacy + Ethics
+
+### Small cell suppression
+```python
+# Don't report counts < 11 (typical threshold)
+# Risk of re-identification
+
+if count < 11:
+    return "< 11"  # suppress exact number
+```
+
+### De-identification (HIPAA Safe Harbor)
+- Remove 18 identifiers (see hipaa-officer)
+- Or expert statistical determination
+- Document method
+
+### IRB / Ethics
+- Research with humans → IRB approval
+- QI projects → often exempt, but document
+- "Just operations" → still respect patient privacy
+
+## Output: Clinical Analysis Report
+
+```markdown
+# 📊 Clinical Analysis: <Title>
+
+| | |
+|--|--|
+| **Analyst** | @clinical-data-analyst |
+| **Date** | YYYY-MM-DD |
+| **Status** | 🟡 Draft |
+| **Reviewed by** | @clinical-lead |
+
+## Clinical Question
+What is X for population Y during period Z?
+
+## Methods
+
+### Cohort
+- Inclusion: ...
+- Exclusion: ...
+- N = XXX patients
+
+### Outcome
+- Definition: ...
+- Codes used: ICD-10 ..., LOINC ...
+
+### Statistical Approach
+- ...
+
+## Results
+
+[Tables, charts]
+
+## Limitations
+
+- ⚠️ Single institution data
+- ⚠️ Possible misclassification of X
+- ⚠️ Missing data on Y for Z% of cohort
+
+## Clinical Implications
+...
+
+## References
+- ...
+```
 
 
 ## reference: clinical-workflows.md

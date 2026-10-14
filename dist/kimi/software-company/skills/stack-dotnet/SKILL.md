@@ -14,7 +14,7 @@ description: Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MV
 ## 1 · เริ่มงาน: อ่านเวอร์ชันก่อน แล้วรันคำสั่งชุดเดียวกันทุกครั้ง
 
 - เวอร์ชัน SDK ดูที่ `global.json` ส่วนเวอร์ชันที่ target ดูที่ `<TargetFramework>` ใน `*.csproj` หรือ `Directory.Build.props`
-- `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง พ.ย. 2028 ส่วน `net8.0` และ `net9.0` หมดอายุ 10 พ.ย. 2026 ถ้าเจอในงานใหม่ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน
+- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://dotnet.microsoft.com/platform/support/policy/dotnet-core): `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง 2028-11-14 · `net8.0` (LTS) และ `net9.0` (Standard Term Support, STS) อยู่ช่วงท้าย รองรับถึง 2026-11-10 · ถ้าเจอ 2 ตัวนี้ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
 - ถ้าเจอ `net48` หรือ `v4.x` ใน `<TargetFrameworkVersion>` แปลว่าเป็น .NET Framework ให้ใช้ชุดคำสั่ง legacy ด้านล่าง
 
 | ขั้น | .NET (Core) 8+ | .NET Framework 4.x (Windows) |
@@ -121,18 +121,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 - test API ทั้งเส้นใช้ `WebApplicationFactory<Program>` ถ้า test มองไม่เห็น `Program` ให้เพิ่ม `public partial class Program;`
 - ฐานข้อมูลจริงใช้ Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`) ห้ามใช้ EF InMemory แทนฐานจริง เพราะไม่ตรวจ constraint และแปล SQL ต่างกัน
 
-```csharp
-public class OrdersApiTests(WebApplicationFactory<Program> factory)
-    : IClassFixture<WebApplicationFactory<Program>>
-{
-    [Fact]
-    public async Task Get_WhenNotLoggedIn_Returns401()
-    {
-        var res = await factory.CreateClient().GetAsync("/api/orders", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
-    }
-}
-```
+ตั้งค่า xUnit และตัวอย่าง `WebApplicationFactory` เต็ม ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#net--xunit)
 
 ## 6 · ความปลอดภัยเฉพาะ .NET
 

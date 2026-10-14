@@ -1,6 +1,6 @@
 ---
 name: "sprint-plan"
-description: "Run sprint planning — backlog refinement, prioritization, and capacity planning."
+description: "Use when the user asks to plan a sprint — backlog refinement, prioritization, capacity (user command)."
 disableModelInvocation: true
 ---
 

@@ -35,72 +35,16 @@ description: Use when reviewing a pull request, self-reviewing before submitting
 
 ## Checklist
 
-### 🎯 Correctness
+House checks first. Each skill holds the full rules, so link to it in the comment:
 
-- [ ] Does the code do what the PR description says?
-- [ ] Are edge cases handled? (null, empty, zero, negative, very large)
-- [ ] Are error paths handled? (network failure, timeout, invalid input)
-- [ ] Are race conditions / concurrency issues considered?
-- [ ] Off-by-one errors checked?
-- [ ] Are assumptions explicit (or asserted)?
+- [ ] Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
+- [ ] Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) (no unused layers, standard library first, one concern per file)
+- [ ] Readable: [`readable-code`](../readable-code/SKILL.md) (names, file and folder layout, config outside code)
+- [ ] Tests sit next to the code and prove the change: [`testing-standards`](../testing-standards/SKILL.md)
+- [ ] Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR
+- [ ] Commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
 
-### 🏗️ Design
-
-- [ ] Does this fit the existing architecture?
-- [ ] Is the abstraction at the right level? (not too generic, not too specific)
-- [ ] Single Responsibility — does each function/class do one thing?
-- [ ] DRY — but not over-abstracted?
-- [ ] Are dependencies appropriate? (no circular, minimal coupling)
-- [ ] Could this be simpler?
-
-### 🧪 Tests
-
-- [ ] Are there tests for the new code?
-- [ ] Tests cover happy path + edge cases + errors?
-- [ ] Tests would actually fail if code broke? (no false positives)
-- [ ] Tests are readable and maintainable?
-- [ ] No flaky tests introduced?
-
-### 🔒 Security
-
-- [ ] Input validation at boundaries?
-- [ ] No SQL injection (parameterized queries)?
-- [ ] No XSS (proper escaping)?
-- [ ] No secrets/credentials in code?
-- [ ] Authorization checks for sensitive operations?
-- [ ] PII / sensitive data logged appropriately?
-- [ ] Dependencies updated? No known CVEs?
-
-### 🚀 Performance
-
-- [ ] No N+1 queries?
-- [ ] Appropriate caching where beneficial?
-- [ ] Loops/algorithms with appropriate complexity?
-- [ ] Large data handled with pagination/streaming?
-- [ ] No unnecessary network calls?
-
-### 📖 Readability
-
-- [ ] Names reveal intent? (variables, functions, classes)
-- [ ] Functions reasonably short?
-- [ ] Complex logic has explanatory comments? (WHY, not WHAT)
-- [ ] No commented-out code left behind?
-- [ ] No debug prints / TODO without ticket?
-- [ ] Consistent with existing code style?
-
-### 📚 Documentation
-
-- [ ] Public APIs documented?
-- [ ] README/CHANGELOG updated if needed?
-- [ ] Breaking changes called out?
-- [ ] New env vars / config documented?
-
-### 🔄 Maintainability
-
-- [ ] Could a new team member understand this in 6 months?
-- [ ] Easy to modify when requirements change?
-- [ ] No magic numbers / strings (use constants)?
-- [ ] Logging at appropriate levels?
+The generic list (correctness, design, performance, documentation, maintainability) is in [`references/full-checklist.md`](references/full-checklist.md).
 
 ## Comment Templates
 
@@ -134,6 +78,8 @@ Suggest: <concrete fix>
 | `nit:` | Minor improvement, optional |
 | `q:` | Question, not necessarily a change |
 | `praise:` | Acknowledge good work |
+
+These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน
 
 ## Anti-patterns to Avoid
 

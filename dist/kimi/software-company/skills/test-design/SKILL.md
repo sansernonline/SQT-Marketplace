@@ -1,6 +1,6 @@
 ---
 name: "test-design"
-description: "Design test cases for a feature using QA tester + test-case-template skill."
+description: "Use when the user asks for test cases for a feature or user story (user command). Runs qa-tester with test-case-template."
 disableModelInvocation: true
 ---
 
@@ -10,17 +10,7 @@ The tester should:
 
 1. Review the feature / user story / acceptance criteria
 2. Apply the `test-case-template` skill
-3. Design test cases covering ALL categories:
-   - Functional (happy path)
-   - Boundary
-   - Negative
-   - Equivalence classes
-   - State transitions (if applicable)
-   - Integration
-   - Concurrency (if applicable)
-   - Security
-   - Performance (if applicable)
-   - Accessibility (for UI)
+3. Cover every category in `test-case-template` (Test Case Categories), noting which ones do not apply and why
 4. Mark each test case with priority (P1-P4)
 5. Indicate automation candidacy
 6. Produce a coverage summary table at the end

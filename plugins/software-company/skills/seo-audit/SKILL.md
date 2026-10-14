@@ -23,22 +23,10 @@ The SEO specialist should:
    - Off-Page SEO
    - Analytics setup
 
-3. **For each area**, identify:
-   - What's working ✅
-   - Issues found with severity (🔴/🟠/🟡/🟢)
-   - Page examples (not generic statements)
-   - Specific recommendation
-   - Estimated effort vs impact
+3. **Write findings and the report** with the checklist's per-finding fields and report template (`seo-audit-checklist` → `references/report-template.md`).
 
-4. **Produce the audit report** in the standard format with:
-   - Executive summary
-   - Health score per category
-   - Prioritized findings
-   - 3-month action plan (Month 1 quick wins → Month 3+ ongoing)
-   - Estimated traffic/ranking impact
-
-5. **Suggest next steps**:
+4. **Suggest next steps**:
    - Which findings should go to `developer` (code/markup changes)
-   - Which to content writer / `ux-designer` (content/IA)
+   - Which to `technical-writer` / `ux-designer` (content/IA)
    - Which to `devops-engineer` (performance/infra)
    - Which need ongoing monitoring

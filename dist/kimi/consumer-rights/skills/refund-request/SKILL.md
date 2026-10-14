@@ -70,9 +70,9 @@ Send so the date is provable: email + registered mail (ไปรษณีย์�
 5. Note the case number and expected timeline; follow up in writing.
 6. If the bank refuses or does not respond, contact ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน ธปท. 1213.
 
-Unauthorised card transactions: under BOT measures announced in 2022, banks refund debit-card holders within 5 days and do not bill credit-card holders for the amount and interest, once it is reasonable that the cardholder was not at fault.
+Unauthorised card transactions: under the BOT fraud measures (first Oct 2564, restated Mar 2566), banks refund debit-card holders within 5 days and do not bill credit-card holders for the amount and interest, once it is reasonable that the cardholder was not at fault. Since 13 Apr 2568 the พ.ร.ก. มาตรการป้องกันและปราบปรามอาชญากรรมทางเทคโนโลยี (ฉบับที่ 2) also makes banks, payment providers, phone networks and platforms share the loss when they did not follow their regulator's standard (BOT standard for banks announced 28 Apr 2568; the days limit inside it not checked — รอยืนยัน).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://thethaiger.com/th/news/488483/ · https://www.infoquest.co.th/?p=460115 (รอยืนยัน — check current BOT rules at bot.or.th)
+ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20211019.html · https://www.bot.or.th/th/news-and-media/news/news-20250428.html · https://www.thebangkokinsight.com/news/stock-finance/finance/1437029/ · https://thethaiger.com/th/news/488483/
 
 ## Worked example
 

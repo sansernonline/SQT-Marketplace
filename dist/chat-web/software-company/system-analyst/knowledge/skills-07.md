@@ -14,15 +14,20 @@ Use when creating, renaming or filing a document a team or client keeps (file na
 - โฟลเดอร์เริ่มมี `final`, `final2`, `ล่าสุด`, `แก้แล้ว`
 - มีคนถามว่า "ตกลงยึดฉบับไหน"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| เนื้อหาข้างในเอกสาร | `srs-writing` · `fsd-writing` · `adr-writer` |
-| รูปแบบ markdown | `polished-document-style` |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` |
-| ไฟล์ชั่วคราวระหว่างทำงาน | `temp-file-discipline` |
-| ข้อความ commit | `commit-message-format` |
+| งาน | skill | |
+|---|---|---|
+| เนื้อหาข้างในเอกสาร | `srs-writing` · `fsd-writing` · `adr-writer` | แทน |
+| รูปแบบ markdown | `polished-document-style` | แทน |
+| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` | แทน |
+| ไฟล์ชั่วคราวระหว่างทำงาน | `temp-file-discipline` | แทน |
+| ข้อความ commit | `commit-message-format` | แทน |
+| เวอร์ชันของ **โปรแกรม** (ไม่ใช่เอกสาร) | `cicd-and-release` | คู่ |
+| สารบัญว่าเอกสารไหนอยู่ที่ไหน | `project-bootstrap` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
 
 ---
 
@@ -138,30 +143,6 @@ Use when creating, renaming or filing a document a team or client keeps (file na
 - ❌ **แก้ใน Word โดยไม่แก้ markdown ต้นฉบับ** — 2 ฉบับเริ่มไม่ตรงกันตั้งแต่นาทีนั้น
 - ❌ **วันที่แบบ `25-09-2026` หรือ `250926`** — เรียงไม่ได้ และคนอ่านคนละแบบ
 - ❌ **ชื่อไฟล์ภาษาไทยที่มีเว้นวรรค** — ลิงก์พัง แนบอีเมลแล้วชื่อเพี้ยน
-
----
-
-## 8 · ตัวย่อ
-
-- **SRS** — Software Requirements Specification (เอกสารข้อกำหนดซอฟต์แวร์)
-- **FSD** — Functional Specification Document (เอกสารข้อกำหนดเชิงหน้าที่)
-- **BRD** — Business Requirements Document (เอกสารความต้องการทางธุรกิจ)
-- **UAT** — User Acceptance Testing (การทดสอบเพื่อตรวจรับโดยผู้ใช้)
-- **ADR** — Architecture Decision Record (บันทึกการตัดสินใจเชิงสถาปัตยกรรม)
-- **ISO 8601** — มาตรฐานรูปแบบวันที่ `YYYY-MM-DD`
-
-## 9 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| เนื้อหาของ SRS · FSD · ADR | `srs-writing` · `fsd-writing` · `adr-writer` |
-| รูปแบบ markdown และธีมสีเอกสาร | `polished-document-style` |
-| render เป็น .docx ให้สวย | `branded-document-design` |
-| ไฟล์ชั่วคราวระหว่างแปลง | `temp-file-discipline` |
-| เวอร์ชันของ **โปรแกรม** (ไม่ใช่เอกสาร) | `cicd-and-release` |
-| สารบัญว่าเอกสารไหนอยู่ที่ไหน | `project-bootstrap` |
-
-**แม่แบบตารางประวัติการแก้ไข และรายการชื่อไฟล์มาตรฐาน** อยู่ใน `assets/naming-cheatsheet.md`
 
 
 ---
@@ -294,7 +275,7 @@ locales/
 
 | ข้อมูล | เก็บ | แสดง |
 |---|---|---|
-| เงิน | ตัวเลขทศนิยมคงที่ + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
+| เงิน | ทศนิยมแบบตรงตัว ไม่ใช่ float (ฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql`) + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
 | ตัวคั่นหลักพันและจุดทศนิยม | ไม่เก็บ | ตามท้องถิ่น บางประเทศใช้สลับกับไทย |
 | เปอร์เซ็นต์ | เก็บเป็นสัดส่วนหรือจำนวนเต็ม **เลือกแบบเดียวทั้งระบบ** | |
 | ที่อยู่ | แยกฟิลด์ตามโครงของไทย (แขวง/เขต หรือ ตำบล/อำเภอ) | |
@@ -375,15 +356,17 @@ Use when a system must show who did what and when (approvals, money, permissions
 - มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
 - ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` |
-| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` |
+| งาน | skill | |
+|---|---|---|
+| log สำหรับไล่ปัญหาทางเทคนิค | `logging-standards` | แทน |
+| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
+| คอลัมน์ `created_by` `updated_at` ในตารางงาน | `database-design` | แทน |
+| สิทธิ์และการยืนยันตัวตน | `auth-implementation-patterns` | แทน |
+| ความยินยอมและสิทธิเจ้าของข้อมูล | `pdpa-compliance` | แทน |
+| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -520,23 +503,3 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 - ❌ **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
 - ❌ **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
 - ❌ **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
-
----
-
-## 9 · ตัวย่อ
-
-- **audit trail** — ร่องรอยการใช้งาน บันทึกว่าใครทำอะไรกับข้อมูลชิ้นไหนเมื่อไหร่
-- **append only** — เขียนต่อท้ายได้อย่างเดียว แก้หรือลบของเดิมไม่ได้
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
-- **UUIDv7** — รหัสสุ่มที่ขึ้นต้นด้วยเวลา จึงเรียงตามเวลาได้
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางและ index ของ audit | `database-design` |
-| correlation id ที่เชื่อมกลับไป log | `logging-standards` |
-| ใครเป็นใคร มีสิทธิ์อะไร | `auth-implementation-patterns` |
-| ความยินยอมและสิทธิขอลบ | `pdpa-compliance` |
-| การแจ้งเตือนเมื่อมีพฤติกรรมผิดปกติ | `observability-basics` |
-| ข้อกำหนดว่าต้องเก็บอะไรกี่ปี | `srs-writing` |

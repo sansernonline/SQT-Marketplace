@@ -813,9 +813,14 @@ def to_pdf(docx_path, outdir="."):
     """แปลงเป็น PDF ด้วย LibreOffice (ต้องมี soffice ในเครื่อง)
     ใช้ตรวจงานด้วยสายตาก่อนส่งมอบเสมอ"""
     import subprocess
-    subprocess.run(["soffice", "--headless", "--convert-to", "pdf",
-                    "--outdir", outdir, docx_path], check=True,
-                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        r = subprocess.run(["soffice", "--headless", "--convert-to", "pdf",
+                            "--outdir", outdir, docx_path],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+    except FileNotFoundError:
+        raise RuntimeError("ไม่พบคำสั่ง soffice — ติดตั้ง LibreOffice แล้วเพิ่มโฟลเดอร์ program ลง PATH") from None
+    if r.returncode != 0:
+        raise RuntimeError(f"soffice แปลง {docx_path} เป็น PDF ไม่สำเร็จ (exit {r.returncode}): {r.stderr.strip()[:500]}")
     return docx_path.rsplit("/", 1)[-1].replace(".docx", ".pdf")
 
 

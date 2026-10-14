@@ -73,9 +73,9 @@ Worked example: last wage 30,000/month (1,000/day), 7 years of service → 240 d
 
 ## 6. Minimum wage
 
-Set by the Wage Committee (คณะกรรมการค่าจ้าง) by province. From 1 Jul 2568 the top rate is **400 baht/day** (Bangkok and selected areas/hotel types); other provinces are lower. Always look up the current announcement (ประกาศคณะกรรมการค่าจ้าง เรื่อง อัตราค่าจ้างขั้นต่ำ) on mol.go.th / wage.mol.go.th before quoting — there may be a 2569 adjustment (รอยืนยัน).
+Set by the Wage Committee (คณะกรรมการค่าจ้าง) by province. From 1 Jul 2568 (ประกาศฉบับที่ 14) the top rate is **400 baht/day** (Bangkok, and hotels and service venues nationwide) and the lowest is **337 baht/day**. The committee met 17 มี.ค. 2569 and postponed any 2569 raise, so these rates are still in force. Always look up the current announcement (ประกาศคณะกรรมการค่าจ้าง เรื่อง อัตราค่าจ้างขั้นต่ำ) on mol.go.th / wage.mol.go.th before quoting — a round for 2570 may come (รอยืนยัน).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/347515 · https://thestandard.co/new-minimum-wage-rates-explained-july-2025/
+ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/39/iid/402570 · https://www.thaipbs.or.th/news/content/503458 (เลื่อนปรับ มี.ค. 2569) · https://thestandard.co/new-minimum-wage-rates-explained-july-2025/
 
 ## Rules of thumb
 

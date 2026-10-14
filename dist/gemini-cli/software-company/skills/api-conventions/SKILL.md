@@ -16,20 +16,26 @@ description: Use when starting an API, adding endpoints or checking API consiste
 - รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
 - ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
-| health check, error envelope, graceful shutdown | `web-service-essentials` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` |
+| งาน | skill | |
+|---|---|---|
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
+| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
+| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
+| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
 
 ---
 
 ## 1 · เอกสารข้อตกลงต้องมีจริง
 
-วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
 ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
 
 > ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
@@ -253,29 +259,3 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
-
----
-
-## 12 · ตัวย่อ
-
-- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
-- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
-- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
-- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
-- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
-- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| health check · error envelope · timeout | `web-service-essentials` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
-| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
-| token · scope · สิทธิ์ | `auth-implementation-patterns` |
-| correlation id ที่โผล่ใน error | `logging-standards` |
-| test สัญญาระหว่างระบบ | `testing-standards` |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
-
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`

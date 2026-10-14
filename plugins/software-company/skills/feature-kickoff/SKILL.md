@@ -33,4 +33,4 @@ Execute these steps **in order**, using sub-agents:
    - Identify dependencies and risks
    - Produce a project plan
 
-After each step, summarize and ask if user wants to proceed to the next role.
+Run all 4 roles in one go without stopping to ask. Report once at the end and list your own judgment calls under **ตัดสินใจเอง**.

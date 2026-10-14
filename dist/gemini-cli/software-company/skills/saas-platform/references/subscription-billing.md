@@ -158,6 +158,18 @@ const subscription = await stripe.subscriptions.create({
 //   customer.subscription.deleted → final action
 ```
 
+One schedule for the whole plugin: retries follow the processor (Stripe default above: 4 retries over 3 weeks). At each failed retry the app escalates one step:
+
+```
+Fail 1 → email the customer (update card link)
+Fail 2 → email + restrict paid features
+Fail 3 → email + escalate to account owner / CS
+Last   → cancel subscription + email
+Grace period → delete data per the retention policy
+```
+
+Recovery-rate target: (รอยืนยัน · 2026-10-14) — track it monthly; do not quote a number without your own data.
+
 ### Dunning Communications
 
 ```python

@@ -11,6 +11,6 @@
   .gitattributes
   .gitignore             ← build output · ค่าลับ · `_to_delete/`
   src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
-  tests/
+  tests/                 ← มีเฉพาะ stack ที่เครื่องมือบังคับ (.NET · Flutter `test/`) · ที่เหลือไฟล์ทดสอบอยู่ข้างไฟล์โค้ด
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
 ```

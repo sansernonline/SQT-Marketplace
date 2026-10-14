@@ -7,7 +7,7 @@ Use when the user corrects the same mistake twice or reviews keep flagging one i
 > agent ไม่ต้องจำกฎร้อยข้อ ถ้าทางเดินมีราวกั้นในจุดที่ถูก มันจะชนแล้วถูกหยุดในจังหวะที่ใช่เอง
 > ข้อความเตือนใน SKILL.md คือราวกั้นที่อ่อนที่สุด ใช้เป็นทางสุดท้าย
 
-มาจาก `correct` และ `rules-as-checks` ของ pstack
+มาจากคำสั่ง correct และ rules-as-checks ของ pstack (ไม่มีใน marketplace นี้)
 
 ## ไม่ใช้เมื่อ
 

@@ -9,7 +9,7 @@ description: Use when writing a post-incident review or blameless postmortem of 
 
 ## When to use this skill
 
-- After any incident affecting production (SEV1-SEV3)
+- After any production incident: required for SEV1-SEV3, a short writeup for SEV4
 - After a near-miss that could have been a major incident
 - After significant bugs that reached production
 - After a security incident
@@ -195,7 +195,7 @@ What can other teams learn from this?
 
 ## When to Skip Postmortem
 
-Almost never. Even for SEV4, a short writeup helps. Always do one for:
+Almost never. SEV4 needs only a short writeup. Always do a full one for:
 - Any SEV1 / SEV2
 - Repeated SEV3+ from same root cause
 - Security incidents

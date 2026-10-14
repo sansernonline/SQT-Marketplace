@@ -1,6 +1,6 @@
 ---
 name: threat-model
-description: Run STRIDE threat modelling on a feature or system with the security-engineer agent.
+description: Use when the user asks for a STRIDE threat model of a feature or system (user command). Runs security-engineer.
 argument-hint: <feature or system to analyze>
 disable-model-invocation: true
 ---
@@ -20,13 +20,7 @@ The security engineer should:
    - Mark trust boundaries explicitly
    - Identify entry points
 
-3. **Apply STRIDE per component:**
-   - 🎭 Spoofing — identity threats
-   - 🔄 Tampering — data modification threats
-   - 🚫 Repudiation — non-repudiation threats
-   - 📢 Information Disclosure — data leak threats
-   - 🛑 Denial of Service — availability threats
-   - ⬆️ Elevation of Privilege — auth bypass threats
+3. **Apply STRIDE per component** (all 6 categories for every component and data flow)
 
 4. **Assess risks** using likelihood × impact:
    - Score each threat

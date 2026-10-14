@@ -49,8 +49,8 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 
 ## Passive vs active
 
-- Default to a low-TER index fund for core holdings; a 1.5% fee gap compounds to roughly 30% less money over 25 years (see example).
-- Choose active only when its 5- and 10-year returns after fees beat the benchmark and the peer median consistently, and the manager team is stable.
+- Compare a low-TER index fund with active funds side by side; a 1.5% fee gap compounds to roughly 30% less money over 25 years (see example).
+- An active fund earns its fee only when its 5- and 10-year returns after fees beat the benchmark and the peer median consistently, and the manager team is stable.
 - Never pick on 1-year return alone — last year's top theme fund is a common trap.
 
 ## Workflow
@@ -58,7 +58,7 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 1. Set the goal, the time horizon (under 3 years means no equity) and the fund's role in the portfolio.
 2. Pick the type from the table.
 3. Shortlist 3 funds in that AIMC category; build the comparison table: TER, front/back fee, 5-yr return vs benchmark, max drawdown, size, hedging, dividend policy.
-4. Recommend the shape ("low-cost SET50 index or global index feeder"), not a guarantee.
+4. Lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
 5. Set the DCA plan and a yearly review date.
 
 ## Worked example — fee drag

@@ -5,7 +5,7 @@ argument-hint: <sprint number or period>
 disable-model-invocation: true
 ---
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `project-docs` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
+> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `learn-from-session` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
 
 Use the `project-manager` agent to facilitate a retrospective for: **$ARGUMENTS**
 

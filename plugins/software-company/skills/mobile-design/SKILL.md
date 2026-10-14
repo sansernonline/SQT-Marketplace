@@ -27,7 +27,7 @@ Workflow:
 6. **Design navigation pattern**
 7. **Plan offline support** if applicable
 8. **Apply `mobile-engineering` skill** for budget checking
-9. **Produce polished architecture doc** using `polished-document-style` (from software-company)
+9. **Produce polished architecture doc** using `polished-document-style`
 10. **Hand-off:** iOS → `mobile-engineer`, Android → `mobile-engineer`, ASO → `growth-specialist`
 
 ---
@@ -45,5 +45,5 @@ Workflow:
 6. **Rating + review analysis**
 7. **Localization gap analysis**
 8. **A/B test recommendations**
-9. **Produce polished ASO audit + 90-day plan** using `polished-document-style` (from software-company)
+9. **Produce polished ASO audit + 90-day plan** using `polished-document-style`
 10. **Hand-off:** asset creation → design team, implementation → respective engineers

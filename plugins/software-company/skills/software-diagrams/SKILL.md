@@ -143,8 +143,8 @@ agent ที่ไม่มี shell รันเองไม่ได้ → ag
 และบ่อยครั้งวาดออกมาไม่ตรงกับที่คิด
 
 ```bash
-npm i -g @mermaid-js/mermaid-cli
-mmdc -i diagram.mmd -o diagram.png -b white -s 2
+# ไม่ติดตั้งลงเครื่อง · pin รุ่นที่ทดสอบธีมไว้ (11.17.0 · รุ่นล่าสุด 12.0.0 ณ 2026-10-14 ยังไม่ได้ทดสอบธีม)
+npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s 2
 ```
 
 แล้ว**เปิดไฟล์ภาพดูด้วยตา** ไล่ตามนี้:

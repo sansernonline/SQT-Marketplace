@@ -3,6 +3,8 @@ name: "api-design"
 description: "Design an API spec with the system-analyst agent — endpoints, schemas, errors, examples."
 ---
 
+> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `feature` (หรือ `project-docs` ถ้าทำแค่เอกสาร) แล้วคัดลอกขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างบอกรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้คู่กับ playbook ไม่ได้ใช้แทน
+
 Use the `system-analyst` agent to design API specifications for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 The system analyst should:
@@ -15,7 +17,6 @@ The system analyst should:
    - Existing API conventions in the codebase
    - Rate limit / SLA requirements
    - Authentication mechanism in use
-   - Versioning strategy (URL vs header)
 
 2. **Design RESTful resources** (or GraphQL types):
    - Identify the nouns (resources)
@@ -33,13 +34,7 @@ The system analyst should:
    - Rate limits
    - Idempotency notes
 
-4. **Apply REST best practices:**
-   - Resource-oriented URLs (`/users/123/orders`, not `/getUserOrders?id=123`)
-   - Plural resource names
-   - Lowercase, hyphens (not camelCase) in URLs
-   - Standard HTTP status codes
-   - Errors as RFC 9457 `application/problem+json` (`web-service-essentials` §2)
-   - Pagination per `api-conventions`
+4. **Check every endpoint against the rulebooks from step 0** (URLs, status codes, pagination per `api-conventions` · errors per `web-service-essentials` §2). Do not restate the rules in the spec
 
 5. **Plan cross-cutting concerns:**
    - Authentication (Bearer? API key? OAuth?)

@@ -4,6 +4,6 @@ description: "Run the weekly tech radar — what changed in tracked libraries, w
 disableModelInvocation: true
 ---
 
-Run the `tech-radar` skill with the `tech-mentor` agent: **$ARGUMENTS`
+Run the `tech-radar` skill with the `tech-mentor` agent: **$ARGUMENTS**
 
 --deep follows one project's release notes in detail and drafts upgrade steps.

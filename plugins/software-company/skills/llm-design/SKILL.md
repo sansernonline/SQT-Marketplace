@@ -16,178 +16,30 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `rag-design`
 
-Use the `ai-engineer` agent to design a RAG system for: **$ARGUMENTS**
+Use the `ai-engineer` agent for: **$ARGUMENTS**
 
-The LLM architect should:
-
-1. **Initial Discovery** — gather:
-   - Document corpus (size, format, update frequency)
-   - Query patterns (questions, who asks)
-   - Quality bar (accuracy, citation requirements)
-   - Latency budget
-   - Cost budget
-   - Privacy / data residency constraints
-
-2. **Apply `llm-engineering` skill** for system design
-
-3. **Design each stage:**
-
-   **a. Ingestion**
-   - Document parsing approach
-   - Cleaning pipeline
-   - Metadata extraction
-
-   **b. Chunking**
-   - Strategy selection (fixed/recursive/semantic)
-   - Chunk size + overlap
-   - Hierarchical (parent-child) if needed
-
-   **c. Embeddings**
-   - Model selection (cost/quality trade-off)
-   - Dimension strategy
-
-   **d. Vector DB**
-   - Selection based on scale + features
-   - Sharding / replication plan
-
-   **e. Retrieval**
-   - Hybrid (vector + keyword) recommended
-   - Metadata filtering
-   - Top-K strategy
-
-   **f. Re-ranking**
-   - Model selection
-   - Position in pipeline
-
-   **g. Context construction**
-   - Token budget management
-   - Citation format
-   - Truncation strategy
-
-   **h. Generation**
-   - Prompt template (with citation requirement)
-   - Refusal pattern (no answer in context)
-   - Model selection per query type
-
-4. **Design evaluation:**
-   - Apply `llm-engineering` skill
-   - Build initial eval set (50+ examples)
-   - Metrics: faithfulness, relevance, context precision
-   - Regression testing approach
-
-5. **Plan production deployment:**
-   - Indexing pipeline (initial + incremental)
-   - Reindexing strategy when docs change
-   - Caching layers
-   - Monitoring (retrieval quality, latency, cost)
-   - Fallback when retrieval fails
-
-6. **Produce polished design document** using `polished-document-style` skill (from software-company):
-   - System architecture diagram (Mermaid)
-   - Tech stack with rationale
-   - Data flow sequence diagram
-   - Eval framework
-   - Cost projection
-   - Phased rollout plan
-   - Risks + mitigations
-
-7. **Hand-off suggestions:**
-   - Data pipeline implementation → `data-engineer`
-   - Production deployment → `ai-engineer`
-   - Prompt optimization → `ai-engineer`
-   - Application integration → `developer` (from software-company)
+Workflow:
+1. **Discovery:** corpus (size, format, update rate), who asks what, quality bar and citations, latency and cost budget, privacy and data residency
+2. **Apply `llm-engineering` skill**, open `references/rag-architecture.md`
+3. **Design stages 1-7** from that file: ingestion, chunking, embeddings, vector database, hybrid retrieval with metadata filters, re-ranking, context and prompt with citations and a "not in context" refusal
+4. **Apply its Security section:** retrieved text is data, filter by the user's access at query time
+5. **Design evaluation** with `references/llm-evaluation-patterns.md` (eval set 20-50 to start, 50+ before production)
+6. **Plan production:** incremental indexing and re-indexing, caching, monitoring (retrieval quality, latency, cost), fallback when retrieval fails
+7. **Produce polished design** using `polished-document-style`: architecture and sequence diagrams, stack with reasons, cost projection, phased rollout, risks
+8. **Hand-off:** data pipeline → `data-engineer`, application integration → `developer`, production deployment → `devops-engineer`
 
 ---
 
 ## Mode: `llm-eval`
 
-Use the `ai-engineer` agent to design LLM evaluation for: **$ARGUMENTS**
+Use the `ai-engineer` agent for: **$ARGUMENTS**
 
-The prompt engineer should:
-
-1. **Initial Discovery** — gather:
-   - Application type (classification, generation, RAG, agent, etc.)
-   - Current prompt(s) and model(s) in use
-   - Production traffic patterns (input distribution)
-   - Quality concerns (where does it fail today?)
-   - Existing eval set (if any)
-   - Acceptable cost / latency for eval runs
-
-2. **Apply `llm-engineering` skill** for framework design
-
-3. **Build eval set:**
-
-   **a. Seed examples (30-50 hand-crafted)**
-   - 50% happy path
-   - 20% edge cases
-   - 15% safety / refusal
-   - 10% multilingual (if applicable)
-   - 5% known failure modes
-
-   **b. Production traffic samples**
-   - Sample 50+ from real traffic
-   - Human label for ground truth
-   - Identify slices that need coverage
-
-4. **Choose metrics by task:**
-
-   **Classification:**
-   - Accuracy, F1, per-class precision/recall
-   - Confusion matrix analysis
-
-   **Extraction:**
-   - Field-level accuracy
-   - Schema validity rate
-   - JSON parseability
-
-   **Generation:**
-   - LLM-as-judge (correctness, completeness, tone)
-   - Semantic similarity
-   - Length / format compliance
-
-   **RAG:**
-   - Faithfulness (grounded in context?)
-   - Answer relevance
-   - Citation accuracy
-
-   **Agent:**
-   - Task completion rate
-   - Number of steps to completion
-   - Tool selection accuracy
-
-5. **Add operational metrics (always):**
-   - Latency (p50, p95, p99)
-   - Token usage (in/out)
-   - Cost per call
-   - Error rate
-
-6. **Set up LLM-as-judge (if applicable):**
-   - Use bigger model for judging
-   - Validate with human correlation (target > 0.7)
-   - Multi-dimension rubric
-
-7. **Define regression criteria:**
-   - Quality drop > X% → fail
-   - Safety eval pass < 99% → fail
-   - Latency p95 increase > Y% → fail
-   - Cost increase > Z% → fail
-
-8. **Produce polished eval document** using `polished-document-style` skill (from software-company):
-   - Eval set documentation (categories, sources)
-   - Metrics catalog with definitions
-   - LLM-as-judge prompts
-   - Baseline performance
-   - Regression test integration (CI hook)
-   - Monitoring dashboard spec
-
-9. **Implementation suggestions:**
-   - Run via promptfoo / LangSmith / DeepEval / RAGAS
-   - Daily/weekly cadence for production sampling
-   - Alert thresholds
-   - Versioning strategy for eval set
-
-10. **Hand-off suggestions:**
-    - Implementation → `developer` (from software-company)
-    - CI integration → `devops-engineer` (from software-company)
-    - Production monitoring → `ai-engineer`
-    - LLM system improvements → `ai-engineer`
+Workflow:
+1. **Discovery:** application type, current prompts and models, real input mix, where it fails today, existing eval set, cost and time allowed per eval run
+2. **Apply `llm-engineering` skill**, open `references/llm-evaluation-patterns.md`
+3. **Build eval set** per its Step 1: 20-50 hand-crafted to start, 50+ before production, plus labelled samples from real traffic
+4. **Choose metrics by task** from its metrics tables, plus operational metrics (latency p95, tokens, cost, error rate)
+5. **Set up LLM-as-judge** if needed, validated against human labels
+6. **Define regression gates** (quality, safety, latency, cost) with numbers the user confirms
+7. **Produce polished eval document** using `polished-document-style`: eval set, metric definitions, judge prompts, baseline, CI hook, monitoring
+8. **Hand-off:** implementation → `developer`, CI integration → `devops-engineer`, production monitoring → `ai-engineer`

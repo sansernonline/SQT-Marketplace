@@ -15,13 +15,19 @@ Use when settings differ by environment or something must never be committed (ke
 - เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
 - secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
+| งาน | skill | |
+|---|---|---|
+| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
+| connection string ของฐานข้อมูล | `database-design` | คู่ |
+| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
+| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -221,31 +227,6 @@ APP_LOG_LEVEL=debug
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
 - ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
----
-
-## 12 · ตัวย่อ
-
-- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
-- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
-- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
-- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
-- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
-- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
-- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
-| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
-| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
-| connection string ของฐานข้อมูล | `database-design` |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 
 ## reference: per-stack.md
@@ -678,7 +659,7 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 
 **ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` · `tests/` · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (ไฟล์ทดสอบอยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
 
 **ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -691,13 +672,14 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 - ชื่อโฟลเดอร์และไฟล์ใน repo เป็นตัวพิมพ์เล็กคั่นด้วยขีดกลาง ไม่มีเว้นวรรค **ยกเว้นภาษาที่มีธรรมเนียมของตัวเอง** ให้ตามภาษานั้น
 
 **ข้อยกเว้นตาม stack** — ชื่อโฟลเดอร์โค้ด โฟลเดอร์ทดสอบ และชื่อไฟล์ใน repo ใช้ตามที่เครื่องมือของภาษาคาดไว้
-ไม่ฝืนให้เป็น `src/` `tests/`:
+ไม่ฝืนให้เป็น `src/` · ปกติไฟล์ทดสอบอยู่ข้างไฟล์โค้ด ใช้โฟลเดอร์ทดสอบแยกเฉพาะ stack ที่เครื่องมือบังคับ (ช่องที่เขียนว่า **บังคับ**):
 
 | Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
 |---|---|---|---|
-| ทั่วไป (Node · .NET) | `src/` | `tests/` | `kebab-case` (.NET ใช้ `PascalCase.cs`) |
-| Python | `src/<package>/` | `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
+| Node | `src/` | ข้างไฟล์โค้ด (`*.test.ts`) | `kebab-case` |
+| .NET | `src/` | `tests/` **บังคับ** (โปรเจกต์ทดสอบแยก `.csproj`) | `PascalCase.cs` |
+| Python | `src/<package>/` | ข้างไฟล์โค้ด (`test_*.py`) | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **บังคับ** (โครงเหมือน `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
 
 skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
 
@@ -853,6 +835,6 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
   .gitattributes
   .gitignore             ← build output · ค่าลับ · `_to_delete/`
   src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
-  tests/
+  tests/                 ← มีเฉพาะ stack ที่เครื่องมือบังคับ (.NET · Flutter `test/`) · ที่เหลือไฟล์ทดสอบอยู่ข้างไฟล์โค้ด
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
 ```

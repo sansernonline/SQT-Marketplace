@@ -762,21 +762,15 @@ Use when producing a document, design, architecture or plan (BRD, FSD, ADR, road
 This skill covers **non-code outputs** — documents, plans, architecture, and
 designs. For code, use `lazy-coding`.
 
-## The one test
+## Check before submitting — 5 items
 
-Before submitting, ask:
+1. **A tired teammate gets it** in 6 months with no prior context.
+2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
+3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
+4. **Nothing can be deleted without losing meaning** — deleting beats adding.
+5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
 
-> Could a tired teammate understand this in 6 months, with no prior context?
-
-If "no" or "not sure" → simplify.
-
-## 5 principles
-
-1. **Start with the simplest thing that works.** Add complexity only when something breaks.
-2. **Reduce moving parts.** Each component adds failure modes, ops burden, and docs. Default to one thing.
-3. **Use familiar patterns.** Boring, proven tech for critical paths. Save novelty for low-risk experiments.
-4. **Optimize for reading.** It's read far more often than written.
-5. **Delete &gt; add.** The best edit removes something. The worst adds a layer for an imagined future need.
+Any "no" or "not sure" → simplify before delivering.
 
 ## By output type
 
@@ -812,16 +806,6 @@ across screens, defaults that work for 80%, progressive disclosure.
 Avoid: novel interactions where a standard one works, 10-step flows when 3
 work, required fields with no smart default, hidden features needing tutorials.
 
-## The 3-question filter
-
-Before adding any new component, configuration option, or pattern:
-
-1. Is there real evidence we need this **now** (not "might need")?
-2. Is there a simpler way? (Sleep on it. Often yes.)
-3. What's the cost of **not** adding it? (Often nothing, or a small refactor later.)
-
-Two or more answers point to "simpler is fine" → don't add it.
-
 ## Examples
 
 **API description**
@@ -856,19 +840,6 @@ auth middleware. Log to the existing system."
 - **Resume-driven design** — fancy tech to look sophisticated.
 - **Buzzword stacking** — "cloud-native event-driven AI-powered".
 
-## Pre-submit checklist
-
-- [ ] A tired teammate would understand this in 6 months.
-- [ ] Nothing can be deleted without losing meaning.
-- [ ] No jargon the audience won't know.
-- [ ] Every abstract claim has an example.
-- [ ] I could explain the whole thing in two sentences.
-
-If any answer is "no" → simplify before delivering.
-
-> "Perfection is achieved not when there is nothing more to add, but when there
-> is nothing left to take away." — Saint-Exupéry
-
 
 ---
 
@@ -887,7 +858,7 @@ Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core)
 ## 1 · เริ่มงาน: อ่านเวอร์ชันก่อน แล้วรันคำสั่งชุดเดียวกันทุกครั้ง
 
 - เวอร์ชัน SDK ดูที่ `global.json` ส่วนเวอร์ชันที่ target ดูที่ `<TargetFramework>` ใน `*.csproj` หรือ `Directory.Build.props`
-- `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง พ.ย. 2028 ส่วน `net8.0` และ `net9.0` หมดอายุ 10 พ.ย. 2026 ถ้าเจอในงานใหม่ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน
+- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://dotnet.microsoft.com/platform/support/policy/dotnet-core): `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง 2028-11-14 · `net8.0` (LTS) และ `net9.0` (Standard Term Support, STS) อยู่ช่วงท้าย รองรับถึง 2026-11-10 · ถ้าเจอ 2 ตัวนี้ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
 - ถ้าเจอ `net48` หรือ `v4.x` ใน `<TargetFrameworkVersion>` แปลว่าเป็น .NET Framework ให้ใช้ชุดคำสั่ง legacy ด้านล่าง
 
 | ขั้น | .NET (Core) 8+ | .NET Framework 4.x (Windows) |
@@ -994,18 +965,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 - test API ทั้งเส้นใช้ `WebApplicationFactory<Program>` ถ้า test มองไม่เห็น `Program` ให้เพิ่ม `public partial class Program;`
 - ฐานข้อมูลจริงใช้ Testcontainers (`Testcontainers.MsSql` · `Testcontainers.PostgreSql`) ห้ามใช้ EF InMemory แทนฐานจริง เพราะไม่ตรวจ constraint และแปล SQL ต่างกัน
 
-```csharp
-public class OrdersApiTests(WebApplicationFactory<Program> factory)
-    : IClassFixture<WebApplicationFactory<Program>>
-{
-    [Fact]
-    public async Task Get_WhenNotLoggedIn_Returns401()
-    {
-        var res = await factory.CreateClient().GetAsync("/api/orders", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
-    }
-}
-```
+ตั้งค่า xUnit และตัวอย่าง `WebApplicationFactory` เต็ม ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#net--xunit)
 
 ## 6 · ความปลอดภัยเฉพาะ .NET
 
@@ -1066,7 +1026,7 @@ Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Ang
 | ดูไฟล์ | บอกอะไร | ทำ |
 |---|---|---|
 | `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด (24 ส่วนตัว 26 เข้า LTS ปลาย ต.ค. 2026 ให้ตรวจก่อนใช้) |
+| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ |
 | `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
 | `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
 
@@ -1166,14 +1126,10 @@ export class OrderList {
 
 ## 6 · test
 
-ใช้ framework ที่ repo มี ถ้าไม่มีให้ดูตาราง `testing-standards` ข้อ 1
+ใช้ framework ที่ repo มี · ตั้งค่า Vitest และ Angular พร้อมตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#node--typescript--vitest) ส่วนเบราว์เซอร์ดู `e2e-testing-patterns`
 
-| ชั้น | เครื่องมือ |
-|---|---|
-| logic ล้วน | Vitest หรือ Jest ตาม repo |
-| HTTP API | `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) |
-| Angular component | `TestBed` + component harness หรือ Testing Library ตั้งแต่ v21 ขึ้นไป CLI ใช้ Vitest เป็นค่าเริ่มต้น |
-| ผ่านเบราว์เซอร์ | Playwright (ดู `e2e-testing-patterns`) |
+- HTTP API: `supertest` (Express · NestJS) · `fastify.inject()` (Fastify) ไม่ต้องเปิดพอร์ตจริง
+- Angular ตั้งแต่ v21 CLI ใช้ Vitest เป็นค่าเริ่มต้น ไม่ใช่ Karma
 
 - logic ใหม่หรือแก้ bug ให้เขียน test ที่แดงก่อน แล้วค่อยแก้ให้เขียว
 - snapshot อย่างเดียวไม่นับเป็น test ต้องมี assert ค่าที่สำคัญ

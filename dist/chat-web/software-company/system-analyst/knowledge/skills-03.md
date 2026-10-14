@@ -49,6 +49,8 @@ Use when writing or reviewing a Software Requirements Specification (SRS) — IS
 อิงตาม ISO/IEC/IEEE 29148 (มาตรฐานสากลสำหรับกระบวนการข้อกำหนด)
 ส่วนฉบับเต็มพร้อมคำใบ้ว่าแต่ละหัวข้อต้องมีอะไรอยู่ใน **`assets/srs-outline.md`**
 
+เอกสารความต้องการฝั่งธุรกิจ (Business Requirements Document — BRD) ที่มักเขียนก่อน SRS ใช้แม่แบบใน [`references/brd-template.md`](references/brd-template.md)
+
 | # | หัวข้อ | ตอบคำถามว่า | ข้ามได้ไหม |
 |---|---|---|---|
 | 1 | บทนำ · วัตถุประสงค์ · ขอบเขต · คำนิยาม | เอกสารนี้พูดถึงอะไร ไม่พูดถึงอะไร | ไม่ได้ |
@@ -206,39 +208,8 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 ## 8 · รีวิวความครบถ้วน
 
-ไล่ให้ครบก่อนส่งทุกครั้ง เพราะข้อที่ไม่ผ่านจะกลายเป็นข้อพิพาทตอนตรวจรับ
-
-**ขอบเขต**
-
-- [ ] มีรายการ "ไม่อยู่ในขอบเขต" ไหม
-- [ ] มีข้อสมมติเขียนไว้ชัดไหม และใครต้องยืนยันข้อสมมตินั้น
-- [ ] ระบุระบบอื่นที่ต้องต่อครบไหม ใครเป็นเจ้าของแต่ละระบบ
-
-**ข้อกำหนดรายข้อ**
-
-- [ ] ทุกข้อมีรหัสไหม
-- [ ] ทุกข้อเขียน test case ได้ไหม
-- [ ] มีคำว่า "เร็ว" "ง่าย" "เหมาะสม" "เสถียร" "ยืดหยุ่น" หลงเหลือไหม
-- [ ] มี "เป็นต้น" "ฯลฯ" "และ/หรือ" หลงเหลือไหม
-- [ ] มีข้อไหนบอกวิธีทำแทนที่จะบอกผลลัพธ์ไหม
-- [ ] มี 2 ข้อที่ขัดกันไหม
-
-**ความครบของหมวด**
-
-- [ ] ครบทั้ง 11 หมวดในข้อ 5 ไหม (หรือเขียนไว้ว่าหมวดไหนไม่เกี่ยวเพราะอะไร)
-- [ ] มีข้อกำหนดเรื่องสิทธิ์ผู้ใช้ไหม
-- [ ] มีข้อกำหนดเรื่องการย้ายข้อมูลเดิมเข้าระบบใหม่ไหม
-- [ ] มีข้อกำหนดเรื่องรายงานไหม (มักถูกลืม แล้วมาโผล่ตอนใกล้ส่ง)
-- [ ] มีข้อกำหนดเรื่องการแจ้งเตือนไหม (อีเมล · LINE · ในระบบ)
-- [ ] มีเกณฑ์การตรวจรับที่วัดได้ไหม
-
-**เอกสาร**
-
-- [ ] ทุกข้อมีที่มาในตารางสอบย้อนกลับไหม
-- [ ] "ต้องมี" ไม่เกิน 60% ใช่ไหม
-- [ ] มีประวัติการแก้ไขพร้อมเลขรุ่นไหม
-- [ ] มีช่องเซ็นรับพร้อมชื่อและตำแหน่งจริงไหม
-- [ ] อภิธานศัพท์ครอบคลุมทุกคำที่ใช้ในเล่มไหม
+ไล่ checklist ใน [`references/review-checklist.md`](references/review-checklist.md) ให้ครบก่อนส่งทุกครั้ง (ขอบเขต · ข้อกำหนดรายข้อ · ความครบของหมวด · เอกสาร)
+เพราะข้อที่ไม่ผ่านจะกลายเป็นข้อพิพาทตอนตรวจรับ
 
 ---
 
@@ -278,6 +249,175 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
 หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: brd-template.md
+
+# BRD template — stakeholder version (Mode B)
+
+แม่แบบ Business Requirements Document (BRD) ฉบับส่งผู้เกี่ยวข้อง ของ agent `business-analyst` — ย้ายมาจากตัว agent (2026-10-14) · จัดรูปแบบตาม `polished-document-style`
+
+**สารบัญ:**
+
+- [Standard Output: Polished BRD (Mode B)](#standard-output-polished-brd-mode-b) — template sections: Executive Summary · Business Objective · Stakeholders · Scope · Business Requirements · Business Rules · Assumptions & Constraints · Open Questions · Process Flow · Sign-off
+
+## Standard Output: Polished BRD (Mode B)
+
+```markdown
+# 📋 BRD: <Feature Name>
+
+| | |
+|--|--|
+| **Document Type** | Business Requirements Document |
+| **Version** | 1.0 |
+| **Status** | 🟡 Draft |
+| **Date** | YYYY-MM-DD |
+| **Author** | @ba-name |
+| **Reviewer(s)** | @stakeholder |
+
+---
+
+## 📑 Table of Contents
+
+1. [Executive Summary](#1-executive-summary)
+2. [Business Objective](#2-business-objective)
+3. [Stakeholders](#3-stakeholders)
+4. [Scope](#4-scope)
+5. [Business Requirements](#5-business-requirements)
+6. [Business Rules](#6-business-rules)
+7. [Assumptions & Constraints](#7-assumptions--constraints)
+8. [Open Questions](#8-open-questions)
+
+---
+
+## 1. Executive Summary
+
+> 💡 **For non-technical readers** — 1 paragraph capturing what, why, and impact.
+
+## 2. 🎯 Business Objective
+
+| Aspect | Details |
+|--------|---------|
+| **Problem** | ... |
+| **Goal** | ... |
+| **Success Metrics** | • Metric 1: target<br>• Metric 2: target |
+| **Business Impact** | 💰 Revenue / ⚡ Efficiency / 👥 UX |
+
+## 3. 👥 Stakeholders
+
+| Role | Name | Interest | Influence | RACI |
+|------|------|:--------:|:---------:|:----:|
+| Product Owner | @alice | 🔴 High | 🔴 High | A |
+| End User | @customer | 🔴 High | 🟡 Med | C |
+| Engineering | @bob | 🟡 Med | 🔴 High | R |
+| Legal | @charlie | 🟢 Low | 🟡 Med | I |
+
+> 📝 **RACI:** R=Responsible, A=Accountable, C=Consulted, I=Informed
+
+## 4. Scope
+
+### ✅ In Scope
+- ...
+
+### ❌ Out of Scope
+- ...
+
+> ⚠️ **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
+
+## 5. Business Requirements
+
+| ID | Requirement | Priority | Acceptance |
+|:---|:------------|:--------:|:-----------|
+| BR-001 | System shall... | 🔴 Must | Verified by ... |
+| BR-002 | System should... | 🟡 Should | Verified by ... |
+| BR-003 | System could... | 🟢 Could | Verified by ... |
+
+> 📝 **MoSCoW prioritization:** Must / Should / Could / Won't
+
+## 6. 📐 Business Rules
+
+| ID | Rule | Source |
+|:---|:-----|:-------|
+| BRL-001 | Tax rate = 7% on Thai customers | Thai VAT law |
+| BRL-002 | Max discount = 30% per order | Pricing policy |
+
+## 7. Assumptions & Constraints
+
+### Assumptions
+- ...
+
+### Constraints
+| Type | Constraint |
+|------|------------|
+| 💰 Budget | $XX,XXX |
+| 🗓️ Timeline | Launch by YYYY-MM-DD |
+| 🔒 Compliance | PDPA, PCI-DSS |
+| ⚙️ Technical | Must integrate with existing CRM |
+
+## 8. ❓ Open Questions
+
+| ID | Question | Owner | Due |
+|:---|:---------|:------|:---:|
+| Q-001 | Which payment gateway? | @alice | MM/DD |
+| Q-002 | Refund policy? | @legal | MM/DD |
+
+## 9. Process Flow (if applicable)
+
+\`\`\`mermaid
+flowchart LR
+    A[Customer requests] --> B{Validate}
+    B -->|Valid| C[Process]
+    B -->|Invalid| D[Reject]
+    C --> E[Notify]
+\`\`\`
+
+## ✍️ Sign-off
+
+| Role | Name | Status | Date |
+|------|------|:------:|------|
+| Product Owner | @alice | ⚪ Pending | — |
+| Tech Lead | @bob | ⚪ Pending | — |
+| Compliance | @charlie | ⚪ Pending | — |
+```
+
+
+## reference: review-checklist.md
+
+# รีวิวความครบถ้วนของ SRS
+
+ใช้กับ `srs-writing` ข้อ 8 · ไล่ให้ครบก่อนส่งทุกครั้ง · "ข้อ 5" หมายถึงหมวดข้อกำหนดที่ไม่ใช่หน้าที่ใน `SKILL.md`
+
+**ขอบเขต**
+
+- [ ] มีรายการ "ไม่อยู่ในขอบเขต" ไหม
+- [ ] มีข้อสมมติเขียนไว้ชัดไหม และใครต้องยืนยันข้อสมมตินั้น
+- [ ] ระบุระบบอื่นที่ต้องต่อครบไหม ใครเป็นเจ้าของแต่ละระบบ
+
+**ข้อกำหนดรายข้อ**
+
+- [ ] ทุกข้อมีรหัสไหม
+- [ ] ทุกข้อเขียน test case ได้ไหม
+- [ ] มีคำว่า "เร็ว" "ง่าย" "เหมาะสม" "เสถียร" "ยืดหยุ่น" หลงเหลือไหม
+- [ ] มี "เป็นต้น" "ฯลฯ" "และ/หรือ" หลงเหลือไหม
+- [ ] มีข้อไหนบอกวิธีทำแทนที่จะบอกผลลัพธ์ไหม
+- [ ] มี 2 ข้อที่ขัดกันไหม
+
+**ความครบของหมวด**
+
+- [ ] ครบทั้ง 11 หมวดในข้อ 5 ไหม (หรือเขียนไว้ว่าหมวดไหนไม่เกี่ยวเพราะอะไร)
+- [ ] มีข้อกำหนดเรื่องสิทธิ์ผู้ใช้ไหม
+- [ ] มีข้อกำหนดเรื่องการย้ายข้อมูลเดิมเข้าระบบใหม่ไหม
+- [ ] มีข้อกำหนดเรื่องรายงานไหม (มักถูกลืม แล้วมาโผล่ตอนใกล้ส่ง)
+- [ ] มีข้อกำหนดเรื่องการแจ้งเตือนไหม (อีเมล · LINE · ในระบบ)
+- [ ] มีเกณฑ์การตรวจรับที่วัดได้ไหม
+
+**เอกสาร**
+
+- [ ] ทุกข้อมีที่มาในตารางสอบย้อนกลับไหม
+- [ ] "ต้องมี" ไม่เกิน 60% ใช่ไหม
+- [ ] มีประวัติการแก้ไขพร้อมเลขรุ่นไหม
+- [ ] มีช่องเซ็นรับพร้อมชื่อและตำแหน่งจริงไหม
+- [ ] อภิธานศัพท์ครอบคลุมทุกคำที่ใช้ในเล่มไหม
 
 
 ---
@@ -362,7 +502,7 @@ skill นี้คือ house style เดียวของรูปที่�
 
 ในโครง HTML แก้ที่ `--accent` ใน `:root` ที่เดียว (SVG/Python engine แก้ `ACCENT` ใน `theme.py`) · สีพื้นตามดีไซน์ของโปรเจกต์ → ต่อท้ายชื่อไฟล์ `#accent=<สีหลัก>&bg=<สีพื้น>` · ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์ (สีโลโก้ผู้ให้บริการ · เทาโครงสร้าง) และ**สีไอคอน 7 กลุ่ม** (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) พร้อมความหมาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "ระบบสี" — สีที่ 8 แปลว่าใช้สีเพื่อความสวย
 
-**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · การ์ดมีแถบสีหนาที่ขอบ · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` (`references/states-and-checks.md`)
+**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · การ์ดมีแถบสีหนาที่ขอบ · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` ([`ui-craft/references/states-and-checks.md`](../ui-craft/references/states-and-checks.md))
 
 ### 5.1 · รูปต้องมีจุดเด่น ไม่จืด
 

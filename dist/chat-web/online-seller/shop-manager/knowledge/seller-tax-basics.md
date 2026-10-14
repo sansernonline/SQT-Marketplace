@@ -28,10 +28,10 @@ The Revenue Department already sees most online sales: banks and e-wallets repor
 | Personal allowance | ฿60,000 |
 | Minimum-tax check | Applies when non-salary income (40(2)–40(8)) is ฿120,000 or more: tax = 0.5% of that income; if over ฿5,000, pay the higher of normal tax and 0.5% tax |
 | Personal income tax brackets (net income) | 0–150,000: exempt · 150,001–300,000: 5% · 300,001–500,000: 10% · 500,001–750,000: 15% · 750,001–1,000,000: 20% · 1,000,001–2,000,000: 25% · 2,000,001–5,000,000: 30% · above 5,000,000: 35% |
-| VAT registration | Compulsory once annual sales exceed ฿1.8 million; register (ภ.พ.01) within 30 days of exceeding; then file ภ.พ.30 monthly by the 15th (e-filing later — รอยืนยัน) |
-| VAT rate | 7% (reduced rate, extended year by year — รอยืนยัน the current extension) |
+| VAT registration | Compulsory once annual sales exceed ฿1.8 million; register (ภ.พ.01) within 30 days of exceeding; then file ภ.พ.30 every month, even with zero sales: paper by the 15th, e-filing by the 23rd |
+| VAT rate | 7% (reduced from the statutory 10%), extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to 30 Sep 2570 |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://flowaccount.com/blog/shopee-income-tax-threshold/ · https://www.thairath.co.th/money/personal_finance/finance_banking/2778210 · e-filing deadlines (รอยืนยัน) each year at rd.go.th
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://flowaccount.com/blog/shopee-income-tax-threshold/ · https://www.thairath.co.th/money/personal_finance/finance_banking/2778210 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275 (VAT 7% to 30 Sep 2570, same source as `thai-workplace:tax-vat-th`)
 
 ## 60% deemed vs actual expenses
 

@@ -185,14 +185,19 @@ Use when a system imports or exports Excel or CSV. Validate before write, row er
 - ย้ายข้อมูลจากระบบเก่าเข้าระบบใหม่
 - ผู้ใช้อัปโหลดแล้วได้ข้อความว่า "ไฟล์ไม่ถูกต้อง" แล้วไม่รู้ว่าผิดตรงไหน
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` |
-| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` |
-| กลไกคิวและความคืบหน้า | `background-jobs` |
-| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` |
+| งาน | skill | |
+|---|---|---|
+| รับไฟล์อัปโหลดทั่วไป (รูป เอกสาร) | `file-upload-and-storage` | แทน |
+| สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` | แทน |
+| กลไกคิวและความคืบหน้า | `background-jobs` | แทน |
+| ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` | แทน |
+| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` | คู่ |
+| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` | คู่ |
+| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` | คู่ |
+| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -300,29 +305,6 @@ Use when a system imports or exports Excel or CSV. Validate before write, row er
 - ❌ **ส่งออกโดยไม่ escape สูตร** เปิดไฟล์แล้วรันคำสั่ง
 - ❌ **ส่งออกได้เกินสิทธิ์ที่มี** ข้อมูลรั่วผ่านปุ่มที่เราทำเอง
 - ❌ **ไม่เก็บไฟล์ต้นฉบับ** มีปัญหาแล้วย้อนดูไม่ได้
-
----
-
-## 7 · ตัวย่อ
-
-- **CSV** — Comma-Separated Values (ไฟล์ข้อความที่คั่นค่าด้วยจุลภาค)
-- **BOM** — Byte Order Mark (ไบต์นำหน้าไฟล์ที่บอกว่าเป็น UTF-8 ทำให้ Excel อ่านภาษาไทยถูก)
-- **UTF-8** — มาตรฐานการเข้ารหัสตัวอักษรที่รองรับทุกภาษา
-- **batch** — ชุดของแถวที่นำเข้าพร้อมกันในครั้งเดียว
-- **CSV injection** — ช่องโหว่ที่ค่าซึ่งขึ้นต้นด้วย `=` ถูก Excel ตีความเป็นสูตรและรันคำสั่ง
-
-## 8 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รับไฟล์อัปโหลดอย่างปลอดภัย | `file-upload-and-storage` |
-| ทำเป็นงานเบื้องหลังพร้อมความคืบหน้า | `background-jobs` |
-| สร้างไฟล์ Excel ที่จัดรูปแบบแล้ว | `anthropic-skills:xlsx` |
-| ปี พ.ศ. · การเรียงลำดับไทย · การเข้ารหัสตัวอักษร | `i18n-and-locale` |
-| บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` |
-| ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` |
-| แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` |
-| ข้อจำกัดและ constraint ของตารางปลายทาง | `database-design` |
 
 
 ---
@@ -626,7 +608,7 @@ locales/
 
 | ข้อมูล | เก็บ | แสดง |
 |---|---|---|
-| เงิน | ตัวเลขทศนิยมคงที่ + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
+| เงิน | ทศนิยมแบบตรงตัว ไม่ใช่ float (ฐานข้อมูลใช้ `decimal(19,4)` ตาม `stack-sql`) + รหัสสกุลเงิน | `1,250.00 บาท` หรือ `฿1,250.00` |
 | ตัวคั่นหลักพันและจุดทศนิยม | ไม่เก็บ | ตามท้องถิ่น บางประเทศใช้สลับกับไทย |
 | เปอร์เซ็นต์ | เก็บเป็นสัดส่วนหรือจำนวนเต็ม **เลือกแบบเดียวทั้งระบบ** | |
 | ที่อยู่ | แยกฟิลด์ตามโครงของไทย (แขวง/เขต หรือ ตำบล/อำเภอ) | |
@@ -720,7 +702,7 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 
 **ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` · `tests/` · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (ไฟล์ทดสอบอยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
 
 **ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -733,13 +715,14 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 - ชื่อโฟลเดอร์และไฟล์ใน repo เป็นตัวพิมพ์เล็กคั่นด้วยขีดกลาง ไม่มีเว้นวรรค **ยกเว้นภาษาที่มีธรรมเนียมของตัวเอง** ให้ตามภาษานั้น
 
 **ข้อยกเว้นตาม stack** — ชื่อโฟลเดอร์โค้ด โฟลเดอร์ทดสอบ และชื่อไฟล์ใน repo ใช้ตามที่เครื่องมือของภาษาคาดไว้
-ไม่ฝืนให้เป็น `src/` `tests/`:
+ไม่ฝืนให้เป็น `src/` · ปกติไฟล์ทดสอบอยู่ข้างไฟล์โค้ด ใช้โฟลเดอร์ทดสอบแยกเฉพาะ stack ที่เครื่องมือบังคับ (ช่องที่เขียนว่า **บังคับ**):
 
 | Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
 |---|---|---|---|
-| ทั่วไป (Node · .NET) | `src/` | `tests/` | `kebab-case` (.NET ใช้ `PascalCase.cs`) |
-| Python | `src/<package>/` | `tests/` | `snake_case.py` |
-| Dart / Flutter | `lib/` | `test/` · `integration_test/` | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
+| Node | `src/` | ข้างไฟล์โค้ด (`*.test.ts`) | `kebab-case` |
+| .NET | `src/` | `tests/` **บังคับ** (โปรเจกต์ทดสอบแยก `.csproj`) | `PascalCase.cs` |
+| Python | `src/<package>/` | ข้างไฟล์โค้ด (`test_*.py`) | `snake_case.py` |
+| Dart / Flutter | `lib/` | `test/` · `integration_test/` **บังคับ** (โครงเหมือน `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
 
 skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
 
@@ -895,7 +878,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
   .gitattributes
   .gitignore             ← build output · ค่าลับ · `_to_delete/`
   src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
-  tests/
+  tests/                 ← มีเฉพาะ stack ที่เครื่องมือบังคับ (.NET · Flutter `test/`) · ที่เหลือไฟล์ทดสอบอยู่ข้างไฟล์โค้ด
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
 ```
 

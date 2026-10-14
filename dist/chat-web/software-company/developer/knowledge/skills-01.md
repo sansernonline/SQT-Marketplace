@@ -138,18 +138,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 
 **เลือกคำแล้วใช้ให้ตรงทั้งโปรเจกต์** ถ้า `get` บางตัวยิงเน็ต คนอ่านจะเลิกเชื่อชื่อทั้งหมด
 
-| คำนำหน้า | สัญญาว่า |
-|---|---|
-| `get` | คืนของที่มีอยู่แล้ว เร็ว ไม่มีผลข้างเคียง ไม่ล้มเหลว |
-| `fetch` · `load` | ไปเอาจากที่อื่น จึงช้าได้ ล้มเหลวได้ และต้อง `await` |
-| `compute` · `calculate` | คำนวณใหม่ทุกครั้ง ไม่เก็บผล |
-| `build` · `create` | สร้างของใหม่คืนออกมา |
-| `save` · `update` · `delete` | เขียนทับของเดิม มีผลข้างเคียงแน่นอน |
-| `ensure` | ทำให้เป็นจริง ถ้าเป็นอยู่แล้วก็ไม่ทำอะไร จึงเรียกซ้ำได้ |
-| `validate` · `assert` | **โยน error** ถ้าไม่ผ่าน |
-| `is` · `has` · `can` | คืน `true`/`false` ไม่เปลี่ยนอะไร |
-| `try...` | คืน `null`/`false` แทนการโยน |
-| `on...` · `handle...` | ตัวรับเหตุการณ์ ไม่มีใครเรียกตรง ๆ |
+ตารางคำนำหน้าทั้ง 10 กลุ่ม (สัญญาว่าอะไร · ล้มเหลวได้ไหม · มีผลข้างเคียงไหม) อยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 2 — เช่น `get` ไม่ยิงเน็ต · `validate` โยน error · `ensure` เรียกซ้ำได้
 
 **กฎประกอบ:**
 
@@ -176,14 +165,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 
 ## 4 · คำต้องห้าม — ใส่แล้วไม่ได้ตัดความหมายอะไรออกเลย
 
-| ห้ามใช้ | ทำไม | แทนด้วย |
-|---|---|---|
-| `data` · `info` · `item` · `obj` · `value` | ทุกอย่างในโปรแกรมคือข้อมูล | ชื่อของสิ่งนั้นจริง ๆ |
-| `manager` · `handler` · `processor` · `service` | ชื่อที่ทำอะไรก็ได้ คือชื่อที่ไม่ได้บอกอะไร | กริยาที่มันทำ — `InvoiceRenderer` |
-| `helper` · `util` · `common` · `misc` | คือที่ที่โค้ดไปตายเมื่อไม่รู้จะวางไหน | แยกตามเรื่อง — `money.ts` · `thai-date.ts` |
-| `do` · `perform` · `execute` · `run` | กริยาว่างเปล่า | กริยาจริง — `sendInvoice` |
-| `temp` · `tmp` · `foo` · `test2` | อยู่ในโค้ดไปอีก 3 ปี | หน้าที่ของมัน |
-| ตัวย่อที่คิดขึ้นเอง (`usrMgr` · `calcAmt`) | ประหยัดตัวอักษร แลกกับเวลาคนอ่าน | เขียนเต็ม |
+**ห้าม `data` `info` `manager` `helper` `util` `do` `temp` และตัวย่อที่คิดเอง** — ทุกอย่างในโปรแกรมคือข้อมูล ชื่อที่ทำอะไรก็ได้คือชื่อที่ไม่บอกอะไร · ตารางเต็มพร้อมคำแทนอยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 4
 
 **ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง
 ส่วนชื่อที่ platform หรือ framework ตั้งมาแล้ว (`SensorManager` · Android `Service` · `ChangeNotifier`) ก็ใช้ตามนั้น
@@ -270,7 +252,7 @@ src/
 - **ชื่อไฟล์คือชื่อของสิ่งที่มัน export เป็นหลัก** — `InvoiceRenderer` อยู่ใน `invoice-renderer.ts`
   รูปแบบตัวพิมพ์ตามธรรมเนียมของภาษา: Dart/Python ใช้ snake_case (`invoice_renderer.dart`) ส่วน .NET ใช้ `InvoiceRenderer.cs`
 - **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่
-  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป)
+  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป) · .NET (โปรเจกต์ทดสอบแยกใน `tests/`) — ตาราง `project-bootstrap` ข้อ 1
   ให้ใช้โครงโฟลเดอร์ใน `test/` เหมือน `lib/` เป๊ะ เช่น `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
 - **ไม่มี `utils/` ก้อนเดียว** เพราะถ้าของ 2 ชิ้นไม่เกี่ยวกัน ก็ไม่ควรอยู่ไฟล์เดียวกัน
   `shared/` ยอมได้ แต่ข้างในต้องแตกตามเรื่อง ไม่ใช่กองรวม
@@ -306,15 +288,7 @@ src/
 
 ## 10 · รายการตรวจก่อนส่งโค้ด
 
-- [ ] ไม่มีชื่อจากตารางคำต้องห้ามในข้อ 4
-- [ ] ตัวเลขที่มีหน่วยทุกตัว มีหน่วยอยู่ในชื่อ
-- [ ] คำนำหน้าฟังก์ชันตรงกับที่มันทำจริง เช่น `get` ไม่ยิงเน็ต และ `validate` โยน error จริง
-- [ ] boolean ทุกตัวเป็นประโยคบอกเล่า อ่านแล้วรู้ว่า `true` แปลว่าอะไร
-- [ ] ไม่มีฟังก์ชันที่รับ boolean เป็นพารามิเตอร์
-- [ ] ไม่มีคอมเมนต์ที่แค่แปลโค้ดเป็นภาษาคน
-- [ ] คอมเมนต์ทุกอันยังตรงกับโค้ดปัจจุบัน
-- [ ] คนใหม่ที่ได้ bug report 1 ข้อ เดาโฟลเดอร์ถูกใน 30 วินาที
-- [ ] ไม่มีตัวระบุภาษาไทย ไม่มีชื่อปนครึ่งคำ
+ใช้รายการตรวจ 12 ข้อใน [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 5 — ไล่ทุกข้อก่อนส่ง ข้อไหนไม่ผ่านกลับไปแก้ตามข้อของ skill นี้
 
 ---
 
@@ -1023,6 +997,68 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 
 ## Checklist
 
+House checks first. Each skill holds the full rules, so link to it in the comment:
+
+- [ ] Security: run [`security-gate`](../security-gate/SKILL.md) on the diff (input checked at the boundary, parameterized SQL, server-side permission check, no secrets in code or logs)
+- [ ] Simple enough: [`lazy-coding`](../lazy-coding/SKILL.md) (no unused layers, standard library first, one concern per file)
+- [ ] Readable: [`readable-code`](../readable-code/SKILL.md) (names, file and folder layout, config outside code)
+- [ ] Tests sit next to the code and prove the change: [`testing-standards`](../testing-standards/SKILL.md)
+- [ ] Shared code touched → [`blast-radius`](../blast-radius/SKILL.md) list is in the PR
+- [ ] Commit message follows [`commit-message-format`](../commit-message-format/SKILL.md)
+
+The generic list (correctness, design, performance, documentation, maintainability) is in [`references/full-checklist.md`](references/full-checklist.md).
+
+## Comment Templates
+
+### Suggestion (non-blocking)
+```
+nit: Consider X for readability
+```
+
+### Question
+```
+q: Why did you choose X over Y here?
+```
+
+### Blocking issue
+```
+blocking: This will cause Y in production because Z.
+Suggest: <concrete fix>
+```
+
+### Praise
+```
+✨ Nice approach with X — much cleaner than the previous version.
+```
+
+## Review Severity Levels
+
+| Prefix | Meaning |
+|--------|---------|
+| `blocking:` | Must fix before merge |
+| `important:` | Should fix, can be follow-up if urgent |
+| `nit:` | Minor improvement, optional |
+| `q:` | Question, not necessarily a change |
+| `praise:` | Acknowledge good work |
+
+These prefixes are for comments on a pull request. A review report uses the `reviewer` scale: `blocking:` = สูง · `important:` = กลาง · `nit:` = ต่ำ, verdict ผ่าน / ไม่ผ่าน
+
+## Anti-patterns to Avoid
+
+As a reviewer:
+- ❌ Bikeshedding — don't fight over trivial style if there's no convention
+- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
+- ❌ Only criticism — acknowledge good things too
+- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
+- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)
+
+
+## reference: full-checklist.md
+
+# Code review — full generic checklist
+
+Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. The house-specific checks stay in SKILL.md.
+
 ### 🎯 Correctness
 
 - [ ] Does the code do what the PR description says?
@@ -1090,48 +1126,6 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 - [ ] No magic numbers / strings (use constants)?
 - [ ] Logging at appropriate levels?
 
-## Comment Templates
-
-### Suggestion (non-blocking)
-```
-nit: Consider X for readability
-```
-
-### Question
-```
-q: Why did you choose X over Y here?
-```
-
-### Blocking issue
-```
-blocking: This will cause Y in production because Z.
-Suggest: <concrete fix>
-```
-
-### Praise
-```
-✨ Nice approach with X — much cleaner than the previous version.
-```
-
-## Review Severity Levels
-
-| Prefix | Meaning |
-|--------|---------|
-| `blocking:` | Must fix before merge |
-| `important:` | Should fix, can be follow-up if urgent |
-| `nit:` | Minor improvement, optional |
-| `q:` | Question, not necessarily a change |
-| `praise:` | Acknowledge good work |
-
-## Anti-patterns to Avoid
-
-As a reviewer:
-- ❌ Bikeshedding — don't fight over trivial style if there's no convention
-- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
-- ❌ Only criticism — acknowledge good things too
-- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
-- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)
-
 
 ---
 
@@ -1197,56 +1191,6 @@ Someone scanning `git log --oneline` should understand each line without opening
 | `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
 | `refactor: แก้โค้ดให้ดีขึ้น` | `refactor(report): อ่านประวัติเบิกครั้งเดียวแทนทุกสินค้า` |
 
-## Examples
-
-### Simple commit
-```
-feat(auth): add password reset via email
-```
-
-### With scope
-```
-fix(checkout): prevent double-charge on slow networks
-```
-
-### With body
-```
-feat(api): add rate limiting to public endpoints
-
-Implement token bucket algorithm with 100 req/min limit per IP.
-Returns 429 status with Retry-After header when exceeded.
-Cache state stored in Redis to handle multi-instance deployments.
-```
-
-### Breaking change
-```
-feat(api)!: change auth response shape
-
-BREAKING CHANGE: The /auth endpoint now returns tokens nested under
-"data" key instead of root level. Update clients accordingly.
-
-Before: { "access_token": "..." }
-After:  { "data": { "access_token": "..." } }
-```
-
-### With issue reference
-```
-fix(login): handle email with leading whitespace
-
-Closes #1234
-Refs #5678
-```
-
-### Revert
-```
-revert: feat(auth): add password reset via email
-
-This reverts commit a1b2c3d4.
-Reverting due to security issue found in production.
-
-Refs INCIDENT-42
-```
-
 ## Body Rules
 
 - Separate from subject with blank line
@@ -1279,21 +1223,5 @@ Co-authored-by: ...      ← attribution
 - ❌ `fix bug`
 - ❌ `WIP`
 - ❌ `final commit` / `final final`
-- ❌ Mixed changes: don't combine feature + refactor + fix in one commit
 - ❌ Past tense: `added feature` (use `add feature`)
 - ❌ Vague scope: `fix(misc): ...` (be specific)
-
-## Splitting Commits
-
-If your change is hard to summarize in one subject, split it:
-
-```bash
-# Instead of one big commit
-feat(profile): redesign UI, add export, fix bug
-
-# Split into focused commits
-refactor(profile): extract user info component
-feat(profile): redesign user info layout
-feat(profile): add CSV export
-fix(profile): correct date format in display
-```

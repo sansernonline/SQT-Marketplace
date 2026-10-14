@@ -358,7 +358,7 @@ response = await client.messages.create(
 # Version prompts in code, not databases
 PROMPTS = {
     "classifier_v3": {
-        "model": "claude-sonnet-4-5",
+        "model": "<model-id>",  # current id: see the claude-api skill
         "temperature": 0,
         "system": "...",
         "examples": [...],

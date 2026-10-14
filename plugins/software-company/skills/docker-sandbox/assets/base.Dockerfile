@@ -4,6 +4,9 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 ARG NODE_MAJOR=22
 ARG INSTALL_PLAYWRIGHT=1
 ARG INSTALL_CLAUDE=1
+# Pin exact versions for reproducible builds: --build-arg CLAUDE_CODE_VERSION=<x.y.z> --build-arg PLAYWRIGHT_VERSION=<x.y.z>
+ARG CLAUDE_CODE_VERSION=latest
+ARG PLAYWRIGHT_VERSION=latest
 ENV DEBIAN_FRONTEND=noninteractive \
     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
@@ -15,10 +18,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - \
     && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
 
-RUN if [ "$INSTALL_CLAUDE" = "1" ]; then npm install -g @anthropic-ai/claude-code; fi
+RUN if [ "$INSTALL_CLAUDE" = "1" ]; then npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}; fi
 
 RUN if [ "$INSTALL_PLAYWRIGHT" = "1" ]; then \
-      npx -y playwright@latest install --with-deps chromium; fi \
+      npx -y playwright@${PLAYWRIGHT_VERSION} install --with-deps chromium; fi \
     && mkdir -p /ms-playwright && chmod -R a+rwX /ms-playwright
 # a+rwX: a project pinned to another Playwright version can add its own browser build here
 

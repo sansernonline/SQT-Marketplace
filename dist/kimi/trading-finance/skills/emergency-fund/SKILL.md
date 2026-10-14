@@ -20,7 +20,7 @@ Months × **essential** monthly spending (rent or mortgage, food, transport, uti
 | Business owner (keep separate from business cash) | 12 |
 | Paying off high-interest debt | 1-month mini buffer first, full fund after (`debt-payoff`) |
 
-Adjust up for: health conditions, older parents depending on you, older car, single-industry town. Adjust down slightly if the employer offers strong severance and the user is ม.33 (social security unemployment benefit: laid off 50% of wage up to 180 days, resign 30% up to 90 days, wage ceiling 15,000 → 17,500 from 2569; reports of a raise to 60% for lay-offs from 28 Jun 2568 (รอยืนยัน) — check sso.go.th or 1506).
+Adjust up for: health conditions, older parents depending on you, older car, single-industry town. Adjust down slightly if the employer offers strong severance and the user is ม.33 (social security unemployment benefit: laid off 60% of wage up to 180 days since 28 Jun 2568, resign 30% up to 90 days, wage ceiling 15,000 → 17,500 from 2569 — check sso.go.th or 1506).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/286127
 

@@ -124,18 +124,17 @@ child_chunks = recursive_splitter(text, chunk_size=400)
 
 ## Stage 3: Embeddings
 
-### Model selection (2026)
+### Model selection
 
-| Model | Dim | Cost | Quality |
-|-------|----:|:----:|:-------:|
-| **OpenAI text-embedding-3-large** | 3072 | 💰💰 | 🟢🟢🟢 |
-| **OpenAI text-embedding-3-small** | 1536 | 💰 | 🟢🟢 |
-| **Cohere embed-multilingual-v3** | 1024 | 💰 | 🟢🟢🟢 multilingual |
-| **Voyage AI voyage-3** | 1024 | 💰 | 🟢🟢🟢 |
-| **BGE-large-en** (open) | 1024 | free | 🟢🟢 |
-| **E5-mistral-7b** (open, big) | 4096 | free GPU | 🟢🟢🟢 |
+Model names and prices change often. Check each provider's current embedding model list before choosing (checked 2026-10-14: the names below are examples of the kinds of options, not a current ranking).
 
-> 💡 **2026 sweet spot:** text-embedding-3-small for budget, voyage-3 for quality
+| Kind | Examples | When |
+|------|----------|------|
+| Hosted, general | OpenAI text-embedding family | Budget, English-heavy |
+| Hosted, multilingual | Cohere multilingual embed, Voyage AI | Thai and mixed-language content |
+| Open, self-hosted | BGE, E5 families | Data must stay on your servers |
+
+> Pick by running your own eval set (Stage 8) on 2-3 candidates with Thai queries, not by a leaderboard.
 
 ### Embedding tips
 
@@ -292,6 +291,13 @@ results = evaluate(
     metrics=[faithfulness, answer_relevancy, context_precision, context_recall]
 )
 ```
+
+## Security
+
+- **Retrieved text is untrusted data, not instructions.** Put chunks inside clear delimiters, tell the model to treat them as quoted material, and ignore any "do X" written inside a document (indirect prompt injection)
+- **Retrieved text never triggers tools on its own.** A tool call or write action that a chunk asked for needs the user's request or a human approval
+- **Filter by the user's access at query time.** Store the owner, tenant or access-list on each chunk's metadata and pre-filter every search on the current user's rights (see Metadata filtering). Never filter only after generation
+- **Re-check access when documents change.** Delete or re-index chunks when a source is deleted or its permissions change
 
 ## Advanced Patterns
 

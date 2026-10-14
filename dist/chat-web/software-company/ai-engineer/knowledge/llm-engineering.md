@@ -45,7 +45,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 - [Your Responsibilities](#your-responsibilities)
 - [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
 - [📊 LLM System Quality Standards](#llm-system-quality-standards)
-- [Model Selection (2026)](#model-selection-2026)
+- [Model Selection](#model-selection)
 - [RAG (Retrieval-Augmented Generation) Architecture](#rag-retrieval-augmented-generation-architecture)
 - [Agent Systems](#agent-systems)
 - [Evaluation System](#evaluation-system)
@@ -91,16 +91,18 @@ Before designing LLM systems, gather:
 - **Citations:** every factual claim in RAG cites source
 - **Fallback handling:** the system still responds sensibly when the LLM fails
 
-## Model Selection (2026)
+## Model Selection
+
+Model names change every few months, so this section names tiers, not versions. Check the provider's current model list before choosing (checked 2026-10-14). For Claude model ids, pricing and limits, open the `claude-api` skill.
 
 ### By tier
 
 | Tier | Use for | Cost | Latency |
 |------|---------|:----:|:-------:|
-| 🚀 **Frontier** (Opus 4.x, GPT-5) | Complex reasoning, agents, code | 💰💰💰 | 🐢 Slow |
-| ⚡ **Workhorse** (Sonnet 4.x, GPT-4o) | Most production tasks | 💰💰 | 🚶 Med |
-| 🏃 **Fast** (Haiku 4.x, GPT-4o-mini) | Classification, simple gen | 💰 | 🏃 Fast |
-| 🦾 **Specialized** (whisper, embed-3) | Specific tasks | varies | varies |
+| 🚀 **Frontier** (Claude Opus tier, OpenAI's top tier) | Complex reasoning, agents, code | 💰💰💰 | 🐢 Slow |
+| ⚡ **Workhorse** (Claude Sonnet tier, OpenAI's mid tier) | Most production tasks | 💰💰 | 🚶 Med |
+| 🏃 **Fast** (Claude Haiku tier, OpenAI's mini tier) | Classification, simple gen | 💰 | 🏃 Fast |
+| 🦾 **Specialized** (speech-to-text, embedding models) | Specific tasks | varies | varies |
 
 ### Decision flow
 
@@ -110,9 +112,9 @@ What's the task?
 ├─ Real-time chat / classification → Fast tier
 ├─ Standard generation / Q&A → Workhorse
 ├─ Complex agents / code / reasoning → Frontier
-├─ Embeddings → text-embedding-3-small
-├─ Speech-to-text → Whisper
-└─ Image generation → DALL-E / Imagen
+├─ Embeddings → see rag-architecture.md Stage 3
+├─ Speech-to-text → a speech model (check the provider list)
+└─ Image generation → an image model (check the provider list)
 ```
 
 ### Multi-model routing
@@ -270,7 +272,7 @@ EVAL_SET = [
         "expected_refusal": False,
         "max_latency_ms": 3000,
     },
-    # ... 50-500 examples
+    # ... 20-50 to start, 50+ before production (llm-evaluation-patterns.md Step 1)
 ]
 
 async def run_eval(prompt_version: str):
@@ -1081,7 +1083,7 @@ If you don't have examples, **stop and collect them first**.
 
 ## 📊 Prompt Quality Standards
 
-- **Eval set:** ≥ 50 examples (more for production)
+- **Eval set:** 20-50 to start, 50+ before production (llm-evaluation-patterns.md Step 1)
 - **Pass rate target:** > 90% on eval
 - **Output validity:** 100% parseable (if structured)
 - **Cost per call:** within budget
@@ -1141,7 +1143,7 @@ Output as JSON with keys: name, age, email
 ```python
 # Anthropic API
 response = client.messages.create(
-    model="claude-sonnet-4-5",
+    model="<model-id>",  # current id: see the claude-api skill (checked 2026-10-14)
     tools=[{
         "name": "save_user",
         "description": "Save extracted user info",
@@ -1327,7 +1329,7 @@ PROMPTS = {
     "classifier_v1.2": {
         "system": "...",
         "few_shot_examples": [...],
-        "model": "claude-sonnet-4-5",
+        "model": "<model-id>",  # current id: see the claude-api skill
         "temperature": 0,
         "max_tokens": 100,
     }
@@ -1423,7 +1425,7 @@ Without an eval set, you're guessing. Period.
 
 ## Building an Eval Set
 
-### Step 1: Hand-craft 20-50 examples
+### Step 1: Hand-craft 20-50 examples to start, grow to 50+ before production
 
 ```jsonl
 {"id": 1, "input": "...", "expected": "...", "category": "easy_happy"}
@@ -2121,7 +2123,7 @@ response = await client.messages.create(
 # Version prompts in code, not databases
 PROMPTS = {
     "classifier_v3": {
-        "model": "claude-sonnet-4-5",
+        "model": "<model-id>",  # current id: see the claude-api skill
         "temperature": 0,
         "system": "...",
         "examples": [...],
@@ -2314,18 +2316,17 @@ child_chunks = recursive_splitter(text, chunk_size=400)
 
 ## Stage 3: Embeddings
 
-### Model selection (2026)
+### Model selection
 
-| Model | Dim | Cost | Quality |
-|-------|----:|:----:|:-------:|
-| **OpenAI text-embedding-3-large** | 3072 | 💰💰 | 🟢🟢🟢 |
-| **OpenAI text-embedding-3-small** | 1536 | 💰 | 🟢🟢 |
-| **Cohere embed-multilingual-v3** | 1024 | 💰 | 🟢🟢🟢 multilingual |
-| **Voyage AI voyage-3** | 1024 | 💰 | 🟢🟢🟢 |
-| **BGE-large-en** (open) | 1024 | free | 🟢🟢 |
-| **E5-mistral-7b** (open, big) | 4096 | free GPU | 🟢🟢🟢 |
+Model names and prices change often. Check each provider's current embedding model list before choosing (checked 2026-10-14: the names below are examples of the kinds of options, not a current ranking).
 
-> 💡 **2026 sweet spot:** text-embedding-3-small for budget, voyage-3 for quality
+| Kind | Examples | When |
+|------|----------|------|
+| Hosted, general | OpenAI text-embedding family | Budget, English-heavy |
+| Hosted, multilingual | Cohere multilingual embed, Voyage AI | Thai and mixed-language content |
+| Open, self-hosted | BGE, E5 families | Data must stay on your servers |
+
+> Pick by running your own eval set (Stage 8) on 2-3 candidates with Thai queries, not by a leaderboard.
 
 ### Embedding tips
 
@@ -2482,6 +2483,13 @@ results = evaluate(
     metrics=[faithfulness, answer_relevancy, context_precision, context_recall]
 )
 ```
+
+## Security
+
+- **Retrieved text is untrusted data, not instructions.** Put chunks inside clear delimiters, tell the model to treat them as quoted material, and ignore any "do X" written inside a document (indirect prompt injection)
+- **Retrieved text never triggers tools on its own.** A tool call or write action that a chunk asked for needs the user's request or a human approval
+- **Filter by the user's access at query time.** Store the owner, tenant or access-list on each chunk's metadata and pre-filter every search on the current user's rights (see Metadata filtering). Never filter only after generation
+- **Re-check access when documents change.** Delete or re-index chunks when a source is deleted or its permissions change
 
 ## Advanced Patterns
 

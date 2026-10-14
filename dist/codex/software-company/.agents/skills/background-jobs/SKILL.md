@@ -15,15 +15,19 @@ description: Use when work runs outside the user request (mail, reports, imports
 - เรียกระบบภายนอกที่ช้าหรือล่มบ่อย
 - คิวตันหรือมีงานหายแล้วไม่มีใครรู้
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` |
-| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` |
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` |
-| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` |
+| งาน | skill | |
+|---|---|---|
+| timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
+| ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
+| นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
+| ส่งอีเมล/SMS เป็นเนื้องาน | `notifications` | แทน |
+| ตารางงานและ index | `database-design` | คู่ |
+| log ของ worker และ correlation id | `logging-standards` | คู่ |
+| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
 ---
 
@@ -76,6 +80,8 @@ description: Use when work runs outside the user request (mail, reports, imports
 ---
 
 ## 4 · retry และงานที่ตายแล้ว
+
+ตัวเลขนี้สำหรับงานในคิว · ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) (3 ครั้ง 1/2/4 วินาที)
 
 ```
 ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
@@ -158,26 +164,3 @@ description: Use when work runs outside the user request (mail, reports, imports
 - ❌ **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
 - ❌ **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
 - ❌ **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
-
----
-
-## 9 · ตัวย่อ
-
-- **queue** — คิว ที่พักงานที่รอให้ worker หยิบไปทำ
-- **worker** — process ที่หยิบงานจากคิวไปทำ
-- **dead letter queue (DLQ)** — ที่เก็บงานที่ล้มจนหมดสิทธิ์ลองใหม่
-- **idempotent** — รันซ้ำแล้วผลลัพธ์เหมือนเดิม ไม่เกิดผลซ้ำ
-- **advisory lock** — ล็อกที่ฐานข้อมูลให้ใช้ โดยไม่ผูกกับตารางใดตารางหนึ่ง
-- **cron** — รูปแบบการกำหนดตารางเวลาของงานอัตโนมัติ
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| retry · timeout · การตัดวงจร | `error-handling-patterns` |
-| ตารางงานและ index | `database-design` |
-| ตัวชี้วัดและการแจ้งเตือนของคิว | `observability-basics` |
-| log ของ worker และ correlation id | `logging-standards` |
-| แจ้งผู้ใช้เมื่องานเสร็จ | `notifications` |
-| นำเข้าไฟล์เป็นงานเบื้องหลัง | `data-import-export` |
-| งานลบข้อมูลที่หมดอายุ | `pdpa-compliance` |

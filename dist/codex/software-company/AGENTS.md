@@ -1,8 +1,8 @@
 # SQT software-company — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.5.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.6.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
-Simulates a complete software development company — 39 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.
+Simulates a complete software development company — 41 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 111 skills and 29 slash commands for the whole SDLC.
 
 ชุดนี้มี skill 111 ตัว · บทบาท 41 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
 
@@ -41,7 +41,7 @@ Simulates a complete software development company — 39 roles from product, ana
 - **product-manager** — Use for product vision, roadmap, feature priorities, user research or market analysis. HOW and WHEN → project-manager.
 - **project-manager** — Use for project plans, timelines, sprints, risks, progress tracking or status reports. WHAT and WHY → product-manager.
 - **qa-tester** — Use when creating test plans, test cases, bug reports, exploratory testing or test coverage before release.
-- **quant-analyst** — Use for quantitative finance — risk models, pricing, credit scoring, backtesting. Insurance → insurance-analyst.
+- **quant-analyst** — Use for quant risk, credit and trading models, backtests. SaaS pricing → revops-analyst. Insurance → insurance-analyst.
 - **recommendation-engineer** — Use when building recommendation systems — related items, personalized ranking, collaborative or hybrid filtering.
 - **reverse-engineer** — Use to understand or recreate software without source (binary, .NET, Electron, APK, JS bundle). Authorized targets only.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.

@@ -1,3 +1,363 @@
+# skill: lazy-coding
+
+Use when writing, fixing, refactoring or reviewing code, or on bloat complaints. Simplest that works.
+
+# Lazy Coding
+
+You write code like a senior dev who has been paged at 3 AM for someone else's
+clever abstraction. Lazy means efficient, not careless. The best code is the
+code you never had to write.
+
+**Team rule:** a tired teammate must understand it in 6 months, with no
+context. If they can't, simplify until they can.
+
+## Active every response
+
+On by default at **full**. Don't drift back to over-building — still on even
+when you're unsure. Switch with `lazy lite | full | ultra`. Off only on
+"stop lazy" / "normal mode".
+
+## The ladder — stop at the first rung that holds
+
+1. **Does this need to exist?** Speculative need → skip it, say so in one line. (YAGNI)
+2. **Stdlib does it?** Use it.
+3. **Native platform feature covers it?** `<input type="date">` over a picker lib, CSS over JS, a DB constraint over app code. On mobile (Flutter, React Native) "native" means writing a platform channel in Kotlin/Swift — the costly rung; a maintained plugin or a framework widget comes first.
+4. **An already-installed dependency solves it?** Use it. Never add a new dependency for what a few lines can do.
+5. **Can it be one line?** One line.
+6. **Only then:** the smallest code that works.
+
+Two rungs both work → take the higher one and move on. The ladder is a reflex,
+not a research project. The first lazy solution that works is the right one.
+
+## Rules
+
+- No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
+- No scaffolding "for later." Later can scaffold for itself.
+- Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
+- Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
+- Match the repo — read 2-3 nearby files first and copy their style.
+- Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.
+
+## Simple is not scattered
+
+Lazy cuts *how much* code exists. It never cuts *where code lives*. A 40-line
+project still looks like software engineering, not a scratchpad:
+
+- **One concern per file.** Entry point, logic, config and I/O each have their own place. A `main.py` that also parses, validates, talks to the database and prints is not lazy — it is a god-file nobody can test.
+- **Feature folders, not type folders.** `invoice/` holds everything about invoices (`readable-code` §7). No `utils/` dumping ground.
+- **Names carry meaning.** Lazy is not `tmp`, `data`, `handle()`. Follow `readable-code` §1–4.
+- **Boundaries stay explicit.** Function signatures, module exports and the data shape between layers are written out, not implied — fewer lines inside each box, never fewer boxes.
+- **Config and secrets outside code.** Even one environment variable goes in `.env.example`, not inline. A project that reads no environment variables (an offline mobile app) has no `.env.example` — do not invent one.
+- **Domain constant tables are code, not config.** Values that change only with a code release (thresholds, unit tables, lux ranges) go in one named constants file next to the feature, not in env vars or a settings screen. "Config outside code" means values that differ per environment or per deployment.
+- **Tests sit next to the code they test** — one small check per non-trivial path (see "When NOT to be lazy"). Where the toolchain fixes the test folder (Flutter `test/` mirroring `lib/`), follow it — "next to" then means the same relative path.
+- **New project → `project-bootstrap` first.** Lazy code lands in a repo that already has its skeleton (README, folder layout, lint, test command). Never scatter files at the root to save a minute.
+
+Test: a tired teammate opens the repo cold. Can they guess which file holds a
+given behaviour in 30 seconds? If not, the structure is not too complex — it
+is *missing*.
+
+## Mark your simplifications
+
+A deliberate shortcut reads as intent, not ignorance, when you label it. Name
+the ceiling and the upgrade path:
+
+```python
+# simple: in-memory dict cache — swap for Redis if we run more than one process
+```
+
+```ts
+// simple: O(n) scan, fine under ~1k items — index it if the list grows
+```
+
+## Output
+
+Code first. Then at most three short lines: what you skipped and when to add
+it. If the explanation is longer than the code, delete the explanation.
+
+Pattern: `[code] → skipped: [X] — add when [Y].`
+
+## Intensity
+
+| Level | What changes |
+|-------|------------|
+| **lite** | Build what's asked, but name the lazier option in one line. The user picks. |
+| **full** | The ladder enforced. Stdlib and native first. Shortest diff, shortest explanation. Default. |
+| **ultra** | YAGNI extremist. Ship the one-liner and challenge the rest of the requirement in the same breath. |
+
+Example — "Add a cache for these API responses."
+
+- **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
+- **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
+- **ultra:** "No cache until a profiler asks for one. When it does: `@lru_cache`. A hand-rolled TTL cache is a bug farm with a hit rate."
+
+## When NOT to be lazy
+
+Never simplify away: input validation at trust boundaries, error handling that
+prevents data loss, security, accessibility basics, or anything explicitly
+requested. If the user insists on the full version, build it — no re-arguing.
+
+Non-trivial logic (a branch, loop, parser, or money/security path) leaves ONE
+runnable check behind — the smallest thing that fails if the logic breaks: an
+`assert`-based self-check or one small `test_*`. No frameworks or fixtures
+unless asked. Trivial one-liners need no test.
+
+## Pairs with
+
+- `readable-code` — **always load together**. Lazy decides how much code; readable-code decides names, function shape and file layout. One without the other gives either bloat or a scratchpad.
+- `project-bootstrap` — the repo skeleton lazy code lands in.
+- `simplicity-first` — same spirit, for docs, plans, and architecture.
+- `code-review-checklist` — the lazy diff still gets reviewed.
+
+
+---
+
+# skill: readable-code
+
+Use when writing or reviewing code for readability (names, function shape, comments, file location).
+
+# โค้ดที่คนอ่านรู้เรื่อง
+
+> **กฎข้อเดียว:** ชื่อที่ต้องเปิดดูข้างในถึงจะเข้าใจ คือชื่อที่ตั้งผิด
+
+---
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เขียนโค้ดใหม่ · ตั้งชื่อตัวแปร ฟังก์ชัน ไฟล์ หรือโฟลเดอร์
+- รีวิวโค้ดแล้วรู้สึกว่า "ทำงานถูกแต่อ่านยาก"
+- คนใหม่เข้าโปรเจกต์แล้วหาไฟล์ไม่เจอ
+- โฟลเดอร์ `utils/` เริ่มกลายเป็นถังขยะ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| สถานการณ์ | ใช้แทน |
+|---|---|
+| ต้องการเขียนโค้ด**น้อยลง** | `lazy-coding` |
+| โครงโฟลเดอร์**ระดับ repo** · README · linter | `project-bootstrap` |
+| รีวิวเรื่องความถูกต้อง ความปลอดภัย การทดสอบ | `code-review-checklist` |
+| ตั้งชื่อ**ไฟล์เอกสาร** | `document-naming` |
+| ตั้งชื่อ**ผลิตภัณฑ์หรือแบรนด์** | `product-naming` |
+
+---
+
+## 1 · ชื่อต้องตอบสามคำถามโดยไม่ต้องเปิดดูข้างใน
+
+**มันคืออะไร · หน่วยอะไร · ใช้ได้ตอนไหน**
+
+| ❌ | ✅ | ที่ต่างคือ |
+|---|---|---|
+| `d` | `daysSinceLastLogin` | มีหน่วย มีจุดอ้างอิง |
+| `list` | `overdueInvoices` | บอกว่าข้างในคืออะไร |
+| `data` | `csvRows` | `data` ไม่ได้ตัดอะไรออกเลย |
+| `temp` | `swapBuffer` | บอกหน้าที่ ไม่ใช่บอกว่าชั่วคราว |
+| `flag` | `hasUnpaidBalance` | อ่านแล้วรู้ว่า `true` แปลว่าอะไร |
+| `timeout` | `timeoutMs` | 30 คือวินาทีหรือมิลลิวินาที |
+| `price` | `priceSatang` | เลขเงินที่ไม่มีหน่วยคือบั๊กรอเกิด |
+| `checkUser()` | `isUserActive()` | `check` ไม่บอกว่าคืน boolean หรือโยน error |
+| `process()` | `normalizePhoneNumber()` | `process` แปลว่าอะไรก็ได้ |
+| `getUser()` ที่ยิง API | `fetchUser()` | `get` แปลว่าเร็วและไม่ล้มเหลว |
+
+> **เลขที่มีหน่วยต้องมีหน่วยในชื่อ เสมอ** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
+> บั๊กเรื่องหน่วยไม่มีใครเห็นตอนรีวิว แต่จะเห็นตอนลูกค้าโทรมา
+
+---
+
+## 2 · คำนำหน้าฟังก์ชัน — หนึ่งคำ หนึ่งความหมาย
+
+**เลือกคำแล้วใช้ให้ตรงทั้งโปรเจกต์** ถ้า `get` บางตัวยิงเน็ต คนอ่านจะเลิกเชื่อชื่อทั้งหมด
+
+ตารางคำนำหน้าทั้ง 10 กลุ่ม (สัญญาว่าอะไร · ล้มเหลวได้ไหม · มีผลข้างเคียงไหม) อยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 2 — เช่น `get` ไม่ยิงเน็ต · `validate` โยน error · `ensure` เรียกซ้ำได้
+
+**กฎประกอบ:**
+
+- **boolean ห้ามตั้งชื่อเชิงปฏิเสธ** — `isNotReady` ทำให้เกิด `if (!isNotReady)` ที่ไม่มีใครอ่านออก
+- **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
+- **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
+- **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
+
+---
+
+## 3 · ชื่อยาวแค่ไหน ขึ้นกับว่ามันมีชีวิตอยู่กี่บรรทัด
+
+| ระยะจากที่ประกาศถึงที่ใช้ครั้งสุดท้าย | ความยาวชื่อที่เหมาะ | ตัวอย่าง |
+|---|---|---|
+| ≤ 5 บรรทัด (ตัวนับใน loop) | 1 ตัวอักษร พอ | `i` · `r` · `x` |
+| ในฟังก์ชันเดียว | 1–2 คำ | `total` · `rawRows` |
+| ทั้งคลาสหรือทั้งไฟล์ | 2–3 คำ | `pendingApprovals` |
+| export ออกนอกไฟล์ | เต็ม ไม่ย่อ | `calculateWithholdingTax` |
+
+> **ชื่อยาวขึ้นตามระยะห่างระหว่างที่ประกาศกับที่ใช้** — `i` ใน loop 3 บรรทัดชัดเจนกว่า `currentIndex`
+> แต่ `i` ที่เป็น field ของคลาสคือชื่อที่ไม่มีใครตามได้
+
+---
+
+## 4 · คำต้องห้าม — ใส่แล้วไม่ได้ตัดความหมายอะไรออกเลย
+
+**ห้าม `data` `info` `manager` `helper` `util` `do` `temp` และตัวย่อที่คิดเอง** — ทุกอย่างในโปรแกรมคือข้อมูล ชื่อที่ทำอะไรก็ได้คือชื่อที่ไม่บอกอะไร · ตารางเต็มพร้อมคำแทนอยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 4
+
+**ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง
+ส่วนชื่อที่ platform หรือ framework ตั้งมาแล้ว (`SensorManager` · Android `Service` · `ChangeNotifier`) ก็ใช้ตามนั้น
+เพราะคำต้องห้ามใช้กับชื่อที่**เราตั้งเอง**เท่านั้น
+
+---
+
+## 5 · รูปร่างของฟังก์ชัน
+
+- **หนึ่งฟังก์ชัน หนึ่งระดับนามธรรม** — ฟังก์ชันที่มีทั้ง "ส่งอีเมล" และ "ต่อสตริง SQL" อ่านยากเพราะสมองต้องสลับระดับ
+- **พารามิเตอร์ไม่เกิน 3 ตัว** ถ้าเกินนั้นให้รับเป็น object ที่มีชื่อฟิลด์
+- **ห้ามรับ boolean เป็นพารามิเตอร์** — `render(true)` ที่จุดเรียกอ่านไม่ออกว่า `true` คืออะไร
+  ให้แยกเป็น `renderDraft()` กับ `renderFinal()` หรือรับ `{ mode: "draft" }`
+  **ยกเว้น named parameter** ที่จุดเรียกเห็นชื่อ เช่น `TextField(obscureText: true)` ใน Dart หรือ `enabled: true` ซึ่งอ่านออกอยู่แล้ว
+- **คืนค่าก่อนดีกว่าซ้อน `else`** — เงื่อนไขที่ตัดจบได้ ให้ `return` ทันที ทางหลักจะได้ไม่เยื้อง
+- **ถ้าเยื้องเกิน 3 ชั้น ต้องแตกฟังก์ชัน** ไม่ใช่เพราะกฎ แต่เพราะสมองตามเงื่อนไขซ้อน 4 ชั้นไม่ไหว
+
+---
+
+## 6 · คอมเมนต์ — เขียน "ทำไม" ไม่ใช่ "ทำอะไร"
+
+```ts
+// ❌ เพิ่มค่า i ทีละ 1
+// ❌ ฟังก์ชันคำนวณภาษี
+
+// ✅ กรมสรรพากรกำหนดให้ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด (ประกาศ ป.161/2566)
+// ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
+// ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
+```
+
+**คอมเมนต์ที่อธิบายว่าโค้ดทำอะไร คือสัญญาณว่าชื่อตั้งผิด** ให้แก้ชื่อแล้วลบคอมเมนต์
+
+**4 แบบที่ควรมีคอมเมนต์:**
+
+| แบบ | ตัวอย่าง |
+|---|---|
+| ข้อจำกัดจากภายนอก | ข้อกำหนดของ API ที่เรียก · กฎหมาย · ข้อจำกัดของฮาร์ดแวร์ |
+| การตัดสินใจที่ดูแปลกแต่ตั้งใจ | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" |
+| สูตรหรือกฎธุรกิจที่มีที่มา | อ้างเลขข้อในเอกสาร ไม่ใช่เล่าสูตรซ้ำ |
+| `TODO` ที่มีเจ้าของและเงื่อนไข | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` |
+
+> **คอมเมนต์ที่โกหกอันตรายกว่าไม่มีคอมเมนต์** ถ้าแก้โค้ดต้องแก้คอมเมนต์ในรอบเดียวกัน
+
+### รอบคัดคอมเมนต์ก่อนรีวิว
+
+ก่อนส่งรีวิว ไล่ทุกคอมเมนต์ที่ diff เพิ่มหรือแก้ แล้วจัดเข้า 1 ใน 4 ทางในตารางนี้ ถ้า diff ใหญ่ให้ subagent ระดับกลางอ่านอย่างเดียวแล้วทำรายการ ส่วน agent หลักเป็นคนตัดสิน
+
+| คอมเมนต์ | ทำ |
+|---|---|
+| แปลโค้ดเป็นภาษาคน · ล้าสมัย · โค้ดที่ถูกคอมเมนต์ทิ้ง | ลบ |
+| อธิบายว่าตัวแปรหรือฟังก์ชันคืออะไร | เปลี่ยนชื่อให้บอกเอง แล้วลบ |
+| อ้างข้อจำกัด ("ห้าม null" · "ต้องเรียกหลัง init" · "ค่าไม่เกิน 100") | เปลี่ยนเป็นของที่ตรวจได้ เช่น type · assert · test · lint (`repeated-mistakes-to-checks`) แล้วลบ |
+| 4 แบบในตารางข้างบน | เก็บ |
+
+รายงานผลเป็นตัวเลข: ลบกี่อัน · เปลี่ยนชื่อกี่อัน · กลายเป็นการตรวจกี่อัน · เก็บกี่อัน
+
+---
+
+## 7 · โครงสร้างไฟล์ที่คนใหม่หาเจอ
+
+**บททดสอบ:** คนที่เพิ่งเข้าโปรเจกต์ ได้ bug report ว่า *"ปุ่มบันทึกใบแจ้งหนี้ไม่ทำงาน"*
+ต้องเดาโฟลเดอร์ถูก**ภายใน 30 วินาที** โดยไม่ต้องถามใคร
+
+### จัดตามฟีเจอร์ ไม่ใช่ตามชนิดไฟล์
+
+```
+❌ จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
+src/
+  controllers/   invoice.ts  customer.ts  report.ts
+  services/      invoice.ts  customer.ts  report.ts
+  models/        invoice.ts  customer.ts  report.ts
+  validators/    invoice.ts  customer.ts  report.ts
+
+✅ จัดตามฟีเจอร์ — ทุกอย่างของใบแจ้งหนี้อยู่ที่เดียว
+src/
+  invoice/       routes.ts  service.ts  model.ts  validation.ts  invoice.test.ts
+  customer/      ...
+  report/        ...
+  shared/        money.ts  thai-date.ts  http-client.ts
+```
+
+**กฎ:**
+
+- **ชื่อไฟล์คือชื่อของสิ่งที่มัน export เป็นหลัก** — `InvoiceRenderer` อยู่ใน `invoice-renderer.ts`
+  รูปแบบตัวพิมพ์ตามธรรมเนียมของภาษา: Dart/Python ใช้ snake_case (`invoice_renderer.dart`) ส่วน .NET ใช้ `InvoiceRenderer.cs`
+- **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่
+  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป) · .NET (โปรเจกต์ทดสอบแยกใน `tests/`) — ตาราง `project-bootstrap` ข้อ 1
+  ให้ใช้โครงโฟลเดอร์ใน `test/` เหมือน `lib/` เป๊ะ เช่น `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
+- **ไม่มี `utils/` ก้อนเดียว** เพราะถ้าของ 2 ชิ้นไม่เกี่ยวกัน ก็ไม่ควรอยู่ไฟล์เดียวกัน
+  `shared/` ยอมได้ แต่ข้างในต้องแตกตามเรื่อง ไม่ใช่กองรวม
+- **`index` ที่ re-export ทั้งโฟลเดอร์ ทำให้ "ไปที่นิยาม" ในเครื่องมือแก้โค้ดพัง** จึงใช้เท่าที่จำเป็นจริง
+- **โฟลเดอร์ที่มีไฟล์เดียวคือโฟลเดอร์ที่ยังไม่ควรมี**
+
+---
+
+## 8 · ขนาดและลำดับข้างในไฟล์
+
+- **ไฟล์เกิน ~300 บรรทัด เป็นสัญญาณ ไม่ใช่กฎ** ถ้าเลื่อนหาของเจอง่ายก็ปล่อยไว้
+- **ลำดับในไฟล์: import → ค่าคงที่ → type → สิ่งที่ export → helper ส่วนตัว**
+- **ฟังก์ชันที่ถูกเรียก อยู่ใต้ฟังก์ชันที่เรียกมัน** จะได้อ่านจากบนลงล่างได้เหมือนบทความ
+  ของสำคัญอยู่บน รายละเอียดอยู่ล่าง คนอ่านหยุดตรงไหนก็เข้าใจภาพรวมแล้ว
+
+---
+
+## 9 · ภาษาไทยกับอังกฤษในโค้ด
+
+| อะไร | ภาษา |
+|---|---|
+| ชื่อตัวแปร ฟังก์ชัน คลาส ไฟล์ โฟลเดอร์ ตาราง คอลัมน์ | **อังกฤษเสมอ** |
+| คอมเมนต์ | ไทยได้ ถ้าทีมอ่านไทย |
+| ข้อความที่ผู้ใช้เห็น | ไทย แต่ไม่ฝังในโค้ด (`i18n-and-locale`) |
+| commit message · ชื่อ branch | ตามที่ทีมตกลง เลือกแล้วใช้ให้ตรงกันทั้งทีม |
+
+- **ห้ามปนครึ่งคำ** — `checkบัตร` · `userชื่อ` อ่านยากและพังใน terminal บางตัว
+- **คำเฉพาะทางไทยที่ไม่มีคำอังกฤษตรง ๆ** ให้หาคำอังกฤษที่ใกล้ที่สุดก่อน
+  (`เลขประจำตัวผู้เสียภาษี` → `taxId` · `ภาษีหัก ณ ที่จ่าย` → `withholdingTax`)
+  ถ้าไม่มีจริง ๆ ให้ใช้ทับศัพท์เต็มคำ แล้วอธิบายไว้ที่ `DATA-DICTIONARY.md`
+
+---
+
+## 10 · รายการตรวจก่อนส่งโค้ด
+
+ใช้รายการตรวจ 12 ข้อใน [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 5 — ไล่ทุกข้อก่อนส่ง ข้อไหนไม่ผ่านกลับไปแก้ตามข้อของ skill นี้
+
+---
+
+## 11 · Anti-patterns
+
+- ❌ **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
+- ❌ **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
+- ❌ **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
+- ❌ **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
+- ❌ **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
+- ❌ **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
+- ❌ **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
+
+---
+
+## 12 · ตัวย่อ
+
+- **API** — Application Programming Interface
+- **SQL** — Structured Query Language
+- **SMS** — Short Message Service
+- **TODO** — สิ่งที่ยังไม่ได้ทำและตั้งใจจะทำ
+- **YAGNI** — You Aren't Gonna Need It
+
+---
+
+## 13 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| เขียนโค้ดให้น้อยลง | `lazy-coding` |
+| โครง repo · README · linter | `project-bootstrap` |
+| รีวิวความถูกต้องและความปลอดภัย | `code-review-checklist` |
+| รูปแบบ log และชื่อ field ใน log | `logging-standards` |
+| ชื่อตารางและคอลัมน์ในฐานข้อมูล | `database-design` |
+| ชื่อ endpoint และ field ใน API | `api-conventions` |
+| ข้อความที่ผู้ใช้เห็น ไทย-อังกฤษ | `i18n-and-locale` |
+| ตารางอ้างอิงแบบหน้าเดียว | `assets/naming-reference.md` |
+
+
+---
+
 # skill: principle-secure-by-default
 
 Use when writing or reviewing code, config or scripts, especially input, database, files, logins, money.
@@ -67,108 +427,3 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 | M3 | **ตั้งการสำรองข้อมูลให้ชัด** (`allowBackup` · `dataExtractionRules`) | ปล่อยค่าเริ่มต้นแล้วข้อมูลส่วนตัวไปอยู่ในสำรองบนคลาวด์ → เลือกเองว่าอะไรสำรองได้ |
 | M4 | **ส่งไฟล์ออกผ่าน share sheet ของระบบ / `FileProvider`** | เขียนไฟล์ลงที่ที่ทุกแอปอ่านได้แล้วส่ง path → แชร์ผ่าน URI ชั่วคราวที่ให้สิทธิ์เฉพาะแอปปลายทาง |
 | M5 | **กุญแจเซ็นแอปไม่อยู่ในแอปหรือ repo** | `key.properties` · `*.jks` ใน git → gitignore + เก็บใน secret store ของ CI และสำรองไว้ (`cicd-and-release`) |
-
-
----
-
-# skill: principle-prove-it-works
-
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
-
-# principle · prove it works — พิสูจน์กับของจริง
-
-> "เสร็จแล้ว" ที่ไม่มีหลักฐาน คือการโยนงานตรวจไปให้คนอื่น
-
-## กฎ
-
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
-
-| งาน | หลักฐานที่นับ | ไม่นับ |
-|---|---|---|
-| ฟีเจอร์ | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator กับค่าที่ฉีดเข้าพิสูจน์ได้แค่**เส้นทางโค้ด** (ติดป้าย `emulator`) ส่วนความแม่นยำต้องลองกับเครื่องจริง (ติดป้าย `เครื่องจริง <รุ่น>`) | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
-| แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
-| test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
-| mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
-| งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
-
-## วิธีทำ
-
-1. ก่อนลงมือ เขียนว่า "จะรู้ได้อย่างไรว่าเสร็จ" ในรูปที่ตรวจได้
-2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
-3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
-
-## สัญญาณว่ากำลังข้าม
-
-- คำว่า "น่าจะ" · "ควรจะ" · "ในทางทฤษฎี" ในรายงานจบงาน
-- ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้
-- ตรวจแค่ส่วนที่ง่าย แล้วสรุปรวมว่าผ่านทั้งหมด
-
-
----
-
-# skill: security-gate
-
-Use when about to ship, merge or hand over code, after adding a dependency, or the user says security check.
-
-# security-gate — ประตูความปลอดภัยก่อนส่งงาน
-
-> เครื่องมือสแกนหาเจอเร็วแต่แจ้งผิดเยอะ ส่วนคนตรวจเข้าใจบริบทแต่ช้า
-> ประตูนี้ให้เครื่องหาก่อน แล้ว agent ยืนยันทุกข้อกับโค้ดจริง ก่อนจะถึงมือคน
-
-ใช้ร่วมกับ [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) ส่วนรายงานเชิงลึกให้ใช้ agent `security-engineer`
-
-## ขั้นตอน
-
-1. **รันในห้อง** (sandbox ของโปรเจกต์) — ถ้าโปรเจกต์มี `.sandbox/` ให้รันทุกคำสั่งผ่าน `sandbox.ps1 exec` ส่วนเครื่องมือที่ยังไม่มีให้ติดตั้งในห้องได้เลย ไม่ติดตั้งบนเครื่องผู้ใช้
-2. **สแกน 3 ด้าน** (เลือกตามที่โปรเจกต์มี)
-
-   | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
-   |---|---|---|
-   | ค่าลับหลุด (รวมประวัติ git) | gitleaks | `gitleaks detect --source . --redact` |
-   | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
-   | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
-   | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
-   | Dockerfile · compose · IaC (ถ้ามี) | trivy | `trivy config .` ส่วนแอป Android ไม่มีส่วนนี้ ให้อ่าน `android/app/build.gradle*` ด้วยตาแทน (signingConfig ต้องไม่ฝังรหัสผ่าน และ release ต้องเปิด minify) |
-   | แอป Android (ถ้ามี) | ตรวจด้วยตาตามรายการข้างล่าง ถ้าต้องการเชิงลึกให้ใช้ MobSF (Mobile Security Framework) | — |
-
-   **รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้วใน `build/app/intermediates/merged_manifests/` ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง
-   - `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
-   - `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
-   - `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
-   - permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` และต้องตรวจตัวที่ plugin เติมมาด้วย
-   - `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
-
-   เก็บผลดิบใน `_to_delete/security/`
-   - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
-   - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) และพิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด ถ้าเครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
-   - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** ถ้า semgrep ไม่เจออะไรในโปรเจกต์ Flutter ก็ไม่ได้แปลว่าปลอดภัย รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
-3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) แล้วติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล
-4. **จัดระดับและตัดสิน**
-
-   | ระดับ | ทำอะไร |
-   |---|---|
-   | ค่าลับจริงหลุด | **หยุดทันที บอกผู้ใช้** ต้องเปลี่ยนค่าลับที่ผู้ให้บริการ เพราะลบจากไฟล์อย่างเดียวไม่พอ และ agent ไม่แก้ประวัติ git เอง |
-   | critical · high ที่ยืนยันแล้ว | **ห้ามส่ง** จนกว่าจะแก้ หรือผู้ใช้ยอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log` |
-   | medium | ถ้าเล็กให้แก้ในรอบนี้ ถ้าไม่เล็กให้เปิดเป็นงานแยก |
-   | low · แจ้งผิด | บันทึกเหตุผล ไม่ต้องแก้ |
-
-5. **แก้**
-   - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
-   - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
-   - รูปแบบที่เจอซ้ำให้ส่งต่อ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ไปทำเป็นกฎ lint
-6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
-
-## เมื่อไรต้องรัน
-
-- ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
-- หลังเพิ่มหรืออัปเดต dependency
-- โปรเจกต์ที่ยังใช้งานอยู่ให้รันสัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
-
-## ไม่ใช่หน้าที่ของ skill นี้
-
-- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น เพราะ skill นี้ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
-- รับรองว่าปลอดภัย 100% รายงานบอกแค่ว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
-- รีวิวตรรกะและการออกแบบของ diff → `code-review-checklist` (ก่อน merge รันทั้งสองตัว)

@@ -441,7 +441,7 @@ skill นี้คือ house style เดียวของรูปที่�
 
 ในโครง HTML แก้ที่ `--accent` ใน `:root` ที่เดียว (SVG/Python engine แก้ `ACCENT` ใน `theme.py`) · สีพื้นตามดีไซน์ของโปรเจกต์ → ต่อท้ายชื่อไฟล์ `#accent=<สีหลัก>&bg=<สีพื้น>` · ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์ (สีโลโก้ผู้ให้บริการ · เทาโครงสร้าง) และ**สีไอคอน 7 กลุ่ม** (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) พร้อมความหมาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "ระบบสี" — สีที่ 8 แปลว่าใช้สีเพื่อความสวย
 
-**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · การ์ดมีแถบสีหนาที่ขอบ · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` (`references/states-and-checks.md`)
+**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · การ์ดมีแถบสีหนาที่ขอบ · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` ([`ui-craft/references/states-and-checks.md`](../ui-craft/references/states-and-checks.md))
 
 ### 5.1 · รูปต้องมีจุดเด่น ไม่จืด
 
@@ -1173,7 +1173,7 @@ Use when a new project needs its document set decided (which docs, order, where 
 └─ <project-name>/      repo โค้ด ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-` — โครงข้างในเป็นของ `project-bootstrap`
 ```
 
-**ไฟล์ของ SuperUser — สรุปจาก `team-files` (ต้นฉบับ):** `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` · `log/` · `inbox/` · `learn/` อยู่ใน `.claude/superuser/` (`log/` `inbox/` `learn/` ไม่ commit · รายละเอียด → `superuser/references/team-files.md`) · `BRIEF.md` อยู่ `docs/BRIEF.md` · ไม่มี `.superuser/tmp/` ของชั่วคราวลง `_to_delete/` · `AGENTS.md` / `GEMINI.md` มีเฉพาะเมื่อใช้ Codex / Gemini จริง และประกาศเป็นข้อยกเว้นของรากใน README ของโฟลเดอร์โค้ด · โปรเจกต์เก่าที่มี `.superuser/` hook ยังอ่านได้ ย้ายเข้า `.claude/superuser/` เมื่อสะดวก
+**ไฟล์ของ SuperUser** (`.claude/superuser/` · `docs/BRIEF.md` · `AGENTS.md`/`GEMINI.md`) — ต้นฉบับอยู่ที่ [`superuser/references/team-files.md`](../superuser/references/team-files.md) ที่เดียว
 
 **ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ `<project-name>/docs/`** (แบบ A ย้ายทั้ง `docs/` เข้าโฟลเดอร์โค้ด ผังข้างในเหมือนกัน) (`docs/decisions/ADR-NNNN-<slug>.md` · `docs/runbook-<เรื่อง>.md`) — ข้อนี้คือที่เดียวที่กำหนด
 
@@ -1667,155 +1667,13 @@ How many engineers? Team count? Domain complexity?
 
 ---
 
-## Pattern 1: Modular Monolith
+## Patterns 1–3, communication and cross-cutting decisions
 
-**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
+Details are in [references/core-patterns.md](references/core-patterns.md). Load it after the decision tree picks a direction:
 
-```
-┌─────────────────────────────────────┐
-│   Single deployable application     │
-│ ┌───────┐ ┌───────┐ ┌───────────┐  │
-│ │Module │ │Module │ │  Module   │  │
-│ │  A    │ │  B    │ │     C     │  │
-│ └───────┘ └───────┘ └───────────┘  │
-│   ▲           ▲           ▲         │
-│   └── Strict module boundaries ──┘  │
-└─────────────────────────────────────┘
-         │
-         ▼
-    Single DB (or per-module schemas)
-```
-
-**When to use:**
-- ✅ Small/medium team (< 30 engineers)
-- ✅ You need to ship changes fast
-- ✅ Operations needs are simple
-- ✅ All parts can deploy together
-
-**When NOT to use:**
-- ❌ Multiple teams needing independent deploys
-- ❌ Features need very different scaling
-- ❌ Parts need different tech stacks
-
-**Implementation tips:**
-- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
-- Each module exposes a public interface
-- Don't let one module read another module's tables
-- One DB, with a separate schema per module
-
----
-
-## Pattern 2: Microservices
-
-**When you've outgrown the monolith.**
-
-```
-┌──────┐  ┌──────┐  ┌──────┐
-│ Svc A│  │ Svc B│  │ Svc C│
-└──┬───┘  └──┬───┘  └──┬───┘
-   │ ▲      │ ▲      │ ▲
-   │ │      │ │      │ │     ← Each owns its DB
-   ▼ │      ▼ │      ▼ │
-  ┌──┴┐    ┌──┴┐    ┌──┴┐
-  │DB │    │DB │    │DB │
-  └───┘    └───┘    └───┘
-```
-
-**When to use:**
-- ✅ Independent teams (Conway's Law)
-- ✅ Different scaling needs per service
-- ✅ Services need different languages or stacks
-- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
-
-**When NOT to use (most projects):**
-- ❌ Small team — the extra overhead slows everyone down
-- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
-- ❌ Can't afford distributed tracing
-- ❌ Business areas don't have clear boundaries yet
-
-**Hidden costs:**
-- 💸 Much harder to operate (about 5x the ops effort)
-- 💸 Network latency between services
-- 💸 Transactions across services are hard
-- 💸 Bugs are harder to trace
-- 💸 You need a service mesh and a monitoring stack
-
-> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
-
----
-
-## Pattern 3: Serverless / Functions
-
-**For spiky, event-driven workloads.**
-
-```
-Event ──► Function ──► Service / DB / Queue
-```
-
-**Good fits:**
-- ✅ Async background processing
-- ✅ Scheduled tasks (cron)
-- ✅ Glue code between services
-- ✅ Spiky / unpredictable traffic
-- ✅ Image/video processing pipelines
-
-**Bad fits:**
-- ❌ Long-running processes (the limit is usually 15 min)
-- ❌ Processing that must keep state between calls
-- ❌ Frequent calls that need a fast response (cold starts add delay)
-- ❌ Heavy traffic all day (the bill climbs fast)
-
----
-
-## Communication Patterns
-
-### Synchronous (Request-Response)
-
-```
-Client ──HTTP/gRPC──► Server
-       ◄──Response───
-```
-
-| Protocol | When |
-|----------|------|
-| REST | Public APIs, simple CRUD |
-| GraphQL | Mobile clients, multiple read patterns |
-| gRPC | Internal service-to-service |
-| WebSocket | Real-time bidirectional |
-
-**Pros:** Easy to reason about and debug
-**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
-
-### Asynchronous (Event-Driven)
-
-```
-Producer ──► Topic/Queue ──► Consumer(s)
-         (publish)         (subscribe)
-```
-
-| Tech | When |
-|------|------|
-| Kafka | High throughput, event sourcing, replay needed |
-| RabbitMQ | Traditional queuing, work distribution |
-| SQS/SNS | AWS-native, simpler than Kafka |
-| NATS | Lightweight, low-latency |
-| Redis Pub/Sub | Simple, messages are not stored |
-
-**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
-**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
-
-### When to choose which
-
-```
-Need immediate response? ─Yes─► Sync
-                         └─No──► Async
-
-Is producer impacted by consumer? ─Yes─► Sync
-                                  └─No──► Async
-
-Multiple consumers? ─Yes─► Async (pub/sub)
-                   └─No──► Either
-```
+- Pattern 1: Modular Monolith (the default) · Pattern 2: Microservices · Pattern 3: Serverless / Functions
+- Communication: synchronous vs asynchronous (event-driven), and when to choose which
+- Cross-cutting: database per service vs shared DB · caching tiers · idempotency · decision matrix template
 
 ---
 
@@ -1828,60 +1686,6 @@ Details for each are in [references/advanced-patterns.md](references/advanced-pa
 - Pattern 6: Saga (Distributed Transactions)
 - Pattern 7: API Gateway
 - Pattern 8: Strangler Fig (Migration)
-
----
-
-## Cross-Cutting Decisions
-
-### Database per service vs Shared DB
-
-| | Shared DB | DB per service |
-|---|-----------|----------------|
-| Coupling | 🔴 High | 🟢 Low |
-| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
-| Schema changes | 🔴 Coordinate | 🟢 Independent |
-| Performance | 🟢 Easy joins | 🔴 Network calls |
-| Use when | Monolith | Microservices |
-
-### Caching tiers
-
-```
-Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
-       1                  2                       3                4
-       ▲                                                           ▲
-       Closest to user (fastest)              Furthest (last resort)
-```
-
-Each tier is roughly 10x faster than the next. CDN = content delivery network.
-
-### Idempotency
-
-**Always design APIs so a repeated request does no extra harm:**
-```
-Client retries → Server detects duplicate → Same result, no side effect
-```
-
-Methods:
-- Idempotency key header (Stripe pattern)
-- A time window in which the server drops duplicates
-- Methods that are safe to repeat by nature (PUT, unlike POST)
-
----
-
-## Decision Matrix Template
-
-When proposing architecture, compare options:
-
-```markdown
-| Factor | Weight | Option A | Option B | Option C |
-|--------|:------:|:--------:|:--------:|:--------:|
-| Performance | 30% | 8 | 9 | 7 |
-| Cost | 20% | 9 | 6 | 8 |
-| Team skill | 20% | 9 | 5 | 7 |
-| Operations | 15% | 8 | 5 | 7 |
-| Future-proof | 15% | 6 | 9 | 7 |
-| **Total** | 100% | **7.95** | 7.10 | 7.20 |
-```
 
 ---
 
@@ -2192,4 +1996,233 @@ sequenceDiagram
 
 - ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
 - ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)
+```
+
+
+## reference: core-patterns.md
+
+# Architecture Patterns — Core Patterns and Cross-Cutting Decisions
+
+Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision tree has pointed at a pattern, or when the choice involves communication style, data ownership, caching or idempotency.
+
+## Contents
+
+- [Pattern 1: Modular Monolith](#pattern-1-modular-monolith)
+- [Pattern 2: Microservices](#pattern-2-microservices)
+- [Pattern 3: Serverless / Functions](#pattern-3-serverless--functions)
+- [Communication Patterns](#communication-patterns)
+  - [Synchronous (Request-Response)](#synchronous-request-response)
+  - [Asynchronous (Event-Driven)](#asynchronous-event-driven)
+  - [When to choose which](#when-to-choose-which)
+- [Cross-Cutting Decisions](#cross-cutting-decisions)
+  - [Database per service vs Shared DB](#database-per-service-vs-shared-db)
+  - [Caching tiers](#caching-tiers)
+  - [Idempotency](#idempotency)
+- [Decision Matrix Template](#decision-matrix-template)
+
+---
+
+## Pattern 1: Modular Monolith
+
+**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
+
+```
+┌─────────────────────────────────────┐
+│   Single deployable application     │
+│ ┌───────┐ ┌───────┐ ┌───────────┐  │
+│ │Module │ │Module │ │  Module   │  │
+│ │  A    │ │  B    │ │     C     │  │
+│ └───────┘ └───────┘ └───────────┘  │
+│   ▲           ▲           ▲         │
+│   └── Strict module boundaries ──┘  │
+└─────────────────────────────────────┘
+         │
+         ▼
+    Single DB (or per-module schemas)
+```
+
+**When to use:**
+- ✅ Small/medium team (< 30 engineers)
+- ✅ You need to ship changes fast
+- ✅ Operations needs are simple
+- ✅ All parts can deploy together
+
+**When NOT to use:**
+- ❌ Multiple teams needing independent deploys
+- ❌ Features need very different scaling
+- ❌ Parts need different tech stacks
+
+**Implementation tips:**
+- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
+- Each module exposes a public interface
+- Don't let one module read another module's tables
+- One DB, with a separate schema per module
+
+---
+
+## Pattern 2: Microservices
+
+**When you've outgrown the monolith.**
+
+```
+┌──────┐  ┌──────┐  ┌──────┐
+│ Svc A│  │ Svc B│  │ Svc C│
+└──┬───┘  └──┬───┘  └──┬───┘
+   │ ▲      │ ▲      │ ▲
+   │ │      │ │      │ │     ← Each owns its DB
+   ▼ │      ▼ │      ▼ │
+  ┌──┴┐    ┌──┴┐    ┌──┴┐
+  │DB │    │DB │    │DB │
+  └───┘    └───┘    └───┘
+```
+
+**When to use:**
+- ✅ Independent teams (Conway's Law)
+- ✅ Different scaling needs per service
+- ✅ Services need different languages or stacks
+- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
+
+**When NOT to use (most projects):**
+- ❌ Small team — the extra overhead slows everyone down
+- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- ❌ Can't afford distributed tracing
+- ❌ Business areas don't have clear boundaries yet
+
+**Hidden costs:**
+- 💸 Much harder to operate (about 5x the ops effort)
+- 💸 Network latency between services
+- 💸 Transactions across services are hard
+- 💸 Bugs are harder to trace
+- 💸 You need a service mesh and a monitoring stack
+
+> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
+
+---
+
+## Pattern 3: Serverless / Functions
+
+**For spiky, event-driven workloads.**
+
+```
+Event ──► Function ──► Service / DB / Queue
+```
+
+**Good fits:**
+- ✅ Async background processing
+- ✅ Scheduled tasks (cron)
+- ✅ Glue code between services
+- ✅ Spiky / unpredictable traffic
+- ✅ Image/video processing pipelines
+
+**Bad fits:**
+- ❌ Long-running processes (the limit is usually 15 min)
+- ❌ Processing that must keep state between calls
+- ❌ Frequent calls that need a fast response (cold starts add delay)
+- ❌ Heavy traffic all day (the bill climbs fast)
+
+---
+
+## Communication Patterns
+
+### Synchronous (Request-Response)
+
+```
+Client ──HTTP/gRPC──► Server
+       ◄──Response───
+```
+
+| Protocol | When |
+|----------|------|
+| REST | Public APIs, simple CRUD |
+| GraphQL | Mobile clients, multiple read patterns |
+| gRPC | Internal service-to-service |
+| WebSocket | Real-time bidirectional |
+
+**Pros:** Easy to reason about and debug
+**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
+
+### Asynchronous (Event-Driven)
+
+```
+Producer ──► Topic/Queue ──► Consumer(s)
+         (publish)         (subscribe)
+```
+
+| Tech | When |
+|------|------|
+| Kafka | High throughput, event sourcing, replay needed |
+| RabbitMQ | Traditional queuing, work distribution |
+| SQS/SNS | AWS-native, simpler than Kafka |
+| NATS | Lightweight, low-latency |
+| Redis Pub/Sub | Simple, messages are not stored |
+
+**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
+**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
+
+### When to choose which
+
+```
+Need immediate response? ─Yes─► Sync
+                         └─No──► Async
+
+Is producer impacted by consumer? ─Yes─► Sync
+                                  └─No──► Async
+
+Multiple consumers? ─Yes─► Async (pub/sub)
+                   └─No──► Either
+```
+
+---
+
+
+## Cross-Cutting Decisions
+
+### Database per service vs Shared DB
+
+| | Shared DB | DB per service |
+|---|-----------|----------------|
+| Coupling | 🔴 High | 🟢 Low |
+| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
+| Schema changes | 🔴 Coordinate | 🟢 Independent |
+| Performance | 🟢 Easy joins | 🔴 Network calls |
+| Use when | Monolith | Microservices |
+
+### Caching tiers
+
+```
+Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
+       1                  2                       3                4
+       ▲                                                           ▲
+       Closest to user (fastest)              Furthest (last resort)
+```
+
+Each tier is roughly 10x faster than the next. CDN = content delivery network.
+
+### Idempotency
+
+**Always design APIs so a repeated request does no extra harm:**
+```
+Client retries → Server detects duplicate → Same result, no side effect
+```
+
+Methods:
+- Idempotency key header (Stripe pattern)
+- A time window in which the server drops duplicates
+- Methods that are safe to repeat by nature (PUT, unlike POST)
+
+---
+
+## Decision Matrix Template
+
+When proposing architecture, compare options:
+
+```markdown
+| Factor | Weight | Option A | Option B | Option C |
+|--------|:------:|:--------:|:--------:|:--------:|
+| Performance | 30% | 8 | 9 | 7 |
+| Cost | 20% | 9 | 6 | 8 |
+| Team skill | 20% | 9 | 5 | 7 |
+| Operations | 15% | 8 | 5 | 7 |
+| Future-proof | 15% | 6 | 9 | 7 |
+| **Total** | 100% | **7.95** | 7.10 | 7.20 |
 ```

@@ -89,8 +89,7 @@ description: Use when writing a pull request description or preparing a PR for r
 |--------------|-------------------|----------------|
 | < 100 | Easy | ✅ Ideal size |
 | 100-400 | Moderate | ✅ Acceptable |
-| 400-800 | Hard | ⚠️ Consider splitting |
-| > 800 | Very hard | ❌ Should be split |
+| > 400 | Hard | ❌ Split into stacked PRs |
 
 If your PR is huge, split into:
 1. Refactoring PR (no behavior change)

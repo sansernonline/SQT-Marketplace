@@ -10,7 +10,7 @@ Size every trade from risk, not from conviction. General information, not invest
 ## The formula — fixed-fractional
 
 ```
-risk budget (บาท)   = capital × risk%            (default 1%, hard max 2%)
+risk budget (บาท)   = capital × risk%            (default 1%, max 2%; higher only if the user writes it in CONTEXT.md)
 risk per share      = |entry − stop|              (+ round-trip cost per share)
 raw size (shares)   = risk budget ÷ risk per share
 size                = round DOWN to the board lot (100 shares on SET)
@@ -65,7 +65,7 @@ Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 
 - Position value = 1,000 × 48.50 = **48,500 baht = 48.5% of capital** → fails the 10% concentration check
 - Cap at 10% → 10,000 ÷ 48.50 = 206 → **200 shares** (9,700 baht); real risk = 200 × 0.94 = **188 baht (0.19%)**
 
-Answer: buy 200 shares, stop 47.75; the concentration limit, not the stop, is the binding rule here. A wider stop at 45.50 (below the 45.75 swing low) would give risk 3.19/share → 313 → 300 shares, but still capped at 200 by concentration.
+Size if the user takes the trade: 200 shares, stop 47.75; the concentration limit, not the stop, is the binding rule here. A wider stop at 45.50 (below the 45.75 swing low) would give risk 3.19/share → 313 → 300 shares, but still capped at 200 by concentration.
 
 ## Output
 

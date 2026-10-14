@@ -25,7 +25,7 @@ Workflow:
 6. **Reserves automation:** initial + adjustment
 7. **Customer communication touchpoints**
 8. **Repair network integration** if applicable
-9. **Produce polished claims design** using `polished-document-style` (from software-company)
+9. **Produce polished claims design** using `polished-document-style`
 10. **Hand-off:** implementation → `developer`, compliance review → `insurance-compliance-officer`
 
 ---
@@ -45,5 +45,5 @@ Workflow:
 8. **Plan model documentation** (regulatory)
 9. **Plan continuous monitoring**
 10. **Apply `insurance-systems` skill** for regulatory check
-11. **Produce polished model design** using `polished-document-style` (from software-company)
+11. **Produce polished model design** using `polished-document-style`
 12. **Hand-off:** ML implementation → `ai-engineer`, compliance filings → `insurance-compliance-officer`

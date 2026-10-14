@@ -25,9 +25,33 @@ const SECRET_PATTERNS = [
   [/:\/\/([^:\/\s@]+):([^@\s]+)@/g, "://$1:[ตัด]@"],
 ];
 
+// เลขส่วนตัวในข้อความผู้ใช้ (log เก็บข้อความผู้ใช้ด้วย) · ตัดเลขบัตรประชาชนก่อน แล้วเลขบัตรจ่ายเงิน แล้วเลขบัญชีหรือเบอร์โทร
+export function luhn(digits) {
+  let sum = 0;
+  for (let i = 0; i < digits.length; i++) {
+    let d = Number(digits[digits.length - 1 - i]);
+    if (i % 2) { d *= 2; if (d > 9) d -= 9; }
+    sum += d;
+  }
+  return sum % 10 === 0;
+}
+
+const PERSONAL_PATTERNS = [
+  // เลขประจำตัวประชาชน 13 หลัก มีหรือไม่มีขีด (1-2345-67890-12-3)
+  [/(?<!\d)\d-?\d{4}-?\d{5}-?\d{2}-?\d(?!\d)/g, "[ตัดเลขประจำตัว]"],
+  // เลขบัตรเครดิตหรือเดบิต 13–19 หลัก คั่นด้วยเว้นวรรคหรือขีดได้ · ตัดเฉพาะที่ผ่าน Luhn จะได้ไม่ตัดตัวเลขทั่วไป
+  [/(?<!\d)\d(?:[ -]?\d){12,18}(?!\d)/g, (m) => (luhn(m.replace(/\D/g, "")) ? "[ตัดเลขบัตร]" : m)],
+  // เลขบัญชีธนาคาร 10 หลักแบบ xxx-x-xxxxx-x และตัวเลขติดกัน 10–12 หลัก (เลขบัญชี เบอร์โทร)
+  [/(?<!\d)\d{3}-\d-\d{5}-\d(?!\d)/g, "[ตัดเลขบัญชี]"],
+  [/(?<![\d-])\d{10,12}(?![\d-])/g, "[ตัดเลขบัญชี]"],
+];
+
 export function redact(text, max = MAX_TARGET) {
   let out = String(text ?? "");
-  for (const [pattern, replacement] of SECRET_PATTERNS) out = out.replace(pattern, replacement);
+  // แต่ละแบบพังได้โดยไม่ทำให้ทั้งบรรทัดหาย
+  for (const [pattern, replacement] of [...SECRET_PATTERNS, ...PERSONAL_PATTERNS]) {
+    try { out = out.replace(pattern, replacement); } catch { /* ข้ามแบบนี้ */ }
+  }
   return out.length > max ? out.slice(0, max) + "…" : out;
 }
 
@@ -213,7 +237,30 @@ function main() {
   }
 }
 
+// node superuser-hook.mjs --self-test → พิสูจน์ว่าการตัดข้อมูลยังจับได้จริง และไม่ตัดตัวเลขทั่วไป
+function selfTest() {
+  const cases = [
+    ["เลขบัตร ปชช. มีขีด", "บัตร 1-1037-02345-67-8 ครับ", "[ตัดเลขประจำตัว]"],
+    ["เลขบัตร ปชช. ติดกัน", "id 1103702345678", "[ตัดเลขประจำตัว]"],
+    ["บัตรเครดิต", "card 4111 1111 1111 1111 exp", "[ตัดเลขบัตร]"],
+    ["เลขบัญชีมีขีด", "โอนเข้า 123-4-56789-0", "[ตัดเลขบัญชี]"],
+    ["เลขบัญชีติดกัน", "บัญชี 1234567890", "[ตัดเลขบัญชี]"],
+    ["token", "token=abcdef123456", "[ตัด]"],
+    ["วันที่ไม่ถูกตัด", "นัด 2026-10-14 เวลา 10:30 ห้อง 1203", null],
+  ];
+  let ok = 0;
+  for (const [label, input, expect] of cases) {
+    const out = redact(input);
+    const hit = expect ? out.includes(expect) : out === input;
+    console.log(`  ${hit ? "✅" : "❌"} ${label} → ${out}`);
+    if (hit) ok++;
+  }
+  console.log(`\nself-test ${ok}/${cases.length} ผ่าน`);
+  process.exit(ok === cases.length ? 0 : 1);
+}
+
 if (process.argv[1]?.replace(/\\/g, "/").endsWith("/superuser-hook.mjs")) {
+  if (process.argv.includes("--self-test")) selfTest();
   try { main(); } catch { /* log ล้มต้องไม่ทำให้งานหลักล้ม */ }
   process.exit(0);
 }

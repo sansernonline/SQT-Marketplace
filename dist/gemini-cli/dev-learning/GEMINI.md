@@ -1,6 +1,6 @@
 # SQT dev-learning — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/dev-learning/ โดย scripts/build/build-targets.mjs (v0.6.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/dev-learning/ โดย scripts/build/build-targets.mjs (v0.7.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Stay-current toolkit for developers — a weekly tech radar over followed libraries and tools, turning papers and long technical articles into working example code, personal learning paths tied to real projects, faster reading of English technical documentation, certification study plans for AWS, Azure, Google Cloud, Kubernetes and Scrum exams, and a scored picker for finishable practice side projects, and thesis and journal-paper writing with verified citations.
 

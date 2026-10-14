@@ -14,15 +14,20 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 - จะเขียน migration โดยเฉพาะตอนที่ระบบมีข้อมูลจริงแล้ว
 - query ช้าแล้วสงสัยว่าเป็นที่ schema หรือที่ index
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` |
-| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` |
-| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| รัน migration ใน pipeline | `cicd-and-release` |
+| งาน | skill | |
+|---|---|---|
+| เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
+| ออกแบบ endpoint และรูปร่าง JSON | `api-conventions` | แทน |
+| เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| ที่เก็บ connection string | `config-and-secrets` | แทน |
+| รัน migration ใน pipeline | `cicd-and-release` | แทน |
+| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` | คู่ |
+| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -191,6 +196,8 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 ขั้นตอน expand-and-contract และตัวอย่าง migration ที่ deploy ได้โดยไม่ปิดระบบ อยู่ใน [`migrations`](references/migrations.md)
 
+คลังข้อมูลเพื่อวิเคราะห์ (star schema · SCD · ELT) อยู่ใน [`warehouse-modeling`](references/warehouse-modeling.md) · pipeline ที่รันซ้ำได้ (incremental · backfill · ทดสอบคุณภาพข้อมูล · checklist ก่อนขึ้น production) อยู่ใน [`data-pipeline-patterns`](references/data-pipeline-patterns.md)
+
 ## 10 · ระบบหลายผู้เช่า (multi-tenant)
 
 | แบบ | แยกกันแค่ไหน | ต้นทุน | เหมาะกับ |
@@ -228,28 +235,145 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 - ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
 - ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
 
----
 
-## 13 · ตัวย่อ
+## reference: data-pipeline-patterns.md
 
-- **3NF** — Third Normal Form (การจัดตารางให้ข้อเท็จจริง 1 อย่างเก็บที่เดียว)
-- **UUID** — Universally Unique Identifier (รหัสสุ่มยาวที่ไม่ชนกันแม้สร้างคนละเครื่อง)
-- **ULID** — Universally Unique Lexicographically Sortable Identifier (UUID ที่เรียงตามเวลาได้)
-- **ORM** — Object-Relational Mapper (ตัวแปลงระหว่างตารางกับ object ในโค้ด)
-- **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล)
+# Data pipeline patterns — incremental, backfill, quality, catalog
 
-## 14 · เชื่อมกับ skill อื่น
+ย้ายมาจาก agent `data-engineer` (2026-10-14) · ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
 
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| รูปร่าง JSON ที่ API ส่งออก | `api-conventions` |
-| รัน migration ตอน deploy | `cicd-and-release` |
-| ที่เก็บ connection string | `config-and-secrets` |
-| ตาราง user, role, session | `auth-implementation-patterns` |
-| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` |
-| บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` |
+**สารบัญ:**
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
+- [Pipeline Patterns](#pipeline-patterns)
+- [Data Catalog Pattern](#data-catalog-pattern)
+- [Production Pipeline Checklist](#production-pipeline-checklist)
+
+## Pipeline Patterns
+
+### Pattern 1: Incremental Loading
+
+```sql
+-- dbt incremental model
+{{ config(materialized='incremental', unique_key='id') }}
+
+SELECT
+    id,
+    user_id,
+    event_type,
+    created_at
+FROM {{ source('raw', 'events') }}
+WHERE 1=1
+{% if is_incremental() %}
+    -- Only new since last run
+    AND created_at > (SELECT MAX(created_at) FROM {{ this }})
+{% endif %}
+```
+
+### Pattern 2: Late-arriving Data
+
+```sql
+-- Don't just look at last 1 hour, look back further for late events
+WHERE created_at > NOW() - INTERVAL '7 days'  -- buffer
+  AND created_at > (SELECT MAX(created_at) - INTERVAL '1 day' FROM target)
+```
+
+### Pattern 3: Data Quality Tests (dbt)
+
+```yaml
+# models/marts/orders.yml
+version: 2
+
+models:
+  - name: orders
+    description: One row per order
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('customers')
+              field: customer_id
+      - name: amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+```
+
+### Pattern 4: Idempotent Backfills
+
+```python
+# Backfill should be safe to re-run
+async def backfill(start_date: date, end_date: date):
+    for d in date_range(start_date, end_date):
+        # DELETE then INSERT in one transaction (idempotent); value passed as a parameter, never in the SQL string
+        async with db.transaction():
+            await db.execute("DELETE FROM target WHERE date = $1", d)
+            await load_for_date(d)
+```
+
+### Pattern 5: Real-time Pipeline
+
+```python
+# Kafka consumer pattern
+from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'events',
+    bootstrap_servers='kafka:9092',
+    enable_auto_commit=False,  # ← manual commit for exactly-once
+    isolation_level='read_committed',
+)
+
+batch = []
+for message in consumer:
+    batch.append(parse(message))
+
+    if len(batch) >= 1000:
+        # Atomic write + commit
+        with db.transaction():
+            db.bulk_insert('events', batch)
+            consumer.commit()  # only after DB write succeeds
+        batch = []
+```
+
+## Data Catalog Pattern
+
+For every table, document:
+
+```yaml
+- table: dim_customer
+  description: Slowly-changing customer master
+  owner: data-team
+  freshness: hourly
+  source: postgres.app.users (CDC)
+  pii: yes
+  retention: 7 years
+  columns:
+    - name: customer_key
+      description: Surrogate key
+    - name: customer_id
+      description: Natural key from source system
+    - name: email
+      pii: yes
+```
+
+## Production Pipeline Checklist
+
+- [ ] Schema validation at ingestion
+- [ ] Schema evolution handled (additive only)
+- [ ] Tests on critical columns (uniqueness, not-null, ranges)
+- [ ] Monitoring on row counts, freshness, error rates
+- [ ] Alerting (PagerDuty / Slack) on failures
+- [ ] Backfill procedure documented + tested
+- [ ] Idempotency verified
+- [ ] Lineage visible (dbt docs, OpenLineage)
+- [ ] PII tagged
+- [ ] Access controls per dataset
+- [ ] Cost monitored (query / storage)
 
 
 ## reference: data-types.md
@@ -584,6 +708,124 @@ def upgrade():
 จำนวนแถวที่ประมาณไว้ต่างจากที่ได้จริงเกิน 10 เท่า · `Nested Loop` ที่วนหลักแสนรอบ
 
 
+## reference: warehouse-modeling.md
+
+# Warehouse modeling — ELT, stack, star schema, SCD
+
+สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป — ย้ายมาจาก agent `data-engineer` (2026-10-14)
+
+**สารบัญ:**
+
+- [ELT vs ETL (Modern Default: ELT)](#elt-vs-etl-modern-default-elt)
+- [Tech Stack (2026 Recommendations)](#tech-stack-2026-recommendations)
+- [Schema Design: Star/Snowflake](#schema-design-starsnowflake)
+- [SCD (Slowly Changing Dimensions)](#scd-slowly-changing-dimensions)
+
+## ELT vs ETL (Modern Default: ELT)
+
+```
+ETL (old way):
+Source → Transform → Warehouse
+        ↑
+        Limited compute, slow
+
+ELT (modern):
+Source → Load raw → Transform in warehouse
+                    ↑
+                    Snowflake/BigQuery scale
+```
+
+> 💡 **2026 default: ELT with dbt** — load raw to warehouse, transform with SQL via dbt
+
+## Tech Stack (2026 Recommendations)
+
+> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
+
+### Warehouse / Lake
+| Tool | Best for | Cost |
+|------|----------|------|
+| **Snowflake** | Pure warehouse, separation of compute/storage | 💰💰 |
+| **BigQuery** | Serverless, ad-hoc, GCP shops | 💰💰 |
+| **Databricks** | Unified lake + warehouse, ML-heavy | 💰💰💰 |
+| **DuckDB** | Local dev, embedded analytics | 💰 free |
+| **Redshift** | AWS-native, legacy | 💰💰 |
+| **Postgres** | Small data (<1TB), simplicity | 💰 |
+
+### Transformation
+- **dbt** — SQL-based, version controlled, tested (industry default)
+- **SQLMesh** — newer alternative to dbt, stronger features
+
+### Orchestration
+- **Airflow** — most popular, mature
+- **Prefect** — modern Python-native
+- **Dagster** — software-engineering approach to pipelines
+
+### Stream Processing
+- **Kafka + Flink** — high throughput, exactly-once
+- **Kinesis Streams + Flink** — AWS-native
+- **Pub/Sub + Dataflow** — GCP-native
+- **Materialized views** (Snowflake, BigQuery) — for simple cases
+
+### Ingestion
+- **Airbyte** — open source, many connectors
+- **Fivetran** — managed, expensive but reliable
+- **Estuary** — modern, streaming-first
+- **Custom** — for sources not covered
+
+## Schema Design: Star/Snowflake
+
+```sql
+-- Fact table (events / measurements)
+CREATE TABLE fact_orders (
+    order_key BIGINT PRIMARY KEY,
+    customer_key BIGINT,
+    product_key BIGINT,
+    date_key INT,
+    quantity INT,
+    amount DECIMAL(12,2),
+    -- foreign keys to dimensions
+);
+
+-- Dimension tables (descriptive context)
+CREATE TABLE dim_customer (
+    customer_key BIGINT PRIMARY KEY,
+    customer_id VARCHAR,        -- natural key
+    name VARCHAR,
+    email VARCHAR,
+    country VARCHAR,
+    -- SCD Type 2 tracking:
+    valid_from DATE,
+    valid_to DATE,
+    is_current BOOLEAN
+);
+```
+
+> 💡 **Star = denormalized, query-fast**
+> **Snowflake = normalized dims, save storage**
+> **Wide tables / OBT (One Big Table) = even faster for analytics**
+
+## SCD (Slowly Changing Dimensions)
+
+### Type 1: Overwrite
+```
+Customer Bob lived in Bangkok. Moved to Phuket.
+→ Update row, lose Bangkok history
+```
+
+### Type 2: New row per change (most common)
+```
+| customer_key | id | name | city    | valid_from | valid_to   | is_current |
+| 1            | 42 | Bob  | Bangkok | 2024-01-01 | 2025-06-30 | false      |
+| 2            | 42 | Bob  | Phuket  | 2025-07-01 | 9999-12-31 | true       |
+```
+
+### Type 3: Add column
+```
+Customer table: current_city, previous_city
+→ Only most recent change preserved
+```
+
+
 ---
 
 # skill: api-conventions
@@ -603,20 +845,26 @@ Use when starting an API, adding endpoints or checking API consistency (URLs, pa
 - รีวิว API แล้วรู้สึกว่าแต่ละส่วนไม่เหมือนกัน
 - ต้องตอบว่า "เปลี่ยนแบบนี้แล้ว client พังไหม"
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` |
-| health check, error envelope, graceful shutdown | `web-service-essentials` |
-| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
-| token, scope, สิทธิ์ | `auth-implementation-patterns` |
+| งาน | skill | |
+|---|---|---|
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ ให้ครบ | command `/api-design` | แทน |
+| health check, error envelope, graceful shutdown | `web-service-essentials` | แทน |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` | แทน |
+| token, scope, สิทธิ์ | `auth-implementation-patterns` | แทน |
+| correlation id ที่โผล่ใน error | `logging-standards` | คู่ |
+| test สัญญาระหว่างระบบ | `testing-standards` | คู่ |
+| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
 
 ---
 
 ## 1 · เอกสารข้อตกลงต้องมีจริง
 
-วางไฟล์ `API-CONVENTIONS.md` ที่รากโปรเจกต์ (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
+วางไฟล์ `docs/API-CONVENTIONS.md` (แม่แบบอยู่ที่ `assets/API-CONVENTIONS.md`)
 ทุกข้อในหน้านี้ที่ตัดสินใจแล้ว ให้เขียนลงไฟล์นั้น พร้อมวันที่และเหตุผลสั้น ๆ
 
 > ข้อตกลงที่อยู่ในหัวคนใดคนหนึ่ง ไม่ใช่ข้อตกลง — คนที่เข้าทีมเดือนหน้าจะทำอีกแบบ
@@ -840,32 +1088,6 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
-
----
-
-## 12 · ตัวย่อ
-
-- **API** — Application Programming Interface (ช่องทางให้โปรแกรมเรียกใช้กันเอง)
-- **CRUD** — Create Read Update Delete (สร้าง อ่าน แก้ ลบ)
-- **RFC 3339** — มาตรฐานรูปแบบวันเวลาในข้อความ
-- **RFC 9457** — มาตรฐานรูปร่างข้อความ error ของ HTTP
-- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
-- **ISO 4217** — มาตรฐานรหัสสกุลเงิน เช่น THB
-- **OpenAPI** — รูปแบบมาตรฐานสำหรับบรรยาย API ให้เครื่องอ่านได้
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| health check · error envelope · timeout | `web-service-essentials` |
-| ออกแบบ endpoint ของฟีเจอร์หนึ่ง ๆ | command `/api-design` |
-| ชนิดข้อมูลในฐานข้อมูล | `database-design` |
-| token · scope · สิทธิ์ | `auth-implementation-patterns` |
-| correlation id ที่โผล่ใน error | `logging-standards` |
-| test สัญญาระหว่างระบบ | `testing-standards` |
-| บันทึกเหตุผลที่เลือกข้อตกลงนี้ | `adr-writer` |
-
-**แม่แบบเอกสารข้อตกลงที่คัดลอกไปใช้ได้เลย** → `assets/API-CONVENTIONS.md`
 
 
 ---

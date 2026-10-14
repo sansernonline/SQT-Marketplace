@@ -16,119 +16,34 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 
 ## Mode: `iot-architecture`
 
-Use the `iot-engineer` agent to design IoT architecture for: **$ARGUMENTS**
+Use the `iot-engineer` agent for: **$ARGUMENTS**
 
 Workflow:
-
-1. **iot-engineer Initial Discovery:**
-   - Device count and connectivity
-   - Power constraints
-   - Data volume + latency tolerance
-   - Regulatory + security requirements
-
-2. **Choose connectivity** (apply `iot-systems` skill):
-   - Protocol (MQTT, CoAP, HTTP)
-   - QoS strategy per message type
-   - Topic structure
-   - Security (mTLS, ACLs)
-
-3. **iot-engineer Compute Placement:**
-   - Apply `iot-systems` skill
-   - Device vs edge vs cloud per task
-   - Edge runtime selection
-   - Offline operation strategy
-
-4. **Design data flow:**
-   - Telemetry pipeline
-   - Command + control path
-   - Edge → cloud aggregation
-   - Cloud → edge sync
-
-5. **Plan fleet management** (apply `iot-systems` skill):
-   - Provisioning approach
-   - OTA strategy
-   - Configuration management
-   - Monitoring
-
-6. **Security architecture:**
-   - Device identity + auth
-   - mTLS everywhere
-   - Per-device ACLs
-   - Cert lifecycle
-
-7. **Produce polished IoT architecture document** using `polished-document-style` skill (from software-company):
-   - System diagram (Mermaid)
-   - Data flow sequences
-   - Compute placement matrix
-   - Tech stack rationale
-   - Security architecture
-   - Cost projection
-   - Scaling plan
-
-8. **Hand-off suggestions:**
-   - Firmware → `iot-engineer`
-   - MQTT deep design → `iot-engineer`
-   - Backend services → `solution-architect` (from software-company)
-   - Production deployment → `devops-engineer` (from software-company)
+1. **Discovery:** device count and connectivity, power limits, data volume and latency tolerance, regulatory and security needs
+2. **Apply `iot-systems` skill**, open `references/mqtt-protocol-patterns.md` and `references/edge-computing-architecture.md`
+3. **Choose connectivity:** protocol, QoS per message type, topic structure
+4. **Place compute:** device vs edge vs cloud per task, edge runtime, offline operation
+5. **Design data flow:** telemetry, command and control, edge-to-cloud and cloud-to-edge sync
+6. **Outline fleet management** (full design: mode `device-fleet-design`)
+7. **Design security:** device identity, mTLS, per-device ACLs, certificate lifecycle
+8. **Estimate cost and scaling**
+9. **Produce polished IoT architecture** using `polished-document-style`: system and sequence diagrams, compute placement matrix, stack with reasons
+10. **Hand-off:** firmware → `iot-engineer`, backend services → `solution-architect`, deployment → `devops-engineer`
 
 ---
 
 ## Mode: `device-fleet-design`
 
-Use the `iot-engineer` agent to design fleet management for: **$ARGUMENTS**
+Use the `iot-engineer` agent for: **$ARGUMENTS**
 
 Workflow:
-
-1. **Initial Discovery:**
-   - Fleet size + growth projection
-   - Device types
-   - Deployment pattern (consumer / B2B / industrial)
-   - Update frequency expected
-
-2. **Apply `iot-systems` skill** for patterns
-
-3. **Design provisioning:**
-   - JITP, zero-touch, or pre-registered
-   - Cert lifecycle
-   - Device claiming flow
-
-4. **Design OTA strategy:**
-   - Update layers (firmware/app/config)
-   - A/B partitioning
-   - Staged rollout (1% → 10% → 100%)
-   - Rollback triggers + procedure
-
-5. **Design configuration management:**
-   - Desired state + reconciliation
-   - Group-based config (by region, tier, etc.)
-   - Version control + rollback per device
-
-6. **Design monitoring:**
-   - Health tiers (healthy/degraded/unhealthy/offline)
-   - Key metrics + SLOs
-   - Anomaly detection patterns
-   - Alert thresholds
-
-7. **Design diagnostic tools:**
-   - Remote log retrieval
-   - Live metric inspection
-   - Self-test triggers
-   - Support escalation flow
-
-8. **Plan decommissioning:**
-   - Wipe procedure
-   - Cert revocation
-   - Audit trail
-
-9. **Produce polished fleet management document** using `polished-document-style` skill (from software-company):
-   - Lifecycle diagram (Mermaid)
-   - Provisioning sequence
-   - OTA rollout phases (Gantt)
-   - Monitoring dashboard spec
-   - Operations runbook
-   - Compliance considerations
-
-10. **Hand-off suggestions:**
-    - Firmware support → `iot-engineer`
-    - Backend implementation → `developer` (from software-company)
-    - Production deployment → `devops-engineer` (from software-company)
+1. **Discovery:** fleet size and growth, device types, deployment pattern (consumer, B2B, industrial), expected update rate
+2. **Apply `iot-systems` skill**, open `references/device-fleet-management.md`
+3. **Design provisioning:** just-in-time, zero-touch or pre-registered, device claiming
+4. **Design OTA (over-the-air) updates:** layers, A/B partitions, staged rollout, rollback triggers
+5. **Design configuration:** desired state and reconciliation, group config, per-device rollback
+6. **Design monitoring:** health tiers, key metrics and SLOs, alert thresholds
+7. **Design diagnostics:** remote logs, live metrics, self-test, support escalation
+8. **Plan decommissioning:** wipe, certificate revocation, audit trail
+9. **Produce polished fleet design** using `polished-document-style`: lifecycle diagram, provisioning sequence, rollout phases, runbook
+10. **Hand-off:** firmware → `iot-engineer`, backend → `developer`, deployment → `devops-engineer`

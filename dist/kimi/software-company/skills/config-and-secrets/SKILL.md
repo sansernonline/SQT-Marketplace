@@ -16,13 +16,19 @@ description: Use when settings differ by environment or something must never be 
 - เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
 - secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
 
-## เมื่อไหร่ **ไม่** ใช้
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
-| โจทย์ | ไปที่ |
-|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` |
+| งาน | skill | |
+|---|---|---|
+| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
+| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
+| connection string ของฐานข้อมูล | `database-design` | คู่ |
+| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
+| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -222,28 +228,3 @@ APP_LOG_LEVEL=debug
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
 - ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
----
-
-## 12 · ตัวย่อ
-
-- **config** — configuration (ค่าตั้งที่ต่างกันได้ตามสภาพแวดล้อม)
-- **secret** — ค่าอ่อนไหวที่ห้ามเปิดเผย เช่น รหัสผ่านหรือกุญแจ
-- **environment variable** — ตัวแปรสภาพแวดล้อม ค่าที่ระบบปฏิบัติการส่งให้โปรแกรมตอนรัน
-- **vault** — ที่เก็บ secret ที่เข้ารหัสและคุมสิทธิ์ได้
-- **rotation** — การหมุนเวียนเปลี่ยนกุญแจตามรอบเวลา
-- **TLS** — Transport Layer Security (การเข้ารหัสระหว่างทางของ HTTPS)
-- **CORS** — Cross-Origin Resource Sharing (กฎที่เบราว์เซอร์ใช้ตัดสินว่าเว็บหนึ่งเรียก API ของอีกที่ได้ไหม)
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| secret ในขั้นตอน build และ deploy | `cicd-and-release` |
-| ปิดบังค่าอ่อนไหวใน log | `logging-standards` |
-| กุญแจเซ็น token · อายุ session | `auth-implementation-patterns` |
-| connection string ของฐานข้อมูล | `database-design` |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
