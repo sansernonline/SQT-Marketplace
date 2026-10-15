@@ -44,7 +44,7 @@ node scripts/check/validate-marketplace.mjs               # แล้วค่�
 
 | ระดับ | รายการ |
 |---|---|
-| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` เกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` · ไฟล์ใน `facts.json` ไม่มีค่าปัจจุบัน · ของกลาง SuperUser ไม่ตรง (`sync-superuser`) · บล็อกกฎร่วมของ prompt ไม่ตรง (`sync-prompt-rules`) |
+| error | frontmatter หาย/ปิดไม่ครบ · **ค่าที่มี `": "` โดยไม่ครอบเครื่องหมายคำพูด** · `name` ไม่ตรงชื่อโฟลเดอร์ · `name` ผิดรูปแบบหรือมีคำว่า claude/anthropic · ไม่มี `description` · `description` เกิน 1024 หรือมีแท็ก `< >` · เนื้อหาเกิน 500 บรรทัด · agent ใช้ `allowed-tools:` แทน `tools:` · `plugin.json` หาย/พัง/`version` ผิดรูป · plugin ที่มีจริงแต่ไม่ได้ประกาศใน `marketplace.json` · ไฟล์ใน `facts.json` ไม่มีค่าปัจจุบัน · ของกลาง SuperUser ไม่ตรง (`sync-superuser`) · บล็อกกฎร่วมของ prompt ไม่ตรง (`sync-prompt-rules`) · `.mcp.json` ของ plugin พัง · ใช้ `@latest` หรือ npx ที่ไม่ล็อกรุ่น · launcher ที่ `.mcp.json` เรียกหายไปหรือใช้รุ่นลอย · เอกสารใน plugin อ้างรุ่นของแพ็กเกจไม่ตรงกับที่ server ล็อก |
 | warning | `description` ยาวเกิน 250 ตัว (โหลดเข้า context ทุก session) · `description` สั้นกว่า 60 ตัว หรือไม่บอกว่าใช้เมื่อไหร่ · เนื้อหาเกิน 400 บรรทัด · ไฟล์ใน `references/` เกิน 100 บรรทัดแต่ไม่มีสารบัญ · README ไม่พูดถึง plugin บางตัว |
 
 ### กับดักหลักที่มันมีไว้จับ

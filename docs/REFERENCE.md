@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (111)
+## 🛠️ Skills (112)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -991,6 +991,11 @@
 ### 111. pptx-to-html-deck
 **ใช้กับ:** technical-writer
 **Description:** Use when a .pptx should play as one animated HTML file, or both .pptx and .html are wanted — click steps, notes, menu, interactive pages.
+
+---
+
+### 112. doc-cover-design
+**Description:** Use when a project's .docx set needs striking covers unique to it. Concept from logo geometry or real mockup; 3 designs, 2-of-3 vote.
 
 ---
 

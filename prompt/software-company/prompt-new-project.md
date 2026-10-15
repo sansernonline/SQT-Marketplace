@@ -394,7 +394,7 @@ agent `technical-writer` · skill `branded-document-design` · `document-naming`
 
 1. อ่าน `docs/README.md` เอารหัสโปรเจกต์และ `doc-theme` (สีแบรนด์เดียวกับ mockup) · อ่านต้นฉบับฉบับปัจจุบันจากดิสก์
 2. ตั้งชื่อไฟล์ส่งมอบตาม `document-naming`: `docs/<รหัส>-<ประเภท>-v<M.m>-<สถานะ>.docx`
-3. สร้าง .docx ด้วย builder ของ `branded-document-design` (`scripts/brandkit.py` — ใช้ตัวแปลง markdown ของ skill ถ้ามี ไม่เขียนธีมเอง): หน้าปก · สารบัญอัตโนมัติ · ตารางสีแบรนด์ · ส่วนหัว/ท้ายหน้า · ภาพและไดอะแกรมแทรกครบ (เจอ Mermaid ในร่าง → ทำรูปใหม่ด้วย `diagram-figures` ไม่แปลงตรง ๆ)
+3. สร้าง .docx ด้วย builder ของ `branded-document-design` (`scripts/brandkit.py` — ใช้ตัวแปลง markdown ของ skill ถ้ามี ไม่เขียนธีมเอง): หน้าปก (มี `docs/design/cover-direction.md` → ใช้ตัวสร้างปกที่ระบุในนั้น · ยังไม่มีและโปรเจกต์มีโลโก้กับ mockup แล้ว → เสนอ `prompt-doc-cover.md` ในรายงาน) · สารบัญอัตโนมัติ · ตารางสีแบรนด์ · ส่วนหัว/ท้ายหน้า · ภาพและไดอะแกรมแทรกครบ (เจอ Mermaid ในร่าง → ทำรูปใหม่ด้วย `diagram-figures` ไม่แปลงตรง ๆ)
    - รูปออกแบบทำตามกฎใน `diagram-figures` ทั้งหมด (เริ่มจากโครงใน `assets/` · ไอคอนทางการ · รายการตรวจข้อ 9) และรัน `python <ที่ติดตั้ง plugin>/skills/diagram-figures/scripts/check-figure-source.py <โฟลเดอร์ไฟล์ต้นทางของรูป>` ได้ exit 0 · วันที่ในรูปใช้รูปแบบเดียวกับเอกสาร
    - ตัวแปลงที่เขียนเองต้องผ่านร่างทดสอบที่มี: ตารางกว้าง 7 คอลัมน์ 60 แถว · ตัวแยกตาราง `:-:` · บรรทัดขึ้นต้นด้วย `|` `>` `!` ที่ไม่ใช่บล็อก · รูป · และต้องมี timeout
 4. ทำ `.pdf` เฉพาะคู่มือผู้ใช้ หรือเมื่อลูกค้าขอ — นอกนั้นไม่ทำ

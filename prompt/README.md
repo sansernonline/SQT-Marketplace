@@ -47,6 +47,7 @@ prompt/
 | Test | `software-company/prompt-quality.md` | ตรวจคุณภาพก่อนปล่อยหรือตามรอบ | 1 security review · 2 code review · 3 doc sync (เอกสารกับโค้ดไม่ตรงกัน) |
 | เอกสาร | `software-company/prompt-existing-code.md` | มีแอปอยู่แล้ว ได้รับมอบหมายให้ทำเอกสาร | 1 reverse spec (`docs/as-is/`) · 2 SRS · 3 FSD · 4 tech doc · 5 คู่มือ (ชี้ไป prompt-manual) |
 | เอกสาร | `software-company/prompt-manual.md` | ทำคู่มือและอบรมผู้ใช้ | 1 user manual แยกบทบาท · 2 training guide |
+| เอกสาร | `software-company/prompt-doc-cover.md` | ปกเอกสาร .docx ดูเหมือนของโปรเจกต์อื่น · อยากได้ปกที่ว้าวและไม่ซ้ำ | 1 สำรวจโปรเจกต์ + research ปก · 2 ออกแบบ 3 แนวแล้วโหวต 2 ใน 3 · 3 รวมผลและสร้างปกใน Word ทั้งชุด |
 | ส่งมอบและดูแล | `software-company/prompt-release.md` | เตรียม deploy / ออกรุ่น | 1 deploy guide · 2 release notes · 3 runbook |
 | ส่งมอบและดูแล | `software-company/prompt-handover.md` | ส่งงานต่อ / ปิดโครงการ | 1 handover · 2 retrospective |
 | ส่งมอบและดูแล | `software-company/prompt-operations.md` | ระบบขึ้นใช้งานจริงแล้ว | 1 รับมือระบบล่ม · 2 postmortem · 3 แผนเฝ้าระวัง · 4 threat model · 5 เก็บกวาดเครื่อง |
@@ -67,6 +68,7 @@ prompt/
 | จะเริ่ม sprint แต่ยังไม่มี backlog | `prompt-user-story.md` ฉบับ 1 (มี SRS) หรือ 2 (ไม่มี) → 3 → `prompt-product.md` ฉบับ 3 |
 | ลูกค้าดู mockup แล้วขอแก้ | `prompt-mockup.md` ฉบับ 3 (ขัดกับ SRS → `prompt-change.md` ฉบับ 1 ก่อน) |
 | มีแอปแล้ว ให้มาทำ spec | `prompt-existing-code.md` ฉบับ 1 → 2 → 3 |
+| ปกเอกสารทุกโปรเจกต์หน้าตาเหมือนกัน หรือลูกค้าบอกว่าปกไม่ว้าว | `prompt-doc-cover.md` ทั้งหมด → render รอบถัดไปด้วย `prompt-new-project.md` ฉบับ 14 |
 | มีแอปแล้ว ให้มาทำคู่มือผู้ใช้ | `prompt-existing-code.md` ฉบับ 1 (เฉพาะ `features.md`) → `prompt-manual.md` ฉบับ 1 |
 | มีแอปแล้ว ให้มาทำ API spec หรือ data dictionary | `prompt-existing-code.md` ฉบับ 1 → 4 |
 | มีแอปแล้ว ให้มาทำ automated test | `prompt-test-automation.md` ทั้งหมด |

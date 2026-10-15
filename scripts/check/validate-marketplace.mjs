@@ -13,7 +13,8 @@
 import { plan as planSuperuser } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
 import { execFileSync } from 'node:child_process';
-import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,6 +37,8 @@ function checkPluginDescription(file, description) {
     err(file, `description ยาว ${description.length} ตัว เกิน ${PLUGIN_DESC_MAX} — claude.ai ไม่รับ plugin นี้ตอนอัปโหลด`);
 }
 let inspected = 0;
+// รายการใน marketplace.json ประกาศ mcpServers เองได้ — checkPlugin ตรวจด้วย (อ่านก่อนเรียก checkPlugin · JSON พังรายงานตอนตรวจ marketplace)
+let mpEntries = [];
 
 const err  = (file, msg) => errors.push(`${file}\n      ${msg}`);
 const warn = (file, msg) => warns.push(`${file}\n      ${msg}`);
@@ -174,6 +177,82 @@ function checkPlugin(dir) {
       if (sub === 'skills' && statSync(p).isDirectory()) checkSkill(p);
       if (sub !== 'skills' && e.endsWith('.md')) checkAgent(p, sub === 'agents' ? AGENT_DESC_SOFT : SKILL_DESC_SOFT);
     }
+  }
+
+  // MCP server มาได้ 3 ทาง: .mcp.json · "mcpServers" ใน plugin.json (object หรือ path ไปไฟล์ JSON) · รายการใน marketplace.json
+  const local = (rel) => { const p = join(dir, rel.replace(/^\.\//, '')); return existsSync(p) ? readFileSync(p, 'utf8') : null; };
+  const pins = {};
+  const mcp = join(dir, '.mcp.json');
+  if (existsSync(mcp)) { inspected++; Object.assign(pins, checkMcpConfig(mcp, readFileSync(mcp, 'utf8'), local)); }
+  const inline = [[pj, j.mcpServers], ...mpEntries.filter(e => e?.name === slug).map(e => [`marketplace.json → ${slug}`, e.mcpServers])];
+  for (const [where, value] of inline)
+    for (const ref of [].concat(value ?? [])) {
+      inspected++;
+      if (typeof ref === 'string') {
+        const body = local(ref);
+        if (body === null) err(where, `"mcpServers" ชี้ไป ${ref} ที่ไม่มีอยู่ใน plugin`);
+        else Object.assign(pins, checkMcpConfig(join(dir, ref), body, local));
+      } else Object.assign(pins, checkMcpServers(`${where} → mcpServers`, ref, local));
+    }
+  if (Object.keys(pins).length) checkPinnedVersions(pins, markdownFiles(dir).map(([rel, text]) => [join(ROOT, rel), text]));
+}
+
+// ---------------------------------------------------------------- MCP server ของ plugin
+// .mcp.json เปิด server ทุกครั้งที่เริ่ม session · npx ที่ไม่ล็อกรุ่นหรือใช้ @latest = ดึงโค้ดใหม่จาก npm ทุกรอบโดยไม่มีใครตรวจ
+const RUNNERS = /^(npx|bunx|pnpx|uvx)(\.cmd|\.exe)?$/i;
+const PINNED = /^(@[\w.-]+\/)?[\w.-]+@\d+\.\d+\.\d+$/;
+const FLOATING = /@(latest|next|canary|beta)\b/;
+// คืน { แพ็กเกจ: รุ่น } ที่ล็อกไว้ เพื่อตรวจว่าไฟล์อื่นใน plugin อ้างรุ่นเดียวกัน
+function checkMcpConfig(file, text, readLocal) {
+  let j;
+  try { j = JSON.parse(text); } catch (e) { err(file, `JSON พัง: ${e.message}`); return {}; }
+  const servers = j?.mcpServers;
+  if (!servers || typeof servers !== 'object') { err(file, 'ไม่มี "mcpServers" — Claude Code จะไม่เปิด server ใดเลย'); return {}; }
+  return checkMcpServers(file, servers, readLocal);
+}
+// ตัด comment ของ JavaScript ออก (/* */ และ // ที่ต้นบรรทัดหรือหลังช่องว่าง — ไม่ตัด https://) แล้วเหลือแค่ string literal
+const codeStrings = (body) => [...body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1')
+  .matchAll(/(["'`])((?:\\.|(?!\1)[^\\\n])*)\1/g)].map(m => m[2]);
+// <แพ็กเกจ>@<รุ่น> ใน string · ซ้ายต้องไม่ใช่ตัวอักษร @ / . - เพื่อไม่จับกลางชื่ออื่น
+const PKG_SPEC = /(?<![\w@/.-])((?:@[\w.-]+\/)?[a-z0-9][\w.-]*)@([^\s"'`,)\]]*)/gi;
+const EXACT = /^\d+\.\d+\.\d+$/;
+function checkMcpServers(file, servers, readLocal) {
+  const pins = {};
+  if (!servers || typeof servers !== 'object') { err(file, '"mcpServers" ต้องเป็น object หรือ path ไปไฟล์ JSON'); return pins; }
+  for (const [name, s] of Object.entries(servers)) {
+    if (!s?.command && !s?.url) { err(file, `server "${name}" ไม่มี command หรือ url`); continue; }
+    const argv = [s.command, ...(s.args ?? [])].filter(a => typeof a === 'string');
+    for (const a of argv) if (FLOATING.test(a)) err(file, `server "${name}" ใช้ "${a}" — ห้ามรุ่นลอย ล็อกเลขรุ่น x.y.z`);
+    const at = argv.findIndex(a => RUNNERS.test(basename(a)));
+    if (at >= 0) {
+      const spec = argv.slice(at + 1).find(a => !a.startsWith('-'));
+      if (!spec || !PINNED.test(spec)) err(file, `server "${name}" รัน ${basename(argv[at])} "${spec ?? ''}" โดยไม่ล็อกรุ่น — เขียนเป็น <แพ็กเกจ>@x.y.z`);
+      else { const i = spec.lastIndexOf('@'); pins[spec.slice(0, i)] = spec.slice(i + 1); }
+    }
+    // script ของ plugin ที่ server เรียก (launcher) ต้องมีจริง และต้องล็อกรุ่นเหมือนกัน
+    for (const a of argv) {
+      const m = a.match(/^\$\{CLAUDE_PLUGIN_ROOT\}\/(.+)$/);
+      if (!m) continue;
+      const body = readLocal(m[1]);
+      if (body === null) { err(file, `server "${name}" เรียก ${m[1]} ที่ไม่มีอยู่ใน plugin`); continue; }
+      let found = 0;
+      for (const str of codeStrings(body))
+        for (const [, pkg, ver] of str.matchAll(PKG_SPEC)) {
+          if (EXACT.test(ver)) { pins[pkg] = ver; found++; }
+          else err(file, `${m[1]} อ้าง "${pkg}@${ver}" — ห้ามรุ่นลอยหรือช่วงรุ่น (@latest · @^ · @~ · @* · @6 · @6.5) ล็อกเลขรุ่น x.y.z`);
+        }
+      if (!found) err(file, `${m[1]} ไม่มี "<แพ็กเกจ>@x.y.z" ในโค้ด — launcher ต้องล็อกรุ่น`);
+    }
+  }
+  return pins;
+}
+// เอกสารและคำสั่งใน plugin ที่อ้าง <แพ็กเกจ>@x.y.z ต้องเป็นรุ่นเดียวกับที่ server ใช้
+function checkPinnedVersions(pins, files) {
+  for (const [pkg, ver] of Object.entries(pins)) {
+    const re = new RegExp(`(?<![\\w@/.-])${pkg.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')}@(\\d+\\.\\d+\\.\\d+)`, 'g');
+    for (const [file, text] of files)
+      for (const [, other] of text.matchAll(re))
+        if (other !== ver) err(file, `อ้าง ${pkg}@${other} แต่ server ล็อกไว้ที่ ${pkg}@${ver} — แก้ให้ตรงกัน`);
   }
 }
 
@@ -419,8 +498,57 @@ function selfTest() {
   const reHit = errors.length === 1 && errors[0].startsWith('old.md') && !errors[0].includes('new.md');
   console.log(`  ${reHit ? '✅' : '❌'} คำที่เลิกใช้ (ป้าย \`เดา\` ใน docs)`);
   if (reHit) ok++;
+  // .mcp.json: @latest · npx ไม่ล็อกรุ่น · JSON พัง · launcher หาย/รุ่นลอย ต้องโดนจับ · แบบของ reverse-engineering-mcp ต้องผ่าน · รุ่นในเอกสารต้องตรง
+  const mcp = (servers, files = {}) => {
+    errors.length = 0;
+    const pins = checkMcpConfig('m/.mcp.json', typeof servers === 'string' ? servers : JSON.stringify({ mcpServers: servers }), (rel) => files[rel] ?? null);
+    return [errors.length, pins];
+  };
+  const launcher = { 'scripts/l.mjs': 'export const P = "rea-agents@6.5.0";' };
+  const viaLauncher = { rea: { command: 'node', args: ['${CLAUDE_PLUGIN_ROOT}/scripts/l.mjs'] } };
+  const pinErr = (text) => { errors.length = 0; checkPinnedVersions({ 'rea-agents': '6.5.0' }, [['d.md', text]]); return errors.length; };
+  const mcpHit = mcp({ rea: { command: 'npx', args: ['-y', 'rea-agents@latest', 'mcp'] } })[0] >= 1
+    && mcp({ rea: { command: 'npx', args: ['-y', 'rea-agents', 'mcp'] } })[0] === 1
+    && mcp({ rea: { command: 'cmd.exe', args: ['/d', '/c', 'npx', '-y', 'rea-agents', 'mcp'] } })[0] === 1
+    && mcp({ rea: { command: 'npx', args: ['-y', 'rea-agents@6.5.0', 'mcp'] } })[0] === 0
+    && mcp('{ "mcpServers": ')[0] === 1
+    && mcp(viaLauncher)[0] === 1
+    && mcp(viaLauncher, { 'scripts/l.mjs': 'spawn("npx", ["-y", "rea-agents@latest"])' })[0] >= 1
+    && mcp(viaLauncher, launcher)[0] === 0 && mcp(viaLauncher, launcher)[1]['rea-agents'] === '6.5.0'
+    && pinErr('npx -y rea-agents@6.4.0 doctor') === 1 && pinErr('npx -y rea-agents@6.5.0 doctor · ห้าม rea-agents@latest') === 0;
+  // ช่วงรุ่นและรุ่นไม่ครบ ต้องโดนจับทั้งใน .mcp.json (ทุก runner) และใน launcher · comment ไม่นับ · ชื่อที่ซ้อนในชื่ออื่นไม่นับ
+  const ranged = ['^6.5.0', '~6.5.0', '*', '6', '6.5'];
+  const rangeHit = ['npx', 'bunx', 'pnpx', 'uvx'].every(r => ranged.every(v => mcp({ s: { command: r, args: ['-y', `rea-agents@${v}`] } })[0] === 1)
+      && mcp({ s: { command: r, args: ['pkg-x@1.2.3'] } })[0] === 0 && mcp({ s: { command: r, args: ['-y', 'pkg-x'] } })[0] === 1)
+    && ranged.every(v => mcp(viaLauncher, { 'scripts/l.mjs': `export const P = "rea-agents@${v}";` })[0] === 2)   // ช่วงรุ่น + ไม่มีรุ่นที่ล็อก
+    && mcp(viaLauncher, { 'scripts/l.mjs': 'spawn("npx", ["-y", "rea-agents", "mcp"])' })[0] === 1
+    && mcp(viaLauncher, { 'scripts/l.mjs': '// เดิมใช้ "rea-agents@latest"\n/* "rea-agents@^6" */\nconst P = "rea-agents@6.5.0"; const r = "https://registry.npmjs.org/";' })[0] === 0
+    && mcp(viaLauncher, { 'scripts/l.mjs': '// "rea-agents@6.5.0"\nconst P = "rea-agents";' })[0] === 1
+    && pinErr('xrea-agents@6.4.0 · @scope/rea-agents@6.4.0 · foo/rea-agents@6.4.0') === 0;
+  console.log(`  ${mcpHit && rangeHit ? '✅' : '❌'} .mcp.json ห้ามรุ่นลอยหรือช่วงรุ่น · launcher ต้องล็อกรุ่น (comment ไม่นับ) · รุ่นในเอกสารตรงกัน`);
+  if (mcpHit && rangeHit) ok++;
+  // mcpServers ที่ประกาศใน plugin.json (object และ path) และใน marketplace.json ต้องโดนตรวจเหมือน .mcp.json
+  const tmp = mkdtempSync(join(tmpdir(), 'vm-'));
+  const plug = (name, pj, files = {}) => {
+    const d = join(tmp, name);
+    mkdirSync(join(d, '.claude-plugin'), { recursive: true });
+    writeFileSync(join(d, '.claude-plugin', 'plugin.json'), JSON.stringify({ name, version: '0.1.0', description: 'test', ...pj }));
+    for (const [rel, body] of Object.entries(files)) writeFileSync(join(d, rel), body);
+    errors.length = 0; checkPlugin(d); return errors.length;
+  };
+  const bad = { s: { command: 'npx', args: ['-y', 'rea-agents@^6'] } }, good = { s: { command: 'npx', args: ['-y', 'rea-agents@6.5.0'] } };
+  let inlineHit;
+  try {
+    inlineHit = plug('p1', { mcpServers: bad }) === 1 && plug('p2', { mcpServers: good }) === 0
+      && plug('p3', { mcpServers: './m.json' }, { 'm.json': JSON.stringify({ mcpServers: bad }) }) === 1
+      && plug('p4', { mcpServers: './none.json' }) === 1;
+    mpEntries = [{ name: 'p5', mcpServers: bad }];
+    inlineHit = inlineHit && plug('p5', {}) === 1;
+  } finally { mpEntries = []; rmSync(tmp, { recursive: true, force: true }); }
+  console.log(`  ${inlineHit ? '✅' : '❌'} mcpServers ใน plugin.json และ marketplace.json โดนตรวจเหมือน .mcp.json`);
+  if (inlineHit) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 8;
+  const total = cases.length + 10;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -432,6 +560,7 @@ const pluginsDir = join(ROOT, 'plugins');
 if (!existsSync(pluginsDir)) { console.error(`ไม่พบ ${pluginsDir}`); process.exit(1); }
 
 const plugins = readdirSync(pluginsDir).filter(d => !d.startsWith('.') && statSync(join(pluginsDir, d)).isDirectory());
+try { mpEntries = JSON.parse(readFileSync(join(ROOT, '.claude-plugin', 'marketplace.json'), 'utf8')).plugins ?? []; } catch { mpEntries = []; }
 plugins.forEach(p => checkPlugin(join(pluginsDir, p)));
 
 // marketplace.json ต้องมี plugin ครบทุกตัวที่มีอยู่จริง

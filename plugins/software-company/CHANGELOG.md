@@ -1,5 +1,13 @@
 # Changelog — software-company
 
+## 2.7.0 — 2026-10-15
+
+- skill ใหม่ `doc-cover-design` — ปกเอกสาร .docx ที่ไม่ซ้ำโปรเจกต์อื่น: หาแนวคิดจากรูปทรงโลโก้ (ทางตั้งต้น) หรือหน้าจอจริงของ mockup (ทางสำรอง) · ทะเบียนกันปกซ้ำ · ชนิดเอกสาร = เฟรมของการเคลื่อนไหวเดียวกัน · ทำ 3 แนวแล้วผู้ตรวจ 3 ตัวโหวต 2 ใน 3 · เครื่องสร้างปกตัวอย่าง `scripts/cover-engine/` (ทดสอบใน Word แล้วเฉพาะปก SRS · ใช้กับโปรเจกต์ใหม่ต้องแก้หลายไฟล์ — ดู word-build.md)
+- ที่มา: bake-off กับ LiteNet · Telex · SwipeOS — แนวรูปทรงโลโก้ชนะ 2 ใน 3 · Telex ใช้หน้าจอจริง
+- `branded-document-design` ชี้ไปที่ `doc-cover-design` เมื่อโปรเจกต์มีโลโก้และ mockup แล้ว
+- prompt ใหม่ `prompt/software-company/prompt-doc-cover.md` (3 ฉบับ) · `prompt-new-project.md` ฉบับ 14 เรียกตัวสร้างปกของโปรเจกต์ถ้ามี
+- agent `reverse-engineer` และ skill `reverse-engineering` ชี้ไปที่ skill `reverse-engineering-mcp:reverse-engineer-anything` เมื่อมี tool ของ REA (native · JavaScript/Electron · Android) · .NET ยังใช้ `ilspycmd` · เป้าหมายที่ไม่น่าไว้ใจให้ติดตั้ง REA แยกใน `docker-sandbox`
+
 ## 2.6.0 — 2026-10-14
 
 จากการตรวจ plugin หัวข้อ 1–6 (ความยาว · กระชับ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ)

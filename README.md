@@ -1,10 +1,10 @@
 # SQT Marketplace — Software Company Plugin Suite
 
-Marketplace สำหรับ Claude Code · **12 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน เลือกติดตั้งตามอุตสาหกรรม
+Marketplace สำหรับ Claude Code · **13 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน เลือกติดตั้งตามอุตสาหกรรม
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
-**รวม 99 agents · 250 skills · 72 commands** — ตั้งแต่บริษัทซอฟต์แวร์ครบวงจรไปจนถึงเทรดหุ้น งานไทย ขายของออนไลน์ บ้าน อาชีพ สุขภาพ และงานครีเอทีฟ
+**รวม 99 agents · 252 skills · 75 commands** — ตั้งแต่บริษัทซอฟต์แวร์ครบวงจรไปจนถึงเทรดหุ้น งานไทย ขายของออนไลน์ บ้าน อาชีพ สุขภาพ และงานครีเอทีฟ
 
 ---
 
@@ -28,7 +28,7 @@ scripts\build-dist.cmd                                                       # �
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
 | **`superuser`** | 3 | 4 | 0 | ต้นฉบับ SuperUser — ใช้เดี่ยวกับงานทั่วไป หรือเป็นแม่แบบให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`software-company`** | 41 | 111 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`software-company`** | 41 | 112 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
 | **`trading-finance`** | 7 | 22 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
 | **`personal-life`** | 6 | 18 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
 | **`thai-workplace`** | 7 | 21 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
@@ -39,8 +39,9 @@ scripts\build-dist.cmd                                                       # �
 | **`consumer-rights`** | 4 | 8 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
 | **`graphic-design`** | 7 | 14 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
 | **`dev-learning`** | 4 | 11 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก · เขียนวิทยานิพนธ์และบทความวิจัย |
+| **`reverse-engineering-mcp`** | 0 | 1 | 3 | เพิ่ม REA MCP server (ล็อกรุ่น 6.5.0) ให้งานแกะซอฟต์แวร์ · tool ที่รันเป้าหมายต้องถามทุกครั้ง · ใช้คู่กับ software-company ([README](plugins/reverse-engineering-mcp/README.md)) |
 
-> plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company และ superuser) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
+> plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company · superuser และ reverse-engineering-mcp) ยังเป็นรุ่น v0.x · `reverse-engineering-mcp` ก็ยังเป็นรุ่น v0.x เช่นกัน (ยังไม่ได้ลองเปิด server จริง) · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
 
 ---

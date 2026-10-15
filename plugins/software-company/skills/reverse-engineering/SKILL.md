@@ -29,6 +29,8 @@ Effort depends almost entirely on what the target was built with. Classify first
 | Native C, C++, Go, Rust | Pseudo-C only; names gone unless symbols exist | Days per feature | strings → imports → Ghidra |
 | Obfuscated or packed | Depends on the protector; can stop the job | Unknown | identify the tool first, then ask |
 
+Plugin `reverse-engineering-mcp` installed (tools named `mcp__plugin_reverse-engineering-mcp_rea__*` exist) → use its skill `reverse-engineering-mcp:reverse-engineer-anything` for native, JavaScript/Electron and Android targets. .NET still goes through `ilspycmd` here, and triage still starts with `triage.py`.
+
 Field test (2026-10, ASP.NET MVC app of about 55,000 lines): `ilspycmd` produced a C# project of 51,700 lines in 9 seconds. Compared against the real source, a cancel method matched statement for statement, and all 1,431 methods matched by name.
 
 ## Safety and legality

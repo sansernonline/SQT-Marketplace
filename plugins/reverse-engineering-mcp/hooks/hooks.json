@@ -1,0 +1,17 @@
+{
+  "description": "Ask the user every time before a REA tool runs the target or changes a device",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__(plugin_reverse-engineering-mcp_)?rea__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/ask-before-run.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

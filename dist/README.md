@@ -22,7 +22,8 @@
 | `home-family` | 0.5.0 | 11 | 5 | 3 | 0.1 MB |
 | `online-seller` | 0.5.0 | 12 | 6 | 4 | 0.1 MB |
 | `personal-life` | 0.7.0 | 18 | 6 | 6 | 0.1 MB |
-| `software-company` | 2.6.0 | 111 | 41 | 29 | 5.8 MB |
+| `reverse-engineering-mcp` | 0.1.1 | 1 | 0 | 3 | 0.0 MB |
+| `software-company` | 2.7.0 | 112 | 41 | 29 | 5.9 MB |
 | `superuser` | 1.3.0 | 4 | 3 | 0 | 0.1 MB |
 | `thai-workplace` | 0.7.0 | 21 | 7 | 8 | 0.1 MB |
 | `trading-finance` | 0.7.0 | 22 | 7 | 7 | 0.1 MB |

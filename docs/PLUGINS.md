@@ -1,6 +1,6 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **12 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0 · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
+ทั้งหมด **13 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0 (ส่วน `reverse-engineering-mcp` เป็นตัวเสริมที่เพิ่ม MCP server ให้งานแกะซอฟต์แวร์) · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
 ---
 
@@ -9,7 +9,7 @@
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**41 agents · 111 skills · 29 commands**
+**41 agents · 112 skills · 29 commands**
 
 ### ติดตั้ง
 ```
