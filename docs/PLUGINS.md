@@ -1,6 +1,6 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **13 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0 (ส่วน `reverse-engineering-mcp` เป็นตัวเสริมที่เพิ่ม MCP server ให้งานแกะซอฟต์แวร์) · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
+ทั้งหมด **12 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0 · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
 ---
 

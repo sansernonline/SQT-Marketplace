@@ -12,7 +12,7 @@ Recognizing the packaging leads straight to the readable layer. Check these befo
 
 ## Electron / Node apps
 
-- `app.asar` — ASAR archive; `npx @electron/asar extract app.asar outdir` (the old `asar` package name is deprecated). Renderer JS is often minified but readable; `.map` source maps may contain original source.
+- `app.asar` — ASAR archive; `python -I scripts/asar_extract.py extract app.asar outdir` (see javascript-electron.md). Renderer JS is often minified but readable; `.map` source maps may contain original source (`scripts/sourcemap_list.py`).
 - `resources/app/package.json` names the app, entry point, and dependency list.
 - Native modules: `*.node` files (PE DLLs) — treat as native binaries.
 
@@ -27,7 +27,7 @@ Recognizing the packaging leads straight to the readable layer. Check these befo
 
 ## Android APK
 
-- ZIP; contains `classes.dex` (Dalvik bytecode — use `jadx` or `apktool` for near-Java output), `AndroidManifest.xml` (binary XML — use `apktool` or `aapt`), `resources.arsc`, native libs under `lib/`.
+- ZIP; contains `classes.dex` (Dalvik bytecode — use `jadx` or `apktool` for near-Java output), `AndroidManifest.xml` (binary XML — `scripts/apk_inventory.py` decodes it; else `apktool` or `aapt2`), `resources.arsc`, native libs under `lib/`.
 
 ## Windows installers generally
 

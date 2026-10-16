@@ -806,7 +806,7 @@
 
 ### 80. reverse-engineering
 **ใช้กับ:** developer, reverse-engineer, solution-architect
-**Description:** Use when there is a compiled app or unknown file format or protocol but no source, or a build may differ.
+**Description:** Use when there is a compiled app (exe, dll, Electron, APK, JS bundle), unknown file format, capture or protocol but no source, or a build may differ.
 
 ---
 

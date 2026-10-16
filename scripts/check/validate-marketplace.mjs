@@ -498,33 +498,33 @@ function selfTest() {
   const reHit = errors.length === 1 && errors[0].startsWith('old.md') && !errors[0].includes('new.md');
   console.log(`  ${reHit ? '✅' : '❌'} คำที่เลิกใช้ (ป้าย \`เดา\` ใน docs)`);
   if (reHit) ok++;
-  // .mcp.json: @latest · npx ไม่ล็อกรุ่น · JSON พัง · launcher หาย/รุ่นลอย ต้องโดนจับ · แบบของ reverse-engineering-mcp ต้องผ่าน · รุ่นในเอกสารต้องตรง
+  // .mcp.json: @latest · npx ไม่ล็อกรุ่น · JSON พัง · launcher หาย/รุ่นลอย ต้องโดนจับ · แบบที่ล็อกรุ่นผ่าน launcher ต้องผ่าน · รุ่นในเอกสารต้องตรง
   const mcp = (servers, files = {}) => {
     errors.length = 0;
     const pins = checkMcpConfig('m/.mcp.json', typeof servers === 'string' ? servers : JSON.stringify({ mcpServers: servers }), (rel) => files[rel] ?? null);
     return [errors.length, pins];
   };
-  const launcher = { 'scripts/l.mjs': 'export const P = "rea-agents@6.5.0";' };
-  const viaLauncher = { rea: { command: 'node', args: ['${CLAUDE_PLUGIN_ROOT}/scripts/l.mjs'] } };
-  const pinErr = (text) => { errors.length = 0; checkPinnedVersions({ 'rea-agents': '6.5.0' }, [['d.md', text]]); return errors.length; };
-  const mcpHit = mcp({ rea: { command: 'npx', args: ['-y', 'rea-agents@latest', 'mcp'] } })[0] >= 1
-    && mcp({ rea: { command: 'npx', args: ['-y', 'rea-agents', 'mcp'] } })[0] === 1
-    && mcp({ rea: { command: 'cmd.exe', args: ['/d', '/c', 'npx', '-y', 'rea-agents', 'mcp'] } })[0] === 1
-    && mcp({ rea: { command: 'npx', args: ['-y', 'rea-agents@6.5.0', 'mcp'] } })[0] === 0
+  const launcher = { 'scripts/l.mjs': 'export const P = "demo-mcp@6.5.0";' };
+  const viaLauncher = { demo: { command: 'node', args: ['${CLAUDE_PLUGIN_ROOT}/scripts/l.mjs'] } };
+  const pinErr = (text) => { errors.length = 0; checkPinnedVersions({ 'demo-mcp': '6.5.0' }, [['d.md', text]]); return errors.length; };
+  const mcpHit = mcp({ demo: { command: 'npx', args: ['-y', 'demo-mcp@latest', 'mcp'] } })[0] >= 1
+    && mcp({ demo: { command: 'npx', args: ['-y', 'demo-mcp', 'mcp'] } })[0] === 1
+    && mcp({ demo: { command: 'cmd.exe', args: ['/d', '/c', 'npx', '-y', 'demo-mcp', 'mcp'] } })[0] === 1
+    && mcp({ demo: { command: 'npx', args: ['-y', 'demo-mcp@6.5.0', 'mcp'] } })[0] === 0
     && mcp('{ "mcpServers": ')[0] === 1
     && mcp(viaLauncher)[0] === 1
-    && mcp(viaLauncher, { 'scripts/l.mjs': 'spawn("npx", ["-y", "rea-agents@latest"])' })[0] >= 1
-    && mcp(viaLauncher, launcher)[0] === 0 && mcp(viaLauncher, launcher)[1]['rea-agents'] === '6.5.0'
-    && pinErr('npx -y rea-agents@6.4.0 doctor') === 1 && pinErr('npx -y rea-agents@6.5.0 doctor · ห้าม rea-agents@latest') === 0;
+    && mcp(viaLauncher, { 'scripts/l.mjs': 'spawn("npx", ["-y", "demo-mcp@latest"])' })[0] >= 1
+    && mcp(viaLauncher, launcher)[0] === 0 && mcp(viaLauncher, launcher)[1]['demo-mcp'] === '6.5.0'
+    && pinErr('npx -y demo-mcp@6.4.0 doctor') === 1 && pinErr('npx -y demo-mcp@6.5.0 doctor · ห้าม demo-mcp@latest') === 0;
   // ช่วงรุ่นและรุ่นไม่ครบ ต้องโดนจับทั้งใน .mcp.json (ทุก runner) และใน launcher · comment ไม่นับ · ชื่อที่ซ้อนในชื่ออื่นไม่นับ
   const ranged = ['^6.5.0', '~6.5.0', '*', '6', '6.5'];
-  const rangeHit = ['npx', 'bunx', 'pnpx', 'uvx'].every(r => ranged.every(v => mcp({ s: { command: r, args: ['-y', `rea-agents@${v}`] } })[0] === 1)
+  const rangeHit = ['npx', 'bunx', 'pnpx', 'uvx'].every(r => ranged.every(v => mcp({ s: { command: r, args: ['-y', `demo-mcp@${v}`] } })[0] === 1)
       && mcp({ s: { command: r, args: ['pkg-x@1.2.3'] } })[0] === 0 && mcp({ s: { command: r, args: ['-y', 'pkg-x'] } })[0] === 1)
-    && ranged.every(v => mcp(viaLauncher, { 'scripts/l.mjs': `export const P = "rea-agents@${v}";` })[0] === 2)   // ช่วงรุ่น + ไม่มีรุ่นที่ล็อก
-    && mcp(viaLauncher, { 'scripts/l.mjs': 'spawn("npx", ["-y", "rea-agents", "mcp"])' })[0] === 1
-    && mcp(viaLauncher, { 'scripts/l.mjs': '// เดิมใช้ "rea-agents@latest"\n/* "rea-agents@^6" */\nconst P = "rea-agents@6.5.0"; const r = "https://registry.npmjs.org/";' })[0] === 0
-    && mcp(viaLauncher, { 'scripts/l.mjs': '// "rea-agents@6.5.0"\nconst P = "rea-agents";' })[0] === 1
-    && pinErr('xrea-agents@6.4.0 · @scope/rea-agents@6.4.0 · foo/rea-agents@6.4.0') === 0;
+    && ranged.every(v => mcp(viaLauncher, { 'scripts/l.mjs': `export const P = "demo-mcp@${v}";` })[0] === 2)   // ช่วงรุ่น + ไม่มีรุ่นที่ล็อก
+    && mcp(viaLauncher, { 'scripts/l.mjs': 'spawn("npx", ["-y", "demo-mcp", "mcp"])' })[0] === 1
+    && mcp(viaLauncher, { 'scripts/l.mjs': '// เดิมใช้ "demo-mcp@latest"\n/* "demo-mcp@^6" */\nconst P = "demo-mcp@6.5.0"; const r = "https://registry.npmjs.org/";' })[0] === 0
+    && mcp(viaLauncher, { 'scripts/l.mjs': '// "demo-mcp@6.5.0"\nconst P = "demo-mcp";' })[0] === 1
+    && pinErr('xdemo-mcp@6.4.0 · @scope/demo-mcp@6.4.0 · foo/demo-mcp@6.4.0') === 0;
   console.log(`  ${mcpHit && rangeHit ? '✅' : '❌'} .mcp.json ห้ามรุ่นลอยหรือช่วงรุ่น · launcher ต้องล็อกรุ่น (comment ไม่นับ) · รุ่นในเอกสารตรงกัน`);
   if (mcpHit && rangeHit) ok++;
   // mcpServers ที่ประกาศใน plugin.json (object และ path) และใน marketplace.json ต้องโดนตรวจเหมือน .mcp.json
@@ -536,7 +536,7 @@ function selfTest() {
     for (const [rel, body] of Object.entries(files)) writeFileSync(join(d, rel), body);
     errors.length = 0; checkPlugin(d); return errors.length;
   };
-  const bad = { s: { command: 'npx', args: ['-y', 'rea-agents@^6'] } }, good = { s: { command: 'npx', args: ['-y', 'rea-agents@6.5.0'] } };
+  const bad = { s: { command: 'npx', args: ['-y', 'demo-mcp@^6'] } }, good = { s: { command: 'npx', args: ['-y', 'demo-mcp@6.5.0'] } };
   let inlineHit;
   try {
     inlineHit = plug('p1', { mcpServers: bad }) === 1 && plug('p2', { mcpServers: good }) === 0

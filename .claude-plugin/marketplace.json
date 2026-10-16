@@ -63,11 +63,6 @@
       "name": "dev-learning",
       "source": "./plugins/dev-learning",
       "description": "Stay-current toolkit for developers — a weekly tech radar over followed libraries and tools, turning papers and long technical articles into working example code, personal learning paths tied to real projects, faster reading of English technical documentation, certification study plans for AWS, Azure, Google Cloud, Kubernetes and Scrum exams, and a scored picker for finishable practice side projects, and thesis and journal-paper writing with verified citations."
-    },
-    {
-      "name": "reverse-engineering-mcp",
-      "source": "./plugins/reverse-engineering-mcp",
-      "description": "Adds the REA (Reverse Engineer Anything) MCP server, pinned to rea-agents 6.5.0, for evidence-backed reverse engineering of native binaries, Electron and JavaScript apps, Android packages, firmware and captures. Tools that run the target or change a device always ask first. Authorized targets only. Pairs with software-company reverse-engineering for .NET and file triage."
     }
   ]
 }

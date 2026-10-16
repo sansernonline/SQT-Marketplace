@@ -34,7 +34,7 @@ XML_KINDS = (
 
 # (entry name or prefix inside the zip, label, next step) — checked in order
 ZIP_KINDS = (
-    ("AndroidManifest.xml", "APK (Android app)", "jadx for Java/Kotlin; assemblies/ → .NET (Xamarin)"),
+    ("AndroidManifest.xml", "APK (Android app)", "apk_inventory.py, then jadx for Java/Kotlin; assemblies/ → .NET (Xamarin)"),
     ("Payload/", "IPA (iOS app)", "unzip, then triage the Mach-O inside Payload/*.app"),
     ("Report/Layout", "Power BI .pbix", "Report/Layout is UTF-16 JSON (visuals, filters); DataModel needs pbi-tools or Tabular Editor"),
     ("word/", "Word .docx", "read word/document.xml"),
@@ -161,7 +161,7 @@ def identify(data):
             try:
                 if "files" in json.loads(data[16:16 + jlen]):
                     info["format"] = "ASAR (Electron archive)"
-                    info["detail"] = "use: npx @electron/asar extract <file> <outdir>"
+                    info["detail"] = "use: python -I asar_extract.py list <file>, then extract <file> <outdir>"
             except ValueError:
                 pass
     if info["format"] == "unknown":
@@ -234,6 +234,8 @@ def main():
         obf = [n for n in OBFUSCATORS if n.encode() in data]
         print(f"obfuscation: {', '.join(obf) if obf else 'no known marker'}")
         print("next:   ilspycmd -p -o <outdir> <file>   (see SKILL.md for version pinning)")
+    elif info["format"] in ("PE (Windows)", "ELF (Linux/Unix)") or info["format"].startswith("Mach-O "):
+        print("next:   python -I pe_elf_info.py <file>   (headers, sections, imports, exports)")
 
     if args.strings or args.pattern:
         import re

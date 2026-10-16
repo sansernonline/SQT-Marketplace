@@ -1,6 +1,6 @@
 # SQT software-company — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.7.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.8.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Simulates a complete software development company — 41 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 111 skills and 29 slash commands for the whole SDLC.
 

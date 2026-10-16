@@ -7,7 +7,7 @@
 ```
 prompt/
 ├─ README.md            ไฟล์นี้ (สารบัญ)
-├─ software-company/    18 ไฟล์
+├─ software-company/    20 ไฟล์
 ├─ career/ · consumer-rights/ · dev-learning/ · graphic-design/
 ├─ health-wellness/ · home-family/ · online-seller/ · personal-life/
 ├─ thai-workplace/ · trading-finance/
@@ -17,7 +17,7 @@ prompt/
 
 | plugin | ไฟล์ |
 |---|---|
-| `software-company` | `software-company/` — 18 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
+| `software-company` | `software-company/` — 20 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
 | plugin อื่น 10 ตัว | `<ชื่อ plugin>/prompt-<สถานการณ์>.md` · เลือกไฟล์จาก `<ชื่อ plugin>/README.md` · ดู [plugin อื่น](#plugin-อื่น) |
 | `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว |
 
@@ -42,6 +42,7 @@ prompt/
 | Dev | `software-company/prompt-user-story.md` | ต้องมี backlog ก่อนวางแผน sprint | 1 story จาก SRS/BRD · 2 story ฟีเจอร์ใหม่จากคำเล่า · 3 ปรับ story ให้พร้อมเข้า sprint |
 | Dev | `software-company/prompt-mockup.md` | ต้องมีหน้าจอให้ลูกค้าเห็นก่อนเขียนโค้ด | 1 สร้าง mockup กดได้จริง · 2 ตรวจ mockup · 3 แก้ตามความเห็นลูกค้า / CR |
 | Dev | `software-company/prompt-existing-dev.md` | รับแอปที่มีอยู่มาพัฒนาต่อ | 1 รับช่วงโค้ด · 2 เพิ่มฟีเจอร์ · 3 ปรับโครง/อัปเกรดเวอร์ชัน · 4 ทำให้เร็วขึ้น |
+| Dev | `software-company/prompt-rebuild.md` | รื้อแอปเดิม สร้างรุ่นใหม่ ออกแบบใหม่ทั้งหมด โดยเก็บบางส่วนไว้ใช้ | 1 สำรวจของเดิม อะไรเก็บ อะไรทิ้ง · 2 เป้าหมายรุ่นใหม่ + แนวทางรื้อ + stack · 3 ออกแบบหน้าตาใหม่ 3 ทิศทาง · 4 สเปกรุ่นใหม่ · 5 สร้างรุ่นใหม่ · 6 ย้ายข้อมูล ตรวจเทียบ แผนสลับระบบ |
 | Dev | `software-company/prompt-change.md` | มีคำขอเปลี่ยน / พบบั๊ก หลังส่งงาน | 1 change request · 2 bugfix |
 | Test | `software-company/prompt-test-automation.md` | มีแอปแล้ว ต้องทำ automated test อย่างเดียว | 1 แผนทดสอบอัตโนมัติ · 2 test case จากแอปจริง · 3 เขียน test · 4 ต่อเข้า CI |
 | Test | `software-company/prompt-quality.md` | ตรวจคุณภาพก่อนปล่อยหรือตามรอบ | 1 security review · 2 code review · 3 doc sync (เอกสารกับโค้ดไม่ตรงกัน) |
@@ -75,6 +76,7 @@ prompt/
 | รับโค้ดจากทีมอื่นมาดูแลต่อ | `prompt-existing-dev.md` ฉบับ 1 · ไม่มีเอกสารเลยเพิ่ม `prompt-existing-code.md` ฉบับ 1 |
 | ลูกค้าขอเพิ่มฟีเจอร์ในแอปเดิม | `prompt-change.md` ฉบับ 1 → `prompt-existing-dev.md` ฉบับ 2 |
 | framework หมดอายุ ต้องอัปเกรด | `prompt-existing-dev.md` ฉบับ 3 (ไม่มี test → `prompt-test-automation.md` ก่อน) |
+| แอปเดิมแก้ต่อไม่ไหว ต้องรื้อสร้างใหม่ หน้าตาใหม่ stack ใหม่ แต่เก็บกฎธุรกิจและข้อมูลไว้ | `prompt-rebuild.md` ทั้งหมด · ไม่แน่ใจว่า stack ใหม่ทำได้ → `prompt-poc.md` ก่อนฉบับ 5 · ก่อนสลับระบบ → `prompt-quality.md` → `prompt-release.md` |
 | ระบบช้า | `prompt-existing-dev.md` ฉบับ 4 |
 | ผู้ใช้แจ้งบั๊ก | `prompt-change.md` ฉบับ 2 |
 | ก่อนขึ้นระบบจริง | `prompt-quality.md` → `prompt-release.md` → `prompt-operations.md` ฉบับ 3 และ 4 |
@@ -134,7 +136,7 @@ prompt/
 
 ## หมายเหตุ
 
-- ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–4 ใน `prompt-existing-dev.md` · ฉบับ 3–4 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md`
+- ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–4 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–4 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md`
 - กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-log` · `principle-prove-it-works` · `status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น
 - user story มีที่เดียวคือ `prompt-user-story.md` · mockup มีที่เดียวคือ `prompt-mockup.md` · `prompt-new-project.md` ฉบับ 4–6 ชี้ไปที่นั่น
