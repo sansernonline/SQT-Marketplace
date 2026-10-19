@@ -31,11 +31,13 @@ description: Use when building from a spec and mockups as a loop (failing test, 
 เขียนลง `docs/BUILD-PLAN.md`
 
 ```markdown
-| # | รหัส | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
-|---|---|---|---|---|---|---|
-| 1 | FR-AUTH-010 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | รอทำ | |
-| 2 | FR-AUTH-020 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | รอทำ | |
+| # | รหัส | milestone | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
+|---|---|---|---|---|---|---|---|
+| 1 | FR-AUTH-010 | M2 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | รอทำ | |
+| 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | รอทำ | |
 ```
+
+คอลัมน์ `milestone` ใส่รหัส `M…` จากแผนโครงการหรือไทม์ไลน์ใน `BUILD-PLAN.md` (playbook `new-project` ขั้น 1) · ไม่มีไทม์ไลน์ → ว่างได้
 
 **เอกสารขัดกัน → ยึดตามลำดับ ไม่เดา** — เขียนลำดับความสำคัญของเอกสาร 1 บรรทัดไว้บนสุดของ `BUILD-PLAN.md` ก่อนแตกงาน เช่น `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`
 - ผู้ใช้กำหนดลำดับมาแล้ว → ใช้ตามนั้น

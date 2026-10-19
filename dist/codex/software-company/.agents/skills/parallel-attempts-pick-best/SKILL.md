@@ -21,7 +21,7 @@ description: Use when one attempt could lock in the wrong shape (design, interfa
 4. ความต่างต้องมาจากที่ไหนสักแห่ง เพราะใน Claude Code โมเดลมาจากค่ายเดียวกัน
    - ผสมระดับโมเดล (ใหญ่ · กลาง — ชื่อจริงดูหัวข้อ Subagent ใน superuser) และ/หรือ
    - ให้แต่ละตัวมีข้อจำกัดต่างกัน เช่น "ใช้ไลบรารีมาตรฐานเท่านั้น" · "ข้อมูลไหลทางเดียว" · "จำนวนไฟล์น้อยที่สุด"
-5. กำหนดที่ส่งงานแยกกัน — git worktree ต่อตัว หรือ `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน
+5. กำหนดที่ส่งงานแยกกัน — git worktree ต่อตัวตาม [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md) หัวข้อ "worktree ต่อตัว" (เร็วกว่าห้อง Docker และเห็นงานที่ยังไม่ commit) หรือ `_to_delete/attempts-<เรื่อง>/<n>/` ห้ามเขียนที่เดียวกัน
 
 ## 2 · ปล่อยพร้อมกัน
 
