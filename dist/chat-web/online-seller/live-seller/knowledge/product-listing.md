@@ -71,6 +71,10 @@ Image sizes per platform and banner formats → `graphic-design` `social-formats
 - Food, supplements, cosmetics: show เลขสารบบอาหาร or เลขที่ใบรับจดแจ้ง in the description and a photo of the label; check the number at oryor.com before reselling someone else's product
 - Keep a copy of every final title and description in a sheet; platform edits sometimes get lost
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. For listings that means real product photos and no AI-generated people or text baked into images.
+
 ## Related
 
 - `marketplace-fees-pricing`, `multi-shop-stock`, `live-selling-script` (the same claims rules apply on air)

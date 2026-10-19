@@ -8,7 +8,7 @@ Use when producing a document, design, architecture or plan (BRD, FSD, ADR, road
 > teammate can follow with no context.
 
 This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`.
+designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
 
 ## Check before submitting — 5 items
 
@@ -251,6 +251,10 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 | ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
 
 ---
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
 
 ## ตัวย่อ
 

@@ -87,6 +87,10 @@ Thai character counts exclude tone marks and above/below vowels (Netflix Thai gu
 - Fast flashing: avoid more than 3 flashes per second (WCAG 2.3.1) — it can trigger seizures
 - When in doubt, cut the motion in half and make it a third shorter
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 - `video-script-to-clip` — beats and captions for whole clips

@@ -42,4 +42,4 @@ Merged in v2.0.0 from `ecommerce-engineer` (software-company-ecommerce) · `inve
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.

@@ -16,6 +16,7 @@ Use when writing test cases or a feature test plan, or turning acceptance criter
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | รายงานข้อบกพร่องที่เจอแล้ว 1 เรื่อง | `bug-report-template` |
+| รันเคสแล้วเก็บหลักฐาน (GIF) · รายงานผ่าน/ไม่ผ่าน | `test-evidence` |
 | คัดรายงานบั๊กที่กองอยู่ในกล่องข้อความ | `bug-inbox-triage` |
 | ตัดสินสัดส่วน unit · integration · E2E หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
 
@@ -27,6 +28,7 @@ Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use
 - An **Overview** tab, then **one tab per module**. With `--mockup`, tabs follow the mockup screen order, every row gets a `screen` column, and each tab lists its mockup screens under the title. Use the same topics as the mockup start page (`ui-craft` → `references/mockup-start-page.md`).
 - Overview counts Pass / Fail / Blocked / Not run per tab with formulas. **No "all cases" tab** — a result typed in two places drifts.
 - Header: light brand fill, dark brand text, one brand-colour rule under it (the same table look as `branded-document-design`). Pass `--brand --head-fill --ink` from the project's `doc-theme`.
+- Columns `test_result` (what actually happened) and `evidence` (GIF link) follow `result`, added empty if the table lacks them. After a run, `--results qa/evidence/<run-id>/results.csv` fills all three — see `test-evidence`. A workbook the user made themselves → `test-evidence/scripts/record_results.py`.
 - Check: open it in Excel; the Overview totals must equal the source row count.
 
 ## Test Case ID Convention
@@ -50,6 +52,32 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
   It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
 
+## ผลที่คาดหวังมาจากไหน (oracle)
+
+ทุก TC บอกในช่อง **Oracle** ว่าผลที่คาดหวังมาจากใคร
+
+| ป้าย | ฟังจาก | เชื่อได้ |
+|---|---|---|
+| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✅ สูงสุด |
+| `[R]` กฎทั่วไป | คณิตศาสตร์ · กฎหมาย · มาตรฐาน · สามัญสำนึก → เขียนเหตุผลกำกับ | 🟡 ดี |
+| `[A]` คนสร้าง | SPEC · README · คำอ้างของคนหรือ AI ที่เขียนระบบ | 🟠 ต่ำ — ตรวจงานตัวเอง |
+| `[O]` หน้าจอ | สิ่งที่เห็นตอนสำรวจระบบ | 🔴 ต่ำสุด — ระบบอาจผิดอยู่แล้ว |
+
+- ทุก TC ต้องมี `[D]` หรือ `[R]` · มีแค่ `[A]` / `[O]` → ใส่ `[O-ยังไม่ยืนยัน]` แล้วเพิ่มเป็นคำถามถึงเจ้าของงาน (ผ่าน BA หรือหัวหน้าทีม)
+- `[A]` ใช้ได้กับรายละเอียดที่เจ้าของงานไม่สนใจ เช่น ข้อความ error คำต่อคำ · แต่ "ต้องห้าม / ต้องเตือน" ต้องมี `[D]` หรือ `[R]` รองรับ
+- **อย่าอบบั๊กลงในผลที่คาดหวัง** → ตัวเลขเงิน แต้ม ยอดรวม คิดจาก `[D]` + `[R]` **ก่อนเปิดระบบ** และเขียนวิธีคิดไว้ (`฿800 − 5% (฿40) = ฿760`) · ห้ามลอกค่าจากหน้าจอ เพราะถ้าระบบผิดอยู่แล้ว test จะผ่านตลอดไป
+
+**ค่าขอบผูกกับกฎ** → กฎธุรกิจ (Business Rule, BR) ที่มีตัวเลข 1 ข้อ = 3 ค่า: ต่ำกว่าขอบ · ที่ขอบ · เกินขอบ เช่น `ส่งฟรี ≤ 5 กม.` → 4.9 · 5.0 · 5.1 · ช่อง Related อ้าง BR ด้วย
+
+**จังหวะตรวจ** → TC ที่เปลี่ยนข้อมูล (จอง · ยกเลิก · แต้ม · สต็อก · สิทธิ์) ใส่ **Check when** = `ทันที` · `หลังรีโหลด` · `ทั้งสอง` · ถูกทันทีแต่หายหลังรีโหลด = ไม่ได้บันทึกจริง
+
+**ครอบคลุมและโยงกลับ** → ท้ายไฟล์ test case มี 2 ตาราง
+
+| ตาราง | หน้าตา | กติกา |
+|---|---|---|
+| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ⚠️ + เหตุผล · ไม่เกี่ยว → `—` |
+| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ⚠️ แล้วเพิ่ม TC |
+
 ## Test Case Categories (Coverage Guide)
 
 For every feature, create test cases in these categories:
@@ -64,6 +92,7 @@ Valid inputs producing expected outputs.
 - Just above maximum
 - Empty / null
 - Single item / first / last
+- Every BR with a number → just below · at · just above the limit (see oracle section)
 
 ### 3. Negative
 - Invalid format (wrong type, regex mismatch)
@@ -124,6 +153,10 @@ Each test case should:
 - [ ] Be independent (doesn't rely on TC-XXX running first)
 - [ ] Be deterministic (same result every run)
 - [ ] Trace back to a requirement (user story, AC)
+- [ ] **Oracle** has `[D]` or `[R]` (or `[O-ยังไม่ยืนยัน]` + a question sent)
+- [ ] Money and totals show their sum, worked out before opening the system
+- [ ] Every BR has a TC · every BR with a number has its 3 boundary values
+- [ ] Coverage matrix and traceability tables at the end, gaps marked ⚠️
 - [ ] `check_outline.py` passes on the whole file
 
 ## Anti-patterns
@@ -134,6 +167,8 @@ Each test case should:
 - ❌ Test cases that depend on previous test cases passing
 - ❌ Only happy-path tests (must include negative + boundary)
 - ❌ Tests with no traceability to requirements
+- ❌ Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
+- ❌ Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
 
 ---
 
@@ -190,6 +225,7 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 - Session cookie set
 - Last login timestamp updated
 
+**Oracle:** [D] US-001 AC1 — login ถูก → เข้า /dashboard
 **Related:** US-001, AC1
 ```
 
@@ -212,6 +248,7 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 | 3 | Click "Login"         | Error: "Email is required"           |
 | 4 | Verify focus          | Email field gets focus               |
 
+**Oracle:** [D] US-001 AC2 — อีเมลเป็นช่องบังคับ · [R] ช่องที่ผิดได้โฟกัส (WCAG 3.3.1)
 **Related:** US-001, AC2
 ```
 
@@ -234,6 +271,8 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 | 3 | Enter valid email + correct password| Error: "Account locked..."    |
 | 4 | Wait 15 minutes                     | Can login successfully        |
 
+**Oracle:** [D] US-001 AC4 — ผิด 5 ครั้ง → ล็อก 15 นาที
+**Check when:** ทั้งสอง — หลังรีโหลดหน้าต้องยังล็อกอยู่
 **Related:** US-001, AC4
 ```
 
@@ -269,12 +308,15 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 5. [Test Environment](#5-test-environment)
 6. [Schedule](#6-schedule)
 7. [Risks](#7-risks)
+8. [Plan Quality](#8-plan-quality)
 
 ---
 
 ## 1. 🎯 Objective
 
 > 💡 What we're testing and why.
+
+**Where expected results come from:** `[D]` owner / customer > `[R]` general rules (maths, law, standards) > `[A]` the builder's SPEC > `[O]` the screen · every test case needs `[D]` or `[R]` (see `test-case-template` → oracle)
 
 ## 2. Scope
 
@@ -293,16 +335,29 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 | 🌐 Compatibility | Top 3 browsers | BrowserStack | @alice |
 | 🐛 Exploratory | Time-boxed 4h/day | — | All |
 
+### Coverage matrix
+
+| Feature | Happy | Negative | Boundary | Equivalence | State | Security/API |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| Booking | TC-BOOK-01 | TC-BOOK-04 | TC-BOOK-06–08 | TC-BOOK-05 | TC-BOOK-10 | TC-BOOK-12 |
+| Gift card | TC-GIFT-01 | TC-GIFT-02 | ⚠️ no expiry-day case yet | — | TC-GIFT-04 | — |
+
+Every BR in the traceability table at the end of the test-case file has at least 1 case.
+
 ## 4. Entry & Exit Criteria
 
 ### ✅ Entry Criteria (Must be met before testing starts)
 - [ ] Code deployed to test environment
 - [ ] Smoke test passing
 - [ ] Test data prepared
+- [ ] Expected results for money and limits worked out from `[D]` + `[R]` and written in the cases — before the first run
 - [ ] Test environment stable for 24h
 
 ### 🏁 Exit Criteria (Must be met before release)
 - [ ] 100% planned test cases executed
+- [ ] Every P1 case passes, on every browser in scope
+- [ ] Pass rate ≥ 95% per browser (round up · `Not run` counts as fail)
+- [ ] Every failed case triaged (system wrong / plan wrong / test wrong) — none "fixed" by editing the expected result
 - [ ] 0 critical (S1) bugs open
 - [ ] ≤ 2 high (S2) bugs open with approved workaround
 - [ ] Regression suite 100% pass
@@ -338,6 +393,18 @@ gantt
 | R-001 | Test env instability | 🟡 Med | 🔴 High | Backup env ready |
 | R-002 | Late requirement changes | 🟡 Med | 🟡 Med | Buffer +20% |
 
+## 8. 🔎 Plan Quality
+
+> 💡 Would this plan catch a broken system? At least 6 rows, covering money, bookings/transactions and state.
+
+| If the system breaks like this | Case(s) that must fail | Caught because (oracle) |
+|---|---|---|
+| Discount applied twice | TC-PRICE-03 | `[D]` BR-03 · `[R]` ฿800 − 5% (฿40) = ฿760 |
+| Double-click confirm creates 2 bookings | TC-BOOK-11 | `[R]` one click = one booking · count after reload |
+| Data gone after reload | TC-POINT-02 (Check when: หลังรีโหลด) | `[D]` points kept after a completed visit |
+
+A break with no case that fails → add a case, then add the row again.
+
 ## ✍️ Sign-off
 
 | Role | Name | Status | Date |
@@ -346,6 +413,223 @@ gantt
 | Dev Lead | @dev | ⚪ Pending | — |
 | Product Owner | @po | ⚪ Pending | — |
 ```
+
+
+---
+
+# skill: test-evidence
+
+Use when running test cases and keeping proof. Captioned GIF per case, Markdown pass/fail report, result and evidence columns in Excel.
+
+# Test Evidence
+
+ทุกเคสที่รัน → GIF 1 ไฟล์ที่บอกว่าเคสไหน ทำอะไร เห็นอะไร ผ่านไหม · รายงาน `.md` 1 ฉบับต่อรอบ · ผลลง Excel พร้อมลิงก์หลักฐาน
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| เขียน test case ก่อนรัน | `test-case-template` |
+| บั๊ก 1 เรื่องที่เจอแล้ว | `bug-report-template` (แนบ GIF จาก skill นี้ได้) |
+| เขียนโค้ด E2E · เทสต์ใน CI ที่ล้ม | `e2e-testing-patterns` (trace · video ของ Playwright) |
+
+## ไฟล์อยู่ที่ไหน
+
+| ไฟล์ | ที่อยู่ |
+|---|---|
+| ภาพแต่ละขั้น + `run.json` (ของชั่วคราว) | `_to_delete/test-frames/<run-id>/` |
+| GIF · ภาพเต็มของขั้นที่ล้ม · `results.csv` | `qa/evidence/<run-id>/` |
+| รายงาน | `qa/reports/<run-id>-test-report.md` |
+| Excel test case | `qa/<project-code>-test-cases.xlsx` |
+
+`<run-id>` = `YYYY-MM-DD-r<n>` เช่น `2026-10-18-r1` · ลิงก์ใน Excel และรายงานเป็น path แบบสัมพัทธ์ ย้ายโฟลเดอร์ `qa/` ทั้งก้อนแล้วยังเปิดได้
+
+## 1 · ถ่ายภาพระหว่างรัน
+
+- 1 ขั้นใน test case = ภาพ 1 ใบ ถ่าย **หลัง** ทำขั้นนั้นเสร็จ (เห็นผลของขั้น) · ใบแรกคือสภาพก่อนเริ่ม
+- เว็บ → Playwright ขนาดหน้าจอ 1280×720 ทุกเคส (`page.screenshot(path=...)`) · desktop · mobile → วิธีถ่ายจาก verify skill ของโปรเจกต์ (`app-verifier-setup`)
+- ขั้นที่ผิด → ใส่ `box` = กรอบแดงรอบจุดที่ผิด (x, y, w, h ของภาพ) · Playwright หาได้จาก `locator.bounding_box()`
+- ใช้ข้อมูลทดสอบเท่านั้น ห้ามมีข้อมูลคนจริง รหัสผ่าน token ในภาพ (`pdpa-compliance`) · ช่องรหัสผ่านต้องเป็นจุด
+
+## 2 · เขียนคำบรรยาย
+
+ต่อขั้น 1 ประโยค: **ทำอะไร → เห็นอะไร** เช่น `กดเข้าสู่ระบบ → ขึ้นว่า รหัสผ่านไม่ถูกต้อง แต่ที่คาดคือ อีเมลหรือรหัสผ่านไม่ถูกต้อง`
+
+- ไม่เกิน 2 บรรทัด (ราว 70 ตัวอักษรต่อบรรทัด) · ยาวกว่านั้นจะถูกตัด
+- เว้นวรรคระหว่างวลี สคริปต์ตัดบรรทัดตรงช่องว่าง
+- ขั้นที่ล้มต้องบอกทั้ง "ที่เห็น" และ "ที่คาด" · ภาษาตาม `human-writing`
+
+## 3 · สร้าง GIF + รายงาน
+
+กรอก `run.json` (รูปแบบเต็มอยู่หัวไฟล์ [`scripts/make_evidence.py`](scripts/make_evidence.py)) · ต่อเคส: `id` · `title` · `result` (`Pass` `Fail` `Blocked` `Not run`) · `expected` · `actual` · `issue` · `bug` · `steps[]`
+
+```bash
+python scripts/make_evidence.py _to_delete/test-frames/2026-10-18-r1/run.json \
+  --out qa/evidence/2026-10-18-r1 --report qa/reports/2026-10-18-r1-test-report.md
+```
+
+หน้าตา GIF (ตั้งไว้ในสคริปต์ ไม่ต้องปรับเอง):
+
+| ส่วน | ค่า | เหตุผล |
+|---|---|---|
+| ความกว้าง | ปรับทุกภาพเป็น 1280 px | เคสต่างกันขนาดตัวอักษรยังเท่ากัน |
+| แถบบน | รหัสเคส · ชื่อเคส · `ขั้น n/N` · ป้าย PASS เขียว / FAIL แดง / BLOCKED ส้ม · ตัวอักษร 24 px | รู้ทันทีว่าดูเคสไหน ผลอะไร |
+| แถบคำบรรยาย | ใต้ภาพ ไม่ทับหน้าจอ · ตัวอักษร 28 px · พื้นดำ ตัวขาว | ย่อเหลือ 800 px ยังอ่านได้ (~17 px) |
+| เวลาต่อขั้น | 2–6 วินาที ตามความยาวคำบรรยาย | อ่านทัน ไม่ต้องหยุดภาพ |
+| ภาพปิด | ผลตัวใหญ่ + ปัญหา + คาดว่า / ที่เกิดจริง | ดูภาพสุดท้ายภาพเดียวก็รู้เรื่อง |
+| ฟอนต์ | Sarabun (ไทย + อังกฤษ) และชุดลูกศร ✓ ✗ อยู่ใน `assets/fonts/` | ทุกเครื่องหน้าตาเหมือนกัน |
+
+- เคส `Fail` · `Blocked` ได้ `<id>-fail.png` เพิ่ม = ขั้นที่ล้มแบบสีเต็ม (GIF มีแค่ 256 สี) ใช้แนบบั๊ก
+- สคริปต์เตือน `no raqm` → สระ วรรณยุกต์ไทยจะซ้อนกัน · รันใน Docker sandbox ของโปรเจกต์ (`docker-sandbox`) แล้วหาย
+- รายงานที่ได้มี: หัวรอบ · ตารางสรุปจำนวน · ผลรายเคสพร้อมลิงก์ GIF · เคสที่ไม่ผ่านหรือติดขัดแบบละเอียดพร้อมภาพ · เคสที่ยังไม่ได้รัน
+- เปิดรายงานแล้วเขียน **ข้อสรุป** 1–2 ประโยคเอง (ปล่อยได้ไหม · ติดอะไร) แทนบรรทัด `(รอยืนยัน)` · ช่อง `ปัญหา` ที่ยังว่างต้องเติม
+
+## 4 · ลงผลใน Excel
+
+`results.csv` มีคอลัมน์ `id` · `result` · `test_result` (ที่เกิดจริงหรือปัญหา) · `evidence` (ชื่อไฟล์ GIF)
+
+| มี Excel อยู่แล้วแบบไหน | คำสั่ง |
+|---|---|
+| ยังไม่มี หรือสร้างจาก `test-case-template` | `python ../test-case-template/scripts/build-test-workbook.py cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv` |
+| ผู้ใช้ส่งไฟล์ของตัวเองมา (หน้าตาแบบไหนก็ได้) | `python scripts/record_results.py <ไฟล์ของผู้ใช้>.xlsx qa/evidence/<run-id>/results.csv -o qa/PRJ-test-cases.xlsx` |
+
+`record_results.py` หาแถวหัวตารางที่มีคอลัมน์รหัสเคส (`ID` · `TC ID` · `Test Case ID` · `รหัส`) ทุก sheet · คอลัมน์ผลที่มีอยู่แล้ว (`Status` · `ผล`) ใช้ต่อ · ที่ไม่มีเพิ่มท้ายตาราง: **Result** · **Test result** · **Evidence** (ลิงก์กดเปิด GIF) · ไฟล์ต้นฉบับของผู้ใช้ไม่แก้ทับ ถ้าจะทับให้ย้ายตัวเดิมไป `_to_delete/` ก่อน
+
+## เช็กก่อนส่ง
+
+- [ ] เคสที่บอกว่า `Pass` รันจริงรอบนี้ (`principle-prove-it-works`) · ไม่ได้รันใส่ `Not run` พร้อมเหตุผล
+- [ ] เปิด GIF ของเคสที่ล้มอย่างน้อย 1 ไฟล์ด้วยตา: อ่านคำบรรยายออก กรอบแดงตรงจุด
+- [ ] จำนวนในตารางสรุปของรายงาน = จำนวนเคสใน `run.json` = ผลใน Excel
+- [ ] ไม่มีข้อมูลจริงหรือรหัสผ่านในภาพ
+- [ ] ภาพดิบอยู่ใน `_to_delete/` ไม่ค้างใน `qa/`
+- [ ] รันสคริปต์ทดสอบตัวเองผ่าน: `python scripts/make_evidence.py --self-test` · `python scripts/record_results.py --self-test`
+
+
+---
+
+# skill: bug-report-template
+
+Use when writing a report for one software defect from testing or a user complaint (repro, severity).
+
+# Bug Report Template
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+## Where bug reports live
+
+One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNN>/` — redact personal data first.
+
+## When to use this skill
+
+- Filing a new bug during testing
+- Converting user complaints into bug tickets
+- Reproducing an issue and documenting findings
+
+## ไม่ใช้เมื่อ
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| รายงานบั๊กกองอยู่หลายเรื่อง ต้องคัด ทำซ้ำ และจัดกลุ่มก่อน | `bug-inbox-triage` แล้วใช้ skill นี้เขียนทีละใบ |
+| เขียนกรณีทดสอบล่วงหน้าจากข้อกำหนด (ยังไม่มีบั๊ก) | `test-case-template` |
+| ระบบจริงล่มหรือกระทบผู้ใช้จำนวนมาก | `incident-runbook-template` ระหว่างเหตุ · `postmortem-template` หลังเหตุ |
+
+## Severity vs Priority
+
+These are **different**:
+
+| | Severity | Priority |
+|---|----------|----------|
+| What it measures | Technical impact | Business urgency |
+| Set by | QA (quality assurance) / Engineering | PM (product manager) / PO (product owner) |
+
+| Severity | Definition |
+|----------|------------|
+| **S1 Critical** | System unusable, data loss, no workaround |
+| **S2 High** | Major feature broken, workaround exists |
+| **S3 Medium** | Feature partially broken |
+| **S4 Low** | Cosmetic, minor inconvenience |
+
+In a review report (the `reviewer` scale): S1–S2 = สูง · S3 = กลาง · S4 = ต่ำ
+
+| Priority | Definition |
+|----------|------------|
+| **P1** | Fix immediately, block release |
+| **P2** | Fix in current sprint |
+| **P3** | Fix in next sprint |
+| **P4** | Fix when there is time / backlog |
+
+## Output Template
+
+Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not write the outline from memory.
+
+- Do not add, remove or reorder headings and `**fields:**`. A section marked `<!-- optional -->` may be deleted whole when it does not apply.
+- A value you do not know yet → `(รอยืนยัน)`, never a guess and never the template's placeholder.
+- Before handing over, run the shared checker until it passes (paths from this skill's folder):
+
+  ```bash
+  python ../polished-document-style/scripts/check_outline.py assets/bug-report.md <your bug file>
+  ```
+
+  It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
+
+## Title Writing Guide
+
+❌ Bad titles:
+- "Login broken"
+- "Bug in checkout"
+- "It doesn't work"
+
+✅ Good titles (action + condition + result):
+- "Login fails with 500 error when email contains apostrophe"
+- "Checkout total shows NaN when quantity is decimal"
+- "Search returns no results for queries longer than 100 chars"
+
+**Formula:** `<Action> + <Condition> + <Unexpected result>`
+
+## Steps to Reproduce Rules
+
+- [ ] Start from a known state (logged out, fresh browser, etc.)
+- [ ] Each step is one action
+- [ ] Anyone can follow without prior knowledge
+- [ ] Include exact data used (not "some user")
+- [ ] No skipped steps (even "obvious" ones)
+- [ ] Numbered sequentially
+
+## Quality Checklist
+
+Before submitting:
+
+- [ ] Title clearly summarizes the issue
+- [ ] Severity set · priority set, or `(รอยืนยัน)` until the PM/PO sets it
+- [ ] Steps are reproducible by someone else
+- [ ] Expected and actual results clearly differ
+- [ ] At least one piece of evidence attached
+- [ ] Environment info complete
+- [ ] Searched for duplicates first
+- [ ] `check_outline.py` passes
+
+## Anti-patterns
+
+- ❌ "Same as last week's bug" — describe it fully
+- ❌ Multiple bugs in one report — split them
+- ❌ "Bug" without steps — give steps to reproduce
+- ❌ Putting a proposed fix in the title — the developer decides the fix
+- ❌ Marking everything as P1 — be honest about priority
+
+---
+
+## Document Look
+
+This skill decides **what goes in** the document. It does not decide **how it looks**.
+Load the matching skill before writing, not after:
+
+| What is being handed over | Load |
+|---|---|
+| Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
+| A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
+| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+
+Default formatting is not neutral. It looks like unfinished work.
 
 
 ---
@@ -367,12 +651,12 @@ plugin อื่นมี `superuser` ของตัวเอง (`/<plugin>:su
 <!-- superuser:begin rules -->
 0. **อ่านก่อนเริ่ม** — `.claude/superuser/CONTEXT.md` (หัวข้อ "ความคืบหน้า" · "รับงานต่อ" — โปรเจกต์ที่มี `docs/BUILD-PLAN.md` ดูสถานะจากตาราง "สถานะล่าสุด" ที่นั่นแทน) และ `inbox/` ข้างกัน · ยังไม่มีและงานใหญ่กว่าคำถามเดียว → สร้างตามหัวข้อ 9 (playbook อ่านอย่างเดียวไม่สร้าง) · มี `~/.claude/superuser-style.md` ให้ทำตามเมื่อขัดกับ playbook ยกเว้นกฎหัวข้อนี้และเรื่องรออนุมัติที่ไม่ได้อนุญาตไว้ล่วงหน้า (หัวข้อ 6)
 1. **เข้าใจงานและจัดขนาดก่อนลงมือ** (หัวข้อ 2) แล้วคัดขั้นตอนของ playbook ลง todo ตรงตัว
-2. **ทุกขั้นจบด้วยการตรวจกับของจริง** — ผ่านได้ด้วยหลักฐานจากภายนอกเท่านั้น (ผลจากเครื่องมือ · test · แหล่งทางการ · `reviewer`) · "น่าจะใช้ได้" หรือ "ดูถูกแล้ว" ไม่นับ · ป้ายหลักฐานตามหัวข้อ 7
+2. **ทุกงานวนจนเสร็จ: ทำ → ตรวจ → แก้ → ตรวจซ้ำ** — ทุกขนาด ทุกชิ้น ทุกขั้น · ตรวจกับ "เสร็จเมื่อ" ด้วยหลักฐานจากภายนอกเท่านั้น (ผลจากเครื่องมือ · test · แหล่งทางการ · `reviewer`) · "น่าจะใช้ได้" หรือ "ดูถูกแล้ว" ไม่นับ · ไม่ผ่าน → แก้ที่ต้นเหตุ แล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · งานเล็กหัวหน้าทีมตรวจเอง · งานกลางขึ้นไป หรืองานที่ถึงมือคนอื่น → `reviewer` ตัวใหม่ทุกรอบ วนจนไม่เหลือข้อระดับสูงและกลาง ไม่เกิน 5 รอบ ([`team-roles`](references/team-roles.md)) · ปิดงานได้เมื่อรอบสุดท้ายผ่านเท่านั้น · ป้ายหลักฐานตามหัวข้อ 7
 3. **ถามแบบเลือกคำตอบครั้งเดียวตอนเริ่ม ทุกตัวเลือกมีหลักฐาน แล้วไม่หยุดถามจนจบ** (หัวข้อ 6)
 4. **ตัดสินใจเองแล้วต้องจด** — เลือกอะไร · ไม่เลือกอะไร · เพราะอะไร ลงตาราง "การตัดสินใจ" ใน `CONTEXT.md` (หรือที่ plugin ระบุใต้กฎ) และรวมท้ายคำตอบใต้หัวข้อ **ตัดสินใจเอง**
 5. **จบงานด้วยตารางสถานะ (หัวข้อ 7) และอัปเดต "รับงานต่อ"** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
 6. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** · ในคำตอบบอกเฉพาะ skill หรือ principle ที่เปลี่ยนการตัดสินใจ และเปลี่ยนอะไร
-7. **ทุกชิ้นงานผ่านเกณฑ์ 3 ข้อในหัวข้อ 4** ไม่งั้นยังไม่เสร็จ · เจอของใหม่ที่ทีมควรรู้ จด `IMPROVEMENTS.md` ทันที
+7. **ทุกชิ้นงานผ่านเกณฑ์ 3 ข้อในหัวข้อ 4 และง่ายตาม `simplify`** (คนนอกอ่านครั้งแรกตามได้ · ไม่มีส่วนเผื่อ) ไม่งั้นยังไม่เสร็จ · เจอของใหม่ที่ทีมควรรู้ จด `IMPROVEMENTS.md` ทันที
 8. **ไม่แต่งข้อมูลของผู้ใช้** — ตัวเลข ชื่อ วันที่ งบ ที่ไม่รู้ ใส่ `(รอยืนยัน)` แล้วทำต่อ
 9. **จบงานด้วยรอบเรียนรู้** (หัวข้อ 9) — ห้ามแก้ skill เอง · ข้ามได้เฉพาะคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
 <!-- superuser:end rules -->
@@ -571,7 +855,7 @@ plugin อื่นมี `superuser` ของตัวเอง (`/<plugin>:su
 
 <!-- superuser:begin patterns -->
 - งานที่เกิน 1 ขั้น: Planning → ReAct ทุกขั้น → Reflection ก่อนส่ง · MoA (Mixture-of-Agents) แรง 3–5 เท่า ใช้เฉพาะเรื่องที่เลือกผิดแล้วแพง
-- Reflection บังคับเมื่องานถึงมือคนอื่น หรือใช้ตัดสินเรื่องเงิน สุขภาพ กฎหมาย · คนตรวจ วิธีรวม MoA และรอบตรวจซ้ำตาม [`team-roles`](references/team-roles.md)
+- Reflection (ตรวจ → แก้ → ตรวจซ้ำ) ทุกงานตามกฎข้อ 2 · งานถึงมือคนอื่น หรือใช้ตัดสินเรื่องเงิน สุขภาพ กฎหมาย → `reviewer` ตัวใหม่เสมอ แม้งานเล็ก · คนตรวจ วิธีรวม MoA และรอบตรวจซ้ำตาม [`team-roles`](references/team-roles.md)
 <!-- superuser:end patterns -->
 
 
@@ -591,7 +875,7 @@ plugin อื่นมี `superuser` ของตัวเอง (`/<plugin>:su
 
 | กติกา | รายละเอียด |
 |---|---|
-| **งานเฉพาะสาขา** | แอปมือถือ → `mobile-engineer` · LLM/ML → `ai-engineer` · ข้อมูล → `data-engineer` · การเงิน → `fintech-engineer` · สุขภาพ → `healthcare-engineer` · ร้านค้าออนไลน์ → `ecommerce-engineer` · ประกัน → `insurance-engineer` · เอกสารกฎหมาย → `legaltech-engineer` · งานกำกับดูแล → `fintech-compliance-officer` · `hipaa-officer` · `insurance-compliance-officer` · `legal-compliance-officer` · โมเดลและตัวเลขของสาขา → `quant-analyst` · `clinical-data-analyst` · `insurance-analyst` · `recommendation-engineer` · `revops-analyst` · SOC และเหตุความปลอดภัย → `security-analyst` · conversion และ store listing → `growth-specialist` · ผลิตภัณฑ์สำหรับนักพัฒนา → `devrel-engineer` · เกม → `game-developer` · `game-designer` · IoT → `iot-engineer` · บล็อกเชน → `blockchain-engineer` · แกะของที่ไม่มีซอร์ส → `reverse-engineer` — แต่ละตัวเปิด skill สาขาของตัวเองก่อนเริ่ม |
+| **งานเฉพาะสาขา** | แอปมือถือ → `mobile-engineer` · LLM/ML → `ai-engineer` · ข้อมูล → `data-engineer` · การเงิน → `fintech-engineer` · สุขภาพ → `healthcare-engineer` · ร้านค้าออนไลน์ → `ecommerce-engineer` · ประกัน → `insurance-engineer` · เอกสารกฎหมาย → `legaltech-engineer` · งานกำกับดูแล → `fintech-compliance-officer` · `hipaa-officer` · `insurance-compliance-officer` · `legal-compliance-officer` · โมเดลและตัวเลขของสาขา → `quant-analyst` · `clinical-data-analyst` · `insurance-analyst` · `recommendation-engineer` · `revops-analyst` · SOC และเหตุความปลอดภัย → `security-analyst` · conversion และ store listing → `growth-specialist` · ผลิตภัณฑ์สำหรับนักพัฒนา → `devrel-engineer` · เกม → `game-developer` · `game-designer` · IoT → `iot-engineer` · บล็อกเชน → `blockchain-engineer` · แกะของที่ไม่มีซอร์ส → `reverse-engineer` · รูปถ่ายและภาพประกอบในเว็บ แอป สไลด์ → `image-artist` — แต่ละตัวเปิด skill สาขาของตัวเองก่อนเริ่ม |
 | **งานชีวิตประจำวัน** (เมื่อติดตั้ง plugin นั้นไว้) | ภาษี เงินเดือน เอกสารไทย LINE OA → `tax-helper` · `thai-doc-writer` · `line-admin` (thai-workplace) · เงินและการลงทุน → `market-analyst` · `risk-manager` (trading-finance) · ขายของออนไลน์ → `shop-manager` · `customer-chat` (online-seller) · ธุระส่วนตัว → `life-admin` (personal-life) · บ้าน → `home-manager` (home-family) · อาชีพ → `career-coach` (career) · สุขภาพ → `health-organizer` (health-wellness) · ร้องเรียนผู้บริโภค → `consumer-advocate` (consumer-rights) · งานภาพ → `art-director` (graphic-design) ถ้าเป็นงานหลายขั้นในสาขานั้นให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น ถ้าไม่ได้ติดตั้งให้บอกผู้ใช้ว่ามี plugin นี้ แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` |
 
 ## ระดับโมเดลของงานโค้ด
@@ -944,7 +1228,7 @@ skill หลัก: `project-bootstrap` · [`project-doc-set`](../../project-doc
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
 1. **ขอบเขตเท่ากระดาษแผ่นเดียว** — ถ้ามี SRS ที่มีรหัส FR อยู่แล้ว ให้ใช้รหัสนั้นเป็นรหัสงานในตารางงานของ `docs/BUILD-PLAN.md` ตาม [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) ถ้าไม่มี ให้ตั้งรหัสสั้นจากขอบเขต (`F-01` …) แล้วเขียนว่าทำอะไร ไม่ทำอะไร และพฤติกรรมไหนตีความได้หลายแบบ (เช่น เครื่องคิดเลขคูณก่อนบวก หรือคิดซ้ายไปขวา) ข้อที่เดาได้และย้อนได้ให้เลือกเองแล้วลง [`decision-log`](../../decision-log/SKILL.md) พร้อม `(รอยืนยัน)` ส่วนข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) ไม่เดาค่า ใส่ `(รอยืนยัน)` ตรงที่ใช้ แล้วรวมไว้ใน "ค้างอยู่" ครั้งเดียว · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)
-2. **เลือกเทคโนโลยีน้อยที่สุดที่พอ** — ใช้ของมาตรฐานของภาษาและแพลตฟอร์มก่อน framework ให้ dependency ทุกตัวต้องมีเหตุผลใน `decision-log` และล็อกเวอร์ชัน (lock file) **ตรวจ toolchain ก่อน** (`flutter doctor` · `dotnet --info` · `node -v` ฯลฯ) ถ้าขาด SDK และติดตั้งลงโฟลเดอร์ของผู้ใช้ได้ (ย้อนกลับได้) ให้ติดตั้งเลยแล้วลง `decision-log` พร้อม path แต่ถ้าต้องติดตั้งทั้งเครื่องหรือใช้สิทธิ์ admin ให้เตรียมคำสั่งไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ใคร: `solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)
+2. **เลือกเทคโนโลยีน้อยที่สุดที่พอ** — ใช้ของมาตรฐานของภาษาและแพลตฟอร์มก่อน framework ให้ dependency ทุกตัวต้องมีเหตุผลใน `decision-log` และล็อกเวอร์ชัน (lock file) **ตรวจ toolchain ก่อน** (`flutter doctor` · `dotnet --info` · `node -v` ฯลฯ) ถ้าขาด SDK และติดตั้งลงโฟลเดอร์ของผู้ใช้ได้ (ย้อนกลับได้) ให้ติดตั้งเลยแล้วลง `decision-log` พร้อม path แต่ถ้าต้องติดตั้งทั้งเครื่องหรือใช้สิทธิ์ admin ให้เตรียมคำสั่งไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · **เช็กเครื่องก่อนเริ่ม**: พอร์ตที่จะใช้ว่างไหม (`docker ps --format "{{.Names}} {{.Ports}}"` · Windows `netstat -ano | findstr :<พอร์ต>` · macOS/Linux `lsof -i :<พอร์ต>`) ถ้า container ของโปรเจกต์อื่นจับพอร์ตอยู่ → `docker stop <ชื่อ>` ได้ (ย้อนได้ ลง `decision-log` ว่าหยุดตัวไหน) แต่**ห้าม** `docker rm` · ลบ volume · kill process ที่ไม่ใช่ของโปรเจกต์นี้ ถ้าจำเป็นต้องทำ → ลง "รออนุมัติ" หรือเปลี่ยนไปใช้พอร์ตอื่น · ใคร: `solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)
 3. **บอกรูปข้อมูลและวางโครงไฟล์** — วางโครงโฟลเดอร์ตาม [`project-doc-set`](../../project-doc-set/SKILL.md) แบบ B: ไฟล์ที่ได้รับมา (SRS) อยู่ `ref/` เอกสารที่เราเขียนอยู่ `docs/` และ source code อยู่ใน `<project-name>/` (ชื่อโปรเจกต์ตัวเล็กคั่น `-`) กฎธุรกิจเป็นฟังก์ชันล้วนที่ไม่แตะหน้าจอหรือฐานข้อมูล แยกชั้นเป็น รับข้อมูลเข้า → กฎธุรกิจ → แสดงผลหรือเก็บข้อมูล จัดโฟลเดอร์ตามหน้าที่ วาง test ข้างโค้ด และให้ README ตอบ "รันอย่างไร · test อย่างไร · อะไรอยู่ไหน" (`project-bootstrap`) · ใคร: `developer` ตัวใหม่
 4. **ทำ verify ก่อนฟีเจอร์ที่ 2** — verify คือสคริปต์ที่รันแอปจริงแล้วตรวจผล พอมีหน้าจอแรกเมื่อไร ให้สร้าง `<project-name>/test/e2e/verify.*` กับ verify skill ตาม `app-verifier-setup` ทันที ถ้าเป็นแอปมือถือ verify ต้องขับ build จริงบน emulator และฉีดค่าฮาร์ดแวร์เข้าไป (เช่น ค่าเซนเซอร์ของ emulator) แล้วเขียนไว้ว่าข้อไหนยังต้องลองบนเครื่องจริง (`principle-prove-it-works`) ถ้าเป็นโปรเจกต์ที่จะใช้ต่อนาน ให้ตั้ง [`docker-sandbox`](../../docker-sandbox/SKILL.md) ด้วย · ใคร: `qa-tester` ตัวใหม่
 5. **สร้างทีละชิ้นตาม playbook `feature`** — เขียน unit test ของกฎ ลองแก้โค้ดให้ผิด 1 จุดแล้ว test ต้องล้ม ขับหน้าจอจริงด้วย verify และดูภาพหน้าจอเอง · ใคร: `developer` ตัวใหม่ต่อชิ้น
@@ -1199,10 +1483,12 @@ skill หลัก: [`decision-log`](../../decision-log/SKILL.md) · [`principle
    - งานหลายวันหรือหลายเฟส ให้เขียนแผนเฟสลงตารางงานใน `docs/BUILD-PLAN.md` แต่ละเฟสต้องจบในสภาพที่ตรวจได้ หัวหน้าทีมเป็นผู้ประสานงาน ไม่เขียนโค้ดเอง แต่แจกงานให้ subagent ตัวใหม่ทีละชิ้น แล้วตรวจผลเอง
    - ถ้าโปรเจกต์มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ใช้โหมด `-Isolated` (หรือแยก sandbox ละชิ้นเมื่อทำขนาน) แล้ว `sync` ผลออกมาเป็น patch ตอนจบ
 3. ทำทีละชิ้น ผ่านการตรวจแล้วค่อย commit ใน branch ของงานตามกฎ commit ใน `superuser` หัวข้อ 6 (ไม่ได้อนุญาต → ปล่อยไว้ในไฟล์ แล้วสรุป diff ตอนจบ) ชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงสถานะ `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)
+   - **หลังติด**: จดใน "ค้างอยู่" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ → เก็บงานค้างไว้ใน branch `stuck/<รหัส>` แล้วคืนสายงานให้ test เขียว → ชิ้นที่ต้องรอชิ้นนี้ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง → ทำชิ้นอื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ) → ยังติด → คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → ทำต่อตาม playbook `pickup-and-pause`
 4. ทุกครั้งที่เลือกทางเอง ให้ลง `decision-log` ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม
 5. ถ้าเจองานในรายการ "รออนุมัติ" (deploy · ลบข้อมูล · merge branch หลัก · ส่งข้อความคนนอก) ให้เตรียมทุกอย่างให้พร้อม (คำสั่ง · diff · ร่างข้อความ) แล้วลง "รออนุมัติ" ห้ามทำเอง ส่วนคำถามที่ต้องให้คนตอบให้ลง "ค้างอยู่" · ใคร: หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ
 6. จบแต่ละชิ้นแล้วให้ทำ `status-report` เขียน "รับงานต่อ" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` เพื่อให้คนที่กลับมากลางทางเห็นสถานะปัจจุบัน · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ "เสร็จเมื่อ" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม
 7. เมื่อจบงาน ให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: ทำเสร็จอะไร · ติดอะไร · **ตัดสินใจเอง** (กี่ข้อ · ชี้ไปที่ decision-log) · รออนุมัติอะไร · ค้างอะไรให้คนตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน
+   - รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ คำสั่งที่รันพร้อมผล หรือ path ไฟล์ · สรุปเป็น **"ผ่าน X / N"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด
 
 ## จบเมื่อ
 
@@ -1525,254 +1811,8 @@ unless asked. Trivial one-liners need no test.
 
 ## Pairs with
 
+- `simplify` — the suite-wide rule for every kind of work; this skill is its detail for code.
 - `readable-code` — **always load together**. Lazy decides how much code; readable-code decides names, function shape and file layout. One without the other gives either bloat or a scratchpad.
 - `project-bootstrap` — the repo skeleton lazy code lands in.
 - `simplicity-first` — same spirit, for docs, plans, and architecture.
 - `code-review-checklist` — the lazy diff still gets reviewed.
-
-
----
-
-# skill: readable-code
-
-Use when writing or reviewing code for readability (names, function shape, comments, file location).
-
-# โค้ดที่คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียว:** ชื่อที่ต้องเปิดดูข้างในถึงจะเข้าใจ คือชื่อที่ตั้งผิด
-
----
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เขียนโค้ดใหม่ · ตั้งชื่อตัวแปร ฟังก์ชัน ไฟล์ หรือโฟลเดอร์
-- รีวิวโค้ดแล้วรู้สึกว่า "ทำงานถูกแต่อ่านยาก"
-- คนใหม่เข้าโปรเจกต์แล้วหาไฟล์ไม่เจอ
-- โฟลเดอร์ `utils/` เริ่มกลายเป็นถังขยะ
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| สถานการณ์ | ใช้แทน |
-|---|---|
-| ต้องการเขียนโค้ด**น้อยลง** | `lazy-coding` |
-| โครงโฟลเดอร์**ระดับ repo** · README · linter | `project-bootstrap` |
-| รีวิวเรื่องความถูกต้อง ความปลอดภัย การทดสอบ | `code-review-checklist` |
-| ตั้งชื่อ**ไฟล์เอกสาร** | `document-naming` |
-| ตั้งชื่อ**ผลิตภัณฑ์หรือแบรนด์** | `product-naming` |
-
----
-
-## 1 · ชื่อต้องตอบสามคำถามโดยไม่ต้องเปิดดูข้างใน
-
-**มันคืออะไร · หน่วยอะไร · ใช้ได้ตอนไหน**
-
-| ❌ | ✅ | ที่ต่างคือ |
-|---|---|---|
-| `d` | `daysSinceLastLogin` | มีหน่วย มีจุดอ้างอิง |
-| `list` | `overdueInvoices` | บอกว่าข้างในคืออะไร |
-| `data` | `csvRows` | `data` ไม่ได้ตัดอะไรออกเลย |
-| `temp` | `swapBuffer` | บอกหน้าที่ ไม่ใช่บอกว่าชั่วคราว |
-| `flag` | `hasUnpaidBalance` | อ่านแล้วรู้ว่า `true` แปลว่าอะไร |
-| `timeout` | `timeoutMs` | 30 คือวินาทีหรือมิลลิวินาที |
-| `price` | `priceSatang` | เลขเงินที่ไม่มีหน่วยคือบั๊กรอเกิด |
-| `checkUser()` | `isUserActive()` | `check` ไม่บอกว่าคืน boolean หรือโยน error |
-| `process()` | `normalizePhoneNumber()` | `process` แปลว่าอะไรก็ได้ |
-| `getUser()` ที่ยิง API | `fetchUser()` | `get` แปลว่าเร็วและไม่ล้มเหลว |
-
-> **เลขที่มีหน่วยต้องมีหน่วยในชื่อ เสมอ** — `Ms` · `Seconds` · `Bytes` · `Satang` · `Percent` · `Ratio`
-> บั๊กเรื่องหน่วยไม่มีใครเห็นตอนรีวิว แต่จะเห็นตอนลูกค้าโทรมา
-
----
-
-## 2 · คำนำหน้าฟังก์ชัน — หนึ่งคำ หนึ่งความหมาย
-
-**เลือกคำแล้วใช้ให้ตรงทั้งโปรเจกต์** ถ้า `get` บางตัวยิงเน็ต คนอ่านจะเลิกเชื่อชื่อทั้งหมด
-
-ตารางคำนำหน้าทั้ง 10 กลุ่ม (สัญญาว่าอะไร · ล้มเหลวได้ไหม · มีผลข้างเคียงไหม) อยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 2 — เช่น `get` ไม่ยิงเน็ต · `validate` โยน error · `ensure` เรียกซ้ำได้
-
-**กฎประกอบ:**
-
-- **boolean ห้ามตั้งชื่อเชิงปฏิเสธ** — `isNotReady` ทำให้เกิด `if (!isNotReady)` ที่ไม่มีใครอ่านออก
-- **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
-- **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
-- **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
-
----
-
-## 3 · ชื่อยาวแค่ไหน ขึ้นกับว่ามันมีชีวิตอยู่กี่บรรทัด
-
-| ระยะจากที่ประกาศถึงที่ใช้ครั้งสุดท้าย | ความยาวชื่อที่เหมาะ | ตัวอย่าง |
-|---|---|---|
-| ≤ 5 บรรทัด (ตัวนับใน loop) | 1 ตัวอักษร พอ | `i` · `r` · `x` |
-| ในฟังก์ชันเดียว | 1–2 คำ | `total` · `rawRows` |
-| ทั้งคลาสหรือทั้งไฟล์ | 2–3 คำ | `pendingApprovals` |
-| export ออกนอกไฟล์ | เต็ม ไม่ย่อ | `calculateWithholdingTax` |
-
-> **ชื่อยาวขึ้นตามระยะห่างระหว่างที่ประกาศกับที่ใช้** — `i` ใน loop 3 บรรทัดชัดเจนกว่า `currentIndex`
-> แต่ `i` ที่เป็น field ของคลาสคือชื่อที่ไม่มีใครตามได้
-
----
-
-## 4 · คำต้องห้าม — ใส่แล้วไม่ได้ตัดความหมายอะไรออกเลย
-
-**ห้าม `data` `info` `manager` `helper` `util` `do` `temp` และตัวย่อที่คิดเอง** — ทุกอย่างในโปรแกรมคือข้อมูล ชื่อที่ทำอะไรก็ได้คือชื่อที่ไม่บอกอะไร · ตารางเต็มพร้อมคำแทนอยู่ที่ [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 4
-
-**ข้อยกเว้น:** ตัวย่อที่คนทั้งวงการใช้ — `id` · `url` · `http` · `db` · `api` · `ui` — ใช้ได้เลย ไม่ต้องกาง
-ส่วนชื่อที่ platform หรือ framework ตั้งมาแล้ว (`SensorManager` · Android `Service` · `ChangeNotifier`) ก็ใช้ตามนั้น
-เพราะคำต้องห้ามใช้กับชื่อที่**เราตั้งเอง**เท่านั้น
-
----
-
-## 5 · รูปร่างของฟังก์ชัน
-
-- **หนึ่งฟังก์ชัน หนึ่งระดับนามธรรม** — ฟังก์ชันที่มีทั้ง "ส่งอีเมล" และ "ต่อสตริง SQL" อ่านยากเพราะสมองต้องสลับระดับ
-- **พารามิเตอร์ไม่เกิน 3 ตัว** ถ้าเกินนั้นให้รับเป็น object ที่มีชื่อฟิลด์
-- **ห้ามรับ boolean เป็นพารามิเตอร์** — `render(true)` ที่จุดเรียกอ่านไม่ออกว่า `true` คืออะไร
-  ให้แยกเป็น `renderDraft()` กับ `renderFinal()` หรือรับ `{ mode: "draft" }`
-  **ยกเว้น named parameter** ที่จุดเรียกเห็นชื่อ เช่น `TextField(obscureText: true)` ใน Dart หรือ `enabled: true` ซึ่งอ่านออกอยู่แล้ว
-- **คืนค่าก่อนดีกว่าซ้อน `else`** — เงื่อนไขที่ตัดจบได้ ให้ `return` ทันที ทางหลักจะได้ไม่เยื้อง
-- **ถ้าเยื้องเกิน 3 ชั้น ต้องแตกฟังก์ชัน** ไม่ใช่เพราะกฎ แต่เพราะสมองตามเงื่อนไขซ้อน 4 ชั้นไม่ไหว
-
----
-
-## 6 · คอมเมนต์ — เขียน "ทำไม" ไม่ใช่ "ทำอะไร"
-
-```ts
-// ❌ เพิ่มค่า i ทีละ 1
-// ❌ ฟังก์ชันคำนวณภาษี
-
-// ✅ กรมสรรพากรกำหนดให้ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด (ประกาศ ป.161/2566)
-// ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
-// ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
-```
-
-**คอมเมนต์ที่อธิบายว่าโค้ดทำอะไร คือสัญญาณว่าชื่อตั้งผิด** ให้แก้ชื่อแล้วลบคอมเมนต์
-
-**4 แบบที่ควรมีคอมเมนต์:**
-
-| แบบ | ตัวอย่าง |
-|---|---|
-| ข้อจำกัดจากภายนอก | ข้อกำหนดของ API ที่เรียก · กฎหมาย · ข้อจำกัดของฮาร์ดแวร์ |
-| การตัดสินใจที่ดูแปลกแต่ตั้งใจ | "ไม่ใช้ index ที่นี่เพราะตารางเขียนบ่อยกว่าอ่าน" |
-| สูตรหรือกฎธุรกิจที่มีที่มา | อ้างเลขข้อในเอกสาร ไม่ใช่เล่าสูตรซ้ำ |
-| `TODO` ที่มีเจ้าของและเงื่อนไข | `TODO(somchai): ย้ายไป Redis เมื่อรันเกิน 1 process` |
-
-> **คอมเมนต์ที่โกหกอันตรายกว่าไม่มีคอมเมนต์** ถ้าแก้โค้ดต้องแก้คอมเมนต์ในรอบเดียวกัน
-
-### รอบคัดคอมเมนต์ก่อนรีวิว
-
-ก่อนส่งรีวิว ไล่ทุกคอมเมนต์ที่ diff เพิ่มหรือแก้ แล้วจัดเข้า 1 ใน 4 ทางในตารางนี้ ถ้า diff ใหญ่ให้ subagent ระดับกลางอ่านอย่างเดียวแล้วทำรายการ ส่วน agent หลักเป็นคนตัดสิน
-
-| คอมเมนต์ | ทำ |
-|---|---|
-| แปลโค้ดเป็นภาษาคน · ล้าสมัย · โค้ดที่ถูกคอมเมนต์ทิ้ง | ลบ |
-| อธิบายว่าตัวแปรหรือฟังก์ชันคืออะไร | เปลี่ยนชื่อให้บอกเอง แล้วลบ |
-| อ้างข้อจำกัด ("ห้าม null" · "ต้องเรียกหลัง init" · "ค่าไม่เกิน 100") | เปลี่ยนเป็นของที่ตรวจได้ เช่น type · assert · test · lint (`repeated-mistakes-to-checks`) แล้วลบ |
-| 4 แบบในตารางข้างบน | เก็บ |
-
-รายงานผลเป็นตัวเลข: ลบกี่อัน · เปลี่ยนชื่อกี่อัน · กลายเป็นการตรวจกี่อัน · เก็บกี่อัน
-
----
-
-## 7 · โครงสร้างไฟล์ที่คนใหม่หาเจอ
-
-**บททดสอบ:** คนที่เพิ่งเข้าโปรเจกต์ ได้ bug report ว่า *"ปุ่มบันทึกใบแจ้งหนี้ไม่ทำงาน"*
-ต้องเดาโฟลเดอร์ถูก**ภายใน 30 วินาที** โดยไม่ต้องถามใคร
-
-### จัดตามฟีเจอร์ ไม่ใช่ตามชนิดไฟล์
-
-```
-❌ จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
-src/
-  controllers/   invoice.ts  customer.ts  report.ts
-  services/      invoice.ts  customer.ts  report.ts
-  models/        invoice.ts  customer.ts  report.ts
-  validators/    invoice.ts  customer.ts  report.ts
-
-✅ จัดตามฟีเจอร์ — ทุกอย่างของใบแจ้งหนี้อยู่ที่เดียว
-src/
-  invoice/       routes.ts  service.ts  model.ts  validation.ts  invoice.test.ts
-  customer/      ...
-  report/        ...
-  shared/        money.ts  thai-date.ts  http-client.ts
-```
-
-**กฎ:**
-
-- **ชื่อไฟล์คือชื่อของสิ่งที่มัน export เป็นหลัก** — `InvoiceRenderer` อยู่ใน `invoice-renderer.ts`
-  รูปแบบตัวพิมพ์ตามธรรมเนียมของภาษา: Dart/Python ใช้ snake_case (`invoice_renderer.dart`) ส่วน .NET ใช้ `InvoiceRenderer.cs`
-- **ไฟล์ทดสอบอยู่ข้างไฟล์ที่มันทดสอบ** ไม่ใช่ใน `tests/` ที่ต้องไล่หาคู่
-  **ยกเว้น stack ที่เครื่องมือบังคับโฟลเดอร์ทดสอบ** เช่น Flutter (`flutter test` หาใน `test/` และ test ใน `lib/` จะลาก `flutter_test` เข้าแอป) · .NET (โปรเจกต์ทดสอบแยกใน `tests/`) — ตาราง `project-bootstrap` ข้อ 1
-  ให้ใช้โครงโฟลเดอร์ใน `test/` เหมือน `lib/` เป๊ะ เช่น `lib/invoice/renderer.dart` ↔ `test/invoice/renderer_test.dart`
-- **ไม่มี `utils/` ก้อนเดียว** เพราะถ้าของ 2 ชิ้นไม่เกี่ยวกัน ก็ไม่ควรอยู่ไฟล์เดียวกัน
-  `shared/` ยอมได้ แต่ข้างในต้องแตกตามเรื่อง ไม่ใช่กองรวม
-- **`index` ที่ re-export ทั้งโฟลเดอร์ ทำให้ "ไปที่นิยาม" ในเครื่องมือแก้โค้ดพัง** จึงใช้เท่าที่จำเป็นจริง
-- **โฟลเดอร์ที่มีไฟล์เดียวคือโฟลเดอร์ที่ยังไม่ควรมี**
-
----
-
-## 8 · ขนาดและลำดับข้างในไฟล์
-
-- **ไฟล์เกิน ~300 บรรทัด เป็นสัญญาณ ไม่ใช่กฎ** ถ้าเลื่อนหาของเจอง่ายก็ปล่อยไว้
-- **ลำดับในไฟล์: import → ค่าคงที่ → type → สิ่งที่ export → helper ส่วนตัว**
-- **ฟังก์ชันที่ถูกเรียก อยู่ใต้ฟังก์ชันที่เรียกมัน** จะได้อ่านจากบนลงล่างได้เหมือนบทความ
-  ของสำคัญอยู่บน รายละเอียดอยู่ล่าง คนอ่านหยุดตรงไหนก็เข้าใจภาพรวมแล้ว
-
----
-
-## 9 · ภาษาไทยกับอังกฤษในโค้ด
-
-| อะไร | ภาษา |
-|---|---|
-| ชื่อตัวแปร ฟังก์ชัน คลาส ไฟล์ โฟลเดอร์ ตาราง คอลัมน์ | **อังกฤษเสมอ** |
-| คอมเมนต์ | ไทยได้ ถ้าทีมอ่านไทย |
-| ข้อความที่ผู้ใช้เห็น | ไทย แต่ไม่ฝังในโค้ด (`i18n-and-locale`) |
-| commit message · ชื่อ branch | ตามที่ทีมตกลง เลือกแล้วใช้ให้ตรงกันทั้งทีม |
-
-- **ห้ามปนครึ่งคำ** — `checkบัตร` · `userชื่อ` อ่านยากและพังใน terminal บางตัว
-- **คำเฉพาะทางไทยที่ไม่มีคำอังกฤษตรง ๆ** ให้หาคำอังกฤษที่ใกล้ที่สุดก่อน
-  (`เลขประจำตัวผู้เสียภาษี` → `taxId` · `ภาษีหัก ณ ที่จ่าย` → `withholdingTax`)
-  ถ้าไม่มีจริง ๆ ให้ใช้ทับศัพท์เต็มคำ แล้วอธิบายไว้ที่ `DATA-DICTIONARY.md`
-
----
-
-## 10 · รายการตรวจก่อนส่งโค้ด
-
-ใช้รายการตรวจ 12 ข้อใน [`assets/naming-reference.md`](assets/naming-reference.md) ข้อ 5 — ไล่ทุกข้อก่อนส่ง ข้อไหนไม่ผ่านกลับไปแก้ตามข้อของ skill นี้
-
----
-
-## 11 · Anti-patterns
-
-- ❌ **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
-- ❌ **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
-- ❌ **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
-- ❌ **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
-- ❌ **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
-- ❌ **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
-- ❌ **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
-
----
-
-## 12 · ตัวย่อ
-
-- **API** — Application Programming Interface
-- **SQL** — Structured Query Language
-- **SMS** — Short Message Service
-- **TODO** — สิ่งที่ยังไม่ได้ทำและตั้งใจจะทำ
-- **YAGNI** — You Aren't Gonna Need It
-
----
-
-## 13 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| เขียนโค้ดให้น้อยลง | `lazy-coding` |
-| โครง repo · README · linter | `project-bootstrap` |
-| รีวิวความถูกต้องและความปลอดภัย | `code-review-checklist` |
-| รูปแบบ log และชื่อ field ใน log | `logging-standards` |
-| ชื่อตารางและคอลัมน์ในฐานข้อมูล | `database-design` |
-| ชื่อ endpoint และ field ใน API | `api-conventions` |
-| ข้อความที่ผู้ใช้เห็น ไทย-อังกฤษ | `i18n-and-locale` |
-| ตารางอ้างอิงแบบหน้าเดียว | `assets/naming-reference.md` |

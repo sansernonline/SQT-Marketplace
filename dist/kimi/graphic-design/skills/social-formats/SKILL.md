@@ -65,6 +65,10 @@ Brief: a café promotes a new drink on IG feed, IG story, TikTok and LINE OA.
 
 Story middle band: 1920 × 14% = 269 px from top; 1920 × 35% = 672 px from bottom → usable to y = 1248.
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 - `campaign-set` — which placements, in what order

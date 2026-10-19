@@ -112,6 +112,18 @@ Most resilient ─────────────────────�
 
 ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P0 P1 หรือ P2 ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
+## Expected Values and Failing Tests
+
+ชุด E2E ที่แปลงมาจากแผนทดสอบ (`test-case-template`):
+
+- ชื่อ test ขึ้นต้นด้วยรหัส TC · tag `@<module>` `@P1|@P2|@P3` · ใส่ผลที่คาดหวังและ oracle เป็น annotation
+  `test.info().annotations.push({ type: 'expected', description: '฿760 · [D] BR-03' })`
+- ค่าที่คาดหวังเป็นค่าคงที่จากแผน · ห้ามอ่านค่าจากหน้าจอแล้ว assert กลับ เช่น อ่านราคาจากการ์ดแล้วเทียบยอดรวม → ผิดทั้งคู่ก็ผ่าน
+- reset ข้อมูลก่อนทุก TC (API reset หรือ seed) · ล็อก "วันนี้" ด้วย `page.clock.setFixedTime()` · `timezoneId` · `locale` ใน config
+- TC ที่มี **Check when** `หลังรีโหลด` → `page.reload()` แล้ว assert อีกครั้ง
+- รันทุกเบราว์เซอร์ที่แผนระบุ · เกณฑ์ผ่านคิดแยกทีละเบราว์เซอร์
+- test ล้ม → ห้ามแก้ค่าที่คาดหวัง · จำแนก `app` / `plan` / `test` ตาม agent `qa-tester` ลง `triage.json` · ใน CI ห้าม retry จนผ่านแล้วถือว่าจบ
+
 ## Fighting Flaky Tests
 
 | Cause | Fix |
@@ -153,6 +165,7 @@ Most resilient ─────────────────────�
 - ❌ **Manual cleanup** — relying on people to reset the environment
 - ❌ **No quarantine** — failing tests get merged anyway because "it's flaky"
 - ❌ **Mocking everything** — at this layer, use the real integrations, or it's not E2E
+- ❌ **Expected value read from the page** — the bug becomes the expectation
 
 ## Quality Targets (from qa-tester agent)
 

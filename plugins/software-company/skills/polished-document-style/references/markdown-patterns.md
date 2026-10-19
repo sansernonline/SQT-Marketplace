@@ -7,9 +7,9 @@
 Every polished doc MUST start with:
 
 ```markdown
-# 📋 <Document Title>
+# <Document Title>
 
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** 🟡 Draft
+> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft
 > **Authors:** <names> · **Reviewers:** <names>
 > **Tags:** `<area>` `<topic>`
 
@@ -17,17 +17,17 @@ Every polished doc MUST start with:
 ```
 
 Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
+- **Draft** — work in progress
+- **Review** — under stakeholder review
+- **Approved** — signed off
+- **Archived** — historical reference
 
 ## Table of Contents
 
 **Always add Table of Contents** for docs with 5+ sections:
 
 ```markdown
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#1-executive-summary)
 2. [Scope](#2-scope)
@@ -36,18 +36,18 @@ Status values:
 
 ## Callout Boxes
 
-Use blockquotes with emoji prefix:
+Use blockquotes with a bold label — no emoji:
 
 ```markdown
-> 💡 **Tip:** Brief actionable insight.
+> **Tip:** Brief actionable insight.
 
-> ⚠️ **Warning:** Important caveat or limitation.
+> **Warning:** Important caveat or limitation.
 
-> 🚨 **Critical:** Must-read before proceeding.
+> **Critical:** Must-read before proceeding.
 
-> ℹ️ **Note:** Additional context or background.
+> **Note:** Additional context or background.
 
-> ❓ **Open Question:** Needs decision/clarification.
+> **Open Question:** Needs decision/clarification.
 ```
 
 ## Tables — When and How
@@ -56,20 +56,20 @@ Use blockquotes with emoji prefix:
 
 Use tables when items have **2+ attributes**:
 
-❌ Don't use bullets:
+Don't use bullets:
 ```markdown
 - email: string, required, unique
 - age: number, optional
 - role: enum, required, default "user"
 ```
 
-✅ Use a table:
+Use a table:
 ```markdown
 | Field | Type   | Required | Default | Description       |
 |-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✅       | —       | Unique login email|
-| age   | number | ❌       | —       | Optional          |
-| role  | enum   | ✅       | `user`  | Access level      |
+| email | string | ✓        | —       | Unique login email|
+| age   | number | ✗        | —       | Optional          |
+| role  | enum   | ✓        | `user`  | Access level      |
 ```
 
 ## Mermaid Diagrams
@@ -92,16 +92,16 @@ sequenceDiagram
 For key fields in headers/tables:
 
 ```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk Level:** 🟡 Medium
-**SLA:** ⚡ < 200ms
+**Status:** Approved
+**Priority:** High
+**Risk Level:** Medium
+**SLA:** < 200ms
 ```
 
 Multiple badges in a header:
 
 ```markdown
-> 🟢 **Approved** · 🔴 **High Priority** · 👤 @alice · 🗓️ Due 2025-03-15
+> **Approved** · **High Priority** · Owner @alice · Due 2025-03-15
 ```
 
 ## Cover Block Pattern
@@ -109,13 +109,13 @@ Multiple badges in a header:
 For formal documents (BRD, FSD, ADR, postmortem):
 
 ```markdown
-# 📋 <Title>
+# <Title>
 
 | | |
 |--|--|
 | **Document Type** | BRD \| FSD \| ADR \| Postmortem |
 | **Version** | 1.2 |
-| **Status** | 🟢 Approved |
+| **Status** | Approved |
 | **Date** | 2025-01-15 |
 | **Author(s)** | @alice, @bob |
 | **Reviewer(s)** | @charlie |
@@ -131,21 +131,21 @@ For trade-off analysis (architect, PM, SEO recommendations):
 ```markdown
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
 |--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B      | 💰   | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C      | 💰💰💰| 🔴 High| 🟢 Low | 🔴 Slow | ⚪ Future consideration |
+| **A**  | ฿80k | Med  | Low  | Fast | **Recommended** |
+| B      | ฿40k | Low  | High | Med  | Not recommended |
+| C      | ฿150k| High | Low  | Slow | Future consideration |
 ```
 
 ## Lists — When to nest, when to flatten
 
-### ✅ Good list
+### Good list
 ```markdown
 - Email is unique across all users
 - Passwords must be 8+ characters with mixed case
 - Sessions expire after 30 days of inactivity
 ```
 
-### ❌ Bad list (over-nested)
+### Bad list (over-nested)
 ```markdown
 - Users
   - Email
@@ -190,14 +190,14 @@ export async function login(email: string, password: string) {
 For documents needing formal approval:
 
 ```markdown
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| Product Owner | @alice | 🟢 Approved | 2025-01-15 |
-| Tech Lead | @bob | 🔵 Reviewing | — |
-| QA Lead | @charlie | ⚪ Not started | — |
-| Security | @dave | ❌ Rejected | 2025-01-14 |
+| Product Owner | @alice | Approved | 2025-01-15 |
+| Tech Lead | @bob | Reviewing | — |
+| QA Lead | @charlie | Not started | — |
+| Security | @dave | Rejected | 2025-01-14 |
 ```
 
 ## Glossary Section
@@ -205,7 +205,7 @@ For documents needing formal approval:
 For docs with 5+ technical terms:
 
 ```markdown
-## 📖 Glossary
+## Glossary
 
 | Term | Definition |
 |------|------------|

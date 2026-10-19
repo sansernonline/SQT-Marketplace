@@ -4,7 +4,7 @@
 
 Career toolkit for people working in Thailand — Thai and international CV conventions with ATS-friendly templates in both languages, interview preparation with a STAR story bank and the questions Thai HR always asks, salary negotiation with total-compensation maths (bonus months, provident fund match, social security, insurance) and scripts in Thai and English, self-review and promotion cases, and LinkedIn profiles tuned for the Thai market.
 
-ชุดนี้มี skill 9 ตัว · บทบาท 5 บทบาท · คำสั่งสำเร็จรูป 3 คำสั่ง
+ชุดนี้มี skill 11 ตัว · บทบาท 5 บทบาท · คำสั่งสำเร็จรูป 3 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`

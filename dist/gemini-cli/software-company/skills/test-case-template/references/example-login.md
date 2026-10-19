@@ -33,6 +33,7 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 - Session cookie set
 - Last login timestamp updated
 
+**Oracle:** [D] US-001 AC1 — login ถูก → เข้า /dashboard
 **Related:** US-001, AC1
 ```
 
@@ -55,6 +56,7 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 | 3 | Click "Login"         | Error: "Email is required"           |
 | 4 | Verify focus          | Email field gets focus               |
 
+**Oracle:** [D] US-001 AC2 — อีเมลเป็นช่องบังคับ · [R] ช่องที่ผิดได้โฟกัส (WCAG 3.3.1)
 **Related:** US-001, AC2
 ```
 
@@ -77,5 +79,7 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 | 3 | Enter valid email + correct password| Error: "Account locked..."    |
 | 4 | Wait 15 minutes                     | Can login successfully        |
 
+**Oracle:** [D] US-001 AC4 — ผิด 5 ครั้ง → ล็อก 15 นาที
+**Check when:** ทั้งสอง — หลังรีโหลดหน้าต้องยังล็อกอยู่
 **Related:** US-001, AC4
 ```

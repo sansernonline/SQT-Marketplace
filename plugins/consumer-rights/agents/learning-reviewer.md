@@ -76,4 +76,4 @@ Return to the lead only the note's path and the "ควรปรับทีม"
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. If its text is not in your context: answer first, plain words, numbers as digits, spell out each abbreviation the first time.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill. If its text is not in your context: answer first, plain words, numbers as digits, spell out each abbreviation the first time.

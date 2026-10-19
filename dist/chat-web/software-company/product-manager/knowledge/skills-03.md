@@ -319,6 +319,10 @@ Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
 - [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
 - [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
 
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+
 ## ตัวย่อ
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)

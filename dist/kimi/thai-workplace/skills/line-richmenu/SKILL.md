@@ -64,6 +64,10 @@ A ready JSON for a 6-button full menu with the grid coordinates: [references/ric
 5. Text fallback: the greeting message lists the same 6 keywords.
 6. Seasonal menu: create the new one first, switch default, then delete the old one.
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 `line-oa-setup` · `line-chatbot` · `line-broadcast`.

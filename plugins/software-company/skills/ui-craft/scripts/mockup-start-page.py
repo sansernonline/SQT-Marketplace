@@ -23,21 +23,15 @@ BEGIN, END = '<!-- start-page:begin -->', '<!-- start-page:end -->'
 
 CSS = '''
 #s-start{--st-bg:var(--bg-base,var(--win-bg,#1c1c1c));--st-card:var(--bg-surface,var(--win-card,#2b2b2b));--st-line:var(--border,var(--win-divider,#3d3d3d));
- --st-text:var(--text-primary,var(--win-text,#fff));--st-muted:var(--text-muted,var(--win-text-secondary,#c5c5c5));--st-accent:var(--accent,var(--win-accent,#7c3aed));
- --st-link:var(--accent-light,var(--win-accent-text,#22d3ee));--st-grad:var(--accent-grad,linear-gradient(90deg,var(--st-accent),var(--st-link)));--st-mono:var(--font-mono,Consolas,monospace)}
+ --st-text:var(--text-primary,var(--win-text,#fff));--st-muted:var(--text-muted,var(--win-text-secondary,#c5c5c5));--st-accent:var(--accent,var(--win-accent,#2A78D6));
+ --st-link:var(--accent-light,var(--win-accent-text,#6CA6EF));--st-mono:var(--font-mono,Consolas,monospace)}
 #s-start .st{display:flex;flex-direction:column;gap:24px;padding:24px 32px 32px;overflow:auto;flex:1;min-width:0}
 #s-start .st>*{width:100%;max-width:1680px;margin-inline:auto;flex-shrink:0}
-#s-start .st-hero{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;padding:32px;border:1px solid var(--st-line);border-radius:12px;overflow:hidden;
- background:radial-gradient(60% 120% at 0 0,color-mix(in srgb,var(--st-accent) 22%,transparent),transparent 70%),radial-gradient(50% 100% at 100% 100%,color-mix(in srgb,var(--st-link) 14%,transparent),transparent 70%),var(--st-card)}
-#s-start .st-hero::after{content:"";position:absolute;left:32px;right:32px;bottom:0;height:3px;border-radius:2px 2px 0 0;background:var(--st-grad)}
-#s-start .st-hero .mk{width:88px;height:88px;border-radius:20px;box-shadow:0 8px 32px color-mix(in srgb,var(--st-accent) 40%,transparent)}
-#s-start .st-hero .blink{animation:st-blink 1.06s steps(1,end) infinite}
-@keyframes st-blink{0%{opacity:1}55%{opacity:.12}}
-@media (prefers-reduced-motion:reduce){#s-start .st-hero .blink{animation:none}}
+#s-start .st-hero{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;padding:32px;border:1px solid var(--st-line);border-radius:12px;overflow:hidden;background:var(--st-card)}
+#s-start .st-hero .mk{width:88px;height:88px;border-radius:20px}
 #s-start .st-ht{display:flex;flex-direction:column;gap:8px;min-width:0}
 #s-start .st-ht h1{margin:0;font-size:28px;line-height:36px;font-weight:600;color:var(--st-text)}
 #s-start .st-ht p{margin:0;color:var(--st-muted);max-width:72ch}
-#s-start .st-ht .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--st-link)}
 #s-start .st-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 #s-start .st-acts a{display:inline-flex;align-items:center;height:32px;padding:0 12px;border:1px solid var(--st-line);border-radius:4px;color:var(--st-text);text-decoration:none;background:var(--st-bg)}
 #s-start .st-acts a.primary{background:var(--st-accent);border-color:var(--st-accent);color:#fff;font-weight:600}
@@ -57,16 +51,15 @@ CSS = '''
 #s-start .st-topic h2{margin:0;font-size:14px;font-weight:600;color:var(--st-text)}
 #s-start .st-topic h2 span{font-weight:400;font-size:12px;color:var(--st-muted);margin-left:8px}
 #s-start .st-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
-#s-start .st-card{display:flex;flex-direction:column;border:1px solid var(--st-line);border-radius:8px;overflow:hidden;background:var(--st-card);color:var(--st-text);text-decoration:none;transition:border-color .12s,transform .12s,box-shadow .12s}
-#s-start .st-card:hover{border-color:var(--st-accent);transform:translateY(-1px);box-shadow:0 10px 30px color-mix(in srgb,var(--st-accent) 22%,transparent)}
+#s-start .st-card{display:flex;flex-direction:column;border:1px solid var(--st-line);border-radius:8px;overflow:hidden;background:var(--st-card);color:var(--st-text);text-decoration:none;transition:border-color .12s}
+#s-start .st-card:hover{border-color:var(--st-accent)}
 #s-start .st-card:focus-visible{outline:2px solid var(--st-link);outline-offset:2px}
 #s-start .st-th{display:block;aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--st-line);background:var(--st-bg)}
-#s-start .st-th img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left;transition:transform .25s}
-#s-start .st-card:hover .st-th img{transform:scale(1.04)}
+#s-start .st-th img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
 #s-start .st-th .l,:root[data-theme="light"] #s-start .st-th .d{display:none}
 :root[data-theme="light"] #s-start .st-th .l{display:block}
 #s-start .st-row{display:flex;gap:12px;align-items:flex-start;padding:12px 16px}
-#s-start .st-no{flex:0 0 36px;height:36px;display:grid;place-items:center;border-radius:8px;background:var(--st-grad);color:#fff;font:600 13px var(--st-mono)}
+#s-start .st-no{flex:0 0 36px;height:36px;display:grid;place-items:center;border-radius:8px;background:var(--st-accent);color:#fff;font:600 13px var(--st-mono)}
 #s-start .st-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
 #s-start .st-tx small{font-size:12px;color:var(--st-muted)}
 #s-start .st-tx code{font:11px var(--st-mono);color:var(--st-link);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -175,7 +168,7 @@ def main():
     links = ''.join(f'<a class="{"primary" if l.get("primary") else ""}" href="{html.escape(l["href"])}">{html.escape(l["label"])}</a>' for l in cfg.get('links', []))
     srs = f' FR means Functional Requirement in <code>{html.escape(cfg["srs"])}</code>.' if cfg.get('srs') else ''
     body = (f'<style>{CSS}</style>\n<div class="st">\n<header class="st-hero">{cfg.get("logo", "")}<div class="st-ht">'
-            f'<p class="eyebrow">{html.escape(cfg.get("product", ""))} mockups</p><h1>{len(screens)} screens you can click</h1>'
+            f'<h1>{html.escape(cfg["product"]) + " · " if cfg.get("product") else ""}{len(screens)} screens you can click</h1>'
             f'<p>Every screen has 5 states: empty, loading, error, partial and success. Switch them with the state switcher, or add <code>?state=error</code> after the screen address.{srs}</p>'
             f'<div class="st-acts">{links}</div></div><dl class="st-stats">' + ''.join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k, v in stats) + '</dl></header>\n'
             '<div class="st-find" role="search"><label><input id="st-find" type="search" autocomplete="off" aria-describedby="st-found" '

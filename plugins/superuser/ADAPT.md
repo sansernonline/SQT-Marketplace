@@ -13,7 +13,7 @@ plugin `superuser` คือต้นฉบับของวิธีทำง�
 |---|---|---|
 | `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `team` (5) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
 | playbook และ reference | `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` · `evidence.md` · `team-roles.md` · `templates/improvements-queue.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) · `triggers.md` · `examples.md` |
-| skill | `agent-patterns` · `answer-shape` · `human-writing` | skill ของสาขา |
+| skill | `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` | skill ของสาขา |
 | agent | `brainstormer` · `reviewer` · `learning-reviewer` | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทางของสาขา (playbook ใช้แทน `reviewer` ได้ · เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
 | hook | `hooks/superuser-hook.mjs` · `hooks/hooks.json` | — |
 | ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` ยกเว้น `improvements-queue.md` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาที่มีอยู่แล้วเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |

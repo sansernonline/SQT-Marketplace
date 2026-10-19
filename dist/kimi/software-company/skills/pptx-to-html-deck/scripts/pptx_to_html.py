@@ -770,7 +770,7 @@ CHROME = """<div id="menu"><div class="mhead"><b>สารบัญ<span>คล�
 <div class="edge l" title="ก่อนหน้า (←)">‹</div><div class="edge r" title="ถัดไป (→)">›</div>
 <div id="bar"></div><div id="bartip"></div>
 <div id="notes"><button class="nclose" type="button" title="ปิดโน้ต (N)">✕</button><div id="notesBody"></div></div>
-<div id="help"><b>← →</b> เปลี่ยนหน้า · <b>M</b> สารบัญ · <b>N</b> โน้ตผู้พูด · <b>T</b> จับเวลา · <b>F</b> เต็มจอ · <b>R</b> เล่นซ้ำ · <b>P</b> เล่นอัตโนมัติ</div>
+<div id="help"><b>← →</b> เปลี่ยนหน้า · <b>Space</b> เล่น/หยุดขั้นในหน้า · <b>↓ ↑</b> ทีละขั้น · <b>M</b> สารบัญ · <b>N</b> โน้ตผู้พูด · <b>T</b> จับเวลา · <b>F</b> เต็มจอ · <b>R</b> เล่นซ้ำ · <b>P</b> เล่นอัตโนมัติ</div>
 <div id="ui"><span id="clock" title="เวลาที่ใช้ (กด T เริ่ม/หยุด)">0:00</span><button id="prev" title="ก่อนหน้า (←)">‹</button><span id="count"></span><button id="next" title="ถัดไป (→)">›</button><button id="mb" title="สารบัญ (M)">สารบัญ</button><button id="nb" title="โน้ตผู้พูด (N)">โน้ต</button><button id="fs" title="เต็มจอ (F)">เต็มจอ</button></div>"""
 
 

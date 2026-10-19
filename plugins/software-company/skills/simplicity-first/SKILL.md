@@ -9,7 +9,7 @@ description: Use when producing a document, design, architecture or plan (BRD, F
 > teammate can follow with no context.
 
 This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`.
+designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
 
 ## Check before submitting — 5 items
 

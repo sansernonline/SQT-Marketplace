@@ -90,4 +90,4 @@ Not for: incident response, alert triage, SOC and detection rules, zero trust â†
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow â€” the `simplify` skill.

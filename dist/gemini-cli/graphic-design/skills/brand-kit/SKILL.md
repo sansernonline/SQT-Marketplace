@@ -76,6 +76,10 @@ Draw the clear-space box on a page in the kit (`logo/usage.png`) — people foll
 - Confirm every font licence from the licence file in the download, not from a blog
 - Keep the kit beside the work: `asset-organize` puts it at `00-brand-kit/`
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 - `style-consistency` — the per-campaign style lock that sits under the kit

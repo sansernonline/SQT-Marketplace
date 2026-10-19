@@ -11,6 +11,6 @@
 ไฟล์ความรู้ไม่เกิน 10 ไฟล์ (Gem)
 
 บทบาทที่ยาวเกินช่อง Instructions → ย้ายเนื้อหาไปไว้ใน `knowledge/00-role.md`:
-ไม่มี
+`software-company/qa-tester`
 
 ข้อจำกัด: หน้าเว็บรันสคริปต์ใน skill ไม่ได้ และไม่มีคำสั่งสำเร็จรูป (slash command)

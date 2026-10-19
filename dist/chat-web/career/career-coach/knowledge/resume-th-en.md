@@ -87,6 +87,10 @@ Fill-in templates (English, Thai, cover email) → [references/templates.md](ref
 
 Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a STAR story) · `important-docs` in `personal-life` (store certificates and transcripts).
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
+
 
 ## reference: templates.md
 

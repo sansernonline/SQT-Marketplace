@@ -20,7 +20,7 @@ Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs po
 - Code comments / inline docs
 - A whole Markdown report that must come out as one .docx → `markdown-report-docx`
 
-> ℹ️ **Note:** This skill governs the *markdown source*. When the deliverable is a
+> **Note:** This skill governs the *markdown source*. When the deliverable is a
 > rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
 > `branded-document-design` on top of it — that skill carries the design tokens,
 > the typography scale, Thai typography rules, and the `brandkit.py` builder.
@@ -35,13 +35,13 @@ Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs po
 
 ## Document Header (Always)
 
-Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ที่มีอิโมจิกำกับ ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ข้อความล้วน ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
+- **Draft** (ร่าง) — work in progress
+- **Review** (กำลังรีวิว) — under stakeholder review
+- **Approved** (อนุมัติแล้ว) — signed off
+- **Archived** (เก็บถาวร) — historical reference
 
 ## Section Hierarchy
 
@@ -68,26 +68,25 @@ Status values:
 ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ใช้ค่าตั้งต้นประจำบ้าน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนที่เข้ากับเนื้องานไว้ในรายงาน
 (ตารางจับคู่เนื้องานกับโทนสีอยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
 
-markdown เองไม่มีสี จึงใช้อิโมจิและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ใน [references/theme-colors.md](references/theme-colors.md)
+markdown เองไม่มีสี จึงใช้คำกำกับและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ใน [references/theme-colors.md](references/theme-colors.md)
 
-**สีสถานะไม่ขึ้นกับธีม** — 🔴 วิกฤต · 🟢 ผ่าน ต้องคงความหมายเดิมไม่ว่าธีมจะเป็นสีอะไร
+**คำสถานะไม่ขึ้นกับธีม** — วิกฤต · ผ่าน ใช้คำเดิมทุกเอกสาร ส่วนสีของสถานะในรูป .docx และสไลด์อยู่ใน [references/theme-colors.md](references/theme-colors.md)
 
-## Emoji Vocabulary
+## คำกำกับ — ใช้คำ ไม่ใช้อีโมจิ
 
-ใช้ให้**คงที่ทั้งเอกสาร** และใช้เพื่อ**หาของเจอเร็วขึ้น** ไม่ใช่เพื่อความน่ารัก
+**ไม่มีอีโมจิในเอกสาร** ทั้งหัวข้อ กล่องข้อความ ป้ายสถานะ และตาราง เพราะอีโมจิในหัวข้อและป้ายเป็นสัญญาณว่า AI ทำ (`no-ai-look`) · ใช้คำตัวหนาที่คงที่ทั้งเอกสารแทน
 
-| ใช้ทำอะไร | ชุดที่ใช้ |
+| ใช้ทำอะไร | คำที่ใช้ |
 |---|---|
-| ระดับความสำคัญ | 🔴 วิกฤต · 🟠 สูง · 🟡 กลาง · 🟢 ต่ำ |
-| สถานะ | ✅ เสร็จ · 🚧 กำลังทำ · ⏳ รอ · ❌ ไม่ผ่าน · ⚠️ ต้องระวัง |
-| ชนิดกล่องข้อความ | 💡 ข้อแนะนำ · 📌 ข้อควรจำ · 🚨 อันตราย · 📋 รายการตรวจ |
-| หมวดเนื้อหา | 🎯 เป้าหมาย · 🏗️ สถาปัตยกรรม · 🔐 ความปลอดภัย · 📊 ตัวเลข · 🧪 การทดสอบ |
+| ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
+| สถานะงาน | เสร็จ · กำลังทำ · รอ · ไม่ผ่าน · ต้องระวัง |
+| ชนิดกล่องข้อความ | ข้อแนะนำ · ข้อควรจำ · อันตราย · คำถามที่ยังเปิด |
 
-**1 อิโมจิต่อหัวข้อ ไม่ใช่ต่อบรรทัด** — เอกสารที่ทุกบรรทัดมีอิโมจิอ่านยากกว่าเอกสารที่ไม่มีเลย
+ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
 
 ## Callout Boxes
 
-Use blockquotes with emoji prefix มี 5 ชนิด คือ 💡 **Tip** · ⚠️ **Warning** · 🚨 **Critical** · ℹ️ **Note** · ❓ **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** · **Warning** · **Critical** · **Note** · **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 **Rules:**
 - Keep callouts to 1-3 sentences
@@ -117,7 +116,7 @@ skill นี้คุมเฉพาะเรื่องการวางไ�
 
 ## Status Badges and Cover Block
 
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะแบบอิโมจิพร้อมคำกำกับ เช่น `**Status:** 🟢 Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Lists and Code Blocks
 
@@ -130,7 +129,7 @@ Code blocks ต้องระบุภาษาทุกครั้ง (Always
 
 Before delivering any polished doc:
 
-- [ ] H1 title with emoji marker
+- [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
 - [ ] Cover block with version, date, status, authors
 - [ ] TOC if 5+ sections
 - [ ] All sections numbered consistently
@@ -149,14 +148,17 @@ Before delivering any polished doc:
 
 ## Anti-patterns
 
-- ❌ **Emoji spam** — emoji in every heading just for decoration
-- ❌ **All emoji, no labels** — `🔴 High` reads better than `🔴` alone
+- ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
 - ❌ **Deep nesting** — bullets 4+ levels deep, use tables instead
 - ❌ **Walls of text** — paragraphs longer than 5 lines
 - ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
 - ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
 - ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
 - ❌ **Skipping the cover block** — readers need version/status/date
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
 
 ## ตัวย่อ
 
@@ -175,9 +177,9 @@ Before delivering any polished doc:
 Every polished doc MUST start with:
 
 ```markdown
-# 📋 <Document Title>
+# <Document Title>
 
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** 🟡 Draft
+> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft
 > **Authors:** <names> · **Reviewers:** <names>
 > **Tags:** `<area>` `<topic>`
 
@@ -185,17 +187,17 @@ Every polished doc MUST start with:
 ```
 
 Status values:
-- 🟡 **Draft** — work in progress
-- 🔵 **Review** — under stakeholder review
-- 🟢 **Approved** — signed off
-- ⚪ **Archived** — historical reference
+- **Draft** — work in progress
+- **Review** — under stakeholder review
+- **Approved** — signed off
+- **Archived** — historical reference
 
 ## Table of Contents
 
 **Always add Table of Contents** for docs with 5+ sections:
 
 ```markdown
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#1-executive-summary)
 2. [Scope](#2-scope)
@@ -204,18 +206,18 @@ Status values:
 
 ## Callout Boxes
 
-Use blockquotes with emoji prefix:
+Use blockquotes with a bold label — no emoji:
 
 ```markdown
-> 💡 **Tip:** Brief actionable insight.
+> **Tip:** Brief actionable insight.
 
-> ⚠️ **Warning:** Important caveat or limitation.
+> **Warning:** Important caveat or limitation.
 
-> 🚨 **Critical:** Must-read before proceeding.
+> **Critical:** Must-read before proceeding.
 
-> ℹ️ **Note:** Additional context or background.
+> **Note:** Additional context or background.
 
-> ❓ **Open Question:** Needs decision/clarification.
+> **Open Question:** Needs decision/clarification.
 ```
 
 ## Tables — When and How
@@ -224,20 +226,20 @@ Use blockquotes with emoji prefix:
 
 Use tables when items have **2+ attributes**:
 
-❌ Don't use bullets:
+Don't use bullets:
 ```markdown
 - email: string, required, unique
 - age: number, optional
 - role: enum, required, default "user"
 ```
 
-✅ Use a table:
+Use a table:
 ```markdown
 | Field | Type   | Required | Default | Description       |
 |-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✅       | —       | Unique login email|
-| age   | number | ❌       | —       | Optional          |
-| role  | enum   | ✅       | `user`  | Access level      |
+| email | string | ✓        | —       | Unique login email|
+| age   | number | ✗        | —       | Optional          |
+| role  | enum   | ✓        | `user`  | Access level      |
 ```
 
 ## Mermaid Diagrams
@@ -260,16 +262,16 @@ sequenceDiagram
 For key fields in headers/tables:
 
 ```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk Level:** 🟡 Medium
-**SLA:** ⚡ < 200ms
+**Status:** Approved
+**Priority:** High
+**Risk Level:** Medium
+**SLA:** < 200ms
 ```
 
 Multiple badges in a header:
 
 ```markdown
-> 🟢 **Approved** · 🔴 **High Priority** · 👤 @alice · 🗓️ Due 2025-03-15
+> **Approved** · **High Priority** · Owner @alice · Due 2025-03-15
 ```
 
 ## Cover Block Pattern
@@ -277,13 +279,13 @@ Multiple badges in a header:
 For formal documents (BRD, FSD, ADR, postmortem):
 
 ```markdown
-# 📋 <Title>
+# <Title>
 
 | | |
 |--|--|
 | **Document Type** | BRD \| FSD \| ADR \| Postmortem |
 | **Version** | 1.2 |
-| **Status** | 🟢 Approved |
+| **Status** | Approved |
 | **Date** | 2025-01-15 |
 | **Author(s)** | @alice, @bob |
 | **Reviewer(s)** | @charlie |
@@ -299,21 +301,21 @@ For trade-off analysis (architect, PM, SEO recommendations):
 ```markdown
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
 |--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B      | 💰   | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C      | 💰💰💰| 🔴 High| 🟢 Low | 🔴 Slow | ⚪ Future consideration |
+| **A**  | ฿80k | Med  | Low  | Fast | **Recommended** |
+| B      | ฿40k | Low  | High | Med  | Not recommended |
+| C      | ฿150k| High | Low  | Slow | Future consideration |
 ```
 
 ## Lists — When to nest, when to flatten
 
-### ✅ Good list
+### Good list
 ```markdown
 - Email is unique across all users
 - Passwords must be 8+ characters with mixed case
 - Sessions expire after 30 days of inactivity
 ```
 
-### ❌ Bad list (over-nested)
+### Bad list (over-nested)
 ```markdown
 - Users
   - Email
@@ -358,14 +360,14 @@ export async function login(email: string, password: string) {
 For documents needing formal approval:
 
 ```markdown
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| Product Owner | @alice | 🟢 Approved | 2025-01-15 |
-| Tech Lead | @bob | 🔵 Reviewing | — |
-| QA Lead | @charlie | ⚪ Not started | — |
-| Security | @dave | ❌ Rejected | 2025-01-14 |
+| Product Owner | @alice | Approved | 2025-01-15 |
+| Tech Lead | @bob | Reviewing | — |
+| QA Lead | @charlie | Not started | — |
+| Security | @dave | Rejected | 2025-01-14 |
 ```
 
 ## Glossary Section
@@ -373,7 +375,7 @@ For documents needing formal approval:
 For docs with 5+ technical terms:
 
 ```markdown
-## 📖 Glossary
+## Glossary
 
 | Term | Definition |
 |------|------------|
@@ -615,6 +617,10 @@ Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
 - [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
 - [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
 - [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
 
 ## ตัวย่อ
 

@@ -59,6 +59,10 @@ Verification: face of glass, layer colours, light from right, palette — all un
 - People: no edits that change a real person's identity, body or what they appear to say without their consent
 - If the edit is larger than the keep list, it is a new image — go back to `brief-to-image`
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. Fix AI tells (plastic skin, teal-orange grade, warped text) as part of the edit.
+
 ## Related
 
 - `brief-to-image` — when regeneration is cheaper than editing

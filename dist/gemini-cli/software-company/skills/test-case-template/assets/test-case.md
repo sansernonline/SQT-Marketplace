@@ -22,4 +22,6 @@
 **Postconditions:** <!-- optional -->
 - <state after the test>
 
-**Related:** <US-NNN, ACn>
+**Oracle:** <[D] or [R] + where it comes from — money: show the sum, e.g. ฿800 − 5% (฿40) = ฿760>
+**Check when:** ทันที | หลังรีโหลด | ทั้งสอง <!-- optional -->
+**Related:** <US-NNN, ACn, BR-NN>

@@ -117,4 +117,4 @@ When you write one of these, open the template first: product vision · polished
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.

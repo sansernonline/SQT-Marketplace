@@ -30,4 +30,4 @@ Other plugins, all optional: (ถ้าติดตั้ง plugin `trading-fin
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.

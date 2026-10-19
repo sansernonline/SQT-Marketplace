@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.7.0 — 2026-10-19
+
+- รับ skill กลาง `no-ai-look` จาก `superuser` · agent ทั้ง 4 ตัว (`art-director` · `brand-keeper` · `design-critic` · `social-creator`) ทำตามและตรวจก่อนส่ง
+- skill 9 ตัวมีหัวข้อ "Not an AI look" · brief ของรูป AI ใส่แนวที่มีชื่อ · hex · แสง · สิ่งที่ไม่เอา ตามข้อ 4 ของ `no-ai-look`
+
 ## 0.6.0 — 2026-10-14
 
 จากการตรวจ plugin หัวข้อ 1–6 (ความยาว · กระชับ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ)

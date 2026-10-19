@@ -4,7 +4,7 @@
 
 ---
 
-## 🧑‍💼 Agents (41)
+## 🧑‍💼 Agents (42)
 
 > หัวข้อด้านล่างอธิบาย 12 ตัวแรกเท่านั้น · หน้าที่ล่าสุดของทุกตัวอยู่ในไฟล์ `plugins/software-company/agents/*.md` · บทบาทกลาง `brainstormer` · `reviewer` · `learning-reviewer` อยู่ที่ [superuser](#62-superuser)
 
@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (112)
+## 🛠️ Skills (116)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -400,7 +400,7 @@
 ---
 
 ### 27. spell-out-abbreviations
-**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, image-artist, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **กฎเดียว:** ตัวย่อทุกตัว เขียนเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — Model Context Protocol (MCP), Software Requirements Specification (SRS) — หลังจากนั้นใช้ตัวย่อได้
 **ครอบคลุม:** เอกสาร, คอมเมนต์ในโค้ด, commit message, ข้อความบนหน้าจอ, ป้ายในไดอะแกรม, คำตอบในแชท
 **ข้อยกเว้น:** ตัวย่อที่ไม่มีใครกางแล้ว (HTTP, URL, JSON, PDF, CPU) และตัวย่อที่นับ token/ความยาวเป็นข้อจำกัดจริง
@@ -417,7 +417,7 @@
 ---
 
 ### 29. software-diagrams
-**ใช้กับ:** graphic-designer
+**ใช้กับ:** graphic-designer, image-artist
 **ครอบคลุม:** C4 3 ระดับ · sequence · state · entity relationship · deployment
 **Output:** ตารางบอกว่า**คำถามแบบไหนวาดแบบไหน** + ธีม Mermaid ชุดเดียวทั้งโปรเจกต์ + 3 classDef (focus/ext/store)
 **โค้ดที่ทดสอบแล้ว:** `assets/mermaid-theme.md` — ตัวอย่างทั้ง 5 แบบ **เรนเดอร์เป็นภาพจริงแล้วเปิดดูด้วยตา** ด้วย mermaid-cli 11.17.0
@@ -445,7 +445,7 @@
 ---
 
 ### 32. graphic-design
-**ใช้กับ:** graphic-designer, reviewer
+**ใช้กับ:** graphic-designer, image-artist, reviewer
 **ครอบคลุม:** โลโก้ · ระบบสีและตัวอักษรของแบรนด์ · โปสเตอร์ · ใบปลิว · โพสต์โซเชียล · LINE OA rich menu · ฉลากสินค้า · นามบัตร
 **Includes:** แกนตัดสินใจ 4 แกน, ทดสอบโลโก้ 7 บริบท (favicon/ปัก/ขาวดำ/กลับสี/ป้าย/โปรไฟล์), กฎภาษาไทยบนงานกราฟิก, ตารางขนาดงานโซเชียลและงานพิมพ์พร้อมตัดตก, `assets/brand-direction.md` ที่กรอกต่อได้
 **Anti-patterns ที่กันไว้:** โลโก้ที่อ่านไม่ออกตอนย่อ, ไล่สีในมาร์ก, ฟอนต์ไทยที่ไม่มีน้ำหนักให้ใช้, งานพิมพ์ที่ลืมตัดตก
@@ -478,7 +478,7 @@
 ---
 
 ### 36. temp-file-discipline
-**ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, product-manager, project-manager, qa-tester, reverse-engineer, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, image-artist, product-manager, project-manager, qa-tester, reverse-engineer, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **กฎเดียว:** อะไรที่ไม่ใช่ผลงานจริง ต้องอยู่ใน `_to_delete/` ที่รากโปรเจกต์
 **Includes:** นิยามว่าอะไรคือไฟล์ชั่วคราว (ไฟล์ที่แปลงแล้ว, ภาพที่เรนเดอร์ตรวจ, log, สคริปต์ใช้ครั้งเดียว, ไฟล์บีบอัดที่ใช้ส่งข้ามเครื่อง), อะไรห้ามอยู่ในนั้น, สภาพที่ต้องทิ้งไว้เมื่อจบงาน, กฎว่าไฟล์ชั่วคราวไม่ถูกลบโดยไม่ถาม
 **Anti-patterns ที่กันไว้:** ไฟล์บีบอัดค้างที่รากโปรเจกต์, โฟลเดอร์ `extracted/` ปนกับเอกสารจริง, ลบไฟล์ของผู้ใช้เอง
@@ -674,7 +674,7 @@
 ---
 
 ### 59. status-report
-**ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** business-analyst, developer, devops-engineer, graphic-designer, image-artist, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use when a task that produces or checks project work ends (document, review, code, fix, release).
 
 ---
@@ -693,7 +693,7 @@
 ---
 
 ### 62. superuser
-**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, image-artist, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
 **ไม่หยุดถาม:** งานที่ย้อนกลับไม่ได้ → เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ผู้ใช้อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) · ค้นเองใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน
@@ -751,7 +751,7 @@
 ---
 
 ### 71. principle-prove-it-works
-**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, image-artist, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
 
 ---
@@ -925,7 +925,7 @@
 ---
 
 ### 100. human-writing
-**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, image-artist, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use when writing anything a person will read (answer, report, document, slide, label) in Thai or English.
 
 ---
@@ -996,6 +996,30 @@
 
 ### 112. doc-cover-design
 **Description:** Use when a project's .docx set needs striking covers unique to it. Concept from logo geometry or real mockup; 3 designs, 2-of-3 vote.
+
+---
+
+### 113. test-evidence
+**ใช้กับ:** qa-tester
+**Description:** Use when running test cases and keeping proof. Captioned GIF per case, Markdown pass/fail report, result and evidence columns in Excel.
+
+---
+
+### 114. image-generation
+**ใช้กับ:** image-artist
+**Description:** Use when a page, mockup or slide needs real images (hero, product, people). Asks the style once; generates, illustrates in SVG or finds free photos.
+
+---
+
+### 115. simplify
+**ใช้กับ:** ai-engineer, blockchain-engineer, brainstormer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, image-artist, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, learning-reviewer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, reviewer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**Description:** Use when making anything (code, document, plan, design, slide, sheet, answer). Simplest form a person can follow.
+
+---
+
+### 116. no-ai-look
+**ใช้กับ:** graphic-designer, growth-specialist, image-artist, reviewer, technical-writer, ux-designer
+**Description:** Use when making or reviewing anything people look at (screen, slide, poster, logo, AI image, document) so it looks made by a person, not AI.
 
 ---
 

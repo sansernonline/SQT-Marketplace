@@ -1,5 +1,53 @@
 # Changelog — software-company
 
+## 2.13.0 — 2026-10-19
+
+- รับ skill กลาง `no-ai-look` จาก `superuser` · agent ที่ทำงานภาพ (`ux-designer` · `graphic-designer` · `image-artist` · `growth-specialist` · `technical-writer`) ทำตามและตรวจก่อนส่ง
+- skill งานภาพ 15 ตัวมีหัวข้อ "ไม่ให้ดูเหมือน AI ทำ" ชี้ไปข้อ 3 ของ `no-ai-look` (ui-craft · web/mobile/windows-app-design · graphic-design · presentation-design · html-slide-deck · pptx-to-html-deck · branded-document-design · polished-document-style · doc-cover-design · diagram-figures · software-diagrams · markdown-visuals · image-generation)
+- ตัดของที่ขัด `no-ai-look` ออก
+  - `polished-document-style`: เลิกใช้อีโมจิทั้งเอกสาร (หัวข้อ H1 · กล่องข้อความ · ป้ายสถานะ · ตาราง) ใช้คำตัวหนาแทน · แม่แบบ `fsd-writing` · `document-naming` · `project-bootstrap` ตามไปด้วย
+  - `diagram-figures`: เลิกแถบสีหนาข้างการ์ด ใช้หัวการ์ดพื้นสีทึบ
+  - `ui-craft` หน้าสารบัญ mockup: ตัดแสงฟุ้ง · ไล่สี · ป้ายเหนือหัวข้อ · เคอร์เซอร์กระพริบ · เงาเรือง · รูปซูม · สีสำรองม่วง-ฟ้า → `#2A78D6`
+- `ui-craft` แกน "พลังของสี": เปลี่ยนคำแนะนำแถบสีหนาข้างการ์ด เป็นหัวการ์ดพื้นสีทึบ (แถบข้างการ์ดมุมมนคือสัญญาณ AI เว้นแต่บอกสถานะ)
+
+## 2.12.0 — 2026-10-18
+
+- `test-case-template` ช่อง **Oracle** ใหม่ — ผลที่คาดหวังมาจากไหน `[D]` เจ้าของงาน · `[R]` กฎทั่วไป · `[A]` คนสร้าง · `[O]` หน้าจอ · ทุก TC ต้องมี `[D]` หรือ `[R]`
+  - กฎ "อย่าอบบั๊ก": ตัวเลขเงินคิดจาก `[D]` + `[R]` ก่อนเปิดระบบ พร้อมวิธีคิด · ห้ามลอกจากหน้าจอ
+  - BR ที่มีตัวเลข = ค่าขอบ 3 ค่า · ช่อง **Check when** (ทันที · หลังรีโหลด) · ตาราง coverage matrix + traceability ท้ายไฟล์
+- แม่แบบแผนทดสอบ: coverage matrix ในหัวข้อ 3 · เกณฑ์ผ่านวัดได้ (P1 ผ่านหมด · ≥ 95% ต่อเบราว์เซอร์ · Not run = ล้ม) · หัวข้อ 8 Plan Quality "ถ้าพังแบบนี้ → TC ไหนล้ม"
+- agent `qa-tester`: ผลไม่ตรง → ห้ามแก้ผลที่คาดหวัง · จำแนก `app` / `plan` / `test` ลง `triage.json` · ฝังบั๊กด้วย `BUG_MODE` เพื่อวัดว่าแผนจับได้ X / Y
+- `e2e-testing-patterns` หัวข้อใหม่ Expected Values and Failing Tests
+- ที่มา: บท "สบายใจ สปา: จากบันทึกสัมภาษณ์ สู่เว็บและแผนทดสอบ"
+
+## 2.10.1 — 2026-10-18
+
+- ปุ่มของเด็ค HTML (`html-slide-deck` · `pptx-to-html-deck`) แยกหน้ากับ player ออกจากกัน
+  - ← → · PageUp PageDown · คลิกขอบ · ปัดจอ = เปลี่ยนหน้าเท่านั้น
+  - Space = เล่น / หยุด player ของหน้านั้น (ทัวร์แผนภาพ · ขั้น On Click) · หน้าที่ไม่มี player ไม่ทำอะไร
+  - ↓ ↑ = player ขั้นถัดไป · ขั้นก่อนหน้า
+  - เปลี่ยนหน้าทุกครั้ง player หยุดและกลับไปขั้นเริ่มต้น ทั้งไปหน้าและถอยกลับ
+- `check_html_deck.py` เดินเด็คด้วย ↓ ทุกขั้นและ → ทุกหน้า และตรวจว่า player reset ทุกครั้งที่เข้าหน้าใหม่
+
+## 2.10.0 — 2026-10-18
+
+- skill ใหม่ `test-evidence` — รันเคสแล้วเก็บหลักฐานครบในรอบเดียว
+  - ภาพทุกขั้น → GIF 1 ไฟล์ต่อเคส: แถบบนบอกรหัสเคส · ชื่อ · ขั้น n/N · ป้าย PASS/FAIL · คำบรรยายใต้ภาพ (ทำอะไร → เห็นอะไร) · กรอบแดงจุดที่ผิด · ภาพปิดสรุปผล คาดว่า / ที่เกิดจริง
+  - ขนาดตายตัว: กว้าง 1280 px · หัว 24 px · คำบรรยาย 28 px (ย่อเหลือ 800 px ยังอ่านได้) · ฟอนต์ Sarabun + ชุดลูกศรฝังใน skill
+  - รายงาน `qa/reports/<run-id>-test-report.md` สร้างอัตโนมัติ: สรุปจำนวน · ผลรายเคสพร้อมลิงก์ · เคสที่ไม่ผ่านพร้อมภาพ · เคสที่ยังไม่ได้รัน
+  - `results.csv` → Excel: คอลัมน์ Result · Test result · Evidence (ลิงก์) · `record_results.py` ลงผลใน Excel ที่ผู้ใช้ส่งมาเองได้ทุกหน้าตา
+  - สคริปต์ 2 ตัวมี `--self-test`
+- `test-case-template/scripts/build-test-workbook.py` เพิ่มคอลัมน์ `test_result` · `evidence` ต่อจาก `result` และ `--results` เติมผลจากรอบทดสอบ
+- agent `qa-tester` ใช้ `test-evidence` ทุกครั้งที่รันเคส
+
+## 2.9.0 — 2026-10-16
+
+- `project-doc-set` ข้อ 3.1 ใหม่ **ทะเบียนจุดค้าง** — เมื่อผู้ใช้ถามว่าเอกสาร DRAFT ยังติดตรงไหน ตอบเป็นไฟล์ Excel ไม่ใช่ข้อความในแชต
+  - สคริปต์ `scripts/open_items.py` อ่าน `.docx` ทั้งชุด รวมตารางคำถาม ข้อสมมติที่ยังไม่ตัดสิน ตารางลงนาม และป้าย `(รอยืนยัน)` `(รอวัด…)` เป็น `<CODE>-OPEN-ITEMS.xlsx` · แผ่นสรุปนับด้วยสูตร COUNTIFS · แยก 5 ประเภท (เจ้าของตัดสิน · ทีมตัดสิน · กฎหมาย · วัดจริง · ลงนาม) · มี `--self-test`
+  - ข้ามประวัติการแก้ไข สารบัญ บรรทัดอธิบายป้าย และ `(รอบหลัง)` · ต้องเปิดอ่านด้วยตาก่อนส่ง
+  - รายการตรวจข้อ 7 เพิ่มข้อทะเบียนจุดค้าง
+- ที่มา: LiteNet v0.5 (6 ฉบับ) ได้ 75 รายการ
+
 ## 2.8.0 — 2026-10-15
 
 - skill `reverse-engineering` แกะซอฟต์แวร์ด้วยเครื่องมือในเครื่องล้วน ไม่ใช้ MCP (Model Context Protocol) server และไม่ดึงแพ็กเกจจาก npm ตอนรัน

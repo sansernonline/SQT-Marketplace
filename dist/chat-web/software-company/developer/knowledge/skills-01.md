@@ -435,6 +435,7 @@ unless asked. Trivial one-liners need no test.
 
 ## Pairs with
 
+- `simplify` — the suite-wide rule for every kind of work; this skill is its detail for code.
 - `readable-code` — **always load together**. Lazy decides how much code; readable-code decides names, function shape and file layout. One without the other gives either bloat or a scratchpad.
 - `project-bootstrap` — the repo skeleton lazy code lands in.
 - `simplicity-first` — same spirit, for docs, plans, and architecture.

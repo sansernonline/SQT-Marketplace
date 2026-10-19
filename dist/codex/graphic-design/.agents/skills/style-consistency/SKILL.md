@@ -67,6 +67,10 @@ Grid check of 6 images: #4 came out with blue-hour light → fails check 2 → r
 - Mid-campaign changes need a version bump and a reason in the log
 - Keep the sheet in the campaign folder next to the asset matrix
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. Lock the style against its section 4 so the whole series avoids the same AI defaults.
+
 ## Related
 
 - `brief-to-image` — per-image briefs that start from the style block

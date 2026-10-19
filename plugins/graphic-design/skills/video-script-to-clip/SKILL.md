@@ -72,6 +72,10 @@ Subject · action/motion (what moves, how fast) · camera (static, pan, push-in,
 - Music: use the platform's licensed library or tracks you own a licence for; commercial accounts often have a narrower library than personal ones (รอยืนยัน per platform)
 - Generate or shoot only after the thumbnail storyboard is approved
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 - `motion-basics` — timing and easing for text animation

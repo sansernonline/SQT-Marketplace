@@ -11,7 +11,7 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 
 ## Workflow
 
-1. **Ask 4 things** if missing: what must the image show · where it will be used (placement → aspect ratio, from `social-formats`) · what text goes on it (usually none in the image — add text in layout) · brand kit or style lock sheet to follow
+1. **Ask 5 things** if missing: image style (`photo` · `flat` · `3d` · `watercolor` · `line` · `isometric` — one style per set; unattended → pick from the use and log why) · what must the image show · where it will be used (placement → aspect ratio, from `social-formats`) · what text goes on it (usually none in the image — add text in layout) · brand kit or style lock sheet to follow
 2. **Fill the brief** with the anatomy below; save it as `briefs/<asset-name>.md` using [prompt-anatomy.md](references/prompt-anatomy.md)
 3. **Assemble the prompt** in anatomy order, most important first
 4. **Generate 3–4 variations**, not 1. Pick by the brief, not by gut feeling
@@ -67,6 +67,10 @@ Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md)
 - Never put the headline, price or Thai copy into the image prompt
 - Generated people: no real, identifiable person without consent. No trademarked characters or logos of other brands
 - Check the tool's terms for commercial use before using an output in an ad
+
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. Every prompt carries the items in its section 4 (named style, hex, light, what to avoid).
 
 ## Related
 

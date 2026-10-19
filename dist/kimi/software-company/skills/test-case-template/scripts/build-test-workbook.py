@@ -2,10 +2,15 @@
 
 Input is one flat table (.csv or the first sheet of an .xlsx) with a header row. Needed columns:
 id, module, fr, title, type, result. Any other columns are kept in order.
+Columns test_result (what actually happened) and evidence (GIF or screenshot file) are added after result if missing.
 
   python build-test-workbook.py cases.csv qa/PRJ-test-cases.xlsx
   python build-test-workbook.py cases.xlsx qa/PRJ-test-cases.xlsx --mockup mockup/PRJ-mockup.html --topics topics.json
   python build-test-workbook.py ... --brand 7C3AED --head-fill E4DCFD --ink 2E1065     # project colours (doc-theme)
+  python build-test-workbook.py cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv
+
+--results: results.csv from test-evidence/scripts/make_evidence.py (id, result, test_result, evidence). Fills those
+columns by id; evidence becomes a link relative to the workbook (--evidence-dir, default: the folder of results.csv).
 
 --mockup adds a `screen` column after `fr` (from each <section class="screen" id="s-NN-…" data-title="… — Name"
 data-fr="FR-001,…">) and orders tabs by the first screen each module touches.
@@ -22,7 +27,8 @@ from openpyxl.worksheet.datavalidation import DataValidation
 
 RESULTS = {'Pass': 'D1FAE5', 'Fail': 'FEE2E2', 'Blocked': 'FEF3C7', 'Not run': 'EEEEF2'}
 WIDTH = {'id': 14, 'module': 14, 'fr': 12, 'screen': 26, 'title': 48, 'type': 11, 'priority': 9, 'level': 11,
-         'preconditions': 30, 'steps': 60, 'test_data': 30, 'expected': 50, 'result': 10, 'notes': 30}
+         'preconditions': 30, 'steps': 60, 'test_data': 30, 'expected': 50, 'result': 10, 'test_result': 45, 'evidence': 24,
+         'notes': 30}
 
 
 def read_rows(path):
@@ -49,6 +55,7 @@ def main():
     ap.add_argument('src'); ap.add_argument('out'); ap.add_argument('--mockup'); ap.add_argument('--topics')
     ap.add_argument('--brand', default='7C3AED'); ap.add_argument('--head-fill', default='E4DCFD'); ap.add_argument('--ink', default='2E1065')
     ap.add_argument('--font', default='Calibri')
+    ap.add_argument('--results'); ap.add_argument('--evidence-dir')
     a = ap.parse_args()
 
     head, data = read_rows(a.src)
@@ -56,6 +63,24 @@ def main():
     if need:
         sys.exit(f'missing columns: {sorted(need)}')
     col = head.index
+    for k, after in (('test_result', 'result'), ('evidence', 'test_result')):
+        if k not in head:
+            at = col(after) + 1
+            head.insert(at, k)
+            data = [list(r[:at]) + [''] + list(r[at:]) for r in data]
+    data = [list(r) + [''] * (len(head) - len(r)) for r in data]
+    ev_dir = None
+    if a.results:
+        import os
+        from pathlib import Path
+        res = {r['id'].strip(): r for r in csv.DictReader(open(a.results, encoding='utf-8-sig'))}
+        ev_dir = Path(a.evidence_dir or Path(a.results).parent)
+        for r in data:
+            got = res.get(str(r[col('id')]).strip())
+            if got:
+                for k in ('result', 'test_result', 'evidence'):
+                    r[col(k)] = got.get(k, '')
+        rel = lambda name: Path(os.path.relpath((ev_dir / name).resolve(), Path(a.out).resolve().parent)).as_posix()
     if a.mockup:
         scr = screens_by_fr(a.mockup)
         head.insert(col('fr') + 1, 'screen')
@@ -102,6 +127,8 @@ def main():
                 cell.alignment = Alignment(vertical='top', wrap_text=True)
                 if i % 2:
                     cell.fill = zebra
+                if head[c - 1] == 'evidence' and v and ev_dir:
+                    cell.hyperlink, cell.font = rel(v), Font(F, size=10, color=a.brand, underline='single')
         last = HR + len(cases)
         for c, h in enumerate(head, 1):
             ws.column_dimensions[get_column_letter(c)].width = WIDTH.get(h, 14)

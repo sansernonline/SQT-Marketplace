@@ -74,6 +74,10 @@ Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) block
 - Praise 1 specific thing. That protects what works in the next round
 - Judge against the job and the kit, not personal taste. When asked "is it good?", state the criterion first
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 - `brand-kit` — the source for point 7

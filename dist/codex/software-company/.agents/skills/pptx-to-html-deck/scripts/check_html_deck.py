@@ -62,13 +62,20 @@ def main() -> None:
                 print(f"หน้า {n + 1:02d} {name[:30]}: {issue}")
                 problems += 1
         page.evaluate("show(0)")
-        presses = 0
-        while presses < 2000 and not page.evaluate("i===S.length-1&&st>=steps(S[i])"):
+        downs = rights = 0                                      # ↓ เปิดขั้นในหน้า · → เปลี่ยนหน้า (ขั้นกลับเป็น 0)
+        while downs + rights < 2000:
+            while downs < 2000 and page.evaluate("st<steps(S[i])"):
+                page.keyboard.press("ArrowDown")
+                downs += 1
+            if page.evaluate("i===S.length-1"):
+                break
             page.keyboard.press("ArrowRight")
-            presses += 1
-        expect = len(names) - 1 + sum(steps)
-        if presses != expect:
-            print(f"กด → {presses} ครั้งถึงท้ายเด็ค · ควรเป็น {expect} (หน้า {len(names)} · ขั้น {sum(steps)})")
+            rights += 1
+            if page.evaluate("st") != 0:
+                print(f"หน้า {rights + 1:02d}: เข้าหน้าใหม่แล้ว player ไม่ reset เป็นขั้น 0")
+                problems += 1
+        if (rights, downs) != (len(names) - 1, sum(steps)):
+            print(f"กด → {rights} · ↓ {downs} ครั้งถึงท้ายเด็ค · ควรเป็น → {len(names) - 1} · ↓ {sum(steps)}")
             problems += 1
         browser.close()
     if a.pptx:

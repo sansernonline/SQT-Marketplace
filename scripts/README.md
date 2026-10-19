@@ -14,12 +14,13 @@ scripts/
 
 | กลุ่ม | ไฟล์ | ทำอะไร | รันเมื่อไหร่ |
 |---|---|---|---|
-| — | `build-dist.cmd` | รัน validate → sync-docs → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
+| — | `build-dist.cmd` | รัน validate → sync-docs → sync-file-map → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
 | **check** | `check/validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
 | check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
-| check | `check/audit-plugin-prompt.md` | prompt ให้ Claude Code ตรวจ plugin ในเรื่องที่สคริปต์ตรวจไม่ได้ เลือกได้ 7 หัวข้อ: ยาวเกิน · กระชับได้ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ · วัดผลจริง | หลังเพิ่ม skill หลายตัว · ก่อนขึ้นเลขรุ่น · ทุกไตรมาส |
+| check | `check/audit-plugin-prompt.md` | prompt ให้ Claude Code ตรวจ plugin ในเรื่องที่สคริปต์ตรวจไม่ได้ เลือกได้ 8 หัวข้อ: ยาวเกิน · กระชับได้ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ · วัดผลจริง · ประหยัด token (หัวข้อนี้แก้ให้ด้วย) | หลังเพิ่ม skill หลายตัว · ก่อนขึ้นเลขรุ่น · ทุกไตรมาส |
 | **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
 | sync | `sync/sync-superuser.mjs` | คัดลอกของกลาง SuperUser จาก `plugins/superuser` ไปทุก plugin (skill กลาง · learning-reviewer · hook · บล็อก `superuser:begin`) · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser`** |
+| sync | `sync/sync-file-map.mjs` + `sync/file-map-th.json` | เขียน `docs/FILE-MAP.md` แผนผังไฟล์ของทุก plugin พร้อมคำอธิบายไทย · skill หรือ agent ใหม่ที่ยังไม่มีคำอธิบายใน `file-map-th.json` → แจ้งชื่อแล้ว exit 1 · `--check` ตรวจอย่างเดียว | **หลังเพิ่มหรือลบ skill / agent / playbook** (`build-dist.cmd` รันให้แล้ว) |
 | sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
 | **diagrams** | `diagrams/make.py` | สร้างรูป 38 รูปและหน้า README ใน `docs/plugins/` จากไฟล์จริง (ดู [หัวข้อ 6](#6--diagrams)) | **หลังเพิ่มหรือแก้ agent · skill · playbook** |

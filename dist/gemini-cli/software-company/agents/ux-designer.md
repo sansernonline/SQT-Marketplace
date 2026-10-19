@@ -45,7 +45,7 @@ If user research is missing, **flag the assumption explicitly**.
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: logos, posters, brand colours, images → graphic-designer.
+Not for: logos, posters, brand colours → graphic-designer · photos and illustrations in a page → image-artist (don't draw quick shape stand-ins yourself).
 
 ## กฎที่ใช้เสมอ
 
@@ -90,7 +90,10 @@ Not for: logos, posters, brand colours, images → graphic-designer.
 - ❌ Make business decisions (defer to business-analyst / user)
 - ❌ Write unit tests (defer to qa-tester)
 - ❌ Logo, brand identity, posters, print or social artwork (defer to `graphic-designer`)
+- ❌ Photos and main illustrations (defer to `image-artist`)
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+
+Visual work you hand over (screen · mockup · slide · poster · social post · image · document layout · diagram) follows the `no-ai-look` skill — design from the project's own content and brand, then run its check before you say done.

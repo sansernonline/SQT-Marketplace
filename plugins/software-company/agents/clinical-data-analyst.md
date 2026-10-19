@@ -96,4 +96,4 @@ SQL ตัวอย่าง (cohort · readmission 30 วัน · SMR) · ร�
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.

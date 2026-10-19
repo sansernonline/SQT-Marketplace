@@ -27,12 +27,15 @@
 5. [Test Environment](#5-test-environment)
 6. [Schedule](#6-schedule)
 7. [Risks](#7-risks)
+8. [Plan Quality](#8-plan-quality)
 
 ---
 
 ## 1. 🎯 Objective
 
 > 💡 What we're testing and why.
+
+**Where expected results come from:** `[D]` owner / customer > `[R]` general rules (maths, law, standards) > `[A]` the builder's SPEC > `[O]` the screen · every test case needs `[D]` or `[R]` (see `test-case-template` → oracle)
 
 ## 2. Scope
 
@@ -51,16 +54,29 @@
 | 🌐 Compatibility | Top 3 browsers | BrowserStack | @alice |
 | 🐛 Exploratory | Time-boxed 4h/day | — | All |
 
+### Coverage matrix
+
+| Feature | Happy | Negative | Boundary | Equivalence | State | Security/API |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| Booking | TC-BOOK-01 | TC-BOOK-04 | TC-BOOK-06–08 | TC-BOOK-05 | TC-BOOK-10 | TC-BOOK-12 |
+| Gift card | TC-GIFT-01 | TC-GIFT-02 | ⚠️ no expiry-day case yet | — | TC-GIFT-04 | — |
+
+Every BR in the traceability table at the end of the test-case file has at least 1 case.
+
 ## 4. Entry & Exit Criteria
 
 ### ✅ Entry Criteria (Must be met before testing starts)
 - [ ] Code deployed to test environment
 - [ ] Smoke test passing
 - [ ] Test data prepared
+- [ ] Expected results for money and limits worked out from `[D]` + `[R]` and written in the cases — before the first run
 - [ ] Test environment stable for 24h
 
 ### 🏁 Exit Criteria (Must be met before release)
 - [ ] 100% planned test cases executed
+- [ ] Every P1 case passes, on every browser in scope
+- [ ] Pass rate ≥ 95% per browser (round up · `Not run` counts as fail)
+- [ ] Every failed case triaged (system wrong / plan wrong / test wrong) — none "fixed" by editing the expected result
 - [ ] 0 critical (S1) bugs open
 - [ ] ≤ 2 high (S2) bugs open with approved workaround
 - [ ] Regression suite 100% pass
@@ -95,6 +111,18 @@ gantt
 |:--:|------|:----------:|:------:|------------|
 | R-001 | Test env instability | 🟡 Med | 🔴 High | Backup env ready |
 | R-002 | Late requirement changes | 🟡 Med | 🟡 Med | Buffer +20% |
+
+## 8. 🔎 Plan Quality
+
+> 💡 Would this plan catch a broken system? At least 6 rows, covering money, bookings/transactions and state.
+
+| If the system breaks like this | Case(s) that must fail | Caught because (oracle) |
+|---|---|---|
+| Discount applied twice | TC-PRICE-03 | `[D]` BR-03 · `[R]` ฿800 − 5% (฿40) = ฿760 |
+| Double-click confirm creates 2 bookings | TC-BOOK-11 | `[R]` one click = one booking · count after reload |
+| Data gone after reload | TC-POINT-02 (Check when: หลังรีโหลด) | `[D]` points kept after a completed visit |
+
+A break with no case that fails → add a case, then add the row again.
 
 ## ✍️ Sign-off
 

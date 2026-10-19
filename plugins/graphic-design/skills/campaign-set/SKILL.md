@@ -61,6 +61,10 @@ File for D1: `matcha26-d1-ig-story-v01-th.jpg`.
 - Thai promo text: check numbers and dates against the card on every row. A wrong date on 1 platform is the most common campaign error
 - Deliver the matrix as a checklist file the team ticks through, saved in the campaign's `02-exports/` folder
 
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
 ## Related
 
 - `social-formats` — sizes and safe zones per row

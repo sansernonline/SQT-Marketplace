@@ -37,4 +37,4 @@ Merged in v2.0.0 from `iot-engineer` (software-company-iot) · `edge-architect` 
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.

@@ -1,10 +1,10 @@
 # SQT software-company — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.8.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.13.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
-Simulates a complete software development company — 41 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 111 skills and 29 slash commands for the whole SDLC.
+Simulates a complete software development company — 42 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 115 skills and 29 slash commands for the whole SDLC.
 
-ชุดนี้มี skill 112 ตัว · บทบาท 41 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
+ชุดนี้มี skill 116 ตัว · บทบาท 42 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`
@@ -30,6 +30,7 @@ Simulates a complete software development company — 41 agents from product, an
 - **growth-specialist** — Use when improving conversion and adoption — landing pages, checkout, A/B tests, onboarding. Search → seo-specialist.
 - **healthcare-engineer** — Use when building healthcare software — EHR integration, FHIR and SMART on FHIR, clinical workflows, telemedicine.
 - **hipaa-officer** — Use for HIPAA compliance — Privacy, Security and Breach Rules, business associate agreements, risk assessments, audits.
+- **image-artist** — Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.
 - **insurance-analyst** — Use for insurance numbers — loss and reserve models, IBNR, pricing, underwriting scores, rating algorithms.
 - **insurance-compliance-officer** — Use for insurance regulation — US state filings, Solvency II, Thailand OIC, licensing, market conduct, privacy.
 - **insurance-engineer** — Use when building insurance products — policy admin, quote and rating engines, agent portals, claims intake.

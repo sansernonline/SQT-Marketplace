@@ -45,4 +45,6 @@ Merged in v2.0.0 from `cro-specialist` (software-company-ecommerce) · `aso-spec
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill.
+
+Visual work you hand over (screen · mockup · slide · poster · social post · image · document layout · diagram) follows the `no-ai-look` skill — design from the project's own content and brand, then run its check before you say done.
