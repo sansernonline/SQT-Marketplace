@@ -4,7 +4,7 @@
 
 ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน
 
-agent 4 · skill 8 · คำสั่ง 2 · playbook 7 · ส่งงานต่อให้ [`personal-life`](../personal-life/README.md) · [`trading-finance`](../trading-finance/README.md) · [`online-seller`](../online-seller/README.md)
+agent 4 · skill 10 · คำสั่ง 2 · playbook 7 · ส่งงานต่อให้ [`personal-life`](../personal-life/README.md) · [`trading-finance`](../trading-finance/README.md) · [`online-seller`](../online-seller/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/consumer-rights/`](../../../plugins/consumer-rights/)
 

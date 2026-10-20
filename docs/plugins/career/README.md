@@ -4,7 +4,7 @@
 
 ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน
 
-agent 5 · skill 9 · คำสั่ง 3 · playbook 8 · ส่งงานต่อให้ [`personal-life`](../personal-life/README.md) · [`trading-finance`](../trading-finance/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`graphic-design`](../graphic-design/README.md)
+agent 5 · skill 11 · คำสั่ง 3 · playbook 8 · ส่งงานต่อให้ [`personal-life`](../personal-life/README.md) · [`trading-finance`](../trading-finance/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`graphic-design`](../graphic-design/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/career/`](../../../plugins/career/)
 

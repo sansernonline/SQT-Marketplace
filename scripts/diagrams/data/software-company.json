@@ -1,7 +1,7 @@
 {
  "plugin": "software-company",
- "version": "2.5.0",
- "description": "Simulates a complete software development company — 39 roles from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.",
+ "version": "2.14.0",
+ "description": "Simulates a complete software development company — 42 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 117 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
   "adr-writer",
@@ -30,6 +30,7 @@
   "decision-log",
   "developer-experience",
   "diagram-figures",
+  "doc-cover-design",
   "docker-sandbox",
   "document-naming",
   "e2e-testing-patterns",
@@ -44,6 +45,7 @@
   "healthcare-systems",
   "html-slide-deck",
   "i18n-and-locale",
+  "image-generation",
   "incident-runbook-template",
   "insurance-systems",
   "iot-systems",
@@ -56,6 +58,7 @@
   "markdown-visuals",
   "mobile-app-design",
   "mobile-engineering",
+  "no-ai-look",
   "notifications",
   "observability-basics",
   "owner-style-capture",
@@ -91,12 +94,14 @@
   "seo-audit-checklist",
   "session-lessons-to-skills",
   "simplicity-first",
+  "simplify",
   "smart-contracts",
   "software-diagrams",
   "spec-to-code-loop",
   "spell-out-abbreviations",
   "srs-writing",
   "stack-dotnet",
+  "stack-mql",
   "stack-python",
   "stack-sql",
   "stack-typescript",
@@ -104,6 +109,7 @@
   "targeted-fix",
   "temp-file-discipline",
   "test-case-template",
+  "test-evidence",
   "testing-standards",
   "ui-craft",
   "user-story-writer",
@@ -164,7 +170,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -181,7 +188,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -192,7 +200,8 @@
    "skills": [
     "parallel-attempts-pick-best",
     "superuser",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -223,7 +232,8 @@
     "data-import-export",
     "context-budget",
     "work-session-context",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -232,13 +242,12 @@
    "core": false,
    "description": "Use when analyzing healthcare data — clinical dashboards, population health, patient outcomes, clinical research.",
    "skills": [
+    "healthcare-systems",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
     "principle-prove-it-works",
-    "saas-platform",
-    "healthcare-systems",
     "pdpa-compliance",
     "markdown-visuals",
     "flag-and-propose",
@@ -248,7 +257,8 @@
     "answer-shape",
     "polished-document-style",
     "architecture-patterns",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -257,14 +267,13 @@
    "core": false,
    "description": "Use when building data pipelines (ETL/ELT), warehouses, integrations, data quality checks or data infrastructure.",
    "skills": [
+    "database-design",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
     "principle-prove-it-works",
-    "saas-platform",
     "llm-engineering",
-    "database-design",
     "data-import-export",
     "background-jobs",
     "observability-basics",
@@ -275,7 +284,8 @@
     "answer-shape",
     "polished-document-style",
     "architecture-patterns",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -304,6 +314,7 @@
     "stack-typescript",
     "stack-python",
     "stack-sql",
+    "stack-mql",
     "e2e-testing-patterns",
     "spec-to-code-loop",
     "app-verifier-setup",
@@ -336,7 +347,8 @@
     "reverse-engineering",
     "human-writing",
     "answer-shape",
-    "spell-out-abbreviations"
+    "spell-out-abbreviations",
+    "simplify"
    ]
   },
   {
@@ -372,7 +384,8 @@
     "config-and-secrets",
     "observability-basics",
     "project-bootstrap",
-    "background-jobs"
+    "background-jobs",
+    "simplify"
    ]
   },
   {
@@ -389,7 +402,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -406,7 +420,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -415,10 +430,9 @@
    "core": false,
    "description": "Use for financial regulation (PCI-DSS, PSD2, BoT, AML/KYC) and audit prep. PDPA, GDPR → legal-compliance-officer.",
    "skills": [
+    "fintech-payments",
     "superuser",
     "principle-prove-it-works",
-    "saas-platform",
-    "fintech-payments",
     "pdpa-compliance",
     "audit-trail",
     "branded-document-design",
@@ -429,7 +443,8 @@
     "answer-shape",
     "polished-document-style",
     "threat-model",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -446,7 +461,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -463,7 +479,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -480,7 +497,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -506,7 +524,9 @@
     "principle-proceed-on-reversible-work",
     "status-report",
     "work-session-context",
-    "software-diagrams"
+    "software-diagrams",
+    "simplify",
+    "no-ai-look"
    ]
   },
   {
@@ -525,7 +545,9 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify",
+    "no-ai-look"
    ]
   },
   {
@@ -542,7 +564,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -551,10 +574,9 @@
    "core": false,
    "description": "Use for HIPAA compliance — Privacy, Security and Breach Rules, business associate agreements, risk assessments, audits.",
    "skills": [
+    "healthcare-systems",
     "superuser",
     "principle-prove-it-works",
-    "saas-platform",
-    "healthcare-systems",
     "pdpa-compliance",
     "audit-trail",
     "branded-document-design",
@@ -564,7 +586,27 @@
     "spell-out-abbreviations",
     "answer-shape",
     "polished-document-style",
-    "human-writing"
+    "human-writing",
+    "simplify"
+   ]
+  },
+  {
+   "name": "image-artist",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.",
+   "skills": [
+    "image-generation",
+    "superuser",
+    "principle-prove-it-works",
+    "graphic-design",
+    "human-writing",
+    "spell-out-abbreviations",
+    "temp-file-discipline",
+    "status-report",
+    "software-diagrams",
+    "simplify",
+    "no-ai-look"
    ]
   },
   {
@@ -581,7 +623,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -590,10 +633,9 @@
    "core": false,
    "description": "Use for insurance regulation — US state filings, Solvency II, Thailand OIC, licensing, market conduct, privacy.",
    "skills": [
+    "insurance-systems",
     "superuser",
     "principle-prove-it-works",
-    "saas-platform",
-    "insurance-systems",
     "pdpa-compliance",
     "audit-trail",
     "branded-document-design",
@@ -603,7 +645,8 @@
     "spell-out-abbreviations",
     "answer-shape",
     "polished-document-style",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -620,7 +663,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -637,7 +681,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -648,7 +693,8 @@
    "skills": [
     "superuser",
     "repeated-mistakes-to-checks",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -657,11 +703,10 @@
    "core": false,
    "description": "Use for legal-tech compliance — GDPR, PDPA, data residency, records retention, e-discovery, multi-jurisdiction rules.",
    "skills": [
-    "superuser",
-    "principle-prove-it-works",
-    "saas-platform",
     "legal-document-systems",
     "pdpa-compliance",
+    "superuser",
+    "principle-prove-it-works",
     "audit-trail",
     "branded-document-design",
     "flag-and-propose",
@@ -670,7 +715,8 @@
     "spell-out-abbreviations",
     "answer-shape",
     "polished-document-style",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -687,7 +733,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -704,7 +751,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -733,7 +781,8 @@
     "work-session-context",
     "reference-app-research",
     "document-naming",
-    "product-naming"
+    "product-naming",
+    "simplify"
    ]
   },
   {
@@ -749,22 +798,23 @@
     "markdown-visuals",
     "presentation-design",
     "branded-document-design",
-    "spell-out-abbreviations",
+    "human-writing",
     "answer-shape",
+    "spell-out-abbreviations",
+    "context-budget",
     "temp-file-discipline",
+    "flag-and-propose",
+    "principle-proceed-on-reversible-work",
     "status-report",
     "owner-style-capture",
-    "principle-proceed-on-reversible-work",
     "decision-log",
     "parallel-split-and-merge",
     "repeated-mistakes-to-checks",
     "session-lessons-to-skills",
-    "flag-and-propose",
     "document-naming",
     "project-doc-set",
-    "context-budget",
     "work-session-context",
-    "human-writing"
+    "simplify"
    ]
   },
   {
@@ -774,6 +824,8 @@
    "description": "Use when creating test plans, test cases, bug reports, exploratory testing or test coverage before release.",
    "skills": [
     "test-case-template",
+    "test-evidence",
+    "bug-report-template",
     "superuser",
     "lazy-coding",
     "readable-code",
@@ -796,7 +848,6 @@
     "security-gate",
     "adversarial-review-panel",
     "parallel-split-and-merge",
-    "bug-report-template",
     "bug-inbox-triage",
     "markdown-visuals",
     "polished-document-style",
@@ -809,23 +860,24 @@
     "flag-and-propose",
     "principle-proceed-on-reversible-work",
     "status-report",
-    "work-session-context"
+    "work-session-context",
+    "simplify"
    ]
   },
   {
    "name": "quant-analyst",
    "model": "opus",
    "core": false,
-   "description": "Use for quantitative finance — risk models, pricing, credit scoring, backtesting. Insurance → insurance-analyst.",
+   "description": "Use for quant risk, credit and trading models, backtests. SaaS pricing → revops-analyst. Insurance → insurance-analyst.",
    "skills": [
+    "fintech-payments",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
     "principle-prove-it-works",
-    "saas-platform",
-    "fintech-payments",
     "markdown-visuals",
+    "stack-mql",
     "flag-and-propose",
     "principle-proceed-on-reversible-work",
     "context-budget",
@@ -833,7 +885,8 @@
     "answer-shape",
     "polished-document-style",
     "architecture-patterns",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -842,13 +895,12 @@
    "core": false,
    "description": "Use when building recommendation systems — related items, personalized ranking, collaborative or hybrid filtering.",
    "skills": [
+    "ecommerce-patterns",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
     "principle-prove-it-works",
-    "saas-platform",
-    "ecommerce-patterns",
     "llm-engineering",
     "observability-basics",
     "flag-and-propose",
@@ -857,7 +909,8 @@
     "spell-out-abbreviations",
     "answer-shape",
     "polished-document-style",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -884,7 +937,8 @@
     "polished-document-style",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -896,6 +950,8 @@
     "code-review-checklist",
     "adversarial-review-panel",
     "graphic-design",
+    "no-ai-look",
+    "simplify",
     "human-writing"
    ]
   },
@@ -905,9 +961,9 @@
    "core": false,
    "description": "Use when designing subscription billing, pricing tiers, usage metering or revenue analytics (MRR, ARR, churn).",
    "skills": [
+    "saas-platform",
     "superuser",
     "principle-prove-it-works",
-    "saas-platform",
     "fintech-payments",
     "markdown-visuals",
     "flag-and-propose",
@@ -915,7 +971,8 @@
     "context-budget",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -932,7 +989,8 @@
     "principle-prove-it-works",
     "spell-out-abbreviations",
     "answer-shape",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -941,6 +999,8 @@
    "core": false,
    "description": "Use for security reviews, threat modeling, vulnerability assessment, secure code, auth design. SOC → security-analyst.",
    "skills": [
+    "healthcare-systems",
+    "fintech-payments",
     "superuser",
     "lazy-coding",
     "readable-code",
@@ -968,7 +1028,8 @@
     "work-session-context",
     "human-writing",
     "answer-shape",
-    "spell-out-abbreviations"
+    "spell-out-abbreviations",
+    "simplify"
    ]
   },
   {
@@ -992,7 +1053,8 @@
     "principle-proceed-on-reversible-work",
     "context-budget",
     "work-session-context",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -1037,7 +1099,8 @@
     "flag-and-propose",
     "principle-proceed-on-reversible-work",
     "status-report",
-    "work-session-context"
+    "work-session-context",
+    "simplify"
    ]
   },
   {
@@ -1071,7 +1134,8 @@
     "pdpa-compliance",
     "context-budget",
     "work-session-context",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -1102,7 +1166,9 @@
     "work-session-context",
     "document-naming",
     "project-doc-set",
-    "product-naming"
+    "product-naming",
+    "simplify",
+    "no-ai-look"
    ]
   },
   {
@@ -1111,10 +1177,10 @@
    "core": false,
    "description": "Use when designing user flows, wireframes, clickable HTML mockups or UI heuristic reviews. Logos → graphic-designer.",
    "skills": [
+    "ui-craft",
     "superuser",
     "principle-prove-it-works",
     "simplicity-first",
-    "ui-craft",
     "web-app-design",
     "mobile-app-design",
     "windows-app-design",
@@ -1129,7 +1195,9 @@
     "i18n-and-locale",
     "context-budget",
     "work-session-context",
-    "human-writing"
+    "human-writing",
+    "simplify",
+    "no-ai-look"
    ]
   }
  ],
@@ -1770,7 +1838,7 @@
     },
     {
      "n": 7,
-     "text": "ร่างคำตอบ — ขึ้นด้วยคำตอบ 1 ประโยค แล้วตามด้วยเส้นทาง ไฟล์:บรรทัด และป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน` / `ยังไม่ตรวจ` ทุกข้อ ถ้าภาพช่วยได้ ให้ใช้ `software-diagrams` · ใคร: หัวหน้าทีม",
+     "text": "ร่างคำตอบ — ขึ้นด้วยคำตอบ 1 ประโยค แล้วตามด้วยเส้นทาง ไฟล์:บรรทัด และป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน` / `ยังไม่ได้ตรวจ` ทุกข้อ ถ้าภาพช่วยได้ ให้ใช้ `software-diagrams` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1970,20 +2038,23 @@
    "steps": [
     {
      "n": 1,
-     "text": "**ขอบเขตเท่ากระดาษแผ่นเดียว** — ถ้ามี SRS ที่มีรหัส FR อยู่แล้ว ให้ใช้รหัสนั้นเป็นรหัสงานในตารางงานของ `docs/BUILD-PLAN.md` ตาม [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) ถ้าไม่มี ให้ตั้งรหัสสั้นจากขอบเขต (`F-01` …) แล้วเขียนว่าทำอะไร ไม่ทำอะไร และพฤติกรรมไหนตีความได้หลายแบบ (เช่น เครื่องคิดเลขคูณก่อนบวก หรือคิดซ้ายไปขวา) ข้อที่เดาได้และย้อนได้ให้เลือกเองแล้วลง [`decision-log`](../../decision-log/SKILL.md) พร้อม `(รอยืนยัน)` ส่วนข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) ไม่เดาค่า ใส่ `(รอยืนยัน)` ตรงที่ใช้ แล้วรวมไว้ใน \"ค้างอยู่\" ครั้งเดียว · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)",
+     "text": "**ขอบเขตเท่ากระดาษแผ่นเดียว** — ถ้ามี SRS ที่มีรหัส FR อยู่แล้ว ให้ใช้รหัสนั้นเป็นรหัสงานในตารางงานของ `docs/BUILD-PLAN.md` ตาม [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) ถ้าไม่มี ให้ตั้งรหัสสั้นจากขอบเขต (`F-01` …) แล้วเขียนว่าทำอะไร ไม่ทำอะไร และพฤติกรรมไหนตีความได้หลายแบบ (เช่น เครื่องคิดเลขคูณก่อนบวก หรือคิดซ้ายไปขวา) ข้อที่เดาได้และย้อนได้ให้เลือกเองแล้วลง [`decision-log`](../../decision-log/SKILL.md) พร้อม `(รอยืนยัน)` ส่วนข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) ไม่เดาค่า ใส่ `(รอยืนยัน)` ตรงที่ใช้ แล้วรวมไว้ใน \"ค้างอยู่\" ครั้งเดียว · **ไทม์ไลน์**: มีแผนโครงการ (`docs/<รหัส>-PLAN-*`) → ใส่รหัส `M…` ของแผนในคอลัมน์ `milestone` ของตารางงาน · ไม่มี → จัดแถวเป็น 3–5 milestone ที่ผู้ใช้เห็นผลได้ (เช่น ตั้งโครง + verify → ฟีเจอร์หลัก → ฟีเจอร์รอง → รีวิว + ส่งมอบ) พร้อมตาราง milestone และ Gantt 1 ภาพจาก `diagram-figures` (รูปลง `docs/figures/` แล้วลิงก์ใน `BUILD-PLAN.md`) ตามแม่แบบของ `status-report` · ระยะเวลาที่ผู้ใช้ไม่ได้ให้ → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่ · ไทม์ไลน์: `project-manager` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": false,
       "agents": [
-       "brainstormer"
+       "brainstormer",
+       "project-manager"
       ],
-      "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)"
+      "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่ · ไทม์ไลน์: `project-manager` ตัวใหม่)"
      },
      "skills": [
       "spec-to-code-loop",
-      "decision-log"
+      "decision-log",
+      "diagram-figures",
+      "status-report"
      ],
      "commands": [],
      "playbooks": [],
@@ -1991,7 +2062,7 @@
     },
     {
      "n": 2,
-     "text": "**เลือกเทคโนโลยีน้อยที่สุดที่พอ** — ใช้ของมาตรฐานของภาษาและแพลตฟอร์มก่อน framework ให้ dependency ทุกตัวต้องมีเหตุผลใน `decision-log` และล็อกเวอร์ชัน (lock file) **ตรวจ toolchain ก่อน** (`flutter doctor` · `dotnet --info` · `node -v` ฯลฯ) ถ้าขาด SDK และติดตั้งลงโฟลเดอร์ของผู้ใช้ได้ (ย้อนกลับได้) ให้ติดตั้งเลยแล้วลง `decision-log` พร้อม path แต่ถ้าต้องติดตั้งทั้งเครื่องหรือใช้สิทธิ์ admin ให้เตรียมคำสั่งไว้ใน \"รออนุมัติ\" แล้วทำส่วนอื่นต่อ · ใคร: `solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)",
+     "text": "**เลือกเทคโนโลยีน้อยที่สุดที่พอ** — ใช้ของมาตรฐานของภาษาและแพลตฟอร์มก่อน framework ให้ dependency ทุกตัวต้องมีเหตุผลใน `decision-log` และล็อกเวอร์ชัน (lock file) **ตรวจ toolchain ก่อน** (`flutter doctor` · `dotnet --info` · `node -v` ฯลฯ) ถ้าขาด SDK และติดตั้งลงโฟลเดอร์ของผู้ใช้ได้ (ย้อนกลับได้) ให้ติดตั้งเลยแล้วลง `decision-log` พร้อม path แต่ถ้าต้องติดตั้งทั้งเครื่องหรือใช้สิทธิ์ admin ให้เตรียมคำสั่งไว้ใน \"รออนุมัติ\" แล้วทำส่วนอื่นต่อ · **เช็กเครื่องก่อนเริ่ม**: พอร์ตที่จะใช้ว่างไหม (`docker ps --format \"{{.Names}} {{.Ports}}\"` · Windows `netstat -ano | findstr :<พอร์ต>` · macOS/Linux `lsof -i :<พอร์ต>`) ถ้า container ของโปรเจกต์อื่นจับพอร์ตอยู่ → `docker stop <ชื่อ>` ได้ (ย้อนได้ ลง `decision-log` ว่าหยุดตัวไหน) แต่**ห้าม** `docker rm` · ลบ volume · kill process ที่ไม่ใช่ของโปรเจกต์นี้ ถ้าจำเป็นต้องทำ → ลง \"รออนุมัติ\" หรือเปลี่ยนไปใช้พอร์ตอื่น · ใคร: `solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)",
      "sub": [],
      "phase": "",
      "who": {
@@ -2515,7 +2586,7 @@
     },
     {
      "n": 2,
-     "text": "รวมช่อง \"ผู้ใช้กรอก\" ของ**ทุกฉบับที่สั่ง** ที่ยังว่างและหาจาก `docs/` · `ref/` · โค้ดไม่ได้ (รวมค่าที่ข้อ 1 ยังขาด) แล้วถามครั้งเดียว (มี mockup ในฉบับที่สั่ง → ถาม**แอปหรือโปรเจกต์ที่ชอบหน้าตา**และ**เลือกแนวภาพเองไหม**ด้วย · สั่งทำ mockup ใหม่ → ถามว่าคงหน้าตาเดิมหรือออกแบบใหม่) เมื่อเริ่มแล้วไม่ถามอีก ช่องที่ยังว่างให้เสนอค่าเองตามข้อ 4 · ใคร: หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)",
+     "text": "รวมช่อง \"ผู้ใช้กรอก\" ของ**ทุกฉบับที่สั่ง** ที่ยังว่างและหาจาก `docs/` · `ref/` · โค้ดไม่ได้ (รวมค่าที่ข้อ 1 ยังขาด) แล้วถามครั้งเดียวแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) (มี mockup ในฉบับที่สั่ง → ถาม**แอปหรือโปรเจกต์ที่ชอบหน้าตา**และ**เลือกแนวภาพเองไหม**ด้วย · สั่งทำ mockup ใหม่ → ถามว่าคงหน้าตาเดิมหรือออกแบบใหม่) เมื่อเริ่มแล้วไม่ถามอีก ช่องที่ยังว่างให้เสนอค่าเองตามข้อ 4 · ใคร: หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)",
      "sub": [],
      "phase": "",
      "who": {
@@ -2524,7 +2595,9 @@
       "agents": [],
       "raw": "หัวหน้าทีม (ถามรวมครั้งเดียวตอนเริ่ม)"
      },
-     "skills": [],
+     "skills": [
+      "superuser"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2590,7 +2663,7 @@
     },
     {
      "n": 6,
-     "text": "ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`) · **ตัวตรวจด้วยเครื่องที่ subagent รันไม่ได้** (`business-analyst` · `system-analyst` · `solution-architect` · `project-manager` · `technical-writer` ไม่มี shell: render รูป · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → สั่งให้ปิดรายงานด้วยรายการคำสั่ง แล้วหัวหน้าทีมรันทันทีที่รับงาน · **mockup มี 2 ด่าน**: ถูกต้อง (`qa-tester` ขับเบราว์เซอร์) **และ** สวย (ด่านสวย 5 แกนของ `ui-craft` ข้อ 9 โดยผู้ตรวจอีกตัว เทียบภาพแอปอ้างอิง) · mockup ใหม่หรือออกแบบใหม่เริ่มจากทิศทางภาพ `ui-craft` ข้อ 0.1 ไม่รวมไฟล์เก่าแล้วคงหน้าตาเดิม · ถ้าไม่ผ่าน agent ที่เขียนฉบับนั้นตัวใหม่เป็นคนแก้ แล้วตรวจซ้ำตามกติกา Reflection ใน `superuser` (reviewer ตัวใหม่ทุกรอบ · วนจนไม่เหลือข้อสูงและกลาง · ไม่เกิน 5 รอบ) และลงผลทุกรอบในช่องผลตรวจของ `docs/BUILD-PLAN.md` · เขียน `ผ่าน` ได้เมื่อรอบล่าสุดไม่เจอข้อสูงและกลางเท่านั้น · ใคร: `reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน",
+     "text": "ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`) · **ตัวตรวจด้วยเครื่องที่ subagent รันไม่ได้** (`business-analyst` · `system-analyst` · `solution-architect` · `project-manager` · `technical-writer` ไม่มี shell: render รูป · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → สั่งให้ปิดรายงานด้วยรายการคำสั่ง แล้วหัวหน้าทีมรันทันทีที่รับงาน · **mockup มี 2 ด่าน**: ถูกต้อง (`qa-tester` ขับเบราว์เซอร์) **และ** สวย (ด่านสวย 6 แกนของ `ui-craft` ข้อ 9 โดยผู้ตรวจอีกตัว เทียบภาพแอปอ้างอิง) · mockup ใหม่หรือออกแบบใหม่เริ่มจากทิศทางภาพ `ui-craft` ข้อ 0.1 ไม่รวมไฟล์เก่าแล้วคงหน้าตาเดิม · ถ้าไม่ผ่าน agent ที่เขียนฉบับนั้นตัวใหม่เป็นคนแก้ แล้วตรวจซ้ำตามกติกา Reflection ใน `superuser` (reviewer ตัวใหม่ทุกรอบ · วนจนไม่เหลือข้อสูงและกลาง · ไม่เกิน 5 รอบ) และลงผลทุกรอบในช่องผลตรวจของ `docs/BUILD-PLAN.md` · เขียน `ผ่าน` ได้เมื่อรอบล่าสุดไม่เจอข้อสูงและกลางเท่านั้น · ใคร: `reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน",
      "sub": [],
      "phase": "",
      "who": {
@@ -3023,7 +3096,7 @@
     },
     {
      "n": 4,
-     "text": "ยืนยันทุกข้อที่พบเอง — อ่านโค้ดจริง หรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ตรวจ` หรือทิ้ง · ใคร: หัวหน้าทีม",
+     "text": "ยืนยันทุกข้อที่พบเอง — อ่านโค้ดจริง หรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือทิ้ง · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3055,7 +3128,7 @@
     },
     {
      "n": 6,
-     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ จากนั้นใส่ตารางสถานะประเภท `ตรวจ` ของ `status-report` ไว้ในคำตอบอย่างเดียว ไม่เขียนลงไฟล์ · ใคร: หัวหน้าทีม",
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ จากนั้นสรุปงานตาม `superuser` หัวข้อ 7 (ใต้ **ที่ทำ** ใช้ตารางสถานะประเภท `ตรวจ` ของ `status-report`) ไว้ในคำตอบอย่างเดียว ไม่เขียนลงไฟล์ · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3065,6 +3138,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
+      "superuser",
       "status-report"
      ],
      "commands": [],
@@ -3424,7 +3498,9 @@
     {
      "n": 3,
      "text": "ทำทีละชิ้น ผ่านการตรวจแล้วค่อย commit ใน branch ของงานตามกฎ commit ใน `superuser` หัวข้อ 6 (ไม่ได้อนุญาต → ปล่อยไว้ในไฟล์ แล้วสรุป diff ตอนจบ) ชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงสถานะ `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)",
-     "sub": [],
+     "sub": [
+      "**หลังติด**: จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ → เก็บงานค้างไว้ใน branch `stuck/<รหัส>` แล้วคืนสายงานให้ test เขียว → ชิ้นที่ต้องรอชิ้นนี้ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง → ทำชิ้นอื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ) → ยังติด → คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → ทำต่อตาม playbook `pickup-and-pause`"
+     ],
      "phase": "",
      "who": {
       "lead": false,
@@ -3438,7 +3514,9 @@
       "superuser"
      ],
      "commands": [],
-     "playbooks": [],
+     "playbooks": [
+      "pickup-and-pause"
+     ],
      "approval": false
     },
     {
@@ -3496,7 +3574,9 @@
     {
      "n": 7,
      "text": "เมื่อจบงาน ให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: ทำเสร็จอะไร · ติดอะไร · **ตัดสินใจเอง** (กี่ข้อ · ชี้ไปที่ decision-log) · รออนุมัติอะไร · ค้างอะไรให้คนตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน",
-     "sub": [],
+     "sub": [
+      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ คำสั่งที่รันพร้อมผล หรือ path ไฟล์ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
+     ],
      "phase": "",
      "who": {
       "lead": true,

@@ -4,7 +4,7 @@
 
 จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ
 
-agent 4 · skill 9 · คำสั่ง 2 · playbook 7 · ส่งงานต่อให้ [`home-family`](../home-family/README.md) · [`trading-finance`](../trading-finance/README.md) · [`personal-life`](../personal-life/README.md)
+agent 4 · skill 11 · คำสั่ง 2 · playbook 7 · ส่งงานต่อให้ [`home-family`](../home-family/README.md) · [`trading-finance`](../trading-finance/README.md) · [`personal-life`](../personal-life/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/health-wellness/`](../../../plugins/health-wellness/)
 

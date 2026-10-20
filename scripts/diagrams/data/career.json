@@ -1,6 +1,6 @@
 {
  "plugin": "career",
- "version": "0.4.0",
+ "version": "0.5.0",
  "description": "Career toolkit for people working in Thailand — Thai and international CV conventions with ATS-friendly templates in both languages, interview preparation with a STAR story bank and the questions Thai HR always asks, salary negotiation with total-compensation maths (bonus months, provident fund match, social security, insurance) and scripts in Thai and English, self-review and promotion cases, and LinkedIn profiles tuned for the Thai market.",
  "cross": [
   "personal-life",
@@ -11,9 +11,11 @@
  "skills": [
   "interview-prep",
   "linkedin-profile",
+  "no-ai-look",
   "performance-self-review",
   "resume-th-en",
-  "salary-negotiation"
+  "salary-negotiation",
+  "simplify"
  ],
  "core_skills": [
   "agent-patterns",
@@ -34,7 +36,8 @@
    "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
    "skills": [
     "superuser",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -48,7 +51,8 @@
     "performance-self-review",
     "linkedin-profile",
     "interview-prep",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -60,7 +64,8 @@
     "interview-prep",
     "salary-negotiation",
     "resume-th-en",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -70,7 +75,8 @@
    "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
    "skills": [
     "superuser",
-    "human-writing"
+    "human-writing",
+    "simplify"
    ]
   },
   {
@@ -79,6 +85,8 @@
    "core": true,
    "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
    "skills": [
+    "no-ai-look",
+    "simplify",
     "human-writing"
    ]
   }
@@ -864,7 +872,7 @@
     },
     {
      "n": 4,
-     "text": "ยืนยันทุกข้อที่พบ ต้องชี้จุดในชิ้นงานได้ และเทียบกับต้นทางหรือแหล่งทางการแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
+     "text": "ยืนยันทุกข้อที่พบ ต้องชี้จุดในชิ้นงานได้ และเทียบกับต้นทางหรือแหล่งทางการแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -896,7 +904,7 @@
     },
     {
      "n": 6,
-     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ และตารางสถานะ · ใคร: หัวหน้าทีม",
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ และสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -905,7 +913,9 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "superuser"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -954,7 +964,9 @@
     {
      "n": 3,
      "text": "ทำทีละชิ้น ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป ถ้าชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: `career-coach` หรือ `interview-coach` ตัวใหม่ต่อชิ้น · ตรวจ: `reviewer` ตัวใหม่",
-     "sub": [],
+     "sub": [
+      "**หลังติด**: จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ → เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว → ชิ้นที่ต้องรอชิ้นนี้ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง → ทำชิ้นอื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ) → ยังติด → คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
+     ],
      "phase": "",
      "who": {
       "lead": false,
@@ -1022,7 +1034,9 @@
     {
      "n": 7,
      "text": "ตอนจบให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไรให้ผู้ใช้ตัดสิน · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)",
-     "sub": [],
+     "sub": [
+      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
+     ],
      "phase": "",
      "who": {
       "lead": true,

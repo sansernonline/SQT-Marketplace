@@ -4,7 +4,7 @@
 
 เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย
 
-agent 7 · skill 21 · คำสั่ง 8 · playbook 8 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`online-seller`](../online-seller/README.md)
+agent 7 · skill 23 · คำสั่ง 8 · playbook 8 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`online-seller`](../online-seller/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/thai-workplace/`](../../../plugins/thai-workplace/)
 
