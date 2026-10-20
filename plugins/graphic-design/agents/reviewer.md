@@ -67,4 +67,4 @@ Longer than about 40 lines → write the full report with Bash under `_to_delete
 
 ## Writing
 
-Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill. If its text is not in your context: answer first, plain words, numbers as digits, spell out each abbreviation the first time.
+Your answers, reports, documents and diagram labels follow the `human-writing` skill. Keep the work itself simple enough for a newcomer to follow — the `simplify` skill. If its text is not in your context: answer first, plain words, numbers as digits, spell out each abbreviation the first time, flat bullets (never nested) with only what the reader needs.
