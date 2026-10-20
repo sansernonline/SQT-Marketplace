@@ -9,7 +9,7 @@
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**42 agents · 117 skills · 29 commands**
+**42 agents · 118 skills · 29 commands**
 
 ### ติดตั้ง
 ```

@@ -8,18 +8,18 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`career`](#career) | ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน | 5 | 11 | 3 | 8 | 48 |
-| [`consumer-rights`](#consumer-rights) | ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน | 4 | 10 | 2 | 7 | 42 |
-| [`dev-learning`](#dev-learning) | ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ | 4 | 13 | 2 | 8 | 57 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 7 | 16 | 6 | 8 | 66 |
-| [`health-wellness`](#health-wellness) | จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ | 4 | 11 | 2 | 7 | 43 |
-| [`home-family`](#home-family) | จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น | 5 | 13 | 3 | 8 | 54 |
-| [`online-seller`](#online-seller) | ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด | 6 | 14 | 4 | 8 | 56 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว | 6 | 20 | 6 | 10 | 71 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 42 | 117 | 29 | 16 | 790 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 6 | 0 | 5 | 35 |
-| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 7 | 23 | 8 | 8 | 78 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 7 | 24 | 7 | 9 | 75 |
+| [`career`](#career) | ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน | 5 | 12 | 3 | 8 | 49 |
+| [`consumer-rights`](#consumer-rights) | ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน | 4 | 11 | 2 | 7 | 43 |
+| [`dev-learning`](#dev-learning) | ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ | 4 | 14 | 2 | 8 | 58 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 7 | 17 | 6 | 8 | 67 |
+| [`health-wellness`](#health-wellness) | จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ | 4 | 12 | 2 | 7 | 44 |
+| [`home-family`](#home-family) | จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น | 5 | 14 | 3 | 8 | 55 |
+| [`online-seller`](#online-seller) | ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด | 6 | 15 | 4 | 8 | 57 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว | 6 | 21 | 6 | 10 | 72 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 42 | 118 | 29 | 16 | 791 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 7 | 0 | 5 | 36 |
+| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 7 | 24 | 8 | 8 | 79 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 7 | 25 | 7 | 9 | 76 |
 
 ## โครงของทุก plugin
 
@@ -48,6 +48,7 @@ plugins/<plugin>/
 |---|---|---|---|
 | skill | `agent-patterns` | เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ) | `references/pattern-details.md` |
 | skill | `answer-shape` | เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ | — |
+| skill | `commit-log` | commit ทุกขั้นที่ทำเสร็จด้วยข้อความรูปแบบเดียวกัน ให้ git log เป็นบันทึกงาน | — |
 | skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `references/headings-and-examples.md` |
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `simplify` | ทำทุกงานให้อยู่ในรูปที่ง่ายที่สุดที่คนทำตามได้ | — |
@@ -95,9 +96,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (5 + ของกลาง 6)
+### skill (5 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -143,9 +144,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (4 + ของกลาง 6)
+### skill (4 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -188,9 +189,9 @@ plugins/<plugin>/
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (7 + ของกลาง 6)
+### skill (7 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -240,9 +241,9 @@ plugins/<plugin>/
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 
-### skill (10 + ของกลาง 6)
+### skill (10 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -296,9 +297,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | สรุปบทเรียนหลังจบงาน · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (5 + ของกลาง 6)
+### skill (5 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -343,9 +344,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | สรุปบทเรียนหลังจบงาน · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (7 + ของกลาง 6)
+### skill (7 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -395,9 +396,9 @@ plugins/<plugin>/
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/shop-manager.md` | คิดราคา ลงสินค้า คุมสต็อก |
 
-### skill (8 + ของกลาง 6)
+### skill (8 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -449,9 +450,9 @@ plugins/<plugin>/
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (14 + ของกลาง 6)
+### skill (14 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -549,9 +550,9 @@ plugins/<plugin>/
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (111 + ของกลาง 6)
+### skill (111 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 **หลักการทำงาน**
 
@@ -793,9 +794,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (0 + ของกลาง 6)
+### skill (0 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 ### playbook (5) — `skills/superuser/references/`
 
@@ -825,9 +826,9 @@ plugins/<plugin>/
 | `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
 | `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (17 + ของกลาง 6)
+### skill (17 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -893,9 +894,9 @@ plugins/<plugin>/
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 
-### skill (18 + ของกลาง 6)
+### skill (18 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|

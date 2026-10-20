@@ -4,7 +4,7 @@
 
 Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.
 
-ชุดนี้มี skill 16 ตัว · บทบาท 7 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
+ชุดนี้มี skill 17 ตัว · บทบาท 7 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

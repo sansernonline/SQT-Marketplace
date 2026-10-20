@@ -14,17 +14,17 @@
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
-| `career` | 0.5.0 | 11 | 5 | 3 | 0.1 MB |
-| `consumer-rights` | 0.5.0 | 10 | 4 | 2 | 0.1 MB |
-| `dev-learning` | 0.7.0 | 13 | 4 | 2 | 0.1 MB |
-| `graphic-design` | 0.7.0 | 16 | 7 | 6 | 0.2 MB |
-| `health-wellness` | 0.5.0 | 11 | 4 | 2 | 0.1 MB |
-| `home-family` | 0.5.0 | 13 | 5 | 3 | 0.1 MB |
-| `online-seller` | 0.5.0 | 14 | 6 | 4 | 0.1 MB |
-| `personal-life` | 0.7.0 | 20 | 6 | 6 | 0.2 MB |
-| `software-company` | 2.14.0 | 117 | 42 | 29 | 6.1 MB |
-| `superuser` | 1.5.0 | 6 | 3 | 0 | 0.1 MB |
-| `thai-workplace` | 0.7.0 | 23 | 7 | 8 | 0.2 MB |
-| `trading-finance` | 0.8.0 | 24 | 7 | 7 | 0.2 MB |
+| `career` | 0.5.0 | 12 | 5 | 3 | 0.1 MB |
+| `consumer-rights` | 0.5.0 | 11 | 4 | 2 | 0.1 MB |
+| `dev-learning` | 0.7.0 | 14 | 4 | 2 | 0.1 MB |
+| `graphic-design` | 0.7.0 | 17 | 7 | 6 | 0.2 MB |
+| `health-wellness` | 0.5.0 | 12 | 4 | 2 | 0.1 MB |
+| `home-family` | 0.5.0 | 14 | 5 | 3 | 0.1 MB |
+| `online-seller` | 0.5.0 | 15 | 6 | 4 | 0.1 MB |
+| `personal-life` | 0.7.0 | 21 | 6 | 6 | 0.2 MB |
+| `software-company` | 2.14.0 | 118 | 42 | 29 | 6.1 MB |
+| `superuser` | 1.6.0 | 7 | 3 | 0 | 0.1 MB |
+| `thai-workplace` | 0.7.0 | 24 | 7 | 8 | 0.2 MB |
+| `trading-finance` | 0.8.0 | 25 | 7 | 7 | 0.2 MB |
 
 ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ

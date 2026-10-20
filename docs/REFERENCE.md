@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (117)
+## 🛠️ Skills (118)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -1026,6 +1026,11 @@
 ### 117. stack-mql
 **ใช้กับ:** developer, quant-analyst
 **Description:** Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert Advisors, indicators, scripts) or preparing one for the MQL5 Market.
+
+---
+
+### 118. commit-log
+**Description:** Use when a step of work is finished in a git folder, or the user asks to commit. One Conventional Commit per step so git log is the work log.
 
 ---
 

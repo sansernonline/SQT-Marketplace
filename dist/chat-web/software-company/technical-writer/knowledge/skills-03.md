@@ -4,6 +4,8 @@ Use when writing a git commit message (Conventional Commits — type, scope, bod
 
 # Conventional Commit Message Format
 
+> When to commit and logging each step → `commit-log` (shared skill). This file adds the release side: scope, commitlint, semantic-release.
+
 ## When to use this skill
 
 - Writing any git commit message
