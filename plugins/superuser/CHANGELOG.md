@@ -1,5 +1,11 @@
 # Changelog — superuser
 
+## 1.6.0 — 2026-10-21
+
+- skill กลางใหม่ `commit-log` — จบ 1 ขั้นที่ตรวจผ่าน → commit 1 ครั้งรูปแบบ Conventional Commits (11 type) ให้ git log เป็นบันทึกงาน · จด hash ลง log · ไม่ push เว้นแต่ผู้ใช้สั่ง · sync ไปทุก plugin
+- กฎข้อ 10: commit ทุกขั้นตาม `commit-log`
+- `team-files`: agent commit เองได้แล้ว (เดิมต้องรอผู้ใช้สั่ง)
+
 ## 1.5.0 — 2026-10-19
 
 - skill กลางใหม่ `no-ai-look` — งานที่คนดู (หน้าจอ · mockup · สไลด์ · โปสเตอร์ · โพสต์ · โลโก้ · รูป AI · เอกสาร · diagram) ต้องดูเหมือนคนออกแบบ ไม่ใช่ AI · sync ไปทุก plugin

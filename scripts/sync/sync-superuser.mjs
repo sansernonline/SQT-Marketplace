@@ -12,6 +12,7 @@ export const SHARED_FILES = [
   "skills/agent-patterns/SKILL.md",
   "skills/agent-patterns/references/pattern-details.md",
   "skills/answer-shape/SKILL.md",
+  "skills/commit-log/SKILL.md",
   "skills/human-writing/SKILL.md",
   "skills/human-writing/references/headings-and-examples.md",
   "skills/no-ai-look/SKILL.md",
