@@ -1,0 +1,10 @@
+import { test } from "node:test"; import assert from "node:assert/strict";
+import { formatThaiDate } from "../src/thaiDate.js"; import { reportHeader } from "../src/report.js";
+const d = (iso) => new Date(iso);
+test("oct", () => assert.equal(formatThaiDate(d("2026-10-19T03:00:00Z")), "19 ต.ค. 2569"));
+test("dec", () => assert.equal(formatThaiDate(d("2026-12-05T05:00:00Z")), "5 ธ.ค. 2569"));
+test("jan", () => assert.equal(formatThaiDate(d("2027-01-10T05:00:00Z")), "10 ม.ค. 2570"));
+test("tz rollover new year", () => assert.equal(formatThaiDate(d("2026-12-31T18:30:00Z")), "1 ม.ค. 2570"));
+test("tz rollover day", () => assert.equal(formatThaiDate(d("2026-03-14T20:00:00Z")), "15 มี.ค. 2569"));
+test("late evening same day", () => assert.equal(formatThaiDate(d("2026-03-14T16:59:00Z")), "14 มี.ค. 2569"));
+test("header", () => assert.equal(reportHeader(d("2026-10-19T03:00:00Z"), "ยอดขาย"), "ยอดขาย · ประจำวันที่ 19 ต.ค. 2569"));

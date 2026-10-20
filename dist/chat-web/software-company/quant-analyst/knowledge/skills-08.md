@@ -1,3 +1,606 @@
+# skill: architecture-patterns
+
+Use when choosing system architecture (monolith, microservices, serverless, event-driven, CQRS, Saga).
+
+# Architecture Patterns
+
+## When to use this skill
+
+- Architecture decisions for a new system
+- Choosing communication patterns between services
+- Splitting a monolith into modules or microservices
+- Designing event-driven systems
+- Implementing Command Query Responsibility Segregation (CQRS), Event Sourcing or Saga
+- Reviewing existing architecture
+- Making decisions big enough for an Architecture Decision Record (ADR)
+
+---
+
+## High-Level Architecture Choice
+
+### Decision tree
+
+```
+How many engineers? Team count? Domain complexity?
+│
+├─ <10 engineers, 1 team
+│  └─ ✅ Monolith (modular monolith)
+│
+├─ 10-50 engineers, 2-5 teams
+│  └─ ✅ Modular monolith OR few services
+│
+├─ 50+ engineers, 5+ teams
+│  └─ Consider microservices (only if needed)
+│
+└─ Any size + spiky/event-driven workload
+   └─ Add serverless for that piece
+```
+
+---
+
+## Patterns 1–3, communication and cross-cutting decisions
+
+Details are in [references/core-patterns.md](references/core-patterns.md). Load it after the decision tree picks a direction:
+
+- Pattern 1: Modular Monolith (the default) · Pattern 2: Microservices · Pattern 3: Serverless / Functions
+- Communication: synchronous vs asynchronous (event-driven), and when to choose which
+- Cross-cutting: database per service vs shared DB · caching tiers · idempotency · decision matrix template
+
+---
+
+## Patterns 4–8: CQRS, Event Sourcing, Saga, API Gateway, Strangler Fig
+
+Details for each are in [references/advanced-patterns.md](references/advanced-patterns.md). Load that file when the decision involves one of these:
+
+- Pattern 4: CQRS (Command Query Responsibility Segregation)
+- Pattern 5: Event Sourcing
+- Pattern 6: Saga (Distributed Transactions)
+- Pattern 7: API Gateway
+- Pattern 8: Strangler Fig (Migration)
+
+---
+
+## Anti-patterns
+
+- ❌ **Microservices too early** — start with a monolith
+- ❌ **Distributed monolith** — services that must deploy together
+- ❌ **God service** — one service that does everything
+- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
+- ❌ **Shared database across microservices** — all the coupling, none of the isolation
+- ❌ **Synchronous calls in critical path** — cascading failures
+- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
+
+---
+
+## Quick Reference: When to Use What
+
+| Need | Pattern |
+|------|---------|
+| Small team, fast iteration | Modular monolith |
+| Independent team deploys | Microservices |
+| Spiky background jobs | Serverless |
+| High write throughput, complex reads | CQRS |
+| Full audit trail, view state at any past time | Event Sourcing |
+| Multi-service transaction | Saga |
+| Reduce service-to-service complexity | Service mesh |
+| Multiple external clients | API Gateway |
+| Migrate legacy system | Strangler Fig |
+
+---
+
+## Always Reference
+
+When you make a decision, record it with the **adr-writer** skill. Architecture decisions are trade-offs. Future you, or whoever replaces you, needs to know why.
+
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/architecture-overview-template.md`](references/architecture-overview-template.md) — แม่แบบภาพรวมสถาปัตยกรรม
+
+
+## reference: advanced-patterns.md
+
+# Architecture Patterns — Advanced Pattern Catalogue
+
+Details moved out of [SKILL.md](../SKILL.md). Load this file when the decision involves one of these patterns.
+
+## Contents
+
+- [Pattern 4: CQRS (Command Query Responsibility Segregation)](#pattern-4-cqrs-command-query-responsibility-segregation)
+- [Pattern 5: Event Sourcing](#pattern-5-event-sourcing)
+- [Pattern 6: Saga (Distributed Transactions)](#pattern-6-saga-distributed-transactions)
+- [Pattern 7: API Gateway](#pattern-7-api-gateway)
+- [Pattern 8: Strangler Fig (Migration)](#pattern-8-strangler-fig-migration)
+
+---
+
+## Pattern 4: CQRS (Command Query Responsibility Segregation)
+
+**Use one model for writes and a separate model for reads.**
+
+```
+Commands ──► Write Model ──► Event Store
+                              │
+                              ▼
+                          Projector
+                              │
+                              ▼
+Queries ◄── Read Models (denormalized for query)
+```
+
+**When to use:**
+- ✅ Read load and write load are very different
+- ✅ Complex reporting / dashboards
+- ✅ Multiple read views from same data
+
+**When NOT to use:**
+- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
+- ❌ Reads must always show the latest write
+
+---
+
+## Pattern 5: Event Sourcing
+
+**Store every change as an event, not just the current state.**
+
+```
+Instead of:           Store:
+Account                Events:
+  balance: $100        ├─ AccountOpened
+                       ├─ Deposit($50)
+                       ├─ Deposit($75)
+                       └─ Withdraw($25)
+
+State is computed from events
+```
+
+**When to use:**
+- ✅ Strong audit/compliance requirements
+- ✅ Need to replay history
+- ✅ Questions about the past ("balance at date X")
+- ✅ Complex business logic with many state transitions
+
+**When NOT to use:**
+- ❌ Apps with simple state (too much)
+- ❌ No team experience with it
+- ❌ Don't need history/audit
+- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
+
+> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+
+---
+
+## Pattern 6: Saga (Distributed Transactions)
+
+**When several services must all succeed or all roll back.**
+
+### Orchestration (centralized)
+```
+Orchestrator
+   │
+   ├──► Service A (do step 1)
+   │    [if fail → Orchestrator triggers compensations]
+   ├──► Service B (do step 2)
+   └──► Service C (do step 3)
+```
+
+### Choreography (decentralized)
+```
+Service A ──Event──► Service B ──Event──► Service C
+   ▲                                            │
+   └──────────── Compensation Event ────────────┘
+```
+
+| | Orchestration | Choreography |
+|---|--------------|--------------|
+| Visibility | 🟢 Central | 🔴 Distributed |
+| Coupling | 🟡 Coupled to orchestrator | 🟢 Loosely coupled |
+| Debugging | 🟢 Easier | 🔴 Hard |
+| Adding services | 🟡 Update orchestrator | 🟢 Add subscriber |
+
+**Choose orchestration** when: complex flow, need clear visibility
+**Choose choreography** when: simple flow, many independent teams
+
+---
+
+## Pattern 7: API Gateway
+
+```
+Clients ──► API Gateway ──► Multiple Services
+              │
+              ├─ Routing
+              ├─ Auth
+              ├─ Rate limit
+              ├─ Logging
+              └─ Aggregation
+```
+
+**Tools:** Kong, AWS API Gateway, Envoy, Tyk, NGINX
+
+**Use when:** external clients call many services, and you want auth, rate limits and logging in one place
+
+---
+
+## Pattern 8: Strangler Fig (Migration)
+
+**Move off a monolith step by step.**
+
+```
+Phase 1:    Phase 2:           Phase 3:
+[Monolith]  [Mono] [NewSvc]    [NewSvc1] [NewSvc2]
+                ▲    │              ▲
+                └────┘ Proxy routes  └── Old Monolith deprecated
+                  selective traffic
+```
+
+**Steps:**
+1. Pick one business area (bounded context) to pull out
+2. Build new service for that context
+3. Add a proxy or feature flag that routes part of the traffic
+4. Gradually shift traffic to new service
+5. Delete old code when fully migrated
+
+> 💡 **Safer than rewriting everything at once.**
+
+
+## reference: architecture-overview-template.md
+
+# แม่แบบเอกสารภาพรวมสถาปัตยกรรม
+
+ย้ายมาจาก agent `solution-architect` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+
+## Standard Output: Polished Architecture Overview
+
+```markdown
+# 🏗️ Architecture: <System Name>
+
+| | |
+|--|--|
+| **Document Type** | Architecture Overview |
+| **Version** | 1.0 |
+| **Status** | 🟡 Draft |
+| **Date** | YYYY-MM-DD |
+| **Architect** | @name |
+| **Related ADRs** | ADR-0001 (`docs/decisions/ADR-0001-database-choice.md`), ADR-0002 (`docs/decisions/ADR-0002-api-style.md`) |
+
+---
+
+## 📑 Table of Contents
+
+1. [Context](#1-context)
+2. [Quality Attributes](#2-quality-attributes)
+3. [High-Level Architecture](#3-high-level-architecture)
+4. [Components](#4-components)
+5. [Data Flow](#5-data-flow)
+6. [Tech Stack](#6-tech-stack)
+7. [Cross-Cutting Concerns](#7-cross-cutting-concerns)
+8. [Trade-offs](#8-trade-offs)
+
+---
+
+## 1. Context
+
+> 💡 What problem does this solve? Why now?
+
+## 2. 🎯 Quality Attributes (Priority Order)
+
+| Rank | Attribute | Target | Why |
+|:----:|-----------|--------|-----|
+| 1 | ⚡ Performance | < 200ms p95 | Customer-facing |
+| 2 | 🔒 Security | PDPA compliant | Legal req |
+| 3 | 📈 Scalability | 10k RPS | Growth plan |
+| 4 | 💰 Cost | < $5k/month | Budget |
+
+## 3. High-Level Architecture
+
+\`\`\`mermaid
+flowchart LR
+    User([👤 User]) --> CDN[🌐 CDN]
+    CDN --> LB[⚖️ Load Balancer]
+    LB --> API[🔷 API Gateway]
+    API --> Auth[🔒 Auth Service]
+    API --> App[⚙️ App Service]
+    App --> Cache[(⚡ Redis)]
+    App --> DB[(💾 PostgreSQL)]
+    App --> Queue[📨 Message Queue]
+    Queue --> Worker[👷 Background Worker]
+\`\`\`
+
+## 4. 🧩 Components
+
+| Component | Responsibility | Technology | Owner |
+|-----------|----------------|------------|-------|
+| API Gateway | Routing, rate-limit | Kong | Platform |
+| Auth Service | JWT, OAuth | Node.js | Security |
+| App Service | Business logic | Node.js + NestJS | App Team |
+| Database | Persistence | PostgreSQL 16 | DBA |
+| Cache | Session, hot data | Redis 7 | Platform |
+
+## 5. 🔄 Data Flow
+
+\`\`\`mermaid
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant API
+    participant App
+    participant DB
+
+    U->>API: Request
+    API->>App: Validate + forward
+    App->>DB: Query
+    DB-->>App: Result
+    App-->>API: Response
+    API-->>U: 200 OK
+\`\`\`
+
+## 6. 🛠️ Tech Stack
+
+| Layer | Technology | Rationale |
+|-------|-----------|-----------|
+| Frontend | React 18 + Next.js 14 | SSR, ecosystem |
+| Backend | Node.js + NestJS | Team expertise |
+| Database | PostgreSQL 16 | ACID + JSON |
+| Cache | Redis 7 | Standard |
+| Infra | AWS (ECS Fargate) | Cost + ops simplicity |
+| CI/CD | GitHub Actions | Already in use |
+
+## 7. 🔗 Cross-Cutting Concerns
+
+| Concern | Approach |
+|---------|----------|
+| 🔒 Authentication | JWT with refresh tokens |
+| 📝 Logging | Structured JSON → CloudWatch |
+| 📊 Monitoring | Prometheus + Grafana |
+| 🚨 Alerting | PagerDuty (P1), Slack (P2-P3) |
+| ⚠️ Error Handling | Standard error envelope, Sentry |
+
+## 8. ⚖️ Trade-offs
+
+| Decision | Chose | Over | Reason |
+|----------|-------|------|--------|
+| Database | PostgreSQL | MongoDB | Strong consistency needed |
+| Hosting | ECS Fargate | EKS | Lower ops burden |
+| API Style | REST | GraphQL | Simpler caching, client maturity |
+
+> ⚠️ **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
+
+## 📖 References
+
+- ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
+- ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)
+```
+
+
+## reference: core-patterns.md
+
+# Architecture Patterns — Core Patterns and Cross-Cutting Decisions
+
+Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision tree has pointed at a pattern, or when the choice involves communication style, data ownership, caching or idempotency.
+
+## Contents
+
+- [Pattern 1: Modular Monolith](#pattern-1-modular-monolith)
+- [Pattern 2: Microservices](#pattern-2-microservices)
+- [Pattern 3: Serverless / Functions](#pattern-3-serverless--functions)
+- [Communication Patterns](#communication-patterns)
+  - [Synchronous (Request-Response)](#synchronous-request-response)
+  - [Asynchronous (Event-Driven)](#asynchronous-event-driven)
+  - [When to choose which](#when-to-choose-which)
+- [Cross-Cutting Decisions](#cross-cutting-decisions)
+  - [Database per service vs Shared DB](#database-per-service-vs-shared-db)
+  - [Caching tiers](#caching-tiers)
+  - [Idempotency](#idempotency)
+- [Decision Matrix Template](#decision-matrix-template)
+
+---
+
+## Pattern 1: Modular Monolith
+
+**The 2026 default for most teams.** One deployable app, split into modules with strict boundaries.
+
+```
+┌─────────────────────────────────────┐
+│   Single deployable application     │
+│ ┌───────┐ ┌───────┐ ┌───────────┐  │
+│ │Module │ │Module │ │  Module   │  │
+│ │  A    │ │  B    │ │     C     │  │
+│ └───────┘ └───────┘ └───────────┘  │
+│   ▲           ▲           ▲         │
+│   └── Strict module boundaries ──┘  │
+└─────────────────────────────────────┘
+         │
+         ▼
+    Single DB (or per-module schemas)
+```
+
+**When to use:**
+- ✅ Small/medium team (< 30 engineers)
+- ✅ You need to ship changes fast
+- ✅ Operations needs are simple
+- ✅ All parts can deploy together
+
+**When NOT to use:**
+- ❌ Multiple teams needing independent deploys
+- ❌ Features need very different scaling
+- ❌ Parts need different tech stacks
+
+**Implementation tips:**
+- Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
+- Each module exposes a public interface
+- Don't let one module read another module's tables
+- One DB, with a separate schema per module
+
+---
+
+## Pattern 2: Microservices
+
+**When you've outgrown the monolith.**
+
+```
+┌──────┐  ┌──────┐  ┌──────┐
+│ Svc A│  │ Svc B│  │ Svc C│
+└──┬───┘  └──┬───┘  └──┬───┘
+   │ ▲      │ ▲      │ ▲
+   │ │      │ │      │ │     ← Each owns its DB
+   ▼ │      ▼ │      ▼ │
+  ┌──┴┐    ┌──┴┐    ┌──┴┐
+  │DB │    │DB │    │DB │
+  └───┘    └───┘    └───┘
+```
+
+**When to use:**
+- ✅ Independent teams (Conway's Law)
+- ✅ Different scaling needs per service
+- ✅ Services need different languages or stacks
+- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
+
+**When NOT to use (most projects):**
+- ❌ Small team — the extra overhead slows everyone down
+- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- ❌ Can't afford distributed tracing
+- ❌ Business areas don't have clear boundaries yet
+
+**Hidden costs:**
+- 💸 Much harder to operate (about 5x the ops effort)
+- 💸 Network latency between services
+- 💸 Transactions across services are hard
+- 💸 Bugs are harder to trace
+- 💸 You need a service mesh and a monitoring stack
+
+> 🚨 **Microservices are an organizational scaling pattern**, not a tech pattern. Adopt them only when teams blocking each other is the real bottleneck.
+
+---
+
+## Pattern 3: Serverless / Functions
+
+**For spiky, event-driven workloads.**
+
+```
+Event ──► Function ──► Service / DB / Queue
+```
+
+**Good fits:**
+- ✅ Async background processing
+- ✅ Scheduled tasks (cron)
+- ✅ Glue code between services
+- ✅ Spiky / unpredictable traffic
+- ✅ Image/video processing pipelines
+
+**Bad fits:**
+- ❌ Long-running processes (the limit is usually 15 min)
+- ❌ Processing that must keep state between calls
+- ❌ Frequent calls that need a fast response (cold starts add delay)
+- ❌ Heavy traffic all day (the bill climbs fast)
+
+---
+
+## Communication Patterns
+
+### Synchronous (Request-Response)
+
+```
+Client ──HTTP/gRPC──► Server
+       ◄──Response───
+```
+
+| Protocol | When |
+|----------|------|
+| REST | Public APIs, simple CRUD |
+| GraphQL | Mobile clients, multiple read patterns |
+| gRPC | Internal service-to-service |
+| WebSocket | Real-time bidirectional |
+
+**Pros:** Easy to reason about and debug
+**Cons:** Services depend on each other directly, one failure spreads to the next, hard to scale each part on its own
+
+### Asynchronous (Event-Driven)
+
+```
+Producer ──► Topic/Queue ──► Consumer(s)
+         (publish)         (subscribe)
+```
+
+| Tech | When |
+|------|------|
+| Kafka | High throughput, event sourcing, replay needed |
+| RabbitMQ | Traditional queuing, work distribution |
+| SQS/SNS | AWS-native, simpler than Kafka |
+| NATS | Lightweight, low-latency |
+| Redis Pub/Sub | Simple, messages are not stored |
+
+**Pros:** Services don't depend on each other directly, survive failures better, scale more easily
+**Cons:** Data is consistent only after a delay (eventual consistency), harder to debug, message order is hard to guarantee
+
+### When to choose which
+
+```
+Need immediate response? ─Yes─► Sync
+                         └─No──► Async
+
+Is producer impacted by consumer? ─Yes─► Sync
+                                  └─No──► Async
+
+Multiple consumers? ─Yes─► Async (pub/sub)
+                   └─No──► Either
+```
+
+---
+
+
+## Cross-Cutting Decisions
+
+### Database per service vs Shared DB
+
+| | Shared DB | DB per service |
+|---|-----------|----------------|
+| Coupling | 🔴 High | 🟢 Low |
+| Consistency | 🟢 ACID (all-or-nothing transactions) | 🟡 Eventual |
+| Schema changes | 🔴 Coordinate | 🟢 Independent |
+| Performance | 🟢 Easy joins | 🔴 Network calls |
+| Use when | Monolith | Microservices |
+
+### Caching tiers
+
+```
+Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) ──► DB
+       1                  2                       3                4
+       ▲                                                           ▲
+       Closest to user (fastest)              Furthest (last resort)
+```
+
+Each tier is roughly 10x faster than the next. CDN = content delivery network.
+
+### Idempotency
+
+**Always design APIs so a repeated request does no extra harm:**
+```
+Client retries → Server detects duplicate → Same result, no side effect
+```
+
+Methods:
+- Idempotency key header (Stripe pattern)
+- A time window in which the server drops duplicates
+- Methods that are safe to repeat by nature (PUT, unlike POST)
+
+---
+
+## Decision Matrix Template
+
+When proposing architecture, compare options:
+
+```markdown
+| Factor | Weight | Option A | Option B | Option C |
+|--------|:------:|:--------:|:--------:|:--------:|
+| Performance | 30% | 8 | 9 | 7 |
+| Cost | 20% | 9 | 6 | 8 |
+| Team skill | 20% | 9 | 5 | 7 |
+| Operations | 15% | 8 | 5 | 7 |
+| Future-proof | 15% | 6 | 9 | 7 |
+| **Total** | 100% | **7.95** | 7.10 | 7.20 |
+```
+
+
+---
+
 # skill: human-writing
 
 Use when writing anything a person will read (answer, report, document, slide, label) in Thai or English.
@@ -168,54 +771,3 @@ Use when writing anything a person will read (answer, report, document, slide, l
 | 6 | ไม่ใช้ "คน" กับสิ่งที่ไม่ใช่คน | "ให้ระบบตัดสิน" |
 
 ที่มา: ISO 24495-1 (plain language) · GOV.UK clear language · Microsoft Writing Style Guide · Wikipedia: Signs of AI writing · คู่มือการร่างเอกสารภาษาไทย
-
-
----
-
-# skill: simplify
-
-Use when making anything (code, document, plan, design, slide, sheet, answer). Simplest form a person can follow.
-
-# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
-
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`)
-
-## 1 · หลักใหญ่
-
-- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
-- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
-- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
-- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
-- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
-- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
-
-## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
-
-1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
-2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
-3. ทำแบบสั้นที่สุดที่ยังครบและถูก
-
-## 3 · ตามชนิดงาน
-
-| งาน | ทำ | เลี่ยง |
-|---|---|---|
-| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
-| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
-| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
-| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
-| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
-| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
-
-plugin `software-company` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
-
-## 4 · บอกว่าตั้งใจทำให้ง่าย
-
-ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
-
-## 5 · ตรวจก่อนส่ง 5 ข้อ
-
-1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
-2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
-3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
-4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
-5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม

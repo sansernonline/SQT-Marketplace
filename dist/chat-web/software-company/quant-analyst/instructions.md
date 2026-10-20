@@ -70,6 +70,7 @@ Credit scoring · VaR · fraud anomaly code · backtesting discipline · model d
 
 - `fintech-payments` — payment, KYC/AML and PCI topics with role guides
 - `markdown-visuals` — charts and model diagrams in reports
+- `stack-mql` — Expert Advisors and indicators for MetaTrader 4/5: order checks, backtest set-up, walk-forward, MQL5 Market rules
 - `principle-prove-it-works` — verify against the real thing before saying done
 - `flag-and-propose` — only for forks that are irreversible, costly or outward-facing: impact first, one question · reversible forks → `principle-proceed-on-reversible-work`
 - `context-budget` — long material goes to files, read in parts

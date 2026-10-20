@@ -1,0 +1,145 @@
+#!/usr/bin/env node
+/**
+ * run-bench.mjs — เทียบ plugin 2 รุ่นบนงานชุดเดียวกัน: เวลา · จำนวนรอบ · ค่าใช้จ่าย · ลูกทีม · test ที่ซ่อนไว้
+ *
+ *   node evals/speed/run-bench.mjs --old <git ref> [--new <git ref>|worktree] [--tasks t1,t4] [--runs 2]
+ *        [--plugin software-company] [--budget 8] [--parallel 4]
+ *
+ *   --old    รุ่นก่อน เป็น git ref เช่น HEAD หรือ f105afc
+ *   --new    รุ่นหลัง ค่าเริ่ม = ไฟล์ในโฟลเดอร์ตอนนี้ (worktree) · ใส่ git ref ก็ได้
+ *   ผลรายรอบอยู่ใน _to_delete/bench/ · ตารางสรุปต่อท้าย evals/speed/RESULTS.md
+ *
+ * ทุกรอบรัน `claude -p` ในโฟลเดอร์ทดสอบที่สร้างใหม่ ใช้เฉพาะ plugin ที่ส่งด้วย --plugin-dir
+ * (--setting-sources project จึงไม่โหลด plugin ที่ติดตั้งในเครื่อง) · agent ได้สิทธิ์แค่แก้ไฟล์ · รัน test · git
+ * ค่าใช้จ่ายจริงตัดจากบัญชี Claude ที่ล็อกอินอยู่ · จำกัดรอบละ --budget ดอลลาร์
+ */
+import { spawn, execFileSync } from "node:child_process";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, appendFileSync } from "node:fs";
+import { join, dirname, resolve } from "node:path";
+import { homedir } from "node:os";
+import { randomUUID } from "node:crypto";
+import { fileURLToPath } from "node:url";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(HERE, "..", "..");
+const OUT = join(ROOT, "_to_delete", "bench");
+const WIN = process.platform === "win32";
+const PY = WIN ? "python" : "python3";
+
+const args = Object.fromEntries(process.argv.slice(2).join(" ").split(/\s*--/).filter(Boolean).map((p) => {
+  const [k, ...v] = p.trim().split(/\s+/); return [k, v.join(" ") || true];
+}));
+if (!args.old) { console.error("ต้องใส่ --old <git ref> เช่น --old HEAD"); process.exit(1); }
+const PLUGIN = args.plugin ?? "software-company";
+const TASKS = (args.tasks ?? "t1,t4").split(",");
+const RUNS = Number(args.runs ?? 2);
+const BUDGET = String(args.budget ?? 8);
+const PARALLEL = Number(args.parallel ?? 4);
+const PROMPT = "ใช้ skill `superuser` ของ plugin " + PLUGIN + " ทำงานตาม TASK.md ในโฟลเดอร์นี้ให้เสร็จจนส่งมอบได้ · ผมไม่อยู่ ห้ามถามกลางทาง ตัดสินใจเองแล้วจดไว้ · จบแล้วสรุปสั้น ๆ ว่าทำอะไรไปและผ่าน test อะไร";
+const ALLOWED = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "Task", "Skill", "TodoWrite",
+  ...["npm", "node", "python", "python3", "pytest", "git", "ls", "cat", "cd", "mkdir", "cp", "grep", "head", "tail", "echo"].map((c) => `Bash(${c} *)`)];
+
+const git = (...a) => execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }).trim();
+
+/** แตก plugin ของรุ่นที่ขอออกมาที่ _to_delete/bench/<ชื่อ>/ · worktree = ใช้ไฟล์ในโฟลเดอร์ตอนนี้ */
+function pluginDir(label, ref) {
+  if (!ref || ref === true || ref === "worktree") return join(ROOT, "plugins", PLUGIN);
+  const dir = join(OUT, `src-${label}`);
+  if (existsSync(dir)) { try { git("worktree", "remove", "--force", dir); } catch { rmSync(dir, { recursive: true, force: true }); } }
+  git("worktree", "add", "--detach", dir, ref);
+  return join(dir, "plugins", PLUGIN);
+}
+
+function run(cmd, argv, opts) {
+  return new Promise((done) => {
+    const p = spawn(cmd, argv, { ...opts, shell: WIN, stdio: ["ignore", "pipe", "pipe"] });
+    let out = "", err = "";
+    p.stdout.on("data", (d) => (out += d)); p.stderr.on("data", (d) => (err += d));
+    p.on("close", (code) => done({ code, out, err }));
+  });
+}
+
+/** นับลูกทีมที่เปิด และรอบที่เปิดพร้อมกันหลายตัว จาก transcript ของ session */
+function countAgents(sessionId) {
+  const base = join(process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), "projects");
+  if (!sessionId || !existsSync(base)) return { agents: [], batches: [] };
+  for (const d of readdirSync(base)) {
+    const f = join(base, d, `${sessionId}.jsonl`);
+    if (!existsSync(f)) continue;
+    const agents = [], batches = [];
+    for (const line of readFileSync(f, "utf8").split("\n")) {
+      let m; try { m = JSON.parse(line); } catch { continue; }
+      const c = m?.message?.role === "assistant" && Array.isArray(m.message.content) ? m.message.content : [];
+      const calls = c.filter((b) => b.type === "tool_use" && (b.name === "Agent" || b.name === "Task"));
+      calls.forEach((b) => agents.push(b.input?.subagent_type ?? "?"));
+      if (calls.length > 1) batches.push(calls.length);
+    }
+    return { agents, batches };
+  }
+  return { agents: [], batches: [] };
+}
+
+async function hidden(task, work) {
+  const check = `${work}-check`;
+  rmSync(check, { recursive: true, force: true });
+  cpSync(work, check, { recursive: true, filter: (s) => !s.includes(join(".claude", "worktrees")) });
+  const hid = join(HERE, "tasks", task, "hidden");
+  let pass = 0, total = 0;
+  for (const f of readdirSync(hid)) {
+    if (f.endsWith(".py")) {
+      cpSync(join(hid, f), join(check, f));
+      const r = await run(PY, ["-m", "pytest", "-q", f], { cwd: check });
+      const p = /(\d+) passed/.exec(r.out), x = /(\d+) failed/.exec(r.out), e = /(\d+) error/.exec(r.out);
+      pass += Number(p?.[1] ?? 0); total += Number(p?.[1] ?? 0) + Number(x?.[1] ?? 0) + Number(e?.[1] ?? 0);
+    } else if (f.endsWith(".test.js")) {
+      mkdirSync(join(check, "hidden"), { recursive: true });
+      cpSync(join(hid, f), join(check, "hidden", f));
+      const r = await run("node", ["--test", join("hidden", f)], { cwd: check });
+      const p = /# pass (\d+)/.exec(r.out), x = /# fail (\d+)/.exec(r.out);
+      pass += Number(p?.[1] ?? 0); total += Number(p?.[1] ?? 0) + Number(x?.[1] ?? 0);
+    }
+  }
+  return { pass, total };
+}
+
+async function one({ task, label, plugin, n }) {
+  const id = `${task}-${label}-${n}`, work = join(OUT, "runs", id);
+  rmSync(work, { recursive: true, force: true });
+  cpSync(join(HERE, "tasks", task, "repo"), work, { recursive: true });
+  cpSync(join(HERE, "tasks", task, "TASK.md"), join(work, "TASK.md"));
+  for (const a of [["init", "-q"], ["add", "-A"], ["-c", "user.name=bench", "-c", "user.email=bench@local", "commit", "-qm", "start"]])
+    execFileSync("git", a, { cwd: work });
+  const sid = randomUUID(); // ตั้ง session เอง จะได้หา transcript ของรอบนี้เจอแน่นอน
+  const t0 = Date.now();
+  const r = await run("claude", ["-p", PROMPT, "--session-id", sid, "--plugin-dir", plugin, "--setting-sources", "project", "--strict-mcp-config",
+    "--permission-mode", "acceptEdits", "--allowedTools", ...ALLOWED, "--output-format", "json", "--max-budget-usd", BUDGET], { cwd: work });
+  const wall = Math.round((Date.now() - t0) / 1000);
+  let j = {}; try { j = JSON.parse(r.out); } catch { /* claude ล้ม → ดู stderr ในไฟล์ */ }
+  const h = await hidden(task, work);
+  const a = countAgents(sid);
+  const row = { id, task, label, wall, turns: j.num_turns ?? null, cost: j.total_cost_usd ?? null, agents: a.agents, batches: a.batches,
+    hidden: `${h.pass}/${h.total}`, denied: (j.permission_denials ?? []).length, error: j.is_error ?? (r.code !== 0) };
+  writeFileSync(join(OUT, "runs", `${id}.json`), JSON.stringify({ ...row, stderr: r.err.slice(-2000), result: j.result }, null, 2));
+  console.log(`${id.padEnd(14)} ${wall}s · turns ${row.turns} · $${(row.cost ?? 0).toFixed(2)} · ลูกทีม ${a.agents.length} · test ${row.hidden}`);
+  return row;
+}
+
+mkdirSync(join(OUT, "runs"), { recursive: true });
+const versions = [["old", pluginDir("old", args.old)], ["new", pluginDir("new", args.new)]];
+const jobs = TASKS.flatMap((task) => Array.from({ length: RUNS }, (_, i) => versions.map(([label, plugin]) => ({ task, label, plugin, n: i + 1 }))).flat());
+const rows = [];
+for (let i = 0; i < jobs.length; i += PARALLEL) rows.push(...(await Promise.all(jobs.slice(i, i + PARALLEL).map(one))));
+
+// สรุป: ค่าเฉลี่ยต่องาน ต่อรุ่น
+const avg = (xs) => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : 0);
+const lines = [`\n## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · old=${args.old} · new=${args.new ?? "worktree"} · ${RUNS} รอบ/รุ่น\n`,
+  "| งาน | รุ่น | เวลาเฉลี่ย (วินาที) | รอบคุยเฉลี่ย | ค่าใช้จ่ายเฉลี่ย ($) | ลูกทีมเฉลี่ย | ส่งพร้อมกัน | test ที่ซ่อนไว้ |", "|---|---|---|---|---|---|---|---|"];
+for (const task of TASKS) for (const [label] of versions) {
+  const rs = rows.filter((r) => r.task === task && r.label === label);
+  lines.push(`| ${task} | ${label} | ${avg(rs.map((r) => r.wall)).toFixed(0)} | ${avg(rs.map((r) => r.turns ?? 0)).toFixed(1)} | ${avg(rs.map((r) => r.cost ?? 0)).toFixed(2)} | ${avg(rs.map((r) => r.agents.length)).toFixed(1)} | ${rs.filter((r) => r.batches.length).length}/${rs.length} | ${rs.map((r) => r.hidden).join(" · ")} |`);
+}
+const results = join(HERE, "RESULTS.md");
+if (!existsSync(results)) writeFileSync(results, "# ผลเทียบความเร็ว\n\nสร้างโดย `evals/speed/run-bench.mjs` · ใหม่สุดอยู่ล่างสุด\n");
+appendFileSync(results, lines.join("\n") + "\n");
+console.log(lines.join("\n"));
+for (const [label] of versions) { const d = join(OUT, `src-${label}`); if (existsSync(d)) try { git("worktree", "remove", "--force", d); } catch { /* ลบเองทีหลัง */ } }

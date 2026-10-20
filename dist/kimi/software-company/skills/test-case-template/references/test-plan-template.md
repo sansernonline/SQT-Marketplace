@@ -51,7 +51,7 @@
 | 🟢 Functional | ⚡ Manual + automated | Playwright | @alice |
 | 🔒 Security | Smoke | OWASP ZAP | @bob |
 | ♿ Accessibility | WCAG AA | Axe DevTools | @charlie |
-| 🌐 Compatibility | Top 3 browsers | BrowserStack | @alice |
+| 🌐 Compatibility | PR: Chromium · nightly: + WebKit (iPhone) · pre-prod: + Firefox | Playwright projects (+ real iPhone before release) | @alice |
 | 🐛 Exploratory | Time-boxed 4h/day | — | All |
 
 ### Coverage matrix
@@ -88,7 +88,7 @@ Every BR in the traceability table at the end of the test-case file has at least
 |--------|--------|
 | URL | https://staging.example.com |
 | Test data | Refreshed nightly from prod (anonymized) |
-| Browsers | Chrome 120+, Firefox 121+, Safari 17+ |
+| Browsers | Chromium (every run) · WebKit/iPhone (nightly, pre-prod) · Firefox (pre-prod only, drop if users don't use it) |
 | Devices | iPhone 15, Galaxy S24, iPad Pro |
 
 ## 6. 🗓️ Schedule

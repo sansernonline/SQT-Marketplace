@@ -1,3 +1,386 @@
+# skill: logging-standards
+
+Use when writing or reviewing code that logs (format, levels, correlation ids, redaction).
+
+# Logging Standards
+
+> **กฎข้อเดียว:** log มีไว้ให้คนอ่านตอนตี 3 ที่ระบบล่ม ไม่ใช่ตอนเขียนโค้ด
+> ถ้าบรรทัดไหนไม่ช่วยตอบว่า "เกิดอะไรขึ้น กับใคร เมื่อไหร่" ก็อย่าเขียนลงไป
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เริ่มโปรเจกต์ใหม่ทุกชนิด (service, API, worker, batch, desktop, frontend)
+- มีคนขอ "ให้มี log file" หรือถามเรื่องรูปแบบและระดับของ log
+- ไล่ปัญหา production แล้วพบว่า log ที่มีอยู่ใช้ไม่ได้
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log
+- ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
+
+---
+
+## 1 · รูปแบบบรรทัด — เหมือนกันทุกภาษา
+
+```
+2026-08-31 09:42:13.482 +07:00  INFO   [a3f9c1b2] orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 userId=57 ms=134
+└────────── เวลา + timezone ──────────┘ └level┘  └ cid ┘ └source┘ └── ข้อความ ──┘ └──── context k=v ────┘
+```
+
+| ส่วน | กฎ |
+|---|---|
+| เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
+| level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
+| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[------]` |
+| source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
+| ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
+| context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
+
+**ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
+`grep "cid=a3f9c1b2"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
+วันที่ต้องส่งเข้า Loki/ELK ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
+
+**1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
+
+---
+
+## 2 · ระดับ log — เขียนให้ตรงความหมาย
+
+| ระดับ | ใช้เมื่อ | ตัวอย่าง |
+|---|---|---|
+| `FATAL` | แอปกำลังจะตาย ทำงานต่อไม่ได้ | ต่อ DB ตอน start ไม่ได้ |
+| `ERROR` | งานนี้ล้มเหลว **และต้องมีคนมาดู** | บันทึกคำสั่งซื้อไม่สำเร็จ |
+| `WARN` | ผิดปกติแต่ระบบยังไปต่อได้ | retry ครั้งที่ 2, disk เหลือ 10% |
+| `INFO` | เหตุการณ์สำคัญทางธุรกิจ | สร้างคำสั่งซื้อ, ผู้ใช้ล็อกอิน, job เริ่ม/จบ |
+| `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
+| `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
+
+> ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
+> คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
+
+ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
+
+---
+
+## 3 · Correlation id — สิ่งที่ทำให้ log ใช้งานได้จริง
+
+1 request ใช้ id เดียวตั้งแต่ต้นจนจบ ทุกบรรทัดที่เกิดจาก request นั้นจึงมี id เดียวกัน
+
+```
+Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
+                        (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
+```
+
+- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้าง (`uuid v4` ตัด 8 ตัวแรก)
+- **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
+- ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
+- เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
+  · `IHttpContextAccessor`/`LogContext` (.NET) — **ห้ามใช้ตัวแปร global** เพราะจะปนกันทันทีที่มีหลาย request พร้อมกัน
+
+---
+
+## 4 · ไฟล์ log
+
+```
+logs/
+  app-20260831.log        ทุกระดับ · หมุนเที่ยงคืน · เก็บ 30 วัน · ไฟล์ละไม่เกิน 100MB
+  error-20260831.log      เฉพาะ ERROR/FATAL · เก็บ 90 วัน
+  fatal.log               exception ที่ไม่ถูกจับ (แอปตาย)
+```
+
+- โฟลเดอร์กำหนดด้วย env `LOG_DIR` — **ห้าม hardcode path**
+- บีบไฟล์เก่า (`.gz`) และ**ต้องมี retention** ไม่อย่างนั้นดิสก์จะเต็มจนระบบล่มเพราะ log ของตัวเอง
+- ใน container ให้ log ออก stdout ด้วย (นอกเหนือจากไฟล์) เพื่อให้ `docker logs` ใช้ได้
+- `logs/` ต้องอยู่ใน `.gitignore`
+
+---
+
+## 5 · สิ่งที่ห้ามลง log เด็ดขาด
+
+รหัสผ่าน · token/API key · cookie/Authorization header · OTP/PIN · เลขบัตรเครดิต/CVV ·
+**เลขบัตรประชาชน** · ข้อมูลสุขภาพ · payload เต็มที่มีข้อมูลส่วนบุคคล
+
+ตัวช่วยที่มีให้แล้ว: ฟังก์ชัน redaction (ปิดค่าลับ) ดู**ว่าชื่อคีย์มีคำต้องห้ามอยู่ข้างในไหม** (`userPassword`, `pwd`,
+`accessToken` โดนหมด) แล้วแทนค่าด้วย `***` โดยตรวจลึกลงไปได้ 4 ชั้นของ object
+
+> 🚨 **Log injection** — ค่าที่มาจากผู้ใช้อาจมี `\n` ถ้าปล่อยผ่าน ผู้ใช้จะ "แต่ง" บรรทัด log
+> ปลอมขึ้นมาเองได้ ทำให้คนอ่านเข้าใจผิดและ parser พัง โค้ดที่ให้มาจึงตัด `\r\n\t` ทิ้งจากทุกค่า
+
+---
+
+## 6 · โค้ดที่พร้อมใช้
+
+| ไฟล์ | สแต็ก | สถานะ |
+|---|---|---|
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✅ รันทดสอบแล้ว |
+| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✅ รันทดสอบแล้ว |
+| `references/per-stack.md` | .NET (Serilog) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+
+```js
+// Node
+const { withCorrelation } = require('./logger.node');
+const log = withCorrelation(req.id).child({ source: 'orders' });
+log.info('สร้างคำสั่งซื้อสำเร็จ', { orderId: 1042, ms: 134 });
+log.error('บันทึกไม่สำเร็จ', err);          // ส่ง Error ตรง ๆ ได้ stack ให้เอง
+```
+
+```python
+# Python
+from logger_py import setup_logging, get_logger, set_correlation_id
+setup_logging(app_name="myapi")             # ครั้งเดียวตอนแอปเริ่ม
+log = get_logger("orders")
+log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
+log.exception("บันทึกไม่สำเร็จ")             # ใน except — ได้ stack ให้เอง
+```
+
+---
+
+## 7 · ตรวจงาน
+
+```bash
+# ไม่มี print/console.log หลงเหลือในโค้ด production
+grep -rnE "console\.(log|error)|Console\.WriteLine|^\s*print\(" src/ --include="*.ts" \
+  --include="*.js" --include="*.cs" --include="*.py" | grep -v test
+
+# log ที่ออกมาอ่านได้จริงและ grep ได้
+tail -f logs/app-*.log
+grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวได้ครบทุกบรรทัดไหม
+```
+
+- [ ] ทุกบรรทัดมีครบ: เวลา+timezone · level · cid · source
+- [ ] `grep` ด้วย cid เดียวแล้วเห็นเรื่องราวของ request นั้นตั้งแต่ต้นจนจบ
+- [ ] ไม่มีความลับหลุด: ลอง log object ที่มี `password`, `token` แล้วต้องเห็น `***`
+- [ ] ยิงค่าที่มี `\n` เข้าไปแล้วไม่เกิดบรรทัดปลอม
+- [ ] ตั้ง `LOG_LEVEL=INFO` แล้ว DEBUG หายไปจริง
+- [ ] ไฟล์หมุนตามวันและมี retention (ปล่อยไว้ 1 เดือนดิสก์ต้องไม่เต็ม)
+- [ ] `logs/` อยู่ใน `.gitignore`
+- [ ] response ส่ง `X-Request-Id` กลับมาให้ลูกค้า
+
+---
+
+## 8 · Anti-patterns
+
+- ❌ **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
+- ❌ **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
+- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
+- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
+- ❌ **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
+  ใช้ข้อความคงที่ + context แทน
+- ❌ **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
+- ❌ **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
+- ❌ **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+
+---
+
+## 9 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| endpoint health/ping/version | `web-service-essentials` |
+| เขียน test ให้ครอบคลุม | `testing-standards` |
+| runbook ตอน incident | `incident-runbook-template` |
+| postmortem หลังเหตุ | `postmortem-template` |
+
+
+## reference: per-stack.md
+
+# ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
+
+> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
+> `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
+> ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
+
+---
+
+## สารบัญ
+
+1. [.NET / C# — Serilog](#net--c--serilog)
+2. [Angular / frontend](#angular--frontend)
+3. [ตารางเทียบ](#ตารางเทียบ)
+
+---
+
+## .NET / C# — Serilog
+
+```bash
+dotnet add package Serilog.AspNetCore
+dotnet add package Serilog.Sinks.File
+```
+
+`appsettings.json` — เก็บการตั้งค่าไว้นอกโค้ด เปลี่ยนระดับ log ได้โดยไม่ต้อง build ใหม่:
+
+```json
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft.AspNetCore": "Warning",
+        "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+      }
+    }
+  }
+}
+```
+
+`Program.cs`:
+
+```csharp
+using Serilog;
+using Serilog.Events;
+
+const string LineTemplate =
+    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
+    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context}{NewLine}{Exception}";
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("CorrelationId", "------")   // ค่าตั้งต้นเมื่อไม่มี request
+    .WriteTo.Console(outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        fileSizeLimitBytes: 100 * 1024 * 1024,
+        rollOnFileSizeLimit: true,
+        outputTemplate: LineTemplate)
+    .WriteTo.File(
+        path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "error-.log"),
+        restrictedToMinimumLevel: LogEventLevel.Error,
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 90,
+        outputTemplate: LineTemplate)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+```
+
+> `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
+> `{Message:lj}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
+
+### Middleware correlation id
+
+```csharp
+public sealed class CorrelationIdMiddleware(RequestDelegate next)
+{
+    public const string Header = "X-Request-Id";
+
+    public async Task Invoke(HttpContext ctx)
+    {
+        var cid = ctx.Request.Headers[Header].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(cid))
+            cid = Guid.NewGuid().ToString("N")[..8];
+
+        ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
+
+        // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", cid))
+            await next(ctx);
+    }
+}
+```
+
+### เขียน log
+
+```csharp
+// ✅ ข้อความคงที่ + ตัวแปรเป็น property — group log ได้ ค้นหาได้
+_logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ {OrderId} {Ms}", orderId, sw.ElapsedMilliseconds);
+
+// ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
+_logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
+```
+
+### ปิดข้อมูลลับ
+
+Serilog ไม่ปิดค่าลับให้อัตโนมัติ ทางที่ชัวร์ที่สุดคือ**อย่าส่ง object ทั้งก้อนเข้า log**
+ให้เลือกเฉพาะ field ที่ต้องการ ถ้าจำเป็นต้องส่งทั้งก้อนให้เขียน `IDestructuringPolicy`
+หรือใส่ `[NotLogged]` ผ่าน `Destructure.ByTransforming<T>()`
+
+---
+
+## Angular / frontend
+
+หลักการต่างจาก backend: **เบราว์เซอร์เขียนไฟล์ไม่ได้** log ที่สำคัญจึงต้องส่งขึ้น backend
+
+```ts
+// core/logger.service.ts
+import { Injectable, inject, isDevMode } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+type Level = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+
+@Injectable({ providedIn: 'root' })
+export class LoggerService {
+  private http = inject(HttpClient);
+  private buffer: unknown[] = [];
+
+  private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
+    // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
+    if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
+    if (level === 'DEBUG' || (isDevMode() && level === 'INFO')) return;
+
+    this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
+    if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
+  }
+
+  /** ส่งเป็นชุด ไม่ยิงทีละบรรทัด — ไม่งั้น network tab เต็มไปด้วย request ของ log เอง */
+  flush() {
+    if (!this.buffer.length) return;
+    const batch = this.buffer.splice(0);
+    this.http.post('/api/client-logs', { entries: batch }).subscribe({ error: () => {} });
+  }
+
+  debug = (m: string, c?: Record<string, unknown>) => this.write('DEBUG', m, c);
+  info  = (m: string, c?: Record<string, unknown>) => this.write('INFO', m, c);
+  warn  = (m: string, c?: Record<string, unknown>) => this.write('WARN', m, c);
+  error = (m: string, c?: Record<string, unknown>) => this.write('ERROR', m, c);
+}
+```
+
+จับ error ที่หลุดทุกตัว:
+
+```ts
+// core/global-error.handler.ts
+@Injectable()
+export class GlobalErrorHandler implements ErrorHandler {
+  private log = inject(LoggerService);
+  handleError(err: unknown) {
+    const e = err as Error;
+    this.log.error(e?.message ?? 'unknown error', { stack: e?.stack?.slice(0, 2000) });
+    if (isDevMode()) console.error(err);
+  }
+}
+// app.config.ts → providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }]
+```
+
+ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
+
+```ts
+export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
+  next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
+```
+
+**ฝั่ง backend** ต้องมี endpoint `POST /api/client-logs` ที่:
+- จำกัดขนาด body และทำ rate limit ไม่อย่างนั้นจะกลายเป็นช่องให้คนยิง log ถล่ม
+- เขียนลงไฟล์แยก `logs/client-YYYYMMDD.log`
+- **ถือว่าเนื้อหาเป็นข้อมูลที่เชื่อไม่ได้** จึงต้องตัด `\r\n` ออกจากทุกค่าเหมือน log ปกติ
+
+---
+
+## ตารางเทียบ
+
+| เรื่อง | .NET | Node | Python | Angular |
+|---|---|---|---|---|
+| ไลบรารี | Serilog | winston | stdlib `logging` | เขียนเอง (บาง) |
+| หมุนไฟล์ | `rollingInterval: Day` | `winston-daily-rotate-file` | `TimedRotatingFileHandler` | — (ส่งขึ้น backend) |
+| correlation | `LogContext.PushProperty` | `AsyncLocalStorage` + `child()` | `ContextVar` | header `X-Request-Id` |
+| ระดับ | `LogEventLevel` | `level` | `setLevel` | enum ของตัวเอง |
+| ตั้งค่าจากภายนอก | `appsettings.json` | env `LOG_LEVEL` | env `LOG_LEVEL` | `isDevMode()` |
+
+
+---
+
 # skill: auth-implementation-patterns
 
 Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
@@ -1971,150 +2354,3 @@ audit log ที่เก็บทุกอย่าง มีค่าเท่
 - ❌ **บันทึกทุกการคลิก** — ของสำคัญจมอยู่ในกองข้อมูลที่ไม่มีใครใช้
 - ❌ **คัดลอกข้อมูลอ่อนไหวลง audit** — เกิดช่องรั่วใหม่โดยไม่ตั้งใจ
 - ❌ **ไม่มีหน้าจอให้ดู** — มีข้อมูลแต่ต้องให้ developer query ทุกครั้งที่ลูกค้าถาม
-
-
----
-
-# skill: file-upload-and-storage
-
-Use when users upload files or the system stores and serves them (type checks, virus scan, links).
-
-# รับไฟล์อัปโหลดและการเก็บไฟล์
-
-> **กฎข้อเดียว:** ไฟล์ที่ผู้ใช้ส่งมาคือข้อมูลที่เชื่อไม่ได้
-> ชื่อไฟล์ นามสกุล ชนิดที่เบราว์เซอร์แจ้งมา และขนาดที่บอกไว้ — **ปลอมได้ทั้งหมด**
-
-## เมื่อไหร่ใช้ skill นี้
-
-- มีหน้าจอให้ผู้ใช้แนบไฟล์ รูป หรือเอกสาร
-- ระบบต้องเก็บไฟล์แล้วส่งกลับให้ดูหรือดาวน์โหลด
-- ต้องตัดสินใจว่าเก็บไฟล์ไว้ที่ไหน
-- มีไฟล์ที่ไม่ควรให้คนอื่นเห็น แต่ตอนนี้ใครมีลิงก์ก็เปิดได้
-
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
-
-| งาน | skill | |
-|---|---|---|
-| นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
-| รูปแบบ endpoint และ error | `api-conventions` | แทน |
-| สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
-| ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
-| ตาราง metadata ของไฟล์ | `database-design` | คู่ |
-| endpoint และ error ของการอัปโหลด | `api-conventions` · `web-service-essentials` | คู่ |
-| อายุการเก็บไฟล์ที่มีข้อมูลบุคคล | `pdpa-compliance` | คู่ |
-| ขนาดพื้นที่ที่ใช้และการแจ้งเตือน | `observability-basics` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-
----
-
-## 1 · ตรวจก่อนรับ
-
-| ตรวจอะไร | ทำยังไง |
-|---|---|
-| **ชนิดไฟล์** | อ่าน**เนื้อในไฟล์** (magic bytes) ไม่ใช่เชื่อนามสกุลหรือ `Content-Type` |
-| **ขนาด** | บังคับที่เซิร์ฟเวอร์ **และ**ที่ตัวรับคำขอด้านหน้า — ตรวจฝั่งเบราว์เซอร์เป็นแค่ความสะดวก |
-| จำนวนไฟล์ต่อครั้ง | ตั้งเพดาน |
-| ขนาดรวมต่อผู้ใช้ | ตั้งโควตา ไม่งั้นคนเดียวกินพื้นที่หมด |
-| ชนิดที่อนุญาต | **รายการที่อนุญาต ไม่ใช่รายการที่ห้าม** |
-
-```
-รายการที่อนุญาตทั่วไป: jpg · png · webp · pdf · xlsx · docx · csv
-ห้ามเสมอ: ไฟล์รันได้ (exe, sh, bat) · ไฟล์สคริปต์ของเซิร์ฟเวอร์ (php, aspx, jsp) · svg ที่ไม่ได้ทำความสะอาด
-```
-
-> 🚨 **SVG คือ HTML** — มันรันสคริปต์ได้ ถ้าจะรับต้องทำความสะอาดก่อน หรือแปลงเป็น PNG
->
-> 🚨 **ตรวจขนาดก่อนอ่านไฟล์เข้าหน่วยความจำ** — ไม่งั้นไฟล์ 5 GB ทำให้เซิร์ฟเวอร์ตาย
-> ก่อนที่โค้ดตรวจขนาดจะได้ทำงาน
-
-**สแกนไวรัส** สำหรับไฟล์ที่คนอื่นจะดาวน์โหลดต่อ — ระหว่างรอผลสแกนให้สถานะเป็น `pending`
-และยังไม่ให้ใครเข้าถึง
-
----
-
-## 2 · เก็บที่ไหน
-
-| ที่เก็บ | เหมาะกับ | หมายเหตุ |
-|---|---|---|
-| **object storage** (S3 · Azure Blob · GCS) | ค่าเริ่มต้นที่ควรใช้ | ขยายได้ · มีลิงก์หมดอายุในตัว |
-| ดิสก์ของเซิร์ฟเวอร์ | ระบบเล็ก เครื่องเดียว | **ต้องอยู่นอกโฟลเดอร์ที่เว็บเสิร์ฟ** และต้องสำรองข้อมูล |
-| ในฐานข้อมูล | ไฟล์เล็กมากและต้องอยู่ใน transaction เดียวกัน | โตเร็ว · สำรองข้อมูลช้าลงมาก |
-
-> ❌ **เก็บไฟล์ในโฟลเดอร์ของแอป** — deploy ทีไรหาย และถ้ามีหลาย instance ก็ไม่เห็นกัน
-> ❌ **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟตรง ๆ** — อัปโหลดไฟล์สคริปต์แล้วเรียกรันได้
-
-**ฐานข้อมูลเก็บแค่ metadata ส่วนตัวไฟล์เก็บที่อื่น** — ตาราง metadata ต้องมีคอลัมน์
-`id` · `original_name` · `stored_key` · `content_type` · `size_bytes` · `checksum` ·
-`uploaded_by` · `uploaded_at` · `scan_status` · `owner_entity_type` · `owner_entity_id`
-
----
-
-## 3 · ตั้งชื่อไฟล์ที่เก็บ
-
-**ห้ามใช้ชื่อไฟล์ที่ผู้ใช้ส่งมาเป็นชื่อจริงที่เก็บ**
-
-```
-❌ uploads/รายงาน (1).xlsx              เว้นวรรค · ภาษาไทย · วงเล็บ
-❌ uploads/../../etc/passwd             หลุดออกนอกโฟลเดอร์
-✅ 2026/09/25/01J9Z8K7X2M4.xlsx         สุ่ม · แยกโฟลเดอร์ตามวันที่
-```
-
-- ชื่อจริงที่เก็บเป็นค่าสุ่ม (UUIDv7 หรือ ULID) + นามสกุลที่**ตรวจแล้ว**
-- ชื่อเดิมของผู้ใช้เก็บไว้ในฐานข้อมูล แล้วส่งกลับตอนดาวน์โหลดผ่าน header
-- แยกโฟลเดอร์ตามวันที่ — โฟลเดอร์เดียวที่มีไฟล์เป็นล้านจะช้าและเปิดดูไม่ไหว
-- เก็บ checksum ไว้ด้วย — ตรวจไฟล์ซ้ำและตรวจว่าไฟล์ไม่เสีย
-
----
-
-## 4 · ส่งไฟล์กลับให้ผู้ใช้
-
-| ไฟล์ | วิธีส่ง |
-|---|---|
-| สาธารณะ (โลโก้ รูปสินค้า) | URL ตรงผ่าน CDN ได้ |
-| **ส่วนตัว** (เอกสาร ใบเสร็จ รูปผู้ใช้) | **ลิงก์ที่มีลายเซ็นและหมดอายุ** 5–15 นาที |
-
-> 🚨 **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ลิงก์ถูกส่งต่อ ถูกบันทึกใน log ของ proxy
-> และติดอยู่ใน `Referer` เสมอ ไฟล์ส่วนตัวต้อง**ตรวจสิทธิ์ทุกครั้ง**แล้วค่อยออกลิงก์ชั่วคราวให้
-
-- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ไม่ต้องผ่านแอป
-- ตอนส่งไฟล์ให้ดาวน์โหลด ต้องตั้ง `Content-Disposition` และ `Content-Type` ให้ถูก
-  และห้ามส่ง HTML ที่ผู้ใช้อัปโหลดกลับมาแบบให้เบราว์เซอร์เรนเดอร์
-- ถ้าทำได้ ให้เสิร์ฟไฟล์ของผู้ใช้จากคนละโดเมนกับแอป เพื่อกันสคริปต์ในไฟล์เข้าถึง cookie ของแอป
-
----
-
-## 5 · รูปภาพ
-
-- **ห้ามส่งรูปต้นฉบับจากกล้องลงหน้าจอ** — รูป 8 MB บนมือถือคือหน้าเว็บที่โหลดไม่ขึ้น
-- สร้างขนาดย่อไว้ล่วงหน้า 2–3 ขนาด (thumbnail · ขนาดกลาง · ขนาดเต็มที่ย่อแล้ว)
-- **ลบ EXIF ออก** — ในรูปมีพิกัดที่ถ่าย ผู้ใช้ไม่รู้ว่ากำลังเผยแพร่ออกไป
-- แปลงเป็น WebP ถ้าเบราว์เซอร์รองรับ
-- หมุนรูปตาม EXIF ก่อนลบ EXIF ทิ้ง ไม่งั้นรูปจากมือถือจะตะแคง
-- ถ้าไฟล์ใหญ่หรือมีหลายไฟล์ ให้ย่อรูปเป็นงานเบื้องหลัง (ดู `background-jobs`)
-
----
-
-## 6 · ลบและอายุการเก็บ
-
-| เรื่อง | กฎ |
-|---|---|
-| ลบข้อมูลต้นเรื่อง | ต้องมีงานคอยตามลบไฟล์กำพร้าที่เหลืออยู่ด้วย |
-| ลำดับการลบ | ลบ metadata ก่อน แล้วค่อยลบไฟล์ — ไฟล์กำพร้าไม่อันตราย แต่ metadata ที่ชี้ไปหาไฟล์ที่หายไปแล้วทำให้หน้าจอพัง |
-| ไฟล์ที่อัปโหลดแล้วไม่ถูกผูกกับอะไร | ลบทิ้งหลัง 24 ชั่วโมง |
-| อายุการเก็บ | กำหนดต่อประเภทไฟล์ · ไฟล์ที่มีข้อมูลบุคคลต้องมีวันหมดอายุ (ดู `pdpa-compliance`) |
-| สำรองข้อมูล | ไฟล์ต้องอยู่ในแผนสำรองเหมือนฐานข้อมูล **และต้องเคยทดสอบกู้คืนจริง** |
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **เชื่อนามสกุลไฟล์** — เปลี่ยนชื่อไฟล์เป็น `.jpg` ใครก็ทำได้
-- ❌ **ตรวจขนาดแค่ฝั่งเบราว์เซอร์** — ข้ามได้ใน 3 วินาที
-- ❌ **ใช้ชื่อไฟล์ของผู้ใช้เป็นเส้นทางจริง** — `../` พาไปไหนก็ได้
-- ❌ **เก็บไฟล์ในโฟลเดอร์ที่เว็บเสิร์ฟ** — อัปโหลดสคริปต์แล้วเรียกรันได้
-- ❌ **"ลิงก์เดายาก" แทนการตรวจสิทธิ์**
-- ❌ **รับ SVG โดยไม่ทำความสะอาด** — สคริปต์ทำงานในเบราว์เซอร์คนอื่น
-- ❌ **ส่งรูปต้นฉบับ 8 MB ลงมือถือ**
-- ❌ **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
-- ❌ **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
-- ❌ **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย

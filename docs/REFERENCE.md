@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (116)
+## 🛠️ Skills (117)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -1020,6 +1020,12 @@
 ### 116. no-ai-look
 **ใช้กับ:** graphic-designer, growth-specialist, image-artist, reviewer, technical-writer, ux-designer
 **Description:** Use when making or reviewing anything people look at (screen, slide, poster, logo, AI image, document) so it looks made by a person, not AI.
+
+---
+
+### 117. stack-mql
+**ใช้กับ:** developer, quant-analyst
+**Description:** Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert Advisors, indicators, scripts) or preparing one for the MQL5 Market.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: position-sizing
-description: Use when about to enter a trade and asking how many shares, where the stop goes or if it is too big.
+description: Use when about to enter a trade and asking how many shares or lots, where the stop goes or if it is too big (shares, forex, crypto).
 ---
 
 # Position Sizing (คำนวณขนาดไม้)
@@ -18,6 +18,8 @@ position value      = size × entry
 ```
 
 If there is no stop, stop and ask for one — no sizing without a stop. Get the stop from the invalidation price in `technical-signals`.
+
+Forex, CFDs (gold, indices), crypto or a prop-firm account → lots, pip value, margin, swap and daily loss limits are in [references/forex-cfd-crypto.md](references/forex-cfd-crypto.md). The rest of this file is SET shares.
 
 ## SET trading rules that change the answer
 

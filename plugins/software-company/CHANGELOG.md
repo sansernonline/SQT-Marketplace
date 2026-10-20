@@ -1,5 +1,11 @@
 # Changelog — software-company
 
+## 2.14.0 — 2026-10-20
+
+- skill ใหม่ `stack-mql` — เขียนและตรวจ MQL4 / MQL5 (Expert Advisor · indicator บน MetaTrader 4/5): ความต่าง MT4 กับ MT5 · ตัวตรวจก่อนส่งออร์เดอร์ (volume · ราคา · stops level · freeze level · margin · จำนวนออร์เดอร์) · state ที่กู้คืนได้หลังรีสตาร์ท · backtest จาก command line · กฎ MQL5 Market · ขายเอง
+- `developer` เพิ่ม `stack-mql` ในตาราง stack · `quant-analyst` ใช้ `stack-mql` กับงาน EA
+- ชุด prompt คู่กัน: `prompt/software-company/prompt-trading-system.md` · `prompt-ai-feature.md` · `prompt-sell-product.md` (ใหม่) และฉบับใหม่ใน `prompt-operations.md` (6 ดูแลประจำ) · `prompt-existing-code.md` (6 ไม่มี source) · `prompt-release.md` (4 แอป Windows) · กฎ "งานเฉพาะสาขา" ใน `prompt-new-project.md`
+
 ## 2.13.0 — 2026-10-19
 
 - รับ skill กลาง `no-ai-look` จาก `superuser` · agent ที่ทำงานภาพ (`ux-designer` · `graphic-designer` · `image-artist` · `growth-specialist` · `technical-writer`) ทำตามและตรวจก่อนส่ง

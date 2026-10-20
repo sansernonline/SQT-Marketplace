@@ -7,17 +7,17 @@
 ```
 prompt/
 ├─ README.md            ไฟล์นี้ (สารบัญ)
-├─ software-company/    20 ไฟล์
+├─ software-company/    23 ไฟล์
 ├─ career/ · consumer-rights/ · dev-learning/ · graphic-design/
 ├─ health-wellness/ · home-family/ · online-seller/ · personal-life/
 ├─ thai-workplace/ · trading-finance/
-│                       4–5 ไฟล์ตามสถานการณ์ + README.md (รายการไฟล์ · เลือกจากสถานการณ์)
+│                       4–6 ไฟล์ตามสถานการณ์ + README.md (รายการไฟล์ · เลือกจากสถานการณ์)
 └─ superuser/           งานทั่วไป + ฉบับกลางที่ใช้ได้ทุก plugin
 ```
 
 | plugin | ไฟล์ |
 |---|---|
-| `software-company` | `software-company/` — 20 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
+| `software-company` | `software-company/` — 23 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
 | plugin อื่น 10 ตัว | `<ชื่อ plugin>/prompt-<สถานการณ์>.md` · เลือกไฟล์จาก `<ชื่อ plugin>/README.md` · ดู [plugin อื่น](#plugin-อื่น) |
 | `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว |
 
@@ -31,7 +31,7 @@ prompt/
 
 ## รายการไฟล์
 
-ไฟล์จัดเป็น 6 กลุ่มตามช่วงงาน · ชื่อไฟล์ไม่มีชื่อกลุ่ม ให้ดูจากตารางนี้
+ไฟล์จัดเป็น 7 กลุ่มตามช่วงงาน · ชื่อไฟล์ไม่มีชื่อกลุ่ม ให้ดูจากตารางนี้
 
 | กลุ่ม | ไฟล์ | ใช้เมื่อ | ฉบับในไฟล์ |
 |---|---|---|---|
@@ -46,15 +46,18 @@ prompt/
 | Dev | `software-company/prompt-change.md` | มีคำขอเปลี่ยน / พบบั๊ก หลังส่งงาน | 1 change request · 2 bugfix |
 | Test | `software-company/prompt-test-automation.md` | มีแอปแล้ว ต้องทำ automated test อย่างเดียว | 1 แผนทดสอบอัตโนมัติ · 2 test case จากแอปจริง · 3 เขียน test · 4 ต่อเข้า CI |
 | Test | `software-company/prompt-quality.md` | ตรวจคุณภาพก่อนปล่อยหรือตามรอบ | 1 security review · 2 code review · 3 doc sync (เอกสารกับโค้ดไม่ตรงกัน) |
-| เอกสาร | `software-company/prompt-existing-code.md` | มีแอปอยู่แล้ว ได้รับมอบหมายให้ทำเอกสาร | 1 reverse spec (`docs/as-is/`) · 2 SRS · 3 FSD · 4 tech doc · 5 คู่มือ (ชี้ไป prompt-manual) |
+| เอกสาร | `software-company/prompt-existing-code.md` | มีแอปอยู่แล้ว ได้รับมอบหมายให้ทำเอกสาร | 1 reverse spec (`docs/as-is/`) · 2 SRS · 3 FSD · 4 tech doc · 5 คู่มือ (ชี้ไป prompt-manual) · **6 มีแค่ตัวโปรแกรม ไม่มี source** |
 | เอกสาร | `software-company/prompt-manual.md` | ทำคู่มือและอบรมผู้ใช้ | 1 user manual แยกบทบาท · 2 training guide |
 | เอกสาร | `software-company/prompt-doc-cover.md` | ปกเอกสาร .docx ดูเหมือนของโปรเจกต์อื่น · อยากได้ปกที่ว้าวและไม่ซ้ำ | 1 สำรวจโปรเจกต์ + research ปก · 2 ออกแบบ 3 แนวแล้วโหวต 2 ใน 3 · 3 รวมผลและสร้างปกใน Word ทั้งชุด |
-| ส่งมอบและดูแล | `software-company/prompt-release.md` | เตรียม deploy / ออกรุ่น | 1 deploy guide · 2 release notes · 3 runbook |
+| ส่งมอบและดูแล | `software-company/prompt-release.md` | เตรียม deploy / ออกรุ่น | 1 deploy guide · 2 release notes · 3 runbook · **4 ออกรุ่นแอป Windows (installer · code signing · auto-update)** |
 | ส่งมอบและดูแล | `software-company/prompt-handover.md` | ส่งงานต่อ / ปิดโครงการ | 1 handover · 2 retrospective |
-| ส่งมอบและดูแล | `software-company/prompt-operations.md` | ระบบขึ้นใช้งานจริงแล้ว | 1 รับมือระบบล่ม · 2 postmortem · 3 แผนเฝ้าระวัง · 4 threat model · 5 เก็บกวาดเครื่อง |
+| ส่งมอบและดูแล | `software-company/prompt-operations.md` | ระบบขึ้นใช้งานจริงแล้ว | 1 รับมือระบบล่ม · 2 postmortem · 3 แผนเฝ้าระวัง · 4 threat model · 5 เก็บกวาดเครื่อง · **6 ดูแลประจำ: คัดบั๊ก · ตรวจโค้ด · รายงาน MA / SLA** |
 | Dev | `software-company/prompt-explore.md` | ต้องรู้หรือพิสูจน์ก่อนลงมือ | 1 ตอบคำถามเชิงเทคนิค · 2 ทำเองหรือใช้ของที่มี · 3 ทดลองหลายแบบ · 4 หน้าจอตรงต้นแบบ |
 | ผลิตภัณฑ์ | `software-company/prompt-product.md` | ตัดสินใจเชิงผลิตภัณฑ์ / นำเสนอ | 1 ตั้งชื่อ · 2 roadmap · 3 แผน sprint · 4 deck นำเสนอ |
 | ผลิตภัณฑ์ | `software-company/prompt-growth.md` | ให้คนค้นเจอและเริ่มใช้ | 1 ตรวจ SEO · 2 เพิ่ม conversion · 3 ภาพประกอบ · 4 ประสบการณ์นักพัฒนา |
+| ผลิตภัณฑ์ | `software-company/prompt-sell-product.md` | จะขายผลิตภัณฑ์ของเราเอง (แอป · plugin · API · EA) | 1 ราคาและแพ็กเกจ · 2 license · สมาชิก · รับเงิน · 3 เงื่อนไขการใช้ · ความเป็นส่วนตัว · คืนเงิน · 4 หน้าร้าน · 5 เปิดขายและดูตัวเลข |
+| งานเฉพาะสาขา | `software-company/prompt-ai-feature.md` | แอปจะเรียก Large Language Model (LLM) หรือ model AI (แชตบอต · สรุป · ถอดเสียง · อ่านภาพ) | 1 ออกแบบและเลือก model · 2 ชุดทดสอบ (eval) · 3 RAG · 4 สร้างและวัดผล · 5 ขึ้นจริงและเฝ้าดู |
+| งานเฉพาะสาขา | `software-company/prompt-trading-system.md` | เขียน Expert Advisor (EA) หรือ indicator บน MetaTrader 4/5 | 1 EA Spec · 2 EA Design · 3 เขียนโค้ด + ตัวตรวจออร์เดอร์ · 4 backtest + ความทนทาน · 5 forward test + VPS · 6 เตรียมขาย MQL5 Market |
 
 ## เลือกจากสถานการณ์
 
@@ -87,6 +90,16 @@ prompt/
 | ผลิตภัณฑ์ใหม่ยังไม่มีชื่อ / ต้องวางแผนหลายเดือน | `prompt-product.md` ฉบับ 1 → 2 → 3 |
 | ต้องไปนำเสนอ | `prompt-product.md` ฉบับ 4 |
 | เว็บไม่มีคนเข้า / มีคนเข้าแต่ไม่สมัคร | `prompt-growth.md` ฉบับ 1 → 2 |
+| จะเพิ่มแชตบอตหรือฟีเจอร์ AI ในแอป | `prompt-ai-feature.md` ฉบับ 1 → 2 → (ตอบจากเอกสาร → 3) → 4 → 5 · ยังไม่แน่ใจว่าทำได้ → `prompt-poc.md` ก่อน |
+| เปลี่ยน model AI หรือแก้ prompt ในระบบจริง | `prompt-ai-feature.md` ฉบับ 2 → 4 |
+| จะเขียน EA ใหม่ หรือ port MT4 ไป MT5 | `prompt-trading-system.md` ทั้งหมด (port → ฉบับ 1 → 2 → 3 → 4) |
+| มี EA แล้ว อยากขายบน MQL5 Market | `prompt-trading-system.md` ฉบับ 1 → 4 → 5 → `prompt-sell-product.md` ฉบับ 1 → `prompt-trading-system.md` ฉบับ 6 |
+| จะขายแอปหรือ API ของเราเอง ยังไม่รู้จะตั้งราคาเท่าไร | `prompt-sell-product.md` ทั้งหมด · ยังไม่มีชื่อ → `prompt-product.md` ฉบับ 1 ก่อน |
+| แอป Windows ของเราติด SmartScreen เตือน / ยังไม่มี installer | `prompt-release.md` ฉบับ 4 |
+| source หาย เหลือแต่ไฟล์ติดตั้ง ต้องทำต่อหรือเขียนใหม่ | `prompt-existing-code.md` ฉบับ 6 → `prompt-rebuild.md` |
+| ดูแลระบบลูกค้าตามสัญญา MA ต้องส่งรายงานทุกเดือน | `prompt-operations.md` ฉบับ 6 |
+| บั๊กเข้ามาทางอีเมลและแชตจนตามไม่ทัน | `prompt-operations.md` ฉบับ 6 (คัดบั๊ก) → `prompt-change.md` ฉบับ 2 |
+| งาน IoT · แอปมือถือ · สุขภาพ · การเงิน · เกม · ประกัน · กฎหมาย | `prompt-new-project.md` (กฎ "งานเฉพาะสาขา" เรียก agent และ skill ของสาขาให้เอง) |
 
 สถานการณ์ใหม่ที่ประกอบจากฉบับที่มีอยู่ได้ → เพิ่มแถวในตารางนี้ ไม่ต้องสร้างไฟล์ใหม่
 
@@ -100,15 +113,15 @@ prompt/
 |---|---|---|
 | [`career`](career/README.md) | `prompt-job-search` หางาน สัมภาษณ์ ต่อรอง · `prompt-at-work` ระหว่างทำงาน · `prompt-career-change` เปลี่ยนสาย กลับมาทำงาน · `prompt-leaving-job` ลาออก ถูกเลิกจ้าง | 13 |
 | [`consumer-rights`](consumer-rights/README.md) | `prompt-before-buying` ก่อนซื้อ ก่อนโอน · `prompt-money-back` ขอเงินคืน ถูกหลอก บิลผิด · `prompt-complaint` ร้องเรียน ยกเลิกสัญญา ประกันภัย ผู้รับเหมา · `prompt-warranty` ประกันสินค้า เสียซ้ำ | 12 |
-| [`dev-learning`](dev-learning/README.md) | `prompt-start-learning` เริ่มเรียน stack ใหม่ · `prompt-read-and-apply` paper เอกสารอังกฤษ เล่าให้ทีม · `prompt-keep-up` เรดาร์ อัปเกรดเวอร์ชัน · `prompt-certification` สอบใบรับรอง · `prompt-portfolio` side project | 14 |
+| [`dev-learning`](dev-learning/README.md) | `prompt-start-learning` เริ่มเรียน stack ใหม่ · `prompt-read-and-apply` paper เอกสารอังกฤษ เล่าให้ทีม · `prompt-keep-up` เรดาร์ อัปเกรดเวอร์ชัน · `prompt-certification` สอบใบรับรอง · `prompt-portfolio` side project · `prompt-thesis` วิทยานิพนธ์ IS บทความวิจัย | 19 |
 | [`graphic-design`](graphic-design/README.md) | `prompt-brand` brand kit ของพิมพ์ จัดไฟล์ · `prompt-campaign` แคมเปญ โปรด่วน ลูกค้าสั่งแก้ · `prompt-images` ชุดภาพ AI ภาพสินค้า โพสต์ทั้งเดือน · `prompt-video` วิดีโอสั้น โลโก้เคลื่อนไหว | 14 |
 | [`health-wellness`](health-wellness/README.md) | `prompt-checkup` ตรวจประจำปี ผลผิดปกติ สิทธิรักษา · `prompt-doctor-and-meds` หาหมอ ยา โรคประจำตัว · `prompt-family-care` พ่อแม่หลายโรค ผ่าตัด การ์ดฉุกเฉิน · `prompt-lifestyle` ออกกำลัง นอน ออฟฟิศซินโดรม เครียด | 13 |
 | [`home-family`](home-family/README.md) | `prompt-house` บิล ซ่อม ย้ายเข้า น้ำท่วม · `prompt-vehicle` ภาษีรถ อุบัติเหตุ รถมือสอง · `prompt-family-week` แผนสัปดาห์ เปิดเทอม ไม่อยู่บ้าน · `prompt-care` ผู้สูงอายุ ลูก สัตว์เลี้ยง | 14 |
 | [`online-seller`](online-seller/README.md) | `prompt-open-shop` เปิดร้าน ลงสินค้า ถูกระงับ · `prompt-stock-and-profit` กำไร สต็อก ปิดยอด ภาษี · `prompt-campaign-live` วันแคมเปญ ไลฟ์ · `prompt-customers` ตอบลูกค้า พัสดุหาย ข้อพิพาท | 15 |
 | [`personal-life`](personal-life/README.md) | `prompt-weekly-routine` ทบทวนสัปดาห์ ประชุม กลับจากลา · `prompt-papers-and-money` เอกสาร บัตรหาย แฟ้มฉุกเฉิน รายจ่าย · `prompt-online-safety` บัญชี ถูกแฮก มือถือหาย · `prompt-life-events` เดินทาง ตัดสินใจ ย้ายบ้าน ข้อความลำบากใจ | 17 |
 | [`thai-workplace`](thai-workplace/README.md) | `prompt-documents` เอกสารธุรกิจ ทวงเงิน ใบลดหนี้ · `prompt-tax-filing` ปิดงาน ภาษี เปิดบริษัท ยื่นเลยกำหนด · `prompt-employees` รับคน ลาออก วันหยุด · `prompt-pdpa-line` PDPA LINE OA | 17 |
-| [`trading-finance`](trading-finance/README.md) | `prompt-trading` ก่อนเทรด ทบทวน ติดดอย · `prompt-investing` พอร์ต กองทุน ตลาดร่วง · `prompt-money-plan` แผนเงิน เงินก้อน ตกงาน · `prompt-tax` ภาษี · `prompt-scam` มิจฉาชีพ | 17 |
-| `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว: 1 หาข้อมูลที่ยืนยันได้ · 2 ทำเอกสาร · 3 ตรวจงาน · 4 งานยาวที่ไม่มีคนดู (ทุก plugin) · 5 รวมบทเรียนเข้า skill (ทุก plugin) · 6 ทำ superuser ให้ plugin สาขาใหม่ | 6 |
+| [`trading-finance`](trading-finance/README.md) | `prompt-trading` ก่อนเทรด ทบทวน ติดดอย forex crypto prop firm · `prompt-investing` พอร์ต กองทุน ตลาดร่วง · `prompt-money-plan` แผนเงิน เงินก้อน ตกงาน · `prompt-tax` ภาษี · `prompt-scam` มิจฉาชีพ | 19 |
+| `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว: 1 หาข้อมูลที่ยืนยันได้ · 2 ทำเอกสาร · 3 ตรวจงาน · 4 งานยาวที่ไม่มีคนดู (ทุก plugin) · 5 รวมบทเรียนเข้า skill (ทุก plugin) · 6 ทำ superuser ให้ plugin สาขาใหม่ · 7 สอน agent ให้ทำงานแบบผม | 7 |
 
 เพิ่ม plugin ใหม่ → `superuser/prompt-superuser.md` ฉบับ 6 สร้างโฟลเดอร์ prompt ของ plugin นั้นแบบเดียวกันให้ด้วย แล้วเพิ่มแถวในตารางนี้ · สถานการณ์ใหม่ของ plugin เดิม → เพิ่มแถวใน `README.md` ของ plugin นั้นก่อน สร้างฉบับใหม่เมื่อประกอบจากฉบับที่มีไม่ได้
 
@@ -136,7 +149,7 @@ prompt/
 
 ## หมายเหตุ
 
-- ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–4 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–4 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md`
+- ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–4 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–4 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md` · ฉบับ 3 ใน `prompt-trading-system.md` · ฉบับ 4 ใน `prompt-ai-feature.md` · ฉบับ 2 ใน `prompt-sell-product.md`
 - ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 2 · ของ `software-company` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
 - กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-log` · `principle-prove-it-works` · `status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น

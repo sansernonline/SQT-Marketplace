@@ -1,6 +1,6 @@
 # prompt-release — เอกสาร deploy และออกรุ่น
 
-ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 3 ฉบับ แต่ละฉบับสร้างเอกสาร 1 ชุด
+ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 4 ฉบับ แต่ละฉบับสร้างเอกสาร 1 ชุด
 
 ## วิธีใช้
 
@@ -19,6 +19,7 @@
 | 1 | เอกสารแผน deploy และ CI/CD | `docs/deploy-guide.md` |
 | 2 | บันทึกการออกรุ่น (Release Notes) | `docs/release-notes/v<เวอร์ชัน>.md` |
 | 3 | คู่มือรับมือเหตุการณ์ (Runbook) | `docs/runbook-<เรื่อง>.md` |
+| 4 | ออกรุ่นแอป Windows: installer · code signing · auto-update | `docs/release-windows.md` |
 
 ---
 
@@ -125,3 +126,33 @@ agent `devops-engineer` · skill `incident-runbook-template` · `observability-b
 
 - คนที่ถูกปลุกตอนตี 3 อ่านแล้วทำตามได้โดยไม่ต้องคิด: ขั้นตอนสั้น · มีเลขลำดับ · ข้อละ 1 การกระทำ
 - การ์ดไหนที่ค้นคำสั่งจริงไม่เจอ ให้เขียน `(ต้องเติมคำสั่ง)` ห้ามแต่งคำสั่ง
+
+---
+
+## 4. ออกรุ่นแอป Windows: installer · code signing · auto-update
+
+agent `devops-engineer` + `developer` · skill `cicd-and-release` · `windows-app-design` · `config-and-secrets` · `principle-safe-to-rerun` · stack ตามภาษา (`stack-dotnet` · `stack-typescript` · `stack-python`)
+**ต้องมีก่อน:** แอปที่ build ได้ · `docs/release-notes/v<เวอร์ชัน>.md` (ฉบับ 2) ถ้ามี
+**ผลลัพธ์:** `docs/release-windows.md` — เอกสารเท่านั้น **ไม่ซื้อใบรับรอง · ไม่ลงนามด้วยใบรับรองจริง · ไม่ส่งขึ้น store** (อยู่ใน "รออนุมัติ") · สคริปต์ build ตัวอย่างอยู่ในเอกสารเป็นบล็อกโค้ด
+
+### ข้อมูลแอป (ผู้ใช้กรอก)
+
+- แอปเขียนด้วยอะไร (WinUI 3 · WPF · WinForms · .NET MAUI · Electron · Tauri · Python):
+- แจกทางไหน (เว็บของเรา · Microsoft Store · winget · ในบริษัท):
+- ต้องสิทธิ์ admin ไหม · ติดตั้งต่อผู้ใช้ หรือทั้งเครื่อง:
+- มีใบรับรอง code signing แล้วไหม (ชนิด · ผู้ออก):
+- ต้องการอัปเดตอัตโนมัติไหม:
+
+### หัวข้อที่ต้องมี
+
+1. **ชนิด installer** — เทียบ MSIX · Inno Setup · WiX · ตัวที่มากับ framework (เช่น Squirrel / electron-builder) ตามแอปนี้ · ตัวที่เลือกพร้อมเหตุผล
+2. **code signing** — ตัวเลือกใบรับรองและบริการลงนามที่มีตอนนี้ พร้อมราคาและเงื่อนไข (ตรวจจากแหล่งทางการรอบนี้ ติดวันที่) · Microsoft SmartScreen จะเตือนอย่างไรก่อนมีชื่อเสียงสะสม · ลงนามทุกไฟล์ที่รันได้และตัว installer · ใส่ timestamp
+3. **ค่าลับของการลงนาม** — กุญแจลงนามอยู่ใน hardware security module (HSM) · token · หรือบริการลงนามบน cloud ตามกฎ CA/Browser Forum (ตั้งแต่ 1 มิ.ย. 2023 ใบรับรองใหม่เก็บเป็นไฟล์ไม่ได้) · pipeline เก็บแค่ credential ของบริการลงนามใน secret · ไม่มีอะไรอยู่ใน repo
+4. **auto-update** — กลไกที่เลือก · ตรวจลายเซ็นก่อนติดตั้งรุ่นใหม่ · ช่องทาง beta / stable · ย้อนรุ่นได้อย่างไร
+5. **pipeline** — build → test → ลงนาม → ทำ installer → ตรวจลายเซ็น (`signtool verify /pa`) → อัปโหลด · รันซ้ำได้
+6. **ทดสอบติดตั้ง** — เครื่องสะอาด Windows 10 และ 11 · ติดตั้งทับรุ่นเก่า · ถอนการติดตั้งแล้วไม่มีไฟล์ค้าง · ผู้ใช้ไม่มีสิทธิ์ admin
+7. **Microsoft Store / winget** (ถ้าเลือก) — สิ่งที่ต้องเตรียมตามกฎปัจจุบัน ติดวันที่ตรวจ
+
+### กฎเฉพาะฉบับนี้
+
+- ราคาใบรับรองและกฎ SmartScreen เปลี่ยนบ่อย ห้ามใช้จากความจำ · ไม่เจอแหล่งทางการ → `(รอยืนยัน)`

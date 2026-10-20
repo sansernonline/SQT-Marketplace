@@ -246,6 +246,7 @@
     "sprint-plan": "วางแผน sprint: เกลา backlog · จัดลำดับ · ดูกำลังทีม",
     "srs-writing": "เขียนหรือตรวจ SRS ตาม ISO 29148 ทุกข้อมีรหัสและทดสอบได้",
     "stack-dotnet": "เขียนและตรวจ C# / .NET (ASP.NET Core · MVC 5 · EF Core)",
+    "stack-mql": "เขียนและตรวจ MQL4 / MQL5 (EA · indicator บน MetaTrader) และเตรียมขายบน MQL5 Market",
     "stack-python": "เขียนและตรวจ Python (สคริปต์ · CLI · FastAPI · Django · pandas · AI)",
     "stack-sql": "เขียนและตรวจ SQL query · procedure · สคริปต์แก้ข้อมูล (SQL Server · PostgreSQL)",
     "stack-typescript": "เขียนและตรวจ TypeScript (Node · NestJS · Angular · React · Vite)",

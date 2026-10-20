@@ -392,6 +392,109 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 ---
 
+# skill: stack-mql
+
+Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert Advisors, indicators, scripts) or preparing one for the MQL5 Market.
+
+# stack · MQL — Expert Advisor (EA) ที่ส่งออร์เดอร์ถูก ทุกโบรกเกอร์ ทุกครั้ง
+
+> **กฎข้อเดียว:** ทุกออร์เดอร์ผ่านตัวตรวจก่อนส่ง และทุกผลส่งกลับถูกอ่าน · EA ที่ "ทำงานใน tester" แต่ไม่ตรวจ ยังไม่เสร็จ
+
+ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec ของโปรเจกต์ (`prompt-trading-system.md`) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
+
+## 1 · เริ่มงาน: รู้ว่าเขียนให้แพลตฟอร์มไหน
+
+- ไฟล์ `.mq4` = MQL4 (MT4) · `.mq5` = MQL5 (MT5) · `.mqh` = include ใช้ร่วมได้ถ้าแยกส่วนที่ต่างไว้หลัง `#ifdef __MQL5__`
+- MQL4 ใส่ `#property strict` ทุกไฟล์ (ไม่ใส่ → compiler ปล่อยบั๊กชนิดข้อมูลผ่าน)
+- compile และ test ต้องมี terminal (Windows หรือ Wine บน macOS / Linux ที่ MetaQuotes แจก) · เครื่องที่ไม่มี → เขียนในรายงานว่า "ยังไม่ได้ compile" ห้ามบอกว่าผ่าน
+
+| ขั้น | MT5 | MT4 |
+|---|---|---|
+| compile | `metaeditor64.exe /compile:"MQL5\Experts\X.mq5" /log` | `metaeditor.exe /compile:"MQL4\Experts\X.mq4" /log` |
+| ผล compile | ไฟล์ `.log` ข้างไฟล์ต้นทาง · 0 errors 0 warnings | เหมือนกัน |
+| backtest จาก command line | `terminal64.exe /config:"tester.ini"` (หัวข้อ `[Tester]`: `Expert` · `Symbol` · `Period` · `FromDate` · `ToDate` · `Model` · `Report` · `ShutdownTerminal=1`) | `terminal.exe` + ไฟล์ config แบบ MT4 (ตัวเลือกน้อยกว่า) |
+
+ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/start_advanced/start · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
+
+## 2 · ความต่างที่ทำให้ port ระหว่าง MT4 กับ MT5 พัง
+
+| เรื่อง | MT4 | MT5 |
+|---|---|---|
+| โมเดลออร์เดอร์ | ออร์เดอร์ = สถานะ (`OrderSend` · `OrderSelect` · `OrdersTotal`) | แยก order · position · deal · ใช้ `CTrade` (`Trade\Trade.mqh`) |
+| บัญชี | hedging เสมอ | netting หรือ hedging → อ่าน `ACCOUNT_MARGIN_MODE` · netting มีได้ 1 position ต่อ symbol |
+| วิธีเติมออร์เดอร์ | ไม่มีให้เลือก | FOK / IOC อ่านจาก flag ใน `SYMBOL_FILLING_MODE` (Market / Exchange Execution) · RETURN ใช้ได้ทุกโหมดยกเว้น Market Execution · pending order ใช้ RETURN |
+| indicator | คืนค่าทันที (`iMA(...)`) | สร้าง handle ครั้งเดียวใน `OnInit` แล้ว `CopyBuffer` · ปล่อยใน `OnDeinit` |
+| ผลส่งออร์เดอร์ | `GetLastError()` (130 stops ผิด · 134 เงินไม่พอ · 138 requote · 146 trade context busy) | `MqlTradeResult.retcode` (10009 done · 10008 placed (pending order) · 10010 done partial = สำเร็จ · 10004 requote · 10014 volume ผิด · 10015 ราคาผิด · 10016 stops ผิด · 10018 ตลาดปิด · 10019 เงินไม่พอ · 10030 filling ผิด) |
+| เหตุการณ์ออร์เดอร์ | ไม่มี ต้องไล่ดูเอง | `OnTradeTransaction` |
+
+## 3 · ตัวตรวจก่อนส่งออร์เดอร์ (ทุกออร์เดอร์ ทุกครั้ง)
+
+| ตรวจ | ทำแบบนี้ | ไม่ตรวจแล้วเจอ |
+|---|---|---|
+| volume | ปัดลงตาม `SYMBOL_VOLUME_STEP` · อยู่ระหว่าง `SYMBOL_VOLUME_MIN` กับ `SYMBOL_VOLUME_MAX` | 10014 · error 131 |
+| ราคา | `NormalizeDouble(price, _Digits)` | 10015 |
+| Stop Loss (SL) / Take Profit (TP) | ห่างราคาปัจจุบันไม่น้อยกว่า `SYMBOL_TRADE_STOPS_LEVEL` × `_Point` | 10016 · error 130 |
+| แก้ออร์เดอร์ | ไม่แก้เมื่อราคาอยู่ในระยะ `SYMBOL_TRADE_FREEZE_LEVEL` · ไม่ส่งค่าเดิมซ้ำ | ถูกปฏิเสธ · 10025 no changes |
+| margin | `OrderCalcMargin` (MT5) · `AccountFreeMarginCheck` (MT4) ก่อนส่ง | 10019 · error 134 |
+| จำนวนออร์เดอร์ | น้อยกว่า `ACCOUNT_LIMIT_ORDERS` (0 = ไม่จำกัด) | ถูกปฏิเสธ |
+| symbol | `SYMBOL_TRADE_MODE` ไม่ใช่ disabled · ตลาดเปิด | 10018 |
+| MT5 ทั้งชุด | `OrderCheck()` ก่อน `OrderSend()` | error ที่บอกไม่ได้ว่าข้อไหนผิด |
+
+- ทุกผลส่งกลับต้องอ่าน · requote / off quotes → ลองใหม่ไม่เกิน 3 ครั้ง ราคาใหม่ทุกครั้ง · เงินไม่พอ / stops ผิด → ไม่ลองซ้ำ ลง log แล้วหยุดไม้นั้น
+- pip กับ point ไม่เท่ากัน: ราคา 5 ตำแหน่ง (หรือ 3 ตำแหน่งของคู่ JPY) → 1 pip = 10 point · input ที่ผู้ใช้กรอกเป็น pip ให้แปลงที่จุดเดียว
+
+ตัวอย่างโค้ดตัวตรวจแต่ละข้อ → https://www.mql5.com/en/articles/23204 (อ่านแล้วเขียนเอง ไม่ลอกทั้งไฟล์)
+
+## 4 · โครง EA ที่อ่านง่ายและกู้คืนได้
+
+- `OnInit` ตรวจ input ทุกตัว (ค่าผิด → `INIT_PARAMETERS_INCORRECT`) · สร้าง handle · `OnDeinit` ปล่อย handle
+- logic หนักทำครั้งเดียวต่อแท่งใหม่ (เทียบ `iTime(_Symbol, _Period, 0)` กับค่าที่จำไว้) ไม่ทำทุก tick
+- magic number ต่อ EA + symbol + กลยุทธ์ · นับและจัดการเฉพาะออร์เดอร์ที่ magic ตรง ห้ามแตะออร์เดอร์มือหรือ EA อื่น
+- **ไม่เก็บ state สำคัญไว้ในตัวแปรอย่างเดียว:** terminal รีสตาร์ท → state หาย · `OnInit` สร้าง state ใหม่จาก position/order ที่ magic ตรง · ค่าที่สร้างใหม่ไม่ได้ (เช่น ยอดขาดทุนวันนี้) เก็บใน `GlobalVariableSet` หรือไฟล์ใน `MQL5\Files` / `MQL4\Files`
+- เวลา: ใช้เวลา server (`TimeCurrent`) ตัดสินแท่งและ session · เวลา server ของแต่ละโบรกเกอร์ไม่เท่ากับเวลาไทย และเลื่อนตาม daylight saving · ใน tester `TimeGMT()` เท่ากับเวลา server จำลองเสมอ (แหล่ง: https://www.mql5.com/en/docs/dateandtime/timegmt) → ตัวกรองข่าวและ session ที่อิง Greenwich Mean Time (GMT) ต้องตั้ง offset เป็น input
+- 1 ฟังก์ชัน 1 หน้าที่: สัญญาณ · ขนาดไม้ · ส่งออร์เดอร์ · จัดการออร์เดอร์ที่เปิดอยู่ แยกกัน · สัญญาณเป็นฟังก์ชันบริสุทธิ์ที่รับข้อมูลแท่งแล้วคืนผล (test ได้ใน script)
+- log ทุกการตัดสินใจที่ส่งหรือไม่ส่งออร์เดอร์: เวลา server · symbol · เหตุผล · ราคา · spread · ผลส่งกลับ · ไม่ log ทุก tick
+
+## 5 · test
+
+- **script test:** ฟังก์ชันสัญญาณและขนาดไม้ test ด้วย script ที่ป้อนข้อมูลตายตัวแล้วเทียบผล (MQL ไม่มี framework test มาตรฐาน)
+- **backtest:** MT5 ใช้โหมด "Every tick based on real ticks" สำหรับผลที่จะใช้ตัดสิน · MT4 รายงาน modelling quality ทุกครั้ง · ค่า spread · commission · swap ตั้งตามบัญชีจริง ไม่ใช่ 0
+- **ทดสอบกับหลายสภาพ:** symbol อย่างน้อย 3 ตัวที่ digits ต่างกัน (เช่น EURUSD · USDJPY · XAUUSD) · timeframe อย่างน้อย 2 ตัว · บัญชี netting และ hedging (MT5) · ทุนน้อยจนส่งไม้ขั้นต่ำไม่ได้
+- **ไม่ตัดสินจากผลที่ optimize มา:** ใช้ forward period ของ MT5 หรือแบ่ง in-sample / out-of-sample เอง · ตัวเลขที่รายงานคือผลช่วงที่ไม่ได้ใช้ optimize
+- `OnTester()` คืนค่าเกณฑ์ที่ spec กำหนด (เช่น profit factor ที่ drawdown ไม่เกินเกณฑ์) เพื่อให้ optimizer เลือกตามเกณฑ์จริง ไม่ใช่กำไรสูงสุด
+
+## 6 · ขายบน MQL5 Market
+
+ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/market/market_sell · กฎเปลี่ยนได้ ตรวจซ้ำก่อนส่ง
+
+- ส่งไฟล์ compile แล้วไฟล์เดียว (`.ex5` / `.ex4`) · indicator · เสียง · รูป ฝังเป็น resource · **ห้ามใช้ Dynamic Link Library (DLL)**
+- **ห้ามจำกัดตามเลขบัญชี ชนิดบัญชี หรือ symbol** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
+- การตรวจอัตโนมัติรัน EA ใน tester หลาย symbol และ timeframe · EA ต้องส่งออร์เดอร์ได้จริงในทุกสภาพนั้น (ไม่ส่งเลย = ไม่ผ่าน) · ตัวตรวจข้อ 3 ครบทุกข้อคือสิ่งที่ทำให้ผ่าน
+- ห้ามสัญญาผลกำไรในคำบรรยาย · ชื่อสินค้าตัวอักษรละตินไม่เกิน 50 ตัว ไม่มีเลขรุ่น · ระบุถ้าใช้ได้เฉพาะ hedging หรือ netting
+
+## 7 · ความปลอดภัยและการขายเอง
+
+- รหัสผ่านบัญชีเทรด · API key · license key ไม่อยู่ในโค้ดหรือ `.set` · ค่าที่ต้องเก็บใช้ input ที่ผู้ใช้กรอกเองบนเครื่อง
+- `WebRequest` ใช้ได้เฉพาะ URL ที่ผู้ใช้เพิ่มใน allow list ของ terminal เอง · บอกในคู่มือว่าต้องเพิ่ม URL ไหน
+- ขายเอง (ไม่ผ่าน Market): ล็อก license ด้วยเลขบัญชี (`ACCOUNT_LOGIN`) + วันหมดอายุ ตรวจใน `OnInit` · ไม่ส่ง `.mq4` / `.mq5` ให้ลูกค้า · ไฟล์ `.ex4` / `.ex5` ถอดกลับได้บางส่วน อย่าวางกฎลับไว้ในตัว EA อย่างเดียว
+
+## 8 · รายการตรวจก่อนส่ง
+
+- [ ] compile ได้ 0 errors 0 warnings (หรือรายงานว่ายังไม่ได้ compile เพราะไม่มี terminal)
+- [ ] ทุกออร์เดอร์ผ่านตัวตรวจข้อ 3 · ทุกผลส่งกลับถูกอ่านและ log
+- [ ] magic number · state สร้างใหม่ได้หลังรีสตาร์ท · ไม่แตะออร์เดอร์ที่ magic ไม่ตรง
+- [ ] input ทุกตัวมีค่า default และช่วงที่ตรวจใน `OnInit`
+- [ ] backtest ใช้ spread · commission · swap จริง · ผลที่รายงานมาจากช่วงที่ไม่ได้ optimize
+- [ ] ทดสอบแล้วอย่างน้อย 3 symbol · 2 timeframe (· netting และ hedging สำหรับ MT5)
+- [ ] ขาย Market: ไม่มี DLL · ไม่ล็อกบัญชีหรือ symbol · คำบรรยายไม่สัญญาผลกำไร
+
+## 9 · เชื่อมกับ skill อื่น
+
+สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt-sell-product.md`
+
+
+---
+
 # skill: e2e-testing-patterns
 
 Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in CI.
@@ -547,7 +650,7 @@ Most resilient ─────────────────────�
 - ✅ Unique test data per test
 - ✅ Database/external services support concurrency
 
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก PR ที่ล้มแล้วบล็อกการ merge → full ทุกคืนแบบข้าม browser → pre-prod ก่อน deploy ที่ต้องผ่าน P0 และ P1 เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานและรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก PR บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P0 และ P1 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
 ## Anti-patterns
 
@@ -627,17 +730,59 @@ async function login(page, user) {
 ```yaml
 # Smoke (every PR, 2 min)
 - 5-10 critical tests
+- Chromium only → feedback เร็ว
 - Fail = block merge
 
-# Full (nightly, 30 min)
+# Full (merge to main + nightly, 30 min)
 - All E2E tests
-- Cross-browser
+- Chromium (desktop) + WebKit (iPhone viewport)
 - Failures investigated next day
 
 # Pre-prod (before deploy, 10 min)
 - P0 + P1 tests
+- Chromium + WebKit + Firefox (ครั้งเดียวก่อน release)
 - Must pass before prod deploy
 ```
+
+### Browser matrix
+
+ไม่ต้องรันครบ 3 browser ทุกรอบ → เวลา CI เพิ่ม ~3 เท่า และเทสต์ flaky เพิ่มตามจำนวน browser
+
+| Browser | ครอบคลุม | รันตอนไหน |
+|---------|----------|-----------|
+| Chromium | Chrome · Edge (ผู้ใช้ส่วนใหญ่) | ทุกรอบ |
+| WebKit | ทุก browser บน iPhone/iPad (รวม Chrome บน iOS) | merge to main · nightly · pre-prod |
+| Firefox | ส่วนแบ่งน้อย | pre-prod เท่านั้น · ตัดได้ถ้าลูกค้าไม่ใช้ |
+
+ปรับตามผู้ใช้จริง → ดู analytics ก่อน ถ้าลูกค้าองค์กรบังคับ Firefox ให้ย้ายขึ้นไปรอบ nightly
+
+ตั้งเป็น project ใน Playwright แล้วเลือกด้วย `--project`
+
+```ts
+// playwright.config.ts
+projects: [
+  { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+  { name: 'webkit-mobile', use: { ...devices['iPhone 15'] } },
+  { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+],
+```
+
+```bash
+npx playwright test --project=chromium                          # PR
+npx playwright test --project=chromium --project=webkit-mobile  # main · nightly
+npx playwright test                                             # pre-prod (ครบ 3)
+```
+
+**เทสต์ที่ควรรันข้าม browser** (tag `@cross-browser`) → จุดที่มักพังต่าง browser:
+- date/time input
+- อัปโหลดไฟล์ · clipboard
+- จัดรูปแบบวันที่/ตัวเลขด้วย `Intl`
+- CSS layout · scroll · sticky
+- autoplay วิดีโอ/เสียง
+
+เทสต์ที่เป็น logic ล้วน → Chromium ตัวเดียวพอ
+
+> WebKit ของ Playwright ไม่ใช่ Safari ตัวจริง 100% → งานที่ลูกค้าใช้ iPhone เยอะ ให้ลองบนเครื่องจริงก่อน release อีกรอบ
 
 ### Artifacts to capture
 - ✅ Screenshots on failure
@@ -1182,39 +1327,3 @@ verify ต้องพึ่งของที่แอปเตรียมไ�
 - เปิด emulator ตัวเดียว และหยุด Gradle daemon หลัง build (`gradlew --stop` ใน `android/`)
 - ถ้า emulator ถูกปิดกลางทาง ให้รายงานว่า "ยังไม่ได้รันซ้ำ" พร้อมรายชื่อ check ที่ไม่ได้รัน ห้ามลองใหม่เงียบ ๆ แล้วรายงานเฉพาะผลรอบหลัง
 - ไม่มี Docker: emulator ใน Docker ต้องมี KVM ซึ่ง Docker Desktop บน Windows ไม่มี จึงให้รันบน host
-
-
----
-
-# skill: principle-build-a-tool-not-handwork
-
-Use when work has a mechanical part (same edit in many files, every screen, migration). Script it.
-
-# principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
-> ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
-
-> งานมี 2 ส่วน: ส่วนที่ต้องใช้วิจารณญาณ กับส่วนที่เป็นกลไกล้วน ๆ
-> ส่วนกลไกไม่ต้องให้ agent คิดวิธีใหม่ทุกครั้ง ให้เขียนเป็นโปรแกรมครั้งเดียว แล้วเก็บแรงคิดไว้กับส่วนที่ต้องตัดสินใจ
-
-## เมื่อไรต้องทำเครื่องมือ
-
-| สัญญาณ | เครื่องมือ |
-|---|---|
-| แก้รูปแบบเดียวกันเกิน 10 จุด | codemod · สคริปต์แก้ผ่าน syntax tree (AST) · `sed` ที่ทดสอบแล้ว |
-| ตรวจทุกหน้าจอหรือทุกไฟล์ | สคริปต์วนตรวจที่พิมพ์ตารางผล |
-| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup`) |
-| ย้ายข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
-| ข้ออ้างว่า "ทุกที่ทำแบบนี้แล้ว" | คำสั่ง grep หรือสคริปต์ที่พิสูจน์ได้ |
-| ทำงานเดิมเป็นครั้งที่ 3 | ทำเป็นคำสั่งหรือ skill |
-
-## กฎของเครื่องมือ
-
-- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ ([`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md))
-- **พิมพ์ผลที่ตรวจได้** — บอกจำนวนที่แก้ · รายการที่ข้าม · รายการที่ล้ม
-- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding`)
-- **เก็บให้ถูกที่** — สคริปต์ที่ใช้ครั้งเดียวเก็บไว้ใน `_to_delete/` ส่วนสคริปต์ที่ใช้ซ้ำเก็บใน `scripts/` แล้วเขียนบรรทัดเดียวใน README ว่ารันเมื่อไร
-- **skill เหลือแค่คำอธิบายบาง ๆ** — ขั้นตอนตายตัวอยู่ในสคริปต์ ส่วน SKILL.md บอกแค่ว่าเรียกเมื่อไรและอ่านผลอย่างไร
-
-## ไม่ต้องทำเมื่อ
-
-งานแก้ 2–3 จุดที่ต่างกันจริง เพราะเขียนสคริปต์จะใช้เวลามากกว่าแก้เอง

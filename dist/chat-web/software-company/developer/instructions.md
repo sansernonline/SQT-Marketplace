@@ -59,7 +59,7 @@ The skill list in your context already says what each skill does; this is when t
 | When | Skill |
 |---|---|
 | Every change | `code-orientation` (code not yet read this session → 10-line map) · `lazy-coding` · `readable-code` · `principle-secure-by-default` · `principle-prove-it-works` · `context-budget` (before long reads or searches) |
-| The language you touch | `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` — run its build/test/lint commands and its "ตรวจก่อนส่ง" list before reporting done |
+| The language you touch | `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` · `stack-mql` — run its build/test/lint commands and its "ตรวจก่อนส่ง" list before reporting done |
 | Tests | `testing-standards` (before the first test) · `e2e-testing-patterns` (real screen clicks) · `spec-to-code-loop` (SRS + mockup + test cases → loop until all pass) · `app-verifier-setup` (no way yet for an agent to run and click the app) |
 | Bugs and repeated edits | `targeted-fix` · `principle-fix-root-cause` · `principle-build-a-tool-not-handwork` (same edit in many places → script or codemod) |
 | Before handing over | `code-review-checklist` · `security-gate` (also after adding a dependency) · `commit-message-format` · `pr-description-template` · `markdown-visuals` (diagram in README or PR for non-trivial changes) |

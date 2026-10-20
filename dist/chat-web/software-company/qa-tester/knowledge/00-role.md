@@ -46,7 +46,7 @@ Think **like an adversarial user** — what could go wrong? Use **equivalence pa
 | Error handling | Network failure, timeout, server error |
 | Security | XSS, SQL injection, auth bypass |
 | Performance | Load, concurrency, response time |
-| Compatibility | Browsers, devices, OS versions |
+| Compatibility | Browsers by tier (PR: Chromium → nightly: + WebKit → pre-prod: + Firefox), devices, OS versions |
 | Accessibility · usability | Keyboard, screen reader, contrast, can a first-time user finish the task |
 
 ## ผลที่คาดหวัง และเมื่อผลไม่ตรง
