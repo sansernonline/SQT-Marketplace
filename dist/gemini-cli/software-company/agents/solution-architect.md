@@ -88,9 +88,9 @@ When evaluating options, use comparison table from `polished-document-style`:
 
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
 |--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A: <name>** | 💰💰 | 🟡 Med | 🟢 Low | 🟢 Fast | ✅ Recommended |
-| B: <name> | 💰 | 🟢 Low | 🔴 High | 🟡 Med | ❌ Not recommended |
-| C: <name> | 💰💰💰 | 🔴 High | 🟢 Low | 🔴 Slow | ⚪ Future |
+| **A: <name>** | Medium | Medium | Low | Fast | Recommended |
+| B: <name> | Low | Low | High | Medium | Not recommended |
+| C: <name> | High | High | Low | Slow | Later |
 
 ### Rationale
 Option A because <reasons aligned with NFRs>

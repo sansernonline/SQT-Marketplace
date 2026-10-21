@@ -5,7 +5,7 @@ description: Use when a project's .docx set needs striking covers unique to it. 
 
 # doc-cover-design — หน้าปกเอกสารที่จำได้ และไม่ซ้ำโปรเจกต์อื่น
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดบนปกเขียนตาม [`human-writing`](../human-writing/SKILL.md)
+> **ภาษา:** ถ้อยคำทุกบรรทัดบนปกเขียนตาม `human-writing`
 > **กฎข้อเดียว:** ปกต้องบอกว่าเป็นโปรเจกต์ไหนได้ทันทีโดยไม่ต้องอ่านชื่อ — ด้วยรูปทรงของโลโก้ หรือหน้าจอจริงของแอป ไม่ใช่ด้วยสีอย่างเดียว
 
 skill นี้ทำ**หน้าปก**อย่างเดียว · ตัวเอกสารทั้งเล่ม (ชุดสี ฟอนต์ไทย ตาราง หัวท้ายหน้า) อยู่ใน [`branded-document-design`](../branded-document-design/SKILL.md) · ปกใช้ `anchor_picture()` ของ `brandkit.py` ตัวเดียวกัน

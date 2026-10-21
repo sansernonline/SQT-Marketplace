@@ -1,3 +1,78 @@
+# skill: security-gate
+
+Use when about to ship, merge or hand over code, after adding a dependency, or the user says security check.
+
+# security-gate — ประตูความปลอดภัยก่อนส่งงาน
+
+> เครื่องมือสแกนหาเจอเร็วแต่แจ้งผิดเยอะ ส่วนคนตรวจเข้าใจบริบทแต่ช้า
+> ประตูนี้ให้เครื่องหาก่อน แล้ว agent ยืนยันทุกข้อกับโค้ดจริง ก่อนจะถึงมือคน
+
+ใช้ร่วมกับ [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) ส่วนรายงานเชิงลึกให้ใช้ agent `security-engineer`
+
+## ขั้นตอน
+
+1. **รันในห้อง** (sandbox ของโปรเจกต์) — ถ้าโปรเจกต์มี `.sandbox/` ให้รันทุกคำสั่งผ่าน `sandbox.ps1 exec` ส่วนเครื่องมือที่ยังไม่มีให้ติดตั้งในห้องได้เลย ไม่ติดตั้งบนเครื่องผู้ใช้
+2. **สแกน 3 ด้าน** (เลือกตามที่โปรเจกต์มี)
+
+   | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
+   |---|---|---|
+   | ค่าลับหลุด (รวมประวัติ git) | gitleaks | `gitleaks detect --source . --redact` |
+   | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
+   | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
+   | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
+   | Dockerfile · compose · IaC (ถ้ามี) | trivy | `trivy config .` ส่วนแอป Android ไม่มีส่วนนี้ ให้อ่าน `android/app/build.gradle*` ด้วยตาแทน (signingConfig ต้องไม่ฝังรหัสผ่าน และ release ต้องเปิด minify) |
+   | แอป Android (ถ้ามี) | ตรวจด้วยตาตาม [`references/android.md`](references/android.md) ถ้าต้องการเชิงลึกให้ใช้ MobSF (Mobile Security Framework) | — |
+
+   **รายการตรวจ Android** → [`references/android.md`](references/android.md)
+
+   เก็บผลดิบใน `_to_delete/security/`
+   - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
+   - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) และพิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด ถ้าเครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
+   - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** ถ้า semgrep ไม่เจออะไรในโปรเจกต์ Flutter ก็ไม่ได้แปลว่าปลอดภัย รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
+3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) แล้วติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล
+4. **จัดระดับและตัดสิน**
+
+   | ระดับ | ทำอะไร |
+   |---|---|
+   | ค่าลับจริงหลุด | **หยุดทันที บอกผู้ใช้** ต้องเปลี่ยนค่าลับที่ผู้ให้บริการ เพราะลบจากไฟล์อย่างเดียวไม่พอ และ agent ไม่แก้ประวัติ git เอง |
+   | critical · high ที่ยืนยันแล้ว | **ห้ามส่ง** จนกว่าจะแก้ หรือผู้ใช้ยอมรับความเสี่ยงเป็นลายลักษณ์อักษรใน `decision-log` |
+   | medium | ถ้าเล็กให้แก้ในรอบนี้ ถ้าไม่เล็กให้เปิดเป็นงานแยก |
+   | low · แจ้งผิด | บันทึกเหตุผล ไม่ต้องแก้ |
+
+5. **แก้**
+   - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
+   - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
+   - รูปแบบที่เจอซ้ำให้ส่งต่อ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ไปทำเป็นกฎ lint
+6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
+   - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`owasp-top10`](../owasp-top10/SKILL.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
+
+## เมื่อไรต้องรัน
+
+- ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
+- หลังเพิ่มหรืออัปเดต dependency
+- โปรเจกต์ที่ยังใช้งานอยู่ให้รันสัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
+
+## ไม่ใช่หน้าที่ของ skill นี้
+
+- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น เพราะ skill นี้ทำเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
+- รับรองว่าปลอดภัย 100% รายงานบอกแค่ว่าตรวจอะไร ด้วยอะไร และอะไรที่ยังไม่ได้ตรวจ
+- รีวิวตรรกะและการออกแบบของ diff → `code-review-checklist` (ก่อน merge รันทั้งสองตัว)
+
+
+## reference: android.md
+
+# รายการตรวจ Android — ใช้กับ `security-gate` ข้อ 2
+
+**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้วใน `build/app/intermediates/merged_manifests/` ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง
+- `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
+- `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
+- `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
+- permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` และต้องตรวจตัวที่ plugin เติมมาด้วย
+- `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
+
+
+---
+
 # skill: code-review-checklist
 
 Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
@@ -23,6 +98,7 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 | Writing or updating the PR description itself | `pr-description-template` |
 | Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 | Scanners, secrets or dependency check before ship or after adding a dependency | `security-gate` (run both before merge) |
+| Web app or API that must meet OWASP Top 10:2025 | `owasp-top10` (per-stack checks in its `references/stack-checks.md`) |
 
 ## Review Process
 
@@ -65,7 +141,7 @@ Suggest: <concrete fix>
 
 ### Praise
 ```
-✨ Nice approach with X — much cleaner than the previous version.
+Nice approach with X — much cleaner than the previous version.
 ```
 
 ## Review Severity Levels
@@ -168,7 +244,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
+Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
 
 # Simplicity First
 
@@ -605,464 +681,3 @@ Verify:
 - Use only as a last resort, never as the main method
 - Use strict rate limits
 - Codes: 6 digits, 5 min expiry
-
-
----
-
-# skill: config-and-secrets
-
-Use when settings differ by environment or something must never be committed (keys, connection strings).
-
-# Config และ Secret
-
-> **กฎ 2 ข้อ:**
-> 1. โค้ดชุดเดียวกันต้องรันได้ทุก environment ความต่างอยู่ที่ config เท่านั้น
-> 2. secret ต้องไม่อยู่ใน git ไม่อยู่ใน log และไม่อยู่ในไฟล์ที่ส่งไปให้เบราว์เซอร์
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เริ่มโปรเจกต์ หรือเพิ่ม environment ใหม่
-- ต้องเก็บ connection string, API key, ใบรับรอง, กุญแจสำหรับเซ็น
-- เจอค่าคงที่ฝังอยู่ในโค้ด (hardcode) แล้วต้องย้ายออก
-- secret หลุดเข้า git หรือสงสัยว่าหลุด ให้ไปข้อ 8 ทันที
-
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
-
-| งาน | skill | |
-|---|---|---|
-| เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
-| ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
-| กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
-| connection string ของฐานข้อมูล | `database-design` | คู่ |
-| บันทึกเหตุการณ์หลัง secret หลุด | `postmortem-template` | คู่ |
-| ขั้นตอนตอนเกิดเหตุ | `incident-runbook-template` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-
-**วิธีทำจริงในแต่ละภาษาและเฟรมเวิร์ก** อยู่ใน `references/per-stack.md`
-
----
-
-## 1 · แยก config กับ secret ให้ออกก่อน
-
-| | config | secret |
-|---|---|---|
-| ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✅ ได้ | ❌ ไม่ได้เด็ดขาด |
-| ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
-| หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
-| เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
-
-> **ถ้าตัดสินใจไม่ได้ว่าเป็นแบบไหน ให้ถือว่าเป็น secret** เพราะระวังเกินไปเสียแค่ความรำคาญเล็กน้อย
-> แต่ถ้าเดาผิด กุญแจจะอยู่ในประวัติ git ตลอดไป
-
----
-
-## 2 · ลำดับความสำคัญ — ค่าหลังทับค่าก่อน
-
-```
-1. ค่าเริ่มต้นในโค้ด        (ปลอดภัย ใช้ได้จริงสำหรับ dev)
-2. ไฟล์ config ตาม environment  (appsettings.Production.json, config/production.yaml)
-3. ตัวแปรสภาพแวดล้อม        (environment variable)
-4. secret store              (Key Vault, Secrets Manager, Kubernetes secret)
-5. อาร์กิวเมนต์ตอนสั่งรัน     (ใช้ตอนไล่ปัญหาเท่านั้น)
-```
-
-**ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
-
----
-
-## 3 · ตรวจตอนบูต — ขาดค่าไหนให้ตายทันที
-
-> 🚨 ข้อนี้คุ้มที่สุดในหน้านี้
-> ระบบที่บูตขึ้นมาได้ทั้งที่ config ผิด จะไปพังตอนตี 2 ในฟังก์ชันที่นาน ๆ ใช้ที
-> ระบบที่ **ไม่ยอมบูต** เมื่อ config ผิด ทำให้รู้ตั้งแต่ตอน deploy ซึ่งยัง rollback ได้
-
-```ts
-// Node — zod
-const Env = z.object({
-  NODE_ENV:      z.enum(['development', 'staging', 'production']),
-  PORT:          z.coerce.number().int().positive().default(3000),
-  DATABASE_URL:  z.string().url(),
-  JWT_SECRET:    z.string().min(32),
-  LOG_LEVEL:     z.enum(['debug','info','warn','error']).default('info'),
-});
-
-export const env = Env.parse(process.env);   // ผิด = process ตายพร้อมบอกว่าตัวไหนผิด
-```
-
-**สิ่งที่ต้องตรวจ:** มีค่าครบ · ชนิดถูก · อยู่ในช่วงที่ยอมรับ ·
-กุญแจยาวพอ · ค่าที่ห้ามใช้บน production (`JWT_SECRET=dev-secret` ต้องไม่ผ่าน)
-
-**พิมพ์สรุป config ตอนบูต**: ชื่อค่า และค่าที่ไม่ใช่ secret
-ส่วน secret พิมพ์แค่ "มีค่าแล้ว" หรือ 4 ตัวท้าย ไม่พิมพ์ค่าเต็ม
-
----
-
-## 4 · ตั้งชื่อตัวแปรสภาพแวดล้อม
-
-```
-<ระบบ>_<กลุ่ม>_<ชื่อ>
-
-APP_DB_HOST          APP_DB_PASSWORD
-APP_REDIS_URL        APP_SMTP_PASSWORD
-APP_FEATURE_NEW_CHECKOUT
-```
-
-| กฎ | เหตุผล |
-|---|---|
-| ตัวพิมพ์ใหญ่ ขีดล่าง | ข้อตกลงของทุกระบบปฏิบัติการ |
-| มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
-| ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
-| ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ❌ `APP_PROD_DB_HOST` |
-
----
-
-## 5 · `.env` และ `.env.example`
-
-| ไฟล์ | อยู่ใน git | หน้าที่ |
-|---|:--:|---|
-| `.env.example` | ✅ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ❌ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ❌ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
-
-```bash
-# .gitignore
-.env
-.env.*
-!.env.example
-```
-
-```bash
-# .env.example
-APP_DB_HOST=localhost              # ที่อยู่ฐานข้อมูล
-APP_DB_PASSWORD=change-me          # ❗ ค่าจริงอยู่ใน 1Password ห้องทีม
-APP_JWT_SECRET=                    # ❗ สร้างด้วย: openssl rand -base64 48
-APP_LOG_LEVEL=debug
-```
-
-**`.env.example` ต้องอัปเดตในคอมมิตเดียวกับที่เพิ่มค่าใหม่**
-ไม่งั้นคนถัดไปที่ clone จะเจอ error ที่ไม่มีใครอธิบายได้
-
-> 🚨 **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
-> การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
-
----
-
-## 6 · เก็บ secret ไว้ที่ไหน
-
-| สถานการณ์ | ใช้ | หมายเหตุ |
-|---|---|---|
-| เครื่องนักพัฒนา | `.env` ที่ไม่เข้า git ส่วน .NET ใช้ `dotnet user-secrets` | ห้ามใช้ค่าของ production |
-| ทีมเล็ก แชร์กัน | ตัวจัดการรหัสผ่านของทีม (1Password, Bitwarden) | ไม่ใช่แชต ไม่ใช่อีเมล ไม่ใช่ Google Sheet |
-| production บนคลาวด์ | Azure Key Vault · AWS Secrets Manager · Google Secret Manager | ให้สิทธิ์ด้วย managed identity ไม่ใช่ key อีกอัน |
-| Kubernetes | External Secrets Operator ดึงจาก vault ข้างบน | secret ของ Kubernetes เองเป็นแค่ base64 **ไม่ใช่การเข้ารหัส** |
-| ต้องเก็บใน git จริง ๆ | SOPS หรือ sealed-secrets (เข้ารหัสก่อน commit) | ทางเลือกสุดท้าย |
-
-**สิทธิ์:** แต่ละ service อ่านได้เฉพาะ secret ของตัวเอง environment แยกกันสนิท และ
-ไม่มีบัญชีไหนอ่านได้ทุกอัน ยกเว้นบัญชีดูแลระบบที่บันทึกการเข้าถึง
-
----
-
-## 7 · การหมุนเวียน (rotation)
-
-**ออกแบบให้รองรับตั้งแต่วันแรก** ไม่ใช่รอถึงตอนต้องหมุนจริง
-
-| ต้องมี | รายละเอียด |
-|---|---|
-| ใช้ 2 ค่าพร้อมกันได้ | ระหว่างเปลี่ยน ทั้งค่าเก่าและใหม่ต้องใช้ได้ ไม่งั้นต้องปิดระบบ |
-| โหลดใหม่โดยไม่ต้อง restart | หรือยอมรับว่าต้อง deploy 1 รอบ และจดไว้ว่าต้องทำ |
-| รอบเวลา | กุญแจเซ็น token 90 วัน · รหัสฐานข้อมูล 180 วัน · ใบรับรองก่อนหมดอายุ 30 วัน |
-| ทำอัตโนมัติ | เพราะงานที่ต้องจำทำเอง สุดท้ายไม่มีใครทำ |
-
-**กุญแจสำหรับเซ็น token ต้องมี id กำกับ (key id)** เพื่อให้เซ็น token ใหม่ด้วยกุญแจใหม่แล้ว
-ก็ยังตรวจ token เก่าที่ยังไม่หมดอายุได้
-
----
-
-## 8 · เมื่อ secret หลุด — ลำดับสำคัญกว่าความเร็ว
-
-1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
-2. ออกค่าใหม่ แล้ว deploy
-3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
-5. บันทึกเหตุการณ์ด้วย `postmortem-template`
-
-> 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
-> ใครที่ fork หรือ clone ไปแล้ว รวมถึงข้อมูลสำรองของผู้ให้บริการ ยังมีค่าเดิมอยู่
-> **ถือว่าทุก secret ที่เคยเข้า git คือหลุดแล้ว** แม้ repo จะเป็น private
-
----
-
-## 9 · อย่าให้ secret ไหลออกทางอื่น
-
-| ทางรั่ว | วิธีปิด |
-|---|---|
-| log | รายการคำที่ต้องปิดบัง ดูที่ `logging-standards` |
-| ข้อความ error ที่ส่งให้ client | คืนเฉพาะ `requestId` ไม่ใช่ stack trace หรือ connection string |
-| รายงาน crash / ตัวติดตามข้อผิดพลาด | ตั้งตัวกรองข้อมูลอ่อนไหวก่อนส่งออก |
-| ประวัติคำสั่งใน shell | ใช้ `read -s` หรืออ่านจากไฟล์ แทนการพิมพ์ค่าลงบรรทัดคำสั่ง |
-| `docker history` | อย่าใส่ secret ใน `ARG`/`ENV` ตอน build ให้ใช้ mount ตอนรันแทน |
-| ไฟล์สำรองข้อมูลและ dump | เข้ารหัส และเก็บที่ที่คุมสิทธิ์ได้ |
-| ภาพหน้าจอในเอกสารและ issue | ปิดบังก่อนแนบเสมอ |
-
----
-
-## 10 · config ของ frontend — ไม่มีอะไรลับ
-
-> 🚨 ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด **คือข้อมูลสาธารณะ**
-> ไม่ว่าจะชื่อว่า `VITE_SECRET_KEY` หรืออยู่ในไฟล์ที่ถูกย่อจนอ่านไม่ออกก็ตาม
-> การย่อโค้ดไม่ใช่การเข้ารหัส เปิด DevTools ก็เห็น
-
-| ใส่ใน frontend ได้ | ต้องอยู่ฝั่งเซิร์ฟเวอร์เท่านั้น |
-|---|---|
-| ที่อยู่ API · ชื่อ environment | API key ของบริการภายนอกทุกชนิด |
-| กุญแจสาธารณะ (publishable key) ของผู้ให้บริการชำระเงิน | กุญแจลับ (secret key) ของผู้ให้บริการเดียวกัน |
-| feature flag ที่ไม่ลับ | กฎการคิดราคา · เกณฑ์อนุมัติ |
-| รหัสเว็บของตัววัดสถิติ | token ที่เรียก API ของบุคคลที่สาม |
-
-**ถ้าต้องการเปลี่ยนค่าโดยไม่ build ใหม่** ให้โหลด `/config.json` ตอนแอปเริ่มทำงาน
-แทนการฝังค่าตอน build (`import.meta.env`) ที่ล็อกค่าติดไปกับไฟล์ที่ build ได้
-
----
-
-## 11 · Anti-patterns
-
-- ❌ **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
-- ❌ **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
-- ❌ **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
-- ❌ **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
-- ❌ **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
-- ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
-
-
-## reference: per-stack.md
-
-# วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
-
-1. [.NET / ASP.NET Core](#1--net--aspnet-core)
-2. [Node.js](#2--nodejs)
-3. [Python](#3--python)
-4. [Angular และ frontend ทั่วไป](#4--angular-และ-frontend-ทั่วไป)
-5. [Docker และ Kubernetes](#5--docker-และ-kubernetes)
-6. [เครื่องมือตรวจ secret ที่หลุดเข้า git](#6--เครื่องมือตรวจ-secret-ที่หลุดเข้า-git)
-7. [คำสั่งสร้างค่าสุ่มที่ปลอดภัย](#7--คำสั่งสร้างค่าสุ่มที่ปลอดภัย)
-
----
-
-## 1 · .NET / ASP.NET Core
-
-**บนเครื่องนักพัฒนา เก็บนอกโฟลเดอร์โปรเจกต์ จึงไม่มีทางเข้า git:**
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;..."
-dotnet user-secrets list
-```
-
-**ตรวจตอนบูต:**
-
-```csharp
-public sealed class AppOptions
-{
-    public const string Section = "App";
-
-    [Required, Url]                       public string ApiBaseUrl { get; init; } = "";
-    [Required, MinLength(32)]             public string JwtSecret  { get; init; } = "";
-    [Range(1, 300)]                       public int TimeoutSeconds { get; init; } = 30;
-}
-
-builder.Services
-    .AddOptions<AppOptions>()
-    .Bind(builder.Configuration.GetSection(AppOptions.Section))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();                   // ← ขาดค่า = แอปไม่ยอมบูต
-```
-
-**ลำดับที่ ASP.NET Core อ่าน (ค่าหลังทับค่าก่อน):**
-
-```
-appsettings.json → appsettings.{Environment}.json → user-secrets (dev)
-→ environment variable → อาร์กิวเมนต์บรรทัดคำสั่ง
-```
-
-ตัวแปรสภาพแวดล้อมใช้ `__` แทนลำดับชั้น เช่น `ConnectionStrings__Default`
-
-**Azure Key Vault:**
-
-```csharp
-builder.Configuration.AddAzureKeyVault(
-    new Uri($"https://{vaultName}.vault.azure.net/"),
-    new DefaultAzureCredential());        // ใช้ managed identity ไม่ต้องมี key อีกอัน
-```
-
----
-
-## 2 · Node.js
-
-```ts
-// config/env.ts — ไฟล์เดียวที่แตะ process.env ได้ทั้งโปรเจกต์
-import { z } from 'zod';
-
-const Env = z.object({
-  NODE_ENV:     z.enum(['development','test','staging','production']),
-  PORT:         z.coerce.number().int().positive().default(3000),
-  DATABASE_URL: z.string().url(),
-  JWT_SECRET:   z.string().min(32),
-  SMTP_PASSWORD: z.string().optional(),
-}).superRefine((v, ctx) => {
-  if (v.NODE_ENV === 'production' && v.JWT_SECRET.startsWith('dev-'))
-    ctx.addIssue({ code: 'custom', message: 'ห้ามใช้ JWT_SECRET ของ dev บน production' });
-});
-
-const parsed = Env.safeParse(process.env);
-if (!parsed.success) {
-  console.error('config ไม่ถูกต้อง:', z.treeifyError(parsed.error));
-  process.exit(1);
-}
-export const env = parsed.data;
-```
-
-> **ห้ามอ่าน `process.env` กระจายทั่วโค้ด** ให้รวมไว้ที่ไฟล์เดียว
-> จะได้ตอบได้ว่าระบบใช้ค่าอะไรบ้าง โดยไม่ต้องไล่ grep ทั้งโปรเจกต์
-
-Node 20 ขึ้นไปโหลด `.env` ได้เองด้วย `node --env-file=.env` ไม่ต้องพึ่ง `dotenv`
-
----
-
-## 3 · Python
-
-```python
-# settings.py
-from pydantic import Field, PostgresDsn
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="APP_", env_file=".env")
-
-    env: str = Field(pattern="^(development|staging|production)$")
-    database_url: PostgresDsn
-    jwt_secret: str = Field(min_length=32)
-    timeout_seconds: int = Field(default=30, ge=1, le=300)
-
-settings = Settings()      # ขาดค่า = ValidationError ตั้งแต่ import
-```
-
-- อ่าน `APP_DATABASE_URL`, `APP_JWT_SECRET` ตาม `env_prefix`
-- import ที่ระดับบนสุดของแอป error จะได้เกิดตอนบูต ไม่ใช่ตอนเรียกใช้ครั้งแรก
-
----
-
-## 4 · Angular และ frontend ทั่วไป
-
-> 🚨 **ทุกอย่างที่อยู่ในไฟล์ที่เบราว์เซอร์โหลด คือสาธารณะ** ไม่มีข้อยกเว้น
-
-**แบบฝังตอน build** (`environment.ts`, `import.meta.env`, `NEXT_PUBLIC_*`):
-ค่าติดไปกับไฟล์ที่ build ได้ เปลี่ยนค่าทีไรต้อง build ใหม่ จึงขัดกับกฎ build ครั้งเดียวแล้วใช้ทุก environment
-
-**แบบโหลดตอนรัน (แนะนำ):**
-
-```ts
-// main.ts — โหลดก่อนแอปเริ่ม
-fetch('/config.json', { cache: 'no-store' })
-  .then(r => r.json())
-  .then(cfg => {
-    (window as any).__APP_CONFIG__ = cfg;
-    return bootstrapApplication(AppComponent, appConfig);
-  });
-```
-
-```json
-// config.json — ไฟล์นี้วางแยกต่อ environment ไม่ต้อง build ใหม่
-{ "apiBaseUrl": "https://api.example.co", "env": "production", "sentryDsn": "..." }
-```
-
-ตั้ง header `Cache-Control: no-store` ให้ `/config.json` ไม่งั้นเบราว์เซอร์จะใช้ค่าเก่า
-
----
-
-## 5 · Docker และ Kubernetes
-
-**Docker อย่าใส่ secret ตอน build:**
-
-```dockerfile
-# ❌ ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
-ARG NPM_TOKEN
-ENV NPM_TOKEN=$NPM_TOKEN
-
-# ✅ mount เฉพาะตอนใช้ ไม่ติดไปกับ image
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
-```
-
-```bash
-docker build --secret id=npmrc,src=$HOME/.npmrc .
-docker run --env-file .env myapp        # ตอนรัน ส่งค่าเข้าไป
-```
-
-**Kubernetes:**
-
-```yaml
-env:
-  - name: APP_DB_PASSWORD
-    valueFrom:
-      secretKeyRef: { name: app-secrets, key: db-password }
-```
-
-> 🚨 **Secret ของ Kubernetes เป็นแค่ base64 ไม่ใช่การเข้ารหัส**
-> ใครมีสิทธิ์ `get secret` ก็อ่านค่าได้ตรง ๆ
-> ต้องเปิด encryption at rest ที่ etcd และคุมสิทธิ์ด้วย RBAC
-> ทางที่ดีกว่า: ให้ External Secrets Operator ดึงค่าจาก Key Vault / Secrets Manager มาสร้าง Secret ให้
-
----
-
-## 6 · เครื่องมือตรวจ secret ที่หลุดเข้า git
-
-```bash
-# ตรวจทั้งประวัติ
-gitleaks detect --source . --redact
-
-# กันไว้ก่อน commit
-pip install pre-commit detect-secrets
-detect-secrets scan > .secrets.baseline
-```
-
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
-    hooks: [{ id: gitleaks }]
-```
-
-**ลบออกจากประวัติ** (ทำหลังเพิกถอนค่าเดิมแล้วเท่านั้น):
-
-```bash
-pip install git-filter-repo
-git filter-repo --path .env --invert-paths
-git push --force --all      # ทุกคนต้อง clone ใหม่
-```
-
----
-
-## 7 · คำสั่งสร้างค่าสุ่มที่ปลอดภัย
-
-```bash
-openssl rand -base64 48                 # กุญแจทั่วไป
-openssl rand -hex 32                    # กุญแจ 256 บิตเป็นเลขฐานสิบหก
-uuidgen                                 # id ไม่ลับ
-
-node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-```powershell
-# Windows
-[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
-```
-
-> ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
-> เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน

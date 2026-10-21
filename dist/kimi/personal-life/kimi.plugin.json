@@ -1,6 +1,6 @@
 {
   "name": "sqt-personal-life",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, and polite Thai-English messages. Works alongside email, calendar and note plugins.",
   "skills": "./skills/",
   "agents": "./agents/",

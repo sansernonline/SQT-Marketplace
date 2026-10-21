@@ -150,8 +150,8 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
 
-- รูปใน README · PR · เอกสารในทีม → Mermaid (`software-diagrams`) ฝังใน `.md`
-- รูปในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ → `diagram-figures` เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
+- รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
+- รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
 
 **หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
 รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
@@ -203,6 +203,6 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ## 10 · เชื่อมกับ skill อื่น
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (ส่งมอบ) · `software-diagrams` (ในทีม) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
 
 **อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ

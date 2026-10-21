@@ -298,7 +298,7 @@ Critical decisions in opening:
 ## Output: Design Document
 
 ```markdown
-# 🎮 Game Design Doc: <Title>
+# Game Design Doc: <Title>
 
 ## Pitch (one paragraph)
 A <genre> where you <core verb> to <player goal>.
@@ -952,7 +952,7 @@ segments = {
 ## Output: Season Plan
 
 ```markdown
-# 🎯 Season X Live-Ops Plan
+# Season X Live-Ops Plan
 
 | | |
 |--|--|

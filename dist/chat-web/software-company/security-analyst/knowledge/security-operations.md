@@ -264,12 +264,12 @@ Preservation:
 Use `polished-document-style` + `postmortem-template` skills.
 
 ```markdown
-# 🚨 Incident Report: <Title>
+# Incident Report: <Title>
 
 | | |
 |--|--|
 | **Severity** | P1 |
-| **Status** | 🟢 Resolved |
+| **Status** | Resolved |
 | **Duration** | 36 hours |
 | **Adversary** | Suspected APT-X / Opportunistic |
 
@@ -426,14 +426,14 @@ flowchart TB
 ## Defense in Depth Layers
 
 ```
-🌐 Perimeter        CDN, WAF, DDoS protection
-🔐 Edge             API gateway, mTLS termination
-🌉 Network          Segmentation, NACL, firewall
-🖥️ Host             Hardened OS, EDR, patch
-📦 Application      Authn, authz, input validation
-💾 Data             Encryption, masking, DLP
-👤 Identity         IAM, SSO, MFA
-👁️ Monitoring       SIEM, SOAR, NDR
+Perimeter        CDN, WAF, DDoS protection
+Edge             API gateway, mTLS termination
+Network          Segmentation, NACL, firewall
+Host             Hardened OS, EDR, patch
+Application      Authn, authz, input validation
+Data             Encryption, masking, DLP
+Identity         IAM, SSO, MFA
+Monitoring       SIEM, SOAR, NDR
 ```
 
 Each layer must withstand the next layer failing.
@@ -569,7 +569,7 @@ Network:
 Use `polished-document-style` skill (from software-company).
 
 ```markdown
-# 🔒 Security Architecture: <System/Org>
+# Security Architecture: <System/Org>
 
 ## Threat Model
 [STRIDE per component]
@@ -784,12 +784,12 @@ Map observed behaviors to ATT&CK tactics/techniques:
 ## Output: Investigation Report
 
 ```markdown
-# 🚨 Investigation: <Alert/Incident Title>
+# Investigation: <Alert/Incident Title>
 
 | | |
 |--|--|
 | **Severity** | P2 High |
-| **Status** | 🟡 Investigating |
+| **Status** | Investigating |
 | **Reporter** | Alert: SIEM rule X |
 | **Assigned** | @security-analyst |
 
@@ -938,7 +938,7 @@ flowchart LR
 ## Hunt Output: Hypothesis Document
 
 ```markdown
-# 🎯 Hunt: <Title>
+# Hunt: <Title>
 
 | | |
 |--|--|
@@ -978,9 +978,9 @@ index=edr EventCode=4688
 - False positives: <count>
 
 ## Actions
-- 🔴 Escalated to IR: <list>
-- 🟢 Converted to detection: <rule name>
-- 🟡 Hypothesis refined for next hunt
+- Escalated to IR: <list>
+- Converted to detection: <rule name>
+- Hypothesis refined for next hunt
 ```
 
 ## Common Hunt Types

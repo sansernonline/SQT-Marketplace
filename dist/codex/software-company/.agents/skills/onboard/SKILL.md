@@ -15,10 +15,10 @@ The technical writer should:
    - Common confusion points from past onboards
 
 2. **Apply Diátaxis framework** — onboarding has 4 parts:
-   - 🎓 **Tutorial** — first day setup + first task
-   - 🔧 **How-To** — common dev workflows (PR, deploy, test)
-   - 📖 **Reference** — links to systems, who-owns-what
-   - 💡 **Explanation** — architecture overview, history
+   - **Tutorial** — first day setup + first task
+   - **How-To** — common dev workflows (PR, deploy, test)
+   - **Reference** — links to systems, who-owns-what
+   - **Explanation** — architecture overview, history
 
 3. **Structure as 30/60/90 day plan:**
 

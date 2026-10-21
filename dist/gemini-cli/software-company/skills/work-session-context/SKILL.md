@@ -19,7 +19,7 @@ description: Use when project work starts, before switching model, handing work 
 | `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
-| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
+| `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
 | `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` |
 | `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` |
 | `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก |

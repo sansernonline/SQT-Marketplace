@@ -4,7 +4,7 @@ Use when writing or reviewing a Software Requirements Specification (SRS) — IS
 
 # SRS Writing
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** ข้อกำหนดทุกข้อต้องเขียน **test case** จากมันได้ทันที
 > ถ้าเขียนไม่ได้ นั่นไม่ใช่ข้อกำหนด แค่ความหวัง
@@ -158,7 +158,7 @@ IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อ�
 | ผู้ใช้พร้อมกัน | ช่วงไหนหนักสุด กี่คน | 500 คน ช่วงปิดยอดสิ้นเดือน |
 | ความพร้อมใช้งาน | ปิดปรับปรุงได้ไหม ช่วงไหน | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
 | การสำรองข้อมูล | ย้อนได้ถึงเมื่อไหร่ กู้คืนนานแค่ไหน | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
-| ความปลอดภัย | สิทธิ์กี่ระดับ ข้อมูลอ่อนไหวอะไรบ้าง | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
+| ความปลอดภัย | สิทธิ์กี่ระดับ ข้อมูลอ่อนไหวอะไรบ้าง · เว็บแอปและ API ใส่ NFR-SEC ตาม `owasp-top10/references/contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
 | การบันทึกร่องรอย | ต้องรู้ว่าใครแก้อะไรเมื่อไหร่ไหม | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
 | ความเข้ากันได้ | เบราว์เซอร์อะไร มือถือไหม | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
 | ภาษา | 2 ภาษาไหม สกุลเงิน เขตเวลา | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
@@ -173,12 +173,12 @@ IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อ�
 ## 6 · รูปในเอกสาร
 
 SRS ที่ไม่มีรูปเลย คนอ่านต้องนึกภาพเอง และแต่ละคนนึกไม่เหมือนกัน
-**เลือกเครื่องมือให้ตรงกับปลายทางของเอกสาร:**
+**รูปในตัว SRS ใช้ house style เดียว:**
 
-| SRS ฉบับนี้ไปจบที่ไหน | วาดด้วย |
+| รูปอะไร | วาดด้วย |
 |---|---|
-| markdown ที่ให้ git ตามความเปลี่ยนแปลงได้ | `software-diagrams` (Mermaid) |
-| ไฟล์ .docx / PDF ที่ลูกค้าเซ็นรับ · ผังที่มีโลโก้ผู้ให้บริการจริง | `diagram-figures` — ได้ไฟล์ภาพคมชัด และคุมตำแหน่งเองได้ |
+| ทุกรูปในตัว SRS (ภาพรวม · ผังขั้นตอน · sequence · ER · สถานะ) ไม่ว่าส่งเป็น markdown, .docx หรือ PDF | `diagram-figures` — ไฟล์ภาพคมชัด คุมตำแหน่งเองได้ เก็บไฟล์ต้นทางใน repo ให้ git ตามได้ |
+| รูปด่วนใน README · PR · โน้ตในโค้ด ที่อยู่นอกตัว SRS | `software-diagrams` (Mermaid) |
 
 **ทุกรูปในเอกสารฉบับเดียวต้องใช้ธีมสีชุดเดียวกัน** — ประกาศธีมไว้ที่ต้นเอกสารตาม
 `polished-document-style` หัวข้อ "ธีมของเอกสาร" แล้วทุกเครื่องมืออ่านค่าจากที่เดียวกัน
@@ -264,20 +264,20 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 ## Standard Output: Polished BRD (Mode B)
 
 ```markdown
-# 📋 BRD: <Feature Name>
+# BRD: <Feature Name>
 
 | | |
 |--|--|
 | **Document Type** | Business Requirements Document |
 | **Version** | 1.0 |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Date** | YYYY-MM-DD |
 | **Author** | @ba-name |
 | **Reviewer(s)** | @stakeholder |
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#1-executive-summary)
 2. [Business Objective](#2-business-objective)
@@ -292,49 +292,49 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 ## 1. Executive Summary
 
-> 💡 **For non-technical readers** — 1 paragraph capturing what, why, and impact.
+> **For non-technical readers** — 1 paragraph capturing what, why, and impact.
 
-## 2. 🎯 Business Objective
+## 2. Business Objective
 
 | Aspect | Details |
 |--------|---------|
 | **Problem** | ... |
 | **Goal** | ... |
 | **Success Metrics** | • Metric 1: target<br>• Metric 2: target |
-| **Business Impact** | 💰 Revenue / ⚡ Efficiency / 👥 UX |
+| **Business Impact** | Revenue / Efficiency / UX |
 
-## 3. 👥 Stakeholders
+## 3. Stakeholders
 
 | Role | Name | Interest | Influence | RACI |
 |------|------|:--------:|:---------:|:----:|
-| Product Owner | @alice | 🔴 High | 🔴 High | A |
-| End User | @customer | 🔴 High | 🟡 Med | C |
-| Engineering | @bob | 🟡 Med | 🔴 High | R |
-| Legal | @charlie | 🟢 Low | 🟡 Med | I |
+| Product Owner | @alice | High | High | A |
+| End User | @customer | High | Medium | C |
+| Engineering | @bob | Medium | High | R |
+| Legal | @charlie | Low | Medium | I |
 
-> 📝 **RACI:** R=Responsible, A=Accountable, C=Consulted, I=Informed
+> **RACI:** R=Responsible, A=Accountable, C=Consulted, I=Informed
 
 ## 4. Scope
 
-### ✅ In Scope
+### In Scope
 - ...
 
-### ❌ Out of Scope
+### Out of Scope
 - ...
 
-> ⚠️ **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
+> **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
 
 ## 5. Business Requirements
 
 | ID | Requirement | Priority | Acceptance |
 |:---|:------------|:--------:|:-----------|
-| BR-001 | System shall... | 🔴 Must | Verified by ... |
-| BR-002 | System should... | 🟡 Should | Verified by ... |
-| BR-003 | System could... | 🟢 Could | Verified by ... |
+| BR-001 | System shall... | Must | Verified by ... |
+| BR-002 | System should... | Should | Verified by ... |
+| BR-003 | System could... | Could | Verified by ... |
 
-> 📝 **MoSCoW prioritization:** Must / Should / Could / Won't
+> **MoSCoW prioritization:** Must / Should / Could / Won't
 
-## 6. 📐 Business Rules
+## 6. Business Rules
 
 | ID | Rule | Source |
 |:---|:-----|:-------|
@@ -349,12 +349,12 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 ### Constraints
 | Type | Constraint |
 |------|------------|
-| 💰 Budget | $XX,XXX |
-| 🗓️ Timeline | Launch by YYYY-MM-DD |
-| 🔒 Compliance | PDPA, PCI-DSS |
-| ⚙️ Technical | Must integrate with existing CRM |
+| Budget | $XX,XXX |
+| Timeline | Launch by YYYY-MM-DD |
+| Compliance | PDPA, PCI-DSS |
+| Technical | Must integrate with existing CRM |
 
-## 8. ❓ Open Questions
+## 8. Open Questions
 
 | ID | Question | Owner | Due |
 |:---|:---------|:------|:---:|
@@ -371,13 +371,13 @@ flowchart LR
     C --> E[Notify]
 \`\`\`
 
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| Product Owner | @alice | ⚪ Pending | — |
-| Tech Lead | @bob | ⚪ Pending | — |
-| Compliance | @charlie | ⚪ Pending | — |
+| Product Owner | @alice | Pending | — |
+| Tech Lead | @bob | Pending | — |
+| Compliance | @charlie | Pending | — |
 ```
 
 
@@ -424,13 +424,13 @@ flowchart LR
 
 # skill: diagram-figures
 
-Use when an architecture or concept figure must look designed for a proposal, slide, print or sign-off.
+Use when a project document (BRD, SRS, FSD, ADR, ER, flows), proposal, slide or print needs a diagram in the house style.
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
 
 # Diagram Figures
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 skill นี้คือ house style เดียวของรูปที่ต้องดู "ออกแบบมา" ไม่ใช่ "generate มา" มี 3 engine ซึ่งใช้สี ไอคอน และกติกาชุดเดียวกัน
 
@@ -438,10 +438,10 @@ skill นี้คือ house style เดียวของรูปที่�
 
 | ต้องการ | ไปที่ |
 |---|---|
-| รูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
+| รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) และรูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
 | รูปแบบเดียวกัน แต่ต้อง generate จากข้อมูลหรือโค้ด เช่น ออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือต้องคุมพิกัดบนกริดเอง | **skill นี้ — SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
 | บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ PDF ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
-| ไดอะแกรมที่อยู่ในเอกสาร markdown · README · Pull Request · เอกสารในทีม | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
+| ไดอะแกรมด่วนใน README · Pull Request · โน้ตในโค้ด (ไม่ใช่เอกสารโปรเจกต์) | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
 | ตัดสินใจว่าจะฝังรูปในไฟล์ markdown แบบไหน (inline SVG · ไฟล์ภาพ · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
 
 ต้นทุนของ skill นี้คือ **เวลา** เพราะ 1 รูปต้องแก้หลายรอบ
@@ -1186,11 +1186,11 @@ Kubernetes ของจริง แบบผังอ้างอิงที�
 
 # skill: spell-out-abbreviations
 
-Use for docs, UI text or commits heavy with abbreviations or jargon, or needing a glossary. General writing → human-writing.
+Use when docs, UI text or commits are heavy with abbreviations or jargon, or need a glossary. General writing → human-writing.
 
 # Spell Out Abbreviations
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
 > **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา

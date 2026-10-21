@@ -49,7 +49,7 @@ Mother, 78, Bangkok, บัตรทอง at a district hospital, blood pressur
 
 ## Related
 
-`kids-school` (one family calendar) · `meal-plan-grocery` (soft, low-salt menus) · `home-maintenance` (grab bars, lighting as a job) · `personal-life` `important-docs` (ID, ทะเบียนบ้าน, hospital card, will) · `trading-finance` `tax-deduction-planner` · `health-wellness` `medication-schedule` (full medicine schedule and refills, if installed)
+`kids-school` (one family calendar) · `meal-plan-grocery` (soft, low-salt menus) · `home-maintenance` (grab bars, lighting as a job) · `personal-life` `important-docs` (ID, ทะเบียนบ้าน, hospital card, will) · `trading-finance` `tax-deduction-planner` · `health-wellness` `medication-schedule` (full medicine schedule and refills, if installed) · `health-wellness` `doctor-visit-prep` (symptom list, questions and visit record, if installed)
 
 
 ## reference: care-templates.md

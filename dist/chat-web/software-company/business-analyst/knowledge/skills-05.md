@@ -4,7 +4,7 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 # รายงานสถานะเมื่อจบงาน
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
 > งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
@@ -38,12 +38,22 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 อัปเดต: 2026-10-01 14:20 · งานล่าสุด: เขียน SRS
 
-| รายการ | ประเภท | สถานะ | ผลตรวจ | ค้าง / หมายเหตุ |
-|---|---|---|---|---|
-| SRS (`docs/srs.md`) | เอกสาร | DRAFT | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
-| mockup (`mockup/`) | เอกสาร | REVIEW | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
-| FSD | เอกสาร | ยังไม่เริ่ม | — | รอ architecture |
-| FR-001 ถึง FR-012 | โค้ด | เสร็จ | ผ่าน — test 48/48 | — |
+**ภาพรวม:** เสร็จ 1/4 · ทำอยู่ 2 · ติด 0 · ไม่ผ่านตรวจ 1
+
+| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |
+|---|---|---|---|---|---|---|
+| SRS (`docs/srs.md`) | เอกสาร | DRAFT | `business-analyst` | `reviewer` | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
+| mockup (`mockup/`) | เอกสาร | REVIEW | `ux-designer` | `reviewer` | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
+| FSD | เอกสาร | ยังไม่เริ่ม | — | — | — | รอ architecture |
+| FR-001 ถึง FR-012 | โค้ด | เสร็จ | `developer` | `reviewer` | ผ่าน — test 48/48 | — |
+
+**ทีมตอนนี้:**
+
+| agent | ทำอะไร | สถานะ | ผล |
+|---|---|---|---|
+| `ux-designer` | แก้ปุ่มหลอกใน `order.html` | ทำอยู่ | — |
+| `business-analyst` | SRS | เสร็จ | ผ่าน — 42/42 FR |
+| `reviewer` | ตรวจ mockup รอบ 1 | เสร็จ | ไม่ผ่าน — ปุ่มหลอก 3 จุด |
 
 **ค้างอยู่ (ต้องมีคนตัดสิน):**
 1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
@@ -63,7 +73,8 @@ Use when a task that produces or checks project work ends (document, review, cod
 |---|---|
 | ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี · ต่างจาก 5 คำของ `superuser` ใน plugin อื่นโดยตั้งใจ ส่วน "รออนุมัติ" กับ "ค้างอยู่" อยู่เป็นหัวข้อท้ายคำตอบ |
+| สถานะ (โค้ด · build) | `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — 5 คำเดียวกับ `superuser` และตารางงานของ `spec-to-code-loop` · งานที่ยังไม่เริ่มใช้ `ค้างอยู่` · รหัสงานใช้รหัส FR ของ SRS ถ้ามี |
+| ใครทำ · ใครตรวจ | ชื่อ agent ตามบทบาท เช่น `developer` · `reviewer` · `หัวหน้าทีม` · `ผู้ใช้` — หลายตัวเรียงด้วย → · ยังไม่มีคนทำหรือตรวจใส่ `—` · ใครตรวจต้องไม่ใช่ตัวเดียวกับใครทำ |
 | ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
 - **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียน `ผ่าน`
@@ -71,6 +82,11 @@ Use when a task that produces or checks project work ends (document, review, cod
 - `APPROVED` มีแต่คนที่เปลี่ยนได้ ส่วน agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
 - ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ รายการที่รอบนี้ไม่ได้แตะให้คัดลอกค่าเดิมมา
 - เอกสาร 1 ฉบับใช้ 1 แถว โค้ดที่สถานะเท่ากันรวมเป็นช่วงรหัสได้ (`FR-001 ถึง FR-012`) และตารางไม่ควรยาวเกิน 25 แถว
+
+### "ภาพรวม" กับ "ทีมตอนนี้"
+
+- **ภาพรวม** — นับจากตารางด้านบน: `เสร็จ` (โค้ด) และ `APPROVED` (เอกสาร) นับเป็นเสร็จ · ไม่ผ่านตรวจ = แถวที่ผลตรวจขึ้นต้นด้วย `ไม่ผ่าน` · ตัวเลขต้องตรงกับตาราง
+- **ทีมตอนนี้** — 1 แถวต่อ agent ที่ใช้ในงานรอบนี้ สถานะใช้ `ทำอยู่` · `เสร็จ` · `ติด` · หัวหน้าทีมเขียนแถว `ทำอยู่` ตอนส่งงานออก และแก้เป็นผลจริงตอนรายงานกลับ เปิดไฟล์กลางงานจึงเห็นว่าใครทำอะไรอยู่ · เริ่มงานรอบใหม่ให้ล้างแถวของรอบก่อน · งานที่ไม่มี subagent ไม่ต้องใส่หัวข้อนี้
 
 ### "ค้างอยู่" กับ "ถัดไป"
 
@@ -88,11 +104,11 @@ Use when a task that produces or checks project work ends (document, review, cod
 ```markdown
 ## ประวัติสถานะ
 
-- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ค้าง 1
-- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด
+- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ทำ `business-analyst` · ตรวจ `reviewer` · ค้าง 1
+- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด · ทำ `ux-designer` · ตรวจ `reviewer` · ค้าง 0
 ```
 
-รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
+รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
 
 หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` ซึ่ง skill นี้ไม่แก้และไม่ลบ
 
@@ -100,7 +116,7 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 ## 4 · ในคำตอบ
 
-แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
+แสดง "ภาพรวม" + ตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
 
 ---
 
@@ -109,6 +125,8 @@ Use when a task that produces or checks project work ends (document, review, cod
 - [ ] อ่าน `docs/BUILD-PLAN.md` จากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
 - [ ] `## สถานะล่าสุด` เขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
 - [ ] ทุกแถวที่เขียนว่า `ผ่าน` มีหลักฐาน
+- [ ] ทุกแถวที่มีคนทำแล้วมี "ใครทำ" · แถวที่ตรวจแล้วมี "ใครตรวจ" ที่ไม่ใช่ตัวเดียวกัน
+- [ ] ตัวเลขใน "ภาพรวม" ตรงกับตาราง · มี subagent → "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
 - [ ] ไม่ได้ตั้ง `APPROVED` เอง
 - [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด
 - [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
@@ -160,30 +178,30 @@ Use when a task that produces or checks project work ends (document, review, cod
 ## Standard Output: Polished Project Plan
 
 ```markdown
-# 📋 Project Plan: <Project Name>
+# Project Plan: <Project Name>
 
 | | |
 |--|--|
 | **Project Lead** | @pm-name |
 | **Sponsor** | @sponsor |
-| **Status** | 🟡 Planning |
+| **Status** | Planning |
 | **Start Date** | YYYY-MM-DD |
 | **Target End** | YYYY-MM-DD |
 | **Budget** | $XX,XXX |
 
 ---
 
-## 🎯 Objective
+## Objective
 
 > One-sentence goal that fits in a tweet.
 
 ## Scope
 
-| ✅ In Scope | ❌ Out of Scope |
+| In Scope | Out of Scope |
 |-------------|-----------------|
 | ... | ... |
 
-## 🗓️ Timeline
+## Timeline
 
 \`\`\`mermaid
 gantt
@@ -201,34 +219,34 @@ gantt
     Go-live         :c2, after c1, 3d
 \`\`\`
 
-## 🏁 Milestones
+## Milestones
 
 | # | Milestone | Target Date | Owner | Status |
 |:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ⚪ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ⚪ |
-| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | ⚪ |
-| 4 | UAT passed | YYYY-MM-DD | @qa | ⚪ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ⚪ |
+| 1 | Requirements approved | YYYY-MM-DD | @ba | Pending |
+| 2 | Architecture signed off | YYYY-MM-DD | @architect | Pending |
+| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | Pending |
+| 4 | UAT passed | YYYY-MM-DD | @qa | Pending |
+| 5 | Production launch | YYYY-MM-DD | @devops | Pending |
 
-## ⚠️ Risk Register
+## Risk Register
 
 | ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
 |:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | 🟡 Med | 🔴 High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | 🟢 Low | 🟡 Med | 2 | Cross-training | @pm |
+| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
+| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
 
-> 📊 **Score = Likelihood × Impact** (1-9 scale)
+> **Score = Likelihood × Impact** (1-9 scale)
 
-## 🔗 Dependencies
+## Dependencies
 
 | Type | Dependency | Owner | Status |
 |------|------------|:------|:------:|
-| 🌐 External | Payment gateway API | Vendor X | 🟡 |
-| 👥 Internal | Design team availability | @design-lead | 🟢 |
-| ⚙️ Technical | New cloud account | @devops | 🟢 |
+| External | Payment gateway API | Vendor X | At risk |
+| Internal | Design team availability | @design-lead | On track |
+| Technical | New cloud account | @devops | On track |
 
-## 👥 RACI Matrix
+## RACI Matrix
 
 | Activity | PM | BA | Arch | Dev | QA | DevOps |
 |----------|:--:|:--:|:----:|:---:|:--:|:------:|
@@ -242,62 +260,62 @@ gantt
 ## Standard Output: Polished Status Report
 
 ```markdown
-# 📊 Status Report: <Project> — Week of YYYY-MM-DD
+# Status Report: <Project> — Week of YYYY-MM-DD
 
 | | |
 |--|--|
 | **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | 🟢 On Track |
-| **Health Trend** | 📈 Improving / 📉 Declining / ➡️ Stable |
+| **Overall Status** | On Track |
+| **Health Trend** | Improving / Declining / Stable |
 
 ---
 
 ## TL;DR
 
-> 💡 1-2 sentence summary for executives.
+> 1-2 sentence summary for executives.
 
-## 📊 Status by Track
+## Status by Track
 
 | Track | Status | Notes |
 |-------|:------:|-------|
-| Scope | 🟢 | On target |
-| Schedule | 🟡 | 3 days behind, recoverable |
-| Budget | 🟢 | 65% spent, on track |
-| Quality | 🟢 | 0 critical bugs open |
-| Team Morale | 🟢 | High |
+| Scope | On track | On target |
+| Schedule | At risk | 3 days behind, recoverable |
+| Budget | On track | 65% spent, on track |
+| Quality | On track | 0 critical bugs open |
+| Team Morale | On track | High |
 
-## ✅ Completed This Period
+## Completed This Period
 
 - ...
 - ...
 
-## 🔄 In Progress
+## In Progress
 
 | Item | Owner | Due | % Done |
 |------|:------|:---:|:------:|
 | Feature X | @alice | MM/DD | 75% |
 | Feature Y | @bob | MM/DD | 40% |
 
-## ⏸️ Blocked
+## Blocked
 
 | Item | Blocker | Owner | Action |
 |------|---------|:------|--------|
 | ... | Waiting on legal review | @legal | Escalate to CTO |
 
-## 🗓️ Upcoming (Next Period)
+## Upcoming (Next Period)
 
 - ...
 
-## ⚠️ New Risks / Issues
+## New Risks / Issues
 
 | Severity | Item | Owner |
 |:--------:|------|:------|
-| 🔴 | ... | ... |
+| High | ... | ... |
 
-## 💬 Asks for Stakeholders
+## Asks for Stakeholders
 
-- ❓ Decision needed on X by MM/DD
-- 👥 Need 1 more QA resource starting next sprint
+- Decision needed on X by MM/DD
+- Need 1 more QA resource starting next sprint
 ```
 
 
@@ -309,7 +327,7 @@ Use when writing or reviewing a Functional Specification Document (FSD) that scr
 
 # เขียน Functional Specification Document (FSD)
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียว:** FSD เสร็จเมื่อ developer เปิดอ่านแล้ว**เขียนโค้ดได้โดยไม่ต้องเดาและไม่ต้องถาม**
 > ทุกจุดที่ต้องเดา คือจุดที่จะกลายเป็นงานแก้หลังส่งมอบ
@@ -611,14 +629,14 @@ This is the "beautiful design" mode. Use Rich Markdown + Mermaid.
 Every stakeholder doc MUST follow this structure:
 
 ```markdown
-# 📋 <Document Title>
+# <Document Title>
 
 > **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
 > **Authors:** ... · **Reviewers:** ...
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#executive-summary)
 2. [Scope](#scope)
@@ -635,7 +653,7 @@ Every stakeholder doc MUST follow this structure:
 
 ## 1. Executive Summary
 
-> 💡 **For non-technical readers** — 1 paragraph explaining what this feature does and why.
+> **For non-technical readers** — 1 paragraph explaining what this feature does and why.
 
 <content>
 
@@ -643,10 +661,10 @@ Every stakeholder doc MUST follow this structure:
 
 ## 2. Scope
 
-### ✅ In Scope
+### In Scope
 - ...
 
-### ❌ Out of Scope
+### Out of Scope
 - ...
 
 [... continue all sections ...]
@@ -661,38 +679,27 @@ Every stakeholder doc MUST follow this structure:
 - Always add TOC for docs with 5+ sections
 - Use anchor links in TOC
 
-### Visual Markers (Emoji)
+### Visual Markers
 
-Use emoji **purposefully**, not decoratively:
+No emoji or icons in headings, body, tables, labels or callouts (`human-writing` · `polished-document-style`). Use words:
 
-| Marker | Meaning |
+| Need | Write |
 |--------|---------|
-| 📋 | Document/list |
-| 📑 | TOC/index |
-| 💡 | Tip/insight |
-| ⚠️ | Warning/caution |
-| 🚨 | Critical |
-| ✅ | Yes/approved/in scope |
-| ❌ | No/rejected/out of scope |
-| 🟢 🟡 🔴 | Status indicators |
-| 🔒 | Security |
-| ⚡ | Performance |
-| 🎯 | Goal/objective |
-| 👤 | Actor/user |
-| 🔄 | Flow/process |
-| 📊 | Data |
-| 🌐 | API/integration |
+| Yes / no in a table | ✓ / ✗ |
+| Status | Draft · Approved · Pending · In Progress |
+| Severity or priority | Critical · High · Medium · Low |
+| Tip, warning, critical, note | Bold callout label (below) |
 
 ### Callout Boxes (Blockquotes)
 
 ```markdown
-> 💡 **Tip:** Brief insight here.
+> **Tip:** Brief insight here.
 
-> ⚠️ **Warning:** Important caveat.
+> **Warning:** Important caveat.
 
-> 🚨 **Critical:** Must read before proceeding.
+> **Critical:** Must read before proceeding.
 
-> 📝 **Note:** Additional context.
+> **Note:** Additional context.
 ```
 
 ### Tables
@@ -702,8 +709,8 @@ Prefer tables over bullet lists when data has 2+ attributes:
 ```markdown
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| email | string | ✅ | User's email |
-| age | number | ❌ | Optional |
+| email | string | ✓ | User's email |
+| age | number | ✗ | Optional |
 ```
 
 Align headers to data when helpful:
@@ -715,14 +722,14 @@ Align headers to data when helpful:
 ### Status Badges (in tables/inline)
 
 ```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk:** 🟡 Medium
+**Status:** Approved
+**Priority:** High
+**Risk:** Medium
 ```
 
 ---
 
-# 🔷 Mermaid Diagrams
+# Mermaid Diagrams
 
 Use Mermaid for ALL diagrams. They render in GitHub/Notion/VSCode.
 
@@ -819,7 +826,7 @@ flowchart TD
 
 ---
 
-# 📋 Templates
+# Templates
 
 ## Use Case Template (Mode B)
 
@@ -829,19 +836,19 @@ flowchart TD
 | Field | Value |
 |-------|-------|
 | **ID** | UC-001 |
-| **Actor** | 👤 Customer |
-| **Priority** | 🔴 High |
-| **Status** | 🟢 Approved |
+| **Actor** | Customer |
+| **Priority** | High |
+| **Status** | Approved |
 | **Trigger** | User clicks "Place Order" |
 
 #### Preconditions
-- ✅ User is authenticated
-- ✅ Cart contains at least 1 item
+- User is authenticated
+- Cart contains at least 1 item
 
 #### Postconditions
-- ✅ Order created with status `pending`
-- ✅ Inventory reserved
-- ✅ Confirmation email sent
+- Order created with status `pending`
+- Inventory reserved
+- Confirmation email sent
 
 #### Main Flow
 
@@ -892,23 +899,23 @@ sequenceDiagram
 ## API Endpoint Template (Mode B)
 
 ```markdown
-### 🌐 POST `/api/v1/orders`
+### POST `/api/v1/orders`
 
 > Create a new order from cart contents.
 
 | Attribute | Value |
 |-----------|-------|
-| **Auth Required** | ✅ Yes (Bearer token) |
+| **Auth Required** | Yes (Bearer token) |
 | **Rate Limit** | 10 req/min per user |
-| **Idempotent** | ✅ Yes (use `Idempotency-Key` header) |
+| **Idempotent** | Yes (use `Idempotency-Key` header) |
 
 #### Request Headers
 
 | Header | Required | Example |
 |--------|:--------:|---------|
-| `Authorization` | ✅ | `Bearer eyJ...` |
-| `Idempotency-Key` | ⚠️ Recommended | `unique-request-id` |
-| `Content-Type` | ✅ | `application/json` |
+| `Authorization` | ✓ | `Bearer eyJ...` |
+| `Idempotency-Key` | Recommended | `unique-request-id` |
+| `Content-Type` | ✓ | `application/json` |
 
 #### Request Body
 
@@ -941,17 +948,17 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 | Code | When | `type` (suffix) |
 |:----:|:-----|:-----|
-| 🔴 401 | Missing/invalid token | `unauthorized` |
-| 🟡 402 | Payment declined | `payment-declined` |
-| 🟡 409 | Inventory unavailable | `out-of-stock` |
-| 🔴 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
-| 🔴 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
+| 401 | Missing/invalid token | `unauthorized` |
+| 402 | Payment declined | `payment-declined` |
+| 409 | Inventory unavailable | `out-of-stock` |
+| 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
+| 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
 ```
 
 ## Data Model Template (Mode B)
 
 ```markdown
-## 📊 Data Model
+## Data Model
 
 ### Entity Relationship Diagram
 
@@ -971,7 +978,7 @@ erDiagram
 | `email` | VARCHAR(255) | UNIQUE, NOT NULL | Login email |
 | `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
 
-> 🔒 **Security:** `email` is encrypted at rest using AES-256.
+> **Security:** `email` is encrypted at rest using AES-256.
 ```
 
 ---
@@ -1029,9 +1036,9 @@ erDiagram
 
 | ฟิลด์ | ชนิด | บังคับ | กฎตรวจ | ข้อความเมื่อไม่ผ่าน | ค่าเริ่มต้น |
 |---|---|:--:|---|---|---|
-| เหตุผลที่ยกเลิก | เลือกจากรายการ | ✅ | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
-| หมายเหตุ | ข้อความยาว | ❌ | ไม่เกิน 500 ตัวอักษร | "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
-| วันที่ต้องการรับ | วันที่ | ✅ | ไม่ก่อนวันนี้ · ไม่เกิน 90 วัน | "เลือกวันที่ตั้งแต่วันนี้ถึง <วันที่>" | วันนี้ + 3 |
+| เหตุผลที่ยกเลิก | เลือกจากรายการ | ✓ | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
+| หมายเหตุ | ข้อความยาว | ✗ | ไม่เกิน 500 ตัวอักษร | "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
+| วันที่ต้องการรับ | วันที่ | ✓ | ไม่ก่อนวันนี้ · ไม่เกิน 90 วัน | "เลือกวันที่ตั้งแต่วันนี้ถึง <วันที่>" | วันนี้ + 3 |
 ```
 
 ## ตารางการเปลี่ยนสถานะ (ข้อ 6)
@@ -1079,12 +1086,12 @@ Use `reverse-engineering` instead when there is no source code, only binaries.
 
    | Label | Shared label (`superuser` evidence) | Meaning | Example |
    |---|---|---|---|
-   | ✅ code | `จากแหล่ง` · confidence high | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
-   | 📄 doc | `จากแหล่ง` · confidence medium | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
-   | 🟡 inferred | `อนุมาน` | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
-   | ❓ ask | `ยังไม่ได้ตรวจ` | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
+   | `code` | `จากแหล่ง` · confidence high | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
+   | `doc` | `จากแหล่ง` · confidence medium | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
+   | `inferred` | `อนุมาน` | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
+   | `ask` | `ยังไม่ได้ตรวจ` | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
 
-   When 📄 and ✅ disagree, record both and raise a ❓. That disagreement is often the most valuable finding. Only something seen running (a log, a captured request, a test against a copy) is `ตรวจจริง`.
+   When `doc` and `code` disagree, record both and raise an `ask`. That disagreement is often the most valuable finding. Only something seen running (a log, a captured request, a test against a copy) is `ตรวจจริง`.
 
    Claims a change request will rest on get the full evidence record from `superuser` `references/evidence.md`: add the commit hash of the code version read (or the file's SHA-256 when there is no git), and what is still unseen (for example: production config not available).
 3. **Wide and shallow first, deep only where a change will land.** Map the whole system at module level; write screen-level detail only for modules a change request touches. Coverage grows one change request at a time.
@@ -1103,7 +1110,7 @@ Look in every layer — business rules in legacy systems are spread thin, not ke
 | Config files | Integrations, feature switches, environment names |
 | Reports (`.rpt`, `.rdl`, `.pbix`) and ETL packages (SSIS, cron, jobs) | Calculations that exist only there, schedules |
 | Enums and constant classes | The status vocabulary — decode it once, reuse everywhere |
-| User manuals, old emails, ticket history | 📄 intent, to compare with ✅ behaviour |
+| User manuals, old emails, ticket history | `doc` intent, to compare with `code` behaviour |
 | Commented-out code, `_old`, `Copy of` files | Previous rules; note them, do not treat as current |
 
 Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md).
@@ -1114,7 +1121,7 @@ Stack-specific locations: [references/evidence-by-stack.md](references/evidence-
 
 Count before reading. File counts by type, projects or modules, largest files, generated folders to ignore (`bin/`, `obj/`, `node_modules/`, publish output, vendored plugins). Write it to `docs/as-is/README.md` as a coverage table: every module listed, depth = none.
 
-**Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be 🟡 or ❓, and the coverage table must say so.
+**Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be `inferred` or `ask`, and the coverage table must say so.
 
 If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. Seven layers worked in practice: screens and permissions · data and status codes · one deep-dive module · rules for each half of the modules · integrations, jobs, reports and ETL · manuals. Then one analyst assembles. Budget for it: a system of about 55,000 lines took 8 subagents and about 2 million tokens.
 
@@ -1128,10 +1135,10 @@ Produce, using the existing skills for format:
 | `02-module-inventory.md` | Module → screens / endpoints / reports / jobs → main tables | — |
 | `03-data-dictionary.md` | Tables grouped by module, key columns, status codes decoded, core ER diagram | `database-design` |
 | `04-business-rules.md` | Rule register — [assets/business-rule-register.md](assets/business-rule-register.md) | — |
-| `05-open-questions.md` | Every ❓, grouped by who can answer, top 5 first | — |
+| `05-open-questions.md` | Every `ask`, grouped by who can answer, top 5 first | — |
 | `06-findings.md` | Defects and security weaknesses found on the way — not rules | `security-gate` severity |
 
-**Documenting a legacy system always turns up bugs and security holes.** Keep them out of the rule register: a rule is what the system does on purpose, a finding is what it does wrong. When unsure which, it is a ❓. `06-findings.md` gives location and a one-line fix, never exploitation steps or secret values, and is marked for the system owner only. Check these in every legacy web system, they are nearly always present: permission enforced only by hiding buttons, server never re-checking status order, SQL built by joining user input, secrets in config files under version control, document numbers issued without a lock.
+**Documenting a legacy system always turns up bugs and security holes.** Keep them out of the rule register: a rule is what the system does on purpose, a finding is what it does wrong. When unsure which, it is an `ask`. `06-findings.md` gives location and a one-line fix, never exploitation steps or secret values, and is marked for the system owner only. Check these in every legacy web system, they are nearly always present: permission enforced only by hiding buttons, server never re-checking status order, SQL built by joining user input, secrets in config files under version control, document numbers issued without a lock.
 
 ### Step 3 — Deep dive (only the module a change touches)
 
@@ -1145,7 +1152,7 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 
 1. Restate the request as a before/after against the as-is spec: which rule IDs, screens and tables change.
 2. Impact: search the code for every table, column, procedure and status code touched, and list each hit. Callers outside the main application — reports, ETL, mobile clients, other systems reading the same database — are the ones usually missed.
-3. Open ❓ items that block the change go to the requester first.
+3. Open `ask` items that block the change go to the requester first.
 4. The characterization tests for the touched area must pass before and after.
 5. After the change ships, update the as-is spec — it is now the to-be.
 
@@ -1154,7 +1161,7 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 - Name things the way the users do. Take screen titles and menu labels from the views, not class names.
 - Decode a status code once in the data dictionary and link to it; never re-explain it per screen.
 - Dead code is a finding, not a rule. Check whether a route is reachable from the menu before documenting the screen.
-- Copy-pasted logic that differs slightly between modules is a ❓, not two rules — ask which one is right.
+- Copy-pasted logic that differs slightly between modules is an `ask`, not two rules — ask which one is right.
 - Stop a module at the depth the change needs. A finished spec of a module nobody will change is waste.
 - Report what was not read. The coverage table in the README is part of the deliverable.
 - Status values hard-coded as strings with no enum are common. Harvest them with a search for quoted upper-case literals next to status columns, then decode them once in the data dictionary.

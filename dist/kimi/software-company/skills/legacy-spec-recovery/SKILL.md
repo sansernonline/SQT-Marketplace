@@ -23,12 +23,12 @@ Use `reverse-engineering` instead when there is no source code, only binaries.
 
    | Label | Shared label (`superuser` evidence) | Meaning | Example |
    |---|---|---|---|
-   | ✅ code | `จากแหล่ง` · confidence high | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
-   | 📄 doc | `จากแหล่ง` · confidence medium | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
-   | 🟡 inferred | `อนุมาน` | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
-   | ❓ ask | `ยังไม่ได้ตรวจ` | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
+   | `code` | `จากแหล่ง` · confidence high | Read in code or schema, can point to the line | `BookingContext.cs:412` rejects a booking when `QTY > 0` is false |
+   | `doc` | `จากแหล่ง` · confidence medium | Stated in a manual or old document, not checked against code | User manual p.7 says approval needs 2 levels |
+   | `inferred` | `อนุมาน` | Guessed from names, UI text or data shape | Column `STS = 'C'` probably means cancelled |
+   | `ask` | `ยังไม่ได้ตรวจ` | Code cannot answer — goes to the question list | Is the 3-day limit a business rule or a bug workaround? |
 
-   When 📄 and ✅ disagree, record both and raise a ❓. That disagreement is often the most valuable finding. Only something seen running (a log, a captured request, a test against a copy) is `ตรวจจริง`.
+   When `doc` and `code` disagree, record both and raise an `ask`. That disagreement is often the most valuable finding. Only something seen running (a log, a captured request, a test against a copy) is `ตรวจจริง`.
 
    Claims a change request will rest on get the full evidence record from `superuser` `references/evidence.md`: add the commit hash of the code version read (or the file's SHA-256 when there is no git), and what is still unseen (for example: production config not available).
 3. **Wide and shallow first, deep only where a change will land.** Map the whole system at module level; write screen-level detail only for modules a change request touches. Coverage grows one change request at a time.
@@ -47,7 +47,7 @@ Look in every layer — business rules in legacy systems are spread thin, not ke
 | Config files | Integrations, feature switches, environment names |
 | Reports (`.rpt`, `.rdl`, `.pbix`) and ETL packages (SSIS, cron, jobs) | Calculations that exist only there, schedules |
 | Enums and constant classes | The status vocabulary — decode it once, reuse everywhere |
-| User manuals, old emails, ticket history | 📄 intent, to compare with ✅ behaviour |
+| User manuals, old emails, ticket history | `doc` intent, to compare with `code` behaviour |
 | Commented-out code, `_old`, `Copy of` files | Previous rules; note them, do not treat as current |
 
 Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md).
@@ -58,7 +58,7 @@ Stack-specific locations: [references/evidence-by-stack.md](references/evidence-
 
 Count before reading. File counts by type, projects or modules, largest files, generated folders to ignore (`bin/`, `obj/`, `node_modules/`, publish output, vendored plugins). Write it to `docs/as-is/README.md` as a coverage table: every module listed, depth = none.
 
-**Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be 🟡 or ❓, and the coverage table must say so.
+**Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be `inferred` or `ask`, and the coverage table must say so.
 
 If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. Seven layers worked in practice: screens and permissions · data and status codes · one deep-dive module · rules for each half of the modules · integrations, jobs, reports and ETL · manuals. Then one analyst assembles. Budget for it: a system of about 55,000 lines took 8 subagents and about 2 million tokens.
 
@@ -72,10 +72,10 @@ Produce, using the existing skills for format:
 | `02-module-inventory.md` | Module → screens / endpoints / reports / jobs → main tables | — |
 | `03-data-dictionary.md` | Tables grouped by module, key columns, status codes decoded, core ER diagram | `database-design` |
 | `04-business-rules.md` | Rule register — [assets/business-rule-register.md](assets/business-rule-register.md) | — |
-| `05-open-questions.md` | Every ❓, grouped by who can answer, top 5 first | — |
+| `05-open-questions.md` | Every `ask`, grouped by who can answer, top 5 first | — |
 | `06-findings.md` | Defects and security weaknesses found on the way — not rules | `security-gate` severity |
 
-**Documenting a legacy system always turns up bugs and security holes.** Keep them out of the rule register: a rule is what the system does on purpose, a finding is what it does wrong. When unsure which, it is a ❓. `06-findings.md` gives location and a one-line fix, never exploitation steps or secret values, and is marked for the system owner only. Check these in every legacy web system, they are nearly always present: permission enforced only by hiding buttons, server never re-checking status order, SQL built by joining user input, secrets in config files under version control, document numbers issued without a lock.
+**Documenting a legacy system always turns up bugs and security holes.** Keep them out of the rule register: a rule is what the system does on purpose, a finding is what it does wrong. When unsure which, it is an `ask`. `06-findings.md` gives location and a one-line fix, never exploitation steps or secret values, and is marked for the system owner only. Check these in every legacy web system, they are nearly always present: permission enforced only by hiding buttons, server never re-checking status order, SQL built by joining user input, secrets in config files under version control, document numbers issued without a lock.
 
 ### Step 3 — Deep dive (only the module a change touches)
 
@@ -89,7 +89,7 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 
 1. Restate the request as a before/after against the as-is spec: which rule IDs, screens and tables change.
 2. Impact: search the code for every table, column, procedure and status code touched, and list each hit. Callers outside the main application — reports, ETL, mobile clients, other systems reading the same database — are the ones usually missed.
-3. Open ❓ items that block the change go to the requester first.
+3. Open `ask` items that block the change go to the requester first.
 4. The characterization tests for the touched area must pass before and after.
 5. After the change ships, update the as-is spec — it is now the to-be.
 
@@ -98,7 +98,7 @@ For each request, fill [assets/change-request.md](assets/change-request.md):
 - Name things the way the users do. Take screen titles and menu labels from the views, not class names.
 - Decode a status code once in the data dictionary and link to it; never re-explain it per screen.
 - Dead code is a finding, not a rule. Check whether a route is reachable from the menu before documenting the screen.
-- Copy-pasted logic that differs slightly between modules is a ❓, not two rules — ask which one is right.
+- Copy-pasted logic that differs slightly between modules is an `ask`, not two rules — ask which one is right.
 - Stop a module at the depth the change needs. A finished spec of a module nobody will change is waste.
 - Report what was not read. The coverage table in the README is part of the deliverable.
 - Status values hard-coded as strings with no enum are common. Harvest them with a search for quoted upper-case literals next to status columns, then decode them once in the data dictionary.

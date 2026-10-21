@@ -38,6 +38,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 | ค่าตั้งและค่าลับ | `config-and-secrets` |
 | ฟีเจอร์ใหม่ที่เปิดออกสู่ภายนอก | คำสั่ง `/software-company:threat-model` ก่อนเขียน |
 | ก่อนส่งงาน | [`security-gate`](../security-gate/SKILL.md) |
+| เว็บแอป · API ที่ส่งมอบลูกค้า หรือสัญญาระบุ OWASP | [`owasp-top10`](../owasp-top10/SKILL.md) — สิ่งที่ต้องมี วิธีพิสูจน์ และรายงานรายข้อ A01–A10 |
 
 ## กับ agent เอง
 
@@ -111,7 +112,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
+Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
 
 # Simplicity First
 

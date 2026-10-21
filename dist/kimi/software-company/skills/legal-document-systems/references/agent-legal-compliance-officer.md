@@ -161,7 +161,7 @@ Document EVERY cross-border flow
 Use polished doc style:
 
 ```markdown
-# 📋 LegalTech Compliance Audit
+# LegalTech Compliance Audit
 
 | | |
 |--|--|

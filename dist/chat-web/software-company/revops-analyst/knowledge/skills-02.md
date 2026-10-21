@@ -146,11 +146,11 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 | Regulation | Applies? | Reason | Owner | Status |
 |-----------|:--------:|--------|:------|:------:|
-| PCI-DSS v4 | ✅ | We process card data | @sec-lead | 🟡 In progress |
-| PDPA Thailand | ✅ | TH customers | @dpo | 🟢 Compliant |
-| AML (Thailand) | ✅ | Money transmission | @compliance | 🟡 In progress |
-| PSD2 | ❌ | No EU operations yet | — | ⚪ N/A |
-| GDPR | 🟡 Indirect | EU users via web | @dpo | 🟢 Compliant |
+| PCI-DSS v4 | ✓ | We process card data | @sec-lead | In progress |
+| PDPA Thailand | ✓ | TH customers | @dpo | Compliant |
+| AML (Thailand) | ✓ | Money transmission | @compliance | In progress |
+| PSD2 | ✗ | No EU operations yet | — | N/A |
+| GDPR | Indirect | EU users via web | @dpo | Compliant |
 ```
 
 ### Control Mapping
@@ -179,7 +179,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ### Audit Readiness Report
 
 ```markdown
-# 📋 Audit Readiness: PCI-DSS v4
+# Audit Readiness: PCI-DSS v4
 
 | | |
 |--|--|
@@ -187,32 +187,32 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 | **QSA** | (auditor name) |
 | **Scope** | Cardholder Data Environment (CDE) |
 | **Target date** | YYYY-MM-DD |
-| **Status** | 🟡 In Progress |
+| **Status** | In Progress |
 
 ## Readiness by Requirement
 
 | Req | Description | Status | Evidence | Gap |
 |:---:|-------------|:------:|----------|-----|
-| 1 | Network security | 🟢 | Firewall config, network diagram | — |
-| 2 | Secure config | 🟢 | Hardening checklist | — |
-| 3 | Protect stored CHD | 🟡 | Encryption proof | Need key rotation log |
-| 4 | Transmit encryption | 🟢 | TLS config | — |
-| 5 | Malware protection | 🟡 | EDR deployment | Coverage 95%, need 100% |
-| 6 | Secure development | 🟢 | SAST in CI, code review | — |
-| 7 | Restrict access | 🟢 | RBAC matrix | — |
-| 8 | Identify users | 🟢 | MFA enforced | — |
-| 9 | Physical access | 🟢 | Cloud provider attestation | — |
-| 10 | Logging | 🟢 | SIEM, retention 1yr | — |
-| 11 | Test security | 🟡 | Last pen test 7mo ago | Schedule new pen test |
-| 12 | Policy | 🟢 | InfoSec policy current | — |
+| 1 | Network security | Compliant | Firewall config, network diagram | — |
+| 2 | Secure config | Compliant | Hardening checklist | — |
+| 3 | Protect stored CHD | Partial | Encryption proof | Need key rotation log |
+| 4 | Transmit encryption | Compliant | TLS config | — |
+| 5 | Malware protection | Partial | EDR deployment | Coverage 95%, need 100% |
+| 6 | Secure development | Compliant | SAST in CI, code review | — |
+| 7 | Restrict access | Compliant | RBAC matrix | — |
+| 8 | Identify users | Compliant | MFA enforced | — |
+| 9 | Physical access | Compliant | Cloud provider attestation | — |
+| 10 | Logging | Compliant | SIEM, retention 1yr | — |
+| 11 | Test security | Partial | Last pen test 7mo ago | Schedule new pen test |
+| 12 | Policy | Compliant | InfoSec policy current | — |
 
 ## Action Items
 
 | ID | Action | Owner | Due | Priority |
 |:--:|--------|:------|:---:|:--------:|
-| 1 | Document key rotation log | @dba | MM/DD | 🔴 H |
-| 2 | Roll out EDR to remaining 5% | @sec | MM/DD | 🟡 M |
-| 3 | Schedule pen test | @sec | MM/DD | 🟡 M |
+| 1 | Document key rotation log | @dba | MM/DD | High |
+| 2 | Roll out EDR to remaining 5% | @sec | MM/DD | Medium |
+| 3 | Schedule pen test | @sec | MM/DD | Medium |
 ```
 
 ## Common Compliance Workflows
@@ -796,7 +796,7 @@ for date in test_dates:
 ### Model Documentation Card
 
 ```markdown
-# 📊 Model: <Name>
+# Model: <Name>
 
 | | |
 |--|--|
@@ -804,13 +804,13 @@ for date in test_dates:
 | **Purpose** | Credit default prediction |
 | **Type** | Logistic regression (binary classification) |
 | **Owner** | @quant-team |
-| **Status** | 🟢 Production |
+| **Status** | Production |
 
-## 🎯 Business Purpose
+## Business Purpose
 
 Predict probability of loan default within 12 months.
 
-## 📊 Performance
+## Performance
 
 | Metric | Train | Test | Live |
 |--------|------:|-----:|-----:|
@@ -818,7 +818,7 @@ Predict probability of loan default within 12 months.
 | Gini | 0.56 | 0.48 | 0.44 |
 | KS | 0.42 | 0.36 | 0.33 |
 
-## 📈 Features
+## Features
 
 | Feature | Importance | Source | Refresh |
 |---------|:----------:|--------|---------|
@@ -826,28 +826,28 @@ Predict probability of loan default within 12 months.
 | debt_to_income | 0.15 | Application | Real-time |
 | ... | ... | ... | ... |
 
-## ⚠️ Assumptions & Limitations
+## Assumptions & Limitations
 
 - Trained on 2020-2024 (includes COVID period)
 - Population: Thai retail borrowers, age 20-60
 - Income < 100k THB/month
-- ⚠️ NOT validated for new-to-credit segment
-- ⚠️ Performance degrades in interest rate > 5%
+- NOT validated for new-to-credit segment
+- Performance degrades in interest rate > 5%
 
-## 🔍 Validation
+## Validation
 
 - Out-of-time backtest: 6 months
 - Backtest AUC: 0.74 (vs train 0.78 — acceptable degradation)
 - Fair lending test: disparate impact ratio 0.85 (acceptable)
 - Stress test: stable under 3x default rate scenario
 
-## 🚨 Monitoring
+## Monitoring
 
 - Drift alerts: PSI > 0.25 on any feature
 - Performance alerts: AUC drop > 5pp
 - Volume alerts: > 50% deviation from baseline
 
-## 📝 Change Log
+## Change Log
 
 | Version | Date | Change |
 |---------|------|--------|
@@ -859,7 +859,7 @@ Predict probability of loan default within 12 months.
 ### Backtest Report Template
 
 ```markdown
-# 📊 Backtest: <Strategy/Model Name>
+# Backtest: <Strategy/Model Name>
 
 ## Configuration
 - **Period:** YYYY-MM-DD to YYYY-MM-DD
@@ -877,16 +877,16 @@ Predict probability of loan default within 12 months.
 | Max drawdown | XX% | XX% |
 | Win rate | XX% | — |
 
-## ⚠️ Caveats
+## Caveats
 
 - Past performance ≠ future
-- Transaction costs included: ✅/❌
-- Slippage: ✅/❌
-- Survivorship bias: ✅/❌
-- Look-ahead bias: ✅/❌
+- Transaction costs included: ✓/✗
+- Slippage: ✓/✗
+- Survivorship bias: ✓/✗
+- Look-ahead bias: ✓/✗
 - Tax treatment: gross/net
 
-## 📊 Equity Curve
+## Equity Curve
 
 [Chart placeholder]
 

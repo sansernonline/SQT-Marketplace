@@ -165,6 +165,7 @@ templates/
 | ตัวชี้วัดอัตราส่งสำเร็จ | `observability-basics` |
 | ไฟล์แนบและลิงก์ที่หมดอายุ | `file-upload-and-storage` |
 | การแจ้งเตือนทีมเมื่อระบบมีปัญหา | `observability-basics` · `incident-runbook-template` |
+| broadcast ถึงเพื่อน LINE OA (โควตา · กลุ่มเป้าหมาย · ความถี่) | `thai-workplace:line-broadcast` (ถ้าติดตั้ง) |
 
 
 ---

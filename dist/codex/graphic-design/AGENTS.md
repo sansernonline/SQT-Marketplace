@@ -1,6 +1,6 @@
 # SQT graphic-design — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.7.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.8.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.
 
@@ -13,9 +13,9 @@ Creative design beyond product UI — brand kits, AI image and video briefs with
 ## บทบาททั้งหมด
 
 - **art-director** — Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.
-- **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **brand-keeper** — Use when starting a brand or when designs look inconsistent. Keeps the brand kit (logo, colours, type, tone).
 - **design-critic** — Use when a design feels off or before visuals ship. Reviews hierarchy, contrast, spacing, alignment; names 2–3 fixes.
+- **social-creator** — Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.
+- **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
-- **social-creator** — Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.

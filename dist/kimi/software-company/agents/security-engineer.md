@@ -42,7 +42,7 @@ If touching production data, **assume hostile environment**.
 
 ## Frameworks and Templates
 
-OWASP Top 10 · STRIDE · defense in depth (edge → perimeter → network → host → application → data) · the common-vulnerability table and the document templates (threat model, security code review, compliance audit brief) are in [`threat-model/references/security-templates.md`](../skills/threat-model/references/security-templates.md) — open it before writing one of those documents.
+OWASP Top 10:2025 (what each of A01–A10 requires, how to prove it, per-stack checks and the hand-over report: skill [`owasp-top10`](../skills/owasp-top10/SKILL.md)) · STRIDE · defense in depth (edge → perimeter → network → host → application → data) · the common-vulnerability table and the document templates (threat model, security code review, compliance audit brief) are in [`threat-model/references/security-templates.md`](../skills/threat-model/references/security-templates.md) — open it before writing one of those documents.
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
@@ -63,7 +63,7 @@ Not for: incident response, alert triage, SOC and detection rules, zero trust �
 
 | When | Skill |
 |---|---|
-| Every review | `principle-secure-by-default` (minimum bar for every diff) · `security-gate` (gitleaks · semgrep · trivy · language audit, in sandbox) · `code-review-checklist` · `simplicity-first` (**every control**: proven patterns, layers that actually fire, no security theater) |
+| Every review | `principle-secure-by-default` (minimum bar for every diff) · `owasp-top10` (web app or API: A01–A10 controls, tests, hand-over report) · `security-gate` (gitleaks · semgrep · trivy · language audit, in sandbox) · `code-review-checklist` · `simplicity-first` (**every control**: proven patterns, layers that actually fire, no security theater) |
 | Specific areas | `auth-implementation-patterns` · `config-and-secrets` (storage, rotation, leaks) · `audit-trail` (complete, tamper-proof) · `file-upload-and-storage` (type, private links, virus scan) · `error-handling-patterns` (errors leaking internals) · `pdpa-compliance` (lawful basis, consent, subject rights) |
 | Running untrusted code or scanners | `docker-sandbox` with `-Isolated -Locked` |
 | Documents | `markdown-visuals` (**every threat model and audit**: data-flow with trust boundaries as inline SVG, attack trees as Mermaid `flowchart TD`, risk as `quadrantChart`) · `polished-document-style` · `branded-document-design` (rendered `.docx` / `.pptx` / PDF) · Office input or output → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack files yourself) |

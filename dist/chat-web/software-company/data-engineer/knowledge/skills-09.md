@@ -250,20 +250,20 @@ Phase 1:    Phase 2:           Phase 3:
 ## Standard Output: Polished Architecture Overview
 
 ```markdown
-# 🏗️ Architecture: <System Name>
+# Architecture: <System Name>
 
 | | |
 |--|--|
 | **Document Type** | Architecture Overview |
 | **Version** | 1.0 |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Date** | YYYY-MM-DD |
 | **Architect** | @name |
 | **Related ADRs** | ADR-0001 (`docs/decisions/ADR-0001-database-choice.md`), ADR-0002 (`docs/decisions/ADR-0002-api-style.md`) |
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Context](#1-context)
 2. [Quality Attributes](#2-quality-attributes)
@@ -278,33 +278,33 @@ Phase 1:    Phase 2:           Phase 3:
 
 ## 1. Context
 
-> 💡 What problem does this solve? Why now?
+> What problem does this solve? Why now?
 
-## 2. 🎯 Quality Attributes (Priority Order)
+## 2. Quality Attributes (Priority Order)
 
 | Rank | Attribute | Target | Why |
 |:----:|-----------|--------|-----|
-| 1 | ⚡ Performance | < 200ms p95 | Customer-facing |
-| 2 | 🔒 Security | PDPA compliant | Legal req |
-| 3 | 📈 Scalability | 10k RPS | Growth plan |
-| 4 | 💰 Cost | < $5k/month | Budget |
+| 1 | Performance | < 200ms p95 | Customer-facing |
+| 2 | Security | PDPA compliant | Legal req |
+| 3 | Scalability | 10k RPS | Growth plan |
+| 4 | Cost | < $5k/month | Budget |
 
 ## 3. High-Level Architecture
 
 \`\`\`mermaid
 flowchart LR
-    User([👤 User]) --> CDN[🌐 CDN]
-    CDN --> LB[⚖️ Load Balancer]
-    LB --> API[🔷 API Gateway]
-    API --> Auth[🔒 Auth Service]
-    API --> App[⚙️ App Service]
-    App --> Cache[(⚡ Redis)]
-    App --> DB[(💾 PostgreSQL)]
-    App --> Queue[📨 Message Queue]
-    Queue --> Worker[👷 Background Worker]
+    User([User]) --> CDN[CDN]
+    CDN --> LB[Load Balancer]
+    LB --> API[API Gateway]
+    API --> Auth[Auth Service]
+    API --> App[App Service]
+    App --> Cache[(Redis)]
+    App --> DB[(PostgreSQL)]
+    App --> Queue[Message Queue]
+    Queue --> Worker[Background Worker]
 \`\`\`
 
-## 4. 🧩 Components
+## 4. Components
 
 | Component | Responsibility | Technology | Owner |
 |-----------|----------------|------------|-------|
@@ -314,7 +314,7 @@ flowchart LR
 | Database | Persistence | PostgreSQL 16 | DBA |
 | Cache | Session, hot data | Redis 7 | Platform |
 
-## 5. 🔄 Data Flow
+## 5. Data Flow
 
 \`\`\`mermaid
 sequenceDiagram
@@ -332,7 +332,7 @@ sequenceDiagram
     API-->>U: 200 OK
 \`\`\`
 
-## 6. 🛠️ Tech Stack
+## 6. Tech Stack
 
 | Layer | Technology | Rationale |
 |-------|-----------|-----------|
@@ -343,17 +343,17 @@ sequenceDiagram
 | Infra | AWS (ECS Fargate) | Cost + ops simplicity |
 | CI/CD | GitHub Actions | Already in use |
 
-## 7. 🔗 Cross-Cutting Concerns
+## 7. Cross-Cutting Concerns
 
 | Concern | Approach |
 |---------|----------|
-| 🔒 Authentication | JWT with refresh tokens |
-| 📝 Logging | Structured JSON → CloudWatch |
-| 📊 Monitoring | Prometheus + Grafana |
-| 🚨 Alerting | PagerDuty (P1), Slack (P2-P3) |
-| ⚠️ Error Handling | Standard error envelope, Sentry |
+| Authentication | JWT with refresh tokens |
+| Logging | Structured JSON → CloudWatch |
+| Monitoring | Prometheus + Grafana |
+| Alerting | PagerDuty (P1), Slack (P2-P3) |
+| Error Handling | Standard error envelope, Sentry |
 
-## 8. ⚖️ Trade-offs
+## 8. Trade-offs
 
 | Decision | Chose | Over | Reason |
 |----------|-------|------|--------|
@@ -361,9 +361,9 @@ sequenceDiagram
 | Hosting | ECS Fargate | EKS | Lower ops burden |
 | API Style | REST | GraphQL | Simpler caching, client maturity |
 
-> ⚠️ **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
+> **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
 
-## 📖 References
+## References
 
 - ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
 - ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)
@@ -603,11 +603,11 @@ When proposing architecture, compare options:
 
 # skill: human-writing
 
-Use when writing anything a person will read (answer, report, document, slide, label) in Thai or English.
+Use before writing or editing anything a person reads — answer, email, report, README, .docx, slide, label — in Thai or English.
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
-ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`)
+ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 ## 1 · หลักใหญ่
 
@@ -622,7 +622,11 @@ Use when writing anything a person will read (answer, report, document, slide, l
 - **เงื่อนไขและคำสั่งเขียนเป็นประโยคเต็ม มีคำเชื่อม** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ) ไม่ใช้ `→` หรือ `·` ต่อประโยคเป็นท่อน ๆ
 - ในตารางใช้ข้อความสั้นได้ แต่ยังต้องอ่านเป็นภาษาคน ไม่ใช่รหัส
 - สัญลักษณ์ห้ามแทนคำจนต้องถอดรหัส ถ้าคนนอกต้องเดาว่าลูกศรหมายถึงอะไร ให้เติมคำ
+- **ไม่ใส่อีโมจิหรือไอคอน** (📌 ✅ 💡 🚀 👀) ในหัวข้อ เนื้อหา ตาราง ป้าย และกล่องข้อความ เพราะคนอ่านเห็นแล้วรู้ทันทีว่า AI เขียน ให้ใช้คำตัวหนาแทน เช่น **หมายเหตุ** · ช่องใช่/ไม่ในตารางใช้ `✓` `✗` ได้ · ระดับความรุนแรงใช้คำ `วิกฤต · สูง · กลาง · ต่ำ` ไม่ใช้จุดสี · อีโมจิที่เจ้าของงานเขียนไว้เองไม่ต้องลบ และไม่ต้องลอกตาม · ข้อยกเว้นเดียวคือข้อความแชตถึงลูกค้าที่ skill ของงานนั้นกำหนดไว้
 - ทุกตัวเลขบอกว่าหมายถึงอะไร · เทียบให้เห็นภาพ (เท่า อ่านง่ายกว่า %) · ผลยังไม่แน่นอนให้บอกตรง ๆ ว่าเพราะอะไร
+- **ตัวเลขที่เปลี่ยนตามเวลา** (ราคา · อัตราภาษี · กฎหมาย · กำหนดยื่น) บอกแหล่งและวันที่ตรวจ · อ้างได้เฉพาะแหล่งที่เปิดอ่านจริง ใส่ลิงก์หรือ DOI · ตัวเลขสมมุติหรือข้อมูลจำลอง ติดป้าย `ตัวอย่าง` ตั้งแต่จุดแรกที่เห็น
+- **วันที่** ในเนื้อหาภาษาไทยใช้ พ.ศ. หรือ ค.ศ. แบบเดียวทั้งชุด · ชื่อไฟล์ รหัส และข้อมูลที่เครื่องอ่านใช้ `YYYY-MM-DD` แบบ ค.ศ.
+- **สถานะงาน** ใช้ 5 คำนี้ทุกเอกสาร: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` · ผลตรวจใช้ `ผ่าน · ไม่ผ่าน`
 
 ## 3 · คำ
 
@@ -630,6 +634,7 @@ Use when writing anything a person will read (answer, report, document, slide, l
 - ศัพท์ที่คนในวงการใช้อยู่แล้ว (token · prompt · API · OCR) คงภาษาอังกฤษไว้
 - ตัวย่อเขียนเต็มครั้งแรกแล้ววงเล็บ จากนั้นใช้ตัวย่อ · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
 - สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
+- เอกสาร 2 ภาษา: เลือกภาษาหลัก 1 ภาษา อีกภาษาอยู่ในวงเล็บหรือคอลัมน์ที่ 2 ไม่สลับไปมาในประโยค
 - ตัดคำฟุ่มเฟือย ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ")
 - เลี่ยงท่าที่ดูเหมือน AI เขียน: คำคมเปิดเรื่อง · "ไม่ใช่แค่… แต่ยัง…" · จัดทุกอย่างเป็นชุดละ 3 · ชมว่าสำคัญเกินจริง · ตัวหนาทุกบรรทัด · สรุปซ้ำตอนจบ · เปิดด้วย "แน่นอน" · ปิดด้วย "หวังว่าจะช่วยได้" · ใช้ "หลาย" ทั้งที่รู้ตัวเลข · ออกตัวซ้อนหลายชั้น (ออกตัวครั้งเดียวตรงจุดที่ไม่แน่ใจจริง)
 - งานที่คนดู (หน้าจอ · สไลด์ · โฆษณา) เลี่ยงเพิ่ม: คำโฆษณากว้าง ๆ (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · ขีดยาวทุกประโยค · ประโยคเปิดสำเร็จรูป ("ในยุคดิจิทัลที่…") · ท่อนสั้นมีจุดคั่น ("เร็ว. ง่าย. ครบ.") · คำอ้างที่ใช้กับคู่แข่งได้ ให้ใส่ชื่อหรือตัวเลขจริงแทน · หน้าตาของงานใช้ `no-ai-look`

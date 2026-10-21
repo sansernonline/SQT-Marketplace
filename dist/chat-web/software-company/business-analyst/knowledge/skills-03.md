@@ -4,7 +4,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 # Presentation Design
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** หัวสไลด์ต้องเป็น**ข้อสรุป** ไม่ใช่**ชื่อหัวข้อ**
 > ถ้าผู้ฟังอ่านแค่หัวสไลด์ทุกแผ่นแล้วเข้าใจเรื่องทั้งหมด แปลว่าเด็คใช้ได้
@@ -268,7 +268,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 # Branded Document Design
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
 > และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
@@ -314,7 +314,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 > ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
 > ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แอปของโปรเจกต์ผ่านด่านสวยแล้ว
 
-1. **มีตัวตนอยู่แล้วไหม** — ดู `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
+1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
 2. **3 แนวขนานกัน** (`parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว — ดู `doc-cover-design` ข้อ 7) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
 3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
 4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน 3 รอบตาม `ui-craft/references/states-and-checks.md` · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
@@ -947,7 +947,7 @@ Use when writing or reviewing a Software Requirements Specification (SRS) — IS
 
 # SRS Writing
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** ข้อกำหนดทุกข้อต้องเขียน **test case** จากมันได้ทันที
 > ถ้าเขียนไม่ได้ นั่นไม่ใช่ข้อกำหนด แค่ความหวัง
@@ -1101,7 +1101,7 @@ IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อ�
 | ผู้ใช้พร้อมกัน | ช่วงไหนหนักสุด กี่คน | 500 คน ช่วงปิดยอดสิ้นเดือน |
 | ความพร้อมใช้งาน | ปิดปรับปรุงได้ไหม ช่วงไหน | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
 | การสำรองข้อมูล | ย้อนได้ถึงเมื่อไหร่ กู้คืนนานแค่ไหน | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
-| ความปลอดภัย | สิทธิ์กี่ระดับ ข้อมูลอ่อนไหวอะไรบ้าง | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
+| ความปลอดภัย | สิทธิ์กี่ระดับ ข้อมูลอ่อนไหวอะไรบ้าง · เว็บแอปและ API ใส่ NFR-SEC ตาม `owasp-top10/references/contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
 | การบันทึกร่องรอย | ต้องรู้ว่าใครแก้อะไรเมื่อไหร่ไหม | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
 | ความเข้ากันได้ | เบราว์เซอร์อะไร มือถือไหม | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
 | ภาษา | 2 ภาษาไหม สกุลเงิน เขตเวลา | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
@@ -1116,12 +1116,12 @@ IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อ�
 ## 6 · รูปในเอกสาร
 
 SRS ที่ไม่มีรูปเลย คนอ่านต้องนึกภาพเอง และแต่ละคนนึกไม่เหมือนกัน
-**เลือกเครื่องมือให้ตรงกับปลายทางของเอกสาร:**
+**รูปในตัว SRS ใช้ house style เดียว:**
 
-| SRS ฉบับนี้ไปจบที่ไหน | วาดด้วย |
+| รูปอะไร | วาดด้วย |
 |---|---|
-| markdown ที่ให้ git ตามความเปลี่ยนแปลงได้ | `software-diagrams` (Mermaid) |
-| ไฟล์ .docx / PDF ที่ลูกค้าเซ็นรับ · ผังที่มีโลโก้ผู้ให้บริการจริง | `diagram-figures` — ได้ไฟล์ภาพคมชัด และคุมตำแหน่งเองได้ |
+| ทุกรูปในตัว SRS (ภาพรวม · ผังขั้นตอน · sequence · ER · สถานะ) ไม่ว่าส่งเป็น markdown, .docx หรือ PDF | `diagram-figures` — ไฟล์ภาพคมชัด คุมตำแหน่งเองได้ เก็บไฟล์ต้นทางใน repo ให้ git ตามได้ |
+| รูปด่วนใน README · PR · โน้ตในโค้ด ที่อยู่นอกตัว SRS | `software-diagrams` (Mermaid) |
 
 **ทุกรูปในเอกสารฉบับเดียวต้องใช้ธีมสีชุดเดียวกัน** — ประกาศธีมไว้ที่ต้นเอกสารตาม
 `polished-document-style` หัวข้อ "ธีมของเอกสาร" แล้วทุกเครื่องมืออ่านค่าจากที่เดียวกัน
@@ -1207,20 +1207,20 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 ## Standard Output: Polished BRD (Mode B)
 
 ```markdown
-# 📋 BRD: <Feature Name>
+# BRD: <Feature Name>
 
 | | |
 |--|--|
 | **Document Type** | Business Requirements Document |
 | **Version** | 1.0 |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Date** | YYYY-MM-DD |
 | **Author** | @ba-name |
 | **Reviewer(s)** | @stakeholder |
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#1-executive-summary)
 2. [Business Objective](#2-business-objective)
@@ -1235,49 +1235,49 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 
 ## 1. Executive Summary
 
-> 💡 **For non-technical readers** — 1 paragraph capturing what, why, and impact.
+> **For non-technical readers** — 1 paragraph capturing what, why, and impact.
 
-## 2. 🎯 Business Objective
+## 2. Business Objective
 
 | Aspect | Details |
 |--------|---------|
 | **Problem** | ... |
 | **Goal** | ... |
 | **Success Metrics** | • Metric 1: target<br>• Metric 2: target |
-| **Business Impact** | 💰 Revenue / ⚡ Efficiency / 👥 UX |
+| **Business Impact** | Revenue / Efficiency / UX |
 
-## 3. 👥 Stakeholders
+## 3. Stakeholders
 
 | Role | Name | Interest | Influence | RACI |
 |------|------|:--------:|:---------:|:----:|
-| Product Owner | @alice | 🔴 High | 🔴 High | A |
-| End User | @customer | 🔴 High | 🟡 Med | C |
-| Engineering | @bob | 🟡 Med | 🔴 High | R |
-| Legal | @charlie | 🟢 Low | 🟡 Med | I |
+| Product Owner | @alice | High | High | A |
+| End User | @customer | High | Medium | C |
+| Engineering | @bob | Medium | High | R |
+| Legal | @charlie | Low | Medium | I |
 
-> 📝 **RACI:** R=Responsible, A=Accountable, C=Consulted, I=Informed
+> **RACI:** R=Responsible, A=Accountable, C=Consulted, I=Informed
 
 ## 4. Scope
 
-### ✅ In Scope
+### In Scope
 - ...
 
-### ❌ Out of Scope
+### Out of Scope
 - ...
 
-> ⚠️ **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
+> **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
 
 ## 5. Business Requirements
 
 | ID | Requirement | Priority | Acceptance |
 |:---|:------------|:--------:|:-----------|
-| BR-001 | System shall... | 🔴 Must | Verified by ... |
-| BR-002 | System should... | 🟡 Should | Verified by ... |
-| BR-003 | System could... | 🟢 Could | Verified by ... |
+| BR-001 | System shall... | Must | Verified by ... |
+| BR-002 | System should... | Should | Verified by ... |
+| BR-003 | System could... | Could | Verified by ... |
 
-> 📝 **MoSCoW prioritization:** Must / Should / Could / Won't
+> **MoSCoW prioritization:** Must / Should / Could / Won't
 
-## 6. 📐 Business Rules
+## 6. Business Rules
 
 | ID | Rule | Source |
 |:---|:-----|:-------|
@@ -1292,12 +1292,12 @@ SRS ที่ไม่มีรูปเลย คนอ่านต้องน
 ### Constraints
 | Type | Constraint |
 |------|------------|
-| 💰 Budget | $XX,XXX |
-| 🗓️ Timeline | Launch by YYYY-MM-DD |
-| 🔒 Compliance | PDPA, PCI-DSS |
-| ⚙️ Technical | Must integrate with existing CRM |
+| Budget | $XX,XXX |
+| Timeline | Launch by YYYY-MM-DD |
+| Compliance | PDPA, PCI-DSS |
+| Technical | Must integrate with existing CRM |
 
-## 8. ❓ Open Questions
+## 8. Open Questions
 
 | ID | Question | Owner | Due |
 |:---|:---------|:------|:---:|
@@ -1314,13 +1314,13 @@ flowchart LR
     C --> E[Notify]
 \`\`\`
 
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| Product Owner | @alice | ⚪ Pending | — |
-| Tech Lead | @bob | ⚪ Pending | — |
-| Compliance | @charlie | ⚪ Pending | — |
+| Product Owner | @alice | Pending | — |
+| Tech Lead | @bob | Pending | — |
+| Compliance | @charlie | Pending | — |
 ```
 
 

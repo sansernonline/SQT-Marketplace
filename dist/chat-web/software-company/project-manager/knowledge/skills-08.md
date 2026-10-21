@@ -149,8 +149,8 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
 
-- รูปใน README · PR · เอกสารในทีม → Mermaid (`software-diagrams`) ฝังใน `.md`
-- รูปในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ → `diagram-figures` เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
+- รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
+- รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
 
 **หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
 รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
@@ -202,7 +202,7 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ## 10 · เชื่อมกับ skill อื่น
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (ส่งมอบ) · `software-diagrams` (ในทีม) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
 
 **อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ
 
@@ -320,13 +320,13 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ---
 
-## ✨ Features
+## Features
 
-- 🚀 What makes this special — feature 1
-- ⚡ Killer feature 2
-- 🔒 Reassuring feature 3
+- What makes this special — feature 1
+- Killer feature 2
+- Reassuring feature 3
 
-## 🚀 Quick Start
+## Quick Start
 
 \`\`\`bash
 npm install package-name
@@ -340,18 +340,18 @@ const result = thing({ option: 'value' });
 
 That's it. You're done.
 
-## 📚 Documentation
+## Documentation
 
 - [Getting Started](#) — 10-minute tutorial
 - [How-To Guides](#) — Solve specific problems
 - [API Reference](#) — Full API spec
 - [Concepts](#) — Why and how it works
 
-## 🤝 Contributing
+## Contributing
 
 See [CONTRIBUTING.md](#).
 
-## 📄 License
+## License
 
 MIT
 ```
@@ -359,15 +359,15 @@ MIT
 ### Tutorial Template
 
 ```markdown
-# 🎓 Tutorial: Build Your First X in 10 Minutes
+# Tutorial: Build Your First X in 10 Minutes
 
-> 💡 **What you'll learn:** by the end, you'll have built Y and understand Z.
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
 
 ## What You'll Need
 
-- ✅ Node.js 18+
-- ✅ A free account at example.com
-- ⏱️ 10 minutes
+- Node.js 18+
+- A free account at example.com
+- 10 minutes
 
 ## Step 1: Set Up
 
@@ -377,7 +377,7 @@ npx create-thing my-project
 cd my-project
 \`\`\`
 
-> 💡 **What just happened?** Brief explanation.
+> **What just happened?** Brief explanation.
 
 You should see:
 \`\`\`
@@ -392,7 +392,7 @@ You should see:
 
 ...
 
-## ✅ Congratulations!
+## Congratulations!
 
 You've built X. Try these next:
 
@@ -410,7 +410,7 @@ Create a new resource.
 
 ### Authentication
 
-🔒 Required. Bearer token in `Authorization` header.
+Required. Bearer token in `Authorization` header.
 
 ### Request
 
@@ -429,8 +429,8 @@ Authorization: Bearer <token>
 
 | Field | Type | Required | Description |
 |-------|------|:--------:|-------------|
-| `name` | string | ✅ | Display name, 1-100 chars |
-| `tags` | string[] | ❌ | Up to 10 tags |
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
 
 ### Response: 201 Created
 
@@ -464,9 +464,9 @@ const res = await fetch('/api/v1/resource', {
 ### Release Notes Template
 
 ```markdown
-# 🚀 Release v2.1.0 — YYYY-MM-DD
+# Release v2.1.0 — YYYY-MM-DD
 
-## ✨ Highlights
+## Highlights
 
 > The TL;DR for busy readers.
 
@@ -485,19 +485,19 @@ Description with user-facing benefit.
 command --new-flag
 \`\`\`
 
-📖 [Read the docs](#)
+[Read the docs](#)
 
-## 🔧 Improvements
+## Improvements
 
 - Faster initial load time
 - Better error messages for X
 
-## 🐛 Bug Fixes
+## Bug Fixes
 
 - Fix issue where ... ([#1234](#))
 - Resolve crash when ... ([#5678](#))
 
-## ⚠️ Breaking Changes
+## Breaking Changes
 
 ### `api.oldMethod()` removed
 
@@ -511,9 +511,9 @@ api.oldMethod(arg)
 api.newMethod({ arg })
 \`\`\`
 
-📖 [Migration guide](#)
+[Migration guide](#)
 
-## 🙏 Contributors
+## Contributors
 
 Thanks to: @alice, @bob, @charlie
 ```
@@ -541,7 +541,7 @@ Use when project work starts, before switching model, handing work over, or an i
 | `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
-| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
+| `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
 | `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` |
 | `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` |
 | `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก |
@@ -679,7 +679,7 @@ Use when making anything (code, document, plan, design, slide, sheet, answer). S
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`)
+ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 ## 1 · หลักใหญ่
 

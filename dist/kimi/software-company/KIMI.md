@@ -1,10 +1,10 @@
 # SQT software-company — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.14.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/software-company/ โดย scripts/build/build-targets.mjs (v2.17.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
-Simulates a complete software development company — 42 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 117 skills and 29 slash commands for the whole SDLC.
+Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 113 skills and 29 slash commands for the whole SDLC.
 
-ชุดนี้มี skill 118 ตัว · บทบาท 42 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
+ชุดนี้มี skill 119 ตัว · บทบาท 42 บทบาท · คำสั่งสำเร็จรูป 29 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`
@@ -14,7 +14,6 @@ Simulates a complete software development company — 42 agents from product, an
 
 - **ai-engineer** — Use when building with LLMs or machine learning — model choice, RAG, prompts, evaluation, training, serving, monitoring.
 - **blockchain-engineer** — Use when building on blockchains — chain choice, smart contracts (Solidity, Solana), DeFi, contract audits, tokenomics.
-- **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **business-analyst** — Use when gathering requirements, writing a BRD, user stories or acceptance criteria. FSD and API → system-analyst.
 - **clinical-data-analyst** — Use when analyzing healthcare data — clinical dashboards, population health, patient outcomes, clinical research.
 - **data-engineer** — Use when building data pipelines (ETL/ELT), warehouses, integrations, data quality checks or data infrastructure.
@@ -35,7 +34,6 @@ Simulates a complete software development company — 42 agents from product, an
 - **insurance-compliance-officer** — Use for insurance regulation — US state filings, Solvency II, Thailand OIC, licensing, market conduct, privacy.
 - **insurance-engineer** — Use when building insurance products — policy admin, quote and rating engines, agent portals, claims intake.
 - **iot-engineer** — Use when building connected devices — microcontroller firmware, MQTT, edge computing, telemetry, device fleets.
-- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **legal-compliance-officer** — Use for legal-tech compliance — GDPR, PDPA, data residency, records retention, e-discovery, multi-jurisdiction rules.
 - **legaltech-engineer** — Use when building legal tech — contract management, clause extraction, document automation, e-signature validity.
 - **mobile-engineer** — Use when building mobile apps — Kotlin, Swift, Flutter or React Native; platform APIs, store submission, performance.
@@ -45,7 +43,6 @@ Simulates a complete software development company — 42 agents from product, an
 - **quant-analyst** — Use for quant risk, credit and trading models, backtests. SaaS pricing → revops-analyst. Insurance → insurance-analyst.
 - **recommendation-engineer** — Use when building recommendation systems — related items, personalized ranking, collaborative or hybrid filtering.
 - **reverse-engineer** — Use to understand or recreate software without source (binary, .NET, Electron, APK, JS bundle). Authorized targets only.
-- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.
 - **revops-analyst** — Use when designing subscription billing, pricing tiers, usage metering or revenue analytics (MRR, ARR, churn).
 - **security-analyst** — Use for security operations — incidents, alert triage, threat hunting, SOC, detections. App code → security-engineer.
 - **security-engineer** — Use for security reviews, threat modeling, vulnerability assessment, secure code, auth design. SOC → security-analyst.
@@ -54,3 +51,6 @@ Simulates a complete software development company — 42 agents from product, an
 - **system-analyst** — Use for an FSD, use cases, data flows, endpoint API specs or sequence diagrams. Architecture → solution-architect.
 - **technical-writer** — Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer.
 - **ux-designer** — Use when designing user flows, wireframes, clickable HTML mockups or UI heuristic reviews. Logos → graphic-designer.
+- **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
+- **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
+- **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.

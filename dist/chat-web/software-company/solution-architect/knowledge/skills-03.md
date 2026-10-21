@@ -4,7 +4,7 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 # Markdown Visuals
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -367,13 +367,13 @@ This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the 
 
 # skill: diagram-figures
 
-Use when an architecture or concept figure must look designed for a proposal, slide, print or sign-off.
+Use when a project document (BRD, SRS, FSD, ADR, ER, flows), proposal, slide or print needs a diagram in the house style.
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
 
 # Diagram Figures
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 skill นี้คือ house style เดียวของรูปที่ต้องดู "ออกแบบมา" ไม่ใช่ "generate มา" มี 3 engine ซึ่งใช้สี ไอคอน และกติกาชุดเดียวกัน
 
@@ -381,10 +381,10 @@ skill นี้คือ house style เดียวของรูปที่�
 
 | ต้องการ | ไปที่ |
 |---|---|
-| รูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
+| รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) และรูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
 | รูปแบบเดียวกัน แต่ต้อง generate จากข้อมูลหรือโค้ด เช่น ออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือต้องคุมพิกัดบนกริดเอง | **skill นี้ — SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
 | บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ PDF ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
-| ไดอะแกรมที่อยู่ในเอกสาร markdown · README · Pull Request · เอกสารในทีม | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
+| ไดอะแกรมด่วนใน README · Pull Request · โน้ตในโค้ด (ไม่ใช่เอกสารโปรเจกต์) | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
 | ตัดสินใจว่าจะฝังรูปในไฟล์ markdown แบบไหน (inline SVG · ไฟล์ภาพ · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
 
 ต้นทุนของ skill นี้คือ **เวลา** เพราะ 1 รูปต้องแก้หลายรอบ
@@ -1278,8 +1278,8 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 5 · รูปในเอกสาร — เลือกให้ถูกตั้งแต่ต้น
 
-- รูปใน README · PR · เอกสารในทีม → Mermaid (`software-diagrams`) ฝังใน `.md`
-- รูปในเอกสารที่ลูกค้าเซ็น · สไลด์ · งานพิมพ์ → `diagram-figures` เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารส่งมอบ** (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
+- รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
+- รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
 
 **หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
 รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
@@ -1331,7 +1331,7 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ## 10 · เชื่อมกับ skill อื่น
 
-นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (ส่งมอบ) · `software-diagrams` (ในทีม) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
+นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
 
 **อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ
 
@@ -1449,13 +1449,13 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ---
 
-## ✨ Features
+## Features
 
-- 🚀 What makes this special — feature 1
-- ⚡ Killer feature 2
-- 🔒 Reassuring feature 3
+- What makes this special — feature 1
+- Killer feature 2
+- Reassuring feature 3
 
-## 🚀 Quick Start
+## Quick Start
 
 \`\`\`bash
 npm install package-name
@@ -1469,18 +1469,18 @@ const result = thing({ option: 'value' });
 
 That's it. You're done.
 
-## 📚 Documentation
+## Documentation
 
 - [Getting Started](#) — 10-minute tutorial
 - [How-To Guides](#) — Solve specific problems
 - [API Reference](#) — Full API spec
 - [Concepts](#) — Why and how it works
 
-## 🤝 Contributing
+## Contributing
 
 See [CONTRIBUTING.md](#).
 
-## 📄 License
+## License
 
 MIT
 ```
@@ -1488,15 +1488,15 @@ MIT
 ### Tutorial Template
 
 ```markdown
-# 🎓 Tutorial: Build Your First X in 10 Minutes
+# Tutorial: Build Your First X in 10 Minutes
 
-> 💡 **What you'll learn:** by the end, you'll have built Y and understand Z.
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
 
 ## What You'll Need
 
-- ✅ Node.js 18+
-- ✅ A free account at example.com
-- ⏱️ 10 minutes
+- Node.js 18+
+- A free account at example.com
+- 10 minutes
 
 ## Step 1: Set Up
 
@@ -1506,7 +1506,7 @@ npx create-thing my-project
 cd my-project
 \`\`\`
 
-> 💡 **What just happened?** Brief explanation.
+> **What just happened?** Brief explanation.
 
 You should see:
 \`\`\`
@@ -1521,7 +1521,7 @@ You should see:
 
 ...
 
-## ✅ Congratulations!
+## Congratulations!
 
 You've built X. Try these next:
 
@@ -1539,7 +1539,7 @@ Create a new resource.
 
 ### Authentication
 
-🔒 Required. Bearer token in `Authorization` header.
+Required. Bearer token in `Authorization` header.
 
 ### Request
 
@@ -1558,8 +1558,8 @@ Authorization: Bearer <token>
 
 | Field | Type | Required | Description |
 |-------|------|:--------:|-------------|
-| `name` | string | ✅ | Display name, 1-100 chars |
-| `tags` | string[] | ❌ | Up to 10 tags |
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
 
 ### Response: 201 Created
 
@@ -1593,9 +1593,9 @@ const res = await fetch('/api/v1/resource', {
 ### Release Notes Template
 
 ```markdown
-# 🚀 Release v2.1.0 — YYYY-MM-DD
+# Release v2.1.0 — YYYY-MM-DD
 
-## ✨ Highlights
+## Highlights
 
 > The TL;DR for busy readers.
 
@@ -1614,19 +1614,19 @@ Description with user-facing benefit.
 command --new-flag
 \`\`\`
 
-📖 [Read the docs](#)
+[Read the docs](#)
 
-## 🔧 Improvements
+## Improvements
 
 - Faster initial load time
 - Better error messages for X
 
-## 🐛 Bug Fixes
+## Bug Fixes
 
 - Fix issue where ... ([#1234](#))
 - Resolve crash when ... ([#5678](#))
 
-## ⚠️ Breaking Changes
+## Breaking Changes
 
 ### `api.oldMethod()` removed
 
@@ -1640,9 +1640,9 @@ api.oldMethod(arg)
 api.newMethod({ arg })
 \`\`\`
 
-📖 [Migration guide](#)
+[Migration guide](#)
 
-## 🙏 Contributors
+## Contributors
 
 Thanks to: @alice, @bob, @charlie
 ```
@@ -1902,20 +1902,20 @@ Phase 1:    Phase 2:           Phase 3:
 ## Standard Output: Polished Architecture Overview
 
 ```markdown
-# 🏗️ Architecture: <System Name>
+# Architecture: <System Name>
 
 | | |
 |--|--|
 | **Document Type** | Architecture Overview |
 | **Version** | 1.0 |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Date** | YYYY-MM-DD |
 | **Architect** | @name |
 | **Related ADRs** | ADR-0001 (`docs/decisions/ADR-0001-database-choice.md`), ADR-0002 (`docs/decisions/ADR-0002-api-style.md`) |
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Context](#1-context)
 2. [Quality Attributes](#2-quality-attributes)
@@ -1930,33 +1930,33 @@ Phase 1:    Phase 2:           Phase 3:
 
 ## 1. Context
 
-> 💡 What problem does this solve? Why now?
+> What problem does this solve? Why now?
 
-## 2. 🎯 Quality Attributes (Priority Order)
+## 2. Quality Attributes (Priority Order)
 
 | Rank | Attribute | Target | Why |
 |:----:|-----------|--------|-----|
-| 1 | ⚡ Performance | < 200ms p95 | Customer-facing |
-| 2 | 🔒 Security | PDPA compliant | Legal req |
-| 3 | 📈 Scalability | 10k RPS | Growth plan |
-| 4 | 💰 Cost | < $5k/month | Budget |
+| 1 | Performance | < 200ms p95 | Customer-facing |
+| 2 | Security | PDPA compliant | Legal req |
+| 3 | Scalability | 10k RPS | Growth plan |
+| 4 | Cost | < $5k/month | Budget |
 
 ## 3. High-Level Architecture
 
 \`\`\`mermaid
 flowchart LR
-    User([👤 User]) --> CDN[🌐 CDN]
-    CDN --> LB[⚖️ Load Balancer]
-    LB --> API[🔷 API Gateway]
-    API --> Auth[🔒 Auth Service]
-    API --> App[⚙️ App Service]
-    App --> Cache[(⚡ Redis)]
-    App --> DB[(💾 PostgreSQL)]
-    App --> Queue[📨 Message Queue]
-    Queue --> Worker[👷 Background Worker]
+    User([User]) --> CDN[CDN]
+    CDN --> LB[Load Balancer]
+    LB --> API[API Gateway]
+    API --> Auth[Auth Service]
+    API --> App[App Service]
+    App --> Cache[(Redis)]
+    App --> DB[(PostgreSQL)]
+    App --> Queue[Message Queue]
+    Queue --> Worker[Background Worker]
 \`\`\`
 
-## 4. 🧩 Components
+## 4. Components
 
 | Component | Responsibility | Technology | Owner |
 |-----------|----------------|------------|-------|
@@ -1966,7 +1966,7 @@ flowchart LR
 | Database | Persistence | PostgreSQL 16 | DBA |
 | Cache | Session, hot data | Redis 7 | Platform |
 
-## 5. 🔄 Data Flow
+## 5. Data Flow
 
 \`\`\`mermaid
 sequenceDiagram
@@ -1984,7 +1984,7 @@ sequenceDiagram
     API-->>U: 200 OK
 \`\`\`
 
-## 6. 🛠️ Tech Stack
+## 6. Tech Stack
 
 | Layer | Technology | Rationale |
 |-------|-----------|-----------|
@@ -1995,17 +1995,17 @@ sequenceDiagram
 | Infra | AWS (ECS Fargate) | Cost + ops simplicity |
 | CI/CD | GitHub Actions | Already in use |
 
-## 7. 🔗 Cross-Cutting Concerns
+## 7. Cross-Cutting Concerns
 
 | Concern | Approach |
 |---------|----------|
-| 🔒 Authentication | JWT with refresh tokens |
-| 📝 Logging | Structured JSON → CloudWatch |
-| 📊 Monitoring | Prometheus + Grafana |
-| 🚨 Alerting | PagerDuty (P1), Slack (P2-P3) |
-| ⚠️ Error Handling | Standard error envelope, Sentry |
+| Authentication | JWT with refresh tokens |
+| Logging | Structured JSON → CloudWatch |
+| Monitoring | Prometheus + Grafana |
+| Alerting | PagerDuty (P1), Slack (P2-P3) |
+| Error Handling | Standard error envelope, Sentry |
 
-## 8. ⚖️ Trade-offs
+## 8. Trade-offs
 
 | Decision | Chose | Over | Reason |
 |----------|-------|------|--------|
@@ -2013,9 +2013,9 @@ sequenceDiagram
 | Hosting | ECS Fargate | EKS | Lower ops burden |
 | API Style | REST | GraphQL | Simpler caching, client maturity |
 
-> ⚠️ **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
+> **Known Limitations:** Single-region deployment limits availability to 99.9%. Multi-region planned for v2.
 
-## 📖 References
+## References
 
 - ADR-0001: Database choice (`docs/decisions/ADR-0001-database-choice.md`)
 - ADR-0002: API style (`docs/decisions/ADR-0002-api-style.md`)

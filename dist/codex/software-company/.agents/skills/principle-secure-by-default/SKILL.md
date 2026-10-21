@@ -39,6 +39,7 @@ description: Use when writing or reviewing code, config or scripts, especially i
 | ค่าตั้งและค่าลับ | `config-and-secrets` |
 | ฟีเจอร์ใหม่ที่เปิดออกสู่ภายนอก | คำสั่ง `/software-company:threat-model` ก่อนเขียน |
 | ก่อนส่งงาน | [`security-gate`](../security-gate/SKILL.md) |
+| เว็บแอป · API ที่ส่งมอบลูกค้า หรือสัญญาระบุ OWASP | [`owasp-top10`](../owasp-top10/SKILL.md) — สิ่งที่ต้องมี วิธีพิสูจน์ และรายงานรายข้อ A01–A10 |
 
 ## กับ agent เอง
 

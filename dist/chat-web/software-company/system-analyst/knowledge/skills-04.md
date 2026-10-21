@@ -4,7 +4,7 @@ Use when an answer has structure (options, trade-offs, how parts connect). Prose
 
 # รูปทรงของคำตอบ
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) · ต้นฉบับอยู่ที่ plugin `superuser` (แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`)
+skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 > **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
 > เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
@@ -197,7 +197,7 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 # รายงานสถานะเมื่อจบงาน
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
 > งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
@@ -231,12 +231,22 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 อัปเดต: 2026-10-01 14:20 · งานล่าสุด: เขียน SRS
 
-| รายการ | ประเภท | สถานะ | ผลตรวจ | ค้าง / หมายเหตุ |
-|---|---|---|---|---|
-| SRS (`docs/srs.md`) | เอกสาร | DRAFT | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
-| mockup (`mockup/`) | เอกสาร | REVIEW | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
-| FSD | เอกสาร | ยังไม่เริ่ม | — | รอ architecture |
-| FR-001 ถึง FR-012 | โค้ด | เสร็จ | ผ่าน — test 48/48 | — |
+**ภาพรวม:** เสร็จ 1/4 · ทำอยู่ 2 · ติด 0 · ไม่ผ่านตรวจ 1
+
+| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |
+|---|---|---|---|---|---|---|
+| SRS (`docs/srs.md`) | เอกสาร | DRAFT | `business-analyst` | `reviewer` | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
+| mockup (`mockup/`) | เอกสาร | REVIEW | `ux-designer` | `reviewer` | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
+| FSD | เอกสาร | ยังไม่เริ่ม | — | — | — | รอ architecture |
+| FR-001 ถึง FR-012 | โค้ด | เสร็จ | `developer` | `reviewer` | ผ่าน — test 48/48 | — |
+
+**ทีมตอนนี้:**
+
+| agent | ทำอะไร | สถานะ | ผล |
+|---|---|---|---|
+| `ux-designer` | แก้ปุ่มหลอกใน `order.html` | ทำอยู่ | — |
+| `business-analyst` | SRS | เสร็จ | ผ่าน — 42/42 FR |
+| `reviewer` | ตรวจ mockup รอบ 1 | เสร็จ | ไม่ผ่าน — ปุ่มหลอก 3 จุด |
 
 **ค้างอยู่ (ต้องมีคนตัดสิน):**
 1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
@@ -256,7 +266,8 @@ Use when a task that produces or checks project work ends (document, review, cod
 |---|---|
 | ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
 | สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด` — ตรงกับตารางงานของ `spec-to-code-loop` และรหัสงานใช้รหัส FR ของ SRS ถ้ามี · ต่างจาก 5 คำของ `superuser` ใน plugin อื่นโดยตั้งใจ ส่วน "รออนุมัติ" กับ "ค้างอยู่" อยู่เป็นหัวข้อท้ายคำตอบ |
+| สถานะ (โค้ด · build) | `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — 5 คำเดียวกับ `superuser` และตารางงานของ `spec-to-code-loop` · งานที่ยังไม่เริ่มใช้ `ค้างอยู่` · รหัสงานใช้รหัส FR ของ SRS ถ้ามี |
+| ใครทำ · ใครตรวจ | ชื่อ agent ตามบทบาท เช่น `developer` · `reviewer` · `หัวหน้าทีม` · `ผู้ใช้` — หลายตัวเรียงด้วย → · ยังไม่มีคนทำหรือตรวจใส่ `—` · ใครตรวจต้องไม่ใช่ตัวเดียวกับใครทำ |
 | ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
 
 - **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียน `ผ่าน`
@@ -264,6 +275,11 @@ Use when a task that produces or checks project work ends (document, review, cod
 - `APPROVED` มีแต่คนที่เปลี่ยนได้ ส่วน agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
 - ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ รายการที่รอบนี้ไม่ได้แตะให้คัดลอกค่าเดิมมา
 - เอกสาร 1 ฉบับใช้ 1 แถว โค้ดที่สถานะเท่ากันรวมเป็นช่วงรหัสได้ (`FR-001 ถึง FR-012`) และตารางไม่ควรยาวเกิน 25 แถว
+
+### "ภาพรวม" กับ "ทีมตอนนี้"
+
+- **ภาพรวม** — นับจากตารางด้านบน: `เสร็จ` (โค้ด) และ `APPROVED` (เอกสาร) นับเป็นเสร็จ · ไม่ผ่านตรวจ = แถวที่ผลตรวจขึ้นต้นด้วย `ไม่ผ่าน` · ตัวเลขต้องตรงกับตาราง
+- **ทีมตอนนี้** — 1 แถวต่อ agent ที่ใช้ในงานรอบนี้ สถานะใช้ `ทำอยู่` · `เสร็จ` · `ติด` · หัวหน้าทีมเขียนแถว `ทำอยู่` ตอนส่งงานออก และแก้เป็นผลจริงตอนรายงานกลับ เปิดไฟล์กลางงานจึงเห็นว่าใครทำอะไรอยู่ · เริ่มงานรอบใหม่ให้ล้างแถวของรอบก่อน · งานที่ไม่มี subagent ไม่ต้องใส่หัวข้อนี้
 
 ### "ค้างอยู่" กับ "ถัดไป"
 
@@ -281,11 +297,11 @@ Use when a task that produces or checks project work ends (document, review, cod
 ```markdown
 ## ประวัติสถานะ
 
-- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ค้าง 1
-- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด
+- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ทำ `business-analyst` · ตรวจ `reviewer` · ค้าง 1
+- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด · ทำ `ux-designer` · ตรวจ `reviewer` · ค้าง 0
 ```
 
-รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
+รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
 
 หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` ซึ่ง skill นี้ไม่แก้และไม่ลบ
 
@@ -293,7 +309,7 @@ Use when a task that produces or checks project work ends (document, review, cod
 
 ## 4 · ในคำตอบ
 
-แสดงตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
+แสดง "ภาพรวม" + ตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
 
 ---
 
@@ -302,6 +318,8 @@ Use when a task that produces or checks project work ends (document, review, cod
 - [ ] อ่าน `docs/BUILD-PLAN.md` จากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
 - [ ] `## สถานะล่าสุด` เขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
 - [ ] ทุกแถวที่เขียนว่า `ผ่าน` มีหลักฐาน
+- [ ] ทุกแถวที่มีคนทำแล้วมี "ใครทำ" · แถวที่ตรวจแล้วมี "ใครตรวจ" ที่ไม่ใช่ตัวเดียวกัน
+- [ ] ตัวเลขใน "ภาพรวม" ตรงกับตาราง · มี subagent → "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
 - [ ] ไม่ได้ตั้ง `APPROVED` เอง
 - [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด
 - [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
@@ -353,30 +371,30 @@ Use when a task that produces or checks project work ends (document, review, cod
 ## Standard Output: Polished Project Plan
 
 ```markdown
-# 📋 Project Plan: <Project Name>
+# Project Plan: <Project Name>
 
 | | |
 |--|--|
 | **Project Lead** | @pm-name |
 | **Sponsor** | @sponsor |
-| **Status** | 🟡 Planning |
+| **Status** | Planning |
 | **Start Date** | YYYY-MM-DD |
 | **Target End** | YYYY-MM-DD |
 | **Budget** | $XX,XXX |
 
 ---
 
-## 🎯 Objective
+## Objective
 
 > One-sentence goal that fits in a tweet.
 
 ## Scope
 
-| ✅ In Scope | ❌ Out of Scope |
+| In Scope | Out of Scope |
 |-------------|-----------------|
 | ... | ... |
 
-## 🗓️ Timeline
+## Timeline
 
 \`\`\`mermaid
 gantt
@@ -394,34 +412,34 @@ gantt
     Go-live         :c2, after c1, 3d
 \`\`\`
 
-## 🏁 Milestones
+## Milestones
 
 | # | Milestone | Target Date | Owner | Status |
 |:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ⚪ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ⚪ |
-| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | ⚪ |
-| 4 | UAT passed | YYYY-MM-DD | @qa | ⚪ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ⚪ |
+| 1 | Requirements approved | YYYY-MM-DD | @ba | Pending |
+| 2 | Architecture signed off | YYYY-MM-DD | @architect | Pending |
+| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | Pending |
+| 4 | UAT passed | YYYY-MM-DD | @qa | Pending |
+| 5 | Production launch | YYYY-MM-DD | @devops | Pending |
 
-## ⚠️ Risk Register
+## Risk Register
 
 | ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
 |:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | 🟡 Med | 🔴 High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | 🟢 Low | 🟡 Med | 2 | Cross-training | @pm |
+| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
+| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
 
-> 📊 **Score = Likelihood × Impact** (1-9 scale)
+> **Score = Likelihood × Impact** (1-9 scale)
 
-## 🔗 Dependencies
+## Dependencies
 
 | Type | Dependency | Owner | Status |
 |------|------------|:------|:------:|
-| 🌐 External | Payment gateway API | Vendor X | 🟡 |
-| 👥 Internal | Design team availability | @design-lead | 🟢 |
-| ⚙️ Technical | New cloud account | @devops | 🟢 |
+| External | Payment gateway API | Vendor X | At risk |
+| Internal | Design team availability | @design-lead | On track |
+| Technical | New cloud account | @devops | On track |
 
-## 👥 RACI Matrix
+## RACI Matrix
 
 | Activity | PM | BA | Arch | Dev | QA | DevOps |
 |----------|:--:|:--:|:----:|:---:|:--:|:------:|
@@ -435,60 +453,60 @@ gantt
 ## Standard Output: Polished Status Report
 
 ```markdown
-# 📊 Status Report: <Project> — Week of YYYY-MM-DD
+# Status Report: <Project> — Week of YYYY-MM-DD
 
 | | |
 |--|--|
 | **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | 🟢 On Track |
-| **Health Trend** | 📈 Improving / 📉 Declining / ➡️ Stable |
+| **Overall Status** | On Track |
+| **Health Trend** | Improving / Declining / Stable |
 
 ---
 
 ## TL;DR
 
-> 💡 1-2 sentence summary for executives.
+> 1-2 sentence summary for executives.
 
-## 📊 Status by Track
+## Status by Track
 
 | Track | Status | Notes |
 |-------|:------:|-------|
-| Scope | 🟢 | On target |
-| Schedule | 🟡 | 3 days behind, recoverable |
-| Budget | 🟢 | 65% spent, on track |
-| Quality | 🟢 | 0 critical bugs open |
-| Team Morale | 🟢 | High |
+| Scope | On track | On target |
+| Schedule | At risk | 3 days behind, recoverable |
+| Budget | On track | 65% spent, on track |
+| Quality | On track | 0 critical bugs open |
+| Team Morale | On track | High |
 
-## ✅ Completed This Period
+## Completed This Period
 
 - ...
 - ...
 
-## 🔄 In Progress
+## In Progress
 
 | Item | Owner | Due | % Done |
 |------|:------|:---:|:------:|
 | Feature X | @alice | MM/DD | 75% |
 | Feature Y | @bob | MM/DD | 40% |
 
-## ⏸️ Blocked
+## Blocked
 
 | Item | Blocker | Owner | Action |
 |------|---------|:------|--------|
 | ... | Waiting on legal review | @legal | Escalate to CTO |
 
-## 🗓️ Upcoming (Next Period)
+## Upcoming (Next Period)
 
 - ...
 
-## ⚠️ New Risks / Issues
+## New Risks / Issues
 
 | Severity | Item | Owner |
 |:--------:|------|:------|
-| 🔴 | ... | ... |
+| High | ... | ... |
 
-## 💬 Asks for Stakeholders
+## Asks for Stakeholders
 
-- ❓ Decision needed on X by MM/DD
-- 👥 Need 1 more QA resource starting next sprint
+- Decision needed on X by MM/DD
+- Need 1 more QA resource starting next sprint
 ```

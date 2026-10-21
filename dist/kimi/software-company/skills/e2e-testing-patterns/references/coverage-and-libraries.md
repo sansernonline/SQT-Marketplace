@@ -7,14 +7,14 @@
 ```markdown
 | User Journey | Coverage | Priority |
 |--------------|:--------:|:--------:|
-| Signup → first action | ✅ | 🔴 P0 |
-| Login → main task | ✅ | 🔴 P0 |
-| Add to cart → checkout → success | ✅ | 🔴 P0 |
-| Search → filter → result | ✅ | 🟡 P1 |
-| Settings → save | ✅ | 🟡 P1 |
-| Admin panel CRUD | ✅ | 🟡 P1 |
-| Password reset | ✅ | 🟢 P2 |
-| Profile edit | 🟡 Sample | 🟢 P2 |
+| Signup → first action | ✓ | P0 |
+| Login → main task | ✓ | P0 |
+| Add to cart → checkout → success | ✓ | P0 |
+| Search → filter → result | ✓ | P1 |
+| Settings → save | ✓ | P1 |
+| Admin panel CRUD | ✓ | P1 |
+| Password reset | ✓ | P2 |
+| Profile edit | Sample | P2 |
 ```
 
 ## Library Quick Reference

@@ -24,7 +24,7 @@ Formal Thai minutes template: [references/thai-minutes-template.md](references/t
 3. **Extract actions** — owner (one person, not a team) + due date + verb-first task. Missing owner or date → mark `[owner?]` / `[date?]` and list them at the top.
 4. **Open questions** — what is unresolved, who will answer, by when.
 5. **Check numbers and names** against the source — amounts, dates, spelling of names and titles (คุณ / ดร. / ผศ.).
-6. **File** — append to the meeting's running note, or create `YYYY-MM-DD_topic_summary.md`.
+6. **File** — append to the meeting's running note, or create `YYYY-MM-DD-topic-summary.md`.
 7. **Draft the send, then wait** — prepare the message with a line "please reply by [date] if anything is wrong" (silence = accepted); send only after the user says send.
 8. **Next meeting opens with the action table** — status of each item.
 

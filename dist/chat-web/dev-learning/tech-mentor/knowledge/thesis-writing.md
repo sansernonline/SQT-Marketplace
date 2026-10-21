@@ -1,6 +1,6 @@
 # skill: thesis-writing
 
-Use when writing a thesis, IS or paper (วิทยานิพนธ์ · บทความวิจัย) — proposal, literature review, citations, defense.
+Use when writing a thesis, IS or research paper (proposal, literature review, citations, Thai .docx typesetting, defense).
 
 # Thesis and Paper Writing
 
@@ -51,7 +51,7 @@ When asked to cross a line in the right column, say which rule it breaks and off
 | Literature review | 25–35% of the text | 15–20% |
 | Discussion | Compares each finding with ≥ 1 earlier study | Same, shorter |
 
-Related: `paper-to-practice` (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` in `software-company` for defense slides.
+Related: `paper-to-practice` (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` in `software-company` for defense slides. Word output from Markdown → `markdown-report-docx` in `software-company` (if installed) builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).
 
 
 ## reference: citation-and-integrity.md

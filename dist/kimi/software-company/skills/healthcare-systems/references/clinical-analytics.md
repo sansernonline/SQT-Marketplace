@@ -206,13 +206,13 @@ if count < 11:
 ## Output: Clinical Analysis Report
 
 ```markdown
-# 📊 Clinical Analysis: <Title>
+# Clinical Analysis: <Title>
 
 | | |
 |--|--|
 | **Analyst** | @clinical-data-analyst |
 | **Date** | YYYY-MM-DD |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Reviewed by** | @clinical-lead |
 
 ## Clinical Question
@@ -238,9 +238,9 @@ What is X for population Y during period Z?
 
 ## Limitations
 
-- ⚠️ Single institution data
-- ⚠️ Possible misclassification of X
-- ⚠️ Missing data on Y for Z% of cohort
+- Single institution data
+- Possible misclassification of X
+- Missing data on Y for Z% of cohort
 
 ## Clinical Implications
 ...

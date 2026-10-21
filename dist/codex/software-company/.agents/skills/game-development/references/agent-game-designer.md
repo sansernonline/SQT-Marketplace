@@ -258,7 +258,7 @@ Critical decisions in opening:
 ## Output: Design Document
 
 ```markdown
-# 🎮 Game Design Doc: <Title>
+# Game Design Doc: <Title>
 
 ## Pitch (one paragraph)
 A <genre> where you <core verb> to <player goal>.

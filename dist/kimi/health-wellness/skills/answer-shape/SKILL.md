@@ -5,7 +5,7 @@ description: Use when an answer has structure (options, trade-offs, how parts co
 
 # รูปทรงของคำตอบ
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) · ต้นฉบับอยู่ที่ plugin `superuser` (แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`)
+skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 > **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
 > เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค

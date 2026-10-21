@@ -103,10 +103,10 @@ The compliance officer should:
    - Recommend scope reduction opportunities
 
 4. **Gap assessment** per requirement:
-   - 🟢 Compliant (evidence available)
-   - 🟡 Partial (in progress)
-   - 🔴 Gap (not implemented)
-   - ⚪ Not applicable (justified)
+   - Compliant (evidence available)
+   - Partial (in progress)
+   - Gap (not implemented)
+   - Not applicable (justified)
 
 5. **Risk-rank gaps**:
    - Severity (impact on assessment outcome)

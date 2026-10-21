@@ -1,6 +1,6 @@
 ---
 name: graphic-design
-description: Use when a software project needs visuals besides app screens (logo, poster, social post, rich menu).
+description: Use when a software project needs a one-off visual (logo, poster, social post). Full brand or campaign → graphic-design plugin.
 ---
 
 # Graphic Design
@@ -26,6 +26,8 @@ rich menu ของ LINE Official Account (LINE OA) · ฉลากสินค�
 | หน้าตาไฟล์ Word / PowerPoint | `branded-document-design` |
 | ไดอะแกรมซอฟต์แวร์ | `software-diagrams` |
 | กราฟข้อมูล | `web-app-design` หัวข้อ chart colors |
+| rich menu ของ LINE OA (ขนาด · พื้นที่กด · JSON) | `thai-workplace:line-richmenu` (ถ้าติดตั้ง) |
+| ภาพจาก AI | `image-generation` · `graphic-design:brief-to-image` (ถ้าติดตั้ง) |
 
 **ติดตั้ง plugin `graphic-design` อยู่:** งานออกแบบลึก ๆ (ชุดแบรนด์ · ชุดแคมเปญ · ภาพ AI · วิดีโอ · ตรวจงานออกแบบ) ใช้ `graphic-design:brand-kit` · `graphic-design:campaign-set` · `graphic-design:design-review` และขนาดแต่ละแพลตฟอร์มจาก `graphic-design:social-formats` · ไม่มี plugin นั้น → ทำตาม skill นี้ต่อไป
 

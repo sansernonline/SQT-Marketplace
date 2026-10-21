@@ -87,7 +87,7 @@ for date in test_dates:
 ### Model Documentation Card
 
 ```markdown
-# 📊 Model: <Name>
+# Model: <Name>
 
 | | |
 |--|--|
@@ -95,13 +95,13 @@ for date in test_dates:
 | **Purpose** | Credit default prediction |
 | **Type** | Logistic regression (binary classification) |
 | **Owner** | @quant-team |
-| **Status** | 🟢 Production |
+| **Status** | Production |
 
-## 🎯 Business Purpose
+## Business Purpose
 
 Predict probability of loan default within 12 months.
 
-## 📊 Performance
+## Performance
 
 | Metric | Train | Test | Live |
 |--------|------:|-----:|-----:|
@@ -109,7 +109,7 @@ Predict probability of loan default within 12 months.
 | Gini | 0.56 | 0.48 | 0.44 |
 | KS | 0.42 | 0.36 | 0.33 |
 
-## 📈 Features
+## Features
 
 | Feature | Importance | Source | Refresh |
 |---------|:----------:|--------|---------|
@@ -117,28 +117,28 @@ Predict probability of loan default within 12 months.
 | debt_to_income | 0.15 | Application | Real-time |
 | ... | ... | ... | ... |
 
-## ⚠️ Assumptions & Limitations
+## Assumptions & Limitations
 
 - Trained on 2020-2024 (includes COVID period)
 - Population: Thai retail borrowers, age 20-60
 - Income < 100k THB/month
-- ⚠️ NOT validated for new-to-credit segment
-- ⚠️ Performance degrades in interest rate > 5%
+- NOT validated for new-to-credit segment
+- Performance degrades in interest rate > 5%
 
-## 🔍 Validation
+## Validation
 
 - Out-of-time backtest: 6 months
 - Backtest AUC: 0.74 (vs train 0.78 — acceptable degradation)
 - Fair lending test: disparate impact ratio 0.85 (acceptable)
 - Stress test: stable under 3x default rate scenario
 
-## 🚨 Monitoring
+## Monitoring
 
 - Drift alerts: PSI > 0.25 on any feature
 - Performance alerts: AUC drop > 5pp
 - Volume alerts: > 50% deviation from baseline
 
-## 📝 Change Log
+## Change Log
 
 | Version | Date | Change |
 |---------|------|--------|
@@ -150,7 +150,7 @@ Predict probability of loan default within 12 months.
 ### Backtest Report Template
 
 ```markdown
-# 📊 Backtest: <Strategy/Model Name>
+# Backtest: <Strategy/Model Name>
 
 ## Configuration
 - **Period:** YYYY-MM-DD to YYYY-MM-DD
@@ -168,16 +168,16 @@ Predict probability of loan default within 12 months.
 | Max drawdown | XX% | XX% |
 | Win rate | XX% | — |
 
-## ⚠️ Caveats
+## Caveats
 
 - Past performance ≠ future
-- Transaction costs included: ✅/❌
-- Slippage: ✅/❌
-- Survivorship bias: ✅/❌
-- Look-ahead bias: ✅/❌
+- Transaction costs included: ✓/✗
+- Slippage: ✓/✗
+- Survivorship bias: ✓/✗
+- Look-ahead bias: ✓/✗
 - Tax treatment: gross/net
 
-## 📊 Equity Curve
+## Equity Curve
 
 [Chart placeholder]
 

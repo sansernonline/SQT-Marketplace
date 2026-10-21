@@ -20,12 +20,12 @@ The technical writer should:
    - Breaking changes noted
 
 3. **Categorize changes:**
-   - ✨ New features (user-visible)
-   - 🔧 Improvements (existing features enhanced)
-   - 🐛 Bug fixes (with severity context)
-   - ⚠️ Breaking changes (with migration guide)
-   - 🔒 Security updates (CVEs patched)
-   - 📚 Documentation updates (if significant)
+   - New features (user-visible)
+   - Improvements (existing features enhanced)
+   - Bug fixes (with severity context)
+   - Breaking changes (with migration guide)
+   - Security updates (CVEs patched)
+   - Documentation updates (if significant)
 
 4. **Translate dev-speak to user value:**
    - ❌ "Refactored auth middleware"

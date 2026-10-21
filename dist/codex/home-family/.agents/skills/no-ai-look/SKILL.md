@@ -8,7 +8,7 @@ description: Use when making or reviewing anything people look at (screen, slide
 > **กฎข้อเดียว:** ทุกการเลือก (สี ฟอนต์ เลย์เอาต์ รูป คำ) ต้องตอบได้ว่า "เลือกเพราะโปรเจกต์นี้" ไม่ใช่ "เพราะเป็นค่าตั้งต้น"
 > ค่าตั้งต้นของโมเดลและ framework คือค่าเฉลี่ยของงานทั้งโลก งานที่ใช้ค่าเฉลี่ยจึงหน้าตาเหมือนกันหมด และคนดูจำได้ทันทีว่า AI ทำ
 
-ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`) · รายการเต็มทุกสื่อพร้อมที่มา → [`references/catalog.md`](references/catalog.md)
+อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies` · รายการเต็มทุกสื่อพร้อมที่มา → [`references/catalog.md`](references/catalog.md)
 
 ## ใช้คู่กับอะไร
 

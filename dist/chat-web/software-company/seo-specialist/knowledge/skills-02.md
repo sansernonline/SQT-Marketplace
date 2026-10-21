@@ -38,7 +38,7 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 # skill: simplicity-first
 
-Use when producing a document, design, architecture or plan (BRD, FSD, ADR, roadmap). Simplest that works.
+Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
 
 # Simplicity First
 

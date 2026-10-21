@@ -10,30 +10,30 @@
 ## Standard Output: Polished Project Plan
 
 ```markdown
-# 📋 Project Plan: <Project Name>
+# Project Plan: <Project Name>
 
 | | |
 |--|--|
 | **Project Lead** | @pm-name |
 | **Sponsor** | @sponsor |
-| **Status** | 🟡 Planning |
+| **Status** | Planning |
 | **Start Date** | YYYY-MM-DD |
 | **Target End** | YYYY-MM-DD |
 | **Budget** | $XX,XXX |
 
 ---
 
-## 🎯 Objective
+## Objective
 
 > One-sentence goal that fits in a tweet.
 
 ## Scope
 
-| ✅ In Scope | ❌ Out of Scope |
+| In Scope | Out of Scope |
 |-------------|-----------------|
 | ... | ... |
 
-## 🗓️ Timeline
+## Timeline
 
 \`\`\`mermaid
 gantt
@@ -51,34 +51,34 @@ gantt
     Go-live         :c2, after c1, 3d
 \`\`\`
 
-## 🏁 Milestones
+## Milestones
 
 | # | Milestone | Target Date | Owner | Status |
 |:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | ⚪ |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | ⚪ |
-| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | ⚪ |
-| 4 | UAT passed | YYYY-MM-DD | @qa | ⚪ |
-| 5 | Production launch | YYYY-MM-DD | @devops | ⚪ |
+| 1 | Requirements approved | YYYY-MM-DD | @ba | Pending |
+| 2 | Architecture signed off | YYYY-MM-DD | @architect | Pending |
+| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | Pending |
+| 4 | UAT passed | YYYY-MM-DD | @qa | Pending |
+| 5 | Production launch | YYYY-MM-DD | @devops | Pending |
 
-## ⚠️ Risk Register
+## Risk Register
 
 | ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
 |:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | 🟡 Med | 🔴 High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | 🟢 Low | 🟡 Med | 2 | Cross-training | @pm |
+| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
+| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
 
-> 📊 **Score = Likelihood × Impact** (1-9 scale)
+> **Score = Likelihood × Impact** (1-9 scale)
 
-## 🔗 Dependencies
+## Dependencies
 
 | Type | Dependency | Owner | Status |
 |------|------------|:------|:------:|
-| 🌐 External | Payment gateway API | Vendor X | 🟡 |
-| 👥 Internal | Design team availability | @design-lead | 🟢 |
-| ⚙️ Technical | New cloud account | @devops | 🟢 |
+| External | Payment gateway API | Vendor X | At risk |
+| Internal | Design team availability | @design-lead | On track |
+| Technical | New cloud account | @devops | On track |
 
-## 👥 RACI Matrix
+## RACI Matrix
 
 | Activity | PM | BA | Arch | Dev | QA | DevOps |
 |----------|:--:|:--:|:----:|:---:|:--:|:------:|
@@ -92,60 +92,60 @@ gantt
 ## Standard Output: Polished Status Report
 
 ```markdown
-# 📊 Status Report: <Project> — Week of YYYY-MM-DD
+# Status Report: <Project> — Week of YYYY-MM-DD
 
 | | |
 |--|--|
 | **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | 🟢 On Track |
-| **Health Trend** | 📈 Improving / 📉 Declining / ➡️ Stable |
+| **Overall Status** | On Track |
+| **Health Trend** | Improving / Declining / Stable |
 
 ---
 
 ## TL;DR
 
-> 💡 1-2 sentence summary for executives.
+> 1-2 sentence summary for executives.
 
-## 📊 Status by Track
+## Status by Track
 
 | Track | Status | Notes |
 |-------|:------:|-------|
-| Scope | 🟢 | On target |
-| Schedule | 🟡 | 3 days behind, recoverable |
-| Budget | 🟢 | 65% spent, on track |
-| Quality | 🟢 | 0 critical bugs open |
-| Team Morale | 🟢 | High |
+| Scope | On track | On target |
+| Schedule | At risk | 3 days behind, recoverable |
+| Budget | On track | 65% spent, on track |
+| Quality | On track | 0 critical bugs open |
+| Team Morale | On track | High |
 
-## ✅ Completed This Period
+## Completed This Period
 
 - ...
 - ...
 
-## 🔄 In Progress
+## In Progress
 
 | Item | Owner | Due | % Done |
 |------|:------|:---:|:------:|
 | Feature X | @alice | MM/DD | 75% |
 | Feature Y | @bob | MM/DD | 40% |
 
-## ⏸️ Blocked
+## Blocked
 
 | Item | Blocker | Owner | Action |
 |------|---------|:------|--------|
 | ... | Waiting on legal review | @legal | Escalate to CTO |
 
-## 🗓️ Upcoming (Next Period)
+## Upcoming (Next Period)
 
 - ...
 
-## ⚠️ New Risks / Issues
+## New Risks / Issues
 
 | Severity | Item | Owner |
 |:--------:|------|:------|
-| 🔴 | ... | ... |
+| High | ... | ... |
 
-## 💬 Asks for Stakeholders
+## Asks for Stakeholders
 
-- ❓ Decision needed on X by MM/DD
-- 👥 Need 1 more QA resource starting next sprint
+- Decision needed on X by MM/DD
+- Need 1 more QA resource starting next sprint
 ```

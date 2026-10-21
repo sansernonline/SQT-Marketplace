@@ -5,7 +5,7 @@ description: Use when writing a pull request description or preparing a PR for r
 
 # Pull Request Description Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 ## When to use this skill
 
@@ -31,20 +31,20 @@ description: Use when writing a pull request description or preparing a PR for r
 - Refs #YYY
 
 ## Changes
-- ✨ Added: ...
-- 🔧 Changed: ...
-- 🐛 Fixed: ...
-- 🗑️ Removed: ...
+- Added: ...
+- Changed: ...
+- Fixed: ...
+- Removed: ...
 
 ## Type of Change
-- [ ] 🐛 Bug fix (non-breaking change)
-- [ ] ✨ New feature (non-breaking change)
-- [ ] 💥 Breaking change (fix or feature that breaks existing behavior)
-- [ ] 📚 Documentation update
-- [ ] 🔧 Refactor (no functional change)
-- [ ] ⚡ Performance improvement
-- [ ] 🧪 Test additions/updates
-- [ ] 🏗️ Build/CI changes
+- [ ] Bug fix (non-breaking change)
+- [ ] New feature (non-breaking change)
+- [ ] Breaking change (fix or feature that breaks existing behavior)
+- [ ] Documentation update
+- [ ] Refactor (no functional change)
+- [ ] Performance improvement
+- [ ] Test additions/updates
+- [ ] Build/CI changes
 
 ## How to Test
 1. Pull this branch

@@ -19,18 +19,18 @@ Used by `seo-audit-checklist` step 5 and the `seo-audit` command. Each finding: 
 - Off-Page SEO: X/10
 - **Overall: X/10**
 
-## Critical Issues (🔴 Fix Immediately)
+## Critical Issues (Fix Immediately)
 | # | Issue | Pages Affected | Impact | Effort |
 |---|-------|----------------|--------|--------|
 | 1 | ...   | ...            | ...    | ...    |
 
-## High Priority (🟠)
+## High Priority
 ...
 
-## Medium Priority (🟡)
+## Medium Priority
 ...
 
-## Low Priority / Nice-to-Have (🟢)
+## Low Priority / Nice-to-Have
 ...
 
 ## Action Plan

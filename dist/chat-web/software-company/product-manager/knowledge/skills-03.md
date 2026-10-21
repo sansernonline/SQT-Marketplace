@@ -4,7 +4,7 @@ Use when writing user stories or turning requirements into stories (Given-When-T
 
 # User Story Writer
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 ## เมื่อไหร่ใช้ skill นี้
 
@@ -118,7 +118,7 @@ skill นี้ตัดสินว่า**เนื้อหาต้องม
 |---|---|
 | markdown ที่คนอ่าน (repo · wiki · ระบบติดตามงาน) | `polished-document-style` |
 | ไฟล์ `.docx` / `.pptx` / PDF ที่ผู้มีส่วนได้เสียเซ็นรับ | `branded-document-design` |
-| ต้องมีภาพถึงจะเข้าใจ | `markdown-visuals` แล้วต่อด้วย `software-diagrams` |
+| ต้องมีภาพถึงจะเข้าใจ | `diagram-figures` (house style ของเอกสารโปรเจกต์) |
 
 การปล่อยรูปแบบเริ่มต้นไว้ไม่ได้ทำให้ดูเป็นกลาง คนอ่านจะมองว่างานยังไม่เสร็จ
 
@@ -131,7 +131,7 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 # Markdown Visuals
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 

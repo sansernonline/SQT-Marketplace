@@ -4,7 +4,7 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 # Markdown Visuals
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -371,7 +371,7 @@ Use when writing an operational runbook, on-call guide or what-to-do-when-X-brea
 
 # Incident Runbook Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 ## When to use this skill
 
@@ -431,22 +431,22 @@ A good runbook is:
 | ส่วน | ต้องมี |
 |---|---|
 | ส่วนหัว | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
-| 🎯 TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
-| 📊 How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
-| 🔍 Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
-| 🩹 Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work |
-| 📞 Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
-| 🔁 Verification | รายการตรวจว่าแก้แล้วจริง |
-| 📝 After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
-| 🤝 Related Runbooks · 📚 Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
+| TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
+| How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
+| Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
+| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work |
+| Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
+| Verification | รายการตรวจว่าแก้แล้วจริง |
+| After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
+| Related Runbooks · Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
 
-**ลำดับ mitigation ในแม่แบบ:** 🟢 Reduce load (low risk) → 🟡 Scale up (medium risk) → 🟠 Rollback recent deploy (higher risk) → 🔴 Failover to backup region (last resort)
+**ลำดับ mitigation ในแม่แบบ:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
 
 **ลำดับ escalation ในแม่แบบ:** ถ้าแก้ไม่ได้ใน 15 นาที ให้เรียก secondary on-call ถ้าสองคนแก้ไม่ได้ใน 30 นาที ให้เรียกทีมเจ้าของ service ถ้ายังเป็น SEV1 หลัง 45 นาที ให้เรียก incident commander (IC) และถ้า SEV1 เกิน 1 ชั่วโมง ให้เรียกผู้บริหารฝ่ายวิศวกรรม
 
 **ถือว่าแก้แล้วเมื่อ** error rate กลับสู่ระดับปกติ · latency p95 ต่ำกว่าเกณฑ์ · หน้าสถานะเป็น "Operational" · ไม่มี alert ใหม่ · ลูกค้าหยุดแจ้งปัญหา และเฝ้าดูต่ออีก 30 นาทีแล้ว
 
-> 💡 Use `postmortem-template` skill for the full analysis
+> Use `postmortem-template` skill for the full analysis
 
 ## Runbook Index and Alert Links
 
@@ -525,7 +525,7 @@ Quarterly:
 Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `document-naming`:
 
 ```markdown
-# 📚 Runbook Index
+# Runbook Index
 
 ## By Service
 - API Service
@@ -572,11 +572,11 @@ Every alert MUST link to a runbook:
 แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
 
 ````markdown
-# 🚨 Runbook: <Alert Name or Failure Mode>
+# Runbook: <Alert Name or Failure Mode>
 
 | | |
 |--|--|
-| **Severity** | 🔴 SEV1 \| 🟠 SEV2 \| 🟡 SEV3 |
+| **Severity** | SEV1 \| SEV2 \| SEV3 |
 | **Service** | service-name |
 | **Owner Team** | @team-name |
 | **Last Reviewed** | YYYY-MM-DD |
@@ -584,25 +584,25 @@ Every alert MUST link to a runbook:
 
 ---
 
-## 🎯 TL;DR (30 seconds)
+## TL;DR (30 seconds)
 
 > One paragraph: what's broken, what to do first, who to call.
 
-## 📊 How to Detect
+## How to Detect
 
 **Symptoms:**
 - User-facing: ...
 - Internal: ...
 
 **Alerts that fire:**
-- 🚨 [Alert Name](link) — fires when ...
-- 🚨 [Another Alert](link) — fires when ...
+- [Alert Name](link) — fires when ...
+- [Another Alert](link) — fires when ...
 
 **Dashboards to check:**
-- 📈 [Main Dashboard](link)
-- 📈 [Service Health](link)
+- [Main Dashboard](link)
+- [Service Health](link)
 
-## 🔍 Diagnosis (60 seconds)
+## Diagnosis (60 seconds)
 
 \`\`\`mermaid
 flowchart TD
@@ -638,11 +638,11 @@ kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
 - Redis: [Dashboard link]
 - External API: [Status page link]
 
-## 🩹 Mitigation Steps
+## Mitigation Steps
 
 Try mitigations in order of risk (lowest first):
 
-### 🟢 Step 1: Reduce load (low risk)
+### Step 1: Reduce load (low risk)
 \`\`\`bash
 # Enable rate limiting
 kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
@@ -651,7 +651,7 @@ kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
 **Expected effect:** Error rate drops within 2 min
 **If doesn't work:** Go to Step 2
 
-### 🟡 Step 2: Scale up (medium risk)
+### Step 2: Scale up (medium risk)
 \`\`\`bash
 kubectl scale deployment/api -n prod --replicas=10
 \`\`\`
@@ -659,7 +659,7 @@ kubectl scale deployment/api -n prod --replicas=10
 **Expected effect:** Latency improves within 3 min
 **Caveats:** Will increase cost, monitor budget alerts
 
-### 🟠 Step 3: Rollback recent deploy (higher risk)
+### Step 3: Rollback recent deploy (higher risk)
 \`\`\`bash
 kubectl rollout undo deployment/api -n prod
 \`\`\`
@@ -667,7 +667,7 @@ kubectl rollout undo deployment/api -n prod
 **Expected effect:** Reverts to previous version
 **Caveats:** Loses any data created since deploy
 
-### 🔴 Step 4: Failover to backup region (last resort)
+### Step 4: Failover to backup region (last resort)
 \`\`\`bash
 # Update DNS to point to backup region
 ./scripts/failover-to-us-west.sh
@@ -676,7 +676,7 @@ kubectl rollout undo deployment/api -n prod
 **Expected effect:** All traffic shifts to backup
 **Caveats:** Some user data may need migration, full rollback complex
 
-## 📞 Escalation Path
+## Escalation Path
 
 ```
 You can't resolve in 15 min
@@ -696,7 +696,7 @@ SEV1 still active after 1h
 4. Page engineering leadership
 ```
 
-## 🔁 Verification (after mitigation)
+## Verification (after mitigation)
 
 Confirm the issue is resolved:
 
@@ -707,22 +707,22 @@ Confirm the issue is resolved:
 - [ ] Customer reports stopped
 - [ ] Monitor for 30 min before considering resolved
 
-## 📝 After Resolution
+## After Resolution
 
 1. **Document in incident channel**: what happened, what you did
 2. **Update status page**: clear incident, post resolution message
 3. **Create postmortem ticket**: if SEV1/SEV2, schedule postmortem
 4. **Update this runbook**: if you learned something new
 
-> 💡 Use `postmortem-template` skill for the full analysis
+> Use `postmortem-template` skill for the full analysis
 
-## 🤝 Related Runbooks
+## Related Runbooks
 
 - [Database connection issues](link)
 - [Cache failure](link)
 - [Authentication service down](link)
 
-## 📚 Background / Why this happens
+## Background / Why this happens
 
 Optional section: brief context on why this failure mode exists.
 Useful for new on-call engineers.

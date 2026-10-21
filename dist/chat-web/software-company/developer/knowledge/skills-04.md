@@ -803,14 +803,14 @@ npx playwright test                                             # pre-prod (ค�
 ```markdown
 | User Journey | Coverage | Priority |
 |--------------|:--------:|:--------:|
-| Signup → first action | ✅ | 🔴 P0 |
-| Login → main task | ✅ | 🔴 P0 |
-| Add to cart → checkout → success | ✅ | 🔴 P0 |
-| Search → filter → result | ✅ | 🟡 P1 |
-| Settings → save | ✅ | 🟡 P1 |
-| Admin panel CRUD | ✅ | 🟡 P1 |
-| Password reset | ✅ | 🟢 P2 |
-| Profile edit | 🟡 Sample | 🟢 P2 |
+| Signup → first action | ✓ | P0 |
+| Login → main task | ✓ | P0 |
+| Add to cart → checkout → success | ✓ | P0 |
+| Search → filter → result | ✓ | P1 |
+| Settings → save | ✓ | P1 |
+| Admin panel CRUD | ✓ | P1 |
+| Password reset | ✓ | P2 |
+| Profile edit | Sample | P2 |
 ```
 
 ## Library Quick Reference
@@ -979,8 +979,8 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 ```markdown
 | # | รหัส | milestone | สิ่งที่ต้องได้ | ไฟล์ที่จะแตะ | test ที่จะเขียน | สถานะ | commit |
 |---|---|---|---|---|---|---|---|
-| 1 | FR-AUTH-010 | M2 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | รอทำ | |
-| 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | รอทำ | |
+| 1 | FR-AUTH-010 | M2 | ล็อกอินด้วยอีเมลและรหัสผ่าน | auth/login.ts · auth/session.ts | login_FR-AUTH-010 | ค้างอยู่ | |
+| 2 | FR-AUTH-020 | M2 | ล็อกผู้ใช้หลังผิด 5 ครั้ง | auth/lockout.ts | lockout_FR-AUTH-020 | ค้างอยู่ | |
 ```
 
 คอลัมน์ `milestone` ใส่รหัส `M…` จากแผนโครงการหรือไทม์ไลน์ใน `BUILD-PLAN.md` (playbook `new-project` ขั้น 1) · ไม่มีไทม์ไลน์ → ว่างได้
@@ -1042,7 +1042,7 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 
 - `docs/BUILD-PLAN.md` — แผนและสถานะ **อ่านไฟล์นี้ก่อนเริ่มทุกรอบ**
   นี่คือไฟล์เดียวที่วงรอบนี้เพิ่มเข้าไปในโฟลเดอร์เอกสารหลัก
-- สถานะมี 4 ค่าเท่านั้น: `รอทำ` · `กำลังทำ` · `เสร็จ` · `ติด`
+- สถานะมี 5 ค่าเท่านั้น (ชุดเดียวกับ `superuser`): `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — งานที่ยังไม่เริ่มใช้ `ค้างอยู่`
 - `ติด` ต้องมีเหตุผลต่อท้าย 1 บรรทัด
 - ทุกข้อที่ `เสร็จ` ต้องมีเลข commit — ไม่มีเลข แปลว่ายังไม่เสร็จจริง
 - จบแต่ละรอบให้อัปเดตหัวข้อ `## สถานะล่าสุด` และ `## ประวัติสถานะ` บนสุดของไฟล์ตาม `status-report` — ตารางงานกับตารางสถานะอยู่ไฟล์เดียวกันแต่คนละหัวข้อ

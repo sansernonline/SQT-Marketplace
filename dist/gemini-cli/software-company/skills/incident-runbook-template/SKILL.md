@@ -5,7 +5,7 @@ description: Use when writing an operational runbook, on-call guide or what-to-d
 
 # Incident Runbook Template
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 ## When to use this skill
 
@@ -65,22 +65,22 @@ A good runbook is:
 | ส่วน | ต้องมี |
 |---|---|
 | ส่วนหัว | Severity · Service · Owner Team · Last Reviewed · Linked Alert |
-| 🎯 TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
-| 📊 How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
-| 🔍 Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
-| 🩹 Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work |
-| 📞 Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
-| 🔁 Verification | รายการตรวจว่าแก้แล้วจริง |
-| 📝 After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
-| 🤝 Related Runbooks · 📚 Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
+| TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
+| How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
+| Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
+| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work |
+| Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
+| Verification | รายการตรวจว่าแก้แล้วจริง |
+| After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
+| Related Runbooks · Background | ลิงก์ไป runbook ที่เกี่ยวข้อง และที่มาของปัญหาแบบสั้น (ไม่บังคับ) |
 
-**ลำดับ mitigation ในแม่แบบ:** 🟢 Reduce load (low risk) → 🟡 Scale up (medium risk) → 🟠 Rollback recent deploy (higher risk) → 🔴 Failover to backup region (last resort)
+**ลำดับ mitigation ในแม่แบบ:** Reduce load (low risk) → Scale up (medium risk) → Rollback recent deploy (higher risk) → Failover to backup region (last resort)
 
 **ลำดับ escalation ในแม่แบบ:** ถ้าแก้ไม่ได้ใน 15 นาที ให้เรียก secondary on-call ถ้าสองคนแก้ไม่ได้ใน 30 นาที ให้เรียกทีมเจ้าของ service ถ้ายังเป็น SEV1 หลัง 45 นาที ให้เรียก incident commander (IC) และถ้า SEV1 เกิน 1 ชั่วโมง ให้เรียกผู้บริหารฝ่ายวิศวกรรม
 
 **ถือว่าแก้แล้วเมื่อ** error rate กลับสู่ระดับปกติ · latency p95 ต่ำกว่าเกณฑ์ · หน้าสถานะเป็น "Operational" · ไม่มี alert ใหม่ · ลูกค้าหยุดแจ้งปัญหา และเฝ้าดูต่ออีก 30 นาทีแล้ว
 
-> 💡 Use `postmortem-template` skill for the full analysis
+> Use `postmortem-template` skill for the full analysis
 
 ## Runbook Index and Alert Links
 

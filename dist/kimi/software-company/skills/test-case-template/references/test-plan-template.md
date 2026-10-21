@@ -5,20 +5,20 @@
 ## Standard Output: Polished Test Plan
 
 ```markdown
-# 🧪 Test Plan: <Feature Name>
+# Test Plan: <Feature Name>
 
 | | |
 |--|--|
 | **Plan Type** | Functional + Regression |
 | **Version** | 1.0 |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **QA Lead** | @name |
 | **Target Release** | vX.Y.Z |
 | **Test Period** | YYYY-MM-DD to YYYY-MM-DD |
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Objective](#1-objective)
 2. [Scope](#2-scope)
@@ -31,48 +31,48 @@
 
 ---
 
-## 1. 🎯 Objective
+## 1. Objective
 
-> 💡 What we're testing and why.
+> What we're testing and why.
 
 **Where expected results come from:** `[D]` owner / customer > `[R]` general rules (maths, law, standards) > `[A]` the builder's SPEC > `[O]` the screen · every test case needs `[D]` or `[R]` (see `test-case-template` → oracle)
 
 ## 2. Scope
 
-| ✅ In Scope | ❌ Out of Scope |
+| In Scope | Out of Scope |
 |-------------|-----------------|
 | Functional, boundary, negative | Performance (separate plan) |
 | Integration with X | Mobile app (Phase 2) |
 
-## 3. 🔄 Test Approach
+## 3. Test Approach
 
 | Test Type | Coverage | Tool | Owner |
 |-----------|:--------:|------|:------|
-| 🟢 Functional | ⚡ Manual + automated | Playwright | @alice |
-| 🔒 Security | Smoke | OWASP ZAP | @bob |
-| ♿ Accessibility | WCAG AA | Axe DevTools | @charlie |
-| 🌐 Compatibility | PR: Chromium · nightly: + WebKit (iPhone) · pre-prod: + Firefox | Playwright projects (+ real iPhone before release) | @alice |
-| 🐛 Exploratory | Time-boxed 4h/day | — | All |
+| Functional | Manual + automated | Playwright | @alice |
+| Security | Smoke | OWASP ZAP | @bob |
+| Accessibility | WCAG AA | Axe DevTools | @charlie |
+| Compatibility | PR: Chromium · nightly: + WebKit (iPhone) · pre-prod: + Firefox | Playwright projects (+ real iPhone before release) | @alice |
+| Exploratory | Time-boxed 4h/day | — | All |
 
 ### Coverage matrix
 
 | Feature | Happy | Negative | Boundary | Equivalence | State | Security/API |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
 | Booking | TC-BOOK-01 | TC-BOOK-04 | TC-BOOK-06–08 | TC-BOOK-05 | TC-BOOK-10 | TC-BOOK-12 |
-| Gift card | TC-GIFT-01 | TC-GIFT-02 | ⚠️ no expiry-day case yet | — | TC-GIFT-04 | — |
+| Gift card | TC-GIFT-01 | TC-GIFT-02 | Gap: no expiry-day case yet | — | TC-GIFT-04 | — |
 
 Every BR in the traceability table at the end of the test-case file has at least 1 case.
 
 ## 4. Entry & Exit Criteria
 
-### ✅ Entry Criteria (Must be met before testing starts)
+### Entry Criteria (Must be met before testing starts)
 - [ ] Code deployed to test environment
 - [ ] Smoke test passing
 - [ ] Test data prepared
 - [ ] Expected results for money and limits worked out from `[D]` + `[R]` and written in the cases — before the first run
 - [ ] Test environment stable for 24h
 
-### 🏁 Exit Criteria (Must be met before release)
+### Exit Criteria (Must be met before release)
 - [ ] 100% planned test cases executed
 - [ ] Every P1 case passes, on every browser in scope
 - [ ] Pass rate ≥ 95% per browser (round up · `Not run` counts as fail)
@@ -82,7 +82,7 @@ Every BR in the traceability table at the end of the test-case file has at least
 - [ ] Regression suite 100% pass
 - [ ] Performance benchmarks met
 
-## 5. 🌐 Test Environment
+## 5. Test Environment
 
 | Aspect | Detail |
 |--------|--------|
@@ -91,7 +91,7 @@ Every BR in the traceability table at the end of the test-case file has at least
 | Browsers | Chromium (every run) · WebKit/iPhone (nightly, pre-prod) · Firefox (pre-prod only, drop if users don't use it) |
 | Devices | iPhone 15, Galaxy S24, iPad Pro |
 
-## 6. 🗓️ Schedule
+## 6. Schedule
 
 \`\`\`mermaid
 gantt
@@ -105,16 +105,16 @@ gantt
     Sign-off           :a6, after a5, 1d
 \`\`\`
 
-## 7. ⚠️ Risks
+## 7. Risks
 
 | ID | Risk | Likelihood | Impact | Mitigation |
 |:--:|------|:----------:|:------:|------------|
-| R-001 | Test env instability | 🟡 Med | 🔴 High | Backup env ready |
-| R-002 | Late requirement changes | 🟡 Med | 🟡 Med | Buffer +20% |
+| R-001 | Test env instability | Medium | High | Backup env ready |
+| R-002 | Late requirement changes | Medium | Medium | Buffer +20% |
 
-## 8. 🔎 Plan Quality
+## 8. Plan Quality
 
-> 💡 Would this plan catch a broken system? At least 6 rows, covering money, bookings/transactions and state.
+> Would this plan catch a broken system? At least 6 rows, covering money, bookings/transactions and state.
 
 | If the system breaks like this | Case(s) that must fail | Caught because (oracle) |
 |---|---|---|
@@ -124,11 +124,11 @@ gantt
 
 A break with no case that fails → add a case, then add the row again.
 
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| QA Lead | @qa | ⚪ Pending | — |
-| Dev Lead | @dev | ⚪ Pending | — |
-| Product Owner | @po | ⚪ Pending | — |
+| QA Lead | @qa | Pending | — |
+| Dev Lead | @dev | Pending | — |
+| Product Owner | @po | Pending | — |
 ```

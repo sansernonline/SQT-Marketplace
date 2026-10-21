@@ -18,7 +18,7 @@ Use when project work starts, before switching model, handing work over, or an i
 | `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
-| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
+| `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
 | `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` |
 | `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` |
 | `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก |
@@ -156,7 +156,7 @@ Use when making anything (code, document, plan, design, slide, sheet, answer). S
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
-ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`)
+ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 ## 1 · หลักใหญ่
 

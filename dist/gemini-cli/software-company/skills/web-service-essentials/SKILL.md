@@ -18,6 +18,7 @@ description: Use when building or reviewing any HTTP service or backend (health 
 ## เมื่อไหร่ **ไม่** ใช้
 
 - ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
+- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
 - รูปแบบ log ให้ใช้ `logging-standards`
 - เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
 

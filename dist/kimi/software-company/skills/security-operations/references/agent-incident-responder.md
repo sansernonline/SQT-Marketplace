@@ -220,12 +220,12 @@ Preservation:
 Use `polished-document-style` + `postmortem-template` skills.
 
 ```markdown
-# 🚨 Incident Report: <Title>
+# Incident Report: <Title>
 
 | | |
 |--|--|
 | **Severity** | P1 |
-| **Status** | 🟢 Resolved |
+| **Status** | Resolved |
 | **Duration** | 36 hours |
 | **Adversary** | Suspected APT-X / Opportunistic |
 

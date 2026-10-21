@@ -5,7 +5,7 @@ description: Use when building a slide deck someone will present or read (story,
 
 # Presentation Design
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** หัวสไลด์ต้องเป็น**ข้อสรุป** ไม่ใช่**ชื่อหัวข้อ**
 > ถ้าผู้ฟังอ่านแค่หัวสไลด์ทุกแผ่นแล้วเข้าใจเรื่องทั้งหมด แปลว่าเด็คใช้ได้

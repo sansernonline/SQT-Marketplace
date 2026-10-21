@@ -90,7 +90,7 @@ flowchart LR
 ## Hunt Output: Hypothesis Document
 
 ```markdown
-# 🎯 Hunt: <Title>
+# Hunt: <Title>
 
 | | |
 |--|--|
@@ -130,9 +130,9 @@ index=edr EventCode=4688
 - False positives: <count>
 
 ## Actions
-- 🔴 Escalated to IR: <list>
-- 🟢 Converted to detection: <rule name>
-- 🟡 Hypothesis refined for next hunt
+- Escalated to IR: <list>
+- Converted to detection: <rule name>
+- Hypothesis refined for next hunt
 ```
 
 ## Common Hunt Types

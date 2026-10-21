@@ -18,7 +18,7 @@ Use when project work starts, before switching model, handing work over, or an i
 | `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
-| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
+| `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
 | `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` |
 | `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` |
 | `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก |
@@ -152,17 +152,17 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 
 # skill: software-diagrams
 
-Use when a markdown doc, README or PR needs a technical diagram (architecture, sequence, ER) in Mermaid.
+Use when a README, PR or code note needs a quick Mermaid diagram. Diagrams in project docs (BRD, SRS, FSD, ER, flows) → diagram-figures.
 
 # Software Diagrams
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** ไดอะแกรมตอบ**คำถามเดียว**
 > ถ้าตอบ 2 คำถาม ให้วาด 2 รูป
 
-> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมที่อยู่ในเอกสาร markdown · README · Pull Request ด้วย Mermaid ธีมประจำบ้าน
-> ส่วนรูปที่ต้องดูออกแบบมาหรือต้องเซ็นรับ (ข้อเสนอลูกค้า · สไลด์ · งานพิมพ์) ให้ไปที่ [`diagram-figures`](../diagram-figures/SKILL.md) · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
+> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมด่วนด้วย Mermaid ธีมประจำบ้าน สำหรับ README · Pull Request · โน้ตในโค้ดเท่านั้น
+> ส่วนรูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) ข้อเสนอลูกค้า สไลด์ และงานพิมพ์ ให้ไปที่ [`diagram-figures`](../diagram-figures/SKILL.md) · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
 >
 > **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** และถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้น ไม่ต้องเลือกสีใหม่รายรูป (ค่าเริ่มต้นคือชุดประจำบ้านใน `polished-document-style` · ความหมายของสีดู `branded-document-design` หัวข้อ "ความหมายของแต่ละสี"):
 > 🔵 น้ำเงิน = เส้นทาง/องค์ประกอบปกติ · 🟠 ส้ม = ทางที่ไม่ผ่านเส้นหลัก/ข้อยกเว้น · 🔴 แดง = จุดพัง/อันตราย/ลบข้อมูล · 🟢 เขียว = จุดที่ยืนยันแล้ว/สำเร็จ · ⚪ เทา = ระบบภายนอก/ปิดอยู่

@@ -80,6 +80,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
    - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
    - รูปแบบที่เจอซ้ำให้ส่งต่อ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ไปทำเป็นกฎ lint
 6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
+   - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`owasp-top10`](../owasp-top10/SKILL.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
 
 ## เมื่อไรต้องรัน
 
@@ -108,13 +109,226 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
 ---
 
+# skill: owasp-top10
+
+Use when building or handing over a web app or API that must meet OWASP Top 10:2025 (contract, security NFR, release).
+
+# owasp-top10 — ระบบที่ส่งมอบต้องผ่าน OWASP Top 10:2025
+
+> สัญญาจ้างทำเว็บแอปเขียนได้ว่า "ต้องผ่าน OWASP Top 10:2025" แต่ไม่มีใครให้ใบรับรองแบบนี้ได้
+> สิ่งที่ส่งมอบได้จริงคือ **รายงานที่บอกทีละข้อ A01–A10 ว่าคุมด้วยอะไร ตรวจด้วยอะไร และมีหลักฐานอะไร**
+> skill นี้ทำให้ทุกระบบที่ทีมสร้างมีรายงานนั้น ตั้งแต่ออกแบบจนส่งมอบ
+
+Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรายการความเสี่ยงของเว็บแอปที่พบบ่อยและร้ายแรงที่สุด 10 ข้อ ฉบับล่าสุด (ต้นฉบับ: owasp.org/Top10/2025)
+
+ใช้คู่กับ: [`principle-secure-by-default`](../principle-secure-by-default/SKILL.md) (เขียนโค้ด) · [`security-gate`](../security-gate/SKILL.md) (สแกนก่อนส่ง) · คำสั่ง `/software-company:threat-model` (ออกแบบ) · agent `security-engineer` (รายงานเชิงลึก)
+
+---
+
+## 1 · 10 ข้อ และสิ่งที่ระบบต้องมี
+
+แต่ละข้อมี 3 ส่วน → **ต้องมี** (สิ่งที่โค้ดและการตั้งค่าต้องทำ) · **พิสูจน์ด้วย** (test หรือเครื่องมือที่รันได้จริง) · **ภาษาเจ้าของกิจการ** (ใช้อธิบายลูกค้าและในรายงาน)
+
+| ข้อ | ความเสี่ยง | ภาษาเจ้าของกิจการ | ต้องมี | พิสูจน์ด้วย |
+|---|---|---|---|---|
+| A01 | Broken Access Control | ลูกค้าคนหนึ่งเห็นข้อมูลของอีกคนได้ | ตรวจสิทธิ์ฝั่ง server ทุก endpoint · ปฏิเสธเป็นค่าเริ่ม · ตรวจว่าเป็นเจ้าของ record ทุกครั้งที่อ่านหรือแก้ด้วย id · กันเซิร์ฟเวอร์ไปดึง URL ภายใน (Server-Side Request Forgery (SSRF)) ด้วย allowlist · Cross-Origin Resource Sharing (CORS) ไม่เปิด `*` คู่กับ cookie · ระบบที่ใช้ cookie session ต้องมี token กันการส่งคำขอแทนผู้ใช้ (Cross-Site Request Forgery (CSRF)) · รับ input ผ่าน Data Transfer Object (DTO) หรือรายชื่อฟิลด์ที่อนุญาต ไม่ผูกทั้ง object (กัน client ส่ง `role` · `isAdmin` มาเอง) | integration test ต่อ endpoint: ไม่ login → 401 · ผิดบทบาท → 403 · id ของคนอื่น → 403 หรือ 404 · POST ไม่มี CSRF token → 403 (ระบบที่ใช้ cookie) · ส่งฟิลด์ `role` เกินมา → ค่าในฐานข้อมูลไม่เปลี่ยน |
+| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | ตั้งค่าเป็นสคริปต์เดียวกันทุก environment ต่างกันแค่ค่าลับ · ปิด debug · stack trace · directory listing · หน้า admin ตัวอย่าง · ใส่ security header (Content Security Policy (CSP) · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options · frame-ancestors) · ไม่มีรหัสผ่านค่าเริ่ม · storage บน cloud ไม่เปิดสาธารณะ | สแกน header (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · test ว่า production ตอบ error แบบไม่มี stack trace |
+| A03 | Software Supply Chain Failures | ใช้ไลบรารีเก่า หรือมีช่องโหว่ | lockfile ทุกภาษา · รายการส่วนประกอบซอฟต์แวร์ (Software Bill of Materials (SBOM)) · ไม่มี dependency ที่มีช่องโหว่ระดับ critical หรือ high · ตัดของที่ไม่ใช้ · ดึงจาก registry ทางการเท่านั้น | `security-gate` ด้าน dependency (npm audit · pip-audit · `dotnet list package --vulnerable` · osv-scanner) · SBOM แบบ CycloneDX |
+| A04 | Cryptographic Failures | ไม่เข้ารหัสรหัสผ่านและข้อมูลสำคัญ | Transport Layer Security (TLS) 1.2 ขึ้นไปทุกทาง + HSTS · รหัสผ่านใช้ Argon2id · bcrypt · PBKDF2 (ห้าม MD5 · SHA-1 · SHA-256 เปล่า) · ข้อมูลอ่อนไหวเข้ารหัสตอนเก็บ · ค่าลับอยู่นอกโค้ด · เก็บข้อมูลเท่าที่ใช้ | semgrep (กฎ crypto) · test ว่ารหัสผ่านใน DB ไม่ใช่ข้อความเดิม · ตรวจ TLS ของ server ที่ deploy |
+| A05 | Injection | กรอกคำสั่งในช่องค้นหา แล้วดึงฐานข้อมูลได้ | SQL ผ่าน parameter หรือ ORM เท่านั้น · ไม่ต่อสตริงเป็นคำสั่ง shell · HTML escape ตอนแสดงผล (กัน Cross-Site Scripting (XSS)) · ตรวจ input ที่ขอบระบบ | semgrep · test ส่ง `' OR 1=1--` · `<script>` · `; rm` แล้วต้องไม่ทำงาน |
+| A06 | Insecure Design | ออกแบบผิดตั้งแต่ต้น เช่น ใช้คูปองซ้ำได้ | threat model ส่วน login · สิทธิ์ · เงิน · ข้อมูลส่วนบุคคล ก่อนเขียน · กฎธุรกิจบังคับที่ server (ใช้ซ้ำไม่ได้ · ยอดติดลบไม่ได้ · ทำซ้ำแล้วไม่ตัดเงินซ้ำ) · จำกัดความถี่ (rate limit) · อัปโหลดไฟล์: ตรวจชนิดจากเนื้อไฟล์ จำกัดขนาด เก็บนอก web root ตั้งชื่อใหม่ ([`file-upload-and-storage`](../file-upload-and-storage/SKILL.md)) | เอกสาร threat model · test อัปโหลดไฟล์ `.php` · `.exe` ที่เปลี่ยนนามสกุลเป็น `.jpg` → ปฏิเสธ · test กรณีใช้ผิดวิธี (abuse case) อย่างน้อย 1 ข้อต่อกฎธุรกิจที่เกี่ยวกับเงินหรือสิทธิ์ |
+| A07 | Authentication Failures | เดารหัสได้ไม่จำกัด ไม่มี MFA | จำกัดการ login ผิด · ยืนยันตัวตนหลายชั้น (Multi-Factor Authentication (MFA)) สำหรับ admin และงานเงิน · รหัสผ่านอย่างน้อย 15 ตัว (8 ตัวถ้ามี MFA ตาม National Institute of Standards and Technology (NIST) Special Publication (SP) 800-63B-4) และเทียบรายการรหัสที่หลุด · ข้อความ login ผิดไม่บอกว่า user มีจริงไหม · session id สุ่มจาก server หมุนใหม่หลัง login · JSON Web Token (JWT) ตรวจ `iss` `aud` `exp` และ algorithm | test: login ผิด N ครั้ง → ถูกหน่วงหรือล็อก · token หมดอายุ → 401 · ข้อความผิดเหมือนกันทั้ง user มีและไม่มี |
+| A08 | Software or Data Integrity Failures | อัปเดตหรือข้อมูลถูกแก้ระหว่างทาง โดยไม่ตรวจ | ไม่ deserialize ข้อมูลจากภายนอกเป็น object ที่รันโค้ดได้ · webhook ตรวจลายเซ็น · ไฟล์อัปเดตตรวจ checksum หรือลายเซ็น · pipeline ส่งงานอัตโนมัติ (CI/CD) ใช้สิทธิ์น้อยสุด ไม่มีค่าลับใน log · ราคาและยอดเงินคำนวณที่ server ไม่เชื่อค่าจาก client | test webhook ลายเซ็นผิด → ปฏิเสธ · test ส่งราคาปลอมจาก client → ใช้ราคาจาก server |
+| A09 | Security Logging and Alerting Failures | ถูกเจาะแล้วไม่มีใครรู้ ไม่มี log | log login สำเร็จและล้ม · ถูกปฏิเสธสิทธิ์ · input ไม่ผ่าน · งานของ admin · เปลี่ยนเงิน — มีเวลา · ใคร · ทำอะไร · ผล · ไม่มีรหัสผ่าน token เลขบัตรใน log · มีการแจ้งเตือนเมื่อ login ล้มเป็นชุด | test ว่า login ล้มแล้วมีบรรทัด log · ค้น log หาค่าลับต้องไม่เจอ · ดู `audit-trail` · `logging-standards` |
+| A10 | Mishandling of Exceptional Conditions | ระบบล่มแล้วแสดงข้อมูลภายใน หรือเปิดช่องให้ผ่าน | error ทุกจุดถูกจับ มีตัวจับกลาง (global handler) เป็นด่านสุดท้าย · ล้มแล้ว **ปิด** ไม่ใช่เปิด (ตรวจสิทธิ์ error → ปฏิเสธ) · ธุรกรรมที่ทำไม่จบต้องย้อนกลับ · ข้อความ error ให้ผู้ใช้ไม่มี stack trace หรือ SQL · จำกัด quota · timeout | test: ทำให้ DB หรือบริการภายนอกล้มระหว่างทำงาน → ได้ error ปกติ ข้อมูลไม่ค้างครึ่งทาง · ตรวจสิทธิ์ throw → ได้ 403 ไม่ใช่ผ่าน |
+
+**ข้อที่ไม่เกี่ยว** เขียน `ไม่เกี่ยว` พร้อมเหตุผล 1 บรรทัด เช่น A07 ในระบบที่ไม่มี login เลย · ห้ามเว้นว่าง
+
+วิธีเขียนตาม stack ที่ทีมใช้ (.NET · TypeScript/Node/Angular · Python · SQL) → [`references/stack-checks.md`](references/stack-checks.md)
+
+---
+
+## 2 · ใช้ตอนไหนของงาน
+
+| ช่วง | ทำอะไร | ได้อะไร |
+|---|---|---|
+| รับงาน · เขียนสัญญา | ใส่ข้อกำหนดและเกณฑ์รับงานตาม [`references/contract-clause.md`](references/contract-clause.md) · ใส่ในเอกสารความต้องการ (Software Requirements Specification (SRS)) หมวดความปลอดภัย (`srs-writing`) | ลูกค้ากับทีมเข้าใจตรงกันว่า "ผ่าน" แปลว่าอะไร |
+| ออกแบบ | threat model ส่วน login · สิทธิ์ · เงิน · ข้อมูลส่วนบุคคล (A01 · A06 · A07) · ระบุบทบาทและสิทธิ์เป็นตาราง | `docs/security/threat-model.md` |
+| เขียนโค้ด | ทำตามคอลัมน์ "ต้องมี" และ `stack-checks` · ทุกข้อที่ทำได้ให้เป็นของกลางที่ใช้ซ้ำ (ตัวตรวจสิทธิ์ตัวเดียว · ตัวจับ error ตัวเดียว · logger ตัวเดียว) | โค้ดที่ทางปลอดภัยเป็นทางที่ง่ายที่สุด |
+| test | เขียน test ตามคอลัมน์ "พิสูจน์ด้วย" ใส่ไว้ในโฟลเดอร์ test ปกติ ชื่อขึ้นต้นด้วยรหัสข้อ เช่น `A01_other_user_order_returns_404` | หลักฐานที่รันซ้ำได้ทุกครั้ง |
+| ก่อนส่งมอบ | รัน `security-gate` แล้วกรอก [`assets/owasp-report.md`](assets/owasp-report.md) ทีละข้อ | `qa/security/<ปี-เดือน-วัน>-owasp.md` |
+
+---
+
+## 3 · รายงานก่อนส่งมอบ — กติกา
+
+- 1 แถวต่อ 1 ข้อ ครบ A01–A10 · สถานะใช้ 6 ค่านี้เท่านั้น
+
+  | สถานะ | ส่งมอบได้ไหม | เขียนเมื่อ |
+  |---|---|---|
+  | `ผ่าน` | ได้ | มีหลักฐานที่รันได้ — ชื่อ test + ผลรัน · ชื่อเครื่องมือ + ไฟล์ผล |
+  | `ผ่าน (ตรวจด้วยตา)` | ได้ ถ้าบอกว่าตรวจไฟล์ไหน และข้อนั้นเขียน test ไม่ได้จริง | เช่น การตั้งค่า server ที่ทีมไม่ได้ deploy test ไว้ |
+  | `ไม่เกี่ยว — <เหตุผล>` | ได้ | ระบบไม่มีส่วนนั้นเลย |
+  | `ยอมรับความเสี่ยง — <วันที่ · ใคร>` | ได้ | ลูกค้าอนุมัติเป็นลายลักษณ์อักษร จดใน `decision-log` |
+  | `ไม่ผ่าน` | ไม่ได้ | เจอช่องโหว่ที่ยืนยันแล้ว |
+  | `ยังไม่ได้ตรวจ — <เหตุผล>` | ไม่ได้ | เครื่องมือรันไม่ได้ หรือยังไม่ได้ทำ |
+
+- **ส่งมอบได้เมื่อ** ไม่มีข้อ `ไม่ผ่าน` และไม่มีข้อ `ยังไม่ได้ตรวจ`
+- ใส่ส่วน **ขอบเขตที่ไม่ได้ตรวจ** เสมอ เช่น ทดสอบเจาะระบบโดยคนนอก (penetration test) · server ของลูกค้าที่ทีมไม่ได้ deploy · ไลบรารีที่ไม่มีข้อมูลช่องโหว่
+- ห้ามเขียน "ปลอดภัย 100%" หรือ "ได้รับการรับรอง OWASP" — OWASP ไม่ได้ออกใบรับรอง · ถ้าส่งมอบได้ ให้เขียน "ผ่านเกณฑ์ OWASP Top 10:2025 ตามรายการตรวจในรายงานนี้"
+- ผลรวมนับแยกครบ 6 สถานะ เช่น `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
+- สรุปสถานะลง `docs/BUILD-PLAN.md` ด้วย `status-report` ประเภท `ตรวจ` (ใครทำ · ใครตรวจ · ผลตรวจ `ผ่าน — ผ่าน 8 · ไม่เกี่ยว 2` หรือ `ไม่ผ่าน — A01 · A07`)
+
+---
+
+## 4 · ใครทำอะไร
+
+| ส่วน | agent |
+|---|---|
+| ข้อกำหนดในสัญญาและ SRS | `business-analyst` · ข้อกฎหมาย → `legal-compliance-officer` |
+| threat model · ตารางสิทธิ์ · รีวิวการออกแบบ | `security-engineer` |
+| โค้ดและ test ตามคอลัมน์ "ต้องมี" · "พิสูจน์ด้วย" | `developer` (และ agent ตาม stack) |
+| สแกนและกรอกรายงาน | `security-engineer` ผ่าน `security-gate` |
+| ตรวจรายงานก่อนส่งลูกค้า | `reviewer` ตัวใหม่ — ทุกแถวที่เขียน `ผ่าน` ต้องเปิดหลักฐานดูได้จริง |
+
+---
+
+## 5 · ไม่ใช่หน้าที่ของ skill นี้
+
+- ทดสอบเจาะระบบจริงหรือระบบของคนอื่น — skill นี้ตรวจเฉพาะโค้ดและ environment ทดสอบของโปรเจกต์นี้
+- มาตรฐานอื่น เช่น OWASP API Security Top 10 · Application Security Verification Standard (ASVS) · Payment Card Industry Data Security Standard (PCI-DSS) · พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (PDPA) — ใช้ skill เฉพาะเรื่องนั้น (`fintech-payments` · `pdpa-compliance`) แต่รายงานนี้ใช้เป็นฐานร่วมได้
+- แอปมือถือ — ใช้ OWASP Mobile Top 10 ร่วมกับ `security-gate/references/android.md` · ส่วน backend ของแอปมือถือยังใช้ skill นี้
+
+
+## reference: contract-clause.md
+
+# ข้อกำหนด OWASP Top 10:2025 ในสัญญาและ SRS
+
+ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `thai-workplace:doc-contract-th`
+
+## ทำไมต้องเขียนให้วัดได้
+
+"ระบบต้องปลอดภัยตาม OWASP" วัดไม่ได้ แล้วจะเถียงกันตอนส่งมอบ · ให้เขียนเป็น **เกณฑ์รับงาน** ที่ตรวจได้ทีละข้อ และบอกขอบเขตที่ไม่รวม
+
+## ร่างข้อกำหนด (ภาษาไทย)
+
+> **ข้อ X ความปลอดภัยของระบบ**
+>
+> X.1 ผู้รับจ้างจะพัฒนาระบบโดยมีมาตรการรองรับความเสี่ยงทั้ง 10 ข้อของ Open Worldwide Application Security Project (OWASP) Top 10 ฉบับปี 2025 (A01 ถึง A10)
+>
+> X.2 ก่อนส่งมอบแต่ละงวด ผู้รับจ้างจะส่งรายงานผลการตรวจ OWASP Top 10:2025 ซึ่งระบุ สำหรับแต่ละข้อ (ก) มาตรการที่ใช้ (ข) วิธีตรวจและเครื่องมือที่ใช้ (ค) หลักฐานผลการตรวจ และ (ง) สถานะ ผ่าน · ผ่านโดยการตรวจเอกสารหรือการตั้งค่าพร้อมระบุไฟล์ที่ตรวจ (สำหรับข้อที่ทดสอบอัตโนมัติไม่ได้) · ไม่ผ่าน · ไม่เกี่ยวข้องพร้อมเหตุผล · ยอมรับความเสี่ยงตามข้อ X.4 · ยังไม่ได้ตรวจพร้อมเหตุผล
+>
+> X.3 งวดงานจะถือว่าผ่านเกณฑ์ด้านความปลอดภัยเมื่อ (ก) ไม่มีข้อใดมีสถานะไม่ผ่าน (ข) ไม่มีข้อใดมีสถานะยังไม่ได้ตรวจ และ (ค) ไม่มีช่องโหว่ระดับวิกฤต (Critical) หรือสูง (High) ที่ยืนยันแล้วค้างอยู่ในโค้ดหรือไลบรารีที่ใช้ ณ วันส่งมอบ โดยวัดระดับตามคะแนน Common Vulnerability Scoring System (CVSS) รุ่น 3.1 ขึ้นไป ที่เครื่องมือตรวจในภาคผนวกรายงาน · ช่องโหว่ที่ยังไม่มีเวอร์ชันแก้ไขจากผู้พัฒนาไลบรารี ผู้รับจ้างจะแจ้งพร้อมมาตรการบรรเทา แล้วให้ใช้ข้อ X.4
+>
+> X.4 ข้อใดที่ผู้ว่าจ้างตกลงยอมรับความเสี่ยง ให้บันทึกเป็นลายลักษณ์อักษร พร้อมชื่อผู้อนุมัติและวันที่
+>
+> X.5 ขอบเขตนี้ไม่รวม (ก) การทดสอบเจาะระบบ (penetration test) โดยบุคคลภายนอก เว้นแต่ตกลงไว้ในภาคผนวก (ข) โครงสร้างพื้นฐานและเซิร์ฟเวอร์ที่ผู้ว่าจ้างจัดหาและดูแลเอง (ค) ช่องโหว่ที่ประกาศหลังวันส่งมอบ ซึ่งให้เป็นไปตามข้อตกลงการดูแลรักษาระบบ (ถ้ามี)
+>
+> X.6 การตรวจตามข้อนี้ไม่ใช่การรับรองว่าระบบปลอดภัยโดยสมบูรณ์
+
+## ร่างใน SRS — หมวดความต้องการที่ไม่ใช่ฟังก์ชัน ด้านความปลอดภัย (Non-Functional Requirement (NFR))
+
+| รหัส | ความต้องการ | วิธีตรวจรับ |
+|---|---|---|
+| NFR-SEC-01 | ระบบรองรับ OWASP Top 10:2025 ครบ A01–A10 | รายงานผลการตรวจตามข้อ X.2 ผ่านเกณฑ์ข้อ X.3 |
+| NFR-SEC-02 | ทุก endpoint ตรวจสิทธิ์ฝั่ง server และผู้ใช้เข้าถึงได้เฉพาะข้อมูลของตน | ชุด test ด้านสิทธิ์ (A01) ผ่านทั้งหมด |
+| NFR-SEC-03 | ไม่มี dependency ที่มีช่องโหว่ระดับ critical หรือ high (ตาม CVSS) ณ วันส่งมอบ ยกเว้นตามข้อ X.3 | ผลสแกน dependency ในภาคผนวกรายงาน |
+| NFR-SEC-04 | admin และธุรกรรมเงินใช้การยืนยันตัวตนหลายชั้น (MFA) | ชุด test ด้าน login (A07) |
+| NFR-SEC-05 | เหตุการณ์ความปลอดภัยมี log และแจ้งเตือน | ชุด test ด้าน log (A09) + ตัวอย่าง log |
+
+เพิ่มหรือตัดแถวตามระบบ · ทุกแถวต้องมี "วิธีตรวจรับ" ที่ทำได้จริง
+
+
+## reference: stack-checks.md
+
+# OWASP Top 10:2025 ตาม stack ที่ทีมใช้
+
+เปิดไฟล์นี้ตอนเขียนโค้ดและตอนกรอกรายงาน · แต่ละข้อบอก "ใช้อะไร" และ "อย่าทำ" · ค่าเริ่มของ framework ที่ปลอดภัยอยู่แล้ว ให้ใช้ตามนั้น ไม่เขียนเอง
+
+- [.NET / ASP.NET Core](#net--aspnet-core)
+- [TypeScript · Node · Angular](#typescript--node--angular)
+- [Python (FastAPI · Django · Flask)](#python-fastapi--django--flask)
+- [SQL (SQL Server · PostgreSQL · MySQL)](#sql-sql-server--postgresql--mysql)
+- [เครื่องมือที่ใช้พิสูจน์](#เครื่องมือที่ใช้พิสูจน์)
+
+---
+
+## .NET / ASP.NET Core
+
+| ข้อ | ใช้อะไร | อย่าทำ |
+|---|---|---|
+| A01 | `FallbackPolicy` = ต้อง login ทุก endpoint แล้วเปิดเฉพาะที่ตั้งใจด้วย `[AllowAnonymous]` · ตรวจเจ้าของ record ด้วย `IAuthorizationService` + resource-based policy · ASP.NET MVC แบบเก่าใช้ `[Authorize]` ระดับ controller + filter กลาง · antiforgery token ทุก form (`[ValidateAntiForgeryToken]` หรือ `AutoValidateAntiforgeryTokenAttribute` ทั้งแอป) · รับ input ผ่าน ViewModel หรือ DTO ไม่ bind entity ตรง | ซ่อนปุ่มใน view แล้วถือว่าคุมสิทธิ์แล้ว · ใช้ id จาก URL ค้น DB โดยไม่กรองด้วย user |
+| A02 | `app.UseExceptionHandler` + `UseHsts` ใน production · `customErrors mode="RemoteOnly"` (MVC เก่า) · ลบ header `Server` · `X-Powered-By` | เปิด `UseDeveloperExceptionPage` บน production · เก็บ connection string ใน `appsettings.json` ที่ commit |
+| A03 | `dotnet list package --vulnerable --include-transitive` · `Directory.Packages.props` คุมเวอร์ชันที่เดียว · SBOM: `dotnet CycloneDX` | ใช้แพ็กเกจที่ไม่มีคนดูแลแล้ว (ดูวันออกล่าสุด) |
+| A04 | ASP.NET Core Identity (PBKDF2) หรือ `Rfc2898DeriveBytes.Pbkdf2` · Data Protection API สำหรับค่าที่ต้องถอดกลับ · ค่าลับใน User Secrets หรือ Key Vault | `MD5` · `SHA1` · `DES` · เขียน crypto เอง |
+| A05 | EF Core LINQ · `FromSqlInterpolated` · Dapper พร้อม parameter · Razor encode HTML ให้เอง | `FromSqlRaw` ต่อสตริง · `Html.Raw` กับข้อมูลผู้ใช้ · `Process.Start` กับ input |
+| A07 | Identity: `Lockout.MaxFailedAccessAttempts` + `PasswordSignInAsync(..., lockoutOnFailure: true)` (หน้า Login ที่ scaffold มาตั้งเป็น false) · cookie `HttpOnly` `Secure` `SameSite` · JWT: ตั้ง `ValidateIssuer` `ValidateAudience` `ValidateLifetime` `ValidateIssuerSigningKey` = true | `ValidateLifetime = false` · รับ algorithm `none` |
+| A08 | `System.Text.Json` · webhook ตรวจลายเซ็น Hash-based Message Authentication Code (HMAC) ด้วย `CryptographicOperations.FixedTimeEquals` | `BinaryFormatter` · `TypeNameHandling.All` ของ Newtonsoft |
+| A09 | `ILogger` แบบ structured (Serilog) · log ผล login · ถูกปฏิเสธสิทธิ์ · ตัดค่าลับด้วย destructuring policy | log ทั้ง request body ที่มีรหัสผ่าน |
+| A10 | ตัวจับกลาง `IExceptionHandler` (.NET 8 ขึ้นไป · ลงทะเบียน `AddExceptionHandler<T>()` + `AddProblemDetails()` **และ** ต้องมี `app.UseExceptionHandler()` ใน pipeline ไม่งั้นตัวจับไม่ทำงาน) คืน `ProblemDetails` · .NET เก่ากว่าใช้ `UseExceptionHandler` กับ lambda หรือ path · `TransactionScope` หรือ `BeginTransaction` ครอบงานหลายขั้น · `CancellationToken` + timeout ของ `HttpClient` | `catch { }` ว่าง · `catch` แล้วคืน `true` จากตัวตรวจสิทธิ์ |
+
+## TypeScript · Node · Angular
+
+| ข้อ | ใช้อะไร | อย่าทำ |
+|---|---|---|
+| A01 | middleware ตรวจสิทธิ์ตัวเดียวที่ router ระดับบน (ปฏิเสธเป็นค่าเริ่ม) · query กรองด้วย `userId` ของ session ทุกครั้ง · Angular route guard ใช้แค่ซ่อนหน้า ส่วนสิทธิ์จริงตรวจที่ API · SSRF: allowlist host ก่อน `fetch` URL ที่ผู้ใช้ส่ง · CSRF token เมื่อใช้ cookie session · ตรวจ body ด้วย schema (zod) แล้วหยิบเฉพาะฟิลด์ที่อนุญาต | เชื่อ `role` ที่ client ส่งมา · `Object.assign(entity, req.body)` · `cors({ origin: true, credentials: true })` |
+| A02 | `helmet()` · `NODE_ENV=production` · ปิด source map ใน production build · Express `app.disable("x-powered-by")` | ส่ง `err.stack` กลับ client |
+| A03 | `npm ci` + `package-lock.json` · `npm audit --omit=dev` · SBOM: `npx @cyclonedx/cyclonedx-npm` · ตรวจ `postinstall` ของแพ็กเกจใหม่ | `npm install` แพ็กเกจที่ชื่อคล้ายของดัง (typosquat) โดยไม่ดูผู้ดูแล |
+| A04 | `argon2` หรือ `bcrypt` · `crypto.randomBytes` · `crypto.timingSafeEqual` | `Math.random()` ทำ token · `crypto.createHash("md5")` กับรหัสผ่าน |
+| A05 | ORM (Prisma · TypeORM) หรือ parameter `$1` · Angular escape ให้เอง · `execFile` พร้อม argument เป็น array | `innerHTML` · `bypassSecurityTrustHtml` กับข้อมูลผู้ใช้ · `eval` · `exec` ต่อสตริง · `new Function` |
+| A07 | `express-rate-limit` ที่ `/login` · cookie `httpOnly` `secure` `sameSite` · JWT: `jwt.verify(token, key, { algorithms: ["RS256"], issuer, audience })` (ระบุ algorithm ที่ใช้จริงตายตัว) | เก็บ token ใน `localStorage` ของระบบที่มีข้อมูลอ่อนไหว · `jwt.decode` แทน `verify` |
+| A08 | ตรวจลายเซ็น webhook ก่อน `JSON.parse` · Subresource Integrity (SRI) กับ script จาก CDN | `node-serialize` · โหลด script จาก CDN โดยไม่มี `integrity` |
+| A09 | pino หรือ winston แบบ JSON · `redact: ["req.headers.authorization", "*.password"]` | `console.log(req.body)` |
+| A10 | Express error middleware ตัวสุดท้าย · `process.on("unhandledRejection")` log แล้วปิดอย่างเป็นระเบียบ · transaction ของ ORM · `AbortSignal.timeout()` กับ `fetch` | `.catch(() => {})` · promise ที่ไม่มีใคร await |
+
+## Python (FastAPI · Django · Flask)
+
+| ข้อ | ใช้อะไร | อย่าทำ |
+|---|---|---|
+| A01 | FastAPI `Depends(current_user)` ระดับ router · Django `LoginRequiredMixin` + `get_object_or_404(Model, pk=..., owner=request.user)` · SSRF: allowlist host ก่อน `httpx.get` · Django CSRF middleware เปิดไว้ · รับ input ด้วย Pydantic model หรือ Django `ModelForm(fields=[...])` | `Model.objects.get(pk=id)` โดยไม่กรองเจ้าของ · `fields = "__all__"` · `@csrf_exempt` ทั้ง view โดยไม่มีเหตุผล |
+| A02 | Django `DEBUG=False` · `SECURE_*` settings · `python manage.py check --deploy` · FastAPI ปิด `/docs` บน production ถ้าไม่ได้ตั้งใจเปิด | `DEBUG=True` · `ALLOWED_HOSTS=["*"]` |
+| A03 | lockfile (`uv.lock` · `poetry.lock` · `requirements.txt` ที่ pin เวอร์ชัน + `--require-hashes`) · `pip-audit` · SBOM: `cyclonedx-py environment` (หรือ `requirements` · `poetry`) | `pip install` จาก URL ที่ไม่รู้จัก |
+| A04 | `argon2-cffi` · Django password hasher ค่าเริ่ม · `secrets.token_urlsafe` · `hmac.compare_digest` | `hashlib.md5(password)` · `random` ทำ token |
+| A05 | ORM หรือ `cursor.execute(sql, params)` · Jinja2 `autoescape=True` · `subprocess.run([...])` แบบ list | f-string ใน SQL · `shell=True` กับ input · `eval` |
+| A07 | `slowapi` หรือ django-axes กัน login รัว · PyJWT: `jwt.decode(token, key, algorithms=["RS256"], audience=..., issuer=...)` (ระบุ algorithm ที่ใช้จริงตายตัว) | `jwt.decode(..., options={"verify_signature": False})` |
+| A08 | ตรวจลายเซ็น webhook ด้วย `hmac.compare_digest` · `yaml.safe_load` · `json` | `pickle.loads` · `yaml.load` กับข้อมูลภายนอก |
+| A09 | `logging` แบบ structured (structlog) · filter ตัดค่าลับ | log `request.headers` ทั้งก้อน |
+| A10 | FastAPI `@app.exception_handler(Exception)` · Django `handler500` · `with transaction.atomic():` · timeout ทุกการเรียก `httpx` | `except Exception: pass` · ตัวตรวจสิทธิ์ที่ `except` แล้ว `return True` |
+
+## SQL (SQL Server · PostgreSQL · MySQL)
+
+| ข้อ | ใช้อะไร | อย่าทำ |
+|---|---|---|
+| A01 | user ของแอปมีสิทธิ์เท่าที่ใช้ (ไม่ใช่ `sa` · `postgres` · `root`) · แยก user อ่านอย่างเดียวสำหรับรายงาน · Row-Level Security (RLS) ของ PostgreSQL หรือ SQL Server สำหรับระบบหลายลูกค้า (multi-tenant) | ให้แอปใช้ user เจ้าของ database |
+| A02 | ปิด port DB จากภายนอก · บังคับ TLS ของการเชื่อมต่อ · ปิด `xp_cmdshell` | เปิด DB ออก internet |
+| A04 | Transparent Data Encryption (TDE) หรือเข้ารหัสระดับดิสก์ · คอลัมน์อ่อนไหวเข้ารหัสระดับแอป หรือ Always Encrypted · backup เข้ารหัส | เก็บเลขบัตรประชาชน · เลขบัตรเครดิตเป็นข้อความเปล่า |
+| A05 | stored procedure หรือ query ที่รับ parameter · ถ้าต้องสร้าง SQL แบบ dynamic ใช้ `sp_executesql` พร้อม parameter และ `QUOTENAME` กับชื่อ object | `EXEC('... ' + @input)` · ต่อชื่อตารางจาก input |
+| A09 | audit ตารางเงินและสิทธิ์ (trigger หรือ temporal table) · log login ล้มของ DB | ปิด audit เพื่อให้เร็ว |
+| A10 | `BEGIN TRY ... BEGIN CATCH ... ROLLBACK` · `SET XACT_ABORT ON` · migration รันซ้ำได้ (`IF NOT EXISTS`) | migration ที่ล้มกลางทางแล้วทิ้งตารางครึ่ง ๆ |
+
+## เครื่องมือที่ใช้พิสูจน์
+
+| ใช้ทำอะไร | เครื่องมือ | ครอบข้อ |
+|---|---|---|
+| ค่าลับ · dependency · โค้ดเสี่ยง · ไฟล์ตั้งค่าโครงสร้างพื้นฐาน (Infrastructure as Code (IaC)) | ตาม [`security-gate`](../../security-gate/SKILL.md) (gitleaks · npm audit · pip-audit · dotnet · osv-scanner · trivy · semgrep) | A02 · A03 · A04 · A05 · A08 |
+| semgrep ชุดเฉพาะ OWASP | `semgrep scan --config p/owasp-top-ten --metrics=off` (ต้องมีเน็ต) · ออฟไลน์ใช้ชุดของ `security-gate` | A01 · A04 · A05 · A08 |
+| สแกนแอปที่รันอยู่ (header · cookie · error page) | OWASP ZAP (Zed Attack Proxy) baseline กับ environment ทดสอบของโปรเจกต์เท่านั้น: `docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t <URL ทดสอบ>` | A02 · A05 · A07 |
+| SBOM | CycloneDX ตามภาษา (ข้างบน) เก็บที่ `qa/security/sbom/` | A03 |
+| test สิทธิ์ · login · error · webhook | integration test ของโปรเจกต์ ตั้งชื่อขึ้นต้นด้วยรหัสข้อ (`A01_...`) | A01 · A06 · A07 · A08 · A09 · A10 |
+
+- ZAP ยิงจริง → ใช้กับ environment ทดสอบที่ทีม deploy เองเท่านั้น ห้ามยิง production หรือระบบของคนอื่นโดยไม่มีหนังสืออนุญาต
+- เครื่องมือไหนรันไม่ได้ ให้เขียน `ยังไม่ได้ตรวจ` พร้อมเหตุผลในรายงาน ห้ามสรุปว่าผ่านจากผลว่าง
+
+
+---
+
 # skill: markdown-visuals
 
 Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
 
 # Markdown Visuals
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -494,6 +708,7 @@ Use when building or reviewing any HTTP service or backend (health endpoints, RF
 ## เมื่อไหร่ **ไม่** ใช้
 
 - ออกแบบ endpoint ทางธุรกิจ ให้ใช้ command `/api-design`
+- รูปแบบ URL · paging · วันที่ · id ของ API ให้ใช้ `api-conventions`
 - รูปแบบ log ให้ใช้ `logging-standards`
 - เลือกสถาปัตยกรรม ให้ใช้ `architecture-patterns`
 
@@ -1170,174 +1385,3 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
-
-
----
-
-# skill: error-handling-patterns
-
-Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
-
-# จัดการข้อผิดพลาด
-
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
-
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
-
-| งาน | skill | |
-|---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-
----
-
-## 1 · จับที่ไหน ปล่อยที่ไหน
-
-| ชั้น | ทำอะไร |
-|---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
-
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
-
-**3 อย่างที่ห้ามทำเด็ดขาด:**
-
-```csharp
-try { ... } catch { }                      // ❌ กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ❌ ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ❌ log ซ้ำทุกชั้น
-```
-
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
-
-```csharp
-catch (SmtpException ex)
-{
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
-}
-```
-
----
-
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
-
-| | ผู้ใช้เห็น | log เก็บ |
-|---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
-
-```
-❌ "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-❌ "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-✅ "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
-```
-
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
-
----
-
-## 3 · แยกประเภทก่อนตัดสินใจ
-
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
-|---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
-
-> 🚨 **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
-
----
-
-## 4 · timeout และการลองใหม่
-
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
-
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
-|---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
-
-**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
-
-```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
-```
-
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
-
----
-
-## 5 · ตัดวงจร (circuit breaker)
-
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
-
-```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
-```
-
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
-
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
-
----
-
-## 6 · ล้มบางส่วน
-
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
-
-| แบบ | เหมาะกับ |
-|---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
-
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
-
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- ❌ **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- ❌ **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- ❌ **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- ❌ **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- ❌ **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- ❌ **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- ❌ **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ

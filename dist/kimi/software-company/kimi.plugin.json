@@ -1,7 +1,7 @@
 {
   "name": "sqt-software-company",
-  "version": "2.14.0",
-  "description": "Simulates a complete software development company — 42 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 117 skills and 29 slash commands for the whole SDLC.",
+  "version": "2.17.0",
+  "description": "Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 113 skills and 29 slash commands for the whole SDLC.",
   "skills": "./skills/",
   "agents": "./agents/",
   "systemPromptPath": "./KIMI.md"

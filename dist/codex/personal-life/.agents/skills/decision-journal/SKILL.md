@@ -67,6 +67,6 @@ Revisit (2027-06-01): leading a project ✓, bonus 0.5 month, evenings ✓. Verd
 - Short beats detailed — if it cannot be stated in five lines, it is not decided yet
 - Never edit the original entry; revisits are appended
 - Log emotional decisions especially; they teach the most
-- One file `decision-journal.md`, newest first, or one file per decision `YYYY-MM-DD_decision-topic.md`
+- One file `decision-journal.md`, newest first, or one file per decision `YYYY-MM-DD-decision-topic.md`
 
 Related: `weekly-review` (surfaces revisit dates) · `goal-and-habit`.

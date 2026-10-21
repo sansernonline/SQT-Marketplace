@@ -67,11 +67,11 @@
 
 | Regulation | Applies? | Reason | Owner | Status |
 |-----------|:--------:|--------|:------|:------:|
-| PCI-DSS v4 | ✅ | We process card data | @sec-lead | 🟡 In progress |
-| PDPA Thailand | ✅ | TH customers | @dpo | 🟢 Compliant |
-| AML (Thailand) | ✅ | Money transmission | @compliance | 🟡 In progress |
-| PSD2 | ❌ | No EU operations yet | — | ⚪ N/A |
-| GDPR | 🟡 Indirect | EU users via web | @dpo | 🟢 Compliant |
+| PCI-DSS v4 | ✓ | We process card data | @sec-lead | In progress |
+| PDPA Thailand | ✓ | TH customers | @dpo | Compliant |
+| AML (Thailand) | ✓ | Money transmission | @compliance | In progress |
+| PSD2 | ✗ | No EU operations yet | — | N/A |
+| GDPR | Indirect | EU users via web | @dpo | Compliant |
 ```
 
 ### Control Mapping
@@ -100,7 +100,7 @@
 ### Audit Readiness Report
 
 ```markdown
-# 📋 Audit Readiness: PCI-DSS v4
+# Audit Readiness: PCI-DSS v4
 
 | | |
 |--|--|
@@ -108,32 +108,32 @@
 | **QSA** | (auditor name) |
 | **Scope** | Cardholder Data Environment (CDE) |
 | **Target date** | YYYY-MM-DD |
-| **Status** | 🟡 In Progress |
+| **Status** | In Progress |
 
 ## Readiness by Requirement
 
 | Req | Description | Status | Evidence | Gap |
 |:---:|-------------|:------:|----------|-----|
-| 1 | Network security | 🟢 | Firewall config, network diagram | — |
-| 2 | Secure config | 🟢 | Hardening checklist | — |
-| 3 | Protect stored CHD | 🟡 | Encryption proof | Need key rotation log |
-| 4 | Transmit encryption | 🟢 | TLS config | — |
-| 5 | Malware protection | 🟡 | EDR deployment | Coverage 95%, need 100% |
-| 6 | Secure development | 🟢 | SAST in CI, code review | — |
-| 7 | Restrict access | 🟢 | RBAC matrix | — |
-| 8 | Identify users | 🟢 | MFA enforced | — |
-| 9 | Physical access | 🟢 | Cloud provider attestation | — |
-| 10 | Logging | 🟢 | SIEM, retention 1yr | — |
-| 11 | Test security | 🟡 | Last pen test 7mo ago | Schedule new pen test |
-| 12 | Policy | 🟢 | InfoSec policy current | — |
+| 1 | Network security | Compliant | Firewall config, network diagram | — |
+| 2 | Secure config | Compliant | Hardening checklist | — |
+| 3 | Protect stored CHD | Partial | Encryption proof | Need key rotation log |
+| 4 | Transmit encryption | Compliant | TLS config | — |
+| 5 | Malware protection | Partial | EDR deployment | Coverage 95%, need 100% |
+| 6 | Secure development | Compliant | SAST in CI, code review | — |
+| 7 | Restrict access | Compliant | RBAC matrix | — |
+| 8 | Identify users | Compliant | MFA enforced | — |
+| 9 | Physical access | Compliant | Cloud provider attestation | — |
+| 10 | Logging | Compliant | SIEM, retention 1yr | — |
+| 11 | Test security | Partial | Last pen test 7mo ago | Schedule new pen test |
+| 12 | Policy | Compliant | InfoSec policy current | — |
 
 ## Action Items
 
 | ID | Action | Owner | Due | Priority |
 |:--:|--------|:------|:---:|:--------:|
-| 1 | Document key rotation log | @dba | MM/DD | 🔴 H |
-| 2 | Roll out EDR to remaining 5% | @sec | MM/DD | 🟡 M |
-| 3 | Schedule pen test | @sec | MM/DD | 🟡 M |
+| 1 | Document key rotation log | @dba | MM/DD | High |
+| 2 | Roll out EDR to remaining 5% | @sec | MM/DD | Medium |
+| 3 | Schedule pen test | @sec | MM/DD | Medium |
 ```
 
 ## Common Compliance Workflows

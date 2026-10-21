@@ -19,19 +19,19 @@ Ask the user once, at the start, all of the following (sprint facts and the retr
 
 Using the answers from the start question, organize into:
 
-### 🟢 Went Well (Glad)
+### Went Well (Glad)
 What should we **continue** doing?
 - ...
 
-### 🔴 Didn't Go Well (Sad/Mad)
+### Didn't Go Well (Sad/Mad)
 What should we **stop** doing?
 - ...
 
-### 💡 Ideas to Try
+### Ideas to Try
 What should we **start** doing?
 - ...
 
-### 🤔 Puzzles
+### Puzzles
 Things we don't yet understand:
 - ...
 
@@ -73,7 +73,7 @@ Rules:
 
 ## Sprint Goal & Outcome
 - Goal: ...
-- Achieved: ✅ | ⚠️ Partial | ❌
+- Achieved: Yes | Partial | No
 
 ## What Went Well
 - ...
@@ -91,5 +91,5 @@ Rules:
 - ...
 
 ## Carry-over from Last Retro
-- Action X: ✅ Done | ⏳ In progress | ❌ Not started
+- Action X: Done | In progress | Not started
 ```

@@ -1,17 +1,17 @@
 ---
 name: software-diagrams
-description: Use when a markdown doc, README or PR needs a technical diagram (architecture, sequence, ER) in Mermaid.
+description: Use when a README, PR or code note needs a quick Mermaid diagram. Diagrams in project docs (BRD, SRS, FSD, ER, flows) → diagram-figures.
 ---
 
 # Software Diagrams
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** ไดอะแกรมตอบ**คำถามเดียว**
 > ถ้าตอบ 2 คำถาม ให้วาด 2 รูป
 
-> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมที่อยู่ในเอกสาร markdown · README · Pull Request ด้วย Mermaid ธีมประจำบ้าน
-> ส่วนรูปที่ต้องดูออกแบบมาหรือต้องเซ็นรับ (ข้อเสนอลูกค้า · สไลด์ · งานพิมพ์) ให้ไปที่ [`diagram-figures`](../diagram-figures/SKILL.md) · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
+> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมด่วนด้วย Mermaid ธีมประจำบ้าน สำหรับ README · Pull Request · โน้ตในโค้ดเท่านั้น
+> ส่วนรูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) ข้อเสนอลูกค้า สไลด์ และงานพิมพ์ ให้ไปที่ [`diagram-figures`](../diagram-figures/SKILL.md) · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
 >
 > **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** และถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้น ไม่ต้องเลือกสีใหม่รายรูป (ค่าเริ่มต้นคือชุดประจำบ้านใน `polished-document-style` · ความหมายของสีดู `branded-document-design` หัวข้อ "ความหมายของแต่ละสี"):
 > 🔵 น้ำเงิน = เส้นทาง/องค์ประกอบปกติ · 🟠 ส้ม = ทางที่ไม่ผ่านเส้นหลัก/ข้อยกเว้น · 🔴 แดง = จุดพัง/อันตราย/ลบข้อมูล · 🟢 เขียว = จุดที่ยืนยันแล้ว/สำเร็จ · ⚪ เทา = ระบบภายนอก/ปิดอยู่

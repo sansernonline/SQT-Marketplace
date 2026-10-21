@@ -49,7 +49,7 @@ Dates on Thai papers are often พ.ศ. — subtract 543 before entering (2572 �
 ## Workflow
 
 1. **Inventory sweep** — walk the seven sections above with the user, one household member at a time. Unknown dates → `unknown` and a question list.
-2. **Scan and name** — `YYYY-MM-DD_holder_item.pdf` (date = issue date), one folder per section. Originals stay physical; the registry says where.
+2. **Scan and name** — `YYYY-MM-DD-holder-item.pdf` (date = issue date), one folder per section. Originals stay physical; the registry says where.
 3. **Fill the CSV** — one row per document; ID and policy numbers last 4 only.
 4. **Set lead time** — from the renewal table in references (passport 120 days before travel, ID card at expiry, vehicle tax 90 days).
 5. **Renewal watch** — each monthly check lists rows where `end_date − today ≤ renew_lead_days`, plus fixed 60 / 30 / 7-day warnings, each with location and the renewal step.

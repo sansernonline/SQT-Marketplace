@@ -57,7 +57,7 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 # Markdown Visuals
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
@@ -420,11 +420,11 @@ This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the 
 
 # skill: polished-document-style
 
-Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs polished formatting.
+Use when writing or tidying any document people keep (Markdown, Word, PDF) — headings, tables, Thai text. Designed look → branded-document-design.
 
 # Polished Document Style
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 ## When to use this skill
 
@@ -432,6 +432,7 @@ Use when a stakeholder Markdown document (BRD, FSD, ADR, status report) needs po
 - Document needs **sign-off** or formal review
 - Output will be **shared widely** or converted to PDF/Word later
 - Any doc with 3+ sections or 500+ words
+- จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
 
 ## When NOT to use
 
@@ -474,7 +475,7 @@ Status values:
 
 ## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
 
-เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `software-diagrams` ·
+เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `diagram-figures` ·
 ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
 ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
 
@@ -499,7 +500,8 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 | ใช้ทำอะไร | คำที่ใช้ |
 |---|---|
 | ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
-| สถานะงาน | เสร็จ · กำลังทำ · รอ · ไม่ผ่าน · ต้องระวัง |
+| สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
+| ผลตรวจ | ผ่าน · ไม่ผ่าน |
 | ชนิดกล่องข้อความ | ข้อแนะนำ · ข้อควรจำ · อันตราย · คำถามที่ยังเปิด |
 
 ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
@@ -524,15 +526,14 @@ Use tables when items have **2+ attributes** ถ้าเขียนเป็�
 
 ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (architect, PM, SEO recommendations) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีศัพท์เทคนิค 5 คำขึ้นไปให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
-## Mermaid Diagrams
+## Diagrams
 
-**ตัวเลือกชนิดไดอะแกรม กติกาความอ่านง่าย ธีม และการจัดการป้ายภาษาไทย อยู่ใน `software-diagrams`**
-skill นี้คุมเฉพาะเรื่องการวางไดอะแกรมลงในเอกสาร markdown
+**รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
+skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
 
 - วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
 - ทุกรูปมีคำบรรยายใต้รูป 1 บรรทัด ขึ้นต้นด้วย **รูปที่ N —**
 - รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
-- รูปที่ต้องส่งให้คนนอกทีมหรือใส่สไลด์ ใช้ `diagram-figures` แล้วฝังเป็นไฟล์ภาพ
 
 ## Status Badges and Cover Block
 
@@ -540,10 +541,21 @@ skill นี้คุมเฉพาะเรื่องการวางไ�
 
 ## Lists and Code Blocks
 
-**Rule:** Max 2 levels of nesting. More nesting = use a table.
+**Rule:** ไม่ซ้อน bullet เลย ถ้ารายการต้องมีชั้นย่อย ให้แยกเป็นหัวข้อย่อยหรือใช้ตาราง
 ตัวอย่างรายการที่ดีและรายการที่ซ้อนเกินอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 Code blocks ต้องระบุภาษาทุกครั้ง (Always specify language) และถ้าโค้ดยาว ให้ใส่ชื่อไฟล์เป็นคอมเมนต์ในบรรทัดแรก ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+
+## เอกสาร Office ภาษาไทย
+
+ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
+
+- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
+- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
+- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
+- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
+- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
+- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
 
 ## Quality Checklist
 
@@ -556,20 +568,20 @@ Before delivering any polished doc:
 - [ ] Anchor links in TOC actually work
 - [ ] Status badges where applicable
 - [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] At least one Mermaid diagram for any flow/relationship
+- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
 - [ ] Glossary for docs with 5+ acronyms
 - [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
 - [ ] Tested rendering in GitHub preview
 
-> ไดอะแกรมในเอกสาร: ชนิดไหนตอบคำถามไหน และธีม Mermaid ชุดเดียวกันทั้งโปรเจกต์
-> อยู่ใน `software-diagrams` ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
+> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · Mermaid ด่วนใน README หรือ PR อยู่ใน `software-diagrams`
+> ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
 
 ## Anti-patterns
 
 - ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
-- ❌ **Deep nesting** — bullets 4+ levels deep, use tables instead
+- ❌ **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
 - ❌ **Walls of text** — paragraphs longer than 5 lines
 - ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
 - ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
@@ -850,7 +862,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 # Branded Document Design
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
 > และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
@@ -896,7 +908,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 > ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
 > ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แอปของโปรเจกต์ผ่านด่านสวยแล้ว
 
-1. **มีตัวตนอยู่แล้วไหม** — ดู `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
+1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
 2. **3 แนวขนานกัน** (`parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว — ดู `doc-cover-design` ข้อ 7) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
 3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
 4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน 3 รอบตาม `ui-craft/references/states-and-checks.md` · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
@@ -1525,11 +1537,11 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 # skill: human-writing
 
-Use when writing anything a person will read (answer, report, document, slide, label) in Thai or English.
+Use before writing or editing anything a person reads — answer, email, report, README, .docx, slide, label — in Thai or English.
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
-ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`)
+ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 ## 1 · หลักใหญ่
 
@@ -1544,7 +1556,11 @@ Use when writing anything a person will read (answer, report, document, slide, l
 - **เงื่อนไขและคำสั่งเขียนเป็นประโยคเต็ม มีคำเชื่อม** (ถ้า … ให้ … · แล้ว · ส่วน · เพราะ) ไม่ใช้ `→` หรือ `·` ต่อประโยคเป็นท่อน ๆ
 - ในตารางใช้ข้อความสั้นได้ แต่ยังต้องอ่านเป็นภาษาคน ไม่ใช่รหัส
 - สัญลักษณ์ห้ามแทนคำจนต้องถอดรหัส ถ้าคนนอกต้องเดาว่าลูกศรหมายถึงอะไร ให้เติมคำ
+- **ไม่ใส่อีโมจิหรือไอคอน** (📌 ✅ 💡 🚀 👀) ในหัวข้อ เนื้อหา ตาราง ป้าย และกล่องข้อความ เพราะคนอ่านเห็นแล้วรู้ทันทีว่า AI เขียน ให้ใช้คำตัวหนาแทน เช่น **หมายเหตุ** · ช่องใช่/ไม่ในตารางใช้ `✓` `✗` ได้ · ระดับความรุนแรงใช้คำ `วิกฤต · สูง · กลาง · ต่ำ` ไม่ใช้จุดสี · อีโมจิที่เจ้าของงานเขียนไว้เองไม่ต้องลบ และไม่ต้องลอกตาม · ข้อยกเว้นเดียวคือข้อความแชตถึงลูกค้าที่ skill ของงานนั้นกำหนดไว้
 - ทุกตัวเลขบอกว่าหมายถึงอะไร · เทียบให้เห็นภาพ (เท่า อ่านง่ายกว่า %) · ผลยังไม่แน่นอนให้บอกตรง ๆ ว่าเพราะอะไร
+- **ตัวเลขที่เปลี่ยนตามเวลา** (ราคา · อัตราภาษี · กฎหมาย · กำหนดยื่น) บอกแหล่งและวันที่ตรวจ · อ้างได้เฉพาะแหล่งที่เปิดอ่านจริง ใส่ลิงก์หรือ DOI · ตัวเลขสมมุติหรือข้อมูลจำลอง ติดป้าย `ตัวอย่าง` ตั้งแต่จุดแรกที่เห็น
+- **วันที่** ในเนื้อหาภาษาไทยใช้ พ.ศ. หรือ ค.ศ. แบบเดียวทั้งชุด · ชื่อไฟล์ รหัส และข้อมูลที่เครื่องอ่านใช้ `YYYY-MM-DD` แบบ ค.ศ.
+- **สถานะงาน** ใช้ 5 คำนี้ทุกเอกสาร: `เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่` · ผลตรวจใช้ `ผ่าน · ไม่ผ่าน`
 
 ## 3 · คำ
 
@@ -1552,6 +1568,7 @@ Use when writing anything a person will read (answer, report, document, slide, l
 - ศัพท์ที่คนในวงการใช้อยู่แล้ว (token · prompt · API · OCR) คงภาษาอังกฤษไว้
 - ตัวย่อเขียนเต็มครั้งแรกแล้ววงเล็บ จากนั้นใช้ตัวย่อ · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
 - สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
+- เอกสาร 2 ภาษา: เลือกภาษาหลัก 1 ภาษา อีกภาษาอยู่ในวงเล็บหรือคอลัมน์ที่ 2 ไม่สลับไปมาในประโยค
 - ตัดคำฟุ่มเฟือย ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ")
 - เลี่ยงท่าที่ดูเหมือน AI เขียน: คำคมเปิดเรื่อง · "ไม่ใช่แค่… แต่ยัง…" · จัดทุกอย่างเป็นชุดละ 3 · ชมว่าสำคัญเกินจริง · ตัวหนาทุกบรรทัด · สรุปซ้ำตอนจบ · เปิดด้วย "แน่นอน" · ปิดด้วย "หวังว่าจะช่วยได้" · ใช้ "หลาย" ทั้งที่รู้ตัวเลข · ออกตัวซ้อนหลายชั้น (ออกตัวครั้งเดียวตรงจุดที่ไม่แน่ใจจริง)
 - งานที่คนดู (หน้าจอ · สไลด์ · โฆษณา) เลี่ยงเพิ่ม: คำโฆษณากว้าง ๆ (ยกระดับ · ไร้รอยต่อ · ล้ำสมัย · supercharge) · ขีดยาวทุกประโยค · ประโยคเปิดสำเร็จรูป ("ในยุคดิจิทัลที่…") · ท่อนสั้นมีจุดคั่น ("เร็ว. ง่าย. ครบ.") · คำอ้างที่ใช้กับคู่แข่งได้ ให้ใส่ชื่อหรือตัวเลขจริงแทน · หน้าตาของงานใช้ `no-ai-look`

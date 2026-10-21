@@ -1,6 +1,6 @@
 # skill: commit-message-format
 
-Use when writing a git commit message (Conventional Commits — type, scope, body, footer).
+Use when setting up commitlint or semantic-release, or a commit needs release rules (scope, BREAKING CHANGE). Everyday commits → commit-log.
 
 # Conventional Commit Message Format
 
@@ -102,11 +102,11 @@ Co-authored-by: ...      ← attribution
 
 # skill: markdown-report-docx
 
-Use when a project or course report must ship as a polished .docx from one Markdown source.
+Use when one Markdown file must become a polished Word report (project, test, handover). Thesis or IS → thesis-writing.
 
 # Markdown Report → .docx
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** Markdown คือต้นฉบับ .docx คือผลที่สร้างจากต้นฉบับ
 > แก้ที่ .md แล้วรันสคริปต์ใหม่ทุกครั้ง ไม่เปิด Word แก้มือ เพราะรอบหน้าจะหายหมด
@@ -125,6 +125,7 @@ Use when a project or course report must ship as a polished .docx from one Markd
 | เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (SRS · BRD · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
 | สไลด์นำเสนอ | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
+| วิทยานิพนธ์ · IS · บทความวิจัย | `dev-learning:thesis-writing` ก่อน (ถ้าติดตั้ง) — คู่มือคณะคุมโครงเล่มและการจัดหน้า สคริปต์นี้ใช้ทำ .docx ต่อได้ |
 
 ---
 
@@ -185,7 +186,6 @@ brand_tint_2: FEF6F6   # พื้นแถวสลับ (ตารางเ�
 - **รูปพื้นเข้มหรือพื้นขาวเลือกแบบเดียวทั้งเล่ม** · กว้าง 1600–2000 px · วาดด้วย [`diagram-figures`](../diagram-figures/SKILL.md) แล้ว export PNG
 - **ผลทดสอบมาจากไฟล์ผลจริง** — สร้างตารางผลด้วยสคริปต์แล้วแทรกระหว่าง `<!-- RESULTS:START -->` กับ `<!-- RESULTS:END -->` ใน .md ก่อนรัน ไม่พิมพ์ตัวเลขเอง
 - **ข้อมูลจำลองต้องบอก** — กล่องหมายเหตุ 1 บรรทัดตั้งแต่หน้าแรกของเนื้อหา
-- **หัวข้อไม่ใส่อีโมจิ** · กล่องละ 1 สัญลักษณ์ที่สคริปต์ใส่ให้แล้ว
 
 ## 5 · ตรวจด้วยตา — ห้ามข้าม
 
@@ -218,6 +218,7 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 | สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`presentation-design`](../presentation-design/SKILL.md) (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
 | รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |
+| ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | [`doc-cover-design`](../doc-cover-design/SKILL.md) |
 
 
 ---
@@ -228,7 +229,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 # Presentation Design
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อเดียวของ skill นี้:** หัวสไลด์ต้องเป็น**ข้อสรุป** ไม่ใช่**ชื่อหัวข้อ**
 > ถ้าผู้ฟังอ่านแค่หัวสไลด์ทุกแผ่นแล้วเข้าใจเรื่องทั้งหมด แปลว่าเด็คใช้ได้

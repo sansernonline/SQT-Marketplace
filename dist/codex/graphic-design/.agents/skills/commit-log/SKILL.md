@@ -5,10 +5,11 @@ description: Use when a step of work is finished in a git folder, or the user as
 
 # commit-log — commit ทุกขั้น ให้ git log เป็นบันทึกงาน
 
-ทำงานเสร็จ 1 ขั้น → commit 1 ครั้ง · อ่าน `git log --oneline` จากล่างขึ้นบนแล้วต้องรู้ว่าทำอะไรไป เรียงอย่างไร เพราะอะไร · ต้นฉบับอยู่ plugin `superuser` (แก้แล้วรัน `node scripts/sync/sync-superuser.mjs`)
+ทำงานเสร็จ 1 ขั้น → commit 1 ครั้ง · อ่าน `git log --oneline` จากล่างขึ้นบนแล้วต้องรู้ว่าทำอะไรไป เรียงอย่างไร เพราะอะไร · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 ## 1 · commit เมื่อไหร่
 
+- **ทำได้เมื่อผู้ใช้สั่ง หรือเขียนอนุญาตไว้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md`** · ไม่ได้อนุญาต → ทำขั้นที่ 1–5 แล้วใส่ข้อความ commit ที่แนะนำไว้ในคำตอบแทนการ commit
 - จบแต่ละขั้นที่ใช้งานได้ (ฟีเจอร์ 1 ชิ้น · แก้บั๊ก · แก้เอกสาร · แก้ config) → ไม่รวบ commit เดียวตอนจบ
 - ก่อนแก้อะไรที่เสี่ยง → มีจุดสะอาดให้ถอยกลับ
 - ผู้ใช้สั่ง

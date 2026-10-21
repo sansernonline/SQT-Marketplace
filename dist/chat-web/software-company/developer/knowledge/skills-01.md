@@ -987,6 +987,7 @@ Use when reviewing a pull request, self-reviewing before submitting, or auditing
 | Writing or updating the PR description itself | `pr-description-template` |
 | Hunting misleading patterns across the codebase, not one diff | `code-gardener` |
 | Scanners, secrets or dependency check before ship or after adding a dependency | `security-gate` (run both before merge) |
+| Web app or API that must meet OWASP Top 10:2025 | `owasp-top10` (per-stack checks in its `references/stack-checks.md`) |
 
 ## Review Process
 
@@ -1029,7 +1030,7 @@ Suggest: <concrete fix>
 
 ### Praise
 ```
-✨ Nice approach with X — much cleaner than the previous version.
+Nice approach with X — much cleaner than the previous version.
 ```
 
 ## Review Severity Levels
@@ -1132,7 +1133,7 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 # skill: commit-message-format
 
-Use when writing a git commit message (Conventional Commits — type, scope, body, footer).
+Use when setting up commitlint or semantic-release, or a commit needs release rules (scope, BREAKING CHANGE). Everyday commits → commit-log.
 
 # Conventional Commit Message Format
 

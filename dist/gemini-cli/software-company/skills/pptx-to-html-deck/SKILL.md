@@ -5,7 +5,7 @@ description: Use when a .pptx should play as one animated HTML file, or both .pp
 
 # PPTX → HTML Deck
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีแปลงและตรวจ
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีแปลงและตรวจ
 
 > **กฎข้อเดียวของ skill นี้:** หน้าตามาจาก .pptx ทั้งหมด · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
 

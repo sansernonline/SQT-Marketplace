@@ -135,14 +135,14 @@ OR use expert determination (statistical method).
 Use `polished-document-style` skill to produce:
 
 ```markdown
-# 🔒 HIPAA Risk Analysis
+# HIPAA Risk Analysis
 
 | | |
 |--|--|
 | **Conducted by** | @hipaa-officer |
 | **Date** | YYYY-MM-DD |
 | **Scope** | Full enterprise / Specific system |
-| **Status** | 🟡 In Progress |
+| **Status** | In Progress |
 
 ## Asset Inventory
 | Asset | PHI? | Location | Owner |

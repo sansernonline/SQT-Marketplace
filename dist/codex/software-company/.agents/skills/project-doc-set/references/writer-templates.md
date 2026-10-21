@@ -17,13 +17,13 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- 🚀 What makes this special — feature 1
-- ⚡ Killer feature 2
-- 🔒 Reassuring feature 3
+- What makes this special — feature 1
+- Killer feature 2
+- Reassuring feature 3
 
-## 🚀 Quick Start
+## Quick Start
 
 \`\`\`bash
 npm install package-name
@@ -37,18 +37,18 @@ const result = thing({ option: 'value' });
 
 That's it. You're done.
 
-## 📚 Documentation
+## Documentation
 
 - [Getting Started](#) — 10-minute tutorial
 - [How-To Guides](#) — Solve specific problems
 - [API Reference](#) — Full API spec
 - [Concepts](#) — Why and how it works
 
-## 🤝 Contributing
+## Contributing
 
 See [CONTRIBUTING.md](#).
 
-## 📄 License
+## License
 
 MIT
 ```
@@ -56,15 +56,15 @@ MIT
 ### Tutorial Template
 
 ```markdown
-# 🎓 Tutorial: Build Your First X in 10 Minutes
+# Tutorial: Build Your First X in 10 Minutes
 
-> 💡 **What you'll learn:** by the end, you'll have built Y and understand Z.
+> **What you'll learn:** by the end, you'll have built Y and understand Z.
 
 ## What You'll Need
 
-- ✅ Node.js 18+
-- ✅ A free account at example.com
-- ⏱️ 10 minutes
+- Node.js 18+
+- A free account at example.com
+- 10 minutes
 
 ## Step 1: Set Up
 
@@ -74,7 +74,7 @@ npx create-thing my-project
 cd my-project
 \`\`\`
 
-> 💡 **What just happened?** Brief explanation.
+> **What just happened?** Brief explanation.
 
 You should see:
 \`\`\`
@@ -89,7 +89,7 @@ You should see:
 
 ...
 
-## ✅ Congratulations!
+## Congratulations!
 
 You've built X. Try these next:
 
@@ -107,7 +107,7 @@ Create a new resource.
 
 ### Authentication
 
-🔒 Required. Bearer token in `Authorization` header.
+Required. Bearer token in `Authorization` header.
 
 ### Request
 
@@ -126,8 +126,8 @@ Authorization: Bearer <token>
 
 | Field | Type | Required | Description |
 |-------|------|:--------:|-------------|
-| `name` | string | ✅ | Display name, 1-100 chars |
-| `tags` | string[] | ❌ | Up to 10 tags |
+| `name` | string | ✓ | Display name, 1-100 chars |
+| `tags` | string[] | ✗ | Up to 10 tags |
 
 ### Response: 201 Created
 
@@ -161,9 +161,9 @@ const res = await fetch('/api/v1/resource', {
 ### Release Notes Template
 
 ```markdown
-# 🚀 Release v2.1.0 — YYYY-MM-DD
+# Release v2.1.0 — YYYY-MM-DD
 
-## ✨ Highlights
+## Highlights
 
 > The TL;DR for busy readers.
 
@@ -182,19 +182,19 @@ Description with user-facing benefit.
 command --new-flag
 \`\`\`
 
-📖 [Read the docs](#)
+[Read the docs](#)
 
-## 🔧 Improvements
+## Improvements
 
 - Faster initial load time
 - Better error messages for X
 
-## 🐛 Bug Fixes
+## Bug Fixes
 
 - Fix issue where ... ([#1234](#))
 - Resolve crash when ... ([#5678](#))
 
-## ⚠️ Breaking Changes
+## Breaking Changes
 
 ### `api.oldMethod()` removed
 
@@ -208,9 +208,9 @@ api.oldMethod(arg)
 api.newMethod({ arg })
 \`\`\`
 
-📖 [Migration guide](#)
+[Migration guide](#)
 
-## 🙏 Contributors
+## Contributors
 
 Thanks to: @alice, @bob, @charlie
 ```

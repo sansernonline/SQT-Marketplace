@@ -77,3 +77,4 @@ Example: `songkran26-hero-ig-feed45-v03-th.png`
 - `brand-kit` — the README where the pattern is written
 - `campaign-set` — the asset matrix uses the same file names
 - `social-formats` — source of the format codes
+- `software-company:document-naming` (if installed) — naming for client documents (proposals, reports, contracts)

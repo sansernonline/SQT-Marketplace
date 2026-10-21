@@ -743,14 +743,14 @@ OR use expert determination (statistical method).
 Use `polished-document-style` skill to produce:
 
 ```markdown
-# 🔒 HIPAA Risk Analysis
+# HIPAA Risk Analysis
 
 | | |
 |--|--|
 | **Conducted by** | @hipaa-officer |
 | **Date** | YYYY-MM-DD |
 | **Scope** | Full enterprise / Specific system |
-| **Status** | 🟡 In Progress |
+| **Status** | In Progress |
 
 ## Asset Inventory
 | Asset | PHI? | Location | Owner |
@@ -979,13 +979,13 @@ if count < 11:
 ## Output: Clinical Analysis Report
 
 ```markdown
-# 📊 Clinical Analysis: <Title>
+# Clinical Analysis: <Title>
 
 | | |
 |--|--|
 | **Analyst** | @clinical-data-analyst |
 | **Date** | YYYY-MM-DD |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Reviewed by** | @clinical-lead |
 
 ## Clinical Question
@@ -1011,9 +1011,9 @@ What is X for population Y during period Z?
 
 ## Limitations
 
-- ⚠️ Single institution data
-- ⚠️ Possible misclassification of X
-- ⚠️ Missing data on Y for Z% of cohort
+- Single institution data
+- Possible misclassification of X
+- Missing data on Y for Z% of cohort
 
 ## Clinical Implications
 ...
@@ -2025,8 +2025,8 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 ```markdown
 | Asset | Threat | Vulnerability | Likelihood | Impact | Risk | Existing Controls | Recommendation |
 |-------|--------|---------------|:----------:|:------:|:----:|------------------|----------------|
-| Patient DB | Unauthorized access | Weak passwords | 🟡 Med | 🔴 High | 🔴 H | MFA, RBAC | Add behavioral analytics |
-| Backup tapes | Theft | Physical access | 🟢 Low | 🔴 High | 🟡 M | Encryption | Continue current |
+| Patient DB | Unauthorized access | Weak passwords | Medium | High | High | MFA, RBAC | Add behavioral analytics |
+| Backup tapes | Theft | Physical access | Low | High | Medium | Encryption | Continue current |
 ```
 
 ## Quick HIPAA Compliance Checklist

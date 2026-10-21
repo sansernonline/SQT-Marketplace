@@ -18,7 +18,7 @@ Use when project work starts, before switching model, handing work over, or an i
 | `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม `superuser/references/brief-template.md` |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
-| `~/.claude/superuser/improvements.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
+| `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
 | `.claude/superuser/learn/*.md` | บทเรียนตอนจบงาน และข้อเสนอแก้ skill รอผู้ใช้ตัดสิน | agent `learning-reviewer` |
 | `.claude/superuser/inbox/*.md` | คิวข้อความถึงทีม | คน bot อื่น หรือ agent เป็นผู้ส่ง · หัวหน้าทีมคนเดียวอ่าน ตอบ และย้ายไป `done/` |
 | `AGENTS.md` · `GEMINI.md` | ป้ายบอก Codex และ Gemini ให้อ่าน `CONTEXT.md` · มีเฉพาะเมื่อโปรเจกต์ใช้ Codex หรือ Gemini จริง | หัวหน้าทีม ครั้งแรก |
@@ -539,32 +539,32 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 ## Standard Output: Polished Deployment Plan
 
 ```markdown
-# 🚀 Deployment Plan: <Release vX.Y.Z>
+# Deployment Plan: <Release vX.Y.Z>
 
 | | |
 |--|--|
 | **Release** | vX.Y.Z |
-| **Type** | 🟢 Routine \| 🟡 Major \| 🔴 Hotfix |
-| **Status** | 🟡 Planned |
+| **Type** | Routine \| Major \| Hotfix |
+| **Status** | Planned |
 | **Deploy Lead** | @name |
 | **Maintenance Window** | YYYY-MM-DD HH:MM-HH:MM UTC |
-| **Expected Downtime** | ⚡ Zero / ⏸️ 5 min |
+| **Expected Downtime** | Zero / 5 min |
 
 ---
 
-## 📋 Pre-Deployment Checklist
+## Pre-Deployment Checklist
 
 | # | Item | Owner | Status |
 |:-:|------|:------|:------:|
-| 1 | All tests passing in CI | @dev | ✅ |
-| 2 | Security scan passed | @security | ✅ |
-| 3 | Database migrations reviewed | @dba | ⚪ |
-| 4 | Rollback plan documented | @devops | ⚪ |
-| 5 | Stakeholders notified | @pm | ⚪ |
-| 6 | On-call engineer briefed | @oncall | ⚪ |
-| 7 | Status page prepared | @devops | ⚪ |
+| 1 | All tests passing in CI | @dev | Done |
+| 2 | Security scan passed | @security | Done |
+| 3 | Database migrations reviewed | @dba | Pending |
+| 4 | Rollback plan documented | @devops | Pending |
+| 5 | Stakeholders notified | @pm | Pending |
+| 6 | On-call engineer briefed | @oncall | Pending |
+| 7 | Status page prepared | @devops | Pending |
 
-## 🔄 Deployment Flow
+## Deployment Flow
 
 \`\`\`mermaid
 flowchart TD
@@ -573,16 +573,16 @@ flowchart TD
     C -->|No| D[Abort + Investigate]
     C -->|Yes| E[Deploy to canary 5%]
     E --> F{Healthy after 10min?}
-    F -->|No| G[🔄 Rollback]
+    F -->|No| G[Rollback]
     F -->|Yes| H[Deploy to 50%]
     H --> I{Healthy?}
     I -->|No| G
     I -->|Yes| J[Deploy to 100%]
     J --> K[Smoke tests]
-    K --> L([Done ✅])
+    K --> L([Done])
 \`\`\`
 
-## 📝 Deployment Steps
+## Deployment Steps
 
 | Step | Action | Command/Link | Owner |
 |:----:|--------|--------------|:------|
@@ -593,7 +593,7 @@ flowchart TD
 | 5 | Approve full deploy | Slack `/deploy approve` | @lead |
 | 6 | Verify production | Smoke test suite | @qa |
 
-## ✅ Verification
+## Verification
 
 ### Health Checks
 - [ ] `/health` returns 200
@@ -609,13 +609,13 @@ flowchart TD
 ### Key Metrics (15 min post-deploy)
 | Metric | Baseline | Threshold | Current |
 |--------|---------:|----------:|--------:|
-| ⚡ p95 latency | 150ms | < 200ms | — |
-| 🐛 Error rate | 0.1% | < 0.5% | — |
-| 📊 Throughput | 1000 RPS | > 800 RPS | — |
+| p95 latency | 150ms | < 200ms | — |
+| Error rate | 0.1% | < 0.5% | — |
+| Throughput | 1000 RPS | > 800 RPS | — |
 
-## 🔄 Rollback Plan
+## Rollback Plan
 
-> ⚠️ **Triggers:** Any of the following requires immediate rollback
+> **Triggers:** Any of the following requires immediate rollback
 > - 5xx error rate > 2% sustained for 5 min
 > - p95 latency > 500ms sustained for 5 min
 > - Customer-impacting bug confirmed
@@ -626,12 +626,12 @@ flowchart TD
 3. Post in #incidents channel
 4. Schedule post-mortem within 48h
 
-## 📢 Post-Deployment
+## Post-Deployment
 
-- 📊 Monitor for 1 hour post-deploy
-- 📝 Update changelog with release notes
-- 📨 Send announcement to #releases
-- ✅ Close release ticket
+- Monitor for 1 hour post-deploy
+- Update changelog with release notes
+- Send announcement to #releases
+- Close release ticket
 ```
 
 

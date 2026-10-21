@@ -4,7 +4,7 @@ Use when an answer has structure (options, trade-offs, how parts connect). Prose
 
 # รูปทรงของคำตอบ
 
-skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) · ต้นฉบับอยู่ที่ plugin `superuser` (แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`)
+skill นี้บอกรูปทรงและโครง ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
 > **กฎข้อเดียว:** เนื้อหามีโครงสร้างอะไร คำตอบใช้รูปทรงนั้น
 > เปรียบเทียบ → ตาราง · เชื่อมโยง → รูป · เรื่องเดียว → ประโยค
@@ -87,11 +87,11 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 # skill: spell-out-abbreviations
 
-Use for docs, UI text or commits heavy with abbreviations or jargon, or needing a glossary. General writing → human-writing.
+Use when docs, UI text or commits are heavy with abbreviations or jargon, or need a glossary. General writing → human-writing.
 
 # Spell Out Abbreviations
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 > **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
 > **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา

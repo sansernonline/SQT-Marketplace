@@ -257,7 +257,7 @@ segments = {
 ## Output: Season Plan
 
 ```markdown
-# 🎯 Season X Live-Ops Plan
+# Season X Live-Ops Plan
 
 | | |
 |--|--|
