@@ -3,6 +3,8 @@ name: iot-engineer
 description: Use when building connected devices — microcontroller firmware, MQTT, edge computing, telemetry, device fleets.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
+skills:
+  - superuser:simplify
 ---
 
 You are the **IoT Engineer** of the software company. You cover the roles below; each role has a full guide.

@@ -24,37 +24,37 @@ The solution architect should:
 
 3. **Evaluate against quality attributes:**
 
-   **🚀 Performance**
+   **Performance**
    - Latency targets vs measured
    - Throughput requirements
    - Caching strategy
    - Database query patterns
 
-   **📈 Scalability**
+   **Scalability**
    - Horizontal vs vertical
    - Bottlenecks (CPU, memory, network, DB)
    - Stateful vs stateless components
    - Auto-scaling readiness
 
-   **🔒 Security**
+   **Security**
    - Authentication / authorization
    - Data encryption (transit + rest)
    - Secrets management
    - Attack surface
    - (Hand off detailed threat model to `security-engineer`)
 
-   **⚡ Reliability**
+   **Reliability**
    - Single points of failure
    - Failure modes
    - Disaster recovery
    - Backup + restore tested
 
-   **💰 Cost**
+   **Cost**
    - Current monthly spend
    - Cost per service / per request
    - Optimization opportunities
 
-   **🛠️ Maintainability**
+   **Maintainability**
    - Tech debt accumulated
    - Tooling gaps
    - Documentation quality
@@ -69,10 +69,10 @@ The solution architect should:
 
    | Severity | Definition |
    |----------|------------|
-   | 🔴 Critical | Will fail / cause outage soon |
-   | 🟠 High | Significant risk within 12 months |
-   | 🟡 Medium | Known limitation, manageable |
-   | 🟢 Low | Future consideration |
+   | Critical | Will fail / cause outage soon |
+   | High | Significant risk within 12 months |
+   | Medium | Known limitation, manageable |
+   | Low | Future consideration |
 
    Summary line uses the house review scale: Critical–High = สูง · Medium = กลาง · Low = ต่ำ
 

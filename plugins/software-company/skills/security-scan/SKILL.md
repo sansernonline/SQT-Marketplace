@@ -21,7 +21,7 @@ The security engineer should:
 2. **Run automated scans where possible:**
 
    ### For code:
-   - Look for OWASP Top 10 violations
+   - Look for OWASP Top 10:2025 violations (A01–A10 list and per-stack checks: skill `owasp-top10`)
    - SQL injection, XSS, CSRF, SSRF
    - Hardcoded secrets / API keys
    - Insecure crypto (MD5, SHA-1, weak ciphers)
@@ -58,17 +58,17 @@ The security engineer should:
 
    | Severity | Definition | Example |
    |----------|------------|---------|
-   | 🔴 Critical | Exploitable now, severe impact | Auth bypass, RCE |
-   | 🟠 High | Likely exploitable, significant impact | SQLi in non-admin |
-   | 🟡 Medium | Hard to exploit OR limited impact | XSS in admin tool |
-   | 🟢 Low | Defense in depth | Missing security header |
+   | Critical | Exploitable now, severe impact | Auth bypass, RCE |
+   | High | Likely exploitable, significant impact | SQLi in non-admin |
+   | Medium | Hard to exploit OR limited impact | XSS in admin tool |
+   | Low | Defense in depth | Missing security header |
 
    Ship or not ship follows [`security-gate`](../security-gate/SKILL.md) step 4: a confirmed Critical or High **blocks shipping** until fixed or the user accepts the risk in writing.
 
 5. **For each finding, provide:**
    - Description (what's wrong)
    - Location (file:line OR component)
-   - OWASP category
+   - OWASP Top 10:2025 category (A01–A10)
    - CWE ID (Common Weakness Enumeration)
    - Proof of concept (how to exploit)
    - Fix recommendation with code example

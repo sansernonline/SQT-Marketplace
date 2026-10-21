@@ -2,6 +2,9 @@
 name: image-artist
 description: Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.
 model: sonnet
+skills:
+  - no-ai-look
+  - human-writing
 ---
 
 <!-- No `tools:` line on purpose: this agent must reach any installed image generation tool (MCP server, plugin or script). -->

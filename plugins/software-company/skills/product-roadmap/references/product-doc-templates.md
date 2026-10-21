@@ -11,7 +11,7 @@
 ### Product Vision Statement
 
 ```markdown
-# 🎯 Product Vision: <Product Name>
+# Product Vision: <Product Name>
 
 ## Vision (5-year)
 > One sentence describing what the product will become.
@@ -32,27 +32,27 @@
 ### Polished Roadmap
 
 ```markdown
-# 📋 Product Roadmap: <Product> — Q1-Q4 YYYY
+# Product Roadmap: <Product> — Q1-Q4 YYYY
 
 | | |
 |--|--|
 | **Document Type** | Product Roadmap |
 | **Version** | 1.0 |
-| **Status** | 🟢 Approved |
+| **Status** | Approved |
 | **Product Owner** | @pm-name |
 | **Time Horizon** | 12 months |
 
 ---
 
-## 🎯 Strategic Themes
+## Strategic Themes
 
 | Theme | Why It Matters | Success Metric |
 |-------|---------------|----------------|
-| 🚀 Activation Lift | Conversion is 30% below industry | +15% activation rate |
-| 💰 Monetization | Unlock paid tier | $XXk MRR by Q4 |
-| 🌍 International | Expand to APAC | 3 new locales |
+| Activation Lift | Conversion is 30% below industry | +15% activation rate |
+| Monetization | Unlock paid tier | $XXk MRR by Q4 |
+| International | Expand to APAC | 3 new locales |
 
-## 🗓️ Quarterly Plan
+## Quarterly Plan
 
 \`\`\`mermaid
 gantt
@@ -69,22 +69,22 @@ gantt
     JP/KR/TH localization   :c2, after c1, 90d
 \`\`\`
 
-## 📊 Feature Prioritization (RICE)
+## Feature Prioritization (RICE)
 
 | Feature | Reach | Impact | Confidence | Effort | RICE Score | Priority |
 |---------|:-----:|:------:|:----------:|:------:|:----------:|:--------:|
-| Onboarding redesign | 10k | 3 | 80% | 8 wks | 300 | 🔴 P0 |
-| Paid tier | 5k | 5 | 90% | 12 wks | 188 | 🟡 P1 |
-| Mobile app | 8k | 4 | 60% | 16 wks | 120 | 🟢 P2 |
+| Onboarding redesign | 10k | 3 | 80% | 8 wks | 300 | P0 |
+| Paid tier | 5k | 5 | 90% | 12 wks | 188 | P1 |
+| Mobile app | 8k | 4 | 60% | 16 wks | 120 | P2 |
 
-> 📐 **RICE = (Reach × Impact × Confidence) / Effort**
+> **RICE = (Reach × Impact × Confidence) / Effort**
 
-## 🎯 Out of Scope (This Year)
+## Out of Scope (This Year)
 
-- ❌ Enterprise SSO (revisit Q1 next year)
-- ❌ AI chatbot (waiting for market signal)
+- Enterprise SSO (revisit Q1 next year)
+- AI chatbot (waiting for market signal)
 
-## 📊 Key Metrics Dashboard
+## Key Metrics Dashboard
 
 | Metric | Current | Q1 Target | Q4 Target |
 |--------|--------:|----------:|----------:|
@@ -92,66 +92,66 @@ gantt
 | MRR | $50k | $80k | $200k |
 | NPS | 32 | 40 | 50 |
 
-## ⚠️ Strategic Risks
+## Strategic Risks
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|:----------:|:------:|------------|
-| Competitor launches similar feature | 🟡 Med | 🔴 High | Speed to market |
-| Key engineering hire delayed | 🟢 Low | 🟡 Med | External contractors |
+| Competitor launches similar feature | Medium | High | Speed to market |
+| Key engineering hire delayed | Low | Medium | External contractors |
 
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| CEO | @ceo | ⚪ Pending | — |
-| Head of Eng | @eng | ⚪ Pending | — |
-| Head of Sales | @sales | ⚪ Pending | — |
+| CEO | @ceo | Pending | — |
+| Head of Eng | @eng | Pending | — |
+| Head of Sales | @sales | Pending | — |
 ```
 
 ### Product Requirements Document (PRD) Brief
 
 ```markdown
-# 📋 PRD: <Feature Name>
+# PRD: <Feature Name>
 
 | | |
 |--|--|
 | **Author** | @pm-name |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Target Release** | Q2 YYYY |
 
-## 🎯 Problem Statement
+## Problem Statement
 
 > What user problem are we solving? Why now?
 
-## 👥 Target User
+## Target User
 
 Primary persona + their context.
 
-## 💡 Solution Overview
+## Solution Overview
 
 High-level approach — NOT detailed spec.
 
-## 📊 Success Metrics
+## Success Metrics
 
 | Metric | Baseline | Target | How Measured |
 |--------|---------:|-------:|--------------|
 | ... | ... | ... | ... |
 
-## 🎯 Hypothesis
+## Hypothesis
 
 > If we build <X>, then <metric Y> will improve by <Z>%, because <reasoning>.
 
-## 🔄 Out of Scope
+## Out of Scope
 
 What we explicitly are NOT doing in v1.
 
-## ⚠️ Risks & Open Questions
+## Risks & Open Questions
 
 | ID | Item | Owner |
 |----|------|------|
 | Q1 | ... | @pm |
 
-## 📖 References
+## References
 
 - User research: [link]
 - Competitive analysis: [link]

@@ -3,6 +3,8 @@ name: blockchain-engineer
 description: Use when building on blockchains — chain choice, smart contracts (Solidity, Solana), DeFi, contract audits, tokenomics.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, Bash
 model: opus
+skills:
+  - superuser:simplify
 ---
 
 You are the **Blockchain Engineer** of the software company. You cover the roles below; each role has a full guide.

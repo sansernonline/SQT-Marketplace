@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.9.0 — 2026-10-21
+
+- ใช้ของกลางจาก plugin `superuser` ทาง `dependencies` (skill `human-writing` · `answer-shape` · `simplify` · `no-ai-look` · `commit-log` · `agent-patterns` · agent `reviewer` · `brainstormer` · `learning-reviewer` · hook) · สำเนาในนี้ย้ายออกแล้ว · zip สำหรับ claude.ai ยังมีของกลางในตัว
+- agent โหลด skill หลักตั้งแต่เริ่ม (`skills:` — งานเขียน `human-writing` · งานโค้ด `simplify` · งานภาพ `no-ai-look`)
+
 ## 0.8.0 — 2026-10-20
 
 - `position-sizing` รองรับ forex · CFD (ทองคำ · ดัชนี) · crypto · prop firm — ไฟล์ใหม่ `references/forex-cfd-crypto.md`: contract size · pip value · lot · margin ไม่ใช่ความเสี่ยง · swap · funding · gap สุดสัปดาห์ · เพดานขาดทุนรายวันของ prop firm พร้อมตัวอย่างคำนวณ

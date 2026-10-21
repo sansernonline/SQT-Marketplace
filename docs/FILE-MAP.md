@@ -8,18 +8,18 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`career`](#career) | ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน | 5 | 12 | 3 | 8 | 49 |
-| [`consumer-rights`](#consumer-rights) | ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน | 4 | 11 | 2 | 7 | 43 |
-| [`dev-learning`](#dev-learning) | ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ | 4 | 14 | 2 | 8 | 58 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 7 | 17 | 6 | 8 | 67 |
-| [`health-wellness`](#health-wellness) | จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ | 4 | 12 | 2 | 7 | 44 |
-| [`home-family`](#home-family) | จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น | 5 | 14 | 3 | 8 | 55 |
-| [`online-seller`](#online-seller) | ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด | 6 | 15 | 4 | 8 | 57 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว | 6 | 21 | 6 | 10 | 72 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 42 | 118 | 29 | 16 | 791 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 7 | 0 | 5 | 36 |
-| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 7 | 24 | 8 | 8 | 79 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 7 | 25 | 7 | 9 | 76 |
+| [`career`](#career) | ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน | 2 | 6 | 3 | 8 | 34 |
+| [`consumer-rights`](#consumer-rights) | ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน | 1 | 5 | 2 | 7 | 28 |
+| [`dev-learning`](#dev-learning) | ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ | 1 | 8 | 2 | 8 | 43 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 4 | 11 | 6 | 8 | 52 |
+| [`health-wellness`](#health-wellness) | จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ | 1 | 6 | 2 | 7 | 29 |
+| [`home-family`](#home-family) | จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น | 2 | 8 | 3 | 8 | 40 |
+| [`online-seller`](#online-seller) | ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด | 3 | 9 | 4 | 8 | 42 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว | 3 | 15 | 6 | 10 | 57 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 113 | 29 | 16 | 780 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 8 | 0 | 5 | 40 |
+| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 18 | 8 | 8 | 64 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 9 | 61 |
 
 ## โครงของทุก plugin
 
@@ -32,7 +32,7 @@ plugins/<plugin>/
 │  ├─ references/              รายละเอียดที่ skill เปิดอ่านเมื่อต้องใช้ (ไม่โหลดทุกครั้ง)
 │  ├─ templates/               แบบไฟล์ที่คัดลอกไปใช้ในโปรเจกต์
 │  └─ scripts/                 สคริปต์ที่ skill เรียกใช้
-└─ hooks/                      hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox
+└─ (hooks/ มีใน superuser ที่เดียว · ดู ของกลาง)
 ```
 
 - **skill** → Claude โหลดเองเมื่องานตรงกับ description
@@ -42,21 +42,21 @@ plugins/<plugin>/
 
 ## ของกลาง
 
-ต้นฉบับอยู่ที่ `plugins/superuser` · `scripts/sync/sync-superuser.mjs` คัดลอกไปทุก plugin · แก้ที่ต้นฉบับเท่านั้น (ยกเว้น `superuser/SKILL.md` กับ playbook ที่แต่ละ plugin ปรับตามงานของตัวเอง)
+อยู่ใน `plugins/superuser` ที่เดียว · plugin อื่นประกาศ `"dependencies": ["superuser"]` แล้วใช้ร่วมกัน · `scripts/sync/sync-superuser.mjs` คัดลอกเฉพาะไฟล์กลางของ `skills/superuser/` (ทุก plugin มี skill superuser ฉบับของตัวเอง)
 
 | ชนิด | ชื่อ | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ |
 |---|---|---|---|
 | skill | `agent-patterns` | เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ) | `references/pattern-details.md` |
 | skill | `answer-shape` | เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ | — |
 | skill | `commit-log` | commit ทุกขั้นที่ทำเสร็จด้วยข้อความรูปแบบเดียวกัน ให้ git log เป็นบันทึกงาน | — |
+| skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` |
 | skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `references/headings-and-examples.md` |
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `simplify` | ทำทุกงานให้อยู่ในรูปที่ง่ายที่สุดที่คนทำตามได้ | — |
-| skill | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/CONTEXT.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/improvements-queue.md` |
 | agent | `brainstormer` | คิดทางเลือกเมื่องานคลุมเครือ | `agents/brainstormer.md` |
 | agent | `learning-reviewer` | ทบทวนวิธีทำงานและเสนอแก้ | `agents/learning-reviewer.md` |
 | agent | `reviewer` | ตรวจงานด้วยสายตาใหม่ | `agents/reviewer.md` |
-| hook | `hooks/` | hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox | `hooks.json` · `superuser-hook.mjs` |
+| hook | `hooks/` | hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox | `hooks.json` · `superuser-hook.mjs` · `core-rules.md` · `skill-router.json` |
 
 **ไฟล์ข้างใน `skills/superuser/`** (นอกจาก playbook ของแต่ละ plugin)
 
@@ -84,21 +84,18 @@ plugins/<plugin>/
 
 ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน · ภาพประกอบ: [docs/plugins/career](plugins/career/README.md) · ต้นฉบับ: `plugins/career/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (5)
+### agent (2)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกเมื่องานคลุมเครือ · ของกลาง |
 | `agents/career-coach.md` | เขียน CV และบทพูดกับ HR |
 | `agents/interview-coach.md` | ซ้อมสัมภาษณ์และให้คะแนน |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (5 + ของกลาง 7)
+### skill (6 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -107,6 +104,7 @@ plugins/<plugin>/
 | `performance-self-review` | เขียนประเมินตัวเองกลางปีหรือปลายปี และเหตุผลขอขึ้นตำแหน่ง | `references/templates.md` |
 | `resume-th-en` | เขียนหรือตรวจ CV ไทยและอังกฤษ ให้ระบบคัดกรอง (ATS) อ่านได้ | `references/templates.md` |
 | `salary-negotiation` | ต่อรองเงินเดือนและเทียบข้อเสนองาน (โบนัส · กองทุน · ประกัน) | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-interview.md` · `references/playbook-job-application.md` · `references/playbook-learn-from-session.md` · `references/playbook-offer-negotiation.md` · `references/playbook-profile-refresh.md` · `references/playbook-promotion-case.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (3) — พิมพ์ `/career:<ชื่อ>`
 
@@ -133,26 +131,24 @@ plugins/<plugin>/
 
 ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน · ภาพประกอบ: [docs/plugins/consumer-rights](plugins/consumer-rights/README.md) · ต้นฉบับ: `plugins/consumer-rights/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (4)
+### agent (1)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกเมื่องานคลุมเครือ · ของกลาง |
 | `agents/consumer-advocate.md` | ร่างคำขอและจดหมายร้องเรียน |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (4 + ของกลาง 7)
+### skill (5 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `buy-compare` | เทียบก่อนซื้อของชิ้นใหญ่: ราคารวมจริง · รีวิวที่เชื่อได้ | — |
 | `complaint-letter-th` | เขียนจดหมายร้องเรียนร้านค้า แพลตฟอร์ม หรือ สคบ. | `references/templates.md` |
 | `refund-request` | ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-learn-from-session.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | — |
 
 ### คำสั่ง (2) — พิมพ์ `/consumer-rights:<ชื่อ>`
@@ -178,20 +174,17 @@ plugins/<plugin>/
 
 ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ · ภาพประกอบ: [docs/plugins/dev-learning](plugins/dev-learning/README.md) · ต้นฉบับ: `plugins/dev-learning/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (4)
+### agent (1)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกเมื่องานคลุมเครือ · ของกลาง |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (7 + ของกลาง 7)
+### skill (8 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -200,6 +193,7 @@ plugins/<plugin>/
 | `learning-path` | วางเส้นทางเรียนภาษา framework หรือแนวคิดใหม่ ให้จบเป็นโปรเจกต์จริง | `references/path-template.md` |
 | `paper-to-practice` | อ่าน paper · RFC · บทความยาว แล้วทำตัวอย่างที่รันได้ | `references/practice-note-template.md` |
 | `side-project-picker` | เลือกโปรเจกต์ฝึกมือหรือ portfolio ให้คะแนน แล้วตัดขอบเขตให้จบได้ | `references/idea-bank.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-cert-prep.md` · `references/playbook-learn-from-session.md` · `references/playbook-learning-path.md` · `references/playbook-paper-to-practice.md` · `references/playbook-review.md` · `references/playbook-side-project.md` · `references/playbook-tech-radar.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `tech-radar` | ติดตามการเปลี่ยนแปลงของเครื่องมือรายสัปดาห์จาก release notes ทางการ | `references/radar-templates.md` |
 | `thesis-writing` | เขียนวิทยานิพนธ์ · IS · บทความวิจัย ตั้งแต่โครงร่างจนสอบป้องกัน | `references/citation-and-integrity.md` · `references/defense-and-review.md` · `references/literature-matrix.md` · `references/thai-academic-language.md` · `references/thai-typesetting.md` · `references/thesis-structure.md` |
 
@@ -227,23 +221,20 @@ plugins/<plugin>/
 
 ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน · ภาพประกอบ: [docs/plugins/graphic-design](plugins/graphic-design/README.md) · ต้นฉบับ: `plugins/graphic-design/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (7)
+### agent (4)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
 | `agents/art-director.md` | ล็อกสไตล์ภาพ AI ให้เหมือนกัน |
-| `agents/brainstormer.md` | คิดทางเลือกก่อนเลือกทาง · ของกลาง |
 | `agents/brand-keeper.md` | ดูแลชุดแบรนด์ของร้าน |
 | `agents/design-critic.md` | ชี้ 2-3 จุดที่ต้องแก้ |
-| `agents/learning-reviewer.md` | สรุปบทเรียนหลังจบงาน · ของกลาง |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 
-### skill (10 + ของกลาง 7)
+### skill (11 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -256,6 +247,7 @@ plugins/<plugin>/
 | `motion-basics` | ทำ motion graphic ตัวอักษรเคลื่อนไหว และโลโก้ขยับ สำหรับคนที่ไม่ใช่นักออกแบบ | `references/twelve-principles.md` |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` |
 | `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/style-lock-sheet.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/shot-list-template.md` |
 
 ### คำสั่ง (6) — พิมพ์ `/graphic-design:<ชื่อ>`
@@ -286,20 +278,17 @@ plugins/<plugin>/
 
 จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ · ภาพประกอบ: [docs/plugins/health-wellness](plugins/health-wellness/README.md) · ต้นฉบับ: `plugins/health-wellness/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (4)
+### agent (1)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกก่อนเลือกทาง · ของกลาง |
 | `agents/health-organizer.md` | จัดเอกสารและตารางสุขภาพ |
-| `agents/learning-reviewer.md` | สรุปบทเรียนหลังจบงาน · ของกลาง |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (5 + ของกลาง 7)
+### skill (6 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -308,6 +297,7 @@ plugins/<plugin>/
 | `exercise-plan` | เริ่มหรือจัดการออกกำลังกาย: เดิน · เวท · ยืดเส้นระหว่างทำงาน | — |
 | `medication-schedule` | ตารางกินยาจากฉลากยา เตือนเติมยา รายการยาที่แพ้ (ไม่กำหนดขนาดยา) | — |
 | `sleep-log` | บันทึกการนอนเพื่อดูรูปแบบหรือเอาไปให้แพทย์ดู (ไม่วินิจฉัย) | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-checkup-cycle.md` · `references/playbook-doctor-visit.md` · `references/playbook-habit-tracking.md` · `references/playbook-learn-from-session.md` · `references/playbook-medication-routine.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (2) — พิมพ์ `/health-wellness:<ชื่อ>`
 
@@ -332,21 +322,18 @@ plugins/<plugin>/
 
 จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น · ภาพประกอบ: [docs/plugins/home-family](plugins/home-family/README.md) · ต้นฉบับ: `plugins/home-family/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (5)
+### agent (2)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกก่อนเลือกทาง · ของกลาง |
 | `agents/family-planner.md` | จัดตารางครอบครัวและเมนู |
 | `agents/home-manager.md` | ดูแลบิลและการซ่อมบ้าน |
-| `agents/learning-reviewer.md` | สรุปบทเรียนหลังจบงาน · ของกลาง |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (7 + ของกลาง 7)
+### skill (8 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -356,6 +343,7 @@ plugins/<plugin>/
 | `kids-school` | จัดปีการศึกษาของลูก: วันเปิดเทอม · ค่าเทอม · เรียนพิเศษ · ย้ายโรงเรียน · ลดหย่อน | `references/school-year-planner.md` |
 | `meal-plan-grocery` | วางเมนูรายสัปดาห์ตามงบ รายการซื้อของ ลดของเหลือทิ้ง | `references/weekly-plan-template.md` |
 | `pet-care` | ดูแลสุนัขแมว: วัคซีนพิษสุนัขบ้า · ขึ้นทะเบียน · ไมโครชิป · ประวัติรักษา | `references/pet-record.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-bills.md` · `references/playbook-care-setup.md` · `references/playbook-family-week.md` · `references/playbook-learn-from-session.md` · `references/playbook-maintenance.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-vehicle.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `vehicle-care` | ดูแลรถยนต์และมอเตอร์ไซค์: พ.ร.บ. · ภาษีประจำปี · ตรวจสภาพ · เข้าศูนย์ | `references/vehicle-record.md` |
 
 ### คำสั่ง (3) — พิมพ์ `/home-family:<ชื่อ>`
@@ -383,22 +371,19 @@ plugins/<plugin>/
 
 ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด · ภาพประกอบ: [docs/plugins/online-seller](plugins/online-seller/README.md) · ต้นฉบับ: `plugins/online-seller/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (6)
+### agent (3)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกก่อนเลือกทาง · ของกลาง |
 | `agents/customer-chat.md` | ตอบลูกค้าสุภาพในชื่อร้าน |
-| `agents/learning-reviewer.md` | สรุปบทเรียนหลังจบงาน · ของกลาง |
 | `agents/live-seller.md` | วางแผนไลฟ์ขายรายนาที |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/shop-manager.md` | คิดราคา ลงสินค้า คุมสต็อก |
 
-### skill (8 + ของกลาง 7)
+### skill (9 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -410,6 +395,7 @@ plugins/<plugin>/
 | `returns-and-bad-reviews` | รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว | `references/review-replies.md` |
 | `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | — |
 | `shipping-compare` | เทียบขนส่ง (Flash · Kerry · J&T · ไปรษณีย์ไทย · SPX) ตามราคา COD และน้ำหนัก | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-live-session.md` · `references/playbook-new-product.md` · `references/playbook-pricing-check.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (4) — พิมพ์ `/online-seller:<ชื่อ>`
 
@@ -437,22 +423,19 @@ plugins/<plugin>/
 
 จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว · ภาพประกอบ: [docs/plugins/personal-life](plugins/personal-life/README.md) · ต้นฉบับ: `plugins/personal-life/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (6)
+### agent (3)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกและเลือกให้ · ของกลาง |
 | `agents/doc-caretaker.md` | ดูแลเอกสารสำคัญ |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานของทีม · ของกลาง |
 | `agents/life-admin.md` | งานธุระประจำของชีวิต |
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (14 + ของกลาง 7)
+### skill (15 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -468,6 +451,7 @@ plugins/<plugin>/
 | `personal-kb` | คลังโน้ตส่วนตัว หาโน้ตที่เคยจดให้เจอ | — |
 | `polite-message-th-en` | เขียนข้อความที่พูดยาก (ขอให้ช่วย · ปฏิเสธ · ทวงเงิน) ไทยหรืออังกฤษ | `references/templates.md` |
 | `subscription-audit` | หารายการตัดเงินรายเดือนจาก statement แล้วตัดที่ไม่คุ้ม | `references/cancel-steps.md` · `references/statement-patterns.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-decide-and-goals.md` · `references/playbook-digital-safety.md` · `references/playbook-documents.md` · `references/playbook-learn-from-session.md` · `references/playbook-meeting.md` · `references/playbook-review.md` · `references/playbook-subscriptions.md` · `references/playbook-template.md` · `references/playbook-trip.md` · `references/playbook-unattended-run.md` · `references/playbook-weekly-reset.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `travel-prep` | เตรียมเดินทาง 1-2 สัปดาห์ก่อนไป: วีซ่า · ประกัน · เงิน · กำหนดการ | `references/checklist-template.md` · `references/travel-facts.md` |
 | `weekly-review` | ทบทวนประจำสัปดาห์ สำหรับคนที่ยุ่งแต่งานไม่เดิน | — |
 
@@ -501,15 +485,14 @@ plugins/<plugin>/
 
 ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ · ภาพประกอบ: [docs/plugins/software-company](plugins/software-company/README.md) · ต้นฉบับ: `plugins/software-company/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (42)
+### agent (39)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
 | `agents/ai-engineer.md` | สร้างระบบ AI และ LLM |
 | `agents/blockchain-engineer.md` | สร้างงานบนบล็อกเชน |
-| `agents/brainstormer.md` | คิดทางเลือกเมื่อโจทย์ไม่ชัด · ของกลาง |
 | `agents/business-analyst.md` | เก็บความต้องการและเขียน BRD |
 | `agents/clinical-data-analyst.md` | วิเคราะห์ข้อมูลทางการแพทย์ |
 | `agents/data-engineer.md` | สร้างท่อข้อมูลและคลังข้อมูล |
@@ -530,7 +513,6 @@ plugins/<plugin>/
 | `agents/insurance-compliance-officer.md` | ดูกฎกำกับธุรกิจประกัน |
 | `agents/insurance-engineer.md` | สร้างระบบประกัน |
 | `agents/iot-engineer.md` | สร้างงานอุปกรณ์เชื่อมต่อ |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานตอนจบงาน · ของกลาง |
 | `agents/legal-compliance-officer.md` | ดูกฎหมายข้อมูลและ PDPA |
 | `agents/legaltech-engineer.md` | สร้างระบบเอกสารกฎหมาย |
 | `agents/mobile-engineer.md` | สร้างแอปมือถือ |
@@ -540,7 +522,6 @@ plugins/<plugin>/
 | `agents/quant-analyst.md` | คำนวณความเสี่ยงและราคาการเงิน |
 | `agents/recommendation-engineer.md` | สร้างระบบแนะนำสินค้า |
 | `agents/reverse-engineer.md` | ถอดงานที่ไม่มีซอร์สโค้ด |
-| `agents/reviewer.md` | ตรวจงานที่เสร็จด้วยสายตาใหม่ · ของกลาง |
 | `agents/revops-analyst.md` | ออกแบบการเก็บเงินแบบสมาชิก |
 | `agents/security-analyst.md` | เฝ้าระวังและรับมือเหตุความปลอดภัย |
 | `agents/security-engineer.md` | ตรวจช่องโหว่และความปลอดภัยโค้ด |
@@ -550,9 +531,9 @@ plugins/<plugin>/
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (111 + ของกลาง 7)
+### skill (113 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 **หลักการทำงาน**
 
@@ -722,7 +703,9 @@ plugins/<plugin>/
 |---|---|---|
 | `doc-cover-design` | ปกเอกสาร .docx ที่ไม่ซ้ำใคร 3 แบบ แล้วโหวต 2 ใน 3 | `references/cover-bakeoff.md` · `references/real-examples.md` · `references/structural-ideas.md` · `references/word-build.md` · `scripts/cover-engine/src/build_all.py` · `scripts/cover-engine/src/calibrate.py` · `scripts/cover-engine/src/capture.py` · `scripts/cover-engine/src/docx_build.py` · `scripts/cover-engine/src/fonts.py` · `scripts/cover-engine/src/render.py` · `scripts/cover-engine/src/web/cover.html` · `scripts/cover-engine/src/web/cover.js` · `scripts/cover-engine/src/web/projects.js` · `scripts/cover-engine/src/web/set.html` · `scripts/cover-engine/src/word_pdf.py` |
 | `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
+| `owasp-top10` | ระบบเว็บและ API ผ่าน OWASP Top 10:2025: สิ่งที่ต้องมี · วิธีพิสูจน์ · รายงานรายข้อ A01–A10 | `assets/owasp-report.md` · `references/contract-clause.md` · `references/stack-checks.md` |
 | `stack-mql` | เขียนและตรวจ MQL4 / MQL5 (EA · indicator บน MetaTrader) และเตรียมขายบน MQL5 Market | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `test-evidence` | รัน test case แล้วเก็บหลักฐาน: GIF มีคำบรรยาย · รายงานผ่าน/ไม่ผ่าน · คอลัมน์ใน Excel | `assets/fonts/LICENSE-DejaVu.txt` · `assets/fonts/OFL-Sarabun.txt` · `assets/fonts/Sarabun-Regular.ttf` · `assets/fonts/Sarabun-SemiBold.ttf` · `assets/fonts/Symbols-DejaVuSans.ttf` · `scripts/make_evidence.py` · `scripts/record_results.py` |
 
 ### คำสั่ง (29) — พิมพ์ `/software-company:<ชื่อ>`
@@ -784,7 +767,7 @@ plugins/<plugin>/
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ · ภาพประกอบ: [docs/plugins/superuser](plugins/superuser/README.md) · ต้นฉบับ: `plugins/superuser/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
 
 ### agent (3)
 
@@ -794,9 +777,13 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (0 + ของกลาง 7)
+### skill (1 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+
+| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
+|---|---|---|
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/CONTEXT.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/improvements-queue.md` |
 
 ### playbook (5) — `skills/superuser/references/`
 
@@ -812,23 +799,20 @@ plugins/<plugin>/
 
 เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย · ภาพประกอบ: [docs/plugins/thai-workplace](plugins/thai-workplace/README.md) · ต้นฉบับ: `plugins/thai-workplace/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (7)
+### agent (4)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
-| `agents/brainstormer.md` | คิดทางเลือกและเลือกให้ · ของกลาง |
 | `agents/compliance-helper.md` | ดูแลข้อมูลส่วนบุคคล PDPA |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานของทีม · ของกลาง |
 | `agents/line-admin.md` | ดูแลบัญชี LINE OA |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
 | `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (17 + ของกลาง 7)
+### skill (18 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -847,6 +831,7 @@ plugins/<plugin>/
 | `pdpa-workflow` | เอกสาร PDPA ของ SME: ความยินยอม · ROPA · คำขอเจ้าของข้อมูล · แจ้งข้อมูลรั่ว | `references/pdpa-templates.md` |
 | `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` |
 | `social-security-th` | ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-monthly-close.md` · `references/playbook-pdpa-setup.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `tax-vat-th` | เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53) | `references/wht-rates.md` |
 | `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
 
@@ -880,23 +865,20 @@ plugins/<plugin>/
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ · ภาพประกอบ: [docs/plugins/trading-finance](plugins/trading-finance/README.md) · ต้นฉบับ: `plugins/trading-finance/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (7)
+### agent (4)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
 | `agents/alert-dispatcher.md` | ตั้งเตือนราคาและข่าว |
-| `agents/brainstormer.md` | คิดทางเลือกและเลือกให้ · ของกลาง |
-| `agents/learning-reviewer.md` | ทบทวนวิธีทำงานของทีม · ของกลาง |
 | `agents/market-analyst.md` | อ่านราคาและข่าวหุ้น |
-| `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 
-### skill (18 + ของกลาง 7)
+### skill (19 + ของกลาง 7)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · `superuser` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -913,6 +895,7 @@ plugins/<plugin>/
 | `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | — |
 | `retirement-plan` | เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร | — |
 | `scam-check` | เช็กก่อนโอนเงินให้แอปลงทุน แอปกู้ กลุ่ม LINE หรือคนที่โทรมา | `references/red-flags-and-evidence.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
 | `tax-basics-th` | ภาษีจากหุ้น ปันผล ดอกเบี้ย คริปโต และเงินได้ต่างประเทศ (ภ.ง.ด.90 · 91) | `references/investment-income-rules.md` |
 | `tax-deduction-planner` | วางแผนลดหย่อนภาษีก่อนสิ้นปี ซื้อ RMF หรือ ThaiESG เท่าไร | `references/deductions-2569.md` |
 | `technical-signals` | กราฟบอกอะไร ตอนนี้เข้าได้ไหม RSI · MACD · volume หมายถึงอะไร | — |

@@ -2,51 +2,44 @@
 
 ย้ายมาจาก agent `security-engineer` · agent และ `/threat-model` เปิดไฟล์นี้เมื่อต้องเขียนเอกสารจริง · กรอกจากของจริง ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
-- [กรอบที่ใช้](#กรอบที่ใช้) — OWASP Top 10 · STRIDE · defense in depth
+- [กรอบที่ใช้](#กรอบที่ใช้) — OWASP Top 10:2025 · STRIDE · defense in depth
 - [Quick Reference: Common Vulnerabilities](#quick-reference-common-vulnerabilities)
 - [แม่แบบเอกสาร](#แม่แบบเอกสาร) — threat model · security code review · compliance audit brief
 
 ## กรอบที่ใช้
 
-### OWASP Top 10 (Web Application)
-1. Broken Access Control
-2. Cryptographic Failures
-3. Injection (SQL, NoSQL, OS, LDAP)
-4. Insecure Design
-5. Security Misconfiguration
-6. Vulnerable & Outdated Components
-7. Identification & Authentication Failures
-8. Software & Data Integrity Failures
-9. Security Logging & Monitoring Failures
-10. Server-Side Request Forgery (SSRF)
+### OWASP Top 10:2025 (Web Application)
+A01 Broken Access Control (รวม SSRF) · A02 Security Misconfiguration · A03 Software Supply Chain Failures · A04 Cryptographic Failures · A05 Injection · A06 Insecure Design · A07 Authentication Failures · A08 Software or Data Integrity Failures · A09 Security Logging and Alerting Failures · A10 Mishandling of Exceptional Conditions
+
+สิ่งที่ต้องมี วิธีพิสูจน์ และรายงานรายข้อ → skill [`owasp-top10`](../../owasp-top10/SKILL.md)
 
 ### STRIDE Threat Categories
 
 | Category | Threat | Example | Defense |
 |----------|--------|---------|---------|
-| 🎭 **S**poofing | Identity theft | Phishing, session hijack | Strong auth, MFA |
-| 🔄 **T**ampering | Data modification | SQL injection, XSS | Input validation, integrity checks |
-| 🚫 **R**epudiation | Deny actions | No audit trail | Logging, non-repudiation |
-| 📢 **I**nformation Disclosure | Data leak | SQL dump, log exposure | Encryption, least privilege |
-| 🛑 **D**enial of Service | Service down | DDoS, resource exhaustion | Rate limiting, autoscaling |
-| ⬆️ **E**levation of Privilege | Privilege escalation | Broken access control | RBAC, regular reviews |
+| **S**poofing | Identity theft | Phishing, session hijack | Strong auth, MFA |
+| **T**ampering | Data modification | SQL injection, XSS | Input validation, integrity checks |
+| **R**epudiation | Deny actions | No audit trail | Logging, non-repudiation |
+| **I**nformation Disclosure | Data leak | SQL dump, log exposure | Encryption, least privilege |
+| **D**enial of Service | Service down | DDoS, resource exhaustion | Rate limiting, autoscaling |
+| **E**levation of Privilege | Privilege escalation | Broken access control | RBAC, regular reviews |
 
 ### Defense in Depth Layers
 
 ```
 Internet
   ↓
-🌐 Edge (CDN, WAF, DDoS protection)
+Edge (CDN, WAF, DDoS protection)
   ↓
-🔐 Perimeter (Load balancer, TLS termination)
+Perimeter (Load balancer, TLS termination)
   ↓
-🌉 Network (VPC, segmentation, firewall rules)
+Network (VPC, segmentation, firewall rules)
   ↓
-🖥️ Host (Hardened OS, EDR, patching)
+Host (Hardened OS, EDR, patching)
   ↓
-📦 Application (Auth, input validation, secure coding)
+Application (Auth, input validation, secure coding)
   ↓
-💾 Data (Encryption, masking, access controls)
+Data (Encryption, masking, access controls)
 ```
 
 ## Quick Reference: Common Vulnerabilities
@@ -67,18 +60,18 @@ Internet
 ### Threat Model (STRIDE)
 
 ```markdown
-# 🔒 Threat Model: <Feature/System Name>
+# Threat Model: <Feature/System Name>
 
 | | |
 |--|--|
 | **Document Type** | Threat Model |
 | **Framework** | STRIDE |
-| **Status** | 🟡 Draft |
+| **Status** | Draft |
 | **Reviewer** | @security-team |
 
 ---
 
-## 🎯 Scope
+## Scope
 
 **In scope:**
 - Component A
@@ -87,15 +80,15 @@ Internet
 **Out of scope:**
 - Component X (covered by separate model)
 
-## 🗺️ Data Flow Diagram
+## Data Flow Diagram
 
 \`\`\`mermaid
 flowchart LR
-    User([👤 User]) -->|HTTPS| WAF[🛡️ WAF]
-    WAF --> LB[⚖️ Load Balancer]
-    LB --> API[🔷 API]
-    API -->|Internal TLS| DB[(💾 Database)]
-    API -->|API key| Ext[🌐 External Service]
+    User([User]) -->|HTTPS| WAF[WAF]
+    WAF --> LB[Load Balancer]
+    LB --> API[API]
+    API -->|Internal TLS| DB[(Database)]
+    API -->|API key| Ext[External Service]
 
     classDef trust1 fill:#e1f5ff
     classDef trust2 fill:#fff4e1
@@ -106,18 +99,18 @@ flowchart LR
     class DB,Ext trust3
 \`\`\`
 
-> 📝 **Trust boundaries:** Internet → DMZ → Internal → Data tier
+> **Trust boundaries:** Internet → DMZ → Internal → Data tier
 
-## 🚨 Identified Threats
+## Identified Threats
 
 | # | Component | Threat (STRIDE) | Likelihood | Impact | Risk | Mitigation |
 |:-:|-----------|-----------------|:----------:|:------:|:----:|------------|
-| 1 | API | 💉 Injection (T) | 🟡 Med | 🔴 High | 🔴 H | Parameterized queries, input validation |
-| 2 | Session | 🎭 Hijacking (S) | 🟡 Med | 🔴 High | 🔴 H | HttpOnly, Secure, SameSite cookies |
-| 3 | Auth | ⬆️ Bypass (E) | 🟢 Low | 🔴 High | 🟡 M | Strong RBAC, audit logs |
-| 4 | DB backup | 📢 Disclosure (I) | 🟢 Low | 🔴 High | 🟡 M | Encryption at rest, access control |
+| 1 | API | Injection (T) | Medium | High | High | Parameterized queries, input validation |
+| 2 | Session | Hijacking (S) | Medium | High | High | HttpOnly, Secure, SameSite cookies |
+| 3 | Auth | Bypass (E) | Low | High | Medium | Strong RBAC, audit logs |
+| 4 | DB backup | Disclosure (I) | Low | High | Medium | Encryption at rest, access control |
 
-## 🛡️ Required Controls
+## Required Controls
 
 ### Authentication
 - [ ] MFA for all admin accounts
@@ -142,103 +135,103 @@ flowchart LR
 - [ ] Logs shipped to immutable store
 - [ ] Alerts on suspicious patterns
 
-## ⚠️ Residual Risks
+## Residual Risks
 
 After mitigations, what risk remains?
 
 | Risk | Acceptable? | Owner |
 |------|:-----------:|:------|
-| ... | ✅ Yes | @cto |
+| ... | Yes | @cto |
 
-## ✍️ Sign-off
+## Sign-off
 
 | Role | Name | Status | Date |
 |------|------|:------:|------|
-| Security Lead | @sec | ⚪ Pending | — |
-| Architect | @architect | ⚪ Pending | — |
-| Compliance | @compliance | ⚪ Pending | — |
+| Security Lead | @sec | Pending | — |
+| Architect | @architect | Pending | — |
+| Compliance | @compliance | Pending | — |
 ```
 
 ### Security Code Review
 
 ```markdown
-# 🔍 Security Review: <PR / Component>
+# Security Review: <PR / Component>
 
 **Reviewer:** @sec-name
 **Scope:** ...
-**Risk Level:** 🟡 Medium
+**Risk Level:** Medium
 
 ---
 
-## ✅ What Looks Good
+## What Looks Good
 
-- ✅ Input validation present
-- ✅ Parameterized queries used
-- ✅ Secrets via env vars, not code
+- Input validation present
+- Parameterized queries used
+- Secrets via env vars, not code
 
-## 🚨 Critical Findings (Must Fix Before Merge)
+## Critical Findings (Must Fix Before Merge)
 
-### 🔴 SEC-001: XSS in profile.tsx:45
+### SEC-001: XSS in profile.tsx:45
 
 **Issue:**
 \`\`\`typescript
 // User-controlled name rendered without escaping
-return <div>{user.name}</div>; // ⚠️ if name = "<script>...", fires
+return <div>{user.name}</div>; // if name = "<script>...", fires
 \`\`\`
 
-**Severity:** 🔴 Critical
-**OWASP:** A03 (Injection)
+**Severity:** Critical
+**OWASP:** A05:2025 (Injection)
 
 **Fix:**
 \`\`\`typescript
 // React escapes by default — confirmed safe
-return <div>{user.name}</div>; // ✅ already safe in JSX
+return <div>{user.name}</div>; // already safe in JSX
 // But for innerHTML cases, use sanitization library
 \`\`\`
 
-## 🟡 High Findings (Fix in This Sprint)
+## High Findings (Fix in This Sprint)
 
-### 🟡 SEC-002: Insufficient rate limiting on /auth/login
+### SEC-002: Insufficient rate limiting on /auth/login
 
 **Issue:** No rate limit on failed login attempts → brute force risk
 **Fix:** Add `express-rate-limit` with 5 attempts / 15 min per IP
 
-## 🟢 Suggestions (Nice-to-Have)
+## Suggestions (Nice-to-Have)
 
 - nit: Consider adding CSRF token to forms
 - nit: Update Helmet config to include HSTS preload
 
-## 📋 Compliance Notes
+## Compliance Notes
 
 - 🇪🇺 GDPR: PII handling looks compliant
-- 💳 PCI: No card data touched
+- PCI: No card data touched
 ```
 
 ### Compliance Audit Brief
 
 ```markdown
-# 📋 Compliance Audit: PDPA Readiness
+# Compliance Audit: PDPA Readiness
 
 | | |
 |--|--|
 | **Scope** | Full application |
 | **Regulation** | Thai PDPA 2019 |
-| **Status** | 🟡 In Progress |
+| **Status** | In Progress |
 
-## 📊 Readiness by Pillar
+## Readiness by Pillar
 
 | Pillar | Status | Evidence | Gaps |
 |--------|:------:|----------|------|
-| Lawful basis | 🟢 | Consent UI live | — |
-| Data inventory | 🟡 | Partial map | Backups not mapped |
-| Subject rights | 🟢 | Export/delete API | — |
-| Breach response | 🟡 | Plan drafted | Not yet tested |
-| Cross-border | 🔴 | — | No SCC with US vendor |
+| Lawful basis | Compliant | Consent UI live | — |
+| Data inventory | Partial | Partial map | Backups not mapped |
+| Subject rights | Compliant | Export/delete API | — |
+| Breach response | Partial | Plan drafted | Not yet tested |
+| Cross-border | Gap | — | No SCC with US vendor |
 
-## 🚨 Critical Gaps
+## Critical Gaps
 
 | ID | Gap | Severity | Deadline |
 |:--:|-----|:--------:|----------|
-| G-001 | No DPA with vendor X | 🔴 H | 30 days |
-| G-002 | Backup retention undefined | 🟡 M | 60 days |
+| G-001 | No DPA with vendor X | High | 30 days |
+| G-002 | Backup retention undefined | Medium | 60 days |
 ```

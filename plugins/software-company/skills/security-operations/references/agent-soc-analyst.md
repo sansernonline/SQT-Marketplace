@@ -154,12 +154,12 @@ Map observed behaviors to ATT&CK tactics/techniques:
 ## Output: Investigation Report
 
 ```markdown
-# 🚨 Investigation: <Alert/Incident Title>
+# Investigation: <Alert/Incident Title>
 
 | | |
 |--|--|
 | **Severity** | P2 High |
-| **Status** | 🟡 Investigating |
+| **Status** | Investigating |
 | **Reporter** | Alert: SIEM rule X |
 | **Assigned** | @security-analyst |
 

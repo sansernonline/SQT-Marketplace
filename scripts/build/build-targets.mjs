@@ -8,7 +8,9 @@
  * แหล่งความจริงคือ plugins/ (รูปแบบ Claude) เท่านั้น · dist/ เป็นผลลัพธ์ ห้ามแก้มือ
  * สคริปต์ลบโฟลเดอร์ผลลัพธ์ทิ้งแล้วสร้างใหม่ทุกครั้ง
  *
- * ทุก plugin ได้ชุดของตัวเอง เพราะชื่อ skill ซ้ำกันข้าม plugin ได้ (เช่น superuser · human-writing)
+ * ทุก plugin ได้ชุดของตัวเอง เพราะชื่อ skill ซ้ำกันข้าม plugin ได้ (เช่น superuser)
+ * ของกลาง (human-writing · answer-shape · reviewer · hook …) อยู่ใน plugins/superuser ที่เดียว · Claude Code ได้มาทาง dependencies
+ * ปลายทางอื่นไม่มี dependencies → สคริปต์ใส่ของกลางลงชุดของทุก plugin ที่ประกาศ dependencies: ["superuser"] ให้ใช้เดี่ยวได้
  *
  *   dist/claude-web/<plugin>.zip         claude.ai (Cowork / แชทเว็บ) อัปโหลดทีละไฟล์
  *   dist/codex/<plugin>/                 OpenAI Codex CLI → .agents/skills · .codex/agents/*.toml · AGENTS.md
@@ -54,7 +56,7 @@ function parse(file) {
   return { fields, body: match[2].trim() + "\n" };
 }
 
-const plugins = listDir(join(ROOT, "plugins")).map((plugin) => {
+const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
   const dir = join(ROOT, "plugins", plugin);
   const read = (sub, toItem) => listDir(join(dir, sub)).map((n) => toItem(n, join(dir, sub, n)));
   const meta = JSON.parse(readFileSync(join(dir, ".claude-plugin", "plugin.json"), "utf8"));
@@ -71,7 +73,27 @@ const plugins = listDir(join(ROOT, "plugins")).map((plugin) => {
     skillByName: new Map(skills.map((s) => [s.name, s])),
     agents: read("agents", (n, path) => ({ name: n.replace(/\.md$/, ""), ...parse(path) })),
     commands: all.filter(isCommand),
+    dependsOnSuperuser: (meta.dependencies ?? []).some((d) => String(typeof d === "string" ? d : d.name).split("@")[0] === "superuser"),
+    meta,
   };
+});
+
+// ของกลางจาก superuser ที่ plugin อื่นใช้ร่วม · ชุดสำหรับปลายทางอื่นต้องใช้เดี่ยวได้ จึงใส่ให้ทุก plugin ที่ประกาศ dependencies
+const SHARED_SKILLS = ["agent-patterns", "answer-shape", "commit-log", "handoff", "human-writing", "no-ai-look", "simplify"];
+const SHARED_AGENTS = ["brainstormer", "reviewer", "learning-reviewer"];
+const core = loaded.find((p) => p.plugin === "superuser");
+const plugins = loaded.map((p) => {
+  if (!p.dependsOnSuperuser || !core) return { ...p, shared: [] };
+  const skills = [...p.skills, ...core.skills.filter((s) => SHARED_SKILLS.includes(s.name) && !p.skillByName.has(s.name))];
+  const have = new Set(p.agents.map((a) => a.name));
+  const agents = [...p.agents, ...core.agents.filter((a) => SHARED_AGENTS.includes(a.name) && !have.has(a.name))];
+  // ไฟล์ของกลางสำหรับ zip: skill · agent · hook ของ superuser วางที่ path เดียวกันใน plugin นี้
+  const shared = [
+    ...SHARED_SKILLS.flatMap((n) => filesUnder(join(core.dir, "skills", n), `skills/${n}/`)),
+    ...SHARED_AGENTS.map((n) => ({ path: join(core.dir, "agents", `${n}.md`), name: `agents/${n}.md` })),
+    ...filesUnder(join(core.dir, "hooks"), "hooks/"),
+  ].filter((f) => existsSync(f.path));
+  return { ...p, skills, skillByName: new Map(skills.map((s) => [s.name, s])), agents, shared };
 });
 
 // ── ตัวช่วยเขียนไฟล์ ──────────────────────────────────────────────────
@@ -272,7 +294,7 @@ function writeZip(out, files) {
   const local = [], central = [];
   let offset = 0;
   for (const f of files) {
-    const data = readFileSync(f.path);
+    const data = f.data ?? readFileSync(f.path);
     const packed = deflateRawSync(data);
     const name = Buffer.from(f.name, "utf8");
     const head = (size) => {
@@ -312,7 +334,16 @@ function writeZip(out, files) {
 
 // โฟลเดอร์หลักในไฟล์ zip ต้องเป็น <plugin>/ ไม่ใช่ plugins/<plugin>/
 function buildClaudeWeb(p) {
-  const files = filesUnder(p.dir, `${p.plugin}/`).filter((f) => !WEB_SKIP.some((re) => re.test(f.name)) && !JUNK.test(f.name));
+  // zip ใช้เดี่ยวได้: ใส่ของกลางจาก superuser และตัด dependencies ออกจาก plugin.json (claude.ai ไม่ได้ติดตั้ง superuser ให้)
+  // agent ที่โหลด skill กลางด้วยชื่อเต็ม (superuser:simplify) → ใน zip ของกลางเป็นของ plugin นี้เอง จึงเปลี่ยนชื่อนำหน้า
+  // ตัวบอก skill และกฎประจำตัวใน hooks/ ก็อ้าง superuser:simplify เช่นกัน
+  const local = (f) => /\/agents\/[^/]+\.md$|\/hooks\/(skill-router\.json|core-rules\.md)$/.test(f.name) && p.shared.length
+    ? { ...f, data: Buffer.from(readFileSync(f.path, "utf8").replace(/^(\s+- )superuser:/gm, `$1${p.plugin}:`).replace(/(["`])superuser:/g, `$1${p.plugin}:`)) } : f;
+  const own = filesUnder(p.dir, `${p.plugin}/`).map((f) => f.name === `${p.plugin}/.claude-plugin/plugin.json` && p.shared.length
+    ? { ...f, data: Buffer.from(JSON.stringify({ ...p.meta, dependencies: undefined }, null, 2) + "\n") } : local(f));
+  const files = [...own, ...p.shared.map((f) => local({ ...f, name: `${p.plugin}/${f.name}` }))]
+    .filter((f) => !WEB_SKIP.some((re) => re.test(f.name)) && !JUNK.test(f.name))
+    .sort((a, b) => (a.name < b.name ? -1 : 1));
   const out = join(DIST, "claude-web", `${p.plugin}.zip`);
   writeZip(out, files);
   return statSync(out).size;

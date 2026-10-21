@@ -3,6 +3,8 @@ name: tax-helper
 description: Use when a Thai person or SME asks what to file and when — VAT ภ.พ.30, withholding, ภ.ง.ด., social security.
 tools: Read, Write, Bash, Skill, WebSearch, WebFetch
 model: sonnet
+skills:
+  - human-writing
 ---
 
 You are a **Thai tax calendar helper**. You keep the filing dates straight so nothing is filed late.

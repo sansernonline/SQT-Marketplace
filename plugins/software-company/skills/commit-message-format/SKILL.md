@@ -1,6 +1,6 @@
 ---
 name: commit-message-format
-description: Use when writing a git commit message (Conventional Commits — type, scope, body, footer).
+description: Use when setting up commitlint or semantic-release, or a commit needs release rules (scope, BREAKING CHANGE). Everyday commits → commit-log.
 ---
 
 # Conventional Commit Message Format

@@ -9,14 +9,14 @@ This is the "beautiful design" mode. Use Rich Markdown + Mermaid.
 Every stakeholder doc MUST follow this structure:
 
 ```markdown
-# 📋 <Document Title>
+# <Document Title>
 
 > **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
 > **Authors:** ... · **Reviewers:** ...
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 1. [Executive Summary](#executive-summary)
 2. [Scope](#scope)
@@ -33,7 +33,7 @@ Every stakeholder doc MUST follow this structure:
 
 ## 1. Executive Summary
 
-> 💡 **For non-technical readers** — 1 paragraph explaining what this feature does and why.
+> **For non-technical readers** — 1 paragraph explaining what this feature does and why.
 
 <content>
 
@@ -41,10 +41,10 @@ Every stakeholder doc MUST follow this structure:
 
 ## 2. Scope
 
-### ✅ In Scope
+### In Scope
 - ...
 
-### ❌ Out of Scope
+### Out of Scope
 - ...
 
 [... continue all sections ...]
@@ -59,38 +59,27 @@ Every stakeholder doc MUST follow this structure:
 - Always add TOC for docs with 5+ sections
 - Use anchor links in TOC
 
-### Visual Markers (Emoji)
+### Visual Markers
 
-Use emoji **purposefully**, not decoratively:
+No emoji or icons in headings, body, tables, labels or callouts (`human-writing` · `polished-document-style`). Use words:
 
-| Marker | Meaning |
+| Need | Write |
 |--------|---------|
-| 📋 | Document/list |
-| 📑 | TOC/index |
-| 💡 | Tip/insight |
-| ⚠️ | Warning/caution |
-| 🚨 | Critical |
-| ✅ | Yes/approved/in scope |
-| ❌ | No/rejected/out of scope |
-| 🟢 🟡 🔴 | Status indicators |
-| 🔒 | Security |
-| ⚡ | Performance |
-| 🎯 | Goal/objective |
-| 👤 | Actor/user |
-| 🔄 | Flow/process |
-| 📊 | Data |
-| 🌐 | API/integration |
+| Yes / no in a table | ✓ / ✗ |
+| Status | Draft · Approved · Pending · In Progress |
+| Severity or priority | Critical · High · Medium · Low |
+| Tip, warning, critical, note | Bold callout label (below) |
 
 ### Callout Boxes (Blockquotes)
 
 ```markdown
-> 💡 **Tip:** Brief insight here.
+> **Tip:** Brief insight here.
 
-> ⚠️ **Warning:** Important caveat.
+> **Warning:** Important caveat.
 
-> 🚨 **Critical:** Must read before proceeding.
+> **Critical:** Must read before proceeding.
 
-> 📝 **Note:** Additional context.
+> **Note:** Additional context.
 ```
 
 ### Tables
@@ -100,8 +89,8 @@ Prefer tables over bullet lists when data has 2+ attributes:
 ```markdown
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| email | string | ✅ | User's email |
-| age | number | ❌ | Optional |
+| email | string | ✓ | User's email |
+| age | number | ✗ | Optional |
 ```
 
 Align headers to data when helpful:
@@ -113,14 +102,14 @@ Align headers to data when helpful:
 ### Status Badges (in tables/inline)
 
 ```markdown
-**Status:** 🟢 Approved
-**Priority:** 🔴 High
-**Risk:** 🟡 Medium
+**Status:** Approved
+**Priority:** High
+**Risk:** Medium
 ```
 
 ---
 
-# 🔷 Mermaid Diagrams
+# Mermaid Diagrams
 
 Use Mermaid for ALL diagrams. They render in GitHub/Notion/VSCode.
 
@@ -217,7 +206,7 @@ flowchart TD
 
 ---
 
-# 📋 Templates
+# Templates
 
 ## Use Case Template (Mode B)
 
@@ -227,19 +216,19 @@ flowchart TD
 | Field | Value |
 |-------|-------|
 | **ID** | UC-001 |
-| **Actor** | 👤 Customer |
-| **Priority** | 🔴 High |
-| **Status** | 🟢 Approved |
+| **Actor** | Customer |
+| **Priority** | High |
+| **Status** | Approved |
 | **Trigger** | User clicks "Place Order" |
 
 #### Preconditions
-- ✅ User is authenticated
-- ✅ Cart contains at least 1 item
+- User is authenticated
+- Cart contains at least 1 item
 
 #### Postconditions
-- ✅ Order created with status `pending`
-- ✅ Inventory reserved
-- ✅ Confirmation email sent
+- Order created with status `pending`
+- Inventory reserved
+- Confirmation email sent
 
 #### Main Flow
 
@@ -290,23 +279,23 @@ sequenceDiagram
 ## API Endpoint Template (Mode B)
 
 ```markdown
-### 🌐 POST `/api/v1/orders`
+### POST `/api/v1/orders`
 
 > Create a new order from cart contents.
 
 | Attribute | Value |
 |-----------|-------|
-| **Auth Required** | ✅ Yes (Bearer token) |
+| **Auth Required** | Yes (Bearer token) |
 | **Rate Limit** | 10 req/min per user |
-| **Idempotent** | ✅ Yes (use `Idempotency-Key` header) |
+| **Idempotent** | Yes (use `Idempotency-Key` header) |
 
 #### Request Headers
 
 | Header | Required | Example |
 |--------|:--------:|---------|
-| `Authorization` | ✅ | `Bearer eyJ...` |
-| `Idempotency-Key` | ⚠️ Recommended | `unique-request-id` |
-| `Content-Type` | ✅ | `application/json` |
+| `Authorization` | ✓ | `Bearer eyJ...` |
+| `Idempotency-Key` | Recommended | `unique-request-id` |
+| `Content-Type` | ✓ | `application/json` |
 
 #### Request Body
 
@@ -339,17 +328,17 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 
 | Code | When | `type` (suffix) |
 |:----:|:-----|:-----|
-| 🔴 401 | Missing/invalid token | `unauthorized` |
-| 🟡 402 | Payment declined | `payment-declined` |
-| 🟡 409 | Inventory unavailable | `out-of-stock` |
-| 🔴 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
-| 🔴 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
+| 401 | Missing/invalid token | `unauthorized` |
+| 402 | Payment declined | `payment-declined` |
+| 409 | Inventory unavailable | `out-of-stock` |
+| 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
+| 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
 ```
 
 ## Data Model Template (Mode B)
 
 ```markdown
-## 📊 Data Model
+## Data Model
 
 ### Entity Relationship Diagram
 
@@ -369,7 +358,7 @@ erDiagram
 | `email` | VARCHAR(255) | UNIQUE, NOT NULL | Login email |
 | `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
 
-> 🔒 **Security:** `email` is encrypted at rest using AES-256.
+> **Security:** `email` is encrypted at rest using AES-256.
 ```
 
 ---

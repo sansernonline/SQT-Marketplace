@@ -1,5 +1,34 @@
 # Changelog — superuser
 
+## 2.1.0 — 2026-10-21
+
+- skill กลางใหม่ `handoff` (ส่วนหนึ่งของ superuser) — ใบสั่งงาน 5 หัวข้อ · ใบส่งงานต่อท้ายใบเดียวกัน · รับงานต่อข้าม session และตอนสลับโมเดล · พิธีเริ่มงาน 4 ขั้น · ชุดส่งต่อให้คน bot อื่น Quix และ Agent Desk
+- โฟลเดอร์ใหม่ `.claude/superuser/handoff/` (1 ชิ้น 1 ไฟล์ · ไม่ commit) · หัวไฟล์ตาม `references/handoff.schema.json` เป็นสัญญากับเครื่องอ่าน
+- `superuser` หัวข้อ 5 ชี้ไปที่ `handoff` แทนการเขียนรายการคำสั่งซ้ำ · `team-files` เพิ่มแถว `handoff/` · `skill-router.json` และ `CLAUDE.global.md` เพิ่มแถว `handoff`
+
+## 2.0.0 — 2026-10-21
+
+- **ของกลางอยู่ที่นี่ที่เดียว** — skill `agent-patterns` · `answer-shape` · `commit-log` · `human-writing` · `no-ai-look` · `simplify` · agent `reviewer` · `brainstormer` · `learning-reviewer` · `hooks/` ไม่คัดลอกไป plugin อื่นแล้ว · plugin อื่นประกาศ `"dependencies": ["superuser"]` · เหตุผล: สำเนา 12 ชุดทำให้รายการ skill ยาว 49,564 ตัวอักษร เกินงบ 30,000 จนคำอธิบายถูกตัด และ hook ทำงานซ้ำ 12 ครั้งต่อเหตุการณ์ (วัดจาก debug log ของ Claude Code 2.1.306)
+- hook ส่งกฎประจำตัว (`hooks/core-rules.md` = สำเนาของ `scripts/install/CLAUDE.global.md`) ตอนเริ่มทุก session ที่ยังไม่ได้ติดตั้งไฟล์นั้น · subagent ได้เฉพาะตาราง "เปิด skill ก่อนลงมือ" (SubagentStart)
+- hook บอกชื่อ skill ที่ต้องเปิดตามคำในข้อความผู้ใช้ (`hooks/skill-router.json`) · self-test เพิ่ม 8 ข้อ
+- `human-writing`: คำอธิบายบอกว่าใช้กับการแก้ไฟล์ด้วย · เพิ่มกฎตัวเลขที่เปลี่ยนตามเวลาต้องมีแหล่งและวันที่ · ข้อมูลจำลองติดป้าย · วันที่ พ.ศ./ค.ศ. · คำสถานะ 5 คำ · เอกสาร 2 ภาษา · ระดับความรุนแรงใช้คำ
+- agent `reviewer` โหลด `human-writing` ตั้งแต่เริ่ม (`skills:`)
+- ลิงก์ไฟล์ข้าม skill กลาง (`../human-writing/SKILL.md`) เปลี่ยนเป็นชื่อ skill เพราะ path ไม่มีใน plugin อื่นแล้ว
+
+## 1.8.0 — 2026-10-21
+
+- hook เขียน `log/SUMMARY.md` ให้คนอ่านทุกครั้งที่หัวหน้าทีมจบรอบ — ราย agent สะสม (ได้รับงาน · จบปกติ · ล้ม · การทำ · เวลาทำงาน) · งานที่ส่งลูกทีมวันนี้ · รายวัน 30 วัน · วันเก่าเก็บผลนับไว้ใน `day.json` · self-test เพิ่ม 1 ข้อ
+- คิวกลางเปลี่ยนชื่อเป็น `~/.claude/superuser/IMPROVEMENTS.md` (ตัวใหญ่ ตรงกับไฟล์ในโปรเจกต์) · ไฟล์เดิมบน Windows ใช้ต่อได้
+
+## 1.7.0 — 2026-10-21
+
+- ของกลางเพิ่ม 3 บล็อกใน reference · sync ไปทุก plugin แล้ว `--check` จับได้เมื่อแก้ผิดที่
+  - `playbook-review` ขั้น 2–6 (บล็อก `review-steps`) · ขั้น 3 ทุก plugin ใช้แบบเดียวกัน: งานใหญ่เพิ่มผู้ตรวจตัวใหม่ `model: opus` และสั่ง "ห้ามเขียนหรือแก้ไฟล์" (เดิมมีแค่ 7 จาก 11 plugin)
+  - `playbook-unattended-run` ขั้นตอนทั้งหมด (บล็อก `unattended-steps`) · ของเฉพาะ plugin ย้ายขึ้นหัวไฟล์ 3 บรรทัด: `ลูกทีมต่อชิ้น` · `ผู้ตรวจต่อชิ้น` · `รออนุมัติที่เจอบ่อย`
+  - `context-template` (บล็อก `context`) สร้างจาก `templates/CONTEXT.md` + `templates/IMPROVEMENTS.md` · ค่าเฉพาะ plugin อยู่หัวข้อ "ค่าของ plugin นี้" · ทุก plugin ได้หัวข้อ "ระวัง" และ "ไฟล์อื่น" ที่เคยขาด
+- `examples.md` ตัดกฎระดับโมเดลที่เขียนซ้ำกับ `SKILL.md` ออก เหลือตัวอย่างงานของแต่ละระดับ
+- `software-company` ไม่รับบล็อก `review-steps` · `unattended-steps` (`OPT_OUT`)
+
 ## 1.6.0 — 2026-10-21
 
 - skill กลางใหม่ `commit-log` — จบ 1 ขั้นที่ตรวจผ่าน → commit 1 ครั้งรูปแบบ Conventional Commits (11 type) ให้ git log เป็นบันทึกงาน · จด hash ลง log · ไม่ push เว้นแต่ผู้ใช้สั่ง · sync ไปทุก plugin

@@ -9,7 +9,7 @@
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**42 agents · 118 skills · 29 commands**
+**39 agents · 113 skills · 29 commands**
 
 ### ติดตั้ง
 ```
@@ -71,7 +71,7 @@ SQT-Marketplace/
 ├── plugins/software-company/
 │   ├── agents/      41 บทบาท
 │   ├── skills/      111 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
-│   └── hooks/       hook ของ SuperUser — เขียน .claude/superuser/log และแจ้ง inbox (ทุก plugin มีชุดเดียวกัน)
+│   └── (hook อยู่ใน plugins/superuser/hooks/ · ใช้ร่วมทาง dependencies)
 ├── docs/            INSTALL · USAGE · REFERENCE · PLUGINS (ไฟล์นี้)
 └── README.md
 ```

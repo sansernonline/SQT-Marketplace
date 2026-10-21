@@ -5,7 +5,7 @@ description: Use when a slide deck is asked for as HTML or with animation — on
 
 # HTML Slide Deck
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม [`human-writing`](../human-writing/SKILL.md) · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีสร้างและหน้าตา
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีสร้างและหน้าตา
 
 > **กฎข้อเดียวของ skill นี้:** เด็คคือไฟล์ .html **ไฟล์เดียว** ที่เปิดในเบราว์เซอร์แล้วนำเสนอได้ทันที
 > รูปฝังในไฟล์ · หัวสไลด์เป็นข้อสรุป · ทุกหน้าผ่าน `check_deck.py` ก่อนส่ง

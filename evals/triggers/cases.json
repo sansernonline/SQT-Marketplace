@@ -1,0 +1,12 @@
+[
+  { "id": "docx-edit", "prompt": "แก้ไฟล์ report.docx ในโฟลเดอร์นี้ ให้หัวข้อดูเป็นทางการขึ้น เหมาะส่งผู้บริหาร", "expect_all": ["human-writing"], "expect_any": ["docx", "polished-document-style"] },
+  { "id": "meeting-minutes", "prompt": "สรุปบันทึกการประชุมจาก notes.txt เป็นรายงานการประชุมภาษาไทยให้หน่อย", "expect_all": ["human-writing"], "expect_any": ["meeting-summary"] },
+  { "id": "client-email", "prompt": "Write a short email to our client explaining the go-live moves to 15 Nov because the vendor API docs are late.", "expect_all": ["human-writing"], "expect_any": [] },
+  { "id": "readme", "prompt": "เขียน README.md สั้น ๆ สำหรับสคริปต์รวมยอดขายจาก sales.csv", "expect_all": ["human-writing"], "expect_any": [] },
+  { "id": "compare", "prompt": "เปรียบเทียบ PostgreSQL กับ SQL Server สำหรับระบบ ERP ขนาดกลาง ควรเลือกตัวไหน", "expect_all": [], "expect_any": ["answer-shape", "human-writing"] },
+  { "id": "python-code", "prompt": "เขียนสคริปต์ Python อ่าน sales.csv แล้วรวมยอดตามสาขา", "expect_all": [], "expect_any": ["simplify", "lazy-coding", "stack-python", "readable-code"] },
+  { "id": "bugfix", "prompt": "ผู้ใช้ล็อกอินไม่ได้หลังเปลี่ยนรหัสผ่าน ช่วยหาสาเหตุแล้วแก้ให้หน่อย", "expect_all": [], "expect_any": ["principle-fix-root-cause", "targeted-fix", "superuser"] },
+  { "id": "slides", "prompt": "ทำสไลด์ 5 หน้าสรุปความคืบหน้าโครงการจาก report.docx", "expect_all": [], "expect_any": ["presentation-design", "html-slide-deck", "pptx"] },
+  { "id": "domain-tax", "prompt": "ขายของออนไลน์ปีนี้ได้ 1.5 ล้าน ต้องจด VAT ไหม", "expect_all": [], "expect_any": ["seller-tax-basics", "tax-vat-th", "tax-basics-th"] },
+  { "id": "domain-pet", "prompt": "หมาอายุ 3 เดือน ต้องฉีดวัคซีนพิษสุนัขบ้าเมื่อไหร่ ต้องจดทะเบียนไหม", "expect_all": [], "expect_any": ["pet-care"] }
+]

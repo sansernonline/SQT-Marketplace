@@ -298,13 +298,13 @@ expected_lift = trace.posterior['diff'].mean()
 ## Output: Test Plan
 
 ```markdown
-# 🧪 Test Plan: <Hypothesis>
+# Test Plan: <Hypothesis>
 
 | | |
 |--|--|
 | **Hypothesis ID** | T-001 |
 | **Owner** | @cro-name |
-| **Status** | 🟡 Designing |
+| **Status** | Designing |
 
 ## Hypothesis
 <statement>

@@ -5,11 +5,11 @@
 แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
 
 ````markdown
-# 🚨 Runbook: <Alert Name or Failure Mode>
+# Runbook: <Alert Name or Failure Mode>
 
 | | |
 |--|--|
-| **Severity** | 🔴 SEV1 \| 🟠 SEV2 \| 🟡 SEV3 |
+| **Severity** | SEV1 \| SEV2 \| SEV3 |
 | **Service** | service-name |
 | **Owner Team** | @team-name |
 | **Last Reviewed** | YYYY-MM-DD |
@@ -17,25 +17,25 @@
 
 ---
 
-## 🎯 TL;DR (30 seconds)
+## TL;DR (30 seconds)
 
 > One paragraph: what's broken, what to do first, who to call.
 
-## 📊 How to Detect
+## How to Detect
 
 **Symptoms:**
 - User-facing: ...
 - Internal: ...
 
 **Alerts that fire:**
-- 🚨 [Alert Name](link) — fires when ...
-- 🚨 [Another Alert](link) — fires when ...
+- [Alert Name](link) — fires when ...
+- [Another Alert](link) — fires when ...
 
 **Dashboards to check:**
-- 📈 [Main Dashboard](link)
-- 📈 [Service Health](link)
+- [Main Dashboard](link)
+- [Service Health](link)
 
-## 🔍 Diagnosis (60 seconds)
+## Diagnosis (60 seconds)
 
 \`\`\`mermaid
 flowchart TD
@@ -71,11 +71,11 @@ kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
 - Redis: [Dashboard link]
 - External API: [Status page link]
 
-## 🩹 Mitigation Steps
+## Mitigation Steps
 
 Try mitigations in order of risk (lowest first):
 
-### 🟢 Step 1: Reduce load (low risk)
+### Step 1: Reduce load (low risk)
 \`\`\`bash
 # Enable rate limiting
 kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
@@ -84,7 +84,7 @@ kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
 **Expected effect:** Error rate drops within 2 min
 **If doesn't work:** Go to Step 2
 
-### 🟡 Step 2: Scale up (medium risk)
+### Step 2: Scale up (medium risk)
 \`\`\`bash
 kubectl scale deployment/api -n prod --replicas=10
 \`\`\`
@@ -92,7 +92,7 @@ kubectl scale deployment/api -n prod --replicas=10
 **Expected effect:** Latency improves within 3 min
 **Caveats:** Will increase cost, monitor budget alerts
 
-### 🟠 Step 3: Rollback recent deploy (higher risk)
+### Step 3: Rollback recent deploy (higher risk)
 \`\`\`bash
 kubectl rollout undo deployment/api -n prod
 \`\`\`
@@ -100,7 +100,7 @@ kubectl rollout undo deployment/api -n prod
 **Expected effect:** Reverts to previous version
 **Caveats:** Loses any data created since deploy
 
-### 🔴 Step 4: Failover to backup region (last resort)
+### Step 4: Failover to backup region (last resort)
 \`\`\`bash
 # Update DNS to point to backup region
 ./scripts/failover-to-us-west.sh
@@ -109,7 +109,7 @@ kubectl rollout undo deployment/api -n prod
 **Expected effect:** All traffic shifts to backup
 **Caveats:** Some user data may need migration, full rollback complex
 
-## 📞 Escalation Path
+## Escalation Path
 
 ```
 You can't resolve in 15 min
@@ -129,7 +129,7 @@ SEV1 still active after 1h
 4. Page engineering leadership
 ```
 
-## 🔁 Verification (after mitigation)
+## Verification (after mitigation)
 
 Confirm the issue is resolved:
 
@@ -140,22 +140,22 @@ Confirm the issue is resolved:
 - [ ] Customer reports stopped
 - [ ] Monitor for 30 min before considering resolved
 
-## 📝 After Resolution
+## After Resolution
 
 1. **Document in incident channel**: what happened, what you did
 2. **Update status page**: clear incident, post resolution message
 3. **Create postmortem ticket**: if SEV1/SEV2, schedule postmortem
 4. **Update this runbook**: if you learned something new
 
-> 💡 Use `postmortem-template` skill for the full analysis
+> Use `postmortem-template` skill for the full analysis
 
-## 🤝 Related Runbooks
+## Related Runbooks
 
 - [Database connection issues](link)
 - [Cache failure](link)
 - [Authentication service down](link)
 
-## 📚 Background / Why this happens
+## Background / Why this happens
 
 Optional section: brief context on why this failure mode exists.
 Useful for new on-call engineers.

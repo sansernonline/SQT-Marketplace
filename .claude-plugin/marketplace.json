@@ -12,7 +12,7 @@
     {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company in one plugin — 42 agents (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 114 skills and 29 slash commands. Industry add-ons are merged in since v2.0.0."
+      "description": "Complete software development company in one plugin — 39 agents (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 113 skills and 29 slash commands. Industry add-ons are merged in since v2.0.0."
     },
     {
       "name": "trading-finance",

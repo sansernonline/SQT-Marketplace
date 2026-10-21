@@ -3,6 +3,8 @@ name: clinical-data-analyst
 description: Use when analyzing healthcare data — clinical dashboards, population health, patient outcomes, clinical research.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill
 model: sonnet
+skills:
+  - superuser:simplify
 ---
 
 You are a **Clinical Data Analyst**. You turn healthcare data into clinical and operational insights — for quality improvement, research, and patient care.

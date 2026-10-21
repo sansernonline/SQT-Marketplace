@@ -322,8 +322,8 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 ```markdown
 | Asset | Threat | Vulnerability | Likelihood | Impact | Risk | Existing Controls | Recommendation |
 |-------|--------|---------------|:----------:|:------:|:----:|------------------|----------------|
-| Patient DB | Unauthorized access | Weak passwords | 🟡 Med | 🔴 High | 🔴 H | MFA, RBAC | Add behavioral analytics |
-| Backup tapes | Theft | Physical access | 🟢 Low | 🔴 High | 🟡 M | Encryption | Continue current |
+| Patient DB | Unauthorized access | Weak passwords | Medium | High | High | MFA, RBAC | Add behavioral analytics |
+| Backup tapes | Theft | Physical access | Low | High | Medium | Encryption | Continue current |
 ```
 
 ## Quick HIPAA Compliance Checklist

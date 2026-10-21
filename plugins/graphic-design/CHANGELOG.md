@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.8.0 — 2026-10-21
+
+- ใช้ของกลางจาก plugin `superuser` ทาง `dependencies` (skill `human-writing` · `answer-shape` · `simplify` · `no-ai-look` · `commit-log` · `agent-patterns` · agent `reviewer` · `brainstormer` · `learning-reviewer` · hook) · สำเนาในนี้ย้ายออกแล้ว · zip สำหรับ claude.ai ยังมีของกลางในตัว
+- agent โหลด skill หลักตั้งแต่เริ่ม (`skills:` — งานเขียน `human-writing` · งานโค้ด `simplify` · งานภาพ `no-ai-look`)
+
 ## 0.7.0 — 2026-10-19
 
 - รับ skill กลาง `no-ai-look` จาก `superuser` · agent ทั้ง 4 ตัว (`art-director` · `brand-keeper` · `design-critic` · `social-creator`) ทำตามและตรวจก่อนส่ง

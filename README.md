@@ -27,18 +27,18 @@ scripts\build-dist.cmd                                                       # �
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`superuser`** | 3 | 7 | 0 | ต้นฉบับ SuperUser — ใช้เดี่ยวกับงานทั่วไป หรือเป็นแม่แบบให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`software-company`** | 42 | 118 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
-| **`trading-finance`** | 7 | 25 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
-| **`personal-life`** | 6 | 21 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
-| **`thai-workplace`** | 7 | 24 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
-| **`online-seller`** | 6 | 15 | 4 | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE |
-| **`home-family`** | 5 | 14 | 3 | บ้านและครอบครัว: บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง |
-| **`career`** | 5 | 12 | 3 | เรซูเม่ สัมภาษณ์ ต่อรองเงินเดือน LinkedIn |
-| **`health-wellness`** | 4 | 12 | 2 | จัดระเบียบสุขภาพ (ไม่วินิจฉัย ไม่สั่งยา) |
-| **`consumer-rights`** | 4 | 11 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
-| **`graphic-design`** | 7 | 17 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
-| **`dev-learning`** | 4 | 14 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก · เขียนวิทยานิพนธ์และบทความวิจัย |
+| **`superuser`** | 3 | 8 | 0 | ต้นฉบับ SuperUser — ใช้เดี่ยวกับงานทั่วไป หรือเป็นแม่แบบให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
+| **`software-company`** | 39 | 113 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`trading-finance`** | 4 | 19 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
+| **`personal-life`** | 3 | 15 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
+| **`thai-workplace`** | 4 | 18 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
+| **`online-seller`** | 3 | 9 | 4 | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE |
+| **`home-family`** | 2 | 8 | 3 | บ้านและครอบครัว: บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง |
+| **`career`** | 2 | 6 | 3 | เรซูเม่ สัมภาษณ์ ต่อรองเงินเดือน LinkedIn |
+| **`health-wellness`** | 1 | 6 | 2 | จัดระเบียบสุขภาพ (ไม่วินิจฉัย ไม่สั่งยา) |
+| **`consumer-rights`** | 1 | 5 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
+| **`graphic-design`** | 4 | 11 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
+| **`dev-learning`** | 1 | 8 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก · เขียนวิทยานิพนธ์และบทความวิจัย |
 
 > plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company และ superuser) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
@@ -64,6 +64,10 @@ scripts\build-dist.cmd                                                       # �
 /plugin marketplace add sansernonline/SQT-Marketplace
 /plugin install software-company@sqt-marketplace
 ```
+
+ทุก plugin ใช้ของกลางจาก `superuser` (skill `human-writing` · `answer-shape` · `simplify` · `no-ai-look` · `commit-log` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
+
+ติดตั้งหลาย plugin → รัน `node scripts/install/set-skill-budget.mjs` ครั้งเดียว (ขยายงบรายการ skill เป็น 2%) ไม่งั้นคำอธิบาย skill บางตัวถูกตัดทิ้ง · รายละเอียด [scripts/README.md](scripts/README.md)
 
 เคยติดตั้ง plugin สาขาของรุ่นก่อน v2.0.0 → ถอดออก (`/plugin uninstall software-company-<สาขา>`) เพราะรวมอยู่ในตัวหลักแล้ว
 
@@ -147,7 +151,7 @@ SQT-Marketplace/
 │       ├── .claude-plugin/plugin.json
 │       ├── agents/     (42)
 │       ├── skills/     (114 skill + 29 คำสั่ง)
-│       └── hooks/      ← hook ของ SuperUser (log · inbox) · ทุก plugin มี hooks/ ชุดเดียวกันนี้
+│       └── (ไม่มี hooks/ · ใช้ของ plugin superuser ทาง dependencies)
 ├── dist/       ← สร้างจาก plugins/ ด้วย build-targets.mjs (ห้ามแก้มือ)
 ├── docs/
 ├── prompt/     ← ชุด prompt แยกโฟลเดอร์ตาม plugin — ข้อยกเว้นของ repo นี้ต่อกฎโครงรากโปรเจกต์

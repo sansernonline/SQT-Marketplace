@@ -5,7 +5,9 @@
     "CHANGELOG.md": "บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร",
     "ADAPT.md": "วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่",
     "hooks/hooks.json": "บอก Claude Code ว่าจะเรียก hook ตอนไหน",
-    "hooks/superuser-hook.mjs": "hook ของ SuperUser: เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox"
+    "hooks/superuser-hook.mjs": "hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox",
+    "hooks/core-rules.md": "กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)",
+    "hooks/skill-router.json": "คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม"
   },
   "superuser_files": {
     "SKILL.md": "หัวหน้าทีม: รับงาน วัดขนาด เลือก playbook แจกงาน ตรวจ รายงาน",
@@ -34,6 +36,7 @@
     "agent-patterns": "เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ)",
     "answer-shape": "เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ",
     "commit-log": "commit ทุกขั้นที่ทำเสร็จด้วยข้อความรูปแบบเดียวกัน ให้ git log เป็นบันทึกงาน",
+    "handoff": "ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา",
     "human-writing": "เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน",
     "no-ai-look": "ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน)",
     "simplify": "ทำทุกงานให้อยู่ในรูปที่ง่ายที่สุดที่คนทำตามได้",
@@ -233,6 +236,7 @@
     "saas-design": "รีวิวสถาปัตยกรรม SaaS แบบ B2B หรือออกแบบการเชื่อมระบบองค์กร",
     "saas-platform": "สร้าง SaaS แบบ B2B: หลายลูกค้าในระบบเดียว · แยกข้อมูล · SSO · SCIM · เก็บเงิน",
     "security-gate": "ด่านความปลอดภัยก่อนส่ง: สแกนค่าลับ · dependency · โค้ด",
+    "owasp-top10": "ระบบเว็บและ API ผ่าน OWASP Top 10:2025: สิ่งที่ต้องมี · วิธีพิสูจน์ · รายงานรายข้อ A01–A10",
     "security-operations": "งานปฏิบัติการความปลอดภัย: กักเหตุ · SOC · กฎ SIEM · ล่าภัยคุกคาม",
     "security-ops-design": "ออกแบบ SOC หรือล่าภัยคุกคาม",
     "security-scan": "ตรวจความปลอดภัยของโค้ด dependency และโครงสร้างพื้นฐาน",

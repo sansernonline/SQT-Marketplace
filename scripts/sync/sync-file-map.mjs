@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const OUT = join(ROOT, "docs", "FILE-MAP.md");
 const CHECK_ONLY = process.argv.includes("--check");
-const CORE = "superuser"; // ต้นฉบับของกลางที่ sync-superuser.mjs คัดลอกไปทุก plugin
+const CORE = "superuser"; // ของกลางอยู่ที่นี่ที่เดียว · plugin อื่นใช้ร่วมผ่าน dependencies
 const TH = JSON.parse(readFileSync(join(ROOT, "scripts", "sync", "file-map-th.json"), "utf8"));
 const missing = [];
 
@@ -63,8 +63,9 @@ function scan(name) {
 
 const plugins = list(join(ROOT, "plugins")).map(scan);
 const core = plugins.find((p) => p.name === CORE);
-const sharedSkills = new Set(core.skills.map((s) => s.name).filter((n) => plugins.every((p) => p.skills.some((s) => s.name === n))));
-const sharedAgents = new Set(core.agents.filter((n) => plugins.every((p) => p.agents.includes(n))));
+// ของกลาง = skill และ agent ของ superuser ยกเว้น skill superuser (ทุก plugin มีฉบับของตัวเอง)
+const sharedSkills = new Set(core.skills.map((s) => s.name).filter((n) => n !== "superuser"));
+const sharedAgents = new Set(core.agents);
 
 // ── คำอธิบาย ────────────────────────────────────────────────────────────
 
@@ -111,7 +112,7 @@ function layout() {
     "│  ├─ references/              รายละเอียดที่ skill เปิดอ่านเมื่อต้องใช้ (ไม่โหลดทุกครั้ง)",
     "│  ├─ templates/               แบบไฟล์ที่คัดลอกไปใช้ในโปรเจกต์",
     "│  └─ scripts/                 สคริปต์ที่ skill เรียกใช้",
-    `└─ hooks/                      ${f["hooks/superuser-hook.mjs"]}`,
+    "└─ (hooks/ มีใน superuser ที่เดียว · ดู ของกลาง)",
     "```",
     "",
     "- **skill** → Claude โหลดเองเมื่องานตรงกับ description",
@@ -126,13 +127,13 @@ function sharedSection() {
   const generic = new Set(plugins.flatMap((p) => p.skills.find((s) => s.name === "superuser")?.files ?? [])
     .filter((f) => !/playbook-(?!template)/.test(f)));
   return [
-    `ต้นฉบับอยู่ที่ ${code("plugins/superuser")} · ${code("scripts/sync/sync-superuser.mjs")} คัดลอกไปทุก plugin · แก้ที่ต้นฉบับเท่านั้น (ยกเว้น ${code("superuser/SKILL.md")} กับ playbook ที่แต่ละ plugin ปรับตามงานของตัวเอง)`,
+    `อยู่ใน ${code("plugins/superuser")} ที่เดียว · plugin อื่นประกาศ ${code('"dependencies": ["superuser"]')} แล้วใช้ร่วมกัน · ${code("scripts/sync/sync-superuser.mjs")} คัดลอกเฉพาะไฟล์กลางของ ${code("skills/superuser/")} (ทุก plugin มี skill superuser ฉบับของตัวเอง)`,
     "",
     "| ชนิด | ชื่อ | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ |",
     "|---|---|---|---|",
     ...sk.map((s) => `| skill | ${code(s.name)} | ${skillTh(s.name)} | ${files(s.files.filter((f) => !f.startsWith("references/playbook-") || s.name !== "superuser"))} |`),
     ...[...sharedAgents].map((a) => `| agent | ${code(a)} | ${agentTh(core, a)} | ${code(`agents/${a}.md`)} |`),
-    `| hook | ${code("hooks/")} | ${TH.plugin_files["hooks/superuser-hook.mjs"]} | ${code("hooks.json")} · ${code("superuser-hook.mjs")} |`,
+    `| hook | ${code("hooks/")} | ${TH.plugin_files["hooks/superuser-hook.mjs"]} | ${["hooks.json", "superuser-hook.mjs", "core-rules.md", "skill-router.json"].map(code).join(" · ")} |`,
     "",
     `**ไฟล์ข้างใน ${code("skills/superuser/")}** (นอกจาก playbook ของแต่ละ plugin)`,
     "",

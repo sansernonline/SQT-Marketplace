@@ -88,14 +88,14 @@ flowchart TB
 ## Defense in Depth Layers
 
 ```
-🌐 Perimeter        CDN, WAF, DDoS protection
-🔐 Edge             API gateway, mTLS termination
-🌉 Network          Segmentation, NACL, firewall
-🖥️ Host             Hardened OS, EDR, patch
-📦 Application      Authn, authz, input validation
-💾 Data             Encryption, masking, DLP
-👤 Identity         IAM, SSO, MFA
-👁️ Monitoring       SIEM, SOAR, NDR
+Perimeter        CDN, WAF, DDoS protection
+Edge             API gateway, mTLS termination
+Network          Segmentation, NACL, firewall
+Host             Hardened OS, EDR, patch
+Application      Authn, authz, input validation
+Data             Encryption, masking, DLP
+Identity         IAM, SSO, MFA
+Monitoring       SIEM, SOAR, NDR
 ```
 
 Each layer must withstand the next layer failing.
@@ -231,7 +231,7 @@ Network:
 Use `polished-document-style` skill (from software-company).
 
 ```markdown
-# 🔒 Security Architecture: <System/Org>
+# Security Architecture: <System/Org>
 
 ## Threat Model
 [STRIDE per component]

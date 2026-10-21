@@ -1,6 +1,6 @@
 {
   "name": "dev-learning",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Stay-current toolkit for developers — a weekly tech radar over followed libraries and tools, turning papers and long technical articles into working example code, personal learning paths tied to real projects, faster reading of English technical documentation, certification study plans for AWS, Azure, Google Cloud, Kubernetes and Scrum exams, and a scored picker for finishable practice side projects, and thesis and journal-paper writing with verified citations.",
   "author": {
     "name": "Square Tech Solutions Co., Ltd."
@@ -16,5 +16,8 @@
     "side-projects",
     "thesis",
     "academic-writing"
+  ],
+  "dependencies": [
+    "superuser"
   ]
 }

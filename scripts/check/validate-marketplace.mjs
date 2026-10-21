@@ -581,7 +581,8 @@ for (const p of plugins) {
   if (!existsSync(refDir)) continue;
   const hasAgent = (name) => {
     const [plug, agent] = name.includes(':') ? name.split(':') : [p, name];
-    return existsSync(join(pluginsDir, plug, 'agents', `${agent}.md`));
+    // agent กลาง (reviewer · brainstormer · learning-reviewer) อยู่ใน superuser ที่เดียว · plugin อื่นได้มาทาง dependencies
+    return existsSync(join(pluginsDir, plug, 'agents', `${agent}.md`)) || (!name.includes(':') && existsSync(join(pluginsDir, 'superuser', 'agents', `${agent}.md`)));
   };
   for (const f of readdirSync(refDir).filter(n => /^playbook-.+\.md$/.test(n) && n !== 'playbook-template.md')) {
     inspected++;

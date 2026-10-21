@@ -28,7 +28,7 @@ Entry rule (per traveller): ______  Source + date checked: ______
 - [ ] Online check-in done; boarding passes offline
 - [ ] Arrival card / registration filled (destination's official app or site)
 
-## Itinerary file (`YYYY-MM-DD_destination_itinerary.md`)
+## Itinerary file (`YYYY-MM-DD-destination-itinerary.md`)
 
 | Date | Time | What | Confirmation no. | Address (local script) | Contact | Notes |
 |---|---|---|---|---|---|---|

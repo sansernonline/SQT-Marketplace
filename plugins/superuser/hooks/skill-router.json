@@ -1,0 +1,25 @@
+{
+  "_": "hook superuser อ่านไฟล์นี้ทุกข้อความของผู้ใช้ · ข้อความตรง pattern ไหน (regex ไม่สนตัวพิมพ์) → บอกให้เปิด skill ในแถวนั้นก่อนเริ่ม · ชื่อ skill ต้องมีจริงใน plugins/ หรืออยู่ใน external (sync-superuser ตรวจ) · ชื่อที่ชนกับ skill ในตัวของ Claude Code (simplify) ใส่ชื่อ plugin นำหน้า · ตารางเดียวกันในรูปที่คนอ่านอยู่ใน scripts/install/CLAUDE.global.md หัวข้อ เปิด skill ก่อนลงมือ",
+  "external": ["docx", "pdf", "pptx", "xlsx"],
+  "rules": [
+    { "pattern": "(เขียน|ร่าง|เรียบเรียง|สรุป|ปรับ|แก้|ตอบ|แปล)[^\\n]{0,30}(อีเมล|เมล|รายงาน|เอกสาร|readme|บทความ|ข้อความ|จดหมาย|หนังสือ|สไลด์|ข้อเสนอ|บันทึก|คู่มือ|โพสต์|แคปชัน|ประกาศ|หัวข้อ|คำตอบ|สรุป)|\\b(write|draft|rewrite|summari[sz]e|proofread|polish|reword)\\b|\\b(email|report|readme|memo|minutes|proposal|letter|blog post|release notes)\\b", "skills": ["human-writing"] },
+    { "pattern": "\\.docx\\b|\\bword (file|document|doc)\\b|\\bms word\\b|ไฟล์ word|เวิร์ด", "skills": ["docx", "human-writing", "polished-document-style"] },
+    { "pattern": "\\.pdf\\b|\\bpdf\\b", "skills": ["pdf", "human-writing"] },
+    { "pattern": "\\.pptx\\b|powerpoint|สไลด์|\\bslides?\\b|\\bdeck\\b|พรีเซน", "skills": ["presentation-design", "pptx", "human-writing", "no-ai-look"] },
+    { "pattern": "\\.xlsx\\b|\\bexcel\\b|สเปรดชีต|spreadsheet", "skills": ["xlsx"] },
+    { "pattern": "เปรียบเทียบ|ข้อดีข้อเสีย|ควรเลือก|ตัวไหนดี|แบบไหนดี|\\bvs\\.?\\s|\\bcompare\\b|trade-?offs?|pros and cons|which should", "skills": ["answer-shape"] },
+    { "pattern": "โค้ด|\\bcode\\b|สคริปต์|\\bscript\\b|ฟังก์ชัน|\\bfunction\\b|\\brefactor|\\bendpoint\\b", "skills": ["superuser:simplify", "lazy-coding", "readable-code"] },
+    { "pattern": "python|\\.py\\b|fastapi|django|pandas", "skills": ["stack-python"] },
+    { "pattern": "typescript|javascript|node\\.js|nodejs|\\bnpm\\b|angular|\\breact\\b|\\.tsx?\\b", "skills": ["stack-typescript"] },
+    { "pattern": "c#|\\.net\\b|asp\\.net|dotnet|entity framework", "skills": ["stack-dotnet"] },
+    { "pattern": "\\bsql\\b|stored procedure|postgres|sql server", "skills": ["stack-sql"] },
+    { "pattern": "\\bmql[45]?\\b|metatrader|expert advisor", "skills": ["stack-mql"] },
+    { "pattern": "บั๊ก|\\bbug|\\berror\\b|พัง|ใช้ไม่ได้|ไม่ทำงาน|ล่ม|\\bcrash|\\bfail(s|ed|ing)?\\b|exception|หาสาเหตุ", "skills": ["principle-fix-root-cause", "targeted-fix"] },
+    { "pattern": "mockup|หน้าจอ|\\bui\\b|landing page|หน้าเว็บ|โปสเตอร์|poster|โลโก้|\\blogo\\b|แบนเนอร์|banner|อินโฟกราฟิก|infographic", "skills": ["no-ai-look"] },
+    { "pattern": "mockup|หน้าจอ|\\bui\\b|landing page|หน้าเว็บ|wireframe", "skills": ["ui-craft"] },
+    { "pattern": "diagram|ไดอะแกรม|แผนภาพ|flowchart|โฟลว์|\\ber\\b|sequence|architecture figure", "skills": ["diagram-figures", "no-ai-look"] },
+    { "pattern": "(สรุป|บันทึก|รายงาน)[^\\n]{0,15}ประชุม|meeting (notes|minutes|summary)", "skills": ["meeting-summary"] },
+    { "pattern": "\\bcommit\\b|คอมมิต", "skills": ["commit-log"] },
+    { "pattern": "ส่งงานต่อ|รับงานต่อ|ส่งต่องาน|ใบสั่งงาน|\\bhand-?off\\b|สลับโมเดล", "skills": ["handoff"] }
+  ]
+}

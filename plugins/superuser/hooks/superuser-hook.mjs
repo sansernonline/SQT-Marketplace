@@ -1,11 +1,15 @@
 #!/usr/bin/env node
-// SuperUser hook — ด่านรีวิวก่อนจบ (Stop) · ด่านแตกงาน (PreToolUse) · เขียน log ทุกการทำ แยกไฟล์ต่อ agent (.claude/superuser/log/<วันที่>/<agent>.jsonl) · ติดธงข้อความที่ผู้ใช้แก้งาน · แจ้งข้อความใหม่ใน inbox
-// ไฟล์นี้เหมือนกันทุก plugin ใน SQT-Marketplace · ติดตั้งหลาย plugin พร้อมกัน → ตัวแรกที่รับเหตุการณ์ทำงาน ตัวอื่นออกเลย (ไม่จดซ้ำ)
-// ทำงานเฉพาะโปรเจกต์ที่มี .claude/superuser/ (หรือ .superuser/ แบบเก่า) · ไม่สร้างโฟลเดอร์ทีมเอง · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
-import { readFileSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync } from "node:fs";
+// SuperUser hook — กฎประจำตัวตอนเริ่ม session (SessionStart) · บอก skill ที่ต้องเปิดตามคำขอ (UserPromptSubmit) · ด่านรีวิวก่อนจบ (Stop) · ด่านแตกงาน (PreToolUse) · เขียน log ทุกการทำ แยกไฟล์ต่อ agent (.claude/superuser/log/<วันที่>/<agent>.jsonl) · สรุป log ให้คนอ่าน (log/SUMMARY.md ทุกครั้งที่หัวหน้าทีมจบรอบ) · ติดธงข้อความที่ผู้ใช้แก้งาน · แจ้งข้อความใหม่ใน inbox
+// อยู่ใน plugin superuser ที่เดียว · plugin อื่นได้ hook นี้ทาง dependencies · plugin รุ่นเก่าที่ยังมีสำเนา → ตัวแรกที่รับเหตุการณ์ทำงาน ตัวอื่นออกเลย (ไม่จดซ้ำ)
+// กฎประจำตัวและตัวบอก skill ทำงานทุก session · log · inbox · ด่านต่าง ๆ ทำงานเฉพาะโปรเจกต์ที่มี .claude/superuser/ (หรือ .superuser/ แบบเก่า)
+// ไม่สร้างโฟลเดอร์ทีมเอง · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
+import { readFileSync, writeSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join, dirname, resolve, relative } from "node:path";
-import { homedir } from "node:os";
+import { homedir, tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
 
 // ความยาวสูงสุดที่เก็บ · ข้อความผู้ใช้ยาวกว่าเป้าหมายของเครื่องมือ
 const MAX_TARGET = 2000;
@@ -201,6 +205,70 @@ export function claimEvent(root, raw, now = Date.now()) {
   try { closeSync(openSync(join(lockDir, `${id}-${bucket}`), "wx")); return true; } catch { return false; }
 }
 
+// ── กฎประจำตัว และตัวบอก skill ─────────────────────────────────────────
+// รายการ skill ตอนเริ่ม session เกินงบเมื่อติดตั้งหลาย plugin → คำอธิบายถูกตัด โมเดลจึงไม่รู้ว่าต้องเปิด skill ไหน
+// แก้ 2 ชั้น: (1) SessionStart ส่งกฎประจำตัว (core-rules.md = สำเนาของ scripts/install/CLAUDE.global.md) ซึ่งมีตาราง "งาน → skill"
+// (2) UserPromptSubmit จับคำในข้อความผู้ใช้ตาม skill-router.json แล้วบอกชื่อ skill ที่ต้องเปิด · ชี้ชื่อตรง ๆ ได้ผลกว่าเตือนกว้าง ๆ
+// ติดตั้ง CLAUDE.global.md เป็น ~/.claude/CLAUDE.md แล้ว (มี CORE_MARK) → ไม่ส่งซ้ำ · ส่งได้ไม่เกิน 10,000 ตัวอักษรต่อครั้ง
+export const CORE_MARK = "<!-- sqt-core-rules -->";
+export const CONTEXT_MAX = 9500;
+const ROUTE_HEAD = "## เปิด skill ก่อนลงมือ";
+
+export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), ".claude"), dir = HERE, routeOnly = false } = {}) {
+  try { if (readFileSync(join(configDir, "CLAUDE.md"), "utf8").includes(CORE_MARK)) return ""; } catch { /* ยังไม่ได้ติดตั้ง */ }
+  let text = "";
+  try { text = readFileSync(join(dir, "core-rules.md"), "utf8").replace(/\r\n/g, "\n"); } catch { return ""; }
+  if (routeOnly) {
+    const at = text.indexOf(ROUTE_HEAD);
+    if (at < 0) return "";
+    const next = text.indexOf("\n## ", at + ROUTE_HEAD.length);
+    text = text.slice(at, next < 0 ? undefined : next).trim();
+  }
+  return text.slice(0, CONTEXT_MAX);
+}
+
+export function routeSkills(prompt, router) {
+  const text = String(prompt ?? "").trim();
+  if (!text || text.startsWith("/")) return [];   // คำสั่ง slash เปิด skill ของมันเองอยู่แล้ว
+  const out = [];
+  for (const rule of router?.rules ?? []) {
+    let re; try { re = new RegExp(rule.pattern, "i"); } catch { continue; }
+    if (re.test(text)) for (const s of rule.skills ?? []) if (!out.includes(s)) out.push(s);
+  }
+  return out;
+}
+
+export function routerNotice(skills) {
+  return skills.length
+    ? `skill ที่ต้องเปิดก่อนเริ่ม (ตามตาราง "เปิด skill ก่อนลงมือ"): ${skills.map((s) => `\`${s}\``).join(" · ")} — เรียกเครื่องมือ Skill ทีละตัวก่อนลงมือ · ตัวที่ไม่มีในเครื่องข้ามไป`
+    : "";
+}
+
+// zip ของ claude.ai มีสำเนา hook ในทุก plugin (ไม่มี dependencies) → ทุกสำเนาได้เหตุการณ์เดียวกัน · ให้ตัวแรกที่จองได้ส่งข้อความ ตัวอื่นเงียบ
+// จองด้วยไฟล์ใน tmp ต่อ session · เหตุการณ์ · ข้อความ · agent · ช่วงเวลา · ไฟล์เก่ากว่า 10 นาทีลบทิ้ง
+export function claimContext(input, dir = join(tmpdir(), "sqt-superuser-context"), now = Date.now()) {
+  try {
+    mkdirSync(dir, { recursive: true });
+    for (const name of readdirSync(dir)) {
+      try { if (now - statSync(join(dir, name)).mtimeMs > 600000) unlinkSync(join(dir, name)); } catch { /* อีกตัวลบไปแล้ว */ }
+    }
+    // ช่วงละ 2 วินาที: สำเนาทุกตัวได้เหตุการณ์ในเสี้ยววินาที · ผู้ใช้พิมพ์ข้อความเดิมซ้ำ (เช่น "ต่อ") ทีหลังยังได้ข้อความตามปกติ
+    const key = [input.session_id, input.hook_event_name, input.agent_id ?? "", input.prompt ?? "", input.source ?? ""].join("|");
+    const id = createHash("sha1").update(key).digest("hex").slice(0, 20);
+    const bucket = Math.floor(now / 2000);
+    if (existsSync(join(dir, `${id}-${bucket - 1}`))) return false;
+    closeSync(openSync(join(dir, `${id}-${bucket}`), "wx"));
+    return true;
+  } catch (e) { return e?.code !== "EEXIST"; }   // จองไม่ได้เพราะมีตัวอื่นจองแล้ว → เงียบ · tmp ใช้ไม่ได้ → พูดเอง (ซ้ำดีกว่าหาย)
+}
+
+function leadContext(input) {
+  if (input.agent_id) return "";
+  if (input.hook_event_name === "SessionStart") return coreRules();
+  if (input.hook_event_name === "UserPromptSubmit") return routerNotice(routeSkills(input.prompt, readJson(join(HERE, "skill-router.json"), { rules: [] })));
+  return "";
+}
+
 // ── ด่านรีวิวก่อนจบ (Stop) ───────────────────────────────────────────────
 // หัวหน้าทีมใช้ skill superuser แล้วแก้ไฟล์งาน ≥ 3 ไฟล์ แต่หลังการแก้ครั้งสุดท้ายไม่มีผู้ตรวจตัวใหม่ → ไม่ให้จบ ส่งกลับไปตรวจก่อน 1 ครั้ง
 // ข้ามได้เมื่อคำตอบสุดท้ายมีบรรทัด `ข้ามรีวิว: <เหตุผล>` (เช่น งานเล็กตามกฎข้อ 2) · กันวน: บล็อกได้ครั้งเดียวต่อการหยุด (stop_hook_active)
@@ -302,17 +370,143 @@ function preWriteGate(input) {
   if (reason) process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason } }));
 }
 
+// ── สรุป log ให้คนอ่าน (Stop ของหัวหน้าทีม) ─────────────────────────────
+// อ่าน log/<วันที่>/*.jsonl แล้วเขียน log/SUMMARY.md: ราย agent สะสม · งานที่ส่งออกวันนี้ · รายวัน 30 วัน
+// วันที่ผ่านไปแล้วเก็บผลนับไว้ใน log/<วันที่>/day.json จะได้ไม่อ่านซ้ำทุกครั้ง · วันนี้นับใหม่ทุกครั้ง
+// "จบปกติ" = ลูกทีมทำงานจนจบโดยเครื่องมือไม่ error · ไม่ใช่ผลตรวจงาน (ผลตรวจอยู่ใน docs/BUILD-PLAN.md หรือ CONTEXT.md)
+const DAY = /^\d{4}-\d{2}-\d{2}$/;
+const LEAD = "main";
+
+function readLines(file) {
+  try { return readFileSync(file, "utf8").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; }
+}
+
+export function countDay(dayDir) {
+  const day = { prompts: 0, corrections: 0, actions: 0, failed: 0, spawns: [], agents: {} };
+  for (const name of readdirSync(dayDir).filter((n) => n.endsWith(".jsonl"))) {
+    const entries = readLines(join(dayDir, name));
+    for (const e of entries) {
+      const agent = e.agent || LEAD;
+      const a = (day.agents[agent] ??= { actions: 0, failed: 0, ms: 0, last: "" });
+      if (e.event === "UserPromptSubmit") { day.prompts++; if (e.correction) day.corrections++; continue; }
+      if (!e.tool) continue;
+      a.actions++; day.actions++;
+      if (e.ok === false) { a.failed++; day.failed++; }
+      if (e.ts > a.last) a.last = e.ts;
+      if (e.role) day.spawns.push({ ts: e.ts, role: e.role, task: String(e.target ?? "").slice(0, 80), ok: e.ok !== false });
+    }
+    // เวลาทำงาน = ช่วงจากการทำแรกถึงสุดท้ายของแต่ละตัว (id) รวมกัน · หัวหน้าทีมไม่นับ เพราะรอผู้ใช้ด้วย
+    const spans = {};
+    for (const e of entries) {
+      if (!e.tool || !e.id) continue;
+      const t = Date.parse(e.ts), s = (spans[`${e.agent}|${e.id}`] ??= { agent: e.agent, from: t, to: t });
+      s.from = Math.min(s.from, t); s.to = Math.max(s.to, t);
+    }
+    for (const s of Object.values(spans)) if (day.agents[s.agent]) day.agents[s.agent].ms += s.to - s.from;
+  }
+  day.spawns.sort((x, y) => (x.ts < y.ts ? -1 : 1));
+  return day;
+}
+
+const fmtMin = (ms) => (ms < 60000 ? `${Math.round(ms / 1000)} วินาที` : `${Math.round(ms / 60000)} นาที`);
+const cell = (s) => String(s).replace(/\|/g, "/").replace(/\n/g, " ");
+
+export function summaryMarkdown(days, now = new Date()) {
+  const names = Object.keys(days).sort();
+  const today = names[names.length - 1];
+  const roles = {};
+  for (const d of names) {
+    for (const [agent, a] of Object.entries(days[d].agents)) {
+      const r = (roles[agent] ??= { got: 0, done: 0, broke: 0, actions: 0, failed: 0, ms: 0, last: "" });
+      r.actions += a.actions; r.failed += a.failed; r.ms += a.ms; if (a.last > r.last) r.last = a.last;
+    }
+    for (const s of days[d].spawns) {
+      const r = (roles[s.role] ??= { got: 0, done: 0, broke: 0, actions: 0, failed: 0, ms: 0, last: "" });
+      r.got++; s.ok ? r.done++ : r.broke++;
+    }
+  }
+  const order = Object.keys(roles).sort((a, b) => (a === LEAD ? -1 : b === LEAD ? 1 : roles[b].got - roles[a].got || a.localeCompare(b)));
+  const out = [
+    "# สรุป log",
+    "",
+    `> hook เขียนไฟล์นี้เองทุกครั้งที่หัวหน้าทีมจบรอบ ห้ามแก้มือ · อัปเดต ${localStamp(now).slice(0, 16).replace("T", " ")} · log ละเอียดอยู่ใน \`<วันที่>/<agent>.jsonl\``,
+    "> \"จบปกติ\" = ลูกทีมทำจนจบโดยไม่ error ไม่ใช่ผลตรวจงาน · ผลตรวจ ผ่าน/ไม่ผ่าน ดูที่ `docs/BUILD-PLAN.md` หรือ `CONTEXT.md`",
+    "",
+    `## ราย agent — สะสม ${names.length} วัน`,
+    "",
+    "| agent | ได้รับงาน | จบปกติ | ล้ม | การทำ | การทำที่ล้ม | เวลาทำงานรวม | ล่าสุด |",
+    "|---|---|---|---|---|---|---|---|",
+    ...order.map((k) => {
+      const r = roles[k];
+      return `| ${k === LEAD ? "หัวหน้าทีม" : `\`${cell(k)}\``} | ${k === LEAD ? "—" : r.got} | ${k === LEAD ? "—" : r.done} | ${k === LEAD ? "—" : r.broke} | ${r.actions} | ${r.failed} | ${k === LEAD ? "—" : fmtMin(r.ms)} | ${r.last ? r.last.slice(0, 16).replace("T", " ") : "—"} |`;
+    }),
+    "",
+    `## งานที่ส่งให้ลูกทีม — ${today ?? "วันนี้"}`,
+    "",
+  ];
+  const spawns = today ? days[today].spawns : [];
+  if (spawns.length) {
+    out.push("| เวลา | agent | งาน | ผล |", "|---|---|---|---|",
+      ...spawns.map((s) => `| ${s.ts.slice(11, 16)} | \`${cell(s.role)}\` | ${cell(s.task) || "—"} | ${s.ok ? "จบปกติ" : "ล้ม"} |`));
+  } else out.push("ยังไม่ได้ส่งงานให้ลูกทีม");
+  out.push("", "## รายวัน — 30 วันล่าสุด", "",
+    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | ส่งงานลูกทีม | การทำ | การทำที่ล้ม |", "|---|---|---|---|---|---|",
+    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${x.spawns.length} | ${x.actions} | ${x.failed} |`; }), "");
+  return out.join("\n");
+}
+
+export function writeSummary(teamDir, now = new Date()) {
+  const logDir = join(teamDir, "log");
+  if (!existsSync(logDir)) return null;
+  const today = localStamp(now).slice(0, 10);
+  const days = {};
+  for (const d of readdirSync(logDir).filter((n) => DAY.test(n)).sort()) {
+    const cache = join(logDir, d, "day.json");
+    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c) { days[d] = c; continue; } }
+    days[d] = countDay(join(logDir, d));
+    if (d < today) writeFileSync(cache, JSON.stringify(days[d]));
+  }
+  if (!Object.keys(days).length) return null;
+  const file = join(logDir, "SUMMARY.md");
+  const temp = `${file}.${process.pid}.tmp`;
+  writeFileSync(temp, summaryMarkdown(days, now));
+  renameSync(temp, file);
+  return file;
+}
+
+function stopSummary(input) {
+  if (input.agent_id) return;
+  const root = findProjectRoot(input.cwd ?? process.cwd());
+  if (root) writeSummary(teamDirOf(root));
+}
+
 function main() {
   let raw = "";
   try { raw = readFileSync(0, "utf8"); } catch { return; }
   const input = JSON.parse(raw || "{}");
-  if (input.hook_event_name === "Stop") { stopGate(input); return; }
+  if (input.hook_event_name === "Stop") { stopGate(input); try { stopSummary(input); } catch { /* สรุปพังต้องไม่บล็อกการจบ */ } return; }
   if (input.hook_event_name === "PreToolUse") { preWriteGate(input); return; }
+  const event = input.hook_event_name;
+  // writeSync: process.exit ทันทีหลังเขียน · write แบบ async อาจถูกตัดเมื่อข้อความยาว (กฎประจำตัวราว 20 KB)
+  const say = (text) => { if (text) writeSync(1, JSON.stringify({ hookSpecificOutput: { hookEventName: event, additionalContext: text.slice(0, CONTEXT_MAX) } })); };
+  const speaks = ["SessionStart", "UserPromptSubmit", "SubagentStart"].includes(event) ? claimContext(input) : true;
+  if (!speaks) return;   // สำเนา hook อีกตัวส่งข้อความของเหตุการณ์นี้แล้ว (log ก็จดแล้วเช่นกัน)
+  // subagent เริ่มใหม่ไม่เห็นกฎของหัวหน้าทีม → ส่งเฉพาะตาราง "งาน → skill" ให้สั้น
+  if (event === "SubagentStart") { say(coreRules({ routeOnly: true })); return; }
+  let lead = "";
+  try { lead = leadContext(input); } catch { /* กฎส่งไม่ได้ต้องไม่ทำให้ log ล้ม */ }
   const root = findProjectRoot(input.cwd ?? process.cwd());
-  if (!root) return;
+  if (!root) { say(lead); return; }
 
   const teamDir = teamDirOf(root);
-  if (!claimEvent(root, raw)) return;
+  let notice = "";
+  try { notice = logAndNotice(input, raw, root, teamDir, event); } catch { /* log ล้มต้องไม่ทำให้กฎหาย */ }
+  say([notice, lead].filter(Boolean).join("\n\n"));   // ข้อความ inbox สั้นและสำคัญ วางก่อนกฎ จะได้ไม่ถูกตัดท้าย
+}
+
+// เขียน log 1 บรรทัด · คืนข้อความแจ้ง inbox ของหัวหน้าทีม · สำเนา hook อีกตัวจด log ไปแล้ว → ไม่จดซ้ำ คืนค่าว่าง
+function logAndNotice(input, raw, root, teamDir, event) {
+  if (!claimEvent(root, raw)) return "";
   const statePath = join(teamDir, "state.json");
   const state = readJson(statePath, { models: {}, seen: [] });
   state.models ??= {};
@@ -323,7 +517,6 @@ function main() {
   mkdirSync(logDir, { recursive: true });
   appendFileSync(join(logDir, `${logFileName(entry.agent)}.jsonl`), JSON.stringify(entry) + "\n");
 
-  const event = entry.event;
   let notice = "";
   const isLead = !input.agent_id;
   if (isLead && ["SessionStart", "UserPromptSubmit", "PostToolUse", "PostToolUseFailure"].includes(event)) {
@@ -334,10 +527,7 @@ function main() {
   const temp = `${statePath}.${process.pid}.tmp`;
   writeFileSync(temp, JSON.stringify(state));
   renameSync(temp, statePath);
-
-  if (notice) {
-    process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: event, additionalContext: notice } }));
-  }
+  return notice;
 }
 
 // node superuser-hook.mjs --self-test → พิสูจน์ว่าการตัดข้อมูลยังจับได้จริง และไม่ตัดตัวเลขทั่วไป
@@ -383,6 +573,29 @@ function selfTest() {
     ["ด่านแตกงาน: Bash สั้น → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(l, "b.js", null, { name: "Bash", input: { command: "echo x > b.js" } }, "/p")],
     ["ด่านแตกงาน: Edit เล็ก → ผ่าน", [skill, edit("a.js")], false, (l) => splitGate(l, "/p/b.js", null, { name: "Edit", input: { new_string: "x\ny" } })],
   );
+  // สรุป log: 1 วัน · หัวหน้าทีมส่ง developer 2 งาน (ล้ม 1) · developer ทำ 3 อย่าง (ล้ม 1) · ผู้ใช้แก้ 1 ครั้ง
+  const day = { prompts: 2, corrections: 1, actions: 5, failed: 1,
+    spawns: [{ ts: "2026-10-21T10:00:00+07:00", role: "software-company:developer", task: "แก้ฟอร์ม", ok: true },
+      { ts: "2026-10-21T10:05:00+07:00", role: "software-company:developer", task: "เขียน test", ok: false }],
+    agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-company:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
+  const md = summaryMarkdown({ "2026-10-21": day }, new Date("2026-10-21T04:00:00Z"));
+  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | 2 | 5 | 1 |")]);
+  // กฎประจำตัวและตัวบอก skill
+  const router = readJson(join(HERE, "skill-router.json"), { rules: [] });
+  const routes = (s) => routeSkills(s, router);
+  gates.push(
+    ["ตัวบอก skill: แก้ไฟล์ .docx → human-writing + docx", [], true, () => routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("docx") && routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("human-writing")],
+    ["ตัวบอก skill: เขียนอีเมล → human-writing", [], true, () => routes("Write a short email to the client").includes("human-writing")],
+    ["ตัวบอก skill: เทียบ → answer-shape", [], true, () => routes("เปรียบเทียบ PostgreSQL กับ SQL Server").includes("answer-shape")],
+    ["ตัวบอก skill: โค้ด python → simplify + stack-python", [], true, () => ["superuser:simplify", "stack-python"].every((s) => routes("เขียนสคริปต์ Python อ่าน csv").includes(s))],
+    ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
+    ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
+    ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
+    ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
+  );
+  const tmp = join(tmpdir(), `sqt-claim-test-${process.pid}`);
+  const ev = { session_id: "s1", hook_event_name: "SessionStart", source: "startup" };
+  gates.push(["สำเนา hook หลายตัว: ส่งกฎครั้งเดียวต่อเหตุการณ์", [], true, () => claimContext(ev, tmp, 1e9) === true && claimContext(ev, tmp, 1e9 + 100) === false && claimContext({ ...ev, session_id: "s2" }, tmp, 1e9) === true && claimContext(ev, tmp, 1e9 + 60000) === true]);
   let gateOk = 0;
   for (const [label, lines, expect, fn = reviewGate] of gates) {
     const hit = Boolean(fn(lines)) === expect;

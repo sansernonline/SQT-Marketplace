@@ -12,11 +12,15 @@ plugin `superuser` คือต้นฉบับของวิธีทำง�
 | ส่วน | ของกลาง (ห้ามแก้ใน plugin สาขา) | ปรับตามสาขา |
 |---|---|---|
 | `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `team` (5) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
-| playbook และ reference | `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` · `evidence.md` · `team-roles.md` · `templates/improvements-queue.md` | playbook ของสาขา · `review` · `unattended-run` (ปรับตัวอย่างให้เข้ากับสาขา) · `triggers.md` · `examples.md` |
-| skill | `agent-patterns` · `answer-shape` · `human-writing` · `no-ai-look` · `simplify` | skill ของสาขา |
-| agent | `brainstormer` · `reviewer` · `learning-reviewer` | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทางของสาขา (playbook ใช้แทน `reviewer` ได้ · เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
-| hook | `hooks/superuser-hook.mjs` · `hooks/hooks.json` | — |
+| playbook และ reference | ทั้งไฟล์: `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` · `evidence.md` · `team-roles.md` · `templates/improvements-queue.md` · บล็อก: `review-steps` ใน `playbook-review.md` (ขั้น 2–6) · `unattended-steps` ใน `playbook-unattended-run.md` (ขั้นตอนทั้งหมด) · `context` ใน `references/context-template.md` (sync สร้างจาก `templates/CONTEXT.md` + `templates/IMPROVEMENTS.md`) | playbook ของสาขา · `review` ขั้น 1 และหัวไฟล์ · `unattended-run` หัวไฟล์ (`ลูกทีมต่อชิ้น` · `ผู้ตรวจต่อชิ้น` · `รออนุมัติที่เจอบ่อย`) · `context-template` หัวข้อ "ค่าของ plugin นี้" · `triggers.md` · `examples.md` (ตัวอย่างอย่างเดียว ห้ามเขียนกฎซ้ำกับ `SKILL.md`) |
+| skill | `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — **อยู่ใน `superuser` ที่เดียว ไม่คัดลอก** | skill ของสาขา |
+| agent | `brainstormer` · `reviewer` · `learning-reviewer` — อยู่ใน `superuser` ที่เดียว | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทางของสาขา (playbook ใช้แทน `reviewer` ได้ · เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
+| hook | `hooks/` ทั้งโฟลเดอร์ (hook · กฎประจำตัว `core-rules.md` · ตัวบอก skill `skill-router.json`) — อยู่ใน `superuser` ที่เดียว | — |
 | ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` ยกเว้น `improvements-queue.md` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาที่มีอยู่แล้วเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |
+
+`software-company` เขียน `playbook-review.md` และ `playbook-unattended-run.md` เองทั้งไฟล์ (ตรวจด้วย diff · `BUILD-PLAN.md` · commit ทีละชิ้น) จึงอยู่ใน `OPT_OUT` ของ `sync-superuser.mjs` · plugin อื่นที่จะออกจากบล็อกไหน ต้องเพิ่มชื่อลง `OPT_OUT` พร้อมเหตุผล
+
+**ทำไมของกลางไม่คัดลอกแล้ว** (ตั้งแต่ superuser 2.0.0): สำเนา 6 skill × 12 plugin ทำให้รายการ skill ของทุก session ยาว 49,564 ตัวอักษร เกินงบ 30,000 ของ Claude Code จนคำอธิบายถูกตัด (debug log `Skill listing over budget`) และ hook ทำงานซ้ำ 12 ครั้งต่อเหตุการณ์ · ตอนนี้ plugin สาขาประกาศ `"dependencies": ["superuser"]` ใน `plugin.json` แล้ว Claude Code ติดตั้ง superuser ให้เอง · ชุดใน `dist/` (zip ของ claude.ai · Codex · Gemini · Kimi) ไม่มีระบบ dependencies สคริปต์ build จึงใส่ของกลางลงชุดของทุก plugin ให้ใช้เดี่ยวได้
 
 ของกลางแก้ที่ plugin `superuser` ที่เดียว แล้วรัน:
 
@@ -31,8 +35,8 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 
 ## 2 · ขั้นตอนทำ superuser ของสาขาใหม่
 
-1. สร้างโครง plugin: `.claude-plugin/plugin.json` · `skills/` · `agents/` · คำสั่ง (ถ้ามี) ให้เป็น skill ที่ตั้ง `disable-model-invocation: true`
-2. คัดลอก `skills/superuser/` ทั้งโฟลเดอร์จาก `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` ให้ของกลางที่เหลือตามไปครบ
+1. สร้างโครง plugin: `.claude-plugin/plugin.json` (ใส่ `"dependencies": ["superuser"]`) · `skills/` · `agents/` · คำสั่ง (ถ้ามี) ให้เป็น skill ที่ตั้ง `disable-model-invocation: true`
+2. คัดลอก `skills/superuser/` ทั้งโฟลเดอร์จาก `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` ให้ไฟล์กลางของ skill นี้ตามไปครบ · ห้ามคัดลอก skill · agent · hook กลาง (sync ตรวจแล้วขึ้น error)
 3. แก้นอกบล็อก ตามตารางข้อ 3
 4. รัน `node scripts/check/validate-marketplace.mjs` ให้ผ่าน แล้ว `node scripts/sync/sync-docs.mjs`
 5. ลองงานจริง 3 งาน (เล็ก · กลาง · ใหญ่) แล้วดูว่าจัดขนาดและเลือก playbook ถูกไหม

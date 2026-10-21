@@ -1,5 +1,25 @@
 # Changelog — software-company
 
+## 2.17.0 — 2026-10-21
+
+- ใช้ของกลางจาก plugin `superuser` ทาง `dependencies` (skill `human-writing` · `answer-shape` · `simplify` · `no-ai-look` · `commit-log` · `agent-patterns` · agent `reviewer` · `brainstormer` · `learning-reviewer` · hook) · สำเนาในนี้ย้ายออกแล้ว · zip สำหรับ claude.ai ยังมีของกลางในตัว
+- agent โหลด skill หลักตั้งแต่เริ่ม (`skills:` — งานเขียน `human-writing` · งานโค้ด `simplify` · งานภาพ `no-ai-look`)
+- แม่แบบเอกสารทุกตัว (runbook · PR · release notes · architecture review · security · SEO · retro · BRD · PRD · test plan …) ไม่มีอีโมจิแล้ว · ระดับความรุนแรงและสถานะใช้คำ ตรงกับ `human-writing`
+- diagram ในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · flow) ไปที่ `diagram-figures` แบบเดียว · Mermaid เหลือแค่ README · PR · โน้ตในโค้ด (`software-diagrams` · `polished-document-style` · `srs-writing` · `project-doc-set` · `user-story-writer`)
+- `polished-document-style` เป็น skill จัดรูปเอกสารทั่วไป (Markdown · Word · PDF) · เพิ่มหัวข้อเอกสาร Office ภาษาไทย · bullet ไม่ซ้อน · คำสถานะ 5 คำ
+- คำอธิบายที่ทับกันแยกขอบเขตชัดขึ้น: `commit-message-format` ↔ `commit-log` · `simplicity-first` ↔ `simplify` · `markdown-report-docx` ↔ `thesis-writing` · `graphic-design` ↔ plugin graphic-design · `spell-out-abbreviations`
+
+## 2.16.0 — 2026-10-21
+
+- skill ใหม่ `owasp-top10` — ระบบเว็บแอปและ API ที่ส่งมอบต้องผ่าน OWASP Top 10:2025 (A01–A10): สิ่งที่ต้องมี · วิธีพิสูจน์ (test ชื่อ `A0x_` + เครื่องมือ) · ภาษาเจ้าของกิจการ · วิธีเขียนตาม stack (.NET · TypeScript/Node/Angular · Python · SQL) · แม่แบบรายงานก่อนส่งมอบ · ร่างข้อกำหนดในสัญญาและ NFR ใน SRS
+- ผูกเข้างานเดิม: playbook `feature` (ทำตอนเขียน) · `ship` และ `new-project` (รายงานต้องไม่มีข้อไม่ผ่าน) · `security-gate` · `principle-secure-by-default` · `code-review-checklist` · `srs-writing` · ตัวกระตุ้นใน `superuser` · agent `security-engineer` · `developer`
+- `threat-model` · `security-scan`: รายการ OWASP เปลี่ยนจากฉบับ 2021 เป็น 2025
+
+## 2.15.0 — 2026-10-21
+
+- `status-report`: `docs/BUILD-PLAN.md` เพิ่ม 3 อย่าง — คอลัมน์ "ใครทำ · ใครตรวจ" (ตารางสถานะล่าสุด และบรรทัดประวัติสถานะ) · บรรทัด "ภาพรวม" (เสร็จ N/ทั้งหมด · กำลังทำ · ติด · ไม่ผ่านตรวจ) · ตาราง "ทีมตอนนี้" ราย agent · BUILD-PLAN เดิมต้องเติม 2 คอลัมน์ใหม่ก่อนตัวตรวจจะผ่าน
+- `coding-evals`: ชุดงานจริง 8 งานอยู่ที่ `evals/coding/` ของ SQT-Marketplace พร้อมสคริปต์ `run-coding.mjs` (ตรวจชุดงาน · เทียบ 2 รุ่น · ให้คะแนนอัตโนมัติ)
+
 ## 2.14.0 — 2026-10-20
 
 - skill ใหม่ `stack-mql` — เขียนและตรวจ MQL4 / MQL5 (Expert Advisor · indicator บน MetaTrader 4/5): ความต่าง MT4 กับ MT5 · ตัวตรวจก่อนส่งออร์เดอร์ (volume · ราคา · stops level · freeze level · margin · จำนวนออร์เดอร์) · state ที่กู้คืนได้หลังรีสตาร์ท · backtest จาก command line · กฎ MQL5 Market · ขายเอง

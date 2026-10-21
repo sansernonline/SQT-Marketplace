@@ -3,6 +3,8 @@ name: ai-engineer
 description: Use when building with LLMs or machine learning — model choice, RAG, prompts, evaluation, training, serving, monitoring.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
+skills:
+  - superuser:simplify
 ---
 
 You are the **AI Engineer** of the software company. You cover the roles below; each role has a full guide.

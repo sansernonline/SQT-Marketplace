@@ -19,7 +19,7 @@ scripts/
 | check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
 | check | `check/audit-plugin-prompt.md` | prompt ให้ Claude Code ตรวจ plugin ในเรื่องที่สคริปต์ตรวจไม่ได้ เลือกได้ 8 หัวข้อ: ยาวเกิน · กระชับได้ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ · วัดผลจริง · ประหยัด token (หัวข้อนี้แก้ให้ด้วย) | หลังเพิ่ม skill หลายตัว · ก่อนขึ้นเลขรุ่น · ทุกไตรมาส |
 | **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
-| sync | `sync/sync-superuser.mjs` | คัดลอกของกลาง SuperUser จาก `plugins/superuser` ไปทุก plugin (skill กลาง · learning-reviewer · hook · บล็อก `superuser:begin`) · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser`** |
+| sync | `sync/sync-superuser.mjs` | คัดลอกไฟล์กลางของ skill `superuser` (reference · บล็อก `superuser:begin`) ไปทุก plugin · คัดลอก `install/CLAUDE.global.md` เป็น `plugins/superuser/hooks/core-rules.md` · ตรวจว่า skill · agent · hook กลางอยู่ใน `superuser` ที่เดียว และทุก plugin ประกาศ `dependencies` · ตรวจชื่อ skill ใน `skill-router.json` · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser` หรือ `CLAUDE.global.md`** |
 | sync | `sync/sync-file-map.mjs` + `sync/file-map-th.json` | เขียน `docs/FILE-MAP.md` แผนผังไฟล์ของทุก plugin พร้อมคำอธิบายไทย · skill หรือ agent ใหม่ที่ยังไม่มีคำอธิบายใน `file-map-th.json` → แจ้งชื่อแล้ว exit 1 · `--check` ตรวจอย่างเดียว | **หลังเพิ่มหรือลบ skill / agent / playbook** (`build-dist.cmd` รันให้แล้ว) |
 | sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
@@ -27,6 +27,7 @@ scripts/
 | **install** | `install/install-marketplace.ps1` | ติดตั้ง marketplace นี้จากโฟลเดอร์ในเครื่อง | ครั้งแรก และเมื่อเพิ่ม plugin ใหม่ |
 | install | `install/install-global-rules.ps1` / `.sh` | ติดตั้ง `CLAUDE.global.md` เป็น `~/.claude/CLAUDE.md` (สำรองไฟล์เดิมก่อน) | ครั้งแรกบนเครื่องใหม่ และหลังแก้กฎ |
 | install | `install/CLAUDE.global.md` | ต้นฉบับกฎประจำตัวระดับเครื่อง — ไม่ใช่สคริปต์ แต่เป็นไฟล์ที่ `install-global-rules` ติดตั้ง | แก้ที่นี่ที่เดียว |
+| install | `install/set-skill-budget.mjs` | ตั้ง `skillListingBudgetFraction` = 0.02 ใน `~/.claude/settings.json` ให้รายการ skill ของ 12 plugin ไม่ถูกตัดคำอธิบาย (`install-global-rules` เรียกให้) | ครั้งแรกบนเครื่องใหม่ |
 
 ---
 
@@ -172,6 +173,8 @@ bash scripts/install/install-global-rules.sh                                    
 
 สคริปต์สำรองไฟล์เดิมไว้เป็น `CLAUDE.md.bak-<วันเวลา>` ก่อนเขียนทับ
 
+ไม่ได้ติดตั้งไฟล์นี้ (เช่น Cowork หรือเครื่องใหม่) ก็ยังได้กฎชุดเดียวกัน เพราะ hook ของ plugin `superuser` ส่ง `core-rules.md` (สำเนาที่ `sync-superuser` สร้าง) เข้า context ตอนเริ่มทุก session · ติดตั้งแล้ว hook เห็นบรรทัด `<!-- sqt-core-rules -->` ใน `~/.claude/CLAUDE.md` จึงไม่ส่งซ้ำ · subagent ได้เฉพาะหัวข้อ "เปิด skill ก่อนลงมือ"
+
 ### อะไรควรอยู่ไฟล์ไหน
 
 | อยู่ใน `CLAUDE.global.md` | อยู่ใน skill |
@@ -181,7 +184,9 @@ bash scripts/install/install-global-rules.sh                                    
 
 **เกณฑ์:** ถ้ากฎนั้นต้องเตือนตอนที่โมเดลกำลังจะพลาด ให้อยู่ที่นี่ · ถ้าเป็นความรู้ที่ไปเปิดอ่านได้ทัน ให้อยู่ใน skill
 
-ไฟล์นี้ควรยาวไม่เกิน **40 บรรทัด** — ทุกบรรทัดจ่ายต้นทุนทุกเซสชันของทุกโปรเจกต์
+ไฟล์นี้ยาวได้ไม่เกิน **9,500 ตัวอักษร** (hook ส่งได้ไม่เกิน 10,000 ต่อครั้ง · `sync-superuser` ตรวจ) — ทุกบรรทัดจ่ายต้นทุนทุกเซสชันของทุกโปรเจกต์
+
+**หัวข้อ "เปิด skill ก่อนลงมือ"** คือตาราง งาน → skill ที่ต้องเปิด · ทำงานคู่กับ `plugins/superuser/hooks/skill-router.json` ที่ hook ใช้จับคำในข้อความผู้ใช้แล้วบอกชื่อ skill · เพิ่มแถวในตารางแล้วเพิ่ม pattern ใน router ด้วย · วัดผลด้วย [`evals/triggers`](../evals/triggers/README.md)
 
 ---
 

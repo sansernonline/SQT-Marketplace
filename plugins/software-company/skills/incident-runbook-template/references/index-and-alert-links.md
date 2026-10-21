@@ -7,7 +7,7 @@
 Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `docs/runbook-<service>-<เรื่อง>.md` per `document-naming`:
 
 ```markdown
-# 📚 Runbook Index
+# Runbook Index
 
 ## By Service
 - API Service

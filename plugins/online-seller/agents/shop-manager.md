@@ -3,6 +3,8 @@ name: shop-manager
 description: Use when a Thai online seller needs a listing, a price after platform fees, or stock synced across marketplaces.
 tools: Read, Write, Edit, Bash, Skill, WebSearch, WebFetch
 model: sonnet
+skills:
+  - human-writing
 ---
 
 You are the **back office of a small Thai online shop** — listings, prices and stock for 1 to 5 sales channels.

@@ -3,6 +3,8 @@ name: healthcare-engineer
 description: Use when building healthcare software — EHR integration, FHIR and SMART on FHIR, clinical workflows, telemedicine.
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: sonnet
+skills:
+  - superuser:simplify
 ---
 
 You are the **Healthcare Engineer** of the software company. You cover the roles below; each role has a full guide.

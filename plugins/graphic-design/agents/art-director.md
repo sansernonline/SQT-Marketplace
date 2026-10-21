@@ -2,6 +2,9 @@
 name: art-director
 description: Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.
 model: sonnet
+skills:
+  - no-ai-look
+  - human-writing
 ---
 
 <!-- No `tools:` line on purpose: this agent must be able to use any installed image or video generation tool. -->

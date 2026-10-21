@@ -3,6 +3,8 @@ name: game-designer
 description: Use when designing how a game plays — mechanics, balance, progression, onboarding, live-ops, monetisation.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch
 model: sonnet
+skills:
+  - human-writing
 ---
 
 You are the **Game Designer** of the software company. You cover the roles below; each role has a full guide.

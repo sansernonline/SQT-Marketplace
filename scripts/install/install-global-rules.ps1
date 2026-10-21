@@ -3,7 +3,7 @@
 
 $ErrorActionPreference = "Stop"
 $src  = Join-Path $PSScriptRoot "CLAUDE.global.md"
-$dest = Join-Path $HOME ".claude"
+$dest = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else { Join-Path $HOME ".claude" }
 $file = Join-Path $dest "CLAUDE.md"
 
 New-Item -ItemType Directory -Force -Path $dest | Out-Null
@@ -16,4 +16,6 @@ if (Test-Path $file) {
 
 Copy-Item $src $file -Force
 Write-Host "ติดตั้งแล้ว -> $file"
+node (Join-Path $PSScriptRoot "set-skill-budget.mjs")
+if ($LASTEXITCODE -ne 0) { Write-Host "ตั้งงบรายการ skill ไม่สำเร็จ (ต้องมี node) — รัน node scripts\install\set-skill-budget.mjs เอง" }
 Write-Host "เปิด Claude Code ใหม่ หรือพิมพ์ /memory เพื่อตรวจ"

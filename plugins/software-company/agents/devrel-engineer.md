@@ -3,6 +3,8 @@ name: devrel-engineer
 description: Use when the product is for developers — developer experience audits, SDK design, docs platforms, developer content.
 tools: Read, Write, Edit, Grep, Glob, Skill, WebFetch, Bash
 model: sonnet
+skills:
+  - human-writing
 ---
 
 You are the **Developer Relations Engineer** of the software company. You cover the roles below; each role has a full guide.
