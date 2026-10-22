@@ -2,7 +2,7 @@
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [Critical Performance Metrics](#critical-performance-metrics)
 - [Launch Time Optimization](#launch-time-optimization)
 - [Frame Rate](#frame-rate)
@@ -15,7 +15,7 @@
 
 # Mobile Performance Patterns
 
-## When to use this skill
+## ใช้เมื่อ
 
 - Profiling a slow app
 - Optimizing launch time
@@ -29,12 +29,14 @@
 |--------|--------|
 | Cold start | < 2s (iOS), < 5s (Android budget) |
 | Warm start | < 1s |
-| Frame rate | 60fps (or 120fps on hardware that supports it) |
+| Frame rate (เฟรมต่อวินาที, fps) | 60fps (or 120fps on hardware that supports it) |
 | Frame budget | 16.67ms (60fps), 8.33ms (120fps) |
-| App Not Responding (ANR) rate (Android) | < 0.05% |
-| Crash rate | < 0.5% |
+| App Not Responding (ANR) rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
+| Crash rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 1.09% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
 | Memory | within device class budget |
 | Battery | < 5% drain per hour active use |
+
+แหล่ง: Android vitals (developer.android.com/topic/performance/vitals) ตรวจ 22 ต.ค. 2569 — ทั้งภาพรวมและต่อรุ่นเครื่อง (ต่อรุ่น = 8%) ถ้าเกินเกณฑ์ แอปจะถูกลดการมองเห็นบน Google Play
 
 ## Launch Time Optimization
 
@@ -50,15 +52,17 @@ Android: Application.onCreate + Activity.onCreate
 
 **Defer heavy work:**
 ```kotlin
-// Bad: blocks launch
-override fun onCreate() {
-    super.onCreate()
+// Bad: blocks launch (Activity.onCreate)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     loadAllData()  // 2 seconds
 }
 
 // Good: load in background, show empty state
-override fun onCreate() {
-    super.onCreate()
+// (Activity.onCreate — Application ไม่มี lifecycleScope;
+//  งานระดับแอปใช้ ProcessLifecycleOwner หรือ App Startup)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     showEmptyState()
     lifecycleScope.launch { loadData() }
 }
@@ -75,7 +79,7 @@ Avoid heavy init in:
 **Baseline profiles (Android):**
 ```kotlin
 // Build with baseline profile
-// Reduces JIT compilation
+// Reduces Just-In-Time (JIT) compilation
 // 20-30% launch time improvement
 ```
 
@@ -89,7 +93,7 @@ Avoid heavy init in:
 2. Heavy layout / measure
 3. Overdraw
 4. Allocation in hot paths
-5. JS bridge calls (RN)
+5. JavaScript thread ที่งานหนักหรือเรียกข้ามไป native บ่อย (RN)
 
 ### Strategies
 
@@ -152,17 +156,17 @@ fun ProductList(products: List<Product>) {
 - Android: LeakCanary, Profiler
 - iOS: Instruments (Allocations, Leaks)
 - Flutter: DevTools memory profiler
-- RN: Flipper
+- React Native (RN): React Native DevTools (แทน Flipper ที่ถูกถอดจาก template ตั้งแต่ 0.74)
 
 ### Image Optimization
 
 ```
 Wrong size = waste:
-- 4K image displayed at 200x200 = 80x memory waste
+- 4K image (3840x2160) displayed at 200x200 = about 200x memory waste (3840*2160 / 200*200 = 207)
 
 Right approach:
 - Request appropriate size from server
-- Use image library (Coil, Glide, FastImage, SDWebImage)
+- Use image library (Coil, Glide, expo-image สำหรับ RN, SDWebImage)
 - Set cache limits
 - Use modern formats (WebP, AVIF)
 ```
@@ -173,7 +177,11 @@ Right approach:
 val memoryClass = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).memoryClass
 val cacheSize = memoryClass * 1024 * 1024 / 8  // 1/8 of available
 
-val cache = LruCache<String, Bitmap>(cacheSize)
+// ต้อง override sizeOf ให้นับเป็น byte — ถ้าไม่ override LruCache นับเป็น "จำนวนรูป"
+// แล้วจะเก็บได้เป็นล้านรูปจนหน่วยความจำหมด (หรือใช้แคชในตัวของ Coil/Glide แทน)
+val cache = object : LruCache<String, Bitmap>(cacheSize) {
+    override fun sizeOf(key: String, value: Bitmap): Int = value.byteCount
+}
 ```
 
 ## Battery Optimization
@@ -242,7 +250,7 @@ AVIF: even smaller (newer)
 HEIC: iOS native (smaller, less compatible)
 ```
 
-### HTTP/3 + QUIC
+### Hypertext Transfer Protocol version 3 (HTTP/3) + QUIC (transport protocol over UDP, RFC 9000 — a name, not an acronym)
 - Faster on lossy networks
 - Built into modern OS HTTP clients
 - Enable when available

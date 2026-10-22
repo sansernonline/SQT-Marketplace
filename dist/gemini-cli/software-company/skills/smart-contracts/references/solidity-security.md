@@ -11,6 +11,8 @@
 
 # Solidity Security Patterns
 
+> Code here targets Solidity 0.8.24+ and OpenZeppelin Contracts **5.x** (compile-checked with 5.6.1 · ตรวจ 22 ต.ค. 2569). In 5.x `security/` is gone (`ReentrancyGuard`, `Pausable` → `utils/`), `Ownable` takes an `initialOwner`, upgradeable contracts use ERC-7201 namespaced storage instead of `__gap` — ที่มา [OpenZeppelin Contracts 5.0 changelog](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/CHANGELOG.md#500-2023-10-05)
+
 ## When to use this skill
 
 - Reviewing smart contract security
@@ -39,9 +41,12 @@ function withdraw() public {
     require(sent);
 }
 
-// ✅ Even safer: ReentrancyGuard
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-function withdraw() public nonReentrant { /* ... */ }
+// ✅ Even safer: ReentrancyGuard (OpenZeppelin 5.x path)
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract Bank is ReentrancyGuard {
+    function withdraw() public nonReentrant { /* CEI as above */ }
+}
 ```
 
 ### 2. Access Control
@@ -59,13 +64,13 @@ function setOwner(address newOwner) public {
     owner = newOwner;
 }
 
-// ✅ Better: OpenZeppelin AccessControl
-import "@openzeppelin/contracts/access/Ownable.sol";
+// ✅ Better: OpenZeppelin Ownable (5.x needs the first owner in the constructor)
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MyContract is Ownable {
-    function setOwner(address newOwner) public onlyOwner {
-        transferOwnership(newOwner);
-    }
+    constructor(address initialOwner) Ownable(initialOwner) {}
+    // transferOwnership(newOwner) is already public + onlyOwner + rejects address(0)
 }
+// Many roles → AccessControl · two-step hand-over → Ownable2Step
 ```
 
 ### 3. Integer Overflow (pre-0.8.0)
@@ -78,10 +83,13 @@ contract MyContract is Ownable {
 uint256 a = type(uint256).max;
 a + 1;  // reverts
 
-// ⚠️ Unchecked blocks (use carefully)
-unchecked {
-    for (uint i = 0; i < length; ++i) { /* ... */ }  // saves gas
+// ⚠️ Unchecked blocks (use carefully) — wrap only the counter, never the loop body
+for (uint256 i = 0; i < length;) {
+    /* body stays checked */
+    unchecked { ++i; }
 }
+// Solidity 0.8.22+ already skips the overflow check on `++i` in a simple
+// `for (...; i < length; ++i)` loop, so on 0.8.22+ the plain form is enough
 ```
 
 ### 4. Front-Running
@@ -101,16 +109,13 @@ unchecked {
 ```solidity
 // ❌ Spot price from AMM
 uint256 price = uniswapPool.price();  // manipulable via flash loan
-
-// ✅ TWAP (Time-Weighted Average Price)
-uint256 price = uniswapV3Oracle.consult(pool, period);
-
-// ✅✅ Multiple oracles + sanity checks
-uint256 chainlink = chainlinkOracle.latestAnswer();
-uint256 twap = uniswapTWAP.consult();
-require(deviation(chainlink, twap) < 2%);
-return median([chainlink, twap, pyth]);
 ```
+
+✅ Use the patterns in [`defi-patterns.md`](defi-patterns.md) · Oracle Integration (one copy, kept up to date):
+
+- Chainlink `latestRoundData()` with `price > 0` and a staleness check on `updatedAt` — never `latestAnswer()` (deprecated, no timestamp)
+- Time-Weighted Average Price (TWAP) from Uniswap V3 for a second opinion
+- several sources → reject if they disagree by more than a set percentage → use the median
 
 ### 6. Storage Layout (Upgradeable Contracts)
 
@@ -134,7 +139,9 @@ contract MyContractV2 {
     uint256 c;  // slot 2 (new)
 }
 
-// Use OpenZeppelin Upgrades for safety checks
+// Use OpenZeppelin Upgrades plugins for layout checks
+// OpenZeppelin 5.x upgradeable contracts keep their state in ERC-7201
+// namespaced storage, so your own variables don't collide with theirs
 ```
 
 ### 7. Delegatecall
@@ -158,13 +165,36 @@ function permit(address user, bytes signature) public {
     // ...
 }
 
-// ✅ EIP-712 with nonce + chain ID
-function permit(address user, uint256 nonce, bytes signature) public {
-    require(nonces[user]++ == nonce);
-    bytes32 hash = keccak256(abi.encodePacked(DOMAIN_SEPARATOR, user, nonce));
-    require(ECDSA.recover(hash, signature) == user);
-    // ...
+// ✅ EIP-712 typed data: domain (name, version, chainId, this contract)
+//    + type hash + nonce + deadline, bound to the exact action
+import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {Nonces} from "@openzeppelin/contracts/utils/Nonces.sol";
+
+contract Vault is EIP712, Nonces {
+    bytes32 private constant WITHDRAW_TYPEHASH = keccak256(
+        "Withdraw(address user,address to,uint256 amount,uint256 nonce,uint256 deadline)"
+    );
+
+    error Expired();
+    error BadSignature();
+
+    constructor() EIP712("Vault", "1") {}
+
+    function withdrawWithSig(
+        address user, address to, uint256 amount, uint256 deadline, bytes calldata signature
+    ) external {
+        if (block.timestamp > deadline) revert Expired();
+        bytes32 structHash = keccak256(
+            abi.encode(WITHDRAW_TYPEHASH, user, to, amount, _useNonce(user), deadline)
+        );
+        // digest = keccak256("\x19\x01" ‖ domainSeparator ‖ structHash)
+        bytes32 digest = _hashTypedDataV4(structHash);
+        if (ECDSA.recover(digest, signature) != user) revert BadSignature();
+        // ... withdraw `amount` of `user` to `to`
+    }
 }
+// Smart-contract wallets (ERC-1271) → SignatureChecker.isValidSignatureNow instead of ECDSA.recover
 ```
 
 ### 9. Flash Loan Attacks
@@ -194,10 +224,18 @@ contract MyContract {
     }
 }
 
-// ✅ Initializer pattern
-contract MyContract is Initializable {
-    function initialize() public initializer {
-        owner = msg.sender;
+// ✅ Initializer pattern (OpenZeppelin 5.x upgradeable)
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+
+contract MyContract is Initializable, OwnableUpgradeable {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();  // nobody can initialize the implementation itself
+    }
+
+    function initialize(address initialOwner) public initializer {
+        __Ownable_init(initialOwner);  // pass the owner explicitly; deploy + initialize in one tx
     }
 }
 ```
@@ -257,8 +295,8 @@ Severity Low:
 
 ## Reference
 
-- [SWC Registry (Smart Contract Weakness Classification)](https://swcregistry.io/)
+- [EEA EthTrust Security Levels](https://entethalliance.org/specs/ethtrust-sl/) — maintained checklist (the old SWC Registry is no longer maintained; use it only for historic IDs)
 - [Trail of Bits Building Secure Smart Contracts](https://github.com/crytic/building-secure-contracts)
-- [OpenZeppelin Defender + best practices](https://docs.openzeppelin.com/)
+- [OpenZeppelin Contracts docs](https://docs.openzeppelin.com/contracts/5.x/) (OpenZeppelin Defender was retired on 1 Jul 2026 — [sunset FAQ](https://www.openzeppelin.com/news/defender-sunset-faq))
 - [Solidity Patterns](https://fravoll.github.io/solidity-patterns/)
 - [Consensys Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/)

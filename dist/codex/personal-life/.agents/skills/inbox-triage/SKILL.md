@@ -21,7 +21,7 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 
 | Test (in this order) | Bucket | Action |
 |---|---|---|
-| Asks for a password, OTP, payment change, or has a link "from" a Thai bank, the RD, a courier or the police | **Verify** | Do not click. Check in the official app or by calling the number on the card. Thai banks stopped sending links by SMS and email in 2023 |
+| Asks for a password, one-time password (OTP), payment change, or has a link "from" a Thai bank, the Revenue Department (RD), a courier or the police | **Verify** | Do not click. Check in the official app or by calling the number on the card. Thai banks stopped sending links by SMS and email in 2023 |
 | Blocks someone today, or has a deadline today/tomorrow | **Today** | Reply now or block a slot today |
 | Real request, not urgent | **This week** | Dated task / calendar slot; reply "received, will answer by [day]" if the sender waits |
 | Someone else should handle it | **Delegate** | Forward with one line: what you need back and by when; log in `waiting-for` |
@@ -39,7 +39,7 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 - **e-Tax Invoice / e-Receipt** in your name and ID — keep for deduction campaigns and warranty claims (`warranty-tracker` in consumer-rights, if installed)
 - **ใบแจ้งหนี้ / e-Statement** — card and utility bills; check due dates in the weekly review
 - **Insurance renewal and premium certificate** (หนังสือรับรองการชำระเบี้ย) — for tax and for `important-docs`
-- **Government** — messages from RD, SSO or DLT usually point you to log in on the official site; type the address yourself
+- **Government** — messages from the RD, the Social Security Office (SSO) or the Department of Land Transport (DLT) usually point you to log in on the official site; type the address yourself
 
 ## Waiting-for log
 

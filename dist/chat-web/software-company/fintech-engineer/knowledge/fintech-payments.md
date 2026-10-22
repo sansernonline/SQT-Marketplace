@@ -219,8 +219,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 FinTech Quality Standards](#fintech-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 FinTech Quality Standards](#-fintech-quality-standards)
 - [Critical FinTech Rules](#critical-fintech-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -275,8 +275,10 @@ const total = price * quantity * 1.07; // floating point drift
 import Decimal from 'decimal.js';
 const total = new Decimal(price).times(quantity).times('1.07');
 
-// ✅ Or use integer cents/satoshis
-const totalCents = priceCents * quantity * 107 / 100; // be careful with rounding
+// ✅ Or use integer minor units (satang/cents) as bigint, with explicit rounding
+// `/ 100` on a JS number gives a float again; on bigint it truncates — so round on purpose:
+const totalCents = (priceCents * quantity * 107n + 50n) / 100n; // half-up, for amounts ≥ 0
+// e.g. 1999n * 3n → 5997n × 1.07 = 6416.79 → 6417n
 ```
 
 ### Rule 2: All money moves are idempotent
@@ -306,9 +308,10 @@ NEVER go backwards (except via reversal record)
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
-- `fintech-payments` — when integrating Stripe, Adyen, Omise, etc.
-- `fintech-payments` — when handling card data
-- `fintech-payments` — when verifying customer identity
+- `fintech-payments` — this skill's references:
+  - `references/payment-gateway-integration.md` · `references/agent-payment-integration.md` — when integrating Stripe, Adyen, Omise, etc.
+  - `references/pci-dss-compliance.md` — when handling card data
+  - `references/kyc-aml-patterns.md` — when verifying customer identity
 - `polished-document-style` (from software-company) — for spec docs
 - `commit-message-format` (from software-company) — for commits
 
@@ -329,21 +332,46 @@ interface Transfer {
   reversalOf?: string;     // if this reverses another transfer
 }
 
+// Everything that decides "may this run?" happens INSIDE one transaction.
+// Checking the key or the balance before the transaction lets two concurrent
+// requests both pass → double transfer or overdraft.
 async function transfer(req: TransferRequest): Promise<Transfer> {
-  // 1. Idempotency check
-  const existing = await db.transfers.findByKey(req.idempotencyKey);
-  if (existing) return existing;
+  validateShape(req); // amount > 0n, known currency, from ≠ to — no DB reads here
 
-  // 2. Validate (account exists, has funds, currency match)
-  await validateTransfer(req);
+  try {
+    return await db.transaction(async (tx) => {
+      // 1. Claim the idempotency key. transfers.idempotency_key is UNIQUE,
+      //    so a concurrent duplicate waits, then fails on this insert.
+      const transfer = await tx.transfers.create({
+        idempotencyKey: req.idempotencyKey,
+        fromAccount: req.fromAccount, toAccount: req.toAccount,
+        amount: req.amount, currency: req.currency, status: 'PENDING',
+      });
 
-  // 3. Single atomic DB transaction
-  return await db.transaction(async (tx) => {
-    const transfer = await tx.transfers.create({...});
-    await tx.ledger.debit(req.fromAccount, req.amount, transfer.id);
-    await tx.ledger.credit(req.toAccount, req.amount, transfer.id);
-    return transfer;
-  });
+      // 2. Lock both accounts in a fixed order (by id) so A→B and B→A can't deadlock
+      //    SELECT id FROM accounts WHERE id IN ($1, $2) ORDER BY id FOR UPDATE
+      await tx.accounts.lockInOrder([req.fromAccount, req.toAccount]);
+
+      // 3. Check funds and debit in one conditional statement:
+      //    UPDATE accounts SET balance = balance - $1
+      //    WHERE id = $2 AND currency = $3 AND balance >= $1
+      const debited = await tx.accounts.debitIfFunds(req.fromAccount, req.amount, req.currency);
+      if (debited.rowCount !== 1) throw new InsufficientFundsError(); // rolls back the whole transaction
+
+      await tx.accounts.credit(req.toAccount, req.amount, req.currency);
+      await tx.ledger.debit(req.fromAccount, req.amount, transfer.id);
+      await tx.ledger.credit(req.toAccount, req.amount, transfer.id);
+      return tx.transfers.update(transfer.id, { status: 'SUCCEEDED' });
+    });
+  } catch (err) {
+    if (isUniqueViolation(err, 'transfers_idempotency_key_key')) {
+      // Same key seen before → return the first result, never run it again
+      const existing = await db.transfers.findByKey(req.idempotencyKey);
+      if (!sameRequest(existing, req)) throw new IdempotencyKeyReusedError(); // same key, different body
+      return existing;
+    }
+    throw err;
+  }
 }
 ```
 
@@ -396,7 +424,7 @@ interface AuditEvent {
 ## When to Hand Off
 
 - Regulatory interpretation → `fintech-compliance-officer`
-- Payment gateway specifics → `fintech-engineer` agent
+- Payment gateway specifics → stay in this role; read `references/agent-payment-integration.md` and `references/payment-gateway-integration.md`
 - Quantitative modeling → `quant-analyst`
 - Security review → `security-engineer` (from software-company)
 - Architecture decisions → `solution-architect` (from software-company)
@@ -432,8 +460,8 @@ interface AuditEvent {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Payment Quality Standards](#payment-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Payment Quality Standards](#-payment-quality-standards)
 - [Gateway Comparison (Asia-Pacific)](#gateway-comparison-asia-pacific)
 - [Critical Payment Patterns](#critical-payment-patterns)
 - [Webhook Best Practices](#webhook-best-practices)
@@ -511,7 +539,7 @@ Before integration, gather:
 ```
 
 Card data goes from the browser straight to the gateway and never touches your server.
-This puts you in PCI SAQ A instead of SAQ D (fully custom form): 12 controls instead of 350.
+This can put you in PCI SAQ A instead of SAQ D (fully custom form); SAQ D is several times larger. SAQ A also has an eligibility rule about scripts on your payment page — see `pci-dss-compliance.md` → SAQ Selection.
 
 ### Pattern 2: Idempotent Charge
 
@@ -523,8 +551,9 @@ async function charge(req: ChargeRequest): Promise<Payment> {
     currency: req.currency,
     payment_method: req.paymentMethodId,
     confirm: true,
-    // KEY:
-    idempotency_key: req.idempotencyKey, // unique per business operation
+  }, {
+    // KEY: a request option (2nd argument) in the Stripe Node library, not a param
+    idempotencyKey: req.idempotencyKey, // unique per business operation, reused on retry
   });
 
   // Store gateway's payment ID in YOUR DB
@@ -541,60 +570,27 @@ async function charge(req: ChargeRequest): Promise<Payment> {
 
 ### Pattern 3: Webhook Handler (Reliable)
 
-```typescript
-app.post('/webhooks/stripe', async (req, res) => {
-  // 1. Verify signature (prevent fakes)
-  const event = stripe.webhooks.constructEvent(
-    req.rawBody,
-    req.headers['stripe-signature'],
-    process.env.STRIPE_WEBHOOK_SECRET
-  );
-
-  // 2. Idempotency: check if processed
-  const existing = await db.webhookEvents.findById(event.id);
-  if (existing) return res.json({ received: true });
-
-  // 3. Persist event FIRST (before processing)
-  await db.webhookEvents.create({
-    id: event.id,
-    type: event.type,
-    rawData: event,
-    status: 'PENDING',
-  });
-
-  // 4. Ack quickly (must be < 5s)
-  res.json({ received: true });
-
-  // 5. Process async (separate worker)
-  await queue.enqueue('process-webhook', { eventId: event.id });
-});
-```
+Order: verify signature on the raw body → store the event (event id = primary key, duplicate insert does nothing) → enqueue → ack. Enqueue before the ack whenever the stored row is still `PENDING` (not only on first insert), so a failed enqueue returns 500 and the gateway's retry enqueues again; a sweeper job re-enqueues rows stuck in `PENDING`; the worker claims each event atomically (`PENDING`/`FAILED` → `PROCESSING`) and handlers stay idempotent. Full code: `payment-gateway-integration.md` → Pattern 3.
 
 ### Pattern 4: Refund Flow
 
+The idempotency key comes from a **stored refund request**, created once per real refund — the same pattern as `payment-gateway-integration.md` → Refund Edge Cases.
+
+- ❌ `refund_${paymentId}_${Date.now()}` → a new key on every retry → timeout + retry = refunded twice
+- ❌ `refund_${paymentId}_${amount}` → two real refunds of the same amount share one key → the 2nd is silently dropped
+
 ```typescript
-async function refund(paymentId: string, amountCents?: bigint): Promise<Refund> {
-  const payment = await db.payments.findById(paymentId);
-  if (payment.status !== 'SUCCEEDED') {
-    throw new Error('Cannot refund: payment not successful');
-  }
+// 1. Record the request once: transaction + row lock + UNIQUE (client_request_id)
+const rr = await requestRefund(paymentId, clientRequestId, amountCents); // returns the existing row on a repeat
 
-  // Default to full refund
-  const refundAmount = amountCents ?? payment.amount;
-
-  if (refundAmount > payment.amount - payment.refundedAmount) {
-    throw new Error('Refund exceeds available');
-  }
-
-  const idempotencyKey = `refund_${paymentId}_${refundAmount}`;
-  const refund = await gateway.refunds.create({
-    payment_intent: payment.gatewayPaymentId,
-    amount: Number(refundAmount),
-    idempotency_key: idempotencyKey,
-  });
-
-  return await db.refunds.create({...});
-}
+// 2. Send it — every retry reuses rr.id, so the key never changes
+const refund = await stripe.refunds.create({
+  payment_intent: payment.gatewayPaymentId,
+  amount: Number(rr.amount),
+  metadata: { refundRequestId: rr.id },
+}, {
+  idempotencyKey: `refund_${rr.id}`, // request option, 2nd argument
+});
 ```
 
 ## Webhook Best Practices
@@ -625,7 +621,7 @@ Daily job:
 |-------|--------|
 | Notification | Auto-alert team |
 | Evidence collection | Gather: receipt, IP, delivery proof, communications |
-| Response submission | Within deadline (usually 7-10 days) |
+| Response submission | Before the deadline — read it from the dispute (`evidence_details.due_by` on Stripe). Stripe says the window is usually 7–21 days depending on the card network (docs.stripe.com/disputes/responding, ตรวจ 22 ต.ค. 2569) |
 | Outcome | Won → funds come back · Lost → write the amount off |
 | Pattern detection | Same pattern repeats → treat it as fraud and act |
 
@@ -645,7 +641,7 @@ Daily job:
 ## When to Hand Off
 
 - PCI compliance documentation → `fintech-compliance-officer`
-- Custom card flow needed → `fintech-engineer`
+- Custom card flow needed → stay in this role; read `references/payment-gateway-integration.md` and `references/pci-dss-compliance.md` first (custom card fields usually mean SAQ A-EP or D)
 - Security review → `security-engineer` (from software-company)
 - High-volume queue design → `solution-architect` (from software-company)
 
@@ -989,7 +985,7 @@ flowchart TD
 - **UN Consolidated** — global
 - **EU Consolidated** — for EU connection
 - **UK HM Treasury** — for UK connection
-- **Local lists** (e.g., AMLO Thailand sanctions)
+- **Local lists** (e.g., Thailand's Anti-Money Laundering Office (AMLO) sanctions list)
 
 ### Matching strategy
 
@@ -1045,6 +1041,7 @@ Categories:
 
 **Threshold rules:**
 - Single transaction > $10,000 (US Currency Transaction Report, CTR)
+- Thailand (reports to AMLO): cash transactions of 2,000,000 baht or more; property transactions over 5,000,000 baht (Tilleke & Gibbins, "Thailand: Anti-Money Laundering", Sep 2025) `(รอยืนยัน — official Ministerial Regulation on amlo.go.th not reachable on 22 ต.ค. 2569; electronic-transfer thresholds not checked)`
 - Several transactions kept just under the threshold (structuring)
 
 **Pattern rules:**
@@ -1101,7 +1098,7 @@ Tier 3: ML models
 
 ## Data Retention
 
-| Data | Retention | Reason |
+| Data | Retention (US / EU baseline) | Reason |
 |------|-----------|--------|
 | KYC documents | 5 years post-relationship | AML regulations |
 | Sanctions screening results | 5 years | Audit trail |
@@ -1109,7 +1106,9 @@ Tier 3: ML models
 | Transaction monitoring alerts | 5 years | Audit |
 | Customer communications | 5 years | Dispute resolution |
 
-> ⚠️ Clashes with the GDPR "right to erasure"? AML obligations usually win.
+**Thailand:** the Anti-Money Laundering Act B.E. 2542 (พ.ร.บ.ป้องกันและปราบปรามการฟอกเงิน) section 22 sets the periods for customer due diligence (CDD) records and transaction records, and the 2015 amendment changed the retention period (Tilleke & Gibbins, Sep 2025). The exact years — possibly 10 years for CDD records after the relationship ends — are `(รอยืนยัน)`: check the Act and the Anti-Money Laundering Board (AMLB) ordinance on safe-keeping CDD information (2016) on amlo.go.th. Until confirmed, keep Thai records for the longer period.
+
+> ⚠️ Clashes with a deletion request? For Thai users this is the Personal Data Protection Act (PDPA); for EU users the GDPR "right to erasure". Both let you keep data that another law requires you to keep, so AML retention usually wins — record the legal basis and delete when the period ends. Details → `pdpa-compliance`.
 
 ## Risk-Based Approach
 
@@ -1153,7 +1152,7 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ## Quality Targets
 
-- False positive rate < 5% (after tuning)
+- False positive rate: set your own target from your baseline (example figure only — published AML alert false-positive rates are often far higher than 5%, so a < 5% target is rarely realistic)
 - Median time to resolve an alert < 5 days
 - 100% of SARs filed within the regulatory deadline
 - Review and tune rules every quarter
@@ -1200,7 +1199,7 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ### Comparison Matrix
 
-Settlement times and coverage change often and were not re-checked on 2026-10-14 `(รอยืนยัน)` — confirm on each vendor's current pricing page before quoting them. Omise may now trade under another brand name `(รอยืนยัน)`.
+Settlement times and coverage change often and were not re-checked on 2026-10-14 `(รอยืนยัน)` — confirm on each vendor's current pricing page before quoting them. Omise traded as "Opn Payments" for about two years and went back to the Omise name in March 2025 (omise.co post "Omise unveils bold rebranding…", 18 Mar 2025; also brandinside.asia and thaipr.net — ตรวจ 22 ต.ค. 2569).
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
@@ -1295,44 +1294,63 @@ if (paymentIntent.status === 'requires_action') {
 ```typescript
 // 1. Receive webhook
 app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  // 2. Verify signature (CRITICAL) — on the raw body, not parsed JSON
+  let event: Stripe.Event;
   try {
-    // 2. Verify signature (CRITICAL)
-    const event = stripe.webhooks.constructEvent(
+    event = stripe.webhooks.constructEvent(
       req.body,
       req.headers['stripe-signature']!,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
+  } catch {
+    return res.status(400).send('Invalid signature');
+  }
 
-    // 3. Idempotency check
-    const existing = await db.webhookEvents.findById(event.id);
-    if (existing) {
-      return res.json({ received: true, duplicate: true });
-    }
-
-    // 4. Store raw event FIRST
-    await db.webhookEvents.create({
+  try {
+    // 3. Store raw event FIRST. event.id is the PRIMARY KEY:
+    //    INSERT ... ON CONFLICT (id) DO NOTHING → a duplicate delivery inserts nothing
+    const inserted = await db.webhookEvents.insertIfAbsent({
       id: event.id,
       type: event.type,
       payload: event,
       status: 'PENDING',
     });
 
-    // 5. Ack within 5s
-    res.json({ received: true });
-
-    // 6. Process async
-    await queue.enqueue('process-webhook', { eventId: event.id });
-  } catch (err) {
-    if (err instanceof stripe.errors.StripeSignatureVerificationError) {
-      return res.status(400).send('Invalid signature');
+    // 4. Enqueue BEFORE the ack, whenever the stored row is still PENDING — not only when it
+    //    was just inserted. So if enqueue throws → 500 → the gateway's retry finds the row
+    //    PENDING and enqueues again. If the process dies, the sweeper below picks the row up.
+    //    (A duplicate enqueue is harmless: the worker claims the event atomically.)
+    const stored = inserted ? { status: 'PENDING' } : await db.webhookEvents.findById(event.id);
+    if (stored.status === 'PENDING') {
+      await queue.enqueue('process-webhook', { eventId: event.id });
     }
+
+    // 5. Ack fast (within a few seconds) — the last step, nothing after it can fail
+    return res.json({ received: true, duplicate: !inserted });
+  } catch (err) {
     log.error('Webhook error', err);
-    res.status(500).send('Error');
+    return res.status(500).send('Error');
   }
 });
 
-// Worker (separate):
+// Sweeper (cron every few minutes): re-enqueue events stuck in PENDING,
+// e.g. stored but never enqueued because the process crashed.
+async function sweepPendingWebhooks() {
+  const stuck = await db.webhookEvents.findPendingOlderThan({ minutes: 5 });
+  for (const e of stuck) await queue.enqueue('process-webhook', { eventId: e.id });
+}
+
+// Worker (separate) — may be enqueued twice for one event (sweeper + retry), so it CLAIMS
+// the event atomically instead of check-then-act:
+//   UPDATE webhook_events SET status = 'PROCESSING'
+//   WHERE id = $1 AND status IN ('PENDING', 'FAILED')
+// Only the worker that changed 1 row goes on. Handlers must still be idempotent
+// (e.g. handleRefund keyed on the refund id): a worker can crash after the handler ran
+// but before PROCESSED is written. A sweeper may also reset rows stuck in PROCESSING
+// for a long time back to PENDING.
 async function processWebhook(eventId: string) {
+  const claimed = await db.webhookEvents.claim(eventId); // rowCount of the UPDATE above
+  if (claimed !== 1) return; // someone else has it, or it is already PROCESSED
   const evt = await db.webhookEvents.findById(eventId);
 
   try {
@@ -1441,55 +1459,69 @@ async function retryPayment(paymentId: string, attempt: number = 0) {
 ```typescript
 // Always store currency with amount
 interface Money {
-  amount: bigint;        // integer (cents/satoshis)
+  amount: bigint;        // integer in the currency's minor unit (THB satang, USD cents; JPY has 0 decimals, KWD 3)
   currency: string;      // ISO 4217 code
 }
 
 // Never assume USD
+// Never assume 2 decimals — don't hard-code `/ 100`
 // Never mix currencies in calculations
 // Always use FX rate at transaction time
 
-// Display formatting (per locale):
+// Display formatting (per locale) — display only, never feed the result back into math:
 function format(money: Money, locale: string): string {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: money.currency,
-  }).format(Number(money.amount) / 100);
+  const fmt = new Intl.NumberFormat(locale, { style: 'currency', currency: money.currency });
+  const digits = fmt.resolvedOptions().maximumFractionDigits; // ISO 4217 minor unit: THB 2, JPY 0, KWD 3
+  return fmt.format(Number(money.amount) / 10 ** digits);
 }
+// The gateway's own amount rules can differ from ISO 4217 for a few currencies
+// (Stripe lists its "zero-decimal" and special cases) — convert with the gateway's table at the API edge.
 ```
 
 ## Settlement Reconciliation
 
 ```typescript
-// Daily job
-async function reconcileSettlement(date: Date) {
-  // 1. Pull settlement report from gateway
-  const settlement = await stripe.balanceTransactions.list({
-    created: { gte: startOfDay(date), lte: endOfDay(date) },
-  });
+// Daily job — match transaction by transaction, not one day total against another.
+// A payout is net of fees and batches several days, so "sum of payouts = payments paid today" never holds.
+const toUnix = (d: Date) => Math.floor(d.getTime() / 1000); // Stripe `created` filters take Unix seconds
 
-  // 2. Sum gateway's view
-  const gatewayTotal = settlement.data
-    .filter((t) => t.type === 'payout')
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  // 3. Sum our DB
-  const ourTotal = await db.payments.sumPaidOnDate(date);
-
-  // 4. Compare
-  if (gatewayTotal !== ourTotal) {
-    await alerts.fire({
-      severity: 'P1',
-      title: 'Settlement reconciliation mismatch',
-      data: { date, gatewayTotal, ourTotal, diff: gatewayTotal - ourTotal },
-    });
+async function reconcileDay(date: Date) {
+  // 1. Gateway view: one entry per charge / refund (gross amount, minor units)
+  const gateway = new Map<string, bigint>(); // source id (ch_… / re_…) → amount
+  for await (const t of stripe.balanceTransactions.list({
+    created: { gte: toUnix(startOfDay(date)), lt: toUnix(startOfNextDay(date)) },
+    limit: 100, // auto-pagination walks every page; the default page is only 10
+  })) {
+    if (!['charge', 'payment', 'refund', 'payment_refund'].includes(t.type)) continue; // fees, payouts, adjustments: own checks
+    gateway.set(t.source as string, BigInt(t.amount)); // t.fee and t.net are there too
   }
+  // Note: balance transactions are in the SETTLEMENT currency. If you charge in another
+  // currency, compare against the charge amount instead, or store both in your DB.
 
-  // 5. Match to bank deposit
-  const bankDeposit = await bankApi.getDeposit(date);
-  if (gatewayTotal !== bankDeposit.amount) {
-    // Gateway → Bank mismatch
-    await alerts.fire({ severity: 'P2', title: 'Bank deposit mismatch' });
+  // 2. Our view: same ids, same sign convention (refunds negative)
+  const ours = await db.ledger.entriesByGatewayIdOnDate(date); // Map<string, bigint>
+
+  // 3. Every difference, both directions
+  const mismatches = [];
+  for (const [id, amt] of gateway) if (ours.get(id) !== amt) mismatches.push({ id, gateway: amt, ours: ours.get(id) });
+  for (const [id, amt] of ours) if (!gateway.has(id)) mismatches.push({ id, gateway: undefined, ours: amt });
+
+  if (mismatches.length > 0) {
+    await alerts.fire({ severity: 'P1', title: 'Settlement reconciliation mismatch', data: { date, mismatches } });
+  }
+}
+
+// Bank side — match each payout (already net of fees) to one bank deposit
+async function reconcilePayouts(date: Date) {
+  for await (const p of stripe.payouts.list({
+    arrival_date: { gte: toUnix(startOfDay(date)), lt: toUnix(startOfNextDay(date)) },
+    limit: 100,
+  })) {
+    const deposit = await bankApi.findDeposit({ reference: p.id, date });
+    if (!deposit || deposit.amount !== BigInt(p.amount)) {
+      await alerts.fire({ severity: 'P2', title: 'Bank deposit mismatch', data: { payout: p.id } });
+    }
+    // Which charges make up this payout: balanceTransactions.list({ payout: p.id })
   }
 }
 ```
@@ -1505,27 +1537,75 @@ async function reconcileSettlement(date: Date) {
 //    - Bank transfer: 1-3 days
 //    - Wallet: usually instant
 
-// Partial refund pattern:
-async function refundPayment(paymentId: string, amountCents?: bigint) {
-  const payment = await db.payments.findById(paymentId);
+// Partial refund pattern — the idempotency key comes from a STORED refund request.
+// ❌ `refund_${paymentId}_${Date.now()}` → new key on every retry → timeout + retry = refunded twice
+// ❌ `refund_${paymentId}_${amount}`     → two real refunds of the same amount share a key → the 2nd is silently dropped
+// ✅ one refund_requests row per real refund; its id is the key; every retry reuses it
 
-  const refundAmount = amountCents ?? (payment.amount - payment.refunded);
+// Step 1: record the request once (inside a transaction, payment row locked)
+async function requestRefund(paymentId: string, clientRequestId: string, amountCents?: bigint) {
+  return db.transaction(async (tx) => {
+    const payment = await tx.payments.findByIdForUpdate(paymentId); // SELECT ... FOR UPDATE
 
-  if (refundAmount <= 0n) throw new Error('Already fully refunded');
-  if (refundAmount > payment.amount - payment.refunded) {
-    throw new Error('Refund exceeds available');
-  }
+    // Same request sent twice (double click, client retry) → same row back.
+    // refund_requests has UNIQUE (client_request_id).
+    // Same id with a different amount is a client bug → refuse (same rule as transfer()).
+    const existing = await tx.refundRequests.findByClientRequestId(clientRequestId);
+    if (existing) {
+      if (amountCents !== undefined && existing.amount !== amountCents) {
+        throw new IdempotencyKeyReusedError(); // same key, different body
+      }
+      return existing;
+    }
 
+    // Count PENDING + SUBMITTED + SUCCEEDED requests, so two requests in flight can't overshoot
+    const reserved = await tx.refundRequests.sumNotFailed(paymentId);
+    const available = payment.amount - reserved;
+    const refundAmount = amountCents ?? available;
+
+    if (refundAmount <= 0n) throw new Error('Already fully refunded');
+    if (refundAmount > available) throw new Error('Refund exceeds available');
+
+    return tx.refundRequests.create({
+      id: crypto.randomUUID(), paymentId, clientRequestId,
+      amount: refundAmount, status: 'PENDING',
+    });
+  });
+}
+
+// Step 2: send it — safe to run again (worker retry, timeout) with the same id
+async function executeRefund(refundRequestId: string) {
+  const rr = await db.refundRequests.findById(refundRequestId);
+  if (rr.status !== 'PENDING') return rr; // already done
+  const payment = await db.payments.findById(rr.paymentId);
+
+  // Stripe Node: the key is a request option (2nd argument), not a param.
+  // Stripe may prune a key after 24 h — for a retry later than that, first look for
+  // an existing refund with metadata.refundRequestId before calling create again.
+  // Network error / timeout → leave PENDING and retry later (same key).
+  // Definite rejection (e.g. StripeInvalidRequestError) → mark FAILED so the amount is freed.
   const refund = await stripe.refunds.create({
     payment_intent: payment.gatewayId,
-    amount: Number(refundAmount),
+    amount: Number(rr.amount),
+    metadata: { refundRequestId: rr.id },
   }, {
-    idempotencyKey: `refund_${paymentId}_${Date.now()}`,
+    idempotencyKey: `refund_${rr.id}`,
   });
 
-  await db.payments.update(paymentId, {
-    refunded: payment.refunded + refundAmount,
-    status: refundAmount === payment.amount ? 'REFUNDED' : 'PARTIALLY_REFUNDED',
+  await db.transaction(async (tx) => {
+    // refund.status can be pending / requires_action / succeeded / failed / canceled.
+    // Not final yet → SUBMITTED (still counted as reserved); the webhook
+    // (refund.updated) later moves it to SUCCEEDED or FAILED and re-runs this total.
+    const status =
+      refund.status === 'succeeded' ? 'SUCCEEDED'
+      : refund.status === 'failed' || refund.status === 'canceled' ? 'FAILED'
+      : 'SUBMITTED';
+    await tx.refundRequests.update(rr.id, { gatewayRefundId: refund.id, status });
+    const refunded = await tx.refundRequests.sumSucceeded(rr.paymentId);
+    await tx.payments.update(rr.paymentId, {
+      refunded,
+      status: refunded === payment.amount ? 'REFUNDED' : 'PARTIALLY_REFUNDED', // total, not this one refund
+    });
   });
 }
 ```
@@ -1571,7 +1651,9 @@ async function refundPayment(paymentId: string, amountCents?: bigint) {
 - [Anti-patterns Specific to PCI](#anti-patterns-specific-to-pci)
 - [Reference](#reference)
 
-# PCI-DSS v4 Compliance Patterns
+# PCI-DSS v4.0.1 Compliance Patterns
+
+> Current version: PCI DSS v4.0.1 (published June 2024). v4.0 was retired on 31 Dec 2024. Source: PCI SSC blog "Just published: PCI DSS v4.0.1"; also Cloud Security Alliance (Aug 2024) and PCI Proxy (Jun 2024) — ตรวจ 22 ต.ค. 2569.
 
 ## When to use this skill
 
@@ -1613,16 +1695,18 @@ Anywhere card data goes, that system is in scope.
 
 ## SAQ Selection (Critical Decision)
 
-| SAQ | Use when | Controls | Effort |
-|:---:|----------|:--------:|:------:|
-| **A** ⭐ | Fully outsourced (Stripe Elements, hosted page) | 24 | 🟢 Low |
-| **A-EP** | E-commerce, hosted with some your server interaction | 191 | 🟡 Med |
-| **B** | Imprint machines only | 41 | 🟡 Med |
-| **B-IP** | Stand-alone IP terminals | 79 | 🟡 Med |
-| **C** | Payment app + isolated network | 162 | 🔴 High |
-| **D** | Everything else (full CDE) | 329 | 🔴 Very High |
+| SAQ | Use when | Effort |
+|:---:|----------|:------:|
+| **A** ⭐ | Fully outsourced (Stripe Elements iframe, hosted payment page) | 🟢 Low |
+| **A-EP** | E-commerce where your own page affects the payment form (e.g. direct post, your JavaScript around the fields) | 🟡 Med |
+| **B** | Imprint machines or stand-alone dial-out terminals | 🟡 Med |
+| **B-IP** | Stand-alone IP terminals | 🟡 Med |
+| **C** | Payment app + isolated network | 🔴 High |
+| **D** | Everything else (full CDE) | 🔴 Very High |
 
-> 🎯 **Aim for SAQ A.** SAQ D has 305 more controls than SAQ A. Design the system so SAQ A applies.
+> 🎯 **Aim for SAQ A.** SAQ D is several times larger than SAQ A. Design the system so SAQ A applies. Question counts change with each SAQ revision — read the current SAQ from the PCI Security Standards Council (PCI SSC) document library instead of quoting a number.
+
+**SAQ A eligibility (January 2025 SAQ A, in effect from 31 Mar 2025):** requirements 6.4.3 and 11.6.1 (payment-page script controls) and 12.3.1 were removed from SAQ A. In their place is a new eligibility rule: the merchant must confirm its site is not susceptible to attacks from scripts that could affect its e-commerce system. In practice: keep the card form fully inside the gateway's iframe or hosted page, control which scripts your pages load (e.g. Content Security Policy (CSP), Subresource Integrity (SRI)), or use the gateway's or a third party's confirmation that the page is protected. If you can't confirm this, SAQ A does not apply. Source: PCI SSC blog "Important updates announced for merchants validating to SAQ A" (30 Jan 2025); also Akamai and Jscrambler write-ups — ตรวจ 22 ต.ค. 2569.
 
 ## The 12 Requirements (Cheat Sheet)
 
@@ -1727,24 +1811,34 @@ Use a key management service (KMS) from AWS, Azure or GCP, or a hardware securit
 ## Tokenization Pattern
 
 ```typescript
-// Use gateway's tokenization
+// Use gateway's tokenization — PaymentIntents + Elements, the same flow as payment-gateway-integration.md
+// (the legacy createToken + charges.create flow is not used for new work)
 // Card NEVER touches your server
 
-// Browser side (Stripe.js example):
-const { token } = await stripe.createToken(cardElement);
-// `token.id` = 'tok_xxx', safe to send
-
-// Server side:
-const charge = await stripe.charges.create({
-  amount: 1000,
+// Server side — create the intent, send only its client_secret to the browser:
+const intent = await stripe.paymentIntents.create({
+  amount: 1000,              // minor units (satang)
   currency: 'thb',
-  source: token.id,  // ← token, not PAN
+  automatic_payment_methods: { enabled: true },
+  metadata: { orderId },
+}, { idempotencyKey: `order_${orderId}_charge_v1` });
+// → return intent.client_secret to the browser
+
+// Browser side (Stripe.js + Payment Element in an iframe):
+const elements = stripe.elements({ clientSecret });
+elements.create('payment').mount('#payment-element');
+const { error } = await stripe.confirmPayment({
+  elements,
+  confirmParams: { return_url: 'https://yourapp.com/payment-return' },
 });
 
-// Store in your DB:
+// Server side, on the payment_intent.succeeded webhook — store references only:
+const pi = await stripe.paymentIntents.retrieve(intentId, { expand: ['latest_charge'] });
+const charge = pi.latest_charge as Stripe.Charge;
 await db.payments.create({
-  paymentMethodToken: charge.payment_method,  // e.g., 'pm_xxx'
-  last4: charge.payment_method_details.card.last4,  // ok to store
+  gatewayPaymentId: pi.id,                              // 'pi_…'
+  paymentMethodId: pi.payment_method as string,         // 'pm_…' token, not PAN
+  last4: charge.payment_method_details?.card?.last4,   // ok to store
   // NEVER: full PAN, CVV
 });
 ```
@@ -1824,6 +1918,7 @@ Before QSA arrives:
 
 ## Reference
 
-- [PCI-DSS v4.0 Standard](https://www.pcisecuritystandards.org/document_library/?category=pcidss)
+- [PCI-DSS v4.0.1 Standard](https://www.pcisecuritystandards.org/document_library/?category=pcidss)
+- [SAQ A update, Jan 2025 (PCI SSC blog)](https://blog.pcisecuritystandards.org/important-updates-announced-for-merchants-validating-to-self-assessment-questionnaire-a)
 - [SAQ Selection Tool](https://www.pcisecuritystandards.org/)
 - [Tokenization Best Practices](https://www.pcisecuritystandards.org/document_library/?category=guidance)

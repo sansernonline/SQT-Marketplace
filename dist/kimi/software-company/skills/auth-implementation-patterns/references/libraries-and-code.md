@@ -24,8 +24,8 @@ Use existing tools:
 
 | Stack | Library | Notes |
 |-------|---------|-------|
-| Node.js | `passport`, `lucia-auth` | Lucia is simpler and newer |
-| Python | `authlib`, `python-jose` | authlib for OAuth |
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
 | Go | `oauth2`, `golang-jwt` | Standard |
 | Rust | `axum-login`, `jsonwebtoken` | — |
 | Any | Auth0, Clerk, Supabase Auth | Managed (faster) |

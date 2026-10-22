@@ -19,6 +19,7 @@
 ```bash
 dotnet add package AspNetCore.HealthChecks.NpgSql
 dotnet add package AspNetCore.HealthChecks.Redis
+dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
 ```
 
 ```csharp
@@ -28,7 +29,9 @@ builder.Services.AddHealthChecks()
     .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
     .AddSmtpHealthCheck(o => { }, name: "mail",
         failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
-        tags: ["ready"]);
+        tags: ["ready"])
+    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
+    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
 ```
 
 ```csharp
@@ -119,30 +122,82 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-```csharp
-builder.Services.Configure<HostOptions>(o =>
-    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
+ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
+จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
 
-// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
-// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
-app.Lifetime.ApplicationStopping.Register(() =>
+```csharp
+// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
+public sealed class ReadinessState { public volatile bool IsShuttingDown; }
+
+public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
 {
-    ReadinessState.IsShuttingDown = true;
-    Thread.Sleep(TimeSpan.FromSeconds(5));
-});
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
+        Task.FromResult(state.IsShuttingDown
+            ? HealthCheckResult.Unhealthy("shutting down")
+            : HealthCheckResult.Healthy());
+}
+
+public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
+{
+    public async Task StoppingAsync(CancellationToken ct)
+    {
+        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
+        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
+    }
+    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
+    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
+    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
+    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
+    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
+}
+
+// ก่อน builder.Build()
+builder.Services.AddSingleton<ReadinessState>();
+builder.Services.AddHostedService<DrainOnShutdown>();
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
 ```
+
+ลำดับตอนปิดของ host (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` ของ hosted service (รวม Kestrel) → `StoppedAsync` → `ApplicationStopped` — ตามหน้า .NET Generic Host ที่ learn.microsoft.com (ตรวจ 22 ต.ค. 2569)
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
+ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+
 ```csharp
-app.UseHsts();
-app.UseHttpsRedirection();
+// ---- ก่อน Build: ลงทะเบียน service ----
 builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
-builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddRateLimiter(o =>
+{
+    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
+    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
+});
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
      .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+
+var app = builder.Build();
+
+// ---- หลัง Build: ลำดับ middleware ----
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
+app.UseHttpsRedirection();
+app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
+{
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
+    await next();
+});
+app.UseCors();
+app.UseRateLimiter();
+
+app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
 ```
+
+ไม่อยากเขียน middleware เอง → แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) ตั้งชุด header พื้นฐานให้ครบ
 
 ---
 
@@ -191,7 +246,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
 | error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
 | request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
-| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
-| security headers | `UseHsts()` | `helmet` | `secure` middleware |
-| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
+| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |

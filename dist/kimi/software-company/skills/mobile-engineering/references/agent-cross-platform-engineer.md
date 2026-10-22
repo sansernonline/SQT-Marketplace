@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Cross-Platform Quality Standards](#cross-platform-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Cross-Platform Quality Standards](#-cross-platform-quality-standards)
 - [Framework Comparison (2026)](#framework-comparison-2026)
 - [React Native Patterns](#react-native-patterns)
 - [Flutter Patterns](#flutter-patterns)
@@ -41,7 +41,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 - **Code sharing:** > 80% across platforms
 - **Native feel:** follows each platform's conventions
-- **Performance:** 60fps for standard interactions
+- **Performance:** 60 frames per second (fps) for standard interactions
 - **Bundle size:** within reasonable limits
 - **Update strategy:** over-the-air (OTA) updates where the store allows
 - **Testing:** unit, integration and end-to-end (E2E)
@@ -50,9 +50,9 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 | Framework | Pros | Cons | Best for |
 |-----------|------|------|----------|
-| **React Native** | JS, huge ecosystem | Bridge perf cost | Web team adopting mobile |
+| **React Native** | JavaScript, huge ecosystem | งานหนักบน JavaScript thread · ข้ามไป native ถี่ ๆ มีต้นทุน (ใช้ JavaScript Interface, JSI) | Web team adopting mobile |
 | **Flutter** | Single rendering engine, performance | Dart language adoption | New apps, design-heavy |
-| **Kotlin Multiplatform** | Native UI, share business logic | Tooling immature | Existing Android shop |
+| **Kotlin Multiplatform** | Native UI, share business logic (Compose Multiplatform for iOS เสถียรตั้งแต่ 1.8.0 พ.ค. 2025 — แชร์ UI ได้ด้วย) | ต้องมีความรู้ Kotlin + Xcode ทั้งสองฝั่ง ระบบ library ยังเล็กกว่า RN/Flutter | Existing Android shop |
 | **Expo (RN)** | Easier setup, OTA updates | Some native limits | MVPs, easier teams |
 | **Capacitor** | Web tech, easy bridge | Webview overhead | Web app to mobile |
 
@@ -88,10 +88,10 @@ function ProductList() {
 - NativeWind (Tailwind for RN)
 - React Native Reanimated (animations)
 
-### New Architecture (Fabric + TurboModules)
-- 2026: enabled by default
-- Better performance
-- More flexible native modules
+### New Architecture (Fabric + Turbo Modules)
+- React Native 0.82 (ต.ค. 2568) เป็นเวอร์ชันแรกที่ใช้ New Architecture อย่างเดียว — ตั้ง `newArchEnabled=false` จะถูกเมินแล้ว (reactnative.dev/blog/2025/10/08/react-native-0.82 ตรวจ 22 ต.ค. 2569)
+- เวอร์ชันเก่ากว่า 0.82 ต้องเปิดเองหรือดูค่าเริ่มต้นของเวอร์ชันนั้น
+- Native module เขียนแบบ Turbo Module หรือ Expo Modules ไม่ใช่ `NativeModules` แบบเก่า
 
 ## Flutter Patterns
 
@@ -120,7 +120,7 @@ class ProductList extends ConsumerWidget {
 - Riverpod (state management)
 - Dio (HTTP)
 - Freezed (data classes)
-- Go Router (navigation)
+- Go Router (navigation — ประกาศเส้นทางในโค้ดด้วย `GoRouter(routes: [...])`)
 - Drift (local DB)
 
 ## Kotlin Multiplatform Patterns
@@ -146,27 +146,35 @@ class ProductRepository(
 - Performance-critical code
 - Existing native code
 
-### RN Bridge
+### RN native module (Expo Modules API — ใช้ได้กับ New Architecture)
 ```typescript
-// JS side
-import { NativeModules } from 'react-native';
-const { MyModule } = NativeModules;
+// JS side: modules/my-module/src/index.ts
+import { requireNativeModule } from 'expo';
+const MyModule = requireNativeModule('MyModule');
 
-await MyModule.doSomethingNative(arg);
-
+export function doSomethingNative(arg: string): Promise<string> {
+  return MyModule.doSomethingNative(arg);
+}
+```
+```swift
 // iOS side (Swift)
-@objc(MyModule)
-class MyModule: NSObject {
-  @objc func doSomethingNative(_ arg: String, resolver: RCTPromiseResolveBlock, ...) {
-    // Native code
-    resolver(result)
+import ExpoModulesCore
+
+public class MyModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("MyModule")
+    AsyncFunction("doSomethingNative") { (arg: String) -> String in
+      // Native code
+      return "native: \(arg)"
+    }
   }
 }
 ```
+ถ้าไม่ใช้ Expo ให้เขียน Turbo Module ตามคู่มือ reactnative.dev (Codegen spec ใน TypeScript)
 
 ## Build + Distribution
 
-### CI/CD
+### Continuous Integration and Delivery (CI/CD)
 - Fastlane (iOS + Android automation)
 - EAS Build (Expo's managed builds)
 - Codemagic, Bitrise (third-party CI)
@@ -180,13 +188,13 @@ class MyModule: NSObject {
 
 ## Performance Patterns
 
-### Avoid bridge calls in hot paths
+### Avoid frequent JS-to-native calls in hot paths
 - Animations on UI thread (Reanimated)
 - Heavy work in native modules
 - Lazy load screens
 
 ### Image optimization
-- Use FastImage / cached_network_image
+- Use `expo-image` (RN) / cached_network_image (Flutter) — react-native-fast-image ไม่มีคนดูแลแล้ว
 - Appropriate sizes per device
 - WebP / AVIF where supported
 
@@ -219,4 +227,3 @@ class MyModule: NSObject {
 - [Flutter Docs](https://flutter.dev/)
 - [Expo Docs](https://docs.expo.dev/)
 - [Kotlin Multiplatform](https://kotlinlang.org/lp/multiplatform/)
-- [Cross-Platform Mobile Benchmark](https://github.com/zedek/CrossPlatformPerfBenchmark)

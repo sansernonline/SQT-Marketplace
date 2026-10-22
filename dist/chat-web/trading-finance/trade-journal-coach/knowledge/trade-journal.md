@@ -20,7 +20,7 @@ The minimum record that still teaches you something later. Fill-in template and 
 R-multiple    = net P/L in baht ÷ 1R
 ```
 
-Example: bought 200 @ 48.50, stop 47.75 → 1R = 0.75 × 200 = 150 baht. Sold 200 @ 50.25, costs 40 baht → net P/L = 1.75 × 200 − 40 = 310 → **+2.07R**. Stopped out at 47.75 with costs 40 → −190 baht = **−1.27R** (more than −1R because of costs or slippage — that gap is information).
+Example: bought 200 @ 48.50, stop 47.50 → 1R = 1.00 × 200 = 200 baht. Sold 200 @ 50.25, costs 40 baht → net P/L = 1.75 × 200 − 40 = 310 → **+1.55R**. Stopped out at 47.50 with costs 40 → −240 baht = **−1.20R** (more than −1R because of costs or slippage — that gap is information).
 
 ## Setup names — pick from a short fixed list
 
@@ -46,13 +46,13 @@ calm · confident · FOMO (กลัวตกรถ) · revenge (เอาคื
 |---|---|
 | Date in | 2026-10-06 10:15 |
 | Symbol / side | ABC / buy |
-| Shares · entry · stop · target | 200 · 48.50 · 47.75 · 51.00 |
-| 1R (baht) | 150 |
+| Shares · entry · stop · target | 200 · 48.50 · 47.50 · 51.00 |
+| 1R (baht) | 200 |
 | Setup | breakout-volume |
 | Reason | Broke 3-month high 48.00 on 2.1× volume, trend up |
 | Emotion | calm |
 | Date out · exit · costs | 2026-10-14 · 50.25 · 40 |
-| P/L baht · R | +310 · +2.07R |
+| P/L baht · R | +310 · +1.55R |
 | What happened | Stalled under 50.50, sold on plan rule "exit if no new high in 5 days" |
 | Plan followed | Y |
 
@@ -75,15 +75,15 @@ id,account,date_in,symbol,side,shares,entry,stop,target,one_r_baht,setup,reason,
 | account | `live` or `paper` | live |
 | date_in | ISO date and time (Gregorian, not พ.ศ., so it sorts) | 2026-10-06 10:15 |
 | symbol / side | ticker, `buy` or `short` | ABC, buy |
-| shares, entry, stop, target | numbers on valid ticks | 200, 48.50, 47.75, 51.00 |
-| one_r_baht | \|entry − stop\| × shares | 150 |
+| shares, entry, stop, target | numbers on valid ticks | 200, 48.50, 47.50, 51.00 |
+| one_r_baht | \|entry − stop\| × shares | 200 |
 | setup | one name from the fixed list | breakout-volume |
 | reason | one sentence, written before entry | Broke 3-month high on 2.1× volume |
 | emotion | one word | calm |
-| stop_changes | "date: old→new, reason" or blank | 10-09: 47.75→48.50, breakeven |
+| stop_changes | "date: old→new, reason" or blank | 10-09: 47.50→48.50, breakeven |
 | date_out, exit, costs_baht | from the broker confirmation | 2026-10-14, 50.25, 40 |
 | pnl_baht | (exit − entry) × shares × side − costs | 310 |
-| r_multiple | pnl_baht ÷ one_r_baht, 2 decimals | 2.07 |
+| r_multiple | pnl_baht ÷ one_r_baht, 2 decimals | 1.55 |
 | what_happened | one sentence | Stalled under 50.50, exited on time rule |
 | plan_followed | Y / N | Y |
 | violation | blank, or `moved-stop`, `oversize`, `no-stop`, `no-setup`, `revenge` | |
@@ -106,5 +106,6 @@ EXIT   date ____  exit ____  costs ____  P/L ____ baht = ____ R
 1. `breakout-volume`
 2. `pullback-50ma`
 3. `earnings-gap`
-4. `range-bounce`
-5. `no-setup` — impulse trade, logged honestly
+4. `dividend-run-up`
+5. `range-bounce`
+6. `no-setup` — impulse trade, logged honestly

@@ -12,15 +12,15 @@ id,account,date_in,symbol,side,shares,entry,stop,target,one_r_baht,setup,reason,
 | account | `live` or `paper` | live |
 | date_in | ISO date and time (Gregorian, not พ.ศ., so it sorts) | 2026-10-06 10:15 |
 | symbol / side | ticker, `buy` or `short` | ABC, buy |
-| shares, entry, stop, target | numbers on valid ticks | 200, 48.50, 47.75, 51.00 |
-| one_r_baht | \|entry − stop\| × shares | 150 |
+| shares, entry, stop, target | numbers on valid ticks | 200, 48.50, 47.50, 51.00 |
+| one_r_baht | \|entry − stop\| × shares | 200 |
 | setup | one name from the fixed list | breakout-volume |
 | reason | one sentence, written before entry | Broke 3-month high on 2.1× volume |
 | emotion | one word | calm |
-| stop_changes | "date: old→new, reason" or blank | 10-09: 47.75→48.50, breakeven |
+| stop_changes | "date: old→new, reason" or blank | 10-09: 47.50→48.50, breakeven |
 | date_out, exit, costs_baht | from the broker confirmation | 2026-10-14, 50.25, 40 |
 | pnl_baht | (exit − entry) × shares × side − costs | 310 |
-| r_multiple | pnl_baht ÷ one_r_baht, 2 decimals | 2.07 |
+| r_multiple | pnl_baht ÷ one_r_baht, 2 decimals | 1.55 |
 | what_happened | one sentence | Stalled under 50.50, exited on time rule |
 | plan_followed | Y / N | Y |
 | violation | blank, or `moved-stop`, `oversize`, `no-stop`, `no-setup`, `revenge` | |
@@ -43,5 +43,6 @@ EXIT   date ____  exit ____  costs ____  P/L ____ baht = ____ R
 1. `breakout-volume`
 2. `pullback-50ma`
 3. `earnings-gap`
-4. `range-bounce`
-5. `no-setup` — impulse trade, logged honestly
+4. `dividend-run-up`
+5. `range-bounce`
+6. `no-setup` — impulse trade, logged honestly

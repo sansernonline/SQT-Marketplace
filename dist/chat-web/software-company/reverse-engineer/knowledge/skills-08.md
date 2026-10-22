@@ -1,19 +1,19 @@
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
+Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
 
 # Markdown Visuals
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
 ## When to use this skill
 
-- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
 - The user asked "show me how it looks" inside a markdown doc or chat reply
@@ -24,8 +24,8 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
@@ -33,19 +33,26 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 ```
 What are you showing?
 │
-├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
 
-## 1 · Inline SVG (primary technique)
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
 
 ### Boilerplate
 
@@ -61,7 +68,7 @@ What are you showing?
 ```
 
 **Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
 - `viewBox` — sets the coordinate space; lets the SVG scale responsively
 - `role="img"` + `aria-label` — accessibility, screen readers
 - `<p align="center">` wrapper — centers in the rendered page
@@ -83,6 +90,7 @@ Window chrome, phone frame, button, card, status badge, running dot and tooltip 
 ## 2 · External image files
 
 Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
 - Photo or screenshot
 - Illustration too complex to author as SVG by hand (50+ shapes)
 - Reusing the same image across many docs
@@ -133,7 +141,7 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
 ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
 | เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
@@ -162,10 +170,10 @@ For every visual:
 - ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
 - ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
 - ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
@@ -182,15 +190,15 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
 
 ## Related skills
 
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -265,7 +273,7 @@ scale
 
 Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
 
-Pattern from `DockXI/docs/12-design-mockup.md`:
+The 6-part pattern for a design spec:
 
 ```
 1. Inline SVG mockup of each UI state              ← "what it looks like"
@@ -360,14 +368,14 @@ Reusable building blocks for inline SVG pictures of a screen inside .md docs (th
 
 ## Worked example — UI state mockup
 
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
 
 
 ---
 
 # skill: polished-document-style
 
-Use when writing or tidying any document people keep (Markdown, Word, PDF) — headings, tables, Thai text. Designed look → branded-document-design.
+Use when writing or tidying a document people keep (report, proposal, Word, PDF) — headings, tables, Thai. Designed look → branded-document-design.
 
 # Polished Document Style
 
@@ -375,17 +383,15 @@ Use when writing or tidying any document people keep (Markdown, Word, PDF) — h
 
 ## When to use this skill
 
-- Output is meant for **non-developers** to read (PMs, executives, clients)
+- Output is meant for **general readers** (managers, executives, clients, customers)
 - Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
+- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
 - จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
 
 ## When NOT to use
 
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
+- Internal notes for the author's own team (keep them concise)
+- Quick scratch notes · code comments
 - A whole Markdown report that must come out as one .docx → `markdown-report-docx`
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
@@ -410,6 +416,8 @@ Status values:
 - **Review** (กำลังรีวิว) — under stakeholder review
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
+
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -449,13 +457,13 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 | ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
 | สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
 | ผลตรวจ | ผ่าน · ไม่ผ่าน |
-| ชนิดกล่องข้อความ | ข้อแนะนำ · ข้อควรจำ · อันตราย · คำถามที่ยังเปิด |
+| ชนิดกล่องข้อความ | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
 
 ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
 
 ## Callout Boxes
 
-Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** · **Warning** · **Critical** · **Note** · **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด) ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 **Rules:**
 - Keep callouts to 1-3 sentences
@@ -471,11 +479,11 @@ Use tables when items have **2+ attributes** ถ้าเขียนเป็�
 - Keep cells short — long content goes in body paragraphs
 - Bold key columns: `**email**`
 
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (architect, PM, SEO recommendations) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีศัพท์เทคนิค 5 คำขึ้นไปให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (strategy, vendor choice, plan options) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป (เกณฑ์เดียวกับ `spell-out-abbreviations`) ให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Diagrams
 
-**รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
+**รูปในเอกสารโปรเจกต์ (รายงาน · ข้อเสนอ · ผังขั้นตอน · ผังข้อมูล) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams` ใน plugin `software-company`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
 skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
 
 - วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
@@ -484,7 +492,7 @@ skill นี้คุมเฉพาะเรื่องการวางร�
 
 ## Status Badges and Cover Block
 
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (ข้อเสนอ · รายงานทางการ · สัญญา · postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Lists and Code Blocks
 
@@ -509,7 +517,7 @@ Code blocks ต้องระบุภาษาทุกครั้ง (Always
 Before delivering any polished doc:
 
 - [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Cover block with version, date, status, authors
+- [ ] Header block with version, date, status, authors (cover block เฉพาะเอกสารทางการ)
 - [ ] TOC if 5+ sections
 - [ ] All sections numbered consistently
 - [ ] Anchor links in TOC actually work
@@ -518,22 +526,18 @@ Before delivering any polished doc:
 - [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
+- [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
 - [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
-- [ ] Tested rendering in GitHub preview
+- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
 
-> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · Mermaid ด่วนใน README หรือ PR อยู่ใน `software-diagrams`
-> ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
+> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · เอกสารโค้ด (Mermaid ด่วน · ข้อกำหนดซอฟต์แวร์) → ส่วนเพิ่มใน plugin `software-company`
 
 ## Anti-patterns
 
 - ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
 - ❌ **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
 - ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
 - ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -585,7 +589,7 @@ Status values:
 
 ## Callout Boxes
 
-Use blockquotes with a bold label — no emoji:
+Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
 
 ```markdown
 > **Tip:** Brief actionable insight.
@@ -621,20 +625,17 @@ Use a table:
 | role  | enum   | ✓        | `user`  | Access level      |
 ```
 
-## Mermaid Diagrams
+## Figures (รูปในเอกสาร)
 
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+
+```markdown
+ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
+
+![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
+
+**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
 ```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
 
 ## Status Badges (Inline)
 
@@ -644,7 +645,7 @@ For key fields in headers/tables:
 **Status:** Approved
 **Priority:** High
 **Risk Level:** Medium
-**SLA:** < 200ms
+**Service Level Agreement (SLA):** < 200ms
 ```
 
 Multiple badges in a header:
@@ -655,7 +656,7 @@ Multiple badges in a header:
 
 ## Cover Block Pattern
 
-For formal documents (BRD, FSD, ADR, postmortem):
+For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
 
 ```markdown
 # <Title>
@@ -675,7 +676,7 @@ For formal documents (BRD, FSD, ADR, postmortem):
 
 ## Comparison / Decision Tables
 
-For trade-off analysis (architect, PM, SEO recommendations):
+For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
 
 ```markdown
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
@@ -744,8 +745,8 @@ For documents needing formal approval:
 | Role | Name | Status | Date |
 |------|------|:------:|------|
 | Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Reviewing | — |
-| QA Lead | @charlie | Not started | — |
+| Tech Lead | @bob | Review | — |
+| QA Lead | @charlie | Pending | — |
 | Security | @dave | Rejected | 2025-01-14 |
 ```
 
@@ -776,8 +777,8 @@ Define acronyms on first use, then add to glossary.
 
 | ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
+| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
+| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
 | รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
 | ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
 | สไลด์ | `presentation-design` | `doc-theme` |

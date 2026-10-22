@@ -15,18 +15,13 @@ Load the `legacy-spec-recovery` skill and `context-budget` first. Read only — 
 
 1. **Inventory** — count files by type and by project, list generated folders to skip, find existing manuals, schema scripts, reports and ETL. Decide where output goes: `docs/as-is/` beside the code, outside the source projects. Write the coverage table into `docs/as-is/README.md`.
 
-2. **System map, in parallel** — send one subagent per layer, each returning a table with `path:line` per row:
-   - screens and endpoints with permissions (controllers, routes, menus)
-   - data access: queries, stored procedures, status codes and the tables they touch
-   - schema and data dictionary
-   - integrations, jobs, reports, ETL, mobile or other clients
-   - manuals and old documents: what they claim the system does
+2. **System map, in parallel** — send one subagent per layer, each returning a table with `path:line` per row. Use the numbered layer list in `legacy-spec-recovery` Step 1; layers 4–6 (deep dive and business rules) can wait for step 3 when no module was named.
 
-   Database objects and the menu/role tables are rarely in the repository: include a request for a script-out of them in the one start question. Not received → mark those rules ❓ and continue.
+   Database objects and the menu/role tables are rarely in the repository: include a request for a script-out of them in the first question to the owner. Not received → mark those rules ❓ and continue.
 
    Then the `system-analyst` agent assembles `01`–`06` from those tables. `06-findings.md` holds defects and security weaknesses, for the system owner only.
 
-3. **Deep dive** — if a module or a change request was given, document that module to screen level and list its characterization tests. If none was given, pick the module with the most business rules and say why.
+3. **Deep dive** — if a module or a change request (CR) was given, document that module to screen level and list its characterization tests. If none was given, pick the module with the most business rules and say why.
 
 4. **Change request** — if a CR was given, fill `assets/change-request.md` from the skill with before/after and full impact.
 

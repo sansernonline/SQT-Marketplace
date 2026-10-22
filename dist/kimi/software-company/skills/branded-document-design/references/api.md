@@ -5,8 +5,9 @@
 ## สารบัญ
 
 1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
-3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
+2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkit_pptxpy--สไลด์-pptx)
+3. [brandkit_stage.py — เด็ค Stage (.pptx)](#brandkit_stagepy--เด็ค-stage-pptx)
+4. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
 
 ---
 
@@ -129,6 +130,9 @@ StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
 
 ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
 
+---
+
+## สูตรความกว้างคอลัมน์ (Word)
 
 | จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
 |:---:|---|

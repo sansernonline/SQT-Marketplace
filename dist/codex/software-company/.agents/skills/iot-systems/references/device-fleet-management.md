@@ -157,29 +157,44 @@ Update flow:
 
 ### Staged Rollout
 
+This is the one rollout table for the skill (1% → 10% → 50% → 100%); other files link here.
+
 ```python
-async def rollout_firmware(version: str, fleet_filter: dict):
-    eligible = await get_devices(fleet_filter)
+import math, random
 
-    stages = [
-        {'percent': 1, 'wait_hours': 24},
-        {'percent': 10, 'wait_hours': 24},
-        {'percent': 50, 'wait_hours': 12},
-        {'percent': 100, 'wait_hours': 0},
-    ]
+# (percent of fleet, hours to watch before the next stage)
+STAGES = [(1, 24), (10, 24), (50, 12), (100, 0)]
 
-    for stage in stages:
-        target = int(len(eligible) * stage['percent'] / 100)
-        batch = random.sample(eligible, target)
+# One stage per run, scheduled as a job (see `background-jobs`) — not one process
+# sleeping for days, which a restart or deploy would kill. State lives in the database.
+async def run_rollout_stage(rollout_id: str):
+    r = await db.rollouts.get(rollout_id)        # version, fleet_filter, stage, updated_ids, status
+    if r.status != 'running':
+        return
 
-        await schedule_updates(batch, version)
-        await asyncio.sleep(stage['wait_hours'] * 3600)
-
-        # Health check
-        success_rate = await calculate_success_rate(batch)
+    # Health check on every device updated so far
+    if r.updated_ids:
+        success_rate = await calculate_success_rate(r.updated_ids)
         if success_rate < 0.95:
-            await alert('OTA degradation, halting')
+            await db.rollouts.update(rollout_id, status='halted')
+            await alert('OTA degradation, halting', rollout_id)
             return
+
+    if r.stage == len(STAGES):
+        await db.rollouts.update(rollout_id, status='done')
+        return
+
+    percent, watch_hours = STAGES[r.stage]
+    eligible = await get_devices(r.fleet_filter)
+    already = set(r.updated_ids)
+    remaining = [d for d in eligible if d.id not in already]   # never pick a device twice
+    target = math.ceil(len(eligible) * percent / 100)
+    batch = random.sample(remaining, min(len(remaining), max(0, target - len(already))))
+
+    await schedule_updates(batch, r.version)
+    await db.rollouts.update(rollout_id, stage=r.stage + 1,
+                             updated_ids=list(already | {d.id for d in batch}))
+    await jobs.enqueue(run_rollout_stage, rollout_id, delay_hours=watch_hours)
 ```
 
 ## Configuration Management
@@ -256,7 +271,7 @@ End of life flow:
 3. Device wipes secrets, factory resets
 4. Acknowledges
 5. Cloud removes from active fleet
-6. Cert revoked (CRL/OCSP)
+6. Cert revoked (published in the Certificate Revocation List (CRL) and the Online Certificate Status Protocol (OCSP) responder)
 
 Why: prevent return-to-service after disposal
 ```

@@ -351,7 +351,7 @@
    "decision-log",
    "flag-and-propose",
    "context-budget",
-   "work-session-context",
+   "handoff",
    "temp-file-discipline",
    "owner-style-capture",
    "parallel-attempts-pick-best",

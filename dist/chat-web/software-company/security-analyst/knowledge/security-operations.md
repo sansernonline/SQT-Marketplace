@@ -47,8 +47,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (URGENT)](#initial-discovery-urgent)
-- [📊 IR Quality Standards](#ir-quality-standards)
+- [🔍 Initial Discovery (URGENT)](#-initial-discovery-urgent)
+- [📊 IR Quality Standards](#-ir-quality-standards)
 - [Incident Response Lifecycle](#incident-response-lifecycle)
 - [Phase 1: Identification (already done by SOC usually)](#phase-1-identification-already-done-by-soc-usually)
 - [Phase 2: Containment](#phase-2-containment)
@@ -58,14 +58,14 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 - [Communication](#communication)
 - [Evidence Handling](#evidence-handling)
 - [Output: Incident Report](#output-incident-report)
-- [Impact Summary](#impact-summary)
-- [Timeline (UTC)](#timeline-utc)
-- [Initial Vector](#initial-vector)
-- [Adversary Activity](#adversary-activity)
-- [Containment Actions](#containment-actions)
-- [Eradication Verification](#eradication-verification)
-- [Action Items](#action-items)
-- [Communications Log](#communications-log)
+- Impact Summary
+- Timeline (UTC)
+- Initial Vector
+- Adversary Activity
+- Containment Actions
+- Eradication Verification
+- Action Items
+- Communications Log
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -125,6 +125,8 @@ The SOC analyst hands over:
 
 ## Phase 2: Containment
 
+> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบใน Phase 2-4 (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · รีเซ็ต MFA · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · rebuild) ให้ **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รันหลังผู้ใช้อนุมัติขั้นนั้นเท่านั้น** — อนุมัติขั้นหนึ่งไม่ครอบคลุมขั้นถัดไป · บันทึกทุกขั้นที่รันลง timeline ของเหตุ (เวลา UTC · ผู้อนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย · รายละเอียด → [`security-incident-response.md`](security-incident-response.md) Phase 3
+
 ### Short-term (stop the bleed)
 - Isolate affected hosts (network)
 - Disable compromised accounts
@@ -169,6 +171,7 @@ For every compromised credential:
 ```
 
 ### Eradication actions
+ทุกข้อด้านล่างใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** (Phase 2)
 - Remove malware
 - Delete persistence mechanisms
 - Revoke all credentials
@@ -230,7 +233,7 @@ Per company crisis comm plan
 ### External
 ```
 - Customer notification (per BAAs, SLAs, regulatory)
-- Regulatory (GDPR 72h, HIPAA 60d, PDPA varies)
+- Regulatory (GDPR 72h, HIPAA 60d, PDPA Thailand 72h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) ตาม ม.37(4) · เจ้าของข้อมูลโดยไม่ชักช้าเมื่อเสี่ยงสูง → `pdpa-compliance` §8)
 - Law enforcement (if applicable)
 - Cyber insurance (claim notification)
 - Public relations (if breach disclosed)
@@ -307,7 +310,6 @@ Use `polished-document-style` + `postmortem-template` skills.
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-company)
 - `polished-document-style` (from software-company)
-- `security-operations`
 
 ## Things You Don't Do
 
@@ -317,13 +319,14 @@ Use `polished-document-style` + `postmortem-template` skills.
 - ❌ Negotiate with the adversary without authorization
 - ❌ Skip evidence preservation for speed
 - ❌ Tip off the adversary with aggressive scanning
+- ❌ Run a containment, eradication or recovery action before the user approves that specific action
 
 ## When to Hand Off
 
-- Detection improvements → `security-analyst`, SOC
-- Architecture changes → `security-analyst`
+- Detection improvements → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md) · SOC
+- Architecture changes → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
 - Customer notifications → `technical-writer` (from software-company)
-- Long-term compliance → `fintech-compliance-officer`
+- Legal notifications and long-term compliance → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
 
 ## Common Pitfalls
 
@@ -341,8 +344,8 @@ Use `polished-document-style` + `postmortem-template` skills.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Security Architecture Standards](#security-architecture-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Security Architecture Standards](#-security-architecture-standards)
 - [Zero Trust Principles](#zero-trust-principles)
 - [Identity-Centric Architecture](#identity-centric-architecture)
 - [Defense in Depth Layers](#defense-in-depth-layers)
@@ -353,14 +356,14 @@ Use `polished-document-style` + `postmortem-template` skills.
 - [Data Security](#data-security)
 - [Cloud Security Architecture](#cloud-security-architecture)
 - [Output: Security Architecture Doc](#output-security-architecture-doc)
-- [Threat Model](#threat-model)
+- Threat Model
 - [Identity Architecture](#identity-architecture)
-- [Network Architecture](#network-architecture)
-- [Data Protection](#data-protection)
+- Network Architecture
+- Data Protection
 - [Defense in Depth Layers](#defense-in-depth-layers)
-- [Tool Stack](#tool-stack)
-- [Implementation Roadmap](#implementation-roadmap)
-- [Maturity Targets](#maturity-targets)
+- Tool Stack
+- Implementation Roadmap
+- Maturity Targets
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -441,7 +444,7 @@ Each layer must withstand the next layer failing.
 ## Critical Architecture Decisions
 
 ### Identity Provider
-- **Cloud-native:** Okta, Auth0, Azure AD, Google Workspace
+- **Cloud-native:** Okta, Auth0, Microsoft Entra ID (เดิม Azure AD), Google Workspace
 - **Enterprise:** ADFS, PingFederate
 - **Self-host:** Keycloak
 
@@ -463,10 +466,11 @@ Each layer must withstand the next layer failing.
 
 ## Framework Alignment
 
-### NIST Cybersecurity Framework
+### NIST Cybersecurity Framework (CSF) 2.0 (ก.พ. 2024)
 ```
-Identify → Protect → Detect → Respond → Recover
+Govern → Identify → Protect → Detect → Respond → Recover
 ```
+Govern (ใหม่ใน 2.0) ครอบทุกฟังก์ชัน — กลยุทธ์ · บทบาท · นโยบาย · ความเสี่ยงจากซัพพลายเชน · ที่มา [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
 
 ### CIS Controls v8 (top 18)
 ```
@@ -612,10 +616,10 @@ Use `polished-document-style` skill (from software-company).
 
 ## When to Hand Off
 
-- Detection engineering → `security-analyst`
+- Detection engineering → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
 - Implementation → `developer` (from software-company), `devops-engineer`
 - Application security review → `security-engineer` (from software-company)
-- Compliance interpretation → `fintech-compliance-officer`
+- Compliance interpretation → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
 
 ## Common Pitfalls
 
@@ -633,8 +637,8 @@ Use `polished-document-style` skill (from software-company).
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SOC Quality Standards](#soc-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SOC Quality Standards](#-soc-quality-standards)
 - [Alert Triage Workflow](#alert-triage-workflow)
 - [Investigation Patterns](#investigation-patterns)
 - [Common Investigation Tools](#common-investigation-tools)
@@ -642,12 +646,12 @@ Use `polished-document-style` skill (from software-company).
 - [Common Playbooks](#common-playbooks)
 - [Skills You Use](#skills-you-use)
 - [Output: Investigation Report](#output-investigation-report)
-- [Summary](#summary)
-- [Timeline (UTC)](#timeline-utc)
-- [Evidence](#evidence)
-- [MITRE Mapping](#mitre-mapping)
-- [Decisions](#decisions)
-- [Recommended Actions](#recommended-actions)
+- Summary
+- Timeline (UTC)
+- Evidence
+- MITRE Mapping
+- Decisions
+- Recommended Actions
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
@@ -747,6 +751,8 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Playbooks
 
+> ขั้นที่เปลี่ยนระบบ (รีเซ็ตรหัส · ปิด/ล็อกบัญชี · quarantine · eradicate · restore) ให้ **เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้วรอผู้ใช้อนุมัติทีละขั้นก่อนรัน** และบันทึกลง timeline — กฎเต็มอยู่ที่ [`security-incident-response.md`](security-incident-response.md) Phase 3 · ขั้นอ่านอย่างเดียวทำได้เลย
+
 ### Phishing
 1. Confirm whether a user reported it or a tool detected it
 2. Pull the email, headers and content
@@ -777,8 +783,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Skills You Use
 
-- `security-operations` — for detection logic
-- `security-operations` — for SOC procedures
+- `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
 - `polished-document-style` (from software-company) — for reports
 
 ## Output: Investigation Report
@@ -830,10 +835,10 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## When to Hand Off
 
-- Active incident → `security-analyst`
-- Hunting for related activity → `security-analyst`
-- Architectural defensive measures → `security-analyst`
-- Customer/legal communication → `fintech-compliance-officer`
+- Active incident → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md)
+- Hunting for related activity → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
+- Architectural defensive measures → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
+- Customer/legal communication → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`) · customer wording → `technical-writer`
 
 ## Common Pitfalls
 
@@ -851,18 +856,18 @@ Map observed behaviors to ATT&CK tactics/techniques:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Hunt Quality Standards](#hunt-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Hunt Quality Standards](#-hunt-quality-standards)
 - [Hunt Methodology (Hunting Loop)](#hunt-methodology-hunting-loop)
 - [Hypothesis Sources](#hypothesis-sources)
 - [Hunt Output: Hypothesis Document](#hunt-output-hypothesis-document)
-- [Hypothesis](#hypothesis)
-- [Reasoning](#reasoning)
-- [Data Sources](#data-sources)
-- [Detection Logic](#detection-logic)
-- [Expected Results](#expected-results)
-- [Results](#results)
-- [Actions](#actions)
+- Hypothesis
+- Reasoning
+- Data Sources
+- Detection Logic
+- Expected Results
+- Results
+- Actions
 - [Common Hunt Types](#common-hunt-types)
 - [TI Integration](#ti-integration)
 - [Skills You Use](#skills-you-use)
@@ -961,12 +966,11 @@ We expect to find evidence of <X> indicating <Y>.
 
 ## Detection Logic
 \`\`\`spl
-index=edr EventCode=4688
-| where ParentImage="powershell.exe"
-| where CommandLine LIKE "%-enc%"
-| where CommandLine has length > 200
+index=sysmon EventCode=1 ParentImage="*\\powershell.exe" CommandLine="*-enc*"
+| where len(CommandLine) > 200
 | stats count by Computer, User
 \`\`\`
+Status: ยังไม่ได้ตรวจ / tested on <date> against <data range>
 
 ## Expected Results
 - True positive look like: ...
@@ -985,42 +989,68 @@ index=edr EventCode=4688
 
 ## Common Hunt Types
 
+> **ยังไม่ได้ตรวจ** — query ด้านล่างยังไม่ได้รันกับ Splunk จริง ชื่อ index/field ขึ้นกับ add-on ที่ติดตั้ง · ไวยากรณ์ wildcard, event ID และ field ดูคำอธิบายใน [`threat-detection-patterns.md`](threat-detection-patterns.md) หัวข้อ Detection Examples
+
 ### Living-off-the-Land (LOLBins)
+Legitimate tools abused, started from Word
+
 ```spl
-# Look for legitimate tools abused
-EventCode=4688 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
-   AND ParentImage="*\\winword.exe"
-| stats by User, Computer
+index=sysmon EventCode=1 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
+    ParentImage="*\\winword.exe"
+| stats count by User, Computer, Image
 ```
 
 ### Credential Theft
+Mimikatz-like command lines (process create) — and, as a separate search, processes opening LSASS (Sysmon process access)
+
 ```spl
-# Mimikatz-like behavior
-EventCode=4688 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
-EventCode=4663 ObjectName="*lsass.exe"
+index=sysmon EventCode=1 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
+| stats count by Computer, User, CommandLine
+```
+
+```spl
+index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
+| stats count by Computer, SourceImage
 ```
 
 ### Persistence
-```spl
-# New scheduled tasks
-EventCode=4698 ServiceFileName=*
+New scheduled tasks (Security 4698 — fields `TaskName`, `TaskContent`), new services (Security 4697 — field `ServiceFileName`; System log 7045 is the same event without audit policy), and registry Run keys (Sysmon 13)
 
-# Registry run keys
-EventCode=13 TargetObject="*\\Run\\*"
+```spl
+index=wineventlog EventCode=4698
+| table _time Computer SubjectUserName TaskName TaskContent
+```
+
+```spl
+index=wineventlog EventCode=4697
+| table _time Computer SubjectUserName ServiceName ServiceFileName
+```
+
+```spl
+index=sysmon EventCode=13 TargetObject="*\\CurrentVersion\\Run*"
+| table _time Computer Image TargetObject Details
 ```
 
 ### Lateral Movement
+Network NTLM logons, then WMI child processes on the same hosts — run both and correlate by `Computer` and time (SPL has no `join with`; avoid `join` on large data, prefer `stats` over a shared field)
+
 ```spl
-# WMI/PsExec
-EventCode=4624 LogonType=3 AuthenticationPackage=NTLM
-   | join with EventCode=4688 Image="*\\wmiprvse.exe"
+index=wineventlog EventCode=4624 Logon_Type=3 Authentication_Package=NTLM
+| stats count min(_time) as first max(_time) as last by Computer, user, src_ip
+```
+
+```spl
+index=sysmon EventCode=1 ParentImage="*\\wmiprvse.exe"
+| stats count min(_time) as first max(_time) as last by Computer, User, Image
 ```
 
 ### Exfiltration
+Large outbound to destinations not in your own `known_destinations.csv` lookup
+
 ```spl
-# Large outbound to rare destinations
-| where bytes_out > 100000000
-| where dest_ip not in known_destinations
+index=netflow bytes_out > 100000000
+    NOT [| inputlookup known_destinations.csv | fields dest_ip]
+| stats sum(bytes_out) as total_out by src_ip, dest_ip
 ```
 
 ## TI Integration
@@ -1062,9 +1092,9 @@ for ioc in iocs:
 
 ## When to Hand Off
 
-- Active threat found → `security-analyst`
+- Active threat found → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md) (containment needs the user's approval per action)
 - New detection rule → SIEM team via SOC
-- Architecture-level defenses → `security-analyst`
+- Architecture-level defenses → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
 - Threat intel feedback → TI team
 
 ## Common Pitfalls
@@ -1169,6 +1199,8 @@ Decision: declare incident OR continue investigation
 
 ## Phase 3: Containment
 
+> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบในเฟส Containment · Eradication · Recovery (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · ลบมัลแวร์ · rebuild · ปิดบริการ) agent **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รอให้ผู้ใช้อนุมัติขั้นนั้นก่อนรัน** — อนุมัติขั้นหนึ่งไม่ได้แปลว่าอนุมัติขั้นถัดไป · ทุกขั้นที่รันแล้วให้บันทึกลง timeline ของเหตุ (เวลา UTC · ใครอนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย
+
 ### Two phases
 
 **Short-term (minutes-hours):**
@@ -1199,6 +1231,8 @@ Decision: declare incident OR continue investigation
 - Investigation needs
 
 ## Phase 4: Eradication
+
+> ทุกขั้นในเฟสนี้เปลี่ยนระบบ — ใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** ที่หัวข้อ Phase 3 (เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → รออนุมัติ → บันทึกลง timeline)
 
 ### Goals
 - Remove adversary access
@@ -1344,7 +1378,7 @@ Public: per disclosure obligations
 | GDPR | 72h | Personal data breach |
 | HIPAA | 60d | PHI breach |
 | State (US) | Varies | Per state law |
-| PDPA Thailand | Without delay | Personal data breach |
+| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562) | 72 h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) นับแต่ทราบเหตุ (ม.37(4)) · แจ้งเจ้าของข้อมูลโดยไม่ชักช้าเมื่อมีความเสี่ยงสูง · รายละเอียด → `pdpa-compliance` §8 | Personal data breach (ยกเว้นไม่มีความเสี่ยงต่อสิทธิและเสรีภาพ) |
 | SEC (US public) | 4 business days | Material cyber incident |
 | PCI-DSS | Immediate | Card data compromise |
 
@@ -1369,10 +1403,11 @@ Include:
 - ❌ Tip off the adversary unnecessarily
 - ❌ Skip evidence preservation
 - ❌ Declare the incident resolved before systems are verified clean
+- ❌ Run a containment, eradication or recovery action before the user approves that specific action
 
 ## Reference
 
-- [NIST SP 800-61 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
+- [NIST SP 800-61 Rev. 3 — Incident Response Recommendations and Considerations for Cybersecurity Risk Management (เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [SANS Incident Handler's Handbook](https://www.sans.org/white-papers/33901/)
 - [ENISA Good Practice Guide for Incident Management](https://www.enisa.europa.eu/)
 - [FIRST.org Best Practices](https://www.first.org/)
@@ -1389,12 +1424,12 @@ Include:
 - [24/7 Coverage Models](#247-coverage-models)
 - [SOC KPIs](#soc-kpis)
 - [Playbook Library](#playbook-library)
-- [Trigger](#trigger)
-- [Severity](#severity)
-- [Steps](#steps)
-- [Escalation](#escalation)
-- [Tools](#tools)
-- [Communications](#communications)
+- Trigger
+- Severity
+- Steps
+- Escalation
+- Tools
+- Communications
 - [SOAR Patterns](#soar-patterns)
 - [Detection Coverage Strategy](#detection-coverage-strategy)
 - [Tools (2026)](#tools-2026)
@@ -1573,8 +1608,8 @@ Continuously improve coverage
 
 | Need | Tools |
 |------|-------|
-| SIEM | Splunk, Sentinel, Elastic, Sumo, Chronicle |
-| SOAR | Splunk SOAR, Tines, Demisto, Tracecat |
+| SIEM | Splunk, Microsoft Sentinel, Elastic, Sumo Logic, Google Security Operations (เดิม Chronicle) |
+| SOAR | Splunk SOAR, Tines, Cortex XSOAR (เดิม Demisto), Tracecat |
 | EDR | CrowdStrike, SentinelOne, Defender |
 | NDR | Vectra, Darktrace, ExtraHop |
 | TIP | MISP, OpenCTI, Anomali |
@@ -1625,7 +1660,7 @@ Tier 3 (24+ months):
 
 ## Reference
 
-- [NIST SP 800-61 (Incident Handling)](https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final)
+- [NIST SP 800-61 Rev. 3 (Incident Response, เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [SANS Reading Room](https://www.sans.org/white-papers/)
 - [MITRE ATT&CK](https://attack.mitre.org/)
 - [FIRST.org (incident response)](https://www.first.org/)
@@ -1715,77 +1750,87 @@ Impact                Mass file modification, encryption
 
 ## Detection Examples (Splunk SPL)
 
+> **ยังไม่ได้ตรวจ** — query ด้านล่างเขียนตามไวยากรณ์ใน Splunk docs แต่ยังไม่ได้รันกับ Splunk จริง ชื่อ index และชื่อ field ขึ้นกับ add-on ที่ติดตั้ง (ตัวอย่างใช้ `index=sysmon` = Microsoft Sysmon ผ่าน Splunk Add-on for Sysmon และ `index=wineventlog` = Windows Security log) — ปรับให้ตรงของจริงแล้วทดสอบกับข้อมูลย้อนหลังก่อนเปิดใช้
+>
+> กฎไวยากรณ์ที่พลาดบ่อย: wildcard `*` ใช้ได้ใน `search` (ต้นท่อ) เท่านั้น — ใน `where` ต้องใช้ `like(field, "%x")` หรือ `match(field, "regex")` · หมายเหตุใน SPL เขียนด้วย triple backtick ไม่ใช่ `#` · `stdev()` เป็นฟังก์ชันของ `stats` ใช้ใน `eval` ไม่ได้
+
+Event ที่ใช้: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (ต้องเปิด audit + command line) · `4624`/`4625` = logon สำเร็จ/ล้มเหลว · `4697` = ติดตั้ง service · `4698` = สร้าง scheduled task
+
 ### Suspicious PowerShell
 
 ```spl
-index=edr EventCode=4688
-| eval is_encoded=if(match(CommandLine, "-[eE][nN][cC]"), 1, 0)
+index=sysmon EventCode=1 Image="*\\powershell.exe"
+| eval is_encoded=if(match(CommandLine, "(?i)\s[-/]e(c|n(c(o(d(e(d(c(o(m(m(a(n(d)?)?)?)?)?)?)?)?)?)?)?)?)?\s"), 1, 0)
 | eval is_long=if(len(CommandLine) > 500, 1, 0)
 | eval is_downloaded=if(match(CommandLine, "(?i)(IEX|invoke-expression|downloadstring|downloadfile)"), 1, 0)
 | where is_encoded=1 OR is_long=1 OR is_downloaded=1
 | stats count by Computer, User, CommandLine
-| where count >= 1
 ```
 
 ### LSASS Access (Credential Theft)
 
 ```spl
-index=edr EventCode=10
-| where TargetImage="*\\lsass.exe"
-| where SourceImage NOT IN (
-    "*\\System32\\svchost.exe",
-    "*\\System32\\wininit.exe",
-    "*\\Windows Defender\\MsMpEng.exe"
-)
+index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
+    NOT (SourceImage="*\\System32\\svchost.exe"
+      OR SourceImage="*\\System32\\wininit.exe"
+      OR SourceImage="*\\Windows Defender\\MsMpEng.exe")
 | stats count by Computer, SourceImage, User
 ```
 
 ### Unusual Logon Patterns
 
+After-hours interactive logon by an admin account (`admin_users.csv` = your own lookup of admin accounts)
+
 ```spl
-# After-hours admin logon
-index=auth EventCode=4624 LogonType=2
-| where hour_of_day < 6 OR hour_of_day > 22
-| where User_Type="admin"
-| stats count by Computer, User, src_ip
+index=wineventlog EventCode=4624 Logon_Type=2
+    [| inputlookup admin_users.csv | fields user]
+| eval hour=tonumber(strftime(_time, "%H"))
+| where hour < 6 OR hour > 22
+| stats count by Computer, user, src_ip
 ```
 
 ### Brute Force
 
+More than 10 failed logons from one source to one account within a 10-minute bucket
+
 ```spl
-index=auth EventCode=4625
-| stats count by src_ip, target_user, _time
+index=wineventlog EventCode=4625
+| bin _time span=10m
+| stats count by _time, src_ip, user
 | where count > 10
-| where window=10minutes
 ```
 
 ### Beaconing (C2)
 
+Regular periodic outbound: many connections with almost the same gap between them
+
 ```spl
-# Find regular periodic outbound
 index=netflow
-| stats list(_time) as times count as connections by src_ip dest_ip dest_port
-| eval intervals=mvmap(times, _time - prev_time)
-| eval std_dev=stdev(intervals)
-| where std_dev < 5 AND connections > 100
-| eval beaconing=1
+| sort 0 src_ip dest_ip dest_port _time
+| streamstats current=f last(_time) as prev_time by src_ip dest_ip dest_port
+| eval interval=_time - prev_time
+| stats count as connections avg(interval) as avg_interval stdev(interval) as std_dev
+    by src_ip dest_ip dest_port
+| where connections > 100 AND std_dev < 5
 ```
 
 ### Unusual Process Trees
 
+Word spawning PowerShell
+
 ```spl
-# Word spawning powershell
-index=edr EventCode=4688
-| where ParentImage="*\\winword.exe"
-| where Image="*\\powershell.exe"
+index=sysmon EventCode=1 ParentImage="*\\winword.exe" Image="*\\powershell.exe"
+| table _time Computer User ParentCommandLine CommandLine
 ```
 
 ## Sigma Rules (Vendor-Agnostic)
 
+`id` ต้องเป็น UUID (สร้างใหม่ทุกกฎ เช่น `python -c "import uuid; print(uuid.uuid4())"`) · กฎใหม่เริ่ม `status: experimental` แล้วค่อยเลื่อนเป็น `test`/`stable` เมื่อทดสอบกับข้อมูลจริงแล้ว — ที่มา [Sigma rule specification](https://github.com/SigmaHQ/sigma-specification)
+
 ```yaml
 title: PowerShell Encoded Command
-id: 12345-67890-abcdef
-status: stable
+id: b7964e9f-a411-4ecf-adc4-3a08cbda12c4
+status: experimental
 description: Detects encoded PowerShell commands
 references:
   - https://attack.mitre.org/techniques/T1059/001/

@@ -63,7 +63,7 @@ Add the deadline in the body: "ภายในวันที่ 20 ตุลา
 2. Choose the type (section 1) and salutation/closing pair (section 2).
 3. Fill the template from references; write the body ด้วย → facts → request with a date.
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
-5. Output .docx on letterhead (see `branded-document-design` in `software-company` (if installed) for styling).
+5. Output .docx on letterhead (styling → `branded-document-design`).
 
 ## Worked example (company to Revenue Department)
 
@@ -179,4 +179,4 @@ Not used for important matters (policy, money, legal rights) — use หนั�
 - [ ] The request has a date
 - [ ] Contact line filled
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.arch.chula.ac.th/arch-cu/files/formcontentepost/ระเบียบงานสารบรรณ ฉบับที่ 4 พ.ศ. 2564.pdf · https://psdg.moe.go.th/wp-content/uploads/2023/06/คู่มืองานสารบรรณ-กพร.สป.pdf
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.arch.chula.ac.th/arch-cu/files/formcontentepost/%E0%B8%A3%E0%B8%B0%E0%B9%80%E0%B8%9A%E0%B8%B5%E0%B8%A2%E0%B8%9A%E0%B8%87%E0%B8%B2%E0%B8%99%E0%B8%AA%E0%B8%B2%E0%B8%A3%E0%B8%9A%E0%B8%A3%E0%B8%A3%E0%B8%93%20%E0%B8%89%E0%B8%9A%E0%B8%B1%E0%B8%9A%E0%B8%97%E0%B8%B5%E0%B9%88%204%20%E0%B8%9E.%E0%B8%A8.%202564.pdf · https://psdg.moe.go.th/wp-content/uploads/2023/06/คู่มืองานสารบรรณ-กพร.สป.pdf

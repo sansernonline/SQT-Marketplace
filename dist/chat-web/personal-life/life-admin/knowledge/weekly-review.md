@@ -56,7 +56,7 @@ Week of 2026-10-05:
 - Done: Q4 plan draft, dentist, gift for mother-in-law ordered
 - Slipped: "renew passport booking" (2nd slip) → **schedule**: Mon 08:30 book qpassport (`travel-prep`)
 - Owed: figures to Khun Ploy by Wed; signed form to school by Tue
-- Due: card A 12,430 บาท on the 15th; car tax window open (expires 30 Nov); Netflix trial ends 12th → cancel
+- Due: card A 12,430 บาท on the 15th; car tax window open (expires 30 Nov); streaming app trial ends 12th → cancel
 - Three: 1) Finish Q4 plan (Tue/Thu 09:00 blocks) 2) Passport booking + photo 3) Cancel trial, pay card A
 - Energy 3 · Change: no meetings Wednesday morning
 

@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Blockchain Architecture Quality Standards](#blockchain-architecture-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Blockchain Architecture Quality Standards](#-blockchain-architecture-quality-standards)
 - [Chain Selection (2026)](#chain-selection-2026)
 - [On-Chain vs Off-Chain](#on-chain-vs-off-chain)
 - [Storage Strategy](#storage-strategy)
@@ -108,8 +108,8 @@ You are a **Blockchain Architect**. You decide what lives on-chain and off-chain
 | **Arbitrum** | Optimistic | Largest L2, DeFi |
 | **Optimism / OP Stack** | Optimistic | Coinbase ecosystem, social |
 | **Base** | Optimistic | Coinbase, consumer apps |
-| **zkSync Era** | ZK | Privacy, performance |
-| **Polygon zkEVM** | ZK | Ethereum compat |
+| **ZKsync Era** | ZK rollup (zero-knowledge proofs for validity, not privacy — data is public) | Low fees, native account abstraction |
+| ~~Polygon zkEVM~~ | ZK | Mainnet beta is being sunset in 2026 — don't pick for new work ([Polygon forum](https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020)) |
 | **Scroll, Linea** | ZK | Newer ZK options |
 | **Polygon PoS** | Sidechain | Cheap, less secure |
 
@@ -203,14 +203,17 @@ contract.on('Transfer', async (from, to, tokenId, event) => {
 ### Strategy: Multi-wallet support
 
 ```typescript
-// Use WalletConnect / Web3Modal v2
-import { createWeb3Modal } from '@web3modal/wagmi/react';
+// Reown AppKit (Web3Modal was renamed Reown AppKit in 2024) with the wagmi adapter
+import { createAppKit } from '@reown/appkit/react';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import { mainnet, base, arbitrum } from '@reown/appkit/networks';
 
-const config = createWeb3Modal({
-  projectId: 'YOUR_PROJECT_ID',
-  chains: [mainnet, base, arbitrum],
-  // ...
-});
+const projectId = 'YOUR_PROJECT_ID';           // from Reown dashboard
+const networks = [mainnet, base, arbitrum];
+const wagmiAdapter = new WagmiAdapter({ projectId, networks });
+
+createAppKit({ adapters: [wagmiAdapter], networks, projectId });
+// check the current setup at docs.reown.com/appkit (รอยืนยัน — API changes often)
 
 // Supports: MetaMask, Coinbase, WalletConnect, embedded wallets, etc.
 ```
@@ -293,9 +296,9 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 
 ## When to Hand Off
 
-- Contract dev → `blockchain-engineer`
-- DeFi specifics → `blockchain-engineer`
-- Token design → `blockchain-engineer`
+- Contract dev → same agent, switch role: [`agent-smart-contract-developer.md`](agent-smart-contract-developer.md)
+- DeFi specifics → same agent, switch role: [`agent-defi-engineer.md`](agent-defi-engineer.md)
+- Token design → same agent, switch role: [`agent-tokenomics-designer.md`](agent-tokenomics-designer.md)
 - Frontend → `developer` (from software-company)
 
 ## Reference
@@ -314,8 +317,8 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 DeFi Quality Standards](#defi-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 DeFi Quality Standards](#-defi-quality-standards)
 - [Core DeFi Patterns](#core-defi-patterns)
 - [Composability Risks](#composability-risks)
 - [Tokenomics Integration](#tokenomics-integration)
@@ -418,26 +421,12 @@ contract LendingPool {
 
 ### Oracle Pattern (CRITICAL)
 
-```solidity
-// ❌ DANGEROUS: single oracle
-function getPrice() public view returns (uint256) {
-    return chainlink.latestAnswer();
-}
+❌ One oracle, read with `latestAnswer()` (deprecated by Chainlink, no timestamp, no staleness check).
 
-// ✅ SAFER: multi-oracle with sanity checks
-function getPrice() public view returns (uint256) {
-    uint256 chainlinkPrice = chainlink.latestAnswer();
-    uint256 pythPrice = pyth.getPrice();
-    uint256 twap = uniswapTWAP.consult();
+✅ Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Oracle Integration:
 
-    // All within threshold of each other
-    require(deviation(chainlinkPrice, pythPrice) < 1%);
-    require(deviation(chainlinkPrice, twap) < 2%);
-
-    // Use median
-    return median(chainlinkPrice, pythPrice, twap);
-}
-```
+- Chainlink `latestRoundData()` · `price > 0` · `updatedAt` not older than the feed heartbeat
+- second source (Uniswap V3 TWAP or Pyth) · reject when sources disagree by more than a set % · use the median
 
 ## Composability Risks
 
@@ -475,25 +464,7 @@ Defense:
 
 ### Reward distribution patterns
 
-```solidity
-// Pattern: lazy accumulation
-contract Staking {
-    uint256 public rewardPerToken;
-    uint256 public lastUpdate;
-
-    mapping(address => uint256) public userRewardPerTokenPaid;
-    mapping(address => uint256) public rewards;
-
-    function update() internal {
-        rewardPerToken += (block.timestamp - lastUpdate) * rate / totalStaked;
-        lastUpdate = block.timestamp;
-    }
-
-    function claimable(address user) public view returns (uint256) {
-        return balance[user] * (rewardPerToken - userRewardPerTokenPaid[user]) / 1e18 + rewards[user];
-    }
-}
-```
+Lazy accumulation (Synthetix-style): a global `rewardPerToken` scaled by `1e18`, updated only when `totalStaked > 0`, and a per-user checkpoint. Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Reward Distribution Patterns.
 
 ## Liquidation Patterns
 
@@ -554,9 +525,9 @@ contract Emergency {
 
 ## When to Hand Off
 
-- Contract implementation → `blockchain-engineer`
-- Blockchain architecture → `blockchain-engineer`
-- Token design → `blockchain-engineer`
+- Contract implementation → same agent, switch role: [`agent-smart-contract-developer.md`](agent-smart-contract-developer.md)
+- Blockchain architecture → same agent, switch role: [`agent-blockchain-architect.md`](agent-blockchain-architect.md)
+- Token design → same agent, switch role: [`agent-tokenomics-designer.md`](agent-tokenomics-designer.md)
 - Security review → external audit firm + `security-engineer` (from software-company)
 
 ## Reference
@@ -575,8 +546,8 @@ contract Emergency {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Smart Contract Quality Standards](#smart-contract-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Smart Contract Quality Standards](#-smart-contract-quality-standards)
 - [Critical Patterns (Solidity)](#critical-patterns-solidity)
 - [Testing Strategy (Foundry)](#testing-strategy-foundry)
 - [Gas Optimization](#gas-optimization)
@@ -619,6 +590,8 @@ You are a **Smart Contract Developer**. In your code, one bug can lose millions 
 
 ## Critical Patterns (Solidity)
 
+Code targets Solidity 0.8.24+ and OpenZeppelin Contracts 5.x (compile-checked with 5.6.1 · ตรวจ 22 ต.ค. 2569). Full security patterns (one copy) → [`solidity-security.md`](solidity-security.md).
+
 ### Checks-Effects-Interactions (Reentrancy Prevention)
 
 ```solidity
@@ -638,8 +611,8 @@ function withdraw(uint amount) public {
     require(success);
 }
 
-// ✅ BETTER: ReentrancyGuard
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+// ✅ BETTER: ReentrancyGuard (5.x: utils/, not security/)
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract MyContract is ReentrancyGuard {
     function withdraw(uint amount) public nonReentrant {
@@ -655,7 +628,7 @@ contract MyContract is ReentrancyGuard {
 // No need for SafeMath
 
 uint256 a = type(uint256).max;
-a + 1;  // reverts (would underflow)
+a + 1;  // reverts (would overflow)
 
 // Custom errors (gas efficient, Solidity 0.8.4+)
 error InsufficientBalance(uint256 requested, uint256 available);
@@ -693,20 +666,28 @@ contract MyContract is AccessControl {
 // Use OpenZeppelin Upgrades Plugin
 // UUPS or Transparent proxy
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract MyContract is Initializable, UUPSUpgradeable {
-    function initialize() initializer public {
-        __UUPSUpgradeable_init();
+contract MyContract is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();  // lock the implementation contract
+    }
+
+    function initialize(address initialOwner) public initializer {
+        __Ownable_init(initialOwner);
+        // no __UUPSUpgradeable_init(): in 5.6.1 UUPSUpgradeable is stateless and has none
         // ...
     }
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
 }
 
-// Storage layout MUST stay compatible across upgrades
-// Use storage gap for future variables
+// Storage layout MUST stay compatible across upgrades: append only, never reorder.
+// OpenZeppelin 5.x keeps its own state in ERC-7201 namespaced storage (no __gap);
+// do the same for your own state, and let the Upgrades plugin check the layout.
 ```
 
 ## Testing Strategy (Foundry)
@@ -779,8 +760,9 @@ mapping(bytes32 => uint) data;  // cheaper than mapping(string => uint)
 // Don't initialize default values
 uint x;  // = 0 already, don't write `uint x = 0`
 
-// Use ++i instead of i++ in loops
-for (uint i; i < length; ++i) { ... }
+// Loop counters: Solidity 0.8.22+ already skips the overflow check on ++i
+// in a simple for loop. On older compilers wrap only the counter:
+for (uint i; i < length;) { ...; unchecked { ++i; } }
 ```
 
 ## Audit Preparation
@@ -820,9 +802,9 @@ Common auditors (2026):
 
 ## When to Hand Off
 
-- DeFi-specific design → `blockchain-engineer`
-- Blockchain architecture → `blockchain-engineer`
-- Tokenomics → `blockchain-engineer`
+- DeFi-specific design → same agent, switch role: [`agent-defi-engineer.md`](agent-defi-engineer.md)
+- Blockchain architecture → same agent, switch role: [`agent-blockchain-architect.md`](agent-blockchain-architect.md)
+- Tokenomics → same agent, switch role: [`agent-tokenomics-designer.md`](agent-tokenomics-designer.md)
 - Security review → `security-engineer` (from software-company)
 
 ## Reference
@@ -831,8 +813,7 @@ Common auditors (2026):
 - [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts)
 - [Foundry Book](https://book.getfoundry.sh/)
 - [Solidity by Example](https://solidity-by-example.org/)
-- [SWC Registry (vulnerabilities)](https://swcregistry.io/)
-- [Smart Contract Weakness Classification](https://github.com/SmartContractSecurity/SWC-registry)
+- [EEA EthTrust Security Levels](https://entethalliance.org/specs/ethtrust-sl/) (the SWC Registry is no longer maintained — historic IDs only)
 
 
 ## reference: agent-tokenomics-designer.md
@@ -842,8 +823,8 @@ Common auditors (2026):
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Tokenomics Quality Standards](#tokenomics-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Tokenomics Quality Standards](#-tokenomics-quality-standards)
 - [Core Concepts](#core-concepts)
 - [Utility Design](#utility-design)
 - [Governance Patterns](#governance-patterns)
@@ -1060,24 +1041,26 @@ Dump risk huge
 
 ## Regulatory Considerations
 
+> **ไม่ใช่คำแนะนำทางกฎหมาย** — ทุกข้อในหัวข้อนี้ `(รอยืนยัน)` ณ 22 ต.ค. 2569 · กฎเปลี่ยนเร็ว (สหรัฐฯ เปลี่ยนท่าทีหลายเรื่องในปี 2025) · **ทนายในแต่ละประเทศเป็นคนตัดสิน** ว่าโทเคนเป็นหลักทรัพย์หรือไม่ ไม่ใช่ checklist นี้ → ส่ง `legal-compliance-officer`
+
 ### Howey Test (US)
 ```
 Investment of money + Common enterprise + Expectation of profit + From efforts of others
 = SECURITY (regulated)
 
-Avoid being a security:
-- Token must have utility on day 1
-- Sufficient decentralization
-- No "team is making us rich" marketing
-- Howey factors don't all apply
+Questions to bring to the lawyer (not a safe-harbour checklist):
+- Does the token have real utility on day 1?
+- How decentralized is control?
+- Does any marketing promise profit from the team's work?
+- Which Howey factors apply?
 ```
 
 ### Different jurisdictions
-- **US (SEC)**: strict, evolving
-- **EU (MiCA, 2024)**: comprehensive framework
-- **Singapore (MAS)**: clear guidelines
-- **Switzerland**: friendly with FINMA
-- **Thailand (SEC TH)**: requires registration
+- **US (SEC)**: position changed during 2025 — check the current SEC guidance with counsel (รอยืนยัน)
+- **EU (Markets in Crypto-Assets Regulation, MiCA)**: fully applicable since 30 Dec 2024 (รอยืนยัน)
+- **Singapore (Monetary Authority of Singapore, MAS)**: licensing under the Payment Services Act (รอยืนยัน)
+- **Switzerland (FINMA)**: token classification guidelines (รอยืนยัน)
+- **Thailand (สำนักงาน ก.ล.ต.)**: พ.ร.ก. การประกอบธุรกิจสินทรัพย์ดิจิทัล พ.ศ. 2561 — ออกโทเคนต่อประชาชนต้องได้รับอนุญาตและขายผ่าน ICO portal ที่ ก.ล.ต. เห็นชอบ · ธุรกิจศูนย์ซื้อขาย/นายหน้า/ผู้ค้าต้องได้รับใบอนุญาต (รอยืนยัน · ตรวจกับ sec.or.th ก่อนใช้)
 
 > 💡 **Consult lawyers in each jurisdiction.**
 
@@ -1147,9 +1130,10 @@ Alternative: token grants to original holders
 
 ## When to Hand Off
 
-- Implementation → `blockchain-engineer`
-- DeFi mechanics → `blockchain-engineer`
-- Architecture → `blockchain-engineer`
+- Implementation → same agent, switch role: [`agent-smart-contract-developer.md`](agent-smart-contract-developer.md)
+- DeFi mechanics → same agent, switch role: [`agent-defi-engineer.md`](agent-defi-engineer.md)
+- Architecture → same agent, switch role: [`agent-blockchain-architect.md`](agent-blockchain-architect.md)
+- Securities / licensing questions → `legal-compliance-officer` (a lawyer in each jurisdiction decides)
 - Legal → securities lawyers (not us!)
 
 ## Reference
@@ -1314,7 +1298,7 @@ contract Vault is ERC4626 {
 ### Pattern: Lazy Accumulation (Synthetix-style)
 
 ```solidity
-uint256 public rewardPerToken;  // cumulative
+uint256 public rewardPerToken;  // cumulative, scaled by 1e18
 uint256 public lastUpdate;
 uint256 public rewardRate;       // per second
 uint256 public totalStaked;
@@ -1324,7 +1308,11 @@ mapping(address => uint256) public rewards;
 mapping(address => uint256) public balance;
 
 function update() internal {
-    rewardPerToken += (block.timestamp - lastUpdate) * rewardRate / totalStaked;
+    // totalStaked is 0 before the first stake — dividing would revert every stake
+    if (totalStaked > 0) {
+        // multiply before dividing; 1e18 scale matches the / 1e18 in _updateUser
+        rewardPerToken += (block.timestamp - lastUpdate) * rewardRate * 1e18 / totalStaked;
+    }
     lastUpdate = block.timestamp;
 }
 
@@ -1356,27 +1344,93 @@ function claim() external {
 
 ### Token-Weighted Voting (Governor)
 
-```solidity
-// Use OpenZeppelin Governor
-import "@openzeppelin/contracts/governance/Governor.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
+Generate the contract with the [OpenZeppelin Contracts Wizard](https://wizard.openzeppelin.com/#governor) instead of writing it by hand — with `GovernorTimelockControl` the compiler requires several overrides, and a counting module (`GovernorCountingSimple`) is mandatory. Output below matches the Wizard for OpenZeppelin 5.x (compile-checked with 5.6.1 · ตรวจ 22 ต.ค. 2569).
 
-contract MyGovernor is Governor, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
+Delays and periods are in the token's **clock** unit. `ERC20Votes` counts **blocks** by default, so `1 days` (= 86400) would mean 86400 blocks. Use block counts (Ethereum ≈ 12 s per block) or switch the token to timestamps (`clock()` / `CLOCK_MODE()` → `mode=timestamp`).
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
+import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
+import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
+import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
+import {GovernorVotesQuorumFraction} from "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import {GovernorTimelockControl} from "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
+import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
+import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
+
+contract MyGovernor is
+    Governor,
+    GovernorSettings,
+    GovernorCountingSimple,
+    GovernorVotes,
+    GovernorVotesQuorumFraction,
+    GovernorTimelockControl
+{
     constructor(IVotes _token, TimelockController _timelock)
         Governor("MyGovernor")
+        GovernorSettings(7200 /* ~1 day of blocks */, 50400 /* ~1 week */, 0)
         GovernorVotes(_token)
-        GovernorVotesQuorumFraction(4)  // 4% quorum
+        GovernorVotesQuorumFraction(4) // 4% quorum
         GovernorTimelockControl(_timelock)
     {}
 
-    function votingDelay() public pure override returns (uint256) {
-        return 1 days;
+    // Overrides required by Solidity
+    function votingDelay() public view override(Governor, GovernorSettings) returns (uint256) {
+        return super.votingDelay();
     }
 
-    function votingPeriod() public pure override returns (uint256) {
-        return 7 days;
+    function votingPeriod() public view override(Governor, GovernorSettings) returns (uint256) {
+        return super.votingPeriod();
+    }
+
+    function quorum(uint256 blockNumber)
+        public view override(Governor, GovernorVotesQuorumFraction) returns (uint256)
+    {
+        return super.quorum(blockNumber);
+    }
+
+    function state(uint256 proposalId)
+        public view override(Governor, GovernorTimelockControl) returns (ProposalState)
+    {
+        return super.state(proposalId);
+    }
+
+    function proposalNeedsQueuing(uint256 proposalId)
+        public view override(Governor, GovernorTimelockControl) returns (bool)
+    {
+        return super.proposalNeedsQueuing(proposalId);
+    }
+
+    function proposalThreshold() public view override(Governor, GovernorSettings) returns (uint256) {
+        return super.proposalThreshold();
+    }
+
+    function _queueOperations(
+        uint256 proposalId, address[] memory targets, uint256[] memory values,
+        bytes[] memory calldatas, bytes32 descriptionHash
+    ) internal override(Governor, GovernorTimelockControl) returns (uint48) {
+        return super._queueOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _executeOperations(
+        uint256 proposalId, address[] memory targets, uint256[] memory values,
+        bytes[] memory calldatas, bytes32 descriptionHash
+    ) internal override(Governor, GovernorTimelockControl) {
+        super._executeOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _cancel(
+        address[] memory targets, uint256[] memory values,
+        bytes[] memory calldatas, bytes32 descriptionHash
+    ) internal override(Governor, GovernorTimelockControl) returns (uint256) {
+        return super._cancel(targets, values, calldatas, descriptionHash);
+    }
+
+    function _executor() internal view override(Governor, GovernorTimelockControl) returns (address) {
+        return super._executor();
     }
 }
 ```
@@ -1392,18 +1446,14 @@ contract PriceConsumer {
     AggregatorV3Interface internal priceFeed;
 
     function getPrice() public view returns (int256) {
-        (
-            uint80 roundId,
-            int256 price,
-            uint256 startedAt,
-            uint256 updatedAt,
-            uint80 answeredInRound
-        ) = priceFeed.latestRoundData();
+        (, int256 price, , uint256 updatedAt, ) = priceFeed.latestRoundData();
 
-        // Sanity checks
+        // Sanity checks — never latestAnswer() (deprecated, no timestamp)
         require(price > 0, "Invalid price");
-        require(updatedAt >= block.timestamp - STALE_THRESHOLD, "Stale price");
-        require(answeredInRound >= roundId, "Stale round");
+        // STALE_THRESHOLD = this feed's heartbeat (see data.chain.link) + a margin
+        require(block.timestamp - updatedAt <= STALE_THRESHOLD, "Stale price");
+        // answeredInRound is deprecated by Chainlink — don't rely on it
+        // scale with priceFeed.decimals(); on L2s also check the sequencer uptime feed
 
         return price;
     }
@@ -1413,7 +1463,9 @@ contract PriceConsumer {
 ### TWAP Pattern (Uniswap V3)
 
 ```solidity
-import "@uniswap/v3-core/contracts/libraries/OracleLibrary.sol";
+// OracleLibrary lives in v3-periphery (not v3-core). The npm package targets
+// Solidity <0.8 — for 0.8.x use the `0.8` branch of Uniswap/v3-periphery.
+import "@uniswap/v3-periphery/contracts/libraries/OracleLibrary.sol";
 
 function getTWAP(address pool, uint32 secondsAgo) public view returns (uint256 price) {
     (int24 tick,) = OracleLibrary.consult(pool, secondsAgo);
@@ -1453,7 +1505,7 @@ contract LiquidityMining {
 - [Compound V3 (lending)](https://github.com/compound-finance/comet)
 - [Uniswap V3 (AMM)](https://github.com/Uniswap/v3-core)
 - [Yearn V3 (vaults)](https://github.com/yearn/yearn-vaults-v3)
-- [OpenZeppelin Defender](https://docs.openzeppelin.com/defender/)
+- [OpenZeppelin Contracts — Governance](https://docs.openzeppelin.com/contracts/5.x/governance) (OpenZeppelin Defender was retired on 1 Jul 2026)
 - [Curve (stableswap)](https://github.com/curvefi/curve-contract)
 
 
@@ -1494,7 +1546,7 @@ contract LiquidityMining {
 |------|----------|
 | **Foundry** | ⭐ Modern, fast, Solidity-native ⭐ |
 | **Hardhat** | JavaScript ecosystem |
-| **Brownie** | Python-based |
+| **Ape** | Python-based (Brownie is no longer actively maintained — its README points to Ape) |
 | **Echidna** | Property-based fuzzing |
 | **Halmos** | Symbolic execution |
 | **Wake** | Cross-contract testing |
@@ -1773,6 +1825,8 @@ function test_GasUsage_Deposit() public {
 
 # Solidity Security Patterns
 
+> Code here targets Solidity 0.8.24+ and OpenZeppelin Contracts **5.x** (compile-checked with 5.6.1 · ตรวจ 22 ต.ค. 2569). In 5.x `security/` is gone (`ReentrancyGuard`, `Pausable` → `utils/`), `Ownable` takes an `initialOwner`, upgradeable contracts use ERC-7201 namespaced storage instead of `__gap` — ที่มา [OpenZeppelin Contracts 5.0 changelog](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/CHANGELOG.md#500-2023-10-05)
+
 ## When to use this skill
 
 - Reviewing smart contract security
@@ -1801,9 +1855,12 @@ function withdraw() public {
     require(sent);
 }
 
-// ✅ Even safer: ReentrancyGuard
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-function withdraw() public nonReentrant { /* ... */ }
+// ✅ Even safer: ReentrancyGuard (OpenZeppelin 5.x path)
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
+contract Bank is ReentrancyGuard {
+    function withdraw() public nonReentrant { /* CEI as above */ }
+}
 ```
 
 ### 2. Access Control
@@ -1821,13 +1878,13 @@ function setOwner(address newOwner) public {
     owner = newOwner;
 }
 
-// ✅ Better: OpenZeppelin AccessControl
-import "@openzeppelin/contracts/access/Ownable.sol";
+// ✅ Better: OpenZeppelin Ownable (5.x needs the first owner in the constructor)
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MyContract is Ownable {
-    function setOwner(address newOwner) public onlyOwner {
-        transferOwnership(newOwner);
-    }
+    constructor(address initialOwner) Ownable(initialOwner) {}
+    // transferOwnership(newOwner) is already public + onlyOwner + rejects address(0)
 }
+// Many roles → AccessControl · two-step hand-over → Ownable2Step
 ```
 
 ### 3. Integer Overflow (pre-0.8.0)
@@ -1840,10 +1897,13 @@ contract MyContract is Ownable {
 uint256 a = type(uint256).max;
 a + 1;  // reverts
 
-// ⚠️ Unchecked blocks (use carefully)
-unchecked {
-    for (uint i = 0; i < length; ++i) { /* ... */ }  // saves gas
+// ⚠️ Unchecked blocks (use carefully) — wrap only the counter, never the loop body
+for (uint256 i = 0; i < length;) {
+    /* body stays checked */
+    unchecked { ++i; }
 }
+// Solidity 0.8.22+ already skips the overflow check on `++i` in a simple
+// `for (...; i < length; ++i)` loop, so on 0.8.22+ the plain form is enough
 ```
 
 ### 4. Front-Running
@@ -1863,16 +1923,13 @@ unchecked {
 ```solidity
 // ❌ Spot price from AMM
 uint256 price = uniswapPool.price();  // manipulable via flash loan
-
-// ✅ TWAP (Time-Weighted Average Price)
-uint256 price = uniswapV3Oracle.consult(pool, period);
-
-// ✅✅ Multiple oracles + sanity checks
-uint256 chainlink = chainlinkOracle.latestAnswer();
-uint256 twap = uniswapTWAP.consult();
-require(deviation(chainlink, twap) < 2%);
-return median([chainlink, twap, pyth]);
 ```
+
+✅ Use the patterns in [`defi-patterns.md`](defi-patterns.md) · Oracle Integration (one copy, kept up to date):
+
+- Chainlink `latestRoundData()` with `price > 0` and a staleness check on `updatedAt` — never `latestAnswer()` (deprecated, no timestamp)
+- Time-Weighted Average Price (TWAP) from Uniswap V3 for a second opinion
+- several sources → reject if they disagree by more than a set percentage → use the median
 
 ### 6. Storage Layout (Upgradeable Contracts)
 
@@ -1896,7 +1953,9 @@ contract MyContractV2 {
     uint256 c;  // slot 2 (new)
 }
 
-// Use OpenZeppelin Upgrades for safety checks
+// Use OpenZeppelin Upgrades plugins for layout checks
+// OpenZeppelin 5.x upgradeable contracts keep their state in ERC-7201
+// namespaced storage, so your own variables don't collide with theirs
 ```
 
 ### 7. Delegatecall
@@ -1920,13 +1979,36 @@ function permit(address user, bytes signature) public {
     // ...
 }
 
-// ✅ EIP-712 with nonce + chain ID
-function permit(address user, uint256 nonce, bytes signature) public {
-    require(nonces[user]++ == nonce);
-    bytes32 hash = keccak256(abi.encodePacked(DOMAIN_SEPARATOR, user, nonce));
-    require(ECDSA.recover(hash, signature) == user);
-    // ...
+// ✅ EIP-712 typed data: domain (name, version, chainId, this contract)
+//    + type hash + nonce + deadline, bound to the exact action
+import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {Nonces} from "@openzeppelin/contracts/utils/Nonces.sol";
+
+contract Vault is EIP712, Nonces {
+    bytes32 private constant WITHDRAW_TYPEHASH = keccak256(
+        "Withdraw(address user,address to,uint256 amount,uint256 nonce,uint256 deadline)"
+    );
+
+    error Expired();
+    error BadSignature();
+
+    constructor() EIP712("Vault", "1") {}
+
+    function withdrawWithSig(
+        address user, address to, uint256 amount, uint256 deadline, bytes calldata signature
+    ) external {
+        if (block.timestamp > deadline) revert Expired();
+        bytes32 structHash = keccak256(
+            abi.encode(WITHDRAW_TYPEHASH, user, to, amount, _useNonce(user), deadline)
+        );
+        // digest = keccak256("\x19\x01" ‖ domainSeparator ‖ structHash)
+        bytes32 digest = _hashTypedDataV4(structHash);
+        if (ECDSA.recover(digest, signature) != user) revert BadSignature();
+        // ... withdraw `amount` of `user` to `to`
+    }
 }
+// Smart-contract wallets (ERC-1271) → SignatureChecker.isValidSignatureNow instead of ECDSA.recover
 ```
 
 ### 9. Flash Loan Attacks
@@ -1956,10 +2038,18 @@ contract MyContract {
     }
 }
 
-// ✅ Initializer pattern
-contract MyContract is Initializable {
-    function initialize() public initializer {
-        owner = msg.sender;
+// ✅ Initializer pattern (OpenZeppelin 5.x upgradeable)
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+
+contract MyContract is Initializable, OwnableUpgradeable {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();  // nobody can initialize the implementation itself
+    }
+
+    function initialize(address initialOwner) public initializer {
+        __Ownable_init(initialOwner);  // pass the owner explicitly; deploy + initialize in one tx
     }
 }
 ```
@@ -2019,8 +2109,8 @@ Severity Low:
 
 ## Reference
 
-- [SWC Registry (Smart Contract Weakness Classification)](https://swcregistry.io/)
+- [EEA EthTrust Security Levels](https://entethalliance.org/specs/ethtrust-sl/) — maintained checklist (the old SWC Registry is no longer maintained; use it only for historic IDs)
 - [Trail of Bits Building Secure Smart Contracts](https://github.com/crytic/building-secure-contracts)
-- [OpenZeppelin Defender + best practices](https://docs.openzeppelin.com/)
+- [OpenZeppelin Contracts docs](https://docs.openzeppelin.com/contracts/5.x/) (OpenZeppelin Defender was retired on 1 Jul 2026 — [sunset FAQ](https://www.openzeppelin.com/news/defender-sunset-faq))
 - [Solidity Patterns](https://fravoll.github.io/solidity-patterns/)
 - [Consensys Smart Contract Best Practices](https://consensys.github.io/smart-contract-best-practices/)

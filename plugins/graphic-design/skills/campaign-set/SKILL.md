@@ -13,9 +13,9 @@ description: Use when one campaign (launch, sale, event, festival) needs assets 
 2. **Asset matrix** (the table of every asset needed) — 1 row per placement, using [asset-matrix-template.md](references/asset-matrix-template.md). Sizes come from `social-formats`
 3. **Cut** — remove any row that does not serve the sentence or the audience's channels
 4. **Style lock** — write or reuse a style lock sheet (`style-consistency`) before any generation or shoot
-5. **Master first** — design the hero at the largest canvas of the main ratio. Get it approved before deriving anything
+5. **Master first** — design the hero at the main placement's ratio (the one that carries most of the campaign), at its largest canvas. Get it approved before deriving anything. Then derive tallest to widest
 6. **Derive in order** — stills by ratio (9:16 → 4:5 → 1:1 → wide) → covers and banners → motion and video last, built from the still's look
-7. **Name** every file with the matrix ID and `asset-organize` pattern
+7. **Name** every file with the `asset-organize` pattern, putting the matrix ID in its optional `<id>` token
 8. **Ship gate** (final check before posting) — each asset passes `design-review` and its matrix row is ticked. No tick, no post
 
 ## Campaign card
@@ -23,9 +23,9 @@ description: Use when one campaign (launch, sale, event, festival) needs assets 
 | Field | Example |
 |---|---|
 | One sentence | "Our new matcha drink is the calm way to cool down this hot season." |
-| Audience | Office workers 22–35 near Silom, follow us on IG and LINE |
+| Audience | Office workers 22–35 near Silom, follow us on Instagram (IG) and LINE |
 | One action | Order at the counter or LINE OA with code `MATCHA26` |
-| Offer and dates | Buy 1 get 1, 1–15 April (Songkran week excluded) |
+| Offer and dates | Buy 1 get 1, 1–12 April |
 | Mandatory items | Logo, price, LINE OA ID, promo terms line |
 | Tone | Calm, fresh, not shouting |
 | Approver | Owner (ชื่อ), 24 h turnaround |
@@ -34,7 +34,7 @@ description: Use when one campaign (launch, sale, event, festival) needs assets 
 
 | Order | Asset | Reason |
 |---|---|---|
-| 1 | Master 9:16 or 4:5 hero | Smallest text area. If it works here, it works on wider sizes |
+| 1 | Master hero at the main placement's ratio (here 4:5; 9:16 if the story is the main placement) | Design where the text area is tightest. If it works here, it works on the others |
 | 2 | Other still ratios | Rearrange the same elements. Never stretch |
 | 3 | Covers, banners, rich menu | Wide or special shapes reuse the hero's parts |
 | 4 | Carousel and secondary posts | Same style, new content |
@@ -45,13 +45,13 @@ description: Use when one campaign (launch, sale, event, festival) needs assets 
 | ID | Placement | Canvas | Type | Copy on image | Due | Status |
 |---|---|---|---|---|---|---|
 | M1 | IG feed (master) | 1080 × 1350 | Still | "มัทฉะเย็น ซื้อ 1 แถม 1" + dates | 25 Mar | Approved |
-| D1 | IG/FB story | 1080 × 1920 | Still | Same + LINE ID | 26 Mar | In review |
+| D1 | IG/Facebook (FB) story | 1080 × 1920 | Still | Same + LINE ID | 26 Mar | In review |
 | D2 | LINE OA rich message | 1040 × 1040 | Still | Same + "แตะเพื่อรับโค้ด" | 26 Mar | To do |
 | D3 | LINE rich menu large | 2500 × 1686 | Still | Menu labels | 27 Mar | To do |
 | D4 | FB cover | 851 × 315 | Still | Headline only | 27 Mar | To do |
 | V1 | TikTok / Reels 12 s | 1080 × 1920 | Video | Hook + offer, captions | 29 Mar | To do |
 
-File for D1: `matcha26-d1-ig-story-v01-th.jpg`.
+File for D1: `matcha26-d1-hero-ig-story-v01-th.jpg` (campaign · matrix ID · asset · platform · format · version · language).
 
 ## Rules
 

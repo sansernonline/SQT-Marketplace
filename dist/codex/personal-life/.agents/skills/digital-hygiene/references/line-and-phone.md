@@ -27,4 +27,4 @@
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/340403 · https://droidsans.com/block-inter-calling-gang-callcenter/
 
-**Sign of a SIM swap**: the phone suddenly shows "No service" or "SOS only" while others around you have signal, followed by OTP or password-reset emails. Treat it as the first hour of a takeover (see [scams-and-takeover.md](scams-and-takeover.md)).
+**Sign of a SIM swap**: the phone suddenly shows "No service" or "SOS only" while others around you have signal, followed by one-time password (OTP) or password-reset emails. Treat it as the first hour of a takeover (see [scams-and-takeover.md](scams-and-takeover.md)).

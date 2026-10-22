@@ -10,13 +10,13 @@ So that I can access my personal dashboard and order history
 **Acceptance Criteria**
 
 AC1: Successful login
-- Given I am a registered user with valid credentials
+- Given I am a registered customer with valid credentials
 - When I enter correct email and password and click "Login"
 - Then I am redirected to my dashboard
 - And I see a welcome message with my name
 
 AC2: Invalid password
-- Given I am a registered user
+- Given I am a registered customer
 - When I enter correct email but wrong password
 - Then I see error message "Invalid email or password"
 - And I remain on the login page

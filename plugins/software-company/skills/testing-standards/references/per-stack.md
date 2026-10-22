@@ -21,7 +21,7 @@
 ```bash
 dotnet new xunit -o tests/MyApp.Tests
 dotnet add tests/MyApp.Tests reference src/MyApp
-dotnet add tests/MyApp.Tests package FluentAssertions      # assert ที่อ่านเป็นประโยค
+dotnet add tests/MyApp.Tests package AwesomeAssertions     # assert ที่อ่านเป็นประโยค (.Should()) · ใช้แทน FluentAssertions ตั้งแต่ v8 ที่ต้องซื้อไลเซนส์ Xceed เมื่อใช้เชิงพาณิชย์ · AwesomeAssertions ฟรี Apache-2.0 ตรวจ 22 ต.ค. 2569 จาก nuget.org
 dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
 dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
 dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
@@ -112,14 +112,14 @@ import { DiscountCalculator } from '../src/discount';
 describe('DiscountCalculator', () => {
   beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
 
-  it('calculateDiscount_whenMemberIsGold_returns15Percent', () => {
+  it('gives gold members a 15 percent discount', () => {
     const sut = new DiscountCalculator();
     expect(sut.calculate({ total: 1000 }, 'gold')).toBe(150);
   });
 
   it.each([
     ['none', 0], ['silver', 50], ['gold', 150],
-  ])('calculateDiscount_byTier_%s', (tier, expected) => {
+  ])('gives the right discount for tier %s', (tier, expected) => {
     expect(new DiscountCalculator().calculate({ total: 1000 }, tier)).toBe(expected);
   });
 });
@@ -203,19 +203,21 @@ pytest --lf                   # เฉพาะที่แดงรอบก่
 
 ## Angular
 
-**Vitest + Testing Library** (โปรเจกต์ใหม่ — เร็วกว่า Karma มาก ไม่ต้องเปิดเบราว์เซอร์จริง)
+**Vitest ที่มากับ Angular CLI** (โปรเจกต์ใหม่ — builder `@angular/build:unit-test` ตั้งให้แล้ว รัน `ng test` ไม่ต้องลง plugin เพิ่ม · Karma ยังใช้ได้ · ตรวจ 22 ต.ค. 2569 จาก angular.dev/guide/testing) · เพิ่ม Testing Library ถ้าต้องการ query แบบผู้ใช้จริง
 
 ```bash
-npm i -D vitest @analogjs/vite-plugin-angular jsdom \
-         @testing-library/angular @testing-library/user-event
+ng test
+npm i -D @testing-library/angular @testing-library/user-event
 ```
+
+โปรเจกต์ Angular รุ่นเก่า (ไม่มี builder นี้) → ย้ายจาก Karma ตามคู่มือ angular.dev/guide/testing/migrating-to-vitest หรือใช้ `@analogjs/vite-plugin-angular` คู่กับ `vitest` และ `jsdom`
 
 ```ts
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { OrderFormComponent } from './order-form.component';
 
-it('orderForm_whenSubmitWithEmptyName_showsRequiredError', async () => {
+it('shows a required error when the name is empty on submit', async () => {
   await render(OrderFormComponent);
 
   await userEvent.click(screen.getByRole('button', { name: /บันทึก/ }));

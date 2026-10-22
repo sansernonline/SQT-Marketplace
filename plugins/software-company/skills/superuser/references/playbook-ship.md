@@ -1,7 +1,7 @@
 # playbook · ship — เตรียมส่งงานขึ้น branch หลัก
 
 ใช้เมื่อ: "เปิด PR" · "ดูแล PR ให้เขียว" · "แก้ตามคอมเมนต์รีวิว" · "พร้อม merge หรือยัง" (รวม `opening a PR` · `babysit` · `shipping` · `autopilot-stack` ของ pstack)
-skill หลัก: `pr-description-template` · `commit-message-format` · `cicd-and-release` · [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md)
+skill หลัก: `pr-description-template` · `commit-message-format` · `cicd-and-release` · `adversarial-review-panel`
 
 > agent **ไม่ commit · push · merge เอง** เว้นแต่ได้รับอนุญาตตามกฎ commit ใน `superuser` หัวข้อ 6 ขั้นไหนต้องใช้สิทธิ์นี้แต่ยังไม่ได้รับอนุญาต ให้เตรียมคำสั่งไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ
 
@@ -9,6 +9,7 @@ skill หลัก: `pr-description-template` · `commit-message-format` · `cic
 
 1. ตรวจว่าทุกชิ้นงานผ่านการพิสูจน์แล้ว (test · skill ตรวจแอป) ถ้ายังไม่ผ่าน ให้กลับไป playbook เดิม · ใคร: `qa-tester` ตัวใหม่
    - รัน [`security-gate`](../../security-gate/SKILL.md) — ถ้า critical หรือ high ที่ยืนยันแล้วยังค้างอยู่ ห้ามส่ง ถ้าค่าลับหลุด ให้หยุดและบอกผู้ใช้
+   - เว็บแอปหรือ API ที่ส่งลูกค้า → รายงาน [`owasp-top10`](../../owasp-top10/SKILL.md) ครบ A01–A10 ต้องไม่มีข้อ `ไม่ผ่าน` หรือ `ยังไม่ได้ตรวจ` · ใคร: `security-engineer` ตัวใหม่ กรอก · `reviewer` ตัวใหม่ เปิดหลักฐานทุกแถวที่เขียน `ผ่าน`
 2. **หาผลกระทบนอก diff** ตาม [`blast-radius`](../../blast-radius/SKILL.md) — ทุกฟังก์ชัน ตาราง หรือ API ที่เปลี่ยน · ใคร: `Explore` ตัวใหม่
 3. เรียง commit เป็นชิ้นเล็ก แต่ละชิ้นผ่าน test และอ่านตามลำดับแล้วเข้าใจเป็นเรื่องเดียว ส่วนข้อความเขียนตาม `commit-message-format` · ใคร: หัวหน้าทีม
 4. เขียนคำอธิบาย PR ตาม `pr-description-template` — ผลต่อผู้ใช้ก่อน · วิธีพิสูจน์ · ความเสี่ยง · ภาพหน้าจอถ้ามี · ใคร: หัวหน้าทีม

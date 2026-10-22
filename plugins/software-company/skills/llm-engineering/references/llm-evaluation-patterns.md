@@ -62,12 +62,20 @@ async def daily_eval_growth():
 
     # Send to human labelers (e.g., Argilla, Label Studio)
     for sample in samples:
+        if not sample.consent_for_quality_review:   # PDPA: only users who agreed
+            continue
         await labeler.queue({
-            "input": sample.input,
-            "ai_output": sample.output,
+            "sample_id": sample.id,                 # id, not user_id
+            "input": redact_pii(sample.input),      # names, phone, ID-card numbers, emails → ***
+            "ai_output": redact_pii(sample.output),
             "task": "rate quality 1-5, identify issues"
         })
 ```
+
+> Production samples hold personal data. Before any of it reaches a labelling tool:
+> - redact personal data (see `logging-standards` section 5), and send an id rather than `user_id`
+> - send only samples from users whose consent covers quality review, under the Personal Data Protection Act (PDPA) — see `pdpa-compliance`
+> - an outside labelling vendor is a data processor: sign a data processing agreement first, or self-host the tool (Argilla and Label Studio both can)
 
 ### Step 3: Stratify by importance
 
@@ -204,7 +212,7 @@ async def llm_judge(question, ai_answer, reference):
 ## A/B Testing Prompts/Models
 
 ```python
-import random
+import hashlib
 
 VARIANTS = {
     'control': PROMPT_V1,
@@ -212,8 +220,10 @@ VARIANTS = {
 }
 
 def get_variant(user_id: str) -> str:
-    # Deterministic bucketing
-    return 'treatment' if hash(user_id) % 100 < 10 else 'control'
+    # Deterministic bucketing — same user, same arm, on every restart and worker.
+    # Do not use hash(): Python randomises str hashes per process.
+    bucket = int(hashlib.sha256(user_id.encode()).hexdigest(), 16) % 100
+    return 'treatment' if bucket < 10 else 'control'
 
 # Log outcome
 async def handle_request(user_id, input):
@@ -221,10 +231,10 @@ async def handle_request(user_id, input):
     result = await call_llm(VARIANTS[variant], input)
 
     await log({
-        'user_id': user_id,
+        'user_hash': hashlib.sha256(user_id.encode()).hexdigest()[:16],  # not the raw id
         'variant': variant,
-        'input': input,
-        'output': result,
+        'input_hash': hashlib.sha256(input.encode()).hexdigest()[:16],   # not the full text
+        'output_len': len(result),   # full text only after redaction — see logging-standards
         'latency': ...,
         'tokens': ...,
         'timestamp': now(),

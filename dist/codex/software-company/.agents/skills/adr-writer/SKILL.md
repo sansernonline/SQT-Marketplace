@@ -37,7 +37,7 @@ Copy **[`assets/adr.md`](assets/adr.md)** and fill it in. Do not write the outli
 - Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
   ```bash
-  python ../polished-document-style/scripts/check_outline.py assets/adr.md <your ADR file>
+  python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/adr.md <your ADR file>
   ```
 
   It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
@@ -73,6 +73,6 @@ load the matching skill before writing, not after:
 |---|---|
 | Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+| The point needs a picture to land | `markdown-visuals`, then `diagram-figures` for project documents (`software-diagrams` only for README / PR notes) |
 
 Default formatting is not neutral — it reads as unfinished work.

@@ -2,7 +2,7 @@
 from brandkit_pptx import BrandDeck
 
 d = BrandDeck()
-d.title_slide("Apps Track", "Project Control & Monitor",
+d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor",
               "รายงานความคืบหน้า · 19 กรกฎาคม 2026")
 d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
 d.bullets_slide("ขอบเขตงาน",
@@ -19,6 +19,6 @@ d.table_slide("สถานะ Milestone", ["รหัส", "รายการ"
                ["M-04", "เชื่อมต่อ Git / CI", "DevOps", "ค้าง"]],
               col_widths=[1, 4, 2, 2], status_col=3,
               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
-d.quote_slide("เอกสารที่อ่านง่าย คือเอกสารที่ถูกอ่านจริง", "ทีม Apps Track")
+d.quote_slide("เอกสารที่อ่านง่าย คือเอกสารที่ถูกอ่านจริง", "ทีมตัวอย่าง")
 d.save("example_deck.pptx")
 print("wrote example_deck.pptx")

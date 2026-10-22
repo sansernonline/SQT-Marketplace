@@ -5,7 +5,8 @@
    ------------------------------------------------------------------ */
 /* =========================================================================
    appstrack.css — ระบบดีไซน์เว็บแอปสไตล์ Apps Track
-   คอนเซปต์: สว่าง โปร่ง นุ่มนวล เรียบสะอาด — โทนเทาเย็น accent น้ำเงิน-ม่วง
+   คอนเซปต์: สว่าง เรียบสะอาด — กรอบแอป (sidebar · topbar · เส้น) เป็นเทา-ดำ ไม่ย้อมสี
+   สีแบรนด์ทึบ 1 สี ใช้กับข้อมูล ปุ่มหลัก ลิงก์ และแถบเลือกเท่านั้น · ไม่มี gradient · ไม่มีกระจกฝ้า
 
    ใช้กับเฟรมเวิร์กอะไรก็ได้ (Angular / React / Vue / HTML เปล่า)
    กฎเหล็ก: โค้ดคอมโพเนนต์ห้ามมีสีดิบ ต้องอ้าง var(--token) เท่านั้น
@@ -13,14 +14,10 @@
    ========================================================================= */
 
 :root {
-  /* ---- gradient / brand ---------------------------------------------- */
-  --grad-accent: linear-gradient(135deg, #2a78d6 0%, #6a5cd6 100%);
-  --grad-primary: linear-gradient(135deg, #14264a, #25498c 48%, #4b63c9);
-  --grad-hero: linear-gradient(150deg, #101f3d, #25498c 45%, #6a5cd6);
-  --grad-page: linear-gradient(160deg, #f3f6fc, #f8f9fc 50%, #f6f3fb);
-
-  --brand: #2a78d6;
-  --brand-2: #6a5cd6;
+  /* ---- brand — สีทึบ ไม่มี gradient ----------------------------------
+     --brand ต้องผ่าน 4.5:1 ทั้งตัวขาวบนพื้น brand และ brand บน --bg       */
+  --brand: #226cc6;                     /* เฉดเข้มของค่าประจำบ้าน #2A78D6 · ขาวบนพื้นนี้ 5.21 · บน --bg 4.87 · บน --brand-50 4.71 */
+  --brand-2: #6a5cd6;                   /* สีข้อมูลชุดที่ 2 คู่กับ --brand (กราฟ) */
   --brand-50: #eef4fd;
   --brand-100: #dde9fb;
 
@@ -30,14 +27,14 @@
   --surface-raised: #ffffff;            /* พื้นการ์ด/เมนูลอย */
   --surface-hover: #f3f5f9;
   --surface-nav-hover: #f6f8fc;
-  --surface-glass: rgba(255, 255, 255, 0.82);   /* topbar โปร่ง */
   --track: #f1f3f8;                     /* รางกราฟโดนัท */
   --track-2: #f2f4f9;                   /* รางกราฟแท่ง */
   --line: #eef0f5;
   --line-strong: #e4e7ee;
-  --shadow: 0 1px 2px rgba(20, 30, 55, .03), 0 6px 20px rgba(20, 30, 55, .05);
-  --shadow-lg: 0 2px 6px rgba(20, 30, 55, .05), 0 18px 44px rgba(20, 30, 55, .1);
-  --shadow-brand: 0 1px 2px rgba(42, 120, 214, .2), 0 6px 16px rgba(42, 120, 214, .18);
+  --skeleton: #e4e7ee;                  /* โครงร่างตอนโหลด */
+  /* เงาเฉพาะของที่ลอยจริง — การ์ดที่อยู่นิ่งไม่มีเงา (ui-craft ข้อ 4) */
+  --shadow: 0 1px 2px rgba(20, 30, 55, .06), 0 4px 12px rgba(20, 30, 55, .08);   /* dropdown · tooltip */
+  --shadow-lg: 0 2px 6px rgba(20, 30, 55, .05), 0 18px 44px rgba(20, 30, 55, .1); /* modal · toast */
 
   --radius: 14px;
   --radius-sm: 9px;
@@ -46,8 +43,8 @@
   /* ---- text ----------------------------------------------------------- */
   --text: #333b4a;
   --text-body: #414957;
-  --text-muted: #7d8492;
-  --text-faint: #a9aeb9;
+  --text-muted: #5f6673;                /* บนขาว 5.78 · บน --bg 5.40 */
+  --text-faint: #69707d;                /* บนขาว 4.98 · บน --bg 4.65 · ต่ำสุดที่ยังอ่านได้ */
   --on-brand: #ffffff;
   --on-brand-strong: rgba(255, 255, 255, .82);
   --on-brand-soft: rgba(255, 255, 255, .78);
@@ -55,15 +52,18 @@
   --on-brand-veil: rgba(255, 255, 255, .14);       /* แผ่นทับบนพื้น accent */
   --on-brand-veil-soft: rgba(255, 255, 255, .06);
 
-  /* ---- sidebar (ค่าเริ่มต้น = สว่าง · โหมดเข้มอยู่ที่ body[data-side]) ---- */
+  /* ---- sidebar (ค่าเริ่มต้น = สว่าง · โหมดเข้มอยู่ที่ body[data-side])
+     กรอบแอปเป็นสีกลาง — เมนูที่เลือกใช้พื้นเทา + ขีดสีแบรนด์ 3px เท่านั้น ---- */
   --sidebar-bg: #ffffff;
+  --sidebar-dark-bg: #1f2329;           /* sidebar โหมดเข้ม — เทาเข้มกลาง ไม่อมสีแบรนด์ */
   --sidebar-line: #eef0f5;
   --sidebar-text: #333b4a;
-  --sidebar-text-muted: #7d8492;
-  --sidebar-text-faint: #a9aeb9;
+  --sidebar-text-muted: #5f6673;
+  --sidebar-text-faint: #69707d;
   --sidebar-hover-bg: #f6f8fc;
-  --sidebar-active-bg: var(--brand-50);
-  --sidebar-active-text: var(--brand);
+  --sidebar-active-bg: #eef0f4;         /* #333b4a บนพื้นนี้ 9.6 */
+  --sidebar-active-text: #333b4a;
+  --sidebar-active-bar: var(--brand);
 
   /* ---- แจ้งความผิดพลาด ------------------------------------------------- */
   --danger: #a63a34;
@@ -110,17 +110,18 @@
 }
 
 /* ---- ธีม accent ทางเลือก — สลับด้วย body[data-theme] -------------------
-   เปลี่ยนแค่ 5 token ที่เดียว ทั้งแอปเปลี่ยนสีตาม ไม่ต้องแตะคอมโพเนนต์ */
-body[data-theme='emerald']  { --grad-accent: linear-gradient(135deg,#0d9463 0%,#0e9bb5 100%); --brand:#0d9463; --brand-2:#0e9bb5; --brand-50:#eaf7f1; --brand-100:#d3efe3; }
-body[data-theme='sunset']   { --grad-accent: linear-gradient(135deg,#e8722e 0%,#d6467e 100%); --brand:#e8722e; --brand-2:#d6467e; --brand-50:#fdf1ea; --brand-100:#fadfcd; }
-body[data-theme='plum']     { --grad-accent: linear-gradient(135deg,#8b5cf6 0%,#d6467e 100%); --brand:#8b5cf6; --brand-2:#d6467e; --brand-50:#f4efff; --brand-100:#e6dcff; }
-body[data-theme='graphite'] { --grad-accent: linear-gradient(135deg,#0e9bb5 0%,#2a78d6 100%); --brand:#0e9bb5; --brand-2:#2a78d6; --brand-50:#eaf6f9; --brand-100:#d1ebf2; }
+   เปลี่ยนแค่ 4 token ที่เดียว ทั้งแอปเปลี่ยนสีตาม ไม่ต้องแตะคอมโพเนนต์
+   ทุกค่า --brand ผ่าน 4.5:1 ทั้งตัวขาวบน brand · brand บน --bg · brand บน --brand-50 (ตรวจ 22 ต.ค. 2569) */
+body[data-theme='emerald']  { --brand:#097a54; --brand-2:#0e9bb5; --brand-50:#eaf7f1; --brand-100:#d3efe3; }  /* ขาว 5.35 · bg 5.00 · brand-50 4.86 */
+body[data-theme='sunset']   { --brand:#b8501a; --brand-2:#d6467e; --brand-50:#fdf1ea; --brand-100:#fadfcd; }
+body[data-theme='plum']     { --brand:#7a4ee8; --brand-2:#d6467e; --brand-50:#f4efff; --brand-100:#e6dcff; }
+body[data-theme='graphite'] { --brand:#0a7a90; --brand-2:#2a78d6; --brand-50:#eaf6f9; --brand-100:#d1ebf2; }
 
-/* ---- sidebar โหมดเข้ม ---------------------------------------------------
-   เมนู active ใช้แผ่นทับโปร่ง (--on-brand-veil) แทนพื้นสีอ่อน
-   เพราะ --brand-50 บนพื้นเข้มจะกลืนหายไปเลย */
+/* ---- sidebar โหมดเข้ม — เทาเข้มกลาง ไม่ย้อมสีแบรนด์ -----------------------
+   เมนู active ใช้แผ่นทับโปร่งสีขาว (--on-brand-veil) + ขีดขาว
+   ข้อความ: ขาว 15.8 · soft 10.1 · muted 8.8 บน #1f2329 */
 body[data-side='dark'] {
-  --sidebar-bg: var(--grad-primary);
+  --sidebar-bg: var(--sidebar-dark-bg);
   --sidebar-line: var(--on-brand-veil);
   --sidebar-text: var(--on-brand);
   --sidebar-text-muted: var(--on-brand-soft);
@@ -128,6 +129,7 @@ body[data-side='dark'] {
   --sidebar-hover-bg: var(--on-brand-veil-soft);
   --sidebar-active-bg: var(--on-brand-veil);
   --sidebar-active-text: var(--on-brand);
+  --sidebar-active-bar: var(--on-brand);   /* โหมดเข้มใช้ขีดขาว — กรอบแอปยังเป็นสีกลาง */
 }
 
 /* =========================== base =========================== */
@@ -139,11 +141,9 @@ html, body { height: 100%; }
 body {
   margin: 0;
   background: var(--bg);
-  background-image: var(--grad-page);
-  background-attachment: fixed;
   color: var(--text-body);
   font-family: var(--font);
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.6;
   letter-spacing: .1px;
   -webkit-font-smoothing: antialiased;
@@ -152,7 +152,7 @@ body {
 }
 
 h1, h2, h3, h4 { margin: 0; color: var(--text); font-weight: 500; }
-h1 { font-size: 19px; }
+h1 { font-size: 22px; }
 h2 { font-size: 15px; }
 h3 { font-size: 13px; }
 
@@ -160,7 +160,7 @@ a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 small, .muted { color: var(--text-muted); font-size: 11px; }
-.faint { color: var(--text-faint); font-size: 10.5px; }
+.faint { color: var(--text-faint); font-size: 11px; }
 .num { font-variant-numeric: tabular-nums; }
 
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
@@ -180,25 +180,28 @@ small, .muted { color: var(--text-muted); font-size: 11px; }
 .app-sidebar .brand {
   display: flex; align-items: center; gap: 9px;
   padding: 4px 8px 14px; color: var(--sidebar-text);
-  font-size: 14px; font-weight: 600;
+  font-size: 15px; font-weight: 600;
 }
 .app-sidebar .brand .mark {
   width: 26px; height: 26px; border-radius: 8px;
-  background: var(--grad-accent); flex: none;
+  background: var(--brand); flex: none;
 }
 .app-sidebar .group {
   padding: 14px 10px 5px;
-  font-size: 10px; letter-spacing: .5px; text-transform: uppercase;
+  font-size: 11px; letter-spacing: .5px; text-transform: uppercase;
   color: var(--sidebar-text-faint);
 }
 .nav-link {
   display: flex; align-items: center; gap: 9px;
   padding: 7px 10px; border-radius: var(--radius-sm);
-  color: var(--sidebar-text-muted); font-size: 12.5px; cursor: pointer;
+  color: var(--sidebar-text-muted); font-size: 13px; cursor: pointer;
   text-decoration: none;
 }
 .nav-link:hover { background: var(--sidebar-hover-bg); color: var(--sidebar-text); text-decoration: none; }
-.nav-link.on { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); font-weight: 500; }
+.nav-link.on {
+  background: var(--sidebar-active-bg); color: var(--sidebar-active-text); font-weight: 500;
+  box-shadow: inset 3px 0 0 var(--sidebar-active-bar);   /* ขีดเลือก — สีแบรนด์จุดเดียวในกรอบแอป */
+}
 .nav-link .ico { width: 15px; height: 15px; flex: none; }
 .app-sidebar .foot { margin-top: auto; }
 
@@ -208,8 +211,7 @@ small, .muted { color: var(--text-muted); font-size: 11px; }
   height: var(--topbar-h); flex: none;
   display: flex; align-items: center; gap: 12px;
   padding: 0 20px;
-  background: var(--surface-glass);
-  backdrop-filter: saturate(1.4) blur(10px);
+  background: var(--surface);          /* ทึบ — ไม่ใช้กระจกฝ้า (no-ai-look) */
   border-bottom: 1px solid var(--line);
   position: sticky; top: 0; z-index: 30;
 }
@@ -232,15 +234,14 @@ body.nav-open .nav-scrim { display: block; }
 .app-main > .inner { max-width: var(--content-max); margin: 0 auto; }
 
 .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-.page-head .sub { color: var(--text-muted); font-size: 11.5px; margin-top: 2px; }
+.page-head .sub { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
 
 /* =========================== card =========================== */
 
 .card {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  border-radius: var(--radius);         /* ไม่มีเงา — การ์ดนิ่งไม่ได้ลอย แยกด้วยเส้น + พื้นต่างเฉด */
 }
 .card-head {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -258,14 +259,14 @@ body.nav-open .nav-scrim { display: block; }
   font-size: 22px; font-weight: 600; color: var(--text);
   letter-spacing: -.4px; font-variant-numeric: tabular-nums; margin-top: 2px;
 }
-.stat .foot { color: var(--text-faint); font-size: 10.5px; margin-top: 2px; }
+.stat .foot { color: var(--text-faint); font-size: 11px; margin-top: 2px; }
 
 /* =========================== pill (สถานะ) =========================== */
 
 .pill {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 2px 9px; border-radius: var(--radius-pill);
-  font-size: 10.5px; line-height: 1.7; white-space: nowrap;
+  font-size: 11px; line-height: 1.7; white-space: nowrap;
   border: 1px solid transparent;
 }
 .pill svg { width: 11px; height: 11px; }
@@ -291,10 +292,10 @@ body.nav-open .nav-scrim { display: block; }
 .btn:disabled { opacity: .55; cursor: not-allowed; }
 .btn svg { width: 14px; height: 14px; }
 .btn-primary {
-  background: var(--grad-accent); border-color: transparent;
-  color: var(--on-brand); box-shadow: var(--shadow-brand);
+  background: var(--brand); border-color: transparent;
+  color: var(--on-brand);
 }
-.btn-primary:hover:not(:disabled) { filter: brightness(1.05); }
+.btn-primary:hover:not(:disabled) { filter: brightness(.92); }   /* เข้มขึ้นตอนชี้ — contrast ไม่ลด */
 .btn-ghost { background: transparent; border-color: transparent; color: var(--text-muted); }
 .btn-ghost:hover:not(:disabled) { background: var(--btn-ghost-hover-bg); border-color: transparent; }
 .btn-danger { color: var(--btn-danger-fg); border-color: var(--btn-danger-line); background: var(--btn-danger-bg); }
@@ -309,7 +310,7 @@ body.nav-open .nav-scrim { display: block; }
   width: 100%; padding: 7px 11px;
   border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
   background: var(--surface); color: var(--text-body);
-  font: inherit; font-size: 12.5px;
+  font: inherit; font-size: 13px;
   transition: border-color .15s, box-shadow .15s;
 }
 .input:focus, .select:focus, .textarea:focus {
@@ -318,7 +319,7 @@ body.nav-open .nav-scrim { display: block; }
 .textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
 .select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237d8492' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235f6673' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
 }
 .err { color: var(--danger); font-size: 11px; margin-top: 4px; }
@@ -330,8 +331,8 @@ body.nav-open .nav-scrim { display: block; }
 /* min-width จำเป็น — ถ้าไม่ใส่ ตารางจะหดจนทุกเซลล์ตัดคำเป็นเสาแทนที่จะเลื่อนแนวนอน */
 .tb { width: 100%; min-width: var(--table-min); border-collapse: collapse; }
 .tb th {
-  text-align: left; font-weight: 400; font-size: 10.5px;
-  color: var(--text-faint); text-transform: uppercase; letter-spacing: .4px;
+  text-align: left; font-weight: 500; font-size: 11px;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: .4px;
   padding: 8px 14px; border-bottom: 1px solid var(--line); white-space: nowrap;
 }
 .tb td { padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
@@ -349,12 +350,12 @@ body.nav-open .nav-scrim { display: block; }
   font-family: inherit; transition: all .15s;
 }
 .chip:hover { background: var(--chip-hover-bg); }
-.chip.on { background: var(--grad-accent); border-color: transparent; color: var(--on-brand); }
+.chip.on { background: var(--brand); border-color: transparent; color: var(--on-brand); }
 
 .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); }
 .tab {
   padding: 8px 14px; border: none; background: none; color: var(--text-muted);
-  font: inherit; font-size: 12.5px; cursor: pointer;
+  font: inherit; font-size: 13px; cursor: pointer;
   border-bottom: 2px solid transparent; margin-bottom: -1px;
 }
 .tab:hover { color: var(--text); }
@@ -363,13 +364,13 @@ body.nav-open .nav-scrim { display: block; }
 /* =========================== progress / avatar =========================== */
 
 .prog { height: 6px; border-radius: var(--radius-pill); background: var(--progress-track); overflow: hidden; }
-.prog > i { display: block; height: 100%; border-radius: var(--radius-pill); background: var(--grad-accent); transition: width .35s ease; }
+.prog > i { display: block; height: 100%; border-radius: var(--radius-pill); background: var(--brand); transition: width .35s ease; }
 
 .ava {
   width: 24px; height: 24px; border-radius: 50%;
   background: var(--brand-50); color: var(--brand);
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 500; flex: none; text-transform: uppercase;
+  font-size: 11px; font-weight: 500; flex: none; text-transform: uppercase;
 }
 .ava-lg { width: 34px; height: 34px; font-size: 12px; }
 
@@ -440,7 +441,16 @@ body.nav-open .nav-scrim { display: block; }
 .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
 .mb-8 { margin-bottom: 8px; } .mb-12 { margin-bottom: 12px; } .mb-16 { margin-bottom: 16px; }
 .gap-12 { gap: 12px; } .gap-16 { gap: 16px; }
-.empty { padding: 40px 16px; text-align: center; color: var(--text-faint); font-size: 12px; }
+.empty { padding: 40px 16px; text-align: center; color: var(--text-muted); font-size: 12px; }
+/* โหลดเนื้อหา (การ์ด ตาราง รายการ) ใช้โครงร่างเทาในรูปทรงของจริง — ui-craft ข้อ 6
+   .spinner ใช้เฉพาะรอสั้น ๆ ในปุ่มหรือข้างข้อความ ไม่วางกลางจอ */
+.skeleton {
+  display: block; height: 12px; border-radius: 6px;
+  background: var(--skeleton); animation: pulse 1.2s ease-in-out infinite;
+}
+.skeleton + .skeleton { margin-top: 8px; }
+.skeleton.lg { height: 22px; width: 40%; }
+@keyframes pulse { 50% { opacity: .5; } }
 .spinner {
   width: 15px; height: 15px;
   border: 2px solid var(--brand-100); border-top-color: var(--brand);

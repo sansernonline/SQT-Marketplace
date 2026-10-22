@@ -18,7 +18,7 @@ General information — entry rules are set by the destination and change often;
 3. **Entry rule lookup** — per destination, decide which row of the decision table applies; record the source URL and the date checked.
 4. **Book in the right order** — visa-required trip: refundable flights/hotel first, then visa appointment, then pay the rest after approval.
 5. **Insurance** — buy before departure; match the destination's minimum if any (Schengen €30,000 medical incl. repatriation).
-6. **Money** — card with low FX fee or a travel card, some cash in local currency, tell the bank / enable overseas use in the app, note the card-freeze hotline.
+6. **Money** — card with low foreign-exchange (FX) fee or a travel card, some cash in local currency, tell the bank / enable overseas use in the app, note the card-freeze hotline.
 7. **Connectivity and power** — roaming pack or eSIM, offline maps, plug adapter from the plug table.
 8. **Health** — enough prescription medicine for the trip + 3 days, in original packaging with the label; English medicine list (`medication-schedule` in health-wellness if installed).
 9. **Itinerary file** — every booking with confirmation number, address in local script, check-in time, contact.
@@ -31,7 +31,7 @@ General information — entry rules are set by the destination and change often;
 | Visa-exempt (e.g. China 30 days, Korea 90 days, Japan 15 days) | Check stay limit and whether the exemption is temporary; check any pre-registration (Korea K-ETA) | 1–3 weeks |
 | Electronic authorisation / e-visa | Apply only on the official government site — look-alike sites charge many times the fee | 1–4 weeks |
 | Visa on arrival | Bring photo, cash in the required currency, return ticket, hotel proof | Day of travel |
-| Embassy / VFS visa (Schengen, UK, US, Australia, etc.) | Appointment, bank statements, employer letter, insurance (Schengen), bookings | 4–12 weeks; US interviews can be longer |
+| Embassy / Visa Facilitation Services (VFS) visa (Schengen, UK, US, Australia, etc.) | Appointment, bank statements, employer letter, insurance (Schengen), bookings | 4–12 weeks; US interviews can be longer |
 | Transit through a third country | Check airside transit rules — some countries need a transit visa even airside | With booking |
 
 Current visa-free list for Thai passports: [references/travel-facts.md](references/travel-facts.md).

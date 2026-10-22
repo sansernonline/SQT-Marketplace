@@ -5,23 +5,23 @@
 ```markdown
 # Clip — <campaign>-<id> (v<NN>)
 
-Platform: <tt / ig reel / yt short / fb reel> · Canvas: 1080 × 1920 · Length: <s> · fps: 30
+Platform: <tt / ig reel / yt short / fb reel> · Canvas: 1080 × 1920 · Length: <s> · frames per second (fps): 30
 Message (one sentence): <...>
 Hook pattern: <show result / call out / problem / number / before-after / question>
-One CTA: <...>
+One call to action (CTA): <...>
 Style lock: <sheet + version> · Music: <track + licence source>
 ```
 
 ## Shot list
 
-| # | Start–end (s) | Duration | Visual (what we see) | Camera / motion | On-screen text (TH) | Counted chars | Min s (÷17) | Voice-over / sound | Source (AI / shoot / stock) | Status |
+| # | Start–end (s) | Duration | Visual (what we see) | Camera / motion | On-screen text (TH) | Counted chars | Min s (÷17 captions · ÷12 marketing text) | Voice-over / sound | Source (AI / shoot / stock) | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 0–3 | 3 | | | | | | | | |
 | 2 | | | | | | | | | | |
 | 3 | | | | | | | | | | |
 | 4 | | | | | | | | | | |
 
-Counted chars = Thai base characters (tone marks and above/below vowels not counted) plus spaces and digits.
+Counted chars = Thai base characters (tone marks and above/below vowels not counted) plus spaces, digits and symbols. Captions that follow the voice-over: seconds = chars ÷ 17. On-screen marketing text: chars ÷ 12, min 1.5 s, offers ≥ 2.5 s.
 
 ## Per-shot brief (AI video tool)
 
@@ -44,7 +44,7 @@ Negatives: text, logos, warped hands, extra objects, flicker
 - Natural window light from one side matches most style locks; turn off mixed-colour room lights
 - Record room tone 10 s for audio clean-up
 
-## SRT caption file example
+## SubRip Text (SRT) caption file example
 
 ```
 1
@@ -53,7 +53,7 @@ Negatives: text, logos, warped hands, extra objects, flicker
 
 2
 00:00:05,000 --> 00:00:09,000
-ซื้อ 1 แถม 1 · 1–15 เม.ย.
+ซื้อ 1 แถม 1 · 1–12 เม.ย.
 
 3
 00:00:09,000 --> 00:00:12,000

@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 CS Engineering Quality Standards](#cs-engineering-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 CS Engineering Quality Standards](#-cs-engineering-quality-standards)
 - [Activation Milestones](#activation-milestones)
 - [Health Score Components](#health-score-components)
 - [In-Product Engagement Tools](#in-product-engagement-tools)
@@ -82,8 +82,8 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 ## 📊 CS Engineering Quality Standards
 
 - **Time to first value:** measured and getting shorter
-- **Activation rate:** over 60% of users reach the first key action
-- **Self-service success:** users answer over 70% of their questions without contacting support
+- **Activation rate:** measured and rising against your own baseline — target set per product (รอยืนยัน · no public standard; quote a benchmark only with source + date)
+- **Self-service success:** share of questions solved without contacting support, tracked against your own baseline (รอยืนยัน)
 - **Health score accuracy:** the score predicts renewal
 - **CS tooling coverage:** CS sees the whole account in one view
 - **Customer data privacy:** follow Thailand's Personal Data Protection Act (PDPA) and the EU General Data Protection Regulation (GDPR)
@@ -261,8 +261,8 @@ flowchart LR
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Integration Quality Standards](#integration-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Integration Quality Standards](#-integration-quality-standards)
 - [SSO Patterns](#sso-patterns)
 - [SCIM Provisioning](#scim-provisioning)
 - [Webhook Patterns](#webhook-patterns)
@@ -305,43 +305,10 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 
 ## SSO Patterns
 
-### SAML 2.0 (Enterprise SSO)
+Code (one copy, kept up to date) → [`enterprise-integration.md`](enterprise-integration.md) · SSO Implementation. What it must do:
 
-```typescript
-// Receive SAML response from IdP
-const samlResponse = req.body.SAMLResponse;
-const decoded = decodeBase64(samlResponse);
-
-// Verify signature against IdP cert
-verifySignature(decoded, customer.idp.cert);
-
-// Extract user attributes
-const user = {
-  email: getAttribute(decoded, 'email'),
-  groups: getAttribute(decoded, 'groups'),
-  externalId: getAttribute(decoded, 'NameID'),
-};
-
-// JIT provision or update
-await provisionUser(customer.id, user);
-```
-
-### OIDC (Modern SSO)
-
-```typescript
-// Authorization code + PKCE
-const authUrl = oidc.buildAuthUrl({
-  client_id,
-  redirect_uri,
-  scope: 'openid profile email',
-  code_challenge,
-  state,
-});
-
-// After redirect, exchange code
-const tokens = await oidc.exchangeCode(code, code_verifier);
-const userInfo = decodeIdToken(tokens.id_token);
-```
+- **SAML 2.0** — require a signed response · check audience, issuer, `NotOnOrAfter` · map `NameID` + attributes → just-in-time (JIT) provision under the customer's tenant
+- **OIDC** — Authorization Code + PKCE · store `state`, `nonce` and `code_verifier` in the server session · reject a missing or mismatched `state` · verify `id_token` against the IdP JSON Web Key Set (JWKS): signature, `iss`, `aud`, `exp`, then `nonce` · never just decode the token
 
 ## SCIM Provisioning
 
@@ -375,56 +342,10 @@ PATCH /Users/abc123
 
 ## Webhook Patterns
 
-### Outbound (we send to customer)
+Code (one copy) → [`enterprise-integration.md`](enterprise-integration.md) · Webhook Patterns (Outbound / Inbound). What it must do:
 
-```typescript
-// Signed delivery
-async function deliver(webhook: Webhook, event: Event) {
-  const body = JSON.stringify(event);
-  const signature = hmac256(webhook.secret, body);
-
-  const response = await fetch(webhook.url, {
-    method: 'POST',
-    headers: {
-      'X-Webhook-Signature': signature,
-      'X-Webhook-Timestamp': Date.now().toString(),
-      'Content-Type': 'application/json',
-    },
-    body,
-  });
-
-  if (!response.ok) {
-    await queueRetry(webhook, event, response.status);
-  }
-}
-
-// Retry with exponential backoff
-// After N failures, mark webhook unhealthy, alert customer
-```
-
-### Inbound (customer sends to us)
-
-```typescript
-// Verify signature
-const signature = req.headers['x-signature'];
-const computed = hmac256(secret, req.rawBody);
-if (signature !== computed) {
-  return 401;
-}
-
-// Idempotency check
-const eventId = req.headers['x-event-id'];
-if (await db.processedEvents.exists(eventId)) {
-  return { received: true, duplicate: true };
-}
-
-// Persist first
-await db.events.create({ id: eventId, raw: req.body });
-res.json({ received: true });
-
-// Process async
-await queue.enqueue('process', eventId);
-```
+- **Outbound** — sign `timestamp.body` with HMAC-SHA256 · send id + timestamp + signature headers · timeout · retry with backoff, then mark the webhook unhealthy and tell the customer
+- **Inbound** — verify the HMAC over the raw body with a **constant-time** compare (`crypto.timingSafeEqual`, never `!==`) · idempotency check on the event id · persist, ack fast, process async
 
 ## Data Sync Patterns
 
@@ -493,7 +414,7 @@ try {
 
 ## When to Hand Off
 
-- Multi-tenant architecture → `solution-architect`
+- Multi-tenant architecture → same agent, switch role: [`agent-saas-architect.md`](agent-saas-architect.md)
 - Customer onboarding flow → `growth-specialist`
 - Billing integration → `revops-analyst`
 - Security review → `security-engineer` (from software-company)
@@ -640,18 +561,11 @@ For subscriptions:
 - Setup fees: depends on whether distinct obligation
 ```
 
+Daily recognition query (one copy; `end_date` exclusive, period = `end_date - start_date` days) → [`subscription-billing.md`](subscription-billing.md) · Revenue Recognition (ASC 606). Sum per day from `daily_recognized_revenue`:
+
 ```sql
--- Daily revenue recognition
-SELECT
-  date,
-  SUM(daily_revenue) as recognized_revenue
-FROM (
-  SELECT
-    -- end_date is the last service day (inclusive), so the series has end - start + 1 days
-    generate_series(start_date, end_date, '1 day') as date,
-    (amount / (end_date - start_date + 1)) as daily_revenue
-  FROM subscriptions
-) sub
+SELECT date, SUM(daily_revenue) AS recognized_revenue
+FROM daily_recognized_revenue
 GROUP BY date;
 ```
 
@@ -676,7 +590,8 @@ churn_rate = churned_mrr / start_of_month_mrr
 # NRR (Net Revenue Retention)
 NRR = (start_mrr + expansion - contraction - churn) / start_mrr
 # > 100% = expanding existing customers cover churn
-# Target: 110%+ for healthy B2B SaaS
+# Target: set from your own baseline and segment (รอยืนยัน) — public "110%+"
+# figures are vendor surveys, not a standard; quote one only with source + date
 ```
 
 ## Tax & Multi-Jurisdiction
@@ -692,8 +607,12 @@ VAT (EU):
 - Reverse charge for B2B
 - Tools: Stripe Tax, Vatglobal
 
-GST (Asia):
-- TH 7%, SG 9%, JP 10%, etc.
+VAT / GST / consumption tax (Asia):
+- TH: Value Added Tax (VAT) 7% — reduced rate (6.3% + local tax) under
+  Royal Decree No. 807 (gazetted 23 Aug 2026) until 30 Sep 2027;
+  standard rate in the Revenue Code is 10% · the cut is renewed year by year,
+  re-check each September (ตรวจ 22 ต.ค. 2569 · รอยืนยัน each year)
+- SG Goods and Services Tax (GST) 9% · JP consumption tax 10% (รอยืนยัน)
 - B2B vs B2C rules
 
 Recommendation:
@@ -710,8 +629,8 @@ Recommendation:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SaaS Architecture Quality Standards](#-saas-architecture-quality-standards)
 - [Multi-Tenancy Models](#multi-tenancy-models)
 - [Data Isolation Patterns](#data-isolation-patterns)
 - [Tenant Context Propagation](#tenant-context-propagation)
@@ -802,36 +721,16 @@ Use: Multi-tier products
 
 ### Pattern 1: Row-Level (Shared Schema)
 
-```sql
--- Every table has tenant_id
-CREATE TABLE orders (
-    id UUID PRIMARY KEY,
-    tenant_id UUID NOT NULL,
-    -- ...
-);
+Every table has `tenant_id` · Postgres Row-Level Security (RLS) with `FORCE ROW LEVEL SECURITY` · the app connects as a role that is not the table owner · tenant set with `set_config('app.tenant_id', $1, true)` inside one transaction per request (never plain `SET`, which stays on the pooled connection for the next request).
 
--- Row-level security (Postgres)
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON orders
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
-
--- App sets tenant context per session
-SET app.tenant_id = 'tenant-uuid';
-```
+Code (one copy, kept up to date) → [`multi-tenancy-patterns.md`](multi-tenancy-patterns.md) · Row-Level Multi-Tenancy
 
 **Pros:** Simple to manage, efficient
 **Cons:** Relies on the app to set the tenant context; one bug leaks data
 
 ### Pattern 2: Schema-Per-Tenant
 
-```sql
--- Each tenant has own schema
-CREATE SCHEMA tenant_abc;
-CREATE SCHEMA tenant_xyz;
-
--- Connect with schema search path
-SET search_path TO tenant_abc;
-```
+One schema per tenant · `search_path` set only inside a transaction (`set_config('search_path', $1, true)` / `SET LOCAL`) or fixed per tenant pool — never plain `SET` on a shared pooled connection. Code → [`multi-tenancy-patterns.md`](multi-tenancy-patterns.md) · Schema-Per-Tenant
 
 **Pros:** Strong isolation, easy to back up each tenant
 **Cons:** Many schemas to manage, migrations get complex
@@ -848,24 +747,7 @@ tenant_xyz → DB instance B
 
 ## Tenant Context Propagation
 
-```typescript
-// Middleware extracts + validates tenant
-app.use(async (req, res, next) => {
-  const token = req.headers.authorization;
-  const claims = await verifyToken(token);
-
-  req.tenant = {
-    id: claims.tenant_id,
-    tier: claims.tier,
-    region: claims.region,
-  };
-
-  // Set DB session var for RLS
-  await db.query(`SET app.tenant_id = '${req.tenant.id}'`);
-
-  next();
-});
-```
+Middleware reads the tenant from a verified token and attaches `req.tenant`; it does not touch the database. Each request's queries run through `withTenant()` (BEGIN → `set_config(..., true)` → work → COMMIT on the same client). Code → [`multi-tenancy-patterns.md`](multi-tenancy-patterns.md) · Tenant Context Propagation
 
 ## Noisy Neighbor Mitigation
 
@@ -991,7 +873,7 @@ log.info('Order created', {
 
 ## When to Hand Off
 
-- Enterprise integration → `solution-architect`
+- Enterprise integration → same agent, switch role: [`agent-integration-engineer.md`](agent-integration-engineer.md)
 - Subscription billing → `revops-analyst`
 - Customer adoption → `growth-specialist`
 - Production deployment → `devops-engineer` (from software-company)
@@ -1068,20 +950,35 @@ app.post('/auth/saml/callback', async (req, res) => {
 
 ### OIDC (Modern Standard)
 
-```typescript
-// Authorization Code Flow with PKCE
-async function login(req, res) {
-  const { codeVerifier, codeChallenge } = generatePKCE();
+Authorization Code Flow with Proof Key for Code Exchange (PKCE), `state` and `nonce` — checks follow [OpenID Connect Core 1.0 §3.1.3.7 ID Token Validation](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation) and [RFC 9700 OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/html/rfc9700) (ตรวจ 22 ต.ค. 2569). Token verification uses [`jose`](https://github.com/panva/jose).
 
-  // Store verifier in session for callback
-  req.session.codeVerifier = codeVerifier;
+```typescript
+import crypto from 'node:crypto';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
+
+const random = () => crypto.randomBytes(32).toString('base64url');
+
+function safeEqual(a: string, b: string) {
+  const x = Buffer.from(a), y = Buffer.from(b);
+  return x.length === y.length && crypto.timingSafeEqual(x, y);
+}
+
+async function login(req, res) {
+  const codeVerifier = random();
+  const codeChallenge = crypto.createHash('sha256').update(codeVerifier).digest('base64url');
+  const state = random();
+  const nonce = random();
+
+  // Keep all of it server-side for the callback
+  req.session.oidc = { codeVerifier, state, nonce, tenantId: customer.tenantId };
 
   const authUrl = new URL(customer.idp.authEndpoint);
   authUrl.searchParams.set('response_type', 'code');
   authUrl.searchParams.set('client_id', customer.idp.clientId);
   authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
   authUrl.searchParams.set('scope', 'openid profile email');
-  authUrl.searchParams.set('state', generateState());
+  authUrl.searchParams.set('state', state);
+  authUrl.searchParams.set('nonce', nonce);
   authUrl.searchParams.set('code_challenge', codeChallenge);
   authUrl.searchParams.set('code_challenge_method', 'S256');
 
@@ -1089,32 +986,50 @@ async function login(req, res) {
 }
 
 async function callback(req, res) {
+  const saved = req.session.oidc;
+  delete req.session.oidc; // single use
   const { code, state } = req.query;
 
-  // Verify state (CSRF)
-  if (state !== req.session.state) return res.status(400).end();
+  // Missing state or missing session must fail (undefined === undefined would pass)
+  if (!saved || typeof code !== 'string' || typeof state !== 'string'
+      || !safeEqual(state, saved.state)) {
+    return res.status(400).end();
+  }
+  const customer = await getCustomer(saved.tenantId);
 
-  // Exchange code for tokens
   const tokenResponse = await fetch(customer.idp.tokenEndpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      // confidential client: client_secret_basic
+      Authorization: 'Basic ' + Buffer.from(
+        `${encodeURIComponent(customer.idp.clientId)}:${encodeURIComponent(customer.idp.clientSecret)}`,
+      ).toString('base64'),
+    },
     body: new URLSearchParams({
       grant_type: 'authorization_code',
       code,
       redirect_uri: REDIRECT_URI,
-      client_id: customer.idp.clientId,
-      code_verifier: req.session.codeVerifier,
+      code_verifier: saved.codeVerifier,
     }),
   });
+  if (!tokenResponse.ok) return res.status(401).end();
+  const { id_token } = await tokenResponse.json();
 
-  const { id_token, access_token } = await tokenResponse.json();
+  // Verify signature (IdP JWKS) + iss + aud + exp/nbf, then nonce
+  const jwks = createRemoteJWKSet(new URL(customer.idp.jwksUri)); // cache one per IdP
+  const { payload: claims } = await jwtVerify(id_token, jwks, {
+    issuer: customer.idp.issuer,     // exact issuer from the IdP discovery document
+    audience: customer.idp.clientId, // aud must contain our client_id
+    algorithms: ['RS256', 'ES256'],  // what this IdP actually uses
+  });
+  if (typeof claims.nonce !== 'string' || !safeEqual(claims.nonce, saved.nonce)) {
+    return res.status(401).end();
+  }
 
-  // Verify id_token signature (using IdP's JWKS)
-  const claims = await verifyIdToken(id_token, customer.idp.jwksUri);
-
-  // Provision/login
-  const user = await provisionUserFromOIDC(customer.tenantId, claims);
-  // ...
+  // Provision/login — tenant comes from the saved session, never from the query string
+  const user = await provisionUserFromOIDC(saved.tenantId, claims);
+  // ... regenerate the session id, then create the logged-in session
 }
 ```
 
@@ -1143,16 +1058,25 @@ app.get('/scim/v2/Users', authenticateScim, async (req, res) => {
 
 app.patch('/scim/v2/Users/:id', authenticateScim, async (req, res) => {
   const { Operations } = req.body;
+  const where = { id: req.params.id, tenant_id: req.tenant.id }; // every lookup scoped to the tenant
+
+  const existing = await db.users.findOne(where);
+  if (!existing) {
+    return res.status(404).json({
+      schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
+      status: '404',
+      detail: 'User not found',
+    });
+  }
 
   for (const op of Operations) {
-    if (op.op === 'replace' && op.path === 'active') {
-      if (op.value === false) {
-        await deactivateUser(req.params.id, req.tenant.id);
-      }
+    // op names are case-insensitive (some IdPs send "Replace")
+    if (op.op?.toLowerCase() === 'replace' && op.path === 'active' && op.value === false) {
+      await deactivateUser(req.params.id, req.tenant.id);
     }
   }
 
-  const updated = await db.users.findById(req.params.id);
+  const updated = await db.users.findOne(where);
   res.json(toScimUser(updated));
 });
 ```
@@ -1327,7 +1251,8 @@ class SalesforceClient {
 
 ## Things You Don't Do
 
-- ❌ Trust a SAML or OIDC response without checking its signature
+- ❌ Trust a SAML or OIDC response without checking its signature, issuer, audience, expiry and (OIDC) `state` + `nonce`
+- ❌ Compare signatures, `state` or `nonce` with `===` / `!==` — use a constant-time compare
 - ❌ Deliver webhooks to the customer synchronously
 - ❌ Retry only once
 - ❌ Process inbound webhooks without an idempotency check
@@ -1409,26 +1334,39 @@ ALTER TABLE orders ADD CONSTRAINT fk_customer
 ### Postgres Row-Level Security
 ```sql
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+-- Table owners skip RLS unless FORCE is set
+ALTER TABLE orders FORCE ROW LEVEL SECURITY;
 
 CREATE POLICY tenant_isolation ON orders
     FOR ALL
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
+    USING      (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid);
+-- no tenant set → NULL → no rows (fails closed)
 
--- App sets context per request
-SET LOCAL app.tenant_id = 'tenant-uuid';
+-- The app connects as its own role: not the table owner, not superuser, no BYPASSRLS
+CREATE ROLE app_user LOGIN NOSUPERUSER NOBYPASSRLS;
+GRANT SELECT, INSERT, UPDATE, DELETE ON orders TO app_user;
 ```
+
+กฎที่ต้องถูกทุกข้อ (ที่มา [PostgreSQL — Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) · [SET](https://www.postgresql.org/docs/current/sql-set.html) · ตรวจ 22 ต.ค. 2569)
+
+- เจ้าของตารางข้าม RLS ถ้าไม่ได้ `FORCE ROW LEVEL SECURITY` · superuser และ role ที่มี `BYPASSRLS` ข้ามเสมอ → แอปต้องใช้ role แยก
+- `SET LOCAL` นอก transaction "emits a warning and otherwise has no effect" → ตั้งค่าภายใน `BEGIN … COMMIT` เท่านั้น
+- `SET` (ไม่มี LOCAL) ติดไปทั้ง session → connection ที่คืนเข้า pool จะพา tenant เดิมไปให้ request ถัดไป ห้ามใช้
+- ห้ามต่อ string tenant id เข้า SQL — ส่งเป็น parameter (`$1`) ผ่าน `set_config(name, value, true)` (`true` = มีผลเฉพาะ transaction นี้)
 
 ### Application Enforcement (defense in depth)
 ```typescript
 // Repository pattern with mandatory tenant
 class OrderRepository {
-  constructor(private tenantId: string) {}
+  // client = the transaction client from withTenant() below
+  constructor(private client: PoolClient, private tenantId: string) {}
 
   findAll() {
-    return db.query`
-      SELECT * FROM orders
-      WHERE tenant_id = ${this.tenantId}
-    `;
+    return this.client.query(
+      'SELECT * FROM orders WHERE tenant_id = $1',
+      [this.tenantId],
+    );
   }
 
   // No method exists that DOESN'T filter by tenant
@@ -1437,28 +1375,50 @@ class OrderRepository {
 
 ## Tenant Context Propagation
 
-### Pattern: Middleware Sets Context
+### Pattern: Middleware Sets Context, One Transaction per Request
+
+Middleware only reads the tenant from a verified token. The database context is set inside the same transaction, on the same pooled client, that runs the queries (node-postgres `pg`).
 
 ```typescript
-app.use(async (req, res, next) => {
-  // Extract from JWT
-  const token = req.headers.authorization;
-  const claims = await verifyJWT(token);
+import { Pool, PoolClient } from 'pg';
+const pool = new Pool(); // connects as app_user (not table owner)
 
-  // Validate tenant access
+app.use(async (req, res, next) => {
+  const token = req.headers.authorization?.replace(/^Bearer /, '');
+  if (!token) return res.status(401).end();
+  const claims = await verifyJWT(token); // checks signature, iss, aud, exp
   if (!claims.tenant_id) return res.status(401).end();
 
-  // Attach to request
   req.tenant = {
     id: claims.tenant_id,
     tier: claims.tier,
     features: await loadFeatures(claims.tenant_id),
   };
-
-  // Set DB session var (for RLS)
-  await db.query(`SET LOCAL app.tenant_id = '${req.tenant.id}'`);
-
   next();
+});
+
+// Every DB call goes through this: BEGIN → set tenant (local) → work → COMMIT
+async function withTenant<T>(tenantId: string, fn: (c: PoolClient) => Promise<T>): Promise<T> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query("SELECT set_config('app.tenant_id', $1, true)", [tenantId]);
+    const result = await fn(client);
+    await client.query('COMMIT');
+    return result; // setting is gone once the transaction ends
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+// Usage in a handler
+app.get('/orders', async (req, res) => {
+  const rows = await withTenant(req.tenant.id, (c) =>
+    new OrderRepository(c, req.tenant.id).findAll());
+  res.json(rows.rows);
 });
 ```
 
@@ -1491,17 +1451,36 @@ CREATE SCHEMA tenant_xyz;
 CREATE TABLE tenant_abc.orders (...);
 CREATE TABLE tenant_xyz.orders (...);
 
--- Connect with search path
-SET search_path TO tenant_abc;
+-- search_path only inside a transaction (SET LOCAL), never plain SET on a pooled connection
+BEGIN;
+SET LOCAL search_path TO tenant_abc;
+-- ... queries ...
+COMMIT;
 ```
 
 ```typescript
-// Per-tenant connection pool
-async function getConnection(tenantId: string) {
-  const conn = await pool.connect();
-  await conn.query(`SET search_path TO tenant_${tenantId}`);
-  return conn;
+// Schema name comes from your tenant registry, never from user input
+async function withTenantSchema<T>(tenantId: string, fn: (c: PoolClient) => Promise<T>) {
+  const schema = await lookupTenantSchema(tenantId); // e.g. 'tenant_abc'
+  if (!/^tenant_[a-z0-9_]{1,40}$/.test(schema)) throw new Error('bad schema name');
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    // local = true → resets at COMMIT/ROLLBACK, so the pooled connection is clean
+    await client.query("SELECT set_config('search_path', $1, true)", [schema]);
+    const result = await fn(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 }
+// Alternative: one small pool per tenant with search_path fixed at connect time:
+// new Pool({ options: `-c search_path=${schema}` })  (schema validated as above)
 ```
 
 ### Migrations
@@ -1534,10 +1513,14 @@ await db.query(`SELECT * FROM orders`);  // tenant_id NOT needed in WHERE
 
 ### Tenant Provisioning
 ```python
+import re
+
 async def provision_tenant(tenant_id: str, region: str):
-    # Create DB
+    # Create DB — identifiers can't be bound as parameters, so validate then quote
+    if not re.fullmatch(r'[a-z0-9_]{1,40}', tenant_id):
+        raise ValueError('bad tenant id')
     db_name = f'tenant_{tenant_id}'
-    await admin_db.query(f'CREATE DATABASE {db_name}')
+    await admin_db.query(f'CREATE DATABASE "{db_name}"')
 
     # Run migrations
     await run_migrations(db_name)
@@ -1561,10 +1544,13 @@ async def provision_tenant(tenant_id: str, region: str):
 // Distributed rate limiter (Redis)
 async function rateLimit(req) {
   const limit = req.tenant.tier === 'enterprise' ? 10000 : 100;
-  const key = `rate:${req.tenant.id}`;
+  // Fixed 1-minute window; the window number is part of the key
+  const window = Math.floor(Date.now() / 60_000);
+  const key = `rate:${req.tenant.id}:${window}`;
 
-  const count = await redis.incr(key);
-  if (count === 1) await redis.expire(key, 60);
+  // MULTI/EXEC (ioredis): INCR and EXPIRE apply together — no key left without a TTL
+  const results = await redis.multi().incr(key).expire(key, 60).exec();
+  const count = Number(results?.[0]?.[1]);
 
   if (count > limit) {
     throw new RateLimitError({ retryAfter: 60 });
@@ -1761,15 +1747,29 @@ async function syncSeats(subscription_id: string, accountId: string) {
 
 ### Usage-Based
 
-```typescript
-// Report usage to Stripe
-async function reportUsage(accountId: string, units: number) {
-  const subscription_item_id = await getMeteredItem(accountId);
+Stripe Billing Meters. Legacy usage records (`createUsageRecord` / `usage_records.create`) were removed in API version `2025-03-31.basil`, and a `metered` price now needs a `meter` — ที่มา [Stripe changelog: Removes legacy usage-based billing](https://docs.stripe.com/changelog/basil/2025-03-31/deprecate-legacy-usage-based-billing) · [Create a billing meter event](https://docs.stripe.com/api/billing/meter-event/create) (ตรวจ 22 ต.ค. 2569)
 
-  await stripe.subscriptionItems.createUsageRecord(subscription_item_id, {
-    quantity: units,
-    timestamp: Math.floor(Date.now() / 1000),
-    action: 'increment',  // or 'set'
+```typescript
+// Once: a meter, and a metered price that points to it
+const meter = await stripe.billing.meters.create({
+  display_name: 'API calls',
+  event_name: 'api_calls',
+  default_aggregation: { formula: 'sum' },
+});
+const price = await stripe.prices.create({
+  product: 'prod_api_calls',
+  currency: 'usd',
+  unit_amount_decimal: '0.5', // 0.5 cent = $0.005 per call (amounts are in minor units)
+  recurring: { interval: 'month', usage_type: 'metered', meter: meter.id },
+});
+
+// Each usage report: a meter event for the customer
+async function reportUsage(stripeCustomerId: string, units: number, eventId: string) {
+  await stripe.billing.meterEvents.create({
+    event_name: 'api_calls',
+    payload: { stripe_customer_id: stripeCustomerId, value: String(units) },
+    identifier: eventId, // Stripe dedups the same identifier for at least 24 h
+    timestamp: Math.floor(Date.now() / 1000), // must be within the past 35 days
   });
 }
 
@@ -1780,16 +1780,17 @@ async function reportUsage(accountId: string, units: number) {
 
 ```typescript
 // Stripe handles via "tiered" price model
+// unit_amount is an integer in minor units (cents) — fractions go in unit_amount_decimal
 const price = await stripe.prices.create({
   product: 'prod_api_calls',
   currency: 'usd',
-  recurring: { interval: 'month', usage_type: 'metered' },
+  recurring: { interval: 'month', usage_type: 'metered', meter: meter.id },
   billing_scheme: 'tiered',
   tiers_mode: 'graduated',
   tiers: [
-    { up_to: 10000,  unit_amount: 0 },      // first 10k free
-    { up_to: 100000, unit_amount: 1 },      // next 90k @ $0.01
-    { up_to: 'inf',  unit_amount: 0.5 },    // beyond @ $0.005
+    { up_to: 10000,  unit_amount: 0 },               // first 10k free
+    { up_to: 100000, unit_amount: 1 },               // next 90k @ $0.01
+    { up_to: 'inf',  unit_amount_decimal: '0.5' },   // beyond @ $0.005
   ],
 });
 ```
@@ -1816,11 +1817,15 @@ async def report_usage_idempotent(account_id, event):
     if await db.usage_reported.exists(dedup_key):
         return  # already reported
 
-    await stripe.usage_records.create(
-        subscription_item=event.subscription_item,
-        quantity=event.quantity,
+    # Stripe also dedups by identifier, but only for a rolling >= 24 h — keep our own check
+    await stripe.billing.MeterEvent.create_async(
+        event_name='api_calls',
+        payload={
+            'stripe_customer_id': event.stripe_customer_id,
+            'value': str(event.quantity),
+        },
+        identifier=event.id,
         timestamp=event.timestamp,
-        action='increment',
     )
 
     await db.usage_reported.create({dedup_key})
@@ -1842,8 +1847,10 @@ const subscription = await stripe.subscriptions.create({
   collection_method: 'charge_automatically',
 });
 
-// Customize retry behavior in Dashboard or via API
-// Default: 4 retries over 3 weeks
+// Retry schedule lives in Dashboard → Billing → Revenue recovery → Retries
+// Smart Retries: "The recommended default setting is 8 tries within 2 weeks"
+// (choose 1 week – 2 months); custom schedule = up to 3 retries
+// ที่มา docs.stripe.com/billing/revenue-recovery/smart-retries (ตรวจ 22 ต.ค. 2569)
 
 // Listen for events:
 //   invoice.payment_failed → email customer
@@ -1851,7 +1858,7 @@ const subscription = await stripe.subscriptions.create({
 //   customer.subscription.deleted → final action
 ```
 
-One schedule for the whole plugin: retries follow the processor (Stripe default above: 4 retries over 3 weeks). At each failed retry the app escalates one step:
+The retry count and timing belong to the payment processor's setting (Stripe: Smart Retries or a custom schedule, set per account, can differ per customer segment with automations). The app does not assume a fixed number of retries: it reads `invoice.attempt_count` from each `invoice.payment_failed` event and escalates one step, and treats "no `next_payment_attempt`" as the last try:
 
 ```
 Fail 1 → email the customer (update card link)
@@ -1880,31 +1887,38 @@ async def handle_payment_failed(event):
     elif attempt == 2:
         await send_email(customer, 'payment_failed_second', ...)
         await restrict_advanced_features(customer)
-    elif attempt == 3:
+    elif attempt >= 3:
         await send_email(customer, 'payment_failed_third_final_warning', ...)
         await alert_cs_team(customer)
-    # Stripe will cancel after configured retries
+
+    if invoice.get('next_payment_attempt') is None:
+        # last try failed — Stripe now applies your "after all retries" setting
+        # (cancel / unpaid / past_due / pause)
+        await send_email(customer, 'payment_failed_final', ...)
+    # with Billing automations, next_payment_attempt is set on invoice.updated instead
 ```
 
 ## Revenue Recognition (ASC 606)
 
+One convention everywhere: `start_date` and `end_date` are `DATE`, the service period is **[start_date, end_date)** — `end_date` is the first day *after* service (a 1-month plan from 1 Jan has `end_date` 1 Feb). The period has `end_date - start_date` days. This is the only copy of this query; other files link here.
+
 ```sql
--- Daily revenue recognition for subscriptions
-INSERT INTO daily_recognized_revenue
+-- Daily revenue recognition for subscriptions (safe to re-run)
+INSERT INTO daily_recognized_revenue (subscription_id, account_id, date, daily_revenue, type)
 SELECT
+    sub.id,
     sub.account_id,
-    d::date as date,
-    sub.amount / extract(epoch from (sub.end_date - sub.start_date))::numeric
-        * 86400 as daily_revenue,
-    'subscription' as type
+    d::date AS date,
+    sub.amount::numeric / (sub.end_date - sub.start_date) AS daily_revenue, -- DATE - DATE = days
+    'subscription' AS type
 FROM subscriptions sub
 CROSS JOIN LATERAL generate_series(
     sub.start_date,
-    LEAST(sub.end_date, current_date),
-    '1 day'
+    LEAST(sub.end_date - 1, current_date),  -- last service day = end_date - 1
+    interval '1 day'
 ) d
 WHERE sub.start_date <= current_date
-  AND sub.end_date > current_date - interval '1 day';
+ON CONFLICT (subscription_id, date) DO NOTHING;  -- needs UNIQUE (subscription_id, date)
 ```
 
 ## MRR / ARR Calculation
@@ -2023,7 +2037,7 @@ await stripe.subscriptions.create({
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
+Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -2031,18 +2045,19 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 ## กฎ
 
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
+ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ · ส่งแล้ว ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
 
 | งาน | หลักฐานที่นับ | ไม่นับ |
 |---|---|---|
-| ฟีเจอร์ | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator กับค่าที่ฉีดเข้าพิสูจน์ได้แค่**เส้นทางโค้ด** (ติดป้าย `emulator`) ส่วนความแม่นยำต้องลองกับเครื่องจริง (ติดป้าย `เครื่องจริง <รุ่น>`) | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
-| แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
-| test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
+| เอกสาร · รายงาน | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลข · สูตร · ยอดเงิน | คำนวณซ้ำอีกวิธีกับ 2–3 แถว และยอดรวมตรงกับต้นทาง (ใบเสร็จ · statement) | สูตรไม่ขึ้น error |
+| ข้อความถึงลูกค้า · อีเมล · การจอง | อ่านเทียบกับคำถามเดิม ชื่อ · ยอด · วันที่ ตรงข้อมูลจริง และการจองเห็นหน้ายืนยัน | ร่างแล้วดูดี · กดปุ่มแล้วไม่มี error |
+| ฟีเจอร์ในแอป | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
+| แก้ปัญหา · บั๊ก | ทำกรณีที่เคยล้มซ้ำทางเดิมแล้วผ่าน | ส่วนอื่นผ่าน |
+| test · การตรวจ | ตรวจแล้วล้มเมื่อของผิด (ลองทำให้ผิด 1 ครั้ง) | ผ่านอย่างเดียว |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ได้ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
-| งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
+| ค่าที่วัด (เซนเซอร์ · lux · ระยะ · น้ำหนัก) | เทียบเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว · ตัวจำลองพิสูจน์ได้แค่เส้นทางงาน (ป้าย `emulator`) ความแม่นต้องของจริง (ป้าย `เครื่องจริง <รุ่น>`) ไม่มีเครื่องมือ → `ยังไม่ได้ตรวจ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| งานของ subagent | อ่านผลงานและรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
 

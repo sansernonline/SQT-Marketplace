@@ -1,6 +1,6 @@
 # skill: principle-build-a-tool-not-handwork
 
-Use when work has a mechanical part (same edit in many files, every screen, migration). Script it.
+Use when work has a mechanical part (same edit in many files, rows or documents, a repeated check). Script it once.
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
 > ใช้คู่กัน: `principle-small-verifiable-steps` (ตัดเป็นชิ้นเล็กที่ตรวจได้) · `parallel-split-and-merge` (รันหลายชิ้นพร้อมกัน)
@@ -12,18 +12,19 @@ Use when work has a mechanical part (same edit in many files, every screen, migr
 
 | สัญญาณ | เครื่องมือ |
 |---|---|
-| แก้รูปแบบเดียวกันเกิน 10 จุด | codemod · สคริปต์แก้ผ่าน syntax tree (AST) · `sed` ที่ทดสอบแล้ว |
-| ตรวจทุกหน้าจอหรือทุกไฟล์ | สคริปต์วนตรวจที่พิมพ์ตารางผล |
-| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup`) |
-| ย้ายข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
+| แก้รูปแบบเดียวกันเกิน 10 จุด (ไฟล์ · แถวในชีต · เอกสาร · โค้ด) | สคริปต์หรือค้นหา-แทนที่ที่ทดสอบแล้ว (โค้ด: codemod · `sed`) |
+| เอกสารจากแม่แบบซ้ำหลายใบ (ใบเสนอราคา 40 ใบ) | แม่แบบ + สคริปต์ผสมข้อมูลจากชีต |
+| ตรวจทุกหน้าจอ ทุกไฟล์ หรือทุกแถว | สคริปต์วนตรวจที่พิมพ์ตารางผล |
+| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup` (plugin `software-company`)) |
+| ย้ายหรือนำเข้าข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
 | ข้ออ้างว่า "ทุกที่ทำแบบนี้แล้ว" | คำสั่ง grep หรือสคริปต์ที่พิสูจน์ได้ |
 | ทำงานเดิมเป็นครั้งที่ 3 | ทำเป็นคำสั่งหรือ skill |
 
 ## กฎของเครื่องมือ
 
-- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ ([`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md))
+- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ (`principle-safe-to-rerun` (plugin `software-company`))
 - **พิมพ์ผลที่ตรวจได้** — บอกจำนวนที่แก้ · รายการที่ข้าม · รายการที่ล้ม
-- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding`)
+- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding` (plugin `software-company`))
 - **เก็บให้ถูกที่** — สคริปต์ที่ใช้ครั้งเดียวเก็บไว้ใน `_to_delete/` ส่วนสคริปต์ที่ใช้ซ้ำเก็บใน `scripts/` แล้วเขียนบรรทัดเดียวใน README ว่ารันเมื่อไร
 - **skill เหลือแค่คำอธิบายบาง ๆ** — ขั้นตอนตายตัวอยู่ในสคริปต์ ส่วน SKILL.md บอกแค่ว่าเรียกเมื่อไรและอ่านผลอย่างไร
 
@@ -52,7 +53,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
    | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
    |---|---|---|
-   | ค่าลับหลุด (รวมประวัติ git) | gitleaks | `gitleaks detect --source . --redact` |
+   | ค่าลับหลุด (รวมประวัติ git) | gitleaks 8.19+ | ประวัติ git: `gitleaks git . --redact` · ไฟล์ที่ยังไม่ commit: `gitleaks dir . --redact` (`detect`/`protect` ถูก deprecate ตั้งแต่ v8.19.0 — ที่มา github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · ตรวจ 22 ต.ค. 2569) |
    | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
    | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
    | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
@@ -78,7 +79,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 5. **แก้**
    - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
    - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
-   - รูปแบบที่เจอซ้ำให้ส่งต่อ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ไปทำเป็นกฎ lint
+   - รูปแบบที่เจอซ้ำให้ส่งต่อ `repeated-mistakes-to-checks` ไปทำเป็นกฎ lint
 6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
    - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`owasp-top10`](../owasp-top10/SKILL.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
 
@@ -99,7 +100,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
 # รายการตรวจ Android — ใช้กับ `security-gate` ข้อ 2
 
-**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้วใน `build/app/intermediates/merged_manifests/` ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง
+**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้ว (merged manifest) ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง · โฟลเดอร์เปลี่ยนตามเวอร์ชัน Android Gradle Plugin (AGP) (`merged_manifests/<variant>/` หรือ `merged_manifest/<variant>/process<Variant>MainManifest/` — ยังไม่ได้ตรวจ) ให้หาด้วย `find build -path '*merged_manifest*' -name AndroidManifest.xml` หลัง build release
 - `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
 - `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
 - `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
@@ -132,7 +133,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 | ข้อ | ความเสี่ยง | ภาษาเจ้าของกิจการ | ต้องมี | พิสูจน์ด้วย |
 |---|---|---|---|---|
 | A01 | Broken Access Control | ลูกค้าคนหนึ่งเห็นข้อมูลของอีกคนได้ | ตรวจสิทธิ์ฝั่ง server ทุก endpoint · ปฏิเสธเป็นค่าเริ่ม · ตรวจว่าเป็นเจ้าของ record ทุกครั้งที่อ่านหรือแก้ด้วย id · กันเซิร์ฟเวอร์ไปดึง URL ภายใน (Server-Side Request Forgery (SSRF)) ด้วย allowlist · Cross-Origin Resource Sharing (CORS) ไม่เปิด `*` คู่กับ cookie · ระบบที่ใช้ cookie session ต้องมี token กันการส่งคำขอแทนผู้ใช้ (Cross-Site Request Forgery (CSRF)) · รับ input ผ่าน Data Transfer Object (DTO) หรือรายชื่อฟิลด์ที่อนุญาต ไม่ผูกทั้ง object (กัน client ส่ง `role` · `isAdmin` มาเอง) | integration test ต่อ endpoint: ไม่ login → 401 · ผิดบทบาท → 403 · id ของคนอื่น → 403 หรือ 404 · POST ไม่มี CSRF token → 403 (ระบบที่ใช้ cookie) · ส่งฟิลด์ `role` เกินมา → ค่าในฐานข้อมูลไม่เปลี่ยน |
-| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | ตั้งค่าเป็นสคริปต์เดียวกันทุก environment ต่างกันแค่ค่าลับ · ปิด debug · stack trace · directory listing · หน้า admin ตัวอย่าง · ใส่ security header (Content Security Policy (CSP) · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options · frame-ancestors) · ไม่มีรหัสผ่านค่าเริ่ม · storage บน cloud ไม่เปิดสาธารณะ | สแกน header (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · test ว่า production ตอบ error แบบไม่มี stack trace |
+| A02 | Security Misconfiguration | ตั้งค่าเซิร์ฟเวอร์หละหลวม เปิดหน้า admin ทิ้งไว้ | ตั้งค่าเป็นสคริปต์เดียวกันทุก environment ต่างกันแค่ค่าลับ · ปิด debug · stack trace · directory listing · หน้า admin ตัวอย่าง · ใส่ security header (Content Security Policy (CSP) รวม `frame-ancestors` · HTTP Strict Transport Security (HSTS) · X-Content-Type-Options) · ไม่มีรหัสผ่านค่าเริ่ม · storage บน cloud ไม่เปิดสาธารณะ | สแกน header (OWASP ZAP (Zed Attack Proxy) baseline) · `trivy config .` · test ว่า production ตอบ error แบบไม่มี stack trace |
 | A03 | Software Supply Chain Failures | ใช้ไลบรารีเก่า หรือมีช่องโหว่ | lockfile ทุกภาษา · รายการส่วนประกอบซอฟต์แวร์ (Software Bill of Materials (SBOM)) · ไม่มี dependency ที่มีช่องโหว่ระดับ critical หรือ high · ตัดของที่ไม่ใช้ · ดึงจาก registry ทางการเท่านั้น | `security-gate` ด้าน dependency (npm audit · pip-audit · `dotnet list package --vulnerable` · osv-scanner) · SBOM แบบ CycloneDX |
 | A04 | Cryptographic Failures | ไม่เข้ารหัสรหัสผ่านและข้อมูลสำคัญ | Transport Layer Security (TLS) 1.2 ขึ้นไปทุกทาง + HSTS · รหัสผ่านใช้ Argon2id · bcrypt · PBKDF2 (ห้าม MD5 · SHA-1 · SHA-256 เปล่า) · ข้อมูลอ่อนไหวเข้ารหัสตอนเก็บ · ค่าลับอยู่นอกโค้ด · เก็บข้อมูลเท่าที่ใช้ | semgrep (กฎ crypto) · test ว่ารหัสผ่านใน DB ไม่ใช่ข้อความเดิม · ตรวจ TLS ของ server ที่ deploy |
 | A05 | Injection | กรอกคำสั่งในช่องค้นหา แล้วดึงฐานข้อมูลได้ | SQL ผ่าน parameter หรือ ORM เท่านั้น · ไม่ต่อสตริงเป็นคำสั่ง shell · HTML escape ตอนแสดงผล (กัน Cross-Site Scripting (XSS)) · ตรวจ input ที่ขอบระบบ | semgrep · test ส่ง `' OR 1=1--` · `<script>` · `; rm` แล้วต้องไม่ทำงาน |
@@ -324,20 +325,20 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
+Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
 
 # Markdown Visuals
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
 ## When to use this skill
 
-- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
 - The user asked "show me how it looks" inside a markdown doc or chat reply
@@ -348,8 +349,8 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
@@ -357,19 +358,26 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 ```
 What are you showing?
 │
-├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
 
-## 1 · Inline SVG (primary technique)
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
 
 ### Boilerplate
 
@@ -385,7 +393,7 @@ What are you showing?
 ```
 
 **Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
 - `viewBox` — sets the coordinate space; lets the SVG scale responsively
 - `role="img"` + `aria-label` — accessibility, screen readers
 - `<p align="center">` wrapper — centers in the rendered page
@@ -407,6 +415,7 @@ Window chrome, phone frame, button, card, status badge, running dot and tooltip 
 ## 2 · External image files
 
 Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
 - Photo or screenshot
 - Illustration too complex to author as SVG by hand (50+ shapes)
 - Reusing the same image across many docs
@@ -457,7 +466,7 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
 ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
 | เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
@@ -486,10 +495,10 @@ For every visual:
 - ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
 - ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
 - ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
@@ -506,15 +515,15 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
 
 ## Related skills
 
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -589,7 +598,7 @@ scale
 
 Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
 
-Pattern from `DockXI/docs/12-design-mockup.md`:
+The 6-part pattern for a design spec:
 
 ```
 1. Inline SVG mockup of each UI state              ← "what it looks like"
@@ -684,7 +693,7 @@ Reusable building blocks for inline SVG pictures of a screen inside .md docs (th
 
 ## Worked example — UI state mockup
 
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
 
 
 ---
@@ -724,7 +733,7 @@ Use when building or reviewing any HTTP service or backend (health endpoints, RF
 | `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
 
 > 🚨 **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็ค DB แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
+> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
 > ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
 > การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
 
@@ -804,7 +813,8 @@ Use when building or reviewing any HTTP service or backend (health endpoints, RF
 
 ## 3 · Request id
 
-- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้างเอง (uuid ตัด 8 ตัว)
+- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
+  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
 - **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
 - ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
 - ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
@@ -833,10 +843,11 @@ SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/rea
 
 - **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
 - **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **CORS ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่ง OTP/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
-  `Strict-Transport-Security` (helmet / `UseHsts()` ทำให้ครบในบรรทัดเดียว)
+- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
+- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
+  `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
+  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
 - **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
 - **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
 - **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
@@ -945,6 +956,7 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 ```bash
 dotnet add package AspNetCore.HealthChecks.NpgSql
 dotnet add package AspNetCore.HealthChecks.Redis
+dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
 ```
 
 ```csharp
@@ -954,7 +966,9 @@ builder.Services.AddHealthChecks()
     .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
     .AddSmtpHealthCheck(o => { }, name: "mail",
         failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
-        tags: ["ready"]);
+        tags: ["ready"])
+    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
+    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
 ```
 
 ```csharp
@@ -1045,30 +1059,82 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-```csharp
-builder.Services.Configure<HostOptions>(o =>
-    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
+ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
+จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
 
-// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
-// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
-app.Lifetime.ApplicationStopping.Register(() =>
+```csharp
+// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
+public sealed class ReadinessState { public volatile bool IsShuttingDown; }
+
+public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
 {
-    ReadinessState.IsShuttingDown = true;
-    Thread.Sleep(TimeSpan.FromSeconds(5));
-});
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
+        Task.FromResult(state.IsShuttingDown
+            ? HealthCheckResult.Unhealthy("shutting down")
+            : HealthCheckResult.Healthy());
+}
+
+public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
+{
+    public async Task StoppingAsync(CancellationToken ct)
+    {
+        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
+        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
+    }
+    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
+    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
+    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
+    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
+    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
+}
+
+// ก่อน builder.Build()
+builder.Services.AddSingleton<ReadinessState>();
+builder.Services.AddHostedService<DrainOnShutdown>();
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
 ```
+
+ลำดับตอนปิดของ host (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` ของ hosted service (รวม Kestrel) → `StoppedAsync` → `ApplicationStopped` — ตามหน้า .NET Generic Host ที่ learn.microsoft.com (ตรวจ 22 ต.ค. 2569)
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
+ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+
 ```csharp
-app.UseHsts();
-app.UseHttpsRedirection();
+// ---- ก่อน Build: ลงทะเบียน service ----
 builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
-builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddRateLimiter(o =>
+{
+    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
+    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
+});
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
      .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+
+var app = builder.Build();
+
+// ---- หลัง Build: ลำดับ middleware ----
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
+app.UseHttpsRedirection();
+app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
+{
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
+    await next();
+});
+app.UseCors();
+app.UseRateLimiter();
+
+app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
 ```
+
+ไม่อยากเขียน middleware เอง → แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) ตั้งชุด header พื้นฐานให้ครบ
 
 ---
 
@@ -1117,9 +1183,9 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
 | error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
 | request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
-| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
-| security headers | `UseHsts()` | `helmet` | `secure` middleware |
-| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
+| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
 
 
@@ -1129,7 +1195,7 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 
 Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
-# ข้อตกลงของ API
+# ข้อตกลงของ Application Programming Interface (API)
 
 > **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
 > API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
@@ -1178,7 +1244,7 @@ PATCH  /v1/orders/{id}            แก้บางส่วน
 PUT    /v1/orders/{id}            แทนที่ทั้งตัว
 DELETE /v1/orders/{id}            ลบ
 GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
 ```
 
 | กฎ | ✅ | ❌ |
@@ -1363,10 +1429,11 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
 2. ส่ง header ในทุก response ของ endpoint นั้น:
    ```
-   Deprecation: true
+   Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
+   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
 3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
 4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
 

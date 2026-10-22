@@ -11,8 +11,8 @@ Prepare for **this** interview: this company, this role, this round.
 1. **Collect** — job post, company, round type, language, interviewer names if known, date and format (on-site, Teams/Zoom, phone).
 2. **Research (15 minutes)** — what the company sells, who the customers are, one recent news item, size and parent company. Write 3 facts the user can mention.
 3. **Map requirements** — take the job post's top 6–8 requirements and match one story to each.
-4. **Build the story bank** (STAR, below).
-5. **Prepare the hard answers** — the Thai HR list below.
+4. **Build the story bank** (Situation, Task, Action, Result (STAR), below).
+5. **Prepare the hard answers** — the Thai human resources (HR) list below.
 6. **Mock round** — the `interview-coach` agent prepares a 10-question practice set with a scoring rubric; the lead runs the live round with the user after the task.
 7. **Logistics** — route and travel time + 20 minutes buffer; for online, test camera, mic, name display and a quiet room the day before.
 8. **After** — thank-you note within 24 hours; debrief notes.
@@ -46,7 +46,7 @@ One story can answer several themes — tag each story with the themes it covers
 | เงินเดือนปัจจุบันเท่าไร / Current salary | Anchor you low | You may share base honestly or redirect to expected; never inflate (they may ask for a payslip or 50 ทวิ) |
 | เริ่มงานได้เมื่อไร / Notice period | Timeline | State your contract notice. Under the Civil and Commercial Code §582 the default is one pay period ahead — check your own contract, which may say 30 days or more |
 | จุดอ่อน / Weakness | Self-awareness | Real but non-fatal weakness + what you do about it + evidence it is improving |
-| มีแฟน / แต่งงานหรือยัง / วางแผนมีลูกไหม | (Should not be asked) | You may answer briefly or redirect: "That won't affect my availability for this role" |
+| มีแฟน / แต่งงานหรือยัง / วางแผนมีลูกไหม | (Not job-related; using it to decide may be unfair discrimination under the Gender Equality Act B.E. 2558) | You may answer briefly or redirect: "That won't affect my availability for this role" |
 | ทำไมเลือกบริษัทเรา / Why us | Did you research | Use the 3 facts from Step 2 |
 | เห็นตัวเองอีก 5 ปีเป็นอย่างไร | Will you stay | Growth inside this kind of role, not "your job" or "my own business" |
 | มีคำถามไหม / Any questions | Interest | Always ask 2–3 (below) |
@@ -82,7 +82,7 @@ Short, specific, one thing you discussed. Templates in Thai and English → [ref
 - Do not memorise scripts word for word; know the story beats.
 - Inappropriate personal questions (religion, pregnancy plans) — answer briefly or redirect; the user decides. Note it for later if it reflects the culture.
 
-Related: `resume-th-en` (stories must match the CV) · `salary-negotiation` · `polite-message-th-en` in `personal-life` (follow-up messages) · `meeting-prep-card` in `personal-life`.
+Related: `resume-th-en` (stories must match the CV) · `salary-negotiation` · `polite-message-th-en` (follow-up messages) · `meeting-prep-card`.
 
 
 ## reference: question-bank.md

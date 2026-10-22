@@ -1,6 +1,6 @@
 ---
 name: "saas-design"
-description: "Review B2B SaaS architecture or design an enterprise integration."
+description: "Review business-to-business (B2B) software as a service (SaaS) architecture or design an enterprise integration."
 ---
 
 Two modes. Read the first word of **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
@@ -8,7 +8,7 @@ Two modes. Read the first word of **สิ่งที่ผู้ใช้ร�
 | Mode | What it does |
 |---|---|
 | `saas-architecture-review` | Review B2B SaaS architecture using solution-architect agent. Covers multi-tenancy, isolation, scaling. |
-| `integration-design` | Design enterprise integration using solution-architect agent. Covers SSO, SCIM, webhooks, API client. |
+| `integration-design` | Design enterprise integration using solution-architect agent. Covers single sign-on (SSO), System for Cross-domain Identity Management (SCIM), webhooks, application programming interface (API) client. |
 
 ---
 
@@ -39,10 +39,10 @@ Workflow:
 
 1. **Discovery:** target system, direction, volume, latency, compliance
 2. **Apply `saas-platform` skill** for protocol/pattern selection
-3. **Design auth:** SAML/OIDC, mTLS, API key as appropriate
+3. **Design auth:** Security Assertion Markup Language (SAML) / OpenID Connect (OIDC), mutual TLS (mTLS), API key as appropriate
 4. **Design data flow:** push/pull, real-time/batch, idempotency
 5. **Design webhook system** (in/out): signing, retry, dead letter
-6. **Plan customer setup flow:** docs, admin UI, test mode
+6. **Plan customer setup flow:** docs, admin user interface (UI), test mode
 7. **Plan observability:** per-tenant, per-integration metrics + logs
 8. **Plan reliability:** retries, circuit breakers, fallbacks
 9. **Produce polished integration spec** using `polished-document-style` (from software-company)

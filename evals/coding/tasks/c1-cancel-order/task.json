@@ -1,0 +1,6 @@
+{
+  "stack": "dotnet",
+  "title": "เพิ่ม endpoint ยกเลิกคำสั่งซื้อ POST /orders/{id}/cancel",
+  "test": ["dotnet", "test", "tests/Orders.Tests"],
+  "testFiles": "(^|[\\\\/])tests[\\\\/]Orders\\.Tests[\\\\/][^\\\\/]*Tests\\.cs$"
+}

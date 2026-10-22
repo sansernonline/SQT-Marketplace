@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Healthcare Quality Standards](#healthcare-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Healthcare Quality Standards](#-healthcare-quality-standards)
 - [Critical Healthcare Rules](#critical-healthcare-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -170,30 +170,44 @@ async function prescribeMedication(rx: Prescription) {
   const currentMeds = await getCurrentMedications(rx.patientId);
   const interactions = checkDDI(rx.drug, currentMeds);
   if (interactions.severity === 'major') {
-    requireOverride(interactions); // Provider must confirm override
+    // Awaited: stops here unless the provider confirms and records a reason
+    await requireOverrideOrStop(rx, interactions);
   }
 
   // 3. Dose range check
+  const patient = await getPatient(rx.patientId);
   if (rx.dose > maxDoseForAge(rx.drug, patient.age)) {
-    requireOverride('Dose exceeds normal range');
+    await requireOverrideOrStop(rx, 'Dose exceeds normal range');
   }
 
   // 4. Log + send
   return await sendToPharmacy(rx);
 }
+
+async function requireOverrideOrStop(rx: Prescription, reason: unknown) {
+  const o = await requestOverride({ rx, reason }); // waits for the provider
+  if (!o.approved || !o.reasonText?.trim()) {
+    throw new ClinicalAlert('Order stopped: override not confirmed with a reason');
+  }
+  await auditLog('override', { rxId: rx.id, reason, reasonText: o.reasonText });
+}
 ```
+
+The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinical-workflows.md` → Bedside Medication Administration](clinical-workflows.md#pattern-bedside-medication-administration).
 
 ## EHR Integration
 
 | EHR | API style | Notes |
 |-----|-----------|-------|
-| Epic | FHIR, App Orchard | Largest US, app marketplace |
+| Epic | FHIR, Showroom (was App Orchard) · Vendor Services | Largest US, app marketplace |
 | Cerner (Oracle Health) | FHIR, CareAware | Large US/international |
-| Allscripts (Veradigm) | FHIR | Mid-market |
+| Veradigm (was Allscripts, ambulatory) · Altera Digital Health (Sunrise, Paragon, TouchWorks) | FHIR | Mid-market |
 | AthenaHealth | REST API | Cloud-native, easier |
 | Meditech | FHIR | Hospital-focused |
 
 > 💡 **Default integration:** SMART on FHIR — works across modern EHRs
+>
+> Vendor names checked 22 Oct 2026 (Epic Showroom announcement, Fierce Healthcare; Allscripts → Veradigm 2023, hospital products → Altera 2022).
 
 ## Things You Don't Do
 
@@ -208,7 +222,7 @@ async function prescribeMedication(rx: Prescription) {
 ## When to Hand Off
 
 - HIPAA compliance details → `hipaa-officer`
-- FHIR/HL7 integration → `healthcare-engineer`
+- FHIR/HL7 integration → stay in this agent, open [`agent-fhir-specialist.md`](agent-fhir-specialist.md)
 - Clinical data analysis → `clinical-data-analyst`
 - Security review → `security-engineer` (from software-company)
 - Compliance signoff → `hipaa-officer`

@@ -1,6 +1,6 @@
 ---
 name: principle-build-a-tool-not-handwork
-description: Use when work has a mechanical part (same edit in many files, every screen, migration). Script it.
+description: Use when work has a mechanical part (same edit in many files, rows or documents, a repeated check). Script it once.
 ---
 
 # principle · build a tool, not handwork — งานกลไกทำเป็นเครื่องมือ
@@ -13,18 +13,19 @@ description: Use when work has a mechanical part (same edit in many files, every
 
 | สัญญาณ | เครื่องมือ |
 |---|---|
-| แก้รูปแบบเดียวกันเกิน 10 จุด | codemod · สคริปต์แก้ผ่าน syntax tree (AST) · `sed` ที่ทดสอบแล้ว |
-| ตรวจทุกหน้าจอหรือทุกไฟล์ | สคริปต์วนตรวจที่พิมพ์ตารางผล |
-| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup`) |
-| ย้ายข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
+| แก้รูปแบบเดียวกันเกิน 10 จุด (ไฟล์ · แถวในชีต · เอกสาร · โค้ด) | สคริปต์หรือค้นหา-แทนที่ที่ทดสอบแล้ว (โค้ด: codemod · `sed`) |
+| เอกสารจากแม่แบบซ้ำหลายใบ (ใบเสนอราคา 40 ใบ) | แม่แบบ + สคริปต์ผสมข้อมูลจากชีต |
+| ตรวจทุกหน้าจอ ทุกไฟล์ หรือทุกแถว | สคริปต์วนตรวจที่พิมพ์ตารางผล |
+| agent ทุกตัวต้องตั้งสภาพแวดล้อมเองก่อนตรวจ | สคริปต์ `start` ใน verify skill (`app-verifier-setup` (plugin `software-company`)) |
+| ย้ายหรือนำเข้าข้อมูล | สคริปต์ที่รันซ้ำได้ผลเดิม พร้อมโหมดลองก่อน (dry run) |
 | ข้ออ้างว่า "ทุกที่ทำแบบนี้แล้ว" | คำสั่ง grep หรือสคริปต์ที่พิสูจน์ได้ |
 | ทำงานเดิมเป็นครั้งที่ 3 | ทำเป็นคำสั่งหรือ skill |
 
 ## กฎของเครื่องมือ
 
-- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ ([`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md))
+- **รันซ้ำได้ผลเดิม** — รัน 2 ครั้งต้องไม่พัง และไม่แก้ซ้ำ (`principle-safe-to-rerun` (plugin `software-company`))
 - **พิมพ์ผลที่ตรวจได้** — บอกจำนวนที่แก้ · รายการที่ข้าม · รายการที่ล้ม
-- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding`)
+- **เล็กที่สุดที่ทำงานได้** — ไม่ต้องสวย ไม่ต้องรองรับทุกกรณีในอนาคต (`lazy-coding` (plugin `software-company`))
 - **เก็บให้ถูกที่** — สคริปต์ที่ใช้ครั้งเดียวเก็บไว้ใน `_to_delete/` ส่วนสคริปต์ที่ใช้ซ้ำเก็บใน `scripts/` แล้วเขียนบรรทัดเดียวใน README ว่ารันเมื่อไร
 - **skill เหลือแค่คำอธิบายบาง ๆ** — ขั้นตอนตายตัวอยู่ในสคริปต์ ส่วน SKILL.md บอกแค่ว่าเรียกเมื่อไรและอ่านผลอย่างไร
 

@@ -9,8 +9,8 @@ def have(path):
 accent = sys.argv[1] if len(sys.argv) > 1 else "2A78D6"
 bg = sys.argv[2] if len(sys.argv) > 2 else "09090A"
 fig = have(sys.argv[3] if len(sys.argv) > 3 else "../examples/fig-flow-dark.png")
-d = StageDeck(accent=accent, bg=bg, project="X Fitness Chatbot")
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+d = StageDeck(accent=accent, bg=bg, project="Sample Chatbot")
+d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
         meta="ทีมพัฒนา · Square Tech Solutions\nIntelligent Chatbot Development  ·  ตุลาคม 2569")
 if fig:
     d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon", fig,

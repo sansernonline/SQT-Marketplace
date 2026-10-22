@@ -43,6 +43,10 @@
 Show "saleable" to customers, not raw inventory.
 ```
 
+**Definitions used across this skill** (the role files point here):
+- `available = on_hand − reserved − allocated − damaged`
+- `saleable = max(0, available − safety_stock)` — the number customers see (same as the `inventory_available` view below)
+
 ## Schema Design
 
 ```sql
@@ -72,7 +76,7 @@ CREATE TABLE reservations (
     quantity INT NOT NULL CHECK (quantity > 0),
     owner_type TEXT NOT NULL,  -- 'cart' | 'order' | 'transfer'
     owner_id TEXT NOT NULL,
-    expires_at TIMESTAMPTZ NOT NULL,
+    expires_at TIMESTAMPTZ,    -- carts only · NULL for orders (an order's allocation never expires)
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -100,18 +104,18 @@ CREATE TABLE inventory_events (
 async function reserve(sku: string, qty: number, owner: string): Promise<string> {
   return await db.transaction(async (tx) => {
     // 1. Lock the row
-    const stock = await tx.query(`
+    const { rows: [stock] } = await tx.query(`
       SELECT on_hand, reserved, allocated, damaged, safety_stock
       FROM inventory
       WHERE sku = $1 AND warehouse_id = $2
       FOR UPDATE
     `, [sku, warehouseId]);
 
-    const available = stock.on_hand - stock.reserved - stock.allocated
-                    - stock.damaged - stock.safety_stock;
+    const saleable = stock.on_hand - stock.reserved - stock.allocated
+                   - stock.damaged - stock.safety_stock;
 
-    if (available < qty) {
-      throw new OutOfStockError({ sku, requested: qty, available });
+    if (saleable < qty) {
+      throw new OutOfStockError({ sku, requested: qty, available: saleable });
     }
 
     // 2. Update reservation count
@@ -142,35 +146,46 @@ async function reserve(sku: string, qty: number, owner: string): Promise<string>
 ### Pattern: Release Expired Reservations
 
 ```typescript
-// Background job, every minute
+// Background job, every minute — CART reservations only.
+// Order allocations live in `allocated`, not `reserved`, and never expire (see below).
 async function releaseExpired() {
   const expired = await db.query(`
-    SELECT id, sku, warehouse_id, quantity
+    SELECT id
     FROM reservations
-    WHERE expires_at < NOW()
+    WHERE owner_type = 'cart' AND expires_at < NOW()
     LIMIT 1000
   `);
 
-  for (const res of expired.rows) {
+  for (const { id } of expired.rows) {
     await db.transaction(async (tx) => {
+      // Delete first, re-checking the condition: if checkout converted this
+      // reservation to an order a moment ago, nothing is deleted and we skip it.
+      const { rows: [res] } = await tx.query(`
+        DELETE FROM reservations
+        WHERE id = $1 AND owner_type = 'cart' AND expires_at < NOW()
+        RETURNING sku, warehouse_id, quantity
+      `, [id]);
+      if (!res) return;
+
       // Decrease reserved count
       await tx.query(`
         UPDATE inventory
-        SET reserved = GREATEST(0, reserved - $1)
+        SET reserved = reserved - $1
         WHERE sku = $2 AND warehouse_id = $3
       `, [res.quantity, res.sku, res.warehouse_id]);
-
-      // Delete reservation
-      await tx.query(`DELETE FROM reservations WHERE id = $1`, [res.id]);
 
       // Log
       await tx.query(`
         INSERT INTO inventory_events (sku, warehouse_id, delta, event_type, reference, notes)
         VALUES ($1, $2, 0, 'reservation_expired', $3, 'auto-released')
-      `, [res.sku, res.warehouse_id, res.id]);
+      `, [res.sku, res.warehouse_id, id]);
     });
   }
 }
+
+// Orders that stay unshipped too long are an ALERT for a person, not an auto-release:
+// SELECT owner_id FROM reservations
+// WHERE owner_type = 'order' AND created_at < NOW() - INTERVAL '7 days'
 ```
 
 ### Pattern: Convert Reservation → Allocation (on Order)
@@ -179,29 +194,30 @@ async function releaseExpired() {
 async function confirmOrder(orderId: string, items: CartItem[]) {
   return await db.transaction(async (tx) => {
     for (const item of items) {
-      // Find the reservation
-      const res = await tx.query(`
-        SELECT id FROM reservations
+      // Find and lock the reservation — its own quantity and warehouse are the truth
+      const { rows: [res] } = await tx.query(`
+        SELECT id, warehouse_id, quantity FROM reservations
         WHERE sku = $1 AND owner_type = 'cart' AND owner_id = $2
+        FOR UPDATE
       `, [item.sku, item.cartId]);
 
-      if (!res.rows[0]) {
-        throw new Error(`No reservation found for ${item.sku}`);
+      if (!res) {
+        throw new Error(`No reservation found for ${item.sku}`); // expired and released → re-reserve
       }
 
-      // Convert: reserved → allocated
+      // Convert: reserved → allocated, in THIS warehouse only
       await tx.query(`
         UPDATE inventory
         SET reserved = reserved - $1, allocated = allocated + $1
-        WHERE sku = $2
-      `, [item.quantity, item.sku]);
+        WHERE sku = $2 AND warehouse_id = $3
+      `, [res.quantity, item.sku, res.warehouse_id]);
 
-      // Update reservation owner
+      // Update reservation owner — orders have no expiry
       await tx.query(`
         UPDATE reservations
-        SET owner_type = 'order', owner_id = $1, expires_at = NOW() + INTERVAL '7 days'
+        SET owner_type = 'order', owner_id = $1, expires_at = NULL
         WHERE id = $2
-      `, [orderId, res.rows[0].id]);
+      `, [orderId, res.id]);
     }
   });
 }
@@ -416,7 +432,8 @@ async def reconcile_warehouse(warehouse_id):
                 'physical': physical,
                 'system': system,
                 'variance': physical - system,
-                'variance_pct': 100 * (physical - system) / system,
+                # system = 0 (stock appeared from nowhere) → no percentage, flag it as new stock
+                'variance_pct': 100 * (physical - system) / system if system else None,
             })
 
     if discrepancies:
@@ -435,13 +452,12 @@ async def reconcile_warehouse(warehouse_id):
 - ❌ **No reservation expiry** → ghost stock accumulates
 - ❌ **Trust marketplace counts** → drift over time
 - ❌ **No event log** → can't audit or rebuild stock history
-- ❌ **Show on-hand instead of available** → false promises
+- ❌ **Show on-hand instead of saleable** → false promises
 - ❌ **No safety stock** → stockouts during demand spikes
 - ❌ **Reserve outside DB transaction** → race conditions
 
 ## Reference
 
-- [Implicit (collaborative filtering library)](https://github.com/benfred/implicit)
 - [Prophet (forecasting)](https://facebook.github.io/prophet/)
 - [APICS Operations Management body of knowledge](https://www.ascm.org/)
-- [Shopify Inventory Best Practices](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventoryitem)
+- [Shopify inventory (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem)

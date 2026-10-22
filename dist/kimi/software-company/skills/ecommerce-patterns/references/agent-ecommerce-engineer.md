@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 E-commerce Quality Standards](#e-commerce-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 E-commerce Quality Standards](#-e-commerce-quality-standards)
 - [Critical E-commerce Rules](#critical-e-commerce-rules)
 - [Common Patterns](#common-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -302,8 +302,9 @@ async function updateProduct(slug: string, updates: any) {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `ecommerce-patterns` — friction analysis + reduction
-- `ecommerce-patterns` — stock control patterns
+- `ecommerce-patterns` — this skill's references:
+  - `references/checkout-optimization.md` — friction analysis + reduction
+  - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
 - `polished-document-style` (from software-company) — for spec docs
 
 ## Things You Don't Do
@@ -319,7 +320,7 @@ async function updateProduct(slug: string, updates: any) {
 
 - Payment integration → `fintech-engineer`
 - Recommendation engine → `recommendation-engineer`
-- Inventory deep work → `ecommerce-engineer`
+- Inventory deep work → stay in this role; read `references/agent-inventory-specialist.md` and `references/inventory-management.md`
 - Conversion analytics → `growth-specialist`
 - Architecture → `solution-architect` (from software-company)
 
@@ -338,5 +339,5 @@ async function updateProduct(slug: string, updates: any) {
 
 - [Shopify Checkout Best Practices](https://shopify.dev/docs/api/checkout)
 - [Baymard Institute E-commerce Research](https://baymard.com/)
-- [Magento DevDocs](https://devdocs.magento.com/)
+- [Adobe Commerce (Magento) developer docs](https://developer.adobe.com/commerce/docs/)
 - [commercetools docs](https://docs.commercetools.com/)

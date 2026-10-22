@@ -38,7 +38,7 @@
 ## โครงโฟลเดอร์
 
     src/        โค้ดจริง — unit test อยู่ข้างไฟล์ที่ทดสอบ (`*.test.ts`)
-    tests/      เฉพาะ integration และ e2e (หรือโฟลเดอร์ทดสอบตามธรรมเนียมของ stack)
+    tests/      เฉพาะ integration และ e2e (.NET · Flutter ใช้เป็นโฟลเดอร์ทดสอบหลักตามที่เครื่องมือบังคับ)
     scripts/    สคริปต์ที่คนต้องรัน
 
 เอกสารอยู่ที่ `../docs/` ที่รากโปรเจกต์ — เริ่มที่ `../docs/README.md`
@@ -125,6 +125,10 @@ indent_style = tab
 
 ```
 * text=auto eol=lf
+
+# ไฟล์สคริปต์ Windows ต้องเป็น CRLF ไม่อย่างนั้นรันพัง
+*.bat text eol=crlf
+*.cmd text eol=crlf
 
 *.png  binary
 *.jpg  binary

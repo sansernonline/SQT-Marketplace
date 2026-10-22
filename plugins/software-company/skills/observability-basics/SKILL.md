@@ -65,7 +65,7 @@ description: Use when a live system must be known healthy before users complain 
 http_requests_total              จำนวนสะสม
 http_request_duration_seconds    ระยะเวลา
 orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth                      ค่า ณ ขณะนั้น
+queue_depth_jobs                 ค่า ณ ขณะนั้น
 ```
 
 | กฎ | เหตุผล |

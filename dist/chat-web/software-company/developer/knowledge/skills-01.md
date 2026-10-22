@@ -7,7 +7,7 @@ Use when about to change code not yet read this session. Maps how it runs, why, 
 > โค้ดที่ agent เขียนพังส่วนใหญ่ไม่ใช่เพราะเขียนไม่เป็น แต่เพราะไม่รู้ว่าโค้ดเดิมทำงานยังไง และทำไมถึงเขียนแบบนี้
 > 10 นาทีที่อ่าน ประหยัดรอบแก้ได้หลายรอบ
 
-แนวคิดมาจาก `/how` · `/why` ของ pstack ให้ใช้ก่อน playbook `feature` · `bug-fix` · `refactor` · `review` ทุกครั้งที่ยังไม่ได้อ่านส่วนนั้นใน session นี้
+ให้ใช้ก่อน playbook `feature` · `bug-fix` · `refactor` · `review` ทุกครั้งที่ยังไม่ได้อ่านส่วนนั้นใน session นี้
 
 ข้ามได้เมื่อแก้ข้อความหรือค่าคงที่จุดเดียว หรือเขียนไฟล์ใหม่ที่ไม่มีใครเรียก
 
@@ -191,7 +191,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 // ❌ เพิ่มค่า i ทีละ 1
 // ❌ ฟังก์ชันคำนวณภาษี
 
-// ✅ กรมสรรพากรกำหนดให้ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด (ประกาศ ป.161/2566)
+// ✅ ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
 // ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
 // ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
@@ -420,7 +420,7 @@ Example — "Add a cache for these API responses."
 
 - **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
 - **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
-- **ultra:** "No cache until a profiler asks for one. When it does: `@lru_cache`. A hand-rolled TTL cache is a bug farm with a hit rate."
+- **ultra:** "`@lru_cache` on the fetch function — done, since you asked. Do you have a profile showing these calls are slow? If not, this line can go. A hand-rolled TTL cache is a bug farm with a hit rate."
 
 ## When NOT to be lazy
 
@@ -482,13 +482,13 @@ Use when adding or setting up automated tests (.NET, Node, Python, Angular, Flut
 | .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
 | Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
 | Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
-| Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
+| Angular | **Vitest ที่มากับ Angular CLI** (`ng test` · แนะนำ · ค่าเริ่มต้นของโปรเจกต์ใหม่) + Testing Library ถ้าต้องการ · Jasmine + Karma (ค่าเริ่มต้นเดิม ยังใช้ได้) · รุ่นเก่ามากใช้ Analog |
 | Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
 
 **ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
 
 - unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
-- unit + integration (แตะ DB จริงผ่าน Testcontainers / SQLite in-memory)
+- unit + integration (แตะ DB จริงผ่าน Testcontainers ใช้ DB ชนิดเดียวกับ production · SQLite in-memory ใช้ได้เฉพาะเมื่อ production ก็เป็น SQLite)
 - ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
 
 > ถ้าโปรเจกต์**มี framework อยู่แล้ว** ก็ไม่ต้องถาม ใช้ของเดิมไป เพราะการมี 2 ระบบในโปรเจกต์เดียว
@@ -562,7 +562,7 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
 
 **ทำให้ผลเหมือนเดิมทุกครั้ง**
-- เวลา: inject `IClock`/`now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
+- เวลา: inject `TimeProvider` (.NET 8+) หรือ `now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
 - สุ่ม: fix seed
 - ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
 - **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
@@ -603,7 +603,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 - [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
 - [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
 - [ ] ชุด unit รันจบใน 10 วินาที
-- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
+- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (pytest: ลง `pytest-randomly` แล้วรัน `pytest` ธรรมดา · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
 - [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
 - [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
 - [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
@@ -663,7 +663,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 ```bash
 dotnet new xunit -o tests/MyApp.Tests
 dotnet add tests/MyApp.Tests reference src/MyApp
-dotnet add tests/MyApp.Tests package FluentAssertions      # assert ที่อ่านเป็นประโยค
+dotnet add tests/MyApp.Tests package AwesomeAssertions     # assert ที่อ่านเป็นประโยค (.Should()) · ใช้แทน FluentAssertions ตั้งแต่ v8 ที่ต้องซื้อไลเซนส์ Xceed เมื่อใช้เชิงพาณิชย์ · AwesomeAssertions ฟรี Apache-2.0 ตรวจ 22 ต.ค. 2569 จาก nuget.org
 dotnet add tests/MyApp.Tests package NSubstitute           # mock ที่ syntax สั้นกว่า Moq
 dotnet add tests/MyApp.Tests package Microsoft.AspNetCore.Mvc.Testing   # integration
 dotnet add tests/MyApp.Tests package Testcontainers.PostgreSql
@@ -754,14 +754,14 @@ import { DiscountCalculator } from '../src/discount';
 describe('DiscountCalculator', () => {
   beforeEach(() => vi.restoreAllMocks());   // กันสถานะรั่วข้าม test
 
-  it('calculateDiscount_whenMemberIsGold_returns15Percent', () => {
+  it('gives gold members a 15 percent discount', () => {
     const sut = new DiscountCalculator();
     expect(sut.calculate({ total: 1000 }, 'gold')).toBe(150);
   });
 
   it.each([
     ['none', 0], ['silver', 50], ['gold', 150],
-  ])('calculateDiscount_byTier_%s', (tier, expected) => {
+  ])('gives the right discount for tier %s', (tier, expected) => {
     expect(new DiscountCalculator().calculate({ total: 1000 }, tier)).toBe(expected);
   });
 });
@@ -845,19 +845,21 @@ pytest --lf                   # เฉพาะที่แดงรอบก่
 
 ## Angular
 
-**Vitest + Testing Library** (โปรเจกต์ใหม่ — เร็วกว่า Karma มาก ไม่ต้องเปิดเบราว์เซอร์จริง)
+**Vitest ที่มากับ Angular CLI** (โปรเจกต์ใหม่ — builder `@angular/build:unit-test` ตั้งให้แล้ว รัน `ng test` ไม่ต้องลง plugin เพิ่ม · Karma ยังใช้ได้ · ตรวจ 22 ต.ค. 2569 จาก angular.dev/guide/testing) · เพิ่ม Testing Library ถ้าต้องการ query แบบผู้ใช้จริง
 
 ```bash
-npm i -D vitest @analogjs/vite-plugin-angular jsdom \
-         @testing-library/angular @testing-library/user-event
+ng test
+npm i -D @testing-library/angular @testing-library/user-event
 ```
+
+โปรเจกต์ Angular รุ่นเก่า (ไม่มี builder นี้) → ย้ายจาก Karma ตามคู่มือ angular.dev/guide/testing/migrating-to-vitest หรือใช้ `@analogjs/vite-plugin-angular` คู่กับ `vitest` และ `jsdom`
 
 ```ts
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { OrderFormComponent } from './order-form.component';
 
-it('orderForm_whenSubmitWithEmptyName_showsRequiredError', async () => {
+it('shows a required error when the name is empty on submit', async () => {
   await render(OrderFormComponent);
 
   await userEvent.click(screen.getByRole('button', { name: /บันทึก/ }));
@@ -966,7 +968,7 @@ flutter test integration_test/            # ต้องมี emulator หร�
 
 Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
 
-> **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md)
+> **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 
 # Code Review Checklist
 
@@ -1141,7 +1143,7 @@ Use when setting up commitlint or semantic-release, or a commit needs release ru
 
 ## When to use this skill
 
-- Writing any git commit message
+- Writing commits that feed release tooling (commitlint, semantic-release) — everyday commits use `commit-log`
 - Reviewing commits in a PR for consistency
 - Setting up commitlint / semantic-release
 

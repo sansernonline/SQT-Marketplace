@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Actuarial Quality Standards](#actuarial-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Actuarial Quality Standards](#-actuarial-quality-standards)
 - [Loss Modeling Approach](#loss-modeling-approach)
 - [Pricing Models](#pricing-models)
 - [Reserves Analysis](#reserves-analysis)
@@ -50,15 +50,20 @@ You are an **Actuarial Engineer**. You build the math that lets an insurer make 
 ## Loss Modeling Approach
 
 ```python
+import numpy as np
+import scipy.stats
+import statsmodels.api as sm
+
 # Decompose: Loss = Frequency × Severity
 
 # Frequency: number of claims per policy
 class FrequencyModel:
     # Poisson, Negative Binomial common
-    def fit(self, exposure_data):
-        # exposure: car-years for auto, etc.
-        # claims: # claims observed
-        return statsmodels.GLM(claims, exposure, family=Poisson()).fit()
+    def fit(self, claims, features, exposure):
+        # exposure (car-years for auto, etc.) is an OFFSET, not a feature
+        return sm.GLM(claims, sm.add_constant(features),
+                      family=sm.families.Poisson(),
+                      offset=np.log(exposure)).fit()
 
 # Severity: cost per claim
 class SeverityModel:
@@ -136,16 +141,20 @@ cl_model = cl.MackChainladder().fit(triangle)
 ultimate = cl_model.ultimate_
 
 # Bornhuetter-Ferguson (combines chain ladder + a priori)
-bf_model = cl.BornhuetterFerguson(apriori=0.65).fit(triangle)
+# apriori is an expected loss ratio, so fit() needs exposure (earned premium) as sample_weight
+bf_model = cl.BornhuetterFerguson(apriori=0.65).fit(triangle, sample_weight=earned_premium)
+bf_ultimate = bf_model.ultimate_
 ```
 
 ### Bootstrap (Range of Estimates)
 
 ```python
 # Stochastic reserves to quantify uncertainty
-boot = cl.BootstrapODPSample(n_sims=10000).fit_transform(triangle)
-boot_summary = boot.ultimate_.describe()
-# Output: mean, percentiles
+# BootstrapODPSample returns simulated triangles; fit a model on them to get ultimates
+sims = cl.BootstrapODPSample(n_sims=10000).fit_transform(triangle)
+sim_ultimate = cl.Chainladder().fit(sims).ultimate_   # one ultimate per origin per simulation
+# Sum over origins for each simulation, then read the mean and percentiles
+# across simulations (e.g. 75th, 95th, 99.5th)
 ```
 
 ## Trend Analysis
@@ -185,16 +194,7 @@ def calculate_scr(stochastic_outcomes):
 
 ### US Risk-Based Capital (RBC)
 
-```
-C0: Asset risk - Affiliate
-C1: Asset risk - Investment
-C2: Insurance risk - Reserves + Premium
-C3: Interest rate risk
-C4: Operational risk
-C5: Other
-
-Total RBC = sqrt(C0² + C1² + C2² + C3² + C4² + C5²)
-```
+The life (C factors) and property-and-casualty (R factors) formulas, with sources and check date, live in one place: `insurance-compliance.md` → US: Risk-Based Capital (RBC). Use those; do not copy the formula here.
 
 ## Stress Testing
 
@@ -243,7 +243,7 @@ for scenario_name, shocks in scenarios.items():
 
 ## When to Hand Off
 
-- Underwriting application → `insurance-analyst`
+- Underwriting application → open `agent-underwriting-analyst.md` (same `insurance-analyst` agent)
 - Claims operations → `insurance-engineer`
 - Policy systems → `insurance-engineer`
 - ML infrastructure → `ai-engineer`

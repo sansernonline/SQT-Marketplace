@@ -8,13 +8,13 @@
 | 2–3 | Problem and gap — 1 number that shows the problem is real | 2 min |
 | 4 | Objectives and research questions | 1 min |
 | 5 | Conceptual framework diagram | 1 min |
-| 6–8 | Method: design, sample, instruments with IOC and reliability, analysis | 4 min |
+| 6–8 | Method: design, sample, instruments with item-objective congruence index (IOC) and reliability, analysis | 4 min |
 | 9–13 | Results: 1 slide per objective, the table reduced to the key numbers | 7 min |
 | 14–15 | Discussion: agrees or disagrees with whom, and why | 3 min |
 | 16 | Contributions and limitations | 1 min |
 | 17 | Recommendations | 0.5 min |
 
-Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` in `software-company` (if installed) for layouts.
+Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` for layouts.
 
 ## Questions committees often ask — prepare 2–3 sentence answers
 
@@ -35,7 +35,7 @@ List every committee comment in a table: comment · page · what was changed · 
 
 | # | Reviewer comment (quoted) | Response | Change in manuscript (page, line) |
 |---|---|---|---|
-| R1.1 | "The sample size is not justified." | Thank you. We added the G*Power calculation (effect size 0.3, power 0.80, α 0.05 → n = 84). | p. 6, lines 12–18 |
+| R1.1 | "The sample size is not justified." | Thank you. We added the G*Power calculation (correlation, two-tailed, effect size r = 0.3, power 0.80, α 0.05 → n = 84). | p. 6, lines 12–18 |
 | R1.2 | "Compare with recent studies." | We added 3 studies from 2023–2025 to the discussion. | p. 12, lines 4–20 |
 
 Rules:
@@ -46,7 +46,7 @@ Rules:
 
 ## Submission checklist
 
-- Journal scope fits the topic, tier checked (TCI 1/2, Scopus quartile)
+- Journal scope fits the topic, tier checked (Thai-Journal Citation Index (TCI) 1/2, Scopus quartile)
 - Not a predatory journal: check it is in the TCI or Scopus list, beware of fast acceptance for a fee and spam invitations
 - Formatted to the author guidelines (template, word limit, reference style)
 - Cover letter: what the paper finds and why it fits this journal, 3–4 sentences

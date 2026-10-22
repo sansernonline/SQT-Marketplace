@@ -1,9 +1,10 @@
 <!-- ตัวอย่างครบ 13 เลย์เอาต์ · คัดลอกเฉพาะ <section> ที่ใช้ แล้วแก้เนื้อหา
-     ทุกหน้า: data-at = เวลาที่ควรถึงหน้านี้ · data-menu = ชื่อในเมนู · data-part = เริ่มส่วนใหม่ · <aside> = บันทึกผู้พูด -->
+     ทุกหน้า: data-at = เวลาที่ควรถึงหน้านี้ · data-menu = ชื่อในเมนู · data-part = เริ่มส่วนใหม่ · <aside> = บันทึกผู้พูด
+     data-anim = เปิด animation เข้าหน้าเฉพาะหน้านั้น (ค่าเริ่มต้นนิ่ง · ใส่เฉพาะหน้าที่การเคลื่อนไหวช่วยให้ตาไล่ตามเรื่อง) -->
 
 <!-- 1 · ปก -->
 <section data-at="0:00" id="cover" data-menu="ปก" data-part="เริ่มต้น" class="slide hero">
-<img src="../../markdown-report-docx/assets/example-logo.png" alt="" style="width:420px">
+<img src="example-logo.png" alt="" style="width:420px">
 <p class="kicker" style="font-size:28px">01234567 Software Project · Final Presentation</p>
 <h1>Clinic Booking Assistant</h1>
 <div class="rule"></div>
@@ -39,7 +40,7 @@
 </section>
 
 <!-- 4 · เปิดส่วน: เลขใหญ่ -->
-<section data-at="0:27" id="div-1" data-menu="เปิดส่วน" data-part="1 · ภาพรวม" class="slide divider">
+<section data-at="0:27" id="div-1" data-menu="เปิดส่วน" data-part="1 · ภาพรวม" class="slide divider" data-anim>
 <p class="num">01</p><h2 style="font-size:84px">ภาพรวม</h2><p class="sub" style="font-size:34px">โจทย์ · ระบบทำอะไรได้</p><p class="pg"></p>
 </section>
 
@@ -73,7 +74,7 @@
 </section>
 
 <!-- 8 · แผนภาพระบบ: กล่องวางตำแหน่ง px + ลูกศร svg -->
-<section data-at="1:03" id="overview" data-menu="ภาพรวมระบบ" class="slide">
+<section data-at="1:03" id="overview" data-menu="ภาพรวมระบบ" class="slide" data-anim>
 <div class="col" style="gap:10px"><p class="kicker">ภาพรวมระบบ</p><h2>LINE ส่งข้อความเข้าแอปเดียว<br>แอปตรวจตารางหมอในฐานข้อมูลก่อนตอบทุกครั้ง</h2></div>
 <div class="map" style="width:1664px;height:460px">
  <svg viewBox="0 0 1664 460" width="1664" height="460"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8a8a92"/></marker></defs>

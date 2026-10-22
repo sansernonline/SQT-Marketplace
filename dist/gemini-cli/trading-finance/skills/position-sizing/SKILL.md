@@ -30,22 +30,25 @@ Forex, CFDs (gold, indices), crypto or a prop-firm account → lots, pip value, 
 | Settlement | T+2 |
 | ETFs / unit trusts tick | 0.01 baht at every price |
 
-Tick size (ช่วงราคา) for SET/mai shares:
+Tick size (ช่วงราคา) for SET/mai shares — SET changes the 5–<50 baht bands on **16 Nov 2569 (2026)**:
 
-| Price (baht) | Tick |
-|---|---|
-| < 2 | 0.01 |
-| 2 – < 5 | 0.02 |
-| 5 – < 10 | 0.05 |
-| 10 – < 25 | 0.10 |
-| 25 – < 100 | 0.25 |
-| 100 – < 200 | 0.50 |
-| 200 – < 400 | 1.00 |
-| ≥ 400 | 2.00 |
+| Price (baht) | Tick now (until 13 Nov 2569) | Tick from 16 Nov 2569 |
+|---|---|---|
+| < 2 | 0.01 | 0.01 |
+| 2 – < 5 | 0.02 | 0.02 |
+| 5 – < 10 | 0.05 | **0.02** |
+| 10 – < 25 | 0.10 | **0.05** |
+| 25 – < 50 | 0.25 | **0.10** |
+| 50 – < 100 | 0.25 | 0.25 |
+| 100 – < 200 | 0.50 | 0.50 |
+| 200 – < 400 | 1.00 | 1.00 |
+| ≥ 400 | 2.00 | 2.00 |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.set.or.th/en/trading-units-tick-sizes-price-limits (table in force since 30 Mar 2009). SET consulted in May 2569 on smaller ticks for 5–<10 (0.02), 10–<25 (0.05) and 25–<50 (0.10); 82% agreed, effective date not yet announced (รอยืนยัน) — re-check before quoting.
+ตรวจ 22 ต.ค. 2569 (2026-10-22) · แหล่ง: SET, "8 มาตรการซื้อขาย" https://www.set.or.th/th/about/mediacenter/insights/article/795-eight-trading-measures (confirms the tick cut for 5–50 baht and the date 16 พ.ย. 2569; same date in Thansettakij, Infoquest, Mondo Visione) · SET hearing result No21 (Jun 2026) https://media.set.or.th/set/Documents/2026/Jun/No21-HearingResult-Proposed-Revision-Measures-Enhance-Confidence.pdf (new values 5–<10 0.02, 10–<25 0.05, 25–<50 0.10; 82% agreed) · old table https://www.set.or.th/en/trading-units-tick-sizes-price-limits. The new values come from the hearing result; the final SET circular was not read (รอยืนยัน) — check it before quoting.
 
-Why ticks matter: stop and entry must sit on a valid tick, and on a 9.95-baht stock one tick (0.05) is 0.5% — a "1-tick" stop is not a real stop.
+Examples in this plugin use prices valid under **both** tables (multiples of 0.50 between 25 and 50 baht), so they stay correct before and after 16 Nov 2569.
+
+Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht stock one tick (0.05 now, 0.02 from 16 Nov 2569) is 0.5% now — a "1-tick" stop is not a real stop.
 
 ## Workflow
 
@@ -61,13 +64,13 @@ Why ticks matter: stop and entry must sit on a valid tick, and on a 9.95-baht st
 
 ## Worked example
 
-Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop one tick below at **47.75** (tick 0.25 in the 25–<100 band). Risk per share = 0.75. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **0.94**.
+Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop 0.50 below at **47.50** (valid under both tick tables: 0.25 now, 0.10 from 16 Nov 2569). Risk per share = 1.00. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **1.19**.
 
-- Raw size = 1,000 ÷ 0.94 = 1,063 → round down to board lot = **1,000 shares**
-- Position value = 1,000 × 48.50 = **48,500 baht = 48.5% of capital** → fails the 10% concentration check
-- Cap at 10% → 10,000 ÷ 48.50 = 206 → **200 shares** (9,700 baht); real risk = 200 × 0.94 = **188 baht (0.19%)**
+- Raw size = 1,000 ÷ 1.19 = 840 → round down to board lot = **800 shares**
+- Position value = 800 × 48.50 = **38,800 baht = 38.8% of capital** → fails the 10% concentration check
+- Cap at 10% → 10,000 ÷ 48.50 = 206 → **200 shares** (9,700 baht); real risk = 200 × 1.19 = **238 baht (0.24%)**
 
-Size if the user takes the trade: 200 shares, stop 47.75; the concentration limit, not the stop, is the binding rule here. A wider stop at 45.50 (below the 45.75 swing low) would give risk 3.19/share → 313 → 300 shares, but still capped at 200 by concentration.
+Size if the user takes the trade: 200 shares, stop 47.50; the concentration limit, not the stop, is the binding rule here. A wider stop at 45.50 (below the 46.00 swing low) would give risk 3.19/share → 313 → 300 shares, but still capped at 200 by concentration.
 
 ## Output
 

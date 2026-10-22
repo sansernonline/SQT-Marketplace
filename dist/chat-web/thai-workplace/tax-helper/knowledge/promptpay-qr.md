@@ -8,7 +8,7 @@ A PromptPay QR is a text string in EMVCo QR Code Specification for Payment Syste
 
 ## 1. Payload structure
 
-Every field is **ID (2 digits) + length (2 digits) + value**. Order as below.
+Every field is **ID (2 digits) + length (2 digits) + value**. ID 00 first, 63 last; the rest in any order (the examples use 58 · 53 · 54).
 
 | ID | Name | Value |
 |---|---|---|

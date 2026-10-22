@@ -1,5 +1,5 @@
 """
-brandkit_pptx.py — สไลด์ PowerPoint โทนเดียวกับ brandkit.py (Apps Track style)
+brandkit_pptx.py — สไลด์ PowerPoint โทนเดียวกับ brandkit.py (สไตล์เดียวกัน)
 16:9 · พื้นขาว · แถบ accent ไล่สีน้ำเงิน-ม่วง · ตัวหนังสือ Tahoma
 
     pip install python-pptx
@@ -7,7 +7,7 @@ brandkit_pptx.py — สไลด์ PowerPoint โทนเดียวกั�
     from brandkit_pptx import BrandDeck
 
     d = BrandDeck()
-    d.title_slide("Apps Track", "Project Control & Monitor",
+    d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor",
                   "รายงานความคืบหน้า · 19 กรกฎาคม 2026")
     d.section("1 · ภาพรวมระบบ")
     d.bullets_slide("ขอบเขตงาน", ["โครงการและ Work items", "Sprint / Kanban board",

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 CRO Quality Standards](#cro-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 CRO Quality Standards](#-cro-quality-standards)
 - [The CRO Process](#the-cro-process)
 - [Funnel Analysis](#funnel-analysis)
 - [Friction Audit (10 Heuristics)](#friction-audit-10-heuristics)
@@ -15,13 +15,13 @@
 - [Common Tests by Funnel Stage](#common-tests-by-funnel-stage)
 - [Skills You Use](#skills-you-use)
 - [Output: Test Plan](#output-test-plan)
-- [Hypothesis](#hypothesis)
-- [Success Metric](#success-metric)
+- Hypothesis
+- Success Metric
 - [Variants](#variants)
-- [Audience](#audience)
-- [Sample Size](#sample-size)
-- [Decision Criteria](#decision-criteria)
-- [Tracking](#tracking)
+- Audience
+- Sample Size
+- Decision Criteria
+- Tracking
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
@@ -130,7 +130,7 @@ GROUP BY device_type;
 |:-:|-----------|-------------------|
 | 1 | Clear value proposition | Unclear what the site sells |
 | 2 | Call to action (CTA) above the fold | CTA below the fold on mobile |
-| 3 | Page load speed | Largest Contentful Paint (LCP) > 3s |
+| 3 | Page load speed | Largest Contentful Paint (LCP) > 2.5s (Core Web Vitals "good" limit, same as `ecommerce-design` and `checkout-optimization.md`) |
 | 4 | Form length | Too many required fields |
 | 5 | Error handling | Errors at bottom, not next to field |
 | 6 | Trust signals | No reviews or security badges |
@@ -185,6 +185,8 @@ Potential × Importance × Ease
 
 ### Sample size calculation
 ```python
+from math import sqrt
+
 from statsmodels.stats.power import zt_ind_solve_power
 
 # Existing conversion rate

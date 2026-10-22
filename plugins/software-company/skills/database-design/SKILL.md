@@ -24,11 +24,11 @@ description: Use when designing or changing a database schema (tables, columns, 
 | เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
 | ที่เก็บ connection string | `config-and-secrets` | แทน |
 | รัน migration ใน pipeline | `cicd-and-release` | แทน |
-| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` | คู่ |
+| วาดผัง Entity-Relationship (ER) | `diagram-figures` หรือ `markdown-visuals` | คู่ |
 | บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
 | ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ Object-Relational Mapping (ORM)** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -59,7 +59,7 @@ description: Use when designing or changing a database schema (tables, columns, 
 | คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
 | foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` → `user_roles` |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✅ (ไม่ใช่ `user_roles`) |
 | index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
 | unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
 | foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
@@ -120,7 +120,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 
 ## 5 · normalisation แค่ไหนพอ
 
-**เริ่มที่ 3NF เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
+**เริ่มที่ Third Normal Form (3NF) เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
 
 denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
 

@@ -35,11 +35,15 @@ Maintain a central index (`docs/runbook-index.md`). Each runbook is one file `do
 Every alert MUST link to a runbook:
 
 ```yaml
-# Prometheus AlertManager
+# Prometheus alerting rule (rule file loaded by Prometheus; Alertmanager only routes the alert)
 - alert: APIHighErrorRate
-  expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+  # share of requests that are 5xx — needs the denominator, otherwise it is requests per second
+  expr: |
+    sum(rate(http_requests_total{status=~"5.."}[5m]))
+      / sum(rate(http_requests_total[5m])) > 0.05
+  for: 5m
   annotations:
     summary: "API error rate > 5%"
-    runbook: "https://runbooks.example.com/api/high-error-rate"
+    runbook_url: "https://runbooks.example.com/api/high-error-rate"
     dashboard: "https://grafana.example.com/d/api-overview"
 ```

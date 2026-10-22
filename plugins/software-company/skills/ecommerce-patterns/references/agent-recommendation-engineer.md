@@ -84,6 +84,7 @@ recs = model.recommend(user_id, interaction_matrix[user_id], N=10)
 
 class TwoTower(nn.Module):
     def __init__(self):
+        super().__init__()  # required before assigning submodules
         self.user_tower = build_mlp([user_features_dim, 128, 64])
         self.item_tower = build_mlp([item_features_dim, 128, 64])
 
@@ -129,16 +130,9 @@ ranker.fit(X, y, group=groups)
 
 ## Cold Start Solutions
 
-### New users
-- Popular items in user's geography/demographic
-- Onboarding survey to bootstrap preferences
-- Default to category browsing
-- Implicit feedback from first actions
+Patterns (new users, new items, timeline) → [`recommendation-systems.md` → Cold Start Strategies](recommendation-systems.md#cold-start-strategies). Role-specific extra: a cold-start tower (item features only) for new items.
 
-### New items
-- Content-based (works without interactions)
-- Boost in recommendations for trial period
-- Cold-start tower (item features only)
+> 🔐 Profiling by demographics and personalised marketing email need consent under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`.
 
 ## Serving Architecture
 
@@ -160,15 +154,8 @@ flowchart LR
 ```
 
 ### Two-stage architecture
-```
-Stage 1: Candidate generation (fast, broad)
-  - ANN search over 100k+ items
-  - Return ~1000 candidates
 
-Stage 2: Ranking (slow, precise)
-  - Heavier model over 1000 candidates
-  - Re-rank to top 10-100
-```
+Stages and candidate counts → [`recommendation-systems.md` → Pattern: Two-Stage Retrieval](recommendation-systems.md#pattern-two-stage-retrieval).
 
 ## Evaluation
 
@@ -196,46 +183,12 @@ Stage 2: Ranking (slow, precise)
 ## Diversity & Serendipity
 
 Tuning only for accuracy gets boring: users see more of the same (a filter bubble) and leave.
-
-```python
-def diversify(candidates, k=10, alpha=0.5):
-    """Maximal Marginal Relevance."""
-    selected = []
-    candidates = sorted(candidates, key=lambda x: -x.score)
-
-    while len(selected) < k and candidates:
-        if not selected:
-            selected.append(candidates.pop(0))
-        else:
-            # Score: relevance - similarity to already selected
-            best_idx = max(
-                range(len(candidates)),
-                key=lambda i: alpha * candidates[i].score
-                            - (1 - alpha) * max_similarity(candidates[i], selected)
-            )
-            selected.append(candidates.pop(best_idx))
-
-    return selected
-```
+Maximal Marginal Relevance (MMR) code → [`recommendation-systems.md` → Diversity Patterns](recommendation-systems.md#diversity-patterns).
 
 ## Business Rules
 
-Recommendations must respect:
-- ✅ Inventory (don't recommend out-of-stock)
-- ✅ Pricing (regional pricing)
-- ✅ Compliance (age-restricted items)
-- ✅ Brand safety (avoid sensitive co-occurrences)
-- ✅ Sponsored vs organic separation
-- ✅ Already purchased (don't re-recommend in same session)
+→ [`recommendation-systems.md` → Business Rules](recommendation-systems.md#business-rules) (one list for the skill).
 
 ## Tools (2026)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
-
-| Tool | Use |
-|------|-----|
-| **Pinecone / Qdrant / Vespa** | ANN vector search |
-| **PyTorch / TensorFlow** | Neural models |
-| **LightFM / implicit** | Classical CF |
-| **Recombee / Algolia Recs** | Managed solutions |
-| **Amazon Personalize** | AWS-managed |
+→ [`recommendation-systems.md` → Tools (2026)](recommendation-systems.md#tools-2026).

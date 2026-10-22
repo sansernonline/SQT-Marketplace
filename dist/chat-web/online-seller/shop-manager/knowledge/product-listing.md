@@ -1,6 +1,6 @@
 # skill: product-listing
 
-Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop or LINE (title, banned claims).
+Use when writing or fixing a product listing on Shopee, Lazada, TikTok Shop, LINE or Facebook (title, banned claims).
 
 # Product Listing (Thai marketplaces)
 
@@ -8,13 +8,13 @@ A listing is found by its title, chosen by its first photo, and bought because o
 
 ## Workflow
 
-1. **Collect facts** — product name, brand, model, size/volume/weight, colour/variants, material, who it is for, price, stock, เลข อย. or เลขจดแจ้ง if food or cosmetic
+1. **Collect facts** — product name, brand, model, size/volume/weight, colour/variants, material, who it is for, price, stock, เลข อย. (สำนักงานคณะกรรมการอาหารและยา) or เลขจดแจ้ง if food or cosmetic
 2. **Keyword research** (10 minutes, free) — see below; pick 1 main keyword + 3–5 supporting
 3. **Title** — apply the platform formula in the table; stay inside the length limit
 4. **Photos** — run the photo checklist
 5. **Description** — fill [the template](references/description-template.md)
 6. **Claims check** — food, supplement, cosmetic, "health" items: run [prohibited claims](references/prohibited-claims.md) and delete every hit
-7. **Variants and SKU** — name SKUs per `multi-shop-stock` before publishing, so stock syncs later
+7. **Variants and Stock Keeping Unit (SKU)** — name SKUs per `multi-shop-stock` before publishing, so stock syncs later
 8. **Price** — set after `marketplace-fees-pricing`, never before
 
 ## Keyword research via search suggestions
@@ -73,7 +73,7 @@ Image sizes per platform and banner formats → `graphic-design` `social-formats
 
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. For listings that means real product photos and no AI-generated people or text baked into images.
+Use real product photos — no AI-generated people and no text baked into images. The full list of AI tells lives in `no-ai-look`.
 
 ## Related
 

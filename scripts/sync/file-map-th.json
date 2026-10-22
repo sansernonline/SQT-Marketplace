@@ -10,6 +10,7 @@
     "hooks/skill-router.json": "คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม"
   },
   "superuser_files": {
+    "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
     "SKILL.md": "หัวหน้าทีม: รับงาน วัดขนาด เลือก playbook แจกงาน ตรวจ รายงาน",
     "references/agents.md": "รายชื่อ agent ของ plugin และงานที่แต่ละตัวรับ",
     "references/approvals.md": "งานแบบไหนต้องรอคนอนุมัติก่อนทำ",
@@ -21,12 +22,18 @@
     "references/playbook-template.md": "แบบสำหรับเขียน playbook ใหม่",
     "references/principles.md": "หลักการทำงานที่ทุก playbook ใช้",
     "references/team-files.md": "ไฟล์ของทีมในโปรเจกต์: CONTEXT · log · inbox · IMPROVEMENTS",
-    "references/team-roles.md": "บทบาทในทีมและรอบตรวจซ้ำจนไม่เหลือข้อสูงและกลาง",
+    "references/team-roles.md": "บทบาทในทีม วิธีแบ่งงาน และรอบตรวจซ้ำจนไม่เหลือข้อสูงและกลาง",
+    "references/voting.md": "ขั้นตอนเต็มของการตัดสินด้วยการค้นและโหวต 3 มุม",
     "references/triggers.md": "คำพูดแบบไหนเปิด playbook ไหน",
     "templates/CONTEXT.md": "แบบไฟล์ CONTEXT.md กลางของโปรเจกต์",
     "templates/HISTORY.md": "แบบไฟล์ประวัติงาน",
     "templates/IMPROVEMENTS.md": "แบบไฟล์จดข้อเสนอแก้ skill ของโปรเจกต์",
-    "templates/improvements-queue.md": "แบบคิวข้อเสนอแก้ skill รวมทั้งเครื่อง"
+    "templates/improvements-queue.md": "แบบคิวข้อเสนอแก้ skill รวมทั้งเครื่อง",
+    "references/autonomy.md": "ถามครั้งเดียว ตัดสินใจเอง โหวต รู้ความเสี่ยง รู้จังหวะหยุด และรายการรออนุมัติทุกสาขา",
+    "references/modules.md": "โมดูลที่เปิดปิดได้: ไฟล์กลาง log token รอบเรียนรู้ inbox config และด่านของ hook",
+    "references/lead-playbook.md": "บทเรียนของหัวหน้าทีมเอง: คาดกับจริงต่างกันตรงไหน จัดขนาดและแจกงานอย่างไร",
+    "templates/TEAM.md": "โปรไฟล์ลูกทีม: ใครถนัดอะไร พลาดบ่อยเรื่องไหน ใช้ระดับไหนพอ",
+    "templates/config.json": "ค่าเปิดปิดโมดูลและงบของโฟลเดอร์งาน"
   },
   "playbooks": {},
   "agents": {
@@ -36,6 +43,7 @@
     "agent-patterns": "เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ)",
     "answer-shape": "เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ",
     "commit-log": "commit ทุกขั้นที่ทำเสร็จด้วยข้อความรูปแบบเดียวกัน ให้ git log เป็นบันทึกงาน",
+    "research-with-sources": "หาข้อมูลที่ยืนยันได้ พร้อมแหล่ง วันที่ และป้ายหลักฐาน",
     "handoff": "ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา",
     "human-writing": "เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน",
     "no-ai-look": "ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน)",
@@ -269,7 +277,6 @@
     "web-service-essentials": "ของที่ทุก HTTP service ต้องมี: health endpoint · error ตาม RFC 9457",
     "web3-design": "ตรวจ smart contract หรือออกแบบ tokenomics",
     "windows-app-design": "แอป desktop ที่ต้องดูเป็นของ Windows 11 (WinUI 3 · MAUI)",
-    "work-session-context": "เริ่มงาน เปลี่ยนโมเดล ส่งต่องาน หรือมีข้อความเข้า inbox → อัปเดตไฟล์ context",
     "contract": "ร่างสัญญาไทยพื้นฐาน (จ้าง · เช่า · บริการ) พร้อมจุดที่ควรให้ทนายดู",
     "dbd-annual-filing": "ยื่นงบหลังปิดปี: ประชุมผู้ถือหุ้น · งบผ่าน DBD e-Filing · บอจ.5 · ภ.ง.ด.50",
     "doc-contract-th": "ร่างหรือตรวจสัญญาไทย (จ้างงาน · เช่า · จ้างทำของ) อากรแสตมป์ · จุดเสี่ยง",

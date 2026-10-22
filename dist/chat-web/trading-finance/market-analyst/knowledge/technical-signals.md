@@ -50,18 +50,18 @@ These are the common platform defaults (Streaming, TradingView, Settrade charts 
 
 ## Worked example (daily chart, illustrative numbers)
 
-Stock ABC, close 48.50. 50-day SMA 46.20 (rising), 200-day SMA 44.00 (rising). RSI(14) 66. MACD 0.42 above signal 0.31, both above zero. Today broke above the 3-month high of 48.00 on volume 2.1× the 20-day average. Swing lows at 45.75 and 44.50.
+Stock ABC, close 48.50. 50-day SMA 46.20 (rising), 200-day SMA 44.00 (rising). RSI(14) 66. MACD 0.42 above signal 0.31, both above zero. Today broke above the 3-month high of 48.00 on volume 2.1× the 20-day average. Swing lows at 46.00 and 44.50.
 
 | Check | Read |
 |---|---|
 | Trend | Price > 50 > 200, both rising → uptrend |
 | Momentum | RSI 66: strong but not yet stretched; MACD positive |
 | Volume | 2.1× average on breakout → real participation |
-| Support | 48.00 (old high, now support), 45.75 |
+| Support | 48.00 (old high, now support), 46.00 |
 | Resistance | None nearby on this chart — use round number 50.00 |
-| **Invalidation** | Close back below 48.00 within 3 days = failed breakout; below 45.75 = trend read wrong |
+| **Invalidation** | Close back below 48.00 within 3 days = failed breakout; below 46.00 = trend read wrong |
 
-Plain answer: "แนวโน้มขาขึ้น ทะลุกรอบพร้อมวอลุ่มหนุน ถ้าปิดกลับใต้ 48.00 ภายใน 3 วัน ถือว่าทะลุหลอก" — then size from a stop under 48.00 or 45.75 with `position-sizing`.
+Plain answer: "แนวโน้มขาขึ้น ทะลุกรอบพร้อมวอลุ่มหนุน ถ้าปิดกลับใต้ 48.00 ภายใน 3 วัน ถือว่าทะลุหลอก" — then size from a stop under 48.00 or 46.00 with `position-sizing`.
 
 ## Output shape
 

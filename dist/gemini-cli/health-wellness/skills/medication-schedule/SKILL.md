@@ -37,7 +37,7 @@ General information to help organise, not medical advice — dose questions go t
 
 A printable tick sheet:
 
-| Date | 07:00 | 12:00 | 18:00 | 21:00 | Note |
+| Date | [time 1] | [time 2] | [time 3] | [time 4] | Note |
 |---|---|---|---|---|---|
 | | ☐ | ☐ | ☐ | ☐ | |
 

@@ -9,7 +9,7 @@ Every broadcast uses message quota and customers' patience. Check both before yo
 
 ## 1. Quota math
 
-A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 messages, whatever its length (1 send can hold up to 5 bubbles). "Target reach" (friends who have not blocked the OA) is the number that counts, not total friends.
+A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 messages, whatever its length (1 send can hold up to 5 message objects). "Target reach" (friends who have not blocked the OA) is the number that counts, not total friends.
 
 | Package (ex VAT 7%) | Free/month | Extra | Sends to 4,000 reach that fit free | Cost of 8 sends to 4,000 reach |
 |---|---|---|---|---|

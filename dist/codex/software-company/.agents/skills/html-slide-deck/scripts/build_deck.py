@@ -1,7 +1,7 @@
 """build_deck.py — รวม shell + slides เป็นไฟล์ .html ไฟล์เดียว เปิดได้แบบไม่ต่อเน็ต (ยกเว้นฟอนต์)
 
     python build_deck.py slides.html -o docs/Project_Presentation-v1.0.html --title "ชื่อเด็ค"
-    python build_deck.py slides.html -o out.html --brand E10613,FF2536 --data data.json --css extra.css --js extra.js
+    python build_deck.py slides.html -o out.html --brand <สีหลัก>,<สีสว่าง> --data data.json --css extra.css --js extra.js
 
 - รูปที่ slides อ้างด้วย path ในเครื่อง (src="...") ถูกฝังเป็น data URI เฉพาะไฟล์รูปที่อยู่ใต้โฟลเดอร์ slides หรือโฟลเดอร์ที่รันคำสั่ง · ไฟล์อื่นถูกข้ามและรายงานว่าหาไม่เจอ · รูปกว้างเกิน --max-width ถูกย่อเป็น JPEG
 - --brand สีหลัก,สีสว่าง → แทน --accent/--accent2 และคำนวณ --accent-deep/--accent-tint ให้
@@ -95,7 +95,7 @@ def main() -> None:
     ap.add_argument("slides", type=Path, help="ไฟล์ที่มีแต่ <section class=\"slide\"> เรียงกัน")
     ap.add_argument("-o", "--out", type=Path, required=True)
     ap.add_argument("--title", default="Presentation")
-    ap.add_argument("--brand", help="สีหลัก,สีสว่าง เช่น E10613,FF2536")
+    ap.add_argument("--brand", help="สีหลัก,สีสว่าง ของโปรเจกต์ (hex ไม่มี #) เช่น 2A78D6,5B9BE6")
     ap.add_argument("--data", type=Path, help="JSON → ตัวแปร DATA")
     ap.add_argument("--css", type=Path, help="CSS เพิ่มของเด็คนี้")
     ap.add_argument("--js", type=Path, help="JS เพิ่มของเด็คนี้ (ใช้ S · show() · DATA ได้)")

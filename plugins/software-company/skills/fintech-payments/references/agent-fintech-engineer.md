@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 FinTech Quality Standards](#fintech-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 FinTech Quality Standards](#-fintech-quality-standards)
 - [Critical FinTech Rules](#critical-fintech-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -59,8 +59,10 @@ const total = price * quantity * 1.07; // floating point drift
 import Decimal from 'decimal.js';
 const total = new Decimal(price).times(quantity).times('1.07');
 
-// ✅ Or use integer cents/satoshis
-const totalCents = priceCents * quantity * 107 / 100; // be careful with rounding
+// ✅ Or use integer minor units (satang/cents) as bigint, with explicit rounding
+// `/ 100` on a JS number gives a float again; on bigint it truncates — so round on purpose:
+const totalCents = (priceCents * quantity * 107n + 50n) / 100n; // half-up, for amounts ≥ 0
+// e.g. 1999n * 3n → 5997n × 1.07 = 6416.79 → 6417n
 ```
 
 ### Rule 2: All money moves are idempotent
@@ -90,9 +92,10 @@ NEVER go backwards (except via reversal record)
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — apply to all code you write. Do the simplest thing that works. Use the standard library or native features before custom code. Mark shortcuts with `// simple:`.
-- `fintech-payments` — when integrating Stripe, Adyen, Omise, etc.
-- `fintech-payments` — when handling card data
-- `fintech-payments` — when verifying customer identity
+- `fintech-payments` — this skill's references:
+  - `references/payment-gateway-integration.md` · `references/agent-payment-integration.md` — when integrating Stripe, Adyen, Omise, etc.
+  - `references/pci-dss-compliance.md` — when handling card data
+  - `references/kyc-aml-patterns.md` — when verifying customer identity
 - `polished-document-style` (from software-company) — for spec docs
 - `commit-message-format` (from software-company) — for commits
 
@@ -113,21 +116,46 @@ interface Transfer {
   reversalOf?: string;     // if this reverses another transfer
 }
 
+// Everything that decides "may this run?" happens INSIDE one transaction.
+// Checking the key or the balance before the transaction lets two concurrent
+// requests both pass → double transfer or overdraft.
 async function transfer(req: TransferRequest): Promise<Transfer> {
-  // 1. Idempotency check
-  const existing = await db.transfers.findByKey(req.idempotencyKey);
-  if (existing) return existing;
+  validateShape(req); // amount > 0n, known currency, from ≠ to — no DB reads here
 
-  // 2. Validate (account exists, has funds, currency match)
-  await validateTransfer(req);
+  try {
+    return await db.transaction(async (tx) => {
+      // 1. Claim the idempotency key. transfers.idempotency_key is UNIQUE,
+      //    so a concurrent duplicate waits, then fails on this insert.
+      const transfer = await tx.transfers.create({
+        idempotencyKey: req.idempotencyKey,
+        fromAccount: req.fromAccount, toAccount: req.toAccount,
+        amount: req.amount, currency: req.currency, status: 'PENDING',
+      });
 
-  // 3. Single atomic DB transaction
-  return await db.transaction(async (tx) => {
-    const transfer = await tx.transfers.create({...});
-    await tx.ledger.debit(req.fromAccount, req.amount, transfer.id);
-    await tx.ledger.credit(req.toAccount, req.amount, transfer.id);
-    return transfer;
-  });
+      // 2. Lock both accounts in a fixed order (by id) so A→B and B→A can't deadlock
+      //    SELECT id FROM accounts WHERE id IN ($1, $2) ORDER BY id FOR UPDATE
+      await tx.accounts.lockInOrder([req.fromAccount, req.toAccount]);
+
+      // 3. Check funds and debit in one conditional statement:
+      //    UPDATE accounts SET balance = balance - $1
+      //    WHERE id = $2 AND currency = $3 AND balance >= $1
+      const debited = await tx.accounts.debitIfFunds(req.fromAccount, req.amount, req.currency);
+      if (debited.rowCount !== 1) throw new InsufficientFundsError(); // rolls back the whole transaction
+
+      await tx.accounts.credit(req.toAccount, req.amount, req.currency);
+      await tx.ledger.debit(req.fromAccount, req.amount, transfer.id);
+      await tx.ledger.credit(req.toAccount, req.amount, transfer.id);
+      return tx.transfers.update(transfer.id, { status: 'SUCCEEDED' });
+    });
+  } catch (err) {
+    if (isUniqueViolation(err, 'transfers_idempotency_key_key')) {
+      // Same key seen before → return the first result, never run it again
+      const existing = await db.transfers.findByKey(req.idempotencyKey);
+      if (!sameRequest(existing, req)) throw new IdempotencyKeyReusedError(); // same key, different body
+      return existing;
+    }
+    throw err;
+  }
 }
 ```
 
@@ -180,7 +208,7 @@ interface AuditEvent {
 ## When to Hand Off
 
 - Regulatory interpretation → `fintech-compliance-officer`
-- Payment gateway specifics → `fintech-engineer` agent
+- Payment gateway specifics → stay in this role; read `references/agent-payment-integration.md` and `references/payment-gateway-integration.md`
 - Quantitative modeling → `quant-analyst`
 - Security review → `security-engineer` (from software-company)
 - Architecture decisions → `solution-architect` (from software-company)

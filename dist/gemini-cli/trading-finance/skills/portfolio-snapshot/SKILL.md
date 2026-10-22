@@ -9,7 +9,7 @@ One page that answers "how am I doing?" honestly. Holdings template and the page
 
 ## Workflow
 
-1. **Load holdings** from the user's file (ask where it lives). Include every account: stock broker, fund accounts (AMC / fund supermarket), RMF/ThaiESG, PVD (latest statement), digital-asset exchange, cash and fixed deposits. Missing an account makes every percentage wrong.
+1. **Load holdings** from the user's file (ask where it lives). Include every account: stock broker, fund accounts (AMC / fund supermarket), Retirement Mutual Fund (RMF) / ThaiESG, provident fund (PVD) (latest statement), digital-asset exchange, cash and fixed deposits. Missing an account makes every percentage wrong.
 2. **Refresh prices** via an installed market-data plugin; funds use the latest NAV (one business day behind); record the as-of timestamp per source. If there is no data plugin, say so and ask for the broker statement values.
 3. **Compute per holding**: market value, cost, unrealised P/L (baht and %), weight %.
 4. **Compute portfolio**: total value, cash %, allocation by asset class / sector / market / currency, realised P/L year to date (from `trade-journal`), dividends received YTD (from `dividend-tracker`).

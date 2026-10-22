@@ -1,6 +1,6 @@
 ---
 name: stack-sql
-description: Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
+description: Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL, MySQL).
 ---
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
@@ -42,26 +42,15 @@ description: Use when writing or reviewing SQL queries, procedures or data-chang
 
 ## 3 · ให้เร็ว: อ่าน plan จริง ไม่เดา
 
-- ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง: SQL Server `SET STATISTICS IO, TIME ON` + Actual Execution Plan · PostgreSQL `EXPLAIN (ANALYZE, BUFFERS)` (รันคำสั่งจริง UPDATE/DELETE ห่อ `BEGIN ... ROLLBACK`) · MySQL 8.0.18+ `EXPLAIN ANALYZE`
-- ใน plan ดู: scan ทั้งตารางใหญ่ · แถวที่คาด vs ได้จริงต่างมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort/hash ล้นลง disk
-- **sargable** — ห้ามครอบคอลัมน์ที่มี index ด้วย function (`YEAR(created_at) = 2026` → ช่วงวันที่ครึ่งเปิด) · `LIKE '%คำ'` ใช้ index ไม่ได้ ใช้ full-text
-- ทุก index ต้องตอบได้ว่ารับ query ไหน (ทำให้เขียนช้าลงทุกตัว) · covering index ใช้ `INCLUDE (...)`
-- แบ่งหน้าลึกใช้ keyset ไม่ใช่ `OFFSET` · N+1 จาก Object-Relational Mapper (ORM) นับ query จาก log แล้วแก้ด้วย eager load
-- parameter sniffing (SQL Server) แก้จากเบาไปหนัก ห้ามล้าง plan cache ทั้ง server · หลังโหลดข้อมูลก้อนใหญ่ update statistics
-- UPDATE/DELETE ก้อนใหญ่ทำทีละชุด (เช่น 5,000 แถว) ไม่งั้น lock ทั้งตาราง log โต rollback นาน
+คำสั่งดู plan จริงแยกตาม engine · สิ่งที่ต้องดูใน plan · ตัวอย่าง keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
 
-ตัวอย่างโค้ด keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
+- กฎย่อ: ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง ไม่เดา · เงื่อนไขต้อง sargable (ไม่ครอบคอลัมน์ที่มี index ด้วย function) · ทุก index ตอบได้ว่ารับ query ไหน · แบ่งหน้าลึกใช้ keyset · นับ N+1 จาก log ของ Object-Relational Mapper (ORM) · UPDATE/DELETE ก้อนใหญ่ทำทีละชุด — รายละเอียดและตัวอย่างอยู่ใน [`references/performance.md`](references/performance.md) ที่เดียว
 
 ## 4 · เปลี่ยนข้อมูลอย่างปลอดภัย
 
 ตาราง isolation · upsert · สร้าง index ไม่ล็อกตาราง แยกตาม engine พร้อมตัวอย่างตรวจจำนวนแถว → [`references/safe-changes.md`](references/safe-changes.md)
 
-- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
-- ก่อนลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
-- นับแถวที่คาดไว้ก่อน แล้วตรวจ `@@ROWCOUNT` (SQL Server) หรือ `GET DIAGNOSTICS` (PostgreSQL) ก่อน `COMMIT` ไม่ตรงให้ ROLLBACK
-- upsert ใช้แบบของ engine (`ON CONFLICT` · `ON DUPLICATE KEY` · SQL Server `UPDATE` + `INSERT ... WHERE NOT EXISTS` ด้วย `UPDLOCK, HOLDLOCK`)
-- deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน transaction สั้นที่สุด ไม่รอ API ภายนอกขณะถือ transaction
-- `ALTER TABLE` ตารางใหญ่: PostgreSQL ตั้ง `SET lock_timeout = '5s'` แล้ว retry · เปลี่ยนชนิดคอลัมน์เขียนตารางใหม่ทั้งก้อน · SQL Server เพิ่ม `NOT NULL` + default ทันทีเฉพาะ Enterprise · เปลี่ยนชนิดหรือย้ายข้อมูลใช้ expand-and-contract ตาม `database-design`
+- กฎย่อ: สคริปต์รันซ้ำได้ · backup ก่อนแก้ข้อมูลก้อนใหญ่ · นับแถวก่อนแล้วตรวจก่อน `COMMIT` · upsert ใช้แบบของ engine · แตะตารางเรียงลำดับเดียวกันกัน deadlock · `ALTER TABLE` ตารางใหญ่ต้องตั้ง `lock_timeout` — รายละเอียดและตัวอย่างอยู่ใน [`references/safe-changes.md`](references/safe-changes.md) ที่เดียว
 
 ## 5 · กับดักที่เจอบ่อย
 

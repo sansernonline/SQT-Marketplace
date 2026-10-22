@@ -132,7 +132,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
 
 - lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
-- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv ตั้งแต่ 0.11.25 มี `uv audit` แต่ยังเป็น preview จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
+- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
 - ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
 - SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
 - ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`

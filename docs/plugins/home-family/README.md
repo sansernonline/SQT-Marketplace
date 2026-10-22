@@ -4,7 +4,7 @@
 
 จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น
 
-agent 5 · skill 13 · คำสั่ง 3 · playbook 8 · ส่งงานต่อให้ [`health-wellness`](../health-wellness/README.md) · [`trading-finance`](../trading-finance/README.md) · [`personal-life`](../personal-life/README.md) · [`consumer-rights`](../consumer-rights/README.md)
+agent 2 · skill 50 · คำสั่ง 3 · playbook 8 · ส่งงานต่อให้ [`health-wellness`](../health-wellness/README.md) · [`trading-finance`](../trading-finance/README.md) · [`personal-life`](../personal-life/README.md) · [`consumer-rights`](../consumer-rights/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/home-family/`](../../../plugins/home-family/)
 

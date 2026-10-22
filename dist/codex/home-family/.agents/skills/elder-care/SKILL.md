@@ -7,7 +7,9 @@ description: Use when a Thai family cares for an elderly parent (doctor visits, 
 
 Organise, remind and prepare. This skill never diagnoses, never suggests a medicine and never changes a dose — it copies what the doctor and the medicine label say and turns worries into questions for the next appointment.
 
-General information, not medical or legal advice — ask the doctor or pharmacist (เภสัชกร) about medicines and the local อปท. or สปสช. about rights.
+General information, not medical or legal advice — ask the doctor or pharmacist (เภสัชกร) about medicines and the local องค์การปกครองส่วนท้องถิ่น (อปท.) or สำนักงานหลักประกันสุขภาพแห่งชาติ (สปสช.) about rights.
+
+**Privacy:** the profile card holds the ID number, blood group, conditions and allergies. Keep it in a private place (`personal-life` `important-docs` if installed, or a locked note), not in a shared family folder. Never post the ID number or medical details to a group chat; a shareable week table shows "ยา ตามตาราง" and a time, not drug names.
 
 ## Workflow
 
@@ -25,8 +27,8 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 |---|---|---|
 | เบี้ยยังชีพผู้สูงอายุ (old-age allowance) | 60–69 ปี 600 · 70–79 ปี 700 · 80–89 ปี 800 · 90+ ปี 1,000 บาท/เดือน | Register at the อปท. (เทศบาล/อบต./สำนักงานเขต in Bangkok) where the person is in the ทะเบียนบ้าน; people turning 60 in the next fiscal year register in advance. Paid on the 10th of each month (earlier working day if a holiday) |
 | Eligibility condition | Under the ระเบียบกระทรวงมหาดไทย พ.ศ. 2566 the allowance is for people without other state pensions/welfare; the "ไม่มีรายได้เพียงพอ" criterion and later amendments (รอยืนยัน the current rule with the อปท.) | |
-| บัตรทอง / หลักประกันสุขภาพแห่งชาติ (UCS) | Thai citizens without another scheme | สปสช. hotline 1330; check or change the registered hospital in the สปสช. app / LINE @nhso |
-| สิทธิข้าราชการ (CSMBS) | Parents of a government officer are covered via the officer | กรมบัญชีกลาง; register the parents in the officer's family data |
+| บัตรทอง / หลักประกันสุขภาพแห่งชาติ (Universal Coverage Scheme, UCS) | Thai citizens without another scheme | สปสช. hotline 1330; check or change the registered hospital in the สปสช. app / LINE @nhso |
+| สิทธิข้าราชการ (Civil Servant Medical Benefit Scheme, CSMBS) | Parents of a government officer are covered via the officer | กรมบัญชีกลาง; register the parents in the officer's family data |
 | ประกันสังคม | Insured under มาตรา 33 / 39 continue their own cover; pension or lump sum at 55+ after leaving work | สำนักงานประกันสังคม hotline 1506 — see `thai-workplace` `social-security-th` (if installed) |
 | Children's tax deduction for parents | ลดหย่อนบิดามารดา 30,000 บาท/คน (parent 60+, income ≤ 30,000/yr); parents' health insurance premium up to 15,000 | `trading-finance` `tax-deduction-planner` (if installed) |
 | Other | ศูนย์ช่วยเหลือสังคม 1300; disability card (บัตรคนพิการ) if eligible; travel discounts (รอยืนยัน current list) | |

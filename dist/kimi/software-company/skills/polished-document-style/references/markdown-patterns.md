@@ -36,7 +36,7 @@ Status values:
 
 ## Callout Boxes
 
-Use blockquotes with a bold label — no emoji:
+Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
 
 ```markdown
 > **Tip:** Brief actionable insight.
@@ -72,20 +72,17 @@ Use a table:
 | role  | enum   | ✓        | `user`  | Access level      |
 ```
 
-## Mermaid Diagrams
+## Figures (รูปในเอกสาร)
 
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+
+```markdown
+ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
+
+![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
+
+**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
 ```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
 
 ## Status Badges (Inline)
 
@@ -95,7 +92,7 @@ For key fields in headers/tables:
 **Status:** Approved
 **Priority:** High
 **Risk Level:** Medium
-**SLA:** < 200ms
+**Service Level Agreement (SLA):** < 200ms
 ```
 
 Multiple badges in a header:
@@ -106,7 +103,7 @@ Multiple badges in a header:
 
 ## Cover Block Pattern
 
-For formal documents (BRD, FSD, ADR, postmortem):
+For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
 
 ```markdown
 # <Title>
@@ -126,7 +123,7 @@ For formal documents (BRD, FSD, ADR, postmortem):
 
 ## Comparison / Decision Tables
 
-For trade-off analysis (architect, PM, SEO recommendations):
+For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
 
 ```markdown
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
@@ -195,8 +192,8 @@ For documents needing formal approval:
 | Role | Name | Status | Date |
 |------|------|:------:|------|
 | Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Reviewing | — |
-| QA Lead | @charlie | Not started | — |
+| Tech Lead | @bob | Review | — |
+| QA Lead | @charlie | Pending | — |
 | Security | @dave | Rejected | 2025-01-14 |
 ```
 

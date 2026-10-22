@@ -27,7 +27,7 @@
 - Tuning game economy
 - Building retention features
 - Live-ops post-launch
-- F2P monetization strategy
+- Free-to-play (F2P) monetization strategy
 
 ## The Retention Funnel
 
@@ -42,14 +42,18 @@ Each transition is a battle:
 - D365 (lifetime value crystallizes)
 ```
 
-### Industry benchmarks (mobile F2P, 2026)
+### Industry benchmarks (mobile, all genres, 2026)
 
-| Metric | Casual | Mid-core | Hardcore |
-|--------|:------:|:--------:|:--------:|
-| D1 retention | 35-50% | 40-55% | 45-60% |
-| D7 retention | 15-25% | 20-30% | 25-35% |
-| D30 retention | 5-12% | 8-15% | 12-20% |
-| Average revenue per daily active user (ARPDAU) | $0.05-0.20 | $0.20-0.50 | $0.50-2.00 |
+Source: GameAnalytics *2026 Mobile & PC Gaming Benchmarks* (16,262 mobile games with ≥ 1,000 monthly active users, iOS + Android), via the GameDev Reports summary, June 2026 · checked 22 Oct 2026.
+
+| Metric | Median | Top 25% | Top 10% |
+|--------|:------:|:-------:|:-------:|
+| D1 retention | not stated in the summary | just above 30% | ~40% |
+| D7 retention | just under 4% | 6–7% | 11–12% |
+| D30 retention | 0.69–0.79% | 1.6–1.8% | not stated |
+
+- Most games sit far below the "D7 20%+" figures that float around online. A D7 of 6–7% already puts a game in the top quarter.
+- Per-genre splits and average revenue per daily active user (ARPDAU) vary a lot by genre and region. Take them from the GameAnalytics benchmark tool for your own genre `(รอยืนยัน)`; do not use a fixed table.
 
 ## Daily Hook Patterns
 
@@ -223,9 +227,10 @@ $99.99 → ultimate pack (whale tier)
 
 ### Sales psychology
 - "First-time only" offers convert
-- "Limited stock" creates urgency
+- Only state real limits. A fake "limited stock" or a countdown that resets can break consumer-protection law (fake scarcity is a misleading practice)
 - "Bundle includes" frames value
 - "Bonus % more" feels generous
+- Disclose loot-box / gacha odds where the law or the store requires it (Apple App Store and Google Play require odds for paid random items)
 
 ## Retention Loops
 
@@ -236,7 +241,7 @@ Trigger (notification at peak time)
    ↓
 Action (open game)
    ↓
-Variable Reward (loot box, mystery box)
+Variable Reward (daily quest with a rotating reward, rare cosmetic drop from play — not a paid random box)
    ↓
 Investment (progression, currency)
 ```
@@ -311,6 +316,19 @@ Uninstalled: very hard
 
 ## Player Segmentation
 
+### Spend tiers (rough shape, check against your own data)
+
+| Segment | Definition | Share of players | Share of revenue | Strategy |
+|---|---|:-:|:-:|---|
+| Whales | top 1% spending | ~1% | ~50% | VIP treatment, exclusive content, account managers |
+| Dolphins | $10–50 / month | ~5% | ~30% | battle pass focus, occasional skins |
+| Minnows | < $10 / month | ~10% | ~15% | value-focused, battle pass every other season |
+| Free | no purchases | ~84% | ~5% (ads) | critical mass, content variety, conversion nudges |
+
+Shares add up to 100%. These are illustrative, not a benchmark `(รอยืนยัน)`.
+
+**Important:** F2P players are NOT freeloaders. They fill competitive matches, give streamers content, and create social pressure to spend.
+
 ```python
 # Behavioral segments
 segments = analyze_players({
@@ -344,9 +362,10 @@ bot_suspects = segments.filter(
 | Tool | Use |
 |------|-----|
 | **GameAnalytics** | Free analytics |
-| **Unity Analytics / Cloud Code** | Unity ecosystem |
+| **Unity Analytics / Cloud Code** | Unity ecosystem (replaced deltaDNA, which has shut down) |
 | **PlayFab** | Microsoft live ops platform |
-| **Amplitude** | Funnel + cohort analysis |
+| **Amplitude / Mixpanel** | Funnel + cohort analysis |
+| **Backtrace / Sentry** | Crash reporting |
 | **AppsFlyer / Adjust** | Attribution |
 | **Helika** | Web3 + gaming analytics |
 | **GrowthBook / Statsig** | A/B testing |
@@ -373,7 +392,6 @@ bot_suspects = segments.filter(
 
 ## Reference
 
-- [Mark Robinson's "Cohort Analysis for Games"](https://www.deltadna.com/)
 - [GameAnalytics Benchmarks](https://gameanalytics.com/benchmarks/)
 - [Naavik gaming industry analysis](https://naavik.co/)
 - [Deconstructor of Fun (podcast/site)](https://www.deconstructoroffun.com/)

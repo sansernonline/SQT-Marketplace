@@ -1,5 +1,7 @@
 # SEO audit checklist
 
+Search engine optimization (SEO) checks. Facts on Google behaviour checked 22 ต.ค. 2569 (sources inline).
+
 Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the single source; agents link here.
 
 ## Contents
@@ -14,10 +16,10 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 
 ### Crawling & Indexing
 - [ ] robots.txt is present and not blocking important pages
-- [ ] XML sitemap exists, submitted to Google Search Console
+- [ ] Extensible Markup Language (XML) sitemap exists, submitted to Google Search Console
 - [ ] No accidental `noindex` on important pages
 - [ ] No `nofollow` on internal links by default
-- [ ] Pagination uses correct canonical or `rel="prev/next"`
+- [ ] Paginated pages each have a self-referencing canonical (not all pointing to page 1) and plain crawlable `<a href>` links between pages — Google stopped using `rel="prev/next"` for indexing (announced Mar 2019, [Google Search Central: pagination](https://developers.google.com/search/docs/specialty/ecommerce/pagination-and-incremental-page-loading))
 - [ ] No orphan pages (every page reachable via internal links)
 - [ ] Crawl depth ≤ 3 clicks from homepage for important pages
 
@@ -27,24 +29,24 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 - [ ] CLS (Cumulative Layout Shift) < 0.1
 - [ ] Images compressed and properly sized
 - [ ] Lazy loading for below-fold images
-- [ ] Critical CSS inlined
+- [ ] Critical Cascading Style Sheets (CSS) inlined
 - [ ] JavaScript deferred / async
 - [ ] Browser caching configured
-- [ ] CDN used for static assets
-- [ ] Server response time < 200ms
+- [ ] Content delivery network (CDN) used for static assets
+- [ ] Time to First Byte (TTFB) ≤ 0.8 s — "most sites should strive to have a TTFB of 0.8 seconds or less" ([web.dev: TTFB](https://web.dev/articles/ttfb)); not a Core Web Vital, a guide
 
 ### Mobile
-- [ ] Mobile-friendly (passes Mobile-Friendly Test)
+- [ ] Mobile-friendly — check with Lighthouse (mobile) and Search Console URL Inspection (the Mobile-Friendly Test tool and report were retired on 1 Dec 2023)
 - [ ] Responsive design (no horizontal scroll)
 - [ ] Tap targets ≥ 48px and adequately spaced
 - [ ] Font size readable (≥ 16px body)
 - [ ] No intrusive interstitials/popups
 
 ### Security & Trust
-- [ ] HTTPS enforced site-wide
+- [ ] Hypertext Transfer Protocol Secure (HTTPS) enforced site-wide
 - [ ] No mixed content warnings
-- [ ] Valid SSL certificate (not expiring soon)
-- [ ] HSTS header set
+- [ ] Valid TLS (Transport Layer Security, often called SSL) certificate (not expiring soon)
+- [ ] HTTP Strict Transport Security (HSTS) header set
 - [ ] No malware / phishing warnings
 
 ### Site Architecture
@@ -58,7 +60,7 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 - [ ] Relevant Schema.org markup present
 - [ ] Validated with Rich Results Test
 - [ ] No errors in Search Console structured data report
-- [ ] Common types: Organization, BreadcrumbList, Article, Product, FAQ
+- [ ] Common types: Organization, BreadcrumbList, Article, Product (FAQ rich results show only for well-known government and health sites; HowTo rich results are no longer shown — [Google, 8 Aug 2023](https://developers.google.com/search/blog/2023/08/howto-faq-changes))
 
 ---
 
@@ -75,7 +77,7 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 - [ ] Every page has unique meta description
 - [ ] Length 150-160 characters
 - [ ] Includes primary keyword naturally
-- [ ] Has clear CTA
+- [ ] Has a clear call to action (CTA)
 - [ ] Accurately describes page content
 
 ### Headings
@@ -100,7 +102,7 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 - [ ] Content above the fold (visible without scrolling) is engaging
 - [ ] Readable (Flesch score appropriate for audience)
 - [ ] Updated recently (where relevance matters)
-- [ ] Includes related semantic terms (LSI)
+- [ ] Covers the related subtopics and terms a reader expects (Google says it does not use "LSI keywords" — don't optimise for them)
 - [ ] No keyword stuffing
 
 ### Images
@@ -132,7 +134,7 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 - [ ] Topic clusters with pillar pages
 - [ ] Topics competitors cover but you don't are filled in
 - [ ] FAQ sections for question-based queries
-- [ ] Author bylines with credentials (E-E-A-T)
+- [ ] Author bylines with credentials (Experience, Expertise, Authoritativeness, Trustworthiness — E-E-A-T)
 - [ ] Publication and update dates visible
 - [ ] Engaging multimedia (images, videos, charts)
 - [ ] Table of contents on long pages
@@ -156,7 +158,7 @@ Used by `seo-audit-checklist` step 3 (manual review). Numbers here are the singl
 ## Analytics & Monitoring
 
 - [ ] Google Search Console verified
-- [ ] Google Analytics 4 installed
+- [ ] Google Analytics 4 (GA4) installed
 - [ ] Goals/conversions tracked
 - [ ] Rank tracking for target keywords
 - [ ] Core Web Vitals monitored

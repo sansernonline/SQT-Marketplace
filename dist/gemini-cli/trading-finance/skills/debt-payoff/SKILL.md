@@ -32,7 +32,7 @@ A lender charging above these, or an unlicensed lender (เงินกู้น
    - Choose snowball if the user has quit plans before; otherwise avalanche.
 5. **When a debt is cleared**, roll its whole payment onto the next target.
 6. **Check refinance / consolidation** (below).
-7. **If minimum payments are impossible**, use the restructuring channels before the debt turns NPL (90+ days overdue).
+7. **If minimum payments are impossible**, use the restructuring channels before the debt turns a non-performing loan (NPL, 90+ days overdue).
 
 ## Worked example — snowball vs avalanche
 

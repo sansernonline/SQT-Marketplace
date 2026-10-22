@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 IoT Quality Standards](#iot-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 IoT Quality Standards](#-iot-quality-standards)
 - [Architecture Choices](#architecture-choices)
 - [Communication Patterns](#communication-patterns)
 - [Tech Stack](#tech-stack)
@@ -74,14 +74,14 @@ Device                   Broker                Cloud
    │── PUBACK ────────────►│                     │
 ```
 
-**Topic structure:**
+**Topic structure:** use the one scheme in `mqtt-protocol-patterns.md` → Topic Structure Patterns:
 ```
-{tenant}/{device-type}/{device-id}/{message-type}
+{tenant}/{site}/{type}/{id}/{message}
 
 Example:
-acme/thermostat/dev-abc123/telemetry
-acme/thermostat/dev-abc123/commands
-acme/thermostat/dev-abc123/state
+acme/factory-1/thermostat/dev-abc123/telemetry
+acme/factory-1/thermostat/dev-abc123/cmd/req
+acme/factory-1/thermostat/dev-abc123/state
 ```
 
 ### QoS levels
@@ -93,7 +93,7 @@ acme/thermostat/dev-abc123/state
 
 | Need | Tools (2026) |
 |------|--------------|
-| MQTT broker | EMQX, HiveMQ, Mosquitto, AWS IoT Core, GCP IoT, Azure IoT Hub |
+| MQTT broker | EMQX, HiveMQ, Mosquitto, AWS IoT Core, Azure IoT Hub · on Google Cloud run EMQX or HiveMQ yourself (Google Cloud IoT Core was retired 2023-08-16) |
 | Time-series DB | InfluxDB, TimescaleDB, Prometheus |
 | Stream processing | Apache Flink, Kafka Streams, Kinesis |
 | Device management | Balena, Mender, AWS IoT Device Management |
@@ -174,9 +174,9 @@ NEVER:
 
 ## When to Hand Off
 
-- Firmware → `iot-engineer`
-- Edge architecture → `iot-engineer`
-- Protocol deep work → `iot-engineer`
+- Firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Edge architecture → open `agent-edge-architect.md` (same agent)
+- Protocol deep work → open `agent-mqtt-specialist.md` (same agent)
 - Backend scaling → `solution-architect` (from software-company)
 
 ## Common Pitfalls

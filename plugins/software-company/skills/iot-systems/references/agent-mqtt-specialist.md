@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 MQTT Quality Standards](#mqtt-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 MQTT Quality Standards](#-mqtt-quality-standards)
 - [Broker Comparison (2026)](#broker-comparison-2026)
 - [Topic Design Patterns](#topic-design-patterns)
 - [QoS Decision Matrix](#qos-decision-matrix)
@@ -63,12 +63,14 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 
 ### Pattern: Hierarchical for Scale
 
+The scheme lives in `mqtt-protocol-patterns.md` → Topic Structure Patterns (one scheme for the whole skill):
+
 ```
-{tenant}/{group}/{device-type}/{device-id}/{message-type}
+{tenant}/{site}/{type}/{id}/{message}
 
 Examples:
 acme/factory-1/temp-sensor/dev-abc/telemetry
-acme/factory-1/temp-sensor/dev-abc/commands
+acme/factory-1/temp-sensor/dev-abc/cmd/req
 acme/factory-1/temp-sensor/dev-abc/state
 ```
 
@@ -127,7 +129,7 @@ publish:
   - acme/factory-1/temp-sensor/dev-abc/state
 
 subscribe:
-  - acme/factory-1/temp-sensor/dev-abc/commands
+  - acme/factory-1/temp-sensor/dev-abc/cmd/req
 ```
 
 ## Performance Tuning
@@ -136,7 +138,7 @@ subscribe:
 
 ```
 Per-broker capacity (rough):
-- Single Mosquitto: 1-10k devices
+- Single Mosquitto: single-threaded — load-test your own message rate before planning past ~10k devices (รอยืนยัน: no vendor benchmark found)
 - HiveMQ/EMQX single node: 100k - 1M
 - EMQX cluster: 100M+
 ```
@@ -178,9 +180,10 @@ Each broker:
 
 ### Pattern: Will Messages
 ```python
+# base = f"{tenant}/{site}/{type}/{device_id}"  (mqtt-protocol-patterns.md)
 # Device sets "last will" on connect
 client.will_set(
-    topic=f"{tenant}/{device_id}/state",
+    topic=f"{base}/state",
     payload='{"status": "offline"}',
     qos=1,
     retain=True
@@ -194,7 +197,7 @@ client.will_set(
 ```python
 # Latest state always available
 client.publish(
-    topic=f"{tenant}/{device_id}/config",
+    topic=f"{base}/config",
     payload=config_json,
     qos=1,
     retain=True  # ← new subscribers get last value
@@ -232,6 +235,6 @@ Key metrics:
 
 ## When to Hand Off
 
-- Device firmware → `iot-engineer`
-- Cloud-side processing → `iot-engineer`, `data-engineer`
+- Device firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Cloud-side processing → open `agent-iot-engineer.md` (same agent); data pipelines → `data-engineer`
 - Production deployment → `devops-engineer` (from software-company)

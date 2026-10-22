@@ -1,0 +1,6 @@
+{
+  "stack": "python",
+  "title": "เส้นทาง async ของ FastAPI เรียกฟังก์ชันที่บล็อก ทำให้คำขอพร้อมกันต่อคิวทีละอัน",
+  "test": ["python", "-m", "pytest", "-q"],
+  "testFiles": "(^|[\\\\/])tests[\\\\/]test_[^\\\\/]*\\.py$"
+}

@@ -14,7 +14,7 @@ description: Use when writing or reviewing TypeScript in Node (Express, Fastify,
 | ดูไฟล์ | บอกอะไร | ทำ |
 |---|---|---|
 | `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ |
+| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ · Node 26 น่าจะขึ้น LTS ช่วงปลาย ต.ค. 2569 (รอยืนยัน) ให้ตรวจบรรทัดนี้ใหม่ทันทีหลังวันนั้น |
 | `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
 | `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
 
@@ -43,7 +43,7 @@ npx vitest run src/order/order.service.test.ts -t "คืนเงินเก�
 - type ของ API ที่ frontend กับ backend ใช้ร่วมกันให้เก็บไว้ที่เดียว (shared package หรือ generate จาก OpenAPI)
 
 ```ts
-const Order = z.object({ id: z.string().uuid(), totalSatang: z.number().int().nonnegative() });
+const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
 type Order = z.infer<typeof Order>;
 
 type PayResult =
@@ -73,7 +73,7 @@ process.on('SIGTERM', () => {
 
 ## 4 · Angular
 
-ตัวล่าสุดคือ v22 (มิ.ย. 2026): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว
+ตัวล่าสุดคือ v22 (ออก 3 มิ.ย. 2026 · แหล่ง: https://angular.dev/reference/releases · ตรวจ 22 ต.ค. 2569): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว (3 ข้อหลังนี้ (รอยืนยัน) — หน้าแหล่งไม่ได้ระบุ ให้ตรวจ release notes ของ v22 ก่อนอ้าง)
 
 | เรื่อง | ทำแบบนี้ | ไม่ทำ |
 |---|---|---|

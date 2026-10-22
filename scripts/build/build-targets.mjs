@@ -73,27 +73,47 @@ const loaded = listDir(join(ROOT, "plugins")).map((plugin) => {
     skillByName: new Map(skills.map((s) => [s.name, s])),
     agents: read("agents", (n, path) => ({ name: n.replace(/\.md$/, ""), ...parse(path) })),
     commands: all.filter(isCommand),
-    dependsOnSuperuser: (meta.dependencies ?? []).some((d) => String(typeof d === "string" ? d : d.name).split("@")[0] === "superuser"),
+    dependsOn: (name) => (meta.dependencies ?? []).some((d) => String(typeof d === "string" ? d : d.name).split("@")[0] === name),
     meta,
   };
 });
 
-// ของกลางจาก superuser ที่ plugin อื่นใช้ร่วม · ชุดสำหรับปลายทางอื่นต้องใช้เดี่ยวได้ จึงใส่ให้ทุก plugin ที่ประกาศ dependencies
-const SHARED_SKILLS = ["agent-patterns", "answer-shape", "commit-log", "handoff", "human-writing", "no-ai-look", "simplify"];
+// ของกลางที่ plugin อื่นใช้ร่วม · ชุดสำหรับปลายทางอื่นต้องใช้เดี่ยวได้ จึงใส่ให้ทุก plugin ที่ประกาศ dependencies
+// รายการต้องตรงกับ SHARED_ONLY_IN_SUPERUSER และ SHARED_ONLY_IN_TOOLKIT ใน scripts/sync/sync-superuser.mjs
+const SHARED_SKILLS = ["adversarial-review-panel", "agent-patterns", "answer-shape", "commit-log", "context-budget", "decision-log", "flag-and-propose", "handoff", "human-writing", "no-ai-look", "owner-style-capture", "parallel-attempts-pick-best", "parallel-split-and-merge", "principle-build-a-tool-not-handwork", "principle-fix-root-cause", "principle-proceed-on-reversible-work", "principle-prove-it-works", "principle-small-verifiable-steps", "principle-user-experience-first", "prior-art-review", "repeated-mistakes-to-checks", "research-with-sources", "session-lessons-to-skills", "simplify", "status-report", "targeted-fix", "temp-file-discipline"];
+const TOOLKIT_SKILLS = ["branded-document-design", "diagram-figures", "document-naming", "html-slide-deck", "image-generation", "markdown-report-docx", "markdown-visuals", "meeting-prep-card", "meeting-summary", "polished-document-style", "polite-message-th-en", "pptx-to-html-deck", "presentation-design", "product-naming", "spell-out-abbreviations"];
 const SHARED_AGENTS = ["brainstormer", "reviewer", "learning-reviewer"];
 const core = loaded.find((p) => p.plugin === "superuser");
+const toolkit = loaded.find((p) => p.plugin === "sqt-toolkit");
+// SKILL.md ของ superuser สาขามีเฉพาะส่วนสาขา (Claude Code เปิดแกนจาก plugin superuser เอง) · ปลายทางอื่นไม่มี dependencies จึงรวมแกน + สาขาเป็นไฟล์เดียว
+const POINTER_LINE = /^> \*\*เปิด `superuser:superuser` ก่อน\*\*[^\n]*\n\n?/m;
+function mergedSuperuser(p) {
+  const own = p.skillByName.get("superuser"), base = core?.skillByName.get("superuser");
+  if (!own || !base) return null;
+  const branch = own.body.replace(POINTER_LINE, "").replace(/^# [^\n]*\n\n?/, "");
+  return { ...own, body: `${base.body.trimEnd()}\n\n---\n\n# ส่วนของสาขา ${p.plugin}\n\n${branch}` };
+}
 const plugins = loaded.map((p) => {
-  if (!p.dependsOnSuperuser || !core) return { ...p, shared: [] };
-  const skills = [...p.skills, ...core.skills.filter((s) => SHARED_SKILLS.includes(s.name) && !p.skillByName.has(s.name))];
+  const fromCore = p.dependsOn("superuser") && core, fromToolkit = p.dependsOn("sqt-toolkit") && toolkit;
+  if (!fromCore && !fromToolkit) return { ...p, shared: [], merged: null };
+  const merged = fromCore ? mergedSuperuser(p) : null;
+  const skills = [
+    ...p.skills.map((s) => (merged && s.name === "superuser" ? merged : s)),
+    ...(fromCore ? core.skills.filter((s) => SHARED_SKILLS.includes(s.name) && !p.skillByName.has(s.name)) : []),
+    ...(fromToolkit ? toolkit.skills.filter((s) => TOOLKIT_SKILLS.includes(s.name) && !p.skillByName.has(s.name)) : []),
+  ];
   const have = new Set(p.agents.map((a) => a.name));
-  const agents = [...p.agents, ...core.agents.filter((a) => SHARED_AGENTS.includes(a.name) && !have.has(a.name))];
-  // ไฟล์ของกลางสำหรับ zip: skill · agent · hook ของ superuser วางที่ path เดียวกันใน plugin นี้
+  const agents = [...p.agents, ...(fromCore ? core.agents.filter((a) => SHARED_AGENTS.includes(a.name) && !have.has(a.name)) : [])];
+  // ไฟล์ของกลางสำหรับ zip: skill · agent · hook วางที่ path เดียวกันใน plugin นี้ · reference ของแกนที่สาขาไม่มี (autonomy · modules · playbook กลาง) ใส่ให้ด้วย
+  const ownRefs = new Set(filesUnder(join(p.dir, "skills", "superuser"), "skills/superuser/").map((f) => f.name));
   const shared = [
-    ...SHARED_SKILLS.flatMap((n) => filesUnder(join(core.dir, "skills", n), `skills/${n}/`)),
-    ...SHARED_AGENTS.map((n) => ({ path: join(core.dir, "agents", `${n}.md`), name: `agents/${n}.md` })),
-    ...filesUnder(join(core.dir, "hooks"), "hooks/"),
+    ...(fromCore ? SHARED_SKILLS.flatMap((n) => filesUnder(join(core.dir, "skills", n), `skills/${n}/`)) : []),
+    ...(fromToolkit ? TOOLKIT_SKILLS.flatMap((n) => filesUnder(join(toolkit.dir, "skills", n), `skills/${n}/`)) : []),
+    ...(fromCore && merged ? filesUnder(join(core.dir, "skills", "superuser"), "skills/superuser/").filter((f) => !ownRefs.has(f.name) && !/SKILL\.md$/.test(f.name)) : []),
+    ...(fromCore ? SHARED_AGENTS.map((n) => ({ path: join(core.dir, "agents", `${n}.md`), name: `agents/${n}.md` })) : []),
+    ...(fromCore ? filesUnder(join(core.dir, "hooks"), "hooks/") : []),
   ].filter((f) => existsSync(f.path));
-  return { ...p, skills, skillByName: new Map(skills.map((s) => [s.name, s])), agents, shared };
+  return { ...p, skills, skillByName: new Map(skills.map((s) => [s.name, s])), agents, shared, merged };
 });
 
 // ── ตัวช่วยเขียนไฟล์ ──────────────────────────────────────────────────
@@ -129,11 +149,20 @@ ${roles}
 `;
 }
 
+// วาง skill ทุกตัวของ plugin ลงโฟลเดอร์ปลายทาง · superuser สาขา → SKILL.md แกน + สาขา และ reference ของแกนที่สาขาไม่มี
+function placeSkills(p, dir) {
+  for (const s of p.skills) cpSync(s.path, join(dir, s.name), COPY);
+  if (!p.merged) return;
+  const head = readFileSync(join(p.merged.path, "SKILL.md"), "utf8").match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/)?.[0] ?? "";
+  write(join(dir, "superuser", "SKILL.md"), `${head}\n${p.merged.body}`);
+  for (const f of p.shared.filter((f) => f.name.startsWith("skills/superuser/"))) cpSync(f.path, join(dir, f.name.replace(/^skills\//, "")), COPY);
+}
+
 // ── Codex CLI ─────────────────────────────────────────────────────────
 
 function buildCodex(p) {
   const out = join(DIST, "codex", p.plugin);
-  for (const s of p.skills) cpSync(s.path, join(out, ".agents/skills", s.name), COPY);
+  placeSkills(p, join(out, ".agents/skills"));
 
   // Codex เลิกใช้ custom prompt แล้ว → แปลงคำสั่งเป็น skill ที่เรียกด้วย $ชื่อ
   for (const c of p.commands) {
@@ -155,7 +184,7 @@ function buildCodex(p) {
 
 function buildGemini(p) {
   const out = join(DIST, "gemini-cli", p.plugin);
-  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), COPY);
+  placeSkills(p, join(out, "skills"));
 
   // ชื่อเครื่องมือของ Claude (Read, Edit, …) ไม่ตรงกับของ Gemini → ตัด tools/model ทิ้งให้ใช้ค่าเริ่มต้น
   for (const a of p.agents) {
@@ -184,7 +213,7 @@ function buildGemini(p) {
 
 function buildKimi(p) {
   const out = join(DIST, "kimi", p.plugin);
-  for (const s of p.skills) cpSync(s.path, join(out, "skills", s.name), COPY);
+  placeSkills(p, join(out, "skills"));
 
   // Kimi ไม่มีโฟลเดอร์คำสั่งแยกที่มีเอกสารชัด → เป็น skill ที่ผู้ใช้เรียกเองด้วย /skill:ชื่อ
   for (const c of p.commands) {
@@ -338,9 +367,16 @@ function buildClaudeWeb(p) {
   // agent ที่โหลด skill กลางด้วยชื่อเต็ม (superuser:simplify) → ใน zip ของกลางเป็นของ plugin นี้เอง จึงเปลี่ยนชื่อนำหน้า
   // ตัวบอก skill และกฎประจำตัวใน hooks/ ก็อ้าง superuser:simplify เช่นกัน
   const local = (f) => /\/agents\/[^/]+\.md$|\/hooks\/(skill-router\.json|core-rules\.md)$/.test(f.name) && p.shared.length
-    ? { ...f, data: Buffer.from(readFileSync(f.path, "utf8").replace(/^(\s+- )superuser:/gm, `$1${p.plugin}:`).replace(/(["`])superuser:/g, `$1${p.plugin}:`)) } : f;
+    ? { ...f, data: Buffer.from(readFileSync(f.path, "utf8").replace(/^(\s+- )(superuser|sqt-toolkit):/gm, `$1${p.plugin}:`).replace(/(["`])(superuser|sqt-toolkit):/g, `$1${p.plugin}:`)) } : f;
+  // SKILL.md ของ superuser สาขา → แกน + สาขาในไฟล์เดียว (frontmatter ของสาขาคงเดิม)
+  const mergedSkill = (f) => {
+    const text = readFileSync(f.path, "utf8");
+    const head = text.match(/^---\r?\n[\s\S]*?\r?\n---\r?\n/)?.[0] ?? "";
+    return { ...f, data: Buffer.from(`${head}\n${p.merged.body}`) };
+  };
   const own = filesUnder(p.dir, `${p.plugin}/`).map((f) => f.name === `${p.plugin}/.claude-plugin/plugin.json` && p.shared.length
-    ? { ...f, data: Buffer.from(JSON.stringify({ ...p.meta, dependencies: undefined }, null, 2) + "\n") } : local(f));
+    ? { ...f, data: Buffer.from(JSON.stringify({ ...p.meta, dependencies: undefined }, null, 2) + "\n") }
+    : f.name === `${p.plugin}/skills/superuser/SKILL.md` && p.merged ? mergedSkill(f) : local(f));
   const files = [...own, ...p.shared.map((f) => local({ ...f, name: `${p.plugin}/${f.name}` }))]
     .filter((f) => !WEB_SKIP.some((re) => re.test(f.name)) && !JUNK.test(f.name))
     .sort((a, b) => (a.name < b.name ? -1 : 1));

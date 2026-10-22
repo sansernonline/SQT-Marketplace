@@ -73,7 +73,8 @@ Rules for the ladder:
 ## Worked example — chasing an unpaid invoice (LINE, to a small client)
 
 - Day +3 after the due date, level 1: "สวัสดีครับคุณเอ ขออนุญาตทวงถามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ครบกำหนดวันที่ 30 ก.ย. ครับ อาจจะตกหล่นไป รบกวนช่วยตรวจสอบให้หน่อยนะครับ ขอบคุณครับ"
-- Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 17 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
+- Day +7, level 2: "...ขอติดตามใบแจ้งหนี้ INV-2026-031 ยอด 18,500 บาท ซึ่งครบกำหนดวันที่ 30 ก.ย. ครับ ยังไม่เห็นยอดเข้า รบกวนแจ้งวันที่คาดว่าจะโอนด้วยนะครับ"
+- Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
 - Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
 
-Related: `inbox-triage` (which messages to answer first), `meeting-summary` (written follow-up after a meeting), and `doc-thai-official` and `doc-quotation` in `thai-workplace`.
+Related: `meeting-summary` (written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `thai-workplace` — formal letters and quotes).

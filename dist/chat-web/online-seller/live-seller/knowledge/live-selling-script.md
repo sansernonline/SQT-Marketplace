@@ -22,7 +22,7 @@ Viewers arrive and leave every few seconds. A live that works repeats a short lo
 | Time | Segment | Host does | Backstage does |
 |---|---|---|---|
 | 0:00–0:03 | Hook | Hero product in hand, the deal in one line, no greetings first | Pin hero product |
-| 0:03–0:10 | Hero rundown | Show, demo, size/texture close-up, price, CTA | Answer size/stock comments by name |
+| 0:03–0:10 | Hero rundown | Show, demo, size/texture close-up, price, call to action (CTA) | Answer size/stock comments by name |
 | 0:10–0:12 | Social proof | Read 2 real reviews, show sales count | Post voucher code in comments |
 | 0:12–0:20 | Add-on product | Pair with hero ("ใช้คู่กับ..."), bundle price, CTA | Switch pinned product |
 | 0:20–0:25 | **Flash deal #1** | Countdown 5 min, fixed units ("20 ชิ้นเท่านั้น") | Activate flash price, call out units left honestly |
@@ -47,7 +47,7 @@ Flash-deal rules of thumb: first deal after viewers have built up (around minute
 
 General information, not legal advice.
 
-- Claims: the same อย./สคบ. rules as listings — no treat/cure, no "เห็นผลใน 7 วัน", no before/after body shots (`product-listing` [prohibited claims](../product-listing/references/prohibited-claims.md))
+- Claims: the same อย. (สำนักงานคณะกรรมการอาหารและยา) / สคบ. (สำนักงานคณะกรรมการคุ้มครองผู้บริโภค) rules as listings — no treat/cure, no "เห็นผลใน 7 วัน", no before/after body shots (`product-listing` [prohibited claims](../product-listing/references/prohibited-claims.md))
 - Price: "ลดจาก X" only if X was a real recent selling price; spoken price must equal the system price
 - Scarcity: units left and time left must be true — false urgency is misleading advertising
 - Giveaways by draw (จับรางวัล/ชิงโชค) may need a permit under the gambling law; a giveaway to everyone who buys (ของแถมทุกออเดอร์) usually does not — check with the local district office before a draw (รอยืนยัน)

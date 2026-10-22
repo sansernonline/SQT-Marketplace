@@ -8,7 +8,7 @@
 - [Medication Workflow](#medication-workflow)
 - [Clinical Decision Support (CDS)](#clinical-decision-support-cds)
 - [Patient Handoff (Shift Change, Transfer)](#patient-handoff-shift-change-transfer)
-- [Patient: Jane Doe, MRN 12345, Room 304](#patient-jane-doe-mrn-12345-room-304)
+- Patient: Jane Doe, MRN 12345, Room 304
 - [Care Plan Management](#care-plan-management)
 - [Patient Safety Patterns](#patient-safety-patterns)
 - [Workflow Design Heuristics](#workflow-design-heuristics)
@@ -57,14 +57,16 @@ flowchart TD
     C --> D[Enters order details]
     D --> E[Clinical decision support fires]
     E --> F{Alert?}
-    F -->|Critical: drug allergy| G[Hard stop - must address]
+    F -->|Critical: drug allergy| G[Hard stop - no override at the order screen]
     F -->|Significant: interaction| H[Soft alert - override allowed]
     F -->|Info: cost, formulary| I[Visible but not blocking]
     F -->|None| J[Cosign / signature]
-    G --> K{Override?}
-    H --> K
+    G --> P{Pharmacist override with reason?}
+    P -->|Yes| L
+    P -->|No| M[Cancel or change order]
+    H --> K{Override?}
     K -->|Yes| L[Document reason]
-    K -->|No| M[Cancel order]
+    K -->|No| M
     I --> J
     J --> N[Order transmitted]
     L --> N
@@ -75,6 +77,7 @@ flowchart TD
 - **Patient context lock** — confirm the patient before the order, and lock the patient while the order is entered
 - **Allergy/interaction checks** — run them during entry, not after
 - **Override documentation** — required, and pharmacy reviews it
+- **Hard stop means no override for the prescriber** — only a pharmacist (or the role your safety committee names) can release it, with a recorded reason
 - **Order set support** — ready-made groups of orders for a protocol (e.g., sepsis bundle)
 
 ## Medication Workflow
@@ -99,11 +102,15 @@ The software MUST enforce all 5.
 
 ### Pattern: Bedside Medication Administration
 
+The code checks all 5 rights against the active order. An override is an awaited step: if the nurse gives no reason, or a hard stop is hit, the function stops and nothing is recorded as given.
+
 ```typescript
 async function administerMedication(scan: {
   patientWristbandBarcode: string;
   medicationBarcode: string;
   nurseId: string;
+  dose: { value: number; unit: string };   // what the nurse is about to give
+  route: string;                           // e.g. 'PO', 'IV'
 }) {
   // 1. Verify patient
   const patient = await getPatientByBarcode(scan.patientWristbandBarcode);
@@ -128,18 +135,40 @@ async function administerMedication(scan: {
     throw new ClinicalError('Medication does not match patient orders');
   }
 
-  // 4. Verify timing
-  if (!matching.isWithinWindow(now())) {
-    requireOverride('Outside scheduled window');
+  // 4. Verify dose against the order (same unit, same amount)
+  if (scan.dose.unit !== matching.dose.unit || scan.dose.value !== matching.dose.value) {
+    throw new ClinicalError('Dose does not match the order'); // hard stop: no bedside override
   }
 
-  // 5. Document administration
+  // 5. Verify route against the order
+  if (scan.route !== matching.route) {
+    throw new ClinicalError('Route does not match the order'); // hard stop
+  }
+
+  // 6. Verify timing — soft stop: allowed only with a recorded reason
+  let overrideReason: string | null = null;
+  if (!matching.isWithinWindow(now())) {
+    const override = await requestOverride({
+      reason: 'Outside scheduled window',
+      nurseId: scan.nurseId,
+      orderId: matching.orderId,
+    }); // waits for the nurse; returns { approved, reasonText }
+    if (!override.approved || !override.reasonText?.trim()) {
+      throw new ClinicalError('Administration stopped: no override reason recorded');
+    }
+    overrideReason = override.reasonText;
+  }
+
+  // 7. Document administration
   await db.medicationAdministrations.create({
     patientId: patient.id,
     medicationCode: med.code,
+    dose: scan.dose,
+    route: scan.route,
     administeredBy: scan.nurseId,
     administeredAt: now(),
     orderId: matching.orderId,
+    overrideReason,
   });
 }
 ```
@@ -150,10 +179,10 @@ async function administerMedication(scan: {
 
 | Type | Trigger | UX |
 |------|---------|----|
-| 🚨 **Hard stop** | Will cause harm | Block until addressed |
-| 🟠 **Significant** | Important consideration | Soft alert, override + reason |
-| 🟡 **Informational** | Useful info | Visible, non-blocking |
-| 💡 **Suggestion** | Could be better | Quiet, dismissible |
+| **Hard stop** (critical) | Will cause harm | Block. The prescriber cannot override; only a pharmacist can, with a reason |
+| **Significant** (warning) | Important consideration | Soft alert, override + reason |
+| **Informational** (info) | Useful info | Visible, non-blocking |
+| **Suggestion** (low) | Could be better | Quiet, dismissible |
 
 ### Avoid Alert Fatigue
 
@@ -169,6 +198,8 @@ ALERT_BUDGET_PER_PATIENT = 5  # not a hard rule, but signal
 ```
 
 ### CDS Hooks (modern pattern)
+
+Flow between the electronic health record (EHR) and the CDS service:
 
 ```
 Trigger: patient-view, order-select, order-sign, encounter-discharge
@@ -210,28 +241,28 @@ CDS Service → EHR (cards):
 ## Patient: Jane Doe, MRN 12345, Room 304
 
 ### S - Situation
-65F admitted 2 days ago for pneumonia. Currently stable on O2.
+65F admitted 2 days ago for pneumonia. Currently stable on oxygen (O2).
 
 ### B - Background
-- Active: DM2 (controlled), HTN
-- Allergies: PCN, sulfa
-- Admit dx: CAP, R lower lobe
+- Active: type 2 diabetes mellitus (DM2, controlled), hypertension (HTN)
+- Allergies: penicillin (PCN), sulfa
+- Admit diagnosis (dx): community-acquired pneumonia (CAP), right lower lobe
 - Cultures pending
 
 ### A - Assessment
 - Vitals stable last 12h (96/min, 16/min, 110/68, 99.4F, 95% on 2L)
-- Tolerating PO, eating 50%
-- IV abx (Cefepime, day 3 of 7)
-- WBC trending down (15 → 12 → 9)
+- Tolerating oral intake (PO), eating 50%
+- Intravenous (IV) antibiotics (abx): Cefepime, day 3 of 7
+- White blood cell count (WBC) trending down (15 → 12 → 9)
 
 ### R - Recommendations / Plan
 - Continue current abx
-- D/C O2 if SpO2 > 92% on RA
+- Discontinue (D/C) O2 if oxygen saturation (SpO2) > 92% on room air (RA)
 - Discharge planning for tomorrow if cultures finalize
-- Watch for AMS (sundowning at home)
+- Watch for altered mental status (AMS) (sundowning at home)
 
 ### Tasks for incoming
-- Check 6am labs (CBC, BMP, troponin)
+- Check 6am labs: complete blood count (CBC), basic metabolic panel (BMP), troponin
 - Page Dr. Smith if hemodynamics change
 - Family update call at 10am
 ```

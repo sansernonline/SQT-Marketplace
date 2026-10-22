@@ -4,7 +4,7 @@ Use when starting, restarting or structuring regular exercise. Walking or streng
 
 # Exercise Plan
 
-Get from "not exercising" to the WHO weekly guidance safely, over about 8–12 weeks.
+Get from "not exercising" to the World Health Organization (WHO) weekly guidance safely, over about 8–12 weeks.
 
 General information, not medical advice — with a health condition, ask your doctor or a physical therapist (นักกายภาพบำบัด) first.
 
@@ -42,7 +42,7 @@ Stop and seek care (1669 if severe) for: chest pain or pressure, fainting, sever
 | 5 | 25 min × 5 | 2 × 10, 2 days | 125 |
 | 6 | 30 min × 5 | 2 × 12, 2 days | **150 — guidance reached** |
 | 7–8 | 30 min × 5, add 2 × 1-min faster intervals | 3 × 10, 2–3 days | 150+ |
-| 9–12 | 35–45 min × 5 or mix in vigorous days | progress: harder variation | 165–220 (+10–20% a week) |
+| 9–12 | 35–45 min × 5 or mix in vigorous days | progress: harder variation | 175–225 (+10–20% a week) |
 
 Strength set (no equipment): wall or knee push-up · chair squat (sit-to-stand) · glute bridge · standing calf raise · plank on knees (10–30 s) · bird-dog.
 

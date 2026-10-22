@@ -37,13 +37,13 @@ description: Use when adding or setting up automated tests (.NET, Node, Python, 
 | .NET | **xUnit** (แนะนำ · เป็นมาตรฐานของ .NET ยุคใหม่) · NUnit (ทีมมาจาก NUnit เดิม) · MSTest (องค์กรที่ผูกกับ VS) |
 | Node/TS | **Vitest** (แนะนำ · เร็ว ตั้งค่าน้อย ใช้ ESM/TS ได้เลย) · Jest (ระบบนิเวศใหญ่ที่สุด) · `node:test` (ไม่อยากลงอะไรเลย) |
 | Python | **pytest** (แนะนำ) · `unittest` (stdlib ล้วน ห้ามลงแพ็กเกจเพิ่ม) |
-| Angular | **Vitest + Testing Library** (แนะนำสำหรับโปรเจกต์ใหม่) · Jasmine + Karma (ค่าเริ่มต้นเดิมของ Angular) |
+| Angular | **Vitest ที่มากับ Angular CLI** (`ng test` · แนะนำ · ค่าเริ่มต้นของโปรเจกต์ใหม่) + Testing Library ถ้าต้องการ · Jasmine + Karma (ค่าเริ่มต้นเดิม ยังใช้ได้) · รุ่นเก่ามากใช้ Analog |
 | Flutter · Dart | **`flutter_test`** (มากับ SDK ไม่ต้องถาม) · fake ด้วยคลาสที่ `implements` ของจริง ก่อนจะลง `mocktail` |
 
 **ข้อ 2 — ขอบเขตที่ต้องการตอนนี้**
 
 - unit อย่างเดียว (เร็ว ไม่แตะ DB/network)
-- unit + integration (แตะ DB จริงผ่าน Testcontainers / SQLite in-memory)
+- unit + integration (แตะ DB จริงผ่าน Testcontainers ใช้ DB ชนิดเดียวกับ production · SQLite in-memory ใช้ได้เฉพาะเมื่อ production ก็เป็น SQLite)
 - ครบชุดรวม E2E (ต่อยอดไป `e2e-testing-patterns`)
 
 > ถ้าโปรเจกต์**มี framework อยู่แล้ว** ก็ไม่ต้องถาม ใช้ของเดิมไป เพราะการมี 2 ระบบในโปรเจกต์เดียว
@@ -117,7 +117,7 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
 
 **ทำให้ผลเหมือนเดิมทุกครั้ง**
-- เวลา: inject `IClock`/`now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
+- เวลา: inject `TimeProvider` (.NET 8+) หรือ `now()` ไม่เรียก `DateTime.Now` ตรง ๆ ในโค้ดที่ทดสอบ
 - สุ่ม: fix seed
 - ลำดับ: test ต้องรันสลับลำดับได้ ห้ามพึ่งสถานะที่ test ก่อนหน้าทิ้งไว้
 - **ห้าม `sleep`** เพื่อรอ async — ใช้ fake timer หรือรอ signal จริง
@@ -158,7 +158,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 - [ ] ใช้ framework ของเดิมหรือที่มากับสแต็ก ถ้าลงตัวใหม่ ต้องถามแล้วหรือบันทึกไว้ใน "ตัดสินใจเอง"
 - [ ] `npm test` / `dotnet test` / `pytest` / `flutter test` รันผ่านจากเครื่องเปล่าโดยไม่ต้องตั้งค่าอะไรเพิ่ม
 - [ ] ชุด unit รันจบใน 10 วินาที
-- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (`pytest -p no:randomly --lf` / `--shuffle`)
+- [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (pytest: ลง `pytest-randomly` แล้วรัน `pytest` ธรรมดา · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
 - [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
 - [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
 - [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด

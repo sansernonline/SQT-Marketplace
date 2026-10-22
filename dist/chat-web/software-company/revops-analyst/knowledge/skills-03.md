@@ -1,19 +1,19 @@
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
+Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
 
 # Markdown Visuals
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
 ## When to use this skill
 
-- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
 - The user asked "show me how it looks" inside a markdown doc or chat reply
@@ -24,8 +24,8 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
@@ -33,19 +33,26 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 ```
 What are you showing?
 │
-├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
 
-## 1 · Inline SVG (primary technique)
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
 
 ### Boilerplate
 
@@ -61,7 +68,7 @@ What are you showing?
 ```
 
 **Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
 - `viewBox` — sets the coordinate space; lets the SVG scale responsively
 - `role="img"` + `aria-label` — accessibility, screen readers
 - `<p align="center">` wrapper — centers in the rendered page
@@ -83,6 +90,7 @@ Window chrome, phone frame, button, card, status badge, running dot and tooltip 
 ## 2 · External image files
 
 Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
 - Photo or screenshot
 - Illustration too complex to author as SVG by hand (50+ shapes)
 - Reusing the same image across many docs
@@ -133,7 +141,7 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
 ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
 | เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
@@ -162,10 +170,10 @@ For every visual:
 - ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
 - ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
 - ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
@@ -182,15 +190,15 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
 
 ## Related skills
 
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -265,7 +273,7 @@ scale
 
 Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
 
-Pattern from `DockXI/docs/12-design-mockup.md`:
+The 6-part pattern for a design spec:
 
 ```
 1. Inline SVG mockup of each UI state              ← "what it looks like"
@@ -360,14 +368,14 @@ Reusable building blocks for inline SVG pictures of a screen inside .md docs (th
 
 ## Worked example — UI state mockup
 
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
 
 
 ---
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
+Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -395,7 +403,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` | คู่ |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-company`) | คู่ |
 
 ---
 
@@ -423,9 +431,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 | ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
 |---|---|
-| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
+| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
 
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
+- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
 - ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
 - ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
 
@@ -438,9 +446,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | | ที่บันทึกไว้ | ของจริง |
 |---|---|---|
-| FR ถึง | 13.9 | **14.12** |
-| Test case | 214 | **245** |
-| PLT | ไม่มี | **มี** |
+| ออเดอร์ที่ดึงมา | 214 | **245** |
+| ราคา SKU-07 | 390 | **420** |
+| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
 ```
 
 - หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
@@ -448,7 +456,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 - แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
 
 **คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+เช่น "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
 
 ---
 
@@ -457,8 +465,8 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | ไฟล์ | ได้อะไร |
 |---|---|
-| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
+| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
+| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
 - คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
@@ -472,7 +480,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
 
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
 
 บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
 และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
@@ -482,7 +490,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ## 6 · ปิดด้วยคำถามเดียว
 
 ```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
 ```
 
 | กฎ | เหตุผล |
@@ -491,7 +499,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
 | มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
 | ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตามกฎ "ถามครั้งเดียว" ใน `CLAUDE.md` ของผู้ใช้ และ `superuser` §6 | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
+| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตาม `superuser` §6: ตัวเลือก 2–4 ตัว · ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` พร้อมเหตุผล 1 บรรทัด | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
 
 **ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
 
@@ -499,7 +507,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ## 7 · ตัวอย่างเต็ม
 
-ตัวอย่างก่อนและหลังแก้ อยู่ใน [`references/example.md`](references/example.md)
+ตัวอย่างก่อนและหลังแก้ (งานเอกสารความต้องการและแผนงานซอฟต์แวร์) อยู่ใน [`references/example.md`](references/example.md)
 
 ---
 
@@ -522,27 +530,29 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ย้ายมาจาก [SKILL.md](../SKILL.md) §7
 
+ตัวย่อในตัวอย่าง: ความต้องการเชิงฟังก์ชัน (Functional Requirement — FR) · ความต้องการที่ไม่ใช่ฟังก์ชัน (Non-Functional Requirement — NFR) · กรณีทดสอบ (Test Case — TC) · บันทึกการตัดสินใจด้านสถาปัตยกรรม (Architecture Decision Record — ADR) · เอกสารข้อกำหนดเชิงฟังก์ชัน (Functional Specification Document — FSD) · Application Programming Interface (API)
+
 **❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
 
 > เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
 > `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
+> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
 > ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
 > BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
+> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
 > เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
 > ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
 
 **✅ หลัง — โครงเดียวกัน 4 บล็อก**
 
 > **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
+> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
 >
 > | | ที่บันทึกไว้ | ของจริง |
 > |---|---|---|
 > | FR ถึง | 13.9 | **14.12** |
 > | Test case | 214 | **245** |
-> | PLT | ไม่มี | **มี** |
+> | NFR | ไม่มี | **มี** |
 >
 > คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
 >

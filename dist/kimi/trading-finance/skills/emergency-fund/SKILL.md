@@ -26,15 +26,15 @@ Adjust up for: health conditions, older parents depending on you, older car, sin
 
 ## Where to park — the ladder
 
-| Layer | Share | Product | Access | Protected by DPA? |
+| Layer | Share | Product | Access | Protected by the Deposit Protection Agency (DPA)? |
 |---|---|---|---|---|
 | 1 | 1 month | normal savings account at main bank | instant | yes |
 | 2 | 2–5 months | high-interest digital savings (e-savings) at a different bank | same day | yes |
 | 3 | rest | money market fund (กองทุนรวมตลาดเงิน, risk level 1) or 3–6 month fixed deposit | money market: usually T+1; fixed deposit: early withdrawal loses interest | money market fund **no** (it is an investment, but holds very short deposits and bills) |
 
-Never in stocks, crypto, long-term funds, RMF/ThaiESG, or lent to friends.
+Never in stocks, crypto, long-term funds, Retirement Mutual Fund (RMF) / ThaiESG, or lent to friends.
 
-## Deposit protection (สถาบันคุ้มครองเงินฝาก, DPA)
+## Deposit protection (สถาบันคุ้มครองเงินฝาก)
 
 - Covers **up to 1,000,000 baht per depositor per bank** — all accounts and branches at that bank combined, principal plus interest. In force since 11 Aug 2564.
 - Covers Thai-baht savings, current, fixed deposits and certificates of deposit at member banks. Does **not** cover mutual funds, bonds, bills of exchange (ตั๋วแลกเงิน), insurance, or co-operatives (สหกรณ์ออมทรัพย์).

@@ -3,7 +3,7 @@ name: dbd-annual-filing
 description: Use when a Thai company files after year end (AGM, audited statements via DBD e-Filing, BOJ 5, PND 50).
 ---
 
-# Year-End Filing — DBD and Revenue Department
+# Year-End Filing — Department of Business Development (DBD) and Revenue Department
 
 Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Department). This is general information, not legal or accounting advice. The auditor (ผู้สอบบัญชีรับอนุญาต) and the accountant do the actual filing.
 
@@ -12,8 +12,8 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | # | Step | Law | Deadline |
 |---|---|---|---|
 | 1 | Close books; auditor audits the financial statements (งบการเงิน) | พ.ร.บ.การบัญชี 2543 | before the AGM |
-| 2 | Send AGM notice to shareholders | ป.พ.พ. ม.1175 | at least 7 days before (14 days if a special resolution is on the agenda); advertise per the articles |
-| 3 | **Annual general meeting (AGM)** approves audited statements | ป.พ.พ. ม.1197 | within **4 months** after year end |
+| 2 | Send annual general meeting (AGM) notice to shareholders | ป.พ.พ. ม.1175 | at least 7 days before (14 days if a special resolution is on the agenda); advertise per the articles |
+| 3 | **AGM** approves audited statements | ป.พ.พ. ม.1197 | within **4 months** after year end |
 | 4 | **บอจ.5** shareholder list | ป.พ.พ. ม.1139 | within **14 days** after the AGM |
 | 5 | **Financial statements** to DBD (DBD e-Filing) with AGM minutes and ส.บช.3 | พ.ร.บ.การบัญชี ม.11 | within **1 month** after the AGM approves (so at latest ~5 months after year end) |
 | 6 | **ภ.ง.ด.50** corporate income tax + audited statements to RD | ประมวลรัษฎากร ม.68 | within **150 days** after year end (+8 days on e-Filing, see `tax-vat-th`) |
@@ -25,7 +25,7 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | AGM | by 30 Apr 2570 |
 | บอจ.5 | 14 days after the AGM (AGM 28 Apr → by 12 May 2570) |
 | Statements to DBD | 1 month after the AGM (AGM 28 Apr → by 28 May 2570) |
-| ภ.ง.ด.50 | by 30 May 2570 (paper) — +8 days on e-Filing if the extension is renewed after 31 Jan 2570 (รอยืนยัน) |
+| ภ.ง.ด.50 | by 30 May 2570 (Sun) → next working day, Mon 31 May 2570 (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569) — +8 days on e-Filing if the extension is renewed after 31 Jan 2570 (รอยืนยัน) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://efiling.dbd.go.th · https://www.dbd.go.th · https://www.infoproff.com/en/open-data/thailand/114/financial-reporting-obligations-for-companies-in-thailand
 
@@ -38,12 +38,12 @@ Each year end brings 4 deadlines from 2 authorities (DBD and the Revenue Departm
 | บริษัทมหาชนจำกัด | yes (พ.ร.บ.บริษัทมหาชน) | yes | 1 month after AGM | 150 days |
 | Foreign company branch / joint venture | no | no | within 5 months | 150 days |
 
-- Small หจก. with registered capital ≤ 5 M, assets ≤ 30 M and revenue ≤ 30 M may use a **Tax Auditor (TA)** instead of a CPA (ผู้สอบบัญชีรับอนุญาต) for the audit (รอยืนยัน current thresholds).
+- Small หจก. with registered capital ≤ 5 M, assets ≤ 30 M and revenue ≤ 30 M may use a **Tax Auditor (TA)** instead of a Certified Public Accountant (CPA, ผู้สอบบัญชีรับอนุญาต) for the audit (รอยืนยัน current thresholds).
 
 ## 3. DBD e-Filing
 
 1. Register the company's user on efiling.dbd.go.th (once; requires director identity verification).
-2. The accountant prepares the XBRL in Excel (DBD template) from the trial balance.
+2. The accountant prepares the eXtensible Business Reporting Language (XBRL) file in Excel (DBD template) from the trial balance.
 3. Upload: statements (XBRL), auditor's report PDF, AGM minutes approving the statements, **ส.บช.3** (บัญชีรายชื่อผู้ทำบัญชีและรายละเอียด).
 4. A director confirms; keep the receipt (ใบตอบรับ).
 5. บอจ.5 is filed separately — online via DBD e-Service or at the registration office.

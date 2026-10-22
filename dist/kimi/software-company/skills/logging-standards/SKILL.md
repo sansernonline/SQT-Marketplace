@@ -16,7 +16,7 @@ description: Use when writing or reviewing code that logs (format, levels, corre
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log
+- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log ให้ไปใช้ `observability-basics`
 - ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
 
 ---
@@ -32,14 +32,14 @@ description: Use when writing or reviewing code that logs (format, levels, corre
 |---|---|
 | เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
 | level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[------]` |
+| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[--------]` (8 ตัวเท่ากัน คอลัมน์จะได้ตรง) |
 | source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
 | ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
 | context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
 
 **ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "cid=a3f9c1b2"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้า Loki/ELK ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
+`grep "\[a3f9c1b2\]"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
+วันที่ต้องส่งเข้าระบบรวม log อย่าง Grafana Loki หรือ Elasticsearch, Logstash, Kibana (ELK) ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
 
 **1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
 
@@ -59,7 +59,7 @@ description: Use when writing or reviewing code that logs (format, levels, corre
 > ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
 > คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
 
-ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
+ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
 
 ---
 

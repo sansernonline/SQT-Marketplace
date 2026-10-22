@@ -1,5 +1,7 @@
 # SEO audit report template
 
+Search engine optimization (SEO) audit report.
+
 Used by `seo-audit-checklist` step 5 and the `seo-audit` command. Each finding: page examples, severity, specific fix, effort vs impact.
 
 ```markdown

@@ -11,9 +11,9 @@ Most market news is entertainment. This finds the few items that move the user's
 
 | Rank | Source | Why |
 |---|---|---|
-| 1 | SET company news (ข่าวบริษัทจดทะเบียน on set.or.th / Settrade) — financial statements, board resolutions, dividends, capital increases, XD/XR/XM, SP/H/NP signs | The company's own filing; the fact itself |
+| 1 | SET company news (ข่าวบริษัทจดทะเบียน on set.or.th / Settrade) — financial statements, board resolutions, dividends, capital increases, XD/XR/XM, trading-halt signs SP (suspension) / H (halt) / NP (notice pending) | The company's own filing; the fact itself |
 | 2 | SEC Thailand news (sec.or.th) — enforcement, licence actions | Regulatory facts |
-| 3 | Bank of Thailand / MPC rate decisions, NESDC GDP, Ministry of Commerce CPI | Macro facts with dates |
+| 3 | Bank of Thailand / Monetary Policy Committee (MPC) rate decisions, National Economic and Social Development Council (NESDC) GDP, Ministry of Commerce consumer price index (CPI) | Macro facts with dates |
 | 4 | Business press (Thai and international) | Context, faster but second-hand |
 | 5 | Analyst notes, broker research, social media, LINE groups | Opinion — label as such; social posts are not sources |
 
@@ -34,7 +34,7 @@ Use whatever news or market-data plugin is installed; if none, say so and use pu
 | Item type | Usually impact | Note |
 |---|---|---|
 | Earnings vs expectations, guidance change | High | Check the actual filing, not the headline number |
-| Capital increase (เพิ่มทุน), PP at discount, warrants | High | Dilution — compute the new share count |
+| Capital increase (เพิ่มทุน), private placement (PP) at discount, warrants | High | Dilution — compute the new share count |
 | SP / H / NP sign, auditor qualification, late statements | High | Liquidity and trust risk; can freeze an exit |
 | Trading measures (Cash Balance, Turnover List) | High for liquidity | Margin no longer usable |
 | Dividend declaration / cut | Medium–high | Send to `dividend-tracker` |

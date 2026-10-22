@@ -1,6 +1,6 @@
 ---
 name: simplicity-first
-description: Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
+description: Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
 ---
 
 # Simplicity First
@@ -25,6 +25,8 @@ Any "no" or "not sure" → simplify before delivering.
 
 ### Documents (BRD, FSD, ADR)
 
+Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
+
 Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
 example for every abstract point, tables for structured data.
 
@@ -34,7 +36,7 @@ jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
 ### Architecture
 
 Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
+standard patterns (Representational State Transfer (REST), queues, caches), single source of truth per data type.
 
 Avoid: microservices for small teams, distributed-everything, multi-master
 databases before you must, event-driven by default (sync is simpler).
@@ -47,7 +49,7 @@ criteria, realistic timelines with buffer, cut scope to fit time.
 Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
 aspirational dates with no buffer, plans without success metrics.
 
-### Designs (UX, API)
+### Designs (user experience (UX), application programming interface (API))
 
 Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
 across screens, defaults that work for 80%, progressive disclosure.
@@ -75,7 +77,7 @@ transient errors (1d), clearer error messages (1d)."
 
 **Architecture for a new feature**
 
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+❌ "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
 dedicated auth service."
 
 ✅ "Add an endpoint to the existing API. One Postgres table for state. Standard

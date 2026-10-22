@@ -6,6 +6,7 @@
 - [Signature Levels](#signature-levels)
 - [Legal Equivalence](#legal-equivalence)
 - [Carve-Outs (Often Require Wet Signature)](#carve-outs-often-require-wet-signature)
+- [Thailand: Electronic Transactions Act B.E. 2544](#thailand-electronic-transactions-act-be-2544)
 - [ESIGN Act (US) Requirements](#esign-act-us-requirements)
 - [eIDAS Requirements (EU)](#eidas-requirements-eu)
 - [Authentication Methods by Level](#authentication-methods-by-level)
@@ -31,9 +32,9 @@
 ## Signature Levels
 
 ```
-SES (Simple)        — typed name, click "I agree"
-AES (Advanced)      — uniquely identifies + tamper-evident
-QES (Qualified)     — AES + qualified certificate
+Simple Electronic Signature (SES)     — typed name, click "I agree"
+Advanced Electronic Signature (AES)   — uniquely identifies + tamper-evident, signer-held key
+Qualified Electronic Signature (QES)  — AES + qualified certificate
 ```
 
 ## Legal Equivalence
@@ -43,7 +44,7 @@ QES (Qualified)     — AES + qualified certificate
 | **EU (eIDAS)** | ✅ | When risk justifies | ✅ |
 | **US (ESIGN/UETA)** | ✅ usually | Specific cases | N/A |
 | **UK (Post-Brexit)** | ✅ | Similar to eIDAS | ✅ |
-| **Thailand (ETA)** | ✅ | Specific cases | N/A |
+| **Thailand (Electronic Transactions Act, ETA)** | ✅ (s.9) | Reliable signature (s.26) when the risk justifies it | N/A — see [Thailand](#thailand-electronic-transactions-act-be-2544) |
 | **Singapore (ETA)** | ✅ | Specific | N/A |
 | **India (IT Act)** | ✅ | Required for many | ✅ |
 
@@ -61,6 +62,16 @@ Even in e-sign friendly jurisdictions:
 ```
 
 > 💡 **Check jurisdiction-specific rules before automating any of above.**
+
+## Thailand: Electronic Transactions Act B.E. 2544
+
+พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544 (amended B.E. 2551 and later). Checked 2026-10-22.
+
+- **Section 9 (มาตรา 9)** — where a law needs a signature, an electronic signature counts when the method identifies the signer, shows intent, and is reliable enough for the purpose of the transaction (source: opsmoac.go.th summary of the Act)
+- **Section 26 (มาตรา 26)** — a "reliable" electronic signature: the signing data links only to the signer, was under the signer's sole control, and any later change to the signature or the document can be detected. Use this level (usually a certificate-based signature) for high-value or disputed contracts (รอยืนยัน: section text not opened this round)
+- **Excluded — no e-signature:** family-law and succession matters (marriage, divorce, adoption, wills and inheritance), by a Royal Decree under the Act (Adobe Thailand e-signature page, updated 2026-08-13; decree year B.E. 2549 รอยืนยัน)
+- **Wet ink in practice:** power of attorney, sale of land and buildings, land office registration and survey, house registration and ID card matters, name changes, some business licences (same Adobe page)
+- **Pending:** a new Electronic Transactions Act draft (63 sections, reviewed by the Council of State, matter 1654/2567) would replace the B.E. 2544 Act and let the Electronic Transactions Development Agency (ETDA) set reliable methods; it starts 180 days after publication in the Royal Gazette (Thansettakij, 2026-10-01). Check etda.or.th for its status before relying on the current sections (รอยืนยัน)
 
 ## ESIGN Act (US) Requirements
 
@@ -92,19 +103,22 @@ Even in e-sign friendly jurisdictions:
 - + Created by qualified signature creation device
 - + Based on qualified certificate from qualified trust service provider
 
+### eIDAS 2.0
+Regulation (EU) 2024/1183 amends eIDAS (in force May 2024). Each member state must offer a European Digital Identity (EUDI) Wallet that can make qualified signatures, due around the end of 2026 (รอยืนยัน exact date) — plan to accept wallet signatures in EU signing flows.
+
 ## Authentication Methods by Level
 
 ```
-SES:
+SES (email or SMS proves access to an inbox or phone, not sole control of a signing key):
 - Click "I Agree"
 - Type name
 - Drawn signature
+- Email verification link
+- SMS one-time code
 
-AES:
-- Email verification
-- SMS code
-- ID upload + verification
-- Personal certificate
+AES (eIDAS Art. 26: signing data under the signer's sole control):
+- Signer-held certificate or key (smart card, device key, remote signing with the signer's own credentials)
+- Plus identity proofing (ID document check, video identification) when the certificate is issued
 
 QES:
 - Government-issued chip card + reader
@@ -204,7 +218,7 @@ Asia → EU:  Depends on equivalence + agreement
 ## Vendor vs Custom
 
 ### Use vendor (most cases)
-- DocuSign, Adobe Sign, HelloSign, etc.
+- DocuSign, Adobe Acrobat Sign (was Adobe Sign), Dropbox Sign (was HelloSign), etc.
 - Pre-built compliance
 - Audit trails
 - TSP relationships
@@ -277,4 +291,4 @@ But: some need longer (court records, real estate)
 - [ESIGN Act (15 USC §7001)](https://www.fdic.gov/regulations/compliance/manual/10/x-3.pdf)
 - [Thailand Electronic Transactions Act](https://www.etda.or.th/)
 - [DocuSign Legal Reference](https://www.docusign.com/legality-guide)
-- [Adobe Sign Legality Guide](https://acrobat.adobe.com/us/en/sign/capabilities/legal/electronic-signature-laws.html)
+- [Adobe Acrobat Sign Legality Guide](https://acrobat.adobe.com/us/en/sign/capabilities/legal/electronic-signature-laws.html)

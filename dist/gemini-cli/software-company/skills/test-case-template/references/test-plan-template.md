@@ -12,7 +12,7 @@
 | **Plan Type** | Functional + Regression |
 | **Version** | 1.0 |
 | **Status** | Draft |
-| **QA Lead** | @name |
+| **Quality Assurance (QA) Lead** | @name |
 | **Target Release** | vX.Y.Z |
 | **Test Period** | YYYY-MM-DD to YYYY-MM-DD |
 
@@ -77,8 +77,8 @@ Every BR in the traceability table at the end of the test-case file has at least
 - [ ] Every P1 case passes, on every browser in scope
 - [ ] Pass rate ≥ 95% per browser (round up · `Not run` counts as fail)
 - [ ] Every failed case triaged (system wrong / plan wrong / test wrong) — none "fixed" by editing the expected result
-- [ ] 0 critical (S1) bugs open
-- [ ] ≤ 2 high (S2) bugs open with approved workaround
+- [ ] 0 critical (severity 1, S1) bugs open
+- [ ] ≤ 2 high (severity 2, S2) bugs open with approved workaround
 - [ ] Regression suite 100% pass
 - [ ] Performance benchmarks met
 
@@ -87,23 +87,22 @@ Every BR in the traceability table at the end of the test-case file has at least
 | Aspect | Detail |
 |--------|--------|
 | URL | https://staging.example.com |
-| Test data | Refreshed nightly from prod (anonymized) |
+| Test data | Synthetic data (generator) · production copies only with anonymisation that the data owner signs off (Personal Data Protection Act, PDPA) |
 | Browsers | Chromium (every run) · WebKit/iPhone (nightly, pre-prod) · Firefox (pre-prod only, drop if users don't use it) |
 | Devices | iPhone 15, Galaxy S24, iPad Pro |
 
 ## 6. Schedule
 
-\`\`\`mermaid
-gantt
-    title Test Schedule
-    dateFormat YYYY-MM-DD
-    Smoke + Sanity     :a1, 2025-01-15, 2d
-    Functional Testing :a2, after a1, 5d
-    Integration        :a3, after a2, 3d
-    Regression         :a4, after a3, 2d
-    Bug Bash           :a5, after a4, 1d
-    Sign-off           :a6, after a5, 1d
-\`\`\`
+| Step | Start | Length | Owner |
+|------|-------|--------|-------|
+| Smoke + Sanity | (รอยืนยัน) | 2d | @name |
+| Functional Testing | after Smoke | 5d | @name |
+| Integration | after Functional | 3d | @name |
+| Regression | after Integration | 2d | @name |
+| Bug Bash | after Regression | 1d | @name |
+| Sign-off | after Bug Bash | 1d | @name |
+
+> Want a Gantt chart? Draw it with `diagram-figures` (house-style figure), not raw Mermaid. Dates stay `(รอยืนยัน)` until the owner confirms them.
 
 ## 7. Risks
 

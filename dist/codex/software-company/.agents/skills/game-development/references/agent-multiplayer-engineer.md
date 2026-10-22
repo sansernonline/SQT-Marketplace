@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Multiplayer Quality Standards](#multiplayer-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Multiplayer Quality Standards](#-multiplayer-quality-standards)
 - [Netcode Architecture Choices](#netcode-architecture-choices)
 - [State Synchronization Patterns](#state-synchronization-patterns)
 - [Networking Stacks (2026)](#networking-stacks-2026)
@@ -45,7 +45,7 @@ Before designing netcode, gather:
 ## 📊 Multiplayer Quality Standards
 
 - **Latency target:** < 100ms for competitive, < 200ms for casual
-- **Tick rate:** 60Hz competitive, 20-30Hz casual
+- **Tick rate:** by game type — use the one table in [`multiplayer-netcode.md` → Server tick rate](multiplayer-netcode.md#server-tick-rate)
 - **Packet loss tolerance:** Graceful up to 5%
 - **Cheat detection rate:** Measured, and improving over time
 - **Matchmaking time:** < 60s for 95% of players (p95)
@@ -108,6 +108,7 @@ Before designing netcode, gather:
 ### Pattern: State Replication
 
 ```csharp
+// Mirror syntax ([SyncVar]). In Netcode for GameObjects use NetworkVariable<T> + OnValueChanged.
 // Authoritative state on server, replicated to clients
 public class NetworkedPlayer : NetworkBehaviour {
     [SyncVar(hook = nameof(OnPositionChanged))]
@@ -119,69 +120,15 @@ public class NetworkedPlayer : NetworkBehaviour {
 }
 ```
 
-### Pattern: Snapshot Interpolation
+### Pattern: Snapshot Interpolation · Client-Side Prediction · Lag Compensation
 
-```csharp
-// Server sends snapshots at fixed rate (e.g., 30Hz)
-// Client renders state from 100ms ago
-// Smooth movement between snapshots
+Code for all three is in the topic file — one copy, so a fix lands once:
 
-class SnapshotBuffer {
-    List<Snapshot> snapshots;
+- [Client-Side Prediction (FPS)](multiplayer-netcode.md#client-side-prediction-fps)
+- [Snapshot Interpolation (Other Players)](multiplayer-netcode.md#snapshot-interpolation-other-players)
+- [Lag Compensation (Hit Detection)](multiplayer-netcode.md#lag-compensation-hit-detection) — rewind goes BACK: `serverNow - latency - interpDelay`, capped by a max rewind
 
-    public Vector3 GetInterpolatedPosition(float renderTime) {
-        // Find snapshots before/after renderTime
-        var (before, after) = FindSnapshots(renderTime);
-        float t = (renderTime - before.time) / (after.time - before.time);
-        return Vector3.Lerp(before.pos, after.pos, t);
-    }
-}
-```
-
-### Pattern: Client-Side Prediction (FPS)
-
-```csharp
-// Predict locally for responsiveness
-// Reconcile with server when authoritative state arrives
-
-void Update() {
-    if (isLocalPlayer) {
-        ProcessInput();
-        ApplyMovementLocally();  // immediate feedback
-        SendInputToServer();
-    }
-}
-
-void OnServerStateReceived(ServerState state) {
-    if (state.tick > lastReceivedTick) {
-        // Reconcile
-        Vector3 serverPos = state.position;
-        Vector3 predictedPos = predictionHistory[state.tick];
-
-        if (Vector3.Distance(serverPos, predictedPos) > THRESHOLD) {
-            // Misprediction: snap + replay
-            transform.position = serverPos;
-            ReplayInputsSince(state.tick);
-        }
-    }
-}
-```
-
-### Pattern: Lag Compensation (Hit Detection)
-
-```csharp
-// On server, "rewind" world to when client saw it
-void OnPlayerShoot(ulong clientId, Vector3 origin, Vector3 direction, float clientTime) {
-    // Rewind based on client's view (clientTime + clientLatency)
-    float rewindTime = clientTime + GetLatency(clientId);
-    var historicalState = stateHistory.GetAt(rewindTime);
-
-    // Perform raycast in rewound state
-    if (Raycast(origin, direction, historicalState, out hit)) {
-        ApplyDamage(hit);
-    }
-}
-```
+Role rules: predict only the local player · render remote players behind server time · every hit is decided on the server in the rewound state.
 
 ## Networking Stacks (2026)
 
@@ -193,28 +140,32 @@ void OnPlayerShoot(ulong clientId, Vector3 origin, Vector3 direction, float clie
 | **Steam Networking** | Unity, Unreal | Steam ecosystem |
 | **Epic Online Services** | Any | Cross-platform |
 | **Unreal Replication** | Unreal | Built-in |
-| **GameLift / PlayFab** | Any | Managed servers |
-| **Hathora** | Any | Managed sessions |
+| **Amazon GameLift / PlayFab** | Any | Managed servers |
 | **Edgegap** | Any | Edge-deployed servers |
+| **Nitrado GameFabric** | Any | Managed game-server hosting |
+
+> Hathora left game hosting after Fireworks AI bought it (customers moved to Nitrado, service ended May 2026) — do not pick it. Checked 22 Oct 2026 (GamesBeat, 4 Mar 2026).
 
 ## Matchmaking
 
 ### Skill-Based Matchmaking (SBMM)
 
 ```python
-# Trueskill or Elo rating
-from trueskill import Rating, rate
+from trueskill import Rating, rate_1vs1
 
-# Per-player rating
+# Per-player rating (TrueSkill scale: mu 25, sigma 8.333)
 player_a = Rating(mu=25, sigma=8.333)
 player_b = Rating(mu=25, sigma=8.333)
 
 # After match
 new_a, new_b = rate_1vs1(player_a, player_b)  # if A won
 
-# Matchmaking: find players within sigma range
-candidates = find_players_in_range(player.mu, range=200)
+# Matchmaking: compare conservative skill (mu - 3*sigma) within a few points, not 200
+def conservative(r): return r.mu - 3 * r.sigma
+candidates = find_players_in_range(conservative(new_a), window=3.0)  # widen while waiting
 ```
+
+`window=200` style ranges belong to an Elo / MMR scale (start ~1500). Basic loop and the widening window: [`multiplayer-netcode.md` → Matchmaking](multiplayer-netcode.md#matchmaking).
 
 ### Latency-Aware Matching
 
@@ -322,22 +273,9 @@ async function quickJoin(player: Player, gameMode: string) {
 
 ## Bandwidth Optimization
 
-```csharp
-// Quantize for bandwidth
-// Float position (12 bytes) → quantized (3-6 bytes)
+Quantize, smallest-3 rotation (5 bytes only when bit-packed) and send-on-change: [`multiplayer-netcode.md` → Bandwidth Optimization](multiplayer-netcode.md#bandwidth-optimization).
 
-// Position within bounds: 16 bits per axis
-ushort QuantizePosition(float value, float min, float max) {
-    return (ushort)((value - min) / (max - min) * 65535);
-}
-
-// Rotation quaternion: smallest-3 (5 bytes vs 16)
-// Velocity: low precision, high frequency
-
-// Delta encoding:
-// Send full state every Nth tick
-// Otherwise: send only fields that changed
-```
+Role rules: budget < 50 kbps per player · full state every Nth tick, changed fields otherwise · low precision for velocity.
 
 ## Skills You Use
 

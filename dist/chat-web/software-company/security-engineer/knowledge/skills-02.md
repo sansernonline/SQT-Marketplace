@@ -88,7 +88,7 @@ Example — "Add a cache for these API responses."
 
 - **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
 - **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
-- **ultra:** "No cache until a profiler asks for one. When it does: `@lru_cache`. A hand-rolled TTL cache is a bug farm with a hit rate."
+- **ultra:** "`@lru_cache` on the fetch function — done, since you asked. Do you have a profile showing these calls are slow? If not, this line can go. A hand-rolled TTL cache is a bug farm with a hit rate."
 
 ## When NOT to be lazy
 
@@ -220,7 +220,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 // ❌ เพิ่มค่า i ทีละ 1
 // ❌ ฟังก์ชันคำนวณภาษี
 
-// ✅ กรมสรรพากรกำหนดให้ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด (ประกาศ ป.161/2566)
+// ✅ ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
 // ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
 // ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
@@ -435,7 +435,7 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
+Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -443,18 +443,19 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 ## กฎ
 
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
+ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ · ส่งแล้ว ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
 
 | งาน | หลักฐานที่นับ | ไม่นับ |
 |---|---|---|
-| ฟีเจอร์ | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator กับค่าที่ฉีดเข้าพิสูจน์ได้แค่**เส้นทางโค้ด** (ติดป้าย `emulator`) ส่วนความแม่นยำต้องลองกับเครื่องจริง (ติดป้าย `เครื่องจริง <รุ่น>`) | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
-| แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
-| test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
+| เอกสาร · รายงาน | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลข · สูตร · ยอดเงิน | คำนวณซ้ำอีกวิธีกับ 2–3 แถว และยอดรวมตรงกับต้นทาง (ใบเสร็จ · statement) | สูตรไม่ขึ้น error |
+| ข้อความถึงลูกค้า · อีเมล · การจอง | อ่านเทียบกับคำถามเดิม ชื่อ · ยอด · วันที่ ตรงข้อมูลจริง และการจองเห็นหน้ายืนยัน | ร่างแล้วดูดี · กดปุ่มแล้วไม่มี error |
+| ฟีเจอร์ในแอป | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
+| แก้ปัญหา · บั๊ก | ทำกรณีที่เคยล้มซ้ำทางเดิมแล้วผ่าน | ส่วนอื่นผ่าน |
+| test · การตรวจ | ตรวจแล้วล้มเมื่อของผิด (ลองทำให้ผิด 1 ครั้ง) | ผ่านอย่างเดียว |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ได้ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
-| งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
+| ค่าที่วัด (เซนเซอร์ · lux · ระยะ · น้ำหนัก) | เทียบเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว · ตัวจำลองพิสูจน์ได้แค่เส้นทางงาน (ป้าย `emulator`) ความแม่นต้องของจริง (ป้าย `เครื่องจริง <รุ่น>`) ไม่มีเครื่องมือ → `ยังไม่ได้ตรวจ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| งานของ subagent | อ่านผลงานและรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
 

@@ -44,7 +44,8 @@ SELECT
   ra.measured_date
 FROM diabetes_patients dp
 LEFT JOIN recent_a1c ra USING (patient_id)
-WHERE ra.a1c > 9.0;  -- Poor control threshold
+WHERE ra.a1c > 9.0   -- Poor control threshold
+   OR ra.a1c IS NULL; -- no HbA1c test in the year also counts as poor control (HEDIS)
 ```
 
 ### Outcome Measure: 30-Day Readmission
@@ -138,8 +139,11 @@ ci_high = stats.chi2.ppf(0.975, 2*(observed+1)) / (2 * expected)
 ### Implementation pattern
 
 ```sql
--- HEDIS measure: BCS (Breast Cancer Screening)
+-- HEDIS measure: BCS (Breast Cancer Screening), measurement year (MY) 2024
 -- Women 50-74 who had mammogram in last 2 years
+-- From MY2025 the measure is BCS-E with ages 40-74, reported as 40-49, 50-74 and total
+-- (NCQA blog "Updates to Breast Cancer Screening Age Range for HEDIS MY 2025", checked 22 Oct 2026).
+-- Take the exact age-as-of date and lookback from the NCQA technical specification for your MY.
 
 WITH denominator AS (
   SELECT patient_id

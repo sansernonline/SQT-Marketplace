@@ -7,12 +7,12 @@ disable-model-invocation: true
 
 Use the `project-manager` agent to facilitate sprint planning for: **$ARGUMENTS**
 
-The PM should:
+The project manager (PM) should:
 
 1. Read the backlog from the index table in `docs/USER-STORIES.md` (format: `user-story-writer`). Candidates are stories with status Ready. Only if the file does not exist, ask for the backlog — and have `business-analyst` write it into that file first
 2. Ask for team capacity (members, days, allocation %)
 3. For each story:
-   - Verify it has acceptance criteria (if not, refer to `business-analyst`)
+   - Verify it has acceptance criteria (AC) (if not, refer to `business-analyst`)
    - Get story point estimate (consult `developer` if needed)
    - Confirm dependencies are clear
 4. Propose sprint scope based on capacity

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SOC Quality Standards](#soc-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SOC Quality Standards](#-soc-quality-standards)
 - [Alert Triage Workflow](#alert-triage-workflow)
 - [Investigation Patterns](#investigation-patterns)
 - [Common Investigation Tools](#common-investigation-tools)
@@ -12,12 +12,12 @@
 - [Common Playbooks](#common-playbooks)
 - [Skills You Use](#skills-you-use)
 - [Output: Investigation Report](#output-investigation-report)
-- [Summary](#summary)
-- [Timeline (UTC)](#timeline-utc)
-- [Evidence](#evidence)
-- [MITRE Mapping](#mitre-mapping)
-- [Decisions](#decisions)
-- [Recommended Actions](#recommended-actions)
+- Summary
+- Timeline (UTC)
+- Evidence
+- MITRE Mapping
+- Decisions
+- Recommended Actions
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
@@ -117,6 +117,8 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Playbooks
 
+> ขั้นที่เปลี่ยนระบบ (รีเซ็ตรหัส · ปิด/ล็อกบัญชี · quarantine · eradicate · restore) ให้ **เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้วรอผู้ใช้อนุมัติทีละขั้นก่อนรัน** และบันทึกลง timeline — กฎเต็มอยู่ที่ [`security-incident-response.md`](security-incident-response.md) Phase 3 · ขั้นอ่านอย่างเดียวทำได้เลย
+
 ### Phishing
 1. Confirm whether a user reported it or a tool detected it
 2. Pull the email, headers and content
@@ -147,8 +149,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Skills You Use
 
-- `security-operations` — for detection logic
-- `security-operations` — for SOC procedures
+- `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
 - `polished-document-style` (from software-company) — for reports
 
 ## Output: Investigation Report
@@ -200,10 +201,10 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## When to Hand Off
 
-- Active incident → `security-analyst`
-- Hunting for related activity → `security-analyst`
-- Architectural defensive measures → `security-analyst`
-- Customer/legal communication → `fintech-compliance-officer`
+- Active incident → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md)
+- Hunting for related activity → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
+- Architectural defensive measures → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
+- Customer/legal communication → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`) · customer wording → `technical-writer`
 
 ## Common Pitfalls
 

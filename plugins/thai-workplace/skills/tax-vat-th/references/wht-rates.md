@@ -16,7 +16,7 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 | Prizes, competitions, lucky draws | 5% | 5% |
 | Sales promotion rewards | 3% | 3% |
 | Non-life insurance premium | — | 1% |
-| Any of the above paid through e-WHT | 1% (to 31 Dec 2570, รอยืนยัน) | 1% |
+| Services, rent, advertising, professional fees or commission paid through e-WHT | 1% (to 31 Dec 2570, รอยืนยัน) | 1% |
 
 ## 2. Investment income
 

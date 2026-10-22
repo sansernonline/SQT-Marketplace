@@ -1,6 +1,6 @@
 # skill: principle-prove-it-works
 
-Use when about to say anything is done, fixed, passing or working. Verify against the real thing.
+Use when about to say any work is done, fixed, sent or working. Check it against the real thing first.
 
 # principle · prove it works — พิสูจน์กับของจริง
 
@@ -8,18 +8,19 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 ## กฎ
 
-ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
+ก่อนใช้คำว่า เสร็จ · แก้แล้ว · ผ่าน · ใช้ได้ · ส่งแล้ว ต้องเห็นผลจากของจริงด้วยตาตัวเองในรอบนี้ก่อน
 
 | งาน | หลักฐานที่นับ | ไม่นับ |
 |---|---|---|
-| ฟีเจอร์ | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
-| ฟีเจอร์ที่ใช้ฮาร์ดแวร์ (เซนเซอร์ · กล้อง · GPS) | emulator กับค่าที่ฉีดเข้าพิสูจน์ได้แค่**เส้นทางโค้ด** (ติดป้าย `emulator`) ส่วนความแม่นยำต้องลองกับเครื่องจริง (ติดป้าย `เครื่องจริง <รุ่น>`) | emulator ผ่าน แล้วรายงานว่า "ค่าแม่น" |
-| แก้บั๊ก | รันกรณีที่เคยล้มซ้ำทางเดิม (หน้าจอหรือ API เดิม) แล้วผ่าน | test อื่นผ่าน |
-| test | test ล้มเมื่อโค้ดผิด (ลองทำโค้ดให้ผิดดู 1 ครั้ง) | test ผ่าน |
+| เอกสาร · รายงาน | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
+| ตัวเลข · สูตร · ยอดเงิน | คำนวณซ้ำอีกวิธีกับ 2–3 แถว และยอดรวมตรงกับต้นทาง (ใบเสร็จ · statement) | สูตรไม่ขึ้น error |
+| ข้อความถึงลูกค้า · อีเมล · การจอง | อ่านเทียบกับคำถามเดิม ชื่อ · ยอด · วันที่ ตรงข้อมูลจริง และการจองเห็นหน้ายืนยัน | ร่างแล้วดูดี · กดปุ่มแล้วไม่มี error |
+| ฟีเจอร์ในแอป | กดบนแอปที่รันอยู่ด้วย skill ตรวจแอป เห็นผลตามเกณฑ์ | compile ผ่าน · อ่านโค้ดแล้วดูถูก |
+| แก้ปัญหา · บั๊ก | ทำกรณีที่เคยล้มซ้ำทางเดิมแล้วผ่าน | ส่วนอื่นผ่าน |
+| test · การตรวจ | ตรวจแล้วล้มเมื่อของผิด (ลองทำให้ผิด 1 ครั้ง) | ผ่านอย่างเดียว |
 | mockup | เปิดในเบราว์เซอร์ กดทุกปุ่ม ไม่มีปุ่มหลอก | HTML ถูกไวยากรณ์ |
-| เอกสาร | reviewer ตัวใหม่เปิดไฟล์ที่ render แล้ว ตรวจข้อกำหนดทีละข้อ (ตัวที่เขียนไม่อ่านงานตัวเองซ้ำ) | เขียนไฟล์สำเร็จ |
-| ตัวเลขที่วัด | รู้ว่าอะไรจำกัดตัวเลขนั้น และวัดซ้ำได้ใกล้เคียง ค่าทางกายภาพ (lux · ระยะ · น้ำหนัก) ต้องเทียบกับเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว ถ้าไม่มีเครื่องมือให้ติดป้าย `ยังไม่ได้ตรวจ` พร้อมบอกว่าความแม่นยำยังไม่ได้เทียบ | วัดครั้งเดียว · เทียบกับตัวเอง |
-| งานของ subagent | อ่าน diff และรันเอง | subagent รายงานว่าเสร็จ |
+| ค่าที่วัด (เซนเซอร์ · lux · ระยะ · น้ำหนัก) | เทียบเครื่องมือวัดอ้างอิงที่สอบเทียบแล้ว · ตัวจำลองพิสูจน์ได้แค่เส้นทางงาน (ป้าย `emulator`) ความแม่นต้องของจริง (ป้าย `เครื่องจริง <รุ่น>`) ไม่มีเครื่องมือ → `ยังไม่ได้ตรวจ` | วัดครั้งเดียว · เทียบกับตัวเอง |
+| งานของ subagent | อ่านผลงานและรันเอง | subagent รายงานว่าเสร็จ |
 
 ## วิธีทำ
 
@@ -36,92 +37,50 @@ Use when about to say anything is done, fixed, passing or working. Verify agains
 
 ---
 
-# skill: simplicity-first
+# skill: simplify
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
+Use when making anything (code, document, plan, design, slide, sheet, answer). Simplest form a person can follow.
 
-# Simplicity First
+# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
+ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
-This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
+## 1 · หลักใหญ่
 
-## Check before submitting — 5 items
+- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
+- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
+- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
+- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
+- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
+- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
 
-1. **A tired teammate gets it** in 6 months with no prior context.
-2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
-3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
-4. **Nothing can be deleted without losing meaning** — deleting beats adding.
-5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
+## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
 
-Any "no" or "not sure" → simplify before delivering.
+1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
+2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
+3. ทำแบบสั้นที่สุดที่ยังครบและถูก
 
-## By output type
+## 3 · ตามชนิดงาน
 
-### Documents (BRD, FSD, ADR)
+| งาน | ทำ | เลี่ยง |
+|---|---|---|
+| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
+| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
+| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
+| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
+| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
+| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
 
-Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
-example for every abstract point, tables for structured data.
+plugin `software-company` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
 
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
-jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+## 4 · บอกว่าตั้งใจทำให้ง่าย
 
-### Architecture
+ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
 
-Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
+## 5 · ตรวจก่อนส่ง 5 ข้อ
 
-Avoid: microservices for small teams, distributed-everything, multi-master
-databases before you must, event-driven by default (sync is simpler).
-
-### Plans
-
-Do: 3-5 priorities (not 20), a named owner per item, measurable success
-criteria, realistic timelines with buffer, cut scope to fit time.
-
-Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
-aspirational dates with no buffer, plans without success metrics.
-
-### Designs (UX, API)
-
-Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
-across screens, defaults that work for 80%, progressive disclosure.
-
-Avoid: novel interactions where a standard one works, 10-step flows when 3
-work, required fields with no smart default, hidden features needing tutorials.
-
-## Examples
-
-**API description**
-
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-❌ "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
+2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
+3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
+4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
+5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม

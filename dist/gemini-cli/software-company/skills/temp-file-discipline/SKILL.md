@@ -1,6 +1,6 @@
 ---
 name: temp-file-discipline
-description: Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
+description: Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
 ---
 
 # ระเบียบไฟล์ชั่วคราว
@@ -21,7 +21,7 @@ description: Use when a task writes temporary files (extracts, previews, backups
 **รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
 - ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
 - ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
+- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-company`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
 
 ---
 
@@ -45,10 +45,10 @@ description: Use when a task writes temporary files (extracts, previews, backups
 ## อะไรไม่ใช่
 
 - ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
+- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
   **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
 - ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
 
 ---
 
@@ -67,13 +67,14 @@ description: Use when a task writes temporary files (extracts, previews, backups
 
   | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
   |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
+  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | [`document-naming`](../document-naming/SKILL.md) |
+  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
   | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
+
+  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 - ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
+- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
 
 ---
 
@@ -81,7 +82,7 @@ description: Use when a task writes temporary files (extracts, previews, backups
 
 1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
 2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
+3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ
 
 ---
 

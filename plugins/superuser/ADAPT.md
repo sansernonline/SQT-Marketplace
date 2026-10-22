@@ -1,31 +1,48 @@
 # ADAPT — เอา SuperUser ไปใช้กับ plugin ของคุณ
 
-plugin `superuser` คือต้นฉบับของวิธีทำงานแบบ SuperUser ซึ่งใช้ได้ 2 แบบ:
+plugin `superuser` คือหัวหน้างาน 1 คน ใช้ได้ 2 แบบ:
 
-1. **ติดตั้งตัวเดียว** — `/superuser:superuser` ทำงานได้ทันทีกับงานทั่วไป (หาข้อมูล · ทำเอกสาร · ตรวจงาน · งานยาว)
-2. **เป็นแม่แบบ** — คัดลอกไปทำ `superuser` ของ plugin สาขาอื่น แล้วปรับเฉพาะส่วนที่เป็นของสาขา
+1. **ติดตั้งตัวเดียว** — `/superuser:superuser` ทำงานได้ทันทีกับงานทั่วไป (หาข้อมูล · ทำเอกสาร · ตรวจงาน · งานยาว) · งานเอกสาร สไลด์ รูป ประชุม ใช้ skill จาก plugin `sqt-toolkit` ติดตั้งเพิ่มได้
+2. **เป็นแกนให้ plugin สาขา** — plugin ของคุณประกาศ `dependencies` แล้วมี `skills/superuser/SKILL.md` ของตัวเองที่มี**เฉพาะส่วนสาขา** (playbook · agent · เกณฑ์ · รออนุมัติ) และบรรทัดแรกบอกให้เปิดแกนก่อน
+
+---
+
+## 0 · แกน กับ โมดูล — อะไรอยู่ตรงไหน และใครตัดสินใจ
+
+SuperUser คือหัวหน้างาน 1 คน: แจกงาน · ประเมินลูกน้อง · จัดการงาน · ตรวจซ้ำจนสำเร็จ ด้วยลูกน้อง effort ต่ำ · กฎแยกคือ **หัวหน้าทำงานไม่ได้ถ้าขาด → แกน · ทำได้แต่ดีขึ้น → โมดูล** · โมดูลเปิดปิดได้ต่อโฟลเดอร์งานใน `.claude/superuser/config.json` · ค่าเริ่มต้นเปิดทุกตัว
+
+| อยู่ไหน | มีอะไร | ไฟล์ |
+|---|---|---|
+| **แกน** (อ่านทุกงาน · ปิดไม่ได้) | จัดขนาด + งบ (เร็ว/สมดุล/คุณภาพ ปรับทั้งลูกทีมและผู้ตรวจ) · ใบสั่งงาน 5 ข้อในข้อความส่งงาน · แจกงานขนาน + ระดับโมเดลคู่ effort · ประเมินลูกทีม (ผ่าน/แก้/ทำใหม่ + โปรไฟล์) · ตรวจซ้ำด้วยผู้ตรวจตัวใหม่จนผ่าน · คำตอบ 3 ระดับ · ประหยัด token · หัวหน้าเรียนรู้ตัวเอง (คาด/จริง รวม token จาก SUMMARY) | `skills/superuser/SKILL.md` (แกน ไฟล์เดียว) · `references/lead-playbook.md` → `~/.claude/superuser/LEAD-PLAYBOOK.md` · `templates/TEAM.md` → `~/.claude/superuser/TEAM.md` |
+| **แกนที่เปิดเมื่อถึงจังหวะ** | ถามครั้งเดียว · ตัดสินใจเอง · โหวต · รู้ความเสี่ยง · รู้จังหวะหยุด · รายการรออนุมัติทุกสาขา | `references/autonomy.md` |
+| **โมดูล** (ปิดได้) | `context` · `log` (log + token ราย agent ใน SUMMARY) · `improvements` · `learning` · `inbox` · `handoff` (ใบสั่งงานเป็นไฟล์ + ใบส่งงาน) · `patterns_advanced` (MoA · Reranker) · `review_gate` · `split_gate` | `references/modules.md` · `templates/config.json` · `hooks/superuser-hook.mjs` (`moduleOn`) · `references/learning-loop.md` · `references/team-files.md` |
+| **เครื่องมือกลาง** (plugin แยก) | เอกสาร · สไลด์ · รูป · ประชุม · ข้อความสุภาพ · ชื่อ 15 skill | `plugins/sqt-toolkit/` · plugin สาขาประกาศ dependency ไว้แล้ว |
+| **สาขา** (plugin อื่นต่อยอด) | agent ของสาขา · playbook ของสาขา · เกณฑ์ตรวจของสาขา · รออนุมัติของสาขา · skill เฉพาะทาง | `plugins/<สาขา>/` ประกาศ `dependencies` · ไม่คัดลอก skill agent hook กลาง |
+| **ส่วนตัว** (ของเจ้าของเครื่อง ไม่อยู่ใน plugin) | ค่าตั้งต้น · กฎส่วนตัว · อนุญาตล่วงหน้า | `~/.claude/superuser-style.md` |
+
+สิ่งที่สาขาส่งเข้าแกนได้ (extension contract): `agents/*.md` · `skills/superuser/SKILL.md` ส่วนสาขา · `skills/superuser/references/playbook-*.md` · `examples.md` · `triggers.md` · `review` ขั้น 1 · `unattended-run` หัวไฟล์ · `context-template` หัวข้อ "ค่าของ plugin นี้" — นอกนั้นแก้ที่แกนแล้ว sync
 
 ---
 
 ## 1 · อะไรเป็นของกลาง อะไรปรับได้
 
-| ส่วน | ของกลาง (ห้ามแก้ใน plugin สาขา) | ปรับตามสาขา |
+| ส่วน | ของกลาง (อยู่ใน `plugins/superuser` ที่เดียว ไม่คัดลอก) | ปรับตามสาขา (อยู่ใน plugin สาขา) |
 |---|---|---|
-| `skills/superuser/SKILL.md` | บล็อก `<!-- superuser:begin X -->`: `rules` (หัวข้อ 1) · `start` (2) · `team` (5) · `autonomy` (6) · `answer` (7) · `open` (8) · `where` · `improvements` · `learning` (9) · `patterns` (10) | ทุกอย่างนอกบล็อก |
-| playbook และ reference | ทั้งไฟล์: `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` · `evidence.md` · `team-roles.md` · `templates/improvements-queue.md` · บล็อก: `review-steps` ใน `playbook-review.md` (ขั้น 2–6) · `unattended-steps` ใน `playbook-unattended-run.md` (ขั้นตอนทั้งหมด) · `context` ใน `references/context-template.md` (sync สร้างจาก `templates/CONTEXT.md` + `templates/IMPROVEMENTS.md`) | playbook ของสาขา · `review` ขั้น 1 และหัวไฟล์ · `unattended-run` หัวไฟล์ (`ลูกทีมต่อชิ้น` · `ผู้ตรวจต่อชิ้น` · `รออนุมัติที่เจอบ่อย`) · `context-template` หัวข้อ "ค่าของ plugin นี้" · `triggers.md` · `examples.md` (ตัวอย่างอย่างเดียว ห้ามเขียนกฎซ้ำกับ `SKILL.md`) |
-| skill | `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — **อยู่ใน `superuser` ที่เดียว ไม่คัดลอก** | skill ของสาขา |
-| agent | `brainstormer` · `reviewer` · `learning-reviewer` — อยู่ใน `superuser` ที่เดียว | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทางของสาขา (playbook ใช้แทน `reviewer` ได้ · เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
-| hook | `hooks/` ทั้งโฟลเดอร์ (hook · กฎประจำตัว `core-rules.md` · ตัวบอก skill `skill-router.json`) — อยู่ใน `superuser` ที่เดียว | — |
-| ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | `templates/*` ยกเว้น `improvements-queue.md` · playbook `research` · `document` จะถูกคัดลอกไปพร้อมโฟลเดอร์ในข้อ 2 แล้วจะเก็บไว้ ปรับ หรือลบก็ได้ ส่วน plugin สาขาที่มีอยู่แล้วเขียนแม่แบบ `CONTEXT.md` ไว้ในหัวข้อ 9 แทน |
+| `skills/superuser/SKILL.md` | แกนทั้งไฟล์ (หัวข้อ 1–9) · Claude Code เปิดให้ทาง `superuser:superuser` | `SKILL.md` ของสาขา: frontmatter · บรรทัด "เปิด `superuser:superuser` ก่อน" · กฎเพิ่มเลข 11 ขึ้นไป · ตาราง playbook · เกณฑ์ 3 ข้อ · ตาราง agent · รออนุมัติของสาขา · ตัวอย่างตารางสถานะ · ไฟล์กลางของสาขา · **ห้ามมีบล็อก `<!-- superuser:begin -->` อีก** (sync `--check` จับ) |
+| playbook และ reference | ทั้งไฟล์ คัดลอกไปทุกสาขาเพื่อให้ลิงก์ในสาขาใช้ได้: `playbook-learn-from-session.md` · `playbook-template.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` · `evidence.md` · `team-roles.md` · `voting.md` · `templates/improvements-queue.md` · `lead-playbook.md` · `templates/TEAM.md` · `templates/config.json` · บล็อก `review-steps` ใน `playbook-review.md` (ขั้น 2–6) · `unattended-steps` ใน `playbook-unattended-run.md` · `context` ใน `references/context-template.md` · `autonomy.md` และ `modules.md` อยู่ที่แกนที่เดียว (เปิดผ่านแกน) | playbook ของสาขา · `review` ขั้น 1 และหัวไฟล์ · `unattended-run` หัวไฟล์ (`ลูกทีมต่อชิ้น` · `ผู้ตรวจต่อชิ้น` · `รออนุมัติที่เจอบ่อย`) · `context-template` หัวข้อ "ค่าของ plugin นี้" · `triggers.md` · `examples.md` (ตัวอย่างอย่างเดียว ห้ามเขียนกฎซ้ำกับแกน) |
+| skill | หัวหน้างาน 27 ตัวใน `plugins/superuser/skills/` (รายการจริงใน `SHARED_ONLY_IN_SUPERUSER` ของ `sync-superuser.mjs`) · เอกสารและรูป 15 ตัวใน `plugins/sqt-toolkit/skills/` (`SHARED_ONLY_IN_TOOLKIT`) | skill ของสาขา · ส่วนเฉพาะสาขาของ skill กลางเขียนเป็นไฟล์ใน `skills/superuser/references/` ของสาขา (ตัวอย่าง: `software-company` → `code-extensions.md`) |
+| agent | `brainstormer` · `reviewer` (ค่าเริ่ม `sonnet` + `medium` · งานใหญ่หรืองบคุณภาพหัวหน้าส่ง `model: opus`) · `learning-reviewer` | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทาง (เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
+| hook | `hooks/` ทั้งโฟลเดอร์ (hook · กฎประจำตัว `core-rules.md` · ตัวบอก skill `skill-router.json`) | — |
+| ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | playbook `research` · `document` · `pickup-and-pause` และ `templates/CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` คัดลอกไปตอนตั้งสาขาใหม่ แล้วเก็บ ปรับ หรือลบก็ได้ |
 
-`software-company` เขียน `playbook-review.md` และ `playbook-unattended-run.md` เองทั้งไฟล์ (ตรวจด้วย diff · `BUILD-PLAN.md` · commit ทีละชิ้น) จึงอยู่ใน `OPT_OUT` ของ `sync-superuser.mjs` · plugin อื่นที่จะออกจากบล็อกไหน ต้องเพิ่มชื่อลง `OPT_OUT` พร้อมเหตุผล
+ทุก plugin รับบล็อกกลางของ `playbook-review.md` และ `playbook-unattended-run.md` เหมือนกัน ส่วนที่เป็นของงานโค้ดของ `software-company` อยู่นอกบล็อก (หัวไฟล์และขั้น 1) · plugin ที่จะออกจากบล็อกไหน ต้องเพิ่มชื่อลง `OPT_OUT` ของ `sync-superuser.mjs` พร้อมเหตุผล
 
-**ทำไมของกลางไม่คัดลอกแล้ว** (ตั้งแต่ superuser 2.0.0): สำเนา 6 skill × 12 plugin ทำให้รายการ skill ของทุก session ยาว 49,564 ตัวอักษร เกินงบ 30,000 ของ Claude Code จนคำอธิบายถูกตัด (debug log `Skill listing over budget`) และ hook ทำงานซ้ำ 12 ครั้งต่อเหตุการณ์ · ตอนนี้ plugin สาขาประกาศ `"dependencies": ["superuser"]` ใน `plugin.json` แล้ว Claude Code ติดตั้ง superuser ให้เอง · ชุดใน `dist/` (zip ของ claude.ai · Codex · Gemini · Kimi) ไม่มีระบบ dependencies สคริปต์ build จึงใส่ของกลางลงชุดของทุก plugin ให้ใช้เดี่ยวได้
+**ทำไมของกลางไม่คัดลอกแล้ว** (ตั้งแต่ superuser 2.0.0): สำเนา 6 skill × 12 plugin ทำให้รายการ skill ของทุก session ยาว 49,564 ตัวอักษร เกินงบ 30,000 ของ Claude Code จนคำอธิบายถูกตัด และ hook ทำงานซ้ำ 12 ครั้งต่อเหตุการณ์ · ตั้งแต่ 3.0.0 `SKILL.md` ของสาขาก็ไม่คัดลอกแกนแล้ว (สำเนา 11 ไฟล์ × 50 KB → ส่วนสาขา 11–13 KB) · ชุดใน `dist/` (zip ของ claude.ai · Codex · Gemini · Kimi) ไม่มีระบบ dependencies สคริปต์ build จึงใส่ของกลางลงชุดของทุก plugin และรวมแกน + ส่วนสาขาเป็น `SKILL.md` ไฟล์เดียว
 
-ของกลางแก้ที่ plugin `superuser` ที่เดียว แล้วรัน:
+ของกลางแก้ที่ plugin `superuser` หรือ `sqt-toolkit` ที่เดียว แล้วรัน:
 
 ```
-node scripts/sync/sync-superuser.mjs          # คัดลอกของกลางไปทุก plugin
+node scripts/sync/sync-superuser.mjs          # คัดลอกไฟล์กลางของ skill superuser ไปทุก plugin
 node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเดียว ไม่เขียน
 ```
 
@@ -35,36 +52,35 @@ node scripts/sync/sync-superuser.mjs --check  # ตรวจอย่างเ�
 
 ## 2 · ขั้นตอนทำ superuser ของสาขาใหม่
 
-1. สร้างโครง plugin: `.claude-plugin/plugin.json` (ใส่ `"dependencies": ["superuser"]`) · `skills/` · `agents/` · คำสั่ง (ถ้ามี) ให้เป็น skill ที่ตั้ง `disable-model-invocation: true`
-2. คัดลอก `skills/superuser/` ทั้งโฟลเดอร์จาก `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` ให้ไฟล์กลางของ skill นี้ตามไปครบ · ห้ามคัดลอก skill · agent · hook กลาง (sync ตรวจแล้วขึ้น error)
-3. แก้นอกบล็อก ตามตารางข้อ 3
+1. สร้างโครง plugin: `.claude-plugin/plugin.json` ใส่ `"dependencies": [{ "name": "superuser", "version": "^3.0" }, { "name": "sqt-toolkit", "version": "^1.0" }]` · `skills/` · `agents/` · คำสั่ง (ถ้ามี) เป็น skill ที่ตั้ง `disable-model-invocation: true`
+2. คัดลอก `skills/superuser/` ของ plugin สาขาที่ใกล้เคียง (เช่น `career`) มาเป็นต้นแบบ แล้วรัน `node scripts/sync/sync-superuser.mjs` ให้ไฟล์กลางตามไปครบ · ห้ามคัดลอก skill · agent · hook กลาง และห้ามคัดลอกแกนจาก `plugins/superuser/skills/superuser/SKILL.md` (sync ตรวจแล้วขึ้น error)
+3. แก้ `SKILL.md` ของสาขาตามตารางข้อ 3 · คงบรรทัด "เปิด `superuser:superuser` ก่อน" ไว้ใต้ชื่อเรื่อง
 4. รัน `node scripts/check/validate-marketplace.mjs` ให้ผ่าน แล้ว `node scripts/sync/sync-docs.mjs`
-5. ลองงานจริง 3 งาน (เล็ก · กลาง · ใหญ่) แล้วดูว่าจัดขนาดและเลือก playbook ถูกไหม
+5. ลองงานจริง 3 งาน (เล็ก · กลาง · ใหญ่) แล้วดูว่าจัดขนาดและเลือก playbook ถูกไหม และ token ใน `log/SUMMARY.md` ตรงกับที่คาด
 
 ---
 
-## 3 · ต้องปรับอะไรบ้าง
+## 3 · ต้องปรับอะไรบ้าง ใน `SKILL.md` ของสาขา
 
-| หัวข้อใน SKILL.md | ปรับอะไร | ตัวอย่างจาก plugin `career` |
+| หัวข้อ | ปรับอะไร | ตัวอย่างจาก plugin `career` |
 |---|---|---|
-| frontmatter `description` | งานของสาขา ≤ 160 ตัวอักษร (`validate-marketplace.mjs` ขึ้น error เกินนี้) · แบบ "Use when <งานสาขา> spans several steps (<งานตัวอย่าง>) or the user says superuser for <สาขา>." · คำว่า superuser ต้องผูกกับสาขา ไม่งั้นติดตั้ง 3 plugin แล้วติดพร้อมกันทั้ง 3 ตัว | "Use when career work spans several steps (application, CV, interview, offer, promotion) or the user says superuser for a career task." |
-| หัวเรื่อง และบรรทัดใต้ | ทีมนี้ทำงานอะไร · ส่งต่อเรื่องไหนให้ผู้เชี่ยวชาญ | ข้อพิพาทแรงงาน → จัดข้อเท็จจริงแล้วส่งต่อศาลแรงงานหรือทนาย |
-| 1 · กฎ | ใต้บล็อก `rules`: "ของจริงที่ใช้ตรวจตามข้อ 2" และกฎเฉพาะสาขา 1–3 ข้อ เลข 10 ขึ้นไป · ที่จดการตัดสินใจถ้าไม่ใช่ `CONTEXT.md` | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
-| 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` · ทุกขั้นของทุก playbook จบด้วย `ใคร:` ตาม `playbook-template` (validator ตรวจ) | `job-application` · `interview` · `offer-negotiation` · "ร่าง CV · ใคร: `career-coach` ตัวใหม่" |
-| 3 · ตัวกระตุ้น | ตารางสถานการณ์ → skill ของสาขา · งานข้ามสาขา → plugin อื่น ใน `references/triggers.md` (SKILL.md เหลือลิงก์ 1 บรรทัด) | มีนัดสัมภาษณ์ → `interview-prep` + agent `interview-coach` |
+| frontmatter `description` | งานของสาขา ≤ 160 ตัวอักษร ห้ามมี `: ` (YAML พัง) · แบบ "Use when <งานสาขา> spans several steps (<งานตัวอย่าง>) or the user says superuser for <สาขา>." · คำว่า superuser ต้องผูกกับสาขา ไม่งั้นติดตั้ง 3 plugin แล้วติดพร้อมกันทั้ง 3 ตัว | "Use when career work spans several steps (application, CV, interview, offer, promotion) or the user says superuser for a career task." |
+| หัวเรื่อง · บรรทัดชี้แกน · บรรทัดใต้ | ชื่อทีม · บรรทัด "เปิด `superuser:superuser` ก่อน" (ห้ามตัด) · ทีมนี้ทำงานอะไร ส่งต่อเรื่องไหนให้ผู้เชี่ยวชาญ | ข้อพิพาทแรงงาน → จัดข้อเท็จจริงแล้วส่งต่อศาลแรงงานหรือทนาย |
+| 1 · กฎ | "ของจริงที่ใช้ตรวจตามข้อ 2" และกฎเฉพาะสาขา 1–3 ข้อ เลข 11 ขึ้นไป (ข้อ 0–10 อยู่ในแกน) · ที่จดการตัดสินใจถ้าไม่ใช่ `CONTEXT.md` | ไม่แต่งประสบการณ์หรือวุฒิ · ตัวเลขเงินเดือนตลาดต้องมีแหล่งและปี |
+| 2 · ตาราง playbook | 4–7 playbook ของงานที่เกิดบ่อยในสาขา + `review` · `unattended-run` · `learn-from-session` · ทุกขั้นจบด้วย `ใคร:` ตาม `playbook-template` (validator ตรวจ) | `job-application` · `interview` · `offer-negotiation` · "ร่าง CV · ใคร: `career-coach` ตัวใหม่" |
+| 3 · ตัวกระตุ้น | ตารางสถานการณ์ → skill ของสาขา · งานข้ามสาขา → plugin อื่น ใน `references/triggers.md` | มีนัดสัมภาษณ์ → `interview-prep` + agent `interview-coach` |
 | 4 · เกณฑ์งาน | 3 ข้อที่ "เสร็จ" ของสาขานี้ต้องผ่าน + skill ที่ใช้ตรวจ | จริง · ตรงเป้า · พร้อมใช้ |
-| 5 · agent | แถว agent ตามบทบาท · งานข้ามสาขา เหนือบล็อก `team` · ตัวอย่างระดับโมเดลใน `references/examples.md` | CV → `career-coach` · สัมภาษณ์ → `interview-coach` |
-| 6 · รออนุมัติ | ใต้บล็อก `autonomy`: สิ่งที่ย้อนไม่ได้ของสาขานี้ · ตัวอย่างงานที่ย้อนได้และลำดับแหล่งข้อมูลทางการไปที่ `references/examples.md` | กดส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก |
+| 5 · agent | ตาราง agent ตามบทบาท · งานข้ามสาขา · ตัวอย่างระดับโมเดลใน `references/examples.md` | CV → `career-coach` · สัมภาษณ์ → `interview-coach` |
+| 6 · รออนุมัติ | สิ่งที่ย้อนไม่ได้ของสาขานี้ (เพิ่มจากรายการทุกสาขาใน `autonomy.md`) · ตัวอย่างงานที่ย้อนได้ไปที่ `examples.md` | กดส่งใบสมัคร · ตอบรับข้อเสนอ · ยื่นลาออก |
 | 7 · ตัวอย่างตารางสถานะ | 1 แถวที่เป็นงานจริงของสาขา | CV ภาษาอังกฤษ · คำค้นครบ 12 คำ |
-| 9 · ไฟล์กลาง | ใต้บล็อก `where`: ตัวอย่างโฟลเดอร์งาน · แม่แบบ `CONTEXT.md` · ข้อมูลที่ห้ามใส่ | ห้ามใส่เงินเดือนจริงใน CONTEXT |
-| 10 · ตารางรูปแบบ | ตัวอย่าง 6 รูปแบบในงานของสาขา ใน `references/examples.md` | MoA: ข้อเสนองาน 2 ที่ → 3 มุม แล้วรวม |
+| 9 · ไฟล์กลาง | ตัวอย่างโฟลเดอร์งาน · แม่แบบ `CONTEXT.md` · ข้อมูลที่ห้ามใส่ · ตัวอย่างรูปแบบการทำงานใน `examples.md` | ห้ามใส่เงินเดือนจริงใน CONTEXT |
 
 ---
 
 ## 4 · กติกาที่ต้องคงไว้
 
 - มีหัวหน้าทีม 1 ตัวต่อโฟลเดอร์งาน และลูกทีมรายงานกลับหัวหน้าเท่านั้น
-- เข้าใจงานและจัดขนาดก่อนเลือก playbook
+- เข้าใจงานและจัดขนาดก่อนเลือก playbook · ทุกชิ้นที่ส่งลูกทีมมีใบสั่งงาน 5 ข้อ
 - ทุกขั้นตรวจกับของจริง ข้อเท็จจริงสาธารณะต้องมี ≥ 3 แหล่งยืนยัน
 - งานที่ย้อนไม่ได้ให้เข้า "รออนุมัติ" ส่วนการจ่ายเงิน ใส่รหัสผ่าน ลบข้อมูลจริง และ CAPTCHA อนุญาตล่วงหน้าไม่ได้
 - ไฟล์ทำงานอยู่ใน `.claude/superuser/` ไม่วางที่รากโปรเจกต์ · `CONTEXT.md` เป็นไฟล์กลาง จบทุกงานด้วยรอบเรียนรู้ และไม่แก้ skill เองระหว่างทำงานอื่น

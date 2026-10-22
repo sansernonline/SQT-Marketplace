@@ -8,7 +8,7 @@ Use when setting up commitlint or semantic-release, or a commit needs release ru
 
 ## When to use this skill
 
-- Writing any git commit message
+- Writing commits that feed release tooling (commitlint, semantic-release) — everyday commits use `commit-log`
 - Reviewing commits in a PR for consistency
 - Setting up commitlint / semantic-release
 
@@ -102,7 +102,7 @@ Co-authored-by: ...      ← attribution
 
 # skill: markdown-report-docx
 
-Use when one Markdown file must become a polished Word report (project, test, handover). Thesis or IS → thesis-writing.
+Use when one Markdown file must become a polished Word report (business, research, test, handover). Thesis or Independent Study (IS) → thesis-writing.
 
 # Markdown Report → .docx
 
@@ -111,18 +111,18 @@ Use when one Markdown file must become a polished Word report (project, test, ha
 > **กฎข้อเดียวของ skill นี้:** Markdown คือต้นฉบับ .docx คือผลที่สร้างจากต้นฉบับ
 > แก้ที่ .md แล้วรันสคริปต์ใหม่ทุกครั้ง ไม่เปิด Word แก้มือ เพราะรอบหน้าจะหายหมด
 
-ต้นแบบมาจากรายงานโครงงาน X Fitness Chatbot (29 หน้า): ปกโลโก้กลางหน้า · สารบัญ · ตารางหัวสีแบรนด์อ่อน · กล่องหมายเหตุ · รูปพื้นเข้มพร้อมคำบรรยาย · ตารางสั้นไม่ขาดข้ามหน้า
+ต้นแบบหน้าตามาจากรายงานโครงงาน X Fitness (29 หน้า · ใช้เป็นแบบอ้างอิงสไตล์เท่านั้น สีใช้ของโปรเจกต์ตัวเอง): ปกโลโก้กลางหน้า · สารบัญ · ตารางหัวสีแบรนด์อ่อน · กล่องหมายเหตุ · รูปพื้นเข้มพร้อมคำบรรยาย · ตารางสั้นไม่ขาดข้ามหน้า
 
 ## เมื่อไหร่ใช้
 
-- รายงานโครงงาน รายงานส่งอาจารย์ รายงานผลทดสอบ เอกสารส่งมอบที่เนื้อหาเขียนเป็น Markdown อยู่แล้ว
-- ต้องสร้างรายงานซ้ำหลายรอบ (ผลทดสอบเปลี่ยน → รันใหม่ ได้ไฟล์หน้าตาเดิม)
+- รายงานธุรกิจ สรุปงานวิจัย รายงานโครงงาน รายงานส่งอาจารย์ รายงานผลทดสอบ เอกสารส่งมอบที่เนื้อหาเขียนเป็น Markdown อยู่แล้ว
+- ต้องสร้างรายงานซ้ำหลายรอบ (ตัวเลขหรือผลทดสอบเปลี่ยน → รันใหม่ ได้ไฟล์หน้าตาเดิม)
 
 ## เมื่อไหร่ **ไม่** ใช้
 
 | งาน | ใช้ |
 |---|---|
-| เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (SRS · BRD · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
+| เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification — SRS) · เอกสารความต้องการทางธุรกิจ (Business Requirements Document — BRD) · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
 | สไลด์นำเสนอ | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
 | วิทยานิพนธ์ · IS · บทความวิจัย | `dev-learning:thesis-writing` ก่อน (ถ้าติดตั้ง) — คู่มือคณะคุมโครงเล่มและการจัดหน้า สคริปต์นี้ใช้ทำ .docx ต่อได้ |
@@ -131,12 +131,12 @@ Use when one Markdown file must become a polished Word report (project, test, ha
 
 ## 1 · ขั้นตอน
 
-1. เขียนเนื้อหาใน `docs/<ชื่อ>.md` ตาม [`polished-document-style`](../polished-document-style/SKILL.md) · ใส่ front matter (ข้อ 2)
-2. รัน `python scripts/md_to_docx.py docs/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
+1. เขียนเนื้อหาใน `docs/src/<ชื่อ>.md` (ต้นฉบับถาวร ตาม `document-naming` ข้อ 1) ตาม [`polished-document-style`](../polished-document-style/SKILL.md) · ใส่ front matter (ข้อ 2)
+2. รัน `python scripts/md_to_docx.py docs/src/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
    - สคริปต์ใช้ `brandkit.py` จาก `branded-document-design/scripts/` ที่อยู่ข้างกัน ต้องมี `python-docx`
-   - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice
+   - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice · PDF นี้ไว้ตรวจข้อ 5 — ส่งเฉพาะคู่มือผู้ใช้หรือเมื่อลูกค้าขอ นอกนั้นย้ายไป `_to_delete/` (`document-naming` ข้อ 1)
 3. แปลง PDF เป็นภาพแล้ว**เปิดดูทุกหน้า** ตามข้อ 5 · เจอปัญหา → แก้ที่ .md แล้วรันใหม่
-4. ตั้งชื่อไฟล์ส่งมอบตาม [`document-naming`](../document-naming/SKILL.md) เช่น `XFitness-Chatbot_Project-Report-v1.0.docx`
+4. ตั้งชื่อไฟล์ส่งมอบตาม [`document-naming`](../document-naming/SKILL.md) เช่น `CLINIC-RPT-project-v1.0-DRAFT.docx`
 
 ลองดูตัวอย่างครบทุกองค์ประกอบ: `python scripts/md_to_docx.py assets/example-report.md --pdf`
 
@@ -144,22 +144,22 @@ Use when one Markdown file must become a polished Word report (project, test, ha
 
 ```yaml
 ---
-title: X Fitness Chatbot                      # ชื่อใหญ่สีแบรนด์บนปก
+title: Clinic Booking Assistant              # ชื่อใหญ่สีแบรนด์บนปก
 subtitle: เอกสารการพัฒนาโครงงานและผลการทดสอบ   # บรรทัดรองตัวหนา
-meta: วิชา 06048308 · ฉบับ 1.2 · 10 ตุลาคม 2569 # บรรทัดเล็กใต้ชื่อรอง
-note: ผู้พัฒนา 68076040 ชื่อ นามสกุล            # ตัวเอียงสีเทา (ไม่บังคับ)
+meta: วิชา 01234567 · ฉบับ 1.2 · 10 ตุลาคม 2569 # บรรทัดเล็กใต้ชื่อรอง
+note: ผู้พัฒนา 6500001 ชื่อ นามสกุล             # ตัวเอียงสีเทา (ไม่บังคับ)
 logo: ../assets/logo-on-light.png             # path เทียบกับไฟล์ .md (ไม่บังคับ)
 logo_width_cm: 6.5
-brand: E10613          # สีหลัก: หัวข้อ H1 ชื่อปก เลขข้อ
-brand_deep: 8E0A12     # หัวข้อ H2 ตัวหนังสือหัวตาราง โค้ดในบรรทัด
-brand_tint: FDECEC     # พื้นหัวตาราง
-brand_tint_2: FEF6F6   # พื้นแถวสลับ (ตารางเกิน 6 แถว)
+brand: 2A78D6          # สีหลักของโปรเจกต์ (ลำดับใน diagram-figures ข้อ 5) · ตัวอย่างนี้ = ค่าประจำบ้าน · หัวข้อ H1 ชื่อปก เลขข้อ
+brand_deep: 1B4E8B     # หัวข้อ H2 ตัวหนังสือหัวตาราง โค้ดในบรรทัด
+brand_tint: EAF2FB     # พื้นหัวตาราง
+brand_tint_2: F4F8FD   # พื้นแถวสลับ (ตารางเกิน 6 แถว)
 ---
 ```
 
 ค่าเสริม: `brand_2` (สี accent รอง) · `toc: no` (ไม่ใส่สารบัญ) · `footer: Page` (คำหน้าเลขหน้า ค่าเริ่มต้น "หน้า") · `figure_width_cm` (ค่าเริ่มต้น 17) · `cover_top_pt` (ระยะจากขอบบนถึงโลโก้ ค่าเริ่มต้น 150)
 
-**สีมาจากเจ้าของงาน** — ดูดสีจากโลโก้หรือหน้าเว็บของลูกค้า ไม่มี → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 4.5:1)
+**สีมาจากเจ้าของงาน** — หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) · หาไม่เจอเลย → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · ห้ามคัดลอกสีจากตัวอย่างหรือรายงานต้นแบบ · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 7:1 ทั้งบนพื้นขาวและ `brand_tint` — สคริปต์ตรวจให้ ไม่ผ่านจะหยุดพร้อมบอกค่า)
 
 ## 3 · Markdown แต่ละแบบกลายเป็นอะไร
 
@@ -218,14 +218,14 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 | สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`presentation-design`](../presentation-design/SKILL.md) (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
 | รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |
-| ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | [`doc-cover-design`](../doc-cover-design/SKILL.md) |
+| ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | `doc-cover-design` (plugin `software-company`) |
 
 
 ---
 
 # skill: presentation-design
 
-Use when building a slide deck someone will present or read (story, headlines, layouts, Thai type).
+Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
 
 # Presentation Design
 
@@ -253,7 +253,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ทำเด็คนำเสนอ — ข้อเสนอโครงการ · รายงานความคืบหน้า · รีวิวออกแบบ · อบรม
+- ทำเด็คนำเสนอ — ข้อเสนอลูกค้า · แผนธุรกิจ · สรุปงานวิจัย · รายงานความคืบหน้า · อบรม · รีวิวออกแบบ
 - รีวิวเด็คที่คนอื่นทำ
 - แปลงเอกสารยาวเป็นเด็ค
 
@@ -262,9 +262,9 @@ Use when building a slide deck someone will present or read (story, headlines, l
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | สร้างไฟล์ `.pptx` จริง (python-pptx, ฟอนต์, หน้าปก) | `branded-document-design` |
-| ชุดสีของกราฟ | `web-app-design` (หัวข้อ chart colors) |
+| ชุดสีของกราฟ | `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company` → `references/tokens.md` "สีข้อมูล (กราฟ)") |
 | เอกสารที่อ่านเอง ไม่มีคนพูด | `polished-document-style` + `branded-document-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
+| ผัง ขั้นตอน หรือสถาปัตยกรรมในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
 
 > **เด็คที่ส่งให้อ่านเอง ไม่ใช่เด็ค** — เป็นเอกสาร ให้ทำเป็นเอกสาร
 > ถ้าต้องทำทั้ง 2 อย่าง ให้ทำเด็คสำหรับพูด แล้วแนบเอกสารแยก อย่ายัดทุกอย่างลงสไลด์
@@ -293,7 +293,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 |---|---|
 | **ขออนุมัติ / ตัดสินใจ** | ข้อสรุปและสิ่งที่ขอ → เหตุผล 3 ข้อ → ทางเลือกที่พิจารณาแล้ว → ความเสี่ยง → สิ่งที่ขออีกครั้ง |
 | **รายงานความคืบหน้า** | สถานะรวม (เขียว/เหลือง/แดง) → ทำอะไรเสร็จ → ติดอะไร ต้องการอะไรจากใคร → แผนรอบหน้า |
-| **รีวิวออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
+| **รีวิวแผนหรืองานออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
 | **อบรม** | ทำอะไรได้หลังเรียน → แนวคิด → สาธิต → ให้ลองทำ → สรุปและที่ค้นต่อ |
 | **ขายงาน** | ปัญหาของลูกค้า (ด้วยคำของเขา) → ผลที่จะได้ → วิธีของเรา → หลักฐาน → ราคาและขั้นต่อไป |
 
@@ -317,7 +317,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 หัวสไลด์ยาวได้ถึง 2 บรรทัด **อย่าย่อจนกลายเป็นชื่อหัวข้อ** และอย่าย่อจนอ่านไม่ลื่น: หัวที่มี 2 ท่อนต้องมีคำเชื่อม ใช้วลีที่คนพูดจริง และเลือกคำตามคนฟัง (กฎเต็มอยู่ใน `human-writing` หัวข้อ 6)
 
 ```
-❌ ทุกข้อความผ่าน 8 ขั้น: AI ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+❌ ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
 ✅ ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
 ```
 
@@ -398,7 +398,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 - **บอกที่มาของข้อมูลเสมอ** — ช่วงเวลา จำนวนตัวอย่าง แหล่ง (ใส่ในแถบข้างหรือท้ายกระดาษ)
 - **ตารางที่เกิน 5 แถว 4 คอลัมน์ไม่ควรอยู่ในสไลด์** ให้ทำเป็นกราฟ หรือย้ายไปเอกสารแนบ
 
-ชุดสีของกราฟที่ใช้ร่วมกับระบบอื่นอยู่ใน `web-app-design` หัวข้อ chart colors
+ชุดสีของกราฟในสไลด์มาจาก `diagram-figures` → `references/colour-by-domain.md` · กราฟที่ต้องใช้ร่วมกับหน้าจอแอปดู `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)"
 
 ---
 
@@ -466,12 +466,12 @@ Use when building a slide deck someone will present or read (story, headlines, l
 | สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
 | เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
 | แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `pptx-to-html-deck` |
-| ชุดสีของกราฟ | `web-app-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
-| กฎระยะห่างและลำดับสายตา | `ui-craft` |
-| เนื้อหามาจากเอกสาร SRS | `srs-writing` |
-| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
-| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` |
+| ชุดสีของกราฟ | สีหลักของงาน + สีรองตาม `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company`) |
+| ผังในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
+| กฎระยะห่างและลำดับสายตา (หน้าจอแอป) | `ui-craft` (plugin `software-company`) |
+| เนื้อหามาจากเอกสาร Software Requirements Specification (SRS) | `srs-writing` (plugin `software-company`) |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` (plugin `software-company`) |
+| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` (plugin `software-company`) |
 
 ---
 

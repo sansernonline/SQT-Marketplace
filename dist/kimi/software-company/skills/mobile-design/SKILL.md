@@ -9,7 +9,7 @@ Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that m
 | Mode | What it does |
 |---|---|
 | `mobile-architecture` | Design mobile app architecture using mobile-engineer agent. Covers framework choice, state management, navigation. |
-| `aso-audit` | Audit App Store / Play Store listing using growth-specialist agent. |
+| `aso-audit` | Audit App Store / Play Store listing (App Store Optimization, ASO) using growth-specialist agent. |
 
 ---
 
@@ -19,15 +19,15 @@ Use `mobile-engineer` agent for: **$ARGUMENTS**
 
 Workflow:
 1. **Discovery:** platforms, team, performance, complexity
-2. **Apply `mobile-engineering` skill**
-3. **Choose framework** (native, RN, Flutter, KMP) with tradeoffs
-4. **Design architecture** (MVVM, MVI, Clean) by complexity
+2. **Apply `mobile-engineering` skill** (สถาปัตยกรรม · ประสิทธิภาพ · งบประสิทธิภาพ)
+3. **Choose framework** (native, React Native (RN), Flutter, Kotlin Multiplatform (KMP)) with tradeoffs
+4. **Design architecture** (Model-View-ViewModel (MVVM), Model-View-Intent (MVI), Clean) by complexity
 5. **Choose state management**
 6. **Design navigation pattern**
 7. **Plan offline support** if applicable
-8. **Apply `mobile-engineering` skill** for budget checking
+8. **Check performance budget** (launch time · frame rate · memory ตาม `mobile-engineering`)
 9. **Produce polished architecture doc** using `polished-document-style`
-10. **Hand-off:** iOS → `mobile-engineer`, Android → `mobile-engineer`, ASO → `growth-specialist`
+10. **Hand-off:** หน้าจอและ design tokens → `mobile-app-design` (ร่วมกับ `ux-designer`) · ลงมือเขียนแอป (iOS · Android · cross-platform) → `mobile-engineer` · App Store Optimization (ASO) → `growth-specialist`
 
 ---
 

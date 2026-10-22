@@ -14,6 +14,7 @@ Use when software handles patient or clinical data (orders, medication, FHIR, EH
 |---|---|
 | designing clinical software workflows — order entry, medication management, clinical decision support, care plans, patient handoffs. Bridges clinical processes and software design | [`references/clinical-workflows.md`](references/clinical-workflows.md) |
 | implementing FHIR R4/R5 — choosing resources, designing profiles, building FHIR APIs, integrating with EHRs via SMART on FHIR, validating resources, or mapping legacy data to FHIR. Concrete patterns and gotchas | [`references/fhir-implementation.md`](references/fhir-implementation.md) |
+| project in Thailand / Thai patients — health data is sensitive personal data under the Personal Data Protection Act (PDPA) of Thailand: explicit consent, breach notice to the regulator within 72 hours. HIPAA is US-only; use it only when the project also serves the US | skill `pdpa-compliance` |
 | implementing HIPAA Security Rule safeguards (administrative, physical, technical), conducting risk assessments, preparing for OCR audits, designing BAA workflows, or evaluating cloud services for PHI workloads. Provides concrete engineering patterns | [`references/hipaa-compliance.md`](references/hipaa-compliance.md) |
 
 ## คู่มือบทบาท
@@ -43,8 +44,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 FHIR Quality Standards](#fhir-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 FHIR Quality Standards](#-fhir-quality-standards)
 - [FHIR Core Concepts](#fhir-core-concepts)
 - [FHIR REST API Pattern](#fhir-rest-api-pattern)
 - [SMART on FHIR (Standard EHR App Auth)](#smart-on-fhir-standard-ehr-app-auth)
@@ -191,14 +192,16 @@ sequenceDiagram
     EHR-->>App: Patient resource
 ```
 
-### Scopes
+### Scopes (SMART v2)
 ```
-patient/Patient.read         — read this patient
-user/Observation.read        — read all user-visible Observations
+patient/Patient.r            — read this patient
+user/Observation.rs          — read + search all user-visible Observations
 launch                       — launched from EHR
-openid profile               — get user identity
+openid fhirUser              — get user identity
 patient/*.rs                 — read + search all patient resources
 ```
+
+v2 letters: `c` create · `r` read · `u` update · `d` delete · `s` search. Old v1 scopes (`patient/Patient.read`) are still accepted by many servers; ask for v2 and fall back only if the server's `.well-known/smart-configuration` lacks `permission-v2`.
 
 ## Implementation Guides
 
@@ -214,48 +217,11 @@ patient/*.rs                 — read + search all patient resources
 
 ## Validation Pattern
 
-```python
-from fhir.resources.patient import Patient
-from fhir.resources.bundle import Bundle
-
-# Validate structure
-patient = Patient.parse_obj(json_data)  # raises on invalid
-
-# Validate against profile (US Core)
-from fhirpathpy import evaluate
-validator = ProfileValidator('http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient')
-result = validator.validate(patient)
-
-if not result.valid:
-    for issue in result.issues:
-        log.warning(f"Validation issue: {issue.diagnostics}")
-```
+Role rule: every resource passes both a structure check and a profile check before it is sent. The working code (pydantic v2 `model_validate`, the server's `$validate` operation, and the HL7 `validator_cli.jar` for CI) is in [`fhir-implementation.md` → Validation](fhir-implementation.md#validation).
 
 ## Bundle (Transaction) Pattern
 
-```json
-{
-  "resourceType": "Bundle",
-  "type": "transaction",
-  "entry": [
-    {
-      "fullUrl": "urn:uuid:patient-1",
-      "resource": { "resourceType": "Patient", "name": [...] },
-      "request": { "method": "POST", "url": "Patient" }
-    },
-    {
-      "fullUrl": "urn:uuid:obs-1",
-      "resource": {
-        "resourceType": "Observation",
-        "subject": { "reference": "urn:uuid:patient-1" }
-      },
-      "request": { "method": "POST", "url": "Observation" }
-    }
-  ]
-}
-```
-
-→ The server creates all resources together or none, and resolves the references itself.
+Use a `transaction` Bundle when several resources must be created together or not at all; the server resolves `urn:uuid:` references itself. Example with valid UUIDs: [`fhir-implementation.md` → Pattern: Bundle (transaction)](fhir-implementation.md#pattern-bundle-transaction).
 
 ## Bulk Data Export
 
@@ -292,7 +258,7 @@ GET <content-location-url>
 ## EHR-Specific Quirks
 
 ### Epic
-- App Orchard / Showroom marketplace
+- Showroom marketplace (renamed from App Orchard) · developer access through Vendor Services / fhir.epic.com (checked 22 Oct 2026)
 - USCDI support generally good
 - May require Epic-specific profiles
 
@@ -304,8 +270,10 @@ GET <content-location-url>
 - Cloud-native, easier to test
 - FHIR + custom REST
 
-### Allscripts (Veradigm)
-- Multiple platforms (Sunrise, TouchWorks)
+### Veradigm (was Allscripts) · Altera Digital Health
+- Allscripts renamed itself Veradigm (2023) and kept the ambulatory products
+- Sunrise, Paragon and TouchWorks moved to Altera Digital Health (2022)
+- Check which company owns the platform before you ask for API access (checked 22 Oct 2026)
 
 ## Audit Events
 
@@ -375,8 +343,8 @@ GET <content-location-url>
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Healthcare Quality Standards](#healthcare-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Healthcare Quality Standards](#-healthcare-quality-standards)
 - [Critical Healthcare Rules](#critical-healthcare-rules)
 - [Skills You Use](#skills-you-use)
 - [Common Patterns](#common-patterns)
@@ -542,30 +510,44 @@ async function prescribeMedication(rx: Prescription) {
   const currentMeds = await getCurrentMedications(rx.patientId);
   const interactions = checkDDI(rx.drug, currentMeds);
   if (interactions.severity === 'major') {
-    requireOverride(interactions); // Provider must confirm override
+    // Awaited: stops here unless the provider confirms and records a reason
+    await requireOverrideOrStop(rx, interactions);
   }
 
   // 3. Dose range check
+  const patient = await getPatient(rx.patientId);
   if (rx.dose > maxDoseForAge(rx.drug, patient.age)) {
-    requireOverride('Dose exceeds normal range');
+    await requireOverrideOrStop(rx, 'Dose exceeds normal range');
   }
 
   // 4. Log + send
   return await sendToPharmacy(rx);
 }
+
+async function requireOverrideOrStop(rx: Prescription, reason: unknown) {
+  const o = await requestOverride({ rx, reason }); // waits for the provider
+  if (!o.approved || !o.reasonText?.trim()) {
+    throw new ClinicalAlert('Order stopped: override not confirmed with a reason');
+  }
+  await auditLog('override', { rxId: rx.id, reason, reasonText: o.reasonText });
+}
 ```
+
+The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinical-workflows.md` → Bedside Medication Administration](clinical-workflows.md#pattern-bedside-medication-administration).
 
 ## EHR Integration
 
 | EHR | API style | Notes |
 |-----|-----------|-------|
-| Epic | FHIR, App Orchard | Largest US, app marketplace |
+| Epic | FHIR, Showroom (was App Orchard) · Vendor Services | Largest US, app marketplace |
 | Cerner (Oracle Health) | FHIR, CareAware | Large US/international |
-| Allscripts (Veradigm) | FHIR | Mid-market |
+| Veradigm (was Allscripts, ambulatory) · Altera Digital Health (Sunrise, Paragon, TouchWorks) | FHIR | Mid-market |
 | AthenaHealth | REST API | Cloud-native, easier |
 | Meditech | FHIR | Hospital-focused |
 
 > 💡 **Default integration:** SMART on FHIR — works across modern EHRs
+>
+> Vendor names checked 22 Oct 2026 (Epic Showroom announcement, Fierce Healthcare; Allscripts → Veradigm 2023, hospital products → Altera 2022).
 
 ## Things You Don't Do
 
@@ -580,7 +562,7 @@ async function prescribeMedication(rx: Prescription) {
 ## When to Hand Off
 
 - HIPAA compliance details → `hipaa-officer`
-- FHIR/HL7 integration → `healthcare-engineer`
+- FHIR/HL7 integration → stay in this agent, open [`agent-fhir-specialist.md`](agent-fhir-specialist.md)
 - Clinical data analysis → `clinical-data-analyst`
 - Security review → `security-engineer` (from software-company)
 - Compliance signoff → `hipaa-officer`
@@ -663,7 +645,7 @@ You (Covered Entity)
    │
    ├──► AWS/Azure/GCP (cloud provider)        ← BAA required
    ├──► Sentry (error tracking)                ← BAA required (sees PHI in errors)
-   ├──► Stripe (payment processor)             ← BAA likely required
+   ├──► Stripe (payment processor)             ← usually no BAA: payment processing alone is exempt (HIPAA §1179); BAA needed only if you send other PHI
    ├──► Email provider (SendGrid/SES)          ← BAA required (sends PHI)
    ├──► CRM (HubSpot/Salesforce)               ← BAA required (stores PHI)
    ├──► Analytics (Mixpanel/Amplitude)         ← BAA required IF receives PHI
@@ -688,14 +670,15 @@ flowchart TD
     D -->|No, low risk| E[Document + close]
     D -->|Yes, risk to PHI| F[Required notifications]
     F --> G[Notify individuals within 60 days]
-    F --> H[Notify OCR]
     F --> I{500+ affected?}
-    I -->|Yes| J[Notify media]
-    I -->|No| K[Annual OCR notification only]
+    I -->|Yes| J[Notify OCR + media within 60 days of discovery]
+    I -->|No| K[Log it; notify OCR within 60 days after the calendar year ends - about 1 March]
     J --> L[Document everything]
     K --> L
     G --> L
 ```
+
+Deadlines match the table in [`hipaa-compliance.md` → Breach Notification Thresholds](hipaa-compliance.md#breach-notification-thresholds) (HHS Breach Notification Rule, checked 22 Oct 2026).
 
 ### Risk assessment factors
 
@@ -710,7 +693,7 @@ flowchart TD
 **No.** HIPAA Safe Harbor requires removing **18 identifiers**:
 1. Names
 2. Addresses (smaller than state)
-3. Dates (except year) of birth, death, admission, etc.
+3. Dates (except year) of birth, death, admission, etc. — and ages over 89 (group them as "90 or older")
 4. Phone numbers
 5. Fax numbers
 6. Email addresses
@@ -817,7 +800,8 @@ SELECT
   ra.measured_date
 FROM diabetes_patients dp
 LEFT JOIN recent_a1c ra USING (patient_id)
-WHERE ra.a1c > 9.0;  -- Poor control threshold
+WHERE ra.a1c > 9.0   -- Poor control threshold
+   OR ra.a1c IS NULL; -- no HbA1c test in the year also counts as poor control (HEDIS)
 ```
 
 ### Outcome Measure: 30-Day Readmission
@@ -911,8 +895,11 @@ ci_high = stats.chi2.ppf(0.975, 2*(observed+1)) / (2 * expected)
 ### Implementation pattern
 
 ```sql
--- HEDIS measure: BCS (Breast Cancer Screening)
+-- HEDIS measure: BCS (Breast Cancer Screening), measurement year (MY) 2024
 -- Women 50-74 who had mammogram in last 2 years
+-- From MY2025 the measure is BCS-E with ages 40-74, reported as 40-49, 50-74 and total
+-- (NCQA blog "Updates to Breast Cancer Screening Age Range for HEDIS MY 2025", checked 22 Oct 2026).
+-- Take the exact age-as-of date and lookback from the NCQA technical specification for your MY.
 
 WITH denominator AS (
   SELECT patient_id
@@ -1035,7 +1022,7 @@ What is X for population Y during period Z?
 - [Medication Workflow](#medication-workflow)
 - [Clinical Decision Support (CDS)](#clinical-decision-support-cds)
 - [Patient Handoff (Shift Change, Transfer)](#patient-handoff-shift-change-transfer)
-- [Patient: Jane Doe, MRN 12345, Room 304](#patient-jane-doe-mrn-12345-room-304)
+- Patient: Jane Doe, MRN 12345, Room 304
 - [Care Plan Management](#care-plan-management)
 - [Patient Safety Patterns](#patient-safety-patterns)
 - [Workflow Design Heuristics](#workflow-design-heuristics)
@@ -1084,14 +1071,16 @@ flowchart TD
     C --> D[Enters order details]
     D --> E[Clinical decision support fires]
     E --> F{Alert?}
-    F -->|Critical: drug allergy| G[Hard stop - must address]
+    F -->|Critical: drug allergy| G[Hard stop - no override at the order screen]
     F -->|Significant: interaction| H[Soft alert - override allowed]
     F -->|Info: cost, formulary| I[Visible but not blocking]
     F -->|None| J[Cosign / signature]
-    G --> K{Override?}
-    H --> K
+    G --> P{Pharmacist override with reason?}
+    P -->|Yes| L
+    P -->|No| M[Cancel or change order]
+    H --> K{Override?}
     K -->|Yes| L[Document reason]
-    K -->|No| M[Cancel order]
+    K -->|No| M
     I --> J
     J --> N[Order transmitted]
     L --> N
@@ -1102,6 +1091,7 @@ flowchart TD
 - **Patient context lock** — confirm the patient before the order, and lock the patient while the order is entered
 - **Allergy/interaction checks** — run them during entry, not after
 - **Override documentation** — required, and pharmacy reviews it
+- **Hard stop means no override for the prescriber** — only a pharmacist (or the role your safety committee names) can release it, with a recorded reason
 - **Order set support** — ready-made groups of orders for a protocol (e.g., sepsis bundle)
 
 ## Medication Workflow
@@ -1126,11 +1116,15 @@ The software MUST enforce all 5.
 
 ### Pattern: Bedside Medication Administration
 
+The code checks all 5 rights against the active order. An override is an awaited step: if the nurse gives no reason, or a hard stop is hit, the function stops and nothing is recorded as given.
+
 ```typescript
 async function administerMedication(scan: {
   patientWristbandBarcode: string;
   medicationBarcode: string;
   nurseId: string;
+  dose: { value: number; unit: string };   // what the nurse is about to give
+  route: string;                           // e.g. 'PO', 'IV'
 }) {
   // 1. Verify patient
   const patient = await getPatientByBarcode(scan.patientWristbandBarcode);
@@ -1155,18 +1149,40 @@ async function administerMedication(scan: {
     throw new ClinicalError('Medication does not match patient orders');
   }
 
-  // 4. Verify timing
-  if (!matching.isWithinWindow(now())) {
-    requireOverride('Outside scheduled window');
+  // 4. Verify dose against the order (same unit, same amount)
+  if (scan.dose.unit !== matching.dose.unit || scan.dose.value !== matching.dose.value) {
+    throw new ClinicalError('Dose does not match the order'); // hard stop: no bedside override
   }
 
-  // 5. Document administration
+  // 5. Verify route against the order
+  if (scan.route !== matching.route) {
+    throw new ClinicalError('Route does not match the order'); // hard stop
+  }
+
+  // 6. Verify timing — soft stop: allowed only with a recorded reason
+  let overrideReason: string | null = null;
+  if (!matching.isWithinWindow(now())) {
+    const override = await requestOverride({
+      reason: 'Outside scheduled window',
+      nurseId: scan.nurseId,
+      orderId: matching.orderId,
+    }); // waits for the nurse; returns { approved, reasonText }
+    if (!override.approved || !override.reasonText?.trim()) {
+      throw new ClinicalError('Administration stopped: no override reason recorded');
+    }
+    overrideReason = override.reasonText;
+  }
+
+  // 7. Document administration
   await db.medicationAdministrations.create({
     patientId: patient.id,
     medicationCode: med.code,
+    dose: scan.dose,
+    route: scan.route,
     administeredBy: scan.nurseId,
     administeredAt: now(),
     orderId: matching.orderId,
+    overrideReason,
   });
 }
 ```
@@ -1177,10 +1193,10 @@ async function administerMedication(scan: {
 
 | Type | Trigger | UX |
 |------|---------|----|
-| 🚨 **Hard stop** | Will cause harm | Block until addressed |
-| 🟠 **Significant** | Important consideration | Soft alert, override + reason |
-| 🟡 **Informational** | Useful info | Visible, non-blocking |
-| 💡 **Suggestion** | Could be better | Quiet, dismissible |
+| **Hard stop** (critical) | Will cause harm | Block. The prescriber cannot override; only a pharmacist can, with a reason |
+| **Significant** (warning) | Important consideration | Soft alert, override + reason |
+| **Informational** (info) | Useful info | Visible, non-blocking |
+| **Suggestion** (low) | Could be better | Quiet, dismissible |
 
 ### Avoid Alert Fatigue
 
@@ -1196,6 +1212,8 @@ ALERT_BUDGET_PER_PATIENT = 5  # not a hard rule, but signal
 ```
 
 ### CDS Hooks (modern pattern)
+
+Flow between the electronic health record (EHR) and the CDS service:
 
 ```
 Trigger: patient-view, order-select, order-sign, encounter-discharge
@@ -1237,28 +1255,28 @@ CDS Service → EHR (cards):
 ## Patient: Jane Doe, MRN 12345, Room 304
 
 ### S - Situation
-65F admitted 2 days ago for pneumonia. Currently stable on O2.
+65F admitted 2 days ago for pneumonia. Currently stable on oxygen (O2).
 
 ### B - Background
-- Active: DM2 (controlled), HTN
-- Allergies: PCN, sulfa
-- Admit dx: CAP, R lower lobe
+- Active: type 2 diabetes mellitus (DM2, controlled), hypertension (HTN)
+- Allergies: penicillin (PCN), sulfa
+- Admit diagnosis (dx): community-acquired pneumonia (CAP), right lower lobe
 - Cultures pending
 
 ### A - Assessment
 - Vitals stable last 12h (96/min, 16/min, 110/68, 99.4F, 95% on 2L)
-- Tolerating PO, eating 50%
-- IV abx (Cefepime, day 3 of 7)
-- WBC trending down (15 → 12 → 9)
+- Tolerating oral intake (PO), eating 50%
+- Intravenous (IV) antibiotics (abx): Cefepime, day 3 of 7
+- White blood cell count (WBC) trending down (15 → 12 → 9)
 
 ### R - Recommendations / Plan
 - Continue current abx
-- D/C O2 if SpO2 > 92% on RA
+- Discontinue (D/C) O2 if oxygen saturation (SpO2) > 92% on room air (RA)
 - Discharge planning for tomorrow if cultures finalize
-- Watch for AMS (sundowning at home)
+- Watch for altered mental status (AMS) (sundowning at home)
 
 ### Tasks for incoming
-- Check 6am labs (CBC, BMP, troponin)
+- Check 6am labs: complete blood count (CBC), basic metabolic panel (BMP), troponin
 - Page Dr. Smith if hemodynamics change
 - Family update call at 10am
 ```
@@ -1558,21 +1576,23 @@ GET /Patient?name=Doe&_count=50&_offset=100
 
 ### Pattern: Bundle (transaction)
 
+`fullUrl` must be `urn:uuid:` + a real UUID (generate one per entry, e.g. `crypto.randomUUID()`). Short labels like `urn:uuid:1` are invalid.
+
 ```json
 {
   "resourceType": "Bundle",
   "type": "transaction",
   "entry": [
     {
-      "fullUrl": "urn:uuid:1",
+      "fullUrl": "urn:uuid:5555847b-6b2a-4a00-b509-f9728846984d",
       "resource": { "resourceType": "Patient", "name": [...] },
       "request": { "method": "POST", "url": "Patient" }
     },
     {
-      "fullUrl": "urn:uuid:2",
+      "fullUrl": "urn:uuid:61230616-a152-4a3c-8cc1-953ad6633f38",
       "resource": {
         "resourceType": "Observation",
-        "subject": { "reference": "urn:uuid:1" }  // resolved server-side
+        "subject": { "reference": "urn:uuid:5555847b-6b2a-4a00-b509-f9728846984d" }  // resolved server-side
       },
       "request": { "method": "POST", "url": "Observation" }
     }
@@ -1597,7 +1617,8 @@ const authUrl = new URL(conformance.authorization_endpoint);
 authUrl.searchParams.set('response_type', 'code');
 authUrl.searchParams.set('client_id', CLIENT_ID);
 authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
-authUrl.searchParams.set('scope', 'launch openid profile patient/Patient.read');
+authUrl.searchParams.set('scope', 'launch openid fhirUser patient/Patient.r patient/Observation.rs');
+// SMART v2 scopes (.r = read, .s = search, .rs = both). Old v1 scopes (patient/Patient.read) are still accepted by many servers
 authUrl.searchParams.set('state', randomString());
 authUrl.searchParams.set('aud', iss);
 authUrl.searchParams.set('launch', launch);
@@ -1630,18 +1651,37 @@ const token = await fetch(conformance.token_endpoint, {
 
 ## Validation
 
+Two levels. The Python model checks structure only. Profile rules (US Core must-support, value-set bindings) need the official validator.
+
 ```python
+# 1. Structure check — fhir.resources >= 7 is built on pydantic v2
+from pydantic import ValidationError
 from fhir.resources.observation import Observation
 
-# Parse + validate
 try:
-    obs = Observation.parse_obj(json_data)
+    obs = Observation.model_validate(json_data)   # parse_obj() is the old pydantic v1 name
 except ValidationError as e:
     print(e.errors())
 
-# Profile validation (US Core)
-from fhirvalidator import validate
-result = validate(json_data, profile_url='http://hl7.org/fhir/us/core/...')
+# 2. Profile check (US Core) — ask the FHIR server to run $validate
+import requests
+
+US_CORE_LAB = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab'
+r = requests.post(
+    f'{FHIR_BASE}/Observation/$validate',
+    params={'profile': US_CORE_LAB},
+    json=json_data,
+    headers={'Content-Type': 'application/fhir+json'},
+)
+outcome = r.json()                                # an OperationOutcome
+errors = [i for i in outcome.get('issue', []) if i['severity'] in ('error', 'fatal')]
+```
+
+Or offline in CI, with the official HL7 validator (Java):
+
+```bash
+java -jar validator_cli.jar obs.json -version 4.0.1 -ig hl7.fhir.us.core \
+  -profile http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab
 ```
 
 ## US Core (Most Common US IG)
@@ -1906,7 +1946,7 @@ Addressable (effectively required):
 | **Datadog** | ✅ | |
 | **GitHub** | ✅ (Enterprise) | |
 | **Slack** | ✅ (Enterprise+) | |
-| **Stripe** | ⚠️ Specific products | |
+| **Stripe** | ⚠️ Usually not needed | Payment processing alone falls under the HIPAA §1179 exemption, so no BAA is needed. If you send PHI beyond payment data (diagnosis, visit reason in metadata), you need a vendor that signs a BAA |
 | **OpenAI** | ⚠️ ZDR + BAA available | |
 | **Anthropic** | ✅ via API on AWS | |
 | **Various startups** | ❌ Often no | Check before using |
@@ -2012,7 +2052,9 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 ```
 < 500 individuals affected:
   - Notify individuals within 60 days
-  - Notify OCR annually (by Feb 1)
+  - Notify OCR (HHS Office for Civil Rights) once a year: no later than 60 days
+    after the end of the calendar year the breach was discovered (about 1 March)
+    (HHS Breach Notification Rule, checked 22 Oct 2026)
 
 500+ individuals affected:
   - Notify individuals within 60 days
@@ -2064,6 +2106,7 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 ## Reference
 
 - [HIPAA Security Rule Standards](https://www.hhs.gov/hipaa/for-professionals/security/index.html)
-- [NIST SP 800-66 Rev 2](https://csrc.nist.gov/publications/detail/sp/800-66/rev-2/draft)
+- [NIST SP 800-66 Rev 2 (final, Feb 2024)](https://csrc.nist.gov/pubs/sp/800/66/r2/final)
+- [HHS proposed Security Rule changes (NPRM, published 6 Jan 2025)](https://www.federalregister.gov/documents/2025/01/06/2024-30983/hipaa-security-rule-to-strengthen-the-cybersecurity-of-electronic-protected-health-information) — would make encryption and multi-factor authentication (MFA) required and drop most "addressable" specs; still a proposal, not law `(รอยืนยัน)` (checked 22 Oct 2026)
 - [AWS HIPAA Compliance](https://aws.amazon.com/compliance/hipaa-compliance/)
 - [OCR Breach Portal](https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf)

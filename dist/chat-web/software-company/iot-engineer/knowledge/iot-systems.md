@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Edge Architecture Quality Standards](#edge-architecture-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Edge Architecture Quality Standards](#-edge-architecture-quality-standards)
 - [Compute Placement Decision](#compute-placement-decision)
 - [Architecture Patterns](#architecture-patterns)
 - [Edge ML Patterns](#edge-ml-patterns)
@@ -214,8 +214,8 @@ async function reconcile() {
 
 ## When to Hand Off
 
-- Device firmware → `iot-engineer`
-- Cloud backend → `iot-engineer`
+- Device firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Cloud backend → open `agent-iot-engineer.md` (same agent)
 - ML model design → `ai-engineer`
 - Production deployment → `devops-engineer` (from software-company)
 
@@ -227,8 +227,8 @@ async function reconcile() {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Firmware Quality Standards](#firmware-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Firmware Quality Standards](#-firmware-quality-standards)
 - [Firmware Patterns](#firmware-patterns)
 - [Language Choices (2026)](#language-choices-2026)
 - [Memory Discipline](#memory-discipline)
@@ -398,8 +398,8 @@ extern const i2c_driver_t esp32_i2c;
 
 ## When to Hand Off
 
-- Cloud connectivity → `iot-engineer`
-- Edge computing → `iot-engineer`
+- Cloud connectivity → open `agent-iot-engineer.md` (same `iot-engineer` agent)
+- Edge computing → open `agent-edge-architect.md` (same agent)
 - Hardware design → external hardware engineer
 - Antenna / RF → external RF engineer
 
@@ -411,8 +411,8 @@ extern const i2c_driver_t esp32_i2c;
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 IoT Quality Standards](#iot-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 IoT Quality Standards](#-iot-quality-standards)
 - [Architecture Choices](#architecture-choices)
 - [Communication Patterns](#communication-patterns)
 - [Tech Stack](#tech-stack)
@@ -482,14 +482,14 @@ Device                   Broker                Cloud
    │── PUBACK ────────────►│                     │
 ```
 
-**Topic structure:**
+**Topic structure:** use the one scheme in `mqtt-protocol-patterns.md` → Topic Structure Patterns:
 ```
-{tenant}/{device-type}/{device-id}/{message-type}
+{tenant}/{site}/{type}/{id}/{message}
 
 Example:
-acme/thermostat/dev-abc123/telemetry
-acme/thermostat/dev-abc123/commands
-acme/thermostat/dev-abc123/state
+acme/factory-1/thermostat/dev-abc123/telemetry
+acme/factory-1/thermostat/dev-abc123/cmd/req
+acme/factory-1/thermostat/dev-abc123/state
 ```
 
 ### QoS levels
@@ -501,7 +501,7 @@ acme/thermostat/dev-abc123/state
 
 | Need | Tools (2026) |
 |------|--------------|
-| MQTT broker | EMQX, HiveMQ, Mosquitto, AWS IoT Core, GCP IoT, Azure IoT Hub |
+| MQTT broker | EMQX, HiveMQ, Mosquitto, AWS IoT Core, Azure IoT Hub · on Google Cloud run EMQX or HiveMQ yourself (Google Cloud IoT Core was retired 2023-08-16) |
 | Time-series DB | InfluxDB, TimescaleDB, Prometheus |
 | Stream processing | Apache Flink, Kafka Streams, Kinesis |
 | Device management | Balena, Mender, AWS IoT Device Management |
@@ -582,9 +582,9 @@ NEVER:
 
 ## When to Hand Off
 
-- Firmware → `iot-engineer`
-- Edge architecture → `iot-engineer`
-- Protocol deep work → `iot-engineer`
+- Firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Edge architecture → open `agent-edge-architect.md` (same agent)
+- Protocol deep work → open `agent-mqtt-specialist.md` (same agent)
 - Backend scaling → `solution-architect` (from software-company)
 
 ## Common Pitfalls
@@ -603,8 +603,8 @@ NEVER:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 MQTT Quality Standards](#mqtt-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 MQTT Quality Standards](#-mqtt-quality-standards)
 - [Broker Comparison (2026)](#broker-comparison-2026)
 - [Topic Design Patterns](#topic-design-patterns)
 - [QoS Decision Matrix](#qos-decision-matrix)
@@ -663,12 +663,14 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 
 ### Pattern: Hierarchical for Scale
 
+The scheme lives in `mqtt-protocol-patterns.md` → Topic Structure Patterns (one scheme for the whole skill):
+
 ```
-{tenant}/{group}/{device-type}/{device-id}/{message-type}
+{tenant}/{site}/{type}/{id}/{message}
 
 Examples:
 acme/factory-1/temp-sensor/dev-abc/telemetry
-acme/factory-1/temp-sensor/dev-abc/commands
+acme/factory-1/temp-sensor/dev-abc/cmd/req
 acme/factory-1/temp-sensor/dev-abc/state
 ```
 
@@ -727,7 +729,7 @@ publish:
   - acme/factory-1/temp-sensor/dev-abc/state
 
 subscribe:
-  - acme/factory-1/temp-sensor/dev-abc/commands
+  - acme/factory-1/temp-sensor/dev-abc/cmd/req
 ```
 
 ## Performance Tuning
@@ -736,7 +738,7 @@ subscribe:
 
 ```
 Per-broker capacity (rough):
-- Single Mosquitto: 1-10k devices
+- Single Mosquitto: single-threaded — load-test your own message rate before planning past ~10k devices (รอยืนยัน: no vendor benchmark found)
 - HiveMQ/EMQX single node: 100k - 1M
 - EMQX cluster: 100M+
 ```
@@ -778,9 +780,10 @@ Each broker:
 
 ### Pattern: Will Messages
 ```python
+# base = f"{tenant}/{site}/{type}/{device_id}"  (mqtt-protocol-patterns.md)
 # Device sets "last will" on connect
 client.will_set(
-    topic=f"{tenant}/{device_id}/state",
+    topic=f"{base}/state",
     payload='{"status": "offline"}',
     qos=1,
     retain=True
@@ -794,7 +797,7 @@ client.will_set(
 ```python
 # Latest state always available
 client.publish(
-    topic=f"{tenant}/{device_id}/config",
+    topic=f"{base}/config",
     payload=config_json,
     qos=1,
     retain=True  # ← new subscribers get last value
@@ -832,8 +835,8 @@ Key metrics:
 
 ## When to Hand Off
 
-- Device firmware → `iot-engineer`
-- Cloud-side processing → `iot-engineer`, `data-engineer`
+- Device firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Cloud-side processing → open `agent-iot-engineer.md` (same agent); data pipelines → `data-engineer`
 - Production deployment → `devops-engineer` (from software-company)
 
 
@@ -998,29 +1001,44 @@ Update flow:
 
 ### Staged Rollout
 
+This is the one rollout table for the skill (1% → 10% → 50% → 100%); other files link here.
+
 ```python
-async def rollout_firmware(version: str, fleet_filter: dict):
-    eligible = await get_devices(fleet_filter)
+import math, random
 
-    stages = [
-        {'percent': 1, 'wait_hours': 24},
-        {'percent': 10, 'wait_hours': 24},
-        {'percent': 50, 'wait_hours': 12},
-        {'percent': 100, 'wait_hours': 0},
-    ]
+# (percent of fleet, hours to watch before the next stage)
+STAGES = [(1, 24), (10, 24), (50, 12), (100, 0)]
 
-    for stage in stages:
-        target = int(len(eligible) * stage['percent'] / 100)
-        batch = random.sample(eligible, target)
+# One stage per run, scheduled as a job (see `background-jobs`) — not one process
+# sleeping for days, which a restart or deploy would kill. State lives in the database.
+async def run_rollout_stage(rollout_id: str):
+    r = await db.rollouts.get(rollout_id)        # version, fleet_filter, stage, updated_ids, status
+    if r.status != 'running':
+        return
 
-        await schedule_updates(batch, version)
-        await asyncio.sleep(stage['wait_hours'] * 3600)
-
-        # Health check
-        success_rate = await calculate_success_rate(batch)
+    # Health check on every device updated so far
+    if r.updated_ids:
+        success_rate = await calculate_success_rate(r.updated_ids)
         if success_rate < 0.95:
-            await alert('OTA degradation, halting')
+            await db.rollouts.update(rollout_id, status='halted')
+            await alert('OTA degradation, halting', rollout_id)
             return
+
+    if r.stage == len(STAGES):
+        await db.rollouts.update(rollout_id, status='done')
+        return
+
+    percent, watch_hours = STAGES[r.stage]
+    eligible = await get_devices(r.fleet_filter)
+    already = set(r.updated_ids)
+    remaining = [d for d in eligible if d.id not in already]   # never pick a device twice
+    target = math.ceil(len(eligible) * percent / 100)
+    batch = random.sample(remaining, min(len(remaining), max(0, target - len(already))))
+
+    await schedule_updates(batch, r.version)
+    await db.rollouts.update(rollout_id, stage=r.stage + 1,
+                             updated_ids=list(already | {d.id for d in batch}))
+    await jobs.enqueue(run_rollout_stage, rollout_id, delay_hours=watch_hours)
 ```
 
 ## Configuration Management
@@ -1097,7 +1115,7 @@ End of life flow:
 3. Device wipes secrets, factory resets
 4. Acknowledges
 5. Cloud removes from active fleet
-6. Cert revoked (CRL/OCSP)
+6. Cert revoked (published in the Certificate Revocation List (CRL) and the Online Certificate Status Protocol (OCSP) responder)
 
 Why: prevent return-to-service after disposal
 ```
@@ -1238,7 +1256,7 @@ Stagger to avoid thundering herd
 |---------|----------|
 | **Bare RTOS** | Tiny MCUs |
 | **Zephyr** | Modern embedded |
-| **NerveOS** | Elixir embedded |
+| **Nerves** (nerves-project.org) | Elixir embedded |
 
 ## Edge ML Patterns
 
@@ -1408,7 +1426,7 @@ interface LocalStore {
 ```
 Each edge device/gateway:
 - Logs → ship to cloud (buffered)
-- Metrics → push to TSDB
+- Metrics → push to a time-series database (TSDB)
 - Traces → sample + ship
 - Health → frequent heartbeat
 
@@ -1432,13 +1450,8 @@ Tools:
 ```
 
 ### Safe rollout
+Stages and wait times: use the one table in `device-fleet-management.md` → Staged Rollout (1% canary → 10% → 50% → 100%).
 ```
-Stage 1: 1% of fleet (canary)
-Wait 24h, check metrics
-Stage 2: 10%
-Wait 24h
-Stage 3: 100%
-
 Auto-rollback if:
 - Crash rate > X%
 - Connectivity drops > Y%
@@ -1532,7 +1545,7 @@ Break-even depends on:
 ### Pattern: Tenant-Aware Hierarchy
 
 ```
-{tenant}/{site}/{type}/{id}/{message}
+{tenant}/{site}/{type}/{id}/{message}      ← the one scheme for this skill; role files link here
 
 Examples:
 acme/factory-1/sensor/dev-001/telemetry
@@ -1549,8 +1562,8 @@ Benefits:
 ### Pattern: Request/Response
 
 ```
-Request:  {tenant}/{device}/cmd/req
-Response: {tenant}/{device}/cmd/resp
+Request:  {tenant}/{site}/{type}/{id}/cmd/req
+Response: {tenant}/{site}/{type}/{id}/cmd/resp
 
 Or use MQTT 5 Response Topic property:
 Request includes "response-topic" property
@@ -1611,17 +1624,21 @@ client.publish(topic, payload, qos=2)
 ### Persistent Session
 
 ```python
-client = mqtt.Client(
-    client_id="dev-abc",
-    clean_session=False  # MQTT 3 — keep state on disconnect
-)
+# paho-mqtt 2.x (tested with 2.1.0, 2026-10-22)
+import paho.mqtt.client as mqtt
+from paho.mqtt.properties import Properties
+from paho.mqtt.packettypes import PacketTypes
 
-# MQTT 5
-client.connect(
-    properties={
-        "SessionExpiryInterval": 3600  # keep for 1h
-    }
-)
+# MQTT 3.1.1 — keep state on disconnect
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv311, clean_session=False)
+
+# MQTT 5 — no clean_session (paho raises ValueError); use clean_start + Session Expiry
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv5)
+props = Properties(PacketTypes.CONNECT)
+props.SessionExpiryInterval = 3600  # keep for 1h
+client.connect(broker, 8883, clean_start=False, properties=props)
 
 # Benefits:
 # - Subscriptions persist
@@ -1632,7 +1649,9 @@ client.connect(
 ### Clean Session
 
 ```python
-client = mqtt.Client(clean_session=True)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
+                     protocol=mqtt.MQTTv311, clean_session=True)
+# MQTT 5: client.connect(broker, 8883, clean_start=True)  — no Session Expiry → session ends on disconnect
 
 # Use for:
 # - Stateless workers
@@ -1643,9 +1662,10 @@ client = mqtt.Client(clean_session=True)
 ## Will (Last Will and Testament)
 
 ```python
+# base = f"{tenant}/{site}/{type}/{device_id}"  (see Topic Structure Patterns)
 # Set BEFORE connect
 client.will_set(
-    topic=f"{tenant}/{device_id}/state",
+    topic=f"{base}/state",
     payload='{"status":"offline","reason":"unexpected"}',
     qos=1,
     retain=True
@@ -1663,7 +1683,7 @@ client.connect(broker)
 ```python
 # Publish with retain
 client.publish(
-    topic=f"{tenant}/{device_id}/config",
+    topic=f"{base}/config",
     payload=config_json,
     qos=1,
     retain=True
@@ -1683,24 +1703,26 @@ client.publish(topic, payload="", retain=True)
 
 ```python
 import paho.mqtt.client as mqtt
-import time
 
-def on_connect(client, userdata, flags, rc, properties=None):
-    if rc == 0:
+# CallbackAPIVersion.VERSION2 signatures (paho-mqtt 2.x)
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
         # Resubscribe (clean session=true)
         client.subscribe([
-            (f"{tenant}/{device_id}/cmd/req", 1),
+            (f"{base}/cmd/req", 1),   # base: see Topic Structure Patterns
             (f"{tenant}/broadcast/+", 1),
         ])
 
-def on_disconnect(client, userdata, rc, properties=None):
-    print(f"Disconnected: rc={rc}")
-    if rc != 0:
-        # Unexpected disconnect, will auto-reconnect
+def on_disconnect(client, userdata, disconnect_flags, reason_code, properties):
+    print(f"Disconnected: reason={reason_code}")
+    if reason_code != 0:
+        pass  # unexpected disconnect — loop_start() reconnects with the backoff below
 
-client = mqtt.Client(client_id="dev-abc", clean_session=False)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv311, clean_session=False)
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
+client.tls_set()  # port 8883 is MQTT over TLS
 
 # Auto-reconnect with backoff
 client.reconnect_delay_set(min_delay=1, max_delay=120)
@@ -1715,18 +1737,34 @@ client.loop_start()
 # When publishing faster than network allows
 # Client buffers messages — but bounded!
 
-# MQTT 5 flow control
-client.connect(
-    properties={
-        "ReceiveMaximum": 100  # max inflight messages
-    }
-)
+import threading
 
-# Application-level backpressure
-async def publish_with_backpressure(topic, payload, qos=1):
-    while client.inflight_count() > 50:
-        await asyncio.sleep(0.01)
-    await client.publish(topic, payload, qos)
+# MQTT 5 flow control — Receive Maximum = how many unacknowledged QoS 1/2
+# messages the broker may send US. The broker's own value (in CONNACK) limits what we send.
+props = Properties(PacketTypes.CONNECT)
+props.ReceiveMaximum = 100
+client.connect(broker, 8883, properties=props)
+
+# Client-side bounds for outgoing messages
+client.max_inflight_messages_set(20)    # unacked QoS 1/2 messages on the wire
+client.max_queued_messages_set(1000)    # local queue; 0 = unbounded (don't)
+
+# Application-level backpressure: block when 50 messages wait for PUBACK
+# (paho has no inflight_count(); count acks yourself)
+inflight = threading.BoundedSemaphore(50)
+
+def on_publish(client, userdata, mid, reason_code, properties):
+    inflight.release()
+
+client.on_publish = on_publish
+
+def publish_with_backpressure(topic, payload, qos=1):
+    inflight.acquire()
+    info = client.publish(topic, payload, qos=qos)
+    if info.rc != mqtt.MQTT_ERR_SUCCESS:
+        inflight.release()
+        raise RuntimeError(mqtt.error_string(info.rc))
+    return info
 ```
 
 ## MQTT 5 Specific Patterns
@@ -1734,17 +1772,13 @@ async def publish_with_backpressure(topic, payload, qos=1):
 ### Properties
 
 ```python
-# User properties (key-value metadata)
-client.publish(
-    topic, payload,
-    qos=1,
-    properties={
-        "UserProperty": [
-            ("trace-id", "abc-123"),
-            ("source-version", "1.2.3"),
-        ]
-    }
-)
+# User properties (key-value metadata) — a Properties object, not a dict
+pub_props = Properties(PacketTypes.PUBLISH)
+pub_props.UserProperty = [
+    ("trace-id", "abc-123"),
+    ("source-version", "1.2.3"),
+]
+client.publish(topic, payload, qos=1, properties=pub_props)
 ```
 
 ### Shared Subscriptions
@@ -1769,11 +1803,12 @@ Use for:
 #       0x97 ("Quota Exceeded")
 #       0x9A ("Retain Not Supported")
 
-# Handle gracefully
-def on_publish_failed(client, userdata, mid, reason_code, properties):
-    if reason_code == 0x97:
-        # Slow down, adjust quota
-        ...
+# Handle gracefully — paho has no on_publish_failed; the PUBACK reason code
+# arrives in on_publish (VERSION2 callbacks, MQTT 5)
+def on_publish(client, userdata, mid, reason_code, properties):
+    if reason_code.is_failure:
+        if reason_code.value == 0x97:   # Quota exceeded
+            ...                         # slow down, adjust quota
 ```
 
 ## Topic Filter Best Practices

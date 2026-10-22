@@ -24,7 +24,7 @@ General information, not professional advice — for tax effects ask a นัก
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.robertwalters.co.th/salarysurvey.html · https://adecco.co.th/en/knowledge-center/detail/salary-guide/download-adecco-thailand-salary-guide-2025
 
-Use at least 2 sources; write the range as low / mid / high with source and year. Recruiter guides skew to multinationals — Thai SMEs often pay below the range.
+Use 3 sources (name + year); write the range as low / mid / high with source and year. Fewer than 3 → mark the range `(รอยืนยัน)`. Salary surveys have no official source, so named recruiter guides count as the source for this case. Recruiter guides skew to multinationals — Thai SMEs often pay below the range.
 
 ## Step 2 — total compensation
 
@@ -36,14 +36,14 @@ Use at least 2 sources; write the range as low / mid / high with source and year
 | Allowances (transport, phone, position, shift) | monthly × 12 — check if counted in the salary base for overtime and severance |
 | Provident fund (กองทุนสำรองเลี้ยงชีพ, PVD) employer match | base × match % × 12 — employee and employer each 2–15% of wage, employer ≥ employee rate; check the **vesting** schedule |
 | Social security (ประกันสังคม) | Not extra money — both sides pay 5% of wage capped at 17,500 baht (max 875/month each) from 1 Jan 2026; identical across offers |
-| Group health / life insurance | Ask the OPD and IPD limits; value at what you would pay for similar individual cover |
-| Annual leave, WFH days | Not money, but price it: each extra leave day ≈ base ÷ 22 |
-| Stock / RSU | Only count what vests within the period you will realistically stay |
+| Group health / life insurance | Ask the out-patient (OPD) and in-patient (IPD) limits; value at what you would pay for similar individual cover |
+| Annual leave, work-from-home (WFH) days | Not money, but price it: each extra leave day ≈ base ÷ 22 |
+| Stock / restricted stock units (RSU) | Only count what vests within the period you will realistically stay |
 | Sign-on bonus | One-off; check claw-back if you leave within 12 months |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.sec.or.th/TH/Template3/Articles/2566/160566.pdf
+ตรวจล่าสุด 22 ต.ค. 2569 · กองทุนสำรองเลี้ยงชีพ: https://www.sec.or.th/TH/Template3/Articles/2566/160566.pdf · ประกันสังคม: https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.thansettakij.com/general-news/646834 (ข่าววันที่ 18 ธ.ค. 2568 รายงานว่ากฎกระทรวงลงราชกิจจานุเบกษาแล้ว ไม่ได้ระบุวันประกาศ) · https://www.bakermckenzie.com/en/insight/publications/alerts/2025/12/thailand-higher-wage-base-for-ssf-contributions
 
-Social security ceiling rises to 20,000 baht (2572–2574) and 23,000 baht (2575 onward) under the same cabinet decision — same source.
+Social security ceiling steps under the ministerial regulation (B.E. 2568): 17,500 baht (2569–2571) → 20,000 baht (2572–2574) → 23,000 baht (2575 onward). Several independent sources agree on the numbers, but the Royal Gazette (ราชกิจจานุเบกษา) text itself has not been opened — `(รอยืนยัน)` until the official link is added.
 
 ## Worked example — two offers
 
@@ -87,7 +87,7 @@ Then **stop talking** and wait.
 2. Is it a real base change in writing, or a promise ("next review")? Only written counts.
 3. Will your manager trust you the same way after you nearly left?
 4. Never use a fake offer to get a counter — it is easily called.
-5. If you accept the new offer: resign in writing, give the contract notice, and keep it polite — `polite-message-th-en` in `personal-life` (if installed).
+5. If you accept the new offer: resign in writing, give the contract notice, and keep it polite — `polite-message-th-en`.
 
 ## Rules
 

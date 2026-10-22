@@ -5,11 +5,11 @@ description: Use when a .pptx should play as one animated HTML file, or both .pp
 
 # PPTX → HTML Deck
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีแปลงและตรวจ
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม `presentation-design` — skill นี้บอกวิธีแปลงและตรวจ
 
 > **กฎข้อเดียวของ skill นี้:** หน้าตามาจาก .pptx ทั้งหมด · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
 
-ต้นแบบมาจากเด็คนำเสนอ IS "Few-shot KIE · Confidence-Gated Cascade" (41 หน้า + หน้าโต้ตอบ 15 หน้า): ทำ .pptx ให้เสร็จก่อน แล้วแปลงเป็น .html ไฟล์เดียวที่ทุกชิ้นเลื่อนเข้ามาทีละแถว พร้อมแถบความคืบหน้า สารบัญ โน้ตผู้พูด และนาฬิกาแบบเด็ค X Fitness
+ต้นแบบมาจากเด็คนำเสนอ Independent Study (IS) "Few-shot Key Information Extraction (KIE) · Confidence-Gated Cascade" (41 หน้า + หน้าโต้ตอบ 15 หน้า): ทำ .pptx ให้เสร็จก่อน แล้วแปลงเป็น .html ไฟล์เดียวที่ทุกชิ้นเลื่อนเข้ามาทีละแถว พร้อมแถบความคืบหน้า สารบัญ โน้ตผู้พูด และนาฬิกาแบบเด็ค X Fitness
 
 ## เมื่อไหร่ใช้
 
@@ -24,7 +24,7 @@ description: Use when a .pptx should play as one animated HTML file, or both .pp
 | ยังไม่มี .pptx และไม่ต้องการ .pptx เลย · อยากได้แผนภาพทัวร์ แชตเล่นซ้ำ คลิกดูไฟล์ | `html-slide-deck` (เขียน HTML ตรง ๆ หน้าตา X Fitness) |
 | ยังไม่มีโครงเรื่อง | `presentation-design` ข้อ 1–3 ก่อน |
 | ต้องการแค่ .pptx | `branded-document-design` · `StageDeck` |
-| ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
+| ชื่อไฟล์และเวอร์ชัน | `document-naming` |
 
 กฎเลือกชนิดไฟล์อยู่ใน `presentation-design`
 
@@ -40,7 +40,7 @@ description: Use when a .pptx should play as one animated HTML file, or both .pp
    ```
 3. **แปลง:**
    ```bash
-   python scripts/pptx_to_html.py docs/<PRJ>-DECK-v1.0-DRAFT.pptx -o docs/<PRJ>-DECK-v1.0-DRAFT.html --title "<ชื่อเด็ค>" --accent E4572E
+   python scripts/pptx_to_html.py docs/<PRJ>-DECK-v1.0-DRAFT.pptx -o docs/<PRJ>-DECK-v1.0-DRAFT.html --title "<ชื่อเด็ค>" --accent <สีหลักของโปรเจกต์ ไม่มี → 2A78D6>
    ```
    `--accent` = สีแถบความคืบหน้าและปุ่ม (ไม่ใส่ = accent1 ของธีม) · รูปฝังในไฟล์ให้เอง · บรรทัด `⚠ แปลงไม่ครบ` ต้องแก้ที่ .pptx (ข้อ 4)
 4. **ตรวจ:** `python scripts/check_html_deck.py docs/<ไฟล์>.html --out _to_delete/deck-check --pptx docs/<ไฟล์>.pptx` → แก้จน**ปัญหา 0 จุด** แล้ว**เปิด `sheet-*.png` ดูทุกแผ่น**

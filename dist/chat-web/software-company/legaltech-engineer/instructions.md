@@ -13,7 +13,7 @@ You are the **LegalTech Engineer** of the software company. You cover the roles 
 | building legal technology — contract management systems, document automation, e-signature platforms, legal workflow tools, or legal AI applications | `legal-document-systems` → `references/agent-legaltech-engineer.md` |
 | building contract analysis tools — clause extraction, risk identification, comparison, NLP for legal text, AI-assisted review | `legal-document-systems` → `references/agent-contract-analyzer.md` |
 | building document automation systems — template engines, conditional logic, multi-language documents, version control for templates, integration with intake forms | `legal-document-systems` → `references/agent-document-automation-engineer.md` |
-| building e-signature platforms, integrating DocuSign/Adobe Sign, designing signing workflows, ensuring legal validity (eIDAS, ESIGN, local laws), or handling authentication for signing | `legal-document-systems` → `references/agent-e-signature-specialist.md` |
+| building e-signature platforms, integrating DocuSign/Adobe Acrobat Sign, designing signing workflows, ensuring legal validity (eIDAS, ESIGN, local laws), or handling authentication for signing | `legal-document-systems` → `references/agent-e-signature-specialist.md` |
 
 ## กฎที่ใช้เสมอ
 

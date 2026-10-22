@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 CRO Quality Standards](#cro-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 CRO Quality Standards](#-cro-quality-standards)
 - [The CRO Process](#the-cro-process)
 - [Funnel Analysis](#funnel-analysis)
 - [Friction Audit (10 Heuristics)](#friction-audit-10-heuristics)
@@ -55,13 +55,13 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [Common Tests by Funnel Stage](#common-tests-by-funnel-stage)
 - [Skills You Use](#skills-you-use)
 - [Output: Test Plan](#output-test-plan)
-- [Hypothesis](#hypothesis)
-- [Success Metric](#success-metric)
+- Hypothesis
+- Success Metric
 - [Variants](#variants)
-- [Audience](#audience)
-- [Sample Size](#sample-size)
-- [Decision Criteria](#decision-criteria)
-- [Tracking](#tracking)
+- Audience
+- Sample Size
+- Decision Criteria
+- Tracking
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
@@ -170,7 +170,7 @@ GROUP BY device_type;
 |:-:|-----------|-------------------|
 | 1 | Clear value proposition | Unclear what the site sells |
 | 2 | Call to action (CTA) above the fold | CTA below the fold on mobile |
-| 3 | Page load speed | Largest Contentful Paint (LCP) > 3s |
+| 3 | Page load speed | Largest Contentful Paint (LCP) > 2.5s (Core Web Vitals "good" limit, same as `ecommerce-design` and `checkout-optimization.md`) |
 | 4 | Form length | Too many required fields |
 | 5 | Error handling | Errors at bottom, not next to field |
 | 6 | Trust signals | No reviews or security badges |
@@ -225,6 +225,8 @@ Potential × Importance × Ease
 
 ### Sample size calculation
 ```python
+from math import sqrt
+
 from statsmodels.stats.power import zt_ind_solve_power
 
 # Existing conversion rate
@@ -418,8 +420,8 @@ expected_lift = trace.posterior['diff'].mean()
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 E-commerce Quality Standards](#e-commerce-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 E-commerce Quality Standards](#-e-commerce-quality-standards)
 - [Critical E-commerce Rules](#critical-e-commerce-rules)
 - [Common Patterns](#common-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -717,8 +719,9 @@ async function updateProduct(slug: string, updates: any) {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `ecommerce-patterns` — friction analysis + reduction
-- `ecommerce-patterns` — stock control patterns
+- `ecommerce-patterns` — this skill's references:
+  - `references/checkout-optimization.md` — friction analysis + reduction
+  - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
 - `polished-document-style` (from software-company) — for spec docs
 
 ## Things You Don't Do
@@ -734,7 +737,7 @@ async function updateProduct(slug: string, updates: any) {
 
 - Payment integration → `fintech-engineer`
 - Recommendation engine → `recommendation-engineer`
-- Inventory deep work → `ecommerce-engineer`
+- Inventory deep work → stay in this role; read `references/agent-inventory-specialist.md` and `references/inventory-management.md`
 - Conversion analytics → `growth-specialist`
 - Architecture → `solution-architect` (from software-company)
 
@@ -753,7 +756,7 @@ async function updateProduct(slug: string, updates: any) {
 
 - [Shopify Checkout Best Practices](https://shopify.dev/docs/api/checkout)
 - [Baymard Institute E-commerce Research](https://baymard.com/)
-- [Magento DevDocs](https://devdocs.magento.com/)
+- [Adobe Commerce (Magento) developer docs](https://developer.adobe.com/commerce/docs/)
 - [commercetools docs](https://docs.commercetools.com/)
 
 
@@ -764,8 +767,8 @@ async function updateProduct(slug: string, updates: any) {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Inventory Quality Standards](#inventory-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Inventory Quality Standards](#-inventory-quality-standards)
 - [Critical Inventory Rules](#critical-inventory-rules)
 - [Stock Model](#stock-model)
 - [Common Patterns](#common-patterns)
@@ -821,13 +824,16 @@ Before designing, gather:
 ### Rule 2: Available ≠ on hand
 ```
 On hand:    physically in warehouse
-Reserved:   in active carts / orders
-Available:  on hand - reserved
+Reserved:   held by active carts
 Allocated:  committed to specific orders
+Damaged:    can't sell
+Available:  on hand - reserved - allocated - damaged
+Saleable:   available - safety stock (never below 0)
 Backorder:  ordered but no stock yet
 
-Show "available" to customers, not "on hand"
+Show "saleable" to customers, not "on hand"
 ```
+One definition for the whole skill: `inventory-management.md` → Core Stock Concepts.
 
 ### Rule 3: Atomic operations
 - Race conditions cause overselling
@@ -851,8 +857,8 @@ interface InventoryItem {
   inTransit: number;       // incoming
   damaged: number;         // can't sell
   // computed:
-  available: number;       // onHand - reserved - allocated
-  saleable: number;        // available - safety_stock
+  available: number;       // onHand - reserved - allocated - damaged (inventory-management.md)
+  saleable: number;        // max(0, available - safety_stock) — shown to customers
 }
 
 interface Reservation {
@@ -1067,7 +1073,7 @@ stateDiagram-v2
 - ❌ Trust marketplace counts as source of truth
 - ❌ Skip reservations during checkout
 - ❌ Use eventual consistency for stock decrements
-- ❌ Show "on hand" instead of "available"
+- ❌ Show "on hand" instead of "saleable"
 - ❌ Hold infinite reservations
 - ❌ Ignore safety stock
 
@@ -1083,7 +1089,7 @@ stateDiagram-v2
 - ❌ **Race conditions on stock decrement** → overselling
 - ❌ **No safety stock** → frequent stockouts
 - ❌ **Slow marketplace sync** → overselling on marketplaces
-- ❌ **Showing on-hand instead of available** → false sense of stock
+- ❌ **Showing on-hand instead of saleable** → false sense of stock
 - ❌ **Reservations never expire** → "ghost stock" accumulates
 - ❌ **No reconciliation** → physical and system counts drift apart
 - ❌ **Treating returns as instant** → restock delays cause overselling
@@ -1093,7 +1099,7 @@ stateDiagram-v2
 - [APICS / ASCM body of knowledge](https://www.ascm.org/)
 - [Operations Management textbooks (Heizer, Jacobs)](https://www.amazon.com/)
 - [Amazon's "Working backwards from the customer"](https://commoncog.com/blog/the-amazon-weekly-business-review/)
-- [Shopify's Inventory Management docs](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventorylevel)
+- [Shopify inventory levels (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel)
 
 
 ## reference: agent-recommendation-engineer.md
@@ -1184,6 +1190,7 @@ recs = model.recommend(user_id, interaction_matrix[user_id], N=10)
 
 class TwoTower(nn.Module):
     def __init__(self):
+        super().__init__()  # required before assigning submodules
         self.user_tower = build_mlp([user_features_dim, 128, 64])
         self.item_tower = build_mlp([item_features_dim, 128, 64])
 
@@ -1229,16 +1236,9 @@ ranker.fit(X, y, group=groups)
 
 ## Cold Start Solutions
 
-### New users
-- Popular items in user's geography/demographic
-- Onboarding survey to bootstrap preferences
-- Default to category browsing
-- Implicit feedback from first actions
+Patterns (new users, new items, timeline) → [`recommendation-systems.md` → Cold Start Strategies](recommendation-systems.md#cold-start-strategies). Role-specific extra: a cold-start tower (item features only) for new items.
 
-### New items
-- Content-based (works without interactions)
-- Boost in recommendations for trial period
-- Cold-start tower (item features only)
+> 🔐 Profiling by demographics and personalised marketing email need consent under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`.
 
 ## Serving Architecture
 
@@ -1260,15 +1260,8 @@ flowchart LR
 ```
 
 ### Two-stage architecture
-```
-Stage 1: Candidate generation (fast, broad)
-  - ANN search over 100k+ items
-  - Return ~1000 candidates
 
-Stage 2: Ranking (slow, precise)
-  - Heavier model over 1000 candidates
-  - Re-rank to top 10-100
-```
+Stages and candidate counts → [`recommendation-systems.md` → Pattern: Two-Stage Retrieval](recommendation-systems.md#pattern-two-stage-retrieval).
 
 ## Evaluation
 
@@ -1296,49 +1289,15 @@ Stage 2: Ranking (slow, precise)
 ## Diversity & Serendipity
 
 Tuning only for accuracy gets boring: users see more of the same (a filter bubble) and leave.
-
-```python
-def diversify(candidates, k=10, alpha=0.5):
-    """Maximal Marginal Relevance."""
-    selected = []
-    candidates = sorted(candidates, key=lambda x: -x.score)
-
-    while len(selected) < k and candidates:
-        if not selected:
-            selected.append(candidates.pop(0))
-        else:
-            # Score: relevance - similarity to already selected
-            best_idx = max(
-                range(len(candidates)),
-                key=lambda i: alpha * candidates[i].score
-                            - (1 - alpha) * max_similarity(candidates[i], selected)
-            )
-            selected.append(candidates.pop(best_idx))
-
-    return selected
-```
+Maximal Marginal Relevance (MMR) code → [`recommendation-systems.md` → Diversity Patterns](recommendation-systems.md#diversity-patterns).
 
 ## Business Rules
 
-Recommendations must respect:
-- ✅ Inventory (don't recommend out-of-stock)
-- ✅ Pricing (regional pricing)
-- ✅ Compliance (age-restricted items)
-- ✅ Brand safety (avoid sensitive co-occurrences)
-- ✅ Sponsored vs organic separation
-- ✅ Already purchased (don't re-recommend in same session)
+→ [`recommendation-systems.md` → Business Rules](recommendation-systems.md#business-rules) (one list for the skill).
 
 ## Tools (2026)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
-
-| Tool | Use |
-|------|-----|
-| **Pinecone / Qdrant / Vespa** | ANN vector search |
-| **PyTorch / TensorFlow** | Neural models |
-| **LightFM / implicit** | Classical CF |
-| **Recombee / Algolia Recs** | Managed solutions |
-| **Amazon Personalize** | AWS-managed |
+→ [`recommendation-systems.md` → Tools (2026)](recommendation-systems.md#tools-2026).
 
 
 ## reference: checkout-optimization.md
@@ -1375,10 +1334,11 @@ Recommendations must respect:
 
 ## The Numbers (Why It Matters)
 
-- **70% average checkout abandonment** (Baymard 2024)
-- **35% of abandonment** comes from forced account creation
-- **22% of abandonment** comes from unexpected costs shown late
-- **Mobile checkout** converts at about 70% of the desktop rate
+- **70.22% average documented cart abandonment rate** (Baymard Institute, average of 50 studies)
+- **~40%** of shoppers who abandon (not counting "just browsing") leave because extra costs (shipping, tax, fees) were too high
+- **~18%** leave because the site wanted them to create an account
+- Source: baymard.com/lists/cart-abandonment-rate (page updated 22 Sep 2025, read 22 ต.ค. 2569) — re-check before quoting; Baymard updates the list
+- **Mobile** usually converts lower than desktop — measure your own split by device instead of quoting an industry figure
 
 ## The 7 Critical Improvements
 
@@ -1390,17 +1350,18 @@ Recommendations must respect:
 ### 2. ✅ Transparent Pricing
 
 Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
-"Unexpected costs at checkout" cause 22% of abandonment.
+Extra costs that are too high are the top abandonment reason in Baymard's list (~40% of non-browsing abandonments, Baymard, read 22 ต.ค. 2569).
 
 ### 3. ✅ Multiple Payment Methods
 
 | Method | Why |
 |--------|-----|
 | Card (Visa, MC, Amex) | Universal |
-| Apple Pay / Google Pay | 1 tap, critical on mobile |
+| **Thailand: PromptPay QR** (list first for TH) | The Thai one-tap path — scan with any bank app, no card needed |
+| Local methods | THB: SCB EASY, K PLUS (mobile banking deep links) |
+| Apple Pay / Google Pay | 1 tap on mobile where available · Apple Pay for Thai merchants `(รอยืนยัน — no official Thai launch found on 22 ต.ค. 2569; check your gateway)` |
 | PayPal | Trust + saved info |
-| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers |
-| Local methods | THB: PromptPay, SCB EASY, K PLUS |
+| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers (markets where offered) |
 | Bank transfer | Widely used in Thailand |
 
 ### 4. ✅ Address Autocomplete
@@ -1492,12 +1453,14 @@ That's it.
 - Native pickers for date, country
 
 ### Payment
-- Apple Pay / Google Pay prominent
+- Thailand: PromptPay QR first · elsewhere: Apple Pay / Google Pay prominent
 - Card fields with detected card type
 - Auto-fill from saved cards
 - One-tap for returning customers
 
 ## Express Checkout (Critical for Mobile)
+
+> 🇹🇭 For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
 
 ### Apple Pay flow
 
@@ -1593,7 +1556,7 @@ catch (paymentError) {
 - INP (Interaction to Next Paint) < 200ms
 - CLS (Cumulative Layout Shift) < 0.1
 
-### Each second of delay = 7% drop in conversions (Google study)
+### Slower pages lose conversions — measure your own drop per second of delay with real-user data (no reliable universal figure; the often-quoted "7% per second" has no traceable source)
 
 ## Checkout Flow Patterns
 
@@ -1654,7 +1617,7 @@ Funnel by:
 ## Common Pitfalls
 
 - ❌ **Hidden fees revealed late** — main abandonment cause
-- ❌ **Forced login** — 35% leave
+- ❌ **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
 - ❌ **No express checkout on mobile** — slow checkout, fewer sales
 - ❌ **Long forms** — drop-off increases per field
 - ❌ **Wrong keyboard** — slow, error-prone typing
@@ -1717,6 +1680,10 @@ Funnel by:
 Show "saleable" to customers, not raw inventory.
 ```
 
+**Definitions used across this skill** (the role files point here):
+- `available = on_hand − reserved − allocated − damaged`
+- `saleable = max(0, available − safety_stock)` — the number customers see (same as the `inventory_available` view below)
+
 ## Schema Design
 
 ```sql
@@ -1746,7 +1713,7 @@ CREATE TABLE reservations (
     quantity INT NOT NULL CHECK (quantity > 0),
     owner_type TEXT NOT NULL,  -- 'cart' | 'order' | 'transfer'
     owner_id TEXT NOT NULL,
-    expires_at TIMESTAMPTZ NOT NULL,
+    expires_at TIMESTAMPTZ,    -- carts only · NULL for orders (an order's allocation never expires)
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -1774,18 +1741,18 @@ CREATE TABLE inventory_events (
 async function reserve(sku: string, qty: number, owner: string): Promise<string> {
   return await db.transaction(async (tx) => {
     // 1. Lock the row
-    const stock = await tx.query(`
+    const { rows: [stock] } = await tx.query(`
       SELECT on_hand, reserved, allocated, damaged, safety_stock
       FROM inventory
       WHERE sku = $1 AND warehouse_id = $2
       FOR UPDATE
     `, [sku, warehouseId]);
 
-    const available = stock.on_hand - stock.reserved - stock.allocated
-                    - stock.damaged - stock.safety_stock;
+    const saleable = stock.on_hand - stock.reserved - stock.allocated
+                   - stock.damaged - stock.safety_stock;
 
-    if (available < qty) {
-      throw new OutOfStockError({ sku, requested: qty, available });
+    if (saleable < qty) {
+      throw new OutOfStockError({ sku, requested: qty, available: saleable });
     }
 
     // 2. Update reservation count
@@ -1816,35 +1783,46 @@ async function reserve(sku: string, qty: number, owner: string): Promise<string>
 ### Pattern: Release Expired Reservations
 
 ```typescript
-// Background job, every minute
+// Background job, every minute — CART reservations only.
+// Order allocations live in `allocated`, not `reserved`, and never expire (see below).
 async function releaseExpired() {
   const expired = await db.query(`
-    SELECT id, sku, warehouse_id, quantity
+    SELECT id
     FROM reservations
-    WHERE expires_at < NOW()
+    WHERE owner_type = 'cart' AND expires_at < NOW()
     LIMIT 1000
   `);
 
-  for (const res of expired.rows) {
+  for (const { id } of expired.rows) {
     await db.transaction(async (tx) => {
+      // Delete first, re-checking the condition: if checkout converted this
+      // reservation to an order a moment ago, nothing is deleted and we skip it.
+      const { rows: [res] } = await tx.query(`
+        DELETE FROM reservations
+        WHERE id = $1 AND owner_type = 'cart' AND expires_at < NOW()
+        RETURNING sku, warehouse_id, quantity
+      `, [id]);
+      if (!res) return;
+
       // Decrease reserved count
       await tx.query(`
         UPDATE inventory
-        SET reserved = GREATEST(0, reserved - $1)
+        SET reserved = reserved - $1
         WHERE sku = $2 AND warehouse_id = $3
       `, [res.quantity, res.sku, res.warehouse_id]);
-
-      // Delete reservation
-      await tx.query(`DELETE FROM reservations WHERE id = $1`, [res.id]);
 
       // Log
       await tx.query(`
         INSERT INTO inventory_events (sku, warehouse_id, delta, event_type, reference, notes)
         VALUES ($1, $2, 0, 'reservation_expired', $3, 'auto-released')
-      `, [res.sku, res.warehouse_id, res.id]);
+      `, [res.sku, res.warehouse_id, id]);
     });
   }
 }
+
+// Orders that stay unshipped too long are an ALERT for a person, not an auto-release:
+// SELECT owner_id FROM reservations
+// WHERE owner_type = 'order' AND created_at < NOW() - INTERVAL '7 days'
 ```
 
 ### Pattern: Convert Reservation → Allocation (on Order)
@@ -1853,29 +1831,30 @@ async function releaseExpired() {
 async function confirmOrder(orderId: string, items: CartItem[]) {
   return await db.transaction(async (tx) => {
     for (const item of items) {
-      // Find the reservation
-      const res = await tx.query(`
-        SELECT id FROM reservations
+      // Find and lock the reservation — its own quantity and warehouse are the truth
+      const { rows: [res] } = await tx.query(`
+        SELECT id, warehouse_id, quantity FROM reservations
         WHERE sku = $1 AND owner_type = 'cart' AND owner_id = $2
+        FOR UPDATE
       `, [item.sku, item.cartId]);
 
-      if (!res.rows[0]) {
-        throw new Error(`No reservation found for ${item.sku}`);
+      if (!res) {
+        throw new Error(`No reservation found for ${item.sku}`); // expired and released → re-reserve
       }
 
-      // Convert: reserved → allocated
+      // Convert: reserved → allocated, in THIS warehouse only
       await tx.query(`
         UPDATE inventory
         SET reserved = reserved - $1, allocated = allocated + $1
-        WHERE sku = $2
-      `, [item.quantity, item.sku]);
+        WHERE sku = $2 AND warehouse_id = $3
+      `, [res.quantity, item.sku, res.warehouse_id]);
 
-      // Update reservation owner
+      // Update reservation owner — orders have no expiry
       await tx.query(`
         UPDATE reservations
-        SET owner_type = 'order', owner_id = $1, expires_at = NOW() + INTERVAL '7 days'
+        SET owner_type = 'order', owner_id = $1, expires_at = NULL
         WHERE id = $2
-      `, [orderId, res.rows[0].id]);
+      `, [orderId, res.id]);
     }
   });
 }
@@ -2090,7 +2069,8 @@ async def reconcile_warehouse(warehouse_id):
                 'physical': physical,
                 'system': system,
                 'variance': physical - system,
-                'variance_pct': 100 * (physical - system) / system,
+                # system = 0 (stock appeared from nowhere) → no percentage, flag it as new stock
+                'variance_pct': 100 * (physical - system) / system if system else None,
             })
 
     if discrepancies:
@@ -2109,16 +2089,15 @@ async def reconcile_warehouse(warehouse_id):
 - ❌ **No reservation expiry** → ghost stock accumulates
 - ❌ **Trust marketplace counts** → drift over time
 - ❌ **No event log** → can't audit or rebuild stock history
-- ❌ **Show on-hand instead of available** → false promises
+- ❌ **Show on-hand instead of saleable** → false promises
 - ❌ **No safety stock** → stockouts during demand spikes
 - ❌ **Reserve outside DB transaction** → race conditions
 
 ## Reference
 
-- [Implicit (collaborative filtering library)](https://github.com/benfred/implicit)
 - [Prophet (forecasting)](https://facebook.github.io/prophet/)
 - [APICS Operations Management body of knowledge](https://www.ascm.org/)
-- [Shopify Inventory Best Practices](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventoryitem)
+- [Shopify inventory (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem)
 
 
 ## reference: recommendation-systems.md
@@ -2210,7 +2189,7 @@ for _, rule in rules.iterrows():
 
 user_emb = user_model(user_features)  # 64-dim vector
 
-# Candidate generation: ANN search
+# Candidate generation: approximate nearest neighbor (ANN) search
 candidates = ann_index.search(user_emb, k=200)
 
 # Ranking: re-rank with deeper model
@@ -2243,12 +2222,13 @@ def trending_score(item_id, half_life_days=7):
 
 ```
 Stage 1: Candidate generation (broad, fast)
-   ↓ 100k items → 200 candidates
+   ↓ 100k+ items → a few hundred to ~1000 candidates
+     (start at ~200; raise it while the ranking stage still fits the latency budget)
    - ANN search
    - Pre-filter (in stock, category match)
 
 Stage 2: Ranking (narrow, precise)
-   ↓ 200 → 10
+   ↓ candidates → 10–100
    - Heavy model
    - Business rules
    - Diversity
@@ -2306,6 +2286,9 @@ Bootstrap with:
 - Onboarding survey (interests)
 - Inferred from context (geography, device, traffic source)
 - Default popular items
+- Default to category browsing · implicit feedback from first actions
+
+> 🔐 Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
 
 ### New items
 ```
@@ -2341,11 +2324,16 @@ def maximal_marginal_relevance(candidates, k=10, lambda_=0.7):
 
 ## Email Recommendations
 
+> 🔐 Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
+
 ```python
 # Offline batch (e.g., nightly)
 # More compute affordable, freshness less critical
 
 async def generate_email_recs(user_id):
+    if not await has_marketing_consent(user_id):  # PDPA: no consent → no email
+        return None
+
     # User context
     profile = await get_user_profile(user_id)
 
@@ -2366,7 +2354,8 @@ Almost always required:
 - ✅ Brand safety (no conflicting brands together)
 - ✅ Filter out items already bought (don't recommend the exact same item)
 - ✅ Sponsored vs organic separation
-- ✅ Local availability
+- ✅ Local availability · regional pricing
+- ✅ Compliance (age-restricted items)
 
 ## A/B Testing Recommendations
 
@@ -2407,8 +2396,11 @@ guardrails = {
 | **Amazon Personalize** | AWS-native |
 | **Recombee** | Mid-market managed |
 | **Vespa** | Self-hosted, scale |
-| **Pinecone + custom** | DIY with vector DB |
-| **PyTorch + serving stack** | Full custom |
+| **Pinecone / Qdrant + custom** | DIY with vector DB (ANN search) |
+| **PyTorch / TensorFlow + serving stack** | Full custom |
+| **LightFM / implicit** | Classical collaborative filtering |
+
+> Tool list from model knowledge, not re-checked against official sites `(รอยืนยัน)` — check before recommending.
 
 ## Reference
 

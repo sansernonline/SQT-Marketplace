@@ -1,3 +1,83 @@
+# skill: spell-out-abbreviations
+
+Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
+
+# Spell Out Abbreviations
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อ 1:** ตัวย่อทุกตัว เขียนเต็มครั้งแรก แล้ววงเล็บตัวย่อไว้ — หลังจากนั้นใช้ตัวย่อได้
+> **กฎข้อ 2:** ศัพท์เฉพาะทุกคำ วงเล็บคำอธิบายสั้น ๆ ไว้ครั้งแรก — ผู้อ่านนอกสายจะได้ไม่ต้องเดา
+
+## รูปแบบ
+
+```
+✅ Model Context Protocol (MCP) ทำให้ Claude ต่อกับระบบอื่นได้ ... MCP รองรับ ...
+❌ MCP ทำให้ Claude ต่อกับระบบอื่นได้
+```
+
+- **ครั้งแรกของแต่ละเอกสาร** เขียนเต็มแล้ววงเล็บตัวย่อ ครั้งต่อไปใช้ตัวย่อล้วน
+- เอกสารยาวที่แบ่งบท ให้เขียนเต็มใหม่**ครั้งแรกของแต่ละบท** เพราะคนมักอ่านทีละบท
+- ตารางหรือหัวข้อที่มีที่ไม่พอ ให้เขียนเต็มในบรรทัดแรกของส่วนนั้นแทน
+- เอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป ต้องมี **อภิธานศัพท์ (glossary)** ท้ายเอกสาร
+
+## ยกเว้น — ไม่ต้องขยาย
+
+คำที่คนทั่วไปรู้จักมากกว่าชื่อเต็ม: URL, PDF, HTML, CSS, JSON, USB, Wi-Fi, ID, OK
+และนามสกุลไฟล์ (`.docx`, `.pptx`) ถ้าไม่แน่ใจ **ให้ขยาย** เพราะขยายเกินไม่เสียหาย แต่คนอ่านไม่รู้เรื่องเสียหาย
+
+## ศัพท์เฉพาะ — วงเล็บคำอธิบาย ไม่ใช่แค่ตัวย่อ
+
+ขยายตัวย่อแล้วอาจยังไม่พอ ถ้าชื่อเต็มก็ยังไม่บอกอะไร **คำที่ผู้อ่านนอกสายไม่รู้จัก
+ต้องมีคำอธิบายสั้นในวงเล็บครั้งแรก**
+
+```
+❌ ใช้ idempotency key กันงานซ้ำ
+✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
+
+❌ ต้องดู cash flow ก่อนกู้
+✅ ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
+```
+
+**คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
+
+**วัดว่าคำไหนต้องอธิบาย** ด้วยคำถามเดียว — คนที่ทำงานคนละสายกับเรื่องนี้
+อ่านแล้วเดาความหมายได้ไหม ถ้าเดาไม่ได้ก็ต้องอธิบาย
+
+| ระดับผู้อ่าน | อธิบายแค่ไหน |
+|---|---|
+| ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
+| ทีมเดียวกันแต่คนละส่วนงาน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
+
+---
+
+## ใช้กับอะไรบ้าง
+
+เอกสารทุกชนิด · สไลด์ · ป้ายและข้อความบนหน้าจอ · ข้อความขายของ · คำอธิบายไดอะแกรม · คอมเมนต์ในโค้ด ·
+คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
+
+## ตัวอย่างที่เจอบ่อย
+
+Model Context Protocol (MCP) · Application Programming Interface (API) ·
+Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
+Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
+Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC)
+
+ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+
+## Anti-patterns
+
+- ❌ ขยายตัวย่อซ้ำทุกครั้งที่โผล่ — รกและกวนสายตา ครั้งแรกพอ
+- ❌ วงเล็บกลับด้าน — `MCP (Model Context Protocol)` อ่านสะดุดกว่าเขียนเต็มขึ้นก่อน
+- ❌ ขยายผิด — ถ้าไม่รู้ว่าย่อมาจากอะไร ให้ค้นก่อน อย่าเดา
+- ❌ ขยายตัวย่อครบแต่ปล่อยศัพท์เฉพาะลอย — `Quadratic Weighted Kappa (QWK)` ยังไม่ช่วยใครถ้าไม่บอกว่ามันวัดอะไร
+- ❌ อธิบายยาวเป็นย่อหน้าในวงเล็บ — วงเล็บไว้ให้คำสั้น ๆ ถ้ายาวให้แยกประโยค
+
+
+---
+
 # skill: answer-shape
 
 Use when an answer has structure (options, trade-offs, how parts connect). Prose, table or diagram.
@@ -21,6 +101,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 | "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
 | ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
 | ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
 
 **สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
 เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
@@ -77,17 +158,37 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 ---
 
+## เมื่อทำต่อไม่ได้
+
+ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+
+- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
+- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
+- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+
+```
+❌ ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
+✅ ติดอยู่ 1 เรื่อง:
+   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+   ต้องการ 1 อย่าง:
+   - แนบ Mockup.html มา หรือบอก path ใหม่
+```
+
+---
+
 ## ตัวย่อ
 
 - **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
 - **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
+- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
 
 
 ---
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
+Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -107,7 +208,7 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 **รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
 - ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
 - ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
+- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-company`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
 
 ---
 
@@ -131,10 +232,10 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 ## อะไรไม่ใช่
 
 - ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
+- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
   **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
 - ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
 
 ---
 
@@ -153,13 +254,14 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 
   | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
   |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
+  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | [`document-naming`](../document-naming/SKILL.md) |
+  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
   | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
+
+  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 - ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
+- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
 
 ---
 
@@ -167,7 +269,7 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 
 1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
 2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
+3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ
 
 ---
 
@@ -187,326 +289,3 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 
 - **zip** — ไฟล์บีบอัดรูปแบบ ZIP
 - **git** — ระบบควบคุมเวอร์ชัน Git
-
-
----
-
-# skill: status-report
-
-Use when a task that produces or checks project work ends (document, review, code, fix, release).
-
-# รายงานสถานะเมื่อจบงาน
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียว:** จบงานทุกครั้ง ต้องมีตารางสถานะใน `docs/BUILD-PLAN.md` และตารางเดียวกันในคำตอบ
-> งานที่ไม่มีตารางสถานะ ถือว่ายังไม่จบ
-> **ยกเว้น** playbook ที่อ่านอย่างเดียว (`investigation` · `review`) — ใส่ตารางในคำตอบอย่างเดียว ไม่เขียนไฟล์
-
----
-
-## 1 · เขียนที่ไหน — `docs/BUILD-PLAN.md` เสมอ
-
-ทุกงาน ทั้งเอกสาร โค้ด การตรวจ การส่งมอบ เขียนที่ไฟล์เดียวนี้ เพื่อให้มีที่ดูสถานะที่เดียว
-
-| สถานการณ์ | ทำอย่างไร |
-|---|---|
-| มีไฟล์อยู่แล้ว | แก้เฉพาะ 2 หัวข้อด้านล่าง — **ห้ามแตะตารางงานหรือหัวข้ออื่น** |
-| ยังไม่มีไฟล์ | สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy 2 หัวข้อจาก [`assets/build-plan-status.md`](assets/build-plan-status.md) มาเติม (ห้ามแต่งโครงเอง) แล้วเมื่อเริ่มเขียนโค้ดค่อยเพิ่มตารางงาน (`spec-to-code-loop`) **ระหว่าง** 2 หัวข้อนี้ |
-| มี subagent หลายตัวทำงานพร้อมกัน | subagent **รายงานกลับ** อย่างเดียว ให้ตัวหลักเขียนไฟล์คนเดียว ไม่งั้นไฟล์พัง |
-
-ลำดับหัวข้อในไฟล์ (ต่อจากชื่อโปรเจกต์): `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
-
-2 หัวข้อที่ skill นี้ดูแล:
-
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว ไม่ใช่ต่อท้าย
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม
-
----
-
-## 2 · ตาราง `## สถานะล่าสุด`
-
-```markdown
-## สถานะล่าสุด
-
-อัปเดต: 2026-10-01 14:20 · งานล่าสุด: เขียน SRS
-
-**ภาพรวม:** เสร็จ 1/4 · ทำอยู่ 2 · ติด 0 · ไม่ผ่านตรวจ 1
-
-| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |
-|---|---|---|---|---|---|---|
-| SRS (`docs/srs.md`) | เอกสาร | DRAFT | `business-analyst` | `reviewer` | ผ่าน — 42 FR ตรวจได้ทุกข้อ | FR-031 รอยืนยันตัวเลข |
-| mockup (`mockup/`) | เอกสาร | REVIEW | `ux-designer` | `reviewer` | ไม่ผ่าน — ปุ่มหลอก 3 จุด | แก้ `order.html` |
-| FSD | เอกสาร | ยังไม่เริ่ม | — | — | — | รอ architecture |
-| FR-001 ถึง FR-012 | โค้ด | เสร็จ | `developer` | `reviewer` | ผ่าน — test 48/48 | — |
-
-**ทีมตอนนี้:**
-
-| agent | ทำอะไร | สถานะ | ผล |
-|---|---|---|---|
-| `ux-designer` | แก้ปุ่มหลอกใน `order.html` | ทำอยู่ | — |
-| `business-analyst` | SRS | เสร็จ | ผ่าน — 42/42 FR |
-| `reviewer` | ตรวจ mockup รอบ 1 | เสร็จ | ไม่ผ่าน — ปุ่มหลอก 3 จุด |
-
-**ค้างอยู่ (ต้องมีคนตัดสิน):**
-1. FR-031 เวลาตอบสนองกี่วินาที — ถามผู้ว่าจ้าง
-
-**รออนุมัติ:**
-1. push branch `feat/search` — `git push -u origin feat/search`
-
-**ถัดไป:** แก้ปุ่มหลอกใน mockup → เขียน architecture
-
-**ข้อเสนอ:**
-1. ย้ายตัวตรวจ input ไปไว้จุดเดียวที่ขอบ API — ลด if ซ้ำ 14 จุด · แรงกลาง
-```
-
-### ค่าที่ใช้ในแต่ละคอลัมน์ — ใช้เฉพาะค่าเหล่านี้
-
-| คอลัมน์ | ค่าที่ใช้ได้ |
-|---|---|
-| ประเภท | `เอกสาร` · `โค้ด` · `ตรวจ` · `build` · `ส่งมอบ` — `build` คือไฟล์ release ที่สร้างแล้ว (APK · AAB · installer) ส่วน `ส่งมอบ` คือถึงมือผู้ใช้หรือขึ้นร้านค้าแล้ว |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `DRAFT` · `REVIEW` · `APPROVED` |
-| สถานะ (โค้ด · build) | `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — 5 คำเดียวกับ `superuser` และตารางงานของ `spec-to-code-loop` · งานที่ยังไม่เริ่มใช้ `ค้างอยู่` · รหัสงานใช้รหัส FR ของ SRS ถ้ามี |
-| ใครทำ · ใครตรวจ | ชื่อ agent ตามบทบาท เช่น `developer` · `reviewer` · `หัวหน้าทีม` · `ผู้ใช้` — หลายตัวเรียงด้วย → · ยังไม่มีคนทำหรือตรวจใส่ `—` · ใครตรวจต้องไม่ใช่ตัวเดียวกับใครทำ |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` (ยังไม่มีอะไรให้ตรวจ) |
-
-- **ผลตรวจต้องมีหลักฐานเสมอ** — ตัวเลข test ที่รันจริง จำนวนข้อที่ตรวจ ชื่อไฟล์ที่ดู ถ้าไม่ได้รันหรือไม่ได้ตรวจให้เขียน `ยังไม่ได้ตรวจ` ห้ามเขียน `ผ่าน`
-- **แอปมือถือ** หลักฐานต้องบอกเครื่องที่รัน — `ผ่าน — emulator Pixel 6 API 34 · ค่าเซนเซอร์ฉีดเข้า` หรือ `ผ่าน — เครื่องจริง <รุ่น> Android 14` ถ้ายังไม่ได้ลองเครื่องจริงให้เขียนไว้ในช่อง ค้าง
-- `APPROVED` มีแต่คนที่เปลี่ยนได้ ส่วน agent ตั้งได้สูงสุด `DRAFT` หรือ `REVIEW`
-- ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ รายการที่รอบนี้ไม่ได้แตะให้คัดลอกค่าเดิมมา
-- เอกสาร 1 ฉบับใช้ 1 แถว โค้ดที่สถานะเท่ากันรวมเป็นช่วงรหัสได้ (`FR-001 ถึง FR-012`) และตารางไม่ควรยาวเกิน 25 แถว
-
-### "ภาพรวม" กับ "ทีมตอนนี้"
-
-- **ภาพรวม** — นับจากตารางด้านบน: `เสร็จ` (โค้ด) และ `APPROVED` (เอกสาร) นับเป็นเสร็จ · ไม่ผ่านตรวจ = แถวที่ผลตรวจขึ้นต้นด้วย `ไม่ผ่าน` · ตัวเลขต้องตรงกับตาราง
-- **ทีมตอนนี้** — 1 แถวต่อ agent ที่ใช้ในงานรอบนี้ สถานะใช้ `ทำอยู่` · `เสร็จ` · `ติด` · หัวหน้าทีมเขียนแถว `ทำอยู่` ตอนส่งงานออก และแก้เป็นผลจริงตอนรายงานกลับ เปิดไฟล์กลางงานจึงเห็นว่าใครทำอะไรอยู่ · เริ่มงานรอบใหม่ให้ล้างแถวของรอบก่อน · งานที่ไม่มี subagent ไม่ต้องใส่หัวข้อนี้
-
-### "ค้างอยู่" กับ "ถัดไป"
-
-- **ค้างอยู่** คือสิ่งที่ agent ไปต่อเองไม่ได้ ต้องมีคนตอบหรือตัดสิน ให้เขียนเป็นคำถามที่ตอบได้ พร้อมบอกว่าถามใคร ถ้าไม่มีให้เขียน `ไม่มี`
-- **รออนุมัติ** คืองานที่เตรียมพร้อมแล้วแต่ย้อนไม่ได้ (superuser หัวข้อ 6) ให้บอกคำสั่งหรือไฟล์ที่พร้อมใช้ ถ้าไม่มีก็ไม่ต้องใส่หัวข้อ
-- **ถัดไป** คืองานลำดับถัดไปไม่เกิน 3 อย่าง
-- **ข้อเสนอ** คือการปรับปรุงนอกขอบเขตไม่เกิน 3 ข้อ บอกว่าได้อะไรและใช้แรงแค่ไหน ถ้าไม่มีก็ไม่ต้องใส่หัวข้อ
-
----
-
-## 3 · บรรทัดใน `## ประวัติสถานะ`
-
-1 บรรทัดต่อ 1 งาน ใหม่สุดอยู่บน:
-
-```markdown
-## ประวัติสถานะ
-
-- 2026-10-01 14:20 · เขียน SRS · DRAFT · ผ่าน 42/42 FR · ทำ `business-analyst` · ตรวจ `reviewer` · ค้าง 1
-- 2026-09-30 10:05 · ตรวจ mockup · ไม่ผ่าน · ปุ่มหลอก 3 จุด · ทำ `ux-designer` · ตรวจ `reviewer` · ค้าง 0
-```
-
-รูปแบบ: `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` — ไม่เกิน 1 บรรทัด ไม่ใส่รายละเอียดที่อยู่ในตารางแล้ว ถ้ารอบนั้นตัดสินใจเองให้ต่อท้าย `· ตัดสินใจเอง <จำนวน>`
-
-หัวข้อ `## ตัดสินใจเอง` ที่อยู่ถัดลงไป เป็นของ skill `decision-log` ซึ่ง skill นี้ไม่แก้และไม่ลบ
-
----
-
-## 4 · ในคำตอบ
-
-แสดง "ภาพรวม" + ตาราง `สถานะล่าสุด` เฉพาะ **แถวที่เปลี่ยนในรอบนี้** + "ค้างอยู่" + "รออนุมัติ" (ถ้ามี) + "ข้อเสนอ" (ถ้ามี) + "ถัดไป" แล้วบอกว่าตารางเต็มอยู่ใน `docs/BUILD-PLAN.md` — ไม่ต้องแปะทั้งไฟล์
-
----
-
-## 5 · รายการตรวจก่อนบอกว่าจบ
-
-- [ ] อ่าน `docs/BUILD-PLAN.md` จากดิสก์ก่อนแก้ (คนอื่นอาจแก้ไปแล้ว)
-- [ ] `## สถานะล่าสุด` เขียนทับ ไม่ได้ต่อท้าย และมีวันที่เวลา
-- [ ] ทุกแถวที่เขียนว่า `ผ่าน` มีหลักฐาน
-- [ ] ทุกแถวที่มีคนทำแล้วมี "ใครทำ" · แถวที่ตรวจแล้วมี "ใครตรวจ" ที่ไม่ใช่ตัวเดียวกัน
-- [ ] ตัวเลขใน "ภาพรวม" ตรงกับตาราง · มี subagent → "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
-- [ ] ไม่ได้ตั้ง `APPROVED` เอง
-- [ ] เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด
-- [ ] ไม่แตะตารางงานหรือหัวข้ออื่นในไฟล์
-- [ ] รันตัวตรวจจนผ่าน (path นับจากโฟลเดอร์ skill นี้): `python ../polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
-- [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
-
----
-
-## 6 · สิ่งที่ห้ามทำ
-
-| อย่าทำ | เพราะ |
-|---|---|
-| เขียนว่า `ผ่าน` โดยไม่ได้รัน test หรือไม่ได้ตรวจจริง | ตารางสถานะที่โกหกแย่กว่าไม่มีตาราง |
-| ต่อท้าย `## สถานะล่าสุด` ทุกรอบ | ไฟล์ยาวขึ้นเรื่อย ๆ และไม่รู้ว่าแถวไหนคือปัจจุบัน |
-| สร้างไฟล์สถานะใหม่ (`STATUS.md` `progress.md`) | สถานะกระจายหลายที่ ไม่มีใครรู้ว่าดูที่ไหน |
-| ซ่อนรายการที่ไม่ผ่านไว้ในร้อยแก้ว | คนอ่านตารางแล้วเข้าใจว่าผ่านหมด |
-| ให้ subagent เขียน `BUILD-PLAN.md` เอง | เขียนชนกันแล้วไฟล์พัง |
-
----
-
-## แผนโครงการและรายงานประจำสัปดาห์
-
-แม่แบบแผนโครงการ (gantt · milestone · risk register · RACI) และรายงานสถานะประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง อยู่ใน [`references/project-plan-and-weekly-status.md`](references/project-plan-and-weekly-status.md)
-
-## เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| ตารางงานและวงรอบเขียนโค้ด ในไฟล์เดียวกัน | `spec-to-code-loop` |
-| ชุดเอกสารของโปรเจกต์และสถานะเอกสาร | `project-doc-set` |
-| บันทึกบริบทเพื่อทำต่อในรอบสนทนาหน้า | `work-session-context` |
-| ตารางการตัดสินใจเองในไฟล์เดียวกัน | `decision-log` |
-| เลือก playbook และจบงานทุกชนิด | `superuser` |
-| รูปแบบตารางและเอกสาร | `polished-document-style` |
-| ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
-
-
-## reference: project-plan-and-weekly-status.md
-
-# Project plan and weekly status — stakeholder templates
-
-แม่แบบของ agent `project-manager` — ย้ายมาจากตัว agent (2026-10-14) · ตารางสถานะท้ายงานแบบสั้นอยู่ใน SKILL.md ของ `status-report` ส่วนไฟล์นี้คือแผนโครงการและรายงานประจำสัปดาห์ฉบับส่งผู้เกี่ยวข้อง
-
-**สารบัญ:**
-
-- [Standard Output: Polished Project Plan](#standard-output-polished-project-plan)
-- [Standard Output: Polished Status Report](#standard-output-polished-status-report)
-
-## Standard Output: Polished Project Plan
-
-```markdown
-# Project Plan: <Project Name>
-
-| | |
-|--|--|
-| **Project Lead** | @pm-name |
-| **Sponsor** | @sponsor |
-| **Status** | Planning |
-| **Start Date** | YYYY-MM-DD |
-| **Target End** | YYYY-MM-DD |
-| **Budget** | $XX,XXX |
-
----
-
-## Objective
-
-> One-sentence goal that fits in a tweet.
-
-## Scope
-
-| In Scope | Out of Scope |
-|-------------|-----------------|
-| ... | ... |
-
-## Timeline
-
-\`\`\`mermaid
-gantt
-    title Project Timeline
-    dateFormat YYYY-MM-DD
-    section Discovery
-    Requirements    :a1, 2025-01-01, 14d
-    Architecture    :a2, after a1, 7d
-    section Build
-    Sprint 1        :b1, after a2, 14d
-    Sprint 2        :b2, after b1, 14d
-    Sprint 3        :b3, after b2, 14d
-    section Launch
-    UAT             :c1, after b3, 7d
-    Go-live         :c2, after c1, 3d
-\`\`\`
-
-## Milestones
-
-| # | Milestone | Target Date | Owner | Status |
-|:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | Pending |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | Pending |
-| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | Pending |
-| 4 | UAT passed | YYYY-MM-DD | @qa | Pending |
-| 5 | Production launch | YYYY-MM-DD | @devops | Pending |
-
-## Risk Register
-
-| ID | Risk | Likelihood | Impact | Score | Mitigation | Owner |
-|:--:|------|:----------:|:------:|:-----:|------------|:------|
-| R-001 | Payment vendor delay | Medium | High | 6 | Plan B vendor | @architect |
-| R-002 | Resource availability | Low | Medium | 2 | Cross-training | @pm |
-
-> **Score = Likelihood × Impact** (1-9 scale)
-
-## Dependencies
-
-| Type | Dependency | Owner | Status |
-|------|------------|:------|:------:|
-| External | Payment gateway API | Vendor X | At risk |
-| Internal | Design team availability | @design-lead | On track |
-| Technical | New cloud account | @devops | On track |
-
-## RACI Matrix
-
-| Activity | PM | BA | Arch | Dev | QA | DevOps |
-|----------|:--:|:--:|:----:|:---:|:--:|:------:|
-| Requirements | A | R | C | I | C | I |
-| Architecture | A | C | R | C | I | C |
-| Implementation | A | I | C | R | C | C |
-| Testing | A | I | I | C | R | I |
-| Deployment | A | I | C | C | I | R |
-```
-
-## Standard Output: Polished Status Report
-
-```markdown
-# Status Report: <Project> — Week of YYYY-MM-DD
-
-| | |
-|--|--|
-| **Reporting Period** | YYYY-MM-DD to YYYY-MM-DD |
-| **Overall Status** | On Track |
-| **Health Trend** | Improving / Declining / Stable |
-
----
-
-## TL;DR
-
-> 1-2 sentence summary for executives.
-
-## Status by Track
-
-| Track | Status | Notes |
-|-------|:------:|-------|
-| Scope | On track | On target |
-| Schedule | At risk | 3 days behind, recoverable |
-| Budget | On track | 65% spent, on track |
-| Quality | On track | 0 critical bugs open |
-| Team Morale | On track | High |
-
-## Completed This Period
-
-- ...
-- ...
-
-## In Progress
-
-| Item | Owner | Due | % Done |
-|------|:------|:---:|:------:|
-| Feature X | @alice | MM/DD | 75% |
-| Feature Y | @bob | MM/DD | 40% |
-
-## Blocked
-
-| Item | Blocker | Owner | Action |
-|------|---------|:------|--------|
-| ... | Waiting on legal review | @legal | Escalate to CTO |
-
-## Upcoming (Next Period)
-
-- ...
-
-## New Risks / Issues
-
-| Severity | Item | Owner |
-|:--------:|------|:------|
-| High | ... | ... |
-
-## Asks for Stakeholders
-
-- Decision needed on X by MM/DD
-- Need 1 more QA resource starting next sprint
-```

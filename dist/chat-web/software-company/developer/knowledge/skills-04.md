@@ -131,7 +131,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
 
 - lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
-- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv ตั้งแต่ 0.11.25 มี `uv audit` แต่ยังเป็น preview จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
+- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
 - ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
 - SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
 - ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`
@@ -169,7 +169,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 
 # skill: stack-sql
 
-Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
+Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL, MySQL).
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
@@ -210,26 +210,15 @@ Use when writing or reviewing SQL queries, procedures or data-change scripts (SQ
 
 ## 3 · ให้เร็ว: อ่าน plan จริง ไม่เดา
 
-- ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง: SQL Server `SET STATISTICS IO, TIME ON` + Actual Execution Plan · PostgreSQL `EXPLAIN (ANALYZE, BUFFERS)` (รันคำสั่งจริง UPDATE/DELETE ห่อ `BEGIN ... ROLLBACK`) · MySQL 8.0.18+ `EXPLAIN ANALYZE`
-- ใน plan ดู: scan ทั้งตารางใหญ่ · แถวที่คาด vs ได้จริงต่างมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort/hash ล้นลง disk
-- **sargable** — ห้ามครอบคอลัมน์ที่มี index ด้วย function (`YEAR(created_at) = 2026` → ช่วงวันที่ครึ่งเปิด) · `LIKE '%คำ'` ใช้ index ไม่ได้ ใช้ full-text
-- ทุก index ต้องตอบได้ว่ารับ query ไหน (ทำให้เขียนช้าลงทุกตัว) · covering index ใช้ `INCLUDE (...)`
-- แบ่งหน้าลึกใช้ keyset ไม่ใช่ `OFFSET` · N+1 จาก Object-Relational Mapper (ORM) นับ query จาก log แล้วแก้ด้วย eager load
-- parameter sniffing (SQL Server) แก้จากเบาไปหนัก ห้ามล้าง plan cache ทั้ง server · หลังโหลดข้อมูลก้อนใหญ่ update statistics
-- UPDATE/DELETE ก้อนใหญ่ทำทีละชุด (เช่น 5,000 แถว) ไม่งั้น lock ทั้งตาราง log โต rollback นาน
+คำสั่งดู plan จริงแยกตาม engine · สิ่งที่ต้องดูใน plan · ตัวอย่าง keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
 
-ตัวอย่างโค้ด keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
+- กฎย่อ: ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง ไม่เดา · เงื่อนไขต้อง sargable (ไม่ครอบคอลัมน์ที่มี index ด้วย function) · ทุก index ตอบได้ว่ารับ query ไหน · แบ่งหน้าลึกใช้ keyset · นับ N+1 จาก log ของ Object-Relational Mapper (ORM) · UPDATE/DELETE ก้อนใหญ่ทำทีละชุด — รายละเอียดและตัวอย่างอยู่ใน [`references/performance.md`](references/performance.md) ที่เดียว
 
 ## 4 · เปลี่ยนข้อมูลอย่างปลอดภัย
 
 ตาราง isolation · upsert · สร้าง index ไม่ล็อกตาราง แยกตาม engine พร้อมตัวอย่างตรวจจำนวนแถว → [`references/safe-changes.md`](references/safe-changes.md)
 
-- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
-- ก่อนลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
-- นับแถวที่คาดไว้ก่อน แล้วตรวจ `@@ROWCOUNT` (SQL Server) หรือ `GET DIAGNOSTICS` (PostgreSQL) ก่อน `COMMIT` ไม่ตรงให้ ROLLBACK
-- upsert ใช้แบบของ engine (`ON CONFLICT` · `ON DUPLICATE KEY` · SQL Server `UPDATE` + `INSERT ... WHERE NOT EXISTS` ด้วย `UPDLOCK, HOLDLOCK`)
-- deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน transaction สั้นที่สุด ไม่รอ API ภายนอกขณะถือ transaction
-- `ALTER TABLE` ตารางใหญ่: PostgreSQL ตั้ง `SET lock_timeout = '5s'` แล้ว retry · เปลี่ยนชนิดคอลัมน์เขียนตารางใหม่ทั้งก้อน · SQL Server เพิ่ม `NOT NULL` + default ทันทีเฉพาะ Enterprise · เปลี่ยนชนิดหรือย้ายข้อมูลใช้ expand-and-contract ตาม `database-design`
+- กฎย่อ: สคริปต์รันซ้ำได้ · backup ก่อนแก้ข้อมูลก้อนใหญ่ · นับแถวก่อนแล้วตรวจก่อน `COMMIT` · upsert ใช้แบบของ engine · แตะตารางเรียงลำดับเดียวกันกัน deadlock · `ALTER TABLE` ตารางใหญ่ต้องตั้ง `lock_timeout` — รายละเอียดและตัวอย่างอยู่ใน [`references/safe-changes.md`](references/safe-changes.md) ที่เดียว
 
 ## 5 · กับดักที่เจอบ่อย
 
@@ -299,7 +288,7 @@ Use when writing or reviewing SQL queries, procedures or data-change scripts (SQ
 -- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
 SELECT id, created_at, total_amount
 FROM orders
-WHERE (created_at, id) < (@last_created_at, @last_id)   -- PostgreSQL · MySQL
+WHERE (created_at, id) < ($1, $2)   -- PostgreSQL ($1, $2) · MySQL (?, ?) · ส่งค่าแถวสุดท้ายของหน้าก่อน
 ORDER BY created_at DESC, id DESC
 LIMIT 50;
 -- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
@@ -400,7 +389,7 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert
 
 > **กฎข้อเดียว:** ทุกออร์เดอร์ผ่านตัวตรวจก่อนส่ง และทุกผลส่งกลับถูกอ่าน · EA ที่ "ทำงานใน tester" แต่ไม่ตรวจ ยังไม่เสร็จ
 
-ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec ของโปรเจกต์ (`prompt-trading-system.md`) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
+ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec การเทรดของโปรเจกต์ (ถ้าใช้ชุด prompt ของ repo: `prompt/software-company/prompt-trading-system.md` — ผู้ที่ติดตั้งเฉพาะ plugin จะไม่มีไฟล์นี้ ให้ขอ spec จากเจ้าของ) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
 
 ## 1 · เริ่มงาน: รู้ว่าเขียนให้แพลตฟอร์มไหน
 
@@ -468,7 +457,7 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert
 ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/market/market_sell · กฎเปลี่ยนได้ ตรวจซ้ำก่อนส่ง
 
 - ส่งไฟล์ compile แล้วไฟล์เดียว (`.ex5` / `.ex4`) · indicator · เสียง · รูป ฝังเป็น resource · **ห้ามใช้ Dynamic Link Library (DLL)**
-- **ห้ามจำกัดตามเลขบัญชี ชนิดบัญชี หรือ symbol** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
+- **ห้ามจำกัดตามเลขบัญชีหรือชนิดบัญชี** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
 - การตรวจอัตโนมัติรัน EA ใน tester หลาย symbol และ timeframe · EA ต้องส่งออร์เดอร์ได้จริงในทุกสภาพนั้น (ไม่ส่งเลย = ไม่ผ่าน) · ตัวตรวจข้อ 3 ครบทุกข้อคือสิ่งที่ทำให้ผ่าน
 - ห้ามสัญญาผลกำไรในคำบรรยาย · ชื่อสินค้าตัวอักษรละตินไม่เกิน 50 ตัว ไม่มีเลขรุ่น · ระบุถ้าใช้ได้เฉพาะ hedging หรือ netting
 
@@ -490,14 +479,14 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert
 
 ## 9 · เชื่อมกับ skill อื่น
 
-สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt-sell-product.md`
+สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt/software-company/prompt-sell-product.md` ของ repo (ถ้าใช้ชุด prompt)
 
 
 ---
 
 # skill: e2e-testing-patterns
 
-Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in CI.
+Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in continuous integration (CI).
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
 
@@ -510,7 +499,7 @@ Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tes
 - Structuring a growing E2E test suite
 - Fighting flaky tests
 - Designing test data strategy
-- Adding E2E to a CI/CD pipeline
+- Adding E2E to a continuous integration and continuous delivery (CI/CD) pipeline
 - Migrating from one framework to another
 
 ## When NOT to use
@@ -606,7 +595,7 @@ Most resilient ─────────────────────�
 
 > 💡 **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
-ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P0 P1 หรือ P2 ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 ## Expected Values and Failing Tests
 
@@ -635,7 +624,8 @@ Most resilient ─────────────────────�
 ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
 
 ### Retry strategy
-- **In CI:** auto-retry failed tests 1-2 times
+- **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
+- **Pass on retry = flaky, not a pass** — report it as flaky and fail the run (`failOnFlakyTests: true` in `playwright.config.ts`, Playwright 1.52+) — the same rule as "Expected Values and Failing Tests" above and `testing-standards` (flaky test: fix or delete, never retry until green)
 - **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
 - **Don't accept flaky tests:** investigate or delete them. Don't ignore them
 
@@ -645,12 +635,9 @@ Most resilient ─────────────────────�
 
 ## Parallelization and CI
 
-**Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
+เงื่อนไขก่อนรันขนาน (Requirements for safe parallel) อยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก PR บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P0 และ P1 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก pull request (PR) บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P1 และ P2 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
 ## Anti-patterns
 
@@ -694,21 +681,29 @@ Slow, brittle, duplicate code
 }
 ```
 
-## ✅ Better: API login + cookie injection
+## ✅ Better: API login (no UI)
 ```typescript
+// page.request shares its cookie jar with the page's browser context,
+// so the Set-Cookie from the login response is already in the browser — no addCookies needed.
 async function login(page, user) {
   const response = await page.request.post('/api/login', { data: user });
-  const cookies = await response.headers();
-  await page.context().addCookies([...]);
+  expect(response.ok()).toBeTruthy();
 }
+
+// Or once for the whole run (global setup), saved for every test:
+// const ctx = await request.newContext({ baseURL });
+// await ctx.post('/api/login', { data: user });
+// await ctx.storageState({ path: 'playwright/.auth/user.json' });
 ```
+
+> 🔐 The saved state file holds a live session (cookies, tokens). Keep it out of git: add `playwright/.auth/` (or your `auth.json`) to `.gitignore`, and use a test account only.
 
 
 ## reference: ci-and-parallel.md
 
 # Parallelization และ CI Integration
 
-ระดับการรันขนาน รอบการรัน E2E ใน CI และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
+ระดับการรันขนาน รอบการรัน end-to-end (E2E) ใน continuous integration (CI) และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
 
 ## Parallelization
 
@@ -728,7 +723,7 @@ async function login(page, user) {
 
 ### Run E2E tier
 ```yaml
-# Smoke (every PR, 2 min)
+# Smoke (every pull request (PR), 2 min)
 - 5-10 critical tests
 - Chromium only → feedback เร็ว
 - Fail = block merge
@@ -739,7 +734,7 @@ async function login(page, user) {
 - Failures investigated next day
 
 # Pre-prod (before deploy, 10 min)
-- P0 + P1 tests
+- P1 + P2 tests (test-case-template scale: P1 = most important)
 - Chromium + WebKit + Firefox (ครั้งเดียวก่อน release)
 - Must pass before prod deploy
 ```
@@ -803,15 +798,17 @@ npx playwright test                                             # pre-prod (ค�
 ```markdown
 | User Journey | Coverage | Priority |
 |--------------|:--------:|:--------:|
-| Signup → first action | ✓ | P0 |
-| Login → main task | ✓ | P0 |
-| Add to cart → checkout → success | ✓ | P0 |
-| Search → filter → result | ✓ | P1 |
-| Settings → save | ✓ | P1 |
-| Admin panel CRUD | ✓ | P1 |
-| Password reset | ✓ | P2 |
-| Profile edit | Sample | P2 |
+| Signup → first action | ✓ | P1 |
+| Login → main task | ✓ | P1 |
+| Add to cart → checkout → success | ✓ | P1 |
+| Search → filter → result | ✓ | P2 |
+| Settings → save | ✓ | P2 |
+| Admin panel CRUD | ✓ | P2 |
+| Password reset | ✓ | P3 |
+| Profile edit | Sample | P3 |
 ```
+
+Priority uses the `test-case-template` scale (P1 = most important, P3 = least), the same as the `@P1|@P2|@P3` test tags.
 
 ## Library Quick Reference
 
@@ -962,7 +959,7 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 
 | สิ่งที่ต้องมี | ถ้าไม่มี |
 |---|---|
-| ข้อกำหนดที่แต่ละข้อทดสอบได้ มีรหัสกำกับ เช่น `FR-AUTH-010` | หยุด ใช้ `srs-writing` ทำให้ทดสอบได้ก่อน |
+| ข้อกำหนดที่แต่ละข้อทดสอบได้ มีรหัสกำกับ เช่น `FR-AUTH-010` (FR = ข้อกำหนดเชิงหน้าที่ Functional Requirement) | หยุด ใช้ `srs-writing` ทำให้ทดสอบได้ก่อน |
 | คำสั่งรัน test 1 บรรทัดที่รันได้จริง | หยุด ตั้งค่าโครง test ก่อน ใช้ `testing-standards` |
 | คำสั่งรันแอปขึ้นมาดูได้ (ถ้ามีหน้าจอ) | ข้ามขั้นเทียบภาพไปก่อน แล้วบอกผู้ใช้ว่าข้าม |
 | ภาพ mockup ที่ตั้งชื่อตรงกับหน้าจอ | ขอจากผู้ใช้ ไม่งั้น UI จะไม่มีวันตรง |
@@ -987,7 +984,7 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 
 **เอกสารขัดกัน → ยึดตามลำดับ ไม่เดา** — เขียนลำดับความสำคัญของเอกสาร 1 บรรทัดไว้บนสุดของ `BUILD-PLAN.md` ก่อนแตกงาน เช่น `ลำดับเอกสาร: TEST-DATA.md > REQUIREMENTS.md > DESIGN.md > mockup`
 - ผู้ใช้กำหนดลำดับมาแล้ว → ใช้ตามนั้น
-- ไม่ได้กำหนด → ใช้ค่าเริ่ม: ข้อมูลทดสอบที่มีค่าคาดหวัง (ตัวเลขชัดที่สุด) > ข้อกำหนด (SRS) > เอกสารออกแบบ > mockup แล้วลง `decision-log` พร้อม `(รอยืนยัน)`
+- ไม่ได้กำหนด → ใช้ค่าเริ่ม: ข้อมูลทดสอบที่มีค่าคาดหวัง (ตัวเลขชัดที่สุด) > ข้อกำหนด (Software Requirements Specification — SRS) > เอกสารออกแบบ > mockup แล้วลง `decision-log` พร้อม `(รอยืนยัน)`
 - เจอจุดที่ขัดกันจริง → ทำตามเอกสารที่อยู่ลำดับสูงกว่า แล้วจดคู่ที่ขัด (ไฟล์ · หัวข้อ · ค่าทั้ง 2 ฝั่ง) ไว้ใน "ค้างอยู่" ให้เจ้าของแก้ต้นฉบับ · ห้ามแก้เอกสารต้นฉบับเอง
 
 **ข้อไหนกำกวมจนเขียน test ไม่ได้ ห้ามเดา** — รวมเป็นรายการคำถามไว้ท้ายไฟล์ และใส่ในหัวข้อ **"ค้างอยู่"** ครั้งเดียว แล้วทำข้ออื่นต่อ
@@ -1008,7 +1005,7 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
   3. เขียนโค้ดจน test เขียว
   4. รัน test ทั้งชุด                  ← กันของเดิมพัง
   5. หน้าจอ: ถ่ายภาพจริงเทียบ mockup   ← ข้อ 5 ข้างล่าง
-  6. อัปเดตสถานะใน BUILD-PLAN.md + commit หนึ่งข้อต่อหนึ่ง commit
+  6. อัปเดตสถานะใน BUILD-PLAN.md + commit หนึ่งข้อต่อหนึ่ง commit (เมื่อได้รับอนุญาตเท่านั้น — ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคอลัมน์ commit พร้อม `(รอ commit)`)
   →  วนข้อถัดไป
 ```
 
@@ -1029,9 +1026,9 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 ### หลังติด — 5 ขั้น
 
 1. **จดว่าติดเพราะอะไร** ใน "ค้างอยู่": ลองอะไรไปแล้วทั้ง 3 รอบ · คิดว่าปัญหาอยู่ตรงไหน · ต้องได้อะไรถึงจะไปต่อ (คำตอบ · ข้อมูล · สิทธิ์)
-2. **ถอยกลับไปจุดที่ test เขียวล่าสุด** — เก็บงานค้างไว้ใน branch `stuck/<รหัส>` แล้วคืนสายงานให้ test ทั้งชุดเขียว test ของข้อที่ติดอยู่ใน branch นั้นด้วย ห้ามลบ
+2. **ถอยกลับไปจุดที่ test เขียวล่าสุด** — เก็บงานค้างไว้ใน branch `stuck/<รหัส>` (ไม่ได้รับอนุญาตให้ commit → เก็บเป็น patch ใน `_to_delete/patches/stuck-<รหัส>.patch` แทน) แล้วคืนสายงานให้ test ทั้งชุดเขียว test ของข้อที่ติดอยู่ใน branch หรือ patch นั้นด้วย ห้ามลบ
 3. **ข้อที่ต้องรอข้อที่ติด** ลงเป็น `ติด` เหตุผล `รอ <รหัส>` โดยไม่ต้องลอง แล้วไปข้อถัดไปตามลำดับในแผนที่ไม่ต้องรอข้อนั้น
-4. **ลองอีก 1 รอบตอนท้าย** — ทำข้ออื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลอง 1 รอบจาก branch `stuck/<รหัส>` และบันทึกในขั้น 1 · มีคำตอบใน inbox แล้ว → เริ่มจากคำตอบนั้น
+4. **ลองอีก 1 รอบตอนท้าย** — ทำข้ออื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลอง 1 รอบจาก branch `stuck/<รหัส>` (หรือ patch ที่เก็บไว้) และบันทึกในขั้น 1 · มีคำตอบใน inbox (`.claude/superuser/inbox/`) แล้ว → เริ่มจากคำตอบนั้น
 5. **ยังติด** → คง `ติด` ไว้ในรายงานปิดงาน พร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → ทำต่อจากข้อนั้นตาม playbook `pickup-and-pause`
 
 ---
@@ -1044,7 +1041,7 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
   นี่คือไฟล์เดียวที่วงรอบนี้เพิ่มเข้าไปในโฟลเดอร์เอกสารหลัก
 - สถานะมี 5 ค่าเท่านั้น (ชุดเดียวกับ `superuser`): `เสร็จ` · `ทำอยู่` · `ติด` · `รออนุมัติ` · `ค้างอยู่` — งานที่ยังไม่เริ่มใช้ `ค้างอยู่`
 - `ติด` ต้องมีเหตุผลต่อท้าย 1 บรรทัด
-- ทุกข้อที่ `เสร็จ` ต้องมีเลข commit — ไม่มีเลข แปลว่ายังไม่เสร็จจริง
+- ทุกข้อที่ `เสร็จ` ต้องมีเลข commit — ไม่มีเลข แปลว่ายังไม่เสร็จจริง · ยกเว้นยังไม่ได้รับอนุญาตให้ commit (commit เมื่อได้รับอนุญาตเท่านั้น): ใส่ข้อความ commit ที่แนะนำ + `(รอ commit)` และหลักฐาน test (ชื่อ test + ผลรัน) แทนเลข แล้วถือว่า `เสร็จ` ได้
 - จบแต่ละรอบให้อัปเดตหัวข้อ `## สถานะล่าสุด` และ `## ประวัติสถานะ` บนสุดของไฟล์ตาม `status-report` — ตารางงานกับตารางสถานะอยู่ไฟล์เดียวกันแต่คนละหัวข้อ
 
 **เริ่มรอบใหม่โดยไม่อ่านไฟล์นี้ก่อน คือสาเหตุอันดับ 1 ที่งานต้องทำซ้ำ**
@@ -1121,6 +1118,8 @@ page.screenshot(path="_to_delete/check/login.png")
 | agent ตรวจงานแบบ**อ่านอย่างเดียว** วิ่งคู่กับ agent ที่เขียนโค้ด | งานที่ต้องรอผลจากอีกงานอยู่แล้ว |
 | แปลงข้อกำหนดเป็น test หลายโมดูลพร้อมกัน | ตอนยังไม่มีแผน — ต้องมีแผนก่อนถึงจะรู้ว่าแตกตรงไหนได้ |
 
+**agent ที่เขียนไฟล์แต่ละตัวต้องได้ worktree ของตัวเอง** ตามสูตรใน `superuser/references/code-extensions.md` หัวข้อ "parallel-split-and-merge" (รวมวิธีจัดการงานที่ยังไม่ commit)
+
 ทุก agent ที่แตกออกไปต้องได้รับ: รหัสข้อที่รับผิดชอบ · รายการไฟล์ที่แตะได้ ·
 คำสั่งรัน test · และกฎข้อ 3 ทั้งหมด
 
@@ -1165,7 +1164,7 @@ page.screenshot(path="_to_delete/check/login.png")
 | แก้เมื่อ test แดงหรือผลไม่ตรง | `targeted-fix` |
 | รูปแบบข้อความ commit | `commit-message-format` |
 | ไฟล์ภาพที่ถ่ายไว้ตรวจ | `temp-file-discipline` |
-| บันทึกสถานะข้ามรอบสนทนา | `work-session-context` |
+| บันทึกสถานะข้ามรอบสนทนา | `handoff` |
 | ตารางสรุปสถานะเมื่อจบรอบ | `status-report` |
 
 ---
@@ -1213,7 +1212,7 @@ Use when a project has no scripted way for an agent to run the app and see resul
    | ชนิด | ขับด้วย | อ่านผลจาก |
    |---|---|---|
    | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver ยังไม่ได้ตรวจว่า Microsoft ยังดูแลอยู่) | ภาพหน้าจอ · log |
+   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver รุ่นล่าสุดน่าจะออกปี 2020 และยังไม่ยืนยันว่า Microsoft ยังดูแลอยู่ (รอยืนยัน)) | ภาพหน้าจอ · log |
    | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
    | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
    | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
@@ -1223,14 +1222,14 @@ Use when a project has no scripted way for an agent to run the app and see resul
    - หน้าที่มี CAPTCHA ให้ใช้ค่าทดสอบของผู้ให้บริการหรือปิดใน environment ทดสอบ ห้ามเขียนสคริปต์แก้ CAPTCHA
    - แอปที่อ่าน hardware (sensor · กล้อง · GPS) ให้ป้อนค่าที่รู้ล่วงหน้า ผ่าน emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build แล้วติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` เพราะความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ถ้ายังไม่ได้รันบนเครื่องจริง ให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
 
-3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
+3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม (`principle-build-a-tool-not-handwork`)
 4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** ไล่จากเมนู · route · command list · SRS แล้วเขียน 1 กลุ่มต่อฟีเจอร์ 1 บรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาด 1 กรณีต่อฟีเจอร์ **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ และพิมพ์ผล `PASS/FAIL` พร้อม expected กับ actual
 5. **สคริปต์ต้องไม่ผ่านลอย ๆ** (ผ่านทั้งที่ไม่ได้ตรวจอะไรจริง) ถ้าชื่อฟีเจอร์ไม่มีจริงให้ exit 1 ถ้าแอปไม่ขึ้นให้ exit 1 และถ้าไม่มี check ไหนได้รันก็ให้ exit 1 (ตรวจ 0 รายการถือว่าพัง ไม่ใช่ผ่าน)
    - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นจะผ่านลอย ๆ และรอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
    - **ต้องแน่ใจว่าอ่านหน้าจอล่าสุด** โดยลบไฟล์ผลเก่าก่อนอ่านใหม่ และกดเมื่อตำแหน่งเป้าหมายนิ่ง 2 รอบติด ถ้าอ่านหน้าจอไม่ได้เพราะแอปวาดไม่หยุด ถือเป็นบั๊กของแอป ไม่ใช่ของสคริปต์
 6. **พิสูจน์ว่าสคริปต์จับของผิดได้** โดยแก้แอปให้ผิด 1 จุดชั่วคราว รันแล้วต้อง `FAIL` แล้วค่อยคืนค่า
 7. **พิสูจน์ว่า skill ใช้ได้จริง** โดยส่ง agent `qa-tester` ตัวใหม่ที่ไม่เคยเห็นโค้ด ให้ใช้แค่ skill นี้ทดสอบ 1 ฟีเจอร์ตั้งแต่เปิดแอปจนถ่ายภาพผล ติดตรงไหนให้แก้ skill ตรงนั้น
-8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ลบได้เมื่อส่งงานแล้ว)
+8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ผู้ใช้ลบเองได้เมื่อส่งงานแล้ว · agent ไม่ลบ)
 
 ## สัญญาสำหรับทดสอบ — ใส่ในแอปตั้งแต่หน้าจอแรก
 

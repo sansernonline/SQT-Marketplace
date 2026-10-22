@@ -7,7 +7,7 @@ description: Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrade
 
 > **กฎข้อเดียว:** ทุกออร์เดอร์ผ่านตัวตรวจก่อนส่ง และทุกผลส่งกลับถูกอ่าน · EA ที่ "ทำงานใน tester" แต่ไม่ตรวจ ยังไม่เสร็จ
 
-ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec ของโปรเจกต์ (`prompt-trading-system.md`) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
+ใช้กับ EA · indicator · script บน MetaTrader 4 (MT4) และ MetaTrader 5 (MT5) · กลยุทธ์ ความเสี่ยง และเกณฑ์ backtest อยู่ใน spec การเทรดของโปรเจกต์ (ถ้าใช้ชุด prompt ของ repo: `prompt/software-company/prompt-trading-system.md` — ผู้ที่ติดตั้งเฉพาะ plugin จะไม่มีไฟล์นี้ ให้ขอ spec จากเจ้าของ) · หลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns`
 
 ## 1 · เริ่มงาน: รู้ว่าเขียนให้แพลตฟอร์มไหน
 
@@ -75,7 +75,7 @@ description: Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrade
 ตรวจล่าสุด 2026-10-20 · แหล่ง: https://www.metatrader5.com/en/terminal/help/market/market_sell · กฎเปลี่ยนได้ ตรวจซ้ำก่อนส่ง
 
 - ส่งไฟล์ compile แล้วไฟล์เดียว (`.ex5` / `.ex4`) · indicator · เสียง · รูป ฝังเป็น resource · **ห้ามใช้ Dynamic Link Library (DLL)**
-- **ห้ามจำกัดตามเลขบัญชี ชนิดบัญชี หรือ symbol** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
+- **ห้ามจำกัดตามเลขบัญชีหรือชนิดบัญชี** · Market ล็อกเครื่องและจำนวน activation ให้เอง · ระบบ license ของเรา (ข้อ 7) ใช้ได้เฉพาะช่องทางขายเอง
 - การตรวจอัตโนมัติรัน EA ใน tester หลาย symbol และ timeframe · EA ต้องส่งออร์เดอร์ได้จริงในทุกสภาพนั้น (ไม่ส่งเลย = ไม่ผ่าน) · ตัวตรวจข้อ 3 ครบทุกข้อคือสิ่งที่ทำให้ผ่าน
 - ห้ามสัญญาผลกำไรในคำบรรยาย · ชื่อสินค้าตัวอักษรละตินไม่เกิน 50 ตัว ไม่มีเลขรุ่น · ระบุถ้าใช้ได้เฉพาะ hedging หรือ netting
 
@@ -97,4 +97,4 @@ description: Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrade
 
 ## 9 · เชื่อมกับ skill อื่น
 
-สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt-sell-product.md`
+สูตรและสถิติ backtest → agent `quant-analyst` · test ทั่วไป → `testing-standards` · log → `logging-standards` · ค่าลับ → `config-and-secrets` · ขั้นตอนเล็กที่ตรวจได้ → `principle-small-verifiable-steps` · ขายและราคา → `prompt/software-company/prompt-sell-product.md` ของ repo (ถ้าใช้ชุด prompt)

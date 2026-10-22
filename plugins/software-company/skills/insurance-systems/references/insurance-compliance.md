@@ -31,16 +31,16 @@
 ```
 US (state-by-state):
   50 state insurance commissioners
-  NAIC coordination (non-binding)
-  SERFF for filings
+  National Association of Insurance Commissioners (NAIC) coordination (non-binding)
+  System for Electronic Rates & Forms Filing (SERFF) for filings
 
 EU:
   Solvency II framework
-  EIOPA coordination
+  European Insurance and Occupational Pensions Authority (EIOPA) coordination
   Member state implementation
 
 UK (post-Brexit):
-  PRA (prudential) + FCA (conduct)
+  Prudential Regulation Authority (PRA, prudential) + Financial Conduct Authority (FCA, conduct)
   Generally aligned with EU but diverging
 
 Thailand:
@@ -54,7 +54,7 @@ Japan:
   FSA (Financial Services Agency)
 
 Australia:
-  APRA + ASIC
+  Australian Prudential Regulation Authority (APRA) + Australian Securities and Investments Commission (ASIC)
 ```
 
 ## US: State Filings via SERFF
@@ -202,18 +202,33 @@ QRTs (Quantitative Reporting Templates):
 
 ## US: Risk-Based Capital (RBC)
 
+This is the one place in the skill for the RBC formulas; role files link here.
+Sources: American Academy of Actuaries, "Regulatory Capital Requirements — US Life Insurers"
+(actuary.org) and actuary.info "Risk-Based Capital explained" (both checked 2026-10-22).
+The NAIC instructions themselves (content.naic.org) were not opened → (รอยืนยัน) before quoting.
+
 ```
-Total RBC = sqrt(C0² + C1² + C2² + C3² + C4² + C5²)
+LIFE (C factors) — two charges sit outside the square root:
+  RBC after covariance = C0 + C4a + sqrt[ (C1o + C3a)² + (C1cs + C3c)² + C2² + C3b² + C4b² ]
+  Authorized Control Level (ACL) = 50% × RBC after covariance (plus an operational-risk add-on)
 
-Categories:
-C0: Asset risk - Affiliate (subsidiaries)
-C1: Asset risk - Investment
-C2: Insurance risk (premium + reserves)
-C3: Interest rate + market risk
-C4: Operational risk
-C5: Other / catastrophe
+  C0   affiliated investments and off-balance-sheet items
+  C1o  asset risk — bonds, mortgages, other fixed income
+  C1cs asset risk — common stock
+  C2   insurance risk — mortality, morbidity, longevity
+  C3a  interest rate risk          C3b  health credit risk
+  C3c  market risk on guarantees
+  C4a  business risk, premium-based   C4b  health administrative expense risk
 
-Levels:
+PROPERTY AND CASUALTY (R factors):
+  RBC after covariance = R0 + sqrt( R1² + R2² + R3² + R4² + R5² + Rcat² )   (plus operational-risk add-on)
+  ACL = 50% × RBC after covariance
+
+  R0 affiliated insurers   R1 fixed-income assets   R2 equity assets
+  R3 credit (incl. reinsurance recoverables)   R4 loss and loss-adjustment reserves
+  R5 written premium       Rcat catastrophe (earthquake, hurricane, wildfire)
+
+Levels (Total Adjusted Capital ÷ ACL):
 - 200%: Company Action (alert)
 - 150%: Regulatory Action
 - 100%: Authorized Control
@@ -225,19 +240,32 @@ Target: 300%+ in practice
 ## Thailand OIC
 
 ```
-Key regulations:
-- Insurance Acts (Life + Non-Life)
-- Ministerial Regulations
-- OIC Notifications
+Regulator: สำนักงานคณะกรรมการกำกับและส่งเสริมการประกอบธุรกิจประกันภัย
+(Office of Insurance Commission, OIC) — oic.or.th
 
-Capital requirements:
-- RBC framework (Thai version)
-- Minimum paid-up capital
-- Solvency margin
+Key laws (both amended several times — check the current consolidated text on oic.or.th):
+- พระราชบัญญัติประกันชีวิต พ.ศ. 2535 (Life Insurance Act B.E. 2535)
+- พระราชบัญญัติประกันวินาศภัย พ.ศ. 2535 (Non-Life Insurance Act B.E. 2535)
+- กฎกระทรวง (Ministerial Regulations) + ประกาศ คปภ. (OIC Notifications) under each Act
+
+Capital requirements — OIC risk-based capital (RBC) framework, now "RBC 2" (รอยืนยัน: effective year):
+- Capital adequacy ratio (CAR) = capital available ÷ capital required
+- OIC early-warning / supervisory level: CAR not below 140%
+  (stated in Prudential Life Q2 2025 and Tokio Marine Life 2025 public disclosures, checked
+  2026-10-22; the OIC notification itself was not opened → (รอยืนยัน))
+- Legal floor in the Acts: 100% of required capital (รอยืนยัน)
+- Insurers publish their CAR quarterly on their own websites
 
 Product approval:
-- Pre-approval required
-- Form + rate filings to OIC
+- Policy forms and rates need OIC approval before sale (แบบและข้อความกรมธรรม์ + อัตราเบี้ยประกันภัย)
+- Forms and procedures: oic.or.th → กฎหมาย / ประกาศ (รอยืนยัน: current menu path)
+
+Online and electronic sales:
+- OIC notifications on offering and issuing policies through electronic channels
+  (issued from B.E. 2560 onward, including the "Digital Face to Face" sales rules of B.E. 2563)
+  — find the version in force on oic.or.th before building a sales flow (รอยืนยัน)
+- Electronic signatures and records: Electronic Transactions Act B.E. 2544
+  (see `legal-document-systems` → e-signature-compliance.md)
 
 Reporting:
 - Quarterly RBC
@@ -263,7 +291,9 @@ Reporting:
 Requirements:
 - Written information security program
 - Risk assessment
-- Designated CISO
+- Designated person(s) responsible for the program (employee, affiliate or vendor)
+  — a named Chief Information Security Officer (CISO) is a New York Department of Financial Services (DFS)
+    rule (23 NYCRR 500), not the model law
 - Annual certification
 - 72-hour breach notification
 ```
@@ -370,4 +400,3 @@ Preparation:
 - [EIOPA (Solvency II)](https://www.eiopa.europa.eu/)
 - [Thai OIC](https://www.oic.or.th/)
 - [NIPR (US producer licensing)](https://nipr.com/)
-- [Insurance Compliance Magazine](https://www.insurancecomplianceinsight.com/)

@@ -50,18 +50,18 @@ TCO = purchase price + delivery/installation + running costs × years + consumab
 
 ### Worked example — 12,000 BTU air conditioner, 7 years
 
-Assumptions: 8 hours a day, 365 days; electricity ≈ 4.13 baht per unit incl. VAT (กกพ. average 3.86 before VAT for bills from ก.ย. 2569; your home tier may differ — see `home-family:household-bills` if installed, or mea.or.th / pea.co.th) · ตรวจล่าสุด 2026-10-14 · แหล่ง: https://erc.or.th/th/news-release/3472. Power draws are illustrative averages — use the model's label figures.
+Assumptions: 8 hours a day, 365 days; electricity ≈ 4.13 baht per unit incl. VAT (กกพ. average 3.86 before VAT for bills from ก.ย. 2569; your home tier may differ — see `home-family:household-bills` if installed, or mea.or.th / pea.co.th) · ตรวจล่าสุด 2026-10-22 · แหล่ง: https://erc.or.th/th/news-release/3472. Power draws are illustrative averages — use the model's label figures.
 
 | | A: fixed-speed | B: inverter |
 |---|---|---|
 | Price incl. installation | 11,900 | 16,900 |
 | Average power | 1.1 kW | 0.7 kW |
 | kWh per year (× 2,920 h) | 3,212 | 2,044 |
-| Electricity per year | 13,490 | 8,585 |
-| Electricity 7 years | 94,430 | 60,095 |
-| **TCO 7 years** (cleaning equal, excluded) | **106,330** | **76,995** |
+| Electricity per year | 13,266 | 8,442 |
+| Electricity 7 years | 92,862 | 59,094 |
+| **TCO 7 years** (cleaning equal, excluded) | **104,762** | **75,994** |
 
-B costs 5,000 more upfront and saves about 29,000 over 7 years; payback ≈ 5,000 ÷ 4,905 per year ≈ 1 year.
+B costs 5,000 more upfront and saves about 28,800 over 7 years; payback ≈ 5,000 ÷ 4,824 per year ≈ 1 year.
 
 ## Review trust signals
 
@@ -69,7 +69,7 @@ Trust more:
 - Verified-purchase reviews with **photos or video of the actual unit**, especially after weeks of use
 - Reviews that mention a specific drawback alongside praise
 - Long-form reviews from people with a review history across many products (Google Maps Local Guides, Pantip threads with older accounts)
-- Independent testing: brand-neutral tech reviewers who disclose sponsorship, ฉลากเบอร์ 5 (การไฟฟ้า) data, มอก. (TISI) certification for regulated products
+- Independent testing: brand-neutral tech reviewers who disclose sponsorship, ฉลากเบอร์ 5 (การไฟฟ้า) data, มอก. (Thai Industrial Standards Institute, TISI) certification for regulated products
 
 ## Fake-review red flags
 
@@ -89,4 +89,4 @@ Sort by **lowest rating** and **most recent** — patterns in 1–2 star reviews
 - Grey-import ("เครื่องหิ้ว", "ประกันร้าน") may have only the shop's warranty — price the risk.
 - Keep the tax invoice or receipt; some brands require online registration within a set time (see `warranty-tracker`).
 
-Related: `warranty-tracker` · `refund-request` · `scam-check` in `trading-finance` (deals that are too good) · `personal-budget` in `trading-finance`.
+Related: `warranty-tracker` · `refund-request` · `scam-check` in `trading-finance` (if installed; deals that are too good) · `personal-budget` in `trading-finance` (if installed).

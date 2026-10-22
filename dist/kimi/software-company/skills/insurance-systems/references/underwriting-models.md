@@ -49,6 +49,7 @@ Hybrid (Recommended 2026)
 ## GLM Pricing Model
 
 ```python
+import numpy as np
 import statsmodels.api as sm
 import pandas as pd
 
@@ -64,7 +65,7 @@ freq_model = sm.GLM(
 severity_model = sm.GLM(
     claim_amount,
     exog=features_severity,
-    family=sm.families.Gamma(),
+    family=sm.families.Gamma(link=sm.families.links.Log()),  # default link is inverse; log gives relativities
     var_weights=claim_count
 ).fit()
 
@@ -76,7 +77,7 @@ pure_premium_model = sm.GLM(
     var_weights=exposure
 ).fit()
 
-# Output: relativities
+# Output: relativities = np.exp(model.params) (log link only)
 # Example: var_age:25-30 = 1.20 means 20% more than baseline
 ```
 
@@ -92,13 +93,13 @@ model = xgb.XGBRegressor(
     n_estimators=500,
     max_depth=6,
     learning_rate=0.05,
+    early_stopping_rounds=50,   # constructor argument since XGBoost 1.6; fit() no longer takes it
 )
 
 model.fit(
     X_train, pure_premium,
     sample_weight=exposure,
     eval_set=[(X_val, pure_premium_val)],
-    early_stopping_rounds=50,
 )
 
 # Feature importance
@@ -113,11 +114,15 @@ shap_values = explainer.shap_values(X_test)
 ## Eligibility Rules
 
 ```python
+from dataclasses import dataclass
+from typing import Any, Callable, Literal
+
+@dataclass(frozen=True)
 class EligibilityRule:
     name: str
     description: str
-    check: callable      # returns True if eligible
-    severity: 'hard' | 'soft'  # hard = auto-decline
+    check: Callable[[Any], bool]      # returns True if eligible
+    severity: Literal['hard', 'soft']  # hard = auto-decline
 
 ELIGIBILITY_RULES = [
     EligibilityRule(

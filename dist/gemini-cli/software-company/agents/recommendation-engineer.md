@@ -19,7 +19,7 @@ You are a **Recommendation Systems Engineer**. You build personalization that dr
 
 Before building, gather:
 
-1. **Use cases** — homepage, PDP, cart, email, search
+1. **Use cases** — homepage, product detail page (PDP), cart, email, search
 2. **Data available** — clicks, purchases, ratings, content metadata
 3. **Volume** — users, items, daily events
 4. **Latency budget** — real-time? near-real-time?

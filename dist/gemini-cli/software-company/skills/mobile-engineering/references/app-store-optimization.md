@@ -2,7 +2,7 @@
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [ASO Pillars](#aso-pillars)
 - [Keyword Research Process](#keyword-research-process)
 - [App Store (iOS) Specifics](#app-store-ios-specifics)
@@ -17,7 +17,7 @@
 
 # App Store Optimization (ASO)
 
-## When to use this skill
+## ใช้เมื่อ
 
 - New app launch
 - Existing app has stopped growing
@@ -51,13 +51,25 @@ ASO covers 3 stages: being found, the page view, and the install.
 7. Prioritize by volume × difficulty × relevance
 ```
 
+### Store limits เทียบกัน App Store vs Play Store (รอยืนยัน — ตรวจกับ App Store Connect Help และ Play Console Help ก่อนใช้ตัวเลข)
+
+| | App Store | Play Store |
+|---|-----------|------------|
+| Title | 30 chars | 30 chars |
+| Subtitle | 30 chars | (uses short description, 80 chars) |
+| Keywords | 100 chars (separated) | Inferred from listing text |
+| Description | 4000 chars | 4000 chars |
+| Screenshots | 10 per device class | 8 per device class |
+| Preview video | Up to 3, 30 sec each | 1 (YouTube link) |
+| Promotional text | 170 chars | (use short description) |
+| A/B testing | Native (Product Page Optimization) | Native (Store Listing Experiments) |
+
 ### Tools (2026)
 
 | Tool | Specialty |
 |------|-----------|
 | AppTweak | ASO suite |
-| Sensor Tower | Market intelligence |
-| App Annie / data.ai | Market data |
+| Sensor Tower (รวม data.ai แล้วตั้งแต่ มี.ค. 2567) | Market intelligence · market data |
 | Mobile Action | Affordable ASO |
 | App Radar | Recommendations engine |
 
@@ -160,7 +172,7 @@ Common formula:
 2. "Beautiful organization" + feature
 3. "Loved by 10M+ users" + social proof
 4. "Smart AI assistant" + feature
-5. "Try free for 7 days" + CTA
+5. "Try free for 7 days" + call to action (CTA)
 ```
 
 ### Preview Video (30 sec)
@@ -214,11 +226,19 @@ Add text overlays explaining what user sees
 ```
 
 ### iOS native prompt
+`SKStoreReviewController.requestReview(in:)` ถูกประกาศเลิกใช้ตั้งแต่ iOS 18 ใช้ตัวใหม่แทน:
+
 ```swift
 import StoreKit
 
+// SwiftUI (iOS 16+)
+@Environment(\.requestReview) private var requestReview
+// ... เรียกเมื่อถึงจังหวะที่เหมาะ
+requestReview()
+
+// UIKit (iOS 16+ · SKStoreReviewController.requestReview(in:) ตัวเก่าเลิกใช้ตั้งแต่ iOS 18 — Apple docs ตรวจ 22 ต.ค. 2569) — เรียกบน main actor
 if let windowScene = view.window?.windowScene {
-    SKStoreReviewController.requestReview(in: windowScene)
+    AppStore.requestReview(in: windowScene)
 }
 ```
 

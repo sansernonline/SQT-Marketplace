@@ -55,7 +55,7 @@ You (Covered Entity)
    │
    ├──► AWS/Azure/GCP (cloud provider)        ← BAA required
    ├──► Sentry (error tracking)                ← BAA required (sees PHI in errors)
-   ├──► Stripe (payment processor)             ← BAA likely required
+   ├──► Stripe (payment processor)             ← usually no BAA: payment processing alone is exempt (HIPAA §1179); BAA needed only if you send other PHI
    ├──► Email provider (SendGrid/SES)          ← BAA required (sends PHI)
    ├──► CRM (HubSpot/Salesforce)               ← BAA required (stores PHI)
    ├──► Analytics (Mixpanel/Amplitude)         ← BAA required IF receives PHI
@@ -80,14 +80,15 @@ flowchart TD
     D -->|No, low risk| E[Document + close]
     D -->|Yes, risk to PHI| F[Required notifications]
     F --> G[Notify individuals within 60 days]
-    F --> H[Notify OCR]
     F --> I{500+ affected?}
-    I -->|Yes| J[Notify media]
-    I -->|No| K[Annual OCR notification only]
+    I -->|Yes| J[Notify OCR + media within 60 days of discovery]
+    I -->|No| K[Log it; notify OCR within 60 days after the calendar year ends - about 1 March]
     J --> L[Document everything]
     K --> L
     G --> L
 ```
+
+Deadlines match the table in [`hipaa-compliance.md` → Breach Notification Thresholds](hipaa-compliance.md#breach-notification-thresholds) (HHS Breach Notification Rule, checked 22 Oct 2026).
 
 ### Risk assessment factors
 
@@ -102,7 +103,7 @@ flowchart TD
 **No.** HIPAA Safe Harbor requires removing **18 identifiers**:
 1. Names
 2. Addresses (smaller than state)
-3. Dates (except year) of birth, death, admission, etc.
+3. Dates (except year) of birth, death, admission, etc. — and ages over 89 (group them as "90 or older")
 4. Phone numbers
 5. Fax numbers
 6. Email addresses

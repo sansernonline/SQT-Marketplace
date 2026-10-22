@@ -179,7 +179,7 @@ env:
 
 ```bash
 # ตรวจทั้งประวัติ
-gitleaks detect --source . --redact
+gitleaks git --redact        # คำสั่ง detect เดิมถูกแทนด้วย git / dir
 
 # กันไว้ก่อน commit
 pip install pre-commit detect-secrets
@@ -190,7 +190,7 @@ detect-secrets scan > .secrets.baseline
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
+    rev: v8.21.2   # ตัวอย่าง ตรวจ rev ล่าสุดก่อนใช้ (รอยืนยัน)
     hooks: [{ id: gitleaks }]
 ```
 
@@ -199,7 +199,8 @@ repos:
 ```bash
 pip install git-filter-repo
 git filter-repo --path .env --invert-paths
-git push --force --all      # ทุกคนต้อง clone ใหม่
+# รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน force push (เขียนประวัติร่วมทับ ทุกคนต้อง clone ใหม่)
+git push --force --all
 ```
 
 ---
@@ -217,7 +218,11 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 ```powershell
 # Windows
-[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
+# PowerShell 5.1 และ 7 (ตัวสุ่มสำหรับงานเข้ารหัส ไม่ใช่ Get-Random)
+$b = New-Object byte[] 48
+[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
+[Convert]::ToBase64String($b)
+# PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
 > ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)

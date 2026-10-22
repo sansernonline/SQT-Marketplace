@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 ML Quality Standards](#ml-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 ML Quality Standards](#-ml-quality-standards)
 - [Problem Framing](#problem-framing)
 - [Model Selection Decision Tree](#model-selection-decision-tree)
 - [Feature Engineering Patterns](#feature-engineering-patterns)

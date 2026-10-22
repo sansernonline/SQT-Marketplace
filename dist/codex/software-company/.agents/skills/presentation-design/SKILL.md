@@ -1,6 +1,6 @@
 ---
 name: presentation-design
-description: Use when building a slide deck someone will present or read (story, headlines, layouts, Thai type).
+description: Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
 ---
 
 # Presentation Design
@@ -29,7 +29,7 @@ description: Use when building a slide deck someone will present or read (story,
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ทำเด็คนำเสนอ — ข้อเสนอโครงการ · รายงานความคืบหน้า · รีวิวออกแบบ · อบรม
+- ทำเด็คนำเสนอ — ข้อเสนอลูกค้า · แผนธุรกิจ · สรุปงานวิจัย · รายงานความคืบหน้า · อบรม · รีวิวออกแบบ
 - รีวิวเด็คที่คนอื่นทำ
 - แปลงเอกสารยาวเป็นเด็ค
 
@@ -38,9 +38,9 @@ description: Use when building a slide deck someone will present or read (story,
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | สร้างไฟล์ `.pptx` จริง (python-pptx, ฟอนต์, หน้าปก) | `branded-document-design` |
-| ชุดสีของกราฟ | `web-app-design` (หัวข้อ chart colors) |
+| ชุดสีของกราฟ | `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company` → `references/tokens.md` "สีข้อมูล (กราฟ)") |
 | เอกสารที่อ่านเอง ไม่มีคนพูด | `polished-document-style` + `branded-document-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
+| ผัง ขั้นตอน หรือสถาปัตยกรรมในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
 
 > **เด็คที่ส่งให้อ่านเอง ไม่ใช่เด็ค** — เป็นเอกสาร ให้ทำเป็นเอกสาร
 > ถ้าต้องทำทั้ง 2 อย่าง ให้ทำเด็คสำหรับพูด แล้วแนบเอกสารแยก อย่ายัดทุกอย่างลงสไลด์
@@ -69,7 +69,7 @@ description: Use when building a slide deck someone will present or read (story,
 |---|---|
 | **ขออนุมัติ / ตัดสินใจ** | ข้อสรุปและสิ่งที่ขอ → เหตุผล 3 ข้อ → ทางเลือกที่พิจารณาแล้ว → ความเสี่ยง → สิ่งที่ขออีกครั้ง |
 | **รายงานความคืบหน้า** | สถานะรวม (เขียว/เหลือง/แดง) → ทำอะไรเสร็จ → ติดอะไร ต้องการอะไรจากใคร → แผนรอบหน้า |
-| **รีวิวออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
+| **รีวิวแผนหรืองานออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
 | **อบรม** | ทำอะไรได้หลังเรียน → แนวคิด → สาธิต → ให้ลองทำ → สรุปและที่ค้นต่อ |
 | **ขายงาน** | ปัญหาของลูกค้า (ด้วยคำของเขา) → ผลที่จะได้ → วิธีของเรา → หลักฐาน → ราคาและขั้นต่อไป |
 
@@ -93,7 +93,7 @@ description: Use when building a slide deck someone will present or read (story,
 หัวสไลด์ยาวได้ถึง 2 บรรทัด **อย่าย่อจนกลายเป็นชื่อหัวข้อ** และอย่าย่อจนอ่านไม่ลื่น: หัวที่มี 2 ท่อนต้องมีคำเชื่อม ใช้วลีที่คนพูดจริง และเลือกคำตามคนฟัง (กฎเต็มอยู่ใน `human-writing` หัวข้อ 6)
 
 ```
-❌ ทุกข้อความผ่าน 8 ขั้น: AI ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+❌ ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
 ✅ ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
 ```
 
@@ -174,7 +174,7 @@ description: Use when building a slide deck someone will present or read (story,
 - **บอกที่มาของข้อมูลเสมอ** — ช่วงเวลา จำนวนตัวอย่าง แหล่ง (ใส่ในแถบข้างหรือท้ายกระดาษ)
 - **ตารางที่เกิน 5 แถว 4 คอลัมน์ไม่ควรอยู่ในสไลด์** ให้ทำเป็นกราฟ หรือย้ายไปเอกสารแนบ
 
-ชุดสีของกราฟที่ใช้ร่วมกับระบบอื่นอยู่ใน `web-app-design` หัวข้อ chart colors
+ชุดสีของกราฟในสไลด์มาจาก `diagram-figures` → `references/colour-by-domain.md` · กราฟที่ต้องใช้ร่วมกับหน้าจอแอปดู `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)"
 
 ---
 
@@ -242,12 +242,12 @@ description: Use when building a slide deck someone will present or read (story,
 | สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
 | เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
 | แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `pptx-to-html-deck` |
-| ชุดสีของกราฟ | `web-app-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
-| กฎระยะห่างและลำดับสายตา | `ui-craft` |
-| เนื้อหามาจากเอกสาร SRS | `srs-writing` |
-| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
-| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` |
+| ชุดสีของกราฟ | สีหลักของงาน + สีรองตาม `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company`) |
+| ผังในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
+| กฎระยะห่างและลำดับสายตา (หน้าจอแอป) | `ui-craft` (plugin `software-company`) |
+| เนื้อหามาจากเอกสาร Software Requirements Specification (SRS) | `srs-writing` (plugin `software-company`) |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` (plugin `software-company`) |
+| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` (plugin `software-company`) |
 
 ---
 

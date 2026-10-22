@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Docs Engineering Quality Standards](#docs-engineering-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Docs Engineering Quality Standards](#-docs-engineering-quality-standards)
 - [Docs Platforms (2026)](#docs-platforms-2026)
 - [API Reference Generation](#api-reference-generation)
 - [Docs-as-Code Pattern](#docs-as-code-pattern)
@@ -128,8 +128,9 @@ Benefits:
 
 ## Code Sample Testing
 
-```typescript
-// Embed samples in MDX
+Embed samples in MDX (the outer fence uses 4 backticks so the inner one survives):
+
+````mdx
 <CodeSample>
 ```typescript
 import { Client } from '@example/sdk';
@@ -143,11 +144,11 @@ const result = await client.users.create({
 console.log(result.id);
 ```
 </CodeSample>
+````
 
-// CI extracts + runs samples
-// Fails if sample broken
-// Forces docs to stay current
-```
+- CI extracts and runs every sample
+- The build fails if a sample is broken
+- So the docs stay current
 
 ## Search Optimization
 
@@ -198,8 +199,7 @@ docs.example.com/zh    (Chinese)
 
 ## Analytics + Iteration
 
-```python
-# Track:
+**Track:**
 - Page views (popular)
 - Time on page (engagement)
 - Exit pages (where do they leave?)
@@ -208,15 +208,14 @@ docs.example.com/zh    (Chinese)
 - Helpful/unhelpful votes
 - Support tickets per page
 
-# Action:
+**Action:**
 - Improve pages with bad metrics
 - Fill content gaps (searches with no results)
 - Reduce duplication (same questions repeatedly)
-```
 
 ## Skills You Use
 
-- `developer-experience` — content patterns
+- `developer-experience` → `references/technical-content.md` — content patterns
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -231,5 +230,5 @@ docs.example.com/zh    (Chinese)
 
 - Content creation → `technical-writer` (from software-company)
 - API spec → `system-analyst` (from software-company)
-- Developer marketing → `devrel-engineer`
-- SDK alignment → `devrel-engineer`
+- Developer marketing → stay in this role; read `references/agent-devrel-engineer.md` and `references/technical-content.md`
+- SDK alignment → stay in this role; read `references/agent-sdk-builder.md`

@@ -8,7 +8,7 @@ One shelf, five shop windows. Every platform thinks it owns the whole shelf, so 
 
 ## Workflow
 
-1. **Name SKUs** with the scheme below, the same code on every platform's "seller SKU" field
+1. **Name Stock Keeping Units (SKUs)** with the scheme below, the same code on every platform's "seller SKU" field
 2. **Build the master sheet** — one row per SKU (template below); Google Sheets so the phone can update it
 3. **Count once** — physical count, write it in `on_hand`, date it
 4. **Set each channel's shown stock** from the sync rules
@@ -35,13 +35,15 @@ Rules: capitals, hyphens, no Thai letters or spaces (some exports break on them)
 
 | SKU | Name (TH) | on_hand | reserved | available | buffer | Shopee | Lazada | TikTok | LINE/FB | avg/day | lead days | reorder point | reorder qty | supplier | last count |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| BAG-TOTE-BLK-L | กระเป๋าผ้า ดำ L | 140 | 6 | =on_hand−reserved | 10 | | | | | 4.0 | 10 | | | | 2026-10-06 |
+| BAG-TOTE-BLK-L | กระเป๋าผ้า ดำ L | 140 | 6 | =on_hand−reserved | 4 | | | | | 4.0 | 10 | | | | 2026-10-06 |
 
 - `reserved` = paid orders not yet shipped
 - `available` = `on_hand − reserved`
 - `buffer` = units never shown anywhere, to absorb sync delay
 
 ## Sync rules (manual or with a tool)
+
+Model: every channel draws on one shared pool, so each channel shows at most `available − buffer`. The channels' shown numbers do not add up to the pool — the buffer and the sync schedule are what stop overselling, so sync at least twice a day (more during a live).
 
 | Situation | Shown stock per channel |
 |---|---|

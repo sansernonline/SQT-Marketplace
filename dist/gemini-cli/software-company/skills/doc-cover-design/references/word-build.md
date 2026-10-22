@@ -1,6 +1,6 @@
 # สร้างปกใน Word จริง — สูตรที่ผ่านแล้ว และเครื่องสร้างปกที่ใช้ซ้ำได้
 
-ใช้กับ `SKILL.md` ข้อ 5 · พิสูจน์แล้ว 2026-10-15 (เครื่องสร้างปกรอบ 2) เฉพาะปก SRS: ตัวหนังสือในป้ายเวอร์ชันเป็นข้อความ Word บนรูปป้ายในภาพพื้น · ตำแหน่งแนวตั้งของข้อความใน Word ตรงกับภาพตัวอย่าง (ค่ากลางต่อสไตล์ 0 px · แนวนอนไม่ได้แก้) · ภาพพื้นไม่จาง · ได้ 2 หน้าพอดี (Word 365 บน Windows 11 · Word COM → PDF → `pdftoppm`)
+ใช้กับ `SKILL.md` ข้อ 5 · พิสูจน์แล้ว 2026-10-15 (เครื่องสร้างปกรอบ 2) เฉพาะปก Software Requirements Specification (SRS): ตัวหนังสือในป้ายเวอร์ชันเป็นข้อความ Word บนรูปป้ายในภาพพื้น · ตำแหน่งแนวตั้งของข้อความใน Word ตรงกับภาพตัวอย่าง (ค่ากลางต่อสไตล์ 0 px · แนวนอนไม่ได้แก้) · ภาพพื้นไม่จาง · ได้ 2 หน้าพอดี (Word 365 บน Windows 11 · Word ผ่าน Component Object Model (COM) → PDF → `pdftoppm`)
 
 ## เครื่องสร้างปก `scripts/cover-engine/`
 
@@ -9,7 +9,7 @@ cover-engine/src/
 ├─ build_all.py    สั่งทั้งหมดในคำสั่งเดียว
 ├─ fonts.py        (รันเมื่อ COVER_INSTALL_FONTS=1) ตัดฟอนต์ variable เป็นไฟล์ static แล้วติดตั้งให้ผู้ใช้คนเดียว (ไม่ใช้ admin)
 ├─ capture.py      ถ่ายจอจาก mockup จริงที่ 2x (แนวหน้าจอจริง)
-├─ render.py       HTML → ภาพตัวอย่าง 150 dpi · ภาพพื้น 300 dpi (ซ่อนข้อความ) · ตำแหน่งกล่องข้อความ → build/layout/*.json · checks.json
+├─ render.py       HTML → ภาพตัวอย่าง 150 จุดต่อนิ้ว (dots per inch, dpi) · ภาพพื้น 300 dpi (ซ่อนข้อความ) · ตำแหน่งกล่องข้อความ → build/layout/*.json · checks.json
 ├─ docx_build.py   ภาพพื้น + ข้อความ Word ในกรอบยึดกับหน้า ด้วย brandkit.py
 ├─ word_pdf.py     Word COM → PDF → PNG
 ├─ calibrate.py    วัดระยะเหลื่อมระหว่าง Word กับภาพตัวอย่าง แก้รอบถัดไป
@@ -25,7 +25,7 @@ cover-engine/src/
    - `calibrate.py`: รายการโปรเจกต์ · `docx_build.py`: `PAGE2` (สีและเนื้อหน้า 2) · `fonts.py`: `SOURCES` และ `NEEDED`
    - `web/set.html`: ชนิดเอกสารในภาพชุด (ตอนนี้ BRD · SRS · ARCH)
    - ลบ 3 โปรเจกต์ตัวอย่างออกจาก `projects.js` (ไม่มีไฟล์ SVG มาด้วย)
-4. ตั้ง `BRANDKIT_DIR` = โฟลเดอร์ `branded-document-design/scripts` · แนวหน้าจอจริงตั้ง `COVER_MOCKUP` = path ไฟล์ mockup (1 โปรเจกต์ต่อการรัน) · Chrome ที่ติดตั้งในเครื่อง → `COVER_CHROME` (ไม่ตั้ง = Chromium ของ Playwright)
+4. ตั้ง `BRANDKIT_DIR` = โฟลเดอร์ `branded-document-design/scripts` ใน plugin `superuser` (ไม่ตั้ง → สคริปต์หาโฟลเดอร์ plugin `superuser` ที่อยู่ข้างกันเอง) · แนวหน้าจอจริงตั้ง `COVER_MOCKUP` = path ไฟล์ mockup (1 โปรเจกต์ต่อการรัน) · Chrome ที่ติดตั้งในเครื่อง → `COVER_CHROME` (ไม่ตั้ง = Chromium ของ Playwright)
 5. `python src/build_all.py` แล้วเปิดดู `covers/*-set.png` และ `build/qa/*-80-1.png` ทุกภาพ
 - ต้องมี: Python + `python-docx` `pillow` `numpy` `playwright` `fontTools` `pywin32` · Chrome · Word (สำหรับ PDF) · `pdftoppm` · อินเทอร์เน็ต (Google Fonts ตอน render · ฟอนต์จาก GitHub)
 - 🚨 **`fonts.py` ติดตั้งฟอนต์ลงเครื่องผู้ใช้** (`%LOCALAPPDATA%\Microsoft\Windows\Fonts` + registry HKCU) และโหลดไฟล์จาก branch `main` ของ google/fonts โดยไม่ตรวจค่า hash — รันเฉพาะเมื่อตั้ง `COVER_INSTALL_FONTS=1` หลังผู้ใช้อนุญาต · บอกในรายงานว่าติดตั้งอะไร · **ถอด:** ลบไฟล์ `.ttf` ที่ติดตั้งใน `%LOCALAPPDATA%\Microsoft\Windows\Fonts` และค่า `<ชื่อฟอนต์> (TrueType)` ใน `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Fonts`
@@ -35,7 +35,7 @@ cover-engine/src/
 
 1. **ภาพพื้น** 2480 × 3508 (300 dpi) ซ่อนข้อความที่ต้องแก้ได้ · **โลโก้อยู่ในภาพพื้น** (ไม่แยกเป็นรูป Word) · `anchor_picture(ย่อหน้าแรก, png, 0, 0, 21.0, 29.7, z=251658240)` → อ้างตำแหน่งกับหน้า · `behindDoc=1` · ย่อหน้านั้นระยะ 0 บรรทัด exact 1pt · ไม่ใช้ header
 2. **ข้อความ** 1 กล่องใน HTML = 1 ย่อหน้า Word ในกรอบยึดหน้า (`w:framePr hAnchor=page vAnchor=page x y w`) · ระยะบรรทัด exact · ขึ้นบรรทัดด้วย `<br>` เท่านั้น · กรอบกว้างกว่ากล่องจริง 80 px ให้ Word ไม่ตัดบรรทัดเอง
-3. **แปลงหน่วย (150 dpi):** twips = px × 9.6 · pt = px × 0.48 · EMU = px × 6096 · ซม. = px ÷ 1240 × 21 · `w:line` = line-height(px) × 9.6
+3. **แปลงหน่วย (150 dpi):** twips = px × 9.6 · pt = px × 0.48 · English Metric Unit (EMU) = px × 6096 · ซม. = px ÷ 1240 × 21 · `w:line` = line-height(px) × 9.6
 4. **ฟอนต์:** `style_run(font=...)` ทุก run แล้ว `thai_runs(ย่อหน้า)` โดยตั้ง `bk.FONT` เป็นฟอนต์ของกล่องนั้น (ตั้งค่าเดียวทั้งไฟล์ → ชื่อ SemiBold กลายเป็น Regular) · body และ footer เรียก `thai_runs` ด้วย
 5. **หน้า 2:** หัวข้อแรกตั้ง `pageBreakBefore` ไม่ใส่ย่อหน้าตัวแบ่งหน้าเปล่า · ซ่อน footer หน้าปกด้วย `different_first_page_header_footer`
 6. **ภาพไม่ถูกบีบ:** ใส่ `<w:doNotAutoCompressPictures/>` ในตำแหน่งตาม schema ของ `settings.xml` · ไฟล์ .docx เก็บภาพเต็ม แต่ PDF จาก Word ยังลดเหลือ 200 ppi (ไม่มีสวิตช์ใน COM)

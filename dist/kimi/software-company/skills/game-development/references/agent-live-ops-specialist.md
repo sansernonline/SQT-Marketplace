@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Live-Ops Quality Standards](#live-ops-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Live-Ops Quality Standards](#-live-ops-quality-standards)
 - [Player Lifecycle](#player-lifecycle)
 - [Retention Loop Design](#retention-loop-design)
 - [Battle Pass Design](#battle-pass-design)
@@ -14,9 +14,9 @@
 - [A/B Testing in Live Ops](#ab-testing-in-live-ops)
 - [Tools (2026)](#tools-2026)
 - [Output: Season Plan](#output-season-plan)
-- [Content Calendar](#content-calendar)
-- [A/B Tests](#ab-tests)
-- [Risks + Contingencies](#risks--contingencies)
+- Content Calendar
+- A/B Tests
+- Risks + Contingencies
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -48,9 +48,11 @@ Before designing live ops, gather:
 
 ## 📊 Live-Ops Quality Standards
 
-- **D1 retention (players who return the next day):** > 40% (genre-dependent)
-- **D7 retention:** > 20%
-- **D30 retention:** > 10%
+Retention targets = "top 25% of mobile games" from the GameAnalytics 2026 benchmarks (checked 22 Oct 2026; full table and source in [`live-ops-patterns.md` → Industry benchmarks](live-ops-patterns.md#industry-benchmarks-mobile-all-genres-2026)). Medians are far lower (D7 just under 4%).
+
+- **D1 retention (players who return the next day):** > 30%
+- **D7 retention:** > 6%
+- **D30 retention:** > 1.6%
 - **Daily login:** > 30% of MAU
 - **Event participation:** > 50% of active players
 - **Battle pass completion:** ~50% of paid users
@@ -93,18 +95,7 @@ Levers      onboarding     content  meaning   reactivation
 
 ## Battle Pass Design
 
-### Structure (typical 2026 format)
-```
-Free track:    Tier 1 → 50 → 100
-Premium track: Tier 1 → 50 → 100 (better rewards)
-
-Tiers 1-50: standard cadence
-Tiers 50-100: spice (rare items, prestige)
-
-Price: ~$10
-Duration: 8-12 weeks
-Estimated playtime: 100-150 hours total
-```
+Structure, XP math and pricing: [`live-ops-patterns.md` → Battle Pass Design](live-ops-patterns.md#battle-pass-design). Your job as the role: tune it with the levers below and block the anti-patterns.
 
 ### Tuning levers
 - **XP per match:** affects pace
@@ -173,7 +164,7 @@ If sink >> faucet → frustration
 | Currency type | Purpose | Examples |
 |---------------|---------|----------|
 | Soft (earned) | Main progression | Gold, XP |
-| Hard (paid) | Power/cosmetics | Gems, V-bucks |
+| Hard (paid) | Cosmetics / convenience (never power in competitive) | Gems, V-bucks |
 | Event | Limited-time | Easter eggs |
 | Premium passes | Battle pass tiers | Stars |
 
@@ -182,49 +173,22 @@ If sink >> faucet → frustration
 ### Tuning by data
 
 ```python
-# Compute target earn rate
-def target_currency_per_hour(target_purchase_per_week_usd):
-    avg_hours_per_week = 14  # genre average
-    item_cost = 500  # gems
-    gems_per_usd = 100
+# Target earn rate: how fast a free player earns an item by playing
+def target_gems_per_hour(item_cost_gems=500, hours_to_earn_free=10):
+    # A free player should reach the item in ~hours_to_earn_free hours of play.
+    # Paying is then a shortcut (convenience), not the only way.
+    return item_cost_gems / hours_to_earn_free      # 500 / 10 = 50 gems per hour
 
-    target_purchase_gems = target_purchase_per_week_usd * gems_per_usd
-    target_earn_gems_per_hour = (item_cost - target_purchase_gems) / avg_hours_per_week
-
-    return target_earn_gems_per_hour
+def price_check(item_cost_gems=500, gems_per_usd=100, hours_to_earn_free=10):
+    usd = item_cost_gems / gems_per_usd             # 500 / 100 = $5
+    return f"${usd:.2f} saves {hours_to_earn_free} hours of play"
 ```
+
+Set `hours_to_earn_free` from your own play-time data (e.g. 14 hours a week → the item takes under a week).
 
 ## Player Segmentation
 
-```python
-# Segment players for targeted live ops
-segments = {
-    'whales': {
-        'definition': 'top 1% spending',
-        'cohort_size': '~1%',
-        'revenue_share': '~50%',
-        'strategy': 'VIP treatment, exclusive content, account managers',
-    },
-    'dolphins': {
-        'definition': '$10-50/month',
-        'cohort_size': '~5%',
-        'revenue_share': '~30%',
-        'strategy': 'battle pass focus, occasional skins',
-    },
-    'minnows': {
-        'definition': '< $10/month',
-        'cohort_size': '~10%',
-        'revenue_share': '~15%',
-        'strategy': 'value-focused, BP every other season',
-    },
-    'free': {
-        'definition': 'no purchases',
-        'cohort_size': '~85%',
-        'revenue_share': '~5% (ads)',
-        'strategy': 'critical mass, content variety, conversion nudges',
-    },
-}
-```
+Spend tiers (whales, dolphins, minnows, free) and the segmentation code: [`live-ops-patterns.md` → Player Segmentation](live-ops-patterns.md#player-segmentation). Role rule: every offer and event names the segment it is for.
 
 **Important:** Free-to-play (F2P) players are NOT freeloaders. They fill competitive matches, give streamers content, and create social pressure to spend.
 
@@ -244,15 +208,7 @@ segments = {
 
 ## Tools (2026)
 
-| Tool | Use |
-|------|-----|
-| **GameAnalytics** | Free analytics |
-| **deltaDNA / Unity Analytics** | Unity ecosystem |
-| **PlayFab** | Microsoft's LiveOps platform |
-| **Backtrace / Sentry** | Crash reporting |
-| **Amplitude / Mixpanel** | Funnel analysis |
-| **Helika** | Web3 game analytics |
-| **AppsFlyer / Adjust** | Attribution |
+Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-2026).
 
 ## Output: Season Plan
 
@@ -309,7 +265,6 @@ segments = {
 
 ## When to Hand Off
 
-- New mechanics → `game-designer`
 - Implementation → `game-developer`
 - Multiplayer issues → `game-developer`
 - Marketing campaigns → `product-manager` (from software-company)

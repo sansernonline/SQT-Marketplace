@@ -72,13 +72,13 @@ Worked example: last wage 30,000/month (1,000/day), 7 years of service → 240 d
 
 ## 6. Minimum wage
 
-Set by the Wage Committee (คณะกรรมการค่าจ้าง) by province. From 1 Jul 2568 (ประกาศฉบับที่ 14) the top rate is **400 baht/day** (Bangkok, and hotels and service venues nationwide) and the lowest is **337 baht/day**. The committee met 17 มี.ค. 2569 and postponed any 2569 raise, so these rates are still in force. Always look up the current announcement (ประกาศคณะกรรมการค่าจ้าง เรื่อง อัตราค่าจ้างขั้นต่ำ) on mol.go.th / wage.mol.go.th before quoting — a round for 2570 may come (รอยืนยัน).
+Set by the Wage Committee (คณะกรรมการค่าจ้าง) by province. From 1 Jul 2568 (ประกาศฉบับที่ 14) the top rate is **400 baht/day** (Bangkok, Chonburi, Rayong, Chachoengsao, Phuket, Ko Samui district, and hotels and service venues nationwide) and the lowest is **337 baht/day**. The committee met 17 มี.ค. 2569 and postponed any 2569 raise, so these rates are still in force. Always look up the current announcement (ประกาศคณะกรรมการค่าจ้าง เรื่อง อัตราค่าจ้างขั้นต่ำ) on mol.go.th / wage.mol.go.th before quoting — a round for 2570 may come (รอยืนยัน).
 
-ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/39/iid/402570 · https://www.thaipbs.or.th/news/content/503458 (เลื่อนปรับ มี.ค. 2569) · https://thestandard.co/new-minimum-wage-rates-explained-july-2025/
+ตรวจล่าสุด 2026-10-22 · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/39/iid/402570 · https://www.thaipbs.or.th/news/content/503458 (เลื่อนปรับ มี.ค. 2569) · https://thestandard.co/new-minimum-wage-rates-explained-july-2025/
 
 ## Rules of thumb
 
-- 10+ employees → must have Thai-language work rules (ข้อบังคับเกี่ยวกับการทำงาน, ม.108) posted and sent to the labour office.
+- 10+ employees → must have Thai-language work rules (ข้อบังคับเกี่ยวกับการทำงาน, ม.108) announced within 15 days of reaching 10 employees and posted at the workplace. No filing with the labour office since 2560 (NCPO Order 21/2560; sources: https://www.ilct.co.th/amendment-to-labour-protection-act/ · https://legardy.com/thai-law/labor-law/labor-law-section-9 — รอยืนยัน on mol.go.th / krisdika.go.th, checked 22 ต.ค. 2569).
 - Put every warning, consent to OT and termination in writing.
 - Pay on time: late wages carry 15% per year interest; wilful delay 15% every 7 days (ม.9).
 

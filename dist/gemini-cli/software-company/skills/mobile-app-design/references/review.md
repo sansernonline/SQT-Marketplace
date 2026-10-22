@@ -12,7 +12,8 @@ python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screen
 
 # 2. ระบบดีไซน์ยังสะอาดอยู่ไหม (ใช้ตัวตรวจของ web-app-design ได้เลย
 #    แต่ต้องส่ง --require เป็น token ชุดของระบบนี้ ไม่ใช่ชุดของเว็บ)
-node ../web-app-design/scripts/check-design-tokens.mjs src/theme.css src/app \
+# คัดลอก check-design-tokens.mjs จาก plugin software-company (skills/web-app-design/scripts/) ไปไว้ที่ tools/ ในโปรเจกต์ก่อน แล้วรัน:
+node tools/check-design-tokens.mjs src/theme.css src/app \
   --require "--bg,--surface,--ink,--soft,--faint,--line,--signal,--repair,--hint,--ui,--dis,--text,--mono,--r-tile,--r-card,--app-max,--gutter"
 ```
 

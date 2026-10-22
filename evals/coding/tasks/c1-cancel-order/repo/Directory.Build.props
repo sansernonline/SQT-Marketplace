@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- ปิดการเตือนช่องโหว่ของ package ตอน restore เพื่อให้ผล build -warnaserror คงที่ทุกวัน -->
+    <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+</Project>

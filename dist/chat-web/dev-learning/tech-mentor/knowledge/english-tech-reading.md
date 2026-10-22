@@ -1,6 +1,6 @@
 # skill: english-tech-reading
 
-Use when an English error message, RFC or documentation passage needs explaining in Thai.
+Use when an English error message, Request for Comments (RFC) or documentation passage needs explaining in Thai.
 
 # English Tech Reading
 

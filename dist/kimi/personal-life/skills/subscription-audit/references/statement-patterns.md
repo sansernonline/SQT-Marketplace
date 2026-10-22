@@ -11,7 +11,7 @@ Merchant text varies by bank and by card network. Match on the **stable part** o
 | `NETFLIX.COM`, `SPOTIFY`, `DISNEY PLUS`, `VIU`, `WeTV`, `iQIYI`, `TrueID` | Streaming billed directly to the card | The merchant website → Account |
 | `MICROSOFT*`, `ADOBE`, `CANVA`, `DROPBOX`, `OPENAI`, `ANTHROPIC` | Software or cloud services, often billed annually | The merchant website → Billing |
 | `PAYPAL *` followed by a merchant | A merchant charging through PayPal | PayPal → Settings → Automatic payments, **and** the merchant |
-| Telco names (AIS, TRUE, DTAC) with a content or VAS label | A carrier-billed add-on (บริการเสริม) | Dial the operator's cancel code or call the call centre (รอยืนยัน: codes vary by operator) |
+| Telco names (AIS, TRUE, DTAC) with a content or value-added service (VAS) label | A carrier-billed add-on (บริการเสริม) | Dial the operator's cancel code or call the call centre (รอยืนยัน: codes vary by operator) |
 | `หักบัญชีอัตโนมัติ`, `DIRECT DEBIT`, an insurer or gym name | A bank auto-debit | Merchant cancellation form + the bank app's direct-debit list |
 | The same baht amount on the same day each month with no clear name | Could be anything, including fraud | Call the card issuer and ask for the merchant detail |
 

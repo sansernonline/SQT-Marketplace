@@ -1,0 +1,14 @@
+{
+  "budget": "balanced",
+  "modules": {
+    "context": true,
+    "log": true,
+    "improvements": true,
+    "learning": true,
+    "inbox": true,
+    "handoff": true,
+    "patterns_advanced": true,
+    "review_gate": true,
+    "split_gate": true
+  }
+}

@@ -59,13 +59,13 @@ Tax saved by a deduction = deduction × your marginal rate (the band your last b
 
 | Item | Cap, baht | Holding rule |
 |---|---|---|
-| PVD (กองทุนสำรองเลี้ยงชีพ) employee contribution | 15% of wage, max 500,000 | first 10,000 is an exemption, the rest a deduction |
-| GPF (กบข.) / private teachers' fund | 15% of wage | — |
-| RMF | 30% of income, max 500,000 | hold 5 years and redeem at age 55+ |
+| Provident fund (PVD, กองทุนสำรองเลี้ยงชีพ) employee contribution | 15% of wage, max 500,000 | first 10,000 is an exemption, the rest a deduction |
+| Government Pension Fund (GPF, กบข.) / private teachers' fund | 15% of wage | — |
+| Retirement Mutual Fund (RMF) | 30% of income, max 500,000 | hold 5 years and redeem at age 55+ |
 | National Savings Fund (กอช.) | 30,000 | — |
 | **Combined retirement cap** | **500,000** | PVD + GPF + teachers' fund + RMF + กอช. + pension insurance together |
 | ThaiESG | 30% of income, max 300,000 | **outside** the 500,000 cap; for buys in 2567–2569 hold 5 full years; ThaiESGX new money merges into this 300,000 in 2569 |
-| SSF | 0 for new buys | no deduction for purchases from 2568; units bought 2563–2567 must still be held 10 years or the tax saved is repaid |
+| Super Savings Fund (SSF) | 0 for new buys | no deduction for purchases from 2568; units bought 2563–2567 must still be held 10 years or the tax saved is repaid |
 
 ThaiESG after 2569: max 100,000 and 8-year hold for 2570–2575 per SEC Q&A (รอยืนยัน — check before advising for 2570).
 

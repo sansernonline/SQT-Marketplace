@@ -88,8 +88,8 @@ const app = express();
 app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
   const expected = crypto.createHmac('sha256', SECRET).update(req.body).digest('base64');
   const given = req.get('x-line-signature') || '';
-  const ok = given.length === expected.length &&
-    crypto.timingSafeEqual(Buffer.from(given), Buffer.from(expected));
+  const a = Buffer.from(given), b = Buffer.from(expected); // compare byte length, not string length
+  const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
   if (!ok) return res.sendStatus(401);
 
   res.sendStatus(200); // answer first, work after

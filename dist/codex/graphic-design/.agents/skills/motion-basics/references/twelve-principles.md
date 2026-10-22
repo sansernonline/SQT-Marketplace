@@ -19,7 +19,7 @@ Source: Frank Thomas and Ollie Johnston, *The Illusion of Life: Disney Animation
 
 ## Frame maths
 
-| fps | 1 frame | 250 ms | 500 ms |
+| frames per second (fps) | 1 frame | 250 ms | 500 ms |
 |---|---|---|---|
 | 24 | 41.7 ms | 6 frames | 12 frames |
 | 25 | 40 ms | 6–7 frames | 12–13 frames |

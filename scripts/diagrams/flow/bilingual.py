@@ -7,7 +7,7 @@ import re, sys
 
 EN = {
  # หัวรูป
- "แม่แบบกลาง": "Core Template", "งานออกแบบ": "Graphic Design", "สิทธิผู้บริโภค": "Consumer Rights",
+ "แกนหัวหน้าทีม": "Team Lead Core", "งานออกแบบ": "Graphic Design", "สิทธิผู้บริโภค": "Consumer Rights",
  "การเรียนรู้เทคโนโลยี": "Tech Learning", "การจัดการเรื่องสุขภาพ": "Health & Wellness",
  "งานบ้านและครอบครัว": "Home & Family", "ร้านค้าออนไลน์": "Online Seller",
  "การจัดการชีวิตส่วนตัว": "Personal Life", "งานอาชีพและการหางาน": "Career & Job Search",
@@ -26,7 +26,10 @@ EN = {
  "เข้าใจ": "Understand", "วางแผน": "Plan", "ออกแบบ": "Design", "ลงมือ": "Do", "พิสูจน์": "Prove", "รายงาน": "Report",
  "หัวหน้าทีม แจกงาน": "Lead Delegates", "ระดับโมเดล — หัวหน้าเลือกตามงาน": "Model Tier — Lead Picks per Task",
  "ใหญ่": "Large", "กลาง": "Medium", "เล็ก": "Small",
- "ลูกทีม (subagent)": "Subagent",
+ "ลูกทีม (subagent)": "Subagent", "ระดับโมเดล + effort — งบขยับทั้งตาราง": "Model Tier + Effort — Budget Shifts All",
+ "3 บรรทัดก่อนแตะงาน": "Three Lines First", "จัดขนาด": "Size the Job", "เลือกงบ": "Pick a Budget", "คาดไว้ก่อน": "Estimate First",
+ "ใบสั่งงาน 5 ข้อ": "5-Point Brief", "ประเมินลูกทีม": "Score Each Piece", "ตรวจซ้ำจนผ่าน": "Re-check Until It Passes",
+ "งานทั่วไป": "General Work", "ของแกน · ใช้ได้ทุกสาขา": "Core · Every Domain",
  "งานข้ามสาขา → ส่งต่อ /&lt;plugin&gt;:superuser ของ plugin นั้น": "Cross-Domain Handoff",
  "งานชีวิตประจำวัน → ส่งต่อ agent ของ plugin อื่นที่ติดตั้งไว้": "Everyday-Task Handoff",
  "เครื่องคุณ = คนสั่ง": "Your Machine Gives Orders", "Docker sandbox · 1 โปรเจกต์ = 1 ห้อง": "Docker Sandbox",
@@ -39,20 +42,21 @@ EN = {
  "ส่งร้องเรียน · ขอเงินคืน": "Complain · Claim Refund", "สมัครสอบ · push": "Register Exam · Push",
  "ส่ง · โพสต์ · ลบ": "Send · Post · Delete", "นัดหมาย · ส่งข้อมูล": "Book · Share Data",
  "ส่งใบสมัคร · ตอบ HR": "Apply · Reply to HR", "ยื่นแบบ · ชำระ": "File · Pay",
- "ระหว่างงาน": "During Work", "ควรปรับ skill ≤ 3": "Skill Fixes ≤ 3", 'ผู้ใช้สั่ง "รวมบทเรียน"': "User Merges Lessons",
+ "ระหว่างงาน": "During Work", "หัวหน้าเทียบคาดกับจริง": "Lead Checks Estimate vs Actual", 'ผู้ใช้สั่ง "รวมบทเรียน"': "User Merges Lessons",
  "เกณฑ์และหลักที่ใช้ทุกขั้น": "Criteria & Principles", "principle เป็นฐานทุกขั้น": "Principles Under Every Step",
- "6 รูปแบบการทำงานของทีม": "6 Team Patterns", "อภิธานศัพท์": "Glossary",
+ "รูปแบบการทำงาน": "Working Patterns", "โมดูล 9 ตัว": "9 Modules", "อภิธานศัพท์": "Glossary",
  "คำทั่วไป": "General", "การทำงานและการอนุมัติ": "Work & Approval", "ไฟล์ในโฟลเดอร์งาน": "Work Folder Files",
  "ศัพท์ของงานนี้": "Domain Terms", "git และการส่งงาน": "Git & Shipping", "sandbox และความปลอดภัย": "Sandbox & Safety",
  "ไฟล์และ skill ในระบบ": "System Files & Skills",
 }
 # หัวที่เป็นอังกฤษอยู่แล้ว → เติมไทยข้างใต้
 TH = {"CONTEXT.md": "ไฟล์กลางของงาน", "learning-reviewer": "ตัวสรุปบทเรียน", "docs/BUILD-PLAN.md": "แผนงานและบันทึกการตัดสินใจ",
-      "CLAUDE.global.md": "กฎประจำเครื่อง", ".superuser/inbox/": "กล่องข้อความเข้า"}
+      "CLAUDE.global.md": "กฎประจำเครื่อง", "inbox/": "กล่องข้อความเข้า"}
 # หัวอังกฤษที่ต้องเปลี่ยนคำและใส่ไทยเอง
 PAIR = {"slash command": ("Slash Command", "คำสั่งลัด")}
 DYN = [(r"ลูกทีมของ plugin นี้ · (\d+) agent", lambda m: f"Team Agents · {m[1]}"),
        (r"skill ที่ลูกทีมใช้ · (\d+) ตัว", lambda m: f"Skills the Team Uses · {m[1]}"),
+       (r"skill กลาง · (\d+) ตัว", lambda m: f"Shared Skills · {m[1]}"),
        (r"playbook ทั้ง (\d+) ตัว", lambda m: f"{m[1]} Playbooks")]
 
 CSS = """<style>
@@ -61,7 +65,7 @@ CSS = """<style>
 .lead .bi .th,.lead .th{color:#D6D8E0}
 .sh .bi .th{font-size:13px;margin-top:0}
 .gh .bi .th{font-size:13px;margin-top:0}
-.lc .bi,.dc .bi,.oc .bi,.gc .bi,.mc .bi,.tier .bi,.grp .bi,.lead .bi{align-items:center}
+.lc .bi,.dc .bi,.plan .bi,.mg .bi,.oc .bi,.gc .bi,.mc .bi,.tier .bi,.grp .bi,.lead .bi{align-items:center}
 .inp .bi{display:block}.inp .bi .th{font-size:13px;margin-top:0}
 .hd h1 .h1th{display:block;font-family:"Anuphan",sans-serif;font-size:20px;font-weight:400;letter-spacing:0;margin-top:8px;color:#fff;white-space:normal}
 </style>

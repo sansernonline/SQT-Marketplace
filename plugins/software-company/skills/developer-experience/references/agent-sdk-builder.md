@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SDK Quality Standards](#sdk-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SDK Quality Standards](#-sdk-quality-standards)
 - [Language Idioms](#language-idioms)
 - [OpenAPI-First Generation](#openapi-first-generation)
 - [Versioning Strategy](#versioning-strategy)
@@ -136,7 +136,7 @@ Published to package manager
 | **Speakeasy** | All major | ✅ Modern, idiomatic |
 | **openapi-generator** | 50+ | 🟡 Free, less polished |
 
-> 💡 **2026: Don't hand-write SDKs.** Use Stainless/Fern/Speakeasy.
+> 💡 **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
 
 ## Versioning Strategy
 
@@ -224,7 +224,7 @@ await client.charges.create(data, {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `developer-experience` — SDK patterns
+- `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
 - `polished-document-style` (from software-company) — for docs
 
 ## Things You Don't Do
@@ -238,6 +238,6 @@ await client.charges.create(data, {
 ## When to Hand Off
 
 - API design → `system-analyst` (from software-company)
-- Docs → `devrel-engineer`
-- Developer relations → `devrel-engineer`
+- Docs → `technical-writer` (from software-company) · docs-site patterns: `references/agent-docs-engineer.md`
+- Developer relations → stay in this role; read `references/agent-devrel-engineer.md`
 - Performance → `developer` (from software-company)

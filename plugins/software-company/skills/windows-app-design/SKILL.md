@@ -1,6 +1,6 @@
 ---
 name: windows-app-design
-description: Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, MAUI). Browser-based → web-app-design.
+description: Use when building a desktop app or mockup that must look native on Windows 11 (WinUI 3, Avalonia, web-wrapped). Browser-based → web-app-design.
 ---
 
 # Windows App Design
@@ -8,7 +8,8 @@ description: Use when building a desktop app or mockup that must look native on 
 > **กฎข้อเดียว:** แอปที่ทำต้องดูเหมือนของที่มากับ Windows 11 ไม่ใช่เว็บที่ถูกยัดใส่หน้าต่าง
 > ผู้ใช้ Windows รู้ทันทีว่าอะไรไม่ใช่ของแท้ — มุมโค้งผิดขนาด ปุ่มสูงผิด เมนูอยู่ผิดที่
 >
-> **เนทีฟไม่ได้แปลว่าใช้ธีมตั้งต้น** — แอปเด่นบน Windows 11 (Windows Terminal · Dev Home · แอป Files) ใช้กติกาเนทีฟ (ขนาด · มุม · ปุ่ม · แถบชื่อ) แต่มีตัวตนของตัวเอง: ธีมเริ่มต้นที่เลือกเอง (มืดได้) · สี accent ของแบรนด์ · Mica/Acrylic ย้อมสี · โลโก้ในแถบชื่อ · หน้าจอพระเอก · เลือกตัวตนตาม `ui-craft` ข้อ 0.1 ก่อนเริ่ม · `fluent.css` คือพื้น ไม่ใช่หน้าตาสุดท้าย
+> **เนทีฟไม่ได้แปลว่าใช้ธีมตั้งต้น** — แอปเด่นบน Windows 11 (Windows Terminal · Dev Home · แอป Files) ใช้กติกาเนทีฟ (ขนาด · มุม · ปุ่ม · แถบชื่อ) แต่มีตัวตนของตัวเอง: ธีมเริ่มต้นที่เลือกเอง (มืดได้) · สี accent ของแบรนด์ที่ข้อมูลและปุ่มหลัก · โลโก้ในแถบชื่อ · หน้าจอพระเอก
+> **กรอบหน้าต่างเป็นสีกลาง** — แถบชื่อ · nav · rail · command bar · status bar · เส้นขอบ ใช้ Mica/Acrylic ไม่ย้อมสี และเส้นกับไอคอนเทา-ดำตามธีม Windows · accent มีได้แค่ขีดเลือก 3×16px ปุ่มหลัก ข้อมูล (ตัวเลข KPI · กราฟ) และลิงก์ · ย้อมกรอบได้เฉพาะเมื่อผู้ใช้สั่ง · เลือกตัวตนตาม `ui-craft` ข้อ 0.1 ก่อนเริ่ม · `fluent.css` คือพื้น ไม่ใช่หน้าตาสุดท้าย
 
 ## เมื่อไหร่ใช้ skill นี้
 
@@ -31,7 +32,7 @@ description: Use when building a desktop app or mockup that must look native on 
 
 ```
 0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ fluent.css
-   (เช่น --win-accent สีแบรนด์ · ธีมเริ่มต้นมืด · พื้น Mica ย้อมสี) — เขียนเป็นบล็อก token ต่อท้าย fluent.css ไม่แก้ไฟล์ต้นฉบับ
+   (เช่น --win-accent สีแบรนด์ · ธีมเริ่มต้นมืด · พื้นกรอบเป็นสีกลางตาม fluent.css ไม่ย้อมสี) — เขียนเป็นบล็อก token ต่อท้าย fluent.css ไม่แก้ไฟล์ต้นฉบับ
 1. เลือกโครงจากตารางข้อ 0 ใน references/patterns.md แล้วคัดลอก template ที่ตรงกับแอป + assets/fluent.css ไปไว้คู่กัน
    (mockup-template.html = ตั้งค่า/dashboard · tool-app-template.html = แอปเครื่องมือที่ข้อมูลแน่น · หน้าตาของทั้งสองแบบดูได้ที่ assets/templates-preview.webp)
 2. ทำ 3 หน้าหลักก่อน (หน้าที่ผู้ใช้เปิดบ่อยที่สุด) ให้สวยจริง ยังไม่ทำหน้าที่เหลือ
@@ -47,7 +48,7 @@ description: Use when building a desktop app or mockup that must look native on 
 
 **mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `fluent.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง · ระหว่างทำวางคู่กันได้
 
-**ทำไมต้อง mockup ก่อน:** แก้ HTML ใช้เวลาเป็นนาที แต่แก้ XAML ที่ผูกกับ ViewModel แล้ว
+**ทำไมต้อง mockup ก่อน:** แก้ HTML ใช้เวลาเป็นนาที แต่แก้ Extensible Application Markup Language (XAML) ที่ผูกกับ ViewModel แล้ว
 ใช้เวลาเป็นชั่วโมง และถ้าเขียนโค้ดไปแล้ว การคุยเรื่องหน้าตาจะกลายเป็นการคุยเรื่องต้นทุน
 
 ---
@@ -61,7 +62,9 @@ description: Use when building a desktop app or mockup that must look native on 
 |---|---|
 | `assets/fluent.css` | web-wrapped desktop + mockup |
 | `assets/FluentTokens.xaml` | WinUI 3 / Windows App SDK |
-| `assets/FluentTokens.axaml` | Avalonia 11 (แนวเดียวกันใช้กับ MAUI ได้) |
+| `assets/FluentTokens.axaml` | Avalonia 11 |
+
+**.NET MAUI ไม่มีไฟล์สำเร็จรูป** — คัดลอกค่าจาก `references/tokens.md` ลง `ResourceDictionary` ของ MAUI (`Resources/Styles/Colors.xaml`) เอง · ชื่อ key ตามคอลัมน์ Avalonia
 
 ค่าที่ต้องจำได้โดยไม่ต้องเปิดตาราง:
 
@@ -77,7 +80,7 @@ description: Use when building a desktop app or mockup that must look native on 
 > แอปที่สีกลางไม่ตรงกับระบบปฏิบัติการ จะดูเหมือนของแปลกปลอมทันทีที่วางข้างแอปอื่น
 >
 > **สีที่เปลี่ยนตามงานมีแค่ accent** ให้ใช้สีแบรนด์ของลูกค้า ถ้ายังไม่มีให้ใช้ค่าเริ่มต้นของ Windows ในตารางข้างบน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจากเนื้องานไว้ในรายงาน
-> (ตารางเลือกโทนสีตามเนื้องาน อยู่ใน [`colour-by-domain`](../diagram-figures/references/colour-by-domain.md))
+> (ตารางเลือกโทนสีตามเนื้องาน อยู่ใน `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`))
 > ค่า accent ในตารางข้างบนคือค่าเริ่มต้นของ Windows ซึ่งเป็นตัวเลือกที่ปลอดภัยเมื่อยังไม่มีแบรนด์
 > **ไม่ใช่ค่าที่ต้องใช้** และ accent ต้องผ่าน contrast ≥ 4.5:1 ทั้งโหมดมืดและสว่าง จึงมักต้องมีคนละค่าต่อโหมด
 
@@ -92,12 +95,12 @@ description: Use when building a desktop app or mockup that must look native on 
 
 ## 3 · โครงหน้าต่าง
 
-ภาพโครงหน้าต่างพร้อมขนาด (title bar 48px · nav 320px · Title 28/36 · ขอบซ้ายขวา 36px · ระยะระหว่าง section 40px · เนื้อหากว้างไม่เกิน 1064px) อยู่ใน [`references/frame-and-components.md`](references/frame-and-components.md)
+ภาพโครงหน้าต่างพร้อมขนาด (title bar 48px · nav 320px · Title 28/36 · ขอบซ้ายขวา 36px · ระยะระหว่าง section 40px · เนื้อหากว้างไม่เกิน 1064px — 36 กับ 40 อยู่ในรายการยกเว้นสเกลระยะของ `ui-craft` `references/scales.md` ระยะอื่นใช้สเกล 4/8/12/16/24/32/48/64) อยู่ใน [`references/frame-and-components.md`](references/frame-and-components.md)
 
 กฎที่คนทำเว็บมักพลาด:
 
 - **เมนูตั้งค่าอยู่ล่างสุดของ nav เสมอ** — ผู้ใช้ Windows หาที่นั่นก่อนที่อื่น
-- **แถบบอกหน้าที่เลือกเป็นขีดเล็ก 3×16px ชิดซ้าย** ไม่ใช่ระบายพื้น accent ทั้งแถว
+- **แถบบอกหน้าที่เลือกเป็นขีดเล็ก 3×16px ชิดซ้าย** ไม่ใช่ระบายพื้น accent ทั้งแถว · ไอคอนของแถวที่เลือกยังเป็นสีข้อความปกติ ไม่เปลี่ยนเป็น accent
 - **หน้าละ 1 Title** — ห้ามมี 2
 - **เป้าคลิกเล็กสุด 32×32px** (ไม่ใช่ 48px แบบมือถือ — เดสก์ท็อปมีเมาส์)
 - **ปุ่มสูง 32px กว้างต่ำสุด 120px** ปุ่มเตี้ยกว่านี้ดูเป็นเว็บทันที (ยกเว้นปุ่มไอคอน 32×32 และปุ่ม subtle ใน command bar)
@@ -111,7 +114,7 @@ description: Use when building a desktop app or mockup that must look native on 
 
 ## 4 · คอมโพเนนต์ที่มีให้แล้วใน fluent.css
 
-ตารางคลาสพร้อมหมายเหตุอยู่ใน [`references/frame-and-components.md`](references/frame-and-components.md): title bar · nav · การ์ด · แถวตั้งค่า · InfoBar · pill · KPI · toggle · ตาราง · ลิงก์ — **InfoBar ใช้แทน `alert()` เสมอ** · KPI 3–5 ช่อง · ลิงก์ใช้สี accent-text ไม่ใช่ accent
+ตารางคลาสพร้อมหมายเหตุอยู่ใน [`references/frame-and-components.md`](references/frame-and-components.md): title bar · nav · การ์ด · แถวตั้งค่า · InfoBar · pill · ตัวชี้วัดหลัก (Key Performance Indicator · KPI) · toggle · ตาราง · ลิงก์ — **InfoBar ใช้แทน `alert()` เสมอ** · KPI 3–5 ช่อง · ลิงก์ใช้สี accent-text ไม่ใช่ accent
 
 ไอคอนใช้ **Segoe Fluent Icons** (มากับ Windows 11) ขนาด 16px ใน nav, 20px หัวข้อ section,
 24px หัวหน้า ห้ามผสมชุดไอคอนอื่น ส่วนรหัสที่ใช้บ่อยอยู่ท้าย `references/tokens.md` และ `references/patterns.md`
@@ -155,7 +158,7 @@ python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screen
 
 ### 6.1 · ให้คนอื่นวิจารณ์
 
-คนที่ทำเองจะเห็นว่างานตัวเองดีกว่าความจริง ให้ส่งภาพให้ subagent ที่ไม่ได้ทำชิ้นนี้ (ถ้าติดตั้ง plugin `graphic-design` ใช้ `graphic-design:design-critic` ไม่มีก็ใช้ general-purpose ที่สั่งให้วิจารณ์อย่างเดียว) พร้อมบอกเป้าหมาย:
+คนที่ทำเองจะเห็นว่างานตัวเองดีกว่าความจริง ให้ส่งภาพให้ subagent ที่ไม่ได้ทำชิ้นนี้ (เรียง: `graphic-design:design-critic` ถ้าติดตั้ง → `graphic-designer` → `general-purpose` ที่สั่งให้วิจารณ์อย่างเดียว · ลำดับเดียวกับ `ui-craft`) พร้อมบอกเป้าหมาย:
 
 ข้อความสั่งงานผู้วิจารณ์ (เป้า · 2–3 ปัญหาต่อหน้า · วิธีแก้ระดับ CSS · ไม่ชม · ≤ 250 คำ) อยู่ใน [`references/review.md`](references/review.md)
 
@@ -165,7 +168,7 @@ python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screen
 
 ## 7 · Anti-patterns
 
-ข้อห้าม 16 ข้อ (ระบายพื้น accent ทั้งแถวเมนู · มุม 12–16px · เงาใต้การ์ด · `alert()` · ทำแค่โหมดมืด · ปุ่มทึบทุกแถว · ปุ่มไม่มีไอคอน ฯลฯ) อยู่ใน [`references/review.md`](references/review.md)
+ข้อห้าม 16 ข้อ (ระบายพื้น accent ทั้งแถวเมนู · ย้อมสีกรอบหน้าต่าง · มุม 12–16px · เงาใต้การ์ด · `alert()` · ทำแค่โหมดมืด · ปุ่มทึบทุกแถว · ปุ่มไม่มีไอคอน ฯลฯ) อยู่ใน [`references/review.md`](references/review.md)
 
 ---
 

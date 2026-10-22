@@ -9,6 +9,8 @@
 
 ## Profile card
 
+Private: holds the ID number and health data. Keep it in the user's own private file or locked note, not committed and not posted to a group chat.
+
 | | |
 |---|---|
 | ชื่อ-นามสกุล | |

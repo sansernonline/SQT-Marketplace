@@ -202,21 +202,23 @@ GET /Patient?name=Doe&_count=50&_offset=100
 
 ### Pattern: Bundle (transaction)
 
+`fullUrl` must be `urn:uuid:` + a real UUID (generate one per entry, e.g. `crypto.randomUUID()`). Short labels like `urn:uuid:1` are invalid.
+
 ```json
 {
   "resourceType": "Bundle",
   "type": "transaction",
   "entry": [
     {
-      "fullUrl": "urn:uuid:1",
+      "fullUrl": "urn:uuid:5555847b-6b2a-4a00-b509-f9728846984d",
       "resource": { "resourceType": "Patient", "name": [...] },
       "request": { "method": "POST", "url": "Patient" }
     },
     {
-      "fullUrl": "urn:uuid:2",
+      "fullUrl": "urn:uuid:61230616-a152-4a3c-8cc1-953ad6633f38",
       "resource": {
         "resourceType": "Observation",
-        "subject": { "reference": "urn:uuid:1" }  // resolved server-side
+        "subject": { "reference": "urn:uuid:5555847b-6b2a-4a00-b509-f9728846984d" }  // resolved server-side
       },
       "request": { "method": "POST", "url": "Observation" }
     }
@@ -241,7 +243,8 @@ const authUrl = new URL(conformance.authorization_endpoint);
 authUrl.searchParams.set('response_type', 'code');
 authUrl.searchParams.set('client_id', CLIENT_ID);
 authUrl.searchParams.set('redirect_uri', REDIRECT_URI);
-authUrl.searchParams.set('scope', 'launch openid profile patient/Patient.read');
+authUrl.searchParams.set('scope', 'launch openid fhirUser patient/Patient.r patient/Observation.rs');
+// SMART v2 scopes (.r = read, .s = search, .rs = both). Old v1 scopes (patient/Patient.read) are still accepted by many servers
 authUrl.searchParams.set('state', randomString());
 authUrl.searchParams.set('aud', iss);
 authUrl.searchParams.set('launch', launch);
@@ -274,18 +277,37 @@ const token = await fetch(conformance.token_endpoint, {
 
 ## Validation
 
+Two levels. The Python model checks structure only. Profile rules (US Core must-support, value-set bindings) need the official validator.
+
 ```python
+# 1. Structure check — fhir.resources >= 7 is built on pydantic v2
+from pydantic import ValidationError
 from fhir.resources.observation import Observation
 
-# Parse + validate
 try:
-    obs = Observation.parse_obj(json_data)
+    obs = Observation.model_validate(json_data)   # parse_obj() is the old pydantic v1 name
 except ValidationError as e:
     print(e.errors())
 
-# Profile validation (US Core)
-from fhirvalidator import validate
-result = validate(json_data, profile_url='http://hl7.org/fhir/us/core/...')
+# 2. Profile check (US Core) — ask the FHIR server to run $validate
+import requests
+
+US_CORE_LAB = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab'
+r = requests.post(
+    f'{FHIR_BASE}/Observation/$validate',
+    params={'profile': US_CORE_LAB},
+    json=json_data,
+    headers={'Content-Type': 'application/fhir+json'},
+)
+outcome = r.json()                                # an OperationOutcome
+errors = [i for i in outcome.get('issue', []) if i['severity'] in ('error', 'fatal')]
+```
+
+Or offline in CI, with the official HL7 validator (Java):
+
+```bash
+java -jar validator_cli.jar obs.json -version 4.0.1 -ig hl7.fhir.us.core \
+  -profile http://hl7.org/fhir/us/core/StructureDefinition/us-core-observation-lab
 ```
 
 ## US Core (Most Common US IG)

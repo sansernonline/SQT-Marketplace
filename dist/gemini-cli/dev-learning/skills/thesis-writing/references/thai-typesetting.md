@@ -16,7 +16,7 @@ Thai has no spaces between words. Neat Thai body text needs two settings working
 
 Word breaks Thai lines at word boundaries only when the Thai word-breaking dictionary on that machine works. When it does not, a long run of Thai has no break point. The line then ends early and Thai Distributed spreads the letters apart ("ใ น แ ต ่ ล ะ ว ั น"). Writers often "fix" this by typing a space between phrases, which is what makes the text gappy in the first place.
 
-So: remove the phrase spaces, and put U+200B at every Thai word boundary. The text looks the same on every machine, and copy-paste and similarity checkers ignore the character.
+So: remove the phrase spaces, and put U+200B at every Thai word boundary. The text looks the same on every machine. Whether similarity checkers (for example Turnitin) ignore the character is not verified (ยังไม่ได้ตรวจ) — Turnitin's guide says it flags hidden text, so test it (last step below).
 
 ## Doing it on a .docx
 
@@ -33,4 +33,5 @@ So: remove the phrase spaces, and put U+200B at every Thai word boundary. The te
 - [ ] No line with letters spread apart
 - [ ] Headings, captions and tables keep their own alignment
 - [ ] Page count checked — removing spaces usually shortens the paper, which can matter for a page limit
+- [ ] Run the similarity check on the U+200B version; if it shows a hidden-character flag, tell the adviser, and keep a copy without U+200B for the check if the university allows
 - [ ] The manual or template still wins: if it prescribes a different alignment or font, follow it

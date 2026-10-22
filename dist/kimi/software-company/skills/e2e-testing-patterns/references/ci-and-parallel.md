@@ -1,6 +1,6 @@
 # Parallelization และ CI Integration
 
-ระดับการรันขนาน รอบการรัน E2E ใน CI และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
+ระดับการรันขนาน รอบการรัน end-to-end (E2E) ใน continuous integration (CI) และไฟล์ที่ต้องเก็บไว้เมื่อเทสต์ล้ม
 
 ## Parallelization
 
@@ -20,7 +20,7 @@
 
 ### Run E2E tier
 ```yaml
-# Smoke (every PR, 2 min)
+# Smoke (every pull request (PR), 2 min)
 - 5-10 critical tests
 - Chromium only → feedback เร็ว
 - Fail = block merge
@@ -31,7 +31,7 @@
 - Failures investigated next day
 
 # Pre-prod (before deploy, 10 min)
-- P0 + P1 tests
+- P1 + P2 tests (test-case-template scale: P1 = most important)
 - Chromium + WebKit + Firefox (ครั้งเดียวก่อน release)
 - Must pass before prod deploy
 ```

@@ -60,7 +60,18 @@ Count before reading. File counts by type, projects or modules, largest files, g
 
 **Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be `inferred` or `ask`, and the coverage table must say so.
 
-If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. Seven layers worked in practice: screens and permissions · data and status codes · one deep-dive module · rules for each half of the modules · integrations, jobs, reports and ETL · manuals. Then one analyst assembles. Budget for it: a system of about 55,000 lines took 8 subagents and about 2 million tokens.
+If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. These layers worked in practice, one subagent each:
+
+1. Screens and endpoints with permissions (controllers, routes, menus)
+2. Data access and status codes: queries, stored procedures and the tables they touch
+3. Schema and data dictionary
+4. One deep-dive module
+5. Business rules, first half of the modules
+6. Business rules, second half of the modules
+7. Integrations, jobs, reports, ETL, mobile or other clients
+8. Manuals and old documents: what they claim the system does
+
+Then one analyst assembles. Budget for it: a system of about 55,000 lines took these 8 subagents and about 2 million tokens. Small systems can merge layers (for example 5 and 6, or 2 and 3).
 
 ### Step 2 — System map (whole system, shallow)
 

@@ -9,7 +9,7 @@ description: Use when writing a report for one software defect from testing or a
 
 ## Where bug reports live
 
-One file per bug in `qa/bugs/BUG-<NNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNN>/` — redact personal data first.
+One file per bug in `qa/bugs/BUG-<NNNN>-<slug>.md` at the project root. Attach screenshots and logs under `qa/bugs/BUG-<NNNN>/` — redact personal data first.
 
 ## When to use this skill
 
@@ -59,7 +59,7 @@ Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not w
 - Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
   ```bash
-  python ../polished-document-style/scripts/check_outline.py assets/bug-report.md <your bug file>
+  python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/bug-report.md <your bug file>
   ```
 
   It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
@@ -119,6 +119,6 @@ Load the matching skill before writing, not after:
 |---|---|
 | Markdown someone reads (repo, wiki, issue tracker) | `polished-document-style` |
 | A rendered `.docx` / `.pptx` / PDF a stakeholder signs off on | `branded-document-design` |
-| The point needs a picture to land | `markdown-visuals`, then `software-diagrams` |
+| The point needs a picture to land | `markdown-visuals`, then `diagram-figures` for project documents (`software-diagrams` only for README / PR notes) |
 
 Default formatting is not neutral. It looks like unfinished work.

@@ -44,8 +44,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Actuarial Quality Standards](#actuarial-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Actuarial Quality Standards](#-actuarial-quality-standards)
 - [Loss Modeling Approach](#loss-modeling-approach)
 - [Pricing Models](#pricing-models)
 - [Reserves Analysis](#reserves-analysis)
@@ -91,15 +91,20 @@ You are an **Actuarial Engineer**. You build the math that lets an insurer make 
 ## Loss Modeling Approach
 
 ```python
+import numpy as np
+import scipy.stats
+import statsmodels.api as sm
+
 # Decompose: Loss = Frequency × Severity
 
 # Frequency: number of claims per policy
 class FrequencyModel:
     # Poisson, Negative Binomial common
-    def fit(self, exposure_data):
-        # exposure: car-years for auto, etc.
-        # claims: # claims observed
-        return statsmodels.GLM(claims, exposure, family=Poisson()).fit()
+    def fit(self, claims, features, exposure):
+        # exposure (car-years for auto, etc.) is an OFFSET, not a feature
+        return sm.GLM(claims, sm.add_constant(features),
+                      family=sm.families.Poisson(),
+                      offset=np.log(exposure)).fit()
 
 # Severity: cost per claim
 class SeverityModel:
@@ -177,16 +182,20 @@ cl_model = cl.MackChainladder().fit(triangle)
 ultimate = cl_model.ultimate_
 
 # Bornhuetter-Ferguson (combines chain ladder + a priori)
-bf_model = cl.BornhuetterFerguson(apriori=0.65).fit(triangle)
+# apriori is an expected loss ratio, so fit() needs exposure (earned premium) as sample_weight
+bf_model = cl.BornhuetterFerguson(apriori=0.65).fit(triangle, sample_weight=earned_premium)
+bf_ultimate = bf_model.ultimate_
 ```
 
 ### Bootstrap (Range of Estimates)
 
 ```python
 # Stochastic reserves to quantify uncertainty
-boot = cl.BootstrapODPSample(n_sims=10000).fit_transform(triangle)
-boot_summary = boot.ultimate_.describe()
-# Output: mean, percentiles
+# BootstrapODPSample returns simulated triangles; fit a model on them to get ultimates
+sims = cl.BootstrapODPSample(n_sims=10000).fit_transform(triangle)
+sim_ultimate = cl.Chainladder().fit(sims).ultimate_   # one ultimate per origin per simulation
+# Sum over origins for each simulation, then read the mean and percentiles
+# across simulations (e.g. 75th, 95th, 99.5th)
 ```
 
 ## Trend Analysis
@@ -226,16 +235,7 @@ def calculate_scr(stochastic_outcomes):
 
 ### US Risk-Based Capital (RBC)
 
-```
-C0: Asset risk - Affiliate
-C1: Asset risk - Investment
-C2: Insurance risk - Reserves + Premium
-C3: Interest rate risk
-C4: Operational risk
-C5: Other
-
-Total RBC = sqrt(C0² + C1² + C2² + C3² + C4² + C5²)
-```
+The life (C factors) and property-and-casualty (R factors) formulas, with sources and check date, live in one place: `insurance-compliance.md` → US: Risk-Based Capital (RBC). Use those; do not copy the formula here.
 
 ## Stress Testing
 
@@ -284,7 +284,7 @@ for scenario_name, shocks in scenarios.items():
 
 ## When to Hand Off
 
-- Underwriting application → `insurance-analyst`
+- Underwriting application → open `agent-underwriting-analyst.md` (same `insurance-analyst` agent)
 - Claims operations → `insurance-engineer`
 - Policy systems → `insurance-engineer`
 - ML infrastructure → `ai-engineer`
@@ -305,8 +305,8 @@ for scenario_name, shocks in scenarios.items():
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Claims Quality Standards](#claims-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Claims Quality Standards](#-claims-quality-standards)
 - [FNOL Pattern](#fnol-pattern)
 - [Triage Pattern](#triage-pattern)
 - [Fraud Detection](#fraud-detection)
@@ -467,11 +467,14 @@ def network_red_flags(claim):
 
 ```typescript
 function calculateSettlement(claim, valuation, policy) {
-  // 1. Determine covered amount
-  let covered = min(valuation.amount, policy.limit);
+  // 1. Apply deductible to the valued loss — a loss below the deductible pays 0, not a negative amount
+  // (amounts in integer satang — never floats)
+  // Order deductible → limit matches claims-workflow-patterns.md; some policy wordings apply
+  // the limit first (gives a different payout when loss > limit) — follow the policy wording
+  let covered = Math.max(0, valuation.amount - policy.deductible);
 
-  // 2. Apply deductible
-  covered -= policy.deductible;
+  // 2. Cap at the policy limit
+  covered = Math.min(covered, policy.limit);
 
   // 3. Apply policy limits (per occurrence, per accident, aggregate)
   covered = applyAllLimits(covered, claim, policy);
@@ -481,8 +484,11 @@ function calculateSettlement(claim, valuation, policy) {
 
   // 5. Add allowable extras
   covered += allowableLossOfUse(claim);
-  covered += allowableSalvage(claim);
 
+  // 6. Salvage reduces the payout only when the insured keeps the damaged item
+  if (claim.salvageRetainedByInsured) covered -= claim.salvageValue;
+
+  // Subrogation is not deducted here — it is recovered later from the third party
   return Math.max(0, covered);
 }
 ```
@@ -554,8 +560,8 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 - Underwriting questions → `insurance-analyst`
 - Statistical reserves → `insurance-analyst`
-- General policy → `insurance-engineer`
-- Compliance → `fintech-compliance-officer`
+- General policy → open `agent-insurance-engineer.md` (same `insurance-engineer` agent)
+- Compliance → `insurance-compliance-officer`
 
 ## Reference
 
@@ -608,16 +614,17 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 - Same framework across EU member states
 
 ### Thailand
-- **OIC (Office of Insurance Commission)**
-- Insurance Acts and ministerial regulations
-- Solvency and reserve rules
-- Product approvals required
+- **OIC (Office of Insurance Commission)** — สำนักงาน คปภ., oic.or.th
+- Life Insurance Act B.E. 2535 and Non-Life Insurance Act B.E. 2535, plus ministerial regulations and OIC notifications
+- OIC risk-based capital: capital adequacy ratio (CAR) supervisory level 140% (รอยืนยัน)
+- Product forms and rates approved before sale; separate rules for electronic sales
+- Details, sources and check dates: `insurance-compliance.md` → Thailand OIC
 
 ### Other major
-- UK: PRA + FCA
-- Japan: FSA + JNFLIC
-- Singapore: MAS
-- Australia: APRA + ASIC
+- UK: Prudential Regulation Authority (PRA) + Financial Conduct Authority (FCA)
+- Japan: Financial Services Agency (FSA)
+- Singapore: Monetary Authority of Singapore (MAS)
+- Australia: Australian Prudential Regulation Authority (APRA) + Australian Securities and Investments Commission (ASIC)
 
 ## Product + Rate Filings (US)
 
@@ -635,7 +642,7 @@ interface RateFiling {
 }
 
 // File via SERFF (System for Electronic Rate and Form Filing)
-// Each state has own review timeline (30-90 days typical)
+// Each state has own review timeline — see insurance-compliance.md (US: State Filings via SERFF)
 // Some states "prior approval", others "file and use"
 ```
 
@@ -701,9 +708,9 @@ async function recommendAnnuity(customer, product) {
 - Required: written information security program
 - Notification of cybersecurity events
 
-**NY DFS Cybersecurity Regulation (23 NYCRR 500):**
+**New York Department of Financial Services (DFS) Cybersecurity Regulation (23 NYCRR 500):**
 - Strict requirements
-- CISO required
+- Chief Information Security Officer (CISO) required (the NAIC model law only asks for a designated responsible person)
 - Annual certification
 
 **Other regimes:**
@@ -733,7 +740,7 @@ Independent actuary opinion annually
 ```
 US: RBC ratio > 200% (target 300%+)
 EU: SCR ratio > 100% (target 150%+)
-TH: per OIC requirements
+TH: CAR ≥ 140% OIC supervisory level (รอยืนยัน) — see insurance-compliance.md → Thailand OIC
 ```
 
 ### Liquidity
@@ -786,8 +793,8 @@ Ongoing monitoring
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Insurance Quality Standards](#insurance-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Insurance Quality Standards](#-insurance-quality-standards)
 - [Critical Insurance Concepts](#critical-insurance-concepts)
 - [Policy Lifecycle](#policy-lifecycle)
 - [Quote Engine Pattern](#quote-engine-pattern)
@@ -929,11 +936,11 @@ async function generateQuote(req: QuoteRequest): Promise<QuoteResponse> {
 ### Rule 1: Money math precision
 ```typescript
 // ALWAYS integer cents/satang, NOT float
-const premium = BigInt(rateInCents);  // 50000n = $500.00
+const premiumSatang = BigInt(rateInSatang);  // 50000n = 500.00 baht
 
-// Or use Decimal library
+// Or use a Decimal library — pass strings, not float literals
 import Decimal from 'decimal.js';
-const premium = new Decimal('500.00').times(0.95);  // discount
+const discounted = new Decimal('500.00').times('0.95');  // 5% discount
 ```
 
 ### Rule 2: Rate book versioning
@@ -996,9 +1003,13 @@ async function processEndorsement(policyId: string, changes: PolicyChange[]) {
   const daysRemaining = daysBetween(today(), policy.expirationDate);
   const totalDays = daysBetween(policy.effectiveDate, policy.expirationDate);
 
-  const oldPremium = policy.premium;
-  const newPremium = await calculatePremium(policy, changes);
-  const adjustment = (newPremium - oldPremium) * daysRemaining / totalDays;
+  // Premiums in integer satang; Decimal for the division, round once at the end
+  const oldPremium = new Decimal(policy.premiumSatang);
+  const newPremium = new Decimal(await calculatePremium(policy, changes));
+  const adjustment = newPremium.minus(oldPremium)
+    .times(daysRemaining).div(totalDays)
+    .toDecimalPlaces(0, Decimal.ROUND_HALF_UP)   // whole satang
+    .toNumber();
 
   // Issue endorsement
   await db.endorsements.create({
@@ -1041,8 +1052,7 @@ async function processRenewals(daysAhead: number = 60) {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `insurance-systems` — for claims integration
-- `insurance-systems` — for regulatory
+- `insurance-systems` — claims integration and regulatory references
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -1056,11 +1066,11 @@ async function processRenewals(daysAhead: number = 60) {
 
 ## When to Hand Off
 
-- Claims processing → `insurance-engineer`
+- Claims processing → open `agent-claims-processing-specialist.md` (same `insurance-engineer` agent)
 - Underwriting depth → `insurance-analyst`
 - Actuarial modeling → `insurance-analyst`
 - Payment integration → `fintech-engineer`
-- Compliance review → `fintech-compliance-officer`
+- Compliance review → `insurance-compliance-officer`
 
 ## Reference
 
@@ -1078,8 +1088,8 @@ async function processRenewals(daysAhead: number = 60) {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Underwriting Quality Standards](#underwriting-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Underwriting Quality Standards](#-underwriting-quality-standards)
 - [Eligibility vs Rating](#eligibility-vs-rating)
 - [Eligibility Rules](#eligibility-rules)
 - [Risk Scoring Model](#risk-scoring-model)
@@ -1159,7 +1169,8 @@ ELIGIBILITY_RULES = [
     {
         'name': 'recent_dui',
         'check': lambda app: not had_dui_recently(app, years=5),
-        'reason': 'DUI within 5 years requires manual review'
+        'reason': 'DUI within 5 years requires manual review',
+        'hard_stop': False,   # refer, not auto-decline (rules without the key are hard stops)
     },
 ]
 
@@ -1167,7 +1178,8 @@ def check_eligibility(application):
     failed = []
     for rule in ELIGIBILITY_RULES:
         if not rule['check'](application):
-            failed.append({'rule': rule['name'], 'reason': rule['reason']})
+            failed.append({'rule': rule['name'], 'reason': rule['reason'],
+                           'hard_stop': rule.get('hard_stop', True)})
     return failed
 ```
 
@@ -1180,8 +1192,8 @@ class RiskModel:
         self.feature_pipeline = load_pipeline(model_version)
         self.version = model_version
 
-    def score(self, application):
-        features = self.feature_pipeline.transform(application)
+    def score(self, application, enrichments=None):
+        features = self.feature_pipeline.transform(application, enrichments)
         prob_claim = self.model.predict_proba(features)[0][1]
 
         # Calibrated to expected loss ratio
@@ -1237,24 +1249,19 @@ function rate(application, rateBook) {
 async def enrich_application(app):
     """Pull external data to inform decisioning."""
 
-    enrichments = await asyncio.gather(
-        # Credit-based insurance score
-        get_credit_score(app.applicant),
+    tasks = {
+        'credit': get_credit_score(app.applicant),     # credit-based insurance score
+        'claims_history': get_clue_report(app.applicant),  # Comprehensive Loss Underwriting Exchange (CLUE)
+        'identity': verify_identity(app.applicant),
+    }
+    if app.product == 'auto':
+        tasks['mvr'] = get_mvr(app.applicant)          # motor vehicle record (MVR)
+    if app.product == 'home':
+        tasks['property'] = get_property_data(app.address)
 
-        # Motor vehicle records (for auto)
-        get_mvr(app.applicant) if app.product == 'auto' else None,
-
-        # CLUE database (claims history)
-        get_clue_report(app.applicant),
-
-        # Property characteristics (for home)
-        get_property_data(app.address) if app.product == 'home' else None,
-
-        # Identity verification
-        verify_identity(app.applicant),
-    )
-
-    return enrichments
+    # gather() only takes awaitables — never pass None
+    results = await asyncio.gather(*tasks.values())
+    return dict(zip(tasks.keys(), results))
 ```
 
 ## Auto-Decisioning
@@ -1270,14 +1277,14 @@ async def auto_decide(app):
     enriched = await enrich_application(app)
 
     # 3. Risk score
-    risk = await risk_model.score(app, enriched)
+    risk = risk_model.score(app, enriched)   # sync method, returns a dict
 
     # 4. Threshold logic
-    if risk.score < AUTO_APPROVE_THRESHOLD and not any_red_flags(enriched):
-        return AutoDecision('approve', tier=risk.tier)
+    if risk['score'] < AUTO_APPROVE_THRESHOLD and not any_red_flags(enriched):
+        return AutoDecision('approve', tier=risk['tier'])
 
-    if risk.score > AUTO_DECLINE_THRESHOLD:
-        return AutoDecision('decline', tier=risk.tier, explanation=risk.explanation)
+    if risk['score'] > AUTO_DECLINE_THRESHOLD:
+        return AutoDecision('decline', tier=risk['tier'], explanation=risk['explanation'])
 
     return ReferralDecision('refer_to_underwriter', flags=collect_flags(app, enriched, risk))
 ```
@@ -1322,8 +1329,7 @@ if decision == 'decline' and used_consumer_report:
 
 ## Skills You Use
 
-- `insurance-systems` — modeling patterns
-- `insurance-systems` — regulatory
+- `insurance-systems` — modeling patterns and regulatory references
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -1336,7 +1342,7 @@ if decision == 'decline' and used_consumer_report:
 
 ## When to Hand Off
 
-- Statistical modeling → `insurance-analyst`
+- Statistical modeling → open `agent-actuarial-engineer.md` (same `insurance-analyst` agent)
 - Policy operations → `insurance-engineer`
 - Claims integration → `insurance-engineer`
 - ML infrastructure → `ai-engineer`
@@ -1452,26 +1458,28 @@ async function triage(claim: Claim): Promise<TriageResult> {
   // Severity
   const estimatedSeverity = await estimateSeverity(claim);
 
-  // Auto-settle simple claims
+  // Fraud screening FIRST — every claim, small ones included,
+  // so a small fraudulent claim is never auto-paid
+  const fraudScore = await assessFraudRisk(claim);
+  if (fraudScore > FRAUD_THRESHOLD) {
+    flags.push('FRAUD_RISK');
+    return {
+      routing: 'siu_fraud',   // Special Investigations Unit (SIU)
+      initial_reserve: estimatedSeverity * 1.2,  // conservative
+      priority: 'high',
+      flags,
+    };
+  }
+
+  // Auto-settle simple claims — only with a low fraud score
   if (estimatedSeverity < AUTO_SETTLE_THRESHOLD
+      && fraudScore < AUTO_SETTLE_MAX_FRAUD_SCORE   // stricter than FRAUD_THRESHOLD
       && !claim.has_injuries
       && !claim.has_litigation_indicators) {
     return {
       routing: 'auto_settle',
       initial_reserve: estimatedSeverity * 1.1,
       priority: 'normal',
-      flags,
-    };
-  }
-
-  // Fraud screening
-  const fraudScore = await assessFraudRisk(claim);
-  if (fraudScore > FRAUD_THRESHOLD) {
-    flags.push('FRAUD_RISK');
-    return {
-      routing: 'siu_fraud',
-      initial_reserve: estimatedSeverity * 1.2,  // conservative
-      priority: 'high',
       flags,
     };
   }
@@ -1607,12 +1615,19 @@ def calculate_settlement(claim):
     # 2. Apply liability percentage (for partial fault)
     insurer_share = damages * claim.liability_percentage
 
-    # 3. Apply policy
-    covered = min(insurer_share, claim.policy.limit)
-    covered -= claim.policy.deductible
+    # 3. Apply policy: deductible, then limit, never below zero
+    #    (same order as agent-claims-processing-specialist.md; follow the policy wording if it says limit first)
+    covered = max(0, insurer_share - claim.policy.deductible)
+    covered = min(covered, claim.policy.limit)
 
-    # 4. Subtract recoverable amounts (subrogation, salvage)
-    net = covered - claim.recoveries
+    # 4. Salvage: subtract only when the insured keeps the damaged item.
+    #    When the insurer takes it, the insured is paid in full and the insurer sells it.
+    if claim.salvage_retained_by_insured:
+        covered = max(0, covered - claim.salvage_value)
+    net = covered
+
+    # Subrogation is NOT taken off the insured's payment. Pay the insured now,
+    # then book what is recovered from the at-fault third party later as a recovery.
 
     return {
         'gross_damages': damages,
@@ -1737,16 +1752,16 @@ const TOUCH_POINTS = [
 ```
 US (state-by-state):
   50 state insurance commissioners
-  NAIC coordination (non-binding)
-  SERFF for filings
+  National Association of Insurance Commissioners (NAIC) coordination (non-binding)
+  System for Electronic Rates & Forms Filing (SERFF) for filings
 
 EU:
   Solvency II framework
-  EIOPA coordination
+  European Insurance and Occupational Pensions Authority (EIOPA) coordination
   Member state implementation
 
 UK (post-Brexit):
-  PRA (prudential) + FCA (conduct)
+  Prudential Regulation Authority (PRA, prudential) + Financial Conduct Authority (FCA, conduct)
   Generally aligned with EU but diverging
 
 Thailand:
@@ -1760,7 +1775,7 @@ Japan:
   FSA (Financial Services Agency)
 
 Australia:
-  APRA + ASIC
+  Australian Prudential Regulation Authority (APRA) + Australian Securities and Investments Commission (ASIC)
 ```
 
 ## US: State Filings via SERFF
@@ -1908,18 +1923,33 @@ QRTs (Quantitative Reporting Templates):
 
 ## US: Risk-Based Capital (RBC)
 
+This is the one place in the skill for the RBC formulas; role files link here.
+Sources: American Academy of Actuaries, "Regulatory Capital Requirements — US Life Insurers"
+(actuary.org) and actuary.info "Risk-Based Capital explained" (both checked 2026-10-22).
+The NAIC instructions themselves (content.naic.org) were not opened → (รอยืนยัน) before quoting.
+
 ```
-Total RBC = sqrt(C0² + C1² + C2² + C3² + C4² + C5²)
+LIFE (C factors) — two charges sit outside the square root:
+  RBC after covariance = C0 + C4a + sqrt[ (C1o + C3a)² + (C1cs + C3c)² + C2² + C3b² + C4b² ]
+  Authorized Control Level (ACL) = 50% × RBC after covariance (plus an operational-risk add-on)
 
-Categories:
-C0: Asset risk - Affiliate (subsidiaries)
-C1: Asset risk - Investment
-C2: Insurance risk (premium + reserves)
-C3: Interest rate + market risk
-C4: Operational risk
-C5: Other / catastrophe
+  C0   affiliated investments and off-balance-sheet items
+  C1o  asset risk — bonds, mortgages, other fixed income
+  C1cs asset risk — common stock
+  C2   insurance risk — mortality, morbidity, longevity
+  C3a  interest rate risk          C3b  health credit risk
+  C3c  market risk on guarantees
+  C4a  business risk, premium-based   C4b  health administrative expense risk
 
-Levels:
+PROPERTY AND CASUALTY (R factors):
+  RBC after covariance = R0 + sqrt( R1² + R2² + R3² + R4² + R5² + Rcat² )   (plus operational-risk add-on)
+  ACL = 50% × RBC after covariance
+
+  R0 affiliated insurers   R1 fixed-income assets   R2 equity assets
+  R3 credit (incl. reinsurance recoverables)   R4 loss and loss-adjustment reserves
+  R5 written premium       Rcat catastrophe (earthquake, hurricane, wildfire)
+
+Levels (Total Adjusted Capital ÷ ACL):
 - 200%: Company Action (alert)
 - 150%: Regulatory Action
 - 100%: Authorized Control
@@ -1931,19 +1961,32 @@ Target: 300%+ in practice
 ## Thailand OIC
 
 ```
-Key regulations:
-- Insurance Acts (Life + Non-Life)
-- Ministerial Regulations
-- OIC Notifications
+Regulator: สำนักงานคณะกรรมการกำกับและส่งเสริมการประกอบธุรกิจประกันภัย
+(Office of Insurance Commission, OIC) — oic.or.th
 
-Capital requirements:
-- RBC framework (Thai version)
-- Minimum paid-up capital
-- Solvency margin
+Key laws (both amended several times — check the current consolidated text on oic.or.th):
+- พระราชบัญญัติประกันชีวิต พ.ศ. 2535 (Life Insurance Act B.E. 2535)
+- พระราชบัญญัติประกันวินาศภัย พ.ศ. 2535 (Non-Life Insurance Act B.E. 2535)
+- กฎกระทรวง (Ministerial Regulations) + ประกาศ คปภ. (OIC Notifications) under each Act
+
+Capital requirements — OIC risk-based capital (RBC) framework, now "RBC 2" (รอยืนยัน: effective year):
+- Capital adequacy ratio (CAR) = capital available ÷ capital required
+- OIC early-warning / supervisory level: CAR not below 140%
+  (stated in Prudential Life Q2 2025 and Tokio Marine Life 2025 public disclosures, checked
+  2026-10-22; the OIC notification itself was not opened → (รอยืนยัน))
+- Legal floor in the Acts: 100% of required capital (รอยืนยัน)
+- Insurers publish their CAR quarterly on their own websites
 
 Product approval:
-- Pre-approval required
-- Form + rate filings to OIC
+- Policy forms and rates need OIC approval before sale (แบบและข้อความกรมธรรม์ + อัตราเบี้ยประกันภัย)
+- Forms and procedures: oic.or.th → กฎหมาย / ประกาศ (รอยืนยัน: current menu path)
+
+Online and electronic sales:
+- OIC notifications on offering and issuing policies through electronic channels
+  (issued from B.E. 2560 onward, including the "Digital Face to Face" sales rules of B.E. 2563)
+  — find the version in force on oic.or.th before building a sales flow (รอยืนยัน)
+- Electronic signatures and records: Electronic Transactions Act B.E. 2544
+  (see `legal-document-systems` → e-signature-compliance.md)
 
 Reporting:
 - Quarterly RBC
@@ -1969,7 +2012,9 @@ Reporting:
 Requirements:
 - Written information security program
 - Risk assessment
-- Designated CISO
+- Designated person(s) responsible for the program (employee, affiliate or vendor)
+  — a named Chief Information Security Officer (CISO) is a New York Department of Financial Services (DFS)
+    rule (23 NYCRR 500), not the model law
 - Annual certification
 - 72-hour breach notification
 ```
@@ -2076,7 +2121,6 @@ Preparation:
 - [EIOPA (Solvency II)](https://www.eiopa.europa.eu/)
 - [Thai OIC](https://www.oic.or.th/)
 - [NIPR (US producer licensing)](https://nipr.com/)
-- [Insurance Compliance Magazine](https://www.insurancecomplianceinsight.com/)
 
 
 ## reference: underwriting-models.md
@@ -2132,6 +2176,7 @@ Hybrid (Recommended 2026)
 ## GLM Pricing Model
 
 ```python
+import numpy as np
 import statsmodels.api as sm
 import pandas as pd
 
@@ -2147,7 +2192,7 @@ freq_model = sm.GLM(
 severity_model = sm.GLM(
     claim_amount,
     exog=features_severity,
-    family=sm.families.Gamma(),
+    family=sm.families.Gamma(link=sm.families.links.Log()),  # default link is inverse; log gives relativities
     var_weights=claim_count
 ).fit()
 
@@ -2159,7 +2204,7 @@ pure_premium_model = sm.GLM(
     var_weights=exposure
 ).fit()
 
-# Output: relativities
+# Output: relativities = np.exp(model.params) (log link only)
 # Example: var_age:25-30 = 1.20 means 20% more than baseline
 ```
 
@@ -2175,13 +2220,13 @@ model = xgb.XGBRegressor(
     n_estimators=500,
     max_depth=6,
     learning_rate=0.05,
+    early_stopping_rounds=50,   # constructor argument since XGBoost 1.6; fit() no longer takes it
 )
 
 model.fit(
     X_train, pure_premium,
     sample_weight=exposure,
     eval_set=[(X_val, pure_premium_val)],
-    early_stopping_rounds=50,
 )
 
 # Feature importance
@@ -2196,11 +2241,15 @@ shap_values = explainer.shap_values(X_test)
 ## Eligibility Rules
 
 ```python
+from dataclasses import dataclass
+from typing import Any, Callable, Literal
+
+@dataclass(frozen=True)
 class EligibilityRule:
     name: str
     description: str
-    check: callable      # returns True if eligible
-    severity: 'hard' | 'soft'  # hard = auto-decline
+    check: Callable[[Any], bool]      # returns True if eligible
+    severity: Literal['hard', 'soft']  # hard = auto-decline
 
 ELIGIBILITY_RULES = [
     EligibilityRule(

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Game Design Quality Standards](#game-design-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Game Design Quality Standards](#-game-design-quality-standards)
 - [Core Loop Design](#core-loop-design)
 - [Mechanics Design Principles](#mechanics-design-principles)
 - [Difficulty Curve](#difficulty-curve)
@@ -15,15 +15,15 @@
 - [Level Design Principles](#level-design-principles)
 - [Playtesting](#playtesting)
 - [Output: Design Document](#output-design-document)
-- [Pitch (one paragraph)](#pitch-one-paragraph)
-- [Inspiration](#inspiration)
-- [Target Audience](#target-audience)
-- [Core Loops](#core-loops)
-- [Mechanics](#mechanics)
-- [Progression](#progression)
-- [Monetization](#monetization)
-- [Unique Selling Points (USPs)](#unique-selling-points-usps)
-- [Risks + Mitigations](#risks--mitigations)
+- Pitch (one paragraph)
+- Inspiration
+- Target Audience
+- Core Loops
+- Mechanics
+- Progression
+- Monetization
+- Unique Selling Points (USPs)
+- Risks + Mitigations
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -313,7 +313,7 @@ A <genre> where you <core verb> to <player goal>.
 
 - Implementation → `game-developer`
 - Multiplayer balance → `game-developer`
-- Live operations + retention → `game-designer`
+- Live operations + retention → stay in this agent, open [`agent-live-ops-specialist.md`](agent-live-ops-specialist.md)
 - Storytelling expansion → `technical-writer` (from software-company)
 
 ## Common Pitfalls

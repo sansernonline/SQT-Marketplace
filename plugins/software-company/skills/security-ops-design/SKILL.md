@@ -1,6 +1,6 @@
 ---
 name: security-ops-design
-description: Design a SOC or run a threat hunt with the security-analyst agent (soc-design or threat-hunt).
+description: Design a security operations center (SOC) or run a threat hunt with the security-analyst agent (soc-design or threat-hunt).
 argument-hint: <soc-design | threat-hunt> <details>
 disable-model-invocation: true
 ---
@@ -21,13 +21,13 @@ Use the `security-analyst` agent to design a SOC for: **$ARGUMENTS**
 Workflow:
 
 1. **Initial Discovery:** org size, regulatory, threats, budget
-2. **Choose model:** in-house, MSSP, hybrid
+2. **Choose model:** in-house, managed security service provider (MSSP), hybrid
 3. **Apply `security-operations` skill** for tier structure + processes
 4. **Design coverage:** 24/7 model (follow-sun, on-call, MSSP-augmented)
-5. **Detection coverage** via `security-operations` skill (MITRE coverage)
-6. **Tool stack:** SIEM, EDR, SOAR, TIP, ticketing
+5. **Detection coverage** via `security-operations` skill (MITRE ATT&CK coverage)
+6. **Tool stack:** security information and event management (SIEM), endpoint detection and response (EDR), security orchestration, automation and response (SOAR), threat intelligence platform (TIP), ticketing
 7. **Playbook library:** top scenarios
-8. **KPIs + SLAs:** MTTD, MTTA, MTTR, FP rate
+8. **Key performance indicators (KPIs) + service level agreements (SLAs):** mean time to detect (MTTD), mean time to acknowledge (MTTA), mean time to respond (MTTR), false positive (FP) rate
 9. **Staffing + training plan**
 10. **Produce polished SOC design** using `polished-document-style` (from software-company)
 11. **Hand-off:** implementation → `developer`, `devops-engineer` (from software-company)
@@ -45,6 +45,6 @@ Workflow:
 3. **Apply `security-operations` skill** for detection logic
 4. **Execute hunt:** queries across SIEM, EDR, etc.
 5. **Analyze results:** triage findings, eliminate FPs
-6. **Outcome:** escalate to IR OR convert to detection OR document negative
+6. **Outcome:** escalate to incident response (IR) OR convert to detection OR document negative — any containment step during IR needs the user's approval per action (`security-operations` → `references/security-incident-response.md` Phase 3)
 7. **Produce polished hunt report** using `polished-document-style` (from software-company)
 8. **Hand-off:** to SOC for new detection rule, IR for findings

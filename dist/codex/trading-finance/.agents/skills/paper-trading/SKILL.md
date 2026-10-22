@@ -18,7 +18,7 @@ A practice account that only works if it is treated as real. General information
 | Real-world friction | How to simulate |
 |---|---|
 | Board lot | Round to 100 shares (50 for stocks ≥ 500 baht for 6 months) |
-| Tick size | Entry and stop on valid ticks — table in `position-sizing` (e.g. 0.25 for 25–<100 baht) |
+| Tick size | Entry and stop on valid ticks — current and from-16-Nov-2569 tables are in `position-sizing` (the tick changes on that date for 5–<50 baht) |
 | Fill price | Market order = next tick against you (buy at ask + 0, assume 1 tick slippage); limit order fills only if price **trades through** the limit, not just touches it |
 | Costs | Commission per the user's broker (often around 0.15–0.25% for internet orders, plus 7% VAT on commission (รอยืนยัน — use the real broker rate)); charge both buy and sell |
 | Settlement | T+2 — cash from a sale is not available for a cash-account purchase the same day (credit-balance and cash-balance accounts differ; ask the broker) |
@@ -53,7 +53,12 @@ Then start live at **one quarter** of the planned risk (0.25% instead of 1%) for
 
 ## Worked example
 
-Capital 100,000. Rule: `pullback-50ma` only, risk 1%. Trade #12: XYZ limit buy 31.50, stop 30.25 (ticks 0.25 OK). Risk/share 1.25 + costs ≈ 0.13 = 1.38 → 1,000 ÷ 1.38 = 724 → **700 shares** (22,050 baht = 22% → cap at 10%: 300 shares, 9,450 baht). Low of the day was 31.50 exactly — touched, not traded through → **no fill**, logged `no-fill`. The next day it opened at 31.25, but the limit was a day order and had expired, so there is still no trade. Counting this as a fill at 31.50 is exactly the "almost trade" that makes paper results look better than live ones.
+Capital 100,000 · rule `pullback-50ma` only · risk 1%. Trade #12: XYZ limit buy 31.50, stop 30.00 (both prices are valid ticks before and after 16 Nov 2569).
+- Size: risk/share 1.50 + costs ≈ 0.13 = 1.63 → 1,000 ÷ 1.63 = 613 → **600 shares** (18,900 baht = 18.9% of capital)
+- Cap: 10% concentration limit (from `position-sizing`) → 300 shares, 9,450 baht
+- Fill: low of the day was 31.50 exactly — touched, not traded through → **no fill**, logged `no-fill`
+- Next day: it opened at 31.00, but the limit was a day order and had expired, so there is still no trade
+- Lesson: counting this as a fill at 31.50 is exactly the "almost trade" that makes paper results look better than live ones
 
 ## Reporting
 

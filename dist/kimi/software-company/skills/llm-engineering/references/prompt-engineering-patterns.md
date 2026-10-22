@@ -125,25 +125,32 @@ Output as JSON: {"name": ..., "age": ...}
 
 ✅ Use tool/function calling:
 ```python
-client.messages.create(
+response = client.messages.create(
     tools=[{
         "name": "save_user",
-        "description": "Save extracted user information",
+        "description": "Save extracted user information. age is 0-120.",
+        "strict": True,  # strict tool use: input follows the schema exactly
         "input_schema": {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "age": {"type": "integer", "minimum": 0, "maximum": 120},
+                "age": {"type": "integer"},  # strict mode does not support minimum/maximum
                 "email": {"type": "string", "format": "email"},
                 "is_active": {"type": "boolean"}
             },
-            "required": ["name", "email"]
+            "required": ["name", "email"],
+            "additionalProperties": False  # required for every object under strict
         }
     }],
     tool_choice={"type": "tool", "name": "save_user"}
 )
 
-# response.content[0].input is GUARANTEED valid
+# Pick the tool_use block by type — content[0] can be a text or thinking block
+tool_input = next(b.input for b in response.content if b.type == "tool_use")
+# strict=True guarantees types and required fields; still check ranges (age 0-120) in code.
+# Without strict the model may send "2" for an integer or omit a required field,
+# so validate with Pydantic / jsonschema before use.
+# Source: platform.claude.com/docs strict-tool-use + structured-outputs (checked 2026-10-22)
 ```
 
 ### Pattern 6: Negative Constraints
@@ -315,12 +322,18 @@ Examples (all easy):
 
 ## Temperature Selection
 
-| Temperature | Use case |
-|:-----------:|----------|
-| 0.0 | Deterministic, classification, extraction |
-| 0.2-0.5 | Factual Q&A, summarization |
-| 0.7-0.9 | Creative writing, brainstorming |
-| 1.0+ | Highly creative (rarely needed) |
+Sampling settings depend on the model. Check the model page (or the `claude-api` skill — bundled with Claude Code or installable from github.com/anthropics/skills; without it, see the models page at platform.claude.com/docs) before setting any of them (checked 2026-10-22):
+
+- **Claude Opus 4.7 and Claude Opus 4.8 do not take `temperature`, `top_p` or `top_k`** — Anthropic's migration guide removes them. Newer models may follow; check before you send them. On these models, steer variation with the prompt ("answer with one label only", "give 5 different ideas") and the effort setting instead.
+- **Models that still accept `temperature`:** Anthropic's range is 0.0–1.0 (there is no "1.0+"). Other providers have their own ranges.
+
+| Task | Where `temperature` is supported | Where it is not |
+|---|:-:|---|
+| Classification, extraction | 0.0 | Strict tool use + one-label instructions |
+| Factual Q&A, summarization | 0.2–0.5 | "Use only the given context", length limits |
+| Creative writing, brainstorming | 0.7–1.0 | "Give N clearly different options" |
+
+Low temperature is not a guarantee of identical output. For repeatable results, rely on a fixed prompt version, strict schemas and evals.
 
 ## Token Budget Management
 
@@ -359,7 +372,7 @@ response = await client.messages.create(
 PROMPTS = {
     "classifier_v3": {
         "model": "<model-id>",  # current id: see the claude-api skill
-        "temperature": 0,
+        "temperature": 0,  # only if the model accepts it — omit on Opus 4.7 / 4.8
         "system": "...",
         "examples": [...],
     },
@@ -378,8 +391,8 @@ When output is wrong:
 1. **Show input + output to a human** — is it actually wrong?
 2. **Check if instructions are followed** — if not, they are unclear or contradict each other
 3. **Add explicit examples** of similar inputs
-4. **Set temperature to 0** if output varies when it shouldn't
-5. **Lower temperature** if output is creative when it shouldn't be
+4. **Tighten the output format** (strict tool use, fixed labels) if output varies when it shouldn't — lower `temperature` only on models that accept it
+5. **Add constraints and examples** if output is creative when it shouldn't be
 6. **Try CoT** for reasoning failures
 7. **Try a different model tier** (Sonnet → Opus, or a smaller one)
 
@@ -389,31 +402,31 @@ When output is wrong:
 - Role + categories defined
 - Few-shot with edge cases
 - Tool use for structured output
-- Temperature 0
+- Temperature 0 where the model supports it
 
 ### Extraction
 - Schema definition (via tool use)
 - "Extract only what's explicitly stated"
 - Negative example: "If not present, return null"
-- Temperature 0
+- Temperature 0 where the model supports it
 
 ### Summarization
 - Style + length constraints
 - Audience description
 - Examples of good summaries
-- Temperature 0.3-0.5
+- Temperature 0.3-0.5 where the model supports it
 
 ### Generation (creative)
 - Persona / tone definition
 - Constraints (length, format)
 - Examples (3-5 diverse)
-- Temperature 0.7+
+- Temperature 0.7-1.0 where the model supports it; otherwise ask for clearly different options
 
 ### Q&A (with context)
 - Citation requirement
 - "Only based on provided context"
 - Refusal pattern
-- Temperature 0
+- Temperature 0 where the model supports it
 
 ## Reference
 

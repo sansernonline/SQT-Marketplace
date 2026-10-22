@@ -31,7 +31,7 @@ Anchor images: <file names, 1–3>
 ## Tool lock
 Tool: <name> · Model version: <...> · Aspect ratios used: <...>
 Style / reference image: <file> · Strength: <value> · Seed policy: <fixed n / free>
-Post-processing: <preset / LUT name>
+Post-processing: <preset / Look-up table (LUT) name>
 
 ## Off-style examples (do not)
 - <file> — why

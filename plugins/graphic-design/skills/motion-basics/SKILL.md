@@ -84,8 +84,8 @@ Thai character counts exclude tone marks and above/below vowels (Netflix Thai gu
 
 - Motion must survive muting and 2× speed — if the meaning dies without it, it was decoration
 - Only 1 main element moves at a time. Others stay still or move less
-- Fast flashing: avoid more than 3 flashes per second (WCAG 2.3.1) — it can trigger seizures
-- When in doubt, cut the motion in half and make it a third shorter
+- Fast flashing: avoid more than 3 flashes per second (Web Content Accessibility Guidelines (WCAG) 2.3.1) — it can trigger seizures
+- When in doubt, remove half the moving elements, and make the rest about a third shorter
 
 ## Not an AI look
 

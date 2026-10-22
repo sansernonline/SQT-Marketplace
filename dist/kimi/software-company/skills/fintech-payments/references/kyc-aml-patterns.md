@@ -123,7 +123,7 @@ flowchart TD
 - **UN Consolidated** — global
 - **EU Consolidated** — for EU connection
 - **UK HM Treasury** — for UK connection
-- **Local lists** (e.g., AMLO Thailand sanctions)
+- **Local lists** (e.g., Thailand's Anti-Money Laundering Office (AMLO) sanctions list)
 
 ### Matching strategy
 
@@ -179,6 +179,7 @@ Categories:
 
 **Threshold rules:**
 - Single transaction > $10,000 (US Currency Transaction Report, CTR)
+- Thailand (reports to AMLO): cash transactions of 2,000,000 baht or more; property transactions over 5,000,000 baht (Tilleke & Gibbins, "Thailand: Anti-Money Laundering", Sep 2025) `(รอยืนยัน — official Ministerial Regulation on amlo.go.th not reachable on 22 ต.ค. 2569; electronic-transfer thresholds not checked)`
 - Several transactions kept just under the threshold (structuring)
 
 **Pattern rules:**
@@ -235,7 +236,7 @@ Tier 3: ML models
 
 ## Data Retention
 
-| Data | Retention | Reason |
+| Data | Retention (US / EU baseline) | Reason |
 |------|-----------|--------|
 | KYC documents | 5 years post-relationship | AML regulations |
 | Sanctions screening results | 5 years | Audit trail |
@@ -243,7 +244,9 @@ Tier 3: ML models
 | Transaction monitoring alerts | 5 years | Audit |
 | Customer communications | 5 years | Dispute resolution |
 
-> ⚠️ Clashes with the GDPR "right to erasure"? AML obligations usually win.
+**Thailand:** the Anti-Money Laundering Act B.E. 2542 (พ.ร.บ.ป้องกันและปราบปรามการฟอกเงิน) section 22 sets the periods for customer due diligence (CDD) records and transaction records, and the 2015 amendment changed the retention period (Tilleke & Gibbins, Sep 2025). The exact years — possibly 10 years for CDD records after the relationship ends — are `(รอยืนยัน)`: check the Act and the Anti-Money Laundering Board (AMLB) ordinance on safe-keeping CDD information (2016) on amlo.go.th. Until confirmed, keep Thai records for the longer period.
+
+> ⚠️ Clashes with a deletion request? For Thai users this is the Personal Data Protection Act (PDPA); for EU users the GDPR "right to erasure". Both let you keep data that another law requires you to keep, so AML retention usually wins — record the legal basis and delete when the period ends. Details → `pdpa-compliance`.
 
 ## Risk-Based Approach
 
@@ -287,7 +290,7 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ## Quality Targets
 
-- False positive rate < 5% (after tuning)
+- False positive rate: set your own target from your baseline (example figure only — published AML alert false-positive rates are often far higher than 5%, so a < 5% target is rarely realistic)
 - Median time to resolve an alert < 5 days
 - 100% of SARs filed within the regulatory deadline
 - Review and tune rules every quarter

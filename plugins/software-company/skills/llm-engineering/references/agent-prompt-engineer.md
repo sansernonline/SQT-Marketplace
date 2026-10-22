@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Prompt Quality Standards](#prompt-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Prompt Quality Standards](#-prompt-quality-standards)
 - [Anatomy of a Good Prompt](#anatomy-of-a-good-prompt)
 - [Critical Prompt Patterns](#critical-prompt-patterns)
 - [Few-Shot vs Fine-Tuning](#few-shot-vs-fine-tuning)
@@ -51,7 +51,7 @@ If you don't have examples, **stop and collect them first**.
 - **Latency:** within budget
 - **Regression test:** every change runs against eval
 - **Versioned prompts:** kept in code, not hidden in a database
-- **Reproducibility:** seed and temperature written down
+- **Reproducibility:** model id, prompt version and any sampling settings the model accepts written down
 
 ## Anatomy of a Good Prompt
 
@@ -105,9 +105,11 @@ Output as JSON with keys: name, age, email
 # Anthropic API
 response = client.messages.create(
     model="<model-id>",  # current id: see the claude-api skill (checked 2026-10-14)
+    # claude-api skill: bundled with Claude Code or installable from github.com/anthropics/skills; without it, see the models page at platform.claude.com/docs
     tools=[{
         "name": "save_user",
         "description": "Save extracted user info",
+        "strict": True,  # strict tool use: input follows the schema exactly
         "input_schema": {
             "type": "object",
             "properties": {
@@ -115,13 +117,19 @@ response = client.messages.create(
                 "age": {"type": "integer"},
                 "email": {"type": "string", "format": "email"}
             },
-            "required": ["name", "email"]
+            "required": ["name", "email"],
+            "additionalProperties": False  # required for every object under strict
         }
     }],
     tool_choice={"type": "tool", "name": "save_user"},  # force tool use
     messages=[...]
 )
-# Now response.content[0].input is GUARANTEED to match schema
+# Pick the tool_use block by type — content[0] can be a text or thinking block
+tool_input = next(b.input for b in response.content if b.type == "tool_use")
+# Without "strict": True the model may send "2" for an integer or skip a required
+# field, so validate (Pydantic / jsonschema) before trusting tool_input.
+# Strict does not support minimum/maximum/minLength: check ranges in your own code.
+# Source: platform.claude.com/docs strict-tool-use + structured-outputs (checked 2026-10-22)
 ```
 
 ### Pattern 3: Chain-of-Thought (When to Use)
@@ -291,7 +299,7 @@ PROMPTS = {
         "system": "...",
         "few_shot_examples": [...],
         "model": "<model-id>",  # current id: see the claude-api skill
-        "temperature": 0,
+        "temperature": 0,  # only if the model accepts it — Opus 4.7 / 4.8 do not; check the model page
         "max_tokens": 100,
     }
 }
@@ -303,8 +311,8 @@ async def call_llm(prompt_id: str, input: str):
 
     await log({
         "prompt_id": prompt_id,
-        "input": input,
-        "output": response.content,
+        "input": redact(input),            # strip personal data first — see logging-standards
+        "output": redact(response.content),
         "tokens": response.usage,
         "latency_ms": ...,
         "timestamp": now(),
@@ -317,7 +325,7 @@ async def call_llm(prompt_id: str, input: str):
 
 - ❌ Skip the eval set (no eval = guessing)
 - ❌ Hide prompts in databases (version with code)
-- ❌ Use temperature > 0 when consistency matters
+- ❌ Rely on temperature alone for consistency — some models (Claude Opus 4.7 / 4.8) have no temperature setting; use strict schemas, fixed labels and evals
 - ❌ Trust LLM output without validation (schema check)
 - ❌ Manually parse JSON when tool use available
 - ❌ Make prompt-only changes without measuring

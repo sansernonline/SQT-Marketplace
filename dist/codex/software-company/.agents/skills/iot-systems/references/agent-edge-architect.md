@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Edge Architecture Quality Standards](#edge-architecture-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Edge Architecture Quality Standards](#-edge-architecture-quality-standards)
 - [Compute Placement Decision](#compute-placement-decision)
 - [Architecture Patterns](#architecture-patterns)
 - [Edge ML Patterns](#edge-ml-patterns)
@@ -174,7 +174,7 @@ async function reconcile() {
 
 ## When to Hand Off
 
-- Device firmware → `iot-engineer`
-- Cloud backend → `iot-engineer`
+- Device firmware → open `agent-firmware-engineer.md` (same `iot-engineer` agent)
+- Cloud backend → open `agent-iot-engineer.md` (same agent)
 - ML model design → `ai-engineer`
 - Production deployment → `devops-engineer` (from software-company)

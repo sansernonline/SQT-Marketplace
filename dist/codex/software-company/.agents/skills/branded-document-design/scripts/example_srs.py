@@ -7,7 +7,7 @@ doc = BrandDoc()
 
 doc.cover(
     "เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-    subtitle="ระบบ Apps Track — Project Control & Monitor",
+    subtitle="ระบบตัวอย่าง — Project Control & Monitor",
     eyebrow="Square Tech Solutions",
     meta_rows=[
         ("เวอร์ชัน", "3.5"),
@@ -15,12 +15,12 @@ doc.cover(
         ("สถานะ", "ฉบับร่างเพื่อทบทวน (Draft for review)"),
         ("ผู้จัดทำ", "ทีมพัฒนา Square Tech Solutions"),
     ],
-    note="v3.5: เพิ่มไอคอน Apps Track บนหน้าปกและระบุไฟล์แนบ",
+    note="v3.5: เพิ่มไอคอนระบบตัวอย่างบนหน้าปกและระบุไฟล์แนบ",
     style="night",              # ปกเข้ม · ไม่ใส่ style = ปกแถบสีแบบเดิม · logo="path.png" ใส่โลโก้มุมซ้ายบน
 )
 
 doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ (Project Management & Tracking) "
+doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ (Project Management & Tracking) "
          "แบบ Web Application ที่พัฒนาใช้งานในองค์กร ครอบคลุมการทำงานตั้งแต่จัดการ "
          "โครงการ งาน (Work Items) ตามขั้นตอน SDLC, Sprint/Agile Board, ปฏิทิน, "
          "การประชุม, Wiki, Timesheet และการเชื่อมต่อ Git Repository/CI")
@@ -30,7 +30,7 @@ doc.kpi_row([("19", "โครงการทั้งหมด"), ("115", "Work
 
 doc.table(
     ["หัวข้อ", "รายละเอียด"],
-    [["URL ระบบ", "https://project.eitaccount.cloud (ชื่อผลิตภัณฑ์: eitprojects)"],
+    [["URL ระบบ", "https://app.example.com (ชื่อผลิตภัณฑ์: ระบบตัวอย่าง)"],
      ["ประเภทระบบ", "Web Application (SPA) + รองรับติดตั้งเป็น PWA พร้อม Push Notification"],
      ["การยืนยันตัวตน", "Username / Password (หน้า Sign in ของระบบเอง)"],
      ["ระบบภายนอกที่เชื่อมต่อ", "Git hosting: Gitea (ภายในองค์กร) และ GitHub"]],
@@ -67,7 +67,7 @@ doc.code("""GET /api/v1/projects?status=active&page=1
 Authorization: Bearer <token>
 
 200 OK
-{ "total": 19, "items": [ { "key": "PROJ-1", "name": "Apps Track" } ] }""")
+{ "total": 19, "items": [ { "key": "PROJ-1", "name": "ระบบตัวอย่าง" } ] }""")
 
 doc.signoff([("Product Owner", "—"), ("Tech Lead", "—"), ("QA Lead", "—")])
 

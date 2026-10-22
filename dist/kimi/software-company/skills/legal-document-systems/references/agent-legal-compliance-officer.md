@@ -89,7 +89,7 @@ async function canDestroy(document) {
 ```
 Production capability:
 - Search across all data
-- Export in standard formats (e.g., EDRM)
+- Export in standard formats (e.g., Electronic Discovery Reference Model (EDRM) load files)
 - Maintain chain of custody
 - Privilege review workflow
 - Redaction tools
@@ -115,14 +115,14 @@ Conflict checking:
 - Across multiple entities (firm + clients + adverse parties)
 - Maintain conflict database
 
-Trust account (IOLTA):
+Trust account (Interest on Lawyers' Trust Accounts, IOLTA):
 - Strict segregation
 - Three-way reconciliation
 - No commingling
 - Special rules per state/country
 
 Unauthorized practice:
-- Some tools may risk UPL if not lawyer-supervised
+- Some tools may risk unauthorized practice of law (UPL) if not lawyer-supervised
 - Disclaimers + tool limitations
 ```
 
@@ -137,9 +137,10 @@ Data stays in region:
 - Logs in region
 
 Exceptions need legal basis:
-- Audit logs to global SIEM (BAA/SCC)
+- Audit logs to a global security information and event management (SIEM) system
+  (Business Associate Agreement (BAA) for US health data / Standard Contractual Clauses (SCC) for EU data)
 - Telemetry (aggregated, anonymized)
-- Customer support tickets (DPA)
+- Customer support tickets (data processing agreement, DPA)
 
 Document EVERY cross-border flow
 ```
@@ -148,7 +149,7 @@ Document EVERY cross-border flow
 
 ### From EU to other countries
 - Adequacy decision (some countries qualified)
-- Standard Contractual Clauses (SCCs) + TIA
+- Standard Contractual Clauses (SCCs) + transfer impact assessment (TIA)
 - Binding Corporate Rules (BCRs)
 - Specific consent (limited)
 

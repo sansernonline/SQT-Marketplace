@@ -22,7 +22,7 @@
 -- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
 SELECT id, created_at, total_amount
 FROM orders
-WHERE (created_at, id) < (@last_created_at, @last_id)   -- PostgreSQL · MySQL
+WHERE (created_at, id) < ($1, $2)   -- PostgreSQL ($1, $2) · MySQL (?, ?) · ส่งค่าแถวสุดท้ายของหน้าก่อน
 ORDER BY created_at DESC, id DESC
 LIMIT 50;
 -- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)

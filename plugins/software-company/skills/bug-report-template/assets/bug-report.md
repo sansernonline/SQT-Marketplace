@@ -1,9 +1,9 @@
 # Bug: <Action + condition + unexpected result>
 
-**ID:** BUG-XXXX
+**ID:** BUG-NNNN
 **Severity:** S1 | S2 | S3 | S4
 **Priority:** P1 | P2 | P3 | P4
-**Reporter:** <name>
+**Reporter:** <role or source id — no personal data>
 **Date:** YYYY-MM-DD
 **Affected Component:** <module/feature>
 **Affected Version:** <build/release>

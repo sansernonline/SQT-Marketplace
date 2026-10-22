@@ -48,6 +48,8 @@ Asynchronous (Words with Friends)
    → Stateless API, no real-time
 ```
 
+> **Which library?** The C# examples below use Unity Netcode for GameObjects (NGO) 1.x style: RPC method names must end in `ServerRpc` / `ClientRpc`, and server time is `NetworkManager.ServerTime`. In NGO 2.x the `[Rpc(SendTo.Server)]` attribute (names ending in `Rpc`) is preferred. Helpers such as `GetPredictedStateAtTick` or `CircularBuffer` are yours to write — treat the blocks as patterns, not drop-in code. Mirror uses different names (`[Command]`, `[ClientRpc]`, `NetworkTime.time`).
+
 ## Client-Server Pattern (Most Common)
 
 ```
@@ -60,14 +62,18 @@ Each client:           Server (authority):
 
 ### Server tick rate
 
-| Game type | Tick rate |
-|-----------|----------:|
-| FPS competitive | 64-128 Hz |
-| Battle royale | 20-30 Hz |
-| MOBA | 30 Hz |
-| MMO | 10-30 Hz |
-| Casual | 10-20 Hz |
-| RTS (lockstep) | 10-25 Hz |
+This is the one tick-rate table for the whole skill set; other files link here.
+
+| Game type | Tick rate | Known examples (checked 22 Oct 2026) |
+|-----------|----------:|---|
+| FPS competitive | 64-128 Hz | VALORANT 128 Hz (Riot Games technology blog "VALORANT's 128-Tick Servers") · Counter-Strike 64 Hz (Valve Source Multiplayer Networking wiki) · Overwatch ~63 Hz |
+| Battle royale | 20-30 Hz | Battlefield 6 REDSEC 30 Hz (developer statement, 2025) |
+| MOBA | ~30 Hz | typical value `(รอยืนยัน)` |
+| MMO | 10-30 Hz | typical value `(รอยืนยัน)` |
+| Casual | 10-20 Hz | typical value `(รอยืนยัน)` |
+| RTS (lockstep) | 10-25 Hz | typical value `(รอยืนยัน)` |
+
+Rule of thumb: pick the lowest rate that still feels right for the game's pace, because bandwidth and server cost grow with the rate.
 
 ## Client-Side Prediction (FPS)
 
@@ -91,7 +97,7 @@ public class PredictivePlayer : NetworkBehaviour {
     }
 
     [ClientRpc]
-    void ReceiveServerState(ServerState state) {
+    void ReceiveServerStateClientRpc(ServerState state) {
         if (!IsOwner) return;
 
         // Find local state at server's tick
@@ -120,12 +126,13 @@ public class InterpolatedRemotePlayer : NetworkBehaviour {
     private const float INTERPOLATION_DELAY = 0.1f;  // 100ms behind
 
     [ClientRpc]
-    void ReceivePositionSnapshot(Vector3 pos, float serverTime) {
+    void ReceivePositionSnapshotClientRpc(Vector3 pos, float serverTime) {
         positions.Add(serverTime, pos);
     }
 
     void Update() {
-        float renderTime = NetworkTime.time - INTERPOLATION_DELAY;
+        // NGO: estimated server time on this client
+        float renderTime = NetworkManager.ServerTime.TimeAsFloat - INTERPOLATION_DELAY;
         Vector3 interpolated = positions.GetInterpolated(renderTime);
         transform.position = interpolated;
     }
@@ -151,15 +158,23 @@ class SnapshotBuffer<T> {
 ## Lag Compensation (Hit Detection)
 
 ```csharp
-// Server rewinds world state to when shooter saw it
+// Server rewinds world state BACK to what the shooter saw
+// Valve formula: command time = server now - packet latency - client interpolation delay
 
 public class LagCompensatedHitDetection : NetworkBehaviour {
     private CircularBuffer<WorldSnapshot> history;
+    private const float INTERPOLATION_DELAY = 0.1f;  // same value the client renders behind
+    private const float MAX_REWIND = 0.25f;          // cap: a high-ping client can't shoot far into the past
 
-    [ServerRpc]
-    void ShootRpc(Vector3 origin, Vector3 direction, float clientRenderTime) {
-        // Account for: client render delay + network latency
-        float rewindTime = clientRenderTime + GetClientLatency(SenderId);
+    [ServerRpc(RequireOwnership = false)]
+    void ShootServerRpc(Vector3 origin, Vector3 direction, ServerRpcParams rpcParams = default) {
+        float serverNow = NetworkManager.ServerTime.TimeAsFloat;
+        float latency = GetClientLatency(rpcParams.Receive.SenderClientId);  // one-way, seconds
+
+        float rewindTime = serverNow - latency - INTERPOLATION_DELAY;
+        rewindTime = Mathf.Max(rewindTime, serverNow - MAX_REWIND);
+        // Alternative: the client sends the server-clock time it was rendering;
+        // then use that value as it is (no latency added), with the same MAX_REWIND clamp.
 
         var snapshot = history.GetAt(rewindTime);
 
@@ -228,14 +243,22 @@ float DequantizePosition(ushort q) {
 ### Rotation: smallest-3
 ```csharp
 // Quaternion is 4 floats (16 bytes)
-// Smallest-3: send 3 smallest components + index of largest (5 bytes)
+// Smallest-3: send 3 smallest components + index of largest
+// 2 + 3 x 11 = 35 bits -> 5 bytes, but ONLY when bit-packed into one value
 
-public struct CompressedQuat {
-    public byte largestIndex;  // 2 bits
-    public short c1;           // 11 bits each
+public struct CompressedQuat {   // as plain fields this is 1 + 2 + 2 + 2 = 7 bytes
+    public byte largestIndex;    // uses 2 bits
+    public short c1;             // uses 11 bits each
     public short c2;
     public short c3;
 }
+
+// Bit-packed: 35 bits in a ulong, write 5 bytes to the stream
+ulong Pack(CompressedQuat q) =>
+    ((ulong)q.largestIndex & 0x3)
+    | (((ulong)q.c1 & 0x7FF) << 2)
+    | (((ulong)q.c2 & 0x7FF) << 13)
+    | (((ulong)q.c3 & 0x7FF) << 24);
 ```
 
 ### Send only on change
@@ -304,6 +327,15 @@ new_p1, new_p2 = rate_1vs1(p1, p2)
 # Skill estimate: mu - 3*sigma (conservative)
 def conservative_skill(rating):
     return rating.mu - 3 * rating.sigma
+
+# Matching window on the TrueSkill scale (mu starts at 25, sigma at 8.333).
+# Widen by skill points, not by Elo-style hundreds: "within 200" only makes
+# sense on an Elo/MMR scale that starts around 1500.
+def skill_window(wait_seconds):
+    return min(1.0 + 0.1 * wait_seconds, 3 * 8.333)   # +-1 point at first, wider while waiting
+
+def in_range(a, b, wait_seconds):
+    return abs(conservative_skill(a) - conservative_skill(b)) <= skill_window(wait_seconds)
 ```
 
 ## Anti-Cheat Considerations
@@ -313,7 +345,7 @@ def conservative_skill(rating):
 ```csharp
 // Validate every action server-side
 [ServerRpc]
-void MovePlayer(Vector3 newPosition) {
+void MovePlayerServerRpc(Vector3 newPosition) {
     float maxMoveDistance = MAX_SPEED * Time.fixedDeltaTime;
     if (Vector3.Distance(currentPosition, newPosition) > maxMoveDistance) {
         // Impossible move - reject + log

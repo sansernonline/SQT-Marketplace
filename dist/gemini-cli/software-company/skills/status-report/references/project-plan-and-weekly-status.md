@@ -16,10 +16,10 @@
 |--|--|
 | **Project Lead** | @pm-name |
 | **Sponsor** | @sponsor |
-| **Status** | Planning |
+| **Status** | ทำอยู่ (วางแผน) |
 | **Start Date** | YYYY-MM-DD |
 | **Target End** | YYYY-MM-DD |
-| **Budget** | $XX,XXX |
+| **Budget** | ฿XX,XXX |
 
 ---
 
@@ -35,31 +35,19 @@
 
 ## Timeline
 
-\`\`\`mermaid
-gantt
-    title Project Timeline
-    dateFormat YYYY-MM-DD
-    section Discovery
-    Requirements    :a1, 2025-01-01, 14d
-    Architecture    :a2, after a1, 7d
-    section Build
-    Sprint 1        :b1, after a2, 14d
-    Sprint 2        :b2, after b1, 14d
-    Sprint 3        :b3, after b2, 14d
-    section Launch
-    UAT             :c1, after b3, 7d
-    Go-live         :c2, after c1, 3d
-\`\`\`
+![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
+
+**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
 
 ## Milestones
 
 | # | Milestone | Target Date | Owner | Status |
 |:-:|-----------|:-----------:|:------|:------:|
-| 1 | Requirements approved | YYYY-MM-DD | @ba | Pending |
-| 2 | Architecture signed off | YYYY-MM-DD | @architect | Pending |
-| 3 | MVP feature complete | YYYY-MM-DD | @dev-lead | Pending |
-| 4 | UAT passed | YYYY-MM-DD | @qa | Pending |
-| 5 | Production launch | YYYY-MM-DD | @devops | Pending |
+| 1 | Requirements approved | YYYY-MM-DD | @ba | ค้างอยู่ |
+| 2 | Architecture signed off | YYYY-MM-DD | @architect | ค้างอยู่ |
+| 3 | Minimum Viable Product (MVP) feature complete | YYYY-MM-DD | @dev-lead | ค้างอยู่ |
+| 4 | User Acceptance Testing (UAT) passed | YYYY-MM-DD | @qa | ค้างอยู่ |
+| 5 | Production launch | YYYY-MM-DD | @devops | ค้างอยู่ |
 
 ## Risk Register
 
@@ -74,11 +62,11 @@ gantt
 
 | Type | Dependency | Owner | Status |
 |------|------------|:------|:------:|
-| External | Payment gateway API | Vendor X | At risk |
-| Internal | Design team availability | @design-lead | On track |
-| Technical | New cloud account | @devops | On track |
+| External | Payment gateway (Application Programming Interface, API) | Vendor X | ติด |
+| Internal | Design team availability | @design-lead | ทำอยู่ |
+| Technical | New cloud account | @devops | ทำอยู่ |
 
-## RACI Matrix
+## Responsible-Accountable-Consulted-Informed (RACI) Matrix
 
 | Activity | PM | BA | Arch | Dev | QA | DevOps |
 |----------|:--:|:--:|:----:|:---:|:--:|:------:|
@@ -102,7 +90,7 @@ gantt
 
 ---
 
-## TL;DR
+## สรุปสั้นสำหรับผู้บริหาร (Too Long; Didn't Read, TL;DR)
 
 > 1-2 sentence summary for executives.
 
@@ -115,6 +103,8 @@ gantt
 | Budget | On track | 65% spent, on track |
 | Quality | On track | 0 critical bugs open |
 | Team Morale | On track | High |
+
+> **Note:** On track / At risk / Off track คือระดับสุขภาพของแต่ละด้านสำหรับผู้อ่านต่างประเทศ ไม่ใช่สถานะของงาน · สถานะรายการงานใช้ 5 คำกลาง (เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่)
 
 ## Completed This Period
 
@@ -132,7 +122,7 @@ gantt
 
 | Item | Blocker | Owner | Action |
 |------|---------|:------|--------|
-| ... | Waiting on legal review | @legal | Escalate to CTO |
+| ... | Waiting on legal review | @legal | Escalate to Chief Technology Officer (CTO) |
 
 ## Upcoming (Next Period)
 

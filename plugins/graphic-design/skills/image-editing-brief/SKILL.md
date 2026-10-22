@@ -24,7 +24,7 @@ Change only what the brief names. AI edits drift: ask for a new cup and the ligh
 | Remove object | Generative fill / erase / inpaint with mask | Mask the object plus a small margin; describe what should be there instead ("plain oak counter") | Repeated textures, ghost shadows left behind |
 | Add object | Inpaint with mask | Mask only where it goes; state size, angle and light direction matching the scene | Wrong light direction, wrong scale, floating object |
 | Replace background | Background removal + new background or inpaint | Describe the new background's light to match the subject | Halo around hair and glass; mismatched shadows |
-| Extend canvas | Outpaint / generative expand | Say which side and by how much (e.g. "extend top by 25% for a 4:5 → 9:16 crop") | Repeated patterns, new objects appearing |
+| Extend canvas | Outpaint / generative expand | Say which side and by how much (e.g. "extend top by 42% for a 4:5 → 9:16 canvas") | Repeated patterns, new objects appearing |
 | Colour change | Selective colour, recolour, or inpaint | Give the target hex; restrict to the object | Colour bleeding into skin or background |
 | Retouch / clean | Healing, spot removal | List each blemish or item | Over-smoothing; plastic skin |
 | Fix AI artefacts | Inpaint per area | 1 area per round (hand, then text, then edge) | New artefacts in the redone area |

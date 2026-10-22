@@ -8,18 +8,19 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`career`](#career) | ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน | 2 | 6 | 3 | 8 | 34 |
-| [`consumer-rights`](#consumer-rights) | ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน | 1 | 5 | 2 | 7 | 28 |
-| [`dev-learning`](#dev-learning) | ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ | 1 | 8 | 2 | 8 | 43 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 4 | 11 | 6 | 8 | 52 |
-| [`health-wellness`](#health-wellness) | จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ | 1 | 6 | 2 | 7 | 29 |
-| [`home-family`](#home-family) | จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น | 2 | 8 | 3 | 8 | 40 |
-| [`online-seller`](#online-seller) | ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด | 3 | 9 | 4 | 8 | 42 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว | 3 | 15 | 6 | 10 | 57 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 113 | 29 | 16 | 780 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 8 | 0 | 5 | 40 |
-| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 18 | 8 | 8 | 64 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 9 | 61 |
+| [`career`](#career) | ช่วยหางาน เขียน CV เตรียมสัมภาษณ์ และต่อรองเงินเดือน | 2 | 6 | 3 | 8 | 38 |
+| [`consumer-rights`](#consumer-rights) | ช่วยเลือกซื้อ ขอคืนเงิน ร้องเรียน และเคลมประกัน | 1 | 5 | 2 | 7 | 32 |
+| [`dev-learning`](#dev-learning) | ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้ | 1 | 8 | 2 | 8 | 47 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 4 | 11 | 6 | 8 | 56 |
+| [`health-wellness`](#health-wellness) | จัดเรื่องสุขภาพของตัวเองและครอบครัวให้เป็นระเบียบ | 1 | 6 | 2 | 7 | 33 |
+| [`home-family`](#home-family) | จัดบ้าน บิล ลูก พ่อแม่ และสัตว์เลี้ยงให้ไม่ตกหล่น | 2 | 8 | 3 | 8 | 44 |
+| [`online-seller`](#online-seller) | ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด | 3 | 9 | 4 | 8 | 46 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว | 3 | 12 | 6 | 10 | 56 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 81 | 29 | 16 | 447 |
+| [`sqt-toolkit`](#sqt-toolkit) |  | 0 | 15 | 0 | 0 | 321 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 28 | 0 | 6 | 72 |
+| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 18 | 8 | 8 | 68 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 9 | 65 |
 
 ## โครงของทุก plugin
 
@@ -46,13 +47,33 @@ plugins/<plugin>/
 
 | ชนิด | ชื่อ | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ |
 |---|---|---|---|
+| skill | `adversarial-review-panel` | คณะรีวิว 3 มุมที่หาจุดอ่อนก่อนส่งงาน | — |
 | skill | `agent-patterns` | เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ) | `references/pattern-details.md` |
 | skill | `answer-shape` | เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ | — |
 | skill | `commit-log` | commit ทุกขั้นที่ทำเสร็จด้วยข้อความรูปแบบเดียวกัน ให้ git log เป็นบันทึกงาน | — |
-| skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` |
+| skill | `context-budget` | ประหยัด context เมื่อต้องอ่านไฟล์เยอะหรือรันคำสั่งที่พิมพ์ผลยาว | — |
+| skill | `decision-log` | จดทุกครั้งที่ agent ตัดสินใจเองในงานยาวหรืองานที่ไม่มีคนดู | — |
+| skill | `flag-and-propose` | เจอเรื่องกลางงานที่ต้องให้คนตัดสิน → แจ้งพร้อมทางเลือก | `references/example.md` |
+| skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` · `references/team-memory.md` · `scripts/log-to-md.mjs` |
 | skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `references/headings-and-examples.md` |
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
+| skill | `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
+| skill | `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |
+| skill | `parallel-split-and-merge` | แบ่งงานที่ไม่ทับกันให้หลาย agent ทำพร้อมกันแล้วรวม | — |
+| skill | `principle-build-a-tool-not-handwork` | งานซ้ำ ๆ ให้เขียนสคริปต์ ไม่ทำมือทีละไฟล์ | — |
+| skill | `principle-fix-root-cause` | แก้ที่ต้นเหตุ: ทำให้เกิดซ้ำก่อน แล้วค่อยแก้ | — |
+| skill | `principle-proceed-on-reversible-work` | งานที่ย้อนได้ทำต่อเลยไม่ต้องถาม งานที่ย้อนไม่ได้รออนุมัติ | — |
+| skill | `principle-prove-it-works` | ก่อนบอกว่าเสร็จ ต้องตรวจกับของจริง | — |
+| skill | `principle-small-verifiable-steps` | งานหลายขั้นแบ่งเป็นขั้นเล็กที่ตรวจได้ทีละขั้น | — |
+| skill | `principle-user-experience-first` | เลือกทางที่คนใช้สะดวก มากกว่าทางที่สร้างง่าย | — |
+| skill | `prior-art-review` | ก่อนสร้าง ดูว่ามีของที่ใช้ได้อยู่แล้วไหม แล้วตัดสินว่าใช้หรือสร้างเอง | — |
+| skill | `repeated-mistakes-to-checks` | ผิดซ้ำ 2 ครั้ง → เปลี่ยนเป็นตัวตรวจอัตโนมัติ | — |
+| skill | `research-with-sources` | หาข้อมูลที่ยืนยันได้ พร้อมแหล่ง วันที่ และป้ายหลักฐาน | — |
+| skill | `session-lessons-to-skills` | รวมบทเรียนจากงานที่ทำ แล้วแก้ skill ที่พาผิด | — |
 | skill | `simplify` | ทำทุกงานให้อยู่ในรูปที่ง่ายที่สุดที่คนทำตามได้ | — |
+| skill | `status-report` | ตารางสถานะเมื่องานจบ: ทำอะไร ผลเป็นอย่างไร ค้างอะไร | `assets/build-plan-status.md` · `references/project-plan-and-weekly-status.md` |
+| skill | `targeted-fix` | มีคนบอกว่าผิด → แก้ให้เล็กที่สุดตรงจุด | — |
+| skill | `temp-file-discipline` | ไฟล์ชั่วคราวทั้งหมดไปอยู่ใน _to_delete/ ไม่ปนกับงานจริง | — |
 | agent | `brainstormer` | คิดทางเลือกเมื่องานคลุมเครือ | `agents/brainstormer.md` |
 | agent | `learning-reviewer` | ทบทวนวิธีทำงานและเสนอแก้ | `agents/learning-reviewer.md` |
 | agent | `reviewer` | ตรวจงานด้วยสายตาใหม่ | `agents/reviewer.md` |
@@ -65,20 +86,27 @@ plugins/<plugin>/
 | `SKILL.md` | หัวหน้าทีม: รับงาน วัดขนาด เลือก playbook แจกงาน ตรวจ รายงาน | ทุก plugin |
 | `references/agents.md` | รายชื่อ agent ของ plugin และงานที่แต่ละตัวรับ | `software-company` |
 | `references/approvals.md` | งานแบบไหนต้องรอคนอนุมัติก่อนทำ | `software-company` |
-| `references/brief-template.md` | แบบฟอร์มใบสั่งงานที่ส่งให้ลูกทีม | ทุก plugin |
+| `references/autonomy.md` | ถามครั้งเดียว ตัดสินใจเอง โหวต รู้ความเสี่ยง รู้จังหวะหยุด และรายการรออนุมัติทุกสาขา | `superuser` |
+| `references/brief-template.md` | แบบฟอร์มใบสั่งงานที่ส่งให้ลูกทีม | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/code-extensions.md` | ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser | `software-company` |
 | `references/context-template.md` | แบบไฟล์ CONTEXT.md สำหรับส่งงานต่อ | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `thai-workplace` · `trading-finance` |
-| `references/evidence.md` | หลักฐานแบบไหนนับว่า "เสร็จจริง" | ทุก plugin |
-| `references/examples.md` | ตัวอย่างงานจริงตั้งแต่รับจนส่ง | ทุก plugin |
-| `references/learning-loop.md` | วิธีเก็บบทเรียนระหว่างงาน แล้วเสนอแก้ skill | ทุก plugin |
-| `references/playbook-template.md` | แบบสำหรับเขียน playbook ใหม่ | ทุก plugin |
+| `references/evidence.md` | หลักฐานแบบไหนนับว่า "เสร็จจริง" | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/examples.md` | ตัวอย่างงานจริงตั้งแต่รับจนส่ง | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/lead-playbook.md` | บทเรียนของหัวหน้าทีมเอง: คาดกับจริงต่างกันตรงไหน จัดขนาดและแจกงานอย่างไร | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/learning-loop.md` | วิธีเก็บบทเรียนระหว่างงาน แล้วเสนอแก้ skill | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/modules.md` | โมดูลที่เปิดปิดได้: ไฟล์กลาง log token รอบเรียนรู้ inbox config และด่านของ hook | `superuser` |
+| `references/playbook-template.md` | แบบสำหรับเขียน playbook ใหม่ | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
 | `references/principles.md` | หลักการทำงานที่ทุก playbook ใช้ | `software-company` |
-| `references/team-files.md` | ไฟล์ของทีมในโปรเจกต์: CONTEXT · log · inbox · IMPROVEMENTS | ทุก plugin |
-| `references/team-roles.md` | บทบาทในทีมและรอบตรวจซ้ำจนไม่เหลือข้อสูงและกลาง | ทุก plugin |
-| `references/triggers.md` | คำพูดแบบไหนเปิด playbook ไหน | ทุก plugin |
+| `references/team-files.md` | ไฟล์ของทีมในโปรเจกต์: CONTEXT · log · inbox · IMPROVEMENTS | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/team-roles.md` | บทบาทในทีม วิธีแบ่งงาน และรอบตรวจซ้ำจนไม่เหลือข้อสูงและกลาง | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/triggers.md` | คำพูดแบบไหนเปิด playbook ไหน | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/voting.md` | ขั้นตอนเต็มของการตัดสินด้วยการค้นและโหวต 3 มุม | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
 | `templates/CONTEXT.md` | แบบไฟล์ CONTEXT.md กลางของโปรเจกต์ | `superuser` |
 | `templates/HISTORY.md` | แบบไฟล์ประวัติงาน | `superuser` |
 | `templates/IMPROVEMENTS.md` | แบบไฟล์จดข้อเสนอแก้ skill ของโปรเจกต์ | `superuser` |
-| `templates/improvements-queue.md` | แบบคิวข้อเสนอแก้ skill รวมทั้งเครื่อง | ทุก plugin |
+| `templates/TEAM.md` | โปรไฟล์ลูกทีม: ใครถนัดอะไร พลาดบ่อยเรื่องไหน ใช้ระดับไหนพอ | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `templates/config.json` | ค่าเปิดปิดโมดูลและงบของโฟลเดอร์งาน | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `templates/improvements-queue.md` | แบบคิวข้อเสนอแก้ skill รวมทั้งเครื่อง | `career` · `consumer-rights` · `dev-learning` · `graphic-design` · `health-wellness` · `home-family` · `online-seller` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
 
 ## career
 
@@ -93,9 +121,9 @@ plugins/<plugin>/
 | `agents/career-coach.md` | เขียน CV และบทพูดกับ HR |
 | `agents/interview-coach.md` | ซ้อมสัมภาษณ์และให้คะแนน |
 
-### skill (6 + ของกลาง 7)
+### skill (6 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -104,7 +132,7 @@ plugins/<plugin>/
 | `performance-self-review` | เขียนประเมินตัวเองกลางปีหรือปลายปี และเหตุผลขอขึ้นตำแหน่ง | `references/templates.md` |
 | `resume-th-en` | เขียนหรือตรวจ CV ไทยและอังกฤษ ให้ระบบคัดกรอง (ATS) อ่านได้ | `references/templates.md` |
 | `salary-negotiation` | ต่อรองเงินเดือนและเทียบข้อเสนองาน (โบนัส · กองทุน · ประกัน) | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-interview.md` · `references/playbook-job-application.md` · `references/playbook-learn-from-session.md` · `references/playbook-offer-negotiation.md` · `references/playbook-profile-refresh.md` · `references/playbook-promotion-case.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-interview.md` · `references/playbook-job-application.md` · `references/playbook-learn-from-session.md` · `references/playbook-offer-negotiation.md` · `references/playbook-profile-refresh.md` · `references/playbook-promotion-case.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (3) — พิมพ์ `/career:<ชื่อ>`
 
@@ -139,16 +167,16 @@ plugins/<plugin>/
 |---|---|
 | `agents/consumer-advocate.md` | ร่างคำขอและจดหมายร้องเรียน |
 
-### skill (5 + ของกลาง 7)
+### skill (5 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `buy-compare` | เทียบก่อนซื้อของชิ้นใหญ่: ราคารวมจริง · รีวิวที่เชื่อได้ | — |
 | `complaint-letter-th` | เขียนจดหมายร้องเรียนร้านค้า แพลตฟอร์ม หรือ สคบ. | `references/templates.md` |
 | `refund-request` | ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-learn-from-session.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-learn-from-session.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | — |
 
 ### คำสั่ง (2) — พิมพ์ `/consumer-rights:<ชื่อ>`
@@ -182,9 +210,9 @@ plugins/<plugin>/
 |---|---|
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (8 + ของกลาง 7)
+### skill (8 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -193,7 +221,7 @@ plugins/<plugin>/
 | `learning-path` | วางเส้นทางเรียนภาษา framework หรือแนวคิดใหม่ ให้จบเป็นโปรเจกต์จริง | `references/path-template.md` |
 | `paper-to-practice` | อ่าน paper · RFC · บทความยาว แล้วทำตัวอย่างที่รันได้ | `references/practice-note-template.md` |
 | `side-project-picker` | เลือกโปรเจกต์ฝึกมือหรือ portfolio ให้คะแนน แล้วตัดขอบเขตให้จบได้ | `references/idea-bank.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-cert-prep.md` · `references/playbook-learn-from-session.md` · `references/playbook-learning-path.md` · `references/playbook-paper-to-practice.md` · `references/playbook-review.md` · `references/playbook-side-project.md` · `references/playbook-tech-radar.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-cert-prep.md` · `references/playbook-learn-from-session.md` · `references/playbook-learning-path.md` · `references/playbook-paper-to-practice.md` · `references/playbook-review.md` · `references/playbook-side-project.md` · `references/playbook-tech-radar.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tech-radar` | ติดตามการเปลี่ยนแปลงของเครื่องมือรายสัปดาห์จาก release notes ทางการ | `references/radar-templates.md` |
 | `thesis-writing` | เขียนวิทยานิพนธ์ · IS · บทความวิจัย ตั้งแต่โครงร่างจนสอบป้องกัน | `references/citation-and-integrity.md` · `references/defense-and-review.md` · `references/literature-matrix.md` · `references/thai-academic-language.md` · `references/thai-typesetting.md` · `references/thesis-structure.md` |
 
@@ -232,9 +260,9 @@ plugins/<plugin>/
 | `agents/design-critic.md` | ชี้ 2-3 จุดที่ต้องแก้ |
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 
-### skill (11 + ของกลาง 7)
+### skill (11 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -247,7 +275,7 @@ plugins/<plugin>/
 | `motion-basics` | ทำ motion graphic ตัวอักษรเคลื่อนไหว และโลโก้ขยับ สำหรับคนที่ไม่ใช่นักออกแบบ | `references/twelve-principles.md` |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` |
 | `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/style-lock-sheet.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/shot-list-template.md` |
 
 ### คำสั่ง (6) — พิมพ์ `/graphic-design:<ชื่อ>`
@@ -286,9 +314,9 @@ plugins/<plugin>/
 |---|---|
 | `agents/health-organizer.md` | จัดเอกสารและตารางสุขภาพ |
 
-### skill (6 + ของกลาง 7)
+### skill (6 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -297,7 +325,7 @@ plugins/<plugin>/
 | `exercise-plan` | เริ่มหรือจัดการออกกำลังกาย: เดิน · เวท · ยืดเส้นระหว่างทำงาน | — |
 | `medication-schedule` | ตารางกินยาจากฉลากยา เตือนเติมยา รายการยาที่แพ้ (ไม่กำหนดขนาดยา) | — |
 | `sleep-log` | บันทึกการนอนเพื่อดูรูปแบบหรือเอาไปให้แพทย์ดู (ไม่วินิจฉัย) | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-checkup-cycle.md` · `references/playbook-doctor-visit.md` · `references/playbook-habit-tracking.md` · `references/playbook-learn-from-session.md` · `references/playbook-medication-routine.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-checkup-cycle.md` · `references/playbook-doctor-visit.md` · `references/playbook-habit-tracking.md` · `references/playbook-learn-from-session.md` · `references/playbook-medication-routine.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (2) — พิมพ์ `/health-wellness:<ชื่อ>`
 
@@ -331,9 +359,9 @@ plugins/<plugin>/
 | `agents/family-planner.md` | จัดตารางครอบครัวและเมนู |
 | `agents/home-manager.md` | ดูแลบิลและการซ่อมบ้าน |
 
-### skill (8 + ของกลาง 7)
+### skill (8 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -343,7 +371,7 @@ plugins/<plugin>/
 | `kids-school` | จัดปีการศึกษาของลูก: วันเปิดเทอม · ค่าเทอม · เรียนพิเศษ · ย้ายโรงเรียน · ลดหย่อน | `references/school-year-planner.md` |
 | `meal-plan-grocery` | วางเมนูรายสัปดาห์ตามงบ รายการซื้อของ ลดของเหลือทิ้ง | `references/weekly-plan-template.md` |
 | `pet-care` | ดูแลสุนัขแมว: วัคซีนพิษสุนัขบ้า · ขึ้นทะเบียน · ไมโครชิป · ประวัติรักษา | `references/pet-record.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-bills.md` · `references/playbook-care-setup.md` · `references/playbook-family-week.md` · `references/playbook-learn-from-session.md` · `references/playbook-maintenance.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-vehicle.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bills.md` · `references/playbook-care-setup.md` · `references/playbook-family-week.md` · `references/playbook-learn-from-session.md` · `references/playbook-maintenance.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-vehicle.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `vehicle-care` | ดูแลรถยนต์และมอเตอร์ไซค์: พ.ร.บ. · ภาษีประจำปี · ตรวจสภาพ · เข้าศูนย์ | `references/vehicle-record.md` |
 
 ### คำสั่ง (3) — พิมพ์ `/home-family:<ชื่อ>`
@@ -381,9 +409,9 @@ plugins/<plugin>/
 | `agents/live-seller.md` | วางแผนไลฟ์ขายรายนาที |
 | `agents/shop-manager.md` | คิดราคา ลงสินค้า คุมสต็อก |
 
-### skill (9 + ของกลาง 7)
+### skill (9 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -395,7 +423,7 @@ plugins/<plugin>/
 | `returns-and-bad-reviews` | รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว | `references/review-replies.md` |
 | `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | — |
 | `shipping-compare` | เทียบขนส่ง (Flash · Kerry · J&T · ไปรษณีย์ไทย · SPX) ตามราคา COD และน้ำหนัก | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-live-session.md` · `references/playbook-new-product.md` · `references/playbook-pricing-check.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-live-session.md` · `references/playbook-new-product.md` · `references/playbook-pricing-check.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (4) — พิมพ์ `/online-seller:<ชื่อ>`
 
@@ -433,9 +461,9 @@ plugins/<plugin>/
 | `agents/life-admin.md` | งานธุระประจำของชีวิต |
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
 
-### skill (15 + ของกลาง 7)
+### skill (12 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -446,12 +474,9 @@ plugins/<plugin>/
 | `goal-and-habit` | ตั้งเป้ารายไตรมาสหรือปีใหม่ เริ่มหรือเลิกนิสัย | — |
 | `important-docs` | ทะเบียนเอกสารสำคัญ (บัตร · พาสปอร์ต · โฉนด · เล่มรถ · ประกัน) และวันหมดอายุ | `references/registry-template.md` |
 | `inbox-triage` | คัดอีเมลที่ล้น ว่าฉบับไหนต้องตอบวันนี้ | — |
-| `meeting-prep-card` | การ์ด 1 ใบก่อนประชุม: เป้าหมาย · 3 คำถาม · สิ่งที่จะขอ | — |
-| `meeting-summary` | สรุปประชุม: สิ่งที่ตัดสินแล้ว · งานที่ต้องทำ · รายงานการประชุมภาษาไทย | `references/thai-minutes-template.md` |
 | `personal-kb` | คลังโน้ตส่วนตัว หาโน้ตที่เคยจดให้เจอ | — |
-| `polite-message-th-en` | เขียนข้อความที่พูดยาก (ขอให้ช่วย · ปฏิเสธ · ทวงเงิน) ไทยหรืออังกฤษ | `references/templates.md` |
 | `subscription-audit` | หารายการตัดเงินรายเดือนจาก statement แล้วตัดที่ไม่คุ้ม | `references/cancel-steps.md` · `references/statement-patterns.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-decide-and-goals.md` · `references/playbook-digital-safety.md` · `references/playbook-documents.md` · `references/playbook-learn-from-session.md` · `references/playbook-meeting.md` · `references/playbook-review.md` · `references/playbook-subscriptions.md` · `references/playbook-template.md` · `references/playbook-trip.md` · `references/playbook-unattended-run.md` · `references/playbook-weekly-reset.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-decide-and-goals.md` · `references/playbook-digital-safety.md` · `references/playbook-documents.md` · `references/playbook-learn-from-session.md` · `references/playbook-meeting.md` · `references/playbook-review.md` · `references/playbook-subscriptions.md` · `references/playbook-template.md` · `references/playbook-trip.md` · `references/playbook-unattended-run.md` · `references/playbook-weekly-reset.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `travel-prep` | เตรียมเดินทาง 1-2 สัปดาห์ก่อนไป: วีซ่า · ประกัน · เงิน · กำหนดการ | `references/checklist-template.md` · `references/travel-facts.md` |
 | `weekly-review` | ทบทวนประจำสัปดาห์ สำหรับคนที่ยุ่งแต่งานไม่เดิน | — |
 
@@ -531,24 +556,18 @@ plugins/<plugin>/
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (113 + ของกลาง 7)
+### skill (81 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 **หลักการทำงาน**
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `principle-build-a-tool-not-handwork` | งานซ้ำ ๆ ให้เขียนสคริปต์ ไม่ทำมือทีละไฟล์ | — |
 | `principle-data-shape-first` | ตกลงรูปข้อมูลก่อนเขียน logic ที่ข้ามหลายฟังก์ชัน | — |
-| `principle-fix-root-cause` | แก้ที่ต้นเหตุ: ทำให้เกิดซ้ำก่อน แล้วค่อยแก้ | — |
-| `principle-proceed-on-reversible-work` | งานที่ย้อนได้ทำต่อเลยไม่ต้องถาม งานที่ย้อนไม่ได้รออนุมัติ | — |
-| `principle-prove-it-works` | ก่อนบอกว่าเสร็จ ต้องตรวจกับของจริง | — |
 | `principle-replace-then-delete` | เปลี่ยนของเก่า: ย้ายคนเรียกไปของใหม่ก่อน แล้วค่อยลบของเก่า | — |
 | `principle-safe-to-rerun` | งานที่อาจรันซ้ำหรือหยุดกลางทาง ต้องรันซ้ำแล้วผลไม่เพี้ยน | — |
 | `principle-secure-by-default` | ปลอดภัยไว้ก่อน: input · ฐานข้อมูล · ไฟล์ · ล็อกอิน · เงิน | `references/mobile.md` |
-| `principle-small-verifiable-steps` | งานหลายขั้นแบ่งเป็นขั้นเล็กที่ตรวจได้ทีละขั้น | — |
-| `principle-user-experience-first` | เลือกทางที่คนใช้สะดวก มากกว่าทางที่สร้างง่าย | — |
 | `simplicity-first` | เอกสาร ดีไซน์ แผน ให้ง่ายที่สุดที่ใช้ได้ | — |
 | `lazy-coding` | เขียนโค้ดแบบที่ง่ายที่สุดที่ใช้ได้ ไม่เผื่อเกินจำเป็น | — |
 
@@ -556,25 +575,13 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `decision-log` | จดทุกครั้งที่ agent ตัดสินใจเองในงานยาวหรืองานที่ไม่มีคนดู | — |
-| `flag-and-propose` | เจอเรื่องกลางงานที่ต้องให้คนตัดสิน → แจ้งพร้อมทางเลือก | `references/example.md` |
-| `context-budget` | ประหยัด context เมื่อต้องอ่านไฟล์เยอะหรือรันคำสั่งที่พิมพ์ผลยาว | — |
-| `work-session-context` | เริ่มงาน เปลี่ยนโมเดล ส่งต่องาน หรือมีข้อความเข้า inbox → อัปเดตไฟล์ context | `scripts/log-to-md.mjs` |
-| `temp-file-discipline` | ไฟล์ชั่วคราวทั้งหมดไปอยู่ใน _to_delete/ ไม่ปนกับงานจริง | — |
-| `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
-| `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |
-| `parallel-split-and-merge` | แบ่งงานที่ไม่ทับกันให้หลาย agent ทำพร้อมกันแล้วรวม | — |
 | `docker-sandbox` | รันโปรเจกต์ใน Docker container ของตัวเอง ไม่แตะเครื่องหลัก | `assets/Dockerfile` · `assets/allowlist.txt` · `assets/base.Dockerfile` · `assets/compose.browser.yaml` · `assets/compose.isolated.yaml` · `assets/compose.locked.yaml` · `assets/compose.yaml` · `assets/init-firewall.sh` · `assets/sandbox.ps1` |
-| `status-report` | ตารางสถานะเมื่องานจบ: ทำอะไร ผลเป็นอย่างไร ค้างอะไร | `assets/build-plan-status.md` · `references/project-plan-and-weekly-status.md` |
 
 **เรียนรู้และปรับปรุงทีม**
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `coding-evals` | วัดว่าทีมเขียนโค้ดดีขึ้นจริงไหม หลังแก้ skill หรือ playbook | — |
-| `repeated-mistakes-to-checks` | ผิดซ้ำ 2 ครั้ง → เปลี่ยนเป็นตัวตรวจอัตโนมัติ | — |
-| `session-lessons-to-skills` | รวมบทเรียนจากงานที่ทำ แล้วแก้ skill ที่พาผิด | — |
-| `prior-art-review` | ก่อนสร้าง ดูว่ามีของที่ใช้ได้อยู่แล้วไหม แล้วตัดสินว่าใช้หรือสร้างเอง | — |
 | `reference-app-research` | "อยากได้แอปแบบ X" → ค้นแอปนั้นและคู่แข่งเป็นเอกสารเดียว | — |
 | `code-gardener` | เดินตรวจโค้ดหาของที่ทำให้เข้าใจผิด: โค้ดซ้ำ · โค้ดตาย · ชื่อเพี้ยน | — |
 
@@ -593,7 +600,6 @@ plugins/<plugin>/
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `code-review-checklist` | checklist รีวิว pull request และตรวจโค้ดตัวเองก่อนส่ง | `references/full-checklist.md` |
-| `adversarial-review-panel` | คณะรีวิว 3 มุมที่หาจุดอ่อนก่อนส่งงาน | — |
 | `testing-standards` | ตั้ง test อัตโนมัติ (.NET · Node · Python · Angular · Flutter) แก้ชุด test ที่ไม่นิ่ง | `references/per-stack.md` |
 | `e2e-testing-patterns` | test แบบเปิดเบราว์เซอร์จริง (Playwright · Cypress) แก้ test ที่ผลไม่นิ่ง | `references/auth-in-e2e.md` · `references/ci-and-parallel.md` · `references/coverage-and-libraries.md` · `references/flaky-tests.md` · `references/page-object-model.md` · `references/test-data-strategies.md` |
 | `test-case-template` | เขียน test case และแผนทดสอบฟีเจอร์จาก acceptance criteria | `assets/test-case.md` · `references/example-login.md` · `references/test-plan-template.md` · `scripts/build-test-workbook.py` |
@@ -602,7 +608,6 @@ plugins/<plugin>/
 | `app-verifier-setup` | สร้างสคริปต์ verify ให้ agent เปิดแอปจริงแล้วเห็นผลเอง + สัญญาสำหรับทดสอบ | `references/android-native.md` |
 | `app-verifier-upkeep` | แก้สคริปต์ verify เมื่อแอปเปลี่ยนจนขั้นตอนไม่ตรง | — |
 | `spec-to-code-loop` | ลูปสร้างจากสเปก: test แดงก่อน → โค้ด → เทียบหน้าจอ → บันทึก · ติดแล้วทำอย่างไร | — |
-| `targeted-fix` | มีคนบอกว่าผิด → แก้ให้เล็กที่สุดตรงจุด | — |
 
 **ความปลอดภัยและข้อมูลส่วนตัว**
 
@@ -657,10 +662,7 @@ plugins/<plugin>/
 | `mobile-app-design` | ออกแบบหน้าจอแอปมือถือหรือ mockup (PWA · React Native · Flutter) | `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `assets/speakgo.css` · `references/review.md` · `references/screen-and-components.md` · `references/tokens.md` · `scripts/screenshot.py` |
 | `windows-app-design` | แอป desktop ที่ต้องดูเป็นของ Windows 11 (WinUI 3 · MAUI) | `assets/FluentTokens.axaml` · `assets/FluentTokens.xaml` · `assets/fluent.css` · `assets/mockup-template.html` · `assets/templates-preview.webp` · `assets/tool-app-template.html` · `references/frame-and-components.md` · `references/patterns.md` · `references/review.md` · `references/tokens.md` · `scripts/screenshot.py` |
 | `graphic-design` | งานภาพของโปรเจกต์ที่ไม่ใช่หน้าจอ: โลโก้ · โปสเตอร์ · โพสต์ · rich menu | `assets/brand-direction.md` · `assets/logo-preview-sheet-example.webp` · `references/designer-outputs.md` · `references/logo-design.md` · `references/sizes-and-print.md` · `references/thai-in-graphics.md` |
-| `diagram-figures` | รูปสถาปัตยกรรมหรือแนวคิดแบบออกแบบมา สำหรับข้อเสนอ สไลด์ งานพิมพ์ | `assets/figure-cloud.html` · `assets/figure-context.html` · `assets/figure-flow-example.png` · `assets/figure-flow.html` · `assets/figure-template.html` · `assets/find-icon.py` · `assets/icons/INDEX.md` · `assets/icons/app/angular.png` · `assets/icons/app/bash.png` · `assets/icons/app/client.png` · `assets/icons/app/cloudflare.png` · `assets/icons/app/csharp.png` · `assets/icons/app/discord.png` · `assets/icons/app/django.png` · `assets/icons/app/dotnet.png` · `assets/icons/app/fastapi.png` · `assets/icons/app/firebase.png` · `assets/icons/app/flask.png` · `assets/icons/app/flutter.png` · `assets/icons/app/go.png` · `assets/icons/app/graphql.png` · `assets/icons/app/java.png` · `assets/icons/app/javascript.png` · `assets/icons/app/laravel.png` · `assets/icons/app/line.png` · `assets/icons/app/nextjs.png` · `assets/icons/app/nodejs.png` · `assets/icons/app/paypal.png` · `assets/icons/app/php.png` · `assets/icons/app/python.png` · `assets/icons/app/rails.png` · `assets/icons/app/react.png` · `assets/icons/app/rust.png` · `assets/icons/app/slack.png` · `assets/icons/app/spring.png` · `assets/icons/app/sql.png` · `assets/icons/app/stripe.png` · `assets/icons/app/svelte.png` · `assets/icons/app/teams.png` · `assets/icons/app/telegram.png` · `assets/icons/app/typescript.png` · `assets/icons/app/user.png` · `assets/icons/app/users.png` · `assets/icons/app/vue.png` · `assets/icons/aws/alb.png` · `assets/icons/aws/api-gateway.png` · `assets/icons/aws/athena.png` · `assets/icons/aws/aurora.png` · `assets/icons/aws/backup.png` · `assets/icons/aws/bedrock.png` · `assets/icons/aws/cloudformation.png` · `assets/icons/aws/cloudfront.png` · `assets/icons/aws/cloudwatch.png` · `assets/icons/aws/cognito.png` · `assets/icons/aws/dynamodb.png` · `assets/icons/aws/ec2.png` · `assets/icons/aws/ecr.png` · `assets/icons/aws/ecs.png` · `assets/icons/aws/efs.png` · `assets/icons/aws/eks.png` · `assets/icons/aws/elasticache.png` · `assets/icons/aws/elb.png` · `assets/icons/aws/eventbridge.png` · `assets/icons/aws/fargate.png` · `assets/icons/aws/glue.png` · `assets/icons/aws/iam.png` · `assets/icons/aws/internet-gateway.png` · `assets/icons/aws/kinesis.png` · `assets/icons/aws/kms.png` · `assets/icons/aws/lambda.png` · `assets/icons/aws/nat-gateway.png` · `assets/icons/aws/rds.png` · `assets/icons/aws/redshift.png` · `assets/icons/aws/route53.png` · `assets/icons/aws/s3.png` · `assets/icons/aws/sagemaker.png` · `assets/icons/aws/secrets-manager.png` · `assets/icons/aws/ses.png` · `assets/icons/aws/sns.png` · `assets/icons/aws/sqs.png` · `assets/icons/aws/step-functions.png` · `assets/icons/aws/vpc.png` · `assets/icons/aws/waf.png` · `assets/icons/azure/active-directory.png` · `assets/icons/azure/aks.png` · `assets/icons/azure/api-management.png` · `assets/icons/azure/app-service.png` · `assets/icons/azure/application-gateway.png` · `assets/icons/azure/blob-storage.png` · `assets/icons/azure/cdn.png` · `assets/icons/azure/container-instances.png` · `assets/icons/azure/container-registry.png` · `assets/icons/azure/cosmos-db.png` · `assets/icons/azure/devops.png` · `assets/icons/azure/dns.png` · `assets/icons/azure/event-grid.png` · `assets/icons/azure/front-door.png` · `assets/icons/azure/functions.png` · `assets/icons/azure/key-vault.png` · `assets/icons/azure/load-balancer.png` · `assets/icons/azure/monitor.png` · `assets/icons/azure/postgresql.png` · `assets/icons/azure/redis.png` · `assets/icons/azure/service-bus.png` · `assets/icons/azure/sql-database.png` · `assets/icons/azure/storage-accounts.png` · `assets/icons/azure/vm.png` · `assets/icons/contact-sheet.html` · `assets/icons/data/cassandra.png` · `assets/icons/data/ceph.png` · `assets/icons/data/clickhouse.png` · `assets/icons/data/elasticsearch.png` · `assets/icons/data/glusterfs.png` · `assets/icons/data/influxdb.png` · `assets/icons/data/kibana.png` · `assets/icons/data/logstash.png` · `assets/icons/data/mariadb.png` · `assets/icons/data/memcached.png` · `assets/icons/data/mongodb.png` · `assets/icons/data/mssql.png` · `assets/icons/data/mysql.png` · `assets/icons/data/neo4j.png` · `assets/icons/data/oracle.png` · `assets/icons/data/postgresql.png` · `assets/icons/data/redis.png` · `assets/icons/gcp/app-engine.png` · `assets/icons/gcp/bigquery.png` · `assets/icons/gcp/bigtable.png` · `assets/icons/gcp/cdn.png` · `assets/icons/gcp/cloud-run.png` · `assets/icons/gcp/cloud-sql.png` · `assets/icons/gcp/cloud-storage.png` · `assets/icons/gcp/compute-engine.png` · `assets/icons/gcp/dataflow.png` · `assets/icons/gcp/dns.png` · `assets/icons/gcp/firestore.png` · `assets/icons/gcp/functions.png` · `assets/icons/gcp/gke.png` · `assets/icons/gcp/iam.png` · `assets/icons/gcp/key-management.png` · `assets/icons/gcp/load-balancing.png` · `assets/icons/gcp/memorystore.png` · `assets/icons/gcp/pubsub.png` · `assets/icons/gcp/spanner.png` · `assets/icons/gcp/vertex-ai.png` · `assets/icons/gcp/vpc.png` · `assets/icons/index.json` · `assets/icons/infra/android.png` · `assets/icons/infra/apache.png` · `assets/icons/infra/consul.png` · `assets/icons/infra/containerd.png` · `assets/icons/infra/docker.png` · `assets/icons/infra/envoy.png` · `assets/icons/infra/etcd.png` · `assets/icons/infra/firewall.png` · `assets/icons/infra/haproxy.png` · `assets/icons/infra/internet.png` · `assets/icons/infra/ios.png` · `assets/icons/infra/istio.png` · `assets/icons/infra/k3s.png` · `assets/icons/infra/kong.png` · `assets/icons/infra/linux.png` · `assets/icons/infra/mobile.png` · `assets/icons/infra/nginx.png` · `assets/icons/infra/router.png` · `assets/icons/infra/storage.png` · `assets/icons/infra/subnet.png` · `assets/icons/infra/switch.png` · `assets/icons/infra/tablet.png` · `assets/icons/infra/traefik.png` · `assets/icons/infra/ubuntu.png` · `assets/icons/infra/vpn.png` · `assets/icons/infra/windows.png` · `assets/icons/k8s/configmap.png` · `assets/icons/k8s/cronjob.png` · `assets/icons/k8s/daemonset.png` · `assets/icons/k8s/deployment.png` · `assets/icons/k8s/ingress.png` · `assets/icons/k8s/job.png` · `assets/icons/k8s/master.png` · `assets/icons/k8s/namespace.png` · `assets/icons/k8s/network-policy.png` · `assets/icons/k8s/node.png` · `assets/icons/k8s/pod.png` · `assets/icons/k8s/pv.png` · `assets/icons/k8s/pvc.png` · `assets/icons/k8s/secret.png` · `assets/icons/k8s/service.png` · `assets/icons/k8s/statefulset.png` · `assets/icons/ops/airflow.png` · `assets/icons/ops/ansible.png` · `assets/icons/ops/circleci.png` · `assets/icons/ops/datadog.png` · `assets/icons/ops/git.png` · `assets/icons/ops/github-actions.png` · `assets/icons/ops/github.png` · `assets/icons/ops/gitlab-ci.png` · `assets/icons/ops/gitlab.png` · `assets/icons/ops/grafana.png` · `assets/icons/ops/jenkins.png` · `assets/icons/ops/prometheus.png` · `assets/icons/ops/sentry.png` · `assets/icons/ops/spark.png` · `assets/icons/ops/splunk.png` · `assets/icons/ops/superset.png` · `assets/icons/ops/terraform.png` · `assets/icons/ops/vault.png` · `assets/icons/ops/zabbix.png` · `assets/icons/queue/activemq.png` · `assets/icons/queue/celery.png` · `assets/icons/queue/emqx.png` · `assets/icons/queue/kafka.png` · `assets/icons/queue/nats.png` · `assets/icons/queue/rabbitmq.png` · `assets/mermaid-engine/build.py` · `assets/mermaid-engine/check.py` · `assets/mermaid-engine/elk.py` · `assets/mermaid-engine/elk_run.js` · `assets/mermaid-engine/er_layout.py` · `assets/mermaid-engine/er_parse.py` · `assets/mermaid-engine/figures.json` · `assets/mermaid-engine/gantt_layout.py` · `assets/mermaid-engine/gantt_parse.py` · `assets/mermaid-engine/graphdraw.py` · `assets/mermaid-engine/render.py` · `assets/mermaid-engine/seq_layout.py` · `assets/mermaid-engine/seq_parse.py` · `assets/mermaid-engine/state_layout.py` · `assets/mermaid-engine/state_parse.py` · `assets/mermaid-engine/svgkit.py` · `assets/mermaid-engine/theme.py` · `assets/render-figure.py` · `assets/svg-engine/d01.py` · `assets/svg-engine/ref.py` · `assets/svg-engine/render.py` · `assets/svg-engine/theme.py` · `assets/tech-icons.zip` · `references/colour-by-domain.md` · `references/design-system.md` · `references/engine-mermaid.md` · `references/engine-svg-python.md` · `references/icons.md` · `references/layout-cloud.md` · `references/layout-context.md` · `references/layout-deployment.md` · `references/layout-flow.md` · `references/pitfalls.md` · `references/wires.md` · `scripts/check-figure-geometry.py` · `scripts/check-figure-source.py` |
 | `software-diagrams` | แผนภาพเทคนิคแบบ Mermaid ใน Markdown README หรือ PR | `assets/diagrams-python.md` · `assets/infra-diagram.py` · `assets/mermaid-theme.md` · `scripts/check-mermaid-theme.mjs` |
-| `markdown-visuals` | ภาพในเอกสาร Markdown ที่แสดงได้ทุกที่ (หน้าจอ · ขั้นตอน · สถาปัตยกรรม) | `references/ascii-patterns.md` · `references/combining-formats.md` · `references/svg-snippets.md` |
-| `product-naming` | ตั้งชื่อสินค้า แอป โมดูล แบรนด์ และเช็กว่าคนไทยอ่านแล้วฟังเป็นอย่างไร | `assets/name-shortlist.md` · `references/formula-9-deep-dive.md` · `references/meaning-libraries.md` |
 
 **เอกสารและสไลด์**
 
@@ -671,14 +673,6 @@ plugins/<plugin>/
 | `user-story-writer` | เขียน user story และเกณฑ์รับงานแบบ Given-When-Then | `assets/user-stories.md` · `examples/login-story.md` |
 | `project-doc-set` | เลือกชุดเอกสารของโปรเจกต์ ลำดับ ที่เก็บ และรวมข้อค้างไว้ใน Excel | `assets/doc-set-checklist.md` · `references/ecosystem.md` · `references/technical-docs.md` · `references/writer-templates.md` · `scripts/open_items.py` |
 | `project-bootstrap` | ตั้ง repo ใหม่: โครงโฟลเดอร์ · README · คำสั่งรันคำสั่งเดียว | `assets/starter-files.md` · `references/changelog-examples.md` · `references/code-folder.md` |
-| `document-naming` | ตั้งชื่อไฟล์เอกสาร รุ่น และสถานะ | `assets/naming-cheatsheet.md` |
-| `polished-document-style` | จัดรูปแบบเอกสาร Markdown ให้ผู้บริหารหรือลูกค้าอ่าน (BRD · FSD · ADR) | `references/markdown-patterns.md` · `references/theme-colors.md` · `scripts/check_outline.py` |
-| `branded-document-design` | ทำ Word · PowerPoint · PDF ให้ดูออกแบบมา (สี · ฟอนต์ไทย) | `examples/example_deck.pptx` · `examples/example_srs-preview.png` · `examples/example_srs.docx` · `examples/example_stage.pptx` · `examples/fig-flow-dark.png` · `references/anti-patterns.md` · `references/api.md` · `references/brandkit-usage.md` · `references/palette-examples.md` · `references/thai-fonts.md` · `references/tokens-and-type.md` · `references/visual-check.md` · `references/word-layout.md` · `scripts/__pycache__/brandkit.cpython-313.pyc` · `scripts/brandkit.py` · `scripts/brandkit_pptx.py` · `scripts/brandkit_stage.py` · `scripts/cover_art.py` · `scripts/example_deck.py` · `scripts/example_srs.py` · `scripts/example_stage.py` |
-| `markdown-report-docx` | รายงานจาก Markdown ไฟล์เดียว ออกมาเป็น .docx สวยพร้อมส่ง | `assets/example-logo.png` · `assets/example-report.md` · `scripts/__pycache__/md_to_docx.cpython-313.pyc` · `scripts/md_to_docx.py` |
-| `presentation-design` | ทำสไลด์ที่คนจะนำเสนอหรืออ่าน: เรื่องเล่า · หัวข้อ · layout · ฟอนต์ไทย | `assets/slide-mockup-preview.webp` · `assets/slide-mockup.html` |
-| `html-slide-deck` | สไลด์เป็นไฟล์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `assets/shell.html` · `assets/slides-example-preview.webp` · `assets/slides-example.html` · `scripts/__pycache__/build_deck.cpython-313.pyc` · `scripts/build_deck.py` · `scripts/check_deck.py` |
-| `pptx-to-html-deck` | เปลี่ยน .pptx เป็น HTML ไฟล์เดียวที่มี animation โน้ต และเมนู | `assets/interactive-page.html` · `assets/runtime.css` · `assets/runtime.js` · `scripts/check_html_deck.py` · `scripts/click_steps.py` · `scripts/pptx_to_html.py` |
-| `spell-out-abbreviations` | เขียนคำย่อเต็มครั้งแรก และทำอภิธานศัพท์ | — |
 
 **ความรู้เฉพาะสาขา**
 
@@ -702,10 +696,9 @@ plugins/<plugin>/
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `doc-cover-design` | ปกเอกสาร .docx ที่ไม่ซ้ำใคร 3 แบบ แล้วโหวต 2 ใน 3 | `references/cover-bakeoff.md` · `references/real-examples.md` · `references/structural-ideas.md` · `references/word-build.md` · `scripts/cover-engine/src/build_all.py` · `scripts/cover-engine/src/calibrate.py` · `scripts/cover-engine/src/capture.py` · `scripts/cover-engine/src/docx_build.py` · `scripts/cover-engine/src/fonts.py` · `scripts/cover-engine/src/render.py` · `scripts/cover-engine/src/web/cover.html` · `scripts/cover-engine/src/web/cover.js` · `scripts/cover-engine/src/web/projects.js` · `scripts/cover-engine/src/web/set.html` · `scripts/cover-engine/src/word_pdf.py` |
-| `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
 | `owasp-top10` | ระบบเว็บและ API ผ่าน OWASP Top 10:2025: สิ่งที่ต้องมี · วิธีพิสูจน์ · รายงานรายข้อ A01–A10 | `assets/owasp-report.md` · `references/contract-clause.md` · `references/stack-checks.md` |
 | `stack-mql` | เขียนและตรวจ MQL4 / MQL5 (EA · indicator บน MetaTrader) และเตรียมขายบน MQL5 Market | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `test-evidence` | รัน test case แล้วเก็บหลักฐาน: GIF มีคำบรรยาย · รายงานผ่าน/ไม่ผ่าน · คอลัมน์ใน Excel | `assets/fonts/LICENSE-DejaVu.txt` · `assets/fonts/OFL-Sarabun.txt` · `assets/fonts/Sarabun-Regular.ttf` · `assets/fonts/Sarabun-SemiBold.ttf` · `assets/fonts/Symbols-DejaVuSans.ttf` · `scripts/make_evidence.py` · `scripts/record_results.py` |
 
 ### คำสั่ง (29) — พิมพ์ `/software-company:<ชื่อ>`
@@ -763,6 +756,44 @@ plugins/<plugin>/
 | `playbook-unattended-run.md` | ปล่อยให้ทำเองยาว ๆ | 7 |
 | `playbook-visual-parity.md` | ทำหน้าจอให้ตรงต้นแบบ | 9 |
 
+## sqt-toolkit
+
+ · ภาพประกอบ: [docs/plugins/sqt-toolkit](plugins/sqt-toolkit/README.md) · ต้นฉบับ: `plugins/sqt-toolkit/`
+
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
+
+### agent (0)
+
+| ไฟล์ | ใช้ทำอะไร |
+|---|---|
+
+### skill (15 + ของกลาง 27)
+
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
+
+| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
+|---|---|---|
+| `branded-document-design` | ทำ Word · PowerPoint · PDF ให้ดูออกแบบมา (สี · ฟอนต์ไทย) | `examples/example_deck.pptx` · `examples/example_srs-preview.png` · `examples/example_srs.docx` · `examples/example_stage.pptx` · `examples/fig-flow-dark.png` · `references/anti-patterns.md` · `references/api.md` · `references/brandkit-usage.md` · `references/palette-examples.md` · `references/thai-fonts.md` · `references/tokens-and-type.md` · `references/visual-check.md` · `references/word-layout.md` · `scripts/__pycache__/brandkit.cpython-313.pyc` · `scripts/brandkit.py` · `scripts/brandkit_pptx.py` · `scripts/brandkit_stage.py` · `scripts/cover_art.py` · `scripts/example_deck.py` · `scripts/example_srs.py` · `scripts/example_stage.py` |
+| `diagram-figures` | รูปสถาปัตยกรรมหรือแนวคิดแบบออกแบบมา สำหรับข้อเสนอ สไลด์ งานพิมพ์ | `assets/figure-cloud.html` · `assets/figure-context.html` · `assets/figure-flow-example.png` · `assets/figure-flow.html` · `assets/figure-template.html` · `assets/find-icon.py` · `assets/icons/INDEX.md` · `assets/icons/app/angular.png` · `assets/icons/app/bash.png` · `assets/icons/app/client.png` · `assets/icons/app/cloudflare.png` · `assets/icons/app/csharp.png` · `assets/icons/app/discord.png` · `assets/icons/app/django.png` · `assets/icons/app/dotnet.png` · `assets/icons/app/fastapi.png` · `assets/icons/app/firebase.png` · `assets/icons/app/flask.png` · `assets/icons/app/flutter.png` · `assets/icons/app/go.png` · `assets/icons/app/graphql.png` · `assets/icons/app/java.png` · `assets/icons/app/javascript.png` · `assets/icons/app/laravel.png` · `assets/icons/app/line.png` · `assets/icons/app/nextjs.png` · `assets/icons/app/nodejs.png` · `assets/icons/app/paypal.png` · `assets/icons/app/php.png` · `assets/icons/app/python.png` · `assets/icons/app/rails.png` · `assets/icons/app/react.png` · `assets/icons/app/rust.png` · `assets/icons/app/slack.png` · `assets/icons/app/spring.png` · `assets/icons/app/sql.png` · `assets/icons/app/stripe.png` · `assets/icons/app/svelte.png` · `assets/icons/app/teams.png` · `assets/icons/app/telegram.png` · `assets/icons/app/typescript.png` · `assets/icons/app/user.png` · `assets/icons/app/users.png` · `assets/icons/app/vue.png` · `assets/icons/aws/alb.png` · `assets/icons/aws/api-gateway.png` · `assets/icons/aws/athena.png` · `assets/icons/aws/aurora.png` · `assets/icons/aws/backup.png` · `assets/icons/aws/bedrock.png` · `assets/icons/aws/cloudformation.png` · `assets/icons/aws/cloudfront.png` · `assets/icons/aws/cloudwatch.png` · `assets/icons/aws/cognito.png` · `assets/icons/aws/dynamodb.png` · `assets/icons/aws/ec2.png` · `assets/icons/aws/ecr.png` · `assets/icons/aws/ecs.png` · `assets/icons/aws/efs.png` · `assets/icons/aws/eks.png` · `assets/icons/aws/elasticache.png` · `assets/icons/aws/elb.png` · `assets/icons/aws/eventbridge.png` · `assets/icons/aws/fargate.png` · `assets/icons/aws/glue.png` · `assets/icons/aws/iam.png` · `assets/icons/aws/internet-gateway.png` · `assets/icons/aws/kinesis.png` · `assets/icons/aws/kms.png` · `assets/icons/aws/lambda.png` · `assets/icons/aws/nat-gateway.png` · `assets/icons/aws/rds.png` · `assets/icons/aws/redshift.png` · `assets/icons/aws/route53.png` · `assets/icons/aws/s3.png` · `assets/icons/aws/sagemaker.png` · `assets/icons/aws/secrets-manager.png` · `assets/icons/aws/ses.png` · `assets/icons/aws/sns.png` · `assets/icons/aws/sqs.png` · `assets/icons/aws/step-functions.png` · `assets/icons/aws/vpc.png` · `assets/icons/aws/waf.png` · `assets/icons/azure/active-directory.png` · `assets/icons/azure/aks.png` · `assets/icons/azure/api-management.png` · `assets/icons/azure/app-service.png` · `assets/icons/azure/application-gateway.png` · `assets/icons/azure/blob-storage.png` · `assets/icons/azure/cdn.png` · `assets/icons/azure/container-instances.png` · `assets/icons/azure/container-registry.png` · `assets/icons/azure/cosmos-db.png` · `assets/icons/azure/devops.png` · `assets/icons/azure/dns.png` · `assets/icons/azure/event-grid.png` · `assets/icons/azure/front-door.png` · `assets/icons/azure/functions.png` · `assets/icons/azure/key-vault.png` · `assets/icons/azure/load-balancer.png` · `assets/icons/azure/monitor.png` · `assets/icons/azure/postgresql.png` · `assets/icons/azure/redis.png` · `assets/icons/azure/service-bus.png` · `assets/icons/azure/sql-database.png` · `assets/icons/azure/storage-accounts.png` · `assets/icons/azure/vm.png` · `assets/icons/contact-sheet.html` · `assets/icons/data/cassandra.png` · `assets/icons/data/ceph.png` · `assets/icons/data/clickhouse.png` · `assets/icons/data/elasticsearch.png` · `assets/icons/data/glusterfs.png` · `assets/icons/data/influxdb.png` · `assets/icons/data/kibana.png` · `assets/icons/data/logstash.png` · `assets/icons/data/mariadb.png` · `assets/icons/data/memcached.png` · `assets/icons/data/mongodb.png` · `assets/icons/data/mssql.png` · `assets/icons/data/mysql.png` · `assets/icons/data/neo4j.png` · `assets/icons/data/oracle.png` · `assets/icons/data/postgresql.png` · `assets/icons/data/redis.png` · `assets/icons/gcp/app-engine.png` · `assets/icons/gcp/bigquery.png` · `assets/icons/gcp/bigtable.png` · `assets/icons/gcp/cdn.png` · `assets/icons/gcp/cloud-run.png` · `assets/icons/gcp/cloud-sql.png` · `assets/icons/gcp/cloud-storage.png` · `assets/icons/gcp/compute-engine.png` · `assets/icons/gcp/dataflow.png` · `assets/icons/gcp/dns.png` · `assets/icons/gcp/firestore.png` · `assets/icons/gcp/functions.png` · `assets/icons/gcp/gke.png` · `assets/icons/gcp/iam.png` · `assets/icons/gcp/key-management.png` · `assets/icons/gcp/load-balancing.png` · `assets/icons/gcp/memorystore.png` · `assets/icons/gcp/pubsub.png` · `assets/icons/gcp/spanner.png` · `assets/icons/gcp/vertex-ai.png` · `assets/icons/gcp/vpc.png` · `assets/icons/index.json` · `assets/icons/infra/android.png` · `assets/icons/infra/apache.png` · `assets/icons/infra/consul.png` · `assets/icons/infra/containerd.png` · `assets/icons/infra/docker.png` · `assets/icons/infra/envoy.png` · `assets/icons/infra/etcd.png` · `assets/icons/infra/firewall.png` · `assets/icons/infra/haproxy.png` · `assets/icons/infra/internet.png` · `assets/icons/infra/ios.png` · `assets/icons/infra/istio.png` · `assets/icons/infra/k3s.png` · `assets/icons/infra/kong.png` · `assets/icons/infra/linux.png` · `assets/icons/infra/mobile.png` · `assets/icons/infra/nginx.png` · `assets/icons/infra/router.png` · `assets/icons/infra/storage.png` · `assets/icons/infra/subnet.png` · `assets/icons/infra/switch.png` · `assets/icons/infra/tablet.png` · `assets/icons/infra/traefik.png` · `assets/icons/infra/ubuntu.png` · `assets/icons/infra/vpn.png` · `assets/icons/infra/windows.png` · `assets/icons/k8s/configmap.png` · `assets/icons/k8s/cronjob.png` · `assets/icons/k8s/daemonset.png` · `assets/icons/k8s/deployment.png` · `assets/icons/k8s/ingress.png` · `assets/icons/k8s/job.png` · `assets/icons/k8s/master.png` · `assets/icons/k8s/namespace.png` · `assets/icons/k8s/network-policy.png` · `assets/icons/k8s/node.png` · `assets/icons/k8s/pod.png` · `assets/icons/k8s/pv.png` · `assets/icons/k8s/pvc.png` · `assets/icons/k8s/secret.png` · `assets/icons/k8s/service.png` · `assets/icons/k8s/statefulset.png` · `assets/icons/ops/airflow.png` · `assets/icons/ops/ansible.png` · `assets/icons/ops/circleci.png` · `assets/icons/ops/datadog.png` · `assets/icons/ops/git.png` · `assets/icons/ops/github-actions.png` · `assets/icons/ops/github.png` · `assets/icons/ops/gitlab-ci.png` · `assets/icons/ops/gitlab.png` · `assets/icons/ops/grafana.png` · `assets/icons/ops/jenkins.png` · `assets/icons/ops/prometheus.png` · `assets/icons/ops/sentry.png` · `assets/icons/ops/spark.png` · `assets/icons/ops/splunk.png` · `assets/icons/ops/superset.png` · `assets/icons/ops/terraform.png` · `assets/icons/ops/vault.png` · `assets/icons/ops/zabbix.png` · `assets/icons/queue/activemq.png` · `assets/icons/queue/celery.png` · `assets/icons/queue/emqx.png` · `assets/icons/queue/kafka.png` · `assets/icons/queue/nats.png` · `assets/icons/queue/rabbitmq.png` · `assets/mermaid-engine/build.py` · `assets/mermaid-engine/check.py` · `assets/mermaid-engine/elk.py` · `assets/mermaid-engine/elk_run.js` · `assets/mermaid-engine/er_layout.py` · `assets/mermaid-engine/er_parse.py` · `assets/mermaid-engine/figures.json` · `assets/mermaid-engine/gantt_layout.py` · `assets/mermaid-engine/gantt_parse.py` · `assets/mermaid-engine/graphdraw.py` · `assets/mermaid-engine/render.py` · `assets/mermaid-engine/seq_layout.py` · `assets/mermaid-engine/seq_parse.py` · `assets/mermaid-engine/state_layout.py` · `assets/mermaid-engine/state_parse.py` · `assets/mermaid-engine/svgkit.py` · `assets/mermaid-engine/theme.py` · `assets/render-figure.py` · `assets/svg-engine/d01.py` · `assets/svg-engine/ref.py` · `assets/svg-engine/render.py` · `assets/svg-engine/theme.py` · `assets/tech-icons.zip` · `references/colour-by-domain.md` · `references/design-system.md` · `references/engine-mermaid.md` · `references/engine-svg-python.md` · `references/icons.md` · `references/layout-cloud.md` · `references/layout-context.md` · `references/layout-deployment.md` · `references/layout-flow.md` · `references/pitfalls.md` · `references/wires.md` · `scripts/check-figure-geometry.py` · `scripts/check-figure-source.py` |
+| `document-naming` | ตั้งชื่อไฟล์เอกสาร รุ่น และสถานะ | `assets/naming-cheatsheet.md` |
+| `html-slide-deck` | สไลด์เป็นไฟล์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `assets/example-logo.png` · `assets/shell.html` · `assets/slides-example-preview.webp` · `assets/slides-example.html` · `scripts/build_deck.py` · `scripts/check_deck.py` |
+| `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
+| `markdown-report-docx` | รายงานจาก Markdown ไฟล์เดียว ออกมาเป็น .docx สวยพร้อมส่ง | `assets/example-logo.png` · `assets/example-report.md` · `scripts/__pycache__/md_to_docx.cpython-313.pyc` · `scripts/md_to_docx.py` |
+| `markdown-visuals` | ภาพในเอกสาร Markdown ที่แสดงได้ทุกที่ (หน้าจอ · ขั้นตอน · สถาปัตยกรรม) | `references/ascii-patterns.md` · `references/combining-formats.md` · `references/svg-snippets.md` |
+| `meeting-prep-card` | การ์ด 1 ใบก่อนประชุม: เป้าหมาย · 3 คำถาม · สิ่งที่จะขอ | — |
+| `meeting-summary` | สรุปประชุม: สิ่งที่ตัดสินแล้ว · งานที่ต้องทำ · รายงานการประชุมภาษาไทย | `references/thai-minutes-template.md` |
+| `polished-document-style` | จัดรูปแบบเอกสาร Markdown ให้ผู้บริหารหรือลูกค้าอ่าน (BRD · FSD · ADR) | `references/markdown-patterns.md` · `references/theme-colors.md` · `scripts/check_outline.py` |
+| `polite-message-th-en` | เขียนข้อความที่พูดยาก (ขอให้ช่วย · ปฏิเสธ · ทวงเงิน) ไทยหรืออังกฤษ | `references/templates.md` |
+| `pptx-to-html-deck` | เปลี่ยน .pptx เป็น HTML ไฟล์เดียวที่มี animation โน้ต และเมนู | `assets/interactive-page.html` · `assets/runtime.css` · `assets/runtime.js` · `scripts/check_html_deck.py` · `scripts/click_steps.py` · `scripts/pptx_to_html.py` |
+| `presentation-design` | ทำสไลด์ที่คนจะนำเสนอหรืออ่าน: เรื่องเล่า · หัวข้อ · layout · ฟอนต์ไทย | `assets/slide-mockup-preview.webp` · `assets/slide-mockup.html` |
+| `product-naming` | ตั้งชื่อสินค้า แอป โมดูล แบรนด์ และเช็กว่าคนไทยอ่านแล้วฟังเป็นอย่างไร | `assets/name-shortlist.md` · `references/formula-9-deep-dive.md` · `references/meaning-libraries.md` |
+| `spell-out-abbreviations` | เขียนคำย่อเต็มครั้งแรก และทำอภิธานศัพท์ | — |
+
+### playbook (0) — `skills/superuser/references/`
+
+| ไฟล์ | ทำอะไร | ขั้น |
+|---|---|---|
+
 ## superuser
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ · ภาพประกอบ: [docs/plugins/superuser](plugins/superuser/README.md) · ต้นฉบับ: `plugins/superuser/`
@@ -777,20 +808,23 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (1 + ของกลาง 7)
+### skill (1 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
+
+**แกนทีม · ส่งต่องาน**
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/CONTEXT.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/autonomy.md` · `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/modules.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/CONTEXT.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
-### playbook (5) — `skills/superuser/references/`
+### playbook (6) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
 | `playbook-document.md` | เขียนเอกสาร | 8 |
 | `playbook-learn-from-session.md` | เรียนรู้จากงานที่ทำ | 7 |
+| `playbook-pickup-and-pause.md` | รับงานต่อ · หยุดงาน | 8 |
 | `playbook-research.md` | ค้นคว้าหาคำตอบ | 7 |
 | `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
 | `playbook-unattended-run.md` | ปล่อยงานยาวให้ทำเอง | 7 |
@@ -810,9 +844,9 @@ plugins/<plugin>/
 | `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
 | `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (18 + ของกลาง 7)
+### skill (18 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -831,7 +865,7 @@ plugins/<plugin>/
 | `pdpa-workflow` | เอกสาร PDPA ของ SME: ความยินยอม · ROPA · คำขอเจ้าของข้อมูล · แจ้งข้อมูลรั่ว | `references/pdpa-templates.md` |
 | `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` |
 | `social-security-th` | ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-monthly-close.md` · `references/playbook-pdpa-setup.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-monthly-close.md` · `references/playbook-pdpa-setup.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tax-vat-th` | เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53) | `references/wht-rates.md` |
 | `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
 
@@ -876,9 +910,9 @@ plugins/<plugin>/
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 
-### skill (19 + ของกลาง 7)
+### skill (19 + ของกลาง 27)
 
-ของกลาง: `agent-patterns` · `answer-shape` · `commit-log` · `handoff` · `human-writing` · `no-ai-look` · `simplify` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `status-report` · `targeted-fix` · `temp-file-discipline` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -895,7 +929,7 @@ plugins/<plugin>/
 | `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | — |
 | `retirement-plan` | เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร | — |
 | `scam-check` | เช็กก่อนโอนเงินให้แอปลงทุน แอปกู้ กลุ่ม LINE หรือคนที่โทรมา | `references/red-flags-and-evidence.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tax-basics-th` | ภาษีจากหุ้น ปันผล ดอกเบี้ย คริปโต และเงินได้ต่างประเทศ (ภ.ง.ด.90 · 91) | `references/investment-income-rules.md` |
 | `tax-deduction-planner` | วางแผนลดหย่อนภาษีก่อนสิ้นปี ซื้อ RMF หรือ ThaiESG เท่าไร | `references/deductions-2569.md` |
 | `technical-signals` | กราฟบอกอะไร ตอนนี้เข้าได้ไหม RSI · MACD · volume หมายถึงอะไร | — |

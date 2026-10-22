@@ -20,6 +20,8 @@
     { "pattern": "diagram|ไดอะแกรม|แผนภาพ|flowchart|โฟลว์|\\ber\\b|sequence|architecture figure", "skills": ["diagram-figures", "no-ai-look"] },
     { "pattern": "(สรุป|บันทึก|รายงาน)[^\\n]{0,15}ประชุม|meeting (notes|minutes|summary)", "skills": ["meeting-summary"] },
     { "pattern": "\\bcommit\\b|คอมมิต", "skills": ["commit-log"] },
-    { "pattern": "ส่งงานต่อ|รับงานต่อ|ส่งต่องาน|ใบสั่งงาน|\\bhand-?off\\b|สลับโมเดล", "skills": ["handoff"] }
+    { "pattern": "ส่งงานต่อ|รับงานต่อ|ส่งต่องาน|ใบสั่งงาน|\\bhand-?off\\b|สลับโมเดล", "skills": ["handoff"] },
+    { "pattern": "หาข้อมูล|ค้นข้อมูล|\\bresearch\\b|เช็กให้หน่อย|ยังจริงไหม", "skills": ["research-with-sources"] },
+    { "pattern": "ทวงเงิน|ทวงถาม|ปฏิเสธ(ยังไง|อย่างไร)|ข้อความ(สุภาพ|ขอโทษ)|polite message", "skills": ["polite-message-th-en"] }
   ]
 }

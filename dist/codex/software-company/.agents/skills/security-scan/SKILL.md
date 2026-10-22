@@ -11,25 +11,25 @@ The security engineer should:
 
 1. **Initial Discovery** — gather:
    - Scan scope (code, deps, infra, all)
-   - Critical assets (PII, payment data, secrets)
+   - Critical assets (personally identifiable information (PII), payment data, secrets)
    - Compliance requirements
    - Pre-existing security findings
-   - Available SCA / SAST tools (Snyk, SonarQube, Trivy)
+   - Available software composition analysis (SCA) / static application security testing (SAST) tools (Snyk, SonarQube, Trivy)
 
 2. **Run automated scans where possible:**
 
    ### For code:
-   - Look for OWASP Top 10:2025 violations (A01–A10 list and per-stack checks: skill `owasp-top10`)
-   - SQL injection, XSS, CSRF, SSRF
-   - Hardcoded secrets / API keys
+   - Look for Open Worldwide Application Security Project (OWASP) Top 10:2025 violations (A01–A10 list and per-stack checks: skill `owasp-top10`)
+   - SQL injection, cross-site scripting (XSS), cross-site request forgery (CSRF), server-side request forgery (SSRF)
+   - Hardcoded secrets / application programming interface (API) keys
    - Insecure crypto (MD5, SHA-1, weak ciphers)
    - Unsafe deserialization
    - Missing input validation
    - Authentication bypasses
-   - Authorization gaps (IDOR)
+   - Authorization gaps (insecure direct object reference, IDOR)
 
    ### For dependencies:
-   - Known CVEs in libraries
+   - Known Common Vulnerabilities and Exposures (CVE) entries in libraries
    - Outdated packages
    - License compliance issues
    - Supply chain risks
@@ -37,11 +37,11 @@ The security engineer should:
 
    ### For infrastructure:
    - Exposed ports / services
-   - Weak IAM policies
+   - Weak identity and access management (IAM) policies
    - Unencrypted storage / transit
    - Missing security headers
    - Insecure defaults
-   - Public S3 buckets, open databases
+   - Public Amazon S3 buckets, open databases
    - Container image vulnerabilities
 
 3. **Manual review** for issues tools miss:
@@ -56,8 +56,8 @@ The security engineer should:
 
    | Severity | Definition | Example |
    |----------|------------|---------|
-   | Critical | Exploitable now, severe impact | Auth bypass, RCE |
-   | High | Likely exploitable, significant impact | SQLi in non-admin |
+   | Critical | Exploitable now, severe impact | Auth bypass, remote code execution (RCE) |
+   | High | Likely exploitable, significant impact | SQL injection (SQLi) in non-admin |
    | Medium | Hard to exploit OR limited impact | XSS in admin tool |
    | Low | Defense in depth | Missing security header |
 
@@ -73,7 +73,7 @@ The security engineer should:
    - References
 
 6. **Check compliance posture:**
-   - Relevant standards (PDPA, GDPR, PCI-DSS, SOC2, HIPAA)
+   - Relevant standards (Thailand Personal Data Protection Act (PDPA), EU General Data Protection Regulation (GDPR), Payment Card Industry Data Security Standard (PCI-DSS), System and Organization Controls 2 (SOC 2), US Health Insurance Portability and Accountability Act (HIPAA))
    - Gaps with required controls
    - Evidence collection status
 

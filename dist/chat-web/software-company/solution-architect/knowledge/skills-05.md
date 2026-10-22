@@ -2,7 +2,7 @@
 
 Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
-# ข้อตกลงของ API
+# ข้อตกลงของ Application Programming Interface (API)
 
 > **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
 > API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
@@ -51,7 +51,7 @@ PATCH  /v1/orders/{id}            แก้บางส่วน
 PUT    /v1/orders/{id}            แทนที่ทั้งตัว
 DELETE /v1/orders/{id}            ลบ
 GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
 ```
 
 | กฎ | ✅ | ❌ |
@@ -236,10 +236,11 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
 2. ส่ง header ในทุก response ของ endpoint นั้น:
    ```
-   Deprecation: true
+   Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
+   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
 3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
 4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
 
@@ -297,7 +298,7 @@ Use when building or reviewing any HTTP service or backend (health endpoints, RF
 | `GET /version` | รันอะไรอยู่ | ไม่* | ไม่ | คน ตอนไล่ปัญหา |
 
 > 🚨 **live ห้ามเช็ค dependency** นี่คือความผิดพลาดที่เจอบ่อยที่สุด
-> ถ้า `/health/live` เช็ค DB แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
+> ถ้า `/health/live` เช็คฐานข้อมูล (database · DB) แล้ว DB ล่มชั่วคราว Kubernetes จะ**ฆ่า pod ทิ้งทั้งหมด**
 > ทั้งที่แอปยังปกติดี พอ DB กลับมาก็ไม่มี pod เหลือรับ traffic แล้ว
 > การเช็ค dependency ต้องอยู่ที่ `/health/ready` ซึ่งแค่ตัด pod ออกจาก pool ชั่วคราว
 
@@ -377,7 +378,8 @@ Use when building or reviewing any HTTP service or backend (health endpoints, RF
 
 ## 3 · Request id
 
-- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้างเอง (uuid ตัด 8 ตัว)
+- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (uuid ตัด 8 ตัว)
+  ค่านี้ลงทุกบรรทัด log ถ้ารับมาตรง ๆ ผู้ส่งจะแทรกขึ้นบรรทัดใหม่หรือข้อความปลอมลง log ได้ (log injection)
 - **ส่งกลับใน response header ทุกครั้ง** รวมทั้งตอน error
 - ใส่ในทุกบรรทัด log (ดู `logging-standards`) และใน error body
 - ส่งต่อไป service ปลายทางทุกครั้งที่เรียกข้ามระบบ
@@ -406,10 +408,11 @@ SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/rea
 
 - **Timeout ทุกทาง** ทั้ง request เข้า การเรียกออก และ query DB ถ้าไม่มี timeout ปลายทางช้าเมื่อไร ทั้งระบบจะค้างตาม
 - **จำกัดขนาด body** (เช่น 1MB) เพื่อกัน memory ระเบิดจาก payload ใหญ่
-- **CORS ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
-- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่ง OTP/อีเมล
-- **Security headers**: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
-  `Strict-Transport-Security` (helmet / `UseHsts()` ทำให้ครบในบรรทัดเดียว)
+- **Cross-Origin Resource Sharing (CORS) ระบุ origin ชัดเจน** — `*` ใช้ได้เฉพาะ API สาธารณะที่ไม่มี cookie
+- **Rate limit** อย่างน้อยที่ endpoint ล็อกอินและที่ที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)/อีเมล
+- **Security headers**: `X-Content-Type-Options: nosniff` · `Content-Security-Policy: frame-ancestors 'none'` (ตัวแทนของ `X-Frame-Options` ที่เป็น header รุ่นเก่า · ใส่ `X-Frame-Options: DENY` คู่ไว้ให้เบราว์เซอร์เก่า) ·
+  `Strict-Transport-Security` (HTTP Strict Transport Security · HSTS)
+  Node: `helmet` ตั้งครบในบรรทัดเดียว · .NET: `UseHsts()` ตั้งแค่ HSTS ที่เหลือต้องเขียน middleware สั้น ๆ หรือใช้แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (ตัวอย่างใน `references/per-stack.md`)
 - **ปิดหน้าโชว์ error เต็ม ๆ ใน production** (`app.UseDeveloperExceptionPage()` เฉพาะ dev)
 - **ตั้งเวอร์ชันไว้ใน path**: `/api/v1/...` ตั้งแต่วันแรก เพราะย้ายทีหลังแพงกว่ามาก
 - **OpenAPI** ที่ generate จากโค้ดจริง ไม่ใช่เขียนมือแล้วลืมอัปเดต
@@ -518,6 +521,7 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 ```bash
 dotnet add package AspNetCore.HealthChecks.NpgSql
 dotnet add package AspNetCore.HealthChecks.Redis
+dotnet add package AspNetCore.HealthChecks.Network   # AddSmtpHealthCheck อยู่ในแพ็กเกจนี้
 ```
 
 ```csharp
@@ -527,7 +531,9 @@ builder.Services.AddHealthChecks()
     .AddRedis(redisCs, name: "redis", timeout: TimeSpan.FromSeconds(3), tags: ["ready", "critical"])
     .AddSmtpHealthCheck(o => { }, name: "mail",
         failureStatus: HealthStatus.Degraded,          // ไม่ critical → degraded ไม่ใช่ down
-        tags: ["ready"]);
+        tags: ["ready"])
+    // ตอนกำลังปิด → Unhealthy → /health/ready ตอบ 503 (ดู "Graceful shutdown" ข้างล่าง)
+    .AddCheck<ShutdownHealthCheck>("shutdown", tags: ["ready", "critical"]);
 ```
 
 ```csharp
@@ -618,30 +624,82 @@ app.UseStatusCodePages();
 
 ### Graceful shutdown
 
-```csharp
-builder.Services.Configure<HostOptions>(o =>
-    o.ShutdownTimeout = TimeSpan.FromSeconds(30));
+ให้ `/health/ready` ตอบ down ก่อนปิดจริงสักพัก เพื่อให้ load balancer ตัดเราออกจาก pool ทัน
+ใช้ `IHostedLifecycleService.StoppingAsync` (.NET 8 ขึ้นไป) เพราะ host เรียกมัน**ก่อน**หยุด Kestrel (หลัง `ApplicationStopping`)
+จึงรอแบบ `await Task.Delay` ได้โดยไม่บล็อกเธรด และ server ยังตอบ 503 ให้ load balancer เห็น
 
-// ให้ /health/ready ตอบ down ก่อนปิดจริงสักพัก
-// เพื่อให้ load balancer ตัดเราออกจาก pool ทันก่อนที่ request จะยังวิ่งเข้ามา
-app.Lifetime.ApplicationStopping.Register(() =>
+```csharp
+// สถานะร่วม: ตัวรอปิดเขียน · health check อ่าน
+public sealed class ReadinessState { public volatile bool IsShuttingDown; }
+
+public sealed class ShutdownHealthCheck(ReadinessState state) : IHealthCheck
 {
-    ReadinessState.IsShuttingDown = true;
-    Thread.Sleep(TimeSpan.FromSeconds(5));
-});
+    public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken ct = default) =>
+        Task.FromResult(state.IsShuttingDown
+            ? HealthCheckResult.Unhealthy("shutting down")
+            : HealthCheckResult.Healthy());
+}
+
+public sealed class DrainOnShutdown(ReadinessState state) : IHostedLifecycleService
+{
+    public async Task StoppingAsync(CancellationToken ct)
+    {
+        state.IsShuttingDown = true;                       // /health/ready → 503 ทันที
+        await Task.Delay(TimeSpan.FromSeconds(5), ct);     // รอ load balancer ตัดออก
+    }
+    public Task StartingAsync(CancellationToken ct) => Task.CompletedTask;
+    public Task StartAsync(CancellationToken ct)    => Task.CompletedTask;
+    public Task StartedAsync(CancellationToken ct)  => Task.CompletedTask;
+    public Task StopAsync(CancellationToken ct)     => Task.CompletedTask;
+    public Task StoppedAsync(CancellationToken ct)  => Task.CompletedTask;
+}
+
+// ก่อน builder.Build()
+builder.Services.AddSingleton<ReadinessState>();
+builder.Services.AddHostedService<DrainOnShutdown>();
+builder.Services.Configure<HostOptions>(o =>
+    o.ShutdownTimeout = TimeSpan.FromSeconds(30));   // รวมเวลารอ 5 วินาทีข้างบน + request ที่ค้าง
 ```
+
+ลำดับตอนปิดของ host (.NET 8+): `ApplicationStopping` → `StoppingAsync` → `StopAsync` ของ hosted service (รวม Kestrel) → `StoppedAsync` → `ApplicationStopped` — ตามหน้า .NET Generic Host ที่ learn.microsoft.com (ตรวจ 22 ต.ค. 2569)
 
 ### สิ่งที่ต้องเปิดก่อน deploy
 
+ลงทะเบียน service ได้**ก่อน** `builder.Build()` เท่านั้น — หลัง Build รายการ service เป็นแบบอ่านอย่างเดียว เรียก `builder.Services.Add…` ตอนนั้นจะได้ `InvalidOperationException` ตอนเริ่มแอป
+
 ```csharp
-app.UseHsts();
-app.UseHttpsRedirection();
+// ---- ก่อน Build: ลงทะเบียน service ----
 builder.Services.Configure<KestrelServerOptions>(o => o.Limits.MaxRequestBodySize = 1_048_576);
-builder.Services.AddRateLimiter(...);          // อย่างน้อยที่ /login และที่ส่ง OTP
+builder.Services.AddRateLimiter(o =>
+{
+    o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // อย่างน้อยที่ /login และที่ส่งรหัสผ่านใช้ครั้งเดียว (One-Time Password · OTP)
+    o.AddFixedWindowLimiter("login", w => { w.PermitLimit = 5; w.Window = TimeSpan.FromMinutes(1); });
+});
 builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
     p.WithOrigins("https://app.example.com")   // ระบุ origin ห้าม AllowAnyOrigin คู่กับ cookie
      .AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+
+var app = builder.Build();
+
+// ---- หลัง Build: ลำดับ middleware ----
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();                             // ตั้งแค่ Strict-Transport-Security · ไม่ใช้ตอน dev เพราะเบราว์เซอร์จำค่าไว้
+app.UseHttpsRedirection();
+app.Use(async (ctx, next) =>                   // header ที่ UseHsts ไม่ได้ตั้งให้
+{
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["Content-Security-Policy"] = "frame-ancestors 'none'";
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";   // สำหรับเบราว์เซอร์เก่า
+    await next();
+});
+app.UseCors();
+app.UseRateLimiter();
+
+app.MapPost("/api/v1/login", Login).RequireRateLimiting("login");
 ```
+
+ไม่อยากเขียน middleware เอง → แพ็กเกจ `NetEscapades.AspNetCore.SecurityHeaders` (`app.UseSecurityHeaders()`) ตั้งชุด header พื้นฐานให้ครบ
 
 ---
 
@@ -690,9 +748,9 @@ this.http.get<ReadyResponse>('/health/ready').subscribe(r => this.status.set(r))
 | health | `AddHealthChecks()` + tag | `createHealthRouter()` | `make_health_router()` |
 | error envelope | `ProblemDetails` (มีในตัว) | `express-problem-json` หรือเขียน middleware | `HTTPException` + custom handler |
 | request id | middleware + `LogContext` | `AsyncLocalStorage` | `ContextVar` + middleware |
-| graceful shutdown | `ApplicationStopping` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
-| security headers | `UseHsts()` | `helmet` | `secure` middleware |
-| OpenAPI | Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
+| graceful shutdown | `IHostedLifecycleService.StoppingAsync` | `server.close()` ใน `SIGTERM` | `lifespan` context ของ FastAPI |
+| security headers | `UseHsts()` (HTTP Strict Transport Security (HSTS) เท่านั้น) + middleware สั้น ๆ หรือ `NetEscapades.AspNetCore.SecurityHeaders` | `helmet` | `secure` middleware |
+| OpenAPI | `Microsoft.AspNetCore.OpenApi` (`AddOpenApi()` + `MapOpenApi()` · มากับ template ตั้งแต่ .NET 9) · ทางเลือก: Swashbuckle / NSwag | `swagger-jsdoc` | มีในตัว `/docs` |
 | rate limit | `AddRateLimiter` | `express-rate-limit` | `slowapi` |
 
 
@@ -787,6 +845,7 @@ catch (SmtpException ex)
 |---|---|---|---|
 | **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
 | **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
+| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
 | **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
 | **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
 | **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
@@ -807,7 +866,7 @@ catch (SmtpException ex)
 | HTTP ภายนอก | 10–30 วินาที |
 | งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
 
-**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
+**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
 
 ```
 ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
@@ -817,7 +876,7 @@ catch (SmtpException ex)
 - **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
 - **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
 - **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
+- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
 
 ---
 
@@ -827,7 +886,7 @@ catch (SmtpException ex)
 
 ```
 ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
 ```
 
 ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
@@ -935,7 +994,7 @@ Use when a live system must be known healthy before users complain (metrics, log
 http_requests_total              จำนวนสะสม
 http_request_duration_seconds    ระยะเวลา
 orders_created_total             เหตุการณ์ทางธุรกิจ
-queue_depth                      ค่า ณ ขณะนั้น
+queue_depth_jobs                 ค่า ณ ขณะนั้น
 ```
 
 | กฎ | เหตุผล |

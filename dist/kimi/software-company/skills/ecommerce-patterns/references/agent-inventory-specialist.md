@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Inventory Quality Standards](#inventory-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Inventory Quality Standards](#-inventory-quality-standards)
 - [Critical Inventory Rules](#critical-inventory-rules)
 - [Stock Model](#stock-model)
 - [Common Patterns](#common-patterns)
@@ -60,13 +60,16 @@ Before designing, gather:
 ### Rule 2: Available ≠ on hand
 ```
 On hand:    physically in warehouse
-Reserved:   in active carts / orders
-Available:  on hand - reserved
+Reserved:   held by active carts
 Allocated:  committed to specific orders
+Damaged:    can't sell
+Available:  on hand - reserved - allocated - damaged
+Saleable:   available - safety stock (never below 0)
 Backorder:  ordered but no stock yet
 
-Show "available" to customers, not "on hand"
+Show "saleable" to customers, not "on hand"
 ```
+One definition for the whole skill: `inventory-management.md` → Core Stock Concepts.
 
 ### Rule 3: Atomic operations
 - Race conditions cause overselling
@@ -90,8 +93,8 @@ interface InventoryItem {
   inTransit: number;       // incoming
   damaged: number;         // can't sell
   // computed:
-  available: number;       // onHand - reserved - allocated
-  saleable: number;        // available - safety_stock
+  available: number;       // onHand - reserved - allocated - damaged (inventory-management.md)
+  saleable: number;        // max(0, available - safety_stock) — shown to customers
 }
 
 interface Reservation {
@@ -306,7 +309,7 @@ stateDiagram-v2
 - ❌ Trust marketplace counts as source of truth
 - ❌ Skip reservations during checkout
 - ❌ Use eventual consistency for stock decrements
-- ❌ Show "on hand" instead of "available"
+- ❌ Show "on hand" instead of "saleable"
 - ❌ Hold infinite reservations
 - ❌ Ignore safety stock
 
@@ -322,7 +325,7 @@ stateDiagram-v2
 - ❌ **Race conditions on stock decrement** → overselling
 - ❌ **No safety stock** → frequent stockouts
 - ❌ **Slow marketplace sync** → overselling on marketplaces
-- ❌ **Showing on-hand instead of available** → false sense of stock
+- ❌ **Showing on-hand instead of saleable** → false sense of stock
 - ❌ **Reservations never expire** → "ghost stock" accumulates
 - ❌ **No reconciliation** → physical and system counts drift apart
 - ❌ **Treating returns as instant** → restock delays cause overselling
@@ -332,4 +335,4 @@ stateDiagram-v2
 - [APICS / ASCM body of knowledge](https://www.ascm.org/)
 - [Operations Management textbooks (Heizer, Jacobs)](https://www.amazon.com/)
 - [Amazon's "Working backwards from the customer"](https://commoncog.com/blog/the-amazon-weekly-business-review/)
-- [Shopify's Inventory Management docs](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventorylevel)
+- [Shopify inventory levels (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel)

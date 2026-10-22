@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Insurance Quality Standards](#insurance-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Insurance Quality Standards](#-insurance-quality-standards)
 - [Critical Insurance Concepts](#critical-insurance-concepts)
 - [Policy Lifecycle](#policy-lifecycle)
 - [Quote Engine Pattern](#quote-engine-pattern)
@@ -146,11 +146,11 @@ async function generateQuote(req: QuoteRequest): Promise<QuoteResponse> {
 ### Rule 1: Money math precision
 ```typescript
 // ALWAYS integer cents/satang, NOT float
-const premium = BigInt(rateInCents);  // 50000n = $500.00
+const premiumSatang = BigInt(rateInSatang);  // 50000n = 500.00 baht
 
-// Or use Decimal library
+// Or use a Decimal library — pass strings, not float literals
 import Decimal from 'decimal.js';
-const premium = new Decimal('500.00').times(0.95);  // discount
+const discounted = new Decimal('500.00').times('0.95');  // 5% discount
 ```
 
 ### Rule 2: Rate book versioning
@@ -213,9 +213,13 @@ async function processEndorsement(policyId: string, changes: PolicyChange[]) {
   const daysRemaining = daysBetween(today(), policy.expirationDate);
   const totalDays = daysBetween(policy.effectiveDate, policy.expirationDate);
 
-  const oldPremium = policy.premium;
-  const newPremium = await calculatePremium(policy, changes);
-  const adjustment = (newPremium - oldPremium) * daysRemaining / totalDays;
+  // Premiums in integer satang; Decimal for the division, round once at the end
+  const oldPremium = new Decimal(policy.premiumSatang);
+  const newPremium = new Decimal(await calculatePremium(policy, changes));
+  const adjustment = newPremium.minus(oldPremium)
+    .times(daysRemaining).div(totalDays)
+    .toDecimalPlaces(0, Decimal.ROUND_HALF_UP)   // whole satang
+    .toNumber();
 
   // Issue endorsement
   await db.endorsements.create({
@@ -258,8 +262,7 @@ async function processRenewals(daysAhead: number = 60) {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `insurance-systems` — for claims integration
-- `insurance-systems` — for regulatory
+- `insurance-systems` — claims integration and regulatory references
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -273,11 +276,11 @@ async function processRenewals(daysAhead: number = 60) {
 
 ## When to Hand Off
 
-- Claims processing → `insurance-engineer`
+- Claims processing → open `agent-claims-processing-specialist.md` (same `insurance-engineer` agent)
 - Underwriting depth → `insurance-analyst`
 - Actuarial modeling → `insurance-analyst`
 - Payment integration → `fintech-engineer`
-- Compliance review → `fintech-compliance-officer`
+- Compliance review → `insurance-compliance-officer`
 
 ## Reference
 

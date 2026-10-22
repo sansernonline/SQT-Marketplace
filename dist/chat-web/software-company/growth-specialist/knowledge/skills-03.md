@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 CRO Quality Standards](#cro-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 CRO Quality Standards](#-cro-quality-standards)
 - [The CRO Process](#the-cro-process)
 - [Funnel Analysis](#funnel-analysis)
 - [Friction Audit (10 Heuristics)](#friction-audit-10-heuristics)
@@ -55,13 +55,13 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 - [Common Tests by Funnel Stage](#common-tests-by-funnel-stage)
 - [Skills You Use](#skills-you-use)
 - [Output: Test Plan](#output-test-plan)
-- [Hypothesis](#hypothesis)
-- [Success Metric](#success-metric)
+- Hypothesis
+- Success Metric
 - [Variants](#variants)
-- [Audience](#audience)
-- [Sample Size](#sample-size)
-- [Decision Criteria](#decision-criteria)
-- [Tracking](#tracking)
+- Audience
+- Sample Size
+- Decision Criteria
+- Tracking
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
@@ -170,7 +170,7 @@ GROUP BY device_type;
 |:-:|-----------|-------------------|
 | 1 | Clear value proposition | Unclear what the site sells |
 | 2 | Call to action (CTA) above the fold | CTA below the fold on mobile |
-| 3 | Page load speed | Largest Contentful Paint (LCP) > 3s |
+| 3 | Page load speed | Largest Contentful Paint (LCP) > 2.5s (Core Web Vitals "good" limit, same as `ecommerce-design` and `checkout-optimization.md`) |
 | 4 | Form length | Too many required fields |
 | 5 | Error handling | Errors at bottom, not next to field |
 | 6 | Trust signals | No reviews or security badges |
@@ -225,6 +225,8 @@ Potential × Importance × Ease
 
 ### Sample size calculation
 ```python
+from math import sqrt
+
 from statsmodels.stats.power import zt_ind_solve_power
 
 # Existing conversion rate
@@ -418,8 +420,8 @@ expected_lift = trace.posterior['diff'].mean()
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 E-commerce Quality Standards](#e-commerce-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 E-commerce Quality Standards](#-e-commerce-quality-standards)
 - [Critical E-commerce Rules](#critical-e-commerce-rules)
 - [Common Patterns](#common-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -717,8 +719,9 @@ async function updateProduct(slug: string, updates: any) {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `ecommerce-patterns` — friction analysis + reduction
-- `ecommerce-patterns` — stock control patterns
+- `ecommerce-patterns` — this skill's references:
+  - `references/checkout-optimization.md` — friction analysis + reduction
+  - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
 - `polished-document-style` (from software-company) — for spec docs
 
 ## Things You Don't Do
@@ -734,7 +737,7 @@ async function updateProduct(slug: string, updates: any) {
 
 - Payment integration → `fintech-engineer`
 - Recommendation engine → `recommendation-engineer`
-- Inventory deep work → `ecommerce-engineer`
+- Inventory deep work → stay in this role; read `references/agent-inventory-specialist.md` and `references/inventory-management.md`
 - Conversion analytics → `growth-specialist`
 - Architecture → `solution-architect` (from software-company)
 
@@ -753,7 +756,7 @@ async function updateProduct(slug: string, updates: any) {
 
 - [Shopify Checkout Best Practices](https://shopify.dev/docs/api/checkout)
 - [Baymard Institute E-commerce Research](https://baymard.com/)
-- [Magento DevDocs](https://devdocs.magento.com/)
+- [Adobe Commerce (Magento) developer docs](https://developer.adobe.com/commerce/docs/)
 - [commercetools docs](https://docs.commercetools.com/)
 
 
@@ -764,8 +767,8 @@ async function updateProduct(slug: string, updates: any) {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Inventory Quality Standards](#inventory-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Inventory Quality Standards](#-inventory-quality-standards)
 - [Critical Inventory Rules](#critical-inventory-rules)
 - [Stock Model](#stock-model)
 - [Common Patterns](#common-patterns)
@@ -821,13 +824,16 @@ Before designing, gather:
 ### Rule 2: Available ≠ on hand
 ```
 On hand:    physically in warehouse
-Reserved:   in active carts / orders
-Available:  on hand - reserved
+Reserved:   held by active carts
 Allocated:  committed to specific orders
+Damaged:    can't sell
+Available:  on hand - reserved - allocated - damaged
+Saleable:   available - safety stock (never below 0)
 Backorder:  ordered but no stock yet
 
-Show "available" to customers, not "on hand"
+Show "saleable" to customers, not "on hand"
 ```
+One definition for the whole skill: `inventory-management.md` → Core Stock Concepts.
 
 ### Rule 3: Atomic operations
 - Race conditions cause overselling
@@ -851,8 +857,8 @@ interface InventoryItem {
   inTransit: number;       // incoming
   damaged: number;         // can't sell
   // computed:
-  available: number;       // onHand - reserved - allocated
-  saleable: number;        // available - safety_stock
+  available: number;       // onHand - reserved - allocated - damaged (inventory-management.md)
+  saleable: number;        // max(0, available - safety_stock) — shown to customers
 }
 
 interface Reservation {
@@ -1067,7 +1073,7 @@ stateDiagram-v2
 - ❌ Trust marketplace counts as source of truth
 - ❌ Skip reservations during checkout
 - ❌ Use eventual consistency for stock decrements
-- ❌ Show "on hand" instead of "available"
+- ❌ Show "on hand" instead of "saleable"
 - ❌ Hold infinite reservations
 - ❌ Ignore safety stock
 
@@ -1083,7 +1089,7 @@ stateDiagram-v2
 - ❌ **Race conditions on stock decrement** → overselling
 - ❌ **No safety stock** → frequent stockouts
 - ❌ **Slow marketplace sync** → overselling on marketplaces
-- ❌ **Showing on-hand instead of available** → false sense of stock
+- ❌ **Showing on-hand instead of saleable** → false sense of stock
 - ❌ **Reservations never expire** → "ghost stock" accumulates
 - ❌ **No reconciliation** → physical and system counts drift apart
 - ❌ **Treating returns as instant** → restock delays cause overselling
@@ -1093,7 +1099,7 @@ stateDiagram-v2
 - [APICS / ASCM body of knowledge](https://www.ascm.org/)
 - [Operations Management textbooks (Heizer, Jacobs)](https://www.amazon.com/)
 - [Amazon's "Working backwards from the customer"](https://commoncog.com/blog/the-amazon-weekly-business-review/)
-- [Shopify's Inventory Management docs](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventorylevel)
+- [Shopify inventory levels (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryLevel)
 
 
 ## reference: agent-recommendation-engineer.md
@@ -1184,6 +1190,7 @@ recs = model.recommend(user_id, interaction_matrix[user_id], N=10)
 
 class TwoTower(nn.Module):
     def __init__(self):
+        super().__init__()  # required before assigning submodules
         self.user_tower = build_mlp([user_features_dim, 128, 64])
         self.item_tower = build_mlp([item_features_dim, 128, 64])
 
@@ -1229,16 +1236,9 @@ ranker.fit(X, y, group=groups)
 
 ## Cold Start Solutions
 
-### New users
-- Popular items in user's geography/demographic
-- Onboarding survey to bootstrap preferences
-- Default to category browsing
-- Implicit feedback from first actions
+Patterns (new users, new items, timeline) → [`recommendation-systems.md` → Cold Start Strategies](recommendation-systems.md#cold-start-strategies). Role-specific extra: a cold-start tower (item features only) for new items.
 
-### New items
-- Content-based (works without interactions)
-- Boost in recommendations for trial period
-- Cold-start tower (item features only)
+> 🔐 Profiling by demographics and personalised marketing email need consent under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`.
 
 ## Serving Architecture
 
@@ -1260,15 +1260,8 @@ flowchart LR
 ```
 
 ### Two-stage architecture
-```
-Stage 1: Candidate generation (fast, broad)
-  - ANN search over 100k+ items
-  - Return ~1000 candidates
 
-Stage 2: Ranking (slow, precise)
-  - Heavier model over 1000 candidates
-  - Re-rank to top 10-100
-```
+Stages and candidate counts → [`recommendation-systems.md` → Pattern: Two-Stage Retrieval](recommendation-systems.md#pattern-two-stage-retrieval).
 
 ## Evaluation
 
@@ -1296,49 +1289,15 @@ Stage 2: Ranking (slow, precise)
 ## Diversity & Serendipity
 
 Tuning only for accuracy gets boring: users see more of the same (a filter bubble) and leave.
-
-```python
-def diversify(candidates, k=10, alpha=0.5):
-    """Maximal Marginal Relevance."""
-    selected = []
-    candidates = sorted(candidates, key=lambda x: -x.score)
-
-    while len(selected) < k and candidates:
-        if not selected:
-            selected.append(candidates.pop(0))
-        else:
-            # Score: relevance - similarity to already selected
-            best_idx = max(
-                range(len(candidates)),
-                key=lambda i: alpha * candidates[i].score
-                            - (1 - alpha) * max_similarity(candidates[i], selected)
-            )
-            selected.append(candidates.pop(best_idx))
-
-    return selected
-```
+Maximal Marginal Relevance (MMR) code → [`recommendation-systems.md` → Diversity Patterns](recommendation-systems.md#diversity-patterns).
 
 ## Business Rules
 
-Recommendations must respect:
-- ✅ Inventory (don't recommend out-of-stock)
-- ✅ Pricing (regional pricing)
-- ✅ Compliance (age-restricted items)
-- ✅ Brand safety (avoid sensitive co-occurrences)
-- ✅ Sponsored vs organic separation
-- ✅ Already purchased (don't re-recommend in same session)
+→ [`recommendation-systems.md` → Business Rules](recommendation-systems.md#business-rules) (one list for the skill).
 
 ## Tools (2026)
 
-> รายชื่อเครื่องมือจากความรู้ของโมเดล ยังไม่ได้ตรวจกับเว็บทางการ (รอยืนยัน) — ตรวจก่อนแนะนำ
-
-| Tool | Use |
-|------|-----|
-| **Pinecone / Qdrant / Vespa** | ANN vector search |
-| **PyTorch / TensorFlow** | Neural models |
-| **LightFM / implicit** | Classical CF |
-| **Recombee / Algolia Recs** | Managed solutions |
-| **Amazon Personalize** | AWS-managed |
+→ [`recommendation-systems.md` → Tools (2026)](recommendation-systems.md#tools-2026).
 
 
 ## reference: checkout-optimization.md
@@ -1375,10 +1334,11 @@ Recommendations must respect:
 
 ## The Numbers (Why It Matters)
 
-- **70% average checkout abandonment** (Baymard 2024)
-- **35% of abandonment** comes from forced account creation
-- **22% of abandonment** comes from unexpected costs shown late
-- **Mobile checkout** converts at about 70% of the desktop rate
+- **70.22% average documented cart abandonment rate** (Baymard Institute, average of 50 studies)
+- **~40%** of shoppers who abandon (not counting "just browsing") leave because extra costs (shipping, tax, fees) were too high
+- **~18%** leave because the site wanted them to create an account
+- Source: baymard.com/lists/cart-abandonment-rate (page updated 22 Sep 2025, read 22 ต.ค. 2569) — re-check before quoting; Baymard updates the list
+- **Mobile** usually converts lower than desktop — measure your own split by device instead of quoting an industry figure
 
 ## The 7 Critical Improvements
 
@@ -1390,17 +1350,18 @@ Recommendations must respect:
 ### 2. ✅ Transparent Pricing
 
 Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
-"Unexpected costs at checkout" cause 22% of abandonment.
+Extra costs that are too high are the top abandonment reason in Baymard's list (~40% of non-browsing abandonments, Baymard, read 22 ต.ค. 2569).
 
 ### 3. ✅ Multiple Payment Methods
 
 | Method | Why |
 |--------|-----|
 | Card (Visa, MC, Amex) | Universal |
-| Apple Pay / Google Pay | 1 tap, critical on mobile |
+| **Thailand: PromptPay QR** (list first for TH) | The Thai one-tap path — scan with any bank app, no card needed |
+| Local methods | THB: SCB EASY, K PLUS (mobile banking deep links) |
+| Apple Pay / Google Pay | 1 tap on mobile where available · Apple Pay for Thai merchants `(รอยืนยัน — no official Thai launch found on 22 ต.ค. 2569; check your gateway)` |
 | PayPal | Trust + saved info |
-| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers |
-| Local methods | THB: PromptPay, SCB EASY, K PLUS |
+| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers (markets where offered) |
 | Bank transfer | Widely used in Thailand |
 
 ### 4. ✅ Address Autocomplete
@@ -1492,12 +1453,14 @@ That's it.
 - Native pickers for date, country
 
 ### Payment
-- Apple Pay / Google Pay prominent
+- Thailand: PromptPay QR first · elsewhere: Apple Pay / Google Pay prominent
 - Card fields with detected card type
 - Auto-fill from saved cards
 - One-tap for returning customers
 
 ## Express Checkout (Critical for Mobile)
+
+> 🇹🇭 For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
 
 ### Apple Pay flow
 
@@ -1593,7 +1556,7 @@ catch (paymentError) {
 - INP (Interaction to Next Paint) < 200ms
 - CLS (Cumulative Layout Shift) < 0.1
 
-### Each second of delay = 7% drop in conversions (Google study)
+### Slower pages lose conversions — measure your own drop per second of delay with real-user data (no reliable universal figure; the often-quoted "7% per second" has no traceable source)
 
 ## Checkout Flow Patterns
 
@@ -1654,7 +1617,7 @@ Funnel by:
 ## Common Pitfalls
 
 - ❌ **Hidden fees revealed late** — main abandonment cause
-- ❌ **Forced login** — 35% leave
+- ❌ **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
 - ❌ **No express checkout on mobile** — slow checkout, fewer sales
 - ❌ **Long forms** — drop-off increases per field
 - ❌ **Wrong keyboard** — slow, error-prone typing
@@ -1717,6 +1680,10 @@ Funnel by:
 Show "saleable" to customers, not raw inventory.
 ```
 
+**Definitions used across this skill** (the role files point here):
+- `available = on_hand − reserved − allocated − damaged`
+- `saleable = max(0, available − safety_stock)` — the number customers see (same as the `inventory_available` view below)
+
 ## Schema Design
 
 ```sql
@@ -1746,7 +1713,7 @@ CREATE TABLE reservations (
     quantity INT NOT NULL CHECK (quantity > 0),
     owner_type TEXT NOT NULL,  -- 'cart' | 'order' | 'transfer'
     owner_id TEXT NOT NULL,
-    expires_at TIMESTAMPTZ NOT NULL,
+    expires_at TIMESTAMPTZ,    -- carts only · NULL for orders (an order's allocation never expires)
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -1774,18 +1741,18 @@ CREATE TABLE inventory_events (
 async function reserve(sku: string, qty: number, owner: string): Promise<string> {
   return await db.transaction(async (tx) => {
     // 1. Lock the row
-    const stock = await tx.query(`
+    const { rows: [stock] } = await tx.query(`
       SELECT on_hand, reserved, allocated, damaged, safety_stock
       FROM inventory
       WHERE sku = $1 AND warehouse_id = $2
       FOR UPDATE
     `, [sku, warehouseId]);
 
-    const available = stock.on_hand - stock.reserved - stock.allocated
-                    - stock.damaged - stock.safety_stock;
+    const saleable = stock.on_hand - stock.reserved - stock.allocated
+                   - stock.damaged - stock.safety_stock;
 
-    if (available < qty) {
-      throw new OutOfStockError({ sku, requested: qty, available });
+    if (saleable < qty) {
+      throw new OutOfStockError({ sku, requested: qty, available: saleable });
     }
 
     // 2. Update reservation count
@@ -1816,35 +1783,46 @@ async function reserve(sku: string, qty: number, owner: string): Promise<string>
 ### Pattern: Release Expired Reservations
 
 ```typescript
-// Background job, every minute
+// Background job, every minute — CART reservations only.
+// Order allocations live in `allocated`, not `reserved`, and never expire (see below).
 async function releaseExpired() {
   const expired = await db.query(`
-    SELECT id, sku, warehouse_id, quantity
+    SELECT id
     FROM reservations
-    WHERE expires_at < NOW()
+    WHERE owner_type = 'cart' AND expires_at < NOW()
     LIMIT 1000
   `);
 
-  for (const res of expired.rows) {
+  for (const { id } of expired.rows) {
     await db.transaction(async (tx) => {
+      // Delete first, re-checking the condition: if checkout converted this
+      // reservation to an order a moment ago, nothing is deleted and we skip it.
+      const { rows: [res] } = await tx.query(`
+        DELETE FROM reservations
+        WHERE id = $1 AND owner_type = 'cart' AND expires_at < NOW()
+        RETURNING sku, warehouse_id, quantity
+      `, [id]);
+      if (!res) return;
+
       // Decrease reserved count
       await tx.query(`
         UPDATE inventory
-        SET reserved = GREATEST(0, reserved - $1)
+        SET reserved = reserved - $1
         WHERE sku = $2 AND warehouse_id = $3
       `, [res.quantity, res.sku, res.warehouse_id]);
-
-      // Delete reservation
-      await tx.query(`DELETE FROM reservations WHERE id = $1`, [res.id]);
 
       // Log
       await tx.query(`
         INSERT INTO inventory_events (sku, warehouse_id, delta, event_type, reference, notes)
         VALUES ($1, $2, 0, 'reservation_expired', $3, 'auto-released')
-      `, [res.sku, res.warehouse_id, res.id]);
+      `, [res.sku, res.warehouse_id, id]);
     });
   }
 }
+
+// Orders that stay unshipped too long are an ALERT for a person, not an auto-release:
+// SELECT owner_id FROM reservations
+// WHERE owner_type = 'order' AND created_at < NOW() - INTERVAL '7 days'
 ```
 
 ### Pattern: Convert Reservation → Allocation (on Order)
@@ -1853,29 +1831,30 @@ async function releaseExpired() {
 async function confirmOrder(orderId: string, items: CartItem[]) {
   return await db.transaction(async (tx) => {
     for (const item of items) {
-      // Find the reservation
-      const res = await tx.query(`
-        SELECT id FROM reservations
+      // Find and lock the reservation — its own quantity and warehouse are the truth
+      const { rows: [res] } = await tx.query(`
+        SELECT id, warehouse_id, quantity FROM reservations
         WHERE sku = $1 AND owner_type = 'cart' AND owner_id = $2
+        FOR UPDATE
       `, [item.sku, item.cartId]);
 
-      if (!res.rows[0]) {
-        throw new Error(`No reservation found for ${item.sku}`);
+      if (!res) {
+        throw new Error(`No reservation found for ${item.sku}`); // expired and released → re-reserve
       }
 
-      // Convert: reserved → allocated
+      // Convert: reserved → allocated, in THIS warehouse only
       await tx.query(`
         UPDATE inventory
         SET reserved = reserved - $1, allocated = allocated + $1
-        WHERE sku = $2
-      `, [item.quantity, item.sku]);
+        WHERE sku = $2 AND warehouse_id = $3
+      `, [res.quantity, item.sku, res.warehouse_id]);
 
-      // Update reservation owner
+      // Update reservation owner — orders have no expiry
       await tx.query(`
         UPDATE reservations
-        SET owner_type = 'order', owner_id = $1, expires_at = NOW() + INTERVAL '7 days'
+        SET owner_type = 'order', owner_id = $1, expires_at = NULL
         WHERE id = $2
-      `, [orderId, res.rows[0].id]);
+      `, [orderId, res.id]);
     }
   });
 }
@@ -2090,7 +2069,8 @@ async def reconcile_warehouse(warehouse_id):
                 'physical': physical,
                 'system': system,
                 'variance': physical - system,
-                'variance_pct': 100 * (physical - system) / system,
+                # system = 0 (stock appeared from nowhere) → no percentage, flag it as new stock
+                'variance_pct': 100 * (physical - system) / system if system else None,
             })
 
     if discrepancies:
@@ -2109,16 +2089,15 @@ async def reconcile_warehouse(warehouse_id):
 - ❌ **No reservation expiry** → ghost stock accumulates
 - ❌ **Trust marketplace counts** → drift over time
 - ❌ **No event log** → can't audit or rebuild stock history
-- ❌ **Show on-hand instead of available** → false promises
+- ❌ **Show on-hand instead of saleable** → false promises
 - ❌ **No safety stock** → stockouts during demand spikes
 - ❌ **Reserve outside DB transaction** → race conditions
 
 ## Reference
 
-- [Implicit (collaborative filtering library)](https://github.com/benfred/implicit)
 - [Prophet (forecasting)](https://facebook.github.io/prophet/)
 - [APICS Operations Management body of knowledge](https://www.ascm.org/)
-- [Shopify Inventory Best Practices](https://shopify.dev/docs/api/admin-rest/2024-01/resources/inventoryitem)
+- [Shopify inventory (GraphQL Admin API — REST Admin API is legacy; new public App Store apps must use GraphQL since Apr 2025, shopify.dev changelog)](https://shopify.dev/docs/api/admin-graphql/latest/objects/InventoryItem)
 
 
 ## reference: recommendation-systems.md
@@ -2210,7 +2189,7 @@ for _, rule in rules.iterrows():
 
 user_emb = user_model(user_features)  # 64-dim vector
 
-# Candidate generation: ANN search
+# Candidate generation: approximate nearest neighbor (ANN) search
 candidates = ann_index.search(user_emb, k=200)
 
 # Ranking: re-rank with deeper model
@@ -2243,12 +2222,13 @@ def trending_score(item_id, half_life_days=7):
 
 ```
 Stage 1: Candidate generation (broad, fast)
-   ↓ 100k items → 200 candidates
+   ↓ 100k+ items → a few hundred to ~1000 candidates
+     (start at ~200; raise it while the ranking stage still fits the latency budget)
    - ANN search
    - Pre-filter (in stock, category match)
 
 Stage 2: Ranking (narrow, precise)
-   ↓ 200 → 10
+   ↓ candidates → 10–100
    - Heavy model
    - Business rules
    - Diversity
@@ -2306,6 +2286,9 @@ Bootstrap with:
 - Onboarding survey (interests)
 - Inferred from context (geography, device, traffic source)
 - Default popular items
+- Default to category browsing · implicit feedback from first actions
+
+> 🔐 Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
 
 ### New items
 ```
@@ -2341,11 +2324,16 @@ def maximal_marginal_relevance(candidates, k=10, lambda_=0.7):
 
 ## Email Recommendations
 
+> 🔐 Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
+
 ```python
 # Offline batch (e.g., nightly)
 # More compute affordable, freshness less critical
 
 async def generate_email_recs(user_id):
+    if not await has_marketing_consent(user_id):  # PDPA: no consent → no email
+        return None
+
     # User context
     profile = await get_user_profile(user_id)
 
@@ -2366,7 +2354,8 @@ Almost always required:
 - ✅ Brand safety (no conflicting brands together)
 - ✅ Filter out items already bought (don't recommend the exact same item)
 - ✅ Sponsored vs organic separation
-- ✅ Local availability
+- ✅ Local availability · regional pricing
+- ✅ Compliance (age-restricted items)
 
 ## A/B Testing Recommendations
 
@@ -2407,8 +2396,11 @@ guardrails = {
 | **Amazon Personalize** | AWS-native |
 | **Recombee** | Mid-market managed |
 | **Vespa** | Self-hosted, scale |
-| **Pinecone + custom** | DIY with vector DB |
-| **PyTorch + serving stack** | Full custom |
+| **Pinecone / Qdrant + custom** | DIY with vector DB (ANN search) |
+| **PyTorch / TensorFlow + serving stack** | Full custom |
+| **LightFM / implicit** | Classical collaborative filtering |
+
+> Tool list from model knowledge, not re-checked against official sites `(รอยืนยัน)` — check before recommending.
 
 ## Reference
 
@@ -2465,8 +2457,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Android Quality Standards](#android-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Android Quality Standards](#-android-quality-standards)
 - [Jetpack Compose Patterns (2026)](#jetpack-compose-patterns-2026)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking (Retrofit + Coroutines)](#networking-retrofit--coroutines)
@@ -2485,7 +2477,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 ## Your Responsibilities
 
 1. **Jetpack Compose** — Modern UI
-2. **Architecture** — MVVM, MVI, Clean Architecture
+2. **Architecture** — Model-View-ViewModel (MVVM), Model-View-Intent (MVI), Clean Architecture
 3. **Networking** — Retrofit, Ktor
 4. **Persistence** — Room, DataStore
 5. **Android Frameworks** — WorkManager, Camera, Maps
@@ -2505,8 +2497,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 - **Frame rate:** 60fps (120fps on high-refresh devices)
 - **App launch:** < 5s cold start
 - **APK/AAB size:** as small as possible
-- **ANR rate:** < 0.05%
-- **Crash rate:** < 0.5%
+- **ANR (App Not Responding) rate:** เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · **Crash rate:** 1.09% (Android vitals, developer.android.com/topic/performance/vitals ตรวจ 22 ต.ค. 2569) — เป้าที่เข้มกว่านี้เป็นเป้าภายในของทีม ไม่ใช่มาตรฐาน
 - **Battery impact:** within Play Store thresholds
 
 ## Jetpack Compose Patterns (2026)
@@ -2597,7 +2588,7 @@ class ProductRepository @Inject constructor(
             dao.insertAll(remote.map { it.toEntity() })
             remote.map { it.toDomain() }
         } catch (e: Exception) {
-            dao.getAll().map { it.toDomain() }  // fallback to cache
+            dao.getAll().map { it.toDomain() }  // fallback to cache (getAll อยู่ใน DAO ด้านล่าง)
         }
     }
 }
@@ -2618,6 +2609,9 @@ data class ProductEntity(
 interface ProductDao {
     @Query("SELECT * FROM ProductEntity")
     fun observeAll(): Flow<List<ProductEntity>>
+
+    @Query("SELECT * FROM ProductEntity")
+    suspend fun getAll(): List<ProductEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(products: List<ProductEntity>)
@@ -2687,6 +2681,7 @@ Card(
 - [ ] AAB (Android App Bundle) signed
 - [ ] Pre-launch report green
 - [ ] Internal testing complete
+- [ ] บัญชีนักพัฒนาส่วนตัวใหม่: ต้องทำ closed test ≥ 12 คน ที่เข้าร่วมต่อเนื่องอย่างน้อย 14 วัน ก่อนขอ production (Play Console Help 14151465, ตรวจ 22 ต.ค. 2569)
 
 ### Play Store Review Tracks
 - Internal (immediate, team only)
@@ -2754,17 +2749,8 @@ Card(
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 ASO Quality Standards](#aso-quality-standards)
-- [App Store vs Play Store Differences](#app-store-vs-play-store-differences)
-- [Keyword Research](#keyword-research)
-- [Visual Optimization](#visual-optimization)
-- [Description Pattern](#description-pattern)
-- [Ratings + Reviews](#ratings--reviews)
-- [A/B Testing](#ab-testing)
-- [Localization](#localization)
-- [Conversion Rate Optimization](#conversion-rate-optimization)
-- [Common Pitfalls](#common-pitfalls)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [เป้าหมายและตัวเลข](#เป้าหมายและตัวเลข)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
@@ -2781,6 +2767,8 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 6. **Conversion Analytics** — How many who see the listing go on to install
 7. **Competitive Analysis** — Track competitors and respond
 
+> ข้อเท็จจริงทั้งหมดของ ASO (ขีดจำกัดตัวอักษรของแต่ละร้าน · การทดสอบ A/B · การขอรีวิว · แปลภาษา · ข้อผิดพลาดที่พบบ่อย) อยู่ใน [app-store-optimization.md](app-store-optimization.md) ที่เดียว — ไฟล์นี้เก็บเฉพาะบทบาท คำถามเริ่มงาน และการส่งต่อ
+
 ## 🔍 Initial Discovery
 
 1. **App category** — affects keyword landscape
@@ -2789,198 +2777,13 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 4. **Competitor positioning**
 5. **Budget for paid** user acquisition (UA), or organic only?
 
-## 📊 ASO Quality Standards
+## เป้าหมายและตัวเลข
 
-- **Conversion rate:** > 25% of people who see the listing install
+- **Conversion rate:** อัตราคนเห็นหน้าร้านแล้วติดตั้ง — ต่างกันมากตามหมวดแอปและร้าน ไม่มีเกณฑ์กลางที่ยืนยันได้ (รอยืนยัน) ให้วัดค่าฐานของแอปเองแล้วตั้งเป้าเทียบกับค่านั้น
 - **Keyword rankings:** track and improve
-- **Rating:** > 4.5/5
+- **Rating:** เป้าภายในของทีม เช่น 4.5/5 ขึ้นไป (ไม่ใช่มาตรฐานของร้าน)
 - **Recent reviews:** new ones keep coming in steadily
 - **Visual A/B testing:** always running
-
-## App Store vs Play Store Differences
-
-| | App Store | Play Store |
-|---|-----------|------------|
-| Title | 30 chars | 30 chars |
-| Subtitle | 30 chars | (uses short description, 80 chars) |
-| Keywords | 100 chars (separated) | Inferred from listing text |
-| Description | 4000 chars | 4000 chars |
-| Screenshots | 10 per device class | 8 per device class |
-| Preview video | Up to 3, 30 sec each | 1, 30 sec |
-| Promotional text | 170 chars | (use short description) |
-| A/B testing | Native (Product Page Optimization) | Native (Store Listing Experiments) |
-
-## Keyword Research
-
-```
-Sources:
-- App Store / Play Store search suggestions
-- Competitor titles + subtitles
-- AppTweak, Sensor Tower, AppFollow
-- Google Keyword Planner (web traffic)
-- ChatGPT for brainstorming
-
-Filter by:
-- Search volume (higher better)
-- Difficulty (lower better)
-- Relevance (must be relevant!)
-- Long-tail opportunities
-```
-
-### Pattern: Branded + Generic
-
-```
-Title: BrandName: Generic Description
-   ↑ branded               ↑ keyword stuffed
-   "Notion: AI Notes & Docs"
-   "TheFork - Restaurant Booking"
-
-Subtitle: Specific use cases
-   "Plan, write, organize anything"
-```
-
-## Visual Optimization
-
-### App Icon
-- Test 3-5 variants
-- Recognizable at small size
-- Distinct from competitors
-- Reflects app function
-
-### Screenshots
-```
-Order matters! First 2 visible without scroll.
-
-Best practice (5-screenshot story):
-1. Hero feature with bold benefit text
-2. Second key feature
-3. Social proof (ratings, awards)
-4. Detail / use case
-5. Call to action
-
-Add text overlays — don't rely on UI alone
-```
-
-### Preview Video (30 sec)
-```
-0-3 sec: Hook (key benefit visible)
-3-10 sec: Show 1-2 features in action
-10-20 sec: Show variety / depth
-20-27 sec: User reaction / call to action
-27-30 sec: Logo + tagline
-
-NO AUDIO assumed (muted by default)
-```
-
-## Description Pattern
-
-```
-[First 252 chars matter most — visible without "more"]
-
-Hook benefit statement
-- Bullet point 1 (key feature)
-- Bullet point 2 (key benefit)
-- Bullet point 3
-
-[Below the fold]
-More detail
-Press quotes
-Awards
-Privacy commitment
-Subscription info (REQUIRED for subscriptions)
-URLs
-```
-
-## Ratings + Reviews
-
-### Rating prompts (Apple way)
-```
-Wait for moments of joy:
-- After successful action
-- After streak / milestone
-- After positive feedback in-app
-
-NEVER prompt:
-- On first launch
-- During errors
-- During onboarding
-- More than 3 times/year (Apple limit)
-```
-
-### Review responses
-- Reply to negative reviews quickly
-- Admit the issue, offer a fix
-- Don't argue
-- Point them to the support channel for details
-
-## A/B Testing
-
-### iOS (Product Page Optimization)
-- Test icon
-- Test first 3 screenshots
-- Test preview video
-- Each test runs 90 days at most
-- The store tells you when a result is statistically significant
-
-### Android (Store Listing Experiments)
-- You can test more elements
-- Tests can target one language or region
-- Tests run 7-90 days
-
-### Common tests
-- Icon style (illustrated vs photo)
-- First screenshot (UI vs benefit-led)
-- Video vs no video
-- Subtitle wording
-- Long description structure
-
-## Localization
-
-```
-Store listings localized = 30-50% install lift
-
-Strategy:
-1. Translate listing for top markets
-2. Localized screenshots (UI in language)
-3. Local keywords (not just translated)
-4. Cultural appropriateness check
-
-Top markets to localize:
-- English (US/UK)
-- Spanish (LatAm/ES)
-- Japanese
-- Korean
-- German
-- French
-- Chinese (Traditional/Simplified)
-- Portuguese (Brazil)
-- Russian (if applicable)
-- Local market (Thai for TH)
-```
-
-## Conversion Rate Optimization
-
-```
-Funnel:
-Impression → Page View → Install → First Open → Active User
-
-ASO focuses on: Impression → Install
-
-Levers:
-- Search ranking (visibility)
-- Listing quality (conversion)
-- Ratings + reviews (trust)
-- Visual appeal (engagement)
-```
-
-## Common Pitfalls
-
-- ❌ Keyword stuffing (store rejects it, and it reads badly)
-- ❌ Misleading screenshots (ratings drop fast)
-- ❌ Ignore negative reviews (more of them pile up)
-- ❌ Same listing for all markets
-- ❌ No A/B testing
-- ❌ Set it and forget it (competitors keep changing)
 
 ## Things You Don't Do
 
@@ -2992,8 +2795,7 @@ Levers:
 
 ## When to Hand Off
 
-- App development → `mobile-engineer`, `mobile-engineer`
-- Cross-platform → `mobile-engineer`
+- App development (iOS · Android · cross-platform) → `mobile-engineer`
 - Brand strategy → product team / marketing
 - Paid UA → growth team
 
@@ -3001,9 +2803,8 @@ Levers:
 
 - [App Store Connect Help](https://developer.apple.com/help/app-store-connect/)
 - [Play Console Help](https://support.google.com/googleplay/android-developer)
-- [App Annie / Data.ai](https://www.data.ai/)
 - [AppTweak](https://www.apptweak.com/)
-- [Sensor Tower](https://sensortower.com/)
+- [Sensor Tower](https://sensortower.com/) (รวม data.ai แล้วตั้งแต่ มี.ค. 2567)
 - [Mobile Action](https://www.mobileaction.co/)
 
 
@@ -3014,8 +2815,8 @@ Levers:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Cross-Platform Quality Standards](#cross-platform-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Cross-Platform Quality Standards](#-cross-platform-quality-standards)
 - [Framework Comparison (2026)](#framework-comparison-2026)
 - [React Native Patterns](#react-native-patterns)
 - [Flutter Patterns](#flutter-patterns)
@@ -3052,7 +2853,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 - **Code sharing:** > 80% across platforms
 - **Native feel:** follows each platform's conventions
-- **Performance:** 60fps for standard interactions
+- **Performance:** 60 frames per second (fps) for standard interactions
 - **Bundle size:** within reasonable limits
 - **Update strategy:** over-the-air (OTA) updates where the store allows
 - **Testing:** unit, integration and end-to-end (E2E)
@@ -3061,9 +2862,9 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 | Framework | Pros | Cons | Best for |
 |-----------|------|------|----------|
-| **React Native** | JS, huge ecosystem | Bridge perf cost | Web team adopting mobile |
+| **React Native** | JavaScript, huge ecosystem | งานหนักบน JavaScript thread · ข้ามไป native ถี่ ๆ มีต้นทุน (ใช้ JavaScript Interface, JSI) | Web team adopting mobile |
 | **Flutter** | Single rendering engine, performance | Dart language adoption | New apps, design-heavy |
-| **Kotlin Multiplatform** | Native UI, share business logic | Tooling immature | Existing Android shop |
+| **Kotlin Multiplatform** | Native UI, share business logic (Compose Multiplatform for iOS เสถียรตั้งแต่ 1.8.0 พ.ค. 2025 — แชร์ UI ได้ด้วย) | ต้องมีความรู้ Kotlin + Xcode ทั้งสองฝั่ง ระบบ library ยังเล็กกว่า RN/Flutter | Existing Android shop |
 | **Expo (RN)** | Easier setup, OTA updates | Some native limits | MVPs, easier teams |
 | **Capacitor** | Web tech, easy bridge | Webview overhead | Web app to mobile |
 
@@ -3099,10 +2900,10 @@ function ProductList() {
 - NativeWind (Tailwind for RN)
 - React Native Reanimated (animations)
 
-### New Architecture (Fabric + TurboModules)
-- 2026: enabled by default
-- Better performance
-- More flexible native modules
+### New Architecture (Fabric + Turbo Modules)
+- React Native 0.82 (ต.ค. 2568) เป็นเวอร์ชันแรกที่ใช้ New Architecture อย่างเดียว — ตั้ง `newArchEnabled=false` จะถูกเมินแล้ว (reactnative.dev/blog/2025/10/08/react-native-0.82 ตรวจ 22 ต.ค. 2569)
+- เวอร์ชันเก่ากว่า 0.82 ต้องเปิดเองหรือดูค่าเริ่มต้นของเวอร์ชันนั้น
+- Native module เขียนแบบ Turbo Module หรือ Expo Modules ไม่ใช่ `NativeModules` แบบเก่า
 
 ## Flutter Patterns
 
@@ -3131,7 +2932,7 @@ class ProductList extends ConsumerWidget {
 - Riverpod (state management)
 - Dio (HTTP)
 - Freezed (data classes)
-- Go Router (navigation)
+- Go Router (navigation — ประกาศเส้นทางในโค้ดด้วย `GoRouter(routes: [...])`)
 - Drift (local DB)
 
 ## Kotlin Multiplatform Patterns
@@ -3157,27 +2958,35 @@ class ProductRepository(
 - Performance-critical code
 - Existing native code
 
-### RN Bridge
+### RN native module (Expo Modules API — ใช้ได้กับ New Architecture)
 ```typescript
-// JS side
-import { NativeModules } from 'react-native';
-const { MyModule } = NativeModules;
+// JS side: modules/my-module/src/index.ts
+import { requireNativeModule } from 'expo';
+const MyModule = requireNativeModule('MyModule');
 
-await MyModule.doSomethingNative(arg);
-
+export function doSomethingNative(arg: string): Promise<string> {
+  return MyModule.doSomethingNative(arg);
+}
+```
+```swift
 // iOS side (Swift)
-@objc(MyModule)
-class MyModule: NSObject {
-  @objc func doSomethingNative(_ arg: String, resolver: RCTPromiseResolveBlock, ...) {
-    // Native code
-    resolver(result)
+import ExpoModulesCore
+
+public class MyModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("MyModule")
+    AsyncFunction("doSomethingNative") { (arg: String) -> String in
+      // Native code
+      return "native: \(arg)"
+    }
   }
 }
 ```
+ถ้าไม่ใช้ Expo ให้เขียน Turbo Module ตามคู่มือ reactnative.dev (Codegen spec ใน TypeScript)
 
 ## Build + Distribution
 
-### CI/CD
+### Continuous Integration and Delivery (CI/CD)
 - Fastlane (iOS + Android automation)
 - EAS Build (Expo's managed builds)
 - Codemagic, Bitrise (third-party CI)
@@ -3191,13 +3000,13 @@ class MyModule: NSObject {
 
 ## Performance Patterns
 
-### Avoid bridge calls in hot paths
+### Avoid frequent JS-to-native calls in hot paths
 - Animations on UI thread (Reanimated)
 - Heavy work in native modules
 - Lazy load screens
 
 ### Image optimization
-- Use FastImage / cached_network_image
+- Use `expo-image` (RN) / cached_network_image (Flutter) — react-native-fast-image ไม่มีคนดูแลแล้ว
 - Appropriate sizes per device
 - WebP / AVIF where supported
 
@@ -3230,7 +3039,6 @@ class MyModule: NSObject {
 - [Flutter Docs](https://flutter.dev/)
 - [Expo Docs](https://docs.expo.dev/)
 - [Kotlin Multiplatform](https://kotlinlang.org/lp/multiplatform/)
-- [Cross-Platform Mobile Benchmark](https://github.com/zedek/CrossPlatformPerfBenchmark)
 
 
 ## reference: agent-ios-engineer.md
@@ -3240,8 +3048,8 @@ class MyModule: NSObject {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 iOS Quality Standards](#ios-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 iOS Quality Standards](#-ios-quality-standards)
 - [SwiftUI Patterns (2026 default)](#swiftui-patterns-2026-default)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking](#networking)
@@ -3259,7 +3067,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 ## Your Responsibilities
 
 1. **SwiftUI / UIKit** — Modern UI development
-2. **Architecture** — MVVM, TCA, Clean Architecture
+2. **Architecture** — Model-View-ViewModel (MVVM), The Composable Architecture (TCA), Clean Architecture
 3. **Networking** — URLSession, async/await
 4. **Persistence** — SwiftData, Core Data, UserDefaults
 5. **iOS Frameworks** — Apple Pay, HealthKit, MapKit, etc.
@@ -3276,7 +3084,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 
 ## 📊 iOS Quality Standards
 
-- **Frame rate:** 60fps (120fps on ProMotion)
+- **Frame rate:** 60 frames per second (fps) (120fps on ProMotion)
 - **App launch:** < 2s cold start
 - **Memory:** within budget per device class
 - **Battery:** impact is measured
@@ -3285,11 +3093,14 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 
 ## SwiftUI Patterns (2026 default)
 
+iOS 17+ ใช้แมโคร `@Observable` คู่กับ `@State` (ค่าเริ่มต้นในปัจจุบัน):
+
 ```swift
 @MainActor
-final class ProductViewModel: ObservableObject {
-    @Published var products: [Product] = []
-    @Published var state: LoadState = .idle
+@Observable
+final class ProductViewModel {
+    var products: [Product] = []
+    var state: LoadState = .idle
 
     func load() async {
         state = .loading
@@ -3303,7 +3114,7 @@ final class ProductViewModel: ObservableObject {
 }
 
 struct ProductView: View {
-    @StateObject var viewModel = ProductViewModel()
+    @State private var viewModel = ProductViewModel()
 
     var body: some View {
         List(viewModel.products) { product in
@@ -3315,12 +3126,14 @@ struct ProductView: View {
 }
 ```
 
+ถ้าต้องรองรับ iOS ต่ำกว่า 17 ให้ใช้แบบเดิม: `final class ProductViewModel: ObservableObject` + `@Published` + `@StateObject` (ดูคู่มือของ Apple "Migrating from the Observable Object protocol to the Observable macro")
+
 ## Architecture Patterns
 
 ### MVVM (most common)
 ```swift
 View → ViewModel → Service → API
-       (@Published)
+       (@Observable · iOS < 17 ใช้ @Published)
        (binding)
 ```
 
@@ -3413,7 +3226,7 @@ let products = try modelContext.fetch(descriptor)
 | AuthenticationServices | Sign in with Apple |
 | WidgetKit | Home screen widgets |
 | App Intents | Siri + Shortcuts |
-| LiveActivities | Lock screen + Dynamic Island |
+| ActivityKit | Live Activities (Lock screen + Dynamic Island) |
 | ARKit | Augmented reality |
 
 ## App Store Submission
@@ -3492,7 +3305,7 @@ let products = try modelContext.fetch(descriptor)
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [ASO Pillars](#aso-pillars)
 - [Keyword Research Process](#keyword-research-process)
 - [App Store (iOS) Specifics](#app-store-ios-specifics)
@@ -3507,7 +3320,7 @@ let products = try modelContext.fetch(descriptor)
 
 # App Store Optimization (ASO)
 
-## When to use this skill
+## ใช้เมื่อ
 
 - New app launch
 - Existing app has stopped growing
@@ -3541,13 +3354,25 @@ ASO covers 3 stages: being found, the page view, and the install.
 7. Prioritize by volume × difficulty × relevance
 ```
 
+### Store limits เทียบกัน App Store vs Play Store (รอยืนยัน — ตรวจกับ App Store Connect Help และ Play Console Help ก่อนใช้ตัวเลข)
+
+| | App Store | Play Store |
+|---|-----------|------------|
+| Title | 30 chars | 30 chars |
+| Subtitle | 30 chars | (uses short description, 80 chars) |
+| Keywords | 100 chars (separated) | Inferred from listing text |
+| Description | 4000 chars | 4000 chars |
+| Screenshots | 10 per device class | 8 per device class |
+| Preview video | Up to 3, 30 sec each | 1 (YouTube link) |
+| Promotional text | 170 chars | (use short description) |
+| A/B testing | Native (Product Page Optimization) | Native (Store Listing Experiments) |
+
 ### Tools (2026)
 
 | Tool | Specialty |
 |------|-----------|
 | AppTweak | ASO suite |
-| Sensor Tower | Market intelligence |
-| App Annie / data.ai | Market data |
+| Sensor Tower (รวม data.ai แล้วตั้งแต่ มี.ค. 2567) | Market intelligence · market data |
 | Mobile Action | Affordable ASO |
 | App Radar | Recommendations engine |
 
@@ -3650,7 +3475,7 @@ Common formula:
 2. "Beautiful organization" + feature
 3. "Loved by 10M+ users" + social proof
 4. "Smart AI assistant" + feature
-5. "Try free for 7 days" + CTA
+5. "Try free for 7 days" + call to action (CTA)
 ```
 
 ### Preview Video (30 sec)
@@ -3704,11 +3529,19 @@ Add text overlays explaining what user sees
 ```
 
 ### iOS native prompt
+`SKStoreReviewController.requestReview(in:)` ถูกประกาศเลิกใช้ตั้งแต่ iOS 18 ใช้ตัวใหม่แทน:
+
 ```swift
 import StoreKit
 
+// SwiftUI (iOS 16+)
+@Environment(\.requestReview) private var requestReview
+// ... เรียกเมื่อถึงจังหวะที่เหมาะ
+requestReview()
+
+// UIKit (iOS 16+ · SKStoreReviewController.requestReview(in:) ตัวเก่าเลิกใช้ตั้งแต่ iOS 18 — Apple docs ตรวจ 22 ต.ค. 2569) — เรียกบน main actor
 if let windowScene = view.window?.windowScene {
-    SKStoreReviewController.requestReview(in: windowScene)
+    AppStore.requestReview(in: windowScene)
 }
 ```
 
@@ -3780,7 +3613,7 @@ Top markets to localize:
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [Pattern Selection](#pattern-selection)
 - [MVVM (Most Common)](#mvvm-most-common)
 - [MVI / Redux Pattern](#mvi--redux-pattern)
@@ -3795,7 +3628,7 @@ Top markets to localize:
 
 # Mobile Architecture Patterns
 
-## When to use this skill
+## ใช้เมื่อ
 
 - Designing new mobile app architecture
 - Refactoring a legacy app
@@ -3809,16 +3642,16 @@ Top markets to localize:
 Team size + experience?
 │
 ├─ Small team, simple app
-│  └─ MVVM (well-understood)
+│  └─ Model-View-ViewModel (MVVM) (well-understood)
 │
 ├─ Larger team, complex state
-│  └─ MVI / Redux / TCA
+│  └─ Model-View-Intent (MVI) / Redux / The Composable Architecture (TCA)
 │
 ├─ Strict architecture needed
 │  └─ Clean Architecture
 │
 └─ Cross-platform shared code
-   └─ KMP business logic, native UI
+   └─ Kotlin Multiplatform (KMP) business logic, native UI
 ```
 
 ## MVVM (Most Common)
@@ -3927,7 +3760,7 @@ class GetActiveProductsUseCase(
 }
 
 // Presentation
-class ViewModel(
+class ProductViewModel(
     private val getActiveProducts: GetActiveProductsUseCase,
 ) : ViewModel() {
     // ...
@@ -3952,12 +3785,30 @@ class ProductViewModel @Inject constructor(
 ) : ViewModel() { ... }
 ```
 
-### iOS: Resolver or manual
+### iOS: ฉีดผ่าน init (ง่ายสุด) หรือ Factory
+Resolver ถูกประกาศเลิกใช้แล้วโดยผู้เขียนเอง ("officially deprecated and replaced by … Factory" — README ของ hmlongco/Resolver ตรวจ 22 ต.ค. 2569)
+
 ```swift
+// แบบง่ายสุด: ฉีดผ่าน init
 @MainActor
 final class ProductViewModel {
-    @Injected private var repository: ProductRepository
-    // ...
+    private let repository: ProductRepository
+    init(repository: ProductRepository) { self.repository = repository }
+}
+```
+
+```swift
+// แบบใช้ Factory — ใช้แทนแบบบน ไม่ใช่ใส่คู่กันในไฟล์เดียว (ชื่อคลาสซ้ำ คอมไพล์ไม่ผ่าน)
+// import FactoryKit ตั้งแต่ Factory 2.5 — รุ่นเก่ากว่าใช้ import Factory
+extension Container {
+    var productRepository: Factory<ProductRepository> {
+        self { ProductRepository() }
+    }
+}
+
+@MainActor
+final class ProductViewModel {
+    @Injected(\.productRepository) private var repository
 }
 ```
 
@@ -3992,13 +3843,24 @@ NavigationStack {
 }
 ```
 
-### Pattern: File-based (Expo Router / Flutter go_router)
+### Pattern: File-based (Expo Router)
 ```
 app/
 ├── index.tsx          → /
 ├── product/
 │   └── [id].tsx       → /product/:id
 └── settings.tsx       → /settings
+```
+
+### Pattern: Declarative in code (Flutter go_router)
+```dart
+final router = GoRouter(routes: [
+  GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+  GoRoute(
+    path: '/product/:id',
+    builder: (context, state) => ProductScreen(id: state.pathParameters['id']!),
+  ),
+]);
 ```
 
 ## State Management
@@ -4116,7 +3978,7 @@ Platform-specific bridges:
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [Critical Performance Metrics](#critical-performance-metrics)
 - [Launch Time Optimization](#launch-time-optimization)
 - [Frame Rate](#frame-rate)
@@ -4129,7 +3991,7 @@ Platform-specific bridges:
 
 # Mobile Performance Patterns
 
-## When to use this skill
+## ใช้เมื่อ
 
 - Profiling a slow app
 - Optimizing launch time
@@ -4143,12 +4005,14 @@ Platform-specific bridges:
 |--------|--------|
 | Cold start | < 2s (iOS), < 5s (Android budget) |
 | Warm start | < 1s |
-| Frame rate | 60fps (or 120fps on hardware that supports it) |
+| Frame rate (เฟรมต่อวินาที, fps) | 60fps (or 120fps on hardware that supports it) |
 | Frame budget | 16.67ms (60fps), 8.33ms (120fps) |
-| App Not Responding (ANR) rate (Android) | < 0.05% |
-| Crash rate | < 0.5% |
+| App Not Responding (ANR) rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
+| Crash rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 1.09% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
 | Memory | within device class budget |
 | Battery | < 5% drain per hour active use |
+
+แหล่ง: Android vitals (developer.android.com/topic/performance/vitals) ตรวจ 22 ต.ค. 2569 — ทั้งภาพรวมและต่อรุ่นเครื่อง (ต่อรุ่น = 8%) ถ้าเกินเกณฑ์ แอปจะถูกลดการมองเห็นบน Google Play
 
 ## Launch Time Optimization
 
@@ -4164,15 +4028,17 @@ Android: Application.onCreate + Activity.onCreate
 
 **Defer heavy work:**
 ```kotlin
-// Bad: blocks launch
-override fun onCreate() {
-    super.onCreate()
+// Bad: blocks launch (Activity.onCreate)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     loadAllData()  // 2 seconds
 }
 
 // Good: load in background, show empty state
-override fun onCreate() {
-    super.onCreate()
+// (Activity.onCreate — Application ไม่มี lifecycleScope;
+//  งานระดับแอปใช้ ProcessLifecycleOwner หรือ App Startup)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     showEmptyState()
     lifecycleScope.launch { loadData() }
 }
@@ -4189,7 +4055,7 @@ Avoid heavy init in:
 **Baseline profiles (Android):**
 ```kotlin
 // Build with baseline profile
-// Reduces JIT compilation
+// Reduces Just-In-Time (JIT) compilation
 // 20-30% launch time improvement
 ```
 
@@ -4203,7 +4069,7 @@ Avoid heavy init in:
 2. Heavy layout / measure
 3. Overdraw
 4. Allocation in hot paths
-5. JS bridge calls (RN)
+5. JavaScript thread ที่งานหนักหรือเรียกข้ามไป native บ่อย (RN)
 
 ### Strategies
 
@@ -4266,17 +4132,17 @@ fun ProductList(products: List<Product>) {
 - Android: LeakCanary, Profiler
 - iOS: Instruments (Allocations, Leaks)
 - Flutter: DevTools memory profiler
-- RN: Flipper
+- React Native (RN): React Native DevTools (แทน Flipper ที่ถูกถอดจาก template ตั้งแต่ 0.74)
 
 ### Image Optimization
 
 ```
 Wrong size = waste:
-- 4K image displayed at 200x200 = 80x memory waste
+- 4K image (3840x2160) displayed at 200x200 = about 200x memory waste (3840*2160 / 200*200 = 207)
 
 Right approach:
 - Request appropriate size from server
-- Use image library (Coil, Glide, FastImage, SDWebImage)
+- Use image library (Coil, Glide, expo-image สำหรับ RN, SDWebImage)
 - Set cache limits
 - Use modern formats (WebP, AVIF)
 ```
@@ -4287,7 +4153,11 @@ Right approach:
 val memoryClass = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).memoryClass
 val cacheSize = memoryClass * 1024 * 1024 / 8  // 1/8 of available
 
-val cache = LruCache<String, Bitmap>(cacheSize)
+// ต้อง override sizeOf ให้นับเป็น byte — ถ้าไม่ override LruCache นับเป็น "จำนวนรูป"
+// แล้วจะเก็บได้เป็นล้านรูปจนหน่วยความจำหมด (หรือใช้แคชในตัวของ Coil/Glide แทน)
+val cache = object : LruCache<String, Bitmap>(cacheSize) {
+    override fun sizeOf(key: String, value: Bitmap): Int = value.byteCount
+}
 ```
 
 ## Battery Optimization
@@ -4356,7 +4226,7 @@ AVIF: even smaller (newer)
 HEIC: iOS native (smaller, less compatible)
 ```
 
-### HTTP/3 + QUIC
+### Hypertext Transfer Protocol version 3 (HTTP/3) + QUIC (transport protocol over UDP, RFC 9000 — a name, not an acronym)
 - Faster on lossy networks
 - Built into modern OS HTTP clients
 - Enable when available

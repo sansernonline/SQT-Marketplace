@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Payment Quality Standards](#payment-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Payment Quality Standards](#-payment-quality-standards)
 - [Gateway Comparison (Asia-Pacific)](#gateway-comparison-asia-pacific)
 - [Critical Payment Patterns](#critical-payment-patterns)
 - [Webhook Best Practices](#webhook-best-practices)
@@ -82,7 +82,7 @@ Before integration, gather:
 ```
 
 Card data goes from the browser straight to the gateway and never touches your server.
-This puts you in PCI SAQ A instead of SAQ D (fully custom form): 12 controls instead of 350.
+This can put you in PCI SAQ A instead of SAQ D (fully custom form); SAQ D is several times larger. SAQ A also has an eligibility rule about scripts on your payment page — see `pci-dss-compliance.md` → SAQ Selection.
 
 ### Pattern 2: Idempotent Charge
 
@@ -94,8 +94,9 @@ async function charge(req: ChargeRequest): Promise<Payment> {
     currency: req.currency,
     payment_method: req.paymentMethodId,
     confirm: true,
-    // KEY:
-    idempotency_key: req.idempotencyKey, // unique per business operation
+  }, {
+    // KEY: a request option (2nd argument) in the Stripe Node library, not a param
+    idempotencyKey: req.idempotencyKey, // unique per business operation, reused on retry
   });
 
   // Store gateway's payment ID in YOUR DB
@@ -112,60 +113,27 @@ async function charge(req: ChargeRequest): Promise<Payment> {
 
 ### Pattern 3: Webhook Handler (Reliable)
 
-```typescript
-app.post('/webhooks/stripe', async (req, res) => {
-  // 1. Verify signature (prevent fakes)
-  const event = stripe.webhooks.constructEvent(
-    req.rawBody,
-    req.headers['stripe-signature'],
-    process.env.STRIPE_WEBHOOK_SECRET
-  );
-
-  // 2. Idempotency: check if processed
-  const existing = await db.webhookEvents.findById(event.id);
-  if (existing) return res.json({ received: true });
-
-  // 3. Persist event FIRST (before processing)
-  await db.webhookEvents.create({
-    id: event.id,
-    type: event.type,
-    rawData: event,
-    status: 'PENDING',
-  });
-
-  // 4. Ack quickly (must be < 5s)
-  res.json({ received: true });
-
-  // 5. Process async (separate worker)
-  await queue.enqueue('process-webhook', { eventId: event.id });
-});
-```
+Order: verify signature on the raw body → store the event (event id = primary key, duplicate insert does nothing) → enqueue → ack. Enqueue before the ack whenever the stored row is still `PENDING` (not only on first insert), so a failed enqueue returns 500 and the gateway's retry enqueues again; a sweeper job re-enqueues rows stuck in `PENDING`; the worker claims each event atomically (`PENDING`/`FAILED` → `PROCESSING`) and handlers stay idempotent. Full code: `payment-gateway-integration.md` → Pattern 3.
 
 ### Pattern 4: Refund Flow
 
+The idempotency key comes from a **stored refund request**, created once per real refund — the same pattern as `payment-gateway-integration.md` → Refund Edge Cases.
+
+- ❌ `refund_${paymentId}_${Date.now()}` → a new key on every retry → timeout + retry = refunded twice
+- ❌ `refund_${paymentId}_${amount}` → two real refunds of the same amount share one key → the 2nd is silently dropped
+
 ```typescript
-async function refund(paymentId: string, amountCents?: bigint): Promise<Refund> {
-  const payment = await db.payments.findById(paymentId);
-  if (payment.status !== 'SUCCEEDED') {
-    throw new Error('Cannot refund: payment not successful');
-  }
+// 1. Record the request once: transaction + row lock + UNIQUE (client_request_id)
+const rr = await requestRefund(paymentId, clientRequestId, amountCents); // returns the existing row on a repeat
 
-  // Default to full refund
-  const refundAmount = amountCents ?? payment.amount;
-
-  if (refundAmount > payment.amount - payment.refundedAmount) {
-    throw new Error('Refund exceeds available');
-  }
-
-  const idempotencyKey = `refund_${paymentId}_${refundAmount}`;
-  const refund = await gateway.refunds.create({
-    payment_intent: payment.gatewayPaymentId,
-    amount: Number(refundAmount),
-    idempotency_key: idempotencyKey,
-  });
-
-  return await db.refunds.create({...});
-}
+// 2. Send it — every retry reuses rr.id, so the key never changes
+const refund = await stripe.refunds.create({
+  payment_intent: payment.gatewayPaymentId,
+  amount: Number(rr.amount),
+  metadata: { refundRequestId: rr.id },
+}, {
+  idempotencyKey: `refund_${rr.id}`, // request option, 2nd argument
+});
 ```
 
 ## Webhook Best Practices
@@ -196,7 +164,7 @@ Daily job:
 |-------|--------|
 | Notification | Auto-alert team |
 | Evidence collection | Gather: receipt, IP, delivery proof, communications |
-| Response submission | Within deadline (usually 7-10 days) |
+| Response submission | Before the deadline — read it from the dispute (`evidence_details.due_by` on Stripe). Stripe says the window is usually 7–21 days depending on the card network (docs.stripe.com/disputes/responding, ตรวจ 22 ต.ค. 2569) |
 | Outcome | Won → funds come back · Lost → write the amount off |
 | Pattern detection | Same pattern repeats → treat it as fraud and act |
 
@@ -216,7 +184,7 @@ Daily job:
 ## When to Hand Off
 
 - PCI compliance documentation → `fintech-compliance-officer`
-- Custom card flow needed → `fintech-engineer`
+- Custom card flow needed → stay in this role; read `references/payment-gateway-integration.md` and `references/pci-dss-compliance.md` first (custom card fields usually mean SAQ A-EP or D)
 - Security review → `security-engineer` (from software-company)
 - High-volume queue design → `solution-architect` (from software-company)
 

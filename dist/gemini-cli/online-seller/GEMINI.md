@@ -1,10 +1,10 @@
 # SQT online-seller — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/online-seller/ โดย scripts/build/build-targets.mjs (v0.6.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/online-seller/ โดย scripts/build/build-targets.mjs (v0.7.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — listings that avoid prohibited claims, fees and pricing, one stock sheet across shops, chat replies, live-selling scripts, couriers and COD, returns and bad reviews, and seller tax basics (40(8), VAT threshold). General information only, not tax or legal advice.
 
-ชุดนี้มี skill 15 ตัว · บทบาท 6 บทบาท · คำสั่งสำเร็จรูป 4 คำสั่ง
+ชุดนี้มี skill 51 ตัว · บทบาท 6 บทบาท · คำสั่งสำเร็จรูป 4 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

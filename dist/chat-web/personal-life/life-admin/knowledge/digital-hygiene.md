@@ -39,7 +39,7 @@ Rule: one manager per family, chosen by whoever will support everyone else.
 | Rank | Account | Why first | Best method |
 |---:|---|---|---|
 | 1 | **Main email** (Gmail, Outlook, iCloud) | Every other password is reset through it | Passkey or authenticator app. Avoid SMS where possible |
-| 2 | **Bank and wallet apps** | Direct access to money | The bank app's own device binding and PIN. Never share an OTP |
+| 2 | **Bank and wallet apps** | Direct access to money | The bank app's own device binding and PIN. Never share a one-time password (OTP) |
 | 3 | **LINE** | Family chats, LINE Pay, and impersonation of you to borrow money | PIN + two-factor authentication + email registered |
 | 4 | **Apple ID / Google account** | Controls the phone, backups and Find My | Passkey + a trusted second device |
 | 5 | **Social media** (Facebook, Instagram, TikTok) | Used to impersonate you and scam your friends | Authenticator app + recovery codes |
@@ -122,7 +122,7 @@ Related: `important-docs` (where the recovery-code envelope is kept), `subscript
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/340403 · https://droidsans.com/block-inter-calling-gang-callcenter/
 
-**Sign of a SIM swap**: the phone suddenly shows "No service" or "SOS only" while others around you have signal, followed by OTP or password-reset emails. Treat it as the first hour of a takeover (see [scams-and-takeover.md](scams-and-takeover.md)).
+**Sign of a SIM swap**: the phone suddenly shows "No service" or "SOS only" while others around you have signal, followed by one-time password (OTP) or password-reset emails. Treat it as the first hour of a takeover (see [scams-and-takeover.md](scams-and-takeover.md)).
 
 
 ## reference: scams-and-takeover.md
@@ -133,16 +133,16 @@ Related: `important-docs` (where the recovery-code envelope is kept), `subscript
 
 | Pattern | What it sounds like | The tell |
 |---|---|---|
-| Call from **+697 / +698**, or +66 over the internet | "This is the police / DSI / Kerry / the Revenue Department / your bank" | Police have warned not to answer these numbers at all. They are calls from abroad shown as if local |
+| Call from **+697 / +698**, or +66 over the internet | "This is the police / Department of Special Investigation (DSI) / Kerry / the Revenue Department / your bank" | Police have warned not to answer these numbers at all. They are calls from abroad shown as if local |
 | แก๊งคอลเซ็นเตอร์: "your parcel contains drugs", "your account is linked to money laundering" | Moves to a LINE video call with a "police officer" in uniform, asks you to transfer money "for checking" | **No Thai authority asks you to move money to check it**, and none works through LINE video |
 | Fake loan / refund / electricity-bill SMS with a link | "Click to receive your refund" | Agencies do not send links by SMS. The link installs an app that takes over the phone |
-| Remote-control app (screen-sharing APK) | "Install this app to update your details" | Installing anything at a caller's request = hang up |
+| Remote-control app (screen-sharing Android app file, APK) | "Install this app to update your details" | Installing anything at a caller's request = hang up |
 | A friend's hacked LINE or Facebook asking to borrow money | "Can you transfer ฿5,000 urgently? I'll return it tonight" | Call the friend on a phone number you already have before sending anything |
 | Investment / job / "like and earn" groups | Small payouts first, then bigger deposits | See `scam-check` in `trading-finance` (if installed) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://thailand.prd.go.th/en/content/category/detail/id/2078/iid/327803 · https://www.thebangkokinsight.com/news/the-bangkok-insight-th/899307/
 
-**Family rule**: if a call asks for money, an OTP, or an app install, hang up, then call back on a number you already know.
+**Family rule**: if a call asks for money, a one-time password (OTP), or an app install, hang up, then call back on a number you already know.
 
 ## The first hour after an account takeover or a scam transfer
 

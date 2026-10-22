@@ -7,7 +7,7 @@
 | ระดับข้อกำหนดที่ลูกค้าเซ็นรับ | `srs-writing` |
 | รูปแบบ markdown และธีมสีของเอกสาร | `polished-document-style` |
 | หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` · `diagram-figures` · `markdown-visuals` |
+| รูปในเอกสาร | `diagram-figures` (ทุกรูปในเอกสารที่ส่ง) · `markdown-visuals` (ภาพร่างหน้าจอ) · `software-diagrams` (Mermaid ร่างคุยในแชตเท่านั้น) |
 | ข้อตกลงของ API ที่ FSD อ้างถึง | `api-conventions` |
 | แบบจำลองข้อมูลที่ FSD อ้างถึง | `database-design` |
 | ห้าสถานะของหน้าจอ และกฎงานออกแบบ | `ui-craft` + skill แพลตฟอร์ม |

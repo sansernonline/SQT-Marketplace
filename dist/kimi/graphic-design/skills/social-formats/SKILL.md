@@ -23,10 +23,10 @@ All pixel sizes and safe zones are in [platform-sizes.md](references/platform-si
 
 | Canvas | Size to design | Used by |
 |---|---|---|
-| 9:16 vertical | 1080 × 1920 (organic) · 1440 × 2560 (Meta ads recommendation) | IG/FB Stories and Reels, TikTok, YouTube Shorts |
+| 9:16 vertical | 1080 × 1920 (organic) · 1440 × 2560 (Meta ads recommendation) | Instagram (IG)/Facebook (FB) Stories and Reels, TikTok, YouTube Shorts |
 | 4:5 portrait feed | 1080 × 1350 (organic) · 1440 × 1800 (Meta ads recommendation) | IG and FB feed |
 | 1:1 square | 1080 × 1080 | FB/IG feed fallback, LINE rich message (1040 × 1040) |
-| Wide | 1200 × 630 (link, 1.91:1) · 1600 × 900 or 1920 × 1080 (16:9) | FB/LinkedIn link preview, X, YouTube |
+| Wide | 1200 × 630 (link, 1.91:1) · 1600 × 900 or 1920 × 1080 (16:9) | FB link preview (1200 × 630), LinkedIn link preview (1200 × 627, same 1.91:1), X, YouTube |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.facebook.com/business/ads-guide/update/image · details per platform in [platform-sizes.md](references/platform-sizes.md)
 

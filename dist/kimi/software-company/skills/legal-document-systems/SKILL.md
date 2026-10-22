@@ -26,7 +26,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 | building legal technology — contract management systems, document automation, e-signature platforms, legal workflow tools, or legal AI applications | [`references/agent-legaltech-engineer.md`](references/agent-legaltech-engineer.md) | `legaltech-engineer` |
 | building contract analysis tools — clause extraction, risk identification, comparison, NLP for legal text, AI-assisted review | [`references/agent-contract-analyzer.md`](references/agent-contract-analyzer.md) | `legaltech-engineer` |
 | building document automation systems — template engines, conditional logic, multi-language documents, version control for templates, integration with intake forms | [`references/agent-document-automation-engineer.md`](references/agent-document-automation-engineer.md) | `legaltech-engineer` |
-| building e-signature platforms, integrating DocuSign/Adobe Sign, designing signing workflows, ensuring legal validity (eIDAS, ESIGN, local laws), or handling authentication for signing | [`references/agent-e-signature-specialist.md`](references/agent-e-signature-specialist.md) | `legaltech-engineer` |
+| building e-signature platforms, integrating DocuSign/Adobe Acrobat Sign, designing signing workflows, ensuring legal validity (eIDAS, ESIGN, local laws), or handling authentication for signing | [`references/agent-e-signature-specialist.md`](references/agent-e-signature-specialist.md) | `legaltech-engineer` |
 | legal-tech regulatory compliance — privacy regimes, records retention and legal hold, e-discovery, bar rules, data residency, cross-border transfers, compliance audit | [`references/agent-legal-compliance-officer.md`](references/agent-legal-compliance-officer.md) | `legal-compliance-officer` |
 
 ## agent ของสายนี้

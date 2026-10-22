@@ -160,7 +160,15 @@ public class SaveData {
     public int version = 1;
     public PlayerSaveData player;
     public List<QuestSaveData> quests;
-    public Dictionary<string, bool> flags;
+    // JsonUtility does NOT serialize Dictionary — the field would vanish from the file
+    // with no error. Use a list of entries (or Newtonsoft JsonConvert, which handles Dictionary).
+    public List<FlagEntry> flags = new();
+}
+
+[Serializable]
+public class FlagEntry {
+    public string key;
+    public bool value;
 }
 
 // 2. Serialize JSON (not binary — easier to debug, mod)
@@ -168,7 +176,14 @@ public class SaveSystem {
     public void Save(string slot) {
         var data = GatherSaveData();
         var json = JsonUtility.ToJson(data);
-        File.WriteAllText(GetPath(slot), json);
+
+        // Write to a temp file first, then swap it in,
+        // so a crash mid-save never leaves a half-written save
+        string path = GetPath(slot);
+        string tmp = path + ".tmp";
+        File.WriteAllText(tmp, json);
+        if (File.Exists(path)) File.Replace(tmp, path, path + ".bak");
+        else File.Move(tmp, path);
     }
 
     public SaveData Load(string slot) {

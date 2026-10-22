@@ -60,7 +60,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 ## 6 · สไลด์ และหัวข้อทุกชนิด
 
-ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตาราง 17 แถวอยู่ใน reference เดียวกัน
+ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตารางก่อน → หลังอยู่ใน reference เดียวกัน
 
 - หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ · ไม่เกิน 2 บรรทัด (ราว 15 คำ) รายละเอียดลงเนื้อหน้า
 - **หัวที่มี 2 ท่อนต้องมีคำเชื่อมที่ตรงกับความสัมพันธ์จริง** ("เพราะ" หรือ "จึง" เมื่อเป็นเหตุผล · "ส่วน" เมื่อแบ่งหน้าที่ · "แต่" เมื่อขัดกัน) · 1 หัว 1 คำเชื่อม ถ้าต้องใช้ 2 แปลว่ายัดเกิน
@@ -89,8 +89,6 @@ Use before writing or editing anything a person reads — answer, email, report,
 # หัวข้อ · สไลด์ · diagram และตัวอย่าง ก่อน → หลัง (ฉบับเต็ม)
 
 อ่านเมื่อเขียนหัวสไลด์ ชื่อรูป ป้ายใน diagram หรืออยากดูตัวอย่างการแก้ · กฎย่ออยู่ใน `SKILL.md` ข้อ 6–7
-
-ไฟล์นี้เหมือนกันทุก plugin ต้นฉบับอยู่ที่ plugin `superuser` แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
 
 ## สไลด์ และหัวข้อทุกชนิด
 
@@ -200,6 +198,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 | "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
 | ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
 | ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
 
 **สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
 เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
@@ -256,17 +255,37 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 ---
 
+## เมื่อทำต่อไม่ได้
+
+ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+
+- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
+- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
+- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+
+```
+❌ ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
+✅ ติดอยู่ 1 เรื่อง:
+   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+   ต้องการ 1 อย่าง:
+   - แนบ Mockup.html มา หรือบอก path ใหม่
+```
+
+---
+
 ## ตัวย่อ
 
 - **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
 - **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
+- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
 
 
 ---
 
 # skill: spell-out-abbreviations
 
-Use when docs, UI text or commits are heavy with abbreviations or jargon, or need a glossary. General writing → human-writing.
+Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
 
 # Spell Out Abbreviations
 
@@ -301,8 +320,8 @@ Use when docs, UI text or commits are heavy with abbreviations or jargon, or nee
 ❌ ใช้ idempotency key กันงานซ้ำ
 ✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
 
-❌ ต้องทำ expand-contract ตอน migrate
-✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
+❌ ต้องดู cash flow ก่อนกู้
+✅ ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
 ```
 
 **คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
@@ -313,26 +332,25 @@ Use when docs, UI text or commits are heavy with abbreviations or jargon, or nee
 | ระดับผู้อ่าน | อธิบายแค่ไหน |
 |---|---|
 | ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
-| ทีมพัฒนาแต่คนละส่วน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| ทีมเดียวกันแต่คนละส่วนงาน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
 | คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
 
 ---
 
 ## ใช้กับอะไรบ้าง
 
-เอกสารทุกชนิด · คอมเมนต์ในโค้ด · ข้อความ commit · ข้อความบนหน้าจอ · คำอธิบายไดอะแกรม ·
+เอกสารทุกชนิด · สไลด์ · ป้ายและข้อความบนหน้าจอ · ข้อความขายของ · คำอธิบายไดอะแกรม · คอมเมนต์ในโค้ด ·
 คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
 
 ## ตัวอย่างที่เจอบ่อย
 
 Model Context Protocol (MCP) · Application Programming Interface (API) ·
-Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
-Software Development Life Cycle (SDLC) · Single Sign-On (SSO) ·
-Continuous Integration / Continuous Deployment (CI/CD) ·
-Software Requirements Specification (SRS) · Key Performance Indicator (KPI) ·
-Personally Identifiable Information (PII) · Proof of Concept (POC) ·
-Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
-Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
+Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
+Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
+Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC)
+
+ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 
 ## Anti-patterns
 

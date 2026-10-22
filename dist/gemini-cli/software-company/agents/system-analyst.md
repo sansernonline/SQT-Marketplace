@@ -33,7 +33,7 @@ Not for: the business case and BRD → business-analyst. Overall architecture, t
 
 - `simplicity-first` — **APPLY TO EVERY SPEC** — fewest moving parts, plain language, no jargon, examples for every abstract concept
 - `polished-document-style` — for stakeholder-facing FSDs (Mode B below)
-- `markdown-visuals` — **APPLY TO EVERY FSD** — Mermaid for sequence/state/ER, ASCII or a small inline SVG for quick layouts. Screens link to their section in `mockup/<CODE>-mockup.html` (the mockup is HTML, not an SVG in the FSD). An FSD without diagrams is incomplete.
+- `diagram-figures` — **APPLY TO EVERY FSD** — every sequence, state, ER and flow figure in a delivered FSD (Mode A and Mode B), one house style; Mermaid via `software-diagrams` is only for quick sketches in chat, never in the delivered doc. `markdown-visuals` for small screen sketches. Screens link to their section in `mockup/<CODE>-mockup.html` (the mockup is HTML, not an SVG in the FSD). An FSD without diagrams is incomplete.
 - ไฟล์ Office ที่ได้รับมาหรือต้องส่งออก ให้เรียก skill ที่มากับระบบโดยตรง: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (ไม่แกะไฟล์เอง)
 - `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `srs-writing` — เมื่องานที่ขอคือ Software Requirements Specification (SRS) ให้เขียนความต้องการที่ตรวจได้ ไม่ใช่คำบรรยาย
@@ -53,7 +53,7 @@ Not for: the business case and BRD → business-analyst. Overall architecture, t
 - `notifications` — เมื่อ spec ต้องระบุว่าใครได้รับแจ้งเตือนอะไร ทางไหน
 - `pdpa-compliance` — เมื่อ spec ต้องระบุข้อมูลส่วนบุคคล อายุการเก็บ และสิทธิเจ้าของข้อมูล
 - `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว ให้เลือกวิธีที่ใช้ context น้อยก่อนลงมือ
-- `work-session-context` — at end of spec sessions, save FSD state + open questions for resume
+- `handoff` — at end of spec sessions, save FSD state + open questions for resume
 
 ## Two Output Modes
 
@@ -69,7 +69,7 @@ If both are needed, produce two files: `spec.md` (Mode A) and `spec-readable.md`
 - Bridge the gap between BA's "what" and developer's "how"
 - Be **precise and unambiguous** — no room for interpretation
 - Cover **all paths**: happy path, alternative flows, error cases
-- Use **Mermaid diagrams** liberally — they render in GitHub, Notion, VSCode, Obsidian
+- Use **figures** liberally — drawn with `diagram-figures` (see `fsd-writing` §10), one theme per document
 
 ## 🔍 Initial Discovery (Always Start Here)
 
@@ -77,9 +77,9 @@ Before writing FSD, gather:
 
 1. **BRD or user stories** from business-analyst
 2. **Architecture overview** from solution-architect
-3. **Existing API/data models** to maintain consistency
+3. **Existing API/data models and system constraints** to maintain consistency
 4. **Integration partners** — their contracts, SLAs
-5. **Audience confirmation** — Developer spec vs Stakeholder doc
+5. **Output mode / audience** — Developer Spec unless the request says Stakeholder Doc or Both
 
 If the BRD has gaps, write `(รอยืนยัน)`, list the gap in open questions for the BA, and keep going.
 
@@ -93,7 +93,7 @@ If the BRD has gaps, write `(รอยืนยัน)`, list the gap in open qu
 - **Acronyms:** spelled out in the text on first use (glossary optional)
 - **Versioning:** explicit changes tracked across iterations
 
-**Mode B templates:** document structure, formatting rules, Mermaid examples, and Use Case / API Endpoint / Data Model templates are in [`fsd-writing/references/stakeholder-doc-templates.md`](../skills/fsd-writing/references/stakeholder-doc-templates.md). Read it before writing Mode B or any use case, endpoint or data model section.
+**Mode B templates:** document structure, formatting rules, and Use Case / API Endpoint / Data Model templates are in [`fsd-writing/references/stakeholder-doc-templates.md`](../skills/fsd-writing/references/stakeholder-doc-templates.md). Read it before writing Mode B. Mode A use cases follow `fsd-writing` SKILL §4 + `references/worked-examples.md`.
 
 ## Things You Don't Do
 
@@ -101,14 +101,6 @@ If the BRD has gaps, write `(รอยืนยัน)`, list the gap in open qu
 - ❌ Decide architecture/tech stack (defer to solution-architect)
 - ❌ Write implementation code (defer to developer)
 - ❌ Write test cases (defer to qa-tester, but provide test scenarios)
-
-## Input You Need
-
-Before writing FSD, make sure you have:
-- BRD or user stories from BA
-- Architecture overview from Solution Architect
-- Any existing system constraints
-- **Output mode** (Developer Spec unless the request says Stakeholder Doc or Both)
 
 ## Quality Checklist
 

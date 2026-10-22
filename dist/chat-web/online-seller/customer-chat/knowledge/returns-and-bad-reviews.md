@@ -10,12 +10,12 @@ A return handled fast costs one order. A return fought badly costs the shop rati
 
 | Platform | Standard window | Notes |
 |---|---|---|
-| Shopee | 15 days from receipt ("คืนสินค้าได้ใน 15 วัน" / 15 Days Free Return on eligible items) | Some categories excluded; the seller agrees or disputes in Seller Centre within the response deadline (รอยืนยัน) |
-| Lazada | 15 days from delivery for most sellers; LazMall may differ | Change-of-mind returns depend on category and programme (รอยืนยัน) |
-| TikTok Shop | 7 days after delivery (ทั่วไป); 15 days with free return for Mall | "No longer needed" return reasons exist on some items (รอยืนยัน) |
+| Shopee | 15 days from receipt ("คืนสินค้าได้ใน 15 วัน" / 15 Days Free Return on eligible items) (รอยืนยัน) | Some categories excluded; the seller agrees or disputes in Seller Centre within the response deadline (รอยืนยัน) |
+| Lazada | 15 days from delivery for most sellers (รอยืนยัน); LazMall may differ | Change-of-mind returns depend on category and programme (รอยืนยัน) |
+| TikTok Shop | 7 days after delivery (ทั่วไป); 15 days with free return for Mall (รอยืนยัน — no official Thai page found; check Seller Center) | "No longer needed" return reasons exist on some items (รอยืนยัน) |
 | LINE / Facebook | Whatever the shop states | State it in the description and the chat auto-reply; consumer law still protects against defective goods |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bigseller.com/blog/articleDetails/tiktok-shop-launches-no-longer-needed-return-policy.2213.htm · Shopee and Lazada help centres — windows and response deadlines (รอยืนยัน) in each Seller Centre
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bigseller.com/blog/articleDetails/tiktok-shop-launches-no-longer-needed-return-policy.2213.htm · the windows above are from one third-party source, not an official page — confirm each window and response deadline in the platform's own Seller Centre help page before relying on it (รอยืนยัน)
 
 ## Workflow — return or refund request
 

@@ -3,18 +3,18 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Hunt Quality Standards](#hunt-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Hunt Quality Standards](#-hunt-quality-standards)
 - [Hunt Methodology (Hunting Loop)](#hunt-methodology-hunting-loop)
 - [Hypothesis Sources](#hypothesis-sources)
 - [Hunt Output: Hypothesis Document](#hunt-output-hypothesis-document)
-- [Hypothesis](#hypothesis)
-- [Reasoning](#reasoning)
-- [Data Sources](#data-sources)
-- [Detection Logic](#detection-logic)
-- [Expected Results](#expected-results)
-- [Results](#results)
-- [Actions](#actions)
+- Hypothesis
+- Reasoning
+- Data Sources
+- Detection Logic
+- Expected Results
+- Results
+- Actions
 - [Common Hunt Types](#common-hunt-types)
 - [TI Integration](#ti-integration)
 - [Skills You Use](#skills-you-use)
@@ -113,12 +113,11 @@ We expect to find evidence of <X> indicating <Y>.
 
 ## Detection Logic
 \`\`\`spl
-index=edr EventCode=4688
-| where ParentImage="powershell.exe"
-| where CommandLine LIKE "%-enc%"
-| where CommandLine has length > 200
+index=sysmon EventCode=1 ParentImage="*\\powershell.exe" CommandLine="*-enc*"
+| where len(CommandLine) > 200
 | stats count by Computer, User
 \`\`\`
+Status: ยังไม่ได้ตรวจ / tested on <date> against <data range>
 
 ## Expected Results
 - True positive look like: ...
@@ -137,42 +136,68 @@ index=edr EventCode=4688
 
 ## Common Hunt Types
 
+> **ยังไม่ได้ตรวจ** — query ด้านล่างยังไม่ได้รันกับ Splunk จริง ชื่อ index/field ขึ้นกับ add-on ที่ติดตั้ง · ไวยากรณ์ wildcard, event ID และ field ดูคำอธิบายใน [`threat-detection-patterns.md`](threat-detection-patterns.md) หัวข้อ Detection Examples
+
 ### Living-off-the-Land (LOLBins)
+Legitimate tools abused, started from Word
+
 ```spl
-# Look for legitimate tools abused
-EventCode=4688 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
-   AND ParentImage="*\\winword.exe"
-| stats by User, Computer
+index=sysmon EventCode=1 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
+    ParentImage="*\\winword.exe"
+| stats count by User, Computer, Image
 ```
 
 ### Credential Theft
+Mimikatz-like command lines (process create) — and, as a separate search, processes opening LSASS (Sysmon process access)
+
 ```spl
-# Mimikatz-like behavior
-EventCode=4688 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
-EventCode=4663 ObjectName="*lsass.exe"
+index=sysmon EventCode=1 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
+| stats count by Computer, User, CommandLine
+```
+
+```spl
+index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
+| stats count by Computer, SourceImage
 ```
 
 ### Persistence
-```spl
-# New scheduled tasks
-EventCode=4698 ServiceFileName=*
+New scheduled tasks (Security 4698 — fields `TaskName`, `TaskContent`), new services (Security 4697 — field `ServiceFileName`; System log 7045 is the same event without audit policy), and registry Run keys (Sysmon 13)
 
-# Registry run keys
-EventCode=13 TargetObject="*\\Run\\*"
+```spl
+index=wineventlog EventCode=4698
+| table _time Computer SubjectUserName TaskName TaskContent
+```
+
+```spl
+index=wineventlog EventCode=4697
+| table _time Computer SubjectUserName ServiceName ServiceFileName
+```
+
+```spl
+index=sysmon EventCode=13 TargetObject="*\\CurrentVersion\\Run*"
+| table _time Computer Image TargetObject Details
 ```
 
 ### Lateral Movement
+Network NTLM logons, then WMI child processes on the same hosts — run both and correlate by `Computer` and time (SPL has no `join with`; avoid `join` on large data, prefer `stats` over a shared field)
+
 ```spl
-# WMI/PsExec
-EventCode=4624 LogonType=3 AuthenticationPackage=NTLM
-   | join with EventCode=4688 Image="*\\wmiprvse.exe"
+index=wineventlog EventCode=4624 Logon_Type=3 Authentication_Package=NTLM
+| stats count min(_time) as first max(_time) as last by Computer, user, src_ip
+```
+
+```spl
+index=sysmon EventCode=1 ParentImage="*\\wmiprvse.exe"
+| stats count min(_time) as first max(_time) as last by Computer, User, Image
 ```
 
 ### Exfiltration
+Large outbound to destinations not in your own `known_destinations.csv` lookup
+
 ```spl
-# Large outbound to rare destinations
-| where bytes_out > 100000000
-| where dest_ip not in known_destinations
+index=netflow bytes_out > 100000000
+    NOT [| inputlookup known_destinations.csv | fields dest_ip]
+| stats sum(bytes_out) as total_out by src_ip, dest_ip
 ```
 
 ## TI Integration
@@ -214,9 +239,9 @@ for ioc in iocs:
 
 ## When to Hand Off
 
-- Active threat found → `security-analyst`
+- Active threat found → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md) (containment needs the user's approval per action)
 - New detection rule → SIEM team via SOC
-- Architecture-level defenses → `security-analyst`
+- Architecture-level defenses → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
 - Threat intel feedback → TI team
 
 ## Common Pitfalls

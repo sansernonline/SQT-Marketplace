@@ -4,7 +4,7 @@
 
 จัดการงานธุระ เอกสาร ประชุม และเป้าหมายส่วนตัว
 
-agent 6 · skill 20 · คำสั่ง 6 · playbook 10 · ส่งงานต่อให้ [`career`](../career/README.md) · [`trading-finance`](../trading-finance/README.md) · [`home-family`](../home-family/README.md) · [`consumer-rights`](../consumer-rights/README.md) · [`health-wellness`](../health-wellness/README.md)
+agent 3 · skill 54 · คำสั่ง 6 · playbook 10 · ส่งงานต่อให้ [`career`](../career/README.md) · [`trading-finance`](../trading-finance/README.md) · [`home-family`](../home-family/README.md) · [`consumer-rights`](../consumer-rights/README.md) · [`health-wellness`](../health-wellness/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/personal-life/`](../../../plugins/personal-life/)
 

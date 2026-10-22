@@ -1,14 +1,14 @@
 # Stakeholder document (Mode B) — style, diagrams, templates
 
-Moved from the system-analyst agent. Read when writing a Mode B document or a use case, API endpoint or data model section.
+Moved from the system-analyst agent. Read when writing a Mode B document. A Mode A use case follows `SKILL.md` §4 and [`worked-examples.md`](worked-examples.md); the templates below are the same content in reviewer-friendly form, never a different format.
 
-This is the "beautiful design" mode. Use Rich Markdown + Mermaid.
+Mode B is **the same FSD** as Mode A — the same 11 sections in the same order as `SKILL.md` §3 — styled for reviewers who sign off: a short summary up front, plain words, more tables, less code. It never adds or drops a section; only the style changes. Diagrams follow `SKILL.md` §10. IDs follow `SKILL.md` §9 (`UC-<module>-<3 digits>`, steps of 10).
 
 ## Document Structure
 
-Every stakeholder doc MUST follow this structure:
+Every stakeholder doc MUST follow the 11 FSD sections (`SKILL.md` §3, full outline in [`assets/fsd-outline.md`](../assets/fsd-outline.md)):
 
-```markdown
+````markdown
 # <Document Title>
 
 > **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
@@ -18,37 +18,37 @@ Every stakeholder doc MUST follow this structure:
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [Scope](#scope)
-3. [Actors & Personas](#actors--personas)
-4. [Use Cases](#use-cases)
-5. [System Flows](#system-flows)
-6. [API Specifications](#api-specifications)
-7. [Data Model](#data-model)
-8. [Business Rules](#business-rules)
-9. [Non-Functional Requirements](#non-functional-requirements)
-10. [Glossary](#glossary)
+1. [Introduction](#1-introduction) — starts with a one-paragraph summary for non-technical readers
+2. [Users & Permissions](#2-users--permissions)
+3. [Process Overview](#3-process-overview)
+4. [Use Cases](#4-use-cases)
+5. [Screen Specifications](#5-screen-specifications)
+6. [State Machines](#6-state-machines)
+7. [Business Rules](#7-business-rules)
+8. [Data & Integrations](#8-data--integrations) — API endpoints and data model go here
+9. [Errors & Edge Cases](#9-errors--edge-cases)
+10. [Traceability](#10-traceability)
+11. [Revision History](#11-revision-history)
 
 ---
 
-## 1. Executive Summary
+## 1. Introduction
 
 > **For non-technical readers** — 1 paragraph explaining what this feature does and why.
 
-<content>
+### Scope
 
----
-
-## 2. Scope
-
-### In Scope
+**In scope**
 - ...
 
-### Out of Scope
+**Out of scope**
 - ...
 
-[... continue all sections ...]
-```
+### Glossary
+- ...
+
+[... continue all 11 sections; skip 5 only if there are no screens and 6 only if nothing has a status ...]
+````
 
 ## Formatting Rules
 
@@ -109,100 +109,21 @@ Align headers to data when helpful:
 
 ---
 
-# Mermaid Diagrams
+# Diagrams
 
-Use Mermaid for ALL diagrams. They render in GitHub/Notion/VSCode.
+Follow `SKILL.md` §10. A Mode B document is delivered to people who sign it, so every figure is a house-style figure made with `diagram-figures` (same theme for every figure in one document, per `doc-theme`). Mermaid through `software-diagrams` is only for a quick sketch in chat, never for the delivered file. Screen sketches use `markdown-visuals`.
 
 ## When to use which diagram
 
-| Diagram | Use for |
-|---------|---------|
-| `flowchart` | Business processes, decision trees |
-| `sequenceDiagram` | Interactions between systems/actors over time |
-| `erDiagram` | Database/data models |
-| `stateDiagram-v2` | Object lifecycle, status transitions |
-| `classDiagram` | Object-oriented design |
-| `gantt` | Timeline/schedule |
-| `journey` | User experience journey |
-| `mindmap` | Concept relationships |
+| Diagram | Use for | FSD section |
+|---------|---------|---|
+| Flowchart | Business processes, decision trees | 3 Process Overview |
+| Sequence diagram | Interactions between systems/actors over time | 4 Use Cases (multi-party) |
+| State diagram | Object lifecycle, status transitions — **next to the table, not instead of it** | 6 State Machines |
+| ER diagram | Tables of this module only | 8 Data & Integrations |
+| Timeline (Gantt) | Schedule, if the document has one | appendix |
 
-## Example: Sequence Diagram
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant FE as Frontend
-    participant API as Backend API
-    participant DB as Database
-
-    User->>FE: Click "Login"
-    FE->>API: POST /auth/login
-    API->>DB: SELECT user WHERE email=?
-    DB-->>API: User row
-    API->>API: Verify bcrypt password
-    alt Valid credentials
-        API-->>FE: 200 { token, user }
-        FE-->>User: Redirect to dashboard
-    else Invalid
-        API-->>FE: 401 { error }
-        FE-->>User: Show error
-    end
-```
-````
-
-## Example: ER Diagram
-
-````markdown
-```mermaid
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-    PRODUCT ||--o{ ORDER_ITEM : "appears in"
-
-    USER {
-        uuid id PK
-        string email UK
-        string name
-        timestamp created_at
-    }
-    ORDER {
-        uuid id PK
-        uuid user_id FK
-        decimal total
-        string status
-    }
-```
-````
-
-## Example: State Diagram
-
-````markdown
-```mermaid
-stateDiagram-v2
-    [*] --> Draft
-    Draft --> Submitted: submit()
-    Submitted --> Approved: approve()
-    Submitted --> Rejected: reject()
-    Rejected --> Draft: revise()
-    Approved --> [*]
-```
-````
-
-## Example: Flowchart
-
-````markdown
-```mermaid
-flowchart TD
-    A[User submits form] --> B{Valid?}
-    B -->|Yes| C[Save to DB]
-    B -->|No| D[Show errors]
-    C --> E[Send confirmation email]
-    E --> F([End])
-    D --> A
-```
-````
+Embed each figure as an image with a numbered caption, for example `![Figure 4-1 Place order — sequence](figures/uc-ord-010-sequence.svg)`.
 
 ---
 
@@ -210,16 +131,18 @@ flowchart TD
 
 ## Use Case Template (Mode B)
 
-```markdown
-### UC-001: <Use Case Name>
+````markdown
+### UC-ORD-010: <Use Case Name>
 
 | Field | Value |
 |-------|-------|
-| **ID** | UC-001 |
+| **ID** | UC-ORD-010 (next use case in this module: UC-ORD-020) |
+| **From (SRS)** | FR-ORD-040 |
 | **Actor** | Customer |
 | **Priority** | High |
 | **Status** | Approved |
 | **Trigger** | User clicks "Place Order" |
+| **Frequency** | ~200 per day `(รอยืนยัน)` |
 
 #### Preconditions
 - User is authenticated
@@ -243,42 +166,28 @@ flowchart TD
 
 #### Alternative Flows
 
-> **A1: Payment declined at step 3**
+> **010-A1: Payment declined at step 3**
 > 3a. Gateway returns decline
 > 3b. System shows error, suggests alternate payment
 > 3c. Returns to step 2
 
 #### Exception Flows
 
-> **E1: Gateway timeout at step 3**
+> **010-E1: Gateway timeout at step 3**
 > 3a. System waits 30s
 > 3b. Logs incident, marks order as `payment_pending`
 > 3c. Sends "We'll retry" email to user
 
 #### Sequence Diagram
 
-\`\`\`mermaid
-sequenceDiagram
-    actor U as Customer
-    participant UI
-    participant API
-    participant Pay as Payment Gateway
-    participant DB
+![Figure 4-1 UC-ORD-010 Place order — Customer, UI, API, Payment Gateway, Database](figures/uc-ord-010-sequence.svg)
 
-    U->>UI: Click "Place Order"
-    UI->>API: POST /orders
-    API->>Pay: Charge
-    Pay-->>API: Auth code
-    API->>DB: INSERT order
-    DB-->>API: Order ID
-    API-->>UI: 201 Created
-    UI-->>U: Confirmation page
-\`\`\`
-```
+> Drawn with `diagram-figures` (house style). Steps: Customer clicks "Place Order" → UI sends POST /orders → API charges the gateway → gateway returns auth code → API inserts the order → UI shows the confirmation page.
+````
 
 ## API Endpoint Template (Mode B)
 
-```markdown
+````markdown
 ### POST `/api/v1/orders`
 
 > Create a new order from cart contents.
@@ -299,7 +208,7 @@ sequenceDiagram
 
 #### Request Body
 
-\`\`\`json
+```json
 {
   "items": [
     { "product_id": "uuid", "quantity": 2 }
@@ -307,11 +216,11 @@ sequenceDiagram
   "shipping_address_id": "uuid",
   "payment_method_id": "uuid"
 }
-\`\`\`
+```
 
 #### Response: 201 Created
 
-\`\`\`json
+```json
 {
   "data": {
     "id": "ORD-12345",
@@ -320,7 +229,7 @@ sequenceDiagram
     "created_at": "2025-01-15T10:30:00Z"
   }
 }
-\`\`\`
+```
 
 #### Error Responses
 
@@ -333,20 +242,18 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 | 409 | Inventory unavailable | `out-of-stock` |
 | 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
 | 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
-```
+````
 
 ## Data Model Template (Mode B)
 
-```markdown
-## Data Model
+````markdown
+## 8. Data & Integrations
 
 ### Entity Relationship Diagram
 
-\`\`\`mermaid
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-\`\`\`
+![Figure 8-1 Order module — USER places ORDER, ORDER contains ORDER_ITEM](figures/order-er.svg)
+
+> Drawn with `diagram-figures` (house style), tables of this module only.
 
 ### Tables
 
@@ -359,6 +266,6 @@ erDiagram
 | `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
 
 > **Security:** `email` is encrypted at rest using AES-256.
-```
+````
 
 ---

@@ -1,0 +1,6 @@
+{
+  "stack": "typescript",
+  "title": "ฟอร์มสมัครสมาชิก Angular: เพิ่มช่องเบอร์มือถือไทย",
+  "test": ["npm", "test"],
+  "testFiles": "(^|/)test/.*\\.test\\.ts$"
+}

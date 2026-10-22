@@ -27,10 +27,11 @@ scripts\build-dist.cmd                                                       # �
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`superuser`** | 3 | 8 | 0 | ต้นฉบับ SuperUser — ใช้เดี่ยวกับงานทั่วไป หรือเป็นแม่แบบให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`software-company`** | 39 | 113 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`superuser`** | 3 | 28 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
+| **`sqt-toolkit`** | 0 | 15 | 0 | skill เอกสาร สไลด์ รูป ประชุม ข้อความสุภาพ ชื่อ — ติดตั้งมาพร้อม plugin สาขาทุกตัว |
+| **`software-company`** | 39 | 81 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
 | **`trading-finance`** | 4 | 19 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
-| **`personal-life`** | 3 | 15 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
+| **`personal-life`** | 3 | 12 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
 | **`thai-workplace`** | 4 | 18 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
 | **`online-seller`** | 3 | 9 | 4 | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE |
 | **`home-family`** | 2 | 8 | 3 | บ้านและครอบครัว: บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง |
@@ -65,7 +66,7 @@ scripts\build-dist.cmd                                                       # �
 /plugin install software-company@sqt-marketplace
 ```
 
-ทุก plugin ใช้ของกลางจาก `superuser` (skill `human-writing` · `answer-shape` · `simplify` · `no-ai-look` · `commit-log` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
+ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · agent `reviewer` · hook) และ `sqt-toolkit` (เอกสาร · สไลด์ · รูป · ประชุม) · ติดตั้ง plugin ไหน Claude Code ติดตั้งทั้งสองให้เองจาก `dependencies` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
 
 ติดตั้งหลาย plugin → รัน `node scripts/install/set-skill-budget.mjs` ครั้งเดียว (ขยายงบรายการ skill เป็น 2%) ไม่งั้นคำอธิบาย skill บางตัวถูกตัดทิ้ง · รายละเอียด [scripts/README.md](scripts/README.md)
 

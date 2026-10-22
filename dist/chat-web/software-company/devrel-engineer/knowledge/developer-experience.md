@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 DevRel Quality Standards](#devrel-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 DevRel Quality Standards](#-devrel-quality-standards)
 - [DevRel Content Hierarchy](#devrel-content-hierarchy)
 - [Content Calendar Template](#content-calendar-template)
 - [Sample Apps Patterns](#sample-apps-patterns)
@@ -201,8 +201,7 @@ Blog post (full)
 
 ## Skills You Use
 
-- `developer-experience` — content patterns
-- `developer-experience` — DX principles
+- `developer-experience` — this skill's references: `references/technical-content.md` (content patterns) · `references/developer-experience.md` (DX principles)
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -215,8 +214,8 @@ Blog post (full)
 
 ## When to Hand Off
 
-- SDK improvements → `devrel-engineer`
-- Docs improvements → `devrel-engineer`
+- SDK improvements → stay in this role; read `references/agent-sdk-builder.md` and `references/sdk-design-patterns.md`
+- Docs improvements → `technical-writer` (from software-company) · docs-site patterns: `references/agent-docs-engineer.md`
 - Product feedback → `product-manager` (from software-company)
 - Marketing co-op → external marketing team
 
@@ -228,8 +227,8 @@ Blog post (full)
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Docs Engineering Quality Standards](#docs-engineering-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Docs Engineering Quality Standards](#-docs-engineering-quality-standards)
 - [Docs Platforms (2026)](#docs-platforms-2026)
 - [API Reference Generation](#api-reference-generation)
 - [Docs-as-Code Pattern](#docs-as-code-pattern)
@@ -353,8 +352,9 @@ Benefits:
 
 ## Code Sample Testing
 
-```typescript
-// Embed samples in MDX
+Embed samples in MDX (the outer fence uses 4 backticks so the inner one survives):
+
+````mdx
 <CodeSample>
 ```typescript
 import { Client } from '@example/sdk';
@@ -368,11 +368,11 @@ const result = await client.users.create({
 console.log(result.id);
 ```
 </CodeSample>
+````
 
-// CI extracts + runs samples
-// Fails if sample broken
-// Forces docs to stay current
-```
+- CI extracts and runs every sample
+- The build fails if a sample is broken
+- So the docs stay current
 
 ## Search Optimization
 
@@ -423,8 +423,7 @@ docs.example.com/zh    (Chinese)
 
 ## Analytics + Iteration
 
-```python
-# Track:
+**Track:**
 - Page views (popular)
 - Time on page (engagement)
 - Exit pages (where do they leave?)
@@ -433,15 +432,14 @@ docs.example.com/zh    (Chinese)
 - Helpful/unhelpful votes
 - Support tickets per page
 
-# Action:
+**Action:**
 - Improve pages with bad metrics
 - Fill content gaps (searches with no results)
 - Reduce duplication (same questions repeatedly)
-```
 
 ## Skills You Use
 
-- `developer-experience` — content patterns
+- `developer-experience` → `references/technical-content.md` — content patterns
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -456,8 +454,8 @@ docs.example.com/zh    (Chinese)
 
 - Content creation → `technical-writer` (from software-company)
 - API spec → `system-analyst` (from software-company)
-- Developer marketing → `devrel-engineer`
-- SDK alignment → `devrel-engineer`
+- Developer marketing → stay in this role; read `references/agent-devrel-engineer.md` and `references/technical-content.md`
+- SDK alignment → stay in this role; read `references/agent-sdk-builder.md`
 
 
 ## reference: agent-dx-engineer.md
@@ -467,8 +465,8 @@ docs.example.com/zh    (Chinese)
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 DX Quality Standards](#dx-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 DX Quality Standards](#-dx-quality-standards)
 - [DX Principles](#dx-principles)
 - [CLI Design Patterns](#cli-design-patterns)
 - [Error Message Anatomy](#error-message-anatomy)
@@ -510,20 +508,10 @@ You are a **Developer Experience (DX) Engineer**. You build developer products. 
 ## DX Principles
 
 ### 1. Optimize for "first 10 minutes"
-- A new developer opens the docs or site
-- They should run working code in < 10 min
-- Every minute saved keeps more users
+A new developer should run working code in < 10 min. Audit path, friction list and fixes → `developer-experience.md` → Time-to-Hello-World Optimization.
 
 ### 2. Errors are UX
-```
-❌ Bad:
-Error: Invalid input
-
-✅ Good:
-Error: Email field must be a valid email address.
-Received: "not-an-email"
-See: https://docs.example.com/errors/EMAIL_INVALID
-```
+Every error says what happened, why, what to do, and where to read more → `developer-experience.md` → Error Message Design.
 
 ### 3. Defaults that work
 - 80% of users should need no configuration
@@ -550,7 +538,7 @@ kubectl get pods -n production
 
 ### Principles
 - **Verb-first commands** — `create user`, not `user create` (reads naturally)
-- **Common commands are short** — `git st` (alias) vs `git status`
+- **Common commands are short** — `gh pr list`, not `gh pull-request list` (user-defined aliases are extras, not the design)
 - **--help everywhere** — every command level has help
 - **Confirm destructive actions** — `--force` skips the prompt
 - **Color and structure** — but respect `NO_COLOR`
@@ -569,82 +557,20 @@ kubectl get pods -n production
 
 ## Error Message Anatomy
 
-```
-✅ Good error structure:
-
-[Error code] What happened?
-   ↓ Why is it a problem?
-   ↓ What can you do about it?
-   ↓ Where to learn more?
-
-Example:
-Error E_AUTH_001: Invalid API key
-   The provided API key was not recognized.
-
-   Possible causes:
-   - Key was rotated (check dashboard)
-   - Key copy missing characters (re-copy)
-   - Using test key in production (or vice versa)
-
-   See: https://docs.example.com/errors/E_AUTH_001
-```
+→ `developer-experience.md` → Error Message Design (anatomy, examples, levels).
 
 ## Sample Code Quality
 
-```typescript
-// ❌ Bad sample
-const result = client.doStuff(thing);
-
-// ✅ Good sample
-import { Client } from '@example/sdk';
-
-const client = new Client({
-  apiKey: process.env.EXAMPLE_API_KEY,  // store in env var
-});
-
-// Create a new project
-const project = await client.projects.create({
-  name: 'My Project',
-  description: 'Optional description',
-});
-
-console.log('Created:', project.id);
-// → "Created: proj_abc123"
-```
-
-Rules:
-- Imports shown
-- Realistic data (not `foo`/`bar`)
-- Comments where non-obvious
-- Sample output shown
-- Copy-pasteable as-is
+→ `developer-experience.md` → Code Sample Standards and Sample App Quality Standards.
 
 ## Local Dev Experience
 
-```bash
-# Best in class:
-git clone example
-cd example
-make dev   # one command, anything works
-
-# Behind the scenes:
-- Sets up dependencies (Docker preferred)
-- Runs with hot reload
-- Shows logs nicely
-- Auto-opens browser to right URL
-```
-
-### Tools
-- Tilt / Telepresence (k8s dev)
-- Docker Compose
-- Dev Containers (.devcontainer)
-- Direnv (env vars)
-- mise / asdf (tool versions)
+→ `developer-experience.md` → Local Dev Setup (one-command setup and tools).
 
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `developer-experience` — DX patterns
+- `developer-experience` → `references/developer-experience.md` — DX patterns
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -657,9 +583,9 @@ make dev   # one command, anything works
 
 ## When to Hand Off
 
-- SDK design → `devrel-engineer`
-- Developer relations → `devrel-engineer`
-- Technical docs → `devrel-engineer`
+- SDK design → stay in this role; read `references/agent-sdk-builder.md` and `references/sdk-design-patterns.md`
+- Developer relations → stay in this role; read `references/agent-devrel-engineer.md`
+- Technical docs → `technical-writer` (from software-company)
 - Architecture review → `solution-architect` (from software-company)
 
 
@@ -670,8 +596,8 @@ make dev   # one command, anything works
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SDK Quality Standards](#sdk-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SDK Quality Standards](#-sdk-quality-standards)
 - [Language Idioms](#language-idioms)
 - [OpenAPI-First Generation](#openapi-first-generation)
 - [Versioning Strategy](#versioning-strategy)
@@ -803,7 +729,7 @@ Published to package manager
 | **Speakeasy** | All major | ✅ Modern, idiomatic |
 | **openapi-generator** | 50+ | 🟡 Free, less polished |
 
-> 💡 **2026: Don't hand-write SDKs.** Use Stainless/Fern/Speakeasy.
+> 💡 **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
 
 ## Versioning Strategy
 
@@ -891,7 +817,7 @@ await client.charges.create(data, {
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `developer-experience` — SDK patterns
+- `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
 - `polished-document-style` (from software-company) — for docs
 
 ## Things You Don't Do
@@ -905,8 +831,8 @@ await client.charges.create(data, {
 ## When to Hand Off
 
 - API design → `system-analyst` (from software-company)
-- Docs → `devrel-engineer`
-- Developer relations → `devrel-engineer`
+- Docs → `technical-writer` (from software-company) · docs-site patterns: `references/agent-docs-engineer.md`
+- Developer relations → stay in this role; read `references/agent-devrel-engineer.md`
 - Performance → `developer` (from software-company)
 
 
@@ -1092,8 +1018,9 @@ make dev   # or `npm run dev` or `docker compose up`
 # Behind the scenes:
 - Install deps
 - Set up DB
-- Start services
-- Open browser
+- Start services (hot reload on)
+- Show logs readably
+- Open browser at the right URL
 
 # Constraint: works on Mac, Linux, Windows (or document)
 ```
@@ -1104,7 +1031,7 @@ make dev   # or `npm run dev` or `docker compose up`
 |------|-----|
 | Docker Compose | Multi-service local |
 | Dev Containers | VSCode integration |
-| Tilt | Kubernetes-aware local |
+| Tilt / Telepresence | Kubernetes-aware local |
 | direnv | Per-project env vars |
 | mise / asdf | Tool version management |
 | nx / turborepo | Monorepo dev experience |
@@ -1147,6 +1074,8 @@ const user = await client.users.create({
 console.log('Created user:', user.id);
 // → "Created user: user_abc123"
 ```
+
+Rules: imports shown · realistic data (not `foo`/`bar`) · comments where non-obvious · sample output shown · copy-pasteable as-is.
 
 ## Onboarding Funnel
 
@@ -1225,10 +1154,8 @@ NPS = % promoters - % detractors
 
 ## Reference
 
-- [DX Conference talks](https://www.developerexperiencecon.com/)
 - [Stripe's DX philosophy](https://stripe.com/blog)
 - [Vercel's DX team](https://vercel.com/blog)
-- [Developer Experience Book (DX Tomorrow)](https://www.devexperience.com/)
 - [Tom Tunguz writing on DX](https://tomtunguz.com/)
 
 
@@ -1523,16 +1450,15 @@ await client.documents.upload({
 ## Webhook Verification SDK
 
 ```typescript
-// Provide helper to verify webhook signatures
-client.webhooks.verify({
-  payload: req.rawBody,
-  signature: req.headers['x-signature'],
-  secret: WEBHOOK_SECRET,
-});
-// Throws on invalid
-
-// Then parse
-const event = client.webhooks.constructEvent(req.body);
+// One helper that verifies AND parses, from the same raw bytes.
+// Verifying rawBody but then building the event from the parsed req.body
+// trusts data that was never checked.
+const event = client.webhooks.constructEvent(
+  req.rawBody,                    // raw bytes, exactly as received
+  req.headers['x-signature'],
+  WEBHOOK_SECRET,
+);
+// Throws on an invalid signature or an old timestamp; returns the typed event
 ```
 
 ## OAuth Helper SDK
@@ -1573,9 +1499,9 @@ const client = new Client({
 
 ## Things You Don't Do
 
-- ❌ Different naming conventions across languages
+- ❌ Naming that breaks the language's own convention (e.g. camelCase methods in Python) — follow each language's idiom (table above)
 - ❌ Use untyped parameters when the language supports types
-- ❌ Hand-write SDKs in 2026 (generate them)
+- ❌ Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
 - ❌ Break v1 users with a v1.x release
 - ❌ Ignore retry edge cases
 - ❌ Force callbacks when async/promises would work
@@ -1584,7 +1510,7 @@ const client = new Client({
 
 - [Stripe SDK Design](https://github.com/stripe/stripe-node)
 - [Anthropic SDK](https://github.com/anthropics/anthropic-sdk-typescript)
-- [Stainless (SDK generator)](https://www.stainlessapi.com/)
+- [Stainless (SDK generator)](https://www.stainless.com/)
 - [Fern (SDK generator)](https://buildwithfern.com/)
 - [Speakeasy (SDK generator)](https://www.speakeasy.com/)
 
@@ -1599,15 +1525,15 @@ const client = new Client({
 - [Audience Mental Model](#audience-mental-model)
 - [Content Types](#content-types)
 - [Tutorial Structure](#tutorial-structure)
-- [What you'll build](#what-youll-build)
-- [What you'll learn](#what-youll-learn)
-- [Prerequisites](#prerequisites)
-- [Step 1: Setup (2 min)](#step-1-setup-2-min)
-- [Step 2: First feature (5 min)](#step-2-first-feature-5-min)
-- [Step 3: Add complexity (5 min)](#step-3-add-complexity-5-min)
-- [Step 4: Deploy (3 min)](#step-4-deploy-3-min)
-- [What's next?](#whats-next)
-- [Get the code](#get-the-code)
+- What you'll build
+- What you'll learn
+- Prerequisites
+- Step 1: Setup (2 min)
+- Step 2: First feature (5 min)
+- Step 3: Add complexity (5 min)
+- Step 4: Deploy (3 min)
+- What's next?
+- Get the code
 - [Writing Tone](#writing-tone)
 - [Code in Content](#code-in-content)
 - [Conference Talk Anatomy](#conference-talk-anatomy)
@@ -1677,7 +1603,7 @@ Developers read content with:
 - Concept C
 
 ## Prerequisites
-- Node.js 18+
+- Node.js 22+ (a supported long-term support (LTS) release — check nodejs.org/en/about/previous-releases; Node 18 reached end of life on 30 Apr 2025)
 - Free account at example.com
 
 ## Step 1: Setup (2 min)
@@ -1851,7 +1777,7 @@ const response = await fetch(url, {
 
 ```
 Target keywords:
-- Long-tail: "How to X with Y" (often >$10 ARPU intent)
+- Long-tail: "How to X with Y" (specific, high intent: the reader is about to build it)
 - Problem-driven: "X error fix" (high intent)
 - Tutorial: "Build X in N minutes"
 
@@ -1894,8 +1820,7 @@ Structure:
 
 ## Reference
 
-- [Writing for Engineers (Heinemeier Hansson)](https://world.hey.com/dhh)
-- [Stripe Increment Magazine](https://increment.com/)
+- [Increment (Stripe's magazine, archive: published Apr 2017 – Nov 2021, increment.com/about)](https://increment.com/)
 - [Julia Evans (zines + blog)](https://jvns.ca/)
 - [Stack Overflow Blog](https://stackoverflow.blog/)
 - [Hacker News Discussion](https://news.ycombinator.com/)

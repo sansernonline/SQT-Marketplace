@@ -51,7 +51,7 @@ const IGNORE = opt('ignore', 'node_modules,dist,.git').split(',');
     ระบบดีไซน์อื่นมี token คนละชุด ให้ส่งของตัวเองมาทาง --require
       --require --bg,--surface,--ink,--signal,--r-card */
 const DEFAULT_REQUIRED = [
-  '--brand', '--brand-2', '--grad-accent', '--grad-page',
+  '--brand', '--brand-2', '--brand-50', '--brand-100',
   '--bg', '--surface', '--line', '--line-strong', '--shadow', '--radius',
   '--text', '--text-body', '--text-muted', '--text-faint',
   '--sidebar-w', '--topbar-h', '--content-max',

@@ -73,6 +73,7 @@ Think **like an adversarial user** — what could go wrong? Use **equivalence pa
 ## พิสูจน์ว่าแผนจับบั๊กได้ (เมื่อทีมมีโค้ดเอง)
 
 - ขอ developer ฝังบั๊ก 2–3 ตัวในกฎสำคัญ (เงิน · การจอง · สถานะ) เปิดด้วย env `BUG_MODE=1` · ค่าเริ่มต้น `0` · ห้ามเปิดนอกเครื่องทดสอบ
+- **ฝังเฉพาะใน worktree หรือ branch ชั่วคราวที่ไม่ merge** (เก็บไว้ใต้ `_to_delete/`) ไม่ฝังในโค้ดจริงของโปรเจกต์ · ก่อนส่ง diff เข้ารีวิวต้องตรวจว่าไม่มี `BUG_MODE` อยู่ใน diff (เช่น `git diff | grep BUG_MODE` ต้องว่าง) · รันเสร็จลบ worktree หรือ branch นั้น
 - developer จดว่าฝังอะไรไว้ใน `_to_delete/seeded-bugs.md` · QA ไม่เปิดดูจนรันเสร็จ
 - รันชุดเดิม 2 รอบ: `BUG_MODE=0` ต้องผ่านตามเกณฑ์ · `BUG_MODE=1` → รายงาน `จับได้ X / Y`
 - ตัวที่หลุด → บอกว่าขาดเทคนิคไหนหรือ oracle อะไร แล้วเพิ่ม TC และแถวในหัวข้อ 8 Plan Quality ของแผน
@@ -92,7 +93,7 @@ Think **like an adversarial user** — what could go wrong? Use **equivalence pa
 
 | When | Skill |
 |---|---|
-| Designing tests | `test-case-template` · `testing-standards` (share per layer, what to automate) · `e2e-testing-patterns` (selectors, seed data, flaky tests) · `fsd-writing` (use cases and edge cases → test cases) · `simplicity-first` (**every test plan**: critical paths first, clear pass/fail) · stack skill of the code under test (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` — its "test" section: runner, one-test command, traps worth a case) |
+| Designing tests | `test-case-template` · `testing-standards` (share per layer, what to automate) · `e2e-testing-patterns` (selectors, seed data, flaky tests) · `fsd-writing` (use cases and edge cases → test cases) · `simplify` (**every test plan**: critical paths first, clear pass/fail) · stack skill of the code under test (`stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql` — its "test" section: runner, one-test command, traps worth a case) |
 | Specific areas | `api-conventions` (API matches project rules, not just works) · `data-import-export` (bad rows, edge values, Excel traps) · `error-handling-patterns` (failure and retry cases) · `readable-code` (is the code or test readable) |
 | Running the app | `app-verifier-setup` (no verify skill yet → build launch, drive, feature map) · `app-verifier-upkeep` (verify steps drifted → re-drive every feature, fix only what is proven) · `docker-sandbox` (verify skill and Playwright in the project container; screenshots to `_to_delete/`) |
 | Running test cases | `test-evidence` (**every test run**: step screenshots → captioned GIF per case · report `qa/reports/<run-id>-test-report.md` · Result · Test result · Evidence columns in the Excel, also in a workbook the user sends) |
@@ -100,7 +101,7 @@ Think **like an adversarial user** — what could go wrong? Use **equivalence pa
 | Bugs | `bug-report-template` (severity and priority definitions live there) · `bug-inbox-triage` (reports from email, chat, issues → reproduce with the verify skill first) · `markdown-visuals` (**test plans and bug reports**: coverage heat-map table, defect lifecycle `stateDiagram-v2`, annotated SVG screenshot with the broken element marked) |
 
 - Documents for people outside the team: `polished-document-style` (when writing test plans for stakeholders/release sign-off) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
-- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at the end of a test design or test run session, save state and open bugs so work can resume
+- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at the end of a test design or test run session, save state and open bugs so work can resume
 
 ## Standard Outputs
 

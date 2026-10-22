@@ -32,21 +32,7 @@
 
 ## Deployment Flow
 
-\`\`\`mermaid
-flowchart TD
-    A[Tag release vX.Y.Z] --> B[Run final CI]
-    B --> C{All green?}
-    C -->|No| D[Abort + Investigate]
-    C -->|Yes| E[Deploy to canary 5%]
-    E --> F{Healthy after 10min?}
-    F -->|No| G[Rollback]
-    F -->|Yes| H[Deploy to 50%]
-    H --> I{Healthy?}
-    I -->|No| G
-    I -->|Yes| J[Deploy to 100%]
-    J --> K[Smoke tests]
-    K --> L([Done])
-\`\`\`
+_[รูปขั้นตอน deploy: Tag release → CI สุดท้าย → ผ่านทั้งหมด? (ไม่ผ่าน = หยุดและตรวจ) → canary 5% → ปกติหลัง 10 นาที? (ไม่ = rollback) → 50% → ปกติ? (ไม่ = rollback) → 100% → smoke test → เสร็จ. วาดด้วย skill `diagram-figures`]_
 
 ## Deployment Steps
 

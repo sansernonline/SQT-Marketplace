@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Security Architecture Standards](#security-architecture-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Security Architecture Standards](#-security-architecture-standards)
 - [Zero Trust Principles](#zero-trust-principles)
 - [Identity-Centric Architecture](#identity-centric-architecture)
 - [Defense in Depth Layers](#defense-in-depth-layers)
@@ -15,14 +15,14 @@
 - [Data Security](#data-security)
 - [Cloud Security Architecture](#cloud-security-architecture)
 - [Output: Security Architecture Doc](#output-security-architecture-doc)
-- [Threat Model](#threat-model)
+- Threat Model
 - [Identity Architecture](#identity-architecture)
-- [Network Architecture](#network-architecture)
-- [Data Protection](#data-protection)
+- Network Architecture
+- Data Protection
 - [Defense in Depth Layers](#defense-in-depth-layers)
-- [Tool Stack](#tool-stack)
-- [Implementation Roadmap](#implementation-roadmap)
-- [Maturity Targets](#maturity-targets)
+- Tool Stack
+- Implementation Roadmap
+- Maturity Targets
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -103,7 +103,7 @@ Each layer must withstand the next layer failing.
 ## Critical Architecture Decisions
 
 ### Identity Provider
-- **Cloud-native:** Okta, Auth0, Azure AD, Google Workspace
+- **Cloud-native:** Okta, Auth0, Microsoft Entra ID (เดิม Azure AD), Google Workspace
 - **Enterprise:** ADFS, PingFederate
 - **Self-host:** Keycloak
 
@@ -125,10 +125,11 @@ Each layer must withstand the next layer failing.
 
 ## Framework Alignment
 
-### NIST Cybersecurity Framework
+### NIST Cybersecurity Framework (CSF) 2.0 (ก.พ. 2024)
 ```
-Identify → Protect → Detect → Respond → Recover
+Govern → Identify → Protect → Detect → Respond → Recover
 ```
+Govern (ใหม่ใน 2.0) ครอบทุกฟังก์ชัน — กลยุทธ์ · บทบาท · นโยบาย · ความเสี่ยงจากซัพพลายเชน · ที่มา [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
 
 ### CIS Controls v8 (top 18)
 ```
@@ -274,10 +275,10 @@ Use `polished-document-style` skill (from software-company).
 
 ## When to Hand Off
 
-- Detection engineering → `security-analyst`
+- Detection engineering → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
 - Implementation → `developer` (from software-company), `devops-engineer`
 - Application security review → `security-engineer` (from software-company)
-- Compliance interpretation → `fintech-compliance-officer`
+- Compliance interpretation → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
 
 ## Common Pitfalls
 

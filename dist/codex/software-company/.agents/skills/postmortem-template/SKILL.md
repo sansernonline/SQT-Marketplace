@@ -9,7 +9,7 @@ description: Use when writing a post-incident review or blameless postmortem of 
 
 ## When to use this skill
 
-- After any production incident: required for SEV1-SEV3, a short writeup for SEV4
+- After any production incident: a full postmortem for SEV1 / SEV2, repeated SEV3, security, customer-facing or data-integrity incidents (see "When to Skip Postmortem"); a short writeup for any other SEV3 and for SEV4
 - After a near-miss that could have been a major incident
 - After significant bugs that reached production
 - After a security incident
@@ -63,7 +63,7 @@ description: Use when writing a post-incident review or blameless postmortem of 
 - **Revenue impact:** $XXX (if known)
 - **Data loss:** None | Minor | Significant
 - **SLA breached:** Yes | No
-- **Regulatory implications:** None | <describe>
+- **Regulatory implications:** None | <describe> — ข้อมูลส่วนบุคคลรั่ว → `pdpa-compliance` ข้อ 8 (แจ้งสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคลภายใน 72 ชั่วโมง เมื่อเข้าเงื่อนไข)
 
 ## 3. Timeline
 

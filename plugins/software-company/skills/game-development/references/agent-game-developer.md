@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Game Quality Standards](#game-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Game Quality Standards](#-game-quality-standards)
 - [Engine Choice (2026)](#engine-choice-2026)
 - [Critical Game Programming Patterns](#critical-game-programming-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -102,13 +102,13 @@ class Enemy : MonoBehaviour {
 ### Pattern 3: ECS (for performance)
 
 ```rust
-// Bevy ECS example
+// Bevy ECS example (Bevy 0.15+: delta_seconds() was renamed delta_secs())
 fn movement_system(
     mut query: Query<(&mut Transform, &Velocity)>,
     time: Res<Time>,
 ) {
     for (mut transform, velocity) in query.iter_mut() {
-        transform.translation += velocity.0 * time.delta_seconds();
+        transform.translation += velocity.0 * time.delta_secs();
     }
 }
 ```
@@ -262,7 +262,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 - Initial load time is critical
 - Less memory available
 - File size matters
-- No threading (until SharedArrayBuffer is universal)
+- Threads (Web Workers sharing memory through SharedArrayBuffer) work in all major browsers only when the page is cross-origin isolated: serve `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` (COOP/COEP)
 - Save via IndexedDB
 
 ### VR (Quest/Vive/Index)
@@ -288,7 +288,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## When to Hand Off
 
-- Multiplayer netcode → `game-developer`
+- Multiplayer netcode → stay in this agent, open [`agent-multiplayer-engineer.md`](agent-multiplayer-engineer.md)
 - Game design / balance → `game-designer`
 - Monetization + retention → `game-designer`
 - Backend services → `solution-architect` (from software-company)

@@ -1,13 +1,13 @@
 ---
 name: "seo-audit"
-description: "Run an SEO audit with the seo-specialist agent — technical, on-page, content, off-page."
+description: "Run a search engine optimization (SEO) audit with the seo-specialist agent — technical, on-page, content, off-page."
 ---
 
-Use the `seo-specialist` agent to perform an SEO audit on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
+Use the `seo-specialist` agent to perform a search engine optimization (SEO) audit on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 The SEO specialist should:
 
-1. **Gather context** by asking the user:
+1. **Gather context** by asking the user once, all at the start (unknown → `(รอยืนยัน)`, keep going):
    - What's the primary business goal? (lead gen, e-commerce, content, brand)
    - Target market / language / region?
    - Main competitors?
@@ -25,6 +25,6 @@ The SEO specialist should:
 
 4. **Suggest next steps**:
    - Which findings should go to `developer` (code/markup changes)
-   - Which to `technical-writer` / `ux-designer` (content/IA)
+   - Which to `technical-writer` / `ux-designer` (content / information architecture (IA))
    - Which to `devops-engineer` (performance/infra)
    - Which need ongoing monitoring

@@ -8,12 +8,12 @@ Numbers marked (รอยืนยัน) came from secondary sources or were no
 
 | Placement | Ratio | Size | Notes |
 |---|---|---|---|
-| Feed image ad (FB/IG) | 4:5 | 1440 × 1800 recommended · min width 600 | JPG/PNG, max 30 MB |
+| Feed image ad (Facebook (FB)/Instagram (IG)) | 4:5 | 1440 × 1800 recommended · min width 600 | JPG/PNG, max 30 MB |
 | Stories / Reels image ad | 9:16 | 1440 × 2560 recommended · min width 500 | Safe zone: top 14%, bottom 35%, sides 6% |
 | Organic IG feed | 4:5 · 1:1 · 1.91:1 | 1080 × 1350 · 1080 × 1080 · 1080 × 566 | IG accepts 1.91:1 to 3:4; profile grid previews at 3:4 (รอยืนยัน) |
 | Organic IG story / reel | 9:16 | 1080 × 1920 | Same safe zone as ads |
-| FB page cover | — | Upload 851 × 315; min 400 × 150 | sRGB JPG under 100 KB loads fastest; desktop and mobile crop differently — centre the text (display sizes 820 × 312 desktop, 640 × 360 mobile (รอยืนยัน)) |
-| FB link preview | 1.91:1 | 1200 × 630 | Same for LinkedIn link posts |
+| FB page cover | — | Upload 851 × 315; min 400 × 150 | standard RGB (sRGB) JPG under 100 KB loads fastest; desktop and mobile crop differently — centre the text (display sizes 820 × 312 desktop, 640 × 360 mobile (รอยืนยัน)) |
+| FB link preview | 1.91:1 | 1200 × 630 | LinkedIn link posts use 1200 × 627 (1200 × 630 also works at 1.91:1), see section 6 |
 | Primary text / headline (ads) | — | 50–150 characters; headline about 27 characters | Stories primary text 125 characters |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.facebook.com/business/ads-guide/update/image · https://www.facebook.com/business/ads-guide/update/image/instagram-story · https://www.facebook.com/help/125379114252045
@@ -81,7 +81,7 @@ Rich menu text: each tap area is about 1/3 of the phone width on screen. Make th
 
 ## 7 · Export settings that work everywhere
 
-- Colour: sRGB; never CMYK for screens
+- Colour: sRGB; never Cyan Magenta Yellow Key (CMYK) for screens
 - Photos: JPG quality 80–90; graphics with flat colour and text: PNG
-- Video: H.264 MP4, 30 fps (or 25), AAC audio, captions burned in for sound-off viewing
+- Video: H.264 MP4, 30 frames per second (fps) (or 25), AAC audio, captions burned in for sound-off viewing
 - Name with platform and format codes (`asset-organize`)

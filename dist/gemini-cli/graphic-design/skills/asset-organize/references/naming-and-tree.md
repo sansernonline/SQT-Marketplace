@@ -64,4 +64,16 @@ macOS / Linux:
 tail -n +2 rename-log.csv | while IFS=, read -r old new _; do old=${old//\"/}; new=${new//\"/}; mkdir -p "$(dirname "$new")"; mv -n "$old" "$new"; done
 ```
 
+Dry run on a copy of the folder first (`-WhatIf` / `echo`), and keep the reverse ready (swap old_path and new_path):
+
+```powershell
+Import-Csv rename-log.csv | ForEach-Object { Move-Item -LiteralPath $_.old_path -Destination $_.new_path -WhatIf }   # dry run
+Import-Csv rename-log.csv | ForEach-Object { Move-Item -LiteralPath $_.new_path -Destination $_.old_path }          # reverse
+```
+
+```bash
+tail -n +2 rename-log.csv | while IFS=, read -r old new _; do old=${old//\"/}; new=${new//\"/}; echo mv -n "$old" "$new"; done   # dry run
+tail -n +2 rename-log.csv | while IFS=, read -r old new _; do old=${old//\"/}; new=${new//\"/}; mkdir -p "$(dirname "$old")"; mv -n "$new" "$old"; done   # reverse
+```
+
 Count files before and after (`(Get-ChildItem -Recurse -File).Count` or `find . -type f | wc -l`); the numbers must match.

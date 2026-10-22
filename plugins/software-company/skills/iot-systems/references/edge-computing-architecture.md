@@ -77,7 +77,7 @@
 |---------|----------|
 | **Bare RTOS** | Tiny MCUs |
 | **Zephyr** | Modern embedded |
-| **NerveOS** | Elixir embedded |
+| **Nerves** (nerves-project.org) | Elixir embedded |
 
 ## Edge ML Patterns
 
@@ -247,7 +247,7 @@ interface LocalStore {
 ```
 Each edge device/gateway:
 - Logs → ship to cloud (buffered)
-- Metrics → push to TSDB
+- Metrics → push to a time-series database (TSDB)
 - Traces → sample + ship
 - Health → frequent heartbeat
 
@@ -271,13 +271,8 @@ Tools:
 ```
 
 ### Safe rollout
+Stages and wait times: use the one table in `device-fleet-management.md` → Staged Rollout (1% canary → 10% → 50% → 100%).
 ```
-Stage 1: 1% of fleet (canary)
-Wait 24h, check metrics
-Stage 2: 10%
-Wait 24h
-Stage 3: 100%
-
 Auto-rollback if:
 - Crash rate > X%
 - Connectivity drops > Y%

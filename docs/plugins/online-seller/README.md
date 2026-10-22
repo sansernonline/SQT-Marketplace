@@ -4,7 +4,7 @@
 
 ตั้งราคา ลงสินค้า ตอบแชต และคุมสต็อกหลายร้านให้ไม่พลาด
 
-agent 6 · skill 14 · คำสั่ง 4 · playbook 8 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`software-company`](../software-company/README.md)
+agent 3 · skill 51 · คำสั่ง 4 · playbook 8 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`software-company`](../software-company/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/online-seller/`](../../../plugins/online-seller/)
 

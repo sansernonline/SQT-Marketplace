@@ -1,5 +1,5 @@
 """
-brandkit_stage.py — เด็ค "Stage" (ต้นแบบ: X Fitness Chatbot Summary v1.2)
+brandkit_stage.py — เด็ค "Stage" (ต้นแบบด้านโครงเด็คเท่านั้น: X Fitness Chatbot Summary v1.2 · สีมาจากโปรเจกต์เอง)
 16:9 · สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์ · หัวเรื่อง Chakra Petch · เนื้อความ IBM Plex Sans Thai
 Stage คือโครงหน้าและตัวอักษร ไม่ใช่สีพื้น — พื้นเข้มหรือสว่างตามที่โปรเจกต์ออกแบบไว้
 
@@ -7,9 +7,9 @@ Stage คือโครงหน้าและตัวอักษร ไม�
 
     from brandkit_stage import StageDeck
 
-    d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")
+    d = StageDeck(accent="2A78D6", bg="09090A", project="Sample Chatbot")
     #             ^สีหลักของโปรเจกต์  ^สีพื้นของโปรเจกต์ (สว่างหรือเข้มก็ได้)
-    d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+    d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
             meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
     d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
              "fig-flow.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")

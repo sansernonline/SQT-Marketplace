@@ -17,7 +17,7 @@ The Revenue Department already sees most online sales: banks and e-wallets repor
 4. **Run the 0.5% minimum-tax check** (below) — it often decides the bill for low-margin shops
 5. **File half-year** ภ.ง.ด.94 for January–June sales (by 30 September; e-filing usually extends — รอยืนยัน the year's date)
 6. **File full-year** ภ.ง.ด.90 by 31 March of the following year (e-filing usually extends ~8 days — รอยืนยัน), crediting tax paid with ภ.ง.ด.94
-7. **Watch the VAT line** monthly — when sales for the year pass ฿1.8 million, register for VAT within 30 days (below)
+7. **Watch the value added tax (VAT) line** monthly — when sales for the year pass ฿1.8 million, register for VAT within 30 days (below)
 8. **Keep records** (list below) for at least 5 years (รอยืนยัน the retention period that applies)
 
 ## Thresholds and key figures
@@ -57,7 +57,7 @@ Gross sales ฿1,200,000 (all channels). Actual costs with receipts ฿900,000. 
 | 0.5% minimum check (0.5% × 1,200,000) | 6,000 | 6,000 → higher than 4,500 and over ฿5,000 |
 | **Tax payable** | **19,500** | **6,000** |
 
-Actual expenses win, but only with receipts — and the 0.5% minimum lifts the bill from ฿4,500 to ฿6,000. Sales are under ฿1.8 million, so no VAT registration yet; at this growth rate, check monthly.
+Actual expenses win, but only with receipts — and the 0.5% minimum lifts the bill from ฿4,500 to ฿6,000. Sales are under ฿1.8 million, so no VAT registration yet; as sales grow, check monthly.
 
 ## Who reports your sales to the Revenue Department
 

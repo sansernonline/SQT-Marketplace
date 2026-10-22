@@ -5,17 +5,20 @@ argument-hint: <sprint number or period>
 disable-model-invocation: true
 ---
 
-> **ทางลัดเข้า SuperUser:** เปิด skill `superuser` ด้วย playbook `learn-from-session` แล้วคัดขั้นตอนของ playbook ลง todo ก่อน ส่วนขั้นตอนด้านล่างคือรูปแบบงานและ output ของคำสั่งนี้ ให้ใช้ประกอบ playbook ไม่ใช่แทนที่
+> retro นี้เป็นของ**ทีมคน** — ผลคือเอกสาร retro และ action items เท่านั้น **ไม่แก้ skill · agent · playbook** · ถ้าอยากให้บทเรียนเข้า skill ของทีม agent ผู้ใช้ต้องสั่ง "รวมบทเรียน" แยกเอง (playbook `learn-from-session` ของ `superuser`)
 
 Use the `project-manager` agent to facilitate a retrospective for: **$ARGUMENTS**
 
 The PM should run this structured retro:
 
 ## 1. Set the Stage
-Ask the user once, at the start, all of the following (sprint facts and the retro input in step 2); do not stop to ask again:
+Ask the user once, at the start, all of the following (sprint facts and the retro input in step 2); do not stop to ask again. Anything the user doesn't know → write `(รอยืนยัน)` and keep going:
 - What was the sprint goal?
 - Was it achieved? (yes/partial/no)
 - Any major events during sprint?
+- What went well — what should we keep doing?
+- What didn't go well — what should we stop doing?
+- Any ideas to try next sprint, or puzzles we don't understand yet?
 
 ## 2. Gather Data (Start/Stop/Continue + Mad/Sad/Glad)
 

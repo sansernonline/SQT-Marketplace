@@ -1,5 +1,20 @@
 # Changelog — software-company
 
+## 2.20.0 — 2026-10-22
+
+- `skills/superuser/SKILL.md` เหลือเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) ขึ้นต้นด้วย "เปิด `superuser:superuser` ก่อน" — แกนของหัวหน้าทีมอ่านจาก plugin `superuser` 3.0.0 ที่เดียว ไม่คัดลอกบล็อกกลางอีก (50 KB → ราว 12 KB)
+- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "sqt-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
+- `playbook-review.md` และ `playbook-unattended-run.md` รับบล็อกกลางจาก `superuser` เหมือนสาขาอื่น (ออกจาก `OPT_OUT`) · ส่วนของงานโค้ด (diff · `BUILD-PLAN.md` · commit ทีละชิ้น · worktree · sandbox) อยู่หัวไฟล์และขั้น 1
+
+## 2.19.0 — 2026-10-21
+
+- `html-slide-deck` · `pptx-to-html-deck` ย้ายไปเป็นของกลางใน plugin `superuser` · ใช้ได้เหมือนเดิมทาง `dependencies`
+
+## 2.18.0 — 2026-10-21
+
+- skill ทั่วไป 29 ตัว (หลักการ · ตรวจงาน · แบ่งงาน · เอกสาร · รูป · สไลด์) ย้ายไปเป็นของกลางใน plugin `superuser` · ได้กลับมาทาง `dependencies` เหมือนเดิม
+- ส่วนเฉพาะงานโค้ดของ skill เหล่านั้นอยู่ที่ `superuser` → `references/code-extensions.md` · `work-session-context` → `handoff`
+
 ## 2.17.0 — 2026-10-21
 
 - ใช้ของกลางจาก plugin `superuser` ทาง `dependencies` (skill `human-writing` · `answer-shape` · `simplify` · `no-ai-look` · `commit-log` · `agent-patterns` · agent `reviewer` · `brainstormer` · `learning-reviewer` · hook) · สำเนาในนี้ย้ายออกแล้ว · zip สำหรับ claude.ai ยังมีของกลางในตัว

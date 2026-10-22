@@ -12,7 +12,7 @@ Not for: negotiating the raise number or an offer → `salary-negotiation`.
 ## Workflow
 
 1. **Keep a brag document** all year — 5 minutes every Friday (template below).
-2. **2 weeks before the review** — pull the year's entries, group them by the company's review criteria or your KPIs.
+2. **2 weeks before the review** — pull the year's entries, group them by the company's review criteria or your key performance indicators (KPIs).
 3. **Frame each item as impact** (formula below). Pick the top 3–5.
 4. **Fill the self-assessment** — the company form or the template in [references/templates.md](references/templates.md).
 5. **Rate yourself honestly** — 1 level above where your manager will likely land is fine; 2 levels is not credible.
@@ -35,7 +35,7 @@ Also save: thank-you messages, customer compliments, certificates, screenshots o
 |---|---|
 | Ran 24 training sessions | Cut new-hire time-to-productive from 8 to 5 weeks by running 24 onboarding sessions |
 | ทำรายงานยอดขายทุกเดือน | ทำให้ผู้บริหารตัดสินใจเรื่องสต็อกได้เร็วขึ้น 1 สัปดาห์ ด้วยรายงานยอดขายรายเดือนแบบอัตโนมัติ |
-| Handled customer complaints | Brought complaint resolution time from 5 days to 2 and kept 3 key accounts worth 4.2 MB a year |
+| Handled customer complaints | Brought complaint resolution time from 5 days to 2 and kept 3 key accounts worth 4.2 million baht a year |
 
 Impact categories that land with Thai management: money (revenue, cost, ลดต้นทุน) · time · risk / compliance (audit, PDPA, safety) · customers · people (trained, retained).
 
@@ -43,7 +43,7 @@ Impact categories that land with Thai management: money (revenue, cost, ลด�
 
 - Use numbers and dates; avoid adjectives ("excellent", "ดีมาก").
 - Acknowledge one real miss and what you changed — it makes the wins believable.
-- Link to company goals by name (the OKR, KPI or strategic theme).
+- Link to company goals by name (the objectives and key results (OKR), KPI or strategic theme).
 - Credit the team where it was a team result, then say your part ("I led …", "I built …").
 - Keep it to one page or what the form allows.
 

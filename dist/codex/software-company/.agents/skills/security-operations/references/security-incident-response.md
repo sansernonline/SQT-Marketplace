@@ -89,6 +89,8 @@ Decision: declare incident OR continue investigation
 
 ## Phase 3: Containment
 
+> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบในเฟส Containment · Eradication · Recovery (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · ลบมัลแวร์ · rebuild · ปิดบริการ) agent **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รอให้ผู้ใช้อนุมัติขั้นนั้นก่อนรัน** — อนุมัติขั้นหนึ่งไม่ได้แปลว่าอนุมัติขั้นถัดไป · ทุกขั้นที่รันแล้วให้บันทึกลง timeline ของเหตุ (เวลา UTC · ใครอนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย
+
 ### Two phases
 
 **Short-term (minutes-hours):**
@@ -119,6 +121,8 @@ Decision: declare incident OR continue investigation
 - Investigation needs
 
 ## Phase 4: Eradication
+
+> ทุกขั้นในเฟสนี้เปลี่ยนระบบ — ใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** ที่หัวข้อ Phase 3 (เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → รออนุมัติ → บันทึกลง timeline)
 
 ### Goals
 - Remove adversary access
@@ -264,7 +268,7 @@ Public: per disclosure obligations
 | GDPR | 72h | Personal data breach |
 | HIPAA | 60d | PHI breach |
 | State (US) | Varies | Per state law |
-| PDPA Thailand | Without delay | Personal data breach |
+| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562) | 72 h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) นับแต่ทราบเหตุ (ม.37(4)) · แจ้งเจ้าของข้อมูลโดยไม่ชักช้าเมื่อมีความเสี่ยงสูง · รายละเอียด → `pdpa-compliance` §8 | Personal data breach (ยกเว้นไม่มีความเสี่ยงต่อสิทธิและเสรีภาพ) |
 | SEC (US public) | 4 business days | Material cyber incident |
 | PCI-DSS | Immediate | Card data compromise |
 
@@ -289,10 +293,11 @@ Include:
 - ❌ Tip off the adversary unnecessarily
 - ❌ Skip evidence preservation
 - ❌ Declare the incident resolved before systems are verified clean
+- ❌ Run a containment, eradication or recovery action before the user approves that specific action
 
 ## Reference
 
-- [NIST SP 800-61 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
+- [NIST SP 800-61 Rev. 3 — Incident Response Recommendations and Considerations for Cybersecurity Risk Management (เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [SANS Incident Handler's Handbook](https://www.sans.org/white-papers/33901/)
 - [ENISA Good Practice Guide for Incident Management](https://www.enisa.europa.eu/)
 - [FIRST.org Best Practices](https://www.first.org/)

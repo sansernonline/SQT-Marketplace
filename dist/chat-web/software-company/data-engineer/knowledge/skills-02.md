@@ -88,7 +88,7 @@ Example — "Add a cache for these API responses."
 
 - **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
 - **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
-- **ultra:** "No cache until a profiler asks for one. When it does: `@lru_cache`. A hand-rolled TTL cache is a bug farm with a hit rate."
+- **ultra:** "`@lru_cache` on the fetch function — done, since you asked. Do you have a profile showing these calls are slow? If not, this line can go. A hand-rolled TTL cache is a bug farm with a hit rate."
 
 ## When NOT to be lazy
 
@@ -220,7 +220,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 // ❌ เพิ่มค่า i ทีละ 1
 // ❌ ฟังก์ชันคำนวณภาษี
 
-// ✅ กรมสรรพากรกำหนดให้ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด (ประกาศ ป.161/2566)
+// ✅ ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
 // ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
 // ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```

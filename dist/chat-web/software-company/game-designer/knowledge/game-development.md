@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Game Design Quality Standards](#game-design-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Game Design Quality Standards](#-game-design-quality-standards)
 - [Core Loop Design](#core-loop-design)
 - [Mechanics Design Principles](#mechanics-design-principles)
 - [Difficulty Curve](#difficulty-curve)
@@ -55,15 +55,15 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 - [Level Design Principles](#level-design-principles)
 - [Playtesting](#playtesting)
 - [Output: Design Document](#output-design-document)
-- [Pitch (one paragraph)](#pitch-one-paragraph)
-- [Inspiration](#inspiration)
-- [Target Audience](#target-audience)
-- [Core Loops](#core-loops)
-- [Mechanics](#mechanics)
-- [Progression](#progression)
-- [Monetization](#monetization)
-- [Unique Selling Points (USPs)](#unique-selling-points-usps)
-- [Risks + Mitigations](#risks--mitigations)
+- Pitch (one paragraph)
+- Inspiration
+- Target Audience
+- Core Loops
+- Mechanics
+- Progression
+- Monetization
+- Unique Selling Points (USPs)
+- Risks + Mitigations
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -353,7 +353,7 @@ A <genre> where you <core verb> to <player goal>.
 
 - Implementation → `game-developer`
 - Multiplayer balance → `game-developer`
-- Live operations + retention → `game-designer`
+- Live operations + retention → stay in this agent, open [`agent-live-ops-specialist.md`](agent-live-ops-specialist.md)
 - Storytelling expansion → `technical-writer` (from software-company)
 
 ## Common Pitfalls
@@ -382,8 +382,8 @@ A <genre> where you <core verb> to <player goal>.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Game Quality Standards](#game-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Game Quality Standards](#-game-quality-standards)
 - [Engine Choice (2026)](#engine-choice-2026)
 - [Critical Game Programming Patterns](#critical-game-programming-patterns)
 - [Performance Patterns](#performance-patterns)
@@ -481,13 +481,13 @@ class Enemy : MonoBehaviour {
 ### Pattern 3: ECS (for performance)
 
 ```rust
-// Bevy ECS example
+// Bevy ECS example (Bevy 0.15+: delta_seconds() was renamed delta_secs())
 fn movement_system(
     mut query: Query<(&mut Transform, &Velocity)>,
     time: Res<Time>,
 ) {
     for (mut transform, velocity) in query.iter_mut() {
-        transform.translation += velocity.0 * time.delta_seconds();
+        transform.translation += velocity.0 * time.delta_secs();
     }
 }
 ```
@@ -641,7 +641,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 - Initial load time is critical
 - Less memory available
 - File size matters
-- No threading (until SharedArrayBuffer is universal)
+- Threads (Web Workers sharing memory through SharedArrayBuffer) work in all major browsers only when the page is cross-origin isolated: serve `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` (COOP/COEP)
 - Save via IndexedDB
 
 ### VR (Quest/Vive/Index)
@@ -667,7 +667,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## When to Hand Off
 
-- Multiplayer netcode → `game-developer`
+- Multiplayer netcode → stay in this agent, open [`agent-multiplayer-engineer.md`](agent-multiplayer-engineer.md)
 - Game design / balance → `game-designer`
 - Monetization + retention → `game-designer`
 - Backend services → `solution-architect` (from software-company)
@@ -698,8 +698,8 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Live-Ops Quality Standards](#live-ops-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Live-Ops Quality Standards](#-live-ops-quality-standards)
 - [Player Lifecycle](#player-lifecycle)
 - [Retention Loop Design](#retention-loop-design)
 - [Battle Pass Design](#battle-pass-design)
@@ -709,9 +709,9 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 - [A/B Testing in Live Ops](#ab-testing-in-live-ops)
 - [Tools (2026)](#tools-2026)
 - [Output: Season Plan](#output-season-plan)
-- [Content Calendar](#content-calendar)
-- [A/B Tests](#ab-tests)
-- [Risks + Contingencies](#risks--contingencies)
+- Content Calendar
+- A/B Tests
+- Risks + Contingencies
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -743,9 +743,11 @@ Before designing live ops, gather:
 
 ## 📊 Live-Ops Quality Standards
 
-- **D1 retention (players who return the next day):** > 40% (genre-dependent)
-- **D7 retention:** > 20%
-- **D30 retention:** > 10%
+Retention targets = "top 25% of mobile games" from the GameAnalytics 2026 benchmarks (checked 22 Oct 2026; full table and source in [`live-ops-patterns.md` → Industry benchmarks](live-ops-patterns.md#industry-benchmarks-mobile-all-genres-2026)). Medians are far lower (D7 just under 4%).
+
+- **D1 retention (players who return the next day):** > 30%
+- **D7 retention:** > 6%
+- **D30 retention:** > 1.6%
 - **Daily login:** > 30% of MAU
 - **Event participation:** > 50% of active players
 - **Battle pass completion:** ~50% of paid users
@@ -788,18 +790,7 @@ Levers      onboarding     content  meaning   reactivation
 
 ## Battle Pass Design
 
-### Structure (typical 2026 format)
-```
-Free track:    Tier 1 → 50 → 100
-Premium track: Tier 1 → 50 → 100 (better rewards)
-
-Tiers 1-50: standard cadence
-Tiers 50-100: spice (rare items, prestige)
-
-Price: ~$10
-Duration: 8-12 weeks
-Estimated playtime: 100-150 hours total
-```
+Structure, XP math and pricing: [`live-ops-patterns.md` → Battle Pass Design](live-ops-patterns.md#battle-pass-design). Your job as the role: tune it with the levers below and block the anti-patterns.
 
 ### Tuning levers
 - **XP per match:** affects pace
@@ -868,7 +859,7 @@ If sink >> faucet → frustration
 | Currency type | Purpose | Examples |
 |---------------|---------|----------|
 | Soft (earned) | Main progression | Gold, XP |
-| Hard (paid) | Power/cosmetics | Gems, V-bucks |
+| Hard (paid) | Cosmetics / convenience (never power in competitive) | Gems, V-bucks |
 | Event | Limited-time | Easter eggs |
 | Premium passes | Battle pass tiers | Stars |
 
@@ -877,49 +868,22 @@ If sink >> faucet → frustration
 ### Tuning by data
 
 ```python
-# Compute target earn rate
-def target_currency_per_hour(target_purchase_per_week_usd):
-    avg_hours_per_week = 14  # genre average
-    item_cost = 500  # gems
-    gems_per_usd = 100
+# Target earn rate: how fast a free player earns an item by playing
+def target_gems_per_hour(item_cost_gems=500, hours_to_earn_free=10):
+    # A free player should reach the item in ~hours_to_earn_free hours of play.
+    # Paying is then a shortcut (convenience), not the only way.
+    return item_cost_gems / hours_to_earn_free      # 500 / 10 = 50 gems per hour
 
-    target_purchase_gems = target_purchase_per_week_usd * gems_per_usd
-    target_earn_gems_per_hour = (item_cost - target_purchase_gems) / avg_hours_per_week
-
-    return target_earn_gems_per_hour
+def price_check(item_cost_gems=500, gems_per_usd=100, hours_to_earn_free=10):
+    usd = item_cost_gems / gems_per_usd             # 500 / 100 = $5
+    return f"${usd:.2f} saves {hours_to_earn_free} hours of play"
 ```
+
+Set `hours_to_earn_free` from your own play-time data (e.g. 14 hours a week → the item takes under a week).
 
 ## Player Segmentation
 
-```python
-# Segment players for targeted live ops
-segments = {
-    'whales': {
-        'definition': 'top 1% spending',
-        'cohort_size': '~1%',
-        'revenue_share': '~50%',
-        'strategy': 'VIP treatment, exclusive content, account managers',
-    },
-    'dolphins': {
-        'definition': '$10-50/month',
-        'cohort_size': '~5%',
-        'revenue_share': '~30%',
-        'strategy': 'battle pass focus, occasional skins',
-    },
-    'minnows': {
-        'definition': '< $10/month',
-        'cohort_size': '~10%',
-        'revenue_share': '~15%',
-        'strategy': 'value-focused, BP every other season',
-    },
-    'free': {
-        'definition': 'no purchases',
-        'cohort_size': '~85%',
-        'revenue_share': '~5% (ads)',
-        'strategy': 'critical mass, content variety, conversion nudges',
-    },
-}
-```
+Spend tiers (whales, dolphins, minnows, free) and the segmentation code: [`live-ops-patterns.md` → Player Segmentation](live-ops-patterns.md#player-segmentation). Role rule: every offer and event names the segment it is for.
 
 **Important:** Free-to-play (F2P) players are NOT freeloaders. They fill competitive matches, give streamers content, and create social pressure to spend.
 
@@ -939,15 +903,7 @@ segments = {
 
 ## Tools (2026)
 
-| Tool | Use |
-|------|-----|
-| **GameAnalytics** | Free analytics |
-| **deltaDNA / Unity Analytics** | Unity ecosystem |
-| **PlayFab** | Microsoft's LiveOps platform |
-| **Backtrace / Sentry** | Crash reporting |
-| **Amplitude / Mixpanel** | Funnel analysis |
-| **Helika** | Web3 game analytics |
-| **AppsFlyer / Adjust** | Attribution |
+Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-2026).
 
 ## Output: Season Plan
 
@@ -1004,7 +960,6 @@ segments = {
 
 ## When to Hand Off
 
-- New mechanics → `game-designer`
 - Implementation → `game-developer`
 - Multiplayer issues → `game-developer`
 - Marketing campaigns → `product-manager` (from software-company)
@@ -1033,8 +988,8 @@ segments = {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 Multiplayer Quality Standards](#multiplayer-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 Multiplayer Quality Standards](#-multiplayer-quality-standards)
 - [Netcode Architecture Choices](#netcode-architecture-choices)
 - [State Synchronization Patterns](#state-synchronization-patterns)
 - [Networking Stacks (2026)](#networking-stacks-2026)
@@ -1075,7 +1030,7 @@ Before designing netcode, gather:
 ## 📊 Multiplayer Quality Standards
 
 - **Latency target:** < 100ms for competitive, < 200ms for casual
-- **Tick rate:** 60Hz competitive, 20-30Hz casual
+- **Tick rate:** by game type — use the one table in [`multiplayer-netcode.md` → Server tick rate](multiplayer-netcode.md#server-tick-rate)
 - **Packet loss tolerance:** Graceful up to 5%
 - **Cheat detection rate:** Measured, and improving over time
 - **Matchmaking time:** < 60s for 95% of players (p95)
@@ -1138,6 +1093,7 @@ Before designing netcode, gather:
 ### Pattern: State Replication
 
 ```csharp
+// Mirror syntax ([SyncVar]). In Netcode for GameObjects use NetworkVariable<T> + OnValueChanged.
 // Authoritative state on server, replicated to clients
 public class NetworkedPlayer : NetworkBehaviour {
     [SyncVar(hook = nameof(OnPositionChanged))]
@@ -1149,69 +1105,15 @@ public class NetworkedPlayer : NetworkBehaviour {
 }
 ```
 
-### Pattern: Snapshot Interpolation
+### Pattern: Snapshot Interpolation · Client-Side Prediction · Lag Compensation
 
-```csharp
-// Server sends snapshots at fixed rate (e.g., 30Hz)
-// Client renders state from 100ms ago
-// Smooth movement between snapshots
+Code for all three is in the topic file — one copy, so a fix lands once:
 
-class SnapshotBuffer {
-    List<Snapshot> snapshots;
+- [Client-Side Prediction (FPS)](multiplayer-netcode.md#client-side-prediction-fps)
+- [Snapshot Interpolation (Other Players)](multiplayer-netcode.md#snapshot-interpolation-other-players)
+- [Lag Compensation (Hit Detection)](multiplayer-netcode.md#lag-compensation-hit-detection) — rewind goes BACK: `serverNow - latency - interpDelay`, capped by a max rewind
 
-    public Vector3 GetInterpolatedPosition(float renderTime) {
-        // Find snapshots before/after renderTime
-        var (before, after) = FindSnapshots(renderTime);
-        float t = (renderTime - before.time) / (after.time - before.time);
-        return Vector3.Lerp(before.pos, after.pos, t);
-    }
-}
-```
-
-### Pattern: Client-Side Prediction (FPS)
-
-```csharp
-// Predict locally for responsiveness
-// Reconcile with server when authoritative state arrives
-
-void Update() {
-    if (isLocalPlayer) {
-        ProcessInput();
-        ApplyMovementLocally();  // immediate feedback
-        SendInputToServer();
-    }
-}
-
-void OnServerStateReceived(ServerState state) {
-    if (state.tick > lastReceivedTick) {
-        // Reconcile
-        Vector3 serverPos = state.position;
-        Vector3 predictedPos = predictionHistory[state.tick];
-
-        if (Vector3.Distance(serverPos, predictedPos) > THRESHOLD) {
-            // Misprediction: snap + replay
-            transform.position = serverPos;
-            ReplayInputsSince(state.tick);
-        }
-    }
-}
-```
-
-### Pattern: Lag Compensation (Hit Detection)
-
-```csharp
-// On server, "rewind" world to when client saw it
-void OnPlayerShoot(ulong clientId, Vector3 origin, Vector3 direction, float clientTime) {
-    // Rewind based on client's view (clientTime + clientLatency)
-    float rewindTime = clientTime + GetLatency(clientId);
-    var historicalState = stateHistory.GetAt(rewindTime);
-
-    // Perform raycast in rewound state
-    if (Raycast(origin, direction, historicalState, out hit)) {
-        ApplyDamage(hit);
-    }
-}
-```
+Role rules: predict only the local player · render remote players behind server time · every hit is decided on the server in the rewound state.
 
 ## Networking Stacks (2026)
 
@@ -1223,28 +1125,32 @@ void OnPlayerShoot(ulong clientId, Vector3 origin, Vector3 direction, float clie
 | **Steam Networking** | Unity, Unreal | Steam ecosystem |
 | **Epic Online Services** | Any | Cross-platform |
 | **Unreal Replication** | Unreal | Built-in |
-| **GameLift / PlayFab** | Any | Managed servers |
-| **Hathora** | Any | Managed sessions |
+| **Amazon GameLift / PlayFab** | Any | Managed servers |
 | **Edgegap** | Any | Edge-deployed servers |
+| **Nitrado GameFabric** | Any | Managed game-server hosting |
+
+> Hathora left game hosting after Fireworks AI bought it (customers moved to Nitrado, service ended May 2026) — do not pick it. Checked 22 Oct 2026 (GamesBeat, 4 Mar 2026).
 
 ## Matchmaking
 
 ### Skill-Based Matchmaking (SBMM)
 
 ```python
-# Trueskill or Elo rating
-from trueskill import Rating, rate
+from trueskill import Rating, rate_1vs1
 
-# Per-player rating
+# Per-player rating (TrueSkill scale: mu 25, sigma 8.333)
 player_a = Rating(mu=25, sigma=8.333)
 player_b = Rating(mu=25, sigma=8.333)
 
 # After match
 new_a, new_b = rate_1vs1(player_a, player_b)  # if A won
 
-# Matchmaking: find players within sigma range
-candidates = find_players_in_range(player.mu, range=200)
+# Matchmaking: compare conservative skill (mu - 3*sigma) within a few points, not 200
+def conservative(r): return r.mu - 3 * r.sigma
+candidates = find_players_in_range(conservative(new_a), window=3.0)  # widen while waiting
 ```
+
+`window=200` style ranges belong to an Elo / MMR scale (start ~1500). Basic loop and the widening window: [`multiplayer-netcode.md` → Matchmaking](multiplayer-netcode.md#matchmaking).
 
 ### Latency-Aware Matching
 
@@ -1352,22 +1258,9 @@ async function quickJoin(player: Player, gameMode: string) {
 
 ## Bandwidth Optimization
 
-```csharp
-// Quantize for bandwidth
-// Float position (12 bytes) → quantized (3-6 bytes)
+Quantize, smallest-3 rotation (5 bytes only when bit-packed) and send-on-change: [`multiplayer-netcode.md` → Bandwidth Optimization](multiplayer-netcode.md#bandwidth-optimization).
 
-// Position within bounds: 16 bits per axis
-ushort QuantizePosition(float value, float min, float max) {
-    return (ushort)((value - min) / (max - min) * 65535);
-}
-
-// Rotation quaternion: smallest-3 (5 bytes vs 16)
-// Velocity: low precision, high frequency
-
-// Delta encoding:
-// Send full state every Nth tick
-// Otherwise: send only fields that changed
-```
+Role rules: budget < 50 kbps per player · full state every Nth tick, changed fields otherwise · low precision for velocity.
 
 ## Skills You Use
 
@@ -1573,7 +1466,15 @@ public class SaveData {
     public int version = 1;
     public PlayerSaveData player;
     public List<QuestSaveData> quests;
-    public Dictionary<string, bool> flags;
+    // JsonUtility does NOT serialize Dictionary — the field would vanish from the file
+    // with no error. Use a list of entries (or Newtonsoft JsonConvert, which handles Dictionary).
+    public List<FlagEntry> flags = new();
+}
+
+[Serializable]
+public class FlagEntry {
+    public string key;
+    public bool value;
 }
 
 // 2. Serialize JSON (not binary — easier to debug, mod)
@@ -1581,7 +1482,14 @@ public class SaveSystem {
     public void Save(string slot) {
         var data = GatherSaveData();
         var json = JsonUtility.ToJson(data);
-        File.WriteAllText(GetPath(slot), json);
+
+        // Write to a temp file first, then swap it in,
+        // so a crash mid-save never leaves a half-written save
+        string path = GetPath(slot);
+        string tmp = path + ".tmp";
+        File.WriteAllText(tmp, json);
+        if (File.Exists(path)) File.Replace(tmp, path, path + ".bak");
+        else File.Move(tmp, path);
     }
 
     public SaveData Load(string slot) {
@@ -1811,7 +1719,7 @@ public class Weapon : MonoBehaviour {
 - Tuning game economy
 - Building retention features
 - Live-ops post-launch
-- F2P monetization strategy
+- Free-to-play (F2P) monetization strategy
 
 ## The Retention Funnel
 
@@ -1826,14 +1734,18 @@ Each transition is a battle:
 - D365 (lifetime value crystallizes)
 ```
 
-### Industry benchmarks (mobile F2P, 2026)
+### Industry benchmarks (mobile, all genres, 2026)
 
-| Metric | Casual | Mid-core | Hardcore |
-|--------|:------:|:--------:|:--------:|
-| D1 retention | 35-50% | 40-55% | 45-60% |
-| D7 retention | 15-25% | 20-30% | 25-35% |
-| D30 retention | 5-12% | 8-15% | 12-20% |
-| Average revenue per daily active user (ARPDAU) | $0.05-0.20 | $0.20-0.50 | $0.50-2.00 |
+Source: GameAnalytics *2026 Mobile & PC Gaming Benchmarks* (16,262 mobile games with ≥ 1,000 monthly active users, iOS + Android), via the GameDev Reports summary, June 2026 · checked 22 Oct 2026.
+
+| Metric | Median | Top 25% | Top 10% |
+|--------|:------:|:-------:|:-------:|
+| D1 retention | not stated in the summary | just above 30% | ~40% |
+| D7 retention | just under 4% | 6–7% | 11–12% |
+| D30 retention | 0.69–0.79% | 1.6–1.8% | not stated |
+
+- Most games sit far below the "D7 20%+" figures that float around online. A D7 of 6–7% already puts a game in the top quarter.
+- Per-genre splits and average revenue per daily active user (ARPDAU) vary a lot by genre and region. Take them from the GameAnalytics benchmark tool for your own genre `(รอยืนยัน)`; do not use a fixed table.
 
 ## Daily Hook Patterns
 
@@ -2007,9 +1919,10 @@ $99.99 → ultimate pack (whale tier)
 
 ### Sales psychology
 - "First-time only" offers convert
-- "Limited stock" creates urgency
+- Only state real limits. A fake "limited stock" or a countdown that resets can break consumer-protection law (fake scarcity is a misleading practice)
 - "Bundle includes" frames value
 - "Bonus % more" feels generous
+- Disclose loot-box / gacha odds where the law or the store requires it (Apple App Store and Google Play require odds for paid random items)
 
 ## Retention Loops
 
@@ -2020,7 +1933,7 @@ Trigger (notification at peak time)
    ↓
 Action (open game)
    ↓
-Variable Reward (loot box, mystery box)
+Variable Reward (daily quest with a rotating reward, rare cosmetic drop from play — not a paid random box)
    ↓
 Investment (progression, currency)
 ```
@@ -2095,6 +2008,19 @@ Uninstalled: very hard
 
 ## Player Segmentation
 
+### Spend tiers (rough shape, check against your own data)
+
+| Segment | Definition | Share of players | Share of revenue | Strategy |
+|---|---|:-:|:-:|---|
+| Whales | top 1% spending | ~1% | ~50% | VIP treatment, exclusive content, account managers |
+| Dolphins | $10–50 / month | ~5% | ~30% | battle pass focus, occasional skins |
+| Minnows | < $10 / month | ~10% | ~15% | value-focused, battle pass every other season |
+| Free | no purchases | ~84% | ~5% (ads) | critical mass, content variety, conversion nudges |
+
+Shares add up to 100%. These are illustrative, not a benchmark `(รอยืนยัน)`.
+
+**Important:** F2P players are NOT freeloaders. They fill competitive matches, give streamers content, and create social pressure to spend.
+
 ```python
 # Behavioral segments
 segments = analyze_players({
@@ -2128,9 +2054,10 @@ bot_suspects = segments.filter(
 | Tool | Use |
 |------|-----|
 | **GameAnalytics** | Free analytics |
-| **Unity Analytics / Cloud Code** | Unity ecosystem |
+| **Unity Analytics / Cloud Code** | Unity ecosystem (replaced deltaDNA, which has shut down) |
 | **PlayFab** | Microsoft live ops platform |
-| **Amplitude** | Funnel + cohort analysis |
+| **Amplitude / Mixpanel** | Funnel + cohort analysis |
+| **Backtrace / Sentry** | Crash reporting |
 | **AppsFlyer / Adjust** | Attribution |
 | **Helika** | Web3 + gaming analytics |
 | **GrowthBook / Statsig** | A/B testing |
@@ -2157,7 +2084,6 @@ bot_suspects = segments.filter(
 
 ## Reference
 
-- [Mark Robinson's "Cohort Analysis for Games"](https://www.deltadna.com/)
 - [GameAnalytics Benchmarks](https://gameanalytics.com/benchmarks/)
 - [Naavik gaming industry analysis](https://naavik.co/)
 - [Deconstructor of Fun (podcast/site)](https://www.deconstructoroffun.com/)
@@ -2216,6 +2142,8 @@ Asynchronous (Words with Friends)
    → Stateless API, no real-time
 ```
 
+> **Which library?** The C# examples below use Unity Netcode for GameObjects (NGO) 1.x style: RPC method names must end in `ServerRpc` / `ClientRpc`, and server time is `NetworkManager.ServerTime`. In NGO 2.x the `[Rpc(SendTo.Server)]` attribute (names ending in `Rpc`) is preferred. Helpers such as `GetPredictedStateAtTick` or `CircularBuffer` are yours to write — treat the blocks as patterns, not drop-in code. Mirror uses different names (`[Command]`, `[ClientRpc]`, `NetworkTime.time`).
+
 ## Client-Server Pattern (Most Common)
 
 ```
@@ -2228,14 +2156,18 @@ Each client:           Server (authority):
 
 ### Server tick rate
 
-| Game type | Tick rate |
-|-----------|----------:|
-| FPS competitive | 64-128 Hz |
-| Battle royale | 20-30 Hz |
-| MOBA | 30 Hz |
-| MMO | 10-30 Hz |
-| Casual | 10-20 Hz |
-| RTS (lockstep) | 10-25 Hz |
+This is the one tick-rate table for the whole skill set; other files link here.
+
+| Game type | Tick rate | Known examples (checked 22 Oct 2026) |
+|-----------|----------:|---|
+| FPS competitive | 64-128 Hz | VALORANT 128 Hz (Riot Games technology blog "VALORANT's 128-Tick Servers") · Counter-Strike 64 Hz (Valve Source Multiplayer Networking wiki) · Overwatch ~63 Hz |
+| Battle royale | 20-30 Hz | Battlefield 6 REDSEC 30 Hz (developer statement, 2025) |
+| MOBA | ~30 Hz | typical value `(รอยืนยัน)` |
+| MMO | 10-30 Hz | typical value `(รอยืนยัน)` |
+| Casual | 10-20 Hz | typical value `(รอยืนยัน)` |
+| RTS (lockstep) | 10-25 Hz | typical value `(รอยืนยัน)` |
+
+Rule of thumb: pick the lowest rate that still feels right for the game's pace, because bandwidth and server cost grow with the rate.
 
 ## Client-Side Prediction (FPS)
 
@@ -2259,7 +2191,7 @@ public class PredictivePlayer : NetworkBehaviour {
     }
 
     [ClientRpc]
-    void ReceiveServerState(ServerState state) {
+    void ReceiveServerStateClientRpc(ServerState state) {
         if (!IsOwner) return;
 
         // Find local state at server's tick
@@ -2288,12 +2220,13 @@ public class InterpolatedRemotePlayer : NetworkBehaviour {
     private const float INTERPOLATION_DELAY = 0.1f;  // 100ms behind
 
     [ClientRpc]
-    void ReceivePositionSnapshot(Vector3 pos, float serverTime) {
+    void ReceivePositionSnapshotClientRpc(Vector3 pos, float serverTime) {
         positions.Add(serverTime, pos);
     }
 
     void Update() {
-        float renderTime = NetworkTime.time - INTERPOLATION_DELAY;
+        // NGO: estimated server time on this client
+        float renderTime = NetworkManager.ServerTime.TimeAsFloat - INTERPOLATION_DELAY;
         Vector3 interpolated = positions.GetInterpolated(renderTime);
         transform.position = interpolated;
     }
@@ -2319,15 +2252,23 @@ class SnapshotBuffer<T> {
 ## Lag Compensation (Hit Detection)
 
 ```csharp
-// Server rewinds world state to when shooter saw it
+// Server rewinds world state BACK to what the shooter saw
+// Valve formula: command time = server now - packet latency - client interpolation delay
 
 public class LagCompensatedHitDetection : NetworkBehaviour {
     private CircularBuffer<WorldSnapshot> history;
+    private const float INTERPOLATION_DELAY = 0.1f;  // same value the client renders behind
+    private const float MAX_REWIND = 0.25f;          // cap: a high-ping client can't shoot far into the past
 
-    [ServerRpc]
-    void ShootRpc(Vector3 origin, Vector3 direction, float clientRenderTime) {
-        // Account for: client render delay + network latency
-        float rewindTime = clientRenderTime + GetClientLatency(SenderId);
+    [ServerRpc(RequireOwnership = false)]
+    void ShootServerRpc(Vector3 origin, Vector3 direction, ServerRpcParams rpcParams = default) {
+        float serverNow = NetworkManager.ServerTime.TimeAsFloat;
+        float latency = GetClientLatency(rpcParams.Receive.SenderClientId);  // one-way, seconds
+
+        float rewindTime = serverNow - latency - INTERPOLATION_DELAY;
+        rewindTime = Mathf.Max(rewindTime, serverNow - MAX_REWIND);
+        // Alternative: the client sends the server-clock time it was rendering;
+        // then use that value as it is (no latency added), with the same MAX_REWIND clamp.
 
         var snapshot = history.GetAt(rewindTime);
 
@@ -2396,14 +2337,22 @@ float DequantizePosition(ushort q) {
 ### Rotation: smallest-3
 ```csharp
 // Quaternion is 4 floats (16 bytes)
-// Smallest-3: send 3 smallest components + index of largest (5 bytes)
+// Smallest-3: send 3 smallest components + index of largest
+// 2 + 3 x 11 = 35 bits -> 5 bytes, but ONLY when bit-packed into one value
 
-public struct CompressedQuat {
-    public byte largestIndex;  // 2 bits
-    public short c1;           // 11 bits each
+public struct CompressedQuat {   // as plain fields this is 1 + 2 + 2 + 2 = 7 bytes
+    public byte largestIndex;    // uses 2 bits
+    public short c1;             // uses 11 bits each
     public short c2;
     public short c3;
 }
+
+// Bit-packed: 35 bits in a ulong, write 5 bytes to the stream
+ulong Pack(CompressedQuat q) =>
+    ((ulong)q.largestIndex & 0x3)
+    | (((ulong)q.c1 & 0x7FF) << 2)
+    | (((ulong)q.c2 & 0x7FF) << 13)
+    | (((ulong)q.c3 & 0x7FF) << 24);
 ```
 
 ### Send only on change
@@ -2472,6 +2421,15 @@ new_p1, new_p2 = rate_1vs1(p1, p2)
 # Skill estimate: mu - 3*sigma (conservative)
 def conservative_skill(rating):
     return rating.mu - 3 * rating.sigma
+
+# Matching window on the TrueSkill scale (mu starts at 25, sigma at 8.333).
+# Widen by skill points, not by Elo-style hundreds: "within 200" only makes
+# sense on an Elo/MMR scale that starts around 1500.
+def skill_window(wait_seconds):
+    return min(1.0 + 0.1 * wait_seconds, 3 * 8.333)   # +-1 point at first, wider while waiting
+
+def in_range(a, b, wait_seconds):
+    return abs(conservative_skill(a) - conservative_skill(b)) <= skill_window(wait_seconds)
 ```
 
 ## Anti-Cheat Considerations
@@ -2481,7 +2439,7 @@ def conservative_skill(rating):
 ```csharp
 // Validate every action server-side
 [ServerRpc]
-void MovePlayer(Vector3 newPosition) {
+void MovePlayerServerRpc(Vector3 newPosition) {
     float maxMoveDistance = MAX_SPEED * Time.fixedDeltaTime;
     if (Vector3.Distance(currentPosition, newPosition) > maxMoveDistance) {
         // Impossible move - reject + log

@@ -21,7 +21,7 @@ The minimum record that still teaches you something later. Fill-in template and 
 R-multiple    = net P/L in baht ÷ 1R
 ```
 
-Example: bought 200 @ 48.50, stop 47.75 → 1R = 0.75 × 200 = 150 baht. Sold 200 @ 50.25, costs 40 baht → net P/L = 1.75 × 200 − 40 = 310 → **+2.07R**. Stopped out at 47.75 with costs 40 → −190 baht = **−1.27R** (more than −1R because of costs or slippage — that gap is information).
+Example: bought 200 @ 48.50, stop 47.50 → 1R = 1.00 × 200 = 200 baht. Sold 200 @ 50.25, costs 40 baht → net P/L = 1.75 × 200 − 40 = 310 → **+1.55R**. Stopped out at 47.50 with costs 40 → −240 baht = **−1.20R** (more than −1R because of costs or slippage — that gap is information).
 
 ## Setup names — pick from a short fixed list
 
@@ -47,13 +47,13 @@ calm · confident · FOMO (กลัวตกรถ) · revenge (เอาคื
 |---|---|
 | Date in | 2026-10-06 10:15 |
 | Symbol / side | ABC / buy |
-| Shares · entry · stop · target | 200 · 48.50 · 47.75 · 51.00 |
-| 1R (baht) | 150 |
+| Shares · entry · stop · target | 200 · 48.50 · 47.50 · 51.00 |
+| 1R (baht) | 200 |
 | Setup | breakout-volume |
 | Reason | Broke 3-month high 48.00 on 2.1× volume, trend up |
 | Emotion | calm |
 | Date out · exit · costs | 2026-10-14 · 50.25 · 40 |
-| P/L baht · R | +310 · +2.07R |
+| P/L baht · R | +310 · +1.55R |
 | What happened | Stalled under 50.50, sold on plan rule "exit if no new high in 5 days" |
 | Plan followed | Y |
 

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 DeFi Quality Standards](#defi-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 DeFi Quality Standards](#-defi-quality-standards)
 - [Core DeFi Patterns](#core-defi-patterns)
 - [Composability Risks](#composability-risks)
 - [Tokenomics Integration](#tokenomics-integration)
@@ -107,26 +107,12 @@ contract LendingPool {
 
 ### Oracle Pattern (CRITICAL)
 
-```solidity
-// ❌ DANGEROUS: single oracle
-function getPrice() public view returns (uint256) {
-    return chainlink.latestAnswer();
-}
+❌ One oracle, read with `latestAnswer()` (deprecated by Chainlink, no timestamp, no staleness check).
 
-// ✅ SAFER: multi-oracle with sanity checks
-function getPrice() public view returns (uint256) {
-    uint256 chainlinkPrice = chainlink.latestAnswer();
-    uint256 pythPrice = pyth.getPrice();
-    uint256 twap = uniswapTWAP.consult();
+✅ Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Oracle Integration:
 
-    // All within threshold of each other
-    require(deviation(chainlinkPrice, pythPrice) < 1%);
-    require(deviation(chainlinkPrice, twap) < 2%);
-
-    // Use median
-    return median(chainlinkPrice, pythPrice, twap);
-}
-```
+- Chainlink `latestRoundData()` · `price > 0` · `updatedAt` not older than the feed heartbeat
+- second source (Uniswap V3 TWAP or Pyth) · reject when sources disagree by more than a set % · use the median
 
 ## Composability Risks
 
@@ -164,25 +150,7 @@ Defense:
 
 ### Reward distribution patterns
 
-```solidity
-// Pattern: lazy accumulation
-contract Staking {
-    uint256 public rewardPerToken;
-    uint256 public lastUpdate;
-
-    mapping(address => uint256) public userRewardPerTokenPaid;
-    mapping(address => uint256) public rewards;
-
-    function update() internal {
-        rewardPerToken += (block.timestamp - lastUpdate) * rate / totalStaked;
-        lastUpdate = block.timestamp;
-    }
-
-    function claimable(address user) public view returns (uint256) {
-        return balance[user] * (rewardPerToken - userRewardPerTokenPaid[user]) / 1e18 + rewards[user];
-    }
-}
-```
+Lazy accumulation (Synthetix-style): a global `rewardPerToken` scaled by `1e18`, updated only when `totalStaked > 0`, and a per-user checkpoint. Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Reward Distribution Patterns.
 
 ## Liquidation Patterns
 
@@ -243,9 +211,9 @@ contract Emergency {
 
 ## When to Hand Off
 
-- Contract implementation → `blockchain-engineer`
-- Blockchain architecture → `blockchain-engineer`
-- Token design → `blockchain-engineer`
+- Contract implementation → same agent, switch role: [`agent-smart-contract-developer.md`](agent-smart-contract-developer.md)
+- Blockchain architecture → same agent, switch role: [`agent-blockchain-architect.md`](agent-blockchain-architect.md)
+- Token design → same agent, switch role: [`agent-tokenomics-designer.md`](agent-tokenomics-designer.md)
 - Security review → external audit firm + `security-engineer` (from software-company)
 
 ## Reference

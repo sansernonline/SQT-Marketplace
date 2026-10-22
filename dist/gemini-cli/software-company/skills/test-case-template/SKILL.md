@@ -19,13 +19,13 @@ description: Use when writing test cases or a feature test plan, or turning acce
 | รายงานข้อบกพร่องที่เจอแล้ว 1 เรื่อง | `bug-report-template` |
 | รันเคสแล้วเก็บหลักฐาน (GIF) · รายงานผ่าน/ไม่ผ่าน | `test-evidence` |
 | คัดรายงานบั๊กที่กองอยู่ในกล่องข้อความ | `bug-inbox-triage` |
-| ตัดสินสัดส่วน unit · integration · E2E หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
+| ตัดสินสัดส่วน unit · integration · end-to-end (E2E) หรือเขียนโค้ด test | `testing-standards` · `e2e-testing-patterns` |
 
 ## Where test cases live
 
-Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where QA fills in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`. Stories and their AC live in `docs/USER-STORIES.md` — the **Related** line cites those IDs exactly (`US-012, AC2`), so a changed AC there points to the test cases that must change.
+Test cases go in the `qa/` folder at the project root, never inside `docs/`. Use `qa/<project-code>-test-cases.md`, or `.xlsx` on large projects where quality assurance (QA) testers fill in results. `docs/test-plan.md` holds only the plan and links here. Bugs found while testing go in `qa/bugs/`. User stories (US) and their acceptance criteria (AC) live in `docs/USER-STORIES.md` — the **Related** line cites those IDs exactly (`US-012, AC2`), so a changed AC there points to the test cases that must change.
 
-**The `.xlsx` workbook** — build it with `scripts/build-test-workbook.py` from one flat table (columns `id, module, fr, title, type, result`, others kept):
+**The `.xlsx` workbook** — build it with `<โฟลเดอร์ skill test-case-template>/scripts/build-test-workbook.py` from one flat table (columns `id, module, fr (functional requirement, FR), title, type, result`, others kept):
 - An **Overview** tab, then **one tab per module**. With `--mockup`, tabs follow the mockup screen order, every row gets a `screen` column, and each tab lists its mockup screens under the title. Use the same topics as the mockup start page (`ui-craft` → `references/mockup-start-page.md`).
 - Overview counts Pass / Fail / Blocked / Not run per tab with formulas. **No "all cases" tab** — a result typed in two places drifts.
 - Header: light brand fill, dark brand text, one brand-colour rule under it (the same table look as `branded-document-design`). Pass `--brand --head-fill --ink` from the project's `doc-theme`.
@@ -48,7 +48,7 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 - Before handing over, run the shared checker until it passes (paths from this skill's folder):
 
   ```bash
-  python ../polished-document-style/scripts/check_outline.py assets/test-case.md <your test-case file>
+  python <โฟลเดอร์ skill polished-document-style ใน plugin superuser>/scripts/check_outline.py assets/test-case.md <your test-case file>
   ```
 
   It flags missing or reordered headings, missing fields, changed table headers, and anything still unfilled (`<...>`, `YYYY-MM-DD`, `XXXX`, `...`, a field still listing every option).
@@ -127,7 +127,7 @@ For features with states (e.g., order: draft → submitted → paid → shipped)
 ### 8. Security
 - Unauthorized access
 - Privilege escalation attempts
-- Input sanitization (XSS, SQL injection)
+- Input sanitization (cross-site scripting (XSS), SQL injection)
 - Rate limiting
 
 ### 9. Performance

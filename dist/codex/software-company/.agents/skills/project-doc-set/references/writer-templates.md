@@ -4,82 +4,37 @@
 
 ## Standard Outputs
 
-### README Template
+### README
 
-```markdown
-# Project Name
-
-> One-line description that fits in a tweet.
-
-[![badges]](#)
-
-**Demo:** [link] · **Docs:** [link] · **Discord:** [link]
-
----
-
-## Features
-
-- What makes this special — feature 1
-- Killer feature 2
-- Reassuring feature 3
-
-## Quick Start
-
-\`\`\`bash
-npm install package-name
-\`\`\`
-
-\`\`\`typescript
-import { thing } from 'package-name';
-
-const result = thing({ option: 'value' });
-\`\`\`
-
-That's it. You're done.
-
-## Documentation
-
-- [Getting Started](#) — 10-minute tutorial
-- [How-To Guides](#) — Solve specific problems
-- [API Reference](#) — Full API spec
-- [Concepts](#) — Why and how it works
-
-## Contributing
-
-See [CONTRIBUTING.md](#).
-
-## License
-
-MIT
-```
+ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) ที่ตอบ 5 คำถาม: คืออะไร · ต้องมีอะไรบนเครื่อง (เวอร์ชัน) · ติดตั้งและรันอย่างไร · รัน test อย่างไร · เอกสารและคนที่ต้องถามอยู่ที่ไหน
 
 ### Tutorial Template
 
-```markdown
+````markdown
 # Tutorial: Build Your First X in 10 Minutes
 
 > **What you'll learn:** by the end, you'll have built Y and understand Z.
 
 ## What You'll Need
 
-- Node.js 18+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
 - A free account at example.com
 - 10 minutes
 
 ## Step 1: Set Up
 
 Run:
-\`\`\`bash
+```bash
 npx create-thing my-project
 cd my-project
-\`\`\`
+```
 
 > **What just happened?** Brief explanation.
 
 You should see:
-\`\`\`
+```
 ✓ Project created
-\`\`\`
+```
 
 ## Step 2: Configure
 
@@ -96,11 +51,11 @@ You've built X. Try these next:
 - [Add feature A](#how-to-add-a) (how-to)
 - [Understand B](#concept-b) (explanation)
 - [Full API](#reference) (reference)
-```
+````
 
 ### API Reference Template (per endpoint)
 
-```markdown
+````markdown
 ## POST `/api/v1/resource`
 
 Create a new resource.
@@ -111,7 +66,7 @@ Required. Bearer token in `Authorization` header.
 
 ### Request
 
-\`\`\`http
+```http
 POST /api/v1/resource HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -120,7 +75,7 @@ Authorization: Bearer <token>
   "name": "string (required)",
   "tags": ["string (optional)"]
 }
-\`\`\`
+```
 
 ### Parameters
 
@@ -131,13 +86,13 @@ Authorization: Bearer <token>
 
 ### Response: 201 Created
 
-\`\`\`json
+```json
 {
   "id": "res_abc123",
   "name": "...",
   "created_at": "2025-01-15T10:30:00Z"
 }
-\`\`\`
+```
 
 ### Errors
 
@@ -149,18 +104,23 @@ Authorization: Bearer <token>
 
 ### Code Examples
 
-\`\`\`typescript
+```typescript
 const res = await fetch('/api/v1/resource', {
   method: 'POST',
-  headers: { Authorization: `Bearer ${token}` },
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
   body: JSON.stringify({ name: 'My Resource' })
 });
-\`\`\`
 ```
+````
 
 ### Release Notes Template
 
-```markdown
+> Breaking Changes ต้องอยู่ก่อนหัวข้ออื่นเสมอ (ต่อจาก Highlights) — กฎเต็มของ release notes อยู่ใน skill `release-notes`
+
+````markdown
 # Release v2.1.0 — YYYY-MM-DD
 
 ## Highlights
@@ -168,8 +128,24 @@ const res = await fetch('/api/v1/resource', {
 > The TL;DR for busy readers.
 
 - **New:** X feature — try it: `command`
-- **Improved:** Y is now 50% faster
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
 - **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
 
 ## 🆕 New Features
 
@@ -177,10 +153,10 @@ const res = await fetch('/api/v1/resource', {
 
 Description with user-facing benefit.
 
-\`\`\`bash
+```bash
 # Example usage
 command --new-flag
-\`\`\`
+```
 
 [Read the docs](#)
 
@@ -194,23 +170,7 @@ command --new-flag
 - Fix issue where ... ([#1234](#))
 - Resolve crash when ... ([#5678](#))
 
-## Breaking Changes
-
-### `api.oldMethod()` removed
-
-**Before:**
-\`\`\`typescript
-api.oldMethod(arg)
-\`\`\`
-
-**After:**
-\`\`\`typescript
-api.newMethod({ arg })
-\`\`\`
-
-[Migration guide](#)
-
 ## Contributors
 
 Thanks to: @alice, @bob, @charlie
-```
+````

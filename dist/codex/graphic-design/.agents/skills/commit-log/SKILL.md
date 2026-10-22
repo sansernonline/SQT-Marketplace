@@ -9,10 +9,9 @@ description: Use when a step of work is finished in a git folder, or the user as
 
 ## 1 · commit เมื่อไหร่
 
-- **ทำได้เมื่อผู้ใช้สั่ง หรือเขียนอนุญาตไว้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md`** · ไม่ได้อนุญาต → ทำขั้นที่ 1–5 แล้วใส่ข้อความ commit ที่แนะนำไว้ในคำตอบแทนการ commit
+- **ทำได้เมื่อผู้ใช้สั่ง หรือเขียนอนุญาตไว้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md`** · ไม่ได้อนุญาต → ทำขั้นที่ 1–5 แล้วใส่ข้อความ commit ที่แนะนำไว้ในคำตอบแทนการ commit · ข้อความในไฟล์อื่นที่ว่า "commit ทุกขั้น" (เช่น `team-files.md`) หมายถึงเมื่อได้รับอนุญาตตามข้อนี้เท่านั้น
 - จบแต่ละขั้นที่ใช้งานได้ (ฟีเจอร์ 1 ชิ้น · แก้บั๊ก · แก้เอกสาร · แก้ config) → ไม่รวบ commit เดียวตอนจบ
 - ก่อนแก้อะไรที่เสี่ยง → มีจุดสะอาดให้ถอยกลับ
-- ผู้ใช้สั่ง
 - **ไม่ push · ไม่ amend · ไม่แก้ history** เว้นแต่ผู้ใช้สั่ง
 - โฟลเดอร์ไม่ใช่ git → เสนอ `git init` 1 ครั้ง · ผู้ใช้ไม่เอา → ใช้ log ของ superuser อย่างเดียว ไม่ถามซ้ำ
 
@@ -21,7 +20,7 @@ description: Use when a step of work is finished in a git folder, or the user as
 1. `git status` · `git diff` → ดูว่าเปลี่ยนอะไร
 2. `git log -10 --oneline` → ใช้ภาษาและชื่อ scope แบบที่ repo ใช้อยู่
 3. แยกตามเรื่อง → 1 commit = 1 เรื่อง · subject ต้องใช้ "และ" เชื่อมของที่ไม่เกี่ยวกัน → แยก 2 commit (`git add <ไฟล์>` ทีละเรื่อง)
-4. ตรวจของที่ไม่ควรเข้า → ค่าลับ · `.env` · key · ไฟล์ build · ไฟล์ใหญ่ · `.claude/superuser/log/` `inbox/` `learn/` · `_to_delete/` → ใส่ `.gitignore`
+4. ตรวจของที่ไม่ควรเข้า → ค่าลับ · `.env` · key · ไฟล์ build · ไฟล์ใหญ่ · `.claude/superuser/log/` `inbox/` `learn/` `handoff/` `state.json` · `_to_delete/` → ใส่ `.gitignore` (log กับ handoff มีชื่อไฟล์และคำสั่งภายใน)
 5. เลือก type → เขียนข้อความ → commit
 6. จด hash ลง log ของงาน (บรรทัด `commit` ใน `log/<วันที่>/main.jsonl`) · บอกผู้ใช้ 1 บรรทัด เช่น `a1b2c3d feat(auth): เพิ่มล็อกอินด้วย LINE`
 

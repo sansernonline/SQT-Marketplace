@@ -46,7 +46,8 @@ description: Use when running test cases and keeping proof. Captioned GIF per ca
 กรอก `run.json` (รูปแบบเต็มอยู่หัวไฟล์ [`scripts/make_evidence.py`](scripts/make_evidence.py)) · ต่อเคส: `id` · `title` · `result` (`Pass` `Fail` `Blocked` `Not run`) · `expected` · `actual` · `issue` · `bug` · `steps[]`
 
 ```bash
-python scripts/make_evidence.py _to_delete/test-frames/2026-10-18-r1/run.json \
+# รันจากรากโปรเจกต์ · เรียกสคริปต์ด้วยพาธเต็มของโฟลเดอร์ skill นี้ (เขียนแทน <โฟลเดอร์ skill test-evidence>)
+python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" _to_delete/test-frames/2026-10-18-r1/run.json \
   --out qa/evidence/2026-10-18-r1 --report qa/reports/2026-10-18-r1-test-report.md
 ```
 
@@ -59,7 +60,7 @@ python scripts/make_evidence.py _to_delete/test-frames/2026-10-18-r1/run.json \
 | แถบคำบรรยาย | ใต้ภาพ ไม่ทับหน้าจอ · ตัวอักษร 28 px · พื้นดำ ตัวขาว | ย่อเหลือ 800 px ยังอ่านได้ (~17 px) |
 | เวลาต่อขั้น | 2–6 วินาที ตามความยาวคำบรรยาย | อ่านทัน ไม่ต้องหยุดภาพ |
 | ภาพปิด | ผลตัวใหญ่ + ปัญหา + คาดว่า / ที่เกิดจริง | ดูภาพสุดท้ายภาพเดียวก็รู้เรื่อง |
-| ฟอนต์ | Sarabun (ไทย + อังกฤษ) และชุดลูกศร ✓ ✗ อยู่ใน `assets/fonts/` | ทุกเครื่องหน้าตาเหมือนกัน |
+| ฟอนต์ | Sarabun (ไทย + อังกฤษ) และชุดเครื่องหมาย ✓ ✗ อยู่ใน `assets/fonts/` | ทุกเครื่องหน้าตาเหมือนกัน |
 
 - เคส `Fail` · `Blocked` ได้ `<id>-fail.png` เพิ่ม = ขั้นที่ล้มแบบสีเต็ม (GIF มีแค่ 256 สี) ใช้แนบบั๊ก
 - สคริปต์เตือน `no raqm` → สระ วรรณยุกต์ไทยจะซ้อนกัน · รันใน Docker sandbox ของโปรเจกต์ (`docker-sandbox`) แล้วหาย
@@ -72,8 +73,8 @@ python scripts/make_evidence.py _to_delete/test-frames/2026-10-18-r1/run.json \
 
 | มี Excel อยู่แล้วแบบไหน | คำสั่ง |
 |---|---|
-| ยังไม่มี หรือสร้างจาก `test-case-template` | `python ../test-case-template/scripts/build-test-workbook.py cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv` |
-| ผู้ใช้ส่งไฟล์ของตัวเองมา (หน้าตาแบบไหนก็ได้) | `python scripts/record_results.py <ไฟล์ของผู้ใช้>.xlsx qa/evidence/<run-id>/results.csv -o qa/PRJ-test-cases.xlsx` |
+| ยังไม่มี หรือสร้างจาก `test-case-template` | `python "<โฟลเดอร์ skill test-case-template>/scripts/build-test-workbook.py" cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv` |
+| ผู้ใช้ส่งไฟล์ของตัวเองมา (หน้าตาแบบไหนก็ได้) | `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" <ไฟล์ของผู้ใช้>.xlsx qa/evidence/<run-id>/results.csv -o qa/PRJ-test-cases.xlsx` |
 
 `record_results.py` หาแถวหัวตารางที่มีคอลัมน์รหัสเคส (`ID` · `TC ID` · `Test Case ID` · `รหัส`) ทุก sheet · คอลัมน์ผลที่มีอยู่แล้ว (`Status` · `ผล`) ใช้ต่อ · ที่ไม่มีเพิ่มท้ายตาราง: **Result** · **Test result** · **Evidence** (ลิงก์กดเปิด GIF) · ไฟล์ต้นฉบับของผู้ใช้ไม่แก้ทับ ถ้าจะทับให้ย้ายตัวเดิมไป `_to_delete/` ก่อน
 
@@ -84,4 +85,4 @@ python scripts/make_evidence.py _to_delete/test-frames/2026-10-18-r1/run.json \
 - [ ] จำนวนในตารางสรุปของรายงาน = จำนวนเคสใน `run.json` = ผลใน Excel
 - [ ] ไม่มีข้อมูลจริงหรือรหัสผ่านในภาพ
 - [ ] ภาพดิบอยู่ใน `_to_delete/` ไม่ค้างใน `qa/`
-- [ ] รันสคริปต์ทดสอบตัวเองผ่าน: `python scripts/make_evidence.py --self-test` · `python scripts/record_results.py --self-test`
+- [ ] รันสคริปต์ทดสอบตัวเองผ่าน: `python "<โฟลเดอร์ skill test-evidence>/scripts/make_evidence.py" --self-test` · `python "<โฟลเดอร์ skill test-evidence>/scripts/record_results.py" --self-test`

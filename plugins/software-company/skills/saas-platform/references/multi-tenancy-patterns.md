@@ -62,26 +62,39 @@ ALTER TABLE orders ADD CONSTRAINT fk_customer
 ### Postgres Row-Level Security
 ```sql
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+-- Table owners skip RLS unless FORCE is set
+ALTER TABLE orders FORCE ROW LEVEL SECURITY;
 
 CREATE POLICY tenant_isolation ON orders
     FOR ALL
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
+    USING      (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid)
+    WITH CHECK (tenant_id = NULLIF(current_setting('app.tenant_id', true), '')::uuid);
+-- no tenant set → NULL → no rows (fails closed)
 
--- App sets context per request
-SET LOCAL app.tenant_id = 'tenant-uuid';
+-- The app connects as its own role: not the table owner, not superuser, no BYPASSRLS
+CREATE ROLE app_user LOGIN NOSUPERUSER NOBYPASSRLS;
+GRANT SELECT, INSERT, UPDATE, DELETE ON orders TO app_user;
 ```
+
+กฎที่ต้องถูกทุกข้อ (ที่มา [PostgreSQL — Row Security Policies](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) · [SET](https://www.postgresql.org/docs/current/sql-set.html) · ตรวจ 22 ต.ค. 2569)
+
+- เจ้าของตารางข้าม RLS ถ้าไม่ได้ `FORCE ROW LEVEL SECURITY` · superuser และ role ที่มี `BYPASSRLS` ข้ามเสมอ → แอปต้องใช้ role แยก
+- `SET LOCAL` นอก transaction "emits a warning and otherwise has no effect" → ตั้งค่าภายใน `BEGIN … COMMIT` เท่านั้น
+- `SET` (ไม่มี LOCAL) ติดไปทั้ง session → connection ที่คืนเข้า pool จะพา tenant เดิมไปให้ request ถัดไป ห้ามใช้
+- ห้ามต่อ string tenant id เข้า SQL — ส่งเป็น parameter (`$1`) ผ่าน `set_config(name, value, true)` (`true` = มีผลเฉพาะ transaction นี้)
 
 ### Application Enforcement (defense in depth)
 ```typescript
 // Repository pattern with mandatory tenant
 class OrderRepository {
-  constructor(private tenantId: string) {}
+  // client = the transaction client from withTenant() below
+  constructor(private client: PoolClient, private tenantId: string) {}
 
   findAll() {
-    return db.query`
-      SELECT * FROM orders
-      WHERE tenant_id = ${this.tenantId}
-    `;
+    return this.client.query(
+      'SELECT * FROM orders WHERE tenant_id = $1',
+      [this.tenantId],
+    );
   }
 
   // No method exists that DOESN'T filter by tenant
@@ -90,28 +103,50 @@ class OrderRepository {
 
 ## Tenant Context Propagation
 
-### Pattern: Middleware Sets Context
+### Pattern: Middleware Sets Context, One Transaction per Request
+
+Middleware only reads the tenant from a verified token. The database context is set inside the same transaction, on the same pooled client, that runs the queries (node-postgres `pg`).
 
 ```typescript
-app.use(async (req, res, next) => {
-  // Extract from JWT
-  const token = req.headers.authorization;
-  const claims = await verifyJWT(token);
+import { Pool, PoolClient } from 'pg';
+const pool = new Pool(); // connects as app_user (not table owner)
 
-  // Validate tenant access
+app.use(async (req, res, next) => {
+  const token = req.headers.authorization?.replace(/^Bearer /, '');
+  if (!token) return res.status(401).end();
+  const claims = await verifyJWT(token); // checks signature, iss, aud, exp
   if (!claims.tenant_id) return res.status(401).end();
 
-  // Attach to request
   req.tenant = {
     id: claims.tenant_id,
     tier: claims.tier,
     features: await loadFeatures(claims.tenant_id),
   };
-
-  // Set DB session var (for RLS)
-  await db.query(`SET LOCAL app.tenant_id = '${req.tenant.id}'`);
-
   next();
+});
+
+// Every DB call goes through this: BEGIN → set tenant (local) → work → COMMIT
+async function withTenant<T>(tenantId: string, fn: (c: PoolClient) => Promise<T>): Promise<T> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query("SELECT set_config('app.tenant_id', $1, true)", [tenantId]);
+    const result = await fn(client);
+    await client.query('COMMIT');
+    return result; // setting is gone once the transaction ends
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}
+
+// Usage in a handler
+app.get('/orders', async (req, res) => {
+  const rows = await withTenant(req.tenant.id, (c) =>
+    new OrderRepository(c, req.tenant.id).findAll());
+  res.json(rows.rows);
 });
 ```
 
@@ -144,17 +179,36 @@ CREATE SCHEMA tenant_xyz;
 CREATE TABLE tenant_abc.orders (...);
 CREATE TABLE tenant_xyz.orders (...);
 
--- Connect with search path
-SET search_path TO tenant_abc;
+-- search_path only inside a transaction (SET LOCAL), never plain SET on a pooled connection
+BEGIN;
+SET LOCAL search_path TO tenant_abc;
+-- ... queries ...
+COMMIT;
 ```
 
 ```typescript
-// Per-tenant connection pool
-async function getConnection(tenantId: string) {
-  const conn = await pool.connect();
-  await conn.query(`SET search_path TO tenant_${tenantId}`);
-  return conn;
+// Schema name comes from your tenant registry, never from user input
+async function withTenantSchema<T>(tenantId: string, fn: (c: PoolClient) => Promise<T>) {
+  const schema = await lookupTenantSchema(tenantId); // e.g. 'tenant_abc'
+  if (!/^tenant_[a-z0-9_]{1,40}$/.test(schema)) throw new Error('bad schema name');
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    // local = true → resets at COMMIT/ROLLBACK, so the pooled connection is clean
+    await client.query("SELECT set_config('search_path', $1, true)", [schema]);
+    const result = await fn(client);
+    await client.query('COMMIT');
+    return result;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 }
+// Alternative: one small pool per tenant with search_path fixed at connect time:
+// new Pool({ options: `-c search_path=${schema}` })  (schema validated as above)
 ```
 
 ### Migrations
@@ -187,10 +241,14 @@ await db.query(`SELECT * FROM orders`);  // tenant_id NOT needed in WHERE
 
 ### Tenant Provisioning
 ```python
+import re
+
 async def provision_tenant(tenant_id: str, region: str):
-    # Create DB
+    # Create DB — identifiers can't be bound as parameters, so validate then quote
+    if not re.fullmatch(r'[a-z0-9_]{1,40}', tenant_id):
+        raise ValueError('bad tenant id')
     db_name = f'tenant_{tenant_id}'
-    await admin_db.query(f'CREATE DATABASE {db_name}')
+    await admin_db.query(f'CREATE DATABASE "{db_name}"')
 
     # Run migrations
     await run_migrations(db_name)
@@ -214,10 +272,13 @@ async def provision_tenant(tenant_id: str, region: str):
 // Distributed rate limiter (Redis)
 async function rateLimit(req) {
   const limit = req.tenant.tier === 'enterprise' ? 10000 : 100;
-  const key = `rate:${req.tenant.id}`;
+  // Fixed 1-minute window; the window number is part of the key
+  const window = Math.floor(Date.now() / 60_000);
+  const key = `rate:${req.tenant.id}:${window}`;
 
-  const count = await redis.incr(key);
-  if (count === 1) await redis.expire(key, 60);
+  // MULTI/EXEC (ioredis): INCR and EXPIRE apply together — no key left without a TTL
+  const results = await redis.multi().incr(key).expire(key, 60).exec();
+  const count = Number(results?.[0]?.[1]);
 
   if (count > limit) {
     throw new RateLimitError({ retryAfter: 60 });

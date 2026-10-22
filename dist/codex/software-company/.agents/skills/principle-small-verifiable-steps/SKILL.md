@@ -1,6 +1,6 @@
 ---
 name: principle-small-verifiable-steps
-description: Use when work has many steps (migration, sweep, many similar edits, unattended run, stacked PRs).
+description: Use when work has many steps (migration, sweep, batch of similar edits, long report, unattended run). Cut into pieces.
 ---
 
 # principle · small verifiable steps — ตัดเป็นชิ้นเล็กที่ตรวจได้ทีละชิ้น
@@ -12,27 +12,25 @@ description: Use when work has many steps (migration, sweep, many similar edits,
 ## วิธีตัด
 
 1. เขียนรายการชิ้นลง todo ก่อนเริ่ม โดยแต่ละชิ้นมีเกณฑ์ "ผ่านเมื่อ" 1 บรรทัด
-2. 1 ชิ้นเปลี่ยนเรื่องเดียว และจบด้วย build ผ่าน · test ผ่าน · แอปยังรันได้
-3. ทำทีละชิ้น ตรวจ แล้ว commit ก่อนขึ้นชิ้นถัดไป โดย commit ตามย่อหน้า **กฎ commit** ใน `superuser` หัวข้อ 6 (ความเป็นอิสระ) ถ้าไม่ได้อนุญาตให้บันทึกชิ้นที่ผ่านไว้ใน `docs/BUILD-PLAN.md` แทน
+2. 1 ชิ้นเปลี่ยนเรื่องเดียว และจบในสภาพที่ตรวจได้ (ไฟล์เปิดได้ · ยอดรวมตรง · โค้ด: build กับ test ผ่าน)
+3. ทำทีละชิ้น ตรวจ แล้วบันทึกก่อนขึ้นชิ้นถัดไป ถ้าเป็นโค้ดให้ commit ตามกฎ commit (`superuser` หัวข้อ 1 ข้อ 10 · งานโค้ด: `superuser` ของ plugin `software-company` หัวข้อ 6) ถ้าไม่ได้อนุญาตหรือไม่ใช่โค้ด ให้บันทึกชิ้นที่ผ่านไว้ในตาราง "ความคืบหน้า" ของ `CONTEXT.md` แทน (โปรเจกต์ที่มี `docs/BUILD-PLAN.md` ใช้ไฟล์นั้น)
 4. ชิ้นไหนตรวจไม่ผ่าน ให้หยุดแก้ที่ชิ้นนั้น ห้ามข้ามไปชิ้นถัดไปแล้วค่อยกลับมา
 
 ## ลำดับ
 
 | ทำก่อน | ทำหลัง |
 |---|---|
-| ของที่คนอื่นพึ่ง (type · schema · ฟังก์ชันกลาง) | ของที่เรียกใช้ |
-| เพิ่มของใหม่ | ย้ายผู้ใช้ แล้วลบของเก่า ([`principle-replace-then-delete`](../principle-replace-then-delete/SKILL.md)) |
+| ของที่คนอื่นพึ่ง (หัวข้อหลัก · แม่แบบ · ตารางต้นทาง · type · schema) | ของที่เรียกใช้ |
+| เพิ่มของใหม่ | ย้ายผู้ใช้ แล้วลบของเก่า (`principle-replace-then-delete` (plugin `software-company`)) |
 | ชิ้นที่เสี่ยงที่สุด | ชิ้นที่รู้แน่ว่าทำได้ |
 
-## commit และ PR
+## ส่งงานเป็นชิ้น
 
-- ทุก commit อ่านจบในตัวเองและ build ผ่าน คนรีวิวจึงไล่ทีละ commit แล้วเชื่อได้
-- PR ที่เปลี่ยนเกิน 400 บรรทัด ให้แบ่งเป็นหลาย PR ต่อกัน (เกณฑ์เดียวกับ `pr-description-template` และ `code-review-checklist`)
-- รูปแบบข้อความใช้ `commit-message-format`
+ทุกชิ้นอ่านจบในตัวเอง ผู้ตรวจจึงไล่ทีละชิ้นแล้วเชื่อได้ (เช่น ปรับราคา 200 รายการ → ทีละ 20 รายการ) · งานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 
 ## งานที่ปล่อยทำเอง
 
-playbook `unattended-run` บันทึกชิ้นที่ผ่านแล้วลง `docs/BUILD-PLAN.md` ทุกชิ้น ถ้าหยุดกลางทางก็รับต่อจากชิ้นสุดท้ายที่ผ่านได้
+playbook `unattended-run` บันทึกชิ้นที่ผ่านแล้วลงตาราง "ความคืบหน้า" ใน `CONTEXT.md` ทุกชิ้น (โปรเจกต์ที่มี `docs/BUILD-PLAN.md` ใช้ไฟล์นั้น) ถ้าหยุดกลางทางก็รับต่อจากชิ้นสุดท้ายที่ผ่านได้
 
 ## ไม่ต้องทำเมื่อ
 

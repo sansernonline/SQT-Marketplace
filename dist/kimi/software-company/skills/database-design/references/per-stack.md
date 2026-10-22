@@ -129,7 +129,7 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
-- `ALTER TABLE` ส่วนใหญ่เขียนตารางใหม่ทั้งตาราง ตารางใหญ่จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
+- MySQL 8.0.12 ขึ้นไป `ADD COLUMN` ใช้ `ALGORITHM=INSTANT` ได้ (ก่อน 8.0.29 เพิ่มได้เฉพาะท้ายตาราง) ส่วนการเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่ (dev.mysql.com online DDL, ตรวจ 22 ต.ค. 2569) ตารางใหญ่ที่ต้อง rebuild จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
 - ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
 
 ---
@@ -189,6 +189,7 @@ model Order {
   id          BigInt   @id @default(autoincrement())
   orderNo     String   @unique @map("order_no") @db.VarChar(20)
   totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  status      String   @db.VarChar(20)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   customer    Customer @relation(fields: [customerId], references: [id])
   customerId  BigInt   @map("customer_id")
@@ -216,13 +217,24 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
+แยกเป็น 3 migration (1 migration ทำเรื่องเดียว):
+
 ```python
+# 1) schema: เพิ่มคอลัมน์ที่ยังว่างได้
 def upgrade():
     op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+
+# 2) ข้อมูล: เติมค่าเดิม (ตารางใหญ่ให้ทำเป็นชุดเล็ก ๆ)
+def upgrade():
     op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+
+# 3) schema: บังคับ NOT NULL และสร้าง index
+def upgrade():
     op.alter_column("orders", "status", nullable=False)
-    op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
-                    postgresql_concurrently=True)
+    # CREATE INDEX CONCURRENTLY ห้ามอยู่ใน transaction จึงต้องออกจาก transaction ของ Alembic
+    with op.get_context().autocommit_block():
+        op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                        postgresql_concurrently=True)
 ```
 
 > `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)

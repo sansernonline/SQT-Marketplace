@@ -45,7 +45,7 @@
 ### Pattern: Tenant-Aware Hierarchy
 
 ```
-{tenant}/{site}/{type}/{id}/{message}
+{tenant}/{site}/{type}/{id}/{message}      ← the one scheme for this skill; role files link here
 
 Examples:
 acme/factory-1/sensor/dev-001/telemetry
@@ -62,8 +62,8 @@ Benefits:
 ### Pattern: Request/Response
 
 ```
-Request:  {tenant}/{device}/cmd/req
-Response: {tenant}/{device}/cmd/resp
+Request:  {tenant}/{site}/{type}/{id}/cmd/req
+Response: {tenant}/{site}/{type}/{id}/cmd/resp
 
 Or use MQTT 5 Response Topic property:
 Request includes "response-topic" property
@@ -124,17 +124,21 @@ client.publish(topic, payload, qos=2)
 ### Persistent Session
 
 ```python
-client = mqtt.Client(
-    client_id="dev-abc",
-    clean_session=False  # MQTT 3 — keep state on disconnect
-)
+# paho-mqtt 2.x (tested with 2.1.0, 2026-10-22)
+import paho.mqtt.client as mqtt
+from paho.mqtt.properties import Properties
+from paho.mqtt.packettypes import PacketTypes
 
-# MQTT 5
-client.connect(
-    properties={
-        "SessionExpiryInterval": 3600  # keep for 1h
-    }
-)
+# MQTT 3.1.1 — keep state on disconnect
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv311, clean_session=False)
+
+# MQTT 5 — no clean_session (paho raises ValueError); use clean_start + Session Expiry
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv5)
+props = Properties(PacketTypes.CONNECT)
+props.SessionExpiryInterval = 3600  # keep for 1h
+client.connect(broker, 8883, clean_start=False, properties=props)
 
 # Benefits:
 # - Subscriptions persist
@@ -145,7 +149,9 @@ client.connect(
 ### Clean Session
 
 ```python
-client = mqtt.Client(clean_session=True)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,
+                     protocol=mqtt.MQTTv311, clean_session=True)
+# MQTT 5: client.connect(broker, 8883, clean_start=True)  — no Session Expiry → session ends on disconnect
 
 # Use for:
 # - Stateless workers
@@ -156,9 +162,10 @@ client = mqtt.Client(clean_session=True)
 ## Will (Last Will and Testament)
 
 ```python
+# base = f"{tenant}/{site}/{type}/{device_id}"  (see Topic Structure Patterns)
 # Set BEFORE connect
 client.will_set(
-    topic=f"{tenant}/{device_id}/state",
+    topic=f"{base}/state",
     payload='{"status":"offline","reason":"unexpected"}',
     qos=1,
     retain=True
@@ -176,7 +183,7 @@ client.connect(broker)
 ```python
 # Publish with retain
 client.publish(
-    topic=f"{tenant}/{device_id}/config",
+    topic=f"{base}/config",
     payload=config_json,
     qos=1,
     retain=True
@@ -196,24 +203,26 @@ client.publish(topic, payload="", retain=True)
 
 ```python
 import paho.mqtt.client as mqtt
-import time
 
-def on_connect(client, userdata, flags, rc, properties=None):
-    if rc == 0:
+# CallbackAPIVersion.VERSION2 signatures (paho-mqtt 2.x)
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
         # Resubscribe (clean session=true)
         client.subscribe([
-            (f"{tenant}/{device_id}/cmd/req", 1),
+            (f"{base}/cmd/req", 1),   # base: see Topic Structure Patterns
             (f"{tenant}/broadcast/+", 1),
         ])
 
-def on_disconnect(client, userdata, rc, properties=None):
-    print(f"Disconnected: rc={rc}")
-    if rc != 0:
-        # Unexpected disconnect, will auto-reconnect
+def on_disconnect(client, userdata, disconnect_flags, reason_code, properties):
+    print(f"Disconnected: reason={reason_code}")
+    if reason_code != 0:
+        pass  # unexpected disconnect — loop_start() reconnects with the backoff below
 
-client = mqtt.Client(client_id="dev-abc", clean_session=False)
+client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="dev-abc",
+                     protocol=mqtt.MQTTv311, clean_session=False)
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
+client.tls_set()  # port 8883 is MQTT over TLS
 
 # Auto-reconnect with backoff
 client.reconnect_delay_set(min_delay=1, max_delay=120)
@@ -228,18 +237,34 @@ client.loop_start()
 # When publishing faster than network allows
 # Client buffers messages — but bounded!
 
-# MQTT 5 flow control
-client.connect(
-    properties={
-        "ReceiveMaximum": 100  # max inflight messages
-    }
-)
+import threading
 
-# Application-level backpressure
-async def publish_with_backpressure(topic, payload, qos=1):
-    while client.inflight_count() > 50:
-        await asyncio.sleep(0.01)
-    await client.publish(topic, payload, qos)
+# MQTT 5 flow control — Receive Maximum = how many unacknowledged QoS 1/2
+# messages the broker may send US. The broker's own value (in CONNACK) limits what we send.
+props = Properties(PacketTypes.CONNECT)
+props.ReceiveMaximum = 100
+client.connect(broker, 8883, properties=props)
+
+# Client-side bounds for outgoing messages
+client.max_inflight_messages_set(20)    # unacked QoS 1/2 messages on the wire
+client.max_queued_messages_set(1000)    # local queue; 0 = unbounded (don't)
+
+# Application-level backpressure: block when 50 messages wait for PUBACK
+# (paho has no inflight_count(); count acks yourself)
+inflight = threading.BoundedSemaphore(50)
+
+def on_publish(client, userdata, mid, reason_code, properties):
+    inflight.release()
+
+client.on_publish = on_publish
+
+def publish_with_backpressure(topic, payload, qos=1):
+    inflight.acquire()
+    info = client.publish(topic, payload, qos=qos)
+    if info.rc != mqtt.MQTT_ERR_SUCCESS:
+        inflight.release()
+        raise RuntimeError(mqtt.error_string(info.rc))
+    return info
 ```
 
 ## MQTT 5 Specific Patterns
@@ -247,17 +272,13 @@ async def publish_with_backpressure(topic, payload, qos=1):
 ### Properties
 
 ```python
-# User properties (key-value metadata)
-client.publish(
-    topic, payload,
-    qos=1,
-    properties={
-        "UserProperty": [
-            ("trace-id", "abc-123"),
-            ("source-version", "1.2.3"),
-        ]
-    }
-)
+# User properties (key-value metadata) — a Properties object, not a dict
+pub_props = Properties(PacketTypes.PUBLISH)
+pub_props.UserProperty = [
+    ("trace-id", "abc-123"),
+    ("source-version", "1.2.3"),
+]
+client.publish(topic, payload, qos=1, properties=pub_props)
 ```
 
 ### Shared Subscriptions
@@ -282,11 +303,12 @@ Use for:
 #       0x97 ("Quota Exceeded")
 #       0x9A ("Retain Not Supported")
 
-# Handle gracefully
-def on_publish_failed(client, userdata, mid, reason_code, properties):
-    if reason_code == 0x97:
-        # Slow down, adjust quota
-        ...
+# Handle gracefully — paho has no on_publish_failed; the PUBACK reason code
+# arrives in on_publish (VERSION2 callbacks, MQTT 5)
+def on_publish(client, userdata, mid, reason_code, properties):
+    if reason_code.is_failure:
+        if reason_code.value == 0x97:   # Quota exceeded
+            ...                         # slow down, adjust quota
 ```
 
 ## Topic Filter Best Practices

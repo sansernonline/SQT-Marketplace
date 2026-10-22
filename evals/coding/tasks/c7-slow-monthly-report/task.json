@@ -1,0 +1,6 @@
+{
+  "stack": "sql",
+  "title": "รายงานยอดขายรายเดือนช้าเกิน 2 วินาที",
+  "test": ["python", "-m", "pytest", "-q"],
+  "testFiles": "^tests/.*\\.py$"
+}

@@ -3,7 +3,7 @@ name: cicd-and-release
 description: Use when setting up or fixing a build and deploy pipeline or deciding how a project ships.
 ---
 
-# CI/CD และการปล่อยของ
+# Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
 
 > **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
 > ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
@@ -74,7 +74,7 @@ commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี
 
 ## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
 
-ใช้ SemVer: `MAJOR.MINOR.PATCH`
+ใช้ Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
 
 | ขึ้นเลขไหน | เมื่อ |
 |---|---|
@@ -206,7 +206,7 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 | เรื่อง | กฎ |
 |---|---|
 | เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
-| build ครั้งเดียว | `flutter build appbundle --release` ได้ AAB ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
+| build ครั้งเดียว | `flutter build appbundle --release` ได้ Android App Bundle (AAB) ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
 | ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
 | rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
 | กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |

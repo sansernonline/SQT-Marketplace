@@ -39,7 +39,7 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Small/medium team (< 30 engineers)
+- ✅ Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
 - ✅ You need to ship changes fast
 - ✅ Operations needs are simple
 - ✅ All parts can deploy together
@@ -86,7 +86,7 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 - ❌ Business areas don't have clear boundaries yet
 
 **Hidden costs:**
-- 💸 Much harder to operate (about 5x the ops effort)
+- 💸 Much harder to operate (more services to deploy, monitor and debug)
 - 💸 Network latency between services
 - 💸 Transactions across services are hard
 - 💸 Bugs are harder to trace
@@ -193,7 +193,7 @@ Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) 
        Closest to user (fastest)              Furthest (last resort)
 ```
 
-Each tier is roughly 10x faster than the next. CDN = content delivery network.
+Each tier is faster than the next (the gap depends on your system; measure it). CDN = content delivery network.
 
 ### Idempotency
 
@@ -221,5 +221,5 @@ When proposing architecture, compare options:
 | Team skill | 20% | 9 | 5 | 7 |
 | Operations | 15% | 8 | 5 | 7 |
 | Future-proof | 15% | 6 | 9 | 7 |
-| **Total** | 100% | **7.95** | 7.10 | 7.20 |
+| **Total** | 100% | **8.10** | 7.00 | 7.20 |
 ```

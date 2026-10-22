@@ -8,5 +8,5 @@ disable-model-invocation: true
 Use the `trade-journal` skill: **$ARGUMENTS**
 
 - `entry` — log symbol, size, entry, stop, target, setup, one-sentence reason, one-word emotion
-- `exit` — log exit price, R-multiple result, one-sentence what happened
+- `exit` — log exit price, costs, R-multiple (net of costs), one-sentence what happened
 - `read` — show recent entries for review

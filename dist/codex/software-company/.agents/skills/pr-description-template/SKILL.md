@@ -53,6 +53,7 @@ description: Use when writing a pull request description or preparing a PR for r
 4. Try edge case: ...
 
 ## Screenshots / Demos
+<!-- ใช้ภาพจากข้อมูลจำลอง หรือเบลอข้อมูลลูกค้าจริงก่อนแนบ -->
 | Before | After |
 |--------|-------|
 | <img>  | <img> |
@@ -77,7 +78,7 @@ description: Use when writing a pull request description or preparing a PR for r
 <note any security implications, OR write "None">
 
 ## Deployment Notes
-<env var changes, migrations, feature flags needed, OR "Standard deployment">
+<env var changes (ใส่ชื่อตัวแปรเท่านั้น ห้ามใส่ค่าจริงหรือรหัสลับ), migrations, feature flags needed, OR "Standard deployment">
 
 ## Notes for Reviewer
 <anything reviewer should pay attention to, gotchas, alternative approaches considered>
@@ -93,8 +94,9 @@ description: Use when writing a pull request description or preparing a PR for r
 
 If your PR is huge, split into:
 1. Refactoring PR (no behavior change)
-2. Feature PR (small, focused)
-3. Test PR (adding coverage)
+2. Feature PR (small, focused) — พร้อมเทสที่พิสูจน์ว่างานนั้นใช้ได้ใน PR เดียวกัน ไม่แยกเป็น PR เทสต่างหาก
+
+> การ push branch หรือเปิด PR ทำเมื่อผู้ใช้สั่งเท่านั้น — เตรียมคำอธิบาย PR ไว้ให้ก่อนได้ แต่ไม่ push และไม่เปิดเอง
 
 ## Summary Writing
 

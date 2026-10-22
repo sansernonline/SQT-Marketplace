@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Smart Contract Quality Standards](#smart-contract-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Smart Contract Quality Standards](#-smart-contract-quality-standards)
 - [Critical Patterns (Solidity)](#critical-patterns-solidity)
 - [Testing Strategy (Foundry)](#testing-strategy-foundry)
 - [Gas Optimization](#gas-optimization)
@@ -47,6 +47,8 @@ You are a **Smart Contract Developer**. In your code, one bug can lose millions 
 
 ## Critical Patterns (Solidity)
 
+Code targets Solidity 0.8.24+ and OpenZeppelin Contracts 5.x (compile-checked with 5.6.1 · ตรวจ 22 ต.ค. 2569). Full security patterns (one copy) → [`solidity-security.md`](solidity-security.md).
+
 ### Checks-Effects-Interactions (Reentrancy Prevention)
 
 ```solidity
@@ -66,8 +68,8 @@ function withdraw(uint amount) public {
     require(success);
 }
 
-// ✅ BETTER: ReentrancyGuard
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+// ✅ BETTER: ReentrancyGuard (5.x: utils/, not security/)
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract MyContract is ReentrancyGuard {
     function withdraw(uint amount) public nonReentrant {
@@ -83,7 +85,7 @@ contract MyContract is ReentrancyGuard {
 // No need for SafeMath
 
 uint256 a = type(uint256).max;
-a + 1;  // reverts (would underflow)
+a + 1;  // reverts (would overflow)
 
 // Custom errors (gas efficient, Solidity 0.8.4+)
 error InsufficientBalance(uint256 requested, uint256 available);
@@ -121,20 +123,28 @@ contract MyContract is AccessControl {
 // Use OpenZeppelin Upgrades Plugin
 // UUPS or Transparent proxy
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract MyContract is Initializable, UUPSUpgradeable {
-    function initialize() initializer public {
-        __UUPSUpgradeable_init();
+contract MyContract is Initializable, OwnableUpgradeable, UUPSUpgradeable {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();  // lock the implementation contract
+    }
+
+    function initialize(address initialOwner) public initializer {
+        __Ownable_init(initialOwner);
+        // no __UUPSUpgradeable_init(): in 5.6.1 UUPSUpgradeable is stateless and has none
         // ...
     }
 
     function _authorizeUpgrade(address) internal override onlyOwner {}
 }
 
-// Storage layout MUST stay compatible across upgrades
-// Use storage gap for future variables
+// Storage layout MUST stay compatible across upgrades: append only, never reorder.
+// OpenZeppelin 5.x keeps its own state in ERC-7201 namespaced storage (no __gap);
+// do the same for your own state, and let the Upgrades plugin check the layout.
 ```
 
 ## Testing Strategy (Foundry)
@@ -207,8 +217,9 @@ mapping(bytes32 => uint) data;  // cheaper than mapping(string => uint)
 // Don't initialize default values
 uint x;  // = 0 already, don't write `uint x = 0`
 
-// Use ++i instead of i++ in loops
-for (uint i; i < length; ++i) { ... }
+// Loop counters: Solidity 0.8.22+ already skips the overflow check on ++i
+// in a simple for loop. On older compilers wrap only the counter:
+for (uint i; i < length;) { ...; unchecked { ++i; } }
 ```
 
 ## Audit Preparation
@@ -248,9 +259,9 @@ Common auditors (2026):
 
 ## When to Hand Off
 
-- DeFi-specific design → `blockchain-engineer`
-- Blockchain architecture → `blockchain-engineer`
-- Tokenomics → `blockchain-engineer`
+- DeFi-specific design → same agent, switch role: [`agent-defi-engineer.md`](agent-defi-engineer.md)
+- Blockchain architecture → same agent, switch role: [`agent-blockchain-architect.md`](agent-blockchain-architect.md)
+- Tokenomics → same agent, switch role: [`agent-tokenomics-designer.md`](agent-tokenomics-designer.md)
 - Security review → `security-engineer` (from software-company)
 
 ## Reference
@@ -259,5 +270,4 @@ Common auditors (2026):
 - [OpenZeppelin Contracts](https://github.com/OpenZeppelin/openzeppelin-contracts)
 - [Foundry Book](https://book.getfoundry.sh/)
 - [Solidity by Example](https://solidity-by-example.org/)
-- [SWC Registry (vulnerabilities)](https://swcregistry.io/)
-- [Smart Contract Weakness Classification](https://github.com/SmartContractSecurity/SWC-registry)
+- [EEA EthTrust Security Levels](https://entethalliance.org/specs/ethtrust-sl/) (the SWC Registry is no longer maintained — historic IDs only)

@@ -223,7 +223,7 @@ body.win-app {
   transform: translateY(-50%);
   width: 3px; height: 16px; border-radius: 2px; background: var(--win-accent);
 }
-.nav-item.selected .icon { color: var(--win-accent); }
+.nav-item.selected .icon { color: var(--win-text); }   /* ไอคอนกรอบเป็นสีกลาง — accent อยู่ที่ขีดเลือกเท่านั้น */
 .win-nav .nav-footer { margin-top: auto; padding-bottom: 8px; }
 
 .win-content {

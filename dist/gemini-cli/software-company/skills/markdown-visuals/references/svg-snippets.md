@@ -77,4 +77,4 @@ Reusable building blocks for inline SVG pictures of a screen inside .md docs (th
 
 ## Worked example — UI state mockup
 
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).

@@ -85,7 +85,7 @@ for _, rule in rules.iterrows():
 
 user_emb = user_model(user_features)  # 64-dim vector
 
-# Candidate generation: ANN search
+# Candidate generation: approximate nearest neighbor (ANN) search
 candidates = ann_index.search(user_emb, k=200)
 
 # Ranking: re-rank with deeper model
@@ -118,12 +118,13 @@ def trending_score(item_id, half_life_days=7):
 
 ```
 Stage 1: Candidate generation (broad, fast)
-   ↓ 100k items → 200 candidates
+   ↓ 100k+ items → a few hundred to ~1000 candidates
+     (start at ~200; raise it while the ranking stage still fits the latency budget)
    - ANN search
    - Pre-filter (in stock, category match)
 
 Stage 2: Ranking (narrow, precise)
-   ↓ 200 → 10
+   ↓ candidates → 10–100
    - Heavy model
    - Business rules
    - Diversity
@@ -181,6 +182,9 @@ Bootstrap with:
 - Onboarding survey (interests)
 - Inferred from context (geography, device, traffic source)
 - Default popular items
+- Default to category browsing · implicit feedback from first actions
+
+> 🔐 Grouping users by demographics (profiling) needs a lawful basis — usually consent — under the Thai Personal Data Protection Act (PDPA) → `pdpa-compliance`. Without it, use non-personal context only (page, category, time).
 
 ### New items
 ```
@@ -216,11 +220,16 @@ def maximal_marginal_relevance(candidates, k=10, lambda_=0.7):
 
 ## Email Recommendations
 
+> 🔐 Marketing email with personalised picks needs the user's marketing consent under PDPA — check the consent flag before generating, and honour unsubscribe → `pdpa-compliance`.
+
 ```python
 # Offline batch (e.g., nightly)
 # More compute affordable, freshness less critical
 
 async def generate_email_recs(user_id):
+    if not await has_marketing_consent(user_id):  # PDPA: no consent → no email
+        return None
+
     # User context
     profile = await get_user_profile(user_id)
 
@@ -241,7 +250,8 @@ Almost always required:
 - ✅ Brand safety (no conflicting brands together)
 - ✅ Filter out items already bought (don't recommend the exact same item)
 - ✅ Sponsored vs organic separation
-- ✅ Local availability
+- ✅ Local availability · regional pricing
+- ✅ Compliance (age-restricted items)
 
 ## A/B Testing Recommendations
 
@@ -282,8 +292,11 @@ guardrails = {
 | **Amazon Personalize** | AWS-native |
 | **Recombee** | Mid-market managed |
 | **Vespa** | Self-hosted, scale |
-| **Pinecone + custom** | DIY with vector DB |
-| **PyTorch + serving stack** | Full custom |
+| **Pinecone / Qdrant + custom** | DIY with vector DB (ANN search) |
+| **PyTorch / TensorFlow + serving stack** | Full custom |
+| **LightFM / implicit** | Classical collaborative filtering |
+
+> Tool list from model knowledge, not re-checked against official sites `(รอยืนยัน)` — check before recommending.
 
 ## Reference
 

@@ -21,6 +21,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 | "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
 | ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
 | ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
 
 **สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
 เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
@@ -77,17 +78,37 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 ---
 
+## เมื่อทำต่อไม่ได้
+
+ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+
+- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
+- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
+- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+
+```
+❌ ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
+✅ ติดอยู่ 1 เรื่อง:
+   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+   ต้องการ 1 อย่าง:
+   - แนบ Mockup.html มา หรือบอก path ใหม่
+```
+
+---
+
 ## ตัวย่อ
 
 - **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
 - **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
+- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)
 
 
 ---
 
 # skill: polished-document-style
 
-Use when writing or tidying any document people keep (Markdown, Word, PDF) — headings, tables, Thai text. Designed look → branded-document-design.
+Use when writing or tidying a document people keep (report, proposal, Word, PDF) — headings, tables, Thai. Designed look → branded-document-design.
 
 # Polished Document Style
 
@@ -95,17 +116,15 @@ Use when writing or tidying any document people keep (Markdown, Word, PDF) — h
 
 ## When to use this skill
 
-- Output is meant for **non-developers** to read (PMs, executives, clients)
+- Output is meant for **general readers** (managers, executives, clients, customers)
 - Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
+- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
 - จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
 
 ## When NOT to use
 
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
+- Internal notes for the author's own team (keep them concise)
+- Quick scratch notes · code comments
 - A whole Markdown report that must come out as one .docx → `markdown-report-docx`
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
@@ -130,6 +149,8 @@ Status values:
 - **Review** (กำลังรีวิว) — under stakeholder review
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
+
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -169,13 +190,13 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 | ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
 | สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
 | ผลตรวจ | ผ่าน · ไม่ผ่าน |
-| ชนิดกล่องข้อความ | ข้อแนะนำ · ข้อควรจำ · อันตราย · คำถามที่ยังเปิด |
+| ชนิดกล่องข้อความ | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
 
 ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
 
 ## Callout Boxes
 
-Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** · **Warning** · **Critical** · **Note** · **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด) ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 **Rules:**
 - Keep callouts to 1-3 sentences
@@ -191,11 +212,11 @@ Use tables when items have **2+ attributes** ถ้าเขียนเป็�
 - Keep cells short — long content goes in body paragraphs
 - Bold key columns: `**email**`
 
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (architect, PM, SEO recommendations) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีศัพท์เทคนิค 5 คำขึ้นไปให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (strategy, vendor choice, plan options) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป (เกณฑ์เดียวกับ `spell-out-abbreviations`) ให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Diagrams
 
-**รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
+**รูปในเอกสารโปรเจกต์ (รายงาน · ข้อเสนอ · ผังขั้นตอน · ผังข้อมูล) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams` ใน plugin `software-company`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
 skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
 
 - วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
@@ -204,7 +225,7 @@ skill นี้คุมเฉพาะเรื่องการวางร�
 
 ## Status Badges and Cover Block
 
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (ข้อเสนอ · รายงานทางการ · สัญญา · postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Lists and Code Blocks
 
@@ -229,7 +250,7 @@ Code blocks ต้องระบุภาษาทุกครั้ง (Always
 Before delivering any polished doc:
 
 - [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Cover block with version, date, status, authors
+- [ ] Header block with version, date, status, authors (cover block เฉพาะเอกสารทางการ)
 - [ ] TOC if 5+ sections
 - [ ] All sections numbered consistently
 - [ ] Anchor links in TOC actually work
@@ -238,22 +259,18 @@ Before delivering any polished doc:
 - [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
+- [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
 - [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
-- [ ] Tested rendering in GitHub preview
+- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
 
-> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · Mermaid ด่วนใน README หรือ PR อยู่ใน `software-diagrams`
-> ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
+> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · เอกสารโค้ด (Mermaid ด่วน · ข้อกำหนดซอฟต์แวร์) → ส่วนเพิ่มใน plugin `software-company`
 
 ## Anti-patterns
 
 - ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
 - ❌ **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
 - ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
 - ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -305,7 +322,7 @@ Status values:
 
 ## Callout Boxes
 
-Use blockquotes with a bold label — no emoji:
+Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
 
 ```markdown
 > **Tip:** Brief actionable insight.
@@ -341,20 +358,17 @@ Use a table:
 | role  | enum   | ✓        | `user`  | Access level      |
 ```
 
-## Mermaid Diagrams
+## Figures (รูปในเอกสาร)
 
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+
+```markdown
+ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
+
+![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
+
+**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
 ```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
 
 ## Status Badges (Inline)
 
@@ -364,7 +378,7 @@ For key fields in headers/tables:
 **Status:** Approved
 **Priority:** High
 **Risk Level:** Medium
-**SLA:** < 200ms
+**Service Level Agreement (SLA):** < 200ms
 ```
 
 Multiple badges in a header:
@@ -375,7 +389,7 @@ Multiple badges in a header:
 
 ## Cover Block Pattern
 
-For formal documents (BRD, FSD, ADR, postmortem):
+For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
 
 ```markdown
 # <Title>
@@ -395,7 +409,7 @@ For formal documents (BRD, FSD, ADR, postmortem):
 
 ## Comparison / Decision Tables
 
-For trade-off analysis (architect, PM, SEO recommendations):
+For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
 
 ```markdown
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
@@ -464,8 +478,8 @@ For documents needing formal approval:
 | Role | Name | Status | Date |
 |------|------|:------:|------|
 | Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Reviewing | — |
-| QA Lead | @charlie | Not started | — |
+| Tech Lead | @bob | Review | — |
+| QA Lead | @charlie | Pending | — |
 | Security | @dave | Rejected | 2025-01-14 |
 ```
 
@@ -496,8 +510,8 @@ Define acronyms on first use, then add to glossary.
 
 | ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
+| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
+| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
 | รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
 | ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
 | สไลด์ | `presentation-design` | `doc-theme` |

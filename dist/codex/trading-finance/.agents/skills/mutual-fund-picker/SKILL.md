@@ -16,9 +16,9 @@ General information, not investment advice — a licensed investment consultant 
 | Fixed income general | corporate bonds | 4 | income |
 | Mixed / balanced (ผสม) | stocks + bonds | 5 | one-fund simple portfolio |
 | Thai equity (หุ้นไทย) / SET50 index | Thai shares | 6 | growth, home-market |
-| Foreign equity, feeder funds (FIF) | foreign funds, often one master fund | 6–7 | global diversification; check currency hedge |
+| Foreign equity, feeder funds (Foreign Investment Fund, FIF) | foreign funds, often one master fund | 6–7 | global diversification; check currency hedge |
 | Sector / single-country / commodity | narrow theme | 7–8 | small satellite only |
-| RMF / ThaiESG | any of the above under tax wrappers | varies | tax deduction — rules in `tax-deduction-planner` |
+| Retirement Mutual Fund (RMF) / ThaiESG | any of the above under tax wrappers | varies | tax deduction — rules in `tax-deduction-planner` |
 
 ## Fees — what each one costs you
 
@@ -27,7 +27,7 @@ General information, not investment advice — a licensed investment consultant 
 | Front-end | ค่าธรรมเนียมการขาย | on buy | 0 – 1.5% |
 | Back-end | ค่าธรรมเนียมการรับซื้อคืน | on sell | 0 – 1% (often 0) |
 | Switching | ค่าธรรมเนียมการสับเปลี่ยน | on switch | often waived in-house |
-| Management fee | ค่าธรรมเนียมการจัดการ | daily inside NAV | index 0.1–0.6%, active equity 1–2% |
+| Management fee | ค่าธรรมเนียมการจัดการ | daily inside net asset value (NAV) | index 0.1–0.6%, active equity 1–2% |
 | Total expense ratio (TER) | ค่าใช้จ่ายรวมทั้งหมด | daily inside NAV | the number to compare |
 
 Feeder funds have a second layer: the master fund's own expense ratio — add it.
@@ -39,7 +39,7 @@ Ranges are rules of thumb, not regulated caps (รอยืนยัน per fund
 1. **Policy and benchmark** — what it actually buys; is it a feeder (which master fund)?
 2. **Risk level 1–8** and currency hedging policy (hedged / partly / unhedged)
 3. **Fees** — front, back, TER; feeder adds master TER
-4. **Performance vs benchmark** for 3, 5, 10 years, and percentile in its peer group (AIMC category)
+4. **Performance vs benchmark** for 3, 5, 10 years, and percentile in its peer group (Association of Investment Management Companies (AIMC) category)
 5. **Maximum drawdown** and standard deviation — "could I hold through this?"
 6. **Fund size and age** — very small or new funds may close or merge
 7. **Top holdings and concentration**

@@ -88,7 +88,7 @@ Example — "Add a cache for these API responses."
 
 - **lite:** "Done. FYI `functools.lru_cache` does this in one line if you'd rather not own a cache class."
 - **full:** "`@lru_cache(maxsize=1000)` on the fetch function. Skipped a custom cache class — add when lru_cache measurably falls short."
-- **ultra:** "No cache until a profiler asks for one. When it does: `@lru_cache`. A hand-rolled TTL cache is a bug farm with a hit rate."
+- **ultra:** "`@lru_cache` on the fetch function — done, since you asked. Do you have a profile showing these calls are slow? If not, this line can go. A hand-rolled TTL cache is a bug farm with a hit rate."
 
 ## When NOT to be lazy
 

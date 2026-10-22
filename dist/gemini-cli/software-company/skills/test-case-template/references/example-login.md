@@ -1,6 +1,18 @@
 # Example: Login Feature Test Cases
 
-Worked example for `test-case-template` (3 cases: happy path, negative, state transition).
+**สารบัญ:** (หัวข้อเคสอยู่ในกรอบโค้ด จึงลิงก์ไม่ได้ — เลื่อนหาตามรหัสเคส)
+
+- TC-LOGIN-001: Successful login with valid credentials
+- TC-LOGIN-002: Empty email field
+- TC-LOGIN-003: Account lockout after 5 failed attempts
+- TC-LOGIN-004: 4 failed attempts do not lock the account (just below the limit)
+- TC-LOGIN-005: 6th attempt on a locked account is rejected (just above the limit)
+- [Coverage matrix](#coverage-matrix)
+- [Traceability](#traceability)
+
+Worked example for `test-case-template` (5 cases: happy path · negative · lockout at the limit of 5 failed attempts with its 3 boundary values 4 · 5 · 6 · security).
+
+IDs: User Story (US) · Acceptance Criteria (AC) · Web Content Accessibility Guidelines (WCAG) · Business Rule (BR) · Functional Requirement (FR).
 
 ```markdown
 ## TC-LOGIN-001: Successful login with valid credentials
@@ -56,7 +68,7 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 | 3 | Click "Login"         | Error: "Email is required"           |
 | 4 | Verify focus          | Email field gets focus               |
 
-**Oracle:** [D] US-001 AC2 — อีเมลเป็นช่องบังคับ · [R] ช่องที่ผิดได้โฟกัส (WCAG 3.3.1)
+**Oracle:** [D] US-001 AC2 — อีเมลเป็นช่องบังคับ และช่องที่ผิดต้องได้โฟกัส (ขั้นที่ 4) · [R] WCAG 3.3.1 — ข้อผิดพลาดต้องบอกเป็นข้อความ (ขั้นที่ 3) · WCAG ไม่ได้บังคับเรื่องโฟกัส จึงอ้างเฉพาะเรื่องข้อความ
 **Related:** US-001, AC2
 ```
 
@@ -83,3 +95,60 @@ Worked example for `test-case-template` (3 cases: happy path, negative, state tr
 **Check when:** ทั้งสอง — หลังรีโหลดหน้าต้องยังล็อกอยู่
 **Related:** US-001, AC4
 ```
+
+```markdown
+## TC-LOGIN-004: 4 failed attempts do not lock the account (just below the limit)
+
+**Module:** Authentication
+**Type:** Boundary
+**Priority:** P1
+**Automation:** Automated
+
+**Preconditions:**
+- User account exists and is not locked
+
+**Steps:**
+| # | Action                              | Expected Result                |
+|---|-------------------------------------|-------------------------------|
+| 1 | Enter valid email + wrong password, 4 times | Error message each time |
+| 2 | Enter valid email + correct password| Redirect to /dashboard        |
+
+**Oracle:** [D] US-001 AC4 — ล็อกเมื่อผิดครบ 5 ครั้ง (4 ครั้งยังไม่ล็อก)
+**Check when:** ทันที
+**Related:** US-001, AC4, BR-001
+```
+
+```markdown
+## TC-LOGIN-005: 6th attempt on a locked account is rejected (just above the limit)
+
+**Module:** Authentication
+**Type:** Boundary
+**Priority:** P1
+**Automation:** Automated
+
+**Preconditions:**
+- User account is locked after 5 failed attempts (see TC-LOGIN-003)
+
+**Steps:**
+| # | Action                              | Expected Result                |
+|---|-------------------------------------|-------------------------------|
+| 1 | Enter valid email + correct password (6th attempt) | Error: "Account locked..." |
+
+**Oracle:** [D] US-001 AC4 — ล็อกอยู่ 15 นาที แม้รหัสผ่านถูก
+**Check when:** ทั้งสอง — หลังรีโหลดหน้าต้องยังล็อกอยู่
+**Related:** US-001, AC4, BR-001
+```
+
+## Coverage matrix
+
+| Feature | Happy | Negative | Boundary | Equivalence | State | Security/API |
+|---|---|---|---|---|---|---|
+| Login | TC-LOGIN-001 | TC-LOGIN-002 | TC-LOGIN-004 · 005 | ⚠️ ยังไม่มี: ชนิดรหัสผ่านที่ผิด | — | TC-LOGIN-003 |
+
+## Traceability
+
+| FR / BR | Test cases |
+|---|---|
+| US-001 AC1 | TC-LOGIN-001 |
+| US-001 AC2 | TC-LOGIN-002 |
+| BR-001 (ผิด 5 ครั้ง → ล็อก 15 นาที) | TC-LOGIN-003 · 004 · 005 |

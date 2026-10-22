@@ -1,7 +1,7 @@
 # playbook · pickup-and-pause — รับงานที่ค้างต่อ · หยุดงานให้คนอื่นรับต่อได้
 
 ใช้เมื่อ: "ทำต่อจากเมื่อวาน" · "ค้างไว้ตรงไหน" · รับงานต่อจาก agent ตัวอื่น · "พอก่อน เดี๋ยวมาทำต่อ" (รวม `session pickup` · `pause safely` · skill `recall` ของ pstack)
-skill หลัก: `work-session-context` · `status-report` · [`decision-log`](../../decision-log/SKILL.md)
+skill หลัก: `handoff` · `status-report` · `decision-log`
 
 ## ขั้นตอน — รับงานต่อ (คัดลง todo ตรงตัว)
 
@@ -15,7 +15,7 @@ skill หลัก: `work-session-context` · `status-report` · [`decision-log`
 1. ทำชิ้นที่กำลังทำให้ถึงจุดที่ตรวจได้ หรือถอยกลับไปจุดตรวจได้ล่าสุด — ไม่ทิ้งโค้ดครึ่งทางที่ test แดงโดยไม่บอก · ใคร: `developer` ตัวเดิม (ถือชิ้นที่ยังไม่บันทึก)
 2. งานที่ยังไม่ commit — ถ้าผู้ใช้ไม่อนุญาตให้ commit ให้เก็บ `git diff` ลง `_to_delete/pause-<วันที่>.patch` และบอกในรายงาน · ใคร: หัวหน้าทีม
 3. หยุด dev server หรือ process ที่เปิดไว้ ส่วน sandbox ปล่อยรันต่อได้ แต่จดชื่อไว้ · ใคร: หัวหน้าทีม
-4. `status-report` และเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ใหม่ (`work-session-context` ข้อ 4) — เขียนว่า: ขั้นถัดไปต้องทำอะไรก่อน · คำสั่งที่ใช้ทำซ้ำ · ของที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง
+4. `status-report` และเขียนหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ใหม่ (`handoff` หัวข้อ 5) — เขียนว่า: ขั้นถัดไปต้องทำอะไรก่อน · คำสั่งที่ใช้ทำซ้ำ · ของที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง
 
 ## จบเมื่อ
 

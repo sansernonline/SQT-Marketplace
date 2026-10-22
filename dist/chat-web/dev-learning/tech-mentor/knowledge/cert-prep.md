@@ -13,13 +13,13 @@ Study what the exam guide weighs, prove it with practice scores, and book the da
 3. **Baseline practice exam** in week 1, before studying, timed. This is the real gap map. The self-rating is only a guess
 4. **Week-by-week plan.** Use the template below. Size: 6–10 hours a week for 4–8 weeks for an associate-level exam with some experience. Double it for a first exam in a new area
 5. **Each study session**: read or watch (40%) → hands-on lab (40%) → write flashcards from your mistakes (20%)
-6. **Spaced repetition**: review cards on day 1, 3, 7, 14 and 30 after they are written (Anki or any SRS app). 15 minutes a day beats a 3-hour weekend cram
+6. **Spaced repetition**: review cards on day 1, 3, 7, 14 and 30 after they are written (Anki or any spaced repetition system (SRS) app). 15 minutes a day beats a 3-hour weekend cram
 7. **Practice-exam loop**: 1 full timed exam per week. For **every** wrong *and* every guessed answer, write why the right answer is right and why yours was wrong, then make 1 card. Track the score per domain
-8. **Booking rule**: book the exam when **2 practice exams in a row** score at least **10 points above** the pass mark (for example ≥ 80% where 72% is needed), with no domain below the pass mark. Book 2–3 weeks out, so the date creates focus
+8. **Booking rule**: book the exam when **2 practice exams in a row** score at least **10 points above** the pass mark (for example ≥ 82% where 72% is needed), with no domain below the pass mark. Book 2–3 weeks out, so the date creates focus
 9. **Final week**: no new topics. Weak-domain review, 1 last practice exam 3 days before, then the exam-day checklist below
 10. **After**: record the result, the score per domain and the renewal date in `learning-log.md`, and set a renewal reminder 3 months before expiry
 
-## Gap map example (AWS SAA-C03)
+## Gap map example (Amazon Web Services (AWS) SAA-C03)
 
 | Domain | Weight | Self-rating (0–3) | Priority = W × (3 − r) | Baseline practice % |
 |---|---:|---:|---:|---:|
@@ -28,7 +28,7 @@ Study what the exam guide weighs, prove it with practice scores, and book the da
 | Design High-Performing Architectures | 24% | 2 | 24 | 68 |
 | Design Cost-Optimized Architectures | 20% | 1 | 40 | 50 |
 
-→ Order: Secure (IAM, KMS, VPC security) → Cost (pricing models, storage tiers) → Resilient → Performance.
+→ Order: Secure (Identity and Access Management (IAM), Key Management Service (KMS), Virtual Private Cloud (VPC) security) → Cost (pricing models, storage tiers) → Resilient → Performance.
 
 ## Plan template (copy to `cert/<exam-code>-plan.md`)
 
@@ -50,15 +50,15 @@ Booking rule: two consecutive practice scores ≥ pass + 10, no domain below pas
 
 ## Hands-on labs — rules
 
-- Labs run in a **sandbox account with a budget alert** (AWS Budgets, Azure cost alert or a GCP budget at ฿300 or less). Delete everything at the end of the session
-- For CKA and CKAD, practise only in a terminal with `kubectl` against a real cluster (kind, minikube or a killer.sh session). The exam is all hands-on, and the speed comes from typing, not reading
+- Labs run in a **sandbox account with a budget alert** (AWS Budgets, Azure cost alert or a Google Cloud Platform (GCP) budget at ฿300 or less). Delete everything at the end of the session
+- For Certified Kubernetes Administrator (CKA) and Certified Kubernetes Application Developer (CKAD), practise only in a terminal with `kubectl` against a real cluster (kind, minikube or a killer.sh session). The exam is all hands-on, and the speed comes from typing, not reading
 - At least 1 lab per domain, taken from the exam guide's task statements
 
 ## Exam-day rules (online proctoring)
 
 - Run the vendor's **system check** on the same computer and network 2–3 days before
 - A clean desk, no second monitor connected, the phone out of reach, the door closed, and nobody walking in. A family member entering can void the exam
-- Valid ID matching the registered name **exactly**, including the order of first and last name. Check this when booking
+- Valid identity document (ID) matching the registered name **exactly**, including the order of first and last name. Check this when booking
 - Log in 15–30 minutes early for the check-in photos (รอยืนยัน: time per vendor)
 - Time management: mark and move on at about 2 minutes per question for multiple choice. For performance-based exams (CKA/CKAD), skip any task worth little that is taking more than 2× its share of the time
 - Test centre as an alternative if the home has unreliable internet or no quiet room
@@ -81,11 +81,11 @@ Always re-check on the vendor page before booking. Exam versions, prices and pas
 
 | Exam | Format | Questions | Time | Pass mark | Price (USD) | Valid for |
 |---|---|---:|---:|---|---:|---|
-| AWS Solutions Architect – Associate (SAA-C03) | Multiple choice / multiple response | 65 (50 scored + 15 unscored) | 130 min | 720 / 1000 (scaled, compensatory) | 150 (รอยืนยัน) | 3 years (รอยืนยัน) |
+| AWS Solutions Architect – Associate (SAA-C03; a newer version SAA-C04 is reported by third-party sites only — re-check aws.amazon.com/certification before use, รอยืนยัน) | Multiple choice / multiple response | 65 (50 scored + 15 unscored) | 130 min | 720 / 1000 (scaled, compensatory) | 150 (รอยืนยัน) | 3 years (รอยืนยัน) |
 | Microsoft Azure Administrator (AZ-104) | Mixed, may include case studies | 40–60 | 100 min | 700 / 1000 | 165 (price varies by country, รอยืนยัน for Thailand) | 1 year, renewed by a free online assessment on Microsoft Learn (opens 6 months before expiry) |
 | Certified Kubernetes Administrator (CKA) | Performance-based, live terminal, kubernetes.io/docs allowed | 15–25 tasks (รอยืนยัน) | 2 hours | 66% (รอยืนยัน) | 445 (includes 1 retake and 2 killer.sh simulator sessions) | 2 years |
 | Certified Kubernetes Application Developer (CKAD) | Performance-based | (รอยืนยัน) | 2 hours (รอยืนยัน) | 66% (รอยืนยัน) | 445 (รอยืนยัน) | 2 years (รอยืนยัน) |
-| Google Cloud Associate Cloud Engineer | Multiple choice / multiple select | (รอยืนยัน) | 2 hours (รอยืนยัน) | Not published (รอยืนยัน) | 125 (รอยืนยัน) | 3 years (รอยืนยัน) |
+| Google Cloud Associate Cloud Engineer | Multiple choice / multiple select | 50–60 | 2 hours | Not published | 125 | 3 years (source: cloud.google.com/learn/certification/cloud-engineer, ตรวจ 22 ต.ค. 2569) |
 | Scrum.org Professional Scrum Master I (PSM I) | Multiple choice, multiple answer, true/false | 80 | 60 min | 85% | 200 | Does not expire. The attempt password does not expire either |
 
 ## Domain weights

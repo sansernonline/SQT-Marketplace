@@ -4,6 +4,7 @@ description: Use to understand or recreate software without source (binary, .NET
 tools: Read, Write, Edit, Grep, Glob, Bash, Skill, WebFetch
 model: opus
 skills:
+  - human-writing
   - superuser:simplify
 ---
 

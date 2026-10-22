@@ -1,0 +1,6 @@
+{
+  "stack": "typescript",
+  "title": "กระดานราคา RxJS: subscription ค้างหลังปิดหน้าจอ",
+  "test": ["npm", "test"],
+  "testFiles": "(^|/)test/.*\\.test\\.ts$"
+}

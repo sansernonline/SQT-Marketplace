@@ -25,7 +25,7 @@
 
 ## 1. เอกสารส่งมอบงาน (Handover)
 
-agent `technical-writer` + `project-manager` · skill `work-session-context` · `onboard` (software-company:onboard) · `polished-document-style`
+agent `technical-writer` + `project-manager` · skill `handoff` · `onboard` (software-company:onboard) · `polished-document-style`
 **ต้องมีก่อน:** เอกสารของโปรเจกต์ที่มีอยู่ (ใช้เป็นแหล่งอ้างอิง ไม่คัดลอกซ้ำ)
 **ผลลัพธ์:** `docs/handover.md` — ผู้รับอ่านแล้วต้องรับช่วงได้โดยไม่ต้องถามผู้ส่งเรื่องพื้นฐาน
 

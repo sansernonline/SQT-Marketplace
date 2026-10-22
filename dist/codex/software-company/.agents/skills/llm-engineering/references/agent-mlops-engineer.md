@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 MLOps Quality Standards](#mlops-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 MLOps Quality Standards](#-mlops-quality-standards)
 - [Production ML Architecture](#production-ml-architecture)
 - [Tech Stack (2026)](#tech-stack-2026)
 - [Model Serving Patterns](#model-serving-patterns)
@@ -119,28 +119,31 @@ flowchart LR
 ### Pattern 1: Real-time Inference
 
 ```python
-# BentoML service definition
+# BentoML 1.2+ service definition (@bentoml.service API, no runners)
+# Source: docs.bentoml.com "Load and manage models" (checked 2026-10-22)
 import bentoml
 import numpy as np
+from bentoml.models import BentoModel
 
 @bentoml.service(
     resources={"cpu": "2", "memory": "4Gi"},
     traffic={"timeout": 30},
 )
 class FraudDetector:
-    model_ref = bentoml.models.get("fraud_model:latest")
+    model_ref = BentoModel("fraud_model:latest")   # class level, so the Bento packages it
 
     def __init__(self):
-        self.model = self.model_ref.to_runner()
+        # Load in-process with your framework's loader; to_runner() is the old 1.1 API
+        self.model = bentoml.sklearn.load_model(self.model_ref)
 
     @bentoml.api
-    async def predict(self, transaction: dict) -> dict:
+    def predict(self, transaction: dict) -> dict:
         features = self.featurize(transaction)
-        score = await self.model.async_run(features)
+        score = float(self.model.predict(np.array([features]))[0])
         return {
-            "score": float(score),
+            "score": score,
             "is_fraud": score > 0.5,
-            "model_version": self.model_ref.tag,
+            "model_version": str(self.model_ref.tag),
         }
 ```
 
@@ -150,7 +153,8 @@ class FraudDetector:
 # Daily batch scoring job
 async def batch_score(date: datetime):
     # 1. Load model from registry
-    model = mlflow.pyfunc.load_model("models:/fraud_detector/Production")
+    # Registry alias, not the deprecated "Production" stage (MLflow 2.9+)
+    model = mlflow.pyfunc.load_model("models:/fraud_detector@champion")
 
     # 2. Pull batch of records
     records = await db.transactions.find_for_date(date)
@@ -187,9 +191,12 @@ async def predict(input):
 ### Pattern 4: A/B Testing
 
 ```python
+import hashlib
+
 def get_model_for_user(user_id: str) -> Model:
-    # Deterministic bucketing
-    bucket = hash(user_id) % 100
+    # Deterministic bucketing — stable across restarts and workers
+    # (built-in hash() on str is randomised per process, so it is not deterministic)
+    bucket = int(hashlib.sha256(user_id.encode()).hexdigest(), 16) % 100
 
     if bucket < 10:
         return new_model  # 10% on new

@@ -37,7 +37,7 @@ You are a **Legal Compliance Officer (LegalTech)**. You make sure legal tech too
 
 ## Privacy, retention, e-discovery, residency, audit template
 
-GDPR / PDPA / CCPA overview · retention periods and legal hold code · e-discovery · bar rules · data residency · cross-border transfers · compliance audit template → skill `legal-document-systems` → [`references/agent-legal-compliance-officer.md`](../skills/legal-document-systems/references/agent-legal-compliance-officer.md) · PDPA in depth → skill `pdpa-compliance` (breach: 72 h to the PDPC, § 8)
+GDPR / PDPA / CCPA overview · retention periods and legal hold code · e-discovery · bar rules · data residency · cross-border transfers · compliance audit template → skill `legal-document-systems` → [`references/agent-legal-compliance-officer.md`](../skills/legal-document-systems/references/agent-legal-compliance-officer.md) · PDPA in depth → skill `pdpa-compliance` (breach: notify the Personal Data Protection Committee (PDPC) office within 72 h — PDPA มาตรา 37(4) · `pdpa-compliance` ข้อ 8)
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 

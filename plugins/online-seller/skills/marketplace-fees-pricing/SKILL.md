@@ -42,12 +42,12 @@ Tote bag: `C` ฿120, seller pays `S` ฿15 shipping subsidy, target `m` 20%, no
 |---|---|---|---|
 | Commission (incl. VAT) | 10.70% (รอยืนยัน category) | 10.70% (รอยืนยัน category) | 5.35% (รอยืนยัน category) |
 | Transaction/payment fee | 3.21% | 3.21% | 3.21% |
-| Other % fee | — (no service programme) | — | Commerce Growth Fee 5.89% (รอยืนยัน) |
+| Other % fee | — (no service programme) | — | Commerce Growth Fee 6.42% (รอยืนยัน; 5.35% for electronics) |
 | Fixed per order | ฿1.07 | ฿0 | ฿1.07 |
-| Formula price | ฿205.89 | ฿204.27 | ฿207.58 |
-| **Rounded price** | **฿209** | **฿209** | **฿209** |
-| Fees at ฿209 | 22.36 + 6.71 + 1.07 | 22.36 + 6.71 | 11.18 + 6.71 + 12.31 + 1.07 |
-| Profit at ฿209 | ฿43.86 (21.0%) | ฿44.93 (21.5%) | ฿42.73 (20.4%) |
+| Formula price | ฿205.89 | ฿204.27 | ฿209.27 |
+| **Rounded price** | **฿209** | **฿209** | **฿210** |
+| Fees at the rounded price | 22.36 + 6.71 + 1.07 | 22.36 + 6.71 | 11.24 + 6.74 + 13.48 + 1.07 |
+| Profit at the rounded price | ฿43.86 (21.0%) | ฿44.93 (21.5%) | ฿42.47 (20.2%) |
 
 Same bag, **VAT-registered** shop on Shopee: formula price ฿228.50 → ฿229. At ฿229: commission 24.50, transaction 7.35, fixed 1.07, shipping 15, cost 120, output VAT 229 × 7/107 = 14.98 → profit ฿46.10 (20.1%). A VAT-registered shop may claim input VAT on the platform's fee invoices — ask the accountant; the formula above ignores that credit, which keeps it safe.
 

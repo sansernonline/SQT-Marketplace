@@ -9,7 +9,7 @@ A school year has 3 money peaks (enrolment, term 1 start, term 2 start) and 1 pa
 
 General information, not tax or legal advice — the school, เขตพื้นที่การศึกษา and กรมสรรพากร are the authorities.
 
-## The Thai school year (public schools under สพฐ.)
+## The Thai school year (public schools under สำนักงานคณะกรรมการการศึกษาขั้นพื้นฐาน, สพฐ.)
 
 | Period | Usual timing | Plan for |
 |---|---|---|
@@ -54,7 +54,7 @@ Ask before paying: what exact gap (subject, grade, test)? For how many weeks? Ho
 | Child deduction (ลดหย่อนบุตร) | 30,000 บาท/คน | Child under 20, or under 25 and studying, with income below the limit |
 | Second child onward born 2561 or later | 60,000 บาท/คน | |
 | Pregnancy and childbirth (ฝากครรภ์และคลอดบุตร) | up to 60,000 บาท/ครรภ์ | Receipts from hospital |
-| เงินอุดหนุนเพื่อการเลี้ยงดูเด็กแรกเกิด (child support grant) | 600 บาท/เดือน to age 6 (รอยืนยัน) | Household income test; register at the local อปท. / district (รอยืนยัน current criteria) |
+| เงินอุดหนุนเพื่อการเลี้ยงดูเด็กแรกเกิด (child support grant) | 600 บาท/เดือน to age 6 (รอยืนยัน) | Household income test; register at the local administrative organisation (องค์กรปกครองส่วนท้องถิ่น · อปท.) / district (รอยืนยัน current criteria) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.rd.go.th · https://www.dailynews.co.th/news/5278292/ — for planning which parent claims which child, and the full list, use `trading-finance` `tax-deduction-planner` (if installed).
 

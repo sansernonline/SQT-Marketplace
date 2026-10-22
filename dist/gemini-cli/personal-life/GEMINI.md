@@ -1,10 +1,10 @@
 # SQT personal-life — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.8.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.11.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, and polite Thai-English messages. Works alongside email, calendar and note plugins.
 
-ชุดนี้มี skill 21 ตัว · บทบาท 6 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
+ชุดนี้มี skill 54 ตัว · บทบาท 6 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

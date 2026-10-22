@@ -11,7 +11,7 @@ This skill gives a complete first draft and flags every risky clause. It is gene
 | Situation | Type (ป.พ.พ.) | Who pays stamp duty | Key law beyond the code |
 |---|---|---|---|
 | Staff on payroll, employer directs the work | จ้างแรงงาน (ม.575) | none — not in the stamp-duty schedule | พ.ร.บ.คุ้มครองแรงงาน (see `labour-law-basics`) |
-| Deliver a result (website, renovation, design) | จ้างทำของ (ม.587) | ผู้รับจ้าง (contractor) | WHT 3% on payment (`tax-vat-th`) |
+| Deliver a result (website, renovation, design) | จ้างทำของ (ม.587) | ผู้รับจ้าง (contractor) | Withholding tax (WHT) 3% on payment (`tax-vat-th`) |
 | Rent land, building, room | เช่าทรัพย์ (ม.537) | ผู้ให้เช่า (lessor) | residential landlords: สคบ. controlled-contract rules |
 | Ongoing service (maintenance, retainer) | usually จ้างทำของ | ผู้รับจ้าง | |
 
@@ -44,7 +44,7 @@ Full checklists for employment, lease and hire-of-work contracts: [references/cl
 | Penalty (เบี้ยปรับ) far above real loss | court may reduce it (ป.พ.พ. ม.383) — draft a realistic rate, e.g. 0.1% per day capped at 10% |
 | Non-compete for employees | enforceable only as far as fair and reasonable (พ.ร.บ.ว่าด้วยข้อสัญญาที่ไม่เป็นธรรม 2540) — limit area, time, field |
 | Employee deposit / guarantor (เงินประกันการทำงาน) | allowed only for certain jobs, with limits under the Labour Protection Act (รอยืนยัน the ministerial rule) |
-| Wage deductions beyond tax, SSO, PVD, agreed debts | restricted by ม.76 |
+| Wage deductions beyond tax, social security (SSO), provident fund (PVD), agreed debts | restricted by ม.76 |
 | Lease over 3 years not registered at the land office | enforceable for only 3 years (ม.538) |
 | Landlord business keeps deposit for wear and tear | residential controlled contract: deposit + advance rent ≤ 3 months, refund in 7 days (14 if damage) — scope by number of units (รอยืนยัน) |
 | One-sided termination without notice, automatic renewal, IP assigned with no fee | unfair-terms risk |

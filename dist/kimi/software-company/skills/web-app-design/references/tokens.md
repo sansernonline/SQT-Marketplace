@@ -10,7 +10,7 @@
 
 ## สารบัญ
 
-1. [แบรนด์ / gradient](#แบรนด์--gradient)
+1. [แบรนด์ — สีทึบ](#แบรนด์--สีทึบ)
 2. [พื้นผิว · เส้น · เงา](#พื้นผิว--เส้น--เงา)
 3. [ตัวอักษร](#ตัวอักษร)
 4. [สีข้อมูล (กราฟ) — ทึบเสมอ](#สีข้อมูล-กราฟ--ทึบเสมอ)
@@ -21,19 +21,17 @@
 
 ---
 
-## แบรนด์ / gradient
+## แบรนด์ — สีทึบ
 
 | Token | ค่า | ใช้กับ |
 |---|---|---|
-| `--brand` | `#2a78d6` | ลิงก์ · แท็บที่เลือก · ไอคอน active · เส้นขอบตอนโฟกัส |
-| `--brand-2` | `#6a5cd6` | ปลายไล่สี · accent รอง |
-| `--brand-50` | `#eef4fd` | พื้นเมนู active · พื้น avatar · วงแหวนโฟกัส |
+| `--brand` | `#226cc6` (เฉดเข้มของค่าประจำบ้าน `#2A78D6`) | ปุ่มหลัก · chip ที่เลือก · แถบ progress · ลิงก์ · แท็บที่เลือก · ขีดเลือกเมนู · เส้นขอบตอนโฟกัส · โลโก้ |
+| `--brand-2` | `#6a5cd6` | สีข้อมูลชุดที่ 2 คู่กับ `--brand` (กราฟ) |
+| `--brand-50` | `#eef4fd` | พื้น avatar · mention · วงแหวนโฟกัส |
 | `--brand-100` | `#dde9fb` | รางของ spinner |
-| `--grad-accent` | `135deg #2a78d6 → #6a5cd6` | ปุ่มหลัก · chip ที่เลือก · แถบ progress |
-| `--grad-primary` | `#14264a → #25498c → #4b63c9` | sidebar โหมดเข้ม |
-| `--grad-page` | `160deg #f3f6fc → #f8f9fc → #f6f3fb` | พื้นหลังหน้า (fixed) |
 
-> gradient ใช้กับ **ปุ่ม/chip/progress** เท่านั้น — **ห้ามใช้บนกราฟ** เพราะค่าสีจะสื่อความหมายผิด
+> **ไม่มี gradient** — ปุ่ม chip progress และกราฟใช้ `--brand` ทึบ (`no-ai-look`: ไล่สีม่วง-น้ำเงิน → สีแบรนด์ทึบ 1 สี)
+> **`--brand` ต้องผ่าน 4.5:1** ทั้งตัวขาวบนพื้น brand (`#226cc6` = 5.21) · brand บน `--bg` (4.87) · brand บน `--brand-50` (4.71) — ตรวจ 22 ต.ค. 2569
 
 ## พื้นผิว · เส้น · เงา
 
@@ -41,37 +39,37 @@
 |---|---|---|
 | `--bg` | `#f6f7fb` | พื้นหน้า |
 | `--surface` | `#ffffff` | การ์ด · input · ปุ่มปกติ |
-| `--surface-glass` | `rgba(255,255,255,.82)` | topbar โปร่ง (คู่กับ backdrop-filter) |
 | `--line` | `#eef0f5` | เส้นในการ์ด · เส้นตาราง |
 | `--line-strong` | `#e4e7ee` | ขอบ input · ขอบปุ่ม |
-| `--shadow` | เงา 2 ชั้นบางมาก | การ์ดปกติ |
+| `--skeleton` | `#e4e7ee` | โครงร่างตอนโหลด (`.skeleton`) |
+| `--shadow` | เงา 2 ชั้นบาง | dropdown · tooltip (ของที่ลอยเล็ก ๆ) |
 | `--shadow-lg` | เงา 2 ชั้นลึก | modal · toast · เมนูลอย |
-| `--shadow-brand` | เงาโทนน้ำเงิน | ปุ่มหลักเท่านั้น |
 | `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | การ์ด / ปุ่ม·input / pill·chip |
+
+> **การ์ดไม่มีเงา** — การ์ดนิ่งไม่ได้ลอย แยกจากพื้นหน้าด้วยเส้น `--line` + พื้น `--surface` บน `--bg` (`ui-craft` ข้อ 4) · topbar พื้น `--surface` ทึบ ไม่ใช้กระจกฝ้า
 
 ## ตัวอักษร
 
 | Token | ค่า | ใช้กับ |
 |---|---|---|
-| `--text` | `#333b4a` | หัวข้อ · ตัวเลข KPI |
+| `--text` | `#333b4a` | หัวข้อ · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) |
 | `--text-body` | `#414957` | เนื้อความ (ค่าเริ่มต้นของ body) |
-| `--text-muted` | `#7d8492` | label · คำอธิบาย · เมนูที่ไม่ active |
-| `--text-faint` | `#a9aeb9` | หัวตาราง · timestamp · empty state |
+| `--text-muted` | `#5f6673` | label · คำอธิบาย · หัวตาราง · empty state · เมนูที่ไม่ active |
+| `--text-faint` | `#69707d` | timestamp · หัวกลุ่มเมนู · ข้อความประกอบ |
 
-สเกล (ตั้งใจให้เล็กกว่าเว็บทั่วไป เพราะเป็นแอปที่ต้องอัดข้อมูล):
+contrast (Web Content Accessibility Guidelines (WCAG) 2.2 ระดับ AA ต้อง ≥ 4.5:1 · ตรวจ 22 ต.ค. 2569): `--text-muted` บนขาว 5.78 · บน `--bg` 5.40 · `--text-faint` บนขาว 4.98 · บน `--bg` 4.65 ← ต่ำสุดของระบบ ห้ามทำให้จางกว่านี้
+
+สเกล 5 ขนาด ตรงกับ `ui-craft` ข้อ 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · เล็กสุด 11):
 
 | ระดับ | ขนาด | |
 |---|---|---|
-| h1 | 19px / 500 | ชื่อหน้า |
-| h2 | 15px / 500 | หัวการ์ด |
-| h3 | 13px / 500 | หัวข้อย่อย |
-| body | 12.5px / 1.6 | เนื้อความ · input · tab |
-| ปุ่ม · pill row | 12px | |
-| label · muted | 11px | |
-| faint · หัวตาราง | 10.5px | หัวตารางเป็นตัวพิมพ์ใหญ่ letter-spacing .4px |
-| ตัวเลข KPI | 22px / 600 | `letter-spacing:-.4px` + `tabular-nums` |
+| h1 · ตัวเลข KPI | 22px / 500 · KPI 600 | ชื่อหน้า · KPI ใช้ `letter-spacing:-.4px` + `tabular-nums` |
+| h2 | 15px / 500 | หัวการ์ด · ชื่อแอปใน sidebar |
+| body · h3 | 13px / 1.6 · h3 หนา 500 | เนื้อความ · input · tab · เมนู · หัวข้อย่อย |
+| ปุ่ม · คำอธิบายใต้ h1 | 12px | |
+| label · pill · หัวตาราง · faint | 11px | หัวตารางเป็นตัวพิมพ์ใหญ่ letter-spacing .4px (เฉพาะอังกฤษ) |
 
-ฟอนต์ใช้ `Inter` + `Noto Sans Thai` เพราะ **Inter ไม่มีอักษรไทย** ถ้าลืมใส่ Noto Sans Thai
+ฟอนต์ตั้งต้นใช้ `Inter` + `Noto Sans Thai` — เลือก Inter เพราะอ่านง่ายที่ขนาด 11–13px ในหน้าจอข้อมูลแน่น (`graphic-design` ข้อ 6 ให้บอกเหตุผลเมื่อใช้ฟอนต์ที่คนใช้กันมาก) · โปรเจกต์ที่มีฟอนต์แบรนด์ ใช้ของโปรเจกต์ · **Inter ไม่มีอักษรไทย** ถ้าลืมใส่ Noto Sans Thai
 เบราว์เซอร์จะใช้ฟอนต์ระบบแทน (fallback) ซึ่งความสูงไม่เข้ากัน ตัวไทยจะดูเล็กและเตี้ยกว่าอังกฤษ
 
 ตัวเลขทุกที่ที่เรียงเป็นคอลัมน์ต้องใส่ `.num` (`tabular-nums`) ไม่งั้นหลักจะไม่ตรงกัน
@@ -107,14 +105,14 @@
 
 ## เปลี่ยนธีม / เปลี่ยนแบรนด์
 
-**สลับ accent ทั้งแอป** — `body[data-theme]`: ว่าง (ocean) · `emerald` · `sunset` · `plum` · `graphite`
-แต่ละธีมแก้แค่ 5 token (`--grad-accent --brand --brand-2 --brand-50 --brand-100`)
+**สลับ accent ทั้งแอป** — `body[data-theme]`: ว่าง (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
+แต่ละธีมแก้แค่ 4 token (`--brand --brand-2 --brand-50 --brand-100`) · ทุก `--brand` ผ่าน 4.5:1 กับตัวขาว · `--bg` · `--brand-50` ของธีมตัวเอง
 
-**sidebar สว่าง/เข้ม** — `body[data-side='dark']` เปลี่ยน 8 token ของ sidebar
-เมนู active ในโหมดเข้มใช้แผ่นทับโปร่ง `--on-brand-veil` **ไม่ใช่** `--brand-50`
-เพราะสีอ่อนบนพื้นเข้มจะกลืนหายไปเลย
+**sidebar สว่าง/เข้ม** — `body[data-side='dark']` เปลี่ยน 9 token ของ sidebar · พื้นเข้มคือ `--sidebar-dark-bg #1f2329` เทากลาง ไม่ย้อมสีแบรนด์
+เมนู active: โหมดสว่าง = พื้นเทา `--sidebar-active-bg` + ขีดสีแบรนด์ 3px (`--sidebar-active-bar`) · โหมดเข้ม = แผ่นทับโปร่ง `--on-brand-veil` + ขีดขาว
+กรอบแอปเป็นสีกลาง — สีแบรนด์ในกรอบมีได้แค่ขีดเลือกกับโลโก้
 
-**แบรนด์ลูกค้าใหม่** ให้คัดลอกบล็อก `body[data-theme='…']` แล้วใส่ 5 ค่าของลูกค้า
+**แบรนด์ลูกค้าใหม่** ให้คัดลอกบล็อก `body[data-theme='…']` แล้วใส่ 4 ค่าของลูกค้า (สีลูกค้าสว่างเกิน → ใช้เฉดเข้มที่ผ่าน 4.5:1 เป็น `--brand` เก็บสีเดิมไว้ที่โลโก้และกราฟ)
 ไม่ต้องแตะคอมโพเนนต์แม้แต่บรรทัดเดียว
 
 ## คลาสคอมโพเนนต์ที่มีให้แล้ว
@@ -129,5 +127,5 @@
 | ฟอร์ม | `.field > label` `.input` `.select` `.textarea` `.err` |
 | ตาราง | `.tb-wrap > .tb` (`.right`) |
 | ตัวกรอง | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
-| อื่น | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.spinner` `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
+| อื่น | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (โหลดเนื้อหา) `.spinner` (รอสั้น ๆ ในปุ่ม) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
 | ยูทิลิตี | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |

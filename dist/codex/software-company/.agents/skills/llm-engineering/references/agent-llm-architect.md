@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 LLM System Quality Standards](#llm-system-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 LLM System Quality Standards](#-llm-system-quality-standards)
 - [Model Selection](#model-selection)
 - [RAG (Retrieval-Augmented Generation) Architecture](#rag-retrieval-augmented-generation-architecture)
 - [Agent Systems](#agent-systems)
@@ -53,7 +53,7 @@ Before designing LLM systems, gather:
 
 ## Model Selection
 
-Model names change every few months, so this section names tiers, not versions. Check the provider's current model list before choosing (checked 2026-10-14). For Claude model ids, pricing and limits, open the `claude-api` skill.
+Model names change every few months, so this section names tiers, not versions. Check the provider's current model list before choosing (checked 2026-10-14). For Claude model ids, pricing and limits, open the `claude-api` skill (bundled with Claude Code or installable from github.com/anthropics/skills; without it, see the models page at platform.claude.com/docs, checked 2026-10-22).
 
 ### By tier
 
@@ -131,7 +131,7 @@ flowchart TB
 
 | Strategy | Use when |
 |----------|----------|
-| Fixed size (500 tokens, 50 overlap) | Generic docs |
+| Fixed size (start values: see `rag-architecture.md` Stage 2) | Generic docs |
 | Semantic (sentence boundary) | Quality matters |
 | Hierarchical (page/section/para) | Long structured docs |
 | Document-aware (markdown headings) | Technical docs |

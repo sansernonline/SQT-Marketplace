@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Firmware Quality Standards](#firmware-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Firmware Quality Standards](#-firmware-quality-standards)
 - [Firmware Patterns](#firmware-patterns)
 - [Language Choices (2026)](#language-choices-2026)
 - [Memory Discipline](#memory-discipline)
@@ -174,7 +174,7 @@ extern const i2c_driver_t esp32_i2c;
 
 ## When to Hand Off
 
-- Cloud connectivity → `iot-engineer`
-- Edge computing → `iot-engineer`
+- Cloud connectivity → open `agent-iot-engineer.md` (same `iot-engineer` agent)
+- Edge computing → open `agent-edge-architect.md` (same agent)
 - Hardware design → external hardware engineer
 - Antenna / RF → external RF engineer

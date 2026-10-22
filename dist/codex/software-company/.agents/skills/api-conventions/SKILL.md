@@ -3,7 +3,7 @@ name: api-conventions
 description: Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 ---
 
-# ข้อตกลงของ API
+# ข้อตกลงของ Application Programming Interface (API)
 
 > **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
 > API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
@@ -52,7 +52,7 @@ PATCH  /v1/orders/{id}            แก้บางส่วน
 PUT    /v1/orders/{id}            แทนที่ทั้งตัว
 DELETE /v1/orders/{id}            ลบ
 GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
 ```
 
 | กฎ | ✅ | ❌ |
@@ -237,10 +237,11 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
 2. ส่ง header ในทุก response ของ endpoint นั้น:
    ```
-   Deprecation: true
+   Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
+   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
 3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
 4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
 

@@ -3,7 +3,7 @@
   up [-Isolated] [-Locked] [-Browser]   build and start (mount mode by default)
   exec "<command>"           run a command inside, no terminal (for agents)
   shell                      open an interactive shell inside
-  claude                     run Claude Code inside without permission prompts
+  claude                     isolated mode only: run Claude Code inside without permission prompts
   sync                       isolated mode: copy changes out as a patch to _to_delete\sandbox\
   status | list              this sandbox | every SQT sandbox on the machine
   stop | stop-all            stop this sandbox | stop every SQT sandbox (frees memory, keeps everything)
@@ -115,7 +115,15 @@ switch ($Command) {
   }
   'exec' { Invoke-Compose exec -T dev bash -lc ($Rest -join ' ') }
   'shell' { Invoke-Compose exec dev bash -l }
-  'claude' { Invoke-Compose exec dev claude --dangerously-skip-permissions @Rest }
+  'claude' {
+    # Without permission prompts only where /work is a copy. In mount mode /work is the
+    # user's real folder, and overwriting or deleting files there needs approval.
+    $mode = if (Test-Path $modeFile) { Get-Content $modeFile -Raw } else { '' }
+    if ($mode -notmatch 'isolated') {
+      throw "'claude' runs without permission prompts, so it is isolated mode only. Use: sandbox.ps1 up -Isolated (mount mode: run Claude Code on the host and use 'exec')"
+    }
+    Invoke-Compose exec dev claude --dangerously-skip-permissions @Rest
+  }
   'sync' {
     $out = Join-Path $projectDir '_to_delete\sandbox'
     New-Item -ItemType Directory -Force -Path $out | Out-Null

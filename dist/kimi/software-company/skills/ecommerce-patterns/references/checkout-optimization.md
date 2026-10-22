@@ -30,10 +30,11 @@
 
 ## The Numbers (Why It Matters)
 
-- **70% average checkout abandonment** (Baymard 2024)
-- **35% of abandonment** comes from forced account creation
-- **22% of abandonment** comes from unexpected costs shown late
-- **Mobile checkout** converts at about 70% of the desktop rate
+- **70.22% average documented cart abandonment rate** (Baymard Institute, average of 50 studies)
+- **~40%** of shoppers who abandon (not counting "just browsing") leave because extra costs (shipping, tax, fees) were too high
+- **~18%** leave because the site wanted them to create an account
+- Source: baymard.com/lists/cart-abandonment-rate (page updated 22 Sep 2025, read 22 ต.ค. 2569) — re-check before quoting; Baymard updates the list
+- **Mobile** usually converts lower than desktop — measure your own split by device instead of quoting an industry figure
 
 ## The 7 Critical Improvements
 
@@ -45,17 +46,18 @@
 ### 2. ✅ Transparent Pricing
 
 Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
-"Unexpected costs at checkout" cause 22% of abandonment.
+Extra costs that are too high are the top abandonment reason in Baymard's list (~40% of non-browsing abandonments, Baymard, read 22 ต.ค. 2569).
 
 ### 3. ✅ Multiple Payment Methods
 
 | Method | Why |
 |--------|-----|
 | Card (Visa, MC, Amex) | Universal |
-| Apple Pay / Google Pay | 1 tap, critical on mobile |
+| **Thailand: PromptPay QR** (list first for TH) | The Thai one-tap path — scan with any bank app, no card needed |
+| Local methods | THB: SCB EASY, K PLUS (mobile banking deep links) |
+| Apple Pay / Google Pay | 1 tap on mobile where available · Apple Pay for Thai merchants `(รอยืนยัน — no official Thai launch found on 22 ต.ค. 2569; check your gateway)` |
 | PayPal | Trust + saved info |
-| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers |
-| Local methods | THB: PromptPay, SCB EASY, K PLUS |
+| Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers (markets where offered) |
 | Bank transfer | Widely used in Thailand |
 
 ### 4. ✅ Address Autocomplete
@@ -147,12 +149,14 @@ That's it.
 - Native pickers for date, country
 
 ### Payment
-- Apple Pay / Google Pay prominent
+- Thailand: PromptPay QR first · elsewhere: Apple Pay / Google Pay prominent
 - Card fields with detected card type
 - Auto-fill from saved cards
 - One-tap for returning customers
 
 ## Express Checkout (Critical for Mobile)
+
+> 🇹🇭 For Thai buyers the express path is usually PromptPay QR or a mobile-banking deep link. The Apple Pay example below applies only where your gateway supports Apple Pay for your merchant country — for Thailand that is `(รอยืนยัน)`.
 
 ### Apple Pay flow
 
@@ -248,7 +252,7 @@ catch (paymentError) {
 - INP (Interaction to Next Paint) < 200ms
 - CLS (Cumulative Layout Shift) < 0.1
 
-### Each second of delay = 7% drop in conversions (Google study)
+### Slower pages lose conversions — measure your own drop per second of delay with real-user data (no reliable universal figure; the often-quoted "7% per second" has no traceable source)
 
 ## Checkout Flow Patterns
 
@@ -309,7 +313,7 @@ Funnel by:
 ## Common Pitfalls
 
 - ❌ **Hidden fees revealed late** — main abandonment cause
-- ❌ **Forced login** — 35% leave
+- ❌ **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
 - ❌ **No express checkout on mobile** — slow checkout, fewer sales
 - ❌ **Long forms** — drop-off increases per field
 - ❌ **Wrong keyboard** — slow, error-prone typing

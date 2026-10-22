@@ -2,15 +2,15 @@
 
 Use when a Thai SME runs PDPA paperwork (consent, ROPA, data-subject requests, breach notice).
 
-# PDPA Workflow for Thai SMEs
+# Personal Data Protection Act (PDPA) Workflow for Thai SMEs
 
-พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a DPO (เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-company) covers designing systems that hold personal data.
+พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 turned into paperwork a small company can actually run. This is general information, not legal advice. Disputes, regulator letters and cross-border transfers go to a lawyer (ทนายความ) or a data protection officer (DPO, เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล). Works on its own; if installed, `pdpa-compliance` (software-company) covers designing systems that hold personal data.
 
 ## 1. Deadlines that matter
 
 | Duty | Deadline | Section |
 |---|---|---|
-| Notify the PDPC office (สคส.) of a personal-data breach | **within 72 hours** of becoming aware, unless the breach is unlikely to risk people's rights | ม.37(4) |
+| Notify the Personal Data Protection Committee (PDPC) office (สคส.) of a personal-data breach | **within 72 hours** of becoming aware, unless the breach is unlikely to risk people's rights | ม.37(4) |
 | Notify affected people | without delay, when the risk is high, with remedies | ม.37(4) |
 | Answer a data-subject request (access, copy, correction, deletion, objection, portability) | **within 30 days** of receiving it | ม.30 (and same practice for other rights) |
 | Withdraw consent | as easy as giving it; stop processing for that purpose | ม.19 |
@@ -29,7 +29,7 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 | CCTV for security | legitimate interest (ประโยชน์โดยชอบด้วยกฎหมาย) + sign at entrance | no |
 | Marketing broadcasts, newsletters | consent | **yes**, separate tick, not pre-ticked |
 | Health data (sick certificates), religion, biometrics (face scan time clock), criminal records | sensitive data — ม.26 | **explicit consent** unless a ม.26 exception applies (e.g. employment law duties, รอยืนยัน case by case) |
-| Children under 10 | consent of the parent | yes |
+| Minors (under 20) | consent of the person with parental power (ผู้ใช้อำนาจปกครอง) unless the minor may act alone under the Civil and Commercial Code; under 10 → always the parent (ม.20) | yes |
 
 ## 3. Workflows
 

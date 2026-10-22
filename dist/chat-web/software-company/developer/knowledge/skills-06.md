@@ -87,6 +87,7 @@ catch (SmtpException ex)
 |---|---|---|---|
 | **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
 | **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
+| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
 | **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
 | **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
 | **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
@@ -107,7 +108,7 @@ catch (SmtpException ex)
 | HTTP ภายนอก | 10–30 วินาที |
 | งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
 
-**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
+**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
 
 ```
 ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
@@ -117,7 +118,7 @@ catch (SmtpException ex)
 - **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
 - **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
 - **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
+- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
 
 ---
 
@@ -127,7 +128,7 @@ catch (SmtpException ex)
 
 ```
 ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
 ```
 
 ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
@@ -186,7 +187,7 @@ Use when writing or reviewing code that logs (format, levels, correlation ids, r
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log
+- ต้องการ metrics หรือ tracing (Prometheus, OpenTelemetry) เพราะเป็นคนละเรื่องกับ log ให้ไปใช้ `observability-basics`
 - ทำ endpoint สุขภาพของ service ให้ไปใช้ `web-service-essentials`
 
 ---
@@ -202,14 +203,14 @@ Use when writing or reviewing code that logs (format, levels, correlation ids, r
 |---|---|
 | เวลา | `YYYY-MM-DD HH:mm:ss.SSS ±HH:MM` — **ต้องมี timezone** ไม่งั้นเทียบ log ข้ามเครื่องไม่ได้ |
 | level | ชิดซ้าย กว้าง 5 ตัวอักษร (`INFO ` `WARN ` `ERROR` `DEBUG` `FATAL`) — คอลัมน์จะได้ตรงกัน |
-| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[------]` |
+| cid | correlation id 8 ตัวในวงเล็บเหลี่ยม ถ้าไม่มีให้ใส่ `[--------]` (8 ตัวเท่ากัน คอลัมน์จะได้ตรง) |
 | source | โมดูลหรือคลาสที่เขียน log ไม่ใช่ชื่อไฟล์ |
 | ข้อความ | ประโยคเดียว ไม่ฝังตัวแปรใน string |
 | context | `key=value` คั่นด้วยช่องว่าง ถ้าค่ามีช่องว่างให้ครอบด้วย `"` |
 
 **ทำไมไม่ใช่ JSON:** ไฟล์นี้มีไว้ให้คนเปิดอ่านและ `grep` เป็นหลัก รูปแบบนี้ยัง
-`grep "cid=a3f9c1b2"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
-วันที่ต้องส่งเข้า Loki/ELK ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
+`grep "\[a3f9c1b2\]"` หรือ `awk` ได้อยู่ แต่ตาอ่านออกทันทีโดยไม่ต้องพึ่งเครื่องมือ
+วันที่ต้องส่งเข้าระบบรวม log อย่าง Grafana Loki หรือ Elasticsearch, Logstash, Kibana (ELK) ให้เพิ่ม sink (ปลายทางที่ส่ง log ไป) แบบ JSON อีก 1 ตัว แต่**อย่าทิ้งไฟล์ข้อความ**
 
 **1 event = 1 บรรทัด** ยกเว้น stack trace ที่ต่อท้ายโดยเยื้อง 4 ช่อง
 
@@ -229,7 +230,7 @@ Use when writing or reviewing code that logs (format, levels, correlation ids, r
 > ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
 > คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
 
-ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **โดยไม่ต้อง deploy ใหม่**
+ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
 
 ---
 
@@ -402,12 +403,13 @@ using Serilog.Events;
 
 const string LineTemplate =
     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
-    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context}{NewLine}{Exception}";
+    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "------")   // ค่าตั้งต้นเมื่อไม่มี request
+    .Enrich.WithProperty("CorrelationId", "--------") // ค่าตั้งต้นเมื่อไม่มี request (8 ตัว)
+    .Enrich.WithProperty("Context", "")              // ค่าว่างเมื่อไม่มี context k=v
     .WriteTo.Console(outputTemplate: LineTemplate)
     .WriteTo.File(
         path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
@@ -428,25 +430,31 @@ builder.Host.UseSerilog();
 ```
 
 > `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
+> `{Message:lj}` และ `{Context:l}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
 
 ### Middleware correlation id
 
 ```csharp
+using System.Text.RegularExpressions;
+
 public sealed class CorrelationIdMiddleware(RequestDelegate next)
 {
     public const string Header = "X-Request-Id";
+    // รับค่าจากลูกค้าเฉพาะตัวอักษร ตัวเลข และ - ยาวไม่เกิน 36 ตัว — กันคนยัดข้อความยาวหรือ \n เข้า log
+    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
 
     public async Task Invoke(HttpContext ctx)
     {
         var cid = ctx.Request.Headers[Header].FirstOrDefault();
-        if (string.IsNullOrWhiteSpace(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];
+        if (cid is null || !Valid.IsMatch(cid))
+            cid = Guid.NewGuid().ToString("N")[..8];   // ไม่มีหรือไม่ผ่าน → สร้างใหม่
+
+        var logCid = cid.Length > 8 ? cid[..8] : cid;   // log ใช้ 8 ตัวแรกให้ตรงคอลัมน์ cid (เหมือน Node/Python) — header ส่งค่าเต็มกลับ
 
         ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
 
         // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", cid))
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
             await next(ctx);
     }
 }
@@ -455,8 +463,10 @@ public sealed class CorrelationIdMiddleware(RequestDelegate next)
 ### เขียน log
 
 ```csharp
-// ✅ ข้อความคงที่ + ตัวแปรเป็น property — group log ได้ ค้นหาได้
-_logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ {OrderId} {Ms}", orderId, sw.ElapsedMilliseconds);
+// ✅ ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
+//    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
+using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
+    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
 
 // ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
 _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
@@ -489,7 +499,7 @@ export class LoggerService {
   private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
     // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
     if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (isDevMode() && level === 'INFO')) return;
+    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod ส่งเฉพาะ WARN ขึ้นไป
 
     this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
     if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
@@ -513,6 +523,9 @@ export class LoggerService {
 
 ```ts
 // core/global-error.handler.ts
+import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
+import { LoggerService } from './logger.service';
+
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   private log = inject(LoggerService);
@@ -528,6 +541,9 @@ export class GlobalErrorHandler implements ErrorHandler {
 ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
 
 ```ts
+// core/correlation.interceptor.ts
+import { HttpInterceptorFn } from '@angular/common/http';
+
 export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
 ```
@@ -853,8 +869,8 @@ Use existing tools:
 
 | Stack | Library | Notes |
 |-------|---------|-------|
-| Node.js | `passport`, `lucia-auth` | Lucia is simpler and newer |
-| Python | `authlib`, `python-jose` | authlib for OAuth |
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
 | Go | `oauth2`, `golang-jwt` | Standard |
 | Rust | `axum-login`, `jsonwebtoken` | — |
 | Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
@@ -927,11 +943,11 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 | เก็บรหัสผ่าน token สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
 | ที่เก็บ connection string | `config-and-secrets` | แทน |
 | รัน migration ใน pipeline | `cicd-and-release` | แทน |
-| วาดผัง ER | `diagram-figures` หรือ `markdown-visuals` | คู่ |
+| วาดผัง Entity-Relationship (ER) | `diagram-figures` หรือ `markdown-visuals` | คู่ |
 | บันทึกเหตุผลที่เลือกฐานข้อมูลตัวนี้ | `adr-writer` | คู่ |
 | ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
 
-**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ ORM** อยู่ใน `references/per-stack.md`
+**ไวยากรณ์เฉพาะแต่ละฐานข้อมูล ชนิดข้อมูลเทียบกัน และคำสั่ง migration ของแต่ละ Object-Relational Mapping (ORM)** อยู่ใน `references/per-stack.md`
 
 ---
 
@@ -962,7 +978,7 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 | คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
 | foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` → `user_roles` |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✅ (ไม่ใช่ `user_roles`) |
 | index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
 | unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
 | foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
@@ -1023,7 +1039,7 @@ updated_at   timestamptz     NOT NULL DEFAULT now()
 
 ## 5 · normalisation แค่ไหนพอ
 
-**เริ่มที่ 3NF เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
+**เริ่มที่ Third Normal Form (3NF) เสมอ**: ข้อเท็จจริง 1 อย่างเก็บที่เดียว
 
 denormalise (ยอมเก็บข้อมูลซ้ำ) ได้เมื่อครบ 3 ข้อนี้เท่านั้น:
 
@@ -1228,7 +1244,7 @@ from kafka import KafkaConsumer
 consumer = KafkaConsumer(
     'events',
     bootstrap_servers='kafka:9092',
-    enable_auto_commit=False,  # ← manual commit for exactly-once
+    enable_auto_commit=False,  # ← manual commit = at-least-once (not exactly-once)
     isolation_level='read_committed',
 )
 
@@ -1237,12 +1253,17 @@ for message in consumer:
     batch.append(parse(message))
 
     if len(batch) >= 1000:
-        # Atomic write + commit
+        # Write first, commit the offset after. Kafka and the DB share no
+        # transaction, so a crash between the two replays this batch
+        # (at-least-once). Make the write idempotent so a replay is harmless.
         with db.transaction():
-            db.bulk_insert('events', batch)
-            consumer.commit()  # only after DB write succeeds
+            db.bulk_upsert('events', batch, key=('topic', 'partition', 'offset'))  # unique key + ON CONFLICT DO NOTHING
+        consumer.commit()  # only after the DB write succeeds
         batch = []
 ```
+
+For exactly-once effect: idempotent upsert as above, or store the offsets in the
+same DB transaction as the data and seek to them on start (skip `consumer.commit()`).
 
 ## Data Catalog Pattern
 
@@ -1355,7 +1376,7 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 
 **คำสั่งที่ล็อกตารางจนระบบค้าง** (ระวังเป็นพิเศษบนตารางใหญ่):
 
-- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว แต่ MySQL ยังเขียนใหม่ทั้งตาราง
+- เพิ่มคอลัมน์ที่มี `DEFAULT` และ `NOT NULL` พร้อมกัน ซึ่ง PostgreSQL รุ่นใหม่ทำได้เร็ว และ MySQL 8.0.12 ขึ้นไปเพิ่มคอลัมน์แบบ INSTANT ได้ (การเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่)
 - เปลี่ยนชนิดข้อมูล
 - สร้าง index ธรรมดา ให้ใช้ `CREATE INDEX CONCURRENTLY` แทน (PostgreSQL) หรือ `ONLINE = ON` (SQL Server)
 
@@ -1498,7 +1519,7 @@ CREATE TABLE orders (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ```
 
-- `ALTER TABLE` ส่วนใหญ่เขียนตารางใหม่ทั้งตาราง ตารางใหญ่จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
+- MySQL 8.0.12 ขึ้นไป `ADD COLUMN` ใช้ `ALGORITHM=INSTANT` ได้ (ก่อน 8.0.29 เพิ่มได้เฉพาะท้ายตาราง) ส่วนการเปลี่ยนชนิดข้อมูลยังเขียนตารางใหม่ (dev.mysql.com online DDL, ตรวจ 22 ต.ค. 2569) ตารางใหญ่ที่ต้อง rebuild จึงควรใช้ `pt-online-schema-change` หรือ `gh-ost`
 - ตั้งเวลาเซิร์ฟเวอร์เป็น UTC (`default_time_zone = '+00:00'`)
 
 ---
@@ -1558,6 +1579,7 @@ model Order {
   id          BigInt   @id @default(autoincrement())
   orderNo     String   @unique @map("order_no") @db.VarChar(20)
   totalAmount Decimal  @map("total_amount") @db.Decimal(19, 4)
+  status      String   @db.VarChar(20)
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   customer    Customer @relation(fields: [customerId], references: [id])
   customerId  BigInt   @map("customer_id")
@@ -1585,13 +1607,24 @@ alembic upgrade head
 alembic downgrade -1
 ```
 
+แยกเป็น 3 migration (1 migration ทำเรื่องเดียว):
+
 ```python
+# 1) schema: เพิ่มคอลัมน์ที่ยังว่างได้
 def upgrade():
     op.add_column("orders", sa.Column("status", sa.String(20), nullable=True))
+
+# 2) ข้อมูล: เติมค่าเดิม (ตารางใหญ่ให้ทำเป็นชุดเล็ก ๆ)
+def upgrade():
     op.execute("UPDATE orders SET status = 'draft' WHERE status IS NULL")
+
+# 3) schema: บังคับ NOT NULL และสร้าง index
+def upgrade():
     op.alter_column("orders", "status", nullable=False)
-    op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
-                    postgresql_concurrently=True)
+    # CREATE INDEX CONCURRENTLY ห้ามอยู่ใน transaction จึงต้องออกจาก transaction ของ Alembic
+    with op.get_context().autocommit_block():
+        op.create_index("ix_orders_status_created", "orders", ["status", "created_at"],
+                        postgresql_concurrently=True)
 ```
 
 > `--autogenerate` **ไม่เห็น** การเปลี่ยนชื่อ (มองเป็นลบแล้วเพิ่มใหม่ ข้อมูลจึงหาย)
@@ -1686,7 +1719,7 @@ CREATE TABLE fact_orders (
     product_key BIGINT,
     date_key INT,
     quantity INT,
-    amount DECIMAL(12,2),
+    amount NUMERIC(19,4)
     -- foreign keys to dimensions
 );
 
@@ -1791,7 +1824,7 @@ Use when settings differ by environment or something must never be committed (ke
 ```
 
 **ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
+เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
 
 ---
 
@@ -1909,7 +1942,7 @@ APP_LOG_LEVEL=debug
 1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
 2. ออกค่าใหม่ แล้ว deploy
 3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
+4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
 5. บันทึกเหตุการณ์ด้วย `postmortem-template`
 
 > 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
@@ -1959,7 +1992,7 @@ APP_LOG_LEVEL=debug
 - ❌ **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
 - ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
+- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
 
 
@@ -2146,7 +2179,7 @@ env:
 
 ```bash
 # ตรวจทั้งประวัติ
-gitleaks detect --source . --redact
+gitleaks git --redact        # คำสั่ง detect เดิมถูกแทนด้วย git / dir
 
 # กันไว้ก่อน commit
 pip install pre-commit detect-secrets
@@ -2157,7 +2190,7 @@ detect-secrets scan > .secrets.baseline
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
+    rev: v8.21.2   # ตัวอย่าง ตรวจ rev ล่าสุดก่อนใช้ (รอยืนยัน)
     hooks: [{ id: gitleaks }]
 ```
 
@@ -2166,7 +2199,8 @@ repos:
 ```bash
 pip install git-filter-repo
 git filter-repo --path .env --invert-paths
-git push --force --all      # ทุกคนต้อง clone ใหม่
+# รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน force push (เขียนประวัติร่วมทับ ทุกคนต้อง clone ใหม่)
+git push --force --all
 ```
 
 ---
@@ -2184,7 +2218,11 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 ```powershell
 # Windows
-[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
+# PowerShell 5.1 และ 7 (ตัวสุ่มสำหรับงานเข้ารหัส ไม่ใช่ Get-Random)
+$b = New-Object byte[] 48
+[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
+[Convert]::ToBase64String($b)
+# PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
 > ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
@@ -2245,7 +2283,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 | กลไก | เหมาะกับ | ระวัง |
 |---|---|---|
 | **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวหยิบงานเอง · ระวัง worker แย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · SQS) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
+| **คิวจริง** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
 | ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** · ดูข้อ 5 |
 | ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
 
@@ -2275,16 +2313,16 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 ## 4 · retry และงานที่ตายแล้ว
 
-ตัวเลขนี้สำหรับงานในคิว · ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) (3 ครั้ง 1/2/4 วินาที)
+ตัวเลขนี้สำหรับงานในคิว · ลองใหม่นอกคิวใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service เรียก service ใช้ 3 ครั้ง 1/2/4 วินาที · มีคนรอหน้าจอ → retry ไม่เกิน 1 ครั้งแล้วให้กดเอง
 
 ```
-ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
+ล้ม → รอ 1 นาที → ล้ม → รอ 4 นาที → ล้ม → รอ 16 นาที → ล้มครั้งที่ 4 → dead letter
 ```
 
 | กฎ | รายละเอียด |
 |---|---|
 | **มีเพดานเสมอ** | 3–5 ครั้ง ถ้า retry ไม่จำกัด งานเดียวก็ทำให้คิวตัน |
-| เว้นเวลาเพิ่มเป็นทวีคูณ + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
+| เว้นเวลาเพิ่มขึ้นทุกรอบ (เท่าตัวคงที่ เช่น ×4) + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
 | ข้อมูลผิดไม่ต้อง retry | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
 | **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter (ที่เก็บงานที่ล้มจนหมดสิทธิ์) โดยเก็บ payload เต็มและ error ล่าสุด |
 | ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |

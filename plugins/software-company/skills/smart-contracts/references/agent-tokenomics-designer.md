@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Tokenomics Quality Standards](#tokenomics-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Tokenomics Quality Standards](#-tokenomics-quality-standards)
 - [Core Concepts](#core-concepts)
 - [Utility Design](#utility-design)
 - [Governance Patterns](#governance-patterns)
@@ -221,24 +221,26 @@ Dump risk huge
 
 ## Regulatory Considerations
 
+> **ไม่ใช่คำแนะนำทางกฎหมาย** — ทุกข้อในหัวข้อนี้ `(รอยืนยัน)` ณ 22 ต.ค. 2569 · กฎเปลี่ยนเร็ว (สหรัฐฯ เปลี่ยนท่าทีหลายเรื่องในปี 2025) · **ทนายในแต่ละประเทศเป็นคนตัดสิน** ว่าโทเคนเป็นหลักทรัพย์หรือไม่ ไม่ใช่ checklist นี้ → ส่ง `legal-compliance-officer`
+
 ### Howey Test (US)
 ```
 Investment of money + Common enterprise + Expectation of profit + From efforts of others
 = SECURITY (regulated)
 
-Avoid being a security:
-- Token must have utility on day 1
-- Sufficient decentralization
-- No "team is making us rich" marketing
-- Howey factors don't all apply
+Questions to bring to the lawyer (not a safe-harbour checklist):
+- Does the token have real utility on day 1?
+- How decentralized is control?
+- Does any marketing promise profit from the team's work?
+- Which Howey factors apply?
 ```
 
 ### Different jurisdictions
-- **US (SEC)**: strict, evolving
-- **EU (MiCA, 2024)**: comprehensive framework
-- **Singapore (MAS)**: clear guidelines
-- **Switzerland**: friendly with FINMA
-- **Thailand (SEC TH)**: requires registration
+- **US (SEC)**: position changed during 2025 — check the current SEC guidance with counsel (รอยืนยัน)
+- **EU (Markets in Crypto-Assets Regulation, MiCA)**: fully applicable since 30 Dec 2024 (รอยืนยัน)
+- **Singapore (Monetary Authority of Singapore, MAS)**: licensing under the Payment Services Act (รอยืนยัน)
+- **Switzerland (FINMA)**: token classification guidelines (รอยืนยัน)
+- **Thailand (สำนักงาน ก.ล.ต.)**: พ.ร.ก. การประกอบธุรกิจสินทรัพย์ดิจิทัล พ.ศ. 2561 — ออกโทเคนต่อประชาชนต้องได้รับอนุญาตและขายผ่าน ICO portal ที่ ก.ล.ต. เห็นชอบ · ธุรกิจศูนย์ซื้อขาย/นายหน้า/ผู้ค้าต้องได้รับใบอนุญาต (รอยืนยัน · ตรวจกับ sec.or.th ก่อนใช้)
 
 > 💡 **Consult lawyers in each jurisdiction.**
 
@@ -308,9 +310,10 @@ Alternative: token grants to original holders
 
 ## When to Hand Off
 
-- Implementation → `blockchain-engineer`
-- DeFi mechanics → `blockchain-engineer`
-- Architecture → `blockchain-engineer`
+- Implementation → same agent, switch role: [`agent-smart-contract-developer.md`](agent-smart-contract-developer.md)
+- DeFi mechanics → same agent, switch role: [`agent-defi-engineer.md`](agent-defi-engineer.md)
+- Architecture → same agent, switch role: [`agent-blockchain-architect.md`](agent-blockchain-architect.md)
+- Securities / licensing questions → `legal-compliance-officer` (a lawyer in each jurisdiction decides)
 - Legal → securities lawyers (not us!)
 
 ## Reference

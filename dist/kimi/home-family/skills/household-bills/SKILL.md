@@ -14,14 +14,14 @@ General information, not financial advice. Tariffs change — the utility's own 
 | Service | Bangkok, Nonthaburi, Samut Prakan | Rest of the country | App to check and pay |
 |---|---|---|---|
 | Electricity | การไฟฟ้านครหลวง (กฟน. / MEA) | การไฟฟ้าส่วนภูมิภาค (กฟภ. / PEA) | MEA Smart Life · PEA Smart Plus |
-| Water | การประปานครหลวง (กปน. / MWA) | การประปาส่วนภูมิภาค (กปภ. / PWA), or a local อปท. system | MWA onMobile · PWA 1662 |
+| Water | การประปานครหลวง (กปน. / MWA) | การประปาส่วนภูมิภาค (กปภ. / PWA), or a local องค์การปกครองส่วนท้องถิ่น (อปท.) system | MWA onMobile · PWA 1662 |
 | Internet / mobile | AIS, True/dtac, 3BB (now with AIS), NT | same | each operator's app |
 
 ## Reading an electricity bill
 
 The bill (ใบแจ้งค่าไฟฟ้า) adds 4 parts:
 
-1. **ค่าพลังงานไฟฟ้า** — units (หน่วย = kWh) × the tiered base tariff for your type (residential ประเภท 1.1.1 ≤150 units/month on a ≤5 A meter, 1.1.2 above that)
+1. **ค่าพลังงานไฟฟ้า** — units (หน่วย = kWh) × the tiered base tariff for your type (your tariff type is printed on the bill; the old residential split 1.1.1 / 1.1.2 may have changed with the new home tariff — รอยืนยัน)
 2. **ค่าบริการ** — a fixed monthly service charge
 3. **ค่า Ft** — units × the Ft rate for the current 4-month period (can be positive or negative)
 4. **ภาษีมูลค่าเพิ่ม 7%** on the sum of 1–3
@@ -31,8 +31,9 @@ Units used = เลขอ่านครั้งนี้ − เลขอ่�
 | Item | Current value | Applies |
 |---|---|---|
 | Ft rate | 16.23 สตางค์/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
-| Average all-in tariff (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย; with the new tiered home tariff the average for all users is 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | งวด ก.ย.–ธ.ค. 2569 · tiered tariff from Sep 2569 bills |
-| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | กกพ. announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
+| Average all-in tariff, Ft period (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
+| Average all-in tariff, new tiered home tariff, all users | 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | tiered tariff from Sep 2569 bills |
+| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | คณะกรรมการกำกับกิจการพลังงาน (กกพ.) announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
 
 ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.erc.or.th/th/news-release/3458 (ค่า Ft งวด ก.ย.–ธ.ค. 2569) · https://erc.or.th/th/news-release/3472 (อัตราแบบขั้นบันได 3.86) · https://www.naewna.com/business/979048
 

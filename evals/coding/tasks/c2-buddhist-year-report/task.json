@@ -1,0 +1,6 @@
+{
+  "stack": "dotnet",
+  "title": "หัวรายงานขึ้นปี 3112 บนเครื่อง th-TH และ CSV ต้องเป็นปี ค.ศ.",
+  "test": ["dotnet", "test", "tests/SalesReport.Tests"],
+  "testFiles": "(^|[\\\\/])tests[\\\\/]SalesReport\\.Tests[\\\\/][^\\\\/]*Tests\\.cs$"
+}

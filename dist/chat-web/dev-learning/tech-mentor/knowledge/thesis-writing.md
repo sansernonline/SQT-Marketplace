@@ -1,6 +1,6 @@
 # skill: thesis-writing
 
-Use when writing a thesis, IS or research paper (proposal, literature review, citations, Thai .docx typesetting, defense).
+Use when writing a thesis, independent study (IS) or research paper (proposal, literature review, citations, Thai .docx typesetting, defense).
 
 # Thesis and Paper Writing
 
@@ -14,7 +14,7 @@ The user's research, the user's claims, the user's data. Claude makes the argume
 4. **Outline every chapter as headings plus 1-line claims**, using [references/thesis-structure.md](references/thesis-structure.md). The adviser checks the outline before anyone writes full text. Changing an outline costs minutes; changing 40 pages costs weeks
 5. **Draft chapter by chapter**, in the order 3 → 1 → 2 → 4 → 5 → abstract. Method first, because it fixes what the rest may claim. Abstract last, because it summarises what exists
 6. **Every paragraph does one job**: topic sentence → evidence with citation → what it means for this study. A paragraph with no citation in chapter 2, or with no number in chapter 4, is usually empty
-7. **Citations checked one by one** against the rules in [references/citation-and-integrity.md](references/citation-and-integrity.md). Each reference must exist, be found by DOI, ThaiJO, ThaiLIS or the publisher's page, and actually say what the sentence says
+7. **Citations checked one by one** against the rules in [references/citation-and-integrity.md](references/citation-and-integrity.md). Each reference must exist, be found by Digital Object Identifier (DOI), ThaiJO, ThaiLIS or the publisher's page, and actually say what the sentence says
 8. **Language pass** for Thai academic register with [references/thai-academic-language.md](references/thai-academic-language.md), or the English rules in the same file. Then a **typesetting pass** for a Thai .docx with [references/thai-typesetting.md](references/thai-typesetting.md): Thai Distributed body text, no spaces between phrases, zero-width break points
 9. **Similarity check** in the university's tool (Turnitin or อักขราวิสุทธิ์) before sending to the adviser. Threshold per university (รอยืนยัน)
 10. **Defense or journal submission** with [references/defense-and-review.md](references/defense-and-review.md): slide plan, likely committee questions, and the response-to-reviewers table
@@ -35,7 +35,7 @@ When asked to cross a line in the right column, say which rule it breaks and off
 
 - **A citation that cannot be found does not go in.** Language models invent plausible references; one fake reference can fail a defense or retract a paper. Show the DOI or URL for every source Claude suggests
 - **Cite what you read.** If the user only read a review that cites the original, cite the review, or find and read the original
-- **AI use follows the institution's policy** and is disclosed where the policy or journal asks. Tools cannot be listed as authors (COPE position)
+- **AI use follows the institution's policy** and is disclosed where the policy or journal asks. Tools cannot be listed as authors (Committee on Publication Ethics (COPE) position)
 - **Numbers in the text match the tables.** Re-check every number in chapters 4, 5 and the abstract against the analysis output
 - **One term per concept** across all chapters. Keep a glossary (นิยามศัพท์เฉพาะ) and use it
 - Dates in Thai theses usually use พ.ศ.; references to English sources keep ค.ศ. Follow the manual
@@ -51,7 +51,7 @@ When asked to cross a line in the right column, say which rule it breaks and off
 | Literature review | 25–35% of the text | 15–20% |
 | Discussion | Compares each finding with ≥ 1 earlier study | Same, shorter |
 
-Related: `paper-to-practice` (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` in `software-company` for defense slides. Word output from Markdown → `markdown-report-docx` in `software-company` (if installed) builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).
+Related: `paper-to-practice` (understand someone else's paper), `english-tech-reading` (read long English papers faster), `human-writing` (plain language for everything outside the thesis itself), and `presentation-design` for defense slides. Word output from Markdown → `markdown-report-docx` builds the .docx; keep the rules in [references/thai-typesetting.md](references/thai-typesetting.md).
 
 
 ## reference: citation-and-integrity.md
@@ -65,7 +65,7 @@ Use the style in the faculty manual or journal guidelines. When none is given:
 | Field | Common style |
 |---|---|
 | Education, social sciences, business, psychology | APA 7th edition |
-| Engineering, computer science | IEEE |
+| Engineering, computer science | Institute of Electrical and Electronics Engineers (IEEE) |
 | Medicine, nursing, health sciences | Vancouver |
 
 ## APA 7 with Thai sources — the usual Thai-university convention
@@ -81,7 +81,7 @@ Some universities ask for Thai references to be translated into English as well 
 
 ## Verifying a citation — before it goes in
 
-1. Find the source by DOI (doi.org), ThaiJO, ThaiLIS, Google Scholar or the publisher page. Not found = not cited
+1. Find the source by Digital Object Identifier (DOI) (doi.org), ThaiJO, ThaiLIS, Google Scholar or the publisher page. Not found = not cited
 2. Open it. Check the author names, year, title, volume, issue and pages against the reference entry
 3. Find the passage that supports the sentence. If the source does not say it, change the sentence or remove the citation
 4. Mark the row in the literature matrix with where it was verified
@@ -99,13 +99,13 @@ When Claude suggests a source, it must show the DOI or URL it found it at. A ref
 ## Generative AI
 
 - Follow the university's and the journal's AI policy. Many require disclosure of how AI tools were used (รอยืนยัน per institution)
-- AI tools cannot be authors and cannot take responsibility for the content (COPE position statement on authorship and AI tools, https://publicationethics.org/cope-position-statements/ai-author)
+- AI tools cannot be authors and cannot take responsibility for the content (Committee on Publication Ethics (COPE) position statement on authorship and AI tools, https://publicationethics.org/cope-position-statements/ai-author)
 - Never use AI to produce data, results, interview quotes or survey responses. That is fabrication, the most serious kind of research misconduct
 - Keep notes on what the tool was used for (outline, language editing, code) so the disclosure can be written honestly
 
 ## Research ethics
 
-Studies with human participants need approval from the university's human research ethics committee (คณะกรรมการจริยธรรมการวิจัยในมนุษย์) before collecting data. Personal data collected falls under the PDPA: consent, purpose, storage and deletion are stated in the consent form.
+Studies with human participants need approval from the university's human research ethics committee (คณะกรรมการจริยธรรมการวิจัยในมนุษย์) before collecting data. Personal data collected falls under the Personal Data Protection Act (PDPA): consent, purpose, storage and deletion are stated in the consent form.
 
 
 ## reference: defense-and-review.md
@@ -120,13 +120,13 @@ Studies with human participants need approval from the university's human resear
 | 2–3 | Problem and gap — 1 number that shows the problem is real | 2 min |
 | 4 | Objectives and research questions | 1 min |
 | 5 | Conceptual framework diagram | 1 min |
-| 6–8 | Method: design, sample, instruments with IOC and reliability, analysis | 4 min |
+| 6–8 | Method: design, sample, instruments with item-objective congruence index (IOC) and reliability, analysis | 4 min |
 | 9–13 | Results: 1 slide per objective, the table reduced to the key numbers | 7 min |
 | 14–15 | Discussion: agrees or disagrees with whom, and why | 3 min |
 | 16 | Contributions and limitations | 1 min |
 | 17 | Recommendations | 0.5 min |
 
-Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` in `software-company` (if installed) for layouts.
+Proposal defenses stop at slide 8 and add the timeline. Slide headlines state the finding ("ความพึงพอใจโดยรวมอยู่ในระดับมาก (x̄ = 4.21)"), not the topic ("ผลการวิจัย"). See `presentation-design` for layouts.
 
 ## Questions committees often ask — prepare 2–3 sentence answers
 
@@ -147,7 +147,7 @@ List every committee comment in a table: comment · page · what was changed · 
 
 | # | Reviewer comment (quoted) | Response | Change in manuscript (page, line) |
 |---|---|---|---|
-| R1.1 | "The sample size is not justified." | Thank you. We added the G*Power calculation (effect size 0.3, power 0.80, α 0.05 → n = 84). | p. 6, lines 12–18 |
+| R1.1 | "The sample size is not justified." | Thank you. We added the G*Power calculation (correlation, two-tailed, effect size r = 0.3, power 0.80, α 0.05 → n = 84). | p. 6, lines 12–18 |
 | R1.2 | "Compare with recent studies." | We added 3 studies from 2023–2025 to the discussion. | p. 12, lines 4–20 |
 
 Rules:
@@ -158,7 +158,7 @@ Rules:
 
 ## Submission checklist
 
-- Journal scope fits the topic, tier checked (TCI 1/2, Scopus quartile)
+- Journal scope fits the topic, tier checked (Thai-Journal Citation Index (TCI) 1/2, Scopus quartile)
 - Not a predatory journal: check it is in the TCI or Scopus list, beware of fast acceptance for a fee and spam invitations
 - Formatted to the author guidelines (template, word limit, reference style)
 - Cover letter: what the paper finds and why it fits this journal, 3–4 sentences
@@ -273,7 +273,7 @@ Thai has no spaces between words. Neat Thai body text needs two settings working
 
 Word breaks Thai lines at word boundaries only when the Thai word-breaking dictionary on that machine works. When it does not, a long run of Thai has no break point. The line then ends early and Thai Distributed spreads the letters apart ("ใ น แ ต ่ ล ะ ว ั น"). Writers often "fix" this by typing a space between phrases, which is what makes the text gappy in the first place.
 
-So: remove the phrase spaces, and put U+200B at every Thai word boundary. The text looks the same on every machine, and copy-paste and similarity checkers ignore the character.
+So: remove the phrase spaces, and put U+200B at every Thai word boundary. The text looks the same on every machine. Whether similarity checkers (for example Turnitin) ignore the character is not verified (ยังไม่ได้ตรวจ) — Turnitin's guide says it flags hidden text, so test it (last step below).
 
 ## Doing it on a .docx
 
@@ -290,6 +290,7 @@ So: remove the phrase spaces, and put U+200B at every Thai word boundary. The te
 - [ ] No line with letters spread apart
 - [ ] Headings, captions and tables keep their own alignment
 - [ ] Page count checked — removing spaces usually shortens the paper, which can matter for a page limit
+- [ ] Run the similarity check on the U+200B version; if it shows a hidden-character flag, tell the adviser, and keep a copy without U+200B for the check if the university allows
 - [ ] The manual or template still wins: if it prescribes a different alignment or font, follow it
 
 

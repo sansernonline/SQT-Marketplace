@@ -1,0 +1,17 @@
+{
+  "name": "price-board",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "rxjs": "7.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "tsx": "4.19.2",
+    "typescript": "5.5.4"
+  }
+}

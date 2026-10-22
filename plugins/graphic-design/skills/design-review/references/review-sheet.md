@@ -37,7 +37,7 @@ Blocking fails (1, 3, 8): <list or none>
 
 ## Quick tools
 
-- Contrast ratio: any WCAG checker (WebAIM Contrast Checker, a Figma or Canva plugin, browser DevTools colour picker)
+- Contrast ratio: any Web Content Accessibility Guidelines (WCAG) checker (WebAIM Contrast Checker, a Figma or Canva plugin, browser DevTools colour picker)
 - Squint test: blur the image (Gaussian 8–10 px) — the primary element must still stand out
 - Alignment: turn on a grid or drag guides in the design tool; check left edges and centre lines
 - Thai proofreading: read the copy aloud; check ๆ, tone marks, and that numbers use one system (Arabic or Thai digits, not mixed)

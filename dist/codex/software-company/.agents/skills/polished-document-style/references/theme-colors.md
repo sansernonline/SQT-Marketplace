@@ -6,8 +6,8 @@
 
 | ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
+| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
+| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
 | รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
 | ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
 | สไลด์ | `presentation-design` | `doc-theme` |

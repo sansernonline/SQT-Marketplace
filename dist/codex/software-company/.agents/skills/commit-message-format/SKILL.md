@@ -9,7 +9,7 @@ description: Use when setting up commitlint or semantic-release, or a commit nee
 
 ## When to use this skill
 
-- Writing any git commit message
+- Writing commits that feed release tooling (commitlint, semantic-release) — everyday commits use `commit-log`
 - Reviewing commits in a PR for consistency
 - Setting up commitlint / semantic-release
 

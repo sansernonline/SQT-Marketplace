@@ -1,6 +1,6 @@
 ---
 name: "feature-kickoff"
-description: "Start a feature by coordinating BA → SA → Architect → planning. Requirements, FSD, architecture."
+description: "Start a feature — business analyst → solution architect → system analyst → planning. Requirements, FSD, architecture."
 disableModelInvocation: true
 ---
 

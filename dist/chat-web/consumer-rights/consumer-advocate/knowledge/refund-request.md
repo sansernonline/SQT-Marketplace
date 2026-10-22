@@ -6,7 +6,7 @@ Use when the user wants money back (broken, fake or undelivered item, direct-sal
 
 Time-limited rights first — they expire while people are still arguing with the seller.
 
-General information, not legal advice — for large amounts ask a lawyer (ทนายความ); for bank disputes the Bank of Thailand's ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน (hotline 1213) can help.
+General information, not legal advice — for large amounts ask a lawyer (ทนายความ); for bank disputes the Bank of Thailand (BOT)'s ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน (hotline 1213) can help.
 
 ## Step 1 — which route, and its clock
 
@@ -16,7 +16,7 @@ General information, not legal advice — for large amounts ask a lawyer (ทน
 | Marketplace purchase (Shopee, Lazada, TikTok Shop) — wrong, damaged, fake, not received | Platform return/refund request in the app | Delivery date | Platform window — shown on the order (รอยืนยัน — varies by platform, store type and promotion; check the order page today) |
 | Paid by credit/debit card; seller won't refund or never delivered | Card dispute / chargeback via your bank | Transaction or statement date | Bank's card terms (รอยืนยัน — commonly counted from the statement date; read your card's ข้อกำหนดและเงื่อนไข and call immediately) |
 | Card charge you did not make | Report unauthorised use to the bank | When you see it | **At once** — call the bank's 24-hour line, freeze the card |
-| Paid by bank transfer / PromptPay to a fake shop | Police report + bank hold request | When you realise | **At once** — ศูนย์ AOC 1441 (24 hours) and your bank |
+| Paid by bank transfer / PromptPay to a fake shop | Police report + bank hold request | When you realise | **At once** — ศูนย์ Anti Online Scam Operation Center (AOC) 1441 (24 hours) and your bank |
 | Defective product, any channel | Seller's liability for defects (ป.พ.พ. มาตรา 472) | Discovering the defect | Lawsuit barred after 1 year (มาตรา 474) — see `complaint-letter-th` |
 
 ## The 7-day cancellation (direct sales / direct marketing)
@@ -29,6 +29,7 @@ Under the พ.ร.บ.ขายตรงและตลาดแบบตรง 
 - **มาตรา 30–31** — the business must give you sales documents in Thai stating the cancellation right clearly.
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/direct-sell-law/direct-sell-law-section-3 · https://www.drthawip.com/book/export/html/3439
+ข้อความมาตราจากเว็บรอง 2 แหล่ง — ตรวจกฎหมายฉบับทางการ: krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา) · ocpb.go.th — ยังไม่ได้เปิดตรวจข้อความทางการ (รอยืนยัน)
 
 Whether a particular online shop counts as a "direct marketer" under the Act depends on the business (registered ผู้ประกอบธุรกิจตลาดแบบตรง, selling through its own media) — if in doubt, send the notice anyway within 7 days and ask สคบ. 1166.
 
@@ -69,7 +70,7 @@ Send so the date is provable: email + registered mail (ไปรษณีย์�
 5. Note the case number and expected timeline; follow up in writing.
 6. If the bank refuses or does not respond, contact ศูนย์คุ้มครองผู้ใช้บริการทางการเงิน ธปท. 1213.
 
-Unauthorised card transactions: under the BOT fraud measures (first Oct 2564, restated Mar 2566), banks refund debit-card holders within 5 days and do not bill credit-card holders for the amount and interest, once it is reasonable that the cardholder was not at fault. Since 13 Apr 2568 the พ.ร.ก. มาตรการป้องกันและปราบปรามอาชญากรรมทางเทคโนโลยี (ฉบับที่ 2) also makes banks, payment providers, phone networks and platforms share the loss when they did not follow their regulator's standard (BOT standard for banks announced 28 Apr 2568; the days limit inside it not checked — รอยืนยัน).
+Unauthorised card transactions: under the BOT fraud measures (first Oct 2564, restated Mar 2566), banks refund debit-card holders within 5 working days (วันทำการ) and do not bill credit-card holders for the amount and interest, once it is reasonable that the cardholder was not at fault. Since 13 Apr 2568 the พ.ร.ก. มาตรการป้องกันและปราบปรามอาชญากรรมทางเทคโนโลยี (ฉบับที่ 2) also makes banks, payment providers, phone networks and platforms share the loss when they did not follow their regulator's standard (BOT standard for banks announced 28 Apr 2568; the days limit inside it not checked — รอยืนยัน).
 
 ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20211019.html · https://www.bot.or.th/th/news-and-media/news/news-20250428.html · https://www.thebangkokinsight.com/news/stock-finance/finance/1437029/ · https://thethaiger.com/th/news/488483/
 
@@ -81,4 +82,4 @@ Bought a skincare set through a Facebook advertiser's own website (direct market
 3. Refund due by 15 days from the company receiving the notice (≈ 2026-10-21 if received 2026-10-06).
 4. No refund by then → `complaint-letter-th`, step 3 (สคบ. 1166), attaching the notice and postal receipt.
 
-Related: `complaint-letter-th` · `warranty-tracker` · `scam-check` in `trading-finance` · `polite-message-th-en` in `personal-life` · `important-docs` in `personal-life`.
+Related: `complaint-letter-th` · `warranty-tracker` · `scam-check` in `trading-finance` (if installed) · `polite-message-th-en` (plugin `superuser`) · `important-docs` in `personal-life` (if installed).

@@ -52,7 +52,7 @@ The conversion rate optimization (CRO) specialist should:
 
 8. **Produce polished audit report** using `polished-document-style` skill (from software-company):
    - Executive summary
-   - Funnel breakdown (with Mermaid Sankey)
+   - Funnel breakdown (funnel diagram via `diagram-figures`, house style)
    - Heuristic scorecard
    - Hypothesis backlog (ICE-prioritized)
    - Top 3 test plans
@@ -110,12 +110,12 @@ The recommendation engineer should:
    - Fallback (when model unavailable)
 
 8. **Define evaluation:**
-   - Offline: Hit Rate@K, NDCG, MAP, coverage, diversity
-   - Online A/B test: CTR, conversion, revenue per impression
+   - Offline: Hit Rate@K, Normalized Discounted Cumulative Gain (NDCG), Mean Average Precision (MAP), coverage, diversity
+   - Online A/B test: click-through rate (CTR), conversion, revenue per impression
    - Guardrail metrics
 
 9. **Produce polished design document** using `polished-document-style` skill (from software-company):
-   - Architecture diagram (Mermaid)
+   - Architecture diagram (`diagram-figures`, house style)
    - Data flow
    - Algorithm rationale + alternatives considered
    - Cold start handling

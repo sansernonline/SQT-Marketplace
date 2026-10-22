@@ -1,7 +1,7 @@
 # playbook · ship — เตรียมส่งงานขึ้น branch หลัก
 
 ใช้เมื่อ: "เปิด PR" · "ดูแล PR ให้เขียว" · "แก้ตามคอมเมนต์รีวิว" · "พร้อม merge หรือยัง" (รวม `opening a PR` · `babysit` · `shipping` · `autopilot-stack` ของ pstack)
-skill หลัก: `pr-description-template` · `commit-message-format` · `cicd-and-release` · [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md)
+skill หลัก: `pr-description-template` · `commit-message-format` · `cicd-and-release` · `adversarial-review-panel`
 
 > agent **ไม่ commit · push · merge เอง** เว้นแต่ได้รับอนุญาตตามกฎ commit ใน `superuser` หัวข้อ 6 ขั้นไหนต้องใช้สิทธิ์นี้แต่ยังไม่ได้รับอนุญาต ให้เตรียมคำสั่งไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ
 

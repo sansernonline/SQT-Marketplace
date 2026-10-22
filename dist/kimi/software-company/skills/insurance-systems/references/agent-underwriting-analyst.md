@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Underwriting Quality Standards](#underwriting-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Underwriting Quality Standards](#-underwriting-quality-standards)
 - [Eligibility vs Rating](#eligibility-vs-rating)
 - [Eligibility Rules](#eligibility-rules)
 - [Risk Scoring Model](#risk-scoring-model)
@@ -84,7 +84,8 @@ ELIGIBILITY_RULES = [
     {
         'name': 'recent_dui',
         'check': lambda app: not had_dui_recently(app, years=5),
-        'reason': 'DUI within 5 years requires manual review'
+        'reason': 'DUI within 5 years requires manual review',
+        'hard_stop': False,   # refer, not auto-decline (rules without the key are hard stops)
     },
 ]
 
@@ -92,7 +93,8 @@ def check_eligibility(application):
     failed = []
     for rule in ELIGIBILITY_RULES:
         if not rule['check'](application):
-            failed.append({'rule': rule['name'], 'reason': rule['reason']})
+            failed.append({'rule': rule['name'], 'reason': rule['reason'],
+                           'hard_stop': rule.get('hard_stop', True)})
     return failed
 ```
 
@@ -105,8 +107,8 @@ class RiskModel:
         self.feature_pipeline = load_pipeline(model_version)
         self.version = model_version
 
-    def score(self, application):
-        features = self.feature_pipeline.transform(application)
+    def score(self, application, enrichments=None):
+        features = self.feature_pipeline.transform(application, enrichments)
         prob_claim = self.model.predict_proba(features)[0][1]
 
         # Calibrated to expected loss ratio
@@ -162,24 +164,19 @@ function rate(application, rateBook) {
 async def enrich_application(app):
     """Pull external data to inform decisioning."""
 
-    enrichments = await asyncio.gather(
-        # Credit-based insurance score
-        get_credit_score(app.applicant),
+    tasks = {
+        'credit': get_credit_score(app.applicant),     # credit-based insurance score
+        'claims_history': get_clue_report(app.applicant),  # Comprehensive Loss Underwriting Exchange (CLUE)
+        'identity': verify_identity(app.applicant),
+    }
+    if app.product == 'auto':
+        tasks['mvr'] = get_mvr(app.applicant)          # motor vehicle record (MVR)
+    if app.product == 'home':
+        tasks['property'] = get_property_data(app.address)
 
-        # Motor vehicle records (for auto)
-        get_mvr(app.applicant) if app.product == 'auto' else None,
-
-        # CLUE database (claims history)
-        get_clue_report(app.applicant),
-
-        # Property characteristics (for home)
-        get_property_data(app.address) if app.product == 'home' else None,
-
-        # Identity verification
-        verify_identity(app.applicant),
-    )
-
-    return enrichments
+    # gather() only takes awaitables — never pass None
+    results = await asyncio.gather(*tasks.values())
+    return dict(zip(tasks.keys(), results))
 ```
 
 ## Auto-Decisioning
@@ -195,14 +192,14 @@ async def auto_decide(app):
     enriched = await enrich_application(app)
 
     # 3. Risk score
-    risk = await risk_model.score(app, enriched)
+    risk = risk_model.score(app, enriched)   # sync method, returns a dict
 
     # 4. Threshold logic
-    if risk.score < AUTO_APPROVE_THRESHOLD and not any_red_flags(enriched):
-        return AutoDecision('approve', tier=risk.tier)
+    if risk['score'] < AUTO_APPROVE_THRESHOLD and not any_red_flags(enriched):
+        return AutoDecision('approve', tier=risk['tier'])
 
-    if risk.score > AUTO_DECLINE_THRESHOLD:
-        return AutoDecision('decline', tier=risk.tier, explanation=risk.explanation)
+    if risk['score'] > AUTO_DECLINE_THRESHOLD:
+        return AutoDecision('decline', tier=risk['tier'], explanation=risk['explanation'])
 
     return ReferralDecision('refer_to_underwriter', flags=collect_flags(app, enriched, risk))
 ```
@@ -247,8 +244,7 @@ if decision == 'decline' and used_consumer_report:
 
 ## Skills You Use
 
-- `insurance-systems` — modeling patterns
-- `insurance-systems` — regulatory
+- `insurance-systems` — modeling patterns and regulatory references
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -261,7 +257,7 @@ if decision == 'decline' and used_consumer_report:
 
 ## When to Hand Off
 
-- Statistical modeling → `insurance-analyst`
+- Statistical modeling → open `agent-actuarial-engineer.md` (same `insurance-analyst` agent)
 - Policy operations → `insurance-engineer`
 - Claims integration → `insurance-engineer`
 - ML infrastructure → `ai-engineer`

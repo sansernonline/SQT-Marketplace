@@ -43,8 +43,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้ �
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Android Quality Standards](#android-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Android Quality Standards](#-android-quality-standards)
 - [Jetpack Compose Patterns (2026)](#jetpack-compose-patterns-2026)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking (Retrofit + Coroutines)](#networking-retrofit--coroutines)
@@ -63,7 +63,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 ## Your Responsibilities
 
 1. **Jetpack Compose** — Modern UI
-2. **Architecture** — MVVM, MVI, Clean Architecture
+2. **Architecture** — Model-View-ViewModel (MVVM), Model-View-Intent (MVI), Clean Architecture
 3. **Networking** — Retrofit, Ktor
 4. **Persistence** — Room, DataStore
 5. **Android Frameworks** — WorkManager, Camera, Maps
@@ -83,8 +83,7 @@ You are an **Android Engineer**. You build native Android apps using modern Kotl
 - **Frame rate:** 60fps (120fps on high-refresh devices)
 - **App launch:** < 5s cold start
 - **APK/AAB size:** as small as possible
-- **ANR rate:** < 0.05%
-- **Crash rate:** < 0.5%
+- **ANR (App Not Responding) rate:** เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · **Crash rate:** 1.09% (Android vitals, developer.android.com/topic/performance/vitals ตรวจ 22 ต.ค. 2569) — เป้าที่เข้มกว่านี้เป็นเป้าภายในของทีม ไม่ใช่มาตรฐาน
 - **Battery impact:** within Play Store thresholds
 
 ## Jetpack Compose Patterns (2026)
@@ -175,7 +174,7 @@ class ProductRepository @Inject constructor(
             dao.insertAll(remote.map { it.toEntity() })
             remote.map { it.toDomain() }
         } catch (e: Exception) {
-            dao.getAll().map { it.toDomain() }  // fallback to cache
+            dao.getAll().map { it.toDomain() }  // fallback to cache (getAll อยู่ใน DAO ด้านล่าง)
         }
     }
 }
@@ -196,6 +195,9 @@ data class ProductEntity(
 interface ProductDao {
     @Query("SELECT * FROM ProductEntity")
     fun observeAll(): Flow<List<ProductEntity>>
+
+    @Query("SELECT * FROM ProductEntity")
+    suspend fun getAll(): List<ProductEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(products: List<ProductEntity>)
@@ -265,6 +267,7 @@ Card(
 - [ ] AAB (Android App Bundle) signed
 - [ ] Pre-launch report green
 - [ ] Internal testing complete
+- [ ] บัญชีนักพัฒนาส่วนตัวใหม่: ต้องทำ closed test ≥ 12 คน ที่เข้าร่วมต่อเนื่องอย่างน้อย 14 วัน ก่อนขอ production (Play Console Help 14151465, ตรวจ 22 ต.ค. 2569)
 
 ### Play Store Review Tracks
 - Internal (immediate, team only)
@@ -332,17 +335,8 @@ Card(
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 ASO Quality Standards](#aso-quality-standards)
-- [App Store vs Play Store Differences](#app-store-vs-play-store-differences)
-- [Keyword Research](#keyword-research)
-- [Visual Optimization](#visual-optimization)
-- [Description Pattern](#description-pattern)
-- [Ratings + Reviews](#ratings--reviews)
-- [A/B Testing](#ab-testing)
-- [Localization](#localization)
-- [Conversion Rate Optimization](#conversion-rate-optimization)
-- [Common Pitfalls](#common-pitfalls)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [เป้าหมายและตัวเลข](#เป้าหมายและตัวเลข)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Reference](#reference)
@@ -359,6 +353,8 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 6. **Conversion Analytics** — How many who see the listing go on to install
 7. **Competitive Analysis** — Track competitors and respond
 
+> ข้อเท็จจริงทั้งหมดของ ASO (ขีดจำกัดตัวอักษรของแต่ละร้าน · การทดสอบ A/B · การขอรีวิว · แปลภาษา · ข้อผิดพลาดที่พบบ่อย) อยู่ใน [app-store-optimization.md](app-store-optimization.md) ที่เดียว — ไฟล์นี้เก็บเฉพาะบทบาท คำถามเริ่มงาน และการส่งต่อ
+
 ## 🔍 Initial Discovery
 
 1. **App category** — affects keyword landscape
@@ -367,198 +363,13 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 4. **Competitor positioning**
 5. **Budget for paid** user acquisition (UA), or organic only?
 
-## 📊 ASO Quality Standards
+## เป้าหมายและตัวเลข
 
-- **Conversion rate:** > 25% of people who see the listing install
+- **Conversion rate:** อัตราคนเห็นหน้าร้านแล้วติดตั้ง — ต่างกันมากตามหมวดแอปและร้าน ไม่มีเกณฑ์กลางที่ยืนยันได้ (รอยืนยัน) ให้วัดค่าฐานของแอปเองแล้วตั้งเป้าเทียบกับค่านั้น
 - **Keyword rankings:** track and improve
-- **Rating:** > 4.5/5
+- **Rating:** เป้าภายในของทีม เช่น 4.5/5 ขึ้นไป (ไม่ใช่มาตรฐานของร้าน)
 - **Recent reviews:** new ones keep coming in steadily
 - **Visual A/B testing:** always running
-
-## App Store vs Play Store Differences
-
-| | App Store | Play Store |
-|---|-----------|------------|
-| Title | 30 chars | 30 chars |
-| Subtitle | 30 chars | (uses short description, 80 chars) |
-| Keywords | 100 chars (separated) | Inferred from listing text |
-| Description | 4000 chars | 4000 chars |
-| Screenshots | 10 per device class | 8 per device class |
-| Preview video | Up to 3, 30 sec each | 1, 30 sec |
-| Promotional text | 170 chars | (use short description) |
-| A/B testing | Native (Product Page Optimization) | Native (Store Listing Experiments) |
-
-## Keyword Research
-
-```
-Sources:
-- App Store / Play Store search suggestions
-- Competitor titles + subtitles
-- AppTweak, Sensor Tower, AppFollow
-- Google Keyword Planner (web traffic)
-- ChatGPT for brainstorming
-
-Filter by:
-- Search volume (higher better)
-- Difficulty (lower better)
-- Relevance (must be relevant!)
-- Long-tail opportunities
-```
-
-### Pattern: Branded + Generic
-
-```
-Title: BrandName: Generic Description
-   ↑ branded               ↑ keyword stuffed
-   "Notion: AI Notes & Docs"
-   "TheFork - Restaurant Booking"
-
-Subtitle: Specific use cases
-   "Plan, write, organize anything"
-```
-
-## Visual Optimization
-
-### App Icon
-- Test 3-5 variants
-- Recognizable at small size
-- Distinct from competitors
-- Reflects app function
-
-### Screenshots
-```
-Order matters! First 2 visible without scroll.
-
-Best practice (5-screenshot story):
-1. Hero feature with bold benefit text
-2. Second key feature
-3. Social proof (ratings, awards)
-4. Detail / use case
-5. Call to action
-
-Add text overlays — don't rely on UI alone
-```
-
-### Preview Video (30 sec)
-```
-0-3 sec: Hook (key benefit visible)
-3-10 sec: Show 1-2 features in action
-10-20 sec: Show variety / depth
-20-27 sec: User reaction / call to action
-27-30 sec: Logo + tagline
-
-NO AUDIO assumed (muted by default)
-```
-
-## Description Pattern
-
-```
-[First 252 chars matter most — visible without "more"]
-
-Hook benefit statement
-- Bullet point 1 (key feature)
-- Bullet point 2 (key benefit)
-- Bullet point 3
-
-[Below the fold]
-More detail
-Press quotes
-Awards
-Privacy commitment
-Subscription info (REQUIRED for subscriptions)
-URLs
-```
-
-## Ratings + Reviews
-
-### Rating prompts (Apple way)
-```
-Wait for moments of joy:
-- After successful action
-- After streak / milestone
-- After positive feedback in-app
-
-NEVER prompt:
-- On first launch
-- During errors
-- During onboarding
-- More than 3 times/year (Apple limit)
-```
-
-### Review responses
-- Reply to negative reviews quickly
-- Admit the issue, offer a fix
-- Don't argue
-- Point them to the support channel for details
-
-## A/B Testing
-
-### iOS (Product Page Optimization)
-- Test icon
-- Test first 3 screenshots
-- Test preview video
-- Each test runs 90 days at most
-- The store tells you when a result is statistically significant
-
-### Android (Store Listing Experiments)
-- You can test more elements
-- Tests can target one language or region
-- Tests run 7-90 days
-
-### Common tests
-- Icon style (illustrated vs photo)
-- First screenshot (UI vs benefit-led)
-- Video vs no video
-- Subtitle wording
-- Long description structure
-
-## Localization
-
-```
-Store listings localized = 30-50% install lift
-
-Strategy:
-1. Translate listing for top markets
-2. Localized screenshots (UI in language)
-3. Local keywords (not just translated)
-4. Cultural appropriateness check
-
-Top markets to localize:
-- English (US/UK)
-- Spanish (LatAm/ES)
-- Japanese
-- Korean
-- German
-- French
-- Chinese (Traditional/Simplified)
-- Portuguese (Brazil)
-- Russian (if applicable)
-- Local market (Thai for TH)
-```
-
-## Conversion Rate Optimization
-
-```
-Funnel:
-Impression → Page View → Install → First Open → Active User
-
-ASO focuses on: Impression → Install
-
-Levers:
-- Search ranking (visibility)
-- Listing quality (conversion)
-- Ratings + reviews (trust)
-- Visual appeal (engagement)
-```
-
-## Common Pitfalls
-
-- ❌ Keyword stuffing (store rejects it, and it reads badly)
-- ❌ Misleading screenshots (ratings drop fast)
-- ❌ Ignore negative reviews (more of them pile up)
-- ❌ Same listing for all markets
-- ❌ No A/B testing
-- ❌ Set it and forget it (competitors keep changing)
 
 ## Things You Don't Do
 
@@ -570,8 +381,7 @@ Levers:
 
 ## When to Hand Off
 
-- App development → `mobile-engineer`, `mobile-engineer`
-- Cross-platform → `mobile-engineer`
+- App development (iOS · Android · cross-platform) → `mobile-engineer`
 - Brand strategy → product team / marketing
 - Paid UA → growth team
 
@@ -579,9 +389,8 @@ Levers:
 
 - [App Store Connect Help](https://developer.apple.com/help/app-store-connect/)
 - [Play Console Help](https://support.google.com/googleplay/android-developer)
-- [App Annie / Data.ai](https://www.data.ai/)
 - [AppTweak](https://www.apptweak.com/)
-- [Sensor Tower](https://sensortower.com/)
+- [Sensor Tower](https://sensortower.com/) (รวม data.ai แล้วตั้งแต่ มี.ค. 2567)
 - [Mobile Action](https://www.mobileaction.co/)
 
 
@@ -592,8 +401,8 @@ Levers:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Cross-Platform Quality Standards](#cross-platform-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Cross-Platform Quality Standards](#-cross-platform-quality-standards)
 - [Framework Comparison (2026)](#framework-comparison-2026)
 - [React Native Patterns](#react-native-patterns)
 - [Flutter Patterns](#flutter-patterns)
@@ -630,7 +439,7 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 - **Code sharing:** > 80% across platforms
 - **Native feel:** follows each platform's conventions
-- **Performance:** 60fps for standard interactions
+- **Performance:** 60 frames per second (fps) for standard interactions
 - **Bundle size:** within reasonable limits
 - **Update strategy:** over-the-air (OTA) updates where the store allows
 - **Testing:** unit, integration and end-to-end (E2E)
@@ -639,9 +448,9 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 
 | Framework | Pros | Cons | Best for |
 |-----------|------|------|----------|
-| **React Native** | JS, huge ecosystem | Bridge perf cost | Web team adopting mobile |
+| **React Native** | JavaScript, huge ecosystem | งานหนักบน JavaScript thread · ข้ามไป native ถี่ ๆ มีต้นทุน (ใช้ JavaScript Interface, JSI) | Web team adopting mobile |
 | **Flutter** | Single rendering engine, performance | Dart language adoption | New apps, design-heavy |
-| **Kotlin Multiplatform** | Native UI, share business logic | Tooling immature | Existing Android shop |
+| **Kotlin Multiplatform** | Native UI, share business logic (Compose Multiplatform for iOS เสถียรตั้งแต่ 1.8.0 พ.ค. 2025 — แชร์ UI ได้ด้วย) | ต้องมีความรู้ Kotlin + Xcode ทั้งสองฝั่ง ระบบ library ยังเล็กกว่า RN/Flutter | Existing Android shop |
 | **Expo (RN)** | Easier setup, OTA updates | Some native limits | MVPs, easier teams |
 | **Capacitor** | Web tech, easy bridge | Webview overhead | Web app to mobile |
 
@@ -677,10 +486,10 @@ function ProductList() {
 - NativeWind (Tailwind for RN)
 - React Native Reanimated (animations)
 
-### New Architecture (Fabric + TurboModules)
-- 2026: enabled by default
-- Better performance
-- More flexible native modules
+### New Architecture (Fabric + Turbo Modules)
+- React Native 0.82 (ต.ค. 2568) เป็นเวอร์ชันแรกที่ใช้ New Architecture อย่างเดียว — ตั้ง `newArchEnabled=false` จะถูกเมินแล้ว (reactnative.dev/blog/2025/10/08/react-native-0.82 ตรวจ 22 ต.ค. 2569)
+- เวอร์ชันเก่ากว่า 0.82 ต้องเปิดเองหรือดูค่าเริ่มต้นของเวอร์ชันนั้น
+- Native module เขียนแบบ Turbo Module หรือ Expo Modules ไม่ใช่ `NativeModules` แบบเก่า
 
 ## Flutter Patterns
 
@@ -709,7 +518,7 @@ class ProductList extends ConsumerWidget {
 - Riverpod (state management)
 - Dio (HTTP)
 - Freezed (data classes)
-- Go Router (navigation)
+- Go Router (navigation — ประกาศเส้นทางในโค้ดด้วย `GoRouter(routes: [...])`)
 - Drift (local DB)
 
 ## Kotlin Multiplatform Patterns
@@ -735,27 +544,35 @@ class ProductRepository(
 - Performance-critical code
 - Existing native code
 
-### RN Bridge
+### RN native module (Expo Modules API — ใช้ได้กับ New Architecture)
 ```typescript
-// JS side
-import { NativeModules } from 'react-native';
-const { MyModule } = NativeModules;
+// JS side: modules/my-module/src/index.ts
+import { requireNativeModule } from 'expo';
+const MyModule = requireNativeModule('MyModule');
 
-await MyModule.doSomethingNative(arg);
-
+export function doSomethingNative(arg: string): Promise<string> {
+  return MyModule.doSomethingNative(arg);
+}
+```
+```swift
 // iOS side (Swift)
-@objc(MyModule)
-class MyModule: NSObject {
-  @objc func doSomethingNative(_ arg: String, resolver: RCTPromiseResolveBlock, ...) {
-    // Native code
-    resolver(result)
+import ExpoModulesCore
+
+public class MyModule: Module {
+  public func definition() -> ModuleDefinition {
+    Name("MyModule")
+    AsyncFunction("doSomethingNative") { (arg: String) -> String in
+      // Native code
+      return "native: \(arg)"
+    }
   }
 }
 ```
+ถ้าไม่ใช้ Expo ให้เขียน Turbo Module ตามคู่มือ reactnative.dev (Codegen spec ใน TypeScript)
 
 ## Build + Distribution
 
-### CI/CD
+### Continuous Integration and Delivery (CI/CD)
 - Fastlane (iOS + Android automation)
 - EAS Build (Expo's managed builds)
 - Codemagic, Bitrise (third-party CI)
@@ -769,13 +586,13 @@ class MyModule: NSObject {
 
 ## Performance Patterns
 
-### Avoid bridge calls in hot paths
+### Avoid frequent JS-to-native calls in hot paths
 - Animations on UI thread (Reanimated)
 - Heavy work in native modules
 - Lazy load screens
 
 ### Image optimization
-- Use FastImage / cached_network_image
+- Use `expo-image` (RN) / cached_network_image (Flutter) — react-native-fast-image ไม่มีคนดูแลแล้ว
 - Appropriate sizes per device
 - WebP / AVIF where supported
 
@@ -808,7 +625,6 @@ class MyModule: NSObject {
 - [Flutter Docs](https://flutter.dev/)
 - [Expo Docs](https://docs.expo.dev/)
 - [Kotlin Multiplatform](https://kotlinlang.org/lp/multiplatform/)
-- [Cross-Platform Mobile Benchmark](https://github.com/zedek/CrossPlatformPerfBenchmark)
 
 
 ## reference: agent-ios-engineer.md
@@ -818,8 +634,8 @@ class MyModule: NSObject {
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 iOS Quality Standards](#ios-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 iOS Quality Standards](#-ios-quality-standards)
 - [SwiftUI Patterns (2026 default)](#swiftui-patterns-2026-default)
 - [Architecture Patterns](#architecture-patterns)
 - [Networking](#networking)
@@ -837,7 +653,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 ## Your Responsibilities
 
 1. **SwiftUI / UIKit** — Modern UI development
-2. **Architecture** — MVVM, TCA, Clean Architecture
+2. **Architecture** — Model-View-ViewModel (MVVM), The Composable Architecture (TCA), Clean Architecture
 3. **Networking** — URLSession, async/await
 4. **Persistence** — SwiftData, Core Data, UserDefaults
 5. **iOS Frameworks** — Apple Pay, HealthKit, MapKit, etc.
@@ -854,7 +670,7 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 
 ## 📊 iOS Quality Standards
 
-- **Frame rate:** 60fps (120fps on ProMotion)
+- **Frame rate:** 60 frames per second (fps) (120fps on ProMotion)
 - **App launch:** < 2s cold start
 - **Memory:** within budget per device class
 - **Battery:** impact is measured
@@ -863,11 +679,14 @@ You are an **iOS Engineer**. You build native iOS apps that feel right at home o
 
 ## SwiftUI Patterns (2026 default)
 
+iOS 17+ ใช้แมโคร `@Observable` คู่กับ `@State` (ค่าเริ่มต้นในปัจจุบัน):
+
 ```swift
 @MainActor
-final class ProductViewModel: ObservableObject {
-    @Published var products: [Product] = []
-    @Published var state: LoadState = .idle
+@Observable
+final class ProductViewModel {
+    var products: [Product] = []
+    var state: LoadState = .idle
 
     func load() async {
         state = .loading
@@ -881,7 +700,7 @@ final class ProductViewModel: ObservableObject {
 }
 
 struct ProductView: View {
-    @StateObject var viewModel = ProductViewModel()
+    @State private var viewModel = ProductViewModel()
 
     var body: some View {
         List(viewModel.products) { product in
@@ -893,12 +712,14 @@ struct ProductView: View {
 }
 ```
 
+ถ้าต้องรองรับ iOS ต่ำกว่า 17 ให้ใช้แบบเดิม: `final class ProductViewModel: ObservableObject` + `@Published` + `@StateObject` (ดูคู่มือของ Apple "Migrating from the Observable Object protocol to the Observable macro")
+
 ## Architecture Patterns
 
 ### MVVM (most common)
 ```swift
 View → ViewModel → Service → API
-       (@Published)
+       (@Observable · iOS < 17 ใช้ @Published)
        (binding)
 ```
 
@@ -991,7 +812,7 @@ let products = try modelContext.fetch(descriptor)
 | AuthenticationServices | Sign in with Apple |
 | WidgetKit | Home screen widgets |
 | App Intents | Siri + Shortcuts |
-| LiveActivities | Lock screen + Dynamic Island |
+| ActivityKit | Live Activities (Lock screen + Dynamic Island) |
 | ARKit | Augmented reality |
 
 ## App Store Submission
@@ -1070,7 +891,7 @@ let products = try modelContext.fetch(descriptor)
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [ASO Pillars](#aso-pillars)
 - [Keyword Research Process](#keyword-research-process)
 - [App Store (iOS) Specifics](#app-store-ios-specifics)
@@ -1085,7 +906,7 @@ let products = try modelContext.fetch(descriptor)
 
 # App Store Optimization (ASO)
 
-## When to use this skill
+## ใช้เมื่อ
 
 - New app launch
 - Existing app has stopped growing
@@ -1119,13 +940,25 @@ ASO covers 3 stages: being found, the page view, and the install.
 7. Prioritize by volume × difficulty × relevance
 ```
 
+### Store limits เทียบกัน App Store vs Play Store (รอยืนยัน — ตรวจกับ App Store Connect Help และ Play Console Help ก่อนใช้ตัวเลข)
+
+| | App Store | Play Store |
+|---|-----------|------------|
+| Title | 30 chars | 30 chars |
+| Subtitle | 30 chars | (uses short description, 80 chars) |
+| Keywords | 100 chars (separated) | Inferred from listing text |
+| Description | 4000 chars | 4000 chars |
+| Screenshots | 10 per device class | 8 per device class |
+| Preview video | Up to 3, 30 sec each | 1 (YouTube link) |
+| Promotional text | 170 chars | (use short description) |
+| A/B testing | Native (Product Page Optimization) | Native (Store Listing Experiments) |
+
 ### Tools (2026)
 
 | Tool | Specialty |
 |------|-----------|
 | AppTweak | ASO suite |
-| Sensor Tower | Market intelligence |
-| App Annie / data.ai | Market data |
+| Sensor Tower (รวม data.ai แล้วตั้งแต่ มี.ค. 2567) | Market intelligence · market data |
 | Mobile Action | Affordable ASO |
 | App Radar | Recommendations engine |
 
@@ -1228,7 +1061,7 @@ Common formula:
 2. "Beautiful organization" + feature
 3. "Loved by 10M+ users" + social proof
 4. "Smart AI assistant" + feature
-5. "Try free for 7 days" + CTA
+5. "Try free for 7 days" + call to action (CTA)
 ```
 
 ### Preview Video (30 sec)
@@ -1282,11 +1115,19 @@ Add text overlays explaining what user sees
 ```
 
 ### iOS native prompt
+`SKStoreReviewController.requestReview(in:)` ถูกประกาศเลิกใช้ตั้งแต่ iOS 18 ใช้ตัวใหม่แทน:
+
 ```swift
 import StoreKit
 
+// SwiftUI (iOS 16+)
+@Environment(\.requestReview) private var requestReview
+// ... เรียกเมื่อถึงจังหวะที่เหมาะ
+requestReview()
+
+// UIKit (iOS 16+ · SKStoreReviewController.requestReview(in:) ตัวเก่าเลิกใช้ตั้งแต่ iOS 18 — Apple docs ตรวจ 22 ต.ค. 2569) — เรียกบน main actor
 if let windowScene = view.window?.windowScene {
-    SKStoreReviewController.requestReview(in: windowScene)
+    AppStore.requestReview(in: windowScene)
 }
 ```
 
@@ -1358,7 +1199,7 @@ Top markets to localize:
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [Pattern Selection](#pattern-selection)
 - [MVVM (Most Common)](#mvvm-most-common)
 - [MVI / Redux Pattern](#mvi--redux-pattern)
@@ -1373,7 +1214,7 @@ Top markets to localize:
 
 # Mobile Architecture Patterns
 
-## When to use this skill
+## ใช้เมื่อ
 
 - Designing new mobile app architecture
 - Refactoring a legacy app
@@ -1387,16 +1228,16 @@ Top markets to localize:
 Team size + experience?
 │
 ├─ Small team, simple app
-│  └─ MVVM (well-understood)
+│  └─ Model-View-ViewModel (MVVM) (well-understood)
 │
 ├─ Larger team, complex state
-│  └─ MVI / Redux / TCA
+│  └─ Model-View-Intent (MVI) / Redux / The Composable Architecture (TCA)
 │
 ├─ Strict architecture needed
 │  └─ Clean Architecture
 │
 └─ Cross-platform shared code
-   └─ KMP business logic, native UI
+   └─ Kotlin Multiplatform (KMP) business logic, native UI
 ```
 
 ## MVVM (Most Common)
@@ -1505,7 +1346,7 @@ class GetActiveProductsUseCase(
 }
 
 // Presentation
-class ViewModel(
+class ProductViewModel(
     private val getActiveProducts: GetActiveProductsUseCase,
 ) : ViewModel() {
     // ...
@@ -1530,12 +1371,30 @@ class ProductViewModel @Inject constructor(
 ) : ViewModel() { ... }
 ```
 
-### iOS: Resolver or manual
+### iOS: ฉีดผ่าน init (ง่ายสุด) หรือ Factory
+Resolver ถูกประกาศเลิกใช้แล้วโดยผู้เขียนเอง ("officially deprecated and replaced by … Factory" — README ของ hmlongco/Resolver ตรวจ 22 ต.ค. 2569)
+
 ```swift
+// แบบง่ายสุด: ฉีดผ่าน init
 @MainActor
 final class ProductViewModel {
-    @Injected private var repository: ProductRepository
-    // ...
+    private let repository: ProductRepository
+    init(repository: ProductRepository) { self.repository = repository }
+}
+```
+
+```swift
+// แบบใช้ Factory — ใช้แทนแบบบน ไม่ใช่ใส่คู่กันในไฟล์เดียว (ชื่อคลาสซ้ำ คอมไพล์ไม่ผ่าน)
+// import FactoryKit ตั้งแต่ Factory 2.5 — รุ่นเก่ากว่าใช้ import Factory
+extension Container {
+    var productRepository: Factory<ProductRepository> {
+        self { ProductRepository() }
+    }
+}
+
+@MainActor
+final class ProductViewModel {
+    @Injected(\.productRepository) private var repository
 }
 ```
 
@@ -1570,13 +1429,24 @@ NavigationStack {
 }
 ```
 
-### Pattern: File-based (Expo Router / Flutter go_router)
+### Pattern: File-based (Expo Router)
 ```
 app/
 ├── index.tsx          → /
 ├── product/
 │   └── [id].tsx       → /product/:id
 └── settings.tsx       → /settings
+```
+
+### Pattern: Declarative in code (Flutter go_router)
+```dart
+final router = GoRouter(routes: [
+  GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+  GoRoute(
+    path: '/product/:id',
+    builder: (context, state) => ProductScreen(id: state.pathParameters['id']!),
+  ),
+]);
 ```
 
 ## State Management
@@ -1694,7 +1564,7 @@ Platform-specific bridges:
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [Critical Performance Metrics](#critical-performance-metrics)
 - [Launch Time Optimization](#launch-time-optimization)
 - [Frame Rate](#frame-rate)
@@ -1707,7 +1577,7 @@ Platform-specific bridges:
 
 # Mobile Performance Patterns
 
-## When to use this skill
+## ใช้เมื่อ
 
 - Profiling a slow app
 - Optimizing launch time
@@ -1721,12 +1591,14 @@ Platform-specific bridges:
 |--------|--------|
 | Cold start | < 2s (iOS), < 5s (Android budget) |
 | Warm start | < 1s |
-| Frame rate | 60fps (or 120fps on hardware that supports it) |
+| Frame rate (เฟรมต่อวินาที, fps) | 60fps (or 120fps on hardware that supports it) |
 | Frame budget | 16.67ms (60fps), 8.33ms (120fps) |
-| App Not Responding (ANR) rate (Android) | < 0.05% |
-| Crash rate | < 0.5% |
+| App Not Responding (ANR) rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 0.47% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
+| Crash rate ที่ผู้ใช้รู้สึก (Android) | เกณฑ์ "พฤติกรรมแย่" ของ Google Play = 1.09% · เป้าภายในที่เข้มกว่าเป็นของทีมเอง (ไม่ใช่มาตรฐาน) |
 | Memory | within device class budget |
 | Battery | < 5% drain per hour active use |
+
+แหล่ง: Android vitals (developer.android.com/topic/performance/vitals) ตรวจ 22 ต.ค. 2569 — ทั้งภาพรวมและต่อรุ่นเครื่อง (ต่อรุ่น = 8%) ถ้าเกินเกณฑ์ แอปจะถูกลดการมองเห็นบน Google Play
 
 ## Launch Time Optimization
 
@@ -1742,15 +1614,17 @@ Android: Application.onCreate + Activity.onCreate
 
 **Defer heavy work:**
 ```kotlin
-// Bad: blocks launch
-override fun onCreate() {
-    super.onCreate()
+// Bad: blocks launch (Activity.onCreate)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     loadAllData()  // 2 seconds
 }
 
 // Good: load in background, show empty state
-override fun onCreate() {
-    super.onCreate()
+// (Activity.onCreate — Application ไม่มี lifecycleScope;
+//  งานระดับแอปใช้ ProcessLifecycleOwner หรือ App Startup)
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     showEmptyState()
     lifecycleScope.launch { loadData() }
 }
@@ -1767,7 +1641,7 @@ Avoid heavy init in:
 **Baseline profiles (Android):**
 ```kotlin
 // Build with baseline profile
-// Reduces JIT compilation
+// Reduces Just-In-Time (JIT) compilation
 // 20-30% launch time improvement
 ```
 
@@ -1781,7 +1655,7 @@ Avoid heavy init in:
 2. Heavy layout / measure
 3. Overdraw
 4. Allocation in hot paths
-5. JS bridge calls (RN)
+5. JavaScript thread ที่งานหนักหรือเรียกข้ามไป native บ่อย (RN)
 
 ### Strategies
 
@@ -1844,17 +1718,17 @@ fun ProductList(products: List<Product>) {
 - Android: LeakCanary, Profiler
 - iOS: Instruments (Allocations, Leaks)
 - Flutter: DevTools memory profiler
-- RN: Flipper
+- React Native (RN): React Native DevTools (แทน Flipper ที่ถูกถอดจาก template ตั้งแต่ 0.74)
 
 ### Image Optimization
 
 ```
 Wrong size = waste:
-- 4K image displayed at 200x200 = 80x memory waste
+- 4K image (3840x2160) displayed at 200x200 = about 200x memory waste (3840*2160 / 200*200 = 207)
 
 Right approach:
 - Request appropriate size from server
-- Use image library (Coil, Glide, FastImage, SDWebImage)
+- Use image library (Coil, Glide, expo-image สำหรับ RN, SDWebImage)
 - Set cache limits
 - Use modern formats (WebP, AVIF)
 ```
@@ -1865,7 +1739,11 @@ Right approach:
 val memoryClass = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).memoryClass
 val cacheSize = memoryClass * 1024 * 1024 / 8  // 1/8 of available
 
-val cache = LruCache<String, Bitmap>(cacheSize)
+// ต้อง override sizeOf ให้นับเป็น byte — ถ้าไม่ override LruCache นับเป็น "จำนวนรูป"
+// แล้วจะเก็บได้เป็นล้านรูปจนหน่วยความจำหมด (หรือใช้แคชในตัวของ Coil/Glide แทน)
+val cache = object : LruCache<String, Bitmap>(cacheSize) {
+    override fun sizeOf(key: String, value: Bitmap): Int = value.byteCount
+}
 ```
 
 ## Battery Optimization
@@ -1934,7 +1812,7 @@ AVIF: even smaller (newer)
 HEIC: iOS native (smaller, less compatible)
 ```
 
-### HTTP/3 + QUIC
+### Hypertext Transfer Protocol version 3 (HTTP/3) + QUIC (transport protocol over UDP, RFC 9000 — a name, not an acronym)
 - Faster on lossy networks
 - Built into modern OS HTTP clients
 - Enable when available

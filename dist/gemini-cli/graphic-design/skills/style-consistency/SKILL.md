@@ -26,7 +26,7 @@ Goal: 10 assets that look like one person made them. AI images drift by default:
 | Character or subject reference | A recurring person, mascot or product | Needs clear front and side references; check identity every image |
 | Same seed | Composition family for similar prompts | Breaks when the subject changes a lot |
 | Same model version | Everything | A model update changes the look — re-test the sheet |
-| Post-processing preset (LUT, Lightroom preset, same grain) | Colour and finish across all images | Cannot fix wrong light direction |
+| Post-processing preset (Look-up table (LUT), Lightroom preset, same grain) | Colour and finish across all images | Cannot fix wrong light direction |
 | Shared layout template | Text position, logo, margins | — |
 
 ## Consistency checklist (per image)

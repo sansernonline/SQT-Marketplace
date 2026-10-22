@@ -1,0 +1,11 @@
+{
+  "name": "orders-migration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.3.16"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "stack": "sql",
+  "title": "เพิ่มคอลัมน์ region_code แบบ NOT NULL ให้ตาราง orders โดยไม่ล็อกตารางนาน",
+  "test": ["npm", "test"],
+  "testFiles": "^test/.*\\.m?js$"
+}

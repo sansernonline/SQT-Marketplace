@@ -42,6 +42,12 @@ jobs:
       - name: ตรวจ dependency
         run: npm audit --audit-level=high
 
+      - name: ตรวจ secret รั่วใน repo
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # ต้องมีเมื่อ repo เป็นของ organization · บัญชีส่วนตัวไม่ต้อง (README gitleaks-action · ตรวจ 22 ต.ค. 2569)
+
       - uses: actions/upload-artifact@v4
         with:
           name: app-${{ github.sha }}
@@ -65,7 +71,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4             # scripts/deploy.sh มาจาก repo
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4    # ตัว build มาจาก artifact (dist/)
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -77,6 +86,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4   # artifact ตัวเดียวกับ staging
+        with:
+          name: app-${{ github.event.workflow_run.head_sha }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ./scripts/deploy.sh production
       - name: ตรวจหลัง deploy
         run: |
@@ -91,6 +108,7 @@ jobs:
 
 - `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
 - ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
+- เวอร์ชันในตัวอย่าง (`@v4`, Node 22, .NET 8.x) เป็นแค่ตัวอย่าง ตรวจเวอร์ชันล่าสุดก่อนใช้ (รอยืนยัน)
 - ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
 - `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
 
@@ -185,7 +203,10 @@ build:
   stage: build
   image: docker:27
   services: [docker:27-dind]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
   script:
+    - echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   rules:
@@ -219,7 +240,8 @@ deploy:production:
 FROM node:22-alpine AS build
 WORKDIR /src
 COPY package*.json ./
-RUN npm ci                      # ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+# ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+RUN npm ci
 COPY . .
 RUN npm run build
 
@@ -229,7 +251,8 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /src/dist ./dist
 COPY --from=build /src/node_modules ./node_modules
-USER node                       # ❌ อย่ารันเป็น root
+# อย่ารันเป็น root
+USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
 CMD ["node", "dist/main.js"]
@@ -252,7 +275,7 @@ CMD ["node", "dist/main.js"]
 | เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
 | แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
 | secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
-| ยกเลิกรอบเก่า | `concurrency` | `batch: true` | `interruptible: true` |
+| ยกเลิกรอบเก่า | `concurrency` | `batch: true` (รวม trigger ระหว่างรอบที่รันอยู่ ไม่ได้ยกเลิกรอบเก่า) | `interruptible: true` |
 | วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
 | รันเอง (self-hosted) | ได้ | ได้ | ได้ |
 

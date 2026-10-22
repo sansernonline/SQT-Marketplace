@@ -13,49 +13,59 @@ General information, not medical advice — the doctor decides which tests you n
 
 | Scheme | Who | Where to check / book |
 |---|---|---|
-| ประกันสังคม มาตรา 33 / 39 | Employees and former employees continuing contributions | Hospitals in the SSO checkup programme — ask the registered hospital; สายด่วน 1506 |
+| ประกันสังคม มาตรา 33 / 39 (Social Security Office, SSO) | Employees and former employees continuing contributions | Hospitals in the SSO checkup programme — ask the registered hospital; สายด่วน 1506 |
 | บัตรทอง (หลักประกันสุขภาพแห่งชาติ, สปสช.) | Thai citizens without other public cover | Registered primary unit, health centre (รพ.สต.), pharmacies or clinics in the network for some services; สายด่วน 1330 |
 | ข้าราชการ (กรมบัญชีกลาง) | Civil servants and family | Government hospitals; annual checkup reimbursement rules (รอยืนยัน — check with the agency's HR) |
 | Private insurance / employer package | Per policy | Read the policy's checkup benefit |
 
 Preventive and health-promotion (P&P) services from สปสช. are generally available to all Thai citizens regardless of scheme (รอยืนยัน — confirm with 1330 for your case).
 
-## Step 2 — free SSO checkup items (มาตรา 33 and 39, 14 items)
+## Step 2 — free SSO checkup items (มาตรา 33 and 39, 14 items, from 1 Jan 2567 / 2024)
 
 | Item | Age band and frequency |
 |---|---|
-| Hearing (finger rub test) | 15+ · yearly |
-| Breast exam by doctor/nurse | 30–39 every 3 years · 40–54 yearly · 55+ as the doctor sees fit |
-| Eye exam by ophthalmologist | 40–54 once · 55+ every 1–2 years |
-| Vision (Snellen chart) | 55+ · yearly |
-| Complete blood count (CBC) | 18–54 once · 55–70 yearly |
-| Urinalysis (UA) | 55+ · yearly |
-| Fasting blood sugar (FBS) | 35–54 every 3 years · 55+ yearly |
-| Kidney function (creatinine, Cr) | 55+ · yearly |
-| Cholesterol (total and HDL) | 20+ · every 5 years |
+| Hearing screening (finger rub test) | 15+ · yearly |
+| Breast exam by doctor/health worker + self-exam teaching | 30–39 every 2 years · 40+ yearly |
+| Eye exam by ophthalmologist (includes Snellen chart and eye pressure) | 40–54 every 2 years · 55+ yearly |
+| Complete blood count (CBC) | 15–34 once · 35+ yearly |
+| Urinalysis (UA) | 35+ · yearly |
+| Fasting blood sugar (FBS) | 35+ · yearly |
+| Kidney function (creatinine, Cr, and eGFR) | 35+ · yearly |
+| Cholesterol (total and HDL) | 20–34 every 5 years · 35+ yearly |
 | Hepatitis B screening (HBsAg) | Born before 1992 (พ.ศ. 2535) · once |
-| Cervical cancer — Pap smear | 30–54 every 3 years · 55+ as the doctor sees fit |
-| Cervical cancer — VIA | 30–54 every 5 years · 55+ yearly per the source below (รอยืนยัน — differs from the Pap row) |
-| Faecal occult blood (FOBT / FIT) | 50+ · yearly |
-| Chest X-ray | 15+ · once |
+| Cervical cancer — Pap smear | 30+ · every 3 years |
+| Cervical cancer — VIA | 30–55 every 5 years · 55+ use Pap smear instead (รอยืนยัน — sources differ on whether the cut is 54 or 55) |
+| Cervical cancer — HPV DNA test (new in 2567) | 30+ · every 5 years |
+| Colorectal cancer — FIT (faecal immunochemical test, replaces FOBT) | 50+ · yearly |
+| Chest X-ray | 15+ · every 3 years |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://thethaiger.com/th/news/504558/ (summarising the SSO announcement) · https://www.prd.go.th/th/content/category/detail/id/9/iid/170758 — verify the current list at sso.go.th or 1506 before booking.
+Age bands and intervals are from the news summaries below; the official sso.go.th page could not be opened by the checker, so confirm the bands at sso.go.th or 1506 (รอยืนยัน) before booking. The 14 items and the start date (1 Jan 2567 / 2024) are confirmed by a government Public Relations Department (PRD) page that quotes the Social Security Office (SSO).
+
+ตรวจ 22 ต.ค. 2569 · แหล่ง: https://radiochiangrai.prd.go.th/th/content/category/detail/id/36/iid/251114 (กรมประชาสัมพันธ์ ยืนยันกับสำนักงานประกันสังคม 17 ม.ค. 2567 — รายการ 14 ข้อ) · https://www.prachachat.net/hilight-prachachat/news-1566620 (17 พ.ค. 2567 — ช่วงอายุ) · https://www.thaipbs.or.th/news/content/340054 (16 พ.ค. 2567 — ช่วงอายุ) · https://www.ktc.co.th/article/healthy-beauty/healthy/social-security-health-care (อัปเดต 13 ส.ค. 2569) · official page to verify: sso.go.th
 
 ## Step 3 — gold card (บัตรทอง) preventive services, working age
 
-For adults about 25–59: blood pressure check · diabetes blood screening · cardiovascular risk screening · smoking, alcohol and substance risk screening · HIV screening · cervical cancer screening · colorectal cancer screening (FIT, age 50–70) · diphtheria–tetanus vaccine · breast self-exam teaching · family planning and contraception · iron supplement for women of reproductive age · health counselling.
+Cancer screening rows (confirmed, with intervals):
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.share2trade.com/news/29596/ (สปสช. post "วัยทำงาน รู้ยัง 13 สิทธิประโยชน์") · https://www.khaosod.co.th/politics/news_7500428 — verify with สปสช. 1330 or the สปสช. app / LINE @nhso.
+| Item | Age and interval |
+|---|---|
+| Cervical cancer (Pap smear, VIA or HPV DNA) | 30–59 · once every 5 years |
+| Colorectal cancer — FIT | 50–70 · once every 2 years (FIT is open under all schemes, not only the gold card) |
+| Oral cancer screening | 40+ · yearly |
+
+Other working-age preventive services the สปสช. lists (age and interval not confirmed for this check — ask 1330) (รอยืนยัน): blood pressure check · diabetes blood screening · cardiovascular risk screening · smoking, alcohol and substance risk screening · HIV screening · diphtheria–tetanus vaccine · breast self-exam teaching · family planning and contraception · iron supplement for women of reproductive age · health counselling.
+
+ตรวจ 22 ต.ค. 2569 · แหล่ง (cancer rows): https://www.thansettakij.com/health/wellbeing/557796 (2 มี.ค. 2566, สปสช.) · https://www.hfocus.org/content/2026/07/38619 (6 ก.ค. 2569, FIT) · https://www.khaosod.co.th/politics/news_7500428 (9 ก.พ. 2566) · nhso.go.th could not list the full working-age items, so verify with สปสช. 1330 or the สปสช. app / LINE @nhso.
 
 ## Step 4 — general items by band (to discuss with the doctor)
 
-Beyond the free list, private packages often add liver function, uric acid, HbA1c, lipid profile, ultrasound, ECG, mammogram, PSA or thyroid tests. More tests are not automatically better — ask the doctor which add-ons fit your age, family history and risk:
+Beyond the free list, private packages often add liver function, uric acid, glycated haemoglobin (HbA1c), lipid profile, ultrasound, electrocardiogram (ECG), mammogram, prostate-specific antigen (PSA) or thyroid tests. More tests are not automatically better — ask the doctor which add-ons fit your age, family history and risk:
 
 | Band | Commonly discussed with the doctor |
 |---|---|
 | 18–39 | Blood pressure every visit, weight/waist, lipids per risk, cervical screening from 30, vaccines (tetanus booster, hepatitis B if not immune) |
 | 40–54 | + blood sugar, lipids, eye exam, breast exam yearly; family history of early heart disease or cancer may change the plan |
-| 55+ | + kidney function, urinalysis, vision, hearing, colorectal screening from 50, fall risk and bone health |
+| 55+ | + kidney function, urinalysis, vision, fall risk and bone health; hearing check at every age from 15; colorectal screening is a 50+ item (see Step 2) |
 | 65+ | + vaccines for older adults (influenza yearly, pneumococcal — ask), memory and medication review |
 
 ## Step 5 — results table (track trends)

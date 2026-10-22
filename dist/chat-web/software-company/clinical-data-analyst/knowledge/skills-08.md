@@ -291,18 +291,7 @@ Phase 1:    Phase 2:           Phase 3:
 
 ## 3. High-Level Architecture
 
-\`\`\`mermaid
-flowchart LR
-    User([User]) --> CDN[CDN]
-    CDN --> LB[Load Balancer]
-    LB --> API[API Gateway]
-    API --> Auth[Auth Service]
-    API --> App[App Service]
-    App --> Cache[(Redis)]
-    App --> DB[(PostgreSQL)]
-    App --> Queue[Message Queue]
-    Queue --> Worker[Background Worker]
-\`\`\`
+_[รูปภาพรวมสถาปัตยกรรม: User → CDN → Load Balancer → API Gateway → Auth / App → Redis · PostgreSQL · Queue → Worker. วาดเป็นรูปสไตล์เดียวกับเอกสารด้วย skill `diagram-figures` ไม่ใช้ Mermaid]_
 
 ## 4. Components
 
@@ -316,27 +305,13 @@ flowchart LR
 
 ## 5. Data Flow
 
-\`\`\`mermaid
-sequenceDiagram
-    autonumber
-    actor U as User
-    participant API
-    participant App
-    participant DB
-
-    U->>API: Request
-    API->>App: Validate + forward
-    App->>DB: Query
-    DB-->>App: Result
-    App-->>API: Response
-    API-->>U: 200 OK
-\`\`\`
+_[รูปลำดับ Data Flow: User → API → App → DB แล้วตอบกลับ. วาดด้วย skill `diagram-figures`]_
 
 ## 6. Tech Stack
 
 | Layer | Technology | Rationale |
 |-------|-----------|-----------|
-| Frontend | React 18 + Next.js 14 | SSR, ecosystem |
+| Frontend | React + Next.js (ใส่เวอร์ชันที่ใช้จริง) | SSR, ecosystem |
 | Backend | Node.js + NestJS | Team expertise |
 | Database | PostgreSQL 16 | ACID + JSON |
 | Cache | Redis 7 | Standard |
@@ -413,7 +388,7 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Small/medium team (< 30 engineers)
+- ✅ Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
 - ✅ You need to ship changes fast
 - ✅ Operations needs are simple
 - ✅ All parts can deploy together
@@ -460,7 +435,7 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 - ❌ Business areas don't have clear boundaries yet
 
 **Hidden costs:**
-- 💸 Much harder to operate (about 5x the ops effort)
+- 💸 Much harder to operate (more services to deploy, monitor and debug)
 - 💸 Network latency between services
 - 💸 Transactions across services are hard
 - 💸 Bugs are harder to trace
@@ -567,7 +542,7 @@ Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) 
        Closest to user (fastest)              Furthest (last resort)
 ```
 
-Each tier is roughly 10x faster than the next. CDN = content delivery network.
+Each tier is faster than the next (the gap depends on your system; measure it). CDN = content delivery network.
 
 ### Idempotency
 
@@ -595,7 +570,7 @@ When proposing architecture, compare options:
 | Team skill | 20% | 9 | 5 | 7 |
 | Operations | 15% | 8 | 5 | 7 |
 | Future-proof | 15% | 6 | 9 | 7 |
-| **Total** | 100% | **7.95** | 7.10 | 7.20 |
+| **Total** | 100% | **8.10** | 7.00 | 7.20 |
 ```
 
 
@@ -663,7 +638,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 ## 6 · สไลด์ และหัวข้อทุกชนิด
 
-ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตาราง 17 แถวอยู่ใน reference เดียวกัน
+ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตารางก่อน → หลังอยู่ใน reference เดียวกัน
 
 - หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ · ไม่เกิน 2 บรรทัด (ราว 15 คำ) รายละเอียดลงเนื้อหน้า
 - **หัวที่มี 2 ท่อนต้องมีคำเชื่อมที่ตรงกับความสัมพันธ์จริง** ("เพราะ" หรือ "จึง" เมื่อเป็นเหตุผล · "ส่วน" เมื่อแบ่งหน้าที่ · "แต่" เมื่อขัดกัน) · 1 หัว 1 คำเชื่อม ถ้าต้องใช้ 2 แปลว่ายัดเกิน
@@ -692,8 +667,6 @@ Use before writing or editing anything a person reads — answer, email, report,
 # หัวข้อ · สไลด์ · diagram และตัวอย่าง ก่อน → หลัง (ฉบับเต็ม)
 
 อ่านเมื่อเขียนหัวสไลด์ ชื่อรูป ป้ายใน diagram หรืออยากดูตัวอย่างการแก้ · กฎย่ออยู่ใน `SKILL.md` ข้อ 6–7
-
-ไฟล์นี้เหมือนกันทุก plugin ต้นฉบับอยู่ที่ plugin `superuser` แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
 
 ## สไลด์ และหัวข้อทุกชนิด
 

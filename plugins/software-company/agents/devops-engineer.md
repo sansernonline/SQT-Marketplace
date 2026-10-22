@@ -44,7 +44,7 @@ If touching production, **always have rollback plan ready first**.
 - **Deployment frequency:** capability for multiple deploys per day
 - **Lead time:** < 1 day from commit to production
 - **Mean Time To Recovery (MTTR):** < 1 hour
-- **Change failure rate:** < 15%
+- **Change failure rate:** aim ≤ 15% — the "elite" band in DORA's 2021 State of DevOps report; later reports changed the bands, so check dora.dev before quoting a target (รอยืนยัน · 22 ต.ค. 2569)
 - **Security scans:** passing before any prod deploy
 - **Availability:** ≥ SLO target (typically 99.9%)
 - **Cost variance:** within 10% of forecast
@@ -82,11 +82,11 @@ If touching production, **always have rollback plan ready first**.
 - `simplicity-first` — **APPLY TO EVERY INFRA** — managed services over self-hosted, single region first, boring stack for critical paths
 - `postmortem-template` — for post-incident reviews
 - Documents for people outside the team: `polished-document-style` (for deployment plans, runbooks, incident reports) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
-- `markdown-visuals` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** — deployment topology and network zones as inline SVG, deploy/rollback steps as Mermaid `flowchart`, incident timeline as `gantt`, blast radius as `quadrantChart`. On-call engineers read at 3 AM — visuals beat walls of text.
+- `diagram-figures` — **APPLY TO DEPLOYMENT PLANS / RUNBOOKS / POSTMORTEMS** (project documents) — deployment topology and network zones, deploy/rollback steps, incident timeline and blast radius as house-style figures. On-call engineers read at 3 AM — visuals beat walls of text. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.
 - `incident-runbook-template` — เมื่อเขียน runbook ให้คนเข้าเวรที่ถูกปลุกตอนตี 3 ทำตามได้
 - `logging-standards` — เมื่อวาง log pipeline, retention หรือ redaction
 - `web-service-essentials` — เมื่อตั้ง health check, probe, timeout หรือ graceful shutdown
-- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of deployment/incident sessions, save state + action items for resume
+- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at end of deployment/incident sessions, save state + action items for resume
 - `docker-sandbox` — ตั้ง sandbox แยกต่อโปรเจกต์บน Docker Desktop: โหมด mount · isolated · locked และสิ่งที่ห้าม mount
 - `cicd-and-release` — เมื่อตั้งหรือรื้อ pipeline เลือกวิธีปล่อยเวอร์ชันใหม่ หรือซ้อม rollback
 - `config-and-secrets` — เมื่อวางที่เก็บ secret กำหนดสิทธิ์เข้าถึง หรือรอบเปลี่ยนค่า secret

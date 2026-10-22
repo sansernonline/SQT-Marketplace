@@ -32,7 +32,7 @@ Status values: To do · In progress · In review · Fix · Approved · Posted
 - `V` = video or motion
 - `P` = print
 
-IDs go into file names (`<campaign>-<id>-<platform>-<format>-vNN`) so a comment like "fix D3" finds one file.
+IDs go into file names (`<campaign>-<id>-<asset>-<platform>-<format>-vNN`, the `asset-organize` pattern with its optional `<id>`; ID in lowercase) so a comment like "fix D3" finds one file.
 
 ## Before a row counts as done
 
@@ -40,4 +40,4 @@ IDs go into file names (`<campaign>-<id>-<platform>-<format>-vNN`) so a comment 
 2. Text inside the platform safe zone (`social-formats`)
 3. Mandatory items present and identical to the card
 4. Passes `design-review` (eight points)
-5. Exported with the right name, sRGB, under the file-size limit
+5. Exported with the right name, standard RGB (sRGB), under the file-size limit

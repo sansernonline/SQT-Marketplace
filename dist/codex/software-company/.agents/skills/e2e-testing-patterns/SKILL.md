@@ -1,6 +1,6 @@
 ---
 name: e2e-testing-patterns
-description: Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in CI.
+description: Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tests or running in continuous integration (CI).
 ---
 
 > **ใน SuperUser:** ถ้าอยากให้ agent รันแอปและพิสูจน์ผลเอง ให้ใช้ [`app-verifier-setup`](../app-verifier-setup/SKILL.md) ส่วน skill นี้คือหลักออกแบบชุดทดสอบ E2E (end-to-end) ที่ verifier นั้นเรียกใช้
@@ -14,7 +14,7 @@ description: Use when designing end-to-end tests with Playwright or Cypress, fix
 - Structuring a growing E2E test suite
 - Fighting flaky tests
 - Designing test data strategy
-- Adding E2E to a CI/CD pipeline
+- Adding E2E to a continuous integration and continuous delivery (CI/CD) pipeline
 - Migrating from one framework to another
 
 ## When NOT to use
@@ -110,7 +110,7 @@ Most resilient ─────────────────────�
 
 > 💡 **Rule of thumb:** If a unit/integration test can verify it, don't add E2E.
 
-ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P0 P1 หรือ P2 ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
+ให้ทำตารางความครอบคลุมของเส้นทางผู้ใช้ (Critical Path Coverage Matrix) ที่บอกว่าแต่ละเส้นทางครอบคลุมแล้วหรือยัง และสำคัญระดับ P1 P2 หรือ P3 (scale เดียวกับ `test-case-template` และ tag ด้านล่าง · P1 สำคัญสุด) ตัวอย่างอยู่ใน [references/coverage-and-libraries.md](references/coverage-and-libraries.md)
 
 ## Expected Values and Failing Tests
 
@@ -139,7 +139,8 @@ Most resilient ─────────────────────�
 ห้ามใช้ `page.waitForTimeout` รอแบบกำหนดเวลา ให้รอเหตุการณ์จริง เช่น response ของ API แทน โค้ดเทียบอยู่ใน [references/flaky-tests.md](references/flaky-tests.md)
 
 ### Retry strategy
-- **In CI:** auto-retry failed tests 1-2 times
+- **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
+- **Pass on retry = flaky, not a pass** — report it as flaky and fail the run (`failOnFlakyTests: true` in `playwright.config.ts`, Playwright 1.52+) — the same rule as "Expected Values and Failing Tests" above and `testing-standards` (flaky test: fix or delete, never retry until green)
 - **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
 - **Don't accept flaky tests:** investigate or delete them. Don't ignore them
 
@@ -149,12 +150,9 @@ Most resilient ─────────────────────�
 
 ## Parallelization and CI
 
-**Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
+เงื่อนไขก่อนรันขนาน (Requirements for safe parallel) อยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
-แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก PR บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P0 และ P1 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
+แบ่ง E2E ใน CI เป็น 3 รอบ คือ smoke ทุก pull request (PR) บน Chromium ตัวเดียว ที่ล้มแล้วบล็อกการ merge → full ตอน merge เข้า main และทุกคืน บน Chromium + WebKit (จอ iPhone) → pre-prod ก่อน deploy ที่ต้องผ่าน P1 และ P2 บนครบ 3 browser (เพิ่ม Firefox) เมื่อเทสต์ล้มต้องเก็บ screenshot · video · trace · console log · network log ไว้เสมอ ส่วนระดับการรันขนานตาราง browser แต่ละรอบ และรายละเอียดของแต่ละรอบอยู่ใน [references/ci-and-parallel.md](references/ci-and-parallel.md)
 
 ## Anti-patterns
 

@@ -5,4 +5,4 @@ description: "Build the home maintenance schedule for the next 12 months, or com
 
 Run `home-maintenance` with the `home-manager` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
-If vehicles are mentioned, add their tax, พ.ร.บ., ตรอ. and service dates from `vehicle-care`. Output a month-by-month table plus the jobs due in the next 90 days; quotes are compared with the contractor quote checklist.
+If vehicles are mentioned, add their tax, พระราชบัญญัติคุ้มครองผู้ประสบภัยจากรถ (พ.ร.บ.), สถานตรวจสภาพรถเอกชน (ตรอ.) and service dates from `vehicle-care`. Output a month-by-month table plus the jobs due in the next 90 days; quotes are compared with the contractor quote checklist.

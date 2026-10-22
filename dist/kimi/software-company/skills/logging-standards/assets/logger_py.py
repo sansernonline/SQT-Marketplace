@@ -27,11 +27,11 @@ from pathlib import Path
 # --------------------------------------------------------------- correlation
 # ContextVar ไม่ใช่ตัวแปร global ธรรมดา — แต่ละ task/request มีค่าของตัวเอง
 # ถ้าใช้ global จะปนกันทันทีที่มี request พร้อมกันหลายอัน
-_correlation_id: ContextVar[str] = ContextVar("correlation_id", default="------")
+_correlation_id: ContextVar[str] = ContextVar("correlation_id", default="--------")
 
 
 def set_correlation_id(cid: str) -> None:
-    _correlation_id.set((cid or "------")[:8])
+    _correlation_id.set((cid or "--------")[:8])
 
 
 def get_correlation_id() -> str:

@@ -1,6 +1,6 @@
 # skill: stack-sql
 
-Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL).
+Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL, MySQL).
 
 # stack · SQL — เขียน query ให้ถูก เร็ว และเปลี่ยนข้อมูลได้ปลอดภัย
 
@@ -41,26 +41,15 @@ Use when writing or reviewing SQL queries, procedures or data-change scripts (SQ
 
 ## 3 · ให้เร็ว: อ่าน plan จริง ไม่เดา
 
-- ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง: SQL Server `SET STATISTICS IO, TIME ON` + Actual Execution Plan · PostgreSQL `EXPLAIN (ANALYZE, BUFFERS)` (รันคำสั่งจริง UPDATE/DELETE ห่อ `BEGIN ... ROLLBACK`) · MySQL 8.0.18+ `EXPLAIN ANALYZE`
-- ใน plan ดู: scan ทั้งตารางใหญ่ · แถวที่คาด vs ได้จริงต่างมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort/hash ล้นลง disk
-- **sargable** — ห้ามครอบคอลัมน์ที่มี index ด้วย function (`YEAR(created_at) = 2026` → ช่วงวันที่ครึ่งเปิด) · `LIKE '%คำ'` ใช้ index ไม่ได้ ใช้ full-text
-- ทุก index ต้องตอบได้ว่ารับ query ไหน (ทำให้เขียนช้าลงทุกตัว) · covering index ใช้ `INCLUDE (...)`
-- แบ่งหน้าลึกใช้ keyset ไม่ใช่ `OFFSET` · N+1 จาก Object-Relational Mapper (ORM) นับ query จาก log แล้วแก้ด้วย eager load
-- parameter sniffing (SQL Server) แก้จากเบาไปหนัก ห้ามล้าง plan cache ทั้ง server · หลังโหลดข้อมูลก้อนใหญ่ update statistics
-- UPDATE/DELETE ก้อนใหญ่ทำทีละชุด (เช่น 5,000 แถว) ไม่งั้น lock ทั้งตาราง log โต rollback นาน
+คำสั่งดู plan จริงแยกตาม engine · สิ่งที่ต้องดูใน plan · ตัวอย่าง keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
 
-ตัวอย่างโค้ด keyset · ลบทีละชุด · ทางแก้ parameter sniffing ทีละขั้น → [`references/performance.md`](references/performance.md)
+- กฎย่อ: ดู plan จริงบนข้อมูลจำนวนใกล้ของจริง ไม่เดา · เงื่อนไขต้อง sargable (ไม่ครอบคอลัมน์ที่มี index ด้วย function) · ทุก index ตอบได้ว่ารับ query ไหน · แบ่งหน้าลึกใช้ keyset · นับ N+1 จาก log ของ Object-Relational Mapper (ORM) · UPDATE/DELETE ก้อนใหญ่ทำทีละชุด — รายละเอียดและตัวอย่างอยู่ใน [`references/performance.md`](references/performance.md) ที่เดียว
 
 ## 4 · เปลี่ยนข้อมูลอย่างปลอดภัย
 
 ตาราง isolation · upsert · สร้าง index ไม่ล็อกตาราง แยกตาม engine พร้อมตัวอย่างตรวจจำนวนแถว → [`references/safe-changes.md`](references/safe-changes.md)
 
-- สคริปต์ทุกตัวต้องรันซ้ำได้ (`principle-safe-to-rerun`): `IF NOT EXISTS` · `CREATE INDEX IF NOT EXISTS` (PostgreSQL) · `CREATE OR ALTER` (SQL Server)
-- ก่อนลบหรือแก้ข้อมูลจำนวนมาก: backup ตารางที่โดน หรือยืนยันว่า backup ล่าสุด restore ได้จริง แล้วเขียนวิธีย้อนกลับไว้ก่อนรัน
-- นับแถวที่คาดไว้ก่อน แล้วตรวจ `@@ROWCOUNT` (SQL Server) หรือ `GET DIAGNOSTICS` (PostgreSQL) ก่อน `COMMIT` ไม่ตรงให้ ROLLBACK
-- upsert ใช้แบบของ engine (`ON CONFLICT` · `ON DUPLICATE KEY` · SQL Server `UPDATE` + `INSERT ... WHERE NOT EXISTS` ด้วย `UPDLOCK, HOLDLOCK`)
-- deadlock: ทุกโค้ดแตะตารางเรียงลำดับเดียวกัน transaction สั้นที่สุด ไม่รอ API ภายนอกขณะถือ transaction
-- `ALTER TABLE` ตารางใหญ่: PostgreSQL ตั้ง `SET lock_timeout = '5s'` แล้ว retry · เปลี่ยนชนิดคอลัมน์เขียนตารางใหม่ทั้งก้อน · SQL Server เพิ่ม `NOT NULL` + default ทันทีเฉพาะ Enterprise · เปลี่ยนชนิดหรือย้ายข้อมูลใช้ expand-and-contract ตาม `database-design`
+- กฎย่อ: สคริปต์รันซ้ำได้ · backup ก่อนแก้ข้อมูลก้อนใหญ่ · นับแถวก่อนแล้วตรวจก่อน `COMMIT` · upsert ใช้แบบของ engine · แตะตารางเรียงลำดับเดียวกันกัน deadlock · `ALTER TABLE` ตารางใหญ่ต้องตั้ง `lock_timeout` — รายละเอียดและตัวอย่างอยู่ใน [`references/safe-changes.md`](references/safe-changes.md) ที่เดียว
 
 ## 5 · กับดักที่เจอบ่อย
 
@@ -130,7 +119,7 @@ Use when writing or reviewing SQL queries, procedures or data-change scripts (SQ
 -- keyset: ส่งค่าแถวสุดท้ายของหน้าก่อนมาเป็น parameter
 SELECT id, created_at, total_amount
 FROM orders
-WHERE (created_at, id) < (@last_created_at, @last_id)   -- PostgreSQL · MySQL
+WHERE (created_at, id) < ($1, $2)   -- PostgreSQL ($1, $2) · MySQL (?, ?) · ส่งค่าแถวสุดท้ายของหน้าก่อน
 ORDER BY created_at DESC, id DESC
 LIMIT 50;
 -- SQL Server: WHERE created_at < @c OR (created_at = @c AND id < @id) · ใช้ TOP (50)
@@ -227,7 +216,7 @@ EXECUTE format('SELECT id, name FROM %I WHERE email = $1', tbl) USING p_email;
 
 Use when starting an API, adding endpoints or checking API consistency (URLs, paging, dates, ids).
 
-# ข้อตกลงของ API
+# ข้อตกลงของ Application Programming Interface (API)
 
 > **กฎข้อเดียว:** ตัดสินใจครั้งเดียว ใช้ทุก endpoint
 > API ที่ทุก endpoint ทำเหมือนกัน แม้ "ไม่ค่อยถูกตามทฤษฎี" ใช้ง่ายกว่า
@@ -276,7 +265,7 @@ PATCH  /v1/orders/{id}            แก้บางส่วน
 PUT    /v1/orders/{id}            แทนที่ทั้งตัว
 DELETE /v1/orders/{id}            ลบ
 GET    /v1/orders/{id}/items      ทรัพยากรลูก
-POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD
+POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
 ```
 
 | กฎ | ✅ | ❌ |
@@ -461,10 +450,11 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 1. ประกาศล่วงหน้า พร้อมบอกว่าใช้อะไรแทน
 2. ส่ง header ในทุก response ของ endpoint นั้น:
    ```
-   Deprecation: true
+   Deprecation: @1790812800
    Sunset: Wed, 31 Dec 2026 23:59:59 GMT
    Link: <https://docs.acme.co/v2/orders>; rel="successor-version"
    ```
+   `Deprecation` ตามมาตรฐาน Request for Comments (RFC) 9745 (มี.ค. 2025) ต้องเป็นวันที่แบบ `@<วินาที unix>` (ตัวอย่างนี้คือ 1 ต.ค. 2026 00:00 UTC) ไม่ใช่ `true` · ตรวจ 22 ต.ค. 2569
 3. **ดูจาก log ว่ายังมีใครเรียกอยู่** แล้วติดต่อเขาตรง ๆ อย่ารอให้เงียบไปเอง
 4. ปิดจริงหลังวันที่ประกาศ ไม่ใช่ก่อน
 
@@ -716,6 +706,7 @@ catch (SmtpException ex)
 |---|---|---|---|
 | **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
 | **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
+| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
 | **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
 | **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
 | **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
@@ -736,7 +727,7 @@ catch (SmtpException ex)
 | HTTP ภายนอก | 10–30 วินาที |
 | งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
 
-**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
+**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
 
 ```
 ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
@@ -746,7 +737,7 @@ catch (SmtpException ex)
 - **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
 - **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
 - **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
+- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
 
 ---
 
@@ -756,7 +747,7 @@ catch (SmtpException ex)
 
 ```
 ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
 ```
 
 ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
@@ -831,7 +822,7 @@ Use when a project has no scripted way for an agent to run the app and see resul
    | ชนิด | ขับด้วย | อ่านผลจาก |
    |---|---|---|
    | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver ยังไม่ได้ตรวจว่า Microsoft ยังดูแลอยู่) | ภาพหน้าจอ · log |
+   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver รุ่นล่าสุดน่าจะออกปี 2020 และยังไม่ยืนยันว่า Microsoft ยังดูแลอยู่ (รอยืนยัน)) | ภาพหน้าจอ · log |
    | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
    | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
    | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
@@ -841,14 +832,14 @@ Use when a project has no scripted way for an agent to run the app and see resul
    - หน้าที่มี CAPTCHA ให้ใช้ค่าทดสอบของผู้ให้บริการหรือปิดใน environment ทดสอบ ห้ามเขียนสคริปต์แก้ CAPTCHA
    - แอปที่อ่าน hardware (sensor · กล้อง · GPS) ให้ป้อนค่าที่รู้ล่วงหน้า ผ่าน emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build แล้วติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` เพราะความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ถ้ายังไม่ได้รันบนเครื่องจริง ให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
 
-3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
+3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม (`principle-build-a-tool-not-handwork`)
 4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** ไล่จากเมนู · route · command list · SRS แล้วเขียน 1 กลุ่มต่อฟีเจอร์ 1 บรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาด 1 กรณีต่อฟีเจอร์ **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ และพิมพ์ผล `PASS/FAIL` พร้อม expected กับ actual
 5. **สคริปต์ต้องไม่ผ่านลอย ๆ** (ผ่านทั้งที่ไม่ได้ตรวจอะไรจริง) ถ้าชื่อฟีเจอร์ไม่มีจริงให้ exit 1 ถ้าแอปไม่ขึ้นให้ exit 1 และถ้าไม่มี check ไหนได้รันก็ให้ exit 1 (ตรวจ 0 รายการถือว่าพัง ไม่ใช่ผ่าน)
    - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นจะผ่านลอย ๆ และรอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
    - **ต้องแน่ใจว่าอ่านหน้าจอล่าสุด** โดยลบไฟล์ผลเก่าก่อนอ่านใหม่ และกดเมื่อตำแหน่งเป้าหมายนิ่ง 2 รอบติด ถ้าอ่านหน้าจอไม่ได้เพราะแอปวาดไม่หยุด ถือเป็นบั๊กของแอป ไม่ใช่ของสคริปต์
 6. **พิสูจน์ว่าสคริปต์จับของผิดได้** โดยแก้แอปให้ผิด 1 จุดชั่วคราว รันแล้วต้อง `FAIL` แล้วค่อยคืนค่า
 7. **พิสูจน์ว่า skill ใช้ได้จริง** โดยส่ง agent `qa-tester` ตัวใหม่ที่ไม่เคยเห็นโค้ด ให้ใช้แค่ skill นี้ทดสอบ 1 ฟีเจอร์ตั้งแต่เปิดแอปจนถ่ายภาพผล ติดตรงไหนให้แก้ skill ตรงนั้น
-8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ลบได้เมื่อส่งงานแล้ว)
+8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ผู้ใช้ลบเองได้เมื่อส่งงานแล้ว · agent ไม่ลบ)
 
 ## สัญญาสำหรับทดสอบ — ใส่ในแอปตั้งแต่หน้าจอแรก
 

@@ -10,7 +10,7 @@ You are a **career coach** for people working in Thailand — Thai companies, mu
 | LinkedIn headline, about, keywords | `linkedin-profile` |
 | Interview coming up | hand to `interview-coach` agent (`interview-prep`) |
 
-Other plugins, all optional: (ถ้าติดตั้ง plugin `personal-life`) ใช้ `personal-life:polite-message-th-en` สำหรับข้อความถึง HR หรือหัวหน้า ไม่มีก็ร่างเองสั้น ๆ สุภาพ · ใช้ `personal-life:important-docs` เก็บ offer letter สลิปเงินเดือน 50 ทวิ ไม่มีก็แนะนำให้ผู้ใช้จดรายการไฟล์และที่เก็บเอง · (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:tax-basics-th` ดูผลภาษีของการขึ้นเงินเดือนหรือโบนัส ไม่มีก็บอกว่าต้องให้ผู้ใช้ตรวจกับสรรพากร
+Other plugins, all optional: ใช้ `polite-message-th-en` (plugin `superuser`) สำหรับข้อความถึง HR หรือหัวหน้า · (ถ้าติดตั้ง plugin `personal-life`) ใช้ `personal-life:important-docs` เก็บ offer letter สลิปเงินเดือน 50 ทวิ ไม่มีก็แนะนำให้ผู้ใช้จดรายการไฟล์และที่เก็บเอง · (ถ้าติดตั้ง plugin `trading-finance`) ใช้ `trading-finance:tax-basics-th` ดูผลภาษีของการขึ้นเงินเดือนหรือโบนัส ไม่มีก็บอกว่าต้องให้ผู้ใช้ตรวจกับสรรพากร
 
 ## How you work
 

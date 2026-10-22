@@ -1,6 +1,6 @@
 ---
 name: spell-out-abbreviations
-description: Use when docs, UI text or commits are heavy with abbreviations or jargon, or need a glossary. General writing → human-writing.
+description: Use when text people read (report, slide, label, message) is heavy with abbreviations or jargon, or needs a glossary. Writing → human-writing.
 ---
 
 # Spell Out Abbreviations
@@ -36,8 +36,8 @@ description: Use when docs, UI text or commits are heavy with abbreviations or j
 ❌ ใช้ idempotency key กันงานซ้ำ
 ✅ ใช้ idempotency key (รหัสกำกับคำขอ ส่งซ้ำแล้วไม่ทำงานซ้ำ) กันงานซ้ำ
 
-❌ ต้องทำ expand-contract ตอน migrate
-✅ ต้องทำ expand-contract (ทยอยเพิ่มของใหม่ก่อน ค่อยลบของเก่าทีหลัง) ตอนเปลี่ยนโครงฐานข้อมูล
+❌ ต้องดู cash flow ก่อนกู้
+✅ ต้องดู cash flow (เงินเข้า-ออกจริงแต่ละเดือน) ก่อนกู้
 ```
 
 **คำอธิบายต้องสั้นกว่า 1 บรรทัด** ถ้ายาวกว่านั้นให้แยกเป็นประโยคของตัวเอง
@@ -48,26 +48,25 @@ description: Use when docs, UI text or commits are heavy with abbreviations or j
 | ระดับผู้อ่าน | อธิบายแค่ไหน |
 |---|---|
 | ลูกค้า ผู้บริหาร คนนอกสาย | ศัพท์เทคนิคทุกคำ แม้แต่คำที่ช่างใช้กันทุกวัน |
-| ทีมพัฒนาแต่คนละส่วน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
+| ทีมเดียวกันแต่คนละส่วนงาน | เฉพาะคำเฉพาะของส่วนนั้น เช่น ชื่อรูปแบบ ชื่อกระบวนการ |
 | คนที่ทำเรื่องนี้อยู่แล้ว | เฉพาะคำที่เพิ่งตั้งขึ้นใหม่ในโปรเจกต์นี้ |
 
 ---
 
 ## ใช้กับอะไรบ้าง
 
-เอกสารทุกชนิด · คอมเมนต์ในโค้ด · ข้อความ commit · ข้อความบนหน้าจอ · คำอธิบายไดอะแกรม ·
+เอกสารทุกชนิด · สไลด์ · ป้ายและข้อความบนหน้าจอ · ข้อความขายของ · คำอธิบายไดอะแกรม · คอมเมนต์ในโค้ด ·
 คำตอบในแชต — **ทุกอย่างที่มีคนอ่าน**
 
 ## ตัวอย่างที่เจอบ่อย
 
 Model Context Protocol (MCP) · Application Programming Interface (API) ·
-Service Level Agreement (SLA) · Role-Based Access Control (RBAC) ·
-Software Development Life Cycle (SDLC) · Single Sign-On (SSO) ·
-Continuous Integration / Continuous Deployment (CI/CD) ·
-Software Requirements Specification (SRS) · Key Performance Indicator (KPI) ·
-Personally Identifiable Information (PII) · Proof of Concept (POC) ·
-Business Requirements Document (BRD) · Functional Specification Document (FSD) ·
-Architecture Decision Record (ADR) · User Interface (UI) · User Experience (UX)
+Key Performance Indicator (KPI) · Service Level Agreement (SLA) ·
+Return on Investment (ROI) · Stock Keeping Unit (SKU) · Value Added Tax (VAT) ·
+Cash on Delivery (COD) · Objectives and Key Results (OKR) ·
+Personally Identifiable Information (PII) · Proof of Concept (POC)
+
+ตัวย่อฝั่งโค้ด (RBAC · SSO · CI/CD · SRS · ADR ฯลฯ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 
 ## Anti-patterns
 

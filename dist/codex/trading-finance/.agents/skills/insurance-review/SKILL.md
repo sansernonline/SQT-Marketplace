@@ -22,10 +22,10 @@ General information, not insurance advice — a licensed agent or broker sells; 
 | Type | What it pays | Rule of thumb |
 |---|---|---|
 | Life (term) | lump sum on death | debts + (yearly spending of dependants × years until they are independent) + education fund − liquid assets. Shortcut 5–10 × annual income. With no dependants and no debt, little or none is needed |
-| Health — IPD | hospital bills | room rate per day = the room at the hospital you would use; yearly or per-illness cap able to cover a major surgery there (private hospital major case often 1–3 million (รอยืนยัน)) |
-| Health — OPD | outpatient visits | usually poor value; pay from budget |
+| Health — in-patient department (IPD) | hospital bills | room rate per day = the room at the hospital you would use; yearly or per-illness cap able to cover a major surgery there (private hospital major case often 1–3 million (รอยืนยัน)) |
+| Health — out-patient department (OPD) | outpatient visits | usually poor value; pay from budget |
 | Critical illness (โรคร้ายแรง) | lump sum on diagnosis | 1–3 years of spending to cover lost income during treatment |
-| Accident (PA) | death / disability / treatment from accident | cheap top-up for riders, drivers, manual work; not a substitute for health |
+| Personal accident (PA) | death / disability / treatment from accident | cheap top-up for riders, drivers, manual work; not a substitute for health |
 | Disability income | monthly if unable to work | consider for self-employed with no sick-pay |
 
 Social security ม.33 already covers medical care at the registered hospital — count it as the base layer.

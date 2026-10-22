@@ -68,15 +68,29 @@ async function syncSeats(subscription_id: string, accountId: string) {
 
 ### Usage-Based
 
-```typescript
-// Report usage to Stripe
-async function reportUsage(accountId: string, units: number) {
-  const subscription_item_id = await getMeteredItem(accountId);
+Stripe Billing Meters. Legacy usage records (`createUsageRecord` / `usage_records.create`) were removed in API version `2025-03-31.basil`, and a `metered` price now needs a `meter` — ที่มา [Stripe changelog: Removes legacy usage-based billing](https://docs.stripe.com/changelog/basil/2025-03-31/deprecate-legacy-usage-based-billing) · [Create a billing meter event](https://docs.stripe.com/api/billing/meter-event/create) (ตรวจ 22 ต.ค. 2569)
 
-  await stripe.subscriptionItems.createUsageRecord(subscription_item_id, {
-    quantity: units,
-    timestamp: Math.floor(Date.now() / 1000),
-    action: 'increment',  // or 'set'
+```typescript
+// Once: a meter, and a metered price that points to it
+const meter = await stripe.billing.meters.create({
+  display_name: 'API calls',
+  event_name: 'api_calls',
+  default_aggregation: { formula: 'sum' },
+});
+const price = await stripe.prices.create({
+  product: 'prod_api_calls',
+  currency: 'usd',
+  unit_amount_decimal: '0.5', // 0.5 cent = $0.005 per call (amounts are in minor units)
+  recurring: { interval: 'month', usage_type: 'metered', meter: meter.id },
+});
+
+// Each usage report: a meter event for the customer
+async function reportUsage(stripeCustomerId: string, units: number, eventId: string) {
+  await stripe.billing.meterEvents.create({
+    event_name: 'api_calls',
+    payload: { stripe_customer_id: stripeCustomerId, value: String(units) },
+    identifier: eventId, // Stripe dedups the same identifier for at least 24 h
+    timestamp: Math.floor(Date.now() / 1000), // must be within the past 35 days
   });
 }
 
@@ -87,16 +101,17 @@ async function reportUsage(accountId: string, units: number) {
 
 ```typescript
 // Stripe handles via "tiered" price model
+// unit_amount is an integer in minor units (cents) — fractions go in unit_amount_decimal
 const price = await stripe.prices.create({
   product: 'prod_api_calls',
   currency: 'usd',
-  recurring: { interval: 'month', usage_type: 'metered' },
+  recurring: { interval: 'month', usage_type: 'metered', meter: meter.id },
   billing_scheme: 'tiered',
   tiers_mode: 'graduated',
   tiers: [
-    { up_to: 10000,  unit_amount: 0 },      // first 10k free
-    { up_to: 100000, unit_amount: 1 },      // next 90k @ $0.01
-    { up_to: 'inf',  unit_amount: 0.5 },    // beyond @ $0.005
+    { up_to: 10000,  unit_amount: 0 },               // first 10k free
+    { up_to: 100000, unit_amount: 1 },               // next 90k @ $0.01
+    { up_to: 'inf',  unit_amount_decimal: '0.5' },   // beyond @ $0.005
   ],
 });
 ```
@@ -123,11 +138,15 @@ async def report_usage_idempotent(account_id, event):
     if await db.usage_reported.exists(dedup_key):
         return  # already reported
 
-    await stripe.usage_records.create(
-        subscription_item=event.subscription_item,
-        quantity=event.quantity,
+    # Stripe also dedups by identifier, but only for a rolling >= 24 h — keep our own check
+    await stripe.billing.MeterEvent.create_async(
+        event_name='api_calls',
+        payload={
+            'stripe_customer_id': event.stripe_customer_id,
+            'value': str(event.quantity),
+        },
+        identifier=event.id,
         timestamp=event.timestamp,
-        action='increment',
     )
 
     await db.usage_reported.create({dedup_key})
@@ -149,8 +168,10 @@ const subscription = await stripe.subscriptions.create({
   collection_method: 'charge_automatically',
 });
 
-// Customize retry behavior in Dashboard or via API
-// Default: 4 retries over 3 weeks
+// Retry schedule lives in Dashboard → Billing → Revenue recovery → Retries
+// Smart Retries: "The recommended default setting is 8 tries within 2 weeks"
+// (choose 1 week – 2 months); custom schedule = up to 3 retries
+// ที่มา docs.stripe.com/billing/revenue-recovery/smart-retries (ตรวจ 22 ต.ค. 2569)
 
 // Listen for events:
 //   invoice.payment_failed → email customer
@@ -158,7 +179,7 @@ const subscription = await stripe.subscriptions.create({
 //   customer.subscription.deleted → final action
 ```
 
-One schedule for the whole plugin: retries follow the processor (Stripe default above: 4 retries over 3 weeks). At each failed retry the app escalates one step:
+The retry count and timing belong to the payment processor's setting (Stripe: Smart Retries or a custom schedule, set per account, can differ per customer segment with automations). The app does not assume a fixed number of retries: it reads `invoice.attempt_count` from each `invoice.payment_failed` event and escalates one step, and treats "no `next_payment_attempt`" as the last try:
 
 ```
 Fail 1 → email the customer (update card link)
@@ -187,31 +208,38 @@ async def handle_payment_failed(event):
     elif attempt == 2:
         await send_email(customer, 'payment_failed_second', ...)
         await restrict_advanced_features(customer)
-    elif attempt == 3:
+    elif attempt >= 3:
         await send_email(customer, 'payment_failed_third_final_warning', ...)
         await alert_cs_team(customer)
-    # Stripe will cancel after configured retries
+
+    if invoice.get('next_payment_attempt') is None:
+        # last try failed — Stripe now applies your "after all retries" setting
+        # (cancel / unpaid / past_due / pause)
+        await send_email(customer, 'payment_failed_final', ...)
+    # with Billing automations, next_payment_attempt is set on invoice.updated instead
 ```
 
 ## Revenue Recognition (ASC 606)
 
+One convention everywhere: `start_date` and `end_date` are `DATE`, the service period is **[start_date, end_date)** — `end_date` is the first day *after* service (a 1-month plan from 1 Jan has `end_date` 1 Feb). The period has `end_date - start_date` days. This is the only copy of this query; other files link here.
+
 ```sql
--- Daily revenue recognition for subscriptions
-INSERT INTO daily_recognized_revenue
+-- Daily revenue recognition for subscriptions (safe to re-run)
+INSERT INTO daily_recognized_revenue (subscription_id, account_id, date, daily_revenue, type)
 SELECT
+    sub.id,
     sub.account_id,
-    d::date as date,
-    sub.amount / extract(epoch from (sub.end_date - sub.start_date))::numeric
-        * 86400 as daily_revenue,
-    'subscription' as type
+    d::date AS date,
+    sub.amount::numeric / (sub.end_date - sub.start_date) AS daily_revenue, -- DATE - DATE = days
+    'subscription' AS type
 FROM subscriptions sub
 CROSS JOIN LATERAL generate_series(
     sub.start_date,
-    LEAST(sub.end_date, current_date),
-    '1 day'
+    LEAST(sub.end_date - 1, current_date),  -- last service day = end_date - 1
+    interval '1 day'
 ) d
 WHERE sub.start_date <= current_date
-  AND sub.end_date > current_date - interval '1 day';
+ON CONFLICT (subscription_id, date) DO NOTHING;  -- needs UNIQUE (subscription_id, date)
 ```
 
 ## MRR / ARR Calculation

@@ -1,6 +1,6 @@
 ---
 name: price-check
-description: Work out a selling price, or profit on a current price, after commission, fees, shipping and VAT.
+description: Work out a selling price, or profit on a current price, after commission, fees, shipping and value added tax (VAT).
 argument-hint: <product> <cost> <platform> [current price, category, target margin]
 disable-model-invocation: true
 ---

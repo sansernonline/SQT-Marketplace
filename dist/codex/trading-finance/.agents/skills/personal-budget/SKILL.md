@@ -10,12 +10,12 @@ A budget that survives contact with real life. Worksheet: [references/budget-wor
 ## Workflow
 
 1. **Real numbers, 2–3 months** — bank statement exports, e-wallet / PromptPay history (TrueMoney, ShopeePay, LINE Pay), credit card statements. Never use the user's guess of their own spending.
-2. **Start from take-home pay**, not gross: salary − social security (5% of wage, capped at a 17,500 baht wage base = **875 baht/month** in 2569) − PVD (provident fund) contribution − withholding tax (ภาษีหัก ณ ที่จ่าย) per payslip. Add regular side income; treat bonus as a separate annual plan, not monthly money.
+2. **Start from take-home pay**, not gross: salary − social security (5% of wage, capped at a 17,500 baht wage base = **875 baht/month** in 2569) − provident fund (PVD) contribution − withholding tax (ภาษีหัก ณ ที่จ่าย) per payslip. Add regular side income; treat bonus as a separate annual plan, not monthly money.
 3. **Categorise** into four envelopes:
    - **Needs** — rent/home loan, utilities, food at home, transport to work, phone, insurance premiums, minimum debt payments, parents' support (ส่งเงินให้พ่อแม่ is a fixed need for many Thai households)
    - **Wants** — eating out, delivery, shopping, travel, subscriptions, gifts and social obligations (ซองงานแต่ง งานบวช งานศพ)
    - **Savings** — emergency fund until full (`emergency-fund`), extra debt payment above minimum (`debt-payoff`), annual bills sinking fund
-   - **Investment** — DCA into funds/stocks, RMF/ThaiESG (`tax-deduction-planner`, `mutual-fund-picker`)
+   - **Investment** — DCA into funds/stocks, Retirement Mutual Fund (RMF) / ThaiESG (`tax-deduction-planner`, `mutual-fund-picker`)
 4. **Flag leaks**: forgotten subscriptions, BNPL / ผ่อน 0% instalments stacking up, cash-advance fees, delivery frequency. List each with its monthly baht.
 5. **Propose the split** — 50/30/20 (needs/wants/savings+investment) as a starting point; adjust to reality (high Bangkok rent may push needs to 60%). Never treat the split as sacred.
 6. **The one number that matters** — the investment/saving transfer, set as a standing order on payday (บัญชีแยก, auto-transfer), before spending starts.

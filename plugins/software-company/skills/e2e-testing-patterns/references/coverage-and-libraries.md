@@ -7,15 +7,17 @@
 ```markdown
 | User Journey | Coverage | Priority |
 |--------------|:--------:|:--------:|
-| Signup → first action | ✓ | P0 |
-| Login → main task | ✓ | P0 |
-| Add to cart → checkout → success | ✓ | P0 |
-| Search → filter → result | ✓ | P1 |
-| Settings → save | ✓ | P1 |
-| Admin panel CRUD | ✓ | P1 |
-| Password reset | ✓ | P2 |
-| Profile edit | Sample | P2 |
+| Signup → first action | ✓ | P1 |
+| Login → main task | ✓ | P1 |
+| Add to cart → checkout → success | ✓ | P1 |
+| Search → filter → result | ✓ | P2 |
+| Settings → save | ✓ | P2 |
+| Admin panel CRUD | ✓ | P2 |
+| Password reset | ✓ | P3 |
+| Profile edit | Sample | P3 |
 ```
+
+Priority uses the `test-case-template` scale (P1 = most important, P3 = least), the same as the `@P1|@P2|@P3` test tags.
 
 ## Library Quick Reference
 

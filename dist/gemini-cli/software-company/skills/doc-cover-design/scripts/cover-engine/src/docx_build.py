@@ -19,9 +19,13 @@ from docx.oxml.ns import nsdecls, qn
 from docx.shared import Pt
 
 ROOT = Path(__file__).resolve().parents[1]
-# brandkit.py: BRANDKIT_DIR, else the sibling skill when this engine still sits inside the plugin
+# brandkit.py: BRANDKIT_DIR, else branded-document-design in the superuser plugin (sibling plugin folder),
+# else a sibling skill in this plugin (older layout)
 SKILLS = Path(__file__).resolve().parents[4]
-sys.path.insert(0, os.environ.get("BRANDKIT_DIR", str(SKILLS / "branded-document-design" / "scripts")))
+_candidates = [SKILLS.parent.parent / "superuser" / "skills" / "branded-document-design" / "scripts",
+               SKILLS / "branded-document-design" / "scripts"]
+_default = next((c for c in _candidates if c.exists()), _candidates[0])
+sys.path.insert(0, os.environ.get("BRANDKIT_DIR", str(_default)))
 import brandkit as bk  # noqa: E402
 from fonts import word_family  # noqa: E402
 

@@ -37,12 +37,12 @@ A calm second look before an irreversible transfer — and a first-hour plan if 
 | Crypto "pig butchering" | Long grooming, small early withdrawals allowed, then a big deposit is trapped | Unlicensed platform; "account frozen, pay to release" |
 | Call-centre / impersonation | Caller says police, DSI, bank, Revenue Department, courier; "your account is involved in money laundering, move money to a safe account" | No Thai authority asks you to transfer money to verify |
 | Loan-app scam | Approval needs an upfront fee, insurance or "credit score" payment | Licensed lenders deduct fees from the loan, never ask first |
-| Recovery scam | After a loss, someone offers to get the money back for a fee — posing as lawyer, hacker, agency or "AOC" | Real police and AOC charge nothing; AOC has no LINE or Facebook channel |
+| Recovery scam | After a loss, someone offers to get the money back for a fee — posing as lawyer, hacker, agency or "AOC" (Anti-Online Scam Operation Center) | Real police and AOC charge nothing; AOC has no LINE or Facebook channel |
 
 ## Already transferred — the first hour
 
 1. **Call your bank's 24-hour hotline now** (number on the back of the card or in the app) and ask to **suspend the transaction** (ระงับธุรกรรม). Under the technology-crime decree (พ.ร.ก.มาตรการป้องกันและปราบปรามอาชญากรรมทางเทคโนโลยี พ.ศ. 2566, มาตรา 7) the bank must hold it temporarily — and you must then file a police report **within 72 hours** or the hold lapses.
-2. **Call 1441** — Anti-Online Scam Operation Center (AOC), 24 hours. Give: receiving bank, account number, account name, amount, time of each transfer.
+2. **Call 1441** — the AOC, 24 hours. Give: receiving bank, account number, account name, amount, time of each transfer.
 3. **Report online at www.thaipoliceonline.go.th** (or at any police station) — this is the police report the bank hold depends on. Keep the case number.
 4. **Keep evidence** — do not delete chats or block yet: screenshots with dates of the chat, profile, group, website URL, app name; transfer slips; the receiving accounts; phone numbers. List in the reference file.
 5. **Secure accounts** if you gave any code, password, ID card photo or installed an app: uninstall the app, change banking passwords from a clean device, ask the bank to block mobile banking if remote control is suspected. If you installed an app, follow `digital-hygiene` (personal-life ถ้าติดตั้ง) for the full account-takeover steps.

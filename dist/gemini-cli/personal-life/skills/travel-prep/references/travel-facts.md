@@ -64,10 +64,10 @@ Thailand: A, B, C, O · 230 V · 50 Hz. Most phone/laptop chargers are 100–240
 | Japan | A, B | 100 V |
 | Taiwan | A, B | 110 V |
 | United States | A, B | 120 V |
-| South Korea | C, F | 230 V |
-| China | A, I | 230 V |
+| South Korea | C, F | 220–230 V (รอยืนยัน) |
+| China | A, C, I | 220–230 V (รอยืนยัน) |
 | Hong Kong, Singapore, Malaysia, United Kingdom | G | 230 V |
-| Vietnam | A, B, C | 230 V |
+| Vietnam | A, B, C | 220–230 V (รอยืนยัน) |
 | Germany | C, F | 230 V |
 | France | C, E | 230 V |
 | Italy | C, F, L | 230 V |

@@ -287,16 +287,15 @@ await client.documents.upload({
 ## Webhook Verification SDK
 
 ```typescript
-// Provide helper to verify webhook signatures
-client.webhooks.verify({
-  payload: req.rawBody,
-  signature: req.headers['x-signature'],
-  secret: WEBHOOK_SECRET,
-});
-// Throws on invalid
-
-// Then parse
-const event = client.webhooks.constructEvent(req.body);
+// One helper that verifies AND parses, from the same raw bytes.
+// Verifying rawBody but then building the event from the parsed req.body
+// trusts data that was never checked.
+const event = client.webhooks.constructEvent(
+  req.rawBody,                    // raw bytes, exactly as received
+  req.headers['x-signature'],
+  WEBHOOK_SECRET,
+);
+// Throws on an invalid signature or an old timestamp; returns the typed event
 ```
 
 ## OAuth Helper SDK
@@ -337,9 +336,9 @@ const client = new Client({
 
 ## Things You Don't Do
 
-- ❌ Different naming conventions across languages
+- ❌ Naming that breaks the language's own convention (e.g. camelCase methods in Python) — follow each language's idiom (table above)
 - ❌ Use untyped parameters when the language supports types
-- ❌ Hand-write SDKs in 2026 (generate them)
+- ❌ Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
 - ❌ Break v1 users with a v1.x release
 - ❌ Ignore retry edge cases
 - ❌ Force callbacks when async/promises would work
@@ -348,6 +347,6 @@ const client = new Client({
 
 - [Stripe SDK Design](https://github.com/stripe/stripe-node)
 - [Anthropic SDK](https://github.com/anthropics/anthropic-sdk-typescript)
-- [Stainless (SDK generator)](https://www.stainlessapi.com/)
+- [Stainless (SDK generator)](https://www.stainless.com/)
 - [Fern (SDK generator)](https://buildwithfern.com/)
 - [Speakeasy (SDK generator)](https://www.speakeasy.com/)

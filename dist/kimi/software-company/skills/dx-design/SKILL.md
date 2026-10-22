@@ -1,6 +1,6 @@
 ---
 name: "dx-design"
-description: "Audit developer experience or design an SDK with the devrel-engineer agent (dx-audit or sdk-design)."
+description: "Audit developer experience (DX) or design a software development kit (SDK) with the devrel-engineer agent (dx-audit or sdk-design)."
 disableModelInvocation: true
 ---
 
@@ -24,7 +24,7 @@ Workflow:
 4. **Audit errors:** clarity, actionability, references
 5. **Audit samples:** runnable, realistic, modern
 6. **Audit onboarding funnel:** drop-off points
-7. **Audit CLI/SDK** if applicable
+7. **Audit command-line interface (CLI) and SDK** if applicable
 8. **Identify quick wins + structural improvements**
 9. **Produce polished DX audit** using `polished-document-style` (from software-company)
 10. **Hand-off:** docs → `technical-writer` · SDK and CLI code changes → `developer`
@@ -43,4 +43,4 @@ Workflow:
 5. **Design auth + errors per language**
 6. **Plan versioning + distribution**
 7. **Produce polished SDK design doc** using `polished-document-style` (from software-company)
-8. **Hand-off:** Implementation → `developer`, docs → `devrel-engineer`
+8. **Hand-off:** Implementation → `developer`, docs → `technical-writer` (same as dx-audit)

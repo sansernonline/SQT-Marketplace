@@ -4,7 +4,7 @@
 
 ช่วยเรียนเทคโนโลยีใหม่ให้จบเป็นโค้ดที่รันได้
 
-agent 4 · skill 13 · คำสั่ง 2 · playbook 8 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`career`](../career/README.md)
+agent 1 · skill 50 · คำสั่ง 2 · playbook 8 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`career`](../career/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/dev-learning/`](../../../plugins/dev-learning/)
 

@@ -11,7 +11,7 @@
 | ค่าคงที่จริง | `MaxRetries` | `MAX_RETRIES` | `MAX_RETRIES` | — |
 | ไฟล์ | `InvoiceRenderer.cs` | `invoice-renderer.ts` | `invoice_renderer.py` | — |
 | โฟลเดอร์ | `Invoices/` | `invoice/` | `invoice/` | — |
-| ตาราง | — | — | — | `invoice` (เอกพจน์) |
+| ตาราง | — | — | — | `invoices` (พหูพจน์ — กฎเต็มที่ `database-design`) |
 | คอลัมน์ | — | — | — | `created_at` |
 | ตัวแปรสภาพแวดล้อม | `DB_HOST` | `DB_HOST` | `DB_HOST` | — |
 
@@ -32,7 +32,7 @@
 | `validate` · `assert` | โยน error ถ้าไม่ผ่าน | ✓ | ✗ |
 | `is` · `has` · `can` | คืน true/false | ✗ | ✗ |
 | `try...` | คืน null/false แทนโยน | ✗ | แล้วแต่ |
-| `on...` · `handle...` | ตัวรับเหตุการณ์ | ✓ | ✓ |
+| `on...` · `handle...` | ตัวรับเหตุการณ์ — ต่อด้วยชื่อเหตุการณ์ เช่น `handleOrderPaid` (คำนำหน้าใช้ได้ แต่คำนาม `handler` เดี่ยว ๆ ห้ามตามข้อ 4) | ✓ | ✓ |
 
 ---
 
@@ -42,7 +42,7 @@
 |---|---|---|
 | เวลา | `Ms` · `Seconds` · `Days` | `timeoutMs` · `retentionDays` |
 | เงิน | `Satang` · `THB` · `USD` | `priceSatang` · `feeTHB` |
-| ขนาด | `Bytes` · `Kb` · `Mb` | `maxUploadBytes` |
+| ขนาด | `Bytes` · `KB` · `MB` (ฐาน 1000) หรือ `KiB` · `MiB` (ฐาน 1024) — ไม่ใช้ `Kb`/`Mb` เพราะอ่านเป็นกิโลบิต/เมกะบิต | `maxUploadBytes` · `cacheSizeMiB` |
 | สัดส่วน | `Percent` · `Ratio` | `discountPercent` · `hitRatio` |
 | จำนวน | `Count` | `retryCount` |
 | ลำดับ | `Index` | `pageIndex` |
@@ -56,7 +56,7 @@
 | ห้าม | แทนด้วย |
 |---|---|
 | `data` · `info` · `item` · `obj` · `value` | ชื่อจริงของสิ่งนั้น |
-| `manager` · `handler` · `processor` · `service` | กริยาที่มันทำ |
+| `manager` · `handler` · `processor` · `service` (เป็นคำนามท้ายชื่อ เช่น `OrderHandler`) | กริยาที่มันทำ |
 | `helper` · `util` · `common` · `misc` | แยกตามเรื่อง |
 | `do` · `perform` · `execute` · `run` | กริยาจริง |
 | `temp` · `tmp` · `foo` · `test2` | หน้าที่ของมัน |

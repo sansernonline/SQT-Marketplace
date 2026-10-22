@@ -1,6 +1,8 @@
 # Page SEO brief — keywords, titles, URLs, schema
 
-ใช้ตอนเขียน brief ของหน้าเดียว (ไม่ใช่ audit ทั้งเว็บ) — ย้ายมาจาก agent `seo-specialist` (2026-10-14) · เรื่อง rich result ของ Google มาจากความรู้ของโมเดล: Google เลิกแสดง HowTo ปี 2023 และจำกัด FAQ ให้เว็บรัฐและสุขภาพ — ยังไม่ได้ตรวจกับ Google Search Central วันนี้ (รอยืนยัน)
+Search engine optimization (SEO) brief for one page.
+
+ใช้ตอนเขียน brief ของหน้าเดียว (ไม่ใช่ audit ทั้งเว็บ) — ย้ายมาจาก agent `seo-specialist` (2026-10-14) · rich result ของ Google: ตั้งแต่ 8 ส.ค. 2023 FAQ แสดงเฉพาะเว็บรัฐและเว็บสุขภาพที่น่าเชื่อถือ · HowTo เลิกแสดงแล้ว — ที่มา [Google Search Central blog: Changes to HowTo and FAQ rich results](https://developers.google.com/search/blog/2023/08/howto-faq-changes) (ตรวจ 22 ต.ค. 2569)
 
 **สารบัญ:**
 
@@ -49,7 +51,7 @@ Examples:
 
 ## Meta Description Formula
 
-`<Hook> + <Primary keyword> + <Value prop> + <CTA>`
+`<Hook> + <Primary keyword> + <Value prop> + <CTA>` (call to action)
 
 Example:
 > Looking for the best running shoes for flat feet? Our podiatrist-reviewed
@@ -109,7 +111,7 @@ Example:
 ## Word Count Target
 ~XXX words (based on top 10 ranking pages)
 
-## SERP Features to Target
+## Search Engine Results Page (SERP) Features to Target
 - [ ] Featured snippet
 - [ ] People Also Ask
 - [ ] Image pack

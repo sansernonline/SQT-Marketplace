@@ -2,7 +2,7 @@
 
 > ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
 > เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast (ตรวจด้วยสคริปต์แล้ว 22 ต.ค. 2569) หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
 
 ## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
 
@@ -12,7 +12,7 @@
 use_brand(
     brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
     brand_tint="EDF1FB", brand_tint_2="F6F8FD",
-    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
+    text="333B4A", text_body="414957", text_muted="676D7A", line="E4E7EE",
 )
 ```
 
@@ -20,9 +20,9 @@ use_brand(
 
 ```python
 use_brand(
-    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0A5A56",
     brand_tint="E6F4F2", brand_tint_2="F3FAF9",
-    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
+    text="2C3A38", text_body="3A4846", text_muted="636F6A", line="E1EAE8",
 )
 ```
 
@@ -32,7 +32,7 @@ use_brand(
 use_brand(
     brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
     brand_tint="E8ECF7", brand_tint_2="F5F7FC",
-    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
+    text="2B3245", text_body="3A4156", text_muted="636A7D", line="E2E6F0",
 )
 ```
 
@@ -42,9 +42,9 @@ accent อุ่นบนโครงเทาเย็น — ใช้ accent 
 
 ```python
 use_brand(
-    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
+    brand="B57509", brand_2="8C5A2B", brand_deep="704805",
     brand_tint="FBF2E1", brand_tint_2="FDF9F1",
-    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
+    text="2F3439", text_body="3E444A", text_muted="676F76", line="E5E8EA",
 )
 ```
 
@@ -66,7 +66,7 @@ use_brand(
 
 ## วิธีตรวจก่อนใช้
 
-1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
+1. เนื้อความและ `text_muted` บนพื้นขาวและพื้น `brand_tint` ≥ 4.5:1 · `brand_deep` (H2 และหัวตาราง) บนพื้นขาวและ `brand_tint` ≥ 7:1 · `brand` (H1 16pt ตัวหนา และตัวเลข KPI นับเป็นตัวใหญ่) ≥ 3:1
 2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
 3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
 

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (URGENT)](#initial-discovery-urgent)
-- [📊 IR Quality Standards](#ir-quality-standards)
+- [🔍 Initial Discovery (URGENT)](#-initial-discovery-urgent)
+- [📊 IR Quality Standards](#-ir-quality-standards)
 - [Incident Response Lifecycle](#incident-response-lifecycle)
 - [Phase 1: Identification (already done by SOC usually)](#phase-1-identification-already-done-by-soc-usually)
 - [Phase 2: Containment](#phase-2-containment)
@@ -14,14 +14,14 @@
 - [Communication](#communication)
 - [Evidence Handling](#evidence-handling)
 - [Output: Incident Report](#output-incident-report)
-- [Impact Summary](#impact-summary)
-- [Timeline (UTC)](#timeline-utc)
-- [Initial Vector](#initial-vector)
-- [Adversary Activity](#adversary-activity)
-- [Containment Actions](#containment-actions)
-- [Eradication Verification](#eradication-verification)
-- [Action Items](#action-items)
-- [Communications Log](#communications-log)
+- Impact Summary
+- Timeline (UTC)
+- Initial Vector
+- Adversary Activity
+- Containment Actions
+- Eradication Verification
+- Action Items
+- Communications Log
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -81,6 +81,8 @@ The SOC analyst hands over:
 
 ## Phase 2: Containment
 
+> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบใน Phase 2-4 (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · รีเซ็ต MFA · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · rebuild) ให้ **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รันหลังผู้ใช้อนุมัติขั้นนั้นเท่านั้น** — อนุมัติขั้นหนึ่งไม่ครอบคลุมขั้นถัดไป · บันทึกทุกขั้นที่รันลง timeline ของเหตุ (เวลา UTC · ผู้อนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย · รายละเอียด → [`security-incident-response.md`](security-incident-response.md) Phase 3
+
 ### Short-term (stop the bleed)
 - Isolate affected hosts (network)
 - Disable compromised accounts
@@ -125,6 +127,7 @@ For every compromised credential:
 ```
 
 ### Eradication actions
+ทุกข้อด้านล่างใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** (Phase 2)
 - Remove malware
 - Delete persistence mechanisms
 - Revoke all credentials
@@ -186,7 +189,7 @@ Per company crisis comm plan
 ### External
 ```
 - Customer notification (per BAAs, SLAs, regulatory)
-- Regulatory (GDPR 72h, HIPAA 60d, PDPA varies)
+- Regulatory (GDPR 72h, HIPAA 60d, PDPA Thailand 72h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) ตาม ม.37(4) · เจ้าของข้อมูลโดยไม่ชักช้าเมื่อเสี่ยงสูง → `pdpa-compliance` §8)
 - Law enforcement (if applicable)
 - Cyber insurance (claim notification)
 - Public relations (if breach disclosed)
@@ -263,7 +266,6 @@ Use `polished-document-style` + `postmortem-template` skills.
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-company)
 - `polished-document-style` (from software-company)
-- `security-operations`
 
 ## Things You Don't Do
 
@@ -273,13 +275,14 @@ Use `polished-document-style` + `postmortem-template` skills.
 - ❌ Negotiate with the adversary without authorization
 - ❌ Skip evidence preservation for speed
 - ❌ Tip off the adversary with aggressive scanning
+- ❌ Run a containment, eradication or recovery action before the user approves that specific action
 
 ## When to Hand Off
 
-- Detection improvements → `security-analyst`, SOC
-- Architecture changes → `security-analyst`
+- Detection improvements → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md) · SOC
+- Architecture changes → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
 - Customer notifications → `technical-writer` (from software-company)
-- Long-term compliance → `fintech-compliance-officer`
+- Legal notifications and long-term compliance → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
 
 ## Common Pitfalls
 

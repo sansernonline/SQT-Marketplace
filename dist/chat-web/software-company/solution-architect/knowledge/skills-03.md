@@ -1,19 +1,19 @@
 # skill: markdown-visuals
 
-Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
+Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
 
 # Markdown Visuals
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
 ## When to use this skill
 
-- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
 - The user asked "show me how it looks" inside a markdown doc or chat reply
@@ -24,8 +24,8 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
@@ -33,19 +33,26 @@ Use when a markdown doc needs a picture (UI state, flow, architecture) that rend
 ```
 What are you showing?
 │
-├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
 
-## 1 · Inline SVG (primary technique)
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
 
 ### Boilerplate
 
@@ -61,7 +68,7 @@ What are you showing?
 ```
 
 **Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
 - `viewBox` — sets the coordinate space; lets the SVG scale responsively
 - `role="img"` + `aria-label` — accessibility, screen readers
 - `<p align="center">` wrapper — centers in the rendered page
@@ -83,6 +90,7 @@ Window chrome, phone frame, button, card, status badge, running dot and tooltip 
 ## 2 · External image files
 
 Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
 - Photo or screenshot
 - Illustration too complex to author as SVG by hand (50+ shapes)
 - Reusing the same image across many docs
@@ -133,7 +141,7 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
 ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
 | เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
@@ -162,10 +170,10 @@ For every visual:
 - ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
 - ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
 - ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
@@ -182,15 +190,15 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
 
 ## Related skills
 
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -265,7 +273,7 @@ scale
 
 Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
 
-Pattern from `DockXI/docs/12-design-mockup.md`:
+The 6-part pattern for a design spec:
 
 ```
 1. Inline SVG mockup of each UI state              ← "what it looks like"
@@ -360,14 +368,14 @@ Reusable building blocks for inline SVG pictures of a screen inside .md docs (th
 
 ## Worked example — UI state mockup
 
-This is the pattern used in `DockXI/docs/12-design-mockup.md` and should be the default for showing UI feature states.
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
 
 
 ---
 
 # skill: diagram-figures
 
-Use when a project document (BRD, SRS, FSD, ADR, ER, flows), proposal, slide or print needs a diagram in the house style.
+Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
 
 > **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
 
@@ -381,11 +389,13 @@ skill นี้คือ house style เดียวของรูปที่�
 
 | ต้องการ | ไปที่ |
 |---|---|
-| รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) และรูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
+| รูปในเอกสารงานใดก็ได้ (แผนธุรกิจ · ผังขั้นตอนของร้าน · ผังเงินครอบครัว · สรุปงานวิจัย · เอกสารซอฟต์แวร์ เช่น เอกสารความต้องการทางธุรกิจ (Business Requirements Document — BRD) · ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification — SRS) · ผังความสัมพันธ์ข้อมูล (Entity-Relationship — ER)) และรูปที่ต้องดูออกแบบมา สำหรับข้อเสนอลูกค้า · สไลด์ · งานพิมพ์ · เอกสารเซ็นรับ รวมถึงผังคลาวด์ที่ต้องมีโลโก้จริง | **skill นี้ — HTML layout engine** (ค่าเริ่มต้น · ข้อ 2) |
 | รูปแบบเดียวกัน แต่ต้อง generate จากข้อมูลหรือโค้ด เช่น ออกซ้ำทุกครั้งที่ข้อมูลเปลี่ยน หรือต้องคุมพิกัดบนกริดเอง | **skill นี้ — SVG/Python engine** ([references/engine-svg-python.md](references/engine-svg-python.md)) |
-| บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ PDF ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
-| ไดอะแกรมด่วนใน README · Pull Request · โน้ตในโค้ด (ไม่ใช่เอกสารโปรเจกต์) | [`software-diagrams`](../software-diagrams/SKILL.md) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
+| บล็อก Mermaid หลายสิบบล็อก (sequence · state · ER · gantt) ที่ต้องส่งในไฟล์ Word หรือ Portable Document Format (PDF) ให้หน้าตาเหมือนรูปวาดมือ | **skill นี้ — Mermaid engine** ([references/engine-mermaid.md](references/engine-mermaid.md)) |
+| ไดอะแกรมด่วนใน README · Pull Request · โน้ตในโค้ด (ไม่ใช่เอกสารโปรเจกต์) | `software-diagrams` (plugin `software-company`) (Mermaid ธีมประจำบ้าน · ถ้าเป็นผังคลาวด์ใน repo ที่ต้องมีโลโก้ ใช้ไลบรารี `diagrams` ใน skill เดียวกัน) |
 | ตัดสินใจว่าจะฝังรูปในไฟล์ markdown แบบไหน (inline SVG · ไฟล์ภาพ · ASCII · Mermaid) | [`markdown-visuals`](../markdown-visuals/SKILL.md) |
+
+**กติกาเลือกทาง (ตรงกับ `software-diagrams` และ `markdown-visuals`):** markdown ใน repo ที่ทีมอ่าน (README · Pull Request · โน้ตในโค้ด) → Mermaid ผ่าน `software-diagrams` · เอกสารโปรเจกต์ (BRD · SRS · Functional Specification Document (FSD) · Architecture Decision Record (ADR) · ER · ผังขั้นตอน) หรือของที่คนนอกทีมอ่าน → skill นี้
 
 ต้นทุนของ skill นี้คือ **เวลา** เพราะ 1 รูปต้องแก้หลายรอบ
 ดังนั้นให้ใช้กับรูปที่คนนอกทีมจะเห็น และเห็นซ้ำหลายครั้งเท่านั้น
@@ -395,7 +405,7 @@ skill นี้คือ house style เดียวของรูปที่�
 1. **รูปนี้ไปอยู่ที่ไหน** — สไลด์ 16:9 · หน้า A4 · หน้าจอ
    แล้วกำหนด `.sheet{width:...}` ตามนั้น: สไลด์ 1600px · A4 แนวตั้ง 1240px · A4 แนวนอน 1750px
 2. **ผู้อ่านคือใคร** — ถ้าเป็นลูกค้าที่ไม่ใช่ช่าง ให้เขียนชื่อกล่องเป็นภาษาไทย ส่วนทีมเทคนิคอ่านชื่อจริงของ service
-3. **คำถามเดียวที่รูปนี้ตอบคืออะไร** — กฎข้อเดียวของ `software-diagrams` ยังใช้อยู่
+3. **คำถามเดียวที่รูปนี้ตอบคืออะไร** — 1 รูปตอบ 1 คำถาม (กฎเดียวกับ `software-diagrams` (plugin `software-company`))
 
 ## 2 · เลือกโครง
 
@@ -403,10 +413,10 @@ skill นี้คือ house style เดียวของรูปที่�
 
 | คำถามที่รูปตอบ | โครง | รายละเอียด |
 |---|---|---|
-| "ระบบนี้คุยกับใครและกับอะไรข้างนอกบ้าง" — C4 ระดับ 1 | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
-| "ของจริงรันอยู่บนเครื่องอะไร มีอะไรอยู่ข้างใน" — deployment · container | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
-| "ใช้บริการอะไรของคลาวด์บ้าง" — ต้องมีโลโก้ AWS · Azure · Google Cloud ของจริง | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
-| "ข้อความ 1 ชิ้นวิ่งผ่านอะไรบ้าง ตามลำดับไหน" — ผังสถาปัตยกรรมแบบมีเลขลำดับ ①–⑥ · ผู้ใช้ → ช่องทาง → ชั้นในระบบ → บริการภายนอกและข้อมูล | [`figure-flow.html`](assets/figure-flow.html) · [ตัวอย่าง](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
+| "ระบบ ร้าน หรือองค์กรนี้คุยกับใครข้างนอกบ้าง" — ภาพรวมระดับบนสุด (ซอฟต์แวร์เรียก C4 model (Context · Containers · Components · Code) ระดับ 1) | [`figure-context.html`](assets/figure-context.html) | [layout-context.md](references/layout-context.md) |
+| "ของจริงอยู่ตรงไหน มีอะไรอยู่ข้างใน" — ฝ่าย · สถานที่ · เครื่อง (ซอฟต์แวร์คือ deployment · container) | [`figure-template.html`](assets/figure-template.html) | [layout-deployment.md](references/layout-deployment.md) |
+| "ใช้บริการอะไรของคลาวด์บ้าง" — ต้องมีโลโก้ Amazon Web Services (AWS) · Azure · Google Cloud ของจริง | [`figure-cloud.html`](assets/figure-cloud.html) | [layout-cloud.md](references/layout-cloud.md) |
+| "ของ 1 ชิ้น (ข้อความ · คำสั่งซื้อ · เงิน) วิ่งผ่านอะไรบ้าง ตามลำดับไหน" — ผังมีเลขลำดับ ①–⑥ · ผู้ใช้ → ช่องทาง → ชั้นภายใน → บริการภายนอกและข้อมูล | [`figure-flow.html`](assets/figure-flow.html) · [ตัวอย่าง](assets/figure-flow-example.png) | [layout-flow.md](references/layout-flow.md) |
 
 ทุกโครงใช้สี ขนาด ฟอนต์ และสคริปต์ลากเส้นชุดเดียวกัน ต่างกันแค่การจัดวาง
 
@@ -423,18 +433,18 @@ skill นี้คือ house style เดียวของรูปที่�
 **ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว อย่าตั้งค่าใหม่เอง**
 ตัวเลขพวกนี้ปรับจนรูปดูตั้งใจแล้ว ถ้าขยับเมื่อไหร่ รูปในเอกสารเดียวกันจะดูไม่เท่ากัน
 
-**ขนาด ระยะ และมุม อยู่ใน `:root` ของ `assets/figure-template.html` แล้ว อย่าตั้งค่าใหม่เอง** · กรอบไอคอน 66px ขึ้นไป (ต่ำกว่า 56px รูปจะโหวง) · เส้นเชื่อมตั้งหรือนอนเท่านั้น หักมุมโค้ง ห้ามเส้นเฉียง
+กรอบไอคอน 66px ขึ้นไป (ต่ำกว่า 56px รูปจะโหวง) · เส้นเชื่อมตั้งหรือนอนเท่านั้น หักมุมโค้ง ห้ามเส้นเฉียง
 
 ตารางค่าเต็ม (ตัวอักษร · ไอคอน · กล่อง · `.focus` · เส้น · ระยะ) → [`references/design-system.md`](references/design-system.md) หัวข้อ "ระบบขนาด" — เปิดเมื่อต้องปรับโครงหรือเขียนโครงใหม่
 
-> **ขนาดตัวอักษรขึ้นกับที่ที่รูปจะไปวาง ไม่ใช่ผ้าใบ** — ตารางข้างบนเหมาะกับสไลด์และจอ · รูปที่จะวางในเอกสาร A4 ต้องคิดย้อนจากขนาดที่วาง: ตัวอักษรเล็กสุดหลังวาง ≥ 7pt → `px ขั้นต่ำ = 0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` · ผ้าใบ 2000px บนหน้าแนวตั้ง 17 ซม. = 29px · บนหน้าแนวนอน 25.7 ซม. = 20px · ขยายฟอนต์แล้วกล่องต้องกว้างพอให้ชื่อไทยไม่ตัดกลางคำ
-> **2 ฉบับจากไฟล์ต้นทางเดียว:** ฉบับเต็ม (มีหัวรูป 5 อย่าง · ใช้เปิดเดี่ยว/สไลด์) และฉบับวางในเอกสาร (`?embed=1` ซ่อนหัวรูป เพราะคำบรรยายของเอกสารบอกแล้ว — หัวซ้ำทำให้รูปเล็กลงและดูรก) · สัดส่วนรูปให้กว้างพอวางเต็มหน้าแนวนอน (กว้าง ÷ สูง ≥ 1.46)
+> **ขนาดตัวอักษรขึ้นกับที่ที่รูปจะไปวาง ไม่ใช่ผ้าใบ** — ตารางข้างบนเหมาะกับสไลด์และจอ · รูปที่จะวางในเอกสาร A4 ต้องคิดย้อนจากขนาดที่วาง: ตัวอักษรเล็กสุดหลังวาง ≥ 7 พอยต์ (point — pt) → `px ขั้นต่ำ = 0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` · ผ้าใบ 2000px บนหน้าแนวตั้ง 17 ซม. = 29px · บนหน้าแนวนอน 25.7 ซม. = 20px · ขยายฟอนต์แล้วกล่องต้องกว้างพอให้ชื่อไทยไม่ตัดกลางคำ
+> **2 ฉบับจากไฟล์ต้นทางเดียว:** ฉบับเต็ม (มีหัวรูป 6 อย่าง · ใช้เปิดเดี่ยว/สไลด์) และฉบับวางในเอกสาร (`?embed=1` ซ่อนหัวรูป เพราะคำบรรยายของเอกสารบอกแล้ว — หัวซ้ำทำให้รูปเล็กลงและดูรก) · สัดส่วนรูปให้กว้างพอวางเต็มหน้าแนวนอน (กว้าง ÷ สูง ≥ 1.46)
 > **รูปทั้งชุดใช้ CSS ไฟล์เดียว** (`figure-theme.css` ข้างไฟล์ต้นทาง) ที่ดึงสี ฟอนต์ และโลโก้จากตัวตนของโปรเจกต์ (`assets/logo/` · token ของ mockup) — แก้ที่เดียว รูปทุกใบเปลี่ยนตาม
 > **ด่านสวยของรูป** ไปพร้อมด่านสวยของเอกสาร (`branded-document-design` ข้อ 0.1) — เส้นทางหลักเส้นทึบสีเด่น · เส้นรองเทา · มีคำอธิบายสัญลักษณ์ · ลำดับการไหลมีเลขเมื่อมีมากกว่า 3 ขั้น
 
 ## 5 · ระบบสี
 
-**สีหลักของรูปคือสีหลักของโปรเจกต์** ห้ามใช้สีจากตัวอย่างหรือจากรูปอ้างอิง หาตามลำดับนี้ เจอที่ไหนหยุดที่นั่น:
+**สีหลักของรูปคือสีหลักของโปรเจกต์ (หรือของร้าน ครอบครัว งานนั้น)** ห้ามใช้สีจากตัวอย่างหรือจากรูปอ้างอิง หาตามลำดับนี้ เจอที่ไหนหยุดที่นั่น:
 
 1. `doc-theme` ในเอกสารของโปรเจกต์ (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 2. สีแบรนด์ที่โปรเจกต์ใช้จริง — ตัวแปรสีหลักในโค้ด (`--primary` · `--brand` · `--accent` ใน CSS · `primary` ใน Tailwind / ธีม UI · `colorPrimary` ในแอปมือถือ) · ชุดแบรนด์ (brand kit) · สีหลักในโลโก้
@@ -445,7 +455,7 @@ skill นี้คือ house style เดียวของรูปที่�
 
 ในโครง HTML แก้ที่ `--accent` ใน `:root` ที่เดียว (SVG/Python engine แก้ `ACCENT` ใน `theme.py`) · สีพื้นตามดีไซน์ของโปรเจกต์ → ต่อท้ายชื่อไฟล์ `#accent=<สีหลัก>&bg=<สีพื้น>` · ข้อยกเว้นที่ไม่เปลี่ยนตามแบรนด์ (สีโลโก้ผู้ให้บริการ · เทาโครงสร้าง) และ**สีไอคอน 7 กลุ่ม** (`t-neutral` · `t-edge` · `t-app` · `t-view` · `t-data` · `t-alert` · `t-warn`) พร้อมความหมาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "ระบบสี" — สีที่ 8 แปลว่าใช้สีเพื่อความสวย
 
-**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · หัวการ์ดเป็นแถบพื้นสีทึบเต็มความกว้าง (ไม่ใช้แถบสีหนาข้างการ์ดมุมมน เพราะเป็นสัญญาณ AI ใน `no-ai-look`) · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` ([`ui-craft/references/states-and-checks.md`](../ui-craft/references/states-and-checks.md))
+**จำกัดจำนวนสี ไม่ได้จำกัดน้ำหนักของสี** — ในรูปที่ต้องดูออกแบบมา สีหลักต้องเห็นได้ทั่วทั้งรูป ไม่ได้อยู่แค่แถบหัว: ป้ายที่ต้องหาให้เจอเร็ว (เลขขั้น · ผู้รับผิดชอบ · สถานะ) ใช้พื้นทึบ · หัวการ์ดเป็นแถบพื้นสีทึบเต็มความกว้าง (ไม่ใช้แถบสีหนาข้างการ์ดมุมมน เพราะเป็นสัญญาณ AI ใน `no-ai-look`) · กล่องสรุปใช้พื้นสีเข้ม · สีพาสเทลใช้ได้แค่เป็นพื้นที่มีตัวหนังสือหรือขอบสีเข้มคู่กัน · ตรวจด้วยแกน "พลังของสี" ในด่านสวยของ `ui-craft` (`ui-craft/references/states-and-checks.md` (plugin `software-company`))
 
 ### 5.1 · รูปต้องมีจุดเด่น ไม่จืด
 
@@ -458,7 +468,9 @@ skill นี้คือ house style เดียวของรูปที่�
 | จุดเด่น | การ์ด `.focus` 1 ใบต่อรูป: ขอบสีแบรนด์ 3px + แสงรอบ + ไอคอนพื้นสีแบรนด์ · การ์ดอื่นพื้นกลืนกับผ้าใบ |
 | ป้ายลำดับ | พื้นสีแบรนด์ ตัวอักษรสีพื้นผ้าใบ + แสงรอบเบา ๆ |
 | คอนทราสต์ | ข้อความรองบนพื้นมืด ≥ 7:1 (เทาอ่อน ไม่ใช่เทากลาง) |
-| ธีม | ทุกสีเป็นตัวแปรใน css ไฟล์เดียว · หัวลูกศรอ่านสีจากตัวแปร (`getComputedStyle`) ไม่ฝังค่าใน JS · สีความหมาย (`t-app` `t-alert` `t-warn`) มีคู่สีของพื้นมืด · ห้ามใส่สีใน `style=""` ของไฟล์รูป |
+| ธีม | ทุกสีเป็นตัวแปรใน css ไฟล์เดียว · หัวลูกศรอ่านสีจากตัวแปร (`getComputedStyle`) ไม่ฝังค่าใน JavaScript (JS) · สีความหมาย (`t-app` `t-alert` `t-warn`) มีคู่สีของพื้นมืด · ห้ามใส่สีใน `style=""` ของไฟล์รูป |
+
+**ลายจุดตาราง + เส้นเรืองแสง = house style ที่อนุมัติแล้ว** (ข้อยกเว้น "หน้าตาที่อนุมัติแล้วชนะเสมอ" ใน `no-ai-look`) · ตอนสแกนด้วย `slop_scan.py` ให้ติด `slop-ok` ที่ `grid-bg` และ `neon-glow` ของรูปเหล่านี้ พร้อมเหตุผลสั้น ๆ
 
 **วิธีเลือกแนว:** เขียน 3 แนวเป็น css ทับ (override) ฉีดเข้ารูปจริง 2 รูปตอนเรนเดอร์ (`add_init_script` ก่อนสคริปต์วาดเส้นทำงาน) → วางเทียบกับรูปเดิม → ให้ผู้ตรวจที่ไม่ได้ทำให้คะแนน → แก้ theme css ไฟล์เดียวแล้วเรนเดอร์ทั้งชุด · รูปมืดในเอกสารหน้าขาวต้องเป็นการตัดสินใจที่จดไว้ (เช่น หน้าเปิดบทและปกก็มืด) ไม่ใช่เผลอ
 
@@ -491,7 +503,7 @@ skill นี้คือ house style เดียวของรูปที่�
 
 - **`line-height` ต่ำกว่า 1.5 ไม่ได้** เพราะสระบนกับวรรณยุกต์ซ้อนกัน 2 ชั้นจะโดนตัด ด้วยเหตุผลเดียวกันจึง **ห้ามกำหนดความสูงตายตัวให้กล่องข้อความ**
 - ฟอนต์เรียงตามนี้ `"Noto Sans Thai","IBM Plex Sans Thai",Tahoma,Loma` ซึ่งตั้งไว้ในโครงแล้ว
-รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก · เอกสาร Word ใช้ Tahoma (`branded-document-design` ข้อ 2) รูปในนั้นต่างฟอนต์ได้ · ถ้าเครื่องไม่มีฟอนต์ไทยสักตัว สระจะผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
+รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก · เอกสาร Word ใช้ฟอนต์ไทยของแบรนด์ ถ้าไม่มีจึงใช้ Tahoma (`branded-document-design` ข้อ 2) รูปในนั้นต่างฟอนต์ได้ · ถ้าเครื่องไม่มีฟอนต์ไทยสักตัว สระจะผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
 - **ไทยไม่เว้นวรรคระหว่างคำ** เบราว์เซอร์จึงตัดบรรทัดกลางคำ ถ้าข้อความยาวให้ใส่ `<br>` เอง
 - ตัวอักษรไทยดูเล็กกว่าอังกฤษที่ขนาดเท่ากัน ดังนั้นคำอธิบายอย่าต่ำกว่า 12px
 
@@ -533,7 +545,7 @@ python scripts/check-figure-source.py docs/figures/src       # ทุกรู�
 
 ## 11 · Anti-patterns
 
-- ❌ **ใช้ skill นี้กับรูปในทีม** — เสียเวลา 10 เท่าเพื่อความสวยที่ไม่มีใครต้องการ
+- ❌ **ใช้ skill นี้กับรูปในทีม** — เสียเวลาหลายรอบเพื่อความสวยที่ไม่มีใครต้องการ
 - ❌ **ใช้โลโก้ทางการในลักษณะที่ดูเหมือนผู้ให้บริการรับรอง** — ข้อ 6 และ [icons.md](references/icons.md)
 - ❌ **กล่อง `.focus` 2 กล่อง** — แปลว่ารูปตอบ 2 คำถาม
 - ❌ **ส่งไฟล์ HTML ให้ลูกค้า** — ให้ส่ง PNG ส่วนไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
@@ -547,12 +559,12 @@ python scripts/check-figure-source.py docs/figures/src       # ทุกรู�
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| ไดอะแกรมในเอกสาร markdown | `software-diagrams` |
+| ไดอะแกรมด่วนใน markdown ของ repo ที่ทีมอ่าน (README · Pull Request · โน้ตในโค้ด) | `software-diagrams` (plugin `software-company`) |
 | เลือกวิธีฝังรูปในไฟล์ markdown | `markdown-visuals` |
 | เอารูปไปวางในสไลด์ | `presentation-design` |
 | เอารูปไปวางในไฟล์ Word / PDF | `branded-document-design` |
-| รูปในเอกสาร SRS | `srs-writing` |
-| สีและระยะห่างของหน้าจอแอป (คนละระบบกับรูปนี้) | `ui-craft` |
+| รูปในเอกสาร SRS | `srs-writing` (plugin `software-company`) |
+| สีและระยะห่างของหน้าจอแอป (คนละระบบกับรูปนี้) | `ui-craft` (plugin `software-company`) |
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -647,7 +659,7 @@ HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG �
 
 ## ฟอนต์ในรูปที่ฝังเด็ค (จากข้อ 8)
 
-  รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก รูปจะได้ฟอนต์เดียวกับเนื้อความของเด็ค · เอกสาร Word ใช้ Tahoma ตาม `branded-document-design` ข้อ 2 รูปในนั้นต่างฟอนต์ได้
+  รูปที่จะฝังในเด็ค (`StageDeck` · `html-slide-deck`) ให้ย้าย `"IBM Plex Sans Thai"` ขึ้นเป็นตัวแรก รูปจะได้ฟอนต์เดียวกับเนื้อความของเด็ค · เอกสาร Word ใช้ฟอนต์ไทยของแบรนด์ ถ้าไม่มีจึงใช้ Tahoma ตาม `branded-document-design` ข้อ 2 รูปในนั้นต่างฟอนต์ได้
   ถ้าเครื่องไม่มีสักตัว จะตกไปใช้ฟอนต์ที่วางสระผิดตำแหน่งแบบเงียบ ๆ ดังนั้น**ต้องเรนเดอร์ดูทุกครั้ง**
 
 
@@ -695,7 +707,7 @@ Python เขียน SVG ลงกริดแล้วเรนเดอร�
 
 ข้อเสียคือใช้เวลา เพราะ 1 รูปต้องแก้หลายรอบ ดังนั้นให้ใช้เฉพาะรูปที่คนนอกทีมจะเห็นและเห็นซ้ำ
 
-> **สีเริ่มต้น = ชุดประจำบ้าน** · ถ้า `doc-theme` ไม่ได้กำหนดสีเน้น (accent) เฉพาะงาน ให้ใช้ชุดใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน") ซึ่งเป็น brand `#2A78D6` ชุดเดียวกับสไลด์และเอกสาร
+> **สีหลัก = สีหลักของโปรเจกต์** · หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) แล้วใส่ใน `ACCENT` ของ `theme.py` · ชุดประจำบ้าน `#2A78D6` ใช้เฉพาะเมื่อลำดับนั้นหาไม่เจอเลย
 
 ---
 
@@ -929,7 +941,7 @@ python render.py d01.svg ../01-architecture.png 1400 860
 | `icons/azure/` | 24 — VM · App Service · AKS · Cosmos DB · Blob Storage · Key Vault … |
 | `icons/gcp/` | 21 — Compute Engine · GKE · Cloud Run · BigQuery · Pub/Sub · Firestore … |
 | `icons/k8s/` | 16 — Pod · Deployment · Service · Ingress · ConfigMap · Secret · Node … |
-| `icons/data/` | 18 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
+| `icons/data/` | 17 — PostgreSQL · MySQL · MongoDB · Redis · Elasticsearch · ClickHouse … |
 | `icons/queue/` | 6 — RabbitMQ · Kafka · Celery · NATS · ActiveMQ · EMQX |
 | `icons/infra/` | 26 — Nginx · Docker · HAProxy · Traefik · Istio · firewall · router · Windows · Linux … |
 | `icons/ops/` | 19 — Prometheus · Grafana · Jenkins · GitLab CI · GitHub Actions · Terraform · Vault … |
@@ -1263,7 +1275,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - อ่านทุก `.docx` ใน `docs/`: ตารางคำถาม · ตารางข้อสมมติที่ยังไม่ตัดสิน · ตารางลงนามที่ยัง "รอ" · ป้ายในเนื้อหา · ข้ามประวัติการแก้ไข สารบัญ บรรทัดอธิบายป้าย และ `(รอบหลัง)`
 - แผ่น **สรุป** นับตามเอกสาร × ประเภทด้วยสูตร · แผ่น **รายการค้าง** มีหัวข้อในเอกสาร · ใครตอบ · ตัดสินภายใน · ค่าที่ใช้ไปก่อน · ข้อที่อ้างถึงกัน · ช่อง "สถานะ" และ "คำตอบ" ให้กรอก
 - ประเภท: **เจ้าของตัดสิน** (ค้นเว็บแล้วปิดไม่ได้) · **ทีมตัดสิน** (BA · SA) · **กฎหมาย** · **วัดจริง** (ไม่มีตัวเลขเผยแพร่) · **ลงนาม** — คำถามที่อ้างคำถามของเจ้าของในเอกสารอื่นถูกนับเป็น "เจ้าของตัดสิน" ด้วย
-- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ใน LiteNet v0.5 (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
+- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ในชุดตัวอย่างหนึ่ง (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
 - ผู้ใช้กรอกคำตอบแล้ว → เติมคำตอบลงเอกสารต้นทาง ลบป้าย บันทึกในประวัติการแก้ไข แล้วรันสคริปต์ซ้ำ · ไฟล์นี้เป็นรายการงาน ไม่ใช่ต้นฉบับ อย่าแก้คำตอบในไฟล์นี้แทนเอกสาร
 
 **สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
@@ -1281,7 +1293,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
 - รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
 
-**หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+**หัวรูปทุกใบต้องมีครบ 6 อย่าง** — โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ (รายละเอียดอยู่ใน `diagram-figures` ข้อ 3)
 รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
 
 ---
@@ -1291,8 +1303,10 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
 
 ```markdown
-<!-- doc-theme: accent=#5B4BE8 -->
+<!-- doc-theme: accent=#2A78D6 -->
 ```
+
+(ตัวอย่างใช้สีประจำบ้าน `#2A78D6` — แทนด้วยสีหลักของโปรเจกต์)
 
 `branded-document-design` · `presentation-design` · `diagram-figures`
 อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
@@ -1313,7 +1327,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
 - [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
 - [ ] รัน `scripts/open_items.py` แล้วทะเบียนจุดค้างไม่มีแถวสถานะ "เปิด" (หรือผู้ว่าจ้างรับรู้ทุกแถวที่ยังเปิด)
-- [ ] `_to_delete/` ว่าง หรือถูกลบไปแล้ว
+- [ ] บอกผู้ใช้ว่ามีอะไรค้างใน `_to_delete/` (ไม่ลบเอง — ลบเมื่อผู้ใช้สั่งเท่านั้น)
 
 ---
 
@@ -1333,7 +1347,7 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ `technical-writer` (tutorial · API reference · release notes · README ดู `project-bootstrap`)
 
 
 ## reference: ecosystem.md
@@ -1436,82 +1450,37 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ## Standard Outputs
 
-### README Template
+### README
 
-```markdown
-# Project Name
-
-> One-line description that fits in a tweet.
-
-[![badges]](#)
-
-**Demo:** [link] · **Docs:** [link] · **Discord:** [link]
-
----
-
-## Features
-
-- What makes this special — feature 1
-- Killer feature 2
-- Reassuring feature 3
-
-## Quick Start
-
-\`\`\`bash
-npm install package-name
-\`\`\`
-
-\`\`\`typescript
-import { thing } from 'package-name';
-
-const result = thing({ option: 'value' });
-\`\`\`
-
-That's it. You're done.
-
-## Documentation
-
-- [Getting Started](#) — 10-minute tutorial
-- [How-To Guides](#) — Solve specific problems
-- [API Reference](#) — Full API spec
-- [Concepts](#) — Why and how it works
-
-## Contributing
-
-See [CONTRIBUTING.md](#).
-
-## License
-
-MIT
-```
+ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) ที่ตอบ 5 คำถาม: คืออะไร · ต้องมีอะไรบนเครื่อง (เวอร์ชัน) · ติดตั้งและรันอย่างไร · รัน test อย่างไร · เอกสารและคนที่ต้องถามอยู่ที่ไหน
 
 ### Tutorial Template
 
-```markdown
+````markdown
 # Tutorial: Build Your First X in 10 Minutes
 
 > **What you'll learn:** by the end, you'll have built Y and understand Z.
 
 ## What You'll Need
 
-- Node.js 18+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
 - A free account at example.com
 - 10 minutes
 
 ## Step 1: Set Up
 
 Run:
-\`\`\`bash
+```bash
 npx create-thing my-project
 cd my-project
-\`\`\`
+```
 
 > **What just happened?** Brief explanation.
 
 You should see:
-\`\`\`
+```
 ✓ Project created
-\`\`\`
+```
 
 ## Step 2: Configure
 
@@ -1528,11 +1497,11 @@ You've built X. Try these next:
 - [Add feature A](#how-to-add-a) (how-to)
 - [Understand B](#concept-b) (explanation)
 - [Full API](#reference) (reference)
-```
+````
 
 ### API Reference Template (per endpoint)
 
-```markdown
+````markdown
 ## POST `/api/v1/resource`
 
 Create a new resource.
@@ -1543,7 +1512,7 @@ Required. Bearer token in `Authorization` header.
 
 ### Request
 
-\`\`\`http
+```http
 POST /api/v1/resource HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -1552,7 +1521,7 @@ Authorization: Bearer <token>
   "name": "string (required)",
   "tags": ["string (optional)"]
 }
-\`\`\`
+```
 
 ### Parameters
 
@@ -1563,13 +1532,13 @@ Authorization: Bearer <token>
 
 ### Response: 201 Created
 
-\`\`\`json
+```json
 {
   "id": "res_abc123",
   "name": "...",
   "created_at": "2025-01-15T10:30:00Z"
 }
-\`\`\`
+```
 
 ### Errors
 
@@ -1581,18 +1550,23 @@ Authorization: Bearer <token>
 
 ### Code Examples
 
-\`\`\`typescript
+```typescript
 const res = await fetch('/api/v1/resource', {
   method: 'POST',
-  headers: { Authorization: `Bearer ${token}` },
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
   body: JSON.stringify({ name: 'My Resource' })
 });
-\`\`\`
 ```
+````
 
 ### Release Notes Template
 
-```markdown
+> Breaking Changes ต้องอยู่ก่อนหัวข้ออื่นเสมอ (ต่อจาก Highlights) — กฎเต็มของ release notes อยู่ใน skill `release-notes`
+
+````markdown
 # Release v2.1.0 — YYYY-MM-DD
 
 ## Highlights
@@ -1600,8 +1574,24 @@ const res = await fetch('/api/v1/resource', {
 > The TL;DR for busy readers.
 
 - **New:** X feature — try it: `command`
-- **Improved:** Y is now 50% faster
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
 - **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
 
 ## 🆕 New Features
 
@@ -1609,10 +1599,10 @@ const res = await fetch('/api/v1/resource', {
 
 Description with user-facing benefit.
 
-\`\`\`bash
+```bash
 # Example usage
 command --new-flag
-\`\`\`
+```
 
 [Read the docs](#)
 
@@ -1626,26 +1616,10 @@ command --new-flag
 - Fix issue where ... ([#1234](#))
 - Resolve crash when ... ([#5678](#))
 
-## Breaking Changes
-
-### `api.oldMethod()` removed
-
-**Before:**
-\`\`\`typescript
-api.oldMethod(arg)
-\`\`\`
-
-**After:**
-\`\`\`typescript
-api.newMethod({ arg })
-\`\`\`
-
-[Migration guide](#)
-
 ## Contributors
 
 Thanks to: @alice, @bob, @charlie
-```
+````
 
 
 ---
@@ -1943,18 +1917,7 @@ Phase 1:    Phase 2:           Phase 3:
 
 ## 3. High-Level Architecture
 
-\`\`\`mermaid
-flowchart LR
-    User([User]) --> CDN[CDN]
-    CDN --> LB[Load Balancer]
-    LB --> API[API Gateway]
-    API --> Auth[Auth Service]
-    API --> App[App Service]
-    App --> Cache[(Redis)]
-    App --> DB[(PostgreSQL)]
-    App --> Queue[Message Queue]
-    Queue --> Worker[Background Worker]
-\`\`\`
+_[รูปภาพรวมสถาปัตยกรรม: User → CDN → Load Balancer → API Gateway → Auth / App → Redis · PostgreSQL · Queue → Worker. วาดเป็นรูปสไตล์เดียวกับเอกสารด้วย skill `diagram-figures` ไม่ใช้ Mermaid]_
 
 ## 4. Components
 
@@ -1968,27 +1931,13 @@ flowchart LR
 
 ## 5. Data Flow
 
-\`\`\`mermaid
-sequenceDiagram
-    autonumber
-    actor U as User
-    participant API
-    participant App
-    participant DB
-
-    U->>API: Request
-    API->>App: Validate + forward
-    App->>DB: Query
-    DB-->>App: Result
-    App-->>API: Response
-    API-->>U: 200 OK
-\`\`\`
+_[รูปลำดับ Data Flow: User → API → App → DB แล้วตอบกลับ. วาดด้วย skill `diagram-figures`]_
 
 ## 6. Tech Stack
 
 | Layer | Technology | Rationale |
 |-------|-----------|-----------|
-| Frontend | React 18 + Next.js 14 | SSR, ecosystem |
+| Frontend | React + Next.js (ใส่เวอร์ชันที่ใช้จริง) | SSR, ecosystem |
 | Backend | Node.js + NestJS | Team expertise |
 | Database | PostgreSQL 16 | ACID + JSON |
 | Cache | Redis 7 | Standard |
@@ -2065,7 +2014,7 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Small/medium team (< 30 engineers)
+- ✅ Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
 - ✅ You need to ship changes fast
 - ✅ Operations needs are simple
 - ✅ All parts can deploy together
@@ -2112,7 +2061,7 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 - ❌ Business areas don't have clear boundaries yet
 
 **Hidden costs:**
-- 💸 Much harder to operate (about 5x the ops effort)
+- 💸 Much harder to operate (more services to deploy, monitor and debug)
 - 💸 Network latency between services
 - 💸 Transactions across services are hard
 - 💸 Bugs are harder to trace
@@ -2219,7 +2168,7 @@ Browser cache ──► CDN ──► Reverse Proxy ──► App Cache (Redis) 
        Closest to user (fastest)              Furthest (last resort)
 ```
 
-Each tier is roughly 10x faster than the next. CDN = content delivery network.
+Each tier is faster than the next (the gap depends on your system; measure it). CDN = content delivery network.
 
 ### Idempotency
 
@@ -2247,5 +2196,5 @@ When proposing architecture, compare options:
 | Team skill | 20% | 9 | 5 | 7 |
 | Operations | 15% | 8 | 5 | 7 |
 | Future-proof | 15% | 6 | 9 | 7 |
-| **Total** | 100% | **7.95** | 7.10 | 7.20 |
+| **Total** | 100% | **8.10** | 7.00 | 7.20 |
 ```

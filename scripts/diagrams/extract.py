@@ -8,8 +8,12 @@ import json, os, re
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(os.path.dirname(__file__), "data")
-# skill กลางที่ sync-superuser คัดลอกไปทุก plugin
-CORE = ("superuser", "human-writing", "agent-patterns", "answer-shape")
+# skill กลาง = รายการ SHARED_ONLY_IN_SUPERUSER (plugin superuser) + SHARED_ONLY_IN_TOOLKIT (plugin sqt-toolkit) ใน sync-superuser.mjs — ทุก plugin ได้ทาง dependencies + skill superuser
+_SYNC = open(os.path.join(ROOT, "scripts", "sync", "sync-superuser.mjs"), encoding="utf-8").read()
+def _list(const):
+    return tuple(re.findall(r'"skills/([a-z0-9-]+)"', _SYNC.split(f"export const {const}", 1)[1].split("];", 1)[0]))
+SHARED = _list("SHARED_ONLY_IN_SUPERUSER") + _list("SHARED_ONLY_IN_TOOLKIT")
+CORE = ("superuser",) + SHARED
 CORE_AGENTS = ("brainstormer", "reviewer", "learning-reviewer")
 TICKS = re.compile(r"`/?([a-z0-9:-]+)`")
 
@@ -36,7 +40,8 @@ def read_skills(base):
 
 def read_agents(base, known):
     agents = []
-    for f in sorted(os.listdir(os.path.join(base, "agents"))):
+    agents_dir = os.path.join(base, "agents")  # plugin ที่เป็น skill ล้วน (sqt-toolkit) ไม่มี agents/
+    for f in sorted(os.listdir(agents_dir)) if os.path.isdir(agents_dir) else []:
         meta, body = frontmatter(read(os.path.join(base, "agents", f)))
         used = [s for s in dict.fromkeys(TICKS.findall(body)) if s in known]
         agents.append(dict(name=f[:-3], model=meta.get("model", ""), core=f[:-3] in CORE_AGENTS,
@@ -51,7 +56,7 @@ def parse_who(who, agents):
 
 
 def read_playbook(path, skills, commands, agents, playbooks):
-    text = read(path)
+    text = re.sub(r"<!--.*?-->", "", read(path))  # ไม่ให้ป้ายบล็อก sync ไปโผล่ในรูป
     title = text.split("\n", 1)[0]
     m = re.match(r"# playbook · ([a-z0-9-]+) — (.+)", title)
     when = re.search(r"^ใช้เมื่อ: (.+)$", text, re.M)
@@ -91,7 +96,7 @@ def read_plugin(name):
     meta = json.loads(read(os.path.join(base, ".claude-plugin", "plugin.json")))
     agents = read_agents(base, set(skills) | set(commands))
     ref = os.path.join(base, "skills", "superuser", "references")
-    files = sorted(f for f in os.listdir(ref) if f.startswith("playbook-") and f != "playbook-template.md")
+    files = sorted(f for f in os.listdir(ref) if f.startswith("playbook-") and f != "playbook-template.md") if os.path.isdir(ref) else []
     pb_names = {f[9:-3] for f in files}
     names = {a["name"] for a in agents}
     playbooks = [read_playbook(os.path.join(ref, f), set(skills), set(commands), names, pb_names) for f in files]
@@ -100,17 +105,22 @@ def read_plugin(name):
         # เหมือนต้นฉบับกลางทุกตัวอักษร → วาดครั้งเดียวในรูปของ superuser
         same = os.path.exists(os.path.join(core_ref, f)) and read(os.path.join(ref, f)) == read(os.path.join(core_ref, f))
         pb["shared"] = same and name != "superuser"
-    handoff = re.search(r"\*\*งานข้ามสาขา\*\* \| (.+?) \|", read(os.path.join(base, "skills", "superuser", "SKILL.md")))
-    plugins = set(os.listdir(os.path.join(ROOT, "plugins")))
+    su = os.path.join(base, "skills", "superuser", "SKILL.md")
+    handoff = re.search(r"\*\*งานข้ามสาขา\*\* \| (.+?) \|", read(su)) if os.path.exists(su) else None
+    # ปลายทางงานข้ามสาขานับเฉพาะ plugin ที่อยู่ในชุดรูป (มี skill superuser) · sqt-toolkit เป็น skill ล้วน ไม่มีตรา
+    plugins = {p for p in os.listdir(os.path.join(ROOT, "plugins")) if os.path.exists(os.path.join(ROOT, "plugins", p, "skills", "superuser", "SKILL.md"))}
     cross = [p for p in dict.fromkeys(TICKS.findall(handoff.group(1))) if p in plugins] if handoff else []
     return dict(plugin=name, version=meta.get("version", ""), description=meta.get("description", ""), cross=cross,
-                skills=[s for s in skills if s not in CORE], core_skills=[s for s in skills if s in CORE],
+                skills=[s for s in skills if s not in CORE], core_skills=list(CORE),
                 commands=commands, agents=agents, playbooks=playbooks)
 
 
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     for name in sorted(os.listdir(os.path.join(ROOT, "plugins"))):
+        # plugin ที่เป็น skill ล้วน (sqt-toolkit) ไม่มี agent playbook หรือ flow ให้วาด → ไม่อยู่ในชุดรูป
+        if not os.path.exists(os.path.join(ROOT, "plugins", name, "skills", "superuser", "SKILL.md")):
+            continue
         data = read_plugin(name)
         with open(os.path.join(OUT, f"{name}.json"), "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=1)

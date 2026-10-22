@@ -80,6 +80,10 @@ svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .todo .note{margin-top:4px}
 .todo .i{color:var(--pc)}
 .note{font-size:var(--fs-xs);color:var(--ink3);text-align:center;margin-top:8px}
+.plan{padding:12px 16px;border-top:4px solid var(--pc);display:grid;grid-template-columns:1fr 16px 1fr 16px 1fr 16px 1fr;gap:8px;align-items:start}
+.plan .ar{color:var(--pc);font-weight:600;align-self:center;text-align:center}
+.plan .t{color:var(--pc);margin-bottom:4px;text-align:center}
+.plan .d{font-size:var(--fs-xs);text-align:center}
 
 /* step 3 */
 .loop{display:grid;grid-template-columns:repeat(5,1fr);gap:24px}
@@ -98,11 +102,21 @@ svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .tier small{display:block;font-size:var(--fs-xs);color:var(--ink2);line-height:1.5;margin-top:4px}
 .tiercap{font-size:var(--fs-xs);color:var(--ink3);text-align:center;margin-bottom:8px}
 .tiernote{font-size:var(--fs-xs);color:var(--ink2);text-align:center;margin-top:8px;line-height:1.6}
+.mgmt{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.mg{padding:12px 16px;border-top:4px solid var(--pc)}
+.mg .t{margin-bottom:4px;text-align:center}
+.mg .d{font-size:var(--fs-xs);text-align:center}
+.mg.ok{background:var(--green-bg);border-color:var(--green-line);border-top-color:var(--green)}
+.mg.ok .t{color:var(--green)}
+.brief{list-style:none;font-size:var(--fs-xs);color:var(--ink2);line-height:1.6;counter-reset:b}
+.brief li{counter-increment:b}
+.brief li::before{content:counter(b) " · ";color:var(--pc);font-weight:600}
+.brief b{color:var(--ink)}
 .plug{padding:12px 16px}
 .plug .t{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .chips{display:flex;flex-wrap:wrap;gap:4px}
 .chip{white-space:nowrap;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:0 8px;line-height:24px;font-size:var(--fs-xs);color:var(--ink2)}
-.machine{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.machine{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
 .mc{padding:12px 16px;text-align:center}
 .mc .chip{border-color:var(--pc);color:var(--ink)}
 .mc.sb{border-top:4px solid var(--green)}
@@ -174,7 +188,7 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 <div class="hd">
   <div>
     <h1>SuperUser <span>—</span> วิธีทำงานของทีม agent</h1>
-    <p>หัวหน้าทีมรับงาน · เลือก playbook · แจกงานลูกทีม · พิสูจน์กับของจริง · ส่งต่อได้ · เรียนรู้ทุกรอบ</p>
+    <p>จัดขนาดและงบ → ใบสั่งงาน 5 ข้อ → แจกลูกทีม → ตรวจซ้ำจนผ่าน → ส่งมอบสั้น → เทียบคาดกับจริง แล้วจำ</p>
   </div>
   <div class="src">skills/superuser/SKILL.md</div>
 </div>
@@ -191,14 +205,14 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
     <div class="card inp" id="in2"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m14 7-4 10"/></svg><div><b>slash command</b><small>ทางลัด</small></div></div>
     <div class="card inp" id="in3"><svg class="i" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><div><b>ไฟล์ใน prompt/</b><small>ชุดเอกสารโปรเจกต์</small></div></div>
     <div class="card inp" id="in4"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><div><b>CLAUDE.global.md</b><small>scripts/install/ · กฎประจำเครื่อง</small></div></div>
-    <div class="card inp" id="in5"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></svg><div><b>.superuser/inbox/</b><small>ข้อความจากคน/bot อื่น</small></div></div>
+    <div class="card inp" id="in5"><svg class="i" viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></svg><div><b>inbox/</b><small>โมดูล inbox · ข้อความจากคนหรือ bot อื่น</small></div></div>
   </div>
   <div class="gap" style="height:32px"></div>
   <div class="lead" id="lead">
     <div class="t">หัวหน้าทีม (SuperUser)</div>
     <div class="chain"><span>ผู้ใช้ · เจ้าของรายการรออนุมัติ</span>→<span class="me">หัวหน้าทีม · 1 คนต่อโปรเจกต์</span>→<span>ลูกทีม (subagent)</span></div>
-    <div class="d" style="margin-bottom:8px">agent สูงสุดของโปรเจกต์ · รับงานแทนคน · เรียก <code>/software-company:superuser</code> หรือ "ใช้ superuser"</div>
-    <div class="readfirst"><b>อ่านก่อนเริ่ม</b> &nbsp;① CONTEXT.md หัวข้อ "รับงานต่อ" &nbsp;② .superuser/inbox/ &nbsp;③ ~/.claude/superuser-style.md (ถ้ามี)</div>
+    <div class="d" style="margin-bottom:8px">เก่ง 4 เรื่อง: แจกงาน · ประเมินลูกทีม · จัดการงาน · ตรวจซ้ำจนสำเร็จ<br>เรียก <code>/software-company:superuser</code> หรือ "ใช้ superuser" · เปิดแกน <code>superuser:superuser</code> ก่อน</div>
+    <div class="readfirst"><b>อ่านก่อนเริ่ม</b> &nbsp;① CONTEXT.md "ความคืบหน้า" · "รับงานต่อ" &nbsp;② superuser-style.md (ถ้ามี) &nbsp;③ config.json ว่าโมดูลไหนเปิด</div>
   </div>
 </div>
 
@@ -207,18 +221,25 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 <!-- 2 -->
 <div class="step">
   <div class="num n2">2</div>
-  <div class="sh"><svg class="i" viewBox="0 0 24 24"><path d="M10 6h11M10 12h11M10 18h11M3 6l1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg>เลือกวิธีทำ</div>
-  <div class="sub">เลือก 1 ใน 16 playbook แล้วคัดขั้นตอนลง todo</div>
+  <div class="sh"><svg class="i" viewBox="0 0 24 24"><path d="M10 6h11M10 12h11M10 18h11M3 6l1 1 2-2M3 12l1 1 2-2M3 18l1 1 2-2"/></svg>เข้าใจงาน · เลือกวิธีทำ</div>
+  <div class="sub">ก่อนแตะงาน: 3 บรรทัด → จัดขนาด → เลือกงบ → คาดไว้ก่อน → เลือก 1 playbook</div>
+  <div class="card plan" id="plan">
+    <div><div class="t">3 บรรทัดก่อนแตะงาน</div><div class="d"><b>เป้า</b> · <b>เสร็จเมื่อ</b> · <b>เสี่ยง</b><br>ย้อนไม่ได้ → หัวหน้าทำหรือตรวจเอง</div></div><div class="ar">→</div>
+    <div><div class="t">จัดขนาด</div><div class="d"><b>เล็ก</b> หัวหน้าทำเอง<br><b>กลาง</b> playbook · ลูกทีม 1–4<br><b>ใหญ่</b> brainstormer เสนอ 2–3 ทาง · ลูกทีม 5–10</div></div><div class="ar">→</div>
+    <div><div class="t">เลือกงบ</div><div class="d"><b>เร็ว</b> ลูกทีมเล็ก · ตรวจ 1 รอบ<br><b>สมดุล</b> ค่าเริ่ม · ตามงาน<br><b>คุณภาพ</b> ขึ้น 1 ระดับ · opus ตรวจทุกรอบ</div></div><div class="ar">→</div>
+    <div><div class="t">คาดไว้ก่อน</div><div class="d">ลูกทีม N · รอบตรวจ N · ระดับ<br>จดก่อนแจกงาน<br>ตอนจบเทียบกับจริงและ token</div></div>
+  </div>
+  <div class="gap" style="height:24px"></div>
   <div class="groups" id="groups">
-    <div class="card grp"><h4>เข้าใจ</h4><div class="pbs"><div class="pb">investigation</div><div class="pb">pickup-and-pause</div></div></div>
+    <div class="card grp"><h4>เข้าใจ</h4><div class="pbs"><div class="pb">investigation</div><div class="pb">research</div><div class="pb">pickup-and-pause</div></div></div>
     <div class="card grp"><h4>สร้างและแก้</h4><div class="pbs two"><div class="pb">new-project</div><div class="pb">feature</div><div class="pb">bug-fix</div><div class="pb">refactor</div><div class="pb">performance</div><div class="pb">visual-parity</div><div class="pb">prototype</div></div></div>
     <div class="card grp" id="g3"><h4>ตรวจและส่ง</h4><div class="pbs"><div class="pb">review</div><div class="pb">ship</div></div></div>
-    <div class="card grp"><h4>งานชุด · งานยาว</h4><div class="pbs"><div class="pb">project-docs</div><div class="pb">unattended-run</div></div></div>
+    <div class="card grp"><h4>งานชุด · งานยาว</h4><div class="pbs"><div class="pb">project-docs</div><div class="pb">document</div><div class="pb">unattended-run</div></div></div>
     <div class="card grp" id="g5"><h4>ดูแลระบบ</h4><div class="pbs"><div class="pb">skill-authoring</div><div class="pb">learn-from-session</div><div class="pb">housekeeping</div></div></div>
   </div>
   <div class="gap" style="height:24px"></div>
   <div class="card todo" id="todo"><div class="tl"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="m8 12 3 3 5-6"/></svg>คัดขั้นตอนของ playbook ลง todo <b>ตรงตัว</b> ไม่สรุปย่อ</div>
-  <div class="note">ไม่มีตัวไหนตรง → เขียนเองตามโครงห้าขั้น · คำถามเล็กหรือคุยทั่วไป → ตอบตรง ๆ ไม่เปิด playbook</div></div>
+  <div class="note">research · document · pickup-and-pause · review · unattended-run · learn-from-session มาจากแกน · ไม่มีตัวตรง → ประกอบเองจาก playbook-template · งานใหญ่เขียน BRIEF.md ก่อน</div></div>
 </div>
 
 <!-- 3 -->
@@ -227,7 +248,7 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
   <div class="sh"><svg class="i" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/></svg>ลงมือทีละขั้น</div>
   <div class="sub">ทุกขั้นจบด้วยการตรวจ · งานหนักทำใน sandbox</div>
   <div class="loop" id="loop">
-    <div class="card lc" id="l1"><div class="t">เข้าใจ</div><div class="d">system-analyst<br>อ่านอย่างเดียว<br>context-budget</div></div>
+    <div class="card lc" id="l1"><div class="t">เข้าใจ</div><div class="d">code-orientation<br>แผนที่ 10 บรรทัด<br>skill ตาม stack</div></div>
     <div class="card lc" id="l2"><div class="t">ออกแบบ</div><div class="d">data shape ก่อน<br>ลองหลายทาง<br>prototype</div></div>
     <div class="card lc" id="l3"><div class="t">ลงมือ</div><div class="d">38 agents ตามบท<br>+ agent สาขา<br>แบ่งงานขนาน<br>สคริปต์แทนมือ</div></div>
     <div class="card lc proof" id="l4"><div class="t">พิสูจน์</div><div class="d">verify skill<br>รีวิว ห้ามข้าม<br>security-gate</div></div>
@@ -236,18 +257,24 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
   <div class="gap" style="height:48px"></div>
 
   <div class="tiers" id="tiers">
-    <div class="card tb leadb" id="tl"><div class="t">หัวหน้าทีม แจกงาน</div><div class="d">แบ่งงาน · เลือก agent ตามบท · เลือกระดับโมเดล · ส่ง path ไม่ยัดเนื้อหา · เขียนไฟล์กลางคนเดียว</div></div>
+    <div class="card tb leadb" id="tl"><div class="t">หัวหน้าทีม แจกงาน</div><div class="d">แบ่งงาน · ตัวใหม่ทุกงาน · ไม่พึ่งกัน → ส่งพร้อมกัน · ส่ง path ไม่ส่งเนื้อหา · เขียนไฟล์กลางคนเดียว</div></div>
     <div>
-      <div class="tiercap">ระดับโมเดล — หัวหน้าเลือกตามงาน</div>
+      <div class="tiercap">ระดับโมเดล + effort — งบขยับทั้งตาราง</div>
       <div class="tierset" id="tierset">
-        <div class="tier"><b>ใหญ่</b><div class="m">opus</div><small>ดีไซน์ข้ามระบบ · root cause ยาก · รีวิวหาจุดผิด</small></div>
-        <div class="tier"><b>กลาง</b><div class="m">sonnet · ค่าเริ่ม</div><small>โค้ดและเอกสารทั่วไป · feature · bug fix</small></div>
-        <div class="tier"><b>เล็ก</b><div class="m">haiku</div><small>งานกลไก · ค้นไฟล์ · แก้ชื่อหลายจุด</small></div>
+        <div class="tier"><b>ใหญ่</b><div class="m">opus + high</div><small>ดีไซน์ข้ามระบบ · root cause ยาก · รีวิวหาจุดผิด</small></div>
+        <div class="tier"><b>กลาง</b><div class="m">sonnet + medium · ค่าเริ่ม</div><small>โค้ดและเอกสารทั่วไป · feature · bug fix</small></div>
+        <div class="tier"><b>เล็ก</b><div class="m">haiku + low</div><small>งานกลไก · ค้นไฟล์ · แก้ชื่อหลายจุด</small></div>
       </div>
     </div>
-    <div class="card tb" id="ts"><div class="t">ลูกทีม (subagent)</div><div class="d">ทำเฉพาะชิ้นที่ได้รับ · รายงานกลับหัวหน้าเท่านั้น · ไม่คุยกับผู้ใช้ · ไม่สั่ง agent อื่นต่อ</div></div>
+    <div class="card tb" id="ts"><div class="t">ลูกทีม (subagent)</div><div class="d">ทำเฉพาะชิ้นตามใบสั่งงาน · ส่งกลับ ≤ 40 บรรทัด · ไม่คุยกับผู้ใช้ · ไม่สั่งตัวอื่นต่อ</div></div>
   </div>
-  <div class="tiernote">หัวหน้า<b>ตรวจกับของจริง</b>ก่อนรับ — "เสร็จแล้ว" จาก subagent ยังไม่ใช่หลักฐาน · เล็กพลาด → ขยับขึ้นหนึ่งระดับ<br>สลับโมเดลกลางทางได้ (ค่ายเดียวกันหรือข้ามค่าย) หลังทำจุดส่งต่อใน CONTEXT.md</div>
+  <div class="tiernote">พลาด → ขยับ effort ขึ้น 1 ขั้นก่อน · พลาดอีก → ขยับโมเดล · ไม่ลองซ้ำแบบเดิม</div>
+  <div class="gap" style="height:16px"></div>
+  <div class="mgmt">
+    <div class="card mg" id="k1"><div class="t">ใบสั่งงาน 5 ข้อ</div><ol class="brief"><li><b>เป้า</b> ชิ้นนี้ให้ได้อะไร</li><li><b>ขอบเขต</b> แตะอะไร ห้ามแตะอะไร</li><li><b>เสร็จเมื่อ</b> ตรวจด้วยอะไร</li><li><b>กติกาเดียวกัน</b> ชื่อ รูปแบบ ภาษา</li><li><b>ส่งกลับ</b> ≤ 40 บรรทัด ไม่เล่ากระบวนการ</li></ol><div class="small">อยู่ในข้อความส่งงาน · ไม่มีใบ ไม่ส่ง</div></div>
+    <div class="card mg ok" id="k2"><div class="t">ประเมินลูกทีม</div><div class="d">ทุกชิ้นได้คะแนน ผ่าน/แก้/ทำใหม่<br>หัวหน้าตรวจเองเทียบ "เสร็จเมื่อ"<br>ถนัด · พลาดบ่อย · ระดับที่พอ → TEAM.md<br>พลาดเรื่องเดิม 2 ครั้ง → ลดขอบเขตหรือขยับระดับ</div></div>
+    <div class="card mg ok" id="k3"><div class="t">ตรวจซ้ำจนผ่าน</div><div class="d">reviewer ตัวใหม่ทุกรอบ ไม่ส่งความเห็นหัวหน้าไป<br>กลาง ≤ 3 รอบ · ใหญ่หรือเสี่ยง ≤ 5 รอบ<br>ค่าเริ่ม sonnet + medium · opus + high เมื่องานใหญ่ รอบสุดท้าย หรืองบคุณภาพ<br>งานเล็กหัวหน้าตรวจเอง ใส่ "ข้ามรีวิว:"</div></div>
+  </div>
   <div class="gap" style="height:16px"></div>
 
   <div class="card plug">
@@ -268,14 +295,14 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 <div class="step">
   <div class="num n4">4</div>
   <div class="sh"><svg class="i" viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><circle cx="12" cy="19" r="2"/><path d="M6 7v2a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V7M12 12v5"/></svg>ก่อนตัดสินใจ</div>
-  <div class="sub">ไม่หยุดงานเพื่อถาม — ดูว่าย้อนกลับได้ไหม รู้หรือยัง</div>
+  <div class="sub">ถามแบบเลือกคำตอบครั้งเดียวตอนเริ่ม แล้วไม่หยุดถาม · กติกาเต็มใน autonomy.md</div>
   <div class="gap" style="height:16px"></div>
   <div class="dec" id="dec">
     <div class="card dc" id="d1"><div class="t">ย้อนกลับได้ → ทำเลย</div><div class="d">แก้ไฟล์ · สร้าง branch · รัน test<br>ร่างเอกสาร · ทุกอย่างใน sandbox</div></div>
-    <div class="card dc" id="d2"><div class="t">ไม่รู้ → ค้นเอง</div><div class="d">ต้อง <b>≥3 แหล่งน่าเชื่อถือ</b> ยืนยันตรงกัน<br>ไม่ครบ = ทางที่ย้อนง่ายสุด + (รอยืนยัน)<br><span class="small">ลง decision-log ทุกครั้ง</span></div></div>
+    <div class="card dc" id="d2"><div class="t">ไม่รู้ → ค้นเอง</div><div class="d">ต้อง <b>≥3 แหล่งน่าเชื่อถือ</b> ยืนยันตรงกัน<br>ไม่ครบ = ทางที่ย้อนง่ายสุด + (รอยืนยัน)<br>กระทบงาน → โหวต 3 agent เสียงข้างมากชนะ<br><span class="small">ลง decision-log ทุกครั้ง</span></div></div>
     <div class="dc amb" id="d3"><div class="t">ย้อนไม่ได้ → รออนุมัติ</div><div class="d">เตรียมคำสั่งไว้ ทำส่วนอื่นต่อ ไม่หยุดงาน</div>
       <div class="achips"><span class="achip">deploy</span><span class="achip">ลบของผู้ใช้</span><span class="achip">commit</span><span class="achip">push</span><span class="achip">merge</span><span class="achip">ส่งออกนอก</span><span class="achip">ค่าลับจริง</span><span class="achip">จ่ายเงิน</span><span class="achip">ติดตั้งทั้งเครื่อง</span></div>
-      <div class="small">อนุญาตล่วงหน้าได้บางข้อ</div></div>
+      <div class="small">อนุญาตล่วงหน้าได้บางข้อ</div><div class="small" style="margin-top:8px"><b>รู้จังหวะหยุด:</b> ครบรอบตรวจยังไม่ผ่าน → หยุด สรุป 2–3 ทางให้ผู้ใช้เลือก</div></div>
   </div>
 </div>
 
@@ -288,9 +315,9 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
   <div class="sub">คนหรือ bot ตัวถัดไปอ่านไฟล์ ก็รู้สถานะและทำต่อได้</div>
   <div class="gap" style="height:8px"></div>
   <div class="out" id="out">
-    <div class="card oc" id="o1"><div class="t">คำตอบตอนจบ</div><div class="d">ผลต่อคนใช้ก่อน<br>ป้าย วัดจริง · อนุมาน · เดา<br>ข้อเสนอปรับปรุง ≤3</div></div>
+    <div class="card oc" id="o1"><div class="t">คำตอบตอนจบ</div><div class="d">3 ระดับ: คำเดียว · 3 บรรทัด · รายงานปิดงาน<br>ป้าย ตรวจจริง · จากแหล่ง · อนุมาน · ยังไม่ได้ตรวจ<br>คาด → จริง + token จาก log/SUMMARY.md</div></div>
     <div class="card oc" id="o2"><div class="t">docs/BUILD-PLAN.md</div><div class="d">สถานะ · รออนุมัติ<br>ค้างอยู่ · ตัดสินใจ</div></div>
-    <div class="card oc" id="o3"><div class="t">CONTEXT.md</div><div class="d">รับงานต่อ — คนหรือ bot ค่ายอื่น<br>อ่านแล้วทำต่อได้<br>AGENTS.md / GEMINI.md ชี้มา</div></div>
+    <div class="card oc" id="o3"><div class="t">CONTEXT.md</div><div class="d">ความคืบหน้า · รับงานต่อ<br>ตาราง "การตัดสินใจ" + บรรทัดคาด<br>AGENTS.md / GEMINI.md ชี้มา</div></div>
     <div class="oc amb" id="o4"><div class="t">PR ขึ้น branch หลัก</div><div class="d">playbook ship<br>merge เมื่อคนอนุมัติ<br>(รออนุมัติ)</div></div>
   </div>
 </div>
@@ -301,15 +328,15 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 <div class="step" style="margin-bottom:0">
   <div class="num n6">6</div>
   <div class="sh"><svg class="i" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.3h6c0-1 .4-1.8 1-2.3A7 7 0 0 0 12 2z"/></svg>เรียนรู้</div>
-  <div class="sub">ครั้งต่อไปดีขึ้นทุกรอบ · ผิดซ้ำต้องเกิดไม่ได้อีก</div>
+  <div class="sub">หัวหน้าเรียนรู้ตัวเองทุกงาน · ทีมเปลี่ยนเมื่อผู้ใช้ตัดสิน</div>
   <div class="gap" style="height:8px"></div>
   <div class="learn" id="learn">
-    <div class="card gc" id="e1"><div class="t">IMPROVEMENTS.md</div><div class="d">จดทันทีที่เจอ<br>ไม่รอจบงาน</div></div>
-    <div class="card gc" id="e2"><div class="t">learn-from-session</div><div class="d">หลังงานใหญ่จบ<br>อ่าน IMPROVEMENTS.md ก่อน</div></div>
-    <div class="card gc" id="e3"><div class="t">ผิดซ้ำ → ทำเป็นการตรวจ</div><div class="d">lint · type · test</div></div>
-    <div class="card gc" id="e4"><div class="t">บทเรียน → แก้ SKILL.md</div><div class="d">เสนอให้คนดูก่อนแก้</div></div>
+    <div class="card gc" id="e1"><div class="t">ระหว่างงาน</div><div class="d">ผู้ใช้แก้ → แก้ชิ้นที่ผิดแบบเดียวกันให้หมด<br>ของใหม่ → IMPROVEMENTS.md</div></div>
+    <div class="card gc" id="e2"><div class="t">หัวหน้าเทียบคาดกับจริง</div><div class="d">ต่างเกิน 2 เท่าหรือต่างซ้ำ<br>→ LEAD-PLAYBOOK.md<br>เรื่องลูกทีม → TEAM.md</div></div>
+    <div class="card gc" id="e3"><div class="t">learning-reviewer</div><div class="d">ตัวใหม่ ตอนจบงาน<br>ควรปรับทีม ≤ 3<br>ผู้ใช้เลือก รับ · ไม่รับ · ไว้ทีหลัง</div></div>
+    <div class="card gc" id="e4"><div class="t">ผู้ใช้สั่ง "รวมบทเรียน"</div><div class="d">อ่านคิวกลางของเครื่องก่อน<br>ซ้ำ ≥ 2 → lint · test<br>ที่เหลือแก้ SKILL.md ทีละย่อหน้า</div></div>
   </div>
-  <div class="card logstrip"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg><div><b>ทุกอย่างถูกบันทึก:</b> <code>.superuser/log/</code> — hook เขียนเองทุกการทำ ทั้งหัวหน้าและลูกทีม · ตัดค่าลับ · ไม่เก็บเนื้อไฟล์</div></div>
+  <div class="card logstrip"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h4"/></svg><div><b>ทุกอย่างถูกบันทึก:</b> <code>.claude/superuser/log/</code> — hook จดทุกการทำ ทั้งหัวหน้าและลูกทีม · <code>SUMMARY.md</code> รวม token ราย agent · ตัดค่าลับ · ไม่เก็บเนื้อไฟล์</div></div>
 </div>
 </div><!-- /steps -->
 
@@ -322,7 +349,7 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
     <span class="cchip"><b>ปลอดภัยตั้งแต่ต้น</b> <span>secure-by-default</span></span>
   </div>
   <div class="chips">
-    <span class="chip">prove-it-works</span><span class="chip">fix-root-cause</span><span class="chip">data-shape-first</span><span class="chip">small-verifiable-steps</span><span class="chip">safe-to-rerun</span><span class="chip">replace-then-delete</span><span class="chip">user-experience-first</span><span class="chip">blast-radius</span><span class="chip">simplicity-first</span><span class="chip">proceed-on-reversible-work</span><span class="chip">build-a-tool</span><span class="chip">rules-as-checks</span><span class="chip">context-budget</span>
+    <span class="chip">prove-it-works</span><span class="chip">fix-root-cause</span><span class="chip">data-shape-first</span><span class="chip">small-verifiable-steps</span><span class="chip">safe-to-rerun</span><span class="chip">replace-then-delete</span><span class="chip">user-experience-first</span><span class="chip">blast-radius</span><span class="chip">simplicity-first</span><span class="chip">proceed-on-reversible-work</span><span class="chip">build-a-tool</span><span class="chip">rules-as-checks</span><span class="chip">+ skill กลางจาก superuser และ sqt-toolkit</span><span class="chip">context-budget</span><span class="chip">stack-dotnet · typescript · python · sql</span><span class="chip">coding-evals</span>
   </div>
 </div>
 
@@ -336,7 +363,7 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
 
 <!-- playbooks -->
 <div class="card panel">
-  <h2>playbook ทั้ง 16 ตัว<small>ใช้เมื่อไร</small></h2>
+  <h2>playbook ทั้ง 18 ตัว<small>ใช้เมื่อไร</small></h2>
   <div class="cols">
     <div class="col">
       <div class="gh" style="--dot:var(--pc)">สร้างและแก้</div>
@@ -351,6 +378,7 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
     <div class="col">
       <div class="gh" style="--dot:var(--pc)">เข้าใจ</div>
       <div class="it pbn"><b>investigation</b><span>"X ทำงานอย่างไร" · "ทำไมถึงทำแบบนี้" · "ควรวางไว้ที่ไหน"</span></div>
+      <div class="it pbn"><b>research</b><span>หาข้อมูลหรือคำตอบที่ต้องยืนยัน · เทียบตัวเลือก (แกน)</span></div>
       <div class="it pbn"><b>pickup-and-pause</b><span>"ทำต่อจากเมื่อวาน" · รับงานต่อจาก agent อื่น · "พอก่อน เดี๋ยวมาทำต่อ"</span></div>
       <div class="gh mt" style="--dot:var(--pc)">ตรวจและส่ง</div>
       <div class="it pbn"><b>review</b><span>รีวิว PR หรือ diff · ตรวจดีไซน์ · ตรวจเอกสาร</span></div>
@@ -359,6 +387,7 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
     <div class="col">
       <div class="gh" style="--dot:var(--pc)">งานชุด · งานยาว</div>
       <div class="it pbn"><b>project-docs</b><span>วางไฟล์จาก prompt/ หรือขอ BRD · SRS · mockup · FSD · คู่มือ</span></div>
+      <div class="it pbn"><b>document</b><span>เอกสาร รายงาน แผน หรือข้อความที่คนอื่นจะอ่าน (แกน)</span></div>
       <div class="it pbn"><b>unattended-run</b><span>"ทำให้เสร็จ เดี๋ยวกลับมาดู" · "ทำทั้งคืน" · "ไม่ต้องถาม"</span></div>
       <div class="gh mt" style="--dot:var(--pc)">ดูแลระบบ</div>
       <div class="it pbn"><b>skill-authoring</b><span>สร้าง skill ใหม่ · แก้ SKILL.md · ไฟล์ agent · prompt ใน prompt/</span></div>
@@ -384,7 +413,9 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
       <div class="it"><b>ระดับโมเดล</b><span>ใหญ่ · กลาง · เล็ก — ตอนนี้ opus · sonnet · haiku</span></div>
       <div class="it"><b>principle</b><span>หลักคิดสั้น ๆ ที่ใช้ตัดสินใจทุกขั้น</span></div>
       <div class="it"><b>data shape</b><span>หน้าตาข้อมูล (type ตาราง state) ก่อนเขียนโค้ด</span></div>
-      <div class="it"><b>วัดจริง · อนุมาน · เดา</b><span>ป้ายบอกว่าข้ออ้างมีหลักฐานแค่ไหน</span></div>
+      <div class="it"><b>ตรวจจริง · จากแหล่ง · อนุมาน</b><span>ป้ายบอกว่าข้ออ้างมีหลักฐานแค่ไหน · ไม่มีหลักฐานเขียนว่า ยังไม่ได้ตรวจ</span></div>
+      <div class="it"><b>ใบสั่งงาน</b><span>5 ข้อที่ทุกชิ้นงานของลูกทีมต้องมี</span></div>
+      <div class="it"><b>งบ · effort</b><span>เร็ว · สมดุล · คุณภาพ · effort คือแรงคิดของโมเดล low · medium · high</span></div>
       <div class="it"><b>ย้อนกลับได้</b><span>แก้คืนได้ เช่น ไฟล์ที่ git เก็บประวัติไว้</span></div>
       <div class="it"><b>lint · type</b><span>ตัวตรวจโค้ดอัตโนมัติ · ชนิดข้อมูลที่ compiler ตรวจให้</span></div>
     </div>
@@ -408,10 +439,11 @@ svg#wires{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
     <div class="col">
       <div class="gh" style="--dot:var(--green)">ไฟล์และ skill ในระบบ</div>
       <div class="it"><b>CONTEXT.md</b><span>ไฟล์กลางที่ root · หัวข้อ "รับงานต่อ" ให้คนหรือ bot ทำต่อ</span></div>
-      <div class="it"><b>.superuser/inbox</b><span>คิวข้อความถึงทีม · หัวหน้าอ่าน ตอบ แล้วย้ายไป done/</span></div>
-      <div class="it"><b>.superuser/log</b><span>บันทึกทุกการทำ ไฟล์ละหนึ่งวัน ไม่ commit</span></div>
+      <div class="it"><b>.claude/superuser/</b><span>ไฟล์ทำงานของหัวหน้า · inbox · log · learn · config.json เปิดปิดโมดูล</span></div>
+      <div class="it"><b>TEAM.md · LEAD-PLAYBOOK.md</b><span>ลูกทีมตัวไหนถนัดอะไร · บทเรียนของหัวหน้าจากคาดกับจริง</span></div>
       <div class="it"><b>hook</b><span>สคริปต์ที่ Claude Code รันเองตามเหตุการณ์ เขียน log และแจ้ง inbox</span></div>
       <div class="it"><b>IMPROVEMENTS.md</b><span>สิ่งที่ทีมควรรู้ รอรวมเข้า skill</span></div>
+      <div class="it"><b>BRIEF.md</b><span>สรุปงานใหญ่เป็นข้อ ๆ: คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร</span></div>
       <div class="it"><b>BUILD-PLAN.md</b><span>สถานะ ประวัติ และการตัดสินใจ ใน docs/</span></div>
       <div class="it"><b>verify skill</b><span>สคริปต์ให้ agent เปิดแอป กด และดูผลเอง</span></div>
       <div class="it"><b>status-report · decision-log</b><span>ตารางสถานะ · บันทึกเลือกอะไร ไม่เลือกอะไร เพราะอะไร</span></div>
@@ -442,9 +474,10 @@ function draw(){
   ['in1','in2','in3','in4','in5'].forEach(id=>{const r=R(id);P(`M${r.cx} ${r.b} V${busY-6} q0 6 ${r.cx<lead.cx?6:-6} 6`,{end:false});});
   P(`M${R('in1').cx+6} ${busY} H${R('in5').cx-6}`,{end:false});
   P(`M${lead.cx} ${busY} V${lead.t-2}`);
-  // lead -> groups (to ตรวจและส่ง column top)
-  const g3=R('g3');
-  P(`M${lead.cx} ${lead.b} V${g3.t-2}`);
+  // lead -> แผนก่อนแตะงาน -> groups (to ตรวจและส่ง column top)
+  const plan=R('plan'), g3=R('g3');
+  P(`M${lead.cx} ${lead.b} V${plan.t-2}`);
+  P(`M${lead.cx} ${plan.b} V${g3.t-2}`);
   // groups -> todo
   P(`M${lead.cx} ${g3.b} V${R('todo').t-2}`);
   // todo -> loop ลงมือ
@@ -480,7 +513,7 @@ function draw(){
   // outputs -> learn
   const e1=R('e1');
   P(`M${ox} ${e1.t-20} H${e1.cx} V${e1.t-2}`);
-  T(ox+8, (o3.b+e1.t)/2+12, 'เจอของใหม่ระหว่างทาง',{a:'start'});
+  T(ox+8, (o3.b+e1.t)/2+12, 'ทุกงานที่เกิน 1 ขั้น',{a:'start'});
   // learn chain
   [['e1','e2'],['e2','e3'],['e3','e4']].forEach(([a,b])=>{const A=R(a),B=R(b);P(`M${A.r+2} ${A.cy} H${B.l-3}`,{c:GR});});
   // loop back e4 -> playbook groups (ดูแลระบบ)

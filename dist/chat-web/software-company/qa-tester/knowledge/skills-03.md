@@ -36,7 +36,7 @@ Use when writing or reviewing a Functional Specification Document (FSD) that scr
 | [references/worked-examples.md](references/worked-examples.md) | ถ้าจะเขียน use case หน้าจอ ตารางสถานะ หรือกฎทางธุรกิจตัวแรกของเอกสาร ให้เปิดดูตัวอย่างเต็มแล้วลอกรูปแบบไปใช้ |
 | [references/edge-cases.md](references/edge-cases.md) | ตอนเขียนหัวข้อข้อผิดพลาดและกรณีขอบ และตอนรีวิวก่อนส่ง เพื่อไล่ให้ครบทุกกรณี |
 | [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | ถ้ายังไม่แน่ใจว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD ให้เปิดตารางเทียบนี้ |
-| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B) หรือต้องการแม่แบบ use case, API endpoint, data model และตัวอย่าง Mermaid |
+| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B — 11 หัวข้อเดียวกับข้อ 3) หรือต้องการแม่แบบ use case, API endpoint, data model ฉบับคนตรวจอ่าน |
 | [references/figures.md](references/figures.md) | ตอนวางแผนว่าหัวข้อไหนต้องมีรูปชนิดไหน |
 | [references/outline-sections.md](references/outline-sections.md) | ถ้าต้องตัดสินว่าหัวข้อไหนข้ามได้ ให้เปิดตารางนี้ ส่วนโครงเต็มที่ลอกไปกรอกได้อยู่ใน [assets/fsd-outline.md](assets/fsd-outline.md) |
 | [references/related-skills.md](references/related-skills.md) | ถ้างานต้องใช้ skill อื่นคู่กัน เช่น รูป ข้อตกลง API หรือ test case ให้เปิดดูว่าใช้ตัวไหน |
@@ -53,7 +53,7 @@ SRS บอกว่าระบบ**ต้องทำอะไรได้** �
 ## 2 · ลำดับการทำงาน
 
 1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามรวมครั้งเดียวตอนเริ่มแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เฉพาะข้อที่ตีความต่างแล้วงานออกมาต่างกันทั้งชุด (ตัวเลือก = การตีความที่เป็นไปได้ อ้างข้อใน SRS/BRD) ที่เหลือใส่ `(รอยืนยัน)` แล้วทำต่อ
-2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว หรือมีลูกค้าอ่านด้วย
+2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว (**Mode A** ค่าเริ่มต้น) หรือมีลูกค้าอ่านเพื่อเซ็นรับด้วย (**Mode B** — 11 หัวข้อเดิม เรียงเหมือนเดิม แค่จัดหน้าให้คนตรวจอ่านง่าย ดู [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md))
 3. ไล่ทีละ use case ไม่ใช่ทีละหน้าจอ — หน้าจอเกิดจาก use case ไม่ใช่ทางกลับกัน
 4. เขียนกฎทางธุรกิจแยกออกมาก่อน แล้วค่อยอ้างถึงจากขั้นตอน (ข้อ 7)
 5. ทำตารางสอบย้อนกลับไปพร้อมกัน ไม่ใช่ทำตอนจบ
@@ -145,8 +145,8 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 
 ตารางว่าหัวข้อไหนควรมีรูปชนิดไหนอยู่ใน [references/figures.md](references/figures.md) ข้อที่ต้องจำคือ state diagram ใช้**คู่กับตาราง ไม่ใช่แทนตาราง**
 
-เลือกเครื่องมือตามปลายทางของเอกสาร: ถ้าเป็น markdown ใช้ `software-diagrams` (Mermaid)
-ไฟล์ที่ลูกค้าเซ็นรับใช้ `diagram-figures` ส่วนภาพร่างหน้าจอใช้ `markdown-visuals`
+รูปทุกรูปในเอกสาร FSD (ทั้ง Mode A และ Mode B ทั้ง markdown และไฟล์ที่ลูกค้าเซ็นรับ) ใช้ `diagram-figures` แบบ house style ชุดเดียว ส่วนภาพร่างหน้าจอใช้ `markdown-visuals`
+Mermaid ผ่าน `software-diagrams` ใช้แค่ร่างคุยกันในแชต ไม่ใส่ในเอกสารที่ส่ง
 **ทุกรูปในฉบับเดียวใช้ธีมสีชุดเดียวกัน** ตาม `doc-theme` (ดู `polished-document-style`)
 
 ## 11 · รีวิวความครบถ้วนก่อนส่ง
@@ -282,7 +282,7 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 | ระดับข้อกำหนดที่ลูกค้าเซ็นรับ | `srs-writing` |
 | รูปแบบ markdown และธีมสีของเอกสาร | `polished-document-style` |
 | หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` · `diagram-figures` · `markdown-visuals` |
+| รูปในเอกสาร | `diagram-figures` (ทุกรูปในเอกสารที่ส่ง) · `markdown-visuals` (ภาพร่างหน้าจอ) · `software-diagrams` (Mermaid ร่างคุยในแชตเท่านั้น) |
 | ข้อตกลงของ API ที่ FSD อ้างถึง | `api-conventions` |
 | แบบจำลองข้อมูลที่ FSD อ้างถึง | `database-design` |
 | ห้าสถานะของหน้าจอ และกฎงานออกแบบ | `ui-craft` + skill แพลตฟอร์ม |
@@ -297,15 +297,15 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 
 # Stakeholder document (Mode B) — style, diagrams, templates
 
-Moved from the system-analyst agent. Read when writing a Mode B document or a use case, API endpoint or data model section.
+Moved from the system-analyst agent. Read when writing a Mode B document. A Mode A use case follows `SKILL.md` §4 and [`worked-examples.md`](worked-examples.md); the templates below are the same content in reviewer-friendly form, never a different format.
 
-This is the "beautiful design" mode. Use Rich Markdown + Mermaid.
+Mode B is **the same FSD** as Mode A — the same 11 sections in the same order as `SKILL.md` §3 — styled for reviewers who sign off: a short summary up front, plain words, more tables, less code. It never adds or drops a section; only the style changes. Diagrams follow `SKILL.md` §10. IDs follow `SKILL.md` §9 (`UC-<module>-<3 digits>`, steps of 10).
 
 ## Document Structure
 
-Every stakeholder doc MUST follow this structure:
+Every stakeholder doc MUST follow the 11 FSD sections (`SKILL.md` §3, full outline in [`assets/fsd-outline.md`](../assets/fsd-outline.md)):
 
-```markdown
+````markdown
 # <Document Title>
 
 > **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
@@ -315,37 +315,37 @@ Every stakeholder doc MUST follow this structure:
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [Scope](#scope)
-3. [Actors & Personas](#actors--personas)
-4. [Use Cases](#use-cases)
-5. [System Flows](#system-flows)
-6. [API Specifications](#api-specifications)
-7. [Data Model](#data-model)
-8. [Business Rules](#business-rules)
-9. [Non-Functional Requirements](#non-functional-requirements)
-10. [Glossary](#glossary)
+1. [Introduction](#1-introduction) — starts with a one-paragraph summary for non-technical readers
+2. [Users & Permissions](#2-users--permissions)
+3. [Process Overview](#3-process-overview)
+4. [Use Cases](#4-use-cases)
+5. [Screen Specifications](#5-screen-specifications)
+6. [State Machines](#6-state-machines)
+7. [Business Rules](#7-business-rules)
+8. [Data & Integrations](#8-data--integrations) — API endpoints and data model go here
+9. [Errors & Edge Cases](#9-errors--edge-cases)
+10. [Traceability](#10-traceability)
+11. [Revision History](#11-revision-history)
 
 ---
 
-## 1. Executive Summary
+## 1. Introduction
 
 > **For non-technical readers** — 1 paragraph explaining what this feature does and why.
 
-<content>
+### Scope
 
----
-
-## 2. Scope
-
-### In Scope
+**In scope**
 - ...
 
-### Out of Scope
+**Out of scope**
 - ...
 
-[... continue all sections ...]
-```
+### Glossary
+- ...
+
+[... continue all 11 sections; skip 5 only if there are no screens and 6 only if nothing has a status ...]
+````
 
 ## Formatting Rules
 
@@ -406,100 +406,21 @@ Align headers to data when helpful:
 
 ---
 
-# Mermaid Diagrams
+# Diagrams
 
-Use Mermaid for ALL diagrams. They render in GitHub/Notion/VSCode.
+Follow `SKILL.md` §10. A Mode B document is delivered to people who sign it, so every figure is a house-style figure made with `diagram-figures` (same theme for every figure in one document, per `doc-theme`). Mermaid through `software-diagrams` is only for a quick sketch in chat, never for the delivered file. Screen sketches use `markdown-visuals`.
 
 ## When to use which diagram
 
-| Diagram | Use for |
-|---------|---------|
-| `flowchart` | Business processes, decision trees |
-| `sequenceDiagram` | Interactions between systems/actors over time |
-| `erDiagram` | Database/data models |
-| `stateDiagram-v2` | Object lifecycle, status transitions |
-| `classDiagram` | Object-oriented design |
-| `gantt` | Timeline/schedule |
-| `journey` | User experience journey |
-| `mindmap` | Concept relationships |
+| Diagram | Use for | FSD section |
+|---------|---------|---|
+| Flowchart | Business processes, decision trees | 3 Process Overview |
+| Sequence diagram | Interactions between systems/actors over time | 4 Use Cases (multi-party) |
+| State diagram | Object lifecycle, status transitions — **next to the table, not instead of it** | 6 State Machines |
+| ER diagram | Tables of this module only | 8 Data & Integrations |
+| Timeline (Gantt) | Schedule, if the document has one | appendix |
 
-## Example: Sequence Diagram
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant FE as Frontend
-    participant API as Backend API
-    participant DB as Database
-
-    User->>FE: Click "Login"
-    FE->>API: POST /auth/login
-    API->>DB: SELECT user WHERE email=?
-    DB-->>API: User row
-    API->>API: Verify bcrypt password
-    alt Valid credentials
-        API-->>FE: 200 { token, user }
-        FE-->>User: Redirect to dashboard
-    else Invalid
-        API-->>FE: 401 { error }
-        FE-->>User: Show error
-    end
-```
-````
-
-## Example: ER Diagram
-
-````markdown
-```mermaid
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-    PRODUCT ||--o{ ORDER_ITEM : "appears in"
-
-    USER {
-        uuid id PK
-        string email UK
-        string name
-        timestamp created_at
-    }
-    ORDER {
-        uuid id PK
-        uuid user_id FK
-        decimal total
-        string status
-    }
-```
-````
-
-## Example: State Diagram
-
-````markdown
-```mermaid
-stateDiagram-v2
-    [*] --> Draft
-    Draft --> Submitted: submit()
-    Submitted --> Approved: approve()
-    Submitted --> Rejected: reject()
-    Rejected --> Draft: revise()
-    Approved --> [*]
-```
-````
-
-## Example: Flowchart
-
-````markdown
-```mermaid
-flowchart TD
-    A[User submits form] --> B{Valid?}
-    B -->|Yes| C[Save to DB]
-    B -->|No| D[Show errors]
-    C --> E[Send confirmation email]
-    E --> F([End])
-    D --> A
-```
-````
+Embed each figure as an image with a numbered caption, for example `![Figure 4-1 Place order — sequence](figures/uc-ord-010-sequence.svg)`.
 
 ---
 
@@ -507,16 +428,18 @@ flowchart TD
 
 ## Use Case Template (Mode B)
 
-```markdown
-### UC-001: <Use Case Name>
+````markdown
+### UC-ORD-010: <Use Case Name>
 
 | Field | Value |
 |-------|-------|
-| **ID** | UC-001 |
+| **ID** | UC-ORD-010 (next use case in this module: UC-ORD-020) |
+| **From (SRS)** | FR-ORD-040 |
 | **Actor** | Customer |
 | **Priority** | High |
 | **Status** | Approved |
 | **Trigger** | User clicks "Place Order" |
+| **Frequency** | ~200 per day `(รอยืนยัน)` |
 
 #### Preconditions
 - User is authenticated
@@ -540,42 +463,28 @@ flowchart TD
 
 #### Alternative Flows
 
-> **A1: Payment declined at step 3**
+> **010-A1: Payment declined at step 3**
 > 3a. Gateway returns decline
 > 3b. System shows error, suggests alternate payment
 > 3c. Returns to step 2
 
 #### Exception Flows
 
-> **E1: Gateway timeout at step 3**
+> **010-E1: Gateway timeout at step 3**
 > 3a. System waits 30s
 > 3b. Logs incident, marks order as `payment_pending`
 > 3c. Sends "We'll retry" email to user
 
 #### Sequence Diagram
 
-\`\`\`mermaid
-sequenceDiagram
-    actor U as Customer
-    participant UI
-    participant API
-    participant Pay as Payment Gateway
-    participant DB
+![Figure 4-1 UC-ORD-010 Place order — Customer, UI, API, Payment Gateway, Database](figures/uc-ord-010-sequence.svg)
 
-    U->>UI: Click "Place Order"
-    UI->>API: POST /orders
-    API->>Pay: Charge
-    Pay-->>API: Auth code
-    API->>DB: INSERT order
-    DB-->>API: Order ID
-    API-->>UI: 201 Created
-    UI-->>U: Confirmation page
-\`\`\`
-```
+> Drawn with `diagram-figures` (house style). Steps: Customer clicks "Place Order" → UI sends POST /orders → API charges the gateway → gateway returns auth code → API inserts the order → UI shows the confirmation page.
+````
 
 ## API Endpoint Template (Mode B)
 
-```markdown
+````markdown
 ### POST `/api/v1/orders`
 
 > Create a new order from cart contents.
@@ -596,7 +505,7 @@ sequenceDiagram
 
 #### Request Body
 
-\`\`\`json
+```json
 {
   "items": [
     { "product_id": "uuid", "quantity": 2 }
@@ -604,11 +513,11 @@ sequenceDiagram
   "shipping_address_id": "uuid",
   "payment_method_id": "uuid"
 }
-\`\`\`
+```
 
 #### Response: 201 Created
 
-\`\`\`json
+```json
 {
   "data": {
     "id": "ORD-12345",
@@ -617,7 +526,7 @@ sequenceDiagram
     "created_at": "2025-01-15T10:30:00Z"
   }
 }
-\`\`\`
+```
 
 #### Error Responses
 
@@ -630,20 +539,18 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 | 409 | Inventory unavailable | `out-of-stock` |
 | 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
 | 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
-```
+````
 
 ## Data Model Template (Mode B)
 
-```markdown
-## Data Model
+````markdown
+## 8. Data & Integrations
 
 ### Entity Relationship Diagram
 
-\`\`\`mermaid
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-\`\`\`
+![Figure 8-1 Order module — USER places ORDER, ORDER contains ORDER_ITEM](figures/order-er.svg)
+
+> Drawn with `diagram-figures` (house style), tables of this module only.
 
 ### Tables
 
@@ -656,7 +563,7 @@ erDiagram
 | `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
 
 > **Security:** `email` is encrypted at rest using AES-256.
-```
+````
 
 ---
 
@@ -713,9 +620,8 @@ erDiagram
 
 | ฟิลด์ | ชนิด | บังคับ | กฎตรวจ | ข้อความเมื่อไม่ผ่าน | ค่าเริ่มต้น |
 |---|---|:--:|---|---|---|
-| เหตุผลที่ยกเลิก | เลือกจากรายการ | ✓ | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
-| หมายเหตุ | ข้อความยาว | ✗ | ไม่เกิน 500 ตัวอักษร | "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
-| วันที่ต้องการรับ | วันที่ | ✓ | ไม่ก่อนวันนี้ · ไม่เกิน 90 วัน | "เลือกวันที่ตั้งแต่วันนี้ถึง <วันที่>" | วันนี้ + 3 |
+| เหตุผลที่ยกเลิก | เลือกจากรายการ | ลูกค้า ✓ · เจ้าหน้าที่ ✗ (010-A1) | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
+| หมายเหตุภายใน | ข้อความยาว | เจ้าหน้าที่ ✓ · ลูกค้าไม่เห็นช่องนี้ | ไม่เกิน 500 ตัวอักษร | "กรุณากรอกหมายเหตุ" · "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
 ```
 
 ## ตารางการเปลี่ยนสถานะ (ข้อ 6)
@@ -734,100 +640,63 @@ erDiagram
 ยกเลิกได้เมื่อสถานะเป็น `confirmed` และยังไม่เกิน 24 ชั่วโมงนับจากเวลายืนยัน
 เจ้าหน้าที่ระดับหัวหน้าขึ้นไปยกเลิกได้โดยไม่จำกัดเวลา แต่ต้องกรอกหมายเหตุ
 **ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.2
+
+**BR-031 · เหตุผลที่ลูกค้าเลือกได้ตอนยกเลิก**
+สั่งผิดรายการ · ได้ราคาที่ถูกกว่า · รอนานเกินไป · ไม่ต้องการแล้ว · อื่น ๆ
+ผู้ดูแลระบบแก้รายการนี้ได้ในหน้าตั้งค่า โดยไม่ต้องแก้โค้ด
+**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.3 `(รอยืนยัน)`
 ```
 
 
 ---
 
-# skill: simplicity-first
+# skill: simplify
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
+Use when making anything (code, document, plan, design, slide, sheet, answer). Simplest form a person can follow.
 
-# Simplicity First
+# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
+ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
-This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
+## 1 · หลักใหญ่
 
-## Check before submitting — 5 items
+- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
+- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
+- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
+- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
+- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
+- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
 
-1. **A tired teammate gets it** in 6 months with no prior context.
-2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
-3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
-4. **Nothing can be deleted without losing meaning** — deleting beats adding.
-5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
+## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
 
-Any "no" or "not sure" → simplify before delivering.
+1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
+2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
+3. ทำแบบสั้นที่สุดที่ยังครบและถูก
 
-## By output type
+## 3 · ตามชนิดงาน
 
-### Documents (BRD, FSD, ADR)
+| งาน | ทำ | เลี่ยง |
+|---|---|---|
+| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
+| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
+| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
+| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
+| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
+| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
 
-Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
-example for every abstract point, tables for structured data.
+plugin `software-company` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
 
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
-jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+## 4 · บอกว่าตั้งใจทำให้ง่าย
 
-### Architecture
+ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
 
-Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
+## 5 · ตรวจก่อนส่ง 5 ข้อ
 
-Avoid: microservices for small teams, distributed-everything, multi-master
-databases before you must, event-driven by default (sync is simpler).
-
-### Plans
-
-Do: 3-5 priorities (not 20), a named owner per item, measurable success
-criteria, realistic timelines with buffer, cut scope to fit time.
-
-Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
-aspirational dates with no buffer, plans without success metrics.
-
-### Designs (UX, API)
-
-Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
-across screens, defaults that work for 80%, progressive disclosure.
-
-Avoid: novel interactions where a standard one works, 10-step flows when 3
-work, required fields with no smart default, hidden features needing tutorials.
-
-## Examples
-
-**API description**
-
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-❌ "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
+2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
+3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
+4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
+5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม
 
 
 ---
@@ -838,7 +707,7 @@ Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core)
 
 # stack-dotnet — เขียน C# ให้ build สะอาด test ผ่าน ไม่มีกับดักเดิม
 
-ใช้เมื่องานแตะโค้ด C# ทุกแบบ: ASP.NET Core (Web API · MVC · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 บน .NET Framework 4.x ที่ยังดูแลอยู่
+ใช้เมื่องานแตะโค้ด C# ทุกแบบ: ASP.NET Core (Web API · Model-View-Controller (MVC) · minimal API) · Entity Framework (EF) Core · ASP.NET MVC 5 บน .NET Framework 4.x ที่ยังดูแลอยู่
 
 ไฟล์นี้มีแค่เรื่องเฉพาะ .NET ส่วนหลักทั่วไปอยู่ที่ `lazy-coding` · `readable-code` · `testing-standards` · `logging-standards` · `error-handling-patterns` · `database-design` · `principle-secure-by-default`
 
@@ -846,7 +715,7 @@ Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MVC 5, EF Core)
 
 ## 1 · เริ่มงาน: อ่านเวอร์ชันก่อน แล้วรันคำสั่งชุดเดียวกันทุกครั้ง
 
-- เวอร์ชัน SDK ดูที่ `global.json` ส่วนเวอร์ชันที่ target ดูที่ `<TargetFramework>` ใน `*.csproj` หรือ `Directory.Build.props`
+- เวอร์ชัน Software Development Kit (SDK) ดูที่ `global.json` ส่วนเวอร์ชันที่ target ดูที่ `<TargetFramework>` ใน `*.csproj` หรือ `Directory.Build.props`
 - เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://dotnet.microsoft.com/platform/support/policy/dotnet-core): `net10.0` คือ Long Term Support (LTS) ล่าสุด รองรับถึง 2028-11-14 · `net8.0` (LTS) และ `net9.0` (Standard Term Support, STS) อยู่ช่วงท้าย รองรับถึง 2026-11-10 · ถ้าเจอ 2 ตัวนี้ให้แจ้งเจ้าของ ไม่อัปเกรดเองกลางงาน · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
 - ถ้าเจอ `net48` หรือ `v4.x` ใน `<TargetFrameworkVersion>` แปลว่าเป็น .NET Framework ให้ใช้ชุดคำสั่ง legacy ด้านล่าง
 
@@ -940,7 +809,7 @@ options.LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLoggin
 | เงินเป็น `double` | 0.1 + 0.2 ≠ 0.3 | ใช้ `decimal` และระบุคอลัมน์เป็น `decimal(18,2)` ให้ชัด |
 | `DateTime.Now` | test ไม่ได้ และเวลาเพี้ยนตาม server | ใช้ `TimeProvider` ผ่าน DI และ `FakeTimeProvider` ใน test |
 | เวลาไทย | server อยู่ UTC | `TimeZoneInfo.FindSystemTimeZoneById("Asia/Bangkok")` ส่วน .NET Framework บน Windows ใช้ `"SE Asia Standard Time"` |
-| array หรือ string ใหญ่ ≥ 85,000 bytes | ลง Large Object Heap (LOH) ทำให้ GC หนัก | stream ข้อมูล · `ArrayPool<T>` · `IAsyncEnumerable<T>` สำหรับรายการยาว |
+| array หรือ string ใหญ่ ≥ 85,000 bytes | ลง Large Object Heap (LOH) ทำให้ตัวเก็บขยะหน่วยความจำ (Garbage Collector — GC) หนัก | stream ข้อมูล · `ArrayPool<T>` · `IAsyncEnumerable<T>` สำหรับรายการยาว |
 | `$"..."` ใน log | ค้นตาม field ไม่ได้ และสร้าง string แม้ระดับ log ปิด | message template: `log.LogInformation("Order {OrderId} paid", id)` ส่วน format อื่นดู `logging-standards` |
 
 จะจับ exception ที่ไหนและ retry อย่างไร ดู `error-handling-patterns` ส่วน ASP.NET Core ใช้ `IExceptionHandler` + `AddProblemDetails()` ที่จุดเดียว
@@ -1015,7 +884,7 @@ Use when writing or reviewing TypeScript in Node (Express, Fastify, NestJS), Ang
 | ดูไฟล์ | บอกอะไร | ทำ |
 |---|---|---|
 | `package-lock.json` · `pnpm-lock.yaml` · `yarn.lock` | package manager | ใช้ตัวนั้นตัวเดียว ห้ามมี lockfile 2 ตัว |
-| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ |
+| `.nvmrc` · `engines` ใน `package.json` | Node version | ใช้ตามนั้น ถ้าไม่มีให้ใช้ Long Term Support (LTS) ล่าสุด — ตรวจล่าสุด 2026-10-14 · แหล่ง: https://nodejs.org/en/about/previous-releases : LTS คือ 24 และ 22 · 26 ยังเป็น Current ไม่ใช้ใน production จนกว่าหน้านี้จะขึ้นว่า LTS · ตัวถัดไปที่หมดอายุคือ 22 (2027-04-30 (รอยืนยัน)) · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ · Node 26 น่าจะขึ้น LTS ช่วงปลาย ต.ค. 2569 (รอยืนยัน) ให้ตรวจบรรทัดนี้ใหม่ทันทีหลังวันนั้น |
 | `"type"` ใน `package.json` · `tsconfig` `module` | ECMAScript Modules (ESM) หรือ CommonJS (CJS) | ตามของเดิม ห้ามผสม |
 | `scripts` ใน `package.json` | คำสั่งจริงของ repo | ใช้ script ที่มีอยู่ก่อนจะเดาคำสั่งเอง |
 
@@ -1044,7 +913,7 @@ npx vitest run src/order/order.service.test.ts -t "คืนเงินเก�
 - type ของ API ที่ frontend กับ backend ใช้ร่วมกันให้เก็บไว้ที่เดียว (shared package หรือ generate จาก OpenAPI)
 
 ```ts
-const Order = z.object({ id: z.string().uuid(), totalSatang: z.number().int().nonnegative() });
+const Order = z.object({ id: z.uuid(), totalSatang: z.number().int().nonnegative() });
 type Order = z.infer<typeof Order>;
 
 type PayResult =
@@ -1074,7 +943,7 @@ process.on('SIGTERM', () => {
 
 ## 4 · Angular
 
-ตัวล่าสุดคือ v22 (มิ.ย. 2026): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว
+ตัวล่าสุดคือ v22 (ออก 3 มิ.ย. 2026 · แหล่ง: https://angular.dev/reference/releases · ตรวจ 22 ต.ค. 2569): app ใหม่เป็น zoneless และ `OnPush` เป็นค่าเริ่มต้น ส่วน Signal Forms ใช้ใน production ได้แล้ว (3 ข้อหลังนี้ (รอยืนยัน) — หน้าแหล่งไม่ได้ระบุ ให้ตรวจ release notes ของ v22 ก่อนอ้าง)
 
 | เรื่อง | ทำแบบนี้ | ไม่ทำ |
 |---|---|---|
@@ -1296,7 +1165,7 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
 
 - lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
-- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv ตั้งแต่ 0.11.25 มี `uv audit` แต่ยังเป็น preview จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
+- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
 - ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
 - SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
 - ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`

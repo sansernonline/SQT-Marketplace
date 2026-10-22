@@ -39,16 +39,17 @@
 - Same framework across EU member states
 
 ### Thailand
-- **OIC (Office of Insurance Commission)**
-- Insurance Acts and ministerial regulations
-- Solvency and reserve rules
-- Product approvals required
+- **OIC (Office of Insurance Commission)** — สำนักงาน คปภ., oic.or.th
+- Life Insurance Act B.E. 2535 and Non-Life Insurance Act B.E. 2535, plus ministerial regulations and OIC notifications
+- OIC risk-based capital: capital adequacy ratio (CAR) supervisory level 140% (รอยืนยัน)
+- Product forms and rates approved before sale; separate rules for electronic sales
+- Details, sources and check dates: `insurance-compliance.md` → Thailand OIC
 
 ### Other major
-- UK: PRA + FCA
-- Japan: FSA + JNFLIC
-- Singapore: MAS
-- Australia: APRA + ASIC
+- UK: Prudential Regulation Authority (PRA) + Financial Conduct Authority (FCA)
+- Japan: Financial Services Agency (FSA)
+- Singapore: Monetary Authority of Singapore (MAS)
+- Australia: Australian Prudential Regulation Authority (APRA) + Australian Securities and Investments Commission (ASIC)
 
 ## Product + Rate Filings (US)
 
@@ -66,7 +67,7 @@ interface RateFiling {
 }
 
 // File via SERFF (System for Electronic Rate and Form Filing)
-// Each state has own review timeline (30-90 days typical)
+// Each state has own review timeline — see insurance-compliance.md (US: State Filings via SERFF)
 // Some states "prior approval", others "file and use"
 ```
 
@@ -132,9 +133,9 @@ async function recommendAnnuity(customer, product) {
 - Required: written information security program
 - Notification of cybersecurity events
 
-**NY DFS Cybersecurity Regulation (23 NYCRR 500):**
+**New York Department of Financial Services (DFS) Cybersecurity Regulation (23 NYCRR 500):**
 - Strict requirements
-- CISO required
+- Chief Information Security Officer (CISO) required (the NAIC model law only asks for a designated responsible person)
 - Annual certification
 
 **Other regimes:**
@@ -164,7 +165,7 @@ Independent actuary opinion annually
 ```
 US: RBC ratio > 200% (target 300%+)
 EU: SCR ratio > 100% (target 150%+)
-TH: per OIC requirements
+TH: CAR ≥ 140% OIC supervisory level (รอยืนยัน) — see insurance-compliance.md → Thailand OIC
 ```
 
 ### Liquidity

@@ -46,6 +46,7 @@ File name pattern: `YYYY-MM-DD_item_type.ext` (receipt, warranty-card, serial-ph
 Even without a warranty card, the seller is liable for defects that existed at delivery and make the item unfit for normal use (ป.พ.พ. มาตรา 472, ความชำรุดบกพร่อง). A lawsuit over the defect is barred once **1 year has passed from discovering the defect** (มาตรา 474) — so a complaint that drags on must not run past that date without filing. Unsafe products causing injury or damage are covered by the พ.ร.บ.ความรับผิดต่อความเสียหายที่เกิดขึ้นจากสินค้าที่ไม่ปลอดภัย พ.ศ. 2551.
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/civil-commercial/civil-and-commercial-section474 · https://www.thailawonline.com/th/thai-civil-code/section-474/
+ข้อความมาตราจากเว็บรอง 2 แหล่ง — ตรวจกฎหมายฉบับทางการ: krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา) · ocpb.go.th — ยังไม่ได้เปิดตรวจข้อความทางการ (รอยืนยัน)
 
 The manufacturer's warranty is a contract on top of this — read what it excludes (water damage, "misuse", installation by non-authorised technicians, consumables).
 

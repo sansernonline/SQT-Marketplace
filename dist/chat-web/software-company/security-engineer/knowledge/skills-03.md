@@ -16,7 +16,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
    | ด้าน | เครื่องมือแนะนำ | คำสั่งตัวอย่าง |
    |---|---|---|
-   | ค่าลับหลุด (รวมประวัติ git) | gitleaks | `gitleaks detect --source . --redact` |
+   | ค่าลับหลุด (รวมประวัติ git) | gitleaks 8.19+ | ประวัติ git: `gitleaks git . --redact` · ไฟล์ที่ยังไม่ commit: `gitleaks dir . --redact` (`detect`/`protect` ถูก deprecate ตั้งแต่ v8.19.0 — ที่มา github.com/gitleaks/gitleaks/releases/tag/v8.19.0 · ตรวจ 22 ต.ค. 2569) |
    | dependency มีช่องโหว่ | ตัวที่มากับภาษา + trivy หรือ osv-scanner | `npm audit --omit=dev` · `pip-audit` · `dotnet list package --vulnerable --include-transitive` · `trivy fs --scanners vuln .` |
    | โค้ดเขียนแบบเสี่ยง (static analysis) | semgrep | มีเน็ต: `semgrep scan --config p/default --metrics=off` · ห้อง `-Locked` หรือเข้า semgrep.dev ไม่ได้: `semgrep scan --config <skill นี้>/assets/semgrep-offline.yml --metrics=off` |
    | dependency ของ Dart / Flutter และ Gradle | osv-scanner (อ่าน `pubspec.lock` และ `gradle.lockfile`) | `osv-scanner scan source -r .` (ยังไม่ได้ตรวจบนเครื่องนี้) · ใช้ `flutter pub outdated` ดูของที่ค้างเวอร์ชัน · ถ้า Gradle ไม่มี lockfile ต้องเปิด `dependencyLocking` ก่อนถึงจะสแกนได้ |
@@ -42,7 +42,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 5. **แก้**
    - ช่องโหว่ใน dependency ให้อัปเดตเป็นเวอร์ชันที่แก้แล้ว แล้วรัน test
    - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
-   - รูปแบบที่เจอซ้ำให้ส่งต่อ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) ไปทำเป็นกฎ lint
+   - รูปแบบที่เจอซ้ำให้ส่งต่อ `repeated-mistakes-to-checks` ไปทำเป็นกฎ lint
 6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
    - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`owasp-top10`](../owasp-top10/SKILL.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
 
@@ -63,7 +63,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
 # รายการตรวจ Android — ใช้กับ `security-gate` ข้อ 2
 
-**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้วใน `build/app/intermediates/merged_manifests/` ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง
+**รายการตรวจ Android** — ดู `AndroidManifest.xml` ที่รวมแล้ว (merged manifest) ไม่ใช่แค่ไฟล์ต้นฉบับ เพราะ plugin เติม permission ให้เอง · โฟลเดอร์เปลี่ยนตามเวอร์ชัน Android Gradle Plugin (AGP) (`merged_manifests/<variant>/` หรือ `merged_manifest/<variant>/process<Variant>MainManifest/` — ยังไม่ได้ตรวจ) ให้หาด้วย `find build -path '*merged_manifest*' -name AndroidManifest.xml` หลัง build release
 - `android:exported` — ให้มีแค่ activity หลักที่เป็น `true` ส่วนตัวอื่นต้องมีเหตุผล
 - `android:allowBackup` / `dataExtractionRules` — ตั้งชัดว่าข้อมูลไหนสำรองได้ ไม่ปล่อยค่าเริ่มต้น
 - `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
@@ -77,7 +77,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
 Use when reviewing a pull request, self-reviewing before submitting, or auditing code quality.
 
-> **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ [`adversarial-review-panel`](../adversarial-review-panel/SKILL.md)
+> **ใน SuperUser:** รีวิวเริ่มจาก playbook [`review`](../superuser/references/playbook-review.md) แล้วใช้ checklist นี้กับรีวิวทั่วไป ส่วนงานเสี่ยงสูงหรือ diff ใหญ่ใช้ `adversarial-review-panel`
 
 # Code Review Checklist
 
@@ -242,95 +242,53 @@ Moved out of [SKILL.md](../SKILL.md). Open it for a large or unfamiliar change. 
 
 ---
 
-# skill: simplicity-first
+# skill: simplify
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
+Use when making anything (code, document, plan, design, slide, sheet, answer). Simplest form a person can follow.
 
-# Simplicity First
+# simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 
-> The best architecture has the fewest moving parts. The best plan is the one a
-> teammate can follow with no context.
+ใช้กับทุกงานที่ส่งให้คน ทั้งโค้ด เอกสาร แผน ดีไซน์ สไลด์ ตาราง และคำตอบ · `human-writing` คุมว่า**เขียนอย่างไร** ส่วน skill นี้คุมว่า**ตัวงานมีอะไรบ้าง** · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
 
-This skill covers **non-code outputs** — documents, plans, architecture, and
-designs. For code, use `lazy-coding`. The suite-wide rule for every kind of work is `simplify`; this skill is its detail for documents, plans and architecture.
+## 1 · หลักใหญ่
 
-## Check before submitting — 5 items
+- **บททดสอบ:** คนที่ไม่ได้อยู่ในงานนี้ เปิดดูอีก 6 เดือนข้างหน้า ต้องเข้าใจและแก้ต่อได้โดยไม่ต้องถามใคร
+- ทำเท่าที่โจทย์ต้องการ ไม่เผื่ออนาคตที่ยังไม่มีใครขอ
+- ตัดก่อนเพิ่ม · ถ้าตัดส่วนไหนออกแล้วความหมายหรือการทำงานไม่เสีย ให้ตัด
+- ของธรรมดาที่คนรู้จักดีกว่าของฉลาดที่ต้องถอดรหัส
+- **ง่ายไม่ใช่มักง่าย** — ห้ามตัดความถูกต้อง ความปลอดภัย การตรวจข้อมูลที่รับจากภายนอก การจัดการ error ที่กันข้อมูลหาย และสิ่งที่ผู้ใช้ขอไว้ชัด ๆ
+- **ง่ายไม่ใช่กองรวม** — ลดจำนวนของ แต่ยังแยกหน้าที่ชัด 1 ส่วนทำ 1 เรื่อง เหมือนงานของมืออาชีพ
 
-1. **A tired teammate gets it** in 6 months with no prior context.
-2. **Simplest thing that works** — fewest moving parts, boring proven patterns; add complexity only when something breaks.
-3. **Every new component, option or layer has evidence it is needed now**, and leaving it out would cost something real.
-4. **Nothing can be deleted without losing meaning** — deleting beats adding.
-5. **Reads in one pass** — no jargon the audience lacks, an example for every abstract claim, the whole thing fits in two sentences.
+## 2 · บันไดก่อนลงมือ — หยุดที่ขั้นแรกที่ใช้ได้
 
-Any "no" or "not sure" → simplify before delivering.
+1. ต้องมีสิ่งนี้จริงไหม · ไม่จำเป็น → ไม่ทำ แล้วบอก 1 บรรทัดว่าข้ามอะไร
+2. มีของเดิมที่ใช้ได้แล้วไหม (ไฟล์ แม่แบบ ฟังก์ชัน เครื่องมือ ฟีเจอร์ที่ติดมากับระบบ) · มี → ใช้ของเดิม
+3. ทำแบบสั้นที่สุดที่ยังครบและถูก
 
-## By output type
+## 3 · ตามชนิดงาน
 
-### Documents (BRD, FSD, ADR)
+| งาน | ทำ | เลี่ยง |
+|---|---|---|
+| **โค้ด** | ชื่อบอกว่าคืออะไรและมีหน่วย · 1 ฟังก์ชันทำ 1 เรื่อง · คืนค่าออกเร็วแทนการซ้อน `if` · เยื้องไม่เกิน 3 ชั้น · คอมเมนต์บอก "ทำไม" · ตามสไตล์ของโปรเจกต์ | abstraction ที่มีตัวใช้ตัวเดียว · ทางลัดที่ฉลาดแต่อ่านยาก · ไฟล์ก้อนเดียวทำทุกอย่าง · โฟลเดอร์ `utils/` กองรวม · dependency ใหม่เพื่องานไม่กี่บรรทัด |
+| **เอกสาร · รายงาน** | ข้อสรุปขึ้นก่อน · 1 ย่อหน้า 1 เรื่อง · ตัวอย่างประกอบข้อที่เป็นนามธรรม · ตารางสำหรับข้อมูลที่เทียบกัน | ทวนสิ่งที่พูดไปแล้ว · หัวข้อที่ไม่มีเนื้อ · ศัพท์ที่คนอ่านไม่รู้ |
+| **แผน · ขั้นตอน** | 3–5 ข้อสำคัญ · ทุกข้อมีเจ้าของและวัดได้ว่าเสร็จ · ขั้นน้อยที่สุดที่ได้ผล | รายการ 20 ข้อที่ไม่มีลำดับความสำคัญ · ขั้นที่มีไว้ "เผื่อ" |
+| **ดีไซน์ · สไลด์ · รูป** | 1 หน้า 1 ใจความ · ทางสั้นสุดไปถึงเป้าของผู้ใช้ · ใช้แบบที่คนคุ้นเคย | อัดข้อมูลจนต้องเพ่ง · ของตกแต่งที่ไม่ช่วยให้เข้าใจ |
+| **ตาราง · ข้อมูล** | คอลัมน์เท่าที่ใช้ตัดสินใจ · สูตรสั้นที่ตามได้ | คอลัมน์ซ้ำความหมาย · สูตรซ้อนยาวบรรทัดเดียว |
+| **คำตอบ** | ตอบก่อน · ยาวเท่าที่คำถามต้องการ | อธิบายยาวกว่าตัวงาน |
 
-Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
-example for every abstract point, tables for structured data.
+plugin `software-company` มีรายละเอียดของโค้ดและสถาปัตยกรรมเพิ่ม: `lazy-coding` (เขียนให้น้อย) · `readable-code` (ชื่อ รูปร่างฟังก์ชัน โครงไฟล์) · `simplicity-first` (เอกสาร แผน สถาปัตยกรรม) · ถ้าติดตั้งอยู่ให้เปิดคู่กัน
 
-Avoid: marketing-speak ("revolutionary", "best-in-class", "synergy"), undefined
-jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
+## 4 · บอกว่าตั้งใจทำให้ง่าย
 
-### Architecture
+ทางลัดที่ตั้งใจ ให้เขียนไว้ว่าใช้ได้ถึงแค่ไหนและเปลี่ยนเมื่อไร จะได้ไม่ดูเหมือนลืม เช่น `// simple: เก็บใน memory — ย้ายไป Redis เมื่อรันเกิน 1 process` · ในรายงานใส่ 1 บรรทัด `ข้าม: X — เพิ่มเมื่อ Y`
 
-Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
+## 5 · ตรวจก่อนส่ง 5 ข้อ
 
-Avoid: microservices for small teams, distributed-everything, multi-master
-databases before you must, event-driven by default (sync is simpler).
-
-### Plans
-
-Do: 3-5 priorities (not 20), a named owner per item, measurable success
-criteria, realistic timelines with buffer, cut scope to fit time.
-
-Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
-aspirational dates with no buffer, plans without success metrics.
-
-### Designs (UX, API)
-
-Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
-across screens, defaults that work for 80%, progressive disclosure.
-
-Avoid: novel interactions where a standard one works, 10-step flows when 3
-work, required fields with no smart default, hidden features needing tutorials.
-
-## Examples
-
-**API description**
-
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
-authentication to facilitate the seamless retrieval of user profile data."
-
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
-`?fields=name,email` to limit the response."
-
-**Sprint goal**
-
-❌ "Improve overall product quality and customer satisfaction through various
-initiatives."
-
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
-transient errors (1d), clearer error messages (1d)."
-
-**Architecture for a new feature**
-
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
-dedicated auth service."
-
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
-auth middleware. Log to the existing system."
-
-## Anti-patterns to reject
-
-- **Future-proofing** — abstractions for needs that never arrive.
-- **"It might scale"** — infra for 1M users while you have 1k.
-- **Layer cake** — 6 layers where 90% just pass through.
-- **Resume-driven design** — fancy tech to look sophisticated.
-- **Buzzword stacking** — "cloud-native event-driven AI-powered".
+1. คนนอกเปิดดูครั้งแรกแล้วเข้าใจภายใน 30 วินาทีไหม
+2. มีส่วนไหน ขั้นไหน หรือชั้นไหนตัดออกได้โดยไม่เสียอะไรไหม ถ้ามีให้ตัด
+3. ทุกส่วนที่เพิ่มมา มีเหตุผลว่าต้องใช้ตอนนี้ ไม่ใช่ "เผื่อ" ใช่ไหม
+4. ยังครบเรื่องความถูกต้อง ความปลอดภัย และสิ่งที่ผู้ใช้ขอไหม
+5. ยังแยกหน้าที่ชัด ไม่ได้ยุบหลายเรื่องไว้ที่เดียวเพื่อให้ดูสั้นใช่ไหม
 
 
 ---
@@ -636,8 +594,8 @@ Use existing tools:
 
 | Stack | Library | Notes |
 |-------|---------|-------|
-| Node.js | `passport`, `lucia-auth` | Lucia is simpler and newer |
-| Python | `authlib`, `python-jose` | authlib for OAuth |
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
 | Go | `oauth2`, `golang-jwt` | Standard |
 | Rust | `axum-login`, `jsonwebtoken` | — |
 | Any | Auth0, Clerk, Supabase Auth | Managed (faster) |

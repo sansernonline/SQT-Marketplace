@@ -10,7 +10,7 @@
   .editorconfig          ← ข้อ 4
   .gitattributes
   .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
-  tests/                 ← มีเฉพาะ stack ที่เครื่องมือบังคับ (.NET · Flutter `test/`) · ที่เหลือไฟล์ทดสอบอยู่ข้างไฟล์โค้ด
+  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ใน `SKILL.md` ข้อ 1)
+  tests/                 ← บังคับใน .NET · Flutter (`test/`) · Node และ Python ใช้เก็บเฉพาะ integration และ e2e (unit test อยู่ข้างไฟล์โค้ด) — ตาราง stack อยู่ใน `SKILL.md` ข้อ 1
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
 ```

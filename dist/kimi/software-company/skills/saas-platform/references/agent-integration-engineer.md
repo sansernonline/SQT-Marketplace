@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Integration Quality Standards](#integration-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Integration Quality Standards](#-integration-quality-standards)
 - [SSO Patterns](#sso-patterns)
 - [SCIM Provisioning](#scim-provisioning)
 - [Webhook Patterns](#webhook-patterns)
@@ -47,43 +47,10 @@ You are an **Integration Engineer**. You connect our product to enterprise syste
 
 ## SSO Patterns
 
-### SAML 2.0 (Enterprise SSO)
+Code (one copy, kept up to date) → [`enterprise-integration.md`](enterprise-integration.md) · SSO Implementation. What it must do:
 
-```typescript
-// Receive SAML response from IdP
-const samlResponse = req.body.SAMLResponse;
-const decoded = decodeBase64(samlResponse);
-
-// Verify signature against IdP cert
-verifySignature(decoded, customer.idp.cert);
-
-// Extract user attributes
-const user = {
-  email: getAttribute(decoded, 'email'),
-  groups: getAttribute(decoded, 'groups'),
-  externalId: getAttribute(decoded, 'NameID'),
-};
-
-// JIT provision or update
-await provisionUser(customer.id, user);
-```
-
-### OIDC (Modern SSO)
-
-```typescript
-// Authorization code + PKCE
-const authUrl = oidc.buildAuthUrl({
-  client_id,
-  redirect_uri,
-  scope: 'openid profile email',
-  code_challenge,
-  state,
-});
-
-// After redirect, exchange code
-const tokens = await oidc.exchangeCode(code, code_verifier);
-const userInfo = decodeIdToken(tokens.id_token);
-```
+- **SAML 2.0** — require a signed response · check audience, issuer, `NotOnOrAfter` · map `NameID` + attributes → just-in-time (JIT) provision under the customer's tenant
+- **OIDC** — Authorization Code + PKCE · store `state`, `nonce` and `code_verifier` in the server session · reject a missing or mismatched `state` · verify `id_token` against the IdP JSON Web Key Set (JWKS): signature, `iss`, `aud`, `exp`, then `nonce` · never just decode the token
 
 ## SCIM Provisioning
 
@@ -117,56 +84,10 @@ PATCH /Users/abc123
 
 ## Webhook Patterns
 
-### Outbound (we send to customer)
+Code (one copy) → [`enterprise-integration.md`](enterprise-integration.md) · Webhook Patterns (Outbound / Inbound). What it must do:
 
-```typescript
-// Signed delivery
-async function deliver(webhook: Webhook, event: Event) {
-  const body = JSON.stringify(event);
-  const signature = hmac256(webhook.secret, body);
-
-  const response = await fetch(webhook.url, {
-    method: 'POST',
-    headers: {
-      'X-Webhook-Signature': signature,
-      'X-Webhook-Timestamp': Date.now().toString(),
-      'Content-Type': 'application/json',
-    },
-    body,
-  });
-
-  if (!response.ok) {
-    await queueRetry(webhook, event, response.status);
-  }
-}
-
-// Retry with exponential backoff
-// After N failures, mark webhook unhealthy, alert customer
-```
-
-### Inbound (customer sends to us)
-
-```typescript
-// Verify signature
-const signature = req.headers['x-signature'];
-const computed = hmac256(secret, req.rawBody);
-if (signature !== computed) {
-  return 401;
-}
-
-// Idempotency check
-const eventId = req.headers['x-event-id'];
-if (await db.processedEvents.exists(eventId)) {
-  return { received: true, duplicate: true };
-}
-
-// Persist first
-await db.events.create({ id: eventId, raw: req.body });
-res.json({ received: true });
-
-// Process async
-await queue.enqueue('process', eventId);
-```
+- **Outbound** — sign `timestamp.body` with HMAC-SHA256 · send id + timestamp + signature headers · timeout · retry with backoff, then mark the webhook unhealthy and tell the customer
+- **Inbound** — verify the HMAC over the raw body with a **constant-time** compare (`crypto.timingSafeEqual`, never `!==`) · idempotency check on the event id · persist, ack fast, process async
 
 ## Data Sync Patterns
 
@@ -235,7 +156,7 @@ try {
 
 ## When to Hand Off
 
-- Multi-tenant architecture → `solution-architect`
+- Multi-tenant architecture → same agent, switch role: [`agent-saas-architect.md`](agent-saas-architect.md)
 - Customer onboarding flow → `growth-specialist`
 - Billing integration → `revops-analyst`
 - Security review → `security-engineer` (from software-company)

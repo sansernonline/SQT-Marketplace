@@ -15,7 +15,9 @@
 - [Anti-patterns Specific to PCI](#anti-patterns-specific-to-pci)
 - [Reference](#reference)
 
-# PCI-DSS v4 Compliance Patterns
+# PCI-DSS v4.0.1 Compliance Patterns
+
+> Current version: PCI DSS v4.0.1 (published June 2024). v4.0 was retired on 31 Dec 2024. Source: PCI SSC blog "Just published: PCI DSS v4.0.1"; also Cloud Security Alliance (Aug 2024) and PCI Proxy (Jun 2024) — ตรวจ 22 ต.ค. 2569.
 
 ## When to use this skill
 
@@ -57,16 +59,18 @@ Anywhere card data goes, that system is in scope.
 
 ## SAQ Selection (Critical Decision)
 
-| SAQ | Use when | Controls | Effort |
-|:---:|----------|:--------:|:------:|
-| **A** ⭐ | Fully outsourced (Stripe Elements, hosted page) | 24 | 🟢 Low |
-| **A-EP** | E-commerce, hosted with some your server interaction | 191 | 🟡 Med |
-| **B** | Imprint machines only | 41 | 🟡 Med |
-| **B-IP** | Stand-alone IP terminals | 79 | 🟡 Med |
-| **C** | Payment app + isolated network | 162 | 🔴 High |
-| **D** | Everything else (full CDE) | 329 | 🔴 Very High |
+| SAQ | Use when | Effort |
+|:---:|----------|:------:|
+| **A** ⭐ | Fully outsourced (Stripe Elements iframe, hosted payment page) | 🟢 Low |
+| **A-EP** | E-commerce where your own page affects the payment form (e.g. direct post, your JavaScript around the fields) | 🟡 Med |
+| **B** | Imprint machines or stand-alone dial-out terminals | 🟡 Med |
+| **B-IP** | Stand-alone IP terminals | 🟡 Med |
+| **C** | Payment app + isolated network | 🔴 High |
+| **D** | Everything else (full CDE) | 🔴 Very High |
 
-> 🎯 **Aim for SAQ A.** SAQ D has 305 more controls than SAQ A. Design the system so SAQ A applies.
+> 🎯 **Aim for SAQ A.** SAQ D is several times larger than SAQ A. Design the system so SAQ A applies. Question counts change with each SAQ revision — read the current SAQ from the PCI Security Standards Council (PCI SSC) document library instead of quoting a number.
+
+**SAQ A eligibility (January 2025 SAQ A, in effect from 31 Mar 2025):** requirements 6.4.3 and 11.6.1 (payment-page script controls) and 12.3.1 were removed from SAQ A. In their place is a new eligibility rule: the merchant must confirm its site is not susceptible to attacks from scripts that could affect its e-commerce system. In practice: keep the card form fully inside the gateway's iframe or hosted page, control which scripts your pages load (e.g. Content Security Policy (CSP), Subresource Integrity (SRI)), or use the gateway's or a third party's confirmation that the page is protected. If you can't confirm this, SAQ A does not apply. Source: PCI SSC blog "Important updates announced for merchants validating to SAQ A" (30 Jan 2025); also Akamai and Jscrambler write-ups — ตรวจ 22 ต.ค. 2569.
 
 ## The 12 Requirements (Cheat Sheet)
 
@@ -171,24 +175,34 @@ Use a key management service (KMS) from AWS, Azure or GCP, or a hardware securit
 ## Tokenization Pattern
 
 ```typescript
-// Use gateway's tokenization
+// Use gateway's tokenization — PaymentIntents + Elements, the same flow as payment-gateway-integration.md
+// (the legacy createToken + charges.create flow is not used for new work)
 // Card NEVER touches your server
 
-// Browser side (Stripe.js example):
-const { token } = await stripe.createToken(cardElement);
-// `token.id` = 'tok_xxx', safe to send
-
-// Server side:
-const charge = await stripe.charges.create({
-  amount: 1000,
+// Server side — create the intent, send only its client_secret to the browser:
+const intent = await stripe.paymentIntents.create({
+  amount: 1000,              // minor units (satang)
   currency: 'thb',
-  source: token.id,  // ← token, not PAN
+  automatic_payment_methods: { enabled: true },
+  metadata: { orderId },
+}, { idempotencyKey: `order_${orderId}_charge_v1` });
+// → return intent.client_secret to the browser
+
+// Browser side (Stripe.js + Payment Element in an iframe):
+const elements = stripe.elements({ clientSecret });
+elements.create('payment').mount('#payment-element');
+const { error } = await stripe.confirmPayment({
+  elements,
+  confirmParams: { return_url: 'https://yourapp.com/payment-return' },
 });
 
-// Store in your DB:
+// Server side, on the payment_intent.succeeded webhook — store references only:
+const pi = await stripe.paymentIntents.retrieve(intentId, { expand: ['latest_charge'] });
+const charge = pi.latest_charge as Stripe.Charge;
 await db.payments.create({
-  paymentMethodToken: charge.payment_method,  // e.g., 'pm_xxx'
-  last4: charge.payment_method_details.card.last4,  // ok to store
+  gatewayPaymentId: pi.id,                              // 'pi_…'
+  paymentMethodId: pi.payment_method as string,         // 'pm_…' token, not PAN
+  last4: charge.payment_method_details?.card?.last4,   // ok to store
   // NEVER: full PAN, CVV
 });
 ```
@@ -268,6 +282,7 @@ Before QSA arrives:
 
 ## Reference
 
-- [PCI-DSS v4.0 Standard](https://www.pcisecuritystandards.org/document_library/?category=pcidss)
+- [PCI-DSS v4.0.1 Standard](https://www.pcisecuritystandards.org/document_library/?category=pcidss)
+- [SAQ A update, Jan 2025 (PCI SSC blog)](https://blog.pcisecuritystandards.org/important-updates-announced-for-merchants-validating-to-self-assessment-questionnaire-a)
 - [SAQ Selection Tool](https://www.pcisecuritystandards.org/)
 - [Tokenization Best Practices](https://www.pcisecuritystandards.org/document_library/?category=guidance)

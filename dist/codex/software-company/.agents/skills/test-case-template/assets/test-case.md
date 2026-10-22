@@ -1,7 +1,7 @@
 ## TC-XXX-NNN: <Short descriptive title>
 
 **Module:** <feature area>
-**Type:** Functional | Boundary | Negative | Integration | Performance | Security
+**Type:** Functional | Boundary | Equivalence | Negative | State Transition | Integration | Concurrency | Performance | Security | Accessibility
 **Priority:** P1 | P2 | P3 | P4
 **Automation:** Manual | Automated | Candidate
 

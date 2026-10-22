@@ -178,8 +178,9 @@ make dev   # or `npm run dev` or `docker compose up`
 # Behind the scenes:
 - Install deps
 - Set up DB
-- Start services
-- Open browser
+- Start services (hot reload on)
+- Show logs readably
+- Open browser at the right URL
 
 # Constraint: works on Mac, Linux, Windows (or document)
 ```
@@ -190,7 +191,7 @@ make dev   # or `npm run dev` or `docker compose up`
 |------|-----|
 | Docker Compose | Multi-service local |
 | Dev Containers | VSCode integration |
-| Tilt | Kubernetes-aware local |
+| Tilt / Telepresence | Kubernetes-aware local |
 | direnv | Per-project env vars |
 | mise / asdf | Tool version management |
 | nx / turborepo | Monorepo dev experience |
@@ -233,6 +234,8 @@ const user = await client.users.create({
 console.log('Created user:', user.id);
 // → "Created user: user_abc123"
 ```
+
+Rules: imports shown · realistic data (not `foo`/`bar`) · comments where non-obvious · sample output shown · copy-pasteable as-is.
 
 ## Onboarding Funnel
 
@@ -311,8 +314,6 @@ NPS = % promoters - % detractors
 
 ## Reference
 
-- [DX Conference talks](https://www.developerexperiencecon.com/)
 - [Stripe's DX philosophy](https://stripe.com/blog)
 - [Vercel's DX team](https://vercel.com/blog)
-- [Developer Experience Book (DX Tomorrow)](https://www.devexperience.com/)
 - [Tom Tunguz writing on DX](https://tomtunguz.com/)

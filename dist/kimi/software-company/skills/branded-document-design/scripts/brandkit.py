@@ -1,6 +1,6 @@
 """
 brandkit.py — ตัวช่วยสร้างเอกสาร Word (.docx) ที่มีหน้าตาเป็นระบบเดียวกัน
-สไตล์อ้างอิงจาก Apps Track SRS (ฟอนต์ Tahoma · accent น้ำเงิน-ม่วง · ตารางหัวฟ้าอ่อน)
+สไตล์อ้างอิงจาก ชุดเอกสารซอฟต์แวร์ตัวอย่าง (ฟอนต์ Tahoma · accent น้ำเงิน-ม่วง · ตารางหัวฟ้าอ่อน)
 
 ใช้กับ python-docx >= 1.1
     pip install python-docx
@@ -9,15 +9,15 @@ brandkit.py — ตัวช่วยสร้างเอกสาร Word (.do
 ------------------
     from brandkit import BrandDoc, TOKENS
 
-    doc = BrandDoc()                       # A4 · Tahoma · โทน Apps Track
+    doc = BrandDoc()                       # A4 · Tahoma · สีประจำบ้าน
     doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-              subtitle="ระบบ Apps Track — Project Control & Monitor",
+              subtitle="ระบบตัวอย่าง — Project Control & Monitor",
               meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-              logo="asset/AppsTrack_Logo_Badge.png")
+              logo="asset/Sample_Logo_Badge.png")
     doc.h1("1. ภาพรวมระบบ")
-    doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
+    doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ ...")
     doc.table(["หัวข้อ", "รายละเอียด"],
-              [["URL ระบบ", "https://project.eitaccount.cloud"],
+              [["URL ระบบ", "https://app.example.com"],
                ["ประเภทระบบ", "Web Application (SPA) + PWA"]],
               widths=[2600, 7038])
     doc.callout("tip", "ข้อแนะนำ", "เขียน callout สั้น ๆ 1–3 บรรทัดเท่านั้น")
@@ -53,7 +53,7 @@ TOKENS = {
     # ตัวอักษร
     "text": "333B4A",         # หัวข้อย่อย/ข้อความเน้น
     "text_body": "414957",    # เนื้อความ
-    "text_muted": "7D8492",   # คำบรรยายรูป, meta, footer
+    "text_muted": "676D7A",   # คำบรรยายรูป, meta, footer (≥ 4.5:1 บนขาวและ brand_tint)
     "text_faint": "A9AEB9",
     # เส้น
     "line": "E4E7EE",
@@ -828,7 +828,35 @@ def use_brand(**overrides):
     """เปลี่ยน palette ทั้งชุดสำหรับลูกค้า/โปรเจกต์อื่น
         use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")"""
     TOKENS.update({k: v.lstrip("#").upper() for k, v in overrides.items()})
+    check_contrast()
     return TOKENS
+
+
+def _lum(h):
+    c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def contrast(a, b):
+    """อัตราส่วน contrast ตาม WCAG ระหว่างสี hex 2 สี"""
+    hi, lo = sorted((_lum(a), _lum(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def check_contrast():
+    """หยุดทันทีถ้าชุดสีไม่ผ่านเกณฑ์ใน SKILL.md ข้อ 0:
+    ข้อความ/text_muted ≥ 4.5 · brand_deep ≥ 7 · brand (H1 และ KPI ตัวใหญ่) ≥ 3"""
+    t = TOKENS
+    rules = [
+        ("text_body", "FFFFFF", 4.5), ("text_muted", "FFFFFF", 4.5), ("text_muted", t["brand_tint"], 4.5),
+        ("brand_deep", "FFFFFF", 7.0), ("brand_deep", t["brand_tint"], 7.0),
+        ("brand", "FFFFFF", 3.0), ("brand", t["brand_tint"], 3.0),
+    ]
+    bad = [f"{fg} {t[fg]} บน {bg} = {contrast(t[fg], bg):.2f} (ต้อง ≥ {need})"
+           for fg, bg, need in rules if contrast(t[fg], bg) < need]
+    if bad:
+        raise ValueError("ชุดสีไม่ผ่านเกณฑ์ contrast — ปรับความเข้มแล้วลองใหม่: " + " · ".join(bad))
 
 
 # ---------------------------------------------------------------------------

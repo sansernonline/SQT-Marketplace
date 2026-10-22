@@ -1,20 +1,20 @@
 ---
 name: markdown-visuals
-description: Use when a markdown doc needs a picture (UI state, flow, architecture) that renders everywhere. Mermaid content → software-diagrams.
+description: Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
 ---
 
 # Markdown Visuals
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
 
-> **Rule:** Every design, mockup, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
 
 ## When to use this skill
 
-- A picture *inside a markdown file* — wireframe sketch or UI state in a spec, FSD, ADR or README
-- Writing FSD, BRD, ADR, or architecture docs that describe layout, flow, or relationships
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
 - Explaining state transitions, user journeys, or system interactions
 - Comparing 2+ visual options for the user
 - The user asked "show me how it looks" inside a markdown doc or chat reply
@@ -25,8 +25,8 @@ description: Use when a markdown doc needs a picture (UI state, flow, architectu
 
 | Task | Use instead |
 |---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
 | Designed figure for a proposal, slide or print | `diagram-figures` |
 
 ## Decision tree: which format?
@@ -34,19 +34,26 @@ description: Use when a markdown doc needs a picture (UI state, flow, architectu
 ```
 What are you showing?
 │
-├─ UI sketch in a doc / component state / icon → Inline SVG
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
 ├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / sequence / decision tree          →  Mermaid (software-diagrams)
-├─ Architecture / ER / class                →  Mermaid (software-diagrams)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
 ├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design tokens.md "สีข้อมูล (กราฟ)"
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
 ├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
 └─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
 ```
 
-**Follow the tree above**; when two branches fit, pick inline SVG over an image file. Inline SVG renders everywhere and versions cleanly in git. It adds no binary files to the repo, and the user can read and edit the markup.
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
 
-## 1 · Inline SVG (primary technique)
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
 
 ### Boilerplate
 
@@ -62,7 +69,7 @@ What are you showing?
 ```
 
 **Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — without this, GitHub may not render
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
 - `viewBox` — sets the coordinate space; lets the SVG scale responsively
 - `role="img"` + `aria-label` — accessibility, screen readers
 - `<p align="center">` wrapper — centers in the rendered page
@@ -84,6 +91,7 @@ Window chrome, phone frame, button, card, status badge, running dot and tooltip 
 ## 2 · External image files
 
 Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
 - Photo or screenshot
 - Illustration too complex to author as SVG by hand (50+ shapes)
 - Reusing the same image across many docs
@@ -134,7 +142,7 @@ Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
 
 ## 4 · Mermaid
 
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams`**
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
 ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
 
 | เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
@@ -163,10 +171,10 @@ For every visual:
 - ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
 - ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
 - ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **SVG without `xmlns`** — GitHub silently fails to render
+- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
 - ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
 - ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mixing Mermaid syntax versions** — stick to v10 syntax so GitHub renders it
+- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
 - ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
 - ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
@@ -183,15 +191,15 @@ When a markdown doc needs a design picture (clickable app screens go to the plat
 4. **Add a feature reference table** below the visuals — what each element means
 5. **Cross-check accessibility checklist** before delivery
 
-Not sure a visual will render? Tell the user to preview it in GitHub or Notion.
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
 
 ## Related skills
 
-- [[polished-document-style]] — overall doc formatting, Mermaid catalogue, callout boxes
-- [[simplicity-first]] — don't over-design the diagram; show what's needed
-- [[software-diagrams]] — which diagram type answers which question, plus the shared Mermaid theme
-- [[diagram-figures]] — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- [[ui-craft]] — spacing, hierarchy and states when the picture is a screen
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
 
 ## ไม่ให้ดูเหมือน AI ทำ
 

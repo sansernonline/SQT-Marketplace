@@ -7,7 +7,7 @@ description: Use when about to generate an AI image or prompts keep missing. Wri
 
 Write the brief before making the first image. Vague prompts give vague images. A brief gives every retry the same target.
 
-This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has.
+This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has. No generation tool → the fallback order (Scalable Vector Graphics (SVG) set, then Openverse photos) lives in `image-generation` (plugin `superuser`); this skill owns the brief and the prompt.
 
 ## Workflow
 
@@ -51,7 +51,7 @@ Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md)
 
 **Request:** "Need a picture for our new matcha drink post, make it nice."
 
-**Brief (after asking):** IG feed 4:5 · headline will be added in layout top-right · brand kit: sage, cream, amber accent, natural editorial style.
+**Brief (after asking):** Instagram (IG) feed 4:5 · headline will be added in layout top-right · brand kit: sage, cream, amber accent, natural editorial style.
 
 **Prompt:**
 

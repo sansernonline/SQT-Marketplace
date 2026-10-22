@@ -73,9 +73,9 @@ Then update `medication-schedule` and the `annual-checkup` results table, and st
 
 ## Worked example — top 3 questions
 
-Visit for morning headaches, 3 weeks, home BP readings 150/95 on 4 mornings:
+Visit for morning headaches, 3 weeks, home blood pressure (BP) readings 150/95 on 4 mornings:
 1. "My home blood pressure readings are on this sheet — could they be connected to the headaches, and do I need more checks?"
 2. "Is any medicine or supplement on my list a possible cause?"
 3. "Which signs mean I should go to the emergency room instead of waiting?"
 
-Related: `medication-schedule` · `annual-checkup` · `sleep-log` · `meeting-prep-card` in `personal-life`.
+Related: `medication-schedule` · `annual-checkup` · `sleep-log` · `meeting-prep-card`.

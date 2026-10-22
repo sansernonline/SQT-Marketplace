@@ -25,7 +25,7 @@
 - [ ] Deadline today / limited slots
 - [ ] Told to keep it secret from family or the bank
 - [ ] Told what to say if the bank asks why you are transferring
-- [ ] Caller claims to be police, DSI, AMLO, bank, Revenue Department or courier and demands a transfer
+- [ ] Caller claims to be police, Department of Special Investigation (DSI), Anti-Money Laundering Office (AMLO), bank, Revenue Department or courier and demands a transfer
 
 Two or more ticks = treat as a scam until proven otherwise. Any tick in "The payment" alone = do not transfer.
 

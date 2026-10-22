@@ -6,15 +6,15 @@
 - [Audience Mental Model](#audience-mental-model)
 - [Content Types](#content-types)
 - [Tutorial Structure](#tutorial-structure)
-- [What you'll build](#what-youll-build)
-- [What you'll learn](#what-youll-learn)
-- [Prerequisites](#prerequisites)
-- [Step 1: Setup (2 min)](#step-1-setup-2-min)
-- [Step 2: First feature (5 min)](#step-2-first-feature-5-min)
-- [Step 3: Add complexity (5 min)](#step-3-add-complexity-5-min)
-- [Step 4: Deploy (3 min)](#step-4-deploy-3-min)
-- [What's next?](#whats-next)
-- [Get the code](#get-the-code)
+- What you'll build
+- What you'll learn
+- Prerequisites
+- Step 1: Setup (2 min)
+- Step 2: First feature (5 min)
+- Step 3: Add complexity (5 min)
+- Step 4: Deploy (3 min)
+- What's next?
+- Get the code
 - [Writing Tone](#writing-tone)
 - [Code in Content](#code-in-content)
 - [Conference Talk Anatomy](#conference-talk-anatomy)
@@ -84,7 +84,7 @@ Developers read content with:
 - Concept C
 
 ## Prerequisites
-- Node.js 18+
+- Node.js 22+ (a supported long-term support (LTS) release — check nodejs.org/en/about/previous-releases; Node 18 reached end of life on 30 Apr 2025)
 - Free account at example.com
 
 ## Step 1: Setup (2 min)
@@ -258,7 +258,7 @@ const response = await fetch(url, {
 
 ```
 Target keywords:
-- Long-tail: "How to X with Y" (often >$10 ARPU intent)
+- Long-tail: "How to X with Y" (specific, high intent: the reader is about to build it)
 - Problem-driven: "X error fix" (high intent)
 - Tutorial: "Build X in N minutes"
 
@@ -301,8 +301,7 @@ Structure:
 
 ## Reference
 
-- [Writing for Engineers (Heinemeier Hansson)](https://world.hey.com/dhh)
-- [Stripe Increment Magazine](https://increment.com/)
+- [Increment (Stripe's magazine, archive: published Apr 2017 – Nov 2021, increment.com/about)](https://increment.com/)
 - [Julia Evans (zines + blog)](https://jvns.ca/)
 - [Stack Overflow Blog](https://stackoverflow.blog/)
 - [Hacker News Discussion](https://news.ycombinator.com/)

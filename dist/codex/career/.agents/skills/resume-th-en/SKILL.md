@@ -15,7 +15,7 @@ General information, not professional advice — for visa or licence claims on a
 |---|---|---|---|---|---|
 | Thai-language post, Thai SME or family business | **Thai** | Usually expected (formal, plain background) | Common | Leave out unless the form requires it | 1–2 pages |
 | English post at a multinational in Thailand | **Hybrid** | Only if the company's own form asks | Leave out | Leave out | 1 page under ~10 years' experience, 2 max |
-| Overseas role (US, UK, EU, Australia, Singapore) | **International** | **Leave out** — many US/UK recruiters discard photo CVs to avoid bias claims | Leave out | Leave out | US: 1 page early-career · UK/EU: 2 pages ok |
+| Overseas role (US, UK, EU, Australia, Singapore) | **International** | **Leave out** — photos are not expected there and can count against you | Leave out | Leave out | US: 1 page early-career · UK/EU: 2 pages ok |
 | Government / state enterprise (ราชการ / รัฐวิสาหกิจ) | Their own ใบสมัคร form | As the form says | As the form says | As the form says | Form |
 
 ## Never put on any CV
@@ -86,8 +86,8 @@ English verbs: Led · Built · Cut · Grew · Launched · Automated · Negotiate
 
 Fill-in templates (English, Thai, cover email) → [references/templates.md](references/templates.md)
 
-Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a STAR story) · `important-docs` in `personal-life` (store certificates and transcripts).
-
 ## Not an AI look
 
-Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there. CVs are usually PDF or .docx, so for those only the 8-point eye check applies — the script is for HTML/CSS files. For a resume that means: no emoji headings, no bold-first bullets, no generic claims without numbers.
+
+Related: `linkedin-profile` (keep CV and profile consistent) · `interview-prep` (every bullet becomes a Situation, Task, Action, Result (STAR) story) · `important-docs` in `personal-life` (store certificates and transcripts).

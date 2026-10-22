@@ -7,12 +7,12 @@
 - [24/7 Coverage Models](#247-coverage-models)
 - [SOC KPIs](#soc-kpis)
 - [Playbook Library](#playbook-library)
-- [Trigger](#trigger)
-- [Severity](#severity)
-- [Steps](#steps)
-- [Escalation](#escalation)
-- [Tools](#tools)
-- [Communications](#communications)
+- Trigger
+- Severity
+- Steps
+- Escalation
+- Tools
+- Communications
 - [SOAR Patterns](#soar-patterns)
 - [Detection Coverage Strategy](#detection-coverage-strategy)
 - [Tools (2026)](#tools-2026)
@@ -191,8 +191,8 @@ Continuously improve coverage
 
 | Need | Tools |
 |------|-------|
-| SIEM | Splunk, Sentinel, Elastic, Sumo, Chronicle |
-| SOAR | Splunk SOAR, Tines, Demisto, Tracecat |
+| SIEM | Splunk, Microsoft Sentinel, Elastic, Sumo Logic, Google Security Operations (เดิม Chronicle) |
+| SOAR | Splunk SOAR, Tines, Cortex XSOAR (เดิม Demisto), Tracecat |
 | EDR | CrowdStrike, SentinelOne, Defender |
 | NDR | Vectra, Darktrace, ExtraHop |
 | TIP | MISP, OpenCTI, Anomali |
@@ -243,7 +243,7 @@ Tier 3 (24+ months):
 
 ## Reference
 
-- [NIST SP 800-61 (Incident Handling)](https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final)
+- [NIST SP 800-61 Rev. 3 (Incident Response, เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [SANS Reading Room](https://www.sans.org/white-papers/)
 - [MITRE ATT&CK](https://attack.mitre.org/)
 - [FIRST.org (incident response)](https://www.first.org/)

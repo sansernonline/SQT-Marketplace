@@ -5,7 +5,7 @@ description: Use when running Thai monthly payroll (tax withholding, social secu
 
 # Thai Payroll
 
-Gross pay minus SSO, PVD and PIT = net pay. Then file and remit. This is general information, not tax advice. Check unusual cases (bonus, stock, foreign staff) with an accountant.
+Gross pay minus social security (SSO), provident fund (PVD) and personal income tax (PIT) = net pay. Then file and remit. This is general information, not tax advice. Check unusual cases (bonus, stock, foreign staff) with an accountant.
 
 ## 1. Monthly payroll steps
 
@@ -15,7 +15,7 @@ Gross pay minus SSO, PVD and PIT = net pay. Then file and remit. This is general
 | 2 | Compute gross: salary + OT + allowances + commission + taxable benefits | payroll register | |
 | 3 | SSO 5% on wage capped at 17,500 → max 875 (see `social-security-th`) | employee + employer share | |
 | 4 | PVD employee % and employer % (if the company has a fund) | | |
-| 5 | PIT withholding by annualisation (section 2) | WHT per head | |
+| 5 | PIT withholding by annualisation (section 2) | withholding tax (WHT) per head | |
 | 6 | Net pay = gross − SSO − PVD − PIT − other agreed deductions | payslip | pay day per contract (at least once a month, ม.70) |
 | 7 | File **ภ.ง.ด.1** and remit WHT | RD receipt | 7th next month (paper) / 15th (e-Filing) |
 | 8 | File **สปส.1-10** and remit SSO (both shares) | SSO receipt | 15th next month |

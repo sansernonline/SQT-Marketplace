@@ -32,13 +32,13 @@
 ### Polished Roadmap
 
 ```markdown
-# Product Roadmap: <Product> — Q1-Q4 YYYY
+# Product Roadmap: <Product> — Q1-Q4 <YYYY>
 
 | | |
 |--|--|
 | **Document Type** | Product Roadmap |
 | **Version** | 1.0 |
-| **Status** | Approved |
+| **Status** | Draft |
 | **Product Owner** | @pm-name |
 | **Time Horizon** | 12 months |
 
@@ -49,39 +49,35 @@
 | Theme | Why It Matters | Success Metric |
 |-------|---------------|----------------|
 | Activation Lift | Conversion is 30% below industry | +15% activation rate |
-| Monetization | Unlock paid tier | $XXk MRR by Q4 |
+| Monetization | Unlock paid tier | $XXk Monthly Recurring Revenue (MRR) by Q4 |
 | International | Expand to APAC | 3 new locales |
 
 ## Quarterly Plan
 
-\`\`\`mermaid
-gantt
-    title Product Roadmap YYYY
-    dateFormat YYYY-MM-DD
-    section Activation
-    Onboarding redesign     :a1, 2025-01-01, 60d
-    Free trial extension    :a2, after a1, 30d
-    section Monetization
-    Pricing experiments     :b1, 2025-02-01, 45d
-    Paid tier launch        :b2, after b1, 30d
-    section International
-    APAC research           :c1, 2025-03-01, 30d
-    JP/KR/TH localization   :c2, after c1, 90d
-\`\`\`
+> รูปไทม์ไลน์ (Gantt) วาดตามแบบประจำบ้านของ skill `diagram-figures` — เอกสารโปรเจกต์ไม่ใช้ Mermaid ค่าเริ่มต้น · ข้อมูลที่ใช้วาด:
+
+| Theme | งาน | เริ่ม | ยาว / ต่อจาก |
+|-------|-----|-------|--------------|
+| Activation | Onboarding redesign | `<YYYY>`-01-01 | 60 วัน |
+| Activation | Free trial extension | ต่อจาก Onboarding redesign | 30 วัน |
+| Monetization | Pricing experiments | `<YYYY>`-02-01 | 45 วัน |
+| Monetization | Paid tier launch | ต่อจาก Pricing experiments | 30 วัน |
+| International | Asia-Pacific (APAC) research | `<YYYY>`-03-01 | 30 วัน |
+| International | JP/KR/TH localization | ต่อจาก APAC research | 90 วัน |
 
 ## Feature Prioritization (RICE)
 
-| Feature | Reach | Impact | Confidence | Effort | RICE Score | Priority |
+| Feature | Reach (users / quarter) | Impact (0.25–3) | Confidence | Effort (person-months) | RICE Score | Priority |
 |---------|:-----:|:------:|:----------:|:------:|:----------:|:--------:|
-| Onboarding redesign | 10k | 3 | 80% | 8 wks | 300 | P0 |
-| Paid tier | 5k | 5 | 90% | 12 wks | 188 | P1 |
-| Mobile app | 8k | 4 | 60% | 16 wks | 120 | P2 |
+| Onboarding redesign | 10,000 | 2 | 80% | 2 | 8,000 | P0 |
+| Paid tier | 5,000 | 3 | 90% | 3 | 4,500 | P1 |
+| Mobile app | 8,000 | 1 | 60% | 4 | 1,200 | P2 |
 
-> **RICE = (Reach × Impact × Confidence) / Effort**
+> **RICE = (Reach × Impact × Confidence) / Effort** — ตัวเลขข้างบนเป็นตัวอย่างสมมติ · Impact ใช้สเกล 0.25 / 0.5 / 1 / 2 / 3 · Effort เป็นคน-เดือน (ตรงกับ `SKILL.md` ข้อ 4)
 
 ## Out of Scope (This Year)
 
-- Enterprise SSO (revisit Q1 next year)
+- Enterprise Single Sign-On (SSO) (revisit Q1 next year)
 - AI chatbot (waiting for market signal)
 
 ## Key Metrics Dashboard
@@ -90,7 +86,7 @@ gantt
 |--------|--------:|----------:|----------:|
 | Activation rate | 18% | 25% | 35% |
 | MRR | $50k | $80k | $200k |
-| NPS | 32 | 40 | 50 |
+| Net Promoter Score (NPS) | 32 | 40 | 50 |
 
 ## Strategic Risks
 
@@ -117,7 +113,7 @@ gantt
 |--|--|
 | **Author** | @pm-name |
 | **Status** | Draft |
-| **Target Release** | Q2 YYYY |
+| **Target Release** | Q2 <YYYY> |
 
 ## Problem Statement
 

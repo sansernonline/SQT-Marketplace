@@ -1,7 +1,7 @@
 ---
 name: health-organizer
 description: Use to organise family health admin — checkups, results, medication, sleep, doctor questions. Never diagnoses; 1669.
-tools: Read, Write, Edit, Skill, WebSearch
+tools: Read, Write, Edit, Skill, WebSearch, WebFetch
 model: sonnet
 skills:
   - human-writing

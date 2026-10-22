@@ -9,7 +9,7 @@ Learn on your own real project, in small wins.
 
 ## Steps
 
-1. **Goal and depth** — what "learned" means here (working knowledge or mastery) and why. Choose the depth out loud
+1. **Goal and depth** — what "learned" means here (skim, working knowledge or mastery) and why. Choose the depth out loud
 2. **Baseline check** — 10 quick questions to find what the user already knows. Skip everything they already know
 3. **Milestones** — 4–7 steps, each: concept → tiny exercise → applied to the user's real project. Each step takes under 2 hours
 4. **Anchoring rule** — at least half the milestones modify or extend something the user already owns, not toy examples

@@ -51,7 +51,7 @@ function safe(v) {
 const RESERVED = new Set(['level', 'message', 'timestamp', 'source', 'cid', 'stack', 'splat']);
 
 const lineFormat = winston.format.printf((info) => {
-  const cid = info.cid || '------';
+  const cid = info.cid || '--------';
   const src = info.source || 'app';
   const ctx = Object.entries(info)
     .filter(([k]) => !RESERVED.has(k) && !k.startsWith('Symbol('))
@@ -107,7 +107,7 @@ const logger = winston.createLogger({
 
 /** ผูก correlation id เข้ากับ logger — เรียกครั้งเดียวต่อ request */
 function withCorrelation(cid) {
-  return logger.child({ cid: (cid || '------').slice(0, 8) });
+  return logger.child({ cid: (cid || '--------').slice(0, 8) });
 }
 
 module.exports = { logger, withCorrelation, redact, safe };

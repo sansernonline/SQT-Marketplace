@@ -13,8 +13,9 @@ One page, fifteen minutes before you walk in. If you cannot fill the goal line, 
 2. **Pick the meeting type** from the table — it sets what "done" looks like.
 3. **Pull context** — last meeting's summary and open actions (`meeting-summary`), recent mail thread, the numbers you might be asked.
 4. **Fill the card** (template below).
-5. **Pre-send** if useful — your one-page note or questions 24 hours ahead for decision meetings; people decide faster when they have read it.
-6. **Bring the card** to the meeting and tick it during; it becomes the skeleton for the summary.
+5. **Bring the card** to the meeting and tick it during; it becomes the skeleton for the summary.
+
+> **If the meeting is a day or more away** (decision meetings): draft a one-page note or your questions to send about 24 hours ahead — people decide faster when they have read it. Draft only; send only when the user says send.
 
 ## Meeting types
 
@@ -60,8 +61,8 @@ Landlord meeting, Saturday 10:00, lease renewal. Type: negotiation.
 ## Rules
 
 - Fits on one page or it does not get used
-- No goal → propose an agenda or decline politely; FYI meetings can often be a document
+- No goal → propose an agenda or decline politely; for-your-information (FYI) meetings can often be a document
 - Recurring meetings: one running card per meeting, updated each week
 - Never put passwords, salaries of others, or personal data you do not need on the card
 
-Related: `meeting-summary` (after) · `calendar-audit` (meetings worth keeping) · `polite-message-th-en` (agenda request, decline).
+Related: `meeting-summary` (after) · `calendar-audit` (plugin `personal-life` — meetings worth keeping) · `polite-message-th-en` (agenda request, decline).

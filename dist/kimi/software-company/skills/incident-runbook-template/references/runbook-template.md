@@ -37,7 +37,7 @@
 
 ## Diagnosis (60 seconds)
 
-\`\`\`mermaid
+```mermaid
 flowchart TD
     Start([Alert fires]) --> Q1{Is the service healthy in dashboard?}
     Q1 -->|No| A[Check infrastructure]
@@ -46,25 +46,25 @@ flowchart TD
     Q2 -->|No| Q3{Is latency high?}
     Q3 -->|Yes| C[Check downstream services]
     Q3 -->|No| D[Check alert config - may be false alarm]
-\`\`\`
+```
 
 ### Quick checks (run in order)
 
 **1. Is service responding?**
-\`\`\`bash
+```bash
 curl -fsS https://api.example.com/health || echo "DOWN"
-\`\`\`
+```
 
 **2. Are recent deploys suspicious?**
-\`\`\`bash
+```bash
 gh release list --repo our-org/service --limit 5
-\`\`\`
+```
 
 **3. Check error rate in logs:**
-\`\`\`bash
+```bash
 # Last 10 min of 5xx errors
 kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
-\`\`\`
+```
 
 **4. Check downstream dependencies:**
 - Database: [Dashboard link]
@@ -73,38 +73,52 @@ kubectl logs -n prod deployment/api --since=10m | grep -c '"status":5'
 
 ## Mitigation Steps
 
-Try mitigations in order of risk (lowest first):
+> **Human approval:** an agent only proposes the command and its expected effect. A human on-call runs it or approves it before it touches production (`principle-proceed-on-reversible-work`, `incident-response` Phase 3).
 
-### Step 1: Reduce load (low risk)
-\`\`\`bash
-# Enable rate limiting
+Try mitigations in order of risk (lowest first) — the same order as `incident-response` Phase 3:
+
+### Step 1: Disable the broken feature or reduce load (low risk)
+```bash
+# Turn off the feature flag of the suspect feature
+./scripts/flag.sh set new-checkout off --env prod
+
+# Or enable rate limiting
 kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
-\`\`\`
+```
 
 **Expected effect:** Error rate drops within 2 min
 **If doesn't work:** Go to Step 2
 
 ### Step 2: Scale up (medium risk)
-\`\`\`bash
+```bash
 kubectl scale deployment/api -n prod --replicas=10
-\`\`\`
+```
 
 **Expected effect:** Latency improves within 3 min
 **Caveats:** Will increase cost, monitor budget alerts
 
 ### Step 3: Rollback recent deploy (higher risk)
-\`\`\`bash
+```bash
 kubectl rollout undo deployment/api -n prod
-\`\`\`
+```
 
 **Expected effect:** Reverts to previous version
-**Caveats:** Loses any data created since deploy
+**Caveats:** Check for schema migrations before rolling back. A rollout undo does not delete data, but old code may break on a schema the new release already migrated — roll back only if the migration is backward-compatible
 
-### Step 4: Failover to backup region (last resort)
-\`\`\`bash
+### Step 4: Block bad traffic at the WAF or firewall (high risk)
+```bash
+# Block the abusive IP range / path at the web application firewall (WAF)
+./scripts/waf-block.sh --cidr 203.0.113.0/24 --ttl 1h
+```
+
+**Expected effect:** Abusive traffic stops reaching the service
+**Caveats:** Can block real users; set a TTL (time to live) and check the allow list
+
+### Step 5: Failover to backup region (last resort)
+```bash
 # Update DNS to point to backup region
 ./scripts/failover-to-us-west.sh
-\`\`\`
+```
 
 **Expected effect:** All traffic shifts to backup
 **Caveats:** Some user data may need migration, full rollback complex

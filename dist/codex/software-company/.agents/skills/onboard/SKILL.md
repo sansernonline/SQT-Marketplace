@@ -16,7 +16,7 @@ The technical writer should:
 
 2. **Apply Diátaxis framework** — onboarding has 4 parts:
    - **Tutorial** — first day setup + first task
-   - **How-To** — common dev workflows (PR, deploy, test)
+   - **How-To** — common dev workflows (pull request (PR), deploy, test)
    - **Reference** — links to systems, who-owns-what
    - **Explanation** — architecture overview, history
 
@@ -24,7 +24,7 @@ The technical writer should:
 
    **Day 1-7: Setup & Orientation**
    - Environment setup checklist
-   - Tool access (Slack, GitHub, AWS, etc.)
+   - Tool access (Slack, GitHub, Amazon Web Services (AWS), etc.) — ใส่ลิงก์ไปที่ขอสิทธิ์ ไม่ใส่รหัสผ่านหรือ token ในเอกสาร
    - Key people to meet (intros)
    - Codebase tour (key directories)
    - First small task (warm-up)
@@ -53,7 +53,7 @@ The technical writer should:
    **Quick Reference Card:**
    - Critical commands
    - Important Slack channels
-   - On-call info / escalation
+   - On-call info / escalation (ชื่อช่องทางและตารางเวร ไม่ใส่รหัสผ่านหรือ token — ลิงก์ไปที่ขอสิทธิ์แทน)
    - Where to find docs
    - Who to ask about X
 
@@ -71,9 +71,9 @@ The technical writer should:
 
 5. **Produce polished onboarding doc** using `polished-document-style` skill:
    - Welcome message
-   - 30/60/90 timeline (Mermaid gantt)
+   - 30/60/90 timeline (รูปไทม์ไลน์ตามแบบประจำบ้านของ skill `diagram-figures` — เอกสารโปรเจกต์ห้ามใช้ Mermaid ค่าเริ่มต้น · Mermaid ใช้ได้เฉพาะภาพร่างในแชตหรือโน้ต README สั้น ๆ)
    - Checklist per phase
-   - FAQ section
+   - Frequently Asked Questions (FAQ) section
    - Glossary of company terms
 
 6. **Hand-off suggestions:**

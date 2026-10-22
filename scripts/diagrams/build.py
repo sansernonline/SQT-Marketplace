@@ -70,8 +70,10 @@ def load(plugin):
 
 # ---------- รูปที่ 1 · แผนผัง plugin ----------
 
+CORE_SKILLS = set(json.load(open(os.path.join(HERE, "data", "superuser.json"), encoding="utf-8"))["core_skills"])
+
 def agent_card(a, job):
-    plugin_skills = [s for s in a["skills"] if s not in ("superuser", "human-writing", "agent-patterns", "answer-shape")]
+    plugin_skills = [s for s in a["skills"] if s not in CORE_SKILLS]
     return (f'<div class="card agent{" core" if a["core"] else ""}"><div class="top"><span class="t">{e(a["name"])}</span>'
             f'<span class="model {e(a["model"])}">{e(a["model"] or "—")}</span></div>'
             f'<div class="d">{e(job)}</div><div class="chips">{chips(plugin_skills, "sk")}</div></div>')
@@ -82,7 +84,8 @@ def map_grouped(data, labels, jobs, by_name):
     skill_group = {s: g for g, ss in labels["skill_groups"].items() for s in ss}
     cards = []
     for group, names in labels["agent_groups"].items():
-        if all(by_name[n]["core"] for n in names):
+        names = [n for n in names if n in by_name]  # agent กลางอยู่ใน plugin superuser ที่เดียวแล้ว
+        if not names or all(by_name[n]["core"] for n in names):
             continue  # ทีมกลางวาดแยกในหัวข้อสุดท้าย
         used = {}
         for n in names:
@@ -94,8 +97,10 @@ def map_grouped(data, labels, jobs, by_name):
         cards.append(f'<div class="card grp"><h4>{e(group)} · {len(names)}</h4>{rows}'
                      f'<div class="small" style="margin-top:8px">ใช้ skill กลุ่ม</div><div class="chips">{chips(top, "sk")}</div></div>')
     teams = f'<div class="grid g2">{"".join(cards)}</div>'
+    own = set(data["skills"])
+    groups = [(g, [x for x in ss if x in own]) for g, ss in labels["skill_groups"].items()]
     skills = "".join(f'<div class="card"><div class="t">{e(g)} <span class="small">· {len(ss)}</span></div>'
-                     f'<div class="chips">{chips(ss, "sk")}</div></div>' for g, ss in labels["skill_groups"].items())
+                     f'<div class="chips">{chips(ss, "sk")}</div></div>' for g, ss in groups if ss)
     return teams, f'<div class="grid g2">{skills}</div>'
 
 
@@ -114,7 +119,9 @@ def build_map(plugin):
              f'<div class="card"><div class="t">เรียก agent ตรง</div><div class="d">พูดชื่อ agent หรือให้ Claude เลือกจากคำอธิบาย</div></div>'
              f'</div>{commands + "<div style=height:12px></div>" if many else ""}{lead}')
     domain = [a for a in data["agents"] if not a["core"]]
-    core = [a for a in data["agents"] if a["core"]]
+    su_data, su_labels = load("superuser") if plugin != "superuser" else (data, labels)
+    core = [a for a in su_data["agents"] if a["core"]]
+    core_jobs = su_labels.get("agents", {})
     if "agent_groups" in labels:
         teams, skill_panel = map_grouped(data, labels, jobs, by_name)
     else:
@@ -124,11 +131,14 @@ def build_map(plugin):
         note = (f'ชิปเส้นประ {len(loose)} ตัว = ไม่มี agent ประจำ หัวหน้าทีมเปิดใช้เอง' if loose else "ทุก skill มี agent ประจำ")
         skill_panel = (f'<div class="card"><div class="chips">{chips([x for x in data["skills"] if x not in loose] or ([] if loose else ["—"]), "sk")}{chips(loose, "sk loose")}</div>'
                        f'<div class="small" style="margin-top:8px">{e(note)}</div></div>')
-    core_panel = (f'<div class="grid g3">{"".join(agent_card(a, jobs.get(a["name"], "")) for a in core)}</div>'
-                  f'<div class="card" style="margin-top:12px"><div class="t">skill กลางที่ทุก plugin มีเหมือนกัน</div>'
-                  f'<div class="chips">{chips(data["core_skills"], "ld")}</div>'
-                  f'<div class="small" style="margin-top:8px">คัดลอกจาก <code>plugins/superuser</code> ด้วย <code>sync-superuser.mjs</code> · '
-                  f'hook <code>superuser-hook.mjs</code> จดทุกการทำงานลง <code>.claude/superuser/log/</code></div></div>')
+    core_groups = su_labels.get("skill_groups") or {"skill กลาง": data["core_skills"]}
+    core_cards = "".join(f'<div class="card"><div class="t">{e(g)} <span class="small">· {len(ss)}</span></div>'
+                         f'<div class="chips">{chips(ss, "ld")}</div></div>' for g, ss in core_groups.items())
+    core_panel = (f'<div class="grid g3">{"".join(agent_card(a, core_jobs.get(a["name"], "")) for a in core)}</div>'
+                  f'<div class="small" style="margin:12px 0 8px">skill กลาง {len(data["core_skills"])} ตัว ใช้กับงานทุกสาขา — หัวหน้างาน {sum(len(s) for g, s in core_groups.items() if not g.startswith("sqt-toolkit"))} ตัวใน superuser · เอกสารและรูป {sum(len(s) for g, s in core_groups.items() if g.startswith("sqt-toolkit"))} ตัวใน sqt-toolkit</div>'
+                  f'<div class="grid g2">{core_cards}</div>'
+                  f'<div class="small" style="margin-top:8px">อยู่ใน <code>plugins/superuser</code> และ <code>plugins/sqt-toolkit</code> ที่เดียว · plugin อื่นได้มาทาง <code>dependencies</code> · '
+                  f'hook <code>superuser-hook.mjs</code> จดทุกการทำงานลง <code>.claude/superuser/log/</code></div>')
     cross = (f'<div class="card" style="margin-top:12px"><div class="t">งานข้ามสาขา → ส่งต่อ plugin อื่น</div>'
              f'<div class="chips">{handoff(data["cross"])}</div></div>') if data["cross"] else ""
     pbs = data["playbooks"]
@@ -144,9 +154,11 @@ def build_map(plugin):
     parts = [(("p", "ทางเข้า", "ผู้ใช้เริ่มงานได้ 3 ทาง ทุกทางมาจบที่หัวหน้าทีม"), entry)]
     if teams:
         parts.append((("b", f"ทีม agent ของสาขานี้ · {len(domain)}", "agent ที่หัวหน้าทีมส่งงานให้" + (" · ชิปเขียว = skill ที่ agent นั้นใช้" if "chip sk" in teams else "")), teams))
-    parts.append((("g", f"skill ของสาขานี้ · {len(data['skills'])}", "ความรู้ที่ agent โหลดเมื่อถึงงานนั้น"), skill_panel))
+    if data["skills"]:
+        parts.append((("g", f"skill ของสาขานี้ · {len(data['skills'])}", "ความรู้ที่ agent โหลดเมื่อถึงงานนั้น"), skill_panel))
     parts.append((("a", f"playbook · {len(pbs)}", "สูตรงานที่หัวหน้าทีมคัดลง todo ทีละขั้น"), pb_panel))
-    parts.append((("", "ทีมกลางจาก SuperUser", "ทุก plugin มีชุดนี้เหมือนกัน"), core_panel + cross))
+    parts.append((("", "ทีมกลางและ skill กลาง" if plugin == "superuser" else "ทีมกลางจาก SuperUser",
+                   "ใช้ได้ตัวเดียว ทุกสาขา" if plugin == "superuser" else "ได้มาจาก plugin superuser ทาง dependencies"), core_panel + cross))
     body += '<div class="steps">' + "".join(step(i + 1, c, t, s, b) for i, ((c, t, s), b) in enumerate(parts)) + "</div>"
     body += legend([("ld", "หัวหน้าทีม · skill กลาง"), ("ag", "agent"), ("sk", "skill"), ("pb", "playbook · plugin อื่น")])
     body += footer(f"agent {len(data['agents'])} · skill {len(data['skills']) + len(data['core_skills'])} · "
@@ -267,6 +279,8 @@ def network(cross):
                     f'<path d="M0 0 10 5 0 10z" fill="{c}" fill-opacity=".6"/></marker>')
     for a in names:
         for b in cross[a]:
+            if b not in pos:  # ปลายทางที่ไม่อยู่ในวง (เช่น superuser ที่ไม่มีตารางงานข้ามสาขา)
+                continue
             (x1, y1), (x2, y2) = pos[a], pos[b]
             mx, my = (x1 + x2) / 2 - cx, (y1 + y2) / 2 - cy
             d = math.hypot(mx, my)

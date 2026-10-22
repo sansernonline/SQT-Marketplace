@@ -57,7 +57,7 @@ Use when settings differ by environment or something must never be committed (ke
 ```
 
 **ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
+เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
 
 ---
 
@@ -175,7 +175,7 @@ APP_LOG_LEVEL=debug
 1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
 2. ออกค่าใหม่ แล้ว deploy
 3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
+4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
 5. บันทึกเหตุการณ์ด้วย `postmortem-template`
 
 > 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
@@ -225,7 +225,7 @@ APP_LOG_LEVEL=debug
 - ❌ **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
 - ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
+- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
 
 
@@ -412,7 +412,7 @@ env:
 
 ```bash
 # ตรวจทั้งประวัติ
-gitleaks detect --source . --redact
+gitleaks git --redact        # คำสั่ง detect เดิมถูกแทนด้วย git / dir
 
 # กันไว้ก่อน commit
 pip install pre-commit detect-secrets
@@ -423,7 +423,7 @@ detect-secrets scan > .secrets.baseline
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
+    rev: v8.21.2   # ตัวอย่าง ตรวจ rev ล่าสุดก่อนใช้ (รอยืนยัน)
     hooks: [{ id: gitleaks }]
 ```
 
@@ -432,7 +432,8 @@ repos:
 ```bash
 pip install git-filter-repo
 git filter-repo --path .env --invert-paths
-git push --force --all      # ทุกคนต้อง clone ใหม่
+# รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน force push (เขียนประวัติร่วมทับ ทุกคนต้อง clone ใหม่)
+git push --force --all
 ```
 
 ---
@@ -450,7 +451,11 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 ```powershell
 # Windows
-[Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Max 256 }))
+# PowerShell 5.1 และ 7 (ตัวสุ่มสำหรับงานเข้ารหัส ไม่ใช่ Get-Random)
+$b = New-Object byte[] 48
+[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
+[Convert]::ToBase64String($b)
+# PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
 > ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
@@ -473,7 +478,7 @@ Use when a system must show who did what and when (approvals, money, permissions
 - ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
 - ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
 - มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
+- ระบบอยู่ภายใต้ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
 
 ## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
@@ -647,7 +652,6 @@ Use when users upload files or the system stores and serves them (type checks, v
 | งาน | skill | |
 |---|---|---|
 | นำเข้า Excel/CSV แล้วเอาข้อมูลเข้าระบบ | `data-import-export` | แทน |
-| รูปแบบ endpoint และ error | `api-conventions` | แทน |
 | สิทธิ์ว่าใครเข้าถึงอะไรได้ | `auth-implementation-patterns` | แทน |
 | ประมวลผลไฟล์ใหญ่เป็นงานเบื้องหลัง | `background-jobs` | แทน |
 | ตาราง metadata ของไฟล์ | `database-design` | คู่ |
@@ -727,7 +731,12 @@ Use when users upload files or the system stores and serves them (type checks, v
 > 🚨 **"ลิงก์เดายาก" ไม่ใช่การควบคุมสิทธิ์** — ลิงก์ถูกส่งต่อ ถูกบันทึกใน log ของ proxy
 > และติดอยู่ใน `Referer` เสมอ ไฟล์ส่วนตัวต้อง**ตรวจสิทธิ์ทุกครั้ง**แล้วค่อยออกลิงก์ชั่วคราวให้
 
-- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ไม่ต้องผ่านแอป
+- ไฟล์ใหญ่ให้ผู้ใช้อัปโหลดตรงไปที่ object storage ด้วยลิงก์ที่เราเซ็นให้ ตัวไฟล์ไม่ต้องผ่านแอป
+  **แต่การตรวจใน §1 ยังต้องครบ** — ทางนี้ข้ามแอปไป เลยต้องคืนการตรวจกลับมาแบบนี้:
+  - **ตอนเซ็นลิงก์:** จำกัดขนาดและชนิดไว้ในลายเซ็น — S3 ใช้ presigned POST ที่ policy มี `content-length-range` และเงื่อนไข `Content-Type` (presigned PUT บังคับขนาดไม่ได้) · ผู้ให้บริการอื่นใช้ตัวเทียบเท่า เช่น GCS ใช้ header `x-goog-content-length-range`
+  - **ตอนเซ็นลิงก์:** กำหนด key เอง (ชื่อสุ่มตาม §3) ลงที่โฟลเดอร์พักไฟล์ · ลิงก์หมดอายุสั้น · บันทึกแถว metadata ด้วย `scan_status = pending`
+  - **หลังอัปโหลดเสร็จ** (event จาก storage หรือผู้ใช้แจ้งว่าเสร็จ): อ่าน magic bytes จริงจาก object · เทียบขนาดจริงกับเพดาน · สแกนไวรัส → ผ่านแล้วย้ายไปที่เก็บจริง และเปลี่ยนเป็น `clean` · ไม่ผ่านให้ลบหรือกักไว้
+  - ระหว่าง `pending` ห้ามออกลิงก์ดาวน์โหลดให้ใคร
 - ตอนส่งไฟล์ให้ดาวน์โหลด ต้องตั้ง `Content-Disposition` และ `Content-Type` ให้ถูก
   และห้ามส่ง HTML ที่ผู้ใช้อัปโหลดกลับมาแบบให้เบราว์เซอร์เรนเดอร์
 - ถ้าทำได้ ให้เสิร์ฟไฟล์ของผู้ใช้จากคนละโดเมนกับแอป เพื่อกันสคริปต์ในไฟล์เข้าถึง cookie ของแอป
@@ -862,6 +871,7 @@ catch (SmtpException ex)
 |---|---|---|---|
 | **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
 | **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
+| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
 | **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
 | **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
 | **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
@@ -882,7 +892,7 @@ catch (SmtpException ex)
 | HTTP ภายนอก | 10–30 วินาที |
 | งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
 
-**สูตรการลองใหม่** (ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบ · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4):
+**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
 
 ```
 ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
@@ -892,7 +902,7 @@ catch (SmtpException ex)
 - **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
 - **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
 - **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- งานที่ผู้ใช้นั่งรออยู่หน้าจอ ลองแค่ครั้งเดียวพอ แล้วให้เขากดเอง
+- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
 
 ---
 
@@ -902,7 +912,7 @@ catch (SmtpException ex)
 
 ```
 ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ลองครึ่งเดียว → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
 ```
 
 ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที

@@ -13,7 +13,7 @@ Image sizes are also kept in `graphic-design:social-formats` (if the `graphic-de
 | Item | Limit |
 |---|---|
 | Image format | JPEG or PNG |
-| Image size (px) | full **2500×1686**, compact **2500×843** (also 1200×810, 1200×405, 800×540, 800×270) |
+| Image size (px) | full **2500×1686**, compact **2500×843** (also 1200×810, 1200×405, 800×540, 800×270). LINE may accept other sizes inside its limits (width 800–2500, height ≥ 250, width/height ≥ 1.45) — รอยืนยัน on developers.line.biz; use the sizes listed to be safe |
 | File size | max **1 MB** |
 | Tap areas | max **20** per menu (bounds x, y, width, height in image pixels) |
 | `chatBarText` | max 14 characters (รอยืนยัน) |

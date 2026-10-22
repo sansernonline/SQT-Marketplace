@@ -33,13 +33,17 @@ Workflow:
 Use `blockchain-engineer` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
 Workflow:
-1. **Discovery:** token purpose, product context, jurisdiction
+1. **Discovery:** token purpose, product context, jurisdiction (where the issuer is, where buyers are) — it decides step 7
 2. **Choose model:** supply, distribution, vesting
 3. **Define utility:** beyond speculation (governance, fees, staking)
 4. **Apply `smart-contracts` skill** if DeFi integration
 5. **Design governance:** voting, delegation, quorum
 6. **Plan launch phases:** community → token → governance handoff
-7. **Regulatory review:** Howey test considerations
+7. **Regulatory review — per jurisdiction** (checked 22 Oct 2026 · confirm current rules on the regulator's site before launch):
+   - **Thailand** → Securities and Exchange Commission, Thailand (SEC Thailand) rules under the Emergency Decree on Digital Asset Businesses B.E. 2561 (2018): offering a digital token to the public needs SEC approval and goes through an SEC-approved Initial Coin Offering (ICO) portal (sec.or.th → Digital Asset)
+   - **United States** → Howey test (SEC v. W.J. Howey Co., 1946): is the token an investment contract, so a security?
+   - **European Union** → Markets in Crypto-Assets Regulation (MiCA, Regulation (EU) 2023/1114): white paper and issuer rules
+   - Other countries → note "not checked" and send to legal; never guess
 8. **Compare to references:** what similar projects did
 9. **Produce polished tokenomics doc** using `polished-document-style` (from software-company)
 10. **Hand-off:** implementation → `blockchain-engineer`, legal → external lawyers

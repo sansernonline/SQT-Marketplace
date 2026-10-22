@@ -1,7 +1,7 @@
 # playbook · skill-authoring — เขียนหรือแก้ skill แล้วพิสูจน์ว่ามันช่วยจริง
 
 ใช้เมื่อ: สร้าง skill ใหม่ · แก้ SKILL.md · แก้ไฟล์ agent · แก้ prompt ใน `prompt/` (รวม `authoring a skill` · `eval` ของ pstack)
-skill หลัก: [`repeated-mistakes-to-checks`](../../repeated-mistakes-to-checks/SKILL.md) · `spell-out-abbreviations` · `simplicity-first`
+skill หลัก: `repeated-mistakes-to-checks` · `spell-out-abbreviations` · `simplicity-first`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

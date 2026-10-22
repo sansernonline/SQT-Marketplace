@@ -1,6 +1,6 @@
 ---
 name: english-tech-reading
-description: Use when an English error message, RFC or documentation passage needs explaining in Thai.
+description: Use when an English error message, Request for Comments (RFC) or documentation passage needs explaining in Thai.
 ---
 
 # English Tech Reading

@@ -1,0 +1,6 @@
+{
+  "stack": "python",
+  "title": "นำเข้าไฟล์ CSV ภาษาไทย (Windows-874) ลง SQLite แบบรันซ้ำได้",
+  "test": ["python", "-m", "pytest", "-q"],
+  "testFiles": "(^|[\\\\/])tests[\\\\/]test_[^\\\\/]*\\.py$"
+}

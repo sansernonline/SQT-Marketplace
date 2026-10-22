@@ -12,10 +12,17 @@ import { fileURLToPath } from "node:url";
 // ของกลางที่อยู่ใน plugin superuser ที่เดียว · plugin อื่นประกาศ "dependencies": ["superuser"] แล้วใช้ร่วมกัน
 // ห้ามมีสำเนาใน plugin อื่น: สำเนาทำให้ชื่อ skill ซ้ำในรายการ skill ของทุก session จนเกินงบรายการ และ hook ทำงานซ้ำทุกเหตุการณ์
 export const SHARED_ONLY_IN_SUPERUSER = [
-  "skills/agent-patterns", "skills/answer-shape", "skills/commit-log", "skills/handoff", "skills/human-writing", "skills/no-ai-look", "skills/simplify",
+  "skills/adversarial-review-panel", "skills/agent-patterns", "skills/answer-shape", "skills/commit-log", "skills/context-budget", "skills/decision-log", "skills/flag-and-propose", "skills/handoff", "skills/human-writing", "skills/no-ai-look", "skills/owner-style-capture", "skills/parallel-attempts-pick-best", "skills/parallel-split-and-merge", "skills/principle-build-a-tool-not-handwork", "skills/principle-fix-root-cause", "skills/principle-proceed-on-reversible-work", "skills/principle-prove-it-works", "skills/principle-small-verifiable-steps", "skills/principle-user-experience-first", "skills/prior-art-review", "skills/repeated-mistakes-to-checks", "skills/research-with-sources", "skills/session-lessons-to-skills", "skills/simplify", "skills/status-report", "skills/targeted-fix", "skills/temp-file-discipline",
   "agents/learning-reviewer.md", "agents/brainstormer.md", "agents/reviewer.md",
   "hooks",
 ];
+// skill เอกสาร · สไลด์ · รูป · ประชุม · ชื่อ อยู่ใน plugin sqt-toolkit ที่เดียว (แยกจาก superuser ตั้งแต่ 3.0.0 ให้ superuser เหลือเฉพาะเรื่องหัวหน้างาน)
+export const SHARED_ONLY_IN_TOOLKIT = [
+  "skills/branded-document-design", "skills/diagram-figures", "skills/document-naming", "skills/html-slide-deck", "skills/image-generation", "skills/markdown-report-docx", "skills/markdown-visuals", "skills/meeting-prep-card", "skills/meeting-summary", "skills/polished-document-style", "skills/polite-message-th-en", "skills/pptx-to-html-deck", "skills/presentation-design", "skills/product-naming", "skills/spell-out-abbreviations",
+];
+export const TOOLKIT = "sqt-toolkit";
+// SKILL.md ของ superuser สาขาต้องมีบรรทัดนี้ (เปิดแกนก่อน) และต้องไม่มีบล็อกกลางอีก — ส่วนกลางอยู่ที่แกนที่เดียว
+export const SKILL_POINTER = "เปิด `superuser:superuser` ก่อน";
 // ไฟล์ใน skill superuser ที่คัดลอกไปทุก plugin (skill superuser ของแต่ละ plugin ปรับตามสาขา จึงยังเป็นสำเนา)
 export const SHARED_FILES = [
   "skills/superuser/references/playbook-learn-from-session.md",
@@ -25,16 +32,18 @@ export const SHARED_FILES = [
   "skills/superuser/references/team-files.md",
   "skills/superuser/references/evidence.md",
   "skills/superuser/references/team-roles.md",
+  "skills/superuser/references/voting.md",
   "skills/superuser/templates/improvements-queue.md",
+  "skills/superuser/references/lead-playbook.md",
+  "skills/superuser/templates/TEAM.md",
+  "skills/superuser/templates/config.json",
 ];
 export const SKILL = "skills/superuser/SKILL.md";
 const REF = "skills/superuser/references";
-// ไฟล์ที่มีบล็อกกลาง · ส่วนนอกบล็อกแต่ละ plugin เขียนเอง
-export const BLOCK_FILES = [SKILL, `${REF}/playbook-review.md`, `${REF}/playbook-unattended-run.md`];
+// ไฟล์ที่มีบล็อกกลาง · ส่วนนอกบล็อกแต่ละ plugin เขียนเอง · SKILL.md ของสาขาไม่มีบล็อกแล้ว (มีเฉพาะส่วนสาขา + บรรทัดชี้ไปแกน)
+export const BLOCK_FILES = [`${REF}/playbook-review.md`, `${REF}/playbook-unattended-run.md`];
 // plugin ที่เขียนไฟล์นี้เองทั้งไฟล์ ไม่รับบล็อก (เหตุผลใน plugins/superuser/ADAPT.md ข้อ 1)
-export const OPT_OUT = {
-  "software-company": [`${REF}/playbook-review.md`, `${REF}/playbook-unattended-run.md`],
-};
+export const OPT_OUT = {};
 // แม่แบบ CONTEXT.md ของแต่ละ plugin · บล็อก context สร้างจาก templates ของ superuser · plugin ไหนไม่มีไฟล์นี้ ข้าม
 export const CONTEXT_FILE = `${REF}/context-template.md`;
 const BLOCK = /<!-- superuser:begin ([a-z-]+) -->\n([\s\S]*?)<!-- superuser:end \1 -->/g;
@@ -92,14 +101,23 @@ export function plan(root) {
     try { new RegExp(r.pattern, "i"); } catch (e) { problems.push(`skill-router.json pattern พัง (${e.message}) — ต้องแก้มือ`); }
     for (const s of r.skills ?? []) if (s.includes(":") ? !existsSync(join(pluginsDir, s.split(":")[0], "skills", s.split(":")[1], "SKILL.md")) : !known.has(s)) problems.push(`skill-router.json อ้าง skill "${s}" ที่ไม่มีใน plugins/ — ต้องแก้มือ`);
   }
+  // skill ของ sqt-toolkit ต้องไม่มีสำเนาใน plugin ไหนเลย รวม superuser
+  for (const p of readdirSync(pluginsDir).filter((p) => p !== TOOLKIT)) {
+    for (const rel of SHARED_ONLY_IN_TOOLKIT) {
+      if (existsSync(join(pluginsDir, p, rel))) problems.push(`${p}/${rel} ต้องไม่มี — skill เอกสารและรูปอยู่ใน plugins/${TOOLKIT} ที่เดียว (ย้ายสำเนาไป _to_delete/)`);
+    }
+  }
   for (const p of targets) {
     for (const rel of SHARED_ONLY_IN_SUPERUSER) {
       if (existsSync(join(pluginsDir, p, rel))) problems.push(`${p}/${rel} ต้องไม่มี — ของกลางอยู่ใน plugins/superuser ที่เดียว (ย้ายสำเนาไป _to_delete/)`);
     }
     const meta = JSON.parse(readFileSync(join(pluginsDir, p, ".claude-plugin", "plugin.json"), "utf8"));
-    if (!(meta.dependencies ?? []).some((d) => (typeof d === "string" ? d : d.name).split("@")[0] === "superuser")) {
-      problems.push(`${p}/.claude-plugin/plugin.json ไม่มี "dependencies": ["superuser"]`);
-    }
+    const depends = (name) => (meta.dependencies ?? []).some((d) => (typeof d === "string" ? d : d.name).split("@")[0] === name);
+    for (const name of ["superuser", TOOLKIT]) if (!depends(name)) problems.push(`${p}/.claude-plugin/plugin.json ไม่มี dependencies "${name}"`);
+    // SKILL.md ของสาขา: มีบรรทัดชี้ไปแกน · ไม่มีบล็อกกลางค้าง (ส่วนกลางอยู่ที่ plugins/superuser ที่เดียว ไม่คัดลอกแล้ว)
+    const skillText = existsSync(join(pluginsDir, p, SKILL)) ? lf(readFileSync(join(pluginsDir, p, SKILL), "utf8")) : "";
+    if (!skillText.includes(SKILL_POINTER)) problems.push(`${p}/${SKILL} ไม่มีบรรทัด "${SKILL_POINTER}" — ต้องแก้มือ (ดู plugins/superuser/ADAPT.md ข้อ 3)`);
+    if (/<!-- superuser:begin /.test(skillText)) problems.push(`${p}/${SKILL} ยังมีบล็อกกลาง superuser:begin — ตัดออก ต้องแก้มือ (ส่วนกลางอยู่ที่แกนแล้ว)`);
     for (const rel of SHARED_FILES) {
       const want = lf(readFileSync(join(source, rel), "utf8"));
       const file = join(pluginsDir, p, rel);

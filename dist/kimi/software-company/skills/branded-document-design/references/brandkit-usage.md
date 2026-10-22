@@ -8,18 +8,18 @@
 import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
 from brandkit import BrandDoc, use_brand, to_pdf
 
-doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
+doc = BrandDoc()                                # A4 · Tahoma · สีประจำบ้าน
 doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-          subtitle="ระบบ Apps Track — Project Control & Monitor",
+          subtitle="ระบบตัวอย่าง (Sample System) — Project Control & Monitor",
           meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-          logo="asset/AppsTrack_Logo_Badge.png")
+          logo="asset/Sample_Logo_Badge.png")
 doc.toc()
 
 doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
+doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ ...")
 doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
 doc.table(["หัวข้อ", "รายละเอียด"],
-          [["URL ระบบ", "https://project.eitaccount.cloud"]],
+          [["URL ระบบ", "https://app.example.com"]],
           widths=[2600, 7038])                  # รวม = 9638
 doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
 doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
@@ -36,7 +36,7 @@ doc.save("SRS.docx")
 ```python
 from brandkit_pptx import BrandDeck
 d = BrandDeck()                                  # 16:9
-d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor", "19 กรกฎาคม 2026")
 d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
 d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
 d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
@@ -52,12 +52,12 @@ d.save("deck.pptx")
 ## เด็ค "Stage" (`brandkit_stage.py`) — ค่าเริ่มต้นของเด็คที่ใช้พูด
 
 `brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบ: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
+(ต้นแบบด้านโครงเด็คเท่านั้น: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
 
 ```python
 from brandkit_stage import StageDeck
-d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")   # สีหลัก · สีพื้นของโปรเจกต์
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+d = StageDeck(accent="2A78D6", bg="09090A", project="Sample Chatbot")   # ตัวอย่าง: สีหลัก · สีพื้นต้องมาจากดีไซน์ของโปรเจกต์คุณเอง
+d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
         meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
 d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
          "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 CS Engineering Quality Standards](#cs-engineering-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 CS Engineering Quality Standards](#-cs-engineering-quality-standards)
 - [Activation Milestones](#activation-milestones)
 - [Health Score Components](#health-score-components)
 - [In-Product Engagement Tools](#in-product-engagement-tools)
@@ -42,8 +42,8 @@ You are a **Customer Success (CS) Engineer**. You build the technical base that 
 ## 📊 CS Engineering Quality Standards
 
 - **Time to first value:** measured and getting shorter
-- **Activation rate:** over 60% of users reach the first key action
-- **Self-service success:** users answer over 70% of their questions without contacting support
+- **Activation rate:** measured and rising against your own baseline — target set per product (รอยืนยัน · no public standard; quote a benchmark only with source + date)
+- **Self-service success:** share of questions solved without contacting support, tracked against your own baseline (รอยืนยัน)
 - **Health score accuracy:** the score predicts renewal
 - **CS tooling coverage:** CS sees the whole account in one view
 - **Customer data privacy:** follow Thailand's Personal Data Protection Act (PDPA) and the EU General Data Protection Regulation (GDPR)

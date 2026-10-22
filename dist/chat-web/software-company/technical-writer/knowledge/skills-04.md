@@ -4,12 +4,12 @@ Use when a slide deck is asked for as HTML or with animation — one offline fil
 
 # HTML Slide Deck
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีสร้างและหน้าตา
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม `presentation-design` — skill นี้บอกวิธีสร้างและหน้าตา
 
 > **กฎข้อเดียวของ skill นี้:** เด็คคือไฟล์ .html **ไฟล์เดียว** ที่เปิดในเบราว์เซอร์แล้วนำเสนอได้ทันที
 > รูปฝังในไฟล์ · หัวสไลด์เป็นข้อสรุป · ทุกหน้าผ่าน `check_deck.py` ก่อนส่ง
 
-ต้นแบบมาจากเด็คนำเสนอ X Fitness Chatbot (45 หน้า 10 นาที): พื้นเข้มสีแบรนด์เดียว · หน้าเปิดส่วนเลขใหญ่ · การ์ดตัวเลข · แผนภาพระบบ · คลิกดูไฟล์จริง · แชตในกรอบโทรศัพท์ · กราฟผลทดสอบ
+ต้นแบบหน้าตามาจากเด็คนำเสนอ X Fitness (45 หน้า 10 นาที · ใช้เป็นแบบอ้างอิงสไตล์เท่านั้น สีใช้ของโปรเจกต์ตัวเอง): พื้นเข้มสีแบรนด์เดียว · หน้าเปิดส่วนเลขใหญ่ · การ์ดตัวเลข · แผนภาพระบบ · คลิกดูไฟล์จริง · แชตในกรอบโทรศัพท์ · กราฟผลทดสอบ
 
 ## เมื่อไหร่ใช้
 
@@ -31,11 +31,11 @@ Use when a slide deck is asked for as HTML or with animation — one offline fil
 ## 1 · ขั้นตอน
 
 1. เขียนโครงเรื่องตาม `presentation-design`: หัวสไลด์ทุกหน้าเป็นข้อสรุป · แบ่งส่วน · เวลาต่อหน้า
-2. **โปรเจกต์มี `docs/deck/` หรือเด็ค .html อยู่แล้ว → เพิ่ม `<section>` ใน `slides.html` เดิม และใช้ shell · css · `--brand` ชุดเดิม ไม่เริ่มไฟล์ใหม่** (หลักเดียวกับ `ui-craft` ข้อ 0) · ยังไม่มี → คัดลอก `assets/slides-example.html` ไปไว้ใน `docs/deck/slides.html` ของโปรเจกต์ · เก็บเฉพาะ `<section>` ของเลย์เอาต์ที่ใช้ (ข้อ 3) แล้วใส่เนื้อหา
+2. **โปรเจกต์มี `docs/deck/` หรือเด็ค .html อยู่แล้ว → เพิ่ม `<section>` ใน `slides.html` เดิม และใช้ shell · css · `--brand` ชุดเดิม ไม่เริ่มไฟล์ใหม่** (หลักเดียวกับ `ui-craft` (plugin `software-company`) ข้อ 0) · ยังไม่มี → คัดลอก `assets/slides-example.html` ไปไว้ใน `docs/deck/slides.html` ของโปรเจกต์ · เก็บเฉพาะ `<section>` ของเลย์เอาต์ที่ใช้ (ข้อ 3) แล้วใส่เนื้อหา
 3. สร้างไฟล์:
    ```bash
    python scripts/build_deck.py docs/deck/slides.html -o docs/<PRJ>-DECK-v1.0-DRAFT.html \
-          --title "<ชื่อเด็ค>" --brand E10613,FF2536
+          --title "<ชื่อเด็ค>" --brand <สีหลัก>,<สีสว่าง>
    ```
    `--css` / `--js` สำหรับของเฉพาะเด็คนี้ · `--data` ใส่ JSON ให้ JS เพิ่มเติมอ่าน · รูปที่อ้างด้วย path ในเครื่องถูกฝังให้เอง
 4. ตรวจ: `python scripts/check_deck.py docs/<ไฟล์>.html --out _to_delete/deck-check` → แก้จน**ปัญหา 0 จุด** แล้ว**เปิด `sheet-*.png` ดูทุกแผ่น**
@@ -45,14 +45,17 @@ Use when a slide deck is asked for as HTML or with animation — one offline fil
 
 ## 2 · ธีม
 
-| token | ค่า X Fitness | ใช้กับ |
+**สีของเด็ค = สีหลักของโปรเจกต์** หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) เจอที่ไหนหยุดที่นั่น · ไม่เจอเลย → `--brand 2A78D6,5B9BE6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ในรายงานแล้วทำต่อ · ห้ามคัดลอกสีจากตารางตัวอย่างข้างล่าง
+
+| token | ค่าตัวอย่าง (เด็คต้นแบบ — ไม่ใช่ค่าเริ่มต้น) | ใช้กับ |
 |---|---|---|
 | `--accent` | `#e10613` | แถบใต้ชื่อปก · ฟองแชตผู้ใช้ |
 | `--accent2` | `#ff2536` | kicker · ตัวเลขใหญ่ · เลขหน้าเปิดส่วน · ของที่เลือกอยู่ |
 | `--accent-deep` · `--accent-tint` | `#2a0a0d` · `#1d0d10` | พื้นไล่สีปก/หน้าเปิดส่วน · พื้นของที่เลือก |
-| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตามแบรนด์ เด็คจาก skill นี้เป็นพื้นเข้มเสมอ (เด็คที่แปลงจาก .pptx ใช้พื้นตาม .pptx) |
+| `--bg` · `--panel` · `--line` | `#09090a` · `#16161a` · `#2a2a30` | พื้น · การ์ด · เส้น — ไม่เปลี่ยนตาม `--brand` · พื้นเข้มคือค่าเริ่มต้นของ shell (ห้องนำเสนอมืด ภาพหน้าจอและแผนภาพเด่น) ไม่ใช่ข้อบังคับ (เด็คที่แปลงจาก .pptx ใช้พื้นตาม .pptx) |
 
-- `--brand สีหลัก,สีสว่าง` คำนวณ deep/tint ให้ · สีสว่างต้องอ่านชัดบนพื้นดำ (contrast ≥ 4.5:1)
+- `--brand สีหลัก,สีสว่าง` คำนวณ deep/tint ให้ · สีสว่างต้องอ่านชัดบนพื้นเด็ค (contrast ≥ 4.5:1)
+- **โปรเจกต์ดีไซน์เป็นพื้นสว่าง** (`diagram-figures` ข้อ 5 ข้อ 2: รูปและเด็คใช้สีพื้นตามดีไซน์ของโปรเจกต์) → override `--bg` `--panel` `--line` `--text` `--soft` `--muted` `--dim` ในไฟล์ `--css` แล้วเปิด `sheet-*.png` ตรวจคอนทราสต์ทุกแผ่น
 - ฟอนต์: หัวข้อ **Chakra Petch** · เนื้อความ **IBM Plex Sans Thai** · โค้ด **JetBrains Mono** (Google Fonts · ไม่มีเน็ต → Tahoma)
 - **สีแบรนด์มีสีเดียว** · เขียว `ok` น้ำเงิน `blue` ส้ม `warn` ใช้เฉพาะความหมาย (ผ่าน · ข้อมูล · เตือน)
 
@@ -93,16 +96,18 @@ Use when a slide deck is asked for as HTML or with animation — one offline fil
 | `#12` ท้าย URL | เปิดที่หน้า 12 · `[data-goto="id"]` กระโดดไปหน้าตาม id |
 | คลิก `img.shot` | ขยายเต็มจอ |
 
-### Animation (ชุดเดียวกับเด็ค X Fitness · ใส่ให้เองทุกหน้า)
+### Animation (เลือกเปิดทีละหน้า — ค่าเริ่มต้นนิ่ง)
+
+เนื้อหาเลื่อนขึ้นทีละชิ้นทุกหน้า ตัวเลขนับขึ้น และแสงวนไม่หยุด เป็นสัญญาณ AI ใน `no-ai-look` (fade-up ทุกชิ้น · glow · ตัวเลขยักษ์) shell จึงไม่ใส่ให้ทุกหน้า: ใส่ `data-anim` ที่ `<section>` เฉพาะหน้าที่การเคลื่อนไหวช่วยให้ตาไล่ตามเรื่อง (ผังระบบที่ลูกศรต้องลากตามลำดับ · หน้าเปิดส่วน) · `data-count` · `data-loop` · `.bars` · `data-chat` ทำงานเฉพาะชิ้นที่ใส่ไว้
 
 | เกิดอะไร | ที่ไหน |
 |---|---|
-| เนื้อหาเลื่อนขึ้นทีละชิ้น 70 ms ต่อชิ้น | ลูกของหน้า · `.row` `.list` `.toc` `.pills` · แถว `.tbl` |
-| เลขหน้าเปิดส่วนพุ่งเข้าจากซ้าย | `.divider .num` |
-| กล่องเด้งขึ้น · ลูกศรค่อย ๆ ลากเส้นทีละเส้น | `.box` `.layer` · `.map svg>path` |
-| ตัวเลขนับขึ้นจาก 0 | `[data-count="10"]` หรือ `"9/10"` |
+| เนื้อหาเลื่อนขึ้นทีละชิ้น 70 ms ต่อชิ้น (หน้าที่มี `data-anim`) | ลูกของหน้า · `.row` `.list` `.toc` `.pills` · แถว `.tbl` |
+| เลขหน้าเปิดส่วนพุ่งเข้าจากซ้าย (หน้าที่มี `data-anim`) | `.divider .num` |
+| กล่องเด้งขึ้น · ลูกศรค่อย ๆ ลากเส้นทีละเส้น (หน้าที่มี `data-anim`) | `.box` `.layer` · `.map svg>path` |
+| ตัวเลขนับขึ้นจาก 0 — ใส่เฉพาะ 1 ตัวเลขที่ต้องจำ ไม่ใส่ทุกการ์ด | `[data-count="10"]` หรือ `"9/10"` |
 | แท่งกราฟโตขึ้น | `.bars` |
-| ไฮไลต์วนทีละขั้นพร้อมเรืองแสง | `[data-loop]` |
+| ไฮไลต์วนทีละขั้น (แสงรอบกะพริบครั้งเดียวต่อขั้น ไม่วนไม่หยุด) | `[data-loop]` |
 | ทัวร์แผนภาพ (player): กล่องสว่าง ลูกศรเปลี่ยนสี มีจุดวิ่งตามเส้น · กด Space แล้วเดินเองทุก 3.2 วินาที | `ol.tour-steps` + `.tourbar` |
 | แชตพิมพ์ทีละตัวพร้อมจุด "กำลังพิมพ์" | `[data-chat]` |
 
@@ -136,10 +141,10 @@ Use when a slide deck is asked for as HTML or with animation — one offline fil
 
 | ต้องการ | ใช้ |
 |---|---|
-| โครงเรื่อง หัวสไลด์ งบข้อความ | [`presentation-design`](../presentation-design/SKILL.md) |
-| รายงาน .docx ชุดเดียวกัน | [`markdown-report-docx`](../markdown-report-docx/SKILL.md) |
-| ผังระบบที่ซับซ้อนเกิน `.map` | [`diagram-figures`](../diagram-figures/SKILL.md) แล้วฝังเป็นรูป |
-| ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
+| โครงเรื่อง หัวสไลด์ งบข้อความ | `presentation-design` |
+| รายงาน .docx ชุดเดียวกัน | `markdown-report-docx` |
+| ผังระบบที่ซับซ้อนเกิน `.map` | `diagram-figures` แล้วฝังเป็นรูป |
+| ชื่อไฟล์และเวอร์ชัน | `document-naming` |
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -154,11 +159,11 @@ Use when a .pptx should play as one animated HTML file, or both .pptx and .html 
 
 # PPTX → HTML Deck
 
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม [`presentation-design`](../presentation-design/SKILL.md) — skill นี้บอกวิธีแปลงและตรวจ
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` · โครงเรื่องและหัวสไลด์ตาม `presentation-design` — skill นี้บอกวิธีแปลงและตรวจ
 
 > **กฎข้อเดียวของ skill นี้:** หน้าตามาจาก .pptx ทั้งหมด · แก้ที่ .pptx แล้วแปลงใหม่ ไม่แก้ .html ที่แปลงแล้ว
 
-ต้นแบบมาจากเด็คนำเสนอ IS "Few-shot KIE · Confidence-Gated Cascade" (41 หน้า + หน้าโต้ตอบ 15 หน้า): ทำ .pptx ให้เสร็จก่อน แล้วแปลงเป็น .html ไฟล์เดียวที่ทุกชิ้นเลื่อนเข้ามาทีละแถว พร้อมแถบความคืบหน้า สารบัญ โน้ตผู้พูด และนาฬิกาแบบเด็ค X Fitness
+ต้นแบบมาจากเด็คนำเสนอ Independent Study (IS) "Few-shot Key Information Extraction (KIE) · Confidence-Gated Cascade" (41 หน้า + หน้าโต้ตอบ 15 หน้า): ทำ .pptx ให้เสร็จก่อน แล้วแปลงเป็น .html ไฟล์เดียวที่ทุกชิ้นเลื่อนเข้ามาทีละแถว พร้อมแถบความคืบหน้า สารบัญ โน้ตผู้พูด และนาฬิกาแบบเด็ค X Fitness
 
 ## เมื่อไหร่ใช้
 
@@ -173,7 +178,7 @@ Use when a .pptx should play as one animated HTML file, or both .pptx and .html 
 | ยังไม่มี .pptx และไม่ต้องการ .pptx เลย · อยากได้แผนภาพทัวร์ แชตเล่นซ้ำ คลิกดูไฟล์ | `html-slide-deck` (เขียน HTML ตรง ๆ หน้าตา X Fitness) |
 | ยังไม่มีโครงเรื่อง | `presentation-design` ข้อ 1–3 ก่อน |
 | ต้องการแค่ .pptx | `branded-document-design` · `StageDeck` |
-| ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
+| ชื่อไฟล์และเวอร์ชัน | `document-naming` |
 
 กฎเลือกชนิดไฟล์อยู่ใน `presentation-design`
 
@@ -189,7 +194,7 @@ Use when a .pptx should play as one animated HTML file, or both .pptx and .html 
    ```
 3. **แปลง:**
    ```bash
-   python scripts/pptx_to_html.py docs/<PRJ>-DECK-v1.0-DRAFT.pptx -o docs/<PRJ>-DECK-v1.0-DRAFT.html --title "<ชื่อเด็ค>" --accent E4572E
+   python scripts/pptx_to_html.py docs/<PRJ>-DECK-v1.0-DRAFT.pptx -o docs/<PRJ>-DECK-v1.0-DRAFT.html --title "<ชื่อเด็ค>" --accent <สีหลักของโปรเจกต์ ไม่มี → 2A78D6>
    ```
    `--accent` = สีแถบความคืบหน้าและปุ่ม (ไม่ใส่ = accent1 ของธีม) · รูปฝังในไฟล์ให้เอง · บรรทัด `⚠ แปลงไม่ครบ` ต้องแก้ที่ .pptx (ข้อ 4)
 4. **ตรวจ:** `python scripts/check_html_deck.py docs/<ไฟล์>.html --out _to_delete/deck-check --pptx docs/<ไฟล์>.pptx` → แก้จน**ปัญหา 0 จุด** แล้ว**เปิด `sheet-*.png` ดูทุกแผ่น**
@@ -327,7 +332,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 ## 6 · สไลด์ และหัวข้อทุกชนิด
 
-ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตาราง 17 แถวอยู่ใน reference เดียวกัน
+ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตารางก่อน → หลังอยู่ใน reference เดียวกัน
 
 - หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ · ไม่เกิน 2 บรรทัด (ราว 15 คำ) รายละเอียดลงเนื้อหน้า
 - **หัวที่มี 2 ท่อนต้องมีคำเชื่อมที่ตรงกับความสัมพันธ์จริง** ("เพราะ" หรือ "จึง" เมื่อเป็นเหตุผล · "ส่วน" เมื่อแบ่งหน้าที่ · "แต่" เมื่อขัดกัน) · 1 หัว 1 คำเชื่อม ถ้าต้องใช้ 2 แปลว่ายัดเกิน
@@ -356,8 +361,6 @@ Use before writing or editing anything a person reads — answer, email, report,
 # หัวข้อ · สไลด์ · diagram และตัวอย่าง ก่อน → หลัง (ฉบับเต็ม)
 
 อ่านเมื่อเขียนหัวสไลด์ ชื่อรูป ป้ายใน diagram หรืออยากดูตัวอย่างการแก้ · กฎย่ออยู่ใน `SKILL.md` ข้อ 6–7
-
-ไฟล์นี้เหมือนกันทุก plugin ต้นฉบับอยู่ที่ plugin `superuser` แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
 
 ## สไลด์ และหัวข้อทุกชนิด
 

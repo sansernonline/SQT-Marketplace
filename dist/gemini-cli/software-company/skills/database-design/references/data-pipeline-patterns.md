@@ -84,7 +84,7 @@ from kafka import KafkaConsumer
 consumer = KafkaConsumer(
     'events',
     bootstrap_servers='kafka:9092',
-    enable_auto_commit=False,  # ← manual commit for exactly-once
+    enable_auto_commit=False,  # ← manual commit = at-least-once (not exactly-once)
     isolation_level='read_committed',
 )
 
@@ -93,12 +93,17 @@ for message in consumer:
     batch.append(parse(message))
 
     if len(batch) >= 1000:
-        # Atomic write + commit
+        # Write first, commit the offset after. Kafka and the DB share no
+        # transaction, so a crash between the two replays this batch
+        # (at-least-once). Make the write idempotent so a replay is harmless.
         with db.transaction():
-            db.bulk_insert('events', batch)
-            consumer.commit()  # only after DB write succeeds
+            db.bulk_upsert('events', batch, key=('topic', 'partition', 'offset'))  # unique key + ON CONFLICT DO NOTHING
+        consumer.commit()  # only after the DB write succeeds
         batch = []
 ```
+
+For exactly-once effect: idempotent upsert as above, or store the offsets in the
+same DB transaction as the data and seek to them on start (skip `consumer.commit()`).
 
 ## Data Catalog Pattern
 

@@ -3,11 +3,9 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Document Automation Quality Standards](#document-automation-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Document Automation Quality Standards](#-document-automation-quality-standards)
 - [Template Languages](#template-languages)
-- [1. Services](#1-services)
-- [2. Confidentiality](#2-confidentiality)
 - [Variable System](#variable-system)
 - [Conditional Logic](#conditional-logic)
 - [Intake Form Flow](#intake-form-flow)
@@ -79,7 +77,7 @@ Contractor will provide:
 ### Pattern: Industry standards
 - **Docassemble** — Python-based, open source
 - **HotDocs** — Industry standard (older)
-- **Documate** — Modern SaaS
+- **Gavel** (was Documate) — Modern SaaS
 - **Custom** — built on Liquid / Jinja / similar
 
 ## Variable System
@@ -234,7 +232,7 @@ async function generate(documentId: string, format: 'docx' | 'pdf' | 'html') {
 
   switch (format) {
     case 'docx':
-      return await docxRenderer.render(rendered);  // mammoth / docx-templates
+      return await docxRenderer.render(rendered);  // docx / docx-templates (mammoth goes DOCX → HTML, the other way)
     case 'pdf':
       return await pdfRenderer.render(rendered);   // puppeteer / chrome
     case 'html':
@@ -274,7 +272,7 @@ const variables = {
 ```typescript
 const doc = await generate(input);
 
-if (input.deal_size > 1000000 OR input.contains_unusual_clauses) {
+if (input.deal_size > 1_000_000 || input.contains_unusual_clauses) {
   await queueForLawyerReview(doc);
   return { status: 'pending_review', estimated_review: '24h' };
 }
@@ -307,15 +305,15 @@ return { document: newlyGenerated, changes_from_last: diff };
 
 ## When to Hand Off
 
-- E-signature integration → `legaltech-engineer`
-- Contract analysis → `legaltech-engineer`
+- E-signature integration → open `agent-e-signature-specialist.md` (same `legaltech-engineer` agent)
+- Contract analysis → open `agent-contract-analyzer.md` (same agent)
 - Legal compliance → `legal-compliance-officer`
 - General app → `developer` (from software-company)
 
 ## Reference
 
 - [Docassemble (open source)](https://docassemble.org/)
-- [Documate](https://www.documate.org/)
+- [Gavel (was Documate)](https://www.gavel.io/)
 - [HotDocs (legacy commercial)](https://www.hotdocs.com/)
 - [Litera (document automation)](https://www.litera.com/)
 - [A2J Author (legal aid)](https://www.a2jauthor.org/)

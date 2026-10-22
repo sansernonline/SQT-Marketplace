@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Claims Quality Standards](#claims-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Claims Quality Standards](#-claims-quality-standards)
 - [FNOL Pattern](#fnol-pattern)
 - [Triage Pattern](#triage-pattern)
 - [Fraud Detection](#fraud-detection)
@@ -165,11 +165,14 @@ def network_red_flags(claim):
 
 ```typescript
 function calculateSettlement(claim, valuation, policy) {
-  // 1. Determine covered amount
-  let covered = min(valuation.amount, policy.limit);
+  // 1. Apply deductible to the valued loss — a loss below the deductible pays 0, not a negative amount
+  // (amounts in integer satang — never floats)
+  // Order deductible → limit matches claims-workflow-patterns.md; some policy wordings apply
+  // the limit first (gives a different payout when loss > limit) — follow the policy wording
+  let covered = Math.max(0, valuation.amount - policy.deductible);
 
-  // 2. Apply deductible
-  covered -= policy.deductible;
+  // 2. Cap at the policy limit
+  covered = Math.min(covered, policy.limit);
 
   // 3. Apply policy limits (per occurrence, per accident, aggregate)
   covered = applyAllLimits(covered, claim, policy);
@@ -179,8 +182,11 @@ function calculateSettlement(claim, valuation, policy) {
 
   // 5. Add allowable extras
   covered += allowableLossOfUse(claim);
-  covered += allowableSalvage(claim);
 
+  // 6. Salvage reduces the payout only when the insured keeps the damaged item
+  if (claim.salvageRetainedByInsured) covered -= claim.salvageValue;
+
+  // Subrogation is not deducted here — it is recovered later from the third party
   return Math.max(0, covered);
 }
 ```
@@ -252,8 +258,8 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 - Underwriting questions → `insurance-analyst`
 - Statistical reserves → `insurance-analyst`
-- General policy → `insurance-engineer`
-- Compliance → `fintech-compliance-officer`
+- General policy → open `agent-insurance-engineer.md` (same `insurance-engineer` agent)
+- Compliance → `insurance-compliance-officer`
 
 ## Reference
 

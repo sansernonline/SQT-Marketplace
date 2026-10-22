@@ -1,6 +1,6 @@
 ---
 name: fintech-design
-description: Design a financial transaction flow or run a PCI-DSS readiness audit.
+description: Design a financial transaction flow or run a Payment Card Industry Data Security Standard (PCI-DSS) readiness audit.
 argument-hint: <transaction-flow-design | pci-audit> <details>
 disable-model-invocation: true
 ---
@@ -21,7 +21,7 @@ Use the `fintech-engineer` agent to design transaction flow for: **$ARGUMENTS**
 The fintech engineer should:
 
 1. **Initial Discovery** — gather:
-   - Money movement type (intra-account, P2P, B2C, card, etc.)
+   - Money movement type (intra-account, peer-to-peer (P2P), business-to-consumer (B2C), card, etc.)
    - Currencies involved
    - Settlement timing requirements
    - Regulatory scope
@@ -63,17 +63,17 @@ The fintech engineer should:
    - Manual reconciliation tooling
 
 8. **Produce polished design document** using `polished-document-style` skill:
-   - Sequence diagram (Mermaid)
-   - State machine diagram (Mermaid stateDiagram)
+   - Sequence diagram (`diagram-figures`, house style)
+   - State machine diagram (`diagram-figures`, house style)
    - API spec for endpoints
    - Database schema (ledger + audit tables)
    - Error handling table
    - Test scenarios (happy + failure + edge)
 
 9. **Apply relevant skills**:
-   - `fintech-payments` if external gateway involved
-   - `fintech-payments` if cards involved
-   - `fintech-payments` if customer-facing
+   - `fintech-payments` → `references/payment-gateway-integration.md` if an external gateway is involved
+   - `fintech-payments` → `references/pci-dss-compliance.md` if cards are involved
+   - `fintech-payments` → `references/kyc-aml-patterns.md` if customer-facing (identity checks)
 
 10. **Hand-off suggestions**:
     - Implementation → `developer`
@@ -99,7 +99,7 @@ The compliance officer should:
 2. **Go through the 12 PCI-DSS requirements** in `fintech-payments/references/pci-dss-compliance.md`
 
 3. **Scope analysis**:
-   - Map ALL systems that touch CHD
+   - Map ALL systems that touch cardholder data (CHD)
    - Identify SAQ candidates (aim for A)
    - Recommend scope reduction opportunities
 
@@ -116,7 +116,7 @@ The compliance officer should:
 
 6. **Produce polished PCI audit report** using `polished-document-style` skill:
    - Executive summary
-   - Scope diagram (Mermaid)
+   - Scope diagram (`diagram-figures`, house style)
    - Readiness scorecard
    - Detailed findings per requirement
    - Remediation plan (30/60/90 day)

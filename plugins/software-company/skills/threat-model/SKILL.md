@@ -5,17 +5,17 @@ argument-hint: <feature or system to analyze>
 disable-model-invocation: true
 ---
 
-Use the `security-engineer` agent to perform STRIDE threat modeling on: **$ARGUMENTS**
+Use the `security-engineer` agent to perform STRIDE (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege) threat modeling on: **$ARGUMENTS**
 
 The security engineer should:
 
 1. **Initial Discovery** — gather:
-   - Data sensitivity (PII, PHI, payment, secrets)
+   - Data sensitivity (personally identifiable information (PII), protected health information (PHI), payment, secrets)
    - Architecture context (trust boundaries, components)
-   - Regulatory scope (PDPA, GDPR, PCI-DSS, etc.)
+   - Regulatory scope (Personal Data Protection Act (PDPA), General Data Protection Regulation (GDPR), Payment Card Industry Data Security Standard (PCI DSS), etc.)
    - Existing security controls
 
-2. **Create Data Flow Diagram** using Mermaid:
+2. **Create Data Flow Diagram (DFD)** as a house-style figure with the `diagram-figures` skill (not raw Mermaid):
    - Show all components
    - Mark trust boundaries explicitly
    - Identify entry points
@@ -28,14 +28,14 @@ The security engineer should:
    - Identify acceptable risks (with justification)
 
 5. **Define required controls**:
-   - Authentication (MFA, password policy, session)
-   - Authorization (RBAC, least privilege)
-   - Cryptography (TLS, at-rest, hashing)
+   - Authentication (multi-factor authentication (MFA), password policy, session)
+   - Authorization (role-based access control (RBAC), least privilege)
+   - Cryptography (Transport Layer Security (TLS), at-rest, hashing)
    - Logging & monitoring (audit events)
 
 6. **Produce polished threat model document** using `polished-document-style` skill, including:
    - Scope section
-   - Data flow diagram (Mermaid)
+   - Data flow diagram (`diagram-figures` figure)
    - Threat table with severity
    - Required controls checklist
    - Residual risks with sign-off section

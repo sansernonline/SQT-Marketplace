@@ -27,7 +27,7 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 
 **ราก (โฟลเดอร์ที่ผู้ใช้เปิด) จัดตาม `project-doc-set` ข้อ 1 แบบ B** — ผังราก แบบ ecosystem และที่อยู่ไฟล์ของ SuperUser (`.claude/superuser/`) อยู่ที่นั่นที่เดียว · โค้ดอยู่ใน `<project-name>/` โครงข้างในเป็นแบบนี้:
 
-ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (ไฟล์ทดสอบอยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
+ใน `<project-name>/` (ชื่อโปรเจกต์ตัวพิมพ์เล็กคั่น `-`): `README.md` (ข้อ 2) · `CHANGELOG.md` · `.env.example` (เฉพาะเมื่ออ่าน environment variable จริง · `config-and-secrets`) · `.editorconfig` · `.gitattributes` · `.gitignore` (build output · ค่าลับ · `_to_delete/`) · `src/` (unit test อยู่ข้างไฟล์โค้ด · `readable-code` ข้อ 7) · `tests/` (เฉพาะ integration · e2e หรือ stack ที่เครื่องมือบังคับ ดูตารางข้อ 1) · `scripts/` (setup · seed · migrate) — ผังพร้อมคำอธิบาย [`references/code-folder.md`](references/code-folder.md) · ADR และ runbook อยู่ใน `docs/` ที่ราก ไม่ใช่ในโฟลเดอร์โค้ด (`project-doc-set` ข้อ 1)
 
 **ชื่อโฟลเดอร์โค้ด** — เอาชื่อโฟลเดอร์โปรเจกต์มาทำเป็นตัวพิมพ์เล็ก เว้นวรรคและเครื่องหมายเปลี่ยนเป็น `-` ตัวเดียว:
 `Lumio - Light Meter/` → `lumio-light-meter/`
@@ -44,9 +44,9 @@ Use when starting a repository or one is slow to run on a new machine (layout, R
 
 | Stack | โค้ด | ทดสอบ | ชื่อไฟล์ |
 |---|---|---|---|
-| Node | `src/` | ข้างไฟล์โค้ด (`*.test.ts`) | `kebab-case` |
+| Node | `src/` | unit test ข้างไฟล์โค้ด (`*.test.ts`) · integration และ e2e ไว้ใน `tests/` | `kebab-case` |
 | .NET | `src/` | `tests/` **บังคับ** (โปรเจกต์ทดสอบแยก `.csproj`) | `PascalCase.cs` |
-| Python | `src/<package>/` | ข้างไฟล์โค้ด (`test_*.py`) | `snake_case.py` |
+| Python | `src/<package>/` | unit test ข้างไฟล์โค้ด (`test_*.py`) · integration และ e2e ไว้ใน `tests/` | `snake_case.py` |
 | Dart / Flutter | `lib/` | `test/` · `integration_test/` **บังคับ** (โครงเหมือน `lib/`) | `snake_case.dart` (lint `file_names`) · `android/` `ios/` อยู่ใน repo |
 
 skill อื่นที่เขียน `tests/` หรือ `test/` ให้อ่านว่า "โฟลเดอร์ทดสอบของ stack นั้น" แล้วเลือกชื่อเดียวใช้ทั้ง repo
@@ -163,12 +163,12 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 - ส่งออกรายงานเป็น Excel
 
 ## [1.2.0] — 2026-09-25
+### เปลี่ยนที่ทำให้ของเดิมพัง
+- `GET /orders` คืน `data` แทนอาเรย์ตรง ๆ — ดู API-CONVENTIONS.md
 ### เพิ่ม
 - แจ้งเตือนทาง LINE
 ### แก้
 - ยอดรวมปัดเศษผิดเมื่อมีส่วนลด
-### เปลี่ยนที่ทำให้ของเดิมพัง
-- `GET /orders` คืน `data` แทนอาเรย์ตรง ๆ — ดู API-CONVENTIONS.md
 ```
 
 เขียนเป็นผลที่ผู้ใช้เห็น ไม่ใช่รายการ commit:
@@ -202,8 +202,8 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
   .editorconfig          ← ข้อ 4
   .gitattributes
   .gitignore             ← build output · ค่าลับ · `_to_delete/`
-  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ในตารางล่าง)
-  tests/                 ← มีเฉพาะ stack ที่เครื่องมือบังคับ (.NET · Flutter `test/`) · ที่เหลือไฟล์ทดสอบอยู่ข้างไฟล์โค้ด
+  src/                   ← โค้ดจริง (หรือโครงตามธรรมเนียมของ stack ใน `SKILL.md` ข้อ 1)
+  tests/                 ← บังคับใน .NET · Flutter (`test/`) · Node และ Python ใช้เก็บเฉพาะ integration และ e2e (unit test อยู่ข้างไฟล์โค้ด) — ตาราง stack อยู่ใน `SKILL.md` ข้อ 1
   scripts/               ← setup, seed, migrate — สคริปต์ที่คนต้องรัน
 ```
 
@@ -212,7 +212,7 @@ skill อื่นที่เขียน `tests/` หรือ `test/` ให�
 
 # skill: docker-sandbox
 
-Use when a project should run in its own Docker container, not on the host, or the user says sandbox.
+Use when a project needs its own Docker container (untrusted code, system installs, overnight runs) or the user says sandbox.
 
 # docker-sandbox — ห้องทดลองต่อโปรเจกต์
 
@@ -240,7 +240,7 @@ Use when a project should run in its own Docker container, not on the host, or t
 | | **mount** (ค่าเริ่ม) | **isolated** (`-Isolated`) |
 |---|---|---|
 | ไฟล์โปรเจกต์ | โฟลเดอร์จริงต่อเข้าไปที่ `/work` แก้แล้วเห็นบนเครื่องทันที | สำเนาอยู่ใน volume โฟลเดอร์จริงต่อเข้าไปแบบอ่านอย่างเดียวที่ `/src` |
-| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
+| ใครแก้ไฟล์ | Claude Code บนเครื่องแก้ไฟล์ตามปกติ (`sandbox.ps1 claude` ใช้ไม่ได้ในโหมดนี้) | Claude Code **ในห้อง** (`sandbox.ps1 claude`) |
 | ใครรันคำสั่ง | ส่งเข้าห้องด้วย `sandbox.ps1 exec "..."` | Claude Code ในห้องรันเอง ไม่มีหน้าต่างขออนุญาต |
 | ผลกลับมาอย่างไร | อยู่ในโฟลเดอร์แล้ว | `sandbox.ps1 sync` → patch ใน `_to_delete\sandbox\` แล้วคนสั่ง `git apply` |
 | ใช้เมื่อ | งานประจำวันที่คนดูอยู่ | งานทั้งคืน · งานเสี่ยง · ลองหลายทางที่ต้องแยกเครื่องจริง (ห้องละทาง) |
@@ -283,7 +283,7 @@ Use when a project should run in its own Docker container, not on the host, or t
 |---|---|
 | รันคำสั่งในห้อง (agent ใช้อันนี้) | `.\.sandbox\sandbox.ps1 exec "npm test"` |
 | เปิด shell ในห้อง | `.\.sandbox\sandbox.ps1 shell` |
-| ให้ Claude Code ทำงานในห้องเต็มที่ | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้) |
+| ให้ Claude Code ทำงานในห้องเต็มที่ (**isolated เท่านั้น**) | `.\.sandbox\sandbox.ps1 claude` (ล็อกอินครั้งแรกครั้งเดียว volume เก็บไว้ · โหมด mount สคริปต์จะปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริง) |
 | เอางานจากห้อง isolated ออกมา | `.\.sandbox\sandbox.ps1 sync` แล้วอ่าน patch ก่อน `git apply` |
 | ห้องทั้งหมดในเครื่อง | `.\.sandbox\sandbox.ps1 list` |
 | ล้างห้องให้สะอาด เริ่มใหม่ | `reset` แล้ว `up` |
@@ -343,6 +343,10 @@ Use when a project should run in its own Docker container, not on the host, or t
 
 เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
 
+`sandbox.ps1 claude` จึงรันได้เฉพาะโหมด isolated — โหมด mount สคริปต์ปฏิเสธ เพราะ `/work` คือโฟลเดอร์จริงของผู้ใช้ (§7 ข้อสุดท้าย)
+
+**ขีดจำกัดของ `-Locked`** — DNS ออกได้เฉพาะ resolver ที่ห้องได้รับ (ของ Docker) ไม่ใช่ DNS server ใดก็ได้ แต่ resolver นั้นยังส่งต่อคำถามออกนอก จึงยังแอบส่งข้อมูลผ่าน DNS (DNS tunnelling) ได้ งานที่ห้ามข้อมูลรั่วเด็ดขาดให้รันแบบไม่มีเครือข่ายเลย
+
 ---
 
 ## 9 · หมายเหตุ Windows
@@ -354,7 +358,7 @@ Use when a project should run in its own Docker container, not on the host, or t
 
 ## เชื่อมกับ skill อื่น
 
-- [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) — ปกติผู้แข่งใช้ git worktree ต่อตัว · ใช้ห้อง isolated ต่อตัว (`-Name <โปรเจกต์>-a1` …) เฉพาะงานที่ต้องแยกเครื่องจริง
+- `parallel-attempts-pick-best` — ปกติผู้แข่งใช้ git worktree ต่อตัว · ใช้ห้อง isolated ต่อตัว (`-Name <โปรเจกต์>-a1` …) เฉพาะงานที่ต้องแยกเครื่องจริง
 - [`app-verifier-setup`](../app-verifier-setup/SKILL.md) — สคริปต์ `start` ของ verify skill รันในห้อง
 - `config-and-secrets` — ค่าทดสอบใส่ `.env` ที่ไม่เข้า git และไม่ bake ลง image
 - playbook `housekeeping` ของ `superuser` — เก็บกวาดห้องและ image เก่า
@@ -498,7 +502,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - อ่านทุก `.docx` ใน `docs/`: ตารางคำถาม · ตารางข้อสมมติที่ยังไม่ตัดสิน · ตารางลงนามที่ยัง "รอ" · ป้ายในเนื้อหา · ข้ามประวัติการแก้ไข สารบัญ บรรทัดอธิบายป้าย และ `(รอบหลัง)`
 - แผ่น **สรุป** นับตามเอกสาร × ประเภทด้วยสูตร · แผ่น **รายการค้าง** มีหัวข้อในเอกสาร · ใครตอบ · ตัดสินภายใน · ค่าที่ใช้ไปก่อน · ข้อที่อ้างถึงกัน · ช่อง "สถานะ" และ "คำตอบ" ให้กรอก
 - ประเภท: **เจ้าของตัดสิน** (ค้นเว็บแล้วปิดไม่ได้) · **ทีมตัดสิน** (BA · SA) · **กฎหมาย** · **วัดจริง** (ไม่มีตัวเลขเผยแพร่) · **ลงนาม** — คำถามที่อ้างคำถามของเจ้าของในเอกสารอื่นถูกนับเป็น "เจ้าของตัดสิน" ด้วย
-- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ใน LiteNet v0.5 (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
+- **ก่อนส่ง เปิดอ่านรายการด้วยตาเอง** — สคริปต์จับจากถ้อยคำ แถวที่ตอบไปแล้วแต่เขียนไม่ตรงคำว่า "ตอบแล้ว · ปิดแล้ว · ตัดสินแล้ว" ยังติดมา · ในชุดตัวอย่างหนึ่ง (6 ฉบับ) ได้ 75 รายการ มีแถวแบบนี้ราว 3 แถว
 - ผู้ใช้กรอกคำตอบแล้ว → เติมคำตอบลงเอกสารต้นทาง ลบป้าย บันทึกในประวัติการแก้ไข แล้วรันสคริปต์ซ้ำ · ไฟล์นี้เป็นรายการงาน ไม่ใช่ต้นฉบับ อย่าแก้คำตอบในไฟล์นี้แทนเอกสาร
 
 **สายเทคนิค** — เขียนเมื่อถึงจุดที่ต้องใช้ ไม่ต้องรอใคร: README · BUILD-PLAN ก่อนโค้ดบรรทัดแรก · DATA-DICTIONARY ตอนออกแบบตารางแรก · API-SPEC ตอน endpoint แรก · PROMPT-LIBRARY ตอน prompt แรกที่ใช้จริง · ADR ตอนตัดสินใจ (ไม่ใช่ตอนสรุปท้าย เพราะเหตุผลจริงหายแล้ว) · Runbook ก่อนขึ้นระบบจริง — ตารางเต็มใน [`references/technical-docs.md`](references/technical-docs.md)
@@ -516,7 +520,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - รูปในเอกสารโปรเจกต์ทุกชนิด (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) · สไลด์ · งานพิมพ์ → `diagram-figures` (house style เดียว) เก็บ `docs/figures/` + ต้นทางใน `src/` · **Mermaid ค่าเริ่มต้นห้ามเข้าเอกสารโปรเจกต์**
 - รูปด่วนใน README · PR · โน้ตในโค้ด → Mermaid (`software-diagrams`) ฝังใน `.md` (สีสุ่มไม่มีความหมาย ไทยล้นกรอบ ย่อลง A4 แล้วอ่านไม่ออก)
 
-**หัวรูปทุกใบต้องมีครบ 5 อย่าง** — ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ
+**หัวรูปทุกใบต้องมีครบ 6 อย่าง** — โลโก้โปรเจกต์ · ชื่อ · คำขยาย 1 บรรทัด · เลขรูป · เวอร์ชันกับวันที่ · เจ้าของ (รายละเอียดอยู่ใน `diagram-figures` ข้อ 3)
 รูปสถาปัตยกรรมถูกก๊อปไปวางในอีเมลและสไลด์แล้วอยู่ต่ออีกเป็นปี **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้**
 
 ---
@@ -526,8 +530,10 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 ประกาศครั้งเดียวต่อโปรเจกต์ บนหัวไฟล์ต้นทางของทุกเอกสาร:
 
 ```markdown
-<!-- doc-theme: accent=#5B4BE8 -->
+<!-- doc-theme: accent=#2A78D6 -->
 ```
+
+(ตัวอย่างใช้สีประจำบ้าน `#2A78D6` — แทนด้วยสีหลักของโปรเจกต์)
 
 `branded-document-design` · `presentation-design` · `diagram-figures`
 อ่านค่านี้แทนการเลือกสีเอง เอกสาร สไลด์ และรูปทุกใบจึงเป็นชุดเดียวกัน
@@ -548,7 +554,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 - [ ] ชื่อไฟล์ตรงตาม `document-naming` — ไม่มี `final2` ไม่มี `ล่าสุด`
 - [ ] เอกสารในชุดอ้างเวอร์ชันของกันและกันตรงกัน
 - [ ] รัน `scripts/open_items.py` แล้วทะเบียนจุดค้างไม่มีแถวสถานะ "เปิด" (หรือผู้ว่าจ้างรับรู้ทุกแถวที่ยังเปิด)
-- [ ] `_to_delete/` ว่าง หรือถูกลบไปแล้ว
+- [ ] บอกผู้ใช้ว่ามีอะไรค้างใน `_to_delete/` (ไม่ลบเอง — ลบเมื่อผู้ใช้สั่งเท่านั้น)
 
 ---
 
@@ -568,7 +574,7 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 นอกจากตาราง "ไม่ใช้" ด้านบน: วาดรูป → `diagram-figures` (เอกสารโปรเจกต์) · `software-diagrams` (README · PR) · ของชั่วคราว → `temp-file-discipline` · สถานะเอกสารใน `docs/BUILD-PLAN.md` → `status-report` · รายการตรวจฉบับพิมพ์ → `assets/doc-set-checklist.md`
 
-**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ
+**อ่านเพิ่มเมื่อต้องใช้:** [`references/writer-templates.md`](references/writer-templates.md) — แม่แบบเอกสารของ `technical-writer` (tutorial · API reference · release notes · README ดู `project-bootstrap`)
 
 
 ## reference: ecosystem.md
@@ -671,82 +677,37 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 ## Standard Outputs
 
-### README Template
+### README
 
-```markdown
-# Project Name
-
-> One-line description that fits in a tweet.
-
-[![badges]](#)
-
-**Demo:** [link] · **Docs:** [link] · **Discord:** [link]
-
----
-
-## Features
-
-- What makes this special — feature 1
-- Killer feature 2
-- Reassuring feature 3
-
-## Quick Start
-
-\`\`\`bash
-npm install package-name
-\`\`\`
-
-\`\`\`typescript
-import { thing } from 'package-name';
-
-const result = thing({ option: 'value' });
-\`\`\`
-
-That's it. You're done.
-
-## Documentation
-
-- [Getting Started](#) — 10-minute tutorial
-- [How-To Guides](#) — Solve specific problems
-- [API Reference](#) — Full API spec
-- [Concepts](#) — Why and how it works
-
-## Contributing
-
-See [CONTRIBUTING.md](#).
-
-## License
-
-MIT
-```
+ไม่มีแม่แบบ README ที่นี่ — ใช้แม่แบบเดียวของ `project-bootstrap` (`SKILL.md` ข้อ 2 และ `assets/starter-files.md`) ที่ตอบ 5 คำถาม: คืออะไร · ต้องมีอะไรบนเครื่อง (เวอร์ชัน) · ติดตั้งและรันอย่างไร · รัน test อย่างไร · เอกสารและคนที่ต้องถามอยู่ที่ไหน
 
 ### Tutorial Template
 
-```markdown
+````markdown
 # Tutorial: Build Your First X in 10 Minutes
 
 > **What you'll learn:** by the end, you'll have built Y and understand Z.
 
 ## What You'll Need
 
-- Node.js 18+
+- Node.js 22+ (Node 18 หมดอายุ 30 เม.ย. 2568, Node 20 หมด 30 เม.ย. 2569 — endoflife.date ตรวจ 22 ต.ค. 2569)
 - A free account at example.com
 - 10 minutes
 
 ## Step 1: Set Up
 
 Run:
-\`\`\`bash
+```bash
 npx create-thing my-project
 cd my-project
-\`\`\`
+```
 
 > **What just happened?** Brief explanation.
 
 You should see:
-\`\`\`
+```
 ✓ Project created
-\`\`\`
+```
 
 ## Step 2: Configure
 
@@ -763,11 +724,11 @@ You've built X. Try these next:
 - [Add feature A](#how-to-add-a) (how-to)
 - [Understand B](#concept-b) (explanation)
 - [Full API](#reference) (reference)
-```
+````
 
 ### API Reference Template (per endpoint)
 
-```markdown
+````markdown
 ## POST `/api/v1/resource`
 
 Create a new resource.
@@ -778,7 +739,7 @@ Required. Bearer token in `Authorization` header.
 
 ### Request
 
-\`\`\`http
+```http
 POST /api/v1/resource HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer <token>
@@ -787,7 +748,7 @@ Authorization: Bearer <token>
   "name": "string (required)",
   "tags": ["string (optional)"]
 }
-\`\`\`
+```
 
 ### Parameters
 
@@ -798,13 +759,13 @@ Authorization: Bearer <token>
 
 ### Response: 201 Created
 
-\`\`\`json
+```json
 {
   "id": "res_abc123",
   "name": "...",
   "created_at": "2025-01-15T10:30:00Z"
 }
-\`\`\`
+```
 
 ### Errors
 
@@ -816,18 +777,23 @@ Authorization: Bearer <token>
 
 ### Code Examples
 
-\`\`\`typescript
+```typescript
 const res = await fetch('/api/v1/resource', {
   method: 'POST',
-  headers: { Authorization: `Bearer ${token}` },
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  },
   body: JSON.stringify({ name: 'My Resource' })
 });
-\`\`\`
 ```
+````
 
 ### Release Notes Template
 
-```markdown
+> Breaking Changes ต้องอยู่ก่อนหัวข้ออื่นเสมอ (ต่อจาก Highlights) — กฎเต็มของ release notes อยู่ใน skill `release-notes`
+
+````markdown
 # Release v2.1.0 — YYYY-MM-DD
 
 ## Highlights
@@ -835,8 +801,24 @@ const res = await fetch('/api/v1/resource', {
 > The TL;DR for busy readers.
 
 - **New:** X feature — try it: `command`
-- **Improved:** Y is now 50% faster
+- **Improved:** Y is faster — <measured number only, e.g. p95 login 1.2 s → 0.7 s; drop the number if not measured>
 - **Fixed:** Z bug affecting users on platform A
+
+## Breaking Changes
+
+### `api.oldMethod()` removed
+
+**Before:**
+```typescript
+api.oldMethod(arg)
+```
+
+**After:**
+```typescript
+api.newMethod({ arg })
+```
+
+[Migration guide](#)
 
 ## 🆕 New Features
 
@@ -844,10 +826,10 @@ const res = await fetch('/api/v1/resource', {
 
 Description with user-facing benefit.
 
-\`\`\`bash
+```bash
 # Example usage
 command --new-flag
-\`\`\`
+```
 
 [Read the docs](#)
 
@@ -861,33 +843,17 @@ command --new-flag
 - Fix issue where ... ([#1234](#))
 - Resolve crash when ... ([#5678](#))
 
-## Breaking Changes
-
-### `api.oldMethod()` removed
-
-**Before:**
-\`\`\`typescript
-api.oldMethod(arg)
-\`\`\`
-
-**After:**
-\`\`\`typescript
-api.newMethod({ arg })
-\`\`\`
-
-[Migration guide](#)
-
 ## Contributors
 
 Thanks to: @alice, @bob, @charlie
-```
+````
 
 
 ---
 
 # skill: temp-file-discipline
 
-Use when a task writes temporary files (extracts, previews, backups, one-off scripts) into a project.
+Use when a task writes temporary files (extracts, previews, backups, drafts, one-off scripts) into a project or work folder.
 
 # ระเบียบไฟล์ชั่วคราว
 
@@ -907,7 +873,7 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 **รากโปรเจกต์ต้องไม่มีไฟล์ชั่วคราวเลย**
 - ถ้า agent สร้างไฟล์ชั่วคราวแล้วไปตกที่ราก (log · ภาพ · สคริปต์ลอง) ให้ย้ายเข้า `_to_delete/` ทันที
 - ถ้าไม่แน่ใจว่าผู้ใช้สร้างหรือใช้ไฟล์นั้นอยู่ ไม่ต้องย้ายเอง ให้บอกผู้ใช้
-- คำสั่งที่รันจากในโฟลเดอร์โค้ด (`<project-name>/` ดู `project-bootstrap`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้าง `_to_delete/` ซ้อนในโฟลเดอร์โค้ด
+- รันจากในโฟลเดอร์ย่อย (เช่น โฟลเดอร์โค้ด ดู `project-bootstrap` ใน plugin `software-company`) ให้เขียนของชั่วคราวไปที่ `_to_delete/` ของ**รากโปรเจกต์** ไม่สร้างซ้อน
 
 ---
 
@@ -931,10 +897,10 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 ## อะไรไม่ใช่
 
 - ผลงานที่ผู้ใช้ขอ
-- ไฟล์ต้นทางของผลงาน เช่น `.py` ที่ผลิตรูป หรือ `.html` ที่เป็นแหล่งที่มาของภาพ —
+- ไฟล์ต้นทางของผลงาน เช่น ไฟล์ออกแบบ `.psd` `.fig` · `.py` ที่ผลิตรูป · `.html` ที่เป็นแหล่งที่มาของภาพ —
   **ปีหน้าจะแก้ก็ต้องมีไฟล์ต้นทาง** จึงเก็บไว้ในโฟลเดอร์ย่อยข้างผลงาน ไม่ใช่ `_to_delete/`
 - ไฟล์ที่ผู้ใช้วางไว้เอง แม้จะดูเหมือนขยะ — **ห้ามย้ายของผู้ใช้โดยไม่ถาม**
-- output ของเครื่องมือ build (`build/` · `.dart_tool/` · `node_modules/` · `bin/` `obj/`) — ปล่อยไว้ที่เครื่องมือวาง แค่ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
+- output ของเครื่องมือ build (`build/` · `node_modules/`) — ปล่อยไว้ ตรวจว่าอยู่ใน `.gitignore` และห้ามย้ายเข้า `_to_delete/`
 
 ---
 
@@ -953,13 +919,14 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 
   | โฟลเดอร์ย่อย | ใส่อะไร | skill ที่ใช้ |
   |---|---|---|
-  | `verify-runs/` | ภาพหน้าจอและผลรันของแอปจริงตอนตรวจ (หลักฐาน verify) | `app-verifier-setup` · `spec-to-code-loop` |
-  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์หรือ mockup | `mobile-app-design` · `web-app-design` · `windows-app-design` |
-  | `security/` | ผลสแกนดิบ | `security-gate` |
+  | `drafts/` | ร่างชั่วคราวที่ยังไม่ใช่ต้นฉบับ (ต้นฉบับ markdown ที่ render ซ้ำอยู่ถาวรที่ `docs/src/<เรื่อง>.md`) | [`document-naming`](../document-naming/SKILL.md) |
+  | `attempts-<เรื่อง>/` | งานของแต่ละตัวที่แข่งกัน | [`parallel-attempts-pick-best`](../parallel-attempts-pick-best/SKILL.md) |
+  | `screenshots/` | ภาพเรนเดอร์ของดีไซน์ mockup หรือภาพตรวจงาน | skill ออกแบบทุกตัว |
   | `logs/` | log จากการรันครั้งเดียว | ทุกตัว |
-  | `check/` | ชื่อเดิมของ `spec-to-code-loop` สำหรับภาพตรวจ ส่วนงานใหม่ใช้ `verify-runs/` แทน | `spec-to-code-loop` |
+
+  งานโค้ด (`verify-runs/` · `security/` · `check/`) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 - ใส่ `_to_delete/` ลงใน `.gitignore` ทุกโปรเจกต์ที่ใช้ git — ตรวจก่อน ถ้ายังไม่มีให้เพิ่ม
-- โปรเจกต์ที่มีชื่อโฟลเดอร์ชั่วคราวอยู่แล้ว (`tmp/` `scratch/` `.cache/`) ให้ใช้ของเดิม อย่าสร้างซ้ำ
+- โปรเจกต์ที่ README ระบุโฟลเดอร์ชั่วคราวอื่นไว้แล้ว (เช่น `tmp/` `scratch/`) → ใช้ตามนั้น แล้วจด 1 แถวในตาราง "การตัดสินใจ" · ไม่มีระบุ → `_to_delete/` · ห้ามใช้ `.cache/` (เป็นของเครื่องมือ ปนกับสถานะของเครื่องมือได้)
 
 ---
 
@@ -967,7 +934,7 @@ Use when a task writes temporary files (extracts, previews, backups, one-off scr
 
 1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
 2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. ถ้าลบไม่ได้เพราะไม่มีสิทธิ์ ให้ย้ายเข้า `_to_delete/` แล้วบอกผู้ใช้ อย่าทิ้งไว้ที่เดิม
+3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ
 
 ---
 
@@ -1013,7 +980,7 @@ Use when patrolling a codebase for misleading patterns (duplication, dead code, 
 ## รอบสำรวจ (ทุกวัน หรือหลังมี commit ใหม่)
 
 1. อ่าน `docs/GARDEN.md` ส่วน "ทบทวนแล้ว" — ธีมที่ตัดสินแล้วไม่ต้องจดซ้ำ
-2. ดูเฉพาะไฟล์ที่เปลี่ยนตั้งแต่รอบก่อน (`git log --since`) ส่วนการดูทั้ง repo ทำแค่สัปดาห์ละครั้ง และงานใหญ่ให้แบ่งด้วย [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)
+2. ดูเฉพาะไฟล์ที่เปลี่ยนตั้งแต่รอบก่อน (`git log --since`) ส่วนการดูทั้ง repo ทำแค่สัปดาห์ละครั้ง และงานใหญ่ให้แบ่งด้วย `parallel-split-and-merge`
 3. มองหา: logic ซ้ำ · เรียกข้ามชั้น (หน้าจอคุยฐานข้อมูลตรง) · กับดักของ framework ที่ใช้ · โค้ดตาย · ชื่อที่ไม่ตรงกับ `readable-code` · test ที่ผ่านทั้งที่โค้ดผิด · ของที่ขัดกับ `docs/AGENT-RULES.md`
 4. **ต่อท้ายลงตารางบันทึก ห้ามแก้โค้ด** ช่อง "รูปแบบ" ให้ใส่คำสั้นที่ใช้ซ้ำได้ จะได้จัดกลุ่มง่าย
 5. ถ้าไม่เจออะไรก็ไม่ต้องเขียน
@@ -1022,7 +989,7 @@ Use when patrolling a codebase for misleading patterns (duplication, dead code, 
 
 1. จัดกลุ่มบันทึกที่ยังไม่ทบทวนตาม "รูปแบบ" และต้นเหตุ
 2. ทุกธีมเลือกทางเดียว
-   - ถ้าเกิดซ้ำได้อีก ให้ใช้ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) เปลี่ยนเป็นตัวกันในโค้ด: โครงสร้าง · type หรือ lint
+   - ถ้าเกิดซ้ำได้อีก ให้ใช้ `repeated-mistakes-to-checks` เปลี่ยนเป็นตัวกันในโค้ด: โครงสร้าง · type หรือ lint
    - ถ้าของที่มีอยู่แล้วต้องจัดใหม่ ให้ใช้ playbook `refactor` ของ [`superuser`](../superuser/SKILL.md)
    - ถ้าไม่คุ้มแก้ ให้เขียนเหตุผลไว้
 3. ลงตาราง "ทบทวนแล้ว" แล้วเสนอผู้ใช้ว่าจะทำธีมไหนก่อน และเริ่มแก้จริงเมื่อผู้ใช้เลือกแล้ว
@@ -1030,7 +997,7 @@ Use when patrolling a codebase for misleading patterns (duplication, dead code, 
 
 ## ตั้งให้รันเอง
 
-ตั้ง scheduled task ในแอป Claude หรือ Windows Task Scheduler: รัน `claude -p "ใช้ code-gardener รอบสำรวจ"` ทุกวัน และ `"... รอบทบทวน"` ทุกวันจันทร์และพฤหัส ถ้ารันโดยไม่มีคนดู ให้ใช้ sandbox (`.sandbox/`, ดู `docker-sandbox`) แบบ `-Isolated -Locked` และอนุญาตเฉพาะเครื่องมือที่ skill นี้ใช้ · รอบไม่มีคนดูทำแค่รอบสำรวจและรอบทบทวน (เขียน log) ไม่แก้โค้ด ไม่ commit
+ตั้ง scheduled task ในแอป Claude หรือ Windows Task Scheduler: รัน `claude -p "ใช้ code-gardener รอบสำรวจ"` ทุกวัน และ `"... รอบทบทวน"` ทุกวันจันทร์และพฤหัส ถ้ารันโดยไม่มีคนดู ให้ใช้ sandbox (`.sandbox/`, ดู `docker-sandbox`) แบบ `-Isolated -Locked` และอนุญาตเฉพาะเครื่องมือที่ skill นี้ใช้ · ขั้นตอนเต็มดู [`playbook-unattended-run`](../superuser/references/playbook-unattended-run.md) · คำสั่งในห้อง (โหมด isolated เท่านั้น — `sandbox.ps1 claude` ปฏิเสธโหมด mount): รันโดยไม่มีคนดูให้ใช้ `.\.sandbox\sandbox.ps1 exec "claude -p '<คำสั่ง>'"` หลังล็อกอินในห้องแล้ว เพราะ `exec` ใช้ `compose exec -T` ส่วน `sandbox.ps1 claude` ส่ง argument ต่อได้ แต่ไม่มี `-T` จึงต้องมีหน้าต่าง terminal ซึ่ง Task Scheduler ไม่มี (จะเพิ่ม `-T` ให้ `claude` หรือไม่ รอยืนยัน) · รอบไม่มีคนดูทำแค่รอบสำรวจและรอบทบทวน (เขียน log) ไม่แก้โค้ด ไม่ commit
 
 
 ---
@@ -1073,7 +1040,7 @@ Use when writing or reviewing a Functional Specification Document (FSD) that scr
 | [references/worked-examples.md](references/worked-examples.md) | ถ้าจะเขียน use case หน้าจอ ตารางสถานะ หรือกฎทางธุรกิจตัวแรกของเอกสาร ให้เปิดดูตัวอย่างเต็มแล้วลอกรูปแบบไปใช้ |
 | [references/edge-cases.md](references/edge-cases.md) | ตอนเขียนหัวข้อข้อผิดพลาดและกรณีขอบ และตอนรีวิวก่อนส่ง เพื่อไล่ให้ครบทุกกรณี |
 | [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | ถ้ายังไม่แน่ใจว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD ให้เปิดตารางเทียบนี้ |
-| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B) หรือต้องการแม่แบบ use case, API endpoint, data model และตัวอย่าง Mermaid |
+| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B — 11 หัวข้อเดียวกับข้อ 3) หรือต้องการแม่แบบ use case, API endpoint, data model ฉบับคนตรวจอ่าน |
 | [references/figures.md](references/figures.md) | ตอนวางแผนว่าหัวข้อไหนต้องมีรูปชนิดไหน |
 | [references/outline-sections.md](references/outline-sections.md) | ถ้าต้องตัดสินว่าหัวข้อไหนข้ามได้ ให้เปิดตารางนี้ ส่วนโครงเต็มที่ลอกไปกรอกได้อยู่ใน [assets/fsd-outline.md](assets/fsd-outline.md) |
 | [references/related-skills.md](references/related-skills.md) | ถ้างานต้องใช้ skill อื่นคู่กัน เช่น รูป ข้อตกลง API หรือ test case ให้เปิดดูว่าใช้ตัวไหน |
@@ -1090,7 +1057,7 @@ SRS บอกว่าระบบ**ต้องทำอะไรได้** �
 ## 2 · ลำดับการทำงาน
 
 1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามรวมครั้งเดียวตอนเริ่มแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เฉพาะข้อที่ตีความต่างแล้วงานออกมาต่างกันทั้งชุด (ตัวเลือก = การตีความที่เป็นไปได้ อ้างข้อใน SRS/BRD) ที่เหลือใส่ `(รอยืนยัน)` แล้วทำต่อ
-2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว หรือมีลูกค้าอ่านด้วย
+2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว (**Mode A** ค่าเริ่มต้น) หรือมีลูกค้าอ่านเพื่อเซ็นรับด้วย (**Mode B** — 11 หัวข้อเดิม เรียงเหมือนเดิม แค่จัดหน้าให้คนตรวจอ่านง่าย ดู [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md))
 3. ไล่ทีละ use case ไม่ใช่ทีละหน้าจอ — หน้าจอเกิดจาก use case ไม่ใช่ทางกลับกัน
 4. เขียนกฎทางธุรกิจแยกออกมาก่อน แล้วค่อยอ้างถึงจากขั้นตอน (ข้อ 7)
 5. ทำตารางสอบย้อนกลับไปพร้อมกัน ไม่ใช่ทำตอนจบ
@@ -1182,8 +1149,8 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 
 ตารางว่าหัวข้อไหนควรมีรูปชนิดไหนอยู่ใน [references/figures.md](references/figures.md) ข้อที่ต้องจำคือ state diagram ใช้**คู่กับตาราง ไม่ใช่แทนตาราง**
 
-เลือกเครื่องมือตามปลายทางของเอกสาร: ถ้าเป็น markdown ใช้ `software-diagrams` (Mermaid)
-ไฟล์ที่ลูกค้าเซ็นรับใช้ `diagram-figures` ส่วนภาพร่างหน้าจอใช้ `markdown-visuals`
+รูปทุกรูปในเอกสาร FSD (ทั้ง Mode A และ Mode B ทั้ง markdown และไฟล์ที่ลูกค้าเซ็นรับ) ใช้ `diagram-figures` แบบ house style ชุดเดียว ส่วนภาพร่างหน้าจอใช้ `markdown-visuals`
+Mermaid ผ่าน `software-diagrams` ใช้แค่ร่างคุยกันในแชต ไม่ใส่ในเอกสารที่ส่ง
 **ทุกรูปในฉบับเดียวใช้ธีมสีชุดเดียวกัน** ตาม `doc-theme` (ดู `polished-document-style`)
 
 ## 11 · รีวิวความครบถ้วนก่อนส่ง
@@ -1319,7 +1286,7 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 | ระดับข้อกำหนดที่ลูกค้าเซ็นรับ | `srs-writing` |
 | รูปแบบ markdown และธีมสีของเอกสาร | `polished-document-style` |
 | หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` · `diagram-figures` · `markdown-visuals` |
+| รูปในเอกสาร | `diagram-figures` (ทุกรูปในเอกสารที่ส่ง) · `markdown-visuals` (ภาพร่างหน้าจอ) · `software-diagrams` (Mermaid ร่างคุยในแชตเท่านั้น) |
 | ข้อตกลงของ API ที่ FSD อ้างถึง | `api-conventions` |
 | แบบจำลองข้อมูลที่ FSD อ้างถึง | `database-design` |
 | ห้าสถานะของหน้าจอ และกฎงานออกแบบ | `ui-craft` + skill แพลตฟอร์ม |
@@ -1334,15 +1301,15 @@ BR-<เลข 3 หลัก>              กฎทางธุรกิจ    
 
 # Stakeholder document (Mode B) — style, diagrams, templates
 
-Moved from the system-analyst agent. Read when writing a Mode B document or a use case, API endpoint or data model section.
+Moved from the system-analyst agent. Read when writing a Mode B document. A Mode A use case follows `SKILL.md` §4 and [`worked-examples.md`](worked-examples.md); the templates below are the same content in reviewer-friendly form, never a different format.
 
-This is the "beautiful design" mode. Use Rich Markdown + Mermaid.
+Mode B is **the same FSD** as Mode A — the same 11 sections in the same order as `SKILL.md` §3 — styled for reviewers who sign off: a short summary up front, plain words, more tables, less code. It never adds or drops a section; only the style changes. Diagrams follow `SKILL.md` §10. IDs follow `SKILL.md` §9 (`UC-<module>-<3 digits>`, steps of 10).
 
 ## Document Structure
 
-Every stakeholder doc MUST follow this structure:
+Every stakeholder doc MUST follow the 11 FSD sections (`SKILL.md` §3, full outline in [`assets/fsd-outline.md`](../assets/fsd-outline.md)):
 
-```markdown
+````markdown
 # <Document Title>
 
 > **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
@@ -1352,37 +1319,37 @@ Every stakeholder doc MUST follow this structure:
 
 ## Table of Contents
 
-1. [Executive Summary](#executive-summary)
-2. [Scope](#scope)
-3. [Actors & Personas](#actors--personas)
-4. [Use Cases](#use-cases)
-5. [System Flows](#system-flows)
-6. [API Specifications](#api-specifications)
-7. [Data Model](#data-model)
-8. [Business Rules](#business-rules)
-9. [Non-Functional Requirements](#non-functional-requirements)
-10. [Glossary](#glossary)
+1. [Introduction](#1-introduction) — starts with a one-paragraph summary for non-technical readers
+2. [Users & Permissions](#2-users--permissions)
+3. [Process Overview](#3-process-overview)
+4. [Use Cases](#4-use-cases)
+5. [Screen Specifications](#5-screen-specifications)
+6. [State Machines](#6-state-machines)
+7. [Business Rules](#7-business-rules)
+8. [Data & Integrations](#8-data--integrations) — API endpoints and data model go here
+9. [Errors & Edge Cases](#9-errors--edge-cases)
+10. [Traceability](#10-traceability)
+11. [Revision History](#11-revision-history)
 
 ---
 
-## 1. Executive Summary
+## 1. Introduction
 
 > **For non-technical readers** — 1 paragraph explaining what this feature does and why.
 
-<content>
+### Scope
 
----
-
-## 2. Scope
-
-### In Scope
+**In scope**
 - ...
 
-### Out of Scope
+**Out of scope**
 - ...
 
-[... continue all sections ...]
-```
+### Glossary
+- ...
+
+[... continue all 11 sections; skip 5 only if there are no screens and 6 only if nothing has a status ...]
+````
 
 ## Formatting Rules
 
@@ -1443,100 +1410,21 @@ Align headers to data when helpful:
 
 ---
 
-# Mermaid Diagrams
+# Diagrams
 
-Use Mermaid for ALL diagrams. They render in GitHub/Notion/VSCode.
+Follow `SKILL.md` §10. A Mode B document is delivered to people who sign it, so every figure is a house-style figure made with `diagram-figures` (same theme for every figure in one document, per `doc-theme`). Mermaid through `software-diagrams` is only for a quick sketch in chat, never for the delivered file. Screen sketches use `markdown-visuals`.
 
 ## When to use which diagram
 
-| Diagram | Use for |
-|---------|---------|
-| `flowchart` | Business processes, decision trees |
-| `sequenceDiagram` | Interactions between systems/actors over time |
-| `erDiagram` | Database/data models |
-| `stateDiagram-v2` | Object lifecycle, status transitions |
-| `classDiagram` | Object-oriented design |
-| `gantt` | Timeline/schedule |
-| `journey` | User experience journey |
-| `mindmap` | Concept relationships |
+| Diagram | Use for | FSD section |
+|---------|---------|---|
+| Flowchart | Business processes, decision trees | 3 Process Overview |
+| Sequence diagram | Interactions between systems/actors over time | 4 Use Cases (multi-party) |
+| State diagram | Object lifecycle, status transitions — **next to the table, not instead of it** | 6 State Machines |
+| ER diagram | Tables of this module only | 8 Data & Integrations |
+| Timeline (Gantt) | Schedule, if the document has one | appendix |
 
-## Example: Sequence Diagram
-
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant FE as Frontend
-    participant API as Backend API
-    participant DB as Database
-
-    User->>FE: Click "Login"
-    FE->>API: POST /auth/login
-    API->>DB: SELECT user WHERE email=?
-    DB-->>API: User row
-    API->>API: Verify bcrypt password
-    alt Valid credentials
-        API-->>FE: 200 { token, user }
-        FE-->>User: Redirect to dashboard
-    else Invalid
-        API-->>FE: 401 { error }
-        FE-->>User: Show error
-    end
-```
-````
-
-## Example: ER Diagram
-
-````markdown
-```mermaid
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-    PRODUCT ||--o{ ORDER_ITEM : "appears in"
-
-    USER {
-        uuid id PK
-        string email UK
-        string name
-        timestamp created_at
-    }
-    ORDER {
-        uuid id PK
-        uuid user_id FK
-        decimal total
-        string status
-    }
-```
-````
-
-## Example: State Diagram
-
-````markdown
-```mermaid
-stateDiagram-v2
-    [*] --> Draft
-    Draft --> Submitted: submit()
-    Submitted --> Approved: approve()
-    Submitted --> Rejected: reject()
-    Rejected --> Draft: revise()
-    Approved --> [*]
-```
-````
-
-## Example: Flowchart
-
-````markdown
-```mermaid
-flowchart TD
-    A[User submits form] --> B{Valid?}
-    B -->|Yes| C[Save to DB]
-    B -->|No| D[Show errors]
-    C --> E[Send confirmation email]
-    E --> F([End])
-    D --> A
-```
-````
+Embed each figure as an image with a numbered caption, for example `![Figure 4-1 Place order — sequence](figures/uc-ord-010-sequence.svg)`.
 
 ---
 
@@ -1544,16 +1432,18 @@ flowchart TD
 
 ## Use Case Template (Mode B)
 
-```markdown
-### UC-001: <Use Case Name>
+````markdown
+### UC-ORD-010: <Use Case Name>
 
 | Field | Value |
 |-------|-------|
-| **ID** | UC-001 |
+| **ID** | UC-ORD-010 (next use case in this module: UC-ORD-020) |
+| **From (SRS)** | FR-ORD-040 |
 | **Actor** | Customer |
 | **Priority** | High |
 | **Status** | Approved |
 | **Trigger** | User clicks "Place Order" |
+| **Frequency** | ~200 per day `(รอยืนยัน)` |
 
 #### Preconditions
 - User is authenticated
@@ -1577,42 +1467,28 @@ flowchart TD
 
 #### Alternative Flows
 
-> **A1: Payment declined at step 3**
+> **010-A1: Payment declined at step 3**
 > 3a. Gateway returns decline
 > 3b. System shows error, suggests alternate payment
 > 3c. Returns to step 2
 
 #### Exception Flows
 
-> **E1: Gateway timeout at step 3**
+> **010-E1: Gateway timeout at step 3**
 > 3a. System waits 30s
 > 3b. Logs incident, marks order as `payment_pending`
 > 3c. Sends "We'll retry" email to user
 
 #### Sequence Diagram
 
-\`\`\`mermaid
-sequenceDiagram
-    actor U as Customer
-    participant UI
-    participant API
-    participant Pay as Payment Gateway
-    participant DB
+![Figure 4-1 UC-ORD-010 Place order — Customer, UI, API, Payment Gateway, Database](figures/uc-ord-010-sequence.svg)
 
-    U->>UI: Click "Place Order"
-    UI->>API: POST /orders
-    API->>Pay: Charge
-    Pay-->>API: Auth code
-    API->>DB: INSERT order
-    DB-->>API: Order ID
-    API-->>UI: 201 Created
-    UI-->>U: Confirmation page
-\`\`\`
-```
+> Drawn with `diagram-figures` (house style). Steps: Customer clicks "Place Order" → UI sends POST /orders → API charges the gateway → gateway returns auth code → API inserts the order → UI shows the confirmation page.
+````
 
 ## API Endpoint Template (Mode B)
 
-```markdown
+````markdown
 ### POST `/api/v1/orders`
 
 > Create a new order from cart contents.
@@ -1633,7 +1509,7 @@ sequenceDiagram
 
 #### Request Body
 
-\`\`\`json
+```json
 {
   "items": [
     { "product_id": "uuid", "quantity": 2 }
@@ -1641,11 +1517,11 @@ sequenceDiagram
   "shipping_address_id": "uuid",
   "payment_method_id": "uuid"
 }
-\`\`\`
+```
 
 #### Response: 201 Created
 
-\`\`\`json
+```json
 {
   "data": {
     "id": "ORD-12345",
@@ -1654,7 +1530,7 @@ sequenceDiagram
     "created_at": "2025-01-15T10:30:00Z"
   }
 }
-\`\`\`
+```
 
 #### Error Responses
 
@@ -1667,20 +1543,18 @@ Every error body is `application/problem+json` (RFC 9457): `type` · `title` · 
 | 409 | Inventory unavailable | `out-of-stock` |
 | 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
 | 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
-```
+````
 
 ## Data Model Template (Mode B)
 
-```markdown
-## Data Model
+````markdown
+## 8. Data & Integrations
 
 ### Entity Relationship Diagram
 
-\`\`\`mermaid
-erDiagram
-    USER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-\`\`\`
+![Figure 8-1 Order module — USER places ORDER, ORDER contains ORDER_ITEM](figures/order-er.svg)
+
+> Drawn with `diagram-figures` (house style), tables of this module only.
 
 ### Tables
 
@@ -1693,7 +1567,7 @@ erDiagram
 | `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
 
 > **Security:** `email` is encrypted at rest using AES-256.
-```
+````
 
 ---
 
@@ -1750,9 +1624,8 @@ erDiagram
 
 | ฟิลด์ | ชนิด | บังคับ | กฎตรวจ | ข้อความเมื่อไม่ผ่าน | ค่าเริ่มต้น |
 |---|---|:--:|---|---|---|
-| เหตุผลที่ยกเลิก | เลือกจากรายการ | ✓ | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
-| หมายเหตุ | ข้อความยาว | ✗ | ไม่เกิน 500 ตัวอักษร | "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
-| วันที่ต้องการรับ | วันที่ | ✓ | ไม่ก่อนวันนี้ · ไม่เกิน 90 วัน | "เลือกวันที่ตั้งแต่วันนี้ถึง <วันที่>" | วันนี้ + 3 |
+| เหตุผลที่ยกเลิก | เลือกจากรายการ | ลูกค้า ✓ · เจ้าหน้าที่ ✗ (010-A1) | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
+| หมายเหตุภายใน | ข้อความยาว | เจ้าหน้าที่ ✓ · ลูกค้าไม่เห็นช่องนี้ | ไม่เกิน 500 ตัวอักษร | "กรุณากรอกหมายเหตุ" · "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
 ```
 
 ## ตารางการเปลี่ยนสถานะ (ข้อ 6)
@@ -1771,4 +1644,9 @@ erDiagram
 ยกเลิกได้เมื่อสถานะเป็น `confirmed` และยังไม่เกิน 24 ชั่วโมงนับจากเวลายืนยัน
 เจ้าหน้าที่ระดับหัวหน้าขึ้นไปยกเลิกได้โดยไม่จำกัดเวลา แต่ต้องกรอกหมายเหตุ
 **ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.2
+
+**BR-031 · เหตุผลที่ลูกค้าเลือกได้ตอนยกเลิก**
+สั่งผิดรายการ · ได้ราคาที่ถูกกว่า · รอนานเกินไป · ไม่ต้องการแล้ว · อื่น ๆ
+ผู้ดูแลระบบแก้รายการนี้ได้ในหน้าตั้งค่า โดยไม่ต้องแก้โค้ด
+**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.3 `(รอยืนยัน)`
 ```

@@ -28,7 +28,7 @@
 
 ### Comparison Matrix
 
-Settlement times and coverage change often and were not re-checked on 2026-10-14 `(รอยืนยัน)` — confirm on each vendor's current pricing page before quoting them. Omise may now trade under another brand name `(รอยืนยัน)`.
+Settlement times and coverage change often and were not re-checked on 2026-10-14 `(รอยืนยัน)` — confirm on each vendor's current pricing page before quoting them. Omise traded as "Opn Payments" for about two years and went back to the Omise name in March 2025 (omise.co post "Omise unveils bold rebranding…", 18 Mar 2025; also brandinside.asia and thaipr.net — ตรวจ 22 ต.ค. 2569).
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
@@ -123,44 +123,63 @@ if (paymentIntent.status === 'requires_action') {
 ```typescript
 // 1. Receive webhook
 app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+  // 2. Verify signature (CRITICAL) — on the raw body, not parsed JSON
+  let event: Stripe.Event;
   try {
-    // 2. Verify signature (CRITICAL)
-    const event = stripe.webhooks.constructEvent(
+    event = stripe.webhooks.constructEvent(
       req.body,
       req.headers['stripe-signature']!,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
+  } catch {
+    return res.status(400).send('Invalid signature');
+  }
 
-    // 3. Idempotency check
-    const existing = await db.webhookEvents.findById(event.id);
-    if (existing) {
-      return res.json({ received: true, duplicate: true });
-    }
-
-    // 4. Store raw event FIRST
-    await db.webhookEvents.create({
+  try {
+    // 3. Store raw event FIRST. event.id is the PRIMARY KEY:
+    //    INSERT ... ON CONFLICT (id) DO NOTHING → a duplicate delivery inserts nothing
+    const inserted = await db.webhookEvents.insertIfAbsent({
       id: event.id,
       type: event.type,
       payload: event,
       status: 'PENDING',
     });
 
-    // 5. Ack within 5s
-    res.json({ received: true });
-
-    // 6. Process async
-    await queue.enqueue('process-webhook', { eventId: event.id });
-  } catch (err) {
-    if (err instanceof stripe.errors.StripeSignatureVerificationError) {
-      return res.status(400).send('Invalid signature');
+    // 4. Enqueue BEFORE the ack, whenever the stored row is still PENDING — not only when it
+    //    was just inserted. So if enqueue throws → 500 → the gateway's retry finds the row
+    //    PENDING and enqueues again. If the process dies, the sweeper below picks the row up.
+    //    (A duplicate enqueue is harmless: the worker claims the event atomically.)
+    const stored = inserted ? { status: 'PENDING' } : await db.webhookEvents.findById(event.id);
+    if (stored.status === 'PENDING') {
+      await queue.enqueue('process-webhook', { eventId: event.id });
     }
+
+    // 5. Ack fast (within a few seconds) — the last step, nothing after it can fail
+    return res.json({ received: true, duplicate: !inserted });
+  } catch (err) {
     log.error('Webhook error', err);
-    res.status(500).send('Error');
+    return res.status(500).send('Error');
   }
 });
 
-// Worker (separate):
+// Sweeper (cron every few minutes): re-enqueue events stuck in PENDING,
+// e.g. stored but never enqueued because the process crashed.
+async function sweepPendingWebhooks() {
+  const stuck = await db.webhookEvents.findPendingOlderThan({ minutes: 5 });
+  for (const e of stuck) await queue.enqueue('process-webhook', { eventId: e.id });
+}
+
+// Worker (separate) — may be enqueued twice for one event (sweeper + retry), so it CLAIMS
+// the event atomically instead of check-then-act:
+//   UPDATE webhook_events SET status = 'PROCESSING'
+//   WHERE id = $1 AND status IN ('PENDING', 'FAILED')
+// Only the worker that changed 1 row goes on. Handlers must still be idempotent
+// (e.g. handleRefund keyed on the refund id): a worker can crash after the handler ran
+// but before PROCESSED is written. A sweeper may also reset rows stuck in PROCESSING
+// for a long time back to PENDING.
 async function processWebhook(eventId: string) {
+  const claimed = await db.webhookEvents.claim(eventId); // rowCount of the UPDATE above
+  if (claimed !== 1) return; // someone else has it, or it is already PROCESSED
   const evt = await db.webhookEvents.findById(eventId);
 
   try {
@@ -269,55 +288,69 @@ async function retryPayment(paymentId: string, attempt: number = 0) {
 ```typescript
 // Always store currency with amount
 interface Money {
-  amount: bigint;        // integer (cents/satoshis)
+  amount: bigint;        // integer in the currency's minor unit (THB satang, USD cents; JPY has 0 decimals, KWD 3)
   currency: string;      // ISO 4217 code
 }
 
 // Never assume USD
+// Never assume 2 decimals — don't hard-code `/ 100`
 // Never mix currencies in calculations
 // Always use FX rate at transaction time
 
-// Display formatting (per locale):
+// Display formatting (per locale) — display only, never feed the result back into math:
 function format(money: Money, locale: string): string {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: money.currency,
-  }).format(Number(money.amount) / 100);
+  const fmt = new Intl.NumberFormat(locale, { style: 'currency', currency: money.currency });
+  const digits = fmt.resolvedOptions().maximumFractionDigits; // ISO 4217 minor unit: THB 2, JPY 0, KWD 3
+  return fmt.format(Number(money.amount) / 10 ** digits);
 }
+// The gateway's own amount rules can differ from ISO 4217 for a few currencies
+// (Stripe lists its "zero-decimal" and special cases) — convert with the gateway's table at the API edge.
 ```
 
 ## Settlement Reconciliation
 
 ```typescript
-// Daily job
-async function reconcileSettlement(date: Date) {
-  // 1. Pull settlement report from gateway
-  const settlement = await stripe.balanceTransactions.list({
-    created: { gte: startOfDay(date), lte: endOfDay(date) },
-  });
+// Daily job — match transaction by transaction, not one day total against another.
+// A payout is net of fees and batches several days, so "sum of payouts = payments paid today" never holds.
+const toUnix = (d: Date) => Math.floor(d.getTime() / 1000); // Stripe `created` filters take Unix seconds
 
-  // 2. Sum gateway's view
-  const gatewayTotal = settlement.data
-    .filter((t) => t.type === 'payout')
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  // 3. Sum our DB
-  const ourTotal = await db.payments.sumPaidOnDate(date);
-
-  // 4. Compare
-  if (gatewayTotal !== ourTotal) {
-    await alerts.fire({
-      severity: 'P1',
-      title: 'Settlement reconciliation mismatch',
-      data: { date, gatewayTotal, ourTotal, diff: gatewayTotal - ourTotal },
-    });
+async function reconcileDay(date: Date) {
+  // 1. Gateway view: one entry per charge / refund (gross amount, minor units)
+  const gateway = new Map<string, bigint>(); // source id (ch_… / re_…) → amount
+  for await (const t of stripe.balanceTransactions.list({
+    created: { gte: toUnix(startOfDay(date)), lt: toUnix(startOfNextDay(date)) },
+    limit: 100, // auto-pagination walks every page; the default page is only 10
+  })) {
+    if (!['charge', 'payment', 'refund', 'payment_refund'].includes(t.type)) continue; // fees, payouts, adjustments: own checks
+    gateway.set(t.source as string, BigInt(t.amount)); // t.fee and t.net are there too
   }
+  // Note: balance transactions are in the SETTLEMENT currency. If you charge in another
+  // currency, compare against the charge amount instead, or store both in your DB.
 
-  // 5. Match to bank deposit
-  const bankDeposit = await bankApi.getDeposit(date);
-  if (gatewayTotal !== bankDeposit.amount) {
-    // Gateway → Bank mismatch
-    await alerts.fire({ severity: 'P2', title: 'Bank deposit mismatch' });
+  // 2. Our view: same ids, same sign convention (refunds negative)
+  const ours = await db.ledger.entriesByGatewayIdOnDate(date); // Map<string, bigint>
+
+  // 3. Every difference, both directions
+  const mismatches = [];
+  for (const [id, amt] of gateway) if (ours.get(id) !== amt) mismatches.push({ id, gateway: amt, ours: ours.get(id) });
+  for (const [id, amt] of ours) if (!gateway.has(id)) mismatches.push({ id, gateway: undefined, ours: amt });
+
+  if (mismatches.length > 0) {
+    await alerts.fire({ severity: 'P1', title: 'Settlement reconciliation mismatch', data: { date, mismatches } });
+  }
+}
+
+// Bank side — match each payout (already net of fees) to one bank deposit
+async function reconcilePayouts(date: Date) {
+  for await (const p of stripe.payouts.list({
+    arrival_date: { gte: toUnix(startOfDay(date)), lt: toUnix(startOfNextDay(date)) },
+    limit: 100,
+  })) {
+    const deposit = await bankApi.findDeposit({ reference: p.id, date });
+    if (!deposit || deposit.amount !== BigInt(p.amount)) {
+      await alerts.fire({ severity: 'P2', title: 'Bank deposit mismatch', data: { payout: p.id } });
+    }
+    // Which charges make up this payout: balanceTransactions.list({ payout: p.id })
   }
 }
 ```
@@ -333,27 +366,75 @@ async function reconcileSettlement(date: Date) {
 //    - Bank transfer: 1-3 days
 //    - Wallet: usually instant
 
-// Partial refund pattern:
-async function refundPayment(paymentId: string, amountCents?: bigint) {
-  const payment = await db.payments.findById(paymentId);
+// Partial refund pattern — the idempotency key comes from a STORED refund request.
+// ❌ `refund_${paymentId}_${Date.now()}` → new key on every retry → timeout + retry = refunded twice
+// ❌ `refund_${paymentId}_${amount}`     → two real refunds of the same amount share a key → the 2nd is silently dropped
+// ✅ one refund_requests row per real refund; its id is the key; every retry reuses it
 
-  const refundAmount = amountCents ?? (payment.amount - payment.refunded);
+// Step 1: record the request once (inside a transaction, payment row locked)
+async function requestRefund(paymentId: string, clientRequestId: string, amountCents?: bigint) {
+  return db.transaction(async (tx) => {
+    const payment = await tx.payments.findByIdForUpdate(paymentId); // SELECT ... FOR UPDATE
 
-  if (refundAmount <= 0n) throw new Error('Already fully refunded');
-  if (refundAmount > payment.amount - payment.refunded) {
-    throw new Error('Refund exceeds available');
-  }
+    // Same request sent twice (double click, client retry) → same row back.
+    // refund_requests has UNIQUE (client_request_id).
+    // Same id with a different amount is a client bug → refuse (same rule as transfer()).
+    const existing = await tx.refundRequests.findByClientRequestId(clientRequestId);
+    if (existing) {
+      if (amountCents !== undefined && existing.amount !== amountCents) {
+        throw new IdempotencyKeyReusedError(); // same key, different body
+      }
+      return existing;
+    }
 
+    // Count PENDING + SUBMITTED + SUCCEEDED requests, so two requests in flight can't overshoot
+    const reserved = await tx.refundRequests.sumNotFailed(paymentId);
+    const available = payment.amount - reserved;
+    const refundAmount = amountCents ?? available;
+
+    if (refundAmount <= 0n) throw new Error('Already fully refunded');
+    if (refundAmount > available) throw new Error('Refund exceeds available');
+
+    return tx.refundRequests.create({
+      id: crypto.randomUUID(), paymentId, clientRequestId,
+      amount: refundAmount, status: 'PENDING',
+    });
+  });
+}
+
+// Step 2: send it — safe to run again (worker retry, timeout) with the same id
+async function executeRefund(refundRequestId: string) {
+  const rr = await db.refundRequests.findById(refundRequestId);
+  if (rr.status !== 'PENDING') return rr; // already done
+  const payment = await db.payments.findById(rr.paymentId);
+
+  // Stripe Node: the key is a request option (2nd argument), not a param.
+  // Stripe may prune a key after 24 h — for a retry later than that, first look for
+  // an existing refund with metadata.refundRequestId before calling create again.
+  // Network error / timeout → leave PENDING and retry later (same key).
+  // Definite rejection (e.g. StripeInvalidRequestError) → mark FAILED so the amount is freed.
   const refund = await stripe.refunds.create({
     payment_intent: payment.gatewayId,
-    amount: Number(refundAmount),
+    amount: Number(rr.amount),
+    metadata: { refundRequestId: rr.id },
   }, {
-    idempotencyKey: `refund_${paymentId}_${Date.now()}`,
+    idempotencyKey: `refund_${rr.id}`,
   });
 
-  await db.payments.update(paymentId, {
-    refunded: payment.refunded + refundAmount,
-    status: refundAmount === payment.amount ? 'REFUNDED' : 'PARTIALLY_REFUNDED',
+  await db.transaction(async (tx) => {
+    // refund.status can be pending / requires_action / succeeded / failed / canceled.
+    // Not final yet → SUBMITTED (still counted as reserved); the webhook
+    // (refund.updated) later moves it to SUCCEEDED or FAILED and re-runs this total.
+    const status =
+      refund.status === 'succeeded' ? 'SUCCEEDED'
+      : refund.status === 'failed' || refund.status === 'canceled' ? 'FAILED'
+      : 'SUBMITTED';
+    await tx.refundRequests.update(rr.id, { gatewayRefundId: refund.id, status });
+    const refunded = await tx.refundRequests.sumSucceeded(rr.paymentId);
+    await tx.payments.update(rr.paymentId, {
+      refunded,
+      status: refunded === payment.amount ? 'REFUNDED' : 'PARTIALLY_REFUNDED', // total, not this one refund
+    });
   });
 }
 ```

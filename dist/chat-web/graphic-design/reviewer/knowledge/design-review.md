@@ -24,7 +24,7 @@ Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 |---|---|---|---|
 | 1 | First read | In 2 seconds a stranger names the product or offer intended | They name the background, a model's face, or "a promotion" |
 | 2 | Hierarchy | Exactly 1 primary element, clearly largest or highest contrast; 3 levels or fewer | 2 elements the same size and weight; price and headline fight |
-| 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (WCAG AA); text over photo passes a squint test | Text on busy photo areas without overlay; amber on white |
+| 3 | Contrast | Body text ≥ 4.5:1, large text ≥ 3:1 (Web Content Accessibility Guidelines (WCAG) AA); text over photo passes a squint test | Text on busy photo areas without overlay; amber on white |
 | 4 | Spacing | 1 spacing scale (e.g. multiples of 8 px); outer margin ≥ inner gaps; text clear of safe zones | Random gaps; text touching edges; text in the story's bottom 35% |
 | 5 | Alignment | Every element sits on a shared edge or centre line | Items "almost" aligned (off by a few px); centred and left-aligned mixed |
 | 6 | Type | ≤ 2 families; ≤ 3 sizes; Thai line-height ≥ 1.5 for body; no single word alone on a headline line | Third font; faux bold; clipped tone marks or vowels; one-word last line |
@@ -46,7 +46,7 @@ Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) block
 
 ## Worked critique
 
-**Asset:** IG story, 1080 × 1920, café "ซื้อ 1 แถม 1" promo. Photo of two drinks, headline in white Kanit Bold over a light window background, price badge bottom-centre, LINE ID at the very bottom.
+**Asset:** Instagram (IG) story, 1080 × 1920, café "ซื้อ 1 แถม 1" promo. Photo of two drinks, headline in white Kanit Bold over a light window background, price badge bottom-centre, LINE ID at the very bottom.
 
 | # | Result | Note |
 |---|---|---|
@@ -127,7 +127,7 @@ Blocking fails (1, 3, 8): <list or none>
 
 ## Quick tools
 
-- Contrast ratio: any WCAG checker (WebAIM Contrast Checker, a Figma or Canva plugin, browser DevTools colour picker)
+- Contrast ratio: any Web Content Accessibility Guidelines (WCAG) checker (WebAIM Contrast Checker, a Figma or Canva plugin, browser DevTools colour picker)
 - Squint test: blur the image (Gaussian 8–10 px) — the primary element must still stand out
 - Alignment: turn on a grid or drag guides in the design tool; check left edges and centre lines
 - Thai proofreading: read the copy aloud; check ๆ, tone marks, and that numbers use one system (Arabic or Thai digits, not mixed)

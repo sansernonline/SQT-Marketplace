@@ -8,14 +8,14 @@ Use the `solution-architect` agent to perform an architecture review of: **ส�
 The solution architect should:
 
 1. **Initial Discovery** — gather:
-   - Current architecture docs (existing diagrams, ADRs)
+   - Current architecture docs (existing diagrams, Architecture Decision Records (ADRs))
    - System scope (which components, boundaries)
    - Review purpose: pre-implementation, mid-build, or operating system
    - Stakeholder concerns driving the review
    - Recent incidents or pain points
 
 2. **Document current architecture:**
-   - Create C4 model views (Context, Container, Component) using Mermaid
+   - Create Context-Container-Component-Code (C4) model views (Context, Container, Component) as figures with the `diagram-figures` skill (not plain Mermaid)
    - List components + responsibilities
    - Map data flows
    - Identify integration points
@@ -81,7 +81,7 @@ The solution architect should:
 
 7. **Produce polished architecture review document** using `polished-document-style` skill:
    - Executive summary
-   - Current state diagrams (Mermaid)
+   - Current state diagrams (`diagram-figures` house style)
    - Quality attribute scorecard
    - Risk register
    - Recommendations prioritized

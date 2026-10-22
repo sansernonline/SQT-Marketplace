@@ -1,11 +1,10 @@
 {
  "plugin": "software-company",
- "version": "2.14.0",
- "description": "Simulates a complete software development company — 42 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 117 skills and 29 slash commands for the whole SDLC.",
+ "version": "2.20.0",
+ "description": "Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
   "adr-writer",
-  "adversarial-review-panel",
   "api-conventions",
   "app-verifier-setup",
   "app-verifier-upkeep",
@@ -14,7 +13,6 @@
   "auth-implementation-patterns",
   "background-jobs",
   "blast-radius",
-  "branded-document-design",
   "bug-inbox-triage",
   "bug-report-template",
   "cicd-and-release",
@@ -24,28 +22,21 @@
   "coding-evals",
   "commit-message-format",
   "config-and-secrets",
-  "context-budget",
   "data-import-export",
   "database-design",
-  "decision-log",
   "developer-experience",
-  "diagram-figures",
   "doc-cover-design",
   "docker-sandbox",
-  "document-naming",
   "e2e-testing-patterns",
   "ecommerce-patterns",
   "error-handling-patterns",
   "file-upload-and-storage",
   "fintech-payments",
-  "flag-and-propose",
   "fsd-writing",
   "game-development",
   "graphic-design",
   "healthcare-systems",
-  "html-slide-deck",
   "i18n-and-locale",
-  "image-generation",
   "incident-runbook-template",
   "insurance-systems",
   "iot-systems",
@@ -54,60 +45,37 @@
   "legal-document-systems",
   "llm-engineering",
   "logging-standards",
-  "markdown-report-docx",
-  "markdown-visuals",
   "mobile-app-design",
   "mobile-engineering",
-  "no-ai-look",
   "notifications",
   "observability-basics",
-  "owner-style-capture",
-  "parallel-attempts-pick-best",
-  "parallel-split-and-merge",
+  "owasp-top10",
   "pdpa-compliance",
-  "polished-document-style",
   "postmortem-template",
-  "pptx-to-html-deck",
   "pr-description-template",
-  "presentation-design",
-  "principle-build-a-tool-not-handwork",
   "principle-data-shape-first",
-  "principle-fix-root-cause",
-  "principle-proceed-on-reversible-work",
-  "principle-prove-it-works",
   "principle-replace-then-delete",
   "principle-safe-to-rerun",
   "principle-secure-by-default",
-  "principle-small-verifiable-steps",
-  "principle-user-experience-first",
-  "prior-art-review",
-  "product-naming",
   "project-bootstrap",
   "project-doc-set",
   "readable-code",
   "reference-app-research",
-  "repeated-mistakes-to-checks",
   "reverse-engineering",
   "saas-platform",
   "security-gate",
   "security-operations",
   "seo-audit-checklist",
-  "session-lessons-to-skills",
   "simplicity-first",
-  "simplify",
   "smart-contracts",
   "software-diagrams",
   "spec-to-code-loop",
-  "spell-out-abbreviations",
   "srs-writing",
   "stack-dotnet",
   "stack-mql",
   "stack-python",
   "stack-sql",
   "stack-typescript",
-  "status-report",
-  "targeted-fix",
-  "temp-file-discipline",
   "test-case-template",
   "test-evidence",
   "testing-standards",
@@ -115,14 +83,52 @@
   "user-story-writer",
   "web-app-design",
   "web-service-essentials",
-  "windows-app-design",
-  "work-session-context"
+  "windows-app-design"
  ],
  "core_skills": [
+  "superuser",
+  "adversarial-review-panel",
   "agent-patterns",
   "answer-shape",
+  "commit-log",
+  "context-budget",
+  "decision-log",
+  "flag-and-propose",
+  "handoff",
   "human-writing",
-  "superuser"
+  "no-ai-look",
+  "owner-style-capture",
+  "parallel-attempts-pick-best",
+  "parallel-split-and-merge",
+  "principle-build-a-tool-not-handwork",
+  "principle-fix-root-cause",
+  "principle-proceed-on-reversible-work",
+  "principle-prove-it-works",
+  "principle-small-verifiable-steps",
+  "principle-user-experience-first",
+  "prior-art-review",
+  "repeated-mistakes-to-checks",
+  "research-with-sources",
+  "session-lessons-to-skills",
+  "simplify",
+  "status-report",
+  "targeted-fix",
+  "temp-file-discipline",
+  "branded-document-design",
+  "diagram-figures",
+  "document-naming",
+  "html-slide-deck",
+  "image-generation",
+  "markdown-report-docx",
+  "markdown-visuals",
+  "meeting-prep-card",
+  "meeting-summary",
+  "polished-document-style",
+  "polite-message-th-en",
+  "pptx-to-html-deck",
+  "presentation-design",
+  "product-naming",
+  "spell-out-abbreviations"
  ],
  "commands": [
   "api-design",
@@ -166,12 +172,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "llm-engineering",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "llm-engineering"
    ]
   },
   {
@@ -184,24 +185,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "smart-contracts",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
-   ]
-  },
-  {
-   "name": "brainstormer",
-   "model": "opus",
-   "core": true,
-   "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
-   "skills": [
-    "parallel-attempts-pick-best",
-    "superuser",
-    "human-writing",
-    "simplify"
+    "smart-contracts"
    ]
   },
   {
@@ -211,29 +195,14 @@
    "description": "Use when gathering requirements, writing a BRD, user stories or acceptance criteria. FSD and API → system-analyst.",
    "skills": [
     "superuser",
-    "principle-prove-it-works",
     "simplicity-first",
     "user-story-writer",
-    "polished-document-style",
-    "markdown-visuals",
-    "presentation-design",
-    "branded-document-design",
+    "software-diagrams",
     "srs-writing",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "temp-file-discipline",
-    "status-report",
     "fsd-writing",
     "legacy-spec-recovery",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "document-naming",
     "pdpa-compliance",
-    "data-import-export",
-    "context-budget",
-    "work-session-context",
-    "human-writing",
-    "simplify"
+    "data-import-export"
    ]
   },
   {
@@ -247,18 +216,8 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "pdpa-compliance",
-    "markdown-visuals",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "architecture-patterns",
-    "human-writing",
-    "simplify"
+    "architecture-patterns"
    ]
   },
   {
@@ -272,20 +231,11 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "llm-engineering",
     "data-import-export",
     "background-jobs",
     "observability-basics",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "architecture-patterns",
-    "human-writing",
-    "simplify"
+    "architecture-patterns"
    ]
   },
   {
@@ -301,15 +251,8 @@
     "code-review-checklist",
     "commit-message-format",
     "pr-description-template",
-    "principle-fix-root-cause",
-    "targeted-fix",
     "superuser",
     "principle-secure-by-default",
-    "principle-prove-it-works",
-    "decision-log",
-    "status-report",
-    "work-session-context",
-    "context-budget",
     "stack-dotnet",
     "stack-typescript",
     "stack-python",
@@ -318,9 +261,8 @@
     "e2e-testing-patterns",
     "spec-to-code-loop",
     "app-verifier-setup",
-    "principle-build-a-tool-not-handwork",
     "security-gate",
-    "markdown-visuals",
+    "owasp-top10",
     "web-service-essentials",
     "api-conventions",
     "error-handling-patterns",
@@ -338,17 +280,10 @@
     "project-bootstrap",
     "docker-sandbox",
     "project-doc-set",
-    "temp-file-discipline",
     "code-gardener",
     "fsd-writing",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
     "simplicity-first",
-    "reverse-engineering",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "simplify"
+    "reverse-engineering"
    ]
   },
   {
@@ -361,31 +296,18 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "simplicity-first",
     "postmortem-template",
-    "polished-document-style",
-    "branded-document-design",
-    "markdown-visuals",
+    "software-diagrams",
     "incident-runbook-template",
     "logging-standards",
     "web-service-essentials",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "work-session-context",
     "docker-sandbox",
     "cicd-and-release",
     "config-and-secrets",
     "observability-basics",
     "project-bootstrap",
-    "background-jobs",
-    "simplify"
+    "background-jobs"
    ]
   },
   {
@@ -398,12 +320,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "developer-experience",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "developer-experience"
    ]
   },
   {
@@ -416,12 +333,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "ecommerce-patterns",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "ecommerce-patterns"
    ]
   },
   {
@@ -432,19 +344,9 @@
    "skills": [
     "fintech-payments",
     "superuser",
-    "principle-prove-it-works",
     "pdpa-compliance",
     "audit-trail",
-    "branded-document-design",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "threat-model",
-    "human-writing",
-    "simplify"
+    "threat-model"
    ]
   },
   {
@@ -457,12 +359,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "fintech-payments",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "fintech-payments"
    ]
   },
   {
@@ -475,12 +372,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "game-development",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "game-development"
    ]
   },
   {
@@ -493,12 +385,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "game-development",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "game-development"
    ]
   },
   {
@@ -509,24 +396,9 @@
    "skills": [
     "graphic-design",
     "superuser",
-    "principle-prove-it-works",
     "ui-craft",
-    "presentation-design",
-    "product-naming",
     "simplicity-first",
-    "branded-document-design",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "work-session-context",
-    "software-diagrams",
-    "simplify",
-    "no-ai-look"
+    "software-diagrams"
    ]
   },
   {
@@ -541,13 +413,7 @@
     "principle-secure-by-default",
     "ecommerce-patterns",
     "mobile-engineering",
-    "saas-platform",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify",
-    "no-ai-look"
+    "saas-platform"
    ]
   },
   {
@@ -560,12 +426,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "healthcare-systems",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "healthcare-systems"
    ]
   },
   {
@@ -576,18 +437,8 @@
    "skills": [
     "healthcare-systems",
     "superuser",
-    "principle-prove-it-works",
     "pdpa-compliance",
-    "audit-trail",
-    "branded-document-design",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "human-writing",
-    "simplify"
+    "audit-trail"
    ]
   },
   {
@@ -596,17 +447,9 @@
    "core": false,
    "description": "Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.",
    "skills": [
-    "image-generation",
     "superuser",
-    "principle-prove-it-works",
     "graphic-design",
-    "human-writing",
-    "spell-out-abbreviations",
-    "temp-file-discipline",
-    "status-report",
-    "software-diagrams",
-    "simplify",
-    "no-ai-look"
+    "software-diagrams"
    ]
   },
   {
@@ -619,12 +462,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "insurance-systems",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "insurance-systems"
    ]
   },
   {
@@ -635,18 +473,8 @@
    "skills": [
     "insurance-systems",
     "superuser",
-    "principle-prove-it-works",
     "pdpa-compliance",
-    "audit-trail",
-    "branded-document-design",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "human-writing",
-    "simplify"
+    "audit-trail"
    ]
   },
   {
@@ -659,12 +487,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "insurance-systems",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "insurance-systems"
    ]
   },
   {
@@ -677,24 +500,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "iot-systems",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
-   ]
-  },
-  {
-   "name": "learning-reviewer",
-   "model": "sonnet",
-   "core": true,
-   "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
-   "skills": [
-    "superuser",
-    "repeated-mistakes-to-checks",
-    "human-writing",
-    "simplify"
+    "iot-systems"
    ]
   },
   {
@@ -706,17 +512,7 @@
     "legal-document-systems",
     "pdpa-compliance",
     "superuser",
-    "principle-prove-it-works",
-    "audit-trail",
-    "branded-document-design",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "human-writing",
-    "simplify"
+    "audit-trail"
    ]
   },
   {
@@ -729,12 +525,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "legal-document-systems",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "legal-document-systems"
    ]
   },
   {
@@ -747,12 +538,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "mobile-engineering",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "mobile-engineering"
    ]
   },
   {
@@ -762,27 +548,9 @@
    "description": "Use for product vision, roadmap, feature priorities, user research or market analysis. HOW and WHEN → project-manager.",
    "skills": [
     "superuser",
-    "principle-prove-it-works",
     "simplicity-first",
-    "polished-document-style",
-    "branded-document-design",
-    "presentation-design",
     "user-story-writer",
-    "markdown-visuals",
-    "prior-art-review",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "work-session-context",
-    "reference-app-research",
-    "document-naming",
-    "product-naming",
-    "simplify"
+    "reference-app-research"
    ]
   },
   {
@@ -792,29 +560,7 @@
    "description": "Use for project plans, timelines, sprints, risks, progress tracking or status reports. WHAT and WHY → product-manager.",
    "skills": [
     "superuser",
-    "principle-prove-it-works",
-    "simplicity-first",
-    "polished-document-style",
-    "markdown-visuals",
-    "presentation-design",
-    "branded-document-design",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "owner-style-capture",
-    "decision-log",
-    "parallel-split-and-merge",
-    "repeated-mistakes-to-checks",
-    "session-lessons-to-skills",
-    "document-naming",
-    "project-doc-set",
-    "work-session-context",
-    "simplify"
+    "project-doc-set"
    ]
   },
   {
@@ -830,11 +576,9 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "testing-standards",
     "e2e-testing-patterns",
     "fsd-writing",
-    "simplicity-first",
     "stack-dotnet",
     "stack-typescript",
     "stack-python",
@@ -846,22 +590,7 @@
     "app-verifier-upkeep",
     "docker-sandbox",
     "security-gate",
-    "adversarial-review-panel",
-    "parallel-split-and-merge",
-    "bug-inbox-triage",
-    "markdown-visuals",
-    "polished-document-style",
-    "branded-document-design",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "work-session-context",
-    "simplify"
+    "bug-inbox-triage"
    ]
   },
   {
@@ -875,18 +604,8 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
-    "markdown-visuals",
     "stack-mql",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "architecture-patterns",
-    "human-writing",
-    "simplify"
+    "architecture-patterns"
    ]
   },
   {
@@ -900,17 +619,8 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "llm-engineering",
-    "observability-basics",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "polished-document-style",
-    "human-writing",
-    "simplify"
+    "observability-basics"
    ]
   },
   {
@@ -922,37 +632,11 @@
     "docker-sandbox",
     "reverse-engineering",
     "reference-app-research",
-    "context-budget",
-    "principle-build-a-tool-not-handwork",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
-    "decision-log",
-    "legacy-spec-recovery",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "markdown-visuals",
-    "polished-document-style",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
-   ]
-  },
-  {
-   "name": "reviewer",
-   "model": "opus",
-   "core": true,
-   "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
-   "skills": [
-    "code-review-checklist",
-    "adversarial-review-panel",
-    "graphic-design",
-    "no-ai-look",
-    "simplify",
-    "human-writing"
+    "legacy-spec-recovery"
    ]
   },
   {
@@ -963,16 +647,7 @@
    "skills": [
     "saas-platform",
     "superuser",
-    "principle-prove-it-works",
-    "fintech-payments",
-    "markdown-visuals",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "fintech-payments"
    ]
   },
   {
@@ -985,12 +660,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "security-operations",
-    "principle-prove-it-works",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "human-writing",
-    "simplify"
+    "security-operations"
    ]
   },
   {
@@ -1001,14 +671,13 @@
    "skills": [
     "healthcare-systems",
     "fintech-payments",
+    "owasp-top10",
     "superuser",
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "security-gate",
     "code-review-checklist",
-    "simplicity-first",
     "auth-implementation-patterns",
     "config-and-secrets",
     "audit-trail",
@@ -1016,20 +685,7 @@
     "error-handling-patterns",
     "pdpa-compliance",
     "docker-sandbox",
-    "markdown-visuals",
-    "polished-document-style",
-    "branded-document-design",
-    "security-operations",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "temp-file-discipline",
-    "status-report",
-    "work-session-context",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "simplify"
+    "security-operations"
    ]
   },
   {
@@ -1039,22 +695,7 @@
    "description": "Use when improving search ranking — SEO audits, keywords, meta tags, URL structure, structured data, competitor SEO.",
    "skills": [
     "seo-audit-checklist",
-    "superuser",
-    "principle-prove-it-works",
-    "simplicity-first",
-    "polished-document-style",
-    "markdown-visuals",
-    "branded-document-design",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "temp-file-discipline",
-    "status-report",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "context-budget",
-    "work-session-context",
-    "human-writing",
-    "simplify"
+    "superuser"
    ]
   },
   {
@@ -1068,16 +709,10 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "principle-prove-it-works",
     "saas-platform",
     "simplicity-first",
-    "markdown-visuals",
-    "diagram-figures",
     "project-doc-set",
     "architecture-patterns",
-    "prior-art-review",
-    "parallel-attempts-pick-best",
-    "adversarial-review-panel",
     "database-design",
     "api-conventions",
     "web-service-essentials",
@@ -1087,20 +722,7 @@
     "audit-trail",
     "pdpa-compliance",
     "cicd-and-release",
-    "repeated-mistakes-to-checks",
-    "reverse-engineering",
-    "polished-document-style",
-    "branded-document-design",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "work-session-context",
-    "simplify"
+    "reverse-engineering"
    ]
   },
   {
@@ -1110,32 +732,17 @@
    "description": "Use for an FSD, use cases, data flows, endpoint API specs or sequence diagrams. Architecture → solution-architect.",
    "skills": [
     "superuser",
-    "principle-prove-it-works",
     "simplicity-first",
-    "polished-document-style",
-    "markdown-visuals",
-    "branded-document-design",
+    "software-diagrams",
     "srs-writing",
-    "diagram-figures",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "temp-file-discipline",
-    "status-report",
     "database-design",
     "api-conventions",
     "fsd-writing",
     "legacy-spec-recovery",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "document-naming",
     "i18n-and-locale",
     "audit-trail",
     "notifications",
-    "pdpa-compliance",
-    "context-budget",
-    "work-session-context",
-    "human-writing",
-    "simplify"
+    "pdpa-compliance"
    ]
   },
   {
@@ -1145,30 +752,8 @@
    "description": "Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer.",
    "skills": [
     "superuser",
-    "principle-prove-it-works",
-    "simplicity-first",
-    "polished-document-style",
-    "branded-document-design",
-    "markdown-visuals",
     "commit-message-format",
-    "markdown-report-docx",
-    "presentation-design",
-    "html-slide-deck",
-    "pptx-to-html-deck",
-    "human-writing",
-    "answer-shape",
-    "spell-out-abbreviations",
-    "context-budget",
-    "temp-file-discipline",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "status-report",
-    "work-session-context",
-    "document-naming",
-    "project-doc-set",
-    "product-naming",
-    "simplify",
-    "no-ai-look"
+    "project-doc-set"
    ]
   },
   {
@@ -1179,25 +764,10 @@
    "skills": [
     "ui-craft",
     "superuser",
-    "principle-prove-it-works",
-    "simplicity-first",
     "web-app-design",
     "mobile-app-design",
     "windows-app-design",
-    "markdown-visuals",
-    "diagram-figures",
-    "spell-out-abbreviations",
-    "answer-shape",
-    "temp-file-discipline",
-    "status-report",
-    "flag-and-propose",
-    "principle-proceed-on-reversible-work",
-    "i18n-and-locale",
-    "context-budget",
-    "work-session-context",
-    "human-writing",
-    "simplify",
-    "no-ai-look"
+    "i18n-and-locale"
    ]
   }
  ],
@@ -1272,7 +842,7 @@
     },
     {
      "n": 4,
-     "text": "หาต้นเหตุตาม [`principle-fix-root-cause`](../../principle-fix-root-cause/SKILL.md) · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)",
+     "text": "หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1284,7 +854,6 @@
       "raw": "`developer` ตัวใหม่ (ส่งผลขั้น 3)"
      },
      "skills": [
-      "principle-fix-root-cause",
       "superuser"
      ],
      "commands": [],
@@ -1355,9 +924,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [
@@ -1369,7 +936,7 @@
     },
     {
      "n": 9,
-     "text": "ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ [`repeated-mistakes-to-checks`](../../repeated-mistakes-to-checks/SKILL.md) · ใคร: หัวหน้าทีม",
+     "text": "ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1378,9 +945,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "repeated-mistakes-to-checks"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -1397,8 +962,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "superuser",
-      "status-report"
+      "superuser"
      ],
      "commands": [],
      "playbooks": [],
@@ -1421,9 +985,7 @@
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "brainstormer"
-      ],
+      "agents": [],
       "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)"
      },
      "skills": [
@@ -1438,7 +1000,8 @@
      "text": "**บอกรูปข้อมูลก่อน** — type · ตาราง · state ที่ฟีเจอร์นี้สร้างหรือเปลี่ยน โดยเขียนเป็นโค้ดหรือตารางสั้น ๆ ในคำตอบ · ใคร: หัวหน้าทีม",
      "sub": [
       "แยก 3 ชั้น (รับข้อมูลเข้า → กฎธุรกิจ → เก็บข้อมูล)",
-      "ถ้าแตะ input จากภายนอก · login · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล ให้เปิด [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้รัน `/software-company:threat-model` ก่อนเขียน"
+      "ถ้าแตะ input จากภายนอก · login · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล ให้เปิด [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้ส่ง `security-engineer` ตัวใหม่ทำ STRIDE ตาม `threat-model/references/security-templates.md` ก่อนเขียน (หรือขอให้ผู้ใช้รัน `/software-company:threat-model` เอง เพราะ skill นั้นเรียกได้เฉพาะผู้ใช้)",
+      "เว็บแอปหรือ API → ทำตามคอลัมน์ \"ต้องมี\" ของ [`owasp-top10`](../../owasp-top10/SKILL.md) ในส่วนที่ฟีเจอร์แตะ และเขียน test ตามคอลัมน์ \"พิสูจน์ด้วย\" (ชื่อ test ขึ้นต้นด้วยรหัสข้อ เช่น `A01_`)"
      ],
      "phase": "",
      "who": {
@@ -1448,7 +1011,8 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "principle-secure-by-default"
+      "principle-secure-by-default",
+      "owasp-top10"
      ],
      "commands": [
       "threat-model"
@@ -1458,7 +1022,7 @@
     },
     {
      "n": 3,
-     "text": "ถ้าฟีเจอร์ข้ามหลายโมดูล ให้ร่างลายเซ็นฟังก์ชันและตำแหน่งไฟล์ก่อนเขียนเนื้อ ถ้ายังมีหลายทางที่ดีพอกัน ให้ใช้ [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) หรือ playbook `prototype` · ใคร: หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)",
+     "text": "ถ้าฟีเจอร์ข้ามหลายโมดูล ให้ร่างลายเซ็นฟังก์ชันและตำแหน่งไฟล์ก่อนเขียนเนื้อ ถ้ายังมีหลายทางที่ดีพอกัน ให้ใช้ `parallel-attempts-pick-best` หรือ playbook `prototype` · ใคร: หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)",
      "sub": [],
      "phase": "",
      "who": {
@@ -1469,9 +1033,7 @@
       ],
       "raw": "หัวหน้าทีม (หลายทางดีพอกัน: `developer` ตัวใหม่ทางละตัว)"
      },
-     "skills": [
-      "parallel-attempts-pick-best"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [
       "prototype"
@@ -1522,7 +1084,7 @@
      "n": 6,
      "text": "ตรวจทุกชิ้นก่อนไปชิ้นถัดไป — test ของชิ้นนั้นต้องผ่าน และกดดูบนแอปจริงด้วย skill ตรวจแอปของโปรเจกต์ · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
-      "**ทุกพฤติกรรมใหม่และทุกข้อที่ตัดสินใจเอง ต้องมี test ล็อกไว้อย่างน้อย 1 ตัว** และ test ต้องล้มเมื่อโค้ดผิด ([`principle-prove-it-works`](../../principle-prove-it-works/SKILL.md))"
+      "**ทุกพฤติกรรมใหม่และทุกข้อที่ตัดสินใจเอง ต้องมี test ล็อกไว้อย่างน้อย 1 ตัว** และ test ต้องล้มเมื่อโค้ดผิด (`principle-prove-it-works`)"
      ],
      "phase": "",
      "who": {
@@ -1533,16 +1095,14 @@
       ],
       "raw": "`qa-tester` ตัวใหม่"
      },
-     "skills": [
-      "principle-prove-it-works"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 7,
-     "text": "**รีวิวก่อนบอกว่าเสร็จ — ห้ามข้าม** diff เล็ก: ความถูกต้องและ edge case · logic หรือ state มาก: [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md) อย่างน้อย 2 มุม คือความถูกต้องและความเรียบง่าย ถ้าเพิ่ม dependency หรือแตะเรื่องเสี่ยง ให้ผ่าน [`security-gate`](../../security-gate/SKILL.md) · ใคร: `reviewer` ตัวใหม่ (logic มาก: `reviewer` ตัวใหม่มุมละตัว · เรื่องเสี่ยง: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "**รีวิวก่อนบอกว่าเสร็จ — ห้ามข้าม** diff เล็ก: ความถูกต้องและ edge case · logic หรือ state มาก: `adversarial-review-panel` อย่างน้อย 2 มุม คือความถูกต้องและความเรียบง่าย ถ้าเพิ่ม dependency หรือแตะเรื่องเสี่ยง ให้ผ่าน [`security-gate`](../../security-gate/SKILL.md) · ใคร: `reviewer` ตัวใหม่ (logic มาก: `reviewer` ตัวใหม่มุมละตัว · เรื่องเสี่ยง: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [
       "test ผ่านครบไม่ได้แปลว่าไม่มีบั๊ก — ทุกข้อที่รีวิวยืนยันแล้ว ให้เขียน test ที่ล้มก่อน แล้วค่อยแก้",
       "หน้าจอที่มี mockup หรือต้องเหมือนระบบเดิม ให้จบขั้นตรวจด้วย playbook `visual-parity`"
@@ -1552,14 +1112,11 @@
       "lead": false,
       "user": false,
       "agents": [
-       "reviewer",
-       "reviewer",
        "security-engineer"
       ],
       "raw": "`reviewer` ตัวใหม่ (logic มาก: `reviewer` ตัวใหม่มุมละตัว · เรื่องเสี่ยง: `security-engineer` ตัวใหม่ อ่านอย่างเดียว · ไม่แก้ไฟล์)"
      },
      "skills": [
-      "adversarial-review-panel",
       "security-gate"
      ],
      "commands": [],
@@ -1594,9 +1151,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -1617,8 +1172,7 @@
      },
      "skills": [
       "superuser",
-      "pr-description-template",
-      "status-report"
+      "pr-description-template"
      ],
      "commands": [],
      "playbooks": [],
@@ -1714,9 +1268,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -1759,9 +1311,7 @@
       ],
       "raw": "`system-analyst` ตัวใหม่ (ไม่เกิน 3 ไฟล์: หัวหน้าทีม)"
      },
-     "skills": [
-      "context-budget"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -1862,9 +1412,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -1901,7 +1449,7 @@
      "n": 1,
      "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
      "sub": [
-      "คิวกลาง `~/.claude/superuser/improvements.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
+      "คิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
       "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
      ],
      "phase": "",
@@ -1935,10 +1483,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "repeated-mistakes-to-checks",
-      "session-lessons-to-skills"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -1999,9 +1544,7 @@
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
      },
      "skills": [
@@ -2038,23 +1581,19 @@
    "steps": [
     {
      "n": 1,
-     "text": "**ขอบเขตเท่ากระดาษแผ่นเดียว** — ถ้ามี SRS ที่มีรหัส FR อยู่แล้ว ให้ใช้รหัสนั้นเป็นรหัสงานในตารางงานของ `docs/BUILD-PLAN.md` ตาม [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) ถ้าไม่มี ให้ตั้งรหัสสั้นจากขอบเขต (`F-01` …) แล้วเขียนว่าทำอะไร ไม่ทำอะไร และพฤติกรรมไหนตีความได้หลายแบบ (เช่น เครื่องคิดเลขคูณก่อนบวก หรือคิดซ้ายไปขวา) ข้อที่เดาได้และย้อนได้ให้เลือกเองแล้วลง [`decision-log`](../../decision-log/SKILL.md) พร้อม `(รอยืนยัน)` ส่วนข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) ไม่เดาค่า ใส่ `(รอยืนยัน)` ตรงที่ใช้ แล้วรวมไว้ใน \"ค้างอยู่\" ครั้งเดียว · **ไทม์ไลน์**: มีแผนโครงการ (`docs/<รหัส>-PLAN-*`) → ใส่รหัส `M…` ของแผนในคอลัมน์ `milestone` ของตารางงาน · ไม่มี → จัดแถวเป็น 3–5 milestone ที่ผู้ใช้เห็นผลได้ (เช่น ตั้งโครง + verify → ฟีเจอร์หลัก → ฟีเจอร์รอง → รีวิว + ส่งมอบ) พร้อมตาราง milestone และ Gantt 1 ภาพจาก `diagram-figures` (รูปลง `docs/figures/` แล้วลิงก์ใน `BUILD-PLAN.md`) ตามแม่แบบของ `status-report` · ระยะเวลาที่ผู้ใช้ไม่ได้ให้ → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่ · ไทม์ไลน์: `project-manager` ตัวใหม่)",
+     "text": "**ขอบเขตเท่ากระดาษแผ่นเดียว** — ถ้ามี SRS ที่มีรหัส FR อยู่แล้ว ให้ใช้รหัสนั้นเป็นรหัสงานในตารางงานของ `docs/BUILD-PLAN.md` ตาม [`spec-to-code-loop`](../../spec-to-code-loop/SKILL.md) ถ้าไม่มี ให้ตั้งรหัสสั้นจากขอบเขต (`F-01` …) แล้วเขียนว่าทำอะไร ไม่ทำอะไร และพฤติกรรมไหนตีความได้หลายแบบ (เช่น เครื่องคิดเลขคูณก่อนบวก หรือคิดซ้ายไปขวา) ข้อที่เดาได้และย้อนได้ให้เลือกเองแล้วลง `decision-log` พร้อม `(รอยืนยัน)` ส่วนข้อเท็จจริงที่ไม่รู้ (ตัวเลข ชื่อ วันที่ งบ) ไม่เดาค่า ใส่ `(รอยืนยัน)` ตรงที่ใช้ แล้วรวมไว้ใน \"ค้างอยู่\" ครั้งเดียว · **ไทม์ไลน์**: มีแผนโครงการ (`docs/<รหัส>-PLAN-*`) → ใส่รหัส `M…` ของแผนในคอลัมน์ `milestone` ของตารางงาน · ไม่มี → จัดแถวเป็น 3–5 milestone ที่ผู้ใช้เห็นผลได้ (เช่น ตั้งโครง + verify → ฟีเจอร์หลัก → ฟีเจอร์รอง → รีวิว + ส่งมอบ) พร้อมตาราง milestone และ Gantt 1 ภาพจาก `diagram-figures` (รูปลง `docs/figures/` แล้วลิงก์ใน `BUILD-PLAN.md`) ตามแม่แบบของ `status-report` · ระยะเวลาที่ผู้ใช้ไม่ได้ให้ → `(รอยืนยัน)` · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่ · ไทม์ไลน์: `project-manager` ตัวใหม่)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": false,
       "agents": [
-       "brainstormer",
        "project-manager"
       ],
       "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่ · ไทม์ไลน์: `project-manager` ตัวใหม่)"
      },
      "skills": [
-      "spec-to-code-loop",
-      "decision-log",
-      "diagram-figures",
-      "status-report"
+      "spec-to-code-loop"
      ],
      "commands": [],
      "playbooks": [],
@@ -2074,9 +1613,7 @@
       ],
       "raw": "`solution-architect` ตัวใหม่เลือกเทคโนโลยี · `developer` ตัวใหม่ตรวจและติดตั้ง toolchain (ต้องใช้ Bash)"
      },
-     "skills": [
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": true
@@ -2117,7 +1654,6 @@
      },
      "skills": [
       "app-verifier-setup",
-      "principle-prove-it-works",
       "docker-sandbox"
      ],
      "commands": [],
@@ -2146,27 +1682,23 @@
     },
     {
      "n": 6,
-     "text": "**คณะรีวิว 3 มุม** ([`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md)) · ใคร: `reviewer` ตัวใหม่มุมละตัว",
+     "text": "**คณะรีวิว 3 มุม** (`adversarial-review-panel`) · ใคร: `reviewer` ตัวใหม่มุมละตัว",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่มุมละตัว"
      },
-     "skills": [
-      "adversarial-review-panel"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 7,
-     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — สแกนค่าลับ dependency และโค้ด หัวหน้าทีมเก็บรายงานใน `qa/security/` · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "**[`security-gate`](../../security-gate/SKILL.md)** — สแกนค่าลับ dependency และโค้ด หัวหน้าทีมเก็บรายงานใน `qa/security/` · เว็บแอปหรือ API เพิ่มรายงาน [`owasp-top10`](../../owasp-top10/SKILL.md) รายข้อ A01–A10 · ใคร: `security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [],
      "phase": "",
      "who": {
@@ -2178,7 +1710,8 @@
       "raw": "`security-engineer` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)"
      },
      "skills": [
-      "security-gate"
+      "security-gate",
+      "owasp-top10"
      ],
      "commands": [],
      "playbooks": [],
@@ -2210,9 +1743,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -2258,9 +1789,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2354,9 +1883,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2385,9 +1912,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -2406,9 +1931,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2540,21 +2063,16 @@
     },
     {
      "n": 4,
-     "text": "`status-report` และเขียนหัวข้อ \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ (`work-session-context` ข้อ 4) — เขียนว่า: ขั้นถัดไปต้องทำอะไรก่อน · คำสั่งที่ใช้ทำซ้ำ · ของที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง",
+     "text": "`status-report` และเขียนหัวข้อ \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ (`handoff` หัวข้อ 5) — เขียนว่า: ขั้นถัดไปต้องทำอะไรก่อน · คำสั่งที่ใช้ทำซ้ำ · ของที่ต้องระวัง · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง",
      "sub": [],
      "phase": "หยุดงาน",
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจกับ `git status` จริง"
      },
-     "skills": [
-      "status-report",
-      "work-session-context"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2566,7 +2084,7 @@
    "name": "project-docs",
    "title": "เอกสารโปรเจกต์ตามชุด prompt",
    "when": "ผู้ใช้วางไฟล์ใดก็ได้จาก `prompt/software-company/` หรือขอเอกสารโปรเจกต์ BRD · SRS · mockup · FSD · คู่มือ",
-   "done": "ทุกฉบับที่สั่งมีสถานะใน `docs/BUILD-PLAN.md` และผลตรวจมีหลักฐาน และไม่มีเอกสารใดถูกตั้ง `APPROVED` โดย agent (ผู้ใช้ตั้งเองเท่านั้น)",
+   "done": "ทุกฉบับที่สั่งมีสถานะใน `docs/BUILD-PLAN.md` และผลตรวจมีหลักฐาน และไม่มีเอกสารใดถูกตั้ง `Approved` โดย agent (ผู้ใช้ตั้งเองเท่านั้น)",
    "steps": [
     {
      "n": 1,
@@ -2619,8 +2137,7 @@
       "raw": "`business-analyst` · `system-analyst` · `ux-designer` · `technical-writer` ตัวใหม่ตามชนิดฉบับ"
      },
      "skills": [
-      "project-doc-set",
-      "document-naming"
+      "project-doc-set"
      ],
      "commands": [],
      "playbooks": [],
@@ -2637,17 +2154,14 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "principle-proceed-on-reversible-work",
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 5,
-     "text": "ถ้าเอกสารขัดกัน ให้ยึดฉบับต้นน้ำ (SRS เหนือ FSD เหนือ mockup) ถ้าเอกสารขัดกับโค้ดที่รันอยู่ ให้ยึดโค้ด แล้วลงคำถามค้าง · **แก้ต้นน้ำหลังปลายน้ำเขียนไปแล้ว → `grep` ค่าเก่าทุกตัวใน `docs/` `qa/` `mockup/` `_to_delete/drafts/` แล้วแก้ครบในรอบเดียว** ลง \"ค่าเก่า → ค่าใหม่ · ไฟล์\" ใน `docs/BUILD-PLAN.md` · **ข้อเท็จจริงจากภายนอก** (คีย์ลัดของแอปอื่น · รุ่นระบบปฏิบัติการ · ขีดจำกัด API · ราคา · กฎหมาย) ตรวจกับเอกสารทางการตั้งแต่ฉบับต้นน้ำ ใส่ลิงก์ + วันที่ ก่อนปล่อยเอกสารปลายน้ำ (subagent ไม่มีเครื่องมือค้นเว็บ → ส่ง `general-purpose` ตรวจแยก) · ใคร: หัวหน้าทีม",
+     "text": "ถ้าเอกสารขัดกัน ให้ยึดฉบับต้นน้ำ (SRS เหนือ FSD เหนือ mockup) ถ้าเอกสารขัดกับโค้ดที่รันอยู่ ให้ยึดโค้ด แล้วลงคำถามค้าง · **แก้ต้นน้ำหลังปลายน้ำเขียนไปแล้ว → `grep` ค่าเก่าทุกตัวใน `docs/` `qa/` `mockup/` `docs/src/` แล้วแก้ครบในรอบเดียว** ลง \"ค่าเก่า → ค่าใหม่ · ไฟล์\" ใน `docs/BUILD-PLAN.md` · **ข้อเท็จจริงจากภายนอก** (คีย์ลัดของแอปอื่น · รุ่นระบบปฏิบัติการ · ขีดจำกัด API · ราคา · กฎหมาย) ตรวจกับเอกสารทางการตั้งแต่ฉบับต้นน้ำ ใส่ลิงก์ + วันที่ ก่อนปล่อยเอกสารปลายน้ำ (subagent ไม่มีเครื่องมือค้นเว็บ → ส่ง `general-purpose` ตรวจแยก) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2663,19 +2177,16 @@
     },
     {
      "n": 6,
-     "text": "ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`) · **ตัวตรวจด้วยเครื่องที่ subagent รันไม่ได้** (`business-analyst` · `system-analyst` · `solution-architect` · `project-manager` · `technical-writer` ไม่มี shell: render รูป · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → สั่งให้ปิดรายงานด้วยรายการคำสั่ง แล้วหัวหน้าทีมรันทันทีที่รับงาน · **mockup มี 2 ด่าน**: ถูกต้อง (`qa-tester` ขับเบราว์เซอร์) **และ** สวย (ด่านสวย 6 แกนของ `ui-craft` ข้อ 9 โดยผู้ตรวจอีกตัว เทียบภาพแอปอ้างอิง) · mockup ใหม่หรือออกแบบใหม่เริ่มจากทิศทางภาพ `ui-craft` ข้อ 0.1 ไม่รวมไฟล์เก่าแล้วคงหน้าตาเดิม · ถ้าไม่ผ่าน agent ที่เขียนฉบับนั้นตัวใหม่เป็นคนแก้ แล้วตรวจซ้ำตามกติกา Reflection ใน `superuser` (reviewer ตัวใหม่ทุกรอบ · วนจนไม่เหลือข้อสูงและกลาง · ไม่เกิน 5 รอบ) และลงผลทุกรอบในช่องผลตรวจของ `docs/BUILD-PLAN.md` · เขียน `ผ่าน` ได้เมื่อรอบล่าสุดไม่เจอข้อสูงและกลางเท่านั้น · ใคร: `reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน",
+     "text": "ตรวจฉบับที่เพิ่งเขียน — ทุกข้อกำหนดตรวจได้ mockup กดได้จริงทุกปุ่ม ตัวย่อเขียนเต็มครั้งแรก และข้อความที่อ้างมีที่มาจริง ห้ามเขียน `ผ่าน` ถ้าไม่ได้ตรวจหรือรันจริง (`principle-prove-it-works`) · **ตัวตรวจด้วยเครื่องที่ subagent รันไม่ได้** (`solution-architect` · `project-manager` ไม่มี shell ส่วน `business-analyst` · `system-analyst` · `technical-writer` มี Bash รันตัวตรวจเองได้: render รูป · `check-figure-source.py` · `check-mermaid-theme.mjs` · render .docx) → สั่งให้ปิดรายงานด้วยรายการคำสั่ง แล้วหัวหน้าทีมรันทันทีที่รับงาน · **mockup มี 2 ด่าน**: ถูกต้อง (`qa-tester` ขับเบราว์เซอร์) **และ** สวย (ด่านสวย 6 แกนของ `ui-craft` ข้อ 9 โดยผู้ตรวจอีกตัว เทียบภาพแอปอ้างอิง) · mockup ใหม่หรือออกแบบใหม่เริ่มจากทิศทางภาพ `ui-craft` ข้อ 0.1 ไม่รวมไฟล์เก่าแล้วคงหน้าตาเดิม · ถ้าไม่ผ่าน agent ที่เขียนฉบับนั้นตัวใหม่เป็นคนแก้ แล้วตรวจซ้ำตามกติกา Reflection ใน `superuser` (reviewer ตัวใหม่ทุกรอบ · วนจนไม่เหลือข้อสูงและกลาง · ตามเพดานใน `team-roles`: กลาง 3 รอบ · ใหญ่หรือส่งคนนอก 5 รอบ) และลงผลทุกรอบในช่องผลตรวจของ `docs/BUILD-PLAN.md` · เขียน `ผ่าน` ได้เมื่อรอบล่าสุดไม่เจอข้อสูงและกลางเท่านั้น · ใคร: `reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่ตรวจ · agent ที่เขียนฉบับนั้นตัวใหม่แก้เมื่อไม่ผ่าน"
      },
      "skills": [
-      "principle-prove-it-works",
       "ui-craft",
       "superuser"
      ],
@@ -2694,9 +2205,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2744,21 +2253,18 @@
     },
     {
      "n": 2,
-     "text": "สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ [`parallel-attempts-pick-best`](../../parallel-attempts-pick-best/SKILL.md) · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)",
+     "text": "สร้างทางเลือก 2–3 ทาง แบบเล็กที่สุดที่ยังตอบคำถามได้ ใน `_to_delete/prototype-<เรื่อง>/` ถ้าทางเลือกเยอะหรือใหญ่ ให้ใช้ `parallel-attempts-pick-best` · ใคร: `developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
       "agents": [
-       "developer",
-       "brainstormer"
+       "developer"
       ],
       "raw": "`developer` ตัวใหม่ทางละตัว (ยังไม่รู้ว่าจะลองทางไหน: `brainstormer` ตัวใหม่เสนอก่อน)"
      },
-     "skills": [
-      "parallel-attempts-pick-best"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2805,9 +2311,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -2817,7 +2321,7 @@
     },
     {
      "n": 6,
-     "text": "ลงผลใน [`decision-log`](../../decision-log/SKILL.md) — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม",
+     "text": "ลงผลใน `decision-log` — เลือก · ไม่เลือก · ตัวเลขที่วัดได้ · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -2826,9 +2330,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2914,7 +2416,7 @@
     },
     {
      "n": 4,
-     "text": "แก้รูปแบบเดียวกันหลายจุด ใช้เครื่องมือตาม [`principle-build-a-tool-not-handwork`](../../principle-build-a-tool-not-handwork/SKILL.md) · ใคร: `developer` ตัวใหม่",
+     "text": "แก้รูปแบบเดียวกันหลายจุด ใช้เครื่องมือตาม `principle-build-a-tool-not-handwork` · ใคร: `developer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -2925,9 +2427,7 @@
       ],
       "raw": "`developer` ตัวใหม่"
      },
-     "skills": [
-      "principle-build-a-tool-not-handwork"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -2996,9 +2496,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [
@@ -3020,8 +2518,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "superuser",
-      "status-report"
+      "superuser"
      ],
      "commands": [],
      "playbooks": [],
@@ -3034,11 +2531,11 @@
    "name": "review",
    "title": "ตรวจก่อนส่ง",
    "when": "รีวิว PR หรือ diff · ตรวจดีไซน์ · ตรวจเอกสาร · \"ช่วยดูหน่อยว่ามีอะไรพลาด\"",
-   "done": "ทุกข้อในรายงานชี้ไฟล์:บรรทัดได้ และผ่านการยืนยันแล้ว",
+   "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
    "steps": [
     {
      "n": 1,
-     "text": "กำหนดขอบเขต — ไฟล์หรือ diff ที่ตรวจ (`git diff main...HEAD`) และไฟล์รอบข้างที่ต้องอ่านเพื่อเข้าใจ ([`code-orientation`](../../code-orientation/SKILL.md)) ตรวจตามรายการ \"ตรวจก่อนส่ง\" ของ skill ตาม stack ด้วย และหาผลกระทบนอก diff ตาม [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม",
+     "text": "กำหนดขอบเขต — ไฟล์หรือ diff ที่ตรวจ (`git diff main...HEAD`) และไฟล์รอบข้างที่ต้องอ่านเพื่อเข้าใจ ([`code-orientation`](../../code-orientation/SKILL.md)) หาผลกระทบนอก diff ตาม [`blast-radius`](../../blast-radius/SKILL.md) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3057,7 +2554,7 @@
     },
     {
      "n": 2,
-     "text": "เขียนเจตนาของงาน 1 ย่อหน้า จากคำขอ · commit · PR · โค้ด ถ้าไม่แน่ใจ ให้เลือกการตีความที่ผลกระทบน้อยสุด แล้วเขียนการตีความนั้นไว้ในรายงาน — ไม่หยุดถาม · ใคร: หัวหน้าทีม",
+     "text": "เขียนเจตนาของงาน 1 ย่อหน้า — ใครใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ ให้เลือกการตีความที่กระทบน้อยสุด ไม่หยุดถาม · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3073,22 +2570,17 @@
     },
     {
      "n": 3,
-     "text": "ส่ง `reviewer` ตัวใหม่ คู่กับ `code-review-checklist` และรายการ \"ตรวจก่อนส่ง\" ของ skill ตาม stack · งานใหญ่หรือเสี่ยงสูงใช้ [`adversarial-review-panel`](../../adversarial-review-panel/SKILL.md) (`reviewer` ตัวใหม่มุมละตัว) · งานภาพ → (ถ้าติดตั้ง plugin `graphic-design`) `design-critic` หรือ `design-review` ไม่มีก็ตรวจตาม [`ui-craft`](../../ui-craft/SKILL.md) · ใคร: `reviewer` ตัวใหม่",
+     "text": "ตรวจทีละข้อตามเกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` แล้วตามเช็กลิสต์ของ skill หลักของ playbook นี้ (ไม่มี → skill ที่เกี่ยว) · งานใหญ่หรือเสี่ยงสูง เพิ่ม subagent ตัวใหม่อีกตัวที่ไม่เคยเห็นงาน ตรวจแยกกันด้วยโมเดลระดับใหญ่ (`model: opus`) · สั่งผู้ตรวจทุกตัวว่า \"ห้ามแก้ชิ้นงาน (เขียนรายงานของตัวเองใน `_to_delete/` ได้)\" · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
-      "raw": "`reviewer` ตัวใหม่"
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)"
      },
      "skills": [
-      "code-review-checklist",
-      "adversarial-review-panel",
-      "graphic-design",
-      "ui-craft"
+      "superuser"
      ],
      "commands": [],
      "playbooks": [],
@@ -3096,7 +2588,7 @@
     },
     {
      "n": 4,
-     "text": "ยืนยันทุกข้อที่พบเอง — อ่านโค้ดจริง หรือรันให้เห็น ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือทิ้ง · ใคร: หัวหน้าทีม",
+     "text": "ยืนยันทุกข้อที่พบ — ต้องชี้จุดในชิ้นงานได้ และเทียบต้นทางแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3112,7 +2604,7 @@
     },
     {
      "n": 5,
-     "text": "แยกเป็น 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) แล้วบอกเหตุผลของข้อที่ทิ้งเพราะไม่ใช่ปัญหาจริง · ใคร: หัวหน้าทีม",
+     "text": "แยก 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ส่วนข้อที่ตัดทิ้งให้บอกเหตุผลด้วย · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3128,7 +2620,7 @@
     },
     {
      "n": 6,
-     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ จากนั้นสรุปงานตาม `superuser` หัวข้อ 7 (ใต้ **ที่ทำ** ใช้ตารางสถานะประเภท `ตรวจ` ของ `status-report`) ไว้ในคำตอบอย่างเดียว ไม่เขียนลงไฟล์ · ใคร: หัวหน้าทีม",
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการและสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3138,8 +2630,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "superuser",
-      "status-report"
+      "superuser"
      ],
      "commands": [],
      "playbooks": [],
@@ -3158,7 +2649,8 @@
      "n": 1,
      "text": "ตรวจว่าทุกชิ้นงานผ่านการพิสูจน์แล้ว (test · skill ตรวจแอป) ถ้ายังไม่ผ่าน ให้กลับไป playbook เดิม · ใคร: `qa-tester` ตัวใหม่",
      "sub": [
-      "รัน [`security-gate`](../../security-gate/SKILL.md) — ถ้า critical หรือ high ที่ยืนยันแล้วยังค้างอยู่ ห้ามส่ง ถ้าค่าลับหลุด ให้หยุดและบอกผู้ใช้"
+      "รัน [`security-gate`](../../security-gate/SKILL.md) — ถ้า critical หรือ high ที่ยืนยันแล้วยังค้างอยู่ ห้ามส่ง ถ้าค่าลับหลุด ให้หยุดและบอกผู้ใช้",
+      "เว็บแอปหรือ API ที่ส่งลูกค้า → รายงาน [`owasp-top10`](../../owasp-top10/SKILL.md) ครบ A01–A10 ต้องไม่มีข้อ `ไม่ผ่าน` หรือ `ยังไม่ได้ตรวจ` · ใคร: `security-engineer` ตัวใหม่ กรอก · `reviewer` ตัวใหม่ เปิดหลักฐานทุกแถวที่เขียน `ผ่าน`"
      ],
      "phase": "",
      "who": {
@@ -3170,7 +2662,8 @@
       "raw": "`qa-tester` ตัวใหม่"
      },
      "skills": [
-      "security-gate"
+      "security-gate",
+      "owasp-top10"
      ],
      "commands": [],
      "playbooks": [],
@@ -3259,9 +2752,7 @@
       ],
       "raw": "`developer` ตัวใหม่"
      },
-     "skills": [
-      "principle-fix-root-cause"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -3274,9 +2765,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -3297,9 +2786,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม (merge: ผู้ใช้ ใน \"รออนุมัติ\")"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": true
@@ -3385,9 +2872,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`general-purpose` ตัวใหม่ 2 ตัวทำ · `reviewer` ตัวใหม่ให้คะแนนแบบปิดตา"
      },
      "skills": [],
@@ -3406,9 +2891,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -3440,9 +2923,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -3458,7 +2939,7 @@
    "steps": [
     {
      "n": 1,
-     "text": "เขียนเงื่อนไขจบที่เครื่องตรวจได้ — test ชุดไหนต้องผ่าน · เอกสารไหนต้องมี · หน้าจอไหนต้องกดได้ · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "text": "เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3474,54 +2955,44 @@
     },
     {
      "n": 2,
-     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ แล้วเลือก playbook ย่อยต่อชิ้น (feature · bug-fix · refactor · project-docs) · ใคร: หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)",
-     "sub": [
-      "งานหลายวันหรือหลายเฟส ให้เขียนแผนเฟสลงตารางงานใน `docs/BUILD-PLAN.md` แต่ละเฟสต้องจบในสภาพที่ตรวจได้ หัวหน้าทีมเป็นผู้ประสานงาน ไม่เขียนโค้ดเอง แต่แจกงานให้ subagent ตัวใหม่ทีละชิ้น แล้วตรวจผลเอง",
-      "ถ้าโปรเจกต์มี `.sandbox/` (ข้อยกเว้นของรากตาม `project-doc-set` ข้อ 1) ให้ใช้โหมด `-Isolated` (หรือแยก sandbox ละชิ้นเมื่อทำขนาน) แล้ว `sync` ผลออกมาเป็น patch ตอนจบ"
-     ],
+     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ ลงตาราง \"ความคืบหน้า\" ใน `CONTEXT.md` เลือก playbook ย่อยให้แต่ละชิ้น แล้วแจกให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "brainstormer"
-      ],
-      "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่)"
+      "agents": [],
+      "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "project-doc-set"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 3,
-     "text": "ทำทีละชิ้น ผ่านการตรวจแล้วค่อย commit ใน branch ของงานตามกฎ commit ใน `superuser` หัวข้อ 6 (ไม่ได้อนุญาต → ปล่อยไว้ในไฟล์ แล้วสรุป diff ตอนจบ) ชิ้นไหนพัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงสถานะ `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)",
+     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน",
      "sub": [
-      "**หลังติด**: จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ → เก็บงานค้างไว้ใน branch `stuck/<รหัส>` แล้วคืนสายงานให้ test เขียว → ชิ้นที่ต้องรอชิ้นนี้ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง → ทำชิ้นอื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ) → ยังติด → คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → ทำต่อตาม playbook `pickup-and-pause`"
+      "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
+      "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
+      "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
+      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
      ],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "developer"
-      ],
-      "raw": "ลูกทีมตาม playbook ย่อยของชิ้นนั้น (เช่น `developer` ตัวใหม่ต่อชิ้น)"
+      "agents": [],
+      "raw": "ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน"
      },
-     "skills": [
-      "superuser"
-     ],
+     "skills": [],
      "commands": [],
-     "playbooks": [
-      "pickup-and-pause"
-     ],
+     "playbooks": [],
      "approval": false
     },
     {
      "n": 4,
-     "text": "ทุกครั้งที่เลือกทางเอง ให้ลง `decision-log` ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "text": "ทุกการเลือกทางเอง จดในตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3530,32 +3001,32 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "decision-log"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 5,
-     "text": "ถ้าเจองานในรายการ \"รออนุมัติ\" (deploy · ลบข้อมูล · merge branch หลัก · ส่งข้อความคนนอก) ให้เตรียมทุกอย่างให้พร้อม (คำสั่ง · diff · ร่างข้อความ) แล้วลง \"รออนุมัติ\" ห้ามทำเอง ส่วนคำถามที่ต้องให้คนตอบให้ลง \"ค้างอยู่\" · ใคร: หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ",
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มในหัวข้อ 6 ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": true,
       "agents": [],
-      "raw": "หัวหน้าทีมเตรียม · ผู้ใช้อนุมัติ"
+      "raw": "หัวหน้าทีม (อนุมัติ: ผู้ใช้)"
      },
-     "skills": [],
+     "skills": [
+      "superuser"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": true
     },
     {
      "n": 6,
-     "text": "จบแต่ละชิ้นแล้วให้ทำ `status-report` เขียน \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` เพื่อให้คนที่กลับมากลางทางเห็นสถานะปัจจุบัน · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "text": "จบแต่ละชิ้นแล้วอัปเดต \"ความคืบหน้า\" และ \"รับงานต่อ\" แล้วดู `.claude/superuser/inbox/` ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -3564,27 +3035,23 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false
     },
     {
      "n": 7,
-     "text": "เมื่อจบงาน ให้ตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: ทำเสร็จอะไร · ติดอะไร · **ตัดสินใจเอง** (กี่ข้อ · ชี้ไปที่ decision-log) · รออนุมัติอะไร · ค้างอะไรให้คนตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน",
+     "text": "จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ ทำรอบเรียนรู้ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไร · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)",
      "sub": [
-      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ คำสั่งที่รันพร้อมผล หรือ path ไฟล์ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
+      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
      ],
      "phase": "",
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
-      "raw": "`reviewer` ตัวใหม่ตรวจ · หัวหน้าทีมรายงาน"
+      "agents": [],
+      "raw": "หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)"
      },
      "skills": [],
      "commands": [],
@@ -3701,8 +3168,7 @@
       "raw": "หัวหน้าทีม"
      },
      "skills": [
-      "ui-craft",
-      "decision-log"
+      "ui-craft"
      ],
      "commands": [],
      "playbooks": [],
@@ -3734,9 +3200,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -3755,9 +3219,7 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [
-      "status-report"
-     ],
+     "skills": [],
      "commands": [],
      "playbooks": [],
      "approval": false

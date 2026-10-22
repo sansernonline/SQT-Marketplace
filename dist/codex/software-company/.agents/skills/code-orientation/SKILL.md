@@ -8,7 +8,7 @@ description: Use when about to change code not yet read this session. Maps how i
 > โค้ดที่ agent เขียนพังส่วนใหญ่ไม่ใช่เพราะเขียนไม่เป็น แต่เพราะไม่รู้ว่าโค้ดเดิมทำงานยังไง และทำไมถึงเขียนแบบนี้
 > 10 นาทีที่อ่าน ประหยัดรอบแก้ได้หลายรอบ
 
-แนวคิดมาจาก `/how` · `/why` ของ pstack ให้ใช้ก่อน playbook `feature` · `bug-fix` · `refactor` · `review` ทุกครั้งที่ยังไม่ได้อ่านส่วนนั้นใน session นี้
+ให้ใช้ก่อน playbook `feature` · `bug-fix` · `refactor` · `review` ทุกครั้งที่ยังไม่ได้อ่านส่วนนั้นใน session นี้
 
 ข้ามได้เมื่อแก้ข้อความหรือค่าคงที่จุดเดียว หรือเขียนไฟล์ใหม่ที่ไม่มีใครเรียก
 

@@ -31,7 +31,7 @@ description: Use when writing user stories or turning requirements into stories 
    So that <some reason / business value>
    ```
 
-3. **เขียน Acceptance Criteria** แบบ Given-When-Then:
+3. **เขียนเกณฑ์การยอมรับ (Acceptance Criteria · AC)** แบบ Given-When-Then:
    ```
    Given <precondition>
    When <action>
@@ -42,7 +42,7 @@ description: Use when writing user stories or turning requirements into stories 
 
 4. **ใส่ metadata เพิ่มเติม**:
    - Priority (High/Medium/Low)
-   - Story Points (ถ้าจำเป็น) — ใช้ Fibonacci: 1, 2, 3, 5, 8, 13
+   - Story Points — ใช้ Fibonacci: 1, 2, 3, 5, 8, 13 · **คนประเมินคือนักพัฒนาหรือทีม** · ผู้เขียน story (เช่น `business-analyst`) เว้นว่างไว้ หรือใส่ค่าเสนอพร้อมเขียน `(เสนอ · รอทีมประเมิน)`
    - Dependencies (ถ้ามี)
 
 5. **บันทึกลงไฟล์** — ดูหัวข้อถัดไป story ที่อยู่แค่ในแชตถือว่ายังไม่ได้เขียน
@@ -54,8 +54,8 @@ description: Use when writing user stories or turning requirements into stories 
 - **อ่านไฟล์ก่อนเขียนเสมอ** ถ้ามีอยู่แล้ว ให้ต่อเลข ID จากตัวสุดท้าย และแก้ story เดิมในที่เดิม ไม่สร้างซ้ำ
 - **ID ไม่นำกลับมาใช้ซ้ำ** story ที่เลิกทำแล้วให้เปลี่ยนสถานะเป็น Dropped ไม่ลบทิ้ง
 - **ตารางสารบัญด้านบนต้องตรงกับเนื้อหาเสมอ** เพิ่มหรือแก้ story แล้วต้องแก้แถวในตารางในรอบเดียวกัน `/sprint-plan` อ่านจากตารางนี้
-- **คอลัมน์อ้างอิง** ใส่ที่มาของ story เช่นข้อกำหนดใน SRS (`REQ-xxx`), กฎธุรกิจ (`BR-xxx`) หรือ change request (`CR-xxx`) เพื่อให้ไล่กลับไปหาได้
-- **story ที่เริ่มทำหรือทำเสร็จแล้ว (In sprint หรือ Done) ถ้าแก้ AC** ให้บันทึกในส่วนประวัติการเปลี่ยนท้ายไฟล์ แล้วค้นใน `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้น ใส่ชื่อลงช่อง test case ที่ต้องแก้ — ไม่แก้ไฟล์ของ QA เอง
+- **คอลัมน์อ้างอิง** ใส่ที่มาของ story เช่นข้อกำหนดในเอกสารข้อกำหนดซอฟต์แวร์ (Software Requirements Specification · SRS) (`REQ-xxx`), กฎธุรกิจ (`BR-xxx`) หรือ change request (`CR-xxx`) เพื่อให้ไล่กลับไปหาได้
+- **story ที่เริ่มทำหรือทำเสร็จแล้ว (In sprint หรือ Done) ถ้าแก้ AC** ให้บันทึกในส่วนประวัติการเปลี่ยนท้ายไฟล์ แล้วค้นใน `qa/` หา test case ที่อ้าง `US-xxx, ACn` นั้น ใส่ชื่อลงช่อง test case ที่ต้องแก้ — ไม่แก้ไฟล์ของทีมประกันคุณภาพ (Quality Assurance · QA) เอง
 - **เกิน 30 story หรือมีหลาย epic ที่แยกทีมกันทำ** ให้ย้ายเนื้อหาไปไว้ที่ `docs/stories/<epic>.md` ส่วนตารางสารบัญยังคงอยู่ใน `docs/USER-STORIES.md` ที่เดียว
 
 ## INVEST Checklist (ตรวจก่อนส่ง)

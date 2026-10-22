@@ -203,7 +203,7 @@ Addressable (effectively required):
 | **Datadog** | ✅ | |
 | **GitHub** | ✅ (Enterprise) | |
 | **Slack** | ✅ (Enterprise+) | |
-| **Stripe** | ⚠️ Specific products | |
+| **Stripe** | ⚠️ Usually not needed | Payment processing alone falls under the HIPAA §1179 exemption, so no BAA is needed. If you send PHI beyond payment data (diagnosis, visit reason in metadata), you need a vendor that signs a BAA |
 | **OpenAI** | ⚠️ ZDR + BAA available | |
 | **Anthropic** | ✅ via API on AWS | |
 | **Various startups** | ❌ Often no | Check before using |
@@ -309,7 +309,9 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 ```
 < 500 individuals affected:
   - Notify individuals within 60 days
-  - Notify OCR annually (by Feb 1)
+  - Notify OCR (HHS Office for Civil Rights) once a year: no later than 60 days
+    after the end of the calendar year the breach was discovered (about 1 March)
+    (HHS Breach Notification Rule, checked 22 Oct 2026)
 
 500+ individuals affected:
   - Notify individuals within 60 days
@@ -361,6 +363,7 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 ## Reference
 
 - [HIPAA Security Rule Standards](https://www.hhs.gov/hipaa/for-professionals/security/index.html)
-- [NIST SP 800-66 Rev 2](https://csrc.nist.gov/publications/detail/sp/800-66/rev-2/draft)
+- [NIST SP 800-66 Rev 2 (final, Feb 2024)](https://csrc.nist.gov/pubs/sp/800/66/r2/final)
+- [HHS proposed Security Rule changes (NPRM, published 6 Jan 2025)](https://www.federalregister.gov/documents/2025/01/06/2024-30983/hipaa-security-rule-to-strengthen-the-cybersecurity-of-electronic-protected-health-information) — would make encryption and multi-factor authentication (MFA) required and drop most "addressable" specs; still a proposal, not law `(รอยืนยัน)` (checked 22 Oct 2026)
 - [AWS HIPAA Compliance](https://aws.amazon.com/compliance/hipaa-compliance/)
 - [OCR Breach Portal](https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf)

@@ -33,7 +33,7 @@
 |------|----------|
 | **Foundry** | ⭐ Modern, fast, Solidity-native ⭐ |
 | **Hardhat** | JavaScript ecosystem |
-| **Brownie** | Python-based |
+| **Ape** | Python-based (Brownie is no longer actively maintained — its README points to Ape) |
 | **Echidna** | Property-based fuzzing |
 | **Halmos** | Symbolic execution |
 | **Wake** | Cross-contract testing |

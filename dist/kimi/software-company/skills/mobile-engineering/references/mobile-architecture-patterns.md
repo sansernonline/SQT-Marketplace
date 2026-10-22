@@ -2,7 +2,7 @@
 
 **สารบัญ:** 
 
-- [When to use this skill](#when-to-use-this-skill)
+- [ใช้เมื่อ](#ใช้เมื่อ)
 - [Pattern Selection](#pattern-selection)
 - [MVVM (Most Common)](#mvvm-most-common)
 - [MVI / Redux Pattern](#mvi--redux-pattern)
@@ -17,7 +17,7 @@
 
 # Mobile Architecture Patterns
 
-## When to use this skill
+## ใช้เมื่อ
 
 - Designing new mobile app architecture
 - Refactoring a legacy app
@@ -31,16 +31,16 @@
 Team size + experience?
 │
 ├─ Small team, simple app
-│  └─ MVVM (well-understood)
+│  └─ Model-View-ViewModel (MVVM) (well-understood)
 │
 ├─ Larger team, complex state
-│  └─ MVI / Redux / TCA
+│  └─ Model-View-Intent (MVI) / Redux / The Composable Architecture (TCA)
 │
 ├─ Strict architecture needed
 │  └─ Clean Architecture
 │
 └─ Cross-platform shared code
-   └─ KMP business logic, native UI
+   └─ Kotlin Multiplatform (KMP) business logic, native UI
 ```
 
 ## MVVM (Most Common)
@@ -149,7 +149,7 @@ class GetActiveProductsUseCase(
 }
 
 // Presentation
-class ViewModel(
+class ProductViewModel(
     private val getActiveProducts: GetActiveProductsUseCase,
 ) : ViewModel() {
     // ...
@@ -174,12 +174,30 @@ class ProductViewModel @Inject constructor(
 ) : ViewModel() { ... }
 ```
 
-### iOS: Resolver or manual
+### iOS: ฉีดผ่าน init (ง่ายสุด) หรือ Factory
+Resolver ถูกประกาศเลิกใช้แล้วโดยผู้เขียนเอง ("officially deprecated and replaced by … Factory" — README ของ hmlongco/Resolver ตรวจ 22 ต.ค. 2569)
+
 ```swift
+// แบบง่ายสุด: ฉีดผ่าน init
 @MainActor
 final class ProductViewModel {
-    @Injected private var repository: ProductRepository
-    // ...
+    private let repository: ProductRepository
+    init(repository: ProductRepository) { self.repository = repository }
+}
+```
+
+```swift
+// แบบใช้ Factory — ใช้แทนแบบบน ไม่ใช่ใส่คู่กันในไฟล์เดียว (ชื่อคลาสซ้ำ คอมไพล์ไม่ผ่าน)
+// import FactoryKit ตั้งแต่ Factory 2.5 — รุ่นเก่ากว่าใช้ import Factory
+extension Container {
+    var productRepository: Factory<ProductRepository> {
+        self { ProductRepository() }
+    }
+}
+
+@MainActor
+final class ProductViewModel {
+    @Injected(\.productRepository) private var repository
 }
 ```
 
@@ -214,13 +232,24 @@ NavigationStack {
 }
 ```
 
-### Pattern: File-based (Expo Router / Flutter go_router)
+### Pattern: File-based (Expo Router)
 ```
 app/
 ├── index.tsx          → /
 ├── product/
 │   └── [id].tsx       → /product/:id
 └── settings.tsx       → /settings
+```
+
+### Pattern: Declarative in code (Flutter go_router)
+```dart
+final router = GoRouter(routes: [
+  GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+  GoRoute(
+    path: '/product/:id',
+    builder: (context, state) => ProductScreen(id: state.pathParameters['id']!),
+  ),
+]);
 ```
 
 ## State Management

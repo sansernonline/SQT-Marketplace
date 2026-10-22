@@ -1,6 +1,6 @@
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
 
 # Branded Document Design
 
@@ -11,14 +11,14 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
+- ผลลัพธ์คือ **.docx / .pptx / .pdf** (ใบเสนอราคา · แผนธุรกิจ · รายงาน · สัญญา · เอกสารซอฟต์แวร์ เช่น SRS) ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
 - เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
 - เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
 - ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
+- ผลลัพธ์เป็น markdown (ในรีโปหรือโฟลเดอร์งาน) ให้ใช้ `polished-document-style`
 - ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
 - รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) ให้ใช้ `markdown-report-docx` ซึ่งมีสคริปต์ md → docx พร้อมแล้ว
@@ -45,17 +45,28 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
 
 
-## 0.1 · หน้าตาเอกสารต่อจากหน้าตาแอป — ทำก่อน render ครั้งแรก
+## 0.1 · หน้าตาเอกสารต่อจากหน้าตาของแบรนด์หรือแอป — ทำก่อน render ครั้งแรก
 
 > ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
-> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แอปของโปรเจกต์ผ่านด่านสวยแล้ว
+> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แบรนด์หรือแอปของงานนั้นผ่านด่านสวยแล้ว
 
-1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
-2. **3 แนวขนานกัน** (`parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว — ดู `doc-cover-design` ข้อ 7) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
-3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
-4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน 3 รอบตาม `ui-craft/references/states-and-checks.md` · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
+1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · งานซอฟต์แวร์: mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
+2. **ทำ 1 แนวก่อน** · ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนว จึงทำ **3 แนวขนานกัน** (ค่าแรง 3–5 เท่า · `parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว · ปกใช้วิธีโหวต 3 แนวในหัวข้อ 0.2) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · เมื่อทำหลายแนว แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
+3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** (ถ้ามีแนวเดียว ให้คะแนนแนวนั้นอย่างเดียว ไม่ต้องผสม) ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
+4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน **3 รอบ** (รายละเอียดเพิ่มที่ `ui-craft/references/states-and-checks.md` ใน plugin `software-company` ถ้าติดตั้ง) · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
 5. **ฟอนต์:** ใช้ฟอนต์ไทยของแบรนด์ที่ติดตั้งในเครื่องและฝังในไฟล์ (`embed_fonts`) · Tahoma เป็นทางสำรองเมื่อฝังไม่ได้ · **ห้ามตั้งข้อความไทยด้วยฟอนต์ mono** (Cascadia/Consolas ไม่มีอักษรไทย) — mono ใช้กับรหัส คีย์ ตัวเลขเท่านั้น
 6. **รูปในเอกสาร · กฎที่ด่านสวยจับได้บ่อย · ปก** (ขนาดพิกเซลขั้นต่ำ กฎใน `check` ของตัว render สูตรปก) → [`references/word-layout.md`](references/word-layout.md) หัวข้อท้ายไฟล์
+
+## 0.2 · ปกที่ต้องเป็นของเอกสารชุดนี้ — ทำ 3 แนวแล้วโหวต 2 ใน 3
+
+ใช้เมื่อชุดเอกสาร (ข้อเสนอ · รายงาน · แผนธุรกิจ) ต้องมีปกของตัวเอง และปกตั้งต้นดูเหมือนของงานอื่น · ทำแนวเดียวก่อน ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนวจึงใช้ (ค่าแรง 3–5 เท่า)
+
+1. **หาของจริงมาจับ** — โลโก้ ชื่อ กริยาหลักของงาน (เสนอ · วิเคราะห์ · ขาย) หรือภาพจริงของงาน · ดูปกจริงของคนอื่นอย่างน้อย 6 ใบ · ทุกรูปบนปกต้องชี้กลับไปที่ของจริงได้ ไม่งั้นตัดออก
+2. **ผู้ออกแบบ 3 ตัว (ใช้ `parallel-attempts-pick-best`)** โจทย์เดียวกัน ต่างกันที่แนว: A วาดจากข้อมูลจริงของงาน · B ภาพจริงของงานเป็นพระเอก (หน้าจอ ภาพถ่าย ตัวอย่างผลงาน) · C รูปทรงโลโก้หรือตัวอักษรเป็นโครง ไม่มีภาพวาด · agent ต้องมี Bash เพื่อ render แล้วเปิดดูภาพเอง
+3. **ผู้ตรวจ 3 ตัวใหม่ ไม่เคยเห็นงาน คนละมุม** — ผู้กำกับศิลป์ (ว้าวจริงไหม ดูเป็นงาน AI ไหม) · แบรนด์และลูกค้า (จำได้ไหม รู้ว่างานเกี่ยวกับอะไรไหม ไปด้วยกันทั้งชุดไหม) · การผลิตใน Word (ทำซ้ำได้ไหม ข้อความแก้ได้ไหม) · ให้ใส่ปกเดิมเป็นตัวเลือกด้วย
+4. **เกณฑ์ที่ให้คะแนน 1–5 แล้วโหวต** ว้าวเทียบปกเดิม · ไม่ซ้ำงานอื่น · บอกความจริงของงาน · เข้ากับทั้งชุด · ความประณีต (ไทย คอนทราสต์ ตัวเล็กสุด) · สร้างใน Word ได้และทำซ้ำได้ · แนวที่ได้ **2 ใน 3 เสียงชนะ** · ยกส่วนเด่นของแนวที่แพ้มาได้ไม่เกิน 2 ชิ้น · เสียงแตก 3 ทาง ให้ "ทำซ้ำได้" ตัดสิน
+5. **ข้อความบนปกเป็นข้อความ Word แก้ได้** (ชื่อ เวอร์ชัน วันที่) · ภาพพื้นไม่ฝังตัวหนังสือ · ยึดภาพกับย่อหน้าแรก ไม่วางใน header
+6. **เฉพาะชุดเอกสารซอฟต์แวร์** (BRD · SRS · FSD ที่ปกต้องมาจากรูปทรงโลโก้หรือ mockup จริง · ใช้เครื่องสร้างปก) → ถ้ามี plugin `software-company` ดู `doc-cover-design` เพิ่ม · ไม่มีก็ทำตามข้อ 1–5 ได้ครบ
 
 ---
 
@@ -65,7 +76,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 - token: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + สีสถานะ 6 ตัว (สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง) ที่**ไม่เปลี่ยนตามแบรนด์**
 - เลือกสีตามความหมาย ไม่ใช่ตามความสวย (แดง = อันตราย/ผิดจริงเท่านั้น) · ใช้ชุดความหมายเดียวกับไดอะแกรม
-- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
+- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 · H1 และตัวเลข KPI (`brand` ตัวใหญ่) ≥ 3:1 · `use_brand()` ตรวจให้และหยุดถ้าไม่ผ่าน · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
 - ตัวอักษรไม่ใช้ดำสนิท (ใช้ `text_body`) · **อย่าเพิ่มขนาดตัวอักษรนอกสเกล** (เนื้อความ Word 11pt · สไลด์ 17pt)
 
 ตาราง token เต็ม · ตารางความหมายของสี · สเกลตัวอักษร (pt) · องค์ประกอบที่ใช้ซ้ำ + เมธอด → [`references/tokens-and-type.md`](references/tokens-and-type.md) — เปิดเมื่อตั้งธีมหรือเลือกขนาด/สี · ตัวอย่างชุดสีที่เคยใช้ → [`references/palette-examples.md`](references/palette-examples.md)
@@ -87,7 +98,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 ## 3 · โครงหน้าเอกสาร Word
 
-โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตาม [`doc-cover-design`](../doc-cover-design/SKILL.md) · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
+โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตามหัวข้อ 0.2 · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
 
 **ปกเข้ม** (แอปหรือแบรนด์ใช้หน้าจอสีเข้ม) → `doc.cover(..., style="night")` · ตัวอย่าง `scripts/example_srs.py` · ภาพ `examples/example_srs-preview.png` · รายละเอียดและบทเรียนจากเจ้าของงาน → [`references/word-layout.md`](references/word-layout.md) กฎที่ต้องจำทุกครั้ง:
 - 🚨 ภาพพื้นปกและโลโก้ห้ามอยู่ใน header หน้าแรก (Word แสดงจางตอนแก้ไฟล์) — ยึดกับย่อหน้าแรกของปก
@@ -148,14 +159,14 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 | ต้องการ | ใช้คู่กับ |
 |---------|-----------|
 | โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (Mermaid) → export PNG → `figure()` |
+| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (plugin `software-company`) (Mermaid) → export PNG → `figure()` |
 | อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
 | สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
+| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` (plugin `software-company`) |
 | โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
 | เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` · มี .pptx แล้ว → `pptx-to-html-deck` |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
+| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` (plugin `software-company`) |
+| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` (plugin `software-company`) |
 
 ---
 
@@ -196,8 +207,9 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 ## สารบัญ
 
 1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
-3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
+2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkit_pptxpy--สไลด์-pptx)
+3. [brandkit_stage.py — เด็ค Stage (.pptx)](#brandkit_stagepy--เด็ค-stage-pptx)
+4. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
 
 ---
 
@@ -320,6 +332,9 @@ StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
 
 ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
 
+---
+
+## สูตรความกว้างคอลัมน์ (Word)
 
 | จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
 |:---:|---|
@@ -342,18 +357,18 @@ StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
 import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
 from brandkit import BrandDoc, use_brand, to_pdf
 
-doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
+doc = BrandDoc()                                # A4 · Tahoma · สีประจำบ้าน
 doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-          subtitle="ระบบ Apps Track — Project Control & Monitor",
+          subtitle="ระบบตัวอย่าง (Sample System) — Project Control & Monitor",
           meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-          logo="asset/AppsTrack_Logo_Badge.png")
+          logo="asset/Sample_Logo_Badge.png")
 doc.toc()
 
 doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
+doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ ...")
 doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
 doc.table(["หัวข้อ", "รายละเอียด"],
-          [["URL ระบบ", "https://project.eitaccount.cloud"]],
+          [["URL ระบบ", "https://app.example.com"]],
           widths=[2600, 7038])                  # รวม = 9638
 doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
 doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
@@ -370,7 +385,7 @@ doc.save("SRS.docx")
 ```python
 from brandkit_pptx import BrandDeck
 d = BrandDeck()                                  # 16:9
-d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor", "19 กรกฎาคม 2026")
 d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
 d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
 d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
@@ -386,12 +401,12 @@ d.save("deck.pptx")
 ## เด็ค "Stage" (`brandkit_stage.py`) — ค่าเริ่มต้นของเด็คที่ใช้พูด
 
 `brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบ: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
+(ต้นแบบด้านโครงเด็คเท่านั้น: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
 
 ```python
 from brandkit_stage import StageDeck
-d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")   # สีหลัก · สีพื้นของโปรเจกต์
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+d = StageDeck(accent="2A78D6", bg="09090A", project="Sample Chatbot")   # ตัวอย่าง: สีหลัก · สีพื้นต้องมาจากดีไซน์ของโปรเจกต์คุณเอง
+d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
         meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
 d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
          "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
@@ -412,7 +427,7 @@ d.save("deck.pptx")
 
 > ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
 > เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast (ตรวจด้วยสคริปต์แล้ว 22 ต.ค. 2569) หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
 
 ## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
 
@@ -422,7 +437,7 @@ d.save("deck.pptx")
 use_brand(
     brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
     brand_tint="EDF1FB", brand_tint_2="F6F8FD",
-    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
+    text="333B4A", text_body="414957", text_muted="676D7A", line="E4E7EE",
 )
 ```
 
@@ -430,9 +445,9 @@ use_brand(
 
 ```python
 use_brand(
-    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0A5A56",
     brand_tint="E6F4F2", brand_tint_2="F3FAF9",
-    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
+    text="2C3A38", text_body="3A4846", text_muted="636F6A", line="E1EAE8",
 )
 ```
 
@@ -442,7 +457,7 @@ use_brand(
 use_brand(
     brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
     brand_tint="E8ECF7", brand_tint_2="F5F7FC",
-    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
+    text="2B3245", text_body="3A4156", text_muted="636A7D", line="E2E6F0",
 )
 ```
 
@@ -452,9 +467,9 @@ accent อุ่นบนโครงเทาเย็น — ใช้ accent 
 
 ```python
 use_brand(
-    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
+    brand="B57509", brand_2="8C5A2B", brand_deep="704805",
     brand_tint="FBF2E1", brand_tint_2="FDF9F1",
-    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
+    text="2F3439", text_body="3E444A", text_muted="676F76", line="E5E8EA",
 )
 ```
 
@@ -476,7 +491,7 @@ use_brand(
 
 ## วิธีตรวจก่อนใช้
 
-1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
+1. เนื้อความและ `text_muted` บนพื้นขาวและพื้น `brand_tint` ≥ 4.5:1 · `brand_deep` (H2 และหัวตาราง) บนพื้นขาวและ `brand_tint` ≥ 7:1 · `brand` (H1 16pt ตัวหนา และตัวเลข KPI นับเป็นตัวใหญ่) ≥ 3:1
 2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
 3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
 
@@ -539,14 +554,14 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 | Token | หน้าที่ | ได้มาจาก |
 |-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
+| `brand` | หัวข้อ H1 · ตัวเลข KPI · แถบ accent · ลิงก์ (ถ้า `brand` ต่ำกว่า 4.5:1 บนพื้นขาว ใช้ `brand_deep` กับลิงก์) | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
 | `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
 | `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
 | `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
 | `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
 | `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
 | `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
+| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 บนพื้นขาวและ `brand_tint` |
 | `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
 
 **สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
@@ -566,7 +581,8 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
 
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
+> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 ·
+> H1 และตัวเลข KPI (`brand` ตัวใหญ่ ตามนิยามตัวใหญ่ของ WCAG 2.2 ข้อ 1.4.3) ≥ 3:1 ·
 > พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
 >
 > **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
@@ -613,7 +629,7 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 ```bash
 soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
-pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-01.png, page-02.png ...
+pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)
 ```
 
 แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
@@ -672,7 +688,7 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 6. **รูปในเอกสาร:** ตัวอักษรเล็กสุดหลังวางจริง ≥ 7pt → พิกเซลขั้นต่ำบนผ้าใบ = `0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` (ผ้าใบ 2000px วางกว้าง 17 ซม. = 29px · วางบนหน้าแนวนอน 25.7 ซม. = 20px · ใช้ 26px ให้ได้ 9pt) · รูปกว้างให้วางหน้าแนวนอนเต็มความกว้างคอลัมน์ (≥ 95%) · ใช้**ฉบับวางในเอกสารที่ไม่มีหัวรูป** เพราะคำบรรยายใน Word บอกเลขและชื่อรูปแล้ว · คำบรรยายรูป ≥ 9pt สีเนื้อความ · หลังรูปขึ้น section ใหม่ ห้ามย่อหน้าถัดไปไหลมาหน้ารูป
 7. **สิ่งที่ด่านสวยจับได้บ่อย (ใส่เป็นกฎใน `check` ของตัว render):** เครื่องหมาย markdown หลุด (`**` · backtick) · ข้อความไทยในฟอนต์ mono · ตารางล้นคอลัมน์ข้อความ · สารบัญเหลือรายการเดียวตกหน้าถัดไป · รายการรหัสถูกตัดกลางรหัส (ให้บรรทัดละ 1 รหัส ฟอนต์เดียวทั้งคอลัมน์) · ป้าย "(รอยืนยัน)" ใช้สีเตือน ไม่ใช่สีแบรนด์ · ตัวตนหายหลังหน้าปก (หน้าเปิดบทใช้แถบสีแบรนด์ของแอป) · มีปกสว่างไว้พิมพ์คู่กับปกมืด
-8. **ปก — ตัวอักษรล้วนก่อน ภาพทีหลัง** (ปกเฉพาะโปรเจกต์ที่ใช้รูปทรงโลโก้หรือหน้าจอจริง แทนภาพตกแต่ง → [`doc-cover-design`](../../doc-cover-design/SKILL.md))**:** ภาพประกอบบนปกไม่บังคับ และปกโล่งที่จัดตัวอักษรดีชนะภาพที่ไม่ว้าวเสมอ · แบบที่ผ่านด่าน: ชนิดเอกสาร (SRS · FSD · ARCH) ตัวใหญ่ 150–200px สีแบรนด์เป็นจุดเด่นเดียว (กว้างไม่เกิน ~85% ของคอลัมน์ · ชื่อเกิน 5 ตัวอย่าง TESTPLAN แยก 2 บรรทัด ไม่ย่อจนเล็กกว่าฉบับอื่น — ทั้งชุดต้องดูขนาดเท่ากัน) → เส้นสั้นสีแบรนด์ → ชื่อไทย → ชื่ออังกฤษ → บรรทัดสรุป 1 ประโยค (≥ 12pt คอลัมน์แคบ) → แถวข้อมูลท้ายหน้า (ป้าย ≥ 10pt) · ที่เหลือปล่อยว่าง · ส่วนที่ตำแหน่งตายตัว (โลโก้ · ชนิดเอกสาร · เส้น · ป้ายสถานะ) วาดลงภาพพื้นปก ส่วนชื่อและข้อมูลเป็นข้อความ Word ให้ค้นและแก้ได้ · ป้าย `(รอยืนยัน)` บนพื้นมืดใช้สีเตือนแบบสว่าง ไม่ใส่พื้นไฮไลต์ · **ผู้ใช้บอกปกไม่สวย → ตัดภาพตกแต่งออกก่อน** (เส้นโค้ง จุดเรือง gradient) แล้วทำปกตัวอักษรล้วน 3 แนวให้เลือก (โปรเจกต์มีโลโก้หรือ mockup → ใช้ `doc-cover-design` ข้อ 7 แทน)
+8. **ปก — ตัวอักษรล้วนก่อน ภาพทีหลัง** (ปกเฉพาะโปรเจกต์ที่ใช้รูปทรงโลโก้หรือหน้าจอจริง แทนภาพตกแต่ง → `doc-cover-design` (plugin `software-company`))**:** ภาพประกอบบนปกไม่บังคับ และปกโล่งที่จัดตัวอักษรดีชนะภาพที่ไม่ว้าวเสมอ · แบบที่ผ่านด่าน: ชนิดเอกสาร (SRS · FSD · ARCH) ตัวใหญ่ 150–200px สีแบรนด์เป็นจุดเด่นเดียว (กว้างไม่เกิน ~85% ของคอลัมน์ · ชื่อเกิน 5 ตัวอย่าง TESTPLAN แยก 2 บรรทัด ไม่ย่อจนเล็กกว่าฉบับอื่น — ทั้งชุดต้องดูขนาดเท่ากัน) → เส้นสั้นสีแบรนด์ → ชื่อไทย → ชื่ออังกฤษ → บรรทัดสรุป 1 ประโยค (≥ 12pt คอลัมน์แคบ) → แถวข้อมูลท้ายหน้า (ป้าย ≥ 10pt) · ที่เหลือปล่อยว่าง · ส่วนที่ตำแหน่งตายตัว (โลโก้ · ชนิดเอกสาร · เส้น · ป้ายสถานะ) วาดลงภาพพื้นปก ส่วนชื่อและข้อมูลเป็นข้อความ Word ให้ค้นและแก้ได้ · ป้าย `(รอยืนยัน)` บนพื้นมืดใช้สีเตือนแบบสว่าง ไม่ใส่พื้นไฮไลต์ · **ผู้ใช้บอกปกไม่สวย → ตัดภาพตกแต่งออกก่อน** (เส้นโค้ง จุดเรือง gradient) แล้วทำปกตัวอักษรล้วน 3 แนวให้เลือก (โปรเจกต์มีโลโก้หรือ mockup → ใช้ `doc-cover-design` ข้อ 7 แทน)
 
 
 ---
@@ -726,8 +742,8 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (URGENT)](#initial-discovery-urgent)
-- [📊 IR Quality Standards](#ir-quality-standards)
+- [🔍 Initial Discovery (URGENT)](#-initial-discovery-urgent)
+- [📊 IR Quality Standards](#-ir-quality-standards)
 - [Incident Response Lifecycle](#incident-response-lifecycle)
 - [Phase 1: Identification (already done by SOC usually)](#phase-1-identification-already-done-by-soc-usually)
 - [Phase 2: Containment](#phase-2-containment)
@@ -737,14 +753,14 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 - [Communication](#communication)
 - [Evidence Handling](#evidence-handling)
 - [Output: Incident Report](#output-incident-report)
-- [Impact Summary](#impact-summary)
-- [Timeline (UTC)](#timeline-utc)
-- [Initial Vector](#initial-vector)
-- [Adversary Activity](#adversary-activity)
-- [Containment Actions](#containment-actions)
-- [Eradication Verification](#eradication-verification)
-- [Action Items](#action-items)
-- [Communications Log](#communications-log)
+- Impact Summary
+- Timeline (UTC)
+- Initial Vector
+- Adversary Activity
+- Containment Actions
+- Eradication Verification
+- Action Items
+- Communications Log
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -804,6 +820,8 @@ The SOC analyst hands over:
 
 ## Phase 2: Containment
 
+> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบใน Phase 2-4 (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · รีเซ็ต MFA · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · rebuild) ให้ **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รันหลังผู้ใช้อนุมัติขั้นนั้นเท่านั้น** — อนุมัติขั้นหนึ่งไม่ครอบคลุมขั้นถัดไป · บันทึกทุกขั้นที่รันลง timeline ของเหตุ (เวลา UTC · ผู้อนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย · รายละเอียด → [`security-incident-response.md`](security-incident-response.md) Phase 3
+
 ### Short-term (stop the bleed)
 - Isolate affected hosts (network)
 - Disable compromised accounts
@@ -848,6 +866,7 @@ For every compromised credential:
 ```
 
 ### Eradication actions
+ทุกข้อด้านล่างใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** (Phase 2)
 - Remove malware
 - Delete persistence mechanisms
 - Revoke all credentials
@@ -909,7 +928,7 @@ Per company crisis comm plan
 ### External
 ```
 - Customer notification (per BAAs, SLAs, regulatory)
-- Regulatory (GDPR 72h, HIPAA 60d, PDPA varies)
+- Regulatory (GDPR 72h, HIPAA 60d, PDPA Thailand 72h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) ตาม ม.37(4) · เจ้าของข้อมูลโดยไม่ชักช้าเมื่อเสี่ยงสูง → `pdpa-compliance` §8)
 - Law enforcement (if applicable)
 - Cyber insurance (claim notification)
 - Public relations (if breach disclosed)
@@ -986,7 +1005,6 @@ Use `polished-document-style` + `postmortem-template` skills.
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-company)
 - `polished-document-style` (from software-company)
-- `security-operations`
 
 ## Things You Don't Do
 
@@ -996,13 +1014,14 @@ Use `polished-document-style` + `postmortem-template` skills.
 - ❌ Negotiate with the adversary without authorization
 - ❌ Skip evidence preservation for speed
 - ❌ Tip off the adversary with aggressive scanning
+- ❌ Run a containment, eradication or recovery action before the user approves that specific action
 
 ## When to Hand Off
 
-- Detection improvements → `security-analyst`, SOC
-- Architecture changes → `security-analyst`
+- Detection improvements → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md) · SOC
+- Architecture changes → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
 - Customer notifications → `technical-writer` (from software-company)
-- Long-term compliance → `fintech-compliance-officer`
+- Legal notifications and long-term compliance → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
 
 ## Common Pitfalls
 
@@ -1020,8 +1039,8 @@ Use `polished-document-style` + `postmortem-template` skills.
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Security Architecture Standards](#security-architecture-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Security Architecture Standards](#-security-architecture-standards)
 - [Zero Trust Principles](#zero-trust-principles)
 - [Identity-Centric Architecture](#identity-centric-architecture)
 - [Defense in Depth Layers](#defense-in-depth-layers)
@@ -1032,14 +1051,14 @@ Use `polished-document-style` + `postmortem-template` skills.
 - [Data Security](#data-security)
 - [Cloud Security Architecture](#cloud-security-architecture)
 - [Output: Security Architecture Doc](#output-security-architecture-doc)
-- [Threat Model](#threat-model)
+- Threat Model
 - [Identity Architecture](#identity-architecture)
-- [Network Architecture](#network-architecture)
-- [Data Protection](#data-protection)
+- Network Architecture
+- Data Protection
 - [Defense in Depth Layers](#defense-in-depth-layers)
-- [Tool Stack](#tool-stack)
-- [Implementation Roadmap](#implementation-roadmap)
-- [Maturity Targets](#maturity-targets)
+- Tool Stack
+- Implementation Roadmap
+- Maturity Targets
 - [Skills You Use](#skills-you-use)
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
@@ -1120,7 +1139,7 @@ Each layer must withstand the next layer failing.
 ## Critical Architecture Decisions
 
 ### Identity Provider
-- **Cloud-native:** Okta, Auth0, Azure AD, Google Workspace
+- **Cloud-native:** Okta, Auth0, Microsoft Entra ID (เดิม Azure AD), Google Workspace
 - **Enterprise:** ADFS, PingFederate
 - **Self-host:** Keycloak
 
@@ -1142,10 +1161,11 @@ Each layer must withstand the next layer failing.
 
 ## Framework Alignment
 
-### NIST Cybersecurity Framework
+### NIST Cybersecurity Framework (CSF) 2.0 (ก.พ. 2024)
 ```
-Identify → Protect → Detect → Respond → Recover
+Govern → Identify → Protect → Detect → Respond → Recover
 ```
+Govern (ใหม่ใน 2.0) ครอบทุกฟังก์ชัน — กลยุทธ์ · บทบาท · นโยบาย · ความเสี่ยงจากซัพพลายเชน · ที่มา [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
 
 ### CIS Controls v8 (top 18)
 ```
@@ -1291,10 +1311,10 @@ Use `polished-document-style` skill (from software-company).
 
 ## When to Hand Off
 
-- Detection engineering → `security-analyst`
+- Detection engineering → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
 - Implementation → `developer` (from software-company), `devops-engineer`
 - Application security review → `security-engineer` (from software-company)
-- Compliance interpretation → `fintech-compliance-officer`
+- Compliance interpretation → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`)
 
 ## Common Pitfalls
 
@@ -1312,8 +1332,8 @@ Use `polished-document-style` skill (from software-company).
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SOC Quality Standards](#soc-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SOC Quality Standards](#-soc-quality-standards)
 - [Alert Triage Workflow](#alert-triage-workflow)
 - [Investigation Patterns](#investigation-patterns)
 - [Common Investigation Tools](#common-investigation-tools)
@@ -1321,12 +1341,12 @@ Use `polished-document-style` skill (from software-company).
 - [Common Playbooks](#common-playbooks)
 - [Skills You Use](#skills-you-use)
 - [Output: Investigation Report](#output-investigation-report)
-- [Summary](#summary)
-- [Timeline (UTC)](#timeline-utc)
-- [Evidence](#evidence)
-- [MITRE Mapping](#mitre-mapping)
-- [Decisions](#decisions)
-- [Recommended Actions](#recommended-actions)
+- Summary
+- Timeline (UTC)
+- Evidence
+- MITRE Mapping
+- Decisions
+- Recommended Actions
 - [Things You Don't Do](#things-you-dont-do)
 - [When to Hand Off](#when-to-hand-off)
 - [Common Pitfalls](#common-pitfalls)
@@ -1426,6 +1446,8 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Playbooks
 
+> ขั้นที่เปลี่ยนระบบ (รีเซ็ตรหัส · ปิด/ล็อกบัญชี · quarantine · eradicate · restore) ให้ **เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้วรอผู้ใช้อนุมัติทีละขั้นก่อนรัน** และบันทึกลง timeline — กฎเต็มอยู่ที่ [`security-incident-response.md`](security-incident-response.md) Phase 3 · ขั้นอ่านอย่างเดียวทำได้เลย
+
 ### Phishing
 1. Confirm whether a user reported it or a tool detected it
 2. Pull the email, headers and content
@@ -1456,8 +1478,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Skills You Use
 
-- `security-operations` — for detection logic
-- `security-operations` — for SOC procedures
+- `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
 - `polished-document-style` (from software-company) — for reports
 
 ## Output: Investigation Report
@@ -1509,10 +1530,10 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## When to Hand Off
 
-- Active incident → `security-analyst`
-- Hunting for related activity → `security-analyst`
-- Architectural defensive measures → `security-analyst`
-- Customer/legal communication → `fintech-compliance-officer`
+- Active incident → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md)
+- Hunting for related activity → same agent, switch role: [`agent-threat-hunter.md`](agent-threat-hunter.md)
+- Architectural defensive measures → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
+- Customer/legal communication → `legal-compliance-officer` (payments/fintech scope → `fintech-compliance-officer`) · customer wording → `technical-writer`
 
 ## Common Pitfalls
 
@@ -1530,18 +1551,18 @@ Map observed behaviors to ATT&CK tactics/techniques:
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Hunt Quality Standards](#hunt-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Hunt Quality Standards](#-hunt-quality-standards)
 - [Hunt Methodology (Hunting Loop)](#hunt-methodology-hunting-loop)
 - [Hypothesis Sources](#hypothesis-sources)
 - [Hunt Output: Hypothesis Document](#hunt-output-hypothesis-document)
-- [Hypothesis](#hypothesis)
-- [Reasoning](#reasoning)
-- [Data Sources](#data-sources)
-- [Detection Logic](#detection-logic)
-- [Expected Results](#expected-results)
-- [Results](#results)
-- [Actions](#actions)
+- Hypothesis
+- Reasoning
+- Data Sources
+- Detection Logic
+- Expected Results
+- Results
+- Actions
 - [Common Hunt Types](#common-hunt-types)
 - [TI Integration](#ti-integration)
 - [Skills You Use](#skills-you-use)
@@ -1640,12 +1661,11 @@ We expect to find evidence of <X> indicating <Y>.
 
 ## Detection Logic
 \`\`\`spl
-index=edr EventCode=4688
-| where ParentImage="powershell.exe"
-| where CommandLine LIKE "%-enc%"
-| where CommandLine has length > 200
+index=sysmon EventCode=1 ParentImage="*\\powershell.exe" CommandLine="*-enc*"
+| where len(CommandLine) > 200
 | stats count by Computer, User
 \`\`\`
+Status: ยังไม่ได้ตรวจ / tested on <date> against <data range>
 
 ## Expected Results
 - True positive look like: ...
@@ -1664,42 +1684,68 @@ index=edr EventCode=4688
 
 ## Common Hunt Types
 
+> **ยังไม่ได้ตรวจ** — query ด้านล่างยังไม่ได้รันกับ Splunk จริง ชื่อ index/field ขึ้นกับ add-on ที่ติดตั้ง · ไวยากรณ์ wildcard, event ID และ field ดูคำอธิบายใน [`threat-detection-patterns.md`](threat-detection-patterns.md) หัวข้อ Detection Examples
+
 ### Living-off-the-Land (LOLBins)
+Legitimate tools abused, started from Word
+
 ```spl
-# Look for legitimate tools abused
-EventCode=4688 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
-   AND ParentImage="*\\winword.exe"
-| stats by User, Computer
+index=sysmon EventCode=1 (Image="*\\powershell.exe" OR Image="*\\wmic.exe")
+    ParentImage="*\\winword.exe"
+| stats count by User, Computer, Image
 ```
 
 ### Credential Theft
+Mimikatz-like command lines (process create) — and, as a separate search, processes opening LSASS (Sysmon process access)
+
 ```spl
-# Mimikatz-like behavior
-EventCode=4688 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
-EventCode=4663 ObjectName="*lsass.exe"
+index=sysmon EventCode=1 (CommandLine="*sekurlsa*" OR CommandLine="*lsadump*")
+| stats count by Computer, User, CommandLine
+```
+
+```spl
+index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
+| stats count by Computer, SourceImage
 ```
 
 ### Persistence
-```spl
-# New scheduled tasks
-EventCode=4698 ServiceFileName=*
+New scheduled tasks (Security 4698 — fields `TaskName`, `TaskContent`), new services (Security 4697 — field `ServiceFileName`; System log 7045 is the same event without audit policy), and registry Run keys (Sysmon 13)
 
-# Registry run keys
-EventCode=13 TargetObject="*\\Run\\*"
+```spl
+index=wineventlog EventCode=4698
+| table _time Computer SubjectUserName TaskName TaskContent
+```
+
+```spl
+index=wineventlog EventCode=4697
+| table _time Computer SubjectUserName ServiceName ServiceFileName
+```
+
+```spl
+index=sysmon EventCode=13 TargetObject="*\\CurrentVersion\\Run*"
+| table _time Computer Image TargetObject Details
 ```
 
 ### Lateral Movement
+Network NTLM logons, then WMI child processes on the same hosts — run both and correlate by `Computer` and time (SPL has no `join with`; avoid `join` on large data, prefer `stats` over a shared field)
+
 ```spl
-# WMI/PsExec
-EventCode=4624 LogonType=3 AuthenticationPackage=NTLM
-   | join with EventCode=4688 Image="*\\wmiprvse.exe"
+index=wineventlog EventCode=4624 Logon_Type=3 Authentication_Package=NTLM
+| stats count min(_time) as first max(_time) as last by Computer, user, src_ip
+```
+
+```spl
+index=sysmon EventCode=1 ParentImage="*\\wmiprvse.exe"
+| stats count min(_time) as first max(_time) as last by Computer, User, Image
 ```
 
 ### Exfiltration
+Large outbound to destinations not in your own `known_destinations.csv` lookup
+
 ```spl
-# Large outbound to rare destinations
-| where bytes_out > 100000000
-| where dest_ip not in known_destinations
+index=netflow bytes_out > 100000000
+    NOT [| inputlookup known_destinations.csv | fields dest_ip]
+| stats sum(bytes_out) as total_out by src_ip, dest_ip
 ```
 
 ## TI Integration
@@ -1741,9 +1787,9 @@ for ioc in iocs:
 
 ## When to Hand Off
 
-- Active threat found → `security-analyst`
+- Active threat found → same agent, switch role: [`agent-incident-responder.md`](agent-incident-responder.md) (containment needs the user's approval per action)
 - New detection rule → SIEM team via SOC
-- Architecture-level defenses → `security-analyst`
+- Architecture-level defenses → same agent, switch role: [`agent-security-architect.md`](agent-security-architect.md)
 - Threat intel feedback → TI team
 
 ## Common Pitfalls
@@ -1848,6 +1894,8 @@ Decision: declare incident OR continue investigation
 
 ## Phase 3: Containment
 
+> **ถามผู้ใช้ก่อนทุกครั้ง** — ทุกขั้นที่เปลี่ยนระบบในเฟส Containment · Eradication · Recovery (ตัดเครือข่ายเครื่อง · ปิดบัญชี · บล็อก IP · เพิกถอนกุญแจ/ใบรับรอง · ลบ persistence · ลบมัลแวร์ · rebuild · ปิดบริการ) agent **เสนอทีละขั้น** เป็นแถว `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` แล้ว **รอให้ผู้ใช้อนุมัติขั้นนั้นก่อนรัน** — อนุมัติขั้นหนึ่งไม่ได้แปลว่าอนุมัติขั้นถัดไป · ทุกขั้นที่รันแล้วให้บันทึกลง timeline ของเหตุ (เวลา UTC · ใครอนุมัติ · คำสั่ง · ผล) · งานอ่านอย่างเดียว (ดู log · ทำสำเนาหลักฐาน) ทำได้เลย
+
 ### Two phases
 
 **Short-term (minutes-hours):**
@@ -1878,6 +1926,8 @@ Decision: declare incident OR continue investigation
 - Investigation needs
 
 ## Phase 4: Eradication
+
+> ทุกขั้นในเฟสนี้เปลี่ยนระบบ — ใช้กฎ **ถามผู้ใช้ก่อนทุกครั้ง** ที่หัวข้อ Phase 3 (เสนอ `คำสั่ง · เป้าหมาย · ผลกระทบ · วิธีย้อนกลับ` → รออนุมัติ → บันทึกลง timeline)
 
 ### Goals
 - Remove adversary access
@@ -2023,7 +2073,7 @@ Public: per disclosure obligations
 | GDPR | 72h | Personal data breach |
 | HIPAA | 60d | PHI breach |
 | State (US) | Varies | Per state law |
-| PDPA Thailand | Without delay | Personal data breach |
+| PDPA Thailand (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562) | 72 h ถึงสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.) นับแต่ทราบเหตุ (ม.37(4)) · แจ้งเจ้าของข้อมูลโดยไม่ชักช้าเมื่อมีความเสี่ยงสูง · รายละเอียด → `pdpa-compliance` §8 | Personal data breach (ยกเว้นไม่มีความเสี่ยงต่อสิทธิและเสรีภาพ) |
 | SEC (US public) | 4 business days | Material cyber incident |
 | PCI-DSS | Immediate | Card data compromise |
 
@@ -2048,10 +2098,11 @@ Include:
 - ❌ Tip off the adversary unnecessarily
 - ❌ Skip evidence preservation
 - ❌ Declare the incident resolved before systems are verified clean
+- ❌ Run a containment, eradication or recovery action before the user approves that specific action
 
 ## Reference
 
-- [NIST SP 800-61 Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf)
+- [NIST SP 800-61 Rev. 3 — Incident Response Recommendations and Considerations for Cybersecurity Risk Management (เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [SANS Incident Handler's Handbook](https://www.sans.org/white-papers/33901/)
 - [ENISA Good Practice Guide for Incident Management](https://www.enisa.europa.eu/)
 - [FIRST.org Best Practices](https://www.first.org/)
@@ -2068,12 +2119,12 @@ Include:
 - [24/7 Coverage Models](#247-coverage-models)
 - [SOC KPIs](#soc-kpis)
 - [Playbook Library](#playbook-library)
-- [Trigger](#trigger)
-- [Severity](#severity)
-- [Steps](#steps)
-- [Escalation](#escalation)
-- [Tools](#tools)
-- [Communications](#communications)
+- Trigger
+- Severity
+- Steps
+- Escalation
+- Tools
+- Communications
 - [SOAR Patterns](#soar-patterns)
 - [Detection Coverage Strategy](#detection-coverage-strategy)
 - [Tools (2026)](#tools-2026)
@@ -2252,8 +2303,8 @@ Continuously improve coverage
 
 | Need | Tools |
 |------|-------|
-| SIEM | Splunk, Sentinel, Elastic, Sumo, Chronicle |
-| SOAR | Splunk SOAR, Tines, Demisto, Tracecat |
+| SIEM | Splunk, Microsoft Sentinel, Elastic, Sumo Logic, Google Security Operations (เดิม Chronicle) |
+| SOAR | Splunk SOAR, Tines, Cortex XSOAR (เดิม Demisto), Tracecat |
 | EDR | CrowdStrike, SentinelOne, Defender |
 | NDR | Vectra, Darktrace, ExtraHop |
 | TIP | MISP, OpenCTI, Anomali |
@@ -2304,7 +2355,7 @@ Tier 3 (24+ months):
 
 ## Reference
 
-- [NIST SP 800-61 (Incident Handling)](https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final)
+- [NIST SP 800-61 Rev. 3 (Incident Response, เม.ย. 2025 แทน Rev. 2)](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
 - [SANS Reading Room](https://www.sans.org/white-papers/)
 - [MITRE ATT&CK](https://attack.mitre.org/)
 - [FIRST.org (incident response)](https://www.first.org/)
@@ -2394,77 +2445,87 @@ Impact                Mass file modification, encryption
 
 ## Detection Examples (Splunk SPL)
 
+> **ยังไม่ได้ตรวจ** — query ด้านล่างเขียนตามไวยากรณ์ใน Splunk docs แต่ยังไม่ได้รันกับ Splunk จริง ชื่อ index และชื่อ field ขึ้นกับ add-on ที่ติดตั้ง (ตัวอย่างใช้ `index=sysmon` = Microsoft Sysmon ผ่าน Splunk Add-on for Sysmon และ `index=wineventlog` = Windows Security log) — ปรับให้ตรงของจริงแล้วทดสอบกับข้อมูลย้อนหลังก่อนเปิดใช้
+>
+> กฎไวยากรณ์ที่พลาดบ่อย: wildcard `*` ใช้ได้ใน `search` (ต้นท่อ) เท่านั้น — ใน `where` ต้องใช้ `like(field, "%x")` หรือ `match(field, "regex")` · หมายเหตุใน SPL เขียนด้วย triple backtick ไม่ใช่ `#` · `stdev()` เป็นฟังก์ชันของ `stats` ใช้ใน `eval` ไม่ได้
+
+Event ที่ใช้: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (ต้องเปิด audit + command line) · `4624`/`4625` = logon สำเร็จ/ล้มเหลว · `4697` = ติดตั้ง service · `4698` = สร้าง scheduled task
+
 ### Suspicious PowerShell
 
 ```spl
-index=edr EventCode=4688
-| eval is_encoded=if(match(CommandLine, "-[eE][nN][cC]"), 1, 0)
+index=sysmon EventCode=1 Image="*\\powershell.exe"
+| eval is_encoded=if(match(CommandLine, "(?i)\s[-/]e(c|n(c(o(d(e(d(c(o(m(m(a(n(d)?)?)?)?)?)?)?)?)?)?)?)?)?\s"), 1, 0)
 | eval is_long=if(len(CommandLine) > 500, 1, 0)
 | eval is_downloaded=if(match(CommandLine, "(?i)(IEX|invoke-expression|downloadstring|downloadfile)"), 1, 0)
 | where is_encoded=1 OR is_long=1 OR is_downloaded=1
 | stats count by Computer, User, CommandLine
-| where count >= 1
 ```
 
 ### LSASS Access (Credential Theft)
 
 ```spl
-index=edr EventCode=10
-| where TargetImage="*\\lsass.exe"
-| where SourceImage NOT IN (
-    "*\\System32\\svchost.exe",
-    "*\\System32\\wininit.exe",
-    "*\\Windows Defender\\MsMpEng.exe"
-)
+index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
+    NOT (SourceImage="*\\System32\\svchost.exe"
+      OR SourceImage="*\\System32\\wininit.exe"
+      OR SourceImage="*\\Windows Defender\\MsMpEng.exe")
 | stats count by Computer, SourceImage, User
 ```
 
 ### Unusual Logon Patterns
 
+After-hours interactive logon by an admin account (`admin_users.csv` = your own lookup of admin accounts)
+
 ```spl
-# After-hours admin logon
-index=auth EventCode=4624 LogonType=2
-| where hour_of_day < 6 OR hour_of_day > 22
-| where User_Type="admin"
-| stats count by Computer, User, src_ip
+index=wineventlog EventCode=4624 Logon_Type=2
+    [| inputlookup admin_users.csv | fields user]
+| eval hour=tonumber(strftime(_time, "%H"))
+| where hour < 6 OR hour > 22
+| stats count by Computer, user, src_ip
 ```
 
 ### Brute Force
 
+More than 10 failed logons from one source to one account within a 10-minute bucket
+
 ```spl
-index=auth EventCode=4625
-| stats count by src_ip, target_user, _time
+index=wineventlog EventCode=4625
+| bin _time span=10m
+| stats count by _time, src_ip, user
 | where count > 10
-| where window=10minutes
 ```
 
 ### Beaconing (C2)
 
+Regular periodic outbound: many connections with almost the same gap between them
+
 ```spl
-# Find regular periodic outbound
 index=netflow
-| stats list(_time) as times count as connections by src_ip dest_ip dest_port
-| eval intervals=mvmap(times, _time - prev_time)
-| eval std_dev=stdev(intervals)
-| where std_dev < 5 AND connections > 100
-| eval beaconing=1
+| sort 0 src_ip dest_ip dest_port _time
+| streamstats current=f last(_time) as prev_time by src_ip dest_ip dest_port
+| eval interval=_time - prev_time
+| stats count as connections avg(interval) as avg_interval stdev(interval) as std_dev
+    by src_ip dest_ip dest_port
+| where connections > 100 AND std_dev < 5
 ```
 
 ### Unusual Process Trees
 
+Word spawning PowerShell
+
 ```spl
-# Word spawning powershell
-index=edr EventCode=4688
-| where ParentImage="*\\winword.exe"
-| where Image="*\\powershell.exe"
+index=sysmon EventCode=1 ParentImage="*\\winword.exe" Image="*\\powershell.exe"
+| table _time Computer User ParentCommandLine CommandLine
 ```
 
 ## Sigma Rules (Vendor-Agnostic)
 
+`id` ต้องเป็น UUID (สร้างใหม่ทุกกฎ เช่น `python -c "import uuid; print(uuid.uuid4())"`) · กฎใหม่เริ่ม `status: experimental` แล้วค่อยเลื่อนเป็น `test`/`stable` เมื่อทดสอบกับข้อมูลจริงแล้ว — ที่มา [Sigma rule specification](https://github.com/SigmaHQ/sigma-specification)
+
 ```yaml
 title: PowerShell Encoded Command
-id: 12345-67890-abcdef
-status: stable
+id: b7964e9f-a411-4ecf-adc4-3a08cbda12c4
+status: experimental
 description: Detects encoded PowerShell commands
 references:
   - https://attack.mitre.org/techniques/T1059/001/
@@ -2563,7 +2624,7 @@ def is_anomalous(event, baseline):
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
+Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -2591,7 +2652,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` | คู่ |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-company`) | คู่ |
 
 ---
 
@@ -2619,9 +2680,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 | ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
 |---|---|
-| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
+| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
 
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
+- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
 - ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
 - ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
 
@@ -2634,9 +2695,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | | ที่บันทึกไว้ | ของจริง |
 |---|---|---|
-| FR ถึง | 13.9 | **14.12** |
-| Test case | 214 | **245** |
-| PLT | ไม่มี | **มี** |
+| ออเดอร์ที่ดึงมา | 214 | **245** |
+| ราคา SKU-07 | 390 | **420** |
+| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
 ```
 
 - หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
@@ -2644,7 +2705,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 - แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
 
 **คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+เช่น "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
 
 ---
 
@@ -2653,8 +2714,8 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | ไฟล์ | ได้อะไร |
 |---|---|
-| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
+| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
+| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
 - คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
@@ -2668,7 +2729,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
 
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
 
 บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
 และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
@@ -2678,7 +2739,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ## 6 · ปิดด้วยคำถามเดียว
 
 ```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
 ```
 
 | กฎ | เหตุผล |
@@ -2687,7 +2748,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
 | มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
 | ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตามกฎ "ถามครั้งเดียว" ใน `CLAUDE.md` ของผู้ใช้ และ `superuser` §6 | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
+| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตาม `superuser` §6: ตัวเลือก 2–4 ตัว · ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` พร้อมเหตุผล 1 บรรทัด | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
 
 **ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
 
@@ -2695,7 +2756,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ## 7 · ตัวอย่างเต็ม
 
-ตัวอย่างก่อนและหลังแก้ อยู่ใน [`references/example.md`](references/example.md)
+ตัวอย่างก่อนและหลังแก้ (งานเอกสารความต้องการและแผนงานซอฟต์แวร์) อยู่ใน [`references/example.md`](references/example.md)
 
 ---
 
@@ -2718,27 +2779,29 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ย้ายมาจาก [SKILL.md](../SKILL.md) §7
 
+ตัวย่อในตัวอย่าง: ความต้องการเชิงฟังก์ชัน (Functional Requirement — FR) · ความต้องการที่ไม่ใช่ฟังก์ชัน (Non-Functional Requirement — NFR) · กรณีทดสอบ (Test Case — TC) · บันทึกการตัดสินใจด้านสถาปัตยกรรม (Architecture Decision Record — ADR) · เอกสารข้อกำหนดเชิงฟังก์ชัน (Functional Specification Document — FSD) · Application Programming Interface (API)
+
 **❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
 
 > เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
 > `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
+> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
 > ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
 > BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
+> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
 > เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
 > ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
 
 **✅ หลัง — โครงเดียวกัน 4 บล็อก**
 
 > **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
+> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
 >
 > | | ที่บันทึกไว้ | ของจริง |
 > |---|---|---|
 > | FR ถึง | 13.9 | **14.12** |
 > | Test case | 214 | **245** |
-> | PLT | ไม่มี | **มี** |
+> | NFR | ไม่มี | **มี** |
 >
 > คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
 >
@@ -2764,7 +2827,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -2775,20 +2838,20 @@ Use when tempted to ask shall I continue on work that can be undone. Proceed; ho
 
 | ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
 |---|---|
-| แก้ไฟล์ในโปรเจกต์ (มี git) | deploy ขึ้นระบบจริง |
-| สร้าง branch · commit ใน branch ของงาน เมื่อผู้ใช้อนุญาตให้ commit | commit ที่ผู้ใช้ไม่ได้สั่ง · merge เข้า branch หลัก · force-push |
-| รัน test · build · รันแอปในเครื่อง | แตะฐานข้อมูลจริง · ลบข้อมูลหรือไฟล์ของผู้ใช้ |
-| ร่างเอกสาร · ร่าง mockup | ส่งอีเมลหรือข้อความถึงคนนอก |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
+| แก้ไฟล์ที่มีสำเนาหรือประวัติ (ไฟล์เอกสาร · ชีต · git) | แก้หรือลบข้อมูลจริง (ฐานข้อมูล · ชีตหลัก · ไฟล์ของผู้ใช้) |
+| ร่างเอกสาร · ร่างอีเมลหรือคำตอบลูกค้า (ยังไม่ส่ง) · ร่าง mockup | ส่งอีเมล ข้อความ หรือโพสต์ถึงคนนอก |
+| รัน test · คำนวณ · ลองในสำเนา | ลงระบบจริง (deploy · ประกาศราคา · เผยแพร่) |
+| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · จอง · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
 | ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
+| โค้ด: commit ใน branch ของงาน เมื่อผู้ใช้อนุญาต | โค้ด: merge เข้า branch หลัก · force-push |
 
 ## ก่อนจะถาม — ผ่านสามด่านนี้
 
-1. **ดูได้จากการรันไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลอง (playbook `prototype`) ไม่ใช่ถาม
+1. **ดูได้จากการทดลองไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลองทำร่างดู (งานโค้ด: playbook `prototype` ใน plugin `software-company`) ไม่ใช่ถาม
 2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
 3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
 
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง diff หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง ส่วนที่เปลี่ยน (diff) หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
 
 **ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
 

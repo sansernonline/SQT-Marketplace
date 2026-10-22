@@ -1,7 +1,7 @@
 # playbook · visual-parity — หน้าจอจริงต้องตรงกับต้นแบบ
 
 ใช้เมื่อ: ทำหน้าจอให้ตรง mockup · ย้ายหน้าจอจากเทคโนโลยีเก่าไปใหม่แล้วต้องเหมือนเดิม · ผู้ใช้บอกว่า "ไม่เหมือนแบบ"
-skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · [`principle-prove-it-works`](../../principle-prove-it-works/SKILL.md)
+skill หลัก: skill ตรวจแอปของโปรเจกต์ (`app-verifier-setup`) · `ui-craft` · `principle-prove-it-works`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

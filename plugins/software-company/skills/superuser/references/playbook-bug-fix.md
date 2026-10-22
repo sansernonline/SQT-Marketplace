@@ -1,7 +1,7 @@
 # playbook · bug-fix — แก้ของพังด้วยหลักฐาน
 
 ใช้เมื่อ: error · stack trace · test ล้ม · หน้าจอผิด · หน่วยความจำรั่ว · CPU วิ่งตอนว่าง · ผู้ใช้แจ้งปัญหา · ของที่ไม่ควรเกิดเลย (ถ้าใช้ได้อยู่แต่อยากให้เร็วหรือเบาขึ้นถึงเป้า → `performance`) (รวม `bug fix` · `runtime forensics` · `trace forensics` ของ pstack)
-skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · [`principle-fix-root-cause`](../../principle-fix-root-cause/SKILL.md) · [`principle-prove-it-works`](../../principle-prove-it-works/SKILL.md)
+skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · skill ตาม stack · `targeted-fix` · `principle-fix-root-cause` · `principle-prove-it-works`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
@@ -10,12 +10,12 @@ skill หลัก: [`code-orientation`](../../code-orientation/SKILL.md) · ski
    - อาการที่เกิดตอนรัน (รั่ว · ค้างเป็นพัก ๆ · วิ่งตอนว่าง) ให้ใส่การวัดหรือ log ชั่วคราว เพื่อให้อาการกลายเป็นตัวเลขก่อนแก้ ถ้าได้ไฟล์ profile มา (cpuprofile · heap snapshot · trace) ให้อ่านด้วยเครื่องมือของไฟล์ชนิดนั้น ไม่เดาจากโค้ด
 3. **เขียน test ที่ล้มเพราะบั๊กนี้ก่อน** แล้วรันให้เห็นว่าแดง (`testing-standards`) ถ้าโปรเจกต์ยังไม่มี test เลย ให้ตั้ง test ตัวแรกให้รันได้ก่อน ถ้าทำ test ไม่ได้จริง (เช่น อาการที่เกิดตอนรันบนเครื่องผู้ใช้) ให้เขียนเหตุผลลงรายงาน และต้องมีขั้นตอนทำซ้ำที่รันได้แทน · ใคร: `developer` ตัวใหม่
    - ถ้ายังไม่ได้อ่านส่วนนี้ใน session นี้ ให้ทำ [`code-orientation`](../../code-orientation/SKILL.md) ก่อนไล่ต้นเหตุ
-4. หาต้นเหตุตาม [`principle-fix-root-cause`](../../principle-fix-root-cause/SKILL.md) · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
+4. หาต้นเหตุตาม `principle-fix-root-cause` · ต้นเหตุที่หายากหรือหลายชั้น ส่ง agent ด้วย `model: opus` (`superuser` หัวข้อ 5) · ใคร: `developer` ตัวใหม่ (ส่งผลขั้น 3)
 5. ถ้าจะแก้ของที่ใช้ร่วม (helper · type · config · schema) ให้หาทุกจุดที่กระทบตาม [`blast-radius`](../../blast-radius/SKILL.md) ก่อนแก้ · **บั๊กด้านความปลอดภัย** ให้ค้นทั้ง repo หาจุดที่เขียนแบบเดียวกันด้วย · ส่งรายการจุดให้ขั้น 6 · ใคร: `Explore` ตัวใหม่
 6. แก้ให้เล็กที่สุดที่ยังถูก (`lazy-coding`) ครบทุกจุดจากขั้น 4–5 ในรอบเดียว — ส่งตำแหน่งไฟล์และต้นเหตุไปด้วย · บั๊กความปลอดภัยลงรายงานใน `qa/security/` ถ้ามีค่าลับหลุด ให้บอกผู้ใช้ให้เปลี่ยนค่าทันที · ใคร: `developer` ตัวใหม่
 7. พิสูจน์ — รันกรณีที่เคยล้มให้ผ่าน รันกรณีใกล้เคียงว่ายังผ่าน แล้วลองทำซ้ำในที่เดิมอีกครั้งด้วยตัวเอง · ใคร: `qa-tester` ตัวใหม่
 8. **รีวิว diff ก่อนบอกว่าเสร็จ** — ตาม `code-review-checklist`: แก้ที่ต้นเหตุ ไม่ลามนอกจุด ผลขั้น 7 ครอบกรณีที่เคยล้ม · บั๊กความปลอดภัยดูครบทุกจุดจากขั้น 5 · ไม่ผ่าน → `developer` ตัวใหม่แก้ แล้ววนตามรอบตรวจใน [`team-roles`](team-roles.md) · ใคร: `reviewer` ตัวใหม่
-9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ [`repeated-mistakes-to-checks`](../../repeated-mistakes-to-checks/SKILL.md) · ใคร: หัวหน้าทีม
+9. ถ้าบั๊กนี้เป็นแบบที่ agent เคยทำมาแล้ว ให้ใช้ `repeated-mistakes-to-checks` · ใคร: หัวหน้าทีม
 10. ส่งมอบตามกฎ commit ใน `superuser` หัวข้อ 6 แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม
 
 ## จบเมื่อ

@@ -1,7 +1,7 @@
 # playbook · performance — ช้า วัดก่อน แก้ทีละข้อ วัดซ้ำ
 
 ใช้เมื่อ: หน้าช้า · API ช้า · build ช้า · กินหน่วยความจำ · อยากให้ตัวเลขตัวหนึ่งดีขึ้นจนถึงเป้า · ถ้าเป็นอาการที่ไม่ควรเกิดเลย (รั่ว · วิ่งตอนว่าง) → `bug-fix` (รวม `perf` · `hillclimb` · `trace forensics` ของ pstack)
-skill หลัก: [`principle-prove-it-works`](../../principle-prove-it-works/SKILL.md) · [`decision-log`](../../decision-log/SKILL.md) · `observability-basics`
+skill หลัก: `principle-prove-it-works` · `decision-log` · `observability-basics`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

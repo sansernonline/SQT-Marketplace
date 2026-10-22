@@ -70,7 +70,7 @@ CREATE TABLE fact_orders (
     product_key BIGINT,
     date_key INT,
     quantity INT,
-    amount DECIMAL(12,2),
+    amount NUMERIC(19,4)
     -- foreign keys to dimensions
 );
 

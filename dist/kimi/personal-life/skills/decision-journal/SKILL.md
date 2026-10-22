@@ -43,7 +43,7 @@ Judge the reasoning on what was knowable *then*, not on what happened.
 ## Thai-context checks for common big decisions
 
 - **Buying a condo/house** — monthly instalment vs rent, transfer fees and taxes at the land office, common-area fee (ค่าส่วนกลาง), and whether the bank's approved loan is the user's comfortable payment; tax angle in `tax-deduction-planner` (trading-finance) if installed
-- **Changing jobs** — total package not base salary: bonus history, PVD employer match and vesting, social security continuity, notice period in the contract; `payroll-th` (thai-workplace) if installed
+- **Changing jobs** — total package not base salary: bonus history, provident fund (PVD) employer match and vesting, social security continuity, notice period in the contract; `payroll-th` (thai-workplace) if installed
 - **Lump-sum investing** — emergency fund first, then fit to the time horizon; product choice is outside this skill
 - **Big purchase with a "today only" price** — that pressure is a reason to log, wait 48 hours, and compare (`buy-compare` in consumer-rights if installed)
 
@@ -54,7 +54,7 @@ General information, not financial advice — for money decisions of this size t
 **2026-10-06 — Accept the job offer at Company B, start 1 Dec 2026.** One-way-ish door (can return to market, cannot return to A).
 
 Options: stay at A (52,000/month) · take B (60,000) · negotiate A counter-offer.
-Facts: B base +15%; B bonus 0–2 months (no history known); A PVD match 5% vested after 5 years — I am at year 4, leaving forfeits about 12,000 (รอยืนยัน with HR); commute B 25 min shorter.
+Facts: B base +15%; B bonus 0–2 months (no history known); A PVD match 5% vested after 5 years — I am at year 4, leaving forfeits about 125,000 plus returns (5% × 52,000 × 12 × 4 years; รอยืนยัน with HR); commute B 25 min shorter.
 Reasoning: growth in role (high), salary (medium), commute (high).
 Pre-mortem: B's team lead leaves; bonus is zero. Early warning: no clear role scope by week 6.
 Prediction: by 2027-06-01, leading one project, total pay ≥ A's last year, more evenings free.

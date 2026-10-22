@@ -1,6 +1,6 @@
 # skill: presentation-design
 
-Use when building a slide deck someone will present or read (story, headlines, layouts, Thai type).
+Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
 
 # Presentation Design
 
@@ -28,7 +28,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ทำเด็คนำเสนอ — ข้อเสนอโครงการ · รายงานความคืบหน้า · รีวิวออกแบบ · อบรม
+- ทำเด็คนำเสนอ — ข้อเสนอลูกค้า · แผนธุรกิจ · สรุปงานวิจัย · รายงานความคืบหน้า · อบรม · รีวิวออกแบบ
 - รีวิวเด็คที่คนอื่นทำ
 - แปลงเอกสารยาวเป็นเด็ค
 
@@ -37,9 +37,9 @@ Use when building a slide deck someone will present or read (story, headlines, l
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | สร้างไฟล์ `.pptx` จริง (python-pptx, ฟอนต์, หน้าปก) | `branded-document-design` |
-| ชุดสีของกราฟ | `web-app-design` (หัวข้อ chart colors) |
+| ชุดสีของกราฟ | `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company` → `references/tokens.md` "สีข้อมูล (กราฟ)") |
 | เอกสารที่อ่านเอง ไม่มีคนพูด | `polished-document-style` + `branded-document-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
+| ผัง ขั้นตอน หรือสถาปัตยกรรมในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
 
 > **เด็คที่ส่งให้อ่านเอง ไม่ใช่เด็ค** — เป็นเอกสาร ให้ทำเป็นเอกสาร
 > ถ้าต้องทำทั้ง 2 อย่าง ให้ทำเด็คสำหรับพูด แล้วแนบเอกสารแยก อย่ายัดทุกอย่างลงสไลด์
@@ -68,7 +68,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 |---|---|
 | **ขออนุมัติ / ตัดสินใจ** | ข้อสรุปและสิ่งที่ขอ → เหตุผล 3 ข้อ → ทางเลือกที่พิจารณาแล้ว → ความเสี่ยง → สิ่งที่ขออีกครั้ง |
 | **รายงานความคืบหน้า** | สถานะรวม (เขียว/เหลือง/แดง) → ทำอะไรเสร็จ → ติดอะไร ต้องการอะไรจากใคร → แผนรอบหน้า |
-| **รีวิวออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
+| **รีวิวแผนหรืองานออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
 | **อบรม** | ทำอะไรได้หลังเรียน → แนวคิด → สาธิต → ให้ลองทำ → สรุปและที่ค้นต่อ |
 | **ขายงาน** | ปัญหาของลูกค้า (ด้วยคำของเขา) → ผลที่จะได้ → วิธีของเรา → หลักฐาน → ราคาและขั้นต่อไป |
 
@@ -92,7 +92,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 หัวสไลด์ยาวได้ถึง 2 บรรทัด **อย่าย่อจนกลายเป็นชื่อหัวข้อ** และอย่าย่อจนอ่านไม่ลื่น: หัวที่มี 2 ท่อนต้องมีคำเชื่อม ใช้วลีที่คนพูดจริง และเลือกคำตามคนฟัง (กฎเต็มอยู่ใน `human-writing` หัวข้อ 6)
 
 ```
-❌ ทุกข้อความผ่าน 8 ขั้น: AI ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+❌ ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
 ✅ ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
 ```
 
@@ -173,7 +173,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 - **บอกที่มาของข้อมูลเสมอ** — ช่วงเวลา จำนวนตัวอย่าง แหล่ง (ใส่ในแถบข้างหรือท้ายกระดาษ)
 - **ตารางที่เกิน 5 แถว 4 คอลัมน์ไม่ควรอยู่ในสไลด์** ให้ทำเป็นกราฟ หรือย้ายไปเอกสารแนบ
 
-ชุดสีของกราฟที่ใช้ร่วมกับระบบอื่นอยู่ใน `web-app-design` หัวข้อ chart colors
+ชุดสีของกราฟในสไลด์มาจาก `diagram-figures` → `references/colour-by-domain.md` · กราฟที่ต้องใช้ร่วมกับหน้าจอแอปดู `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)"
 
 ---
 
@@ -241,12 +241,12 @@ Use when building a slide deck someone will present or read (story, headlines, l
 | สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
 | เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
 | แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `pptx-to-html-deck` |
-| ชุดสีของกราฟ | `web-app-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
-| กฎระยะห่างและลำดับสายตา | `ui-craft` |
-| เนื้อหามาจากเอกสาร SRS | `srs-writing` |
-| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
-| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` |
+| ชุดสีของกราฟ | สีหลักของงาน + สีรองตาม `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company`) |
+| ผังในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
+| กฎระยะห่างและลำดับสายตา (หน้าจอแอป) | `ui-craft` (plugin `software-company`) |
+| เนื้อหามาจากเอกสาร Software Requirements Specification (SRS) | `srs-writing` (plugin `software-company`) |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` (plugin `software-company`) |
+| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` (plugin `software-company`) |
 
 ---
 
@@ -264,7 +264,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 # skill: product-naming
 
-Use when naming a product, app, module or brand, or checking how a name sounds in Thai.
+Use when naming a product, shop, service, app or brand, or checking how a name sounds in Thai.
 
 # ตั้งชื่อผลิตภัณฑ์
 
@@ -273,7 +273,7 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ตั้งชื่อผลิตภัณฑ์ แอป โมดูล หรือชื่อโครงการภายใน
+- ตั้งชื่อผลิตภัณฑ์ ร้าน บริการ แอป แบรนด์ โมดูล หรือชื่อโครงการภายใน
 - มีชื่ออยู่แล้วแต่รู้สึกว่าเชย ยาว หรือซ้ำกับคนอื่น
 - มีผลิตภัณฑ์หลายตัวและอยากให้ชื่อเป็นตระกูลเดียวกัน
 - ต้องเลือกจากรายการชื่อที่ระดมมาแล้ว แต่ตัดสินใจไม่ลง
@@ -282,10 +282,10 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
-| โลโก้ สี ตัวอักษรของแบรนด์ | `graphic-design` |
+| โลโก้ สี ตัวอักษรของแบรนด์ | `graphic-design` (plugin `software-company`) |
 | ตั้งชื่อไฟล์เอกสาร | `document-naming` |
-| ตั้งชื่อตาราง คอลัมน์ | `database-design` |
-| ตั้งชื่อ endpoint | `api-conventions` |
+| ตั้งชื่อตาราง คอลัมน์ (งานซอฟต์แวร์) | `database-design` (plugin `software-company`) |
+| ตั้งชื่อ endpoint (งานซอฟต์แวร์) | `api-conventions` (plugin `software-company`) |
 
 ---
 
@@ -298,7 +298,7 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 | 1 | **ทดสอบโทรศัพท์** — พูดชื่อให้คนฟังทางโทรศัพท์ เขาพิมพ์ถูกไหม | ต้องสะกดให้ฟัง |
 | 2 | **ความยาว** | เกิน 3 พยางค์ หรือเกิน 12 ตัวอักษร |
 | 3 | **โดเมนและ handle** | `.com` และ `.co` ถูกจับหมด และ handle โซเชียลไม่ว่างสักที่ |
-| 4 | **ชนของที่มีอยู่** | มีผลิตภัณฑ์ซอฟต์แวร์ชื่อเดียวกันหรือใกล้กันมาก |
+| 4 | **ชนของที่มีอยู่** | มีผลิตภัณฑ์ ร้าน หรือบริการในหมวดเดียวกันชื่อเดียวกันหรือใกล้กันมาก |
 | 5 | **ความหมายในภาษาอื่น** | แปลว่าอะไรไม่ดีในภาษาที่ลูกค้าพูด |
 | 6 | **คนไทยออกเสียงได้** | มีเสียงควบที่คนไทยเลี่ยง หรือลงท้ายด้วยเสียงที่กลืนหาย |
 
@@ -345,7 +345,7 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 | **มีมาแต่กำเนิด** | 4 รากละติน/กรีก · 7 คำจริงยืมข้ามบริบท | `Aurio` จาก *aurum* ทอง · `Anchor` ความมั่นคง |
 | **ใส่ทีหลัง** | 6 คำสั้นไร้ความหมาย | `Quix` ตั้งก่อน แล้วค่อยผูกกับความเร็ว |
 
-> **ทางที่ 2 ใช้ได้จริงและปลอดภัยกว่า** ดู Nike, Kodak, Apple ไม่มีชื่อไหนบอกว่าขายอะไร
+> **ทางที่ 2 ใช้ได้จริงและปลอดภัยกว่า** ดู Kodak, Häagen-Dazs, Apple ไม่มีชื่อไหนบอกว่าขายอะไร
 > ความหมายถูกสร้างขึ้นหลังจากนั้นทั้งหมด
 
 **กฎของความหมาย:** หารากจาก**สิ่งที่ผู้ใช้ได้** ไม่ใช่สิ่งที่ระบบทำ
@@ -387,15 +387,15 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 | ตรวจอะไร | ที่ไหน | ตกเมื่อ |
 |---|---|---|
 | โดเมน | ผู้ให้บริการจดโดเมน | `.com` และ `.co` ถูกจับ และตัวสำรองก็ไม่เหลือ |
-| เครื่องหมายการค้าไทย | กรมทรัพย์สินทางปัญญา | มีของจดไว้ในหมวดซอฟต์แวร์ |
+| เครื่องหมายการค้าไทย | กรมทรัพย์สินทางปัญญา | มีของจดไว้ในหมวดสินค้าหรือบริการของเรา |
 | เครื่องหมายการค้าสากล | ฐานข้อมูล WIPO | เหมือนข้อบน ถ้าจะขายต่างประเทศ |
-| ชื่อแพ็กเกจ | npm · PyPI · NuGet | ถูกใช้แล้วในระบบนิเวศที่จะเผยแพร่ |
-| ชื่อในแอปสโตร์ | App Store · Play Store | มีแอปชื่อเดียวกันในหมวดเดียวกัน |
-| handle โซเชียล | X · Instagram · GitHub · LINE | ไม่ว่างสักที่ |
+| ชื่อแพ็กเกจ (ถ้าเป็นซอฟต์แวร์) | npm · PyPI · NuGet | ถูกใช้แล้วในระบบนิเวศที่จะเผยแพร่ |
+| ชื่อในแอปสโตร์ (ถ้าเป็นแอป) | App Store · Play Store | มีแอปชื่อเดียวกันในหมวดเดียวกัน |
+| handle โซเชียล | X · Instagram · Facebook · TikTok · GitHub · LINE | ไม่ว่างสักที่ |
 | ค้นหาธรรมดา | เสิร์ชเอนจิน | หน้าแรกเต็มไปด้วยของคนอื่น |
 
 **เกณฑ์ตัดสิน:** โดเมนหลักต้องได้ handle ต้องว่างอย่างน้อยครึ่งหนึ่ง และ
-เครื่องหมายการค้าในหมวดซอฟต์แวร์ต้องไม่ชน 3 ข้อนี้ไม่มีข้อยกเว้น
+เครื่องหมายการค้าในหมวดของเราต้องไม่ชน 3 ข้อนี้ไม่มีข้อยกเว้น
 
 ---
 
@@ -424,7 +424,7 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 | 4 | อยู่รอดเมื่อขอบเขตโต | ชื่อที่มีคำว่า "ทอง" จะพังวันที่ขายเงินด้วย |
 | 5 | ทนต่อการล้อ | ลองคิดมุกล้อชื่อตัวเอง ถ้าคิดออกง่ายเกินไป ระวัง |
 
-**ข้อ 4 สำคัญที่สุดสำหรับซอฟต์แวร์** — ชื่อที่บอกความสามารถวันนี้
+**ข้อ 4 สำคัญที่สุดสำหรับสิ่งที่จะโตต่อ (ผลิตภัณฑ์ ร้าน แบรนด์)** — ชื่อที่บอกความสามารถวันนี้
 จะกลายเป็นกรงขังเมื่อผลิตภัณฑ์โตขึ้น ชื่อไร้ความหมายจึงปลอดภัยกว่าในระยะยาว
 
 ---
@@ -439,7 +439,7 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 - ❌ **คำไทยทับศัพท์ที่ฝรั่งอ่านไม่ออก** ถ้าคิดจะขายต่างประเทศ
 - ❌ **ชื่อที่ต้องอธิบายว่าทำไมถึงตั้งชื่อนี้** — ลูกค้าไม่มีเวลาฟัง
 - ❌ **เลือกชื่อก่อนตรวจโดเมนและเครื่องหมายการค้า** — เสียเวลา 2 รอบ
-- ❌ **ระดมชื่อคนเดียวในหัว** — ได้ชื่อจากมุมเดียว ให้เดินตาม 8 สูตรแทน
+- ❌ **ระดมชื่อคนเดียวในหัว** — ได้ชื่อจากมุมเดียว ให้เดินตาม 9 สูตรแทน
 
 ---
 
@@ -454,10 +454,10 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 
 | ต้องการ | ใช้คู่กับ |
 |---|---|
-| โลโก้ สี ตัวอักษรของชื่อที่เลือกแล้ว | `graphic-design` |
+| โลโก้ สี ตัวอักษรของชื่อที่เลือกแล้ว | `graphic-design` (plugin `software-company`) |
 | เช็กว่ามีคนทำของแบบเดียวกันชื่อนี้อยู่แล้วไหม | `prior-art-review` |
 | ชื่อที่ใช้ในเอกสารและไฟล์ส่งมอบ | `document-naming` |
-| คำที่ใช้เรียกฟีเจอร์ในตัวผลิตภัณฑ์ | `i18n-and-locale` |
+| คำที่ใช้เรียกฟีเจอร์ในตัวผลิตภัณฑ์ | `i18n-and-locale` (plugin `software-company`) |
 | นำเสนอชื่อที่คัดแล้วให้ผู้มีอำนาจตัดสินใจ | `presentation-design` |
 
 **ตารางคัดชื่อที่กรอกต่อได้ทันที** → `assets/name-shortlist.md`
@@ -484,7 +484,7 @@ Use when naming a product, app, module or brand, or checking how a name sounds i
 |---|---|
 | จำง่าย | ผู้ฟังรู้จักทั้ง 2 คำอยู่แล้ว ไม่ต้องจำการสะกดใหม่ |
 | ไม่ซ้ำใคร | คู่คำที่ไม่มีเหตุผลต้องอยู่ด้วยกัน จึงไม่มีใครเคยจับคู่ไว้ |
-| โดเมนหาง่าย | ง่ายกว่าคำเดี่ยวมาก เพราะไม่มีใครไปจับจอง |
+| โดเมนหาง่าย | มักหาง่ายกว่าคำเดี่ยว แต่ยังต้องตรวจตามหัวข้อ 5 ใน `SKILL.md` |
 | ผ่านทดสอบโทรศัพท์ | พูดแล้วพิมพ์ถูกทันที เพราะเป็นคำที่เขารู้จัก |
 
 **กฎของสูตรนี้**

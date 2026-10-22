@@ -1,6 +1,592 @@
+# skill: markdown-visuals
+
+Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+
+# Markdown Visuals
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
+
+> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
+
+## When to use this skill
+
+- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
+- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
+- Explaining state transitions, user journeys, or system interactions
+- Comparing 2+ visual options for the user
+- The user asked "show me how it looks" inside a markdown doc or chat reply
+
+**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
+
+## When NOT to use
+
+| Task | Use instead |
+|---|---|
+| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
+| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
+| Designed figure for a proposal, slide or print | `diagram-figures` |
+
+## Decision tree: which format?
+
+```
+What are you showing?
+│
+├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
+├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
+├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
+│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
+├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
+├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
+├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
+├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
+└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
+```
+
+**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
+
+**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
+
+- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
+- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
+- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
+
+## 1 · Inline SVG (for viewers that render it — not GitHub)
+
+### Boilerplate
+
+```markdown
+<p align="center">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
+  <!-- background = bg-canvas of the project palette (see สี below) -->
+  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
+
+  <!-- content goes here -->
+</svg>
+</p>
+```
+
+**Required attributes:**
+- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
+- `viewBox` — sets the coordinate space; lets the SVG scale responsively
+- `role="img"` + `aria-label` — accessibility, screen readers
+- `<p align="center">` wrapper — centers in the rendered page
+
+**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
+- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
+- Component state: `viewBox="0 0 400 300"` (squarer)
+- Icon / chip: `viewBox="0 0 64 64"`
+- Full screen layout: `viewBox="0 0 800 500"`
+
+### สี
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+
+### Reusable snippets
+
+Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
+
+## 2 · External image files
+
+Use when:
+- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
+- Photo or screenshot
+- Illustration too complex to author as SVG by hand (50+ shapes)
+- Reusing the same image across many docs
+- Generated by a design tool (Figma export, etc.)
+
+### Folder convention
+
+```
+docs/
+  figures/
+    01-hover-state.svg
+    02-empty-state.png
+    architecture-overview.svg
+    src/                      editable sources (.mmd · .drawio · .html)
+```
+
+- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
+- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
+- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
+
+### Reference syntax
+
+```markdown
+![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
+```
+
+- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
+- Path is **relative to the markdown file**, not absolute
+- For centered + sized images, wrap in HTML:
+
+```markdown
+<p align="center">
+  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
+</p>
+```
+
+### Creating SVG files
+
+When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
+
+## 3 · ASCII art
+
+For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
+
+Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
+
+Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
+
+## 4 · Mermaid
+
+**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
+ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
+
+| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
+|---|---|
+| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
+| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
+| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
+
+## Combining formats in one doc
+
+A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
+
+## Accessibility checklist
+
+For every visual:
+
+- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
+- [ ] **Image file** has descriptive alt text (not "image.png")
+- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
+- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
+- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
+- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
+
+## Anti-patterns
+
+- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
+- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- ❌ **PNG screenshots of text** — use the text, in a code block
+- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+
+## Quick-start recipe
+
+When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
+
+1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
+2. **Pick the format(s)** using the decision tree above
+3. **For each visual:**
+   - State a one-line caption
+   - Emit the SVG/Mermaid/ASCII
+   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
+4. **Add a feature reference table** below the visuals — what each element means
+5. **Cross-check accessibility checklist** before delivery
+
+Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
+
+## Related skills
+
+- `polished-document-style` — overall doc formatting, figure captions, callout boxes
+- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
+- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
+- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
+- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: ascii-patterns.md
+
+# ASCII patterns
+
+Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
+
+## Box-drawing characters
+
+```
+┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
+│     │  ┃     ┃  │     │  ╎     ╎
+└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
+ light    heavy   rounded   dashed
+```
+
+Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
+Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
+Joins:   `├ ┤ ┬ ┴ ┼`
+Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
+Dots:    `• · ◦ ● ○ ▪ ▫`
+
+## Common patterns
+
+**Layout sketch:**
+```
+┌─────────────────────────────────────┐
+│ Header        [Search]      [👤]    │
+├──────────┬──────────────────────────┤
+│ Sidebar  │ Main content             │
+│  • Item  │                          │
+│  • Item  │  ┌────────────────────┐  │
+│          │  │  Primary CTA       │  │
+│          │  └────────────────────┘  │
+└──────────┴──────────────────────────┘
+```
+
+**State machine:**
+```
+┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
+│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
+└─────────┘◄────────└──────────┘◄────────└─────────┘
+            exit               done
+```
+
+**Curve / chart:**
+```
+scale
+ ↑
+1.7│         ╱╲
+1.4│       ╱    ╲
+1.2│     ╱        ╲
+1.0│___╱            ╲___
+   └──────────┬──────────→ cursor X
+         tile.Center
+```
+
+
+## reference: combining-formats.md
+
+# Combining formats in one doc
+
+Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
+
+The 6-part pattern for a design spec:
+
+```
+1. Inline SVG mockup of each UI state              ← "what it looks like"
+2. Feature reference table                          ← "what it does"
+3. ASCII layout sketch with measurements           ← "how it's positioned"
+4. Mermaid state diagram                            ← "how it transitions"
+5. ASCII / inline-SVG zoom curve                    ← "the math"
+6. Acceptance criteria table                        ← "how we verify"
+```
+
+Don't force everything into one format. Each format is best at something different.
+
+
+## reference: svg-snippets.md
+
+# Inline SVG snippets
+
+Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
+
+## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
+
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
+ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
+อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
+
+กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
+
+| Token | หน้าที่ | ได้มาจาก |
+|---|---|---|
+| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
+| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
+| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
+| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
+| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
+| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
+| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
+
+**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
+
+## Snippets
+
+> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
+> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
+
+**Window chrome (desktop app mockup):**
+```xml
+<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
+<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
+<circle cx="62" cy="42" r="6" fill="#febc2e"/>
+<circle cx="82" cy="42" r="6" fill="#28c940"/>
+<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
+<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
+```
+
+**Phone frame (mobile mockup):**
+```xml
+<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
+<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
+<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
+```
+
+**Button:**
+```xml
+<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
+<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
+```
+
+**Card with title and body:**
+```xml
+<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
+<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
+<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
+<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
+<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
+```
+
+**Status badge (top-right of tile):**
+```xml
+<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
+<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
+```
+
+**Running dot (indicator below tile):**
+```xml
+<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
+```
+
+**Tooltip text (no balloon — plain floating text):**
+```xml
+<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
+```
+
+## Worked example — UI state mockup
+
+Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
+
+
+---
+
+# skill: software-diagrams
+
+Use when a README, PR or code note needs a quick Mermaid diagram. Diagrams in project docs (BRD, SRS, FSD, ER, flows) → diagram-figures.
+
+# Software Diagrams
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อเดียวของ skill นี้:** ไดอะแกรมตอบ**คำถามเดียว**
+> ถ้าตอบ 2 คำถาม ให้วาด 2 รูป
+
+> **ปลายทางตัดสินเครื่องมือ:** skill นี้วาดไดอะแกรมด่วนด้วย Mermaid ธีมประจำบ้าน สำหรับ README · Pull Request · โน้ตในโค้ดเท่านั้น
+> ส่วนรูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) ข้อเสนอลูกค้า สไลด์ และงานพิมพ์ ให้ไปที่ `diagram-figures` · ตารางเลือกทางฉบับเต็มอยู่ที่หัว skill นั้น
+>
+> **สีในรูปต้องสื่อความหมาย ไม่ใช่ตกแต่ง** และถ้าเอกสารต้นทางประกาศ `doc-theme` ไว้แล้ว ให้ใช้ค่านั้น ไม่ต้องเลือกสีใหม่รายรูป (ค่าเริ่มต้นคือชุดประจำบ้านใน `polished-document-style` · ความหมายของสีดู `branded-document-design/references/tokens-and-type.md`):
+> ไดอะแกรมด่วนใช้ **สีหลักสีเดียว** = "ของที่เรากำลังพูดถึง" · เทา = ระบบภายนอก/ปิดอยู่ · ขาวเส้นเทา (`store`) = ที่เก็บข้อมูล · กล่องอื่นใช้ค่าตั้งต้น (3 คลาส `focus` · `ext` · `store` ใน `assets/mermaid-theme.md`) · ถ้าต้องแยกจุดพัง/ข้อยกเว้น/สำเร็จด้วยสีหลายสี แปลว่าตอบหลายคำถามในรูปเดียว ให้แยกเป็นรูปใหม่หรือใช้ `diagram-figures`
+
+## เมื่อไหร่ใช้ skill นี้
+
+ใน README · Pull Request · โน้ตในโค้ด:
+
+- อธิบายสถาปัตยกรรมระบบ
+- อธิบายลำดับการทำงานข้ามหลายส่วน
+- อธิบายสถานะของข้อมูล
+- ออกแบบฐานข้อมูล
+- บอกว่าอะไรรันอยู่บนเครื่องไหน
+- รีวิวไดอะแกรมที่คนอื่นวาด
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| เลือกว่าจะใช้ภาพแบบไหน (SVG / ASCII / Mermaid) | `markdown-visuals` |
+| ภาพหน้าจอ · wireframe | `ui-craft` + skill แพลตฟอร์ม |
+| กราฟข้อมูล | `web-app-design` → `references/tokens.md` หัวข้อ "สีข้อมูล (กราฟ)" |
+| ตัดสินใจเลือกสถาปัตยกรรม | `architecture-patterns` |
+
+## 1 · คำถามไหน วาดแบบไหน
+
+**เริ่มจากคำถาม ไม่ใช่เริ่มจากชนิดไดอะแกรม** — คนวาดผิดเพราะเลือกชนิดก่อนแล้วค่อยยัดเนื้อหาลงไป
+
+| คำถามที่ผู้อ่านมีในหัว | ไดอะแกรม |
+|---|---|
+| "ระบบนี้คุยกับใครข้างนอกบ้าง" | C4 ระดับ 1 — System Context |
+| "ข้างในระบบมีอะไรบ้าง รันแยกกันไหม" | C4 ระดับ 2 — Container |
+| "ใน service ตัวนี้แบ่งเป็นส่วนอะไร" | C4 ระดับ 3 — Component |
+| "กดปุ่มนี้แล้วเกิดอะไรขึ้นบ้าง ตามลำดับ" | Sequence |
+| "เอกสารนี้เปลี่ยนสถานะยังไงได้บ้าง" | State |
+| "ตารางไหนเชื่อมกับตารางไหน" | Entity Relationship (ER) |
+| "ของจริงรันอยู่บนเครื่องอะไร กี่ตัว" | Deployment |
+| "ใครอนุมัติต่อจากใคร" | Flowchart (ขั้นตอนงาน) |
+| "ผังคลาวด์ใน repo ที่มีโลโก้ AWS / Azure จริง ๆ" | Infrastructure — ข้อ 3 |
+| "อยากได้รูปสวย ๆ ไว้ใส่ข้อเสนอลูกค้า" | ไม่ใช่งานของ skill นี้ — `diagram-figures` |
+
+> **C4 model** คือวิธีวาดสถาปัตยกรรมเป็นชั้น ๆ เหมือนซูมแผนที่ —
+> ระดับ 1 มองจากนอกระบบ · ระดับ 2 เปิดฝาดูข้างใน · ระดับ 3 ซูมเข้าไปในกล่องเดียว
+> **วาดระดับ 1 กับ 2 ให้ครบก่อนเสมอ** ระดับ 3 วาดเฉพาะส่วนที่ซับซ้อนจริง
+
+## 2 · ธีม — ใช้ชุดเดียวทั้งโปรเจกต์
+
+วางบรรทัด `%%{init: ...}%%` ไว้**บรรทัดแรกสุด**ของทุกไดอะแกรม แล้วใช้สีหลักสีเดียวกับ 3 คลาส `focus` · `ext` · `store` ซึ่งสีหลักสงวนไว้ให้ "ของที่เรากำลังพูดถึง" เท่านั้น
+บรรทัดธีม ตัวแทนค่าสี คลาส และตัวอย่างที่เรนเดอร์แล้วอยู่ใน [`assets/mermaid-theme.md`](assets/mermaid-theme.md) ส่วนตารางที่จับคู่เนื้องานกับโทนสีอยู่ใน `diagram-figures/references/colour-by-domain.md`
+
+> ⚠️ **`fontFamily` ต้องอยู่นอก `themeVariables`** ถ้าใส่ไว้ข้างใน จะถูกเมินเงียบ ๆ แล้วกลับไปใช้ฟอนต์เริ่มต้นของ Mermaid
+
+**ตรวจด้วยเครื่องก่อนส่งทุกครั้ง** — กฎข้อนี้ถูกลืมบ่อยที่สุด (โปรเจกต์ทดสอบหนึ่งมี 63 จาก 66 รูปที่ไม่มีบรรทัดธีม และไม่มีใครเห็น):
+
+สคริปต์อยู่ในโฟลเดอร์ `scripts/` ของ skill นี้ — รันด้วย path เต็มของสคริปต์ กับโฟลเดอร์ `docs` ของโปรเจกต์ที่ตรวจ (`<path ของ skill>` = โฟลเดอร์ที่ติดตั้ง skill นี้):
+
+```bash
+node <path ของ skill>/scripts/check-mermaid-theme.mjs docs          # exit 1 พร้อม ไฟล์:บรรทัด ของบล็อกที่ไม่มี %%{init
+node <path ของ skill>/scripts/check-mermaid-theme.mjs --self-test   # พิสูจน์ว่าตัวตรวจยังจับได้
+```
+
+agent ที่ไม่มี shell รันเองไม่ได้ → agent หลักรันหลังรับงาน
+
+## 3 · ผังที่ต้องมีโลโก้จริง (infrastructure)
+
+ถ้าผังโครงสร้างพื้นฐานที่อยู่ใน repo ต้องมีไอคอน Amazon Web Services (AWS) · Azure · Kubernetes ของจริง ซึ่ง Mermaid วาดให้ไม่ได้ ให้ใช้ไลบรารี **`diagrams`** (Python + Graphviz) โดยเริ่มจาก [`assets/infra-diagram.py`](assets/infra-diagram.py)
+วิธีติดตั้ง กติกา node ที่ใช้บ่อย และกับดักอยู่ใน [`assets/diagrams-python.md`](assets/diagrams-python.md) · ส่วนผังคลาวด์ที่ลูกค้าหรือสไลด์จะเห็น ให้ใช้ `diagram-figures`
+
+## 4 · กฎที่ทำให้อ่านรู้เรื่อง
+
+**ไม่เกิน 7 กล่อง** — เกินนี้คนอ่านเลิกอ่าน (นับกล่องจริง ไม่นับ subgraph)
+
+**นับกล่องก่อนวาด ไม่ใช่หลังวาด** — ถ้าเกิน 7 ให้**แยกรูปตามลำดับเรื่องก่อนวาด** จดการแยกลง `decision-log` แล้วบอกในคำตอบ
+ห้ามวาดจนครบแล้วค่อยบอกทีหลัง
+
+```
+เนื้อหาที่ให้มามี 20 กล่อง เกินเพดานสามเท่า ขอแยกเป็น 3 รูป:
+  รูปที่ 1 — ตอนทดลอง: อะไรเข้า อะไรออก
+  รูปที่ 2 — ตอนรันชุดการทดลอง
+  รูปที่ 3 — ตอนออกรายงาน
+อยากแบ่งแบบอื่น บอกได้ — แยกใหม่ได้
+```
+
+> **"แยกคนละไฟล์ก็ได้" แปลว่าต้องแยก** — ถ้าคำขอเปิดช่องให้แยก และเนื้อหาเกินเพดาน
+> ให้ถือว่าเป็นคำสั่งให้แยก ไม่ใช่ทางเลือก
+
+**3 อย่างนี้ห้ามอยู่ในไดอะแกรม** — เป็นเนื้อหาของคู่มือ ไม่ใช่รูป และทำให้กล่องบานจนผังเบี้ยว
+
+| ห้ามใส่ | ไปอยู่ที่ไหน |
+|---|---|
+| ตัวเลือกบรรทัดคำสั่ง `--all` `--resume` `--limit N` | `README` หรือ `docs/cli.md` |
+| รายการ input/output ของหลายตัว | **ตารางข้างรูป** — คอลัมน์: ส่วนประกอบ · รับอะไร · ให้อะไร · เก็บที่ไหน |
+| ชื่อไฟล์หรือ path ครบทุกตัว | ตารางเดียวกัน ใส่ในรูปเฉพาะตัวที่เป็นใจความ |
+
+**คำขอว่า "บอก input/output ด้วย" ไม่ได้แปลว่าให้วาดทุกอย่างเป็นกล่อง** —
+กล่องคือสิ่งที่ *ทำงาน* สิ่งที่ *ไหลผ่าน* เป็นป้ายบนเส้น ส่วน *รายละเอียด* ไปอยู่ในตาราง
+
+**ระดับรายละเอียดเดียวกันทั้งรูป** — มี `PostgreSQL` กับ `OrderRepository.cs` อยู่ในรูปเดียวกัน
+คือสัญญาณว่าผสม 2 ระดับ
+
+**ทุกเส้นต้องมีป้าย** และป้ายต้องบอก**อะไรไหลผ่าน** ไม่ใช่ว่าต่อกันอยู่
+
+```
+❌ api --> db
+❌ api -->|ใช้| db
+✅ api -->|SQL · อ่าน-เขียนคำสั่งซื้อ| db
+```
+
+**ทิศทางเดียว** — บนลงล่าง (`TB`) หรือซ้ายไปขวา (`LR`) เลือกแล้วอย่าให้มีเส้นวิ่งย้อน
+เส้นย้อนแปลว่าเรียงลำดับกล่องผิด ไม่ใช่ว่าต้องวาดลูกศร 2 หัว
+
+**ชื่อกล่อง = สิ่งที่มันทำ ไม่ใช่เทคโนโลยี** เทคโนโลยีใส่บรรทัดที่สองตัวเล็ก
+
+```
+❌ [Redis]
+✅ ["ที่พักข้อมูลชั่วคราว<br><small>Redis</small>"]
+```
+
+**มีคำอธิบายสัญลักษณ์ (legend) เมื่อใช้สีหรือรูปทรงสื่อความหมาย** —
+ถ้าอธิบายไม่ได้ว่าทำไมกล่องนี้สีต่าง แปลว่าสีนั้นไม่ควรมี
+
+## 5 · ภาษาไทยในไดอะแกรม
+
+- **ป้ายเส้นภาษาไทยยาวเกิน 3 คำจะทับเส้น** — ตัดให้สั้น หรือใส่ `<br>` เอง
+- **ห้ามใช้ `()` `[]` `{}` ในข้อความ** จะไปชนกับไวยากรณ์ Mermaid — ครอบด้วย `"..."` เสมอ
+- **วรรณยุกต์ลอยเหนือกล่อง** เมื่อ `fontSize` เล็กกว่า 12px — อย่าลดต่ำกว่านี้
+- ชื่อตารางและชื่อฟิลด์ในไดอะแกรม ER ใช้ภาษาอังกฤษ (ตรงกับฐานข้อมูลจริง)
+  ส่วนคำอธิบายใช้ไทยได้
+
+## 6 · เรนเดอร์ดูจริง — ห้ามข้าม
+
+ไดอะแกรมที่ไม่เคยเรนเดอร์ยังเป็นแค่ข้อความ ไม่ใช่รูป เพราะไวยากรณ์ผิดบางแบบ Mermaid ไม่แจ้ง error
+และบ่อยครั้งวาดออกมาไม่ตรงกับที่คิด
+
+```bash
+# ไม่ติดตั้งลงเครื่อง · pin รุ่นที่ทดสอบธีมไว้ (11.17.0 · รุ่นล่าสุด 12.0.0 ณ 2026-10-14 ยังไม่ได้ทดสอบธีม)
+npx -y @mermaid-js/mermaid-cli@11.17.0 -i diagram.mmd -o diagram.png -b white -s 2
+```
+
+แล้ว**เปิดไฟล์ภาพดูด้วยตา** ไล่ตามนี้:
+
+- [ ] กล่องไม่เกิน 7 ใบใช่ไหม
+- [ ] ทุกเส้นมีป้ายไหม และป้ายบอกว่าอะไรไหลผ่านไหม
+- [ ] มีเส้นวิ่งย้อนทิศไหม
+- [ ] ป้ายทับเส้นหรือทับกล่องไหม
+- [ ] ข้อความไทยครบ ไม่มีสระหาย
+- [ ] ระดับรายละเอียดเดียวกันทั้งรูป
+- [ ] คนที่ไม่เคยเห็นระบบนี้อ่านแล้วตอบคำถามต้นทางได้ไหม
+
+**ข้อจำกัดของ Mermaid ที่ต้องรู้ก่อนเสียเวลา:**
+
+| อาการ | สาเหตุ |
+|---|---|
+| `direction LR` ใน subgraph ไม่ทำงาน | ถูกเมินเมื่อ subgraph มีเส้นเชื่อมออกนอก — ต้องจัดลำดับกล่องเอา |
+| กล่องกว้างผิดปกติ | มีข้อความยาวบรรทัดเดียว — ใส่ `<br>` เอง Mermaid ไม่ตัดบรรทัดให้ |
+| เส้นทับกันมั่ว | กล่องเยอะเกินไป — Mermaid ไม่มีการจัดเส้นแบบฉลาด ต้องลดกล่อง |
+| ฟอนต์ไม่เปลี่ยน | `fontFamily` อยู่ผิดที่ (ดูข้อ 2) |
+
+ถ้าจัดวางเองไม่ได้ดั่งใจจริง ๆ และรูปยังอยู่ในเอกสาร markdown ให้วาด inline SVG ตาม `markdown-visuals` · ส่วนถ้ารูปต้องดูออกแบบมา ให้ไปที่ `diagram-figures`
+
+## 7 · Anti-patterns
+
+- ❌ **ไดอะแกรมสถาปัตยกรรม 40 กล่อง** — ไม่มีใครอ่าน แยกเป็น C4 หลายระดับ
+- ❌ **วาดจนเกินเพดานแล้วค่อยบอก** — ต้องแยกตั้งแต่นับได้ว่าเกิน
+- ❌ **ยัดตัวเลือกบรรทัดคำสั่งลงในกล่อง** — กล่องบาน ตัวอักษรเล็ก อ่านไม่ออกทั้งรูป
+- ❌ **เส้นไม่มีป้าย** — ผู้อ่านเดาเองว่าอะไรไหลผ่าน แล้วเดาผิด
+- ❌ **ผสมระดับรายละเอียด** — `Kubernetes` อยู่ข้าง ๆ `UserService.validate()`
+- ❌ **สีรุ้ง** — สีต้องมีความหมาย ไม่ใช่ใส่ให้ไม่น่าเบื่อ
+- ❌ **วาดทุกกรณี error ใน sequence เดียว** — วาดทางหลักก่อน แล้วแยกรูปกรณีพิเศษ
+- ❌ **ER ที่มีทุกตารางในระบบ** — แยกตามโดเมน
+- ❌ **ไดอะแกรมที่ไม่มีวันที่และเจ้าของ** — ผ่านไป 1 ปีไม่มีใครกล้าแก้
+- ❌ **ส่งไดอะแกรมโดยไม่เคยเรนเดอร์ดู**
+- ❌ **ธีมต่างกันทุกรูปในเอกสารเดียว**
+
+## 8 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| เลือกรูปแบบภาพในเอกสาร markdown | `markdown-visuals` |
+| เอกสารรอบ ๆ ไดอะแกรม | `polished-document-style` |
+| ฝังในไฟล์ Word / PowerPoint | `branded-document-design` |
+| ไดอะแกรมในเอกสาร SRS | `srs-writing` |
+| เลือกสถาปัตยกรรมก่อนวาด | `architecture-patterns` |
+| รูปที่ต้องดูออกแบบมาหรือต้องเซ็นรับ | `diagram-figures` |
+| บันทึกเหตุผลที่เลือกแบบนี้ | `adr-writer` |
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+---
+
 # skill: presentation-design
 
-Use when building a slide deck someone will present or read (story, headlines, layouts, Thai type).
+Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
 
 # Presentation Design
 
@@ -28,7 +614,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ทำเด็คนำเสนอ — ข้อเสนอโครงการ · รายงานความคืบหน้า · รีวิวออกแบบ · อบรม
+- ทำเด็คนำเสนอ — ข้อเสนอลูกค้า · แผนธุรกิจ · สรุปงานวิจัย · รายงานความคืบหน้า · อบรม · รีวิวออกแบบ
 - รีวิวเด็คที่คนอื่นทำ
 - แปลงเอกสารยาวเป็นเด็ค
 
@@ -37,9 +623,9 @@ Use when building a slide deck someone will present or read (story, headlines, l
 | งาน | ใช้ตัวนี้แทน |
 |---|---|
 | สร้างไฟล์ `.pptx` จริง (python-pptx, ฟอนต์, หน้าปก) | `branded-document-design` |
-| ชุดสีของกราฟ | `web-app-design` (หัวข้อ chart colors) |
+| ชุดสีของกราฟ | `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company` → `references/tokens.md` "สีข้อมูล (กราฟ)") |
 | เอกสารที่อ่านเอง ไม่มีคนพูด | `polished-document-style` + `branded-document-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
+| ผัง ขั้นตอน หรือสถาปัตยกรรมในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
 
 > **เด็คที่ส่งให้อ่านเอง ไม่ใช่เด็ค** — เป็นเอกสาร ให้ทำเป็นเอกสาร
 > ถ้าต้องทำทั้ง 2 อย่าง ให้ทำเด็คสำหรับพูด แล้วแนบเอกสารแยก อย่ายัดทุกอย่างลงสไลด์
@@ -68,7 +654,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 |---|---|
 | **ขออนุมัติ / ตัดสินใจ** | ข้อสรุปและสิ่งที่ขอ → เหตุผล 3 ข้อ → ทางเลือกที่พิจารณาแล้ว → ความเสี่ยง → สิ่งที่ขออีกครั้ง |
 | **รายงานความคืบหน้า** | สถานะรวม (เขียว/เหลือง/แดง) → ทำอะไรเสร็จ → ติดอะไร ต้องการอะไรจากใคร → แผนรอบหน้า |
-| **รีวิวออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
+| **รีวิวแผนหรืองานออกแบบ** | ปัญหาที่แก้ → ข้อจำกัด → แบบที่เลือก → ที่ไม่เลือกเพราะอะไร → ประเด็นที่อยากได้ความเห็น |
 | **อบรม** | ทำอะไรได้หลังเรียน → แนวคิด → สาธิต → ให้ลองทำ → สรุปและที่ค้นต่อ |
 | **ขายงาน** | ปัญหาของลูกค้า (ด้วยคำของเขา) → ผลที่จะได้ → วิธีของเรา → หลักฐาน → ราคาและขั้นต่อไป |
 
@@ -92,7 +678,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 หัวสไลด์ยาวได้ถึง 2 บรรทัด **อย่าย่อจนกลายเป็นชื่อหัวข้อ** และอย่าย่อจนอ่านไม่ลื่น: หัวที่มี 2 ท่อนต้องมีคำเชื่อม ใช้วลีที่คนพูดจริง และเลือกคำตามคนฟัง (กฎเต็มอยู่ใน `human-writing` หัวข้อ 6)
 
 ```
-❌ ทุกข้อความผ่าน 8 ขั้น: AI ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+❌ ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
 ✅ ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
 ```
 
@@ -173,7 +759,7 @@ Use when building a slide deck someone will present or read (story, headlines, l
 - **บอกที่มาของข้อมูลเสมอ** — ช่วงเวลา จำนวนตัวอย่าง แหล่ง (ใส่ในแถบข้างหรือท้ายกระดาษ)
 - **ตารางที่เกิน 5 แถว 4 คอลัมน์ไม่ควรอยู่ในสไลด์** ให้ทำเป็นกราฟ หรือย้ายไปเอกสารแนบ
 
-ชุดสีของกราฟที่ใช้ร่วมกับระบบอื่นอยู่ใน `web-app-design` หัวข้อ chart colors
+ชุดสีของกราฟในสไลด์มาจาก `diagram-figures` → `references/colour-by-domain.md` · กราฟที่ต้องใช้ร่วมกับหน้าจอแอปดู `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)"
 
 ---
 
@@ -241,12 +827,12 @@ Use when building a slide deck someone will present or read (story, headlines, l
 | สร้างไฟล์ `.pptx` จริง | `branded-document-design` |
 | เด็ค .html ไฟล์เดียว นำเสนอจากเบราว์เซอร์ (เมนู · โน้ต · นาฬิกา · คลิกดูรายละเอียด) | `html-slide-deck` |
 | แปลง .pptx เป็น .html มี animation · เปิดทีละคลิก · แทรกหน้าโต้ตอบ | `pptx-to-html-deck` |
-| ชุดสีของกราฟ | `web-app-design` |
-| ไดอะแกรมสถาปัตยกรรมในสไลด์ | `software-diagrams` |
-| กฎระยะห่างและลำดับสายตา | `ui-craft` |
-| เนื้อหามาจากเอกสาร SRS | `srs-writing` |
-| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` |
-| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` |
+| ชุดสีของกราฟ | สีหลักของงาน + สีรองตาม `diagram-figures` → `references/colour-by-domain.md` (หน้าจอแอป: `web-app-design` ใน plugin `software-company`) |
+| ผังในสไลด์ | `diagram-figures` (ซอฟต์แวร์ใช้ `software-diagrams` (plugin `software-company`) ได้) |
+| กฎระยะห่างและลำดับสายตา (หน้าจอแอป) | `ui-craft` (plugin `software-company`) |
+| เนื้อหามาจากเอกสาร Software Requirements Specification (SRS) | `srs-writing` (plugin `software-company`) |
+| ตัดเนื้อหาให้เหลือเท่าที่จำเป็น | `simplicity-first` (plugin `software-company`) |
+| ระบบสีและตัวอักษรของแบรนด์ · ภาพประกอบ | `graphic-design` (plugin `software-company`) |
 
 ---
 
@@ -258,1106 +844,3 @@ Use when building a slide deck someone will present or read (story, headlines, l
 
 เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
 หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
----
-
-# skill: branded-document-design
-
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole report from one Markdown → markdown-report-docx.
-
-# Branded Document Design
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียวของ skill นี้:** เอกสารที่ส่งออกไปต้องดูออกว่าตั้งใจออกแบบ คือมีชุดสี ชุดขนาดตัวอักษร
-> และช่องไฟที่เหมือนกันทุกหน้า ไม่ใช่เปิด Word แล้วพิมพ์เลย
-
-## เมื่อไหร่ใช้ skill นี้
-
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
-- เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
-- เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
-- ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
-
-## เมื่อไหร่ **ไม่** ใช้
-
-- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
-- ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
-- ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
-- รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) ให้ใช้ `markdown-report-docx` ซึ่งมีสคริปต์ md → docx พร้อมแล้ว
-
-**ลำดับที่ถูกต้อง:** เขียนเนื้อหาเป็น markdown ก่อน (polished-document-style)
-→ ค่อยใช้ skill นี้ render เป็นไฟล์ส่งมอบ และแก้เนื้อหาที่ markdown เสมอ (markdown คือต้นฉบับ)
-
----
-
-**ติดตั้งก่อนใช้:** `pip install python-docx python-pptx` · LibreOffice (`soffice`) สำหรับแปลงเป็น PDF · `pdftoppm` (poppler) สำหรับแปลงเป็นภาพ
-
-## 0 · สีมาจากโปรเจกต์ — หาตามลำดับ ไม่หยุดรอ
-
-**ถ้า markdown ต้นทางมี `doc-theme` อยู่แล้ว ให้ใช้ค่านั้น อย่าถามซ้ำ อย่าตั้งใหม่**
-(ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
-
-ถ้ายังไม่มี ให้หาตามลำดับใน `diagram-figures` ข้อ 5 ที่เดียว (`doc-theme` → สีแบรนด์ในโค้ด โลโก้ ชุดแบรนด์ → ยังไม่มีเลย)
-ยังไม่มีเลย → ใช้สีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนตามเนื้องาน (ดูบรรทัดถัดไป) ไว้ในรายงานให้ผู้ใช้เลือกทีหลัง
-ได้สีแล้ว**เขียนกลับลง `doc-theme`** ในไฟล์ markdown เพื่อให้เอกสาร รูป และสไลด์ใช้สีเดียวกัน
-
-โทนที่เสนอตามเนื้องาน (การแพทย์ · การเงิน · ราชการ ฯลฯ) → [`references/palette-examples.md`](references/palette-examples.md) · ลูกค้ามีแบรนด์แล้วใช้สีแบรนด์เสมอ
-
-**สีหลักมีสีเดียว** เฉดอ่อนและเข้มทั้งหมดคำนวณจากสีนั้น ไม่เลือกเพิ่มทีละสี
-สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
-
-
-## 0.1 · หน้าตาเอกสารต่อจากหน้าตาแอป — ทำก่อน render ครั้งแรก
-
-> ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
-> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แอปของโปรเจกต์ผ่านด่านสวยแล้ว
-
-1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
-2. **3 แนวขนานกัน** (`parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว — ดู `doc-cover-design` ข้อ 7) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
-3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
-4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน 3 รอบตาม `ui-craft/references/states-and-checks.md` · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
-5. **ฟอนต์:** ใช้ฟอนต์ไทยของแบรนด์ที่ติดตั้งในเครื่องและฝังในไฟล์ (`embed_fonts`) · Tahoma เป็นทางสำรองเมื่อฝังไม่ได้ · **ห้ามตั้งข้อความไทยด้วยฟอนต์ mono** (Cascadia/Consolas ไม่มีอักษรไทย) — mono ใช้กับรหัส คีย์ ตัวเลขเท่านั้น
-6. **รูปในเอกสาร · กฎที่ด่านสวยจับได้บ่อย · ปก** (ขนาดพิกเซลขั้นต่ำ กฎใน `check` ของตัว render สูตรปก) → [`references/word-layout.md`](references/word-layout.md) หัวข้อท้ายไฟล์
-
----
-
-## 1 · Design tokens — ห้าม hardcode สีนอกตารางนี้
-
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี · ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
-
-- token: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + สีสถานะ 6 ตัว (สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง) ที่**ไม่เปลี่ยนตามแบรนด์**
-- เลือกสีตามความหมาย ไม่ใช่ตามความสวย (แดง = อันตราย/ผิดจริงเท่านั้น) · ใช้ชุดความหมายเดียวกับไดอะแกรม
-- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
-- ตัวอักษรไม่ใช้ดำสนิท (ใช้ `text_body`) · **อย่าเพิ่มขนาดตัวอักษรนอกสเกล** (เนื้อความ Word 11pt · สไลด์ 17pt)
-
-ตาราง token เต็ม · ตารางความหมายของสี · สเกลตัวอักษร (pt) · องค์ประกอบที่ใช้ซ้ำ + เมธอด → [`references/tokens-and-type.md`](references/tokens-and-type.md) — เปิดเมื่อตั้งธีมหรือเลือกขนาด/สี · ตัวอย่างชุดสีที่เคยใช้ → [`references/palette-examples.md`](references/palette-examples.md)
-
----
-
-## 2 · ฟอนต์และภาษาไทย — จุดที่พังบ่อยที่สุด
-
-ใช้ฟอนต์ไทยของแบรนด์ตามข้อ 0.1 ข้อ 5 ก่อน · ไม่มีหรือฝังไม่ได้ ใช้ **Tahoma** เป็นทางสำรอง · กฎที่ห้ามพลาด:
-
-- 🚨 Word ถือว่าไทยเป็น *complex script* — **ห้ามตั้งฟอนต์/ขนาด/ตัวหนาเองด้วยมือ** ใช้ `style_run()` ใน `brandkit.py` (ตั้ง `w:szCs` `w:bCs` `w:iCs` และ `w:rFonts` ครบ 4 ช่อง)
-- 🚨 ฟอนต์ละตินกับไทยคนละตัว → ตั้ง `bk.FONT` กับ `bk.LATIN_FONT` แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header/footer ก่อน `save()`
-- ระยะบรรทัด 1.3–1.35 (Tahoma) · **ห้าม justify** ย่อหน้าไทย · ส่ง PDF ให้ export จาก Word จริง หรือเปิดตรวจด้วยตาก่อน (LibreOffice ตัดคำไทยต่างจาก Word)
-- Linux ไม่มี Tahoma → Loma/Sarabun · ReportLab จัดวรรณยุกต์ผิด
-
-รายละเอียดกับดักฟอนต์คู่ · ฝังฟอนต์ · ฟอนต์ variable · ตัวไทยดูเล็กบน Linux → [`references/thai-fonts.md`](references/thai-fonts.md) — เปิดเมื่อตั้งฟอนต์หรือ PDF เพี้ยน
-
----
-
-## 3 · โครงหน้าเอกสาร Word
-
-โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตาม [`doc-cover-design`](../doc-cover-design/SKILL.md) · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
-
-**ปกเข้ม** (แอปหรือแบรนด์ใช้หน้าจอสีเข้ม) → `doc.cover(..., style="night")` · ตัวอย่าง `scripts/example_srs.py` · ภาพ `examples/example_srs-preview.png` · รายละเอียดและบทเรียนจากเจ้าของงาน → [`references/word-layout.md`](references/word-layout.md) กฎที่ต้องจำทุกครั้ง:
-- 🚨 ภาพพื้นปกและโลโก้ห้ามอยู่ใน header หน้าแรก (Word แสดงจางตอนแก้ไฟล์) — ยึดกับย่อหน้าแรกของปก
-
-**หัวตารางหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** · พื้นปกเข้ม ขนาดโลโก้ ตัวหนังสือเล็ก เส้นแสงใต้ชื่อ → [`references/word-layout.md`](references/word-layout.md)
-
-หน้ากระดาษ A4 · ขอบ บน/ล่าง 2.2 ซม. · ซ้าย/ขวา 2.0 ซม. ได้ความกว้างเนื้อหา **17 ซม. = 9638 twips** (`BODY_TWIPS`)
-(ใช้ตัวเลขนี้ตั้งความกว้างคอลัมน์ตารางให้รวมกันพอดี)
-
----
-
-## 4 · องค์ประกอบที่ใช้ซ้ำ
-
-องค์ประกอบ (`cover()` · `table()` · `pill_table()` · `kpi_row()` · `callout()` · `figure()` · `code()` · `signoff()`) หน้าตาและเมธอดครบ → [`references/tokens-and-type.md`](references/tokens-and-type.md)
-
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · KPI strip 3–5 ช่อง · ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
-
----
-
-## 5 · วิธีใช้ brandkit
-
-นำเข้า: `from brandkit import BrandDoc, use_brand, to_pdf` (วาง `scripts/` ไว้ใน path หรือ copy `brandkit.py` มาข้างงาน) · สไลด์ → `brandkit_pptx.BrandDeck` · เด็คพูด → `brandkit_stage.StageDeck`
-
-โค้ดตัวอย่างครบ (Word · สไลด์ · เด็ค Stage) → [`references/brandkit-usage.md`](references/brandkit-usage.md) · เมธอดทั้งหมด → `references/api.md` · สคริปต์ที่รันได้ `scripts/example_srs.py` · `scripts/example_deck.py`
-
-**เด็ค Stage** (ค่าเริ่มต้นของเด็คที่ใช้พูด): สี `accent`/`bg` หาตาม `diagram-figures` ข้อ 5 · ไม่มีเลยใช้ `#2A78D6` พื้น `09090A` + `(รอยืนยัน)` · รายละเอียด → `references/brandkit-usage.md`
-
----
-
-## 6 · ตรวจงานด้วยตา — ขั้นตอนที่ห้ามข้าม
-
-เอกสารที่ยังไม่มีใครเปิดดูหน้าจริง ถือว่ายังไม่เสร็จ เพราะอาจมีตารางล้นขอบ หัวข้อค้างท้ายหน้า
-วรรณยุกต์ลอย ปัญหาเหล่านี้ดูจากโค้ดไม่เห็น
-render เป็น PDF แล้วแปลงเป็นภาพ แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ · คำสั่ง `soffice` · `pdftoppm` และรายการตรวจ 7 ข้อ → [`references/visual-check.md`](references/visual-check.md)
-
----
-
-## 7 · Anti-patterns
-
-- ❌ **ใช้ Heading style ที่มากับ Word** → ใช้ `h1()/h2()/h3()`
-- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** → เส้น `line` 0.5pt
-- ❌ **ตัวอักษรสีดำสนิท** → ใช้ `text_body`
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี**
-- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** → `fixed_widths()` เสมอ
-- ❌ **อีโมจิเยอะเกิน**
-- ❌ **ส่งไฟล์โดยไม่เคย render ดู**
-- ❌ **ใช้หน้าตาตั้งต้นของ skill เป็นเอกสารส่งมอบ ทั้งที่แอปมีตัวตนแล้ว** → ทำข้อ 0.1
-- ❌ **รูปกว้าง 2000px วางในหน้าแนวตั้ง 17 ซม. โดยไม่คิดขนาดตัวอักษร** → ตัวอักษรเหลือราว 5pt (ข้อ 0.1 ข้อ 6)
-- ❌ **ภาพตกแต่งบนปกที่ไม่มีใครบอกว่าว้าว** → ตัดออก ให้ตัวอักษรเป็นจุดเด่น (references/word-layout.md ข้อ 8)
-- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ**
-
-เหตุผลและสิ่งที่ใช้แทนของแต่ละข้อ → [`references/anti-patterns.md`](references/anti-patterns.md)
-
----
-
-## 8 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---------|-----------|
-| โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (Mermaid) → export PNG → `figure()` |
-| อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
-| สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
-| โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
-| เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` · มี .pptx แล้ว → `pptx-to-html-deck` |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
-
----
-
-## ไม่ให้ดูเหมือน AI ทำ
-
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: anti-patterns.md
-
-# Anti-patterns — เหตุผลและสิ่งที่ใช้แทน
-
-ย้ายมาจาก `SKILL.md` ข้อ 7 (ไม่แก้ถ้อยคำ) · หัวข้อสั้นอยู่ใน `SKILL.md`
-
-- ❌ **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
-  ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
-- ❌ **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
-  ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- ❌ **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
-
-
-## reference: api.md
-
-# brandkit API — อ้างอิงเมธอด
-
-ทุกเมธอดคืนอ็อบเจกต์ที่สร้าง (paragraph / table / slide) จึงปรับแต่งต่อได้
-
-## สารบัญ
-
-1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
-3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
-
----
-
-## brandkit.py — Word (.docx)
-
-### สร้างเอกสาร
-
-```python
-BrandDoc(path_template=None, page="A4", margins_cm=(2.2, 2.0, 2.2, 2.0),
-         footer_text="หน้า")
-```
-
-| พารามิเตอร์ | ความหมาย |
-|-------------|----------|
-| `path_template` | ไฟล์ .docx/.dotx ที่ใช้เป็นแม่แบบ (มี header/logo ขององค์กรอยู่แล้ว) |
-| `page` | `"A4"` หรือ `"Letter"` |
-| `margins_cm` | (บน, ขวา, ล่าง, ซ้าย) |
-| `footer_text` | คำนำหน้าเลขหน้า · `""` = เลขเปล่า |
-
-### บล็อกระดับหน้า
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `cover(title, subtitle, meta, note, logo, logo_width_cm=None, eyebrow=None, meta_rows=None, top_space_pt=24, page_break=True, style="light", art_colors=None)` | โลโก้รับได้ทั้ง .png และ .emf แต่ **.svg ใช้ไม่ได้ใน python-docx** ต้องแปลงเป็น PNG ก่อน (`rsvg-convert -w 600` หรือ `cairosvg`) |
-| `cover(..., style="night")` | **ปกเข้มเต็มหน้า** (ดูตัวอย่าง `examples/example_srs-preview.png`): พื้นเทาเข้ม `#1C1C22` + แสงจางสีแบรนด์ · `logo` (ไม่ใส่ = ไม่มีโลโก้) เล็กมุมซ้ายบน กว้าง 4.6 ซม. · `eyebrow` → ชื่อเอกสาร (32pt · ยาวเกิน 2 บรรทัดลดเป็น 26pt) → `subtitle` → เส้นแสงเต็มแนวข้อความ · `meta_rows` ค่าสั้น (≤18 ตัวอักษร ไม่เกิน 4 ค่า) เป็นตาราง 4 ช่อง ที่เหลือเป็นแถว ป้าย/ค่า · `note` ท้ายสุด · ปกไม่มี footer · `art_colors=(สี1, สี2, สี3)` สีเส้นแสงจากซ้ายไปขวา และแสงพื้น (ค่าเริ่มต้น `brand_2` → `brand` → `brand` อ่อน) · ภาพพื้น/โลโก้/เส้นยึดกับย่อหน้าในเนื้อหา ไม่ใช่ header · ต้องมี numpy + pillow (`cover_art.py`) · `logo_width_cm` ค่าเริ่มต้น 2.6 (light) / 4.6 (night) |
-| `toc(heading="สารบัญ", levels="1-3")` | แทรก field TOC แล้วใน Word กด **Ctrl+A แล้ว F9** เพื่อให้รายการขึ้น (ตอนสร้างจะยังว่าง) |
-| `page_break()` | |
-| `landscape_section()` | เปิดส่วนแนวนอนสำหรับตารางกว้าง |
-
-### หัวข้อและข้อความ
-
-| เมธอด | ผลลัพธ์ |
-|-------|---------|
-| `h1(text)` `h2(text)` `h3(text)` | 16 / 12.5 / 11.5 pt · bold · brand / brand_deep / text · ตั้ง `outlineLvl` ให้ TOC เห็น |
-| `para(text, size, color, bold, italic, align, space_after)` | `align` = `"center"｜"right"｜"justify"` (ไทยอย่าใช้ justify) |
-| `rich([(text, opts), ...])` | หลายรูปแบบในย่อหน้าเดียว เช่น `[("สถานะ: ", {"bold": True}), ("อนุมัติ", {"color": "green"})]` |
-| `bullets([...], style="List Bullet")` | `style="List Number"` สำหรับเลขลำดับ |
-| `code(text)` | บล็อกโค้ดพื้นเทา |
-
-### ตารางและข้อมูล
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `table(headers, rows, widths=None, zebra=False, align=None, first_col_bold=False, size=None, header_style="tint")` | `widths` หน่วย twips รวม **9638** (`BODY_TWIPS`) สำหรับ A4 ขอบ 2 ซม. · `align` = list ต่อคอลัมน์ · `header_style="tint"` (ค่าเริ่มต้น) หัวพื้น `brand` ผสมขาว 80% ตัวหนา `brand_deep` ไม่มีเส้นบน เส้น `brand` 1.5pt ใต้หัวเส้นเดียว เส้นแถวบาง ไม่มีเส้นตั้ง · `"classic"` = แบบเดิม (หัว `brand_tint` กริดเทาบาง) |
-| `pill_table(headers, rows, status_col, palette, widths)` | `palette = {"เสร็จ": "green", "ค้าง": "red"}` · โทนที่ใช้ได้: green blue amber red violet grey |
-| `kpi_row([(value, label), ...])` | 3–5 ช่องพอดี |
-| `signoff([(role, name), ...])` | ตารางเซ็นอนุมัติ |
-
-### อื่น ๆ
-
-| เมธอด | หมายเหตุ |
-|-------|----------|
-| `callout(kind, title, body)` | kind = `tip｜note｜warning｜critical｜success｜question` |
-| `figure(image_path, caption, width_cm=15.5, number=None)` | `number=1` จะขึ้นต้นคำบรรยายว่า "รูปที่ 1 — " |
-| `save(path)` | |
-
-### ฟังก์ชันระดับโมดูล
-
-| ฟังก์ชัน | ใช้เมื่อ |
-|----------|---------|
-| `use_brand(**tokens)` | เปลี่ยนชุดสีทั้งชุด ต้องเรียก **ก่อน** สร้าง `BrandDoc` |
-| `style_run(run, size, color, bold, italic, mono)` | ตั้งฟอนต์เอง (ครอบคลุม complex-script ให้แล้ว) |
-| `shade(cell, token)` · `left_accent(cell, token, size)` | ระบายพื้น / แถบสีซ้ายของเซลล์ |
-| `fixed_widths(table, widths)` | บังคับความกว้างคอลัมน์ |
-| `set_borders(table)` · `row_borders(table)` · `no_borders(table)` · `cell_border(cell, edge, color, size)` | `row_borders` = เส้นแนวนอนอย่างเดียว · `cell_border(..., color=None)` = ไม่มีเส้นด้านนั้น |
-| `mix(color, other="FFFFFF", amount=0.5)` | ผสมสีทำสีอ่อน/เข้มจาก palette |
-| `repeat_header(row)` · `keep_with_next(paragraph)` | |
-| `add_field(paragraph, "PAGE")` | แทรก field ของ Word |
-| `to_pdf(docx_path, outdir)` | เรียก LibreOffice แปลงเป็น PDF |
-
----
-
-## brandkit_pptx.py — สไลด์ (.pptx)
-
-```python
-BrandDeck(template=None)      # 16:9 (13.333 × 7.5 นิ้ว)
-```
-
-| เมธอด | สไลด์ที่ได้ |
-|-------|-------------|
-| `title_slide(title, subtitle, meta)` | พื้นฟ้าอ่อน + เส้นแบรนด์คั่น |
-| `section(title, kicker=None)` | แถบแบรนด์แนวตั้งซ้าย + ชื่อส่วน |
-| `bullets_slide(title, items, subtitle=None)` | หัวข้อ + ขีดม่วงใต้หัวข้อ + bullet 17pt |
-| `kpi_slide(title, items, subtitle=None)` | การ์ดตัวเลข |
-| `table_slide(title, headers, rows, col_widths, subtitle, status_col, palette)` | `col_widths` เป็นสัดส่วน เช่น `[1, 4, 2, 2]` |
-| `image_slide(title, image_path, caption, subtitle)` | รูปกลางสไลด์ พอดีกรอบอัตโนมัติ |
-| `quote_slide(text, source)` | สไลด์คำพูด/ข้อสรุป |
-| `save(path)` | |
-
-**ข้อจำกัดที่ต้องรู้**
-
-- สไลด์ทุกอันสร้างจาก layout ว่าง (`slide_layouts[6]`) จึงไม่มีช่อง placeholder ให้แก้ใน PowerPoint
-  แบบเทมเพลตปกติ ถ้าลูกค้าต้องแก้เองเยอะ ให้ส่ง `template=` เป็นไฟล์ .pptx ขององค์กรแทน
-- ตารางใน python-pptx ไม่มี API ปิดเส้นขอบตรง ๆ ถ้าอยากได้ตารางไม่มีเส้น ให้เรียงกล่องข้อความแทน
-- ความสูงแถวตารางเป็นค่าต่ำสุด ข้อความยาวจะดันแถวสูงขึ้นเอง ให้เผื่อพื้นที่
-
----
-
-## brandkit_stage.py — เด็ค Stage (.pptx)
-
-```python
-StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
-          head_font="Chakra Petch", body_font="IBM Plex Sans Thai", **colors)
-# accent / bg = สีหลักกับสีพื้นจากดีไซน์ของโปรเจกต์ · colors = สีที่โปรเจกต์กำหนดไว้แล้ว เช่น text="1B2430"
-```
-
-ทุกแผ่นยกเว้นปกและคั่นบทมี: สี่เหลี่ยมสีหลัก + ชื่อหมวด (`kicker`) · หัวสไลด์ 28 pt · เส้นท้ายกระดาษ · `PROJECT · หมวด` · เลขหน้า 2 หลัก
-
-| เมธอด | สไลด์ที่ได้ |
-|-------|-------------|
-| `cover(title, lines, meta, logo=None, mark=None)` | ชื่อ 60 pt + ขีดสีหลัก · `lines[1]` เป็นสีหลัก · `mark` = สัญลักษณ์ใหญ่จางทางขวา (ไม่ใส่ = วงแหวนจาง) |
-| `section(number, title, note)` | คั่นบท — เลขใหญ่สีหลัก |
-| `figure(kicker, title, image, caption, subtitle)` | รูปผังเต็มแผ่น (เรนเดอร์ด้วย `#bg=` เดียวกับเด็ค) |
-| `compare(kicker, title, headers, rows, widths=(1, 1.85, 1.95))` | ตารางเส้นคั่นแถว · คอลัมน์ 1 เทา 2 หนาขาว 3 เนื้อความ · ไม่เกิน 5 แถว |
-| `stats(kicker, title, items, subtitle)` | ตัวเลขใหญ่ 2–4 ช่อง + ตัวอย่างถาม/ตอบใต้ตัวเลข |
-| `steps(kicker, title, rows, example_head, note)` | ขั้นตอนมีเลข · `rows = [(ชื่อ, ทำอะไร, ตัวอย่าง)]` ไม่เกิน 6 ขั้น |
-| `points(kicker, title, points, image, caption, side, side_caption)` | ภาพซ้าย + ใจความมีขีดสีหลัก · `side` = ภาพเล็กขวา เช่น QR |
-| `statement(kicker, text, sub)` | ข้อความเดียวกลางแผ่น |
-| `save(path)` | |
-
-ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
-
-
-| จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
-|:---:|---|
-| 2 | `[2600, 7038]` — หัวข้อ/รายละเอียด |
-| 3 | `[1400, 6238, 2000]` — รหัส/รายการ/ผู้รับผิดชอบ |
-| 4 | `[1100, 4478, 1900, 2160]` — รหัส/รายการ/ผู้รับผิดชอบ/สถานะ |
-| 5 | `[1000, 1800, 2838, 2000, 2000]` |
-| 6 ขึ้นไป | ใช้ `landscape_section()` (พื้นที่ 14570 twips) |
-
-
-## reference: brandkit-usage.md
-
-# วิธีใช้ brandkit — โค้ดตัวอย่าง
-
-อ่านเมื่อเริ่มเขียนสคริปต์สร้างไฟล์จริง · เมธอดทั้งหมดอยู่ใน `api.md`
-
-## เอกสาร Word (`brandkit.py`)
-
-```python
-import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
-from brandkit import BrandDoc, use_brand, to_pdf
-
-doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
-doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-          subtitle="ระบบ Apps Track — Project Control & Monitor",
-          meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-          logo="asset/AppsTrack_Logo_Badge.png")
-doc.toc()
-
-doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
-doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
-doc.table(["หัวข้อ", "รายละเอียด"],
-          [["URL ระบบ", "https://project.eitaccount.cloud"]],
-          widths=[2600, 7038])                  # รวม = 9638
-doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
-doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
-doc.pill_table(["รหัส", "งาน", "สถานะ"], rows, status_col=2,
-               palette={"เสร็จ": "green", "กำลังทำ": "amber", "ค้าง": "red"})
-doc.signoff([("Product Owner", "—"), ("Tech Lead", "—")])
-doc.save("SRS.docx")
-```
-
-## สไลด์ (`brandkit_pptx.py`)
-
-สไลด์ใช้ `brandkit_pptx.py` ซึ่งกินโทเคนชุดเดียวกัน:
-
-```python
-from brandkit_pptx import BrandDeck
-d = BrandDeck()                                  # 16:9
-d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
-d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
-d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
-d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
-d.table_slide("สถานะ Milestone", headers, rows, col_widths=[1, 4, 2, 2],
-              status_col=3, palette={"เสร็จ": "green", "กำลังทำ": "amber"})
-d.image_slide("สถาปัตยกรรม", "diagrams/arch.png", caption="ภาพรวมองค์ประกอบ")
-d.save("deck.pptx")
-```
-
-เมธอดทั้งหมดอยู่ใน `references/api.md` ส่วนไฟล์ตัวอย่างที่รันได้จริงคือ
-`scripts/example_srs.py` (เอกสาร) · `scripts/example_deck.py` (สไลด์ `BrandDeck`)
-
-## เด็ค "Stage" (`brandkit_stage.py`) — ค่าเริ่มต้นของเด็คที่ใช้พูด
-
-`brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบ: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
-
-```python
-from brandkit_stage import StageDeck
-d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")   # สีหลัก · สีพื้นของโปรเจกต์
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
-        meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
-d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
-         "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
-d.save("deck.pptx")
-```
-
-- **สีมาจากดีไซน์ของโปรเจกต์ 2 ค่า** คือ `accent` (สีหลัก) กับ `bg` (สีพื้น) หาตามลำดับใน `diagram-figures` ข้อ 5 (`doc-theme` → ดีไซน์ในโค้ด เช่น `--primary` · `--background` · ธีม Tailwind · โหมดมืด/สว่างของแอป → โลโก้และชุดแบรนด์ → ยังไม่มีเลยใช้สีประจำบ้าน `#2A78D6` พื้น `09090A` แล้วเขียน `(รอยืนยัน)`) ห้ามใช้สีของต้นแบบ
-- เทาทุกระดับคำนวณจาก `bg` (พื้นเข้มผสมขาว พื้นสว่างผสมดำ) จึงอมโทนเดียวกับพื้นของโปรเจกต์ · `accent_hi` คือสีหลักที่ปรับความสว่างจนอ่านออกบนพื้นนั้น ใช้กับตัวเลขใหญ่ เลขลำดับ และคำเน้น · โปรเจกต์ที่กำหนดสีตัวหนังสือไว้แล้ว ส่งทับได้ เช่น `text="1B2430"`
-- ฟอนต์ใช้ของโปรเจกต์ได้ (`head_font=` · `body_font=`) ถ้าโปรเจกต์ยังไม่มี ใช้ Chakra Petch + IBM Plex Sans Thai
-- **รูปผังต้องใช้สีพื้นเดียวกับเด็ค** — เรนเดอร์ `diagram-figures` ด้วย `#accent=<สีหลัก>&bg=<สีพื้น>` (ตอนนี้มีใน `figure-flow.html`)
-- **ต้องติดตั้งฟอนต์ Chakra Petch และ IBM Plex Sans Thai** (Google Fonts · ใช้ฟรี) ในเครื่องที่เปิดไฟล์ ถ้าเครื่องปลายทางไม่มี ให้ส่ง PDF คู่ไปด้วย หรือสร้างใหม่ด้วย `head_font="Tahoma", body_font="Tahoma"`
-- ถ้าจะพิมพ์ ให้สร้างอีกชุดด้วย `bg="FFFFFF"` แทนการใช้พื้นเข้มเปลืองหมึก · `BrandDeck` (แถบสีด้านบน) ยังใช้ได้กับรายงานที่ส่งให้อ่านเอง
-
-
-## reference: palette-examples.md
-
-# ตัวอย่างชุดสีที่เคยใช้จริง
-
-> ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
-> เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
-
-## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
-
-โทนสว่าง โปร่ง นุ่มนวล ตัวอักษรเทาเย็น
-
-```python
-use_brand(
-    brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
-    brand_tint="EDF1FB", brand_tint_2="F6F8FD",
-    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
-)
-```
-
-## ชุด B — เขียวอมฟ้า (การแพทย์ · สุขภาพ)
-
-```python
-use_brand(
-    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
-    brand_tint="E6F4F2", brand_tint_2="F3FAF9",
-    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
-)
-```
-
-## ชุด C — กรมท่า (ราชการ · กฎหมาย)
-
-```python
-use_brand(
-    brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
-    brand_tint="E8ECF7", brand_tint_2="F5F7FC",
-    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
-)
-```
-
-## ชุด D — เหลืองอำพัน + เทาเหล็ก (อุตสาหกรรม · โรงงาน)
-
-accent อุ่นบนโครงเทาเย็น — ใช้ accent เฉพาะจุดที่ต้องการให้สังเกต ไม่ใช่ทั้งหน้า
-
-```python
-use_brand(
-    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
-    brand_tint="FBF2E1", brand_tint_2="FDF9F1",
-    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
-)
-```
-
-## สีสถานะ — ชุดเดียวกันทุกแบรนด์
-
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะความหมายของมันคงที่
-
-| สถานะ | พื้น | ตัวอักษร |
-|---|---|---|
-| สำเร็จ | `E9F7EF` | `17794A` |
-| ข้อมูล | `EAF2FD` | `2160AB` |
-| เตือน | `FDF5E4` | `96660D` |
-| ผิดพลาด | `FDEDEC` | `A63A34` |
-| เน้น | `F1EEFC` | `52439F` |
-| เป็นกลาง | `F2F4F8` | `626A7A` |
-
-> ถ้าสีแบรนด์ชนกับสีสถานะตัวใดตัวหนึ่ง (เช่น แบรนด์เป็นเขียว) ให้เปลี่ยน**สีแบรนด์ในบริบทนั้น**
-> อย่าเปลี่ยนสีสถานะ — ผู้อ่านตีความเขียวว่าผ่านไปแล้วก่อนอ่านข้อความ
-
-## วิธีตรวจก่อนใช้
-
-1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
-2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
-3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
-
-## โทนที่เสนอตามเนื้องาน (ใช้เมื่อไม่มีสีแบรนด์ให้ยึด)
-
-| เนื้องาน | โทนที่เสนอ | เหตุผล |
-|---|---|---|
-| การแพทย์ · สุขภาพ | เขียวอมฟ้า · เขียว | ความสะอาด ความปลอดภัย |
-| การเงิน · ธนาคาร | น้ำเงินเข้ม · เทาเงิน | ความมั่นคง |
-| อุตสาหกรรม · โรงงาน | เหลืองอำพัน · เทาเหล็ก | เครื่องจักร การเตือน |
-| การศึกษา | ม่วง · ส้มอ่อน | ความกระตือรือร้น |
-| ค้าปลีก · อาหาร | ส้ม · แดงอมชมพู | ความอบอุ่น ความอยาก |
-| ราชการ · กฎหมาย | กรมท่า · เลือดหมู | ความเป็นทางการ |
-| ซอฟต์แวร์ทั่วไป | น้ำเงิน | ค่ากลางเมื่อไม่มีบริบทอื่น |
-
-ถ้าลูกค้ามีแบรนด์อยู่แล้ว ให้ใช้สีแบรนด์ ตารางนี้ใช้เฉพาะตอนไม่มีอะไรให้ยึด
-
-
-## reference: thai-fonts.md
-
-# ฟอนต์และภาษาไทย — รายละเอียด
-
-ย้ายมาจาก `SKILL.md` ข้อ 2 (ไม่แก้ถ้อยคำ) · กฎที่ห้ามพลาดย่อไว้ใน `SKILL.md`
-
-ใช้ **Tahoma** เป็นค่าเริ่มต้น: มีทุกเครื่อง Windows/Office · วรรณยุกต์ไม่ชนสระ ·
-bold อ่านออกชัด · ความสูง x-height ไทยกับอังกฤษใกล้เคียงกัน
-
-> 🚨 **กับดัก complex script:** Word ถือว่าภาษาไทยเป็น *complex script* คนละชุดกับ latin
-> ถ้าตั้งแค่ `run.font.size` / `run.font.bold` ตัวอักษรไทยจะ **ไม่เปลี่ยนตาม**
-> ต้องตั้ง `w:szCs`, `w:bCs`, `w:iCs` และ `w:rFonts` ให้ครบทั้ง `ascii/hAnsi/cs/eastAsia`
-> ฟังก์ชัน `style_run()` ใน `brandkit.py` จัดการให้แล้ว **ห้ามตั้งฟอนต์เองด้วยมือ**
-
-> 🚨 **กับดักฟอนต์คู่:** ถ้าใช้ฟอนต์ละตินกับฟอนต์ไทยคนละตัว เช่น Noto Sans + Noto Sans Thai
-> การตั้งช่อง `cs` อย่างเดียวไม่พอ Word จะวาดตัวไทยด้วยฟอนต์ช่องละตินถ้าฟอนต์นั้นมีตัวไทย ถ้าไม่มีจะตกไปใช้ Browallia New แบบเงียบ ๆ
-> ให้ตั้ง `bk.FONT` (ไทย) กับ `bk.LATIN_FONT` (ละติน) แล้วเรียก `bk.thai_runs(doc.element.body)` กับทุก header และ footer ก่อน `save()`
-> ฟังก์ชันนี้แยกข้อความไทยออกเป็น run ของตัวเอง และตั้งทั้ง 4 ช่องเป็นฟอนต์ไทย
-> ฟอนต์ที่ไม่ได้มีทุกเครื่องให้เรียก `bk.embed_fonts(doc)` เพื่อฝังฟอนต์ในไฟล์ ซึ่งทำได้เฉพาะฟอนต์ที่สัญญาอนุญาตยอมให้ฝัง เช่น OFL แต่ไฟล์จะใหญ่ขึ้นหลาย MB
-> ฟอนต์ variable เช่น Cascadia Mono จะกลายเป็น Calibri เมื่อ Word export เป็น PDF ให้ใช้ Consolas กับโค้ด
-
-กฎอื่นสำหรับเอกสารไทย:
-
-- ระยะบรรทัด **1.3–1.35** สำหรับ Tahoma (อังกฤษล้วนใช้ 1.15 ได้ แต่ไทยมีวรรณยุกต์และสระบน–ล่าง ต้องเว้นที่) · ฟอนต์ตระกูล Noto มีความสูงบรรทัดในตัว 1.36–1.51 em จึงใช้ **1.1–1.15** ก็ได้ระยะเท่ากัน — ตัดสินจากหน้า PDF จริง ไม่ใช่จากตัวเลข
-- **ห้ามจัดชิดขอบ 2 ด้าน (justify)** กับย่อหน้าไทย เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดคำจนเป็นรู
-- LibreOffice ตัดคำไทยไม่เหมือน Word ถ้าจะส่ง PDF ให้ export จาก Word จริง
-  หรืออย่างน้อยเปิด PDF ตรวจด้วยตาก่อนส่ง
-- สร้าง PDF บน Linux ที่ไม่มี Tahoma ให้ใช้ **Loma** หรือ **Sarabun** แทน
-  (ReportLab จัดวรรณยุกต์ไทยผิด ให้ใช้ python-docx→LibreOffice หรือ WeasyPrint แทน)
-- เวลา preview บน Linux ตัวอักษรไทยจะดู **เล็กกว่า** latin เพราะฟอนต์แทนที่มี x-height ต่ำกว่า
-  ไม่ใช่บั๊กของขนาดฟอนต์ บน Windows ที่มี Tahoma จริงจะสูงเท่ากัน จึงให้ตรวจรอบสุดท้ายจาก Word
-
-
-## reference: tokens-and-type.md
-
-# Design tokens · สเกลตัวอักษร · องค์ประกอบที่ใช้ซ้ำ
-
-สารบัญ: tokens → ความหมายของสี → สเกลตัวอักษร → องค์ประกอบที่ใช้ซ้ำ · ย้ายมาจาก `SKILL.md` ข้อ 1 และข้อ 4 (ไม่แก้ถ้อยคำ)
-
-ตารางนี้กำหนด**หน้าที่**ของแต่ละ token ไม่ได้กำหนดค่าสี
-ค่าจริงมาจากข้อ 0 แล้วตั้งครั้งเดียวด้วย `use_brand(...)`
-
-| Token | หน้าที่ | ได้มาจาก |
-|-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
-| `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
-| `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
-| `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
-| `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
-| `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
-| `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
-| `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
-
-**สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
-สีสถานะ**ไม่เปลี่ยนตามแบรนด์** เพราะเขียวคือผ่าน แดงคือไม่ผ่าน ในทุกเอกสาร
-พื้นคือเฉดอ่อนมาก ตัวอักษรคือเฉดเข้มของสีเดียวกัน ให้ contrast ≥ 4.5:1
-
-**ความหมายของแต่ละสี — เลือกสีตามความหมายเสมอ** (เหมือนกันทั้งเอกสารและไดอะแกรม)
-
-| สี | หมายความว่า | ใช้กับ (callout / pill / กล่อง / เส้นในรูป) |
-|---|---|---|
-| 🔴 แดง | อันตราย · ห้าม · ลบทิ้ง · ผิดพลาด · เลยกำหนด | `critical` · สถานะ "ค้าง/ล้มเหลว" · ขั้นที่ทำลายข้อมูล · เส้นที่พัง |
-| 🟠 เหลือง/ส้ม | ระวัง · รอดำเนินการ · ข้อแม้ · ทางที่ไม่ใช่เส้นหลัก | `warning` · สถานะ "กำลังทำ" · โซน/เส้นข้อยกเว้น (`#C77A11`) |
-| 🟢 เขียว | สำเร็จ · ผ่าน · ปลอดภัย · เสร็จแล้ว | `success` · สถานะ "เสร็จ" · ผลลัพธ์ที่ยืนยันแล้ว |
-| 🔵 สีหลัก (สีแบรนด์ ไม่มีแบรนด์ใช้น้ำเงินประจำบ้าน) | ข้อมูล · การกระทำหลัก · เส้นทางปกติ | `tip` · ปุ่มหลัก · กล่อง/เส้นเส้นทางหลัก |
-| 🟣 ม่วง | คำถาม · ทางเลือก · หมายเหตุเสริม | `question` · ของเสริมที่ไม่บังคับ |
-| ⚪ เทา | เป็นกลาง · ปิดใช้งาน · ของภายนอก | `note` · ระบบภายนอก · ส่วนที่ปิดอยู่ |
-
-กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
-
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
-> พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
->
-> **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
-
-> 💡 **เปลี่ยนแบรนด์ทั้งชุดในบรรทัดเดียว:**
-> `use_brand(brand="C1121F", brand_deep="780000", brand_tint="FDECEC")`
-
-## สเกลตัวอักษร (pt)
-
-| ระดับ | Word | Slide | น้ำหนัก · สี |
-|-------|------|-------|--------------|
-| ชื่อบนปก | 20 | 40 | bold · `brand` (Word) / `brand_deep` (สไลด์) |
-| H1 | 16 | 26 | bold · `brand` |
-| H2 | 12.5 | — | bold · `brand_deep` |
-| H3 | 11.5 | — | bold · `text` |
-| เนื้อความ | 11 | 17 | regular · `text_body` |
-| ตาราง | 11 | 12.5 | regular · `text_body` |
-| คำบรรยาย/footer | 8.5–9 | 10–12 | italic หรือ regular · `text_muted` |
-
-**อย่าเพิ่มขนาดนอกสเกลนี้** เพราะทุกขนาดที่เพิ่มทำให้เอกสารดูไม่สม่ำเสมอ และคนอ่านสังเกตเห็น
-
-## องค์ประกอบที่ใช้ซ้ำ (จากข้อ 4)
-
-| องค์ประกอบ | หน้าตา | เมธอด |
-|-----------|--------|-------|
-| หน้าปก | โลโก้ + ชื่อสีแบรนด์ กลางหน้า | `cover()` |
-| ตาราง | หัวพื้น `brand_tint` ตัวอักษร `brand_deep` · เส้นแบรนด์ 1.5pt ใต้แถวหัว · เส้นระหว่างแถว `line` 0.5pt · หัวซ้ำทุกหน้า | `table()` |
-| ตารางสถานะ | คอลัมน์สถานะย้อมสีตามค่า | `pill_table()` |
-| แถบตัวเลขสรุป | การ์ดพื้น `brand_tint` ตัวเลขใหญ่สีแบรนด์ + ป้ายเทาเล็ก | `kpi_row()` |
-| กล่องข้อความ | พื้นสีอ่อน + แถบสีหนาด้านซ้าย + อีโมจิ 1 ตัว | `callout()` |
-| รูปพร้อมคำบรรยาย | รูปกลางหน้า + "รูปที่ N — ..." เอียงเทาใต้รูป | `figure()` |
-| บล็อกโค้ด | พื้นเทาอ่อน ฟอนต์ Consolas 9pt | `code()` |
-| ตารางเซ็น | บทบาท / ชื่อ / ลายเซ็น / วันที่ | `signoff()` |
-
-**สัดส่วนที่พอดี:** callout ไม่เกิน 3–5 กล่องต่อ 10 หน้า · แถบตัวเลขสรุป (KPI strip) 3–5 ช่อง (ตั้งแต่ 6 ช่อง ตัวเลขจะเล็กจนไม่เด่น) ·
-ตารางเกิน 6 คอลัมน์ให้เปลี่ยนเป็นหน้าแนวนอน (`landscape_section()`)
-
-
-## reference: visual-check.md
-
-# ตรวจเอกสารด้วยตา — คำสั่งและรายการตรวจ
-
-ย้ายมาจาก [SKILL.md](../SKILL.md) §6
-
-```bash
-soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
-pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-01.png, page-02.png ...
-```
-
-แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
-
-- [ ] ไม่มีตารางล้นขอบกระดาษ คอลัมน์กว้างพอดี ไม่มีคำถูกบีบขึ้นบรรทัดใหม่แปลก ๆ
-- [ ] ไม่มีหัวข้อค้างอยู่บรรทัดสุดท้ายของหน้า
-- [ ] วรรณยุกต์/สระไทยไม่ชนกัน และไม่มีตัวอักษรกลายเป็นกล่องสี่เหลี่ยม
-- [ ] หน้าปกไม่มีข้อความล้นหรือตกขอบ · **หน้า 2 ไม่ว่าง** (ปกเต็มหน้าแล้วย่อหน้าตัวแบ่งหน้าตกไปหน้า 2 — `cover()` ใส่ตัวแบ่งไว้ท้ายย่อหน้าสุดท้ายแล้ว ถ้าเขียนปกเองต้องทำแบบเดียวกัน)
-- [ ] ช่องไฟก่อน/หลังตารางและ callout เท่ากันทั้งเอกสาร
-- [ ] footer เลขหน้าครบทุกหน้า
-- [ ] ไม่มี TBD / Lorem ipsum / placeholder หลงเหลือ (ยกเว้น `(รอยืนยัน)` ที่อยู่ในรายการรอยืนยันของรายงาน)
-
-
-## reference: word-layout.md
-
-# ปกเข้มและหัวตาราง — รายละเอียดจากงานจริง
-
-อ่านเมื่อทำปกแบบเข้ม หรือปรับหัวตารางในหน้าใน · กฎย่อที่ต้องใช้ทุกครั้งอยู่ใน `SKILL.md` ข้อ 3
-
-## แบบปกเข้ม
-
-**แบบปกเข้ม (เมื่อแอปหรือแบรนด์ใช้หน้าจอสีเข้ม):** ปกเต็มหน้าสีเทาเข้มเกือบดำแบบกลาง ๆ (เช่น `#1C1C22`) มีแสงเรืองสีแบรนด์จางมาก (ไม่เกิน 15%) — แสงม่วงเข้มเต็มมุมทำให้ปกดูเป็นสีม่วง เจ้าของงานขอกลับเป็นเทาเข้ม ·
-ชื่อเอกสาร ชื่อรอง และเส้นใต้ชื่อ วาง**ชิดใต้โลโก้** ไม่ใช่กลางหรือล่างหน้า ส่วนตารางข้อมูลเอกสารอยู่ค่อนไปทางล่าง ·
-โลโก้แบบตัวอักษรสว่าง (light-on-dark) มุมซ้ายบน · ชื่อเอกสาร 28–32pt · ตารางข้อมูลเอกสาร 4 ช่อง
-(รหัสเอกสาร · เวอร์ชัน · วันที่ · สถานะ) · หน้าในเป็นพื้นขาว บล็อกโค้ดสีเข้ม header มีโลโก้เล็ก ชื่อเอกสาร และรหัสเอกสาร
-footer มีชื่อระบบกับ "หน้า / ทั้งหมด" — สีเข้มอยู่ที่ปกหน้าเดียว จึงยังพิมพ์ได้ ขนาดชื่อเอกสารบนปกแบบนี้เกินสเกลข้อ 1 ได้
-โลโก้บนปกใช้**ขนาดเล็ก (กว้างราว 4.5 ซม.) มุมซ้ายบน เหนือชื่อเอกสาร** — เคยลองขยายสัญลักษณ์เป็นภาพหลักกลางปก เจ้าของงานขอกลับเป็นขนาดเล็ก
-ถ้าต้องการลูกเล่น ให้ลากแสงสีของโลโก้เป็นเส้นยาวเท่าแนวข้อความ (เว้นขอบซ้ายขวาเท่าระยะขอบกระดาษ — เส้นที่ชนขอบกระดาษถูกขอให้เว้นขอบ) เป็นแท่งหนาสม่ำเสมอ **ปลายตัดตรง มุมมนเล็กน้อย** (หนาราว 0.7 มม. มุมราว 0.25 มม.) — ปลายเรียวแหลมถูกทักว่าแหลมไป · แสงเรืองต้องจางเป็นศูนย์ก่อนถึงขอบภาพ ไม่อย่างนั้นจะเห็นขอบกล่องของภาพ แทนเส้นใต้ชื่อเอกสาร (ยึดภาพเส้นกับย่อหน้าใต้ชื่อ เพื่อให้ตามได้ทั้งชื่อ 1 และ 2 บรรทัด) · เส้นต้องเป็น**ภาพเดียวต่อเนื่อง** ความหนาและแสงเท่ากันตลอด ไล่สีแบบ smoothstep ปลายสองข้างจางลงนุ่ม ๆ และวาดที่ 300 dpi — ห้ามวางแถบสั้นซ้อนบนเส้นยาว เพราะจะเห็นเป็นก้อนหนาที่สีไม่ต่อกัน (เจ้าของงานทักว่า "เส้นสีไม่ smooth")
-> 🚨 **ภาพพื้นปกและโลโก้บนปก ห้ามวางใน header ของหน้าแรก** — Word แสดงทุกอย่างใน header เป็นสีจางระหว่างอ่านหรือแก้ตัวเอกสาร ปกเข้มทั้งหน้าจึงดูซีด (ใน PDF ไม่จาง จึงตรวจจาก PDF อย่างเดียวไม่เจอ — เจ้าของงานทักว่า "ดูซีด ๆ") ให้ยึดภาพแบบลอยหลังข้อความไว้กับย่อหน้าแรกของปกแทน และตั้ง `relativeHeight` แบบที่ Word ใช้ (ภาพพื้น 251658240 · ภาพที่อยู่เหนือขึ้นไปเพิ่มทีละ 1024) เพราะ Word จะเรียงเลขน้อย ๆ อย่าง 1, 2, 3 ใหม่ตอนบันทึก แล้วภาพพื้นจะทับโลโก้
-
-ตัวหนังสือเล็กบนปกเข้ม (ป้ายกำกับ ข้อมูลผู้เขียน หมายเหตุ) ใช้ขนาด**อย่างน้อย 8.5pt** และสีเทาอ่อน `#CFCCDE` ขึ้นไป ชื่อรองใช้สีอ่อนเกือบขาว — ตัว 7.5pt สีเทากลางบนพื้นเข้มดูจาง
-
-**ใช้ในโค้ด:** `doc.cover(title, subtitle=..., eyebrow=..., meta_rows=[...], logo="logo.png", style="night")` — โลโก้ไม่บังคับ · สีเส้นแสงปรับได้ด้วย `art_colors=(สี1, สี2, สี3)` · หน้าตาที่ได้: `examples/example_srs-preview.png` (ปก + หน้าใน) · ตัวอย่างเรียก: `scripts/example_srs.py` · `table()` ใช้หัวตารางแบบนี้เป็นค่าเริ่มต้น (`header_style="classic"` = แบบเดิม)
-
-## หัวตารางในหน้าใน
-
-**หัวตารางในหน้าใน ห้ามใช้พื้นสีเข้มเต็มแถบ** แม้ปกจะสีเข้มก็ตาม เพราะตารางมีทุกหน้า สีเข้มจึงหนักตาและเปลืองหมึก (เจ้าของงานขอเปลี่ยนจริงในงานหนึ่ง)
-ให้ใช้พื้นอ่อนของสีแบรนด์ที่ยังเห็นชัดว่าเป็นแถวหัว เช่น `#E4DCFD` (พื้นที่อ่อนกว่านี้อย่าง `#F5F3FF` เจ้าของงานบอกว่าจางไป) ตัวหนังสือสีเข้มของแบรนด์ตัวหนา
-เส้นขอบมีเส้นเดียว คือเส้นสีแบรนด์ 1.5pt ใต้แถวหัว ไม่มีเส้นด้านบน (เส้นดำด้านบนดูหนักและถูกขอให้ปรับ) และไม่เว้นช่องขาวระหว่างช่องหัว เพราะจะทำให้เส้นใต้หัวขาดเป็นช่วง
-Word วาดเส้นขอบไล่สีไม่ได้ ถ้าใส่ไล่สี สีจะเปลี่ยนเป็นช่วงตามคอลัมน์
-
-## โครงหน้าเอกสาร (ย้ายมาจาก `SKILL.md` ข้อ 3 — ไม่แก้ถ้อยคำ)
-
-```
-หน้าปก        โลโก้กลาง → ชื่อเอกสาร (brand, bold) → ชื่อระบบ (text, bold)
-              → บรรทัดเวอร์ชัน/วันที่ (9pt) → หมายเหตุการแก้ไข (8pt เอียง เทา)
-              → ขึ้นหน้าใหม่
-สารบัญ        field TOC (ผู้ใช้กด F9 อัปเดต) → ขึ้นหน้าใหม่
-เนื้อหา        H1 มีเลขข้อเสมอ ("1. ภาพรวมระบบ") · H2 เป็น "1.1"
-              ทุก H1/H2/H3 ตั้ง keep-with-next กันหัวข้อค้างท้ายหน้า
-ท้ายเอกสาร    ตารางลงนามอนุมัติ
-footer        "หน้า N" กลางหน้า สีเทา 9pt
-```
-
-## รูปในเอกสาร · กฎด่านสวย · ปก (ย้ายมาจาก SKILL.md §0.1 ข้อ 6–8)
-
-6. **รูปในเอกสาร:** ตัวอักษรเล็กสุดหลังวางจริง ≥ 7pt → พิกเซลขั้นต่ำบนผ้าใบ = `0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` (ผ้าใบ 2000px วางกว้าง 17 ซม. = 29px · วางบนหน้าแนวนอน 25.7 ซม. = 20px · ใช้ 26px ให้ได้ 9pt) · รูปกว้างให้วางหน้าแนวนอนเต็มความกว้างคอลัมน์ (≥ 95%) · ใช้**ฉบับวางในเอกสารที่ไม่มีหัวรูป** เพราะคำบรรยายใน Word บอกเลขและชื่อรูปแล้ว · คำบรรยายรูป ≥ 9pt สีเนื้อความ · หลังรูปขึ้น section ใหม่ ห้ามย่อหน้าถัดไปไหลมาหน้ารูป
-7. **สิ่งที่ด่านสวยจับได้บ่อย (ใส่เป็นกฎใน `check` ของตัว render):** เครื่องหมาย markdown หลุด (`**` · backtick) · ข้อความไทยในฟอนต์ mono · ตารางล้นคอลัมน์ข้อความ · สารบัญเหลือรายการเดียวตกหน้าถัดไป · รายการรหัสถูกตัดกลางรหัส (ให้บรรทัดละ 1 รหัส ฟอนต์เดียวทั้งคอลัมน์) · ป้าย "(รอยืนยัน)" ใช้สีเตือน ไม่ใช่สีแบรนด์ · ตัวตนหายหลังหน้าปก (หน้าเปิดบทใช้แถบสีแบรนด์ของแอป) · มีปกสว่างไว้พิมพ์คู่กับปกมืด
-8. **ปก — ตัวอักษรล้วนก่อน ภาพทีหลัง** (ปกเฉพาะโปรเจกต์ที่ใช้รูปทรงโลโก้หรือหน้าจอจริง แทนภาพตกแต่ง → [`doc-cover-design`](../../doc-cover-design/SKILL.md))**:** ภาพประกอบบนปกไม่บังคับ และปกโล่งที่จัดตัวอักษรดีชนะภาพที่ไม่ว้าวเสมอ · แบบที่ผ่านด่าน: ชนิดเอกสาร (SRS · FSD · ARCH) ตัวใหญ่ 150–200px สีแบรนด์เป็นจุดเด่นเดียว (กว้างไม่เกิน ~85% ของคอลัมน์ · ชื่อเกิน 5 ตัวอย่าง TESTPLAN แยก 2 บรรทัด ไม่ย่อจนเล็กกว่าฉบับอื่น — ทั้งชุดต้องดูขนาดเท่ากัน) → เส้นสั้นสีแบรนด์ → ชื่อไทย → ชื่ออังกฤษ → บรรทัดสรุป 1 ประโยค (≥ 12pt คอลัมน์แคบ) → แถวข้อมูลท้ายหน้า (ป้าย ≥ 10pt) · ที่เหลือปล่อยว่าง · ส่วนที่ตำแหน่งตายตัว (โลโก้ · ชนิดเอกสาร · เส้น · ป้ายสถานะ) วาดลงภาพพื้นปก ส่วนชื่อและข้อมูลเป็นข้อความ Word ให้ค้นและแก้ได้ · ป้าย `(รอยืนยัน)` บนพื้นมืดใช้สีเตือนแบบสว่าง ไม่ใส่พื้นไฮไลต์ · **ผู้ใช้บอกปกไม่สวย → ตัดภาพตกแต่งออกก่อน** (เส้นโค้ง จุดเรือง gradient) แล้วทำปกตัวอักษรล้วน 3 แนวให้เลือก (โปรเจกต์มีโลโก้หรือ mockup → ใช้ `doc-cover-design` ข้อ 7 แทน)
-
-
----
-
-# skill: srs-writing
-
-Use when writing or reviewing a Software Requirements Specification (SRS) — ISO 29148, testable ids, tracing.
-
-# SRS Writing
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **กฎข้อเดียวของ skill นี้:** ข้อกำหนดทุกข้อต้องเขียน **test case** จากมันได้ทันที
-> ถ้าเขียนไม่ได้ นั่นไม่ใช่ข้อกำหนด แค่ความหวัง
-
----
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เขียนเอกสาร Software Requirements Specification (SRS)
-- รีวิว SRS ที่คนอื่นเขียน ก่อนเซ็นรับ
-- แปลงบันทึกการประชุมเป็นข้อกำหนดที่ใช้งานได้
-- เตรียมเอกสารสำหรับประมูลงานหรือ statement of work (SOW)
-
-## เมื่อไหร่ **ไม่** ใช้
-
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| user story สำหรับ sprint | `user-story-writer` |
-| บันทึกเหตุผลที่เลือกเทคโนโลยี | `adr-writer` |
-| Functional Specification Document (FSD) ระดับหน้าจอ | `fsd-writing` |
-| หน้าตาไฟล์ Word ที่ส่งออก | `branded-document-design` |
-| รูปในเอกสาร | `software-diagrams` · `diagram-figures` |
-
----
-
-## 1 · ลำดับการทำงาน
-
-1. **เก็บข้อมูลให้ครบก่อนเขียน** — ใครใช้ · ตอนนี้ทำงานยังไง · อะไรคือปัญหา ·
-   สำเร็จแล้ววัดจากอะไร · ระบบอื่นที่ต้องต่อ · ข้อบังคับทางกฎหมาย
-2. **ร่างโครงก่อน** — ใช้ `assets/srs-outline.md` วางหัวข้อให้ครบ ยังไม่ต้องเขียนเนื้อ
-3. **เขียนขอบเขตและผู้เกี่ยวข้องก่อนข้อกำหนด** — ถ้ายังไม่รู้ว่าใครใช้ จะเขียนข้อกำหนดผิดคน
-4. **เขียนข้อกำหนดตามข้อ 3** ทีละข้อ ให้รหัสทันทีที่เขียน
-5. **ทำตารางสอบย้อนกลับ (traceability matrix)** — ทุกข้อกำหนดต้องมีที่มา
-6. **รีวิวตามข้อ 8** แล้วค่อยส่ง
-
-> ข้อ 5 คนข้ามบ่อยที่สุด แต่เป็นข้อที่ทำให้เอกสารมีค่าจริงตอนมีคำขอเปลี่ยนแปลง
-
----
-
-## 2 · โครงเอกสาร
-
-อิงตาม ISO/IEC/IEEE 29148 (มาตรฐานสากลสำหรับกระบวนการข้อกำหนด)
-ส่วนฉบับเต็มพร้อมคำใบ้ว่าแต่ละหัวข้อต้องมีอะไรอยู่ใน **`assets/srs-outline.md`**
-
-เอกสารความต้องการฝั่งธุรกิจ (Business Requirements Document — BRD) ที่มักเขียนก่อน SRS ใช้แม่แบบใน [`references/brd-template.md`](references/brd-template.md)
-
-| # | หัวข้อ | ตอบคำถามว่า | ข้ามได้ไหม |
-|---|---|---|---|
-| 1 | บทนำ · วัตถุประสงค์ · ขอบเขต · คำนิยาม | เอกสารนี้พูดถึงอะไร ไม่พูดถึงอะไร | ไม่ได้ |
-| 2 | ภาพรวมระบบ · ผู้ใช้ · ข้อจำกัด · ข้อสมมติ | ระบบอยู่ตรงไหนของโลก | ไม่ได้ |
-| 3 | ข้อกำหนดเชิงหน้าที่ (functional requirement) | ระบบต้องทำอะไรได้ | ไม่ได้ |
-| 4 | ข้อกำหนดด้านส่วนต่อประสาน (interface) | ต่อกับระบบอื่นยังไง | ถ้าไม่ต่อกับใครเลย |
-| 5 | ข้อกำหนดที่ไม่ใช่หน้าที่ (non-functional requirement) | ต้องเร็วแค่ไหน ปลอดภัยแค่ไหน | ไม่ได้ |
-| 6 | ข้อมูลและกฎทางธุรกิจ | ข้อมูลหน้าตายังไง กฎอะไรบังคับ | ไม่ได้ |
-| 7 | เกณฑ์การตรวจรับ | ถือว่าเสร็จเมื่อไหร่ | ไม่ได้ |
-| 8 | ตารางสอบย้อนกลับ | ข้อกำหนดนี้มาจากไหน | ไม่ได้ |
-| 9 | ภาคผนวก · ประวัติการแก้ไข | ใครแก้อะไรเมื่อไหร่ | ไม่ได้ |
-
-**หัวข้อ 1.2 ขอบเขต ต้องมีทั้ง "อยู่ในขอบเขต" และ "ไม่อยู่ในขอบเขต"** —
-ในเอกสารทั้งฉบับ รายการ "ไม่อยู่ในขอบเขต" กันข้อพิพาทได้มากที่สุด
-
----
-
-## 3 · เขียนข้อกำหนดหนึ่งข้อยังไง
-
-### คำบังคับ
-
-| คำ | ความหมาย | ผลทางสัญญา |
-|---|---|---|
-| **ต้อง** (shall) | บังคับ | ถ้าไม่มี ถือว่าไม่ผ่านการตรวจรับ |
-| **ควร** (should) | แนะนำ | ไม่มีได้ ถ้ามีเหตุผลบันทึกไว้ |
-| **อาจ** (may) | ทางเลือก | ไม่มีก็ได้ |
-
-**ใช้ "ต้อง" กับ "จะ" ปนกันไม่ได้** — เลือกคำเดียวแล้วใช้ตลอดเล่ม
-
-### รูปประโยค
-
-```
-<รหัส> · <ผู้กระทำ> ต้อง <ทำอะไร> <เงื่อนไข/ขีดจำกัดที่วัดได้>
-```
-
-```
-❌ ระบบต้องค้นหาได้เร็ว
-❌ ระบบต้องใช้งานง่ายและรองรับผู้ใช้จำนวนมาก
-✅ FR-SRCH-010 · ระบบต้องคืนผลการค้นหาคำสั่งซื้อภายใน 2 วินาที
-   เมื่อฐานข้อมูลมีคำสั่งซื้อไม่เกิน 500,000 รายการ
-```
-
-### กฎเจ็ดข้อ
-
-1. **1 ข้อ 1 ความต้องการ** — เจอคำว่า "และ" ให้สงสัยไว้ก่อนว่าควรแยกเป็น 2 ข้อ
-2. **ระบุผู้กระทำเสมอ** เช่น "ระบบ" · "ผู้อนุมัติ" · "งานตามเวลา" ห้ามเขียนประโยคไม่มีประธาน
-3. **ตัวเลขแทนคำคุณศัพท์** — "เร็ว" "เยอะ" "ง่าย" "เสถียร" ต้องแปลงเป็นตัวเลขทุกคำ
-4. **ห้ามใส่วิธีทำ** — ข้อกำหนดบอกว่า *ต้องได้อะไร* ไม่ใช่ *ทำยังไง*
-   (`ต้องเก็บใน Redis` ผิด · `ต้องคืนผลภายใน 200ms` ถูก)
-5. **ห้าม "เป็นต้น" "ฯลฯ" "และ/หรือ"** — ผู้รับเหมาจะตีความแคบสุดเสมอ
-6. **ทดสอบได้** — อ่านแล้วต้องบอกได้ทันทีว่า *จะพิสูจน์ยังไงว่าผ่าน*
-7. **ไม่ขัดกับข้ออื่น** — เขียนเสร็จแล้วไล่หาข้อที่ขัดกันเอง
-
-### วิธีแปลงคำคลุมเครือ
-
-| ลูกค้าพูดว่า | ถามกลับว่า | เขียนลงไปว่า |
-|---|---|---|
-| "ต้องเร็ว" | เร็วแค่ไหน วัดที่ไหน ตอนมีคนใช้กี่คน | คืนผลภายใน 2 วินาที ที่เปอร์เซ็นไทล์ 95 เมื่อมีผู้ใช้พร้อมกัน 200 คน |
-| "ใช้ง่าย" | ผู้ใช้ใหม่ต้องทำอะไรได้ ในเวลาเท่าไหร่ โดยไม่ต้องอบรม | ผู้ใช้ใหม่สร้างคำสั่งซื้อแรกได้ภายใน 5 นาที โดยไม่ต้องเปิดคู่มือ |
-| "ปลอดภัย" | กันใคร ทำอะไรไม่ได้ | ผู้ใช้สิทธิ์ "ผู้ดู" ต้องเรียก API ที่เปลี่ยนแปลงข้อมูลไม่ได้ และได้รหัส 403 |
-| "รองรับคนเยอะ" | กี่คนพร้อมกัน ช่วงไหนหนักสุด | รองรับผู้ใช้พร้อมกัน 500 คน ในช่วงปิดยอดสิ้นเดือน |
-| "รายงานครบ" | รายงานอะไรบ้าง ใครดู ดูบ่อยแค่ไหน | แจกแจงเป็นข้อ ๆ ข้อละรายงาน |
-
----
-
-## 4 · รหัสและการสอบย้อนกลับ
-
-### ระบบรหัส
-
-```
-FR-<โมดูล>-<เลข 3 หลัก>      ข้อกำหนดเชิงหน้าที่    FR-ORD-010
-NFR-<หมวด>-<เลข 3 หลัก>      ข้อกำหนดที่ไม่ใช่หน้าที่  NFR-PERF-010
-BR-<เลข 3 หลัก>              กฎทางธุรกิจ            BR-020
-IF-<ระบบปลายทาง>-<เลข>       ส่วนต่อประสาน           IF-LINE-010
-```
-
-**เว้นเลขทีละ 10** — เพิ่มข้อแทรกทีหลังได้โดยไม่ต้องเรียงใหม่ทั้งเล่ม
-
-**รหัสที่ออกไปแล้วห้ามนำกลับมาใช้ซ้ำ** ข้อที่ยกเลิกแล้วให้ทำเครื่องหมาย `(ยกเลิก v1.3)`
-ไว้ที่เดิม — ไม่ใช่ลบทิ้ง ไม่งั้นคนที่ถือเอกสารเก่าจะอ่านคนละเรื่องกัน
-
-### ตารางสอบย้อนกลับ
-
-| รหัส | ที่มา | โมดูล | ความสำคัญ | ทดสอบด้วย | สถานะ |
-|---|---|---|---|---|---|
-| FR-ORD-010 | ประชุม 12 ส.ค. ข้อ 3 | คำสั่งซื้อ | ต้องมี | TC-ORD-001..004 | ตกลงแล้ว |
-| NFR-PERF-010 | สัญญา ข้อ 7.2 | ทั้งระบบ | ต้องมี | TC-PERF-001 | ตกลงแล้ว |
-
-- **ทุกข้อกำหนดต้องมีที่มา** — ข้อที่ไม่มีที่มาคือข้อที่ทีมคิดเอง ต้องไปถามให้ได้คำตอบ
-- **ทุกข้อกำหนดต้องมี test case อย่างน้อย 1 ตัว**
-- ความสำคัญใช้ MoSCoW: ต้องมี (Must) · ควรมี (Should) · มีก็ดี (Could) · ไว้ทีหลัง (Won't)
-  **ถ้า "ต้องมี" เกิน 60% ของทั้งหมด แปลว่ายังไม่ได้จัดลำดับจริง**
-
----
-
-## 5 · ข้อกำหนดที่ไม่ใช่หน้าที่ — หมวดที่ต้องถามทุกครั้ง
-
-หมวดที่ลืมแล้วเจ็บที่สุดคือ **ความสามารถในการดูแลรักษา** และ **การสำรองข้อมูล** —
-ไม่มีใครถามตอนเซ็นสัญญา แต่ทุกคนถามตอนระบบล่ม
-
-| หมวด | ต้องถามว่า | ตัวอย่างที่เขียนได้ |
-|---|---|---|
-| ประสิทธิภาพ | ช้าสุดที่ยอมได้เท่าไหร่ วัดที่เปอร์เซ็นไทล์ไหน | หน้ารายการโหลดภายใน 1.5 วิ ที่ p95 |
-| ความจุ | ข้อมูลโตปีละเท่าไหร่ ใช้ไปกี่ปี | รองรับ 2 ล้านรายการใน 3 ปี |
-| ผู้ใช้พร้อมกัน | ช่วงไหนหนักสุด กี่คน | 500 คน ช่วงปิดยอดสิ้นเดือน |
-| ความพร้อมใช้งาน | ปิดปรับปรุงได้ไหม ช่วงไหน | 99.5% ต่อเดือน · ปิดได้คืนวันอาทิตย์ 01:00–03:00 |
-| การสำรองข้อมูล | ย้อนได้ถึงเมื่อไหร่ กู้คืนนานแค่ไหน | สำรองทุกวัน · เก็บ 90 วัน · กู้คืนภายใน 4 ชม. |
-| ความปลอดภัย | สิทธิ์กี่ระดับ ข้อมูลอ่อนไหวอะไรบ้าง · เว็บแอปและ API ใส่ NFR-SEC ตาม `owasp-top10/references/contract-clause.md` | 4 บทบาท · เลขบัตรประชาชนเข้ารหัสตอนพัก |
-| การบันทึกร่องรอย | ต้องรู้ว่าใครแก้อะไรเมื่อไหร่ไหม | บันทึกทุกการเปลี่ยนสถานะ เก็บ 2 ปี |
-| ความเข้ากันได้ | เบราว์เซอร์อะไร มือถือไหม | Chrome/Edge 2 รุ่นล่าสุด · จอ ≥ 360px |
-| ภาษา | 2 ภาษาไหม สกุลเงิน เขตเวลา | ไทย/อังกฤษ · Asia/Bangkok · พ.ศ. ในรายงาน |
-| การดูแลรักษา | ใครดูแลต่อ ส่งมอบอะไรบ้าง | ส่งมอบซอร์สโค้ด · คู่มือติดตั้ง · อบรม 2 วัน |
-| กฎหมาย | ข้อบังคับอะไรบ้าง | พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) |
-
-ตัวเลขทุกตัวต้องมาจาก**ลูกค้า** ไม่ใช่จากคนเขียนเอกสาร
-ถ้าลูกค้าไม่รู้ ให้เสนอตัวเลขแล้ว**บันทึกว่าเป็นข้อสมมติ** ในหัวข้อ 2
-
----
-
-## 6 · รูปในเอกสาร
-
-SRS ที่ไม่มีรูปเลย คนอ่านต้องนึกภาพเอง และแต่ละคนนึกไม่เหมือนกัน
-**รูปในตัว SRS ใช้ house style เดียว:**
-
-| รูปอะไร | วาดด้วย |
-|---|---|
-| ทุกรูปในตัว SRS (ภาพรวม · ผังขั้นตอน · sequence · ER · สถานะ) ไม่ว่าส่งเป็น markdown, .docx หรือ PDF | `diagram-figures` — ไฟล์ภาพคมชัด คุมตำแหน่งเองได้ เก็บไฟล์ต้นทางใน repo ให้ git ตามได้ |
-| รูปด่วนใน README · PR · โน้ตในโค้ด ที่อยู่นอกตัว SRS | `software-diagrams` (Mermaid) |
-
-**ทุกรูปในเอกสารฉบับเดียวต้องใช้ธีมสีชุดเดียวกัน** — ประกาศธีมไว้ที่ต้นเอกสารตาม
-`polished-document-style` หัวข้อ "ธีมของเอกสาร" แล้วทุกเครื่องมืออ่านค่าจากที่เดียวกัน
-
-รูปขั้นต่ำที่ควรมี:
-
-| หัวข้อ | รูป |
-|---|---|
-| 2 ภาพรวมระบบ | C4 ระดับ 1 — ระบบคุยกับใครบ้าง |
-| 2 ผู้ใช้ | ตารางบทบาทและสิทธิ์ |
-| 3 ข้อกำหนดเชิงหน้าที่ | ผังขั้นตอนงานของกระบวนการหลัก |
-| 3 กระบวนการที่ซับซ้อน | sequence diagram |
-| 6 ข้อมูล | ER diagram + ผังสถานะของเอกสารหลัก |
-
----
-
-## 7 · เอกสารสองภาษา
-
-- **เลือกภาษาหลัก 1 ภาษา** แล้วอีกภาษาเป็นวงเล็บหรือคอลัมน์ที่ 2 — ห้ามสลับไปมา
-- **ศัพท์เทคนิคใส่อังกฤษในวงเล็บครั้งแรก** ตามกฎใน `spell-out-abbreviations`
-- **ชื่อฟิลด์ ชื่อ API ชื่อสถานะในฐานข้อมูล ใช้อังกฤษเสมอ** ถึงเอกสารจะเป็นไทย —
-  ไม่งั้นเวลาเขียนโค้ดจะแปลกันคนละแบบ
-- ทำ**อภิธานศัพท์**ในหัวข้อ 1.3 ให้ครบ: คำไทย · คำอังกฤษ · ความหมาย · ชื่อในระบบ
-- ฟอนต์และการจัดหน้าไฟล์ Word ดู `branded-document-design`
-
----
-
-## 8 · รีวิวความครบถ้วน
-
-ไล่ checklist ใน [`references/review-checklist.md`](references/review-checklist.md) ให้ครบก่อนส่งทุกครั้ง (ขอบเขต · ข้อกำหนดรายข้อ · ความครบของหมวด · เอกสาร)
-เพราะข้อที่ไม่ผ่านจะกลายเป็นข้อพิพาทตอนตรวจรับ
-
----
-
-## 9 · Anti-patterns
-
-- ❌ **คัดลอกบันทึกการประชุมมาวางเป็นข้อกำหนด** — คนละรูปแบบ คนละระดับความละเอียด
-- ❌ **"ระบบต้องใช้งานง่าย"** — ไม่มีใครตรวจรับข้อนี้ได้
-- ❌ **ใส่หน้าจอที่ออกแบบไว้แล้วลงใน SRS** — ล็อกวิธีทำตั้งแต่ยังไม่รู้ความต้องการครบ
-  (ภาพร่างหน้าจอไปอยู่ใน FSD)
-- ❌ **ไม่มีหัวข้อ "ไม่อยู่ในขอบเขต"** — ต้นเหตุอันดับ 1 ของงานเพิ่มที่ไม่ได้เงิน
-- ❌ **ทุกข้อเป็น "ต้องมี"** — แปลว่ายังไม่ได้คุยเรื่องลำดับความสำคัญกับลูกค้า
-- ❌ **ข้อกำหนดที่ไม่ใช่หน้าที่เขียนรวมเป็นย่อหน้าเดียว** — ต้องแตกเป็นข้อ ๆ มีรหัส
-- ❌ **ตัวเลขที่คนเขียนคิดเอง** โดยไม่ได้ถามลูกค้า แล้วไม่บอกว่าเป็นข้อสมมติ
-- ❌ **ไม่มีเลขรุ่นและประวัติการแก้ไข** — ไม่มีใครรู้ว่าถือฉบับล่าสุดอยู่หรือเปล่า
-- ❌ **ใช้รหัสซ้ำกับข้อที่ยกเลิกไปแล้ว**
-- ❌ **ส่งไฟล์ Word หน้าตาเริ่มต้น** — ดู `branded-document-design`
-
----
-
-## 10 · เชื่อมกับ skill อื่น
-
-| ต้องการ | ใช้คู่กับ |
-|---|---|
-| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
-| รูปแบบ markdown ระหว่างร่าง | `polished-document-style` |
-| รูปในเอกสาร (ดูข้อ 6 ว่าเลือกตัวไหน) | `software-diagrams` · `diagram-figures` |
-| ธีมสีของทั้งเอกสาร | `polished-document-style` หัวข้อ "ธีมของเอกสาร" |
-| ลงรายละเอียดระดับที่ developer ลงมือได้ | `fsd-writing` |
-| แตกเป็น user story ตอนเริ่มทำจริง | `user-story-writer` |
-| แปลงข้อกำหนดเป็น test case | `test-case-template` |
-| ตัดสิ่งที่ไม่จำเป็นออกจากเอกสาร | `simplicity-first` |
-| นำเสนอ SRS ให้ผู้บริหาร | `presentation-design` |
-
----
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: brd-template.md
-
-# BRD template — stakeholder version (Mode B)
-
-แม่แบบ Business Requirements Document (BRD) ฉบับส่งผู้เกี่ยวข้อง ของ agent `business-analyst` — ย้ายมาจากตัว agent (2026-10-14) · จัดรูปแบบตาม `polished-document-style`
-
-**สารบัญ:**
-
-- [Standard Output: Polished BRD (Mode B)](#standard-output-polished-brd-mode-b) — template sections: Executive Summary · Business Objective · Stakeholders · Scope · Business Requirements · Business Rules · Assumptions & Constraints · Open Questions · Process Flow · Sign-off
-
-## Standard Output: Polished BRD (Mode B)
-
-```markdown
-# BRD: <Feature Name>
-
-| | |
-|--|--|
-| **Document Type** | Business Requirements Document |
-| **Version** | 1.0 |
-| **Status** | Draft |
-| **Date** | YYYY-MM-DD |
-| **Author** | @ba-name |
-| **Reviewer(s)** | @stakeholder |
-
----
-
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Business Objective](#2-business-objective)
-3. [Stakeholders](#3-stakeholders)
-4. [Scope](#4-scope)
-5. [Business Requirements](#5-business-requirements)
-6. [Business Rules](#6-business-rules)
-7. [Assumptions & Constraints](#7-assumptions--constraints)
-8. [Open Questions](#8-open-questions)
-
----
-
-## 1. Executive Summary
-
-> **For non-technical readers** — 1 paragraph capturing what, why, and impact.
-
-## 2. Business Objective
-
-| Aspect | Details |
-|--------|---------|
-| **Problem** | ... |
-| **Goal** | ... |
-| **Success Metrics** | • Metric 1: target<br>• Metric 2: target |
-| **Business Impact** | Revenue / Efficiency / UX |
-
-## 3. Stakeholders
-
-| Role | Name | Interest | Influence | RACI |
-|------|------|:--------:|:---------:|:----:|
-| Product Owner | @alice | High | High | A |
-| End User | @customer | High | Medium | C |
-| Engineering | @bob | Medium | High | R |
-| Legal | @charlie | Low | Medium | I |
-
-> **RACI:** R=Responsible, A=Accountable, C=Consulted, I=Informed
-
-## 4. Scope
-
-### In Scope
-- ...
-
-### Out of Scope
-- ...
-
-> **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
-
-## 5. Business Requirements
-
-| ID | Requirement | Priority | Acceptance |
-|:---|:------------|:--------:|:-----------|
-| BR-001 | System shall... | Must | Verified by ... |
-| BR-002 | System should... | Should | Verified by ... |
-| BR-003 | System could... | Could | Verified by ... |
-
-> **MoSCoW prioritization:** Must / Should / Could / Won't
-
-## 6. Business Rules
-
-| ID | Rule | Source |
-|:---|:-----|:-------|
-| BRL-001 | Tax rate = 7% on Thai customers | Thai VAT law |
-| BRL-002 | Max discount = 30% per order | Pricing policy |
-
-## 7. Assumptions & Constraints
-
-### Assumptions
-- ...
-
-### Constraints
-| Type | Constraint |
-|------|------------|
-| Budget | $XX,XXX |
-| Timeline | Launch by YYYY-MM-DD |
-| Compliance | PDPA, PCI-DSS |
-| Technical | Must integrate with existing CRM |
-
-## 8. Open Questions
-
-| ID | Question | Owner | Due |
-|:---|:---------|:------|:---:|
-| Q-001 | Which payment gateway? | @alice | MM/DD |
-| Q-002 | Refund policy? | @legal | MM/DD |
-
-## 9. Process Flow (if applicable)
-
-\`\`\`mermaid
-flowchart LR
-    A[Customer requests] --> B{Validate}
-    B -->|Valid| C[Process]
-    B -->|Invalid| D[Reject]
-    C --> E[Notify]
-\`\`\`
-
-## Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | Pending | — |
-| Tech Lead | @bob | Pending | — |
-| Compliance | @charlie | Pending | — |
-```
-
-
-## reference: review-checklist.md
-
-# รีวิวความครบถ้วนของ SRS
-
-ใช้กับ `srs-writing` ข้อ 8 · ไล่ให้ครบก่อนส่งทุกครั้ง · "ข้อ 5" หมายถึงหมวดข้อกำหนดที่ไม่ใช่หน้าที่ใน `SKILL.md`
-
-**ขอบเขต**
-
-- [ ] มีรายการ "ไม่อยู่ในขอบเขต" ไหม
-- [ ] มีข้อสมมติเขียนไว้ชัดไหม และใครต้องยืนยันข้อสมมตินั้น
-- [ ] ระบุระบบอื่นที่ต้องต่อครบไหม ใครเป็นเจ้าของแต่ละระบบ
-
-**ข้อกำหนดรายข้อ**
-
-- [ ] ทุกข้อมีรหัสไหม
-- [ ] ทุกข้อเขียน test case ได้ไหม
-- [ ] มีคำว่า "เร็ว" "ง่าย" "เหมาะสม" "เสถียร" "ยืดหยุ่น" หลงเหลือไหม
-- [ ] มี "เป็นต้น" "ฯลฯ" "และ/หรือ" หลงเหลือไหม
-- [ ] มีข้อไหนบอกวิธีทำแทนที่จะบอกผลลัพธ์ไหม
-- [ ] มี 2 ข้อที่ขัดกันไหม
-
-**ความครบของหมวด**
-
-- [ ] ครบทั้ง 11 หมวดในข้อ 5 ไหม (หรือเขียนไว้ว่าหมวดไหนไม่เกี่ยวเพราะอะไร)
-- [ ] มีข้อกำหนดเรื่องสิทธิ์ผู้ใช้ไหม
-- [ ] มีข้อกำหนดเรื่องการย้ายข้อมูลเดิมเข้าระบบใหม่ไหม
-- [ ] มีข้อกำหนดเรื่องรายงานไหม (มักถูกลืม แล้วมาโผล่ตอนใกล้ส่ง)
-- [ ] มีข้อกำหนดเรื่องการแจ้งเตือนไหม (อีเมล · LINE · ในระบบ)
-- [ ] มีเกณฑ์การตรวจรับที่วัดได้ไหม
-
-**เอกสาร**
-
-- [ ] ทุกข้อมีที่มาในตารางสอบย้อนกลับไหม
-- [ ] "ต้องมี" ไม่เกิน 60% ใช่ไหม
-- [ ] มีประวัติการแก้ไขพร้อมเลขรุ่นไหม
-- [ ] มีช่องเซ็นรับพร้อมชื่อและตำแหน่งจริงไหม
-- [ ] อภิธานศัพท์ครอบคลุมทุกคำที่ใช้ในเล่มไหม

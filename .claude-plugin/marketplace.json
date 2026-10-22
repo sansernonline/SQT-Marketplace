@@ -7,7 +7,12 @@
     {
       "name": "superuser",
       "source": "./plugins/superuser",
-      "description": "SuperUser core and master copy — a lead agent that sizes the task, picks or builds a playbook, hands parts to subagents, proves the result, keeps one shared CONTEXT.md, logs every action and learns after every task. Install alone, or adapt it into a domain plugin with ADAPT.md."
+      "description": "SuperUser — a team lead agent. Sizes the task and picks a budget, briefs every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, learning loop, inbox, hook gates) switch per project. Install alone, or extend it with a domain plugin via dependencies."
+    },
+    {
+      "name": "sqt-toolkit",
+      "source": "./plugins/sqt-toolkit",
+      "description": "Shared document and design toolkit — polished Markdown and .docx reports, branded documents, HTML slide decks and .pptx conversion, diagrams and figures, AI image briefs, meeting prep cards and summaries, polite Thai-English messages, product naming, document naming and abbreviation glossaries. Installed automatically by every SQT domain plugin; install alone to use with any workflow."
     },
     {
       "name": "software-company",

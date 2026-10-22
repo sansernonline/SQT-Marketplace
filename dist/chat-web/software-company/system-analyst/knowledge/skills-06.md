@@ -1,3 +1,655 @@
+# skill: fsd-writing
+
+Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
+
+# เขียน Functional Specification Document (FSD)
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+
+> **กฎข้อเดียว:** FSD เสร็จเมื่อ developer เปิดอ่านแล้ว**เขียนโค้ดได้โดยไม่ต้องเดาและไม่ต้องถาม**
+> ทุกจุดที่ต้องเดา คือจุดที่จะกลายเป็นงานแก้หลังส่งมอบ
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เขียน FSD หรือ Functional Spec ของฟีเจอร์ โมดูล หรือทั้งระบบ
+- แปลง Software Requirements Specification (SRS) หรือ Business Requirements Document (BRD) ให้ละเอียดพอลงมือทำ
+- รีวิว FSD ของคนอื่น แล้วต้องบอกให้ได้ว่าขาดอะไร
+- developer ถามคำถามเดิมซ้ำ ๆ ระหว่างทำ — แปลว่า FSD ยังไม่ครบ
+
+## เมื่อไหร่ **ไม่** ใช้
+
+| งาน | ใช้ตัวนี้แทน |
+|---|---|
+| ข้อกำหนดระดับที่ลูกค้าเซ็นรับ | `srs-writing` |
+| user story สำหรับ sprint | `user-story-writer` |
+| ออกแบบ endpoint ของฟีเจอร์หนึ่ง | command `/api-design` |
+| ข้อตกลงกลางของ API ทั้งระบบ | `api-conventions` |
+| ตาราง คอลัมน์ ความสัมพันธ์ | `database-design` |
+| หน้าตาหน้าจอ ระยะห่าง สถานะ | `ui-craft` + skill แพลตฟอร์ม |
+| รูปแบบ markdown และธีมเอกสาร | `polished-document-style` |
+| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/worked-examples.md](references/worked-examples.md) | ถ้าจะเขียน use case หน้าจอ ตารางสถานะ หรือกฎทางธุรกิจตัวแรกของเอกสาร ให้เปิดดูตัวอย่างเต็มแล้วลอกรูปแบบไปใช้ |
+| [references/edge-cases.md](references/edge-cases.md) | ตอนเขียนหัวข้อข้อผิดพลาดและกรณีขอบ และตอนรีวิวก่อนส่ง เพื่อไล่ให้ครบทุกกรณี |
+| [references/fsd-vs-srs.md](references/fsd-vs-srs.md) | ถ้ายังไม่แน่ใจว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD ให้เปิดตารางเทียบนี้ |
+| [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md) | ถ้าเขียน FSD แบบอ่านง่ายสำหรับผู้มีส่วนได้เสีย (Mode B — 11 หัวข้อเดียวกับข้อ 3) หรือต้องการแม่แบบ use case, API endpoint, data model ฉบับคนตรวจอ่าน |
+| [references/figures.md](references/figures.md) | ตอนวางแผนว่าหัวข้อไหนต้องมีรูปชนิดไหน |
+| [references/outline-sections.md](references/outline-sections.md) | ถ้าต้องตัดสินว่าหัวข้อไหนข้ามได้ ให้เปิดตารางนี้ ส่วนโครงเต็มที่ลอกไปกรอกได้อยู่ใน [assets/fsd-outline.md](assets/fsd-outline.md) |
+| [references/related-skills.md](references/related-skills.md) | ถ้างานต้องใช้ skill อื่นคู่กัน เช่น รูป ข้อตกลง API หรือ test case ให้เปิดดูว่าใช้ตัวไหน |
+
+## 1 · FSD ต่างจาก SRS ยังไง — เส้นแบ่งที่ต้องชัด
+
+เอกสารสองฉบับนี้ปนกันบ่อยที่สุด ผลคือ SRS ยาวจนลูกค้าไม่อ่าน และ FSD ตื้นจน developer ต้องถาม
+SRS บอกว่าระบบ**ต้องทำอะไรได้** ส่วน FSD บอกว่าระบบ**ทำสิ่งนั้นอย่างไร** ตารางเทียบทีละมิติอยู่ใน [references/fsd-vs-srs.md](references/fsd-vs-srs.md)
+
+> 🚨 **ห้าม FSD สร้างข้อกำหนดใหม่เอง** — เจออะไรที่ SRS ไม่ได้ครอบคลุม ให้**ลงรายการคำถามค้าง** ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ
+> ข้อนั้นต้องเพิ่มใน SRS ก่อน ไม่ใช่เขียนลง FSD เงียบ ๆ
+> ข้อที่โผล่มาใน FSD โดยไม่มีที่มา คือข้อที่ลูกค้าจะปฏิเสธจ่ายตอนตรวจรับ
+
+## 2 · ลำดับการทำงาน
+
+1. อ่าน SRS หรือ BRD ให้จบก่อน แล้ว**ทำรายการข้อที่ยังคลุมเครือ** ถามรวมครั้งเดียวตอนเริ่มแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เฉพาะข้อที่ตีความต่างแล้วงานออกมาต่างกันทั้งชุด (ตัวเลือก = การตีความที่เป็นไปได้ อ้างข้อใน SRS/BRD) ที่เหลือใส่ `(รอยืนยัน)` แล้วทำต่อ
+2. ยืนยันว่าเอกสารนี้เขียนให้ใครอ่าน — developer อย่างเดียว (**Mode A** ค่าเริ่มต้น) หรือมีลูกค้าอ่านเพื่อเซ็นรับด้วย (**Mode B** — 11 หัวข้อเดิม เรียงเหมือนเดิม แค่จัดหน้าให้คนตรวจอ่านง่าย ดู [references/stakeholder-doc-templates.md](references/stakeholder-doc-templates.md))
+3. ไล่ทีละ use case ไม่ใช่ทีละหน้าจอ — หน้าจอเกิดจาก use case ไม่ใช่ทางกลับกัน
+4. เขียนกฎทางธุรกิจแยกออกมาก่อน แล้วค่อยอ้างถึงจากขั้นตอน (ข้อ 7)
+5. ทำตารางสอบย้อนกลับไปพร้อมกัน ไม่ใช่ทำตอนจบ
+6. รีวิวตามข้อ 11 ก่อนส่ง
+
+## 3 · โครงเอกสาร
+
+มี 11 หัวข้อ เรียงตามนี้: บทนำ · ผู้ใช้และสิทธิ์ · ภาพรวมกระบวนการ · use case · ข้อกำหนดหน้าจอ · ผังสถานะ · กฎทางธุรกิจ · ข้อมูลและการเชื่อมต่อ · ข้อผิดพลาดและกรณีขอบ · ตารางสอบย้อนกลับ · ประวัติการแก้ไข
+ข้ามได้แค่ข้อกำหนดหน้าจอถ้าไม่มีหน้าจอ และผังสถานะถ้าไม่มีสถานะ โครงเต็มอยู่ใน **[`assets/fsd-outline.md`](assets/fsd-outline.md)** ส่วนตารางที่บอกว่าแต่ละหัวข้อตอบคำถามอะไรอยู่ใน [references/outline-sections.md](references/outline-sections.md)
+
+## 4 · use case — รูปแบบเดียวทั้งเอกสาร
+
+ทุก use case มีหัวตาราง (มาจาก · ผู้ทำ · เงื่อนไขก่อนเริ่ม · ผลเมื่อสำเร็จ · ความถี่) ตามด้วยตารางขั้นตอนหลัก ทางเลือกอื่น และกรณีผิดพลาด ตัวอย่างเต็ม UC-ORD-010 อยู่ใน [references/worked-examples.md](references/worked-examples.md)
+
+**กฎของ use case:**
+
+- **หนึ่ง use case = หนึ่งเป้าหมายของผู้ใช้** ไม่ใช่หนึ่งหน้าจอ
+- ทุก use case ต้องมี **ทางเลือกอื่น** และ **กรณีผิดพลาด** อย่างน้อยอย่างละหนึ่ง —
+  use case ที่มีแต่ทางที่ทุกอย่างราบรื่น คือ use case ที่ยังเขียนไม่เสร็จ
+- คอลัมน์ "ระบบทำอะไรต่อ" ห้ามว่าง — ถ้าว่างแปลว่ายังไม่ได้คิดว่าระบบตอบสนองยังไง
+- **เงื่อนไขก่อนเริ่มต้องตรวจซ้ำที่ฝั่งเซิร์ฟเวอร์เสมอ** การซ่อนปุ่มไม่ใช่การควบคุมสิทธิ์
+- เขียนเป็น "ผู้ใช้ทำ → ระบบตอบ" สลับกัน ไม่ใช่เล่าเป็นย่อหน้า
+
+## 5 · ข้อกำหนดหน้าจอ
+
+ตัวอย่างเต็ม SC-ORD-020 พร้อมตารางฟิลด์อยู่ใน [references/worked-examples.md](references/worked-examples.md)
+
+**ทุกหน้าจอต้องระบุครบ 6 อย่าง:**
+
+| ต้องมี | รายละเอียด |
+|---|---|
+| ตารางฟิลด์ | ชนิด · บังคับไหม · กฎตรวจ · **ข้อความ error ตามจริง** · ค่าเริ่มต้น |
+| สิทธิ์ต่อบทบาท | บทบาทไหนเห็น · แก้ได้ · แค่อ่าน · ไม่เห็นเลย |
+| ห้าสถานะของหน้าจอ | ว่าง · กำลังโหลด · ผิดพลาด · มีบางส่วน · สำเร็จ (ดู `ui-craft`) |
+| การกระทำและผลลัพธ์ | ปุ่มไหนพาไปไหน · ปุ่มไหนเปิดกล่องยืนยัน |
+| กฎการแสดงผล | รูปแบบวันที่ · ทศนิยมของเงิน · การปัดเศษ · เขตเวลา |
+| ที่มาของข้อมูล | ฟิลด์นี้มาจาก endpoint ไหนหรือตารางไหน |
+
+> **"ข้อความ error ตามจริง" คือคำที่ผู้ใช้จะเห็นจริง ๆ** ไม่ใช่ "แสดงข้อความแจ้งเตือน"
+> ถ้าไม่เขียน developer จะแต่งเอง แล้วทั้งระบบจะมีสำนวนคนละแบบสิบแบบ
+>
+> **กฎการแสดงผลต้องเขียนไว้** — "ยอดรวม" ที่ไม่บอกว่าปัดเศษยังไง
+> คือบั๊กที่จะเจอตอนกระทบยอดสิ้นเดือน
+
+## 6 · ผังสถานะ — จุดที่ FSD ลืมบ่อยที่สุด
+
+ของที่มี "สถานะ" (คำสั่งซื้อ ใบลา ตั๋วงาน เอกสาร) ต้องมีตารางที่มีคอลัมน์ จาก · ไป · ใครทำได้ · เงื่อนไข · ผลข้างเคียง และ**ห้ามมีแค่รูป** ตัวอย่างตารางอยู่ใน [references/worked-examples.md](references/worked-examples.md)
+
+**กฎ:**
+
+- **การเปลี่ยนที่ไม่อยู่ในตาราง คือการเปลี่ยนที่ต้องถูกปฏิเสธ** เขียนบรรทัด "ทำไม่ได้" ไว้ให้ชัด
+  เพราะสิ่งที่ห้ามทำคือสิ่งที่ทดสอบได้ยากที่สุดถ้าไม่มีใครเขียนไว้
+- ทุกสถานะต้องมีทางออก ยกเว้นสถานะปลายทางที่ตั้งใจให้จบ
+- ผลข้างเคียงที่เกิดกับระบบอื่น (อีเมล สต็อก บัญชี) ต้องอยู่ในตารางนี้ ไม่ใช่ซ่อนอยู่ในขั้นตอน
+
+## 7 · กฎทางธุรกิจแยกออกมาจากขั้นตอน
+
+กฎแต่ละข้อมีรหัส ชื่อ เนื้อกฎ และที่มา ตัวอย่าง BR-030 อยู่ใน [references/worked-examples.md](references/worked-examples.md)
+
+- **กฎหนึ่งข้อเขียนที่เดียว** แล้วอ้างด้วยรหัสจากทุกที่ที่ใช้ — ถ้าลอกไปวางสามที่ สักวันจะแก้ไม่ครบ
+- ทุกกฎต้องมี**ที่มา** กฎที่ไม่มีที่มาคือกฎที่ทีมคิดเอง
+- กฎที่เปลี่ยนตามเวลา (อัตราภาษี ค่าธรรมเนียม) ต้องระบุว่า**เก็บไว้ที่ไหน** —
+  ในโค้ด ในตารางตั้งค่า หรือให้ผู้ดูแลระบบแก้ได้เอง
+
+## 8 · ข้อผิดพลาดและกรณีขอบที่ต้องตอบให้ครบ
+
+ตารางกรณีขอบคือสิ่งที่ทีมทดสอบจะใช้ และคือสิ่งที่ FSD ส่วนใหญ่ขาด ตั้งแต่ไม่มีข้อมูล กดปุ่มรัว ๆ สองคนแก้พร้อมกัน ไปจนถึงสิทธิ์ไม่พอ ให้ไล่ทุกแถวใน [references/edge-cases.md](references/edge-cases.md) แล้วตอบทุกแถวที่เกี่ยวกับฟีเจอร์
+
+## 9 · รหัสและการสอบย้อนกลับ
+
+```
+UC-<โมดูล>-<เลข 3 หลัก>      use case              UC-ORD-010
+SC-<โมดูล>-<เลข 3 หลัก>      ข้อกำหนดหน้าจอ         SC-ORD-020
+BR-<เลข 3 หลัก>              กฎทางธุรกิจ            BR-030
+```
+
+ใช้ระบบเดียวกับ `srs-writing` — **เว้นเลขทีละ 10** และ **รหัสที่ออกไปแล้วห้ามใช้ซ้ำ**
+
+| SRS | FSD | หน้าจอ | test case | สถานะ |
+|---|---|---|---|---|
+| FR-ORD-040 | UC-ORD-010 | SC-ORD-020 | TC-ORD-010..014 | ทำแล้ว |
+| FR-ORD-040 | UC-ORD-010 · 010-E1 | SC-ORD-020 | TC-ORD-015 | ทำแล้ว |
+
+- **ทุก use case ต้องชี้กลับไปที่ข้อกำหนดใน SRS ได้** — ถ้าชี้ไม่ได้ แปลว่ามีของแถมที่ไม่มีใครสั่ง
+- **ทุกข้อกำหนดใน SRS ต้องมี use case อย่างน้อยหนึ่งตัว** — ถ้าไม่มี แปลว่าลืมทำ
+- ทางเลือกอื่นและกรณีผิดพลาดต้องมี test case ของตัวเอง ห้ามนับรวมกับทางหลัก
+
+## 10 · รูปในเอกสาร
+
+ตารางว่าหัวข้อไหนควรมีรูปชนิดไหนอยู่ใน [references/figures.md](references/figures.md) ข้อที่ต้องจำคือ state diagram ใช้**คู่กับตาราง ไม่ใช่แทนตาราง**
+
+รูปทุกรูปในเอกสาร FSD (ทั้ง Mode A และ Mode B ทั้ง markdown และไฟล์ที่ลูกค้าเซ็นรับ) ใช้ `diagram-figures` แบบ house style ชุดเดียว ส่วนภาพร่างหน้าจอใช้ `markdown-visuals`
+Mermaid ผ่าน `software-diagrams` ใช้แค่ร่างคุยกันในแชต ไม่ใส่ในเอกสารที่ส่ง
+**ทุกรูปในฉบับเดียวใช้ธีมสีชุดเดียวกัน** ตาม `doc-theme` (ดู `polished-document-style`)
+
+## 11 · รีวิวความครบถ้วนก่อนส่ง
+
+**ความครบ**
+
+- [ ] ทุกข้อกำหนดใน SRS มี use case อย่างน้อยหนึ่งตัว
+- [ ] ทุก use case มีทางเลือกอื่นและกรณีผิดพลาดอย่างน้อยอย่างละหนึ่ง
+- [ ] ทุกหน้าจอมีตารางฟิลด์ครบ 5 คอลัมน์ และห้าสถานะ
+- [ ] ทุกของที่มีสถานะ มีตารางการเปลี่ยนสถานะ รวมบรรทัดที่ "ทำไม่ได้"
+- [ ] ตอบตารางกรณีขอบในข้อ 8 ครบทุกแถวที่เกี่ยวข้อง
+
+**ความชัด**
+
+- [ ] ไม่มีคำว่า "ตามความเหมาะสม" "โดยอัตโนมัติ" "ที่จำเป็น" โดยไม่บอกว่าคืออะไร
+- [ ] ข้อความ error ทุกอันเขียนเป็นคำจริง ไม่ใช่ "แสดงข้อความแจ้งเตือน"
+- [ ] ตัวเลขทุกตัวมีหน่วย และมีที่มา
+- [ ] ชื่อฟิลด์ ชื่อสถานะ ชื่อ endpoint ใช้ภาษาอังกฤษตรงกับที่จะใช้ในโค้ดจริง
+
+**ความสอดคล้อง**
+
+- [ ] คำเดียวกันหมายถึงของเดียวกันทั้งเล่ม (มีอภิธานศัพท์)
+- [ ] ชื่อสถานะในผัง ในตาราง และใน use case ตรงกันหมด
+- [ ] ไม่มีข้อกำหนดใหม่ที่ไม่มีใน SRS
+
+> **ทดสอบขั้นสุดท้าย:** ให้ developer ที่ไม่ได้อยู่ในที่ประชุมอ่านหนึ่งคน
+> ทุกคำถามที่เขาถาม คือหนึ่งช่องว่างที่ต้องเติมก่อนส่ง
+
+## 12 · Anti-patterns
+
+- ❌ **คัดลอก SRS มาแล้วเติมคำว่า "ระบบจะ"** — ได้เอกสารสองฉบับที่พูดเรื่องเดียวกัน
+- ❌ **use case ที่มีแต่ทางที่ราบรื่น** — ทางที่พังคือสิ่งที่ FSD มีไว้เพื่อบอก
+- ❌ **"แสดงข้อความแจ้งเตือน"** โดยไม่บอกว่าข้อความว่าอะไร
+- ❌ **"ระบบจะคำนวณโดยอัตโนมัติ"** โดยไม่บอกสูตรและการปัดเศษ
+- ❌ **ผังสถานะเป็นรูปอย่างเดียว** — รูปบอกไม่ได้ว่าใครมีสิทธิ์และมีผลข้างเคียงอะไร
+- ❌ **คุมสิทธิ์ด้วยการซ่อนปุ่ม** โดยไม่ระบุการตรวจฝั่งเซิร์ฟเวอร์
+- ❌ **กฎทางธุรกิจกระจายอยู่ในขั้นตอน** — พอแก้ทีหลังก็ตกหล่น
+- ❌ **หน้าจอที่ไม่บอกว่าข้อมูลมาจากไหน** — developer จะเดา endpoint เอง
+- ❌ **เอา wireframe มาแทนข้อกำหนด** — รูปบอกไม่ได้ว่าอะไรบังคับ กฎตรวจคืออะไร
+- ❌ **ไม่มีตารางสอบย้อนกลับ** — แล้วไม่มีใครรู้ว่าทำครบหรือยัง
+
+## 13 · ตัวย่อ
+
+- **FSD** — Functional Specification Document (เอกสารข้อกำหนดเชิงหน้าที่ ระดับที่ลงมือทำได้)
+- **SRS** — Software Requirements Specification (เอกสารข้อกำหนดซอฟต์แวร์ ระดับที่ลูกค้าเซ็นรับ)
+- **BRD** — Business Requirements Document (เอกสารความต้องการทางธุรกิจ)
+- **use case** — กรณีการใช้งาน หนึ่งเป้าหมายของผู้ใช้ตั้งแต่เริ่มจนจบ
+- **state machine** — ผังสถานะ บอกว่าของชิ้นหนึ่งเปลี่ยนจากสถานะไหนไปสถานะไหนได้บ้าง
+- **ETag** — Entity Tag (รหัสระบุรุ่นของข้อมูล ใช้ตรวจว่ามีคนแก้ไปก่อนไหม)
+
+
+## reference: edge-cases.md
+
+# ข้อผิดพลาดและกรณีขอบที่ต้องตอบให้ครบ
+
+ทีมทดสอบจะใช้ตารางนี้ และเป็นส่วนที่ FSD ส่วนใหญ่ขาด ให้ไล่ทุกแถวที่เกี่ยวกับฟีเจอร์ แล้วเขียนคำตอบลงหัวข้อ 9 ของเอกสาร
+
+| กรณี | คำถามที่ต้องตอบ |
+|---|---|
+| ไม่มีข้อมูล | หน้าจอว่างเปล่าแสดงอะไร มีปุ่มพาไปทำอะไรต่อไหม |
+| ข้อมูลเยอะมาก | กี่รายการต่อหน้า · เรียงยังไง · ค้นหาได้ไหม |
+| กดปุ่มรัว ๆ | กันงานซ้ำยังไง (ดู idempotency key ใน `api-conventions`) |
+| สองคนแก้พร้อมกัน | ใครชนะ · อีกคนเห็นอะไร (ดู ETag ใน `api-conventions`) |
+| เน็ตหลุดกลางทาง | ข้อมูลที่กรอกหายไหม · ลองใหม่แล้วซ้ำไหม |
+| หมดเวลา session | เด้งออกทันที หรือเก็บสิ่งที่กรอกไว้ |
+| ค่าที่ขอบเขต | 0 · ค่าติดลบ · วันนี้ · วันสุดท้ายของเดือน · ปีอธิกสุรทิน |
+| ข้อความยาวผิดปกติ | ชื่อ 200 ตัวอักษรทำให้เลย์เอาต์พังไหม |
+| ภาษาไทยและอักขระพิเศษ | เรียงลำดับถูกไหม · ค้นหาเจอไหม · อีโมจิพังไหม |
+| ระบบภายนอกไม่ตอบ | รอกี่วินาที · ลองใหม่กี่ครั้ง · ผู้ใช้เห็นอะไรระหว่างนั้น |
+| สิทธิ์ไม่พอ | เห็นแต่กดไม่ได้ หรือไม่เห็นเลย — **ต้องเลือกให้ชัด** |
+
+
+## reference: figures.md
+
+# รูปในเอกสาร FSD
+
+ตารางนี้บอกว่าหัวข้อไหนของ FSD ควรมีรูปชนิดไหน ส่วนเครื่องมือที่ใช้วาดและเรื่องธีมสีอยู่ใน `SKILL.md` ข้อ 10
+
+| หัวข้อ | รูปที่ควรมี |
+|---|---|
+| 3 ภาพรวมกระบวนการ | ผังขั้นตอนงานตั้งแต่ต้นจนจบ |
+| 4 use case ที่มีหลายฝ่าย | sequence diagram |
+| 5 หน้าจอ | ภาพร่างหน้าจอ พร้อมหมายเลขชี้ไปที่ตารางฟิลด์ |
+| 6 สถานะ | state diagram — **คู่กับตาราง ไม่ใช่แทนตาราง** |
+| 8 ข้อมูล | ER diagram เฉพาะตารางที่เกี่ยวกับโมดูลนี้ |
+
+
+## reference: fsd-vs-srs.md
+
+# FSD ต่างจาก SRS ยังไง
+
+ตารางเทียบเอกสารสองฉบับทีละมิติ ใช้ตอนต้องตัดสินว่าเนื้อหาชิ้นหนึ่งควรอยู่ใน SRS หรือใน FSD
+
+| | SRS | FSD |
+|---|---|---|
+| ตอบคำถาม | ระบบ**ต้องทำอะไรได้** | ระบบ**ทำสิ่งนั้นอย่างไร** |
+| คนอ่านหลัก | ลูกค้า · ผู้บริหาร · คนเซ็นรับ | developer · tester · ux |
+| ระดับรายละเอียด | "ระบบต้องให้ผู้ใช้ยกเลิกคำสั่งซื้อได้" | ปุ่มอยู่ตรงไหน · ยกเลิกได้ในสถานะไหนบ้าง · ใครมีสิทธิ์ · ยืนยันด้วยอะไร · ข้อความตอนทำไม่ได้ว่าอะไร · ระบบทำอะไรต่อ |
+| เปลี่ยนแปลง | ต้องผ่านการอนุมัติ มีผลต่อสัญญา | เปลี่ยนได้ในทีม ตราบใดที่ยังตอบ SRS ข้อเดิม |
+| หน่วยเนื้อหา | ข้อกำหนด (`FR-…`) | use case (`UC-…`) + ข้อกำหนดหน้าจอ (`SC-…`) |
+| ตัวเลข | มาจากลูกค้า | มาจาก SRS ห้ามคิดใหม่ |
+
+
+## reference: outline-sections.md
+
+# หัวข้อของ FSD และข้ามได้เมื่อไหร่
+
+ตารางนี้สรุปว่าแต่ละหัวข้อของ FSD ตอบคำถามอะไร ส่วนโครงเต็มที่มีคำใบ้ให้กรอกอยู่ใน [`../assets/fsd-outline.md`](../assets/fsd-outline.md)
+
+| # | หัวข้อ | ตอบคำถามว่า | ข้ามได้ไหม |
+|---|---|---|---|
+| 1 | บทนำ · ขอบเขต · เอกสารอ้างอิง | ฉบับนี้ครอบคลุมส่วนไหน อ้างอิง SRS ข้อไหน | ไม่ได้ |
+| 2 | ผู้ใช้และสิทธิ์ | ใครทำอะไรได้บ้าง | ไม่ได้ |
+| 3 | ภาพรวมกระบวนการ | งานไหลจากต้นจนจบยังไง | ไม่ได้ |
+| 4 | use case รายตัว | แต่ละงานทำทีละขั้นยังไง | ไม่ได้ |
+| 5 | ข้อกำหนดหน้าจอ | หน้าจอมีอะไร ฟิลด์ตรวจอะไร | ข้ามได้ถ้าไม่มีหน้าจอ |
+| 6 | ผังสถานะ | ของชิ้นนี้เปลี่ยนสถานะไปไหนได้บ้าง | ข้ามได้ถ้าไม่มีสถานะ |
+| 7 | กฎทางธุรกิจ | กฎอะไรบังคับอยู่ | ไม่ได้ |
+| 8 | ข้อมูลและการเชื่อมต่อ | ใช้ข้อมูลอะไร ต่อกับระบบไหน | ไม่ได้ |
+| 9 | ข้อผิดพลาดและกรณีขอบ | พังแบบไหนได้บ้าง แล้วผู้ใช้เห็นอะไร | ไม่ได้ |
+| 10 | ตารางสอบย้อนกลับ | ข้อนี้มาจาก SRS ข้อไหน ทดสอบด้วยอะไร | ไม่ได้ |
+| 11 | ประวัติการแก้ไข | ใครแก้อะไรเมื่อไหร่ | ไม่ได้ |
+
+
+## reference: related-skills.md
+
+# เชื่อมกับ skill อื่น
+
+ถ้างานที่ทำอยู่ต้องใช้ความรู้นอกเหนือจาก FSD ให้เปิด skill ในคอลัมน์ขวาคู่กัน
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| ระดับข้อกำหนดที่ลูกค้าเซ็นรับ | `srs-writing` |
+| รูปแบบ markdown และธีมสีของเอกสาร | `polished-document-style` |
+| หน้าตาไฟล์ .docx ที่ส่งออก | `branded-document-design` |
+| รูปในเอกสาร | `diagram-figures` (ทุกรูปในเอกสารที่ส่ง) · `markdown-visuals` (ภาพร่างหน้าจอ) · `software-diagrams` (Mermaid ร่างคุยในแชตเท่านั้น) |
+| ข้อตกลงของ API ที่ FSD อ้างถึง | `api-conventions` |
+| แบบจำลองข้อมูลที่ FSD อ้างถึง | `database-design` |
+| ห้าสถานะของหน้าจอ และกฎงานออกแบบ | `ui-craft` + skill แพลตฟอร์ม |
+| แปลง use case เป็น test case | `test-case-template` |
+| แตกเป็น user story ตอนเริ่ม sprint | `user-story-writer` |
+| ตัดสิ่งที่ไม่จำเป็นออกจากเอกสาร | `simplicity-first` |
+
+**โครงเอกสารที่คัดลอกไปกรอกต่อได้ทันที** → [`../assets/fsd-outline.md`](../assets/fsd-outline.md)
+
+
+## reference: stakeholder-doc-templates.md
+
+# Stakeholder document (Mode B) — style, diagrams, templates
+
+Moved from the system-analyst agent. Read when writing a Mode B document. A Mode A use case follows `SKILL.md` §4 and [`worked-examples.md`](worked-examples.md); the templates below are the same content in reviewer-friendly form, never a different format.
+
+Mode B is **the same FSD** as Mode A — the same 11 sections in the same order as `SKILL.md` §3 — styled for reviewers who sign off: a short summary up front, plain words, more tables, less code. It never adds or drops a section; only the style changes. Diagrams follow `SKILL.md` §10. IDs follow `SKILL.md` §9 (`UC-<module>-<3 digits>`, steps of 10).
+
+## Document Structure
+
+Every stakeholder doc MUST follow the 11 FSD sections (`SKILL.md` §3, full outline in [`assets/fsd-outline.md`](../assets/fsd-outline.md)):
+
+````markdown
+# <Document Title>
+
+> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft | Review | Approved
+> **Authors:** ... · **Reviewers:** ...
+
+---
+
+## Table of Contents
+
+1. [Introduction](#1-introduction) — starts with a one-paragraph summary for non-technical readers
+2. [Users & Permissions](#2-users--permissions)
+3. [Process Overview](#3-process-overview)
+4. [Use Cases](#4-use-cases)
+5. [Screen Specifications](#5-screen-specifications)
+6. [State Machines](#6-state-machines)
+7. [Business Rules](#7-business-rules)
+8. [Data & Integrations](#8-data--integrations) — API endpoints and data model go here
+9. [Errors & Edge Cases](#9-errors--edge-cases)
+10. [Traceability](#10-traceability)
+11. [Revision History](#11-revision-history)
+
+---
+
+## 1. Introduction
+
+> **For non-technical readers** — 1 paragraph explaining what this feature does and why.
+
+### Scope
+
+**In scope**
+- ...
+
+**Out of scope**
+- ...
+
+### Glossary
+- ...
+
+[... continue all 11 sections; skip 5 only if there are no screens and 6 only if nothing has a status ...]
+````
+
+## Formatting Rules
+
+### Hierarchy & Numbering
+- H1 = document title (only ONE)
+- H2 = numbered sections (1., 2., 3.)
+- H3 = sub-sections (1.1, 1.2)
+- Always add TOC for docs with 5+ sections
+- Use anchor links in TOC
+
+### Visual Markers
+
+No emoji or icons in headings, body, tables, labels or callouts (`human-writing` · `polished-document-style`). Use words:
+
+| Need | Write |
+|--------|---------|
+| Yes / no in a table | ✓ / ✗ |
+| Status | Draft · Approved · Pending · In Progress |
+| Severity or priority | Critical · High · Medium · Low |
+| Tip, warning, critical, note | Bold callout label (below) |
+
+### Callout Boxes (Blockquotes)
+
+```markdown
+> **Tip:** Brief insight here.
+
+> **Warning:** Important caveat.
+
+> **Critical:** Must read before proceeding.
+
+> **Note:** Additional context.
+```
+
+### Tables
+
+Prefer tables over bullet lists when data has 2+ attributes:
+
+```markdown
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| email | string | ✓ | User's email |
+| age | number | ✗ | Optional |
+```
+
+Align headers to data when helpful:
+```markdown
+| Field | Type | Required |
+|:------|:-----|:--------:|
+```
+
+### Status Badges (in tables/inline)
+
+```markdown
+**Status:** Approved
+**Priority:** High
+**Risk:** Medium
+```
+
+---
+
+# Diagrams
+
+Follow `SKILL.md` §10. A Mode B document is delivered to people who sign it, so every figure is a house-style figure made with `diagram-figures` (same theme for every figure in one document, per `doc-theme`). Mermaid through `software-diagrams` is only for a quick sketch in chat, never for the delivered file. Screen sketches use `markdown-visuals`.
+
+## When to use which diagram
+
+| Diagram | Use for | FSD section |
+|---------|---------|---|
+| Flowchart | Business processes, decision trees | 3 Process Overview |
+| Sequence diagram | Interactions between systems/actors over time | 4 Use Cases (multi-party) |
+| State diagram | Object lifecycle, status transitions — **next to the table, not instead of it** | 6 State Machines |
+| ER diagram | Tables of this module only | 8 Data & Integrations |
+| Timeline (Gantt) | Schedule, if the document has one | appendix |
+
+Embed each figure as an image with a numbered caption, for example `![Figure 4-1 Place order — sequence](figures/uc-ord-010-sequence.svg)`.
+
+---
+
+# Templates
+
+## Use Case Template (Mode B)
+
+````markdown
+### UC-ORD-010: <Use Case Name>
+
+| Field | Value |
+|-------|-------|
+| **ID** | UC-ORD-010 (next use case in this module: UC-ORD-020) |
+| **From (SRS)** | FR-ORD-040 |
+| **Actor** | Customer |
+| **Priority** | High |
+| **Status** | Approved |
+| **Trigger** | User clicks "Place Order" |
+| **Frequency** | ~200 per day `(รอยืนยัน)` |
+
+#### Preconditions
+- User is authenticated
+- Cart contains at least 1 item
+
+#### Postconditions
+- Order created with status `pending`
+- Inventory reserved
+- Confirmation email sent
+
+#### Main Flow
+
+| Step | Actor | Action | System Response |
+|:----:|:------|:-------|:----------------|
+| 1 | User | Reviews cart and clicks "Place Order" | Shows order summary |
+| 2 | User | Confirms payment method | Validates payment info |
+| 3 | System | Submits payment to gateway | Receives auth code |
+| 4 | System | Creates order record | Returns order #ORD-XXXX |
+| 5 | System | Sends confirmation email | — |
+| 6 | User | Sees confirmation page | — |
+
+#### Alternative Flows
+
+> **010-A1: Payment declined at step 3**
+> 3a. Gateway returns decline
+> 3b. System shows error, suggests alternate payment
+> 3c. Returns to step 2
+
+#### Exception Flows
+
+> **010-E1: Gateway timeout at step 3**
+> 3a. System waits 30s
+> 3b. Logs incident, marks order as `payment_pending`
+> 3c. Sends "We'll retry" email to user
+
+#### Sequence Diagram
+
+![Figure 4-1 UC-ORD-010 Place order — Customer, UI, API, Payment Gateway, Database](figures/uc-ord-010-sequence.svg)
+
+> Drawn with `diagram-figures` (house style). Steps: Customer clicks "Place Order" → UI sends POST /orders → API charges the gateway → gateway returns auth code → API inserts the order → UI shows the confirmation page.
+````
+
+## API Endpoint Template (Mode B)
+
+````markdown
+### POST `/api/v1/orders`
+
+> Create a new order from cart contents.
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth Required** | Yes (Bearer token) |
+| **Rate Limit** | 10 req/min per user |
+| **Idempotent** | Yes (use `Idempotency-Key` header) |
+
+#### Request Headers
+
+| Header | Required | Example |
+|--------|:--------:|---------|
+| `Authorization` | ✓ | `Bearer eyJ...` |
+| `Idempotency-Key` | Recommended | `unique-request-id` |
+| `Content-Type` | ✓ | `application/json` |
+
+#### Request Body
+
+```json
+{
+  "items": [
+    { "product_id": "uuid", "quantity": 2 }
+  ],
+  "shipping_address_id": "uuid",
+  "payment_method_id": "uuid"
+}
+```
+
+#### Response: 201 Created
+
+```json
+{
+  "data": {
+    "id": "ORD-12345",
+    "status": "pending",
+    "total": 1250.00,
+    "created_at": "2025-01-15T10:30:00Z"
+  }
+}
+```
+
+#### Error Responses
+
+Every error body is `application/problem+json` (RFC 9457): `type` · `title` · `status` · `detail` · `requestId`, plus `errors[]` for validation. Shape and status rules: `web-service-essentials` §2.
+
+| Code | When | `type` (suffix) |
+|:----:|:-----|:-----|
+| 401 | Missing/invalid token | `unauthorized` |
+| 402 | Payment declined | `payment-declined` |
+| 409 | Inventory unavailable | `out-of-stock` |
+| 422 | Validation failed | `validation` + `errors[]` (`field` · `code` · `message`) |
+| 429 | Rate limit exceeded | `rate-limited` + `Retry-After` header |
+````
+
+## Data Model Template (Mode B)
+
+````markdown
+## 8. Data & Integrations
+
+### Entity Relationship Diagram
+
+![Figure 8-1 Order module — USER places ORDER, ORDER contains ORDER_ITEM](figures/order-er.svg)
+
+> Drawn with `diagram-figures` (house style), tables of this module only.
+
+### Tables
+
+#### `users`
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | UUID | PK | Unique identifier |
+| `email` | VARCHAR(255) | UNIQUE, NOT NULL | Login email |
+| `created_at` | TIMESTAMP | NOT NULL, DEFAULT NOW() | Account creation |
+
+> **Security:** `email` is encrypted at rest using AES-256.
+````
+
+---
+
+
+## reference: worked-examples.md
+
+# ตัวอย่างเต็มของ use case หน้าจอ ผังสถานะ และกฎทางธุรกิจ
+
+ตัวอย่างทั้งไฟล์ใช้เรื่องเดียวกัน คือการยกเลิกคำสั่งซื้อ ลอกรูปแบบไปใช้ได้ทันที ส่วนกฎของแต่ละแบบอยู่ใน `SKILL.md`
+
+## use case (ข้อ 4)
+
+```markdown
+### UC-ORD-010 · ยกเลิกคำสั่งซื้อ
+
+| | |
+|---|---|
+| **มาจาก** | FR-ORD-040 |
+| **ผู้ทำ** | ลูกค้า · เจ้าหน้าที่ฝ่ายขาย |
+| **เงื่อนไขก่อนเริ่ม** | เข้าสู่ระบบแล้ว · คำสั่งซื้ออยู่ในสถานะ `confirmed` |
+| **ผลเมื่อสำเร็จ** | คำสั่งซื้อเป็น `cancelled` · คืนจำนวนสินค้าเข้าคลัง · ส่งอีเมลแจ้ง |
+| **ความถี่** | ประมาณ 30 ครั้งต่อวัน |
+
+**ขั้นตอนหลัก**
+
+| # | ผู้ทำ | การกระทำ | ระบบทำอะไรต่อ |
+|:--:|---|---|---|
+| 1 | ลูกค้า | เปิดหน้ารายละเอียดคำสั่งซื้อ | แสดงปุ่ม "ยกเลิก" เฉพาะเมื่อ BR-030 ผ่าน |
+| 2 | ลูกค้า | กด "ยกเลิก" | เปิดกล่องยืนยัน พร้อมช่องเหตุผล (บังคับ) |
+| 3 | ลูกค้า | เลือกเหตุผล แล้วกดยืนยัน | ตรวจ BR-030 อีกครั้งที่ฝั่งเซิร์ฟเวอร์ |
+| 4 | ระบบ | — | เปลี่ยนสถานะ · คืนสต็อก · บันทึกผู้ทำและเวลา · ส่งอีเมล |
+| 5 | ระบบ | — | แสดงข้อความสำเร็จ และปุ่มยกเลิกหายไป |
+
+**ทางเลือกอื่น**
+
+| รหัส | แยกที่ขั้น | เงื่อนไข | ผลลัพธ์ |
+|---|:--:|---|---|
+| 010-A1 | 3 | ผู้ทำเป็นเจ้าหน้าที่ | ข้ามช่องเหตุผล แต่บังคับกรอกหมายเหตุภายใน |
+
+**กรณีผิดพลาด**
+
+| รหัส | เกิดที่ขั้น | สาเหตุ | ผู้ใช้เห็นอะไร | ระบบทำอะไร |
+|---|:--:|---|---|---|
+| 010-E1 | 3 | มีคนเปลี่ยนสถานะไปก่อนแล้ว | "คำสั่งซื้อนี้ถูกจัดส่งแล้ว ยกเลิกไม่ได้" | ไม่เปลี่ยนอะไร · โหลดหน้าใหม่ |
+| 010-E2 | 4 | คืนสต็อกไม่สำเร็จ | "ระบบขัดข้อง กรุณาลองใหม่" + รหัสอ้างอิง | ย้อนกลับทั้งรายการ · บันทึก log ระดับ error |
+```
+
+## ข้อกำหนดหน้าจอ (ข้อ 5)
+
+```markdown
+### SC-ORD-020 · หน้ารายละเอียดคำสั่งซื้อ
+
+**เส้นทาง:** `/orders/{id}` · **ใช้ใน:** UC-ORD-010, UC-ORD-020
+
+| ฟิลด์ | ชนิด | บังคับ | กฎตรวจ | ข้อความเมื่อไม่ผ่าน | ค่าเริ่มต้น |
+|---|---|:--:|---|---|---|
+| เหตุผลที่ยกเลิก | เลือกจากรายการ | ลูกค้า ✓ · เจ้าหน้าที่ ✗ (010-A1) | ต้องเป็นค่าในรายการ BR-031 | "กรุณาเลือกเหตุผล" | — |
+| หมายเหตุภายใน | ข้อความยาว | เจ้าหน้าที่ ✓ · ลูกค้าไม่เห็นช่องนี้ | ไม่เกิน 500 ตัวอักษร | "กรุณากรอกหมายเหตุ" · "หมายเหตุยาวเกิน 500 ตัวอักษร" | ว่าง |
+```
+
+## ตารางการเปลี่ยนสถานะ (ข้อ 6)
+
+| จาก | ไป | ใครทำได้ | เงื่อนไข | ผลข้างเคียง |
+|---|---|---|---|---|
+| `draft` | `confirmed` | ลูกค้า | มีสินค้าอย่างน้อย 1 รายการ · ที่อยู่ครบ | ตัดสต็อก · ส่งอีเมล |
+| `confirmed` | `cancelled` | ลูกค้า · เจ้าหน้าที่ | BR-030 | คืนสต็อก · ส่งอีเมล |
+| `confirmed` | `shipped` | เจ้าหน้าที่คลัง | มีเลขพัสดุ | ส่ง SMS |
+| `shipped` | `cancelled` | — | **ทำไม่ได้** | — |
+
+## กฎทางธุรกิจ (ข้อ 7)
+
+```markdown
+**BR-030 · ยกเลิกคำสั่งซื้อได้เมื่อไหร่**
+ยกเลิกได้เมื่อสถานะเป็น `confirmed` และยังไม่เกิน 24 ชั่วโมงนับจากเวลายืนยัน
+เจ้าหน้าที่ระดับหัวหน้าขึ้นไปยกเลิกได้โดยไม่จำกัดเวลา แต่ต้องกรอกหมายเหตุ
+**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.2
+
+**BR-031 · เหตุผลที่ลูกค้าเลือกได้ตอนยกเลิก**
+สั่งผิดรายการ · ได้ราคาที่ถูกกว่า · รอนานเกินไป · ไม่ต้องการแล้ว · อื่น ๆ
+ผู้ดูแลระบบแก้รายการนี้ได้ในหน้าตั้งค่า โดยไม่ต้องแก้โค้ด
+**ที่มา:** นโยบายคืนเงิน ฉบับ 2026-03 ข้อ 4.3 `(รอยืนยัน)`
+```
+
+
+---
+
 # skill: legacy-spec-recovery
 
 Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
@@ -59,7 +711,18 @@ Count before reading. File counts by type, projects or modules, largest files, g
 
 **Ask for the database scripts on day one.** Code calls stored procedures, views, triggers and functions whose source is usually not in the repository — and that is where tariff, tax and numbering rules live. Request a script-out of all database objects (and an export of menu and role tables if menus come from the database) before Step 2; until it arrives, those rules can only be `inferred` or `ask`, and the coverage table must say so.
 
-If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. Seven layers worked in practice: screens and permissions · data and status codes · one deep-dive module · rules for each half of the modules · integrations, jobs, reports and ETL · manuals. Then one analyst assembles. Budget for it: a system of about 55,000 lines took 8 subagents and about 2 million tokens.
+If the system is larger than one context can hold (it usually is), hand each layer to a subagent and tell it exactly what to bring back: a table with columns and the `path:line` per row, written to a file — not prose, not file dumps. These layers worked in practice, one subagent each:
+
+1. Screens and endpoints with permissions (controllers, routes, menus)
+2. Data access and status codes: queries, stored procedures and the tables they touch
+3. Schema and data dictionary
+4. One deep-dive module
+5. Business rules, first half of the modules
+6. Business rules, second half of the modules
+7. Integrations, jobs, reports, ETL, mobile or other clients
+8. Manuals and old documents: what they claim the system does
+
+Then one analyst assembles. Budget for it: a system of about 55,000 lines took these 8 subagents and about 2 million tokens. Small systems can merge layers (for example 5 and 6, or 2 and 3).
 
 ### Step 2 — System map (whole system, shallow)
 
@@ -150,7 +813,7 @@ Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, 
 
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
+Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -178,7 +841,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` | คู่ |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-company`) | คู่ |
 
 ---
 
@@ -206,9 +869,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 | ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
 |---|---|
-| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
+| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
 
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
+- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
 - ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
 - ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
 
@@ -221,9 +884,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | | ที่บันทึกไว้ | ของจริง |
 |---|---|---|
-| FR ถึง | 13.9 | **14.12** |
-| Test case | 214 | **245** |
-| PLT | ไม่มี | **มี** |
+| ออเดอร์ที่ดึงมา | 214 | **245** |
+| ราคา SKU-07 | 390 | **420** |
+| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
 ```
 
 - หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
@@ -231,7 +894,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 - แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
 
 **คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+เช่น "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
 
 ---
 
@@ -240,8 +903,8 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | ไฟล์ | ได้อะไร |
 |---|---|
-| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
+| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
+| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
 - คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
@@ -255,7 +918,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
 
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
 
 บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
 และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
@@ -265,7 +928,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ## 6 · ปิดด้วยคำถามเดียว
 
 ```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
 ```
 
 | กฎ | เหตุผล |
@@ -274,7 +937,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
 | มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
 | ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตามกฎ "ถามครั้งเดียว" ใน `CLAUDE.md` ของผู้ใช้ และ `superuser` §6 | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
+| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตาม `superuser` §6: ตัวเลือก 2–4 ตัว · ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` พร้อมเหตุผล 1 บรรทัด | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
 
 **ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
 
@@ -282,7 +945,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ## 7 · ตัวอย่างเต็ม
 
-ตัวอย่างก่อนและหลังแก้ อยู่ใน [`references/example.md`](references/example.md)
+ตัวอย่างก่อนและหลังแก้ (งานเอกสารความต้องการและแผนงานซอฟต์แวร์) อยู่ใน [`references/example.md`](references/example.md)
 
 ---
 
@@ -305,27 +968,29 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ย้ายมาจาก [SKILL.md](../SKILL.md) §7
 
+ตัวย่อในตัวอย่าง: ความต้องการเชิงฟังก์ชัน (Functional Requirement — FR) · ความต้องการที่ไม่ใช่ฟังก์ชัน (Non-Functional Requirement — NFR) · กรณีทดสอบ (Test Case — TC) · บันทึกการตัดสินใจด้านสถาปัตยกรรม (Architecture Decision Record — ADR) · เอกสารข้อกำหนดเชิงฟังก์ชัน (Functional Specification Document — FSD) · Application Programming Interface (API)
+
 **❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
 
 > เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
 > `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
+> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
 > ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
 > BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
+> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
 > เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
 > ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
 
 **✅ หลัง — โครงเดียวกัน 4 บล็อก**
 
 > **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
+> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
 >
 > | | ที่บันทึกไว้ | ของจริง |
 > |---|---|---|
 > | FR ถึง | 13.9 | **14.12** |
 > | Test case | 214 | **245** |
-> | PLT | ไม่มี | **มี** |
+> | NFR | ไม่มี | **มี** |
 >
 > คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
 >
@@ -345,42 +1010,3 @@ Use when something found mid-task changes what happens next (stale file, blocked
 **สิ่งที่หายไป ทั้งที่ข้อมูลครบเท่าเดิม:** คำเกริ่น · การเล่าว่าตรวจเจอยังไง ·
 ชื่อไฟล์เต็มที่ไม่ได้ช่วยตัดสินใจ · คำอธิบายว่าทำไมคำถามเดิมถึงตกไป ·
 รายละเอียดวิธีทำของแต่ละข้อเสนอ
-
-
----
-
-# skill: principle-proceed-on-reversible-work
-
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
-
-# principle · proceed on reversible work — ย้อนได้ ทำเลย
-
-> ทุกคำถามที่หยุดรอคำตอบ คือเวลาที่ทั้งคนและ agent ไม่ได้ทำงาน
-> ถ้างานย้อนกลับได้ ทำแล้วให้ดูเลยจะเร็วกว่าถามแล้วรอ
-
-## แยกให้ออก
-
-| ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
-|---|---|
-| แก้ไฟล์ในโปรเจกต์ (มี git) | deploy ขึ้นระบบจริง |
-| สร้าง branch · commit ใน branch ของงาน เมื่อผู้ใช้อนุญาตให้ commit | commit ที่ผู้ใช้ไม่ได้สั่ง · merge เข้า branch หลัก · force-push |
-| รัน test · build · รันแอปในเครื่อง | แตะฐานข้อมูลจริง · ลบข้อมูลหรือไฟล์ของผู้ใช้ |
-| ร่างเอกสาร · ร่าง mockup | ส่งอีเมลหรือข้อความถึงคนนอก |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
-| ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
-
-## ก่อนจะถาม — ผ่านสามด่านนี้
-
-1. **ดูได้จากการรันไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลอง (playbook `prototype`) ไม่ใช่ถาม
-2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
-3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
-
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง diff หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
-
-**ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
-
-## สิ่งที่ห้ามทำ
-
-- ถาม "ให้ทำต่อไหม" หลังจบแต่ละขั้นของงานที่สั่งไว้แล้ว
-- เสนอแผนแล้วรออนุมัติ ทั้งที่งานชัดและย้อนได้
-- ใช้หลักนี้เป็นข้ออ้างทำสิ่งที่ผู้ใช้ไม่ได้ขอ เพราะ "ทำต่อ" หมายถึงทำงานที่สั่งให้จบ ไม่ใช่ขยายขอบเขตเอง

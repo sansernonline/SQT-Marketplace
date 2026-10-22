@@ -4,7 +4,7 @@ Use when a Thai seller compares couriers (Flash, Kerry, J&T, Thailand Post, SPX)
 
 # Shipping Compare
 
-The cheapest courier on a rate card is often not the cheapest on your parcels. Compare on your own last month of orders: real weights, real sizes, real destinations, real COD share.
+The cheapest courier on a rate card is often not the cheapest on your parcels. Compare on your own last month of orders: real weights, real sizes, real destinations, real cash on delivery (COD) share.
 
 ## Where the choice actually exists
 
@@ -51,7 +51,7 @@ Divisor is usually 5,000 or 6,000 depending on the courier and service — confi
 | Claim limit without insurance | | | | | |
 | **Cost per average order** | | | | | |
 
-Context: Flash, Kerry (KEX) and J&T reportedly raised base prices by ฿3 per parcel from 1 April 2026 (fuel costs). COD maximum per parcel at Flash reported ฿50,000 (รอยืนยัน).
+Context: Flash, Kerry (KEX) and J&T reportedly raised base prices by ฿3 per parcel from 1 April 2026 (fuel costs) (รอยืนยัน — one news source). COD maximum per parcel at Flash reported ฿50,000 (รอยืนยัน).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://zortout.com/en/docs/how-to-register-and-ship-cash-on-delivery-cod-packages-via-flash-express · https://www.car250.com/?p=463590 · courier rate pages — every rate (รอยืนยัน) in the courier's own app
 

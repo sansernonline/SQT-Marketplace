@@ -4,7 +4,7 @@
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ
 
-agent 7 · skill 24 · คำสั่ง 7 · playbook 9 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`consumer-rights`](../consumer-rights/README.md) · [`home-family`](../home-family/README.md)
+agent 4 · skill 61 · คำสั่ง 7 · playbook 9 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`consumer-rights`](../consumer-rights/README.md) · [`home-family`](../home-family/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/trading-finance/`](../../../plugins/trading-finance/)
 

@@ -1,6 +1,6 @@
 ---
 name: principle-fix-root-cause
-description: Use when debugging anything broken (error, crash, wrong value, flaky test). Reproduce, fix the cause. Cause known, small fix → targeted-fix.
+description: Use when something is broken or wrong (error, wrong figure, failed step, flaky test). Find the cause. Known small fix → targeted-fix.
 ---
 
 # principle · fix root cause — แก้ที่ต้นเหตุ
@@ -9,9 +9,15 @@ description: Use when debugging anything broken (error, crash, wrong value, flak
 
 ## กฎ
 
-1. **ทำให้เกิดซ้ำก่อนแก้** — ถ้าทำให้เกิดซ้ำไม่ได้ แปลว่ายังไม่รู้ว่ากำลังแก้อะไร ให้ใช้ skill ตรวจแอปของโปรเจกต์ หรือคำสั่งที่รันได้
+1. **ทำให้เกิดซ้ำก่อนแก้** — ถ้าทำให้เกิดซ้ำไม่ได้ แปลว่ายังไม่รู้ว่ากำลังแก้อะไร ให้ใช้ skill ตรวจแอปของโปรเจกต์ หรือทำซ้ำตามขั้นที่ผู้ใช้ทำ
 2. **ถาม "ทำไม" จนถึงจุดที่ค่าผิดเกิดขึ้นครั้งแรก** — ไม่ใช่จุดที่มันระเบิด
 3. **แก้ที่จุดนั้น** แล้วรันกรณีเดิมให้ผ่าน
+
+**หาจุดเร็ว**
+- ข้อความ error · stack trace → หาบรรทัดแรกที่เป็นโค้ดของเรา (ส่วนของเราก่อน ส่วนของ framework ทีหลัง) · Python พิมพ์จุดที่พังไว้ล่างสุด ส่วน Java · Node.js · .NET พิมพ์ไว้บนสุด
+- ค้นข้อความ ตัวเลข หรือ error ที่ผิดแบบตรงตัว · มักเจอที่เดียว
+- "เมื่อก่อนใช้ได้" → ดูการแก้ครั้งล่าสุดของจุดนั้น (ประวัติฉบับ · งานโค้ด `git log -p <ไฟล์>` · `git blame`)
+- เบาะแสขอบเขต ("เฉพาะออเดอร์ใหญ่" · "หลัง login เท่านั้น") ช่วยตัดที่ค้นได้มาก
 
 ## ไม่ใช้เมื่อ
 
@@ -21,9 +27,9 @@ description: Use when debugging anything broken (error, crash, wrong value, flak
 
 | อาการ | แก้ที่อาการ (ห้าม) | แก้ที่ต้นเหตุ |
 |---|---|---|
+| ยอดรวมในรายงานไม่ตรงบัญชี | พิมพ์ทับยอดให้ตรง | หาว่าแถวไหนนำเข้าซ้ำหรือสูตรอ้างช่วงผิด แล้วแก้ที่ต้นทาง |
+| ลูกค้าได้ของช้าหลายราย | ขอโทษทีละราย | หาว่าขั้นไหนค้าง (สต็อกไม่ซิงก์ · ส่งช้า) แล้วแก้ขั้นนั้น |
 | หน้ารายงานพังเพราะ `date` เป็น null | `if (date) ...` ที่หน้าจอ | หาว่าทำไม import ไม่ใส่วันที่ แล้วพบว่าต้องแก้ parser ที่อ่านปี พ.ศ. ไม่ได้ |
-| test ล้มบ้างผ่านบ้าง | ใส่ retry 3 ครั้ง | หาว่าโค้ดแข่งกันที่ไหน (race) แล้วรอให้ถึงสถานะที่ถูก แทนการรอตามเวลา |
-| API ช้า | เพิ่ม cache | วัดก่อนว่าช้าที่ไหน แล้วพบว่า query ไม่มี index |
 
 ## ข้อยกเว้น
 
@@ -31,4 +37,4 @@ description: Use when debugging anything broken (error, crash, wrong value, flak
 
 ## ใช้คู่กับ
 
-`targeted-fix` (ขั้นตอนแก้แบบเล็กที่สุด) · playbook `bug-fix` ของ [`superuser`](../superuser/SKILL.md)
+`targeted-fix` (ขั้นตอนแก้แบบเล็กที่สุด) · playbook `bug-fix` ของ `superuser` ใน plugin `software-company`

@@ -149,7 +149,7 @@ contract Vault is ERC4626 {
 ### Pattern: Lazy Accumulation (Synthetix-style)
 
 ```solidity
-uint256 public rewardPerToken;  // cumulative
+uint256 public rewardPerToken;  // cumulative, scaled by 1e18
 uint256 public lastUpdate;
 uint256 public rewardRate;       // per second
 uint256 public totalStaked;
@@ -159,7 +159,11 @@ mapping(address => uint256) public rewards;
 mapping(address => uint256) public balance;
 
 function update() internal {
-    rewardPerToken += (block.timestamp - lastUpdate) * rewardRate / totalStaked;
+    // totalStaked is 0 before the first stake — dividing would revert every stake
+    if (totalStaked > 0) {
+        // multiply before dividing; 1e18 scale matches the / 1e18 in _updateUser
+        rewardPerToken += (block.timestamp - lastUpdate) * rewardRate * 1e18 / totalStaked;
+    }
     lastUpdate = block.timestamp;
 }
 
@@ -191,27 +195,93 @@ function claim() external {
 
 ### Token-Weighted Voting (Governor)
 
-```solidity
-// Use OpenZeppelin Governor
-import "@openzeppelin/contracts/governance/Governor.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
+Generate the contract with the [OpenZeppelin Contracts Wizard](https://wizard.openzeppelin.com/#governor) instead of writing it by hand — with `GovernorTimelockControl` the compiler requires several overrides, and a counting module (`GovernorCountingSimple`) is mandatory. Output below matches the Wizard for OpenZeppelin 5.x (compile-checked with 5.6.1 · ตรวจ 22 ต.ค. 2569).
 
-contract MyGovernor is Governor, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
+Delays and periods are in the token's **clock** unit. `ERC20Votes` counts **blocks** by default, so `1 days` (= 86400) would mean 86400 blocks. Use block counts (Ethereum ≈ 12 s per block) or switch the token to timestamps (`clock()` / `CLOCK_MODE()` → `mode=timestamp`).
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+import {Governor} from "@openzeppelin/contracts/governance/Governor.sol";
+import {GovernorSettings} from "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
+import {GovernorCountingSimple} from "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
+import {GovernorVotes} from "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
+import {GovernorVotesQuorumFraction} from "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import {GovernorTimelockControl} from "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
+import {IVotes} from "@openzeppelin/contracts/governance/utils/IVotes.sol";
+import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
+
+contract MyGovernor is
+    Governor,
+    GovernorSettings,
+    GovernorCountingSimple,
+    GovernorVotes,
+    GovernorVotesQuorumFraction,
+    GovernorTimelockControl
+{
     constructor(IVotes _token, TimelockController _timelock)
         Governor("MyGovernor")
+        GovernorSettings(7200 /* ~1 day of blocks */, 50400 /* ~1 week */, 0)
         GovernorVotes(_token)
-        GovernorVotesQuorumFraction(4)  // 4% quorum
+        GovernorVotesQuorumFraction(4) // 4% quorum
         GovernorTimelockControl(_timelock)
     {}
 
-    function votingDelay() public pure override returns (uint256) {
-        return 1 days;
+    // Overrides required by Solidity
+    function votingDelay() public view override(Governor, GovernorSettings) returns (uint256) {
+        return super.votingDelay();
     }
 
-    function votingPeriod() public pure override returns (uint256) {
-        return 7 days;
+    function votingPeriod() public view override(Governor, GovernorSettings) returns (uint256) {
+        return super.votingPeriod();
+    }
+
+    function quorum(uint256 blockNumber)
+        public view override(Governor, GovernorVotesQuorumFraction) returns (uint256)
+    {
+        return super.quorum(blockNumber);
+    }
+
+    function state(uint256 proposalId)
+        public view override(Governor, GovernorTimelockControl) returns (ProposalState)
+    {
+        return super.state(proposalId);
+    }
+
+    function proposalNeedsQueuing(uint256 proposalId)
+        public view override(Governor, GovernorTimelockControl) returns (bool)
+    {
+        return super.proposalNeedsQueuing(proposalId);
+    }
+
+    function proposalThreshold() public view override(Governor, GovernorSettings) returns (uint256) {
+        return super.proposalThreshold();
+    }
+
+    function _queueOperations(
+        uint256 proposalId, address[] memory targets, uint256[] memory values,
+        bytes[] memory calldatas, bytes32 descriptionHash
+    ) internal override(Governor, GovernorTimelockControl) returns (uint48) {
+        return super._queueOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _executeOperations(
+        uint256 proposalId, address[] memory targets, uint256[] memory values,
+        bytes[] memory calldatas, bytes32 descriptionHash
+    ) internal override(Governor, GovernorTimelockControl) {
+        super._executeOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+
+    function _cancel(
+        address[] memory targets, uint256[] memory values,
+        bytes[] memory calldatas, bytes32 descriptionHash
+    ) internal override(Governor, GovernorTimelockControl) returns (uint256) {
+        return super._cancel(targets, values, calldatas, descriptionHash);
+    }
+
+    function _executor() internal view override(Governor, GovernorTimelockControl) returns (address) {
+        return super._executor();
     }
 }
 ```
@@ -227,18 +297,14 @@ contract PriceConsumer {
     AggregatorV3Interface internal priceFeed;
 
     function getPrice() public view returns (int256) {
-        (
-            uint80 roundId,
-            int256 price,
-            uint256 startedAt,
-            uint256 updatedAt,
-            uint80 answeredInRound
-        ) = priceFeed.latestRoundData();
+        (, int256 price, , uint256 updatedAt, ) = priceFeed.latestRoundData();
 
-        // Sanity checks
+        // Sanity checks — never latestAnswer() (deprecated, no timestamp)
         require(price > 0, "Invalid price");
-        require(updatedAt >= block.timestamp - STALE_THRESHOLD, "Stale price");
-        require(answeredInRound >= roundId, "Stale round");
+        // STALE_THRESHOLD = this feed's heartbeat (see data.chain.link) + a margin
+        require(block.timestamp - updatedAt <= STALE_THRESHOLD, "Stale price");
+        // answeredInRound is deprecated by Chainlink — don't rely on it
+        // scale with priceFeed.decimals(); on L2s also check the sequencer uptime feed
 
         return price;
     }
@@ -248,7 +314,9 @@ contract PriceConsumer {
 ### TWAP Pattern (Uniswap V3)
 
 ```solidity
-import "@uniswap/v3-core/contracts/libraries/OracleLibrary.sol";
+// OracleLibrary lives in v3-periphery (not v3-core). The npm package targets
+// Solidity <0.8 — for 0.8.x use the `0.8` branch of Uniswap/v3-periphery.
+import "@uniswap/v3-periphery/contracts/libraries/OracleLibrary.sol";
 
 function getTWAP(address pool, uint32 secondsAgo) public view returns (uint256 price) {
     (int24 tick,) = OracleLibrary.consult(pool, secondsAgo);
@@ -288,5 +356,5 @@ contract LiquidityMining {
 - [Compound V3 (lending)](https://github.com/compound-finance/comet)
 - [Uniswap V3 (AMM)](https://github.com/Uniswap/v3-core)
 - [Yearn V3 (vaults)](https://github.com/yearn/yearn-vaults-v3)
-- [OpenZeppelin Defender](https://docs.openzeppelin.com/defender/)
+- [OpenZeppelin Contracts — Governance](https://docs.openzeppelin.com/contracts/5.x/governance) (OpenZeppelin Defender was retired on 1 Jul 2026)
 - [Curve (stableswap)](https://github.com/curvefi/curve-contract)

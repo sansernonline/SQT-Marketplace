@@ -26,7 +26,7 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 | Form | What | Paper deadline | e-Filing deadline |
 |---|---|---|---|
 | ภ.พ.30 | VAT return — **every month, even with zero sales** | 15th of next month | 23rd (15 + 8 days) |
-| ภ.ง.ด.1 | WHT on salary and wages | 7th of next month | 15th |
+| ภ.ง.ด.1 | Withholding tax (WHT) on salary and wages | 7th of next month | 15th |
 | ภ.ง.ด.2 | WHT on interest/dividends paid to individuals | 7th | 15th |
 | ภ.ง.ด.3 | WHT on payments to **individuals** (services, rent, fees) | 7th | 15th |
 | ภ.ง.ด.53 | WHT on payments to **companies / juristic persons** | 7th | 15th |
@@ -38,7 +38,7 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 
 - The **+8 days for e-Filing** is an RD extension currently covering returns due **1 Feb 2567 – 31 Jan 2570**. Check whether it is renewed before planning dates after Jan 2570.
 - A due date on a weekend or public holiday moves to the next working day (see `thai-holidays`).
-- For a 31 December year end: ภ.ง.ด.51 by 31 Aug (e-Filing 8 Sep); ภ.ง.ด.50 by about 29 May (150 days) + 8 for e-Filing.
+- For a 31 December year end: ภ.ง.ด.51 by 31 Aug (e-Filing 8 Sep); ภ.ง.ด.50 by 30 May (150 days; 29 May when February has 29 days) + 8 for e-Filing. When 30 May falls on a Sunday (as in 2570), the next working day applies (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://rd.go.th/49808.html · https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/FilingExtension_4.pdf
 
@@ -117,7 +117,7 @@ Legal basis: ประมวลรัษฎากร ม.3 เตรส, ม.50,
 | Prizes, competitions, lucky draws | 5% | 5% |
 | Sales promotion rewards | 3% | 3% |
 | Non-life insurance premium | — | 1% |
-| Any of the above paid through e-WHT | 1% (to 31 Dec 2570, รอยืนยัน) | 1% |
+| Services, rent, advertising, professional fees or commission paid through e-WHT | 1% (to 31 Dec 2570, รอยืนยัน) | 1% |
 
 ## 2. Investment income
 

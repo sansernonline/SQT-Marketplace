@@ -46,18 +46,7 @@
 
 ## 3. High-Level Architecture
 
-\`\`\`mermaid
-flowchart LR
-    User([User]) --> CDN[CDN]
-    CDN --> LB[Load Balancer]
-    LB --> API[API Gateway]
-    API --> Auth[Auth Service]
-    API --> App[App Service]
-    App --> Cache[(Redis)]
-    App --> DB[(PostgreSQL)]
-    App --> Queue[Message Queue]
-    Queue --> Worker[Background Worker]
-\`\`\`
+_[รูปภาพรวมสถาปัตยกรรม: User → CDN → Load Balancer → API Gateway → Auth / App → Redis · PostgreSQL · Queue → Worker. วาดเป็นรูปสไตล์เดียวกับเอกสารด้วย skill `diagram-figures` ไม่ใช้ Mermaid]_
 
 ## 4. Components
 
@@ -71,27 +60,13 @@ flowchart LR
 
 ## 5. Data Flow
 
-\`\`\`mermaid
-sequenceDiagram
-    autonumber
-    actor U as User
-    participant API
-    participant App
-    participant DB
-
-    U->>API: Request
-    API->>App: Validate + forward
-    App->>DB: Query
-    DB-->>App: Result
-    App-->>API: Response
-    API-->>U: 200 OK
-\`\`\`
+_[รูปลำดับ Data Flow: User → API → App → DB แล้วตอบกลับ. วาดด้วย skill `diagram-figures`]_
 
 ## 6. Tech Stack
 
 | Layer | Technology | Rationale |
 |-------|-----------|-----------|
-| Frontend | React 18 + Next.js 14 | SSR, ecosystem |
+| Frontend | React + Next.js (ใส่เวอร์ชันที่ใช้จริง) | SSR, ecosystem |
 | Backend | Node.js + NestJS | Team expertise |
 | Database | PostgreSQL 16 | ACID + JSON |
 | Cache | Redis 7 | Standard |

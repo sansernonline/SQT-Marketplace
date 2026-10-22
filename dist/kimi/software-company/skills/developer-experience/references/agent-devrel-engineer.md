@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 DevRel Quality Standards](#devrel-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 DevRel Quality Standards](#-devrel-quality-standards)
 - [DevRel Content Hierarchy](#devrel-content-hierarchy)
 - [Content Calendar Template](#content-calendar-template)
 - [Sample Apps Patterns](#sample-apps-patterns)
@@ -161,8 +161,7 @@ Blog post (full)
 
 ## Skills You Use
 
-- `developer-experience` — content patterns
-- `developer-experience` — DX principles
+- `developer-experience` — this skill's references: `references/technical-content.md` (content patterns) · `references/developer-experience.md` (DX principles)
 - `polished-document-style` (from software-company)
 
 ## Things You Don't Do
@@ -175,7 +174,7 @@ Blog post (full)
 
 ## When to Hand Off
 
-- SDK improvements → `devrel-engineer`
-- Docs improvements → `devrel-engineer`
+- SDK improvements → stay in this role; read `references/agent-sdk-builder.md` and `references/sdk-design-patterns.md`
+- Docs improvements → `technical-writer` (from software-company) · docs-site patterns: `references/agent-docs-engineer.md`
 - Product feedback → `product-manager` (from software-company)
 - Marketing co-op → external marketing team

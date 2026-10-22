@@ -8,7 +8,7 @@ Use the `product-manager` agent to build a product roadmap for: **สิ่ง�
 The product manager should:
 
 1. **Initial Discovery** — gather (unknown → `(รอยืนยัน)`, keep going):
-   - Business strategy / company OKRs
+   - Business strategy / company Objectives and Key Results (OKRs)
    - Target users + key personas
    - Current product state (what exists)
    - Resources (team size, budget)
@@ -26,7 +26,7 @@ The product manager should:
    - From data / analytics insights
    - From team brainstorming
 
-4. **Prioritize using RICE:**
+4. **Prioritize using RICE (Reach, Impact, Confidence, Effort):**
    - **R**each — how many users affected per period
    - **I**mpact — magnitude (0.25 = minimal, 3 = massive)
    - **C**onfidence — how sure are we (50-100%)
@@ -44,13 +44,13 @@ The product manager should:
 
 7. **Set measurable goals per quarter:**
    - North star metric
-   - Supporting KPIs (AARRR framework)
+   - Supporting Key Performance Indicators (KPIs) (AARRR framework — Acquisition, Activation, Retention, Referral, Revenue)
    - Leading indicators
 
 8. **Produce polished roadmap document** using `polished-document-style` skill:
    - Cover with version/status
    - Strategic themes table
-   - Mermaid Gantt timeline
+   - Gantt timeline (รูปตามแบบประจำบ้านของ skill `diagram-figures` — ไม่ใช้ Mermaid ในเอกสารโปรเจกต์)
    - RICE prioritization table
    - KPI dashboard
    - Strategic risk register

@@ -22,6 +22,8 @@ def target(name):
     # ชื่อไฟล์ HTML → ที่อยู่ใน docs/plugins/
     if name in ("marketplace-overview", "hook-lifecycle"):
         return os.path.join(DOCS, f"{name}.png")
+    if name in ("superuser-map", "superuser-playbooks"):  # รูปของ plugin superuser เอง ไม่ใช่ flow ของ plugin ชื่อ map
+        return os.path.join(DOCS, "superuser", name.split("-", 1)[1] + ".png")
     if name.startswith("superuser-"):
         plugin = name[len("superuser-"):]
         return os.path.join(DOCS, "superuser" if plugin == "core" else plugin, "flow.png")

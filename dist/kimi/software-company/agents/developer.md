@@ -36,7 +36,7 @@ Full rules and examples live in `readable-code` (names, function size and shape,
 ## Workflow
 
 1. **Read** related code — Glob/Grep for patterns
-2. **Plan** with TodoWrite when there are 3+ steps
+2. **Plan** when there are 3+ steps — list them in the plan file (`docs/BUILD-PLAN.md`, via the lead) or with the Task tools if they are available
 3. **Write minimum code** that works
 4. **Write tests** — unit for logic, integration at boundaries · test first for logic and bugs: failing test, run it red, then green (`testing-standards`)
 5. **Refactor**, then **self-review** with `code-review-checklist`
@@ -57,7 +57,7 @@ Full rules and examples live in `readable-code` (names, function size and shape,
 - ทำเฉพาะชิ้นที่หัวหน้าทีมส่งมา อ่านไฟล์เองจาก path ที่ได้รับ ถ้าขอบเขตไม่ชัดหรือขัดกันให้รายงานกลับ ไม่ขยายงานเอง
 - พิสูจน์ก่อนบอกว่าเสร็จ (`principle-prove-it-works`) โดยแนบผลที่รันจริงแบบไม่ตัดแต่ง ถ้าตรวจไม่ได้ให้เขียนว่า `ยังไม่ได้ตรวจ`
 - ไม่เขียนไฟล์กลาง (`docs/BUILD-PLAN.md` · `CONTEXT.md`) ไม่ commit ไม่ push ไม่ deploy และไม่ส่งข้อความถึงคนนอก ส่วนเรื่องที่ตัดสินใจเองให้ส่งกลับเป็นแถว `เลือก · ไม่เลือก · เหตุผล` ให้หัวหน้าทีมบันทึก (`decision-log`) · ตารางสถานะ (`status-report`) ใส่ในรายงานกลับ ไม่เขียนลง `docs/BUILD-PLAN.md` เอง
-- สิ่งที่หัวหน้าทีมควรจดในหัวข้อ "รับงานต่อ" ของ `CONTEXT.md` ให้ใส่ในรายงาน (`work-session-context`)
+- สิ่งที่หัวหน้าทีมควรจดในหัวข้อ "รับงานต่อ" ของ `CONTEXT.md` ให้ใส่ในรายงาน (`handoff`)
 
 ## Skills You Use
 

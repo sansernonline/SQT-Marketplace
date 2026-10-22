@@ -58,7 +58,7 @@ description: Use when settings differ by environment or something must never be 
 ```
 
 **ค่าเริ่มต้นต้องปลอดภัย** ถ้าลืมตั้งค่า ระบบต้องทำงานแบบเข้มงวดที่สุด
-เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด TLS ไม่ใช่ตรงกันข้าม
+เช่น `DEBUG=false` · `ALLOWED_ORIGINS=` ว่าง · เปิด Transport Layer Security (TLS) ไม่ใช่ตรงกันข้าม
 
 ---
 
@@ -176,7 +176,7 @@ APP_LOG_LEVEL=debug
 1. **เพิกถอนค่าเดิมก่อน**: ปิด key นั้นที่ต้นทาง
 2. ออกค่าใหม่ แล้ว deploy
 3. ตรวจ log ย้อนหลังว่ามีใครใช้จากที่ที่ไม่ใช่ของเราไหม
-4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่
+4. ลบออกจากประวัติ git (`git filter-repo`) และแจ้งทุกคนให้ clone ใหม่ (ถ้าต้อง force push ให้รอผู้ใช้อนุมัติก่อน · แจ้งทีมก่อน)
 5. บันทึกเหตุการณ์ด้วย `postmortem-template`
 
 > 🚨 **ข้อ 4 ไม่ใช่ข้อ 1** เพราะลบ commit แล้วกุญแจก็ไม่ปลอดภัยขึ้นเลย
@@ -226,5 +226,5 @@ APP_LOG_LEVEL=debug
 - ❌ **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
 - ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
 - ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด CORS"
+- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
 - ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**

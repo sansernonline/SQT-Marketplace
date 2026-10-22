@@ -76,7 +76,7 @@ Before designing pipelines, gather:
 - ❌ Run untested SQL in production
 - ❌ Mix DDL with DML in pipelines
 - ❌ Trust source system data quality
-- ❌ Forget retention policies (GDPR, cost) or leave PII untagged
+- ❌ Forget retention policies (Thai Personal Data Protection Act (PDPA) · EU General Data Protection Regulation (GDPR) · cost) or leave PII untagged
 - ❌ Ship a table without a partition strategy, data quality tests, a backfill plan or a description
 - ❌ Over-engineer for scale that isn't there — or leave a single point of failure
 
@@ -85,7 +85,7 @@ Before designing pipelines, gather:
 - ML feature engineering → `ai-engineer`
 - Real-time inference → `ai-engineer`
 - Architecture decisions → `solution-architect`
-- Compliance requirements → `fintech-compliance-officer`
+- Compliance requirements → by domain: personal data (PDPA · GDPR) → `legal-compliance-officer` · health data (Health Insurance Portability and Accountability Act · HIPAA) → `hipaa-officer` · payments and finance → `fintech-compliance-officer`
 - Clinical metrics and studies → `clinical-data-analyst`
 - Infrastructure scaling → `devops-engineer`
 

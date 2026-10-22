@@ -4,7 +4,7 @@
 
 ภาพเทียบ: [`../assets/app-character-sheet.webp`](../assets/app-character-sheet.webp) แสดงการ์ดรายการเดียวกันใน 6 บุคลิก ต้นฉบับ HTML อยู่ที่ [`../assets/app-character-sheet.html`](../assets/app-character-sheet.html) ใช้เป็นจุดเริ่มต้นได้
 
-## 1 · เลือกจาก 4 คำถาม (ตอบจาก BRD หรือคำขอของผู้ใช้)
+## 1 · เลือกจาก 4 คำถาม (ตอบจากเอกสารความต้องการทางธุรกิจ (Business Requirements Document · BRD) หรือคำขอของผู้ใช้)
 
 | คำถาม | เอียงไปทาง เรียบและสงบ | เอียงไปทาง สดใสและขี้เล่น |
 |---|---|---|

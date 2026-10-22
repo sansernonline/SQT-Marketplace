@@ -16,11 +16,11 @@ General information, not legal advice — for large amounts, injury or a contrac
 | 1 | Seller / shop / service provider | Chat on the platform (keeps a record), email, or letter | 3–7 days to answer (state a date) | No reply or refusal by the date |
 | 2 | Platform (Shopee, Lazada, TikTok Shop, delivery app) | In-app "return/refund" or dispute, then customer service ticket | Platform's own window — act **before** it closes | Platform rejects, or seller is off-platform |
 | 2b | Card issuer / bank (if paid by card) | Dispute or chargeback — see `refund-request` | Bank's dispute window (รอยืนยัน — read your card terms) | Bank declines |
-| 2c | Online-transaction complaints | ศูนย์รับเรื่องร้องเรียนปัญหาออนไลน์ (OCC, under ETDA) hotline 1212 | — | Not resolved |
+| 2c | Online-transaction complaints | ศูนย์รับเรื่องร้องเรียนปัญหาออนไลน์ (Online Complaint Center, OCC, under สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์ — Electronic Transactions Development Agency, ETDA) hotline 1212 | — | Not resolved |
 | 3 | สำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ., Office of the Consumer Protection Board) | Hotline **1166**, OCPB Connect app, online at **complaint.ocpb.go.th** (register with บัตรประชาชน), or in person; provinces → สคบ.จังหวัด at the provincial hall | สคบ. may call both sides to a mediation; can sue on the consumer's behalf in some cases | Mediation fails |
 | 4 | ศาล — consumer case (คดีผู้บริโภค) | File at the court with jurisdiction where you live; can be filed **orally** with a court case officer (เจ้าพนักงานคดี) who writes it down | Court hearing | — |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.marketingoops.com/digital-life/ocpb-online-complaint/ · https://www.mitihoon.com/2026/06/05/647541/ (สคบ. channels 1166, OCPB Connect, ocpb.go.th) — verify the URL at www.ocpb.go.th before sending.
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.marketingoops.com/digital-life/ocpb-online-complaint/ · https://www.mitihoon.com/2026/06/05/647541/ (สคบ. channels 1166, OCPB Connect, ocpb.go.th) — verify the URL at www.ocpb.go.th before sending. Channels not yet checked against the official ocpb.go.th page (รอยืนยัน).
 
 Consumer court basics (พ.ร.บ.วิธีพิจารณาคดีผู้บริโภค พ.ศ. 2551):
 - Consumer plaintiffs are exempt from court fees (มาตรา 18) — the court may still order costs in some cases (รอยืนยัน — amendment details)
@@ -28,6 +28,7 @@ Consumer court basics (พ.ร.บ.วิธีพิจารณาคดีผ
 - A business suing a consumer must file where the consumer lives (มาตรา 17)
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/consumer-case-procedure/consumer-case-procedure-filing-section-17-21 · https://legardy.com/blogs/consumer-case-thailand-steps-fees-evidence
+ข้อความมาตราจากเว็บรอง 2 แหล่ง — ตรวจกฎหมายฉบับทางการ: krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา) · ocpb.go.th — ยังไม่ได้เปิดตรวจข้อความทางการ (รอยืนยัน)
 
 Watch the clock: a defect lawsuit is barred 1 year after discovering the defect (ป.พ.พ. มาตรา 474 — see `warranty-tracker`). Don't let steps 1–3 run past it.
 
@@ -89,4 +90,4 @@ More templates (to สคบ., platform escalation, English version) → [refere
 - One request, one deadline.
 - Public reviews: facts only ("ordered on …, received …, seller did not reply by …"). Exaggeration can expose the user to a defamation claim (หมิ่นประมาท).
 
-Related: `refund-request` · `warranty-tracker` · `polite-message-th-en` in `personal-life` (first friendly message) · `scam-check` in `trading-finance` (seller vanished, fake shop) · `important-docs` in `personal-life`.
+Related: `refund-request` · `warranty-tracker` · `polite-message-th-en` (first friendly message) · `scam-check` in `trading-finance` (if installed; seller vanished, fake shop) · `important-docs` in `personal-life` (if installed).

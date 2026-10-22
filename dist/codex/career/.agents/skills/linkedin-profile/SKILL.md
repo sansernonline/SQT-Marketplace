@@ -45,6 +45,8 @@ Example hook:
 
 ## Thai market keywords (examples by function)
 
+These are recruiter search terms, kept as written — not text to paste in unchanged. Use only the ones that are true for you.
+
 | Function | Keywords recruiters search |
 |---|---|
 | Finance / accounting | TFRS, IFRS, SAP FI/CO, month-end closing, consolidation, BOI, transfer pricing, CPA (ผู้สอบบัญชีรับอนุญาต) |

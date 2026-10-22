@@ -5,7 +5,7 @@ skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consiste
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
-1. เขียนข้อความหลักและ hook 3 วินาที · ใคร: `social-creator` ตัวใหม่
+1. เขียนข้อความหลักและ hook 3 วินาที · ใคร: `social-creator` ตัวใหม่ (ข้อความ hook สคริปต์) · ส่วน shot list motion และ brief ทีละช็อตเป็นของ `art-director`
 2. ทำ shot list ตาม `video-script-to-clip` — ภาพ ข้อความบนจอ เสียง เวลา · ใคร: `art-director` ตัวใหม่
 3. ตั้งจังหวะ motion ตาม `motion-basics` — กำหนดเวลาเป็นมิลลิวินาที · เลือกเส้น easing (จังหวะเร่งและชะลอ) · ข้อความบนจออยู่นานพอให้อ่านทัน · ใคร: `art-director` ตัวใหม่
 4. เขียน brief ทีละช็อตสำหรับเครื่องมือวิดีโอหรือการถ่ายด้วยมือถือ · ใคร: `art-director` ตัวใหม่

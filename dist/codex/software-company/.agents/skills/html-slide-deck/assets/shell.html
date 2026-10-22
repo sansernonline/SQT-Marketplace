@@ -95,20 +95,21 @@ pre.code em{font-style:normal;color:var(--accent2)}pre.code i{font-style:normal;
 .bars .v{font:16px var(--mono);color:var(--soft)}.bars .l{font:16px var(--mono);color:var(--dim)}
 .growbar{width:100%;height:0;background:var(--accent2);border-radius:6px 6px 0 0;transition:height .9s cubic-bezier(.2,.7,.2,1)}
 .shot{max-width:100%;max-height:420px;border-radius:10px;border:1px solid #333;cursor:zoom-in}
-/* ===== motion: children rise in, numbers count up, [data-loop] lights one child at a time ===== */
+/* ===== motion: opt-in per slide — rise-in, stagger, box pop and arrow draw run only on <section data-anim>;
+   count-up only on [data-count], one-by-one highlight only on [data-loop]. Default = still slides (no-ai-look: no fade-up on everything). ===== */
 @keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 @keyframes slideIn{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:none}}
-.slide.on>*{animation:up .55s cubic-bezier(.2,.7,.2,1) both}
-.slide.on>*:nth-child(2){animation-delay:.08s}.slide.on>*:nth-child(3){animation-delay:.16s}.slide.on>*:nth-child(4){animation-delay:.24s}
+.slide[data-anim].on>*{animation:up .55s cubic-bezier(.2,.7,.2,1) both}
+.slide[data-anim].on>*:nth-child(2){animation-delay:.08s}.slide[data-anim].on>*:nth-child(3){animation-delay:.16s}.slide[data-anim].on>*:nth-child(4){animation-delay:.24s}
 .slide.on>.foot,.slide.on>.pg{animation:none}
-.slide.on [data-k]{animation:up .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--k) * 70ms + 220ms)}
-.slide.on.divider .num{animation:slideIn .7s cubic-bezier(.2,.7,.2,1) both}
+.slide[data-anim].on [data-k]{animation:up .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--k) * 70ms + 220ms)}
+.slide[data-anim].on.divider .num{animation:slideIn .7s cubic-bezier(.2,.7,.2,1) both}
 @keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes glow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--accent2) 28%,transparent)}}
-.slide.on .box[data-k],.slide.on .layer[data-k]{animation-name:pop}
-.slide.on .map svg>path{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .6s ease-out both;animation-delay:calc(var(--k,0) * 120ms + .5s)}
-.lit{border-color:var(--accent2)!important;background:var(--accent-tint)!important;animation:glow 1.4s ease-in-out infinite}
+.slide[data-anim].on .box[data-k],.slide[data-anim].on .layer[data-k]{animation-name:pop}
+.slide[data-anim].on .map svg>path{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .6s ease-out both;animation-delay:calc(var(--k,0) * 120ms + .5s)}
+.lit{border-color:var(--accent2)!important;background:var(--accent-tint)!important;animation:glow 1.4s ease-in-out 1}
 /* map tour: a step lights its boxes (data-key) and arrows (id), a dot runs along each arrow */
 .map svg>path.hot{stroke:var(--accent2);stroke-width:3;marker-end:url(#ahh)}
 .map .tour{border-color:var(--accent2)!important;background:var(--accent-tint)!important}
@@ -159,7 +160,7 @@ ol.tour-steps{display:none}
 </div>
 <div id="menu"><div class="mhead"><b>สารบัญ<span>คลิกหน้าที่ต้องการ · กด M หรือ Esc เพื่อปิด</span></b><button class="mclose" type="button">✕ ปิด</button></div><div id="menuList"></div></div>
 <div class="edge l" title="ก่อนหน้า (←)">‹</div><div class="edge r" title="ถัดไป (→)">›</div><div id="bar"></div><div id="bartip"></div>
-<div id="notes"><button class="nclose" type="button" title="ปิดบันทึก (N)">✕</button><div id="notesBody"></div></div><div id="zoom"><img alt=""></div>
+<div id="notes"><button class="nclose" type="button" title="ปิดบันทึก (N)">✕</button><div id="notesBody"></div></div><div id="zoom"><!-- slop-ok: broken-image ช่องขยายรูป เติม src ตอนคลิก img.shot --><img alt=""></div>
 <div id="ui"><span id="clock" title="เวลาที่ใช้ / เวลาที่ควรถึงหน้านี้ (กด T เริ่ม/หยุด)">0:00</span><button id="prev" title="ก่อนหน้า (←)">‹</button><span id="count"></span><button id="next" title="ถัดไป (→)">›</button><button id="mb" title="สารบัญทุกหน้า (M)">สารบัญ</button><button id="nb" title="บันทึกผู้พูด (N)">โน้ต</button><button id="fs" title="เต็มจอ (F)">เต็มจอ</button></div>
 <script>
 const DATA=/*DATA*/null;

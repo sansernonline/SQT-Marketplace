@@ -50,7 +50,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 | กลไก | เหมาะกับ | ระวัง |
 |---|---|---|
 | **ตารางงานในฐานข้อมูล** | ระบบเล็ก–กลาง · งานไม่เกินหลักพันต่อวัน | ต้องเขียนตัวหยิบงานเอง · ระวัง worker แย่งงานกัน |
-| **คิวจริง** (Redis · RabbitMQ · SQS) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
+| **คิวจริง** (Redis · RabbitMQ · Amazon Simple Queue Service (SQS)) | งานเยอะ · ต้องการ retry และ dead letter ในตัว | เพิ่มของที่ต้องดูแล |
 | ตัวตั้งเวลาในแอป (cron ในโค้ด) | งานตามเวลาที่มี instance เดียว | **หลาย instance จะรันพร้อมกัน** · ดูข้อ 5 |
 | ตัวตั้งเวลาของแพลตฟอร์ม | งานตามเวลาบนคลาวด์ | |
 
@@ -80,16 +80,16 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 ## 4 · retry และงานที่ตายแล้ว
 
-ตัวเลขนี้สำหรับงานในคิว · ลองใหม่ระหว่างที่ผู้ใช้รอคำตอบใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) (3 ครั้ง 1/2/4 วินาที)
+ตัวเลขนี้สำหรับงานในคิว · ลองใหม่นอกคิวใช้ของ [`error-handling-patterns`](../error-handling-patterns/SKILL.md) §4: service เรียก service ใช้ 3 ครั้ง 1/2/4 วินาที · มีคนรอหน้าจอ → retry ไม่เกิน 1 ครั้งแล้วให้กดเอง
 
 ```
-ล้ม → รอ 1 นาที → ล้ม → รอ 5 นาที → ล้ม → รอ 15 นาที → ล้มครั้งที่ 4 → dead letter
+ล้ม → รอ 1 นาที → ล้ม → รอ 4 นาที → ล้ม → รอ 16 นาที → ล้มครั้งที่ 4 → dead letter
 ```
 
 | กฎ | รายละเอียด |
 |---|---|
 | **มีเพดานเสมอ** | 3–5 ครั้ง ถ้า retry ไม่จำกัด งานเดียวก็ทำให้คิวตัน |
-| เว้นเวลาเพิ่มเป็นทวีคูณ + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
+| เว้นเวลาเพิ่มขึ้นทุกรอบ (เท่าตัวคงที่ เช่น ×4) + สุ่มเล็กน้อย | เหมือน `error-handling-patterns` |
 | ข้อมูลผิดไม่ต้อง retry | payload ผิดรูปแบบ ลองอีกกี่ครั้งก็เหมือนเดิม |
 | **งานที่หมดสิทธิ์ต้องไปที่เดียว** | dead letter (ที่เก็บงานที่ล้มจนหมดสิทธิ์) โดยเก็บ payload เต็มและ error ล่าสุด |
 | ต้องมีคนดู dead letter | **แจ้งเตือนเมื่อมีงานเข้าไปใหม่** ไม่ใช่รอให้ลูกค้าทัก |
@@ -181,7 +181,7 @@ Use when a system must show who did what and when (approvals, money, permissions
 - ระบบมีงานอนุมัติ การเงิน สิทธิ์ผู้ใช้ หรือข้อมูลส่วนบุคคล
 - ลูกค้าหรือผู้ตรวจสอบถามได้ว่า "ใครทำ เมื่อไหร่ เปลี่ยนจากอะไรเป็นอะไร"
 - มีข้อพิพาทเรื่องข้อมูลที่ถูกแก้ แล้วไม่มีใครตอบได้
-- ระบบอยู่ภายใต้ PDPA หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
+- ระบบอยู่ภายใต้ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (Personal Data Protection Act: PDPA) หรือมาตรฐานที่ต้องตรวจย้อนหลังได้
 
 ## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
 
@@ -435,7 +435,7 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 |---|---|
 | ขอดู | ออกสำเนาข้อมูลทั้งหมดของคนนั้น |
 | ขอแก้ | แก้ข้อมูลที่ไม่ถูกต้อง แล้ว**ส่งต่อการแก้ไปยังที่ที่เคยส่งข้อมูลไป** |
-| **ขอลบ** | ลบจริงจากทุกที่ที่มี รวม log และไฟล์สำรอง |
+| **ขอลบ** | ลบจริงจากทุกที่ที่ใช้งานอยู่ รวม log · ส่วนไฟล์สำรองให้ตัดออกจากการใช้งาน (ถ้ากู้คืนต้องลบซ้ำ) แล้วปล่อยให้หมดอายุตามรอบหมุนเวียน (ดูข้อ 6) พร้อมบอกเจ้าของข้อมูลว่าข้อมูลในไฟล์สำรองจะหายภายในวันที่เท่าไร |
 | ขอให้ระงับใช้ | หยุดใช้ชั่วคราวโดยไม่ลบ |
 | ขอย้ายข้อมูล | ส่งออกในรูปแบบที่เครื่องอ่านได้ |
 | คัดค้าน | หยุดการตลาดหรือการประมวลผลที่คัดค้าน |
@@ -459,8 +459,9 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 | ปิดบังตอนแสดง | `x-xxxx-xxxx-12-3` |
 | **แยกข้อมูลอ่อนไหวออกจากตารางหลัก** | จำกัดสิทธิ์และตรวจสอบง่ายกว่า |
 
-**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** — เชื้อชาติ ศาสนา ความคิดเห็นทางการเมือง พฤติกรรมทางเพศ
-ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ข้อมูลชีวภาพ จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ
+**ข้อมูลอ่อนไหวเป็นชั้นที่เข้มกว่า** (มาตรา 26) — เช่น เชื้อชาติ เผ่าพันธุ์ ความคิดเห็นทางการเมือง ความเชื่อลัทธิ ศาสนาหรือปรัชญา พฤติกรรมทางเพศ
+ประวัติอาชญากรรม **ข้อมูลสุขภาพ** ความพิการ ข้อมูลสหภาพแรงงาน ข้อมูลพันธุกรรม ข้อมูลชีวภาพ และข้อมูลอื่นที่กระทบเจ้าของข้อมูลในทำนองเดียวกัน
+จึงเก็บได้เมื่อจำเป็นจริงและต้องมีมาตรการเข้มกว่าปกติ (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 มาตรา 26 ตรวจ 22 ต.ค. 2569)
 
 **ห้ามใช้ข้อมูลจริงบนเครื่องพัฒนาหรือ staging** — ต้องปิดบังก่อนเสมอ (ดู `cicd-and-release`)
 
@@ -542,7 +543,7 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 | ปิดบังข้อมูลใน log | `logging-standards` |
 | สิทธิ์เข้าถึงและการยืนยันตัวตน | `auth-implementation-patterns` |
 | ปิดบังข้อมูลจริงก่อนลง staging | `cicd-and-release` |
-| ความยินยอมสำหรับการตลาด | `notifications` |
+| การส่งและการยกเลิกรับข้อความการตลาด (เรื่องความยินยอมอยู่ที่ skill นี้) | `notifications` |
 | ปิดบังข้อมูลในไฟล์ส่งออก | `data-import-export` |
 | อายุการเก็บไฟล์แนบ | `file-upload-and-storage` |
 | งานลบข้อมูลที่หมดอายุ | `background-jobs` |
@@ -555,7 +556,7 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 
 Use when setting up or fixing a build and deploy pipeline or deciding how a project ships.
 
-# CI/CD และการปล่อยของ
+# Continuous Integration / Continuous Delivery (CI/CD) และการปล่อยของ
 
 > **กฎข้อเดียว:** build ครั้งเดียว แล้วเอา **artifact ตัวเดิม** ไปทุก environment
 > ถ้า build ใหม่ตอนขึ้น production ของที่ทดสอบผ่านกับของที่ลูกค้าใช้จะไม่ใช่ตัวเดียวกัน
@@ -626,7 +627,7 @@ commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี
 
 ## 3 · เวอร์ชันต้องไล่กลับไปหา commit ได้
 
-ใช้ SemVer: `MAJOR.MINOR.PATCH`
+ใช้ Semantic Versioning (SemVer): `MAJOR.MINOR.PATCH`
 
 | ขึ้นเลขไหน | เมื่อ |
 |---|---|
@@ -758,7 +759,7 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 | เรื่อง | กฎ |
 |---|---|
 | เลขเวอร์ชัน | `pubspec.yaml` `version: X.Y.Z+N` · `X.Y.Z` ตาม SemVer · **`N` คือ versionCode เป็นจำนวนเต็มที่ขึ้นอย่างเดียว** (เช่นเลขรอบของ CI) · commit hash ส่งผ่าน `--dart-define=GIT_SHA=<hash>` แล้วแสดงในหน้า "เกี่ยวกับ" |
-| build ครั้งเดียว | `flutter build appbundle --release` ได้ AAB ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
+| build ครั้งเดียว | `flutter build appbundle --release` ได้ Android App Bundle (AAB) ไฟล์เดียว แล้วเลื่อนไฟล์เดิมผ่าน track ของ Play: internal → closed → production · ไม่ build ใหม่ต่อ track |
 | ปล่อยทีละส่วน | production ใช้ staged rollout เป็น % (เช่น 5 → 20 → 50 → 100) แทน canary ของเซิร์ฟเวอร์ · track ของ Play แทน environment ในข้อ 5 |
 | rollback | **ย้อนเวอร์ชันบน Play ไม่ได้** เพราะ versionCode ลดไม่ได้ และเครื่องที่ติดตั้งแล้วไม่ถอยกลับ ให้หยุด rollout (halt) แล้วปล่อยตัวแก้ที่ versionCode สูงกว่า และซ้อมขั้นตอนนี้แทนข้อ 9 |
 | กุญแจเซ็น | upload key เก็บใน secret store ของ CI เป็น base64 + รหัสผ่านแยกเป็น secret · `android/key.properties` และ `*.jks` อยู่ใน `.gitignore` · **สำรองกุญแจไว้นอก CI อย่างน้อย 1 ที่** ถ้าทำหายจะอัปเดตแอปไม่ได้จนกว่าจะขอ Play support รีเซ็ต (ใช้ Play App Signing ให้ Google ถือกุญแจจริง) |
@@ -815,21 +816,7 @@ deploy แล้วพังกี่เปอร์เซ็นต์ · กู
 
 ## Deployment Flow
 
-\`\`\`mermaid
-flowchart TD
-    A[Tag release vX.Y.Z] --> B[Run final CI]
-    B --> C{All green?}
-    C -->|No| D[Abort + Investigate]
-    C -->|Yes| E[Deploy to canary 5%]
-    E --> F{Healthy after 10min?}
-    F -->|No| G[Rollback]
-    F -->|Yes| H[Deploy to 50%]
-    H --> I{Healthy?}
-    I -->|No| G
-    I -->|Yes| J[Deploy to 100%]
-    J --> K[Smoke tests]
-    K --> L([Done])
-\`\`\`
+_[รูปขั้นตอน deploy: Tag release → CI สุดท้าย → ผ่านทั้งหมด? (ไม่ผ่าน = หยุดและตรวจ) → canary 5% → ปกติหลัง 10 นาที? (ไม่ = rollback) → 50% → ปกติ? (ไม่ = rollback) → 100% → smoke test → เสร็จ. วาดด้วย skill `diagram-figures`]_
 
 ## Deployment Steps
 
@@ -930,6 +917,12 @@ jobs:
       - name: ตรวจ dependency
         run: npm audit --audit-level=high
 
+      - name: ตรวจ secret รั่วใน repo
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }} # ต้องมีเมื่อ repo เป็นของ organization · บัญชีส่วนตัวไม่ต้อง (README gitleaks-action · ตรวจ 22 ต.ค. 2569)
+
       - uses: actions/upload-artifact@v4
         with:
           name: app-${{ github.sha }}
@@ -953,7 +946,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4             # scripts/deploy.sh มาจาก repo
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4    # ตัว build มาจาก artifact (dist/)
         with:
           name: app-${{ github.event.workflow_run.head_sha }}
           run-id: ${{ github.event.workflow_run.id }}
@@ -965,6 +961,14 @@ jobs:
     runs-on: ubuntu-latest
     environment: production        # ← ตั้ง required reviewers ที่นี่ = ด่านคน
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4   # artifact ตัวเดียวกับ staging
+        with:
+          name: app-${{ github.event.workflow_run.head_sha }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ./scripts/deploy.sh production
       - name: ตรวจหลัง deploy
         run: |
@@ -979,6 +983,7 @@ jobs:
 
 - `pull_request_target` เห็น secret และรันโค้ดจาก fork จึง**อย่าใช้** เว้นแต่รู้จริงว่ากำลังทำอะไร
 - ตั้ง `permissions` ให้แคบที่สุดในทุก workflow เพราะบางองค์กรตั้งค่าเริ่มต้นให้เขียนได้ทั้ง repo
+- เวอร์ชันในตัวอย่าง (`@v4`, Node 22, .NET 8.x) เป็นแค่ตัวอย่าง ตรวจเวอร์ชันล่าสุดก่อนใช้ (รอยืนยัน)
 - ปักหมุด action อย่างน้อยด้วย tag เวอร์ชัน (`@v4`) ถ้าต้องการเข้มงวดให้ปักด้วย commit hash
 - `environment:` คือที่ตั้งผู้อนุมัติ (required reviewers) และ secret เฉพาะ environment
 
@@ -1073,7 +1078,10 @@ build:
   stage: build
   image: docker:27
   services: [docker:27-dind]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
   script:
+    - echo "$CI_JOB_TOKEN" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   rules:
@@ -1107,7 +1115,8 @@ deploy:production:
 FROM node:22-alpine AS build
 WORKDIR /src
 COPY package*.json ./
-RUN npm ci                      # ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+# ชั้นนี้ถูกแคชตราบใดที่ lock file ไม่เปลี่ยน
+RUN npm ci
 COPY . .
 RUN npm run build
 
@@ -1117,7 +1126,8 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY --from=build /src/dist ./dist
 COPY --from=build /src/node_modules ./node_modules
-USER node                       # ❌ อย่ารันเป็น root
+# อย่ารันเป็น root
+USER node
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD node dist/healthcheck.js
 CMD ["node", "dist/main.js"]
@@ -1140,7 +1150,7 @@ CMD ["node", "dist/main.js"]
 | เก็บ artifact | `upload/download-artifact` | `publish` / `download` | `artifacts:` |
 | แคช dependency | `actions/cache` หรือ `cache:` ใน setup | `Cache@2` | `cache:` |
 | secret ต่อ environment | Environment secrets | Variable group + Key Vault | ตัวแปร Protected ต่อ environment |
-| ยกเลิกรอบเก่า | `concurrency` | `batch: true` | `interruptible: true` |
+| ยกเลิกรอบเก่า | `concurrency` | `batch: true` (รวม trigger ระหว่างรอบที่รันอยู่ ไม่ได้ยกเลิกรอบเก่า) | `interruptible: true` |
 | วิ่งขนาน | `strategy.matrix` | `strategy.matrix` | `parallel:` |
 | รันเอง (self-hosted) | ได้ | ได้ | ได้ |
 

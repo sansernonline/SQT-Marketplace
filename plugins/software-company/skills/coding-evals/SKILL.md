@@ -27,7 +27,7 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 | 7 | SQL | query รายงานยอดขายรายเดือน ช้าเกิน 2 วินาทีบนข้อมูล 1 ล้านแถว | เวลารันและ plan · ผลตรงกับคำตอบ |
 | 8 | SQL | migration เพิ่มคอลัมน์ NOT NULL บนตารางใหญ่ โดยไม่ล็อกนาน | รันซ้ำได้ · ไม่มี downtime ในสคริปต์ |
 
-ชุดงานเก็บที่ `evals/coding/<เลข>-<ชื่อ>/` ของ repo ที่ใช้วัด (ไม่ใช่ใน plugin): `TASK.md` (คำสั่งที่ส่งให้ทีม) · `repo/` (โค้ดเริ่มต้น) · `hidden-tests/` (ทีมห้ามเห็น) · `check.sh` หรือ `check.ps1`
+ชุดงานอยู่ใน SQT-Marketplace ที่ `evals/coding/tasks/c<เลข>-<ชื่อ>/` (ไม่อยู่ใน plugin): `TASK.md` (คำสั่งที่ส่งให้ทีม) · `task.json` · `repo/` (โค้ดตั้งต้น) · `hidden/` (test ที่ทีมห้ามเห็น) · `reference/` (คำตอบอ้างอิง) · `check.mjs` · กติกาเต็มใน `evals/coding/CONTRACT.md`
 
 ## 2 · คะแนนต่องาน (เต็ม 10)
 
@@ -43,15 +43,21 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 
 ## 3 · วิธีรัน
 
-1. ทำงานใน sandbox (`docker-sandbox`) โดยใช้ 1 โฟลเดอร์สะอาดต่อ 1 งาน
-2. รอบ **ก่อน** — ใช้ plugin เวอร์ชันก่อนแก้ แล้วส่ง `TASK.md` ให้ `/software-company:superuser` ตรงตัว ไม่ช่วยเพิ่ม
-3. รัน `check` แล้วให้ subagent ตัวใหม่ (ไม่เห็นงาน) ให้คะแนนตามข้อ 2
-4. รอบ **หลัง** — ใช้ plugin เวอร์ชันใหม่ ทำซ้ำข้อ 2–3 กับงานชุดเดิม
-5. งานที่ผลแกว่ง (โมเดลสุ่ม) ให้รัน 2 รอบต่อเวอร์ชันแล้วใช้ค่าเฉลี่ย
+สคริปต์ `evals/coding/run-coding.mjs` ทำทุกขั้นให้ (วิธีใช้เต็มใน `evals/coding/README.md`)
+
+```powershell
+node evals/coding/run-coding.mjs --verify                     # ตรวจชุดงานก่อน: โค้ดตั้งต้นต้องตก · คำตอบอ้างอิงต้องผ่านครบ
+node evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # รุ่นก่อน = commit ล่าสุด · รุ่นหลัง = ไฟล์ที่แก้อยู่
+```
+
+1. ทุกรอบรันในโฟลเดอร์ใหม่ใต้ `_to_delete/coding-bench/runs/` โหลดเฉพาะ plugin ที่เทียบ แล้วส่งคำสั่งเดียวกันให้ `superuser` ตรงตัว ไม่ช่วยเพิ่ม
+2. ตรวจด้วย `check.mjs` ของงาน แล้วนับข้อ "test ของทีมเอง" กับ "สะอาด" ให้อัตโนมัติ (เอา test ของทีมไปรันกับโค้ดตั้งต้น · เทียบขนาด diff กับ `reference/`)
+3. ข้อ "ตามแบบแผน" กับ "รายงานจริง" ให้ claude ตัวใหม่ที่ไม่เห็นงานตอนทำเป็นคนตัดสิน
+4. งานที่ผลแกว่ง (โมเดลสุ่ม) ให้รัน `--runs 2` ขึ้นไปแล้วใช้ค่าเฉลี่ย
 
 ## 4 · รายงานผล
 
-เพิ่มแถวใน `evals/coding/RESULTS.md`:
+สคริปต์เพิ่มแถวใน `evals/coding/RESULTS.md` เอง (1 แถวต่อรุ่น) · ผลรายรอบอยู่ใน `_to_delete/coding-bench/runs/`:
 
 | วันที่ | เวอร์ชัน | งาน 1–8 | รวม /80 | เวลา | หมายเหตุ |
 |---|---|---|---|---|---|
@@ -61,7 +67,7 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 
 ## 5 · กติกา
 
-- ทีมห้ามเห็น `hidden-tests/` และคำตอบอ้างอิง ส่วนคนให้คะแนนต้องเป็น subagent ตัวใหม่เสมอ
+- ทีมห้ามเห็น `hidden/` และคำตอบอ้างอิง ส่วนคนให้คะแนนต้องเป็น subagent ตัวใหม่เสมอ
 - ห้ามแก้ชุดงานให้ผ่านง่ายขึ้นระหว่างเทียบ เพิ่มงานใหม่ได้ แต่เทียบเฉพาะงานที่มีทั้ง 2 รอบ
 - บั๊กจริงที่ทีมเคยพลาด (จาก `.claude/superuser/learn/`) แปลงเป็นงานใหม่ในชุดนี้ได้ หลังตัดข้อมูลลูกค้าออก
 

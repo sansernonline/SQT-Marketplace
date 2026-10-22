@@ -68,7 +68,7 @@ A good runbook is:
 | TL;DR (30 seconds) | ย่อหน้าเดียวว่าอะไรพัง ต้องทำอะไรก่อน และต้องโทรหาใคร |
 | How to Detect | อาการที่ผู้ใช้เห็นและที่เห็นภายใน · alert ที่ดัง · dashboard ที่ต้องเปิด |
 | Diagnosis (60 seconds) | ผัง flowchart ตัดสินใจ และ quick checks ที่เป็นคำสั่งคัดลอกไปรันได้ เรียงตามลำดับ |
-| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work |
+| Mitigation Steps | ขั้นตอนเรียงจากความเสี่ยงต่ำไปสูง (ลำดับเดียวกับ `incident-response` Phase 3) ทุกขั้นบอก Expected effect และ Caveats หรือ If doesn't work · agent แค่เสนอคำสั่งกับผลที่คาด คน on-call เป็นคนรันหรืออนุมัติก่อนแตะ production |
 | Escalation Path | ใครต้องถูกเรียกเมื่อไหร่ เป็นนาทีที่ชัดเจน |
 | Verification | รายการตรวจว่าแก้แล้วจริง |
 | After Resolution | บันทึกในช่องเหตุการณ์ → อัปเดตหน้าสถานะ → เปิดตั๋ว postmortem → อัปเดต runbook นี้ |
@@ -86,7 +86,7 @@ A good runbook is:
 
 ทำหน้ารวม runbook ไว้ที่เดียว ให้ค้นได้ทั้งตาม service ตามชื่อ alert และตามเหตุที่เกิดบ่อยใน 90 วันล่าสุด
 
-alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ่าน annotation `runbook:` ของ alert และควรใส่ `dashboard:` คู่กันด้วย ส่วนตัวอย่างหน้ารวมและตัวอย่าง AlertManager อยู่ใน [references/index-and-alert-links.md](references/index-and-alert-links.md)
+alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ่าน annotation `runbook_url:` ของ alert และควรใส่ `dashboard:` คู่กันด้วย ส่วนตัวอย่างหน้ารวมและตัวอย่าง Prometheus alerting rule อยู่ใน [references/index-and-alert-links.md](references/index-and-alert-links.md)
 
 ## What Makes Runbooks Fail
 

@@ -126,7 +126,7 @@ playbook `learn-from-session` ของ plugin ที่กรอก
 
 ### ต้องมีในผลงาน
 
-1. รวบรวมจากคิวกลาง `~/.claude/superuser/improvements.md` · `.claude/superuser/learn/` · `.claude/superuser/IMPROVEMENTS.md` ของทุกโปรเจกต์ที่กรอก
+1. รวบรวมจากคิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` · `.claude/superuser/learn/` · `.claude/superuser/IMPROVEMENTS.md` ของทุกโปรเจกต์ที่กรอก
 2. เรื่องที่เกิดครั้งเดียว → ทิ้ง · เกิดซ้ำ → ทำเป็นตัวตรวจ ไม่ใช่คำเตือน
 3. ตารางเสนอแก้ เรียงตามจำนวนครั้ง
 4. ผู้ใช้เห็นด้วย → แก้ทีละย่อหน้า · คำสั่ง `node scripts/...` รันที่ราก repo SQT-Marketplace (เปิด agent ที่นั่น หรือกรอก path ของ repo ในช่อง "ผู้ใช้กรอก") · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` · แก้ใน repo แล้วรัน `node scripts/check/validate-marketplace.mjs` ให้ผ่าน

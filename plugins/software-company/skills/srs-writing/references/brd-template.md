@@ -32,6 +32,8 @@
 6. [Business Rules](#6-business-rules)
 7. [Assumptions & Constraints](#7-assumptions--constraints)
 8. [Open Questions](#8-open-questions)
+9. [Process Flow](#9-process-flow-if-applicable)
+10. [Sign-off](#sign-off)
 
 ---
 
@@ -67,15 +69,15 @@
 ### Out of Scope
 - ...
 
-> **Note:** Out-of-scope items may be addressed in future phases (see Section 7).
+> **Note:** Out-of-scope items may be addressed in future phases (list each one in Section 8, Open Questions, with its target phase).
 
 ## 5. Business Requirements
 
 | ID | Requirement | Priority | Acceptance |
 |:---|:------------|:--------:|:-----------|
-| BR-001 | System shall... | Must | Verified by ... |
-| BR-002 | System should... | Should | Verified by ... |
-| BR-003 | System could... | Could | Verified by ... |
+| BREQ-001 | System shall... | Must | Verified by ... |
+| BREQ-002 | System should... | Should | Verified by ... |
+| BREQ-003 | System could... | Could | Verified by ... |
 
 > **MoSCoW prioritization:** Must / Should / Could / Won't
 
@@ -83,7 +85,7 @@
 
 | ID | Rule | Source |
 |:---|:-----|:-------|
-| BRL-001 | Tax rate = 7% on Thai customers | Thai VAT law |
+| BRL-001 | Returns accepted within 14 days of delivery | Return policy |
 | BRL-002 | Max discount = 30% per order | Pricing policy |
 
 ## 7. Assumptions & Constraints
@@ -94,10 +96,10 @@
 ### Constraints
 | Type | Constraint |
 |------|------------|
-| Budget | $XX,XXX |
+| Budget | ฿XX,XXX |
 | Timeline | Launch by YYYY-MM-DD |
-| Compliance | PDPA, PCI-DSS |
-| Technical | Must integrate with existing CRM |
+| Compliance | Personal Data Protection Act (PDPA), Payment Card Industry Data Security Standard (PCI-DSS) |
+| Technical | Must integrate with existing Customer Relationship Management (CRM) system |
 
 ## 8. Open Questions
 
@@ -108,13 +110,8 @@
 
 ## 9. Process Flow (if applicable)
 
-\`\`\`mermaid
-flowchart LR
-    A[Customer requests] --> B{Validate}
-    B -->|Valid| C[Process]
-    B -->|Invalid| D[Reject]
-    C --> E[Notify]
-\`\`\`
+[Flowchart: Customer requests → Validate → Process → Notify; invalid → Reject]
+(draw it as a house-style figure with `diagram-figures`, not inline Mermaid)
 
 ## Sign-off
 

@@ -7,7 +7,7 @@ Use the style in the faculty manual or journal guidelines. When none is given:
 | Field | Common style |
 |---|---|
 | Education, social sciences, business, psychology | APA 7th edition |
-| Engineering, computer science | IEEE |
+| Engineering, computer science | Institute of Electrical and Electronics Engineers (IEEE) |
 | Medicine, nursing, health sciences | Vancouver |
 
 ## APA 7 with Thai sources — the usual Thai-university convention
@@ -23,7 +23,7 @@ Some universities ask for Thai references to be translated into English as well 
 
 ## Verifying a citation — before it goes in
 
-1. Find the source by DOI (doi.org), ThaiJO, ThaiLIS, Google Scholar or the publisher page. Not found = not cited
+1. Find the source by Digital Object Identifier (DOI) (doi.org), ThaiJO, ThaiLIS, Google Scholar or the publisher page. Not found = not cited
 2. Open it. Check the author names, year, title, volume, issue and pages against the reference entry
 3. Find the passage that supports the sentence. If the source does not say it, change the sentence or remove the citation
 4. Mark the row in the literature matrix with where it was verified
@@ -41,10 +41,10 @@ When Claude suggests a source, it must show the DOI or URL it found it at. A ref
 ## Generative AI
 
 - Follow the university's and the journal's AI policy. Many require disclosure of how AI tools were used (รอยืนยัน per institution)
-- AI tools cannot be authors and cannot take responsibility for the content (COPE position statement on authorship and AI tools, https://publicationethics.org/cope-position-statements/ai-author)
+- AI tools cannot be authors and cannot take responsibility for the content (Committee on Publication Ethics (COPE) position statement on authorship and AI tools, https://publicationethics.org/cope-position-statements/ai-author)
 - Never use AI to produce data, results, interview quotes or survey responses. That is fabrication, the most serious kind of research misconduct
 - Keep notes on what the tool was used for (outline, language editing, code) so the disclosure can be written honestly
 
 ## Research ethics
 
-Studies with human participants need approval from the university's human research ethics committee (คณะกรรมการจริยธรรมการวิจัยในมนุษย์) before collecting data. Personal data collected falls under the PDPA: consent, purpose, storage and deletion are stated in the consent form.
+Studies with human participants need approval from the university's human research ethics committee (คณะกรรมการจริยธรรมการวิจัยในมนุษย์) before collecting data. Personal data collected falls under the Personal Data Protection Act (PDPA): consent, purpose, storage and deletion are stated in the consent form.

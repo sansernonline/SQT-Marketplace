@@ -26,11 +26,11 @@ For app or product screens, the `software-company` plugin's `ui-craft` skill (if
 |---|---|---|---|
 | Background / neutral | ~60% | Canvas | Off-white or near-black, not pure #FFFFFF everywhere |
 | Primary | ~30% | Recognition | The colour people name the brand by |
-| Accent | ~10% | Action, price, CTA | Use sparingly. If it is everywhere, it stops drawing the eye |
+| Accent | ~10% | Action, price, call to action (CTA) | Use sparingly. If it is everywhere, it stops drawing the eye |
 | Text | — | Reading | Must pass 4.5:1 on every background it sits on |
 | Semantic (optional) | — | Sale, warning | Do not reuse accent for "error" |
 
-**Contrast check (WCAG 2.2 AA, criterion 1.4.3):** normal text ≥ **4.5:1**; large text (≥ 18 pt, or ≥ 14 pt bold) ≥ **3:1**. Logos are exempt but should still be legible. Check pairs with any WCAG contrast checker (WebAIM Contrast Checker, a Figma or Canva contrast plugin, browser DevTools).
+**Contrast check (Web Content Accessibility Guidelines (WCAG) 2.2 AA, criterion 1.4.3):** normal text ≥ **4.5:1**; large text (≥ 18 pt, or ≥ 14 pt bold) ≥ **3:1**. Logos are exempt but should still be legible. Check pairs with any WCAG contrast checker (WebAIM Contrast Checker, a Figma or Canva contrast plugin, browser DevTools).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
 

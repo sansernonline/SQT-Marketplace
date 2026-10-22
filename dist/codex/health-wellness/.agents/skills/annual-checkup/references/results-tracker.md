@@ -22,8 +22,9 @@ Copy each value exactly as printed on the lab report. Do not convert units. Do n
 | SGPT / ALT (if done) | U/L | | | | | | |
 | Hemoglobin (CBC) | g/dL | | | | | | |
 | Urinalysis | text | | | | | | |
-| FOBT / FIT | pos/neg | | | | | | |
+| FIT (faecal immunochemical test; older reports say FOBT) | pos/neg | | | | | | |
 | Pap / VIA | result text | | | | | | |
+| HPV DNA test (if done) | result text | | | | | | |
 | Chest X-ray | result text | | | | | | |
 | Vision / hearing | result text | | | | | | |
 

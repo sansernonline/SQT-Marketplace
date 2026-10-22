@@ -129,18 +129,11 @@ For subscriptions:
 - Setup fees: depends on whether distinct obligation
 ```
 
+Daily recognition query (one copy; `end_date` exclusive, period = `end_date - start_date` days) → [`subscription-billing.md`](subscription-billing.md) · Revenue Recognition (ASC 606). Sum per day from `daily_recognized_revenue`:
+
 ```sql
--- Daily revenue recognition
-SELECT
-  date,
-  SUM(daily_revenue) as recognized_revenue
-FROM (
-  SELECT
-    -- end_date is the last service day (inclusive), so the series has end - start + 1 days
-    generate_series(start_date, end_date, '1 day') as date,
-    (amount / (end_date - start_date + 1)) as daily_revenue
-  FROM subscriptions
-) sub
+SELECT date, SUM(daily_revenue) AS recognized_revenue
+FROM daily_recognized_revenue
 GROUP BY date;
 ```
 
@@ -165,7 +158,8 @@ churn_rate = churned_mrr / start_of_month_mrr
 # NRR (Net Revenue Retention)
 NRR = (start_mrr + expansion - contraction - churn) / start_mrr
 # > 100% = expanding existing customers cover churn
-# Target: 110%+ for healthy B2B SaaS
+# Target: set from your own baseline and segment (รอยืนยัน) — public "110%+"
+# figures are vendor surveys, not a standard; quote one only with source + date
 ```
 
 ## Tax & Multi-Jurisdiction
@@ -181,8 +175,12 @@ VAT (EU):
 - Reverse charge for B2B
 - Tools: Stripe Tax, Vatglobal
 
-GST (Asia):
-- TH 7%, SG 9%, JP 10%, etc.
+VAT / GST / consumption tax (Asia):
+- TH: Value Added Tax (VAT) 7% — reduced rate (6.3% + local tax) under
+  Royal Decree No. 807 (gazetted 23 Aug 2026) until 30 Sep 2027;
+  standard rate in the Revenue Code is 10% · the cut is renewed year by year,
+  re-check each September (ตรวจ 22 ต.ค. 2569 · รอยืนยัน each year)
+- SG Goods and Services Tax (GST) 9% · JP consumption tax 10% (รอยืนยัน)
 - B2B vs B2C rules
 
 Recommendation:

@@ -101,7 +101,7 @@ Not for: GDPR/PDPA → legal-compliance-officer. PCI-DSS → fintech-compliance-
 - [HIPAA Security Rule guidance](https://www.hhs.gov/hipaa/for-professionals/security/index.html)
 - [HHS sample BAA](https://www.hhs.gov/hipaa/for-professionals/covered-entities/sample-business-associate-agreement-provisions/index.html)
 - [OCR Audit Protocol](https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/audit/index.html)
-- [NIST SP 800-66 HIPAA Implementation Guide](https://csrc.nist.gov/publications/detail/sp/800-66/rev-2/draft)
+- [NIST SP 800-66 Rev. 2 — Implementing the HIPAA Security Rule (final, Feb 2024)](https://csrc.nist.gov/pubs/sp/800/66/r2/final)
 
 ## Writing
 

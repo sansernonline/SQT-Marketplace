@@ -44,7 +44,7 @@ Managers often run 50–60% meetings by design — adjust targets to the role, b
 
 ## Worked example
 
-160 h available in September. Found: meetings 78 h (49%), focus 22 h (14%), admin 30 h (19%), reactive 22 h (14%), commute 8 h. Stated priority #1 "write the Q4 plan" got 3 h.
+160 h available in September. Found: meetings 78 h (49%), focus 22 h (14%), admin 30 h (19%), reactive 22 h (14%), commute 8 h. Stated priority #1 "write the Q4 (fourth-quarter) plan" got 3 h.
 
 Worst three:
 | Meeting | Sessions | Person-hours | Decisions | Action |

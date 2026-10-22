@@ -2,7 +2,7 @@
 
 Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
 
-Pattern from `DockXI/docs/12-design-mockup.md`:
+The 6-part pattern for a design spec:
 
 ```
 1. Inline SVG mockup of each UI state              ← "what it looks like"

@@ -99,26 +99,28 @@ async function triage(claim: Claim): Promise<TriageResult> {
   // Severity
   const estimatedSeverity = await estimateSeverity(claim);
 
-  // Auto-settle simple claims
+  // Fraud screening FIRST — every claim, small ones included,
+  // so a small fraudulent claim is never auto-paid
+  const fraudScore = await assessFraudRisk(claim);
+  if (fraudScore > FRAUD_THRESHOLD) {
+    flags.push('FRAUD_RISK');
+    return {
+      routing: 'siu_fraud',   // Special Investigations Unit (SIU)
+      initial_reserve: estimatedSeverity * 1.2,  // conservative
+      priority: 'high',
+      flags,
+    };
+  }
+
+  // Auto-settle simple claims — only with a low fraud score
   if (estimatedSeverity < AUTO_SETTLE_THRESHOLD
+      && fraudScore < AUTO_SETTLE_MAX_FRAUD_SCORE   // stricter than FRAUD_THRESHOLD
       && !claim.has_injuries
       && !claim.has_litigation_indicators) {
     return {
       routing: 'auto_settle',
       initial_reserve: estimatedSeverity * 1.1,
       priority: 'normal',
-      flags,
-    };
-  }
-
-  // Fraud screening
-  const fraudScore = await assessFraudRisk(claim);
-  if (fraudScore > FRAUD_THRESHOLD) {
-    flags.push('FRAUD_RISK');
-    return {
-      routing: 'siu_fraud',
-      initial_reserve: estimatedSeverity * 1.2,  // conservative
-      priority: 'high',
       flags,
     };
   }
@@ -254,12 +256,19 @@ def calculate_settlement(claim):
     # 2. Apply liability percentage (for partial fault)
     insurer_share = damages * claim.liability_percentage
 
-    # 3. Apply policy
-    covered = min(insurer_share, claim.policy.limit)
-    covered -= claim.policy.deductible
+    # 3. Apply policy: deductible, then limit, never below zero
+    #    (same order as agent-claims-processing-specialist.md; follow the policy wording if it says limit first)
+    covered = max(0, insurer_share - claim.policy.deductible)
+    covered = min(covered, claim.policy.limit)
 
-    # 4. Subtract recoverable amounts (subrogation, salvage)
-    net = covered - claim.recoveries
+    # 4. Salvage: subtract only when the insured keeps the damaged item.
+    #    When the insurer takes it, the insured is paid in full and the insurer sells it.
+    if claim.salvage_retained_by_insured:
+        covered = max(0, covered - claim.salvage_value)
+    net = covered
+
+    # Subrogation is NOT taken off the insured's payment. Pay the insured now,
+    # then book what is recovered from the at-fault third party later as a recovery.
 
     return {
         'gross_damages': damages,

@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 SaaS Architecture Quality Standards](#saas-architecture-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 SaaS Architecture Quality Standards](#-saas-architecture-quality-standards)
 - [Multi-Tenancy Models](#multi-tenancy-models)
 - [Data Isolation Patterns](#data-isolation-patterns)
 - [Tenant Context Propagation](#tenant-context-propagation)
@@ -95,36 +95,16 @@ Use: Multi-tier products
 
 ### Pattern 1: Row-Level (Shared Schema)
 
-```sql
--- Every table has tenant_id
-CREATE TABLE orders (
-    id UUID PRIMARY KEY,
-    tenant_id UUID NOT NULL,
-    -- ...
-);
+Every table has `tenant_id` · Postgres Row-Level Security (RLS) with `FORCE ROW LEVEL SECURITY` · the app connects as a role that is not the table owner · tenant set with `set_config('app.tenant_id', $1, true)` inside one transaction per request (never plain `SET`, which stays on the pooled connection for the next request).
 
--- Row-level security (Postgres)
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-CREATE POLICY tenant_isolation ON orders
-    USING (tenant_id = current_setting('app.tenant_id')::uuid);
-
--- App sets tenant context per session
-SET app.tenant_id = 'tenant-uuid';
-```
+Code (one copy, kept up to date) → [`multi-tenancy-patterns.md`](multi-tenancy-patterns.md) · Row-Level Multi-Tenancy
 
 **Pros:** Simple to manage, efficient
 **Cons:** Relies on the app to set the tenant context; one bug leaks data
 
 ### Pattern 2: Schema-Per-Tenant
 
-```sql
--- Each tenant has own schema
-CREATE SCHEMA tenant_abc;
-CREATE SCHEMA tenant_xyz;
-
--- Connect with schema search path
-SET search_path TO tenant_abc;
-```
+One schema per tenant · `search_path` set only inside a transaction (`set_config('search_path', $1, true)` / `SET LOCAL`) or fixed per tenant pool — never plain `SET` on a shared pooled connection. Code → [`multi-tenancy-patterns.md`](multi-tenancy-patterns.md) · Schema-Per-Tenant
 
 **Pros:** Strong isolation, easy to back up each tenant
 **Cons:** Many schemas to manage, migrations get complex
@@ -141,24 +121,7 @@ tenant_xyz → DB instance B
 
 ## Tenant Context Propagation
 
-```typescript
-// Middleware extracts + validates tenant
-app.use(async (req, res, next) => {
-  const token = req.headers.authorization;
-  const claims = await verifyToken(token);
-
-  req.tenant = {
-    id: claims.tenant_id,
-    tier: claims.tier,
-    region: claims.region,
-  };
-
-  // Set DB session var for RLS
-  await db.query(`SET app.tenant_id = '${req.tenant.id}'`);
-
-  next();
-});
-```
+Middleware reads the tenant from a verified token and attaches `req.tenant`; it does not touch the database. Each request's queries run through `withTenant()` (BEGIN → `set_config(..., true)` → work → COMMIT on the same client). Code → [`multi-tenancy-patterns.md`](multi-tenancy-patterns.md) · Tenant Context Propagation
 
 ## Noisy Neighbor Mitigation
 
@@ -284,7 +247,7 @@ log.info('Order created', {
 
 ## When to Hand Off
 
-- Enterprise integration → `solution-architect`
+- Enterprise integration → same agent, switch role: [`agent-integration-engineer.md`](agent-integration-engineer.md)
 - Subscription billing → `revops-analyst`
 - Customer adoption → `growth-specialist`
 - Production deployment → `devops-engineer` (from software-company)

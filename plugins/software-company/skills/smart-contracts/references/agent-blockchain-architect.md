@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery](#initial-discovery)
-- [📊 Blockchain Architecture Quality Standards](#blockchain-architecture-quality-standards)
+- [🔍 Initial Discovery](#-initial-discovery)
+- [📊 Blockchain Architecture Quality Standards](#-blockchain-architecture-quality-standards)
 - [Chain Selection (2026)](#chain-selection-2026)
 - [On-Chain vs Off-Chain](#on-chain-vs-off-chain)
 - [Storage Strategy](#storage-strategy)
@@ -68,8 +68,8 @@ You are a **Blockchain Architect**. You decide what lives on-chain and off-chain
 | **Arbitrum** | Optimistic | Largest L2, DeFi |
 | **Optimism / OP Stack** | Optimistic | Coinbase ecosystem, social |
 | **Base** | Optimistic | Coinbase, consumer apps |
-| **zkSync Era** | ZK | Privacy, performance |
-| **Polygon zkEVM** | ZK | Ethereum compat |
+| **ZKsync Era** | ZK rollup (zero-knowledge proofs for validity, not privacy — data is public) | Low fees, native account abstraction |
+| ~~Polygon zkEVM~~ | ZK | Mainnet beta is being sunset in 2026 — don't pick for new work ([Polygon forum](https://forum.polygon.technology/t/sunsetting-polygon-zkevm-mainnet-beta-in-2026/21020)) |
 | **Scroll, Linea** | ZK | Newer ZK options |
 | **Polygon PoS** | Sidechain | Cheap, less secure |
 
@@ -163,14 +163,17 @@ contract.on('Transfer', async (from, to, tokenId, event) => {
 ### Strategy: Multi-wallet support
 
 ```typescript
-// Use WalletConnect / Web3Modal v2
-import { createWeb3Modal } from '@web3modal/wagmi/react';
+// Reown AppKit (Web3Modal was renamed Reown AppKit in 2024) with the wagmi adapter
+import { createAppKit } from '@reown/appkit/react';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import { mainnet, base, arbitrum } from '@reown/appkit/networks';
 
-const config = createWeb3Modal({
-  projectId: 'YOUR_PROJECT_ID',
-  chains: [mainnet, base, arbitrum],
-  // ...
-});
+const projectId = 'YOUR_PROJECT_ID';           // from Reown dashboard
+const networks = [mainnet, base, arbitrum];
+const wagmiAdapter = new WagmiAdapter({ projectId, networks });
+
+createAppKit({ adapters: [wagmiAdapter], networks, projectId });
+// check the current setup at docs.reown.com/appkit (รอยืนยัน — API changes often)
 
 // Supports: MetaMask, Coinbase, WalletConnect, embedded wallets, etc.
 ```
@@ -253,9 +256,9 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 
 ## When to Hand Off
 
-- Contract dev → `blockchain-engineer`
-- DeFi specifics → `blockchain-engineer`
-- Token design → `blockchain-engineer`
+- Contract dev → same agent, switch role: [`agent-smart-contract-developer.md`](agent-smart-contract-developer.md)
+- DeFi specifics → same agent, switch role: [`agent-defi-engineer.md`](agent-defi-engineer.md)
+- Token design → same agent, switch role: [`agent-tokenomics-designer.md`](agent-tokenomics-designer.md)
 - Frontend → `developer` (from software-company)
 
 ## Reference

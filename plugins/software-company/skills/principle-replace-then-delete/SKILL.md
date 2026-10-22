@@ -12,7 +12,7 @@ description: Use when replacing an API, function, table or component, or in a mi
 1. **ลบก่อนเพิ่ม** — เอาโค้ดตาย · validator ที่ซ้ำ · stub · flag ที่เปิดถาวรแล้ว ออกก่อน แล้วสร้างบนฐานที่เล็กลง
 2. **นับผู้ใช้ของเก่าทั้งหมด** ด้วยคำสั่งที่รันซ้ำได้ (grep · find references) — ตัวเลขนี้คือหลักฐาน
 3. **สร้างของใหม่ตามรูปที่ควรเป็น** ไม่ดัดให้หน้าตาเหมือนของเก่า
-4. **ย้ายผู้ใช้ทุกตัว** — ถ้าเกิน 10 จุดให้ใช้ codemod ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
+4. **ย้ายผู้ใช้ทุกตัว** — ถ้าเกิน 10 จุดให้ใช้ codemod (`principle-build-a-tool-not-handwork`)
 5. **ลบของเก่าใน PR หรือชุดเดียวกัน** แล้วรันคำสั่งในข้อ 2 ซ้ำ ซึ่งต้องเหลือ 0 จุด
 
 ## ห้าม

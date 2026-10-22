@@ -1,6 +1,6 @@
 # skill: flag-and-propose
 
-Use when something found mid-task changes what happens next (stale file, blocked step) and needs a decision.
+Use when something found mid-task in any work changes what happens next (stale file, wrong number, blocked step) and needs a decision.
 
 # แจ้งสิ่งที่เจอ แล้วเสนอทางไป
 
@@ -28,7 +28,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | เขียนเป็นเอกสารให้คนอื่นอ่าน | `polished-document-style` | แทน |
 | งานพังจริงและต้องแก้ทันที | `targeted-fix` — แก้ก่อน แล้วค่อยรายงาน | แทน |
 | กางตัวย่อและศัพท์เฉพาะในคำตอบ | `spell-out-abbreviations` | คู่ |
-| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` | คู่ |
+| สิ่งที่เจอคือเหตุขัดข้องของระบบจริง | `incident-runbook-template` · `postmortem-template` (plugin `software-company`) | คู่ |
 
 ---
 
@@ -56,9 +56,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 | ❌ เขียนแบบเล่าเรื่อง | ✅ เขียนแบบขึ้นด้วยผลกระทบ |
 |---|---|
-| "ระหว่างตรวจผมพบว่าไฟล์ BUILD-PLAN.md ที่สร้างเมื่อเช้านี้นั้นได้อ่านข้อมูลมาจากโฟลเดอร์ extracted ซึ่งเป็นฉบับก่อนที่จะมีการแก้ไข…" | "**BUILD-PLAN.md ตัวเลขเก่า** เพราะอ่านจากไฟล์ฉบับก่อนแก้ ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันข้าม FR-14.x กับ PLT ทั้งชุด" |
+| "ระหว่างทำสรุปยอดผมพบว่าไฟล์ยอดขายที่ดึงมาเมื่อเช้านี้นั้นเป็นฉบับก่อนที่ร้านจะแก้ราคา…" | "**สรุปยอดขายใช้ราคาเก่า** เพราะดึงจากไฟล์ก่อนร้านแก้ราคา ต้องดึงใหม่ก่อนส่งบัญชี ไม่งั้นภาษีคำนวณผิด 38 รายการ" |
 
-- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
+- **"ไม่งั้น…" ต้องเป็นรูปธรรม** — "ข้าม FR-14.x (Functional Requirement — ความต้องการเชิงฟังก์ชัน ข้อ 14.x) ทั้งชุด" ไม่ใช่ "อาจมีปัญหาตามมา"
 - ไม่ต้องบอกว่าเจอตอนไหนหรือเจอได้ยังไง เว้นแต่วิธีเจอจะเปลี่ยนสิ่งที่ต้องทำ
 - ตัวหนาใช้กับ**คำที่เปลี่ยนการตัดสินใจ**เท่านั้น ไม่ใช่ทุกคำสำคัญ
 
@@ -71,9 +71,9 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | | ที่บันทึกไว้ | ของจริง |
 |---|---|---|
-| FR ถึง | 13.9 | **14.12** |
-| Test case | 214 | **245** |
-| PLT | ไม่มี | **มี** |
+| ออเดอร์ที่ดึงมา | 214 | **245** |
+| ราคา SKU-07 | 390 | **420** |
+| ค่าส่งต่างประเทศ | ไม่มี | **มี** |
 ```
 
 - หัวคอลัมน์บอกว่า**ค่าไหนเชื่อได้** — "ที่บันทึกไว้ / ของจริง" ไม่ใช่ "เก่า / ใหม่"
@@ -81,7 +81,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 - แถวที่ตรงกันอยู่แล้ว **ไม่ต้องใส่**
 
 **คำถามหรือสมมติฐานเดิมที่ตกไปเพราะข้อมูลใหม่ ให้ตัดทิ้งในหนึ่งบรรทัด**
-เช่น "คำถามข้อ 1 เรื่องเลขไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
+เช่น "คำถามข้อ 1 เรื่องยอดไม่ตรง — ตกไปเอง" แล้วไปต่อ อย่าอธิบายว่าทำไมถึงตก
 
 ---
 
@@ -90,8 +90,8 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ```markdown
 | ไฟล์ | ได้อะไร |
 |---|---|
-| `docs/README.md` | สารบัญ — อ่านอะไรก่อน ใครเป็นเจ้าของ |
-| ประวัติการแก้ไขในหน้าแรกของ docx | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
+| สารบัญของโฟลเดอร์งาน (`README`) | รู้ว่าอ่านอะไรก่อน ใครเป็นเจ้าของ |
+| วันที่และฉบับบนหน้าแรกของแต่ละไฟล์ | รู้ว่าถืออยู่ฉบับไหน — ตรงกับปัญหาที่เพิ่งเจอ |
 ```
 
 - คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
@@ -105,7 +105,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 หนึ่งบรรทัด พร้อมเหตุผลและเวลาที่ควรทำแทน
 
-> FSD กับ API spec ไม่ทำตอนนี้ — ทำตอนเริ่มเขียนโค้ดของแต่ละหน้าจอ
+> รายงานย้อนหลังรายปีไม่ทำตอนนี้ — ทำหลังยอดเดือนนี้ยืนยัน
 
 บรรทัดนี้กัน **"แล้วอันนั้นล่ะ ทำไมไม่ทำ"** ซึ่งเป็นคำถามที่ตามมาเกือบทุกครั้ง
 และบอกกลาย ๆ ว่าคิดครบแล้ว ไม่ได้ลืม
@@ -115,7 +115,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 ## 6 · ปิดด้วยคำถามเดียว
 
 ```
-เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วย re-extract + อัปเดต BUILD-PLAN
+เริ่มจากอันไหนดีครับ หรือทำทั้ง 4 แล้วปิดท้ายด้วยดึงไฟล์ใหม่ + อัปเดตสรุป
 ```
 
 | กฎ | เหตุผล |
@@ -124,7 +124,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 | ตอบได้ด้วยไม่กี่คำ | "ทั้ง 4" · "เริ่มข้อ 2" |
 | มีตัวเลือก "เอาทั้งหมด" ให้ | ส่วนใหญ่ผู้ใช้เลือกอันนี้ ถ้าต้องพิมพ์เองจะเสียเวลา |
 | ถ้ามีลำดับที่แนะนำ ใส่ไว้ในคำถามเลย | เขาจะได้ตอบว่า "ตามนั้น" คำเดียว |
-| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตามกฎ "ถามครั้งเดียว" ใน `CLAUDE.md` ของผู้ใช้ และ `superuser` §6 | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
+| **ถามแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน** ตาม `superuser` §6: ตัวเลือก 2–4 ตัว · ตัวแนะนำอยู่บนสุดต่อท้าย `(แนะนำ)` พร้อมเหตุผล 1 บรรทัด | กดเลือกได้เลย และไม่เลือกจากตัวเลือกที่สมมุติขึ้น |
 
 **ห้ามปิดด้วยการถามว่า "มีอะไรให้ช่วยเพิ่มไหม"** — ไม่ใช่คำถามที่ขอการตัดสินใจ
 
@@ -132,7 +132,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ## 7 · ตัวอย่างเต็ม
 
-ตัวอย่างก่อนและหลังแก้ อยู่ใน [`references/example.md`](references/example.md)
+ตัวอย่างก่อนและหลังแก้ (งานเอกสารความต้องการและแผนงานซอฟต์แวร์) อยู่ใน [`references/example.md`](references/example.md)
 
 ---
 
@@ -155,27 +155,29 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 ย้ายมาจาก [SKILL.md](../SKILL.md) §7
 
+ตัวย่อในตัวอย่าง: ความต้องการเชิงฟังก์ชัน (Functional Requirement — FR) · ความต้องการที่ไม่ใช่ฟังก์ชัน (Non-Functional Requirement — NFR) · กรณีทดสอบ (Test Case — TC) · บันทึกการตัดสินใจด้านสถาปัตยกรรม (Architecture Decision Record — ADR) · เอกสารข้อกำหนดเชิงฟังก์ชัน (Functional Specification Document — FSD) · Application Programming Interface (API)
+
 **❌ ก่อน — 1 ย่อหน้ายาว 3 ก้อน อ่านจบแล้วยังไม่รู้ว่าต้องตอบอะไร**
 
 > เรื่องด่วนที่เจอระหว่างตรวจ — BUILD-PLAN.md ที่สร้างเมื่อเช้านี้อ่านจาก
 > `_to_delete/extracted/*.md` ซึ่งเป็นฉบับก่อนที่ผมจะแก้ มันจึงบันทึกไว้ว่า
-> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี PLT" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
+> "FR ถึง FR-13.9 · TC 214 ข้อ · ไม่มี NFR" และตั้งคำถามข้อ 1 ว่าเลข 239 ไม่ตรง
 > ตอนนี้เอกสารจริงเป็น FR-14.12 และ 245 กรณีแล้ว ต้อง extract ใหม่แล้วอัปเดต
 > BUILD-PLAN ก่อนให้ agent เขียนโค้ดต่อ ไม่งั้นมันจะสร้างระบบตามสเปกเก่าและข้าม
-> FR-14.x กับ PLT ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
+> FR-14.x กับ NFR ทั้งหมด … ถ้าจะทำให้ชุดนี้เป็นตัวอย่างของโปรเจกต์ถัดไป ผมเสนอให้
 > เติม 4 ไฟล์ที่คุ้มที่สุดก่อน คือ docs/README.md เป็นสารบัญบอกว่าอ่านอะไรก่อนและ
 > ใครเป็นเจ้าของ, เพิ่มตารางประวัติการแก้ไขในหน้าแรกของทั้ง 4 docx, …
 
 **✅ หลัง — โครงเดียวกัน 4 บล็อก**
 
 > **ด่วน — `BUILD-PLAN.md` ตัวเลขเก่า** เพราะอ่านจาก `_to_delete/extracted/` ฉบับก่อนคุณแก้
-> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ PLT ทั้งชุด
+> ต้อง re-extract ก่อนปล่อย agent เขียนโค้ด ไม่งั้นมันสร้างตามสเปกเก่าและข้าม FR-14.x กับ NFR ทั้งชุด
 >
 > | | ที่บันทึกไว้ | ของจริง |
 > |---|---|---|
 > | FR ถึง | 13.9 | **14.12** |
 > | Test case | 214 | **245** |
-> | PLT | ไม่มี | **มี** |
+> | NFR | ไม่มี | **มี** |
 >
 > คำถามข้อ 1 ที่ตั้งไว้ว่าเลข 239 ไม่ตรง — ตกไปเอง
 >
@@ -201,7 +203,7 @@ Use when something found mid-task changes what happens next (stale file, blocked
 
 # skill: principle-proceed-on-reversible-work
 
-Use when tempted to ask shall I continue on work that can be undone. Proceed; hold irreversible steps.
+Use when about to ask shall I continue on any work that can be undone. Proceed; hold irreversible steps.
 
 # principle · proceed on reversible work — ย้อนได้ ทำเลย
 
@@ -212,20 +214,20 @@ Use when tempted to ask shall I continue on work that can be undone. Proceed; ho
 
 | ย้อนได้ ให้ทำเลย | ย้อนไม่ได้ ให้เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ |
 |---|---|
-| แก้ไฟล์ในโปรเจกต์ (มี git) | deploy ขึ้นระบบจริง |
-| สร้าง branch · commit ใน branch ของงาน เมื่อผู้ใช้อนุญาตให้ commit | commit ที่ผู้ใช้ไม่ได้สั่ง · merge เข้า branch หลัก · force-push |
-| รัน test · build · รันแอปในเครื่อง | แตะฐานข้อมูลจริง · ลบข้อมูลหรือไฟล์ของผู้ใช้ |
-| ร่างเอกสาร · ร่าง mockup | ส่งอีเมลหรือข้อความถึงคนนอก |
-| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
+| แก้ไฟล์ที่มีสำเนาหรือประวัติ (ไฟล์เอกสาร · ชีต · git) | แก้หรือลบข้อมูลจริง (ฐานข้อมูล · ชีตหลัก · ไฟล์ของผู้ใช้) |
+| ร่างเอกสาร · ร่างอีเมลหรือคำตอบลูกค้า (ยังไม่ส่ง) · ร่าง mockup | ส่งอีเมล ข้อความ หรือโพสต์ถึงคนนอก |
+| รัน test · คำนวณ · ลองในสำเนา | ลงระบบจริง (deploy · ประกาศราคา · เผยแพร่) |
+| เลือกระหว่าง 2 ทางที่เปลี่ยนทีหลังได้ | จ่ายเงิน · จอง · ยอมรับเงื่อนไข · ใส่ค่าลับจริง |
 | ย้ายไฟล์ชั่วคราวไป `_to_delete/` | ลบถาวร |
+| โค้ด: commit ใน branch ของงาน เมื่อผู้ใช้อนุญาต | โค้ด: merge เข้า branch หลัก · force-push |
 
 ## ก่อนจะถาม — ผ่านสามด่านนี้
 
-1. **ดูได้จากการรันไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลอง (playbook `prototype`) ไม่ใช่ถาม
+1. **ดูได้จากการทดลองไหม** — ถ้าคำตอบคือพฤติกรรม ความเร็ว หน้าตา ผลลัพธ์ ให้ทดลองทำร่างดู (งานโค้ด: playbook `prototype` ใน plugin `software-company`) ไม่ใช่ถาม
 2. **ย้อนได้ไหม** — ถ้าได้ ให้เลือกทางที่ผลกระทบน้อยสุด ลงมือทำ แล้วจดใน [`decision-log`](../decision-log/SKILL.md)
 3. **เป็นข้อเท็จจริงหรือรสนิยมของผู้ใช้ไหม** — ตัวเลข ชื่อ วันที่ งบ ห้ามเดา ให้ใส่ `(รอยืนยัน)` แล้วทำส่วนอื่นต่อ · สีแบรนด์ที่ไม่มีให้ใช้ค่าตั้งต้นของ skill นั้นพร้อม `(รอยืนยัน)` และรวมคำถามไว้ใน "ค้างอยู่" ครั้งเดียว
 
-ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง diff หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
+ถ้าผ่านทั้ง 3 ด่านแล้วยังต้องถาม ก็ไม่หยุดรอ ให้รวมทุกคำถามไว้ใน "ค้างอยู่" ครั้งเดียว พร้อมทางที่แนะนำ แล้วทำส่วนอื่นต่อ ส่วนงานที่ย้อนไม่ได้ ให้เตรียมคำสั่ง ส่วนที่เปลี่ยน (diff) หรือร่างข้อความไว้ใน "รออนุมัติ" ไม่ทำเอง
 
 **ข้อยกเว้นเดียวที่ถามก่อนได้** — ตอนเริ่มงาน ถ้าโจทย์ตีความได้หลายทางจนงานออกมาต่างกันทั้งชุด ให้ถามครั้งเดียวโดยรวมทุกคำถามไว้ในรอบนั้นแบบเลือกคำตอบ ทุกตัวเลือกมีหลักฐาน (skill `superuser` หัวข้อ 6) เริ่มแล้วไม่ถามอีก · ทางแยกที่ย้อนไม่ได้ แพง หรือออกไปถึงคนนอก ใช้ [`flag-and-propose`](../flag-and-propose/SKILL.md)
 
@@ -240,7 +242,7 @@ Use when tempted to ask shall I continue on work that can be undone. Proceed; ho
 
 # skill: simplicity-first
 
-Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other work → simplify.
+Use when shaping a software BRD, SRS, FSD, ADR, architecture or roadmap to fewest parts. Code → lazy-coding; other → simplify.
 
 # Simplicity First
 
@@ -264,6 +266,8 @@ Any "no" or "not sure" → simplify before delivering.
 
 ### Documents (BRD, FSD, ADR)
 
+Business Requirements Document (BRD) · Software Requirements Specification (SRS) · Functional Specification Document (FSD) · Architecture Decision Record (ADR).
+
 Do: short sentences (≤ 20 words), plain English, one idea per paragraph, an
 example for every abstract point, tables for structured data.
 
@@ -273,7 +277,7 @@ jargon, walls of text, hedging ("might possibly potentially"), acronym soup.
 ### Architecture
 
 Do: monolith first (split only when a bottleneck is proven), familiar stack,
-standard patterns (REST, queues, caches), single source of truth per data type.
+standard patterns (Representational State Transfer (REST), queues, caches), single source of truth per data type.
 
 Avoid: microservices for small teams, distributed-everything, multi-master
 databases before you must, event-driven by default (sync is simpler).
@@ -286,7 +290,7 @@ criteria, realistic timelines with buffer, cut scope to fit time.
 Avoid: vague goals ("improve quality"), 50-item lists (= no priority),
 aspirational dates with no buffer, plans without success metrics.
 
-### Designs (UX, API)
+### Designs (user experience (UX), application programming interface (API))
 
 Do: fewest steps to the user's goal, reuse existing patterns, stay consistent
 across screens, defaults that work for 80%, progressive disclosure.
@@ -314,7 +318,7 @@ transient errors (1d), clearer error messages (1d)."
 
 **Architecture for a new feature**
 
-❌ "Event-sourced microservice with CQRS, Kafka ingestion, Redis cache, and a
+❌ "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
 dedicated auth service."
 
 ✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
@@ -750,55 +754,55 @@ import บอกได้มากโดยไม่ต้อง decompile:
 
 ## reference: packaging-patterns.md
 
-# Common application packaging patterns
+# รูปแบบการแพ็กแอปที่เจอบ่อย
 
-Recognizing the packaging leads straight to the readable layer. Check these before touching a decompiler.
+รู้ว่าแอปแพ็กแบบไหน ก็ไปถึงชั้นที่อ่านได้เลย — ดูหัวข้อนี้ก่อนเปิด decompiler · ทุกคำสั่งในไฟล์นี้ **อ่านหรือแตกไฟล์อย่างเดียว** ยกเว้นที่ติดป้าย **ถามก่อน** (ตามตารางสิทธิ์ใน `SKILL.md` §2)
 
-## Mozilla apps (Firefox, Thunderbird)
+## แอปของ Mozilla (Firefox · Thunderbird)
 
-- Full Windows installer is a **7-Zip SFX stub** (small PE32, sections=3) with the app in an appended archive. `7z x setup.exe` extracts `core/` plus `setup.exe`.
-- `core/application.ini` — version, BuildID, source repository and SourceStamp (build provenance evidence).
-- `core/omni.ja` — ZIP archive (97MB+ for Thunderbird) holding nearly all app JavaScript (`modules/`, `chrome/`) and default prefs (`defaults/pref/*.js`). Extract with 7z; Grep it to trace features. `omni.ja` is usually the cheapest route to full answers.
-- The big DLLs are the native layer: `xul.dll` (Gecko engine), `nss3.dll`/`freebl3.dll` (crypto), `rnp.dll` (OpenPGP), `libotr.dll` (chat encryption).
-- `thunderbird.exe` itself is only a launcher stub.
+- ตัวติดตั้งเต็มบน Windows คือ **7-Zip SFX stub** (PE32 เล็ก มี 3 section) ที่ต่อ archive ของแอปไว้ท้ายไฟล์ · `7z x setup.exe` ได้ `core/` กับ `setup.exe`
+- `core/application.ini` — เวอร์ชัน · BuildID · repository ต้นทาง · SourceStamp (หลักฐานว่าสร้างจากซอร์สไหน)
+- `core/omni.ja` — ไฟล์ ZIP (Thunderbird 97MB ขึ้นไป) เก็บ JavaScript ของแอปเกือบทั้งหมด (`modules/` · `chrome/`) และค่าเริ่มต้น (`defaults/pref/*.js`) · แตกด้วย 7z แล้ว Grep หา feature · `omni.ja` มักเป็นทางที่ถูกที่สุดที่ได้คำตอบครบ
+- DLL ใหญ่ ๆ คือชั้น native: `xul.dll` (เอนจิน Gecko) · `nss3.dll`/`freebl3.dll` (การเข้ารหัส) · `rnp.dll` (OpenPGP) · `libotr.dll` (เข้ารหัสแชต)
+- `thunderbird.exe` เป็นแค่ตัวเรียก (launcher stub)
 
-## Electron / Node apps
+## แอป Electron / Node
 
-- `app.asar` — ASAR archive; `python -I scripts/asar_extract.py extract app.asar outdir` (see javascript-electron.md). Renderer JS is often minified but readable; `.map` source maps may contain original source (`scripts/sourcemap_list.py`).
-- `resources/app/package.json` names the app, entry point, and dependency list.
-- Native modules: `*.node` files (PE DLLs) — treat as native binaries.
+- `app.asar` — archive แบบ ASAR · `python -I scripts/asar_extract.py extract app.asar outdir` (ดู javascript-electron.md) · JS ฝั่ง renderer มัก minify แต่ยังอ่านได้ · ไฟล์ `.map` (source map) อาจมีซอร์สต้นฉบับ (`scripts/sourcemap_list.py`)
+- `resources/app/package.json` บอกชื่อแอป · จุดเริ่มทำงาน · รายการ dependency
+- native module: ไฟล์ `*.node` (เป็น PE DLL) — ถือเป็น native binary
 
-## .NET applications
+## แอป .NET
 
-- PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd -p -o <out> <dll>` gives a near-original C# project — field-tested: identical logic, SQL strings intact, only comments and local names lost.
-- A `.pdb` beside the dll restores original file names and line numbers; a `.dll.config` holds settings (and often secrets).
-- ASP.NET MVC with precompiled views: `.cshtml` come back as classes under `<Assembly>.Views.<Controller>`.
-- Xamarin APK: the C# lives in `assemblies/*.dll` inside the APK (sometimes LZ4-compressed `XALZ`) — decompile those, not `classes.dex`.
-- Check for bundled/single-file deployment (self-extracting extractors) — extract first.
-- P/Invoke declarations map managed code to native DLL entry points.
+- PE ที่มี CLI header (triage รายงาน `.NET / managed PE`) · `ilspycmd -p -o <out> <dll>` ได้ project C# ใกล้ต้นฉบับ — ลองกับงานจริงแล้ว: logic เหมือนเดิม SQL ครบ หายแค่คอมเมนต์กับชื่อตัวแปรในฟังก์ชัน
+- `.pdb` ข้าง dll คืนชื่อไฟล์และเลขบรรทัดเดิม · `.dll.config` เก็บค่าตั้ง (และมักมีความลับ)
+- ASP.NET MVC ที่ precompile view: `.cshtml` กลับมาเป็นคลาสใต้ `<Assembly>.Views.<Controller>`
+- APK ของ Xamarin: โค้ด C# อยู่ใน `assemblies/*.dll` ใน APK (บางทีบีบด้วย LZ4 เป็น `XALZ`) — decompile ไฟล์พวกนี้ ไม่ใช่ `classes.dex`
+- ดูว่าเป็น bundled / single-file deployment (แตกตัวเองตอนรัน) หรือไม่ — แตกออกมาก่อน
+- การประกาศ P/Invoke บอกว่าโค้ด managed เรียกฟังก์ชันไหนใน DLL native
 
 ## Android APK
 
-- ZIP; contains `classes.dex` (Dalvik bytecode — use `jadx` or `apktool` for near-Java output), `AndroidManifest.xml` (binary XML — `scripts/apk_inventory.py` decodes it; else `apktool` or `aapt2`), `resources.arsc`, native libs under `lib/`.
+- เป็น ZIP · มี `classes.dex` (Dalvik bytecode — ใช้ `jadx` หรือ `apktool` ได้โค้ดใกล้ Java) · `AndroidManifest.xml` (XML แบบ binary — `scripts/apk_inventory.py` ถอดได้ ไม่งั้นใช้ `apktool` หรือ `aapt2`) · `resources.arsc` · native lib ใต้ `lib/`
 
-## Windows installers generally
+## ตัวติดตั้ง Windows ทั่วไป
 
-- 7-Zip SFX: extract with `7z x`.
-- NSIS: extract with `7z x` (triage detects `NullsoftInstall` marker).
-- MSI: `msiexec /a file.msi /qb TARGETDIR=<out>` or 7z.
-- MSI transforms and stub downloaders may contain no payload — identify early to avoid wasted work.
+- 7-Zip SFX: แตกด้วย `7z x`
+- NSIS: แตกด้วย `7z x` (triage เจอ marker `NullsoftInstall`)
+- MSI: **ใช้ `7z x file.msi` หรือ `lessmsi x file.msi <out>\` ก่อน** — อ่านไฟล์อย่างเดียว ไม่เรียก Windows Installer · `msiexec /a file.msi /qb TARGETDIR=<out>` (administrative install) **ถามก่อน** เพราะเป็นการรัน Windows Installer บนเครื่องผู้ใช้ (บอกว่าจะรันอะไร กับไฟล์ไหน) · ไฟล์ที่ไม่รู้ที่มา → รันใน `docker-sandbox` เท่านั้น
+- MSI transform และ stub ที่ดาวน์โหลดตัวจริงทีหลัง อาจไม่มี payload เลย — ดูให้รู้แต่แรกจะได้ไม่เสียแรง
 
-## Enterprise report and ETL files
+## ไฟล์รายงานและ ETL (Extract-Transform-Load) ขององค์กร
 
-Often the only place a calculation lives. None need a decompiler.
+บ่อยครั้งเป็นที่เดียวที่สูตรคำนวณอยู่ · ไม่ต้องใช้ decompiler เลย
 
-| File | What it is | Readable layer |
+| ไฟล์ | คืออะไร | ชั้นที่อ่านได้ |
 |---|---|---|
-| `.rpt` Crystal Reports | OLE compound file | `strings` shows SQL, table and field names; formulas need Crystal Designer or an RptToXml export |
-| `.pbix` Power BI | ZIP | `Report/Layout` is UTF-16 JSON (pages, visuals, filters); measures in `DataModel` need pbi-tools or Tabular Editor |
-| `.dtsx` SSIS | XML | Search `SqlCommand`, `ConnectionManager`, `DTS:ObjectName`; package order in the master package |
-| `.rdl` SSRS | XML | `CommandText` per dataset |
-| `.mdb` / `.accdb` | Access database | Queries and VBA modules; open with mdbtools or Access |
+| `.rpt` Crystal Reports | OLE compound file | `strings` เห็น SQL ชื่อตารางและฟิลด์ · สูตรต้องใช้ Crystal Designer หรือ export ด้วย RptToXml |
+| `.pbix` Power BI | ZIP | `Report/Layout` เป็น JSON แบบ UTF-16 (หน้า visual filter) · measure ใน `DataModel` ต้องใช้ pbi-tools หรือ Tabular Editor |
+| `.dtsx` SQL Server Integration Services (SSIS) | XML | ค้น `SqlCommand` · `ConnectionManager` · `DTS:ObjectName` · ลำดับ package ดูใน master package |
+| `.rdl` SQL Server Reporting Services (SSRS) | XML | `CommandText` ของแต่ละ dataset |
+| `.mdb` / `.accdb` | ฐานข้อมูล Access | query และโมดูล VBA · เปิดด้วย mdbtools หรือ Access |
 
 
 ## reference: runtime-observation.md
@@ -980,7 +984,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 ## 6 · สไลด์ และหัวข้อทุกชนิด
 
-ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตาราง 17 แถวอยู่ใน reference เดียวกัน
+ใช้กับหัวสไลด์ ชื่อรูป หัวข้อเอกสาร และหัวกล่องใน diagram · กฎเต็มและตารางก่อน → หลังอยู่ใน reference เดียวกัน
 
 - หัวสไลด์ = ข้อสรุปของหน้า ไม่ใช่ชื่อหัวข้อ · ไม่เกิน 2 บรรทัด (ราว 15 คำ) รายละเอียดลงเนื้อหน้า
 - **หัวที่มี 2 ท่อนต้องมีคำเชื่อมที่ตรงกับความสัมพันธ์จริง** ("เพราะ" หรือ "จึง" เมื่อเป็นเหตุผล · "ส่วน" เมื่อแบ่งหน้าที่ · "แต่" เมื่อขัดกัน) · 1 หัว 1 คำเชื่อม ถ้าต้องใช้ 2 แปลว่ายัดเกิน
@@ -1009,8 +1013,6 @@ Use before writing or editing anything a person reads — answer, email, report,
 # หัวข้อ · สไลด์ · diagram และตัวอย่าง ก่อน → หลัง (ฉบับเต็ม)
 
 อ่านเมื่อเขียนหัวสไลด์ ชื่อรูป ป้ายใน diagram หรืออยากดูตัวอย่างการแก้ · กฎย่ออยู่ใน `SKILL.md` ข้อ 6–7
-
-ไฟล์นี้เหมือนกันทุก plugin ต้นฉบับอยู่ที่ plugin `superuser` แก้ที่นั่นแล้วรัน `node scripts/sync/sync-superuser.mjs`
 
 ## สไลด์ และหัวข้อทุกชนิด
 
@@ -1120,6 +1122,7 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 | "ทำไม" · "แปลว่าอะไร" · เรื่องเดียวไม่มีแขนง | **ประโยคธรรมดา** |
 | ตัวเลขหลายตัวที่ต้องดูพร้อมกัน | **ตาราง** |
 | ขั้นตอนที่ต้องทำเรียงกัน | **รายการมีเลข** |
+| ทำต่อไม่ได้ · ต้องรอของจากผู้ใช้ | **รายการสั้น: ติดอะไร → ต้องการอะไร** |
 
 **สัญญาณสำคัญที่สุดคือมี "สิ่งที่ถูกเทียบ" ตั้งแต่ 2 ตัวขึ้นไป** แบบนี้ให้ใช้ตาราง
 เพราะถ้าเขียนเป็นย่อหน้า ผู้อ่านต้องจำตัวแรกไว้ในหัวระหว่างอ่านตัวที่ 2
@@ -1176,7 +1179,27 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 ---
 
+## เมื่อทำต่อไม่ได้
+
+ติดขัดเมื่อไหร่ → บอกเป็นข้อ ๆ แค่ 2 อย่าง: **ติดอะไร** และ **ต้องการอะไรจากผู้ใช้**
+
+- ข้อละ 1 บรรทัด · ไม่เกิน 4 ข้อ
+- ไม่เล่าสาเหตุยาว ไม่ตอบเรื่องข้างเคียง ไม่วางแผนงานล่วงหน้า — รอได้ของก่อนค่อยทำ
+- ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
+
+```
+❌ ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
+✅ ติดอยู่ 1 เรื่อง:
+   - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
+   ต้องการ 1 อย่าง:
+   - แนบ Mockup.html มา หรือบอก path ใหม่
+```
+
+---
+
 ## ตัวย่อ
 
 - **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
 - **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
+- **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
+- **API** — Application Programming Interface (ช่องทางที่โปรแกรมหนึ่งเรียกใช้อีกโปรแกรมหนึ่ง)

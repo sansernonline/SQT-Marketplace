@@ -40,7 +40,7 @@ Rule: one manager per family, chosen by whoever will support everyone else.
 | Rank | Account | Why first | Best method |
 |---:|---|---|---|
 | 1 | **Main email** (Gmail, Outlook, iCloud) | Every other password is reset through it | Passkey or authenticator app. Avoid SMS where possible |
-| 2 | **Bank and wallet apps** | Direct access to money | The bank app's own device binding and PIN. Never share an OTP |
+| 2 | **Bank and wallet apps** | Direct access to money | The bank app's own device binding and PIN. Never share a one-time password (OTP) |
 | 3 | **LINE** | Family chats, LINE Pay, and impersonation of you to borrow money | PIN + two-factor authentication + email registered |
 | 4 | **Apple ID / Google account** | Controls the phone, backups and Find My | Passkey + a trusted second device |
 | 5 | **Social media** (Facebook, Instagram, TikTok) | Used to impersonate you and scam your friends | Authenticator app + recovery codes |

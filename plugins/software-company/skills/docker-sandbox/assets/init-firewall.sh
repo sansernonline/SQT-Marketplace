@@ -20,8 +20,14 @@ done < "$ALLOW"
 
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
-iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
+# DNS only to the resolvers this container was given (Docker's embedded 127.0.0.11 on a
+# compose network, already covered by the lo rule), not to any server on the internet.
+# Limit: the resolver still forwards lookups upstream, so DNS tunnelling through it stays
+# possible. For code that must not leak anything, run with no network at all.
+for ns in $(awk '/^nameserver/ {print $2}' /etc/resolv.conf | grep -E '^[0-9]+(\.[0-9]+){3}$' || true); do
+  iptables -A OUTPUT -p udp -d "$ns" --dport 53 -j ACCEPT
+  iptables -A OUTPUT -p tcp -d "$ns" --dport 53 -j ACCEPT
+done
 iptables -A OUTPUT -m set --match-set sandbox-allowed dst -j ACCEPT
 iptables -P OUTPUT DROP
 

@@ -1,6 +1,6 @@
 ---
 name: "price-check"
-description: "Work out a selling price, or profit on a current price, after commission, fees, shipping and VAT."
+description: "Work out a selling price, or profit on a current price, after commission, fees, shipping and value added tax (VAT)."
 ---
 
 Run `marketplace-fees-pricing` with the `shop-manager` agent for: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**

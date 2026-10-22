@@ -13,12 +13,12 @@ Renewal rules for Thai documents and the fill-in CSV: [references/registry-templ
 | Keeps here | Lives elsewhere |
 |---|---|
 | Identity — บัตรประชาชน, passport, ทะเบียนบ้าน, สูติบัตร, ทะเบียนสมรส/หย่า, ใบเปลี่ยนชื่อ | **Product warranties and receipts** → `warranty-tracker` (consumer-rights) if installed; otherwise rows with `section = warranty` in this same file |
-| Property — โฉนด / น.ส.3, lease (สัญญาเช่า), condo juristic papers | Passwords, OTPs, recovery codes → password manager (`digital-hygiene`) |
+| Property — โฉนด / น.ส.3, lease (สัญญาเช่า), condo juristic papers | Passwords, one-time passwords (OTPs), recovery codes → password manager (`digital-hygiene`) |
 | Vehicle — เล่มทะเบียนรถ, ใบขับขี่, พ.ร.บ., tax sticker | Medicine lists → `medication-schedule` (health-wellness) if installed |
 | Insurance — life, health, home, car policies and schedules | |
 | Contract — employment, loan, purchase, service contracts | |
 | Education — ปริญญาบัตร, transcript, certificates, licences (ใบประกอบวิชาชีพ) | |
-| Health — vaccine book, hospital cards (HN), blood group, living will (หนังสือแสดงเจตนา) | |
+| Health — vaccine book, hospital cards (hospital number, HN), blood group, living will (หนังสือแสดงเจตนา) | |
 
 **One registry.** Warranty rows use the same columns (below), so the warranty table and this registry are one CSV — never two lists that drift apart.
 
@@ -49,7 +49,7 @@ Dates on Thai papers are often พ.ศ. — subtract 543 before entering (2572 �
 ## Workflow
 
 1. **Inventory sweep** — walk the seven sections above with the user, one household member at a time. Unknown dates → `unknown` and a question list.
-2. **Scan and name** — `YYYY-MM-DD-holder-item.pdf` (date = issue date), one folder per section. Originals stay physical; the registry says where.
+2. **Scan and name** — `YYYY-MM-DD_holder_item.ext` (e.g. `2020-05-02_nok_idcard.pdf`; date = issue date), one folder per section. Originals stay physical; the registry says where.
 3. **Fill the CSV** — one row per document; ID and policy numbers last 4 only.
 4. **Set lead time** — from the renewal table in references (passport 120 days before travel, ID card at expiry, vehicle tax 90 days).
 5. **Renewal watch** — each monthly check lists rows where `end_date − today ≤ renew_lead_days`, plus fixed 60 / 30 / 7-day warnings, each with location and the renewal step.
@@ -71,7 +71,7 @@ Household of two adults. Sweep finds 23 documents. Monthly check on 2026-10-06 s
 | item | holder | end_date | lead | Warning |
 |---|---|---|---|---|
 | Passport | Nok | 2027-03-14 | 120 | Inside 6-month rule for the January Japan trip → book qpassport now; old book at `physical: ตู้เอกสาร ลิ้นชัก 2` |
-| Car tax + พ.ร.บ. | Tom | 2026-11-30 | 90 | Can pay now (inside 90 days) — DLT app / ห้างที่รับชำระ |
+| Car tax + พ.ร.บ. | Tom | 2026-11-30 | 90 | Can pay now (inside 90 days) — Department of Land Transport (DLT) app / ห้างที่รับชำระ |
 | Health policy | Tom | 2026-12-01 | 30 | Premium notice due; compare before auto-renew |
 | Air purifier (warranty) | Nok | 2026-11-20 | 30 | Test the unit this week while still covered |
 

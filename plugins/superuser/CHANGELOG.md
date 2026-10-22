@@ -1,5 +1,42 @@
 # Changelog — superuser
 
+## 3.0.0 — 2026-10-22
+
+- **แกน 2 ชั้น** — `SKILL.md` เหลือเฉพาะที่หัวหน้าอ่านทุกงาน (46 KB → 27 KB) · ถาม ตัดสินใจเอง รออนุมัติ รู้จังหวะหยุด ย้ายไป `references/autonomy.md` · ไฟล์กลาง log รอบเรียนรู้ config ด่าน hook ย้ายไป `references/modules.md` เปิดเมื่อถึงจังหวะ
+- **SKILL.md ของ plugin สาขาไม่คัดลอกแกนแล้ว** — เหลือเฉพาะส่วนสาขา (11 ไฟล์ × 50 KB → 11–13 KB) ขึ้นต้นด้วย "เปิด `superuser:superuser` ก่อน" · `sync-superuser.mjs --check` จับบล็อกกลางที่ค้างและบรรทัดชี้ที่หาย · `build-targets.mjs` รวมแกน + สาขาเป็นไฟล์เดียวใน `dist/` ที่ไม่มีระบบ dependencies
+- **skill เอกสารและรูป 15 ตัวแยกไป plugin `sqt-toolkit`** (branded-document-design · diagram-figures · document-naming · html-slide-deck · image-generation · markdown-report-docx · markdown-visuals · meeting-prep-card · meeting-summary · polished-document-style · polite-message-th-en · pptx-to-html-deck · presentation-design · product-naming · spell-out-abbreviations) · superuser เหลือ 28 skill ที่เป็นเรื่องหัวหน้างาน · plugin สาขาประกาศ dependency ทั้งสองตัวพร้อมช่วงเวอร์ชัน `^3.0` · `^1.0`
+- **ผู้ตรวจขยับตามงบ** — ตารางงบเพิ่มคอลัมน์ผู้ตรวจ: เร็วและรอบแรกของสมดุล `sonnet` + `medium` รับ diff กับ "เสร็จเมื่อ" · งานใหญ่ รอบสุดท้าย หรืองบคุณภาพ `opus` + `high` · agent `reviewer` ค่าเริ่มเปลี่ยนเป็น `sonnet` + `medium`
+- **ใบสั่งงาน 5 ข้ออยู่ในข้อความส่งงาน** — เขียนเป็นไฟล์ `handoff/<id>.md` เฉพาะชิ้นที่ข้าม session หรือส่งต่อ bot อื่น (โมดูล `handoff`) ไม่ใช่ทุกชิ้น
+- **hook วัด token ราย agent** — `log/SUMMARY.md` เพิ่มคอลัมน์ input · output · cache อ่าน · cache สร้าง ต่อ agent และยอดรวมวัน (อ่านจาก transcript ของหัวหน้าและ `subagents/*.jsonl` นับครั้งเดียวต่อข้อความ) · บรรทัด "คาด/จริง" ตอนจบใช้ตัวเลขนี้ · ด่านแตกงานและด่านรีวิวจำสถานะใน `log/gate-state.json` อ่านเฉพาะส่วนที่เพิ่ม (transcript 65 MB: 371 ms → 140 ms) · ทางด่วนออกทันทีเมื่อไม่มี `.claude/superuser/` หรือโมดูลปิด · self-test 60/60
+- `software-company` รับบล็อกกลางของ `playbook-review` และ `playbook-unattended-run` เหมือนสาขาอื่นแล้ว (ออกจาก `OPT_OUT`) ส่วนของงานโค้ดอยู่หัวไฟล์และขั้น 1
+- **superuser = หัวหน้างาน 1 คน** — `SKILL.md` เขียนใหม่รอบแกน 4 เรื่อง: แจกงาน · ประเมินลูกน้อง · จัดการงาน · ตรวจซ้ำจนสำเร็จ ด้วยลูกน้อง effort ต่ำ · แกน (หัวข้อ 1–8) กับโมดูล (9–11) แยกชัด · `ADAPT.md` หัวข้อ 0 บอกว่าอะไรอยู่ไหน
+- ใหม่ในแกน: **ใบสั่งงาน 5 ข้อ** ทุกชิ้นที่ส่งลูกทีม · **งบ** `เร็ว/สมดุล/คุณภาพ` ปรับระดับโมเดล รอบตรวจ ขนาน · **ประเมินลูกทีม** ผ่าน/แก้/ทำใหม่ + โปรไฟล์ `~/.claude/superuser/TEAM.md` (`templates/TEAM.md`) · พลาดซ้ำ 2 ครั้ง → ลดขอบเขตหรือขยับระดับ · **หัวหน้าเรียนรู้ตัวเอง** คาดก่อนแจกงาน เทียบตอนจบ จดลง `~/.claude/superuser/LEAD-PLAYBOOK.md` (`references/lead-playbook.md`) · **รู้ความเสี่ยง** งานย้อนไม่ได้หัวหน้าทำหรือตรวจเอง · **รู้จังหวะหยุด** ครบรอบแล้วไม่ผ่าน → สรุป 2–3 ทางให้คนตัดสิน · **คำตอบ 3 ระดับ** คำเดียว / 3 บรรทัด / รายงานปิดงานไม่เกินครึ่งหน้า พร้อม "ยังไม่ได้ตรวจ" และ "ต้องทำต่อ 1 ข้อ" · **ประหยัด token** 4 กฎในหัวข้อ 5
+- **config ต่อโฟลเดอร์งาน** `.claude/superuser/config.json` (`templates/config.json`) เปิดปิด `context` · `log` · `improvements` · `learning` · `inbox` · `handoff` · `patterns_advanced` · `review_gate` · `split_gate` และตั้ง `budget` · hook อ่านเอง (`moduleOn`) สำหรับ log · inbox · 2 ด่าน · self-test เพิ่ม 1 ข้อ (55/55)
+- บล็อกกลางใหม่ `modules` (หัวข้อ 11) ใส่ marker ให้ทุก plugin แล้ว · `sync-superuser.mjs` คัดลอก `lead-playbook.md` · `TEAM.md` · `config.json` ไปทุก plugin
+- patterns: แกนเหลือ Planning → ReAct → Reflection (+ Multi-Agent คือหัวข้อ 5) · MoA · Reranker · parallel-attempts เป็นโมดูล `patterns_advanced`
+
+## 2.4.0 — 2026-10-21
+
+- ย้ายเข้าแกน: `html-slide-deck` · `pptx-to-html-deck` (จาก software-company) · `meeting-prep-card` (จาก personal-life) · skill กลางรวม 43 ตัว
+- playbook ใหม่ `pickup-and-pause` (รับงานต่อ · หยุดงาน) แบบใช้ได้ทุกงาน · ส่วน git · sandbox · server อยู่ใน playbook ชื่อเดียวกันของ software-company
+- `branded-document-design` ข้อ 0.2: ทำปก 3 แนว แล้วผู้ตรวจ 3 มุมโหวต 2 ใน 3 (รวมวิธีจาก `doc-cover-design`)
+- `image-generation` หัวข้อ "เขียน brief และ prompt": ลำดับ prompt และวิธีทำภาพเป็นชุด (ย่อจาก `brief-to-image` · `style-consistency` ของ graphic-design)
+
+## 2.3.0 — 2026-10-21
+
+- ย้าย `meeting-summary` · `polite-message-th-en` จาก `personal-life` มาเป็นของกลาง (ทุกสาขาใช้)
+- skill ใหม่ `research-with-sources` — หาข้อมูลพร้อมแหล่ง วันที่ และป้ายหลักฐาน · งานกลางขึ้นไปเดินตาม playbook `research`
+- `triggers.md` · `skill-router.json` · `CLAUDE.global.md` เพิ่มแถวของ 3 ตัวนี้
+- รูปใน `docs/plugins/` สร้างใหม่ทั้ง 38 รูป · `scripts/diagrams` อ่านรายการ skill กลางจาก `sync-superuser.mjs` · รูป map ของทุก plugin มีหัวข้อ skill กลาง 40 ตัว 6 กลุ่ม · แก้บั๊กที่รูป map/playbooks ของ superuser ไปลงโฟลเดอร์ `docs/plugins/map/` · `docs/plugins/playbooks/`
+- `docs/PLUGINS.md` มีหัวข้อ `superuser` (มีอะไร · เปลี่ยนอะไร · ติดตั้ง)
+
+## 2.2.0 — 2026-10-21
+
+- **superuser ใช้เดี่ยวได้เต็มที่** — ย้าย skill ทั่วไป 29 ตัวจาก `software-company` มาเป็นของกลาง แล้วปรับให้ใช้กับงานทุกสาขา (เอกสาร · ร้านค้า · การเงิน · งานบ้าน · โค้ด): `principle-prove-it-works` · `principle-proceed-on-reversible-work` · `principle-small-verifiable-steps` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-user-experience-first` · `decision-log` · `flag-and-propose` · `targeted-fix` · `repeated-mistakes-to-checks` · `session-lessons-to-skills` · `owner-style-capture` · `parallel-split-and-merge` · `parallel-attempts-pick-best` · `adversarial-review-panel` · `prior-art-review` · `context-budget` · `polished-document-style` · `document-naming` · `spell-out-abbreviations` · `temp-file-discipline` · `status-report` · `diagram-figures` · `presentation-design` · `image-generation` · `markdown-visuals` · `branded-document-design` · `markdown-report-docx` · `product-naming`
+- `work-session-context` รวมเข้า `handoff` (`references/team-memory.md` · `scripts/log-to-md.mjs`)
+- `triggers.md` มีตารางสถานการณ์ → skill กลางครบทุกตัว · `team-roles` · agent `brainstormer` · `reviewer` ไม่ต้องรอ software-company แล้ว
+- ส่วนที่ใช้เฉพาะงานโค้ดย้ายไปที่ `software-company` → `superuser` → `references/code-extensions.md`
+
 ## 2.1.0 — 2026-10-21
 
 - skill กลางใหม่ `handoff` (ส่วนหนึ่งของ superuser) — ใบสั่งงาน 5 หัวข้อ · ใบส่งงานต่อท้ายใบเดียวกัน · รับงานต่อข้าม session และตอนสลับโมเดล · พิธีเริ่มงาน 4 ขั้น · ชุดส่งต่อให้คน bot อื่น Quix และ Agent Desk

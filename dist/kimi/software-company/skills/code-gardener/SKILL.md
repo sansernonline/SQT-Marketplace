@@ -21,7 +21,7 @@ description: Use when patrolling a codebase for misleading patterns (duplication
 ## รอบสำรวจ (ทุกวัน หรือหลังมี commit ใหม่)
 
 1. อ่าน `docs/GARDEN.md` ส่วน "ทบทวนแล้ว" — ธีมที่ตัดสินแล้วไม่ต้องจดซ้ำ
-2. ดูเฉพาะไฟล์ที่เปลี่ยนตั้งแต่รอบก่อน (`git log --since`) ส่วนการดูทั้ง repo ทำแค่สัปดาห์ละครั้ง และงานใหญ่ให้แบ่งด้วย [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md)
+2. ดูเฉพาะไฟล์ที่เปลี่ยนตั้งแต่รอบก่อน (`git log --since`) ส่วนการดูทั้ง repo ทำแค่สัปดาห์ละครั้ง และงานใหญ่ให้แบ่งด้วย `parallel-split-and-merge`
 3. มองหา: logic ซ้ำ · เรียกข้ามชั้น (หน้าจอคุยฐานข้อมูลตรง) · กับดักของ framework ที่ใช้ · โค้ดตาย · ชื่อที่ไม่ตรงกับ `readable-code` · test ที่ผ่านทั้งที่โค้ดผิด · ของที่ขัดกับ `docs/AGENT-RULES.md`
 4. **ต่อท้ายลงตารางบันทึก ห้ามแก้โค้ด** ช่อง "รูปแบบ" ให้ใส่คำสั้นที่ใช้ซ้ำได้ จะได้จัดกลุ่มง่าย
 5. ถ้าไม่เจออะไรก็ไม่ต้องเขียน
@@ -30,7 +30,7 @@ description: Use when patrolling a codebase for misleading patterns (duplication
 
 1. จัดกลุ่มบันทึกที่ยังไม่ทบทวนตาม "รูปแบบ" และต้นเหตุ
 2. ทุกธีมเลือกทางเดียว
-   - ถ้าเกิดซ้ำได้อีก ให้ใช้ [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) เปลี่ยนเป็นตัวกันในโค้ด: โครงสร้าง · type หรือ lint
+   - ถ้าเกิดซ้ำได้อีก ให้ใช้ `repeated-mistakes-to-checks` เปลี่ยนเป็นตัวกันในโค้ด: โครงสร้าง · type หรือ lint
    - ถ้าของที่มีอยู่แล้วต้องจัดใหม่ ให้ใช้ playbook `refactor` ของ [`superuser`](../superuser/SKILL.md)
    - ถ้าไม่คุ้มแก้ ให้เขียนเหตุผลไว้
 3. ลงตาราง "ทบทวนแล้ว" แล้วเสนอผู้ใช้ว่าจะทำธีมไหนก่อน และเริ่มแก้จริงเมื่อผู้ใช้เลือกแล้ว
@@ -38,4 +38,4 @@ description: Use when patrolling a codebase for misleading patterns (duplication
 
 ## ตั้งให้รันเอง
 
-ตั้ง scheduled task ในแอป Claude หรือ Windows Task Scheduler: รัน `claude -p "ใช้ code-gardener รอบสำรวจ"` ทุกวัน และ `"... รอบทบทวน"` ทุกวันจันทร์และพฤหัส ถ้ารันโดยไม่มีคนดู ให้ใช้ sandbox (`.sandbox/`, ดู `docker-sandbox`) แบบ `-Isolated -Locked` และอนุญาตเฉพาะเครื่องมือที่ skill นี้ใช้ · รอบไม่มีคนดูทำแค่รอบสำรวจและรอบทบทวน (เขียน log) ไม่แก้โค้ด ไม่ commit
+ตั้ง scheduled task ในแอป Claude หรือ Windows Task Scheduler: รัน `claude -p "ใช้ code-gardener รอบสำรวจ"` ทุกวัน และ `"... รอบทบทวน"` ทุกวันจันทร์และพฤหัส ถ้ารันโดยไม่มีคนดู ให้ใช้ sandbox (`.sandbox/`, ดู `docker-sandbox`) แบบ `-Isolated -Locked` และอนุญาตเฉพาะเครื่องมือที่ skill นี้ใช้ · ขั้นตอนเต็มดู [`playbook-unattended-run`](../superuser/references/playbook-unattended-run.md) · คำสั่งในห้อง (โหมด isolated เท่านั้น — `sandbox.ps1 claude` ปฏิเสธโหมด mount): รันโดยไม่มีคนดูให้ใช้ `.\.sandbox\sandbox.ps1 exec "claude -p '<คำสั่ง>'"` หลังล็อกอินในห้องแล้ว เพราะ `exec` ใช้ `compose exec -T` ส่วน `sandbox.ps1 claude` ส่ง argument ต่อได้ แต่ไม่มี `-T` จึงต้องมีหน้าต่าง terminal ซึ่ง Task Scheduler ไม่มี (จะเพิ่ม `-T` ให้ `claude` หรือไม่ รอยืนยัน) · รอบไม่มีคนดูทำแค่รอบสำรวจและรอบทบทวน (เขียน log) ไม่แก้โค้ด ไม่ commit

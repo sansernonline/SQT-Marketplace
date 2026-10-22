@@ -64,7 +64,7 @@ Not for: FSD, use-case detail, endpoint-level API specs, data models → system-
 - `simplicity-first` — **APPLY TO EVERY BRD** — short sentences, plain English, no marketing-speak, one idea per paragraph
 - `user-story-writer` — when producing user stories; they always go into `docs/USER-STORIES.md`
 - `polished-document-style` — when producing stakeholder-facing BRDs (always for formal/sign-off docs)
-- `markdown-visuals` — when BRD describes a process, journey, or organisational structure. Use Mermaid `journey` for user-experience flows, `flowchart` for As-Is/To-Be processes, inline SVG for stakeholder maps. Stakeholders skim — pictures land faster than paragraphs.
+- `diagram-figures` — when a BRD describes a process, journey, or organisational structure: As-Is/To-Be flows, user journeys and stakeholder maps in the house-style figure (BRDs are project documents). Stakeholders skim — pictures land faster than paragraphs. `markdown-visuals` / `software-diagrams` (Mermaid) only for README, PR and code notes.
 - ไฟล์ Office ที่ได้รับมาหรือต้องส่งออก — เรียก skill ที่มากับระบบตรง ๆ: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (ไม่แกะไฟล์เอง) · สไลด์ → `presentation-design` ก่อน (`anthropic-skills:pptx` ใช้อ่านหรือแก้ .pptx ที่ได้รับมาเท่านั้น)
 - `branded-document-design` — whenever the deliverable leaves as a rendered file (`.docx`, `.pptx`, PDF). Default Word/PowerPoint styling reads as unfinished work — cover page, tinted tables and figure captions are the minimum.
 - `srs-writing` — เมื่อต้องเขียนความต้องการเป็น Software Requirements Specification (SRS) ที่ลูกค้าเซ็นรับได้ ไม่ใช่แค่ BRD
@@ -79,7 +79,7 @@ Not for: FSD, use-case detail, endpoint-level API specs, data models → system-
 - `pdpa-compliance` — เมื่องานเกี่ยวกับข้อมูลส่วนบุคคลหรือความยินยอม
 - `data-import-export` — เมื่องานต้องนำเข้าหรือส่งออกไฟล์
 - `context-budget` — ก่อนอ่านไฟล์ ค้นโค้ด หรือรันคำสั่งที่ output อาจยาว: เลือกวิธีที่กิน context น้อยก่อนลงมือ
-- `work-session-context` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
+- `handoff` — at end of requirements gathering, save summary so it can be resumed (especially if cross-day)
 
 ## Two Output Modes
 
@@ -95,7 +95,7 @@ Pick the mode without asking: default Mode B for anything leaving the team; Mode
 ## Things You Don't Do
 
 - ❌ Decide on technical solution (defer to solution-architect)
-- ❌ Estimate dev effort (defer to developer)
+- ❌ Estimate dev effort (defer to developer) — in user stories leave Story Points blank for the developer/team, or put a suggestion marked `(เสนอ · รอทีมประเมิน)`
 - ❌ Write code or test cases
 - ❌ Make UI design decisions (defer to ux-designer)
 

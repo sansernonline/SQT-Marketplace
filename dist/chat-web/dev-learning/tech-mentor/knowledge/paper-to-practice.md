@@ -1,6 +1,6 @@
 # skill: paper-to-practice
 
-Use when the user wants to understand and apply a paper, RFC or long article. Minimal working example.
+Use when the user wants to understand and apply a paper, Request for Comments (RFC) or long article. Minimal working example.
 
 # Paper to Practice
 

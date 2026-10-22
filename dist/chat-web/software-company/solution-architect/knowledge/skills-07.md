@@ -1,6 +1,6 @@
 # skill: repeated-mistakes-to-checks
 
-Use when the user corrects the same mistake twice or reviews keep flagging one issue. Make it a check.
+Use when the user corrects the same mistake twice or reviews keep flagging one issue in any work. Turn it into a check.
 
 # repeated-mistakes-to-checks — ความผิดที่ทำซ้ำ ต้องเกิดไม่ได้อีก
 
@@ -18,27 +18,27 @@ Use when the user corrects the same mistake twice or reviews keep flagging one i
 
 ## ขั้นตอน
 
-1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · `docs/BUILD-PLAN.md` · ความเห็นในการรีวิว · commit ที่ revert หรือ fix ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
-2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใส่ปุ่มหลอกใน mockup" · "เรียกฐานข้อมูลจาก controller ตรง" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
+1. **เก็บหลักฐาน** — ผู้ใช้แก้อะไรบ้าง (ข้อความในบทสนทนานี้ · บรรทัด `correction: true` ใน `.claude/superuser/log/` · เรื่องที่ซ้ำใน `.claude/superuser/learn/` · ตาราง "การตัดสินใจ" ที่ขึ้นต้น `ผู้ใช้แก้ —` · ความเห็นในการรีวิว · งานที่ลูกค้าตีกลับ · commit ที่ revert ซ้ำ ๆ) ต้องมีอย่างน้อย 2 ครั้งที่เป็นเรื่องเดียวกัน ถ้าเกิดครั้งเดียวยังไม่นับ
+2. **จัดเป็นประเภท** — ตั้งชื่อความผิดแต่ละประเภทให้สั้นและชัด เช่น "ใช้ราคาไม่รวม VAT ในใบเสนอราคา" · "ลืมวันที่แหล่งข้อมูลในรายงาน" · "ใช้ปี พ.ศ. ในฐานข้อมูล"
 3. **เลือกชั้นที่แก้ — สูงสุดที่ทำได้**
 
    | ชั้น | ตัวอย่าง | เหตุที่ดีกว่าชั้นล่าง |
    |---|---|---|
-   | สถาปัตยกรรม | 1 โฟลเดอร์ต่อ 1 ฟีเจอร์ · เหลือวิธีทำวิธีเดียว · ลบ API เก่าทิ้ง | ทางผิดหายไปเลย |
-   | type | type แยกสำหรับ `ThaiYear` กับ `Year` · enum แทน string | compiler หยุดให้ |
-   | lint หรือสคริปต์ตรวจ | กฎ ESLint · Roslyn analyzer · สคริปต์ grep ใน CI · **ข้อความ error บอกวิธีแก้** | ชนแล้วรู้ทันทีว่าต้องทำอะไร |
-   | test | test ที่ล้มเมื่อพฤติกรรมผิด | จับได้ก่อน merge |
+   | โครงสร้าง | แม่แบบที่เหลือช่องให้เติมแค่ที่ต้องเติม · เหลือวิธีทำวิธีเดียว · ลบของเก่าที่ทำให้สับสน | ทางผิดหายไปเลย |
+   | ชนิดข้อมูล | ช่องวันที่ในชีตตั้งให้รับแค่วันที่ · งานโค้ด: type แยก `ThaiYear` กับ `Year` | เครื่องหยุดให้ |
+   | สคริปต์ตรวจ | สูตรเทียบยอดรวมในชีต · สคริปต์ grep หาคำต้องห้ามในเอกสาร · lint ใน CI · **ข้อความ error บอกวิธีแก้** | ชนแล้วรู้ทันทีว่าต้องทำอะไร |
+   | ตัวอย่างตรวจ | ชุดตัวอย่างที่ต้องผ่านก่อนส่ง · test ที่ล้มเมื่อพฤติกรรมผิด | จับได้ก่อนส่งหรือ merge |
    | ข้อความ | แก้ย่อหน้าใน SKILL.md หรือ agent | ใช้เมื่อชั้นบนทำไม่ได้จริงเท่านั้น |
 
 4. **สร้างการตรวจ** — เขียนแบบเล็กที่สุดที่จับประเภทนั้นได้ ([`principle-build-a-tool-not-handwork`](../principle-build-a-tool-not-handwork/SKILL.md))
 5. **พิสูจน์ว่ามันจับได้จริง** — ย้อนเอาโค้ดหรือเอกสารจากความผิดครั้งจริง (หรือสร้างซ้ำให้เหมือน) แล้วรันการตรวจ ซึ่ง**ต้องล้ม** จากนั้นรันกับของปัจจุบัน ซึ่งต้องผ่าน เพราะตัวตรวจที่ไม่เคยล้มเลยคือตัวตรวจที่พัง
-6. **ลงตาราง** — `docs/AGENT-RULES.md` ของโปรเจกต์ (หรือ `README` ของ repo skill) `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` ถ้ายังไม่มีไฟล์ให้สร้างใหม่
+6. **ลงตาราง** — `| ความผิด | ชั้นที่แก้ | ตัวตรวจ (ไฟล์) | พิสูจน์ด้วย |` ลงใน `.claude/superuser/IMPROVEMENTS.md` (งานโค้ดใช้ `docs/AGENT-RULES.md` หรือ `README` ของ repo skill ก็ได้) แล้วเพิ่ม 1 บรรทัดในหัวข้อ "กติกา" ของ `CONTEXT.md` ชี้ไปหา
 7. ทำซ้ำทุกครั้งที่ผู้ใช้แก้เรื่องใหม่เป็นครั้งที่ 2
 
 ## ไม่ต้องรอให้ผิดซ้ำ — สัญญาณที่ควรทำเป็นการตรวจเลย
 
 - ถ้ากฎเดียวกันอยู่ในหลายไฟล์ (เช่น เขียนซ้ำในทุก prompt) ให้ย้ายไปไว้ที่เดียว แล้วให้ที่อื่นอ้างถึง
-- ถ้ากำลังจะเขียน "ห้าม..." เพิ่มอีกบรรทัด ทั้งที่ตรวจด้วย grep ได้ ให้ทำเป็นสคริปต์ใน CI แทน
+- ถ้ากำลังจะเขียน "ห้าม..." เพิ่มอีกบรรทัด ทั้งที่ตรวจด้วยเครื่องได้ (grep · สูตร · CI) ให้ทำเป็นตัวตรวจแทน
 - ข้อความ error ของตัวตรวจต้องบอกวิธีแก้ ไม่ใช่แค่บอกว่าผิด
 
 ตัวอย่างในชุดนี้:
@@ -51,7 +51,7 @@ Use when the user corrects the same mistake twice or reviews keep flagging one i
 
 ## สิ่งที่ห้ามทำ
 
-- เพิ่มข้อความ "ห้าม..." ใน SKILL.md ทั้งที่ทำเป็น lint ได้
+- เพิ่มข้อความ "ห้าม..." ใน SKILL.md ทั้งที่ทำเป็นตัวตรวจได้
 - สร้างกฎที่ไม่ได้พิสูจน์ด้วยความผิดจริง เพราะกฎที่ยิงไม่โดนเป้าทำให้ทุกคนเชื่อผิด ๆ ว่าปลอดภัย
 - ตรวจกว้างเกินจนจับของถูกด้วย เพราะสุดท้ายทุกคนจะเรียนรู้ที่จะข้ามมัน
 
@@ -477,55 +477,55 @@ import บอกได้มากโดยไม่ต้อง decompile:
 
 ## reference: packaging-patterns.md
 
-# Common application packaging patterns
+# รูปแบบการแพ็กแอปที่เจอบ่อย
 
-Recognizing the packaging leads straight to the readable layer. Check these before touching a decompiler.
+รู้ว่าแอปแพ็กแบบไหน ก็ไปถึงชั้นที่อ่านได้เลย — ดูหัวข้อนี้ก่อนเปิด decompiler · ทุกคำสั่งในไฟล์นี้ **อ่านหรือแตกไฟล์อย่างเดียว** ยกเว้นที่ติดป้าย **ถามก่อน** (ตามตารางสิทธิ์ใน `SKILL.md` §2)
 
-## Mozilla apps (Firefox, Thunderbird)
+## แอปของ Mozilla (Firefox · Thunderbird)
 
-- Full Windows installer is a **7-Zip SFX stub** (small PE32, sections=3) with the app in an appended archive. `7z x setup.exe` extracts `core/` plus `setup.exe`.
-- `core/application.ini` — version, BuildID, source repository and SourceStamp (build provenance evidence).
-- `core/omni.ja` — ZIP archive (97MB+ for Thunderbird) holding nearly all app JavaScript (`modules/`, `chrome/`) and default prefs (`defaults/pref/*.js`). Extract with 7z; Grep it to trace features. `omni.ja` is usually the cheapest route to full answers.
-- The big DLLs are the native layer: `xul.dll` (Gecko engine), `nss3.dll`/`freebl3.dll` (crypto), `rnp.dll` (OpenPGP), `libotr.dll` (chat encryption).
-- `thunderbird.exe` itself is only a launcher stub.
+- ตัวติดตั้งเต็มบน Windows คือ **7-Zip SFX stub** (PE32 เล็ก มี 3 section) ที่ต่อ archive ของแอปไว้ท้ายไฟล์ · `7z x setup.exe` ได้ `core/` กับ `setup.exe`
+- `core/application.ini` — เวอร์ชัน · BuildID · repository ต้นทาง · SourceStamp (หลักฐานว่าสร้างจากซอร์สไหน)
+- `core/omni.ja` — ไฟล์ ZIP (Thunderbird 97MB ขึ้นไป) เก็บ JavaScript ของแอปเกือบทั้งหมด (`modules/` · `chrome/`) และค่าเริ่มต้น (`defaults/pref/*.js`) · แตกด้วย 7z แล้ว Grep หา feature · `omni.ja` มักเป็นทางที่ถูกที่สุดที่ได้คำตอบครบ
+- DLL ใหญ่ ๆ คือชั้น native: `xul.dll` (เอนจิน Gecko) · `nss3.dll`/`freebl3.dll` (การเข้ารหัส) · `rnp.dll` (OpenPGP) · `libotr.dll` (เข้ารหัสแชต)
+- `thunderbird.exe` เป็นแค่ตัวเรียก (launcher stub)
 
-## Electron / Node apps
+## แอป Electron / Node
 
-- `app.asar` — ASAR archive; `python -I scripts/asar_extract.py extract app.asar outdir` (see javascript-electron.md). Renderer JS is often minified but readable; `.map` source maps may contain original source (`scripts/sourcemap_list.py`).
-- `resources/app/package.json` names the app, entry point, and dependency list.
-- Native modules: `*.node` files (PE DLLs) — treat as native binaries.
+- `app.asar` — archive แบบ ASAR · `python -I scripts/asar_extract.py extract app.asar outdir` (ดู javascript-electron.md) · JS ฝั่ง renderer มัก minify แต่ยังอ่านได้ · ไฟล์ `.map` (source map) อาจมีซอร์สต้นฉบับ (`scripts/sourcemap_list.py`)
+- `resources/app/package.json` บอกชื่อแอป · จุดเริ่มทำงาน · รายการ dependency
+- native module: ไฟล์ `*.node` (เป็น PE DLL) — ถือเป็น native binary
 
-## .NET applications
+## แอป .NET
 
-- PE with a CLI header (triage reports `.NET / managed PE`). `ilspycmd -p -o <out> <dll>` gives a near-original C# project — field-tested: identical logic, SQL strings intact, only comments and local names lost.
-- A `.pdb` beside the dll restores original file names and line numbers; a `.dll.config` holds settings (and often secrets).
-- ASP.NET MVC with precompiled views: `.cshtml` come back as classes under `<Assembly>.Views.<Controller>`.
-- Xamarin APK: the C# lives in `assemblies/*.dll` inside the APK (sometimes LZ4-compressed `XALZ`) — decompile those, not `classes.dex`.
-- Check for bundled/single-file deployment (self-extracting extractors) — extract first.
-- P/Invoke declarations map managed code to native DLL entry points.
+- PE ที่มี CLI header (triage รายงาน `.NET / managed PE`) · `ilspycmd -p -o <out> <dll>` ได้ project C# ใกล้ต้นฉบับ — ลองกับงานจริงแล้ว: logic เหมือนเดิม SQL ครบ หายแค่คอมเมนต์กับชื่อตัวแปรในฟังก์ชัน
+- `.pdb` ข้าง dll คืนชื่อไฟล์และเลขบรรทัดเดิม · `.dll.config` เก็บค่าตั้ง (และมักมีความลับ)
+- ASP.NET MVC ที่ precompile view: `.cshtml` กลับมาเป็นคลาสใต้ `<Assembly>.Views.<Controller>`
+- APK ของ Xamarin: โค้ด C# อยู่ใน `assemblies/*.dll` ใน APK (บางทีบีบด้วย LZ4 เป็น `XALZ`) — decompile ไฟล์พวกนี้ ไม่ใช่ `classes.dex`
+- ดูว่าเป็น bundled / single-file deployment (แตกตัวเองตอนรัน) หรือไม่ — แตกออกมาก่อน
+- การประกาศ P/Invoke บอกว่าโค้ด managed เรียกฟังก์ชันไหนใน DLL native
 
 ## Android APK
 
-- ZIP; contains `classes.dex` (Dalvik bytecode — use `jadx` or `apktool` for near-Java output), `AndroidManifest.xml` (binary XML — `scripts/apk_inventory.py` decodes it; else `apktool` or `aapt2`), `resources.arsc`, native libs under `lib/`.
+- เป็น ZIP · มี `classes.dex` (Dalvik bytecode — ใช้ `jadx` หรือ `apktool` ได้โค้ดใกล้ Java) · `AndroidManifest.xml` (XML แบบ binary — `scripts/apk_inventory.py` ถอดได้ ไม่งั้นใช้ `apktool` หรือ `aapt2`) · `resources.arsc` · native lib ใต้ `lib/`
 
-## Windows installers generally
+## ตัวติดตั้ง Windows ทั่วไป
 
-- 7-Zip SFX: extract with `7z x`.
-- NSIS: extract with `7z x` (triage detects `NullsoftInstall` marker).
-- MSI: `msiexec /a file.msi /qb TARGETDIR=<out>` or 7z.
-- MSI transforms and stub downloaders may contain no payload — identify early to avoid wasted work.
+- 7-Zip SFX: แตกด้วย `7z x`
+- NSIS: แตกด้วย `7z x` (triage เจอ marker `NullsoftInstall`)
+- MSI: **ใช้ `7z x file.msi` หรือ `lessmsi x file.msi <out>\` ก่อน** — อ่านไฟล์อย่างเดียว ไม่เรียก Windows Installer · `msiexec /a file.msi /qb TARGETDIR=<out>` (administrative install) **ถามก่อน** เพราะเป็นการรัน Windows Installer บนเครื่องผู้ใช้ (บอกว่าจะรันอะไร กับไฟล์ไหน) · ไฟล์ที่ไม่รู้ที่มา → รันใน `docker-sandbox` เท่านั้น
+- MSI transform และ stub ที่ดาวน์โหลดตัวจริงทีหลัง อาจไม่มี payload เลย — ดูให้รู้แต่แรกจะได้ไม่เสียแรง
 
-## Enterprise report and ETL files
+## ไฟล์รายงานและ ETL (Extract-Transform-Load) ขององค์กร
 
-Often the only place a calculation lives. None need a decompiler.
+บ่อยครั้งเป็นที่เดียวที่สูตรคำนวณอยู่ · ไม่ต้องใช้ decompiler เลย
 
-| File | What it is | Readable layer |
+| ไฟล์ | คืออะไร | ชั้นที่อ่านได้ |
 |---|---|---|
-| `.rpt` Crystal Reports | OLE compound file | `strings` shows SQL, table and field names; formulas need Crystal Designer or an RptToXml export |
-| `.pbix` Power BI | ZIP | `Report/Layout` is UTF-16 JSON (pages, visuals, filters); measures in `DataModel` need pbi-tools or Tabular Editor |
-| `.dtsx` SSIS | XML | Search `SqlCommand`, `ConnectionManager`, `DTS:ObjectName`; package order in the master package |
-| `.rdl` SSRS | XML | `CommandText` per dataset |
-| `.mdb` / `.accdb` | Access database | Queries and VBA modules; open with mdbtools or Access |
+| `.rpt` Crystal Reports | OLE compound file | `strings` เห็น SQL ชื่อตารางและฟิลด์ · สูตรต้องใช้ Crystal Designer หรือ export ด้วย RptToXml |
+| `.pbix` Power BI | ZIP | `Report/Layout` เป็น JSON แบบ UTF-16 (หน้า visual filter) · measure ใน `DataModel` ต้องใช้ pbi-tools หรือ Tabular Editor |
+| `.dtsx` SQL Server Integration Services (SSIS) | XML | ค้น `SqlCommand` · `ConnectionManager` · `DTS:ObjectName` · ลำดับ package ดูใน master package |
+| `.rdl` SQL Server Reporting Services (SSRS) | XML | `CommandText` ของแต่ละ dataset |
+| `.mdb` / `.accdb` | ฐานข้อมูล Access | query และโมดูล VBA · เปิดด้วย mdbtools หรือ Access |
 
 
 ## reference: runtime-observation.md
@@ -647,7 +647,7 @@ tshark -r <file.pcap> -Y dns -T fields -e dns.qry.name | sort | uniq -c | sort -
 
 # skill: polished-document-style
 
-Use when writing or tidying any document people keep (Markdown, Word, PDF) — headings, tables, Thai text. Designed look → branded-document-design.
+Use when writing or tidying a document people keep (report, proposal, Word, PDF) — headings, tables, Thai. Designed look → branded-document-design.
 
 # Polished Document Style
 
@@ -655,17 +655,15 @@ Use when writing or tidying any document people keep (Markdown, Word, PDF) — h
 
 ## When to use this skill
 
-- Output is meant for **non-developers** to read (PMs, executives, clients)
+- Output is meant for **general readers** (managers, executives, clients, customers)
 - Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later
-- Any doc with 3+ sections or 500+ words
+- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
 - จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
 
 ## When NOT to use
 
-- Internal developer-only specs (keep them concise)
-- Quick scratch notes
-- Code comments / inline docs
+- Internal notes for the author's own team (keep them concise)
+- Quick scratch notes · code comments
 - A whole Markdown report that must come out as one .docx → `markdown-report-docx`
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
@@ -690,6 +688,8 @@ Status values:
 - **Review** (กำลังรีวิว) — under stakeholder review
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
+
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -729,13 +729,13 @@ markdown เองไม่มีสี จึงใช้คำกำกับ�
 | ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
 | สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
 | ผลตรวจ | ผ่าน · ไม่ผ่าน |
-| ชนิดกล่องข้อความ | ข้อแนะนำ · ข้อควรจำ · อันตราย · คำถามที่ยังเปิด |
+| ชนิดกล่องข้อความ | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
 
 ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
 
 ## Callout Boxes
 
-Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** · **Warning** · **Critical** · **Note** · **Open Question** ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด) ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 **Rules:**
 - Keep callouts to 1-3 sentences
@@ -751,11 +751,11 @@ Use tables when items have **2+ attributes** ถ้าเขียนเป็�
 - Keep cells short — long content goes in body paragraphs
 - Bold key columns: `**email**`
 
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (architect, PM, SEO recommendations) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีศัพท์เทคนิค 5 คำขึ้นไปให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (strategy, vendor choice, plan options) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป (เกณฑ์เดียวกับ `spell-out-abbreviations`) ให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Diagrams
 
-**รูปในเอกสารโปรเจกต์ (BRD · SRS · FSD · ADR · ER · ผังขั้นตอน) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
+**รูปในเอกสารโปรเจกต์ (รายงาน · ข้อเสนอ · ผังขั้นตอน · ผังข้อมูล) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams` ใน plugin `software-company`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
 skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
 
 - วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
@@ -764,7 +764,7 @@ skill นี้คุมเฉพาะเรื่องการวางร�
 
 ## Status Badges and Cover Block
 
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (BRD, FSD, ADR, postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
+ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (ข้อเสนอ · รายงานทางการ · สัญญา · postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
 
 ## Lists and Code Blocks
 
@@ -789,7 +789,7 @@ Code blocks ต้องระบุภาษาทุกครั้ง (Always
 Before delivering any polished doc:
 
 - [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Cover block with version, date, status, authors
+- [ ] Header block with version, date, status, authors (cover block เฉพาะเอกสารทางการ)
 - [ ] TOC if 5+ sections
 - [ ] All sections numbered consistently
 - [ ] Anchor links in TOC actually work
@@ -798,22 +798,18 @@ Before delivering any polished doc:
 - [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ acronyms
+- [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
 - [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
-- [ ] Tested rendering in GitHub preview
+- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
 
-> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · Mermaid ด่วนใน README หรือ PR อยู่ใน `software-diagrams`
-> ส่วนเรื่องเอกสาร SRS โดยเฉพาะอยู่ใน `srs-writing`
+> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · เอกสารโค้ด (Mermaid ด่วน · ข้อกำหนดซอฟต์แวร์) → ส่วนเพิ่มใน plugin `software-company`
 
 ## Anti-patterns
 
 - ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
 - ❌ **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
-- ❌ **Walls of text** — paragraphs longer than 5 lines
 - ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Diagrams that duplicate text** — diagram should add insight, not repeat
 - ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-- ❌ **Skipping the cover block** — readers need version/status/date
 
 ## ไม่ให้ดูเหมือน AI ทำ
 
@@ -865,7 +861,7 @@ Status values:
 
 ## Callout Boxes
 
-Use blockquotes with a bold label — no emoji:
+Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
 
 ```markdown
 > **Tip:** Brief actionable insight.
@@ -901,20 +897,17 @@ Use a table:
 | role  | enum   | ✓        | `user`  | Access level      |
 ```
 
-## Mermaid Diagrams
+## Figures (รูปในเอกสาร)
 
-````markdown
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as ผู้ใช้
-    participant API
-    U->>API: ส่งคำขอ
-    API-->>U: ตอบกลับ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+
+```markdown
+ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
+
+![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
+
+**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
 ```
-````
-
-*รูปที่ 3 — ลำดับการเรียกเมื่อผู้ใช้กดบันทึก*
 
 ## Status Badges (Inline)
 
@@ -924,7 +917,7 @@ For key fields in headers/tables:
 **Status:** Approved
 **Priority:** High
 **Risk Level:** Medium
-**SLA:** < 200ms
+**Service Level Agreement (SLA):** < 200ms
 ```
 
 Multiple badges in a header:
@@ -935,7 +928,7 @@ Multiple badges in a header:
 
 ## Cover Block Pattern
 
-For formal documents (BRD, FSD, ADR, postmortem):
+For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
 
 ```markdown
 # <Title>
@@ -955,7 +948,7 @@ For formal documents (BRD, FSD, ADR, postmortem):
 
 ## Comparison / Decision Tables
 
-For trade-off analysis (architect, PM, SEO recommendations):
+For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
 
 ```markdown
 | Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
@@ -1024,8 +1017,8 @@ For documents needing formal approval:
 | Role | Name | Status | Date |
 |------|------|:------:|------|
 | Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Reviewing | — |
-| QA Lead | @charlie | Not started | — |
+| Tech Lead | @bob | Review | — |
+| QA Lead | @charlie | Pending | — |
 | Security | @dave | Rejected | 2025-01-14 |
 ```
 
@@ -1056,8 +1049,8 @@ Define acronyms on first use, then add to glossary.
 
 | ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
 |---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้อิโมจิและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `software-diagrams` ข้อ 2 | `doc-theme` |
+| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
+| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
 | รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
 | ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
 | สไลด์ | `presentation-design` | `doc-theme` |
@@ -1085,7 +1078,7 @@ Define acronyms on first use, then add to glossary.
 
 # skill: branded-document-design
 
-Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type, Thai fonts). Whole report from one Markdown → markdown-report-docx.
+Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
 
 # Branded Document Design
 
@@ -1096,14 +1089,14 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 ## เมื่อไหร่ใช้ skill นี้
 
-- ผลลัพธ์คือ **.docx / .pptx / .pdf** ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
+- ผลลัพธ์คือ **.docx / .pptx / .pdf** (ใบเสนอราคา · แผนธุรกิจ · รายงาน · สัญญา · เอกสารซอฟต์แวร์ เช่น SRS) ที่ลูกค้า ผู้บริหาร หรือทีมอื่นจะเปิดดู
 - เอกสารต้อง **เซ็นอนุมัติ** หรือแนบไปกับสัญญา/ข้อเสนอ
 - เอกสารไทย–อังกฤษปนกัน (ถ้าตั้งฟอนต์ไม่ครบจะพังง่ายมาก)
 - ต้องออกเอกสารแบบเดียวกันซ้ำ ๆ และอยากให้ทุกฉบับหน้าตาเหมือนกัน
 
 ## เมื่อไหร่ **ไม่** ใช้
 
-- ผลลัพธ์เป็น markdown ในรีโป ให้ใช้ `polished-document-style`
+- ผลลัพธ์เป็น markdown (ในรีโปหรือโฟลเดอร์งาน) ให้ใช้ `polished-document-style`
 - ต้องแค่ **อ่าน/แกะ** ไฟล์ Office ที่ได้รับมา ให้ใช้ `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf`
 - ไดอะแกรมในเอกสาร markdown ให้ใช้ `markdown-visuals`
 - รายงานทั้งเล่มจาก Markdown ไฟล์เดียว (ปกโลโก้กลาง · สารบัญ · ตาราง · รูป) ให้ใช้ `markdown-report-docx` ซึ่งมีสคริปต์ md → docx พร้อมแล้ว
@@ -1130,17 +1123,28 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 สีที่ไม่ผูกกับสีหลักมีแค่สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) และต้องคงความหมายเดิมเสมอ
 
 
-## 0.1 · หน้าตาเอกสารต่อจากหน้าตาแอป — ทำก่อน render ครั้งแรก
+## 0.1 · หน้าตาเอกสารต่อจากหน้าตาของแบรนด์หรือแอป — ทำก่อน render ครั้งแรก
 
 > ค่าตั้งต้นของ skill นี้ (Tahoma · ปกแถบสีทึบ · ตารางมีเส้นทุกช่อง) คือ**พื้น** ไม่ใช่หน้าตาส่งมอบ
-> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แอปของโปรเจกต์ผ่านด่านสวยแล้ว
+> ใช้ค่าตั้งต้นตรง ๆ = เอกสารที่ดูเหมือนพิมพ์จาก Word ทุกบริษัท ทั้งที่แบรนด์หรือแอปของงานนั้นผ่านด่านสวยแล้ว
 
-1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
-2. **3 แนวขนานกัน** (`parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว — ดู `doc-cover-design` ข้อ 7) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
-3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
-4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน 3 รอบตาม `ui-craft/references/states-and-checks.md` · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
+1. **มีตัวตนอยู่แล้วไหม** — ดู brand kit เดิม (`graphic-design:brand-kit` ถ้าติดตั้ง ใช้สีและฟอนต์จากชุดนั้น) · `assets/logo/` · `docs/design/` · งานซอฟต์แวร์: mockup ที่ผ่านด่านสวย (คะแนนใน `docs/BUILD-PLAN.md`) · `docs/README.md` ช่อง `doc-theme` → มี: เอกสารต้องใช้โลโก้ (ปก + หัวหน้า) สีแบรนด์ และลวดลายเดียวกับแอป · ไม่มี: ทำตามข้อ 0
+2. **ทำ 1 แนวก่อน** · ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนว จึงทำ **3 แนวขนานกัน** (ค่าแรง 3–5 เท่า · `parallel-attempts-pick-best` · agent ที่มี Bash ตัวใหม่แนวละตัว · ปกใช้วิธีโหวต 3 แนวในหัวข้อ 0.2) — แต่ละแนวทำ HTML จำลองหน้า A4: ปก · หน้าเนื้อหาที่มีตารางข้อกำหนดจริง 4 แถว + callout · หน้าสารบัญหรือหน้ารูป · **รูป 1 รูปทำใหม่ตามแนว** (ใช้ `diagram-figures`) · หัวไฟล์บอกวิธีทำแต่ละชิ้นใน Word จริง · เมื่อทำหลายแนว แนวต้องต่างกันจริง เช่น ปกมืดต่อจากแอป / รายงานสว่างแบบบรรณาธิการ / สเปกวิศวกรรม
+3. **ผู้ตรวจ 2 ตัวที่ไม่ได้ทำ** (ถ้ามีแนวเดียว ให้คะแนนแนวนั้นอย่างเดียว ไม่ต้องผสม) ให้คะแนน 1–5 (ผ่าน = 4): ความประทับใจแรก · ต่อเนื่องกับแอป · ความประณีต (ตารางไทยยาว 60 แถว ไม่ตัดกลางคำ · สเกลตัวอักษร · คอนทราสต์) · รูปอ่านออกเมื่อวางจริง · สร้างใน Word ได้จริง → **ผสมได้** (ปกจากแนวหนึ่ง เนื้อจากอีกแนว) ถ้าผู้ตรวจระบุชิ้นชัด
+4. ลงมือที่ตัว render (ไม่แก้ทีละไฟล์ .docx) → render ทุกฉบับ → **ด่านสวยของเอกสาร**: ผู้ตรวจ 2 ตัวใหม่ดูภาพหน้าจริง (ปก · สารบัญ · หน้าเปิดบท · หน้าตารางยาว · หน้ารูป) ใช้ 5 แกนข้างบน ใช้คะแนนที่ต่ำกว่า · เพดาน **3 รอบ** (รายละเอียดเพิ่มที่ `ui-craft/references/states-and-checks.md` ใน plugin `software-company` ถ้าติดตั้ง) · คะแนนทุกรอบลง `docs/BUILD-PLAN.md`
 5. **ฟอนต์:** ใช้ฟอนต์ไทยของแบรนด์ที่ติดตั้งในเครื่องและฝังในไฟล์ (`embed_fonts`) · Tahoma เป็นทางสำรองเมื่อฝังไม่ได้ · **ห้ามตั้งข้อความไทยด้วยฟอนต์ mono** (Cascadia/Consolas ไม่มีอักษรไทย) — mono ใช้กับรหัส คีย์ ตัวเลขเท่านั้น
 6. **รูปในเอกสาร · กฎที่ด่านสวยจับได้บ่อย · ปก** (ขนาดพิกเซลขั้นต่ำ กฎใน `check` ของตัว render สูตรปก) → [`references/word-layout.md`](references/word-layout.md) หัวข้อท้ายไฟล์
+
+## 0.2 · ปกที่ต้องเป็นของเอกสารชุดนี้ — ทำ 3 แนวแล้วโหวต 2 ใน 3
+
+ใช้เมื่อชุดเอกสาร (ข้อเสนอ · รายงาน · แผนธุรกิจ) ต้องมีปกของตัวเอง และปกตั้งต้นดูเหมือนของงานอื่น · ทำแนวเดียวก่อน ถ้าผู้ใช้ไม่ว้าวหรือขอหลายแนวจึงใช้ (ค่าแรง 3–5 เท่า)
+
+1. **หาของจริงมาจับ** — โลโก้ ชื่อ กริยาหลักของงาน (เสนอ · วิเคราะห์ · ขาย) หรือภาพจริงของงาน · ดูปกจริงของคนอื่นอย่างน้อย 6 ใบ · ทุกรูปบนปกต้องชี้กลับไปที่ของจริงได้ ไม่งั้นตัดออก
+2. **ผู้ออกแบบ 3 ตัว (ใช้ `parallel-attempts-pick-best`)** โจทย์เดียวกัน ต่างกันที่แนว: A วาดจากข้อมูลจริงของงาน · B ภาพจริงของงานเป็นพระเอก (หน้าจอ ภาพถ่าย ตัวอย่างผลงาน) · C รูปทรงโลโก้หรือตัวอักษรเป็นโครง ไม่มีภาพวาด · agent ต้องมี Bash เพื่อ render แล้วเปิดดูภาพเอง
+3. **ผู้ตรวจ 3 ตัวใหม่ ไม่เคยเห็นงาน คนละมุม** — ผู้กำกับศิลป์ (ว้าวจริงไหม ดูเป็นงาน AI ไหม) · แบรนด์และลูกค้า (จำได้ไหม รู้ว่างานเกี่ยวกับอะไรไหม ไปด้วยกันทั้งชุดไหม) · การผลิตใน Word (ทำซ้ำได้ไหม ข้อความแก้ได้ไหม) · ให้ใส่ปกเดิมเป็นตัวเลือกด้วย
+4. **เกณฑ์ที่ให้คะแนน 1–5 แล้วโหวต** ว้าวเทียบปกเดิม · ไม่ซ้ำงานอื่น · บอกความจริงของงาน · เข้ากับทั้งชุด · ความประณีต (ไทย คอนทราสต์ ตัวเล็กสุด) · สร้างใน Word ได้และทำซ้ำได้ · แนวที่ได้ **2 ใน 3 เสียงชนะ** · ยกส่วนเด่นของแนวที่แพ้มาได้ไม่เกิน 2 ชิ้น · เสียงแตก 3 ทาง ให้ "ทำซ้ำได้" ตัดสิน
+5. **ข้อความบนปกเป็นข้อความ Word แก้ได้** (ชื่อ เวอร์ชัน วันที่) · ภาพพื้นไม่ฝังตัวหนังสือ · ยึดภาพกับย่อหน้าแรก ไม่วางใน header
+6. **เฉพาะชุดเอกสารซอฟต์แวร์** (BRD · SRS · FSD ที่ปกต้องมาจากรูปทรงโลโก้หรือ mockup จริง · ใช้เครื่องสร้างปก) → ถ้ามี plugin `software-company` ดู `doc-cover-design` เพิ่ม · ไม่มีก็ทำตามข้อ 1–5 ได้ครบ
 
 ---
 
@@ -1150,7 +1154,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 - token: `brand` · `brand_2` · `brand_deep` · `brand_tint` · `brand_tint_2` · `text` · `text_body` · `text_muted` · `line` + สีสถานะ 6 ตัว (สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง) ที่**ไม่เปลี่ยนตามแบรนด์**
 - เลือกสีตามความหมาย ไม่ใช่ตามความสวย (แดง = อันตราย/ผิดจริงเท่านั้น) · ใช้ชุดความหมายเดียวกับไดอะแกรม
-- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
+- เกณฑ์ที่ต้องผ่านทุกชุดสี: เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 · H1 และตัวเลข KPI (`brand` ตัวใหญ่) ≥ 3:1 · `use_brand()` ตรวจให้และหยุดถ้าไม่ผ่าน · พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก · ไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
 - ตัวอักษรไม่ใช้ดำสนิท (ใช้ `text_body`) · **อย่าเพิ่มขนาดตัวอักษรนอกสเกล** (เนื้อความ Word 11pt · สไลด์ 17pt)
 
 ตาราง token เต็ม · ตารางความหมายของสี · สเกลตัวอักษร (pt) · องค์ประกอบที่ใช้ซ้ำ + เมธอด → [`references/tokens-and-type.md`](references/tokens-and-type.md) — เปิดเมื่อตั้งธีมหรือเลือกขนาด/สี · ตัวอย่างชุดสีที่เคยใช้ → [`references/palette-examples.md`](references/palette-examples.md)
@@ -1172,7 +1176,7 @@ Use when a Word, PowerPoint or PDF deliverable must look designed (palette, type
 
 ## 3 · โครงหน้าเอกสาร Word
 
-โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตาม [`doc-cover-design`](../doc-cover-design/SKILL.md) · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
+โครงเอกสาร: หน้าปก (โปรเจกต์มีโลโก้และ mockup แล้ว → ปกเฉพาะโปรเจกต์ตามหัวข้อ 0.2 · ไม่มีตัวตนใช้แบบตั้งต้น) → สารบัญ (field TOC) → เนื้อหา (H1 มีเลขข้อ · keep-with-next ทุกหัวข้อ) → ตารางลงนามอนุมัติ · footer "หน้า N" กลางหน้า สีเทา 9pt · โครงเต็มทีละบรรทัด → [`references/word-layout.md`](references/word-layout.md) หัวข้อ "โครงหน้าเอกสาร"
 
 **ปกเข้ม** (แอปหรือแบรนด์ใช้หน้าจอสีเข้ม) → `doc.cover(..., style="night")` · ตัวอย่าง `scripts/example_srs.py` · ภาพ `examples/example_srs-preview.png` · รายละเอียดและบทเรียนจากเจ้าของงาน → [`references/word-layout.md`](references/word-layout.md) กฎที่ต้องจำทุกครั้ง:
 - 🚨 ภาพพื้นปกและโลโก้ห้ามอยู่ใน header หน้าแรก (Word แสดงจางตอนแก้ไฟล์) — ยึดกับย่อหน้าแรกของปก
@@ -1233,14 +1237,14 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 | ต้องการ | ใช้คู่กับ |
 |---------|-----------|
 | โครงเนื้อหา/สำนวนเอกสารทางการ · **ธีมสีของเอกสาร** | `polished-document-style` |
-| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (Mermaid) → export PNG → `figure()` |
+| ไดอะแกรมที่จะเอามาแปะเป็นรูป | `diagram-figures` (รูปออกแบบ) · `software-diagrams` (plugin `software-company`) (Mermaid) → export PNG → `figure()` |
 | อ่านไฟล์ Office ที่ลูกค้าส่งมา | `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` |
 | สเปรดชีตส่งมอบ | `anthropic-skills:xlsx` (โทเคนสีชุดเดียวกันใช้ได้) |
-| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` |
+| เนื้อหาและความครบถ้วนของเอกสาร SRS | `srs-writing` (plugin `software-company`) |
 | โครงเรื่องและเลย์เอาต์ของสไลด์ | `presentation-design` |
 | เด็คนำเสนอเป็น .html ไฟล์เดียว | `html-slide-deck` · มี .pptx แล้ว → `pptx-to-html-deck` |
-| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` |
-| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` |
+| ไดอะแกรมที่วาดด้วย Mermaid ธีมเดียวกัน | `software-diagrams` (plugin `software-company`) |
+| ที่มาของระบบสีและตัวอักษร · โลโก้ | `graphic-design` (plugin `software-company`) |
 
 ---
 
@@ -1281,8 +1285,9 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 ## สารบัญ
 
 1. [brandkit.py — Word (.docx)](#brandkitpy--word-docx)
-2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkitpptxpy--สไลด์-pptx)
-3. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
+2. [brandkit_pptx.py — สไลด์ (.pptx)](#brandkit_pptxpy--สไลด์-pptx)
+3. [brandkit_stage.py — เด็ค Stage (.pptx)](#brandkit_stagepy--เด็ค-stage-pptx)
+4. [สูตรความกว้างคอลัมน์ (Word)](#สูตรความกว้างคอลัมน์-word)
 
 ---
 
@@ -1405,6 +1410,9 @@ StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
 
 ตัวช่วยสี: `make_theme(accent, bg)` คืนชุดสีทั้งหมด · `fit(color, bg)` ปรับความสว่างโดยคงความสดจนอ่านออกบนพื้นนั้น · `is_dark(bg)` · `contrast(a, b)`
 
+---
+
+## สูตรความกว้างคอลัมน์ (Word)
 
 | จำนวนคอลัมน์ | ตัวอย่าง widths (รวม 9638) |
 |:---:|---|
@@ -1427,18 +1435,18 @@ StageDeck(accent="2A78D6", bg="09090A", project="", template=None,
 import sys; sys.path.insert(0, "scripts")     # หรือ copy brandkit.py มาไว้ข้างงาน
 from brandkit import BrandDoc, use_brand, to_pdf
 
-doc = BrandDoc()                                # A4 · Tahoma · โทน Apps Track
+doc = BrandDoc()                                # A4 · Tahoma · สีประจำบ้าน
 doc.cover("เอกสารข้อกำหนดซอฟต์แวร์ (Software Specification)",
-          subtitle="ระบบ Apps Track — Project Control & Monitor",
+          subtitle="ระบบตัวอย่าง (Sample System) — Project Control & Monitor",
           meta="เวอร์ชันเอกสาร 3.5  •  ปรับปรุง 19 กรกฎาคม 2026",
-          logo="asset/AppsTrack_Logo_Badge.png")
+          logo="asset/Sample_Logo_Badge.png")
 doc.toc()
 
 doc.h1("1. ภาพรวมระบบ")
-doc.para("eitprojects เป็นระบบบริหารและติดตามโครงการ ...")
+doc.para("ระบบตัวอย่างเป็นระบบบริหารและติดตามโครงการ ...")
 doc.kpi_row([("19", "โครงการ"), ("115", "Work items"), ("103", "Open tasks")])
 doc.table(["หัวข้อ", "รายละเอียด"],
-          [["URL ระบบ", "https://project.eitaccount.cloud"]],
+          [["URL ระบบ", "https://app.example.com"]],
           widths=[2600, 7038])                  # รวม = 9638
 doc.callout("warning", "ข้อควรระวัง", "Token ต้องไม่ถูกแสดงกลับใน UI หลังบันทึก")
 doc.figure("diagrams/context.png", "ภาพรวมระบบและขอบเขตการใช้งาน", number=1)
@@ -1455,7 +1463,7 @@ doc.save("SRS.docx")
 ```python
 from brandkit_pptx import BrandDeck
 d = BrandDeck()                                  # 16:9
-d.title_slide("Apps Track", "Project Control & Monitor", "19 กรกฎาคม 2026")
+d.title_slide("ระบบตัวอย่าง", "Project Control & Monitor", "19 กรกฎาคม 2026")
 d.section("1 · ภาพรวมระบบ", kicker="ส่วนที่ 1")
 d.bullets_slide("ขอบเขตงาน", ["...", "..."], subtitle="สรุปจาก SRS v3.5")
 d.kpi_slide("ตัวเลขสำคัญ", [("19", "โครงการ"), ("115", "Work items")])
@@ -1471,12 +1479,12 @@ d.save("deck.pptx")
 ## เด็ค "Stage" (`brandkit_stage.py`) — ค่าเริ่มต้นของเด็คที่ใช้พูด
 
 `brandkit_stage.py` ทำเด็คโครงเดียวกับต้นแบบ หัวเรื่อง Chakra Petch เนื้อความ IBM Plex Sans Thai ส่วน**สีพื้นและสีหลักมาจากดีไซน์ของโปรเจกต์** พื้นเข้มหรือสว่างก็ได้
-(ต้นแบบ: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
+(ต้นแบบด้านโครงเด็คเท่านั้น: X Fitness Chatbot Summary v1.2 · ตัวอย่างที่รันแล้ว `examples/example_stage.pptx`)
 
 ```python
 from brandkit_stage import StageDeck
-d = StageDeck(accent="E10613", bg="09090A", project="X Fitness Chatbot")   # สีหลัก · สีพื้นของโปรเจกต์
-d.cover("X Fitness Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
+d = StageDeck(accent="2A78D6", bg="09090A", project="Sample Chatbot")   # ตัวอย่าง: สีหลัก · สีพื้นต้องมาจากดีไซน์ของโปรเจกต์คุณเอง
+d.cover("Sample Chatbot", ["สรุปการทำงานของแชตบอท", "ตอบจากข้อมูลจริง และไม่ถูกหลอก"],
         meta="ทีมพัฒนา · ตุลาคม 2569", logo="logo.png", mark="mark.png")
 d.figure("องค์ประกอบของระบบ", "แอปเดียวรับทุกช่องทาง ความฉลาดเรียกจาก Typhoon",
          "fig-flow-dark.png", caption="หน้าเว็บ + LINE OA → FastAPI → LightRAG + Typhoon")
@@ -1497,7 +1505,7 @@ d.save("deck.pptx")
 
 > ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
 > เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
-> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
+> ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast (ตรวจด้วยสคริปต์แล้ว 22 ต.ค. 2569) หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
 
 ## ชุด A — น้ำเงิน–ม่วง (ซอฟต์แวร์ทั่วไป · สกัดจาก Apps Track)
 
@@ -1507,7 +1515,7 @@ d.save("deck.pptx")
 use_brand(
     brand="2A78D6", brand_2="6A5CD6", brand_deep="2A4C86",
     brand_tint="EDF1FB", brand_tint_2="F6F8FD",
-    text="333B4A", text_body="414957", text_muted="7D8492", line="E4E7EE",
+    text="333B4A", text_body="414957", text_muted="676D7A", line="E4E7EE",
 )
 ```
 
@@ -1515,9 +1523,9 @@ use_brand(
 
 ```python
 use_brand(
-    brand="0E8F86", brand_2="2F9E6E", brand_deep="0B5F5A",
+    brand="0E8F86", brand_2="2F9E6E", brand_deep="0A5A56",
     brand_tint="E6F4F2", brand_tint_2="F3FAF9",
-    text="2C3A38", text_body="3A4846", text_muted="76857F", line="E1EAE8",
+    text="2C3A38", text_body="3A4846", text_muted="636F6A", line="E1EAE8",
 )
 ```
 
@@ -1527,7 +1535,7 @@ use_brand(
 use_brand(
     brand="1F3C88", brand_2="5B4B8A", brand_deep="14275C",
     brand_tint="E8ECF7", brand_tint_2="F5F7FC",
-    text="2B3245", text_body="3A4156", text_muted="767E93", line="E2E6F0",
+    text="2B3245", text_body="3A4156", text_muted="636A7D", line="E2E6F0",
 )
 ```
 
@@ -1537,9 +1545,9 @@ accent อุ่นบนโครงเทาเย็น — ใช้ accent 
 
 ```python
 use_brand(
-    brand="B57509", brand_2="8C5A2B", brand_deep="7A4E05",
+    brand="B57509", brand_2="8C5A2B", brand_deep="704805",
     brand_tint="FBF2E1", brand_tint_2="FDF9F1",
-    text="2F3439", text_body="3E444A", text_muted="7B838B", line="E5E8EA",
+    text="2F3439", text_body="3E444A", text_muted="676F76", line="E5E8EA",
 )
 ```
 
@@ -1561,7 +1569,7 @@ use_brand(
 
 ## วิธีตรวจก่อนใช้
 
-1. เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1
+1. เนื้อความและ `text_muted` บนพื้นขาวและพื้น `brand_tint` ≥ 4.5:1 · `brand_deep` (H2 และหัวตาราง) บนพื้นขาวและ `brand_tint` ≥ 7:1 · `brand` (H1 16pt ตัวหนา และตัวเลข KPI นับเป็นตัวใหญ่) ≥ 3:1
 2. พิมพ์ขาวดำแล้วยังแยกหัวข้อกับเนื้อความออก
 3. เปิดไฟล์ที่เรนเดอร์แล้วดูด้วยตา ไม่ใช่เชื่อค่าในตาราง
 
@@ -1624,14 +1632,14 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 | Token | หน้าที่ | ได้มาจาก |
 |-------|---------|----------|
-| `brand` | หัวข้อ H1 · ตัวเลข KPI · ลิงก์ · แถบ accent | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
+| `brand` | หัวข้อ H1 · ตัวเลข KPI · แถบ accent · ลิงก์ (ถ้า `brand` ต่ำกว่า 4.5:1 บนพื้นขาว ใช้ `brand_deep` กับลิงก์) | สีแบรนด์ (ไม่มี → ค่าประจำบ้าน + `(รอยืนยัน)`) |
 | `brand_2` | accent รอง · ขีดใต้หัวข้อสไลด์ · ปลายไล่สี | เพื่อนบ้านของสีหลักบนวงล้อสี |
 | `brand_deep` | หัวข้อ H2 · ตัวอักษรหัวตาราง | สีหลักผสมดำ ให้ contrast ≥ 7:1 บนพื้นขาว |
 | `brand_tint` | พื้นหัวตาราง · การ์ด KPI · พื้นหน้าปก | สีหลักผสมขาวประมาณ 90% |
 | `brand_tint_2` | แถวสลับ (zebra) ในตารางยาว | สีหลักผสมขาวประมาณ 96% |
 | `text` | หัวข้อ H3 · ข้อความเน้น | เทาเข้มอมโทนเดียวกับสีหลัก |
 | `text_body` | เนื้อความทั้งหมด | เทาเข้มอ่อนกว่า `text` 1 ขั้น **ไม่ใช่ดำสนิท เพราะดำสนิทล้าตา** |
-| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 |
+| `text_muted` | คำบรรยายรูป · meta · footer | เทากลาง contrast ≥ 4.5:1 บนพื้นขาวและ `brand_tint` |
 | `line` | เส้นตาราง เส้นคั่น | เทาอ่อนมาก เห็นได้แต่ไม่แย่งสายตา |
 
 **สีสถานะ 6 ตัว** (แต่ละตัวมีคู่สีพื้นกับสีตัวอักษร): สำเร็จ · ข้อมูล · เตือน · ผิดพลาด · เน้น · เป็นกลาง
@@ -1651,7 +1659,8 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 กฎเดียว: **เลือกสีตามความหมาย ไม่ใช่ตามความสวย** อย่าใช้แดงเพราะอยากให้เด่น ใช้แดงเฉพาะเมื่ออันตรายหรือผิดจริง และไดอะแกรมก็ใช้ชุดความหมายเดียวกันนี้ (ดู `software-diagrams` · `diagram-figures` ที่มี `EXCEPT_HUE` ส้มสำหรับทางที่ไม่ผ่านเส้นหลัก)
 
-> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความบนพื้น ≥ 4.5:1 · หัวข้อบนพื้น ≥ 7:1 ·
+> **เกณฑ์ที่ต้องผ่านทุกชุดสี:** เนื้อความและ `text_muted` บนพื้น ≥ 4.5:1 · H2 และหัวตาราง (`brand_deep`) ≥ 7:1 ·
+> H1 และตัวเลข KPI (`brand` ตัวใหญ่ ตามนิยามตัวใหญ่ของ WCAG 2.2 ข้อ 1.4.3) ≥ 3:1 ·
 > พิมพ์ขาวดำแล้วยังแยกลำดับชั้นออก ถ้าไม่ผ่านให้ปรับความเข้ม ไม่เปลี่ยนสี
 >
 > **ตัวอย่างชุดสีที่เคยใช้จริง** (ไม่ใช่ค่ามาตรฐาน อย่าคัดลอกไปใช้โดยไม่ดูเนื้องาน) → `references/palette-examples.md`
@@ -1698,7 +1707,7 @@ bold อ่านออกชัด · ความสูง x-height ไทย�
 
 ```bash
 soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
-pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-01.png, page-02.png ...
+pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)
 ```
 
 แล้ว **เปิดภาพดูจริงทุกหน้า** (Read tool) ก่อนส่งมอบ ตรวจตามนี้:
@@ -1757,4 +1766,4 @@ footer        "หน้า N" กลางหน้า สีเทา 9pt
 
 6. **รูปในเอกสาร:** ตัวอักษรเล็กสุดหลังวางจริง ≥ 7pt → พิกเซลขั้นต่ำบนผ้าใบ = `0.247 × ความกว้างผ้าใบ(px) ÷ ความกว้างที่วาง(ซม.)` (ผ้าใบ 2000px วางกว้าง 17 ซม. = 29px · วางบนหน้าแนวนอน 25.7 ซม. = 20px · ใช้ 26px ให้ได้ 9pt) · รูปกว้างให้วางหน้าแนวนอนเต็มความกว้างคอลัมน์ (≥ 95%) · ใช้**ฉบับวางในเอกสารที่ไม่มีหัวรูป** เพราะคำบรรยายใน Word บอกเลขและชื่อรูปแล้ว · คำบรรยายรูป ≥ 9pt สีเนื้อความ · หลังรูปขึ้น section ใหม่ ห้ามย่อหน้าถัดไปไหลมาหน้ารูป
 7. **สิ่งที่ด่านสวยจับได้บ่อย (ใส่เป็นกฎใน `check` ของตัว render):** เครื่องหมาย markdown หลุด (`**` · backtick) · ข้อความไทยในฟอนต์ mono · ตารางล้นคอลัมน์ข้อความ · สารบัญเหลือรายการเดียวตกหน้าถัดไป · รายการรหัสถูกตัดกลางรหัส (ให้บรรทัดละ 1 รหัส ฟอนต์เดียวทั้งคอลัมน์) · ป้าย "(รอยืนยัน)" ใช้สีเตือน ไม่ใช่สีแบรนด์ · ตัวตนหายหลังหน้าปก (หน้าเปิดบทใช้แถบสีแบรนด์ของแอป) · มีปกสว่างไว้พิมพ์คู่กับปกมืด
-8. **ปก — ตัวอักษรล้วนก่อน ภาพทีหลัง** (ปกเฉพาะโปรเจกต์ที่ใช้รูปทรงโลโก้หรือหน้าจอจริง แทนภาพตกแต่ง → [`doc-cover-design`](../../doc-cover-design/SKILL.md))**:** ภาพประกอบบนปกไม่บังคับ และปกโล่งที่จัดตัวอักษรดีชนะภาพที่ไม่ว้าวเสมอ · แบบที่ผ่านด่าน: ชนิดเอกสาร (SRS · FSD · ARCH) ตัวใหญ่ 150–200px สีแบรนด์เป็นจุดเด่นเดียว (กว้างไม่เกิน ~85% ของคอลัมน์ · ชื่อเกิน 5 ตัวอย่าง TESTPLAN แยก 2 บรรทัด ไม่ย่อจนเล็กกว่าฉบับอื่น — ทั้งชุดต้องดูขนาดเท่ากัน) → เส้นสั้นสีแบรนด์ → ชื่อไทย → ชื่ออังกฤษ → บรรทัดสรุป 1 ประโยค (≥ 12pt คอลัมน์แคบ) → แถวข้อมูลท้ายหน้า (ป้าย ≥ 10pt) · ที่เหลือปล่อยว่าง · ส่วนที่ตำแหน่งตายตัว (โลโก้ · ชนิดเอกสาร · เส้น · ป้ายสถานะ) วาดลงภาพพื้นปก ส่วนชื่อและข้อมูลเป็นข้อความ Word ให้ค้นและแก้ได้ · ป้าย `(รอยืนยัน)` บนพื้นมืดใช้สีเตือนแบบสว่าง ไม่ใส่พื้นไฮไลต์ · **ผู้ใช้บอกปกไม่สวย → ตัดภาพตกแต่งออกก่อน** (เส้นโค้ง จุดเรือง gradient) แล้วทำปกตัวอักษรล้วน 3 แนวให้เลือก (โปรเจกต์มีโลโก้หรือ mockup → ใช้ `doc-cover-design` ข้อ 7 แทน)
+8. **ปก — ตัวอักษรล้วนก่อน ภาพทีหลัง** (ปกเฉพาะโปรเจกต์ที่ใช้รูปทรงโลโก้หรือหน้าจอจริง แทนภาพตกแต่ง → `doc-cover-design` (plugin `software-company`))**:** ภาพประกอบบนปกไม่บังคับ และปกโล่งที่จัดตัวอักษรดีชนะภาพที่ไม่ว้าวเสมอ · แบบที่ผ่านด่าน: ชนิดเอกสาร (SRS · FSD · ARCH) ตัวใหญ่ 150–200px สีแบรนด์เป็นจุดเด่นเดียว (กว้างไม่เกิน ~85% ของคอลัมน์ · ชื่อเกิน 5 ตัวอย่าง TESTPLAN แยก 2 บรรทัด ไม่ย่อจนเล็กกว่าฉบับอื่น — ทั้งชุดต้องดูขนาดเท่ากัน) → เส้นสั้นสีแบรนด์ → ชื่อไทย → ชื่ออังกฤษ → บรรทัดสรุป 1 ประโยค (≥ 12pt คอลัมน์แคบ) → แถวข้อมูลท้ายหน้า (ป้าย ≥ 10pt) · ที่เหลือปล่อยว่าง · ส่วนที่ตำแหน่งตายตัว (โลโก้ · ชนิดเอกสาร · เส้น · ป้ายสถานะ) วาดลงภาพพื้นปก ส่วนชื่อและข้อมูลเป็นข้อความ Word ให้ค้นและแก้ได้ · ป้าย `(รอยืนยัน)` บนพื้นมืดใช้สีเตือนแบบสว่าง ไม่ใส่พื้นไฮไลต์ · **ผู้ใช้บอกปกไม่สวย → ตัดภาพตกแต่งออกก่อน** (เส้นโค้ง จุดเรือง gradient) แล้วทำปกตัวอักษรล้วน 3 แนวให้เลือก (โปรเจกต์มีโลโก้หรือ mockup → ใช้ `doc-cover-design` ข้อ 7 แทน)

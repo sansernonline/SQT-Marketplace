@@ -1,9 +1,11 @@
 ---
 name: game-design
-description: Write a game design document or design multiplayer architecture.
+description: Use when the user asks for a game design document or multiplayer architecture. Modes — game-design · multiplayer-architecture.
 argument-hint: <game-design | multiplayer-architecture> <details>
 disable-model-invocation: true
 ---
+
+> **ภาษา:** ถ้อยคำทุกบรรทัดในเอกสารที่ได้ เขียนตาม `human-writing` — command นี้บอกขั้นตอน ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
 
 Two modes. Read the first word of **$ARGUMENTS**: if it names a mode, run that mode on the rest; otherwise pick the mode that fits the request and say which one you chose.
 
@@ -46,7 +48,7 @@ The game designer should:
    - End-game mastery
 
 5. **Design progression:**
-   - XP/levels OR unlock-based OR mastery-based
+   - Experience points (XP)/levels OR unlock-based OR mastery-based
    - Match to player motivation
    - Hook points throughout journey
 
@@ -67,7 +69,7 @@ The game designer should:
 9. **Produce polished game design document** using `polished-document-style` skill (from software-company):
    - Pitch (one paragraph)
    - Target audience
-   - Core loops (Mermaid)
+   - Core loops (house-style figure via `diagram-figures`)
    - Mechanic breakdown
    - Difficulty curve chart
    - Monetization design
@@ -77,7 +79,6 @@ The game designer should:
 10. **Hand-off suggestions:**
     - Implementation → `game-developer`
     - Multiplayer details → `game-developer`
-    - Live operations + retention → `game-designer`
     - Art direction → external (artist)
 
 ---
@@ -86,7 +87,7 @@ The game designer should:
 
 Use the `game-developer` agent to design multiplayer architecture for: **$ARGUMENTS**
 
-The multiplayer engineer should:
+The game-developer agent should:
 
 1. **Initial Discovery** — gather:
    - Game genre + pace
@@ -102,14 +103,11 @@ The multiplayer engineer should:
 3. **Choose netcode architecture:**
    - Client-server (dedicated)
    - Client-server (listen)
-   - P2P
+   - Peer-to-peer (P2P)
    - Hybrid
    - Justify with trade-offs
 
-4. **Define tick rate** based on game type:
-   - Competitive FPS: 60-128 Hz
-   - Casual: 20-30 Hz
-   - Strategic: 10-20 Hz
+4. **Define tick rate** based on game type — use the one sourced table in `game-development` → [`references/multiplayer-netcode.md` → Server tick rate](../game-development/references/multiplayer-netcode.md#server-tick-rate) (competitive first-person shooter (FPS) 64-128 Hz, casual 10-20 Hz, and so on)
 
 5. **Plan state synchronization:**
    - Replication strategy
@@ -131,14 +129,14 @@ The multiplayer engineer should:
 8. **Anti-cheat strategy:**
    - Server-side validation
    - Statistical detection
-   - Third-party tools (EAC, BattlEye)
+   - Third-party tools (Easy Anti-Cheat (EAC), BattlEye)
    - Bug bounty / community reporting
 
 9. **Plan infrastructure:**
-   - Dedicated servers vs managed (GameLift, Hathora)
+   - Dedicated servers vs managed (Amazon GameLift, Edgegap, Nitrado GameFabric — checked 22 Oct 2026; Hathora left game hosting in 2026)
    - Regional deployment
    - Scaling strategy
-   - DDoS mitigation
+   - Distributed denial-of-service (DDoS) mitigation
 
 10. **Reconnection / disconnection:**
     - Mid-match reconnect grace period
@@ -146,8 +144,7 @@ The multiplayer engineer should:
     - Backfill for casual
 
 11. **Produce polished multiplayer architecture document** using `polished-document-style` skill (from software-company):
-    - Architecture diagram (Mermaid)
-    - Network flow sequence diagrams
+    - Architecture diagram and network flow sequence diagrams (house-style figures via `diagram-figures`)
     - Tick rate + bandwidth budget
     - Matchmaking flow
     - Anti-cheat layers
@@ -157,5 +154,4 @@ The multiplayer engineer should:
 12. **Hand-off suggestions:**
     - Infrastructure deployment → `devops-engineer` (from software-company)
     - Backend services → `solution-architect` (from software-company)
-    - Game logic → `game-developer`
     - Live monitoring + tournaments → `game-designer`

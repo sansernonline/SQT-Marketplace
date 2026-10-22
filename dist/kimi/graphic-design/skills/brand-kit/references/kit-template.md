@@ -15,11 +15,11 @@ brand-kit/
     │   ├── <brand>-symbol-*.svg          (icon-only versions, if any)
     │   └── usage.png                     (clear space, min size, don'ts drawn)
     ├── colour/
-    │   ├── palette.md                    (roles, hex, RGB, CMYK, contrast matrix)
+    │   ├── palette.md                    (roles, hex, RGB, Cyan Magenta Yellow Key (CMYK), contrast matrix)
     │   └── swatches.png
     ├── type/
     │   ├── fonts.md                      (families, weights, scale, licence links)
-    │   └── licences/                     (the OFL.txt of every font shipped)
+    │   └── licences/                     (the SIL Open Font License (OFL) text, OFL.txt, of every font shipped)
     ├── imagery/
     │   ├── on-style/                     (3–6 examples)
     │   └── off-style/                    (2–3 examples of what not to do)

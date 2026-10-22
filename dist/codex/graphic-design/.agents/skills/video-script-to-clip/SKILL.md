@@ -16,7 +16,7 @@ Viewers decide in the first 3 seconds, and most watch with the sound off. Write 
 5. **Shot list** with [shot-list-template.md](references/shot-list-template.md): visual, camera, motion, on-screen text, voice-over, duration
 6. **Thumbnail storyboard** — one frame per shot in a grid; if the story does not read as stills, motion will not save it
 7. **Per-shot generation brief** (style block from `style-consistency`) or shooting notes for a phone shoot
-8. **Captions** — burned-in or SRT using the rules below; review on a phone with sound off
+8. **Captions** — burned-in or SubRip Text (SRT) using the rules below; review on a phone with sound off
 
 ## Hook patterns (first 3 seconds)
 
@@ -38,7 +38,7 @@ Rules: no logo intro, no slow fade-in, no black frame at the start; movement or 
 | Position | Inside the middle band — clear of top 14%, bottom 35%, sides 6% (Meta); TikTok right column and caption area |
 | Lines | 1 line preferred, max 2; bottom-heavy pyramid when 2 lines |
 | Thai line length | ≤ 35 characters per line, not counting tone marks and above/below vowels |
-| Reading speed (Thai adult) | ≤ 17 characters per second |
+| Reading speed (Thai adult) | Captions and subtitles (they follow the voice-over): ≤ 17 characters per second. On-screen marketing text (headline, offer): characters ÷ 12, min 1.5 s, offers ≥ 2.5 s (see `motion-basics`) |
 | Duration per caption | 5/6 s minimum, 7 s maximum |
 | Thai punctuation | No full stops; separate sentences with a space; no question marks or dashes in dialogue; "…" as one character |
 | Size | Thai caption ≥ 48 px on a 1080 px canvas with dark outline or 60–70% box behind (house rule) |
@@ -55,10 +55,10 @@ Platform auto-captions mis-transcribe Thai names, prices and brand words — alw
 |---|---|---|---|---|---|
 | 1 | 0–2.5 s | Matcha poured over milk and ice, layers forming | Macro, static | "ร้อนแบบนี้ ต้องมัทฉะเย็น" | (sound: ice) |
 | 2 | 2.5–5 s | Office worker takes first sip, eyes close | Medium, slow push-in | — | "บ่ายนี้ เติมความสดชื่นหน่อย" |
-| 3 | 5–9 s | Two glasses slide together on the counter | Top-down | "ซื้อ 1 แถม 1 · 1–15 เม.ย." | "ซื้อหนึ่งแถมหนึ่ง ถึงสิบห้าเมษา" |
+| 3 | 5–9 s | Two glasses slide together on the counter | Top-down | "ซื้อ 1 แถม 1 · 1–12 เม.ย." | "ซื้อหนึ่งแถมหนึ่ง ถึงสิบสองเมษา" |
 | 4 | 9–12 s | Logo + LINE ID on cream background, glass beside | Static | "แอด LINE @matcha26 รับโค้ด" | "แอดไลน์รับโค้ดเลย" |
 
-Check shot 3 text: "ซื้อ 1 แถม 1 · 1–15 เม.ย." ≈ 20 counted characters ÷ 17 cps = 1.2 s minimum → on screen 4 s, fine.
+Check shot 3 text (on-screen marketing text, read while watching, so ÷ 12 not ÷ 17): "ซื้อ 1 แถม 1 · 1–12 เม.ย." = 23 counted characters (base letters + digits + spaces + symbols) ÷ 12 ≈ 1.9 s; it is the offer, so hold ≥ 2.5 s → on screen 4 s, fine.
 
 ## Per-shot generation brief
 

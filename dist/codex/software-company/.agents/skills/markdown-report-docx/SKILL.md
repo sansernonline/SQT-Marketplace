@@ -1,6 +1,6 @@
 ---
 name: markdown-report-docx
-description: Use when one Markdown file must become a polished Word report (project, test, handover). Thesis or IS → thesis-writing.
+description: Use when one Markdown file must become a polished Word report (business, research, test, handover). Thesis or Independent Study (IS) → thesis-writing.
 ---
 
 # Markdown Report → .docx
@@ -10,18 +10,18 @@ description: Use when one Markdown file must become a polished Word report (proj
 > **กฎข้อเดียวของ skill นี้:** Markdown คือต้นฉบับ .docx คือผลที่สร้างจากต้นฉบับ
 > แก้ที่ .md แล้วรันสคริปต์ใหม่ทุกครั้ง ไม่เปิด Word แก้มือ เพราะรอบหน้าจะหายหมด
 
-ต้นแบบมาจากรายงานโครงงาน X Fitness Chatbot (29 หน้า): ปกโลโก้กลางหน้า · สารบัญ · ตารางหัวสีแบรนด์อ่อน · กล่องหมายเหตุ · รูปพื้นเข้มพร้อมคำบรรยาย · ตารางสั้นไม่ขาดข้ามหน้า
+ต้นแบบหน้าตามาจากรายงานโครงงาน X Fitness (29 หน้า · ใช้เป็นแบบอ้างอิงสไตล์เท่านั้น สีใช้ของโปรเจกต์ตัวเอง): ปกโลโก้กลางหน้า · สารบัญ · ตารางหัวสีแบรนด์อ่อน · กล่องหมายเหตุ · รูปพื้นเข้มพร้อมคำบรรยาย · ตารางสั้นไม่ขาดข้ามหน้า
 
 ## เมื่อไหร่ใช้
 
-- รายงานโครงงาน รายงานส่งอาจารย์ รายงานผลทดสอบ เอกสารส่งมอบที่เนื้อหาเขียนเป็น Markdown อยู่แล้ว
-- ต้องสร้างรายงานซ้ำหลายรอบ (ผลทดสอบเปลี่ยน → รันใหม่ ได้ไฟล์หน้าตาเดิม)
+- รายงานธุรกิจ สรุปงานวิจัย รายงานโครงงาน รายงานส่งอาจารย์ รายงานผลทดสอบ เอกสารส่งมอบที่เนื้อหาเขียนเป็น Markdown อยู่แล้ว
+- ต้องสร้างรายงานซ้ำหลายรอบ (ตัวเลขหรือผลทดสอบเปลี่ยน → รันใหม่ ได้ไฟล์หน้าตาเดิม)
 
 ## เมื่อไหร่ **ไม่** ใช้
 
 | งาน | ใช้ |
 |---|---|
-| เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (SRS · BRD · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
+| เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification — SRS) · เอกสารความต้องการทางธุรกิจ (Business Requirements Document — BRD) · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
 | สไลด์นำเสนอ | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
 | วิทยานิพนธ์ · IS · บทความวิจัย | `dev-learning:thesis-writing` ก่อน (ถ้าติดตั้ง) — คู่มือคณะคุมโครงเล่มและการจัดหน้า สคริปต์นี้ใช้ทำ .docx ต่อได้ |
@@ -30,12 +30,12 @@ description: Use when one Markdown file must become a polished Word report (proj
 
 ## 1 · ขั้นตอน
 
-1. เขียนเนื้อหาใน `docs/<ชื่อ>.md` ตาม [`polished-document-style`](../polished-document-style/SKILL.md) · ใส่ front matter (ข้อ 2)
-2. รัน `python scripts/md_to_docx.py docs/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
+1. เขียนเนื้อหาใน `docs/src/<ชื่อ>.md` (ต้นฉบับถาวร ตาม `document-naming` ข้อ 1) ตาม [`polished-document-style`](../polished-document-style/SKILL.md) · ใส่ front matter (ข้อ 2)
+2. รัน `python scripts/md_to_docx.py docs/src/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
    - สคริปต์ใช้ `brandkit.py` จาก `branded-document-design/scripts/` ที่อยู่ข้างกัน ต้องมี `python-docx`
-   - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice
+   - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice · PDF นี้ไว้ตรวจข้อ 5 — ส่งเฉพาะคู่มือผู้ใช้หรือเมื่อลูกค้าขอ นอกนั้นย้ายไป `_to_delete/` (`document-naming` ข้อ 1)
 3. แปลง PDF เป็นภาพแล้ว**เปิดดูทุกหน้า** ตามข้อ 5 · เจอปัญหา → แก้ที่ .md แล้วรันใหม่
-4. ตั้งชื่อไฟล์ส่งมอบตาม [`document-naming`](../document-naming/SKILL.md) เช่น `XFitness-Chatbot_Project-Report-v1.0.docx`
+4. ตั้งชื่อไฟล์ส่งมอบตาม [`document-naming`](../document-naming/SKILL.md) เช่น `CLINIC-RPT-project-v1.0-DRAFT.docx`
 
 ลองดูตัวอย่างครบทุกองค์ประกอบ: `python scripts/md_to_docx.py assets/example-report.md --pdf`
 
@@ -43,22 +43,22 @@ description: Use when one Markdown file must become a polished Word report (proj
 
 ```yaml
 ---
-title: X Fitness Chatbot                      # ชื่อใหญ่สีแบรนด์บนปก
+title: Clinic Booking Assistant              # ชื่อใหญ่สีแบรนด์บนปก
 subtitle: เอกสารการพัฒนาโครงงานและผลการทดสอบ   # บรรทัดรองตัวหนา
-meta: วิชา 06048308 · ฉบับ 1.2 · 10 ตุลาคม 2569 # บรรทัดเล็กใต้ชื่อรอง
-note: ผู้พัฒนา 68076040 ชื่อ นามสกุล            # ตัวเอียงสีเทา (ไม่บังคับ)
+meta: วิชา 01234567 · ฉบับ 1.2 · 10 ตุลาคม 2569 # บรรทัดเล็กใต้ชื่อรอง
+note: ผู้พัฒนา 6500001 ชื่อ นามสกุล             # ตัวเอียงสีเทา (ไม่บังคับ)
 logo: ../assets/logo-on-light.png             # path เทียบกับไฟล์ .md (ไม่บังคับ)
 logo_width_cm: 6.5
-brand: E10613          # สีหลัก: หัวข้อ H1 ชื่อปก เลขข้อ
-brand_deep: 8E0A12     # หัวข้อ H2 ตัวหนังสือหัวตาราง โค้ดในบรรทัด
-brand_tint: FDECEC     # พื้นหัวตาราง
-brand_tint_2: FEF6F6   # พื้นแถวสลับ (ตารางเกิน 6 แถว)
+brand: 2A78D6          # สีหลักของโปรเจกต์ (ลำดับใน diagram-figures ข้อ 5) · ตัวอย่างนี้ = ค่าประจำบ้าน · หัวข้อ H1 ชื่อปก เลขข้อ
+brand_deep: 1B4E8B     # หัวข้อ H2 ตัวหนังสือหัวตาราง โค้ดในบรรทัด
+brand_tint: EAF2FB     # พื้นหัวตาราง
+brand_tint_2: F4F8FD   # พื้นแถวสลับ (ตารางเกิน 6 แถว)
 ---
 ```
 
 ค่าเสริม: `brand_2` (สี accent รอง) · `toc: no` (ไม่ใส่สารบัญ) · `footer: Page` (คำหน้าเลขหน้า ค่าเริ่มต้น "หน้า") · `figure_width_cm` (ค่าเริ่มต้น 17) · `cover_top_pt` (ระยะจากขอบบนถึงโลโก้ ค่าเริ่มต้น 150)
 
-**สีมาจากเจ้าของงาน** — ดูดสีจากโลโก้หรือหน้าเว็บของลูกค้า ไม่มี → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 4.5:1)
+**สีมาจากเจ้าของงาน** — หาตามลำดับใน `diagram-figures` ข้อ 5 (ระบบสี) · หาไม่เจอเลย → ใส่ `brand: 2A78D6` (ค่าประจำบ้าน) เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · ห้ามคัดลอกสีจากตัวอย่างหรือรายงานต้นแบบ · `brand_tint` ต้องอ่อนพอให้ตัวหนังสือ `brand_deep` อ่านชัด (contrast ≥ 7:1 ทั้งบนพื้นขาวและ `brand_tint` — สคริปต์ตรวจให้ ไม่ผ่านจะหยุดพร้อมบอกค่า)
 
 ## 3 · Markdown แต่ละแบบกลายเป็นอะไร
 
@@ -117,4 +117,4 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 | สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`presentation-design`](../presentation-design/SKILL.md) (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
 | รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |
-| ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | [`doc-cover-design`](../doc-cover-design/SKILL.md) |
+| ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | `doc-cover-design` (plugin `software-company`) |

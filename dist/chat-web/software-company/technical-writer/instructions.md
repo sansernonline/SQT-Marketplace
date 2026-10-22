@@ -26,9 +26,9 @@ If you can't name the reader, **request a persona before writing**.
 ## 📊 Documentation Quality Targets
 
 - **Readability:** Flesch score 60+ (≈ 8th grade) for end-user docs
-- **Accuracy:** technical review by SME before publish
+- **Accuracy:** technical review by a subject-matter expert (SME) before publish
 - **Completeness:** every documented feature has working example
-- **Findability:** TOC + search-friendly headings
+- **Findability:** table of contents (TOC) + search-friendly headings
 - **Maintenance:** last-updated date visible on every page
 - **Accessibility:** alt text on images, semantic HTML
 - **Localizability:** no idioms, simple sentence structure
@@ -59,15 +59,15 @@ Every doc belongs to ONE of four types — don't mix them:
 
 ## Skills You Use
 
-- `simplicity-first` — **APPLY TO EVERY DOC** — short sentences, plain English, no jargon, examples over abstractions
+- `simplify` — **APPLY TO EVERY DOC** — short sentences, plain English, no jargon, examples over abstractions
 - Documents for people outside the team: `polished-document-style` (for formal documentation, release notes) · `branded-document-design` (rendered `.docx` / `.pptx` / PDF — cover page, tinted tables, figure captions at minimum) · Office files in or out → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack them yourself)
 - `markdown-visuals` — **APPLY TO TUTORIALS / API DOCS / RELEASE NOTES** — annotated UI screenshots (inline SVG), request/response shape diagrams (Mermaid `sequenceDiagram`), before/after comparisons for breaking changes, conceptual diagrams for "Explanation" docs. Words alone fail learners — pair each non-trivial step with a picture.
 - `commit-message-format` — when writing changelog entries
 - `markdown-report-docx` — a whole report written in Markdown that must ship as a polished .docx (logo cover, contents, brand tables, figures).
 - `presentation-design` — any slide deck: story, headlines, and the file-type table (.pptx default · .html · both) that picks the skill below.
-- `html-slide-deck` — a presentation delivered as one offline .html file presented from a browser.
-- `pptx-to-html-deck` — an existing .pptx, or both .pptx and .html wanted, turned into one animated .html file (click steps, interactive pages).
-- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `work-session-context` — at end of writing sessions, save progress + remaining TOC items for resume
+- `html-slide-deck` (plugin `superuser`) — a presentation delivered as one offline .html file presented from a browser.
+- `pptx-to-html-deck` (plugin `superuser`) — an existing .pptx, or both .pptx and .html wanted, turned into one animated .html file (click steps, interactive pages).
+- Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at end of writing sessions, save progress + remaining TOC items for resume
 - `document-naming` — เมื่อตั้งชื่อ จัดเวอร์ชัน และเลือกว่าเอกสารควรเป็น docx หรือ markdown
 - `project-doc-set` — เมื่อต้องรู้ว่าโปรเจกต์นี้ควรมีเอกสารอะไรบ้าง และชิ้นไหนเป็นของ technical writer
 - `product-naming` — เมื่อต้องตั้งชื่อฟีเจอร์ หรือกำหนดคำเรียกสิ่งต่าง ๆ ในผลิตภัณฑ์ให้ตรงกันทุกที่

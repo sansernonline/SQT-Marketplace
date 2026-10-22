@@ -3,8 +3,8 @@
 **สารบัญ:** 
 
 - [Your Responsibilities](#your-responsibilities)
-- [🔍 Initial Discovery (Always Start Here)](#initial-discovery-always-start-here)
-- [📊 FHIR Quality Standards](#fhir-quality-standards)
+- [🔍 Initial Discovery (Always Start Here)](#-initial-discovery-always-start-here)
+- [📊 FHIR Quality Standards](#-fhir-quality-standards)
 - [FHIR Core Concepts](#fhir-core-concepts)
 - [FHIR REST API Pattern](#fhir-rest-api-pattern)
 - [SMART on FHIR (Standard EHR App Auth)](#smart-on-fhir-standard-ehr-app-auth)
@@ -151,14 +151,16 @@ sequenceDiagram
     EHR-->>App: Patient resource
 ```
 
-### Scopes
+### Scopes (SMART v2)
 ```
-patient/Patient.read         — read this patient
-user/Observation.read        — read all user-visible Observations
+patient/Patient.r            — read this patient
+user/Observation.rs          — read + search all user-visible Observations
 launch                       — launched from EHR
-openid profile               — get user identity
+openid fhirUser              — get user identity
 patient/*.rs                 — read + search all patient resources
 ```
+
+v2 letters: `c` create · `r` read · `u` update · `d` delete · `s` search. Old v1 scopes (`patient/Patient.read`) are still accepted by many servers; ask for v2 and fall back only if the server's `.well-known/smart-configuration` lacks `permission-v2`.
 
 ## Implementation Guides
 
@@ -174,48 +176,11 @@ patient/*.rs                 — read + search all patient resources
 
 ## Validation Pattern
 
-```python
-from fhir.resources.patient import Patient
-from fhir.resources.bundle import Bundle
-
-# Validate structure
-patient = Patient.parse_obj(json_data)  # raises on invalid
-
-# Validate against profile (US Core)
-from fhirpathpy import evaluate
-validator = ProfileValidator('http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient')
-result = validator.validate(patient)
-
-if not result.valid:
-    for issue in result.issues:
-        log.warning(f"Validation issue: {issue.diagnostics}")
-```
+Role rule: every resource passes both a structure check and a profile check before it is sent. The working code (pydantic v2 `model_validate`, the server's `$validate` operation, and the HL7 `validator_cli.jar` for CI) is in [`fhir-implementation.md` → Validation](fhir-implementation.md#validation).
 
 ## Bundle (Transaction) Pattern
 
-```json
-{
-  "resourceType": "Bundle",
-  "type": "transaction",
-  "entry": [
-    {
-      "fullUrl": "urn:uuid:patient-1",
-      "resource": { "resourceType": "Patient", "name": [...] },
-      "request": { "method": "POST", "url": "Patient" }
-    },
-    {
-      "fullUrl": "urn:uuid:obs-1",
-      "resource": {
-        "resourceType": "Observation",
-        "subject": { "reference": "urn:uuid:patient-1" }
-      },
-      "request": { "method": "POST", "url": "Observation" }
-    }
-  ]
-}
-```
-
-→ The server creates all resources together or none, and resolves the references itself.
+Use a `transaction` Bundle when several resources must be created together or not at all; the server resolves `urn:uuid:` references itself. Example with valid UUIDs: [`fhir-implementation.md` → Pattern: Bundle (transaction)](fhir-implementation.md#pattern-bundle-transaction).
 
 ## Bulk Data Export
 
@@ -252,7 +217,7 @@ GET <content-location-url>
 ## EHR-Specific Quirks
 
 ### Epic
-- App Orchard / Showroom marketplace
+- Showroom marketplace (renamed from App Orchard) · developer access through Vendor Services / fhir.epic.com (checked 22 Oct 2026)
 - USCDI support generally good
 - May require Epic-specific profiles
 
@@ -264,8 +229,10 @@ GET <content-location-url>
 - Cloud-native, easier to test
 - FHIR + custom REST
 
-### Allscripts (Veradigm)
-- Multiple platforms (Sunrise, TouchWorks)
+### Veradigm (was Allscripts) · Altera Digital Health
+- Allscripts renamed itself Veradigm (2023) and kept the ambulatory products
+- Sunrise, Paragon and TouchWorks moved to Altera Digital Health (2022)
+- Check which company owns the platform before you ask for API access (checked 22 Oct 2026)
 
 ## Audit Events
 

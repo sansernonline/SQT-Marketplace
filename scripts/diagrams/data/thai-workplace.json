@@ -1,6 +1,6 @@
 {
  "plugin": "thai-workplace",
- "version": "0.7.0",
+ "version": "0.9.0",
  "description": "Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (quotations, สารบรรณ letters, contracts), PDPA, VAT and withholding tax with a filing calendar, payroll and 50 ทวิ, social security, e-Tax Invoice, year-end DBD and corporate tax, Labour Protection Act basics, PromptPay QR and public holidays. General information only, not legal or tax advice.",
  "cross": [
   "software-company",
@@ -19,20 +19,57 @@
   "line-chatbot",
   "line-oa-setup",
   "line-richmenu",
-  "no-ai-look",
   "payroll-th",
   "pdpa-workflow",
   "promptpay-qr",
-  "simplify",
   "social-security-th",
   "tax-vat-th",
   "thai-holidays"
  ],
  "core_skills": [
+  "superuser",
+  "adversarial-review-panel",
   "agent-patterns",
   "answer-shape",
+  "commit-log",
+  "context-budget",
+  "decision-log",
+  "flag-and-propose",
+  "handoff",
   "human-writing",
-  "superuser"
+  "no-ai-look",
+  "owner-style-capture",
+  "parallel-attempts-pick-best",
+  "parallel-split-and-merge",
+  "principle-build-a-tool-not-handwork",
+  "principle-fix-root-cause",
+  "principle-proceed-on-reversible-work",
+  "principle-prove-it-works",
+  "principle-small-verifiable-steps",
+  "principle-user-experience-first",
+  "prior-art-review",
+  "repeated-mistakes-to-checks",
+  "research-with-sources",
+  "session-lessons-to-skills",
+  "simplify",
+  "status-report",
+  "targeted-fix",
+  "temp-file-discipline",
+  "branded-document-design",
+  "diagram-figures",
+  "document-naming",
+  "html-slide-deck",
+  "image-generation",
+  "markdown-report-docx",
+  "markdown-visuals",
+  "meeting-prep-card",
+  "meeting-summary",
+  "polished-document-style",
+  "polite-message-th-en",
+  "pptx-to-html-deck",
+  "presentation-design",
+  "product-naming",
+  "spell-out-abbreviations"
  ],
  "commands": [
   "contract",
@@ -46,36 +83,12 @@
  ],
  "agents": [
   {
-   "name": "brainstormer",
-   "model": "opus",
-   "core": true,
-   "description": "Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.",
-   "skills": [
-    "superuser",
-    "human-writing",
-    "simplify"
-   ]
-  },
-  {
    "name": "compliance-helper",
    "model": "sonnet",
    "core": false,
    "description": "Use when a Thai SME handles personal data under PDPA — consent forms, breach response, data-subject requests, ROPA.",
    "skills": [
-    "pdpa-workflow",
-    "human-writing",
-    "simplify"
-   ]
-  },
-  {
-   "name": "learning-reviewer",
-   "model": "sonnet",
-   "core": true,
-   "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
-   "skills": [
-    "superuser",
-    "human-writing",
-    "simplify"
+    "pdpa-workflow"
    ]
   },
   {
@@ -84,19 +97,10 @@
    "core": false,
    "description": "Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu.",
    "skills": [
-    "human-writing",
-    "simplify"
-   ]
-  },
-  {
-   "name": "reviewer",
-   "model": "opus",
-   "core": true,
-   "description": "Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.",
-   "skills": [
-    "no-ai-look",
-    "simplify",
-    "human-writing"
+    "line-oa-setup",
+    "line-richmenu",
+    "line-chatbot",
+    "line-broadcast"
    ]
   },
   {
@@ -111,9 +115,7 @@
     "e-tax-invoice",
     "dbd-annual-filing",
     "labour-law-basics",
-    "promptpay-qr",
-    "human-writing",
-    "simplify"
+    "promptpay-qr"
    ]
   },
   {
@@ -122,8 +124,11 @@
    "core": false,
    "description": "Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form.",
    "skills": [
-    "human-writing",
-    "simplify"
+    "doc-quotation",
+    "e-tax-invoice",
+    "doc-thai-official",
+    "doc-contract-th",
+    "doc-leave"
    ]
   }
  ],
@@ -212,9 +217,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -235,7 +238,7 @@
      "n": 1,
      "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
      "sub": [
-      "คิวกลาง `~/.claude/superuser/improvements.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
+      "คิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
       "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
      ],
      "phase": "",
@@ -330,9 +333,7 @@
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
      },
      "skills": [
@@ -470,8 +471,7 @@
       "lead": false,
       "user": false,
       "agents": [
-       "line-admin",
-       "reviewer"
+       "line-admin"
       ],
       "raw": "`line-admin` ตัวใหม่ส่งไปบัญชีทดสอบ · `reviewer` ตัวใหม่ตรวจผลกับ log และการคำนวณโควตา"
      },
@@ -590,9 +590,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -689,9 +687,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],
@@ -726,7 +722,7 @@
     },
     {
      "n": 2,
-     "text": "เขียนเจตนาของงาน 1 ย่อหน้า — ใครจะใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ ให้เลือกการตีความที่ผลกระทบน้อยสุด ไม่หยุดถาม · ใคร: หัวหน้าทีม",
+     "text": "เขียนเจตนาของงาน 1 ย่อหน้า — ใครใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ ให้เลือกการตีความที่กระทบน้อยสุด ไม่หยุดถาม · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -742,16 +738,14 @@
     },
     {
      "n": 3,
-     "text": "ตรวจทีละข้อตามเกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` แล้วตามเช็กลิสต์ของ skill หลัก ถ้างานใหญ่หรือเสี่ยงสูง ให้ subagent ตัวใหม่ที่ไม่เห็นงานมาก่อนตรวจอีกรอบแยกกัน ด้วยโมเดลระดับใหญ่ (`model: opus`) และสั่งให้อ่านอย่างเดียว (\"ห้ามเขียนหรือแก้ไฟล์\") · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · `model: opus`)",
+     "text": "ตรวจทีละข้อตามเกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` แล้วตามเช็กลิสต์ของ skill หลักของ playbook นี้ (ไม่มี → skill ที่เกี่ยว) · งานใหญ่หรือเสี่ยงสูง เพิ่ม subagent ตัวใหม่อีกตัวที่ไม่เคยเห็นงาน ตรวจแยกกันด้วยโมเดลระดับใหญ่ (`model: opus`) · สั่งผู้ตรวจทุกตัวว่า \"ห้ามแก้ชิ้นงาน (เขียนรายงานของตัวเองใน `_to_delete/` ได้)\" · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
-      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · `model: opus`)"
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)"
      },
      "skills": [
       "superuser"
@@ -762,7 +756,7 @@
     },
     {
      "n": 4,
-     "text": "ยืนยันทุกข้อที่พบ — ต้องชี้จุดในชิ้นงานได้ และเทียบกับต้นทางหรือแหล่งทางการแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
+     "text": "ยืนยันทุกข้อที่พบ — ต้องชี้จุดในชิ้นงานได้ และเทียบต้นทางแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -778,7 +772,7 @@
     },
     {
      "n": 5,
-     "text": "แยกเป็น 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ส่วนข้อที่ตัดทิ้งเพราะไม่ใช่ปัญหาจริงให้บอกเหตุผลด้วย · ใคร: หัวหน้าทีม",
+     "text": "แยก 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ส่วนข้อที่ตัดทิ้งให้บอกเหตุผลด้วย · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -794,7 +788,7 @@
     },
     {
      "n": 6,
-     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการ และสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการและสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -837,7 +831,7 @@
     },
     {
      "n": 2,
-     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ แล้วเลือก playbook ย่อยให้แต่ละชิ้น หัวหน้าทีมประสานงานและตรวจ โดยแจกชิ้นให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ ลงตาราง \"ความคืบหน้า\" ใน `CONTEXT.md` เลือก playbook ย่อยให้แต่ละชิ้น แล้วแจกให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -853,22 +847,19 @@
     },
     {
      "n": 3,
-     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป ชิ้นที่พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → หยุดชิ้นนั้น ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: agent สาขาตามบทบาทของชิ้น (`thai-doc-writer` · `tax-helper` · `line-admin` · `compliance-helper`) ตัวใหม่ต่อชิ้น · ตรวจ: `reviewer` ตัวใหม่",
+     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน",
      "sub": [
-      "**หลังติด**: จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ → เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว → ชิ้นที่ต้องรอชิ้นนี้ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง → ทำชิ้นอื่นหมดแล้ว ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ) → ยังติด → คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
+      "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
+      "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
+      "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
+      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
      ],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "thai-doc-writer",
-       "tax-helper",
-       "line-admin",
-       "compliance-helper",
-       "reviewer"
-      ],
-      "raw": "agent สาขาตามบทบาทของชิ้น (`thai-doc-writer` · `tax-helper` · `line-admin` · `compliance-helper`) ตัวใหม่ต่อชิ้น · ตรวจ: `reviewer` ตัวใหม่"
+      "agents": [],
+      "raw": "ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน"
      },
      "skills": [],
      "commands": [],
@@ -877,7 +868,7 @@
     },
     {
      "n": 4,
-     "text": "ทุกการเลือกทางเอง ลงตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "text": "ทุกการเลือกทางเอง จดในตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -893,23 +884,25 @@
     },
     {
      "n": 5,
-     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ยื่นแบบ · ชำระภาษี · ส่งเอกสาร · broadcast LINE) ให้เตรียมให้พร้อมกด แล้วลง \"รออนุมัติ\" ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ลง \"ค้างอยู่\" · ใคร: หัวหน้าทีมเตรียม แล้วผู้ใช้อนุมัติเอง",
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มในหัวข้อ 6 ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {
       "lead": true,
       "user": true,
       "agents": [],
-      "raw": "หัวหน้าทีมเตรียม แล้วผู้ใช้อนุมัติเอง"
+      "raw": "หัวหน้าทีม (อนุมัติ: ผู้ใช้)"
      },
-     "skills": [],
+     "skills": [
+      "superuser"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": true
     },
     {
      "n": 6,
-     "text": "จบแต่ละชิ้นแล้วเขียน \"รับงานต่อ\" ใน `CONTEXT.md` ใหม่ และดู `.claude/superuser/inbox/` ถ้ามี ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "text": "จบแต่ละชิ้นแล้วอัปเดต \"ความคืบหน้า\" และ \"รับงานต่อ\" แล้วดู `.claude/superuser/inbox/` ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -925,7 +918,7 @@
     },
     {
      "n": 7,
-     "text": "จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไรให้ผู้ใช้ตัดสิน · ใคร: `reviewer` ตัวใหม่ตรวจเงื่อนไขข้อ 1 แล้วหัวหน้าทีมรายงาน",
+     "text": "จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ ทำรอบเรียนรู้ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไร · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)",
      "sub": [
       "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
      ],
@@ -933,10 +926,8 @@
      "who": {
       "lead": true,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
-      "raw": "`reviewer` ตัวใหม่ตรวจเงื่อนไขข้อ 1 แล้วหัวหน้าทีมรายงาน"
+      "agents": [],
+      "raw": "หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)"
      },
      "skills": [],
      "commands": [],
@@ -1034,9 +1025,7 @@
      "who": {
       "lead": false,
       "user": false,
-      "agents": [
-       "reviewer"
-      ],
+      "agents": [],
       "raw": "`reviewer` ตัวใหม่"
      },
      "skills": [],

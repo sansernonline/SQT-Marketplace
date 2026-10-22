@@ -45,12 +45,13 @@ using Serilog.Events;
 
 const string LineTemplate =
     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}  {Level:u5}  " +
-    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context}{NewLine}{Exception}";
+    "[{CorrelationId}] {SourceContext}  {Message:lj}  {Context:l}{NewLine}{Exception}";
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .Enrich.WithProperty("CorrelationId", "------")   // ค่าตั้งต้นเมื่อไม่มี request
+    .Enrich.WithProperty("CorrelationId", "--------") // ค่าตั้งต้นเมื่อไม่มี request (8 ตัว)
+    .Enrich.WithProperty("Context", "")              // ค่าว่างเมื่อไม่มี context k=v
     .WriteTo.Console(outputTemplate: LineTemplate)
     .WriteTo.File(
         path: Path.Combine(Environment.GetEnvironmentVariable("LOG_DIR") ?? "logs", "app-.log"),
@@ -71,25 +72,31 @@ builder.Host.UseSerilog();
 ```
 
 > `{Level:u5}` คือตัวพิมพ์ใหญ่กว้าง 5 ตัวอักษร จึงได้ `INFO ` `WARN ` `ERROR` ตรงกับสแต็กอื่น
-> `{Message:lj}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
+> `{Message:lj}` และ `{Context:l}` คือไม่ครอบ string ด้วย `"` ซ้ำอีกชั้น
 
 ### Middleware correlation id
 
 ```csharp
+using System.Text.RegularExpressions;
+
 public sealed class CorrelationIdMiddleware(RequestDelegate next)
 {
     public const string Header = "X-Request-Id";
+    // รับค่าจากลูกค้าเฉพาะตัวอักษร ตัวเลข และ - ยาวไม่เกิน 36 ตัว — กันคนยัดข้อความยาวหรือ \n เข้า log
+    private static readonly Regex Valid = new("^[A-Za-z0-9-]{1,36}$", RegexOptions.Compiled);
 
     public async Task Invoke(HttpContext ctx)
     {
         var cid = ctx.Request.Headers[Header].FirstOrDefault();
-        if (string.IsNullOrWhiteSpace(cid))
-            cid = Guid.NewGuid().ToString("N")[..8];
+        if (cid is null || !Valid.IsMatch(cid))
+            cid = Guid.NewGuid().ToString("N")[..8];   // ไม่มีหรือไม่ผ่าน → สร้างใหม่
+
+        var logCid = cid.Length > 8 ? cid[..8] : cid;   // log ใช้ 8 ตัวแรกให้ตรงคอลัมน์ cid (เหมือน Node/Python) — header ส่งค่าเต็มกลับ
 
         ctx.Response.Headers[Header] = cid;          // ส่งกลับให้ลูกค้าอ้างอิงได้
 
         // LogContext ผูกกับ async flow ของ request นี้เท่านั้น — ไม่ปนกับ request อื่น
-        using (Serilog.Context.LogContext.PushProperty("CorrelationId", cid))
+        using (Serilog.Context.LogContext.PushProperty("CorrelationId", logCid))
             await next(ctx);
     }
 }
@@ -98,8 +105,10 @@ public sealed class CorrelationIdMiddleware(RequestDelegate next)
 ### เขียน log
 
 ```csharp
-// ✅ ข้อความคงที่ + ตัวแปรเป็น property — group log ได้ ค้นหาได้
-_logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ {OrderId} {Ms}", orderId, sw.ElapsedMilliseconds);
+// ✅ ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
+//    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
+using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
+    _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
 
 // ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
 _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
@@ -132,7 +141,7 @@ export class LoggerService {
   private write(level: Level, message: string, ctx: Record<string, unknown> = {}) {
     // dev: ออก console เพื่อไล่ปัญหา — prod: เงียบ ยกเว้น WARN ขึ้นไปที่ส่งขึ้น server
     if (isDevMode()) console[level === 'ERROR' ? 'error' : 'log'](level, message, ctx);
-    if (level === 'DEBUG' || (isDevMode() && level === 'INFO')) return;
+    if (level === 'DEBUG' || (!isDevMode() && level === 'INFO')) return;   // prod ส่งเฉพาะ WARN ขึ้นไป
 
     this.buffer.push({ ts: new Date().toISOString(), level, message, ctx });
     if (this.buffer.length >= 10 || level === 'ERROR') this.flush();
@@ -156,6 +165,9 @@ export class LoggerService {
 
 ```ts
 // core/global-error.handler.ts
+import { ErrorHandler, Injectable, inject, isDevMode } from '@angular/core';
+import { LoggerService } from './logger.service';
+
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   private log = inject(LoggerService);
@@ -171,6 +183,9 @@ export class GlobalErrorHandler implements ErrorHandler {
 ส่ง correlation id ในทุก request เพื่อให้ log ฝั่ง client กับ server ต่อกันติด:
 
 ```ts
+// core/correlation.interceptor.ts
+import { HttpInterceptorFn } from '@angular/common/http';
+
 export const correlationInterceptor: HttpInterceptorFn = (req, next) =>
   next(req.clone({ setHeaders: { 'X-Request-Id': crypto.randomUUID().slice(0, 8) } }));
 ```

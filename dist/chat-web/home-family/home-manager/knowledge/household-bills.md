@@ -13,14 +13,14 @@ General information, not financial advice. Tariffs change — the utility's own 
 | Service | Bangkok, Nonthaburi, Samut Prakan | Rest of the country | App to check and pay |
 |---|---|---|---|
 | Electricity | การไฟฟ้านครหลวง (กฟน. / MEA) | การไฟฟ้าส่วนภูมิภาค (กฟภ. / PEA) | MEA Smart Life · PEA Smart Plus |
-| Water | การประปานครหลวง (กปน. / MWA) | การประปาส่วนภูมิภาค (กปภ. / PWA), or a local อปท. system | MWA onMobile · PWA 1662 |
+| Water | การประปานครหลวง (กปน. / MWA) | การประปาส่วนภูมิภาค (กปภ. / PWA), or a local องค์การปกครองส่วนท้องถิ่น (อปท.) system | MWA onMobile · PWA 1662 |
 | Internet / mobile | AIS, True/dtac, 3BB (now with AIS), NT | same | each operator's app |
 
 ## Reading an electricity bill
 
 The bill (ใบแจ้งค่าไฟฟ้า) adds 4 parts:
 
-1. **ค่าพลังงานไฟฟ้า** — units (หน่วย = kWh) × the tiered base tariff for your type (residential ประเภท 1.1.1 ≤150 units/month on a ≤5 A meter, 1.1.2 above that)
+1. **ค่าพลังงานไฟฟ้า** — units (หน่วย = kWh) × the tiered base tariff for your type (your tariff type is printed on the bill; the old residential split 1.1.1 / 1.1.2 may have changed with the new home tariff — รอยืนยัน)
 2. **ค่าบริการ** — a fixed monthly service charge
 3. **ค่า Ft** — units × the Ft rate for the current 4-month period (can be positive or negative)
 4. **ภาษีมูลค่าเพิ่ม 7%** on the sum of 1–3
@@ -30,8 +30,9 @@ Units used = เลขอ่านครั้งนี้ − เลขอ่�
 | Item | Current value | Applies |
 |---|---|---|
 | Ft rate | 16.23 สตางค์/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
-| Average all-in tariff (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย; with the new tiered home tariff the average for all users is 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | งวด ก.ย.–ธ.ค. 2569 · tiered tariff from Sep 2569 bills |
-| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | กกพ. announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
+| Average all-in tariff, Ft period (base 3.78 + Ft, before VAT) | 3.95 บาท/หน่วย | งวด ก.ย.–ธ.ค. 2569 |
+| Average all-in tariff, new tiered home tariff, all users | 3.86 บาท/หน่วย (≈ 4.13 incl. VAT 7%) | tiered tariff from Sep 2569 bills |
+| Residential tier rates and service charge | (รอยืนยัน) — read your type's table on mea.or.th / pea.co.th | คณะกรรมการกำกับกิจการพลังงาน (กกพ.) announced a new progressive home tariff on 13 ส.ค. 2569 for bills from ก.ย. 2569; tier rates not checked (รอยืนยัน) |
 
 ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.erc.or.th/th/news-release/3458 (ค่า Ft งวด ก.ย.–ธ.ค. 2569) · https://erc.or.th/th/news-release/3472 (อัตราแบบขั้นบันได 3.86) · https://www.naewna.com/business/979048
 
@@ -83,24 +84,41 @@ A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (aver
 
 # Monthly bill tracker — template
 
-Copy into a spreadsheet or a shared note. One row per bill per month.
+Copy into a spreadsheet or a shared note. Use **one sheet (or one block of rows) per metered service**, one row per month, so the spike formula only ever compares the same service. Put the unit name in the column header and keep column D numbers only.
 
-| เดือน | บริการ | ผู้ให้บริการ | หน่วยที่ใช้ | จำนวนวันรอบบิล | ยอดเงิน (บาท) | ครบกำหนดชำระ | วิธีชำระ | ชำระแล้ว | หมายเหตุ |
-|---|---|---|---|---|---|---|---|---|---|
-| 2569-09 | ไฟฟ้า | กฟน. | 352 | 30 | | | หักบัญชี | ☐ | |
-| 2569-09 | น้ำประปา | กปน. | 22 ลบ.ม. | 31 | | | หักบัญชี | ☐ | |
-| 2569-09 | อินเทอร์เน็ตบ้าน | | – | – | | | บัตรเครดิต | ☐ | สัญญาหมด … |
-| 2569-09 | มือถือ (พ่อ) | | – | – | | | | ☐ | |
-| 2569-09 | มือถือ (แม่) | | – | – | | | | ☐ | |
-| 2569-09 | ค่าส่วนกลาง | นิติบุคคล | – | – | | | | ☐ | |
+### Block 1 — ไฟฟ้า (header row = row 1)
+
+| เดือน | ผู้ให้บริการ | จำนวนวันรอบบิล | หน่วยที่ใช้ (kWh) | ยอดเงิน (บาท) | ครบกำหนดชำระ | วิธีชำระ | ชำระแล้ว | หมายเหตุ |
+|---|---|---|---|---|---|---|---|---|
+| 2569-06 | กฟน. | 30 | 318 | | | หักบัญชี | ☐ | |
+| 2569-07 | กฟน. | 31 | 305 | | | หักบัญชี | ☐ | |
+| 2569-08 | กฟน. | 30 | 330 | | | หักบัญชี | ☐ | |
+| 2569-09 | กฟน. | 30 | 352 | | | หักบัญชี | ☐ | |
+
+### Block 2 — น้ำประปา (same layout; column D header = หน่วยที่ใช้ (ลบ.ม.), numbers only)
+
+| เดือน | ผู้ให้บริการ | จำนวนวันรอบบิล | หน่วยที่ใช้ (ลบ.ม.) | ยอดเงิน (บาท) | ครบกำหนดชำระ | วิธีชำระ | ชำระแล้ว | หมายเหตุ |
+|---|---|---|---|---|---|---|---|---|
+| 2569-09 | กปน. | 31 | 22 | | | หักบัญชี | ☐ | |
+
+### Block 3 — บิลที่ไม่มีหน่วยวัด (ยอดเงินอย่างเดียว ไม่ใช้สูตรเตือนข้างล่าง)
+
+| เดือน | บริการ | ผู้ให้บริการ | ยอดเงิน (บาท) | ครบกำหนดชำระ | วิธีชำระ | ชำระแล้ว | หมายเหตุ |
+|---|---|---|---|---|---|---|---|
+| 2569-09 | อินเทอร์เน็ตบ้าน | | | | บัตรเครดิต | ☐ | สัญญาหมด … |
+| 2569-09 | มือถือ (พ่อ) | | | | | ☐ | |
+| 2569-09 | มือถือ (แม่) | | | | | ☐ | |
+| 2569-09 | ค่าส่วนกลาง | นิติบุคคล | | | | ☐ | |
 
 ## Spike flag formula (spreadsheet)
+
+In Block 1 (units in column D, newest month in row 5, the three months before it in rows 2–4):
 
 ```
 =IF(D5 > 1.2 * AVERAGE(D2:D4), "ตรวจ", "")
 ```
 
-Compare units (column D), never baht — the Ft changes every four months.
+Compare units (column D), never baht — the Ft changes every four months. Copy the same formula down the block as rows are added (it then moves to the 3 rows above). Do not use it on Block 3.
 
 ## Account numbers to keep (once)
 

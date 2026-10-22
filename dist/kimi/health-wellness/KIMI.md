@@ -1,10 +1,10 @@
 # SQT health-wellness — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/health-wellness/ โดย scripts/build/build-targets.mjs (v0.6.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/health-wellness/ โดย scripts/build/build-targets.mjs (v0.7.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Personal health organiser for people in Thailand — beginner exercise plans built on WHO activity guidance, a sleep diary, annual checkup planning with Thai social security and gold-card preventive rights, a medication schedule and refill reminders for medicines a doctor already prescribed, and doctor-visit preparation. Strict scope - it organises, reminds and prepares questions; it never diagnoses or changes doses, and sends emergencies to 1669.
 
-ชุดนี้มี skill 12 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 2 คำสั่ง
+ชุดนี้มี skill 48 ตัว · บทบาท 4 บทบาท · คำสั่งสำเร็จรูป 2 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`

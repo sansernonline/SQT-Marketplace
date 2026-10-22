@@ -80,77 +80,87 @@ Impact                Mass file modification, encryption
 
 ## Detection Examples (Splunk SPL)
 
+> **ยังไม่ได้ตรวจ** — query ด้านล่างเขียนตามไวยากรณ์ใน Splunk docs แต่ยังไม่ได้รันกับ Splunk จริง ชื่อ index และชื่อ field ขึ้นกับ add-on ที่ติดตั้ง (ตัวอย่างใช้ `index=sysmon` = Microsoft Sysmon ผ่าน Splunk Add-on for Sysmon และ `index=wineventlog` = Windows Security log) — ปรับให้ตรงของจริงแล้วทดสอบกับข้อมูลย้อนหลังก่อนเปิดใช้
+>
+> กฎไวยากรณ์ที่พลาดบ่อย: wildcard `*` ใช้ได้ใน `search` (ต้นท่อ) เท่านั้น — ใน `where` ต้องใช้ `like(field, "%x")` หรือ `match(field, "regex")` · หมายเหตุใน SPL เขียนด้วย triple backtick ไม่ใช่ `#` · `stdev()` เป็นฟังก์ชันของ `stats` ใช้ใน `eval` ไม่ได้
+
+Event ที่ใช้: Sysmon `EventCode=1` = process create · `10` = process access · `13` = registry value set · Windows Security `4688` = process create (ต้องเปิด audit + command line) · `4624`/`4625` = logon สำเร็จ/ล้มเหลว · `4697` = ติดตั้ง service · `4698` = สร้าง scheduled task
+
 ### Suspicious PowerShell
 
 ```spl
-index=edr EventCode=4688
-| eval is_encoded=if(match(CommandLine, "-[eE][nN][cC]"), 1, 0)
+index=sysmon EventCode=1 Image="*\\powershell.exe"
+| eval is_encoded=if(match(CommandLine, "(?i)\s[-/]e(c|n(c(o(d(e(d(c(o(m(m(a(n(d)?)?)?)?)?)?)?)?)?)?)?)?)?\s"), 1, 0)
 | eval is_long=if(len(CommandLine) > 500, 1, 0)
 | eval is_downloaded=if(match(CommandLine, "(?i)(IEX|invoke-expression|downloadstring|downloadfile)"), 1, 0)
 | where is_encoded=1 OR is_long=1 OR is_downloaded=1
 | stats count by Computer, User, CommandLine
-| where count >= 1
 ```
 
 ### LSASS Access (Credential Theft)
 
 ```spl
-index=edr EventCode=10
-| where TargetImage="*\\lsass.exe"
-| where SourceImage NOT IN (
-    "*\\System32\\svchost.exe",
-    "*\\System32\\wininit.exe",
-    "*\\Windows Defender\\MsMpEng.exe"
-)
+index=sysmon EventCode=10 TargetImage="*\\lsass.exe"
+    NOT (SourceImage="*\\System32\\svchost.exe"
+      OR SourceImage="*\\System32\\wininit.exe"
+      OR SourceImage="*\\Windows Defender\\MsMpEng.exe")
 | stats count by Computer, SourceImage, User
 ```
 
 ### Unusual Logon Patterns
 
+After-hours interactive logon by an admin account (`admin_users.csv` = your own lookup of admin accounts)
+
 ```spl
-# After-hours admin logon
-index=auth EventCode=4624 LogonType=2
-| where hour_of_day < 6 OR hour_of_day > 22
-| where User_Type="admin"
-| stats count by Computer, User, src_ip
+index=wineventlog EventCode=4624 Logon_Type=2
+    [| inputlookup admin_users.csv | fields user]
+| eval hour=tonumber(strftime(_time, "%H"))
+| where hour < 6 OR hour > 22
+| stats count by Computer, user, src_ip
 ```
 
 ### Brute Force
 
+More than 10 failed logons from one source to one account within a 10-minute bucket
+
 ```spl
-index=auth EventCode=4625
-| stats count by src_ip, target_user, _time
+index=wineventlog EventCode=4625
+| bin _time span=10m
+| stats count by _time, src_ip, user
 | where count > 10
-| where window=10minutes
 ```
 
 ### Beaconing (C2)
 
+Regular periodic outbound: many connections with almost the same gap between them
+
 ```spl
-# Find regular periodic outbound
 index=netflow
-| stats list(_time) as times count as connections by src_ip dest_ip dest_port
-| eval intervals=mvmap(times, _time - prev_time)
-| eval std_dev=stdev(intervals)
-| where std_dev < 5 AND connections > 100
-| eval beaconing=1
+| sort 0 src_ip dest_ip dest_port _time
+| streamstats current=f last(_time) as prev_time by src_ip dest_ip dest_port
+| eval interval=_time - prev_time
+| stats count as connections avg(interval) as avg_interval stdev(interval) as std_dev
+    by src_ip dest_ip dest_port
+| where connections > 100 AND std_dev < 5
 ```
 
 ### Unusual Process Trees
 
+Word spawning PowerShell
+
 ```spl
-# Word spawning powershell
-index=edr EventCode=4688
-| where ParentImage="*\\winword.exe"
-| where Image="*\\powershell.exe"
+index=sysmon EventCode=1 ParentImage="*\\winword.exe" Image="*\\powershell.exe"
+| table _time Computer User ParentCommandLine CommandLine
 ```
 
 ## Sigma Rules (Vendor-Agnostic)
 
+`id` ต้องเป็น UUID (สร้างใหม่ทุกกฎ เช่น `python -c "import uuid; print(uuid.uuid4())"`) · กฎใหม่เริ่ม `status: experimental` แล้วค่อยเลื่อนเป็น `test`/`stable` เมื่อทดสอบกับข้อมูลจริงแล้ว — ที่มา [Sigma rule specification](https://github.com/SigmaHQ/sigma-specification)
+
 ```yaml
 title: PowerShell Encoded Command
-id: 12345-67890-abcdef
-status: stable
+id: b7964e9f-a411-4ecf-adc4-3a08cbda12c4
+status: experimental
 description: Detects encoded PowerShell commands
 references:
   - https://attack.mitre.org/techniques/T1059/001/
