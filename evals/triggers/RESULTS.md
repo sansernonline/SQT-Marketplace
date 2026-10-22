@@ -103,3 +103,39 @@
 | slides | 1/1 | presentation-design, human-writing, no-ai-look |
 | domain-tax | 1/1 | seller-tax-basics |
 | domain-pet | 1/1 | pet-care, human-writing |
+
+## 2026-10-22 08:30 · v3.0 · ผ่าน 16/20 · $4.85
+
+- plugin: 13 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace\plugins` · listing: Skill listing over budget: 240 skills, 38804 chars > 30000 budget — descriptions will be truncated. Run /skills to disable some, or raise skillListingBudgetFraction in settings.
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| docx-edit | 1/2 | human-writing, polished-document-style |
+| meeting-minutes | 2/2 | meeting-summary, human-writing |
+| client-email | 2/2 | human-writing |
+| readme | 2/2 | human-writing |
+| compare | 2/2 | answer-shape, stack-sql |
+| python-code | 1/2 | stack-python |
+| bugfix | 2/2 | principle-fix-root-cause, targeted-fix |
+| slides | 0/2 | — |
+| domain-tax | 2/2 | seller-tax-basics |
+| domain-pet | 2/2 | pet-care |
+
+## 2026-10-22 08:33 · v3.0-budget2 · ผ่าน 19/20 · $5.66
+
+- plugin: 13 ตัวจาก `C:\_DATA\Personal\Work\_KK\Agent Skill - Sub Agents & Agent Skills\SQT-Marketplace\plugins` · skillListingBudgetFraction 0.02 · listing: ไม่เกินงบ
+
+| เคส | ผ่าน | skill ที่เปิด |
+|---|---|---|
+| docx-edit | 2/2 | human-writing, polished-document-style |
+| meeting-minutes | 2/2 | meeting-summary, human-writing |
+| client-email | 2/2 | human-writing |
+| readme | 2/2 | human-writing |
+| compare | 2/2 | answer-shape, stack-sql |
+| python-code | 2/2 | simplify, lazy-coding, readable-code, stack-python |
+| bugfix | 2/2 | principle-fix-root-cause |
+| slides | 1/2 | presentation-design |
+| domain-tax | 2/2 | seller-tax-basics |
+| domain-pet | 2/2 | pet-care |
+
+- 2 รอบบนเป็นรอบแรกบน Windows หลังแก้ตัวรันให้เรียก `claude.exe` ตรง · superuser 3.0 (แกน 2 ชั้น · skill เอกสารย้ายไป sqt-toolkit) ได้ 19/20 เท่ากับรุ่น 2.0 เมื่อใช้งบรายการ 2% · งบ 1% ค่าเริ่มได้ 16/20 เพราะรายการ 240 skill ยาว 38,804 ตัวอักษรเกิน 30,000 จนคำอธิบายของ sqt-toolkit (slides) ถูกตัด → ติดตั้งหลาย plugin ต้องรัน `scripts/install/set-skill-budget.mjs` ตามที่ README บอก

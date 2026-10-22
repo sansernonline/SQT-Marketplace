@@ -41,18 +41,25 @@ const ALLOWED = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "Task", "Skil
 
 const git = (...a) => execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }).trim();
 
-/** แตก plugin ของรุ่นที่ขอออกมาที่ _to_delete/bench/<ชื่อ>/ · worktree = ใช้ไฟล์ในโฟลเดอร์ตอนนี้ */
-function pluginDir(label, ref) {
-  if (!ref || ref === true || ref === "worktree") return join(ROOT, "plugins", PLUGIN);
-  const dir = join(OUT, `src-${label}`);
-  if (existsSync(dir)) { try { git("worktree", "remove", "--force", dir); } catch { rmSync(dir, { recursive: true, force: true }); } }
-  git("worktree", "add", "--detach", dir, ref);
-  return join(dir, "plugins", PLUGIN);
+/** โฟลเดอร์ plugin ของรุ่นที่ขอ: plugin ที่เทียบ + ของกลางที่มันพึ่ง (superuser · sqt-toolkit) จาก repo รุ่นเดียวกัน
+ *  --plugin-dir ไม่ติดตั้ง dependencies ให้ ส่งแค่ plugin เดียวทีมจะไม่มี skill superuser แกน · reviewer · hook (ตั้งแต่ superuser 2.0.0)
+ *  worktree = ใช้ไฟล์ในโฟลเดอร์ตอนนี้ · git ref = แตกออกมาที่ _to_delete/bench/src-<ชื่อ>/ */
+function pluginDirs(label, ref) {
+  let root = ROOT;
+  if (ref && ref !== true && ref !== "worktree") {
+    root = join(OUT, `src-${label}`);
+    if (existsSync(root)) { try { git("worktree", "remove", "--force", root); } catch { rmSync(root, { recursive: true, force: true }); } }
+    git("worktree", "add", "--detach", root, ref);
+  }
+  return [...new Set([PLUGIN, "superuser", "sqt-toolkit"])].map((p) => join(root, "plugins", p)).filter((d) => existsSync(join(d, ".claude-plugin", "plugin.json")));
 }
 
 function run(cmd, argv, opts) {
   return new Promise((done) => {
-    const p = spawn(cmd, argv, { ...opts, shell: WIN, stdio: ["ignore", "pipe", "pipe"] });
+    // claude เป็น .exe เรียกตรง · คำสั่งอื่น (npm · python) บน Windows เป็น .cmd ต้องผ่าน shell แต่ Node ไม่ quote ให้ จึง quote เอง
+    const viaShell = WIN && cmd !== "claude";
+    const q = (s) => (viaShell && /[\s()&|<>^"]/.test(s) ? `"${String(s).replace(/"/g, '\\"')}"` : s);
+    const p = spawn(cmd, argv.map(q), { ...opts, shell: viaShell, stdio: ["ignore", "pipe", "pipe"] });
     let out = "", err = "";
     p.stdout.on("data", (d) => (out += d)); p.stderr.on("data", (d) => (err += d));
     p.on("close", (code) => done({ code, out, err }));
@@ -111,7 +118,7 @@ async function one({ task, label, plugin, n }) {
     execFileSync("git", a, { cwd: work });
   const sid = randomUUID(); // ตั้ง session เอง จะได้หา transcript ของรอบนี้เจอแน่นอน
   const t0 = Date.now();
-  const r = await run("claude", ["-p", PROMPT, "--session-id", sid, "--plugin-dir", plugin, "--setting-sources", "project", "--strict-mcp-config",
+  const r = await run("claude", ["-p", PROMPT, "--session-id", sid, ...plugin.flatMap((d) => ["--plugin-dir", d]), "--setting-sources", "project", "--strict-mcp-config",
     "--permission-mode", "acceptEdits", "--allowedTools", ...ALLOWED, "--output-format", "json", "--max-budget-usd", BUDGET], { cwd: work });
   const wall = Math.round((Date.now() - t0) / 1000);
   let j = {}; try { j = JSON.parse(r.out); } catch { /* claude ล้ม → ดู stderr ในไฟล์ */ }
@@ -125,7 +132,8 @@ async function one({ task, label, plugin, n }) {
 }
 
 mkdirSync(join(OUT, "runs"), { recursive: true });
-const versions = [["old", pluginDir("old", args.old)], ["new", pluginDir("new", args.new)]];
+const versions = [["old", pluginDirs("old", args.old)], ["new", pluginDirs("new", args.new)]];
+for (const [label, dirs] of versions) console.log(`${label}: โหลด ${dirs.map((d) => d.replace(ROOT, ".")).join(" · ")}`);
 const jobs = TASKS.flatMap((task) => Array.from({ length: RUNS }, (_, i) => versions.map(([label, plugin]) => ({ task, label, plugin, n: i + 1 }))).flat());
 const rows = [];
 for (let i = 0; i < jobs.length; i += PARALLEL) rows.push(...(await Promise.all(jobs.slice(i, i + PARALLEL).map(one))));

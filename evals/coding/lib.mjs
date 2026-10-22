@@ -17,7 +17,8 @@ export function run(cmd, argv, opts = {}) {
   return new Promise((done) => {
     const t0 = Date.now();
     const { input, ...rest } = opts;
-    const p = spawn(cmd, WIN ? argv.map(quote) : argv, { ...rest, shell: WIN, stdio: [input == null ? "ignore" : "pipe", "pipe", "pipe"], env: { ...process.env, ...(opts.env ?? {}) } });
+    const viaShell = WIN && cmd !== "claude"; // claude เป็น .exe เรียกตรงได้ ไม่ต้องผ่าน cmd.exe
+    const p = spawn(cmd, viaShell ? argv.map(quote) : argv, { ...rest, shell: viaShell, stdio: [input == null ? "ignore" : "pipe", "pipe", "pipe"], env: { ...process.env, ...(opts.env ?? {}) } });
     if (input != null) { p.stdin.on("error", () => {}); p.stdin.end(input); }
     let out = "", err = "";
     p.stdout.on("data", (d) => (out += d)); p.stderr.on("data", (d) => (err += d));

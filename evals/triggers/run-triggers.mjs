@@ -48,7 +48,8 @@ function run(c, n) {
       "--disallowedTools", "Write", "Edit", "MultiEdit", "NotebookEdit", "Bash", "Agent", "Task", "WebSearch", "WebFetch",
       "--output-format", "stream-json", "--verbose", "--max-turns", "8", "--max-budget-usd", BUDGET, "--debug-file", debug,
       ...(FRACTION ? ["--settings", JSON.stringify({ skillListingBudgetFraction: Number(FRACTION) })] : [])];
-    const p = spawn("claude", args, { cwd: work, shell: WIN, stdio: ["ignore", "pipe", "pipe"] });
+    // claude เป็นไฟล์ .exe เรียกตรงได้ทุกระบบ · ห้ามใช้ shell บน Windows เพราะ Node ไม่ quote อาร์กิวเมนต์ให้ (prompt มีช่องว่าง · รายชื่อเครื่องมือมีวงเล็บ)
+    const p = spawn("claude", args, { cwd: work, stdio: ["ignore", "pipe", "pipe"] });
     let out = "";
     p.stdout.on("data", (d) => (out += d));
     p.on("close", () => {
