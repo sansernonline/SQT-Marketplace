@@ -1,10 +1,16 @@
 # Changelog — graphic-design
 
-## Unreleased
+## 0.10.0 — 2026-10-23
 
-- รับ skill `image-generation` จาก `doc-toolkit` ที่ยุบ (เนื้อหาเดิม ชื่อเดิม) · ตัด dependency `doc-toolkit`
+- รับ skill `image-generation` จาก `doc-toolkit` ที่ยุบ (ชื่อเดิม) · ตัด dependency `doc-toolkit`
 - `brief-to-image`: `references/prompt-anatomy.md` เพิ่มหัวข้อ Tactile 3D hero object: แม่แบบภาพวัตถุ 3 มิติจับต้องได้ 8 บรรทัด (subject · material · light · shadow · lens · background · one colour · negatives) พร้อมตัวอย่างเครื่องหมายคำถามกระดาษตัดสีส้มบนกระดาษครีม · เพิ่มสารบัญเพราะไฟล์ยาวเกิน 100 บรรทัด · ลิงก์จาก `SKILL.md` · `image-generation` `references/styles.md` แถว `3d` เปลี่ยนจาก prompt ทั่วไป (clay · studio · pastel) เป็นวัสดุ แสง เงา และ negative ที่ระบุชัด แล้วชี้ไปแม่แบบ
 - `video-script-to-clip`: เพิ่ม `references/production-tools.md` เครื่องมือแปลงสคริปต์เป็นคลิป (CapCut · DaVinci Resolve รุ่นฟรี · HyperFrames · Remotion) พร้อมเงื่อนไขใช้เพื่อการค้าของเพลง เทมเพลต และฟอนต์ใน CapCut · เกณฑ์ Company License ของ Remotion · ค่าส่งออกต่อแพลตฟอร์ม · ฟอนต์ซับไทย · กฎเพลง ตรวจแหล่ง 2026-10-23 · ลิงก์จาก `SKILL.md` หัวข้อ Related · แถวใหม่ใน `triggers.md`
+- `brief-to-image`: ตาราง Failure modes 8 อาการ บอกว่าแก้อย่างเดียวอะไรเมื่อรูปพลาด (ตัวอักษรเพี้ยน → เอาคำออกจาก prompt แล้วใส่ข้อความตอนจัดหน้า · ภาพในชุดไม่เข้ากัน → style lock sheet กับ seed หรือรูปอ้างอิงเดียวกัน) · ผู้ใช้ Gemini API: โมเดล `imagen-4.0-*` ปิดบริการเมื่อ 2026-08-17 ตามหน้า deprecations ให้ใช้รุ่น `gemini-*-image` และจดรหัสโมเดลที่ใช้จริง (ตรวจ 2026-10-23) · `image-generation` เขียน 1 ย่อหน้าบนสุดของ `image-style.md` ว่าภาพชุดนี้คืออะไร (ใครดู · ดูแล้วรู้สึกอะไร · จะไม่เป็นแบบไหน) แล้วเทียบทุกรูปกับย่อหน้านี้
+- `brand-kit`: แยก Imagery กับ Voice · Voice ใช้คู่ก่อนกับหลังภาษาไทยที่เจ้าของแบรนด์เขียนเอง พร้อมเลือก ครับ/ค่ะ สรรพนาม และระดับภาษา 1 แบบจาก `thai-grammar` ข้อความไทยของแบรนด์จึงเสียงเดียวกันทุกชิ้น
+- `design-review`: squint test (หรี่ตา ซูม 10% หรือเบลอ 10 px แล้วดูว่าอะไรยังเห็น) · เช็กตัวอักษร 4 ข้อ (ระดับต่างกันด้วยขนาดและน้ำหนัก ไม่ใช่สีอย่างเดียว · บรรทัดเนื้อความ 45–75 ตัวละติน หรือราว 35–55 ตัวไทย · ไม่ใส่ letter-spacing กับเนื้อความไทย · 1 บล็อก 1 การจัดแนว)
+- `motion-basics`: ตาราง token การเคลื่อนไหวของ Material 3 (easing 5 แบบ · ช่วงเวลา 50–1000 ms) ตรวจกับ material-web (Apache-2.0) 2026-10-23 · ฉากหลังที่เคลื่อนไหวต้องมีความหมาย ฉากที่แค่ตกแต่งให้ตัดทิ้ง
+- `video-script-to-clip`: เครื่องหมายวรรคตอนไทยในซับไตเติลและข้อความบนจอ · ข้อความการตลาดบนจอทั้งคลิป 15 วินาที ไม่เกินราว 120 ตัวอักษรไทย (ไม่นับวรรณยุกต์และสระบนล่าง)
+- ใช้แกน `superuser` 3.1.0: playbook `team-project` และค่าตั้ง hook `guard` · `recompact` (ปิดไว้)
 
 ## 0.9.1 — 2026-10-22
 

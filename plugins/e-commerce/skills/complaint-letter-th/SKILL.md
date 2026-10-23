@@ -18,17 +18,17 @@ General information, not legal advice — for large amounts, injury or a contrac
 | 2b | Card issuer / bank (if paid by card) | Dispute or chargeback — see `refund-request` | Bank's dispute window (รอยืนยัน — read your card terms) | Bank declines |
 | 2c | Online-transaction complaints | ศูนย์รับเรื่องร้องเรียนปัญหาออนไลน์ (Online Complaint Center, OCC, under สำนักงานพัฒนาธุรกรรมทางอิเล็กทรอนิกส์ — Electronic Transactions Development Agency, ETDA) hotline 1212 | — | Not resolved |
 | 3 | สำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ., Office of the Consumer Protection Board) | Hotline **1166**, OCPB Connect app, online at **complaint.ocpb.go.th** (register with บัตรประชาชน), or in person; provinces → สคบ.จังหวัด at the provincial hall | สคบ. may call both sides to a mediation; can sue on the consumer's behalf in some cases | Mediation fails |
-| 4 | ศาล — consumer case (คดีผู้บริโภค) | File at the court with jurisdiction where you live; can be filed **orally** with a court case officer (เจ้าพนักงานคดี) who writes it down | Court hearing | — |
+| 4 | ศาล — consumer case (คดีผู้บริโภค) | File at the court where the cause arose (มูลคดีเกิด) or where the business is domiciled — not simply where you live (รอยืนยัน — one official court page so far); can be filed **orally** with a court case officer (เจ้าพนักงานคดี) who writes it down | Court hearing | — |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.marketingoops.com/digital-life/ocpb-online-complaint/ · https://www.mitihoon.com/2026/06/05/647541/ (สคบ. channels 1166, OCPB Connect, ocpb.go.th) — verify the URL at www.ocpb.go.th before sending. Channels not yet checked against the official ocpb.go.th page (รอยืนยัน).
 
 Consumer court basics (พ.ร.บ.วิธีพิจารณาคดีผู้บริโภค พ.ศ. 2551):
-- Consumer plaintiffs are exempt from court fees (มาตรา 18) — the court may still order costs in some cases (รอยืนยัน — amendment details)
-- Oral filing is allowed (มาตรา 20); no lawyer required
-- A business suing a consumer may file in the consumer's local court or another court; if it picks the consumer's court, only one (มาตรา 17)
+- A consumer (or the body suing for them) pays no court fees to file or at any step of the case, but the final costs order is not covered; the court may make the consumer pay the waived fees if the claim was baseless, inflated or abusive; a business that sues is not exempt (มาตรา 18)
+- A claim can be filed orally or in writing; a court case officer writes down an oral claim (มาตรา 20)
+- A business suing a consumer must file in the one court whose area covers the consumer's domicile (ภูมิลำเนา), even when another court would otherwise be open to it (มาตรา 17)
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://legardy.com/thai-law/consumer-case-procedure/consumer-case-procedure-filing-section-17-21 · https://legardy.com/blogs/consumer-case-thailand-steps-fees-evidence
-ข้อความมาตราจากเว็บรอง 2 แหล่ง — ตรวจกฎหมายฉบับทางการ: krisdika.go.th (สำนักงานคณะกรรมการกฤษฎีกา) · ocpb.go.th — ยังไม่ได้เปิดตรวจข้อความทางการ (รอยืนยัน)
+ตรวจล่าสุด 2026-10-23 · แหล่งทางการ: ราชกิจจานุเบกษา เล่ม 125 ตอนที่ 38 ก (25 ก.พ. 2551) https://ratchakitcha.soc.go.th/documents/242398.pdf · มาตรา 17 · 18 · 20 ไม่ถูกแก้ (ฉบับที่ 2 พ.ศ. 2556 แก้มาตรา 19 · ฉบับที่ 3 พ.ศ. 2558 แก้มาตรา 49 วรรคสอง 51 และยกเลิก 52–54)
+ยืนยันตรงกัน: ศาลแพ่งตลิ่งชัน https://civiltlc.coj.go.th/th/content/page/index/id/397228 · Veridian E-Journal มหาวิทยาลัยศิลปากร 10(3) 2560 · วิทยานิพนธ์มหาวิทยาลัยธุรกิจบัณฑิตย์ 2560 · https://legardy.com/thai-law/consumer-case-procedure/consumer-case-procedure-filing-section-17-21
 
 Watch the clock: a defect lawsuit is barred 1 year after discovering the defect (ป.พ.พ. มาตรา 474 — see `warranty-tracker`). Don't let steps 1–3 run past it.
 

@@ -1,10 +1,22 @@
 # Changelog — personal-life
 
-## Unreleased
+## 0.13.0 — 2026-10-23
 
-- รับ skill `meeting-summary` · `meeting-prep-card` จาก `doc-toolkit` ที่ยุบ (เนื้อหาเดิม ชื่อเดิม) · ตัด dependency `doc-toolkit`
-- รวม plugin dev-learning: skill 9 ตัว (+alias 2) · agent tech-mentor · playbook 5 ตัว · prompt 6 ฉบับ — หมวดที่ 5 "เรียนรู้" ใน `skills/superuser/SKILL.md` (กฎ 18–19 · เกณฑ์ · รออนุมัติ) · triggers · examples · context-template
 - skill ใหม่ `course-builder` ออกแบบหลักสูตรฝั่งผู้สอน (ฝั่งผู้เรียนยังเป็น `learning-path`): ผลลัพธ์การเรียนรู้ด้วยกริยาที่มองเห็นได้ตามอนุกรมวิธานของบลูมฉบับปรับปรุง (Krathwohl 2002) · ตารางสอนพร้อมเวลา · แบบฝึกจากพาทำไปจนทำเอง · rubric 3–4 ระดับพร้อมงานตัวอย่าง · แบบประเมินหลังอบรม · ออนไลน์กับในห้อง · ลิขสิทธิ์สื่อการสอน · ตัวอย่างหลักสูตร Git 1 วันที่รันคำสั่งจริงแล้ว · แนวคิดจาก mattpocock/skills `teach` และ `scaffold-exercises` (MIT · เขียนใหม่) · ตรวจแหล่ง 2026-10-23 · แถวใหม่ใน `triggers.md` หมวดเรียนรู้
+- ส่วนเสริมจากการเทียบตัวต่อตัวกับ skill เปิด (2026-10-22 · เขียนใหม่ด้วยคำเรา ระบุที่มาในไฟล์):
+  - จัดการชีวิต: `calendar-audit` นับต้นทุนประชุมที่ตัดช่วงโฟกัส (ความยาวประชุม + ราว 23 นาทีกว่าจะกลับเข้างาน · ตัวเลขที่คนอ้างกันทั่วไป ยังไม่ได้เปิดต้นฉบับ (รอยืนยัน)) · `inbox-triage` ร่างตอบหยุดที่โฟลเดอร์ร่าง ผู้ใช้กดส่งเอง และคัดเฉพาะเมลตั้งแต่รอบที่แล้ว · `meeting-prep-card` ด่าน "ประชุม · เขียน · รอ" ก่อนทำการ์ด · `meeting-summary` ทุกมติมีเหตุผล 1 วรรค · `weekly-review` เริ่มจากบันทึกจริงก่อนถามความจำ · `personal-kb` lint รายเดือน 5 ข้อ · `decision-journal` ความมั่นใจเป็นคะแนน 1–10
+  - อาชีพ: `interview-prep` เรื่องเล่า 3 ความยาว (30 วินาที · 90 วินาที · 3 นาที) · `linkedin-profile` หัวข้อ Recommendations และแบนเนอร์ 1,584 × 396 px (รอยืนยัน) · `resume-th-en` แยกข้อกำหนดของประกาศงาน 3 ระดับ และข้อความไทยที่จะส่งไม่ใช้ขีดยาว · `performance-self-review` จัดอันดับหลักฐาน 4 ขั้น (Measured · Witnessed · Shown · Claimed) · `salary-negotiation` ตารางเวลาหลังได้ข้อเสนอ 7 วัน และสิ่งที่ต่อรองแทนฐานเงินเดือน · แก้ข้อเท็จจริงกองทุนสำรองเลี้ยงชีพ: ลูกจ้างและนายจ้างสมทบฝ่ายละ 2–15% ของค่าจ้าง อัตราของนายจ้างไม่ต้องเท่าของลูกจ้าง
+  - สุขภาพ บ้าน และเรียนรู้: `doctor-visit-prep` การ์ดฉุกเฉิน 1 หน้า (ไม่ใส่เลขบัตรประชาชน) · `thesis-writing` ลำดับหาต้นทางของอ้างอิง (DOI → CrossRef → arXiv → Semantic Scholar → ThaiJO หรือ ThaiLIS → ตัวจัดการอ้างอิง) และกฎประโยคทั่วไปย้ายไป `thai-grammar` · `english-tech-reading` และ `paper-to-practice` รายการตรวจคำอธิบายไทยจากต้นฉบับอังกฤษ 5 ข้อ
+- ข้อเท็จจริงที่ตรวจใหม่ 2026-10-22: `vehicle-care` ค่าตรวจสภาพที่ ตรอ. เป็นราคาที่มักอ้างถึง ไม่ใช่อัตราตามกฎหมาย (รอยืนยัน · ถามสถานีก่อนไป) และวงเงินค่ารักษาของ พ.ร.บ. 80,000 บาท ติด (รอยืนยัน) · แม่แบบบันทึกรถเตือนใบขับขี่ 30 วันก่อนหมดอายุ · `elder-care` เบี้ยยังชีพคงอัตราเดิม พร้อมหมายเหตุข่าวอัตราใหม่ที่ยังไม่ยืนยัน · `pet-care` ค่าปรับเมื่อไม่ฉีดวัคซีนพิษสุนัขบ้า (รอยืนยัน)
+- ใช้แกน `superuser` 3.1.0: playbook `team-project` และค่าตั้ง hook `guard` · `recompact` (ปิดไว้)
+
+## 0.12.0 — 2026-10-22
+
+- รวม `home-family` `health-wellness` และ `career` เข้ามาเป็น plugin เดียว — ชีวิตประจำวัน 4 หมวด: จัดการชีวิต · บ้านและครอบครัว · สุขภาพ · อาชีพ
+- รวม plugin dev-learning: skill 9 ตัว (+alias 2) · agent tech-mentor · playbook 5 ตัว · prompt 6 ฉบับ — หมวดที่ 5 "เรียนรู้" ใน `skills/superuser/SKILL.md` (กฎ 18–19 · เกณฑ์ · รออนุมัติ) · triggers · examples · context-template
+- ชื่อ skill และ command เดิมทุกตัวใช้ได้เหมือนเดิม · playbook ทุกหมวดรวมอยู่ใน skill `superuser`
+- รับ skill `meeting-summary` · `meeting-prep-card` จาก `doc-toolkit` ที่ยุบ (ชื่อเดิม) · ตัด dependency `doc-toolkit`
+- ถอด plugin เดิม: `/plugin uninstall home-family` `health-wellness` `career` `dev-learning`
 
 ## 0.11.1 — 2026-10-22
 
@@ -37,12 +49,6 @@
 - ป้าย "ยังไม่ตรวจ" เปลี่ยนเป็น "ยังไม่ได้ตรวจ" ทุกไฟล์
 - meeting-summary ร่างข้อความ ส่งเมื่อผู้ใช้สั่ง · inbox-triage มีกฎอีเมลเป็นข้อมูล
 - ข้อมูลการเดินทาง (ไต้หวัน) ตรวจใหม่ 2026-10-14
-
-## 0.12.0 (2026-10-22)
-
-- รวม `home-family` `health-wellness` และ `career` เข้ามาเป็น plugin เดียว — ชีวิตประจำวัน 4 หมวด: จัดการชีวิต · บ้านและครอบครัว · สุขภาพ · อาชีพ
-- ชื่อ skill และ command เดิมทุกตัวใช้ได้เหมือนเดิม · playbook ทุกหมวดรวมอยู่ใน skill `superuser`
-- ถอด plugin เดิม: `/plugin uninstall home-family` `health-wellness` `career`
 
 ## ประวัติจาก dev-learning (รวมเข้ามา 2026-10-22)
 

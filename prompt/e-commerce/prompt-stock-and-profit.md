@@ -128,7 +128,7 @@ playbook `pricing-check` (ขั้น 1–2: ต้นทุนและกำ�
 
 ## 5. ภาษีของคนขายออนไลน์
 
-skill `seller-tax-basics` · agent `shop-manager` · งานกลาง ไม่ต้องเปิด playbook
+skill `seller-tax-basics` (thai-workplace) · agent `shop-manager` · งานกลาง ไม่ต้องเปิด playbook
 **ผลลัพธ์:** `tax/<ปี>-estimate.md` · ข้อมูลทั่วไป ยืนยันกับนักบัญชี
 
 ### ข้อมูล (ผู้ใช้กรอก)
