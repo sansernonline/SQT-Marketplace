@@ -12,7 +12,10 @@
     "evals/README.md": "วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก evals/ ที่รากอย่างไร",
     "evals/human-writing-trigger/case.yaml": "เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด",
     "evals/human-writing-behaviour/case.yaml": "เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้",
-    "evals/human-writing-regression/case.yaml": "เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน"
+    "evals/human-writing-regression/case.yaml": "เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน",
+    "evals/speaking-script-trigger/case.yaml": "เคส eval: โจทย์สคริปต์พูดที่ต้องทำให้ speaking-script ถูกเปิด",
+    "evals/speaking-script-behaviour/case.yaml": "เคส eval: บทพูดต้องเปิดด้วย hook เป็นภาษาพูด และปิดด้วย CTA",
+    "evals/speaking-script-regression/case.yaml": "เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -294,6 +297,7 @@
     "skill-authoring": "เขียน skill · agent · playbook ของ marketplace นี้ พร้อม eval 3 เคสแบบ claude plugin eval",
     "sleep-log": "บันทึกการนอนเพื่อดูรูปแบบหรือเอาไปให้แพทย์ดู (ไม่วินิจฉัย)",
     "smart-contracts": "สร้างงานบนบล็อกเชน: สัญญา Solidity / Solana · ตรวจสัญญา · DeFi",
+    "speaking-script": "เขียนสคริปต์พูดหน้ากล้อง: hook ก่อนทักทาย · ภาษาพูด · จับเวลาด้วยนาฬิกา",
     "social-formats": "ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X",
     "social-security-th": "ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น",
     "software-diagrams": "แผนภาพเทคนิคแบบ Mermaid ใน Markdown README หรือ PR",

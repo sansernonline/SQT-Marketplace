@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## Unreleased
+
+- เพิ่ม skill `speaking-script`: สคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) — กฎข้อเดียว write for the ear · hook ก่อนทักทาย · ตารางภาษาเขียน → ภาษาพูด · จับเวลาด้วยนาฬิกาไม่นับคำ · ขั้น 0 หาคลิปอ้างอิงก่อนเขียน · eval 3 เคส ใน `evals/speaking-script-*` · เพิ่มแถวใน skill-router (พร้อมกัน pattern โค้ดไม่จับ "สคริปต์พูด" อีก) · triggers · file-map
+- `brief-to-image`: เพิ่มขั้น 0 หารูปอ้างอิงที่ชอบก่อนเขียน prompt แล้วแตกว่าชอบอะไร (แสง · สี · องค์ประกอบ) ใส่ใน brief — ลดผลงานหน้าตาเหมือนกันทุกชิ้น
+
 ## 0.10.0 — 2026-10-23
 
 - รับ skill `image-generation` จาก `doc-toolkit` ที่ยุบ (ชื่อเดิม) · ตัด dependency `doc-toolkit`

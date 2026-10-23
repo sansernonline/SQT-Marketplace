@@ -1,0 +1,38 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: speaking-script-behaviour
+description: สคริปต์พูด 60 วินาทีต้องขึ้นต้นด้วย hook ไม่ใช่คำทักทาย เป็นบรรทัดสั้นภาษาพูด และปิดท้ายด้วย CTA
+tags: [behaviour, speaking-script]
+runs: 3
+expected_outcome: ประโยคแรกเป็น hook · ไม่มีคำภาษาเขียน · มี ครับ/ค่ะ · บรรทัดสั้นหายใจทัน · มี CTA ชวนกดติดตาม
+execution:
+  prompt: |
+    เขียนสคริปต์พูดหน้ากล้อง 60 วินาที เปิดช่อง YouTube ใหม่ของฉันที่สอนทำอาหารไทยแบบบ้าน ๆ
+    กลุ่มเป้าหมายคือคนทำงานออฟฟิศที่อยากกลับไปทำกับข้าวกินเองตอนเย็น ปิดท้ายชวนกดติดตาม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: no-written-thai
+    type: regex
+    pattern: "เนื่องจาก|ดังนั้น|อย่างไรก็ตาม|ทั้งนี้|คุณสมบัติ|ประกอบด้วย"
+    match: not_contains
+    target: last_message
+  - name: spoken-particle-present
+    type: regex
+    pattern: "ครับ|ค่ะ"
+    match: contains
+    target: last_message
+  - name: cta-present
+    type: regex
+    pattern: "ติดตาม|subscribe|กดไลก์|คอมเมนต์"
+    match: contains
+    target: last_message
+  - name: built-for-the-ear
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ประโยคแรกของบทพูดเป็น hook (คำถาม ข่าว หรือประโยชน์ที่คนฟังจะได้) ไม่ใช่คำทักทายหรือการแนะนำตัว
+      2. บทพูดเป็นบรรทัดหรือประโยคสั้นที่พูดหายใจทัน ไม่ใช่ย่อหน้ายาวแบบบทความ
+      3. อ่านออกเสียงแล้วลื่น เป็นภาษาที่คนไทยพูดจริงหน้ากล้อง ไม่มีประโยคซ้อนยาว
+      4. CTA ปิดท้ายสัมพันธ์กับโจทย์ (ชวนกดติดตามช่องอาหาร)
