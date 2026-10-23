@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## Unreleased
+
+- prompt ใหม่ `prompt/personal-life/prompt-podcast-lesson.md` 5 ฉบับ: วางชุดบทเรียน (`course-builder`) · สคริปต์พูด 1 ตอนพร้อม show notes · สไลด์ประกอบที่ตรงกับสคริปต์ (`presentation-design` และ `html-slide-deck` ของ software-company) · อัดเสียง ตัดต่อ และเวอร์ชันวิดีโอ · ตรวจก่อนปล่อย
+
 ## 0.13.0 — 2026-10-23
 
 - skill ใหม่ `course-builder` ออกแบบหลักสูตรฝั่งผู้สอน (ฝั่งผู้เรียนยังเป็น `learning-path`): ผลลัพธ์การเรียนรู้ด้วยกริยาที่มองเห็นได้ตามอนุกรมวิธานของบลูมฉบับปรับปรุง (Krathwohl 2002) · ตารางสอนพร้อมเวลา · แบบฝึกจากพาทำไปจนทำเอง · rubric 3–4 ระดับพร้อมงานตัวอย่าง · แบบประเมินหลังอบรม · ออนไลน์กับในห้อง · ลิขสิทธิ์สื่อการสอน · ตัวอย่างหลักสูตร Git 1 วันที่รันคำสั่งจริงแล้ว · แนวคิดจาก mattpocock/skills `teach` และ `scaffold-exercises` (MIT · เขียนใหม่) · ตรวจแหล่ง 2026-10-23 · แถวใหม่ใน `triggers.md` หมวดเรียนรู้

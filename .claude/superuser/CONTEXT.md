@@ -18,6 +18,7 @@ branch `feat/superuser-3-eight-plugins` merge เข้า main แล้ว แ
 | รอบ 2: skill ใหม่ 5 (hiring-th · thai-business-setup · infra-as-code · data-analysis · course-builder) · reference 5 (Figma · docs site · API บัญชีไทย · API ร้านค้าไทย · เครื่องมือผลิตวิดีโอ) | เสร็จ | commit `e4ded99` (89 ไฟล์ เฉพาะของทีมเรา) | 2026-10-23 |
 | รอบ 2: hook คอลัมน์ "รีวิวผ่านแล้วผู้ใช้ยังแก้" · eval review-recall (สร้าง ไม่รัน) · validator ตรวจลิงก์ภายใน · ตารางระยะบรรทัดไทย · `thai_tells.py` ไม่เตือนขีดในช่องตาราง | เสร็จ | commit `e4ded99` · hook self-test 83/83 · validator self-test 18/18 · review-recall `--verify` ผ่าน | 2026-10-23 |
 | เลื่อนรุ่น 6 plugin · CHANGELOG ครบทุกรุ่น (เติมส่วนเสริมที่ลงโค้ดแล้วแต่ยังไม่มีบรรทัด) · ตัวชี้ `seller-tax-basics` 8 จุด · มาตรา 17 · 18 · 20 ใน `complaint-letter-th` ตามราชกิจจานุเบกษา · description นับ skill ใหม่ | เสร็จ | commit ถัดจาก `e4ded99` (`chore(release)`) · validator 488 รายการ error 0 | 2026-10-23 |
+| prompt ใหม่ `prompt/personal-life/prompt-podcast-lesson.md` 5 ฉบับ (บทเรียน podcast พร้อมสไลด์) · README 2 ไฟล์ · CHANGELOG personal-life `Unreleased` | กำลังทดสอบ (agent ตัวใหม่ทำฉบับ 1–3 จริงใน `_to_delete/podcast-test/`) · ยังไม่ commit | validator 489 รายการ error 0 | 2026-10-23 |
 | สร้างใหม่: sync · docs · FILE-MAP · รูป 26 รูป · dist 8 plugin | สร้างแล้ว ยังไม่ commit (มีของอีกฝั่งปน) | `scripts\build-dist.cmd` exit 0 (ก่อนเลื่อนรุ่น ต้องรันใหม่) | 2026-10-23 |
 
 ## กติกา
