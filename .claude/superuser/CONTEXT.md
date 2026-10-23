@@ -4,7 +4,7 @@
 
 ## งานนี้คืออะไร
 marketplace plugin ของ Square Tech: 8 plugin = `superuser` (แกนกลาง) + 7 สาขา (software-company · personal-life · thai-workplace · e-commerce · trading-finance · graphic-design · reverse-engineer) · ส่งออกไป claude.ai · Codex · Gemini · Kimi ผ่าน `dist/`
-อยู่บน branch `feat/superuser-3-eight-plugins` · commit แล้ว 5 ชุด (ยังไม่ push ยังไม่ tag) · เลื่อนรุ่นแล้ว: superuser 3.1.0 · software-company 2.21.0 · personal-life 0.13.0 · thai-workplace 0.11.0 · graphic-design 0.10.0 · trading-finance 0.11.0 · e-commerce 1.0.0 · reverse-engineer 0.1.0
+branch `feat/superuser-3-eight-plugins` merge เข้า main แล้ว และลบแล้วทั้งในเครื่องและบน GitHub · ตอนนี้อยู่บน `chore/superuser-notes-2026-10-23` (แตกจาก main) · merge 2026-10-23 ผ่าน PR #1 (merge commit `f784b41` · tree เท่ากับ `b6c4c30`) · repo ไม่เคยมี git tag · เลื่อนรุ่นแล้ว: superuser 3.1.0 · software-company 2.21.0 · personal-life 0.13.0 · thai-workplace 0.11.0 · graphic-design 0.10.0 · trading-finance 0.11.0 · e-commerce 1.0.0 · reverse-engineer 0.1.0
 
 ## เป้าตอนนี้
 ผู้ใช้ตัดสินเรื่อง push · tag · ไฟล์ของงานอีกฝั่ง · commit ไฟล์ที่สร้างจากสคริปต์ (ดู "รอผู้ใช้")
@@ -58,15 +58,15 @@ marketplace plugin ของ Square Tech: 8 plugin = `superuser` (แกนก�
 ไม่เกิน 10 แถว · แถวบนสุดคือข้อที่ **ต่อไป** ในคำตอบชี้ให้ผู้ใช้ทำ · "ทำไมต้องเป็นคุณ" ใช้ 4 ค่า: ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน · agent ลบแถวทันทีที่ผู้ใช้ตอบหรือปลดล็อกแล้ว
 | เรื่อง | ทำไมต้องเป็นคุณ | หลักฐาน | ปลดล็อกอะไร · ตอบแบบไหน | วันที่เพิ่ม |
 |---|---|---|---|---|
-| push branch แล้วเปิด PR หรือ merge main | ตัดสิน | 5 commit บน `feat/superuser-3-eight-plugins` (ล่าสุด `chore(release)`) | คนอื่นติดตั้งรุ่นใหม่จาก GitHub ได้ · ตอบ "push" หรือ "push + PR" | 2026-10-23 |
+| อัปเดต plugin ในเครื่อง | ตัดสิน | main มีรุ่นใหม่แล้ว (`f784b41`) แต่ `installed_plugins.json` ยังเป็น software-company 2.7.0 กฎและ hook ใหม่จึงไม่ทำงาน | `/plugin marketplace update sqt-marketplace` แล้ว `/plugin update software-company@sqt-marketplace` (ตาม `docs/INSTALL.md`) · ติดตั้ง `superuser` และ plugin สาขาที่ใช้ · ถอดตัวเก่าที่ถูกรวมแล้ว | 2026-10-23 |
 | ไฟล์ของงานอีกฝั่ง | ตัดสิน | `tools/set-data-mcp/` · `docs/MCP.md` · `html-slide-deck/SKILL.md` · `presentation-design/SKILL.md` · `brief-to-image/SKILL.md` ขั้น 0 · `reverse-engineer/SKILL.md` + `templates/` 4 ไฟล์ · `mcp-server/SKILL.md` + README + `wire-inventory-2026-10-23.jsonl` · `testcase-prompts-2026-10-23.md` ใน `docs/` และ `scripts/` (ไฟล์เดียวกัน 2 ที่) | commit รวมหรือแยก · แม่แบบ `system-map.md` ใช้อีโมจิ 🔵🟢 ขัดกฎ human-writing | 2026-10-23 |
 | commit ไฟล์ที่สร้างจากสคริปต์ (`dist/` · `docs/plugins/` · `docs/FILE-MAP.md` · `scripts/diagrams/data/`) | ตัดสิน | สร้างไว้ก่อนเลื่อนรุ่น และมีของอีกฝั่งปน | ตอบ "อีกฝั่งเสร็จแล้ว" → รัน `scripts\build-dist.cmd` แล้ว commit แยก | 2026-10-23 |
-| tag รุ่นใหม่ | ตัดสิน | plugin.json เลื่อนแล้ว 6 ตัว | ทำหลัง push · ตอบ "tag" | 2026-10-23 |
+| tag รุ่นใหม่ (ไม่บังคับ) | ตัดสิน | repo ไม่เคยมี git tag · การติดตั้งอ่านเลขรุ่นจาก plugin.json | ตอบ "tag" ถ้าอยากมี | 2026-10-23 |
 | อ่านออกเสียงคู่ตัวอย่างภาษาไทย 5 คู่ใน `human-writing/references/thai-examples.md` | ตรวจด้วยตาหรือหู | ทุกคู่ติดป้าย (ชั่วคราว) | เอาป้ายออก · ตอบ "รับ" หรือแก้ข้อความ | 2026-10-22 |
 | รัน eval ที่เสียเงิน: `claude plugin eval` ของ superuser · `evals/review-recall --run` | ใช้เงินหรือ token | ยังไม่เคยรันจริง | วัดผลได้จริง · ตอบ "รัน eval" | 2026-10-23 |
 
 ## รับงานต่อ
-- **ทำต่อเป็นข้อแรก:** ถามผู้ใช้แถวบนสุดของ "รอผู้ใช้" (push) · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
+- **ทำต่อเป็นข้อแรก:** ถามผู้ใช้แถวบนสุดของ "รอผู้ใช้" (อัปเดต plugin ในเครื่อง) · งานต่อไปบน repo แตก branch ใหม่จาก main (`f784b41`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
 - **รออนุมัติ:** commit · push · merge · tag · eval ที่เสียเงิน · แตะไฟล์ของอีกฝั่ง
 - **ค้างอยู่:** `items.json` ที่รากเป็นภาพรวมเก่า 12 ต.ค. ไม่มีตัวสร้าง · ตัวบทราชบัณฑิตยสภาเรื่องไม้ยมกและประกาศทับศัพท์ 2532 · ข้อความ licence เต็มของ GSAP · ข้อที่ agent ติด (ยังไม่ได้ตรวจ) ไว้ใน skill ใหม่ (เช่น ม.17/17-1 พ.ร.บ.คุ้มครองแรงงาน · rate limit ของ Shopee/Lazada · ค่า API ของ PEAK/FlowAccount)
 - **ข้อเสนอที่ยังไม่ได้ทำ:** ตัวตรวจ `plugin:ชื่อ` ใน validator · ตรวจลำดับหัวรุ่นใน CHANGELOG (รายละเอียดใน `IMPROVEMENTS.md`)
