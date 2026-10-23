@@ -55,23 +55,7 @@ Use when any task that produces or checks work ends (document, research, review,
 
 ## 3 · แบบสำหรับโปรเจกต์ที่มี `docs/BUILD-PLAN.md`
 
-เขียน 2 หัวข้อนี้ในไฟล์นั้นแทน `CONTEXT.md` · ไม่มีไฟล์ → สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy จาก [`assets/build-plan-status.md`](assets/build-plan-status.md) (ห้ามแต่งโครงเอง) · **ห้ามแตะตารางงานหรือหัวข้ออื่น**
-ลำดับหัวข้อ: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
-
-- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว
-- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม รูปแบบ `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (ถ้ารอบนั้นตัดสินใจเองต่อท้าย `· ตัดสินใจเอง <จำนวน>`)
-
-หัวข้อ `## สถานะล่าสุด` มี: บรรทัดอัปเดต (วันที่เวลา · งานล่าสุด) · **ภาพรวม** (เสร็จ N/ทั้งหมด · ทำอยู่ · ติด · ไม่ผ่านตรวจ — นับจากตารางและต้องตรงกัน) · ตาราง `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` · **ทีมตอนนี้** (1 แถวต่อ agent ที่ใช้รอบนี้ · ไม่มี subagent ไม่ต้องใส่ · เริ่มรอบใหม่ล้างแถวเก่า) · ค้างอยู่ · รออนุมัติ · ถัดไป (ไม่เกิน 3) · ข้อเสนอ
-
-| คอลัมน์ | ค่าที่ใช้ได้ |
-|---|---|
-| ประเภท | `เอกสาร` · `ตรวจ` · `ส่งมอบ` · `โค้ด` · `build` |
-| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `Draft` · `Review` · `Approved` · `Archived` (ชุดเดียวกับ `polished-document-style`) — `Approved` มีแต่คนที่เปลี่ยนได้ agent ตั้งได้สูงสุด `Review` |
-| สถานะ (อื่น ๆ) | 5 คำในข้อ 2 |
-| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` |
-
-ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ (รายการที่ไม่ได้แตะคัดลอกค่าเดิม) ไม่เกิน 25 แถว
-งานโค้ด (ตัวอย่างตารางเต็ม · ประเภท `build`/`ส่งมอบ` · หลักฐานแอปมือถือ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
+เขียน `## สถานะล่าสุด` (เขียนทับ) และ `## ประวัติสถานะ` (เพิ่มบรรทัดบนสุด) ในไฟล์นั้นแทน `CONTEXT.md` · ลำดับหัวข้อ คอลัมน์ ค่าที่ใช้ได้ และเพดานแถว อยู่ใน [`build-plan-rules`](references/build-plan-rules.md) **เปิดก่อนเขียนทุกครั้ง**
 
 ---
 
@@ -90,7 +74,7 @@ Use when any task that produces or checks work ends (document, research, review,
 - [ ] `## รับงานต่อ` มี "ทำต่อเป็นข้อแรก" ที่คนอื่นเริ่มได้ทันที
 - [ ] ไม่แตะหัวข้ออื่นในไฟล์
 - [ ] แบบ BUILD-PLAN: ตัวเลขใน "ภาพรวม" ตรงตาราง · เพิ่มบรรทัดใน `## ประวัติสถานะ` 1 บรรทัด · "ทีมตอนนี้" ไม่มีแถว `ทำอยู่` ค้างของงานที่จบแล้ว
-- [ ] แบบ BUILD-PLAN: รันตัวตรวจจนผ่าน (path นับจากโฟลเดอร์ skill นี้): `python ../polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
+- [ ] แบบ BUILD-PLAN: รันตัวตรวจจนผ่าน (ตัวตรวจอยู่ใน plugin `superuser`): `python <โฟลเดอร์ superuser>/skills/polished-document-style/scripts/check_outline.py assets/build-plan-status.md <path ของ docs/BUILD-PLAN.md>` — จับหัวข้อหาย หัวข้อสลับ ช่องตัวหนาหาย หัวตารางเปลี่ยน และช่องที่ยังไม่เติม · หัวข้ออื่นในไฟล์ (ตารางงาน `## ตัดสินใจเอง`) ตัวตรวจปล่อยผ่าน
 - [ ] คำตอบมีตารางเฉพาะแถวที่เปลี่ยน + ค้าง + รออนุมัติ (ถ้ามี) + ข้อเสนอ (ถ้ามี) + ถัดไป
 
 ---
@@ -122,6 +106,31 @@ Use when any task that produces or checks work ends (document, research, review,
 | เลือก playbook และจบงานทุกชนิด | `superuser` |
 | รูปแบบตารางและเอกสาร | `polished-document-style` |
 | ชื่อและสถานะของไฟล์เอกสาร | `document-naming` |
+
+
+## reference: build-plan-rules.md
+
+# แบบสำหรับโปรเจกต์ที่มี docs/BUILD-PLAN.md
+
+ย้ายมาจาก `SKILL.md` ข้อ 3 · เปิดเมื่อโปรเจกต์มี `docs/BUILD-PLAN.md`
+
+เขียน 2 หัวข้อนี้ในไฟล์นั้นแทน `CONTEXT.md` · ไม่มีไฟล์ → สร้างไฟล์ที่มีแค่ชื่อโปรเจกต์ แล้ว copy จาก [`assets/build-plan-status.md`](../assets/build-plan-status.md) (ห้ามแต่งโครงเอง) · **ห้ามแตะตารางงานหรือหัวข้ออื่น**
+ลำดับหัวข้อ: `## สถานะล่าสุด` → ตารางงาน → `## ประวัติสถานะ` → `## ตัดสินใจเอง` (`decision-log`)
+
+- `## สถานะล่าสุด` — **เขียนทับทั้งหัวข้อ** ทุกครั้ง เป็นภาพปัจจุบันภาพเดียว
+- `## ประวัติสถานะ` — **เพิ่ม 1 บรรทัดบนสุด** ต่อ 1 งาน ไม่ลบของเดิม รูปแบบ `วันที่ เวลา · งาน · สถานะ · ผล · ทำ <agent> · ตรวจ <agent> · ค้างกี่ข้อ` (ถ้ารอบนั้นตัดสินใจเองต่อท้าย `· ตัดสินใจเอง <จำนวน>`)
+
+หัวข้อ `## สถานะล่าสุด` มี: บรรทัดอัปเดต (วันที่เวลา · งานล่าสุด) · **ภาพรวม** (เสร็จ N/ทั้งหมด · ทำอยู่ · ติด · ไม่ผ่านตรวจ — นับจากตารางและต้องตรงกัน) · ตาราง `| รายการ | ประเภท | สถานะ | ใครทำ | ใครตรวจ | ผลตรวจ | ค้าง / หมายเหตุ |` · **ทีมตอนนี้** (1 แถวต่อ agent ที่ใช้รอบนี้ · ไม่มี subagent ไม่ต้องใส่ · เริ่มรอบใหม่ล้างแถวเก่า) · ค้างอยู่ · รออนุมัติ · ถัดไป (ไม่เกิน 3) · ข้อเสนอ
+
+| คอลัมน์ | ค่าที่ใช้ได้ |
+|---|---|
+| ประเภท | `เอกสาร` · `ตรวจ` · `ส่งมอบ` · `โค้ด` · `build` |
+| สถานะ (เอกสาร) | `ยังไม่เริ่ม` · `Draft` · `Review` · `Approved` · `Archived` (ชุดเดียวกับ `polished-document-style`) — `Approved` มีแต่คนที่เปลี่ยนได้ agent ตั้งได้สูงสุด `Review` |
+| สถานะ (อื่น ๆ) | 5 คำใน `SKILL.md` ข้อ 2 |
+| ผลตรวจ | `ผ่าน — <หลักฐาน>` · `ไม่ผ่าน — <สิ่งที่ไม่ผ่าน>` · `ยังไม่ได้ตรวจ` · `—` |
+
+ตารางมีทุกรายการของโปรเจกต์ ไม่ใช่แค่งานรอบนี้ (รายการที่ไม่ได้แตะคัดลอกค่าเดิม) ไม่เกิน 25 แถว
+งานโค้ด (ตัวอย่างตารางเต็ม · ประเภท `build`/`ส่งมอบ` · หลักฐานแอปมือถือ) → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 
 
 ## reference: project-plan-and-weekly-status.md
@@ -165,7 +174,7 @@ Use when any task that produces or checks work ends (document, research, review,
 
 ![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
 
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
+**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
 
 ## Milestones
 
@@ -513,7 +522,7 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-ย้ายมาจาก agent `data-engineer` (2026-10-14) · ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
+ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
 
 **สารบัญ:**
 
@@ -658,8 +667,6 @@ For every table, document:
 
 # 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
 
-ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
-
 ### เงิน
 
 ```sql
@@ -706,8 +713,6 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 
 # 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
 
-ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
-
 **กฎ 3 ข้อ:**
 
 1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
@@ -742,6 +747,8 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 ## reference: per-stack.md
 
 # ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+
+**สารบัญ:** 1 ชนิดข้อมูลเทียบกัน · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 คำสั่งตรวจ query ช้า
 
 1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
 2. [PostgreSQL](#2--postgresql)
@@ -827,6 +834,20 @@ CREATE POLICY tenant_isolation ON orders
   USING (tenant_id = current_setting('app.tenant_id')::bigint);
 -- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
 ```
+
+**กับดักที่เจอบ่อยใน PostgreSQL** (แนวคิดจาก wshobson postgresql-table-design · เลขรุ่นคือรุ่นที่พฤติกรรมเริ่มเป็นแบบนี้)
+
+| กับดัก | ทำแบบนี้แทน |
+|---|---|
+| `timestamp` (ไม่มี time zone) ทิ้ง offset เงียบ ๆ เครื่อง `+07:00` กับ UTC เก็บค่าคนละความหมาย | `timestamptz` เสมอ |
+| `serial` สร้าง sequence แยกที่สิทธิ์และ `DROP` ไม่ตามตาราง | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` บนตารางใหญ่กลัวล็อกนาน | ถ้าใส่ `DEFAULT` ค่าคงที่ ไม่เขียนตารางใหม่แล้ว (PG 11+) · DEFAULT ที่เป็นฟังก์ชันเช่น `now()` ยังเขียนใหม่ทั้งตาราง |
+| `ADD CONSTRAINT` (FK · CHECK) สแกนทั้งตารางขณะถือล็อก | `... NOT VALID` ก่อน แล้ว `VALIDATE CONSTRAINT` แยกคำสั่ง (ล็อกเบากว่า) |
+| DDL ต่อคิวหลัง transaction ยาว แล้วทุก query หลังมันค้างตาม | `SET lock_timeout = '5s'` ก่อน DDL ทุกครั้ง ตกแล้วรันใหม่ |
+| unique index ปล่อยให้ `NULL` ซ้ำได้หลายแถว | `UNIQUE NULLS NOT DISTINCT` (PG 15+) หรือ partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` และ `ILIKE` ไม่ใช้ btree index | extension `pg_trgm` + GIN index · ค้นข้อความจริงจังใช้ `tsvector` |
+| `jsonb` ค้นด้วย `->>` ไม่ใช้ index | GIN index บนคอลัมน์ (`@>` · `?`) หรือ expression index บน `(meta->>'key')` |
+| `count(*)` ทั้งตารางเพื่อแสดงจำนวนหน้า | ใช้ค่าประมาณจาก `pg_class.reltuples` หรือเลิกแสดงจำนวนรวม (cursor pagination) |
 
 ---
 
@@ -1002,7 +1023,7 @@ def upgrade():
 
 # Warehouse modeling — ELT, stack, star schema, SCD
 
-สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป — ย้ายมาจาก agent `data-engineer` (2026-10-14)
+สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป
 
 **สารบัญ:**
 
@@ -1368,7 +1389,18 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 ---
 
-## 11 · Anti-patterns
+## 11 · ตรวจก่อนปล่อย endpoint ใหม่
+
+ไล่ทุกข้อกับ endpoint ที่เพิ่ม ตกข้อเดียวยังไม่ merge (แนวคิดจาก ECC api-design)
+
+- [ ] URL เป็นคำนามพหูพจน์ตามข้อ 2 · อยู่ใต้เวอร์ชันตามข้อ 3 · ไม่มี `GET` ที่เปลี่ยนข้อมูล
+- [ ] รายการทุกตัวมี pagination และเพดานขนาดหน้า (ข้อ 4) · filter และ sort ใช้ชื่อพารามิเตอร์เดียวกับ endpoint เดิม (ข้อ 5)
+- [ ] วันที่ · id · เงิน อยู่ในรูปแบบของข้อ 6 · response ไม่ใช่ entity ของฐานข้อมูลตรง ๆ
+- [ ] error ทุกตัวตาม `web-service-essentials` §2 และมี `code` คงที่ (ข้อ 7) · คำขอที่สร้างหรือจ่ายเงินรับ idempotency key · การแก้รับ `If-Match` (ข้อ 8)
+- [ ] ระบุ auth และ rate limit (ข้อ 9) · อยู่ใน OpenAPI แล้ว และตัวอย่าง cURL ในเอกสารรันผ่านจริง
+- [ ] มี contract test หรือ test ระดับ endpoint อย่างน้อย 1 กรณีสำเร็จ 1 กรณี error — ตรวจ response กับ OpenAPI ใน CI · Pact เมื่อผู้เรียกแยกทีม · `oasdiff breaking` ทุก PR: [`references/contract-testing.md`](references/contract-testing.md)
+
+## 12 · Anti-patterns
 
 - ❌ **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
 - ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
@@ -1379,3 +1411,43 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+
+
+## reference: contract-testing.md
+
+# Contract testing — OpenAPI คือสัญญา แล้วให้ CI ตรวจว่าของจริงตรง
+
+เอกสาร `docs/API-CONVENTIONS.md` บอกกติกา · ไฟล์ OpenAPI บอกรูปร่างของแต่ละ endpoint · contract test คือสิ่งที่ทำให้ 2 อย่างนี้ไม่เป็นแค่เอกสาร
+
+## 1 · OpenAPI เป็นสัญญา
+
+- สร้างจากโค้ดจริง (annotation · decorator · generator ของ framework) แล้ว commit ไฟล์ที่ได้ — ไม่เขียนมือแยก · เมื่อ 2 ฝั่งต่างกัน ฝั่งโค้ดคือความจริง และ diff ในไฟล์คือสิ่งที่ reviewer เห็น
+- ทุก response มี schema รวมถึง error (`web-service-essentials` §2) · ทุกฟิลด์มี `format` ของวันที่ · id · เงิน ตาม §6 ของ SKILL.md หลัก
+
+## 2 · ตรวจ response กับ spec ใน CI (provider side)
+
+| เครื่องมือ | ทำอะไร | licence | หมายเหตุ (ตรวจ 2026-10-23) |
+|---|---|---|---|
+| Schemathesis | อ่าน OpenAPI แล้วสร้าง request จาก schema ยิงใส่ service จริง ตรวจว่า response ตรง spec และไม่ 500 · `schemathesis run <url ของ openapi.json>` | MIT | ยิงจริง สร้างและลบข้อมูล → ชี้ไป dev หรือ staging เท่านั้น · Python |
+| Prism (Stoplight) | `prism mock <spec>` ให้ frontend ใช้ก่อน backend เสร็จ · `prism proxy <spec> <upstream>` ตรวจ traffic จริงกับ spec | Apache-2.0 | Node ≥ 18.20 · โหมด proxy ใส่หน้า service ใน test environment ได้ |
+| Dredd | ตรวจ API กับ API Blueprint / OpenAPI 2 (OpenAPI 3 ทดลอง) | MIT | **เลิกดูแลแล้ว** (archived 2024-11-08) — ไม่เริ่มใช้ใหม่ |
+
+ค่าเริ่มของเรา: Schemathesis ใน job ของ CI หลัง service ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) · ล้ม = ไม่ merge
+
+## 3 · Consumer-driven contract — เมื่อทีม frontend หรือผู้เรียกแยกจาก backend
+
+- Pact (pact-foundation · MIT): ฝั่งผู้เรียกเขียน test ว่าใช้ request/response คู่ไหนบ้าง → ได้ไฟล์ pact → ฝั่ง provider รันตรวจกับไฟล์นั้นใน CI ของตัวเอง · provider เปลี่ยนส่วนที่ไม่มีใครใช้ได้โดย test ไม่พัง
+- ใช้เมื่อ: ทีมคนละชุด ปล่อยคนละรอบ หรือมีผู้เรียกมากกว่า 1 ราย (mobile + web + partner) · ทีมเดียวทำทั้ง 2 ฝั่ง → ข้อ 2 พอ
+- ไฟล์ pact แลกกันผ่าน Pact Broker หรือ commit ลง repo ของ provider — ตกลงที่เดียวใน `API-CONVENTIONS.md`
+
+## 4 · เช็ค breaking change ทุก PR
+
+- `oasdiff breaking <spec เดิม> <spec ใหม่>` (Apache-2.0 · Go · มี Docker image) รายงานเฉพาะการเปลี่ยนที่ทำให้ผู้เรียกเดิมพัง: ลบ endpoint หรือฟิลด์ · ฟิลด์กลายเป็น required · type เปลี่ยน · enum หาย
+- ใน CI: spec เดิม = ของ branch หลัก · spec ใหม่ = ของ PR · เจอ breaking → ต้องขึ้นเวอร์ชันใหม่ตาม §3 หรือ deprecate ตาม §10 ของ SKILL.md หลัก — ไม่ใช่ปิด check
+- เพิ่มฟิลด์ optional · เพิ่ม endpoint · เพิ่มค่า enum ที่ผู้เรียกไม่ switch ตาย = ไม่ breaking
+
+## ตรวจก่อนส่ง
+
+- [ ] OpenAPI อยู่ใน repo และสร้างจากโค้ด · CI ล้มถ้าไฟล์ไม่ตรงโค้ด
+- [ ] Schemathesis (หรือเทียบเท่า) รันกับ service ที่ขึ้นด้วยข้อมูลทดสอบ · `oasdiff breaking` รันทุก PR
+- [ ] ผู้เรียกแยกทีม → มี pact อย่างน้อย 1 ไฟล์ต่อผู้เรียก และ provider ตรวจใน CI

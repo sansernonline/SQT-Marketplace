@@ -216,7 +216,7 @@ docs.example.com/zh    (Chinese)
 ## Skills You Use
 
 - `developer-experience` → `references/technical-content.md` — content patterns
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

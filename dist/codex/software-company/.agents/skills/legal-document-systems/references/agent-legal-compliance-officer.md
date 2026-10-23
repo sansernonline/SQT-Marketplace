@@ -1,6 +1,6 @@
 # Legal Compliance Officer — privacy, retention, e-discovery, residency, audit
 
-คู่มือบทบาทของ agent `legal-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · PDPA ฉบับเต็ม (ฐานทางกฎหมาย · ความยินยอม · สิทธิ · แจ้งเหตุรั่วใน 72 ชั่วโมง) ใช้ skill `pdpa-compliance` · ระยะเวลาเก็บเอกสารต่างกันตามประเทศ ตรวจกับกฎหมายจริงก่อนใช้ (รอยืนยัน)
+คู่มือบทบาทของ agent `legal-compliance-officer` · PDPA ฉบับเต็ม (ฐานทางกฎหมาย · ความยินยอม · สิทธิ · แจ้งเหตุรั่วใน 72 ชั่วโมง) ใช้ skill `pdpa-compliance` · ระยะเวลาเก็บเอกสารต่างกันตามประเทศ ตรวจกับกฎหมายจริงก่อนใช้ (รอยืนยัน)
 
 **สารบัญ:**
 

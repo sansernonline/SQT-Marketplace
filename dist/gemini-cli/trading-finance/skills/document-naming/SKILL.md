@@ -21,8 +21,8 @@ description: Use when creating, renaming or filing any document a team or client
 |---|---|---|
 | เนื้อหาข้างในเอกสาร | `human-writing` (งานโค้ด: `srs-writing` · `fsd-writing` ใน plugin `software-company`) | แทน |
 | รูปแบบ markdown | `polished-document-style` | แทน |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` | แทน |
-| ไฟล์ชั่วคราวระหว่างทำงาน | [`temp-file-discipline`](../temp-file-discipline/SKILL.md) | แทน |
+| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` (plugin `software-company`) | แทน |
+| ไฟล์ชั่วคราวระหว่างทำงาน | `superuser:temp-file-discipline` | แทน |
 | งานโค้ด: ข้อความ commit · เวอร์ชันของ **โปรแกรม** · สารบัญเอกสารโปรเจกต์ | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-company`) | แทน/คู่ |
 | ตัวย่อในงานที่คนอ่าน | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | คู่ |
 
@@ -38,7 +38,7 @@ description: Use when creating, renaming or filing any document a team or client
 |---|---|---|
 | ข้อเสนอ · ใบเสนอราคา · รายงานส่งมอบ · ใบตรวจรับงาน · สัญญา (ชุดเอกสารโปรเจกต์ซอฟต์แวร์ → plugin `software-company`) | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
 | คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
+| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design` ใน plugin `software-company`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
 | ขั้นตอนทำงาน · คู่มือภายใน · README · บันทึกประชุม · บันทึกการตัดสินใจ (งานโค้ด → plugin `software-company`) | **markdown** ในโฟลเดอร์เอกสาร | เปลี่ยนบ่อย ต้องเทียบความต่างได้ ค้นหาง่าย |
 
 > 🚨 **ต้นฉบับ markdown ที่ render ซ้ำได้ เก็บถาวรใน `docs/src/<เรื่อง>.md` แล้ว render เป็น docx ลงโฟลเดอร์เอกสาร (`docs/`)**
@@ -124,7 +124,7 @@ description: Use when creating, renaming or filing any document a team or client
 | ต้นฉบับ | อยู่ใน `docs/src/` ของงานที่เดียว (งานโค้ด: `project-doc-set` ใน plugin `software-company`) |
 | ไฟล์ส่งออก | อยู่ในโฟลเดอร์เอกสาร (`docs/`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
 | ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
-| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู [`temp-file-discipline`](../temp-file-discipline/SKILL.md)) |
+| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `superuser:temp-file-discipline`) |
 | ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |
 
 ---

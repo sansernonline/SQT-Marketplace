@@ -17,12 +17,14 @@
 | **patterns_advanced** | `patterns_advanced` | Mixture-of-Agents (MoA) แรง 3–5 เท่า · Reranker · `parallel-attempts-pick-best` เมื่อทางเดียวอาจล็อกรูปผิด · วิธีทำ ต้นทุน กับดักใน `agent-patterns` | ใช้แค่แกน Planning → ReAct → Reflection |
 | **review_gate** | `review_gate` | ด่านรีวิวตอนจบ (hook Stop): แก้ไฟล์งาน ≥ 3 ไฟล์แต่ไม่มีผู้ตรวจตัวใหม่หลังการแก้ครั้งสุดท้าย และไม่มีบรรทัด `ข้ามรีวิว:` → ไม่ให้จบ 1 ครั้ง · **แนะนำให้เปิดไว้** เพราะเป็นตัวบังคับ "ไม่ตรวจ = ไม่จบ" | หัวหน้าต้องคุมกฎข้อ 3 เอง |
 | **split_gate** | `split_gate` | ด่านแตกงาน (hook PreToolUse): หัวหน้าเขียนชิ้นใหญ่เองไปแล้วและยังไม่ส่งลูกทีมสักตัว → ไม่ให้เขียนไฟล์โค้ดไฟล์ถัดไป ให้แตกงานก่อน | หัวหน้าต้องคุมกฎ "งานกลางขึ้นไปต้องแบ่ง" เอง |
+| **guard** | `guard` · **ค่าเริ่มปิด** | ด่านป้องกัน (hook PreToolUse เฉพาะ `Bash` ทุก agent): คำสั่งที่กฎประจำตัวห้ามอยู่แล้วถูกปฏิเสธพร้อมเหตุผล 1 บรรทัดและกฎที่มา — `git push` · `git commit` · `git reset --hard` · `git stash drop/clear` · `rm -rf` และ `Remove-Item -Recurse -Force` นอก `_to_delete/` · เขียนทับ `~/.claude/settings.json` ผ่าน shell · รายการ regex อยู่ใน `hooks/guard-rules.json` · ไม่แตะ Read/Edit/Write · ยกเว้นต่อโฟลเดอร์งานใน `.claude/superuser/guard-allow.json` `{"allow": ["git-commit", "^git push origin feature/"]}` (id = ปิดข้อนั้น · อื่น ๆ = regex ที่ถ้าตรงคำสั่งให้ผ่าน) — ผู้ใช้สั่ง commit ก็เพิ่ม `git-commit` ไว้ | ไม่มีด่านเครื่อง กฎประจำตัวยังห้ามเหมือนเดิมแต่หัวหน้าคุมเอง |
+| **recompact** | `recompact` · **ค่าเริ่มปิด** | หลังย่อบริบท (SessionStart `source: compact` — hook ส่งกฎประจำตัวซ้ำตรงนี้อยู่แล้ว) เติมหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ของ `CONTEXT.md` ไม่เกิน 40 บรรทัด หัวหน้าจึงไม่หลุดตำแหน่งงาน · ไม่มีไฟล์หรือไม่มีหัวข้อ = ไม่ส่ง · เอกสาร hooks (code.claude.com/docs/en/hooks ตรวจ 2026-10-23) บอกว่า `PostCompact` "has no decision control" และทิ้ง `systemMessage`/`continue` จึงใช้ส่งบริบทไม่ได้ — hook รับ `PostCompact` ไว้แค่จด log ว่าย่อเมื่อไร | หลังย่อบริบทได้กฎประจำตัวอย่างเดียว ต้องอ่าน `CONTEXT.md` เอง |
 
 `.claude/superuser/` ไม่ commit ยกเว้น `CONTEXT.md` และ `IMPROVEMENTS.md` · brief ไป `docs/BRIEF.md` · `CONTEXT.md` กับ `.superuser/` ที่รากของโปรเจกต์เก่าใช้ต่อได้
 
 ## config
 
-`.claude/superuser/config.json` ของโฟลเดอร์งาน (ไม่มีไฟล์ = เปิดทุกตัว) · แม่แบบใน [`templates/config.json`](../templates/config.json) · หัวหน้าอ่านตอนเริ่ม session แล้วทำตาม · hook อ่านเองสำหรับ `log` · `inbox` · `review_gate` · `split_gate` และออกทันทีเมื่อโฟลเดอร์งานไม่มี `.claude/superuser/` หรือโมดูลนั้นปิด
+`.claude/superuser/config.json` ของโฟลเดอร์งาน (ไม่มีไฟล์ = ค่าเริ่ม: เปิดทุกตัว ยกเว้น `guard` และ `recompact` ที่ต้องเปิดเอง) · แม่แบบใน [`templates/config.json`](../templates/config.json) · หัวหน้าอ่านตอนเริ่ม session แล้วทำตาม · hook อ่านเองสำหรับ `log` · `inbox` · `review_gate` · `split_gate` · `guard` · `recompact` และออกทันทีเมื่อโฟลเดอร์งานไม่มี `.claude/superuser/` หรือโมดูลนั้นปิด
 
 ```json
 {
@@ -30,7 +32,8 @@
   "modules": {
     "context": true, "log": true, "improvements": true, "learning": true,
     "inbox": true, "handoff": true, "patterns_advanced": true,
-    "review_gate": true, "split_gate": true
+    "review_gate": true, "split_gate": true,
+    "guard": false, "recompact": false
   }
 }
 ```

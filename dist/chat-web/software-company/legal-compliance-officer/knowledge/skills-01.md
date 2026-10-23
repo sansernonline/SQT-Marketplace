@@ -871,7 +871,7 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 ## Skills You Use
 
 - `legal-document-systems` — legal requirements
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -901,7 +901,7 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 
 # Legal Compliance Officer — privacy, retention, e-discovery, residency, audit
 
-คู่มือบทบาทของ agent `legal-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · PDPA ฉบับเต็ม (ฐานทางกฎหมาย · ความยินยอม · สิทธิ · แจ้งเหตุรั่วใน 72 ชั่วโมง) ใช้ skill `pdpa-compliance` · ระยะเวลาเก็บเอกสารต่างกันตามประเทศ ตรวจกับกฎหมายจริงก่อนใช้ (รอยืนยัน)
+คู่มือบทบาทของ agent `legal-compliance-officer` · PDPA ฉบับเต็ม (ฐานทางกฎหมาย · ความยินยอม · สิทธิ · แจ้งเหตุรั่วใน 72 ชั่วโมง) ใช้ skill `pdpa-compliance` · ระยะเวลาเก็บเอกสารต่างกันตามประเทศ ตรวจกับกฎหมายจริงก่อนใช้ (รอยืนยัน)
 
 **สารบัญ:**
 
@@ -1325,7 +1325,7 @@ async function checkRetention() {
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `legal-document-systems` — contract analysis and signing references
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1613,6 +1613,23 @@ def extract_money(text):
 ```
 
 ## Risk Pattern Detection
+
+Start from a fixed clause list so every contract gets the same 10 checks, then flag each one (แนวคิดจาก borghei contract-review (เขียนใหม่)):
+
+| # | Clause | RED (block) | YELLOW (negotiate) | GREEN |
+|---|---|---|---|---|
+| 1 | Term | auto-renews with < 30 days notice | fixed term, no renewal terms | clear term + renewal notice ≥ 30 days |
+| 2 | Termination | counter-party only, for convenience | mutual but long notice | mutual, for cause + convenience, same notice |
+| 3 | Payment | pay before acceptance, no dispute path | > 60 days or vague "upon invoice" | milestones or ≤ 30 days, late-payment rule |
+| 4 | Liability cap | unlimited, or cap only on our side | cap below fees paid | cap = fees paid in 12 months, carve-outs listed |
+| 5 | Indemnity | one-way, unlimited | mutual but broad triggers | mutual, limited to IP and third-party claims |
+| 6 | Confidentiality | one-way, no term | survives forever | mutual, 3–5 years, standard exclusions |
+| 7 | Intellectual property | all deliverables and background IP assigned | licence scope unclear | deliverables assigned, background IP licensed |
+| 8 | Governing law | foreign law + foreign court for a Thai deal | foreign law, local court | Thai law for Thai parties (or agreed neutral) |
+| 9 | Dispute resolution | no process, straight to court abroad | arbitration seat unclear | negotiation → mediation → arbitration or court |
+| 10 | Force majeure | missing, or excludes payment relief | lists events but no notice duty | defined events, notice duty, termination after N days |
+
+Output the flag per clause in `Risk` (below) so the LLM review and the regex rules feed the same schema.
 
 ```python
 RISK_RULES = {
@@ -2594,7 +2611,24 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 
 ---
 
-## 10 · ตัวย่อ
+## 10 · มาตราที่อ้างบ่อย และตัวย่อ
+
+ใช้ตอนลูกค้าหรือฝ่ายกฎหมายถามว่า "ข้อนี้อยู่มาตราไหน" (ตรวจกับฉบับแปลอังกฤษไม่เป็นทางการของ พ.ร.บ. 2562 ราชกิจจานุเบกษา 27 พ.ค. 2562 เมื่อ 23 ต.ค. 2569)
+
+| เรื่อง (ข้อใน skill นี้) | มาตรา |
+|---|---|
+| ความยินยอม (ข้อ 3) | 19 |
+| ฐานทางกฎหมายที่ไม่ต้องขอความยินยอม (ข้อ 2) | 24 |
+| ข้อมูลอ่อนไหว (ข้อ 5) | 26 |
+| ส่งข้อมูลออกนอกประเทศ (ข้อ 7) | 28 |
+| สิทธิเจ้าของข้อมูล (ข้อ 4) — ขอดู · ขอย้าย · คัดค้าน · ขอลบ · ขอระงับ · ขอแก้ | 30 · 31 · 32 · 33 · 34 · 35–36 |
+| มาตรการความปลอดภัย · ระบบลบเมื่อหมดอายุ · แจ้งเหตุรั่วใน 72 ชั่วโมง (ข้อ 6, 8) | 37(1) · 37(3) · 37(4) |
+| บันทึกรายการประมวลผล (ข้อ 1) | 39 |
+| เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) | 41 |
+| ค่าสินไหม · ค่าเสียหายเชิงลงโทษ | 77 · 78 |
+| โทษปรับทางปกครอง สูงสุด 1 · 3 · 5 ล้านบาท | 82 · 83 · 84 |
+
+**ภาคที่มีกฎทับอีกชั้น** — สุขภาพ · การเงิน · โทรคมนาคม มีหน่วยกำกับของตัวเอง (กระทรวงสาธารณสุข · ธปท./ก.ล.ต./คปภ. · กสทช.) ที่เพิ่มเงื่อนไขเรื่องความลับ อายุการเก็บ และการแจ้งเหตุ ให้ตรวจกฎของภาคนั้นก่อนออกแบบ ไม่ใช่ยึด PDPA อย่างเดียว (แนวคิดจาก BV thai-pdpa (MIT))
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม

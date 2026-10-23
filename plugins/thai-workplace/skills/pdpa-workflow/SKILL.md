@@ -39,6 +39,7 @@ Consent is the weakest basis — it can be withdrawn. Pick the basis first (ม.
 2. For each: data items, purpose, basis, who can access, where stored, vendors, retention, deletion method.
 3. Write it into the ROPA template ([references/pdpa-templates.md](references/pdpa-templates.md)).
 4. Small businesses may be partly exempt from keeping a ROPA under a PDPC announcement — not if they handle sensitive data or high-risk processing (รอยืนยัน the current conditions); keeping one anyway is cheap.
+5. PDPC published a **draft** ROPA practice guideline on 7 July 2569 (reported by tilleke.com; checked 2026-10-22). It is a draft, not yet in force (รอยืนยัน the final text on pdpc.or.th) — if it is adopted, align the template's columns with it.
 
 ### B. Privacy notice and consent
 1. Privacy notice (ประกาศความเป็นส่วนตัว) at every collection point — what, why, basis, retention, rights, contact.

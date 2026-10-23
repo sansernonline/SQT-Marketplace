@@ -202,7 +202,7 @@ Blog post (full)
 ## Skills You Use
 
 - `developer-experience` — this skill's references: `references/technical-content.md` (content patterns) · `references/developer-experience.md` (DX principles)
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -440,7 +440,7 @@ docs.example.com/zh    (Chinese)
 ## Skills You Use
 
 - `developer-experience` → `references/technical-content.md` — content patterns
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -571,7 +571,7 @@ kubectl get pods -n production
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/developer-experience.md` — DX patterns
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -818,7 +818,7 @@ await client.charges.create(data, {
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `developer-experience` → `references/sdk-design-patterns.md` — SDK patterns
-- `polished-document-style` (from software-company) — for docs
+- `polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 

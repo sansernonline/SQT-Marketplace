@@ -7,7 +7,7 @@ description: Use when a project verify skill has drifted from the real app (step
 
 > verify skill ที่บอกขั้นตอนผิด อันตรายกว่าไม่มีเลย เพราะ agent จะเชื่อแล้วรายงานว่าผ่าน
 
-ใช้กับ skill ที่สร้างจาก [`app-verifier-setup`](../app-verifier-setup/SKILL.md)
+ใช้กับ skill ที่สร้างจาก [`app-verifier-setup`](../app-verifier-setup/SKILL.md) · บน Claude Code ไฟล์นั้นคือ `.claude/skills/verify/SKILL.md` (ดู [`app-verifier-setup/references/builtin-verify.md`](../app-verifier-setup/references/builtin-verify.md)) — ดูแลไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน
 
 ## ขั้นตอน
 

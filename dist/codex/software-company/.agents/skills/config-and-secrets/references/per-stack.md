@@ -1,5 +1,7 @@
 # วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
 
+**สารบัญ:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular และ frontend ทั่วไป · 5 Docker และ Kubernetes · 6 เครื่องมือตรวจ secret ที่หลุดเข้า git · 7 คำสั่งสร้างค่าสุ่มที่ปลอดภัย
+
 1. [.NET / ASP.NET Core](#1--net--aspnet-core)
 2. [Node.js](#2--nodejs)
 3. [Python](#3--python)

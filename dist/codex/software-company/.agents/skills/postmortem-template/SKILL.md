@@ -6,6 +6,7 @@ description: Use when writing a post-incident review or blameless postmortem of 
 # Blameless Postmortem Template
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
 
@@ -80,6 +81,9 @@ All times in UTC.
 | HH:MM | All clear confirmed |
 
 ## 4. What Happened (Detailed)
+
+### Trigger
+What set it off? (deploy · config change · traffic spike · dependency outage · scheduled job) — keep separate from the root cause and from how we noticed
 
 ### Detection
 How was the incident detected? Was it automated alerting or customer report?
@@ -201,6 +205,19 @@ Almost never. SEV4 needs only a short writeup. Always do a full one for:
 - Security incidents
 - Customer-facing incidents
 - Data integrity issues
+
+### Quick postmortem (SEV3 not repeated · SEV4 · near-miss)
+
+One block in the incident channel or ticket, same day — no meeting. Trigger · Detection · action-item Type are the same words as the full template (แนวคิดจาก Google SRE postmortem example):
+
+```markdown
+**Quick postmortem:** <title> · SEV3 · YYYY-MM-DD · <XX min>
+- Trigger → impact: <what set it off> → <who felt what>
+- Detection: <alert | customer | chance> after <XX min>
+- Mitigation: <what stopped it>
+- Root cause: <one sentence>
+- Action: <one item> · @owner · Type <Prevent | Detect | Mitigate | Process> · due YYYY-MM-DD
+```
 
 ---
 

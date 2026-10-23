@@ -229,7 +229,7 @@ Network:
 
 ## Output: Security Architecture Doc
 
-Use `polished-document-style` skill (from software-company).
+Use `polished-document-style` skill (from superuser).
 
 ```markdown
 # Security Architecture: <System/Org>
@@ -261,7 +261,7 @@ Use `polished-document-style` skill (from software-company).
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 - `architecture-patterns` (from software-company)
 - `security-operations`
 

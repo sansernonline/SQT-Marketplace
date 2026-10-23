@@ -34,6 +34,8 @@ Managers often run 50–60% meetings by design — adjust targets to the role, b
 
 `hours per session × attendees × sessions per month` = person-hours. Example: weekly sync 1 h × 8 people × 4 = 32 person-hours/month. Ask: "what did those 32 hours decide?"
 
+**Refocus overhead.** A meeting dropped into a focus block costs its length plus about 23 minutes to get back into the work. Count it: `meetings that cut a focus block × 23 min` and add it to the meetings column — 5 scattered 30-minute calls in a day cost about 2 h of focus on top of their 2.5 h. Same-length meetings back to back cost nothing extra, which is why the guard rails below cluster them. (23 minutes: Mark, Gudith and Klocke, "The cost of interrupted work: more speed and stress", CHI 2008 — figure as widely quoted; paper not opened on 2026-10-23 → รอยืนยัน.)
+
 ## Guard rails
 
 - One meeting-free half-day per week (e.g. Wednesday morning), marked busy

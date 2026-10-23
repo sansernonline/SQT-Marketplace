@@ -34,6 +34,7 @@ not a research project. The first lazy solution that works is the right one.
 - No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
 - No scaffolding "for later." Later can scaffold for itself.
 - Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
+- Deletion test: remove the piece, run the tests — still green? It stays deleted. (idea from mattpocock codebase-design)
 - Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
 - Match the repo — read 2-3 nearby files first and copy their style.
 - Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.
@@ -175,6 +176,11 @@ Use when writing or reviewing code for readability (names, function shape, comme
 - **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
 - **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
 - **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
+- **ชื่อฟังก์ชันเรียง กริยา → บริบทใหญ่ → บริบทย่อย** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · เรียงแบบเดียวกันทั้งโปรเจกต์ คนอ่านจะเดาชื่อที่ยังไม่เคยเห็นถูก
+- **boolean ขึ้นต้นด้วย `is` `has` `should` `can`** — อ่านเป็นคำถามที่ตอบได้แค่ใช่หรือไม่ (`hasUnpaidBalance` · `canRetry`)
+- **ไม่ซ้ำบริบทที่ชื่อรอบนอกบอกแล้ว** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
+
+(3 ข้อท้าย — แนวคิดจาก kettanaito/naming-cheatsheet (MIT) เขียนใหม่ด้วยคำเรา)
 
 ---
 

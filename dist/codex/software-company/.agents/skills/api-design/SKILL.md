@@ -57,7 +57,12 @@ The system analyst should:
    - Versioning policy
    - Rate limiting table
 
-8. **Hand-off suggestions:**
+8. **Change protocol** (the spec is the contract consumers test against · idea from ECC contract-first):
+   - Spec first, code second — every later change edits the OpenAPI/proto file before any handler, and the diff of that file is what reviewers read
+   - Additive changes only in place (new optional field · new endpoint · new enum value the client ignores); rename, remove, type change or new required field → new version or deprecation per `api-conventions` §10
+   - Each spec change names its consumers and how they were told (changelog line · deprecation header date)
+
+9. **Hand-off suggestions:**
    - Implementation → `developer`
    - Security review → `security-engineer`
    - Documentation for external devs → `technical-writer`

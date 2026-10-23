@@ -1,0 +1,6 @@
+{
+  "name": "sqt-reverse-engineer",
+  "version": "0.1.0",
+  "description": "Reverse-engineering toolkit that mirrors the REA architecture — one entry skill routes to per-target modules (JavaScript/Electron apps, native binaries, .NET assemblies, websites, Android APKs), every conclusion must carry evidence and stated limitations, and findings end in an explanation or a rebuildable implementation. Uses the REA engine (npx rea-agents) when available, with manual static-analysis fallbacks. For software you own or are authorized to examine only.",
+  "contextFileName": "GEMINI.md"
+}

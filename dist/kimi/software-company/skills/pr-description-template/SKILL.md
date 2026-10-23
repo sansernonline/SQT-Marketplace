@@ -6,6 +6,7 @@ description: Use when writing a pull request description or preparing a PR for r
 # Pull Request Description Template
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
 
@@ -52,6 +53,15 @@ description: Use when writing a pull request description or preparing a PR for r
 3. Verify ...
 4. Try edge case: ...
 
+## Evidence
+<!-- ก่อน/หลัง ที่ reviewer ตรวจเองได้: ผล test ที่รันจริง (ชื่อ test + ผ่าน/ไม่ผ่าน) · ตัวเลขที่วัดได้ · ภาพหน้าจอ — "tested locally" ไม่นับ -->
+- Before: ...
+- After: ...
+
+## Merge Danger
+<!-- one-way door = ย้อนกลับยาก (migration ลบคอลัมน์ · ลบ API · เปลี่ยนรูปแบบข้อมูลที่เก็บแล้ว) ต้องบอกแผนถอยกลับ · two-way door = revert ได้ใน 1 commit -->
+<one-way door / two-way door — ถ้า one-way ใส่แผนถอยกลับ>
+
 ## Screenshots / Demos
 <!-- ใช้ภาพจากข้อมูลจำลอง หรือเบลอข้อมูลลูกค้าจริงก่อนแนบ -->
 | Before | After |
@@ -83,6 +93,8 @@ description: Use when writing a pull request description or preparing a PR for r
 ## Notes for Reviewer
 <anything reviewer should pay attention to, gotchas, alternative approaches considered>
 ```
+
+> ส่วน Evidence และ Merge Danger — แนวคิดจาก mattpocock/skills pr (เครดิต HumanLayer) เขียนใหม่ด้วยคำเรา
 
 ## Size Guidelines
 

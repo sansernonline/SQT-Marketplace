@@ -259,6 +259,23 @@ def extract_money(text):
 
 ## Risk Pattern Detection
 
+Start from a fixed clause list so every contract gets the same 10 checks, then flag each one (แนวคิดจาก borghei contract-review (เขียนใหม่)):
+
+| # | Clause | RED (block) | YELLOW (negotiate) | GREEN |
+|---|---|---|---|---|
+| 1 | Term | auto-renews with < 30 days notice | fixed term, no renewal terms | clear term + renewal notice ≥ 30 days |
+| 2 | Termination | counter-party only, for convenience | mutual but long notice | mutual, for cause + convenience, same notice |
+| 3 | Payment | pay before acceptance, no dispute path | > 60 days or vague "upon invoice" | milestones or ≤ 30 days, late-payment rule |
+| 4 | Liability cap | unlimited, or cap only on our side | cap below fees paid | cap = fees paid in 12 months, carve-outs listed |
+| 5 | Indemnity | one-way, unlimited | mutual but broad triggers | mutual, limited to IP and third-party claims |
+| 6 | Confidentiality | one-way, no term | survives forever | mutual, 3–5 years, standard exclusions |
+| 7 | Intellectual property | all deliverables and background IP assigned | licence scope unclear | deliverables assigned, background IP licensed |
+| 8 | Governing law | foreign law + foreign court for a Thai deal | foreign law, local court | Thai law for Thai parties (or agreed neutral) |
+| 9 | Dispute resolution | no process, straight to court abroad | arbitration seat unclear | negotiation → mediation → arbitration or court |
+| 10 | Force majeure | missing, or excludes payment relief | lists events but no notice duty | defined events, notice duty, termination after N days |
+
+Output the flag per clause in `Risk` (below) so the LLM review and the regex rules feed the same schema.
+
 ```python
 RISK_RULES = {
     'auto_renewal_short_notice': {

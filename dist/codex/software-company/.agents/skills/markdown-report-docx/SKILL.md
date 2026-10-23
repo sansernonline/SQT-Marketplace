@@ -24,7 +24,7 @@ description: Use when one Markdown file must become a polished Word report (busi
 | เอกสารทางการแบบปกมีแถบสี กล่อง metadata ตารางลงนาม (ข้อกำหนดความต้องการซอฟต์แวร์ (Software Requirements Specification — SRS) · เอกสารความต้องการทางธุรกิจ (Business Requirements Document — BRD) · ข้อเสนอ) | `branded-document-design` เรียก `BrandDoc` ตรง |
 | สไลด์นำเสนอ | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลง) |
 | เอกสารที่อยู่ในรีโปเป็น Markdown อย่างเดียว | `polished-document-style` |
-| วิทยานิพนธ์ · IS · บทความวิจัย | `dev-learning:thesis-writing` ก่อน (ถ้าติดตั้ง) — คู่มือคณะคุมโครงเล่มและการจัดหน้า สคริปต์นี้ใช้ทำ .docx ต่อได้ |
+| วิทยานิพนธ์ · IS · บทความวิจัย | `personal-life:thesis-writing` ก่อน (ถ้าติดตั้ง) — คู่มือคณะคุมโครงเล่มและการจัดหน้า สคริปต์นี้ใช้ทำ .docx ต่อได้ |
 
 ---
 

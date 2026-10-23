@@ -16,7 +16,7 @@ For app or product screens, the `software-company` plugin's `ui-craft` skill (if
 3. **Logo** — collect or request the 4 versions (full colour · reversed white · solid black · solid white), set clear space and minimum size (below)
 4. **Colour** — assign roles, not just swatches (table below); run the contrast check on every text/background pair you will actually use
 5. **Type** — pick 1 Thai+Latin pairing from [thai-fonts.md](references/thai-fonts.md), confirm the licence file, set the scale
-6. **Imagery and voice** — 3 adjectives each, plus 1 on-style and 1 off-style example
+6. **Imagery** — 3 adjectives, plus 1 on-style and 1 off-style example. **Voice** — not 3 adjectives: 1 before/after Thai pair written by the owner (how they would say it vs how a stranger would) · particles ครับ/ค่ะ yes or no · `คุณ` or no pronoun · 1 register from `human-writing` `references/thai-grammar.md` section 4
 7. **Write the README** — the 5 rules that must never break, each with a 1-line reason
 8. **Tag** `v1` and log changes in `CHANGELOG.md`; any change to colour, logo or font is `v2`
 
@@ -54,7 +54,7 @@ Ratios computed with the WCAG relative-luminance formula. Decision written into 
 
 - 1 Thai+Latin family for headlines and 1 for body (it can be the same family in 2 weights)
 - Scale ratio 1.25 (major third) from a 16 px body: **16 · 20 · 25 · 31 · 39 · 49** px. On a 1080 px-wide social canvas: body 32–40 px, headline 72–120 px
-- Thai body line-height **1.5–1.7** (stacked vowels and tone marks collide below about 1.4); Latin-only 1.4–1.5
+- Thai body line-height **1.5–1.7** (stacked vowels and tone marks collide below about 1.4); Latin-only 1.4–1.5 (ค่ากลางอยู่ใน `human-writing` `references/thai-line-breaking.md`)
 - Thai glyphs look smaller than Latin at the same size in many fonts — compare x-height and bump Thai 5–10% if the pairing looks uneven (judge by eye at real size)
 - Looped Thai (มีหัว) for body and small text; loopless (ไม่มีหัว) for headlines and short display text
 

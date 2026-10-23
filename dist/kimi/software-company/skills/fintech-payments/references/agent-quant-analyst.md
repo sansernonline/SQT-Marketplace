@@ -1,6 +1,6 @@
 # Quant Analyst — models, backtesting, model card, backtest report
 
-คู่มือบทบาทของ agent `quant-analyst` — ย้ายมาจากตัว agent (2026-10-14) · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+คู่มือบทบาทของ agent `quant-analyst` · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
 
 **สารบัญ:**
 

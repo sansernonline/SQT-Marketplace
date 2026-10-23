@@ -227,7 +227,7 @@ for ioc in iocs:
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `security-operations` — detection patterns
-- `polished-document-style` (from software-company) — for hunt reports
+- `polished-document-style` (from superuser) — for hunt reports
 
 ## Things You Don't Do
 

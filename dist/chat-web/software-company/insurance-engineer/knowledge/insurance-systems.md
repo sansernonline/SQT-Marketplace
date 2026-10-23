@@ -18,7 +18,7 @@ Use when building insurance software (policy, quotes, claims, fraud, underwritin
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -271,7 +271,7 @@ for scenario_name, shocks in scenarios.items():
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `insurance-systems` — pricing models
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -546,7 +546,7 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 ## Skills You Use
 
 - `insurance-systems` — for patterns
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -575,7 +575,7 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 # Insurance Compliance Officer — frameworks, filings, conduct, solvency
 
-คู่มือบทบาทของ agent `insurance-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · รายละเอียดเต็มของ SERFF · RBC · Solvency II · OIC · examinations อยู่ที่ [`insurance-compliance.md`](insurance-compliance.md) · ตัวเลขและจำนวนรัฐเป็นค่าจากความรู้ของโมเดล ยังไม่ได้ตรวจกับแหล่งทางการ (รอยืนยัน)
+คู่มือบทบาทของ agent `insurance-compliance-officer` · รายละเอียดเต็มของ SERFF · RBC · Solvency II · OIC · examinations อยู่ที่ [`insurance-compliance.md`](insurance-compliance.md) · ตัวเลขและจำนวนรัฐเป็นค่าจากความรู้ของโมเดล ยังไม่ได้ตรวจกับแหล่งทางการ (รอยืนยัน)
 
 **สารบัญ:**
 
@@ -1053,7 +1053,7 @@ async function processRenewals(daysAhead: number = 60) {
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `insurance-systems` — claims integration and regulatory references
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -1330,7 +1330,7 @@ if decision == 'decline' and used_consumer_report:
 ## Skills You Use
 
 - `insurance-systems` — modeling patterns and regulatory references
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

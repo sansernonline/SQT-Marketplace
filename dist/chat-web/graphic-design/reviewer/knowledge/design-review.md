@@ -13,6 +13,7 @@ Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 1. **Know the job** — placement, campaign sentence, one action (from the `campaign-set` card). Without it, point 1 cannot be judged
 2. **View at real size** — on a phone for social (or 375 px wide on screen), at arm's length for print proofs
 3. **2-second test** — look for 2 seconds, look away, and say what it was about
+   - **Squint test** — squint, or zoom to 10%, or blur the image 10 px: what still shows is the real hierarchy. If the offer or the one action disappears and the photo stays, point 2 fails whatever the sizes say
 4. **Score the 8 points** below — pass or fail by the criteria, 1 line each
 5. **Rank the top 3 fixes** by impact on the one action. Each fix names the element, the change and the amount
 6. **Name 1 thing to keep** that the fixes must not break
@@ -32,6 +33,13 @@ Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 | 8 | Craft | No artefacts, no stretching, no default effects, correct spelling in both languages | AI artefacts (fingers, warped text, melted objects); jagged cut-outs; typos in price or date |
 
 Point 3 source: WCAG 2.2 criterion 1.4.3 — ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+
+Point 6, 4 quick checks (house rules):
+
+- Levels differ by size **and** weight, not by colour alone — a headline 2 weights heavier than body, not just orange
+- Line length: body text 45–75 Latin characters, about 35–55 Thai characters per line; longer lines are skipped on a phone
+- No letter-spacing on Thai body text — it breaks the vowel and tone-mark stacking; tracking only on short Latin caps
+- One alignment per text block; a centred headline over left-aligned body needs a visible reason (a centred photo axis)
 
 Severity: a fail on 1, 3 or 8 (wrong price, unreadable text, broken hands) blocks shipping. Fails on 4–7 can ship if the deadline is hard and they go on the next-round list.
 

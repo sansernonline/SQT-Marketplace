@@ -44,3 +44,26 @@ BEGIN
 END
 -- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
 ```
+
+## index เฉพาะแถวส่วนน้อย และตารางบวม (SKILL.md ข้อ 5)
+
+```sql
+-- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
+CREATE INDEX CONCURRENTLY ix_orders_pending ON orders (created_at) WHERE status = 'pending';
+-- SQL Server · filtered index แบบเดียวกัน (query ต้องมี WHERE status = 'pending' ตรงตัว)
+CREATE INDEX ix_orders_pending ON dbo.orders (created_at) WHERE status = 'pending';
+
+-- PostgreSQL · ตารางบวมหลังลบหรืออัปเดตก้อนใหญ่
+SELECT relname, n_live_tup, n_dead_tup, last_autovacuum
+FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC;
+VACUUM (VERBOSE, ANALYZE) orders;          -- ปกติ
+REINDEX INDEX CONCURRENTLY ix_orders_pending; -- index บวม
+
+-- SQL Server · index แตกเป็นชิ้น
+SELECT i.name, s.avg_fragmentation_in_percent, s.page_count
+FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('dbo.orders'), NULL, NULL, 'LIMITED') s
+JOIN sys.indexes i ON i.object_id = s.object_id AND i.index_id = s.index_id
+WHERE s.page_count > 1000;
+ALTER INDEX ix_orders_pending ON dbo.orders REORGANIZE; -- < 30%
+ALTER INDEX ix_orders_pending ON dbo.orders REBUILD WITH (ONLINE = ON); -- >= 30% (Enterprise/Azure)
+```

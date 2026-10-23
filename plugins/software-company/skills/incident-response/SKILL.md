@@ -48,7 +48,14 @@ The DevOps engineer should follow this structured response:
    - What pattern do logs show?
    - Could it be capacity? Network? Bug? Config?
 
-3. **Communicate updates** every 15-30 min even if "still investigating"
+3. **Communicate updates** every 15-30 min even if "still investigating" — one message per audience, the Communications lead sends them (แนวคิดจาก borghei incident-commander (MIT+Commons Clause → เขียนใหม่)):
+
+   | Audience | When | Says (and nothing more) |
+   |---|---|---|
+   | Internal (incident channel · support) | every 15-30 min | what is broken · who is affected · what we are trying now · next update at HH:MM |
+   | Exec (SEV1/2) | at declare · at mitigate · at all-clear | impact in business terms (users · orders · baht) · ETA or "unknown" · what we need from them (a decision, a vendor call) |
+   | Customers (status page · in-app) | at declare · on change · at all-clear | symptom in their words · workaround if any · next update time — no root cause, no blame, no promises of a fix time |
+   | Regulator / PDPC (personal-data breach only) | within 72 h of knowing, via `pdpa-compliance` section 8 | what data · how many people · what was done · contact person — drafted by `legal-compliance-officer`, not improvised in the channel |
 
 ## 🩹 Phase 3: Mitigation (stop the bleeding)
 
@@ -98,8 +105,6 @@ Throughout the incident, keep a running **incident log** as plain timestamped li
 - Mitigations attempted (worked + didn't)
 - Resolution actions
 - Action items for postmortem
-
-Use the `postmortem-template` skill afterwards for the full analysis.
 
 ## Hand-off Suggestions
 

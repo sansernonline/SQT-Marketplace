@@ -305,7 +305,7 @@ async function updateProduct(slug: string, updates: any) {
 - `ecommerce-patterns` — this skill's references:
   - `references/checkout-optimization.md` — friction analysis + reduction
   - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
-- `polished-document-style` (from software-company) — for spec docs
+- `polished-document-style` (from superuser) — for spec docs
 
 ## Things You Don't Do
 

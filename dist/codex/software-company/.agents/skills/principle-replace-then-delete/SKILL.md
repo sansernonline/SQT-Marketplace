@@ -30,3 +30,5 @@ description: Use when replacing an API, function, table or component, or in a mi
 | แอปมือถือรุ่นเก่ายังใช้งานอยู่ | รองรับถึงรุ่นขั้นต่ำที่บังคับอัปเดต |
 
 จดทุกข้อยกเว้นใน `decision-log` พร้อมวันที่จะลบ
+
+อัปเกรด framework ทั้งระบบ (.NET Framework → .NET 8 · Angular major · Python 2 → 3 · Node LTS) ใช้หลักเดียวกันทีละ package — playbook ต่อ stack อยู่ที่ [`legacy-spec-recovery/references/framework-upgrade.md`](../legacy-spec-recovery/references/framework-upgrade.md)

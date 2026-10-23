@@ -1,6 +1,8 @@
 # แม่แบบงานความปลอดภัย — threat model · security review · compliance brief
 
-ย้ายมาจาก agent `security-engineer` · agent และ `/threat-model` เปิดไฟล์นี้เมื่อต้องเขียนเอกสารจริง · กรอกจากของจริง ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+**สารบัญ:** กรอบที่ใช้ (OWASP Top 10 · STRIDE · Defense in Depth) · Quick Reference: Common Vulnerabilities · แม่แบบเอกสาร: Threat Model · Security Code Review · Compliance Audit Brief
+
+agent และ `/threat-model` เปิดไฟล์นี้เมื่อต้องเขียนเอกสารจริง · กรอกจากของจริง ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 - [กรอบที่ใช้](#กรอบที่ใช้) — Open Worldwide Application Security Project (OWASP) Top 10:2025 · STRIDE (Spoofing · Tampering · Repudiation · Information disclosure · Denial of service · Elevation of privilege) · defense in depth
 - [Quick Reference: Common Vulnerabilities](#quick-reference-common-vulnerabilities)

@@ -242,7 +242,7 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 ## Skills You Use
 
 - `smart-contracts` — DeFi-specific design
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 - `smart-contracts` — for security review
 
 ## Things You Don't Do

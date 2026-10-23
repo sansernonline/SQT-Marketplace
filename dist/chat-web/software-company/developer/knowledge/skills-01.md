@@ -37,7 +37,7 @@ Use when about to change code not yet read this session. Maps how it runs, why, 
 | ดูที่ | คำสั่ง |
 |---|---|
 | ใครแก้บรรทัดนี้ เพราะอะไร | `git log -L <เริ่ม>,<จบ>:<ไฟล์>` · `git blame -w <ไฟล์>` แล้ว `git show <commit>` |
-| commit ที่พูดถึงเรื่องนี้ | `git log --oneline -S "ชื่อฟังก์ชัน"` · `git log --grep "คำค้น"` |
+| commit ที่พูดถึงเรื่องนี้ | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
 | เอกสาร | `docs/` · ADR · `CONTEXT.md` · comment ที่บอก "ทำไม" |
 | test ที่ล็อกพฤติกรรมไว้ | ค้นชื่อฟังก์ชันในโฟลเดอร์ test เพราะ test บอกเจตนาได้ดีกว่า comment |
 
@@ -48,6 +48,14 @@ Use when about to change code not yet read this session. Maps how it runs, why, 
 อ่านไฟล์ที่คล้ายกับที่จะเขียน 2–3 ไฟล์ แล้วจด:
 - **คำสั่ง** — install · build · test · lint · format · รัน test ตัวเดียว (จาก README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
 - **โครง** — วางไฟล์แบบไหน · ตั้งชื่อแบบไหน · จัดการ error และ log แบบไหน · test เขียนแบบไหน
+- **รายการตรวจแบบแผน** (จดเฉพาะที่ต่างจากค่าเริ่มต้นของภาษา · แนวคิดจาก ECC codebase-onboarding)
+
+  | ดู | หลักฐานที่เปิด |
+  |---|---|
+  | ชื่อไฟล์ คลาส ฟังก์ชัน ตัวแปร (`PascalCase` · `kebab-case` · prefix `I` · suffix `Service`) | ไฟล์พี่น้อง 2–3 ไฟล์ในโฟลเดอร์เดียวกัน |
+  | lint และ format ที่ใช้จริง | `.editorconfig` · `.eslintrc*` · `.prettierrc` · `ruff.toml` · `.globalconfig` หรือ `Directory.Build.props` (.NET) · pre-commit |
+  | import (path alias · ลำดับ · barrel file) · error (throw vs Result) · log (library · ฟิลด์) · async (Promise vs Observable · `async`/`await` vs callback) | ไฟล์ทางเข้าและ 1 ไฟล์ใน layer เดียวกับที่จะแก้ |
+  | test: ชื่อไฟล์ · วางข้างโค้ดหรือแยกโฟลเดอร์ · fixture หรือ builder ที่ repo มีอยู่ | โฟลเดอร์ test ที่ใกล้ที่สุด |
 - **stack** — เปิด skill ตามภาษา: `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`
 
 ทำตามแบบของ repo แม้ไม่ใช่แบบที่ชอบ ถ้าอยากเปลี่ยนแบบแผนให้เสนอในรายงาน ไม่เปลี่ยนเงียบ ๆ กลางงาน
@@ -146,6 +154,11 @@ Use when writing or reviewing code for readability (names, function shape, comme
 - **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
 - **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
 - **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
+- **ชื่อฟังก์ชันเรียง กริยา → บริบทใหญ่ → บริบทย่อย** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · เรียงแบบเดียวกันทั้งโปรเจกต์ คนอ่านจะเดาชื่อที่ยังไม่เคยเห็นถูก
+- **boolean ขึ้นต้นด้วย `is` `has` `should` `can`** — อ่านเป็นคำถามที่ตอบได้แค่ใช่หรือไม่ (`hasUnpaidBalance` · `canRetry`)
+- **ไม่ซ้ำบริบทที่ชื่อรอบนอกบอกแล้ว** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
+
+(3 ข้อท้าย — แนวคิดจาก kettanaito/naming-cheatsheet (MIT) เขียนใหม่ด้วยคำเรา)
 
 ---
 
@@ -366,6 +379,7 @@ not a research project. The first lazy solution that works is the right one.
 - No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
 - No scaffolding "for later." Later can scaffold for itself.
 - Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
+- Deletion test: remove the piece, run the tests — still green? It stays deleted. (idea from mattpocock codebase-design)
 - Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
 - Match the repo — read 2-3 nearby files first and copy their style.
 - Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.
@@ -558,6 +572,11 @@ ParseDate_WhenInputIsEmpty_ReturnsNull
 
 **1 test = 1 เหตุผลที่จะพัง** ถ้ามี assert 5 อันที่ไม่เกี่ยวกัน ให้แยกเป็น 5 test
 
+**บอกให้ได้ก่อนเขียนว่าโค้ดเปลี่ยนตรงไหนแล้ว test นี้จะแดง** (ปรับจาก superpowers `test-driven-development` · MIT)
+- บอกไม่ได้ → test นี้ไม่ได้จับพฤติกรรม เขียนใหม่ให้จับผลที่สังเกตได้
+- คำตอบคือ "ข้อความในไฟล์ต้นฉบับเปลี่ยน" → กำลังทดสอบตัวอักษร ให้รันของจริงแล้วตรวจผลแทน
+- แดงเฉพาะตอนคนตั้งใจเปลี่ยนค่า (เช่น เปลี่ยนสี label) → เป็นตัวจับการเปลี่ยน ไม่ใช่ test พฤติกรรม ย้ายไปทดสอบสิ่งที่ค่านั้นกระทบแทน
+
 **ห้ามมี logic ใน test** — ไม่มี `if`, ไม่มีลูปที่คำนวณค่าคาดหวัง
 ถ้าอยากรันหลายเคส ใช้ parameterized test (`[Theory]` / `test.each` / `@pytest.mark.parametrize`)
 
@@ -606,6 +625,7 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 - [ ] ลองสลับลำดับ test แล้วยังเขียวหมด (pytest: ลง `pytest-randomly` แล้วรัน `pytest` ธรรมดา · Vitest: `--sequence.shuffle` · Jest: `--randomize` · Flutter: `--test-randomize-ordering-seed random`)
 - [ ] รันซ้ำ 3 รอบได้ผลเหมือนเดิม (ไม่ flaky)
 - [ ] แก้โค้ดให้พังโดยตั้งใจ 1 จุด แล้ว test **ต้องแดง** — ถ้ายังเขียว แปลว่า test ไม่ได้ทดสอบอะไร
+- [ ] **ลองพังในหัวก่อนปิดไฟล์ test** — ไล่ 5 แบบ: ค่าคงที่หรือ argument ผิด · เข้า branch ผิด · ลืมเปลี่ยน state หรือ side effect · คืนค่าว่างหรือค่าเริ่มต้น · ไม่ตรวจ 0 · ว่าง · null · ไม่มีสิทธิ์ · รูปแบบผิด — แบบไหนไม่มี test แดง แปลว่าพฤติกรรมนั้นยังไม่มีใครคุ้ม
 - [ ] ชื่อ test อ่านแล้วรู้ว่าพังอะไรโดยไม่ต้องเปิดโค้ด
 - [ ] ไม่มี `sleep` / `Thread.Sleep` ในชุด test
 - [ ] ไม่มี test ที่ถูก skip ค้างโดยไม่มีเหตุผลกำกับ
@@ -1185,11 +1205,12 @@ Use when setting up commitlint or semantic-release, or a commit needs release ru
 
 Someone scanning `git log --oneline` should understand each line without opening the diff.
 
-- **Language follows the repo** — check `git log -10` first. A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
+- **Measure the repo's norm, then follow it** — `git log --oneline -30` before the first commit: language, whether `scope` is used, which types appear, typical subject length. A repo that never uses scope does not get one from you; a repo at 40 characters does not get a 72-character subject. Note what you measured in the report once (idea from ECC conventional-commit-review).
+- **Language follows the repo** — A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
 - **Subject says what changed for the reader**, not which file was touched: `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว`, not `fix: แก้ items.js บรรทัด 42`
 - **One line is enough** for most commits. Add a body only when *why* is not obvious from the subject — at most 3 short lines or bullets
 - **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
-- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit
+- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit. Check `git diff --stat` before writing the subject: when the files fall into more than one topic (feature + unrelated rename, fix + formatting sweep), propose the split as a list of `<subject> → <files>` per commit and stage each with `git add <files>` or `git add -p`; never hide the second topic in the body
 
 | ❌ Hard to read | ✅ Short and clear |
 |---|---|
@@ -1218,7 +1239,7 @@ Co-authored-by: ...      ← attribution
 
 - [ ] Type matches the change (not just "chore" for everything)
 - [ ] Scope is meaningful (component/module name)
-- [ ] Subject is imperative and ≤50 chars
+- [ ] Subject is imperative and ≤50 chars — Thai subjects count base consonants only (~50); vowels and tone marks do not count · กติกาเต็มอยู่ใน `superuser` skill `commit-log`
 - [ ] Body explains WHY (if change isn't obvious)
 - [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
 - [ ] Linked to issue/ticket when applicable

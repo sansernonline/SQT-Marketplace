@@ -134,7 +134,7 @@ Use when someone says I want an app like X. Researches it and its competitors in
 6. เทียบคู่แข่ง (4.5)
 7. ข้อเสนอปรับปรุง (4.6) + ไม่ควรลอก + ยังไม่รู้
 8. ส่งต่อเอกสารถัดไป (ตารางด้านล่าง)
-9. แหล่งอ้างอิง — เลขลำดับ [1] [2] … · ชื่อหน้า · URL · วันที่เข้าดู
+9. ทะเบียนแหล่ง (source register) — ตารางเดียว ทุกแถวมี เลข [n] · ชื่อหน้า · URL · กลุ่ม (ข้อ 2) · วันที่ดึง · เอาอะไรมาจากแหล่งนี้ (feature / รีวิว / ภาพ) — แถวที่ไม่มีวันที่ดึงยังไม่นับเป็นหลักฐาน (แนวคิดจาก daymade competitors-analysis · MIT)
 ```
 
 ### ตารางส่งต่อ — ทำให้ research ใช้ได้จริงในเอกสารถัดไป
@@ -162,7 +162,7 @@ Use when someone says I want an app like X. Researches it and its competitors in
 ## 7 · รายการตรวจก่อนส่ง
 
 - [ ] ขอบเขต (รุ่น แพลตฟอร์ม ผู้ใช้ของเรา) ชัดตั้งแต่ต้นเอกสาร
-- [ ] ทุกข้อเท็จจริงมีเลขแหล่ง หรือติดป้าย `ยังไม่ได้ตรวจ` และแหล่งครบ 4 กลุ่ม
+- [ ] ทุกข้อเท็จจริงมีเลขแหล่ง หรือติดป้าย `ยังไม่ได้ตรวจ` และแหล่งครบ 4 กลุ่ม · ทะเบียนแหล่งมีวันที่ดึงทุกแถว
 - [ ] เสียงผู้ใช้นับความถี่ ไม่ได้ยกความเห็นเดียวมาเป็นข้อสรุป
 - [ ] ข้อเสนอปรับปรุงมีครบ 6 ช่องทุกข้อ และเป็นส่วนที่ยาวที่สุดของเอกสาร
 - [ ] มี "ไม่ควรลอก" และ "ยังไม่รู้"
@@ -233,8 +233,8 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 |---|---|---|
 | เนื้อหาข้างในเอกสาร | `human-writing` (งานโค้ด: `srs-writing` · `fsd-writing` ใน plugin `software-company`) | แทน |
 | รูปแบบ markdown | `polished-document-style` | แทน |
-| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` | แทน |
-| ไฟล์ชั่วคราวระหว่างทำงาน | [`temp-file-discipline`](../temp-file-discipline/SKILL.md) | แทน |
+| หน้าตาไฟล์ที่ render ออกมา | `branded-document-design` (plugin `software-company`) | แทน |
+| ไฟล์ชั่วคราวระหว่างทำงาน | `superuser:temp-file-discipline` | แทน |
 | งานโค้ด: ข้อความ commit · เวอร์ชันของ **โปรแกรม** · สารบัญเอกสารโปรเจกต์ | `commit-message-format` · `cicd-and-release` · `project-bootstrap` (plugin `software-company`) | แทน/คู่ |
 | ตัวย่อในงานที่คนอ่าน | [`spell-out-abbreviations`](../spell-out-abbreviations/SKILL.md) | คู่ |
 
@@ -250,7 +250,7 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 |---|---|---|
 | ข้อเสนอ · ใบเสนอราคา · รายงานส่งมอบ · ใบตรวจรับงาน · สัญญา (ชุดเอกสารโปรเจกต์ซอฟต์แวร์ → plugin `software-company`) | **docx** | มีคนเซ็น ต้องล็อกฉบับ |
 | คู่มือผู้ใช้ | **docx + PDF** | ผู้ใช้ปลายทางเปิดได้ทุกเครื่อง |
-| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
+| สไลด์นำเสนอ | **pptx** · ขอ html → .html ไฟล์เดียว (ชนิดไฟล์ตาม `presentation-design` ใน plugin `software-company`) · PDF เมื่อเครื่องปลายทางไม่มีฟอนต์ | |
 | ขั้นตอนทำงาน · คู่มือภายใน · README · บันทึกประชุม · บันทึกการตัดสินใจ (งานโค้ด → plugin `software-company`) | **markdown** ในโฟลเดอร์เอกสาร | เปลี่ยนบ่อย ต้องเทียบความต่างได้ ค้นหาง่าย |
 
 > 🚨 **ต้นฉบับ markdown ที่ render ซ้ำได้ เก็บถาวรใน `docs/src/<เรื่อง>.md` แล้ว render เป็น docx ลงโฟลเดอร์เอกสาร (`docs/`)**
@@ -336,7 +336,7 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 | ต้นฉบับ | อยู่ใน `docs/src/` ของงานที่เดียว (งานโค้ด: `project-doc-set` ใน plugin `software-company`) |
 | ไฟล์ส่งออก | อยู่ในโฟลเดอร์เอกสาร (`docs/`) หรือที่เก็บของลูกค้า **ไม่ใช่รากโปรเจกต์** |
 | ไฟล์ที่ได้รับมา | เก็บชื่อเดิมของเขาไว้ ห้ามเปลี่ยน — เขาอ้างถึงชื่อนั้น |
-| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู [`temp-file-discipline`](../temp-file-discipline/SKILL.md)) |
+| ไฟล์ระหว่างแปลง | `_to_delete/` (ดู `superuser:temp-file-discipline`) |
 | ส่งทางแชตหรืออีเมล | ส่งไฟล์ที่มีเวอร์ชันและสถานะในชื่อเสมอ ไม่ส่ง `เอกสาร.docx` |
 
 ---
@@ -495,6 +495,7 @@ Use when naming a product, shop, service, app or brand, or checking how a name s
 | เรื่อง | กฎ |
 |---|---|
 | ลูกค้าไทยจะเขียนชื่อเป็นภาษาไทยแน่นอน | ลองเขียนดูเองก่อน เช่น `Aurio` เป็น "ออริโอ" แล้วดูว่าอ่านลื่นไหม |
+| เลือกคำไทยทางการ 1 แบบ | เขียนตามหลักเกณฑ์ทับศัพท์ของราชบัณฑิตยสภา ไม่ใส่วรรณยุกต์ (ซอฟต์แวร์ ไม่ใช่ ซ้อฟต์แว่ร์) · บันทึกลง brand kit · แบบอื่นที่ลูกค้าพิมพ์กันจริงเก็บเป็นคำค้น (search keyword) ไม่ใช้ในงาน |
 | เสียงที่คนไทยกลืน | `-th` `-v` `-s` ท้ายคำ หายเกือบทุกครั้ง |
 | เสียงควบที่เลี่ยงกัน | `str-` `spl-` `thr-` |
 | ชื่อที่พิมพ์ผิดง่ายบนแป้นไทย | เลี่ยงตัวที่อยู่ใกล้กันจนสลับได้ |
@@ -558,7 +559,7 @@ Use when naming a product, shop, service, app or brand, or checking how a name s
 
 # สูตร 9 ลงลึก
 
-ย้ายมาจาก `SKILL.md` ข้อ 2 (ไม่แก้ถ้อยคำ) · เปิดเมื่อผลิตชื่อด้วยสูตร 9
+เปิดเมื่อผลิตชื่อด้วยสูตร 9
 
 ## แบบที่ให้ชื่อดูเท่าที่สุดโดยไม่ต้องประดิษฐ์คำ
 
@@ -602,7 +603,7 @@ Use when naming a product, shop, service, app or brand, or checking how a name s
 
 # คลังช่วยคิดความหมายของชื่อ
 
-สารบัญ: คลังรากละติน/กรีก → คลังคำจริงยืมข้ามบริบท → เรื่องเล่าที่ดีกับที่แย่ · ย้ายมาจาก `SKILL.md` ข้อ 3 (ไม่แก้ถ้อยคำ)
+สารบัญ: คลังรากละติน/กรีก → คลังคำจริงยืมข้ามบริบท → เรื่องเล่าที่ดีกับที่แย่
 
 ## คลังรากละติน/กรีก ที่ใช้ได้จริง
 

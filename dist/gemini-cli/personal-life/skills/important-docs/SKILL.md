@@ -13,9 +13,9 @@ Renewal rules for Thai documents and the fill-in CSV: [references/registry-templ
 
 | Keeps here | Lives elsewhere |
 |---|---|
-| Identity — บัตรประชาชน, passport, ทะเบียนบ้าน, สูติบัตร, ทะเบียนสมรส/หย่า, ใบเปลี่ยนชื่อ | **Product warranties and receipts** → `warranty-tracker` (consumer-rights) if installed; otherwise rows with `section = warranty` in this same file |
+| Identity — บัตรประชาชน, passport, ทะเบียนบ้าน, สูติบัตร, ทะเบียนสมรส/หย่า, ใบเปลี่ยนชื่อ | **Product warranties and receipts** → `warranty-tracker` (e-commerce) if installed; otherwise rows with `section = warranty` in this same file |
 | Property — โฉนด / น.ส.3, lease (สัญญาเช่า), condo juristic papers | Passwords, one-time passwords (OTPs), recovery codes → password manager (`digital-hygiene`) |
-| Vehicle — เล่มทะเบียนรถ, ใบขับขี่, พ.ร.บ., tax sticker | Medicine lists → `medication-schedule` (health-wellness) if installed |
+| Vehicle — เล่มทะเบียนรถ, ใบขับขี่, พ.ร.บ., tax sticker | Medicine lists → `medication-schedule` (personal-life) if installed |
 | Insurance — life, health, home, car policies and schedules | |
 | Contract — employment, loan, purchase, service contracts | |
 | Education — ปริญญาบัตร, transcript, certificates, licences (ใบประกอบวิชาชีพ) | |
@@ -83,4 +83,4 @@ Household of two adults. Sweep finds 23 documents. Monthly check on 2026-10-06 s
 - The registry is updated in place; a second list is a bug
 - Cadence: 5-minute monthly check, full sweep each January and after any move, marriage, birth or death
 
-Related: `travel-prep` (passport timing) · `digital-hygiene` (where secrets go) · `warranty-tracker` in consumer-rights and `vehicle-care` in home-family, if installed.
+Related: `travel-prep` (passport timing) · `digital-hygiene` (where secrets go) · `warranty-tracker` in e-commerce and `vehicle-care` (plugin เดียวกัน).

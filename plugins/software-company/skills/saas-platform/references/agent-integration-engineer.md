@@ -144,7 +144,7 @@ try {
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `saas-platform` — patterns for common integrations
-- `polished-document-style` (from software-company) — for integration docs
+- `polished-document-style` (from superuser) — for integration docs
 
 ## Things You Don't Do
 

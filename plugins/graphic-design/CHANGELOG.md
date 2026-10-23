@@ -1,9 +1,18 @@
 # Changelog — graphic-design
 
+## Unreleased
+
+- รับ skill `image-generation` จาก `doc-toolkit` ที่ยุบ (เนื้อหาเดิม ชื่อเดิม) · ตัด dependency `doc-toolkit`
+- `brief-to-image`: `references/prompt-anatomy.md` เพิ่มหัวข้อ Tactile 3D hero object: แม่แบบภาพวัตถุ 3 มิติจับต้องได้ 8 บรรทัด (subject · material · light · shadow · lens · background · one colour · negatives) พร้อมตัวอย่างเครื่องหมายคำถามกระดาษตัดสีส้มบนกระดาษครีม · เพิ่มสารบัญเพราะไฟล์ยาวเกิน 100 บรรทัด · ลิงก์จาก `SKILL.md` · `image-generation` `references/styles.md` แถว `3d` เปลี่ยนจาก prompt ทั่วไป (clay · studio · pastel) เป็นวัสดุ แสง เงา และ negative ที่ระบุชัด แล้วชี้ไปแม่แบบ
+
+## 0.9.1 — 2026-10-22
+
+- แก้ชื่อ plugin ของ `image-generation` (เป็น `doc-toolkit`) · แก้ตัวชี้ใน examples/triggers
+
 ## 0.9.0 — 2026-10-22
 
 - `skills/superuser/SKILL.md` เหลือเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) ขึ้นต้นด้วย "เปิด `superuser:superuser` ก่อน" — แกนของหัวหน้าทีมอ่านจาก plugin `superuser` 3.0.0 ที่เดียว ไม่คัดลอกบล็อกกลางอีก (50 KB → ราว 12 KB)
-- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "sqt-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
+- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "doc-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
 
 ## 0.8.0 — 2026-10-21
 

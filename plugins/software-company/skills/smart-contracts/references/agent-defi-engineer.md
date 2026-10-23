@@ -198,7 +198,7 @@ contract Emergency {
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `smart-contracts` — common DeFi patterns
 - `smart-contracts` — security patterns
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

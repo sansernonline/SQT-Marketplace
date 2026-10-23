@@ -26,6 +26,7 @@ The technical writer should:
 
    **Day 1-7: Setup & Orientation**
    - Environment setup checklist
+   - Setup check before hand-over: run every setup command in the README on a clean checkout (fresh clone or a `docker-sandbox` container), note the first step that fails, and fix the README — the guide must not paper over a broken README (แนวคิดจาก borghei codebase-onboarding · เขียนใหม่)
    - Tool access (Slack, GitHub, Amazon Web Services (AWS), etc.) — ใส่ลิงก์ไปที่ขอสิทธิ์ ไม่ใส่รหัสผ่านหรือ token ในเอกสาร
    - Key people to meet (intros)
    - Codebase tour (key directories)

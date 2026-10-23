@@ -168,7 +168,7 @@ Claude ควรเรียก skill `user-story-writer` มาใช้อั�
 /hooks
 ```
 
-ควรเห็น hook `superuser-hook.mjs` (อยู่ใน plugin `superuser` ซึ่งติดตั้งตามมาเองจาก `dependencies` พร้อม `sqt-toolkit` ที่เก็บ skill เอกสาร สไลด์ รูป ประชุม · ติดตั้ง `superuser` เดี่ยวแล้วอยากได้ชุดนั้น → `/plugin install sqt-toolkit@sqt-marketplace`) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
+ควรเห็น hook `superuser-hook.mjs` (อยู่ใน plugin `superuser` ซึ่งติดตั้งตามมาเองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life` — ติดตั้ง plugin นั้นเพิ่มถ้าต้องการ) — รายการ event ดู [REFERENCE.md หัวข้อ Hooks](REFERENCE.md#hooks)
 
 ### 5. เปิด SuperUser ในโปรเจกต์
 
@@ -235,7 +235,7 @@ hook เขียน log เฉพาะโปรเจกต์ที่มี 
 
 `dist/claude-web/<plugin>.zip` คือ plugin ที่บีบอัดไว้ 1 ไฟล์ต่อ 1 plugin · **อัปโหลดเข้า claude.ai** แล้วใช้ skill ได้ใน Cowork และแชทบนเว็บหรือเดสก์ท็อปด้วย ไม่ใช่แค่ใน Claude Code
 
-**`software-company.zip`:** 81 skills · 39 agents · 29 commands · `plugin.json` v2.20.0 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
+**`software-company.zip`:** 93 skills · 39 agents · 29 commands · `plugin.json` v2.20.1 · โฟลเดอร์หลักในไฟล์ zip ชื่อ `software-company/`
 
 ---
 

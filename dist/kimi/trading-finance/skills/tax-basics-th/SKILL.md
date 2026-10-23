@@ -7,7 +7,7 @@ description: Use when asking about Thai tax on stock gains, dividends, interest,
 
 General information, not tax advice — for a real filing ask a นักบัญชี / tax agent or the Revenue Department (RD) call centre 1161.
 
-Per-income-type table and the dividend credit formula: [references/investment-income-rules.md](references/investment-income-rules.md). Year-end deductions: `tax-deduction-planner`. Dividend dates and income tracking: `dividend-tracker`. Income from selling online (40(8)) → `online-seller:seller-tax-basics` (if installed).
+Per-income-type table and the dividend credit formula: [references/investment-income-rules.md](references/investment-income-rules.md). Year-end deductions: `tax-deduction-planner`. Dividend dates and income tracking: `dividend-tracker`. Income from selling online (40(8)) → `e-commerce:seller-tax-basics` (if installed).
 
 ## Which form, by when
 

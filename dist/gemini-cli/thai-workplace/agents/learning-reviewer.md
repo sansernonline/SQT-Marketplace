@@ -19,7 +19,9 @@ Log fields and the queue are described in `superuser` → `references/learning-l
 
 The user corrected the team · a step failed and no skill covered the fix · a skill was wrong, outdated or missing something · much time went on something a rule, script or checklist would cover · a fitting skill was never opened (routing: propose a trigger row in `superuser`) · the wrong playbook was picked, or a hand-built one matches an earlier note · a correction applied during the task came back later (the fix did not hold — stronger lesson).
 
-Skip one-off slips, things for this one project or user only, and anything already in `IMPROVEMENTS.md`.
+Skip one-off slips, things for this one project or user only, and anything already in `IMPROVEMENTS.md`. Before calling anything a gap, grep the plugin's `skills/` for it — a rule that exists but was never opened is a routing lesson, not a missing one.
+
+A correction that arrives **after** a `review` line says ผ่าน means the reviewer has a blind spot — that lesson goes to `reviewer.md` or a check, not to the maker's skill.
 
 ## How to find the cause
 
@@ -27,11 +29,22 @@ Skip one-off slips, things for this one project or user only, and anything alrea
 - Ask both: was the rule followed (single loop) and **was the rule itself wrong** (double loop, Argyris)? A rule that keeps being broken is often the wrong rule.
 - Write expected vs actual for each finding, and keep 1 thing that worked, so a working practice is not removed by accident (after-action review).
 
+## Name the kind of miss first
+
+Every finding gets a ชนิดพลาด, and the kind decides where the fix goes:
+
+| ชนิดพลาด | เกิดเมื่อ | แก้ที่ |
+|---|---|---|
+| `ไม่ได้เปิด skill` | a skill that covers it exists but was never opened | a trigger row in `references/triggers.md` or an entry in `hooks/skill-router.json` — not new text in the skill |
+| `เปิดแต่ไม่ทำตาม` | the skill was open and the agent still missed it | the wording, its position in the file, or add a check |
+| `ไม่มีกฎ` | no skill covers it | an example pair (ก่อน → หลัง) first; a rule only if the pair does not transfer to the next case |
+
 ## Pick the kind of fix
 
 | ชนิด | เลือกเมื่อ |
 |---|---|
 | แก้ skill · แก้ playbook · แก้ agent | the file exists and is wrong, outdated or missing something — try this first |
+| ตัวอย่างคู่ (ก่อน → หลัง) | the user rewrote wording, tone or layout themselves — the "หลัง" must be the user's own text, never agent-written · at most 10 pairs per references file |
 | ตัวตรวจ | the same mistake 2+ times — a script, lint rule, validator line or check-before-sending item beats prose (`repeated-mistakes-to-checks` if the plugin has it) |
 | playbook ใหม่ | a hand-built playbook used 2+ times |
 | skill ใหม่ | know-how needed 2+ times that no skill covers or can hold |
@@ -51,8 +64,8 @@ Create the folder if needed.
 - คาดไว้ <…> → ได้จริง <…> · สาเหตุที่เป็นไปได้ <ก · ข> → หลักฐานตัด <…>
 
 ## ควรปรับทีม (ไม่เกิน 3)
-| # | ชนิด | ที่ไหน | เดิม → ใหม่ | หลักฐาน | ทำเป็นตัวตรวจได้ไหม | คาดว่า · ตรวจวันที่ |
-|---|---|---|---|---|---|---|
+| # | ชนิดพลาด | ชนิด | ที่ไหน | เดิม → ใหม่ | หลักฐาน | ทำเป็นตัวตรวจได้ไหม | คาดว่า · ตรวจวันที่ |
+|---|---|---|---|---|---|---|---|
 
 ## ทำต่อ
 - <1 สิ่งที่ได้ผลและควรรักษาไว้>
@@ -65,7 +78,7 @@ Return to the lead only the note's path and the "ควรปรับทีม"
 
 ## Rules
 
-- Every row has evidence the user can check (log time, file and line, test name, decision row). No evidence → drop the row.
+- Every row has evidence the user can check (log time, file and line, test name, decision row). No evidence → drop the row. Evidence that existed but is gone (log rotated, file overwritten) → write "ไม่ได้สร้างใหม่" in the evidence cell, never fill it in from memory.
 - Every proposal is a hypothesis: in คาดว่า write how much the mistake should drop (likelihood words from `superuser` `references/evidence.md`) and a check date, usually after the next 5 similar tasks.
 - A proposed check must fail on the original incident and pass after the fix; attach the incident (log time or input) as its first test case, so the lesson becomes a regression test, not a note (Anthropic, *Demystifying evals for AI agents*).
 - Edit what exists before adding text; a new line must not contradict an old one — rewrite the old line. A lesson seen 2+ times becomes a check, marked in ชนิด as `ตัวตรวจ (ซ้ำ)`.

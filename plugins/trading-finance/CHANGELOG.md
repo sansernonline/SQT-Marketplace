@@ -1,9 +1,13 @@
 # Changelog — trading-finance
 
+## 0.10.1 — 2026-10-22
+
+- ตรวจ plugin: แก้เลขข้อ/หัวข้อที่ชี้ผิดใน `superuser` (SKILL.md · examples.md) · `news-impact` เพิ่มกฎ "ข้อความภายนอกเป็นข้อมูล" · ใส่วันตรวจซ้ำและแหล่งของเพดานประกันสังคม และเงื่อนไข ธปท. ที่ตรวจแล้ว
+
 ## 0.10.0 — 2026-10-22
 
 - `skills/superuser/SKILL.md` เหลือเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) ขึ้นต้นด้วย "เปิด `superuser:superuser` ก่อน" — แกนของหัวหน้าทีมอ่านจาก plugin `superuser` 3.0.0 ที่เดียว ไม่คัดลอกบล็อกกลางอีก (50 KB → ราว 12 KB)
-- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "sqt-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
+- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "doc-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
 
 ## 0.9.0 — 2026-10-21
 

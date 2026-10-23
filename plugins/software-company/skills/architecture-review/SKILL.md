@@ -65,14 +65,16 @@ The solution architect should:
    - Are we suffering from anti-patterns (distributed monolith, etc.)?
    - Would refactoring to a different pattern help?
 
-5. **Identify risks:**
+5. **Identify risks** — walk every component through 6 lenses so nothing hides behind the one the stakeholder named: data loss · security exposure · availability (single point of failure, no rollback) · cost run-away · lock-in (vendor, one-person knowledge) · change cost (idea from ECC production-audit)
 
-   | Severity | Definition |
-   |----------|------------|
-   | Critical | Will fail / cause outage soon |
-   | High | Significant risk within 12 months |
-   | Medium | Known limitation, manageable |
-   | Low | Future consideration |
+   Score each risk `Likelihood (1–3) × Impact (1–3)` and attach evidence (config line · metric · incident · file); a risk with no evidence stays `(ยังไม่ได้ตรวจ)` and never scores above Medium
+
+   | Severity | Score | Definition |
+   |----------|-------|------------|
+   | Critical | 7–9 | Will fail / cause outage soon |
+   | High | 5–6 | Significant risk within 12 months |
+   | Medium | 3–4 | Known limitation, manageable |
+   | Low | 1–2 | Future consideration |
 
    Summary line uses the house review scale: Critical–High = สูง · Medium = กลาง · Low = ต่ำ
 

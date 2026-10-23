@@ -265,7 +265,7 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-company)
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

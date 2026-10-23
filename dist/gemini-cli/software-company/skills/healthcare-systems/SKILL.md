@@ -20,7 +20,7 @@ description: Use when software handles patient or clinical data (orders, medicat
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -32,6 +32,10 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## agent ของสายนี้
 
 `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst`
+
+## อ้างอิงภายนอก
+
+- anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — โค้ด validation และ value sets จริง · ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
 
 ## ที่มา
 

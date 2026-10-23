@@ -1,6 +1,7 @@
 ---
 name: legacy-spec-recovery
 description: Use when a legacy system has code but no spec and must change. As-is spec with evidence, impact.
+allowed-tools: Read, Grep, Glob
 ---
 
 # Legacy Spec Recovery
@@ -50,7 +51,7 @@ Look in every layer — business rules in legacy systems are spread thin, not ke
 | User manuals, old emails, ticket history | `doc` intent, to compare with `code` behaviour |
 | Commented-out code, `_old`, `Copy of` files | Previous rules; note them, do not treat as current |
 
-Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md).
+Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md). When the change request is a framework upgrade (.NET Framework → .NET 8, Angular major, Python 2 → 3 / Django LTS, Node LTS): [references/framework-upgrade.md](references/framework-upgrade.md).
 
 ## Workflow
 

@@ -54,7 +54,7 @@ Minimal Node (Express) handler: [references/webhook-node.md](references/webhook-
 | Basic | 1,280 baht | 15,000 | 0.10 baht |
 | Pro | 1,780 baht | 35,000 | 0.06 baht |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
+ตรวจล่าสุด 2026-10-22 (หน้าทางการ LINE for Business ยืนยัน 1,280 / 1,780 บาท ไม่รวม VAT 7%) · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
 
 Counted messages = push, multicast, narrowcast, broadcast — **per recipient**. Reply messages (using a reply token) and 1:1 chat typed by staff are not counted. Quota math: `line-broadcast`.
 

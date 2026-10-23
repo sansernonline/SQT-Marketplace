@@ -24,6 +24,8 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 | 9 | **path · URL · คำสั่ง ที่มาจากผู้ใช้ ห้ามใช้ตรง** | `File.Open(userPath)` → หา path จริงก่อน (`realpath` ตาม symlink) แล้วเช็กว่าอยู่ใต้โฟลเดอร์ที่อนุญาต · เรียก URL ปลายทางจากรายการที่อนุญาต · ไม่ส่ง input เข้า shell · เซิร์ฟเวอร์สำหรับพัฒนาฟังเฉพาะ `127.0.0.1` และรับเฉพาะ Host ที่รู้จัก |
 | 10 | **dependency ใหม่ต้องมีเหตุผล** — ล็อกเวอร์ชัน (lock file) ดูว่ายังมีคนดูแลอยู่ และไม่ติดช่องโหว่ที่รู้แล้ว | เพิ่มแพ็กเกจเพื่อ 5 บรรทัด → เขียน 5 บรรทัด (`lazy-coding` ข้อ 4) |
 
+**อ่านลึกรายข้อ** — OWASP Cheat Sheet Series (cheatsheetseries.owasp.org · CC-BY-SA จึงลิงก์ได้ ไม่คัดข้อความมาใส่ skill): ข้อ 1 `Input_Validation` · ข้อ 2 `SQL_Injection_Prevention` · ข้อ 3 `Authorization` · ข้อ 4 `Cross_Site_Scripting_Prevention` · ข้อ 5 `Secrets_Management` · ข้อ 6 `Logging` · ข้อ 7 `Error_Handling` · ข้อ 9 `Server_Side_Request_Forgery_Prevention` · ข้อ 10 `Vulnerable_Dependency_Management` — URL คือ `https://cheatsheetseries.owasp.org/cheatsheets/<ชื่อ>_Cheat_Sheet.html`
+
 **แอปมือถือหรือแอปที่ไม่มีเซิร์ฟเวอร์** — เปิด [`references/mobile.md`](references/mobile.md) เพิ่ม (กฎ M1–M5: permission · exported · สำรองข้อมูล · ส่งไฟล์ · กุญแจเซ็นแอป)
 
 ## เมื่องานแตะเรื่องเสี่ยง — เปิด skill เฉพาะทาง
@@ -102,11 +104,17 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
 3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ได้ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
 
-## สัญญาณว่ากำลังข้าม
+## ข้ออ้างที่ไม่นับเป็นหลักฐาน
 
-- คำว่า "น่าจะ" · "ควรจะ" · "ในทางทฤษฎี" ในรายงานจบงาน
-- ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้
-- ตรวจแค่ส่วนที่ง่าย แล้วสรุปรวมว่าผ่านทั้งหมด
+| ข้ออ้าง | ทำไมไม่นับ | ต้องทำแทน |
+|---|---|---|
+| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" | คำออกตัวแปลว่ายังไม่ได้ดู — เจอในรายงานจบงาน = ธงแดง ให้กลับไปตรวจก่อนส่ง | รันหรือเปิดดู แล้วแปะผลดิบ |
+| "test ผ่านแล้ว" โดยไม่มี output | ผ่านในความจำกับผ่านตอนนี้คนละอย่าง | แปะบรรทัดสรุปผลรันรอบนี้ |
+| "แก้ตามที่บอกแล้ว" · "ไม่มี error" | ไม่มี error ≠ ได้ผลที่ต้องการ | ทำกรณีที่เคยล้มซ้ำให้เห็นว่าผ่าน |
+| subagent รายงานว่าเสร็จ | รายงานคือคำพูด ไม่ใช่ชิ้นงาน | ดู diff หรือเปิดไฟล์ที่เปลี่ยนเอง |
+| ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้ · ตรวจแค่ส่วนง่ายแล้วสรุปว่าผ่านทั้งหมด | โยนงานตรวจให้คนอื่น | รันเองให้ครบก่อนใช้คำว่าเสร็จ |
+
+ที่มาของแนวคิดตารางข้ออ้าง: skill `verification-before-completion` ใน obra/superpowers (MIT) · เขียนใหม่ให้ครอบงานนอกโค้ด
 
 
 ---
@@ -340,7 +348,7 @@ flowchart LR
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company) — for docs/portals
+- `polished-document-style` (from superuser) — for docs/portals
 - `saas-platform` — for CS tool connections
 
 ## Things You Don't Do
@@ -515,7 +523,7 @@ try {
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `saas-platform` — patterns for common integrations
-- `polished-document-style` (from software-company) — for integration docs
+- `polished-document-style` (from superuser) — for integration docs
 
 ## Things You Don't Do
 
@@ -545,7 +553,7 @@ try {
 
 # RevOps Analyst — pricing, billing, metering, revenue
 
-คู่มือบทบาทของ agent `revops-analyst` — ย้ายมาจากตัว agent (2026-10-14) · ตัวเลือกเครื่องมือและ dunning ใช้คู่กับ [`subscription-billing.md`](subscription-billing.md)
+คู่มือบทบาทของ agent `revops-analyst` · ตัวเลือกเครื่องมือและ dunning ใช้คู่กับ [`subscription-billing.md`](subscription-billing.md)
 
 **สารบัญ:**
 
@@ -974,7 +982,7 @@ log.info('Order created', {
 
 - `saas-platform` — implementation patterns
 - `architecture-patterns` (from software-company) — system design
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

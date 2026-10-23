@@ -77,7 +77,7 @@ If the clinical workflow is unclear, **watch a clinician at work before you desi
 - `healthcare-systems` — HIPAA safeguards implementation
 - `healthcare-systems` — HL7 FHIR standards
 - `healthcare-systems` — clinical process patterns
-- `polished-document-style` (from software-company) — for docs
+- `polished-document-style` (from superuser) — for docs
 
 ## Common Patterns
 

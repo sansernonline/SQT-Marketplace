@@ -253,7 +253,7 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 ## Skills You Use
 
 - `game-development` — patterns for events, retention
-- `polished-document-style` (from software-company) — for plans/docs
+- `polished-document-style` (from superuser) — for plans/docs
 
 ## Things You Don't Do
 

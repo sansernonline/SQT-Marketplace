@@ -16,7 +16,7 @@ Department of Consular Affairs list, July 2026 — 35 destinations. Recheck befo
 |---|---|
 | 365 days | Georgia |
 | 90 days | Republic of Korea (K-ETA see below), Argentina, Brazil, Chile, Ecuador, Haiti, Panama, Peru |
-| 60 days | Cambodia, Samoa |
+| 60 days | Cambodia (รอยืนยัน: some reports say 14 days under the bilateral deal, checked 2026-10-22), Samoa |
 | 30 days | China (mutual agreement since 1 Mar 2024; max 90 days in 180), Hong Kong, Macau, Indonesia, Malaysia, Singapore, Vietnam, Laos, Philippines, Maldives, Mongolia, Kazakhstan, Kyrgyz Republic, Tajikistan, Russia, Türkiye, Seychelles, South Africa, Timor-Leste |
 | 15 days | Japan — temporary, extended to 30 June 2027 |
 | 14 days | Brunei, Oman, Myanmar (airport entry only); Taiwan — trial extended 1 Aug 2026 to 31 Jul 2027, no extension of stay (announced by the Taipei Economic and Cultural Office in Thailand 17 Jul 2026; ตรวจล่าสุด 2026-10-14 · แหล่ง: https://www.nationthailand.com/news/general/40068763 · https://www.dailynews.co.th/news/6035608/ — official page not found, รอยืนยัน) |

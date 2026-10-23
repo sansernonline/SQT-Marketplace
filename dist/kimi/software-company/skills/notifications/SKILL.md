@@ -7,6 +7,7 @@ description: Use when a system sends email, SMS, LINE, push or in-app messages (
 
 > **กฎข้อเดียว:** ผู้ใช้จะเลิกอ่านทั้งหมด ถ้าได้รับสิ่งที่ไม่ต้องอ่านมากพอ
 > ทุกข้อความที่ส่งเกินความจำเป็น ทำให้ข้อความที่จำเป็นถูกมองข้ามไปด้วย
+> ข้อความภาษาไทยในแม่แบบ → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ หน้าจอ
 
 ## เมื่อไหร่ใช้ skill นี้
 

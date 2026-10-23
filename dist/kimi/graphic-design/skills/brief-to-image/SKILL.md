@@ -7,7 +7,7 @@ description: Use when about to generate an AI image or prompts keep missing. Wri
 
 Write the brief before making the first image. Vague prompts give vague images. A brief gives every retry the same target.
 
-This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has. No generation tool → the fallback order (Scalable Vector Graphics (SVG) set, then Openverse photos) lives in `image-generation` (plugin `superuser`); this skill owns the brief and the prompt.
+This skill writes the brief and prompt. Generation happens in whatever image tool or plugin the user has. No generation tool → the fallback order (Scalable Vector Graphics (SVG) set, then Openverse photos) lives in `image-generation`; this skill owns the brief and the prompt.
 
 ## Workflow
 
@@ -35,6 +35,7 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 | 10 | Format | Aspect ratio, resolution | → "4:5 portrait" (set as a parameter if the tool has one) |
 
 Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md).
+One tactile 3D object as the hero (paper cut, clay, felt): use the 8-line template (subject · material · light · shadow · lens · background · one colour · negatives) and its worked example in [prompt-anatomy.md](references/prompt-anatomy.md), section "Tactile 3D hero object".
 
 ## Model differences (general, check your tool's docs)
 
@@ -46,6 +47,21 @@ Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md)
 | Text inside images is unreliable, worst for Thai script | Generate without text; add Thai copy in a layout tool with the brand font |
 | Reference image, style reference or seed features exist in many tools | Use them for series work (`style-consistency`) |
 | Models change between versions | Record the version; re-test a saved prompt after an update |
+
+## Failure modes — what to change when the image misses
+
+| Miss | Change only this |
+|---|---|
+| Extra fingers, limbs, melted faces | Fewer people, hands out of frame or holding something; crop tighter |
+| Garbled text or signage | Remove every word from the prompt; add copy in layout |
+| 2 subjects where 1 was asked, or duplicated objects | "a single …", 1 focal point, remove plural nouns |
+| Subject always centred | Composition line with an edge: "placed far left, touching the frame edge, empty wall right" |
+| Negative word appears anyway ("no straw" gives a straw) | Describe what is there instead of what is not |
+| Colour oversaturated, plastic look | Add "natural, muted, editorial, not advertising" and the hex palette |
+| Set does not match across images | Style lock sheet (`style-consistency`) and the same seed or reference image |
+| Wrong aspect ratio | Set the parameter, delete the ratio words from the prompt |
+
+Gemini API users: Imagen is no longer the way — the `imagen-4.0-*` models were shut down on 17 Aug 2026 per the deprecations page, and the image-generation page now lists `gemini-3.1-flash-image` (Nano Banana 2), `gemini-nano-banana-2.1` and `gemini-3-pro-image`, with `gemini-2.5-flash-image` kept as legacy. Record the exact model ID you used (workflow step 7). ตรวจ 2026-10-23 · แหล่ง: https://ai.google.dev/gemini-api/docs/image-generation · https://ai.google.dev/gemini-api/docs/deprecations
 
 ## Worked example — brief to prompt
 

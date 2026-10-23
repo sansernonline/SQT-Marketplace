@@ -303,7 +303,7 @@ async def run_eval(prompt_version: str):
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company) — for design docs
+- `polished-document-style` (from superuser) — for design docs
 - `architecture-patterns` (from software-company) — for system design
 - `llm-engineering` — for RAG-specific patterns
 - `llm-engineering` — for eval frameworks
@@ -637,7 +637,7 @@ with mlflow.start_run() as run:
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `polished-document-style` (from software-company) — for model cards
+- `polished-document-style` (from superuser) — for model cards
 - `architecture-patterns` (from software-company) — for ML system design
 
 ## Production Handoff
@@ -960,7 +960,7 @@ def psi(baseline: np.ndarray, current: np.ndarray, bins: int = 10) -> float:
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `polished-document-style` (from software-company) — for runbooks
+- `polished-document-style` (from superuser) — for runbooks
 - `incident-runbook-template` (from software-company) — for ML runbooks
 - `architecture-patterns` (from software-company) — for system design
 - `llm-engineering` — for LLM-specific monitoring
@@ -1333,7 +1333,7 @@ Output JSON: {"correctness": N, "completeness": N, "tone": N, "reasoning": "..."
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company) — for prompt design docs
+- `polished-document-style` (from superuser) — for prompt design docs
 - `llm-engineering` — for detailed patterns
 
 ## Production Considerations
@@ -2537,6 +2537,15 @@ results = evaluate(
 
 ## Advanced Patterns
 
+Pick one query transform at a time and measure recall before adding another (แนวคิดจาก borghei rag-architect (MIT+Commons Clause → เขียนใหม่))
+
+| Transform | What it does | Use when | Cost |
+|---|---|---|---|
+| **Multi-query** | LLM writes 3–5 paraphrases, retrieve for each, dedupe | Users phrase the same need many ways; recall is low | +1 LLM call · N× retrieval |
+| **HyDE** | LLM drafts a hypothetical answer, embed that instead of the question | Short questions vs long documents; vocabulary gap between query and corpus | +1 LLM call · risk of confident hallucination steering retrieval |
+| **Step-back** | Ask a broader, more general question first, retrieve for both | Very specific questions whose answer sits in background or principle sections | +1 LLM call · 2× retrieval |
+| **RRF** (reciprocal rank fusion) | Merge ranked lists by `1/(k+rank)`, no score calibration needed | Combining dense + BM25, or results of the transforms above | No LLM call · negligible |
+
 ### Multi-query RAG
 
 ```python
@@ -2721,6 +2730,22 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 **ทุกการแจ้งเตือนต้องมี:** อะไรพัง · กระทบใคร · **ลิงก์ไป runbook** · ลิงก์ไปแดชบอร์ด
 **ตั้งช่วงเวลา (นาน N นาที) เสมอ** ไม่ใช่เตือนทันทีที่ค่าพุ่งครั้งเดียว
 
+### 4.1 · งบความผิดพลาด (error budget) และอัตราเผางบ (burn rate)
+
+ระบบที่มี SLO ใช้วิธีนี้แทนการตั้งเกณฑ์ error % ตายตัว เพราะมันบอกว่า "ถ้าปล่อยไว้แบบนี้ งบทั้งเดือนจะหมดเมื่อไหร่" (แนวคิดจาก Google SRE Workbook)
+
+- **งบ** = เวลาที่ยอมให้ล้มได้ใน 30 วัน → SLO 99.9% = 43 นาที · 99.5% = 3.6 ชั่วโมง · 99% = 7.2 ชั่วโมง
+- **burn rate** = อัตรา error ตอนนี้ ÷ (1 − SLO) → burn 1 = งบหมดพอดีวันที่ 30 · burn 10 = หมดใน 3 วัน
+- ตั้งแจ้งเตือน 2 ระดับ และให้ทั้งสองระดับต้องเป็นจริงทั้งช่วงยาวและช่วงสั้น (ช่วงสั้น = 1/12 ของช่วงยาว) จะได้หยุดเตือนทันทีที่ระบบหาย
+
+| ระดับ | burn rate | ช่วงยาว · ช่วงสั้น | กินงบไปแล้ว | SLO 99.9% แปลว่า error เกิน | ส่งไปไหน |
+|---|---|---|---|---|---|
+| ไหม้เร็ว | 14.4 | 1 ชั่วโมง · 5 นาที | 2% ของเดือน ใน 1 ชั่วโมง | 1.44% | ปลุกคน |
+| ไหม้ช้า | 6 | 6 ชั่วโมง · 30 นาที | 5% ของเดือน ใน 6 ชั่วโมง | 0.6% | ปลุกคน |
+| รั่วซึม | 1 | 3 วัน · 6 ชั่วโมง | 10% ของเดือน ใน 3 วัน | 0.1% | แชตของทีม |
+
+งบเหลือเท่าไหร่ให้ขึ้นบนแดชบอร์ดภาพรวม — งบใกล้หมด = หยุดปล่อยฟีเจอร์ ไปแก้ความเสถียรก่อน เป็นกติกาที่ตกลงกับเจ้าของผลิตภัณฑ์ล่วงหน้า ไม่ใช่ตอนทะเลาะกัน
+
 ---
 
 ## 5 · แดชบอร์ด
@@ -2775,6 +2800,7 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 - **label / tag** — ป้ายกำกับที่แนบกับตัวชี้วัด ใช้แยกดูเป็นกลุ่ม
 - **on-call** — เวรรับแจ้งเหตุนอกเวลาทำการ
 - **SLO** — Service Level Objective (เป้าหมายระดับบริการที่ตั้งไว้เอง เช่น สำเร็จ 99.5%)
+- **error budget / burn rate** — เวลาที่ยอมให้ล้มได้ต่อเดือนตาม SLO และความเร็วที่กำลังใช้มันหมด (ข้อ 4.1)
 
 ## 9 · เชื่อมกับ skill อื่น
 

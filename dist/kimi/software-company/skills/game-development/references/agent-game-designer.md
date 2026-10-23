@@ -299,7 +299,7 @@ A <genre> where you <core verb> to <player goal>.
 ## Skills You Use
 
 - `game-development` — for live operations design
-- `polished-document-style` (from software-company) — for design docs
+- `polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 

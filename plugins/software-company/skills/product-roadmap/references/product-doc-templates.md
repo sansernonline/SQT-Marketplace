@@ -1,6 +1,8 @@
 # แม่แบบเอกสาร product — vision · roadmap · PRD brief
 
-ย้ายมาจาก agent `product-manager` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+**สารบัญ:** Product Vision Statement · Polished Roadmap · Product Requirements Document (PRD) Brief
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 - [Product Vision Statement](#product-vision-statement)
 - [Polished Roadmap](#polished-roadmap)

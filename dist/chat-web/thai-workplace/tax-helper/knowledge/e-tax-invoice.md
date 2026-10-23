@@ -39,7 +39,7 @@ Retail to consumers only, with permission. Must show: "ใบกำกับภ�
 
 | | **e-Tax Invoice & e-Receipt** | **e-Tax Invoice by Email** |
 |---|---|---|
-| Who | Any VAT-registered business (no revenue limit) | VAT-registered with revenue **not over 30 M baht/year** |
+| Who | Any VAT-registered business (no revenue limit) | VAT-registered with revenue **not over 30 M baht/year** (รอยืนยัน — a FlowAccount article dated 19 Sep 2568 reports that a 2567 RD change lets businesses above 30 M use Time Stamp too, yet the same article still prints "not over 30 M"; rd.go.th/27659 shows nav updated 13 Feb 2025; confirm on rd.go.th before advising a >30 M client) |
 | Format | XML to the ETDA standard (ขมธอ.3-2560), digitally signed with a CA certificate | PDF/A-3 attached to an email |
 | Signing | Own certificate, or via a registered Service Provider | Time-stamped by the central mailbox |
 | Sending | Upload to RD within the 15th of the following month (or real-time via a Service Provider) | Send to the buyer and **cc csemail@etax.teda.th** |

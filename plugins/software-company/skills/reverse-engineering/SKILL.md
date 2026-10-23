@@ -1,6 +1,7 @@
 ---
 name: reverse-engineering
 description: Use when there is a compiled app (exe, dll, Electron, APK, JS bundle), unknown file format, capture or protocol but no source, or a build may differ.
+allowed-tools: Read, Grep, Glob, Bash(python -I *)
 ---
 
 # Reverse Engineering — แกะซอฟต์แวร์ที่ไม่มีซอร์ส แบบมีหลักฐานทุกข้อ

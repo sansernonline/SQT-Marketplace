@@ -22,12 +22,12 @@ A "freelancer" who works fixed hours under the company's orders is legally an em
 | Instrument | Rate | Note |
 |---|---|---|
 | เช่าที่ดิน โรงเรือน สิ่งปลูกสร้าง | **1 baht per 1,000 baht** (or part) of the **total rent for the whole term** | lessor pays; ≥ 1 million baht → pay in cash/e-Stamp instead of stamps |
-| จ้างทำของ | 1 baht per 1,000 baht (or part) of the fee (รอยืนยัน rate) | contractor pays; ≥ 1 million baht → cash/e-Stamp |
-| กู้ยืมเงิน | 1 baht per 2,000 baht, max 10,000 (รอยืนยัน) | |
+| จ้างทำของ | 1 baht per 1,000 baht (or part) of the fee | contractor pays; ≥ 1 million baht → cash/e-Stamp |
+| กู้ยืมเงิน | 1 baht per 2,000 baht, max 10,000 | |
 | ค้ำประกัน | 1 / 5 / 10 baht by amount (รอยืนยัน) | |
 | สัญญาจ้างแรงงาน | none | |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://rd.go.th/67218.html (จ้างทำของ, ผู้รับจ้างชำระ, ≥ 1 ล้านบาทชำระเป็นตัวเงิน) · บัญชีอัตราอากรแสตมป์ via rd.go.th (เช่า 1 บาท ต่อ 1,000 บาท)
+ตรวจล่าสุด 2026-10-22 · แหล่ง: https://rd.go.th/67218.html (จ้างทำของ, ผู้รับจ้างชำระ, ≥ 1 ล้านบาทชำระเป็นตัวเงิน) · https://www.rd.go.th/23006.html และ https://www.rd.go.th/6162.html (บัญชีอัตราอากรแสตมป์: จ้างทำของ 1 ต่อ 1,000 · กู้ยืม 1 ต่อ 2,000 สูงสุด 10,000 · เช่า 1 ต่อ 1,000 — ยืนยันแล้ว)
 
 Stamp at signing, or pay through **e-Stamp Duty** on rd.go.th within 15 days of signing. An unstamped contract **cannot be used as evidence in a civil case** until duty plus surcharge (เงินเพิ่มอากร, several times the duty — รอยืนยัน multiple) is paid.
 
@@ -63,7 +63,7 @@ Full checklists for employment, lease and hire-of-work contracts: [references/cl
 2. Fill the checklist for that type; leave unknowns as `{…}` not guesses.
 3. Mark ⚠️ on red-flag clauses, with 1 line on why.
 4. Compute stamp duty and say who pays.
-5. Close with: "ร่างนี้จัดระเบียบเจตนาของคู่สัญญา ก่อนลงนามควรให้ทนายความตรวจ".
+5. Close with: "ร่างนี้เรียบเรียงจากที่คู่สัญญาตกลงกัน ก่อนลงนามควรให้ทนายความตรวจ".
 
 ## Related
 

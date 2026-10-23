@@ -287,7 +287,7 @@ Output JSON: {"correctness": N, "completeness": N, "tone": N, "reasoning": "..."
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company) — for prompt design docs
+- `polished-document-style` (from superuser) — for prompt design docs
 - `llm-engineering` — for detailed patterns
 
 ## Production Considerations

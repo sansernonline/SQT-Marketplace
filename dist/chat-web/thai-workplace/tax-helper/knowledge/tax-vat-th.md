@@ -19,7 +19,7 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 - VAT rate: **7%** (6.3% + local tax 0.7%), reduced from the statutory 10%, extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to **30 Sep 2570**.
 - Registration is online through RD e-Registration (rd.go.th).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/33/iid/526275 · https://www.rd.go.th
+ตรวจล่าสุด 2026-10-22 (ครม. 27 ก.ค. 2569 ขยาย VAT 7% ถึง 30 ก.ย. 2570 · เลขฉบับ 807 ยังไม่ได้เทียบกับราชกิจจานุเบกษา) · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/33/iid/526275 · https://www.rd.go.th
 
 ## 2. Monthly and yearly calendar
 
@@ -40,7 +40,7 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 - A due date on a weekend or public holiday moves to the next working day (see `thai-holidays`).
 - For a 31 December year end: ภ.ง.ด.51 by 31 Aug (e-Filing 8 Sep); ภ.ง.ด.50 by 30 May (150 days; 29 May when February has 29 days) + 8 for e-Filing. When 30 May falls on a Sunday (as in 2570), the next working day applies (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://rd.go.th/49808.html · https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/FilingExtension_4.pdf
+ตรวจล่าสุด 2026-10-22 (ช่วงขยาย 1 ก.พ. 2567 – 31 ม.ค. 2570 ตรงกับ Deloitte ก.พ. 2567 · หน้า rd.go.th ที่ค้นได้ไม่แสดงวันสิ้นสุด) · แหล่ง: https://rd.go.th/49808.html · https://www.rd.go.th/fileadmin/user_upload/kormor/newlaw/FilingExtension_4.pdf
 
 ## 3. Withholding tax — how much
 

@@ -25,7 +25,7 @@ cover-engine/src/
    - `calibrate.py`: รายการโปรเจกต์ · `docx_build.py`: `PAGE2` (สีและเนื้อหน้า 2) · `fonts.py`: `SOURCES` และ `NEEDED`
    - `web/set.html`: ชนิดเอกสารในภาพชุด (ตอนนี้ BRD · SRS · ARCH)
    - ลบ 3 โปรเจกต์ตัวอย่างออกจาก `projects.js` (ไม่มีไฟล์ SVG มาด้วย)
-4. ตั้ง `BRANDKIT_DIR` = โฟลเดอร์ `branded-document-design/scripts` ใน plugin `superuser` (ไม่ตั้ง → สคริปต์หาโฟลเดอร์ plugin `superuser` ที่อยู่ข้างกันเอง) · แนวหน้าจอจริงตั้ง `COVER_MOCKUP` = path ไฟล์ mockup (1 โปรเจกต์ต่อการรัน) · Chrome ที่ติดตั้งในเครื่อง → `COVER_CHROME` (ไม่ตั้ง = Chromium ของ Playwright)
+4. ตั้ง `BRANDKIT_DIR` = โฟลเดอร์ `branded-document-design/scripts` ใน plugin `software-company` (ไม่ตั้ง → สคริปต์หาโฟลเดอร์ skill ที่อยู่ข้างกันเอง) · แนวหน้าจอจริงตั้ง `COVER_MOCKUP` = path ไฟล์ mockup (1 โปรเจกต์ต่อการรัน) · Chrome ที่ติดตั้งในเครื่อง → `COVER_CHROME` (ไม่ตั้ง = Chromium ของ Playwright)
 5. `python src/build_all.py` แล้วเปิดดู `covers/*-set.png` และ `build/qa/*-80-1.png` ทุกภาพ
 - ต้องมี: Python + `python-docx` `pillow` `numpy` `playwright` `fontTools` `pywin32` · Chrome · Word (สำหรับ PDF) · `pdftoppm` · อินเทอร์เน็ต (Google Fonts ตอน render · ฟอนต์จาก GitHub)
 - 🚨 **`fonts.py` ติดตั้งฟอนต์ลงเครื่องผู้ใช้** (`%LOCALAPPDATA%\Microsoft\Windows\Fonts` + registry HKCU) และโหลดไฟล์จาก branch `main` ของ google/fonts โดยไม่ตรวจค่า hash — รันเฉพาะเมื่อตั้ง `COVER_INSTALL_FONTS=1` หลังผู้ใช้อนุญาต · บอกในรายงานว่าติดตั้งอะไร · **ถอด:** ลบไฟล์ `.ttf` ที่ติดตั้งใน `%LOCALAPPDATA%\Microsoft\Windows\Fonts` และค่า `<ชื่อฟอนต์> (TrueType)` ใน `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Fonts`

@@ -25,7 +25,7 @@ Who pays how much, what the money buys, and what the employer must file by when.
 | 2575 onwards | 23,000 | 1,150 |
 
 The 5% employee share covers: sickness, maternity, disability, death 1.5% · child allowance and old age 3% · unemployment 0.5%.
-Minimum base 1,650 baht (รอยืนยัน still unchanged under the 2569 regulation).
+Minimum base 1,650 baht (ข่าวอ้างข้อความกฎกระทรวง "ไม่ต่ำกว่า 1,650 ไม่เกิน 17,500 ใช้ตั้งแต่ 1 ม.ค. 2569" ตรวจ 2026-10-22 · รอยืนยัน กับราชกิจจานุเบกษา).
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.infoquest.co.th/2025/550753 · https://www.krungsri.com/th/krungsri-the-coach/life/good-life/sso-section-33-rate-increase · https://www.bangkokbiznews.com/health/labour/1136027
 
@@ -39,7 +39,7 @@ Minimum base 1,650 baht (รอยืนยัน still unchanged under the 2569
 | Death (non-work) | Funeral grant 50,000 + survivor's lump sum by contribution years (รอยืนยัน) | 1 month within the last 6 |
 | Child allowance | 1,000 per month per child aged 0–6, up to 3 children | 12 months within the last 36 |
 | Old age | Pension 20% of the average last-60-months wage, +1.5% per year beyond 15 years — if 180+ months paid; otherwise lump sum | 180 months for pension |
-| Unemployment | Laid off: 60% of wage for up to 180 days (กฎกระทรวง ฉบับที่ 2 พ.ศ. 2568, effective 28 Jun 2568) · resigned or contract ended: 30% for up to 90 days · register with กรมการจัดหางาน within 30 days | 6 months within the last 15 |
+| Unemployment | Laid off: 60% of wage for up to 180 days (กฎกระทรวง ฉบับที่ 2 พ.ศ. 2568, effective 28 Jun 2568) — wage is the capped wage, so the ceiling is 9,000/month on the 15,000 cap and would be 10,500 on the 17,500 cap from 1 Jan 2569 (รอยืนยัน whether SSO applies the new cap to this benefit; ตรวจ 2026-10-23 ไม่พบแหล่งทางการ) · resigned or contract ended: 30% for up to 90 days · register with กรมการจัดหางาน within 30 days | 6 months within the last 15 |
 
 มาตรา 39 gets the same except unemployment. มาตรา 40 benefits depend on the plan (70 = sickness, disability, death · 100 = + old-age lump sum · 300 = + child allowance).
 

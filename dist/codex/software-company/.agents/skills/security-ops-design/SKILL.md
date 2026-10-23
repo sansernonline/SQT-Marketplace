@@ -27,7 +27,7 @@ Workflow:
 7. **Playbook library:** top scenarios
 8. **Key performance indicators (KPIs) + service level agreements (SLAs):** mean time to detect (MTTD), mean time to acknowledge (MTTA), mean time to respond (MTTR), false positive (FP) rate
 9. **Staffing + training plan**
-10. **Produce polished SOC design** using `polished-document-style` (from software-company)
+10. **Produce polished SOC design** using `polished-document-style` (from superuser)
 11. **Hand-off:** implementation → `developer`, `devops-engineer` (from software-company)
 
 ---
@@ -44,5 +44,5 @@ Workflow:
 4. **Execute hunt:** queries across SIEM, EDR, etc.
 5. **Analyze results:** triage findings, eliminate FPs
 6. **Outcome:** escalate to incident response (IR) OR convert to detection OR document negative — any containment step during IR needs the user's approval per action (`security-operations` → `references/security-incident-response.md` Phase 3)
-7. **Produce polished hunt report** using `polished-document-style` (from software-company)
+7. **Produce polished hunt report** using `polished-document-style` (from superuser)
 8. **Hand-off:** to SOC for new detection rule, IR for findings

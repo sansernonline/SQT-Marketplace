@@ -17,7 +17,7 @@ A message is counted **per recipient**: 1 broadcast to 4,000 friends = 4,000 mes
 | Basic 1,280 baht | 15,000 | 0.10 baht | 3 | 32,000 msgs → 17,000 extra × 0.10 = 1,700 + 1,280 = **2,980 baht** |
 | Pro 1,780 baht | 35,000 | 0.06 baht | 8 | 32,000 ≤ 35,000 → **1,780 baht** |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
+ตรวจล่าสุด 2026-10-22 (หน้าทางการ LINE for Business ยืนยันตาราง Free 300 · Basic 15,000 · Pro 35,000 ข้อความ) · แหล่ง: https://lineforbusiness.com/th/service/line-oa-features/broadcast-message
 
 Formulas: `messages = reach × sends` · `extra cost = max(0, messages − free) × rate`. Basic becomes dearer than Pro above about **20,000 messages/month** (extra Basic spend passes the 500-baht price gap).
 
@@ -59,6 +59,13 @@ If blocks pass about 1% of reach after 1 send, you are sending too often or to t
 Café, Basic package, 5,200 friends, 4,600 target reach. Plan: 2 promos to everyone + 2 to "bought in 90 days" (1,850) this month.
 Messages = 2 × 4,600 + 2 × 1,850 = 12,900 ≤ 15,000 → no extra cost; 2,100 left for order pushes.
 
+Promo text for the first send (one `!` on the hook only, period and conditions stated, no "รีบ…เลย!"):
+> กาแฟเย็นทุกแก้วลด 20%!
+> 25–31 ต.ค. 2569 เฉพาะสั่งหน้าร้าน แสดงข้อความนี้ก่อนชำระเงิน
+> ไม่ร่วมกับโปรโมชันอื่น · สาขา <ชื่อสาขา> เปิด 07:00–18:00
+
+ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน
+
 ## Rules
 
 - No false urgency ("วันสุดท้าย!" every week trains people to ignore you, and misleading ads are a consumer-protection risk).
@@ -68,4 +75,4 @@ Messages = 2 × 4,600 + 2 × 1,850 = 12,900 ≤ 15,000 → no extra cost; 2,100 
 
 ## Related
 
-`line-oa-setup` (packages) · `line-chatbot` (reply keywords) · `line-richmenu` · `thai-holidays` · `pdpa-workflow` · if installed: `live-selling-script` (online-seller).
+`line-oa-setup` (packages) · `line-chatbot` (reply keywords) · `line-richmenu` · `thai-holidays` · `pdpa-workflow` · if installed: `live-selling-script` (e-commerce).

@@ -335,7 +335,7 @@ expected_lift = trace.posterior['diff'].mean()
 ## Skills You Use
 
 - `ecommerce-patterns` — checkout-specific patterns
-- `polished-document-style` (from software-company) — for reports
+- `polished-document-style` (from superuser) — for reports
 
 ## Output: Test Plan
 
@@ -722,7 +722,7 @@ async function updateProduct(slug: string, updates: any) {
 - `ecommerce-patterns` — this skill's references:
   - `references/checkout-optimization.md` — friction analysis + reduction
   - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
-- `polished-document-style` (from software-company) — for spec docs
+- `polished-document-style` (from superuser) — for spec docs
 
 ## Things You Don't Do
 
@@ -1066,7 +1066,7 @@ stateDiagram-v2
 ## Skills You Use
 
 - `ecommerce-patterns` — patterns and algorithms
-- `polished-document-style` (from software-company) — for docs
+- `polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 
@@ -1106,7 +1106,7 @@ stateDiagram-v2
 
 # Recommendation Engineer — algorithms, serving, evaluation
 
-คู่มือบทบาทของ agent `recommendation-engineer` — ย้ายมาจากตัว agent (2026-10-14) · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
+คู่มือบทบาทของ agent `recommendation-engineer` · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
 
 **สารบัญ:**
 

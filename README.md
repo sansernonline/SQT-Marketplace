@@ -1,10 +1,10 @@
 # SQT Marketplace — Software Company Plugin Suite
 
-Marketplace สำหรับ Claude Code · **12 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน เลือกติดตั้งตามอุตสาหกรรม
+Marketplace สำหรับ Claude Code · **8 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน + reverse engineer เลือกติดตั้งตามอุตสาหกรรม
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
-**รวม 99 agents · 252 skills · 75 commands** — ตั้งแต่บริษัทซอฟต์แวร์ครบวงจรไปจนถึงเทรดหุ้น งานไทย ขายของออนไลน์ บ้าน อาชีพ สุขภาพ และงานครีเอทีฟ
+**รวม 68 agents · 229 skills · 73 commands** — ตั้งแต่บริษัทซอฟต์แวร์ครบวงจร ไปจนถึงเทรดหุ้น งานไทย ซื้อขายออนไลน์ ชีวิตประจำวัน งานครีเอทีฟ และ reverse engineer
 
 ---
 
@@ -27,21 +27,16 @@ scripts\build-dist.cmd                                                       # �
 
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
-| **`superuser`** | 3 | 28 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`sqt-toolkit`** | 0 | 15 | 0 | skill เอกสาร สไลด์ รูป ประชุม ข้อความสุภาพ ชื่อ — ติดตั้งมาพร้อม plugin สาขาทุกตัว |
-| **`software-company`** | 39 | 81 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`superuser`** | 3 | 34 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
+| **`software-company`** | 39 | 93 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
 | **`trading-finance`** | 4 | 19 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
-| **`personal-life`** | 3 | 12 | 6 | จัดการชีวิตประจำวัน · ค่าสมาชิกรายเดือน · ความปลอดภัยบัญชีออนไลน์ · ข้อความสุภาพ |
-| **`thai-workplace`** | 4 | 18 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี, เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
-| **`online-seller`** | 3 | 9 | 4 | แม่ค้าออนไลน์ Shopee · Lazada · TikTok Shop · LINE |
-| **`home-family`** | 2 | 8 | 3 | บ้านและครอบครัว: บิล ซ่อมบำรุง รถ อาหาร ลูก ผู้สูงอายุ สัตว์เลี้ยง |
-| **`career`** | 2 | 6 | 3 | เรซูเม่ สัมภาษณ์ ต่อรองเงินเดือน LinkedIn |
-| **`health-wellness`** | 1 | 6 | 2 | จัดระเบียบสุขภาพ (ไม่วินิจฉัย ไม่สั่งยา) |
-| **`consumer-rights`** | 1 | 5 | 2 | เทียบก่อนซื้อ · ประกันสินค้า · ร้องเรียน สคบ. · ขอคืนเงิน |
-| **`graphic-design`** | 4 | 11 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
-| **`dev-learning`** | 1 | 8 | 2 | อัปเดตวงการ dev · เตรียมสอบใบรับรอง · เลือกโปรเจกต์ฝึก · เขียนวิทยานิพนธ์และบทความวิจัย |
+| **`personal-life`** | 9 | 38 | 16 | ชีวิตประจำวันตัวเดียวครบ 5 หมวด — จัดการชีวิต (ประชุม เอกสาร ค่าสมาชิก ความปลอดภัยบัญชี) · บ้านและครอบครัว (บิล รถ ลูก ผู้สูงอายุ สัตว์เลี้ยง) · สุขภาพ (จัดระเบียบ ไม่วินิจฉัย) · อาชีพ (เรซูเม่ สัมภาษณ์ เงินเดือน) · เรียนรู้ (เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์ — รวม `dev-learning` เดิม) |
+| **`thai-workplace`** | 4 | 19 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี (รวมภาษีคนขายออนไลน์), เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
+| **`e-commerce`** | 4 | 12 | 6 | ซื้อขายออนไลน์ทั้งสองฝั่ง — ขาย: Shopee · Lazada · TikTok Shop · LINE · ไลฟ์ · สต็อก · ซื้อ: เทียบก่อนซื้อ ประกัน ร้องเรียน สคบ. ขอคืนเงิน (รวม `online-seller` + `consumer-rights` เดิม) |
+| **`graphic-design`** | 4 | 12 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
+| **`reverse-engineer`** | 1 | 7 | 1 | reverse engineer แอป/ไบนารี/เว็บ/APK โดยไม่มี source — สถาปัตยกรรมลอกจาก REA: จุดเข้าเดียว หลักฐานทุกข้อสรุป แล้วสร้าง implementation ของตัวเอง |
 
-> plugin ชีวิตประจำวัน 10 ตัว (ทุกตัวยกเว้น software-company และ superuser) ยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
+> plugin ชีวิตประจำวันยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
 
 ---
@@ -66,7 +61,7 @@ scripts\build-dist.cmd                                                       # �
 /plugin install software-company@sqt-marketplace
 ```
 
-ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · agent `reviewer` · hook) และ `sqt-toolkit` (เอกสาร · สไลด์ · รูป · ประชุม) · ติดตั้ง plugin ไหน Claude Code ติดตั้งทั้งสองให้เองจาก `dependencies` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
+ทุก plugin ใช้ของกลางจาก `superuser` (แกนหัวหน้าทีม · skill `human-writing` · `simplify` · เอกสารหลัก `polished-document-style` · `document-naming` · agent `reviewer` · hook) · ติดตั้ง plugin ไหน Claude Code ติดตั้ง `superuser` ให้เองจาก `dependencies` · skill เอกสารออกแบบ สไลด์ รูปอยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุม ใน `personal-life` · zip สำหรับ claude.ai มีของกลางอยู่ในตัวแล้ว
 
 ติดตั้งหลาย plugin → รัน `node scripts/install/set-skill-budget.mjs` ครั้งเดียว (ขยายงบรายการ skill เป็น 2%) ไม่งั้นคำอธิบาย skill บางตัวถูกตัดทิ้ง · รายละเอียด [scripts/README.md](scripts/README.md)
 

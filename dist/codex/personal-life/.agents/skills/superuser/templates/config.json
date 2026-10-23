@@ -9,6 +9,8 @@
     "handoff": true,
     "patterns_advanced": true,
     "review_gate": true,
-    "split_gate": true
+    "split_gate": true,
+    "guard": false,
+    "recompact": false
   }
 }

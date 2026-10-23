@@ -61,4 +61,4 @@ KB entry template and a handoff message set: [references/kb-template.md](referen
 
 ## Related
 
-`line-oa-setup` · `line-richmenu` · `line-broadcast` · `pdpa-workflow` · if installed: `chat-reply-templates` (online-seller), `notifications` (software-company), `llm-engineering` (software-company) for the LLM classifier, prompts and evals.
+`line-oa-setup` · `line-richmenu` · `line-broadcast` · `pdpa-workflow` · if installed: `chat-reply-templates` (e-commerce), `notifications` (software-company), `llm-engineering` (software-company) for the LLM classifier, prompts and evals.

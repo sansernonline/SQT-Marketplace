@@ -20,7 +20,7 @@ Twenty minutes, once a week, so Monday starts with a plan instead of panic. Frid
 ## Money and admin checklist (step 4)
 
 - [ ] Credit card due dates this fortnight — pay in full by the due date, not the minimum
-- [ ] Utility, phone, internet bills — auto-debit worked? (`household-bills` in home-family, if installed)
+- [ ] Utility, phone, internet bills — auto-debit worked? (`household-bills` ใน plugin เดียวกัน)
 - [ ] Anything in `important-docs` expiring within 60 days
 - [ ] Free trials ending (`subscription-audit`)
 - [ ] Decision-journal revisits due (`decision-journal`)
@@ -63,6 +63,7 @@ Week of 2026-10-05:
 ## Rules
 
 - Twenty minutes — when it grows, the review has become the procrastination
+- Scan the record before asking memory — steps 2 and 3 start from the calendar, sent mail, chat threads and the task list (developers: git log and merged pull requests), and the user is asked only about what the record does not show; memory keeps the loud week and drops the promises
 - Write it even when the week felt like nothing; boring weeks are data
 - Three priorities, not five; everything else is the queue
 - End with the three visible where the user will see them Monday morning (calendar, phone widget, sticky note)

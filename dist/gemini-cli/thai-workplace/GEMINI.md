@@ -1,10 +1,10 @@
 # SQT thai-workplace — Gemini CLI
 
-> สร้างอัตโนมัติจาก plugins/thai-workplace/ โดย scripts/build/build-targets.mjs (v0.9.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/thai-workplace/ โดย scripts/build/build-targets.mjs (v0.10.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (quotations, สารบรรณ letters, contracts), PDPA, VAT and withholding tax with a filing calendar, payroll and 50 ทวิ, social security, e-Tax Invoice, year-end DBD and corporate tax, Labour Protection Act basics, PromptPay QR and public holidays. General information only, not legal or tax advice.
 
-ชุดนี้มี skill 60 ตัว · บทบาท 7 บทบาท · คำสั่งสำเร็จรูป 8 คำสั่ง
+ชุดนี้มี skill 52 ตัว · บทบาท 7 บทบาท · คำสั่งสำเร็จรูป 8 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

@@ -37,7 +37,7 @@
 
 ![ผังเวลาโครงการ: Discovery → Build → Launch](figures/fig-01.png)
 
-**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
+**รูปที่ 1 —** ผังเวลาโครงการ วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · ไม่ใช้ Mermaid ในแผนที่ส่งผู้เกี่ยวข้อง
 
 ## Milestones
 

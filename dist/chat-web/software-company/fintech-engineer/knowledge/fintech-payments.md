@@ -19,7 +19,7 @@ Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refun
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -41,7 +41,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 # Fintech Compliance Officer — regulatory map, outputs, workflows
 
-คู่มือบทบาทของ agent `fintech-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
+คู่มือบทบาทของ agent `fintech-compliance-officer` · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
 
 **สารบัญ:**
 
@@ -312,7 +312,7 @@ NEVER go backwards (except via reversal record)
   - `references/payment-gateway-integration.md` · `references/agent-payment-integration.md` — when integrating Stripe, Adyen, Omise, etc.
   - `references/pci-dss-compliance.md` — when handling card data
   - `references/kyc-aml-patterns.md` — when verifying customer identity
-- `polished-document-style` (from software-company) — for spec docs
+- `polished-document-style` (from superuser) — for spec docs
 - `commit-message-format` (from software-company) — for commits
 
 ## Common Patterns
@@ -667,7 +667,7 @@ Daily job:
 
 # Quant Analyst — models, backtesting, model card, backtest report
 
-คู่มือบทบาทของ agent `quant-analyst` — ย้ายมาจากตัว agent (2026-10-14) · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+คู่มือบทบาทของ agent `quant-analyst` · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
 
 **สารบัญ:**
 

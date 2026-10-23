@@ -162,7 +162,7 @@ Blog post (full)
 ## Skills You Use
 
 - `developer-experience` — this skill's references: `references/technical-content.md` (content patterns) · `references/developer-experience.md` (DX principles)
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

@@ -1,5 +1,7 @@
 # Runbook Template
 
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: TL;DR · How to Detect · Diagnosis · Mitigation Steps (ขั้น 1–5) · Escalation Path · Verification · After Resolution · Related Runbooks · Background
+
 - [แม่แบบทั้งไฟล์](#runbook-template) อยู่ในบล็อกเดียว ให้คัดลอกทั้งบล็อกไปเป็นไฟล์ runbook ใหม่
 
 แม่แบบเต็มของ runbook หนึ่งฉบับ ให้คัดลอกไปกรอกต่อได้ทันที ส่วนกฎว่าแต่ละส่วนต้องมีอะไรอยู่ใน `SKILL.md`
@@ -9,7 +11,7 @@
 
 | | |
 |--|--|
-| **Severity** | SEV1 \| SEV2 \| SEV3 |
+| **Severity** | SEV1 \| SEV2 \| SEV3 \| SEV4 (table in `postmortem-template`) |
 | **Service** | service-name |
 | **Owner Team** | @team-name |
 | **Last Reviewed** | YYYY-MM-DD |
@@ -87,6 +89,7 @@ kubectl set env deployment/api -n prod RATE_LIMIT_AGGRESSIVE=true
 ```
 
 **Expected effect:** Error rate drops within 2 min
+**VERIFY:** `./scripts/flag.sh get new-checkout --env prod` → `off` · dashboard 5xx panel < 1% for 2 min
 **If doesn't work:** Go to Step 2
 
 ### Step 2: Scale up (medium risk)
@@ -95,6 +98,7 @@ kubectl scale deployment/api -n prod --replicas=10
 ```
 
 **Expected effect:** Latency improves within 3 min
+**VERIFY:** `kubectl get deployment/api -n prod` → READY `10/10` · p95 panel back under threshold
 **Caveats:** Will increase cost, monitor budget alerts
 
 ### Step 3: Rollback recent deploy (higher risk)
@@ -103,6 +107,7 @@ kubectl rollout undo deployment/api -n prod
 ```
 
 **Expected effect:** Reverts to previous version
+**VERIFY:** `kubectl rollout status deployment/api -n prod` → `successfully rolled out` · running image tag = previous release
 **Caveats:** Check for schema migrations before rolling back. A rollout undo does not delete data, but old code may break on a schema the new release already migrated — roll back only if the migration is backward-compatible
 
 ### Step 4: Block bad traffic at the WAF or firewall (high risk)
@@ -112,6 +117,7 @@ kubectl rollout undo deployment/api -n prod
 ```
 
 **Expected effect:** Abusive traffic stops reaching the service
+**VERIFY:** `./scripts/waf-block.sh list` shows the CIDR with TTL · requests from that range in access log → 0 · request rate from real users unchanged
 **Caveats:** Can block real users; set a TTL (time to live) and check the allow list
 
 ### Step 5: Failover to backup region (last resort)
@@ -121,6 +127,7 @@ kubectl rollout undo deployment/api -n prod
 ```
 
 **Expected effect:** All traffic shifts to backup
+**VERIFY:** `dig +short api.example.com` → backup region IP · backup region request rate ≈ previous primary rate · primary → 0
 **Caveats:** Some user data may need migration, full rollback complex
 
 ## Escalation Path

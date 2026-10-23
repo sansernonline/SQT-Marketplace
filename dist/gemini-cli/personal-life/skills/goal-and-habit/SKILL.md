@@ -86,4 +86,4 @@ Rule: the user must be able to say **yes or no** on the date. "Better" and "more
 - Never shame a slip. Change the system first, then the goal
 - Health goals: set the habit and the measurement; ask a doctor before strict diets or intense training
 
-Related: `weekly-review` (the weekly check), `decision-journal` (drop or continue), `personal-budget` in `trading-finance` (money goals), `learning-path` in `dev-learning` (learning goals).
+Related: `weekly-review` (the weekly check), `decision-journal` (drop or continue), `personal-budget` in `trading-finance` (money goals), `learning-path` (learning goals).
