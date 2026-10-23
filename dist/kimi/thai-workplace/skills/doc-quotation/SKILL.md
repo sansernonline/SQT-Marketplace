@@ -83,4 +83,4 @@ Templates for all 5 documents: [references/templates.md](references/templates.md
 
 ## Related
 
-`e-tax-invoice` · `tax-vat-th` · `promptpay-qr` · `doc-contract-th` · if installed: `seller-tax-basics` (e-commerce).
+`e-tax-invoice` · `tax-vat-th` · `promptpay-qr` · `doc-contract-th` · `seller-tax-basics`.

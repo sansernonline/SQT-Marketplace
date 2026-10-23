@@ -23,7 +23,7 @@ The user corrected the team · a step failed and no skill covered the fix · a s
 
 Skip one-off slips, things for this one project or user only, and anything already in `IMPROVEMENTS.md`. Before calling anything a gap, grep the plugin's `skills/` for it — a rule that exists but was never opened is a routing lesson, not a missing one.
 
-A correction that arrives **after** a `review` line says ผ่าน means the reviewer has a blind spot — that lesson goes to `reviewer.md` or a check, not to the maker's skill.
+A correction that arrives **after** a `review` line says ผ่าน means the reviewer has a blind spot — that lesson goes to `reviewer.md` or a check, not to the maker's skill. `log/SUMMARY.md` counts these per day (column "รีวิวผ่านแล้วผู้ใช้ยังแก้", count/passing reviews and %): a high rate is that blind spot repeating, so the fix goes to the same place — but the flag comes from a word list, so read each `prompt` before citing it.
 
 ## How to find the cause
 

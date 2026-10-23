@@ -8,11 +8,13 @@
 | ยื่นภาษีอะไร เมื่อไร | `tax-vat-th` + agent `tax-helper` |
 | ภาษีคนขายออนไลน์ (40(8) · เกณฑ์ VAT) | `seller-tax-basics` |
 | ประกันสังคม | `social-security-th` |
+| เปิดกิจการใหม่ (บุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน · ต้นทุนนำเข้าจากจีน) | `thai-business-setup` |
 | ปิดปีบริษัท | `dbd-annual-filing` |
 | ใบเสนอราคา ใบเสร็จ ใบกำกับภาษี | `doc-quotation` · `e-tax-invoice` |
 | หนังสือราชการ | `doc-thai-official` + agent `thai-doc-writer` |
 | สัญญา | `doc-contract-th` |
 | วันลา OT ค่าชดเชย | `labour-law-basics` · `doc-leave` |
+| จ้างพนักงานใหม่ (ประกาศรับสมัคร · ใบคัดกรอง · สัมภาษณ์ · จดหมายเสนองาน) | `hiring-th` |
 | PDPA | `pdpa-workflow` + agent `compliance-helper` |
 | LINE OA | `line-oa-setup` · `line-chatbot` · `line-richmenu` · `line-broadcast` + agent `line-admin` |
 | QR พร้อมเพย์ | `promptpay-qr` |

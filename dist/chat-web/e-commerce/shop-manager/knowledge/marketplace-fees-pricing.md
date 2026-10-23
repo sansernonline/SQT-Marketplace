@@ -66,7 +66,7 @@ Same bag, **VAT-registered** shop on Shopee: formula price ฿228.50 → ฿229.
 ## Related
 
 - `shipping-compare` — `S` per parcel size
-- `seller-tax-basics` — when to register VAT (sets `v`)
+- `seller-tax-basics` (thai-workplace) — when to register VAT (sets `v`)
 - `multi-shop-stock` — same SKU codes in the price sheet
 - `thai-workplace` `doc-quotation` (if installed) — B2B buyers who need a quotation with VAT
 

@@ -30,12 +30,12 @@ description: Use when one Markdown file must become a polished Word report (busi
 
 ## 1 · ขั้นตอน
 
-1. เขียนเนื้อหาใน `docs/src/<ชื่อ>.md` (ต้นฉบับถาวร ตาม `document-naming` ข้อ 1) ตาม [`polished-document-style`](../polished-document-style/SKILL.md) · ใส่ front matter (ข้อ 2)
+1. เขียนเนื้อหาใน `docs/src/<ชื่อ>.md` (ต้นฉบับถาวร ตาม `document-naming` ข้อ 1) ตาม `polished-document-style` (plugin `superuser`) · ใส่ front matter (ข้อ 2)
 2. รัน `python scripts/md_to_docx.py docs/src/<ชื่อ>.md -o docs/<ชื่อไฟล์ส่งมอบ>.docx --pdf`
    - สคริปต์ใช้ `brandkit.py` จาก `branded-document-design/scripts/` ที่อยู่ข้างกัน ต้องมี `python-docx`
    - `--pdf` ใช้ Word บน Windows (อัปเดตสารบัญให้ด้วย) ไม่มี Word → LibreOffice · PDF นี้ไว้ตรวจข้อ 5 — ส่งเฉพาะคู่มือผู้ใช้หรือเมื่อลูกค้าขอ นอกนั้นย้ายไป `_to_delete/` (`document-naming` ข้อ 1)
 3. แปลง PDF เป็นภาพแล้ว**เปิดดูทุกหน้า** ตามข้อ 5 · เจอปัญหา → แก้ที่ .md แล้วรันใหม่
-4. ตั้งชื่อไฟล์ส่งมอบตาม [`document-naming`](../document-naming/SKILL.md) เช่น `CLINIC-RPT-project-v1.0-DRAFT.docx`
+4. ตั้งชื่อไฟล์ส่งมอบตาม `document-naming` (plugin `superuser`) เช่น `CLINIC-RPT-project-v1.0-DRAFT.docx`
 
 ลองดูตัวอย่างครบทุกองค์ประกอบ: `python scripts/md_to_docx.py assets/example-report.md --pdf`
 
@@ -115,6 +115,6 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 |---|---|
 | เพิ่มองค์ประกอบที่สคริปต์ไม่มี (KPI · pill · ลงนาม · หน้าแนวนอน) | เรียก `BrandDoc` ใน [`branded-document-design`](../branded-document-design/SKILL.md) ต่อจาก `build()` |
 | สไลด์คู่กับรายงานชุดเดียวกัน สีเดียวกัน | [`presentation-design`](../presentation-design/SKILL.md) (ตารางบนสุดเลือก .pptx · .html · แปลง) |
-| ชื่อไฟล์และเวอร์ชัน | [`document-naming`](../document-naming/SKILL.md) |
+| ชื่อไฟล์และเวอร์ชัน | `document-naming` (plugin `superuser`) |
 | รูปในรายงาน | [`diagram-figures`](../diagram-figures/SKILL.md) |
 | ปกเฉพาะโปรเจกต์ (มีโลโก้และ mockup แล้ว) | `doc-cover-design` (plugin `software-company`) |

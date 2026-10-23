@@ -1,7 +1,7 @@
 # playbook · pricing-check — ตรวจกำไรและตั้งราคาใหม่
 
 ใช้เมื่อ: ขายแล้วไม่เหลือกำไร · ค่าธรรมเนียมเปลี่ยน · จะจัดโปรลดราคา
-skill หลัก: `marketplace-fees-pricing` · `shipping-compare` · `seller-tax-basics`
+skill หลัก: `marketplace-fees-pricing` · `shipping-compare` · `seller-tax-basics` (thai-workplace)
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 

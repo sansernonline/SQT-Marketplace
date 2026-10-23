@@ -64,6 +64,8 @@ description: Use when a task produces a screen, screen spec or mockup, alongside
 
 **โปรเจกต์ใหม่ เลือกบุคลิกแอป 1 ใน 6 แบบก่อนวาดหน้าแรก** → [`references/app-character.md`](references/app-character.md) (หน้าตาเดิมของโปรเจกต์ชนะเสมอ)
 
+**ลูกค้าส่งไฟล์ Figma มา** → อ่านผ่าน Figma MCP server แปลง variables เป็น token แล้วทำ mockup HTML ตามข้อนี้ · เมื่อไหร่ควรข้าม Figma → [`references/figma-to-code.md`](references/figma-to-code.md)
+
 ---
 
 ## 0.1 · ทิศทางภาพ — ก่อนวาดหน้าจอแรกของโปรเจกต์ใหม่หรือการออกแบบใหม่
