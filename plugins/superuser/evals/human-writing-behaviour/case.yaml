@@ -1,0 +1,41 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: human-writing-behaviour
+description: รายงานสถานะภาษาไทยต้องขึ้นต้นด้วยข้อสรุป ไม่มีคำฟุ่มเฟือย ไม่มีอีโมจิ ตัวย่อเขียนเต็มครั้งแรก ตัวเลขเป็นเลข
+tags: [behaviour, human-writing]
+runs: 3
+expected_outcome: ย่อหน้าแรกบอกผลรวม (2 ใน 3 เสร็จ ติด 1) ตามด้วยตาราง ผล ที่ทำ ต่อไป ไม่มี ทำการ มีการ ในส่วนของ ไม่มีอีโมจิ OCR เขียนเต็มครั้งแรก
+execution:
+  prompt: |
+    เขียนรายงานสถานะประจำสัปดาห์ภาษาไทยให้ผู้บริหารอ่าน จากข้อมูลนี้:
+    - งาน 3 ชิ้น: หน้า login เสร็จและทดสอบผ่าน 42 เคส · ระบบ OCR ใบกำกับภาษีเสร็จแต่ความแม่นยำ 91% ต่ำกว่าเป้า 95% · การเชื่อม API ธนาคารติด เพราะธนาคารยังไม่ส่ง sandbox credential มา 9 วันแล้ว
+    - สัปดาห์หน้า: ปรับโมเดล OCR และทวง credential ผ่านผู้จัดการบัญชีของธนาคาร
+    - งบใช้ไป 1,250,000 จาก 2,000,000 บาท
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: no-filler-words
+    type: regex
+    pattern: "ทำการ|มีการ|ในส่วนของ|ได้มีการ|เป็นการ"
+    match: not_contains
+    target: last_message
+  - name: no-emoji
+    type: regex
+    pattern: "✅|❌|📌|🚀|💡|✨|⭐|🔥|👉|📊|📝|🎯|⚠️"
+    match: not_contains
+    target: last_message
+  - name: abbreviation-spelled-out
+    type: regex
+    pattern: "Optical Character Recognition"
+    match: contains
+    target: last_message
+  - name: reads-like-a-person
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ย่อหน้าหรือบรรทัดแรกเป็นข้อสรุปของสัปดาห์ (อ่านแค่ตรงนี้ก็รู้ว่า 2 ชิ้นเสร็จ 1 ชิ้นติด) ไม่เกริ่น ไม่ทวนโจทย์
+      2. ตัวเลขทุกตัวเขียนเป็นเลข (42 เคส · 91% · 1,250,000 บาท) และบอกว่าหมายถึงอะไร
+      3. ไม่มีการสรุปซ้ำตอนท้าย และไม่มีประโยคปิดแบบ "หวังว่าจะเป็นประโยชน์"
+      4. งานที่ติดบอกสาเหตุและสิ่งที่จะทำต่อ ไม่ปลอบลอย ๆ
+      5. สถานะใช้คำในชุด เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่

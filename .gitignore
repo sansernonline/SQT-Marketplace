@@ -2,3 +2,6 @@ _to_delete/
 
 __pycache__/
 *.pyc
+
+# ผลของ claude plugin eval (สร้างใหม่ทุกรอบ ไม่ commit)
+plugins/*/evals/results/

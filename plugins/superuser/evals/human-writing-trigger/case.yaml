@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: human-writing-trigger
+description: โจทย์เขียนอีเมลภาษาไทยธรรมดา ไม่เอ่ยชื่อ skill ต้องทำให้ human-writing ถูกเปิด และคำตอบไม่มีอีโมจิ
+tags: [trigger, human-writing]
+runs: 3
+expected_outcome: เรียก Skill human-writing ก่อนเขียน แล้วส่งอีเมลที่ขึ้นต้นด้วยเรื่องที่เลื่อน ไม่มีอีโมจิ ไม่สรุปซ้ำ
+execution:
+  prompt: |
+    เขียนอีเมลภาษาไทยถึงลูกค้า แจ้งว่าวันขึ้นระบบเลื่อนจาก 1 พ.ย. เป็น 15 พ.ย. 2569
+    เพราะเอกสาร API ของผู้ให้บริการภายนอกส่งมาช้า 2 สัปดาห์ ทีมจะใช้ช่วงที่เพิ่มมาทดสอบระบบจ่ายเงินเพิ่ม
+    ผู้ส่งคือ สันเสริญ หัวหน้าโครงการ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?human-writing"'
+    min: 1
+    arm: with-only
+  - name: no-emoji
+    type: regex
+    pattern: "✅|❌|📌|🚀|💡|✨|⭐|🔥|👉|📊|📝|🎯|⚠️"
+    match: not_contains
+    target: last_message
+  - name: date-and-reason-present
+    type: regex
+    pattern: "15 พ\\.ย\\.|15 พฤศจิกายน"
+    match: contains
+    target: last_message

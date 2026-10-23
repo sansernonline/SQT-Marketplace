@@ -66,8 +66,8 @@ description: Use when Thai back-office work spans several steps (payroll, filing
 
 | กติกา | รายละเอียด |
 |---|---|
-| **เลือก agent ตามบทบาท** | ภาษีและปฏิทินยื่นแบบใช้ `tax-helper` · เอกสารธุรกิจใช้ `thai-doc-writer` · PDPA ใช้ `compliance-helper` · LINE OA ใช้ `line-admin` |
-| **งานข้ามสาขา** | ระบบที่ต้องเขียนโค้ดจริง (เช่น ระบบเงินเดือน · webhook ขนาดใหญ่) ใช้ `software-company` ภาษีส่วนบุคคลใช้ `trading-finance` ร้านค้าออนไลน์ใช้ `online-seller` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี plugin นี้ แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **เลือก agent ตามบทบาท** | ภาษีและปฏิทินยื่นแบบ (รวมภาษีคนขายออนไลน์ `seller-tax-basics`) ใช้ `tax-helper` · เอกสารธุรกิจใช้ `thai-doc-writer` · PDPA ใช้ `compliance-helper` · LINE OA ใช้ `line-admin` |
+| **งานข้ามสาขา** | ระบบที่ต้องเขียนโค้ดจริง (เช่น ระบบเงินเดือน · webhook ขนาดใหญ่) ใช้ `software-company` ภาษีส่วนบุคคลใช้ `trading-finance` ร้านค้าออนไลน์ใช้ `e-commerce` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี plugin นี้ แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
 
 ---
 

@@ -6,6 +6,7 @@
 |---|---|
 | เงินเดือนประจำเดือน | `payroll-th` |
 | ยื่นภาษีอะไร เมื่อไร | `tax-vat-th` + agent `tax-helper` |
+| ภาษีคนขายออนไลน์ (40(8) · เกณฑ์ VAT) | `seller-tax-basics` |
 | ประกันสังคม | `social-security-th` |
 | ปิดปีบริษัท | `dbd-annual-filing` |
 | ใบเสนอราคา ใบเสร็จ ใบกำกับภาษี | `doc-quotation` · `e-tax-invoice` |

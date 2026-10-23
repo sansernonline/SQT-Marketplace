@@ -17,11 +17,15 @@
     { "pattern": "บั๊ก|\\bbug|\\berror\\b|พัง|ใช้ไม่ได้|ไม่ทำงาน|ล่ม|\\bcrash|\\bfail(s|ed|ing)?\\b|exception|หาสาเหตุ", "skills": ["principle-fix-root-cause", "targeted-fix"] },
     { "pattern": "mockup|หน้าจอ|\\bui\\b|landing page|หน้าเว็บ|โปสเตอร์|poster|โลโก้|\\blogo\\b|แบนเนอร์|banner|อินโฟกราฟิก|infographic", "skills": ["no-ai-look"] },
     { "pattern": "mockup|หน้าจอ|\\bui\\b|landing page|หน้าเว็บ|wireframe", "skills": ["ui-craft"] },
+    { "pattern": "เว็บ[^\\n]{0,20}(animation|แอนิเม|เคลื่อนไหว|dynamic|มีชีวิต|เลื่อนแล้ว)|\\bgsap\\b|scroll-?driven|เว็บ(แบบ)?บท|one-?page site|\\bdynamic (web)?site\\b", "skills": ["dynamic-website", "motion-basics", "no-ai-look"] },
+    { "pattern": "ภาษาไทย(ให้)?(ลื่น|เป็นธรรมชาติ|อ่านง่าย)|ขัดภาษา|ตรวจเข้ม|เกลาภาษา|แปล(เป็น)?ไทย|อ่านแล้ว(แข็ง|เหมือนแปล|ห้วน)", "skills": ["human-writing"] },
     { "pattern": "diagram|ไดอะแกรม|แผนภาพ|flowchart|โฟลว์|\\ber\\b|sequence|architecture figure", "skills": ["diagram-figures", "no-ai-look"] },
     { "pattern": "(สรุป|บันทึก|รายงาน)[^\\n]{0,15}ประชุม|meeting (notes|minutes|summary)", "skills": ["meeting-summary"] },
     { "pattern": "\\bcommit\\b|คอมมิต", "skills": ["commit-log"] },
     { "pattern": "ส่งงานต่อ|รับงานต่อ|ส่งต่องาน|ใบสั่งงาน|\\bhand-?off\\b|สลับโมเดล", "skills": ["handoff"] },
     { "pattern": "หาข้อมูล|ค้นข้อมูล|\\bresearch\\b|เช็กให้หน่อย|ยังจริงไหม", "skills": ["research-with-sources"] },
+    { "pattern": "(สร้าง|เขียน|แก้|ปรับ|ทำ)[^\\n]{0,12}(skill|agent|playbook)\\b|\\b(new|write|create|fix|improve)[^\\n]{0,12}(skill|subagent|playbook)\\b|\\bevals?\\b|case\\.yaml|skill-doctor|plugin eval", "skills": ["skill-authoring"] },
+    { "pattern": "แปล(เป็น|ภาษา)?(ไทย|อังกฤษ)|แปลภาษา|แปลเอกสาร|แปลข้อความ|\\btranslat(e|ion|ed|ing)\\b|สองภาษา|\\bbilingual\\b|\\b(th|en)[- ](to|→)[- ](th|en)\\b", "skills": ["translate-th-en", "human-writing"] },
     { "pattern": "ทวงเงิน|ทวงถาม|ปฏิเสธ(ยังไง|อย่างไร)|ข้อความ(สุภาพ|ขอโทษ)|polite message", "skills": ["polite-message-th-en"] }
   ]
 }

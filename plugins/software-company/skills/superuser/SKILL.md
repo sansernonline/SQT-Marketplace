@@ -18,7 +18,7 @@ plugin อื่นมี `superuser` ของตัวเอง (`/<plugin>:su
 **กฎเฉพาะของ plugin นี้**
 
 - **ที่จด** — การตัดสินใจลง `decision-log` ใน `docs/BUILD-PLAN.md` แทนตารางใน `CONTEXT.md` · ตารางสถานะใช้ `status-report` · `CONTEXT.md` และจุดส่งต่อตาม `handoff` · ไฟล์ style สร้างด้วย `owner-style-capture`
-- **principle ที่อยู่หลังกฎ** — ข้อ 2 `principle-prove-it-works` · ข้อ 3 `principle-proceed-on-reversible-work` · playbook อ่านอย่างเดียว: `investigation` · `review`
+- **principle ที่อยู่หลังกฎ** — ข้อ 3 `principle-prove-it-works` · ข้อ 4 `principle-proceed-on-reversible-work` (เลขข้อของ `superuser:superuser`) · playbook อ่านอย่างเดียว: `investigation` · `review`
 
 ---
 
