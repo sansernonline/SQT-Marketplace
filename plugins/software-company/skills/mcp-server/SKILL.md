@@ -91,7 +91,7 @@ Model Context Protocol (MCP) คือโปรโตคอลเปิด (JSON
 | รัน stdio | `if __name__ == "__main__": mcp.run()` (ไม่ใส่ transport = stdio) · `uv run mcp dev server.py` เปิด Inspector | `StdioServerTransport` จาก `@modelcontextprotocol/server/stdio` |
 | เมื่อไหร่เลือก | ทีมถนัด Python · ต่อฐานข้อมูล · pandas | ลูกค้าใช้ Node อยู่แล้ว · จะแพ็กเป็น MCPB ให้ติดตั้งโดยไม่ลง runtime · Anthropic `mcp-builder` แนะนำ TypeScript เป็นหลัก |
 
-ตัวอย่างสมบูรณ์: `assets/inventory-mcp/server.py` (113 บรรทัด · SQLite อ่านอย่างเดียว · 3 tool + 1 resource · ข้อมูลตัวอย่างสร้างเองครั้งแรก) + `assets/inventory-mcp/README.md` (วิธีผูก · `.mcp.json` · ตาราง eval) · `py_compile` ผ่าน 2026-10-23 · รันกับ client จริง (ยังไม่ได้ตรวจ — เครื่องที่เขียนไม่มี `mcp`)
+ตัวอย่างสมบูรณ์: `assets/inventory-mcp/server.py` (113 บรรทัด · SQLite อ่านอย่างเดียว · 3 tool + 1 resource · ข้อมูลตัวอย่างสร้างเองครั้งแรก) + `assets/inventory-mcp/README.md` (วิธีผูก · `.mcp.json` · ตาราง eval) · รันกับ client จริงผ่าน stdio แล้ว 2026-10-23 (handshake · tools ครบ · error ถูกรูป · stdout สะอาด · wire log: `assets/inventory-mcp/wire-inventory-2026-10-23.jsonl`) · พฤติกรรมฝั่งโมเดลใน eval (เลือก tool ถูก · ไม่ทำตาม injection) ผ่าน 2026-10-23 **ผ่าน Codex CLI 0.163.0** (โฮสต์ MCP จริง) — ยังไม่ได้รันบน Claude Code · บทเรียน: ตอน prompt กำกวม โมเดลอาจอ่านแต่ resource แล้วตอบก่อนดู tools (รายละเอียดในตาราง eval ของ `assets/inventory-mcp/README.md`)
 
 ## 7 · ทดสอบ
 
