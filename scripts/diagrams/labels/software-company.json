@@ -357,6 +357,7 @@
    "parallel-attempts-pick-best",
    "parallel-split-and-merge",
    "docker-sandbox",
+   "worktree-and-branch",
    "status-report"
   ],
   "เรียนรู้และปรับปรุงทีม": [
@@ -385,6 +386,7 @@
    "app-verifier-setup",
    "app-verifier-upkeep",
    "spec-to-code-loop",
+   "web-quality-audit",
    "targeted-fix"
   ],
   "ความปลอดภัยและข้อมูลส่วนตัว": [
@@ -412,6 +414,7 @@
    "api-conventions",
    "database-design",
    "web-service-essentials",
+   "mcp-server",
    "background-jobs",
    "notifications",
    "file-upload-and-storage",
@@ -425,6 +428,7 @@
   "ออกแบบหน้าจอและภาพ": [
    "ui-craft",
    "web-app-design",
+   "dynamic-website",
    "mobile-app-design",
    "windows-app-design",
    "graphic-design",

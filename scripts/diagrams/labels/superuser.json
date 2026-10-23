@@ -84,6 +84,21 @@
     "อัปเดตความคืบหน้าและการตัดสินใจ",
     "เขียนรับงานต่อใหม่"
    ]
+  },
+  "team-project": {
+   "short": "งานใหญ่หลายวัน คนกับ agent ร่วมทีม",
+   "group": "ตรวจ · งานยาว · เรียนรู้",
+   "steps": [
+    "เข้าใจโจทย์และข้อจำกัด",
+    "วางทางและเขียน brief",
+    "แตก milestone ที่ตรวจได้",
+    "วางของกลางและตารางแบ่งงาน",
+    "เขียนใบสั่งงานทุกชิ้น",
+    "ลงมือพร้อมกัน",
+    "พิสูจน์ทีละ milestone",
+    "sync ปิดวัน",
+    "รายงานเจ้าของงาน"
+   ]
   }
  },
  "skill_groups": {
@@ -117,30 +132,21 @@
    "repeated-mistakes-to-checks",
    "session-lessons-to-skills",
    "owner-style-capture",
+   "skill-authoring",
    "commit-log"
   ],
   "เขียน": [
    "human-writing",
+   "translate-th-en",
    "answer-shape",
    "no-ai-look",
    "temp-file-discipline"
   ],
-  "sqt-toolkit · เอกสาร สไลด์ รูป ประชุม (plugin แยก)": [
+  "เอกสารและข้อความ": [
    "polished-document-style",
-   "branded-document-design",
-   "markdown-report-docx",
    "document-naming",
    "spell-out-abbreviations",
-   "presentation-design",
-   "html-slide-deck",
-   "pptx-to-html-deck",
-   "diagram-figures",
-   "markdown-visuals",
-   "image-generation",
-   "meeting-prep-card",
-   "meeting-summary",
-   "polite-message-th-en",
-   "product-naming"
+   "polite-message-th-en"
   ]
  }
 }

@@ -20,7 +20,7 @@ General information — entry rules are set by the destination and change often;
 5. **Insurance** — buy before departure; match the destination's minimum if any (Schengen €30,000 medical incl. repatriation).
 6. **Money** — card with low foreign-exchange (FX) fee or a travel card, some cash in local currency, tell the bank / enable overseas use in the app, note the card-freeze hotline.
 7. **Connectivity and power** — roaming pack or eSIM, offline maps, plug adapter from the plug table.
-8. **Health** — enough prescription medicine for the trip + 3 days, in original packaging with the label; English medicine list (`medication-schedule` in health-wellness if installed).
+8. **Health** — enough prescription medicine for the trip + 3 days, in original packaging with the label; English medicine list (`medication-schedule` ใน plugin เดียวกัน).
 9. **Itinerary file** — every booking with confirmation number, address in local script, check-in time, contact.
 10. **Day-before pass** — passport, money/cards, phone + charger + adapter, medicine: four things, physically checked.
 
@@ -39,7 +39,7 @@ Current visa-free list for Thai passports: [references/travel-facts.md](referenc
 ## Thai passport renewal (summary)
 
 - There is no "renewal" — a new book is issued; the old one is cancelled. Book a queue at **qpassport.in.th**.
-- Age 20+: choose **10-year (1,500 บาท)** or 5-year (1,000 บาท). Same-day express 3,500 / 3,000 บาท at selected offices.
+- Age 20+: choose 10-year or 5-year book; fees and same-day express rates are in [travel-facts](references/travel-facts.md).
 - Adult brings ID card + old passport. Under 20 brings birth certificate, ID card, parents' ID cards; parents' consent required.
 - Standard delivery by post in about 2–5 working days — still allow 2+ weeks before a visa appointment that needs the new book.
 

@@ -1,0 +1,28 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "Online buying and selling toolkit for Thailand, both sides in one plugin — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, fees and pricing, one stock sheet, chat replies, live-selling scripts, couriers and COD, returns) and buy with confidence (decision matrix and total cost, fake-review check, warranty registry, complaint letters up to OCPB hotline 1166, refunds and chargebacks). General information only, not tax or legal advice.",
+  "author": {
+    "name": "Square Tech Solutions Co., Ltd."
+  },
+  "keywords": [
+    "thailand",
+    "shopee",
+    "lazada",
+    "tiktok-shop",
+    "e-commerce",
+    "e-commerce",
+    "live-commerce",
+    "e-commerce",
+    "complaint",
+    "refund",
+    "warranty",
+    "sme"
+  ],
+  "dependencies": [
+    {
+      "name": "superuser",
+      "version": "^3.0"
+    }
+  ]
+}

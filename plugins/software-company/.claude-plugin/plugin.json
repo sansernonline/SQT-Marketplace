@@ -1,7 +1,7 @@
 {
   "name": "software-company",
-  "version": "2.20.0",
-  "description": "Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.",
+  "version": "2.20.1",
+  "description": "Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 81 skills and 29 slash commands for the whole SDLC.",
   "author": {
     "name": "Square Tech Solutions Co., Ltd."
   },
@@ -16,10 +16,6 @@
     {
       "name": "superuser",
       "version": "^3.0"
-    },
-    {
-      "name": "sqt-toolkit",
-      "version": "^1.0"
     }
   ]
 }

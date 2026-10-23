@@ -28,7 +28,7 @@ node evals/coding/run-coding.mjs --old f105afc --new HEAD --runs 2 --budget 5
 | `--parallel` | `2` | รันพร้อมกันกี่รอบ |
 | `--no-judge` | — | ไม่เรียกผู้ตัดสิน · ข้อ "ตามแบบแผน" กับ "รายงานจริง" ได้ 0 |
 
-ทุกรุ่นโหลด plugin ที่เทียบพร้อม `superuser` และ `sqt-toolkit` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ ตั้งแต่ superuser 2.0.0 ของกลางไม่อยู่ใน software-company แล้ว) · รุ่นเก่าที่ยังไม่มี 2 plugin นี้ก็โหลดแค่ที่มี
+ทุกรุ่นโหลด plugin ที่เทียบพร้อม `superuser` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ ตั้งแต่ superuser 2.0.0 ของกลางไม่อยู่ใน software-company แล้ว) · รุ่นเก่าที่ยังไม่มี 2 plugin นี้ก็โหลดแค่ที่มี
 
 ## ต้องมีในเครื่อง
 

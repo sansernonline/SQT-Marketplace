@@ -1,12 +1,12 @@
 {
  "plugin": "trading-finance",
- "version": "0.10.0",
+ "version": "0.10.1",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have.",
  "cross": [
   "software-company",
   "thai-workplace",
-  "consumer-rights",
-  "home-family"
+  "e-commerce",
+  "personal-life"
  ],
  "skills": [
   "debt-payoff",
@@ -36,6 +36,7 @@
   "commit-log",
   "context-budget",
   "decision-log",
+  "document-naming",
   "flag-and-propose",
   "handoff",
   "human-writing",
@@ -43,6 +44,8 @@
   "owner-style-capture",
   "parallel-attempts-pick-best",
   "parallel-split-and-merge",
+  "polished-document-style",
+  "polite-message-th-en",
   "principle-build-a-tool-not-handwork",
   "principle-fix-root-cause",
   "principle-proceed-on-reversible-work",
@@ -54,24 +57,12 @@
   "research-with-sources",
   "session-lessons-to-skills",
   "simplify",
+  "skill-authoring",
+  "spell-out-abbreviations",
   "status-report",
   "targeted-fix",
   "temp-file-discipline",
-  "branded-document-design",
-  "diagram-figures",
-  "document-naming",
-  "html-slide-deck",
-  "image-generation",
-  "markdown-report-docx",
-  "markdown-visuals",
-  "meeting-prep-card",
-  "meeting-summary",
-  "polished-document-style",
-  "polite-message-th-en",
-  "pptx-to-html-deck",
-  "presentation-design",
-  "product-naming",
-  "spell-out-abbreviations"
+  "translate-th-en"
  ],
  "commands": [
   "alert-set",
@@ -153,6 +144,8 @@
      "n": 2,
      "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
      "sub": [
+      "**นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill",
+      "**skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง",
       "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
       "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
       "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
@@ -993,7 +986,8 @@
       "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
       "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
       "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
-      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
+      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น",
+      "**ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง \"รอผู้ใช้\" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ"
      ],
      "phase": "",
      "who": {
@@ -1025,7 +1019,7 @@
     },
     {
      "n": 5,
-     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มในหัวข้อ 6 ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ \"รออนุมัติ — ทุกสาขา\" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {

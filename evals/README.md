@@ -10,7 +10,7 @@
 
 ## กติการ่วม
 
-- **โหลด plugin ให้ครบ** — ทุกตัวรันส่ง `--plugin-dir` ของ plugin ที่เทียบพร้อม `superuser` และ `sqt-toolkit` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ ตั้งแต่ superuser 2.0.0 ของกลางไม่อยู่ใน plugin สาขา) · `triggers` โหลดทุก plugin ใน `plugins/` อยู่แล้ว
+- **โหลด plugin ให้ครบ** — ทุกตัวรันส่ง `--plugin-dir` ของ plugin ที่เทียบพร้อม `superuser` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้ ตั้งแต่ superuser 2.0.0 ของกลางไม่อยู่ใน plugin สาขา) · `triggers` โหลดทุก plugin ใน `plugins/` อยู่แล้ว
 - **รุ่นก่อน = git ref** — ตัวรันแตก worktree ออกมาที่ `_to_delete/` เอง แล้วลบตอนจบ · รุ่นหลังค่าเริ่ม = ไฟล์ในโฟลเดอร์ตอนนี้
 - **ไม่โหลด plugin ที่ติดตั้งในเครื่อง** (`--setting-sources project`) ผลจึงมาจากไฟล์ใน repo เท่านั้น
 - **ผลแกว่ง** — ตัดสินจริงใช้ 2 รอบขึ้นไป (triggers 3 · speed 5) · รอบเดียวใช้ดูแนวโน้ม

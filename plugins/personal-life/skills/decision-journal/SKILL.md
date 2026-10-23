@@ -24,7 +24,7 @@ Entry and revisit templates: [references/entry-template.md](references/entry-tem
 2. **Classify the door** — two-way (reversible: decide fast) or one-way (irreversible: slow down, sleep on it).
 3. **List the real options** — at least three, always including "do nothing / wait".
 4. **Write the key facts** with numbers (price, monthly cost, time, salary) and what you do **not** know.
-5. **Reasoning** — the two or three reasons that actually tip it, each with confidence low / medium / high.
+5. **Reasoning** — the two or three reasons that actually tip it, each with confidence 1–10 (10 = would bet a year's income on it; under 5 = a guess dressed as a reason, so find the fact or drop it). At the revisit, a 9 that turned out wrong is the lesson.
 6. **Pre-mortem** — "It is one year later and this went badly. Why?" List the top 2 causes and what would warn you early.
 7. **Prediction** — what you expect to observe, measurable, with a check-in date (3, 6 or 12 months).
 8. **Emotional state** — calm / excited / anxious / pressured. One word.
@@ -45,7 +45,7 @@ Judge the reasoning on what was knowable *then*, not on what happened.
 - **Buying a condo/house** — monthly instalment vs rent, transfer fees and taxes at the land office, common-area fee (ค่าส่วนกลาง), and whether the bank's approved loan is the user's comfortable payment; tax angle in `tax-deduction-planner` (trading-finance) if installed
 - **Changing jobs** — total package not base salary: bonus history, provident fund (PVD) employer match and vesting, social security continuity, notice period in the contract; `payroll-th` (thai-workplace) if installed
 - **Lump-sum investing** — emergency fund first, then fit to the time horizon; product choice is outside this skill
-- **Big purchase with a "today only" price** — that pressure is a reason to log, wait 48 hours, and compare (`buy-compare` in consumer-rights if installed)
+- **Big purchase with a "today only" price** — that pressure is a reason to log, wait 48 hours, and compare (`buy-compare` in e-commerce if installed)
 
 General information, not financial advice — for money decisions of this size talk to a licensed adviser or นักบัญชี.
 
@@ -55,7 +55,7 @@ General information, not financial advice — for money decisions of this size t
 
 Options: stay at A (52,000/month) · take B (60,000) · negotiate A counter-offer.
 Facts: B base +15%; B bonus 0–2 months (no history known); A PVD match 5% vested after 5 years — I am at year 4, leaving forfeits about 125,000 plus returns (5% × 52,000 × 12 × 4 years; รอยืนยัน with HR); commute B 25 min shorter.
-Reasoning: growth in role (high), salary (medium), commute (high).
+Reasoning: growth in role (8), salary (5), commute (9).
 Pre-mortem: B's team lead leaves; bonus is zero. Early warning: no clear role scope by week 6.
 Prediction: by 2027-06-01, leading one project, total pay ≥ A's last year, more evenings free.
 State: excited. Revisit: 2027-06-01.

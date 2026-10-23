@@ -135,9 +135,9 @@ def build_map(plugin):
     core_cards = "".join(f'<div class="card"><div class="t">{e(g)} <span class="small">· {len(ss)}</span></div>'
                          f'<div class="chips">{chips(ss, "ld")}</div></div>' for g, ss in core_groups.items())
     core_panel = (f'<div class="grid g3">{"".join(agent_card(a, core_jobs.get(a["name"], "")) for a in core)}</div>'
-                  f'<div class="small" style="margin:12px 0 8px">skill กลาง {len(data["core_skills"])} ตัว ใช้กับงานทุกสาขา — หัวหน้างาน {sum(len(s) for g, s in core_groups.items() if not g.startswith("sqt-toolkit"))} ตัวใน superuser · เอกสารและรูป {sum(len(s) for g, s in core_groups.items() if g.startswith("sqt-toolkit"))} ตัวใน sqt-toolkit</div>'
+                  f'<div class="small" style="margin:12px 0 8px">skill กลาง {len(data["core_skills"])} ตัว ใช้กับงานทุกสาขา — อยู่ใน superuser ที่เดียว</div>'
                   f'<div class="grid g2">{core_cards}</div>'
-                  f'<div class="small" style="margin-top:8px">อยู่ใน <code>plugins/superuser</code> และ <code>plugins/sqt-toolkit</code> ที่เดียว · plugin อื่นได้มาทาง <code>dependencies</code> · '
+                  f'<div class="small" style="margin-top:8px">อยู่ใน <code>plugins/superuser</code> ที่เดียว · plugin อื่นได้มาทาง <code>dependencies</code> · '
                   f'hook <code>superuser-hook.mjs</code> จดทุกการทำงานลง <code>.claude/superuser/log/</code></div>')
     cross = (f'<div class="card" style="margin-top:12px"><div class="t">งานข้ามสาขา → ส่งต่อ plugin อื่น</div>'
              f'<div class="chips">{handoff(data["cross"])}</div></div>') if data["cross"] else ""
@@ -266,7 +266,7 @@ def matrix(cross):
 
 
 def network(cross):
-    """แผนภาพวงกลม: แกนกลางตรงกลาง · 11 plugin รอบวง · เส้นสี = งานที่ต้นทางส่งต่อให้ปลายทาง"""
+    """แผนภาพวงกลม: แกนกลางตรงกลาง · plugin สาขารอบวง · เส้นสี = งานที่ต้นทางส่งต่อให้ปลายทาง"""
     import math
     W, H, cx, cy, R, hub = 896, 480, 448, 240, 180, 64
     names = sorted(cross)
@@ -341,12 +341,12 @@ def build_overview(plugins):
             ("plugins/", "ต้นฉบับ"), ("validate", '<span class="nb">check/validate-marketplace</span>'), ("sync", "sync-docs · sync-superuser"),
             ("dist/", "build-targets: claude.ai · Codex · Gemini"), ("ติดตั้ง", "install-marketplace.ps1")]) + "</div>"
     strip = '<div class="strip">' + "".join(badge(p, 20) for p in plugins if p != "superuser") + "</div>"
-    body = header("SQT-Marketplace", "ภาพรวม marketplace", "12 plugin ใช้แกน SuperUser เดียวกัน แต่ละตัวเติม agent · skill · playbook ของสาขาตัวเอง",
+    body = header("SQT-Marketplace", "ภาพรวม marketplace", f"{len(plugins)} plugin ใช้แกน SuperUser เดียวกัน แต่ละตัวเติม agent · skill · playbook ของสาขาตัวเอง",
                   "plugins/*/.claude-plugin/plugin.json", "superuser",
                   [(totals[0], "agent"), (totals[1], "skill"), (totals[2], "คำสั่ง"), (totals[3], "playbook"), (len(plugins), "plugin")])
     body = body.replace('<div class="hero">', '<div class="hero ink short">', 1)
-    body += sec(1, "แกนกลางเดียว · 11 สาขาส่งงานถึงกัน", "แก้ที่ plugins/superuser ที่เดียว แล้วรัน sync · งานที่เกินสาขาตัวเอง หัวหน้าทีมส่งต่อให้ plugin ที่ถนัด", net)
-    body += sec(2, "plugin ของแต่ละสาขา · 11", "แถบสี + ตรา = plugin นั้น · ตัวเลข = จำนวนของในตัว (รวมของกลาง)", grid)
+    body += sec(1, f"แกนกลางเดียว · {len(plugins) - 1} สาขาส่งงานถึงกัน", "แก้ที่ plugins/superuser ที่เดียว แล้วรัน sync · งานที่เกินสาขาตัวเอง หัวหน้าทีมส่งต่อให้ plugin ที่ถนัด", net)
+    body += sec(2, f"plugin ของแต่ละสาขา · {len(plugins) - 1}", "แถบสี + ตรา = plugin นั้น · ตัวเลข = จำนวนของในตัว (รวมของกลาง)", grid)
     body += sec(3, "จาก plugins/ ไปถึงเครื่องผู้ใช้", "ตรวจ → sync → build ด้วย build-dist.cmd คลิกเดียว", metro)
     body += footer("ตัวเลขในก้อนหัวรวมทุก plugin นับซ้ำของกลางในทุก plugin · ชิปตราเล็กใต้ \"ส่งต่อ\" = plugin ที่รับงานข้ามสาขา")
     return page("marketplace overview", body)

@@ -1,0 +1,1411 @@
+{
+ "plugin": "e-commerce",
+ "version": "1.0.0",
+ "description": "Online buying and selling toolkit for Thailand, both sides in one plugin — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, fees and pricing, one stock sheet, chat replies, live-selling scripts, couriers and COD, returns) and buy with confidence (decision matrix and total cost, fake-review check, warranty registry, complaint letters up to OCPB hotline 1166, refunds and chargebacks). General information only, not tax or legal advice.",
+ "cross": [
+  "graphic-design",
+  "thai-workplace",
+  "software-company",
+  "superuser",
+  "personal-life",
+  "trading-finance"
+ ],
+ "skills": [
+  "buy-compare",
+  "chat-reply-templates",
+  "complaint-letter-th",
+  "live-selling-script",
+  "marketplace-fees-pricing",
+  "multi-shop-stock",
+  "product-listing",
+  "refund-request",
+  "returns-and-bad-reviews",
+  "shipping-compare",
+  "warranty-tracker"
+ ],
+ "core_skills": [
+  "superuser",
+  "adversarial-review-panel",
+  "agent-patterns",
+  "answer-shape",
+  "commit-log",
+  "context-budget",
+  "decision-log",
+  "document-naming",
+  "flag-and-propose",
+  "handoff",
+  "human-writing",
+  "no-ai-look",
+  "owner-style-capture",
+  "parallel-attempts-pick-best",
+  "parallel-split-and-merge",
+  "polished-document-style",
+  "polite-message-th-en",
+  "principle-build-a-tool-not-handwork",
+  "principle-fix-root-cause",
+  "principle-proceed-on-reversible-work",
+  "principle-prove-it-works",
+  "principle-small-verifiable-steps",
+  "principle-user-experience-first",
+  "prior-art-review",
+  "repeated-mistakes-to-checks",
+  "research-with-sources",
+  "session-lessons-to-skills",
+  "simplify",
+  "skill-authoring",
+  "spell-out-abbreviations",
+  "status-report",
+  "targeted-fix",
+  "temp-file-discipline",
+  "translate-th-en"
+ ],
+ "commands": [
+  "compare",
+  "complain",
+  "listing",
+  "live-script",
+  "price-check",
+  "reply"
+ ],
+ "agents": [
+  {
+   "name": "consumer-advocate",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for a big purchase, faulty product, refused refund, complaint to a seller, platform or สคบ., card dispute, warranty.",
+   "skills": [
+    "buy-compare",
+    "warranty-tracker",
+    "complaint-letter-th",
+    "refund-request",
+    "superuser"
+   ]
+  },
+  {
+   "name": "customer-chat",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a Thai online seller must answer a customer — price, stock, late parcel, refund, haggling, bad review.",
+   "skills": [
+    "chat-reply-templates",
+    "returns-and-bad-reviews"
+   ]
+  },
+  {
+   "name": "live-seller",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when planning a live sale on TikTok Shop, Shopee, Lazada or Facebook Live. Run sheet, hook, flash deals, CTA lines.",
+   "skills": [
+    "live-selling-script",
+    "product-listing",
+    "multi-shop-stock"
+   ]
+  },
+  {
+   "name": "shop-manager",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a Thai online seller needs a listing, a price after platform fees, or stock synced across marketplaces.",
+   "skills": [
+    "product-listing",
+    "marketplace-fees-pricing",
+    "multi-shop-stock",
+    "shipping-compare"
+   ]
+  }
+ ],
+ "playbooks": [
+  {
+   "name": "buy-decision",
+   "title": "ตัดสินใจซื้อของชิ้นใหญ่",
+   "when": "จะซื้อเครื่องใช้ไฟฟ้า มือถือ รถ คอร์ส หรือบริการราคาสูง · ลังเลระหว่างหลายตัวเลือก",
+   "done": "มีตารางตัดสินใจที่คำนวณซ้ำแล้ว ทุกราคามีแหล่งและวันที่ และมีคำแนะนำ 1 ตัวพร้อมเหตุผล",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เก็บความต้องการ — ใช้ทำอะไร งบเท่าไร ต้องมีอะไร ห้ามมีอะไร ข้อไหนไม่รู้ให้ใส่ `(รอยืนยัน)` ไม่เดาค่า · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "คัดตัวเลือก 2–4 ตัว แล้วเอาสเปกและราคาจากเว็บผู้ผลิตหรือร้านทางการ พร้อมวันที่ดู · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำตารางตัดสินใจถ่วงน้ำหนัก และคำนวณค่าใช้จ่ายรวมตลอดอายุใช้งาน (ราคา · ไฟ · ค่าซ่อม · ของสิ้นเปลือง) · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตรวจรีวิวด้วยเกณฑ์รีวิวปลอมของ `buy-compare` ทิ้งรีวิวที่ไม่ผ่าน แล้วบอกว่าทิ้งกี่รีวิวเพราะอะไร · ใคร: `consumer-advocate` ตัวใหม่คัดรีวิว · `reviewer` ตัวใหม่ตรวจว่าการคัดตรงเกณฑ์",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่คัดรีวิว · `reviewer` ตัวใหม่ตรวจว่าการคัดตรงเกณฑ์"
+     },
+     "skills": [
+      "buy-compare"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "เทียบเงื่อนไขรับประกันและช่องทางเคลมด้วย `warranty-tracker` · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [
+      "warranty-tracker"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "แนะนำ 1 ตัวพร้อมเหตุผล และตัวสำรอง 1 ตัว ส่วนการกดสั่งซื้ออยู่ใน \"รออนุมัติ\" · ใคร: หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้ (กดสั่งซื้อ: ผู้ใช้)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม · `reviewer` ตัวใหม่ตรวจทั้งชุดก่อนถึงผู้ใช้ (กดสั่งซื้อ: ผู้ใช้)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "complaint",
+   "title": "ร้องเรียนตามขั้นบันได",
+   "when": "ร้านไม่แก้ ไม่ส่งของ หรือไม่ทำตามที่สัญญา · บริการแย่และอยากร้องเรียน",
+   "done": "ไทม์ไลน์ รายการหลักฐาน และร่างทุกขั้นพร้อมส่ง ส่วนการส่งจริงอยู่ใน \"รออนุมัติ\"",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เรียงเหตุการณ์เป็นไทม์ไลน์พร้อมวันที่ และทำรายการหลักฐาน ถ้าขาดชิ้นไหนให้บอกผู้ใช้ว่าต้องเก็บอะไร · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ระบุสิ่งที่ต้องการให้ชัด — ซ่อม · เปลี่ยน · คืนเงิน · ขอโทษ · ชดเชย ใช้คำตอบตอนเริ่ม ไม่มีให้เลือกตามความเสียหายแล้วติด `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "วางขั้นบันไดตาม `complaint-letter-th` — ร้าน → แพลตฟอร์ม → หน่วยงานรับเรื่อง → ศาลคดีผู้บริโภค แล้วตรวจช่องทางและกรอบเวลาของแต่ละขั้นจากเว็บทางการ · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [
+      "complaint-letter-th"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ร่างจดหมายหรือข้อความของขั้นแรกเป็นภาษาไทยสุภาพ ชัด มีกำหนดวันตอบ · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "เตรียมร่างของขั้นถัดไปไว้ล่วงหน้า พร้อมเงื่อนไขว่าจะขึ้นขั้นเมื่อไร · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ตรวจว่าทุกข้ออ้างชี้หลักฐานได้ วันที่ตรงกับไทม์ไลน์ และไม่มีถ้อยคำข่มขู่หรือหมิ่นประมาท · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "customer-issue",
+   "title": "เรื่องลูกค้า คืนสินค้า และรีวิวแย่",
+   "when": "ลูกค้าถามหรือบ่น · ของส่งช้า ผิด หรือเสีย · ขอคืนเงิน · ได้รีวิว 1–3 ดาว",
+   "done": "ร่างคำตอบและทางที่เลือกพร้อมส่ง โดยการส่งและคืนเงินอยู่ใน \"รออนุมัติ\"",
+   "steps": [
+    {
+     "n": 1,
+     "text": "อ่านแชตหรือรีวิวและข้อมูลคำสั่งซื้อจริง — สถานะพัสดุ วันที่ นโยบายร้าน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "แยกประเภทกรณี แล้วเลือกทางตาม `returns-and-bad-reviews`: ตอบ · เปลี่ยน · คืนเงิน · โต้แย้งกับแพลตฟอร์ม · ใคร: `customer-chat` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "customer-chat"
+      ],
+      "raw": "`customer-chat` ตัวใหม่"
+     },
+     "skills": [
+      "returns-and-bad-reviews"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ร่างคำตอบภาษาไทยสุภาพในน้ำเสียงของร้าน และอยู่ในนโยบายแพลตฟอร์ม · ใคร: `customer-chat` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "customer-chat"
+      ],
+      "raw": "`customer-chat` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ถ้าเป็นรีวิวสาธารณะ ให้ร่างคำตอบที่ไม่เถียง และไม่เปิดเผยข้อมูลลูกค้า · ใคร: `customer-chat` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "customer-chat"
+      ],
+      "raw": "`customer-chat` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจว่าไม่มีสัญญาที่ร้านทำไม่ได้ และข้อเท็จจริงตรงกับคำสั่งซื้อ · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "learn-from-session",
+   "title": "ทำให้ทีมเก่งขึ้นทุกรอบ",
+   "when": "ผู้ใช้สั่ง \"รวมบทเรียน\" หรือ \"reflect\" เท่านั้น ถ้าผู้ใช้แก้ทีมเรื่องเดิมเป็นครั้งที่สอง หรือ `.claude/superuser/learn/` มีบันทึกรอเกิน 5 ไฟล์ ให้บอกผู้ใช้ในรายงานว่าควรสั่ง \"รวมบทเรียน\" แต่ไม่เริ่มเอง",
+   "done": "ทุกบทเรียนชี้ได้ว่าไปอยู่ที่ไฟล์ไหน · ความผิดที่ทำซ้ำมีตัวตรวจที่พิสูจน์แล้วว่าจับกรณีจริงได้ · ช่อง \"ควรรวมไหม\" และ \"รวมแล้ว\" ในคิวกลางตรงกับที่ทำจริง",
+   "steps": [
+    {
+     "n": 1,
+     "text": "**รวบรวม** ตามลำดับ · ใคร: หัวหน้าทีม",
+     "sub": [
+      "คิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` และ `IMPROVEMENTS.md` — แถวที่ \"รวมแล้ว\" = `ยัง` และ \"ควรรวมไหม\" ≠ `ไม่รวม` เรียงตาม \"ครั้ง\" มากไปน้อย แล้วเปิดหลักฐานตาม \"ที่มา\" · แถวในคิวกลาง (ช่องนี้มีเฉพาะในคิวกลาง) ที่รวมแล้วและถึง \"ตรวจวันที่\" ให้ดู log แล้วใส่ \"ผลหลังรวม\" · เกิดอีก 2 ครั้ง → แถวนั้นกลับมาเป็นงานรอบนี้: ทำเป็นตัวตรวจหรือถอยการแก้กลับ",
+      "`.claude/superuser/learn/*.md` ของโปรเจกต์ที่เปิดอยู่ — ตาราง \"ควรปรับทีม\" (บันทึกเก่า: \"ควรปรับ skill\") เรื่องเดียวกันรวมเป็นแถวเดียวแล้วนับครั้ง"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
+     "sub": [
+      "**นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill",
+      "**skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง",
+      "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
+      "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
+      "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
+      "**แก้ agent หรือ playbook** — แก้ย่อหน้าแบบเดียวกัน · playbook ต้องยังผ่าน `validate-marketplace.mjs`",
+      "**กฎผู้ใช้** — 1 บรรทัดใน `~/.claude/superuser-style.md` ทำได้จากทุกโปรเจกต์",
+      "**ตัด** — ลบบรรทัดที่ตัวตรวจจับได้แล้ว หรือที่ซ้ำกับไฟล์อื่น",
+      "**skill หรือ agent ใหม่** — เฉพาะแถวที่ผู้ใช้ `รับ` แล้ว และแก้ของเดิมไม่ได้ · agent ใหม่ต้องมีเหตุผลเรื่อง context เครื่องมือ หรือโมเดล ไม่งั้นทำเป็น skill"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "**ทิ้งเรื่องที่เกิดครั้งเดียว** — ครั้งเดียวยังไม่ใช่บทเรียน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "**ทุกบทเรียนต้องจบเป็นการแก้ที่จับต้องได้** — ตัวตรวจ · สคริปต์ · ย่อหน้าที่แก้ ถ้าแก้ของเดิมได้ก็ไม่สร้างใหม่ ถ้าข้อใหม่ขัดกับข้อเดิม ให้แก้ข้อเดิม ไม่ต่อท้าย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "**เสนอผู้ใช้** — ตาราง: ชนิด · ที่ไหน · เดิม → ใหม่ · หลักฐาน · ครั้ง · คาดว่า · ตรวจวันที่ ให้ตอบทีละข้อ `รับ` · `ไม่รับ` · `ไว้ทีหลัง` · ข้อที่ยังไม่ `รับ` ลง \"รออนุมัติ\" และยังไม่แก้ไฟล์ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "**แก้เฉพาะข้อที่ `รับ` แล้ว** (ตอบมา หรือ `ควรรวม` ในคิว) ทีละย่อหน้า ไม่เขียนทั้งไฟล์ใหม่ · ตัวตรวจใหม่ต้องรันกับเหตุการณ์เดิมให้เห็นว่า**ล้มก่อนแก้ และผ่านหลังแก้** แล้วเก็บเหตุการณ์นั้นไว้เป็นกรณีทดสอบ (self-test หรือ test ของสคริปต์) · ของกลางแก้ที่ plugin `superuser` แล้วรัน `node scripts/sync/sync-superuser.mjs` กับ `validate-marketplace.mjs` (ติดตั้ง plugin เดี่ยว: เสนอ เดิม → ใหม่ ให้ผู้ใช้แก้ใน repo SQT-Marketplace) · ใคร: หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีมแก้ · `reviewer` ตัวใหม่ตรวจกับหลักฐาน"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "**ปิดรายการ** — ย้ายบันทึกที่จัดการแล้วไป `.claude/superuser/learn/done/` แล้วใน `IMPROVEMENTS.md` และคิวกลาง ใส่ช่อง \"ควรรวมไหม\" เป็น `ควรรวม` หรือ `ไม่รวม (<เหตุผล>)` และใส่ช่อง \"รวมแล้ว\" เป็น `แล้ว <วันที่> (<ไฟล์>)` เฉพาะแถวที่แก้ไฟล์จริงแล้ว · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": true
+  },
+  {
+   "name": "live-session",
+   "title": "เตรียมไลฟ์ขายของ",
+   "when": "จะไลฟ์บน TikTok Shop · Shopee Live · Lazada Live · Facebook Live",
+   "done": "run sheet และเช็กลิสต์พร้อมใช้ ผ่านการตรวจคำต้องห้ามทุกบรรทัด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เลือกสินค้าและดีลของไลฟ์ ตรวจสต็อกและราคาว่ายังมีกำไร · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ทำ run sheet รายนาทีตาม `live-selling-script` — hook เปิด · ลำดับสินค้า · จังหวะ flash deal · ประโยคปิดการขาย · ใคร: `live-seller` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "live-seller"
+      ],
+      "raw": "`live-seller` ตัวใหม่"
+     },
+     "skills": [
+      "live-selling-script"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำเช็กลิสต์หลังบ้าน — คนตอบแชต สต็อกที่ล็อกไว้ ลิงก์สินค้า · ใคร: `live-seller` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "live-seller"
+      ],
+      "raw": "`live-seller` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตรวจคำพูดทุกบรรทัดกับรายการคำโฆษณาต้องห้าม และเช็กลิสต์กับสต็อกจริง · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "new-product",
+   "title": "ลงสินค้าใหม่ครบชุด",
+   "when": "มีสินค้าใหม่จะลงขาย 1 หรือหลายแพลตฟอร์ม",
+   "done": "ตารางราคาที่คำนวณซ้ำแล้ว · listing ทุกแพลตฟอร์มผ่านการตรวจคำต้องห้าม · SKU อยู่ในไฟล์สต็อก · การลงขายจริงอยู่ใน \"รออนุมัติ\"",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เก็บข้อมูล — สินค้า ต้นทุนต่อชิ้น แพลตฟอร์ม ประเภทร้าน หมวด น้ำหนักและขนาดพัสดุ ข้อไหนไม่มีให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "คิดค่าส่งจริงจากขนาดพัสดุตาม `shipping-compare` (รวมน้ำหนักตามปริมาตร) · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [
+      "shipping-compare"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ตั้งราคาต่อแพลตฟอร์มด้วยสูตรของ `marketplace-fees-pricing` เป็นตาราง แล้วบอกให้ตรวจอัตรากับ Seller Centre · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [
+      "marketplace-fees-pricing"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "เขียนชื่อสินค้า คำค้น คำบรรยาย และเช็กลิสต์รูป ต่อแพลตฟอร์มตาม `product-listing` · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [
+      "product-listing"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตั้ง SKU และใส่ในไฟล์สต็อกหลักตาม `multi-shop-stock` พร้อมจุดสั่งซื้อซ้ำ · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [
+      "multi-shop-stock"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ตรวจคำโฆษณาต้องห้าม SKU และขนาดรูปตามแพลตฟอร์ม (`social-formats` ใน graphic-design ถ้าติดตั้ง) · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "pricing-check",
+   "title": "ตรวจกำไรและตั้งราคาใหม่",
+   "when": "ขายแล้วไม่เหลือกำไร · ค่าธรรมเนียมเปลี่ยน · จะจัดโปรลดราคา",
+   "done": "ตารางกำไรต่อ SKU ต่อแพลตฟอร์ม และราคาใหม่ที่ผ่านเป้า margin",
+   "steps": [
+    {
+     "n": 1,
+     "text": "คัดต้นทุนและราคาขายปัจจุบันของทุก SKU ที่เกี่ยว · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "คิดกำไรจริงต่อชิ้นต่อแพลตฟอร์มหลังหักค่าธรรมเนียมทุกตัว ค่าส่ง และส่วนลด · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำราคาใหม่หรือเพดานส่วนลดที่ยังได้กำไรตามเป้า (margin) · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ถ้ายอดขายใกล้เกณฑ์จด VAT ให้ชี้ไป `seller-tax-basics` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจโดยคำนวณซ้ำด้วยสูตรในสเปรดชีต ตัวเลขต้องตรงกันทุกแถว · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "refund",
+   "title": "ขอเงินคืน",
+   "when": "อยากได้เงินคืน — เปลี่ยนใจหลังซื้อแบบขายตรง · ของผิด ปลอม หรือพัง · จ่ายแล้วไม่ได้ของ · รายการบัตรที่ไม่รู้จักหรือซ้ำ",
+   "done": "คำขอพร้อมส่งก่อนวันหมดเขต พร้อมแผนสำรองถ้าถูกปฏิเสธ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "แยกประเภทกรณีตาม `refund-request` และนับวันหมดเขตของสิทธิ์แต่ละทาง แล้วทำทางที่ใกล้หมดเขตก่อน · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [
+      "refund-request"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "รวบรวมหลักฐานการจ่ายเงินและสภาพสินค้า · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เลือกทาง — ขอร้าน · เปิดข้อพิพาทกับแพลตฟอร์ม · ขอธนาคารปฏิเสธรายการ · ร้องเรียน แล้วลงเหตุผลในตาราง \"การตัดสินใจ\" · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ร่างคำขอ แบบฟอร์ม และข้อความที่ต้องใช้ พร้อมขั้นตอนทีละคลิกในแอปของแพลตฟอร์มหรือธนาคาร · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจว่ายอดเงิน วันที่ และเลขคำสั่งซื้อตรงกับหลักฐาน · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "review",
+   "title": "ตรวจงานซื้อขายออนไลน์ก่อนส่ง",
+   "when": "ตรวจงานก่อนส่งหรือก่อนใช้จริง · \"ช่วยดูหน่อยว่ามีอะไรพลาด\" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ",
+   "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (ต้นทุน · ค่าธรรมเนียมใน Seller Centre · นโยบายแพลตฟอร์ม · ไฟล์สต็อก · หลักฐาน · ไทม์ไลน์ · เงื่อนไขของร้านหรือแพลตฟอร์ม) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เขียนเจตนาของงาน 1 ย่อหน้า — ใครใช้ ใช้ทำอะไร ถ้าไม่แน่ใจ ให้เลือกการตีความที่กระทบน้อยสุด ไม่หยุดถาม · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ตรวจทีละข้อตามเกณฑ์ 3 ข้อในหัวข้อ 4 ของ `superuser` แล้วตามเช็กลิสต์ของ skill หลักของ playbook นี้ (ไม่มี → skill ที่เกี่ยว) · งานใหญ่หรือเสี่ยงสูง เพิ่ม subagent ตัวใหม่อีกตัวที่ไม่เคยเห็นงาน ตรวจแยกกันด้วยโมเดลระดับใหญ่ (`model: opus`) · สั่งผู้ตรวจทุกตัวว่า \"ห้ามแก้ชิ้นงาน (เขียนรายงานของตัวเองใน `_to_delete/` ได้)\" · ใคร: `reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่ (อ่านอย่างเดียว · งานใหญ่ `model: opus`)"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ยืนยันทุกข้อที่พบ — ต้องชี้จุดในชิ้นงานได้ และเทียบต้นทางแล้ว ข้อที่ยืนยันไม่ได้ให้ติดป้าย `ยังไม่ได้ตรวจ` หรือตัดทิ้ง · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "แยก 3 กลุ่ม: สูง · กลาง · ต่ำ (ตามนิยามใน `reviewer`) ส่วนข้อที่ตัดทิ้งให้บอกเหตุผลด้วย · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "รายงาน — คำตัดสิน 1 บรรทัด (`ส่งได้` · `ส่งได้หลังแก้` · `ยังไม่ควรส่ง`) แล้วตามด้วยรายการและสรุปงานตาม `superuser` หัวข้อ 7 · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "stock-sync",
+   "title": "สต็อกหลายร้านให้ตรงกัน",
+   "when": "ขายของชุดเดียวกันหลายแพลตฟอร์มแล้วขายเกิน · นับของไม่ตรง",
+   "done": "ไฟล์สต็อกหลักตรงกับของจริง · ยอดโชว์ทุกร้านไม่เกิน available − บัฟเฟอร์ และรายการปรับยอดพร้อมทำ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "รวมยอดสต็อกจากทุกร้านและของจริงในคลังลงไฟล์หลักเดียว · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ตั้งชื่อ SKU ให้เป็นแบบเดียวกันทุกร้าน · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ตั้งกฎซิงก์สต็อก บัฟเฟอร์ (ของที่กันไว้ไม่ขาย) ต่อร้าน และจุดสั่งซื้อซ้ำ ตาม `multi-shop-stock` · ใคร: `shop-manager` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่"
+     },
+     "skills": [
+      "multi-shop-stock"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทำรายการปรับยอดต่อร้าน (ร้านไหน SKU ไหน จากเท่าไรเป็นเท่าไร) ส่วนการแก้ในร้านจริงให้อยู่ใน \"รออนุมัติ\" · ใคร: `shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": true,
+      "agents": [
+       "shop-manager"
+      ],
+      "raw": "`shop-manager` ตัวใหม่ · ผู้ใช้อนุมัติการแก้ในร้านจริง"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 5,
+     "text": "ตรวจว่ายอดที่โชว์แต่ละร้านไม่เกิน available − บัฟเฟอร์ (ของจริงในคลัง − ของที่จองแล้ว − บัฟเฟอร์) และกำหนดรอบซิงก์ไว้แล้ว · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "unattended-run",
+   "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
+   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น ลงสินค้า 20 SKU ครบชุดทุกแพลตฟอร์ม · ตรวจกำไรทั้งร้าน · เตรียมชุดร้องเรียนทุกขั้น · จัดทะเบียนใบเสร็จทั้งบ้าน",
+   "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เขียนเงื่อนไขจบที่ตรวจได้ — ไฟล์ไหนต้องมี · ตารางไหนต้องครบ · ร่างไหนต้องพร้อมส่ง · รันด้วย `claude -p` → ใส่ `--max-budget-usd <งบ>` เสมอ (ไม่รู้งบ → ถามรวมในคำถามครั้งเดียวตอนเริ่ม) ชนเพดาน = `ติด` แล้วรายงานว่าทำถึงไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "แตกงานเป็นชิ้นที่แต่ละชิ้นจบด้วยการตรวจ ลงตาราง \"ความคืบหน้า\" ใน `CONTEXT.md` เลือก playbook ย่อยให้แต่ละชิ้น แล้วแจกให้ subagent ตัวใหม่ทีละชิ้น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ทำทีละชิ้น — ผ่านเกณฑ์หัวข้อ 4 แล้วค่อยไปชิ้นถัดไป พัง 2 รอบ → แตกเป็นขั้นย่อย ไม่ลองแบบเดิมซ้ำ · ครบ 3 รอบ → ลงเป็น `ติด` แล้วไปชิ้นอื่น · ใคร: ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน",
+     "sub": [
+      "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
+      "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
+      "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
+      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น",
+      "**ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง \"รอผู้ใช้\" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ"
+     ],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "ลูกทีมตามบรรทัด `ลูกทีมต่อชิ้น` ด้านบน ตัวใหม่ต่อชิ้น · ตรวจ: ตามบรรทัด `ผู้ตรวจต่อชิ้น` ด้านบน"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทุกการเลือกทางเอง จดในตาราง \"การตัดสินใจ\" ทันที ไม่รวบไปเขียนตอนจบ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ \"รออนุมัติ — ทุกสาขา\" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม (อนุมัติ: ผู้ใช้)"
+     },
+     "skills": [
+      "superuser"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "จบแต่ละชิ้นแล้วอัปเดต \"ความคืบหน้า\" และ \"รับงานต่อ\" แล้วดู `.claude/superuser/inbox/` ผู้ใช้กลับมากลางทางจะได้เห็นสถานะล่าสุด · เริ่ม session ใหม่กลางงาน → รันตัวตรวจ \"เสร็จเมื่อ\" ของชิ้นล่าสุดที่ `เสร็จ` 1 ครั้งก่อนทำชิ้นถัดไป ไม่ผ่าน → แก้ชิ้นนั้นก่อน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "จบงานแล้วตรวจเงื่อนไขข้อ 1 ทั้งหมดอีกรอบ ทำรอบเรียนรู้ แล้วรายงานครั้งเดียว: เสร็จอะไร · ติดอะไร · ตัดสินใจเองกี่ข้อ · รออนุมัติอะไร · ค้างอะไร · ใคร: หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)",
+     "sub": [
+      "รายงานปิดด้วยตาราง `ขั้น | ผล | หลักฐาน` 1 แถวต่อเงื่อนไขในข้อ 1 · หลักฐานคือ path ไฟล์ · ลิงก์ · ผลตรวจ · สรุปเป็น **\"ผ่าน X / N\"** นับจากตัวตรวจจริง ไม่ใช่จากที่ลูกทีมบอก · ข้อที่ต้องใช้ตาคนตรวจไม่นับว่าผ่าน แยกเป็นแถว `ต้องให้คนดู` · ข้อที่ไม่ผ่านให้ใส่สาเหตุ 1 บรรทัด"
+     ],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม (ตรวจเงื่อนไขซ้ำ: `reviewer` ตัวใหม่)"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "warranty-claim",
+   "title": "ทะเบียนรับประกันและการเคลม",
+   "when": "เพิ่งซื้อของที่มีประกัน · อยากเก็บใบเสร็จให้เป็นระบบ · ของเสียและอยากรู้ว่ายังอยู่ในประกันไหม",
+   "done": "ทะเบียนตรงกับเอกสารจริงทุกแถว และชุดเคลมพร้อมส่ง (ถ้ามี)",
+   "steps": [
+    {
+     "n": 1,
+     "text": "สร้างหรือเปิดทะเบียนตาม `warranty-tracker` — สินค้า · วันที่ซื้อ · ร้าน · หมดประกัน · ที่เก็บใบเสร็จ · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [
+      "warranty-tracker"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เพิ่มของที่ผู้ใช้ส่งมา โดยอ่านจากใบเสร็จหรือใบรับประกันจริง · ใคร: `consumer-advocate` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ถ้าจะเคลม ให้ตรวจว่ายังอยู่ในประกัน อ่านเงื่อนไขยกเว้น แล้วเตรียมเอกสารและข้อความแจ้งศูนย์ · ใคร: `consumer-advocate` ตัวใหม่ตรวจสิทธิ์และเตรียมเอกสาร",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "consumer-advocate"
+      ],
+      "raw": "`consumer-advocate` ตัวใหม่ตรวจสิทธิ์และเตรียมเอกสาร"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ตั้งเตือนก่อนหมดประกัน 30 วันสำหรับของที่ควรตรวจก่อนหมด · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจทะเบียน การตั้งเตือน และชุดเคลม (ถ้ามี) ก่อนถึงผู้ใช้ · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  }
+ ]
+}
