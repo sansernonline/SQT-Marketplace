@@ -1,6 +1,6 @@
 # Recommendation Engineer — algorithms, serving, evaluation
 
-คู่มือบทบาทของ agent `recommendation-engineer` — ย้ายมาจากตัว agent (2026-10-14) · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
+คู่มือบทบาทของ agent `recommendation-engineer` · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
 
 **สารบัญ:**
 

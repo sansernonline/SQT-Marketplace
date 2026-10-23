@@ -19,7 +19,7 @@ Say the hard thing clearly. Politeness belongs in the wording, not in hiding the
 
 | Element | Casual (friend, peer) | Polite (colleague, customer, เจ้าของร้าน) | Formal (senior, official, ผู้ใหญ่, letter) |
 |---|---|---|---|
-| End particle | ครับ / ค่ะ, sometimes นะครับ / นะคะ | ครับ / ค่ะ on every sentence | ครับ / ค่ะ; in letters, no particle, formal verbs instead |
+| End particle | ครับ / ค่ะ, sometimes นะครับ / นะคะ | ครับ / ค่ะ at the opening, the close, and after the request; not on every sentence (`human-writing` `references/thai-grammar.md` f4, f6) | ครับ / ค่ะ; in letters, no particle, formal verbs instead |
 | "You" | เธอ / ชื่อเล่น / พี่ / น้อง | คุณ + first name | ท่าน, or คุณ + full name + position |
 | "I" | เรา / ชื่อเล่น | ผม / ดิฉัน (ฉัน in LINE) | ผม / ดิฉัน / กระผม (very formal) |
 | Asking | ช่วย...หน่อยได้ไหม | รบกวน...ด้วยครับ/ค่ะ | ขอความกรุณา... / ใคร่ขอความอนุเคราะห์... |
@@ -76,7 +76,7 @@ Rules for the ladder:
 - Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
 - Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
 
-Related: `meeting-summary` (written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `thai-workplace` — formal letters and quotes).
+Related: `meeting-summary` (plugin `personal-life` — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `thai-workplace` — formal letters and quotes).
 
 
 ## reference: templates.md
@@ -198,7 +198,7 @@ The problem: [facts].
 I'd like a [refund/replacement/repair] by [date]. Receipt and photos attached.
 ```
 
-If the merchant does not respond, the next step is a complaint to the Office of the Consumer Protection Board (สคบ.) (hotline 1166 per news reports, checked 22 ต.ค. 2569 — not yet confirmed on the official ocpb.go.th page, รอยืนยัน; full channel list in `complaint-letter-th`, plugin `consumer-rights`, if installed).
+If the merchant does not respond, the next step is a complaint to the Office of the Consumer Protection Board (สคบ.) (hotline 1166 per news reports, checked 22 ต.ค. 2569 — not yet confirmed on the official ocpb.go.th page, รอยืนยัน; full channel list in `complaint-letter-th`, plugin `e-commerce`, if installed).
 
 ## 6. Following up after silence
 

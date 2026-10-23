@@ -35,6 +35,7 @@ not a research project. The first lazy solution that works is the right one.
 - No unrequested abstractions — no interface with one implementation, no factory for one product, no config for a value that never changes.
 - No scaffolding "for later." Later can scaffold for itself.
 - Delete before you add. Boring before clever — clever is what someone decodes at 3 AM.
+- Deletion test: remove the piece, run the tests — still green? It stays deleted. (idea from mattpocock codebase-design)
 - Shortest working diff wins — but never by merging concerns into one file. Fewest files **that still keep one concern per file**.
 - Match the repo — read 2-3 nearby files first and copy their style.
 - Two stdlib options the same size? Take the one that's correct on edge cases. Lazy means less code, not a flimsier algorithm.

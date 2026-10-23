@@ -1,6 +1,6 @@
 # prompt-existing-dev — รับแอปที่มีอยู่แล้วมาพัฒนาต่อ
 
-ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 4 ฉบับ · ใช้เมื่อได้รับแอปที่ใช้งานอยู่แล้ว (เขียนเองหรือรับช่วงจากทีมอื่น) แล้วต้องเพิ่มฟีเจอร์ อัปเกรด หรือทำให้เร็วขึ้น · ต้องการแค่เอกสาร → `prompt-existing-code.md` · ต้องการแค่ test → `prompt-test-automation.md`
+ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 6 ฉบับ · ใช้เมื่อได้รับแอปที่ใช้งานอยู่แล้ว (เขียนเองหรือรับช่วงจากทีมอื่น) แล้วต้องเพิ่มฟีเจอร์ อัปเกรด ทำให้เร็วขึ้น หรือทำหลายงานพร้อมกัน · ต้องการแค่เอกสาร → `prompt-existing-code.md` · ต้องการแค่ test → `prompt-test-automation.md`
 
 ## วิธีใช้
 
@@ -20,8 +20,10 @@
 |---|---|---|---|---|
 | 1 | รับช่วงโค้ด: รันได้บนเครื่อง และรู้ว่าแก้ตรงไหน | `investigation` | `docs/ONBOARDING-NOTES.md` | ไม่ |
 | 2 | เพิ่มหรือเปลี่ยนฟีเจอร์ในแอปเดิม | `feature` | โค้ด + test + เอกสารที่ถูกแตะ | ใช่ ต้องติ๊กอนุญาต |
-| 3 | ปรับโครงหรืออัปเกรดเวอร์ชัน (framework · ภาษา · ไลบรารี) | `refactor` | โค้ด + `docs/upgrade-<เรื่อง>.md` | ใช่ ต้องติ๊กอนุญาต |
+| 3 | ปรับโครง หรืออัปเกรดไลบรารีและรุ่นย่อย (framework หรือ runtime ข้ามรุ่นใหญ่ → ฉบับ 5) | `refactor` | โค้ด + `docs/upgrade-<เรื่อง>.md` | ใช่ ต้องติ๊กอนุญาต |
 | 4 | ทำให้เร็วขึ้นหรือกินเครื่องน้อยลง | `performance` | ตัวเลขก่อน-หลัง + โค้ด | ใช่ ต้องติ๊กอนุญาต |
+| 5 | อัปเกรด framework หรือ runtime ข้ามรุ่นใหญ่ | `refactor` | โค้ด + `docs/upgrade-<เรื่อง>.md` (inventory · ตารางความเข้ากันได้ · หลักฐาน regression) | ใช่ ต้องติ๊กอนุญาต |
+| 6 | ทำหลายงานขนานด้วย worktree และปิด branch | `feature` ต่องาน · `housekeeping` ตอนปิด | worktree ต่องาน · ตาราง worktree และทางปิด branch ใน `docs/BUILD-PLAN.md` | ใช่ ต้องติ๊กอนุญาต |
 
 ### ข้อมูลแอป (ผู้ใช้กรอก ใช้ร่วมทุกฉบับ)
 
@@ -31,7 +33,7 @@
 - เอกสารที่มี: ☐ SRS/FSD ☐ `docs/as-is/` ☐ README ☐ ไม่มีเลย
 - ผู้ที่ตอบคำถามเรื่องระบบได้ (บทบาท ไม่ต้องใส่ชื่อ):
 
-**ทุกฉบับที่แก้โค้ด:** ทำบน branch ใหม่ชื่อตามฉบับ (`feature/…` · `upgrade/…` · `perf/…`) · commit บนเครื่องเท่านั้น · ไม่ push · ไม่ merge เข้า branch หลัก · รัน test ทั้งชุดก่อนและหลังแก้ แล้วรายงานตัวเลขจริงทั้ง 2 รอบ · สั่งหลายฉบับ → ทำฉบับ 1 ก่อนบน branch ฐานโดยไม่ commit · ฉบับที่แก้โค้ดแต่ละฉบับแตก branch จาก branch ฐาน ไม่ต่อกัน และ commit สคริปต์ตรวจแอปจากฉบับ 1 เป็นก้อนแรก · รายงานว่า branch รวมกันได้ไหม
+**ทุกฉบับที่แก้โค้ด:** ทำบน branch ใหม่ชื่อตามฉบับ (`feature/…` · `upgrade/…` · `perf/…`) · commit บนเครื่องเท่านั้น · ไม่ push · ไม่ merge เข้า branch หลัก · รัน test ทั้งชุดก่อนและหลังแก้ แล้วรายงานตัวเลขจริงทั้ง 2 รอบ · สั่งหลายฉบับ → ทำฉบับ 1 ก่อนบน branch ฐานโดยไม่ commit · ฉบับที่แก้โค้ดแต่ละฉบับแตก branch จาก branch ฐาน ไม่ต่อกัน และ commit สคริปต์ตรวจแอปจากฉบับ 1 เป็นก้อนแรก · รายงานว่า branch รวมกันได้ไหม · จะให้ agent หลายตัวทำพร้อมกัน → ใช้ฉบับ 6 แยก worktree ต่องาน
 
 ---
 
@@ -89,6 +91,7 @@ agent `system-analyst` + `developer` + `qa-tester` · skill `blast-radius` · `t
 ## 3. ปรับโครงหรืออัปเกรดเวอร์ชัน
 
 agent `solution-architect` + `developer` · skill `blast-radius` · `principle-small-verifiable-steps` · `principle-replace-then-delete` · `stack-*` ตามภาษา · `adr-writer`
+**ใช้เมื่อ:** ปรับโครงโดยพฤติกรรมเท่าเดิม · เปลี่ยนหรืออัปเกรดไลบรารีทีละตัว · อัปเกรดรุ่นย่อย · framework หรือ runtime ข้ามรุ่นใหญ่ใช้ฉบับ 5 · อัปเดต dependency ตามผลสแกนช่องโหว่ใช้ `prompt-operations.md` ฉบับ 7
 **ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · test เดิมรันได้ (ไม่มี test → เขียน test จับพฤติกรรมของ flow หลักก่อน ตาม `prompt-test-automation.md` ฉบับ 3 · skill `testing-standards` · `e2e-testing-patterns`)
 **ผลลัพธ์:** `docs/upgrade-<เรื่อง>.md` (แผน + ผล) · ADR 1 ฉบับที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md` · โค้ด
 
@@ -96,7 +99,7 @@ agent `solution-architect` + `developer` · skill `blast-radius` · `principle-s
 
 ### เรื่องที่จะทำ (ผู้ใช้กรอก)
 
-- จากอะไรไปอะไร (เช่น .NET Framework 4.8 → .NET 8 · Angular 12 → 18):
+- จากอะไรไปอะไร (เช่น Newtonsoft.Json → System.Text.Json · แยกโมดูลรายงานออกจากโมดูลขาย):
 - เหตุผล (หมดอายุการสนับสนุน · ช่องโหว่ · ต้องใช้ความสามารถใหม่):
 - ส่วนที่ห้ามแตะ:
 
@@ -140,3 +143,66 @@ agent `developer` + `devops-engineer` · skill `observability-basics` · `stack-
 
 - ตัวเลขทุกตัวในรายงานมาจากการตรวจจริงพร้อมคำสั่งที่ใช้ · ไม่ได้วัด → ไม่เขียน
 - test ทั้งชุดต้องเขียวหลังทุกจุดที่แก้
+
+---
+
+## 5. อัปเกรด framework หรือ runtime ข้ามรุ่นใหญ่
+
+agent `solution-architect` + `developer` + `qa-tester` (หลักฐาน regression) · skill `legacy-spec-recovery` (`references/framework-upgrade.md`) · `principle-replace-then-delete` · `principle-small-verifiable-steps` · `worktree-and-branch` · `blast-radius` · `stack-*` ตามภาษา · `adr-writer` · `status-report`
+**ใช้เมื่อ:** .NET Framework → .NET 8 หรือ LTS ล่าสุด · Angular ข้าม major · Python 2 → 3 แล้วต่อ Django LTS · Node ข้ามสาย LTS · framework เดิมหมดอายุการสนับสนุน
+**ต้องมีก่อน:** `docs/ONBOARDING-NOTES.md` (ฉบับ 1) · `docs/as-is/` อย่างน้อยระดับภาพรวมระบบ (`prompt-existing-code.md` ฉบับ 1) · characterization test ของโมดูลที่แตะ คือ test ที่บันทึกว่าระบบทำอะไรอยู่ตอนนี้ (ไม่มี → เขียนตาม `prompt-test-automation.md` ฉบับ 3 ก่อน) · ขาด 2 อย่างหลัง การอัปเกรดคือการเดาว่าอะไรพัง
+**ผลลัพธ์:** `docs/upgrade-<เรื่อง>.md` (inventory · ตารางความเข้ากันได้ · รายการ error จาก spike · ขั้นตอน · หลักฐาน regression) · ADR ที่ `docs/decisions/ADR-NNNN-<เรื่อง>.md` · โค้ด
+
+- [ ] อนุญาตให้แก้โค้ดตามแผน (commit บนเครื่องเท่านั้น บน branch แยก `upgrade/…` · ไม่ push · ไม่ merge เข้า branch หลัก)
+
+### เรื่องที่จะทำ (ผู้ใช้กรอก)
+
+- stack และรุ่น จากอะไรไปอะไร:
+- เหตุผลและวันที่ต้องเสร็จ (เช่น วันหมดอายุการสนับสนุน):
+- ส่วนที่ห้ามแตะ · ระบบอื่นที่อ่านฐานข้อมูลเดียวกัน (รายงาน · ETL · แอปมือถือ):
+
+### ลำดับ
+
+1. **Inventory** ลงตารางเดียว: รุ่นของ runtime · framework · ทุก dependency (จาก lockfile หรือ `packages.config`) · ของที่ compile เอง (native · COM · plugin) · OS และเซิร์ฟเวอร์ที่รันอยู่
+2. **ตารางความเข้ากันได้** แถวละ dependency: รุ่นเดิม · รุ่นที่รองรับเป้าหมาย · มีไหม · ตัวแทนถ้าไม่มี · ป้าย `code` · `doc` · `ask` ตาม `legacy-spec-recovery` · dependency ที่ไม่มีทางไปคือความเสี่ยงที่ต้องบอกเจ้าของระบบก่อนเริ่มขั้น 4
+3. **Spike บน worktree** ตาม `worktree-and-branch`: build บนรุ่นเป้าหมายให้จบ 1 รอบโดยยังไม่แก้ logic · จด error ทุกตัวเป็นรายการ ไม่ไล่แก้ทีละตัวในรอบนี้ · ประเมินจำนวนวันจากรายการนั้น ไม่ใช่จากความรู้สึก
+4. **ย้ายให้ครบแล้วลบของเก่า** ตาม `principle-replace-then-delete`: ไม่มี wrapper ชื่อเก่า ไม่มี flag สลับรุ่น · ย้ายทีละ project หรือ package เป็นขั้นที่ build ผ่าน · คนนอกเรียก API เดิมอยู่ → deprecate ตาม `api-conventions`
+5. **หลักฐาน regression:** characterization test ผ่านทั้งก่อนและหลัง · golden file ของรายงานและ stored procedure เทียบแล้วเท่ากัน · รันบนข้อมูลสำเนา ไม่ใช่ production · รายงานด้วย `status-report` พร้อมสิ่งที่ยังไม่ได้ทดสอบ
+
+### กฎเฉพาะฉบับนี้
+
+- อ่าน breaking change ของ**ทุกรุ่นที่ข้าม** ไม่ใช่แค่รุ่นปลายทาง · อ้างคู่มือทางการตามตารางต่อ stack ใน `framework-upgrade.md` แล้วติดวันที่ตรวจ
+- ห้ามอัปเกรดพร้อมแก้ฟีเจอร์ในชุดเดียวกัน · ห้ามเปลี่ยน ORM · UI framework หรือโครงโฟลเดอร์ "ถือโอกาส" ระหว่างทาง ให้จดไว้เป็นงานถัดไปหลัง regression ผ่าน
+- build ผ่านยังไม่ใช่เสร็จ ต้องมีหลักฐานขั้น 5 ครบ
+
+---
+
+## 6. ทำหลายงานขนานด้วย worktree และปิด branch
+
+agent `developer` ตัวใหม่ 1 ตัวต่องาน · `reviewer` ตัวใหม่ตรวจแต่ละ branch · skill `worktree-and-branch` · `parallel-split-and-merge` · `principle-small-verifiable-steps` · `principle-prove-it-works` · `commit-message-format` · `pr-description-template` · `config-and-secrets`
+**ใช้เมื่อ:** สั่งฉบับที่แก้โค้ดตั้งแต่ 2 งานพร้อมกัน (เช่น ฉบับ 2 หลายฟีเจอร์ · ฉบับ 2 คู่กับฉบับ 4) · spike ที่อาจทำ checkout หลักพัง · branch ที่ทำเสร็จค้างอยู่หลายตัว · งานเดียวที่ agent ตัวเดียวทำ ใช้ branch ธรรมดาพอ
+**ต้องมีก่อน:** repo มี commit แล้ว · คำสั่งรัน test จาก `docs/ONBOARDING-NOTES.md` (ฉบับ 1)
+**ผลลัพธ์:** worktree 1 ตัวต่องาน วางเป็นโฟลเดอร์พี่น้องของ repo (`../<repo>-<งาน>`) หรือ `.claude/worktrees/<ชื่อ>/` ที่ ignore แล้ว · repo อยู่ใต้รากโปรเจกต์ (`<project>/<repo>/`) ให้ใช้แบบหลัง จะได้ไม่มีโฟลเดอร์ใหม่โผล่ที่รากโปรเจกต์ · ตาราง worktree และทางปิด branch ใน `docs/BUILD-PLAN.md` · **รออนุมัติ:** merge ลง branch หลัก · push · เปิด PR · ทิ้ง branch
+
+- [ ] อนุญาตให้สร้าง worktree และแก้โค้ดในนั้น (commit บนเครื่องเท่านั้น บน branch ของ worktree นั้น · ไม่ push · ไม่ merge เข้า branch หลัก)
+
+### งาน (ผู้ใช้กรอก)
+
+- งานที่จะทำขนาน 1 บรรทัดต่องาน (เลขฉบับ · CR · บั๊ก):
+- branch ฐาน (เว้นว่าง = `main`):
+- ทีมปิด branch แบบไหน (merge ในเครื่อง · เปิด PR · ตามที่ repo ทำอยู่):
+
+### ลำดับ
+
+1. แบ่งงานเป็นชิ้นที่ไม่แก้ไฟล์เดียวกันตาม `parallel-split-and-merge` · ชิ้นที่ต้องแตะไฟล์ร่วมกันทำต่อกัน ไม่ทำขนาน
+2. สร้าง worktree ต่องานบน branch `<ประเภท>/<งาน>` · คัดลอก `.env` และไฟล์ตั้งค่า dev แบบระบุชื่อไฟล์ ไม่คัดลอกทั้งโฟลเดอร์ · Windows ตั้งชื่อโฟลเดอร์สั้นให้ path ไม่เกิน 260 ตัวอักษร · ติดตั้ง dependency แล้วรัน test 1 รอบเป็น baseline ก่อนแก้
+3. agent แต่ละตัวทำเฉพาะใน worktree ของตัวเอง · หัวหน้าทีมจด path · branch · baseline ลงตารางใน `docs/BUILD-PLAN.md`
+4. ก่อนปิด: test ทั้งชุดผ่านบน branch นั้น · `git status` สะอาด · `git log main..HEAD --oneline` แสดง commit ที่จะเข้า · main ขยับระหว่างทาง → รวม main ล่าสุดแล้ว test ใหม่ · conflict แก้แบบเข้าใจทั้ง 2 ฝั่ง ไม่ใช้ `--ours` หรือ `--theirs` ทั้งไฟล์
+5. เลือกทางปิดต่อ branch จากตารางใน `worktree-and-branch` ข้อ 4: merge ในเครื่อง · เปิด PR · เก็บไว้ก่อน · ทิ้ง · ทางที่อยู่ใน "รออนุมัติ" เตรียมคำสั่งไว้ให้ผู้ใช้เลือก
+6. เก็บกวาดหลังผู้ใช้อนุมัติทางปิด: ลบ worktree ที่ `status` สะอาด · `git worktree prune` · ลบ branch ด้วย `-d` เมื่อ `git branch --merged main` มีชื่อนั้น · `git worktree list` เหลือเฉพาะตัวที่มีเหตุผลในบันทึก
+
+### กฎเฉพาะฉบับนี้
+
+- ตาราง `| worktree | branch | งาน | เจ้าของ | baseline | test หลังแก้ | ทางปิด | สถานะ |` ใน `docs/BUILD-PLAN.md` หัวหน้าทีมเขียนคนเดียว
+- "ทิ้ง" ไม่ใช่ตัวเลือกปกติ เสนอเมื่อผู้ใช้สั่งเท่านั้น และแสดงก่อนว่าจะหาย commit กี่ตัว ไฟล์ untracked อะไรบ้าง · ไม่ใช้ `git worktree remove --force` หรือ `git branch -D` จนกว่าผู้ใช้อนุมัติทางทิ้ง
+- worktree และ branch เก่าที่ไม่ได้มาจากงานนี้ เก็บกวาดด้วย `prompt-operations.md` ฉบับ 5

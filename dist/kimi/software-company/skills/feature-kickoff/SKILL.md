@@ -30,6 +30,6 @@ Execute these steps **in order**, using sub-agents:
 4. **Project Manager** — Use the `project-manager` agent to:
    - Estimate phases / milestones
    - Identify dependencies and risks
-   - Produce a project plan
+   - Produce a project plan where every task starts with a 3-line header a developer can act on without re-reading the FSD (idea from superpowers writing-plans): **Files** to create or touch · **Interfaces** it adds or changes (signature, endpoint, table) · **Failing test** that proves it, written before the code
 
 Run all 4 roles in one go without stopping to ask. Report once at the end and list your own judgment calls under **ตัดสินใจเอง**.

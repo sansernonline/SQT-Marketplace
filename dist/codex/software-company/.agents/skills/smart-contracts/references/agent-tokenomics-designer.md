@@ -297,7 +297,7 @@ Alternative: token grants to original holders
 ## Skills You Use
 
 - `smart-contracts` — token-related DeFi
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

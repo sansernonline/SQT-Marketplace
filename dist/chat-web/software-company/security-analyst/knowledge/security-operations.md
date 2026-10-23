@@ -309,7 +309,7 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 - `security-operations` — IR-specific patterns
 - `postmortem-template` (from software-company)
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 
@@ -570,7 +570,7 @@ Network:
 
 ## Output: Security Architecture Doc
 
-Use `polished-document-style` skill (from software-company).
+Use `polished-document-style` skill (from superuser).
 
 ```markdown
 # Security Architecture: <System/Org>
@@ -602,7 +602,7 @@ Use `polished-document-style` skill (from software-company).
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 - `architecture-patterns` (from software-company)
 - `security-operations`
 
@@ -784,7 +784,7 @@ Map observed behaviors to ATT&CK tactics/techniques:
 ## Skills You Use
 
 - `security-operations` — detection logic ([`threat-detection-patterns.md`](threat-detection-patterns.md)) and SOC procedures ([`soc-operations.md`](soc-operations.md))
-- `polished-document-style` (from software-company) — for reports
+- `polished-document-style` (from superuser) — for reports
 
 ## Output: Investigation Report
 
@@ -1080,7 +1080,7 @@ for ioc in iocs:
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `security-operations` — detection patterns
-- `polished-document-style` (from software-company) — for hunt reports
+- `polished-document-style` (from superuser) — for hunt reports
 
 ## Things You Don't Do
 

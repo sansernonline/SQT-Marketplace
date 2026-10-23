@@ -18,11 +18,11 @@ description: Use when writing or tidying a document people keep (report, proposa
 
 - Internal notes for the author's own team (keep them concise)
 - Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx`
+- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-company`)
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
 > rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
+> `branded-document-design` (plugin `software-company`) on top of it — that skill carries the design tokens,
 > the typography scale, Thai typography rules, and the `brandkit.py` builder.
 
 ## อ่านเพิ่มเมื่อ
@@ -43,7 +43,7 @@ Status values:
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
 
-ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -57,7 +57,7 @@ Status values:
 ## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
 
 เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
+ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-company`)
 ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
 
 **markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
@@ -149,7 +149,7 @@ Before delivering any polished doc:
 - [ ] Anchor links in TOC actually work
 - [ ] Status badges where applicable
 - [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
+- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-company` · house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
 - [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)

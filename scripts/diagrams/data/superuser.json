@@ -1,6 +1,6 @@
 {
  "plugin": "superuser",
- "version": "3.0.0",
+ "version": "3.0.1",
  "description": "SuperUser — a team lead agent. Sizes the task and picks a budget, writes a 5-point brief for every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, improvements, learning loop, inbox, hook gates) switch on and off per project. Use it alone or as the core other plugins extend.",
  "cross": [],
  "skills": [],
@@ -12,6 +12,7 @@
   "commit-log",
   "context-budget",
   "decision-log",
+  "document-naming",
   "flag-and-propose",
   "handoff",
   "human-writing",
@@ -19,6 +20,8 @@
   "owner-style-capture",
   "parallel-attempts-pick-best",
   "parallel-split-and-merge",
+  "polished-document-style",
+  "polite-message-th-en",
   "principle-build-a-tool-not-handwork",
   "principle-fix-root-cause",
   "principle-proceed-on-reversible-work",
@@ -30,24 +33,12 @@
   "research-with-sources",
   "session-lessons-to-skills",
   "simplify",
+  "skill-authoring",
+  "spell-out-abbreviations",
   "status-report",
   "targeted-fix",
   "temp-file-discipline",
-  "branded-document-design",
-  "diagram-figures",
-  "document-naming",
-  "html-slide-deck",
-  "image-generation",
-  "markdown-report-docx",
-  "markdown-visuals",
-  "meeting-prep-card",
-  "meeting-summary",
-  "polished-document-style",
-  "polite-message-th-en",
-  "pptx-to-html-deck",
-  "presentation-design",
-  "product-naming",
-  "spell-out-abbreviations"
+  "translate-th-en"
  ],
  "commands": [],
  "agents": [
@@ -259,6 +250,8 @@
      "n": 2,
      "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
      "sub": [
+      "**นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill",
+      "**skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง",
       "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
       "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
       "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
@@ -378,7 +371,9 @@
     {
      "n": 1,
      "text": "อ่านหัวข้อ \"รับงานต่อ\" ใน `CONTEXT.md` · ข้อความค้างใน `.claude/superuser/inbox/` · ใบส่งงานที่ยังเปิดใน `.claude/superuser/handoff/` (`status` ไม่ใช่ `เสร็จ`) · log ล่าสุดว่าตัวก่อนทำอะไรไปจริง · ใคร: หัวหน้าทีม",
-     "sub": [],
+     "sub": [
+      "อ่านตาราง \"รอผู้ใช้\" ใน `CONTEXT.md` ด้วย — แถวที่มีคำตอบแล้วใน inbox หรือข้อความล่าสุด → ลบแถวแล้วเริ่มจากงานที่ปลดล็อก"
+     ],
      "phase": "รับงานต่อ",
      "who": {
       "lead": true,
@@ -539,14 +534,14 @@
     },
     {
      "n": 2,
-     "text": "รวบรวมกว้าง 10–30 แหล่ง — แหล่งทางการก่อน แล้วมาตรฐาน แล้วผู้ดูแลเครื่องมือหรือผู้เชี่ยวชาญที่ระบุชื่อ · ใคร: `general-purpose` ตัวใหม่",
+     "text": "รวบรวมกว้าง 10–30 แหล่ง — แหล่งทางการก่อน แล้วมาตรฐาน แล้วผู้ดูแลเครื่องมือหรือผู้เชี่ยวชาญที่ระบุชื่อ · ใคร: `general-purpose` ตัวใหม่ · ส่งกลับตาราง แหล่ง · ลิงก์ · ข้อสรุป ไม่เกินราว 40 บรรทัด ผลยาวเขียนลงไฟล์แล้วส่ง path",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
       "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "raw": "`general-purpose` ตัวใหม่ · ส่งกลับตาราง แหล่ง · ลิงก์ · ข้อสรุป ไม่เกินราว 40 บรรทัด ผลยาวเขียนลงไฟล์แล้วส่ง path"
      },
      "skills": [],
      "commands": [],
@@ -750,6 +745,177 @@
    "shared": false
   },
   {
+   "name": "team-project",
+   "title": "งาน XL หลายวัน มีคนและ agent ร่วมทีม",
+   "when": "งานใหญ่ที่จบไม่ได้ใน session เดียว · มี milestone หลายอัน · มีคนจริง (เพื่อนร่วมทีม) รับชิ้นงานไปทำคู่กับ agent · \"โปรเจกต์นี้ทำกับทีม\" · \"งานเป็นเดือน\"",
+   "done": "ทุก milestone ในตาราง \"สถานะล่าสุด\" เป็น `เสร็จ` พร้อมหลักฐานตรวจ และคนหรือ bot ตัวใหม่อ่าน `CONTEXT.md` ไฟล์เดียวแล้วรับงานต่อได้โดยไม่ถาม\n\n---\n\nกฎเฉพาะงาน XL · **ตรวจต่อ milestone ไม่ใช่ตอนท้ายงาน** — งานเป็นเดือนที่ตรวจครั้งเดียวตอนจบ ค้นจุดพังช้าเกินแก้ · **ชิ้นของคนกับ agent อย่าแตะไฟล์เดียวกัน** — ตารางแบ่งงานต้องระบุ `files_allowed` ไม่ทับกันเด็ดขาด · ไฟล์กลางหัวหน้าเขียนคนเดียว (`team-files`) · **คนส่งงานช้ากว่า agent** — ออกแบบให้ชิ้นของคนไม่ขวางชิ้นของ agent (คนรับชิ้นที่ต้องการดุลยพินิจ · agent รับชิ้นกลไก) · ชิ้นของคนที่ `ติด` หรือเกินกำหนด → หัวหน้าเสนอรับมาทำเองหรือส่งลูกทีมใน \"รออนุมัติ\" · **ทุกวันต้องจบที่จุดรับต่อได้** — ไม่มีวันไหนที่งานค้างอยู่ในแชตล้วน ๆ",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เข้าใจ — อ่านโจทย์ · ของเดิมในโปรเจกต์ · ข้อจำกัด (งบ · คน · เวลา) · ถามเจ้าของงานแบบเลือกคำตอบครั้งเดียว · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "วางทาง — `brainstormer` ตัวใหม่เสนอ 2–3 ทาง (ทางสำคัญมากใช้ MoA) → หัวหน้าเลือก 1 → เขียน brief ตาม `brief-template` ลง `docs/BRIEF.md` · ใคร: `brainstormer` ตัวใหม่ → หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [
+       "brainstormer"
+      ],
+      "raw": "`brainstormer` ตัวใหม่ → หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "แตก milestone — แต่ละ milestone ต้องจบด้วยของที่ตรวจได้และส่งให้เจ้าของงานดูได้ · ลงตาราง \"สถานะล่าสุด\" ใน `docs/BUILD-PLAN.md` ตาม `status-report` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "วางของกลาง + ตารางแบ่งงาน — โครงเรื่อง · รูปข้อมูล · แม่แบบ · กติการ่วม (ภาษา · ตั้งชื่อ · commit) หัวหน้าทำคนเดียว · ตาราง `ชิ้น | ไฟล์ที่แตะ | ขนาด | ต้องรอชิ้นไหน | ใคร (คน/agent) · ระดับ` ชี้ชัดว่าชิ้นไหนให้ผู้ร่วมทีมคนไหน · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "เขียนใบทุกชิ้น — งาน XL ทุกชิ้นต้องเป็นไฟล์ `handoff/<id>.md` ตาม skill `handoff` (เพราะข้าม session แน่) ไม่ใช่แค่ข้อความในแชต · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "handoff"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ลงมือ — ชิ้นของ agent ส่งพร้อมกันในข้อความเดียว (2–4 ตัว ไม่เกิน 8 · เกินนั้น `parallel-split-and-merge`) · ชิ้นของคนส่ง path ใบให้ผู้ร่วมทีมพร้อมกำหนดส่งใบกลับ · ชิ้นที่ต้องรอกันลงรอบถัดไป · ใคร: ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "ลูกทีมตัวใหม่ต่อชิ้น · ผู้ร่วมทีมตามใบ"
+     },
+     "skills": [
+      "parallel-split-and-merge"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 7,
+     "text": "พิสูจน์ ต่อ milestone — รวมชิ้นของ milestone แล้ว `reviewer` ตัวใหม่ตรวจทั้ง milestone รวดเดียวกับ \"เสร็จเมื่อ\" ใน brief · งานเสี่ยง (เงิน · กฎหมาย · สุขภาพ · ส่งคนนอก) ใช้ `adversarial-review-panel` · ไม่ผ่าน → แก้ → ตรวจซ้ำ ตามเพดานรอบใน `team-roles` · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "reviewer"
+      ],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [
+      "adversarial-review-panel"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 8,
+     "text": "sync ปิดวัน — เก็บใบส่งงานที่เข้ามา (คนและ agent เท่ากัน) · อัปเดต BUILD-PLAN + \"ความคืบหน้า\" และ \"รับงานต่อ\" ใน `CONTEXT.md` ตาม playbook `pickup-and-pause` · การตัดสินใจลง `decision-log` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "decision-log"
+     ],
+     "commands": [],
+     "playbooks": [
+      "pickup-and-pause"
+     ],
+     "approval": false
+    },
+    {
+     "n": 9,
+     "text": "รายงานเจ้าของงาน — จบ milestone หรือจบสัปดาห์ด้วย `status-report` · รายการที่ใช้เงินหรือย้อนไม่ได้ลง \"รออนุมัติ\" ไม่ขวางชิ้นอื่น · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "status-report"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    }
+   ],
+   "shared": false
+  },
+  {
    "name": "unattended-run",
    "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
    "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว",
@@ -794,7 +960,8 @@
       "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
       "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
       "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
-      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
+      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น",
+      "**ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง \"รอผู้ใช้\" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ"
      ],
      "phase": "",
      "who": {
@@ -826,7 +993,7 @@
     },
     {
      "n": 5,
-     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มในหัวข้อ 6 ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ \"รออนุมัติ — ทุกสาขา\" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {

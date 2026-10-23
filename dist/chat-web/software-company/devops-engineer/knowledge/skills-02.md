@@ -28,11 +28,17 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
 3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ได้ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
 
-## สัญญาณว่ากำลังข้าม
+## ข้ออ้างที่ไม่นับเป็นหลักฐาน
 
-- คำว่า "น่าจะ" · "ควรจะ" · "ในทางทฤษฎี" ในรายงานจบงาน
-- ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้
-- ตรวจแค่ส่วนที่ง่าย แล้วสรุปรวมว่าผ่านทั้งหมด
+| ข้ออ้าง | ทำไมไม่นับ | ต้องทำแทน |
+|---|---|---|
+| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" | คำออกตัวแปลว่ายังไม่ได้ดู — เจอในรายงานจบงาน = ธงแดง ให้กลับไปตรวจก่อนส่ง | รันหรือเปิดดู แล้วแปะผลดิบ |
+| "test ผ่านแล้ว" โดยไม่มี output | ผ่านในความจำกับผ่านตอนนี้คนละอย่าง | แปะบรรทัดสรุปผลรันรอบนี้ |
+| "แก้ตามที่บอกแล้ว" · "ไม่มี error" | ไม่มี error ≠ ได้ผลที่ต้องการ | ทำกรณีที่เคยล้มซ้ำให้เห็นว่าผ่าน |
+| subagent รายงานว่าเสร็จ | รายงานคือคำพูด ไม่ใช่ชิ้นงาน | ดู diff หรือเปิดไฟล์ที่เปลี่ยนเอง |
+| ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้ · ตรวจแค่ส่วนง่ายแล้วสรุปว่าผ่านทั้งหมด | โยนงานตรวจให้คนอื่น | รันเองให้ครบก่อนใช้คำว่าเสร็จ |
+
+ที่มาของแนวคิดตารางข้ออ้าง: skill `verification-before-completion` ใน obra/superpowers (MIT) · เขียนใหม่ให้ครอบงานนอกโค้ด
 
 
 ---
@@ -139,6 +145,7 @@ Use when writing a post-incident review or blameless postmortem of a production 
 # Blameless Postmortem Template
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## When to use this skill
 
@@ -213,6 +220,9 @@ All times in UTC.
 | HH:MM | All clear confirmed |
 
 ## 4. What Happened (Detailed)
+
+### Trigger
+What set it off? (deploy · config change · traffic spike · dependency outage · scheduled job) — keep separate from the root cause and from how we noticed
 
 ### Detection
 How was the incident detected? Was it automated alerting or customer report?
@@ -335,6 +345,19 @@ Almost never. SEV4 needs only a short writeup. Always do a full one for:
 - Customer-facing incidents
 - Data integrity issues
 
+### Quick postmortem (SEV3 not repeated · SEV4 · near-miss)
+
+One block in the incident channel or ticket, same day — no meeting. Trigger · Detection · action-item Type are the same words as the full template (แนวคิดจาก Google SRE postmortem example):
+
+```markdown
+**Quick postmortem:** <title> · SEV3 · YYYY-MM-DD · <XX min>
+- Trigger → impact: <what set it off> → <who felt what>
+- Detection: <alert | customer | chance> after <XX min>
+- Mitigation: <what stopped it>
+- Root cause: <one sentence>
+- Action: <one item> · @owner · Type <Prevent | Detect | Mitigate | Process> · due YYYY-MM-DD
+```
+
 ---
 
 ## Document Look
@@ -372,11 +395,11 @@ Use when writing or tidying a document people keep (report, proposal, Word, PDF)
 
 - Internal notes for the author's own team (keep them concise)
 - Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx`
+- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-company`)
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
 > rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
+> `branded-document-design` (plugin `software-company`) on top of it — that skill carries the design tokens,
 > the typography scale, Thai typography rules, and the `brandkit.py` builder.
 
 ## อ่านเพิ่มเมื่อ
@@ -397,7 +420,7 @@ Status values:
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
 
-ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -411,7 +434,7 @@ Status values:
 ## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
 
 เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
+ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-company`)
 ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
 
 **markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
@@ -503,7 +526,7 @@ Before delivering any polished doc:
 - [ ] Anchor links in TOC actually work
 - [ ] Status badges where applicable
 - [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
+- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-company` · house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
 - [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
@@ -534,6 +557,8 @@ Before delivering any polished doc:
 # รูปแบบ markdown พร้อมตัวอย่าง
 
 ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+
+**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
 
 ## Document Header (Always)
 
@@ -607,7 +632,7 @@ Use a table:
 
 ## Figures (รูปในเอกสาร)
 
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
 
 ```markdown
 ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
@@ -759,9 +784,9 @@ Define acronyms on first use, then add to glossary.
 |---|---|---|
 | หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
 | ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
+| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-company`) | `doc-theme` |
+| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-company`) ข้อ 0–1 | `doc-theme` |
+| สไลด์ | `presentation-design` (plugin `software-company`) | `doc-theme` |
 
 ## ค่าตั้งต้นประจำบ้าน (house default)
 

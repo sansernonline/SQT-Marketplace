@@ -98,6 +98,7 @@ The compliance officer should:
 
 3. **Scope analysis**:
    - Map ALL systems that touch cardholder data (CHD)
+   - **Never-store sweep first** (idea from wshobson pci-compliance): search logs, database columns, backups, analytics events, crash reports and screenshots for the data PCI-DSS forbids after authorisation — CVV/CVC (never, not even encrypted or "only in debug logs"), full magnetic-stripe or chip track data, PIN or PIN block — and for an unmasked PAN anywhere outside the tokenised vault (display is at most first 6 and last 4). One hit is a Critical gap that outranks every other finding
    - Identify SAQ candidates (aim for A)
    - Recommend scope reduction opportunities
 

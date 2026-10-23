@@ -6,7 +6,7 @@
       "checked": "2026-10-06",
       "note": "ฐานค่าจ้างสูงสุดประกันสังคม 17,500 บาท (เงินสมทบ 875) ตั้งแต่ 1 ม.ค. 2569",
       "files": [
-        "plugins/career/skills/salary-negotiation/SKILL.md",
+        "plugins/personal-life/skills/salary-negotiation/SKILL.md",
         "plugins/thai-workplace/skills/payroll-th/SKILL.md",
         "plugins/thai-workplace/skills/social-security-th/SKILL.md",
         "plugins/trading-finance/skills/emergency-fund/SKILL.md",
@@ -29,9 +29,10 @@
       "checked": "2026-10-06",
       "note": "จดทะเบียน VAT เมื่อรายได้เกิน 1.8 ล้านบาท/ปี",
       "files": [
-        "plugins/online-seller/skills/seller-tax-basics/SKILL.md",
+        "plugins/thai-workplace/skills/seller-tax-basics/SKILL.md",
         "plugins/thai-workplace/skills/doc-quotation/SKILL.md",
-        "plugins/thai-workplace/skills/tax-vat-th/SKILL.md"
+        "plugins/thai-workplace/skills/tax-vat-th/SKILL.md",
+        "plugins/thai-workplace/skills/thai-business-setup/SKILL.md"
       ]
     },
     "deposit-protection": {
@@ -47,7 +48,7 @@
       "checked": "2026-10-06",
       "note": "สายด่วนศูนย์ AOC แจ้งอายัดบัญชีมิจฉาชีพ 24 ชั่วโมง",
       "files": [
-        "plugins/consumer-rights/skills/refund-request/SKILL.md",
+        "plugins/e-commerce/skills/refund-request/SKILL.md",
         "plugins/personal-life/agents/life-admin.md",
         "plugins/personal-life/skills/digital-hygiene/references/scams-and-takeover.md",
         "plugins/personal-life/skills/digital-hygiene/SKILL.md",
@@ -61,9 +62,26 @@
       "checked": "2026-10-06",
       "note": "อัตราภาษีเงินได้บุคคลธรรมดาขั้นสูงสุด 35% (เงินได้สุทธิเกิน 5 ล้าน)",
       "files": [
-        "plugins/online-seller/skills/seller-tax-basics/SKILL.md",
+        "plugins/thai-workplace/skills/seller-tax-basics/SKILL.md",
         "plugins/thai-workplace/skills/payroll-th/SKILL.md",
-        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md"
+        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md",
+        "plugins/thai-workplace/skills/thai-business-setup/SKILL.md"
+      ]
+    },
+    "import-duty-exemption": {
+      "value": "219/2568",
+      "checked": "2026-10-23",
+      "note": "ประกาศกรมศุลกากรที่ 219/2568 ยกเลิกยกเว้นอากรของนำเข้ามูลค่าไม่เกิน 1,500 บาท เหลือยกเว้นเฉพาะไม่เกิน 1 บาท ตั้งแต่ 1 ม.ค. 2569 · VAT ของนำเข้าราคาต่ำเก็บตั้งแต่ 5 ก.ค. 2567",
+      "files": [
+        "plugins/thai-workplace/skills/thai-business-setup/SKILL.md"
+      ]
+    },
+    "consumer-case-act": {
+      "value": "เล่ม 125 ตอนที่ 38 ก",
+      "checked": "2026-10-23",
+      "note": "พ.ร.บ.วิธีพิจารณาคดีผู้บริโภค พ.ศ. 2551 ตามราชกิจจานุเบกษา · มาตรา 17 · 18 · 20 ยังไม่ถูกแก้ (ฉบับที่ 2 พ.ศ. 2556 แก้มาตรา 19 · ฉบับที่ 3 พ.ศ. 2558 แก้มาตรา 49 51 และยกเลิก 52–54) · ผู้ประกอบธุรกิจฟ้องผู้บริโภคได้ที่ศาลภูมิลำเนาของผู้บริโภคแห่งเดียว · ตรวจซ้ำว่ามีฉบับแก้ใหม่หรือไม่",
+      "files": [
+        "plugins/e-commerce/skills/complaint-letter-th/SKILL.md"
       ]
     }
   },

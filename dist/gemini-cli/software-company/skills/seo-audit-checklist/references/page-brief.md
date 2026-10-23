@@ -2,7 +2,7 @@
 
 Search engine optimization (SEO) brief for one page.
 
-ใช้ตอนเขียน brief ของหน้าเดียว (ไม่ใช่ audit ทั้งเว็บ) — ย้ายมาจาก agent `seo-specialist` (2026-10-14) · rich result ของ Google: ตั้งแต่ 8 ส.ค. 2023 FAQ แสดงเฉพาะเว็บรัฐและเว็บสุขภาพที่น่าเชื่อถือ · HowTo เลิกแสดงแล้ว — ที่มา [Google Search Central blog: Changes to HowTo and FAQ rich results](https://developers.google.com/search/blog/2023/08/howto-faq-changes) (ตรวจ 22 ต.ค. 2569)
+ใช้ตอนเขียน brief ของหน้าเดียว (ไม่ใช่ audit ทั้งเว็บ) · rich result ของ Google: ตั้งแต่ 8 ส.ค. 2023 FAQ แสดงเฉพาะเว็บรัฐและเว็บสุขภาพที่น่าเชื่อถือ · HowTo เลิกแสดงแล้ว — ที่มา [Google Search Central blog: Changes to HowTo and FAQ rich results](https://developers.google.com/search/blog/2023/08/howto-faq-changes) (ตรวจ 22 ต.ค. 2569)
 
 **สารบัญ:**
 

@@ -1,6 +1,6 @@
 # Clinical analytics — cohorts, measures, risk adjustment, report
 
-คู่มือของ agent `clinical-data-analyst` — ย้ายมาจากตัว agent (2026-10-14) · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
+คู่มือของ agent `clinical-data-analyst` · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
 
 **สารบัญ:**
 

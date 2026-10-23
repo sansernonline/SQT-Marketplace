@@ -1,7 +1,7 @@
 {
  "plugin": "software-company",
- "version": "2.20.0",
- "description": "Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 110 skills and 29 slash commands for the whole SDLC.",
+ "version": "2.20.1",
+ "description": "Simulates a complete software development company — 39 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 81 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
   "adr-writer",
@@ -13,6 +13,7 @@
   "auth-implementation-patterns",
   "background-jobs",
   "blast-radius",
+  "branded-document-design",
   "bug-inbox-triage",
   "bug-report-template",
   "cicd-and-release",
@@ -25,8 +26,10 @@
   "data-import-export",
   "database-design",
   "developer-experience",
+  "diagram-figures",
   "doc-cover-design",
   "docker-sandbox",
+  "dynamic-website",
   "e2e-testing-patterns",
   "ecommerce-patterns",
   "error-handling-patterns",
@@ -36,6 +39,7 @@
   "game-development",
   "graphic-design",
   "healthcare-systems",
+  "html-slide-deck",
   "i18n-and-locale",
   "incident-runbook-template",
   "insurance-systems",
@@ -45,6 +49,9 @@
   "legal-document-systems",
   "llm-engineering",
   "logging-standards",
+  "markdown-report-docx",
+  "markdown-visuals",
+  "mcp-server",
   "mobile-app-design",
   "mobile-engineering",
   "notifications",
@@ -52,11 +59,14 @@
   "owasp-top10",
   "pdpa-compliance",
   "postmortem-template",
+  "pptx-to-html-deck",
   "pr-description-template",
+  "presentation-design",
   "principle-data-shape-first",
   "principle-replace-then-delete",
   "principle-safe-to-rerun",
   "principle-secure-by-default",
+  "product-naming",
   "project-bootstrap",
   "project-doc-set",
   "readable-code",
@@ -82,8 +92,10 @@
   "ui-craft",
   "user-story-writer",
   "web-app-design",
+  "web-quality-audit",
   "web-service-essentials",
-  "windows-app-design"
+  "windows-app-design",
+  "worktree-and-branch"
  ],
  "core_skills": [
   "superuser",
@@ -93,6 +105,7 @@
   "commit-log",
   "context-budget",
   "decision-log",
+  "document-naming",
   "flag-and-propose",
   "handoff",
   "human-writing",
@@ -100,6 +113,8 @@
   "owner-style-capture",
   "parallel-attempts-pick-best",
   "parallel-split-and-merge",
+  "polished-document-style",
+  "polite-message-th-en",
   "principle-build-a-tool-not-handwork",
   "principle-fix-root-cause",
   "principle-proceed-on-reversible-work",
@@ -111,24 +126,12 @@
   "research-with-sources",
   "session-lessons-to-skills",
   "simplify",
+  "skill-authoring",
+  "spell-out-abbreviations",
   "status-report",
   "targeted-fix",
   "temp-file-discipline",
-  "branded-document-design",
-  "diagram-figures",
-  "document-naming",
-  "html-slide-deck",
-  "image-generation",
-  "markdown-report-docx",
-  "markdown-visuals",
-  "meeting-prep-card",
-  "meeting-summary",
-  "polished-document-style",
-  "polite-message-th-en",
-  "pptx-to-html-deck",
-  "presentation-design",
-  "product-naming",
-  "spell-out-abbreviations"
+  "translate-th-en"
  ],
  "commands": [
   "api-design",
@@ -197,7 +200,11 @@
     "superuser",
     "simplicity-first",
     "user-story-writer",
+    "diagram-figures",
+    "markdown-visuals",
     "software-diagrams",
+    "presentation-design",
+    "branded-document-design",
     "srs-writing",
     "fsd-writing",
     "legacy-spec-recovery",
@@ -217,6 +224,7 @@
     "readable-code",
     "principle-secure-by-default",
     "pdpa-compliance",
+    "markdown-visuals",
     "architecture-patterns"
    ]
   },
@@ -263,6 +271,7 @@
     "app-verifier-setup",
     "security-gate",
     "owasp-top10",
+    "markdown-visuals",
     "web-service-essentials",
     "api-conventions",
     "error-handling-patterns",
@@ -298,6 +307,9 @@
     "principle-secure-by-default",
     "simplicity-first",
     "postmortem-template",
+    "branded-document-design",
+    "diagram-figures",
+    "markdown-visuals",
     "software-diagrams",
     "incident-runbook-template",
     "logging-standards",
@@ -346,6 +358,7 @@
     "superuser",
     "pdpa-compliance",
     "audit-trail",
+    "branded-document-design",
     "threat-model"
    ]
   },
@@ -397,7 +410,10 @@
     "graphic-design",
     "superuser",
     "ui-craft",
+    "presentation-design",
+    "product-naming",
     "simplicity-first",
+    "branded-document-design",
     "software-diagrams"
    ]
   },
@@ -438,7 +454,8 @@
     "healthcare-systems",
     "superuser",
     "pdpa-compliance",
-    "audit-trail"
+    "audit-trail",
+    "branded-document-design"
    ]
   },
   {
@@ -447,8 +464,8 @@
    "core": false,
    "description": "Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.",
    "skills": [
-    "superuser",
     "graphic-design",
+    "superuser",
     "software-diagrams"
    ]
   },
@@ -474,7 +491,8 @@
     "insurance-systems",
     "superuser",
     "pdpa-compliance",
-    "audit-trail"
+    "audit-trail",
+    "branded-document-design"
    ]
   },
   {
@@ -512,7 +530,8 @@
     "legal-document-systems",
     "pdpa-compliance",
     "superuser",
-    "audit-trail"
+    "audit-trail",
+    "branded-document-design"
    ]
   },
   {
@@ -549,8 +568,12 @@
    "skills": [
     "superuser",
     "simplicity-first",
+    "branded-document-design",
+    "presentation-design",
     "user-story-writer",
-    "reference-app-research"
+    "markdown-visuals",
+    "reference-app-research",
+    "product-naming"
    ]
   },
   {
@@ -560,6 +583,9 @@
    "description": "Use for project plans, timelines, sprints, risks, progress tracking or status reports. WHAT and WHY → product-manager.",
    "skills": [
     "superuser",
+    "markdown-visuals",
+    "presentation-design",
+    "branded-document-design",
     "project-doc-set"
    ]
   },
@@ -590,7 +616,9 @@
     "app-verifier-upkeep",
     "docker-sandbox",
     "security-gate",
-    "bug-inbox-triage"
+    "bug-inbox-triage",
+    "markdown-visuals",
+    "branded-document-design"
    ]
   },
   {
@@ -604,6 +632,7 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
+    "markdown-visuals",
     "stack-mql",
     "architecture-patterns"
    ]
@@ -636,7 +665,8 @@
     "lazy-coding",
     "readable-code",
     "principle-secure-by-default",
-    "legacy-spec-recovery"
+    "legacy-spec-recovery",
+    "markdown-visuals"
    ]
   },
   {
@@ -647,7 +677,8 @@
    "skills": [
     "saas-platform",
     "superuser",
-    "fintech-payments"
+    "fintech-payments",
+    "markdown-visuals"
    ]
   },
   {
@@ -685,6 +716,8 @@
     "error-handling-patterns",
     "pdpa-compliance",
     "docker-sandbox",
+    "markdown-visuals",
+    "branded-document-design",
     "security-operations"
    ]
   },
@@ -695,7 +728,9 @@
    "description": "Use when improving search ranking — SEO audits, keywords, meta tags, URL structure, structured data, competitor SEO.",
    "skills": [
     "seo-audit-checklist",
-    "superuser"
+    "superuser",
+    "markdown-visuals",
+    "branded-document-design"
    ]
   },
   {
@@ -711,6 +746,8 @@
     "principle-secure-by-default",
     "saas-platform",
     "simplicity-first",
+    "markdown-visuals",
+    "diagram-figures",
     "project-doc-set",
     "architecture-patterns",
     "database-design",
@@ -722,7 +759,8 @@
     "audit-trail",
     "pdpa-compliance",
     "cicd-and-release",
-    "reverse-engineering"
+    "reverse-engineering",
+    "branded-document-design"
    ]
   },
   {
@@ -733,7 +771,10 @@
    "skills": [
     "superuser",
     "simplicity-first",
+    "diagram-figures",
     "software-diagrams",
+    "markdown-visuals",
+    "branded-document-design",
     "srs-writing",
     "database-design",
     "api-conventions",
@@ -752,8 +793,15 @@
    "description": "Use when writing user guides, API docs, tutorials, READMEs or release notes. Docs platform, SDK → devrel-engineer.",
    "skills": [
     "superuser",
+    "branded-document-design",
+    "markdown-visuals",
     "commit-message-format",
-    "project-doc-set"
+    "markdown-report-docx",
+    "presentation-design",
+    "html-slide-deck",
+    "pptx-to-html-deck",
+    "project-doc-set",
+    "product-naming"
    ]
   },
   {
@@ -767,6 +815,8 @@
     "web-app-design",
     "mobile-app-design",
     "windows-app-design",
+    "markdown-visuals",
+    "diagram-figures",
     "i18n-and-locale"
    ]
   }
@@ -1468,6 +1518,8 @@
      "n": 2,
      "text": "**แยกประเภท** · ใคร: หัวหน้าทีม",
      "sub": [
+      "**นับชนิดพลาดก่อน** — ทุกแถวติดป้าย `ไม่ได้เปิด skill` · `เปิดแต่ไม่ทำตาม` · `ไม่มีกฎ` (นิยามใน agent `learning-reviewer`) แล้วนับ · ส่วนใหญ่เป็น `ไม่ได้เปิด` → งานรอบนี้คือแก้การบอก skill (`triggers.md` · `hooks/skill-router.json`) ไม่ใช่เขียนข้อความเพิ่มใน skill",
+      "**skill ที่รับบทเรียนรวมแล้ว 3 ข้อแต่พลาดไม่ลด** — หยุดเพิ่มข้อความ เสนอตัวตรวจ ตัวอย่างคู่ (ก่อน → หลัง) หรือถอยการแก้กลับ อย่างใดอย่างหนึ่ง",
       "**ความผิดที่ทำซ้ำ** (เจอ 2 ครั้งขึ้นไป · `correction: true` ใน log เรื่องเดียวกัน) ทำเป็นตัวตรวจ ไม่เขียนเตือนเพิ่ม (`repeated-mistakes-to-checks` ถ้ามี ไม่งั้นสคริปต์ตรวจหรือข้อในรายการตรวจก่อนส่ง)",
       "**วิธีที่ได้ผล หรือ skill ที่บอกผิด** แก้ย่อหน้าใน SKILL.md (`session-lessons-to-skills` ถ้ามี)",
       "**playbook ที่ประกอบเองแล้วใช้ซ้ำ 2 ครั้งขึ้นไป** ให้เสนอเป็น playbook ถาวรตาม [`playbook-template`](playbook-template.md)",
@@ -1593,7 +1645,8 @@
       "raw": "หัวหน้าทีม (โจทย์ไม่ชัด: `brainstormer` ตัวใหม่ · ไทม์ไลน์: `project-manager` ตัวใหม่)"
      },
      "skills": [
-      "spec-to-code-loop"
+      "spec-to-code-loop",
+      "diagram-figures"
      ],
      "commands": [],
      "playbooks": [],
@@ -2976,7 +3029,8 @@
       "**หลังติด** — จดใน \"ค้างอยู่\" ว่าลองอะไรไปแล้ว · ปัญหาน่าจะอยู่ตรงไหน · ต้องได้อะไรถึงไปต่อ · เก็บงานค้างแยกไว้เป็นร่าง ไม่ทับชิ้นที่ผ่านแล้ว",
       "**ชิ้นที่ต้องรอชิ้นที่ติด** — ลงเป็น `ติด` เหตุผล `รอ <ชิ้น>` โดยไม่ต้องลอง",
       "**ทำชิ้นอื่นหมดแล้ว** — ให้ agent ตัวใหม่ที่ใช้โมเดลขนาดใหญ่ขึ้นลองอีก 1 รอบจากบันทึกนั้น (มีคำตอบใน inbox → เริ่มจากคำตอบ)",
-      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น"
+      "**ยังติด** — คงไว้ในรายงานพร้อมบอกว่าต้องการอะไรจากผู้ใช้ · ผู้ใช้ตอบทีหลัง → session ใหม่อ่าน `CONTEXT.md` แล้วทำต่อจากชิ้นนั้น",
+      "**ติดเพราะต้องเป็นผู้ใช้** (ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน) — เพิ่มแถวในตาราง \"รอผู้ใช้\" ของ `CONTEXT.md` แล้วไปทำชิ้นอื่นต่อ ไม่หยุดรอ"
      ],
      "phase": "",
      "who": {
@@ -3008,7 +3062,7 @@
     },
     {
      "n": 5,
-     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มในหัวข้อ 6 ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
+     "text": "ถ้าเจอรายการ \"รออนุมัติ\" (ตัวอย่างในบรรทัด `รออนุมัติที่เจอบ่อย` ด้านบน · รายการเต็มใน `autonomy` หัวข้อ \"รออนุมัติ — ทุกสาขา\" ของ `superuser`) ให้เตรียมให้พร้อมกด ห้ามทำเอง ส่วนคำถามที่ผู้ใช้ต้องตอบให้ใส่ไว้ใน \"ค้างอยู่\" · ใคร: หัวหน้าทีม (อนุมัติ: ผู้ใช้)",
      "sub": [],
      "phase": "",
      "who": {

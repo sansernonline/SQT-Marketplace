@@ -38,7 +38,7 @@ description: Use when about to change code not yet read this session. Maps how i
 | ดูที่ | คำสั่ง |
 |---|---|
 | ใครแก้บรรทัดนี้ เพราะอะไร | `git log -L <เริ่ม>,<จบ>:<ไฟล์>` · `git blame -w <ไฟล์>` แล้ว `git show <commit>` |
-| commit ที่พูดถึงเรื่องนี้ | `git log --oneline -S "ชื่อฟังก์ชัน"` · `git log --grep "คำค้น"` |
+| commit ที่พูดถึงเรื่องนี้ | `git log --oneline -n 20 -S "ชื่อฟังก์ชัน"` · `git log --oneline -n 20 --grep "คำค้น"` |
 | เอกสาร | `docs/` · ADR · `CONTEXT.md` · comment ที่บอก "ทำไม" |
 | test ที่ล็อกพฤติกรรมไว้ | ค้นชื่อฟังก์ชันในโฟลเดอร์ test เพราะ test บอกเจตนาได้ดีกว่า comment |
 
@@ -49,6 +49,14 @@ description: Use when about to change code not yet read this session. Maps how i
 อ่านไฟล์ที่คล้ายกับที่จะเขียน 2–3 ไฟล์ แล้วจด:
 - **คำสั่ง** — install · build · test · lint · format · รัน test ตัวเดียว (จาก README · `package.json` · `*.csproj` · `pyproject.toml` · CI config)
 - **โครง** — วางไฟล์แบบไหน · ตั้งชื่อแบบไหน · จัดการ error และ log แบบไหน · test เขียนแบบไหน
+- **รายการตรวจแบบแผน** (จดเฉพาะที่ต่างจากค่าเริ่มต้นของภาษา · แนวคิดจาก ECC codebase-onboarding)
+
+  | ดู | หลักฐานที่เปิด |
+  |---|---|
+  | ชื่อไฟล์ คลาส ฟังก์ชัน ตัวแปร (`PascalCase` · `kebab-case` · prefix `I` · suffix `Service`) | ไฟล์พี่น้อง 2–3 ไฟล์ในโฟลเดอร์เดียวกัน |
+  | lint และ format ที่ใช้จริง | `.editorconfig` · `.eslintrc*` · `.prettierrc` · `ruff.toml` · `.globalconfig` หรือ `Directory.Build.props` (.NET) · pre-commit |
+  | import (path alias · ลำดับ · barrel file) · error (throw vs Result) · log (library · ฟิลด์) · async (Promise vs Observable · `async`/`await` vs callback) | ไฟล์ทางเข้าและ 1 ไฟล์ใน layer เดียวกับที่จะแก้ |
+  | test: ชื่อไฟล์ · วางข้างโค้ดหรือแยกโฟลเดอร์ · fixture หรือ builder ที่ repo มีอยู่ | โฟลเดอร์ test ที่ใกล้ที่สุด |
 - **stack** — เปิด skill ตามภาษา: `stack-dotnet` · `stack-typescript` · `stack-python` · `stack-sql`
 
 ทำตามแบบของ repo แม้ไม่ใช่แบบที่ชอบ ถ้าอยากเปลี่ยนแบบแผนให้เสนอในรายงาน ไม่เปลี่ยนเงียบ ๆ กลางงาน

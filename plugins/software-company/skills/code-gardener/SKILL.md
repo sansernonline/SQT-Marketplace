@@ -11,7 +11,7 @@ description: Use when patrolling a codebase for misleading patterns (duplication
 ## ไฟล์เดียวที่ใช้ — `docs/GARDEN.md`
 
 ```markdown
-## บันทึก (ต่อท้ายทุกรอบ ไม่แก้ของเก่า)
+## บันทึก (ต่อท้ายทุกรอบ ไม่แก้ของเก่า · เกิน 300 แถว ย้ายแถวที่ทบทวนแล้วไป docs/garden-archive.md)
 | วันที่ | ไฟล์:บรรทัด | สิ่งที่เห็น | ทำไมน่ากังวล | รูปแบบ |
 
 ## ทบทวนแล้ว

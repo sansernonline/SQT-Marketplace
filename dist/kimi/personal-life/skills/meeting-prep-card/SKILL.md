@@ -15,6 +15,16 @@ One page, fifteen minutes before you walk in. If you cannot fill the goal line, 
 4. **Fill the card** (template below).
 5. **Bring the card** to the meeting and tick it during; it becomes the skeleton for the summary.
 
+## Meet, write or wait — the gate before the card
+
+| Found in step 1–2 | Verdict | What to do instead |
+|---|---|---|
+| No decision, no open question, no ask that needs these people together | **Async** | Write the update and send it; propose cancelling with that text attached |
+| A decision is needed but the options, numbers or the decider are not ready | **Not ready** | Move the meeting; send what is missing and a date |
+| A decision, a disagreement to settle, or a relationship that needs a face | **Meet** | Fill the card |
+
+Apply the gate to meetings the user organises; for meetings the user is invited to, it decides whether to attend or send a written input.
+
 > **If the meeting is a day or more away** (decision meetings): draft a one-page note or your questions to send about 24 hours ahead — people decide faster when they have read it. Draft only; send only when the user says send.
 
 ## Meeting types
@@ -65,4 +75,4 @@ Landlord meeting, Saturday 10:00, lease renewal. Type: negotiation.
 - Recurring meetings: one running card per meeting, updated each week
 - Never put passwords, salaries of others, or personal data you do not need on the card
 
-Related: `meeting-summary` (after) · `calendar-audit` (plugin `personal-life` — meetings worth keeping) · `polite-message-th-en` (agenda request, decline).
+Related: `meeting-summary` (after) · `calendar-audit` (meetings worth keeping) · `polite-message-th-en` (agenda request, decline).

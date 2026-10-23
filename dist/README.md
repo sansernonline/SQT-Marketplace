@@ -14,18 +14,13 @@
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
-| `career` | 0.7.0 | 48 | 5 | 3 | 4.8 MB |
-| `consumer-rights` | 0.7.0 | 47 | 4 | 2 | 4.8 MB |
-| `dev-learning` | 0.9.0 | 50 | 4 | 2 | 4.8 MB |
-| `graphic-design` | 0.9.0 | 53 | 7 | 6 | 4.8 MB |
-| `health-wellness` | 0.7.0 | 48 | 4 | 2 | 4.8 MB |
-| `home-family` | 0.7.0 | 50 | 5 | 3 | 4.8 MB |
-| `online-seller` | 0.7.0 | 51 | 6 | 4 | 4.8 MB |
-| `personal-life` | 0.11.0 | 54 | 6 | 6 | 4.8 MB |
-| `software-company` | 2.20.0 | 123 | 42 | 29 | 6.2 MB |
-| `sqt-toolkit` | 1.0.0 | 15 | 0 | 0 | 4.6 MB |
-| `superuser` | 3.0.0 | 28 | 3 | 0 | 0.2 MB |
-| `thai-workplace` | 0.9.0 | 60 | 7 | 8 | 4.8 MB |
-| `trading-finance` | 0.10.0 | 61 | 7 | 7 | 4.8 MB |
+| `e-commerce` | 1.0.0 | 45 | 7 | 6 | 0.4 MB |
+| `graphic-design` | 0.9.1 | 45 | 7 | 6 | 0.4 MB |
+| `personal-life` | 0.12.0 | 71 | 12 | 16 | 0.5 MB |
+| `reverse-engineer` | 0.1.0 | 40 | 4 | 1 | 0.3 MB |
+| `software-company` | 2.20.1 | 126 | 42 | 29 | 6.4 MB |
+| `superuser` | 3.0.1 | 34 | 3 | 0 | 0.3 MB |
+| `thai-workplace` | 0.10.0 | 52 | 7 | 8 | 0.4 MB |
+| `trading-finance` | 0.10.1 | 52 | 7 | 7 | 0.4 MB |
 
 ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ

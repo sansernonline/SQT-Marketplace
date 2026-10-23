@@ -22,7 +22,7 @@ Months × **essential** monthly spending (rent or mortgage, food, transport, uti
 
 Adjust up for: health conditions, older parents depending on you, older car, single-industry town. Adjust down slightly if the employer offers strong severance and the user is ม.33 (social security unemployment benefit: laid off 60% of wage up to 180 days since 28 Jun 2568, resign 30% up to 90 days, wage ceiling 15,000 → 17,500 from 2569 — check sso.go.th or 1506).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/286127
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipbs.or.th/news/content/353742 (กฎกระทรวงฉบับที่ 2 พ.ศ. 2568 · 60% · 180 วัน · มีผล 28 มิ.ย. 2568 · ตรวจซ้ำ 2026-10-22; ลาออก 30% · 90 วัน ไม่ได้แก้) · เพดานค่าจ้าง 17,500 ตั้งแต่ 1 ม.ค. 2569 ตรวจซ้ำ 2026-10-22 (infoquest.co.th/2025/550753)
 
 ## Where to park — the ladder
 

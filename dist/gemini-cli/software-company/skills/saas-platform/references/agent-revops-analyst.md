@@ -1,6 +1,6 @@
 # RevOps Analyst — pricing, billing, metering, revenue
 
-คู่มือบทบาทของ agent `revops-analyst` — ย้ายมาจากตัว agent (2026-10-14) · ตัวเลือกเครื่องมือและ dunning ใช้คู่กับ [`subscription-billing.md`](subscription-billing.md)
+คู่มือบทบาทของ agent `revops-analyst` · ตัวเลือกเครื่องมือและ dunning ใช้คู่กับ [`subscription-billing.md`](subscription-billing.md)
 
 **สารบัญ:**
 

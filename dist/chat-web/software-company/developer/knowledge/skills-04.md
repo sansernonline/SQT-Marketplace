@@ -28,7 +28,7 @@ Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, p
 ruff check .                      # lint
 ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
 pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
-pytest -q                         # ทั้งชุด
+pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
 pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
 pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
 ```
@@ -113,6 +113,8 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 | `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
 | `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
 | `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
+| repo ใช้ `uv` แต่เพิ่มแพ็กเกจด้วย `uv pip install` หรือแก้ `pyproject.toml` มือ | `uv.lock` ไม่อัปเดต เครื่องอื่น `uv sync` แล้วไม่มีแพ็กเกจ | `uv add <pkg>` / `uv remove <pkg>` เท่านั้น · ของ dev ใส่ `uv add --group dev` (`[dependency-groups]`) · รันทุกอย่างผ่าน `uv run` ไม่ activate venv เอง (แนวคิดจาก trailofbits `modern-python` · CC-BY-SA เขียนใหม่) |
+| สคริปต์ไฟล์เดียวมี `requirements.txt` แยกต่างหาก | คนรันลืมติดตั้ง · เวอร์ชันไม่ตรง | ใส่ dependency ไว้ในหัวไฟล์แบบ PEP 723 (`# /// script` … `# dependencies = ["httpx"]` … `# ///`) แล้ว `uv run script.py` สร้าง env ให้เอง |
 | blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
 
 ## 6 · test
@@ -228,6 +230,10 @@ Use when writing or reviewing SQL queries, procedures or data-change scripts (SQ
 - collation ไม่ตรงตอน join → ตั้งให้ตรงที่คอลัมน์ (ใส่ `COLLATE` ใน query ทำให้ไม่ใช้ index)
 - id ไม่เรียงต่อเนื่องเสมอ (identity กระโดด · sequence ไม่ย้อนเมื่อ rollback) → เลขเอกสารที่ห้ามขาดออกเองในตารางนับเลข
 - timestamp ไม่มี time zone → PostgreSQL `timestamptz` · SQL Server `datetime2` ที่ตกลงว่าเป็น UTC หรือ `datetimeoffset`
+- query ที่กรองแถวส่วนน้อยเสมอ (`WHERE status = 'pending'` · `deleted_at IS NULL`) แต่ index ครอบทุกแถว → index ใหญ่และ planner ไม่หยิบ → ใส่เงื่อนไขนั้นลงใน index เลย: PostgreSQL `CREATE INDEX ... WHERE status = 'pending'` · SQL Server filtered index `CREATE INDEX ... WHERE status = 'pending'` (query ต้องเขียนเงื่อนไขตรงกันถึงจะใช้ได้ · แนวคิดจาก supabase/agent-skills · MIT)
+- ลบหรืออัปเดตแถวจำนวนมากแล้ว query ช้าลงทั้งที่ plan ไม่เปลี่ยน → ตารางและ index บวม (dead tuple · page แตก) → PostgreSQL ดู `pg_stat_user_tables.n_dead_tup` แล้ว `VACUUM (ANALYZE)` หรือ `REINDEX CONCURRENTLY` · SQL Server ดู `sys.dm_db_index_physical_stats` แล้ว `ALTER INDEX ... REORGANIZE` (ต่ำกว่า 30%) หรือ `REBUILD` · ตรวจข้อนี้ก่อนโทษ query
+
+ตัวอย่างคำสั่งทั้ง 2 ข้อ → [`references/performance.md`](references/performance.md)
 
 ## 6 · test
 
@@ -309,6 +315,29 @@ BEGIN
     IF @@ROWCOUNT < 5000 BREAK;
 END
 -- PostgreSQL: DELETE FROM audit_logs WHERE id IN (SELECT id FROM audit_logs WHERE created_at < $1 LIMIT 5000); วนจากแอปหรือ procedure
+```
+
+## index เฉพาะแถวส่วนน้อย และตารางบวม (SKILL.md ข้อ 5)
+
+```sql
+-- PostgreSQL · partial index: index เฉพาะแถวที่ query กรองเสมอ
+CREATE INDEX CONCURRENTLY ix_orders_pending ON orders (created_at) WHERE status = 'pending';
+-- SQL Server · filtered index แบบเดียวกัน (query ต้องมี WHERE status = 'pending' ตรงตัว)
+CREATE INDEX ix_orders_pending ON dbo.orders (created_at) WHERE status = 'pending';
+
+-- PostgreSQL · ตารางบวมหลังลบหรืออัปเดตก้อนใหญ่
+SELECT relname, n_live_tup, n_dead_tup, last_autovacuum
+FROM pg_stat_user_tables WHERE n_dead_tup > 10000 ORDER BY n_dead_tup DESC;
+VACUUM (VERBOSE, ANALYZE) orders;          -- ปกติ
+REINDEX INDEX CONCURRENTLY ix_orders_pending; -- index บวม
+
+-- SQL Server · index แตกเป็นชิ้น
+SELECT i.name, s.avg_fragmentation_in_percent, s.page_count
+FROM sys.dm_db_index_physical_stats(DB_ID(), OBJECT_ID('dbo.orders'), NULL, NULL, 'LIMITED') s
+JOIN sys.indexes i ON i.object_id = s.object_id AND i.index_id = s.index_id
+WHERE s.page_count > 1000;
+ALTER INDEX ix_orders_pending ON dbo.orders REORGANIZE; -- < 30%
+ALTER INDEX ix_orders_pending ON dbo.orders REBUILD WITH (ONLINE = ON); -- >= 30% (Enterprise/Azure)
 ```
 
 
@@ -431,6 +460,7 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert
 
 - ทุกผลส่งกลับต้องอ่าน · requote / off quotes → ลองใหม่ไม่เกิน 3 ครั้ง ราคาใหม่ทุกครั้ง · เงินไม่พอ / stops ผิด → ไม่ลองซ้ำ ลง log แล้วหยุดไม้นั้น
 - pip กับ point ไม่เท่ากัน: ราคา 5 ตำแหน่ง (หรือ 3 ตำแหน่งของคู่ JPY) → 1 pip = 10 point · input ที่ผู้ใช้กรอกเป็น pip ให้แปลงที่จุดเดียว
+- **กับดักที่โค้ดดูถูกแต่พังจริง** (ปรับจาก ThomasPraun/mql-developer · MIT): เทียบ `double` ด้วย `==` ไม่ได้ ให้ `NormalizeDouble` ทั้ง 2 ฝั่งหรือเทียบกับค่าคลาดเคลื่อน · MT4 ปิดหลายออร์เดอร์ต้องวนจาก `OrdersTotal()-1` ลงถึง 0 เพราะปิดแล้ว index เลื่อน · โบรกเกอร์ ECN บางเจ้าไม่รับ SL/TP ใน `OrderSend` ต้องส่งก่อนแล้ว `OrderModify` ตาม · `WebRequest` บล็อกจนกว่าจะตอบ และใช้ใน indicator กับ tester ไม่ได้ · MT4 terminal เดียวเทรดได้ทีละ EA (error 146) ต้องรอแล้วลองใหม่ ไม่ใช่ส่งซ้ำทันที · array แบบ series index 0 = แท่งล่าสุด ให้ `ArraySetAsSeries` กำกับทุกครั้ง ไม่เดาว่าทิศไหน
 
 ตัวอย่างโค้ดตัวตรวจแต่ละข้อ → https://www.mql5.com/en/articles/23204 (อ่านแล้วเขียนเอง ไม่ลอกทั้งไฟล์)
 
@@ -627,6 +657,7 @@ Most resilient ─────────────────────�
 - **In CI:** retry at most 1 time, **only to collect a trace** (`retries: 1` + `trace: 'on-first-retry'`)
 - **Pass on retry = flaky, not a pass** — report it as flaky and fail the run (`failOnFlakyTests: true` in `playwright.config.ts`, Playwright 1.52+) — the same rule as "Expected Values and Failing Tests" above and `testing-standards` (flaky test: fix or delete, never retry until green)
 - **Track flakiness:** a test that fails > 5% of runs is a candidate for quarantine (pulled out of the blocking run)
+- **Quarantine has an expiry date** (idea from ECC e2e-testing): tag the test `@flaky` with an issue link and a date (`test('checkout total @flaky', { annotation: { type: 'quarantine', description: 'until 2026-11-15 · issue #123' } }, ...)`), run the `@flaky` set as a separate non-blocking job so the signal is not lost, and have CI fail when today is past the date — the test is then fixed or deleted, never extended twice
 - **Don't accept flaky tests:** investigate or delete them. Don't ignore them
 
 ## Authentication in E2E
@@ -944,7 +975,7 @@ test('user sees orders', async ({ page, request }) => {
 
 # skill: spec-to-code-loop
 
-Use when building from a spec and mockups as a loop (failing test, code, check screen, record).
+Use when building from a spec and mockups as a loop (failing test, code, check screen, record), or asked for TDD / test-driven.
 
 > **ใน SuperUser:** ลูปนี้คือแกนของ playbook [`feature`](../superuser/references/playbook-feature.md) และ [`new-project`](../superuser/references/playbook-new-project.md) ถ้าเปิด superuser อยู่ ให้ทำตาม playbook แล้วใช้ไฟล์นี้เป็นรายละเอียดของลูป
 
@@ -992,6 +1023,18 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 > คำถามที่ต้องถามแทนการเดา: ค่าขอบเขตเป็นเท่าไหร่ · ผิดแล้วต้องเกิดอะไร ·
 > ใครเห็นข้อมูลนี้ได้บ้าง · ถ้าของเดิมมีอยู่แล้วจะทับหรือจะเตือน
 
+**ตรวจแผนเองก่อนส่ง — 5 ข้อ ทำเองไม่ต้องส่ง agent** (ปรับจาก superpowers `writing-plans` · MIT)
+
+| ข้อ | ถาม | เจอแล้วทำ |
+|---|---|---|
+| ครบ | ไล่ทุกข้อกำหนดใน SRS หรือ FSD ชี้แถวในตารางได้ไหม | ชี้ไม่ได้ → เพิ่มแถว |
+| ขนาด | แต่ละแถวให้คนเขียนได้ 1 อย่างที่สมเหตุสมผล ไม่กว้างจนเดา ไม่ละเอียดจนเป็นโค้ด | กว้าง → แตก · ละเอียด → เหลือลายเซ็นกับชื่อ test |
+| ชื่อตรงกัน | type · ฟังก์ชัน · คอลัมน์ ที่แถวหลังอ้าง สะกดเหมือนที่แถวแรกตั้ง | ต่างกัน → แก้ให้เป็นชื่อเดียว |
+| เคสที่กัด | input แต่ละแบบและทางล้มที่ข้อกำหนดบอกเป็นนัย มี test ในแถวไหน | ไม่มี → เพิ่มชื่อ test ในแถวเจ้าของ |
+| สัดส่วน | แผนยาวกว่าข้อกำหนดหลายเท่า = ถอดโค้ดล่วงหน้า ไม่ใช่แผน | ตัดเนื้อโค้ดเหลือลายเซ็นและ assertion |
+
+เจอแล้วแก้ในที่ ไม่ต้องตรวจซ้ำอีกรอบ
+
 จบรอบที่ศูนย์ **ต้องหยุด** ให้ผู้ใช้อ่านแผนก่อน — อย่าไหลต่อไปเขียนโค้ดเอง
 
 ---
@@ -1011,6 +1054,8 @@ Use when building from a spec and mockups as a loop (failing test, code, check s
 
 **ขั้นที่ 2 คนข้ามบ่อยที่สุด และพลาดแล้วแพงที่สุด** — test ที่ไม่เคยเห็นแดง
 อาจผ่านตลอดไม่ว่าโค้ดจะถูกหรือผิด
+
+**ถ้าผู้ใช้พูดว่า TDD · test-driven · "เขียน test ก่อน"** — คือวงรอบนี้เอง ไม่ต้องหาวิธีอื่น: red = ขั้น 1–2 (test ที่ตั้งชื่อด้วยรหัสข้อกำหนด และต้องเห็นแดงจริง) · green = ขั้น 3 (โค้ดน้อยที่สุดที่ทำให้เขียว ตาม `lazy-coding`) · refactor = ทำระหว่างขั้น 4 โดย test ทั้งชุดยังเขียว ไม่เพิ่มพฤติกรรมใหม่ในรอบนั้น · หน่วยของ 1 รอบคือ 1 ข้อกำหนด ไม่ใช่ 1 ฟังก์ชัน จึงเล็กกว่าที่คนคิดและใหญ่กว่า TDD ตำรา · โครง test · คำสั่งรัน · สัดส่วน unit กับ integration ดู `testing-standards` · ไม่มีข้อกำหนดที่ทดสอบได้ → ยังทำ TDD ไม่ได้ กลับไป "ต้องมีครบก่อนเริ่ม"
 
 ---
 
@@ -1262,6 +1307,7 @@ verify ต้องพึ่งของที่แอปเตรียมไ�
 
 ## เชื่อมกับ skill อื่น
 
+- [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code มี `/verify` ติดเครื่อง: โปรเจกต์ที่รันบน Claude Code ให้สร้าง skill ชื่อ `verify` ที่ `.claude/skills/verify/SKILL.md` ในรูปแบบนั้น แทน `verify-<โปรเจกต์>`
 - [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — แก้เมื่อแอปเปลี่ยนจนแผนที่ไม่ตรง
 - `e2e-testing-patterns` — ถ้าจะยกขั้นตอนบางส่วนขึ้นเป็น test อัตโนมัติใน continuous integration (CI)
 - [`superuser`](../superuser/SKILL.md) — playbook `bug-fix` และ `feature` เรียกใช้ skill ที่สร้างจากที่นี่
@@ -1326,3 +1372,37 @@ verify ต้องพึ่งของที่แอปเตรียมไ�
 - เปิด emulator ตัวเดียว และหยุด Gradle daemon หลัง build (`gradlew --stop` ใน `android/`)
 - ถ้า emulator ถูกปิดกลางทาง ให้รายงานว่า "ยังไม่ได้รันซ้ำ" พร้อมรายชื่อ check ที่ไม่ได้รัน ห้ามลองใหม่เงียบ ๆ แล้วรายงานเฉพาะผลรอบหลัง
 - ไม่มี Docker: emulator ใน Docker ต้องมี KVM ซึ่ง Docker Desktop บน Windows ไม่มี จึงให้รันบน host
+
+
+## reference: builtin-verify.md
+
+# `/verify` ที่มากับ Claude Code — กับ app-verifier ของเรา
+
+ที่มา: code.claude.com/docs/en/skills (อ่าน 2026-10-23) · ตัวเลขรุ่นที่อ้างมาจากหน้านั้น ไม่ได้ทดสอบกับทุกรุ่น
+
+## สิ่งที่ Claude Code มีอยู่แล้ว
+
+- skill ติดเครื่อง 3 ตัวทำงานด้วยกัน: `/run` เปิดและขับแอปให้เห็นว่าการแก้ใช้ได้ · `/verify` build แล้วรันแอปเพื่อยืนยันว่าโค้ดที่แก้ทำสิ่งที่ควรทำ โดยไม่ถอยไปพึ่ง test หรือ type check · `/run-skill-generator` สอน 2 ตัวแรกว่า build และเปิดโปรเจกต์นี้อย่างไร
+- `/verify` และ `/code-review` รันเมื่อผู้ใช้เรียกเท่านั้น (ตั้งแต่ v2.1.215 — ก่อนหน้านั้น Claude เรียกเองได้)
+- `/run-skill-generator` รันจาก environment สะอาด จดสิ่งที่ใช้ได้จริง (คำสั่งติดตั้ง · env · สคริปต์เปิด) แล้ว commit เป็น skill ของโปรเจกต์ที่ `.claude/skills/run-<name>/` — รันครั้งเดียวต่อโปรเจกต์ และอีกครั้งเมื่อวิธี build เปลี่ยน
+- `/verify` จดสูตรของตัวเองได้: ถ้าไม่มีสูตร มันเขียนสิ่งที่ใช้ได้ลง `.claude/skills/verify/SKILL.md` ที่รากโปรเจกต์ (monorepo: ในโฟลเดอร์ package ที่แตะ) · **skill ที่รากชื่อ `verify` แทนที่ `/verify` ติดเครื่อง**
+- session ที่เริ่มโดยมี skill ชื่อ `verify` หรือ `simplify` ของโปรเจกต์ (หรือส่วนตัว · องค์กร · `.claude/commands/`) → คำสั่ง commit ของ Claude Code สั่งให้รันก่อนทุก commit ยกเว้นแก้เฉพาะเอกสารหรือ test · ตัวติดเครื่อง · plugin skill · skill จาก claude.ai ไม่นับ
+- ปิดทั้งชุดได้ด้วย `disableBundledSkills` (เหลือ `/doctor`)
+
+## สิ่งที่ `app-verifier-setup` เพิ่มให้
+
+| ของเรา | ตัวติดเครื่องไม่มี |
+|---|---|
+| สัญญาสำหรับทดสอบในแอป: `data-testid` · `data-ready` · reset endpoint ใต้ flag · นาฬิกาล็อกได้ (`clock`) | มันขับแอปจากสิ่งที่เห็น ไม่ได้บังคับให้แอปเตรียมที่ยึด |
+| แผนที่ฟีเจอร์เป็นข้อมูลในสคริปต์ `test/e2e/verify.*` พิมพ์ `PASS/FAIL` พร้อม expected กับ actual · ตรวจ 0 รายการ = exit 1 | สูตรเป็นภาษาคนใน SKILL.md |
+| พิสูจน์ว่าจับของผิดได้ (ทำให้พัง 1 จุด ต้อง FAIL) และ agent `qa-tester` ตัวใหม่ใช้ได้จริง | — |
+| หลักฐานทุกรอบใน `_to_delete/verify-runs/` · ขับมือถือ native · CLI · API ได้ ไม่ใช่แค่เว็บ | — |
+
+## ตัดสินใจ
+
+**โปรเจกต์ที่ทำงานบน Claude Code ที่มี `/verify` ติดเครื่อง → `app-verifier-setup` สร้าง skill ของโปรเจกต์ที่ `.claude/skills/verify/SKILL.md` (ชื่อ `verify` ไม่ใช่ `verify-<โปรเจกต์>`) ในรูปแบบสูตรที่ `/verify` จดเอง** — ส่วนแรกคือสูตร build และเปิดแอป (แบบเดียวกับที่ `/run-skill-generator` จด) ต่อด้วยของเรา: คำสั่งรัน `test/e2e/verify.*` · ลิงก์แผนที่ฟีเจอร์ · สัญญาสำหรับทดสอบ · ข้อห้าม (หัวข้อ "SKILL.md ของ verify skill ต้องมี" ใน SKILL.md หลัก) · ได้ 2 อย่างฟรี: แทนที่ตัวติดเครื่อง และถูกรันก่อน commit อัตโนมัติ
+
+- ก่อนเขียน ให้อ่าน `.claude/skills/verify/SKILL.md` หรือ `run-<name>/` ที่ `/verify` จดไว้แล้ว (ถ้ามี) แล้วเขียนต่อในรูปแบบเดียวกัน — ฟิลด์ frontmatter ที่ตัวติดเครื่องใช้ยังไม่ได้ตรวจจากเอกสาร (ยังไม่ได้ตรวจ)
+- monorepo → วางในโฟลเดอร์ package ที่แตะ ตามกติกาของตัวติดเครื่อง
+- Codex · Gemini หรือ Claude Code รุ่นก่อน v2.1.145 (ยังไม่ได้ตรวจว่า `/verify` เริ่มรุ่นไหน) → ใช้ชื่อเดิม `verify-<โปรเจกต์>` ใน `.claude/skills/` · `.agents/skills/` · `skills/`
+- `app-verifier-upkeep` ดูแลไฟล์นี้ไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน

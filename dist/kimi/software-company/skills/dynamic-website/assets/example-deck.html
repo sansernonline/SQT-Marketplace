@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>วันเปิดบ้านนักพัฒนา · ตัวอย่าง dynamic-website</title>
+<meta name="description" content="ตัวอย่างเว็บแบบบท 3 บท: rail · ทางเข้า 2 แบบ · คีย์บอร์ดและล้อเมาส์ · reduced-motion · token">
+<style>
+/* ===== token — สีแบรนด์ใช้ค่าประจำบ้าน แทนด้วยสีของโปรเจกต์ (รอยืนยัน) · ชื่อตรงกับ web-app-design ===== */
+:root {
+  --bg: #F7F6F2; --surface: #FFFFFF;
+  --ink: #0F0F0E; --ink-2: #3A3934; --muted: #6B6A63;
+  --line: #E4E1D8; --line-2: #CFCBBF;
+  --accent: #2A78D6; --accent-ink: #226CC6; --accent-soft: #EAF2FC;
+  --ease: cubic-bezier(.16, 1, .3, 1); --ease-io: cubic-bezier(.65, 0, .35, 1);
+  --r: 8px; --pad: 24px; --max: 1100px;
+  --font: "IBM Plex Sans Thai", "Noto Sans Thai", "Segoe UI", system-ui, sans-serif; /* งานจริง self-host woff2 แยก unicode-range */
+}
+@media (max-width: 900px) { :root { --pad: 16px; } }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font); transition: background-color .6s var(--ease); }
+body[data-ch="agenda"] { --bg: #F2F4F0; }   /* พื้นหลังขยับตามบท — แทนกล้อง 3D ในตัวอย่างนี้ */
+body[data-ch="join"]   { --bg: #F4F1EC; }
+a { color: var(--accent-ink); }
+.note { max-width: var(--max); margin: 0 auto; padding: 12px var(--pad); font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); }
+
+/* ===== บท — ค่าเริ่มต้น (ไม่มี JS หรือ GSAP) = เรียงกันเลื่อนอ่านได้ทั้งหมด ===== */
+.ch { min-height: 100vh; display: grid; align-content: center; padding: calc(var(--pad) * 3) var(--pad); outline: none; }
+.ch > .in { width: 100%; max-width: var(--max); margin: 0 auto; }
+.eyebrow { font-size: 12px; letter-spacing: .04em; color: var(--muted); font-variant-numeric: tabular-nums; margin: 0 0 14px; }
+.eyebrow b { color: var(--accent-ink); }
+h1, h2 { margin: 0 0 20px; font-weight: 700; line-height: 1.04; letter-spacing: -.02em; max-width: 12.5em; }
+h1 { font-size: clamp(42px, 5.7vw, 94px); }
+h2 { font-size: clamp(34px, 4.6vw, 70px); }
+.lead { font-size: clamp(17px, 1.6vw, 20px); color: var(--ink-2); max-width: 34em; margin: 0 0 24px; }
+.wd { display: inline-block; }
+.btn { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; padding: 12px 22px; border-radius: var(--r); font-weight: 600; }
+.btn:focus-visible, .rail button:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+.hint { font-size: 13px; color: var(--muted); margin: 14px 0 0; }
+.hint kbd { font: inherit; border: 1px solid var(--line-2); border-radius: 4px; padding: 0 6px; background: var(--surface); }
+
+/* กำหนดการ: รายการที่เลื่อนในตัวเอง (กฎ 9) */
+.scrollable { max-height: 42vh; overflow: auto; border-top: 1px solid var(--line); margin: 0; padding: 0; list-style: none; }
+.scrollable li { display: grid; grid-template-columns: 7em 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.scrollable time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.edge-hint { position: absolute; left: 0; right: 0; margin: 10px 0 0; font-size: 13px; color: var(--accent-ink); opacity: 0; }
+.list-wrap { position: relative; }
+
+/* ===== deck-mode — JS ติด body.deck เมื่อ GSAP พร้อม ===== */
+body.deck main { position: relative; height: 100vh; overflow: hidden; }
+body.deck .ch { position: absolute; inset: 0; visibility: hidden; pointer-events: none; }
+body.deck .ch.on { visibility: visible; pointer-events: auto; }
+body.deck .note { display: none; }
+
+/* rail — ขวาจอ · < 900px เป็นแถบล่าง */
+.rail { display: none; }
+body.deck .rail { position: fixed; z-index: 5; right: 20px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.rail-i { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 7px 0; cursor: pointer; color: var(--muted); font: 600 13px/1 var(--font); }
+.rail-i .n { font-variant-numeric: tabular-nums; font-size: 12px; position: relative; padding-right: 26px; }
+.rail-i .n::after { content: ""; position: absolute; right: 0; top: 50%; width: 14px; height: 1px; background: var(--line-2); transition: width .45s var(--ease), background .3s; }
+.rail-i.on { color: var(--ink); }
+.rail-i.on .n::after { width: 22px; height: 2px; margin-top: -1px; background: var(--accent); }
+.rail-i .t { opacity: 0; transform: translateX(8px); transition: opacity .3s var(--ease), transform .45s var(--ease); white-space: nowrap; font-weight: 400; }
+.rail-i.on .t, .rail:hover .rail-i .t, .rail-i:focus-visible .t { opacity: 1; transform: none; }
+.rail-arrow { background: none; border: 1px solid var(--line-2); border-radius: 6px; width: 30px; height: 30px; cursor: pointer; color: var(--ink-2); margin: 6px 0; font: inherit; }
+.rail-arrow:hover { border-color: var(--ink); color: var(--ink); }
+@media (max-width: 900px) {
+  body.deck .rail { right: 0; left: 0; top: auto; bottom: 0; transform: none; flex-direction: row; align-items: center; justify-content: space-between; gap: 0; height: 60px; padding: 0 12px env(safe-area-inset-bottom, 0px); background: var(--bg); border-top: 1px solid var(--line); }
+  .rail-i { padding: 0 6px; height: 100%; }
+  .rail-i .n { padding: 0; }
+  .rail-i .n::after { left: 50%; right: auto; top: auto; bottom: -8px; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; }
+  .rail-i.on .n::after { width: 18px; height: 3px; border-radius: 2px; margin: 0; }
+  .rail-i .t { display: none; }
+  .rail-i.on .t { display: inline; }
+  .rail-arrow { margin: 0; width: 38px; height: 38px; }
+  body.deck .ch { padding-bottom: 80px; }
+}
+
+/* ===== kill-switch — บล็อกเดียว ไม่เช็กซ้ำรายชิ้น (กฎ 1) ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<noscript><p class="note">หน้านี้แสดงทั้ง 3 บทเรียงกัน เพราะเบราว์เซอร์ปิด JavaScript</p></noscript>
+<p class="note" id="no-gsap" hidden>เปิดแบบเลื่อนอ่านธรรมดา เพราะโหลด GSAP ไม่ได้ — เนื้อหาครบทุกบท</p>
+
+<nav class="rail" id="rail" aria-label="บท"></nav>
+
+<main id="main">
+  <section class="ch" id="intro" data-label="งานนี้คืออะไร" data-enter="blurWords" tabindex="-1">
+    <div class="in">
+      <p class="eyebrow" data-f><b>01</b> · วันเปิดบ้านนักพัฒนา · 14–16 พฤศจิกายน 2569</p>
+      <h1 data-t>เว็บที่เล่าเรื่อง ทีละบท ไม่ใช่ทีละ scroll</h1>
+      <p class="lead" data-f>3 วันที่สำนักงานสาทร เรานั่งคุยกับคนที่เขียนระบบจริง ดูโค้ดจริง และลองแก้ bug จริงด้วยกัน ไม่มีสไลด์ขาย</p>
+      <p class="hint" data-f>เลื่อนล้อเมาส์ · กด <kbd>↓</kbd> <kbd>PgDn</kbd> <kbd>Space</kbd> · หรือปัดจอ เพื่อไปบทถัดไป · <kbd>Home</kbd> <kbd>End</kbd> ไปต้นและท้าย</p>
+    </div>
+  </section>
+
+  <section class="ch" id="agenda" data-label="กำหนดการ" data-enter="blurLine" tabindex="-1">
+    <div class="in">
+      <p class="eyebrow" data-f><b>02</b> · กำหนดการ</p>
+      <h2 data-t>9 ช่วง ใน 3 วัน เลื่อนดูได้จนครบก่อน แล้วค่อยไปบทถัดไป</h2>
+      <div class="list-wrap">
+        <ul class="scrollable" data-f aria-label="กำหนดการ">
+          <li><time>ศ 14 · 09:30</time><span>ลงทะเบียน รับป้ายชื่อ กาแฟ</span></li>
+          <li><time>ศ 14 · 10:00</time><span>ระบบจองคิวโรงพยาบาล: ทำไมถึงเขียนใหม่รอบที่ 3</span></li>
+          <li><time>ศ 14 · 13:00</time><span>อ่านโค้ดด้วยกัน: ตัวจัดคิวที่พังตอนคนเข้า 2,000 คน</span></li>
+          <li><time>ส 15 · 09:30</time><span>LINE OA ที่ตอบลูกค้าได้ 80% โดยไม่ต้องมีคนเฝ้า</span></li>
+          <li><time>ส 15 · 11:00</time><span>แก้ bug สด: รายงานภาษีที่ยอดไม่ตรง 1 สตางค์</span></li>
+          <li><time>ส 15 · 14:00</time><span>ถามอะไรก็ได้กับทีม DevOps</span></li>
+          <li><time>อา 16 · 09:30</time><span>เวิร์กช็อป: ตั้ง CI ให้โปรเจกต์เก่าใน 1 ชั่วโมง</span></li>
+          <li><time>อา 16 · 13:00</time><span>โชว์ของที่ทำได้ใน 3 วัน</span></li>
+          <li><time>อา 16 · 15:30</time><span>ปิดงาน ถ่ายรูป กลับบ้าน</span></li>
+        </ul>
+        <p class="edge-hint" id="edge-hint" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ch" id="join" data-label="ลงทะเบียน" data-enter="inkWords" tabindex="-1">
+    <div class="in">
+      <p class="eyebrow" data-f><b>03</b> · ลงทะเบียน</p>
+      <h2 data-t>รับ 60 คน ไม่มีค่าใช้จ่าย ปิดรับเมื่อเต็ม</h2>
+      <p class="lead" data-f>กรอกชื่อ อีเมล และบอกว่าอยากฟังช่วงไหนมากที่สุด เราจะส่งอีเมลยืนยันภายใน 1 วันทำการ</p>
+      <p data-f><a class="btn" href="#join">ลงทะเบียน</a></p>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/Observer.min.js"></script>
+<script>
+(() => {
+  const G = window.gsap;
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  if (!G) { $('#no-gsap').hidden = false; return; }   // ไม่มี GSAP → คงหน้าเลื่อนปกติไว้ (CSS ค่าเริ่มต้น)
+  const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const T = s => (reduced() ? 0 : s);               // ประตูเดียวของทุก duration · delay · stagger
+  const CH = $$('.ch');
+  const deck = { i: -1, busy: false, last: 0, lastWheel: 0, innerAt: 0, edgeArm: 0 };
+  document.body.classList.add('deck');
+
+  // ---- rail
+  const rail = $('#rail');
+  rail.innerHTML = '<button class="rail-arrow" type="button" data-step="-1" aria-label="บทก่อนหน้า">↑</button>'
+    + CH.map((c, i) => `<button type="button" class="rail-i" data-i="${i}" aria-current="false"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${c.dataset.label}</span></button>`).join('')
+    + '<button class="rail-arrow" type="button" data-step="1" aria-label="บทถัดไป">↓</button>';
+  rail.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    deck.last = 0; go(b.dataset.i != null ? +b.dataset.i : deck.i + +b.dataset.step);
+  });
+
+  // ---- ทางเข้า (ตัวอย่างใช้ 3 แบบ ไม่ซ้ำกันติดกัน) และทางออก
+  function splitWords(el) {
+    if (el.dataset.split) return;
+    el.dataset.split = 1;
+    el.innerHTML = el.textContent.split(/(\s+)/).map(p => (/^\s+$/.test(p) || !p) ? p : `<span class="wd">${p}</span>`).join('');
+  }
+  const ENTER = {
+    blurWords: (els, at, tl) => els.forEach(el => { splitWords(el);
+      tl.fromTo($$('.wd', el), { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: T(.55), stagger: T(.075), ease: 'expo.out' }, at); }),
+    inkWords: (els, at, tl) => els.forEach(el => { splitWords(el);
+      tl.fromTo($$('.wd', el), { opacity: .14 }, { opacity: 1, duration: T(.5), stagger: T(.09), ease: 'power2.out' }, at); }),
+    blurLine: (els, at, tl) => tl.fromTo(els, { opacity: 0, filter: 'blur(10px)' }, { opacity: 1, filter: 'blur(0px)', duration: T(.6), stagger: T(.08), ease: 'expo.out' }, at),
+  };
+  function enterChapter(sec, tl, at) {
+    ENTER[sec.dataset.enter || 'blurWords']($$('[data-t]', sec), at, tl);
+    ENTER.blurLine($$('[data-f]', sec), at + T(.25), tl);
+    tl.set($$('.wd, [data-f]', sec), { clearProps: 'filter' }, at + T(1.8));   // ตัวหนังสือคมหลังเข้าเสร็จ
+  }
+  function exitChapter(sec, tl) {                    // ออกสั้นกว่าเข้า และเร่งออก
+    tl.to($$('.wd, [data-f]', sec), { opacity: 0, filter: 'blur(8px)', duration: T(.22), stagger: T(.012), ease: 'power3.in', overwrite: 'auto' }, 0);
+  }
+
+  // ---- เปลี่ยนบท: timeline เดียว ออก → ซ่อน → โชว์ → เข้า
+  function go(j, first) {
+    j = Math.max(0, Math.min(CH.length - 1, j));
+    if (deck.busy || j === deck.i) return;
+    const cur = CH[deck.i], nxt = CH[j]; let at = 0;
+    deck.busy = true; setTimeout(() => { deck.busy = false; }, 2400);   // เครื่องช้า: ไม่ล็อกนานเกิน
+    const tl = G.timeline({ onComplete: () => { deck.busy = false; } });
+    if (cur) { exitChapter(cur, tl); tl.add(() => { cur.classList.remove('on'); cur.setAttribute('aria-hidden', 'true'); }, T(.32)); at = T(.62); }
+    tl.add(() => { nxt.classList.add('on'); nxt.removeAttribute('aria-hidden'); if (!first) nxt.focus({ preventScroll: true }); }, at);   // ย้ายโฟกัสตามบท (โฟกัสได้เมื่อ visible แล้ว)
+    enterChapter(nxt, tl, at);
+    deck.i = j; deck.last = performance.now();
+    $$('.rail-i').forEach((b, k) => { b.classList.toggle('on', k === j); b.setAttribute('aria-current', k === j ? 'step' : 'false'); });
+    history.replaceState(null, '', '#' + nxt.id);
+    document.body.dataset.ch = nxt.id;
+    document.title = nxt.dataset.label + ' · วันเปิดบ้านนักพัฒนา';
+  }
+  const step = d => go(deck.i + d);
+
+  // ---- wheel: รายการในบทเลื่อนก่อน ถึงขอบบอกใบ้ หยุดแล้วค่อยเปลี่ยนบท · กันแรงเฉื่อย trackpad
+  function edgeHint(sc, dy) {
+    const el = $('#edge-hint'); if (!el || !sc.parentNode.contains(el)) return;
+    el.textContent = dy > 0 ? 'ดูครบแล้ว · เลื่อนอีกครั้งเพื่อไปบทถัดไป ↓' : 'บนสุดแล้ว · เลื่อนอีกครั้งเพื่อกลับบทก่อน ↑';
+    G.killTweensOf(el);
+    G.fromTo(el, { opacity: 0, y: dy > 0 ? 6 : -6 }, { opacity: 1, y: 0, duration: T(.3), ease: 'expo.out' });
+    G.to(el, { opacity: 0, delay: T(1.4), duration: T(.4) });
+  }
+  function onWheel(e) {
+    const now = performance.now(), dy = e.deltaY, sinceWheel = now - deck.lastWheel; deck.lastWheel = now;
+    const sc = e.target.closest('.scrollable');
+    if (sc && sc.scrollHeight > sc.clientHeight + 4) {
+      const atEdge = dy > 0 ? sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2 : sc.scrollTop <= 1;
+      if (!atEdge) { deck.innerAt = now; deck.edgeArm = 0; return; }
+      if (now - deck.innerAt < 700 || sinceWheel < 220) { e.preventDefault(); if (!deck.edgeArm) { deck.edgeArm = now; edgeHint(sc, dy); } return; }
+      deck.edgeArm = 0;
+    }
+    e.preventDefault();
+    if (Math.abs(dy) < 6 || now - deck.last < 1000 || (sinceWheel < 160 && now - deck.last < 2200)) return;
+    step(dy > 0 ? 1 : -1);
+  }
+  addEventListener('wheel', onWheel, { passive: false });   // passive:false เฉพาะ deck-mode
+
+  // ---- คีย์บอร์ด (บังคับ) · ข้ามเมื่ออยู่ในช่องกรอก
+  addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea, select, [contenteditable]')) return;
+    const k = e.key;
+    if (['ArrowDown', 'PageDown', ' '].includes(k)) { e.preventDefault(); deck.last = 0; step(1); }
+    else if (['ArrowUp', 'PageUp'].includes(k)) { e.preventDefault(); deck.last = 0; step(-1); }
+    else if (k === 'Home') go(0);
+    else if (k === 'End') go(CH.length - 1);
+  });
+
+  // ---- ปัดจอ (มือถือ) — ถ้า Observer โหลดมา
+  if (window.Observer) {
+    G.registerPlugin(window.Observer);
+    window.Observer.create({ target: window, type: 'touch', tolerance: 24, preventDefault: true, ignore: '.scrollable', onUp: () => step(1), onDown: () => step(-1) });
+  }
+
+  // ---- เริ่มที่บทตาม hash · hash เปลี่ยนจากลิงก์ในหน้า → ไปบทนั้น
+  const byHash = () => CH.findIndex(c => '#' + c.id === location.hash);
+  addEventListener('hashchange', () => { const j = byHash(); if (j >= 0) go(j); });
+  go(Math.max(0, byHash()), true);
+})();
+</script>
+</body>
+</html>

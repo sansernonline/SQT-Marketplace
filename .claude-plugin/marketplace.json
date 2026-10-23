@@ -10,14 +10,9 @@
       "description": "SuperUser — a team lead agent. Sizes the task and picks a budget, briefs every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, learning loop, inbox, hook gates) switch per project. Install alone, or extend it with a domain plugin via dependencies."
     },
     {
-      "name": "sqt-toolkit",
-      "source": "./plugins/sqt-toolkit",
-      "description": "Shared document and design toolkit — polished Markdown and .docx reports, branded documents, HTML slide decks and .pptx conversion, diagrams and figures, AI image briefs, meeting prep cards and summaries, polite Thai-English messages, product naming, document naming and abbreviation glossaries. Installed automatically by every SQT domain plugin; install alone to use with any workflow."
-    },
-    {
       "name": "software-company",
       "source": "./plugins/software-company",
-      "description": "Complete software development company in one plugin — 39 agents (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 113 skills and 29 slash commands. Industry add-ons are merged in since v2.0.0."
+      "description": "Complete software development company in one plugin — 39 agents (core SDLC team plus AI, security operations, mobile, data, compliance, growth, games, IoT, blockchain, reverse engineering and an engineer, a compliance officer and an analyst per industry: fintech, healthcare, e-commerce, insurance, legal tech, SaaS), 95 skills and 29 slash commands. Industry add-ons are merged in since v2.0.0."
     },
     {
       "name": "trading-finance",
@@ -27,7 +22,7 @@
     {
       "name": "personal-life",
       "source": "./plugins/personal-life",
-      "description": "Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, and polite Thai-English messages. Works alongside email, calendar and note plugins."
+      "description": "Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, polite Thai-English messages, home and family, health organising, career, and learning (learning paths, papers to code, tech radar, certification prep, side projects, thesis writing). Works alongside email, calendar and note plugins."
     },
     {
       "name": "thai-workplace",
@@ -35,29 +30,9 @@
       "description": "Thai workplace toolkit for SMEs — LINE OA and chatbots, business documents (quotations, สารบรรณ letters, contracts), PDPA, VAT and withholding tax with a filing calendar, payroll and 50 ทวิ, social security, e-Tax Invoice, year-end DBD and corporate tax, Labour Protection Act basics, PromptPay QR and public holidays. General information only, not legal or tax advice."
     },
     {
-      "name": "online-seller",
-      "source": "./plugins/online-seller",
-      "description": "Toolkit for Thai small sellers on Shopee, Lazada, TikTok Shop, LINE and Facebook — listings that avoid prohibited claims, fees and pricing, one stock sheet across shops, chat replies, live-selling scripts, couriers and COD, returns and bad reviews, and seller tax basics (40(8), VAT threshold). General information only, not tax or legal advice."
-    },
-    {
-      "name": "home-family",
-      "source": "./plugins/home-family",
-      "description": "Household admin for Thai families — reading electricity (MEA/PEA, Ft) and water bills with a monthly tracker, a seasonal home-maintenance schedule for the Thai climate, vehicle tax, compulsory insurance and inspection reminders, weekly meal plans with grocery lists, school terms and enrolment documents, elder-care rights and medication tables, and pet vaccination records. General information only, not legal, tax or medical advice."
-    },
-    {
-      "name": "career",
-      "source": "./plugins/career",
-      "description": "Career toolkit for people working in Thailand — Thai and international CV conventions with ATS-friendly templates in both languages, interview preparation with a STAR story bank and the questions Thai HR always asks, salary negotiation with total-compensation maths (bonus months, provident fund match, social security, insurance) and scripts in Thai and English, self-review and promotion cases, and LinkedIn profiles tuned for the Thai market."
-    },
-    {
-      "name": "health-wellness",
-      "source": "./plugins/health-wellness",
-      "description": "Personal health organiser for people in Thailand — beginner exercise plans built on WHO activity guidance, a sleep diary, annual checkup planning with Thai social security and gold-card preventive rights, a medication schedule and refill reminders for medicines a doctor already prescribed, and doctor-visit preparation. Strict scope - it organises, reminds and prepares questions; it never diagnoses or changes doses, and sends emergencies to 1669."
-    },
-    {
-      "name": "consumer-rights",
-      "source": "./plugins/consumer-rights",
-      "description": "Consumer toolkit for buyers in Thailand — compare purchases with a decision matrix and total cost of ownership, spot fake reviews, keep a warranty and receipt registry, write complaint letters in Thai with the escalation ladder from seller to platform to the Office of the Consumer Protection Board (hotline 1166) to the consumer court, and request refunds using the direct-marketing cooling-off right, platform disputes and credit-card chargebacks. General information, not legal advice."
+      "name": "e-commerce",
+      "source": "./plugins/e-commerce",
+      "description": "Online buying and selling toolkit for Thailand, both sides in one plugin — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, fees and pricing, one stock sheet, chat replies, live-selling scripts, couriers and COD, returns) and buy with confidence (decision matrix and total cost, fake-review check, warranty registry, complaint letters up to OCPB hotline 1166, refunds and chargebacks). General information only, not tax or legal advice."
     },
     {
       "name": "graphic-design",
@@ -65,9 +40,9 @@
       "description": "Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top."
     },
     {
-      "name": "dev-learning",
-      "source": "./plugins/dev-learning",
-      "description": "Stay-current toolkit for developers — a weekly tech radar over followed libraries and tools, turning papers and long technical articles into working example code, personal learning paths tied to real projects, faster reading of English technical documentation, certification study plans for AWS, Azure, Google Cloud, Kubernetes and Scrum exams, and a scored picker for finishable practice side projects, and thesis and journal-paper writing with verified citations."
+      "name": "reverse-engineer",
+      "source": "./plugins/reverse-engineer",
+      "description": "Reverse-engineering toolkit that mirrors the REA architecture — one entry skill routes to per-target modules (JavaScript/Electron apps, native binaries, .NET assemblies, websites, Android APKs), every conclusion must carry evidence and stated limitations, and findings end in an explanation or a rebuildable implementation. Uses the REA engine (npx rea-agents) when available, with manual static-analysis fallbacks. For software you own or are authorized to examine only."
     }
   ]
 }

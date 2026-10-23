@@ -9,7 +9,7 @@ Motion is emphasis. Everything else is decoration. Most amateur motion has 3 fau
 
 ## Workflow
 
-1. **Name the purpose** of each movement — reveal, connect, emphasise, transition. No purpose, no motion
+1. **Name the purpose** of each movement — reveal, connect, emphasise, transition. No purpose, no motion. A background must carry meaning too: on the AI4BA site, 1 dot = 1 registered person, the path = the agenda, and the camera flies to the item you hover. A background that only decorates is cut
 2. **Pick 1 entrance and 1 exit style** for the whole piece (e.g. fade-up in, fade out)
 3. **Set durations** from the timing table
 4. **Set easing** from the easing table — never linear for objects
@@ -39,10 +39,25 @@ Exits are about 20–30% shorter than entrances — the viewer already knows wha
 | ease-in | `cubic-bezier(0.42, 0, 1, 1)` | **Exits** — starts slow, leaves fast |
 | ease-out | `cubic-bezier(0, 0, 0.58, 1)` | **Entrances** — arrives fast, settles gently |
 | ease-in-out | `cubic-bezier(0.42, 0, 0.58, 1)` | Moving from one place to another on screen |
-| Material 3 "standard" | `cubic-bezier(0.2, 0, 0, 1)` (รอยืนยัน) | Crisp modern ease for most moves |
+| Material 3 "standard" | `cubic-bezier(0.2, 0, 0, 1)` | Crisp modern ease for most moves |
 | Overshoot / back | e.g. `cubic-bezier(0.34, 1.56, 0.64, 1)` | Playful brands only; once per piece |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: CSS Easing Functions Level 1 https://www.w3.org/TR/css-easing-1/ · Material 3 https://m3.material.io/styles/motion/easing-and-duration (page not readable at check time)
+ตรวจล่าสุด 2026-10-06 · แหล่ง: CSS Easing Functions Level 1 https://www.w3.org/TR/css-easing-1/
+
+### Material 3 tokens (copy the values, keep the names)
+
+| Token | Value | Use |
+|---|---|---|
+| `easing-standard` | `cubic-bezier(0.2, 0, 0, 1)` | Most moves inside the frame |
+| `easing-standard-decelerate` | `cubic-bezier(0, 0, 0, 1)` | Entrances |
+| `easing-standard-accelerate` | `cubic-bezier(0.3, 0, 1, 1)` | Exits |
+| `easing-emphasized-decelerate` | `cubic-bezier(0.05, 0.7, 0.1, 1)` | Hero entrance, 1 per piece |
+| `easing-emphasized-accelerate` | `cubic-bezier(0.3, 0, 0.8, 0.15)` | Hero exit |
+| `easing-emphasized` | `cubic-bezier(0.2, 0, 0, 1)` | Same curve as standard in the CSS token; the real emphasized curve is a 2-part path that CSS cannot express |
+
+Durations: `short1–4` 50 · 100 · 150 · 200 ms · `medium1–4` 250 · 300 · 350 · 400 ms · `long1–4` 450 · 500 · 550 · 600 ms · `extra-long1–4` 700 · 800 · 900 · 1000 ms. Our timing table above sits inside these bands (small change = short, enter/leave = medium, transition = long or extra-long).
+
+ตรวจล่าสุด 2026-10-23 · แหล่ง: material-web, file `tokens/versions/v0_192/_md-sys-motion.scss` (Apache-2.0, Google LLC) https://github.com/material-components/material-web/blob/main/tokens/versions/v0_192/_md-sys-motion.scss
 
 In After Effects, CapCut, Canva or Premiere: "ease-out" = ease in on the *arriving* keyframe ("Easy Ease In" in After Effects); when unsure, use the app's "ease out" preset for entrances.
 

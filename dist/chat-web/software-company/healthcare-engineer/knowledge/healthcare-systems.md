@@ -19,7 +19,7 @@ Use when software handles patient or clinical data (orders, medication, FHIR, EH
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -31,6 +31,10 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 ## agent ของสายนี้
 
 `healthcare-engineer` · `hipaa-officer` · `clinical-data-analyst`
+
+## อ้างอิงภายนอก
+
+- anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) — โค้ด validation และ value sets จริง · ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
 
 ## ที่มา
 
@@ -417,7 +421,7 @@ If the clinical workflow is unclear, **watch a clinician at work before you desi
 - `healthcare-systems` — HIPAA safeguards implementation
 - `healthcare-systems` — HL7 FHIR standards
 - `healthcare-systems` — clinical process patterns
-- `polished-document-style` (from software-company) — for docs
+- `polished-document-style` (from superuser) — for docs
 
 ## Common Patterns
 
@@ -590,7 +594,7 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 
 # HIPAA Officer — rules, patient rights, BAAs, breach, risk analysis
 
-คู่มือบทบาทของ agent `hipaa-officer` — ย้ายมาจากตัว agent (2026-10-14) · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
+คู่มือบทบาทของ agent `hipaa-officer` · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
 
 **สารบัญ:**
 
@@ -756,7 +760,7 @@ Use `polished-document-style` skill to produce:
 
 # Clinical analytics — cohorts, measures, risk adjustment, report
 
-คู่มือของ agent `clinical-data-analyst` — ย้ายมาจากตัว agent (2026-10-14) · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
+คู่มือของ agent `clinical-data-analyst` · SQL ทุกตัวเป็นตัวอย่าง ต้องปรับชื่อตารางและรหัสให้ตรงระบบจริง
 
 **สารบัญ:**
 

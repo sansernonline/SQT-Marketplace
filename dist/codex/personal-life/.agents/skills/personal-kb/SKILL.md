@@ -57,7 +57,7 @@ Related: [[other note]]
 1. **Capture (< 1 minute)** — drop into `kb/inbox/` with a dated name; formatting optional.
 2. **Weekly sort (10 minutes, in `weekly-review`)** — for each inbox note: delete · merge into an existing note · file it with a proper name and tags.
 3. **Split** notes over one screen into one-idea notes and link them.
-4. **Index monthly** — add new evergreen notes to `kb/index.md` under their category.
+4. **Index and lint monthly** — add new evergreen notes to `kb/index.md` under their category, then run the lint: notes with no `tags:` line (`grep -rL '^tags:' kb --include=*.md`) · inbox notes older than 14 days · two notes with the same title · `[[links]]` to notes that do not exist · people notes with no "last talk" date. Fix or delete each hit in the same sitting; a lint list that is carried over is a to-do list, not a knowledge base.
 5. **Retrieval** — search by file name first, then tags, then full text. When a note was hard to find, rename it or add the alias you searched for — that is the maintenance loop.
 
 ## Worked example

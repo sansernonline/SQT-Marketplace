@@ -1,6 +1,6 @@
 # ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
 
-ย้ายมาจาก `SKILL.md` หัวข้อ 3 · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -10,6 +10,7 @@
 | ต้องแก้ภาพที่มีอยู่ | `image-editing-brief` |
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` |
+| เลือกโปรแกรมตัดต่อ (CapCut · DaVinci Resolve · HyperFrames · Remotion) · ซับไทยอัตโนมัติ · เพลงหรือเทมเพลตใช้เพื่อการค้าได้ไหม | `video-script-to-clip` ไฟล์ `references/production-tools.md` |
 | ก่อนส่งงานภาพทุกชิ้น · ดูแล้วรู้สึกแปลก | `design-review` + agent `design-critic` |
 | ไฟล์รก | `asset-organize` |
 | เขียนคำตอบ รายงาน เอกสาร หรือป้ายใน diagram | `human-writing` · มีตัวเลือก ตัวเลขหลายตัว หรือส่วนที่เชื่อมกัน → `answer-shape` |

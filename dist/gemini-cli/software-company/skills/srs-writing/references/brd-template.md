@@ -1,6 +1,6 @@
 # BRD template — stakeholder version (Mode B)
 
-แม่แบบ Business Requirements Document (BRD) ฉบับส่งผู้เกี่ยวข้อง ของ agent `business-analyst` — ย้ายมาจากตัว agent (2026-10-14) · จัดรูปแบบตาม `polished-document-style`
+แม่แบบ Business Requirements Document (BRD) ฉบับส่งผู้เกี่ยวข้อง ของ agent `business-analyst` · จัดรูปแบบตาม `polished-document-style`
 
 **สารบัญ:**
 

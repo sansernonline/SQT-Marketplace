@@ -8,11 +8,11 @@ import json, os, re
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(os.path.dirname(__file__), "data")
-# skill กลาง = รายการ SHARED_ONLY_IN_SUPERUSER (plugin superuser) + SHARED_ONLY_IN_TOOLKIT (plugin sqt-toolkit) ใน sync-superuser.mjs — ทุก plugin ได้ทาง dependencies + skill superuser
+# skill กลาง = รายการ SHARED_ONLY_IN_SUPERUSER (plugin superuser) ใน sync-superuser.mjs — ทุก plugin ได้ทาง dependencies + skill superuser
 _SYNC = open(os.path.join(ROOT, "scripts", "sync", "sync-superuser.mjs"), encoding="utf-8").read()
 def _list(const):
     return tuple(re.findall(r'"skills/([a-z0-9-]+)"', _SYNC.split(f"export const {const}", 1)[1].split("];", 1)[0]))
-SHARED = _list("SHARED_ONLY_IN_SUPERUSER") + _list("SHARED_ONLY_IN_TOOLKIT")
+SHARED = _list("SHARED_ONLY_IN_SUPERUSER")
 CORE = ("superuser",) + SHARED
 CORE_AGENTS = ("brainstormer", "reviewer", "learning-reviewer")
 TICKS = re.compile(r"`/?([a-z0-9:-]+)`")
@@ -40,7 +40,7 @@ def read_skills(base):
 
 def read_agents(base, known):
     agents = []
-    agents_dir = os.path.join(base, "agents")  # plugin ที่เป็น skill ล้วน (sqt-toolkit) ไม่มี agents/
+    agents_dir = os.path.join(base, "agents")  # plugin ที่ไม่มี agents/ ข้าม
     for f in sorted(os.listdir(agents_dir)) if os.path.isdir(agents_dir) else []:
         meta, body = frontmatter(read(os.path.join(base, "agents", f)))
         used = [s for s in dict.fromkeys(TICKS.findall(body)) if s in known]
@@ -107,7 +107,7 @@ def read_plugin(name):
         pb["shared"] = same and name != "superuser"
     su = os.path.join(base, "skills", "superuser", "SKILL.md")
     handoff = re.search(r"\*\*งานข้ามสาขา\*\* \| (.+?) \|", read(su)) if os.path.exists(su) else None
-    # ปลายทางงานข้ามสาขานับเฉพาะ plugin ที่อยู่ในชุดรูป (มี skill superuser) · sqt-toolkit เป็น skill ล้วน ไม่มีตรา
+    # ปลายทางงานข้ามสาขานับเฉพาะ plugin ที่อยู่ในชุดรูป (มี skill superuser)
     plugins = {p for p in os.listdir(os.path.join(ROOT, "plugins")) if os.path.exists(os.path.join(ROOT, "plugins", p, "skills", "superuser", "SKILL.md"))}
     cross = [p for p in dict.fromkeys(TICKS.findall(handoff.group(1))) if p in plugins] if handoff else []
     return dict(plugin=name, version=meta.get("version", ""), description=meta.get("description", ""), cross=cross,
@@ -118,7 +118,7 @@ def read_plugin(name):
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     for name in sorted(os.listdir(os.path.join(ROOT, "plugins"))):
-        # plugin ที่เป็น skill ล้วน (sqt-toolkit) ไม่มี agent playbook หรือ flow ให้วาด → ไม่อยู่ในชุดรูป
+        # plugin ที่ไม่มี skill superuser ไม่มี agent playbook หรือ flow ให้วาด → ไม่อยู่ในชุดรูป
         if not os.path.exists(os.path.join(ROOT, "plugins", name, "skills", "superuser", "SKILL.md")):
             continue
         data = read_plugin(name)

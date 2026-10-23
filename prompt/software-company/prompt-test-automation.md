@@ -1,6 +1,6 @@
 # prompt-test-automation — ทำ automated test ให้แอปที่มีอยู่แล้ว
 
-ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 4 ฉบับ · ใช้เมื่อมีแอปอยู่แล้ว และงานที่ได้รับคือทำ test อย่างเดียว ไม่ได้สร้างหรือแก้ฟีเจอร์
+ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 5 ฉบับ · ใช้เมื่อมีแอปอยู่แล้ว และงานที่ได้รับคือทำ test อย่างเดียว ไม่ได้สร้างหรือแก้ฟีเจอร์
 
 ## วิธีใช้
 
@@ -12,7 +12,7 @@
 **วนจนเสร็จ (agent loop):** ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ จนผ่านทุกข้อที่ฉบับนั้นต้องมี · ตรวจด้วยหลักฐานจริง (เปิดไฟล์ · รันคำสั่ง · เทียบแหล่ง) ไม่ใช่คำบอกของตัวที่ทำ · รอบตรวจใช้ `reviewer` ตัวใหม่ทุกรอบ · ไม่ผ่าน → แก้ที่ต้นเหตุแล้วตรวจซ้ำทั้งข้อเดิมและจุดที่แก้ · เหลือแค่ข้อระดับต่ำ → ปิดได้แล้วลงรายงาน · ครบเพดานรอบ (งานกลาง 3 · งานใหญ่หรืองานเสี่ยง 5) ยังไม่ผ่าน → ติดป้าย `ติด` ทำส่วนอื่นให้จบ แล้วรายงานข้อที่เหลือ · รายละเอียดอยู่ใน skill `superuser` กฎข้อ 2
 <!-- rules:end -->
 
-**playbook เฉพาะไฟล์นี้:** ฉบับ 1–2 ใช้ `project-docs` · ฉบับ 3–4 เขียนโค้ด ใช้ `feature` ขั้น 1 · 5 · 6 · 7 · 8 (ข้ามขั้น 2 และ 4 เพราะงานนี้ไม่เปลี่ยนพฤติกรรมแอป · ห้ามลบโค้ดของแอป) · ฉบับที่อ้างหัวข้อจากไฟล์ prompt อื่น → วางไฟล์นั้นต่อท้ายด้วย · ไม่ได้วาง → ใช้โครงจาก skill ที่ฉบับนั้นระบุ
+**playbook เฉพาะไฟล์นี้:** ฉบับ 1–2 ใช้ `project-docs` · ฉบับ 3–5 เขียนโค้ด ใช้ `feature` ขั้น 1 · 5 · 6 · 7 · 8 (ข้ามขั้น 2 และ 4 เพราะงานนี้ไม่เปลี่ยนพฤติกรรมแอป · ห้ามลบโค้ดของแอป) · ฉบับที่อ้างหัวข้อจากไฟล์ prompt อื่น → วางไฟล์นั้นต่อท้ายด้วย · ไม่ได้วาง → ใช้โครงจาก skill ที่ฉบับนั้นระบุ
 
 **ภาษาและรูป:** ทุกเอกสารเขียนตาม skill `human-writing` · รูปในเอกสารส่งมอบใช้ `diagram-figures` · Mermaid (`software-diagrams`) ใช้ได้เฉพาะเอกสารภายในทีม
 
@@ -24,6 +24,7 @@
 | 2 | test case จากพฤติกรรมของแอปจริง | `qa/<รหัส>-test-cases.md` | ไม่ |
 | 3 | เขียน automated test | โฟลเดอร์ test ตามที่แผนกำหนด | ใช่ ต้องติ๊กอนุญาต |
 | 4 | ต่อ test เข้า CI (Continuous Integration) | ไฟล์ pipeline ใน repo | ใช่ ต้องติ๊กอนุญาต |
+| 5 | ทดสอบสัญญา API ด้วย OpenAPI (contract test) | ไฟล์ OpenAPI ใน repo · job ตรวจสัญญาใน pipeline | ใช่ ต้องติ๊กอนุญาต |
 
 ### ข้อมูลแอป (ผู้ใช้กรอก ใช้ร่วมทุกฉบับ)
 
@@ -158,3 +159,35 @@ agent `devops-engineer` · skill `cicd-and-release` · `config-and-secrets` · `
 - CI ไม่ retry อัตโนมัติ (ตาม `testing-standards`) · ต้องการ trace → retry 1 ครั้ง และนับข้อที่ผ่านรอบ retry เป็น flaky ที่ต้องแก้
 - ยังไม่ได้รันจริงบน CI → รายงานว่า "ยังไม่ได้ทดสอบบน CI" ห้ามบอกว่าใช้ได้
 - repo ไม่มี remote หรือ pipeline พึ่งไฟล์ที่ยังไม่ commit (เช่น lockfile) → ระบุใน `รออนุมัติ` ว่าต้อง commit หรือ push ไฟล์ไหนก่อน pipeline จะรันได้
+
+---
+
+## 5. ทดสอบสัญญา API ด้วย OpenAPI (contract test)
+
+agent `qa-tester` + `developer` + `devops-engineer` (CI) · `system-analyst` (เมื่อต้องตกลงสัญญากับทีมที่เรียก API) · skill `api-conventions` (`references/contract-testing.md`) · `web-service-essentials` · `testing-standards` · `cicd-and-release` · `config-and-secrets`
+**ใช้เมื่อ:** แอปมี API ให้ frontend แอปมือถือ หรือ partner เรียก · API เปลี่ยนแล้วฝั่งที่เรียกพังโดยไม่มีใครรู้ · ทีม frontend กับ backend แยกกันและปล่อยรุ่นคนละรอบ
+**ต้องมีก่อน:** API รันบนเครื่องหรือ staging ได้ · จะใส่ใน pipeline ให้ทำฉบับ 4 ก่อน · ไม่มี source code (black-box) → ใช้ไฟล์ OpenAPI ที่ได้มาแล้วทำได้แค่ข้อ 2
+**ผลลัพธ์:** ไฟล์ OpenAPI ที่สร้างจากโค้ดและอยู่ใน repo · job ตรวจสัญญาใน pipeline · หัวข้อ "สัญญา API" ใน `docs/test-automation-plan.md` · ผลรันจริงใน `qa/test-runs/<วันที่>.md`
+
+- [ ] อนุญาตให้เพิ่มตัวสร้าง OpenAPI ในโค้ดของแอป (annotation · decorator · generator ของ framework · ไม่เปลี่ยนพฤติกรรม)
+- [ ] อนุญาตให้เพิ่ม job ในไฟล์ pipeline (commit บนเครื่องเท่านั้น บน branch `test/contract` · ไม่ push · ไม่ merge เข้า branch หลัก)
+
+### API (ผู้ใช้กรอก)
+
+- ใครเรียก API นี้ (frontend ทีมเดียวกัน · แอปมือถือ · partner ภายนอก):
+- มีไฟล์ OpenAPI อยู่แล้วไหม (path · เขียนมือ · สร้างจากโค้ด · ไม่มี):
+- URL ของ dev หรือ staging ที่ยิงทดสอบได้ (ห้าม production):
+
+### ลำดับ
+
+1. **OpenAPI เป็นสัญญา:** สร้างจากโค้ดจริงแล้ว commit ไฟล์ที่ได้ ไม่เขียนมือแยก · ทุก response มี schema รวมถึง error (`web-service-essentials`) · วันที่ id และเงินมี `format` ตาม `api-conventions` · pipeline ล้มเมื่อไฟล์ไม่ตรงกับโค้ด
+2. **ตรวจฝั่งที่ให้บริการ:** Schemathesis สร้าง request จาก schema ยิงใส่ service ที่ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) แล้วตรวจว่า response ตรง spec และไม่ตอบ 500 · ล้มแล้วห้าม merge
+3. **เช็ก breaking change ทุก PR:** `oasdiff breaking <spec ของ branch หลัก> <spec ของ PR>` · เจอแล้วต้องขึ้นเวอร์ชัน API หรือ deprecate ตาม `api-conventions` ไม่ใช่ปิด check · เพิ่มฟิลด์ optional หรือ endpoint ใหม่ไม่นับเป็น breaking
+4. **ผู้เรียกแยกทีมหรือมีมากกว่า 1 ราย:** ทำ consumer-driven contract ด้วย Pact · ฝั่งที่เรียกเขียนคู่ request กับ response ที่ใช้จริง · ฝั่งที่ให้บริการตรวจไฟล์ pact ใน pipeline ของตัวเอง · ตกลงที่เก็บไฟล์ pact ไว้ที่เดียว · ทีมเดียวทำทั้ง 2 ฝั่ง ข้อ 2 กับ 3 พอ
+5. test ที่ล้มเพราะ API ไม่ตรงสัญญา → รายงานบั๊กตาม `prompt-change.md` ฉบับ 2 และทำเครื่องหมายว่ารู้ว่าล้มแบบเดียวกับฉบับ 3
+
+### กฎเฉพาะฉบับนี้
+
+- Schemathesis สร้างและลบข้อมูลจริง ชี้ไป dev หรือ staging เท่านั้น
+- ไม่เริ่มใช้ Dredd เพราะเลิกดูแลแล้ว · รุ่นและ licence ของเครื่องมืออ่านจากหน้าทางการรอบนี้ แล้วติดวันที่ตรวจ
+- spec กับโค้ดไม่ตรงกัน ฝั่งโค้ดคือความจริง · diff ในไฟล์ OpenAPI คือสิ่งที่ผู้รีวิวเห็น

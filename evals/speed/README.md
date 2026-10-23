@@ -25,7 +25,7 @@ node evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3,t4 --ru
 
 - ใช้ `claude` ที่ล็อกอินอยู่ในเครื่อง · ค่าใช้จ่ายตัดจากบัญชีนั้น (รอบหนึ่งของ t4 ราว $0.5–1.2)
 - ต้องมี Node 22 · Python + `pytest` (สำหรับ t2 · t4)
-- ทุกรุ่นโหลด plugin ที่เทียบพร้อม `superuser` และ `sqt-toolkit` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้) · รุ่นเก่าที่ยังไม่มี 2 plugin นี้โหลดเท่าที่มี
+- ทุกรุ่นโหลด plugin ที่เทียบพร้อม `superuser` จาก repo รุ่นเดียวกัน (`--plugin-dir` ไม่ติดตั้ง dependencies ให้) · รุ่นเก่าที่ยังไม่มี 2 plugin นี้โหลดเท่าที่มี
 - ทุกรอบรันในโฟลเดอร์ใหม่ใต้ `_to_delete/bench/runs/` · โหลดเฉพาะ plugin ที่เทียบ ไม่โหลด plugin ที่ติดตั้งในเครื่อง
 - agent ได้สิทธิ์แค่อ่าน · แก้ไฟล์ · รัน test · git ในโฟลเดอร์ทดสอบ
 - ผลรายรอบอยู่ใน `_to_delete/bench/runs/<งาน>-<รุ่น>-<รอบ>.json` · ตารางสรุปต่อท้าย `RESULTS.md`

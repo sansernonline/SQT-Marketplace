@@ -150,7 +150,7 @@ async function judge(task, work, report, checked) {
   catch { return { conventions: 0, honest: 0, why: "อ่านคำตอบผู้ตรวจไม่ได้" }; }
 }
 
-/** โฟลเดอร์ plugin ที่ต้องโหลดให้ claude ของรุ่นนั้น: plugin ที่เทียบ + ของกลางที่มันพึ่ง (superuser · sqt-toolkit) จาก repo รุ่นเดียวกัน
+/** โฟลเดอร์ plugin ที่ต้องโหลดให้ claude ของรุ่นนั้น: plugin ที่เทียบ + ของกลางที่มันพึ่ง (superuser) จาก repo รุ่นเดียวกัน
  *  --plugin-dir ไม่ติดตั้ง dependencies ให้ ถ้าส่งแค่ plugin เดียว ทีมจะไม่มี skill superuser แกน · human-writing · reviewer · hook (ตั้งแต่ superuser 2.0.0) */
 function pluginDirs(label, ref) {
   let root = ROOT;
@@ -159,7 +159,7 @@ function pluginDirs(label, ref) {
     if (existsSync(root)) { try { git(ROOT, "worktree", "remove", "--force", root); } catch { rmSync(root, { recursive: true, force: true }); } }
     git(ROOT, "worktree", "add", "--detach", root, ref);
   }
-  return [...new Set([PLUGIN, "superuser", "sqt-toolkit"])].map((p) => join(root, "plugins", p)).filter((d) => existsSync(join(d, ".claude-plugin", "plugin.json")));
+  return [...new Set([PLUGIN, "superuser"])].map((p) => join(root, "plugins", p)).filter((d) => existsSync(join(d, ".claude-plugin", "plugin.json")));
 }
 
 /** ให้คะแนนโฟลเดอร์งานที่ทำเสร็จแล้ว (ต้องเป็น git ที่ commit แรกคือโค้ดตั้งต้น) */

@@ -41,7 +41,7 @@ const ALLOWED = ["Read", "Edit", "Write", "Glob", "Grep", "Agent", "Task", "Skil
 
 const git = (...a) => execFileSync("git", a, { cwd: ROOT, encoding: "utf8" }).trim();
 
-/** โฟลเดอร์ plugin ของรุ่นที่ขอ: plugin ที่เทียบ + ของกลางที่มันพึ่ง (superuser · sqt-toolkit) จาก repo รุ่นเดียวกัน
+/** โฟลเดอร์ plugin ของรุ่นที่ขอ: plugin ที่เทียบ + ของกลางที่มันพึ่ง (superuser) จาก repo รุ่นเดียวกัน
  *  --plugin-dir ไม่ติดตั้ง dependencies ให้ ส่งแค่ plugin เดียวทีมจะไม่มี skill superuser แกน · reviewer · hook (ตั้งแต่ superuser 2.0.0)
  *  worktree = ใช้ไฟล์ในโฟลเดอร์ตอนนี้ · git ref = แตกออกมาที่ _to_delete/bench/src-<ชื่อ>/ */
 function pluginDirs(label, ref) {
@@ -51,7 +51,7 @@ function pluginDirs(label, ref) {
     if (existsSync(root)) { try { git("worktree", "remove", "--force", root); } catch { rmSync(root, { recursive: true, force: true }); } }
     git("worktree", "add", "--detach", root, ref);
   }
-  return [...new Set([PLUGIN, "superuser", "sqt-toolkit"])].map((p) => join(root, "plugins", p)).filter((d) => existsSync(join(d, ".claude-plugin", "plugin.json")));
+  return [...new Set([PLUGIN, "superuser"])].map((p) => join(root, "plugins", p)).filter((d) => existsSync(join(d, ".claude-plugin", "plugin.json")));
 }
 
 function run(cmd, argv, opts) {

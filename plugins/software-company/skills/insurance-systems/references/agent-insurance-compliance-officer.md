@@ -1,6 +1,6 @@
 # Insurance Compliance Officer — frameworks, filings, conduct, solvency
 
-คู่มือบทบาทของ agent `insurance-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · รายละเอียดเต็มของ SERFF · RBC · Solvency II · OIC · examinations อยู่ที่ [`insurance-compliance.md`](insurance-compliance.md) · ตัวเลขและจำนวนรัฐเป็นค่าจากความรู้ของโมเดล ยังไม่ได้ตรวจกับแหล่งทางการ (รอยืนยัน)
+คู่มือบทบาทของ agent `insurance-compliance-officer` · รายละเอียดเต็มของ SERFF · RBC · Solvency II · OIC · examinations อยู่ที่ [`insurance-compliance.md`](insurance-compliance.md) · ตัวเลขและจำนวนรัฐเป็นค่าจากความรู้ของโมเดล ยังไม่ได้ตรวจกับแหล่งทางการ (รอยืนยัน)
 
 **สารบัญ:**
 

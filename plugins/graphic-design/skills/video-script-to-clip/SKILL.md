@@ -40,10 +40,10 @@ Rules: no logo intro, no slow fade-in, no black frame at the start; movement or 
 | Thai line length | ≤ 35 characters per line, not counting tone marks and above/below vowels |
 | Reading speed (Thai adult) | Captions and subtitles (they follow the voice-over): ≤ 17 characters per second. On-screen marketing text (headline, offer): characters ÷ 12, min 1.5 s, offers ≥ 2.5 s (see `motion-basics`) |
 | Duration per caption | 5/6 s minimum, 7 s maximum |
-| Thai punctuation | No full stops; separate sentences with a space; no question marks or dashes in dialogue; "…" as one character |
+| Thai punctuation | Subtitles: no full stops; separate sentences with a space; no question marks or dashes in dialogue; "…" as one character. On-screen hook text may use "?" once |
 | Size | Thai caption ≥ 48 px on a 1080 px canvas with dark outline or 60–70% box behind (house rule) |
 | Line breaks | Break between words or phrases — Thai has no spaces between words, so never break inside a word; check every break by reading aloud |
-| Total on-screen marketing text | Under ~30 words / ~120 Thai characters across a 15 s clip |
+| Total on-screen marketing text | Under ~120 ตัวอักษรไทย across a 15 s clip (not counting tone marks and above/below vowels) |
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://partnerhelp.netflixstudios.com/hc/en-us/articles/220448308 (Thai Timed Text Style Guide) · https://partnerhelp.netflixstudios.com/hc/en-us/articles/215758617 (durations) · Meta safe zone: https://www.facebook.com/business/ads-guide/update/image/instagram-story
 
@@ -78,6 +78,7 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 
 ## Related
 
+- [references/production-tools.md](references/production-tools.md) — which editor or code tool to cut with (CapCut, DaVinci Resolve, HyperFrames, Remotion), commercial-use terms, export settings, Thai subtitle fonts, music licences
 - `motion-basics` — timing and easing for text animation
 - `social-formats` — canvas and safe zones
 - `style-consistency` — one look across shots

@@ -12,13 +12,15 @@ The security engineer should:
    - Architecture context (trust boundaries, components)
    - Regulatory scope (Personal Data Protection Act (PDPA), General Data Protection Regulation (GDPR), Payment Card Industry Data Security Standard (PCI DSS), etc.)
    - Existing security controls
+   - **Incremental mode** — if `docs/threat-model*.md` or `qa/security/` already holds a model for this system, do not start over: diff the new feature against it, list only the components, flows and boundaries that are new or changed, carry forward unchanged threats with their status, and mark each threat `new` / `changed` / `unchanged` in the table
+   - **Non-capabilities** — write down what the system must *not* be able to do even when fully compromised (e.g. "the web tier cannot read raw card numbers", "a tenant's token cannot list another tenant's rows"); each becomes a check in step 4 and a line in the residual-risk section (idea from github/awesome-copilot `threat-model-analyst`, MIT, rewritten)
 
 2. **Create Data Flow Diagram (DFD)** as a house-style figure with the `diagram-figures` skill (not raw Mermaid):
    - Show all components
    - Mark trust boundaries explicitly
    - Identify entry points
 
-3. **Apply STRIDE per component** (all 6 categories for every component and data flow)
+3. **Apply STRIDE per interaction, not only per box** — for every data flow that crosses a trust boundary in the DFD, go through all 6 categories with the question "what can the sender or the channel do to the receiver here"; then do the stores and processes themselves. A flow with no threat in any category is a finding to double-check, not a pass. Each row names the interaction (`source → target`), the category and the attacker's capability
 
 4. **Assess risks** using likelihood × impact:
    - Score each threat

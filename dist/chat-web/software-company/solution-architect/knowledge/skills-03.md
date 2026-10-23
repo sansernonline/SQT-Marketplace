@@ -377,7 +377,7 @@ Use this pattern by default for showing UI feature states. On GitHub, save the S
 
 Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
 
-> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
+> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
 
 # Diagram Figures
 
@@ -596,7 +596,7 @@ HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG �
 
 # ระบบออกแบบของรูป — รายละเอียด
 
-สารบัญ: หัวรูป → ระบบขนาด → ระบบสี → ไอคอนเส้นที่วาดเอง · ย้ายมาจาก `SKILL.md` ข้อ 3–6 (ไม่แก้ถ้อยคำ) · กฎสั้นอยู่ใน `SKILL.md`
+สารบัญ: หัวรูป → ระบบขนาด → ระบบสี → ไอคอนเส้นที่วาดเอง · กฎสั้นอยู่ใน `SKILL.md`
 
 ## หัวรูป (จากข้อ 3)
 
@@ -1112,7 +1112,7 @@ Kubernetes ของจริง แบบผังอ้างอิงที�
 
 # สายเชื่อม — รายละเอียด
 
-ย้ายมาจาก `SKILL.md` ข้อ 7 (ไม่แก้ถ้อยคำ) · เปิดเมื่อเขียน `WIRES` หรือแก้เส้นที่ลากผิด
+เปิดเมื่อเขียน `WIRES` หรือแก้เส้นที่ลากผิด
 
 **ในคอลัมน์เดียวกัน** ให้ใช้ลูกศรลง `.down` ระหว่างกล่อง โดยไม่ต้องเขียนอะไรเพิ่ม
 
@@ -1446,7 +1446,9 @@ ADR Architecture Decision Record · BRD Business Requirements Document · FSD Fu
 
 # แม่แบบของ technical-writer — README · tutorial · API reference · release notes
 
-ย้ายมาจาก agent `technical-writer` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+**สารบัญ:** README · Tutorial Template · API Reference Template · Release Notes Template
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 ## Standard Outputs
 
@@ -1619,6 +1621,47 @@ command --new-flag
 ## Contributors
 
 Thanks to: @alice, @bob, @charlie
+````
+
+### Release Notes Template (ภาษาไทย)
+
+> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ✅/❌ อยู่ใน skill `release-notes` ข้อ 4
+
+````markdown
+# เวอร์ชัน 2.1.0 — YYYY-MM-DD
+
+## สรุป
+
+- **ใหม่:** ส่งออกรายงานเป็น CSV ได้แล้ว — เมนู รายงาน → ส่งออก
+- **เร็วขึ้น:** ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที
+- **แก้แล้ว:** ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก
+
+## สิ่งที่ต้องแก้ก่อนอัปเดต
+
+### `api.oldMethod()` ถูกถอดออก
+
+**เดิม:** `api.oldMethod(arg)` · **ใหม่:** `api.newMethod({ arg })` · [วิธีย้าย](#)
+
+## ฟีเจอร์ใหม่
+
+### ชื่อฟีเจอร์
+
+ผู้ใช้ทำอะไรได้ 1 ประโยค แล้วตามด้วยตัวอย่างคำสั่งหรือภาพหน้าจอ
+
+## ปรับปรุง
+
+- หน้าแรกโหลดเสร็จใน 1.2 วินาที จาก 2.8 วินาที
+- ข้อความแจ้งเตือนตอนอัปโหลดไฟล์ผิดชนิด บอกชนิดที่รับได้แล้ว
+
+## แก้บั๊ก
+
+- ยอดรวมในใบเสนอราคาไม่เพี้ยนเมื่อมีส่วนลดเป็นเปอร์เซ็นต์ ([#1234](#))
+
+## ผู้ร่วมพัฒนา
+
+ขอบคุณ @alice @bob @charlie
+
+เวอร์ชัน 2.1.0 · ออก YYYY-MM-DD
 ````
 
 
@@ -1871,7 +1914,9 @@ Phase 1:    Phase 2:           Phase 3:
 
 # แม่แบบเอกสารภาพรวมสถาปัตยกรรม
 
-ย้ายมาจาก agent `solution-architect` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 ## Standard Output: Polished Architecture Overview
 

@@ -61,6 +61,11 @@ Use when writing or reviewing code for readability (names, function shape, comme
 - **collection เป็นพหูพจน์ และบอกชนิดข้างใน** — `userIds` ไม่ใช่ `users` ถ้าข้างในเป็นเลข
 - **ชื่อฟังก์ชันที่มีคำว่า `and` คือฟังก์ชัน 2 ตัว** — `saveAndNotify()` ควรแยกเป็น 2 ตัว
 - **ค่าคงที่ใช้ตัวพิมพ์ใหญ่เฉพาะค่าที่ตั้งครั้งเดียวจริง ๆ** ส่วนค่าที่อ่านจาก config ไม่ใช่ค่าคงที่
+- **ชื่อฟังก์ชันเรียง กริยา → บริบทใหญ่ → บริบทย่อย** — `getUserMessages` (get · user · messages) · `shouldDisplayBanner` · เรียงแบบเดียวกันทั้งโปรเจกต์ คนอ่านจะเดาชื่อที่ยังไม่เคยเห็นถูก
+- **boolean ขึ้นต้นด้วย `is` `has` `should` `can`** — อ่านเป็นคำถามที่ตอบได้แค่ใช่หรือไม่ (`hasUnpaidBalance` · `canRetry`)
+- **ไม่ซ้ำบริบทที่ชื่อรอบนอกบอกแล้ว** — `user.userName` → `user.name` · `Invoice.invoiceTotal` → `Invoice.total`
+
+(3 ข้อท้าย — แนวคิดจาก kettanaito/naming-cheatsheet (MIT) เขียนใหม่ด้วยคำเรา)
 
 ---
 
@@ -270,6 +275,8 @@ Use when writing or reviewing code, config or scripts, especially input, databas
 | 8 | **สิทธิ์น้อยที่สุด** — บัญชีฐานข้อมูล · token · container ได้เท่าที่ใช้ | ใช้ `sa` ต่อฐานข้อมูล → บัญชีที่อ่านเขียนได้เฉพาะตารางของแอป |
 | 9 | **path · URL · คำสั่ง ที่มาจากผู้ใช้ ห้ามใช้ตรง** | `File.Open(userPath)` → หา path จริงก่อน (`realpath` ตาม symlink) แล้วเช็กว่าอยู่ใต้โฟลเดอร์ที่อนุญาต · เรียก URL ปลายทางจากรายการที่อนุญาต · ไม่ส่ง input เข้า shell · เซิร์ฟเวอร์สำหรับพัฒนาฟังเฉพาะ `127.0.0.1` และรับเฉพาะ Host ที่รู้จัก |
 | 10 | **dependency ใหม่ต้องมีเหตุผล** — ล็อกเวอร์ชัน (lock file) ดูว่ายังมีคนดูแลอยู่ และไม่ติดช่องโหว่ที่รู้แล้ว | เพิ่มแพ็กเกจเพื่อ 5 บรรทัด → เขียน 5 บรรทัด (`lazy-coding` ข้อ 4) |
+
+**อ่านลึกรายข้อ** — OWASP Cheat Sheet Series (cheatsheetseries.owasp.org · CC-BY-SA จึงลิงก์ได้ ไม่คัดข้อความมาใส่ skill): ข้อ 1 `Input_Validation` · ข้อ 2 `SQL_Injection_Prevention` · ข้อ 3 `Authorization` · ข้อ 4 `Cross_Site_Scripting_Prevention` · ข้อ 5 `Secrets_Management` · ข้อ 6 `Logging` · ข้อ 7 `Error_Handling` · ข้อ 9 `Server_Side_Request_Forgery_Prevention` · ข้อ 10 `Vulnerable_Dependency_Management` — URL คือ `https://cheatsheetseries.owasp.org/cheatsheets/<ชื่อ>_Cheat_Sheet.html`
 
 **แอปมือถือหรือแอปที่ไม่มีเซิร์ฟเวอร์** — เปิด [`references/mobile.md`](references/mobile.md) เพิ่ม (กฎ M1–M5: permission · exported · สำรองข้อมูล · ส่งไฟล์ · กุญแจเซ็นแอป)
 

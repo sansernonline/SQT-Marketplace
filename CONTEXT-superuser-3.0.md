@@ -19,16 +19,17 @@
 ## รอบ 2 (22 ต.ค. 2026 ช่วงบ่าย) — ทำแล้ว
 - แกน 2 ชั้น: `SKILL.md` 46 → 27 KB · `references/autonomy.md` (ถาม · ตัดสินใจเอง · รออนุมัติ · รู้จังหวะหยุด) · `references/modules.md` (โมดูล · config · รอบเรียนรู้ · ด่าน hook)
 - SKILL.md ของ 11 plugin สาขาเหลือเฉพาะส่วนสาขา (50 → 11–13 KB) ขึ้นต้น "เปิด `superuser:superuser` ก่อน" · sync `--check` จับบล็อกค้างและบรรทัดชี้ที่หาย · `build-targets.mjs` รวมแกน + สาขาเป็นไฟล์เดียวใน dist
-- plugin ใหม่ `sqt-toolkit` 1.0.0 = skill เอกสาร สไลด์ รูป ประชุม 15 ตัว ย้ายจาก superuser (เหลือ 28) · ทุกสาขา `dependencies` = `[{superuser ^3.0}, {sqt-toolkit ^1.0}]` (object form ตรวจกับ docs แล้ว 22 ต.ค.)
+- plugin `doc-toolkit` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัว แยกจาก superuser ตอน 3.0.0) ยุบแล้ว 22 ต.ค.: 4 ตัวกลับเข้าแกน superuser (`document-naming` · `polished-document-style` · `spell-out-abbreviations` · `polite-message-th-en`) · 8 ตัวไป `software-company` · `image-generation` ไป `graphic-design` · `meeting-*` ไป `personal-life` — ทุกสาขาต้องติดตั้งคู่กันอยู่แล้ว แยกไว้ไม่ได้ประหยัดอะไร แต่เพิ่มงาน tag/release · ทุกสาขา `dependencies` = `[{superuser ^3.0}]` (object form ตรวจกับ docs แล้ว 22 ต.ค.)
 - ผู้ตรวจขยับตามงบ (reviewer ค่าเริ่ม sonnet+medium) · ใบสั่งงาน 5 ข้อในข้อความ ไฟล์เฉพาะโมดูล handoff
 - hook: token ราย agent ใน `log/SUMMARY.md` · gate-state ไม่ parse ทั้ง transcript (371 → 140 ms) · fast-path · self-test 60/60
 - software-company ออกจาก `OPT_OUT` รับบล็อก review/unattended เหมือนสาขาอื่น
+- plugin `dev-learning` รวมเข้า `personal-life` หมวดเรียนรู้ (22 ต.ค.): skill 9 ตัว · agent `tech-mentor` · playbook 5 ตัว · prompt 6 ฉบับ — marketplace เหลือ 8 plugin
 - validate error 0 · sync-docs · file-map · diagrams · dist สร้างใหม่ (ผลดูในรายงานปิดงานของ session)
 
 ## ค้างอยู่
-- [ ] **tag release ก่อนใคร install จาก GitHub**: `claude plugin tag superuser 3.0.0 --push` และ `claude plugin tag sqt-toolkit 1.0.0 --push` (ช่วงเวอร์ชันใน dependencies resolve จาก tag `<plugin>--v<version>`) — ไม่ tag = install plugin สาขาล้ม
+- [ ] **tag release ก่อนใคร install จาก GitHub**: `claude plugin tag superuser 3.0.0 --push` (ช่วงเวอร์ชันใน dependencies resolve จาก tag `<plugin>--v<version>`) — ไม่ tag = install plugin สาขาล้ม
 - [ ] commit (ยังไม่ commit ทั้งชุด) แล้ว `claude plugin update` บนเครื่องนี้ (cache ยังเป็น software-company 2.5.0 · superuser ไม่เคยติดตั้ง)
 - [ ] ลองใช้จริง 1 งาน (เช่น Telex) ดูใบสั่งงาน 5 ข้อ · คาด/จริง · ตัวเลข token ใน SUMMARY — ใช้เป็น eval ก่อน/หลังสำหรับ README
 - [ ] ยังไม่ได้ตรวจ: ชื่อลูกทีมในคอลัมน์ token (จาก `agentType` ใน meta.json) ตรงกับคอลัมน์ log (`input.agent_type`) ไหม · ลูกทีมที่ยังไม่จบตอน Stop นับรอบถัดไป
-- [ ] รูป `docs/plugins/sqt-toolkit/` ไม่มี agent/playbook ให้วาด (data ว่าง) — ดูว่าควรตัดออกจากชุดรูปหรือทำรูป map แบบ skill ล้วน
+- [x] รูป `docs/plugins/doc-toolkit/` — ไม่ต้องทำแล้ว plugin ยุบ 22 ต.ค.
 - [ ] ทำให้ดัง: README ภาษาอังกฤษ + GIF เดโม · ตัด path ส่วนตัวออกจากแกน · ส่ง official marketplace · รองรับ Codex/Cursor/OpenCode

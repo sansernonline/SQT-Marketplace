@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (81)
+## 🛠️ Skills (95)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -775,6 +775,84 @@
 ### 81. owasp-top10
 **ใช้กับ:** developer, security-engineer
 **Description:** Use when building or handing over a web app or API that must meet OWASP Top 10:2025 (contract, security NFR, release).
+
+---
+
+### 82. dynamic-website
+**Description:** Use when a marketing, event or showcase website needs chapter-by-chapter motion (GSAP, scroll, 3D background). Not an app, not a slide deck.
+
+---
+
+### 83. branded-document-design
+**ใช้กับ:** business-analyst, devops-engineer, fintech-compliance-officer, graphic-designer, hipaa-officer, insurance-compliance-officer, legal-compliance-officer, product-manager, project-manager, qa-tester, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer
+**Description:** Use when a Word, PowerPoint or PDF deliverable (proposal, report, contract) must look designed. Whole report from one Markdown → markdown-report-docx.
+
+---
+
+### 84. diagram-figures
+**ใช้กับ:** business-analyst, devops-engineer, solution-architect, system-analyst, ux-designer
+**Description:** Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
+
+---
+
+### 85. html-slide-deck
+**ใช้กับ:** technical-writer
+**Description:** Use when a slide deck is asked for as HTML or with animation — one offline file with speaker notes.
+
+---
+
+### 86. markdown-report-docx
+**ใช้กับ:** technical-writer
+**Description:** Use when one Markdown file must become a polished Word report (business, research, test, handover). Thesis or Independent Study (IS) → thesis-writing.
+
+---
+
+### 87. markdown-visuals
+**ใช้กับ:** business-analyst, clinical-data-analyst, developer, devops-engineer, product-manager, project-manager, qa-tester, quant-analyst, reverse-engineer, revops-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**Description:** Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
+
+---
+
+### 88. pptx-to-html-deck
+**ใช้กับ:** technical-writer
+**Description:** Use when a .pptx should play as one animated HTML file, or both .pptx and .html are wanted — click steps, notes, menu, interactive pages.
+
+---
+
+### 89. presentation-design
+**ใช้กับ:** business-analyst, graphic-designer, product-manager, project-manager, technical-writer
+**Description:** Use when building a slide deck for any work (pitch, plan, report, training) that someone will present or read. Story, headlines, layouts.
+
+---
+
+### 90. product-naming
+**ใช้กับ:** graphic-designer, product-manager, technical-writer
+**Description:** Use when naming a product, shop, service, app or brand, or checking how a name sounds in Thai.
+
+---
+
+### 91. mcp-server
+**Description:** Use when an agent must reach a real system (database, ERP, internal API) through an MCP server, or when choosing a vendor MCP over building one.
+
+---
+
+### 92. web-quality-audit
+**Description:** Use when auditing a web page for accessibility (WCAG 2.2 AA) or performance (Lighthouse, Core Web Vitals), or before a site launches.
+
+---
+
+### 93. worktree-and-branch
+**Description:** Use when 2 or more agents edit one repo at once, a spike could break the main checkout, or a finished branch must be merged, PR-ed or discarded.
+
+---
+
+### 94. data-analysis
+**Description:** Use when a CSV, Excel or SQL export must answer a business question (sales, usage, survey) with traceable numbers, Thai charts and caveats.
+
+---
+
+### 95. infra-as-code
+**Description:** Use when cloud servers, databases or networks should be built from code (OpenTofu, Terraform, Pulumi), drift appears, or data must stay in Thailand.
 
 ---
 

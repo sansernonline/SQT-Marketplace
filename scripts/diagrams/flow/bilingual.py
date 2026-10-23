@@ -12,6 +12,9 @@ EN = {
  "งานบ้านและครอบครัว": "Home & Family", "ร้านค้าออนไลน์": "Online Seller",
  "การจัดการชีวิตส่วนตัว": "Personal Life", "งานอาชีพและการหางาน": "Career & Job Search",
  "งานหลังบ้านบริษัทไทย": "Thai Workplace Admin", "การเงินและการลงทุน": "Trading & Finance",
+ "ขายของออนไลน์และสิทธิผู้ซื้อ": "Online Selling & Buyer Rights",
+ "ชีวิต บ้าน สุขภาพ อาชีพ และการเรียนรู้": "Life · Home · Health · Career · Learning",
+ "อ่านซอฟต์แวร์ที่ไม่มีซอร์ส": "Reverse Engineering",
  "วิธีทำงานของทีม agent": "How the Agent Team Works",
  # ขั้นหลัก
  "รับงาน": "Intake", "เข้าใจงาน · เลือกวิธีทำ": "Understand · Choose the Approach",
@@ -39,6 +42,8 @@ EN = {
  "คำตอบตอนจบ": "Final Answer", "ตารางสถานะ": "Status Table", "PR ขึ้น branch หลัก": "PR to Main Branch",
  "ใบสั่งซื้อขาย": "Trade Orders", "ลงขาย · ตอบลูกค้า": "List · Reply to Buyers", "จ่ายเงิน · ส่งข้อความ": "Pay · Send Messages",
  "ส่งอีเมล · ยกเลิกบริการ": "Email · Cancel Services", "โพสต์ · ยิงแอด": "Post · Run Ads",
+ "ลงขาย · ตอบ · ร้องเรียน": "List · Reply · Complain", "ส่ง · จ่าย · นัด · ตอบรับ": "Send · Pay · Book · Accept",
+ "รัน · ติดตั้ง · ส่งออก": "Run · Install · Export",
  "ส่งร้องเรียน · ขอเงินคืน": "Complain · Claim Refund", "สมัครสอบ · push": "Register Exam · Push",
  "ส่ง · โพสต์ · ลบ": "Send · Post · Delete", "นัดหมาย · ส่งข้อมูล": "Book · Share Data",
  "ส่งใบสมัคร · ตอบ HR": "Apply · Reply to HR", "ยื่นแบบ · ชำระ": "File · Pay",

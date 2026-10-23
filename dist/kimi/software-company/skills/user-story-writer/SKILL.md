@@ -6,6 +6,7 @@ description: Use when writing user stories or turning requirements into stories 
 # User Story Writer
 
 > **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
+> ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ธุรกิจ
 
 ## เมื่อไหร่ใช้ skill นี้
 
@@ -93,9 +94,11 @@ AC2: <ชื่อ scenario>
 
 **Priority:** High | Medium | Low
 **Story Points:** X
-**Dependencies:** US-YYY (ถ้ามี)
+**Blocked by:** US-YYY (story ที่ต้องเสร็จก่อนถึงจะเริ่มข้อนี้ได้) · ไม่มี → เขียน `None (เริ่มได้ทันที)`
 **Notes:** ข้อมูลเพิ่มเติม / business rules
 ```
+
+**Blocked by ใส่เฉพาะที่กั้นจริง** (ปรับจาก mattpocock `to-tickets` · MIT) — story A กั้น B เมื่อ B เริ่มไม่ได้ถ้า A ยังไม่เสร็จ (ต้องใช้ตาราง · API · หน้าจอของ A) ไม่ใช่แค่ "ควรทำก่อน" · เรียงลำดับใน `USER-STORIES.md` ให้ตัวที่กั้นอยู่ก่อนตัวที่ถูกกั้น · ทีมหรือ agent หยิบงานจากชุด "ทุกตัวที่กั้นเสร็จแล้ว" ซึ่งเป็นชุดที่ทำขนานกันได้ · ถ้าใช้ tracker จริง (GitHub · Linear) ให้ใช้ความสัมพันธ์ blocking ของมัน ไม่ใช่เขียนในข้อความอย่างเดียว
 
 ## ตัวอย่าง
 

@@ -16,6 +16,7 @@ description: Use when building commerce software (checkout, cart, orders, promot
 | designing or improving a checkout flow — form design, guest vs login, payment methods, mobile patterns, trust signals, cutting friction (based on Baymard research and industry benchmarks) | [`references/checkout-optimization.md`](references/checkout-optimization.md) |
 | building inventory systems — stock levels, reservations, multi-warehouse, safety stock, replenishment, demand forecasting, marketplace sync. Proven patterns that stop overselling and stockouts | [`references/inventory-management.md`](references/inventory-management.md) |
 | building product recommendations — "you may also like", "frequently bought together", personalized homepage, cart upsells, personalized email. Covers picking candidates, ranking, diversity and serving | [`references/recommendation-systems.md`](references/recommendation-systems.md) |
+| connecting to Thai marketplaces — Shopee, Lazada, TikTok Shop, LINE SHOPPING and LINE Pay: partner sign-up, request signing, order · stock · shipping endpoints, webhooks, rate limits, sandbox, and the back-office SaaS Thai sellers use instead | [`references/thai-marketplace-apis.md`](references/thai-marketplace-apis.md) |
 
 ## คู่มือบทบาท
 

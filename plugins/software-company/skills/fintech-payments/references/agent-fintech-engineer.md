@@ -96,7 +96,7 @@ NEVER go backwards (except via reversal record)
   - `references/payment-gateway-integration.md` · `references/agent-payment-integration.md` — when integrating Stripe, Adyen, Omise, etc.
   - `references/pci-dss-compliance.md` — when handling card data
   - `references/kyc-aml-patterns.md` — when verifying customer identity
-- `polished-document-style` (from software-company) — for spec docs
+- `polished-document-style` (from superuser) — for spec docs
 - `commit-message-format` (from software-company) — for commits
 
 ## Common Patterns

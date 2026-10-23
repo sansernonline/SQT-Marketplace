@@ -244,7 +244,7 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 ## Skills You Use
 
 - `insurance-systems` — for patterns
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

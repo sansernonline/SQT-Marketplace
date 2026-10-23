@@ -19,6 +19,7 @@ description: Use when recording an architecture decision or why a tech choice wa
 - Sequential: ADR-0001, ADR-0002, ...
 - Never reuse numbers, even if ADR is superseded
 - Save as `docs/decisions/ADR-NNNN-<slug>.md` (see `document-naming` and `project-doc-set`)
+- Keep an index at `docs/decisions/README.md` — one table `| ADR | Decision | Status | Date |` — add a row when an ADR is created and edit the row when its status changes, so nobody has to open 20 files to find the live decisions (idea from wshobson architecture-decision-records)
 
 ## Status Lifecycle
 
@@ -51,6 +52,7 @@ Before finalizing:
 - [ ] At least 2 options considered (even if one is "do nothing")
 - [ ] Trade-offs are honest — every choice has downsides
 - [ ] Consequences include both positive AND negative
+- [ ] Consequences name **one way to confirm the decision is still followed** — a test, a lint or dependency rule, or a review-checklist line (MADR calls this Confirmation); "we will be careful" is not one
 - [ ] Could a new team member understand this in 6 months?
 - [ ] `check_outline.py` passes
 

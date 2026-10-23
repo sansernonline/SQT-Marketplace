@@ -109,6 +109,7 @@ description: Use when building a desktop app or mockup that must look native on 
 โครงข้างบนเป็นของหน้าตั้งค่าและ dashboard · **แอปเครื่องมือที่ข้อมูลแน่น** (terminal client, file manager, admin tool)
 ใช้ icon rail 48px + รายการ + แผงรายละเอียด 360px แทน ดูแบบทั้งหมดใน **`references/patterns.md`**
 (ปุ่มในแถว · list-detail · command bar · หัวกลุ่ม · tab ใน title bar · status bar · หน้าเริ่มต้น · ไอคอนต้องมีที่ไหน)
+ข้อ 0.1 ของไฟล์นั้นมีตารางเทียบกับแอปจริงบน Windows 11 · ตารางแปลงความต้องการเป็นคอนโทรล WinUI 3 · และรูบริกขนาดหน้าต่างเริ่มต้น — ใช้ตอนเลือกโครงและตอนส่งต่อให้คนเขียน XAML
 
 ---
 

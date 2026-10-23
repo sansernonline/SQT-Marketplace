@@ -64,6 +64,7 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 
    เก็บผลดิบใน `_to_delete/security/`
    - **ห้ามใช้ `--config auto` คู่กับ `--metrics=off`** — semgrep ไม่ยอมรัน (เจอจริงในโปรเจกต์ตัวอย่าง)
+   - **ชุดกฎ semgrep เลือกตามภาษาที่เจอ ไม่ใช่ `p/default` อย่างเดียว** (แนวคิดจาก trailofbits/skills `semgrep` · CC-BY-SA เขียนใหม่ด้วยคำเรา) — ทุกโปรเจกต์: `p/security-audit` + `p/secrets` รันครั้งเดียวทั้ง repo · แล้วเพิ่มตามภาษา: `p/python` (+`p/django` หรือ `p/flask`) · `p/javascript` + `p/typescript` (+`p/react` · `p/nodejs`) · `p/csharp` · `p/dockerfile` · มีหลายภาษาใส่ `--config` หลายตัวในคำสั่งเดียวได้ · ชุดกฎไหนโหลดไม่ได้ (ไม่มีเน็ต · ชื่อผิด) ต้องขึ้นในรายงานว่าไม่ได้รัน ไม่ใช่หายเงียบ
    - ชุดออฟไลน์มี 6 กฎที่แทบไม่มีกรณีปลอดภัย (eval · HTML จากตัวแปร · shell จากตัวแปร · SQL ต่อสตริง · ค่าลับในโค้ด) และพิสูจน์แล้วว่าจับได้ครบในไฟล์ที่ตั้งใจเขียนผิด ถ้าเครื่องมือไหนรันไม่ได้ ให้เขียนในรายงานว่า `ยังไม่ได้ตรวจ` พร้อมเหตุผล
    - **semgrep รองรับ Dart น้อยมาก และกฎออฟไลน์เขียนไว้สำหรับเว็บกับ backend** ถ้า semgrep ไม่เจออะไรในโปรเจกต์ Flutter ก็ไม่ได้แปลว่าปลอดภัย รายงานต้องเขียนว่าโค้ด Dart `ยังไม่ได้ตรวจด้วย static analysis` แล้วพึ่ง `flutter analyze` กับการอ่านโค้ดแทน ห้ามสรุปว่า `ผ่าน` จากผลว่าง
 3. **ยืนยันทุกข้อ** — เปิดโค้ดจริงดูว่าใช้ได้จริงไหม (เช่น ช่องโหว่อยู่ในฟังก์ชันที่โปรเจกต์ไม่ได้เรียก) แล้วติดป้าย `ยืนยันแล้ว` / `แจ้งผิด` / `ยังไม่ยืนยัน` พร้อมเหตุผล
@@ -81,12 +82,13 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
    - ช่องโหว่ในโค้ดให้ใช้ playbook `bug-fix` (หาต้นเหตุ + เขียน test ที่ล้มก่อนแก้ + ค้นจุดอื่นที่เขียนแบบเดียวกัน)
    - รูปแบบที่เจอซ้ำให้ส่งต่อ `repeated-mistakes-to-checks` ไปทำเป็นกฎ lint
 6. **รายงาน** — `qa/security/<ปี-เดือน-วัน>-gate.md` ตาราง `| ระดับ | เรื่อง | ไฟล์:บรรทัด หรือแพ็กเกจ | ยืนยัน | ทำอะไร |` พร้อมคำตัดสิน 1 บรรทัด (`ผ่าน` · `ผ่านหลังแก้` · `ไม่ผ่าน`) ห้ามคัดค่าลับลงรายงาน (ให้ใช้ผลแบบ `--redact`) แล้วรายงานสถานะด้วย `status-report` ประเภท `ตรวจ`
+   - **ต้องมีหัวข้อ "ไม่ได้รัน"** ก่อนคำตัดสิน: เครื่องมือหรือชุดกฎที่ติดตั้งไม่ได้ · ออก exit code ไม่ใช่ 0 · ภาษาที่สแกนเนอร์ไม่รองรับ (เช่น Dart) · ไฟล์หรือโฟลเดอร์ที่ข้าม — ระบุชื่อและเหตุผลทีละรายการ · รายงานที่สแกนไม่ครบแต่เขียนเหมือนครบ แย่กว่าไม่สแกน · ถ้ามีรายการในหัวข้อนี้ คำตัดสิน `ผ่าน` ต้องต่อท้ายว่า `(ยกเว้นที่ไม่ได้รัน)`
    - ก่อนส่งมอบลูกค้า หรือสัญญาระบุ OWASP → กรอกรายงานรายข้อ A01–A10 ตาม [`owasp-top10`](../owasp-top10/SKILL.md) เพิ่มอีกไฟล์ `qa/security/<ปี-เดือน-วัน>-owasp.md` · ผลสแกนของ gate นี้ใช้เป็นหลักฐานข้อ A02 · A03 · A04 · A05 · A08
 
 ## เมื่อไรต้องรัน
 
 - ทุกครั้งก่อน playbook `ship` และก่อนส่งมอบงานลูกค้า
-- หลังเพิ่มหรืออัปเดต dependency
+- หลังเพิ่มหรืออัปเดต dependency — ผลสแกนมีรายการ ให้ทำตาม [`references/dependency-updates.md`](references/dependency-updates.md) (จัดกลุ่มตามความเสี่ยงจริง · ลำดับ patch → minor → major · พิสูจน์ · ลง CHANGELOG)
 - โปรเจกต์ที่ยังใช้งานอยู่ให้รันสัปดาห์ละครั้งตามรอบ (scheduled task) เพราะช่องโหว่ใหม่ถูกประกาศทุกวันแม้โค้ดไม่เปลี่ยน
 
 ## ไม่ใช่หน้าที่ของ skill นี้
@@ -106,6 +108,57 @@ Use when about to ship, merge or hand over code, after adding a dependency, or t
 - `android:debuggable` ต้องไม่มีใน release และ `usesCleartextTraffic` ต้องไม่เป็น `true`
 - permission เท่าที่ใช้จริง — แอปออฟไลน์ต้องไม่มี `INTERNET` และต้องตรวจตัวที่ plugin เติมมาด้วย
 - `key.properties` · `*.jks` · `*.keystore` ไม่อยู่ใน git (`git ls-files` แล้วค้น)
+
+
+## reference: dependency-updates.md
+
+# อัปเดต dependency ที่มีช่องโหว่ — ส่วนขยายของ `security-gate` ขั้น 5
+
+ใช้เมื่อผลสแกน dependency มีรายการ หรือเพิ่งเพิ่ม dependency ใหม่ · แนวคิดจาก wshobson `dependency-management` (MIT) และ Trail of Bits `supply-chain-risk-auditor` (CC-BY-SA 4.0 — เอาแค่แนวคิด เขียนใหม่ด้วยคำเรา)
+
+## 1 · สแกน — ใช้ตัวที่มากับภาษา แล้วเสริมด้วยตัวที่อ่าน lockfile ได้ทุกภาษา
+
+| stack | คำสั่ง | หมายเหตุ |
+|---|---|---|
+| Node | `npm audit --omit=dev --json > _to_delete/security/npm-audit.json` | `--omit=dev` ตัดของที่ไม่ไปถึง production · ห้าม `npm audit fix --force` เพราะมันยอมอัปเดตข้าม major |
+| Python | `pip-audit -r requirements.txt` หรือ `pip-audit` ใน venv | โปรเจกต์ที่ใช้ `uv` / `poetry` ให้ export lockfile เป็น requirements ก่อน |
+| .NET | `dotnet list package --vulnerable --include-transitive` | ไม่ใส่ `--include-transitive` จะเห็นแค่ที่อ้างตรง |
+| ทุก stack | `trivy fs --scanners vuln .` หรือ `osv-scanner scan source -r .` | อ่าน lockfile ของทุกภาษาในครั้งเดียว ใช้ยืนยันผลข้างบนและจับ Dart · Go · Rust |
+
+**lockfile ต้อง commit เสมอ** (`package-lock.json` · `uv.lock` / `poetry.lock` · `packages.lock.json` · `pubspec.lock`) — ไม่มี lockfile เครื่องแต่ละเครื่องได้เวอร์ชันต่างกัน และตัวสแกนไม่รู้ว่าจริง ๆ ใช้เวอร์ชันไหน
+
+## 2 · จัดกลุ่มตามความเสี่ยงจริง ไม่ใช่ตามป้าย severity ของตัวสแกน
+
+ตอบ 3 คำถามต่อรายการ แล้วลงตาราง `| แพ็กเกจ | เวอร์ชัน | ช่องโหว่ | ใช้ถึงโค้ดที่เสี่ยงไหม | ตรง/ผ่านตัวอื่น | มีเวอร์ชันแก้ไหม | ทำอะไร |`
+
+| คำถาม | ดูจาก | ผลต่อการตัดสิน |
+|---|---|---|
+| โค้ดเราเรียกถึงฟังก์ชันที่มีช่องโหว่ไหม และ input ไปถึงมันได้จากภายนอกไหม | `grep` ชื่อฟังก์ชันใน advisory · ทางเดินของ input | ไม่ถึง → ลดระดับได้ แต่ต้องจดเหตุผล ไม่ใช่ปิดเงียบ |
+| อ้างตรงหรือมาผ่านตัวอื่น (transitive) | `npm ls <pkg>` · `pipdeptree -r -p <pkg>` · `dotnet nuget why <pkg>` | transitive → แก้ที่ตัวแม่ก่อน ถ้าแม่ยังไม่ออกเวอร์ชันใหม่ค่อย override ใน lockfile แล้วจดไว้ว่าต้องถอดเมื่อแม่แก้ |
+| มีเวอร์ชันที่แก้แล้วไหม | ช่อง `fixed in` ของ advisory | ไม่มี → หาแพ็กเกจแทน หรือปิดทางเข้าของ input แล้วจดเป็นความเสี่ยงที่ยอมรับใน `decision-log` |
+
+ผลสรุป: **แก้ตอนนี้** (ถึงจริง + มีตัวแก้) · **แก้รอบหน้า** (ถึงไม่ได้ แต่มีตัวแก้) · **ยอมรับความเสี่ยงชั่วคราว** (ไม่มีตัวแก้ — ผู้ใช้ต้องเห็นและตกลง)
+
+## 3 · ลำดับอัปเดต — เล็กก่อน แยกใหญ่ออกมาให้เห็นชัด
+
+1. **patch** ทั้งหมดในรอบเดียว (1.2.3 → 1.2.9) — ตามสัญญา semver ไม่เปลี่ยนพฤติกรรม แต่ยังต้องรัน test
+2. **minor** รวมได้ถ้าอยู่ในกลุ่มเดียวกัน (เช่น ชุด `@angular/*` ไปพร้อมกัน) · อ่าน release notes หาคำว่า deprecated
+3. **major — 1 PR ต่อ 1 แพ็กเกจ** อ่าน migration guide ก่อน แก้โค้ดตามนั้น แล้วรัน test ทั้งชุด · ห้ามพ่วง major 2 ตัวใน PR เดียว เพราะพังแล้วไม่รู้ว่าตัวไหน
+4. แพ็กเกจที่ไม่มีคนดูแลแล้ว (ไม่มี release เกิน 2 ปี · issue ค้างเรื่องความปลอดภัย) → เปิดงานแยกเพื่อหาตัวแทน ไม่ซ่อนไว้ใน PR อัปเดต
+
+ทางอัตโนมัติ: เปิด **Renovate** หรือ **Dependabot** ให้ยื่น PR ตามลำดับข้างบนเอง (ตั้งกลุ่ม patch+minor อัตโนมัติ · major แยก PR · กำหนดวันในสัปดาห์) — คนยังต้องอ่าน release notes และ merge เอง ไม่ auto-merge major
+
+## 4 · พิสูจน์ก่อนปิดรายการ
+
+- test ทั้งชุดเขียว และ build ผ่านจากเครื่องเปล่าด้วย lockfile ที่ commit แล้ว
+- **เดินทางเดิมของช่องโหว่อีกครั้ง** — ถ้า advisory บอกว่า input รูปแบบ X ทำให้พัง ให้ส่ง X เข้าไปจริง (ใน sandbox) แล้วดูว่าไม่พัง · เขียนเป็น test ถ้าทำได้ เพื่อไม่ให้ถอยกลับตอนมีคน downgrade
+- รันตัวสแกนข้อ 1 ซ้ำ รายการนั้นต้องหายไป ไม่ใช่แค่เปลี่ยนเวอร์ชันในไฟล์
+
+## 5 · บันทึก
+
+- `CHANGELOG.md` ใต้หัวข้อ Security: แพ็กเกจ · จาก → ไป · รหัสช่องโหว่ (CVE หรือ GHSA) · 1 บรรทัดว่าเราถึงช่องโหว่นั้นไหม
+- รายการที่ยอมรับความเสี่ยงหรือ override ใน lockfile → `decision-log` พร้อมวันที่ต้องกลับมาดู
+- รายงาน gate ของรอบนั้น (`qa/security/<วัน>-gate.md`) ชี้มาที่ CHANGELOG แทนการเขียนซ้ำ
 
 
 ---
@@ -175,6 +228,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
   | `ยังไม่ได้ตรวจ — <เหตุผล>` | ไม่ได้ | เครื่องมือรันไม่ได้ หรือยังไม่ได้ทำ |
 
 - **ส่งมอบได้เมื่อ** ไม่มีข้อ `ไม่ผ่าน` และไม่มีข้อ `ยังไม่ได้ตรวจ`
+- **ข้อที่ `ไม่ผ่าน` เขียนเป็น finding block ทีละรายการ** (แม่แบบใน `assets/owasp-report.md`) — รหัส `F-01` · ไฟล์:บรรทัด · ข้อ A0x + ระดับ Application Security Verification Standard (ASVS) ที่ต้องถึง (L1 ทุกระบบ · L2 มีข้อมูลส่วนบุคคลหรือธุรกรรม · L3 เงิน สุขภาพ โครงสร้างสำคัญ) · ผลกระทบในภาษาเจ้าของกิจการ · วิธีแก้ · หลักฐานที่ใช้ยืนยัน (คำสั่ง · test · ภาพ) · 1 block ต่อ 1 ช่องโหว่ ไม่รวมหลายจุดในแถวเดียว (แนวคิดจาก agamm/claude-code-owasp (MIT))
 - ใส่ส่วน **ขอบเขตที่ไม่ได้ตรวจ** เสมอ เช่น ทดสอบเจาะระบบโดยคนนอก (penetration test) · server ของลูกค้าที่ทีมไม่ได้ deploy · ไลบรารีที่ไม่มีข้อมูลช่องโหว่
 - ห้ามเขียน "ปลอดภัย 100%" หรือ "ได้รับการรับรอง OWASP" — OWASP ไม่ได้ออกใบรับรอง · ถ้าส่งมอบได้ ให้เขียน "ผ่านเกณฑ์ OWASP Top 10:2025 ตามรายการตรวจในรายงานนี้"
 - ผลรวมนับแยกครบ 6 สถานะ เช่น `ผ่าน 7 · ผ่าน (ตรวจด้วยตา) 1 · ไม่เกี่ยว 2 · ยอมรับความเสี่ยง 0 · ไม่ผ่าน 0 · ยังไม่ได้ตรวจ 0`
@@ -739,6 +793,22 @@ Use when building or reviewing any HTTP service or backend (health endpoints, RF
 
 \* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
 
+**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
+
+```yaml
+livenessProbe:            # ตาย → restart container
+  httpGet: { path: /health/live, port: 3000 }
+  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
+  periodSeconds: 10
+  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
+readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
+  httpGet: { path: /health/ready, port: 3000 }
+  initialDelaySeconds: 5
+  periodSeconds: 10
+```
+
+แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
+
 ### รูปร่าง response (เหมือนกันทุกภาษา)
 
 ```jsonc
@@ -928,6 +998,7 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 |---|---|
 | รูปแบบ log และ correlation id | `logging-standards` |
 | test ให้ endpoint พวกนี้ | `testing-standards` |
+| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
 | ออกแบบ endpoint ธุรกิจ | command `/api-design` |
 | runbook ตอน service ล่ม | `incident-runbook-template` |
 | ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |
@@ -1441,7 +1512,18 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 ---
 
-## 11 · Anti-patterns
+## 11 · ตรวจก่อนปล่อย endpoint ใหม่
+
+ไล่ทุกข้อกับ endpoint ที่เพิ่ม ตกข้อเดียวยังไม่ merge (แนวคิดจาก ECC api-design)
+
+- [ ] URL เป็นคำนามพหูพจน์ตามข้อ 2 · อยู่ใต้เวอร์ชันตามข้อ 3 · ไม่มี `GET` ที่เปลี่ยนข้อมูล
+- [ ] รายการทุกตัวมี pagination และเพดานขนาดหน้า (ข้อ 4) · filter และ sort ใช้ชื่อพารามิเตอร์เดียวกับ endpoint เดิม (ข้อ 5)
+- [ ] วันที่ · id · เงิน อยู่ในรูปแบบของข้อ 6 · response ไม่ใช่ entity ของฐานข้อมูลตรง ๆ
+- [ ] error ทุกตัวตาม `web-service-essentials` §2 และมี `code` คงที่ (ข้อ 7) · คำขอที่สร้างหรือจ่ายเงินรับ idempotency key · การแก้รับ `If-Match` (ข้อ 8)
+- [ ] ระบุ auth และ rate limit (ข้อ 9) · อยู่ใน OpenAPI แล้ว และตัวอย่าง cURL ในเอกสารรันผ่านจริง
+- [ ] มี contract test หรือ test ระดับ endpoint อย่างน้อย 1 กรณีสำเร็จ 1 กรณี error — ตรวจ response กับ OpenAPI ใน CI · Pact เมื่อผู้เรียกแยกทีม · `oasdiff breaking` ทุก PR: [`references/contract-testing.md`](references/contract-testing.md)
+
+## 12 · Anti-patterns
 
 - ❌ **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
 - ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
@@ -1452,3 +1534,43 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 - ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
 - ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
 - ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+
+
+## reference: contract-testing.md
+
+# Contract testing — OpenAPI คือสัญญา แล้วให้ CI ตรวจว่าของจริงตรง
+
+เอกสาร `docs/API-CONVENTIONS.md` บอกกติกา · ไฟล์ OpenAPI บอกรูปร่างของแต่ละ endpoint · contract test คือสิ่งที่ทำให้ 2 อย่างนี้ไม่เป็นแค่เอกสาร
+
+## 1 · OpenAPI เป็นสัญญา
+
+- สร้างจากโค้ดจริง (annotation · decorator · generator ของ framework) แล้ว commit ไฟล์ที่ได้ — ไม่เขียนมือแยก · เมื่อ 2 ฝั่งต่างกัน ฝั่งโค้ดคือความจริง และ diff ในไฟล์คือสิ่งที่ reviewer เห็น
+- ทุก response มี schema รวมถึง error (`web-service-essentials` §2) · ทุกฟิลด์มี `format` ของวันที่ · id · เงิน ตาม §6 ของ SKILL.md หลัก
+
+## 2 · ตรวจ response กับ spec ใน CI (provider side)
+
+| เครื่องมือ | ทำอะไร | licence | หมายเหตุ (ตรวจ 2026-10-23) |
+|---|---|---|---|
+| Schemathesis | อ่าน OpenAPI แล้วสร้าง request จาก schema ยิงใส่ service จริง ตรวจว่า response ตรง spec และไม่ 500 · `schemathesis run <url ของ openapi.json>` | MIT | ยิงจริง สร้างและลบข้อมูล → ชี้ไป dev หรือ staging เท่านั้น · Python |
+| Prism (Stoplight) | `prism mock <spec>` ให้ frontend ใช้ก่อน backend เสร็จ · `prism proxy <spec> <upstream>` ตรวจ traffic จริงกับ spec | Apache-2.0 | Node ≥ 18.20 · โหมด proxy ใส่หน้า service ใน test environment ได้ |
+| Dredd | ตรวจ API กับ API Blueprint / OpenAPI 2 (OpenAPI 3 ทดลอง) | MIT | **เลิกดูแลแล้ว** (archived 2024-11-08) — ไม่เริ่มใช้ใหม่ |
+
+ค่าเริ่มของเรา: Schemathesis ใน job ของ CI หลัง service ขึ้นด้วยข้อมูลทดสอบ (reset endpoint จาก `app-verifier-setup`) · ล้ม = ไม่ merge
+
+## 3 · Consumer-driven contract — เมื่อทีม frontend หรือผู้เรียกแยกจาก backend
+
+- Pact (pact-foundation · MIT): ฝั่งผู้เรียกเขียน test ว่าใช้ request/response คู่ไหนบ้าง → ได้ไฟล์ pact → ฝั่ง provider รันตรวจกับไฟล์นั้นใน CI ของตัวเอง · provider เปลี่ยนส่วนที่ไม่มีใครใช้ได้โดย test ไม่พัง
+- ใช้เมื่อ: ทีมคนละชุด ปล่อยคนละรอบ หรือมีผู้เรียกมากกว่า 1 ราย (mobile + web + partner) · ทีมเดียวทำทั้ง 2 ฝั่ง → ข้อ 2 พอ
+- ไฟล์ pact แลกกันผ่าน Pact Broker หรือ commit ลง repo ของ provider — ตกลงที่เดียวใน `API-CONVENTIONS.md`
+
+## 4 · เช็ค breaking change ทุก PR
+
+- `oasdiff breaking <spec เดิม> <spec ใหม่>` (Apache-2.0 · Go · มี Docker image) รายงานเฉพาะการเปลี่ยนที่ทำให้ผู้เรียกเดิมพัง: ลบ endpoint หรือฟิลด์ · ฟิลด์กลายเป็น required · type เปลี่ยน · enum หาย
+- ใน CI: spec เดิม = ของ branch หลัก · spec ใหม่ = ของ PR · เจอ breaking → ต้องขึ้นเวอร์ชันใหม่ตาม §3 หรือ deprecate ตาม §10 ของ SKILL.md หลัก — ไม่ใช่ปิด check
+- เพิ่มฟิลด์ optional · เพิ่ม endpoint · เพิ่มค่า enum ที่ผู้เรียกไม่ switch ตาย = ไม่ breaking
+
+## ตรวจก่อนส่ง
+
+- [ ] OpenAPI อยู่ใน repo และสร้างจากโค้ด · CI ล้มถ้าไฟล์ไม่ตรงโค้ด
+- [ ] Schemathesis (หรือเทียบเท่า) รันกับ service ที่ขึ้นด้วยข้อมูลทดสอบ · `oasdiff breaking` รันทุก PR
+- [ ] ผู้เรียกแยกทีม → มี pact อย่างน้อย 1 ไฟล์ต่อผู้เรียก และ provider ตรวจใน CI

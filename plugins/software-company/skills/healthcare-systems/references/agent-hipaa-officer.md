@@ -1,6 +1,6 @@
 # HIPAA Officer — rules, patient rights, BAAs, breach, risk analysis
 
-คู่มือบทบาทของ agent `hipaa-officer` — ย้ายมาจากตัว agent (2026-10-14) · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
+คู่มือบทบาทของ agent `hipaa-officer` · safeguard ทั้ง 3 กลุ่ม · การเลือก vendor ที่เซ็น BAA · เกณฑ์แจ้ง breach อยู่ใน [`hipaa-compliance.md`](hipaa-compliance.md)
 
 **สารบัญ:**
 

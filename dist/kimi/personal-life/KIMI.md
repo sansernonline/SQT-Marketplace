@@ -1,10 +1,10 @@
 # SQT personal-life — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.11.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/personal-life/ โดย scripts/build/build-targets.mjs (v0.12.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
-Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, and polite Thai-English messages. Works alongside email, calendar and note plugins.
+Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets), health organising (exercise, sleep, checkups, medication, doctor-visit prep — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers to code, tech radar, certification prep, side projects, thesis). General information only.
 
-ชุดนี้มี skill 54 ตัว · บทบาท 6 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
+ชุดนี้มี skill 71 ตัว · บทบาท 12 บทบาท · คำสั่งสำเร็จรูป 16 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`
@@ -12,9 +12,15 @@ Personal life admin for busy adults — weekly reviews, meeting prep and summari
 
 ## บทบาททั้งหมด
 
+- **career-coach** — Use when changing jobs, asking for a raise, writing a CV or LinkedIn profile, or weighing offers. Thai or English.
 - **doc-caretaker** — Use when an important document is missing, expiring or piled up. Keeps one registry of ID, property, vehicle, insurance.
+- **family-planner** — Use when a Thai family needs its week organised — meals, groceries, school fees, elder appointments, pet vaccines.
+- **health-organizer** — Use to organise family health admin — checkups, results, medication, sleep, doctor questions. Never diagnoses; 1669.
+- **home-manager** — Use for Thai household bills and upkeep — utilities, repairs, contractor quotes, vehicle tax, พ.ร.บ., renewals.
+- **interview-coach** — Use when an interview is coming — practice sets, STAR stories, hard Thai HR questions, scoring. Offers → career-coach.
 - **life-admin** — Use for recurring personal admin — weekly reviews, subscription audits, digital safety, goals, habits, polite messages.
 - **meeting-prep** — Use before and after a meeting that matters. One-page prep card (goal, questions, context) and action-item summary.
+- **tech-mentor** — Use to keep up with tech, learn a new technology, prepare for a certification, or pick a 2-weekend side project.
 - **brainstormer** — Use when the user wants ideas or options, or a task is big or unclear and a wrong pick is costly. Lead picks.
 - **learning-reviewer** — Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.
 - **reviewer** — Use at a playbook's check step for fresh-eyes review of finished work. Reports, never fixes; default checker.

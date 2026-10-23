@@ -37,7 +37,7 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 ## หลักการเลือกเมื่อต้องตัดสินเอง
 
 เลือกทางที่กระทบน้อยสุด: ย้อนกลับง่าย · แก้ไฟล์น้อย · ตรงกับที่เอกสารหรือ repo ใช้อยู่ · ไม่ปิดทางเลือกอื่น
-**ข้อที่เปลี่ยนแล้วกระทบงาน** ตัดสินด้วยการค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 ("ตัดสินด้วยการค้นและโหวต") · ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นด้วยผลโหวต เช่น `โหวต 2/3 (ต้นทุน ✔ · ความเสี่ยง ✘ · ส่งเร็ว ✔) —` แล้วตามด้วยแหล่ง
+**ข้อที่เปลี่ยนแล้วกระทบงาน** ตัดสินด้วยการค้นแล้วโหวต 3 agent ตาม skill `superuser` หัวข้อ 6 → `references/voting.md` · ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นด้วยผลโหวต เช่น `โหวต 2/3 (ต้นทุน ✔ · ความเสี่ยง ✘ · ส่งเร็ว ✔) —` แล้วตามด้วยแหล่ง
 **ค่าตั้งต้นของเจ้าของ** ใน `~/.claude/superuser-style.md` (ชื่อคนในบทบาทที่ว่าง · นโยบายค่าใช้จ่าย) ใช้แทนการถามได้ ช่องเหตุผลขึ้นต้นว่า `ค่าตั้งต้นของเจ้าของ —`
 **ข้อเท็จจริงที่เหลือ** (ตัวเลข ชื่อ วันที่ งบ ที่ค้นไม่ได้และไม่มีค่าตั้งต้น) ห้ามเดา ใส่ `(รอยืนยัน)` ตรงที่ต้องใช้ (ค่าที่มาจากหลักฐาน เช่น ตัวเลขที่ตรวจจริง ใส่ได้พร้อมป้าย) แล้วลงคำถามในส่วน "ค้างอยู่" ของ `status-report` ส่วนงานที่ย้อนไม่ได้ให้เตรียมคำสั่ง ร่างอีเมล หรือ diff ไว้ในส่วน "รออนุมัติ" ไม่ลงมือเอง
 
@@ -46,7 +46,8 @@ subagent ไม่เขียนตารางเอง แต่**ราย�
 - 1 แถวต่อ 1 การตัดสินใจ ลงทันทีที่ตัดสิน ไม่รวบไปเขียนตอนจบ
 - "ไม่เลือก" ต้องมีอย่างน้อย 1 ทาง ถ้าไม่มีทางอื่นเลยก็ไม่ใช่การตัดสินใจ · ทางที่ไม่เลือกต้องเป็นทางที่มีจริงตามหลักฐาน ไม่ใช่ทางที่แต่งขึ้นให้ครบช่อง เพราะตอนจบจะถูกยกไปเป็นตัวเลือกให้ผู้ใช้ `คงไว้` หรือเปลี่ยน (skill `superuser` หัวข้อ 6)
 - "เหตุผล · หลักฐาน" ระบุที่มา: ไฟล์ · ADR · ตัวเลขที่วัด ถ้าเป็นตัวเลขให้ติดป้าย `ตรวจจริง` / `จากแหล่ง` / `อนุมาน`
-- ไม่ลบแถวเก่า ถ้าผู้ใช้ไม่เห็นด้วยให้แก้ที่แถวนั้น แล้วทำใหม่เฉพาะงานนั้น
+- ไม่ลบและไม่แก้แถวเก่า ถ้าผู้ใช้ไม่เห็นด้วยให้เพิ่มแถวใหม่ไว้บนสุด ช่อง "เหตุผล · หลักฐาน" ขึ้นต้นว่า `ผู้ใช้แก้ — แทนแถว <วันที่>` แล้วทำใหม่เฉพาะงานนั้น — แถวเดิมยังอยู่ให้เห็นว่าเคยเลือกอะไรไว้
+- คอลัมน์ `ทบทวนเมื่อ` ใส่ได้ถ้าต้องการ — วันที่หรือเหตุการณ์ที่ควรกลับมาดูว่าการตัดสินนั้นยังถูกอยู่ไหม (เช่น หลังรุ่นถัดไป · เมื่อมีผู้ใช้เกิน 100 คน)
 - ถ้า**ผู้ใช้เป็นคนตัดสินเอง** (เช่น ยอมรับความเสี่ยงที่ถูกเตือน) ให้ลงตารางเดียวกัน และเพิ่มคอลัมน์ท้าย `ผู้ตัดสิน` ใส่ `agent` หรือ `ผู้ใช้` ถ้าตารางไม่มีคอลัมน์นี้ แปลว่า agent ตัดสินทุกแถว
 
 ## ในคำตอบตอนจบ
@@ -108,7 +109,7 @@ Look in every layer — business rules in legacy systems are spread thin, not ke
 | User manuals, old emails, ticket history | `doc` intent, to compare with `code` behaviour |
 | Commented-out code, `_old`, `Copy of` files | Previous rules; note them, do not treat as current |
 
-Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md).
+Stack-specific locations: [references/evidence-by-stack.md](references/evidence-by-stack.md). When the change request is a framework upgrade (.NET Framework → .NET 8, Angular major, Python 2 → 3 / Django LTS, Node LTS): [references/framework-upgrade.md](references/framework-upgrade.md).
 
 ## Workflow
 
@@ -214,3 +215,35 @@ Ignore build output everywhere: `bin/`, `obj/`, `publish*/`, `dist/`, `build/`, 
 | COBOL / RPG | Copybooks for record layouts, JCL for job flow |
 | Node / JavaScript SPA | Router config, API client module, form schemas, `.env.example` |
 | Mobile (Xamarin, native) | API base URL and endpoint list, offline storage schema |
+
+
+## reference: framework-upgrade.md
+
+# อัปเกรด framework ของระบบเก่า — playbook ต่อ stack
+
+ใช้หลังมี as-is spec อย่างน้อยระดับ system map (Step 2) และ characterization test ของโมดูลที่แตะ (Step 3) — ไม่มี 2 อย่างนี้ การอัปเกรดคือการเดาว่าอะไรพัง
+
+## ขั้นตอนเดียวกันทุก stack
+
+1. **Inventory** — รุ่นปัจจุบันของ runtime · framework · ทุก dependency พร้อมรุ่น (ไฟล์ lock หรือ `packages.config` · `package.json` · `requirements.txt`) · ของที่ compile เอง (native · COM · plugin) · OS และเซิร์ฟเวอร์ที่รันอยู่ · ลงตารางเดียว
+2. **Compatibility matrix** — แถวละ dependency: รุ่นเดิม · รุ่นที่รองรับเป้าหมาย · มีหรือไม่มี · ตัวแทนถ้าไม่มี · ป้าย `code` / `doc` / `ask` เหมือนกติกาของ skill นี้ · dependency ที่ไม่มีทางไป คือความเสี่ยงที่ต้องบอกเจ้าของก่อนเริ่ม
+3. **Spike บน worktree** — แยก worktree ตาม `worktree-and-branch` แล้วลอง build บนเป้าหมายจนจบ 1 รอบโดยยังไม่แก้ logic · จด error ทุกตัวเป็นรายการ ไม่แก้ทีละตัวในรอบนี้ · ประเมินวันจากรายการนั้น ไม่ใช่จากความรู้สึก
+4. **ย้ายให้ครบแล้วลบของเก่า** — `principle-replace-then-delete`: ไม่มี wrapper ชื่อเก่า ไม่มี flag สลับรุ่น · ย้ายทีละ project หรือ package เป็นขั้นที่ build ผ่าน (`principle-small-verifiable-steps`) · คนนอกเรียก API เดิม → deprecate ตาม `api-conventions`
+5. **หลักฐาน regression** — characterization test ผ่านทั้งก่อนและหลัง · golden file ของรายงานและ stored procedure เทียบแล้วเท่ากัน · รันบนข้อมูลสำเนา ไม่ใช่ production · รายงานด้วย `status-report` พร้อมสิ่งที่ยังไม่ได้ทดสอบ
+
+## ต่อ stack (คู่มือทางการ · ตรวจว่าเปิดได้ 2026-10-23)
+
+| stack | ทางที่ใช้ | กับดักที่เจอบ่อย | คู่มือ |
+|---|---|---|---|
+| .NET Framework → .NET 8 (หรือ LTS ล่าสุด) | ย้ายทีละ project จากใบล่างของ dependency graph ขึ้นบน · `packages.config` → PackageReference ก่อน · เช็ค API ที่ไม่มีใน .NET (WCF server · Web Forms · AppDomain · Remoting) | Web Forms ไม่มีทางไปตรง ต้องเขียนหน้าใหม่ · `System.Drawing` บน Linux · `ConfigurationManager` → `appsettings.json` · Upgrade Assistant ถูก deprecate แล้ว Microsoft ชี้ไปที่ GitHub Copilot app modernization — ถ้าไม่มีสิทธิ์ใช้ ให้ทำมือตามคู่มือ | learn.microsoft.com/dotnet/core/porting (อัปเดต 2026-08-04) |
+| Angular major | `ng update @angular/core@<N> @angular/cli@<N>` **ทีละ major** ตามที่ Angular ระบุ · ใช้ Update Guide สร้างรายการขั้นตอนจากรุ่นต้นถึงรุ่นปลาย | AngularJS (1.x) ไม่ใช่ Angular — ต้องเขียนใหม่หรือ ngUpgrade · library ภายนอกที่หยุดดูแล · Angular รองรับแต่ละ major 24 เดือน (active 12 + LTS 12) | angular.dev/update-guide · angular.dev/reference/releases |
+| Python 2 → 3 แล้ว Django LTS | ทำ coverage ก่อน → `futurize` หรือ `modernize` → `pylint --py3k` กันถอยหลัง → ขึ้น 3 แล้วค่อยไล่ Django ทีละรุ่น (2.2 → 3.2 → 4.2 → LTS ปัจจุบัน) รัน `python -Wa manage.py test` ล้าง deprecation ก่อนข้ามแต่ละรุ่น | bytes กับ str · การหารจำนวนเต็ม · `2to3` ถูกถอดจาก Python 3.13 (ยังไม่ได้ตรวจ) · คู่มือ porting ของ Python ถูกเลิกตั้งแต่ 3.11 ต้องอ่านฉบับ 3.10 | docs.python.org/3.10/howto/pyporting.html · docs.djangoproject.com/en/stable/howto/upgrade-version |
+| Node LTS | ขึ้นทีละสาย LTS (เลขคู่) · รัน test บนรุ่นใหม่ด้วย `nvm` หรือ container ก่อนเปลี่ยน `engines` · `npm outdated` แล้วไล่ major ของ dependency ที่ผูกกับ Node ABI (native addon) ก่อน | native addon ที่ไม่มี build ให้รุ่นใหม่ · `node-sass` → `sass` · OpenSSL 3 ทำให้ hash หรือ cipher เก่า error · ดูวันหมดอายุของแต่ละสายจากหน้า releases | nodejs.org/en/about/previous-releases |
+
+ทุกแถว: อ่าน breaking changes ของ**ทุกรุ่นที่ข้าม** ไม่ใช่เฉพาะรุ่นปลายทาง
+
+## ห้าม
+
+- อัปเกรดกับแก้ฟีเจอร์ในชุดเดียวกัน — ถ้าพัง ไม่รู้ว่าเพราะอะไร
+- เปลี่ยน ORM · UI framework · โครงโฟลเดอร์ "ถือโอกาส" ระหว่างอัปเกรด → เป็นงานถัดไปหลัง regression ผ่าน
+- บอกว่าเสร็จเพราะ build ผ่าน — ต้องมีข้อ 5

@@ -1,7 +1,5 @@
 # ตรวจเอกสารด้วยตา — คำสั่งและรายการตรวจ
 
-ย้ายมาจาก [SKILL.md](../SKILL.md) §6
-
 ```bash
 soffice --headless --convert-to pdf --outdir _to_delete/preview SRS.docx
 pdftoppm -png -r 80 _to_delete/preview/SRS.pdf _to_delete/preview/page      # ได้ page-1.png หรือ page-01.png (เลขเติมศูนย์ตามจำนวนหน้าทั้งหมด)

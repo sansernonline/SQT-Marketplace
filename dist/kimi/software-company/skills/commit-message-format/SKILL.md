@@ -51,11 +51,12 @@ description: Use when setting up commitlint or semantic-release, or a commit nee
 
 Someone scanning `git log --oneline` should understand each line without opening the diff.
 
-- **Language follows the repo** — check `git log -10` first. A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
+- **Measure the repo's norm, then follow it** — `git log --oneline -30` before the first commit: language, whether `scope` is used, which types appear, typical subject length. A repo that never uses scope does not get one from you; a repo at 40 characters does not get a 72-character subject. Note what you measured in the report once (idea from ECC conventional-commit-review).
+- **Language follows the repo** — A Thai repo gets Thai descriptions; `type(scope):` stays English so tools can parse it. Lowercase and imperative mood apply to English only.
 - **Subject says what changed for the reader**, not which file was touched: `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว`, not `fix: แก้ items.js บรรทัด 42`
 - **One line is enough** for most commits. Add a body only when *why* is not obvious from the subject — at most 3 short lines or bullets
 - **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
-- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit
+- **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit. Check `git diff --stat` before writing the subject: when the files fall into more than one topic (feature + unrelated rename, fix + formatting sweep), propose the split as a list of `<subject> → <files>` per commit and stage each with `git add <files>` or `git add -p`; never hide the second topic in the body
 
 | ❌ Hard to read | ✅ Short and clear |
 |---|---|
@@ -84,7 +85,7 @@ Co-authored-by: ...      ← attribution
 
 - [ ] Type matches the change (not just "chore" for everything)
 - [ ] Scope is meaningful (component/module name)
-- [ ] Subject is imperative and ≤50 chars
+- [ ] Subject is imperative and ≤50 chars — Thai subjects count base consonants only (~50); vowels and tone marks do not count · กติกาเต็มอยู่ใน `superuser` skill `commit-log`
 - [ ] Body explains WHY (if change isn't obvious)
 - [ ] Breaking changes marked with `!` AND `BREAKING CHANGE:` footer
 - [ ] Linked to issue/ticket when applicable

@@ -17,11 +17,11 @@ Use when writing or tidying a document people keep (report, proposal, Word, PDF)
 
 - Internal notes for the author's own team (keep them concise)
 - Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx`
+- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-company`)
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
 > rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
+> `branded-document-design` (plugin `software-company`) on top of it — that skill carries the design tokens,
 > the typography scale, Thai typography rules, and the `brandkit.py` builder.
 
 ## อ่านเพิ่มเมื่อ
@@ -42,7 +42,7 @@ Status values:
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
 
-ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -56,7 +56,7 @@ Status values:
 ## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
 
 เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
+ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-company`)
 ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
 
 **markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
@@ -148,7 +148,7 @@ Before delivering any polished doc:
 - [ ] Anchor links in TOC actually work
 - [ ] Status badges where applicable
 - [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
+- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-company` · house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
 - [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
@@ -179,6 +179,8 @@ Before delivering any polished doc:
 # รูปแบบ markdown พร้อมตัวอย่าง
 
 ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+
+**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
 
 ## Document Header (Always)
 
@@ -252,7 +254,7 @@ Use a table:
 
 ## Figures (รูปในเอกสาร)
 
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
 
 ```markdown
 ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
@@ -404,9 +406,9 @@ Define acronyms on first use, then add to glossary.
 |---|---|---|
 | หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
 | ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
+| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-company`) | `doc-theme` |
+| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-company`) ข้อ 0–1 | `doc-theme` |
+| สไลด์ | `presentation-design` (plugin `software-company`) | `doc-theme` |
 
 ## ค่าตั้งต้นประจำบ้าน (house default)
 
@@ -433,7 +435,7 @@ Define acronyms on first use, then add to glossary.
 
 Use when a document, plan, proposal, slide or print (business plan, shop process, budget flow, research, software spec) needs a designed diagram.
 
-> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style` ("ค่าตั้งต้นประจำบ้าน")
+> **สีหลักของรูป = สีหลักของโปรเจกต์** · หาตามลำดับในข้อ 5 ถ้าหาไม่เจอเลยจึงใช้ชุดสีประจำบ้าน `#2A78D6` ใน `polished-document-style/references/theme-colors.md` ("ค่าตั้งต้นประจำบ้าน")
 
 # Diagram Figures
 
@@ -652,7 +654,7 @@ HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG �
 
 # ระบบออกแบบของรูป — รายละเอียด
 
-สารบัญ: หัวรูป → ระบบขนาด → ระบบสี → ไอคอนเส้นที่วาดเอง · ย้ายมาจาก `SKILL.md` ข้อ 3–6 (ไม่แก้ถ้อยคำ) · กฎสั้นอยู่ใน `SKILL.md`
+สารบัญ: หัวรูป → ระบบขนาด → ระบบสี → ไอคอนเส้นที่วาดเอง · กฎสั้นอยู่ใน `SKILL.md`
 
 ## หัวรูป (จากข้อ 3)
 
@@ -1168,7 +1170,7 @@ Kubernetes ของจริง แบบผังอ้างอิงที�
 
 # สายเชื่อม — รายละเอียด
 
-ย้ายมาจาก `SKILL.md` ข้อ 7 (ไม่แก้ถ้อยคำ) · เปิดเมื่อเขียน `WIRES` หรือแก้เส้นที่ลากผิด
+เปิดเมื่อเขียน `WIRES` หรือแก้เส้นที่ลากผิด
 
 **ในคอลัมน์เดียวกัน** ให้ใช้ลูกศรลง `.down` ระหว่างกล่อง โดยไม่ต้องเขียนอะไรเพิ่ม
 

@@ -1,6 +1,8 @@
 # แม่แบบเอกสารภาพรวมสถาปัตยกรรม
 
-ย้ายมาจาก agent `solution-architect` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: Context · Quality Attributes · High-Level Architecture · Components · Data Flow · Tech Stack · Cross-Cutting Concerns · Trade-offs · References
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 ## Standard Output: Polished Architecture Overview
 

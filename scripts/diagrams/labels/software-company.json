@@ -269,6 +269,21 @@
     "ตรวจว่ารายการต่างปิดครบ",
     "รายงานสถานะ"
    ]
+  },
+  "team-project": {
+   "short": "งานใหญ่หลายวัน คนกับ agent ร่วมทีม",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "เข้าใจโจทย์และข้อจำกัด",
+    "วางทางและเขียน brief",
+    "แตก milestone ที่ตรวจได้",
+    "วางของกลางและตารางแบ่งงาน",
+    "เขียนใบสั่งงานทุกชิ้น",
+    "ลงมือพร้อมกัน",
+    "พิสูจน์ทีละ milestone",
+    "sync ปิดวัน",
+    "รายงานเจ้าของงาน"
+   ]
   }
  },
  "agent_groups": {
@@ -357,6 +372,7 @@
    "parallel-attempts-pick-best",
    "parallel-split-and-merge",
    "docker-sandbox",
+   "worktree-and-branch",
    "status-report"
   ],
   "เรียนรู้และปรับปรุงทีม": [
@@ -385,6 +401,7 @@
    "app-verifier-setup",
    "app-verifier-upkeep",
    "spec-to-code-loop",
+   "web-quality-audit",
    "targeted-fix"
   ],
   "ความปลอดภัยและข้อมูลส่วนตัว": [
@@ -412,12 +429,14 @@
    "api-conventions",
    "database-design",
    "web-service-essentials",
+   "mcp-server",
    "background-jobs",
    "notifications",
    "file-upload-and-storage",
    "data-import-export",
    "observability-basics",
    "cicd-and-release",
+   "infra-as-code",
    "incident-runbook-template",
    "postmortem-template",
    "saas-platform"
@@ -425,6 +444,7 @@
   "ออกแบบหน้าจอและภาพ": [
    "ui-craft",
    "web-app-design",
+   "dynamic-website",
    "mobile-app-design",
    "windows-app-design",
    "graphic-design",
@@ -460,7 +480,8 @@
    "mobile-engineering",
    "smart-contracts",
    "developer-experience",
-   "seo-audit-checklist"
+   "seo-audit-checklist",
+   "data-analysis"
   ]
  }
 }

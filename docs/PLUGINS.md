@@ -1,6 +1,8 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **13 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0 · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
+ทั้งหมด **8 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
+
+> **รวม plugin ชีวิตประจำวัน (2026-10-22)** — `online-seller` + `consumer-rights` → **`e-commerce`** (ซื้อ-ขายออนไลน์ทั้งสองฝั่ง) · `home-family` + `health-wellness` + `career` → **`personal-life`** (ชีวิตประจำวัน 4 หมวด) · `dev-learning` → **`personal-life`** (หมวดเรียนรู้: เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์) · `seller-tax-basics` ย้ายไป `thai-workplace` · `sqt-toolkit` (เคยชื่อ `doc-toolkit`) ยุบแล้ว — skill เอกสารหลัก 4 ตัวกลับเข้า `superuser` ที่เหลือไป `software-company` `graphic-design` `personal-life` · เพิ่ม **`reverse-engineer`** (ลอกสถาปัตยกรรม REA: จุดเข้าเดียว evidence-first) · ชื่อ skill/command เดิมใช้ได้เหมือนเดิม ถอด plugin เก่าด้วย `/plugin uninstall <ชื่อเดิม>` · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
 ---
 
@@ -9,7 +11,7 @@
 ทีมผู้ช่วยทำงานหลายขั้น: หัวหน้าทีมรับงาน → จัดขนาด → brainstorm (งานใหญ่) → เลือก playbook → แจกงานให้ agent ตัวใหม่ → ตรวจกับของจริง → ส่งงาน → เรียนรู้ · ใช้กับงานได้ทุกสาขา (เอกสาร · หาข้อมูล · ร้านค้า · เงิน · โค้ด) · plugin สาขาอื่นต่อยอดจากตัวนี้ทาง `dependencies`
 
 ### มีอะไรบ้าง
-**3 agents · 28 skills · 6 playbooks · hook 1 ชุด** (skill เอกสารและรูป 15 ตัวอยู่ใน `sqt-toolkit`)
+**3 agents · 34 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
 
 - **agent กลาง:** brainstormer (คิดทางเลือก) · reviewer (ตรวจด้วยสายตาใหม่) · learning-reviewer (ทบทวนวิธีทำงาน)
 - **playbook:** research · document · review · unattended-run · learn-from-session · pickup-and-pause (รับงานต่อ · หยุดงาน)
@@ -18,6 +20,7 @@
 - **แบ่งงาน · ตรวจ · หาข้อมูล:** parallel-split-and-merge · parallel-attempts-pick-best · adversarial-review-panel · prior-art-review · **research-with-sources** (หาข้อมูลพร้อมแหล่ง ≥ 3 แหล่ง วันที่ และป้ายหลักฐาน)
 - **เรียนรู้ · ปรับทีม:** repeated-mistakes-to-checks · session-lessons-to-skills · owner-style-capture · commit-log
 - **เขียน:** human-writing · answer-shape · no-ai-look · temp-file-discipline
+- **เอกสารหลัก · ข้อความ:** polished-document-style · document-naming · spell-out-abbreviations · polite-message-th-en
 
 รูปทั้งหมด: [`docs/plugins/superuser/`](plugins/superuser/README.md) (flow · map · playbooks)
 
@@ -25,7 +28,7 @@
 
 - **หัวหน้างาน 1 คน** — จัดขนาด + งบ (เร็ว/สมดุล/คุณภาพ ปรับทั้งลูกทีมและผู้ตรวจ) · ใบสั่งงาน 5 ข้อในข้อความส่งงาน · ประเมินลูกทีม ผ่าน/แก้/ทำใหม่ + `TEAM.md` · ตรวจซ้ำจนผ่าน · คำตอบ 3 ระดับ · คาด/จริง + token จาก `log/SUMMARY.md`
 - **แกน 2 ชั้น** — `SKILL.md` 27 KB อ่านทุกงาน · `autonomy.md` · `modules.md` เปิดเมื่อถึงจังหวะ · โมดูล 9 ตัวเปิดปิดใน `.claude/superuser/config.json`
-- **plugin สาขาเหลือเฉพาะส่วนสาขา** (ราว 12 KB) เปิดแกนจาก superuser · skill เอกสาร 15 ตัวแยกไป `sqt-toolkit`
+- **plugin สาขาเหลือเฉพาะส่วนสาขา** (ราว 12 KB) เปิดแกนจาก superuser · skill เอกสารออกแบบ สไลด์ รูป ประชุม อยู่ใน plugin สาขาที่ใช้มากสุด (เอกสารหลัก 4 ตัวอยู่ในแกน)
 - **hook** วัด token ราย agent · ด่านจำสถานะ ไม่ parse transcript ทั้งไฟล์ · self-test 60/60
 
 ### เปลี่ยนอะไร (2026-10-21 · superuser 2.0.0 → 2.4.0)
@@ -53,31 +56,12 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 
 ---
 
-## 🧰 `sqt-toolkit` — เครื่องมือเอกสารและรูป (ติดตั้งมาพร้อมทุกสาขา)
-
-skill 15 ตัวที่ทุก plugin ใช้ร่วมกัน แยกออกจาก `superuser` ตั้งแต่ 3.0.0 ให้ superuser เหลือเฉพาะเรื่องหัวหน้างาน · ไม่มี agent · hook · คำสั่ง
-
-### มีอะไรบ้าง
-**3 agents · 28 skills · 0 commands**
-
-- **เอกสาร:** polished-document-style · branded-document-design · markdown-report-docx · document-naming · spell-out-abbreviations
-- **สไลด์ · รูป:** presentation-design · html-slide-deck · pptx-to-html-deck · diagram-figures · markdown-visuals · image-generation
-- **ประชุม · ข้อความ · ชื่อ:** meeting-prep-card · meeting-summary · polite-message-th-en · product-naming
-
-### ติดตั้ง
-```
-/plugin install sqt-toolkit@sqt-marketplace
-```
-ติดตั้ง plugin สาขาตัวไหน Claude Code จะติดตั้ง sqt-toolkit ให้เอง · ติดตั้ง superuser เดี่ยวต้องสั่งเอง
-
----
-
 ## 🏢 `software-company`
 
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**39 agents · 81 skills · 29 commands** (ไม่นับ skill กลาง 28 ตัวจาก `superuser` และ 15 ตัวจาก `sqt-toolkit`)
+**39 agents · 95 skills · 29 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```
@@ -150,7 +134,7 @@ SQT-Marketplace/
 
 _ร่างเมื่อ 6 ต.ค. 2569 · software-company ครอบงาน "สร้างซอฟต์แวร์" แล้ว ชุดนี้จึงเสนอ plugin สำหรับใช้ในชีวิตประจำวัน_
 
-> **แผนเก่า เก็บไว้ดูที่มา** — ตัวเลขและสถานะในหัวข้อนี้เป็นของวันที่ร่าง (เช่น dev-learning ที่เขียนว่า "สำรอง" ส่งแล้วเป็น v0.6.0) · จำนวนจริงปัจจุบันดูตารางใน [README](../README.md#-plugins)
+> **แผนเก่า เก็บไว้ดูที่มา** — ตัวเลขและสถานะในหัวข้อนี้เป็นของวันที่ร่าง (เช่น dev-learning ที่เขียนว่า "สำรอง" ส่งแล้วเป็น v0.6.0 และรวมเข้า `personal-life` หมวดเรียนรู้เมื่อ 22 ต.ค. 2569) · จำนวนจริงปัจจุบันดูตารางใน [README](../README.md#-plugins)
 
 หลักการเลือก:
 1. ไม่ซ้ำกับ 101 skills ที่มี · ของเดิมเน้นออกแบบและสร้าง ของใหม่เน้น "ใช้ในชีวิต"

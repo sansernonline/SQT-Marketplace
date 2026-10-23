@@ -3,7 +3,7 @@
     python check_deck.py docs/Project_Presentation-v1.0.html --out _to_delete/deck-check
 
 ได้: หน้าละ 1 ภาพ (p01.png …) · sheet-1.png … (ภาพย่อ 9 หน้าต่อแผ่น ไว้เปิดดูทีเดียว) · รายการปัญหาใน stdout
-ปัญหาที่หา: ของล้นขอบ 1920×1080 · ทับแถบ foot ด้านล่าง · ข้อความใน card/detail/list ล้นกล่อง · ตัวอักษรเล็กกว่า 16px · รูปโหลดไม่ขึ้น
+ปัญหาที่หา: ทั้งหน้าสูงเกิน 1080 (scrollHeight) · ของล้นขอบ 1920×1080 · ทับแถบ foot ด้านล่าง · ข้อความใน card/detail/list ล้นกล่อง · ตัวอักษรเล็กกว่า 16px · รูปโหลดไม่ขึ้น
 ต้องมี playwright (pip install playwright && playwright install chromium) และ Pillow
 exit 1 เมื่อพบปัญหา
 """
@@ -20,6 +20,7 @@ PROBE = """(s) => {
   const foot = 1080 - 120;                              // พื้นที่ของ .foot และ .pg
   const name = el => el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.split(' ')[0] : '')
     + ' "' + (el.textContent || '').trim().slice(0, 40) + '"';
+  if (s.scrollHeight > s.clientHeight + 2) out.push('เนื้อหาล้นหน้า: สูง ' + s.scrollHeight + ' px จาก 1080 (ถูกตัดทิ้งตอนฉาย)');
   for (const el of s.querySelectorAll('*')) {
     if (el.closest('aside,template,.chatlog') || !el.offsetParent) continue;
     const r = el.getBoundingClientRect(); if (!r.width || !r.height) continue;

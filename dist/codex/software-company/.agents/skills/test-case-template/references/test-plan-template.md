@@ -1,6 +1,8 @@
 # แม่แบบแผนทดสอบ (test plan)
 
-ย้ายมาจาก agent `qa-tester` · เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
+**สารบัญ:** แม่แบบเต็ม 1 บล็อก: Objective · Scope · Test Approach · Entry & Exit Criteria · Test Environment · Schedule · Risks · Plan Quality · Sign-off
+
+เปิดเมื่อต้องเขียนเอกสารชนิดนี้จริง · ส่วนที่ไม่รู้ใส่ `(รอยืนยัน)`
 
 ## Standard Output: Polished Test Plan
 

@@ -154,7 +154,17 @@ catch (SmtpException ex)
 
 ---
 
-## 7 · Anti-patterns
+## 7 · ตรวจก่อนส่ง
+
+ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+
+- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
+- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
+- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
+- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
+- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
+
+## 8 · Anti-patterns
 
 - ❌ **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
 - ❌ **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
@@ -243,7 +253,7 @@ Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
                         (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
 ```
 
-- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้าง (`uuid v4` ตัด 8 ตัวแรก)
+- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (`uuid v4` ตัด 8 ตัวแรก) · เหตุผลดู `web-service-essentials` ข้อ 3
 - **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
 - ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
 - เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)
@@ -1160,7 +1170,7 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 # Data pipeline patterns — incremental, backfill, quality, catalog
 
-ย้ายมาจาก agent `data-engineer` (2026-10-14) · ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
+ทุก pipeline ต้องรันซ้ำได้ผลเท่าเดิม (`principle-safe-to-rerun`) และส่งค่าเข้า SQL เป็น parameter เสมอ
 
 **สารบัญ:**
 
@@ -1305,8 +1315,6 @@ For every table, document:
 
 # 6 · สี่ชนิดข้อมูลที่พลาดกันประจำ
 
-ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
-
 ### เงิน
 
 ```sql
@@ -1353,8 +1361,6 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 
 # 9 · migration — เปลี่ยน schema โดยไม่ต้องปิดระบบ
 
-ย้ายมาจาก `database-design` SKILL.md หัวข้อเดียวกัน
-
 **กฎ 3 ข้อ:**
 
 1. **เดินหน้าอย่างเดียว**: migration ที่ merge แล้วห้ามแก้ ถ้าผิดให้เขียนตัวใหม่ทับ
@@ -1389,6 +1395,8 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 ## reference: per-stack.md
 
 # ไวยากรณ์และเครื่องมือแยกตามฐานข้อมูล/ORM
+
+**สารบัญ:** 1 ชนิดข้อมูลเทียบกัน · 2 PostgreSQL · 3 SQL Server · 4 MySQL / MariaDB · 5 MongoDB · 6 Entity Framework Core (.NET) · 7 Prisma / Drizzle (Node) · 8 Alembic (Python) · 9 คำสั่งตรวจ query ช้า
 
 1. [ชนิดข้อมูลเทียบกัน](#1--ชนิดข้อมูลเทียบกัน)
 2. [PostgreSQL](#2--postgresql)
@@ -1474,6 +1482,20 @@ CREATE POLICY tenant_isolation ON orders
   USING (tenant_id = current_setting('app.tenant_id')::bigint);
 -- แอปตั้งค่าต่อ connection: SET app.tenant_id = '42';
 ```
+
+**กับดักที่เจอบ่อยใน PostgreSQL** (แนวคิดจาก wshobson postgresql-table-design · เลขรุ่นคือรุ่นที่พฤติกรรมเริ่มเป็นแบบนี้)
+
+| กับดัก | ทำแบบนี้แทน |
+|---|---|
+| `timestamp` (ไม่มี time zone) ทิ้ง offset เงียบ ๆ เครื่อง `+07:00` กับ UTC เก็บค่าคนละความหมาย | `timestamptz` เสมอ |
+| `serial` สร้าง sequence แยกที่สิทธิ์และ `DROP` ไม่ตามตาราง | `GENERATED ALWAYS AS IDENTITY` (PG 10+) |
+| `ADD COLUMN ... NOT NULL` บนตารางใหญ่กลัวล็อกนาน | ถ้าใส่ `DEFAULT` ค่าคงที่ ไม่เขียนตารางใหม่แล้ว (PG 11+) · DEFAULT ที่เป็นฟังก์ชันเช่น `now()` ยังเขียนใหม่ทั้งตาราง |
+| `ADD CONSTRAINT` (FK · CHECK) สแกนทั้งตารางขณะถือล็อก | `... NOT VALID` ก่อน แล้ว `VALIDATE CONSTRAINT` แยกคำสั่ง (ล็อกเบากว่า) |
+| DDL ต่อคิวหลัง transaction ยาว แล้วทุก query หลังมันค้างตาม | `SET lock_timeout = '5s'` ก่อน DDL ทุกครั้ง ตกแล้วรันใหม่ |
+| unique index ปล่อยให้ `NULL` ซ้ำได้หลายแถว | `UNIQUE NULLS NOT DISTINCT` (PG 15+) หรือ partial index `WHERE col IS NOT NULL` |
+| `LIKE '%คำ%'` และ `ILIKE` ไม่ใช้ btree index | extension `pg_trgm` + GIN index · ค้นข้อความจริงจังใช้ `tsvector` |
+| `jsonb` ค้นด้วย `->>` ไม่ใช้ index | GIN index บนคอลัมน์ (`@>` · `?`) หรือ expression index บน `(meta->>'key')` |
+| `count(*)` ทั้งตารางเพื่อแสดงจำนวนหน้า | ใช้ค่าประมาณจาก `pg_class.reltuples` หรือเลิกแสดงจำนวนรวม (cursor pagination) |
 
 ---
 
@@ -1649,7 +1671,7 @@ def upgrade():
 
 # Warehouse modeling — ELT, stack, star schema, SCD
 
-สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป — ย้ายมาจาก agent `data-engineer` (2026-10-14)
+สำหรับคลังข้อมูลเพื่อวิเคราะห์ (analytics warehouse) ไม่ใช่ฐานข้อมูลของแอป
 
 **สารบัญ:**
 
@@ -1904,6 +1926,8 @@ APP_LOG_LEVEL=debug
 > 🚨 **`.env` ที่ใส่ `.gitignore` ไม่ทัน**: ไฟล์ถูก track ไปแล้วแม้ครั้งเดียว
 > การเพิ่มใน `.gitignore` ทีหลัง**ไม่ลบมันออกจากประวัติ** ต้อง `git rm --cached` และถือว่า secret หลุดแล้ว
 
+**ด่านก่อน commit** (แนวคิดจาก wshobson secrets-management): `.gitignore` กันแค่ไฟล์ที่รู้ชื่อ แต่กุญแจที่เผลอวางในโค้ดหรือ YAML ต้องมีตัวสแกน — ติดตั้ง gitleaks เป็น pre-commit hook ของทุก repo (`gitleaks git --pre-commit --staged` ใน gitleaks 8.19 ขึ้นไป · รุ่นก่อนหน้าใช้ `gitleaks protect --staged`) และรันซ้ำใน CI ทั้งประวัติด้วย `gitleaks git --redact` · hook ตกแล้วห้าม `--no-verify` ให้ย้ายค่าออกก่อน · เจอใน history แล้วไปข้อ 8 ทันที ไม่ใช่แค่ลบบรรทัด
+
 ---
 
 ## 6 · เก็บ secret ไว้ที่ไหน
@@ -1999,6 +2023,8 @@ APP_LOG_LEVEL=debug
 ## reference: per-stack.md
 
 # วิธีทำจริงแยกตามภาษาและเฟรมเวิร์ก
+
+**สารบัญ:** 1 .NET / ASP.NET Core · 2 Node.js · 3 Python · 4 Angular และ frontend ทั่วไป · 5 Docker และ Kubernetes · 6 เครื่องมือตรวจ secret ที่หลุดเข้า git · 7 คำสั่งสร้างค่าสุ่มที่ปลอดภัย
 
 1. [.NET / ASP.NET Core](#1--net--aspnet-core)
 2. [Node.js](#2--nodejs)
@@ -2330,6 +2356,8 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 **งานที่ค้างเพราะ worker ตาย** ต้องมีตัวปลดล็อก
 งานที่ `locked_at` เก่ากว่า N นาที ให้ถือว่าไม่มีใครทำอยู่แล้ว แล้วปลดล็อกให้ worker อื่นหยิบไปทำต่อ
+
+**สถานะของงานเป็นเครื่องสถานะ ไม่ใช่ boolean** (แนวคิดจาก wshobson python-background-jobs) — ทุกกลไกในข้อ 2 ต้องตอบได้ว่างานอยู่สถานะไหนใน `queued → running → succeeded` หรือ `running → failed (attempts < เพดาน) → queued` หรือ `failed → dead` · เก็บ `attempts` · `locked_at` · `last_error` · `finished_at` ไว้กับงาน · เดินได้เฉพาะลูกศรข้างบน (งาน `succeeded` กลับไป `running` ไม่ได้ ต้องสร้างงานใหม่) · หน้าจอแอดมินและ dead letter อ่านจากสถานะนี้ที่เดียว
 
 ---
 

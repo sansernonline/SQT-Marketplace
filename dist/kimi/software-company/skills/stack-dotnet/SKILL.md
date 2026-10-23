@@ -21,7 +21,7 @@ description: Use when writing, reviewing or fixing C# and .NET (ASP.NET Core, MV
 |---|---|---|
 | ดึงแพ็กเกจ | `dotnet restore` | `msbuild App.sln -t:restore` หรือ `nuget restore App.sln` |
 | build | `dotnet build -warnaserror` (หรือตามนโยบาย repo) | `msbuild App.sln -p:Configuration=Release` |
-| test ทั้งหมด | `dotnet test` | `vstest.console.exe Tests\bin\Release\App.Tests.dll` |
+| test ทั้งหมด | `dotnet test` | `vstest.console.exe Tests/bin/Release/App.Tests.dll` |
 | จัดรูปแบบ | `dotnet format --verify-no-changes` | ตาม `.editorconfig` ใน Visual Studio |
 
 รัน test ตัวเดียว:
@@ -32,6 +32,7 @@ dotnet test --filter-method "*Cancel_*"                               # xUnit v3
 vstest.console.exe App.Tests.dll /TestCaseFilter:"FullyQualifiedName~Cancel"   # .NET Framework
 ```
 
+- test ทั้งชุดพ่นผลยาว ให้ต่อท้าย `2>&1 | tail -40` ดูแค่สรุปและ test ที่ล้ม
 - ถ้า repo ตั้ง MTP ไว้ใน `global.json` (`"test": { "runner": "Microsoft.Testing.Platform" }`) ให้ใช้ `--filter-*` แบบบรรทัดที่ 2
 - `msbuild` และ `vstest.console.exe` อยู่ใน Visual Studio หรือ Build Tools ให้เปิดผ่าน Developer PowerShell ส่วนเครื่อง Linux build .NET Framework web project ไม่ได้ จึงต้องบอกตรง ๆ ว่ายังไม่ได้ build
 
@@ -71,6 +72,24 @@ builder.Services.AddOptions<SmtpOptions>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 ```
+
+ผลที่ "ไม่สำเร็จแต่คาดได้" (ไม่พบ · ซ้ำ · สต็อกไม่พอ) คืนเป็นค่า ไม่โยน exception — exception เก็บไว้สำหรับสิ่งที่โค้ดไม่คาด (ปรับจาก wshobson `dotnet-backend-patterns` · MIT):
+
+```csharp
+public sealed record Result<T>(bool IsSuccess, T? Value, string? Error, string? Code)
+{
+    public static Result<T> Ok(T value) => new(true, value, null, null);
+    public static Result<T> Fail(string error, string? code = null) => new(false, default, error, code);
+}
+
+// service
+return stock < qty ? Result<Order>.Fail("สต็อกไม่พอ", "OUT_OF_STOCK") : Result<Order>.Ok(order);
+
+// endpoint — code → status เดียวกันทั้งระบบ แล้วออกเป็น ProblemDetails
+return r.IsSuccess ? Results.Ok(r.Value) : Results.Problem(r.Error, statusCode: r.Code switch { "NOT_FOUND" => 404, "OUT_OF_STOCK" => 409, _ => 400 });
+```
+
+repo ที่มี `FluentResults` หรือ `ErrorOr` อยู่แล้วให้ใช้ตัวนั้น ไม่เพิ่ม record ใหม่ซ้อน
 
 ## 3 · EF Core
 

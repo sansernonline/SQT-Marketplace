@@ -29,7 +29,7 @@ description: Use when writing, reviewing or testing Python (scripts, CLIs, FastA
 ruff check .                      # lint
 ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
 pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
-pytest -q                         # ทั้งชุด
+pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
 pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
 pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
 ```
@@ -114,6 +114,8 @@ def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
 | `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
 | `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
 | `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
+| repo ใช้ `uv` แต่เพิ่มแพ็กเกจด้วย `uv pip install` หรือแก้ `pyproject.toml` มือ | `uv.lock` ไม่อัปเดต เครื่องอื่น `uv sync` แล้วไม่มีแพ็กเกจ | `uv add <pkg>` / `uv remove <pkg>` เท่านั้น · ของ dev ใส่ `uv add --group dev` (`[dependency-groups]`) · รันทุกอย่างผ่าน `uv run` ไม่ activate venv เอง (แนวคิดจาก trailofbits `modern-python` · CC-BY-SA เขียนใหม่) |
+| สคริปต์ไฟล์เดียวมี `requirements.txt` แยกต่างหาก | คนรันลืมติดตั้ง · เวอร์ชันไม่ตรง | ใส่ dependency ไว้ในหัวไฟล์แบบ PEP 723 (`# /// script` … `# dependencies = ["httpx"]` … `# ///`) แล้ว `uv run script.py` สร้าง env ให้เอง |
 | blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
 
 ## 6 · test

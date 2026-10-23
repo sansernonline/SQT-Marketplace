@@ -72,7 +72,7 @@ Client ──X-Request-Id?── API Gateway ──┬── Service A ──┐
                         (ไม่มีก็สร้าง)   └── Service B ──┴─→ ทุกบรรทัดมี cid เดียวกัน
 ```
 
-- รับจาก header **`X-Request-Id`** ถ้าไม่มีให้สร้าง (`uuid v4` ตัด 8 ตัวแรก)
+- รับจาก header **`X-Request-Id`** เฉพาะเมื่อตรง `^[A-Za-z0-9-]{1,64}$` · ไม่มีหรือไม่ตรง → สร้างใหม่ (`uuid v4` ตัด 8 ตัวแรก) · เหตุผลดู `web-service-essentials` ข้อ 3
 - **ส่งกลับใน response header เสมอ** เพื่อให้ลูกค้าส่ง id มาตอนแจ้งปัญหา แล้วเราตามได้ทันที
 - ส่งต่อไปยัง service ปลายทางทุกครั้งที่เรียกข้ามระบบ
 - เก็บด้วยกลไกที่แยกตาม request: `AsyncLocalStorage` (Node) · `ContextVar` (Python)

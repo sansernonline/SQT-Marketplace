@@ -303,7 +303,7 @@ async def run_eval(prompt_version: str):
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company) — for design docs
+- `polished-document-style` (from superuser) — for design docs
 - `architecture-patterns` (from software-company) — for system design
 - `llm-engineering` — for RAG-specific patterns
 - `llm-engineering` — for eval frameworks
@@ -637,7 +637,7 @@ with mlflow.start_run() as run:
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `polished-document-style` (from software-company) — for model cards
+- `polished-document-style` (from superuser) — for model cards
 - `architecture-patterns` (from software-company) — for ML system design
 
 ## Production Handoff
@@ -960,7 +960,7 @@ def psi(baseline: np.ndarray, current: np.ndarray, bins: int = 10) -> float:
 ## Skills You Use
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
-- `polished-document-style` (from software-company) — for runbooks
+- `polished-document-style` (from superuser) — for runbooks
 - `incident-runbook-template` (from software-company) — for ML runbooks
 - `architecture-patterns` (from software-company) — for system design
 - `llm-engineering` — for LLM-specific monitoring
@@ -1333,7 +1333,7 @@ Output JSON: {"correctness": N, "completeness": N, "tone": N, "reasoning": "..."
 
 ## Skills You Use
 
-- `polished-document-style` (from software-company) — for prompt design docs
+- `polished-document-style` (from superuser) — for prompt design docs
 - `llm-engineering` — for detailed patterns
 
 ## Production Considerations
@@ -2536,6 +2536,15 @@ results = evaluate(
 - **Re-check access when documents change.** Delete or re-index chunks when a source is deleted or its permissions change
 
 ## Advanced Patterns
+
+Pick one query transform at a time and measure recall before adding another (แนวคิดจาก borghei rag-architect (MIT+Commons Clause → เขียนใหม่))
+
+| Transform | What it does | Use when | Cost |
+|---|---|---|---|
+| **Multi-query** | LLM writes 3–5 paraphrases, retrieve for each, dedupe | Users phrase the same need many ways; recall is low | +1 LLM call · N× retrieval |
+| **HyDE** | LLM drafts a hypothetical answer, embed that instead of the question | Short questions vs long documents; vocabulary gap between query and corpus | +1 LLM call · risk of confident hallucination steering retrieval |
+| **Step-back** | Ask a broader, more general question first, retrieve for both | Very specific questions whose answer sits in background or principle sections | +1 LLM call · 2× retrieval |
+| **RRF** (reciprocal rank fusion) | Merge ranked lists by `1/(k+rank)`, no score calibration needed | Combining dense + BM25, or results of the transforms above | No LLM call · negligible |
 
 ### Multi-query RAG
 

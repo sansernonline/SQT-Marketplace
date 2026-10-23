@@ -72,6 +72,10 @@ Age 35, retire 60, plan to 85. Spends 30,000/month today. Salary 40,000, PVD 5% 
 
 Reading: on these assumptions the PVD alone covers about 13%. Levers: raising PVD to the employer's max match, retiring at 63, or cutting retirement spending to 25,000 today each move the number a lot — show the user the one they choose. Salary growth is ignored here, which understates PVD.
 
+## Spending after retirement — guardrails, not a fixed %
+
+A fixed "4% of the starting pot, raised with inflation every year" ignores what the market does. The guardrail idea (Guyton and Klinger, *Journal of Financial Planning*, 2006 — idea only, their exact bands are for US portfolios): set a starting withdrawal rate (4–5%), raise it with inflation each year, and each year recompute this year's withdrawal ÷ current portfolio. If that rate has drifted about 20% above the starting rate, cut spending by about 10%; if it has drifted 20% below, allow a 10% raise; skip the inflation raise in a year the portfolio fell. Small cuts early keep the money alive without the all-or-nothing of a fixed rule. Apply it to the invested part only — the ม.33 pension is fixed and is not withdrawn.
+
 ## Rules
 
 - Always show inflation; "30,000 a month" today is about 63,000 in 25 years at 3%.

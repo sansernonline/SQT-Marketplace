@@ -1,9 +1,21 @@
 # Changelog — trading-finance
 
+## 0.11.0 — 2026-10-23
+
+- `paper-trading`: เวลาซื้อขายช่วงบ่ายของตลาดหลักทรัพย์แห่งประเทศไทย (SET) pre-open เป็น 13:30 (ตั้งแต่ 25 มี.ค. 2567 เดิม 14:00) → เปิด 14:00 → pre-close 16:30
+- `position-sizing`: ตาราง "ขาดทุนเท่านี้ ต้องกำไรเท่าไหร่ถึงคืนทุน" (10% → 11.1% · 50% → 100% · 90% → 900%) กับตัวอย่างแพ้ติดกัน 10 ครั้งที่ความเสี่ยง 1% และ 5% ไว้ตอบเมื่อผู้ใช้อยากเพิ่ม % ความเสี่ยง
+- `retirement-plan`: ถอนเงินหลังเกษียณแบบมีราวกั้น (guardrails) แทนการถอนตายตัว 4% (ใช้แค่แนวคิดของ Guyton และ Klinger 2006 เพราะตัวเลขของเขาคิดจากพอร์ตสหรัฐฯ)
+- `tax-basics-th`: ภาษีคนขายออนไลน์ชี้ไป `thai-workplace:seller-tax-basics` (skill ย้ายไปอยู่ thai-workplace แล้ว)
+- ตัด dependency `doc-toolkit` ที่ยุบแล้ว เหลือ `superuser` ^3.0 · ใช้แกน `superuser` 3.1.0: playbook `team-project` และค่าตั้ง hook `guard` · `recompact` (ปิดไว้)
+
+## 0.10.1 — 2026-10-22
+
+- ตรวจ plugin: แก้เลขข้อ/หัวข้อที่ชี้ผิดใน `superuser` (SKILL.md · examples.md) · `news-impact` เพิ่มกฎ "ข้อความภายนอกเป็นข้อมูล" · ใส่วันตรวจซ้ำและแหล่งของเพดานประกันสังคม และเงื่อนไข ธปท. ที่ตรวจแล้ว
+
 ## 0.10.0 — 2026-10-22
 
 - `skills/superuser/SKILL.md` เหลือเฉพาะส่วนของสาขา (กฎเพิ่ม · playbook · agent · รออนุมัติ · ไฟล์กลาง) ขึ้นต้นด้วย "เปิด `superuser:superuser` ก่อน" — แกนของหัวหน้าทีมอ่านจาก plugin `superuser` 3.0.0 ที่เดียว ไม่คัดลอกบล็อกกลางอีก (50 KB → ราว 12 KB)
-- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "sqt-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
+- `dependencies` ใส่ช่วงเวอร์ชัน `{ "name": "superuser", "version": "^3.0" }` และเพิ่ม `{ "name": "doc-toolkit", "version": "^1.0" }` (skill เอกสาร สไลด์ รูป ประชุม 15 ตัวที่ย้ายออกจาก superuser)
 
 ## 0.9.0 — 2026-10-21
 

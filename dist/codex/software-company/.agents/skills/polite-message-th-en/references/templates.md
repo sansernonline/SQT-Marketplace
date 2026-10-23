@@ -115,7 +115,7 @@ The problem: [facts].
 I'd like a [refund/replacement/repair] by [date]. Receipt and photos attached.
 ```
 
-If the merchant does not respond, the next step is a complaint to the Office of the Consumer Protection Board (สคบ.) (hotline 1166 per news reports, checked 22 ต.ค. 2569 — not yet confirmed on the official ocpb.go.th page, รอยืนยัน; full channel list in `complaint-letter-th`, plugin `consumer-rights`, if installed).
+If the merchant does not respond, the next step is a complaint to the Office of the Consumer Protection Board (สคบ.) (hotline 1166 per news reports, checked 22 ต.ค. 2569 — not yet confirmed on the official ocpb.go.th page, รอยืนยัน; full channel list in `complaint-letter-th`, plugin `e-commerce`, if installed).
 
 ## 6. Following up after silence
 

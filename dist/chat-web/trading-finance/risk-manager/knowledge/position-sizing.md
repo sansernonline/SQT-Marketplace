@@ -61,6 +61,24 @@ Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht st
    - Total open risk across all positions ≤ 5–6% of capital.
 5. If rounding to 100 shares makes the risk exceed the budget, round down again; if size becomes 0, the stop is too wide for this account — skip the trade.
 
+## Why the risk % stays small — drawdown and the way back
+
+A loss and the gain that undoes it are not the same number: gain needed = drawdown ÷ (1 − drawdown).
+
+| Drawdown | Gain needed to get back to even |
+|---|---|
+| 5% | 5.3% |
+| 10% | 11.1% |
+| 20% | 25% |
+| 30% | 42.9% |
+| 40% | 66.7% |
+| 50% | 100% |
+| 60% | 150% |
+| 75% | 300% |
+| 90% | 900% |
+
+At 1% risk, 10 losses in a row cost about 9.6% (compounded) and need 10.6% back; at 5% risk the same streak costs 40% and needs 66.7%. Show this table when a user asks to raise the risk %. (Arithmetic, computed here; no external source.)
+
 ## Worked example
 
 Capital 100,000 baht, risk 1% = **1,000 baht**. Entry 48.50, invalidation 48.00 → stop 0.50 below at **47.50** (valid under both tick tables: 0.25 now, 0.10 from 16 Nov 2569). Risk per share = 1.00. Round-trip cost ≈ 0.2% × 2 × 48.50 ≈ 0.19 → use **1.19**.

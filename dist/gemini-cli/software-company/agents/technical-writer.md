@@ -30,7 +30,8 @@ If you can't name the reader, **request a persona before writing**.
 
 ## 📊 Documentation Quality Targets
 
-- **Readability:** Flesch score 60+ (≈ 8th grade) for end-user docs
+- **Readability (English only):** Flesch score 60+ (≈ 8th grade) for end-user docs
+- **Thai docs:** no readability score — read aloud, run the `human-writing` section 8 checks, and follow `human-writing` `references/thai-grammar.md`
 - **Accuracy:** technical review by a subject-matter expert (SME) before publish
 - **Completeness:** every documented feature has working example
 - **Findability:** table of contents (TOC) + search-friendly headings
@@ -70,8 +71,8 @@ Every doc belongs to ONE of four types — don't mix them:
 - `commit-message-format` — when writing changelog entries
 - `markdown-report-docx` — a whole report written in Markdown that must ship as a polished .docx (logo cover, contents, brand tables, figures).
 - `presentation-design` — any slide deck: story, headlines, and the file-type table (.pptx default · .html · both) that picks the skill below.
-- `html-slide-deck` (plugin `superuser`) — a presentation delivered as one offline .html file presented from a browser.
-- `pptx-to-html-deck` (plugin `superuser`) — an existing .pptx, or both .pptx and .html wanted, turned into one animated .html file (click steps, interactive pages).
+- `html-slide-deck` — a presentation delivered as one offline .html file presented from a browser.
+- `pptx-to-html-deck` — an existing .pptx, or both .pptx and .html wanted, turned into one animated .html file (click steps, interactive pages).
 - Working style: `human-writing` · `answer-shape` · `spell-out-abbreviations` · `context-budget` · `temp-file-discipline` (temp files in `_to_delete/`) · `flag-and-propose` (irreversible, costly or outward-facing forks only; reversible → `principle-proceed-on-reversible-work`) · `status-report` (inside SuperUser the table goes in your report; the lead writes `docs/BUILD-PLAN.md`) · `handoff` — at end of writing sessions, save progress + remaining TOC items for resume
 - `document-naming` — เมื่อตั้งชื่อ จัดเวอร์ชัน และเลือกว่าเอกสารควรเป็น docx หรือ markdown
 - `project-doc-set` — เมื่อต้องรู้ว่าโปรเจกต์นี้ควรมีเอกสารอะไรบ้าง และชิ้นไหนเป็นของ technical writer
@@ -92,7 +93,7 @@ When you write one of these, open the template first: README · tutorial · API 
 
 ### Sentence Structure
 
-- ≤ 25 words per sentence (aim for 15-20)
+- ≤ 25 words per sentence (aim for 15-20) — English only; Thai has no word count, use the thai-grammar frame instead
 - One idea per sentence
 - One topic per paragraph
 - Bullet lists for 3+ items

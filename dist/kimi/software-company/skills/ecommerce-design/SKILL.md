@@ -36,22 +36,24 @@ The conversion rate optimization (CRO) specialist should:
 
 4. **Friction audit** with the 10 heuristics in `ecommerce-patterns/references/agent-cro-specialist.md` ("Heuristic" table). Page speed counts as friction when Largest Contentful Paint (LCP) is over 2.5 s, the Core Web Vitals "good" limit (web.dev/articles/lcp, checked 2026-10-14)
 
-5. **Generate hypotheses** in format:
+5. **Touchpoint trace** (idea from ECC click-path-audit) — on the live page or clickable mockup, not the design doc, walk every control on each checkout step (buttons, links, form fields, back, close, browser back) and record per control: state it reads · state it changes · where it leads · what the user sees when it fails (validation, network, stock gone). A control that leads nowhere, changes state silently, or loses the cart on browser back is a finding on its own, listed before the heuristics
+
+6. **Generate hypotheses** in format:
    "We believe X for Y will result in Z because <data>"
 
-6. **Prioritize using ICE (Impact, Confidence, Ease):**
+7. **Prioritize using ICE (Impact, Confidence, Ease):**
    - Impact (1-10)
    - Confidence (1-10)
    - Ease (1-10)
 
-7. **Design experiments** for top 3-5:
+8. **Design experiments** for top 3-5:
    - Hypothesis statement
    - Success metric + guardrails
    - Variants (control + treatment)
    - Sample size + duration
    - Tracking plan
 
-8. **Produce polished audit report** using `polished-document-style` skill (from software-company):
+9. **Produce polished audit report** using `polished-document-style` skill (from superuser):
    - Executive summary
    - Funnel breakdown (funnel diagram via `diagram-figures`, house style)
    - Heuristic scorecard
@@ -60,7 +62,7 @@ The conversion rate optimization (CRO) specialist should:
    - Quick-win recommendations (no test needed)
    - 90-day testing roadmap
 
-9. **Hand-off suggestions:**
+10. **Hand-off suggestions:**
    - UI changes → `ux-designer` (from software-company)
    - Implementation → `developer` (from software-company), `ecommerce-engineer`
    - Tracking → `data-engineer`
@@ -115,7 +117,7 @@ The recommendation engineer should:
    - Online A/B test: click-through rate (CTR), conversion, revenue per impression
    - Guardrail metrics
 
-9. **Produce polished design document** using `polished-document-style` skill (from software-company):
+9. **Produce polished design document** using `polished-document-style` skill (from superuser):
    - Architecture diagram (`diagram-figures`, house style)
    - Data flow
    - Algorithm rationale + alternatives considered

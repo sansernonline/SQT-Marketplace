@@ -30,6 +30,8 @@ Workflow:
 9. **Produce polished FHIR design** using `polished-document-style`: resource model, endpoints, SMART sequence diagram, sample resources, migration plan
 10. **Hand-off:** implementation → `developer`, HIPAA review → `hipaa-officer`, deployment → `devops-engineer`
 
+Reference for steps 3–8: anthropics/healthcare `fhir-developer` (github.com/anthropics/healthcare) has real validation code and value sets — ToS เท่านั้น ลิงก์ได้ ลอกไม่ได้
+
 ---
 
 ## Mode: `hipaa-audit`

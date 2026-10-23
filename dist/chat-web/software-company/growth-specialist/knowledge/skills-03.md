@@ -335,7 +335,7 @@ expected_lift = trace.posterior['diff'].mean()
 ## Skills You Use
 
 - `ecommerce-patterns` — checkout-specific patterns
-- `polished-document-style` (from software-company) — for reports
+- `polished-document-style` (from superuser) — for reports
 
 ## Output: Test Plan
 
@@ -722,7 +722,7 @@ async function updateProduct(slug: string, updates: any) {
 - `ecommerce-patterns` — this skill's references:
   - `references/checkout-optimization.md` — friction analysis + reduction
   - `references/inventory-management.md` · `references/agent-inventory-specialist.md` — stock control patterns
-- `polished-document-style` (from software-company) — for spec docs
+- `polished-document-style` (from superuser) — for spec docs
 
 ## Things You Don't Do
 
@@ -1066,7 +1066,7 @@ stateDiagram-v2
 ## Skills You Use
 
 - `ecommerce-patterns` — patterns and algorithms
-- `polished-document-style` (from software-company) — for docs
+- `polished-document-style` (from superuser) — for docs
 
 ## Things You Don't Do
 
@@ -1106,7 +1106,7 @@ stateDiagram-v2
 
 # Recommendation Engineer — algorithms, serving, evaluation
 
-คู่มือบทบาทของ agent `recommendation-engineer` — ย้ายมาจากตัว agent (2026-10-14) · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
+คู่มือบทบาทของ agent `recommendation-engineer` · จุดแสดงผลในร้าน · email · A/B test อยู่ที่ [`recommendation-systems.md`](recommendation-systems.md)
 
 **สารบัญ:**
 
@@ -2867,6 +2867,18 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 | **Kotlin Multiplatform** | Native UI, share business logic (Compose Multiplatform for iOS เสถียรตั้งแต่ 1.8.0 พ.ค. 2025 — แชร์ UI ได้ด้วย) | ต้องมีความรู้ Kotlin + Xcode ทั้งสองฝั่ง ระบบ library ยังเล็กกว่า RN/Flutter | Existing Android shop |
 | **Expo (RN)** | Easier setup, OTA updates | Some native limits | MVPs, easier teams |
 | **Capacitor** | Web tech, easy bridge | Webview overhead | Web app to mobile |
+
+### Expo vs bare React Native
+
+Decide this before the first commit — moving from bare to Expo later is a rewrite of the native folders (แนวคิดจาก borghei senior-mobile (เขียนใหม่))
+
+| | Expo (managed) | Bare React Native |
+|---|---|---|
+| Native modules | Expo SDK + any module with a config plugin; custom native code via Expo Modules API and prebuild | Anything, edit `ios/` and `android/` directly |
+| Build | EAS Build in the cloud, no Xcode/Android Studio on the dev machine | Local Xcode + Gradle, or your own CI runners |
+| OTA updates | Expo Updates built in (JS and assets only, not native changes) | Add a library yourself, or none |
+| Upgrades | One SDK version bump per release | Upgrade RN + every native dependency by hand |
+| Choose when | MVP, small team, web developers, no exotic hardware | Existing native code, custom SDKs with no config plugin, strict control of build toolchain |
 
 ## React Native Patterns
 

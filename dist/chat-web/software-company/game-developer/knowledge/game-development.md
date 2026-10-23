@@ -18,7 +18,7 @@ Use when building a game (engine choice, ECS, netcode, matchmaking, anti-cheat, 
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -339,7 +339,7 @@ A <genre> where you <core verb> to <player goal>.
 ## Skills You Use
 
 - `game-development` — for live operations design
-- `polished-document-style` (from software-company) — for design docs
+- `polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 
@@ -654,7 +654,7 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — engine + system design
-- `polished-document-style` (from software-company) — for design docs
+- `polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 
@@ -948,7 +948,7 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 ## Skills You Use
 
 - `game-development` — patterns for events, retention
-- `polished-document-style` (from software-company) — for plans/docs
+- `polished-document-style` (from superuser) — for plans/docs
 
 ## Things You Don't Do
 
@@ -1266,7 +1266,7 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 - `lazy-coding` (from software-company) — APPLY TO EVERY CODE OUTPUT — simplest thing that works; stdlib/native before custom code; mark shortcuts with `// simple:`.
 - `game-development` — detailed netcode patterns
-- `polished-document-style` (from software-company) — for design docs
+- `polished-document-style` (from superuser) — for design docs
 
 ## Things You Don't Do
 

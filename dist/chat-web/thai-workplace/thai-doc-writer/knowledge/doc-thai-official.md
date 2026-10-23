@@ -57,13 +57,35 @@ Add the deadline in the body: "ภายในวันที่ 20 ตุลา
 - Contact block at bottom-left: ส่วนราชการเจ้าของเรื่อง, โทร., ไปรษณีย์อิเล็กทรอนิกส์.
 - 1 matter per letter. Polite, precise, no slang, no English unless a proper noun.
 
+Word choice — swap the everyday word for the letter word:
+
+| ภาษาพูด / ร่าง AI | หนังสือราชการ |
+|---|---|
+| เซ็น | ลงนาม |
+| ทำ | ดำเนินการ |
+| เช็ค | ตรวจสอบ |
+| ส่งให้ | ส่งมาเพื่อ… (ส่งมาเพื่อพิจารณา / ส่งมาเพื่อทราบ) |
+| ภายในวันที่ X / ภายใน X วัน | ภายใน X วัน นับจากวันที่ได้รับหนังสือฉบับนี้ |
+| เรา | บริษัทฯ (ไม่ใช้บุรุษที่ 1) |
+
+## 5. Body paragraph — before and after
+
+Draft (AI):
+> บริษัทได้ทำการตรวจสอบระบบแล้ว ซึ่งพบว่ามีความผิดพลาดในการบันทึกข้อมูลของเดือนกันยายน ดังนั้นจึงมีความจำเป็นต้องขอขยายระยะเวลาการยื่นเอกสารออกไป
+
+Clean (ด้วย → ข้อเท็จจริง → ในการนี้):
+> ด้วยบริษัทฯ ตรวจสอบระบบบัญชีแล้วพบว่าข้อมูลเดือนกันยายน 2569 บันทึกผิดพลาด ขณะนี้อยู่ระหว่างแก้ไข คาดว่าจะแล้วเสร็จวันที่ 10 พฤศจิกายน 2569
+> ในการนี้ บริษัทฯ ขอขยายระยะเวลายื่นเอกสารประกอบการตรวจสอบถึงวันที่ 15 พฤศจิกายน 2569
+
+What changed: ทำการตรวจสอบ → ตรวจสอบ · ซึ่ง/ดังนั้น/มีความจำเป็น cut · facts get dates · the request starts with ในการนี้ and names a date.
+
 ## Workflow
 
 1. Ask: sender, recipient position, purpose (inform / request / approve), deadline, enclosures, any letter being referred to.
 2. Choose the type (section 1) and salutation/closing pair (section 2).
-3. Fill the template from references; write the body ด้วย → facts → request with a date.
+3. Fill the template from references; write the body ด้วย → facts → request with a date. ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ ราชการ (and the word table in section 4).
 4. Check: salutation and closing match; ที่ and date present; enclosures numbered and actually attached; signer's full name in brackets and position under it.
-5. Output .docx on letterhead (styling → `branded-document-design`).
+5. Output .docx on letterhead (styling → `branded-document-design`, plugin `software-company`).
 
 ## Worked example (company to Revenue Department)
 

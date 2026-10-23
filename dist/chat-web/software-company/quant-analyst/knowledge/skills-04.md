@@ -423,6 +423,7 @@ Use when writing, reviewing or testing MQL4/MQL5 code for MetaTrader 4/5 (Expert
 
 - ทุกผลส่งกลับต้องอ่าน · requote / off quotes → ลองใหม่ไม่เกิน 3 ครั้ง ราคาใหม่ทุกครั้ง · เงินไม่พอ / stops ผิด → ไม่ลองซ้ำ ลง log แล้วหยุดไม้นั้น
 - pip กับ point ไม่เท่ากัน: ราคา 5 ตำแหน่ง (หรือ 3 ตำแหน่งของคู่ JPY) → 1 pip = 10 point · input ที่ผู้ใช้กรอกเป็น pip ให้แปลงที่จุดเดียว
+- **กับดักที่โค้ดดูถูกแต่พังจริง** (ปรับจาก ThomasPraun/mql-developer · MIT): เทียบ `double` ด้วย `==` ไม่ได้ ให้ `NormalizeDouble` ทั้ง 2 ฝั่งหรือเทียบกับค่าคลาดเคลื่อน · MT4 ปิดหลายออร์เดอร์ต้องวนจาก `OrdersTotal()-1` ลงถึง 0 เพราะปิดแล้ว index เลื่อน · โบรกเกอร์ ECN บางเจ้าไม่รับ SL/TP ใน `OrderSend` ต้องส่งก่อนแล้ว `OrderModify` ตาม · `WebRequest` บล็อกจนกว่าจะตอบ และใช้ใน indicator กับ tester ไม่ได้ · MT4 terminal เดียวเทรดได้ทีละ EA (error 146) ต้องรอแล้วลองใหม่ ไม่ใช่ส่งซ้ำทันที · array แบบ series index 0 = แท่งล่าสุด ให้ `ArraySetAsSeries` กำกับทุกครั้ง ไม่เดาว่าทิศไหน
 
 ตัวอย่างโค้ดตัวตรวจแต่ละข้อ → https://www.mql5.com/en/articles/23204 (อ่านแล้วเขียนเอง ไม่ลอกทั้งไฟล์)
 

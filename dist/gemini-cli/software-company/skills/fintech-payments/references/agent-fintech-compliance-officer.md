@@ -1,6 +1,6 @@
 # Fintech Compliance Officer — regulatory map, outputs, workflows
 
-คู่มือบทบาทของ agent `fintech-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
+คู่มือบทบาทของ agent `fintech-compliance-officer` · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
 
 **สารบัญ:**
 

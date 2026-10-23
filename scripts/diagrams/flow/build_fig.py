@@ -11,10 +11,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from palette import COLOR, emblem, badge
 
 ROOT, TEMPLATE, OUT = sys.argv[1:4]
-# เฉพาะ plugin ที่มี skill superuser (sqt-toolkit เป็น skill ล้วน ไม่มี flow)
+# เฉพาะ plugin ที่มี skill superuser
 PLUGINS = sorted(p for p in os.listdir(os.path.join(ROOT, "plugins")) if os.path.exists(os.path.join(ROOT, "plugins", p, "skills", "superuser", "SKILL.md")))
 count_skills = lambda p: len([d for d in os.listdir(os.path.join(ROOT, "plugins", p, "skills")) if d != "superuser"])
-N_CORE, N_KIT = count_skills("superuser"), count_skills("sqt-toolkit")
+N_CORE = count_skills("superuser")
 tpl = open(TEMPLATE, encoding="utf-8").read()
 HEAD = tpl[: tpl.index("<body>")]
 SCRIPT = tpl[tpl.index("<script>") : tpl.index("</script>") + len("</script>")]
@@ -92,7 +92,7 @@ MODULES = [("context", "CONTEXT.md · ความคืบหน้า · ก�
 CORE_GATE = [("จริง", "", "มีแหล่ง หรือใส่ (รอยืนยัน)"), ("ตรงเป้า", "", "ตรงกับ เสร็จเมื่อ"), ("พร้อมใช้", "", "ใช้ต่อได้ทันที")]
 # ศัพท์ใน figdata ของแกนยังเป็นของ 2.x (บล็อก superuser:begin ถูกเลิกใน 3.0)
 CORE_GLOSS = [("ADAPT.md", "คู่มือต่อยอดแกนเป็น plugin สาขา"), ("plugin สาขา", "มีเฉพาะ playbook · agent · เกณฑ์ · รออนุมัติ แล้วเปิดแกนก่อน"),
-  ("sqt-toolkit", f"plugin เครื่องมือกลาง {N_KIT} skill: เอกสาร สไลด์ รูป ประชุม"), ("hook", "สคริปต์ที่ Claude Code รันเอง: จด log · ส่งกฎประจำตัว · ด่านรีวิว")]
+  ("hook", "สคริปต์ที่ Claude Code รันเอง: จด log · ส่งกฎประจำตัว · ด่านรีวิว")]
 
 def patterns(sk):
     # ตาราง 6 รูปแบบอยู่ใน agent-patterns (ทุก plugin มีชุดเดียวกัน) · sk ยังรับไว้เพื่อให้ตัวเรียกเดิมไม่ต้องแก้
@@ -250,7 +250,7 @@ def build(name):
   <div class="gap" style="height:16px"></div>
   <div class="machine">
     <div class="card mc" id="m1"><div class="t">ลูกทีมของ plugin นี้ · {len(r["agents"])} agent</div><div class="chips" style="justify-content:center;margin-top:8px">{chips(r["agents"])}</div></div>
-    <div class="card mc sb" id="m2"><div class="t">{f"skill กลาง · {N_CORE} ตัว" if is_core else f"skill ที่ลูกทีมใช้ · {len(r['skills'])} ตัว"}</div><div class="chips" style="justify-content:center;margin-top:8px">{chips(r["skills"])}<span class="chip">{"+ sqt-toolkit" if is_core else f"+ skill กลาง {N_CORE} ตัว · sqt-toolkit"} {N_KIT} ตัว: เอกสาร สไลด์ รูป ประชุม</span></div></div>
+    <div class="card mc sb" id="m2"><div class="t">{f"skill กลาง · {N_CORE} ตัว" if is_core else f"skill ที่ลูกทีมใช้ · {len(r['skills'])} ตัว"}</div><div class="chips" style="justify-content:center;margin-top:8px">{chips(r["skills"])}<span class="chip">{"ใช้กับงานทุกสาขา" if is_core else f"+ skill กลาง {N_CORE} ตัว"}</span></div></div>
   </div>
 </div>
 

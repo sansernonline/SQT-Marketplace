@@ -17,6 +17,7 @@ A practice account that only works if it is treated as real. General information
 
 | Real-world friction | How to simulate |
 |---|---|
+| Trading hours | Morning: pre-open 09:30 → random open (T1) → close 12:30 · Afternoon: pre-open **13:30** (since 25 Mar 2567; it used to be 14:00) → open 14:00 → pre-close 16:30 → random close 16:35–16:40 · off-hour until 17:00. Orders outside these windows queue for the next session; a paper fill cannot happen at 13:45 (set.or.th trading-hours, checked 2026-10-22) |
 | Board lot | Round to 100 shares (50 for stocks ≥ 500 baht for 6 months) |
 | Tick size | Entry and stop on valid ticks — current and from-16-Nov-2569 tables are in `position-sizing` (the tick changes on that date for 5–<50 baht) |
 | Fill price | Market order = next tick against you (buy at ask + 0, assume 1 tick slippage); limit order fills only if price **trades through** the limit, not just touches it |

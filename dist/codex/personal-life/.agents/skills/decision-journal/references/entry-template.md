@@ -9,7 +9,7 @@
 - Options: 1) ___ 2) ___ 3) do nothing / wait
 - Key facts (numbers): ___
 - Unknowns: ___
-- Reasoning (confidence L/M/H):
+- Reasoning (confidence 1–10 each):
   - ___ (H)
   - ___ (M)
 - Pre-mortem — it went badly because: ___ · early warning sign: ___

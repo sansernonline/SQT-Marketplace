@@ -60,6 +60,8 @@ Total in words: **ห้าหมื่นสามพันห้าร้อ�
 
 Thai amount-in-words rules: 1 = หนึ่ง alone, but a trailing 1 after tens/hundreds is "เอ็ด" (21 ยี่สิบเอ็ด, 101 หนึ่งร้อยเอ็ด); 20 = ยี่สิบ; whole baht end with "ถ้วน"; satang: 1,234.50 = หนึ่งพันสองร้อยสามสิบสี่บาทห้าสิบสตางค์.
 
+In code, use a tested library rather than writing the rules again: npm `thai-baht-text` (antronic/thai-baht-text-js, MIT, has unit tests) — `ThaiBahtText(10050)` → หนึ่งหมื่นห้าสิบบาทถ้วน. Still spot-check เอ็ด, ยี่สิบ and satang cases against the rules above. ตรวจล่าสุด 2026-10-23 · แหล่ง: https://github.com/antronic/thai-baht-text-js
+
 ## 5. Workflow
 
 1. Confirm: seller VAT-registered? buyer company (WHT) or person? goods or service (tax point)?
@@ -80,7 +82,7 @@ Templates for all 5 documents: [references/templates.md](references/templates.md
 
 ## Related
 
-`e-tax-invoice` · `tax-vat-th` · `promptpay-qr` · `doc-contract-th` · if installed: `seller-tax-basics` (online-seller).
+`e-tax-invoice` · `tax-vat-th` · `promptpay-qr` · `doc-contract-th` · if installed: `seller-tax-basics` (e-commerce).
 
 
 ## reference: templates.md

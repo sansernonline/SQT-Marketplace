@@ -121,12 +121,12 @@ function readJson(path, fallback) {
   try { return JSON.parse(readFileSync(path, "utf8")); } catch { return fallback; }
 }
 
-// config ของโฟลเดอร์งาน (.claude/superuser/config.json) · ไม่มีไฟล์หรือพัง = เปิดทุกโมดูล · ดู SKILL.md หัวข้อ 11
-export function moduleOn(teamDir, key) {
-  if (!teamDir) return true;
+// config ของโฟลเดอร์งาน (.claude/superuser/config.json) · ไม่มีไฟล์หรือพัง = ค่าเริ่ม (เปิด · โมดูล guard และ recompact ค่าเริ่มปิด) · ดู references/modules.md
+export function moduleOn(teamDir, key, def = true) {
+  if (!teamDir) return def;
   const cfg = readJson(join(teamDir, "config.json"), null);
   const v = cfg?.modules?.[key];
-  return v === undefined ? true : v !== false;
+  return v === undefined ? def : v !== false;
 }
 
 // agent id ย่อ 8 ตัว · แยก subagent ชนิดเดียวกันที่ถูกเรียกหลายรอบ (เช่น reviewer รอบ 1–5) ซึ่งเขียนลงไฟล์เดียวกัน
@@ -248,7 +248,7 @@ export function routeSkills(prompt, router) {
 
 export function routerNotice(skills) {
   return skills.length
-    ? `skill ที่ต้องเปิดก่อนเริ่ม (ตามตาราง "เปิด skill ก่อนลงมือ"): ${skills.map((s) => `\`${s}\``).join(" · ")} — เรียกเครื่องมือ Skill ทีละตัวก่อนลงมือ · ตัวที่ไม่มีในเครื่องข้ามไป`
+    ? `เปิด skill ก่อนลงมือ (เครื่องมือ Skill ทีละตัว · ไม่มีในเครื่องข้ามไป): ${skills.map((s) => `\`${s}\``).join(" · ")}`
     : "";
 }
 
@@ -432,21 +432,57 @@ export function ownerInboxGate(name, inp = {}) {
   return "";
 }
 
+// ── ด่านป้องกัน (PreToolUse ทุก agent · โมดูล guard ค่าเริ่มปิด) ─────────
+// รายการห้ามอยู่ใน guard-rules.json (regex ต่อข้อ + เหตุผล + กฎที่มา) · ตรวจเฉพาะ Bash ไม่แตะ Read/Edit/Write
+// ยกเว้นต่อโปรเจกต์: .claude/superuser/guard-allow.json {"allow": ["git-commit"]} ปิดข้อนั้น · ค่าที่ไม่ใช่ id = regex ถ้าตรงคำสั่งให้ผ่าน (เช่น ผู้ใช้สั่ง commit)
+// ตอบตามเอกสาร hooks (code.claude.com/docs/en/hooks ตรวจ 2026-10-23): hookSpecificOutput.permissionDecision "deny" + permissionDecisionReason
+export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(HERE, "guard-rules.json"), { rules: [] }).rules ?? []) {
+  if (name !== "Bash") return "";
+  const cmd = String(inp.command ?? "");
+  const allow = (teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || [];
+  const ids = new Set(rules.map((r) => r.id));
+  for (const a of allow) if (!ids.has(a)) { try { if (new RegExp(a, "i").test(cmd)) return ""; } catch { /* regex พัง = ไม่ยกเว้น */ } }
+  for (const r of rules) {
+    if (allow.includes(r.id)) continue;
+    let re; try { re = new RegExp(r.pattern, "i"); } catch { continue; }
+    if (re.test(cmd)) return `ด่านป้องกัน (SuperUser): ${r.reason} — กฎ: ${r.rule} · ถ้าผู้ใช้สั่งไว้จริง เพิ่ม "${r.id}" ใน .claude/superuser/guard-allow.json ("allow") แล้วลองใหม่`;
+  }
+  return "";
+}
+
 // ทางด่วน: ไม่มีโฟลเดอร์ทีม หรือปิด split_gate → ออกก่อนแตะ transcript · ด่านข้อความเจ้าของไม่อ่านไฟล์ จึงตรวจทุกโปรเจกต์
 function preWriteGate(input) {
   if (input.hook_event_name !== "PreToolUse" || !["Write", "Edit", "Bash"].includes(input.tool_name)) return;
   const root = findProjectRoot(input.cwd ?? process.cwd());
   const teamDir = root && teamDirOf(root);
+  const deny = (reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason } }));
+  if (teamDir && moduleOn(teamDir, "guard", false)) { const g = guardGate(input.tool_name, input.tool_input ?? {}, teamDir); if (g) { deny(g); return; } }
   if (teamDir && !moduleOn(teamDir, "split_gate")) return;
   const owner = ownerInboxGate(input.tool_name, input.tool_input ?? {});
-  if (owner) { process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: owner } })); return; }
+  if (owner) { deny(owner); return; }
   if (!teamDir || input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return;
   const current = { name: input.tool_name, input: input.tool_input ?? {} };
   const targets = targetsOf(current.name, current.input);
   if (!targets.length) return;
   const s = gateState(teamDir, input.transcript_path);
   const reason = targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean);
-  if (reason) process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason } }));
+  if (reason) deny(reason);
+}
+
+// ── ส่งตำแหน่งงานกลับหลังย่อบริบท (โมดูล recompact ค่าเริ่มปิด) ──────────
+// เอกสาร hooks (ตรวจ 2026-10-23): PostCompact "has no decision control" และทิ้ง systemMessage/continue — ส่งบริบทไม่ได้ · ทางที่ส่งได้คือ SessionStart source "compact" ซึ่ง hook นี้รับอยู่แล้ว (กฎประจำตัวถูกส่งซ้ำตรงนั้น)
+// โมดูลนี้เติมหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ของ CONTEXT.md (≤ 40 บรรทัด) ต่อท้ายข้อความ SessionStart ตอน source = compact · PostCompact ใน hooks.json มีไว้จด log ว่าย่อเมื่อไร
+export const RECOMPACT_MAX_LINES = 40;
+const RECOMPACT_HEADS = ["ความคืบหน้า", "รับงานต่อ"];
+export function recompactNotice(teamDir, root = dirname(teamDir)) {
+  const file = [join(teamDir, "CONTEXT.md"), join(root, "CONTEXT.md")].find((f) => existsSync(f));
+  if (!file) return "";
+  let text = ""; try { text = readFileSync(file, "utf8").replace(/\r\n/g, "\n"); } catch { return ""; }
+  // หัวข้อ + บรรทัดถัดไปจนถึงหัวข้อ ## ถัดไป
+  const parts = RECOMPACT_HEADS.map((h) => text.match(new RegExp(`(?:^|\n)(## ${h}[^\n]*(?:\n(?!## )[^\n]*)*)`))?.[1].trim()).filter(Boolean);
+  if (!parts.length) return "";
+  const lines = parts.join("\n\n").split("\n").slice(0, RECOMPACT_MAX_LINES);
+  return `บริบทเพิ่งถูกย่อ — ตำแหน่งงานล่าสุดจาก ${relative(root, file).replace(/\\/g, "/")} (อ่านทั้งไฟล์เมื่อต้องการหัวข้ออื่น):\n${lines.join("\n")}`;
 }
 
 // ── สรุป log ให้คนอ่าน (Stop ของหัวหน้าทีม) ─────────────────────────────
@@ -460,14 +496,24 @@ function readLines(file) {
   try { return readFileSync(file, "utf8").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; }
 }
 
+// รีวิวผ่านแล้วผู้ใช้ยังแก้: บรรทัด review ที่ result ขึ้นต้น "ผ่าน" หรือ "pass" ("ไม่ผ่าน" ไม่ใช่) แล้วมีข้อความผู้ใช้ correction: true ก่อนบรรทัด review ถัดไป
+// นับครั้งเดียวต่อรอบตรวจ เทียบกับรอบล่าสุดเท่านั้น · ไล่ตามลำดับบรรทัดในไฟล์ (หัวหน้าเขียน review ลง main.jsonl ไฟล์เดียวกับข้อความผู้ใช้) · ธงแก้มาจากรายการคำ ตัวเลขนี้จึงใช้เตือน ไม่ใช่ผลวัด
+const PASSED = /^\s*(ผ่าน|pass)/i;
+
 export function countDay(dayDir) {
-  const day = { prompts: 0, corrections: 0, actions: 0, failed: 0, spawns: [], agents: {} };
+  const day = { prompts: 0, corrections: 0, passedReviews: 0, correctedAfterPass: 0, actions: 0, failed: 0, spawns: [], agents: {} };
   for (const name of readdirSync(dayDir).filter((n) => n.endsWith(".jsonl"))) {
     const entries = readLines(join(dayDir, name));
+    let open = false;   // รอบตรวจล่าสุดในไฟล์นี้ผ่าน และยังไม่มีข้อความแก้ตามมา
     for (const e of entries) {
       const agent = e.agent || LEAD;
       const a = (day.agents[agent] ??= { actions: 0, failed: 0, ms: 0, last: "" });
-      if (e.event === "UserPromptSubmit") { day.prompts++; if (e.correction) day.corrections++; continue; }
+      if (e.event === "review") { open = PASSED.test(String(e.result ?? "")); if (open) day.passedReviews++; continue; }
+      if (e.event === "UserPromptSubmit") {
+        day.prompts++;
+        if (e.correction) { day.corrections++; if (open) { day.correctedAfterPass++; open = false; } }
+        continue;
+      }
       if (!e.tool) continue;
       a.actions++; day.actions++;
       if (e.ok === false) { a.failed++; day.failed++; }
@@ -538,9 +584,12 @@ export function summaryMarkdown(days, now = new Date()) {
     out.push("| เวลา | agent | งาน | ผล |", "|---|---|---|---|",
       ...spawns.map((s) => `| ${s.ts.slice(11, 16)} | \`${cell(s.role)}\` | ${cell(s.task) || "—"} | ${s.ok ? "จบปกติ" : "ล้ม"} |`));
   } else out.push("ยังไม่ได้ส่งงานให้ลูกทีม");
+  // ไม่มีรอบตรวจที่ผ่าน → —
+  const afterPass = (x) => (x.passedReviews ? `${x.correctedAfterPass}/${x.passedReviews} (${Math.round((100 * x.correctedAfterPass) / x.passedReviews)}%)` : "—");
   out.push("", "## รายวัน — 30 วันล่าสุด", "",
-    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | ส่งงานลูกทีม | การทำ | การทำที่ล้ม | input token | output token | cache อ่าน | cache สร้าง |", "|---|---|---|---|---|---|---|---|---|---|",
-    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${x.spawns.length} | ${x.actions} | ${x.failed} | ${tok(dayTokens[d])} |`; }), "");
+    "> \"รีวิวผ่านแล้วผู้ใช้ยังแก้\" = รอบตรวจที่ได้ผล ผ่าน แล้วผู้ใช้ยังแก้งานก่อนรอบตรวจถัดไป (นับในวันเดียวกัน) แสดงเป็น `ครั้ง/รอบที่ผ่าน (%)` · ใช้เตือนเท่านั้น เพราะธงผู้ใช้แก้จับจากคำในข้อความจึงพลาดได้ · สูงหลายวันติดกันชี้ว่าผู้ตรวจมีจุดบอด", "",
+    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | รีวิวผ่านแล้วผู้ใช้ยังแก้ | ส่งงานลูกทีม | การทำ | การทำที่ล้ม | input token | output token | cache อ่าน | cache สร้าง |", "|---|---|---|---|---|---|---|---|---|---|---|",
+    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${afterPass(x)} | ${x.spawns.length} | ${x.actions} | ${x.failed} | ${tok(dayTokens[d])} |`; }), "");
   return out.join("\n");
 }
 
@@ -551,7 +600,8 @@ export function writeSummary(teamDir, now = new Date()) {
   const days = {};
   for (const d of readdirSync(logDir).filter((n) => DAY.test(n)).sort()) {
     const cache = join(logDir, d, "day.json");
-    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c) { days[d] = c; continue; } }
+    // day.json รุ่นก่อนไม่มีตัวนับรีวิว → นับวันนั้นใหม่ครั้งเดียว
+    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c?.passedReviews !== undefined) { days[d] = c; continue; } }
     days[d] = countDay(join(logDir, d));
     if (d < today) writeFileSync(cache, JSON.stringify(days[d]));
   }
@@ -658,9 +708,12 @@ function main() {
   if (!root) { say(lead); return; }
 
   const teamDir = teamDirOf(root);
-  let notice = "";
+  let notice = "", back = "";
   try { notice = logAndNotice(input, raw, root, teamDir, event); } catch { /* log ล้มต้องไม่ทำให้กฎหาย */ }
-  say([notice, lead].filter(Boolean).join("\n\n"));   // ข้อความ inbox สั้นและสำคัญ วางก่อนกฎ จะได้ไม่ถูกตัดท้าย
+  if (event === "SessionStart" && input.source === "compact" && moduleOn(teamDir, "recompact", false)) {
+    try { back = recompactNotice(teamDir, root); } catch { /* CONTEXT.md พังต้องไม่ทำให้กฎหาย */ }
+  }
+  say([notice, back, lead].filter(Boolean).join("\n\n"));   // ข้อความ inbox และตำแหน่งงานสั้นและสำคัญ วางก่อนกฎ จะได้ไม่ถูกตัดท้าย
 }
 
 // เขียน log 1 บรรทัด · คืนข้อความแจ้ง inbox ของหัวหน้าทีม · สำเนา hook อีกตัวจด log ไปแล้ว → ไม่จดซ้ำ คืนค่าว่าง
@@ -740,7 +793,28 @@ function selfTest() {
       { ts: "2026-10-21T10:05:00+07:00", role: "software-company:developer", task: "เขียน test", ok: false }],
     agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-company:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
   const md = summaryMarkdown({ "2026-10-21": day }, new Date("2026-10-21T04:00:00Z"));
-  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | 2 | 5 | 1 |")]);
+  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | 5 | 1 |")]);
+  // รีวิวผ่านแล้วผู้ใช้ยังแก้: main.jsonl ชั่วคราว · R = บรรทัด review ที่หัวหน้าเขียน · P(true) = ข้อความผู้ใช้ที่ hook ติดธงแก้
+  const rvDir = join(tmpdir(), `sqt-review-test-${process.pid}`); mkdirSync(rvDir, { recursive: true });
+  const R = (result) => JSON.stringify({ ts: "2026-10-20T10:00:00+07:00", event: "review", agent: "main", task: "ฟอร์ม", round: 1, by: "superuser:reviewer", result, high: 0, mid: 0, low: 1 });
+  const P = (correction) => JSON.stringify({ ts: "2026-10-20T10:05:00+07:00", event: "UserPromptSubmit", agent: "main", prompt: "x", ...(correction ? { correction: true } : {}) });
+  const rv = (...rows) => { writeFileSync(join(rvDir, "main.jsonl"), rows.join("\n") + "\n"); const c = countDay(rvDir); return `${c.correctedAfterPass}/${c.passedReviews}`; };
+  const mdRv = summaryMarkdown({ "2026-10-20": { ...day, passedReviews: 0, correctedAfterPass: 0 }, "2026-10-21": { ...day, passedReviews: 3, correctedAfterPass: 1 } }, new Date("2026-10-21T04:00:00Z"));
+  gates.push(
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่าน → ผู้ใช้แก้ = นับ", [], true, () => rv(R("ผ่าน"), P(true)) === "1/1"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่าน → ผ่าน ไม่มีแก้ = ไม่นับ", [], true, () => rv(R("ผ่าน"), P(false), R("ผ่าน")) === "0/2"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: แก้ก่อนมีรีวิว = ไม่นับ", [], true, () => rv(P(true), R("ผ่าน")) === "0/1"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: รีวิว 2 รอบแล้วแก้ = นับครั้งเดียว เทียบรอบล่าสุด", [], true, () => rv(R("ผ่าน"), R("ผ่าน"), P(true), P(true)) === "1/2" && rv(R("ไม่ผ่าน"), R("ผ่าน"), P(true)) === "1/1" && rv(R("ผ่าน"), R("ไม่ผ่าน"), P(true)) === "0/1"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่านกฎ และ PASS นับเป็นผ่าน · ไม่ผ่าน ไม่นับ", [], true, () => rv(R("ผ่านกฎ"), P(true)) === "1/1" && rv(R("PASS"), P(true)) === "1/1" && rv(R("ไม่ผ่าน"), P(true)) === "0/0"],
+    ["สรุป log: คอลัมน์ ครั้ง/รอบที่ผ่าน (%) · ไม่มีรอบผ่าน = —", [], true, () => mdRv.includes("| 2026-10-21 | 2 | 1 | 1/3 (33%) | 2 | 5 | 1 |") && mdRv.includes("| 2026-10-20 | 2 | 1 | — | 2 |")],
+    ["สรุป log: day.json รุ่นก่อนไม่มีตัวนับรีวิว → นับวันนั้นใหม่", [], true, () => {
+      const rvTeam = join(tmpdir(), `sqt-review-sum-${process.pid}`), dd = join(rvTeam, "log", "2026-10-20"); mkdirSync(dd, { recursive: true });
+      writeFileSync(join(dd, "main.jsonl"), [R("ผ่าน"), P(true)].join("\n") + "\n");
+      writeFileSync(join(dd, "day.json"), JSON.stringify({ prompts: 9, corrections: 9, actions: 0, failed: 0, spawns: [], agents: {} }));
+      const text = readFileSync(writeSummary(rvTeam, new Date("2026-10-22T04:00:00Z")), "utf8");
+      return text.includes("| 2026-10-20 | 1 | 1 | 1/1 (100%) |") && readJson(join(dd, "day.json"), {}).passedReviews === 1;
+    }],
+  );
   // กฎประจำตัวและตัวบอก skill
   const router = readJson(join(HERE, "skill-router.json"), { rules: [] });
   const routes = (s) => routeSkills(s, router);
@@ -783,6 +857,53 @@ function selfTest() {
       finally { process.stdout.write = w; }
       return /"deny"/.test(out);
     }],
+  );
+  // ด่านป้องกัน (guard): โปรเจกต์ชั่วคราวที่มี .claude/superuser/ · ไม่มี config = ปิด · เปิดแล้วบล็อกตามรายการ · guard-allow.json ยกเว้นได้
+  const proj = join(tmpdir(), `sqt-guard-test-${process.pid}`), gTeam = join(proj, ".claude", "superuser"); mkdirSync(gTeam, { recursive: true });
+  const capture = (fn) => { const w = process.stdout.write; let out = ""; process.stdout.write = (s) => { out += s; return true; }; try { fn(); } finally { process.stdout.write = w; } return out; };
+  const bashPre = (command) => capture(() => preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Bash", cwd: proj, tool_input: { command } }));
+  const G = (cmd) => guardGate("Bash", { command: cmd });
+  gates.push(
+    ["ด่านป้องกัน: ค่าเริ่มปิด (ไม่มี config) → git push ผ่าน", [], false, () => /"deny"/.test(bashPre("git push origin main"))],
+    ["ด่านป้องกัน: git push → บล็อก", [], true, () => /ไม่ push/.test(G("git push origin main")) && G("git -C /p push") && !G("git status")],
+    ["ด่านป้องกัน: git commit → บล็อก · git log ผ่าน", [], true, () => /commit/.test(G("git add -A && git commit -m 'x'")) && !G("git log --oneline -5")],
+    ["ด่านป้องกัน: git reset --hard → บล็อก · reset --soft ผ่าน", [], true, () => /reset --hard/.test(G("git reset --hard HEAD~1")) && !G("git reset --soft HEAD~1")],
+    ["ด่านป้องกัน: git stash drop/clear → บล็อก · stash list ผ่าน", [], true, () => G("git stash drop") && G("git stash clear") && !G("git stash list")],
+    ["ด่านป้องกัน: rm -rf นอก _to_delete → บล็อก · ใน _to_delete ผ่าน", [], true, () => G("rm -rf src/old") && G("sudo rm -r -f /tmp/x") && !G("rm -rf _to_delete/lock") && !G("rm -rf ./_to_delete/x") && !G("rm -f a.txt")],
+    ["ด่านป้องกัน: Remove-Item -Recurse -Force นอก _to_delete → บล็อก · ใน _to_delete ผ่าน", [], true, () => G("Remove-Item -Recurse -Force dist") && G("Remove-Item dist -Recurse -Force") && !G("Remove-Item -Recurse -Force _to_delete/x") && !G("Remove-Item a.txt -Force")],
+    ["ด่านป้องกัน: เขียน ~/.claude/settings.json → บล็อก · cat ผ่าน", [], true, () => G("echo '{}' > ~/.claude/settings.json") && G("cp /tmp/s.json $HOME/.claude/settings.json") && G("Set-Content C:\\Users\\me\\.claude\\settings.json '{}'") && !G("cat ~/.claude/settings.json") && !G("echo x > .claude/settings.json")],
+    ["ด่านป้องกัน: guard-allow.json ยกเว้น git-commit และ regex ได้", [], true, () => {
+      writeFileSync(join(gTeam, "guard-allow.json"), JSON.stringify({ allow: ["git-commit", "^git push origin feature/"] }));
+      const ok = !guardGate("Bash", { command: "git commit -m x" }, gTeam) && !guardGate("Bash", { command: "git push origin feature/a" }, gTeam) && Boolean(guardGate("Bash", { command: "git push origin main" }, gTeam));
+      unlinkSync(join(gTeam, "guard-allow.json")); return ok;
+    }],
+    ["ด่านป้องกัน: Edit/Write/Read ไม่โดน", [], false, () => guardGate("Edit", { file_path: "/p/a.md", new_string: "git push origin main" }) || guardGate("Write", { file_path: "/p/a.sh", content: "rm -rf /" }) || guardGate("Read", { file_path: "~/.claude/settings.json" })],
+    ["ด่านป้องกัน: เปิดใน config → ตอบ deny ตามเอกสาร PreToolUse", [], true, () => {
+      writeFileSync(join(gTeam, "config.json"), JSON.stringify({ modules: { guard: true } }));
+      const out = bashPre("git push origin main"); unlinkSync(join(gTeam, "config.json"));
+      let j; try { j = JSON.parse(out); } catch { return false; }
+      return j.hookSpecificOutput?.hookEventName === "PreToolUse" && j.hookSpecificOutput?.permissionDecision === "deny" && /ด่านป้องกัน/.test(j.hookSpecificOutput?.permissionDecisionReason);
+    }],
+  );
+  // ส่งตำแหน่งงานกลับหลังย่อบริบท (recompact)
+  const ctx = "# งาน\n\n## เป้าตอนนี้\nทำ hook\n\n## ความคืบหน้า\n- ขั้น 1 เสร็จ\n- ขั้น 2 กำลังทำ\n\n## กติกา\nห้ามลืม\n\n## รับงานต่อ\n1. รัน self-test\n2. รายงาน\n\n## ไฟล์อื่น\nx\n";
+  gates.push(
+    ["recompact: มี CONTEXT.md → ส่งเฉพาะ ความคืบหน้า + รับงานต่อ", [], true, () => {
+      writeFileSync(join(gTeam, "CONTEXT.md"), ctx);
+      const t = recompactNotice(gTeam, proj); unlinkSync(join(gTeam, "CONTEXT.md"));
+      return t.includes("ขั้น 2 กำลังทำ") && t.includes("รัน self-test") && !t.includes("ห้ามลืม") && !t.includes("ทำ hook") && t.split("\n").length <= RECOMPACT_MAX_LINES + 1;
+    }],
+    ["recompact: ไม่มี CONTEXT.md → ไม่ส่ง", [], false, () => recompactNotice(gTeam, proj)],
+    ["recompact: ยาวเกิน → ตัดที่ 40 บรรทัด", [], true, () => {
+      writeFileSync(join(gTeam, "CONTEXT.md"), "## ความคืบหน้า\n" + "- x\n".repeat(60));
+      const n = recompactNotice(gTeam, proj).split("\n").length; unlinkSync(join(gTeam, "CONTEXT.md"));
+      return n === RECOMPACT_MAX_LINES + 1;
+    }],
+    ["hooks.json: parse ได้ · PreToolUse จับ Bash · มี SessionStart และ PostCompact", [], true, () => {
+      const h = readJson(join(HERE, "hooks.json"), null)?.hooks;
+      return Boolean(h?.SessionStart && h.PostCompact) && h.PreToolUse.some((e) => new RegExp(e.matcher).test("Bash"));
+    }],
+    ["config แม่แบบ: guard และ recompact ปิดเป็นค่าเริ่ม", [], true, () => { const m = readJson(join(HERE, "..", "skills", "superuser", "templates", "config.json"), {}).modules ?? {}; return m.guard === false && m.recompact === false && moduleOn(gTeam, "guard", false) === false; }],
   );
   // สถานะด่าน: อ่านต่อจาก offset ต้องได้ตัวนับเท่าอ่านทั้งไฟล์
   const team = join(tmpdir(), `sqt-gate-test-${process.pid}`); mkdirSync(team, { recursive: true });

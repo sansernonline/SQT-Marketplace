@@ -189,7 +189,24 @@ Use when software stores personal data of people in Thailand (PDPA consent, righ
 
 ---
 
-## 10 · ตัวย่อ
+## 10 · มาตราที่อ้างบ่อย และตัวย่อ
+
+ใช้ตอนลูกค้าหรือฝ่ายกฎหมายถามว่า "ข้อนี้อยู่มาตราไหน" (ตรวจกับฉบับแปลอังกฤษไม่เป็นทางการของ พ.ร.บ. 2562 ราชกิจจานุเบกษา 27 พ.ค. 2562 เมื่อ 23 ต.ค. 2569)
+
+| เรื่อง (ข้อใน skill นี้) | มาตรา |
+|---|---|
+| ความยินยอม (ข้อ 3) | 19 |
+| ฐานทางกฎหมายที่ไม่ต้องขอความยินยอม (ข้อ 2) | 24 |
+| ข้อมูลอ่อนไหว (ข้อ 5) | 26 |
+| ส่งข้อมูลออกนอกประเทศ (ข้อ 7) | 28 |
+| สิทธิเจ้าของข้อมูล (ข้อ 4) — ขอดู · ขอย้าย · คัดค้าน · ขอลบ · ขอระงับ · ขอแก้ | 30 · 31 · 32 · 33 · 34 · 35–36 |
+| มาตรการความปลอดภัย · ระบบลบเมื่อหมดอายุ · แจ้งเหตุรั่วใน 72 ชั่วโมง (ข้อ 6, 8) | 37(1) · 37(3) · 37(4) |
+| บันทึกรายการประมวลผล (ข้อ 1) | 39 |
+| เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (DPO) | 41 |
+| ค่าสินไหม · ค่าเสียหายเชิงลงโทษ | 77 · 78 |
+| โทษปรับทางปกครอง สูงสุด 1 · 3 · 5 ล้านบาท | 82 · 83 · 84 |
+
+**ภาคที่มีกฎทับอีกชั้น** — สุขภาพ · การเงิน · โทรคมนาคม มีหน่วยกำกับของตัวเอง (กระทรวงสาธารณสุข · ธปท./ก.ล.ต./คปภ. · กสทช.) ที่เพิ่มเงื่อนไขเรื่องความลับ อายุการเก็บ และการแจ้งเหตุ ให้ตรวจกฎของภาคนั้นก่อนออกแบบ ไม่ใช่ยึด PDPA อย่างเดียว (แนวคิดจาก BV thai-pdpa (MIT))
 
 - **PDPA** — Personal Data Protection Act (พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562)
 - **ข้อมูลส่วนบุคคล** — ข้อมูลที่ระบุตัวบุคคลได้ ไม่ว่าทางตรงหรือทางอ้อม
@@ -346,6 +363,7 @@ Use when a project needs its own Docker container (untrusted code, system instal
 | เปิด port แบบ `"3000:3000"` (ทุกการ์ดแลน) | คนในเครือข่ายเดียวกันเข้าถึงได้ — ใช้ `127.0.0.1:` เสมอ |
 | ใส่ค่าลับจริงใน `Dockerfile` หรือ image | ค่าลับติดไปกับ image ตลอด |
 | ปิดหรือเพิ่ม limit `cpus` `mem_limit` `pids_limit` จนเครื่องค้าง | ห้องที่วนไม่จบจะกินเครื่องทั้งเครื่อง |
+| mount ของจากเครื่องแบบเขียนได้ ทั้งที่ห้องแค่ต้องอ่าน (`ref/` · ข้อมูลตัวอย่าง · cache SDK ที่แชร์ · ซอร์สต้นทางของโหมด isolated) | โค้ดในห้องที่ถูกหลอกจะเขียนกลับเครื่องได้ — ใส่ `:ro` ทุก mount ที่ไม่ใช่ผลงานของรอบนี้ แล้วให้ห้องคัดลอกเข้าพื้นที่ของตัวเองถ้าต้องแก้ (แนวคิดจาก anthropics/claude-code devcontainer และ trailofbits/skills) |
 
 เอกสารของ Claude Code เตือนไว้ว่า แม้ในคอนเทนเนอร์ การรันแบบไม่มีหน้าต่างขออนุญาต (`--dangerously-skip-permissions`) ยังกันไม่ได้ถ้าโค้ดในโปรเจกต์ตั้งใจขโมยของที่อยู่ในห้อง รวมถึง token ของ Claude Code เอง — ใช้กับ repo ที่ไว้ใจเท่านั้น และใช้ `-Locked` เมื่อไม่แน่ใจ
 
@@ -766,11 +784,11 @@ Use when writing or tidying a document people keep (report, proposal, Word, PDF)
 
 - Internal notes for the author's own team (keep them concise)
 - Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx`
+- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-company`)
 
 > **Note:** This skill governs the *markdown source*. When the deliverable is a
 > rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` on top of it — that skill carries the design tokens,
+> `branded-document-design` (plugin `software-company`) on top of it — that skill carries the design tokens,
 > the typography scale, Thai typography rules, and the `brandkit.py` builder.
 
 ## อ่านเพิ่มเมื่อ
@@ -791,7 +809,7 @@ Status values:
 - **Approved** (อนุมัติแล้ว) — signed off
 - **Archived** (เก็บถาวร) — historical reference
 
-ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
+ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
 
 ## Section Hierarchy
 
@@ -805,7 +823,7 @@ Status values:
 ## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
 
 เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design`
+ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-company`)
 ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
 
 **markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
@@ -897,7 +915,7 @@ Before delivering any polished doc:
 - [ ] Anchor links in TOC actually work
 - [ ] Status badges where applicable
 - [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (house style), not default Mermaid
+- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-company` · house style), not default Mermaid
 - [ ] Callout boxes for tips/warnings (not just paragraphs)
 - [ ] Code blocks have language hints
 - [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
@@ -928,6 +946,8 @@ Before delivering any polished doc:
 # รูปแบบ markdown พร้อมตัวอย่าง
 
 ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
+
+**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
 
 ## Document Header (Always)
 
@@ -1001,7 +1021,7 @@ Use a table:
 
 ## Figures (รูปในเอกสาร)
 
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
+รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
 
 ```markdown
 ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
@@ -1153,9 +1173,9 @@ Define acronyms on first use, then add to glossary.
 |---|---|---|
 | หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
 | ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` | `doc-theme` |
+| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-company`) | `doc-theme` |
+| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-company`) ข้อ 0–1 | `doc-theme` |
+| สไลด์ | `presentation-design` (plugin `software-company`) | `doc-theme` |
 
 ## ค่าตั้งต้นประจำบ้าน (house default)
 

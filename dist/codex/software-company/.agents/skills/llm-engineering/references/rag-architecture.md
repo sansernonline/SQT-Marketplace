@@ -307,6 +307,15 @@ results = evaluate(
 
 ## Advanced Patterns
 
+Pick one query transform at a time and measure recall before adding another (แนวคิดจาก borghei rag-architect (MIT+Commons Clause → เขียนใหม่))
+
+| Transform | What it does | Use when | Cost |
+|---|---|---|---|
+| **Multi-query** | LLM writes 3–5 paraphrases, retrieve for each, dedupe | Users phrase the same need many ways; recall is low | +1 LLM call · N× retrieval |
+| **HyDE** | LLM drafts a hypothetical answer, embed that instead of the question | Short questions vs long documents; vocabulary gap between query and corpus | +1 LLM call · risk of confident hallucination steering retrieval |
+| **Step-back** | Ask a broader, more general question first, retrieve for both | Very specific questions whose answer sits in background or principle sections | +1 LLM call · 2× retrieval |
+| **RRF** (reciprocal rank fusion) | Merge ranked lists by `1/(k+rank)`, no score calibration needed | Combining dense + BM25, or results of the transforms above | No LLM call · negligible |
+
 ### Multi-query RAG
 
 ```python

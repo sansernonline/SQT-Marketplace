@@ -21,7 +21,7 @@ description: Use when writing or reviewing TypeScript in Node (Express, Fastify,
 ```bash
 npm ci                      # pnpm install --frozen-lockfile · yarn install --immutable
 npx tsc --noEmit            # ตรวจ type ทั้งโปรเจกต์
-npm run lint && npm test && npm run build
+npm run lint && npm test && npm run build 2>&1 | tail -40   # ดูแค่ท้ายผล
 npx vitest run src/order/order.service.test.ts -t "คืนเงินเกินยอด"   # รัน test เดียว
 ```
 
@@ -90,6 +90,7 @@ process.on('SIGTERM', () => {
 - `DomSanitizer.bypassSecurityTrust*` ห้ามใช้กับข้อมูลที่ผู้ใช้ส่งมา ถ้าต้องใช้จริงให้คอมเมนต์ว่าทำไมปลอดภัย
 - **repo เก่า (v14–19)** ให้เขียนตามแบบที่ repo ใช้อยู่ ใช้ของใหม่ได้เฉพาะที่ version นั้นรองรับ และไม่ migrate ทั้ง repo ในงาน feature ถ้าอยาก migrate ให้เสนอแยกงาน แล้วใช้ `ng generate @angular/core:control-flow` และ schematic อื่นของ Angular
 - React หรือ Vite: เก็บ state ใน component ก่อน `useEffect` ต้องมี cleanup key ใน list เป็น id ไม่ใช่ index และ env ฝั่ง client ใช้ได้เฉพาะ `VITE_*` และถือว่าทุกคนเห็น
+- repo React หรือ Next.js ที่ต้องไล่เรื่องความเร็ว (render ซ้ำ · bundle · data fetching แบบ waterfall) ให้ดึงกฎจาก Vercel `react-best-practices` มาอ่านสด ๆ ตอนทำ: https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices — เป็นลิงก์อย่างเดียว ไม่คัดกฎมาใส่ที่นี่ เพราะยังไม่ได้ตรวจ licence ของ repo นั้น (ตรวจ 23 ต.ค. 2569) · กฎที่ขัดกับข้อ 2 ของ skill นี้ (strict TS) ให้ยึดของเรา
 
 ```ts
 export class OrderList {

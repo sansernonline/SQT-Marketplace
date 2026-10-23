@@ -26,7 +26,7 @@ Workflow:
 6. **Assess tenant lifecycle:** provisioning, offboarding, migration
 7. **Assess per-tenant features:** config, customization, flags
 8. **Identify risks** with severity
-9. **Produce polished architecture review** using `polished-document-style` (from software-company)
+9. **Produce polished architecture review** using `polished-document-style` (from superuser)
 10. **Hand-off:** implementation → `developer`, `devops-engineer` (from software-company)
 
 ---
@@ -45,5 +45,5 @@ Workflow:
 6. **Plan customer setup flow:** docs, admin user interface (UI), test mode
 7. **Plan observability:** per-tenant, per-integration metrics + logs
 8. **Plan reliability:** retries, circuit breakers, fallbacks
-9. **Produce polished integration spec** using `polished-document-style` (from software-company)
+9. **Produce polished integration spec** using `polished-document-style` (from superuser)
 10. **Hand-off:** implementation → `developer`, security → `security-engineer` (from software-company)

@@ -56,6 +56,18 @@ You are a **Cross-Platform Mobile Engineer**. You build mobile apps that run on 
 | **Expo (RN)** | Easier setup, OTA updates | Some native limits | MVPs, easier teams |
 | **Capacitor** | Web tech, easy bridge | Webview overhead | Web app to mobile |
 
+### Expo vs bare React Native
+
+Decide this before the first commit — moving from bare to Expo later is a rewrite of the native folders (แนวคิดจาก borghei senior-mobile (เขียนใหม่))
+
+| | Expo (managed) | Bare React Native |
+|---|---|---|
+| Native modules | Expo SDK + any module with a config plugin; custom native code via Expo Modules API and prebuild | Anything, edit `ios/` and `android/` directly |
+| Build | EAS Build in the cloud, no Xcode/Android Studio on the dev machine | Local Xcode + Gradle, or your own CI runners |
+| OTA updates | Expo Updates built in (JS and assets only, not native changes) | Add a library yourself, or none |
+| Upgrades | One SDK version bump per release | Upgrade RN + every native dependency by hand |
+| Choose when | MVP, small team, web developers, no exotic hardware | Existing native code, custom SDKs with no config plugin, strict control of build toolchain |
+
 ## React Native Patterns
 
 ```tsx

@@ -40,6 +40,22 @@ description: Use when building or reviewing any HTTP service or backend (health 
 
 \* ถ้าไม่อยากให้คนทั่วไปเห็น commit hash ใน `/version` ให้จำกัดให้เรียกได้เฉพาะเครือข่ายภายใน
 
+**ผูกกับ Kubernetes แบบนี้** (ปรับจาก secondsky `health-check-endpoints` · MIT) — live กับ ready ต้องชี้คนละ path ไม่งั้นข้อข้างบนไร้ความหมาย
+
+```yaml
+livenessProbe:            # ตาย → restart container
+  httpGet: { path: /health/live, port: 3000 }
+  initialDelaySeconds: 15 # ให้แอปขึ้นก่อน ไม่งั้นโดนฆ่าตั้งแต่ยังไม่ทัน listen
+  periodSeconds: 10
+  failureThreshold: 3     # พลาด 3 ครั้งติด (30 วินาที) ค่อย restart
+readinessProbe:           # ไม่พร้อม → ตัดออกจาก Service ชั่วคราว ไม่ restart
+  httpGet: { path: /health/ready, port: 3000 }
+  initialDelaySeconds: 5
+  periodSeconds: 10
+```
+
+แอปที่ warm-up นาน (โหลดโมเดล · cache ใหญ่) เพิ่ม `startupProbe` ชี้ `/health/live` พร้อม `failureThreshold` สูง แทนการยืด `initialDelaySeconds` ของ liveness
+
 ### รูปร่าง response (เหมือนกันทุกภาษา)
 
 ```jsonc
@@ -229,6 +245,7 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 |---|---|
 | รูปแบบ log และ correlation id | `logging-standards` |
 | test ให้ endpoint พวกนี้ | `testing-standards` |
+| ตรวจ response ตรงกับ OpenAPI ใน CI · contract กับทีม frontend · เช็ค breaking change | `api-conventions` [`references/contract-testing.md`](../api-conventions/references/contract-testing.md) |
 | ออกแบบ endpoint ธุรกิจ | command `/api-design` |
 | runbook ตอน service ล่ม | `incident-runbook-template` |
 | ตรวจความปลอดภัย | `security-engineer` + command `/security-scan` |

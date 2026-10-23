@@ -33,6 +33,46 @@
 
 **ห้ามเอา template หน้าตั้งค่าไปทำแอปเครื่องมือ** — ได้หน้าจอที่เนื้อหาลอยอยู่ครึ่งบน และพื้นที่ขวาว่าง
 
+### 0.1 · เทียบกับแอปจริงบน Windows 11 และคอนโทรล WinUI 3
+
+ปรับจาก microsoft/winappCli `winui-design` (MIT · ตรวจ LICENSE ในสำเนา repo 23 ต.ค. 2569) — ใช้ตอนเลือกโครง และตอนส่งต่อ mockup ให้คนเขียน XAML จะได้ไม่ต้องเดาชื่อคอนโทรล
+
+**เลือกเงาแอปจริงก่อนวาง layout** — แถวไหนใกล้แอปที่จะทำที่สุด ให้ยึดโครงนั้น
+
+| แอปเป็นแบบไหน | คอนโทรลหลัก (WinUI 3) | แอปจริงที่ดูเป็นตัวอย่าง |
+|---|---|---|
+| ตั้งค่า · config | `NavigationView` ซ้าย + `SettingsCard` / `SettingsExpander` | Windows Settings |
+| แก้เอกสารหรือ session | `TabView` + เนื้อหาเต็มหน้าต่าง กรอบน้อย | Windows Terminal · Notepad · VS Code |
+| ท่องโครงสร้างเป็นชั้น | `TreeView` + `ListView` + `BreadcrumbBar` | File Explorer · Outlook |
+| เครื่องมือนักพัฒนา · dashboard | `NavigationView` + การ์ด | Dev Home · GitHub Desktop |
+| เครื่องมือจุดประสงค์เดียว | ตัวสลับโหมด + ตารางปุ่มแน่น | Calculator · Snipping Tool |
+| สื่อ · canvas · ภาพใหญ่ | `Grid` มีพื้นผิว hero + ปุ่มลอย **ไม่มี** `NavigationView` | Photos · Clipchamp |
+
+**แปลงความต้องการเป็นคอนโทรล** — กันสัญชาตญาณจากเว็บ (`<select>` · `<input type=date>` · DataGrid ของ WPF)
+
+| ต้องการ | ใช้ |
+|---|---|
+| นำทาง 2–7 หมวด | `NavigationView` · tab เอกสาร → `TabView` · เส้นทาง → `BreadcrumbBar` · 2–3 โหมด → `SelectorBar` |
+| รายการแนวตั้ง · ตารางกระเบื้อง · ต้นไม้ | `ListView` · `GridView` หรือ `ItemsRepeater` + `UniformGridLayout` · `TreeView` |
+| ตารางข้อมูล | `ListView` ที่ `ItemTemplate` เป็น `Grid` + หัวตารางเป็น `Grid` อีกตัว — WinUI 3 ไม่มี `DataGrid` และตัวของ CommunityToolkit ใช้ `x:Bind` ในคอลัมน์ไม่ได้ |
+| รายการ + รายละเอียด | `ListView` + `Grid` ฝั่งรายละเอียด |
+| กรอกข้อความ · ตัวเลข · ค้นหา · วันที่ · เปิดปิด | `TextBox` · `NumberBox` · `AutoSuggestBox` · `CalendarDatePicker` · `ToggleSwitch` |
+| เลือก 1 จาก 2–3 · เลือก 1 จาก 4 ขึ้นไป | `RadioButtons` · `ComboBox` |
+| ต้องตัดสินใจก่อนไปต่อ · เมนูตามบริบท · คำแนะนำครั้งแรก | `ContentDialog` · `Flyout` / `MenuFlyout` · `TeachingTip` |
+| สถานะในหน้า · กำลังทำงาน | `InfoBar` (ตรงกับกฎ InfoBar แทน `alert()` ในข้อ 4 ของ SKILL.md) · แจ้งเตือนระบบ → `AppNotification` |
+
+**ขนาดหน้าต่างเริ่มต้น** — WinUI 3 ไม่มี `SizeToContent` ถ้าไม่ตั้ง จะได้ประมาณ 1024×768 ซึ่งใหญ่เกินสำหรับเครื่องมือส่วนใหญ่ ให้คำนวณใน constructor ของ `MainWindow`
+
+| ค่า | วิธีคิด |
+|---|---|
+| กว้าง | แถวที่กว้างสุด + 48 (ขอบ) แล้วปัดขึ้นเป็นหลัก 20 |
+| สูง | 32 (title bar) + ความสูงทุกแถว + ระยะห่างทุกช่อง + 48 (ขอบ) แล้วปัดขึ้นเป็นหลัก 20 |
+| ปัดทางไหน | ปัดขึ้นเสมอ — เนื้อหาโดนตัดแย่กว่าหน้าต่างกว้างไปนิด |
+| ช่วงที่มักได้ | เครื่องมือจุดประสงค์เดียว 440–560 กว้าง · ฟอร์มหน้าเดียว 600–800 × 640–800 · nav + เนื้อหา 1100–1300 × 720–840 · editor สื่อหรือเอกสาร 1280+ กว้าง |
+| กับดัก | `AppWindow.Resize` รับ **พิกเซลจริง** ไม่ใช่ DIP ต้องคูณ DPI scale ของจอ (`GetDpiForWindow(hwnd) / 96.0`) · ห้ามตั้ง `Width`/`Height` ที่ `Grid` ราก เพราะตัดเนื้อหา ไม่ได้ย่อหน้าต่าง |
+
+mockup HTML ของเราจึงควรตั้ง `width`/`height` ของ `.window` ตามรูบริกนี้ ไม่ใช่เต็ม viewport เสมอ
+
 ---
 
 ## 1 · รายการที่มีปุ่มในแต่ละแถว

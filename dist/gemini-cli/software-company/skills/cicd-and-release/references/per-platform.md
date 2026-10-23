@@ -1,5 +1,7 @@
 # ไฟล์ pipeline ตั้งต้น แยกตามแพลตฟอร์ม
 
+**สารบัญ:** 1 GitHub Actions · 2 Azure DevOps · 3 GitLab CI · 4 Dockerfile หลายขั้น · 5 ตารางเทียบความสามารถ
+
 1. [GitHub Actions](#1--github-actions)
 2. [Azure DevOps](#2--azure-devops)
 3. [GitLab CI](#3--gitlab-ci)

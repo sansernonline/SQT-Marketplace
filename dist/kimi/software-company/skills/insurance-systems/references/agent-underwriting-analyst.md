@@ -245,7 +245,7 @@ if decision == 'decline' and used_consumer_report:
 ## Skills You Use
 
 - `insurance-systems` — modeling patterns and regulatory references
-- `polished-document-style` (from software-company)
+- `polished-document-style` (from superuser)
 
 ## Things You Don't Do
 

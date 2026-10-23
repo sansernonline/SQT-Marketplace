@@ -28,11 +28,17 @@ Use when about to say any work is done, fixed, sent or working. Check it against
 2. หลังทำ ให้ตรวจตามนั้นกับของจริง แล้วบันทึกผลดิบ (ตัวเลข · ภาพ · output)
 3. ถ้าตรวจไม่ได้จริง ๆ (ไม่มีสภาพแวดล้อม · ต้องใช้บัญชีจริง) ให้บอกตรง ๆ ว่า `ยังไม่ได้ตรวจ` และขาดอะไร ห้ามเขียน `ผ่าน`
 
-## สัญญาณว่ากำลังข้าม
+## ข้ออ้างที่ไม่นับเป็นหลักฐาน
 
-- คำว่า "น่าจะ" · "ควรจะ" · "ในทางทฤษฎี" ในรายงานจบงาน
-- ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้
-- ตรวจแค่ส่วนที่ง่าย แล้วสรุปรวมว่าผ่านทั้งหมด
+| ข้ออ้าง | ทำไมไม่นับ | ต้องทำแทน |
+|---|---|---|
+| "น่าจะใช้ได้" · "ควรจะผ่าน" · "ในทางทฤษฎี" · "เหมือนครั้งก่อน" | คำออกตัวแปลว่ายังไม่ได้ดู — เจอในรายงานจบงาน = ธงแดง ให้กลับไปตรวจก่อนส่ง | รันหรือเปิดดู แล้วแปะผลดิบ |
+| "test ผ่านแล้ว" โดยไม่มี output | ผ่านในความจำกับผ่านตอนนี้คนละอย่าง | แปะบรรทัดสรุปผลรันรอบนี้ |
+| "แก้ตามที่บอกแล้ว" · "ไม่มี error" | ไม่มี error ≠ ได้ผลที่ต้องการ | ทำกรณีที่เคยล้มซ้ำให้เห็นว่าผ่าน |
+| subagent รายงานว่าเสร็จ | รายงานคือคำพูด ไม่ใช่ชิ้นงาน | ดู diff หรือเปิดไฟล์ที่เปลี่ยนเอง |
+| ส่งคำสั่งให้ผู้ใช้ไปรันเอง ทั้งที่เรารันได้ · ตรวจแค่ส่วนง่ายแล้วสรุปว่าผ่านทั้งหมด | โยนงานตรวจให้คนอื่น | รันเองให้ครบก่อนใช้คำว่าเสร็จ |
+
+ที่มาของแนวคิดตารางข้ออ้าง: skill `verification-before-completion` ใน obra/superpowers (MIT) · เขียนใหม่ให้ครอบงานนอกโค้ด
 
 
 ---
@@ -58,7 +64,7 @@ Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refun
 
 ## คู่มือบทบาท
 
-agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน
+agent ที่ถูกเรียกมาทำงานสายนี้ให้เปิดไฟล์บทบาทของตัวเองก่อนเริ่มงาน · อ่านสารบัญก่อน แล้วอ่านเฉพาะหัวข้อที่งานใช้
 
 | บทบาท | อ่าน | agent |
 |---|---|---|
@@ -80,7 +86,7 @@ agent ที่ถูกเรียกมาทำงานสายนี้�
 
 # Fintech Compliance Officer — regulatory map, outputs, workflows
 
-คู่มือบทบาทของ agent `fintech-compliance-officer` — ย้ายมาจากตัว agent (2026-10-14) · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
+คู่มือบทบาทของ agent `fintech-compliance-officer` · รายละเอียด PCI-DSS (SAQ, ระดับ, control) อยู่ที่ [`pci-dss-compliance.md`](pci-dss-compliance.md) · KYC/AML อยู่ที่ [`kyc-aml-patterns.md`](kyc-aml-patterns.md)
 
 **สารบัญ:**
 
@@ -351,7 +357,7 @@ NEVER go backwards (except via reversal record)
   - `references/payment-gateway-integration.md` · `references/agent-payment-integration.md` — when integrating Stripe, Adyen, Omise, etc.
   - `references/pci-dss-compliance.md` — when handling card data
   - `references/kyc-aml-patterns.md` — when verifying customer identity
-- `polished-document-style` (from software-company) — for spec docs
+- `polished-document-style` (from superuser) — for spec docs
 - `commit-message-format` (from software-company) — for commits
 
 ## Common Patterns
@@ -706,7 +712,7 @@ Daily job:
 
 # Quant Analyst — models, backtesting, model card, backtest report
 
-คู่มือบทบาทของ agent `quant-analyst` — ย้ายมาจากตัว agent (2026-10-14) · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
+คู่มือบทบาทของ agent `quant-analyst` · โค้ดเป็นตัวอย่าง ต้องตรวจกับข้อมูลจริงก่อนใช้
 
 **สารบัญ:**
 

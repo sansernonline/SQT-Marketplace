@@ -4,7 +4,7 @@
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ
 
-agent 3 · skill 43 · คำสั่ง 0 · playbook 6 · ส่งงานต่อให้ —
+agent 3 · skill 34 · คำสั่ง 0 · playbook 7 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/superuser/`](../../../plugins/superuser/)
 
@@ -35,4 +35,5 @@ agent 3 · skill 43 · คำสั่ง 0 · playbook 6 · ส่งงาน�
 | `pickup-and-pause` | รับงานต่อ · หยุดงาน | 8 |
 | `research` | ค้นคว้าหาคำตอบ | 7 |
 | `review` | ตรวจงานก่อนส่ง | 6 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `unattended-run` | ปล่อยงานยาวให้ทำเอง | 7 |

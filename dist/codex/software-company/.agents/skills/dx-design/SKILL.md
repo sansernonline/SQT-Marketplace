@@ -25,7 +25,7 @@ Workflow:
 6. **Audit onboarding funnel:** drop-off points
 7. **Audit command-line interface (CLI) and SDK** if applicable
 8. **Identify quick wins + structural improvements**
-9. **Produce polished DX audit** using `polished-document-style` (from software-company)
+9. **Produce polished DX audit** using `polished-document-style` (from superuser)
 10. **Hand-off:** docs → `technical-writer` · SDK and CLI code changes → `developer`
 
 ---
@@ -41,5 +41,5 @@ Workflow:
 4. **Design API surface:** resource organization, methods, types
 5. **Design auth + errors per language**
 6. **Plan versioning + distribution**
-7. **Produce polished SDK design doc** using `polished-document-style` (from software-company)
+7. **Produce polished SDK design doc** using `polished-document-style` (from superuser)
 8. **Hand-off:** Implementation → `developer`, docs → `technical-writer` (same as dx-audit)
