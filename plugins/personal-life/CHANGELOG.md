@@ -4,6 +4,7 @@
 
 - รับ skill `meeting-summary` · `meeting-prep-card` จาก `doc-toolkit` ที่ยุบ (เนื้อหาเดิม ชื่อเดิม) · ตัด dependency `doc-toolkit`
 - รวม plugin dev-learning: skill 9 ตัว (+alias 2) · agent tech-mentor · playbook 5 ตัว · prompt 6 ฉบับ — หมวดที่ 5 "เรียนรู้" ใน `skills/superuser/SKILL.md` (กฎ 18–19 · เกณฑ์ · รออนุมัติ) · triggers · examples · context-template
+- skill ใหม่ `course-builder` ออกแบบหลักสูตรฝั่งผู้สอน (ฝั่งผู้เรียนยังเป็น `learning-path`): ผลลัพธ์การเรียนรู้ด้วยกริยาที่มองเห็นได้ตามอนุกรมวิธานของบลูมฉบับปรับปรุง (Krathwohl 2002) · ตารางสอนพร้อมเวลา · แบบฝึกจากพาทำไปจนทำเอง · rubric 3–4 ระดับพร้อมงานตัวอย่าง · แบบประเมินหลังอบรม · ออนไลน์กับในห้อง · ลิขสิทธิ์สื่อการสอน · ตัวอย่างหลักสูตร Git 1 วันที่รันคำสั่งจริงแล้ว · แนวคิดจาก mattpocock/skills `teach` และ `scaffold-exercises` (MIT · เขียนใหม่) · ตรวจแหล่ง 2026-10-23 · แถวใหม่ใน `triggers.md` หมวดเรียนรู้
 
 ## 0.11.1 — 2026-10-22
 

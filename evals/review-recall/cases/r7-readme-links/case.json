@@ -1,0 +1,19 @@
+{
+  "id": "r7-readme-links",
+  "kind": "readme",
+  "request": "เขียน README ของ repo leave-api ใหม่ ให้คนเข้าทีมใหม่ตั้งเครื่องเองได้ใน 30 นาที และลิงก์ไปเอกสารที่มีอยู่แล้วในโฟลเดอร์ docs/ · ส่งมาตรวจเฉพาะ README กับ docs/ ส่วนโค้ดอยู่ใน repo จริง",
+  "done_when": [
+    "คนใหม่ทำตามขั้นเริ่มบนเครื่องได้ทีละบรรทัด",
+    "จาก README ไปถึงเอกสารทุกไฟล์ใน docs/ ได้",
+    "เขียนตาม human-writing"
+  ],
+  "skills": ["human-writing"],
+  "planted": [
+    {
+      "type": "broken-link",
+      "defect": "ลิงก์ docs/api.md ชี้ไฟล์ที่ไม่มี ไฟล์จริงชื่อ docs/api-reference.md",
+      "where": { "file": "README.md", "line": 23, "quote": "docs/api.md" },
+      "keywords": ["api.md", "api-reference", "ลิงก์เสีย", "ลิงก์ผิด", "ลิงก์ไม่", "เปิดไม่ได้"]
+    }
+  ]
+}

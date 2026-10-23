@@ -4,6 +4,7 @@
 
 - รับ skill `image-generation` จาก `doc-toolkit` ที่ยุบ (เนื้อหาเดิม ชื่อเดิม) · ตัด dependency `doc-toolkit`
 - `brief-to-image`: `references/prompt-anatomy.md` เพิ่มหัวข้อ Tactile 3D hero object: แม่แบบภาพวัตถุ 3 มิติจับต้องได้ 8 บรรทัด (subject · material · light · shadow · lens · background · one colour · negatives) พร้อมตัวอย่างเครื่องหมายคำถามกระดาษตัดสีส้มบนกระดาษครีม · เพิ่มสารบัญเพราะไฟล์ยาวเกิน 100 บรรทัด · ลิงก์จาก `SKILL.md` · `image-generation` `references/styles.md` แถว `3d` เปลี่ยนจาก prompt ทั่วไป (clay · studio · pastel) เป็นวัสดุ แสง เงา และ negative ที่ระบุชัด แล้วชี้ไปแม่แบบ
+- `video-script-to-clip`: เพิ่ม `references/production-tools.md` เครื่องมือแปลงสคริปต์เป็นคลิป (CapCut · DaVinci Resolve รุ่นฟรี · HyperFrames · Remotion) พร้อมเงื่อนไขใช้เพื่อการค้าของเพลง เทมเพลต และฟอนต์ใน CapCut · เกณฑ์ Company License ของ Remotion · ค่าส่งออกต่อแพลตฟอร์ม · ฟอนต์ซับไทย · กฎเพลง ตรวจแหล่ง 2026-10-23 · ลิงก์จาก `SKILL.md` หัวข้อ Related · แถวใหม่ใน `triggers.md`
 
 ## 0.9.1 — 2026-10-22
 

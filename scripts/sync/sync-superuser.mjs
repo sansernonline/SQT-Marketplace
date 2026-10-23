@@ -22,6 +22,7 @@ export const SKILL_POINTER = "เปิด `superuser:superuser` ก่อน";
 export const SHARED_FILES = [
   "skills/superuser/references/playbook-learn-from-session.md",
   "skills/superuser/references/playbook-template.md",
+  "skills/superuser/references/playbook-team-project.md",
   "skills/superuser/references/learning-loop.md",
   "skills/superuser/references/brief-template.md",
   "skills/superuser/references/team-files.md",

@@ -5,3 +5,9 @@ __pycache__/
 
 # ผลของ claude plugin eval (สร้างใหม่ทุกรอบ ไม่ commit)
 plugins/*/evals/results/
+
+# ไฟล์ทำงานของ superuser ที่ไม่ commit (ตาม team-files): log · inbox · learn · state ของ hook
+.claude/superuser/log/
+.claude/superuser/inbox/
+.claude/superuser/learn/
+.claude/superuser/state.json*

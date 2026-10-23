@@ -269,6 +269,21 @@
     "ตรวจว่ารายการต่างปิดครบ",
     "รายงานสถานะ"
    ]
+  },
+  "team-project": {
+   "short": "งานใหญ่หลายวัน คนกับ agent ร่วมทีม",
+   "group": "งานยาวและเรียนรู้",
+   "steps": [
+    "เข้าใจโจทย์และข้อจำกัด",
+    "วางทางและเขียน brief",
+    "แตก milestone ที่ตรวจได้",
+    "วางของกลางและตารางแบ่งงาน",
+    "เขียนใบสั่งงานทุกชิ้น",
+    "ลงมือพร้อมกัน",
+    "พิสูจน์ทีละ milestone",
+    "sync ปิดวัน",
+    "รายงานเจ้าของงาน"
+   ]
   }
  },
  "agent_groups": {
@@ -421,6 +436,7 @@
    "data-import-export",
    "observability-basics",
    "cicd-and-release",
+   "infra-as-code",
    "incident-runbook-template",
    "postmortem-template",
    "saas-platform"
@@ -464,7 +480,8 @@
    "mobile-engineering",
    "smart-contracts",
    "developer-experience",
-   "seo-audit-checklist"
+   "seo-audit-checklist",
+   "data-analysis"
   ]
  }
 }

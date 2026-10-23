@@ -31,7 +31,8 @@
       "files": [
         "plugins/thai-workplace/skills/seller-tax-basics/SKILL.md",
         "plugins/thai-workplace/skills/doc-quotation/SKILL.md",
-        "plugins/thai-workplace/skills/tax-vat-th/SKILL.md"
+        "plugins/thai-workplace/skills/tax-vat-th/SKILL.md",
+        "plugins/thai-workplace/skills/thai-business-setup/SKILL.md"
       ]
     },
     "deposit-protection": {
@@ -63,7 +64,16 @@
       "files": [
         "plugins/thai-workplace/skills/seller-tax-basics/SKILL.md",
         "plugins/thai-workplace/skills/payroll-th/SKILL.md",
-        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md"
+        "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md",
+        "plugins/thai-workplace/skills/thai-business-setup/SKILL.md"
+      ]
+    },
+    "import-duty-exemption": {
+      "value": "219/2568",
+      "checked": "2026-10-23",
+      "note": "ประกาศกรมศุลกากรที่ 219/2568 ยกเลิกยกเว้นอากรของนำเข้ามูลค่าไม่เกิน 1,500 บาท เหลือยกเว้นเฉพาะไม่เกิน 1 บาท ตั้งแต่ 1 ม.ค. 2569 · VAT ของนำเข้าราคาต่ำเก็บตั้งแต่ 5 ก.ค. 2567",
+      "files": [
+        "plugins/thai-workplace/skills/thai-business-setup/SKILL.md"
       ]
     }
   },

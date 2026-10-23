@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (93)
+## 🛠️ Skills (95)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -843,6 +843,16 @@
 
 ### 93. worktree-and-branch
 **Description:** Use when 2 or more agents edit one repo at once, a spike could break the main checkout, or a finished branch must be merged, PR-ed or discarded.
+
+---
+
+### 94. data-analysis
+**Description:** Use when a CSV, Excel or SQL export must answer a business question (sales, usage, survey) with traceable numbers, Thai charts and caveats.
+
+---
+
+### 95. infra-as-code
+**Description:** Use when cloud servers, databases or networks should be built from code (OpenTofu, Terraform, Pulumi), drift appears, or data must stay in Thailand.
 
 ---
 

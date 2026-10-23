@@ -33,6 +33,7 @@ ABBR_OK = ("ดร", "นพ", "พญ", "ผศ", "รศ", "ศ", "บจก",
 PERIOD = re.compile(r"([ก-๛]{2,})\.\s+(?=[ก-๛])")  # คำไทย ≥2 ตัว ตามด้วยจุด แล้วคำไทย = จบประโยคด้วยจุด
 YAMOK = re.compile(r"[ก-๛]ๆ|ๆ[ก-๛]")
 DASH = re.compile(r"\s[—–]\s|;")
+EMPTY_CELL = re.compile(r"\|\s*[—–]\s*(?=\|)")  # ขีดเดี่ยวในช่องตาราง = "ไม่มี" ไม่ใช่ขีดยาวในประโยค
 THUK = re.compile(r"ถูก(?!ต้อง|ใจ|กฎ|ลง|กว่า|ที่สุด|สุขลักษณะ|หวย|คอ|ชะตา|อก|ปาก|โฉลก|แพง)(?=[ก-๛])")
 STRIP = [re.compile(r"```.*?```", re.S), re.compile(r"`[^`\n]*`"), re.compile(r"\"[^\"\n]{1,200}\""), re.compile(r"“[^”\n]{1,200}”")]
 
@@ -62,7 +63,7 @@ def scan(text: str):
                 hits.append((i, "f3", m.group(0).strip() + " …"))
         for m in YAMOK.finditer(line):
             hits.append((i, "g-yamok", m.group(0)))
-        for m in DASH.finditer(line):
+        for m in DASH.finditer(EMPTY_CELL.sub("| x ", line)):
             hits.append((i, "t-dash", m.group(0).strip() or ";"))
         if line.lstrip().startswith("ทั้งนี้"):
             hits.append((i, "t-budget", "ทั้งนี้ เปิดย่อหน้า"))
@@ -96,7 +97,8 @@ def self_test() -> int:
     bad = ("ในยุคปัจจุบัน ระบบได้ทำการตรวจสอบ ซึ่งพบว่า… ซึ่งต้องแก้ โดยเร็ว โดยทีม โดยการ\n"
            "เร็วขึ้น. ใช้น้อยลง. ต่างๆ — ทั้งหมด; ถูกลบ ถูกย้าย ถูกเขียน\n\nทั้งนี้ ไม่ต้องกังวล\n")
     good = ("ระบบตรวจแล้วพบ 3 จุด `ทำการ` \"ในยุคปัจจุบัน\" วันทำการถัดไป ดร. สมชาย พ.ศ. 2569 09.00 น. เริ่มงาน\n"
-            "ต่าง ๆ โดยตรง ซึ่งตรงกับที่คาด\n")
+            "ต่าง ๆ โดยตรง ซึ่งตรงกับที่คาด\n"
+            "| สื่อ | หัวข้อ |\n| diagram | — |\n")
     codes = {c for _, c, _ in scan(bad)}
     want = {"t-block", "t-padding", "t-budget", "f3", "g-yamok", "t-dash", "t-thuk"}
     missed = want - codes

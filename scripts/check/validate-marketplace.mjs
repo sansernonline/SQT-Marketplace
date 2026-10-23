@@ -295,6 +295,27 @@ function checkTables(file, text) {
   }
 }
 
+// ---------------------------------------------------------------- relative links
+// ลิงก์ระหว่างไฟล์ (skill → reference · playbook → playbook · ../<skill>/SKILL.md) ต้องเปิดได้จริง — พังเงียบเวลาย้าย skill ข้าม plugin
+// ตรวจเฉพาะปลายทาง .md · โฟลเดอร์ (ลงท้าย /) · หรือขึ้นต้นด้วย ../ · ลิงก์รูปและข้อความตัวอย่างไม่ตรวจ
+// ไม่ตรวจ: ลิงก์ในโค้ด · http · mailto · # · ช่องเติม <…> {…} · ไฟล์ใน assets/ (แม่แบบที่ลิงก์ตามโปรเจกต์ของผู้ใช้)
+function checkLinks(file, text, exists) {
+  if (/(^|\/)assets\//.test(file)) return;
+  const body = text.replace(/\r\n/g, '\n')
+    .replace(/^(\s*)(```|~~~)[\s\S]*?^\1\2/gm, (m) => m.replace(/[^\n]/g, ' '))   // คงเลขบรรทัด
+    .replace(/`[^`\n]*`/g, (m) => ' '.repeat(m.length));
+  body.split('\n').forEach((line, i) => {
+    for (const m of line.matchAll(/\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+      const url = m[1];
+      if (/^(https?:|mailto:|#|data:)/i.test(url) || /[<>{}]/.test(url)) continue;
+      let p = url.split('#')[0].split('?')[0];
+      try { p = decodeURI(p); } catch { /* คงตามที่เขียน */ }
+      if (!p || !(/\.md$/i.test(p) || p.endsWith('/') || p.startsWith('../'))) continue;
+      if (!exists(join(dirname(file), p))) err(`${file}:${i + 1}`, `ลิงก์ "${url}" เปิดไม่ได้ — ถ้าไฟล์อยู่คนละ plugin ให้เขียนชื่อ skill พร้อม plugin แทนลิงก์`);
+    }
+  });
+}
+
 // ---------------------------------------------------------------- playbook
 // ทุกขั้นของ playbook บอก "ใคร:" · ชื่อ agent ใน backtick ต้องมีจริง · ขั้นตรวจต้องอยู่หลังขั้นสุดท้ายที่ลงมือทำ
 // คนตรวจ = `reviewer` ตัวใหม่ · ผู้ตรวจเฉพาะทางตัวใหม่ที่บรรทัดเขียน READ_ONLY · ผู้ใช้อนุมัติ/ตรวจ (การเลือกทางไม่ใช่การตรวจ)
@@ -547,8 +568,17 @@ function selfTest() {
   } finally { mpEntries = []; rmSync(tmp, { recursive: true, force: true }); }
   console.log(`  ${inlineHit ? '✅' : '❌'} mcpServers ใน plugin.json และ marketplace.json โดนตรวจเหมือน .mcp.json`);
   if (inlineHit) ok++;
+  // ลิงก์: ไฟล์ที่ไม่มีต้องโดนจับ · ลิงก์ในโค้ด แม่แบบใน assets/ ช่องเติม รูป และคำตัวอย่าง ต้องไม่โดน
+  errors.length = 0;
+  const have = new Set(['p/skills/a/references/r.md', 'p/skills/b/SKILL.md'].map((x) => join(x)));
+  const exists = (p) => have.has(join(p));
+  checkLinks('p/skills/a/SKILL.md', '[r](references/r.md) [b](../b/SKILL.md) [x](../gone/SKILL.md)\n`[c](../c/SKILL.md)` [f](figures/x.png) [t](<CODE>.md) [w](link)\n```\n[d](../d/SKILL.md)\n```\n', exists);
+  checkLinks('p/skills/a/assets/t.md', '[s](srs.md)', exists);
+  const linkHit = errors.length === 1 && errors[0].includes('../gone/SKILL.md') && errors[0].startsWith('p/skills/a/SKILL.md:1');
+  console.log(`  ${linkHit ? '✅' : '❌'} ลิงก์ไปไฟล์ที่ไม่มีโดนจับ · โค้ด แม่แบบ ช่องเติม รูป ไม่โดน`);
+  if (linkHit) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 10;
+  const total = cases.length + 11;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -617,7 +647,10 @@ function markdownFiles(dir, out = []) {
 }
 const docFiles = ['plugins', 'prompt', 'docs', 'scripts/install'].filter(d => existsSync(join(ROOT, d))).flatMap(d => markdownFiles(join(ROOT, d)))
   .concat(existsSync(readme) ? [['README.md', readFileSync(readme, 'utf8')]] : []);
-for (const [rel, text] of docFiles) checkTables(rel, text);
+for (const [rel, text] of docFiles) {
+  checkTables(rel, text);
+  checkLinks(rel, text, (p) => existsSync(join(ROOT, p)));
+}
 if (existsSync(factsFile)) checkRetired(JSON.parse(readFileSync(factsFile, 'utf8')).retired ?? [], docFiles);
 
 // skill กลางที่ต้องเหมือนกันทุก plugin (human-writing · agent-patterns) · ทุก agent ต้องชี้ไปที่ human-writing

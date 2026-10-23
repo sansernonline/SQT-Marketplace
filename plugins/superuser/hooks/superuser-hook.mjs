@@ -496,14 +496,24 @@ function readLines(file) {
   try { return readFileSync(file, "utf8").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); } catch { return []; }
 }
 
+// รีวิวผ่านแล้วผู้ใช้ยังแก้: บรรทัด review ที่ result ขึ้นต้น "ผ่าน" หรือ "pass" ("ไม่ผ่าน" ไม่ใช่) แล้วมีข้อความผู้ใช้ correction: true ก่อนบรรทัด review ถัดไป
+// นับครั้งเดียวต่อรอบตรวจ เทียบกับรอบล่าสุดเท่านั้น · ไล่ตามลำดับบรรทัดในไฟล์ (หัวหน้าเขียน review ลง main.jsonl ไฟล์เดียวกับข้อความผู้ใช้) · ธงแก้มาจากรายการคำ ตัวเลขนี้จึงใช้เตือน ไม่ใช่ผลวัด
+const PASSED = /^\s*(ผ่าน|pass)/i;
+
 export function countDay(dayDir) {
-  const day = { prompts: 0, corrections: 0, actions: 0, failed: 0, spawns: [], agents: {} };
+  const day = { prompts: 0, corrections: 0, passedReviews: 0, correctedAfterPass: 0, actions: 0, failed: 0, spawns: [], agents: {} };
   for (const name of readdirSync(dayDir).filter((n) => n.endsWith(".jsonl"))) {
     const entries = readLines(join(dayDir, name));
+    let open = false;   // รอบตรวจล่าสุดในไฟล์นี้ผ่าน และยังไม่มีข้อความแก้ตามมา
     for (const e of entries) {
       const agent = e.agent || LEAD;
       const a = (day.agents[agent] ??= { actions: 0, failed: 0, ms: 0, last: "" });
-      if (e.event === "UserPromptSubmit") { day.prompts++; if (e.correction) day.corrections++; continue; }
+      if (e.event === "review") { open = PASSED.test(String(e.result ?? "")); if (open) day.passedReviews++; continue; }
+      if (e.event === "UserPromptSubmit") {
+        day.prompts++;
+        if (e.correction) { day.corrections++; if (open) { day.correctedAfterPass++; open = false; } }
+        continue;
+      }
       if (!e.tool) continue;
       a.actions++; day.actions++;
       if (e.ok === false) { a.failed++; day.failed++; }
@@ -574,9 +584,12 @@ export function summaryMarkdown(days, now = new Date()) {
     out.push("| เวลา | agent | งาน | ผล |", "|---|---|---|---|",
       ...spawns.map((s) => `| ${s.ts.slice(11, 16)} | \`${cell(s.role)}\` | ${cell(s.task) || "—"} | ${s.ok ? "จบปกติ" : "ล้ม"} |`));
   } else out.push("ยังไม่ได้ส่งงานให้ลูกทีม");
+  // ไม่มีรอบตรวจที่ผ่าน → —
+  const afterPass = (x) => (x.passedReviews ? `${x.correctedAfterPass}/${x.passedReviews} (${Math.round((100 * x.correctedAfterPass) / x.passedReviews)}%)` : "—");
   out.push("", "## รายวัน — 30 วันล่าสุด", "",
-    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | ส่งงานลูกทีม | การทำ | การทำที่ล้ม | input token | output token | cache อ่าน | cache สร้าง |", "|---|---|---|---|---|---|---|---|---|---|",
-    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${x.spawns.length} | ${x.actions} | ${x.failed} | ${tok(dayTokens[d])} |`; }), "");
+    "> \"รีวิวผ่านแล้วผู้ใช้ยังแก้\" = รอบตรวจที่ได้ผล ผ่าน แล้วผู้ใช้ยังแก้งานก่อนรอบตรวจถัดไป (นับในวันเดียวกัน) แสดงเป็น `ครั้ง/รอบที่ผ่าน (%)` · ใช้เตือนเท่านั้น เพราะธงผู้ใช้แก้จับจากคำในข้อความจึงพลาดได้ · สูงหลายวันติดกันชี้ว่าผู้ตรวจมีจุดบอด", "",
+    "| วันที่ | ข้อความผู้ใช้ | ผู้ใช้แก้งาน | รีวิวผ่านแล้วผู้ใช้ยังแก้ | ส่งงานลูกทีม | การทำ | การทำที่ล้ม | input token | output token | cache อ่าน | cache สร้าง |", "|---|---|---|---|---|---|---|---|---|---|---|",
+    ...names.slice(-30).reverse().map((d) => { const x = days[d]; return `| ${d} | ${x.prompts} | ${x.corrections} | ${afterPass(x)} | ${x.spawns.length} | ${x.actions} | ${x.failed} | ${tok(dayTokens[d])} |`; }), "");
   return out.join("\n");
 }
 
@@ -587,7 +600,8 @@ export function writeSummary(teamDir, now = new Date()) {
   const days = {};
   for (const d of readdirSync(logDir).filter((n) => DAY.test(n)).sort()) {
     const cache = join(logDir, d, "day.json");
-    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c) { days[d] = c; continue; } }
+    // day.json รุ่นก่อนไม่มีตัวนับรีวิว → นับวันนั้นใหม่ครั้งเดียว
+    if (d < today && existsSync(cache)) { const c = readJson(cache, null); if (c?.passedReviews !== undefined) { days[d] = c; continue; } }
     days[d] = countDay(join(logDir, d));
     if (d < today) writeFileSync(cache, JSON.stringify(days[d]));
   }
@@ -779,7 +793,28 @@ function selfTest() {
       { ts: "2026-10-21T10:05:00+07:00", role: "software-company:developer", task: "เขียน test", ok: false }],
     agents: { main: { actions: 2, failed: 0, ms: 0, last: "2026-10-21T10:06:00+07:00" }, "software-company:developer": { actions: 3, failed: 1, ms: 120000, last: "2026-10-21T10:04:00+07:00" } } };
   const md = summaryMarkdown({ "2026-10-21": day }, new Date("2026-10-21T04:00:00Z"));
-  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | 2 | 5 | 1 |")]);
+  gates.push(["สรุป log: นับงานราย agent", [], true, () => md.includes("| `software-company:developer` | 2 | 1 | 1 | 3 | 1 | 2 นาที |") && md.includes("| 2026-10-21 | 2 | 1 | — | 2 | 5 | 1 |")]);
+  // รีวิวผ่านแล้วผู้ใช้ยังแก้: main.jsonl ชั่วคราว · R = บรรทัด review ที่หัวหน้าเขียน · P(true) = ข้อความผู้ใช้ที่ hook ติดธงแก้
+  const rvDir = join(tmpdir(), `sqt-review-test-${process.pid}`); mkdirSync(rvDir, { recursive: true });
+  const R = (result) => JSON.stringify({ ts: "2026-10-20T10:00:00+07:00", event: "review", agent: "main", task: "ฟอร์ม", round: 1, by: "superuser:reviewer", result, high: 0, mid: 0, low: 1 });
+  const P = (correction) => JSON.stringify({ ts: "2026-10-20T10:05:00+07:00", event: "UserPromptSubmit", agent: "main", prompt: "x", ...(correction ? { correction: true } : {}) });
+  const rv = (...rows) => { writeFileSync(join(rvDir, "main.jsonl"), rows.join("\n") + "\n"); const c = countDay(rvDir); return `${c.correctedAfterPass}/${c.passedReviews}`; };
+  const mdRv = summaryMarkdown({ "2026-10-20": { ...day, passedReviews: 0, correctedAfterPass: 0 }, "2026-10-21": { ...day, passedReviews: 3, correctedAfterPass: 1 } }, new Date("2026-10-21T04:00:00Z"));
+  gates.push(
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่าน → ผู้ใช้แก้ = นับ", [], true, () => rv(R("ผ่าน"), P(true)) === "1/1"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่าน → ผ่าน ไม่มีแก้ = ไม่นับ", [], true, () => rv(R("ผ่าน"), P(false), R("ผ่าน")) === "0/2"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: แก้ก่อนมีรีวิว = ไม่นับ", [], true, () => rv(P(true), R("ผ่าน")) === "0/1"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: รีวิว 2 รอบแล้วแก้ = นับครั้งเดียว เทียบรอบล่าสุด", [], true, () => rv(R("ผ่าน"), R("ผ่าน"), P(true), P(true)) === "1/2" && rv(R("ไม่ผ่าน"), R("ผ่าน"), P(true)) === "1/1" && rv(R("ผ่าน"), R("ไม่ผ่าน"), P(true)) === "0/1"],
+    ["รีวิวผ่านแล้วผู้ใช้ยังแก้: ผ่านกฎ และ PASS นับเป็นผ่าน · ไม่ผ่าน ไม่นับ", [], true, () => rv(R("ผ่านกฎ"), P(true)) === "1/1" && rv(R("PASS"), P(true)) === "1/1" && rv(R("ไม่ผ่าน"), P(true)) === "0/0"],
+    ["สรุป log: คอลัมน์ ครั้ง/รอบที่ผ่าน (%) · ไม่มีรอบผ่าน = —", [], true, () => mdRv.includes("| 2026-10-21 | 2 | 1 | 1/3 (33%) | 2 | 5 | 1 |") && mdRv.includes("| 2026-10-20 | 2 | 1 | — | 2 |")],
+    ["สรุป log: day.json รุ่นก่อนไม่มีตัวนับรีวิว → นับวันนั้นใหม่", [], true, () => {
+      const rvTeam = join(tmpdir(), `sqt-review-sum-${process.pid}`), dd = join(rvTeam, "log", "2026-10-20"); mkdirSync(dd, { recursive: true });
+      writeFileSync(join(dd, "main.jsonl"), [R("ผ่าน"), P(true)].join("\n") + "\n");
+      writeFileSync(join(dd, "day.json"), JSON.stringify({ prompts: 9, corrections: 9, actions: 0, failed: 0, spawns: [], agents: {} }));
+      const text = readFileSync(writeSummary(rvTeam, new Date("2026-10-22T04:00:00Z")), "utf8");
+      return text.includes("| 2026-10-20 | 1 | 1 | 1/1 (100%) |") && readJson(join(dd, "day.json"), {}).passedReviews === 1;
+    }],
+  );
   // กฎประจำตัวและตัวบอก skill
   const router = readJson(join(HERE, "skill-router.json"), { rules: [] });
   const routes = (s) => routeSkills(s, router);
