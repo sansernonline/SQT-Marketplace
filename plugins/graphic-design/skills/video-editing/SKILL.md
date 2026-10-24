@@ -1,9 +1,9 @@
 ---
 name: video-editing
-description: Use when editing video or audio with ffmpeg (ตัดต่อ, silences, loudness, vertical export) or turning slides plus narration into one video.
+description: Use when editing video or audio with ffmpeg (ตัดต่อ, silences, loudness), turning slides into video, or making Thai narration from a script (TTS).
 ---
 
-# video-editing — ตัด ต่อ ปรับเสียง และส่งออกด้วย ffmpeg
+# video-editing — ตัด ต่อ ปรับเสียง สร้างเสียงบรรยาย และส่งออกวิดีโอ
 
 อยู่ใน plugin `graphic-design` · ถ้อยคำเขียนตาม `human-writing` · agent ที่ทำงานนี้คือ `video-editor` · เลือกโปรแกรมตัดต่อแบบกดดูภาพ (CapCut · DaVinci Resolve) และค่าส่งออกต่อแพลตฟอร์มอยู่ใน `video-script-to-clip` `references/production-tools.md`
 
@@ -16,6 +16,7 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
 - ปรับความดังให้ได้ค่าที่แพลตฟอร์มกำหนด (podcast · YouTube · คลิปอบรม)
 - แปลงแนวนอน 16:9 เป็นแนวตั้ง 9:16 · ดึงภาพปก · ส่งออกเป็น MP4 ที่เปิดได้ทุกที่
 - ต่อสไลด์ HTML จาก `html-slide-deck` กับเสียงบรรยายเป็นวิดีโอไฟล์เดียว (บทเรียน podcast · คลิปอบรม) หัวข้อ "สไลด์กับเสียงบรรยายเป็นวิดีโอ"
+- ไม่อยากอัดเสียงเอง: สร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ ได้ซับและเวลาสไลด์ในรอบเดียว หัวข้อ "เสียงบรรยายจากสคริปต์"
 
 ## ไม่ใช้เมื่อ (ใช้ตัวอื่นแทนหรือคู่กัน)
 
@@ -23,6 +24,8 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
 |---|---|
 | เขียน hook บท shot list | `video-script-to-clip` |
 | ซับไทย (ถอดเสียง · ตรวจ · ฝัง) | `subtitles-th` |
+| เขียนสคริปต์ให้ฟังเป็นภาษาพูดก่อนทำเสียง | `speaking-script` |
+| เลียนเสียงคนดังหรือคนที่ไม่ได้ยินยอม | ไม่ทำ บอกผู้ใช้ว่าทำไม่ได้ |
 | สไลด์ที่ต้องมีภาพเคลื่อนไหวในแผ่น | อัดหน้าจอตอนเปิดเด็ค หรือ HyperFrames หรือ Remotion (`production-tools.md` ข้อ 1) |
 | แก้สี ตัดหลายแทร็กโดยดูภาพ ใส่เอฟเฟกต์ | คนตัดใน DaVinci Resolve หรือ CapCut (`production-tools.md` ข้อ 1) · agent เขียนเช็กลิสต์ให้ |
 | คลิปที่สร้างจากโค้ดเป็นชุด (ราคา ข้อความเปลี่ยนตามข้อมูล) | HyperFrames หรือ Remotion (`production-tools.md` ข้อ 1) |
@@ -41,7 +44,7 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
    `python scripts/silences.py in.mp4` ดูช่วงเงียบและเวลาที่จะเหลือ → พอใจแล้วใส่ `-o tight.mp4`
    `--noise` ตั้งต่ำกว่าเสียงพูดเบาสุดแต่สูงกว่าเสียงพื้นห้อง (ค่าตั้งต้นของสคริปต์ -35 dB · ของ ffmpeg เอง -60 dB ซึ่งเข้มเกินสำหรับห้องอัดทั่วไป) · `--min` ช่วงเงียบสั้นสุดที่ตัด (0.7 วินาที · ffmpeg ตั้ง 2 วินาที) · `--pad` เว้นขอบช่วงพูด (0.15 วินาที) กันพยางค์แรกและท้ายขาด
    ช่วงพูดผิดตัดด้วยมือตามเวลาที่ผู้ใช้จดมา ไม่เดาจากความเงียบ
-5. **ปรับความดัง** `python scripts/loudnorm2.py in.wav out.wav --target <LUFS> --tp <dBTP>` (ไฟล์วิดีโอ: คัดลอกภาพเดิม เข้ารหัสเสียงใหม่) · รอบแรกวัด รอบสองใส่ค่าที่วัดได้ · อ่านบรรทัด `Normalization Type`:
+5. **ปรับความดัง** `python scripts/loudnorm2.py in.wav out.wav --target <LUFS> --tp <dBTP>` (LUFS คือหน่วยวัดความดังเสียงทั้งไฟล์) (ไฟล์วิดีโอ: คัดลอกภาพเดิม เข้ารหัสเสียงใหม่) · รอบแรกวัด รอบสองใส่ค่าที่วัดได้ · อ่านบรรทัด `Normalization Type`:
    - `Linear` = เพิ่มหรือลดทั้งไฟล์เท่ากัน ช่วงดังเบาเหมือนเดิม
    - `Dynamic` = ffmpeg บีบช่วงดังเบาให้ถึงเป้า เกิดเมื่อช่วงความดัง (LRA) ที่วัดได้เกิน `--lra` หรือเป็น 0 (ทดสอบ 2026-10-24: LRA 5.9 ได้ Linear · 11.9 และ 0 ได้ Dynamic) และเมื่อไม่ได้ใส่ค่า `measured_*` ครบ 4 ตัว · อยากได้ Linear ให้เพิ่ม `--lra` หรือยอมรับแบบ Dynamic แล้วฟังช่วงที่ดังสุด
    - โหมด Dynamic ทำงานที่ 192 kHz จึงต้องกำหนด `-ar` ของไฟล์ผลลัพธ์ (สคริปต์ตั้ง 48000 ให้) · ค่าตั้งต้นของ ffmpeg คือ I -24 · LRA 7 · TP -2 ไม่ใช่ค่าของแพลตฟอร์มใด สคริปต์จึงให้ใส่เป้าเอง
@@ -54,11 +57,46 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
 8. **ส่งออก** H.264 กับ AAC · `-pix_fmt yuv420p` (เปิดได้ในเครื่องเล่นทั่วไป) · `-movflags +faststart` (เล่นบนเว็บได้ก่อนโหลดครบ) · ขนาดและ fps ตาม `production-tools.md` ข้อ 3
 9. **วัดไฟล์ที่ได้** ความยาวภาพกับเสียง `ffprobe -v error -show_entries stream=codec_type,duration -of csv=p=0 out.mp4` · ความดัง `python scripts/loudnorm2.py out.mp4 --measure` · ดึงภาพที่จุดตัดมาดู · แล้วให้ผู้ใช้ฟังช่วงที่ตัดจริง
 
+## เสียงบรรยายจากสคริปต์ (text-to-speech)
+
+สร้างเสียงทีละซับจากสคริปต์ ซับจึงได้ข้อความจากสคริปต์และเวลาจากเสียงจริง ไม่ต้องถอดเสียง · ฟังครบทุกซับก่อนบอกว่าเสร็จ · เสียงต้นแบบที่ใช้เลียนต้องเป็นเสียงของผู้ใช้เอง หรือเจ้าของเสียงยินยอมเป็นหนังสือ · เขียนสคริปต์ตาม `speaking-script` ก่อน
+
+**เลือกเครื่องสร้างเสียง**
+
+| เครื่อง | ใช้ทำ | ค่าใช้จ่ายและสิทธิ์ | ที่เจอจริงบนเครื่องทดสอบ (2026-10-24) |
+|---|---|---|---|
+| F5-TTS-THAI `--engine f5` | เสียงตัวจริงที่เลียนเสียงผู้ใช้จากคลิปต้นแบบ 5–10 วินาที | ฟรี รันในเครื่อง ข้อความไม่ออกนอกเครื่อง · โค้ด MIT · การ์ดโมเดลไทยเขียน CC-BY-4.0 แต่โมเดลฐาน F5-TTS เป็น CC-BY-NC (รอยืนยัน) จะใช้กับคลิปหารายได้ต้องตรวจสัญญาก่อน | ต้องมีการ์ดจอ NVIDIA จึงใช้งานจริงได้ · บน CPU (หน่วยประมวลผลกลาง · Core Ultra 7 258V) เสียง 8.4 วินาทีใช้ 198.8 วินาทีที่ NFE 16 (NFE คือจำนวนรอบที่โมเดลเกลาเสียง ยิ่งน้อยยิ่งเร็ว) · NFE 7 ใช้ราว 13.5 วินาทีต่อซับ (วัด 1 ซับ · คุณภาพยังไม่ได้ฟังเทียบ) · รันข้อความยาวบน CPU จนหน่วยความจำเกือบหมด |
+| edge-tts `--engine edge` | งานภายในและร่างที่อยากได้เสียงดี | ฟรี ไม่ต้องมีบัญชี · เรียกปลายทางอ่านออกเสียงของ Edge ด้วย token ที่ฝังในแพ็กเกจ ไม่ใช่ API ที่มีสัญญาสำหรับนักพัฒนา (อนุมานจากโค้ดของ edge-tts) จึงไม่ใช้กับคลิปหารายได้ · ข้อความออกนอกเครื่อง | เสียง th-TH-PremwadeeNeural และ th-TH-NiwatNeural · บริการตอบว่าไม่มีเสียงเป็นพัก ๆ ข้อความเดิมลองใหม่แล้วผ่าน สคริปต์จึงลองให้ 3 ครั้ง |
+| เสียงที่มากับ Windows เช่น Pattara `--engine windows` | ร่างเพื่อจับเวลาและตรวจซับ | ฟรี รันในเครื่อง · สัญญาอนุญาตของ Windows (`license.rtf` ในเครื่อง ปรับปรุง April 2024) ไม่พูดถึงการเผยแพร่เสียงที่สร้าง (รอยืนยัน) | 9 ซับสร้างใน 0.9–9.1 วินาที (รอบแรกที่ PowerShell ยังไม่ได้โหลดช้ากว่า) · System.Speech มองไม่เห็นเสียงนี้ ต้องเรียกผ่าน WinRT (Windows Runtime API) |
+| Azure AI Speech แบบจ่าย · Google Cloud TTS | คลิปหารายได้ที่ต้องสิทธิ์ชัด | Azure ล้านตัวอักษรละ 15 USD · Product Terms ให้สิทธิ์ใช้เสียงที่สร้างรวมถึงเชิงพาณิชย์ "For Customers of the paid tier TTS Service only" (รอยืนยัน · คำตอบในฟอรัม Microsoft Q&A ขัดกัน) · Google Chirp 3 HD ฟรี 1 ล้านตัวอักษรต่อเดือน เกินแล้วล้านละ 30 USD · ทั้งคู่ต้องมีบัญชีและคีย์ | ยังไม่มีในสคริปต์ เพิ่มเมื่อผู้ใช้มีคีย์ |
+| Lunarlist ผ่าน PyThaiTTS 0.8.0 | ไม่ใช้ | ฟรี · MIT | อ่านอักษรละตินไม่ได้ (Git · commit ถูกข้าม) · บางวลีพูดไม่หยุด วลี 3 วินาทีออกมา 58 วินาที |
+
+1. **แบ่งสคริปต์เป็นซับ** เขียนตาม `speaking-script` แล้วให้ 1 บรรทัดเป็น 1 ซับ บรรทัดหนึ่งไม่เกิน 35 ตัว ใช้ `|` แบ่งเป็น 2 บรรทัด · ใส่ `[สไลด์ n]` ก่อนบรรทัดที่สไลด์เปลี่ยน · บรรทัดที่ขึ้นต้นด้วย `#` เป็นหมายเหตุ เครื่องไม่อ่าน
+2. **ทำไฟล์คำอ่าน** `words.tsv` บรรทัดละ `คำ<TAB>คำอ่าน` สำหรับคำอังกฤษ ชื่อเฉพาะ และตัวย่อ เช่น `Git<TAB>กิต` · เครื่องอ่านตามคำอ่าน แต่ซับยังแสดงคำเดิม · คำอังกฤษจับโดยไม่สนตัวพิมพ์เล็กใหญ่ · บรรทัดที่ขึ้นต้นด้วย `#` และแถวหัวตาราง (`คำ` หรือ `word`) ถูกข้าม · ตัวเลข: F5 แปลงเป็นคำเองใน `th_normalize.py` (เห็นในโค้ด) · เสียง Windows กับ edge ยังไม่ได้ฟังตรวจว่าอ่านเลขถูกไหม ให้ฟังในข้อ 5 · ตัวที่อ่านได้หลายแบบ (ปี ทศนิยม เบอร์) เขียนเป็นคำในสคริปต์ทุกเครื่อง
+3. **ทำร่างด้วยเสียง Windows ก่อน** `python scripts/tts_cues.py ep01.txt -o draft --engine windows --lexicon words.tsv` ดูความยาวรวมกับเวลาสไลด์ แล้วรัน `srt_check.py` ของ `subtitles-th` กับ `draft/narration.srt` แก้สคริปต์จนผ่าน
+4. **สร้างเสียงตัวจริง**
+   - F5: `python scripts/tts_cues.py ep01.txt -o final --engine f5 --lexicon words.tsv --f5-python <F5>/venv/Scripts/python.exe --f5-root <F5> --ref me.wav --ref-text "ข้อความที่พูดใน me.wav ตรงทุกคำ"`
+   - `--ref` เป็นคลิปเสียงของผู้ใช้ยาว 5–10 วินาที ไม่มีเสียงรบกวน · `--nfe` ค่าตั้งต้น 32 ลดได้ถึง 7 ถ้าอยากได้เร็ว ซึ่งหน้าเว็บของ F5-TTS-THAI บอกว่าเสียงยังพอฟังได้
+   - edge: `--engine edge --voice th-TH-PremwadeeNeural` ต้องติดตั้ง `edge-tts` ใน venv ของงานก่อน (`python -m pip install edge-tts`)
+   - งานล้มกลางทางแล้วรันซ้ำได้ เสียงที่สร้างเสร็จเก็บใน `final/cues/` สคริปต์สร้างใหม่เฉพาะซับที่ข้อความหรือค่าตั้งเปลี่ยน
+5. **ฟังทุกซับ** จดคำที่อ่านผิด แก้ใน `words.tsv` หรือในสคริปต์ แล้วรันคำสั่งเดิมซ้ำ
+6. **ตรวจแล้วต่อ** `srt_check.py final/narration.srt` ต้องผ่าน · ความยาวของ `narration.wav` ต้องเท่ากับ `total` ใน `cues.json` · ปรับความดังตามข้อ 5 ของขั้นตอนหลัก (Apple Podcasts -16 LUFS) · คัด `data_at` ของแต่ละสไลด์จาก `cues.json` ใส่เด็ค แล้วทำต่อตามหัวข้อสไลด์กับเสียงบรรยาย
+7. **บอกผู้ฟัง** ใน show notes หรือคำอธิบายคลิปว่าเสียงบรรยายสร้างด้วย AI (Code of Conduct for Microsoft AI Services ข้อ 3 บังคับกับ Azure · ใช้กับทุกเครื่องเพื่อความโปร่งใส)
+
+| อาการ | สาเหตุ | แก้ |
+|---|---|---|
+| F5 ล้มพร้อมข้อความ `Could not load libtorchcodec` | torchaudio 2.9 ขึ้นไปอ่านไฟล์เสียงผ่าน torchcodec ซึ่งต้องมีไฟล์ไลบรารี (DLL) ของ FFmpeg รุ่น shared · ffmpeg.exe แบบไฟล์เดียวใช้ไม่ได้ | `f5_worker.py` อ่านไฟล์ด้วย soundfile แทนแล้ว · หน้าเว็บของ F5 ยังล้มอยู่ ต้องติดตั้ง FFmpeg รุ่น shared แล้วเพิ่มโฟลเดอร์ลงใน PATH (รายชื่อโฟลเดอร์ที่ Windows ใช้หาโปรแกรม) · ข้อนี้รออนุมัติ |
+| เครื่องช้ามากหรือหน่วยความจำเกือบหมดตอนรัน F5 | รันบน CPU | ทำตอนสั้นทีละตอน · NFE 16 · ย้ายไปเครื่องที่มีการ์ดจอ NVIDIA |
+| เสียง Windows ออกมาไฟล์เดียวแทนทุกซับ | `ConvertFrom-Json` ของ PowerShell 5.1 ส่ง array ออกมาเป็นก้อนเดียว | อย่าห่อผลด้วย `@()` (แก้แล้วใน `windows_tts.ps1`) |
+| คำอังกฤษหายหรืออ่านเพี้ยน | โมเดลไทยรู้จักอักษรไทยเป็นหลัก | ใส่คำอ่านใน `words.tsv` |
+| ซับแสดงคำอ่านแทนคำเดิม | เขียนคำอ่านลงในสคริปต์ตรง ๆ | ย้ายไปใส่ใน `words.tsv` |
+| ซับสั้นอยู่บนจอไม่ถึง 5/6 วินาที (ราว 0.83 วินาที ค่าต่ำสุดในตาราง caption ของ `video-script-to-clip`) | ประโยคสั้นมาก เช่น "สวัสดีครับ" | สคริปต์ยืดเวลาซับให้อย่างน้อย 0.9 วินาทีแล้ว แต่ไม่ให้ทับซับถัดไป |
+
 ## สไลด์กับเสียงบรรยายเป็นวิดีโอ
 
 เวลาของทุกสไลด์มาจาก `data-at` ในเด็คที่เดียว แล้วพิสูจน์จากไฟล์ที่ได้ว่ายาวเท่าเสียง และภาพที่เวลาสุ่มเป็นแผ่นที่ควรขึ้น
 
-1. **ตั้งเวลาในเด็ค** ทุก `<section class="slide">` มี `data-at="m:ss"` คือเวลาที่ควรถึงแผ่นนั้น (ความหมายเดียวกับนาฬิกาในหน้าต่างผู้พูดของ `html-slide-deck`) · เอาเวลาจากเสียงที่ตัดเสร็จแล้ว ไม่ใช่เวลาประมาณในสคริปต์
+1. **ตั้งเวลาในเด็ค** ทุก `<section class="slide">` มี `data-at="m:ss"` คือเวลาที่ควรถึงแผ่นนั้น (ความหมายเดียวกับนาฬิกาในหน้าต่างผู้พูดของ `html-slide-deck`) · เอาเวลาจากเสียงที่ตัดเสร็จแล้ว ไม่ใช่เวลาประมาณในสคริปต์ · เสียงที่สร้างตามหัวข้อเสียงบรรยายจากสคริปต์มี `data_at` ของทุกสไลด์ใน `cues.json` แล้ว
 2. **ทำภาพทีละแผ่น** `python <html-slide-deck>/scripts/check_deck.py deck.html --out frames` ได้ `p01.png …` ขนาด 1920×1080 (ต้องมี Playwright และ Pillow) · แผ่นที่มี animation เพิ่ม `--wait` ให้ภาพเป็นสถานะสุดท้าย · เด็คที่ยังเป็นไฟล์เนื้อหาต้อง `build_deck.py` ก่อน
 3. **เสียงต้องเสร็จก่อน** ตัดและปรับความดังตามข้อ 4–5 ก่อนตั้ง `data-at` ตัดเสียงทีหลังแล้วสไลด์จะเลื่อนทั้งเด็ค
 4. **ดูตารางเวลาแล้วสร้าง** `python scripts/slides_to_video.py deck.html frames narration.wav --check` · สคริปต์หยุดพร้อมบอกเหตุเมื่อ `data-at` ไม่เพิ่มขึ้นทุกแผ่น · จำนวนภาพไม่เท่าสไลด์ · แผ่นสุดท้ายเริ่มหลังเสียงจบ · ผ่านแล้วตัด `--check` ใส่ `-o episode.mp4` ได้ H.264 กับ AAC 30 fps ยาวเท่าเสียงพอดี
@@ -93,6 +131,14 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
 - **โจทย์:** เสียง 11 วินาทีที่มีช่วงเงียบ 2 ช่วง (2 กับ 1 วินาที) ในไฟล์วิดีโอ และเสียงที่ดังเบาต่างกันให้ปรับเป็น -16 LUFS
 - **สิ่งที่ทำ:** `silences.py gaps.mp4 -o tight.mp4` · `loudnorm2.py varied2.wav out.wav`
 - **ผล:** เจอช่วงเงียบ 3.00–5.00 และ 8.00–9.00 ตรงตามที่สร้าง · เหลือ 8.60 วินาทีเท่าที่คำนวณ (ภาพ 8.60 · เสียง 8.62) · ความดังได้ -15.6 LUFS แบบ Linear · ไฟล์วิดีโอ `--target -14` ได้ -14.0 LUFS โดยภาพไม่ถูกเข้ารหัสใหม่ (ตรวจจริง 2026-10-24 · ffmpeg 9.0.2 บน Windows)
+- **โจทย์ (เสียงบรรยายจากสคริปต์):** บทเรียน Git ตอนที่ 1 มี 9 ซับ 3 สไลด์ มีคำอังกฤษ ตัวเลข และวรรณยุกต์ซ้อน (ก๋วยเตี๋ยว)
+- **สิ่งที่ทำ:** รันด้วย 3 เครื่อง · เสียง Windows ใช้ `words.tsv` · edge ไม่ใช้ · F5 ทดสอบ 2 ซับที่ NFE 16 ด้วยคลิปต้นแบบที่มากับโปรแกรม · เอา `data_at` จาก `cues.json` ใส่เด็ค 3 แผ่นแล้วต่อด้วย `slides_to_video.py` · ฝังซับแล้วดึงภาพที่วินาทีที่ 12 กับ 28
+- **ผล** (ตรวจจริง 2026-10-24 · ffmpeg 9.0.2 บน Windows):
+  - เสียง Windows: 9 ซับใช้ 0.9 วินาที (รอบแรกหลังเปิดเครื่องช้าได้ถึง 9.1 วินาที) · ยาวรวม 32.21 วินาที ffprobe วัดได้ตรงกัน · รันซ้ำแล้วใช้เสียงเดิมทั้ง 9 ซับ
+  - edge: ยาวรวม 28.73 วินาที · รอบแรกบริการไม่ส่งเสียงที่ซับ 5 รอบสองใช้เสียง 4 ซับเดิมแล้วสร้างต่อจนครบ
+  - F5: ซับละ 35–42 วินาที ได้เสียงพูด 5.38 วินาที · ทีละซับเร็วกว่าท่อนยาว 8.4 วินาทีที่ใช้ 198.8 วินาทีราว 1.6 เท่า (เทียบเฉพาะเสียงพูด) · อ่าน "ง่าย ๆ" เป็น "ง่ายง่าย"
+  - ทุกเครื่อง `srt_check.py` ผ่าน · วิดีโอยาว 32.21 วินาทีเท่าเสียง · ซับวางวรรณยุกต์ตรงตำแหน่ง และแสดง "commit" ตามสคริปต์ขณะที่เสียงอ่าน "คอมมิต"
+- **รอบทดสอบกับ agent (haiku · 2026-10-24 · โจทย์เสียง Windows):** ตัวที่ไม่มี skill เขียนสคริปต์เอง 232 บรรทัด สร้างทีละประโยค ผลผ่านเหมือนกัน (`srt_check.py` ผ่าน) แต่ใช้ 205k token 10.3 นาที · ตัวที่มี skill ใช้ 144k token 4.8 นาที (ตัวนับของการรัน agent ทั้ง 2 ตัว) ได้เสียง 32.66 วินาทีเท่ากับ `total` ใน `cues.json` · ที่วัดได้คือหัวข้อนี้ช่วยเรื่องเวลาและให้สคริปต์ที่ใช้ซ้ำได้ ไม่ได้ทำให้งานเสียง Windows ผ่านมากขึ้น · ส่วนเรื่อง F5 กับสิทธิ์ยังไม่ได้วัดกับ agent (อนุมาน) · ข้อที่ agent บอกว่าไม่ชัด (5/6 วินาที · ตัวเลขของเสียง Windows) แก้แล้ว · ผู้ใช้จึงเลือกรวมเป็นหัวข้อใน skill นี้แทน skill แยก
 
 ## ตรวจก่อนส่ง
 
@@ -101,6 +147,8 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
 - [ ] ความดังรวมห่างจากเป้าไม่เกิน 1 LU และ true peak ไม่เกินเพดาน · บอกว่า Linear หรือ Dynamic
 - [ ] ดึงภาพที่จุดตัดอย่างน้อย 1 จุดมาดู · บอกผู้ใช้ว่าต้องฟังนาทีไหน
 - [ ] วิดีโอจากสไลด์: เปิดดูต้นแผ่นอย่างน้อย 3 จุดแล้วภาพตรงแผ่น
+- [ ] เสียงบรรยายจากสคริปต์: เสียงต้นแบบเป็นเสียงของผู้ใช้หรือมีหนังสือยินยอม · สิทธิ์ของเครื่องสร้างเสียงตรงกับการใช้ (ถ้าเป็นคลิปหารายได้ ใช้ Azure แบบจ่ายหรือ Google หรือตรวจสัญญาของ F5 ก่อน)
+- [ ] เสียงบรรยายจากสคริปต์: ฟังครบทุกซับ · `srt_check.py` ผ่าน · ความยาวไฟล์เสียงเท่ากับ `total` ใน `cues.json` · บอกผู้ฟังแล้วว่าเป็นเสียง AI
 - [ ] เพลง ฟุตเทจ และฟอนต์มีใบอนุญาตสำหรับช่องทางนั้น (`production-tools.md` ข้อ 2 และ 5)
 
 ## ที่มา
@@ -109,4 +157,10 @@ description: Use when editing video or audio with ffmpeg (ตัดต่อ, si
 - ffmpeg Formats Documentation: [concat demuxer](https://ffmpeg.org/ffmpeg-formats.html#concat) (`file` · `duration` · `-safe 0` สำหรับ path เต็ม · ทุกไฟล์ต้อง codec เดียวกัน) · ffmpeg Wiki [Slideshow](https://trac.ffmpeg.org/wiki/Slideshow#Concatdemuxer) (ภาพสุดท้ายต้องใส่ซ้ำโดยไม่มี `duration`) (ดู 2026-10-24)
 - `html-slide-deck` `assets/shell.html`: `data-at="m:ss"` คือเวลาที่ควรถึงแผ่นนั้น · `scripts/check_deck.py` ถ่ายภาพที่ 1920×1080 (อ่าน 2026-10-24)
 - ค่าความดัง: [Apple Podcasts audio requirements](https://podcasters.apple.com/support/893-audio-requirements) · [Spotify loudness normalization](https://support.spotify.com/us/artists/article/loudness-normalization/) · [Spotify audio ad specs](https://ads.spotify.com/en-US/ad-specs/audio-ad-specs/) · [YouTube stable volume](https://support.google.com/youtube/answer/14106294) · [ACX audio submission requirements](https://help.acx.com/s/article/acx-audio-submission-requirements) · [EBU R 128](https://tech.ebu.ch/docs/r/r128.pdf) (ดูทุกหน้า 2026-10-24)
+- F5-TTS-THAI: [VYNCX/F5-TTS-THAI](https://github.com/VYNCX/F5-TTS-THAI) (โค้ด MIT · `f5_tts_webui.py` ให้ค่า NFE และ cfg strength (น้ำหนักที่บังคับให้เสียงตามข้อความ) และคำแนะนำเรื่องคลิปต้นแบบกับคำอังกฤษ · commit `7b0989f`) · โมเดล [VIZINTZOR/F5-TTS-THAI](https://huggingface.co/VIZINTZOR/F5-TTS-THAI) (การ์ด CC-BY-4.0) · โมเดลฐาน [SWivid/F5-TTS](https://github.com/SWivid/F5-TTS) (CC-BY-NC เพราะข้อมูลฝึก Emilia) (ดู 2026-10-24)
+- [rany2/edge-tts](https://github.com/rany2/edge-tts) (LGPL-3.0 · รุ่น 7.3.1 จาก PyPI · ดู 2026-10-24)
+- Google Cloud [Text-to-Speech pricing](https://cloud.google.com/text-to-speech/pricing) (ตรวจ 2026-10-24) · [Chirp 3: HD](https://docs.cloud.google.com/text-to-speech/docs/chirp3-hd) (มี th-TH · หน้าอัปเดต 2026-10-22)
+- Azure AI Speech: [Microsoft Product Terms](https://www.microsoft.com/licensing/terms/productoffering/MicrosoftAzure/EAEAS) หมวด Text-to-Speech (TTS) Services ข้อสิทธิ์ใช้เสียงที่สร้าง และหน้าราคา (agent ค้นข้อมูลอ่านเมื่อ 2026-10-24 · รอยืนยัน) · [Code of Conduct for Microsoft AI Services](https://learn.microsoft.com/en-us/legal/ai-code-of-conduct) ข้อ 3 ให้บอกว่าเสียงเป็นเสียงสังเคราะห์ (ฉบับ 4.0 · 2026-05-01 · ตรวจ 2026-10-24)
+- Windows: สัญญาอนุญาตในเครื่อง `C:\Windows\System32\license.rtf` (ปรับปรุง April 2024 · agent ค้นข้อมูลอ่านเมื่อ 2026-10-24)
+- [pythainlp/pythaitts](https://github.com/pythainlp/pythaitts) 0.8.0 (Apache-2.0) · โมเดล Lunarlist ONNX (MIT) · ทดสอบ 2026-10-24
 - ผลทดสอบของ skill นี้: หัวข้อ "ตัวอย่างจริง" ด้านบน (รันกับไฟล์ทดสอบที่สร้างขึ้นเอง 2026-10-24 · ffmpeg 9.0.2 บน Windows)

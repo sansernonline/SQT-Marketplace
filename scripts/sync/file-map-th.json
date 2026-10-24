@@ -24,7 +24,10 @@
     "evals/subtitles-th-regression/case.yaml": "เคส eval: กันอาการฝังซับไทยแล้วเป็นสี่เหลี่ยมโดยไม่ระบุฟอนต์ไทย",
     "evals/video-editing-slides-trigger/case.yaml": "เคส eval: โจทย์สไลด์กับเสียงเป็นวิดีโอที่ต้องทำให้ video-editing ถูกเปิด",
     "evals/video-editing-slides-behaviour/case.yaml": "เคส eval: ความยาวต่อแผ่นถูก แผ่นสุดท้ายไม่หาย วิดีโอยาวเท่าเสียง",
-    "evals/video-editing-slides-regression/case.yaml": "เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย"
+    "evals/video-editing-slides-regression/case.yaml": "เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย",
+    "evals/video-editing-tts-trigger/case.yaml": "เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด",
+    "evals/video-editing-tts-behaviour/case.yaml": "เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ",
+    "evals/video-editing-tts-regression/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -351,7 +354,7 @@
     "user-story-writer": "เขียน user story และเกณฑ์รับงานแบบ Given-When-Then",
     "vehicle-care": "ดูแลรถยนต์และมอเตอร์ไซค์: พ.ร.บ. · ภาษีประจำปี · ตรวจสภาพ · เข้าศูนย์",
     "video": "เปลี่ยนข้อความเป็นคลิปสั้น (hook · บทถ่าย · ตัวหนังสือบนจอ · brief)",
-    "video-editing": "ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก และต่อสไลด์กับเสียงเป็นวิดีโอด้วย ffmpeg พร้อมวัดผล",
+    "video-editing": "ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก ต่อสไลด์กับเสียงเป็นวิดีโอ และสร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) พร้อมวัดผล",
     "video-script-to-clip": "ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย",
     "warranty-tracker": "เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม",
     "watch": "เพิ่ม ทบทวน หรือล้าง watchlist (เหตุผล · โซนเข้า · แจ้งเตือน)",

@@ -99,6 +99,14 @@
       "files": [
         "plugins/graphic-design/skills/video-editing/SKILL.md"
       ]
+    },
+    "google-tts-chirp3hd-free": {
+      "value": "1 ล้านตัวอักษรต่อเดือน",
+      "checked": "2026-10-24",
+      "note": "Google Cloud Text-to-Speech pricing · Chirp 3: HD ฟรี 0 ถึง 1 ล้านตัวอักษรต่อเดือน เกินแล้ว 30 USD ต่อ 1 ล้าน · ต้องเปิด billing",
+      "files": [
+        "plugins/graphic-design/skills/video-editing/SKILL.md"
+      ]
     }
   },
   "retired": [
@@ -161,6 +169,11 @@
       "old": "`slides-to-video`",
       "new": "`video-editing` หัวข้อสไลด์กับเสียงบรรยาย",
       "why": "รวมเข้า video-editing ก่อนออกรุ่น เพราะรอบทดสอบแบบไม่มี skill ทำถูกอยู่แล้ว · 2026-10-24"
+    },
+    {
+      "old": "`tts-th`",
+      "new": "`video-editing` หัวข้อเสียงบรรยายจากสคริปต์",
+      "why": "ผู้ใช้เลือกรวมเข้า video-editing ก่อนออกรุ่น เพราะรอบทดสอบแบบไม่มี skill ทำงานเสียง Windows ถูกอยู่แล้ว · 2026-10-24"
     }
   ],
   "$comment_retired": "คำที่เลิกใช้แล้ว: validate-marketplace ล้มถ้ายังเจอใน plugins/ prompt/ docs/ README.md พร้อมรายชื่อทุกไฟล์ · เปลี่ยนคำ ป้าย ตัวเลข หรือกฎที่ใช้หลายไฟล์ ให้เพิ่มคำเก่าที่นี่"
