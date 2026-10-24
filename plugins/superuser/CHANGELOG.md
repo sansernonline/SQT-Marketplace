@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## Unreleased
+
+- `hooks/skill-router.json` เพิ่ม 3 แถวให้ skill ใหม่ของ graphic-design (ตัดต่อ และสไลด์กับเสียงเป็นวิดีโอ → `video-editing` · ซับไทย → `subtitles-th`) · ทดสอบประโยคจริง 8 ประโยคจับถูกทั้งหมด และประโยคที่ไม่เกี่ยว 2 ประโยคไม่ถูกส่งไป
+- prompt ทุกไฟล์ (71 ไฟล์ รวมบล็อกกฎของ `sync-prompt-rules.mjs`) ชี้กฎวนจนเสร็จเป็นข้อ 3 ตามแกน 3.x · ใส่เลขเก่าใน `retired` ของ `scripts/check/facts.json` แล้ว (เจอจากรอบทดสอบ prompt จริง)
+
 ## 3.1.0 — 2026-10-23 (ภาษาไทยจาก kien-thai และวิธีเรียนรู้ของทีม)
 
 - doc-toolkit ยุบ: skill 15 ตัวกระจายไป superuser 4 (`document-naming` · `polished-document-style` · `spell-out-abbreviations` · `polite-message-th-en`) · software-company 8 · graphic-design 1 · personal-life 2 — ทุกสาขาต้องติดตั้งคู่กันอยู่แล้ว แยกไว้ไม่ได้ประหยัดอะไร แต่เพิ่มงาน tag/release

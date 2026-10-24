@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: video-editing-slides-trigger
+description: โจทย์เอาสไลด์ HTML กับเสียงบรรยายมาทำวิดีโอ ไม่เอ่ยชื่อ skill ต้องทำให้ video-editing ถูกเปิด และใช้เวลา data-at ของสไลด์
+tags: [trigger, video-editing]
+runs: 3
+expected_outcome: เรียก Skill video-editing แล้วอธิบายการทำภาพทีละแผ่น อ่านเวลาจาก data-at และต่อกับเสียงด้วย ffmpeg
+execution:
+  prompt: |
+    มีสไลด์ lesson.html ที่ทำจาก html-slide-deck กับไฟล์เสียงบรรยาย ep01.wav
+    อยากได้วิดีโอ mp4 ไฟล์เดียว ให้สไลด์เปลี่ยนตรงกับจังหวะที่พูด
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?video-editing"'
+    min: 1
+    arm: with-only
+  - name: uses-data-at
+    type: regex
+    pattern: "data-at"
+    match: contains
+    target: last_message
+  - name: uses-ffmpeg
+    type: regex
+    pattern: "ffmpeg|slides_to_video"
+    match: contains
+    target: last_message

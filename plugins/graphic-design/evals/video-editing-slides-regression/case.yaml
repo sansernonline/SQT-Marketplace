@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่กัน: ทดสอบ 2026-10-24 ต่อภาพด้วย concat demuxer + -shortest แล้ววิดีโอยาวเกินเสียง 1.67 วินาที (เห็นจริง)
+# แผ่นสุดท้ายสั้นกว่าที่ตั้งเมื่อไม่ใส่ภาพสุดท้ายซ้ำ ตาม ffmpeg wiki Slideshow (ยังไม่ได้เห็นจริง) — video-editing หัวข้อสไลด์กับเสียงบรรยาย
+schema_version: "1.1"
+name: video-editing-slides-regression
+description: วิดีโอที่ต่อจากสไลด์ยาวกว่าเสียงและแผ่นสุดท้ายหาย ต้องแก้ด้วยการใส่ภาพสุดท้ายซ้ำและตัดความยาวเท่าเสียง
+tags: [regression, video-editing]
+runs: 3
+expected_outcome: ใส่ภาพสุดท้ายซ้ำท้ายไฟล์รายการ · ใช้ -t ตามความยาวเสียงแทน -shortest อย่างเดียว · วัดความยาวด้วย ffprobe
+execution:
+  prompt: |
+    วิดีโอที่ต่อจากภาพสไลด์ยาวกว่าเสียง 2 วินาที และแผ่นสุดท้ายขึ้นแป๊บเดียว คำสั่งที่ใช้คือ
+    ffmpeg -f concat -safe 0 -i list.txt -i voice.wav -shortest out.mp4
+    list.txt มี file กับ duration ของทุกแผ่น ช่วยแก้ให้หน่อย
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: exact-length
+    type: regex
+    pattern: "-t "
+    match: contains
+    target: last_message
+  - name: both-causes-fixed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. บอกว่า concat demuxer ใช้ duration ของภาพสุดท้ายเมื่อใส่ชื่อไฟล์นั้นซ้ำอีกบรรทัดท้ายรายการ แล้วให้รายการที่แก้แล้ว
+      2. ตัดความยาวให้เท่าเสียงด้วย -t (หรือเทียบเท่า) แทนพึ่ง -shortest อย่างเดียว
+      3. บอกวิธีวัดความยาวไฟล์ที่ได้

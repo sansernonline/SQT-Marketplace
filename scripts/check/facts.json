@@ -83,6 +83,22 @@
       "files": [
         "plugins/e-commerce/skills/complaint-letter-th/SKILL.md"
       ]
+    },
+    "apple-podcasts-loudness": {
+      "value": "-16 LKFS ±1 dB",
+      "checked": "2026-10-24",
+      "note": "Apple Podcasts audio requirements (podcasters.apple.com/support/893) · true peak ไม่เกิน -1 dB",
+      "files": [
+        "plugins/graphic-design/skills/video-editing/SKILL.md"
+      ]
+    },
+    "spotify-loudness": {
+      "value": "-14 LUFS",
+      "checked": "2026-10-24",
+      "note": "Spotify for Artists loudness normalization · ตอน podcast ไม่มีค่าทางการ · โฆษณาใน podcast -16 LUFS ±1.5",
+      "files": [
+        "plugins/graphic-design/skills/video-editing/SKILL.md"
+      ]
     }
   },
   "retired": [
@@ -135,6 +151,16 @@
       "old": "พร้อมป้าย `(รอยืนยัน)`",
       "new": "พร้อมป้าย `ยังไม่ตรวจ` — `(รอยืนยัน)` ใช้กับข้อเท็จจริงของผู้ใช้ ไม่ใช่ป้ายหลักฐาน",
       "why": "evidence.md · 2026-10-12"
+    },
+    {
+      "old": "skill `superuser` กฎข้อ 2",
+      "new": "skill `superuser` กฎข้อ 3 (ทำ → ตรวจ → แก้ → ตรวจซ้ำ)",
+      "why": "แกน superuser 3.x เลื่อนเลขกฎ ข้อ 2 กลายเป็นใบสั่งงาน 5 ข้อ · prompt 71 ไฟล์ชี้เลขเก่า · 2026-10-24"
+    },
+    {
+      "old": "`slides-to-video`",
+      "new": "`video-editing` หัวข้อสไลด์กับเสียงบรรยาย",
+      "why": "รวมเข้า video-editing ก่อนออกรุ่น เพราะรอบทดสอบแบบไม่มี skill ทำถูกอยู่แล้ว · 2026-10-24"
     }
   ],
   "$comment_retired": "คำที่เลิกใช้แล้ว: validate-marketplace ล้มถ้ายังเจอใน plugins/ prompt/ docs/ README.md พร้อมรายชื่อทุกไฟล์ · เปลี่ยนคำ ป้าย ตัวเลข หรือกฎที่ใช้หลายไฟล์ ให้เพิ่มคำเก่าที่นี่"

@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: video-editing-slides-behaviour
+description: ภาพสไลด์ 5 แผ่นกับเสียง 3 นาทีและเวลาเริ่มของแต่ละแผ่น ต้องได้ความยาวต่อแผ่นถูก แผ่นสุดท้ายไม่หาย และวิดีโอยาวเท่าเสียง
+tags: [behaviour, video-editing]
+runs: 3
+expected_outcome: แผ่น 1 ยาว 40 วินาที · แผ่นสุดท้ายยาว 30 วินาที · ภาพสุดท้ายซ้ำท้ายรายการหรือเทียบเท่า · ตัดความยาวเท่าเสียง · มีขั้นวัดผล
+execution:
+  prompt: |
+    ทำวิดีโอจากภาพ p01.png ถึง p05.png กับเสียงบรรยาย voice.wav ยาว 3 นาทีพอดี
+    แต่ละแผ่นต้องขึ้นที่ 0:00 · 0:40 · 1:10 · 2:00 · 2:30 ส่งไฟล์รายการภาพและคำสั่ง ffmpeg
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: first-slide-40s
+    type: regex
+    pattern: "duration 40"
+    match: contains
+    target: last_message
+  - name: last-slide-30s
+    type: regex
+    pattern: "duration 30"
+    match: contains
+    target: last_message
+  - name: timing-proof
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ความยาวต่อแผ่นเป็น 40 · 30 · 50 · 30 · 30 วินาที ตามเวลาที่ให้
+      2. แผ่นสุดท้ายแสดงครบ 30 วินาที (ใส่ภาพสุดท้ายซ้ำท้ายรายการ หรือวิธีอื่นที่ได้ผลเท่ากัน)
+      3. วิดีโอที่ได้ยาวเท่าเสียง (เช่น ใช้ -t 180) ไม่ยาวเกินเพราะ -shortest อย่างเดียว
+      4. มีวิธีวัดผล เช่น ffprobe ความยาว หรือเปิดดูที่เวลาต้นแผ่น

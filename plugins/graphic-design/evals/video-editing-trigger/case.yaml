@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: video-editing-trigger
+description: โจทย์ตัดช่วงเงียบและปรับเสียงก่อนอัปโหลด ไม่เอ่ยชื่อ skill ต้องทำให้ video-editing ถูกเปิด และได้คำสั่ง ffmpeg ที่วัดความดังก่อนปรับ
+tags: [trigger, video-editing]
+runs: 3
+expected_outcome: เรียก Skill video-editing แล้วตอบด้วยคำสั่ง ffmpeg ตัดช่วงเงียบ และปรับความดังแบบวัดก่อน 2 รอบ
+execution:
+  prompt: |
+    มีไฟล์ interview.mp4 ยาว 12 นาที คนพูดเงียบไปนาน ๆ หลายช่วง อยากตัดช่วงเงียบออก
+    แล้วทำให้เสียงดังพอดีก่อนอัปโหลด YouTube ขอคำสั่งที่รันได้เลยบน Windows
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?video-editing"'
+    min: 1
+    arm: with-only
+  - name: uses-ffmpeg
+    type: regex
+    pattern: "ffmpeg"
+    match: contains
+    target: last_message
+  - name: measures-loudness
+    type: regex
+    pattern: "loudnorm|ebur128|LUFS"
+    match: contains
+    target: last_message
