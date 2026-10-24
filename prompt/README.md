@@ -152,7 +152,7 @@ prompt/
 ## หมายเหตุ
 
 - ฉบับส่วนใหญ่สร้างเอกสารอย่างเดียว ไม่แก้โค้ด · ฉบับที่แก้โค้ดมีช่องให้ติ๊กอนุญาตก่อนเสมอ: bugfix ใน `prompt-change.md` · ฉบับ 2–6 ใน `prompt-existing-dev.md` · ฉบับ 5–6 ใน `prompt-rebuild.md` · ฉบับ 3–5 ใน `prompt-test-automation.md` · ฉบับ 4 ใน `prompt-explore.md` · ฉบับ 3 และ 7 ใน `prompt-operations.md` · ฉบับ 2 ใน `prompt-poc.md` · ฉบับ 3 ใน `prompt-trading-system.md` · ฉบับ 4 ใน `prompt-ai-feature.md` · ฉบับ 2 ใน `prompt-sell-product.md` · ฉบับ 2–5 ใน `prompt-mcp-server.md` · ฉบับ 2 · 3 · 5 ใน `prompt-dynamic-website.md`
-- ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 2 · ของ `software-company` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
+- ทุกไฟล์ prompt มีบรรทัด **วนจนเสร็จ (agent loop)** — ทุกฉบับวน ทำ → ตรวจ → แก้ → ตรวจซ้ำ (`reviewer` ตัวใหม่ทุกรอบ · งานกลางไม่เกิน 3 รอบ · งานใหญ่หรืองานเสี่ยงไม่เกิน 5 รอบ) จนผ่าน · ต้นฉบับกฎคือ skill `superuser` กฎข้อ 3 · ของ `software-company` อยู่ในบล็อกที่ `sync-prompt-rules.mjs` เขียนให้
 - กฎการทำงานร่วม (ตัดสินใจเอง · พิสูจน์ผล · รายงานสถานะ) อยู่ใน skill `superuser` · `decision-log` · `principle-prove-it-works` · `status-report` · ไม่เขียนซ้ำในไฟล์ prompt · จะแก้กฎ → แก้ที่ skill ที่เดียว
 - คู่มือผู้ใช้มีที่เดียวคือ `prompt-manual.md` ฉบับ 1 · `prompt-new-project.md` ฉบับ 12 ชี้ไปที่นั่น
 - user story มีที่เดียวคือ `prompt-user-story.md` · mockup มีที่เดียวคือ `prompt-mockup.md` · `prompt-new-project.md` ฉบับ 4–6 ชี้ไปที่นั่น
