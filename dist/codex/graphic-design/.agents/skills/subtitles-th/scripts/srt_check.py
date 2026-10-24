@@ -91,6 +91,8 @@ def self_test() -> int:
 
 
 def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):  # เครื่องที่ code page ไม่ใช่ UTF-8 พิมพ์ภาษาไทยผ่าน pipe แล้วล้ม
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("srt", type=Path, nargs="?")
     ap.add_argument("--max-chars", type=int, default=35)
