@@ -209,7 +209,7 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 
 | กติกา | รายละเอียด |
 |---|---|
-| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` |
+| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` · ตัดต่อ ใส่ซับ และส่งออกวิดีโอใช้ `video-editor` |
 | **งานข้ามสาขา** | หน้าจอแอปหรือเว็บส่งให้ `software-company` (`ux-designer` · `graphic-designer`) · ภาพสินค้าในร้านออนไลน์ส่งให้ `e-commerce` · rich menu ของ LINE OA ส่งให้ `thai-workplace` ถ้ายังไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ส่วนงานหลายขั้นในสาขานั้นให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
 
 ---
@@ -823,8 +823,8 @@ skill หลัก: ตาราง "การตัดสินใจ" แล�
 
 # playbook · video — วิดีโอสั้นและงาน motion
 
-ใช้เมื่อ: Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว
-skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consistency`
+ใช้เมื่อ: Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว · ตัดต่อและใส่ซับจากฟุตเทจที่มี
+skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consistency` · `video-editing` · `subtitles-th`
 
 ## ขั้นตอน (คัดลง todo ตรงตัว)
 
@@ -832,11 +832,12 @@ skill หลัก: `video-script-to-clip` · `motion-basics` · `style-consiste
 2. ทำ shot list ตาม `video-script-to-clip` — ภาพ ข้อความบนจอ เสียง เวลา · ใคร: `art-director` ตัวใหม่
 3. ตั้งจังหวะ motion ตาม `motion-basics` — กำหนดเวลาเป็นมิลลิวินาที · เลือกเส้น easing (จังหวะเร่งและชะลอ) · ข้อความบนจออยู่นานพอให้อ่านทัน · ใคร: `art-director` ตัวใหม่
 4. เขียน brief ทีละช็อตสำหรับเครื่องมือวิดีโอหรือการถ่ายด้วยมือถือ · ใคร: `art-director` ตัวใหม่
-5. ตรวจว่าซับไทยอ่านทันที่ความเร็วจริง และข้อความไม่ตกนอก safe zone ของแพลตฟอร์ม · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
+5. มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่
+6. ตรวจว่าซับไทยอ่านทันที่ความเร็วจริง ข้อความไม่ตกนอก safe zone ของแพลตฟอร์ม และไฟล์ที่ส่งออก (ถ้ามี) ยาวและดังตามที่วัดไว้ · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)
 
 ## จบเมื่อ
 
-shot list และ brief ครบทุกช็อต และซับไทยผ่านการตรวจความเร็วอ่าน
+shot list และ brief ครบทุกช็อต และซับไทยผ่านการตรวจความเร็วอ่าน · มีขั้น 5 → ไฟล์ส่งออกผ่าน `srt_check.py` และค่าความดังตามเป้าของแพลตฟอร์ม
 
 
 ## reference: team-files.md
@@ -969,6 +970,9 @@ shot list และ brief ครบทุกช็อต และซับไ�
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` |
 | เลือกโปรแกรมตัดต่อ (CapCut · DaVinci Resolve · HyperFrames · Remotion) · ซับไทยอัตโนมัติ · เพลงหรือเทมเพลตใช้เพื่อการค้าได้ไหม | `video-script-to-clip` ไฟล์ `references/production-tools.md` |
+| ตัดต่อด้วยคำสั่ง: ตัดหัวท้าย · ตัดช่วงเงียบ · ต่อคลิป · ปรับความดังให้ได้ตามแพลตฟอร์ม · แปลงแนวนอนเป็นแนวตั้ง | `video-editing` (agent `video-editor`) |
+| ซับไทยเป็นไฟล์: ถอดเสียงเป็น .srt · ตรวจความยาวบรรทัดและเวลา · ฝังซับลงคลิป | `subtitles-th` |
+| สไลด์กับเสียงบรรยายเป็นวิดีโอ (บทเรียน podcast · คลิปอบรม) | `video-editing` หัวข้อสไลด์กับเสียงบรรยาย |
 | ก่อนส่งงานภาพทุกชิ้น · ดูแล้วรู้สึกแปลก | `design-review` + agent `design-critic` |
 | ไฟล์รก | `asset-organize` |
 | เขียนคำตอบ รายงาน เอกสาร หรือป้ายใน diagram | `human-writing` · มีตัวเลือก ตัวเลขหลายตัว หรือส่วนที่เชื่อมกัน → `answer-shape` |

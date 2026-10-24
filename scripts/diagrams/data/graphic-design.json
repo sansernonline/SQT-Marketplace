@@ -1,6 +1,6 @@
 {
  "plugin": "graphic-design",
- "version": "0.9.1",
+ "version": "0.10.0",
  "description": "Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.",
  "cross": [
   "software-company",
@@ -17,7 +17,10 @@
   "image-generation",
   "motion-basics",
   "social-formats",
+  "speaking-script",
   "style-consistency",
+  "subtitles-th",
+  "video-editing",
   "video-script-to-clip"
  ],
  "core_skills": [
@@ -92,6 +95,18 @@
    "core": false,
    "description": "Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.",
    "skills": []
+  },
+  {
+   "name": "video-editor",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when footage or narration must become a finished file — cut, Thai subtitles, loudness, export. Works with ffmpeg.",
+   "skills": [
+    "video-editing",
+    "subtitles-th",
+    "asset-organize",
+    "video-script-to-clip"
+   ]
   }
  ],
  "playbooks": [
@@ -1087,8 +1102,8 @@
   {
    "name": "video",
    "title": "วิดีโอสั้นและงาน motion",
-   "when": "Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว",
-   "done": "shot list และ brief ครบทุกช็อต และซับไทยผ่านการตรวจความเร็วอ่าน",
+   "when": "Reels · TikTok · Shorts · วิดีโอโฆษณา · ข้อความเคลื่อนไหว · โลโก้เคลื่อนไหว · ตัดต่อและใส่ซับจากฟุตเทจที่มี",
+   "done": "shot list และ brief ครบทุกช็อต และซับไทยผ่านการตรวจความเร็วอ่าน · มีขั้น 5 → ไฟล์ส่งออกผ่าน `srt_check.py` และค่าความดังตามเป้าของแพลตฟอร์ม",
    "steps": [
     {
      "n": 1,
@@ -1169,7 +1184,28 @@
     },
     {
      "n": 5,
-     "text": "ตรวจว่าซับไทยอ่านทันที่ความเร็วจริง และข้อความไม่ตกนอก safe zone ของแพลตฟอร์ม · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
+     "text": "มีฟุตเทจหรือเสียงแล้ว: ตัด ต่อ ปรับความดัง ต่อสไลด์กับเสียง และส่งออกตาม `video-editing` · ซับไทยตาม `subtitles-th` · งานที่ส่งแค่ brief ข้ามขั้นนี้ · ใคร: `video-editor` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "video-editor"
+      ],
+      "raw": "`video-editor` ตัวใหม่"
+     },
+     "skills": [
+      "video-editing",
+      "subtitles-th"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 6,
+     "text": "ตรวจว่าซับไทยอ่านทันที่ความเร็วจริง ข้อความไม่ตกนอก safe zone ของแพลตฟอร์ม และไฟล์ที่ส่งออก (ถ้ามี) ยาวและดังตามที่วัดไว้ · ใคร: `design-critic` ตัวใหม่ (อ่านอย่างเดียว · ไม่แก้ไฟล์)",
      "sub": [],
      "phase": "",
      "who": {

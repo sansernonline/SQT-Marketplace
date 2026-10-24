@@ -1,0 +1,245 @@
+# skill: video-script-to-clip
+
+Use when making a short video, Reel, TikTok or video ad. Hook, shot list, Thai subtitles, shot briefs.
+
+# Video Script to Clip
+
+Viewers decide in the first 3 seconds, and most watch with the sound off. Write for both.
+
+## Workflow
+
+1. **One message, one action** — from the `campaign-set` card; if it will not fit one sentence, it is two videos
+2. **Pick length and platform** — 9:16, 1080 × 1920; 7–15 s for an offer, 15–30 s for a demo, up to 60 s for a story (safe zones from `social-formats`)
+3. **Write the hook** (0–3 s) using a pattern below; the product or problem is visible in the first frame
+4. **Beat sheet** — one idea per 2–5 s: hook → problem or desire → proof/demo → offer → call to action
+5. **Shot list** with [shot-list-template.md](references/shot-list-template.md): visual, camera, motion, on-screen text, voice-over, duration
+6. **Thumbnail storyboard** — one frame per shot in a grid; if the story does not read as stills, motion will not save it
+7. **Per-shot generation brief** (style block from `style-consistency`) or shooting notes for a phone shoot
+8. **Captions** — burned-in or SubRip Text (SRT) using the rules below; review on a phone with sound off
+
+## Hook patterns (first 3 seconds)
+
+| Pattern | Example (café matcha) |
+|---|---|
+| Show the result | Close-up pour of matcha into milk, layers forming |
+| Call out the viewer | "คนทำงานสีลม ร้อนแบบนี้…" |
+| Problem first | Sweat on forehead, sun, "บ่ายสองโมงแล้วง่วงมาก?" |
+| Surprising number | "ซื้อ 1 แถม 1 ทั้งเดือน" on screen at frame 1 |
+| Before → after | Plain glass → finished layered drink in one cut |
+| Question | "รู้ไหมทำไมมัทฉะต้องตีน้ำร้อน 80 องศา?" |
+
+Rules: no logo intro, no slow fade-in, no black frame at the start; movement or text in frame 1.
+
+## Caption and on-screen text rules
+
+| Rule | Value |
+|---|---|
+| Position | Inside the middle band — clear of top 14%, bottom 35%, sides 6% (Meta); TikTok right column and caption area |
+| Lines | 1 line preferred, max 2; bottom-heavy pyramid when 2 lines |
+| Thai line length | ≤ 35 characters per line, not counting tone marks and above/below vowels |
+| Reading speed (Thai adult) | Captions and subtitles (they follow the voice-over): ≤ 17 characters per second. On-screen marketing text (headline, offer): characters ÷ 12, min 1.5 s, offers ≥ 2.5 s (see `motion-basics`) |
+| Duration per caption | 5/6 s minimum, 7 s maximum |
+| Thai punctuation | Subtitles: no full stops; separate sentences with a space; no question marks or dashes in dialogue; "…" as one character. On-screen hook text may use "?" once |
+| Size | Thai caption ≥ 48 px on a 1080 px canvas with dark outline or 60–70% box behind (house rule) |
+| Line breaks | Break between words or phrases — Thai has no spaces between words, so never break inside a word; check every break by reading aloud |
+| Total on-screen marketing text | Under ~120 ตัวอักษรไทย across a 15 s clip (not counting tone marks and above/below vowels) |
+
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://partnerhelp.netflixstudios.com/hc/en-us/articles/220448308 (Thai Timed Text Style Guide) · https://partnerhelp.netflixstudios.com/hc/en-us/articles/215758617 (durations) · Meta safe zone: https://www.facebook.com/business/ads-guide/update/image/instagram-story
+
+Platform auto-captions mis-transcribe Thai names, prices and brand words — always correct them by hand.
+
+## Worked example — 12 s offer clip
+
+| # | Time | Visual | Camera | On-screen text | Voice-over |
+|---|---|---|---|---|---|
+| 1 | 0–2.5 s | Matcha poured over milk and ice, layers forming | Macro, static | "ร้อนแบบนี้ ต้องมัทฉะเย็น" | (sound: ice) |
+| 2 | 2.5–5 s | Office worker takes first sip, eyes close | Medium, slow push-in | — | "บ่ายนี้ เติมความสดชื่นหน่อย" |
+| 3 | 5–9 s | Two glasses slide together on the counter | Top-down | "ซื้อ 1 แถม 1 · 1–12 เม.ย." | "ซื้อหนึ่งแถมหนึ่ง ถึงสิบสองเมษา" |
+| 4 | 9–12 s | Logo + LINE ID on cream background, glass beside | Static | "แอด LINE @matcha26 รับโค้ด" | "แอดไลน์รับโค้ดเลย" |
+
+Check shot 3 text (on-screen marketing text, read while watching, so ÷ 12 not ÷ 17): "ซื้อ 1 แถม 1 · 1–12 เม.ย." = 23 counted characters (base letters + digits + spaces + symbols) ÷ 12 ≈ 1.9 s; it is the offer, so hold ≥ 2.5 s → on screen 4 s, fine.
+
+## Per-shot generation brief
+
+Subject · action/motion (what moves, how fast) · camera (static, pan, push-in, orbit) · duration · aspect ratio · style block reference · first-frame and last-frame description (for continuity between shots) · negatives (text, logos, warped hands).
+
+## Rules
+
+- If the hook cannot be stated in one sentence, the video does not have one yet
+- One video = one call to action (CTA). With 2 CTAs, viewers follow neither
+- Show the offer and the CTA as text — most people watch without sound
+- Music: use the platform's licensed library or tracks you own a licence for; commercial accounts often have a narrower library than personal ones (รอยืนยัน per platform)
+- Generate or shoot only after the thumbnail storyboard is approved
+
+## Not an AI look
+
+Before handing over, run the check in `no-ai-look` (section 3): its script on HTML/CSS, the 8-point eye check on images and other files. The full list of AI tells for every medium lives there.
+
+## Related
+
+- [references/production-tools.md](references/production-tools.md) — which editor or code tool to cut with (CapCut, DaVinci Resolve, HyperFrames, Remotion), commercial-use terms, export settings, Thai subtitle fonts, music licences
+- `motion-basics` — timing and easing for text animation
+- `social-formats` — canvas and safe zones
+- `style-consistency` — one look across shots
+- `campaign-set` — the V rows in the matrix
+
+
+## reference: production-tools.md
+
+# เครื่องมือแปลงสคริปต์เป็นคลิป
+
+เปิดไฟล์นี้หลังได้รายการช็อตจากขั้นที่ 5 ของ `SKILL.md` แล้ว ตอนต้องเลือกว่าจะตัดต่อด้วยอะไร ใส่ซับไทยอย่างไร และเพลงกับฟอนต์ใช้ได้แค่ไหน · ทุกข้อตรวจกับหน้าทางการเมื่อ 2026-10-23 ราคาและเงื่อนไขเปลี่ยนบ่อย งานลูกค้าหรือโฆษณาให้เปิดหน้าทางการซ้ำก่อนส่ง · ป้าย (แนวของเรา) คือค่าเริ่มต้นที่ทีมเลือกเอง ไม่ใช่ข้อเท็จจริงจากแหล่ง
+
+## 1 · เลือกเครื่องมือ
+
+| เครื่องมือ | เหมาะกับ | ซับไทยอัตโนมัติ | ใช้เพื่อการค้า | ต้องรู้ก่อนใช้ |
+|---|---|---|---|---|
+| CapCut (มือถือ · เดสก์ท็อป · เว็บ) | คลิปสั้นที่ต้องเสร็จวันนี้ · ลง TikTok | หน้าเครื่องมือภาษาไทยของ CapCut บอกว่าถอดเสียงพูดภาษาไทยเป็นข้อความได้ และส่งออกซับเป็นไฟล์ .srt ได้ · หน้าภาษาอังกฤษไม่มีรายชื่อภาษา | ตัวโปรแกรมใช้ได้ แต่เพลง เทมเพลต และฟอนต์ในแอปมีเงื่อนไข (หัวข้อ 2) | สิทธิ์ใช้วัสดุในแอปเป็นแบบเพิกถอนได้ |
+| DaVinci Resolve 21 รุ่นฟรี (Windows · macOS · Linux) | ตัดต่อจริงจัง แก้สี แก้เสียง · คลิปยาว | แหล่งรองบอกว่าการสร้างซับจากเสียงเป็นของรุ่น Studio และไม่มีภาษาไทยในรายชื่อ (ยังไม่ได้ตรวจกับคู่มือทางการ) · ใช้วิธีนำเข้า .srt ที่แก้แล้วแทน | หน้าผลิตภัณฑ์ไม่พูดถึงเรื่องนี้ · อ่านสัญญาอนุญาตตอนติดตั้ง (ยังไม่ได้ตรวจ) | รุ่นฟรีทำงานกับวิดีโอ 8 บิต สูงสุด 60 fps ที่ 3840 × 2160 · DaVinci AI Neural Engine และการเร่ง H.264/H.265 ด้วยฮาร์ดแวร์อยู่ในรุ่น Studio ราคา $236 (ลดจาก $295) |
+| HyperFrames (โอเพนซอร์สของ HeyGen) | คลิปที่เขียนด้วย HTML และ CSS · ให้ agent สร้างเป็นชุดจากแม่แบบ | ไม่มีตัวถอดเสียงไทยที่ตรวจแล้ว · ใส่ซับจากไฟล์ที่แก้แล้ว | สัญญาอนุญาต Apache-2.0 ใช้เพื่อการค้าได้ · ฟอนต์ เพลง และภาพที่ใส่เข้าไปต้องมีสิทธิ์เอง | ต้องมี Node.js 22 ขึ้นไปและ FFmpeg · `npx hyperframes render` ได้ไฟล์ MP4 |
+| Remotion | คลิปที่เขียนด้วย React · ทำซ้ำหลายร้อยคลิปจากข้อมูล | ไม่มีตัวถอดเสียงไทยที่ตรวจแล้ว | ฟรีสำหรับบุคคล · บริษัทที่หากำไรและมีพนักงานไม่เกิน 3 คน · องค์กรไม่แสวงกำไร · ช่วงลองก่อนใช้เพื่อการค้า · องค์กรอื่นต้องซื้อ Company License | `npx remotion render <entry> <composition-id> <output>` · ไม่ใส่ `--codec` จะได้ H.264 |
+
+ราคา Company License ของ Remotion: Creators $25 ต่อที่นั่งต่อเดือน · Automators $0.01 ต่อการ render ขั้นต่ำ $100 ต่อเดือน · Enterprise เริ่มที่ $500 ต่อเดือน
+
+**เลือกเร็ว** (แนวของเรา)
+
+- ทำคลิปเดียวเองแล้วลง TikTok ใช้ CapCut จะเสร็จเร็วที่สุด
+- คลิปของลูกค้าหรือโฆษณาที่ลงหลายแพลตฟอร์ม ให้ตัดใน DaVinci Resolve รุ่นฟรี แล้วใช้เพลงกับฟอนต์ที่มีใบอนุญาต (หัวข้อ 4 และ 5)
+- คลิปหน้าตาเดียวกันหลายสิบตัวที่ราคาหรือข้อความเปลี่ยนตามข้อมูล ใช้ HyperFrames หรือ Remotion · ถ้าบริษัทมีพนักงานเกิน 3 คนแล้วเลือก Remotion ให้ใส่ค่า Company License ในงบด้วย
+
+## 2 · CapCut: เพลง เทมเพลต และฟอนต์ ใช้เพื่อการค้าได้แค่ไหน
+
+สัญญาที่ผูกพันคือ CapCut Materials License Agreement ผู้ใช้นอกสหรัฐฯ ทำสัญญากับ ByteDance Pte. Ltd. (ปรับปรุงล่าสุด 2026-01-22) · Terms of Service (ปรับปรุงล่าสุด 2026-04-15) ข้อ 10 ส่งต่อมาที่สัญญานี้ และบอกว่าไม่ได้ให้สิทธิ์ในงานเพลงและเสียงบันทึกที่อยู่ในแอป
+
+| ของในแอป | ใช้ได้แค่ไหน |
+|---|---|
+| เทมเพลต สติกเกอร์ ฟอนต์ เอฟเฟกต์เสียงทั่วไป | ใช้ส่วนตัว ไม่ใช่เพื่อการค้า |
+| ของที่มีป้ายใช้เพื่อการค้า (สัญญาเรียกว่า Dual Use Materials) | ใช้เพื่อการค้าได้เฉพาะช่องทาง ระยะเวลา และพื้นที่ที่สัญญาระบุ |
+| คลิปที่ผสมของ 2 แบบข้างบน | ทั้งคลิปใช้ได้แค่ส่วนตัว |
+| เพลงคลังปกติ (Sounds) | ใช้ได้เมื่อคลิปเป็นงานส่วนตัวเพื่อความบันเทิง ไม่ใช่เพื่อการค้า |
+| Commercial Sounds | แชร์คลิปได้ใน CapCut · TikTok · TikTok for Business เท่านั้น · ลงที่อื่นต้องขออนุญาตจากเจ้าของสิทธิ์แยกต่างหาก |
+
+(แนวของเรา) งานลูกค้าหรือโฆษณาใช้ CapCut เป็นแค่โปรแกรมตัดต่อ ส่วนเพลง ฟอนต์ และภาพ เอามาจากแหล่งที่มีไฟล์ใบอนุญาต (หัวข้อ 4 และ 5) · ถ้าหน้าอื่นของ CapCut เขียนต่างจากสัญญา ให้ยึดสัญญา
+
+## 3 · ค่าส่งออกต่อแพลตฟอร์ม
+
+ขนาด สัดส่วน และพื้นที่ปลอดภัยของทุกแพลตฟอร์มอยู่ใน `social-formats` ไฟล์ `references/platform-sizes.md` (หัวข้อ 7 คือค่าส่งออกกลางที่ใช้ได้ทุกที่: sRGB · H.264 MP4 · 30 fps · เสียง AAC) ตารางนี้บอกเฉพาะว่าตั้งที่ไหน
+
+| ส่งไป | ค่าที่ตั้ง |
+|---|---|
+| TikTok · Reels · Shorts | 1080 × 1920 (9:16) · 30 fps · MP4 H.264 กับเสียง AAC · ซับฝังในภาพ |
+| YouTube แนวนอน | 16:9 เช่น 1920 × 1080 · ซับแยกเป็นไฟล์ .srt ได้ (YouTube รับ SubRip แบบพื้นฐาน ไม่อ่านสไตล์ ต้องเป็น UTF-8) |
+| ส่งต่อให้คนตัดต่อคนอื่น | ไฟล์ต้นฉบับ · ไฟล์ .srt · โฟลเดอร์เพลงพร้อมใบอนุญาต ตั้งชื่อตาม `asset-organize` |
+
+| เครื่องมือ | ตั้งที่ไหน |
+|---|---|
+| CapCut | ปุ่ม Export: ความละเอียด อัตราเฟรม และรูปแบบไฟล์ (ชื่อเมนูในรุ่นล่าสุด ยังไม่ได้ตรวจ) |
+| DaVinci Resolve | หน้า Deliver: Format MP4 · Codec H.264 (ชื่อ preset ในรุ่น 21 ยังไม่ได้ตรวจ) |
+| HyperFrames | `npx hyperframes render` ได้ MP4 · วิธีตั้งขนาดภาพดูเอกสารของโปรเจกต์ (ยังไม่ได้ตรวจ) |
+| Remotion | ตั้ง `width` `height` `fps` `durationInFrames` ใน `<Composition>` · ไม่ใส่ `--codec` จะได้ H.264 |
+
+## 4 · ซับไทย: ฟอนต์และความยาวบรรทัด
+
+- **ความยาวบรรทัด ความเร็วในการอ่าน เวลาต่อซับ และจุดตัดบรรทัด** ใช้ตาราง Caption and on-screen text rules ใน `SKILL.md` ที่เดียว: ไม่เกิน 35 ตัวอักษรต่อบรรทัด · ไม่เกิน 17 ตัวต่อวินาที · ไม่ตัดกลางคำ
+- **HyperFrames และ Remotion วาดภาพด้วย Chrome แบบไม่มีหน้าต่าง (headless)** กฎ CSS ภาษาไทยจึงใช้ได้ตรง ๆ: ใส่ `lang="th"` และห้าม `word-break: break-all` ตามแถว HTML ใน `human-writing` `references/thai-line-breaking.md`
+- **ฟอนต์ที่สัญญาอนุญาตชัด** Sarabun · Kanit · Noto Sans Thai อยู่ในโฟลเดอร์ `ofl/` ของ google/fonts (SIL Open Font License: OFL) · คำถามที่พบบ่อยของ OFL ข้อ 1.1 และ 1.13 บอกว่าใช้ในงานเพื่อการค้าได้ และภาพหรือวิดีโอที่ทำออกมาไม่ติดเงื่อนไขของ OFL · ข้อห้ามคือขายไฟล์ฟอนต์เดี่ยว ๆ
+- **ฟอนต์ในแอป CapCut นับเป็นวัสดุของ CapCut** ตามข้อ 10 ของ Terms of Service งานเพื่อการค้าจึงใช้ได้เฉพาะฟอนต์ที่มีป้ายใช้เพื่อการค้า หรือฟอนต์ OFL ที่นำเข้าเอง (วิธีนำเข้าฟอนต์ในแต่ละรุ่นของแอป ยังไม่ได้ตรวจ)
+- **ขนาดและพื้นหลัง** อย่างน้อย 48 px บนแคนวาสกว้าง 1080 px มีขอบเข้มหรือกล่องทึบ 60–70% ตาม `SKILL.md` · ใช้น้ำหนัก Medium ขึ้นไป เพราะหัวของตัวอักษรไทยในน้ำหนักบางจะหายเมื่อวิดีโอถูกบีบอัด (แนวของเรา)
+- **ซับจาก AI ทุกเครื่องมือ** ต้องแก้ชื่อคน ชื่อแบรนด์ ราคา และตัวเลขด้วยมือก่อนส่งออก
+
+## 5 · เพลง: กฎง่าย ๆ
+
+1. **ทางที่ปลอดภัยที่สุด** ใช้คลังเพลงของแพลตฟอร์มที่จะโพสต์ และใช้ภายในแพลตฟอร์มนั้นเท่านั้น · บัญชีธุรกิจมักได้คลังเล็กกว่าบัญชีส่วนตัว (รอยืนยัน รายแพลตฟอร์ม)
+2. **ลงหลายแพลตฟอร์มหรือทำโฆษณา** ใช้เพลง royalty-free ที่ซื้อหรือดาวน์โหลดพร้อมใบอนุญาต แล้วเก็บไฟล์ใบอนุญาตไว้ในโปรเจกต์ข้างไฟล์เพลง เช่น `music/licences/` ให้มี PDF หรือภาพหน้าจอของใบอนุญาต ลิงก์ ชื่อบัญชีที่ซื้อ และวันที่ · royalty-free แปลว่าไม่ต้องจ่ายค่าใช้ทุกครั้งที่ใช้ ไม่ได้แปลว่าฟรี
+3. ใส่ชื่อเพลงและแหล่งใบอนุญาตในช่อง `Music:` ของหัวสคริปต์ใน [shot-list-template.md](shot-list-template.md)
+4. **ห้าม** ดึงเพลงดังจาก YouTube หรือ Spotify มาใส่ · การให้เครดิตเจ้าของเพลงไม่ได้แทนใบอนุญาต · Commercial Sounds ของ CapCut ใช้นอก CapCut และ TikTok ไม่ได้
+
+## แหล่งที่มา (ตรวจ 2026-10-23)
+
+| เรื่อง | ที่มา |
+|---|---|
+| สัญญาวัสดุของ CapCut (ByteDance Pte. Ltd. · ปรับปรุง 2026-01-22) | capcut.com/clause/material-license-agreement |
+| Terms of Service ข้อ 10 · ไม่ให้สิทธิ์ในเพลง (ปรับปรุง 2026-04-15) | capcut.com/clause/terms-of-service |
+| ถอดเสียงไทย · ส่งออก .srt | capcut.com/th-th/tools/video-to-text · capcut.com/th-th/tools/add-subtitles-to-video · หน้าภาษาอังกฤษ capcut.com/tools/auto-caption-generator ไม่ระบุภาษา |
+| DaVinci Resolve 21 รุ่นฟรีกับ Studio · ราคา | blackmagicdesign.com/products/davinciresolve และหน้า /studio · การใช้รุ่นฟรีเพื่อการค้า: ผลค้นพบกระทู้ในฟอรัม Blackmagic ปี 2020 ที่พนักงานตอบว่าใช้ได้ แต่เปิดอ่านต้นฉบับไม่ได้ (403) จึงยังไม่ได้ตรวจ |
+| สร้างซับจากเสียงใน Resolve | แหล่งรอง (cined.com และบล็อกของผู้ทำเครื่องมือซับ) ยังไม่ได้ตรวจกับคู่มือทางการ |
+| HyperFrames: Apache-2.0 (Copyright 2026 HeyGen, Inc.) · Node.js 22+ · FFmpeg · คำสั่ง | github.com/heygen-com/hyperframes (LICENSE · README) |
+| Remotion: เกณฑ์ใช้ฟรี · Company License · ราคา · คำสั่ง render · props ของ Composition | github.com/remotion-dev/remotion/blob/main/LICENSE.md · remotion.pro/license · remotion.dev/docs/cli/render · remotion.dev/docs/composition |
+| ฟอนต์ OFL | github.com/google/fonts/tree/main/ofl (sarabun · kanit · notosansthai) · openfontlicense.org/ofl-faq |
+| YouTube รับไฟล์ .srt | support.google.com/youtube/answer/2734698 |
+
+
+## reference: shot-list-template.md
+
+# Shot list and caption templates
+
+## Script header
+
+```markdown
+# Clip — <campaign>-<id> (v<NN>)
+
+Platform: <tt / ig reel / yt short / fb reel> · Canvas: 1080 × 1920 · Length: <s> · frames per second (fps): 30
+Message (one sentence): <...>
+Hook pattern: <show result / call out / problem / number / before-after / question>
+One call to action (CTA): <...>
+Style lock: <sheet + version> · Music: <track + licence source>
+```
+
+## Shot list
+
+| # | Start–end (s) | Duration | Visual (what we see) | Camera / motion | On-screen text (TH) | Counted chars | Min s (÷17 captions · ÷12 marketing text) | Voice-over / sound | Source (AI / shoot / stock) | Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 0–3 | 3 | | | | | | | | |
+| 2 | | | | | | | | | | |
+| 3 | | | | | | | | | | |
+| 4 | | | | | | | | | | |
+
+Counted chars = Thai base characters (tone marks and above/below vowels not counted) plus spaces, digits and symbols. Captions that follow the voice-over: seconds = chars ÷ 17. On-screen marketing text: chars ÷ 12, min 1.5 s, offers ≥ 2.5 s.
+
+## Per-shot brief (AI video tool)
+
+```markdown
+### Shot <n>
+Subject:
+Motion (what moves, speed):
+Camera: static / pan left / push-in / orbit / handheld
+Duration: <s> · Aspect ratio: 9:16
+First frame:
+Last frame (must match next shot's first frame):
+Style block: <paste from style lock>
+Negatives: text, logos, warped hands, extra objects, flicker
+```
+
+## Phone shoot notes
+
+- Shoot vertical 1080 × 1920 or 4K vertical, 30 fps, lock exposure and focus on the product
+- 3 takes per shot; 1 s of stillness before and after each take for clean cuts
+- Natural window light from one side matches most style locks; turn off mixed-colour room lights
+- Record room tone 10 s for audio clean-up
+
+## SubRip Text (SRT) caption file example
+
+```
+1
+00:00:00,000 --> 00:00:02,500
+ร้อนแบบนี้ ต้องมัทฉะเย็น
+
+2
+00:00:05,000 --> 00:00:09,000
+ซื้อ 1 แถม 1 · 1–12 เม.ย.
+
+3
+00:00:09,000 --> 00:00:12,000
+แอด LINE @matcha26 รับโค้ด
+```
+
+Save as UTF-8 so Thai characters survive upload.
+
+## Pre-publish checklist
+
+- [ ] Frame 1 has movement or text — no logo intro
+- [ ] Offer and CTA readable with sound off
+- [ ] Every caption inside the safe zone and ≤ 17 chars/s
+- [ ] Prices, dates, ID match the campaign card
+- [ ] Music licence recorded
+- [ ] Thumbnail / cover frame chosen and readable at small size

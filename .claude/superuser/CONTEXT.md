@@ -1,13 +1,13 @@
 # SQT-Marketplace — CONTEXT
 
-> คนและ bot ทุกตัวอ่านหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ก่อนทำงาน (หัวข้ออื่นเปิดเมื่อต้องใช้) · อัปเดต: 2026-10-23 19:50 โดย superuser (Opus 5.5)
+> คนและ bot ทุกตัวอ่านหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ก่อนทำงาน (หัวข้ออื่นเปิดเมื่อต้องใช้) · อัปเดต: 2026-10-24 12:31 โดย superuser (Opus 5.5)
 
 ## งานนี้คืออะไร
 marketplace plugin ของ Square Tech: 8 plugin = `superuser` (แกนกลาง) + 7 สาขา (software-company · personal-life · thai-workplace · e-commerce · trading-finance · graphic-design · reverse-engineer) · ส่งออกไป claude.ai · Codex · Gemini · Kimi ผ่าน `dist/`
 branch `feat/superuser-3-eight-plugins` merge เข้า main แล้ว และลบแล้วทั้งในเครื่องและบน GitHub · ตอนนี้อยู่บน `chore/superuser-notes-2026-10-23` (แตกจาก main) · merge 2026-10-23 ผ่าน PR #1 (merge commit `f784b41` · tree เท่ากับ `b6c4c30`) · repo ไม่เคยมี git tag · เลื่อนรุ่นแล้ว: superuser 3.1.0 · software-company 2.21.0 · personal-life 0.13.0 · thai-workplace 0.11.0 · graphic-design 0.10.0 · trading-finance 0.11.0 · e-commerce 1.0.0 · reverse-engineer 0.1.0
 
 ## เป้าตอนนี้
-ผู้ใช้ตัดสินเรื่อง push · tag · ไฟล์ของงานอีกฝั่ง · commit ไฟล์ที่สร้างจากสคริปต์ (ดู "รอผู้ใช้")
+text-to-speech ภาษาไทยสำหรับเสียงบรรยายบทเรียน podcast และคลิปสไลด์ (ผู้ใช้อยากได้มากกว่าตัวถอดเสียง) · หาข้อมูลเครื่องมือก่อน แล้วถามผู้ใช้เลือกครั้งเดียว · ผู้ใช้ merge PR ของ branch นี้ (ดู "รอผู้ใช้")
 
 ## ความคืบหน้า
 | งาน | สถานะ | หลักฐาน | อัปเดต |
@@ -18,8 +18,13 @@ branch `feat/superuser-3-eight-plugins` merge เข้า main แล้ว แ
 | รอบ 2: skill ใหม่ 5 (hiring-th · thai-business-setup · infra-as-code · data-analysis · course-builder) · reference 5 (Figma · docs site · API บัญชีไทย · API ร้านค้าไทย · เครื่องมือผลิตวิดีโอ) | เสร็จ | commit `e4ded99` (89 ไฟล์ เฉพาะของทีมเรา) | 2026-10-23 |
 | รอบ 2: hook คอลัมน์ "รีวิวผ่านแล้วผู้ใช้ยังแก้" · eval review-recall (สร้าง ไม่รัน) · validator ตรวจลิงก์ภายใน · ตารางระยะบรรทัดไทย · `thai_tells.py` ไม่เตือนขีดในช่องตาราง | เสร็จ | commit `e4ded99` · hook self-test 83/83 · validator self-test 18/18 · review-recall `--verify` ผ่าน | 2026-10-23 |
 | เลื่อนรุ่น 6 plugin · CHANGELOG ครบทุกรุ่น (เติมส่วนเสริมที่ลงโค้ดแล้วแต่ยังไม่มีบรรทัด) · ตัวชี้ `seller-tax-basics` 8 จุด · มาตรา 17 · 18 · 20 ใน `complaint-letter-th` ตามราชกิจจานุเบกษา · description นับ skill ใหม่ | เสร็จ | commit ถัดจาก `e4ded99` (`chore(release)`) · validator 488 รายการ error 0 | 2026-10-23 |
-| prompt ใหม่ `prompt/personal-life/prompt-podcast-lesson.md` 5 ฉบับ (บทเรียน podcast พร้อมสไลด์) · README 2 ไฟล์ · CHANGELOG personal-life `Unreleased` | กำลังทดสอบ (agent ตัวใหม่ทำฉบับ 1–3 จริงใน `_to_delete/podcast-test/`) · ยังไม่ commit | validator 489 รายการ error 0 | 2026-10-23 |
-| สร้างใหม่: sync · docs · FILE-MAP · รูป 26 รูป · dist 8 plugin | สร้างแล้ว ยังไม่ commit (มีของอีกฝั่งปน) | `scripts\build-dist.cmd` exit 0 (ก่อนเลื่อนรุ่น ต้องรันใหม่) | 2026-10-23 |
+| prompt ใหม่ `prompt/personal-life/prompt-podcast-lesson.md` 5 ฉบับ (บทเรียน podcast พร้อมสไลด์) | commit แล้วใน `ccc56df` (อีกเครื่องมือ commit ให้) · แก้ตามรอบทดสอบจริง 11 จุด commit ใน feat graphic-design 2026-10-24 | agent ตัวใหม่ทำฉบับ 1–3 จริงใน `_to_delete/podcast-test/` (54 นาที) | 2026-10-24 |
+| prompt ทุกไฟล์ชี้กฎวนจนเสร็จเป็นข้อ 3 (เดิมชี้เลขเก่า 71 ไฟล์) · ใส่เลขเก่าใน `retired` | commit `c89b8b7` (retired อยู่ใน commit ถัดไป) | `sync-prompt-rules` 25 ไฟล์ · เหลือเลขเก่า 0 ไฟล์ | 2026-10-24 |
+| graphic-design: skill `video-editing` (รวมหัวข้อสไลด์กับเสียงบรรยายแล้ว) · `subtitles-th` + agent `video-editor` · สคริปต์ 4 ตัว · eval 9 เคส · router · triggers · playbook `video` · FILE-MAP · CHANGELOG | commit feat graphic-design 2026-10-24 | สคริปต์ทุกตัวรันกับไฟล์จริงผ่าน (ffmpeg 9.0.2) · validator 492 รายการ error 0 · router 12 ประโยคถูกทั้งหมด · รอบแดง/เขียวด้วย haiku: `subtitles-th` แดงพลาด (เลื่อนเวลาซับโดยไม่ฟัง · ฟอนต์ไม่ดูใบอนุญาต) เขียวแก้ได้ · `video-editing` และหัวข้อสไลด์แดงทำถูกอยู่แล้ว | 2026-10-24 |
+| dist 8 plugin และเอกสาร sync | สร้างใหม่หลังรวม skill แล้ว | `scripts\build-dist.cmd` exit 0 · ไม่มีชื่อ skill เดิมค้างใน `dist/` | 2026-10-24 |
+| commit + push งานรอบ 2026-10-24 บน `chore/superuser-notes-2026-10-23` | 3 commit: `c89b8b7` เลขกฎใน prompt · feat graphic-design · chore ไฟล์ที่สร้างอัตโนมัติ | validator 492 รายการ error 0 · self-test ผ่านทุกตัว | 2026-10-24 |
+| ทดสอบ whisper.cpp ถอดเสียงไทย | หยุดตามผู้ใช้ (อยากได้ TTS มากกว่า) · `subtitles-th` ข้อ 2 ยังติดป้ายว่ายังไม่ได้รันจริง | ได้ไบนารี `b5454` hash ตรงกับ GitHub · เสียงทดสอบ Pattara 33.7 วินาทีที่ `_to_delete/whisper-test/work/tts.wav` · โมเดลโหลดไม่ครบ | 2026-10-24 |
+| text-to-speech ภาษาไทย | กำลังหาข้อมูลเครื่องมือ (agent อ่านเว็บอย่างเดียว) → `_to_delete/tts-research.md` | — | 2026-10-24 |
 
 ## กติกา
 - ไม่ commit · push · merge main · tag เว้นแต่ผู้ใช้สั่งในรอบนั้น
@@ -53,6 +58,11 @@ branch `feat/superuser-3-eight-plugins` merge เข้า main แล้ว แ
 | 2026-10-23 | personal-life แยก 0.12.0 (รวม plugin) กับ 0.13.0 · thai-workplace ย้าย 0.10.0 จากท้ายไฟล์ขึ้นบน | รวมเป็นรุ่นเดียว | plugin.json ตั้ง 0.12.0 และ 0.10.0 ไว้แล้วตอนรวม plugin |
 | 2026-10-23 | ส่วนเสริมใน CHANGELOG เขียนย่อตามหมวด | ใส่ร่างเต็มทีละ skill | ร่างของ software-company ยาว 66 KB อ่านไม่ไหวในหน้า release notes |
 | 2026-10-23 | ตัวชี้ `seller-tax-basics` ใน e-commerce บอกชื่อ plugin `thai-workplace` | ปล่อยชื่อเปล่า | e-commerce ไม่ได้ depend thai-workplace คนที่ติดตั้งเดี่ยวจะไม่รู้ว่าอยู่ที่ไหน |
+| 2026-10-24 | เพิ่ม skill วิดีโอใน graphic-design 3 ตัว + agent `video-editor` | แยก plugin `video-production` | สอดคล้องกับที่ผู้ใช้ยุบ plugin เล็ก · ผู้ใช้สั่ง "เพิ่มให้หน่อย" ตามข้อเสนอนี้ |
+| 2026-10-24 | ซับแนวตั้งใช้ `MarginV=100` · ห้าม `Alignment=5` | วางกลางจอด้วย Alignment | วัดจริง: MarginV 100 ได้ 37% จากขอบล่าง · Alignment 5 ไปอยู่ชิดบน |
+| 2026-10-24 | แก้เลขกฎใน prompt 71 ไฟล์ทั้งชุดในรอบนี้ | แก้เฉพาะ prompt podcast | ตัวชี้ผิดเหมือนกันทุกไฟล์ แก้ด้วยสคริปต์ diff เปลี่ยนแค่เลขข้อ |
+| 2026-10-24 | ผู้ใช้เลือก — รวม `slides-to-video` เป็นหัวข้อใน `video-editing` ก่อนออกรุ่น · ชื่อเดิมลง `retired` | คงไว้ 3 skill จนรีวิวเดือนหน้า | รอบแดงทำถูกโดยไม่มี skill · ของที่เหลือเป็นสคริปต์กับกับดัก 3 ข้อ ไม่คุ้มเป็น skill แยก |
+| 2026-10-24 | ผู้ใช้แก้ — หยุดทดสอบตัวถอดเสียง ไปทำ text-to-speech แทน | ทดสอบ whisper.cpp ให้จบ | ผู้ใช้ถามว่า "อยากได้ด้วยเหรอ" และบอกว่าอยากได้ TTS มากกว่า · เสียงที่มาจากสคริปต์ทำซับจากสคริปต์ได้เลย ไม่ต้องถอดเสียง |
 | 2026-10-23 | มาตรา 17 กลับเป็น "ฟ้องที่ศาลภูมิลำเนาผู้บริโภคแห่งเดียว" | คงข้อความที่มีอยู่ | ราชกิจจานุเบกษา + 4 แหล่งอิสระตรงกัน ข้อความเดิมอ่านกลับความหมาย · ศาลของผู้บริโภคที่เป็นโจทก์มีแหล่งทางการแหล่งเดียว จึงติด (รอยืนยัน) |
 
 ## รอผู้ใช้
@@ -60,14 +70,14 @@ branch `feat/superuser-3-eight-plugins` merge เข้า main แล้ว แ
 | เรื่อง | ทำไมต้องเป็นคุณ | หลักฐาน | ปลดล็อกอะไร · ตอบแบบไหน | วันที่เพิ่ม |
 |---|---|---|---|---|
 | อัปเดต plugin ในเครื่อง | ตัดสิน | main มีรุ่นใหม่แล้ว (`f784b41`) แต่ `installed_plugins.json` ยังเป็น software-company 2.7.0 กฎและ hook ใหม่จึงไม่ทำงาน | `/plugin marketplace update sqt-marketplace` แล้ว `/plugin update software-company@sqt-marketplace` (ตาม `docs/INSTALL.md`) · ติดตั้ง `superuser` และ plugin สาขาที่ใช้ · ถอดตัวเก่าที่ถูกรวมแล้ว | 2026-10-23 |
-| ไฟล์ของงานอีกฝั่ง | ตัดสิน | `tools/set-data-mcp/` · `docs/MCP.md` · `html-slide-deck/SKILL.md` · `presentation-design/SKILL.md` · `brief-to-image/SKILL.md` ขั้น 0 · `reverse-engineer/SKILL.md` + `templates/` 4 ไฟล์ · `mcp-server/SKILL.md` + README + `wire-inventory-2026-10-23.jsonl` · `testcase-prompts-2026-10-23.md` ใน `docs/` และ `scripts/` (ไฟล์เดียวกัน 2 ที่) | commit รวมหรือแยก · แม่แบบ `system-map.md` ใช้อีโมจิ 🔵🟢 ขัดกฎ human-writing | 2026-10-23 |
-| commit ไฟล์ที่สร้างจากสคริปต์ (`dist/` · `docs/plugins/` · `docs/FILE-MAP.md` · `scripts/diagrams/data/`) | ตัดสิน | สร้างไว้ก่อนเลื่อนรุ่น และมีของอีกฝั่งปน | ตอบ "อีกฝั่งเสร็จแล้ว" → รัน `scripts\build-dist.cmd` แล้ว commit แยก | 2026-10-23 |
+| เลือกเครื่องมือ text-to-speech ภาษาไทย | ตัดสิน · อาจใช้เงิน บัญชี หรือส่งข้อความออกนอกเครื่อง | รอผลค้น `_to_delete/tts-research.md` · เสียง Pattara ที่มากับ Windows ใช้ได้แล้วบนเครื่องนี้ ฟังตัวอย่างได้ที่ `_to_delete/whisper-test/work/tts.wav` | agent จะถามแบบเลือกคำตอบ แล้วทำ skill และแก้ prompt podcast ฉบับ 4 | 2026-10-24 |
+| merge PR ของ `chore/superuser-notes-2026-10-23` เข้า main | ตัดสิน | push แล้ว 2026-10-24 · มี commit ของอีกเครื่องมือ 8 ตัวอยู่ใน branch นี้ด้วย | เปิด PR บนเว็บแล้วกด merge (agent merge เองไม่ได้) | 2026-10-24 |
 | tag รุ่นใหม่ (ไม่บังคับ) | ตัดสิน | repo ไม่เคยมี git tag · การติดตั้งอ่านเลขรุ่นจาก plugin.json | ตอบ "tag" ถ้าอยากมี | 2026-10-23 |
 | อ่านออกเสียงคู่ตัวอย่างภาษาไทย 5 คู่ใน `human-writing/references/thai-examples.md` | ตรวจด้วยตาหรือหู | ทุกคู่ติดป้าย (ชั่วคราว) | เอาป้ายออก · ตอบ "รับ" หรือแก้ข้อความ | 2026-10-22 |
 | รัน eval ที่เสียเงิน: `claude plugin eval` ของ superuser · `evals/review-recall --run` | ใช้เงินหรือ token | ยังไม่เคยรันจริง | วัดผลได้จริง · ตอบ "รัน eval" | 2026-10-23 |
 
 ## รับงานต่อ
-- **ทำต่อเป็นข้อแรก:** ถามผู้ใช้แถวบนสุดของ "รอผู้ใช้" (อัปเดต plugin ในเครื่อง) · งานต่อไปบน repo แตก branch ใหม่จาก main (`f784b41`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
+- **ทำต่อเป็นข้อแรก:** อ่าน `_to_delete/tts-research.md` แล้วถามผู้ใช้เลือกเครื่องมือ TTS ครั้งเดียว · ทำ skill TTS ใน graphic-design (สร้างเสียงทีละประโยค · ซับจากสคริปต์ตามเวลาเสียง) และแก้ prompt podcast ฉบับ 4 · งาน TTS ยังไม่ได้รับอนุญาตให้ commit · ถามผู้ใช้เรื่องอัปเดต plugin ในเครื่อง · ทบทวน skill วิดีโอด้วย `/skill-doctor` ราว 2026-11-24 (รอบแดงของ `video-editing` ทำถูกโดยไม่มี skill · ดูว่าควรย่อเหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เองไหม) · งานต่อไปบน repo แตก branch ใหม่จาก main (`f784b41`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
 - **รออนุมัติ:** commit · push · merge · tag · eval ที่เสียเงิน · แตะไฟล์ของอีกฝั่ง
 - **ค้างอยู่:** `items.json` ที่รากเป็นภาพรวมเก่า 12 ต.ค. ไม่มีตัวสร้าง · ตัวบทราชบัณฑิตยสภาเรื่องไม้ยมกและประกาศทับศัพท์ 2532 · ข้อความ licence เต็มของ GSAP · ข้อที่ agent ติด (ยังไม่ได้ตรวจ) ไว้ใน skill ใหม่ (เช่น ม.17/17-1 พ.ร.บ.คุ้มครองแรงงาน · rate limit ของ Shopee/Lazada · ค่า API ของ PEAK/FlowAccount)
 - **ข้อเสนอที่ยังไม่ได้ทำ:** ตัวตรวจ `plugin:ชื่อ` ใน validator · ตรวจลำดับหัวรุ่นใน CHANGELOG (รายละเอียดใน `IMPROVEMENTS.md`)
