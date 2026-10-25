@@ -1,26 +1,44 @@
 {
  "plugin": "e-commerce",
  "version": "1.0.0",
- "description": "Online buying and selling toolkit for Thailand, both sides in one plugin — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, fees and pricing, one stock sheet, chat replies, live-selling scripts, couriers and COD, returns) and buy with confidence (decision matrix and total cost, fake-review check, warranty registry, complaint letters up to OCPB hotline 1166, refunds and chargebacks). General information only, not tax or legal advice.",
+ "description": "Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.",
  "cross": [
   "graphic-design",
-  "thai-workplace",
   "software-company",
+  "trading-finance",
   "superuser",
-  "personal-life",
-  "trading-finance"
+  "personal-life"
  ],
  "skills": [
   "buy-compare",
   "chat-reply-templates",
   "complaint-letter-th",
+  "dbd-annual-filing",
+  "doc-contract-th",
+  "doc-leave",
+  "doc-quotation",
+  "doc-thai-official",
+  "e-tax-invoice",
+  "hiring-th",
+  "labour-law-basics",
+  "line-broadcast",
+  "line-chatbot",
+  "line-oa-setup",
   "live-selling-script",
   "marketplace-fees-pricing",
   "multi-shop-stock",
+  "payroll-th",
+  "pdpa-workflow",
   "product-listing",
+  "promptpay-qr",
   "refund-request",
   "returns-and-bad-reviews",
+  "seller-tax-basics",
   "shipping-compare",
+  "social-security-th",
+  "tax-vat-th",
+  "thai-business-setup",
+  "thai-holidays",
   "warranty-tracker"
  ],
  "core_skills": [
@@ -62,12 +80,29 @@
  "commands": [
   "compare",
   "complain",
+  "contract",
+  "line-bot",
+  "line-setup",
   "listing",
   "live-script",
+  "payroll",
+  "pdpa",
   "price-check",
-  "reply"
+  "quotation",
+  "reply",
+  "tax-due",
+  "year-end-filing"
  ],
  "agents": [
+  {
+   "name": "compliance-helper",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a Thai SME handles personal data under PDPA — consent forms, breach response, data-subject requests, ROPA.",
+   "skills": [
+    "pdpa-workflow"
+   ]
+  },
   {
    "name": "consumer-advocate",
    "model": "sonnet",
@@ -88,7 +123,20 @@
    "description": "Use when a Thai online seller must answer a customer — price, stock, late parcel, refund, haggling, bad review.",
    "skills": [
     "chat-reply-templates",
-    "returns-and-bad-reviews"
+    "returns-and-bad-reviews",
+    "promptpay-qr",
+    "line-oa-setup"
+   ]
+  },
+  {
+   "name": "line-admin",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when setting up or running a LINE Official Account — Messaging API, webhook, chatbot, broadcast, rich menu.",
+   "skills": [
+    "line-oa-setup",
+    "line-chatbot",
+    "line-broadcast"
    ]
   },
   {
@@ -111,11 +159,140 @@
     "product-listing",
     "marketplace-fees-pricing",
     "multi-shop-stock",
-    "shipping-compare"
+    "shipping-compare",
+    "seller-tax-basics",
+    "doc-quotation",
+    "promptpay-qr"
+   ]
+  },
+  {
+   "name": "tax-helper",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a Thai SME or person asks what to file and when (VAT, WHT, social security), hiring or business setup.",
+   "skills": [
+    "tax-vat-th",
+    "payroll-th",
+    "social-security-th",
+    "e-tax-invoice",
+    "dbd-annual-filing",
+    "labour-law-basics",
+    "promptpay-qr",
+    "seller-tax-basics",
+    "hiring-th",
+    "thai-business-setup"
+   ]
+  },
+  {
+   "name": "thai-doc-writer",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when drafting Thai business documents — ใบเสนอราคา, invoice, receipt, official letter, contract, leave form.",
+   "skills": [
+    "doc-quotation",
+    "e-tax-invoice",
+    "doc-thai-official",
+    "doc-contract-th",
+    "doc-leave"
    ]
   }
  ],
  "playbooks": [
+  {
+   "name": "business-doc",
+   "title": "เอกสารธุรกิจภาษาไทย",
+   "when": "ใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ ใบกำกับภาษี · หนังสือราชการ · สัญญา · ใบลา",
+   "done": "เอกสารพร้อมส่ง ช่องบังคับครบ ยอดตรง และจุดที่ต้องให้ผู้เชี่ยวชาญดูติดธงแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เลือกชนิดเอกสารให้ถูกกับเหตุการณ์ตาม `doc-quotation` (เสนอราคา · วางบิล · รับเงิน · ใบกำกับภาษี) · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [
+      "doc-quotation"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "เก็บข้อมูลคู่สัญญาและรายการจากของจริง · เลขผู้เสียภาษีและที่อยู่ใส่ตามที่ผู้ใช้ให้ · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ร่างตามรูปแบบของ skill — ใบกำกับภาษีมีช่องครบตามกฎหมาย · หนังสือราชการตามระเบียบงานสารบรรณ · สัญญาตามเช็กลิสต์ข้อสัญญา · ใคร: `thai-doc-writer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "thai-doc-writer"
+      ],
+      "raw": "`thai-doc-writer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "คำนวณ VAT ภาษีหัก ณ ที่จ่าย และยอดรวมเป็นตัวหนังสือไทยด้วยสูตร · ใคร: `thai-doc-writer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "thai-doc-writer"
+      ],
+      "raw": "`thai-doc-writer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — ช่องบังคับครบ · ตัวเลขและตัวหนังสือตรงกัน · ข้อสัญญาที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
   {
    "name": "buy-decision",
    "title": "ตัดสินใจซื้อของชิ้นใหญ่",
@@ -580,6 +757,125 @@
    "shared": true
   },
   {
+   "name": "line-oa",
+   "title": "ตั้งและดูแล LINE Official Account",
+   "when": "สร้าง LINE OA · เปิด Messaging API · ทำ chatbot · rich menu · broadcast",
+   "done": "ข้อความทดสอบผ่านจริง ค่าลับไม่อยู่ในโค้ดหรือแชต และโควตาคำนวณแล้ว",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ตรวจแพ็กเกจและโควตาข้อความของบัญชีจากหน้าทางการของ LINE · ใคร: `line-admin` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "line-admin"
+      ],
+      "raw": "`line-admin` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ตั้ง channel และ webhook ตาม `line-oa-setup` — ตรวจลายเซ็น X-Line-Signature และเก็บค่าลับไว้ในไฟล์ตั้งค่าที่ผู้ใช้ใส่เอง · ใคร: `line-admin` ตัวใหม่ (ผู้ใช้ใส่ค่าลับเอง)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": true,
+      "agents": [
+       "line-admin"
+      ],
+      "raw": "`line-admin` ตัวใหม่ (ผู้ใช้ใส่ค่าลับเอง)"
+     },
+     "skills": [
+      "line-oa-setup"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 3,
+     "text": "chatbot — จัดกลุ่มคำถามจริงของลูกค้าตามเจตนา (intent) แล้วตอบจากฐานความรู้ ถ้าไม่มั่นใจให้ส่งต่อให้พนักงาน และไม่แต่งราคาหรือสต็อก · ใคร: `line-admin` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "line-admin"
+      ],
+      "raw": "`line-admin` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "rich menu — ทำขนาดภาพและพื้นที่กดตาม `graphic-design:line-richmenu` (ไม่ได้ติดตั้ง → ใช้ขนาดจากเอกสารทางการของ LINE แล้วติดป้าย `ยังไม่ได้ตรวจ`) · ใคร: `line-admin` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "line-admin"
+      ],
+      "raw": "`line-admin` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "broadcast — คำนวณโควตาก่อนส่ง ส่วนการส่งจริงต้องรออนุมัติ · ใคร: `line-admin` ตัวใหม่คำนวณโควตา แล้วผู้ใช้อนุมัติการส่งจริง",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": true,
+      "agents": [
+       "line-admin"
+      ],
+      "raw": "`line-admin` ตัวใหม่คำนวณโควตา แล้วผู้ใช้อนุมัติการส่งจริง"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "ทดสอบ echo หรือข้อความทดสอบกับบัญชีทดสอบ · ใคร: `line-admin` ตัวใหม่ส่งไปบัญชีทดสอบ · `reviewer` ตัวใหม่ตรวจผลกับ log และการคำนวณโควตา",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "line-admin"
+      ],
+      "raw": "`line-admin` ตัวใหม่ส่งไปบัญชีทดสอบ · `reviewer` ตัวใหม่ตรวจผลกับ log และการคำนวณโควตา"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
    "name": "live-session",
    "title": "เตรียมไลฟ์ขายของ",
    "when": "จะไลฟ์บน TikTok Shop · Shopee Live · Lazada Live · Facebook Live",
@@ -644,6 +940,124 @@
     {
      "n": 4,
      "text": "ตรวจคำพูดทุกบรรทัดกับรายการคำโฆษณาต้องห้าม และเช็กลิสต์กับสต็อกจริง · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "monthly-close",
+   "title": "ปิดเดือน — เงินเดือน ภาษี ประกันสังคม",
+   "when": "ทำเงินเดือนประจำเดือน · ยื่นภาษีหัก ณ ที่จ่าย ภาษีมูลค่าเพิ่ม และประกันสังคม",
+   "done": "ตารางเงินเดือนที่คำนวณซ้ำแล้ว และชุดยื่นทุกแบบของเดือนพร้อมยื่นก่อนวันครบกำหนด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "เก็บข้อมูลจริงของเดือน — รายชื่อพนักงาน เงินเดือน OT เบี้ยขยัน หักขาดลา กองทุนสำรองเลี้ยงชีพ ถ้าข้อมูลไม่ครบให้ใส่ `(รอยืนยัน)` · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ตรวจอัตราและเพดานปีนี้จากเว็บทางการ — ฐานค่าจ้างประกันสังคม อัตราภาษี · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "คำนวณ gross → net ต่อคนด้วยสูตรในสเปรดชีตตาม `payroll-th` (ภาษีหักแบบประมาณทั้งปี) · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [
+      "payroll-th"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทำรายการแบบที่ต้องยื่นเดือนนี้พร้อมวันครบกำหนด ตาม `tax-vat-th` และ `social-security-th` · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [
+      "tax-vat-th",
+      "social-security-th"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "เตรียมไฟล์ยื่นและขั้นตอนทีละคลิกบนระบบ e-Filing — การยื่นและชำระจริงต้องรออนุมัติ · ใคร: `tax-helper` ตัวใหม่เตรียม แล้วผู้ใช้ยื่นและชำระเอง",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": true,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่เตรียม แล้วผู้ใช้ยื่นและชำระเอง"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 6,
+     "text": "ตรวจ — ยอดรวมในแบบและไฟล์ยื่นต้องตรงกับตารางเงินเดือน และคำนวณซ้ำด้วยมือ 1 คน · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
@@ -782,6 +1196,103 @@
    "shared": false
   },
   {
+   "name": "pdpa-setup",
+   "title": "ตั้งระบบ PDPA ของ SME",
+   "when": "เริ่มทำ PDPA · ทำแบบขอความยินยอม · มีคำขอจากเจ้าของข้อมูล · ข้อมูลรั่ว",
+   "done": "ชุดเอกสาร PDPA พร้อมใช้ และขั้นตอนรับคำขอและเหตุละเมิดที่มีกรอบเวลาชัด",
+   "steps": [
+    {
+     "n": 1,
+     "text": "ถ้ามีข้อมูลรั่วอยู่ตอนนี้ ให้ทำขั้นตอนรับมือเหตุละเมิดใน `pdpa-workflow` ก่อนอย่างอื่น และเริ่มนับเวลาที่ต้องแจ้งหน่วยงาน · ใคร: หัวหน้าทีม (คุยกับผู้ใช้ทันที)",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": true,
+      "agents": [],
+      "raw": "หัวหน้าทีม (คุยกับผู้ใช้ทันที)"
+     },
+     "skills": [
+      "pdpa-workflow"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 2,
+     "text": "ทำรายการข้อมูลส่วนบุคคลที่บริษัทเก็บ — เก็บอะไร ของใคร เพื่ออะไร ฐานทางกฎหมาย เก็บนานเท่าไร · ใคร: `compliance-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "compliance-helper"
+      ],
+      "raw": "`compliance-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "ร่างแบบขอความยินยอม ประกาศความเป็นส่วนตัว และบันทึกรายการกิจกรรมประมวลผล · ใคร: `compliance-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "compliance-helper"
+      ],
+      "raw": "`compliance-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "วางขั้นตอนรับคำขอจากเจ้าของข้อมูลพร้อมกรอบเวลา · ใคร: `compliance-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "compliance-helper"
+      ],
+      "raw": "`compliance-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — ทุกกิจกรรมต้องมีฐานทางกฎหมาย และจุดที่ต้องให้ทนายดูติดธงแล้ว · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
    "name": "pricing-check",
    "title": "ตรวจกำไรและตั้งราคาใหม่",
    "when": "ขายแล้วไม่เหลือกำไร · ค่าธรรมเนียมเปลี่ยน · จะจัดโปรลดราคา",
@@ -852,7 +1363,9 @@
       "agents": [],
       "raw": "หัวหน้าทีม"
      },
-     "skills": [],
+     "skills": [
+      "seller-tax-basics"
+     ],
      "commands": [],
      "playbooks": [],
      "approval": false
@@ -973,13 +1486,13 @@
   },
   {
    "name": "review",
-   "title": "ตรวจงานซื้อขายออนไลน์ก่อนส่ง",
+   "title": "ตรวจงานซื้อขายออนไลน์และงานหลังบ้านก่อนส่ง",
    "when": "ตรวจงานก่อนส่งหรือก่อนใช้จริง · \"ช่วยดูหน่อยว่ามีอะไรพลาด\" · ผู้ใช้ทำมาเองแล้วอยากให้ตรวจ",
    "done": "ทุกข้อในรายงานชี้จุดในชิ้นงานได้ และผ่านการยืนยันแล้ว",
    "steps": [
     {
      "n": 1,
-     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (ต้นทุน · ค่าธรรมเนียมใน Seller Centre · นโยบายแพลตฟอร์ม · ไฟล์สต็อก · หลักฐาน · ไทม์ไลน์ · เงื่อนไขของร้านหรือแพลตฟอร์ม) · ใคร: หัวหน้าทีม",
+     "text": "กำหนดขอบเขต — ชิ้นงานที่ตรวจ และเอกสารต้นทางที่ต้องเทียบ (ต้นทุน · ค่าธรรมเนียมใน Seller Centre · นโยบายแพลตฟอร์ม · ไฟล์สต็อก · หลักฐาน · ไทม์ไลน์ · เงื่อนไขของร้านหรือแพลตฟอร์ม · อัตราจากเว็บทางการ · ตารางเงินเดือน · แบบฟอร์มทางการ) · ใคร: หัวหน้าทีม",
      "sub": [],
      "phase": "",
      "who": {
@@ -1335,7 +1848,7 @@
   {
    "name": "unattended-run",
    "title": "งานยาวที่ผู้ใช้ไม่อยู่ดู",
-   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น ลงสินค้า 20 SKU ครบชุดทุกแพลตฟอร์ม · ตรวจกำไรทั้งร้าน · เตรียมชุดร้องเรียนทุกขั้น · จัดทะเบียนใบเสร็จทั้งบ้าน",
+   "when": "\"ทำให้เสร็จ เดี๋ยวกลับมาดู\" · \"ไม่ต้องถาม\" · งานหลายขั้นที่ผู้ใช้จะมาตรวจทีเดียว — เช่น ลงสินค้า 20 SKU ครบชุดทุกแพลตฟอร์ม · ตรวจกำไรทั้งร้าน · เตรียมชุดร้องเรียนทุกขั้น · จัดทะเบียนใบเสร็จทั้งบ้าน · ทำเงินเดือนและชุดยื่นทั้งเดือน · เตรียมเอกสารปิดปีทั้งชุด",
    "done": "เงื่อนไขข้อ 1 ผ่านทั้งหมด หรือชิ้นที่เหลือทุกชิ้นมีเหตุผลว่าทำไมติด",
    "steps": [
     {
@@ -1544,6 +2057,105 @@
     {
      "n": 5,
      "text": "ตรวจทะเบียน การตั้งเตือน และชุดเคลม (ถ้ามี) ก่อนถึงผู้ใช้ · ใคร: `reviewer` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [],
+      "raw": "`reviewer` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    }
+   ],
+   "shared": false
+  },
+  {
+   "name": "year-end",
+   "title": "งานปิดปี — งบการเงิน ประชุมผู้ถือหุ้น ภ.ง.ด.50 และ 50 ทวิ",
+   "when": "หลังวันสิ้นรอบบัญชี · ทำหนังสือรับรองหักภาษีและ ภ.ง.ด.1ก ให้พนักงาน",
+   "done": "ไทม์ไลน์ปิดปีที่ตรวจกับแหล่งทางการแล้ว และ 50 ทวิทุกคนตรงกับยอดรวม",
+   "steps": [
+    {
+     "n": 1,
+     "text": "นับย้อนจากวันสิ้นรอบบัญชีตาม `dbd-annual-filing` — ประชุมผู้ถือหุ้น · งบการเงินผ่านผู้สอบ · บอจ.5 · ภ.ง.ด.50 · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [
+      "dbd-annual-filing"
+     ],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 2,
+     "text": "ตรวจกำหนดวันและค่าปรับจากเว็บกรมพัฒนาธุรกิจการค้าและกรมสรรพากร · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 3,
+     "text": "เตรียม ภ.ง.ด.1ก และ 50 ทวิ จากตารางเงินเดือนทั้งปี · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 4,
+     "text": "ทำรายการเอกสารที่ต้องได้จากผู้สอบบัญชีและกรรมการ พร้อมวันที่ต้องได้ · ใคร: `tax-helper` ตัวใหม่",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": false,
+      "user": false,
+      "agents": [
+       "tax-helper"
+      ],
+      "raw": "`tax-helper` ตัวใหม่"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": false
+    },
+    {
+     "n": 5,
+     "text": "ตรวจ — ยอดทั้งปีใน 50 ทวิ ต้องตรงกับผลรวม 12 เดือน · ใคร: `reviewer` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {

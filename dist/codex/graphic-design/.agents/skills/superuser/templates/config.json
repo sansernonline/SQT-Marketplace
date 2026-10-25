@@ -11,6 +11,7 @@
     "review_gate": true,
     "split_gate": true,
     "guard": false,
-    "recompact": false
+    "recompact": false,
+    "ui_scan": true
   }
 }

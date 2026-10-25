@@ -26,7 +26,7 @@ Response time and chat rate count toward shop ratings on the big platforms, and 
 | ได้ของผิด / ไม่ครบ / ชำรุด | T4 wrong or damaged item | photos/video from buyer, packing record |
 | ขอคืนเงิน / ขอคืนสินค้า | T5 refund | decision table in `returns-and-bad-reviews` |
 | ส่งของวันไหน | T7 shipping time | cut-off time, today's shipments |
-| ขอใบเสร็จ / ใบกำกับภาษี | T8 receipt | VAT-registered or not (`seller-tax-basics` in thai-workplace) |
+| ขอใบเสร็จ / ใบกำกับภาษี | T8 receipt | VAT-registered or not (`seller-tax-basics`) |
 
 ## Rules
 
@@ -37,8 +37,8 @@ Response time and chat rate count toward shop ratings on the big platforms, and 
 - Never paste another buyer's details, and never ask for a buyer's ID card or bank account in chat (refunds go through the platform)
 - Keep emoji to 1–2 per message; no stickers in complaint chats
 - ข้อความภาษาไทย → `human-writing` `references/thai-grammar.md` หัวข้อ 4 ระดับ แชตร้าน · ชื่อร้าน/แอดมิน ใส่ครั้งแรกครั้งเดียว ประโยคถัดไปละได้
-- Quotation or tax invoice for a business buyer → `thai-workplace` `doc-quotation` (if installed)
-- LINE shop auto-replies and rich menu → `thai-workplace` `line-oa-setup` (if installed)
+- Quotation or tax invoice for a business buyer → `doc-quotation`
+- LINE shop auto-replies → `line-oa-setup` · `line-chatbot` · rich menu image → `graphic-design:line-richmenu` (if installed)
 
 ## Worked example
 

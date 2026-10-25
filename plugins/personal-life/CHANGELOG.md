@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- agent `life-admin` รับ `personal-kb` · `travel-prep` · `gift-idea-tracker` · `decision-journal` · agent `tech-mentor` รับ `course-builder` · `triggers.md` เพิ่มแถว `personal-kb`
+- ตัดคำว่า "if installed" ที่ skill ใน plugin นี้เขียนถึง skill ของ plugin เดียวกัน (15 จุด) · `meeting-prep` บอกถูกแล้วว่า skill ประชุมอยู่ใน plugin นี้ ไม่ใช่ `superuser`
 - prompt ใหม่ `prompt/personal-life/prompt-podcast-lesson.md` 5 ฉบับ: วางชุดบทเรียน (`course-builder`) · สคริปต์พูด 1 ตอนพร้อม show notes · สไลด์ประกอบที่ตรงกับสคริปต์ (`presentation-design` และ `html-slide-deck` ของ software-company) · อัดเสียง ตัดต่อ และเวอร์ชันวิดีโอ · ตรวจก่อนปล่อย
 - `prompt-podcast-lesson.md` แก้ตามรอบทดสอบจริง (agent ตัวใหม่ทำฉบับ 1–3 กับบทเรียน Git 2 ตอน): ฉบับ 1 มีช่องเครื่องมือที่ผู้ฟังต้องใช้ · จำนวนตอนที่ผู้ใช้กรอกเป็นกรอบ · ส่งโครงตอนเป็น `outline.md` · ฉบับ 2 ใช้กฎภาษาพูดของ `speaking-script` · ตัวเลขเขียนเป็นเลขพร้อมคำอ่าน · บทพูดสรุปท้ายตอนได้แต่ show notes ไม่สรุปซ้ำ · ฉบับ 3 บันทึกผู้พูดต่อแผ่นชัดขึ้น · ไม่มี Playwright มีทางสำรอง · ทำวิดีโอด้วย `video-editing` (หัวข้อสไลด์กับเสียงบรรยาย) แทนอัดหน้าจอ · ตรวจตัวอักษรบนมือถือจริงแทนอ้างข้อที่ไม่ตรง · ฉบับ 4 ใช้ `video-editing` และ `subtitles-th`
 - `prompt-podcast-lesson.md` ฉบับ 4: เสียงสังเคราะห์ใช้ `video-editing` ของ graphic-design (หัวข้อเสียงบรรยายจากสคริปต์) (ทำร่างด้วยเสียง Windows · ได้ซับและเวลาสไลด์จากการรันเดียว ไม่ต้องถอดเสียง)

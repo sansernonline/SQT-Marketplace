@@ -85,7 +85,7 @@ No ID-card number on it — the card itself is in the same wallet. Half a page i
 | Cost and what the scheme covered | |
 | Questions for next time | |
 
-Then update `medication-schedule` and the `annual-checkup` results table, and store papers in `important-docs` (`personal-life`, if installed).
+Then update `medication-schedule` and the `annual-checkup` results table, and store papers in `important-docs`.
 
 ## Worked example — top 3 questions
 

@@ -6,6 +6,7 @@
     "ADAPT.md": "วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่",
     "hooks/hooks.json": "บอก Claude Code ว่าจะเรียก hook ตอนไหน",
     "hooks/superuser-hook.mjs": "hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox",
+    "hooks/ui-scan-hook.mjs": "ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan",
     "hooks/core-rules.md": "กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)",
     "hooks/skill-router.json": "คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม",
     "hooks/guard-rules.json": "รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา",
@@ -27,11 +28,7 @@
     "evals/video-editing-slides-regression/case.yaml": "เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย",
     "evals/video-editing-tts-trigger/case.yaml": "เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด",
     "evals/video-editing-tts-behaviour/case.yaml": "เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ",
-    "evals/video-editing-tts-guard/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง",
-    "README.md": "คำอธิบายและวิธีเริ่มใช้งาน plugin",
-    "package.json": "นิยามสคริปต์ npm — doctor ตรวจเครื่องมือ และ test ตรวจโครง tools.json",
-    "scripts/check-tools.mjs": "ตรวจว่าเครื่องมือ reverse engineering ที่ผู้ใช้ติดตั้งมีตัวไหน โดยไม่ดาวน์โหลดและไม่เปิดโปรแกรม",
-    "tools.json": "รายการเครื่องมือ reverse engineering แยกตามกลุ่มงาน พร้อมวิธีตรวจและแหล่งติดตั้งทางการ"
+    "evals/video-editing-tts-guard/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -68,11 +65,6 @@
     "adversarial-review-panel": "คณะรีวิว 3 มุมที่หาจุดอ่อนก่อนส่งงาน",
     "agent-patterns": "เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ)",
     "alert-set": "ตั้งแจ้งเตือนราคาหรือข่าวของหุ้นที่ติดตาม พร้อมช่วงพัก",
-    "analyze-apk": "ตรวจ APK ของ Android: manifest ทรัพยากร คลาสที่ถอดรหัส และการเรียกเมธอด",
-    "analyze-dotnet": "ตรวจ assembly .NET (.dll/.exe): metadata คำสั่ง CIL dependency และเทียบ build",
-    "analyze-js-electron": "ตรวจแอป JavaScript หรือ Electron ที่แตกออกมา: โมดูล import ขอบเขต IPC และ source map",
-    "analyze-native-binary": "ตรวจไบนารี native (.exe .dll ELF Mach-O): string symbol pseudocode และฟังก์ชันที่ import",
-    "analyze-website": "ตรวจว่าฟีเจอร์ของเว็บทำงานอย่างไรจากโครงหน้า สคริปต์ และ network call โดยไม่มี backend",
     "annual-checkup": "วางแผนตรวจสุขภาพประจำปี เช็กสิทธิ์ประกันสังคมหรือบัตรทอง เทียบแพ็กเกจ",
     "answer-shape": "เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ",
     "api-conventions": "กติกา API ให้เหมือนกันทั้งระบบ: URL · แบ่งหน้า · วันที่ · id",
@@ -276,7 +268,6 @@
     "promptpay-qr": "QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR",
     "quotation": "ร่างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ เป็น .docx",
     "radar": "ไล่ดูว่าไลบรารีที่ติดตามเปลี่ยนอะไรในสัปดาห์นี้",
-    "re": "คำสั่งลัด reverse engineer ฟีเจอร์จากแอป ไบนารี assembly เว็บ หรือ APK: หลักฐานก่อน แล้วสร้างใหม่",
     "readable-code": "โค้ดอ่านง่าย: ชื่อ · รูปฟังก์ชัน · คอมเมนต์ · ที่วางไฟล์",
     "reference-app-research": "\"อยากได้แอปแบบ X\" → ค้นแอปนั้นและคู่แข่งเป็นเอกสารเดียว",
     "refund-request": "ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก",
@@ -290,7 +281,6 @@
     "retirement-plan": "เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร",
     "retrospective": "ทบทวนหลังจบ sprint: อะไรดี อะไรไม่ดี จะทำอะไรต่อ",
     "returns-and-bad-reviews": "รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว",
-    "reverse-engineer": "จุดเข้าหลักของการ reverse engineer: อธิบายว่าฟีเจอร์ทำงานอย่างไรพร้อมหลักฐาน แล้วสร้างใหม่",
     "reverse-engineering": "ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล)",
     "review-design": "ตรวจภาพหรืองานออกแบบก่อนส่ง แล้วบอก 2-3 จุดที่สำคัญที่สุด",
     "review-week": "ทบทวนเทรดรายสัปดาห์หรือรายเดือน หาความผิดที่ซ้ำ ตั้งกฎใหม่ 1 ข้อ",
@@ -371,8 +361,6 @@
     "weekly-review": "ทบทวนประจำสัปดาห์ สำหรับคนที่ยุ่งแต่งานไม่เดิน",
     "windows-app-design": "แอป desktop ที่ต้องดูเป็นของ Windows 11 (WinUI 3 · MAUI)",
     "worktree-and-branch": "แยกที่ทำงานให้ agent ด้วย git worktree แล้วปิด branch ให้จบ (merge · PR · ทิ้ง) พร้อมหลักฐาน",
-    "year-end-filing": "ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50)",
-    "analyze-network": "ตรวจทราฟฟิกที่บันทึกไว้ (HAR · PCAP) หรือสังเกตแอปทดสอบที่ได้รับอนุญาตผ่าน Wireshark หรือ mitmproxy",
-    "analyze-firmware": "ตรวจ firmware image หรือ embedded filesystem ที่ได้รับอนุญาตแบบสถิตด้วย Binwalk หรือ Unblob"
+    "year-end-filing": "ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50)"
   }
 }

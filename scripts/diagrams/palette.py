@@ -6,9 +6,9 @@
 COLOR = {
     "superuser": "#4338CA", "career": "#1D4ED8", "consumer-rights": "#991B1B",
     "graphic-design": "#A21CAF", "health-wellness": "#15803D", "home-family": "#C2410C", "online-seller": "#BE185D",
-    "personal-life": "#6D28D9", "software-company": "#3B5B7A", "thai-workplace": "#4D7C0F", "trading-finance": "#A16207",
-    # e-commerce รวม online-seller + consumer-rights จึงใช้สีเดิมของ online-seller · reverse-engineer เขียวหัวเป็ด ตัวขาว 5.4:1
-    "e-commerce": "#BE185D", "reverse-engineer": "#0F766E",
+    "personal-life": "#6D28D9", "software-company": "#3B5B7A", "trading-finance": "#A16207",
+    # e-commerce รวม online-seller + consumer-rights จึงใช้สีเดิมของ online-seller
+    "e-commerce": "#BE185D",
 }
 
 # รูปทรงเรขาคณิตง่าย ๆ ใน viewBox 24 × 24 เส้นอย่างเดียว
@@ -23,10 +23,8 @@ SHAPE = {
     "online-seller": '<path d="M5 8h14l-1 13H6z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/>',
     "personal-life": '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15.5" r="2"/>',
     "software-company": '<path d="m12 3 9 4.5-9 4.5-9-4.5z"/><path d="m3 12 9 4.5 9-4.5M3 16.5 12 21l9-4.5"/>',
-    "thai-workplace": '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14h7"/><circle cx="14" cy="18" r="1.6"/>',
     "trading-finance": '<path d="M3 3v18h18"/><path d="m6 15 4-4 3 3 7-7"/><path d="M16 7h4v4"/>',
     "e-commerce": '<path d="M5 8h14l-1 13H6z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/>',
-    "reverse-engineer": '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/><path d="M9 8l-2 2.5L9 13M12 8l2 2.5-2 2.5"/>',
 }
 
 

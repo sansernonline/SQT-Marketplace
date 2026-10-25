@@ -1,5 +1,14 @@
 # CHANGELOG — e-commerce
 
+## Unreleased
+
+- agent `tax-helper` โหลด `seller-tax-basics` · `hiring-th` · `thai-business-setup` ด้วย · ตัวกระตุ้นของ 2 ตัวหลังชี้มาที่ `tax-helper`
+- รวม plugin `thai-workplace` เข้ามา: skill 19 ตัว คำสั่ง 8 ตัว (เอกสารธุรกิจ · ภาษีและปฏิทินยื่นแบบ · เงินเดือน · ประกันสังคม · กฎหมายแรงงาน · รับพนักงาน · เปิดบริษัท · ยื่นสิ้นปี · PDPA · LINE OA · พร้อมเพย์ · วันหยุด) · agent `thai-doc-writer` · `tax-helper` · `compliance-helper` · `line-admin` · playbook `business-doc` · `monthly-close` · `year-end` · `pdpa-setup` · `line-oa`
+- `seller-tax-basics` กลับมาอยู่ plugin เดียวกับฝั่งขาย · ตัวชี้ที่เคยบอกให้ติดตั้ง `thai-workplace` เพิ่มไม่ต้องใช้แล้ว
+- `line-richmenu` ไม่ได้ย้ายมาด้วย ไปอยู่ `graphic-design` เพราะเป็นงานออกแบบภาพเมนู
+- prompt ของ `thai-workplace` 4 ไฟล์ย้ายไป `prompt/e-commerce/` · README รวมตาราง "เลือกจากสถานการณ์" ของงานหลังบ้านไว้ท้ายไฟล์
+- ผู้ที่ติดตั้ง `thai-workplace` ไว้: `/plugin uninstall thai-workplace` แล้วติดตั้ง `e-commerce` · ชื่อ skill และ command เดิมใช้ได้เหมือนเดิมภายใต้ `e-commerce:`
+
 ## 1.0.0 — 2026-10-23
 
 - รวม `online-seller` + `consumer-rights` เป็น plugin เดียว — ครอบซื้อ-ขายออนไลน์ทั้งสองฝั่ง

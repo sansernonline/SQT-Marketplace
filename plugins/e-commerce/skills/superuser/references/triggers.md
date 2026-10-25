@@ -13,8 +13,8 @@
 | ตอบลูกค้า | `chat-reply-templates` + agent `customer-chat` |
 | คืนสินค้า · รีวิวแย่ | `returns-and-bad-reviews` |
 | ไลฟ์ขายของ | `live-selling-script` + agent `live-seller` |
-| ภาษีคนขายออนไลน์ | `seller-tax-basics` (thai-workplace) |
-| ใบเสนอราคา ใบเสร็จ QR พร้อมเพย์ LINE OA | `doc-quotation` · `promptpay-qr` · `line-chatbot` (thai-workplace) |
+| ภาษีคนขายออนไลน์ (40(8) · เกณฑ์ VAT) | `seller-tax-basics` + agent `tax-helper` |
+| ใบเสนอราคา ใบเสร็จ QR พร้อมเพย์ LINE OA | ดูตารางงานหลังบ้านด้านล่าง |
 
 **ฝั่งซื้อ**
 
@@ -26,6 +26,25 @@
 | ซื้อของมีประกัน · ของเสีย | `warranty-tracker` |
 | ต้องเขียนข้อความสุภาพหรือทวงถาม | `polite-message-th-en` (superuser) |
 | ถูกหลอกโอนเงินลงทุน | `scam-check` (trading-finance) |
+
+**งานหลังบ้าน**
+
+| สถานการณ์ | เรียก |
+|---|---|
+| เงินเดือนประจำเดือน | `payroll-th` |
+| ยื่นภาษีอะไร เมื่อไร | `tax-vat-th` + agent `tax-helper` |
+| ประกันสังคม | `social-security-th` |
+| เปิดกิจการใหม่ (บุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน · ต้นทุนนำเข้าจากจีน) | `thai-business-setup` + agent `tax-helper` |
+| ปิดปีบริษัท | `dbd-annual-filing` |
+| ใบเสนอราคา ใบเสร็จ ใบกำกับภาษี | `doc-quotation` · `e-tax-invoice` |
+| หนังสือราชการ | `doc-thai-official` + agent `thai-doc-writer` |
+| สัญญา | `doc-contract-th` |
+| วันลา OT ค่าชดเชย | `labour-law-basics` · `doc-leave` |
+| จ้างพนักงานใหม่ (ประกาศรับสมัคร · ใบคัดกรอง · สัมภาษณ์ · จดหมายเสนองาน) | `hiring-th` + agent `tax-helper` |
+| PDPA | `pdpa-workflow` + agent `compliance-helper` |
+| LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · ภาพ rich menu → `line-richmenu` (graphic-design) |
+| QR พร้อมเพย์ | `promptpay-qr` |
+| วันหยุด | `thai-holidays` |
 
 **ใช้ร่วมกัน**
 

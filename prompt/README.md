@@ -9,7 +9,7 @@ prompt/
 ├─ README.md            ไฟล์นี้ (สารบัญ)
 ├─ software-company/    25 ไฟล์
 ├─ e-commerce/ · graphic-design/ · personal-life/
-├─ thai-workplace/ · trading-finance/
+├─ trading-finance/
 │                       4–6 ไฟล์ตามสถานการณ์ + README.md (รายการไฟล์ · เลือกจากสถานการณ์)
 └─ superuser/           งานทั่วไป + ฉบับกลางที่ใช้ได้ทุก plugin
 ```
@@ -17,7 +17,7 @@ prompt/
 | plugin | ไฟล์ |
 |---|---|
 | `software-company` | `software-company/` — 25 ไฟล์ตามช่วงงาน · ดู [รายการไฟล์](#รายการไฟล์) |
-| plugin อื่น 6 ตัว | `<ชื่อ plugin>/prompt-<สถานการณ์>.md` · เลือกไฟล์จาก `<ชื่อ plugin>/README.md` · ดู [plugin อื่น](#plugin-อื่น) |
+| plugin อื่น 4 ตัว | `<ชื่อ plugin>/prompt-<สถานการณ์>.md` · เลือกไฟล์จาก `<ชื่อ plugin>/README.md` · ดู [plugin อื่น](#plugin-อื่น) |
 | `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว |
 
 ## วิธีใช้ (software-company)
@@ -118,10 +118,9 @@ prompt/
 
 | plugin | ไฟล์ (สถานการณ์) | ฉบับ |
 |---|---|---|
-| [`e-commerce`](e-commerce/README.md) | `prompt-open-shop` เปิดร้าน ลงสินค้า ถูกระงับ · `prompt-stock-and-profit` กำไร สต็อก ปิดยอด ภาษี · `prompt-campaign-live` วันแคมเปญ ไลฟ์ · `prompt-customers` ตอบลูกค้า พัสดุหาย ข้อพิพาท · `prompt-before-buying` ก่อนซื้อ ก่อนโอน · `prompt-money-back` ขอเงินคืน ถูกหลอก บิลผิด · `prompt-complaint` ร้องเรียน ยกเลิกสัญญา · `prompt-warranty` ประกันสินค้า | 27 |
+| [`e-commerce`](e-commerce/README.md) | `prompt-open-shop` เปิดร้าน ลงสินค้า ถูกระงับ · `prompt-stock-and-profit` กำไร สต็อก ปิดยอด ภาษี · `prompt-campaign-live` วันแคมเปญ ไลฟ์ · `prompt-customers` ตอบลูกค้า พัสดุหาย ข้อพิพาท · `prompt-before-buying` ก่อนซื้อ ก่อนโอน · `prompt-money-back` ขอเงินคืน ถูกหลอก บิลผิด · `prompt-complaint` ร้องเรียน ยกเลิกสัญญา · `prompt-warranty` ประกันสินค้า · `prompt-documents` เอกสารธุรกิจ ทวงเงิน ใบลดหนี้ · `prompt-tax-filing` ปิดงาน ภาษี เปิดบริษัท ยื่นเลยกำหนด · `prompt-employees` รับคน ลาออก วันหยุด · `prompt-pdpa-line` PDPA LINE OA | 27 · 17 |
 | [`graphic-design`](graphic-design/README.md) | `prompt-brand` brand kit ของพิมพ์ จัดไฟล์ · `prompt-campaign` แคมเปญ โปรด่วน ลูกค้าสั่งแก้ · `prompt-images` ชุดภาพ AI ภาพสินค้า โพสต์ทั้งเดือน · `prompt-video` วิดีโอสั้น โลโก้เคลื่อนไหว | 14 |
 | [`personal-life`](personal-life/README.md) | `prompt-weekly-routine` ทบทวนสัปดาห์ ประชุม กลับจากลา · `prompt-papers-and-money` เอกสาร บัตรหาย แฟ้มฉุกเฉิน รายจ่าย · `prompt-online-safety` บัญชี ถูกแฮก มือถือหาย · `prompt-life-events` เดินทาง ตัดสินใจ ย้ายบ้าน · `prompt-house` บิล ซ่อม น้ำท่วม · `prompt-vehicle` ภาษีรถ อุบัติเหตุ · `prompt-family-week` แผนสัปดาห์ เปิดเทอม · `prompt-care` ผู้สูงอายุ ลูก สัตว์เลี้ยง · `prompt-checkup` ตรวจประจำปี สิทธิรักษา · `prompt-doctor-and-meds` หาหมอ ยา · `prompt-family-care` พ่อแม่หลายโรค · `prompt-lifestyle` ออกกำลัง นอน เครียด · `prompt-job-search` หางาน สัมภาษณ์ · `prompt-at-work` ระหว่างทำงาน · `prompt-career-change` เปลี่ยนสาย · `prompt-leaving-job` ลาออก · `prompt-start-learning` เริ่มเรียน stack ใหม่ · `prompt-read-and-apply` paper เอกสารอังกฤษ เล่าให้ทีม · `prompt-keep-up` เรดาร์ อัปเกรดเวอร์ชัน · `prompt-certification` สอบใบรับรอง · `prompt-portfolio` side project · `prompt-thesis` วิทยานิพนธ์ IS บทความวิจัย · `prompt-podcast-lesson` บทเรียน podcast พร้อมสไลด์ | 81 |
-| [`thai-workplace`](thai-workplace/README.md) | `prompt-documents` เอกสารธุรกิจ ทวงเงิน ใบลดหนี้ · `prompt-tax-filing` ปิดงาน ภาษี เปิดบริษัท ยื่นเลยกำหนด · `prompt-employees` รับคน ลาออก วันหยุด · `prompt-pdpa-line` PDPA LINE OA | 17 |
 | [`trading-finance`](trading-finance/README.md) | `prompt-trading` ก่อนเทรด ทบทวน ติดดอย forex crypto prop firm · `prompt-investing` พอร์ต กองทุน ตลาดร่วง · `prompt-money-plan` แผนเงิน เงินก้อน ตกงาน · `prompt-tax` ภาษี · `prompt-scam` มิจฉาชีพ | 19 |
 | `superuser` | `superuser/prompt-superuser.md` ไฟล์เดียว: 1 หาข้อมูลที่ยืนยันได้ · 2 ทำเอกสาร · 3 ตรวจงาน · 4 งานยาวที่ไม่มีคนดู (ทุก plugin) · 5 รวมบทเรียนเข้า skill (ทุก plugin) · 6 ทำ superuser ให้ plugin สาขาใหม่ · 7 สอน agent ให้ทำงานแบบผม · 8 แปลเอกสารทั้งชุด ไทย ↔ อังกฤษ · 9 ตรวจภาษาไทยแบบเข้ม · 10 เขียนหรือแก้ skill พร้อม eval 3 กรณี · 11 เปิดด่าน guard และ recompact | 11 |
 

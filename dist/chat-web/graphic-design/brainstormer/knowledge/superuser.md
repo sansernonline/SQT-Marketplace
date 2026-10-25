@@ -209,8 +209,8 @@ Use when design work spans several assets (brand kit, campaign, AI image or vide
 
 | กติกา | รายละเอียด |
 |---|---|
-| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` · ตัดต่อ ใส่ซับ และส่งออกวิดีโอใช้ `video-editor` |
-| **งานข้ามสาขา** | หน้าจอแอปหรือเว็บส่งให้ `software-company` (`ux-designer` · `graphic-designer`) · ภาพสินค้าในร้านออนไลน์ส่งให้ `e-commerce` · rich menu ของ LINE OA ส่งให้ `thai-workplace` ถ้ายังไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ส่วนงานหลายขั้นในสาขานั้นให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` · ตัดต่อ ใส่ซับ และส่งออกวิดีโอใช้ `video-editor` · รูปจริงในหน้าเว็บ แอป และสไลด์ใช้ `image-artist` |
+| **งานข้ามสาขา** | หน้าจอแอปหรือเว็บส่งให้ `software-company` (`ux-designer` · `graphic-designer`) · ภาพสินค้าในร้านออนไลน์ส่งให้ `e-commerce` · rich menu ของ LINE OA ส่งให้ `e-commerce` ถ้ายังไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ส่วนงานหลายขั้นในสาขานั้นให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
 
 ---
 
@@ -966,9 +966,12 @@ shot list และ brief ครบทุกช็อต และซับไ�
 |---|---|
 | เริ่มหรือรื้อแบรนด์ | `brand-kit` + agent `brand-keeper` |
 | จะสร้างภาพด้วย AI | `brief-to-image` |
+| ต้องการรูปจริงในหน้าเว็บ แอป หรือสไลด์ (hero · สินค้า · คน) — สร้าง วาด SVG หรือหารูป | `image-generation` + agent `image-artist` |
+| เขียนบทพูดหน้ากล้อง (คลิปพูด · พิธีกร · เสียงบรรยาย) — hook ภาษาพูด จังหวะ | `speaking-script` |
 | หลายภาพต้องดูเป็นชุดเดียว | `style-consistency` + agent `art-director` |
 | ต้องแก้ภาพที่มีอยู่ | `image-editing-brief` |
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
+| rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · อัปโหลดผ่าน API) | `line-richmenu` · ขนาดภาพอ่านจาก `social-formats` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` |
 | เลือกโปรแกรมตัดต่อ (CapCut · DaVinci Resolve · HyperFrames · Remotion) · ซับไทยอัตโนมัติ · เพลงหรือเทมเพลตใช้เพื่อการค้าได้ไหม | `video-script-to-clip` ไฟล์ `references/production-tools.md` |
 | ตัดต่อด้วยคำสั่ง: ตัดหัวท้าย · ตัดช่วงเงียบ · ต่อคลิป · ปรับความดังให้ได้ตามแพลตฟอร์ม · แปลงแนวนอนเป็นแนวตั้ง | `video-editing` (agent `video-editor`) |

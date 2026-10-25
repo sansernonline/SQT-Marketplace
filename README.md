@@ -1,6 +1,6 @@
 # SQT Marketplace — Software Company Plugin Suite
 
-Marketplace สำหรับ Claude Code · **8 plugins** — ทีมพัฒนาซอฟต์แวร์ + ชุดใช้ในชีวิตประจำวัน + reverse engineer เลือกติดตั้งตามอุตสาหกรรม
+Marketplace สำหรับ Claude Code · **6 plugins** — ทีมพัฒนาซอฟต์แวร์ (รวม reverse engineering) + ชุดใช้ในชีวิตประจำวันและธุรกิจ เลือกติดตั้งตามงาน
 
 🔗 [sansernonline/SQT-Marketplace](https://github.com/sansernonline/SQT-Marketplace)
 
@@ -28,13 +28,11 @@ scripts\build-dist.cmd                                                       # �
 | Plugin | Agents | Skills | Commands | สำหรับ |
 |--------|:-----:|:------:|:--------:|--------|
 | **`superuser`** | 3 | 34 | 0 | หัวหน้างานกลาง — จัดขนาด ใบสั่งงาน 5 ข้อ แจกลูกทีม ตรวจซ้ำจนผ่าน วัด token · ใช้เดี่ยวได้ หรือเป็นแกนให้ plugin อื่น ([ADAPT.md](plugins/superuser/ADAPT.md)) |
-| **`software-company`** | 39 | 95 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
-| **`trading-finance`** | 4 | 19 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
+| **`software-company`** | 38 | 95 | 29 | บริษัทซอฟต์แวร์ครบทุกสาขา |
+| **`trading-finance`** | 5 | 19 | 7 | เทรดหุ้น การเงินส่วนตัว ภาษีและลดหย่อน เกษียณ หนี้ ประกัน |
 | **`personal-life`** | 9 | 39 | 16 | ชีวิตประจำวันตัวเดียวครบ 5 หมวด — จัดการชีวิต (ประชุม เอกสาร ค่าสมาชิก ความปลอดภัยบัญชี) · บ้านและครอบครัว (บิล รถ ลูก ผู้สูงอายุ สัตว์เลี้ยง) · สุขภาพ (จัดระเบียบ ไม่วินิจฉัย) · อาชีพ (เรซูเม่ สัมภาษณ์ เงินเดือน) · เรียนรู้ (เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์ — รวม `dev-learning` เดิม) |
-| **`thai-workplace`** | 4 | 21 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี (รวมภาษีคนขายออนไลน์), เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
-| **`e-commerce`** | 4 | 12 | 6 | ซื้อขายออนไลน์ทั้งสองฝั่ง — ขาย: Shopee · Lazada · TikTok Shop · LINE · ไลฟ์ · สต็อก · ซื้อ: เทียบก่อนซื้อ ประกัน ร้องเรียน สคบ. ขอคืนเงิน (รวม `online-seller` + `consumer-rights` เดิม) |
-| **`graphic-design`** | 5 | 15 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
-| **`reverse-engineer`** | 1 | 9 | 1 | reverse engineer แอป/ไบนารี/เว็บ/APK โดยไม่มี source — สถาปัตยกรรมลอกจาก REA: จุดเข้าเดียว หลักฐานทุกข้อสรุป แล้วสร้าง implementation ของตัวเอง |
+| **`e-commerce`** | 8 | 31 | 14 | ซื้อขายออนไลน์ทั้งสองฝั่งและงานหลังบ้านบริษัทไทย — ขาย: Shopee · Lazada · TikTok Shop · LINE · ไลฟ์ · สต็อก · ซื้อ: เทียบก่อนซื้อ ประกัน ร้องเรียน สคบ. ขอคืนเงิน · หลังบ้าน: LINE OA · เอกสาร · ภาษี · เงินเดือน · กฎหมายแรงงาน · PDPA · พร้อมเพย์ (รวม `online-seller` · `consumer-rights` · `thai-workplace` เดิม) |
+| **`graphic-design`** | 6 | 16 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
 
 > plugin ชีวิตประจำวันยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)

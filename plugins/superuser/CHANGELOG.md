@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **hook `ui-scan` ใหม่** (`hooks/ui-scan-hook.mjs` · PostToolUse Write/Edit/MultiEdit): แก้ไฟล์ UI แล้วรัน `no-ai-look/scripts/slop_scan.py` กับไฟล์นั้นทันที · P0/P1 ส่งกลับให้แก้ · P2 แจ้งเป็นบริบท · ผลเดิมใน session เดียวกันไม่เตือนซ้ำ · ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม · ไม่มี Python = เงียบ · โมดูล `ui_scan` (ค่าเริ่มเปิด) ใน `modules.md` และ `templates/config.json` · self-test 10/10 · แนวคิด hook หลังแก้ UI จาก pbakaus/impeccable (Apache-2.0 · ตรวจ 2026-10-25)
+- `no-ai-look/scripts/slop_scan.py` เพิ่ม `--url` ตรวจหน้าเว็บที่ขึ้นแล้วพร้อม stylesheet ที่หน้า `<link>` ไว้ (ไม่เกิน 10 ไฟล์ · http/https เท่านั้น · ไม่รัน JavaScript) · self-test 43/43 + ตัวดึง stylesheet · ทดสอบกับหน้าเว็บจริง 2026-10-25
 - hook: รายงานลูกทีม (`<agent-message` · `<task-notification`) ไม่นับเป็นผู้ใช้แก้ · ตอนเริ่ม session แจ้งจำนวนข้อที่รับแล้วรอรวมในคิวกลาง · ส่งลูกทีมตัวแรกของวันแล้วตารางการตัดสินใจไม่มี `คาด:` → เตือนวันละครั้ง ไม่บล็อก · self-test 86/86
 - validator (`scripts/check/lesson-checks.mjs`): เตือนเมื่อ plugin ในเครื่องเก่ากว่า repo · ล้มเมื่อเคส `-regression` เขียนว่ายังไม่เคยเห็นจริง · เตือนบรรทัดที่อ้างว่าทดสอบแล้วแต่ไม่มีวันที่ · ล้มเมื่อ prompt ไม่มีบรรทัด `ทดสอบจริง:` หรือ `ยังไม่ได้ทดสอบจริง` (ใส่ครบ 70 ไฟล์แล้ว) · self-test 22/22
 - ใบสั่งงานข้อ 2: ค่าตัวอย่างคัดจากไฟล์ต้นทางพร้อม `ไฟล์:บรรทัด` ไม่เขียนจากความจำ (ข้อเสนอ SwipeOS 2026-10-13)

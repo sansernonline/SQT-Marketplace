@@ -77,7 +77,7 @@ A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (aver
 
 ## Related
 
-`home-maintenance` · `trading-finance` `personal-budget` (if installed) · `personal-life` `important-docs` (if installed) (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
+`home-maintenance` · `trading-finance` `personal-budget` (if installed) · `important-docs` (keep the meter number, electricity customer number CA/รหัสผู้ใช้ไฟ, and water account number there)
 
 
 ## reference: bill-tracker-template.md

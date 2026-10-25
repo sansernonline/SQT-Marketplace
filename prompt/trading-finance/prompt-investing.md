@@ -76,7 +76,7 @@ skill `mutual-fund-picker` · agent `market-analyst` · งานกลาง �
 
 ## 3. เริ่มลงทุนครั้งแรก
 
-playbook `money-plan` (ครอบคลุมงบ เงินสำรอง และเลือกกองทุน) · agent `risk-manager` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `mutual-fund-picker`
+playbook `money-plan` (ครอบคลุมงบ เงินสำรอง และเลือกกองทุน) · agent `money-planner` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `mutual-fund-picker`
 **ผลลัพธ์:** `plan/first-invest.md` — พร้อมลงทุนหรือยัง · ลงเดือนละเท่าไร · ลงที่ไหน · ลำดับขั้น · **รออนุมัติ:** เปิดบัญชีกองทุนหรือหุ้น · ซื้อครั้งแรก · ตั้งซื้อรายเดือน (DCA)
 
 ### ข้อมูล (ผู้ใช้กรอก)

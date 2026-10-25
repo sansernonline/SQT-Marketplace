@@ -13,7 +13,7 @@ Use when money moves through software (Stripe, Omise, PromptPay, webhooks, refun
 | ใช้เมื่อ | อ่าน |
 |---|---|
 | integrating with payment gateways (Stripe, Adyen, Omise, 2C2P, PromptPay), implementing checkout flows, handling 3D Secure / SCA, managing payment retries, or building robust webhook processing | [`references/payment-gateway-integration.md`](references/payment-gateway-integration.md) |
-| สร้าง payload ของ PromptPay QR (EMVCo) ให้หน้าชำระเงิน | `thai-workplace:promptpay-qr` |
+| สร้าง payload ของ PromptPay QR (EMVCo) ให้หน้าชำระเงิน | `e-commerce:promptpay-qr` |
 | implementing customer identification (KYC), anti-money laundering (AML) controls, sanctions screening, PEP checks, transaction monitoring, or suspicious activity reporting. Covers risk-based approach, vendor integration, and ongoing monitoring | [`references/kyc-aml-patterns.md`](references/kyc-aml-patterns.md) |
 | handling card data, reducing PCI scope, selecting SAQ type, designing CDE (Cardholder Data Environment), preparing for PCI assessment, or implementing PCI-DSS v4 controls. Provides concrete guidance on the 12 requirements with implementation patterns | [`references/pci-dss-compliance.md`](references/pci-dss-compliance.md) |
 

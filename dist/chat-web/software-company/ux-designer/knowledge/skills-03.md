@@ -29,7 +29,7 @@ Use when designing or building a web app UI or mockup (dashboard, admin panel, i
 
 ```
 0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ appstrack.css ในบล็อก token
-   หน้าที่มีรูป (hero · สินค้า · บริการ · ทีม) → image-artist หารูปตาม image-generation ลง public/images/ ก่อนขั้น 2 · ไม่วาดรูปทรงพื้นฐานแทนของจริงเอง
+   หน้าที่มีรูป (hero · สินค้า · บริการ · ทีม) → `graphic-design:image-artist` หารูปตาม image-generation ลง public/images/ ก่อนขั้น 2 · ไม่วาดรูปทรงพื้นฐานแทนของจริงเอง
 1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
 3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440

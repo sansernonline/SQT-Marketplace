@@ -259,7 +259,7 @@ Open Worldwide Application Security Project (OWASP) Top 10:2025 คือรา�
 
 # ข้อกำหนด OWASP Top 10:2025 ในสัญญาและ SRS
 
-ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `thai-workplace:doc-contract-th`
+ร่างนี้ใช้เป็นจุดเริ่ม ไม่ใช่คำแนะนำทางกฎหมาย · สัญญาจริงให้ `legal-compliance-officer` หรือทนายของผู้ว่าจ้างตรวจ · ร่างสัญญาภาษาไทยทั้งฉบับใช้ `e-commerce:doc-contract-th`
 
 ## ทำไมต้องเขียนให้วัดได้
 

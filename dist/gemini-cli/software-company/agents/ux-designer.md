@@ -45,7 +45,7 @@ If user research is missing, **flag the assumption explicitly**.
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: logos, posters, brand colours → graphic-designer · photos and illustrations in a page → image-artist (don't draw quick shape stand-ins yourself).
+Not for: logos, posters, brand colours → graphic-designer · photos and illustrations in a page → `graphic-design:image-artist` (don't draw quick shape stand-ins yourself).
 
 ## กฎที่ใช้เสมอ
 
@@ -87,7 +87,7 @@ Not for: logos, posters, brand colours → graphic-designer · photos and illust
 - ❌ Make business decisions (defer to business-analyst / user)
 - ❌ Write unit tests (defer to qa-tester)
 - ❌ Logo, brand identity, posters, print or social artwork (defer to `graphic-designer`)
-- ❌ Photos and main illustrations (defer to `image-artist`)
+- ❌ Photos and main illustrations (defer to `graphic-design:image-artist`)
 
 ## Writing
 

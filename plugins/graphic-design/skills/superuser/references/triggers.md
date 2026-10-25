@@ -6,9 +6,12 @@
 |---|---|
 | เริ่มหรือรื้อแบรนด์ | `brand-kit` + agent `brand-keeper` |
 | จะสร้างภาพด้วย AI | `brief-to-image` |
+| ต้องการรูปจริงในหน้าเว็บ แอป หรือสไลด์ (hero · สินค้า · คน) — สร้าง วาด SVG หรือหารูป | `image-generation` + agent `image-artist` |
+| เขียนบทพูดหน้ากล้อง (คลิปพูด · พิธีกร · เสียงบรรยาย) — hook ภาษาพูด จังหวะ | `speaking-script` |
 | หลายภาพต้องดูเป็นชุดเดียว | `style-consistency` + agent `art-director` |
 | ต้องแก้ภาพที่มีอยู่ | `image-editing-brief` |
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
+| rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · อัปโหลดผ่าน API) | `line-richmenu` · ขนาดภาพอ่านจาก `social-formats` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` |
 | เลือกโปรแกรมตัดต่อ (CapCut · DaVinci Resolve · HyperFrames · Remotion) · ซับไทยอัตโนมัติ · เพลงหรือเทมเพลตใช้เพื่อการค้าได้ไหม | `video-script-to-clip` ไฟล์ `references/production-tools.md` |
 | ตัดต่อด้วยคำสั่ง: ตัดหัวท้าย · ตัดช่วงเงียบ · ต่อคลิป · ปรับความดังให้ได้ตามแพลตฟอร์ม · แปลงแนวนอนเป็นแนวตั้ง | `video-editing` (agent `video-editor`) |

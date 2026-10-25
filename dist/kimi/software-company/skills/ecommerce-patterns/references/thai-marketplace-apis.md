@@ -52,7 +52,7 @@
 - **LINE SHOPPING / MyShop ยังเปิดอยู่** (lineshoppingseller.com · เปิดร้านฟรีผ่าน LINE Official Account) · LINE SHOPPING API เปิดให้พาร์ทเนอร์แพลตฟอร์มเท่านั้น ไม่พบเอกสารสาธารณะ → ร้านต่อผ่านพาร์ทเนอร์ในหน้า Partners (รวมราว 20 ราย เช่น ZORT · BigSeller · BentoWeb · PEAK)
 - **LINE Pay ไทย** ใช้ชื่อ "LINE Pay" (pay-th.line.me · ร้านค้าสมัครแล้วรอพิจารณา · รับชำระออนไลน์ผ่าน API) · ลิงก์ช่วยเหลือด้านเทคนิคพาไป developers-pay.line.me: Online API v3 (`/v3/payments/request` · `confirm` · `refund`) · header `X-LINE-ChannelId` · `X-LINE-Authorization-Nonce` · `X-LINE-Authorization` (HMAC-SHA256) · sandbox `sandbox-api-pay.line.me`
 - หน้าเอกสาร LINE Pay ไม่ได้ระบุประเทศไทย และ change log ล่าสุด (พ.ย. 2025) เป็นของไต้หวัน · LINE Pay ญี่ปุ่นปิดแล้ว → ยืนยันกับ LINE Pay ไทยก่อนเชื่อมตรง (รอยืนยัน) · ทางที่ง่ายกว่าคือรับผ่าน payment gateway (`fintech-payments`)
-- PromptPay QR บนหน้าชำระเงิน → `thai-workplace:promptpay-qr` (ถ้าติดตั้ง)
+- PromptPay QR บนหน้าชำระเงิน → `e-commerce:promptpay-qr` (ถ้าติดตั้ง)
 
 ## 7 · ระบบหลังร้านที่ผู้ขายไทยใช้แทนการเขียนเอง
 

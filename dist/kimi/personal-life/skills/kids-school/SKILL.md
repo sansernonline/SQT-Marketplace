@@ -41,7 +41,7 @@ Use [references/school-year-planner.md](references/school-year-planner.md) to la
 | Vaccination record (สมุดสีชมพู) | often requested for อนุบาล | |
 | Name/surname change certificate, guardianship papers if applicable | ✔ | ✔ |
 
-Sign every copy "สำเนาถูกต้อง" and keep the originals in `personal-life` `important-docs` (if installed).
+Sign every copy "สำเนาถูกต้อง" and keep the originals in `important-docs`.
 
 ## Tutoring decision
 
@@ -73,4 +73,4 @@ Ask before paying: what exact gap (subject, grade, test)? For how many weeks? Ho
 
 ## Related
 
-`meal-plan-grocery` (lunch boxes) · `elder-care` (grandparent pick-up roster in the handoff note) · `trading-finance` `tax-deduction-planner` (if installed) · `trading-finance` `personal-budget` (if installed) · `personal-life` `important-docs` (if installed)
+`meal-plan-grocery` (lunch boxes) · `elder-care` (grandparent pick-up roster in the handoff note) · `trading-finance` `tax-deduction-planner` (if installed) · `trading-finance` `personal-budget` (if installed) · `important-docs`

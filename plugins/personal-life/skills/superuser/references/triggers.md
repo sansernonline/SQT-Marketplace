@@ -10,6 +10,7 @@
 | อินบ็อกซ์ล้น | `inbox-triage` |
 | ไม่มีเวลาทำงานจริง | `calendar-audit` |
 | ก่อนหรือหลังประชุม | `meeting-prep-card` · `meeting-summary` + agent `meeting-prep` |
+| หาโน้ตที่เคยจดไม่เจอ · อยากมีคลังความรู้ส่วนตัว | `personal-kb` + agent `life-admin` |
 | หาเอกสารไม่เจอ · ใกล้หมดอายุ | `important-docs` + agent `doc-caretaker` |
 | ค่าสมาชิกรายเดือน | `subscription-audit` |
 | จะเดินทาง | `travel-prep` |
@@ -51,7 +52,7 @@
 | ได้ข้อเสนอ · ถูกถามเงินเดือนที่คาดหวัง · ขอขึ้นเงินเดือน | `salary-negotiation` |
 | ประเมินผลงาน · ขอเลื่อนตำแหน่ง | `performance-self-review` |
 | ต้องเขียนข้อความสุภาพถึง HR หรือหัวหน้า | `polite-message-th-en` (superuser) |
-| สิทธิ์ลาออก ค่าชดเชย วันลา | `labour-law-basics` (thai-workplace) |
+| สิทธิ์ลาออก ค่าชดเชย วันลา | `labour-law-basics` (e-commerce) |
 
 **เรียนรู้**
 

@@ -99,7 +99,7 @@ Use real product photos — no AI-generated people and no text baked into images
 
 - `marketplace-fees-pricing`, `multi-shop-stock`, `live-selling-script` (the same claims rules apply on air)
 - `graphic-design` `social-formats` (if installed) — image and banner sizes
-- `thai-workplace` `line-oa-setup` (if installed) — when the LINE shop is the channel
+- `line-oa-setup` — when the LINE shop is the channel
 
 
 ## reference: description-template.md

@@ -8,14 +8,12 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`e-commerce`](#e-commerce) | ซื้อ-ขายออนไลน์ทั้งสองฝั่ง ขายบน Shopee Lazada TikTok และซื้ออย่างรู้สิทธิ์ | 4 | 12 | 6 | 13 | 59 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 5 | 15 | 6 | 9 | 88 |
+| [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 31 | 14 | 18 | 108 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 16 | 6 | 9 | 91 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 39 | 16 | 30 | 144 |
-| [`reverse-engineer`](#reverse-engineer) | reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ | 1 | 9 | 1 | 4 | 37 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 95 | 29 | 17 | 777 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 99 |
-| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 21 | 8 | 9 | 72 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 10 | 66 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 95 | 29 | 17 | 790 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 100 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 19 | 7 | 10 | 67 |
 
 ## โครงของทุก plugin
 
@@ -90,9 +88,9 @@ plugins/<plugin>/
 | `references/autonomy.md` | ถามครั้งเดียว ตัดสินใจเอง โหวต รู้ความเสี่ยง รู้จังหวะหยุด และรายการรออนุมัติทุกสาขา | `superuser` |
 | `references/brief-template.md` | แบบฟอร์มใบสั่งงานที่ส่งให้ลูกทีม | ทุก plugin |
 | `references/code-extensions.md` | ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser | `software-company` |
-| `references/context-template.md` | แบบไฟล์ CONTEXT.md สำหรับส่งงานต่อ | `e-commerce` · `graphic-design` · `personal-life` · `reverse-engineer` · `thai-workplace` · `trading-finance` |
+| `references/context-template.md` | แบบไฟล์ CONTEXT.md สำหรับส่งงานต่อ | `e-commerce` · `graphic-design` · `personal-life` · `trading-finance` |
 | `references/evidence.md` | หลักฐานแบบไหนนับว่า "เสร็จจริง" | ทุก plugin |
-| `references/examples.md` | ตัวอย่างงานจริงตั้งแต่รับจนส่ง | `e-commerce` · `graphic-design` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/examples.md` | ตัวอย่างงานจริงตั้งแต่รับจนส่ง | ทุก plugin |
 | `references/lead-playbook.md` | บทเรียนของหัวหน้าทีมเอง: คาดกับจริงต่างกันตรงไหน จัดขนาดและแจกงานอย่างไร | ทุก plugin |
 | `references/learning-loop.md` | วิธีเก็บบทเรียนระหว่างงาน แล้วเสนอแก้ skill | ทุก plugin |
 | `references/modules.md` | โมดูลที่เปิดปิดได้: ไฟล์กลาง log token รอบเรียนรู้ inbox config และด่านของ hook | `superuser` |
@@ -100,7 +98,7 @@ plugins/<plugin>/
 | `references/principles.md` | หลักการทำงานที่ทุก playbook ใช้ | `software-company` |
 | `references/team-files.md` | ไฟล์ของทีมในโปรเจกต์: CONTEXT · log · inbox · IMPROVEMENTS | ทุก plugin |
 | `references/team-roles.md` | บทบาทในทีม วิธีแบ่งงาน และรอบตรวจซ้ำจนไม่เหลือข้อสูงและกลาง | ทุก plugin |
-| `references/triggers.md` | คำพูดแบบไหนเปิด playbook ไหน | `e-commerce` · `graphic-design` · `personal-life` · `software-company` · `superuser` · `thai-workplace` · `trading-finance` |
+| `references/triggers.md` | คำพูดแบบไหนเปิด playbook ไหน | ทุก plugin |
 | `references/voting.md` | ขั้นตอนเต็มของการตัดสินด้วยการค้นและโหวต 3 มุม | ทุก plugin |
 | `templates/CONTEXT.md` | แบบไฟล์ CONTEXT.md กลางของโปรเจกต์ | `superuser` |
 | `templates/HISTORY.md` | แบบไฟล์ประวัติงาน | `superuser` |
@@ -111,20 +109,24 @@ plugins/<plugin>/
 
 ## e-commerce
 
-ซื้อ-ขายออนไลน์ทั้งสองฝั่ง ขายบน Shopee Lazada TikTok และซื้ออย่างรู้สิทธิ์ · ภาพประกอบ: [docs/plugins/e-commerce](plugins/e-commerce/README.md) · ต้นฉบับ: `plugins/e-commerce/`
+ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย · ภาพประกอบ: [docs/plugins/e-commerce](plugins/e-commerce/README.md) · ต้นฉบับ: `plugins/e-commerce/`
 
 **ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (4)
+### agent (8)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
+| `agents/compliance-helper.md` | ดูแลข้อมูลส่วนบุคคล PDPA |
 | `agents/consumer-advocate.md` | ร่างคำขอและจดหมายร้องเรียน |
 | `agents/customer-chat.md` | ตอบลูกค้าสุภาพในชื่อร้าน |
+| `agents/line-admin.md` | ดูแลบัญชี LINE OA |
 | `agents/live-seller.md` | วางแผนไลฟ์ขายรายนาที |
 | `agents/shop-manager.md` | คิดราคา ลงสินค้า คุมสต็อก |
+| `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
+| `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (12 + ของกลาง 33)
+### skill (31 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -133,37 +135,68 @@ plugins/<plugin>/
 | `buy-compare` | เทียบก่อนซื้อของชิ้นใหญ่: ราคารวมจริง · รีวิวที่เชื่อได้ | — |
 | `chat-reply-templates` | แบบคำตอบแชตลูกค้า: ราคา · ของหมด · ไซซ์ · พัสดุช้า | `references/templates.md` |
 | `complaint-letter-th` | เขียนจดหมายร้องเรียนร้านค้า แพลตฟอร์ม หรือ สคบ. | `references/templates.md` |
+| `dbd-annual-filing` | ยื่นงบหลังปิดปี: ประชุมผู้ถือหุ้น · งบผ่าน DBD e-Filing · บอจ.5 · ภ.ง.ด.50 | — |
+| `doc-contract-th` | ร่างหรือตรวจสัญญาไทย (จ้างงาน · เช่า · จ้างทำของ) อากรแสตมป์ · จุดเสี่ยง | `references/clause-checklists.md` |
+| `doc-leave` | ใบลาและยอดวันลา (ป่วย · พักร้อน · กิจ · คลอด) | `references/leave-forms.md` |
+| `doc-quotation` | ใบเสนอราคา ใบแจ้งหนี้ ใบวางบิล ใบเสร็จ (VAT · หัก ณ ที่จ่าย · ตัวเลขเป็นคำ) | `references/templates.md` |
+| `doc-thai-official` | หนังสือราชการและบันทึกข้อความตามระเบียบสารบรรณ | `references/templates.md` |
+| `e-tax-invoice` | ออกหรือตรวจใบกำกับภาษี (มาตรา 86/4 · e-Tax Invoice) | — |
+| `hiring-th` | จ้างพนักงานฝั่งนายจ้าง: ประกาศรับสมัครไม่เลือกปฏิบัติ · ใบคัดกรอง · สัมภาษณ์ · ตรวจบุคคลอ้างอิง · จดหมายเสนองาน | — |
+| `labour-law-basics` | กฎหมายคุ้มครองแรงงาน: ทดลองงาน · OT · วันลา · บอกเลิก · ค่าชดเชย · ค่าจ้าง | `references/leave-and-severance.md` |
+| `line-broadcast` | ส่งข้อความหาเพื่อนใน LINE OA: โควตา · กลุ่มเป้าหมาย · ความถี่ | `references/broadcast-template.md` |
+| `line-chatbot` | ให้ LINE OA ตอบลูกค้าอัตโนมัติ: โควตา · คลังความรู้ · ส่งต่อคน | `references/kb-template.md` |
+| `line-oa-setup` | สร้าง LINE OA และเปิด Messaging API (token · webhook · โควตา) | `references/webhook-node.md` |
 | `live-selling-script` | เตรียมไลฟ์ขายของบน TikTok · Shopee · Lazada · Facebook | `references/host-lines.md` |
 | `marketplace-fees-pricing` | ตั้งราคาหลังหักค่าธรรมเนียมแต่ละแพลตฟอร์ม และหาว่าสินค้าไหนขาดทุน | `references/fee-structures.md` |
 | `multi-shop-stock` | คุมสต็อกที่ขายหลายร้านไม่ให้ขายเกิน: ชีตสต็อกหลัก · รหัส SKU | — |
+| `payroll-th` | ทำเงินเดือนรายเดือน: หักภาษี · ประกันสังคม · กองทุนสำรองเลี้ยงชีพ · ภ.ง.ด.1 | `references/50-tawi.md` |
+| `pdpa-workflow` | เอกสาร PDPA ของ SME: ความยินยอม · ROPA · คำขอเจ้าของข้อมูล · แจ้งข้อมูลรั่ว | `references/pdpa-templates.md` |
 | `product-listing` | เขียนหรือแก้หน้าสินค้าบน Shopee · Lazada · TikTok Shop · LINE | `references/description-template.md` · `references/prohibited-claims.md` |
+| `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` |
 | `refund-request` | ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก | `references/cancellation-notice.md` |
 | `returns-and-bad-reviews` | รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว | `references/review-replies.md` |
+| `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | — |
 | `shipping-compare` | เทียบขนส่ง (Flash · Kerry · J&T · ไปรษณีย์ไทย · SPX) ตามราคา COD และน้ำหนัก | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-live-session.md` · `references/playbook-new-product.md` · `references/playbook-pricing-check.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `social-security-th` | ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น | — |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-live-session.md` · `references/playbook-monthly-close.md` · `references/playbook-new-product.md` · `references/playbook-pdpa-setup.md` · `references/playbook-pricing-check.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `tax-vat-th` | เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53) | `references/wht-rates.md` |
+| `thai-business-setup` | ตั้งธุรกิจ: เลือกบุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน DBD · เช็กลิสต์หลังจด · ต้นทุนนำเข้าจากจีน | — |
+| `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
 | `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | — |
 
-### คำสั่ง (6) — พิมพ์ `/e-commerce:<ชื่อ>`
+### คำสั่ง (14) — พิมพ์ `/e-commerce:<ชื่อ>`
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
 | `compare` | เทียบสินค้าหรือบริการก่อนซื้อด้วยตารางตัดสินใจ | — |
 | `complain` | ร่างเรื่องร้องเรียนและแผนยกระดับจนถึง สคบ. 1166 | — |
+| `contract` | ร่างสัญญาไทยพื้นฐาน (จ้าง · เช่า · บริการ) พร้อมจุดที่ควรให้ทนายดู | — |
+| `line-bot` | สร้างหรือปรับบอตตอบลูกค้าบน LINE OA (เจตนา · คำตอบ · ส่งต่อคน) | — |
+| `line-setup` | ตั้งช่อง Messaging API ครบวงจร จนทดสอบ echo ผ่าน | — |
 | `listing` | เขียนหน้าสินค้า (ชื่อ · คีย์เวิร์ด · คำที่ห้ามใช้) | — |
 | `live-script` | ทำบทไลฟ์ขายของ (hook · ลำดับสินค้า · จังหวะ flash deal) | — |
+| `payroll` | ทำเงินเดือน จากเงินเต็มถึงเงินสุทธิ หรือเอกสารสิ้นปี (ภ.ง.ด.1ก · 50 ทวิ) | — |
+| `pdpa` | งาน PDPA ของ SME (แบบขอความยินยอม · รับมือข้อมูลรั่ว · คำขอเจ้าของข้อมูล) | — |
 | `price-check` | คิดราคาขาย หรือกำไรของราคาปัจจุบัน หลังหักทุกค่าใช้จ่าย | — |
+| `quotation` | ร่างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ เป็น .docx | — |
 | `reply` | ร่างคำตอบลูกค้าหรือรีวิวเป็นภาษาไทย | — |
+| `tax-due` | ปฏิทินยื่นภาษี: แบบไหน เดือนไหน ใช้เอกสารอะไร | — |
+| `year-end-filing` | ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50) | — |
 
-### playbook (13) — `skills/superuser/references/`
+### playbook (18) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
+| `playbook-business-doc.md` | ร่างเอกสารธุรกิจ | 5 |
 | `playbook-buy-decision.md` | ตัดสินใจซื้อของ | 6 |
 | `playbook-complaint.md` | ร้องเรียนร้านค้า | 6 |
 | `playbook-customer-issue.md` | แก้ปัญหาลูกค้าและรีวิว | 5 |
 | `playbook-learn-from-session.md` | เรียนรู้จากงานที่ทำ | 7 |
+| `playbook-line-oa.md` | ตั้งและใช้ LINE OA | 6 |
 | `playbook-live-session.md` | วางแผนไลฟ์ขาย | 4 |
+| `playbook-monthly-close.md` | ปิดเงินเดือนประจำเดือน | 6 |
 | `playbook-new-product.md` | ลงสินค้าใหม่ | 6 |
+| `playbook-pdpa-setup.md` | ตั้งระบบ PDPA | 5 |
 | `playbook-pricing-check.md` | ตรวจราคาและกำไร | 5 |
 | `playbook-refund.md` | ขอคืนเงิน | 5 |
 | `playbook-review.md` | ตรวจงานที่เสร็จแล้ว | 6 |
@@ -171,6 +204,7 @@ plugins/<plugin>/
 | `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | งานยาวไม่ต้องเฝ้า | 7 |
 | `playbook-warranty-claim.md` | เคลมและติดตามประกัน | 5 |
+| `playbook-year-end.md` | ปิดปีและยื่นประจำปี | 5 |
 
 ## graphic-design
 
@@ -178,17 +212,18 @@ plugins/<plugin>/
 
 **ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/speaking-script-behaviour/case.yaml` (เคส eval: บทพูดต้องเปิดด้วย hook เป็นภาษาพูด และปิดด้วย CTA) · `evals/speaking-script-regression/case.yaml` (เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ) · `evals/speaking-script-trigger/case.yaml` (เคส eval: โจทย์สคริปต์พูดที่ต้องทำให้ speaking-script ถูกเปิด) · `evals/subtitles-th-behaviour/case.yaml` (เคส eval: แก้ซับให้ตามกฎความยาว ความเร็วอ่าน และเครื่องหมาย) · `evals/subtitles-th-regression/case.yaml` (เคส eval: กันอาการฝังซับไทยแล้วเป็นสี่เหลี่ยมโดยไม่ระบุฟอนต์ไทย) · `evals/subtitles-th-trigger/case.yaml` (เคส eval: โจทย์ทำซับไทยแล้วฝังที่ต้องทำให้ subtitles-th ถูกเปิด) · `evals/video-editing-behaviour/case.yaml` (เคส eval: ตัดให้ตรงเฟรม ปรับเสียง 2 รอบ และวัดไฟล์ที่ได้) · `evals/video-editing-guard/case.yaml` (เคส eval: กันอาการรับรองความดังจากคำสั่งรอบเดียวโดยไม่วัด) · `evals/video-editing-slides-behaviour/case.yaml` (เคส eval: ความยาวต่อแผ่นถูก แผ่นสุดท้ายไม่หาย วิดีโอยาวเท่าเสียง) · `evals/video-editing-slides-regression/case.yaml` (เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย) · `evals/video-editing-slides-trigger/case.yaml` (เคส eval: โจทย์สไลด์กับเสียงเป็นวิดีโอที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-trigger/case.yaml` (เคส eval: โจทย์ตัดช่วงเงียบและปรับเสียงที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-tts-behaviour/case.yaml` (เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ) · `evals/video-editing-tts-guard/case.yaml` (เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง) · `evals/video-editing-tts-trigger/case.yaml` (เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด)
 
-### agent (5)
+### agent (6)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
 | `agents/art-director.md` | ล็อกสไตล์ภาพ AI ให้เหมือนกัน |
 | `agents/brand-keeper.md` | ดูแลชุดแบรนด์ของร้าน |
 | `agents/design-critic.md` | ชี้ 2-3 จุดที่ต้องแก้ |
+| `agents/image-artist.md` | หา หรือสร้างภาพจริงให้หน้าเว็บ แอป และสไลด์ |
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 | `agents/video-editor.md` | ตัดต่อ ใส่ซับ และส่งออกวิดีโอ |
 
-### skill (15 + ของกลาง 33)
+### skill (16 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -201,6 +236,7 @@ plugins/<plugin>/
 | `design-review` | ตรวจงานภาพก่อนส่ง 8 ข้อ แล้วบอก 3 จุดที่ต้องแก้ก่อน | `references/review-sheet.md` |
 | `image-editing-brief` | เขียนคำสั่งแก้ภาพ: ลบของ · แก้สี · เปลี่ยนพื้นหลัง · ขยายภาพ | `references/edit-brief-template.md` |
 | `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
+| `line-richmenu` | ทำ rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · เรียก API) | `references/richmenu-6.md` |
 | `motion-basics` | ทำ motion graphic ตัวอักษรเคลื่อนไหว และโลโก้ขยับ สำหรับคนที่ไม่ใช่นักออกแบบ | `references/twelve-principles.md` |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` |
 | `speaking-script` | เขียนสคริปต์พูดหน้ากล้อง: hook ก่อนทักทาย · ภาษาพูด · จับเวลาด้วยนาฬิกา | — |
@@ -357,56 +393,13 @@ plugins/<plugin>/
 | `playbook-vehicle.md` | ต่อภาษีและประกันรถ | 4 |
 | `playbook-weekly-reset.md` | รีเซ็ตประจำสัปดาห์ | 5 |
 
-## reverse-engineer
-
-reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ · ภาพประกอบ: [docs/plugins/reverse-engineer](plugins/reverse-engineer/README.md) · ต้นฉบับ: `plugins/reverse-engineer/`
-
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `README.md` (คำอธิบายและวิธีเริ่มใช้งาน plugin) · `package.json` (นิยามสคริปต์ npm — doctor ตรวจเครื่องมือ และ test ตรวจโครง tools.json) · `scripts/check-tools.mjs` (ตรวจว่าเครื่องมือ reverse engineering ที่ผู้ใช้ติดตั้งมีตัวไหน โดยไม่ดาวน์โหลดและไม่เปิดโปรแกรม) · `tools.json` (รายการเครื่องมือ reverse engineering แยกตามกลุ่มงาน พร้อมวิธีตรวจและแหล่งติดตั้งทางการ)
-
-### agent (1)
-
-| ไฟล์ | ใช้ทำอะไร |
-|---|---|
-| `agents/reverse-engineer-analyst.md` | ตรวจแอปหรือไบนารีที่ไม่มี source อธิบายพร้อมหลักฐาน แล้วสร้างใหม่ |
-
-### skill (9 + ของกลาง 33)
-
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
-
-| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
-|---|---|---|
-| `analyze-apk` | ตรวจ APK ของ Android: manifest ทรัพยากร คลาสที่ถอดรหัส และการเรียกเมธอด | — |
-| `analyze-dotnet` | ตรวจ assembly .NET (.dll/.exe): metadata คำสั่ง CIL dependency และเทียบ build | — |
-| `analyze-firmware` | ตรวจ firmware image หรือ embedded filesystem ที่ได้รับอนุญาตแบบสถิตด้วย Binwalk หรือ Unblob | — |
-| `analyze-js-electron` | ตรวจแอป JavaScript หรือ Electron ที่แตกออกมา: โมดูล import ขอบเขต IPC และ source map | — |
-| `analyze-native-binary` | ตรวจไบนารี native (.exe .dll ELF Mach-O): string symbol pseudocode และฟังก์ชันที่ import | — |
-| `analyze-network` | ตรวจทราฟฟิกที่บันทึกไว้ (HAR · PCAP) หรือสังเกตแอปทดสอบที่ได้รับอนุญาตผ่าน Wireshark หรือ mitmproxy | — |
-| `analyze-website` | ตรวจว่าฟีเจอร์ของเว็บทำงานอย่างไรจากโครงหน้า สคริปต์ และ network call โดยไม่มี backend | — |
-| `reverse-engineer` | จุดเข้าหลักของการ reverse engineer: อธิบายว่าฟีเจอร์ทำงานอย่างไรพร้อมหลักฐาน แล้วสร้างใหม่ | `templates/api-inventory.md` · `templates/change-proof.md` · `templates/codebase-map.md` · `templates/system-map.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
-
-### คำสั่ง (1) — พิมพ์ `/reverse-engineer:<ชื่อ>`
-
-| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
-|---|---|---|
-| `re` | คำสั่งลัด reverse engineer ฟีเจอร์จากแอป ไบนารี assembly เว็บ หรือ APK: หลักฐานก่อน แล้วสร้างใหม่ | — |
-
-### playbook (4) — `skills/superuser/references/`
-
-| ไฟล์ | ทำอะไร | ขั้น |
-|---|---|---|
-| `playbook-learn-from-session.md` | เรียนรู้จากงานที่ทำ | 7 |
-| `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
-| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
-| `playbook-unattended-run.md` | ปล่อยงานยาวให้ทำเอง | 7 |
-
 ## software-company
 
 ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ · ภาพประกอบ: [docs/plugins/software-company](plugins/software-company/README.md) · ต้นฉบับ: `plugins/software-company/`
 
 **ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (39)
+### agent (38)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
@@ -427,7 +420,6 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `agents/growth-specialist.md` | เพิ่มยอดสมัครและยอดซื้อ |
 | `agents/healthcare-engineer.md` | สร้างระบบโรงพยาบาล |
 | `agents/hipaa-officer.md` | ดูกฎ HIPAA |
-| `agents/image-artist.md` | หา หรือสร้างภาพจริงให้หน้าเว็บ แอป และสไลด์ |
 | `agents/insurance-analyst.md` | คำนวณเบี้ยและความเสี่ยงประกัน |
 | `agents/insurance-compliance-officer.md` | ดูกฎกำกับธุรกิจประกัน |
 | `agents/insurance-engineer.md` | สร้างระบบประกัน |
@@ -487,7 +479,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `code-orientation` | อ่านโค้ดที่ยังไม่เคยเห็นก่อนแก้: รันอย่างไร · ทำไม · ธรรมเนียมของ repo | — |
 | `blast-radius` | แก้โค้ดที่ใช้ร่วมกันแล้วหาว่าอะไรอื่นจะพังตาม | — |
 | `legacy-spec-recovery` | กู้สเปกจากโค้ดระบบเก่าพร้อมหลักฐาน ก่อนแก้ระบบ | `assets/business-rule-register.md` · `assets/change-request.md` · `references/evidence-by-stack.md` · `references/framework-upgrade.md` |
-| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/compare_members.py` · `scripts/har_summary.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/triage.py` |
+| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/firmware.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/check-tools.mjs` · `scripts/compare_members.py` · `scripts/dotnet_meta.py` · `scripts/evm_selectors.py` · `scripts/har_summary.py` · `scripts/ipa_inventory.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/sqlite_inspect.py` · `scripts/triage.py` · `scripts/wasm_info.py` · `templates/api-inventory.md` · `templates/change-proof.md` · `templates/codebase-map.md` · `templates/system-map.md` · `tools.json` |
 | `readable-code` | โค้ดอ่านง่าย: ชื่อ · รูปฟังก์ชัน · คอมเมนต์ · ที่วางไฟล์ | `assets/naming-reference.md` |
 
 **ตรวจและทดสอบ**
@@ -555,7 +547,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `ui-craft` | ฝีมือหน้าจอ: ใช้คู่กับ skill ตามแพลตฟอร์มทุกครั้งที่ทำหน้าจอหรือ mockup | `assets/app-character-sheet.html` · `assets/app-character-sheet.webp` · `assets/mockup-start-page-preview.webp` · `assets/mockup-start-page.example.json` · `references/app-character.md` · `references/depth-and-flourish.md` · `references/figma-to-code.md` · `references/mockup-start-page.md` · `references/scales.md` · `references/states-and-checks.md` · `references/ux-spec-outputs.md` · `references/web-looks.md` · `scripts/mockup-start-page.py` |
+| `ui-craft` | ฝีมือหน้าจอ: ใช้คู่กับ skill ตามแพลตฟอร์มทุกครั้งที่ทำหน้าจอหรือ mockup | `assets/app-character-sheet.html` · `assets/app-character-sheet.webp` · `assets/mockup-start-page-preview.webp` · `assets/mockup-start-page.example.json` · `references/app-character.md` · `references/depth-and-flourish.md` · `references/figma-to-code.md` · `references/live-and-variants.md` · `references/mockup-start-page.md` · `references/scales.md` · `references/states-and-checks.md` · `references/ux-spec-outputs.md` · `references/web-looks.md` · `scripts/design_tokens.py` · `scripts/mockup-start-page.py` |
 | `web-app-design` | ออกแบบหน้าจอเว็บแอปหรือ mockup (dashboard · หน้าแอดมิน · SaaS) | `assets/appstrack.css` · `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `references/tokens.md` · `scripts/check-design-tokens.mjs` · `scripts/screenshot.py` |
 | `dynamic-website` | เว็บการตลาดหรือหน้างานที่เล่าเรื่องทีละบทด้วย GSAP (deck-mode · scroll · พื้นหลัง 3D) | `assets/example-deck.html` · `references/recipes.md` |
 | `mobile-app-design` | ออกแบบหน้าจอแอปมือถือหรือ mockup (PWA · React Native · Flutter) | `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `assets/speakgo.css` · `references/review.md` · `references/screen-and-components.md` · `references/tokens.md` · `scripts/screenshot.py` |
@@ -669,7 +661,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ · ภาพประกอบ: [docs/plugins/superuser](plugins/superuser/README.md) · ต้นฉบับ: `plugins/superuser/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/README.md` (วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก scripts/evals/ ของ repo อย่างไร) · `evals/human-writing-behaviour/case.yaml` (เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้) · `evals/human-writing-regression/case.yaml` (เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน) · `evals/human-writing-trigger/case.yaml` (เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/guard-rules.json` (รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/README.md` (วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก scripts/evals/ ของ repo อย่างไร) · `evals/human-writing-behaviour/case.yaml` (เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้) · `evals/human-writing-regression/case.yaml` (เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน) · `evals/human-writing-trigger/case.yaml` (เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/guard-rules.json` (รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox) · `hooks/ui-scan-hook.mjs` (ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan)
 
 ### agent (3)
 
@@ -701,88 +693,19 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | ปล่อยงานยาวให้ทำเอง | 7 |
 
-## thai-workplace
-
-เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย · ภาพประกอบ: [docs/plugins/thai-workplace](plugins/thai-workplace/README.md) · ต้นฉบับ: `plugins/thai-workplace/`
-
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
-
-### agent (4)
-
-| ไฟล์ | ใช้ทำอะไร |
-|---|---|
-| `agents/compliance-helper.md` | ดูแลข้อมูลส่วนบุคคล PDPA |
-| `agents/line-admin.md` | ดูแลบัญชี LINE OA |
-| `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
-| `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
-
-### skill (21 + ของกลาง 33)
-
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
-
-| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
-|---|---|---|
-| `dbd-annual-filing` | ยื่นงบหลังปิดปี: ประชุมผู้ถือหุ้น · งบผ่าน DBD e-Filing · บอจ.5 · ภ.ง.ด.50 | — |
-| `doc-contract-th` | ร่างหรือตรวจสัญญาไทย (จ้างงาน · เช่า · จ้างทำของ) อากรแสตมป์ · จุดเสี่ยง | `references/clause-checklists.md` |
-| `doc-leave` | ใบลาและยอดวันลา (ป่วย · พักร้อน · กิจ · คลอด) | `references/leave-forms.md` |
-| `doc-quotation` | ใบเสนอราคา ใบแจ้งหนี้ ใบวางบิล ใบเสร็จ (VAT · หัก ณ ที่จ่าย · ตัวเลขเป็นคำ) | `references/templates.md` |
-| `doc-thai-official` | หนังสือราชการและบันทึกข้อความตามระเบียบสารบรรณ | `references/templates.md` |
-| `e-tax-invoice` | ออกหรือตรวจใบกำกับภาษี (มาตรา 86/4 · e-Tax Invoice) | — |
-| `hiring-th` | จ้างพนักงานฝั่งนายจ้าง: ประกาศรับสมัครไม่เลือกปฏิบัติ · ใบคัดกรอง · สัมภาษณ์ · ตรวจบุคคลอ้างอิง · จดหมายเสนองาน | — |
-| `labour-law-basics` | กฎหมายคุ้มครองแรงงาน: ทดลองงาน · OT · วันลา · บอกเลิก · ค่าชดเชย · ค่าจ้าง | `references/leave-and-severance.md` |
-| `line-broadcast` | ส่งข้อความหาเพื่อนใน LINE OA: โควตา · กลุ่มเป้าหมาย · ความถี่ | `references/broadcast-template.md` |
-| `line-chatbot` | ให้ LINE OA ตอบลูกค้าอัตโนมัติ: โควตา · คลังความรู้ · ส่งต่อคน | `references/kb-template.md` |
-| `line-oa-setup` | สร้าง LINE OA และเปิด Messaging API (token · webhook · โควตา) | `references/webhook-node.md` |
-| `line-richmenu` | ทำ rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · เรียก API) | `references/richmenu-6.md` |
-| `payroll-th` | ทำเงินเดือนรายเดือน: หักภาษี · ประกันสังคม · กองทุนสำรองเลี้ยงชีพ · ภ.ง.ด.1 | `references/50-tawi.md` |
-| `pdpa-workflow` | เอกสาร PDPA ของ SME: ความยินยอม · ROPA · คำขอเจ้าของข้อมูล · แจ้งข้อมูลรั่ว | `references/pdpa-templates.md` |
-| `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` |
-| `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | — |
-| `social-security-th` | ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-monthly-close.md` · `references/playbook-pdpa-setup.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
-| `tax-vat-th` | เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53) | `references/wht-rates.md` |
-| `thai-business-setup` | ตั้งธุรกิจ: เลือกบุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน DBD · เช็กลิสต์หลังจด · ต้นทุนนำเข้าจากจีน | — |
-| `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
-
-### คำสั่ง (8) — พิมพ์ `/thai-workplace:<ชื่อ>`
-
-| โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
-|---|---|---|
-| `contract` | ร่างสัญญาไทยพื้นฐาน (จ้าง · เช่า · บริการ) พร้อมจุดที่ควรให้ทนายดู | — |
-| `line-bot` | สร้างหรือปรับบอตตอบลูกค้าบน LINE OA (เจตนา · คำตอบ · ส่งต่อคน) | — |
-| `line-setup` | ตั้งช่อง Messaging API ครบวงจร จนทดสอบ echo ผ่าน | — |
-| `payroll` | ทำเงินเดือน จากเงินเต็มถึงเงินสุทธิ หรือเอกสารสิ้นปี (ภ.ง.ด.1ก · 50 ทวิ) | — |
-| `pdpa` | งาน PDPA ของ SME (แบบขอความยินยอม · รับมือข้อมูลรั่ว · คำขอเจ้าของข้อมูล) | — |
-| `quotation` | ร่างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ เป็น .docx | — |
-| `tax-due` | ปฏิทินยื่นภาษี: แบบไหน เดือนไหน ใช้เอกสารอะไร | — |
-| `year-end-filing` | ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50) | — |
-
-### playbook (9) — `skills/superuser/references/`
-
-| ไฟล์ | ทำอะไร | ขั้น |
-|---|---|---|
-| `playbook-business-doc.md` | ร่างเอกสารธุรกิจ | 5 |
-| `playbook-learn-from-session.md` | เรียนรู้จากงานที่ผ่านมา | 7 |
-| `playbook-line-oa.md` | ตั้งและใช้ LINE OA | 6 |
-| `playbook-monthly-close.md` | ปิดเงินเดือนประจำเดือน | 6 |
-| `playbook-pdpa-setup.md` | ตั้งระบบ PDPA | 5 |
-| `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
-| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
-| `playbook-unattended-run.md` | ให้ทำงานยาวเอง | 7 |
-| `playbook-year-end.md` | ปิดปีและยื่นประจำปี | 5 |
-
 ## trading-finance
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ · ภาพประกอบ: [docs/plugins/trading-finance](plugins/trading-finance/README.md) · ต้นฉบับ: `plugins/trading-finance/`
 
 **ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
 
-### agent (4)
+### agent (5)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
 | `agents/alert-dispatcher.md` | ตั้งเตือนราคาและข่าว |
 | `agents/market-analyst.md` | อ่านราคาและข่าวหุ้น |
+| `agents/money-planner.md` | วางแผนเงิน หนี้ ประกัน ภาษี และเช็กมิจฉาชีพ |
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 

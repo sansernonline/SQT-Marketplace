@@ -1,6 +1,6 @@
 {
   "name": "sqt-e-commerce",
   "version": "1.0.0",
-  "description": "Online buying and selling toolkit for Thailand, both sides in one plugin — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, fees and pricing, one stock sheet, chat replies, live-selling scripts, couriers and COD, returns) and buy with confidence (decision matrix and total cost, fake-review check, warranty registry, complaint letters up to OCPB hotline 1166, refunds and chargebacks). General information only, not tax or legal advice.",
+  "description": "Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.",
   "contextFileName": "GEMINI.md"
 }

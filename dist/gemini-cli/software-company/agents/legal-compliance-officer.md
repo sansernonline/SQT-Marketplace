@@ -39,7 +39,7 @@ GDPR / PDPA / CCPA overview · retention periods and legal hold code · e-discov
 
 ## ไม่ใช้เมื่อ / ส่งต่อ
 
-Not for: HIPAA → hipaa-officer. PCI-DSS, AML/KYC → fintech-compliance-officer. Insurance regulation → insurance-compliance-officer. Technical control design → security-engineer. Thai SME PDPA workflows (consent forms, ROPA) → (ถ้าติดตั้ง plugin `thai-workplace`) ใช้ agent `thai-workplace:compliance-helper` ไม่มีก็ทำเอง.
+Not for: HIPAA → hipaa-officer. PCI-DSS, AML/KYC → fintech-compliance-officer. Insurance regulation → insurance-compliance-officer. Technical control design → security-engineer. Thai SME PDPA workflows (consent forms, ROPA) → (ถ้าติดตั้ง plugin `e-commerce`) ใช้ agent `e-commerce:compliance-helper` ไม่มีก็ทำเอง.
 
 ## กฎที่ใช้เสมอ
 

@@ -4,7 +4,6 @@
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have.",
  "cross": [
   "software-company",
-  "thai-workplace",
   "e-commerce",
   "personal-life"
  ],
@@ -92,6 +91,24 @@
    "skills": [
     "technical-signals",
     "news-impact"
+   ]
+  },
+  {
+   "name": "money-planner",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use for personal money — budget, debt, emergency fund, retirement, insurance, funds, personal tax, scam checks.",
+   "skills": [
+    "personal-budget",
+    "emergency-fund",
+    "debt-payoff",
+    "retirement-plan",
+    "insurance-review",
+    "mutual-fund-picker",
+    "dividend-tracker",
+    "tax-basics-th",
+    "tax-deduction-planner",
+    "scam-check"
    ]
   },
   {
@@ -275,14 +292,16 @@
     },
     {
      "n": 2,
-     "text": "ทำตามลำดับ: งบรายเดือน → เงินสำรองฉุกเฉิน → หนี้ดอกสูง → เกษียณและการลงทุน · ใคร: `general-purpose` ตัวใหม่",
+     "text": "ทำตามลำดับ: งบรายเดือน → เงินสำรองฉุกเฉิน → หนี้ดอกสูง → เกษียณและการลงทุน · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [],
      "commands": [],
@@ -291,14 +310,16 @@
     },
     {
      "n": 3,
-     "text": "ใช้ skill ของแต่ละเรื่อง และตรวจอัตราและกฎของปีปัจจุบันกับแหล่งทางการ · ใคร: `general-purpose` ตัวใหม่",
+     "text": "ใช้ skill ของแต่ละเรื่อง และตรวจอัตราและกฎของปีปัจจุบันกับแหล่งทางการ · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [],
      "commands": [],
@@ -307,14 +328,16 @@
     },
     {
      "n": 4,
-     "text": "ทุกทางเลือกแสดงตัวเลขเทียบกัน ไม่ชี้ว่าต้องเลือกทางไหน · ใคร: `general-purpose` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง",
+     "text": "ทุกทางเลือกแสดงตัวเลขเทียบกัน ไม่ชี้ว่าต้องเลือกทางไหน · ใคร: `money-planner` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": true,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่ทำตารางเทียบ แล้วผู้ใช้เลือกเอง"
      },
      "skills": [],
      "commands": [],
@@ -698,14 +721,16 @@
     },
     {
      "n": 2,
-     "text": "ถ้ายังไม่โอน ให้ตรวจสัญญาณอันตรายตาม `scam-check` และตรวจใบอนุญาตจากเว็บหน่วยงานกำกับ · ใคร: `general-purpose` ตัวใหม่",
+     "text": "ถ้ายังไม่โอน ให้ตรวจสัญญาณอันตรายตาม `scam-check` และตรวจใบอนุญาตจากเว็บหน่วยงานกำกับ · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [
       "scam-check"
@@ -718,14 +743,16 @@
     },
     {
      "n": 3,
-     "text": "สรุปผล: ระดับความเสี่ยง · สัญญาณที่เจอ · หลักฐาน · ใคร: `general-purpose` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้",
+     "text": "สรุปผล: ระดับความเสี่ยง · สัญญาณที่เจอ · หลักฐาน · ใคร: `money-planner` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": true,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่สรุป · `reviewer` ตัวใหม่ตรวจหลักฐานก่อนถึงผู้ใช้"
      },
      "skills": [],
      "commands": [],
@@ -775,14 +802,16 @@
     },
     {
      "n": 2,
-     "text": "ตรวจกฎและเพดานปีภาษีนี้จากเว็บกรมสรรพากร · ใคร: `general-purpose` ตัวใหม่",
+     "text": "ตรวจกฎและเพดานปีภาษีนี้จากเว็บกรมสรรพากร · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [],
      "commands": [],
@@ -791,14 +820,16 @@
     },
     {
      "n": 3,
-     "text": "คำนวณภาษีก่อนและหลังลดหย่อนแต่ละทาง ตาม `tax-deduction-planner` แล้วบอกว่ายังเหลือสิทธิ์ซื้อกองทุนลดหย่อนได้อีกเท่าไร · ใคร: `general-purpose` ตัวใหม่",
+     "text": "คำนวณภาษีก่อนและหลังลดหย่อนแต่ละทาง ตาม `tax-deduction-planner` แล้วบอกว่ายังเหลือสิทธิ์ซื้อกองทุนลดหย่อนได้อีกเท่าไร · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [
       "tax-deduction-planner"
@@ -809,14 +840,16 @@
     },
     {
      "n": 4,
-     "text": "ภาษีจากการลงทุน ให้บอกแบบที่ต้องยื่น และจะขอเครดิตภาษีปันผลหรือไม่ ตาม `tax-basics-th` · ใคร: `general-purpose` ตัวใหม่",
+     "text": "ภาษีจากการลงทุน ให้บอกแบบที่ต้องยื่น และจะขอเครดิตภาษีปันผลหรือไม่ ตาม `tax-basics-th` · ใคร: `money-planner` ตัวใหม่",
      "sub": [],
      "phase": "",
      "who": {
       "lead": false,
       "user": false,
-      "agents": [],
-      "raw": "`general-purpose` ตัวใหม่"
+      "agents": [
+       "money-planner"
+      ],
+      "raw": "`money-planner` ตัวใหม่"
      },
      "skills": [
       "tax-basics-th"
