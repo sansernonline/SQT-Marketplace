@@ -314,13 +314,21 @@ function filesUnder(dir, prefix = "") {
   });
 }
 
+// ไฟล์ข้อความ (ไม่มีไบต์ 0) เปลี่ยน CRLF เป็น LF เหมือน parse() zip จึงเหมือนกันทุกเครื่อง · .cmd .ps1 เป็น CRLF เสมอตาม .gitattributes
+const CRLF_FILE = /\.(cmd|ps1)$/i;
+const toLf = (name, data) => {
+  if (data.includes(0)) return data;
+  const lf = data.toString("latin1").replace(/\r\n/g, "\n");
+  return Buffer.from(CRLF_FILE.test(name) ? lf.replace(/\n/g, "\r\n") : lf, "latin1");
+};
+
 // simple: เขียน zip เองด้วย zlib แทน dependency · วันที่คงที่ ไฟล์จึงไม่เปลี่ยนถ้าเนื้อหาไม่เปลี่ยน
 function writeZip(out, files) {
   const DOS_DATE = 0x21; // 1980-01-01
   const local = [], central = [];
   let offset = 0;
   for (const f of files) {
-    const data = f.data ?? readFileSync(f.path);
+    const data = toLf(f.name, f.data ?? readFileSync(f.path));
     const packed = deflateRawSync(data);
     const name = Buffer.from(f.name, "utf8");
     const head = (size) => {
