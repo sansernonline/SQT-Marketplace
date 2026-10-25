@@ -19,7 +19,7 @@ scripts/
 | check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
 | check | `check/audit-plugin-prompt.md` | prompt ให้ Claude Code ตรวจ plugin ในเรื่องที่สคริปต์ตรวจไม่ได้ เลือกได้ 12 หัวข้อ: ยาวเกิน · กระชับได้ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ · วัดผลจริง · ประหยัด token (หัวข้อนี้แก้ให้ด้วย) · ความเร็ว · ความเสถียร · รับมือเมื่อพลาด · ผลข้างเคียง | หลังเพิ่ม skill หลายตัว · ก่อนขึ้นเลขรุ่น · ทุกไตรมาส |
 | **sync** | `sync/sync-docs.mjs` | เขียนตัวเลขนับและรายการ skill ในเอกสารจากของจริงใน `plugins/` | **หลังเพิ่มหรือลบ skill / agent / command** |
-| sync | `sync/sync-superuser.mjs` | คัดลอกไฟล์กลางของ skill `superuser` (reference · บล็อก `superuser:begin`) ไปทุก plugin · คัดลอก `install/CLAUDE.global.md` เป็น `plugins/superuser/hooks/core-rules.md` · ตรวจว่า skill · agent · hook กลางอยู่ใน `superuser` ที่เดียว และทุก plugin ประกาศ `dependencies` · ตรวจชื่อ skill ใน `skill-router.json` · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser` หรือ `CLAUDE.global.md`** |
+| sync | `sync/sync-superuser.mjs` | คัดลอกไฟล์กลางของ skill `superuser` (reference · บล็อก `superuser:begin`) ไปทุก plugin · คัดลอก `install/CLAUDE.global.md` เป็น `plugins/superuser/hooks/core-rules.md` (มีหัวเก็บ hash · สำเนาที่ถูกแก้มือ sync ไม่เขียนทับ ให้แก้ที่ต้นฉบับ) · ตรวจว่า skill · agent · hook กลางอยู่ใน `superuser` ที่เดียว และทุก plugin ประกาศ `dependencies` · ตรวจชื่อ skill ใน `skill-router.json` · `--check` ตรวจอย่างเดียว | **หลังแก้อะไรใน `plugins/superuser` หรือ `CLAUDE.global.md`** |
 | sync | `sync/sync-file-map.mjs` + `sync/file-map-th.json` | เขียน `docs/FILE-MAP.md` แผนผังไฟล์ของทุก plugin พร้อมคำอธิบายไทย · skill หรือ agent ใหม่ที่ยังไม่มีคำอธิบายใน `file-map-th.json` → แจ้งชื่อแล้ว exit 1 · `--check` ตรวจอย่างเดียว | **หลังเพิ่มหรือลบ skill / agent / playbook** (`build-dist.cmd` รันให้แล้ว) |
 | sync | `sync/sync-prompt-rules.mjs` | เขียนบล็อกกฎร่วม `<!-- rules:begin/end -->` ในทุกไฟล์ `prompt/software-company/prompt-*.md` ให้ตรงกับ `RULES` ในสคริปต์ (ต้นฉบับที่เดียว · กฎเฉพาะไฟล์วางใต้ `rules:end`) · `--check` ตรวจอย่างเดียว · `validate-marketplace` ตรวจให้ด้วย | **หลังแก้กฎร่วมของ prompt** — แก้ `RULES` แล้วรัน |
 | **build** | `build/build-targets.mjs` | สร้าง `dist/` สำหรับ claude.ai (zip), Codex CLI, Gemini CLI และหน้าเว็บ ChatGPT / Gemini จาก `plugins/` | **หลังแก้อะไรก็ได้ใน `plugins/`** แล้ว commit `dist/` ไปด้วย |
@@ -95,7 +95,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps
 
 ## CI
 
-`.github/workflows/check.yml` รันทุก push เข้า `main` และทุก PR บน Ubuntu และ Windows: self-test ของตัวตรวจ · ตรวจทั้ง repo · ของกลาง superuser · แผนผังไฟล์ · กฎร่วมของ prompt · hook self-test · และสร้าง `dist/` ใหม่เทียบกับที่ commit ไว้ (ต่างกัน = ลืมรัน `build-dist.cmd`) · ใช้แค่ Node ไม่ติดตั้งอะไรเพิ่ม
+`.github/workflows/check.yml` รันทุก push เข้า `main` และทุก PR บน Ubuntu และ Windows: self-test ของตัวตรวจ · ตรวจทั้ง repo · ของกลาง superuser · แผนผังไฟล์ · กฎร่วมของ prompt · hook self-test · และ `build-targets.mjs --check` สร้าง `dist/` ใหม่ในโฟลเดอร์ชั่วคราวเทียบกับที่ commit ไว้ (ต่างกัน = ลืมรัน `build-dist.cmd` หลังแก้ต้นฉบับ · รันเองก่อน commit ได้ด้วย) · ใช้แค่ Node ไม่ติดตั้งอะไรเพิ่ม
 
 ---
 
@@ -103,7 +103,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps
 
 | ไฟล์ | สถานะ |
 |---|---|
-| `validate-marketplace.mjs` | รันจริงกับทั้งรีโป + `--self-test` ผ่าน 24/24 (2026-10-25) |
+| `validate-marketplace.mjs` | รันจริงกับทั้งรีโป + `--self-test` ผ่าน 26/26 (2026-10-25) |
 | `install-marketplace.ps1` | ทดสอบบน PowerShell 7.4 ครบทุกเส้นทาง |
 
 ---
@@ -138,7 +138,9 @@ skill ใหม่ที่ยังไม่มีบล็อกใน `REFERE
 ## 4 · build-targets.mjs
 
 ```bash
-node scripts/build/build-targets.mjs
+node scripts/build/build-targets.mjs              # สร้าง dist/ ใหม่
+node scripts/build/build-targets.mjs --check      # สร้างในโฟลเดอร์ชั่วคราวแล้วเทียบกับ dist/ · ต่าง → exit 1 (ก่อน commit · CI)
+node scripts/build/build-targets.mjs --self-test  # พิสูจน์ว่าตัวเทียบจับ dist เก่าได้
 ```
 
 ลบ `dist/` แล้วสร้างใหม่จาก `plugins/` ทุกครั้ง · ไม่ใช้ dependency ภายนอก · วิธีติดตั้งฝั่งปลายทางอยู่ใน [docs/OTHER-LLMS.md](../docs/INSTALL.md#ใช้ชุดนี้กับ-llm-ตัวอื่น)

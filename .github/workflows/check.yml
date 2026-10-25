@@ -29,6 +29,7 @@ jobs:
       - name: ของกลาง superuser ตรงทุก plugin
         run: node scripts/sync/sync-superuser.mjs --check
       - name: แผนผังไฟล์และกฎร่วมของ prompt ตรงกับของจริง
+        shell: bash
         run: |
           node scripts/sync/sync-file-map.mjs --check
           node scripts/sync/sync-prompt-rules.mjs --check
@@ -37,5 +38,5 @@ jobs:
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |
-          node scripts/build/build-targets.mjs --out="$RUNNER_TEMP/dist"
-          git diff --no-index --ignore-cr-at-eol --stat dist "$RUNNER_TEMP/dist"
+          node scripts/build/build-targets.mjs --self-test
+          node scripts/build/build-targets.mjs --check

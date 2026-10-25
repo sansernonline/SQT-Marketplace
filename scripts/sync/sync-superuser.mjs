@@ -6,6 +6,7 @@
 //   + บล็อก context ของ references/context-template.md ที่สร้างจาก templates/CONTEXT.md และ templates/IMPROVEMENTS.md
 // ส่วนอื่นของแต่ละ plugin ไม่ถูกแตะ (ดู plugins/superuser/ADAPT.md)
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -75,6 +76,19 @@ function syncBlocks(file, label, masterBlocks, problems, writes) {
   if (text !== lf(original)) writes.push([file, original.includes("\r\n") ? text.replace(/\n/g, "\r\n") : text]);
 }
 
+// core-rules.md เป็นสำเนา · บทเรียน 2026-10-25: แก้สำเนาแล้ว sync เขียนทับจนงานหาย
+// หัวเก็บ hash ของเนื้อหาที่ sync เขียน · เนื้อหาไม่ตรง hash = มีคนแก้มือ → ไม่เขียนทับ ไม่ว่าไฟล์ไหนแก้ทีหลัง (hook ตัดหัวนี้ก่อนส่ง)
+const sha = (s) => createHash("sha256").update(s).digest("hex").slice(0, 12);
+export const rulesHeader = (src) => `<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:${sha(src)} -->\n`;
+// have = สำเนาที่มี (null = ไม่มี) · src = ต้นฉบับ · คืน { problem, write } (ไม่มี problem = ตรงแล้ว)
+export function rulesCopyAction(have, src) {
+  if (have === rulesHeader(src) + src) return {};
+  const head = have?.match(/^<!-- สำเนาที่ [^\n]*sha256:([0-9a-f]{12}) -->\n/);
+  if (head && sha(have.slice(head[0].length)) !== head[1])
+    return { problem: "superuser/hooks/core-rules.md ถูกแก้มือ (เนื้อหาไม่ตรงกับ hash ในหัวไฟล์) — sync ไม่เขียนทับ ย้ายสิ่งที่แก้ไปที่ scripts/install/CLAUDE.global.md แล้วลบสำเนานี้ก่อนรันใหม่ (ต้องแก้มือ)", write: false };
+  return { problem: "superuser/hooks/core-rules.md ไม่ตรงกับต้นฉบับ scripts/install/CLAUDE.global.md (ไฟล์นี้ sync สร้าง แก้ที่ต้นฉบับเท่านั้น)", write: true };
+}
+
 // คืนรายการปัญหา และข้อความใหม่ของแต่ละไฟล์ (ใช้ร่วมกับ validate-marketplace.mjs)
 export function plan(root) {
   const pluginsDir = join(root, "plugins");
@@ -86,9 +100,10 @@ export function plan(root) {
   const rulesSrc = lf(readFileSync(join(root, "scripts", "install", "CLAUDE.global.md"), "utf8"));
   const rulesDst = join(source, "hooks", "core-rules.md");
   if (rulesSrc.length > 9500) problems.push(`scripts/install/CLAUDE.global.md ยาว ${rulesSrc.length} ตัวอักษร เกิน 9,500 — hook ส่งไม่ครบ ต้องแก้มือ`);
-  if (!existsSync(rulesDst) || lf(readFileSync(rulesDst, "utf8")) !== rulesSrc) {
-    problems.push("superuser/hooks/core-rules.md ไม่ตรงกับ scripts/install/CLAUDE.global.md");
-    writes.push([rulesDst, rulesSrc]);
+  const rules = rulesCopyAction(existsSync(rulesDst) ? lf(readFileSync(rulesDst, "utf8")) : null, rulesSrc);
+  if (rules.problem) {
+    problems.push(rules.problem);
+    if (rules.write) writes.push([rulesDst, rulesHeader(rulesSrc) + rulesSrc]);
   }
   // ชื่อ skill ในตัวบอก skill ต้องมีจริง
   const router = JSON.parse(readFileSync(join(source, "hooks", "skill-router.json"), "utf8"));

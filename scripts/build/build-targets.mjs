@@ -4,6 +4,8 @@
  *
  *   node scripts/build/build-targets.mjs                 สร้างลง dist/
  *   node scripts/build/build-targets.mjs --out=<โฟลเดอร์>  สร้างลงที่อื่น (ใช้ทดสอบ)
+ *   node scripts/build/build-targets.mjs --check         สร้างลงโฟลเดอร์ชั่วคราวแล้วเทียบกับ dist/ · ต่าง = ลืมสร้างใหม่หลังแก้ต้นฉบับ → exit 1 (รันก่อน commit)
+ *   node scripts/build/build-targets.mjs --self-test     พิสูจน์ว่าตัวเทียบจับ dist เก่าได้
  *
  * แหล่งความจริงคือ plugins/ (รูปแบบ Claude) เท่านั้น · dist/ เป็นผลลัพธ์ ห้ามแก้มือ
  * สคริปต์ลบโฟลเดอร์ผลลัพธ์ทิ้งแล้วสร้างใหม่ทุกครั้ง
@@ -18,14 +20,45 @@
  *   dist/kimi/<plugin>/                  Kimi Code CLI plugin → kimi.plugin.json · skills (คำสั่ง = skill เรียกเอง) · agents · KIMI.md
  *   dist/chat-web/<plugin>/<บทบาท>/      ChatGPT Custom GPT / Gemini Gem → instructions.md + knowledge/
  */
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, cpSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, rmSync, cpSync, statSync, mkdtempSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
+import { tmpdir } from "node:os";
 import { deflateRawSync, crc32 } from "node:zlib";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const CHECK = process.argv.includes("--check");
 const OUT_ARG = process.argv.find((a) => a.startsWith("--out="))?.slice(6);
-const DIST = OUT_ARG ? resolve(OUT_ARG) : join(ROOT, "dist");
+const DIST = CHECK ? mkdtempSync(join(tmpdir(), "dist-check-")) : OUT_ARG ? resolve(OUT_ARG) : join(ROOT, "dist");
+
+// เทียบ 2 โฟลเดอร์ dist · ไฟล์ข้อความ (ไม่มีไบต์ 0) ไม่นับ CRLF/LF · คืนรายการ path ที่ต่าง ขาด หรือเกิน
+// บทเรียน 2026-10-25: แก้ต้นฉบับหลังสร้าง dist แล้วไม่ได้สร้างใหม่ ผู้ตรวจจึงเจอ dist เก่า
+export function distDiff(want, have) {
+  const files = (dir, pre = "") => (existsSync(dir) ? readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? files(join(dir, e.name), `${pre}${e.name}/`) : [`${pre}${e.name}`]) : []);
+  const norm = (b) => (b.includes(0) ? b : Buffer.from(b.toString("latin1").replace(/\r\n/g, "\n"), "latin1"));
+  const a = new Set(files(want)), b = new Set(files(have));
+  const out = [...a].filter((f) => !b.has(f)).map((f) => `ขาดใน dist: ${f}`);
+  out.push(...[...b].filter((f) => !a.has(f)).map((f) => `เกินใน dist: ${f}`));
+  for (const f of a) if (b.has(f) && !norm(readFileSync(join(want, f))).equals(norm(readFileSync(join(have, f))))) out.push(`ต่าง: ${f}`);
+  return out.sort();
+}
+
+if (process.argv.includes("--self-test")) {
+  const t = mkdtempSync(join(tmpdir(), "dist-selftest-"));
+  const put = (p, s) => { mkdirSync(dirname(join(t, p)), { recursive: true }); writeFileSync(join(t, p), s); };
+  put("want/a.md", "x\ny\n"); put("want/z.bin", Buffer.from([0, 13, 10]));
+  put("have/a.md", "x\r\ny\r\n"); put("have/z.bin", Buffer.from([0, 13, 10]));
+  const same = distDiff(join(t, "want"), join(t, "have")).length === 0;
+  put("want/a.md", "x\ny\nแถวใหม่\n"); put("have/old.md", "x");
+  const d = distDiff(join(t, "want"), join(t, "have"));
+  const stale = d.length === 2 && d.includes("ต่าง: a.md") && d.includes("เกินใน dist: old.md");
+  rmSync(t, { recursive: true, force: true });
+  console.log(`  ${same ? "ผ่าน" : "ล้ม"} เนื้อหาเท่ากันต่างแค่ CRLF ไม่นับว่าต่าง · ไบนารีเทียบทุกไบต์`);
+  console.log(`  ${stale ? "ผ่าน" : "ล้ม"} แก้ต้นฉบับหลังสร้าง dist โดนจับ · ไฟล์ค้างใน dist โดนจับ`);
+  console.log(`\nself-test ${Number(same) + Number(stale)}/2 ผ่าน`);
+  process.exit(same && stale ? 0 : 1);
+}
 
 // ขีดจำกัดของหน้าเว็บ (ตรวจเมื่อ 2026-10-01)
 const GPT_INSTRUCTIONS_MAX = 8000; // ตัวอักษร
@@ -432,3 +465,10 @@ for (const p of plugins) {
 chatWebReadme(tooLong);
 distReadme(rows);
 console.log(`dist/ → ${plugins.length} plugins · chat-web: ${tooLong.length} roles moved to knowledge/00-role.md`);
+if (CHECK) {
+  const diff = distDiff(DIST, join(ROOT, "dist"));
+  rmSync(DIST, { recursive: true, force: true });
+  for (const line of diff.slice(0, 20)) console.log(`  ${line}`);
+  console.log(diff.length ? `\ndist/ เก่ากว่าต้นฉบับ ${diff.length} ไฟล์ — รัน scripts\\build-dist.cmd ใหม่` : "\ndist/ ตรงกับต้นฉบับ");
+  process.exit(diff.length ? 1 : 0);
+}
