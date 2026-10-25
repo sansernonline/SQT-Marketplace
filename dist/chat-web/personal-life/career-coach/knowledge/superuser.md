@@ -1549,6 +1549,8 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | งานโรงเรียนของลูก | `kids-school` |
 | ดูแลพ่อแม่สูงอายุ · สิทธิ์ผู้สูงอายุ | `elder-care` |
 | สัตว์เลี้ยง | `pet-care` |
+| เตรียมรับน้ำท่วม · น้ำเริ่มเข้าบ้าน · ขอเงินช่วยเหลือหรือเคลมประกันหลังน้ำลด | `flood-prep` + agent `home-manager` |
+| คนในบ้านเสียชีวิต · แบ่งมรดก · ทำพินัยกรรม · ผู้จัดการมรดก | `estate-and-will` + agent `doc-caretaker` · ข้อพิพาทหรือทรัพย์สินซับซ้อนให้ปรึกษาทนาย |
 
 **สุขภาพ**
 
@@ -1559,6 +1561,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | มียาที่แพทย์สั่ง · ต้องการตารางยา | `medication-schedule` |
 | อยากเริ่มออกกำลังกาย | `exercise-plan` |
 | นอนไม่ดี · จะไปหาหมอเรื่องการนอน | `sleep-log` |
+| ตั้งครรภ์ · ฝากครรภ์ · สิทธิ์คลอดบุตร · แจ้งเกิด · วัคซีนเด็กเล็ก | `pregnancy-and-baby` + agent `health-organizer` · อาการอันตรายตอนตั้งครรภ์ให้โทร 1669 ก่อน |
 | ประกันสุขภาพพอไหม | `insurance-review` (trading-finance) |
 
 **อาชีพ**

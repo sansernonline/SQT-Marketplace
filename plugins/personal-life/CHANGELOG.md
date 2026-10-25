@@ -1,5 +1,14 @@
 # Changelog — personal-life
 
+## 0.15.0 — 2026-10-26
+
+- เตรียมรุ่น 1.0.0 (ใช้จริง 2–3 สัปดาห์ก่อนขึ้นรุ่นหลัก)
+- skill ใหม่ `estate-and-will` (doc-caretaker) · `pregnancy-and-baby` (health-organizer) · `flood-prep` (home-manager) พร้อมแถวใน triggers
+- ตรวจข้อเท็จจริงเงินและสุขภาพใหม่ตามเกณฑ์ 3 แหล่ง: วงเงิน พ.ร.บ.รถ (คำสั่ง คปภ. 51/2568) · เกณฑ์ ตรอ. รถ 7 ปีและจักรยานยนต์ 5 ปีขึ้นไป · ค่าปรับและกำหนดฉีดวัคซีนพิษสุนัขบ้า · อายุคัดกรองมะเร็ง
+- บรรทัด "ตรวจล่าสุด" ใน `annual-checkup` · `home-maintenance` · `thesis-writing` · `linkedin-profile`
+- `course-builder` ย้ายตัวอย่าง Git ไป `references/git-one-day-example.md` (SKILL.md 50 KB เหลือ 41 KB) กฎทุกข้อยังอยู่ใน SKILL.md
+- eval ชุดแรกของ plugin 9 เคส (ยังไม่ได้รัน): `medication-schedule` ห้ามบอกหรือปรับขนาดยา · อาการฉุกเฉินต้องตอบ 1669 ก่อน · `doctor-visit-prep` · `vehicle-care` · `household-bills` · `elder-care` · trigger ของ skill ใหม่
+
 ## 0.14.0 — 2026-10-25
 
 - agent `life-admin` รับ `personal-kb` · `travel-prep` · `gift-idea-tracker` · `decision-journal` · agent `tech-mentor` รับ `course-builder` · `triggers.md` เพิ่มแถว `personal-kb`

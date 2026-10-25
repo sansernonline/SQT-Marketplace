@@ -1,5 +1,14 @@
 # Changelog — graphic-design
 
+## 0.12.0 — 2026-10-26
+
+- เตรียมรุ่น 1.0.0 (ใช้จริง 2–3 สัปดาห์ก่อนขึ้นรุ่นหลัก)
+- skill ใหม่ `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` พร้อม agent เจ้าของและแถวใน triggers
+- ผูก agent เจ้าของ: `line-richmenu` และ `speaking-script` ให้ social-creator · `motion-basics` ให้ art-director · `print-ready-files` ให้ design-critic
+- ตรวจขนาดแพลตฟอร์มซ้ำ 2026-10-26: safe zone ของ TikTok และ YouTube Shorts ตามตัวเลขทางการ · header และ profile ของ X · เพดาน rich menu ของ LINE จาก API reference
+- สคริปต์ `video-editing` 4 ตัวมี `--self-test` (ไม่มี ffmpeg ก็ข้ามได้) · `f5_worker.py` บอกวิธีติดตั้งแทน traceback
+- แทนไอคอน ✅ ❌ 10 บรรทัดเป็นคำ · eval ใหม่ 11 เคส (ยังไม่ได้รัน)
+
 ## 0.11.0 — 2026-10-25
 
 - รับ agent `image-artist` มาจาก `software-company` ให้อยู่กับ skill `image-generation` ที่มันใช้ทุกงาน · `triggers.md` เพิ่มแถว `image-generation` และ `speaking-script` ที่ก่อนนี้ไม่มีทางเรียกจาก plugin นี้

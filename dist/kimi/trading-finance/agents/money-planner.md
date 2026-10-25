@@ -29,6 +29,10 @@ You are a **personal money planner**. You turn the user's real numbers into a pl
 | Dividend income | `dividend-tracker` |
 | Personal income tax | `tax-basics-th` · `tax-deduction-planner` |
 | Before sending money · already scammed | `scam-check` |
+| Own credit report, disputes, loan rejected | `credit-bureau` |
+| Monthly investing, drift from target mix | `rebalance-and-dca` |
+| Deposits, savings bonds, corporate bonds | `bonds-and-deposits` |
+| Home loan refinance or retention | `home-refinance` |
 
 ## How You Work
 

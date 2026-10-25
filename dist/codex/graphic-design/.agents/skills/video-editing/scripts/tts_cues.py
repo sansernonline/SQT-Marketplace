@@ -135,13 +135,52 @@ def mss(sec):
     return f"{int(t // 60)}:{t % 60:04.1f}"
 
 
+def self_test():
+    """ตรวจตัวอ่านสคริปต์ คำอ่าน และเวลา โดยไม่เรียกเครื่องอ่านเสียงหรือเครือข่าย · มี ffmpeg → ตรวจการตัดเงียบหัวท้ายด้วย"""
+    import shutil
+    import tempfile
+    checks = []
+    with tempfile.TemporaryDirectory() as d:
+        script, lex = Path(d) / "ep.txt", Path(d) / "words.tsv"
+        script.write_text("# หมายเหตุ ข้าม\n[สไลด์ 2]\nสวัสดีครับ|วันนี้มาลอง Git\n\n[slide 3]\nใช้ GitHub กับ git\n", encoding="utf-8")
+        lex.write_text("คำ\tคำอ่าน\nGit\tกิต\nGitHub\tกิตฮับ\n", encoding="utf-8")
+        cues = parse_script(script)
+        lexicon = load_lexicon(lex)
+        checks += [("แบ่งซับและสไลด์", [(c["text"], c["slide"]) for c in cues]
+                    == [("สวัสดีครับ\nวันนี้มาลอง Git", 2), ("ใช้ GitHub กับ git", 3)]),
+                   ("ข้ามแถวหัวตารางคำอ่าน · คำยาวก่อน", [w for w, _ in lexicon] == ["GitHub", "Git"]),
+                   ("แทนคำอ่านทั้งคำ ไม่สนตัวพิมพ์", spoken_of(cues[1]["text"], lexicon) == "ใช้ กิตฮับ กับ กิต"),
+                   ("เวลา .srt", ts(3661.5) == "01:01:01,500" and ts(0.0004) == "00:00:00,000"),
+                   ("เวลา data-at ปัดไม่ล้นนาที", mss(59.97) == "1:00.0" and mss(75.25) == "1:15.2")]
+        if not shutil.which("ffmpeg"):
+            print("ข้ามการตัดเงียบหัวท้าย: ไม่พบ ffmpeg ใน PATH")
+        else:
+            src, dst = Path(d) / "pad.wav", Path(d) / "pad.48k.wav"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono:d=0.5",
+                            "-f", "lavfi", "-i", "sine=frequency=440:duration=1:sample_rate=44100",
+                            "-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono:d=0.5",
+                            "-filter_complex", "[0][1][2]concat=n=3:v=0:a=1", str(src)], check=True)
+            to_48k_trimmed(src, dst)
+            with wave.open(str(dst), "rb") as w:
+                sec, rate = w.getnframes() / w.getframerate(), w.getframerate()
+            checks.append((f"ตัดเงียบหัวท้าย 2.0 → {sec:.2f} วินาที ที่ {rate} Hz", rate == SR and 0.95 <= sec <= 1.2))
+    for name, ok in checks:
+        print(f"{name}:", "ผ่าน" if ok else "ไม่ผ่าน")
+    ok = all(ok for _, ok in checks)
+    print("self-test", "ผ่าน" if ok else "ไม่ผ่าน")
+    return 0 if ok else 1
+
+
 def main():
     if hasattr(sys.stdout, "reconfigure"):  # เครื่องที่ code page ไม่ใช่ UTF-8 พิมพ์ภาษาไทยผ่าน pipe แล้วล้ม
         sys.stdout.reconfigure(encoding="utf-8")
+    if "--self-test" in sys.argv[1:]:
+        sys.exit(self_test())
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("script")
     ap.add_argument("-o", "--out", required=True)
     ap.add_argument("--engine", choices=["windows", "edge", "f5"], required=True)
+    ap.add_argument("--self-test", action="store_true", help="ทดสอบตัวเอง ไม่สร้างเสียงและไม่ใช้เครือข่าย")
     ap.add_argument("--voice", default="", help="windows: ส่วนหนึ่งของชื่อเสียง (Pattara) · edge: th-TH-NiwatNeural หรือ th-TH-PremwadeeNeural")
     ap.add_argument("--rate", default="+0%", help="edge: ความเร็ว เช่น -10%%")
     ap.add_argument("--lexicon")

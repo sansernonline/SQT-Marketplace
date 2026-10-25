@@ -1,7 +1,7 @@
 {
  "plugin": "graphic-design",
- "version": "0.11.0",
- "description": "Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.",
+ "version": "0.12.0",
+ "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
  "cross": [
   "software-company",
   "e-commerce"
@@ -15,13 +15,16 @@
   "image-editing-brief",
   "image-generation",
   "line-richmenu",
+  "marketplace-product-images",
   "motion-basics",
+  "print-ready-files",
   "social-formats",
   "speaking-script",
   "style-consistency",
   "subtitles-th",
   "video-editing",
-  "video-script-to-clip"
+  "video-script-to-clip",
+  "youtube-thumbnail"
  ],
  "core_skills": [
   "superuser",
@@ -73,7 +76,11 @@
    "model": "sonnet",
    "core": false,
    "description": "Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.",
-   "skills": []
+   "skills": [
+    "style-consistency",
+    "brief-to-image",
+    "motion-basics"
+   ]
   },
   {
    "name": "brand-keeper",
@@ -87,7 +94,10 @@
    "model": "sonnet",
    "core": false,
    "description": "Use when a design feels off or before visuals ship. Reviews hierarchy, contrast, spacing, alignment; names 2–3 fixes.",
-   "skills": []
+   "skills": [
+    "design-review",
+    "print-ready-files"
+   ]
   },
   {
    "name": "image-artist",
@@ -108,7 +118,14 @@
    "model": "sonnet",
    "core": false,
    "description": "Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.",
-   "skills": []
+   "skills": [
+    "social-formats",
+    "campaign-set",
+    "line-richmenu",
+    "youtube-thumbnail",
+    "marketplace-product-images",
+    "speaking-script"
+   ]
   },
   {
    "name": "video-editor",

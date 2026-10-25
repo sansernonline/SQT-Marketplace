@@ -18,15 +18,15 @@ General information, not legal or insurance advice — กรมการขน�
 | Item | Rule | Number |
 |---|---|---|
 | Pay annual tax early | up to 90 days before expiry | 90 วัน |
-| ตรอ. inspection required before tax | car over 7 years from the first registration date; motorbike over 5 years. Sources word the line differently ("เกิน 7 ปี" vs "7 ปีขึ้นไป") — a vehicle that turns exactly 7 (or 5) years old: ask the ตรอ. (รอยืนยัน) | 7 ปี / 5 ปี |
-| ตรอ. inspection also required | any vehicle whose tax is overdue more than 1 year but not more than 3 years (รอยืนยัน with DLT) | ค้าง > 1 ปี |
-| Inspection fee at a private ตรอ. | commonly quoted: car ≤2,000 kg empty weight 200 บาท; motorbike 60 บาท — but no DLT page confirming a fixed rate was found on 2026-10-22, and a Dec 2025 report shows stations charging different amounts (motorbike 100–150) (รอยืนยัน; ask the station before going) | varies by ตรอ. |
+| ตรอ. inspection required before tax | private car (and private pickup) aged 7 full years (ครบ 7 ปี) or more, motorbike 5 full years or more — counted from the first registration date to the tax expiry date; inspection can be done up to 90 days ahead (DLT page, confirmed 2026-10-26) | 7 ปี / 5 ปี |
+| ตรอ. inspection also required | any vehicle whose tax is overdue more than 1 year (stated on the DLT page; no second source — รอยืนยัน) | ค้าง > 1 ปี |
+| Inspection fee at a private ตรอ. | sources conflict: the DLT page (2559) says car ≤1,600 kg empty weight 150 บาท, >1,600 kg 250, motorbike 60; KTC (2569) says ≤2,000 kg 200, >2,000 kg 300, motorbike 60, and some stations charge motorbikes 100–150 (รอยืนยัน; tell the user the amount is not confirmed and to ask the station) | varies by ตรอ. |
 | Late tax surcharge | 1% per month of the tax due | 1%/เดือน |
 | Tax unpaid over 3 years | registration cancelled (ระงับทะเบียน); return plates and book, pay up to 3 years back + surcharge, re-register | 3 ปี |
-| พ.ร.บ. premium | private car ≤7 seats 645.21 บาท/ปี; motorbike premium by cc (รอยืนยัน — e.g. >150 cc 645.21) | |
-| พ.ร.บ. cover | injury medical up to 80,000 บาท/คน (รอยืนยัน — 645.21 and 500,000 confirmed 2026-10-22 via news and bank pages; 80,000 not found); death or permanent disability 500,000 บาท/คน | |
+| พ.ร.บ. premium | private car ≤7 seats 645.21 บาท/ปี; private motorbike ≤75 cc 161.57 · 75–125 cc 323.14 · 125–150 cc 430.14 · >150 cc 645.21 (sellers and banks agree; no OIC premium table found — รอยืนยัน) | |
+| พ.ร.บ. cover | **Paid at once, no fault needed (ค่าเสียหายเบื้องต้น):** medical up to 30,000 บาท/คน; death or permanent disability 35,000. **After fault is settled:** medical up to 80,000; death or total permanent disability 500,000; loss of organs 200,000–500,000; inpatient 200 บาท/วัน up to 20 days; total up to 504,000/คน. A driver at fault gets the initial amount only (คปภ. order 51/2568, confirmed 2026-10-26) | |
 
-ตรวจล่าสุด 2026-10-22 · แหล่ง: https://www.dlt.go.th · https://www.thansettakij.com/news/general-news/579209 · https://www.ktc.co.th/article/knowledge/things-car-owner-over-7-years-should-know-atpb · https://www.oic.or.th
+ตรวจล่าสุด 2026-10-26 · แหล่ง: คปภ. คำสั่งนายทะเบียน 51/2568 https://www.oic.or.th/web-upload/1xff0d34e409a13ef56eea54c52a291126/202508/m_news/217/69225/file_download/cdc3a5e370cf49e506d383261f6d0eb7.pdf · DLT https://nma.dlt.go.th/th/m_page_1679 · https://www.ktc.co.th/article/knowledge/things-car-owner-over-7-years-should-know-atpb · https://www.thansettakij.com/news/general-news/579209
 
 ## Ways to pay annual tax
 
@@ -86,7 +86,7 @@ If the licence has already expired (the same bands apply to both types; รอ�
 ## Workflow
 
 1. **Record each vehicle** in the table in [references/vehicle-record.md](references/vehicle-record.md) — plate, first registration date, tax expiry, พ.ร.บ. expiry, voluntary policy expiry, licence expiry for each driver
-2. **Compute:** inspection needed this year? Take the full age on the tax expiry date, counted from the first registration date (not just year minus year): over 7 years for cars / over 5 for motorbikes, or tax overdue more than 1 year → yes; exactly 7 (or 5) years → ask the ตรอ.
+2. **Compute:** inspection needed this year? Take the full age on the tax expiry date, counted from the first registration date (not just year minus year): 7 full years or more for cars / 5 or more for motorbikes, or tax overdue more than 1 year → yes
 3. **Calendar:** reminder 90 days before tax expiry and 30 days before every policy and licence expiry
 4. **Quote** voluntary insurance 45 days before expiry — at least 3 quotes, same sum insured and excess
 5. **Service** — log odometer at each service; next service = whichever comes first, km or months

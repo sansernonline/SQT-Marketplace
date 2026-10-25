@@ -17,9 +17,11 @@ Turn "I want to watch some stocks" into a short list where every name has a reas
    - **trigger / entry zone** — price zone or event that makes it actionable
    - **invalidation** — price or event that kills the thesis (from `technical-signals` for levels)
    - **liquidity** — 20-day average daily value traded; flag if under ~5 million baht (wide spreads, hard to exit)
-   - **calendar** — next earnings (quarterly results due within 45 days of quarter end (รอยืนยัน)), XD date, AGM
+   - **calendar** — next earnings (quarterly results due within 45 days of quarter end; annual audited results within 2 months, or 3 months if a reviewed Q4 statement is filed), XD date, AGM
    - **alerts** — price above/below, % move, volume spike — set in the broker app (Streaming, Settrade) or via the `alert-dispatcher` agent
-4. **Check SET market signs** on each name before adding: `C` (caution), `SP` (suspended), `H` (halt), `NP` / `NR` (notice pending / received), and whether it is on the SET market surveillance lists (Cash Balance, Turnover List). A name under trading measures needs a cash account and is a red flag for a beginner.
+4. **Check SET market signs** on each name before adding: the C signs `CB` `CS` `CC` `CF` (caution; there is no plain `C`), `SP` (suspended), `H` (halt), `NP` / `NR` (notice pending / received), and whether it is on the SET market surveillance lists (Cash Balance, Turnover List). A name under trading measures needs a cash account and is a red flag for a beginner.
+
+ตรวจล่าสุด 2026-10-26 · แหล่ง: เครื่องหมาย https://www.set.or.th/en/market/information/trading-procedure/trading-signs , https://www.set.or.th/en/listing/listed-company/simplified-regulations/disclosure/c-sign-posting , https://media.set.or.th/rulebook/circular-letter/attachment-file/237.pdf · กำหนดส่งงบ https://www.set.or.th/en/listing/listed-company/simplified-regulations/disclosure/periodic-disclosure , https://www.sec.or.th/TH/Documents/Report56/FAQ-FinancialStatement-issuer.pdf , https://publish.sec.or.th/nrs/10198s.pdf
 5. **Save** as `watchlist.md` (or `.csv`) in the finance folder; date the file.
 
 ## Decision table — add, keep or drop
