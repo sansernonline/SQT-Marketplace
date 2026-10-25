@@ -1,5 +1,5 @@
 /**
- * lesson-checks.mjs — ตัวตรวจจากบทเรียนของทีม 6 ข้อ (ใช้จาก validate-marketplace.mjs)
+ * lesson-checks.mjs — ตัวตรวจจากบทเรียนของทีม 8 ข้อ (ใช้จาก validate-marketplace.mjs)
  *   1. plugin ที่ติดตั้งในเครื่องเก่ากว่า repo        → warning
  *   2. eval -regression ที่ยังไม่เคยเห็น agent พลาดจริง → error (ต้องชื่อ -guard)
  *   3. ข้อความอ้างว่าทดสอบ/วัดจริง ต้องมีวันที่ในบรรทัดเดียวกัน → warning (จับจากคำ จึงมีบรรทัดตัวอย่างหลุดมาได้)
@@ -7,6 +7,7 @@
  *   5. SKILL.md ใหญ่เกิน 20,000 ไบต์ → warning บรรทัดเดียว
  *   6. ตาราง "การตัดสินใจ" ใน .claude/superuser/CONTEXT.md เกิน 20 แถว → warning
  *   7. ไฟล์ .md มีตัว CR ดิบที่ไม่ตามด้วย LF → error
+ *   8. ข้อเท็จจริงที่หมดอายุตามปฏิทิน (scripts/check/expiry.json) เลยวันแล้วหรือเหลือไม่ถึง 30 วัน → warning · ไฟล์ที่อ้างไม่มี → error
  * ทุกฟังก์ชันรับข้อความเข้าและคืนรายการปัญหา (ข้อความ หรือ {at, msg} ของข้อ 3) ไม่อ่านไฟล์เอง (ยกเว้น installedOlder ที่รับ path)
  */
 import { readFileSync, existsSync } from 'node:fs';
@@ -86,4 +87,23 @@ export function loneCR(text) {
     if (line.replace(/\r$/, '').includes('\r')) out.push({ at: i + 1, msg: 'มีตัว CR ดิบกลางบรรทัด (มักมาจาก heredoc ที่ตีความ \\r) — แก้ด้วยเครื่องมือแก้ไฟล์ ไม่ส่งผ่าน heredoc' });
   });
   return out;
+}
+
+// 8. ข้อเท็จจริงที่หมดอายุตามปฏิทิน · entries = [{ date: 'YYYY-MM-DD', file, what }] · today = 'YYYY-MM-DD'
+//    exists(file) บอกว่าไฟล์ยังมีไหม · คืน { warns, errors } · เลยวัน = ต้องตรวจแหล่งใหม่แล้วแก้ไฟล์ แล้วลบหรือเลื่อนแถว
+// วันที่ตามเวลาเครื่อง แบบ YYYY-MM-DD · ไม่ใช้ toISOString() เพราะเป็น UTC (ไทยหลังเที่ยงคืนจะได้วันก่อนหน้า)
+export const localToday = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+export function expiredFacts(entries, today, exists, soonDays = 30) {
+  const day = (s) => Date.parse(`${s}T00:00:00Z`) / 86400000;
+  const warns = [], errors = [];
+  for (const e of entries) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date ?? '') || !e.file || !e.what) { errors.push(`แถวไม่ครบ (ต้องมี date แบบ YYYY-MM-DD · file · what): ${JSON.stringify(e)}`); continue; }
+    if (!exists(e.file)) { errors.push(`${e.file} ไม่มีแล้ว — แก้ path หรือลบแถว "${e.what}"`); continue; }
+    const left = day(e.date) - day(today);
+    if (left < 0) warns.push(`${e.file}: ${e.what} หมดแล้วเมื่อ ${e.date} — ตรวจแหล่งทางการใหม่ แก้ไฟล์ แล้วลบหรือเลื่อนแถวใน expiry.json`);
+    else if (left <= soonDays) warns.push(`${e.file}: ${e.what} หมด ${e.date} (อีก ${left} วัน) — เตรียมตรวจแหล่งใหม่`);
+  }
+  return { warns, errors };
 }

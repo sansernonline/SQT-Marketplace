@@ -29,7 +29,9 @@ def plugin_page(plugin, data, labels):
     images = "\n\n".join(f"## {title}\n\n{text}\n\n![{title}]({file})" for file, title, text in IMAGES)
     cross = " · ".join(f"[`{c}`](../{c}/README.md)" for c in data["cross"]) or "—"
     return (f"{NOTE}# {plugin}\n\n{labels.get('tagline', '')}\n\n"
-            f"agent {len(data['agents'])} · skill {len(data['skills']) + len(data['core_skills'])} · "
+            f"agent {len(data['agents'])} · skill {len(data['skills']) + len(data['core_skills'])}"
+            + (f" (ของ plugin {len(data['skills'])} · ของกลางจาก superuser {len(data['core_skills'])})" if data['core_skills'] else "")
+            + " · "
             f"คำสั่ง {len(data['commands'])} · playbook {len(data['playbooks'])} · ส่งงานต่อให้ {cross}\n\n"
             f"[← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/{plugin}/`](../../../plugins/{plugin}/)\n\n"
             f"{images}\n\n## playbook ทั้งหมด\n\n| playbook | ทำอะไร | ขั้น |\n|---|---|---|\n{rows}\n")
