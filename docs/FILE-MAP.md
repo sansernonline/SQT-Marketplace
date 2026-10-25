@@ -9,11 +9,11 @@
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 14 | 18 | 112 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 16 | 6 | 9 | 91 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 39 | 16 | 30 | 144 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 19 | 6 | 9 | 105 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 158 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 95 | 29 | 17 | 790 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 101 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 19 | 7 | 10 | 67 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 7 | 10 | 79 |
 
 ## โครงของทุก plugin
 
@@ -212,7 +212,7 @@ plugins/<plugin>/
 
 ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน · ภาพประกอบ: [docs/plugins/graphic-design](plugins/graphic-design/README.md) · ต้นฉบับ: `plugins/graphic-design/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/speaking-script-behaviour/case.yaml` (เคส eval: บทพูดต้องเปิดด้วย hook เป็นภาษาพูด และปิดด้วย CTA) · `evals/speaking-script-regression/case.yaml` (เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ) · `evals/speaking-script-trigger/case.yaml` (เคส eval: โจทย์สคริปต์พูดที่ต้องทำให้ speaking-script ถูกเปิด) · `evals/subtitles-th-behaviour/case.yaml` (เคส eval: แก้ซับให้ตามกฎความยาว ความเร็วอ่าน และเครื่องหมาย) · `evals/subtitles-th-regression/case.yaml` (เคส eval: กันอาการฝังซับไทยแล้วเป็นสี่เหลี่ยมโดยไม่ระบุฟอนต์ไทย) · `evals/subtitles-th-trigger/case.yaml` (เคส eval: โจทย์ทำซับไทยแล้วฝังที่ต้องทำให้ subtitles-th ถูกเปิด) · `evals/video-editing-behaviour/case.yaml` (เคส eval: ตัดให้ตรงเฟรม ปรับเสียง 2 รอบ และวัดไฟล์ที่ได้) · `evals/video-editing-guard/case.yaml` (เคส eval: กันอาการรับรองความดังจากคำสั่งรอบเดียวโดยไม่วัด) · `evals/video-editing-slides-behaviour/case.yaml` (เคส eval: ความยาวต่อแผ่นถูก แผ่นสุดท้ายไม่หาย วิดีโอยาวเท่าเสียง) · `evals/video-editing-slides-regression/case.yaml` (เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย) · `evals/video-editing-slides-trigger/case.yaml` (เคส eval: โจทย์สไลด์กับเสียงเป็นวิดีโอที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-trigger/case.yaml` (เคส eval: โจทย์ตัดช่วงเงียบและปรับเสียงที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-tts-behaviour/case.yaml` (เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ) · `evals/video-editing-tts-guard/case.yaml` (เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง) · `evals/video-editing-tts-trigger/case.yaml` (เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/brand-kit-behaviour/case.yaml` (เคส eval: kit ต้องมีฟอนต์ไทยที่มีอยู่จริงพร้อมใบอนุญาต และตรวจคอนทราสต์ตัวอักษรกับพื้นเป็นตัวเลข (4.5:1)) · `evals/brand-kit-trigger/case.yaml` (เคส eval: เจ้าของร้านบ่นว่าโพสต์ดูไม่เป็นชุด ไม่เอ่ยชื่อ skill ต้องทำให้ brand-kit ถูกเปิด และคำตอบมีบทบาทของสี) · `evals/image-generation-behaviour/case.yaml` (เคส eval: ไม่มีเครื่องมือสร้างภาพ ต้องวาด SVG แบบภาพประกอบเต็มฉากที่มีรายละเอียดจริง ไม่ใช่รูปทรงพื้นฐานวางแทน …) · `evals/image-generation-trigger/case.yaml` (เคส eval: โจทย์หน้าเว็บที่ต้องมีรูปจริง ไม่เอ่ยชื่อ skill ต้องทำให้ image-generation ถูกเปิด และถามหรือเลือกแนวภาพ) · `evals/line-richmenu-behaviour/case.yaml` (เคส eval: JSON ของ rich menu ต้องมีขนาดภาพที่ API รับ chatBarText ไม่เกิน 14 ตัว และพื้นที่กดไม่เกินขอบภาพ) · `evals/line-richmenu-trigger/case.yaml` (เคส eval: โจทย์ทำเมนูด้านล่างแชต LINE OA ไม่เอ่ยชื่อ skill ต้องทำให้ line-richmenu ถูกเปิด และให้ขนาดภาพ 2500 × 1686) · `evals/marketplace-product-images-trigger/case.yaml` (เคส eval: ผู้ขายถามเรื่องรูปสินค้าลง Shopee และ TikTok Shop ไม่เอ่ยชื่อ skill ต้องทำให้ marketplace-product-images …) · `evals/print-ready-files-trigger/case.yaml` (เคส eval: ผู้ใช้จะส่งนามบัตรจาก Canva ไปโรงพิมพ์ ไม่เอ่ยชื่อ skill ต้องทำให้ print-ready-files ถูกเปิด …) · `evals/social-formats-behaviour/case.yaml` (เคส eval: ขนาดและพื้นที่ปลอดภัยต้องตรงตาราง platform-sizes.md (feed 4:5 1080 × 1350 · story ล่าง 35%) …) · `evals/social-formats-trigger/case.yaml` (เคส eval: โจทย์ร้านค้าขอขนาดภาพหลายแพลตฟอร์ม ไม่เอ่ยชื่อ skill ต้องทำให้ social-formats ถูกเปิด และให้ขนาด 9:16 เป็น …) · `evals/speaking-script-behaviour/case.yaml` (เคส eval: บทพูดต้องเปิดด้วย hook เป็นภาษาพูด และปิดด้วย CTA) · `evals/speaking-script-regression/case.yaml` (เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ) · `evals/speaking-script-trigger/case.yaml` (เคส eval: โจทย์สคริปต์พูดที่ต้องทำให้ speaking-script ถูกเปิด) · `evals/subtitles-th-behaviour/case.yaml` (เคส eval: แก้ซับให้ตามกฎความยาว ความเร็วอ่าน และเครื่องหมาย) · `evals/subtitles-th-regression/case.yaml` (เคส eval: กันอาการฝังซับไทยแล้วเป็นสี่เหลี่ยมโดยไม่ระบุฟอนต์ไทย) · `evals/subtitles-th-trigger/case.yaml` (เคส eval: โจทย์ทำซับไทยแล้วฝังที่ต้องทำให้ subtitles-th ถูกเปิด) · `evals/video-editing-behaviour/case.yaml` (เคส eval: ตัดให้ตรงเฟรม ปรับเสียง 2 รอบ และวัดไฟล์ที่ได้) · `evals/video-editing-guard/case.yaml` (เคส eval: กันอาการรับรองความดังจากคำสั่งรอบเดียวโดยไม่วัด) · `evals/video-editing-slides-behaviour/case.yaml` (เคส eval: ความยาวต่อแผ่นถูก แผ่นสุดท้ายไม่หาย วิดีโอยาวเท่าเสียง) · `evals/video-editing-slides-regression/case.yaml` (เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย) · `evals/video-editing-slides-trigger/case.yaml` (เคส eval: โจทย์สไลด์กับเสียงเป็นวิดีโอที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-trigger/case.yaml` (เคส eval: โจทย์ตัดช่วงเงียบและปรับเสียงที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-tts-behaviour/case.yaml` (เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ) · `evals/video-editing-tts-guard/case.yaml` (เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง) · `evals/video-editing-tts-trigger/case.yaml` (เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด) · `evals/youtube-thumbnail-trigger/case.yaml` (เคส eval: ยูทูบเบอร์ถามเรื่องภาพปกคลิปและการทดสอบหลายปก ไม่เอ่ยชื่อ skill ต้องทำให้ youtube-thumbnail ถูกเปิด …)
 
 ### agent (6)
 
@@ -225,7 +225,7 @@ plugins/<plugin>/
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 | `agents/video-editor.md` | ตัดต่อ ใส่ซับ และส่งออกวิดีโอ |
 
-### skill (16 + ของกลาง 33)
+### skill (19 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -239,7 +239,9 @@ plugins/<plugin>/
 | `image-editing-brief` | เขียนคำสั่งแก้ภาพ: ลบของ · แก้สี · เปลี่ยนพื้นหลัง · ขยายภาพ | `references/edit-brief-template.md` |
 | `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
 | `line-richmenu` | ทำ rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · เรียก API) | `references/richmenu-6.md` |
+| `marketplace-product-images` | รูปสินค้าลง Shopee · Lazada · TikTok Shop: ขนาด พื้นขาว สิ่งที่ห้ามบนรูป | — |
 | `motion-basics` | ทำ motion graphic ตัวอักษรเคลื่อนไหว และโลโก้ขยับ สำหรับคนที่ไม่ใช่นักออกแบบ | `references/twelve-principles.md` |
+| `print-ready-files` | เตรียมไฟล์ส่งโรงพิมพ์และร้านป้าย: CMYK ระยะตัดตก ความละเอียด ฟอนต์ไทย PDF/X | — |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` |
 | `speaking-script` | เขียนสคริปต์พูดหน้ากล้อง: hook ก่อนทักทาย · ภาษาพูด · จับเวลาด้วยนาฬิกา | — |
 | `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/style-lock-sheet.md` |
@@ -247,6 +249,7 @@ plugins/<plugin>/
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `video-editing` | ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก ต่อสไลด์กับเสียงเป็นวิดีโอ และสร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) พร้อมวัดผล | `scripts/f5_worker.py` · `scripts/loudnorm2.py` · `scripts/silences.py` · `scripts/slides_to_video.py` · `scripts/tts_cues.py` · `scripts/windows_tts.ps1` |
 | `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/production-tools.md` · `references/shot-list-template.md` |
+| `youtube-thumbnail` | ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare) | — |
 
 ### คำสั่ง (6) — พิมพ์ `/graphic-design:<ชื่อ>`
 
@@ -277,7 +280,7 @@ plugins/<plugin>/
 
 จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ · ภาพประกอบ: [docs/plugins/personal-life](plugins/personal-life/README.md) · ต้นฉบับ: `plugins/personal-life/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/doctor-visit-prep-behaviour/case.yaml` (เคส eval: ผู้ใช้ปวดหัวมา 3 สัปดาห์และถามว่าน่าจะเป็นไมเกรนไหม ต้องไม่วินิจฉัย แต่ทำบัตรเตรียมพบแพทย์ ไทม์ไลน์อาการ …) · `evals/doctor-visit-prep-guard/case.yaml` (เคส eval: ผู้ใช้ขอให้เตรียมคำถามไปหาหมอพรุ่งนี้ แต่เล่าอาการเจ็บแน่นหน้าอกร้าวไปแขนตอนนี้ ต้องตอบให้โทร 1669 …) · `evals/elder-care-behaviour/case.yaml` (เคส eval: ลูกขอบันทึกส่งต่อการดูแลแม่ 72 ปีให้พี่ที่มาแทน ขอเพิ่มยาความดันเอง และถามเบี้ยยังชีพ ต้องไม่เปลี่ยนยา …) · `evals/estate-and-will-trigger/case.yaml` (เคส eval: พ่อเพิ่งเสียชีวิต ไม่มีพินัยกรรม ลูกถามว่าต้องทำอะไรและใครได้มรดก ไม่เอ่ยชื่อ skill ต้องทำให้ …) · `evals/flood-prep-trigger/case.yaml` (เคส eval: ข่าวเตือนน้ำจะเข้าหมู่บ้านใน 2 วัน ผู้ใช้ถามว่าต้องเตรียมบ้านอย่างไร ไม่เอ่ยชื่อ skill ต้องทำให้ flood-prep …) · `evals/household-bills-behaviour/case.yaml` (เคส eval: ค่าไฟเดือนพฤษภาคมขึ้นจาก 1,300 เป็น 2,050 บาท ต้องเทียบหน่วยไม่ใช่บาท ดูจำนวนวันในรอบบิล …) · `evals/medication-schedule-guard/case.yaml` (เคส eval: ผู้ใช้ลืมกินยาเช้าแล้วขอให้กินเบิ้ลตอนเย็นและขอลดยาอีกตัวเอง ต้องไม่บอกหรือเปลี่ยนขนาดยา คัดคำบนฉลากตามตัว …) · `evals/pregnancy-and-baby-trigger/case.yaml` (เคส eval: ผู้ใช้เพิ่งรู้ว่าตั้งครรภ์ 7 สัปดาห์ ถามว่าต้องฝากครรภ์เมื่อไรและได้สิทธิ์ประกันสังคมอะไร ไม่เอ่ยชื่อ skill …) · `evals/vehicle-care-behaviour/case.yaml` (เคส eval: รถเก๋งจดทะเบียน 3 มี.ค. 2561 ภาษีหมด 2 มี.ค. 2570 กับมอเตอร์ไซค์อายุ 4 ปี ต้องคำนวณอายุเต็มปี …)
 
 ### agent (9)
 
@@ -293,7 +296,7 @@ plugins/<plugin>/
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (39 + ของกลาง 33)
+### skill (42 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -302,13 +305,15 @@ plugins/<plugin>/
 | `annual-checkup` | วางแผนตรวจสุขภาพประจำปี เช็กสิทธิ์ประกันสังคมหรือบัตรทอง เทียบแพ็กเกจ | `references/results-tracker.md` |
 | `calendar-audit` | ตรวจปฏิทินรายเดือน แล้วจองช่วงเวลาไว้ทำงานสำคัญ | — |
 | `cert-prep` | เตรียมสอบใบรับรอง (AWS · Azure · GCP · CKA · PSM) แผนรายสัปดาห์และข้อสอบลอง | `references/exam-facts.md` · `references/plan-template.md` |
-| `course-builder` | ออกแบบหลักสูตรฝั่งผู้สอน: ผลลัพธ์การเรียนรู้ · ตารางสอนพร้อมเวลา · แบบฝึก · rubric · แบบประเมิน | — |
+| `course-builder` | ออกแบบหลักสูตรฝั่งผู้สอน: ผลลัพธ์การเรียนรู้ · ตารางสอนพร้อมเวลา · แบบฝึก · rubric · แบบประเมิน | `references/git-one-day-example.md` |
 | `decision-journal` | บันทึกการตัดสินใจใหญ่ (งาน · คอนโด · รถ · ย้ายบ้าน) แล้วกลับมาทบทวน | `references/entry-template.md` |
 | `digital-hygiene` | ล็อกบัญชีครอบครัวให้ปลอดภัย: ตัวจัดการรหัสผ่าน · 2FA · passkey · สำรองข้อมูล | `references/line-and-phone.md` · `references/scams-and-takeover.md` |
 | `doctor-visit-prep` | เตรียมพบแพทย์: ลำดับอาการ · ยาที่ใช้ · ยาที่แพ้ · คำถาม (ไม่วินิจฉัย) | — |
 | `elder-care` | ดูแลพ่อแม่สูงอายุ: นัดแพทย์ · เบี้ยผู้สูงอายุ · กันล้ม · ส่งต่อคนดูแล | `references/care-templates.md` |
 | `english-tech-reading` | อธิบายข้อความ error · RFC · เอกสารภาษาอังกฤษเป็นภาษาไทย | `references/decode-template.md` |
+| `estate-and-will` | มีคนในบ้านเสียชีวิต แบ่งมรดก ทำพินัยกรรม ผู้จัดการมรดก ภาษีมรดก (ข้อมูลทั่วไป ไม่ใช่คำปรึกษากฎหมาย) | `references/estate-checklist.md` |
 | `exercise-plan` | เริ่มหรือจัดการออกกำลังกาย: เดิน · เวท · ยืดเส้นระหว่างทำงาน | — |
+| `flood-prep` | เตรียมบ้านรับน้ำท่วม แหล่งเตือนภัย ตัดไฟและแก๊ส เงินช่วยเหลือ เคลมประกันหลังน้ำลด | — |
 | `gift-idea-tracker` | จดของขวัญที่เคยให้ และคิดของขวัญตามงบ | `references/gift-registry-template.md` |
 | `goal-and-habit` | ตั้งเป้ารายไตรมาสหรือปีใหม่ เริ่มหรือเลิกนิสัย | — |
 | `home-maintenance` | ตารางดูแลบ้านตามฤดู (แอร์ · ปั๊ม · ปลวก · หลังคา) และเทียบใบเสนอราคาช่าง | `references/maintenance-calendar.md` |
@@ -327,6 +332,7 @@ plugins/<plugin>/
 | `performance-self-review` | เขียนประเมินตัวเองกลางปีหรือปลายปี และเหตุผลขอขึ้นตำแหน่ง | `references/templates.md` |
 | `personal-kb` | คลังโน้ตส่วนตัว หาโน้ตที่เคยจดให้เจอ | — |
 | `pet-care` | ดูแลสุนัขแมว: วัคซีนพิษสุนัขบ้า · ขึ้นทะเบียน · ไมโครชิป · ประวัติรักษา | `references/pet-record.md` |
+| `pregnancy-and-baby` | ฝากครรภ์ สิทธิ์คลอดบุตรประกันสังคม ลาคลอด แจ้งเกิด วัคซีนเด็กเล็ก (ไม่วินิจฉัย อาการอันตรายโทร 1669) | — |
 | `resume-th-en` | เขียนหรือตรวจ CV ไทยและอังกฤษ ให้ระบบคัดกรอง (ATS) อ่านได้ | `references/templates.md` |
 | `salary-negotiation` | ต่อรองเงินเดือนและเทียบข้อเสนองาน (โบนัส · กองทุน · ประกัน) | — |
 | `side-project-picker` | เลือกโปรเจกต์ฝึกมือหรือ portfolio ให้คะแนน แล้วตัดขอบเขตให้จบได้ | `references/idea-bank.md` |
@@ -699,7 +705,7 @@ plugins/<plugin>/
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ · ภาพประกอบ: [docs/plugins/trading-finance](plugins/trading-finance/README.md) · ต้นฉบับ: `plugins/trading-finance/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/bonds-and-deposits-trigger/case.yaml` (เคส eval: ผู้ใช้มีเงินก้อนและเลือกไม่ถูกระหว่างเงินฝากประจำ พันธบัตรออมทรัพย์ หุ้นกู้ ไม่เอ่ยชื่อ skill ต้องทำให้ …) · `evals/credit-bureau-trigger/case.yaml` (เคส eval: ผู้ใช้กู้บ้านไม่ผ่านและกลัวติดแบล็กลิสต์ ไม่เอ่ยชื่อ skill ต้องทำให้ credit-bureau ถูกเปิด …) · `evals/home-refinance-trigger/case.yaml` (เคส eval: กู้บ้านครบ 3 ปีแล้วดอกเบี้ยลอยตัวขึ้น ไม่เอ่ยชื่อ skill ต้องทำให้ home-refinance ถูกเปิด …) · `evals/position-sizing-behaviour/case.yaml` (เคส eval: ขอขนาดไม้ 2 ตัว ตัวแรกราคาไม่ลงช่วงราคา ตัวที่สองไม่มี stop ต้องปัดราคาเข้า tick ปัดจำนวนลงเป็น 100 หุ้น …) · `evals/rebalance-and-dca-trigger/case.yaml` (เคส eval: พอร์ตกองทุนหุ้นโตจนสัดส่วนเพี้ยนจากแผน ไม่เอ่ยชื่อ skill ต้องทำให้ rebalance-and-dca ถูกเปิด …) · `evals/scam-check-guard/case.yaml` (เคส eval: ผู้ใช้เพิ่งโอนเงินให้กลุ่มลงทุนใน LINE แล้วถามว่าควรไปลงทุนอะไรแทน ต้องให้ขั้นตอนเร่งด่วนก่อน …) · `evals/tax-deduction-planner-behaviour/case.yaml` (เคส eval: ผู้ใช้ถามด้วยข้อมูลของปี 2568 (ประกันสังคม 9,000 · ThaiESGX) · `evals/tax-deduction-planner-trigger/case.yaml` (เคส eval: พนักงานเงินเดือนถามปลายปีว่าจะซื้อ RMF กับ ThaiESG เท่าไรให้ภาษีลด ไม่เอ่ยชื่อ skill ต้องทำให้ …)
 
 ### agent (5)
 
@@ -711,15 +717,18 @@ plugins/<plugin>/
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 
-### skill (19 + ของกลาง 33)
+### skill (23 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
+| `bonds-and-deposits` | เทียบเงินฝาก พันธบัตรออมทรัพย์ หุ้นกู้ และกองทุนตลาดเงิน ทั้งการคุ้มครองเงินฝาก ภาษีดอกเบี้ย และการถอน | — |
+| `credit-bureau` | ขอรายงานเครดิตบูโรของตัวเอง อ่านรหัสสถานะ โต้แย้งข้อมูลผิด และแก้ความเชื่อเรื่องแบล็กลิสต์ | — |
 | `debt-payoff` | วางแผนปิดหนี้หลายก้อน (บัตร · สินเชื่อ · จำนำทะเบียน) แบบก้อนเล็กก่อนหรือดอกสูงก่อน | — |
 | `dividend-tracker` | ติดตามปันผล: วัน XD · อัตราผลตอบแทน · ภาษีปันผล | `references/dividend-template.md` |
 | `emergency-fund` | เงินสำรองฉุกเฉินควรมีเท่าไร เก็บที่ไหน คุ้มครองเงินฝาก | — |
+| `home-refinance` | เทียบรีไฟแนนซ์กับขอลดดอกเบี้ยธนาคารเดิมเป็นบาท นับค่าธรรมเนียมทุกตัว และหาจุดคุ้มทุน | — |
 | `insurance-review` | เช็กว่าประกันชีวิต สุขภาพ โรคร้าย อุบัติเหตุ พอไหม และร้องเรียน คปภ. | — |
 | `mutual-fund-picker` | เลือกกองทุนรวมไทย อ่าน factsheet เลือก RMF หรือ ThaiESG ตั้ง DCA | — |
 | `news-impact` | ข่าวไหนสำคัญกับหุ้นที่ถืออยู่วันนี้ กรองตาม watchlist | — |
@@ -728,6 +737,7 @@ plugins/<plugin>/
 | `portfolio-snapshot` | พอร์ตเป็นอย่างไร กำไรหรือขาดทุนเท่าไร | `references/snapshot-template.md` |
 | `position-sizing` | ก่อนเข้าเทรด: ซื้อกี่หุ้น วาง stop ตรงไหน ใหญ่เกินไหม | `references/forex-cfd-crypto.md` |
 | `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | — |
+| `rebalance-and-dca` | ตั้งการลงทุนรายเดือนและกฎปรับสัดส่วนพอร์ต เริ่มจากใช้เงินใหม่ก่อนขายของเดิม | — |
 | `retirement-plan` | เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร | — |
 | `scam-check` | เช็กก่อนโอนเงินให้แอปลงทุน แอปกู้ กลุ่ม LINE หรือคนที่โทรมา | `references/red-flags-and-evidence.md` |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |

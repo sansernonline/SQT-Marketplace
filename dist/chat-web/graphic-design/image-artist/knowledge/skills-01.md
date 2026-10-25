@@ -171,8 +171,8 @@ Composition: eye-level, subject in left third, empty space on the right for the 
 
 ## ตัวอย่างความต่าง — รูปสปา
 
-- ❌ สามเหลี่ยมทองบนสี่เหลี่ยมขาว = "วัด" · แท่งสี่เหลี่ยมเขียว = "ต้นไม้" · วงกลมเหลือง = "ดวงอาทิตย์"
-- ✅ ผ้าขนหนูขาวพับ 3 ผืนซ้อนกัน มีร่องพับและเงาใต้แต่ละผืน · หินดำ 3 ก้อนเรียงซ้อน มีไฮไลต์ด้านบน · กล้วยไม้ขาว 1 ช่อ กลีบมีไล่สีม่วงอ่อนที่โคน · ชามทองเหลืองสะท้อนแสง · พื้นไม้สักมีลายไม้ · ฉากหลังใบไม้เบลอ
+- ผิด: สามเหลี่ยมทองบนสี่เหลี่ยมขาว = "วัด" · แท่งสี่เหลี่ยมเขียว = "ต้นไม้" · วงกลมเหลือง = "ดวงอาทิตย์"
+- ถูก: ผ้าขนหนูขาวพับ 3 ผืนซ้อนกัน มีร่องพับและเงาใต้แต่ละผืน · หินดำ 3 ก้อนเรียงซ้อน มีไฮไลต์ด้านบน · กล้วยไม้ขาว 1 ช่อ กลีบมีไล่สีม่วงอ่อนที่โคน · ชามทองเหลืองสะท้อนแสง · พื้นไม้สักมีลายไม้ · ฉากหลังใบไม้เบลอ
 
 ## ความประณีตขั้นต่ำ
 
@@ -1176,12 +1176,15 @@ shot list และ brief ครบทุกช็อต และซับไ�
 | เริ่มหรือรื้อแบรนด์ | `brand-kit` + agent `brand-keeper` |
 | จะสร้างภาพด้วย AI | `brief-to-image` |
 | ต้องการรูปจริงในหน้าเว็บ แอป หรือสไลด์ (hero · สินค้า · คน) — สร้าง วาด SVG หรือหารูป | `image-generation` + agent `image-artist` |
-| เขียนบทพูดหน้ากล้อง (คลิปพูด · พิธีกร · เสียงบรรยาย) — hook ภาษาพูด จังหวะ | `speaking-script` |
+| เขียนบทพูดหน้ากล้อง (คลิปพูด · พิธีกร · เสียงบรรยาย) — hook ภาษาพูด จังหวะ | `speaking-script` + agent `social-creator` |
 | หลายภาพต้องดูเป็นชุดเดียว | `style-consistency` + agent `art-director` |
 | ต้องแก้ภาพที่มีอยู่ | `image-editing-brief` |
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
-| rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · อัปโหลดผ่าน API) | `line-richmenu` · ขนาดภาพอ่านจาก `social-formats` |
-| วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` |
+| rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · อัปโหลดผ่าน API) | `line-richmenu` + agent `social-creator` · ขนาดภาพอ่านจาก `social-formats` |
+| รูปสินค้าลง Shopee · Lazada · TikTok Shop (ขนาด · พื้นขาว · ข้อความบนรูป · รูปที่ถูกปฏิเสธ) | `marketplace-product-images` + agent `social-creator` · ข้อความในหน้าสินค้า → `e-commerce:product-listing` |
+| ภาพปกคลิป YouTube (thumbnail) · ข้อความไทยบนปก · ทดสอบหลายปก | `youtube-thumbnail` + agent `social-creator` |
+| ส่งไฟล์ไปโรงพิมพ์หรือร้านป้าย (ใบปลิว · นามบัตร · ไวนิล · สติกเกอร์) · CMYK · ระยะตัดตก · ฟอนต์ไทยเพี้ยน | `print-ready-files` + agent `design-critic` |
+| วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` + agent `art-director` |
 | เลือกโปรแกรมตัดต่อ (CapCut · DaVinci Resolve · HyperFrames · Remotion) · ซับไทยอัตโนมัติ · เพลงหรือเทมเพลตใช้เพื่อการค้าได้ไหม | `video-script-to-clip` ไฟล์ `references/production-tools.md` |
 | ตัดต่อด้วยคำสั่ง: ตัดหัวท้าย · ตัดช่วงเงียบ · ต่อคลิป · ปรับความดังให้ได้ตามแพลตฟอร์ม · แปลงแนวนอนเป็นแนวตั้ง | `video-editing` (agent `video-editor`) |
 | ซับไทยเป็นไฟล์: ถอดเสียงเป็น .srt · ตรวจความยาวบรรทัดและเวลา · ฝังซับลงคลิป | `subtitles-th` |

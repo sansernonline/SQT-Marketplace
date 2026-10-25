@@ -228,9 +228,9 @@ A calm second look before an irreversible transfer — and a first-hour plan if 
 4. **Keep evidence** — do not delete chats or block yet: screenshots with dates of the chat, profile, group, website URL, app name; transfer slips; the receiving accounts; phone numbers. List in the reference file.
 5. **Secure accounts** if you gave any code, password, ID card photo or installed an app: uninstall the app, change banking passwords from a clean device, ask the bank to block mobile banking if remote control is suspected. If you installed an app, follow `digital-hygiene` (personal-life ถ้าติดตั้ง) for the full account-takeover steps.
 6. **Never pay a "recovery" service** — anyone asking for money to get money back is the second scam.
-7. Investment scams also: report to SEC **1207**; Ponzi schemes: DSI (กรมสอบสวนคดีพิเศษ) **1202**.
+7. Investment scams also: report to SEC **1207** (press 22); Ponzi schemes: DSI (กรมสอบสวนคดีพิเศษ) **1202**. Bank complaints go to BOT ศคง. **1213** (office hours, not for a same-day hold — the bank hotline in step 1 is).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipoliceonline.go.th (official online report, with 1441), https://www.infoquest.co.th/?p=378031 (AOC 1441 one channel only), https://www.bot.or.th/content/dam/bot/documents/th/news-and-media/media-gallery/infographic/2023_04_05_tech_crime_act.pdf (bank hold, 72 hours), https://market.sec.or.th/public/idisc/th/InvestorAlert (SEC Investor Alert, SEC Check First, 1207). DSI hotline 1202 (รอยืนยัน).
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipoliceonline.go.th (official online report, with 1441), https://www.infoquest.co.th/?p=378031 (AOC 1441 one channel only), https://www.bot.or.th/content/dam/bot/documents/th/news-and-media/media-gallery/infographic/2023_04_05_tech_crime_act.pdf (bank hold, 72 hours), https://market.sec.or.th/public/idisc/th/InvestorAlert (SEC Investor Alert, SEC Check First, 1207). ตรวจซ้ำ 2026-10-26: 1441 · 1207 กด 22 · ธปท. 1213 เวลาทำการ · DSI 1202 ครบ 3 แหล่งรวมแหล่งทางการ ลิงก์อยู่ใน [references/red-flags-and-evidence.md](references/red-flags-and-evidence.md)
 
 ## Worked example
 
@@ -287,11 +287,12 @@ Two or more ticks = treat as a scam until proven otherwise. Any tick in "The pay
 | Bank hold on a transfer | Your bank's 24-hour hotline (back of card / app) |
 | Online scam report, 24 hours | **1441** AOC — phone only, no LINE/Facebook channel |
 | Police report online | www.thaipoliceonline.go.th |
-| Investment scam advice / licence check | SEC **1207**; app SEC Check First |
-| Bank / lender complaint | BOT Contact Center 1213 (รอยืนยัน) |
-| Ponzi / large-scale fraud | DSI 1202 (รอยืนยัน) |
+| Investment scam advice / licence check | SEC **1207** (press 22 for investment scams); app SEC Check First |
+| Bank / lender complaint | BOT Financial Consumer Protection Center (ศคง.) **1213** — office hours (Mon–Fri 08:30–16:30), not 24 hours; email fcc@bot.or.th |
+| Ponzi / large-scale fraud | DSI (กรมสอบสวนคดีพิเศษ) **1202**, free nationwide (hours: DSI page says 24 hours, news says office hours — call in office hours to be safe) |
+| Informal lender, loan shark, licensed pico-finance list | **1359** ศูนย์รับแจ้งการเงินนอกระบบ สำนักงานเศรษฐกิจการคลัง (Fiscal Policy Office, Ministry of Finance), office hours; www.1359.go.th |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipoliceonline.go.th, https://market.sec.or.th/public/idisc/th/InvestorAlert
+ตรวจล่าสุด 2026-10-26 · แหล่ง: 1441 24 ชั่วโมง https://www.prd.go.th/th/content/category/detail/id/33/iid/479742 , https://narathiwat.prd.go.th/th/content/category/detail/id/9/iid/542303 , https://www.infoquest.co.th/?p=378031 · ตำรวจออนไลน์ https://www.thaipoliceonline.go.th , https://www.bangkokbiznews.com/news/news-update/1106620 · SEC 1207 กด 22 https://www.sec.or.th/TH/Template3/Articles/2568/260368.pdf , https://www.infoquest.co.th/?p=589530 , https://market.sec.or.th/public/idisc/th/InvestorAlert · ธปท. 1213 https://www.bot.or.th/th/contact-us.html , https://www.bot.or.th/th/news-and-media/news/news-20210531.html (เวลาทำการ · หน้าปี 2564 เวลาทำการรอยืนยัน) , https://www.bot.or.th/th/news-and-media/news/news-20210729-2.html · DSI 1202 https://www.dsi.go.th/th/Detail/9b97a3607503e30a1a17406da5a88ea8 , https://www.dsi.go.th/Upload/cb4f27a92a57cb2d796013e57f8f752b.pdf , https://www.bangkokbiznews.com/news/news-update/1150454 · 1359 https://www.1359.go.th/contact/ , https://www.thansettakij.com/finance/489385
 
 ## Evidence to keep (do this before blocking anyone)
 

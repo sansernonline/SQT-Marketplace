@@ -1,7 +1,7 @@
 {
  "plugin": "personal-life",
- "version": "0.14.0",
- "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets), health organising (exercise, sleep, checkups, medication, doctor-visit prep — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers to code, tech radar, certification prep, side projects, thesis). General information only.",
+ "version": "0.15.0",
+ "description": "Daily-life admin, five categories — life admin (weekly reviews, inbox triage, documents, travel, decisions, subscriptions, digital safety, goals), home and family (bills, maintenance, vehicle, meals, school, elder care, pets, floods, wills), health (exercise, sleep, checkups, medication, doctor visits, pregnancy — never diagnoses), career (CVs, interviews, salary, LinkedIn), and learning (learning paths, papers, tech radar, certs, side projects, thesis). General information only.",
  "cross": [
   "superuser",
   "software-company",
@@ -19,7 +19,9 @@
   "doctor-visit-prep",
   "elder-care",
   "english-tech-reading",
+  "estate-and-will",
   "exercise-plan",
+  "flood-prep",
   "gift-idea-tracker",
   "goal-and-habit",
   "home-maintenance",
@@ -38,6 +40,7 @@
   "performance-self-review",
   "personal-kb",
   "pet-care",
+  "pregnancy-and-baby",
   "resume-th-en",
   "salary-negotiation",
   "side-project-picker",
@@ -124,7 +127,8 @@
    "core": false,
    "description": "Use when an important document is missing, expiring or piled up. Keeps one registry of ID, property, vehicle, insurance.",
    "skills": [
-    "important-docs"
+    "important-docs",
+    "estate-and-will"
    ]
   },
   {
@@ -149,7 +153,8 @@
     "sleep-log",
     "annual-checkup",
     "medication-schedule",
-    "doctor-visit-prep"
+    "doctor-visit-prep",
+    "pregnancy-and-baby"
    ]
   },
   {
@@ -160,7 +165,8 @@
    "skills": [
     "household-bills",
     "home-maintenance",
-    "vehicle-care"
+    "vehicle-care",
+    "flood-prep"
    ]
   },
   {

@@ -14,13 +14,14 @@ Image sizes are also kept in `social-formats` with source and check date — if 
 | Item | Limit |
 |---|---|
 | Image format | JPEG or PNG |
-| Image size (px) | full **2500×1686**, compact **2500×843** (also 1200×810, 1200×405, 800×540, 800×270). LINE may accept other sizes inside its limits (width 800–2500, height ≥ 250, width/height ≥ 1.45) — รอยืนยัน on developers.line.biz; use the sizes listed to be safe |
+| Image size (px) | full **2500×1686**, compact **2500×843** (also 1200×810, 1200×405, 800×540, 800×270). The API accepts any size inside its limits: width 800–2500, height ≥ 250, width/height ≥ 1.45 · the sizes listed are the ones the OA Manager templates use |
 | File size | max **1 MB** |
 | Tap areas | max **20** per menu (bounds x, y, width, height in image pixels) |
-| `chatBarText` | max 14 characters (รอยืนยัน) |
-| Rich menus per channel | 1,000 (รอยืนยัน) |
+| `chatBarText` | max **14** characters |
+| Rich menus per channel | **1,000** |
+| Bulk link or unlink | max **500** user IDs per call |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://developers.line.biz/en/docs/messaging-api/using-rich-menus/ · https://developers.line.biz/en/reference/messaging-api/ (rich menu image requirements)
+ตรวจล่าสุด 2026-10-26 (ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-26) · แหล่ง: https://developers.line.biz/en/reference/messaging-api/ (หัวข้อ Requirements for rich menu image · rich menu object · bulk link) · https://developers.line.biz/en/docs/messaging-api/using-rich-menus/ · ค่าในตารางนี้เป็นเพดานที่ API ของ LINE กำหนดเอง จึงใช้หน้าอ้างอิง API ทางการเป็นแหล่งหลัก (เกินเพดาน API ตอบ error ทันที)
 
 What a user sees, highest priority first: **per-user menu (API) > default menu (API) > default menu set in OA Manager**.
 
@@ -51,7 +52,7 @@ POST   https://api.line.me/v2/bot/user/{userId}/richmenu/{richMenuId}    link to
 DELETE https://api.line.me/v2/bot/user/{userId}/richmenu                 unlink → user falls back to default
 ```
 
-All calls need `Authorization: Bearer {channel access token}`. Many users at once: `POST /v2/bot/richmenu/bulk/link` (up to 500 user IDs per call, รอยืนยัน).
+All calls need `Authorization: Bearer {channel access token}`. Many users at once: `POST /v2/bot/richmenu/bulk/link` (up to 500 user IDs per call · ตรวจล่าสุด 2026-10-26 ในหน้าอ้างอิง API).
 
 A ready JSON for a 6-button full menu with the grid coordinates: [references/richmenu-6.md](references/richmenu-6.md).
 

@@ -46,7 +46,51 @@ def media_seconds(path: Path) -> float:
     return float(out.strip())
 
 
+def self_test() -> int:
+    """ตรวจตัวอ่าน data-at ด้วยเด็คตัวอย่าง · มี ffmpeg → สร้างวิดีโอ 2 แผ่นจากภาพสีพื้นกับเสียง 3 วินาทีแล้ววัดความยาว"""
+    import shutil
+    import tempfile
+    checks = []
+    with tempfile.TemporaryDirectory() as d:
+        deck = Path(d) / "deck.html"
+        deck.write_text('<section class="cover"></section><section class="slide" data-at="0:00"></section>\n'
+                        '<section data-at="1:05.5" class="slide wide"></section>', encoding="utf-8")
+        checks.append(("อ่าน data-at และข้าม section ที่ไม่ใช่สไลด์", slide_starts(deck) == [0.0, 65.5]))
+        deck.write_text('<section class="slide" data-at="0:10"></section><section class="slide" data-at="0:05"></section>',
+                        encoding="utf-8")
+        try:
+            slide_starts(deck)
+            checks.append(("ปฏิเสธ data-at ที่ลดลง", False))
+        except SystemExit:
+            checks.append(("ปฏิเสธ data-at ที่ลดลง", True))
+        if not (shutil.which("ffmpeg") and shutil.which("ffprobe")):
+            print("ข้ามการสร้างวิดีโอจริง: ไม่พบ ffmpeg/ffprobe ใน PATH")
+        else:
+            deck.write_text('<section class="slide" data-at="0:00"></section><section class="slide" data-at="0:01.5"></section>',
+                            encoding="utf-8")
+            frames, audio, out = Path(d) / "frames", Path(d) / "voice.wav", Path(d) / "ep.mp4"
+            frames.mkdir()
+            run = ["ffmpeg", "-v", "error", "-y", "-f", "lavfi"]
+            for n, colour in ((1, "navy"), (2, "white")):
+                subprocess.run([*run, "-i", f"color=c={colour}:s=320x180", "-frames:v", "1",
+                                str(frames / f"p{n:02d}.png")], check=True)
+            subprocess.run([*run, "-i", "sine=frequency=440:duration=3", str(audio)], check=True)
+            r = subprocess.run([sys.executable, __file__, str(deck), str(frames), str(audio), "-o", str(out)],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace")
+            sec = media_seconds(out) if out.exists() else 0.0
+            checks.append((f"สร้างวิดีโอจริง ยาว {sec:.2f} วินาที (เสียง 3.00)", r.returncode == 0 and abs(sec - 3.0) < 0.15))
+    for name, ok in checks:
+        print(f"{name}:", "ผ่าน" if ok else "ไม่ผ่าน")
+    ok = all(ok for _, ok in checks)
+    print("self-test", "ผ่าน" if ok else "ไม่ผ่าน")
+    return 0 if ok else 1
+
+
 def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):  # เครื่องที่ code page ไม่ใช่ UTF-8 พิมพ์ภาษาไทยผ่าน pipe แล้วล้ม
+        sys.stdout.reconfigure(encoding="utf-8")
+    if "--self-test" in sys.argv[1:]:
+        sys.exit(self_test())
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("deck", type=Path)
     ap.add_argument("frames", type=Path)
@@ -54,6 +98,7 @@ def main() -> None:
     ap.add_argument("-o", "--out", type=Path, default=Path("episode.mp4"))
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--check", action="store_true", help="พิมพ์ตารางเวลาแล้วจบ ไม่สร้างวิดีโอ")
+    ap.add_argument("--self-test", action="store_true", help="ทดสอบตัวเอง (ไม่มี ffmpeg ข้ามส่วนสร้างวิดีโอจริง)")
     a = ap.parse_args()
 
     starts = slide_starts(a.deck)

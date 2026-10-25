@@ -47,9 +47,9 @@ A calm second look before an irreversible transfer — and a first-hour plan if 
 4. **Keep evidence** — do not delete chats or block yet: screenshots with dates of the chat, profile, group, website URL, app name; transfer slips; the receiving accounts; phone numbers. List in the reference file.
 5. **Secure accounts** if you gave any code, password, ID card photo or installed an app: uninstall the app, change banking passwords from a clean device, ask the bank to block mobile banking if remote control is suspected. If you installed an app, follow `digital-hygiene` (personal-life ถ้าติดตั้ง) for the full account-takeover steps.
 6. **Never pay a "recovery" service** — anyone asking for money to get money back is the second scam.
-7. Investment scams also: report to SEC **1207**; Ponzi schemes: DSI (กรมสอบสวนคดีพิเศษ) **1202**.
+7. Investment scams also: report to SEC **1207** (press 22); Ponzi schemes: DSI (กรมสอบสวนคดีพิเศษ) **1202**. Bank complaints go to BOT ศคง. **1213** (office hours, not for a same-day hold — the bank hotline in step 1 is).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipoliceonline.go.th (official online report, with 1441), https://www.infoquest.co.th/?p=378031 (AOC 1441 one channel only), https://www.bot.or.th/content/dam/bot/documents/th/news-and-media/media-gallery/infographic/2023_04_05_tech_crime_act.pdf (bank hold, 72 hours), https://market.sec.or.th/public/idisc/th/InvestorAlert (SEC Investor Alert, SEC Check First, 1207). DSI hotline 1202 (รอยืนยัน).
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thaipoliceonline.go.th (official online report, with 1441), https://www.infoquest.co.th/?p=378031 (AOC 1441 one channel only), https://www.bot.or.th/content/dam/bot/documents/th/news-and-media/media-gallery/infographic/2023_04_05_tech_crime_act.pdf (bank hold, 72 hours), https://market.sec.or.th/public/idisc/th/InvestorAlert (SEC Investor Alert, SEC Check First, 1207). ตรวจซ้ำ 2026-10-26: 1441 · 1207 กด 22 · ธปท. 1213 เวลาทำการ · DSI 1202 ครบ 3 แหล่งรวมแหล่งทางการ ลิงก์อยู่ใน [references/red-flags-and-evidence.md](references/red-flags-and-evidence.md)
 
 ## Worked example
 

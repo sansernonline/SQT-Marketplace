@@ -11,10 +11,21 @@ import sys
 import time
 from pathlib import Path
 
-import numpy as np
-import soundfile as sf
-import torch
-import torchaudio
+INSTALL_HINT = """ยังไม่มีแพ็กเกจที่ F5-TTS-THAI ต้องใช้ ({name}) ใน python ตัวนี้: {exe}
+- รันด้วย python ของ venv ที่ติดตั้ง F5-TTS-THAI ไม่ใช่ python ของเครื่อง เช่น <F5>/venv/Scripts/python.exe
+- ยังไม่ได้ติดตั้ง: ทำตาม README ของ F5-TTS-THAI (github.com/VYNCX/F5-TTS-THAI) ใน venv ของมันเอง
+  การติดตั้ง torch กินพื้นที่หลาย GB ให้ผู้ใช้อนุมัติก่อน (video-editing หัวข้อเสียงบรรยายจากสคริปต์)
+- ไม่อยากติดตั้ง: ใช้ tts_cues.py --engine edge หรือ --engine windows แทน"""
+
+try:
+    import numpy as np
+    import soundfile as sf
+    import torch
+    import torchaudio
+except ModuleNotFoundError as e:  # ยังไม่ได้ติดตั้ง → พิมพ์วิธีแก้แทน traceback ยาว ๆ
+    sys.exit(INSTALL_HINT.format(name=e.name or "?", exe=sys.executable))
+except ImportError as e:  # ติดตั้งแล้วแต่โหลดไม่ขึ้น เช่น DLL พัง → บอกข้อความจริง
+    sys.exit(f"โหลดแพ็กเกจไม่สำเร็จ: {e}")
 
 
 def _load_with_soundfile(uri, *args, **kwargs):
@@ -25,12 +36,17 @@ def _load_with_soundfile(uri, *args, **kwargs):
 
 torchaudio.load = _load_with_soundfile  # มีผลเฉพาะใน process นี้
 
-from cached_path import cached_path  # noqa: E402  (ต้อง import หลังแทน torchaudio.load)
-from f5_tts.cleantext.th_normalize import normalize_text  # noqa: E402
-from f5_tts.infer.utils_infer import (infer_process, load_model, load_vocoder,  # noqa: E402
-                                      preprocess_ref_audio_text, remove_silence_for_generated_wav)
-from f5_tts.model import DiT  # noqa: E402
-from f5_tts.model.utils import seed_everything  # noqa: E402
+try:  # ต้อง import หลังแทน torchaudio.load
+    from cached_path import cached_path  # noqa: E402
+    from f5_tts.cleantext.th_normalize import normalize_text  # noqa: E402
+    from f5_tts.infer.utils_infer import (infer_process, load_model, load_vocoder,  # noqa: E402
+                                          preprocess_ref_audio_text, remove_silence_for_generated_wav)
+    from f5_tts.model import DiT  # noqa: E402
+    from f5_tts.model.utils import seed_everything  # noqa: E402
+except ModuleNotFoundError as e:
+    sys.exit(INSTALL_HINT.format(name=e.name or "?", exe=sys.executable))
+except ImportError as e:
+    sys.exit(f"โหลดแพ็กเกจไม่สำเร็จ: {e}")
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--root", required=True, help="โฟลเดอร์ที่ติดตั้ง F5-TTS-THAI (มี vocab/vocab.txt)")

@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: line-richmenu-trigger
+description: โจทย์ทำเมนูด้านล่างแชต LINE OA ไม่เอ่ยชื่อ skill ต้องทำให้ line-richmenu ถูกเปิด และให้ขนาดภาพ 2500 × 1686
+tags: [trigger, line-richmenu]
+runs: 3
+expected_outcome: เรียก Skill line-richmenu แล้วให้ขนาดภาพ 2500 × 1686 และจำนวนปุ่ม 6 ช่อง
+execution:
+  prompt: |
+    อยากทำเมนูปุ่มใหญ่ ๆ ด้านล่างห้องแชตของ LINE ร้านนวด มี 6 ปุ่ม: จองคิว ราคา แผนที่ โปรโมชัน รีวิว ติดต่อ
+    ต้องทำรูปขนาดเท่าไหร่ แล้วตั้งยังไง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?line-richmenu"'
+    min: 1
+    arm: with-only
+  - name: full-size
+    type: regex
+    pattern: "2500\\s*[×xX]\\s*1686"
+    match: contains
+    target: last_message

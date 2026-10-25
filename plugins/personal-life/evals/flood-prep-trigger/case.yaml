@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: flood-prep-trigger
+description: ข่าวเตือนน้ำจะเข้าหมู่บ้านใน 2 วัน ผู้ใช้ถามว่าต้องเตรียมบ้านอย่างไร ไม่เอ่ยชื่อ skill ต้องทำให้ flood-prep ถูกเปิด
+tags: [trigger, flood-prep]
+runs: 3
+expected_outcome: เรียก Skill flood-prep แล้วตอบด้วยรายการเตรียม ยกของและเอกสาร ตัดไฟที่เบรกเกอร์หลักก่อนน้ำถึงปลั๊ก ปิดวาล์วถังแก๊ส แหล่งเตือนภัยทางการ และถ่ายรูปความเสียหายไว้ขอเงินช่วยเหลือหรือเคลมประกัน
+execution:
+  prompt: |
+    ข่าวบอกว่าอีก 2 วันน้ำจะเข้าหมู่บ้านที่ปทุมธานี บ้านชั้นเดียว มีรถเก๋ง 1 คัน
+    ต้องเตรียมอะไรบ้าง ไฟฟ้ากับแก๊สต้องทำยังไง แล้วถ้าบ้านเสียหายจะขอความช่วยเหลือจากไหนได้
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?flood-prep"'
+    min: 1
+    arm: with-only
+  - name: power-safety
+    type: regex
+    pattern: "เบรกเกอร์|คัตเอาต์|สะพานไฟ"
+    match: contains
+    target: last_message

@@ -20,12 +20,12 @@
     {
       "name": "trading-finance",
       "source": "./plugins/trading-finance",
-      "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds. Uses whatever market-data plugins you already have."
+      "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have."
     },
     {
       "name": "personal-life",
       "source": "./plugins/personal-life",
-      "description": "Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits from Thai bank statements, scam defence, goals and habits, polite Thai-English messages, home and family, health organising, career, and learning (learning paths, papers to code, tech radar, certification prep, side projects, thesis writing). Works alongside email, calendar and note plugins."
+      "description": "Personal life admin for busy adults — weekly reviews, meeting prep and summaries, inbox triage, important documents with expiry dates, travel checklists, gifts, a decision journal, subscription audits, scam defence, goals and habits, polite Thai-English messages, home and family (incl. floods, wills), health (incl. pregnancy), career, and learning (learning paths, papers to code, tech radar, certification prep, side projects, thesis writing). Works alongside email, calendar and note plugins."
     },
     {
       "name": "e-commerce",
@@ -35,7 +35,7 @@
     {
       "name": "graphic-design",
       "source": "./plugins/graphic-design",
-      "description": "Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top."
+      "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist."
     }
   ]
 }

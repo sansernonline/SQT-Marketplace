@@ -44,6 +44,8 @@ General information, not engineering advice. Electrical, gas, structural and roo
 
 Costs vary by city and size — get 2 quotes; a figure marked (รอยืนยัน) is a planning guess, not a price.
 
+ตรวจล่าสุด 2026-10-26 · Season months: the กรมอุตุนิยมวิทยา (TMD) winter outlook runs mid-Oct 2569 to mid-Feb 2570, and TMD declared the rainy season on 15 May 2568 (news reports: https://www.naewna.com/n/?p=113925 · https://www.thairath.co.th/news/society/2787259 · https://www.thansettakij.com/general-news/641947); the hot season actually started late Feb to early Mar in recent years, so the table shows long-run averages — check the TMD seasonal outlook at https://www.tmd.go.th/forecast/seasonal each year. Prices and the aircon electricity figure have no official source and stay (รอยืนยัน).
+
 ## Contractor quote checklist
 
 Before paying anything, every quote must show:

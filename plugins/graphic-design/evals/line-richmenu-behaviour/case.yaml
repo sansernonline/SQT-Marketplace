@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: line-richmenu-behaviour
+description: JSON ของ rich menu ต้องมีขนาดภาพที่ API รับ chatBarText ไม่เกิน 14 ตัว และพื้นที่กดไม่เกินขอบภาพ · ไฟล์ภาพไม่เกิน 1 MB
+tags: [behaviour, line-richmenu]
+runs: 3
+expected_outcome: JSON มี size 2500 × 843 (compact) · chatBarText ≤ 14 ตัวอักษร · 3 areas ที่ x + width ≤ 2500 และ y + height ≤ 843 · บอกเพดาน 1 MB
+execution:
+  prompt: |
+    เขียน JSON rich menu แบบเตี้ย 3 ปุ่มให้ร้านซักรีด: "เรียกรถรับผ้า" "เช็กสถานะผ้า" "ราคาและโปรโมชันประจำเดือน"
+    ข้อความบนแถบแชตอยากให้เขียนว่า "แตะที่นี่เพื่อดูบริการทั้งหมดของร้าน" แล้วบอกขั้นตอนอัปโหลดด้วย
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: compact-height
+    type: regex
+    pattern: '"height"\s*:\s*843'
+    match: contains
+    target: last_message
+  - name: one-mb-limit
+    type: regex
+    pattern: "1\\s*MB"
+    match: contains
+    target: last_message
+  - name: chatbar-and-bounds
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ค่า chatBarText ใน JSON ยาวไม่เกิน 14 ตัวอักษร (ข้อความที่ผู้ใช้ขอยาวเกิน ต้องถูกย่อ และคำตอบบอกเหตุผลว่าเพดาน 14 ตัว)
+      2. มี areas 3 ช่อง และทุกช่อง bounds x + width ไม่เกิน 2500 และ y + height ไม่เกิน 843
+      3. ขั้นตอนอัปโหลดมีครบ: สร้าง rich menu · อัปโหลดภาพ · ตั้งเป็นเมนูตั้งต้นหรือผูกกับผู้ใช้

@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: estate-and-will-trigger
+description: พ่อเพิ่งเสียชีวิต ไม่มีพินัยกรรม ลูกถามว่าต้องทำอะไรและใครได้มรดก ไม่เอ่ยชื่อ skill ต้องทำให้ estate-and-will ถูกเปิด
+tags: [trigger, estate-and-will]
+runs: 3
+expected_outcome: เรียก Skill estate-and-will แล้วตอบด้วยลำดับทายาทโดยธรรม สิทธิ์ของคู่สมรสที่จดทะเบียน การขอศาลตั้งผู้จัดการมรดก และบอกว่าเป็นข้อมูลทั่วไป ควรปรึกษาทนาย
+execution:
+  prompt: |
+    พ่อเพิ่งเสียเมื่อวาน ไม่ได้ทำพินัยกรรมไว้ มีบ้าน 1 หลังกับเงินฝากธนาคาร
+    แม่ยังอยู่ จดทะเบียนสมรสกัน มีลูก 3 คน ต้องทำอะไรก่อนหลัง แล้วใครได้อะไรบ้าง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?estate-and-will"'
+    min: 1
+    arm: with-only
+  - name: executor-step
+    type: regex
+    pattern: "ผู้จัดการมรดก"
+    match: contains
+    target: last_message

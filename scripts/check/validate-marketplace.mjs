@@ -12,7 +12,7 @@
  */
 import { plan as planSuperuser, rulesCopyAction, rulesHeader } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
-import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR } from './lesson-checks.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday } from './lesson-checks.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
@@ -623,8 +623,22 @@ function selfTest() {
   const cr = loneCR('| 2026-10-25 | sync-docs ตัด \r ก่อนเทียบ |\r\n').length === 1 && loneCR('a\r\nb\r\n').length === 0 && loneCR('a\nb\n').length === 0;
   console.log(`  ${cr ? '✅' : '❌'} CR ดิบกลางบรรทัดโดนจับ · ไฟล์ CRLF และ LF ปกติไม่โดน`);
   if (cr) ok++;
+  // เหตุการณ์จริง: Imagen 4 ปิด 2026-08-17 แต่ skill ยังแนะนำอยู่ เพราะไม่มีใครเตือนเมื่อเลยวัน
+  const ex = expiredFacts([
+    { date: '2026-08-17', file: 'a.md', what: 'Imagen 4' },
+    { date: '2026-11-10', file: 'a.md', what: 'ใกล้หมด' },
+    { date: '2027-09-30', file: 'a.md', what: 'อีกนาน' },
+    { date: '2027-01-01', file: 'gone.md', what: 'ไฟล์หาย' },
+    { date: '2027-1-1', file: 'a.md', what: 'วันผิดรูป' },
+  ], '2026-10-25', (f) => f === 'a.md');
+  const d = new Date(2026, 9, 26, 0, 30);   // 00:30 ตามเวลาเครื่อง = ยังเป็นวันที่ 25 ใน UTC ถ้าเครื่องอยู่ไทย
+  const exp = ex.warns.length === 2 && ex.warns[0].includes('หมดแล้ว') && ex.warns[1].includes('อีก 16 วัน') && ex.errors.length === 2
+    && localToday(d) === '2026-10-26'
+    && expiredFacts([{ date: '2026-11-25', file: 'a.md', what: 'ขอบ 30 วัน' }], '2026-10-26', () => true).warns.length === 1;
+  console.log(`  ${exp ? '✅' : '❌'} ข้อเท็จจริงที่เลยวันหรือเหลือไม่ถึง 30 วันโดนเตือน · ไฟล์หายและวันผิดรูปโดนจับ · ที่ยังอีกนานไม่โดน`);
+  if (exp) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 19;
+  const total = cases.length + 20;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -755,6 +769,12 @@ for (const p of plugins) {
 for (const m of bigSkills(skillSizes)) warn('plugins/*/skills/*/SKILL.md', m);
 const contextFile = join(ROOT, '.claude', 'superuser', 'CONTEXT.md');
 if (existsSync(contextFile)) for (const m of decisionRows(readFileSync(contextFile, 'utf8'))) warn('.claude/superuser/CONTEXT.md', m);
+const expiryFile = join(ROOT, 'scripts', 'check', 'expiry.json');
+if (existsSync(expiryFile)) {
+  const { warns: ew, errors: ee } = expiredFacts(JSON.parse(readFileSync(expiryFile, 'utf8')).facts ?? [], localToday(), (f) => existsSync(join(ROOT, f)));
+  for (const m of ew) warn('scripts/check/expiry.json', m);
+  for (const m of ee) err('scripts/check/expiry.json', m);
+}
 for (const [rel, text] of docFiles) if (rel.startsWith('prompt/') && /^prompt-.+\.md$/.test(basename(rel))) for (const m of promptTestLine(text)) err(rel, m);
 
 // ---------------------------------------------------------------- report

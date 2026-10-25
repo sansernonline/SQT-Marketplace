@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: youtube-thumbnail-trigger
+description: ยูทูบเบอร์ถามเรื่องภาพปกคลิปและการทดสอบหลายปก ไม่เอ่ยชื่อ skill ต้องทำให้ youtube-thumbnail ถูกเปิด และบอกว่าการทดสอบตัดสินด้วยเวลาดู
+tags: [trigger, youtube-thumbnail]
+runs: 3
+expected_outcome: เรียก Skill youtube-thumbnail แล้วให้ 1280 × 720 · ข้อความสั้นอ่านออกบนมือถือ · Test & compare สูงสุด 3 แบบตัดสินด้วย watch time share ไม่ใช่ยอดกด
+execution:
+  prompt: |
+    ช่อง YouTube รีวิวมือถือของผมคนกดน้อย อยากทำปกคลิปใหม่ที่ตัวหนังสือไทยอ่านออกบนมือถือ
+    แล้วได้ยินว่า YouTube ให้ลองหลายปกได้ อยากรู้ว่าลองได้กี่แบบ และมันวัดผลจากยอดคลิกใช่ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?youtube-thumbnail"'
+    min: 1
+    arm: with-only
+  - name: size
+    type: regex
+    pattern: "1280\\s*[×xX]\\s*720"
+    match: contains
+    target: last_message
+  - name: watch-time-not-ctr
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อคำตอบบอกว่าทดสอบได้สูงสุด 3 แบบ และ YouTube ตัดสินผู้ชนะจากส่วนแบ่งเวลาดู (watch time share) ไม่ใช่อัตราการคลิก

@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: marketplace-product-images-trigger
+description: ผู้ขายถามเรื่องรูปสินค้าลง Shopee และ TikTok Shop ไม่เอ่ยชื่อ skill ต้องทำให้ marketplace-product-images ถูกเปิด และห้ามใส่ QR LINE บนรูป
+tags: [trigger, marketplace-product-images]
+runs: 3
+expected_outcome: เรียก Skill marketplace-product-images แล้วแนะนำรูป 1:1 พื้นเรียบ และบอกว่าห้ามใส่ QR code หรือ LINE บนรูป
+execution:
+  prompt: |
+    จะเอากระเป๋าผ้าทำมือขึ้นขายบน Shopee กับ TikTok Shop รูปควรถ่ายแบบไหน ขนาดเท่าไหร่
+    แล้วอยากใส่ QR LINE ร้านไว้มุมรูปด้วยให้ลูกค้าทักมาสั่งทำพิเศษ ได้ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?marketplace-product-images"'
+    min: 1
+    arm: with-only
+  - name: square-ratio
+    type: regex
+    pattern: "1\\s*:\\s*1"
+    match: contains
+    target: last_message
+  - name: refuses-qr
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อคำตอบบอกชัดว่าไม่ควรหรือห้ามใส่ QR code หรือช่องทางติดต่อ LINE บนรูปสินค้า และบอกผลที่อาจเกิด (แต้มโทษ หรือสินค้าถูกระงับ)

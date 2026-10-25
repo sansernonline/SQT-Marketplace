@@ -123,12 +123,28 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 SQT-Marketplace/
 ├── .claude-plugin/marketplace.json
 ├── plugins/software-company/
-│   ├── agents/      41 บทบาท
-│   ├── skills/      111 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
+│   ├── agents/      38 บทบาท
+│   ├── skills/      95 skill + 29 คำสั่ง (คำสั่งตั้ง disable-model-invocation: true)
 │   └── (hook อยู่ใน plugins/superuser/hooks/ · ใช้ร่วมทาง dependencies)
+├── plugins/superuser · e-commerce · trading-finance · personal-life · graphic-design
 ├── docs/            INSTALL · USAGE · REFERENCE · PLUGINS (ไฟล์นี้)
 └── README.md
 ```
+
+---
+
+## plugin ชีวิตประจำวันรุ่นปัจจุบัน
+
+จำนวน agent · skill · คำสั่ง ที่อัปเดตตามของจริงอยู่ในตารางของ [`README.md`](../README.md) (สร้างจาก `sync-docs`) · แผนผังของแต่ละ plugin อยู่ใน [`docs/plugins/`](plugins/README.md)
+
+| plugin | รุ่น | เพิ่มล่าสุด (2026-10-26) | ก่อนขึ้น 1.0.0 |
+|---|---|---|---|
+| `trading-finance` | 0.13.0 | skill เครดิตบูโร · ปรับพอร์ตและ DCA · พันธบัตรและเงินฝาก · รีไฟแนนซ์บ้าน | ใช้จริง 2–3 สัปดาห์ · รัน eval 8 เคส |
+| `personal-life` | 0.15.0 | skill มรดกและพินัยกรรม · ตั้งครรภ์และลูกเล็ก · เตรียมรับน้ำท่วม | ใช้จริง 2–3 สัปดาห์ · รัน eval 9 เคส |
+| `graphic-design` | 0.12.0 | skill รูปสินค้าบน marketplace · ไฟล์ส่งโรงพิมพ์ · ปกคลิป YouTube | ใช้จริง 2–3 สัปดาห์ · รัน eval 26 เคส |
+| `e-commerce` | 1.1.0 | skill บัญชี SME · กระแสเงินสด | ขึ้น 1.0.0 แล้วเพราะรวม plugin |
+
+ข้อเท็จจริงที่หมดอายุตามปฏิทินของทุก plugin อยู่ใน `scripts/check/expiry.json` ตัวตรวจเตือนเมื่อเหลือไม่ถึง 30 วัน
 
 ---
 
