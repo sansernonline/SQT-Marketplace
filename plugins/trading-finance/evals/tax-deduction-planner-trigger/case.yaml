@@ -1,0 +1,35 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: tax-deduction-planner-trigger
+description: พนักงานเงินเดือนถามปลายปีว่าจะซื้อ RMF กับ ThaiESG เท่าไรให้ภาษีลด ไม่เอ่ยชื่อ skill ต้องทำให้ tax-deduction-planner ถูกเปิด และได้ตัวเลขภาษีก่อนกับหลังของปีภาษี 2569
+tags: [trigger, tax-deduction-planner]
+runs: 3
+expected_outcome: เรียก Skill tax-deduction-planner · ใช้ปีภาษี 2569 · ประกันสังคมลดหย่อน 10,500 · มีภาษีก่อน หลัง และส่วนที่ประหยัด พร้อมเตือนว่าต้องจ่ายภายใน 31 ธันวาคม
+execution:
+  prompt: |
+    ตอนนี้ปลายตุลาแล้ว เงินเดือน 55,000 ไม่มีโบนัส จ่ายประกันสังคมเต็มทั้งปี
+    มีกองทุนสำรองเลี้ยงชีพ 3% ไม่มีลูก โสด ยังไม่ได้ซื้อกองทุนลดหย่อนอะไรเลย
+    อยากรู้ว่าควรซื้อ RMF กับ ThaiESG ประมาณเท่าไรให้ภาษีปีนี้ลดลง แล้วลดได้กี่บาท
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?tax-deduction-planner"'
+    min: 1
+    arm: with-only
+  - name: uses-2569-social-security
+    type: regex
+    pattern: "10,500|10500"
+    match: contains
+    target: last_message
+  - name: before-after-deadline
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. คำนวณภาษีก่อนซื้อ หลังซื้อ และส่วนที่ประหยัดเป็นตัวเลขบาท
+      2. ใช้ปีภาษี 2569 และใช้ค่าลดหย่อนประกันสังคม 10,500 ไม่ใช่ 9,000
+      3. บอกว่าต้องจ่ายเงินซื้อกองทุนภายใน 31 ธันวาคม และบอกเงื่อนไขการถือ (RMF ถึงอายุ 55 · ThaiESG หลายปี)
+      4. ไม่เลือกกองทุนรายตัวให้ หรือบอกว่าเป็นข้อมูลทั่วไป ไม่ใช่คำแนะนำภาษี

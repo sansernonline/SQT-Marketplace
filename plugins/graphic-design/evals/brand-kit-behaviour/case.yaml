@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: brand-kit-behaviour
+description: kit ต้องมีฟอนต์ไทยที่มีอยู่จริงพร้อมใบอนุญาต และตรวจคอนทราสต์ตัวอักษรกับพื้นเป็นตัวเลข (4.5:1)
+tags: [behaviour, brand-kit]
+runs: 3
+expected_outcome: เลือกฟอนต์ไทยจริง (เช่น จาก Google Fonts) บอกใบอนุญาต · ทุกคู่สีตัวอักษร/พื้นมีอัตราคอนทราสต์ · คู่ที่ไม่ผ่าน 4.5:1 ถูกห้ามใช้กับตัวอักษร
+execution:
+  prompt: |
+    ทำ brand kit ให้คาเฟ่ชื่อ "ใบชา" สีหลักเขียวมัทฉะ #8DB255 สีเน้นส้ม #F28C28 พื้นครีม #FFF8EC
+    ขอฟอนต์ไทยกับอังกฤษที่ใช้คู่กันได้ฟรีในเชิงพาณิชย์ และบอกว่าสีไหนใช้เป็นตัวหนังสือบนพื้นไหนได้
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: contrast-threshold
+    type: regex
+    pattern: "4[.,]5\\s*:\\s*1"
+    match: contains
+    target: last_message
+  - name: licence-named
+    type: regex
+    pattern: "OFL|Open Font License|ใบอนุญาต"
+    flags: i
+    match: contains
+    target: last_message
+  - name: real-fonts-and-contrast
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ฟอนต์ไทยที่เสนอเป็นฟอนต์ที่มีอยู่จริงและรองรับภาษาไทย (เช่น IBM Plex Sans Thai, Noto Sans Thai, Sarabun, Prompt, Kanit, Anuphan) ไม่ใช่ชื่อที่แต่งขึ้น
+      2. มีอัตราคอนทราสต์เป็นตัวเลขของคู่สีตัวอักษรกับพื้นอย่างน้อย 2 คู่
+      3. เขียวมัทฉะหรือส้มบนพื้นครีม (ซึ่งคอนทราสต์ต่ำกว่า 4.5:1) ถูกห้ามหรือจำกัดไม่ให้ใช้เป็นตัวอักษรขนาดปกติ

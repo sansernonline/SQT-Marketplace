@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: social-formats-trigger
+description: โจทย์ร้านค้าขอขนาดภาพหลายแพลตฟอร์ม ไม่เอ่ยชื่อ skill ต้องทำให้ social-formats ถูกเปิด และให้ขนาด 9:16 เป็น 1080 × 1920
+tags: [trigger, social-formats]
+runs: 3
+expected_outcome: เรียก Skill social-formats แล้วตอบขนาดที่ตรงตาราง platform-sizes.md พร้อมพื้นที่ปลอดภัยของสตอรี่
+execution:
+  prompt: |
+    ร้านเบเกอรี่ของฉันจะโปรโมตเค้กวันเกิดลง IG feed, IG story และ TikTok
+    ต้องเตรียมภาพขนาดเท่าไหร่บ้าง แล้วตัวหนังสือควรวางตรงไหนไม่ให้โดนปุ่มบัง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?social-formats"'
+    min: 1
+    arm: with-only
+  - name: vertical-size
+    type: regex
+    pattern: "1080\\s*[×xX]\\s*1920"
+    match: contains
+    target: last_message

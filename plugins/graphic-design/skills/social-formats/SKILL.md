@@ -35,13 +35,14 @@ All pixel sizes and safe zones are in [platform-sizes.md](references/platform-si
 | Placement | Keep text and logos out of |
 |---|---|
 | Meta Stories and Reels (9:16) | Top **14%**, bottom **35%**, **6%** each side |
-| TikTok | Right column (like/share buttons), bottom caption area, top account bar — use TikTok's official template; sizes vary with caption length |
-| YouTube channel banner | Everything outside the centre 1235 × 338 of a 2048 × 1152 canvas (รอยืนยัน) |
+| TikTok (9:16) | On 1080 × 1920: top **240 px**, bottom **660 px**, **120 px** each side, plus a **180 px** strip on the right over the lower 1080 px (buttons) — TikTok's in-feed template, scaled from 720 × 1280; longer captions take more room |
+| YouTube Shorts (9:16) | On 1080 × 1920: top **288 px**, bottom **672 px**, left **48 px**, right **192 px** (Google Ads figure for ads in Shorts · using it for ordinary Shorts is our inference, no official organic figure found) |
+| YouTube channel banner | Everything outside the centre 1235 × 338 of a 2048 × 1152 canvas (official page only · รอยืนยัน) |
 | Facebook page cover | Outer edges — mobile and desktop crop differently; keep text in the centre |
 | LinkedIn profile cover | Bottom-left, where the profile photo overlaps |
 | LINE OA profile | Corners — the image is shown in a circle |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.facebook.com/business/ads-guide/update/image/instagram-story · https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads
+ตรวจล่าสุด 2026-10-06 (Meta) · 2026-10-26 (TikTok · YouTube) · แหล่ง: https://www.facebook.com/business/ads-guide/update/image/instagram-story · https://ads.tiktok.com/help/article/tiktok-auction-in-feed-ads (ไฟล์แม่แบบ In-Feed) · https://support.google.com/google-ads/answer/9128498 · https://support.google.com/youtube/answer/10456525 · ตัวเลข TikTok และ Shorts ตรงกับคู่มือที่ไม่ใช่ทางการอีก 2 แหล่งต่อแพลตฟอร์ม (รายการใน platform-sizes.md)
 
 ## Rules
 

@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: pregnancy-and-baby-trigger
+description: ผู้ใช้เพิ่งรู้ว่าตั้งครรภ์ 7 สัปดาห์ ถามว่าต้องฝากครรภ์เมื่อไรและได้สิทธิ์ประกันสังคมอะไร ไม่เอ่ยชื่อ skill ต้องทำให้ pregnancy-and-baby ถูกเปิด
+tags: [trigger, pregnancy-and-baby]
+runs: 3
+expected_outcome: เรียก Skill pregnancy-and-baby แล้วตอบว่าควรฝากครรภ์ก่อน 12 สัปดาห์ บอกสิทธิ์คลอดบุตรของประกันสังคมพร้อมแหล่ง และบอกอาการอันตรายที่ต้องโทร 1669
+execution:
+  prompt: |
+    เพิ่งตรวจเจอว่าท้องได้ประมาณ 7 สัปดาห์ค่ะ ทำงานบริษัทมีประกันสังคม
+    ต้องไปฝากครรภ์เมื่อไร ต้องไปกี่ครั้ง แล้วประกันสังคมจ่ายค่าคลอดเท่าไร
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?pregnancy-and-baby"'
+    min: 1
+    arm: with-only
+  - name: emergency-number
+    type: regex
+    pattern: "1669"
+    match: contains
+    target: last_message

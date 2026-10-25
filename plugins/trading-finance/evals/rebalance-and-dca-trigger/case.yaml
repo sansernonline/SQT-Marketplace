@@ -1,0 +1,35 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: rebalance-and-dca-trigger
+description: พอร์ตกองทุนหุ้นโตจนสัดส่วนเพี้ยนจากแผน ไม่เอ่ยชื่อ skill ต้องทำให้ rebalance-and-dca ถูกเปิด และได้ตารางปรับสัดส่วนที่คำนวณจริง
+tags: [trigger, rebalance-and-dca]
+runs: 3
+expected_outcome: เรียก Skill rebalance-and-dca · คำนวณสัดส่วนตอนนี้เทียบเป้า · เสนอปรับด้วยเงินใหม่ก่อนขายของเดิม · บอกเรื่องค่าธรรมเนียมและเงื่อนไข RMF หรือ ThaiESG ถ้าเกี่ยว
+execution:
+  prompt: |
+    ตั้งใจถือหุ้น 60 ตราสารหนี้ 40 แล้วลงทุนรายเดือนเดือนละ 10,000 มา 3 ปี
+    ตอนนี้กองทุนหุ้นไทยกับหุ้นโลกรวมกัน 780,000 กองตราสารหนี้ 320,000
+    ควรทำอะไรกับพอร์ตไหม หรือปล่อยไว้แบบนี้
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?rebalance-and-dca"'
+    min: 1
+    arm: with-only
+  - name: computes-drift
+    type: regex
+    pattern: "71|70\\.9"
+    match: contains
+    target: last_message
+  - name: rebalance-plan
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. คำนวณว่าหุ้นตอนนี้ราว 71% ของพอร์ต 1,100,000 เทียบเป้า 60%
+      2. เสนอทางปรับเป็นตัวเลขบาท (เช่น ย้ายราว 120,000 ไปตราสารหนี้ หรือใส่เงินรายเดือนลงตราสารหนี้ก่อน)
+      3. เตือนเรื่องค่าธรรมเนียม ภาษี หรือเงื่อนไขกองทุนลดหย่อนก่อนขายหรือสับเปลี่ยน
+      4. ไม่เลือกกองทุนรายตัวให้

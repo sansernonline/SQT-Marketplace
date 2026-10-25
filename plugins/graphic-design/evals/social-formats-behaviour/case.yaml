@@ -1,0 +1,32 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: social-formats-behaviour
+description: ขนาดและพื้นที่ปลอดภัยต้องตรงตาราง platform-sizes.md (feed 4:5 1080 × 1350 · story ล่าง 35%) และตัวเลขที่ยังรอยืนยันต้องบอกผู้ใช้
+tags: [behaviour, social-formats]
+runs: 3
+expected_outcome: ให้ 1080 × 1350 สำหรับ feed · บอกให้เว้นล่าง 35% ของสตอรี่ · ขนาดภาพโพสต์ X บอกว่ายังไม่ยืนยัน · ไม่ใช้ CMYK กับงานจอ
+execution:
+  prompt: |
+    ทำตารางขนาดภาพให้ทีมหน่อย ใช้กับแคมเปญลดราคาปลายปี: Instagram feed, Instagram story, รูปในโพสต์ X
+    บอกด้วยว่าแต่ละอันต้องเว้นขอบตรงไหน และตัวเลขไหนมั่นใจได้แค่ไหน
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: feed-size
+    type: regex
+    pattern: "1080\\s*[×xX]\\s*1350"
+    match: contains
+    target: last_message
+  - name: story-bottom-35
+    type: regex
+    pattern: "(?i)(story|สตอรี่)[^\\n]{0,80}35\\s*%|35\\s*%[^\\n]{0,80}(story|สตอรี่)"
+    match: contains
+    target: last_message
+  - name: flags-unconfirmed
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. มีตารางขนาดของ 3 ตำแหน่งที่โจทย์ขอ
+      2. บอกพื้นที่ปลอดภัยของ story (บน ล่าง ข้าง) เป็นตัวเลข
+      3. ขนาดรูปในโพสต์ X ถูกบอกว่ายังไม่ยืนยันหรือให้ตรวจที่หน้าแพลตฟอร์มก่อน ไม่ได้พูดเหมือนเป็นค่าทางการแน่นอน

@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: print-ready-files-trigger
+description: ผู้ใช้จะส่งนามบัตรจาก Canva ไปโรงพิมพ์ ไม่เอ่ยชื่อ skill ต้องทำให้ print-ready-files ถูกเปิด และบอกระยะตัดตก 3 มม. กับ CMYK
+tags: [trigger, print-ready-files]
+runs: 3
+expected_outcome: เรียก Skill print-ready-files แล้วบอก CMYK · ระยะตัดตก 3 มม. · 300 ppi · ฟอนต์ไทยแปลงเป็นเส้นหรือฝังใน PDF · ให้ถามร้านก่อน
+execution:
+  prompt: |
+    ออกแบบนามบัตรใน Canva เสร็จแล้ว จะส่งให้ร้านพิมพ์แถวบ้านพิมพ์ 200 ใบ
+    ครั้งก่อนส่งไปตัวหนังสือไทยเพี้ยนกับขอบมีเส้นขาว ต้องเตรียมไฟล์ยังไง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?print-ready-files"'
+    min: 1
+    arm: with-only
+  - name: bleed-3mm
+    type: regex
+    pattern: "3\\s*(มม|mm|มิลลิเมตร)"
+    match: contains
+    target: last_message
+  - name: cmyk
+    type: regex
+    pattern: "CMYK"
+    match: contains
+    target: last_message

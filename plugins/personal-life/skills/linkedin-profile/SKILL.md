@@ -75,6 +75,8 @@ Ask for 2–3, from a manager, a client and a peer — one each. Make it easy: s
 - Photo: face filling ~60% of the frame, plain background; banner 1,584 × 396 px with domain or city — keep the left third clear where the photo overlaps on desktop (banner size as commonly published; LinkedIn help page for personal profiles not found on 2026-10-23 → รอยืนยัน)
 - Contact: email you check; no phone number in public fields
 
+ตรวจล่าสุด 2026-10-26 · banner 1,584 × 396 px (4:1, JPG or PNG under 8 MB) agrees across secondary guides (https://linearity.io/blog/linkedin-size-guide/ · https://magicstudio.com/blog/linkedin-background-photo/) · the official LinkedIn help page found (https://www.linkedin.com/help/linkedin/answer/a563309) covers company Pages only (cover 1,512 × 256 px), so the personal banner size stays (รอยืนยัน) — tell the user it is the commonly published size, not an official one
+
 ## Checklist
 
 - [ ] Headline has target title + 2 keywords + proof
