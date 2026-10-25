@@ -1,9 +1,11 @@
 /**
- * lesson-checks.mjs — ตัวตรวจจากบทเรียนของทีม 4 ข้อ (ใช้จาก validate-marketplace.mjs)
+ * lesson-checks.mjs — ตัวตรวจจากบทเรียนของทีม 6 ข้อ (ใช้จาก validate-marketplace.mjs)
  *   1. plugin ที่ติดตั้งในเครื่องเก่ากว่า repo        → warning
  *   2. eval -regression ที่ยังไม่เคยเห็น agent พลาดจริง → error (ต้องชื่อ -guard)
  *   3. ข้อความอ้างว่าทดสอบ/วัดจริง ต้องมีวันที่ในบรรทัดเดียวกัน → warning (จับจากคำ จึงมีบรรทัดตัวอย่างหลุดมาได้)
  *   4. prompt-*.md ต้องมีบรรทัด "ทดสอบจริง: <วันที่ · ฉบับ>" หรือ "ยังไม่ได้ทดสอบจริง" → error
+ *   5. SKILL.md ใหญ่เกิน 20,000 ไบต์ → warning บรรทัดเดียว
+ *   6. ตาราง "การตัดสินใจ" ใน .claude/superuser/CONTEXT.md เกิน 20 แถว → warning
  * ทุกฟังก์ชันรับข้อความเข้าและคืนรายการปัญหา (ข้อความ หรือ {at, msg} ของข้อ 3) ไม่อ่านไฟล์เอง (ยกเว้น installedOlder ที่รับ path)
  */
 import { readFileSync, existsSync } from 'node:fs';
@@ -60,4 +62,18 @@ export function undatedClaims(text) {
 export function promptTestLine(text) {
   return /^(?:ทดสอบจริง: \S.*|ยังไม่ได้ทดสอบจริง.*)$/m.test(text) ? []
     : [`ไม่มีบรรทัด "ทดสอบจริง: <วันที่ · ฉบับ>" หรือ "ยังไม่ได้ทดสอบจริง" ใต้หัวข้อ`];
+}
+
+// 5. SKILL.md ใหญ่ · หลังบีบ context Claude Code แนบ skill กลับแค่ราว 5,000 token แรก (code.claude.com/docs/en/skills ตรวจ 2026-10-25) · sizes = [{ rel, bytes }] · เตือนบรรทัดเดียว
+export function bigSkills(sizes, limit = 20000) {
+  const big = sizes.filter((s) => s.bytes > limit).sort((a, b) => b.bytes - a.bytes);
+  return big.length ? [`SKILL.md เกิน ${limit} ไบต์ ${big.length} ไฟล์ (ใหญ่สุด: ${big.slice(0, 3).map((s) => `${s.rel} ${s.bytes}`).join(' · ')}) · หลังบีบ context กฎท้ายไฟล์อาจหาย ให้กฎที่ห้ามข้ามอยู่ต้นไฟล์`] : [];
+}
+
+// 6. ตาราง "การตัดสินใจ" ใน CONTEXT.md เก็บ 20 แถวล่าสุด (decision-log บรรทัด 14) · เกิน → ย้ายแถวเก่าไป HISTORY.md
+export function decisionRows(text, cap = 20) {
+  const sec = text.split(/\r?\n## /).find((s) => s.startsWith('การตัดสินใจ'));
+  if (!sec) return [];
+  const rows = sec.split(/\r?\n/).filter((l) => l.startsWith('|') && !/^\|[\s:|-]+\|\s*$/.test(l)).length - 1;
+  return rows > cap ? [`ตาราง "การตัดสินใจ" มี ${rows} แถว เกิน ${cap} · ย้ายแถวเก่าไป HISTORY.md`] : [];
 }

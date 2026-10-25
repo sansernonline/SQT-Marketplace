@@ -14,7 +14,7 @@ scripts/
 
 | กลุ่ม | ไฟล์ | ทำอะไร | รันเมื่อไหร่ |
 |---|---|---|---|
-| — | `build-dist.cmd` | รัน validate → sync-docs → sync-file-map → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันสามตัวทีละคำสั่ง |
+| — | `build-dist.cmd` | รัน validate → `claude plugin validate --strict` (ตัวตรวจทางการ ข้ามถ้าเครื่องไม่มี Claude Code) → sync-docs → sync-file-map → build-targets ต่อกัน หยุดทันทีถ้าขั้นไหนล้ม (ดับเบิลคลิกได้) | **ก่อน commit** แทนการรันทีละคำสั่ง |
 | **check** | `check/validate-marketplace.mjs` | ตรวจ frontmatter / ชื่อ / ความยาว ของทุก skill · agent · plugin | **ก่อน commit ทุกครั้ง** |
 | check | `check/facts.json` | ข้อเท็จจริงไทยที่หลายไฟล์อ้างถึง (ฐานประกันสังคม · ลาคลอด · เกณฑ์ VAT · คุ้มครองเงินฝาก · 1441 · ภาษีขั้นสูงสุด) — `validate-marketplace` ตรวจว่าทุกไฟล์ในรายการยังมีค่าปัจจุบัน | **อัตราเปลี่ยน** → แก้ `value` ที่นี่ แล้วรันตรวจ จะได้รายชื่อไฟล์ที่ต้องตามแก้ |
 | check | `check/audit-plugin-prompt.md` | prompt ให้ Claude Code ตรวจ plugin ในเรื่องที่สคริปต์ตรวจไม่ได้ เลือกได้ 12 หัวข้อ: ยาวเกิน · กระชับได้ · ทำงานซ้อน · เช็กลิสต์ Anthropic · ความปลอดภัย · การส่งมอบ · วัดผลจริง · ประหยัด token (หัวข้อนี้แก้ให้ด้วย) · ความเร็ว · ความเสถียร · รับมือเมื่อพลาด · ผลข้างเคียง | หลังเพิ่ม skill หลายตัว · ก่อนขึ้นเลขรุ่น · ทุกไตรมาส |
@@ -93,12 +93,9 @@ loader ทิ้ง field ทุกตัว → **skill ไม่เคยถ�
 powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps1
 ```
 
-## ใส่ใน CI
+## CI
 
-```yaml
-- run: node scripts/check/validate-marketplace.mjs --self-test
-- run: node scripts/check/validate-marketplace.mjs
-```
+`.github/workflows/check.yml` รันทุก push เข้า `main` และทุก PR บน Ubuntu และ Windows: self-test ของตัวตรวจ · ตรวจทั้ง repo · ของกลาง superuser · แผนผังไฟล์ · กฎร่วมของ prompt · hook self-test · และสร้าง `dist/` ใหม่เทียบกับที่ commit ไว้ (ต่างกัน = ลืมรัน `build-dist.cmd`) · ใช้แค่ Node ไม่ติดตั้งอะไรเพิ่ม
 
 ---
 
@@ -106,8 +103,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\<ชื่อไฟล์>.ps
 
 | ไฟล์ | สถานะ |
 |---|---|
-| `validate-marketplace.mjs` | ✅ รันจริงกับทั้งรีโป + `--self-test` ผ่าน 4/4 |
-| `install-marketplace.ps1` | ✅ ทดสอบบน PowerShell 7.4 ครบทุกเส้นทาง |
+| `validate-marketplace.mjs` | รันจริงกับทั้งรีโป + `--self-test` ผ่าน 24/24 (2026-10-25) |
+| `install-marketplace.ps1` | ทดสอบบน PowerShell 7.4 ครบทุกเส้นทาง |
 
 ---
 

@@ -33,7 +33,7 @@ repo นี้มี AI หลายตัวแก้พร้อมกัน (
 
 ```bash
 node scripts/check/validate-marketplace.mjs      # error ต้องเป็น 0
-scripts\build-dist.cmd                           # validate → sync-docs → sync-file-map → build-targets
+scripts\build-dist.cmd                           # validate → claude plugin validate --strict → sync-docs → sync-file-map → build-targets
 ```
 
 แก้อะไรใน `plugins/superuser` → รัน `node scripts/sync/sync-superuser.mjs` ก่อน · รายละเอียดสคริปต์ทั้งหมดอยู่ใน `scripts/README.md`

@@ -3,6 +3,9 @@
   "owner": {
     "name": "Square Tech Solutions Co., Ltd."
   },
+  "metadata": {
+    "description": "Thai-first agent teams for Claude Code: a SuperUser team lead plus domain plugins for software work, e-commerce and SME back office, trading and personal money, personal life admin, and graphic design."
+  },
   "plugins": [
     {
       "name": "superuser",
