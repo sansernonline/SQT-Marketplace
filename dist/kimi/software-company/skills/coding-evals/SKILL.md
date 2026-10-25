@@ -27,7 +27,7 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 | 7 | SQL | query รายงานยอดขายรายเดือน ช้าเกิน 2 วินาทีบนข้อมูล 1 ล้านแถว | เวลารันและ plan · ผลตรงกับคำตอบ |
 | 8 | SQL | migration เพิ่มคอลัมน์ NOT NULL บนตารางใหญ่ โดยไม่ล็อกนาน | รันซ้ำได้ · ไม่มี downtime ในสคริปต์ |
 
-ชุดงานอยู่ใน SQT-Marketplace ที่ `evals/coding/tasks/c<เลข>-<ชื่อ>/` (ไม่อยู่ใน plugin): `TASK.md` (คำสั่งที่ส่งให้ทีม) · `task.json` · `repo/` (โค้ดตั้งต้น) · `hidden/` (test ที่ทีมห้ามเห็น) · `reference/` (คำตอบอ้างอิง) · `check.mjs` · กติกาเต็มใน `evals/coding/CONTRACT.md`
+ชุดงานอยู่ใน SQT-Marketplace ที่ `scripts/evals/coding/tasks/c<เลข>-<ชื่อ>/` (ไม่อยู่ใน plugin): `TASK.md` (คำสั่งที่ส่งให้ทีม) · `task.json` · `repo/` (โค้ดตั้งต้น) · `hidden/` (test ที่ทีมห้ามเห็น) · `reference/` (คำตอบอ้างอิง) · `check.mjs` · กติกาเต็มใน `scripts/evals/coding/CONTRACT.md`
 
 ## 2 · คะแนนต่องาน (เต็ม 10)
 
@@ -43,11 +43,11 @@ description: Use when changing coding skills, playbooks or the developer agent, 
 
 ## 3 · วิธีรัน
 
-สคริปต์ `evals/coding/run-coding.mjs` ทำทุกขั้นให้ (วิธีใช้เต็มใน `evals/coding/README.md`)
+สคริปต์ `scripts/evals/coding/run-coding.mjs` ทำทุกขั้นให้ (วิธีใช้เต็มใน `scripts/evals/coding/README.md`)
 
 ```powershell
-node evals/coding/run-coding.mjs --verify                     # ตรวจชุดงานก่อน: โค้ดตั้งต้นต้องตก · คำตอบอ้างอิงต้องผ่านครบ
-node evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # รุ่นก่อน = commit ล่าสุด · รุ่นหลัง = ไฟล์ที่แก้อยู่
+node scripts/evals/coding/run-coding.mjs --verify                     # ตรวจชุดงานก่อน: โค้ดตั้งต้นต้องตก · คำตอบอ้างอิงต้องผ่านครบ
+node scripts/evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # รุ่นก่อน = commit ล่าสุด · รุ่นหลัง = ไฟล์ที่แก้อยู่
 ```
 
 1. ทุกรอบรันในโฟลเดอร์ใหม่ใต้ `_to_delete/coding-bench/runs/` โหลด plugin ที่เทียบพร้อม `superuser` รุ่นเดียวกัน (ไม่โหลด plugin ที่ติดตั้งในเครื่อง) แล้วส่งคำสั่งเดียวกันให้ `superuser` ตรงตัว ไม่ช่วยเพิ่ม
@@ -57,7 +57,7 @@ node evals/coding/run-coding.mjs --old HEAD --tasks c1,c5     # รุ่นก�
 
 ## 4 · รายงานผล
 
-สคริปต์เพิ่มแถวใน `evals/coding/RESULTS.md` เอง (1 แถวต่อรุ่น) · ผลรายรอบอยู่ใน `_to_delete/coding-bench/runs/`:
+สคริปต์เพิ่มแถวใน `scripts/evals/coding/RESULTS.md` เอง (1 แถวต่อรุ่น) · ผลรายรอบอยู่ใน `_to_delete/coding-bench/runs/`:
 
 | วันที่ | เวอร์ชัน | งาน 1–8 | รวม /80 | เวลา | หมายเหตุ |
 |---|---|---|---|---|---|

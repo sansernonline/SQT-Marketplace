@@ -34,7 +34,7 @@ scripts\build-dist.cmd                                                       # �
 | **`thai-workplace`** | 4 | 21 | 8 | งานไทย: LINE OA, เอกสาร, ภาษี (รวมภาษีคนขายออนไลน์), เงินเดือน, กฎหมายแรงงาน, PDPA, พร้อมเพย์ |
 | **`e-commerce`** | 4 | 12 | 6 | ซื้อขายออนไลน์ทั้งสองฝั่ง — ขาย: Shopee · Lazada · TikTok Shop · LINE · ไลฟ์ · สต็อก · ซื้อ: เทียบก่อนซื้อ ประกัน ร้องเรียน สคบ. ขอคืนเงิน (รวม `online-seller` + `consumer-rights` เดิม) |
 | **`graphic-design`** | 5 | 15 | 6 | งานครีเอทีฟ: แบรนด์, ภาพ/วิดีโอ AI, โซเชียล |
-| **`reverse-engineer`** | 1 | 7 | 1 | reverse engineer แอป/ไบนารี/เว็บ/APK โดยไม่มี source — สถาปัตยกรรมลอกจาก REA: จุดเข้าเดียว หลักฐานทุกข้อสรุป แล้วสร้าง implementation ของตัวเอง |
+| **`reverse-engineer`** | 1 | 9 | 1 | reverse engineer แอป/ไบนารี/เว็บ/APK โดยไม่มี source — สถาปัตยกรรมลอกจาก REA: จุดเข้าเดียว หลักฐานทุกข้อสรุป แล้วสร้าง implementation ของตัวเอง |
 
 > plugin ชีวิตประจำวันยังเป็นรุ่น v0.x · ตัวเลขภาษี กฎหมาย และอัตราต่าง ๆ ตรวจกับแหล่งทางการแล้วเมื่อ 6 ต.ค. 2569 · ตัวเลขที่ยังไม่ยืนยันมีป้าย (รอยืนยัน) · spec ดูที่ [docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน](docs/PLUGINS.md#️-roadmap--plugin-ชีวิตประจำวัน)
 > ตั้งแต่ v2.0.0 สาขาเฉพาะทาง (fintech · AI · healthcare · e-commerce · game · IoT · security operations · SaaS · devtools · mobile · web3 · legal · insurance) รวมอยู่ใน software-company ตัวเดียว · ตารางว่าอะไรย้ายไปไหนอยู่ที่ [docs/PLUGINS.md](docs/PLUGINS.md)
@@ -134,7 +134,7 @@ SuperUser ทำงานอย่างไร → [docs/plugins/software-compan
 | [docs/SKILL-LEVELS.md](docs/SKILL-LEVELS.md) | 4 ระดับที่เก็บ skill ได้ และเรียกใช้ยังไง |
 | [docs/IDEAS.md](docs/IDEAS.md) | ไอเดียปรับปรุงที่สำรวจไว้ (ของเก่า เก็บไว้อ้างอิง) |
 | [scripts/README.md](scripts/README.md) | สคริปต์ทั้งหมด · build-dist · ติดตั้งกฎประจำตัว |
-| [evals/README.md](evals/README.md) | ชุดวัดผลจริง: เปิด skill ถูกตัว (triggers) · ความเร็ว (speed) · คุณภาพโค้ด (coding) · รันเมื่อไร ค่าใช้จ่ายเท่าไร |
+| [scripts/evals/README.md](scripts/evals/README.md) | ชุดวัดผลจริง: เปิด skill ถูกตัว (triggers) · ความเร็ว (speed) · คุณภาพโค้ด (coding) · รันเมื่อไร ค่าใช้จ่ายเท่าไร |
 
 ---
 

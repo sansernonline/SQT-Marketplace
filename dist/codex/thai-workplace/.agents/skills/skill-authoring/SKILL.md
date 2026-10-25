@@ -12,7 +12,7 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 ## ใช้เมื่อ
 
 - สร้าง skill agent หรือ playbook ใหม่ใน `plugins/<plugin>/` · แก้ description หรือย้าย skill ข้าม plugin
-- เขียนหรือแก้ eval ของ skill · `/skill-doctor` หรือ `evals/triggers` บอกว่า skill ไม่ถูกเรียก
+- เขียนหรือแก้ eval ของ skill · `/skill-doctor` หรือ `scripts/evals/triggers` บอกว่า skill ไม่ถูกเรียก
 - ตรวจ skill ที่คนอื่นเขียนก่อนรวม
 
 ไม่ใช้เมื่อ: บทเรียนจากงานยังไม่ได้กรอง → `session-lessons-to-skills` ก่อน (ที่นั่นตัดสินว่าแก้ skill ไหน แล้วมาที่นี่เพื่อแก้ให้ถูกแบบ) · ความผิดซ้ำที่ทำเป็นตัวตรวจอัตโนมัติได้ → `repeated-mistakes-to-checks` · หัวหน้าทีมแจกงานเขียน skill เป็นหลายขั้นให้ลูกทีม → playbook `skill-authoring` ใน plugin `software-company` (`skills/superuser/references/playbook-skill-authoring.md` ขั้น 5 ทดสอบปิดตา) ซึ่งใช้กฎในไฟล์นี้
@@ -86,7 +86,7 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 - โจทย์ต้องเป็นงานที่ agent ทำไม่ได้ดีโดยไม่มี skill — โจทย์ง่ายเกินไปทั้ง 2 รอบผ่านหมด วัดอะไรไม่ได้ (`จากแหล่ง` skill-creator) · ค่าเริ่มต้นรัน 3 รอบต่อเคส ทั้งรอบมี plugin และไม่มี แล้วรายงาน `WITH` `W/OUT` `Δ`
 - รัน: `claude plugin eval plugins/<plugin> --trust-plugin --case "<skill>-*" --no-publish --max-cost-usd 5` · ใน CI เพิ่ม `--json results.json --threshold 0.8` และอ่าน exit code (0 ผ่าน · 1 ไม่ผ่าน · 2 ชนเพดานเงินหรือ auth)
 - ใส่ `evals/results/` ใน `.gitignore` · ผลสรุปที่อยากเก็บลง `RESULTS.md` ของ plugin นั้น
-- eval ของ repo (`evals/triggers` `speed` `coding`) เป็นคนละชั้น: วัดข้ามทุก plugin และเทียบ 2 รุ่นจาก git ref · ไม่แทนกัน (ความต่างใน README ของ `plugins/superuser/evals/`)
+- eval ของ repo (`scripts/evals/triggers` `speed` `coding`) เป็นคนละชั้น: วัดข้ามทุก plugin และเทียบ 2 รุ่นจาก git ref · ไม่แทนกัน (ความต่างใน README ของ `plugins/superuser/evals/`)
 
 ## 7 · ทดสอบก่อนและหลังด้วย subagent ตัวใหม่ ก่อนรวมทุกการแก้
 

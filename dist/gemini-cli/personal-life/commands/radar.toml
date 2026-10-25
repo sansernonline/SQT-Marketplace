@@ -1,2 +1,2 @@
 description = "Run the weekly tech radar — what changed in tracked libraries, what matters, what to ignore."
-prompt = "Run the `tech-radar` skill with the `tech-mentor` agent: **{{args}}**\r\n\r\n--deep follows one project's release notes in detail and drafts upgrade steps.\n"
+prompt = "Run the `tech-radar` skill with the `tech-mentor` agent: **{{args}}**\n\n--deep follows one project's release notes in detail and drafts upgrade steps.\n"

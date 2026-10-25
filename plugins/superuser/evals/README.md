@@ -16,9 +16,9 @@ claude plugin eval plugins/superuser --trust-plugin --json _to_delete/eval.json 
 - ผลลง `evals/results/<timestamp>/` (`aggregate-result.json` + `report.html`) · โฟลเดอร์นี้ต้องอยู่ใน `.gitignore` (ยังไม่ได้เพิ่ม · รอผู้ดูแล) · ผลที่อยากเก็บสรุปลง `RESULTS.md` ที่นี่ บรรทัดละรอบ
 - exit code: 0 ผ่าน · 1 มีเคสไม่ถึง threshold หรือโหลดไม่ได้ · 2 รันไม่ครบ (เงินหรือ auth)
 
-## ต่างจาก `evals/` ที่รากของ repo อย่างไร
+## ต่างจาก `scripts/evals/` ของ repo อย่างไร
 
-| | `plugins/<plugin>/evals/` (ที่นี่) | `evals/` ราก (`triggers` · `speed` · `coding`) |
+| | `plugins/<plugin>/evals/` (ที่นี่) | `scripts/evals/` (`triggers` · `speed` · `coding` · `review-recall`) |
 |---|---|---|
 | วัดอะไร | skill 1 ตัวทำตามกฎไหม เทียบกับไม่มี plugin | ทั้งทีม: skill ถูกเปิดข้ามทุก plugin · เวลาและค่าใช้จ่ายของ playbook · คุณภาพโค้ด |
 | รูปแบบ | `case.yaml` ทางการ · `claude plugin eval` รันและให้คะแนน | `cases.json` และสคริปต์ `run-*.mjs` ของเราเอง เรียก `claude -p` เอง |
@@ -26,7 +26,7 @@ claude plugin eval plugins/superuser --trust-plugin --json _to_delete/eval.json 
 | โหลด plugin | เฉพาะ plugin ที่ชี้ · ไม่ตาม `dependencies` | ทุก plugin ใน `plugins/` หรือ `--plugin-dir` ที่ระบุ |
 | รันเมื่อ | สร้างหรือแก้ skill ตัวนั้น | แก้ของที่กระทบทั้งทีม (description หลายตัว · hook · playbook · ระดับโมเดล) |
 
-เคสที่นี่ไม่แทน `evals/triggers` — ตัวนั้นเห็น skill ทุก plugin พร้อมกันจึงจับการแย่งกันระหว่าง skill ได้ ส่วนเคส `-trigger` ที่นี่เห็นแค่ plugin เดียว
+เคสที่นี่ไม่แทน `scripts/evals/triggers` — ตัวนั้นเห็น skill ทุก plugin พร้อมกันจึงจับการแย่งกันระหว่าง skill ได้ ส่วนเคส `-trigger` ที่นี่เห็นแค่ plugin เดียว
 
 ## เคสที่มี
 

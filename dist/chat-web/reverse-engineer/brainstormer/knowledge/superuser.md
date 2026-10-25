@@ -151,8 +151,6 @@ Use when a reverse-engineering job spans several steps (inspect, explain, rebuil
 
 # ส่วนของสาขา reverse-engineer
 
-
-
 เรียกได้ทั้ง `/reverse-engineer:superuser` หรือพูดว่า "ใช้ superuser" กับงาน reverse engineer
 
 วิเคราะห์เฉพาะซอฟต์แวร์ที่ผู้ใช้เป็นเจ้าของหรือได้รับอนุญาตเท่านั้น · ทุกข้อสรุปต้องมีหลักฐานและหัวข้อข้อจำกัด ตามสถาปัตยกรรม evidence-first ของ REA

@@ -44,7 +44,7 @@ text-to-speech ภาษาไทยรวมเป็นหัวข้อเ�
 | `.claude/superuser/research/kien-thai-research.md` | ผลค้น kien-thai · กวาด Thai ทุก plugin |
 | `.claude/superuser/research/design-skills-research.md` | skill ออกแบบที่ดี |
 | `.claude/superuser/research/dynamic-website-research.md` | สูตรเว็บมีชีวิต (ai4ba) |
-| `evals/review-recall/` | eval วัด reviewer · `--verify` ฟรี · `--run` เสียเงิน |
+| `scripts/evals/review-recall/` | eval วัด reviewer · `--verify` ฟรี · `--run` เสียเงิน |
 | auto memory `kien-thai-adoption.md` | สรุปเดียวกันสำหรับ session ใหม่ |
 
 ## การตัดสินใจ
@@ -80,14 +80,14 @@ text-to-speech ภาษาไทยรวมเป็นหัวข้อเ�
 | merge PR ของ `chore/superuser-notes-2026-10-23` เข้า main | ตัดสิน | push แล้ว 2026-10-24 · มี commit ของอีกเครื่องมือ 8 ตัวอยู่ใน branch นี้ด้วย | เปิด PR บนเว็บแล้วกด merge (agent merge เองไม่ได้) | 2026-10-24 |
 | tag รุ่นใหม่ (ไม่บังคับ) | ตัดสิน | repo ไม่เคยมี git tag · การติดตั้งอ่านเลขรุ่นจาก plugin.json | ตอบ "tag" ถ้าอยากมี | 2026-10-23 |
 | อ่านออกเสียงคู่ตัวอย่างภาษาไทย 5 คู่ใน `human-writing/references/thai-examples.md` | ตรวจด้วยตาหรือหู | ทุกคู่ติดป้าย (ชั่วคราว) | เอาป้ายออก · ตอบ "รับ" หรือแก้ข้อความ | 2026-10-22 |
-| รัน eval ที่เสียเงิน: `claude plugin eval` ของ superuser · `evals/review-recall --run` | ใช้เงินหรือ token | ยังไม่เคยรันจริง | วัดผลได้จริง · ตอบ "รัน eval" | 2026-10-23 |
+| รัน eval ที่เสียเงิน: `claude plugin eval` ของ superuser · `scripts/evals/review-recall --run` | ใช้เงินหรือ token | ยังไม่เคยรันจริง | วัดผลได้จริง · ตอบ "รัน eval" | 2026-10-23 |
 
 ## รับงานต่อ
-- **ทำต่อเป็นข้อแรก:** เปิด PR ของ `chore/superuser-notes-2026-10-23` (commit + push ครบแล้ว 2026-10-25 · `gh` ยังไม่ได้ login → ผู้ใช้เปิดบนเว็บหรือรัน `gh auth login`) แล้วผู้ใช้ merge · F5 บนเครื่องนี้ (CPU) ใช้ทดสอบสั้น ๆ เท่านั้น รันยาวแล้วหน่วยความจำเกือบหมด · ถามผู้ใช้เรื่องอัปเดต plugin ในเครื่อง · ทบทวน skill วิดีโอด้วย `/skill-doctor` ราว 2026-11-24 (รอบแดงของ `video-editing` ทำถูกโดยไม่มี skill · ดูว่าควรย่อเหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เองไหม) · งานต่อไปบน repo แตก branch ใหม่จาก main (`f784b41`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
+- **ทำต่อเป็นข้อแรก:** ผู้ใช้ merge PR ของ `chore/superuser-notes-2026-10-23` (เปิดแล้ว 2026-10-25 · merge main เข้ามาแล้วแก้ conflict) · PR #2 (reverse-engineer เลิกพึ่ง REA · ย้าย evals ไป `scripts/evals/`) merge แล้ว `3f1e4cf` · F5 บนเครื่องนี้ (CPU) ใช้ทดสอบสั้น ๆ เท่านั้น รันยาวแล้วหน่วยความจำเกือบหมด · ถามผู้ใช้เรื่องอัปเดต plugin ในเครื่อง · ทบทวน skill วิดีโอด้วย `/skill-doctor` ราว 2026-11-24 (รอบแดงของ `video-editing` ทำถูกโดยไม่มี skill · ดูว่าควรย่อเหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เองไหม) · งานต่อไปบน repo แตก branch ใหม่จาก main (`f784b41`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
 - **รออนุมัติ:** commit · push · merge · tag · eval ที่เสียเงิน · แตะไฟล์ของอีกฝั่ง
 - **ค้างอยู่:** ตัวบทราชบัณฑิตยสภาเรื่องไม้ยมกและประกาศทับศัพท์ 2532 · ข้อความ licence เต็มของ GSAP · ข้อที่ agent ติด (ยังไม่ได้ตรวจ) ไว้ใน skill ใหม่ (เช่น ม.17/17-1 พ.ร.บ.คุ้มครองแรงงาน · rate limit ของ Shopee/Lazada · ค่า API ของ PEAK/FlowAccount)
 - **ข้อเสนอที่ยังไม่ได้ทำ:** ตัวตรวจ `plugin:ชื่อ` ใน validator · ตรวจลำดับหัวรุ่นใน CHANGELOG (รายละเอียดใน `IMPROVEMENTS.md`)
-- **ระวัง:** อย่าแก้ไฟล์ของงานอีกฝั่ง · eval review-recall มีไฟล์ตั้งใจพัง (ลิงก์เสีย · ซึ่ง/โดย เกินงบ) ใน `evals/review-recall/cases/` ตัวตรวจที่เพิ่มใหม่ต้องข้ามโฟลเดอร์นี้ · `data-analysis` ต้องใช้ matplotlib 3.11 ขึ้นไป (3.10 วรรณยุกต์ซ้อนสระบนหาย)
+- **ระวัง:** อย่าแก้ไฟล์ของงานอีกฝั่ง · eval review-recall มีไฟล์ตั้งใจพัง (ลิงก์เสีย · ซึ่ง/โดย เกินงบ) ใน `scripts/evals/review-recall/cases/` ตัวตรวจที่เพิ่มใหม่ต้องข้ามโฟลเดอร์นี้ · `data-analysis` ต้องใช้ matplotlib 3.11 ขึ้นไป (3.10 วรรณยุกต์ซ้อนสระบนหาย)
 
 ## ไฟล์อื่น
 `HISTORY.md` งานที่เสร็จแล้ว · `IMPROVEMENTS.md` · `handoff/` ใบสั่งและใบส่งงาน · `log/` · `learn/` · `inbox/` (ทั้งหมดอยู่ใน `.claude/superuser/` · log learn inbox state ไม่ commit ตาม `.gitignore`) · ผลค้นคว้าอยู่ใน `.claude/superuser/research/`
