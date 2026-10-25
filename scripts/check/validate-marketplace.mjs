@@ -10,9 +10,9 @@
  *
  * ไม่ใช้ dependency ภายนอก
  */
-import { plan as planSuperuser } from '../sync/sync-superuser.mjs';
+import { plan as planSuperuser, rulesCopyAction, rulesHeader } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
-import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows } from './lesson-checks.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR } from './lesson-checks.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
@@ -611,8 +611,20 @@ function selfTest() {
   const dr = decisionRows(table(21)).length === 1 && decisionRows(table(20)).length === 0 && decisionRows('# t\n').length === 0;
   console.log(`  ${dr ? '✅' : '❌'} ตารางการตัดสินใจ 21 แถวโดนเตือน · 20 แถว · ตารางหัวข้ออื่น · ไม่มีตาราง ไม่โดน`);
   if (dr) ok++;
+  // เหตุการณ์จริง 2026-10-25: แก้สำเนา core-rules.md แล้ว sync เขียนทับ · แถว IMPROVEMENTS ที่ \r กลายเป็น CR ดิบ
+  const src = 'กฎ\n', newer = 'กฎ\nกฎใหม่ในต้นฉบับ\n';
+  const rc = rulesCopyAction(rulesHeader(src) + src, src).problem === undefined
+    && rulesCopyAction(src, src).write === true                                          // สำเนาเก่าที่ยังไม่มีหัว → เขียนได้
+    && rulesCopyAction(rulesHeader(src) + src, newer).write === true                     // ต้นฉบับเปลี่ยน สำเนาไม่มีใครแตะ → เขียนได้
+    && rulesCopyAction(rulesHeader(src) + 'กฎ\nที่แก้ในสำเนา\n', src).write === false     // แก้สำเนา (เหตุการณ์จริง)
+    && rulesCopyAction(rulesHeader(src) + 'กฎ\nที่แก้ในสำเนา\n', newer).write === false;  // แก้สำเนาแล้วต้นฉบับถูกแก้ทีหลัง
+  console.log(`  ${rc ? '✅' : '❌'} สำเนา core-rules.md ที่ถูกแก้มือ sync ไม่เขียนทับ แม้ต้นฉบับถูกแก้ทีหลัง · สำเนาที่ไม่มีใครแตะเขียนทับได้`);
+  if (rc) ok++;
+  const cr = loneCR('| 2026-10-25 | sync-docs ตัด \r ก่อนเทียบ |\r\n').length === 1 && loneCR('a\r\nb\r\n').length === 0 && loneCR('a\nb\n').length === 0;
+  console.log(`  ${cr ? '✅' : '❌'} CR ดิบกลางบรรทัดโดนจับ · ไฟล์ CRLF และ LF ปกติไม่โดน`);
+  if (cr) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 17;
+  const total = cases.length + 19;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -685,13 +697,16 @@ for (const [rel, text] of docFiles) {
   checkTables(rel, text);
   checkLinks(rel, text, (p) => existsSync(join(ROOT, p)));
 }
+const teamDir = join(ROOT, '.claude', 'superuser');
+for (const [rel, text] of docFiles.concat(existsSync(teamDir) ? markdownFiles(teamDir) : []))
+  for (const { at, msg } of loneCR(text)) err(`${rel}:${at}`, msg);
 if (existsSync(factsFile)) checkRetired(JSON.parse(readFileSync(factsFile, 'utf8')).retired ?? [], docFiles);
 
 // skill กลางที่ต้องเหมือนกันทุก plugin (human-writing · agent-patterns) · ทุก agent ต้องชี้ไปที่ human-writing
 // ของกลางของ SuperUser: ต้นฉบับอยู่ที่ plugins/superuser · ทุก plugin ต้องตรงกับต้นฉบับ (sync-superuser.mjs)
 if (existsSync(join(pluginsDir, 'superuser'))) {
   const { problems } = planSuperuser(join(pluginsDir, '..'));
-  for (const line of problems) err(line, 'ของกลาง SuperUser ไม่ตรงกับต้นฉบับ — แก้ที่ plugins/superuser แล้วรัน node scripts/sync/sync-superuser.mjs');
+  for (const line of problems) err(line, 'ของกลาง SuperUser ไม่ตรงกับต้นฉบับ — แก้ที่ต้นฉบับ (plugins/superuser หรือไฟล์ที่ข้อความบอก) แล้วรัน node scripts/sync/sync-superuser.mjs');
 }
 // บล็อกกฎร่วมของ prompt/software-company: ต้นฉบับคือ RULES ใน sync-prompt-rules.mjs
 if (existsSync(join(pluginsDir, '..', PROMPT_DIR))) {

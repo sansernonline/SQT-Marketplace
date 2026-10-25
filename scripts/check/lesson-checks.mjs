@@ -6,6 +6,7 @@
  *   4. prompt-*.md ต้องมีบรรทัด "ทดสอบจริง: <วันที่ · ฉบับ>" หรือ "ยังไม่ได้ทดสอบจริง" → error
  *   5. SKILL.md ใหญ่เกิน 20,000 ไบต์ → warning บรรทัดเดียว
  *   6. ตาราง "การตัดสินใจ" ใน .claude/superuser/CONTEXT.md เกิน 20 แถว → warning
+ *   7. ไฟล์ .md มีตัว CR ดิบที่ไม่ตามด้วย LF → error
  * ทุกฟังก์ชันรับข้อความเข้าและคืนรายการปัญหา (ข้อความ หรือ {at, msg} ของข้อ 3) ไม่อ่านไฟล์เอง (ยกเว้น installedOlder ที่รับ path)
  */
 import { readFileSync, existsSync } from 'node:fs';
@@ -76,4 +77,13 @@ export function decisionRows(text, cap = 20) {
   if (!sec) return [];
   const rows = sec.split(/\r?\n/).filter((l) => l.startsWith('|') && !/^\|[\s:|-]+\|\s*$/.test(l)).length - 1;
   return rows > cap ? [`ตาราง "การตัดสินใจ" มี ${rows} แถว เกิน ${cap} · ย้ายแถวเก่าไป HISTORY.md`] : [];
+}
+
+// 7. CR ดิบกลางบรรทัด · บทเรียน 2026-10-25: ส่งข้อความผ่าน heredoc แล้ว `\r` ในข้อความกลายเป็นตัว CR จริง ข้อความหายไปเงียบ ๆ
+export function loneCR(text) {
+  const out = [];
+  text.split('\n').forEach((line, i) => {
+    if (line.replace(/\r$/, '').includes('\r')) out.push({ at: i + 1, msg: 'มีตัว CR ดิบกลางบรรทัด (มักมาจาก heredoc ที่ตีความ \\r) — แก้ด้วยเครื่องมือแก้ไฟล์ ไม่ส่งผ่าน heredoc' });
+  });
+  return out;
 }

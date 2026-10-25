@@ -257,6 +257,7 @@ export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(ho
   try { if (readFileSync(join(configDir, "CLAUDE.md"), "utf8").includes(CORE_MARK)) return ""; } catch { /* ยังไม่ได้ติดตั้ง */ }
   let text = "";
   try { text = readFileSync(join(dir, "core-rules.md"), "utf8").replace(/\r\n/g, "\n"); } catch { return ""; }
+  text = text.replace(/^<!-- สำเนาที่ [^\n]*-->\n/, "");   // หัวบอกว่าเป็นสำเนา มีไว้สำหรับคนแก้ repo ไม่ส่งเข้า session
   if (routeOnly) {
     const at = text.indexOf(ROUTE_HEAD);
     if (at < 0) return "";
@@ -870,6 +871,7 @@ function selfTest() {
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
+    ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
     ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
   );
   const tmp = join(tmpdir(), `sqt-claim-test-${process.pid}`);

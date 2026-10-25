@@ -1,3 +1,4 @@
+<!-- สำเนาที่ scripts/sync/sync-superuser.mjs สร้างจาก scripts/install/CLAUDE.global.md · ห้ามแก้ไฟล์นี้ แก้ที่ต้นฉบับ · sha256:b480169390e5 -->
 <!-- sqt-core-rules -->
 # กฎประจำตัว — ใช้กับทุกโปรเจกต์
 
