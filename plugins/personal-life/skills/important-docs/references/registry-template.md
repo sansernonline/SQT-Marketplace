@@ -13,7 +13,7 @@
 | บัตรประจำตัวประชาชน | 8 years, ends on the holder's birthday | Apply within 60 days after expiry; age 70+ not required to hold a new card | สำนักทะเบียนอำเภอ / เขต — bring the old card |
 | Passport (หนังสือเดินทาง) | 5 years (1,000 บาท) or 10 years for age 20+ (1,500 บาท); express same-day 3,000 / 3,500 บาท | 120 days before a trip; many countries need 6 months left at entry | Book at qpassport.in.th; a new book is issued (no "renewal"); adults bring ID card + old passport; delivery by post 2–5 working days |
 | ใบขับขี่ | First licence 2 years, then 5 years | Renew up to 6 months before expiry | กรมการขนส่งทางบก office or DLT Smart Queue app |
-| ภาษีรถประจำปี + พ.ร.บ. | 1 year | Tax can be paid up to 90 days early (รอยืนยัน); พ.ร.บ. must be valid to pay tax | DLT e-service / app, ห้าง, ไปรษณีย์ — `vehicle-care` (personal-life) if installed |
+| ภาษีรถประจำปี + พ.ร.บ. | 1 year | Tax can be paid up to 90 days early (รอยืนยัน); พ.ร.บ. must be valid to pay tax | DLT e-service / app, ห้าง, ไปรษณีย์ — `vehicle-care` |
 | Insurance policies | Usually 1 year (life: term of policy) | 30 days before — compare, do not auto-renew blind | Insurer app; premium certificate needed for tax |
 | Lease (สัญญาเช่า) | Usually 1 year | 60 days — notice period is in the contract | Landlord |
 | ทะเบียนบ้าน, สูติบัตร, ทะเบียนสมรส, โฉนด, เล่มทะเบียนรถ | No expiry | — | Record location; know the replacement office (อำเภอ/เขต, สำนักงานที่ดิน, ขนส่ง) |

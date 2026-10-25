@@ -1,7 +1,9 @@
 # 📦 Plugin ใน SQT Marketplace
 
-ทั้งหมด **8 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
+ทั้งหมด **6 plugins** · สายพัฒนาซอฟต์แวร์มี `software-company` ตัวเดียว เพราะรวมทุกสาขาไว้แล้วตั้งแต่ v2.0.0
 
+> **รวม plugin รอบ 2 (2026-10-25)** — `thai-workplace` รวมเข้า **`e-commerce`** (skill 19 ตัว คำสั่ง 8 ตัว agent 4 ตัว playbook 5 ตัว) ยกเว้น `line-richmenu` ที่ย้ายไป **`graphic-design`** · `reverse-engineer` รวมเข้า skill `reverse-engineering` และ agent `reverse-engineer` ของ **`software-company`** (module .NET · firmware · network และตัวตรวจเครื่องมือ `check-tools.mjs`) · ถอด plugin เก่าด้วย `/plugin uninstall thai-workplace` และ `/plugin uninstall reverse-engineer` · หัวข้อด้านล่างที่ยังเรียก `thai-workplace` เป็นบันทึกของรอบก่อน
+>
 > **รวม plugin ชีวิตประจำวัน (2026-10-22)** — `online-seller` + `consumer-rights` → **`e-commerce`** (ซื้อ-ขายออนไลน์ทั้งสองฝั่ง) · `home-family` + `health-wellness` + `career` → **`personal-life`** (ชีวิตประจำวัน 4 หมวด) · `dev-learning` → **`personal-life`** (หมวดเรียนรู้: เรียนเทคโนโลยี paper ใบรับรอง side project วิทยานิพนธ์) · `seller-tax-basics` ย้ายไป `thai-workplace` · `sqt-toolkit` (เคยชื่อ `doc-toolkit`) ยุบแล้ว — skill เอกสารหลัก 4 ตัวกลับเข้า `superuser` ที่เหลือไป `software-company` `graphic-design` `personal-life` · เพิ่ม **`reverse-engineer`** (ลอกสถาปัตยกรรม REA: จุดเข้าเดียว evidence-first) · ชื่อ skill/command เดิมใช้ได้เหมือนเดิม ถอด plugin เก่าด้วย `/plugin uninstall <ชื่อเดิม>` · ไฟล์นี้ลงรายละเอียดเฉพาะ `software-company` — จำนวนของทุก plugin ดูตารางใน [README](../README.md#-plugins) และหน้าแต่ละตัวใน [docs/plugins/](plugins/)
 
 ---
@@ -61,7 +63,7 @@ superuser = แม่แบบ + skill 6 ตัว           superuser = แก�
 จำลองบริษัทซอฟต์แวร์ครบทุกขั้นของ Software Development Life Cycle (SDLC) ตั้งแต่ทีมหลัก (product · analysis · architecture · design · development · QA · DevOps · security) ไปจนถึงผู้เชี่ยวชาญเฉพาะสาขา
 
 ### มีอะไรบ้าง
-**39 agents · 95 skills · 29 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
+**38 agents · 95 skills · 29 commands** (ไม่นับ skill กลาง 32 ตัวจาก `superuser`)
 
 ### ติดตั้ง
 ```

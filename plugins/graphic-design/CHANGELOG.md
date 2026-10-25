@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- รับ agent `image-artist` มาจาก `software-company` ให้อยู่กับ skill `image-generation` ที่มันใช้ทุกงาน · `triggers.md` เพิ่มแถว `image-generation` และ `speaking-script` ที่ก่อนนี้ไม่มีทางเรียกจาก plugin นี้
+- `line-richmenu` ตัดข้อความ "ถ้าติดตั้ง graphic-design" ที่ชี้หาตัวเอง
+- รับ skill `line-richmenu` (rich menu ของ LINE OA: ขนาดภาพ · พื้นที่กด · JSON · คำสั่ง API) มาจาก `thai-workplace` ที่รวมเข้า `e-commerce` แล้ว
+
 - eval `video-editing-regression` และ `video-editing-tts-regression` เปลี่ยนชื่อเป็น `-guard` เพราะรอบแดงทำถูกอยู่แล้ว ไม่ใช่เรื่องที่เคยพลาดจริง (กฎใหม่ใน `skill-authoring`)
 - เพิ่ม skill `speaking-script`: สคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) — กฎข้อเดียว write for the ear · hook ก่อนทักทาย · ตารางภาษาเขียน → ภาษาพูด · จับเวลาด้วยนาฬิกาไม่นับคำ · ขั้น 0 หาคลิปอ้างอิงก่อนเขียน · eval 3 เคส ใน `evals/speaking-script-*` · เพิ่มแถวใน skill-router (พร้อมกัน pattern โค้ดไม่จับ "สคริปต์พูด" อีก) · triggers · file-map
 - `brief-to-image`: เพิ่มขั้น 0 หารูปอ้างอิงที่ชอบก่อนเขียน prompt แล้วแตกว่าชอบอะไร (แสง · สี · องค์ประกอบ) ใส่ใน brief — ลดผลงานหน้าตาเหมือนกันทุกชิ้น

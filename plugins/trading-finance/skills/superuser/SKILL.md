@@ -67,8 +67,8 @@ description: Use when a money matter spans several steps (trades, portfolio, bud
 
 | กติกา | รายละเอียด |
 |---|---|
-| **เลือก agent ตามบทบาท** | วิเคราะห์หุ้นและข่าวใช้ `market-analyst` · ขนาดไม้และความเสี่ยงพอร์ตใช้ `risk-manager` · ทบทวนพฤติกรรมใช้ `trade-journal-coach` · เตือนราคาและข่าวใช้ `alert-dispatcher` |
-| **งานข้ามสาขา** | ระบบเทรดหรือ Expert Advisor (EA) ที่ต้องเขียนโค้ดส่งให้ `software-company` (`quant-analyst`) · เงินเดือนและภาษีบริษัทส่งให้ `thai-workplace` · ร้องเรียนสถาบันการเงินส่งให้ `e-commerce` · งบครัวเรือนส่งให้ `personal-life` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **เลือก agent ตามบทบาท** | วิเคราะห์หุ้นและข่าวใช้ `market-analyst` · ขนาดไม้และความเสี่ยงพอร์ตใช้ `risk-manager` · ทบทวนพฤติกรรมใช้ `trade-journal-coach` · เตือนราคาและข่าวใช้ `alert-dispatcher` · งบ หนี้ เกษียณ ประกัน กองทุน ภาษีบุคคล และเช็กมิจฉาชีพใช้ `money-planner` |
+| **งานข้ามสาขา** | ระบบเทรดหรือ Expert Advisor (EA) ที่ต้องเขียนโค้ดส่งให้ `software-company` (`quant-analyst`) · เงินเดือนและภาษีบริษัทส่งให้ `e-commerce` · ร้องเรียนสถาบันการเงินส่งให้ `e-commerce` · งบครัวเรือนส่งให้ `personal-life` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
 
 ---
 

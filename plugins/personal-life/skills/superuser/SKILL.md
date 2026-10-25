@@ -161,7 +161,7 @@ description: Use when daily-life work spans several steps (weekly reset, documen
 | กติกา | รายละเอียด |
 |---|---|
 | **เลือก agent ตามบทบาท** | งานประจำ ค่าสมาชิก ความปลอดภัย เป้าหมาย และข้อความ ใช้ `life-admin` · เอกสารสำคัญใช้ `doc-caretaker` · ประชุมใช้ `meeting-prep` · บิล บ้าน และรถ ใช้ `home-manager` · อาหาร โรงเรียน ผู้สูงอายุ สัตว์เลี้ยง ใช้ `family-planner` · สุขภาพใช้ `health-organizer` (ดูแลหลายคนในบ้าน → ตัวใหม่ต่อคน ข้อมูลจะได้ไม่ปนกัน) · CV LinkedIn ข้อเสนอ เลื่อนตำแหน่ง → `career-coach` · สัมภาษณ์และซ้อม → `interview-coach` · เรียนเทคโนโลยี paper เรดาร์ ใบรับรอง side project → `tech-mentor` (งานแยกได้หลายชิ้น เช่น หลาย paper หรือหลายไลบรารีในเรดาร์ → ตัวใหม่ต่อชิ้น) |
-| **งานข้ามสาขา** | ข้อความสุภาพ → `polite-message-th-en` (plugin `superuser`) · งานโค้ดของโปรเจกต์จริง → `software-company` · เงิน ภาษี ประกัน หนี้ → `trading-finance` · ร้องเรียนร้านค้าหรือช่าง → `e-commerce` · สิทธิ์ตามกฎหมายแรงงาน → `thai-workplace` · รูปโปรไฟล์และพอร์ตงานภาพ → `graphic-design` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี plugin นี้ให้ติดตั้ง แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
+| **งานข้ามสาขา** | ข้อความสุภาพ → `polite-message-th-en` (plugin `superuser`) · งานโค้ดของโปรเจกต์จริง → `software-company` · เงิน ภาษี ประกัน หนี้ → `trading-finance` · ร้องเรียนร้านค้าหรือช่าง → `e-commerce` · สิทธิ์ตามกฎหมายแรงงาน → `e-commerce` · รูปโปรไฟล์และพอร์ตงานภาพ → `graphic-design` ถ้าไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี plugin นี้ให้ติดตั้ง แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ถ้าเป็นงานหลายขั้นในสาขานั้น ให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
 
 ---
 
