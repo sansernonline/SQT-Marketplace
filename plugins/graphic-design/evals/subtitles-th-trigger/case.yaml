@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: subtitles-th-trigger
+description: โจทย์ทำซับไทยแล้วฝังลงคลิป ไม่เอ่ยชื่อ skill ต้องทำให้ subtitles-th ถูกเปิด และได้ไฟล์ .srt กับคำสั่งฝังที่ระบุฟอนต์ไทย
+tags: [trigger, subtitles-th]
+runs: 3
+expected_outcome: เรียก Skill subtitles-th แล้วอธิบายการถอดเสียงเป็น .srt ตรวจความยาวบรรทัด และคำสั่ง ffmpeg ฝังซับพร้อมฟอนต์ไทย
+execution:
+  prompt: |
+    ช่วยทำซับภาษาไทยให้คลิปสอน Excel ยาว 8 นาที (lesson.mp4) แล้วฝังลงในคลิปเลย
+    คนดูส่วนใหญ่ดูในมือถือแบบปิดเสียง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?subtitles-th"'
+    min: 1
+    arm: with-only
+  - name: srt-file
+    type: regex
+    pattern: "\\.srt|SRT"
+    match: contains
+    target: last_message
+  - name: thai-font-set
+    type: regex
+    pattern: "FontName|fontsdir"
+    match: contains
+    target: last_message

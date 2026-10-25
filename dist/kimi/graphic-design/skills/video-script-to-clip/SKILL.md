@@ -78,6 +78,7 @@ Before handing over, run the check in `no-ai-look` (section 3): its script on HT
 
 ## Related
 
+- [references/production-tools.md](references/production-tools.md) — which editor or code tool to cut with (CapCut, DaVinci Resolve, HyperFrames, Remotion), commercial-use terms, export settings, Thai subtitle fonts, music licences
 - `motion-basics` — timing and easing for text animation
 - `social-formats` — canvas and safe zones
 - `style-consistency` — one look across shots

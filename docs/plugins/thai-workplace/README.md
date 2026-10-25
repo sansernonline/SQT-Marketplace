@@ -4,7 +4,7 @@
 
 เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย
 
-agent 4 · skill 52 · คำสั่ง 8 · playbook 8 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md)
+agent 4 · skill 54 · คำสั่ง 8 · playbook 9 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/thai-workplace/`](../../../plugins/thai-workplace/)
 
@@ -36,5 +36,6 @@ agent 4 · skill 52 · คำสั่ง 8 · playbook 8 · ส่งงาน�
 | `monthly-close` | ปิดเงินเดือนประจำเดือน | 6 |
 | `pdpa-setup` | ตั้งระบบ PDPA | 5 |
 | `review` | ตรวจงานก่อนส่ง | 6 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `unattended-run` | ให้ทำงานยาวเอง | 7 |
 | `year-end` | ปิดปีและยื่นประจำปี | 5 |

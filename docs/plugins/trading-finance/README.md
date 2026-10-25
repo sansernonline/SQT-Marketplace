@@ -4,7 +4,7 @@
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ
 
-agent 4 · skill 52 · คำสั่ง 7 · playbook 9 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`e-commerce`](../e-commerce/README.md) · [`personal-life`](../personal-life/README.md)
+agent 4 · skill 52 · คำสั่ง 7 · playbook 10 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`e-commerce`](../e-commerce/README.md) · [`personal-life`](../personal-life/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/trading-finance/`](../../../plugins/trading-finance/)
 
@@ -37,5 +37,6 @@ agent 4 · skill 52 · คำสั่ง 7 · playbook 9 · ส่งงาน�
 | `review` | ตรวจงานก่อนส่ง | 6 |
 | `scam-check` | เช็กว่าโดนหลอกไหม | 4 |
 | `tax-season` | ภาษีประจำปี | 5 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `trade-review` | ทบทวนการเทรด | 5 |
 | `unattended-run` | ให้ทำงานยาวเอง | 7 |

@@ -186,7 +186,7 @@ bash scripts/install/install-global-rules.sh                                    
 
 ไฟล์นี้ยาวได้ไม่เกิน **9,500 ตัวอักษร** (hook ส่งได้ไม่เกิน 10,000 ต่อครั้ง · `sync-superuser` ตรวจ) — ทุกบรรทัดจ่ายต้นทุนทุกเซสชันของทุกโปรเจกต์
 
-**หัวข้อ "เปิด skill ก่อนลงมือ"** คือตาราง งาน → skill ที่ต้องเปิด · ทำงานคู่กับ `plugins/superuser/hooks/skill-router.json` ที่ hook ใช้จับคำในข้อความผู้ใช้แล้วบอกชื่อ skill · เพิ่มแถวในตารางแล้วเพิ่ม pattern ใน router ด้วย · วัดผลด้วย [`evals/triggers`](../evals/triggers/README.md)
+**หัวข้อ "เปิด skill ก่อนลงมือ"** คือตาราง งาน → skill ที่ต้องเปิด · ทำงานคู่กับ `plugins/superuser/hooks/skill-router.json` ที่ hook ใช้จับคำในข้อความผู้ใช้แล้วบอกชื่อ skill · เพิ่มแถวในตารางแล้วเพิ่ม pattern ใน router ด้วย · วัดผลด้วย [`scripts/evals/triggers`](evals/triggers/README.md)
 
 ---
 

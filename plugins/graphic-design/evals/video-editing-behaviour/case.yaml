@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: video-editing-behaviour
+description: ตัดคลิปให้ตรงเฟรมและปรับความดังตามตัวเลข ต้องเข้ารหัสใหม่ตอนตัด ปรับเสียง 2 รอบ และบอกวิธีวัดไฟล์ผลลัพธ์
+tags: [behaviour, video-editing]
+runs: 3
+expected_outcome: ตัดแบบเข้ารหัสใหม่ (ไม่ใช่ -c copy) · loudnorm รอบสองใส่ measured_I · วัดผลด้วย ffprobe หรือ loudnorm/ebur128 · ไม่เขียนทับต้นฉบับ
+execution:
+  prompt: |
+    ตัดคลิป talk.mp4 ช่วงนาทีที่ 01:30 ถึง 02:10 ให้ตรงระดับเฟรม แล้วปรับเสียงทั้งไฟล์ให้ได้ -14 LUFS
+    true peak ไม่เกิน -1 dBTP ส่งคำสั่งทั้งหมดตามลำดับ และบอกว่าจะรู้ได้อย่างไรว่าผลถูก
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: two-pass-loudness
+    type: regex
+    pattern: "measured_I"
+    match: contains
+    target: last_message
+  - name: verifies-output
+    type: regex
+    pattern: "ffprobe|ebur128|print_format"
+    match: contains
+    target: last_message
+  - name: cut-and-proof
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. คำสั่งตัดช่วง 01:30–02:10 เข้ารหัสภาพใหม่ (เช่น libx264) เพื่อให้ตรงเฟรม หรือถ้าใช้ -c copy ต้องบอกว่าจะคลาดตาม keyframe
+      2. ปรับความดังแบบ 2 รอบ: รอบแรกวัด รอบสองใส่ค่าที่วัดได้ ตั้ง I=-14 และ TP=-1
+      3. บอกวิธีวัดไฟล์ที่ได้ (ความยาว 40 วินาที · ความดังรวม) ไม่ใช่แค่บอกว่ารันแล้วเสร็จ
+      4. ไฟล์ผลลัพธ์ใช้ชื่อใหม่ ไม่เขียนทับ talk.mp4

@@ -11,6 +11,10 @@
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` |
 | เลือกโปรแกรมตัดต่อ (CapCut · DaVinci Resolve · HyperFrames · Remotion) · ซับไทยอัตโนมัติ · เพลงหรือเทมเพลตใช้เพื่อการค้าได้ไหม | `video-script-to-clip` ไฟล์ `references/production-tools.md` |
+| ตัดต่อด้วยคำสั่ง: ตัดหัวท้าย · ตัดช่วงเงียบ · ต่อคลิป · ปรับความดังให้ได้ตามแพลตฟอร์ม · แปลงแนวนอนเป็นแนวตั้ง | `video-editing` (agent `video-editor`) |
+| ซับไทยเป็นไฟล์: ถอดเสียงเป็น .srt · ตรวจความยาวบรรทัดและเวลา · ฝังซับลงคลิป | `subtitles-th` |
+| สไลด์กับเสียงบรรยายเป็นวิดีโอ (บทเรียน podcast · คลิปอบรม) | `video-editing` หัวข้อสไลด์กับเสียงบรรยาย |
+| ไม่อัดเสียงเอง: เสียงบรรยายไทยจากสคริปต์ (text-to-speech · เลียนเสียงตัวเอง) พร้อมซับและเวลาสไลด์ | `video-editing` หัวข้อเสียงบรรยายจากสคริปต์ (agent `video-editor`) |
 | ก่อนส่งงานภาพทุกชิ้น · ดูแล้วรู้สึกแปลก | `design-review` + agent `design-critic` |
 | ไฟล์รก | `asset-organize` |
 | เขียนคำตอบ รายงาน เอกสาร หรือป้ายใน diagram | `human-writing` · มีตัวเลือก ตัวเลขหลายตัว หรือส่วนที่เชื่อมกัน → `answer-shape` |

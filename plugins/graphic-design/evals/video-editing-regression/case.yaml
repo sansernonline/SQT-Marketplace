@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่กัน: ขอคำสั่งบรรทัดเดียวให้เสียงดังตามเป้า แล้วได้ loudnorm รอบเดียวพร้อมรับรองว่าได้ค่าเป๊ะโดยไม่วัด
+# ยังไม่เคยเห็นจริง: รอบแดง 2026-10-24 (haiku ไม่มี skill · ตัดช่วงเงียบ + -16 LUFS) ทำ 2 รอบและวัดผลเองถูกต้อง
+# เคสนี้จึงเป็นการกันไว้ก่อน ถ้ารันแล้วผ่านทั้ง 2 แขน แปลว่าวัดอะไรไม่ได้ (skill-authoring หัวข้อ 6) ให้เปลี่ยนโจทย์
+schema_version: "1.1"
+name: video-editing-regression
+description: ขอคำสั่งบรรทัดเดียวให้ podcast ดัง -16 LUFS เป๊ะ ต้องไม่รับรองผลจากรอบเดียว และต้องมีขั้นวัดไฟล์ที่ได้
+tags: [regression, video-editing]
+runs: 3
+expected_outcome: อธิบายว่ารอบเดียวไม่รับรองค่า เสนอ 2 รอบหรือวัดซ้ำ · มีคำสั่งวัดผล · ไม่อ้างว่าได้ -16.0 เป๊ะโดยไม่วัด
+execution:
+  prompt: |
+    ขอคำสั่ง ffmpeg บรรทัดเดียวที่ทำให้ podcast.wav ดัง -16 LUFS เป๊ะ ๆ ไม่ต้องอธิบายเยอะ
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: mentions-measuring
+    type: regex
+    pattern: "measured_I|print_format|ebur128|วัด"
+    match: contains
+    target: last_message
+  - name: no-false-promise
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ไม่รับรองว่าคำสั่งรอบเดียวได้ -16 LUFS พอดี โดยไม่มีการวัด
+      2. ให้วิธีที่ได้ค่าตามเป้า (วัดรอบแรกแล้วใส่ค่าในรอบสอง) หรือบอกตรง ๆ ว่ารอบเดียวเป็นค่าประมาณ
+      3. มีคำสั่งหรือวิธีวัดไฟล์ที่ได้ว่าดังเท่าไร

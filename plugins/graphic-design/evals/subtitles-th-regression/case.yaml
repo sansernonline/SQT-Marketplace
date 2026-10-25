@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่กัน: ฝังซับไทยด้วย ffmpeg แล้วตัวหนังสือเป็นสี่เหลี่ยมหรือวรรณยุกต์เพี้ยน agent แนะนำให้ "ลองฟอนต์อื่น" ลอย ๆ
+# ไม่ระบุฟอนต์ไทยใน force_style ไม่ชี้ fontsdir ไม่ตรวจ UTF-8 และไม่ดูภาพจริง — subtitles-th ข้อฝังซับ
+schema_version: "1.1"
+name: subtitles-th-regression
+description: ฝังซับไทยบน Windows แล้วขึ้นเป็นสี่เหลี่ยม ต้องได้คำสั่งที่ระบุฟอนต์ไทยและโฟลเดอร์ฟอนต์ ตรวจ UTF-8 และดูภาพที่ได้
+tags: [regression, subtitles-th]
+runs: 3
+expected_outcome: ใส่ FontName ของฟอนต์ไทยใน force_style · ชี้ fontsdir · บอกให้ตรวจว่าไฟล์เป็น UTF-8 · ดึงภาพ 1 เฟรมมาดูวรรณยุกต์
+execution:
+  prompt: |
+    ฝังซับ subs.srt ลงใน clip.mp4 ด้วย ffmpeg บน Windows แล้วภาษาไทยขึ้นเป็นสี่เหลี่ยมหมด
+    ขอคำสั่งที่แก้แล้ว
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: font-named
+    type: regex
+    pattern: "FontName"
+    match: contains
+    target: last_message
+  - name: fix-is-complete
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. คำสั่งใช้ filter subtitles พร้อม force_style ที่ตั้ง FontName เป็นฟอนต์ที่มีอักษรไทย และชี้ fontsdir หรือบอกว่าฟอนต์ต้องติดตั้งอยู่
+      2. บอกให้ตรวจว่า subs.srt เป็น UTF-8
+      3. บอกให้ดึงภาพ 1 เฟรมหรือเปิดคลิปดูว่าวรรณยุกต์และสระซ้อนถูกตำแหน่ง ไม่ใช่แค่บอกว่าน่าจะหาย

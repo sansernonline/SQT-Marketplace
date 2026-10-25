@@ -64,6 +64,7 @@
 | เตรียมสอบใบรับรอง | `cert-prep` |
 | หาโปรเจกต์ฝึก | `side-project-picker` |
 | วิทยานิพนธ์ IS หรือบทความวิจัย (proposal · ทบทวนวรรณกรรม · อ้างอิง · สอบ) | `thesis-writing` |
+| ต้องสอนหรือจัดอบรม (ผลลัพธ์การเรียนรู้ · ตารางสอน · แบบฝึก · rubric · แบบประเมิน) | `course-builder` · สไลด์ใช้ `presentation-design` (software-company) |
 | งานกลายเป็นโค้ดของโปรเจกต์จริง | `/software-company:superuser` |
 
 **ใช้ร่วมกัน**

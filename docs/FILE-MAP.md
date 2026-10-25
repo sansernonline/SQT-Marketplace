@@ -8,14 +8,14 @@
 
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
-| [`e-commerce`](#e-commerce) | ซื้อ-ขายออนไลน์ทั้งสองฝั่ง ขายบน Shopee Lazada TikTok และซื้ออย่างรู้สิทธิ์ | 4 | 12 | 6 | 12 | 58 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 4 | 12 | 6 | 8 | 60 |
-| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 38 | 16 | 29 | 142 |
-| [`reverse-engineer`](#reverse-engineer) | reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ | 1 | 7 | 1 | 3 | 26 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 93 | 29 | 16 | 769 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 100 |
-| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 19 | 8 | 8 | 69 |
-| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 9 | 65 |
+| [`e-commerce`](#e-commerce) | ซื้อ-ขายออนไลน์ทั้งสองฝั่ง ขายบน Shopee Lazada TikTok และซื้ออย่างรู้สิทธิ์ | 4 | 12 | 6 | 13 | 59 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 5 | 15 | 6 | 9 | 88 |
+| [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 39 | 16 | 30 | 144 |
+| [`reverse-engineer`](#reverse-engineer) | reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ | 1 | 9 | 1 | 4 | 37 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 95 | 29 | 17 | 777 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 99 |
+| [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 21 | 8 | 9 | 72 |
+| [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 10 | 66 |
 
 ## โครงของทุก plugin
 
@@ -51,7 +51,7 @@ plugins/<plugin>/
 | skill | `document-naming` | ตั้งชื่อไฟล์เอกสาร รุ่น และสถานะ | `assets/naming-cheatsheet.md` |
 | skill | `flag-and-propose` | เจอเรื่องกลางงานที่ต้องให้คนตัดสิน → แจ้งพร้อมทางเลือก | `references/example.md` |
 | skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` · `references/team-memory.md` · `scripts/log-to-md.mjs` |
-| skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `THIRD-PARTY-NOTICES.md` · `references/headings-and-examples.md` · `references/strict-review.md` · `references/thai-examples.md` · `references/thai-grammar.md` · `references/thai-line-breaking.md` · `scripts/__pycache__/thai_tells.cpython-313.pyc` · `scripts/thai_linebreak.py` · `scripts/thai_tells.py` |
+| skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `THIRD-PARTY-NOTICES.md` · `references/headings-and-examples.md` · `references/strict-review.md` · `references/thai-examples.md` · `references/thai-grammar.md` · `references/thai-line-breaking.md` · `scripts/thai_linebreak.py` · `scripts/thai_tells.py` |
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
 | skill | `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |
@@ -140,7 +140,7 @@ plugins/<plugin>/
 | `refund-request` | ขอเงินคืน: ของเสีย ของปลอม ไม่ได้ของ ยกเลิกขายตรง รายการแปลก | `references/cancellation-notice.md` |
 | `returns-and-bad-reviews` | รับมือคืนสินค้า ขอเงินคืน ข้อพิพาท และรีวิว 1-3 ดาว | `references/review-replies.md` |
 | `shipping-compare` | เทียบขนส่ง (Flash · Kerry · J&T · ไปรษณีย์ไทย · SPX) ตามราคา COD และน้ำหนัก | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-live-session.md` · `references/playbook-new-product.md` · `references/playbook-pricing-check.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-buy-decision.md` · `references/playbook-complaint.md` · `references/playbook-customer-issue.md` · `references/playbook-learn-from-session.md` · `references/playbook-live-session.md` · `references/playbook-new-product.md` · `references/playbook-pricing-check.md` · `references/playbook-refund.md` · `references/playbook-review.md` · `references/playbook-stock-sync.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-warranty-claim.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `warranty-tracker` | เก็บใบเสร็จและบัตรรับประกัน เช็กสิทธิ์ เตรียมเคลม | — |
 
 ### คำสั่ง (6) — พิมพ์ `/e-commerce:<ชื่อ>`
@@ -154,7 +154,7 @@ plugins/<plugin>/
 | `price-check` | คิดราคาขาย หรือกำไรของราคาปัจจุบัน หลังหักทุกค่าใช้จ่าย | — |
 | `reply` | ร่างคำตอบลูกค้าหรือรีวิวเป็นภาษาไทย | — |
 
-### playbook (12) — `skills/superuser/references/`
+### playbook (13) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
@@ -168,6 +168,7 @@ plugins/<plugin>/
 | `playbook-refund.md` | ขอคืนเงิน | 5 |
 | `playbook-review.md` | ตรวจงานที่เสร็จแล้ว | 6 |
 | `playbook-stock-sync.md` | ซิงก์สต็อกหลายร้าน | 5 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | งานยาวไม่ต้องเฝ้า | 7 |
 | `playbook-warranty-claim.md` | เคลมและติดตามประกัน | 5 |
 
@@ -175,9 +176,9 @@ plugins/<plugin>/
 
 ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน · ภาพประกอบ: [docs/plugins/graphic-design](plugins/graphic-design/README.md) · ต้นฉบับ: `plugins/graphic-design/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/speaking-script-behaviour/case.yaml` (เคส eval: บทพูดต้องเปิดด้วย hook เป็นภาษาพูด และปิดด้วย CTA) · `evals/speaking-script-regression/case.yaml` (เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ) · `evals/speaking-script-trigger/case.yaml` (เคส eval: โจทย์สคริปต์พูดที่ต้องทำให้ speaking-script ถูกเปิด) · `evals/subtitles-th-behaviour/case.yaml` (เคส eval: แก้ซับให้ตามกฎความยาว ความเร็วอ่าน และเครื่องหมาย) · `evals/subtitles-th-regression/case.yaml` (เคส eval: กันอาการฝังซับไทยแล้วเป็นสี่เหลี่ยมโดยไม่ระบุฟอนต์ไทย) · `evals/subtitles-th-trigger/case.yaml` (เคส eval: โจทย์ทำซับไทยแล้วฝังที่ต้องทำให้ subtitles-th ถูกเปิด) · `evals/video-editing-behaviour/case.yaml` (เคส eval: ตัดให้ตรงเฟรม ปรับเสียง 2 รอบ และวัดไฟล์ที่ได้) · `evals/video-editing-regression/case.yaml` (เคส eval: กันอาการรับรองความดังจากคำสั่งรอบเดียวโดยไม่วัด) · `evals/video-editing-slides-behaviour/case.yaml` (เคส eval: ความยาวต่อแผ่นถูก แผ่นสุดท้ายไม่หาย วิดีโอยาวเท่าเสียง) · `evals/video-editing-slides-regression/case.yaml` (เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย) · `evals/video-editing-slides-trigger/case.yaml` (เคส eval: โจทย์สไลด์กับเสียงเป็นวิดีโอที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-trigger/case.yaml` (เคส eval: โจทย์ตัดช่วงเงียบและปรับเสียงที่ต้องทำให้ video-editing ถูกเปิด) · `evals/video-editing-tts-behaviour/case.yaml` (เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ) · `evals/video-editing-tts-regression/case.yaml` (เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง) · `evals/video-editing-tts-trigger/case.yaml` (เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด)
 
-### agent (4)
+### agent (5)
 
 | ไฟล์ | ใช้ทำอะไร |
 |---|---|
@@ -185,8 +186,9 @@ plugins/<plugin>/
 | `agents/brand-keeper.md` | ดูแลชุดแบรนด์ของร้าน |
 | `agents/design-critic.md` | ชี้ 2-3 จุดที่ต้องแก้ |
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
+| `agents/video-editor.md` | ตัดต่อ ใส่ซับ และส่งออกวิดีโอ |
 
-### skill (12 + ของกลาง 33)
+### skill (15 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -201,9 +203,12 @@ plugins/<plugin>/
 | `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
 | `motion-basics` | ทำ motion graphic ตัวอักษรเคลื่อนไหว และโลโก้ขยับ สำหรับคนที่ไม่ใช่นักออกแบบ | `references/twelve-principles.md` |
 | `social-formats` | ขนาด สัดส่วน และพื้นที่ปลอดภัยของ Facebook · IG · TikTok · YouTube · LINE OA · X | `references/platform-sizes.md` |
+| `speaking-script` | เขียนสคริปต์พูดหน้ากล้อง: hook ก่อนทักทาย · ภาษาพูด · จับเวลาด้วยนาฬิกา | — |
 | `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/style-lock-sheet.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
-| `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/shot-list-template.md` |
+| `subtitles-th` | ซับไทยเป็นไฟล์: ถอดเสียงเป็น .srt · ตรวจความยาวบรรทัดและเวลา · ฝังซับด้วยฟอนต์ไทย | `scripts/srt_check.py` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `video-editing` | ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก ต่อสไลด์กับเสียงเป็นวิดีโอ และสร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) พร้อมวัดผล | `scripts/f5_worker.py` · `scripts/loudnorm2.py` · `scripts/silences.py` · `scripts/slides_to_video.py` · `scripts/tts_cues.py` · `scripts/windows_tts.ps1` |
+| `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/production-tools.md` · `references/shot-list-template.md` |
 
 ### คำสั่ง (6) — พิมพ์ `/graphic-design:<ชื่อ>`
 
@@ -216,7 +221,7 @@ plugins/<plugin>/
 | `review-design` | ตรวจภาพหรืองานออกแบบก่อนส่ง แล้วบอก 2-3 จุดที่สำคัญที่สุด | — |
 | `video` | เปลี่ยนข้อความเป็นคลิปสั้น (hook · บทถ่าย · ตัวหนังสือบนจอ · brief) | — |
 
-### playbook (8) — `skills/superuser/references/`
+### playbook (9) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
@@ -226,6 +231,7 @@ plugins/<plugin>/
 | `playbook-image-series.md` | ทำภาพ AI เป็นชุด | 6 |
 | `playbook-learn-from-session.md` | เรียนรู้จากงานที่ทำ | 7 |
 | `playbook-review.md` | ตรวจงานที่เสร็จแล้ว | 6 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | งานยาวไม่ต้องเฝ้า | 7 |
 | `playbook-video.md` | ทำคลิปสั้นจากสคริปต์ | 5 |
 
@@ -249,7 +255,7 @@ plugins/<plugin>/
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (38 + ของกลาง 33)
+### skill (39 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -258,6 +264,7 @@ plugins/<plugin>/
 | `annual-checkup` | วางแผนตรวจสุขภาพประจำปี เช็กสิทธิ์ประกันสังคมหรือบัตรทอง เทียบแพ็กเกจ | `references/results-tracker.md` |
 | `calendar-audit` | ตรวจปฏิทินรายเดือน แล้วจองช่วงเวลาไว้ทำงานสำคัญ | — |
 | `cert-prep` | เตรียมสอบใบรับรอง (AWS · Azure · GCP · CKA · PSM) แผนรายสัปดาห์และข้อสอบลอง | `references/exam-facts.md` · `references/plan-template.md` |
+| `course-builder` | ออกแบบหลักสูตรฝั่งผู้สอน: ผลลัพธ์การเรียนรู้ · ตารางสอนพร้อมเวลา · แบบฝึก · rubric · แบบประเมิน | — |
 | `decision-journal` | บันทึกการตัดสินใจใหญ่ (งาน · คอนโด · รถ · ย้ายบ้าน) แล้วกลับมาทบทวน | `references/entry-template.md` |
 | `digital-hygiene` | ล็อกบัญชีครอบครัวให้ปลอดภัย: ตัวจัดการรหัสผ่าน · 2FA · passkey · สำรองข้อมูล | `references/line-and-phone.md` · `references/scams-and-takeover.md` |
 | `doctor-visit-prep` | เตรียมพบแพทย์: ลำดับอาการ · ยาที่ใช้ · ยาที่แพ้ · คำถาม (ไม่วินิจฉัย) | — |
@@ -287,7 +294,7 @@ plugins/<plugin>/
 | `side-project-picker` | เลือกโปรเจกต์ฝึกมือหรือ portfolio ให้คะแนน แล้วตัดขอบเขตให้จบได้ | `references/idea-bank.md` |
 | `sleep-log` | บันทึกการนอนเพื่อดูรูปแบบหรือเอาไปให้แพทย์ดู (ไม่วินิจฉัย) | — |
 | `subscription-audit` | หารายการตัดเงินรายเดือนจาก statement แล้วตัดที่ไม่คุ้ม | `references/cancel-steps.md` · `references/statement-patterns.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bills.md` · `references/playbook-care-setup.md` · `references/playbook-cert-prep.md` · `references/playbook-checkup-cycle.md` · `references/playbook-decide-and-goals.md` · `references/playbook-digital-safety.md` · `references/playbook-doctor-visit.md` · `references/playbook-documents.md` · `references/playbook-family-week.md` · `references/playbook-habit-tracking.md` · `references/playbook-interview.md` · `references/playbook-job-application.md` · `references/playbook-learn-from-session.md` · `references/playbook-learning-path.md` · `references/playbook-maintenance.md` · `references/playbook-medication-routine.md` · `references/playbook-meeting.md` · `references/playbook-offer-negotiation.md` · `references/playbook-paper-to-practice.md` · `references/playbook-profile-refresh.md` · `references/playbook-promotion-case.md` · `references/playbook-review.md` · `references/playbook-side-project.md` · `references/playbook-subscriptions.md` · `references/playbook-tech-radar.md` · `references/playbook-template.md` · `references/playbook-trip.md` · `references/playbook-unattended-run.md` · `references/playbook-vehicle.md` · `references/playbook-weekly-reset.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bills.md` · `references/playbook-care-setup.md` · `references/playbook-cert-prep.md` · `references/playbook-checkup-cycle.md` · `references/playbook-decide-and-goals.md` · `references/playbook-digital-safety.md` · `references/playbook-doctor-visit.md` · `references/playbook-documents.md` · `references/playbook-family-week.md` · `references/playbook-habit-tracking.md` · `references/playbook-interview.md` · `references/playbook-job-application.md` · `references/playbook-learn-from-session.md` · `references/playbook-learning-path.md` · `references/playbook-maintenance.md` · `references/playbook-medication-routine.md` · `references/playbook-meeting.md` · `references/playbook-offer-negotiation.md` · `references/playbook-paper-to-practice.md` · `references/playbook-profile-refresh.md` · `references/playbook-promotion-case.md` · `references/playbook-review.md` · `references/playbook-side-project.md` · `references/playbook-subscriptions.md` · `references/playbook-team-project.md` · `references/playbook-tech-radar.md` · `references/playbook-template.md` · `references/playbook-trip.md` · `references/playbook-unattended-run.md` · `references/playbook-vehicle.md` · `references/playbook-weekly-reset.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tech-radar` | ติดตามการเปลี่ยนแปลงของเครื่องมือรายสัปดาห์จาก release notes ทางการ | `references/radar-templates.md` |
 | `thesis-writing` | เขียนวิทยานิพนธ์ · IS · บทความวิจัย ตั้งแต่โครงร่างจนสอบป้องกัน | `references/citation-and-integrity.md` · `references/defense-and-review.md` · `references/literature-matrix.md` · `references/thai-academic-language.md` · `references/thai-typesetting.md` · `references/thesis-structure.md` |
 | `travel-prep` | เตรียมเดินทาง 1-2 สัปดาห์ก่อนไป: วีซ่า · ประกัน · เงิน · กำหนดการ | `references/checklist-template.md` · `references/travel-facts.md` |
@@ -315,7 +322,7 @@ plugins/<plugin>/
 | `triage-mail` | แยกอีเมลเป็น วันนี้ · สัปดาห์นี้ · ส่งต่อ · เก็บ | — |
 | `week-review` | ทบทวนสัปดาห์ 20 นาที (เสร็จ · หลุด · ค้างใคร · 3 เรื่องหลัก) | — |
 
-### playbook (29) — `skills/superuser/references/`
+### playbook (30) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
@@ -343,6 +350,7 @@ plugins/<plugin>/
 | `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
 | `playbook-side-project.md` | เลือกโปรเจกต์ฝึกมือ | 4 |
 | `playbook-subscriptions.md` | ตรวจค่าสมาชิกรายเดือน | 5 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-tech-radar.md` | ตามข่าวเทคโนโลยี | 5 |
 | `playbook-trip.md` | เตรียมเที่ยว | 4 |
 | `playbook-unattended-run.md` | ให้ทำงานยาวเอง | 7 |
@@ -353,7 +361,7 @@ plugins/<plugin>/
 
 reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ · ภาพประกอบ: [docs/plugins/reverse-engineer](plugins/reverse-engineer/README.md) · ต้นฉบับ: `plugins/reverse-engineer/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `README.md` (คำอธิบายและวิธีเริ่มใช้งาน plugin) · `package.json` (นิยามสคริปต์ npm — doctor ตรวจเครื่องมือ และ test ตรวจโครง tools.json) · `scripts/check-tools.mjs` (ตรวจว่าเครื่องมือ reverse engineering ที่ผู้ใช้ติดตั้งมีตัวไหน โดยไม่ดาวน์โหลดและไม่เปิดโปรแกรม) · `tools.json` (รายการเครื่องมือ reverse engineering แยกตามกลุ่มงาน พร้อมวิธีตรวจและแหล่งติดตั้งทางการ)
 
 ### agent (1)
 
@@ -361,7 +369,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 |---|---|
 | `agents/reverse-engineer-analyst.md` | ตรวจแอปหรือไบนารีที่ไม่มี source อธิบายพร้อมหลักฐาน แล้วสร้างใหม่ |
 
-### skill (7 + ของกลาง 33)
+### skill (9 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -369,11 +377,13 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 |---|---|---|
 | `analyze-apk` | ตรวจ APK ของ Android: manifest ทรัพยากร คลาสที่ถอดรหัส และการเรียกเมธอด | — |
 | `analyze-dotnet` | ตรวจ assembly .NET (.dll/.exe): metadata คำสั่ง CIL dependency และเทียบ build | — |
+| `analyze-firmware` | ตรวจ firmware image หรือ embedded filesystem ที่ได้รับอนุญาตแบบสถิตด้วย Binwalk หรือ Unblob | — |
 | `analyze-js-electron` | ตรวจแอป JavaScript หรือ Electron ที่แตกออกมา: โมดูล import ขอบเขต IPC และ source map | — |
 | `analyze-native-binary` | ตรวจไบนารี native (.exe .dll ELF Mach-O): string symbol pseudocode และฟังก์ชันที่ import | — |
+| `analyze-network` | ตรวจทราฟฟิกที่บันทึกไว้ (HAR · PCAP) หรือสังเกตแอปทดสอบที่ได้รับอนุญาตผ่าน Wireshark หรือ mitmproxy | — |
 | `analyze-website` | ตรวจว่าฟีเจอร์ของเว็บทำงานอย่างไรจากโครงหน้า สคริปต์ และ network call โดยไม่มี backend | — |
-| `reverse-engineer` | จุดเข้าหลักของการ reverse engineer: อธิบายว่าฟีเจอร์ทำงานอย่างไรพร้อมหลักฐาน แล้วสร้างใหม่ | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `reverse-engineer` | จุดเข้าหลักของการ reverse engineer: อธิบายว่าฟีเจอร์ทำงานอย่างไรพร้อมหลักฐาน แล้วสร้างใหม่ | `templates/api-inventory.md` · `templates/change-proof.md` · `templates/codebase-map.md` · `templates/system-map.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 
 ### คำสั่ง (1) — พิมพ์ `/reverse-engineer:<ชื่อ>`
 
@@ -381,12 +391,13 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 |---|---|---|
 | `re` | คำสั่งลัด reverse engineer ฟีเจอร์จากแอป ไบนารี assembly เว็บ หรือ APK: หลักฐานก่อน แล้วสร้างใหม่ | — |
 
-### playbook (3) — `skills/superuser/references/`
+### playbook (4) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
 | `playbook-learn-from-session.md` | เรียนรู้จากงานที่ทำ | 7 |
 | `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | ปล่อยงานยาวให้ทำเอง | 7 |
 
 ## software-company
@@ -439,7 +450,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (93 + ของกลาง 33)
+### skill (95 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -476,7 +487,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `code-orientation` | อ่านโค้ดที่ยังไม่เคยเห็นก่อนแก้: รันอย่างไร · ทำไม · ธรรมเนียมของ repo | — |
 | `blast-radius` | แก้โค้ดที่ใช้ร่วมกันแล้วหาว่าอะไรอื่นจะพังตาม | — |
 | `legacy-spec-recovery` | กู้สเปกจากโค้ดระบบเก่าพร้อมหลักฐาน ก่อนแก้ระบบ | `assets/business-rule-register.md` · `assets/change-request.md` · `references/evidence-by-stack.md` · `references/framework-upgrade.md` |
-| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/__pycache__/triage.cpython-313.pyc` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/compare_members.py` · `scripts/har_summary.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/triage.py` |
+| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/compare_members.py` · `scripts/har_summary.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/triage.py` |
 | `readable-code` | โค้ดอ่านง่าย: ชื่อ · รูปฟังก์ชัน · คอมเมนต์ · ที่วางไฟล์ | `assets/naming-reference.md` |
 
 **ตรวจและทดสอบ**
@@ -528,13 +539,14 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `api-conventions` | กติกา API ให้เหมือนกันทั้งระบบ: URL · แบ่งหน้า · วันที่ · id | `assets/API-CONVENTIONS.md` · `references/contract-testing.md` |
 | `database-design` | ออกแบบหรือแก้ schema: ตาราง · คอลัมน์ · index · ความสัมพันธ์ · migration | `references/data-pipeline-patterns.md` · `references/data-types.md` · `references/migrations.md` · `references/per-stack.md` · `references/warehouse-modeling.md` |
 | `web-service-essentials` | ของที่ทุก HTTP service ต้องมี: health endpoint · error ตาม RFC 9457 | `assets/health.node.js` · `assets/health_py.py` · `references/per-stack.md` |
-| `mcp-server` | สร้าง MCP server ให้ agent ใช้ระบบจริง (stdio ก่อน · tool อ่านอย่างเดียว · eval 3 กรณี) | `assets/inventory-mcp/README.md` · `assets/inventory-mcp/server.py` · `references/remote-and-auth.md` · `references/tool-design.md` |
+| `mcp-server` | สร้าง MCP server ให้ agent ใช้ระบบจริง (stdio ก่อน · tool อ่านอย่างเดียว · eval 3 กรณี) | `assets/inventory-mcp/README.md` · `assets/inventory-mcp/server.py` · `assets/inventory-mcp/wire-inventory-2026-10-23.jsonl` · `references/remote-and-auth.md` · `references/tool-design.md` |
 | `background-jobs` | งานเบื้องหลัง (ส่งเมล · รายงาน · นำเข้า · ตั้งเวลา) คิวและการลองซ้ำ | — |
 | `notifications` | ส่งเมล SMS LINE push และข้อความในแอป: ช่องทาง · แม่แบบ · เลิกรับ | — |
 | `file-upload-and-storage` | รับไฟล์อัปโหลด เก็บ และให้ดาวน์โหลด (ตรวจชนิด · สแกนไวรัส · ลิงก์) | — |
-| `data-import-export` | นำเข้าและส่งออก Excel/CSV: ตรวจก่อนเขียน · error รายแถว · ปี พ.ศ. | — |
+| `data-import-export` | นำเข้าและส่งออก Excel/CSV: ตรวจก่อนเขียน · error รายแถว · ปี พ.ศ. | `references/thai-accounting-apis.md` |
 | `observability-basics` | รู้ว่าระบบปกติก่อนลูกค้าบ่น: metric · log · trace · แจ้งเตือน | — |
 | `cicd-and-release` | ตั้งหรือแก้ท่อ build และ deploy เลือกวิธีปล่อยงาน | `references/deployment-plan-template.md` · `references/per-platform.md` |
+| `infra-as-code` | สร้างเครื่อง ฐานข้อมูล และเครือข่ายบนคลาวด์จากโค้ด (OpenTofu · plan ใน PR · apply production รออนุมัติ · region ในไทย) | — |
 | `incident-runbook-template` | คู่มือรับมือเมื่อระบบพัง และคู่มือเวร on-call | `references/game-days.md` · `references/index-and-alert-links.md` · `references/runbook-template.md` |
 | `postmortem-template` | เขียนทบทวนหลังเหตุระบบล่มแบบไม่โทษคน | — |
 | `saas-platform` | สร้าง SaaS แบบ B2B: หลายลูกค้าในระบบเดียว · แยกข้อมูล · SSO · SCIM · เก็บเงิน | `references/agent-customer-success-engineer.md` · `references/agent-integration-engineer.md` · `references/agent-revops-analyst.md` · `references/agent-saas-architect.md` · `references/enterprise-integration.md` · `references/multi-tenancy-patterns.md` · `references/subscription-billing.md` |
@@ -543,7 +555,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `ui-craft` | ฝีมือหน้าจอ: ใช้คู่กับ skill ตามแพลตฟอร์มทุกครั้งที่ทำหน้าจอหรือ mockup | `assets/app-character-sheet.html` · `assets/app-character-sheet.webp` · `assets/mockup-start-page-preview.webp` · `assets/mockup-start-page.example.json` · `references/app-character.md` · `references/depth-and-flourish.md` · `references/mockup-start-page.md` · `references/scales.md` · `references/states-and-checks.md` · `references/ux-spec-outputs.md` · `references/web-looks.md` · `scripts/mockup-start-page.py` |
+| `ui-craft` | ฝีมือหน้าจอ: ใช้คู่กับ skill ตามแพลตฟอร์มทุกครั้งที่ทำหน้าจอหรือ mockup | `assets/app-character-sheet.html` · `assets/app-character-sheet.webp` · `assets/mockup-start-page-preview.webp` · `assets/mockup-start-page.example.json` · `references/app-character.md` · `references/depth-and-flourish.md` · `references/figma-to-code.md` · `references/mockup-start-page.md` · `references/scales.md` · `references/states-and-checks.md` · `references/ux-spec-outputs.md` · `references/web-looks.md` · `scripts/mockup-start-page.py` |
 | `web-app-design` | ออกแบบหน้าจอเว็บแอปหรือ mockup (dashboard · หน้าแอดมิน · SaaS) | `assets/appstrack.css` · `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `references/tokens.md` · `scripts/check-design-tokens.mjs` · `scripts/screenshot.py` |
 | `dynamic-website` | เว็บการตลาดหรือหน้างานที่เล่าเรื่องทีละบทด้วย GSAP (deck-mode · scroll · พื้นหลัง 3D) | `assets/example-deck.html` · `references/recipes.md` |
 | `mobile-app-design` | ออกแบบหน้าจอแอปมือถือหรือ mockup (PWA · React Native · Flutter) | `assets/mockup-template-preview.webp` · `assets/mockup-template.html` · `assets/speakgo.css` · `references/review.md` · `references/screen-and-components.md` · `references/tokens.md` · `scripts/screenshot.py` |
@@ -561,10 +573,10 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `srs-writing` | เขียนหรือตรวจ SRS ตาม ISO 29148 ทุกข้อมีรหัสและทดสอบได้ | `assets/srs-outline.md` · `references/brd-template.md` · `references/review-checklist.md` |
 | `fsd-writing` | เขียนหรือตรวจ FSD เอกสารสเปกที่ใช้สร้างหน้าจอ | `assets/fsd-outline.md` · `references/edge-cases.md` · `references/figures.md` · `references/fsd-vs-srs.md` · `references/outline-sections.md` · `references/related-skills.md` · `references/stakeholder-doc-templates.md` · `references/worked-examples.md` |
 | `user-story-writer` | เขียน user story และเกณฑ์รับงานแบบ Given-When-Then | `assets/user-stories.md` · `examples/login-story.md` |
-| `project-doc-set` | เลือกชุดเอกสารของโปรเจกต์ ลำดับ ที่เก็บ และรวมข้อค้างไว้ใน Excel | `assets/doc-set-checklist.md` · `references/ecosystem.md` · `references/technical-docs.md` · `references/writer-templates.md` · `scripts/open_items.py` |
+| `project-doc-set` | เลือกชุดเอกสารของโปรเจกต์ ลำดับ ที่เก็บ และรวมข้อค้างไว้ใน Excel | `assets/doc-set-checklist.md` · `references/docs-site.md` · `references/ecosystem.md` · `references/technical-docs.md` · `references/writer-templates.md` · `scripts/open_items.py` |
 | `project-bootstrap` | ตั้ง repo ใหม่: โครงโฟลเดอร์ · README · คำสั่งรันคำสั่งเดียว | `assets/starter-files.md` · `references/changelog-examples.md` · `references/code-folder.md` |
-| `branded-document-design` | ทำ Word · PowerPoint · PDF ให้ดูออกแบบมา (สี · ฟอนต์ไทย) | `examples/example_deck.pptx` · `examples/example_srs-preview.png` · `examples/example_srs.docx` · `examples/example_stage.pptx` · `examples/fig-flow-dark.png` · `references/anti-patterns.md` · `references/api.md` · `references/brandkit-usage.md` · `references/cover-vote.md` · `references/palette-examples.md` · `references/thai-fonts.md` · `references/tokens-and-type.md` · `references/visual-check.md` · `references/word-layout.md` · `scripts/__pycache__/brandkit.cpython-313.pyc` · `scripts/brandkit.py` · `scripts/brandkit_pptx.py` · `scripts/brandkit_stage.py` · `scripts/cover_art.py` · `scripts/example_deck.py` · `scripts/example_srs.py` · `scripts/example_stage.py` |
-| `markdown-report-docx` | รายงานจาก Markdown ไฟล์เดียว ออกมาเป็น .docx สวยพร้อมส่ง | `assets/example-logo.png` · `assets/example-report.md` · `scripts/__pycache__/md_to_docx.cpython-313.pyc` · `scripts/md_to_docx.py` |
+| `branded-document-design` | ทำ Word · PowerPoint · PDF ให้ดูออกแบบมา (สี · ฟอนต์ไทย) | `examples/example_deck.pptx` · `examples/example_srs-preview.png` · `examples/example_srs.docx` · `examples/example_stage.pptx` · `examples/fig-flow-dark.png` · `references/anti-patterns.md` · `references/api.md` · `references/brandkit-usage.md` · `references/cover-vote.md` · `references/palette-examples.md` · `references/thai-fonts.md` · `references/tokens-and-type.md` · `references/visual-check.md` · `references/word-layout.md` · `scripts/brandkit.py` · `scripts/brandkit_pptx.py` · `scripts/brandkit_stage.py` · `scripts/cover_art.py` · `scripts/example_deck.py` · `scripts/example_srs.py` · `scripts/example_stage.py` |
+| `markdown-report-docx` | รายงานจาก Markdown ไฟล์เดียว ออกมาเป็น .docx สวยพร้อมส่ง | `assets/example-logo.png` · `assets/example-report.md` · `scripts/md_to_docx.py` |
 | `presentation-design` | ทำสไลด์ที่คนจะนำเสนอหรืออ่าน: เรื่องเล่า · หัวข้อ · layout · ฟอนต์ไทย | `assets/slide-mockup-preview.webp` · `assets/slide-mockup.html` · `references/anti-patterns.md` |
 | `html-slide-deck` | สไลด์เป็นไฟล์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `assets/example-logo.png` · `assets/shell.html` · `assets/slides-example-preview.webp` · `assets/slides-example.html` · `scripts/build_deck.py` · `scripts/check_deck.py` |
 | `pptx-to-html-deck` | เปลี่ยน .pptx เป็น HTML ไฟล์เดียวที่มี animation โน้ต และเมนู | `assets/interactive-page.html` · `assets/runtime.css` · `assets/runtime.js` · `scripts/check_html_deck.py` · `scripts/click_steps.py` · `scripts/pptx_to_html.py` |
@@ -573,7 +585,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `ecommerce-patterns` | สร้างซอฟต์แวร์ร้านค้า: ตะกร้า · ชำระเงิน · คำสั่งซื้อ · โปรโมชัน · สต็อก | `references/agent-cro-specialist.md` · `references/agent-ecommerce-engineer.md` · `references/agent-inventory-specialist.md` · `references/agent-recommendation-engineer.md` · `references/checkout-optimization.md` · `references/inventory-management.md` · `references/recommendation-systems.md` |
+| `ecommerce-patterns` | สร้างซอฟต์แวร์ร้านค้า: ตะกร้า · ชำระเงิน · คำสั่งซื้อ · โปรโมชัน · สต็อก | `references/agent-cro-specialist.md` · `references/agent-ecommerce-engineer.md` · `references/agent-inventory-specialist.md` · `references/agent-recommendation-engineer.md` · `references/checkout-optimization.md` · `references/inventory-management.md` · `references/recommendation-systems.md` · `references/thai-marketplace-apis.md` |
 | `fintech-payments` | ระบบรับจ่ายเงิน (Stripe · Omise · PromptPay · webhook · คืนเงิน · KYC) | `references/agent-fintech-compliance-officer.md` · `references/agent-fintech-engineer.md` · `references/agent-payment-integration.md` · `references/agent-quant-analyst.md` · `references/kyc-aml-patterns.md` · `references/payment-gateway-integration.md` · `references/pci-dss-compliance.md` |
 | `game-development` | สร้างเกม: เลือก engine · ECS · netcode · จับคู่ผู้เล่น · กันโกง | `references/agent-game-designer.md` · `references/agent-game-developer.md` · `references/agent-live-ops-specialist.md` · `references/agent-multiplayer-engineer.md` · `references/game-architecture.md` · `references/live-ops-patterns.md` · `references/multiplayer-netcode.md` |
 | `healthcare-systems` | ซอฟต์แวร์ที่จับข้อมูลผู้ป่วย (คำสั่งแพทย์ · ยา · FHIR · EHR · HIPAA) | `references/agent-fhir-specialist.md` · `references/agent-healthcare-engineer.md` · `references/agent-hipaa-officer.md` · `references/clinical-analytics.md` · `references/clinical-workflows.md` · `references/fhir-implementation.md` · `references/hipaa-compliance.md` |
@@ -585,6 +597,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `smart-contracts` | สร้างงานบนบล็อกเชน: สัญญา Solidity / Solana · ตรวจสัญญา · DeFi | `references/agent-blockchain-architect.md` · `references/agent-defi-engineer.md` · `references/agent-smart-contract-developer.md` · `references/agent-tokenomics-designer.md` · `references/defi-patterns.md` · `references/smart-contract-testing.md` · `references/solidity-security.md` |
 | `developer-experience` | ประสบการณ์นักพัฒนา: เวลาถึง hello world · ข้อความ error · CLI · SDK | `references/agent-devrel-engineer.md` · `references/agent-docs-engineer.md` · `references/agent-dx-engineer.md` · `references/agent-sdk-builder.md` · `references/developer-experience.md` · `references/sdk-design-patterns.md` · `references/technical-content.md` |
 | `seo-audit-checklist` | checklist ตรวจ SEO ของเว็บก่อนเปิดตัว | `references/checklist.md` · `references/page-brief.md` · `references/report-template.md` |
+| `data-analysis` | ตอบคำถามธุรกิจจาก CSV · Excel · SQL ด้วยสคริปต์รันซ้ำได้ (ตัวเลขอ้างบรรทัดผล · ไฟล์ไทย · กราฟภาษาไทย) | `assets/analyse_sales.py` · `assets/make_sample.py` · `assets/sales-sample.csv` |
 
 **อื่น ๆ**
 
@@ -593,7 +606,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `doc-cover-design` | ปกเอกสาร .docx ที่ไม่ซ้ำใคร 3 แบบ แล้วโหวต 2 ใน 3 | `references/cover-bakeoff.md` · `references/real-examples.md` · `references/structural-ideas.md` · `references/word-build.md` · `scripts/cover-engine/src/build_all.py` · `scripts/cover-engine/src/calibrate.py` · `scripts/cover-engine/src/capture.py` · `scripts/cover-engine/src/docx_build.py` · `scripts/cover-engine/src/fonts.py` · `scripts/cover-engine/src/render.py` · `scripts/cover-engine/src/web/cover.html` · `scripts/cover-engine/src/web/cover.js` · `scripts/cover-engine/src/web/projects.js` · `scripts/cover-engine/src/web/set.html` · `scripts/cover-engine/src/word_pdf.py` |
 | `owasp-top10` | ระบบเว็บและ API ผ่าน OWASP Top 10:2025: สิ่งที่ต้องมี · วิธีพิสูจน์ · รายงานรายข้อ A01–A10 | `assets/owasp-report.md` · `references/contract-clause.md` · `references/stack-checks.md` |
 | `stack-mql` | เขียนและตรวจ MQL4 / MQL5 (EA · indicator บน MetaTrader) และเตรียมขายบน MQL5 Market | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/agents.md` · `references/approvals.md` · `references/brief-template.md` · `references/code-extensions.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-bug-fix.md` · `references/playbook-feature.md` · `references/playbook-housekeeping.md` · `references/playbook-investigation.md` · `references/playbook-learn-from-session.md` · `references/playbook-new-project.md` · `references/playbook-performance.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-project-docs.md` · `references/playbook-prototype.md` · `references/playbook-refactor.md` · `references/playbook-review.md` · `references/playbook-ship.md` · `references/playbook-skill-authoring.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-visual-parity.md` · `references/principles.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `test-evidence` | รัน test case แล้วเก็บหลักฐาน: GIF มีคำบรรยาย · รายงานผ่าน/ไม่ผ่าน · คอลัมน์ใน Excel | `assets/fonts/LICENSE-DejaVu.txt` · `assets/fonts/OFL-Sarabun.txt` · `assets/fonts/Sarabun-Regular.ttf` · `assets/fonts/Sarabun-SemiBold.ttf` · `assets/fonts/Symbols-DejaVuSans.ttf` · `scripts/make_evidence.py` · `scripts/record_results.py` |
 
 ### คำสั่ง (29) — พิมพ์ `/software-company:<ชื่อ>`
@@ -630,7 +643,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `threat-model` | ทำ threat model แบบ STRIDE ของฟีเจอร์หรือระบบ | `references/security-templates.md` |
 | `web3-design` | ตรวจ smart contract หรือออกแบบ tokenomics | — |
 
-### playbook (16) — `skills/superuser/references/`
+### playbook (17) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
@@ -648,6 +661,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `playbook-review.md` | รีวิวโค้ด | 6 |
 | `playbook-ship.md` | ส่งมอบงาน | 8 |
 | `playbook-skill-authoring.md` | เขียน skill ใหม่ | 8 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | ปล่อยให้ทำเองยาว ๆ | 7 |
 | `playbook-visual-parity.md` | ทำหน้าจอให้ตรงต้นแบบ | 9 |
 
@@ -655,7 +669,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ · ภาพประกอบ: [docs/plugins/superuser](plugins/superuser/README.md) · ต้นฉบับ: `plugins/superuser/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/README.md` (วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก evals/ ที่รากอย่างไร) · `evals/human-writing-behaviour/case.yaml` (เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้) · `evals/human-writing-regression/case.yaml` (เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน) · `evals/human-writing-trigger/case.yaml` (เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/guard-rules.json` (รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/README.md` (วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก scripts/evals/ ของ repo อย่างไร) · `evals/human-writing-behaviour/case.yaml` (เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้) · `evals/human-writing-regression/case.yaml` (เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน) · `evals/human-writing-trigger/case.yaml` (เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/guard-rules.json` (รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox)
 
 ### agent (3)
 
@@ -702,7 +716,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
 | `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (19 + ของกลาง 33)
+### skill (21 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -714,6 +728,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `doc-quotation` | ใบเสนอราคา ใบแจ้งหนี้ ใบวางบิล ใบเสร็จ (VAT · หัก ณ ที่จ่าย · ตัวเลขเป็นคำ) | `references/templates.md` |
 | `doc-thai-official` | หนังสือราชการและบันทึกข้อความตามระเบียบสารบรรณ | `references/templates.md` |
 | `e-tax-invoice` | ออกหรือตรวจใบกำกับภาษี (มาตรา 86/4 · e-Tax Invoice) | — |
+| `hiring-th` | จ้างพนักงานฝั่งนายจ้าง: ประกาศรับสมัครไม่เลือกปฏิบัติ · ใบคัดกรอง · สัมภาษณ์ · ตรวจบุคคลอ้างอิง · จดหมายเสนองาน | — |
 | `labour-law-basics` | กฎหมายคุ้มครองแรงงาน: ทดลองงาน · OT · วันลา · บอกเลิก · ค่าชดเชย · ค่าจ้าง | `references/leave-and-severance.md` |
 | `line-broadcast` | ส่งข้อความหาเพื่อนใน LINE OA: โควตา · กลุ่มเป้าหมาย · ความถี่ | `references/broadcast-template.md` |
 | `line-chatbot` | ให้ LINE OA ตอบลูกค้าอัตโนมัติ: โควตา · คลังความรู้ · ส่งต่อคน | `references/kb-template.md` |
@@ -724,8 +739,9 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `promptpay-qr` | QR พร้อมเพย์บนใบแจ้งหนี้หรือหน้าร้าน และวิธีสร้างข้อมูลใน QR | `references/payload.md` |
 | `seller-tax-basics` | ภาษีคนขายออนไลน์: 40(8) · หักค่าใช้จ่ายแบบเหมา · ภ.ง.ด.90/94 · VAT | — |
 | `social-security-th` | ประกันสังคม (ม.33 · 39 · 40) ฐานค่าจ้าง สิทธิประโยชน์ การยื่น | — |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-monthly-close.md` · `references/playbook-pdpa-setup.md` · `references/playbook-review.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-business-doc.md` · `references/playbook-learn-from-session.md` · `references/playbook-line-oa.md` · `references/playbook-monthly-close.md` · `references/playbook-pdpa-setup.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-year-end.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tax-vat-th` | เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53) | `references/wht-rates.md` |
+| `thai-business-setup` | ตั้งธุรกิจ: เลือกบุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน DBD · เช็กลิสต์หลังจด · ต้นทุนนำเข้าจากจีน | — |
 | `thai-holidays` | วันหยุดราชการและวันหยุดธนาคาร รวมวันหยุดชดเชย | `references/holidays-2569-2570.md` |
 
 ### คำสั่ง (8) — พิมพ์ `/thai-workplace:<ชื่อ>`
@@ -741,7 +757,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `tax-due` | ปฏิทินยื่นภาษี: แบบไหน เดือนไหน ใช้เอกสารอะไร | — |
 | `year-end-filing` | ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50) | — |
 
-### playbook (8) — `skills/superuser/references/`
+### playbook (9) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
@@ -751,6 +767,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `playbook-monthly-close.md` | ปิดเงินเดือนประจำเดือน | 6 |
 | `playbook-pdpa-setup.md` | ตั้งระบบ PDPA | 5 |
 | `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-unattended-run.md` | ให้ทำงานยาวเอง | 7 |
 | `playbook-year-end.md` | ปิดปีและยื่นประจำปี | 5 |
 
@@ -788,7 +805,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `post-trade-review` | ทบทวนผลเทรดรายสัปดาห์หรือรายเดือน: อัตราชนะ · ค่าคาดหวัง · drawdown · กฎใหม่ 1 ข้อ | — |
 | `retirement-plan` | เกษียณในไทยต้องมีเงินเท่าไร และใช้ PVD · RMF · ThaiESG อย่างไร | — |
 | `scam-check` | เช็กก่อนโอนเงินให้แอปลงทุน แอปกู้ กลุ่ม LINE หรือคนที่โทรมา | `references/red-flags-and-evidence.md` |
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-money-plan.md` · `references/playbook-portfolio-check.md` · `references/playbook-pre-trade.md` · `references/playbook-review.md` · `references/playbook-scam-check.md` · `references/playbook-tax-season.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-trade-review.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
 | `tax-basics-th` | ภาษีจากหุ้น ปันผล ดอกเบี้ย คริปโต และเงินได้ต่างประเทศ (ภ.ง.ด.90 · 91) | `references/investment-income-rules.md` |
 | `tax-deduction-planner` | วางแผนลดหย่อนภาษีก่อนสิ้นปี ซื้อ RMF หรือ ThaiESG เท่าไร | `references/deductions-2569.md` |
 | `technical-signals` | กราฟบอกอะไร ตอนนี้เข้าได้ไหม RSI · MACD · volume หมายถึงอะไร | — |
@@ -807,7 +824,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `tax-plan` | วางแผนลดหย่อนสิ้นปี ภาษีก่อนและหลัง และวงเงิน RMF ThaiESG ที่เหลือ | — |
 | `watch` | เพิ่ม ทบทวน หรือล้าง watchlist (เหตุผล · โซนเข้า · แจ้งเตือน) | — |
 
-### playbook (9) — `skills/superuser/references/`
+### playbook (10) — `skills/superuser/references/`
 
 | ไฟล์ | ทำอะไร | ขั้น |
 |---|---|---|
@@ -818,5 +835,6 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `playbook-review.md` | ตรวจงานก่อนส่ง | 6 |
 | `playbook-scam-check.md` | เช็กว่าโดนหลอกไหม | 4 |
 | `playbook-tax-season.md` | ภาษีประจำปี | 5 |
+| `playbook-team-project.md` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม | 9 |
 | `playbook-trade-review.md` | ทบทวนการเทรด | 5 |
 | `playbook-unattended-run.md` | ให้ทำงานยาวเอง | 7 |

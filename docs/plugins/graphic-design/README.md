@@ -4,7 +4,7 @@
 
 ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน
 
-agent 4 · skill 45 · คำสั่ง 6 · playbook 8 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`e-commerce`](../e-commerce/README.md) · [`thai-workplace`](../thai-workplace/README.md)
+agent 5 · skill 48 · คำสั่ง 6 · playbook 9 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`e-commerce`](../e-commerce/README.md) · [`thai-workplace`](../thai-workplace/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/graphic-design/`](../../../plugins/graphic-design/)
 
@@ -36,5 +36,6 @@ agent 4 · skill 45 · คำสั่ง 6 · playbook 8 · ส่งงาน�
 | `image-series` | ทำภาพ AI เป็นชุด | 6 |
 | `learn-from-session` | เรียนรู้จากงานที่ทำ (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 7 |
 | `review` | ตรวจงานที่เสร็จแล้ว | 6 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `unattended-run` | งานยาวไม่ต้องเฝ้า | 7 |
-| `video` | ทำคลิปสั้นจากสคริปต์ | 5 |
+| `video` | ทำคลิปสั้นจากสคริปต์ | 6 |

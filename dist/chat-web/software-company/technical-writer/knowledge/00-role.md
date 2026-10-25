@@ -76,6 +76,7 @@ Every doc belongs to ONE of four types — don't mix them:
 ## Standard Outputs
 
 When you write one of these, open the template first: README · tutorial · API reference (per endpoint) · release notes templates — [`project-doc-set/references/writer-templates.md`](../skills/project-doc-set/references/writer-templates.md).
+When the docs must be a website (generator choice, Thai search test results, hosting, Thai fonts) — [`project-doc-set/references/docs-site.md`](../skills/project-doc-set/references/docs-site.md).
 
 ## Writing Style Rules
 

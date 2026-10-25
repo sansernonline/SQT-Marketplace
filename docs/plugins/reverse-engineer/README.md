@@ -4,7 +4,7 @@
 
 reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่
 
-agent 1 · skill 40 · คำสั่ง 1 · playbook 3 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`superuser`](../superuser/README.md)
+agent 1 · skill 40 · คำสั่ง 1 · playbook 4 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`superuser`](../superuser/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/reverse-engineer/`](../../../plugins/reverse-engineer/)
 
@@ -32,4 +32,5 @@ agent 1 · skill 40 · คำสั่ง 1 · playbook 3 · ส่งงาน�
 |---|---|---|
 | `learn-from-session` | เรียนรู้จากงานที่ทำ (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 7 |
 | `review` | ตรวจงานก่อนส่ง (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 6 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `unattended-run` | ปล่อยงานยาวให้ทำเอง (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 7 |

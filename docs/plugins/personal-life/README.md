@@ -4,7 +4,7 @@
 
 จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้
 
-agent 9 · skill 71 · คำสั่ง 16 · playbook 29 · ส่งงานต่อให้ [`superuser`](../superuser/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`graphic-design`](../graphic-design/README.md)
+agent 9 · skill 72 · คำสั่ง 16 · playbook 30 · ส่งงานต่อให้ [`superuser`](../superuser/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`graphic-design`](../graphic-design/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/personal-life/`](../../../plugins/personal-life/)
 
@@ -54,6 +54,7 @@ agent 9 · skill 71 · คำสั่ง 16 · playbook 29 · ส่งงา�
 | `review` | ตรวจงานก่อนส่ง | 6 |
 | `side-project` | เลือกโปรเจกต์ฝึกมือ | 4 |
 | `subscriptions` | ตรวจค่าสมาชิกรายเดือน | 5 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `tech-radar` | ตามข่าวเทคโนโลยี | 5 |
 | `trip` | เตรียมเที่ยว | 4 |
 | `unattended-run` | ให้ทำงานยาวเอง | 7 |

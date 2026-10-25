@@ -23,6 +23,7 @@ description: Use when a system imports or exports Excel or CSV. Validate before 
 | สร้างไฟล์ Excel ที่จัดรูปแบบสวยงาม | `anthropic-skills:xlsx` | แทน |
 | กลไกคิวและความคืบหน้า | `background-jobs` | แทน |
 | ปี พ.ศ. และการเรียงลำดับไทย | `i18n-and-locale` | แทน |
+| ส่งเอกสารเข้าโปรแกรมบัญชีไทย (PEAK · FlowAccount) ผ่าน API แทนไฟล์ | [`references/thai-accounting-apis.md`](references/thai-accounting-apis.md) | แทน |
 | บันทึกว่าใครนำเข้าหรือส่งออกอะไร | `audit-trail` | คู่ |
 | ปิดบังข้อมูลส่วนบุคคลในไฟล์ส่งออก | `pdpa-compliance` | คู่ |
 | แจ้งผู้ใช้เมื่อนำเข้าเสร็จ | `notifications` | คู่ |

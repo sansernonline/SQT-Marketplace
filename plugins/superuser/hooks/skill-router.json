@@ -8,7 +8,7 @@
     { "pattern": "\\.pptx\\b|powerpoint|สไลด์|\\bslides?\\b|\\bdeck\\b|พรีเซน", "skills": ["presentation-design", "pptx", "human-writing", "no-ai-look"] },
     { "pattern": "\\.xlsx\\b|\\bexcel\\b|สเปรดชีต|spreadsheet", "skills": ["xlsx"] },
     { "pattern": "เปรียบเทียบ|ข้อดีข้อเสีย|ควรเลือก|ตัวไหนดี|แบบไหนดี|\\bvs\\.?\\s|\\bcompare\\b|trade-?offs?|pros and cons|which should", "skills": ["answer-shape"] },
-    { "pattern": "โค้ด|\\bcode\\b|สคริปต์|\\bscript\\b|ฟังก์ชัน|\\bfunction\\b|\\brefactor|\\bendpoint\\b", "skills": ["superuser:simplify", "lazy-coding", "readable-code"] },
+    { "pattern": "โค้ด|\\bcode\\b|สคริปต์(?! ?พูด)|\\bscript\\b|ฟังก์ชัน|\\bfunction\\b|\\brefactor|\\bendpoint\\b", "skills": ["superuser:simplify", "lazy-coding", "readable-code"] },
     { "pattern": "python|\\.py\\b|fastapi|django|pandas", "skills": ["stack-python"] },
     { "pattern": "typescript|javascript|node\\.js|nodejs|\\bnpm\\b|angular|\\breact\\b|\\.tsx?\\b", "skills": ["stack-typescript"] },
     { "pattern": "c#|\\.net\\b|asp\\.net|dotnet|entity framework", "skills": ["stack-dotnet"] },
@@ -26,6 +26,11 @@
     { "pattern": "หาข้อมูล|ค้นข้อมูล|\\bresearch\\b|เช็กให้หน่อย|ยังจริงไหม", "skills": ["research-with-sources"] },
     { "pattern": "(สร้าง|เขียน|แก้|ปรับ|ทำ)[^\\n]{0,12}(skill|agent|playbook)\\b|\\b(new|write|create|fix|improve)[^\\n]{0,12}(skill|subagent|playbook)\\b|\\bevals?\\b|case\\.yaml|skill-doctor|plugin eval", "skills": ["skill-authoring"] },
     { "pattern": "แปล(เป็น|ภาษา)?(ไทย|อังกฤษ)|แปลภาษา|แปลเอกสาร|แปลข้อความ|\\btranslat(e|ion|ed|ing)\\b|สองภาษา|\\bbilingual\\b|\\b(th|en)[- ](to|→)[- ](th|en)\\b", "skills": ["translate-th-en", "human-writing"] },
-    { "pattern": "ทวงเงิน|ทวงถาม|ปฏิเสธ(ยังไง|อย่างไร)|ข้อความ(สุภาพ|ขอโทษ)|polite message", "skills": ["polite-message-th-en"] }
+    { "pattern": "ทวงเงิน|ทวงถาม|ปฏิเสธ(ยังไง|อย่างไร)|ข้อความ(สุภาพ|ขอโทษ)|polite message", "skills": ["polite-message-th-en"] },
+    { "pattern": "สคริปต์ ?พูด|บทพูด|พูดหน้ากล้อง|talking ?head|influencer|พิธีกร|voice ?over|เสียงบรรยาย", "skills": ["speaking-script"] },
+    { "pattern": "ตัดต่อ|ตัดคลิป|ต่อคลิป|รวมคลิป|ตัด(ช่วง|เสียง)เงียบ|\\bffmpeg\\b|loudness|\\bLUFS\\b|ความดังเสียง|เสียงดังไม่เท่ากัน|ส่งออกวิดีโอ|export (video|mp4)", "skills": ["video-editing"] },
+    { "pattern": "ซับไทย|ทำซับ|ใส่ซับ|ฝังซับ|ถอดเสียง|ถอดคำพูด|\\.srt\\b|\\bsubtitles?\\b|คำบรรยายใต้ภาพ", "skills": ["subtitles-th"] },
+    { "pattern": "สไลด์[^\\n]{0,30}(วิดีโอ|คลิป|mp4)|(วิดีโอ|คลิป)[^\\n]{0,30}สไลด์|slides? to video|สไลด์(ประกอบ|กับ)เสียง", "skills": ["video-editing"] },
+    { "pattern": "text[- ]?to[- ]?speech|(?<![\\w-])tts(?![\\w-])|เสียงบรรยาย ?(ด้วย ?)?ai|เสียงบรรยาย ?จาก ?สคริปต์|ไม่(อยาก|ต้อง)อัดเสียง|ให้ ?(ai|คอม|เครื่อง) ?อ่าน ?(สคริปต์|บท|ข้อความ)|แปลง ?(ข้อความ|สคริปต์) ?เป็นเสียง|เสียงพากย์|สร้างเสียง(พูด|บรรยาย|พากย์)|เสียงอ่าน|เลียนเสียง|โคลนเสียง|voice ?clon|f5-?tts|edge-?tts", "skills": ["video-editing"] }
   ]
 }

@@ -25,7 +25,7 @@ Response time and chat rate count toward shop ratings on the big platforms, and 
 | ได้ของผิด / ไม่ครบ / ชำรุด | T4 wrong or damaged item | photos/video from buyer, packing record |
 | ขอคืนเงิน / ขอคืนสินค้า | T5 refund | decision table in `returns-and-bad-reviews` |
 | ส่งของวันไหน | T7 shipping time | cut-off time, today's shipments |
-| ขอใบเสร็จ / ใบกำกับภาษี | T8 receipt | VAT-registered or not (`seller-tax-basics`) |
+| ขอใบเสร็จ / ใบกำกับภาษี | T8 receipt | VAT-registered or not (`seller-tax-basics` in thai-workplace) |
 
 ## Rules
 

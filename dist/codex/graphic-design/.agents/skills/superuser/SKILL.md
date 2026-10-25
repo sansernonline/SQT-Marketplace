@@ -210,7 +210,7 @@ description: Use when design work spans several assets (brand kit, campaign, AI 
 
 | กติกา | รายละเอียด |
 |---|---|
-| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` |
+| **เลือก agent ตามบทบาท** | ล็อกสไตล์และเขียน brief ภาพใช้ `art-director` · ทำ brand kit และตรวจความตรงแบรนด์ใช้ `brand-keeper` · ตรวจก่อนส่งใช้ `design-critic` (ตัวใหม่ที่ไม่เห็นงานมาก่อน) · โพสต์และแคมเปญใช้ `social-creator` · ตัดต่อ ใส่ซับ และส่งออกวิดีโอใช้ `video-editor` |
 | **งานข้ามสาขา** | หน้าจอแอปหรือเว็บส่งให้ `software-company` (`ux-designer` · `graphic-designer`) · ภาพสินค้าในร้านออนไลน์ส่งให้ `e-commerce` · rich menu ของ LINE OA ส่งให้ `thai-workplace` ถ้ายังไม่ได้ติดตั้ง plugin นั้น ให้บอกผู้ใช้ว่ามี แล้วทำต่อด้วยความรู้ทั่วไปพร้อมป้าย `ยังไม่ได้ตรวจ` ส่วนงานหลายขั้นในสาขานั้นให้ส่งต่อ `/<plugin>:superuser` ของ plugin นั้น |
 
 ---

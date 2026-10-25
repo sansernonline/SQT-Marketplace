@@ -4,7 +4,7 @@
 
 ซื้อ-ขายออนไลน์ทั้งสองฝั่ง ขายบน Shopee Lazada TikTok และซื้ออย่างรู้สิทธิ์
 
-agent 4 · skill 45 · คำสั่ง 6 · playbook 12 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`software-company`](../software-company/README.md) · [`superuser`](../superuser/README.md) · [`personal-life`](../personal-life/README.md) · [`trading-finance`](../trading-finance/README.md)
+agent 4 · skill 45 · คำสั่ง 6 · playbook 13 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`software-company`](../software-company/README.md) · [`superuser`](../superuser/README.md) · [`personal-life`](../personal-life/README.md) · [`trading-finance`](../trading-finance/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/e-commerce/`](../../../plugins/e-commerce/)
 
@@ -40,5 +40,6 @@ agent 4 · skill 45 · คำสั่ง 6 · playbook 12 · ส่งงาน
 | `refund` | ขอคืนเงิน | 5 |
 | `review` | ตรวจงานที่เสร็จแล้ว | 6 |
 | `stock-sync` | ซิงก์สต็อกหลายร้าน | 5 |
+| `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `unattended-run` | งานยาวไม่ต้องเฝ้า | 7 |
 | `warranty-claim` | เคลมและติดตามประกัน | 5 |
