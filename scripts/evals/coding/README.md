@@ -1,19 +1,19 @@
-# evals/coding — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม
+# scripts/evals/coding — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม
 
 แก้ skill หรือ agent ที่เกี่ยวกับโค้ดแล้ว → ให้ plugin รุ่นก่อนกับรุ่นหลังทำงานชุดเดียวกัน แล้วเทียบคะแนน
-ต่างจาก `evals/speed` ตรงที่วัด **คุณภาพ** (เต็ม 10 ต่องาน) ไม่ใช่ความเร็ว · วิธีให้คะแนนอยู่ใน skill `coding-evals` ของ software-company
+ต่างจาก `scripts/evals/speed` ตรงที่วัด **คุณภาพ** (เต็ม 10 ต่องาน) ไม่ใช่ความเร็ว · วิธีให้คะแนนอยู่ใน skill `coding-evals` ของ software-company
 
 ## วิธีรัน
 
 ```powershell
 # 1. ตรวจชุดงานก่อนใช้ (ไม่เรียก claude ไม่เสียเงิน): โค้ดตั้งต้นต้องตก · คำตอบอ้างอิงต้องผ่านครบ
-node evals/coding/run-coding.mjs --verify
+node scripts/evals/coding/run-coding.mjs --verify
 
 # 2. เทียบ commit ล่าสุด (รุ่นก่อน) กับไฟล์ที่แก้อยู่ตอนนี้ (รุ่นหลัง) · งาน c1 กับ c5 · รุ่นละ 1 รอบ
-node evals/coding/run-coding.mjs --old HEAD --tasks c1,c5
+node scripts/evals/coding/run-coding.mjs --old HEAD --tasks c1,c5
 
 # 3. เทียบครบ 8 งาน · รุ่นละ 2 รอบ · จำกัดรอบละ $5
-node evals/coding/run-coding.mjs --old f105afc --new HEAD --runs 2 --budget 5
+node scripts/evals/coding/run-coding.mjs --old f105afc --new HEAD --runs 2 --budget 5
 ```
 
 | ตัวเลือก | ค่าเริ่ม | ความหมาย |

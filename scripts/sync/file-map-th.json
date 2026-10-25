@@ -9,7 +9,7 @@
     "hooks/core-rules.md": "กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)",
     "hooks/skill-router.json": "คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม",
     "hooks/guard-rules.json": "รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา",
-    "evals/README.md": "วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก evals/ ที่รากอย่างไร",
+    "evals/README.md": "วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก scripts/evals/ ของ repo อย่างไร",
     "evals/human-writing-trigger/case.yaml": "เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด",
     "evals/human-writing-behaviour/case.yaml": "เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้",
     "evals/human-writing-regression/case.yaml": "เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน",

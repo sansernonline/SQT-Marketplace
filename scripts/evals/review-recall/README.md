@@ -1,6 +1,6 @@
-# evals/review-recall — reviewer เจอข้อผิดที่ฝังไว้ไหม
+# scripts/evals/review-recall — reviewer เจอข้อผิดที่ฝังไว้ไหม
 
-`reviewer` ของ superuser ([`reviewer.md`](../../plugins/superuser/agents/reviewer.md)) เป็นด่านสุดท้ายก่อนงานถึงผู้ใช้ ถ้ามันพลาด ผู้ใช้จะเป็นคนเจอเอง
+`reviewer` ของ superuser ([`reviewer.md`](../../../plugins/superuser/agents/reviewer.md)) เป็นด่านสุดท้ายก่อนงานถึงผู้ใช้ ถ้ามันพลาด ผู้ใช้จะเป็นคนเจอเอง
 ชุดนี้วัด **recall** (ข้อผิดที่ reviewer ชี้ได้ ÷ ข้อผิดที่ฝังไว้ทั้งหมด) บนงาน 8 ชิ้นแบบที่บริษัทซอฟต์แวร์ไทยส่งลูกค้าจริง ฝังข้อผิดไว้ 12 ข้อ ทุกข้อมาจากรายการตรวจใน `reviewer.md` และพิสูจน์ได้จากไฟล์ในเคสเท่านั้น
 
 ## ทำไมไม่ใช้ผู้ตัดสิน
@@ -15,13 +15,13 @@
 
 ```powershell
 # 1. ตรวจชุดเคส ฟรี ไม่เรียก claude
-node evals/review-recall/run-review-recall.mjs --verify
+node scripts/evals/review-recall/run-review-recall.mjs --verify
 
 # 2. รันจริง เสียเงิน: ทุกเคส เคสละ 1 รอบ โมเดลและ effort ตาม reviewer.md
-node evals/review-recall/run-review-recall.mjs --run
+node scripts/evals/review-recall/run-review-recall.mjs --run
 
 # 3. ก่อนตัดสินว่าแก้ reviewer แล้วดีขึ้น: 2 รอบ ติดชื่อชุดผล
-node evals/review-recall/run-review-recall.mjs --run --runs 2 --label reviewer-v2
+node scripts/evals/review-recall/run-review-recall.mjs --run --runs 2 --label reviewer-v2
 ```
 
 | ตัวเลือก | ค่าเริ่ม | ความหมาย |
@@ -44,7 +44,7 @@ node evals/review-recall/run-review-recall.mjs --run --runs 2 --label reviewer-v
 - 1 เคส 1 รอบ = เรียก `claude -p --agent superuser:reviewer` ใหม่ 1 ครั้ง ได้ reviewer ตัวใหม่ที่ไม่เคยเห็นงาน ทำงานในโฟลเดอร์ชั่วคราวนอก repo ที่มีแค่ไฟล์งาน ไม่มี `case.json`
 - reviewer ได้สิ่งที่หัวหน้าทีมส่งจริงตามหัวข้อ "What you get" ใน `reviewer.md`: คำขอของผู้ใช้ · จบเมื่อ · รายชื่อไฟล์ · skill ที่งานต้องทำตาม และไม่ได้รายการข้อผิด
 - โหลด plugin จาก repo นี้ด้วย `--plugin-dir` · `--setting-sources project` จึงไม่โหลด plugin ที่ติดตั้งในเครื่อง · `--add-dir` เปิดให้อ่าน references และสคริปต์ของ skill ได้เหมือนตอนใช้จริง เฉพาะโฟลเดอร์ plugin ไม่รวม `evals/`
-- reviewer เห็น path ของ plugin ใน repo จึงเดินไปหาคำเฉลยได้ในทางทฤษฎี · ถ้าเครื่องมือของมันแตะ `evals/review-recall` หรือ `case.json` ตัวรันขึ้นคำเตือนและจดในบล็อกผลว่ารอบนั้นใช้ไม่ได้
+- reviewer เห็น path ของ plugin ใน repo จึงเดินไปหาคำเฉลยได้ในทางทฤษฎี · ถ้าเครื่องมือของมันแตะ `scripts/evals/review-recall` หรือ `case.json` ตัวรันขึ้นคำเตือนและจดในบล็อกผลว่ารอบนั้นใช้ไม่ได้
 - ปิด WebSearch และ WebFetch เพราะข้อผิดทุกข้อตรวจได้จากไฟล์ในเคส · Bash ใช้ได้เฉพาะคำสั่งอ่าน คำนวณ และรัน test (`node` `python` `grep` `sed` `cp` ฯลฯ)
 - รายงานยาวที่ reviewer เขียนลง `_to_delete/` ของโฟลเดอร์งานตามกติกาของมัน ตัวรันเก็บมารวมกับคำตอบสุดท้ายก่อนให้คะแนน (เฉพาะไฟล์ที่ขึ้นหัว `ผล:`)
 - ตัวรันขึ้นคำเตือนเมื่อ claude ไม่ได้รันเป็น reviewer จริง (มีเครื่องมือ Write หรือ Edit) · โมเดลที่ได้ไม่ตรงที่ขอ · หรือรายงานไม่ได้เขียนตามแบบ
@@ -93,7 +93,7 @@ node evals/review-recall/run-review-recall.mjs --run --runs 2 --label reviewer-v
 
 ## เพิ่มเคส
 
-เคสที่ดีที่สุดมาจากของจริง: งานที่ reviewer ให้ผ่านแล้วผู้ใช้ยังเจอข้อผิด ตัดข้อมูลลูกค้าออก แล้วทำเป็นเคสใหม่ ตามขั้น "พิสูจน์ว่ามันจับได้จริง" ของ [`repeated-mistakes-to-checks`](../../plugins/superuser/skills/repeated-mistakes-to-checks/SKILL.md) · เคสนั้นควรพลาดบน reviewer รุ่นที่ปล่อยข้อผิดออกไป และเจอบนรุ่นที่แก้แล้ว
+เคสที่ดีที่สุดมาจากของจริง: งานที่ reviewer ให้ผ่านแล้วผู้ใช้ยังเจอข้อผิด ตัดข้อมูลลูกค้าออก แล้วทำเป็นเคสใหม่ ตามขั้น "พิสูจน์ว่ามันจับได้จริง" ของ [`repeated-mistakes-to-checks`](../../../plugins/superuser/skills/repeated-mistakes-to-checks/SKILL.md) · เคสนั้นควรพลาดบน reviewer รุ่นที่ปล่อยข้อผิดออกไป และเจอบนรุ่นที่แก้แล้ว
 
 1. สร้าง `cases/r<เลข>-<ชื่อ>/` วางไฟล์งานให้เหมือนงานจริง รวมทุกไฟล์ไม่เกิน 60 บรรทัด และบรรทัดที่ฝังต้องไม่มีปัญหาอื่น (ไม่งั้นแถวที่ชี้ปัญหาอื่นจะนับว่าเจอ)
 2. เขียน `case.json` ตามแบบในเคสที่มีอยู่ ช่องที่ต้องมี: `id` (ตรงชื่อโฟลเดอร์) · `kind` · `request` · `done_when` · `planted`

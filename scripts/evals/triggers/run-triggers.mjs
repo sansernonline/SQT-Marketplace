@@ -2,10 +2,10 @@
 /**
  * run-triggers.mjs — วัดว่า Claude เปิด skill ที่ควรเปิดไหม (trigger eval)
  *
- *   node evals/triggers/run-triggers.mjs                       ทุกเคส · รอบละ 1 · plugin ทั้งหมดในรีโปนี้
- *   node evals/triggers/run-triggers.mjs --runs 3 --cases docx-edit,readme
- *   node evals/triggers/run-triggers.mjs --src <โฟลเดอร์ plugins อื่น> --label before
- *   node evals/triggers/run-triggers.mjs --budget-fraction 0.02 --label budget2   ลองงบรายการ skill 2%
+ *   node scripts/evals/triggers/run-triggers.mjs                       ทุกเคส · รอบละ 1 · plugin ทั้งหมดในรีโปนี้
+ *   node scripts/evals/triggers/run-triggers.mjs --runs 3 --cases docx-edit,readme
+ *   node scripts/evals/triggers/run-triggers.mjs --src <โฟลเดอร์ plugins อื่น> --label before
+ *   node scripts/evals/triggers/run-triggers.mjs --budget-fraction 0.02 --label budget2   ลองงบรายการ skill 2%
  *
  * ทุกเคสรัน `claude -p` ในโฟลเดอร์ใหม่ใต้ _to_delete/triggers/ (คัดลอก fixtures/ ไปด้วย)
  * โหลดเฉพาะ plugin จาก --src ด้วย --plugin-dir · --setting-sources project จึงไม่โหลด plugin ที่ติดตั้งในเครื่อง
@@ -19,7 +19,7 @@ import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(HERE, "..", "..");
+const ROOT = resolve(HERE, "..", "..", "..");
 const argv = process.argv.slice(2);
 const opt = (name, def) => { const i = argv.indexOf(`--${name}`); return i >= 0 ? argv[i + 1] : def; };
 const SRC = resolve(opt("src", join(ROOT, "plugins")));

@@ -1,4 +1,4 @@
-# สัญญาของ 1 งานใน evals/coding/tasks/<cN-ชื่อ>/
+# สัญญาของ 1 งานใน scripts/evals/coding/tasks/<cN-ชื่อ>/
 
 | ไฟล์ | คืออะไร |
 |---|---|

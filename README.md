@@ -134,7 +134,7 @@ SuperUser ทำงานอย่างไร → [docs/plugins/software-compan
 | [docs/SKILL-LEVELS.md](docs/SKILL-LEVELS.md) | 4 ระดับที่เก็บ skill ได้ และเรียกใช้ยังไง |
 | [docs/IDEAS.md](docs/IDEAS.md) | ไอเดียปรับปรุงที่สำรวจไว้ (ของเก่า เก็บไว้อ้างอิง) |
 | [scripts/README.md](scripts/README.md) | สคริปต์ทั้งหมด · build-dist · ติดตั้งกฎประจำตัว |
-| [evals/README.md](evals/README.md) | ชุดวัดผลจริง: เปิด skill ถูกตัว (triggers) · ความเร็ว (speed) · คุณภาพโค้ด (coding) · รันเมื่อไร ค่าใช้จ่ายเท่าไร |
+| [scripts/evals/README.md](scripts/evals/README.md) | ชุดวัดผลจริง: เปิด skill ถูกตัว (triggers) · ความเร็ว (speed) · คุณภาพโค้ด (coding) · รันเมื่อไร ค่าใช้จ่ายเท่าไร |
 
 ---
 

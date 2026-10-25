@@ -2,12 +2,12 @@
 /**
  * run-bench.mjs — เทียบ plugin 2 รุ่นบนงานชุดเดียวกัน: เวลา · จำนวนรอบ · ค่าใช้จ่าย · ลูกทีม · test ที่ซ่อนไว้
  *
- *   node evals/speed/run-bench.mjs --old <git ref> [--new <git ref>|worktree] [--tasks t1,t4] [--runs 2]
+ *   node scripts/evals/speed/run-bench.mjs --old <git ref> [--new <git ref>|worktree] [--tasks t1,t4] [--runs 2]
  *        [--plugin software-company] [--budget 8] [--parallel 4]
  *
  *   --old    รุ่นก่อน เป็น git ref เช่น HEAD หรือ f105afc
  *   --new    รุ่นหลัง ค่าเริ่ม = ไฟล์ในโฟลเดอร์ตอนนี้ (worktree) · ใส่ git ref ก็ได้
- *   ผลรายรอบอยู่ใน _to_delete/bench/ · ตารางสรุปต่อท้าย evals/speed/RESULTS.md
+ *   ผลรายรอบอยู่ใน _to_delete/bench/ · ตารางสรุปต่อท้าย scripts/evals/speed/RESULTS.md
  *
  * ทุกรอบรัน `claude -p` ในโฟลเดอร์ทดสอบที่สร้างใหม่ ใช้เฉพาะ plugin ที่ส่งด้วย --plugin-dir
  * (--setting-sources project จึงไม่โหลด plugin ที่ติดตั้งในเครื่อง) · agent ได้สิทธิ์แค่แก้ไฟล์ · รัน test · git
@@ -21,7 +21,7 @@ import { randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(HERE, "..", "..");
+const ROOT = resolve(HERE, "..", "..", "..");
 const OUT = join(ROOT, "_to_delete", "bench");
 const WIN = process.platform === "win32";
 const PY = WIN ? "python" : "python3";
@@ -147,7 +147,7 @@ for (const task of TASKS) for (const [label] of versions) {
   lines.push(`| ${task} | ${label} | ${avg(rs.map((r) => r.wall)).toFixed(0)} | ${avg(rs.map((r) => r.turns ?? 0)).toFixed(1)} | ${avg(rs.map((r) => r.cost ?? 0)).toFixed(2)} | ${avg(rs.map((r) => r.agents.length)).toFixed(1)} | ${rs.filter((r) => r.batches.length).length}/${rs.length} | ${rs.map((r) => r.hidden).join(" · ")} |`);
 }
 const results = join(HERE, "RESULTS.md");
-if (!existsSync(results)) writeFileSync(results, "# ผลเทียบความเร็ว\n\nสร้างโดย `evals/speed/run-bench.mjs` · ใหม่สุดอยู่ล่างสุด\n");
+if (!existsSync(results)) writeFileSync(results, "# ผลเทียบความเร็ว\n\nสร้างโดย `scripts/evals/speed/run-bench.mjs` · ใหม่สุดอยู่ล่างสุด\n");
 appendFileSync(results, lines.join("\n") + "\n");
 console.log(lines.join("\n"));
 for (const [label] of versions) { const d = join(OUT, `src-${label}`); if (existsSync(d)) try { git("worktree", "remove", "--force", d); } catch { /* ลบเองทีหลัง */ } }

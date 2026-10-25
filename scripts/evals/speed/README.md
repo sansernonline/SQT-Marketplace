@@ -1,4 +1,4 @@
-# evals/speed — เทียบความเร็ว plugin 2 รุ่น
+# scripts/evals/speed — เทียบความเร็ว plugin 2 รุ่น
 
 แก้ skill แล้วอยากรู้ว่าทีมเร็วขึ้นจริงไหม → รันงานชุดเดิมกับรุ่นก่อนและรุ่นหลัง แล้วเทียบตัวเลข
 ตัววัดคุณภาพคือ test ที่ซ่อนไว้ (agent มองไม่เห็น) เร็วขึ้นแต่ test ตก ไม่นับว่าดีขึ้น
@@ -7,10 +7,10 @@
 
 ```powershell
 # เทียบ commit ล่าสุด (รุ่นก่อน) กับไฟล์ที่แก้อยู่ตอนนี้ (รุ่นหลัง) · งาน t1 กับ t4 · รุ่นละ 2 รอบ
-node evals/speed/run-bench.mjs --old HEAD --tasks t1,t4 --runs 2
+node scripts/evals/speed/run-bench.mjs --old HEAD --tasks t1,t4 --runs 2
 
 # เทียบ 2 commit · ทุกงาน · รุ่นละ 3 รอบ · จำกัดรอบละ $5
-node evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3,t4 --runs 3 --budget 5
+node scripts/evals/speed/run-bench.mjs --old f105afc --new HEAD --tasks t1,t2,t3,t4 --runs 3 --budget 5
 ```
 
 | ตัวเลือก | ค่าเริ่ม | ความหมาย |

@@ -1,4 +1,4 @@
-# evals/triggers — Claude เปิด skill ที่ควรเปิดไหม
+# scripts/evals/triggers — Claude เปิด skill ที่ควรเปิดไหม
 
 skill ทำงานได้ต่อเมื่อ Claude เปิดมันก่อน · Claude เลือกเปิดจากชื่อและคำอธิบาย 1 บรรทัดในรายการ skill เท่านั้น
 ชุดนี้วัดว่าคำขอจริง 10 แบบ (แก้ .docx · สรุปประชุม · อีเมล · README · เทียบ · โค้ด · บั๊ก · สไลด์ · ภาษี · สัตว์เลี้ยง) ทำให้ Claude เปิด skill ที่ต้องใช้หรือเปล่า
@@ -6,10 +6,10 @@ skill ทำงานได้ต่อเมื่อ Claude เปิดมั
 ## วิธีรัน
 
 ```bash
-node evals/triggers/run-triggers.mjs --runs 2                               # plugin ในรีโปตอนนี้ · เคสละ 2 รอบ
-node evals/triggers/run-triggers.mjs --src <โฟลเดอร์ plugins รุ่นก่อน> --label before --runs 2
-node evals/triggers/run-triggers.mjs --cases docx-edit,readme                # เฉพาะบางเคส
-node evals/triggers/run-triggers.mjs --budget-fraction 0.02 --label budget2  # ลองงบรายการ skill 2%
+node scripts/evals/triggers/run-triggers.mjs --runs 2                               # plugin ในรีโปตอนนี้ · เคสละ 2 รอบ
+node scripts/evals/triggers/run-triggers.mjs --src <โฟลเดอร์ plugins รุ่นก่อน> --label before --runs 2
+node scripts/evals/triggers/run-triggers.mjs --cases docx-edit,readme                # เฉพาะบางเคส
+node scripts/evals/triggers/run-triggers.mjs --budget-fraction 0.02 --label budget2  # ลองงบรายการ skill 2%
 ```
 
 | ตัวเลือก | ค่าเริ่ม | ความหมาย |

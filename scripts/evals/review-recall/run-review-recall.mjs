@@ -2,8 +2,8 @@
 /**
  * run-review-recall.mjs — reviewer ของ superuser เจอข้อผิดที่ฝังไว้ในงานกี่ข้อ (recall) · ให้คะแนนด้วยการเทียบข้อความ ไม่ใช้ผู้ตัดสิน
  *
- *   node evals/review-recall/run-review-recall.mjs --verify      ตรวจชุดเคส (ฟรี ไม่เรียก claude)
- *   node evals/review-recall/run-review-recall.mjs --run [--cases r1,r5] [--runs 1] [--model <reviewer.md>] [--effort <reviewer.md>]
+ *   node scripts/evals/review-recall/run-review-recall.mjs --verify      ตรวจชุดเคส (ฟรี ไม่เรียก claude)
+ *   node scripts/evals/review-recall/run-review-recall.mjs --run [--cases r1,r5] [--runs 1] [--model <reviewer.md>] [--effort <reviewer.md>]
  *        [--budget 1] [--parallel 4] [--label current] [--plugins superuser]
  *
  * 1 เคส 1 รอบ = claude -p --agent superuser:reviewer ตัวใหม่ ในโฟลเดอร์ชั่วคราวนอก repo ที่มีแค่ไฟล์งาน (ไม่มี case.json)
@@ -18,7 +18,7 @@ import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(HERE, "..", "..");
+const ROOT = resolve(HERE, "..", "..", "..");
 const CASES = join(HERE, "cases");
 const AGENT = "superuser:reviewer";
 const AGENT_FILE = join(ROOT, "plugins", "superuser", "agents", "reviewer.md");
@@ -256,7 +256,7 @@ function runOne(c, n, dirs) {
       }
       const report = [res.result ?? "", ...(existsSync(work) ? writtenReports(work) : [])].join("\n\n");
       const hits = score(c, report);
-      // reviewer เห็น path ของ plugin ใน repo จึงเดินไปหาคำเฉลยได้ในทางทฤษฎี · เครื่องมือแตะ evals/review-recall หรือ case.json = รอบนี้ใช้ไม่ได้
+      // reviewer เห็น path ของ plugin ใน repo จึงเดินไปหาคำเฉลยได้ในทางทฤษฎี · เครื่องมือแตะ scripts/evals/review-recall หรือ case.json = รอบนี้ใช้ไม่ได้
       const peeked = out.split("\n").some((l) => l.includes('"tool_use"') && /evals[\\/]+review-recall|case\.json/.test(l));
       const r = { id: c.id, run: n, kind: c.kind, found: hits.filter((h) => h.hit).length, planted: hits.length, hits, peeked,
         rows: issueLines(report).filter((l) => SEVERITY.test(l)).length, cost: res.total_cost_usd ?? 0,
@@ -268,7 +268,7 @@ function runOne(c, n, dirs) {
       console.log(`  ${r.found === r.planted ? "✓" : "✗"} ${c.id} #${n}  เจอ ${r.found}/${r.planted}${missed.length ? ` · พลาด: ${missed.join(", ")}` : ""} · แถว ${r.rows} · $${r.cost.toFixed(2)} · ${r.seconds} วินาที · ${r.status}`);
       if (r.tools.includes("Write") || r.tools.includes("Edit")) console.log(`    ⚠ ไม่ได้รันเป็น ${AGENT} (มีเครื่องมือ Write/Edit) ตรวจ --plugins และชื่อ agent`);
       if (r.model && !r.model.includes(MODEL)) console.log(`    ⚠ ขอโมเดล ${MODEL} แต่ได้ ${r.model}`);
-      if (peeked) console.log("    ⚠ reviewer แตะ evals/review-recall หรือ case.json ระหว่างตรวจ รอบนี้ใช้ไม่ได้");
+      if (peeked) console.log("    ⚠ reviewer แตะ scripts/evals/review-recall หรือ case.json ระหว่างตรวจ รอบนี้ใช้ไม่ได้");
       if (!/ผล\s*:/.test(report)) console.log(`    ⚠ รายงานไม่ได้ขึ้นหัว "ผล:" ตามแบบของ reviewer ดู ${relative(ROOT, join(OUT, `${c.id}-${n}.json`))}`);
       done(r);
     };
@@ -295,7 +295,7 @@ function summarize(cases, results, dirs) {
     "", `## ${new Date().toISOString().slice(0, 16).replace("T", " ")} · ${LABEL} · เจอ ${found}/${planted} (${planted ? Math.round((100 * found) / planted) : 0}%) · ${MODEL} · ${EFFORT} · $${sum(results, "cost").toFixed(2)}`, "",
     `- agent \`${AGENT}\` · plugin: ${dirs.map((d) => basename(d)).join(", ")} · เคสละ ${RUNS} รอบ · เพดาน $${BUDGET} ต่อครั้ง · โมเดลที่ใช้จริง: ${models}`,
     `- แยกตามชนิด: ${perType}`,
-    ...results.filter((r) => r.peeked).map((r) => `- ⚠ ${r.id} รอบ ${r.run} แตะ evals/review-recall หรือ case.json ระหว่างตรวจ ผลของรอบนี้ใช้ไม่ได้`), "",
+    ...results.filter((r) => r.peeked).map((r) => `- ⚠ ${r.id} รอบ ${r.run} แตะ scripts/evals/review-recall หรือ case.json ระหว่างตรวจ ผลของรอบนี้ใช้ไม่ได้`), "",
     "| เคส | งาน | เจอ | ข้อที่พลาด | แถวปัญหาที่รายงาน | ค่าใช้จ่าย |", "|---|---|---|---|---|---|", ...rows, "",
   ].join("\n");
   appendFileSync(join(HERE, "RESULTS.md"), block);
@@ -319,6 +319,6 @@ async function paidRun() {
 if (has("verify")) verify();
 else if (has("run")) await paidRun();
 else {
-  console.error("ใส่ --verify (ตรวจชุดเคส ฟรี) หรือ --run (เรียก claude จริง เสียเงิน) · วิธีใช้อยู่ใน evals/review-recall/README.md");
+  console.error("ใส่ --verify (ตรวจชุดเคส ฟรี) หรือ --run (เรียก claude จริง เสียเงิน) · วิธีใช้อยู่ใน scripts/evals/review-recall/README.md");
   process.exit(1);
 }

@@ -2,14 +2,14 @@
 /**
  * run-coding.mjs — วัดว่าทีมเขียนโค้ดเก่งขึ้นจริงไหม: ให้ 2 รุ่นของ plugin ทำงานชุดเดียวกัน แล้วให้คะแนนเต็ม 10 ต่องาน
  *
- *   node evals/coding/run-coding.mjs --verify [--tasks c5,c6]          ตรวจชุดงานเอง (ไม่เรียก claude)
- *   node evals/coding/run-coding.mjs --old <git ref> [--new <git ref>] [--tasks c1,c5] [--runs 1]
+ *   node scripts/evals/coding/run-coding.mjs --verify [--tasks c5,c6]          ตรวจชุดงานเอง (ไม่เรียก claude)
+ *   node scripts/evals/coding/run-coding.mjs --old <git ref> [--new <git ref>] [--tasks c1,c5] [--runs 1]
  *        [--plugin software-company] [--budget 8] [--parallel 2] [--no-judge]
- *   node evals/coding/run-coding.mjs --score <โฟลเดอร์งาน> --tasks c5 [--no-judge]   ให้คะแนนโฟลเดอร์ที่ทำเสร็จแล้วซ้ำ
+ *   node scripts/evals/coding/run-coding.mjs --score <โฟลเดอร์งาน> --tasks c5 [--no-judge]   ให้คะแนนโฟลเดอร์ที่ทำเสร็จแล้วซ้ำ
  *
  * คะแนน (ตาม skill coding-evals): ถูกต้อง 4 · test ของทีมเอง 2 · สะอาด 2 · ตามแบบแผน repo 1 · รายงานจริง 1
  * 2 ข้อท้ายให้ claude ตัวใหม่ที่ไม่เห็นงานตอนทำเป็นคนตัดสิน (--no-judge = ข้าม ได้ 0 ทั้ง 2 ข้อ)
- * ทีมทำงานในโฟลเดอร์ชั่วคราวนอก repo (<temp>/sqt-coding-bench/) · ผลรายรอบอยู่ใน _to_delete/coding-bench/runs/ · สรุปต่อท้าย evals/coding/RESULTS.md
+ * ทีมทำงานในโฟลเดอร์ชั่วคราวนอก repo (<temp>/sqt-coding-bench/) · ผลรายรอบอยู่ใน _to_delete/coding-bench/runs/ · สรุปต่อท้าย scripts/evals/coding/RESULTS.md
  */
 import { spawn, execFileSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, appendFileSync, statSync } from "node:fs";
@@ -20,7 +20,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { run, npmInstall, PY, cleanup, prepare } from "./lib.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(HERE, "..", "..");
+const ROOT = resolve(HERE, "..", "..", "..");
 const OUT = join(ROOT, "_to_delete", "coding-bench");
 // โฟลเดอร์ที่ทีมทำงานอยู่นอก repo ของ plugin → ทีมมองไม่เห็น hidden/ · reference/ และไม่โหลด CLAUDE.md ของ SQT-Marketplace
 const WORK = join(tmpdir(), "sqt-coding-bench");
