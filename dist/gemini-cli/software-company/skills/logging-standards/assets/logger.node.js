@@ -57,7 +57,7 @@ const lineFormat = winston.format.printf((info) => {
     .filter(([k]) => !RESERVED.has(k) && !k.startsWith('Symbol('))
     .map(([k, v]) => `${k}=${safe(v)}`)
     .join(' ');
-  const head = `${info.timestamp}  ${info.level.toUpperCase().padEnd(5)}  [${cid}] ${src}  ${info.message}`;
+  const head = `${info.timestamp}  ${info.level.toUpperCase().padEnd(5)}  [${cid}] ${src}  ${String(info.message).replace(/[\r\n\t]+/g, ' ').trim()}`;
   const body = ctx ? `${head}  ${ctx}` : head;
   // stack trace ขึ้นบรรทัดใหม่ได้ — เยื้อง 4 ช่องเพื่อให้เห็นว่าเป็นส่วนต่อของบรรทัดบน
   return info.stack ? `${body}\n    ${info.stack.replace(/\n/g, '\n    ')}` : body;

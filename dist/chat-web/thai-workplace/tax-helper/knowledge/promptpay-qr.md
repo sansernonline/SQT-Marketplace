@@ -54,7 +54,7 @@ Code and a full byte-by-byte breakdown: [references/payload.md](references/paylo
 Reference implementations to compare output against (do not copy without reading): **dtinth/promptpay-qr** (MIT, tag 29 only, long established) · **uunw/thai-qr-payment** (MIT, TypeScript, tag 29 and tag 30, CLI and SVG renderer — new repo with 0 stars at check, so read the tests before trusting it). Your payload for the same number and amount must match theirs byte for byte.
 ตรวจล่าสุด 2026-10-23 (uunw) · 2026-10-22 (dtinth) · แหล่ง: https://github.com/dtinth/promptpay-qr · https://github.com/uunw/thai-qr-payment
 
-## 3. Worked example (verified with the code in references)
+## 3. Worked example (ยังไม่ได้ตรวจกับโค้ดใน references)
 
 Mobile 081-234-5678.
 
