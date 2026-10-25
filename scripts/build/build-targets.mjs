@@ -314,9 +314,13 @@ function filesUnder(dir, prefix = "") {
   });
 }
 
-// ไฟล์ข้อความ (ไม่มีไบต์ 0) ตัด \r ออกเหมือน parse() zip จึงเหมือนกันทุกเครื่อง · .cmd .ps1 คง CRLF ตาม .gitattributes
-const KEEP_CRLF = /\.(cmd|bat|ps1)$/i;
-const toLf = (name, data) => (KEEP_CRLF.test(name) || data.includes(0) ? data : Buffer.from(data.toString("latin1").replace(/\r\n/g, "\n"), "latin1"));
+// ไฟล์ข้อความ (ไม่มีไบต์ 0) เปลี่ยน CRLF เป็น LF เหมือน parse() zip จึงเหมือนกันทุกเครื่อง · .cmd .ps1 เป็น CRLF เสมอตาม .gitattributes
+const CRLF_FILE = /\.(cmd|ps1)$/i;
+const toLf = (name, data) => {
+  if (data.includes(0)) return data;
+  const lf = data.toString("latin1").replace(/\r\n/g, "\n");
+  return Buffer.from(CRLF_FILE.test(name) ? lf.replace(/\n/g, "\r\n") : lf, "latin1");
+};
 
 // simple: เขียน zip เองด้วย zlib แทน dependency · วันที่คงที่ ไฟล์จึงไม่เปลี่ยนถ้าเนื้อหาไม่เปลี่ยน
 function writeZip(out, files) {
