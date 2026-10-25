@@ -285,7 +285,7 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 
 # skill: simplify
 
-Use when making anything (code, document, plan, design, slide, sheet, answer). Simplest form a person can follow.
+Use when a deliverable has steps, layers or options nobody needs yet, or a newcomer must follow it. Not Claude Code /simplify.
 
 # simplify — ทำให้ง่าย คนอ่านครั้งแรกก็ตามได้
 

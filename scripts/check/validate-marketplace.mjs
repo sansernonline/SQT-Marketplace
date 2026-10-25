@@ -12,7 +12,7 @@
  */
 import { plan as planSuperuser } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
-import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine } from './lesson-checks.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows } from './lesson-checks.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
@@ -603,8 +603,16 @@ function selfTest() {
     && promptTestLine('# t\n\nข้อความ\n').length === 1;
   console.log(`  ${pt ? '✅' : '❌'} prompt ไม่มีบรรทัดสถานะทดสอบจริงโดนจับ · มีบรรทัดผ่าน`);
   if (pt) ok++;
+  const bs = bigSkills([{ rel: 'a', bytes: 25000 }, { rel: 'b', bytes: 30000 }, { rel: 'c', bytes: 900 }]);
+  const big = bs.length === 1 && bs[0].includes('2 ไฟล์') && bs[0].indexOf('b 30000') < bs[0].indexOf('a 25000') && bigSkills([{ rel: 'c', bytes: 900 }]).length === 0;
+  console.log(`  ${big ? '✅' : '❌'} SKILL.md ใหญ่เกินเตือนบรรทัดเดียว เรียงใหญ่ก่อน · ไฟล์เล็กไม่โดน`);
+  if (big) ok++;
+  const table = (n) => `# t\r\n\r\n## การตัดสินใจ\r\n| วันที่ | เลือก |\r\n|---|---|\r\n${'| x | y |\r\n'.repeat(n)}\r\n## รอผู้ใช้\r\n| a | b |\r\n|---|---|\r\n| 1 | 2 |\r\n`;
+  const dr = decisionRows(table(21)).length === 1 && decisionRows(table(20)).length === 0 && decisionRows('# t\n').length === 0;
+  console.log(`  ${dr ? '✅' : '❌'} ตารางการตัดสินใจ 21 แถวโดนเตือน · 20 แถว · ตารางหัวข้ออื่น · ไม่มีตาราง ไม่โดน`);
+  if (dr) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 15;
+  const total = cases.length + 17;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -714,6 +722,7 @@ function walkFiles(dir, exts, out = []) {
   return out;
 }
 const relOf = (f) => f.slice(ROOT.length + 1).replace(/\\/g, '/');
+const skillSizes = [];
 for (const p of plugins) {
   const evals = join(pluginsDir, p, 'evals');
   if (existsSync(evals)) for (const f of walkFiles(evals, ['.yaml', '.yml', '.md'])) {
@@ -722,9 +731,15 @@ for (const p of plugins) {
     for (const { at, msg } of undatedClaims(text)) warn(`${relOf(f)}:${at}`, msg);
   }
   const skills = join(pluginsDir, p, 'skills');
-  if (existsSync(skills)) for (const f of walkFiles(skills, ['SKILL.md']))
-    for (const { at, msg } of undatedClaims(readFileSync(f, 'utf8'))) warn(`${relOf(f)}:${at}`, msg);
+  if (existsSync(skills)) for (const f of walkFiles(skills, ['SKILL.md'])) {
+    const text = readFileSync(f, 'utf8');
+    skillSizes.push({ rel: relOf(f), bytes: Buffer.byteLength(text.replace(/\r\n/g, '\n')) });
+    for (const { at, msg } of undatedClaims(text)) warn(`${relOf(f)}:${at}`, msg);
+  }
 }
+for (const m of bigSkills(skillSizes)) warn('plugins/*/skills/*/SKILL.md', m);
+const contextFile = join(ROOT, '.claude', 'superuser', 'CONTEXT.md');
+if (existsSync(contextFile)) for (const m of decisionRows(readFileSync(contextFile, 'utf8'))) warn('.claude/superuser/CONTEXT.md', m);
 for (const [rel, text] of docFiles) if (rel.startsWith('prompt/') && /^prompt-.+\.md$/.test(basename(rel))) for (const m of promptTestLine(text)) err(rel, m);
 
 // ---------------------------------------------------------------- report

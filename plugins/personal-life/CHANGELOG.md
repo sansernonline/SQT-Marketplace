@@ -1,6 +1,6 @@
 # Changelog — personal-life
 
-## Unreleased
+## 0.14.0 — 2026-10-25
 
 - agent `life-admin` รับ `personal-kb` · `travel-prep` · `gift-idea-tracker` · `decision-journal` · agent `tech-mentor` รับ `course-builder` · `triggers.md` เพิ่มแถว `personal-kb`
 - ตัดคำว่า "if installed" ที่ skill ใน plugin นี้เขียนถึง skill ของ plugin เดียวกัน (15 จุด) · `meeting-prep` บอกถูกแล้วว่า skill ประชุมอยู่ใน plugin นี้ ไม่ใช่ `superuser`

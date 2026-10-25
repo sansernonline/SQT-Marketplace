@@ -1,7 +1,10 @@
 # Changelog — trading-finance
 
-## Unreleased
+## 0.12.0 — 2026-10-25
 
+- `debt-payoff`: เพดานดอกเบี้ยยืนยันกับเอกสารของ ธปท. (บัตรเครดิต 16% · สินเชื่อส่วนบุคคล 25% · จำนำทะเบียนรถ 24%) และเพิ่มแถว nano finance 33% · เพิ่มแถวเช่าซื้อรถ 10/15/23% ตามประกาศ ธปท. 55/2568 (รอยืนยัน แหล่งเดียว) · ตรวจ 2026-10-25
+- `tax-deduction-planner`: Easy e-Receipt ปีภาษี 2569 ยังไม่มีรอบใหม่ ข่าวว่ากระทรวงการคลังจะไม่ทำต่อ (ยังรอยืนยันจากแหล่งทางการ)
+- `tax-basics-th`: staking และ yield farming แยกตามชนิดสินทรัพย์ (โทเคนดิจิทัล 40(4)(ซ) · คริปโท 40(8)) airdrop เป็น 40(8) ไม่อยู่ในข้อยกเว้น 2568–2572 ซึ่งยกเว้นเฉพาะกำไรจากการโอน (ยังรอยืนยัน) · เดิมเขียนว่า 40(4)(ฌ)
 - agent ใหม่ `money-planner` ดูแล skill เงินส่วนตัว 10 ตัว (`personal-budget` · `emergency-fund` · `debt-payoff` · `retirement-plan` · `insurance-review` · `mutual-fund-picker` · `dividend-tracker` · `tax-basics-th` · `tax-deduction-planner` · `scam-check`) ที่ก่อนนี้ไม่มี agent ไหนรับ · playbook `money-plan` · `tax-season` · `scam-check` และ prompt เงิน ภาษี มิจฉาชีพ ใช้ตัวนี้แทน `risk-manager` ซึ่งกลับไปทำเฉพาะขนาดไม้และความเสี่ยงพอร์ต
 - `triggers.md` เพิ่มแถว `watchlist-setup`
 

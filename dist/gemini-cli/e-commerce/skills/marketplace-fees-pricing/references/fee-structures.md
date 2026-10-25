@@ -2,7 +2,7 @@
 
 Rates below are the published structure as reported in August–September 2026. **They differ by category and shop, and change several times a year.** Treat every number as a starting point and confirm in the shop's own Seller Centre before pricing.
 
-Note: in September 2026 the Trade Competition Commission of Thailand (สำนักงานคณะกรรมการการแข่งขันทางการค้า, กขค.) reportedly ordered Shopee, Lazada, TikTok Shop and other platforms to freeze merchant commission rates for six months while it reviews fee calculation. Scope and dates (รอยืนยัน) at otcc.or.th. Search on 2026-10-22 found no news confirming this order (ยังไม่ได้ตรวจ — treat as unverified).
+Note: in September 2026 the Trade Competition Commission of Thailand (สำนักงานคณะกรรมการการแข่งขันทางการค้า, กขค.) reportedly ordered Shopee, Lazada, TikTok Shop and other platforms to freeze merchant commission rates for six months while it reviews fee calculation. News on 2026-10-25 reports an order under ม.60 พ.ร.บ.การแข่งขันทางการค้า 2560 freezing GP, fee and commission rises for 6 large platforms (e-commerce and ride-hailing) from late Aug / 7 Sep 2569 until Feb 2570; it stops rises but sets no cap. The order itself was not found on otcc.or.th and the start date differs between sources (รอยืนยัน). ตรวจล่าสุด 2026-10-25 · แหล่ง: https://thaipbs.or.th/news/content/571385 · https://www.rainmaker.in.th/tcct-control-platform-gp-fees-sme/ · https://www.bigseller.com/blog/articleDetails/tcct-gp-freeze-6-months-thailand-sellers-2026.5035.htm
 
 ## Shopee (effective 4 Aug 2026 for the commission round — รอยืนยัน: a Thai news report on 2026-10-22 dates a commission rise to 1 Jun 2026 with non-Mall 7.49–14.98% and Mall 7.49–17.12%, which differs from the table; check Seller Centre)
 

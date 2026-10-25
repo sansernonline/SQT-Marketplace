@@ -926,10 +926,10 @@ Before delivering any polished doc:
 
 ## Anti-patterns
 
-- ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
-- ❌ **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
-- ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
+- **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
+- **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
+- **Inconsistent terminology** — "user" in one section, "customer" in next
+- **Tables of paragraphs** — if cells are >2 sentences, use headings instead
 
 ## ไม่ให้ดูเหมือน AI ทำ
 

@@ -1,6 +1,6 @@
 # Changelog — graphic-design
 
-## Unreleased
+## 0.11.0 — 2026-10-25
 
 - รับ agent `image-artist` มาจาก `software-company` ให้อยู่กับ skill `image-generation` ที่มันใช้ทุกงาน · `triggers.md` เพิ่มแถว `image-generation` และ `speaking-script` ที่ก่อนนี้ไม่มีทางเรียกจาก plugin นี้
 - `line-richmenu` ตัดข้อความ "ถ้าติดตั้ง graphic-design" ที่ชี้หาตัวเอง

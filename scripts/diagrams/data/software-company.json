@@ -1,6 +1,6 @@
 {
  "plugin": "software-company",
- "version": "2.21.0",
+ "version": "2.22.0",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
@@ -2829,6 +2829,22 @@
       "user": true,
       "agents": [],
       "raw": "หัวหน้าทีม (merge: ผู้ใช้ ใน \"รออนุมัติ\")"
+     },
+     "skills": [],
+     "commands": [],
+     "playbooks": [],
+     "approval": true
+    },
+    {
+     "n": 9,
+     "text": "ผู้ใช้อนุมัติ merge แล้ว **ลบ branch ในขั้นเดียวกันเลย ไม่ต้องถามซ้ำ:** `gh pr merge <เลข> --merge --delete-branch` (ลบทั้งบน GitHub และในเครื่อง แล้วสลับไป branch หลัก) · ก่อนลบดูว่าไม่มีไฟล์ค้างใน working tree และ branch นี้ไม่มี worktree อื่นใช้อยู่ · ไม่ใช้ `gh` → `git branch -d <ชื่อ>` (ลบได้เฉพาะที่ merge แล้ว · ห้าม `-D`) และ `git push origin --delete <ชื่อ>` · branch ที่ลบแล้วกู้คืนได้จากหน้า PR บน GitHub · ใคร: หัวหน้าทีม",
+     "sub": [],
+     "phase": "",
+     "who": {
+      "lead": true,
+      "user": false,
+      "agents": [],
+      "raw": "หัวหน้าทีม"
      },
      "skills": [],
      "commands": [],

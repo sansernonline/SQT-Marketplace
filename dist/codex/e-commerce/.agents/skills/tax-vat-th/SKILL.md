@@ -20,7 +20,7 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 - VAT rate: **7%** (6.3% + local tax 0.7%), reduced from the statutory 10%, extended by พ.ร.ฎ. (ฉบับที่ 807) พ.ศ. 2569 to **30 Sep 2570**.
 - Registration is online through RD e-Registration (rd.go.th).
 
-ตรวจล่าสุด 2026-10-22 (ครม. 27 ก.ค. 2569 ขยาย VAT 7% ถึง 30 ก.ย. 2570 · เลขฉบับ 807 ยังไม่ได้เทียบกับราชกิจจานุเบกษา) · แหล่ง: https://www.prd.go.th/th/content/category/detail/id/33/iid/526275 · https://www.rd.go.th
+ตรวจล่าสุด 2026-10-25 (พ.ร.ฎ. ฉบับที่ 807 ลงราชกิจจานุเบกษา 23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570) · แหล่ง: https://www.rd.go.th/1603.html · https://www.thaipbs.or.th/news/content/509779 · https://www.thansettakij.com/economy/667217 · https://www.prd.go.th/th/content/category/detail/id/33/iid/526275
 
 ## 2. Monthly and yearly calendar
 
@@ -37,7 +37,7 @@ Which form, which date, how much to withhold, and what filing late costs. This i
 | ภ.ง.ด.51 | Half-year corporate income tax (estimate) | within 2 months after month 6 of the accounting year | + 8 days |
 | ภ.ง.ด.50 | Annual corporate income tax | within **150 days** after year end | + 8 days |
 
-- The **+8 days for e-Filing** is an RD extension currently covering returns due **1 Feb 2567 – 31 Jan 2570**. Check whether it is renewed before planning dates after Jan 2570.
+- The **+8 days for e-Filing** is an RD extension currently covering returns due **1 Feb 2567 – 31 Jan 2570** (ประกาศกระทรวงการคลัง ฉบับที่ 8 ลงวันที่ 1 มี.ค. 2567). No renewal found as of 2026-10-25 — check before planning dates after Jan 2570 (รอยืนยัน). ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.rd.go.th/fileadmin/user_upload/lorkhor/newspr/2025/vat_refund.pdf · https://www.peakaccount.com/blog/tax/gen-tax/tax-filing-deadline · https://www.humansoft.co.th/en/blog/submit-tax-returns-online
 - A due date on a weekend or public holiday moves to the next working day (see `thai-holidays`).
 - For a 31 December year end: ภ.ง.ด.51 by 31 Aug (e-Filing 8 Sep); ภ.ง.ด.50 by 30 May (150 days; 29 May when February has 29 days) + 8 for e-Filing. When 30 May falls on a Sunday (as in 2570), the next working day applies (RD Order ป.117/2545, https://www.rd.go.th/10514.html, checked 22 ต.ค. 2569).
 
@@ -71,9 +71,11 @@ Pay through a bank that supports e-WHT and the bank deducts, files and remits �
 | Item | Rule |
 |---|---|
 | เงินเพิ่ม (surcharge) | **1.5% per month** or part of a month on unpaid tax, capped at the tax amount — income tax, WHT and VAT |
-| เบี้ยปรับ VAT (penalty) | Up to 2× the tax (ม.89); reduced for voluntary late filing — commonly 2% within 15 days, 5% within 15–30 days, 10% after 30 days (รอยืนยัน against current ระเบียบกรมสรรพากร ป.4/2528) |
+| เบี้ยปรับ VAT (penalty) | Up to 2× the tax (ม.89); late ภ.พ.30 filed with payment before any written notice is cut to a share **of the penalty**: 2% if paid within 15 days of the due date, 5% within 15–30 days, 10% within 30–60 days, 20% after 60 days (คำสั่ง ท.ป.81/2542 ข้อ 5(1), amended by ท.ป.369/2569 from 3 Jul 2569) |
 | ค่าปรับอาญา for a late return | Up to 2,000 baht (ม.35); usual settlement 100–200 baht per WHT return and 300–500 baht per ภ.พ.30 (รอยืนยัน) |
 | Under-estimated ภ.ง.ด.51 | Estimate more than 25% below actual profit without reasonable cause: 20% surcharge on the shortfall |
+
+ตรวจล่าสุด 2026-10-25 (เบี้ยปรับ VAT) · แหล่ง: https://www.rd.go.th/3361.html , https://www.prosofterp.com/Article/Detail/141129 , https://www.auditorasia.com/th/process_add_money · ค่าปรับอาญา 100/200 และ 300/500 บาท (ยื่นช้าไม่เกิน 7 วัน / เกิน 7 วัน) พบแค่แหล่งรอง ยังไม่พบระเบียบทางการ
 
 ## Workflow
 

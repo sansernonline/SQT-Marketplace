@@ -1,13 +1,13 @@
 # Changelog — software-company
 
-## Unreleased
+## 2.22.0 — 2026-10-25
 
 - `superuser` ตัวกระตุ้น: แถวใหม่สำหรับปกชุดเอกสาร BRD · SRS · FSD ที่มาจากรูปทรงโลโก้หรือ mockup จริง ชี้ไป `doc-cover-design` (ก่อนหน้านี้ไม่มีตัวกระตุ้นที่ไหนชี้ไป skill นี้ · เอกสารทั่วไปมีแถวในตารางของแกนอยู่แล้ว)
 - playbook `ship` ขั้น 9: ผู้ใช้อนุมัติ merge แล้วลบ branch ในขั้นเดียวกันด้วย `gh pr merge --delete-branch` ไม่ถามซ้ำ · `cicd-and-release` ข้อ 4 เพิ่มกฎลบ branch หลัง merge และตั้งค่าลบเองบน GitHub
 - `ui-craft`: สคริปต์ใหม่ `scripts/design_tokens.py` ร่าง `docs/DESIGN.md` จาก css ที่โปรเจกต์มีอยู่ (token · สี · ฟอนต์ · ขนาด · ระยะ · มุม · เงา · breakpoint) พร้อมจุดที่หลุดสเกลของข้อ 1–2 · ไม่เขียนทับไฟล์เดิม · self-test 9/9 · ข้อ 0 เรียกใช้ก่อนลอกหน้าตาเดิม · reference ใหม่ `live-and-variants.md` (ลองค่าสดในเบราว์เซอร์ · 3 แบบของชิ้นเดียวในไฟล์ mockup เดิม) · ข้อ 7 จังหวะให้ยิ้มได้ 1 จุดต่อ flow · เช็กลิสต์เพิ่มข้อมูลยากของจริง เน็ตช้า และเป้ากด 44px · แนวคิดจากคำสั่ง `document` `live` `generate` `delight` `harden` ของ pbakaus/impeccable (Apache-2.0 · ตรวจ 2026-10-25) เขียนใหม่ ไม่คัดข้อความ
 - agent `image-artist` ย้ายไป `graphic-design` · ที่อ้างถึงเปลี่ยนเป็น `graphic-design:image-artist` · `graphic-designer` ตัด "LINE rich menu" ออกจากคำอธิบาย (skill อยู่ graphic-design แล้ว)
 - `reverse-engineering` รับเนื้อหาจาก plugin `reverse-engineer` ที่ยุบแล้ว: reference ใหม่ `firmware.md` (Binwalk · Unblob) · `web-and-network.md` เพิ่ม mitmproxy · tshark · robots.txt · `android-apk.md` เพิ่มขั้น ADB พร้อมกฎขออนุญาตแยก · `native-binaries.md` เพิ่มตัวเลือก ilspycmd และชุดผลของ Ghidra · `tools.json` 12 เครื่องมือพร้อมแหล่งติดตั้งทางการ และ `scripts/check-tools.mjs` ตรวจว่าเครื่องมีอะไรโดยไม่ดาวน์โหลด · แม่แบบรายงาน 4 ไฟล์ใน `templates/` · กฎทำบนสำเนา + SHA-256
-- `reverse-engineering` สคริปต์ใหม่ 5 ตัว (Python มาตรฐานล้วน อ่านอย่างเดียว ไม่ดาวน์โหลด): `dotnet_meta.py` รายชื่อ class · method · P/Invoke ของ .NET โดยไม่ต้องมี ilspycmd (จำนวน type และ method ตรงกับ .NET reflection บน System.Configuration.dll) · `wasm_info.py` · `sqlite_inspect.py` (ปิดค่าลับในแถวตัวอย่าง) · `ipa_inventory.py` (iOS) · `evm_selectors.py` (smart contract · keccak256 ในตัว) · ทุกตัวมี `--self-test`
+- `reverse-engineering` สคริปต์ใหม่ 5 ตัว (Python มาตรฐานล้วน อ่านอย่างเดียว ไม่ดาวน์โหลด): `dotnet_meta.py` รายชื่อ class · method · P/Invoke ของ .NET โดยไม่ต้องมี ilspycmd (จำนวน type และ method ตรงกับ .NET reflection บน System.Configuration.dll) · `wasm_info.py` · `sqlite_inspect.py` (ปิดค่าลับในแถวตัวอย่าง) · `ipa_inventory.py` (iOS) · `evm_selectors.py` (smart contract · keccak256 ในตัว) · 4 ตัวหลังมี `--self-test` ส่วน `dotnet_meta.py` ยังไม่มี (ตรวจกับ .NET reflection แทน)
 - agent `reverse-engineer` รับกฎจาก `reverse-engineer-analyst`: ตรวจเครื่องมือก่อนเริ่ม · ขออนุญาตก่อนดักทราฟฟิก ใช้ adb หรือ flash · 1 agent ต่อ 1 เป้าหมาย
 - คำสั่ง `/reverse-engineer:re` เลิกแล้ว ใช้ skill `reverse-engineering` หรือสั่ง agent `reverse-engineer` แทน
 - ผู้ที่ติดตั้ง plugin `reverse-engineer` ไว้: `/plugin uninstall reverse-engineer` · ใช้ skill `software-company:reverse-engineering` และ agent `software-company:reverse-engineer` แทน

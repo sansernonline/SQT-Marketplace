@@ -1,7 +1,14 @@
 # Changelog — superuser
 
-## Unreleased
+## 3.2.0 — 2026-10-25
 
+- `reviewer` ไม่มี WebSearch · WebFetch แล้ว: อ่านไฟล์ส่วนตัว + อ่านเว็บ + Bash อยู่ในตัวเดียวกันทำให้ข้อมูลรั่วได้ (lethal trifecta) · ข้อเท็จจริงที่ต้องค้นเว็บติด `(ยังไม่ได้ตรวจ — ต้องค้นเว็บ)` แล้วหัวหน้าค้นเองก่อนปิดงาน (`team-roles`) · โหวต 3 ต่อ 0
+- `simplify` description แคบลง: ใช้เมื่องานมีขั้น ชั้น หรือตัวเลือกที่ยังไม่ต้องใช้ หรือคนใหม่ต้องทำตาม · บอกว่าไม่ใช่ `/simplify` ของ Claude Code · คงชื่อเดิม (โหวต 2 ต่อ 1)
+- กฎ commit เขียนรายการเดียวกันทุกที่ (ผู้ใช้สั่ง · `superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) ใน `SKILL.md` ข้อ 9 · `CLAUDE.global.md` · `commit-log` · ต้นฉบับอยู่ที่ `team-files`
+- `SKILL.md` หัวข้อ 2: ลูกทีมทั้งงาน 5–10 ตัว ปล่อยพร้อมกันรอบละไม่เกิน 8 (เดิมอ่านเหมือนขัดกับหัวข้อ 5)
+- `context-budget/references/windows-shell.md` ใหม่: กับดัก 4 เรื่องที่เกิดจริงบน Windows (`ls -F` ทำให้ลบของที่สั่งเก็บ · heredoc ทำ `\\b` เหลือ `\b` · CRLF · entry-point ของ hook) · `temp-file-discipline` ชี้มา
+- skill ใน superuser เลิกใช้ ✅ ❌ ⚠ ตามที่ `human-writing` ห้าม ใช้คำแทน
+- validator: เตือนบรรทัดเดียวเมื่อ SKILL.md เกิน 20,000 ไบต์ (หลังบีบ context Claude Code แนบ skill กลับแค่ราว 5,000 token แรก) · เตือนเมื่อตาราง "การตัดสินใจ" ใน `CONTEXT.md` เกิน 20 แถว
 - กฎข้อ 9: แก้บน branch ของงาน · repo ที่มี AI หลายตัวแก้พร้อมกัน → 1 ตัว 1 worktree และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ · `team-files` หัวข้อใหม่ "หลาย AI ใน repo เดียว" (สร้าง · ดูว่าใครทำอะไรจาก `git worktree list` · ห้ามแตะ worktree ของตัวอื่น · เก็บกวาดหลัง merge) · ที่มา: 2026-10-25 อีก session stage ไฟล์ในโฟลเดอร์เดียวกันระหว่างทำงาน
 - **hook `ui-scan` ใหม่** (`hooks/ui-scan-hook.mjs` · PostToolUse Write/Edit/MultiEdit): แก้ไฟล์ UI แล้วรัน `no-ai-look/scripts/slop_scan.py` กับไฟล์นั้นทันที · P0/P1 ส่งกลับให้แก้ · P2 แจ้งเป็นบริบท · ผลเดิมใน session เดียวกันไม่เตือนซ้ำ · ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม · ไม่มี Python = เงียบ · โมดูล `ui_scan` (ค่าเริ่มเปิด) ใน `modules.md` และ `templates/config.json` · self-test 10/10 · แนวคิด hook หลังแก้ UI จาก pbakaus/impeccable (Apache-2.0 · ตรวจ 2026-10-25)
 - `no-ai-look/scripts/slop_scan.py` เพิ่ม `--url` ตรวจหน้าเว็บที่ขึ้นแล้วพร้อม stylesheet ที่หน้า `<link>` ไว้ (ไม่เกิน 10 ไฟล์ · http/https เท่านั้น · ไม่รัน JavaScript) · self-test 43/43 + ตัวดึง stylesheet · ทดสอบกับหน้าเว็บจริง 2026-10-25

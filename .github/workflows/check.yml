@@ -1,0 +1,41 @@
+# ตรวจทุก push และ PR · รันทั้ง Linux และ Windows เพราะปัญหา CRLF เกิดเฉพาะเครื่องที่ checkout เป็น CRLF (เกิดจริง 2026-10-25)
+# ใช้แค่ Node ไม่ติดตั้งอะไรเพิ่ม · claude plugin validate รันใน build-dist.cmd บนเครื่องที่มี Claude Code แทน
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: ตัวตรวจยังจับ bug ได้
+        run: node scripts/check/validate-marketplace.mjs --self-test
+      - name: ตรวจทั้ง repo
+        run: node scripts/check/validate-marketplace.mjs
+      - name: ของกลาง superuser ตรงทุก plugin
+        run: node scripts/sync/sync-superuser.mjs --check
+      - name: แผนผังไฟล์และกฎร่วมของ prompt ตรงกับของจริง
+        run: |
+          node scripts/sync/sync-file-map.mjs --check
+          node scripts/sync/sync-prompt-rules.mjs --check
+      - name: hook self-test
+        run: node plugins/superuser/hooks/superuser-hook.mjs --self-test
+      - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
+        shell: bash
+        run: |
+          node scripts/build/build-targets.mjs --out="$RUNNER_TEMP/dist"
+          git diff --no-index --ignore-cr-at-eol --stat dist "$RUNNER_TEMP/dist"
