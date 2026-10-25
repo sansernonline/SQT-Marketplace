@@ -65,7 +65,8 @@ const pending = new Map();
 
 function edit(relativePath, transform) {
   const file = join(ROOT, relativePath);
-  const before = readFileSync(file, "utf8");
+  // ตัด \r ออก: เครื่องที่ checkout เป็น CRLF ไม่งั้นทุกไฟล์ "ไม่ตรง" ทั้งที่เนื้อหาเหมือนกัน
+  const before = readFileSync(file, "utf8").replace(/\r\n/g, "\n");
   const after = transform(before);
   if (after !== before) pending.set(relativePath, after);
 }

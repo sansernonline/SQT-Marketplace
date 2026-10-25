@@ -151,6 +151,7 @@ SQT-Marketplace/
 ├── docs/
 ├── prompt/     ← ชุด prompt แยกโฟลเดอร์ตาม plugin — ข้อยกเว้นของ repo นี้ต่อกฎโครงรากโปรเจกต์
 ├── scripts/
+├── AGENTS.md   ← กฎสำหรับ Codex และ AI ตัวอื่น (1 ตัว 1 worktree) · Codex อ่านจากรากเท่านั้น จึงเป็นข้อยกเว้นของรากอีกไฟล์
 └── README.md
 ```
 
