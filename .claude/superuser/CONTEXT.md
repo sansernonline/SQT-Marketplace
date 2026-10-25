@@ -54,7 +54,6 @@ main = `a7c95b6` (merge PR #4: รวม plugin เหลือ 6 · จัด�
 ## การตัดสินใจ
 | วันที่ | เลือก | ไม่เลือก | เพราะ |
 |---|---|---|---|
-| 2026-10-23 | มาตรา 17 กลับเป็น "ฟ้องที่ศาลภูมิลำเนาผู้บริโภคแห่งเดียว" | คงข้อความที่มีอยู่ | ราชกิจจานุเบกษา + 4 แหล่งอิสระตรงกัน ข้อความเดิมอ่านกลับความหมาย · ศาลของผู้บริโภคที่เป็นโจทก์มีแหล่งทางการแหล่งเดียว จึงติด (รอยืนยัน) |
 | 2026-10-25 | ผู้ใช้เลือก — รวม thai-workplace ทั้งหมดเข้า e-commerce ส่วนกราฟิก (`line-richmenu`) ไป graphic-design | ย้ายแค่ `seller-tax-basics` (ตัวแนะนำ) · plugin ธุรกิจชื่อใหม่ | ผู้ใช้ตอบ |
 | 2026-10-25 | reverse-engineer รวมเข้า skill `reverse-engineering` เดิม ไม่ย้ายทั้งชุด | ย้าย 9 skill + agent ตามที่เป็น | ผู้ใช้เลือก · กันชื่อ reverse-engineer กับ reverse-engineering ซ้อนกัน |
 | 2026-10-25 | เลื่อนรุ่นไว้รอบออกรุ่น ใส่แค่ `Unreleased` ใน CHANGELOG 3 ตัว | เลื่อน plugin.json ทันที | graphic-design และ software-company มี `Unreleased` ค้างอยู่แล้ว เลื่อนตอนนี้จะไม่ตรงกับ CHANGELOG |
@@ -74,6 +73,7 @@ main = `a7c95b6` (merge PR #4: รวม plugin เหลือ 6 · จัด�
 | 2026-10-25 | ไม่แก้คิวกลาง `~/.claude/superuser/improvements.md` | แปลงแถว bullet เป็นตาราง | `superuser-hook.mjs:186-198` อ่านได้ทั้ง bullet และตาราง ทั้งชื่อ `improvements.md` และ `IMPROVEMENTS.md` ข้ออ้างของผู้วิจัยไม่จริง |
 | 2026-10-25 | skill ใหม่ `sme-bookkeeping` · `cash-flow` ให้ `tax-helper` ดูแล · ยังไม่มี eval | `shop-manager` · เขียน eval ด้วย | `shop-manager` ไม่มีรายการ skill · e-commerce ยังไม่มีโฟลเดอร์ `evals/` เป็นงานแยก |
 | 2026-10-25 | วิจัยความพร้อมรุ่น 1.0.0 ของ trading-finance · personal-life · graphic-design แบบอ่านอย่างเดียว · คาด: ขนาดกลาง · ลูกทีม 4 ตัว (เกณฑ์ภายนอก 1 · plugin ละ 1) · ไม่มี reviewer เพราะไม่แก้ไฟล์ · ระดับ sonnet | ให้ตัวเดียวตรวจทั้ง 3 plugin | แต่ละ plugin มี skill 20–40 ตัว แยกกันเร็วกว่าและไม่ทับไฟล์ |
+| 2026-10-26 | license แบบสงวนสิทธิ์ (`LICENSE` ที่ราก) | MIT · ไม่ใส่ | ผู้ใช้เลือก · ตัวตรวจทางการ (--profile directory) ต้องมี license และนับไฟล์ที่รากให้ทุก plugin |
 
 ## รอผู้ใช้
 ไม่เกิน 10 แถว · แถวบนสุดคือข้อที่ **ต่อไป** ในคำตอบชี้ให้ผู้ใช้ทำ · "ทำไมต้องเป็นคุณ" ใช้ 4 ค่า: ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน · agent ลบแถวทันทีที่ผู้ใช้ตอบหรือปลดล็อกแล้ว
@@ -86,7 +86,7 @@ main = `a7c95b6` (merge PR #4: รวม plugin เหลือ 6 · จัด�
 | รัน eval ที่เสียเงิน: `claude plugin eval` ของ superuser · `scripts/evals/review-recall --run` | ใช้เงินหรือ token | ยังไม่เคยรันจริง | วัดผลได้จริง · ตอบ "รัน eval" | 2026-10-23 |
 
 ## รับงานต่อ
-- **ทำต่อเป็นข้อแรก:** เตรียม 1.0.0 ของ trading-finance 0.13.0 · personal-life 0.15.0 · graphic-design 0.12.0 (branch `claude/prep-1.0`) · ผู้ใช้เลือก "แก้ก่อน แล้วค่อย 1.0.0" (2026-10-25): ใช้จริง 2–3 สัปดาห์ จดใน `learn/` · รัน eval ที่เขียนไว้ (8 · 9 · 26 เคส ต้องผู้ใช้อนุมัติเพราะเสียเงิน) · เขียน eval behaviour และ guard ให้ skill ใหม่ 10 ตัว · เพิ่ม pattern ของ skill ใหม่ใน `superuser/hooks/skill-router.json` · ลิงก์ที่มาของ TikTok ที่เป็นแค่โดเมน · license และไอคอนรอผู้ใช้เลือก · ขึ้น 1.0.0 พร้อม git tag `<plugin>--v1.0.0` (ช่วงรุ่นของ dependency อ่านจาก tag) · ถึงวันใน `scripts/check/expiry.json` ตัวตรวจเตือน ให้ตรวจแหล่งแล้วแก้ไฟล์
+- **ทำต่อเป็นข้อแรก:** เตรียม 1.0.0 ของ trading-finance 0.13.0 · personal-life 0.15.0 · graphic-design 0.12.0 (branch `claude/prep-1.0`) · ผู้ใช้เลือก "แก้ก่อน แล้วค่อย 1.0.0" (2026-10-25): ใช้จริง 2–3 สัปดาห์ จดใน `learn/` · รัน eval ที่เขียนไว้ (8 · 9 · 26 เคส ต้องผู้ใช้อนุมัติเพราะเสียเงิน) · เขียน eval behaviour และ guard ให้ skill ใหม่ 10 ตัว · เพิ่ม pattern ของ skill ใหม่ใน `superuser/hooks/skill-router.json` · ลิงก์ที่มาของ TikTok ที่เป็นแค่โดเมน · license สงวนสิทธิ์ใส่แล้ว (`LICENSE`) · ไอคอนรอผู้ใช้ (ตั้งได้ครั้งเดียวตอนส่งไดเรกทอรี) · ขึ้น 1.0.0 พร้อม git tag `<plugin>--v1.0.0` (ช่วงรุ่นของ dependency อ่านจาก tag) · ถึงวันใน `scripts/check/expiry.json` ตัวตรวจเตือน ให้ตรวจแหล่งแล้วแก้ไฟล์
 - **รออนุมัติ:** commit · push · merge · tag · eval ที่เสียเงิน · แตะไฟล์ของอีกฝั่ง
 - **ค้างอยู่:** ตัวบทราชบัณฑิตยสภาเรื่องไม้ยมกและประกาศทับศัพท์ 2532 · ข้อความ licence เต็มของ GSAP · ข้อที่ agent ติด (ยังไม่ได้ตรวจ) ไว้ใน skill ใหม่ (เช่น ม.17/17-1 พ.ร.บ.คุ้มครองแรงงาน · rate limit ของ Shopee/Lazada · ค่า API ของ PEAK/FlowAccount)
 - **ข้อเสนอที่ยังไม่ได้ทำ:** ตัวตรวจ `plugin:ชื่อ` ใน validator · ตรวจลำดับหัวรุ่นใน CHANGELOG (รายละเอียดใน `IMPROVEMENTS.md`)
