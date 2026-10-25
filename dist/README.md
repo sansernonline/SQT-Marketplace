@@ -17,7 +17,7 @@
 | `e-commerce` | 1.0.0 | 45 | 7 | 6 | 0.4 MB |
 | `graphic-design` | 0.10.0 | 48 | 8 | 6 | 0.4 MB |
 | `personal-life` | 0.13.0 | 72 | 12 | 16 | 0.5 MB |
-| `reverse-engineer` | 0.1.0 | 40 | 4 | 1 | 0.3 MB |
+| `reverse-engineer` | 0.3.0 | 42 | 4 | 1 | 0.3 MB |
 | `software-company` | 2.21.0 | 128 | 42 | 29 | 6.4 MB |
 | `superuser` | 3.1.0 | 34 | 3 | 0 | 0.3 MB |
 | `thai-workplace` | 0.11.0 | 54 | 7 | 8 | 0.4 MB |

@@ -9,11 +9,11 @@
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
 | [`e-commerce`](#e-commerce) | ซื้อ-ขายออนไลน์ทั้งสองฝั่ง ขายบน Shopee Lazada TikTok และซื้ออย่างรู้สิทธิ์ | 4 | 12 | 6 | 13 | 59 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 5 | 15 | 6 | 9 | 89 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 5 | 15 | 6 | 9 | 88 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 39 | 16 | 30 | 144 |
-| [`reverse-engineer`](#reverse-engineer) | reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ | 1 | 7 | 1 | 4 | 31 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 95 | 29 | 17 | 780 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 100 |
+| [`reverse-engineer`](#reverse-engineer) | reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ | 1 | 9 | 1 | 4 | 37 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 39 | 95 | 29 | 17 | 777 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 99 |
 | [`thai-workplace`](#thai-workplace) | เอกสาร ภาษี เงินเดือน LINE และ PDPA ของบริษัทไทย | 4 | 21 | 8 | 9 | 72 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 4 | 19 | 7 | 10 | 66 |
 
@@ -51,7 +51,7 @@ plugins/<plugin>/
 | skill | `document-naming` | ตั้งชื่อไฟล์เอกสาร รุ่น และสถานะ | `assets/naming-cheatsheet.md` |
 | skill | `flag-and-propose` | เจอเรื่องกลางงานที่ต้องให้คนตัดสิน → แจ้งพร้อมทางเลือก | `references/example.md` |
 | skill | `handoff` | ใบสั่งงาน · ใบส่งงาน · รับงานต่อ ให้ agent คน และ bot ส่งงานต่อกันโดยไม่ต้องเดา | `references/handoff.schema.json` · `references/team-memory.md` · `scripts/log-to-md.mjs` |
-| skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `THIRD-PARTY-NOTICES.md` · `references/headings-and-examples.md` · `references/strict-review.md` · `references/thai-examples.md` · `references/thai-grammar.md` · `references/thai-line-breaking.md` · `scripts/__pycache__/thai_tells.cpython-313.pyc` · `scripts/thai_linebreak.py` · `scripts/thai_tells.py` |
+| skill | `human-writing` | เขียนภาษาคน ไทยหรืออังกฤษ อ่านง่าย ไม่เหมือนเครื่องเขียน | `THIRD-PARTY-NOTICES.md` · `references/headings-and-examples.md` · `references/strict-review.md` · `references/thai-examples.md` · `references/thai-grammar.md` · `references/thai-line-breaking.md` · `scripts/thai_linebreak.py` · `scripts/thai_tells.py` |
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
 | skill | `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |
@@ -207,7 +207,7 @@ plugins/<plugin>/
 | `style-consistency` | ทำภาพหลายภาพให้ดูเป็นชุดเดียวกัน | `references/style-lock-sheet.md` |
 | `subtitles-th` | ซับไทยเป็นไฟล์: ถอดเสียงเป็น .srt · ตรวจความยาวบรรทัดและเวลา · ฝังซับด้วยฟอนต์ไทย | `scripts/srt_check.py` |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-asset-cleanup.md` · `references/playbook-brand-setup.md` · `references/playbook-campaign.md` · `references/playbook-image-series.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/playbook-video.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
-| `video-editing` | ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก ต่อสไลด์กับเสียงเป็นวิดีโอ และสร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) พร้อมวัดผล | `scripts/__pycache__/tts_cues.cpython-313.pyc` · `scripts/f5_worker.py` · `scripts/loudnorm2.py` · `scripts/silences.py` · `scripts/slides_to_video.py` · `scripts/tts_cues.py` · `scripts/windows_tts.ps1` |
+| `video-editing` | ตัด ต่อ ตัดช่วงเงียบ ปรับความดัง ส่งออก ต่อสไลด์กับเสียงเป็นวิดีโอ และสร้างเสียงบรรยายไทยจากสคริปต์ทีละซับ (F5-TTS-THAI · edge-tts · เสียง Windows) พร้อมวัดผล | `scripts/f5_worker.py` · `scripts/loudnorm2.py` · `scripts/silences.py` · `scripts/slides_to_video.py` · `scripts/tts_cues.py` · `scripts/windows_tts.ps1` |
 | `video-script-to-clip` | ทำคลิปสั้น Reel TikTok: hook · รายการช็อต · ซับไทย | `references/production-tools.md` · `references/shot-list-template.md` |
 
 ### คำสั่ง (6) — พิมพ์ `/graphic-design:<ชื่อ>`
@@ -361,7 +361,7 @@ plugins/<plugin>/
 
 reverse engineer แอป ไบนารี เว็บ และ APK จากหลักฐาน แล้วสร้างใหม่ · ภาพประกอบ: [docs/plugins/reverse-engineer](plugins/reverse-engineer/README.md) · ต้นฉบับ: `plugins/reverse-engineer/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `README.md` (คำอธิบายและวิธีเริ่มใช้งาน plugin) · `package.json` (นิยามสคริปต์ npm — doctor ตรวจเครื่องมือ และ test ตรวจโครง tools.json) · `scripts/check-tools.mjs` (ตรวจว่าเครื่องมือ reverse engineering ที่ผู้ใช้ติดตั้งมีตัวไหน โดยไม่ดาวน์โหลดและไม่เปิดโปรแกรม) · `tools.json` (รายการเครื่องมือ reverse engineering แยกตามกลุ่มงาน พร้อมวิธีตรวจและแหล่งติดตั้งทางการ)
 
 ### agent (1)
 
@@ -369,7 +369,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 |---|---|
 | `agents/reverse-engineer-analyst.md` | ตรวจแอปหรือไบนารีที่ไม่มี source อธิบายพร้อมหลักฐาน แล้วสร้างใหม่ |
 
-### skill (7 + ของกลาง 33)
+### skill (9 + ของกลาง 33)
 
 ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
 
@@ -377,8 +377,10 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 |---|---|---|
 | `analyze-apk` | ตรวจ APK ของ Android: manifest ทรัพยากร คลาสที่ถอดรหัส และการเรียกเมธอด | — |
 | `analyze-dotnet` | ตรวจ assembly .NET (.dll/.exe): metadata คำสั่ง CIL dependency และเทียบ build | — |
+| `analyze-firmware` | ตรวจ firmware image หรือ embedded filesystem ที่ได้รับอนุญาตแบบสถิตด้วย Binwalk หรือ Unblob | — |
 | `analyze-js-electron` | ตรวจแอป JavaScript หรือ Electron ที่แตกออกมา: โมดูล import ขอบเขต IPC และ source map | — |
 | `analyze-native-binary` | ตรวจไบนารี native (.exe .dll ELF Mach-O): string symbol pseudocode และฟังก์ชันที่ import | — |
+| `analyze-network` | ตรวจทราฟฟิกที่บันทึกไว้ (HAR · PCAP) หรือสังเกตแอปทดสอบที่ได้รับอนุญาตผ่าน Wireshark หรือ mitmproxy | — |
 | `analyze-website` | ตรวจว่าฟีเจอร์ของเว็บทำงานอย่างไรจากโครงหน้า สคริปต์ และ network call โดยไม่มี backend | — |
 | `reverse-engineer` | จุดเข้าหลักของการ reverse engineer: อธิบายว่าฟีเจอร์ทำงานอย่างไรพร้อมหลักฐาน แล้วสร้างใหม่ | `templates/api-inventory.md` · `templates/change-proof.md` · `templates/codebase-map.md` · `templates/system-map.md` |
 | `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/brief-template.md` · `references/context-template.md` · `references/evidence.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/playbook-learn-from-session.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/voting.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
@@ -485,7 +487,7 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `code-orientation` | อ่านโค้ดที่ยังไม่เคยเห็นก่อนแก้: รันอย่างไร · ทำไม · ธรรมเนียมของ repo | — |
 | `blast-radius` | แก้โค้ดที่ใช้ร่วมกันแล้วหาว่าอะไรอื่นจะพังตาม | — |
 | `legacy-spec-recovery` | กู้สเปกจากโค้ดระบบเก่าพร้อมหลักฐาน ก่อนแก้ระบบ | `assets/business-rule-register.md` · `assets/change-request.md` · `references/evidence-by-stack.md` · `references/framework-upgrade.md` |
-| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/__pycache__/triage.cpython-313.pyc` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/compare_members.py` · `scripts/har_summary.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/triage.py` |
+| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/compare_members.py` · `scripts/har_summary.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/triage.py` |
 | `readable-code` | โค้ดอ่านง่าย: ชื่อ · รูปฟังก์ชัน · คอมเมนต์ · ที่วางไฟล์ | `assets/naming-reference.md` |
 
 **ตรวจและทดสอบ**
@@ -573,8 +575,8 @@ reverse engineer แอป ไบนารี เว็บ และ APK จา�
 | `user-story-writer` | เขียน user story และเกณฑ์รับงานแบบ Given-When-Then | `assets/user-stories.md` · `examples/login-story.md` |
 | `project-doc-set` | เลือกชุดเอกสารของโปรเจกต์ ลำดับ ที่เก็บ และรวมข้อค้างไว้ใน Excel | `assets/doc-set-checklist.md` · `references/docs-site.md` · `references/ecosystem.md` · `references/technical-docs.md` · `references/writer-templates.md` · `scripts/open_items.py` |
 | `project-bootstrap` | ตั้ง repo ใหม่: โครงโฟลเดอร์ · README · คำสั่งรันคำสั่งเดียว | `assets/starter-files.md` · `references/changelog-examples.md` · `references/code-folder.md` |
-| `branded-document-design` | ทำ Word · PowerPoint · PDF ให้ดูออกแบบมา (สี · ฟอนต์ไทย) | `examples/example_deck.pptx` · `examples/example_srs-preview.png` · `examples/example_srs.docx` · `examples/example_stage.pptx` · `examples/fig-flow-dark.png` · `references/anti-patterns.md` · `references/api.md` · `references/brandkit-usage.md` · `references/cover-vote.md` · `references/palette-examples.md` · `references/thai-fonts.md` · `references/tokens-and-type.md` · `references/visual-check.md` · `references/word-layout.md` · `scripts/__pycache__/brandkit.cpython-313.pyc` · `scripts/brandkit.py` · `scripts/brandkit_pptx.py` · `scripts/brandkit_stage.py` · `scripts/cover_art.py` · `scripts/example_deck.py` · `scripts/example_srs.py` · `scripts/example_stage.py` |
-| `markdown-report-docx` | รายงานจาก Markdown ไฟล์เดียว ออกมาเป็น .docx สวยพร้อมส่ง | `assets/example-logo.png` · `assets/example-report.md` · `scripts/__pycache__/md_to_docx.cpython-313.pyc` · `scripts/md_to_docx.py` |
+| `branded-document-design` | ทำ Word · PowerPoint · PDF ให้ดูออกแบบมา (สี · ฟอนต์ไทย) | `examples/example_deck.pptx` · `examples/example_srs-preview.png` · `examples/example_srs.docx` · `examples/example_stage.pptx` · `examples/fig-flow-dark.png` · `references/anti-patterns.md` · `references/api.md` · `references/brandkit-usage.md` · `references/cover-vote.md` · `references/palette-examples.md` · `references/thai-fonts.md` · `references/tokens-and-type.md` · `references/visual-check.md` · `references/word-layout.md` · `scripts/brandkit.py` · `scripts/brandkit_pptx.py` · `scripts/brandkit_stage.py` · `scripts/cover_art.py` · `scripts/example_deck.py` · `scripts/example_srs.py` · `scripts/example_stage.py` |
+| `markdown-report-docx` | รายงานจาก Markdown ไฟล์เดียว ออกมาเป็น .docx สวยพร้อมส่ง | `assets/example-logo.png` · `assets/example-report.md` · `scripts/md_to_docx.py` |
 | `presentation-design` | ทำสไลด์ที่คนจะนำเสนอหรืออ่าน: เรื่องเล่า · หัวข้อ · layout · ฟอนต์ไทย | `assets/slide-mockup-preview.webp` · `assets/slide-mockup.html` · `references/anti-patterns.md` |
 | `html-slide-deck` | สไลด์เป็นไฟล์ HTML ไฟล์เดียว เปิดได้ไม่ต้องต่อเน็ต มีโน้ตผู้พูด | `assets/example-logo.png` · `assets/shell.html` · `assets/slides-example-preview.webp` · `assets/slides-example.html` · `scripts/build_deck.py` · `scripts/check_deck.py` |
 | `pptx-to-html-deck` | เปลี่ยน .pptx เป็น HTML ไฟล์เดียวที่มี animation โน้ต และเมนู | `assets/interactive-page.html` · `assets/runtime.css` · `assets/runtime.js` · `scripts/check_html_deck.py` · `scripts/click_steps.py` · `scripts/pptx_to_html.py` |
