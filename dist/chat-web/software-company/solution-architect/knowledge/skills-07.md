@@ -118,10 +118,14 @@ python -I scripts/triage.py <file> --pattern 'oauth|WHT'    # หาคำใน
 |---|---|---|---|---|
 | JavaScript · Electron | ได้โค้ดจริง มักถูกย่อ · source map อาจให้ต้นฉบับ · ไม่กี่นาที | `asar_extract.py` · `sourcemap_list.py` | Node สำหรับจัดรูปโค้ด (Prettier ที่ติดตั้งในโปรเจกต์แล้ว) | [javascript-electron](references/javascript-electron.md) |
 | native PE · ELF · Mach-O (C · C++ · Go · Rust) | pseudo-C เท่านั้น ชื่อหายถ้าไม่มี symbol · หลายวันต่อฟีเจอร์ | `pe_elf_info.py` · `triage.py --strings` | `objdump` · Ghidra headless | [native-binaries](references/native-binaries.md) |
-| .NET (C# · VB.NET · Xamarin) | ได้ซอร์สเกือบเท่าเดิม เสียแค่ comment และชื่อตัวแปร · ไม่กี่นาที | `triage.py` | `ilspycmd` | [native-binaries](references/native-binaries.md#2--net) |
+| .NET (C# · VB.NET · Xamarin) | ได้ซอร์สเกือบเท่าเดิม เสียแค่ comment และชื่อตัวแปร · ไม่กี่นาที | `triage.py` · `dotnet_meta.py` (รายชื่อ class · method · P/Invoke โดยไม่ต้องมี ilspycmd) | `ilspycmd` | [native-binaries](references/native-binaries.md#2--net) |
 | Android APK | Java/Kotlin เกือบเท่าเดิม · ไม่กี่นาที | `apk_inventory.py` | jadx · apktool · `aapt2` · `apksigner` | [android-apk](references/android-apk.md) |
 | เว็บแอป · ทราฟฟิกเครือข่าย (HAR · pcap · proxy) | รายการ API การยืนยันตัวตน และลำดับการเรียก | `har_summary.py` · `sourcemap_list.py` | DevTools ของเบราว์เซอร์ (ผู้ใช้กดเอง) · Wireshark/tshark · mitmproxy (ต้องถาม) | [web-and-network](references/web-and-network.md) |
 | firmware · filesystem ของอุปกรณ์ | รายการส่วนใน image · ไฟล์ config · binary ที่ต้องแกะต่อ · หลายชั่วโมง | `triage.py` | Binwalk · Unblob (มักอยู่ใน Linux หรือ WSL) | [firmware](references/firmware.md) |
+| iOS `.ipa` · `.app` · plist | bundle id · สิทธิ์ที่ขอ · URL scheme · entitlements · framework · ไม่กี่นาที | `ipa_inventory.py` (`--plist` แปลง plist ใด ๆ เป็น JSON) | Ghidra หรือ Hopper สำหรับ Mach-O | [native-binaries](references/native-binaries.md) |
+| WebAssembly `.wasm` | import · export · ภาษาและเครื่องมือที่คอมไพล์ · นับได้ ไม่แกะเนื้อฟังก์ชัน · ไม่กี่นาที | `wasm_info.py` | — | — |
+| ฐานข้อมูล SQLite ในแอป | ตาราง · CREATE SQL · จำนวนแถว · ตัวอย่างแถวที่ปิดค่าลับ · ไม่กี่นาที | `sqlite_inspect.py` (อ่านอย่างเดียว ไม่เห็นข้อมูลที่ค้างใน `-wal`) | — | — |
+| smart contract (bytecode ของ EVM) | function selector · event topic · คำสั่งเสี่ยง (DELEGATECALL · SELFDESTRUCT) · ไม่กี่นาที | `evm_selectors.py` (จับเฉพาะ dispatcher แบบ solc) | — | — |
 | Python `.pyc` · PyInstaller | กู้ได้ถ้า Python ≤ 3.8 หลังจากนั้นได้บางส่วน · หลายชั่วโมง | `triage.py` | pyinstxtractor · decompyle3 / pycdc | — |
 | ถูกทำให้อ่านยาก หรือถูก pack | ขึ้นกับตัวป้องกัน อาจหยุดงานได้ | `triage.py` | หาให้ได้ก่อนว่าเป็นตัวไหน แล้วถามผู้ใช้ | — |
 
@@ -523,6 +527,7 @@ import บอกได้มากโดยไม่ต้อง decompile:
 
 ## 2 · .NET
 
+- ดูโครงก่อนด้วย `python -I scripts/dotnet_meta.py <dll>` — รายชื่อ assembly ที่อ้าง · class · method · P/Invoke (`Type.method -> dll!ชื่อ`) · resource · `--strings` แสดง user string ที่ปิดค่าลับแล้ว · ไม่ต้องติดตั้งอะไร · ไม่รองรับ metadata แบบ `#-` ที่มี pointer table
 - โค้ด C# อ่านได้ใช้ `ilspycmd` (คำสั่งใน SKILL.md หัวข้อ 5.1) · ได้โค้ดเกือบเท่าต้นฉบับ SQL ครบ เสียแค่ comment และชื่อตัวแปร
 - `.pdb` ที่วางข้าง ๆ คืนชื่อไฟล์และเลขบรรทัด · `.dll.config` มีค่าตั้ง (และมักมีความลับ — ชื่ออย่างเดียว)
 - ASP.NET MVC ที่ compile view ไว้: `.cshtml` กลับมาเป็น class ใต้ `<Assembly>.Views.<Controller>`

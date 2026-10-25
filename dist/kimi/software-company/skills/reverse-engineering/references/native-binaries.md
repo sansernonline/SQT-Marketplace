@@ -36,6 +36,7 @@ import บอกได้มากโดยไม่ต้อง decompile:
 
 ## 2 · .NET
 
+- ดูโครงก่อนด้วย `python -I scripts/dotnet_meta.py <dll>` — รายชื่อ assembly ที่อ้าง · class · method · P/Invoke (`Type.method -> dll!ชื่อ`) · resource · `--strings` แสดง user string ที่ปิดค่าลับแล้ว · ไม่ต้องติดตั้งอะไร · ไม่รองรับ metadata แบบ `#-` ที่มี pointer table
 - โค้ด C# อ่านได้ใช้ `ilspycmd` (คำสั่งใน SKILL.md หัวข้อ 5.1) · ได้โค้ดเกือบเท่าต้นฉบับ SQL ครบ เสียแค่ comment และชื่อตัวแปร
 - `.pdb` ที่วางข้าง ๆ คืนชื่อไฟล์และเลขบรรทัด · `.dll.config` มีค่าตั้ง (และมักมีความลับ — ชื่ออย่างเดียว)
 - ASP.NET MVC ที่ compile view ไว้: `.cshtml` กลับมาเป็น class ใต้ `<Assembly>.Views.<Controller>`

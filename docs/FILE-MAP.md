@@ -11,7 +11,7 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 31 | 14 | 18 | 108 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 16 | 6 | 9 | 91 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 39 | 16 | 30 | 144 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 95 | 29 | 17 | 783 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 95 | 29 | 17 | 788 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 99 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 19 | 7 | 10 | 67 |
 
@@ -479,7 +479,7 @@ plugins/<plugin>/
 | `code-orientation` | อ่านโค้ดที่ยังไม่เคยเห็นก่อนแก้: รันอย่างไร · ทำไม · ธรรมเนียมของ repo | — |
 | `blast-radius` | แก้โค้ดที่ใช้ร่วมกันแล้วหาว่าอะไรอื่นจะพังตาม | — |
 | `legacy-spec-recovery` | กู้สเปกจากโค้ดระบบเก่าพร้อมหลักฐาน ก่อนแก้ระบบ | `assets/business-rule-register.md` · `assets/change-request.md` · `references/evidence-by-stack.md` · `references/framework-upgrade.md` |
-| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/firmware.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/check-tools.mjs` · `scripts/compare_members.py` · `scripts/har_summary.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/triage.py` · `templates/api-inventory.md` · `templates/change-proof.md` · `templates/codebase-map.md` · `templates/system-map.md` · `tools.json` |
+| `reverse-engineering` | ถอดงานที่ไม่มีซอร์สโค้ด (exe · dll · Electron · APK · JS bundle · โปรโตคอล) | `NOTICE` · `references/android-apk.md` · `references/evidence-ledger.md` · `references/firmware.md` · `references/javascript-electron.md` · `references/native-binaries.md` · `references/packaging-patterns.md` · `references/runtime-observation.md` · `references/web-and-network.md` · `scripts/apk_inventory.py` · `scripts/asar_extract.py` · `scripts/check-tools.mjs` · `scripts/compare_members.py` · `scripts/dotnet_meta.py` · `scripts/evm_selectors.py` · `scripts/har_summary.py` · `scripts/ipa_inventory.py` · `scripts/pe_elf_info.py` · `scripts/sourcemap_list.py` · `scripts/sqlite_inspect.py` · `scripts/triage.py` · `scripts/wasm_info.py` · `templates/api-inventory.md` · `templates/change-proof.md` · `templates/codebase-map.md` · `templates/system-map.md` · `tools.json` |
 | `readable-code` | โค้ดอ่านง่าย: ชื่อ · รูปฟังก์ชัน · คอมเมนต์ · ที่วางไฟล์ | `assets/naming-reference.md` |
 
 **ตรวจและทดสอบ**

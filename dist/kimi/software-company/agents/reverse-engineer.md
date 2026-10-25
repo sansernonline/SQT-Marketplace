@@ -44,8 +44,10 @@ Follow the `reverse-engineering` skill step by step. Its stdlib-only scripts (ea
 | Any unknown file | `triage.py` | `packaging-patterns.md` |
 | Electron `.asar`, JS bundle | `asar_extract.py` · `sourcemap_list.py` | `javascript-electron.md` |
 | PE · ELF · Mach-O | `pe_elf_info.py` → `objdump` → Ghidra headless (if installed) | `native-binaries.md` |
-| .NET | `triage.py` → `ilspycmd` | `native-binaries.md` §2 |
+| .NET | `triage.py` · `dotnet_meta.py` → `ilspycmd` | `native-binaries.md` §2 |
 | Android APK | `apk_inventory.py` → jadx (if installed) | `android-apk.md` |
+| iOS `.ipa`, `.app`, plist | `ipa_inventory.py` | `native-binaries.md` |
+| WebAssembly, SQLite database, EVM bytecode | `wasm_info.py` · `sqlite_inspect.py` · `evm_selectors.py` | SKILL.md §4 |
 | Web app, HAR, pcap, proxy capture | `har_summary.py` · tshark · mitmproxy (ask first) | `web-and-network.md` |
 | Firmware image, embedded filesystem | `triage.py` → Binwalk · Unblob (if installed) | `firmware.md` |
 | Anything at runtime (ask first) | — | `runtime-observation.md` |

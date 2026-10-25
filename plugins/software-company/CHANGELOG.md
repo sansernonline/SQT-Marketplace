@@ -4,6 +4,7 @@
 
 - agent `image-artist` ย้ายไป `graphic-design` · ที่อ้างถึงเปลี่ยนเป็น `graphic-design:image-artist` · `graphic-designer` ตัด "LINE rich menu" ออกจากคำอธิบาย (skill อยู่ graphic-design แล้ว)
 - `reverse-engineering` รับเนื้อหาจาก plugin `reverse-engineer` ที่ยุบแล้ว: reference ใหม่ `firmware.md` (Binwalk · Unblob) · `web-and-network.md` เพิ่ม mitmproxy · tshark · robots.txt · `android-apk.md` เพิ่มขั้น ADB พร้อมกฎขออนุญาตแยก · `native-binaries.md` เพิ่มตัวเลือก ilspycmd และชุดผลของ Ghidra · `tools.json` 12 เครื่องมือพร้อมแหล่งติดตั้งทางการ และ `scripts/check-tools.mjs` ตรวจว่าเครื่องมีอะไรโดยไม่ดาวน์โหลด · แม่แบบรายงาน 4 ไฟล์ใน `templates/` · กฎทำบนสำเนา + SHA-256
+- `reverse-engineering` สคริปต์ใหม่ 5 ตัว (Python มาตรฐานล้วน อ่านอย่างเดียว ไม่ดาวน์โหลด): `dotnet_meta.py` รายชื่อ class · method · P/Invoke ของ .NET โดยไม่ต้องมี ilspycmd (จำนวน type และ method ตรงกับ .NET reflection บน System.Configuration.dll) · `wasm_info.py` · `sqlite_inspect.py` (ปิดค่าลับในแถวตัวอย่าง) · `ipa_inventory.py` (iOS) · `evm_selectors.py` (smart contract · keccak256 ในตัว) · ทุกตัวมี `--self-test`
 - agent `reverse-engineer` รับกฎจาก `reverse-engineer-analyst`: ตรวจเครื่องมือก่อนเริ่ม · ขออนุญาตก่อนดักทราฟฟิก ใช้ adb หรือ flash · 1 agent ต่อ 1 เป้าหมาย
 - คำสั่ง `/reverse-engineer:re` เลิกแล้ว ใช้ skill `reverse-engineering` หรือสั่ง agent `reverse-engineer` แทน
 - ผู้ที่ติดตั้ง plugin `reverse-engineer` ไว้: `/plugin uninstall reverse-engineer` · ใช้ skill `software-company:reverse-engineering` และ agent `software-company:reverse-engineer` แทน
