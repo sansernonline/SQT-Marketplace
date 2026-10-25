@@ -26,7 +26,7 @@ description: Use when a money matter spans several steps (trades, portfolio, bud
 6. **ไม่แต่งข้อมูลของผู้ใช้** — ตัวเลข ชื่อ วันที่ งบ ที่ไม่รู้ ใส่ `(รอยืนยัน)` แล้วทำต่อ
 7. **งานเสี่ยงหรือย้อนไม่ได้ หัวหน้าทำเองหรือตรวจเองก่อนปล่อย** ไม่ให้ลูกทีม effort ต่ำทำ (รายการ "รออนุมัติ" ใน `autonomy`)
 8. **จบงานด้วยสรุปสั้น (หัวข้อ 7) และเทียบคาดกับจริง** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
-9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `superuser-style.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง
+9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง · ไม่ commit ลง branch หลักโดยไม่ถาม · ต้นฉบับของกติกานี้อยู่ใน `team-files`
    - งานใน git repo แก้บน branch ของงาน ไม่แก้บน branch หลัก · repo ที่มี AI หรือ session อื่นแก้พร้อมกัน → **1 ตัว 1 worktree** และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ (`claude/` · `codex/`) · วิธีและกฎใน [`team-files`](references/team-files.md) หัวข้อ "หลาย AI ใน repo เดียว"
 10. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** และบอกเฉพาะตัวที่เปลี่ยนการตัดสินใจ · ห้ามแก้ไฟล์ skill · agent · playbook เอง (รอผู้ใช้สั่ง "รวมบทเรียน")
 
@@ -40,7 +40,7 @@ description: Use when a money matter spans several steps (trades, portfolio, bud
 |---|---|---|
 | **เล็ก** | คำถามเดียว · แก้จุดเดียว · ย้อนได้ทันที | หัวหน้าทำเอง ไม่แบ่ง ไม่เปิด playbook แต่ยังตรวจผลก่อนตอบ |
 | **กลาง** | หลายขั้น แต่รู้ทางแล้ว | playbook ที่ตรงที่สุด (ตารางด้านล่าง) · ไม่มีตัวตรง → ประกอบตาม [`playbook-template`](references/playbook-template.md) · ลูกทีม 1–4 ตัว |
-| **ใหญ่ หรือโจทย์ไม่ชัด** | ไปได้หลายทาง · เลือกผิดแล้วแพง | `brainstormer` ตัวใหม่เสนอ 2–3 ทาง → หัวหน้าเลือก 1 → brief ตาม [`brief-template`](references/brief-template.md) ที่ `docs/BRIEF.md` → playbook · ลูกทีม 5–10 ตัว หน้าที่ไม่ทับกัน |
+| **ใหญ่ หรือโจทย์ไม่ชัด** | ไปได้หลายทาง · เลือกผิดแล้วแพง | `brainstormer` ตัวใหม่เสนอ 2–3 ทาง → หัวหน้าเลือก 1 → brief ตาม [`brief-template`](references/brief-template.md) ที่ `docs/BRIEF.md` → playbook · ลูกทีมทั้งงาน 5–10 ตัว หน้าที่ไม่ทับกัน (ปล่อยพร้อมกันรอบละไม่เกิน 8) |
 | **XL (หลายวัน · มี milestone · มีคนร่วมทีม)** | จบไม่ได้ใน session เดียว · คนจริงรับชิ้นไปทำคู่กับ agent | [`team-project`](references/playbook-team-project.md) — brief → BUILD-PLAN แตก milestone → ใบ `handoff` ทุกชิ้น · ตรวจต่อ milestone · ปิดวันด้วย "รับงานต่อ" |
 
 ไม่แน่ใจขนาด → ถือว่าใหญ่ขึ้น 1 ขั้น · ใช้ลูกทีมเกิน 2 เท่าของที่วางไว้แล้วยังไม่จบ → ทบทวนแผน จด 1 แถวใน "การตัดสินใจ"

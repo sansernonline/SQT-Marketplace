@@ -42,7 +42,7 @@ agent 38 · skill 128 · คำสั่ง 29 · playbook 17 · ส่งงา
 | `prototype` | ลองของก่อนตัดสินใจ | 7 |
 | `refactor` | จัดโค้ดใหม่ | 9 |
 | `review` | รีวิวโค้ด | 6 |
-| `ship` | ส่งมอบงาน | 8 |
+| `ship` | ส่งมอบงาน | 9 |
 | `skill-authoring` | เขียน skill ใหม่ | 8 |
 | `team-project` | งานใหญ่หลายวัน คนกับ agent ร่วมทีม (เหมือนต้นฉบับกลาง ดูที่ [`superuser`](../superuser/README.md)) | 9 |
 | `unattended-run` | ปล่อยให้ทำเองยาว ๆ | 7 |

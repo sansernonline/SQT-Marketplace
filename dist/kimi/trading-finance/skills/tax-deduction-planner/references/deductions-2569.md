@@ -79,13 +79,13 @@ ThaiESG after 2569: max 100,000 and 8-year hold for 2570–2575 per SEC Q&A (ร
 | Donations to schools/universities, state hospitals, listed sport bodies | 2 × amount | together with general donations, max 10% of income after other deductions; e-Donation receipt needed |
 | General donations (temples, charities) | 1 × amount | max 10% of income after other deductions |
 | Political party donation | 10,000 | — |
-| Easy e-Receipt / ช้อปดีมีคืน | 2568: 50,000 (30,000 general VAT shops + 20,000 OTOP/community enterprise, e-Tax Invoice or e-Receipt only, 16 Jan–28 Feb 2568) | **no 2569 round found** — no Cabinet approval or RD notice seen as of 2026-10-14; plan without it (รอยืนยัน) |
+| Easy e-Receipt / ช้อปดีมีคืน | 2568: 50,000 (30,000 general VAT shops + 20,000 OTOP/community enterprise, e-Tax Invoice or e-Receipt only, 16 Jan–28 Feb 2568) | **no 2569 round** — news (Dec 2568, Feb 2569) reports the Finance Ministry will not continue it; no Cabinet approval or RD notice seen as of 2026-10-25; plan without it (รอยืนยัน: no official statement found) |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thairath.co.th/money/economics/thai_economics/2832789 , https://www.bangkokbiznews.com/economics/1214725 · Easy e-Receipt 2569 ค้นซ้ำ 2026-10-14 ไม่พบประกาศ (https://www.rd.go.th)
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.thairath.co.th/money/economics/thai_economics/2832789 , https://www.bangkokbiznews.com/economics/1214725 · Easy e-Receipt 2569 ตรวจล่าสุด 2026-10-25 ไม่พบประกาศ (https://www.rd.go.th) · ข่าวว่าคลังไม่ต่อ: https://thethaiger.com/th/news/1509461/ , https://www.sanook.com/money/946276/ , https://www.bangkokbiznews.com/economics/1221930
 
 ## 7. What changed versus tax year 2568
 
 - Social security cap up from 9,000 to 10,500
 - ThaiESGX separate 300,000 (May–Jun 2568 window) and LTF switch up to 500,000 were 2568-only
-- Easy e-Receipt: no 2569 round found as of 2026-10-14 (last round 16 Jan–28 Feb 2568, cap 50,000)
+- Easy e-Receipt: no 2569 round as of 2026-10-25; news reports the Finance Ministry will not continue it (last round 16 Jan–28 Feb 2568, cap 50,000)
 - Proposed TISA savings account not law at check date — do not plan on it

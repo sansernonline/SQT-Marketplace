@@ -38,8 +38,8 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 - **หัวคอลัมน์เป็นคำถามที่ผู้อ่านมีในหัว** ไม่ใช่ชื่อสาขาวิชา
 
 ```
-❌ | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
-✅ | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
+ผิด: | ตัวเลือก | ประสิทธิภาพ | ความซับซ้อน |
+ถูก: | ตัวเลือก | เร็วแค่ไหน | ต้องดูแลมากไหม |
 ```
 
 **ปิดท้ายตารางด้วยข้อสรุป 1 บรรทัดเสมอ** — ตารางบอกข้อมูล ไม่ได้บอกว่าควรเลือกอะไร
@@ -87,8 +87,8 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 - ถ้ามีหลายทางให้ผู้ใช้เลือก → แต่ละทางเป็น 1 ข้อ ทางที่ง่ายสุดอยู่บนสุด
 
 ```
-❌ ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
-✅ ติดอยู่ 1 เรื่อง:
+ผิด: ย่อหน้ายาวเล่าว่า container ใหม่ · โฟลเดอร์ว่าง · OneDrive หาย · แล้ววางแผนแก้ 3 ข้อรอไว้
+ถูก: ติดอยู่ 1 เรื่อง:
    - มองไม่เห็นไฟล์ — โฟลเดอร์ที่เชื่อมไว้ว่าง
    ต้องการ 1 อย่าง:
    - แนบ Mockup.html มา หรือบอก path ใหม่
@@ -267,10 +267,10 @@ Before delivering any polished doc:
 
 ## Anti-patterns
 
-- ❌ **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
-- ❌ **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
-- ❌ **Inconsistent terminology** — "user" in one section, "customer" in next
-- ❌ **Tables of paragraphs** — if cells are >2 sentences, use headings instead
+- **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
+- **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
+- **Inconsistent terminology** — "user" in one section, "customer" in next
+- **Tables of paragraphs** — if cells are >2 sentences, use headings instead
 
 ## ไม่ให้ดูเหมือน AI ทำ
 

@@ -15,11 +15,13 @@ General information, not legal or financial advice — for lawsuits or garnishme
 | Personal loan — revolving (บัตรกดเงินสด) | 25% per year |
 | Personal loan — instalment | 25% per year |
 | Car title loan (จำนำทะเบียนรถ) | 24% per year |
+| Nano finance (สินเชื่อรายย่อยเพื่อการประกอบอาชีพ) | 33% per year |
+| Car or motorbike hire purchase (เช่าซื้อ) for personal use | new car 10% · used car 15% · motorbike 23% per year, effective rate (ประกาศ ธปท. 55/2568 ลงวันที่ 2 ธ.ค. 2568 · รอยืนยัน) |
 | Credit card minimum payment | 8% of balance, kept at 8% until 31 Dec 2569 |
 
 A lender charging above these, or an unlicensed lender (เงินกู้นอกระบบ), is outside the rules — informal loans above 15% per year are illegal under the Civil and Commercial Code (ป.พ.พ. ม.654) and the 2560 loan-interest act; report to police / 1359 (รอยืนยัน hotline).
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20251204-2.html , https://www.prachachat.net/finance/news-1368667 · ตรวจซ้ำ 2026-10-22: หน้า BOT news-20251204-2 ยืนยันขั้นต่ำ 8% ถึงสิ้นปี 2569 · เพดาน 16/25/24% ไม่อยู่ในหน้านั้น ยืนยันจากข่าวรอง (รอยืนยันกับ bot.or.th)
+ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20251204-2.html , https://www.prachachat.net/finance/news-1368667 · ตรวจซ้ำ 2026-10-22: หน้า BOT news-20251204-2 ยืนยันขั้นต่ำ 8% ถึงสิ้นปี 2569 · เพดาน 16/25/24/33% ตรวจล่าสุด 2026-10-25 · แหล่ง: https://www.bot.or.th/content/dam/bot/documents/th/our-services/bot-license-check/interest.pdf (ประกาศ ธปท. สนส. 11-13/2563 · เช่าซื้อ 10/15/23% อยู่ในเอกสารเดียวกัน ตรวจ 2026-10-25 แหล่งเดียว) , https://www.thairath.co.th/money/personal_finance/finance_banking/2843164 , https://www.sawad.co.th/article/legal-interest-rates-and-calculation (25/24/33%) , https://www.tcc.or.th/credit-card-interest/ (16%)
 
 ## Workflow
 

@@ -43,7 +43,7 @@ Current caps and the rate table: [references/deductions-2569.md](references/dedu
 | 17 | Donations ×2 (schools, state hospitals, sport) | within 10% of net | e-Donation recorded? |
 | 18 | Donations ×1 | within 10% of net | e-Donation recorded? |
 | 19 | Political party | 10,000 | — |
-| 20 | Easy e-Receipt / ช้อปดีมีคืน | no 2569 round found as of 2026-10-14 — plan without it (รอยืนยัน) | e-Tax Invoice in own name and ID |
+| 20 | Easy e-Receipt / ช้อปดีมีคืน | no 2569 round as of 2026-10-25 (news: Finance Ministry not continuing it) — plan without it (รอยืนยัน) | e-Tax Invoice in own name and ID |
 
 ## Rules
 
