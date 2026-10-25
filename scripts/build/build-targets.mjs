@@ -45,7 +45,8 @@ function listDir(path) {
 }
 
 function parse(file) {
-  const text = readFileSync(file, "utf8");
+  // ตัด \r ออก: เครื่องที่ checkout เป็น CRLF จะได้ dist เหมือนเครื่องอื่น (ไม่งั้น \r หลุดเข้า TOML ของ Codex)
+  const text = readFileSync(file, "utf8").replace(/\r\n/g, "\n");
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
   if (!match) return { fields: {}, body: text };
   const fields = {};

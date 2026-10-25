@@ -1,2 +1,2 @@
 description = "Draft a Thai reply to a customer chat or review — stock, late parcel, wrong item, refund, bad review."
-prompt = "Run `chat-reply-templates` (and `returns-and-bad-reviews` for returns, refunds and reviews) with the `customer-chat` agent for: **{{args}}**\r\n\r\nGive one ready-to-send reply, plus the next action for the seller (refund, resend, open a dispute, nothing).\n"
+prompt = "Run `chat-reply-templates` (and `returns-and-bad-reviews` for returns, refunds and reviews) with the `customer-chat` agent for: **{{args}}**\n\nGive one ready-to-send reply, plus the next action for the seller (refund, resend, open a dispute, nothing).\n"

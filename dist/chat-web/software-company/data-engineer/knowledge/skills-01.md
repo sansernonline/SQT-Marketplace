@@ -885,6 +885,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 7. **งานเสี่ยงหรือย้อนไม่ได้ หัวหน้าทำเองหรือตรวจเองก่อนปล่อย** ไม่ให้ลูกทีม effort ต่ำทำ (รายการ "รออนุมัติ" ใน `autonomy`)
 8. **จบงานด้วยสรุปสั้น (หัวข้อ 7) และเทียบคาดกับจริง** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
 9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `superuser-style.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง
+   - งานใน git repo แก้บน branch ของงาน ไม่แก้บน branch หลัก · repo ที่มี AI หรือ session อื่นแก้พร้อมกัน → **1 ตัว 1 worktree** และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ (`claude/` · `codex/`) · วิธีและกฎใน [`team-files`](references/team-files.md) หัวข้อ "หลาย AI ใน repo เดียว"
 10. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** และบอกเฉพาะตัวที่เปลี่ยนการตัดสินใจ · ห้ามแก้ไฟล์ skill · agent · playbook เอง (รอผู้ใช้สั่ง "รวมบทเรียน")
 
 ---
@@ -1009,8 +1010,6 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 ---
 
 # ส่วนของสาขา software-company
-
-
 
 เรียกได้ทั้ง `/software-company:superuser` หรือพูดว่า "ใช้ superuser" กับงานซอฟต์แวร์
 
@@ -1927,6 +1926,7 @@ skill หลัก: `pr-description-template` · `commit-message-format` · `cic
 6. **ดูแลจนเขียว** — ถ้า CI แดง ให้หาต้นเหตุแล้วแก้ (`principle-fix-root-cause`) ห้าม retry หรือปิด test ส่วนคอมเมนต์รีวิวจากคนหรือบอต ให้ประเมินทีละข้อ แก้ข้อที่เป็นปัญหาจริง และตอบข้อที่ไม่ใช่ปัญหาพร้อมเหตุผล · ใคร: `developer` ตัวใหม่
 7. ก่อน merge ตรวจทั้ง PR อีกรอบตาม playbook [`review`](playbook-review.md) เพราะ CI เขียวไม่ได้แปลว่าปลอดภัย · ใคร: `reviewer` ตัวใหม่
 8. การ merge เข้า branch หลักต้อง **รออนุมัติ** แม้ทุกอย่างผ่าน (เตรียมคำสั่ง merge ไว้ให้) แล้วจบด้วย `status-report` · ใคร: หัวหน้าทีม (merge: ผู้ใช้ ใน "รออนุมัติ")
+9. ผู้ใช้อนุมัติ merge แล้ว **ลบ branch ในขั้นเดียวกันเลย ไม่ต้องถามซ้ำ:** `gh pr merge <เลข> --merge --delete-branch` (ลบทั้งบน GitHub และในเครื่อง แล้วสลับไป branch หลัก) · ก่อนลบดูว่าไม่มีไฟล์ค้างใน working tree และ branch นี้ไม่มี worktree อื่นใช้อยู่ · ไม่ใช้ `gh` → `git branch -d <ชื่อ>` (ลบได้เฉพาะที่ merge แล้ว · ห้าม `-D`) และ `git push origin --delete <ชื่อ>` · branch ที่ลบแล้วกู้คืนได้จากหน้า PR บน GitHub · ใคร: หัวหน้าทีม
 
 ## ข้ออ้างที่เจอบ่อย — อ่านก่อนข้ามขั้น
 
@@ -2195,6 +2195,22 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 - **เจอเรื่องเดิมซ้ำ** — เพิ่มหลักฐานในแถวเดิม ไม่เพิ่มแถว
 - **จดแถวใหม่แล้ว** — เพิ่ม 1 แถวในคิวกลาง `~/.claude/superuser/IMPROVEMENTS.md` ด้วย ([`learning-loop`](learning-loop.md))
 - **รวมเข้า skill** — เฉพาะเมื่อผู้ใช้สั่ง "รวมบทเรียน" (playbook [`learn-from-session`](playbook-learn-from-session.md)) · ระหว่างทำงานอื่นห้ามแก้ skill ใน SQT-Marketplace เอง
+
+## หลาย AI ใน repo เดียว
+
+2 session ที่ทำงานในโฟลเดอร์เดียวกันใช้ working tree และพื้นที่ stage ร่วมกัน: ไฟล์ที่อีกตัว stage ไว้จะติดไปกับ commit ของเรา และสคริปต์ที่สร้างไฟล์ (เช่น `dist/`) จะหยิบไฟล์ที่ยังไม่ commit ของอีกตัวไปด้วย · จดในตารางว่าใครทำ branch ไหนไม่ช่วย เพราะยังแก้โฟลเดอร์เดียวกันอยู่ · ต้องแยกโฟลเดอร์
+
+1. **1 ตัว 1 worktree** · เริ่มงานใหม่จาก branch หลักล่าสุด:
+   ```bash
+   git fetch origin
+   git worktree add ../<repo>-<เครื่องมือ>-<งาน> -b <เครื่องมือ>/<งาน> origin/main
+   ```
+   แล้วทำงานในโฟลเดอร์นั้นทั้งหมด · โฟลเดอร์หลักของ repo ให้คนใช้ หรือ AI ตัวที่ผู้ใช้กำหนด
+2. **ชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ** (`claude/` · `codex/` · `gemini/`) ตามด้วยงาน เช่น `claude/ui-scan-hook` · เห็นชื่อแล้วรู้ว่าใครทำ ไม่ต้องดูแลตารางแยก
+3. **ใครทำอะไรอยู่ ดูจาก git** · `git worktree list` (ใครอยู่โฟลเดอร์ไหน branch อะไร) · `git branch -vv` · ข้อมูลนี้ไม่ต้องจดซ้ำใน `CONTEXT.md` เพราะแต่ละ branch มี `CONTEXT.md` ของตัวเอง จดไปก็เก่าและชนกันตอน merge
+4. **ห้ามแตะ worktree ของตัวอื่น** · ไม่ commit · ไม่ลบ · ไม่ switch branch ในโฟลเดอร์ที่ไม่ใช่ของตัวเอง · เจอไฟล์ค้างที่ไม่ได้มาจาก input ของ tool ใน session นี้ = ของคนอื่น ห้าม stage
+5. **merge แล้วเก็บกวาด** · ลบ branch (`gh pr merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · ถ้า worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force`
+6. ไฟล์ที่ไม่อยู่ใน git (`node_modules` · `.venv` · `.env`) ไม่ตามมาใน worktree ใหม่ ต้องติดตั้งหรือคัดลอกเอง · ค่าลับคัดลอกเฉพาะไฟล์ที่ `.gitignore` กันไว้แล้ว
 
 
 ## reference: team-roles.md

@@ -11,3 +11,5 @@ plugins/*/evals/results/
 .claude/superuser/inbox/
 .claude/superuser/learn/
 .claude/superuser/state.json*
+# สิทธิ์ของ Claude Code เฉพาะเครื่องนี้ (ไม่ commit)
+.claude/settings.local.json

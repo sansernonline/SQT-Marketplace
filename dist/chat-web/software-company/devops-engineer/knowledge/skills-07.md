@@ -259,6 +259,7 @@ commit → build → artifact v1.4.0+abc1234 ─┬→ staging  (ตัวนี
 - `main` ต้อง deploy ได้ตลอดเวลา
 - ป้องกัน `main` ไว้ ให้ต้องผ่าน pull request และ CI เขียว ห้าม push ตรง
 - branch ที่อายุเกิน 1 สัปดาห์ให้เตรียมเจอ merge conflict
+- merge แล้วลบ branch ทันที (`gh pr merge --delete-branch`) · เปิด "Automatically delete head branches" ใน Settings → General ของ repo บน GitHub ให้ลบเองทุก PR · branch ที่ลบแล้วกู้จากหน้า PR ได้
 
 ---
 

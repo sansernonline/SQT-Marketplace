@@ -1,2 +1,2 @@
 description = "Draft a basic Thai contract — hire, rent or services — with standard sections and lawyer flags."
-prompt = "Run `doc-contract-th` with the `thai-doc-writer` agent for: **{{args}}**\r\n\r\nEvery flagged clause stays flagged until a Thai lawyer clears it. The draft sets out what the parties want; the lawyer makes sure it protects them.\n"
+prompt = "Run `doc-contract-th` with the `thai-doc-writer` agent for: **{{args}}**\n\nEvery flagged clause stays flagged until a Thai lawyer clears it. The draft sets out what the parties want; the lawyer makes sure it protects them.\n"
