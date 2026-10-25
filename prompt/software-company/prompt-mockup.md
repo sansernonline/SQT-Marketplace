@@ -1,5 +1,7 @@
 # prompt-mockup — สร้าง ตรวจ และแก้ mockup ที่กดได้จริง
 
+ยังไม่ได้ทดสอบจริง
+
 ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 3 ฉบับ ทุกฉบับทำงานใน `mockup/` · `prompt-new-project.md` ฉบับ 5 และ 6 ชี้มาที่ฉบับ 1 และ 2 · เทียบหน้าจอจริงกับ mockup ใช้ `prompt-explore.md` ฉบับ 4
 
 ## วิธีใช้

@@ -1,5 +1,7 @@
 # prompt-superuser — งานทั่วไป + ฉบับกลางที่ใช้ได้กับทุก plugin
 
+ยังไม่ได้ทดสอบจริง
+
 ใช้คู่กับ plugin `superuser` (ฉบับ 1–3 · 6–9 · 11) · plugin ใดก็ได้ในชุด (ฉบับ 4–5) · plugin `software-company` (ฉบับ 10 ใช้ playbook ของที่นั่น แต่แก้ skill ได้ทุก plugin) · ไฟล์นี้รวม prompt 11 ฉบับ · 1 ฉบับ = 1 งาน
 
 ## วิธีใช้

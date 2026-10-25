@@ -12,9 +12,10 @@
  */
 import { plan as planSuperuser } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine } from './lesson-checks.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { tmpdir, homedir } from 'node:os';
 import { join, basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -577,8 +578,33 @@ function selfTest() {
   const linkHit = errors.length === 1 && errors[0].includes('../gone/SKILL.md') && errors[0].startsWith('p/skills/a/SKILL.md:1');
   console.log(`  ${linkHit ? '✅' : '❌'} ลิงก์ไปไฟล์ที่ไม่มีโดนจับ · โค้ด แม่แบบ ช่องเติม รูป ไม่โดน`);
   if (linkHit) ok++;
+  // บทเรียนทีม 4 ข้อ (lesson-checks.mjs): ของเสียต้องโดนจับ ของดีต้องผ่าน
+  const lt = mkdtempSync(join(tmpdir(), 'lesson-'));
+  let lessonHit;
+  try {
+    const inst = join(lt, 'installed.json');
+    writeFileSync(inst, JSON.stringify({ plugins: { 'a@sqt-marketplace': [{ version: '2.7.0' }], 'b@sqt-marketplace': [{ version: '1.0.0' }], 'c@other': [{ version: '0.1.0' }] } }));
+    const old = installedOlder(inst, { a: '2.21.0', b: '1.0.0', c: '9.0.0' });
+    lessonHit = old.length === 1 && old[0].includes('"a"') && installedOlder(join(lt, 'none.json'), { a: '2.21.0' }).length === 0;
+  } finally { rmSync(lt, { recursive: true, force: true }); }
+  console.log(`  ${lessonHit ? '✅' : '❌'} plugin ในเครื่องเก่ากว่า repo โดนเตือน · รุ่นเท่ากัน plugin ตลาดอื่น ไม่มีไฟล์ ไม่โดน`);
+  if (lessonHit) ok++;
+  const rg = regressionNeverSeen('x-regression', '# ยังไม่เคยเห็นจริง: รอบแดงผ่าน\nname: x\n').length === 1
+    && regressionNeverSeen('x-guard', '# ยังไม่เคยเห็นจริง\n').length === 0
+    && regressionNeverSeen('x-regression', '# อาการที่กัน: เห็นจริง 2026-10-24\n# (ยังไม่ได้เห็นจริง) อีกจุด\n').length === 0
+    && regressionNeverSeen('x-regression', '# อาการเดิม (2026-10-23): agent เขียนผิด\n').length === 0;
+  console.log(`  ${rg ? '✅' : '❌'} -regression ที่ยังไม่เคยเห็นพลาดจริงโดนจับ · -guard และเคสที่เห็นจริงผ่าน`);
+  if (rg) ok++;
+  const dc = undatedClaims('| x | ✅ รันทดสอบแล้ว |\n').length === 1 && undatedClaims('| x | ✅ รันทดสอบแล้ว 2026-09-01 |\n').length === 0
+    && undatedClaims('ต้องรันจริงก่อนส่ง\n- [ ] ตรวจจริงแล้ว\n').length === 0;
+  console.log(`  ${dc ? '✅' : '❌'} อ้างว่าทดสอบจริงโดยไม่มีวันที่โดนเตือน · มีวันที่ กฎ และช่องติ๊กผ่าน`);
+  if (dc) ok++;
+  const pt = promptTestLine('# t\n\nยังไม่ได้ทดสอบจริง\n').length === 0 && promptTestLine('# t\n\nทดสอบจริง: 2026-10-24 · ฉบับ 1\n').length === 0
+    && promptTestLine('# t\n\nข้อความ\n').length === 1;
+  console.log(`  ${pt ? '✅' : '❌'} prompt ไม่มีบรรทัดสถานะทดสอบจริงโดนจับ · มีบรรทัดผ่าน`);
+  if (pt) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 11;
+  const total = cases.length + 15;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -672,6 +698,34 @@ for (const shared of ['human-writing']) {
       if (!readFileSync(join(ad, a), 'utf8').includes('human-writing')) err(join(ad, a), 'agent ไม่ได้ชี้ไปที่ human-writing — เพิ่มหัวข้อ ## Writing');
   }
 }
+
+// บทเรียนทีม: plugin ในเครื่องเก่ากว่า repo (warning) · eval -regression ที่ไม่เคยเห็นพลาดจริง · อ้างทดสอบจริงไม่มีวันที่ (warning) · prompt ไม่บอกสถานะทดสอบจริง
+const repoVersions = {};
+for (const p of plugins) {
+  try { repoVersions[p] = JSON.parse(readFileSync(join(pluginsDir, p, '.claude-plugin', 'plugin.json'), 'utf8')).version; } catch { /* plugin.json พัง checkPlugin รายงานแล้ว */ }
+}
+for (const m of installedOlder(join(homedir(), '.claude', 'plugins', 'installed_plugins.json'), repoVersions)) warn('~/.claude/plugins/installed_plugins.json', m);
+function walkFiles(dir, exts, out = []) {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) { if (!(e.name === 'cases' && basename(dir) === 'review-recall')) walkFiles(p, exts, out); }
+    else if (exts.some((x) => e.name.endsWith(x))) out.push(p);
+  }
+  return out;
+}
+const relOf = (f) => f.slice(ROOT.length + 1).replace(/\\/g, '/');
+for (const p of plugins) {
+  const evals = join(pluginsDir, p, 'evals');
+  if (existsSync(evals)) for (const f of walkFiles(evals, ['.yaml', '.yml', '.md'])) {
+    const text = readFileSync(f, 'utf8');
+    if (basename(f) === 'case.yaml') for (const m of regressionNeverSeen(basename(dirname(f)), text)) err(relOf(f), m);
+    for (const { at, msg } of undatedClaims(text)) warn(`${relOf(f)}:${at}`, msg);
+  }
+  const skills = join(pluginsDir, p, 'skills');
+  if (existsSync(skills)) for (const f of walkFiles(skills, ['SKILL.md']))
+    for (const { at, msg } of undatedClaims(readFileSync(f, 'utf8'))) warn(`${relOf(f)}:${at}`, msg);
+}
+for (const [rel, text] of docFiles) if (rel.startsWith('prompt/') && /^prompt-.+\.md$/.test(basename(rel))) for (const m of promptTestLine(text)) err(rel, m);
 
 // ---------------------------------------------------------------- report
 console.log();

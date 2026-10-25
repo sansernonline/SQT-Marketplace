@@ -1,5 +1,10 @@
 # Changelog — software-company
 
+## Unreleased
+
+- `logging-standards`: โค้ด logger ทั้ง Node และ Python ตัด `\r\n\t` ออกจากข้อความหลักด้วย (เดิมตัดแค่ค่า ทำให้ปลอมบรรทัด log ได้) · รันทดสอบจริง 2026-10-25
+- `doc-cover-design` ข้อ 7: ลูกทีมเปิด agent ต่อเองไม่ได้ → ผู้ออกแบบส่งปก 3 แบบเป็นไฟล์ หัวหน้าทีมเปิดผู้ตรวจโหวต (บทเรียน Speak Go 2026-10-15)
+
 ## 2.21.0 — 2026-10-23
 
 - reference ใหม่ 4 ไฟล์ (ข้อเท็จจริงจากเอกสารทางการที่เปิดตรวจ 2026-10-23 · ที่หาไม่พบติด (ยังไม่ได้ตรวจ)) — `ui-craft` → `references/figma-to-code.md`: Figma MCP server แบบ remote กับ desktop · แผนและโควตาตามที่นั่ง · variables → token · component → mockup HTML · เมื่อไหร่ข้าม Figma · `project-doc-set` → `references/docs-site.md` (ลิงก์จาก `technical-writer` ด้วย): เทียบ MkDocs Material · Docusaurus · Starlight · VitePress · ผลทดสอบค้นหาภาษาไทย (Pagefind 6/9 · lunr-languages 6/9 · MiniSearch ค่าตั้งต้น 0/9 · MiniSearch + Intl.Segmenter 9/9) · `data-import-export` → `references/thai-accounting-apis.md`: PEAK · FlowAccount (แพ็กเกจ · token · ลายเซ็น · UAT · rate limit · webhook) · TRCLOUD · AccRevo · Express · `ecommerce-patterns` → `references/thai-marketplace-apis.md`: Shopee · Lazada · TikTok Shop (สมัคร · ลายเซ็น · token · endpoint ออเดอร์ สต็อก ส่งของ · webhook · sandbox) · LINE SHOPPING กับ LINE Pay ไทย · ZORT · BentoWeb · BigSeller

@@ -1,5 +1,7 @@
 # prompt-sell-product — ขายซอฟต์แวร์ของเราเอง: ราคา · license · เงื่อนไขการใช้ · หน้าร้าน · เปิดขาย
 
+ยังไม่ได้ทดสอบจริง
+
 ใช้คู่กับ plugin `software-company` · ไฟล์นี้มี prompt 5 ฉบับ · ใช้เมื่อจะขายผลิตภัณฑ์ของเราเอง (แอป · plugin · API · EA) ไม่ใช่งานรับจ้างทำให้ลูกค้า · Expert Advisor (EA) คือโปรแกรมเทรดอัตโนมัติบน MetaTrader · รับจ้างทำ → `prompt-proposal.md` · ตั้งชื่อและ roadmap → `prompt-product.md` · ให้คนค้นเจอและสมัคร → `prompt-growth.md`
 
 ## วิธีใช้

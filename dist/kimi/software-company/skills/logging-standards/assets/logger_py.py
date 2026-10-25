@@ -20,6 +20,7 @@ import json
 import logging
 import logging.handlers
 import os
+import re
 import time
 from contextvars import ContextVar
 from pathlib import Path
@@ -44,6 +45,9 @@ SECRET_KEYS = (
     "apikey", "api_key", "accesstoken", "refreshtoken", "otp", "pin",
     "creditcard", "cardnumber", "cvv", "citizenid", "nationalid", "ssn",
 )
+
+
+_CTRL = re.compile(r"[\r\n\t]+")  # ข้อความหลักก็ตัดตัวขึ้นบรรทัด กันปลอมบรรทัด log
 
 
 def _redact(value, depth: int = 0):
@@ -90,7 +94,7 @@ class LineFormatter(logging.Formatter):
         line = (
             f"{ts}.{ms:03d} {tz}  "
             f"{_LEVEL_NAME.get(record.levelname, record.levelname):<5}  "
-            f"[{get_correlation_id()}] {record.name}  {record.getMessage()}"
+            f"[{get_correlation_id()}] {record.name}  {_CTRL.sub(' ', record.getMessage()).strip()}"
         )
         if ctx_str:
             line += f"  {ctx_str}"
