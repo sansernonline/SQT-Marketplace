@@ -6,6 +6,7 @@
     "ADAPT.md": "วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่",
     "hooks/hooks.json": "บอก Claude Code ว่าจะเรียก hook ตอนไหน",
     "hooks/superuser-hook.mjs": "hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox",
+    "hooks/ui-scan-hook.mjs": "ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan",
     "hooks/core-rules.md": "กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)",
     "hooks/skill-router.json": "คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม",
     "hooks/guard-rules.json": "รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา",

@@ -60,8 +60,12 @@ skill นี้คุมแค่ "ดูเหมือน AI หรือไ�
 ```bash
 python <path ของ skill นี้>/scripts/slop_scan.py <ไฟล์หรือโฟลเดอร์>          # ตาราง
 python <path ของ skill นี้>/scripts/slop_scan.py <path> --min P2 --json       # เฉพาะข้อหนัก
+python <path ของ skill นี้>/scripts/slop_scan.py --url https://...           # หน้าที่ขึ้นเว็บแล้ว + stylesheet ที่หน้า <link> ไว้ (ไม่รัน JavaScript)
 python <path ของ skill นี้>/scripts/slop_scan.py --self-test                  # รันก่อน ถ้าแก้สคริปต์
 ```
+
+- **hook `ui-scan` ของ plugin `superuser` รันสคริปต์นี้ให้เองทุกครั้งที่ Write/Edit ไฟล์ UI** — P0/P1 ถูกส่งกลับให้แก้ทันที · P2 แจ้งเป็นบริบท · ผลเดิมไม่เตือนซ้ำ · ปิดด้วย `"ui_scan": false` ใน `.claude/superuser/config.json` · hook ตรวจทีละไฟล์ ก่อนส่งยังต้องรันทั้งโฟลเดอร์ 1 รอบ
+- หน้าที่วาดด้วย JavaScript ทั้งหน้า (SPA) `--url` เห็นแค่โครง → ตรวจโค้ดต้นทาง หรือบันทึกหน้าจากเบราว์เซอร์เป็น .html แล้วตรวจไฟล์นั้น
 
 - ตรวจ 43 กฎจากโค้ด (สี การ์ด ตัวอักษร การเคลื่อนไหว คำ รูปเสีย ช่องกรอกไม่มี label คอนทราสต์ class ของ Tailwind) · ไม่ต้องติดตั้งอะไรเพิ่ม
 - ระดับ: P0 ใช้ไม่ได้ · P1 อ่านยาก · P2 สัญญาณ AI ชัด · P3 ให้ดูอีกครั้ง (อาจตั้งใจ) · มี P0 หรือ P1 → exit 1

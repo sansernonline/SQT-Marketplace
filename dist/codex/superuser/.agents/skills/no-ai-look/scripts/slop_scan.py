@@ -3,6 +3,7 @@
   python slop_scan.py mockup/                 # folder or files · prints a table
   python slop_scan.py src/ --json             # machine-readable
   python slop_scan.py src/ --min P2           # show only P0..P2
+  python slop_scan.py --url https://example.com   # live page + its stylesheets (up to 10)
   python slop_scan.py --self-test             # prove every rule still fires
 
 Levels: P0 broken / unusable · P1 hard to read · P2 strong AI tell · P3 look again (may be intentional)
@@ -13,7 +14,7 @@ A finding is a reason to look, not an order to change. Keep an intentional choic
 anywhere in the same file. The reason is shown in the report so reviewers can see it.
 No dependencies beyond the Python standard library.
 """
-import argparse, json, pathlib, re, sys
+import argparse, json, pathlib, re, sys, urllib.parse, urllib.request
 from html.parser import HTMLParser
 
 EXTS = {'.html', '.htm', '.css', '.scss', '.less', '.jsx', '.tsx', '.vue', '.svelte', '.astro'}
@@ -261,13 +262,13 @@ class Html(HTMLParser):
             if LOREM.search(d): self.out('lorem', ln)
             if OPENER.search(d): self.out('stock-opener', ln)
 
-def scan_text(path, src):
+def scan_text(path, src, kind=None):
     found = []; ok = {}
     for m in re.finditer(r'slop-ok:\s*([\w-]+)\s*([^*>]*)', src):
         ok[m.group(1)] = m.group(2).strip(' -') or '(ไม่ได้ให้เหตุผล)'
     def out(rule, line):
         found.append({'file': str(path), 'line': line, 'rule': rule, 'level': HINT[rule][0], 'hint': HINT[rule][1], 'kept': ok.get(rule)})
-    ext = pathlib.Path(path).suffix.lower()
+    ext = kind or pathlib.Path(path).suffix.lower()
     if ext in ('.css', '.scss', '.less'):
         scan_css(src, out)
     else:
@@ -301,6 +302,31 @@ def files(paths):
         elif p.is_dir():
             for f in sorted(p.rglob('*')):
                 if f.suffix.lower() in EXTS and not (set(f.parts) & SKIP_DIRS) and '.min.' not in f.name: yield f
+
+MAX_FETCH = 2_000_000
+SHEET = re.compile(r"<link\b[^>]*rel=[\"']?stylesheet[^>]*>", re.I)
+
+def sheet_urls(base, html, limit=10):
+    out = []
+    for tag in SHEET.findall(html):
+        m = re.search(r"href=[\"']?([^\"' >]+)", tag)
+        if m: out.append(urllib.parse.urljoin(base, m.group(1)))
+    return [u for u in dict.fromkeys(out) if u.startswith(('http://', 'https://'))][:limit]
+
+def fetch(url):
+    if not url.startswith(('http://', 'https://')): raise ValueError('ใช้ได้เฉพาะ http:// หรือ https://')
+    req = urllib.request.Request(url, headers={'User-Agent': 'slop-scan/1 (+no-ai-look)'})
+    with urllib.request.urlopen(req, timeout=10) as r:
+        return r.read(MAX_FETCH).decode(r.headers.get_content_charset() or 'utf-8', 'replace')
+
+def scan_url(url):
+    """ตรวจหน้าเว็บที่เปิดอยู่จริง: HTML ที่เซิร์ฟเวอร์ส่งมา + stylesheet ที่หน้า <link> ไว้ ไม่รัน JavaScript
+    หน้าที่วาดด้วย JavaScript ทั้งหน้า (SPA) จะเห็นแค่โครง → ตรวจโค้ดต้นทางหรือบันทึกหน้าจากเบราว์เซอร์แล้วตรวจไฟล์แทน"""
+    html = fetch(url); found = scan_text(url, html, '.html'); n = 1
+    for u in sheet_urls(url, html):
+        try: found += scan_text(u, fetch(u), '.css'); n += 1
+        except Exception as e: print(f'โหลด {u} ไม่ได้: {e}', file=sys.stderr)
+    return found, n
 
 def report(found, as_json, min_level):
     found = [f for f in found if LEVELS.index(f['level']) <= LEVELS.index(min_level)]
@@ -389,6 +415,8 @@ def self_test():
     if missing: print('ไม่ยิง:', ', '.join(missing))
     for f in false: print('จับผิด (ไฟล์ดี):', f['file'], f['line'], f['rule'])
     if not (kept and all(f['kept'] for f in kept)): print('slop-ok ไม่ทำงาน')
+    urls = sheet_urls('https://a.co/p/', '<link rel="stylesheet" href="s.css"><link href="/t.css" rel=stylesheet><link rel="icon" href="i.png">')
+    if urls != ['https://a.co/p/s.css', 'https://a.co/t.css']: print('sheet_urls ผิด:', urls); ok = False
     print('self-test ผ่าน' if ok else 'self-test ล้ม')
     return 0 if ok else 1
 
@@ -397,17 +425,21 @@ def main():
     ap = argparse.ArgumentParser(description='Scan UI source for AI-slop tells')
     ap.add_argument('paths', nargs='*'); ap.add_argument('--json', action='store_true')
     ap.add_argument('--min', default='P3', choices=LEVELS); ap.add_argument('--self-test', action='store_true')
+    ap.add_argument('--url', action='append', default=[], help='หน้าเว็บที่จะตรวจ (ใส่ซ้ำได้)')
     a = ap.parse_args()
     if a.self_test: return self_test()
-    if not a.paths: ap.error('ใส่ path ของไฟล์หรือโฟลเดอร์')
+    if not a.paths and not a.url: ap.error('ใส่ path ของไฟล์หรือโฟลเดอร์ หรือ --url')
+    found = []; n_url = 0
+    for u in a.url:
+        try: f, n = scan_url(u); found += f; n_url += n
+        except Exception as e: print(f'โหลด {u} ไม่ได้: {e}'); return 2
     fl = list(files(a.paths))
-    if not fl:
+    if not fl and not n_url:
         print('ไม่พบไฟล์ UI ให้ตรวจ (ตรวจ 0 ไฟล์ = ผิด ไม่ใช่ผ่าน) · ดู path อีกครั้ง'); return 2
-    found = []
     for f in fl:
         found += scan_text(f, f.read_text(encoding='utf-8', errors='replace'))
     shown = report(found, a.json, a.min)
-    if not a.json: print(f'ตรวจ {len(fl)} ไฟล์')
+    if not a.json: print(f'ตรวจ {len(fl) + n_url} ไฟล์')
     return 1 if any(f['level'] in ('P0', 'P1') and not f['kept'] for f in shown) else 0
 
 if __name__ == '__main__':
