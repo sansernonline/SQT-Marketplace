@@ -1,18 +1,19 @@
 # SQT-Marketplace — CONTEXT
 
-> คนและ bot ทุกตัวอ่านหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ก่อนทำงาน (หัวข้ออื่นเปิดเมื่อต้องใช้) · อัปเดต: 2026-10-24 22:22 โดย superuser (Opus 5.5)
+> คนและ bot ทุกตัวอ่านหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ก่อนทำงาน (หัวข้ออื่นเปิดเมื่อต้องใช้) · อัปเดต: 2026-10-25 16:53 โดย superuser (Opus 5.5)
 
 ## งานนี้คืออะไร
 marketplace plugin ของ Square Tech: 6 plugin = `superuser` (แกนกลาง) + 5 สาขา (software-company · personal-life · e-commerce · trading-finance · graphic-design) · ส่งออกไป claude.ai · Codex · Gemini · Kimi ผ่าน `dist/` · 2026-10-25 รวม `thai-workplace` เข้า e-commerce (`line-richmenu` ไป graphic-design) และ `reverse-engineer` เข้า skill `reverse-engineering` ของ software-company
-main = `2097830` (merge PR #2 · #3) · งานรวม plugin อยู่บน branch `refactor/merge-plugins-6` (แตกจาก main) ยังไม่ commit
+main = `a7c95b6` (merge PR #4: รวม plugin เหลือ 6 · จัดที่ skill/agent · สคริปต์ reverse-engineering · hook `ui-scan`) · branch `refactor/merge-plugins-6` และ `chore/superuser-notes-2026-10-23` ลบแล้วทั้งในเครื่องและบน GitHub
 
 ## เป้าตอนนี้
-รวม plugin เหลือ 6 ตัวบน `refactor/merge-plugins-6` · รอผู้ใช้สั่ง commit · push · เปิด PR
+ไม่มีงานค้างบน repo · ต่อไป: ผู้ใช้อัปเดต plugin ในเครื่อง แล้วลอง hook `ui-scan` กับ mockup จริง 1 งาน
 
 ## ความคืบหน้า
 | งาน | สถานะ | หลักฐาน | อัปเดต |
 |---|---|---|---|
-| จัดที่ skill/agent: `money-planner` · `image-artist` ไป graphic-design · แถวตัวกระตุ้น · ข้อความค้าง | เสร็จ ยังไม่ commit | validator error 0 · ผู้ตรวจรอบ 1 พบ 5 ข้อ แก้แล้ว 4 ไม่แก้ 1 (Roadmap) | 2026-10-25 |
+| hook `ui-scan` (สแกนไฟล์ UI หลัง Write/Edit) · `slop_scan.py --url` · `ui-craft/scripts/design_tokens.py` · `live-and-variants.md` · ข้อ 7 จังหวะให้ยิ้ม · เช็กลิสต์ข้อมูลยาก เน็ตช้า เป้ากด 44px · ส่วนที่ขาดเมื่อเทียบกับ pbakaus/impeccable | เสร็จ · commit `e1ccbf0` · merge ใน `a7c95b6` | self-test hook 10/10 · slop_scan 43/43 · design_tokens 9/9 · ลอง input แบบ Claude Code ได้ผลตามคาด (เจอบั๊ก hook ไม่รันบน Windows แก้แล้ว) · build-dist 4 ขั้นผ่าน · validator error 0 · ยังไม่ได้ลองกับ mockup จริง | 2026-10-25 |
+| จัดที่ skill/agent: `money-planner` · `image-artist` ไป graphic-design · แถวตัวกระตุ้น · ข้อความค้าง | เสร็จ · commit `5699857` · merge ใน `a7c95b6` | validator error 0 · ผู้ตรวจรอบ 1 พบ 5 ข้อ แก้แล้ว 4 ไม่แก้ 1 (Roadmap) | 2026-10-25 |
 | รวมเหลือ 8 plugin | เสร็จ | commit `06e5aef` | 2026-10-23 |
 | กฎภาษาไทยจาก kien-thai · `thai_tells.py` · skill-authoring · translate-th-en · hook guard/recompact | เสร็จ | commit `f42637b` | 2026-10-23 |
 | skill ใหม่ 4 · ส่วนเสริมจากการเทียบ ~110 จุด · ชุดออกแบบ · prompt · docs รูป dist | เสร็จ | commit `7584e5e` | 2026-10-23 |
@@ -28,8 +29,8 @@ main = `2097830` (merge PR #2 · #3) · งานรวม plugin อยู่�
 | text-to-speech ภาษาไทย: หัวข้อเสียงบรรยายจากสคริปต์ใน `video-editing` (เดิมทำเป็น skill `tts-th` แล้วผู้ใช้เลือกรวม) · `scripts/tts_cues.py` · `f5_worker.py` · `windows_tts.ps1` + eval `video-editing-tts-*` 3 เคส + router · triggers · playbook `video` · agent `video-editor` · prompt podcast ฉบับ 4 · CHANGELOG · facts | commit + push 2026-10-24 ตามที่ผู้ใช้สั่ง · ผู้ตรวจ 2 รอบผ่าน (รอบ 1 กลาง 3 ต่ำ 8 · รอบ 2 ต่ำ 5 · แก้ครบ) · หลังรวม: validator 492 รายการ error 0 · router แถว TTS 20/20 · ทดสอบย่อย 10/10 | ผู้ใช้เลือก F5-TTS-THAI ตัวหลัก edge-tts ตัวรอง · ทดสอบจริง 3 เครื่องจนได้วิดีโอ 32.21 วินาที · validator 493 รายการ error 0 · router 14/14 · แดง/เขียว haiku: แดงทำถูก 205k token 10.3 นาที เขียว 144k 4.8 นาที · ตัวอย่างเสียง `_to_delete/tts-samples/listen/index.html` (ลบแล้ว 2026-10-25) · ค้น 58 แหล่ง `_to_delete/tts-research.md` | 2026-10-24 |
 | รวมบทเรียน 11 ข้อจากคิวกลาง (hook 3 · validator 4 · ข้อความ skill 4) ใน worktree `SQT-lessons` บน branch `chore/superuser-notes-2026-10-23` | เสร็จ · commit `21dfda8` + `0cd886d` push แล้ว · worktree ลบแล้ว | hook self-test 86/86 · validator self-test 22/22 · validator 492 รายการ error 0 warning 5 · ตัวนับข้อรอรวม 11 → 0 · ผู้ตรวจผ่าน (ต่ำ 4 แก้ 2) · dist สร้างใหม่ exit 0 | 2026-10-25 |
 | ลบไฟล์เก่า: `items.json` · `CONTEXT-superuser-3.0.md` · `HANDOFF-reverse-engineer.md` · branch `chore/skill-audit-2026-10-12` · ของใน `_to_delete/` ราว 2 GB | เสร็จ · **พลาด:** ตัวอย่างเสียง ไฟล์ทดสอบ whisper podcast และ TTS ถูกลบไปด้วย (ตั้งใจเก็บ) ผลที่จดในแถวด้านบนยังถูก แต่ไฟล์หลักฐานไม่มีแล้ว · สำรองโค้ด REA กู้จากต้นฉบับ Kimi แล้ว | `ls -F` ต่อท้ายโฟลเดอร์ด้วย `/` รายการเก็บจึงจับไม่ได้ · ต่อไปใช้ `find -maxdepth 1 -printf '%f'` | 2026-10-25 |
-| รวม plugin เหลือ 6: thai-workplace → e-commerce (19 skill · 8 คำสั่ง · 4 agent · 5 playbook · prompt 4 ไฟล์) · line-richmenu → graphic-design · reverse-engineer → `reverse-engineering` + agent `reverse-engineer` ของ software-company | เสร็จ ยังไม่ commit | validator 472 รายการ error 0 · sync ทุกตัวตรง · hook 86/86 · validator self-test 22/22 · `check-tools.mjs --self-test` ผ่าน · make.py และ build-dist ใหม่ | 2026-10-25 |
-| `reverse-engineering` สคริปต์ใหม่ 5 ตัว (`dotnet_meta` · `wasm_info` · `sqlite_inspect` · `ipa_inventory` · `evm_selectors`) ผูกเข้า SKILL.md §4 · agent · native-binaries §2 · CHANGELOG · งานเติมให้เท่า REA ส่วนที่เหลือหยุด (คำสั่งถูกระบบความปลอดภัยหยุด) | เสร็จ ยังไม่ commit | self-test 5/5 · dotnet_meta รันกับ System.Configuration.dll · validator 473 รายการ error 0 · sync ตรง · build-targets exit 0 | 2026-10-25 |
+| รวม plugin เหลือ 6: thai-workplace → e-commerce (19 skill · 8 คำสั่ง · 4 agent · 5 playbook · prompt 4 ไฟล์) · line-richmenu → graphic-design · reverse-engineer → `reverse-engineering` + agent `reverse-engineer` ของ software-company | เสร็จ · commit `1a3e583` · merge ใน `a7c95b6` | validator 472 รายการ error 0 · sync ทุกตัวตรง · hook 86/86 · validator self-test 22/22 · `check-tools.mjs --self-test` ผ่าน · make.py และ build-dist ใหม่ | 2026-10-25 |
+| `reverse-engineering` สคริปต์ใหม่ 5 ตัว (`dotnet_meta` · `wasm_info` · `sqlite_inspect` · `ipa_inventory` · `evm_selectors`) ผูกเข้า SKILL.md §4 · agent · native-binaries §2 · CHANGELOG · งานเติมให้เท่า REA ส่วนที่เหลือหยุด (คำสั่งถูกระบบความปลอดภัยหยุด) | เสร็จ · commit `bab1d5f` · merge ใน `a7c95b6` | self-test 5/5 · dotnet_meta รันกับ System.Configuration.dll · validator 473 รายการ error 0 · sync ตรง · build-targets exit 0 | 2026-10-25 |
 
 ## กติกา
 - ไม่ commit · push · merge main · tag เว้นแต่ผู้ใช้สั่งในรอบนั้น
@@ -80,21 +81,25 @@ main = `2097830` (merge PR #2 · #3) · งานรวม plugin อยู่�
 | 2026-10-25 | e-commerce เก็บชื่อเดิม ไม่เปลี่ยนชื่อ plugin | เปลี่ยนเป็นชื่อธุรกิจ | ผู้ใช้เลือกรวมเข้า e-commerce · คนที่ติดตั้ง e-commerce อยู่ไม่ต้องลงใหม่ |
 | 2026-10-25 | `scam-check` และ `insurance-review` อยู่ trading-finance ต่อ ให้ agent `money-planner` ใหม่ดูแล | ย้ายไป personal-life (ผู้ใช้เลือกชุดที่มีการย้ายนี้) | โหวต 3 agent: ต้นทุน · ความเสี่ยง · ส่งเร็ว = อยู่ที่เดิม 3 ต่อ 0 · `scam-check` ถูกอ้าง 20 ไฟล์ รวม playbook และกฎฉุกเฉิน ย้ายแล้วต้องแก้อย่างน้อย 18 ไฟล์ |
 | 2026-10-25 | ไม่แก้ "Agents (4)" ในหัวข้อ Roadmap ของ `docs/PLUGINS.md` | แก้ตามที่ผู้ตรวจเสนอ | เป็นแผนเดิมของ 2026-10-06 (ยังมี thai-workplace อยู่ในนั้น) ไม่ใช่รายการปัจจุบัน |
+| 2026-10-25 | hook `ui-scan` เป็นไฟล์แยก `ui-scan-hook.mjs` · โมดูล `ui_scan` ค่าเริ่มเปิด · ทำงานโดยไม่ต้องมีโฟลเดอร์ทีม | ใส่ใน `superuser-hook.mjs` | hook หลักออกทันทีเมื่อไม่มี `.claude/superuser/` · ไฟล์แยกถอดได้ด้วยการลบแถวเดียวใน `hooks.json` |
+| 2026-10-25 | P0/P1 ส่งกลับให้แก้ (`decision: block` หลังเขียน) · P2 แจ้งเป็นบริบท · ผลเดิมไม่เตือนซ้ำ | หยุดก่อนเขียน (PreToolUse) | ไฟล์ต้องเขียนก่อนถึงสแกนได้ · ข้อที่ตั้งใจคงไว้ใส่ `slop-ok` ได้ |
+| 2026-10-25 | ไม่ทำส่วนขยายเบราว์เซอร์และ `overdrive` ของ impeccable | ทำตามครบทุกคำสั่ง | `--url` แทนส่วนขยายได้ · เอฟเฟกต์มีใน `depth-and-flourish.md` และขัดงบการเคลื่อนไหว |
+| 2026-10-25 | PR #4 merge แบบ merge commit ล็อก head `e1ccbf0` | squash | แบบเดียวกับ PR #2 · #3 · เก็บ commit แยกตามงาน |
 | 2026-10-25 | `hiring-th` · `thai-business-setup` ให้ `tax-helper` ดูแล | รวม `compliance-helper` เข้า agent หลังบ้านตัวเดียว | แก้น้อยไฟล์ ย้อนง่าย · การรวม agent เป็นงานแยก |
 
 ## รอผู้ใช้
 ไม่เกิน 10 แถว · แถวบนสุดคือข้อที่ **ต่อไป** ในคำตอบชี้ให้ผู้ใช้ทำ · "ทำไมต้องเป็นคุณ" ใช้ 4 ค่า: ตัดสิน · ตรวจด้วยตาหรือหู · ใช้เงินหรือ token · รับรองข้อความที่ agent เขียนแทน · agent ลบแถวทันทีที่ผู้ใช้ตอบหรือปลดล็อกแล้ว
 | เรื่อง | ทำไมต้องเป็นคุณ | หลักฐาน | ปลดล็อกอะไร · ตอบแบบไหน | วันที่เพิ่ม |
 |---|---|---|---|---|
-| อัปเดต plugin ในเครื่อง | ตัดสิน | main มีรุ่นใหม่แล้ว (`f784b41`) แต่ `installed_plugins.json` ยังเป็น software-company 2.7.0 กฎและ hook ใหม่จึงไม่ทำงาน | `/plugin marketplace update sqt-marketplace` แล้ว `/plugin update software-company@sqt-marketplace` (ตาม `docs/INSTALL.md`) · ติดตั้ง `superuser` และ plugin สาขาที่ใช้ · ถอดตัวเก่าที่ถูกรวมแล้ว | 2026-10-23 |
+| อัปเดต plugin ในเครื่อง | ตัดสิน | main มีรุ่นใหม่แล้ว (`a7c95b6`) แต่ `installed_plugins.json` ยังเป็นรุ่นเก่า กฎ hook และ `ui-scan` ใหม่จึงไม่ทำงาน | `/plugin marketplace update sqt-marketplace` แล้ว `/plugin update <plugin>@sqt-marketplace` (ตาม `docs/INSTALL.md`) · ติดตั้ง `superuser` และ plugin สาขาที่ใช้ · ถอด `thai-workplace` · `reverse-engineer` ที่ถูกรวมแล้ว | 2026-10-23 |
+| ลอง hook `ui-scan` กับ mockup จริง 1 งาน | ตรวจด้วยตาหรือหู | ทดสอบแค่ไฟล์ตัวอย่าง · ยังไม่รู้ว่าเตือนถี่หรือรบกวนแค่ไหนในงานจริง | ใช้งานตามปกติแล้วบอกผล · เตือนเยอะเกิน → ปรับระดับหรือปิด `ui_scan` | 2026-10-25 |
 | หน้าเว็บ F5-TTS-THAI ล้มที่ torchcodec (ไม่กระทบ skill) | ตัดสิน · ติดตั้งทั้งเครื่อง | torchaudio 2.11 ต้องมี DLL ของ FFmpeg รุ่น shared · สคริปต์ของ skill เลี่ยงได้แล้ว | ติดตั้ง FFmpeg รุ่น shared ใส่ PATH เอง หรือบอกให้เตรียมคำสั่ง | 2026-10-24 |
-| merge PR ของ `chore/superuser-notes-2026-10-23` เข้า main | ตัดสิน | push แล้ว 2026-10-24 · มี commit ของอีกเครื่องมือ 8 ตัวอยู่ใน branch นี้ด้วย | เปิด PR บนเว็บแล้วกด merge (agent merge เองไม่ได้) | 2026-10-24 |
 | tag รุ่นใหม่ (ไม่บังคับ) | ตัดสิน | repo ไม่เคยมี git tag · การติดตั้งอ่านเลขรุ่นจาก plugin.json | ตอบ "tag" ถ้าอยากมี | 2026-10-23 |
 | อ่านออกเสียงคู่ตัวอย่างภาษาไทย 5 คู่ใน `human-writing/references/thai-examples.md` | ตรวจด้วยตาหรือหู | ทุกคู่ติดป้าย (ชั่วคราว) | เอาป้ายออก · ตอบ "รับ" หรือแก้ข้อความ | 2026-10-22 |
 | รัน eval ที่เสียเงิน: `claude plugin eval` ของ superuser · `scripts/evals/review-recall --run` | ใช้เงินหรือ token | ยังไม่เคยรันจริง | วัดผลได้จริง · ตอบ "รัน eval" | 2026-10-23 |
 
 ## รับงานต่อ
-- **ทำต่อเป็นข้อแรก:** ผู้ใช้ตรวจงานรวม plugin บน `refactor/merge-plugins-6` แล้วสั่ง commit · push · PR · คนที่ติดตั้ง `thai-workplace` หรือ `reverse-engineer` ไว้ต้อง uninstall แล้วติดตั้ง e-commerce / software-company · ลบ branch `chore/superuser-notes-2026-10-23` ได้ (เข้า main ครบแล้ว) · F5 บนเครื่องนี้ (CPU) ใช้ทดสอบสั้น ๆ เท่านั้น รันยาวแล้วหน่วยความจำเกือบหมด · ถามผู้ใช้เรื่องอัปเดต plugin ในเครื่อง · ทบทวน skill วิดีโอด้วย `/skill-doctor` ราว 2026-11-24 (รอบแดงของ `video-editing` ทำถูกโดยไม่มี skill · ดูว่าควรย่อเหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เองไหม) · งานต่อไปบน repo แตก branch ใหม่จาก main (`f784b41`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
+- **ทำต่อเป็นข้อแรก:** งานรวม plugin เหลือ 6 และ hook `ui-scan` เข้า main แล้ว (`a7c95b6` · PR #4) · ถามผู้ใช้เรื่องอัปเดต plugin ในเครื่อง (คนที่ติดตั้ง `thai-workplace` หรือ `reverse-engineer` ไว้ต้อง uninstall แล้วติดตั้ง e-commerce / software-company) และผลลอง `ui-scan` กับ mockup จริง · F5 บนเครื่องนี้ (CPU) ใช้ทดสอบสั้น ๆ เท่านั้น รันยาวแล้วหน่วยความจำเกือบหมด · ทบทวน skill วิดีโอด้วย `/skill-doctor` ราว 2026-11-24 (รอบแดงของ `video-editing` ทำถูกโดยไม่มี skill · ดูว่าควรย่อเหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เองไหม) · งานต่อไปบน repo แตก branch ใหม่จาก main (`a7c95b6`) ไม่ commit ลง main ตรง · ข้อปรับทีม 3 ข้อจาก learn `2026-10-23-release-round2.md` ผู้ใช้ "รับ" แล้ว อยู่ในคิวกลาง ลงมือเมื่อผู้ใช้สั่ง "รวมบทเรียน" · ได้คำตอบแล้วทำตาม · ก่อน commit อะไรต่อ เทียบบรรทัดที่เพิ่มกับ input ของ tool ใน transcript ของ session (ไม่ใช่ผลที่อ่าน) เพื่อแยกงานของอีกฝั่ง
 - **รออนุมัติ:** commit · push · merge · tag · eval ที่เสียเงิน · แตะไฟล์ของอีกฝั่ง
 - **ค้างอยู่:** ตัวบทราชบัณฑิตยสภาเรื่องไม้ยมกและประกาศทับศัพท์ 2532 · ข้อความ licence เต็มของ GSAP · ข้อที่ agent ติด (ยังไม่ได้ตรวจ) ไว้ใน skill ใหม่ (เช่น ม.17/17-1 พ.ร.บ.คุ้มครองแรงงาน · rate limit ของ Shopee/Lazada · ค่า API ของ PEAK/FlowAccount)
 - **ข้อเสนอที่ยังไม่ได้ทำ:** ตัวตรวจ `plugin:ชื่อ` ใน validator · ตรวจลำดับหัวรุ่นใน CHANGELOG (รายละเอียดใน `IMPROVEMENTS.md`)
