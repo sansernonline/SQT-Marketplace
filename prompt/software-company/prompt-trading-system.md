@@ -1,5 +1,7 @@
 # prompt-trading-system — สร้างระบบเทรดอัตโนมัติ: Expert Advisor (EA) และ indicator บน MetaTrader 4/5
 
+ยังไม่ได้ทดสอบจริง
+
 ใช้คู่กับ plugin `software-company` · ไฟล์นี้มี prompt 6 ฉบับ ทำเรียงกัน 1 → 6 · ใช้เมื่อจะเขียน EA หรือ indicator ใหม่ · port จาก MetaTrader 4 (MT4) ไป MetaTrader 5 (MT5) · หรือเตรียม EA ที่มีอยู่ไปขาย · เทรดเองด้วยมือ (ซื้อกี่หุ้น · ทบทวนผลเทรด) → plugin `trading-finance` (`prompt/trading-finance/prompt-trading.md`)
 
 ## วิธีใช้

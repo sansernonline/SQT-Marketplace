@@ -1,5 +1,7 @@
 # prompt-trading — เทรด: ก่อนเปิดสถานะ ทบทวนเทรด watchlist ซ้อมเงินจำลอง ติดดอย · forex / crypto · prop firm
 
+ยังไม่ได้ทดสอบจริง
+
 ใช้คู่กับ plugin `trading-finance` · ไฟล์นี้รวม prompt 7 ฉบับ · 1 ฉบับ = 1 งาน
 
 ## วิธีใช้

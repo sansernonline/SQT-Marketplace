@@ -62,8 +62,12 @@ export function redact(text, max = MAX_TARGET) {
 // ข้อความที่ผู้ใช้กำลังแก้งานของทีม → learning-reviewer อ่านบรรทัดที่มี correction: true ตอนจบงาน
 const CORRECTION = /(ไม่ใช่|ผิด|อย่า|บอกแล้ว|บอกไปแล้ว|แก้ใหม่|ทำใหม่|ไม่ได้สั่ง|ไม่ได้ขอ|ไม่ต้อง|เลิก|ย้อนกลับ|ไม่เอา|\bwrong\b|\bdon'?t\b|\bnot what\b|\bi said\b|\balready told\b|\bstop\b|\brevert\b|\bundo\b|\binstead\b)/i;
 
+// รายงานลูกทีม (<agent-message) และแจ้งงานจบ (<task-notification) มาในช่องข้อความผู้ใช้ แต่ไม่ใช่ผู้ใช้แก้งาน
+const NOT_USER = /^\s*<(agent-message|task-notification)/i;
+
 export function isCorrection(prompt) {
-  return CORRECTION.test(String(prompt ?? ""));
+  const text = String(prompt ?? "");
+  return !NOT_USER.test(text) && CORRECTION.test(text);
 }
 
 // .claude/superuser/ คือที่ใหม่ · .superuser/ คือที่เดิมของโปรเจกต์ที่สร้างไว้ก่อน
@@ -176,6 +180,33 @@ export function pendingMessages(teamDir) {
   const inbox = join(teamDir, "inbox");
   if (!existsSync(inbox)) return [];
   return readdirSync(inbox).filter((name) => name.endsWith(".md")).sort();
+}
+
+// คิวปรับทีมกลางของเครื่อง: นับข้อที่ผู้ใช้รับแล้วแต่ยังไม่รวม · แถวตาราง = ควรรวม + ช่อง "รวมแล้ว" ขึ้นต้น ยัง · แถว bullet = "- วันที่ · โปรเจกต์ · รับ · ..." ที่ไม่มีคำว่า รวมแล้ว
+export function pendingImprovements(home = homedir()) {
+  let text = "";
+  for (const name of ["improvements.md", "IMPROVEMENTS.md"]) {
+    try { text = readFileSync(join(home, ".claude", "superuser", name), "utf8"); break; } catch { /* ลองชื่อถัดไป */ }
+  }
+  let n = 0;
+  for (const line of text.split("\n")) {
+    if (/^-\s+\d{4}-\d{2}-\d{2}\s·[^·]*·\s*รับ\s·/.test(line)) { if (!line.includes("รวมแล้ว")) n++; continue; }
+    if (!line.startsWith("|")) continue;
+    const c = line.split("|").map((x) => x.trim());   // c[0] ว่าง · วันที่ c[1] · ควรรวมไหม c[8] · รวมแล้ว c[9]
+    if (/^\d{4}-/.test(c[1] ?? "") && c[8]?.startsWith("ควรรวม") && c[9]?.startsWith("ยัง")) n++;
+  }
+  return n;
+}
+
+// ตาราง "การตัดสินใจ" มีแถวแล้วแต่ไม่มีแถวไหนมี "คาด:" → true
+export function decisionsLackExpect(teamDir) {
+  let text = "";
+  try { text = readFileSync(join(teamDir, "CONTEXT.md"), "utf8"); } catch { return false; }
+  const at = text.indexOf("## การตัดสินใจ");
+  if (at < 0) return false;
+  const body = text.slice(at + 1).split(/\n## /)[0];
+  const rows = body.split("\n").filter((l) => l.startsWith("|") && !/^\|[-\s|]+\|?$/.test(l)).slice(1);
+  return rows.length > 0 && !rows.some((r) => r.includes("คาด:"));
 }
 
 export function inboxNotice(teamDir, event, state, rel = ".claude/superuser") {
@@ -735,6 +766,19 @@ function logAndNotice(input, raw, root, teamDir, event) {
   if (isLead && moduleOn(teamDir, "inbox") && ["SessionStart", "UserPromptSubmit", "PostToolUse", "PostToolUseFailure"].includes(event)) {
     notice = inboxNotice(teamDir, event, state, relative(root, teamDir).replace(/\\/g, "/"));
   }
+  if (isLead && moduleOn(teamDir, "inbox")) {
+    const extra = [];
+    if (event === "SessionStart") {
+      const n = pendingImprovements();
+      if (n > 0) extra.push(`คิวปรับทีม (~/.claude/superuser/improvements.md) มี ${n} ข้อที่รับแล้วแต่ยังไม่รวม — ผู้ใช้สั่ง "รวมบทเรียน" เมื่อพร้อม`);
+    }
+    const today = entry.ts.slice(0, 10);
+    if (event === "PostToolUse" && ["Agent", "Task"].includes(input.tool_name) && state.expectWarned !== today) {
+      state.expectWarned = today;
+      if (decisionsLackExpect(teamDir)) extra.push(`ตาราง "การตัดสินใจ" ใน CONTEXT.md ยังไม่มีแถวไหนมี "คาด:" — จด 1 บรรทัดก่อนแจกงาน: คาด: ขนาด · ลูกทีม · รอบตรวจ · ระดับ (superuser หัวข้อ 2) แล้วเทียบกับจริงตอนจบ`);
+    }
+    if (extra.length) notice = [notice, ...extra].filter(Boolean).join("\n");
+  }
   const keys = Object.keys(state.models);
   if (keys.length > 40) for (const key of keys.slice(0, keys.length - 40)) delete state.models[key];
   const temp = `${statePath}.${process.pid}.tmp`;
@@ -835,7 +879,28 @@ function selfTest() {
   writeFileSync(join(cfgDir, "config.json"), JSON.stringify({ modules: { log: false, review_gate: true } }));
   gates.push(["config: ปิด log ได้ · ไม่มี key = เปิด · ไม่มีไฟล์ = เปิด", [], true, () => moduleOn(cfgDir, "log") === false && moduleOn(cfgDir, "review_gate") === true && moduleOn(cfgDir, "inbox") === true && moduleOn(join(cfgDir, "none"), "log") === true]);
   let gateOk = 0;
+  const qHome = join(tmpdir(), `sqt-queue-${process.pid}`); mkdirSync(join(qHome, ".claude", "superuser"), { recursive: true });
+  writeFileSync(join(qHome, ".claude", "superuser", "improvements.md"), "| วันที่ | a |\n|---|---|\n| 2026-10-12 | p | k | r | w | 1 | s | ควรรวม | แล้ว 2026-10-12 (x) | c | — |\n| 2026-10-13 | p | k | r | w | 1 | s | ควรรวม | ยัง | c | — |\n\n- 2026-10-15 · P · รับ · เรื่องหนึ่ง\n- 2026-10-16 · P · รับ · เรื่องสอง รวมแล้ว 2026-10-20\n");
+  const cDir = join(tmpdir(), `sqt-ctx-${process.pid}`); mkdirSync(cDir, { recursive: true });
+  const ctxWith = (rows) => writeFileSync(join(cDir, "CONTEXT.md"), `# งาน
+
+## การตัดสินใจ
+| วันที่ | เลือก | ไม่เลือก | เพราะ |
+|---|---|---|---|
+${rows}
+## รอผู้ใช้
+| x | y |
+| ก | คาด: ข |
+`);
   gates.push(
+    ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
+    ["คิวปรับทีม: นับเฉพาะข้อที่รับแล้วยังไม่รวม (ตาราง 1 + bullet 1)", [], true, () => pendingImprovements(qHome) === 2 && pendingImprovements(join(qHome, "none")) === 0],
+    ["คาด: ตารางตัดสินใจมีแถวแต่ไม่มี คาด: → เตือน · มี คาด: หรือไม่มีแถว → เงียบ", [], true, () => {
+      ctxWith("| 2026-10-24 | ก | ข | ค |\n"); const a = decisionsLackExpect(cDir);
+      ctxWith("| 2026-10-24 | ก | ข | ค · คาด: ลด 20% ตรวจ 2026-11-24 |\n"); const b = decisionsLackExpect(cDir);
+      ctxWith(""); const c = decisionsLackExpect(cDir);
+      return a === true && b === false && c === false;
+    }],
     ["ด่านข้อความเจ้าของ: Write ไฟล์ -owner.md → บล็อก", [], true, () => ownerInboxGate("Write", { file_path: "/p/.claude/superuser/inbox/2026-10-22-0900-owner.md", content: "x" })],
     ["ด่านข้อความเจ้าของ: Bash เขียน from: owner ลง inbox → บล็อก", [], true, () => ownerInboxGate("Bash", { command: "printf 'from: owner\\n' > .claude/superuser/inbox/a.md" })],
     ["ด่านข้อความเจ้าของ: Bash echo >> ไฟล์ -owner.md → บล็อก", [], true, () => ownerInboxGate("Bash", { command: "echo hi >> .claude/superuser/inbox/a-owner.md" })],

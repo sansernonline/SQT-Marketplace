@@ -18,7 +18,7 @@
     "evals/speaking-script-regression/case.yaml": "เคส eval: กันอาการเดิมกลับมา เช่น สคริปต์พูดออกมาเป็นบทความ",
     "evals/video-editing-trigger/case.yaml": "เคส eval: โจทย์ตัดช่วงเงียบและปรับเสียงที่ต้องทำให้ video-editing ถูกเปิด",
     "evals/video-editing-behaviour/case.yaml": "เคส eval: ตัดให้ตรงเฟรม ปรับเสียง 2 รอบ และวัดไฟล์ที่ได้",
-    "evals/video-editing-regression/case.yaml": "เคส eval: กันอาการรับรองความดังจากคำสั่งรอบเดียวโดยไม่วัด",
+    "evals/video-editing-guard/case.yaml": "เคส eval: กันอาการรับรองความดังจากคำสั่งรอบเดียวโดยไม่วัด",
     "evals/subtitles-th-trigger/case.yaml": "เคส eval: โจทย์ทำซับไทยแล้วฝังที่ต้องทำให้ subtitles-th ถูกเปิด",
     "evals/subtitles-th-behaviour/case.yaml": "เคส eval: แก้ซับให้ตามกฎความยาว ความเร็วอ่าน และเครื่องหมาย",
     "evals/subtitles-th-regression/case.yaml": "เคส eval: กันอาการฝังซับไทยแล้วเป็นสี่เหลี่ยมโดยไม่ระบุฟอนต์ไทย",
@@ -27,7 +27,7 @@
     "evals/video-editing-slides-regression/case.yaml": "เคส eval: กันอาการวิดีโอยาวเกินเสียงและแผ่นสุดท้ายหาย",
     "evals/video-editing-tts-trigger/case.yaml": "เคส eval: โจทย์ไม่อยากอัดเสียงเองที่ต้องทำให้ video-editing ถูกเปิด",
     "evals/video-editing-tts-behaviour/case.yaml": "เคส eval: เตรียมสคริปต์ให้เครื่องอ่าน มีไฟล์คำอ่าน ขั้นทำร่าง และกฎเสียงต้นแบบ",
-    "evals/video-editing-tts-regression/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง"
+    "evals/video-editing-tts-guard/case.yaml": "เคส eval: F5 ล้มที่ libtorchcodec ต้องใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้งและไม่ติดตั้งของทั้งเครื่องเอง"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",

@@ -1,5 +1,7 @@
 # prompt-user-story — เขียนและปรับ user story
 
+ยังไม่ได้ทดสอบจริง
+
 ใช้คู่กับ plugin `software-company` · ไฟล์นี้รวม prompt 3 ฉบับ ทุกฉบับเขียนลง `docs/USER-STORIES.md` ไฟล์เดียว · `prompt-new-project.md` ฉบับ 4 ชี้มาที่ฉบับ 1 · แผน sprint (`prompt-product.md` ฉบับ 3) หยิบ story สถานะ Ready จากไฟล์นี้
 
 ## วิธีใช้

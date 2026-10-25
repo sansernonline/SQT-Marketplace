@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- eval `video-editing-regression` และ `video-editing-tts-regression` เปลี่ยนชื่อเป็น `-guard` เพราะรอบแดงทำถูกอยู่แล้ว ไม่ใช่เรื่องที่เคยพลาดจริง (กฎใหม่ใน `skill-authoring`)
 - เพิ่ม skill `speaking-script`: สคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) — กฎข้อเดียว write for the ear · hook ก่อนทักทาย · ตารางภาษาเขียน → ภาษาพูด · จับเวลาด้วยนาฬิกาไม่นับคำ · ขั้น 0 หาคลิปอ้างอิงก่อนเขียน · eval 3 เคส ใน `evals/speaking-script-*` · เพิ่มแถวใน skill-router (พร้อมกัน pattern โค้ดไม่จับ "สคริปต์พูด" อีก) · triggers · file-map
 - `brief-to-image`: เพิ่มขั้น 0 หารูปอ้างอิงที่ชอบก่อนเขียน prompt แล้วแตกว่าชอบอะไร (แสง · สี · องค์ประกอบ) ใส่ใน brief — ลดผลงานหน้าตาเหมือนกันทุกชิ้น
 - skill ใหม่ 2 ตัวสำหรับตัดต่อด้วย ffmpeg และ agent ใหม่ `video-editor`: `video-editing` (ตัดให้ตรงเฟรม · ต่อคลิป · ตัดช่วงเงียบด้วย `scripts/silences.py` · ปรับความดัง 2 รอบด้วย `scripts/loudnorm2.py` และอ่านว่าได้ Linear หรือ Dynamic · แปลงเป็นแนวตั้ง · ภาพปก · ต่อภาพสไลด์จาก `check_deck.py` กับเสียงบรรยายตาม `data-at` ด้วย `scripts/slides_to_video.py` ให้ยาวเท่าเสียงพอดี · วัดไฟล์ที่ได้ทุกครั้ง) · `subtitles-th` (ถอดเสียงเป็น .srt · `scripts/srt_check.py` ตรวจความยาวบรรทัด ความเร็วอ่าน เวลา และเครื่องหมายตามตาราง caption ของ `video-script-to-clip` · ฝังซับด้วยฟอนต์ไทยแล้วเปิดภาพดูวรรณยุกต์) · ทดสอบทุกคำสั่งกับ ffmpeg 9.0.2 บน Windows 2026-10-24 · eval 9 เคส (`video-editing-*` · `video-editing-slides-*` · `subtitles-th-*`) · playbook `video` เพิ่มขั้นตัดต่อก่อนขั้นตรวจ · `triggers.md` เพิ่ม 3 แถว
