@@ -32,7 +32,7 @@ Notes:
 - **รบกวน** literally means "to disturb". It is the default polite opener for a request: รบกวนส่ง...ภายในวันศุกร์ได้ไหมครับ
 - **ขออนุญาต** before doing something to someone: ขออนุญาตทวงถาม... (permission to follow up) softens a payment chase
 - **ท่าน** sounds stiff in LINE between peers. Keep it for seniors and for formal letters
-- For formal letters (หนังสือราชการ), use `doc-thai-official` in `thai-workplace` (if installed)
+- For formal letters (หนังสือราชการ), use `doc-thai-official` in `e-commerce` (if installed)
 
 ## English register in brief
 
@@ -77,4 +77,4 @@ Rules for the ladder:
 - Day +10, level 3: "...ขอความกรุณาโอนชำระภายในวันศุกร์ที่ 16 ต.ค. นี้ครับ หากมีปัญหาเรื่องเอกสารแจ้งได้เลยครับ"
 - Day +20, level 4: "...หากไม่ได้รับชำระภายในวันที่ 31 ต.ค. ผมจำเป็นต้องหยุดงานส่วนที่เหลือไว้ก่อนจนกว่าจะเคลียร์ยอดนี้ครับ"
 
-Related: `meeting-summary` (plugin `personal-life` — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `thai-workplace` — formal letters and quotes).
+Related: `meeting-summary` (plugin `personal-life` — written follow-up after a meeting). Optional, if installed: `inbox-triage` (plugin `personal-life` — which messages to answer first) · `doc-thai-official` and `doc-quotation` (plugin `e-commerce` — formal letters and quotes).

@@ -4,7 +4,7 @@
 
 ---
 
-## 🧑‍💼 Agents (39)
+## 🧑‍💼 Agents (38)
 
 > หัวข้อด้านล่างอธิบาย 12 ตัวแรกเท่านั้น · หน้าที่ล่าสุดของทุกตัวอยู่ในไฟล์ `plugins/software-company/agents/*.md` · บทบาทกลาง `brainstormer` · `reviewer` · `learning-reviewer` อยู่ที่ [superuser](#62-superuser)
 
@@ -371,7 +371,7 @@
 ---
 
 ### 23. software-diagrams
-**ใช้กับ:** business-analyst, devops-engineer, graphic-designer, image-artist, system-analyst
+**ใช้กับ:** business-analyst, devops-engineer, graphic-designer, system-analyst
 **ครอบคลุม:** C4 3 ระดับ · sequence · state · entity relationship · deployment
 **Output:** ตารางบอกว่า**คำถามแบบไหนวาดแบบไหน** + ธีม Mermaid ชุดเดียวทั้งโปรเจกต์ + 3 classDef (focus/ext/store)
 **โค้ดที่ทดสอบแล้ว:** `assets/mermaid-theme.md` — ตัวอย่างทั้ง 5 แบบ **เรนเดอร์เป็นภาพจริงแล้วเปิดดูด้วยตา** ด้วย mermaid-cli 11.17.0
@@ -390,7 +390,7 @@
 ---
 
 ### 25. graphic-design
-**ใช้กับ:** graphic-designer, image-artist
+**ใช้กับ:** graphic-designer
 **ครอบคลุม:** โลโก้ · ระบบสีและตัวอักษรของแบรนด์ · โปสเตอร์ · ใบปลิว · โพสต์โซเชียล · LINE OA rich menu · ฉลากสินค้า · นามบัตร
 **Includes:** แกนตัดสินใจ 4 แกน, ทดสอบโลโก้ 7 บริบท (favicon/ปัก/ขาวดำ/กลับสี/ป้าย/โปรไฟล์), กฎภาษาไทยบนงานกราฟิก, ตารางขนาดงานโซเชียลและงานพิมพ์พร้อมตัดตก, `assets/brand-direction.md` ที่กรอกต่อได้
 **Anti-patterns ที่กันไว้:** โลโก้ที่อ่านไม่ออกตอนย่อ, ไล่สีในมาร์ก, ฟอนต์ไทยที่ไม่มีน้ำหนักให้ใช้, งานพิมพ์ที่ลืมตัดตก
@@ -555,7 +555,7 @@
 ---
 
 ### 45. superuser
-**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, image-artist, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
+**ใช้กับ:** ai-engineer, blockchain-engineer, business-analyst, clinical-data-analyst, data-engineer, developer, devops-engineer, devrel-engineer, ecommerce-engineer, fintech-compliance-officer, fintech-engineer, game-designer, game-developer, graphic-designer, growth-specialist, healthcare-engineer, hipaa-officer, insurance-analyst, insurance-compliance-officer, insurance-engineer, iot-engineer, legal-compliance-officer, legaltech-engineer, mobile-engineer, product-manager, project-manager, qa-tester, quant-analyst, recommendation-engineer, reverse-engineer, revops-analyst, security-analyst, security-engineer, seo-specialist, solution-architect, system-analyst, technical-writer, ux-designer
 **Description:** Use at the start of any non-trivial task — a feature, a bug, a refactor, an investigation, a project document set, a review, or a long run the user will check later — or whenever the user types superuser. Picks one playbook, copies its steps into the todo list, routes each step to the right skill and agent, applies the principle index, and proves the result against the real thing before calling it done. Stays on for the rest of the session until the user turns it off.
 **หัวหน้าทีม:** ตัวที่คุยกับผู้ใช้ มี 1 ตัวต่อโปรเจกต์ · สั่งงานและตรวจงาน subagent · เป็นคนเดียวที่เขียนไฟล์กลาง (`CONTEXT.md` · `docs/BUILD-PLAN.md` · `IMPROVEMENTS.md` · inbox) · เลือกขนาดโมเดลใหญ่/กลาง/เล็ก (opus · sonnet · haiku) ตามงาน · สลับโมเดลกลางทางได้ หลังเขียนจุดส่งต่อไว้ใน `CONTEXT.md`
 **ไม่หยุดถาม:** งานที่ย้อนกลับไม่ได้ → เตรียมไว้ใน "รออนุมัติ" แล้วทำส่วนอื่นต่อ · ผู้ใช้อนุญาตล่วงหน้าได้ใน `~/.claude/superuser-style.md` หรือ `docs/AGENT-LOOP.md` (ยกเว้น deploy production · ลบข้อมูลจริง · จ่ายเงิน) · ค้นเองใช้ได้เมื่อแหล่งที่น่าเชื่อถืออย่างน้อย 3 แหล่งยืนยันตรงกัน
@@ -608,7 +608,7 @@
 
 ### 53. reverse-engineering
 **ใช้กับ:** developer, reverse-engineer, solution-architect
-**Description:** Use when there is a compiled app (exe, dll, Electron, APK, JS bundle), unknown file format, capture or protocol but no source, or a build may differ.
+**Description:** Use when a compiled app (exe, .NET, Electron, APK, JS bundle), firmware, network capture or unknown format has no source, or a build may differ.
 
 ---
 

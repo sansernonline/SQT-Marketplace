@@ -15,7 +15,7 @@ Renewal rules for Thai documents and the fill-in CSV: [references/registry-templ
 |---|---|
 | Identity — บัตรประชาชน, passport, ทะเบียนบ้าน, สูติบัตร, ทะเบียนสมรส/หย่า, ใบเปลี่ยนชื่อ | **Product warranties and receipts** → `warranty-tracker` (e-commerce) if installed; otherwise rows with `section = warranty` in this same file |
 | Property — โฉนด / น.ส.3, lease (สัญญาเช่า), condo juristic papers | Passwords, one-time passwords (OTPs), recovery codes → password manager (`digital-hygiene`) |
-| Vehicle — เล่มทะเบียนรถ, ใบขับขี่, พ.ร.บ., tax sticker | Medicine lists → `medication-schedule` (personal-life) if installed |
+| Vehicle — เล่มทะเบียนรถ, ใบขับขี่, พ.ร.บ., tax sticker | Medicine lists → `medication-schedule` |
 | Insurance — life, health, home, car policies and schedules | |
 | Contract — employment, loan, purchase, service contracts | |
 | Education — ปริญญาบัตร, transcript, certificates, licences (ใบประกอบวิชาชีพ) | |

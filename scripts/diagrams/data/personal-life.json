@@ -7,7 +7,6 @@
   "software-company",
   "trading-finance",
   "e-commerce",
-  "thai-workplace",
   "graphic-design"
  ],
  "skills": [
@@ -187,7 +186,11 @@
     "goal-and-habit",
     "important-docs",
     "inbox-triage",
-    "calendar-audit"
+    "calendar-audit",
+    "personal-kb",
+    "travel-prep",
+    "gift-idea-tracker",
+    "decision-journal"
    ]
   },
   {
@@ -197,8 +200,7 @@
    "description": "Use before and after a meeting that matters. One-page prep card (goal, questions, context) and action-item summary.",
    "skills": [
     "meeting-prep-card",
-    "meeting-summary",
-    "superuser"
+    "meeting-summary"
    ]
   },
   {
@@ -213,7 +215,8 @@
     "english-tech-reading",
     "cert-prep",
     "side-project-picker",
-    "thesis-writing"
+    "thesis-writing",
+    "course-builder"
    ]
   }
  ],

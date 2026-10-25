@@ -33,6 +33,10 @@ Not for: complaints and refund requests about a product → use agent `consumer-
 | Polite Thai/English messages and tone ladder | `polite-message-th-en` |
 | Documents and expiry dates | `important-docs` |
 | Inbox and calendar | `inbox-triage`, `calendar-audit` |
+| Notes and personal knowledge base | `personal-kb` |
+| Trips — documents, packing, money | `travel-prep` |
+| Gifts and dates to remember | `gift-idea-tracker` |
+| Big decisions written down and reviewed later | `decision-journal` |
 
 ## How You Work
 

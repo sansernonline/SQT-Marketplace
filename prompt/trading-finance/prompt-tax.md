@@ -32,7 +32,7 @@
 
 ## 1. ภาษีและลดหย่อนปลายปี
 
-playbook `tax-season` · agent `risk-manager` · skill `tax-deduction-planner` · `tax-basics-th`
+playbook `tax-season` · agent `money-planner` · skill `tax-deduction-planner` · `tax-basics-th`
 **ผลลัพธ์:** `tax/<ปี>-plan.md` · **รออนุมัติ:** ซื้อกองทุน ซื้อประกัน ยื่นแบบ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -54,7 +54,7 @@ playbook `tax-season` · agent `risk-manager` · skill `tax-deduction-planner` �
 
 ## 2. ยื่นภาษีต้นปี
 
-playbook `tax-season` (ส่วนยื่นภาษีต้นปี) · agent `risk-manager` · skill `tax-basics-th` · `tax-deduction-planner` · `dividend-tracker` (ปันผลทั้งปี)
+playbook `tax-season` (ส่วนยื่นภาษีต้นปี) · agent `money-planner` · skill `tax-basics-th` · `tax-deduction-planner` · `dividend-tracker` (ปันผลทั้งปี)
 **ผลลัพธ์:** `tax/<ปี>-filing.md` — ใช้แบบไหน · ตัวเลขกรอกทีละช่อง · เอกสารที่ต้องแนบหรือเก็บ · ได้คืนหรือต้องจ่ายเพิ่ม · **รออนุมัติ:** ยื่นแบบ · ชำระภาษี · ผูกพร้อมเพย์กับเลขประจำตัวประชาชนเพื่อรับเงินคืน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -79,7 +79,7 @@ playbook `tax-season` (ส่วนยื่นภาษีต้นปี) · a
 
 ## 3. ตรวจงานการเงินก่อนใช้
 
-playbook `review` · agent `risk-manager` + agent ตัวใหม่
+playbook `review` · agent `money-planner` + agent ตัวใหม่
 **ผลลัพธ์:** คำตัดสิน `ผ่าน / แก้ก่อนใช้` · **ไม่แก้ไฟล์เอง**
 
 ### ข้อมูล (ผู้ใช้กรอก)

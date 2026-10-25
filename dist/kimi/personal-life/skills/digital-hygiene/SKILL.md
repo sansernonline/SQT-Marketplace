@@ -89,4 +89,4 @@ Rule: one manager per family, chosen by whoever will support everyone else.
 - [ ] Emergency access in the password manager is still set to the right person
 - [ ] The first-hour card is still on the fridge, with its numbers checked
 
-Related: `important-docs` (where the recovery-code envelope is kept), `subscription-audit` (unknown charges), `scam-check` in `trading-finance`, and `pdpa-workflow` in `thai-workplace`.
+Related: `important-docs` (where the recovery-code envelope is kept), `subscription-audit` (unknown charges), `scam-check` in `trading-finance`, and `pdpa-workflow` in `e-commerce`.

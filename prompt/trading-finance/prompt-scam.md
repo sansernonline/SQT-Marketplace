@@ -29,7 +29,7 @@
 
 ## 1. ตรวจก่อนโอน: มิจฉาชีพไหม
 
-playbook `scam-check` · agent `risk-manager` · skill `scam-check`
+playbook `scam-check` · agent `money-planner` · skill `scam-check`
 **ผลลัพธ์:** คำตอบในแชต**ทันที** (ข้อสรุปก่อน) · บันทึก `scam-check/<วันที่>.md`
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -54,7 +54,7 @@ playbook `scam-check` · agent `risk-manager` · skill `scam-check`
 
 ## 2. กันพ่อแม่และคนในบ้านโดนหลอก
 
-playbook `scam-check` (ใช้ส่วนสัญญาณเตือนและขั้นตอนชั่วโมงแรก ทำเป็นการ์ดไว้ล่วงหน้า) · agent `risk-manager` · skill `scam-check`
+playbook `scam-check` (ใช้ส่วนสัญญาณเตือนและขั้นตอนชั่วโมงแรก ทำเป็นการ์ดไว้ล่วงหน้า) · agent `money-planner` · skill `scam-check`
 **ผลลัพธ์:** `scam-check/family-card.md` — การ์ด 1 หน้าตัวหนังสือใหญ่ พิมพ์หรือส่งในแชตครอบครัวได้ · รายการตั้งค่าในมือถือและแอปธนาคาร · **รออนุมัติ:** ส่งการ์ดในกลุ่มครอบครัว · เปลี่ยนวงเงินโอนหรือการตั้งค่าในแอปธนาคารของคนในบ้าน (เจ้าของบัญชีทำเองหรือยินยอม)
 
 ### ข้อมูล (ผู้ใช้กรอก)

@@ -1,0 +1,130 @@
+{
+  "targets": {
+    "native": "Native binaries",
+    "android": "Android applications and devices",
+    "web": "Websites and Electron applications",
+    "network": "Network captures and local proxying",
+    "firmware": "Firmware images and embedded filesystems"
+  },
+  "tools": [
+    {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "targets": ["native", "firmware"],
+      "commands": { "win32": ["analyzeHeadless.bat"], "default": ["analyzeHeadless"] },
+      "install": "https://github.com/NationalSecurityAgency/ghidra/releases"
+    },
+    {
+      "id": "ida",
+      "name": "IDA",
+      "targets": ["native"],
+      "commands": { "default": ["ida64", "idat64", "ida", "idat"] },
+      "install": "https://hex-rays.com/ida-pro"
+    },
+    {
+      "id": "hopper",
+      "name": "Hopper",
+      "targets": ["native"],
+      "commands": { "default": ["hopper"] },
+      "install": "https://www.hopperapp.com/"
+    },
+    {
+      "id": "jadx",
+      "name": "JADX",
+      "targets": ["android"],
+      "commands": { "win32": ["jadx.bat"], "default": ["jadx"] },
+      "install": "https://github.com/skylot/jadx/releases"
+    },
+    {
+      "id": "apktool",
+      "name": "Apktool",
+      "targets": ["android"],
+      "commands": { "win32": ["apktool.bat"], "default": ["apktool"] },
+      "install": "https://apktool.org/docs/install"
+    },
+    {
+      "id": "adb",
+      "name": "Android Debug Bridge (ADB)",
+      "targets": ["android"],
+      "commands": { "win32": ["adb.exe"], "default": ["adb"] },
+      "paths": {
+        "win32": [
+          "%ANDROID_HOME%\\platform-tools\\adb.exe",
+          "%ANDROID_SDK_ROOT%\\platform-tools\\adb.exe",
+          "%LOCALAPPDATA%\\Android\\Sdk\\platform-tools\\adb.exe"
+        ],
+        "darwin": [
+          "%ANDROID_HOME%/platform-tools/adb",
+          "%HOME%/Library/Android/sdk/platform-tools/adb"
+        ],
+        "default": [
+          "%ANDROID_HOME%/platform-tools/adb",
+          "%ANDROID_SDK_ROOT%/platform-tools/adb",
+          "%HOME%/Android/Sdk/platform-tools/adb"
+        ]
+      },
+      "install": "https://developer.android.com/tools/releases/platform-tools"
+    },
+    {
+      "id": "chrome",
+      "name": "Chrome or a Chromium-family browser",
+      "targets": ["web"],
+      "commands": {
+        "win32": ["chrome.exe", "msedge.exe"],
+        "darwin": ["Google Chrome"],
+        "default": ["google-chrome", "chromium", "chromium-browser"]
+      },
+      "paths": {
+        "win32": [
+          "%PROGRAMFILES%\\Google\\Chrome\\Application\\chrome.exe",
+          "%PROGRAMFILES(X86)%\\Google\\Chrome\\Application\\chrome.exe",
+          "%LOCALAPPDATA%\\Google\\Chrome\\Application\\chrome.exe",
+          "%PROGRAMFILES(X86)%\\Microsoft\\Edge\\Application\\msedge.exe",
+          "%PROGRAMFILES%\\Microsoft\\Edge\\Application\\msedge.exe",
+          "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+          "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+          "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+        ],
+        "darwin": ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"]
+      },
+      "install": "https://www.google.com/chrome/"
+    },
+    {
+      "id": "playwright",
+      "name": "Playwright Core",
+      "targets": ["web"],
+      "nodePackage": "playwright-core",
+      "install": "npm i playwright-core (user-installed, optional; https://playwright.dev)"
+    },
+    {
+      "id": "wireshark",
+      "name": "Wireshark / TShark",
+      "targets": ["network"],
+      "commands": { "win32": ["tshark.exe"], "default": ["tshark"] },
+      "paths": { "win32": ["%PROGRAMFILES%\\Wireshark\\tshark.exe", "C:\\Program Files\\Wireshark\\tshark.exe"] },
+      "install": "https://www.wireshark.org/download.html"
+    },
+    {
+      "id": "mitmproxy",
+      "name": "mitmproxy",
+      "targets": ["network"],
+      "commands": { "win32": ["mitmdump.exe"], "default": ["mitmdump", "mitmproxy"] },
+      "install": "https://mitmproxy.org/"
+    },
+    {
+      "id": "binwalk",
+      "name": "Binwalk",
+      "targets": ["firmware"],
+      "commands": { "default": ["binwalk"] },
+      "install": "https://github.com/ReFirmLabs/binwalk"
+    },
+    {
+      "id": "unblob",
+      "name": "Unblob",
+      "targets": ["firmware"],
+      "commands": { "default": ["unblob"] },
+      "install": "https://unblob.org/"
+    }
+  ]
+}

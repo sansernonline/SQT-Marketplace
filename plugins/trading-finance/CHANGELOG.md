@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## Unreleased
+
+- agent ใหม่ `money-planner` ดูแล skill เงินส่วนตัว 10 ตัว (`personal-budget` · `emergency-fund` · `debt-payoff` · `retirement-plan` · `insurance-review` · `mutual-fund-picker` · `dividend-tracker` · `tax-basics-th` · `tax-deduction-planner` · `scam-check`) ที่ก่อนนี้ไม่มี agent ไหนรับ · playbook `money-plan` · `tax-season` · `scam-check` และ prompt เงิน ภาษี มิจฉาชีพ ใช้ตัวนี้แทน `risk-manager` ซึ่งกลับไปทำเฉพาะขนาดไม้และความเสี่ยงพอร์ต
+- `triggers.md` เพิ่มแถว `watchlist-setup`
+
 ## 0.11.0 — 2026-10-23
 
 - `paper-trading`: เวลาซื้อขายช่วงบ่ายของตลาดหลักทรัพย์แห่งประเทศไทย (SET) pre-open เป็น 13:30 (ตั้งแต่ 25 มี.ค. 2567 เดิม 14:00) → เปิด 14:00 → pre-close 16:30

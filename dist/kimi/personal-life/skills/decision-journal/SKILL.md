@@ -43,7 +43,7 @@ Judge the reasoning on what was knowable *then*, not on what happened.
 ## Thai-context checks for common big decisions
 
 - **Buying a condo/house** — monthly instalment vs rent, transfer fees and taxes at the land office, common-area fee (ค่าส่วนกลาง), and whether the bank's approved loan is the user's comfortable payment; tax angle in `tax-deduction-planner` (trading-finance) if installed
-- **Changing jobs** — total package not base salary: bonus history, provident fund (PVD) employer match and vesting, social security continuity, notice period in the contract; `payroll-th` (thai-workplace) if installed
+- **Changing jobs** — total package not base salary: bonus history, provident fund (PVD) employer match and vesting, social security continuity, notice period in the contract; `payroll-th` (e-commerce) if installed
 - **Lump-sum investing** — emergency fund first, then fit to the time horizon; product choice is outside this skill
 - **Big purchase with a "today only" price** — that pressure is a reason to log, wait 48 hours, and compare (`buy-compare` in e-commerce if installed)
 

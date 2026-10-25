@@ -86,7 +86,7 @@ Before a big campaign (9.9, 10.10, 11.11, 12.12, payday sales) raise average dai
 - Cancel or returned-to-stock items go back only after inspection (`returns-and-bad-reviews`)
 - Defective returns go to a separate `damaged` column, never to `on_hand`
 - Write a reason for every manual adjustment; unexplained shrinkage above 2% of on-hand a month means a process problem
-- Keep the sheets as long as the tax records — at least 5 years (`seller-tax-basics` in thai-workplace, records to keep); they back up purchase and stock history
+- Keep the sheets as long as the tax records — at least 5 years (`seller-tax-basics`, records to keep); they back up purchase and stock history
 
 ## Related
 

@@ -4,7 +4,7 @@
 
 วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ
 
-agent 4 · skill 52 · คำสั่ง 7 · playbook 10 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`thai-workplace`](../thai-workplace/README.md) · [`e-commerce`](../e-commerce/README.md) · [`personal-life`](../personal-life/README.md)
+agent 5 · skill 52 · คำสั่ง 7 · playbook 10 · ส่งงานต่อให้ [`software-company`](../software-company/README.md) · [`e-commerce`](../e-commerce/README.md) · [`personal-life`](../personal-life/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/trading-finance/`](../../../plugins/trading-finance/)
 

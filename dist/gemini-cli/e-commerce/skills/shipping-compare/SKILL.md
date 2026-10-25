@@ -82,4 +82,4 @@ Near tie — decide on pick-up reliability and COD payout speed, not the rate ca
 ## Related
 
 - `marketplace-fees-pricing` (shipping `S`), `chat-reply-templates` T3 late parcel, `returns-and-bad-reviews`
-- `thai-workplace` `promptpay-qr` (if installed) — prepaid transfer instead of COD for LINE/Facebook orders cuts COD fees and refused parcels
+- `promptpay-qr` — prepaid transfer instead of COD for LINE/Facebook orders cuts COD fees and refused parcels

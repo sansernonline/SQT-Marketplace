@@ -63,7 +63,7 @@ Puppy adopted 1 July 2026 at 8 weeks. Vet plan: core vaccine 1 July, boosters 29
 
 ## Related
 
-`home-maintenance` (fences, screens, termite and pest treatment safe for pets — ask the contractor) · `meal-plan-grocery` (foods toxic to pets: chocolate, grapes, onion, garlic, xylitol) · `trading-finance` `personal-budget` (if installed) · `personal-life` `important-docs` (if installed)
+`home-maintenance` (fences, screens, termite and pest treatment safe for pets — ask the contractor) · `meal-plan-grocery` (foods toxic to pets: chocolate, grapes, onion, garlic, xylitol) · `trading-finance` `personal-budget` (if installed) · `important-docs`
 
 
 ## reference: pet-record.md

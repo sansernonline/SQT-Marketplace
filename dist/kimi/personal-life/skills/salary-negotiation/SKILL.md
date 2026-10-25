@@ -108,6 +108,6 @@ Many Thai companies, and most large ones, have a salary band (กรอบเง
 - Never inflate current salary — HR may ask for a payslip or 50 ทวิ.
 - Get the final offer in writing (offer letter: base, bonus terms, allowances, PVD, probation length, notice period, start date) before resigning.
 - Probation: under the Labour Protection Act §118, severance starts after 120 days of continuous work regardless of probation label — check the offer letter does not imply otherwise.
-- Keep every offer letter in `important-docs` (`personal-life`, if installed).
+- Keep every offer letter in `important-docs`.
 
 Related: `performance-self-review` (evidence for a raise) · `interview-prep` · `personal-budget` in `trading-finance` (what the raise does to the monthly budget).

@@ -751,7 +751,7 @@ Use when a system imports or exports Excel or CSV. Validate before write, row er
 
 - เลือกระบบเดียวเป็นผู้ออกเลขที่ใบกำกับภาษี · ห้ามระบบเรากับโปรแกรมบัญชีออกเลขซ้อนกัน
 - ส่งเข้าโปรแกรมบัญชีเป็นเอกสารต้นทาง แล้วให้โปรแกรมบัญชีออก e-Tax · PEAK มี endpoint ส่ง e-Tax · FlowAccount ไม่พบใน spec ต้องถามผู้ขาย
-- กฎของใบกำกับ (มาตรา 86/4 · e-Tax Invoice & e-Receipt กับ by Email) → `thai-workplace:e-tax-invoice` (ถ้าติดตั้ง)
+- กฎของใบกำกับ (มาตรา 86/4 · e-Tax Invoice & e-Receipt กับ by Email) → `e-commerce:e-tax-invoice` (ถ้าติดตั้ง)
 
 ## 6 · กันซ้ำและกระทบยอด
 

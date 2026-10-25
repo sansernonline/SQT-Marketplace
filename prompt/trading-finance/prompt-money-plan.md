@@ -30,7 +30,7 @@
 
 ## 1. แผนการเงิน
 
-playbook `money-plan` · agent `risk-manager` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `retirement-plan` · `insurance-review` (เลือกตามเรื่อง)
+playbook `money-plan` · agent `money-planner` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `retirement-plan` · `insurance-review` (เลือกตามเรื่อง)
 **ผลลัพธ์:** `plan/<เรื่อง>.md` · **รออนุมัติ:** โอน ปิดบัญชี รีไฟแนนซ์ ซื้อหรือยกเลิกประกัน
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -54,7 +54,7 @@ playbook `money-plan` · agent `risk-manager` · skill `personal-budget` · `eme
 
 ## 2. ได้เงินก้อน
 
-playbook `money-plan` · agent `risk-manager` · skill `debt-payoff` · `emergency-fund` · `retirement-plan` · `mutual-fund-picker` · `tax-basics-th` (ถ้าเงินก้อนต้องเสียภาษี)
+playbook `money-plan` · agent `money-planner` · skill `debt-payoff` · `emergency-fund` · `retirement-plan` · `mutual-fund-picker` · `tax-basics-th` (ถ้าเงินก้อนต้องเสียภาษี)
 **ผลลัพธ์:** `plan/lump-sum-<ปี-เดือน>.md` — แบ่งเงินก้อนเป็นส่วน พร้อมลำดับและวันที่ · **รออนุมัติ:** โอน · ปิดหนี้ก่อนกำหนด · ซื้อกองทุนหรือประกัน · ฝากประจำ
 
 ### ข้อมูล (ผู้ใช้กรอก)
@@ -82,7 +82,7 @@ playbook `money-plan` · agent `risk-manager` · skill `debt-payoff` · `emergen
 
 ## 3. รายได้หาย ตกงาน ต้องประคองเงิน
 
-playbook `money-plan` · agent `risk-manager` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `insurance-review` · `retirement-plan` (สิทธิประกันสังคมที่เกี่ยว)
+playbook `money-plan` · agent `money-planner` · skill `personal-budget` · `emergency-fund` · `debt-payoff` · `insurance-review` · `retirement-plan` (สิทธิประกันสังคมที่เกี่ยว)
 **ผลลัพธ์:** `plan/income-loss-<ปี-เดือน>.md` — เงินพอใช้กี่เดือน · งบฉุกเฉิน · ลำดับจ่ายหนี้ · รายการติดต่อ · **รออนุมัติ:** ขอพักหนี้หรือปรับโครงสร้างหนี้กับธนาคาร · ถอนเงินลงทุนหรือกองทุนสำรองเลี้ยงชีพ · หยุดหรือลดเบี้ยประกัน · ยื่นขอรับสิทธิประกันสังคม
 
 ### ข้อมูล (ผู้ใช้กรอก)

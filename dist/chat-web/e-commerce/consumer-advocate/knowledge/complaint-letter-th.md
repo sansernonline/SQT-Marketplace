@@ -102,7 +102,7 @@ Contents
 วันที่ [วันที่]
 ```
 
-สิ่งที่ส่งมาด้วย sits under เรียน, the same term and position as a company letter (`thai-workplace` `doc-thai-official`); the body refers to each item as (แนบ 1) (แนบ 2).
+สิ่งที่ส่งมาด้วย sits under เรียน, the same term and position as a company letter (`doc-thai-official`); the body refers to each item as (แนบ 1) (แนบ 2).
 
 ## 1. Platform escalation message
 

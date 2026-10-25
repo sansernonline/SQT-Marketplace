@@ -39,7 +39,7 @@ description: Use when software stores personal data of people in Thailand (PDPA 
 | การยืนยันตัวตนและสิทธิ์ | `auth-implementation-patterns` |
 | ปิดบังข้อมูลใน log | `logging-standards` |
 | ที่เก็บกุญแจ | `config-and-secrets` |
-| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `thai-workplace`) `thai-workplace:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
+| แบบฟอร์มยินยอม ประกาศความเป็นส่วนตัว และเอกสาร PDPA ของบริษัท (ไม่ใช่ระบบซอฟต์แวร์) | (ถ้าติดตั้ง plugin `e-commerce`) `e-commerce:pdpa-workflow` ไม่มีก็ใช้ข้อ 3 ของ skill นี้เป็นโครง |
 
 ---
 

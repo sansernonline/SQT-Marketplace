@@ -8,12 +8,12 @@ Organise, remind and prepare. This skill never diagnoses, never suggests a medic
 
 General information, not medical or legal advice — ask the doctor or pharmacist (เภสัชกร) about medicines and the local องค์การปกครองส่วนท้องถิ่น (อปท.) or สำนักงานหลักประกันสุขภาพแห่งชาติ (สปสช.) about rights.
 
-**Privacy:** the profile card holds the ID number, blood group, conditions and allergies. Keep it in a private place (`personal-life` `important-docs` if installed, or a locked note), not in a shared family folder. Never post the ID number or medical details to a group chat; a shareable week table shows "ยา ตามตาราง" and a time, not drug names.
+**Privacy:** the profile card holds the ID number, blood group, conditions and allergies. Keep it in a private place (`important-docs`, or a locked note), not in a shared family folder. Never post the ID number or medical details to a group chat; a shareable week table shows "ยา ตามตาราง" and a time, not drug names.
 
 ## Workflow
 
 1. **Profile** — one page: name, ID number, blood group, allergies, conditions, health-coverage scheme and main hospital, doctors, emergency contacts (template in [references/care-templates.md](references/care-templates.md))
-2. **Medicines (summary)** — bring the actual bag of medicines (ถุงยาเดิม) to every appointment so the doctor can reconcile; copy each medicine into the table in [references/care-templates.md](references/care-templates.md) exactly as the label or ใบรายการยา says; never change, skip or double a dose — questions go to the doctor or pharmacist. For the full daily schedule, label-word guide and refill method use `medication-schedule` (personal-life) if installed
+2. **Medicines (summary)** — bring the actual bag of medicines (ถุงยาเดิม) to every appointment so the doctor can reconcile; copy each medicine into the table in [references/care-templates.md](references/care-templates.md) exactly as the label or ใบรายการยา says; never change, skip or double a dose — questions go to the doctor or pharmacist. For the full daily schedule, label-word guide and refill method use `medication-schedule`
 3. **Appointments** — put every ใบนัด in the family calendar with who drives; note fasting instructions (งดน้ำงดอาหาร)
 4. **Questions for the doctor** — collect during the month: new symptoms with date, falls, sleep, appetite, side effects noticed. Ask: what is each medicine for, what side effects to watch, what to do if a dose is missed, when to come back sooner
 5. **Rights check** — the table below, once a year and when anything changes
@@ -28,7 +28,7 @@ General information, not medical or legal advice — ask the doctor or pharmacis
 | Eligibility condition | Under the ระเบียบกระทรวงมหาดไทย พ.ศ. 2566 the allowance is for people without other state pensions/welfare; the "ไม่มีรายได้เพียงพอ" criterion and later amendments (รอยืนยัน the current rule with the อปท.) | |
 | บัตรทอง / หลักประกันสุขภาพแห่งชาติ (Universal Coverage Scheme, UCS) | Thai citizens without another scheme | สปสช. hotline 1330; check or change the registered hospital in the สปสช. app / LINE @nhso |
 | สิทธิข้าราชการ (Civil Servant Medical Benefit Scheme, CSMBS) | Parents of a government officer are covered via the officer | กรมบัญชีกลาง; register the parents in the officer's family data |
-| ประกันสังคม | Insured under มาตรา 33 / 39 continue their own cover; pension or lump sum at 55+ after leaving work | สำนักงานประกันสังคม hotline 1506 — see `thai-workplace` `social-security-th` (if installed) |
+| ประกันสังคม | Insured under มาตรา 33 / 39 continue their own cover; pension or lump sum at 55+ after leaving work | สำนักงานประกันสังคม hotline 1506 — see `e-commerce` `social-security-th` (if installed) |
 | Children's tax deduction for parents | ลดหย่อนบิดามารดา 30,000 บาท/คน (parent 60+, income ≤ 30,000/yr); parents' health insurance premium up to 15,000 | `trading-finance` `tax-deduction-planner` (if installed) |
 | Other | ศูนย์ช่วยเหลือสังคม 1300; disability card (บัตรคนพิการ) if eligible; travel discounts (รอยืนยัน current list) | |
 
@@ -51,7 +51,7 @@ Mother, 78, Bangkok, บัตรทอง at a district hospital, blood pressur
 
 ## Related
 
-`kids-school` (one family calendar) · `meal-plan-grocery` (soft, low-salt menus) · `home-maintenance` (grab bars, lighting as a job) · `personal-life` `important-docs` (ID, ทะเบียนบ้าน, hospital card, will) · `trading-finance` `tax-deduction-planner` · `personal-life` `medication-schedule` (full medicine schedule and refills, if installed) · `personal-life` `doctor-visit-prep` (symptom list, questions and visit record, if installed)
+`kids-school` (one family calendar) · `meal-plan-grocery` (soft, low-salt menus) · `home-maintenance` (grab bars, lighting as a job) · `personal-life` `important-docs` (ID, ทะเบียนบ้าน, hospital card, will) · `trading-finance` `tax-deduction-planner` · `personal-life` `medication-schedule` (full medicine schedule and refills) · `personal-life` `doctor-visit-prep` (symptom list, questions and visit record)
 
 
 ## reference: care-templates.md

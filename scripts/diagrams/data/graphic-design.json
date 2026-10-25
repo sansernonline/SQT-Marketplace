@@ -4,8 +4,7 @@
  "description": "Creative design beyond product UI — brand kits, AI image and video briefs with style consistency, social media format systems, campaign asset sets, motion basics for non-designers, and a critical design-review checklist. Complements image/video generation plugins by adding the design knowledge layer on top.",
  "cross": [
   "software-company",
-  "e-commerce",
-  "thai-workplace"
+  "e-commerce"
  ],
  "skills": [
   "asset-organize",
@@ -15,6 +14,7 @@
   "design-review",
   "image-editing-brief",
   "image-generation",
+  "line-richmenu",
   "motion-basics",
   "social-formats",
   "speaking-script",
@@ -88,6 +88,20 @@
    "core": false,
    "description": "Use when a design feels off or before visuals ship. Reviews hierarchy, contrast, spacing, alignment; names 2–3 fixes.",
    "skills": []
+  },
+  {
+   "name": "image-artist",
+   "model": "sonnet",
+   "core": false,
+   "description": "Use when a page, app or slide needs images (hero, product, people). Asks the style; generates, draws SVG or gets photos.",
+   "skills": [
+    "image-generation",
+    "superuser",
+    "brief-to-image",
+    "style-consistency",
+    "image-editing-brief",
+    "brand-kit"
+   ]
   },
   {
    "name": "social-creator",
