@@ -27,6 +27,7 @@ description: Use when a money matter spans several steps (trades, portfolio, bud
 7. **งานเสี่ยงหรือย้อนไม่ได้ หัวหน้าทำเองหรือตรวจเองก่อนปล่อย** ไม่ให้ลูกทีม effort ต่ำทำ (รายการ "รออนุมัติ" ใน `autonomy`)
 8. **จบงานด้วยสรุปสั้น (หัวข้อ 7) และเทียบคาดกับจริง** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
 9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `superuser-style.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง
+   - งานใน git repo แก้บน branch ของงาน ไม่แก้บน branch หลัก · repo ที่มี AI หรือ session อื่นแก้พร้อมกัน → **1 ตัว 1 worktree** และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ (`claude/` · `codex/`) · วิธีและกฎใน [`team-files`](references/team-files.md) หัวข้อ "หลาย AI ใน repo เดียว"
 10. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** และบอกเฉพาะตัวที่เปลี่ยนการตัดสินใจ · ห้ามแก้ไฟล์ skill · agent · playbook เอง (รอผู้ใช้สั่ง "รวมบทเรียน")
 
 ---
@@ -151,8 +152,6 @@ description: Use when a money matter spans several steps (trades, portfolio, bud
 ---
 
 # ส่วนของสาขา trading-finance
-
-
 
 เรียกได้ทั้ง `/trading-finance:superuser` หรือพูดว่า "ใช้ superuser" กับงานการเงินและการลงทุน
 
