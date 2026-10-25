@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `superuser` ตัวกระตุ้น: แถวใหม่สำหรับเอกสาร Word หรือ PDF ที่ต้องดูออกแบบ ชี้ไป `branded-document-design` · `markdown-report-docx` · `doc-cover-design` (ก่อนหน้านี้ไม่มีแถวไหนชี้ไป 3 skill นี้)
 - playbook `ship` ขั้น 9: ผู้ใช้อนุมัติ merge แล้วลบ branch ในขั้นเดียวกันด้วย `gh pr merge --delete-branch` ไม่ถามซ้ำ · `cicd-and-release` ข้อ 4 เพิ่มกฎลบ branch หลัง merge และตั้งค่าลบเองบน GitHub
 - `ui-craft`: สคริปต์ใหม่ `scripts/design_tokens.py` ร่าง `docs/DESIGN.md` จาก css ที่โปรเจกต์มีอยู่ (token · สี · ฟอนต์ · ขนาด · ระยะ · มุม · เงา · breakpoint) พร้อมจุดที่หลุดสเกลของข้อ 1–2 · ไม่เขียนทับไฟล์เดิม · self-test 9/9 · ข้อ 0 เรียกใช้ก่อนลอกหน้าตาเดิม · reference ใหม่ `live-and-variants.md` (ลองค่าสดในเบราว์เซอร์ · 3 แบบของชิ้นเดียวในไฟล์ mockup เดิม) · ข้อ 7 จังหวะให้ยิ้มได้ 1 จุดต่อ flow · เช็กลิสต์เพิ่มข้อมูลยากของจริง เน็ตช้า และเป้ากด 44px · แนวคิดจากคำสั่ง `document` `live` `generate` `delight` `harden` ของ pbakaus/impeccable (Apache-2.0 · ตรวจ 2026-10-25) เขียนใหม่ ไม่คัดข้อความ
 - agent `image-artist` ย้ายไป `graphic-design` · ที่อ้างถึงเปลี่ยนเป็น `graphic-design:image-artist` · `graphic-designer` ตัด "LINE rich menu" ออกจากคำอธิบาย (skill อยู่ graphic-design แล้ว)

@@ -1464,6 +1464,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 | เขียนไฟล์ชั่วคราวลงโฟลเดอร์ผู้ใช้ | `temp-file-discipline` |
 | เขียนคำตอบ รายงาน เอกสาร หรือป้ายใน diagram | `human-writing` · `spell-out-abbreviations` · `answer-shape` |
 | สไลด์ · เด็ค · presentation (ทุกชนิดไฟล์) | `presentation-design` (ตารางบนสุดเลือก .pptx · .html · แปลงจาก .pptx) · ทำเป็นงานด้วย `technical-writer` |
+| เอกสาร Word หรือ PDF ที่ต้องดูออกแบบ · รายงานทั้งเล่มจาก Markdown · ปกของชุดเอกสาร | [`branded-document-design`](../../branded-document-design/SKILL.md) · รายงานจาก Markdown ไฟล์เดียว → [`markdown-report-docx`](../../markdown-report-docx/SKILL.md) · ปกชุด BRD · SRS · FSD ที่มาจากรูปทรงโลโก้หรือ mockup จริง → [`doc-cover-design`](../../doc-cover-design/SKILL.md) |
 | เขียน commit หรือเปิด PR | `commit-message-format` · `pr-description-template` |
 | งานแตะ login · สิทธิ์ · input จากภายนอก · ไฟล์ · เงิน · ข้อมูลส่วนบุคคล | [`principle-secure-by-default`](../../principle-secure-by-default/SKILL.md) + skill เฉพาะทางในตารางของมัน ส่วนฟีเจอร์ที่เปิดสู่ภายนอก ให้ส่ง `security-engineer` ตัวใหม่ทำ STRIDE ตาม `threat-model/references/security-templates.md` ก่อนเขียน (หรือขอให้ผู้ใช้รัน `/software-company:threat-model` เอง เพราะ skill นั้นเรียกได้เฉพาะผู้ใช้) |
 | ก่อน `ship` · ส่งมอบ · เพิ่ม dependency | [`security-gate`](../../security-gate/SKILL.md) |
