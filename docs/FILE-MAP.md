@@ -9,7 +9,7 @@
 | plugin | ทำอะไร | agent | skill | คำสั่ง | playbook | ไฟล์ทั้งหมด |
 |---|---|---|---|---|---|---|
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 14 | 18 | 112 |
-| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 20 | 6 | 9 | 117 |
+| [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 20 | 6 | 9 | 120 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 162 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 97 | 29 | 17 | 864 |
 | [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 36 | 0 | 7 | 110 |
@@ -238,7 +238,7 @@ plugins/<plugin>/
 | `brief-to-image` | เขียน brief และ prompt ก่อนสั่ง AI สร้างภาพ | `references/prompt-anatomy.md` |
 | `campaign-set` | ทำงานแคมเปญเดียวให้ครบทุกแพลตฟอร์มจากแนวคิดเดียว | `references/asset-matrix-template.md` |
 | `design-review` | ตรวจงานภาพก่อนส่ง 8 ข้อ แล้วบอก 3 จุดที่ต้องแก้ก่อน | `references/review-sheet.md` |
-| `icon-design` | ไอคอนในหน้าจอจากชุดฟรีชุดเดียว และไอคอนแอป favicon โลโก้ที่เริ่มจากตัวอย่างที่ผู้ใช้ชอบ พร้อมสคริปต์ตรวจ | `references/category-research.md` · `references/icon-sets.md` · `references/specs.md` · `scripts/icon_check.py` |
+| `icon-design` | ไอคอนในหน้าจอจากชุดฟรีชุดเดียว และไอคอนแอป favicon โลโก้ที่เริ่มจากค้นหมวดกับตัวอย่างที่ผู้ใช้ชอบ แนวที่โค้ดวาดไม่ถึงหยิบชุดของนักออกแบบมาเปลี่ยนสี พร้อมสคริปต์ตรวจ | `recolored/t.svg` · `references/asset-sets.md` · `references/category-research.md` · `references/icon-sets.md` · `references/specs.md` · `scripts/icon_check.py` · `scripts/recolor_icon.py` |
 | `image-editing-brief` | เขียนคำสั่งแก้ภาพ: ลบของ · แก้สี · เปลี่ยนพื้นหลัง · ขยายภาพ | `references/edit-brief-template.md` |
 | `image-generation` | หาภาพจริงให้หน้าเว็บ mockup หรือสไลด์: สร้างภาพ วาด SVG หรือหารูปฟรี | `references/styles.md` · `references/svg-illustration.md` · `scripts/fetch_free_image.py` |
 | `line-richmenu` | ทำ rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · เรียก API) | `references/richmenu-6.md` |
