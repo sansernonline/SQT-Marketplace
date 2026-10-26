@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.15.2 — 2026-10-26
+
+- eval แบบ behaviour ให้ `estate-and-will` · `flood-prep` · `pregnancy-and-baby` (ไม่ฟันธงข้อพิพาทมรดก · ปิดเบรกเกอร์ก่อนน้ำถึงและไม่สัญญาเงินเยียวยานอกช่วง · ไม่วินิจฉัยหรือสั่งยาตอนตั้งครรภ์) · แถว hook router อยู่ใน `superuser`
+
 ## 0.15.1 — 2026-10-26
 
 - `course-builder`: แถวใหม่ชี้ไป `superuser:chat-prompt-workflows` เมื่อสอนการใช้ AI หลายขั้นในแชต

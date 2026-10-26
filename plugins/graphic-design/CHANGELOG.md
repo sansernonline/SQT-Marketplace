@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.12.3 — 2026-10-26
+
+- eval แบบ behaviour ให้ `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` · แถว hook router อยู่ใน `superuser`
+- `brand-kit` (`thai-fonts.md`) และ `print-ready-files`: ฟอนต์ SIPA ดัดแปลงต้องแจ้งเป็นหนังสือและเปลี่ยนชื่อ · TH Sarabun New ใช้ GPL พร้อมข้อยกเว้นฟอนต์ ไม่ใช่ใบอนุญาต DIP-SIPA
+
 ## 0.12.2 — 2026-10-26
 
 - `subtitles-th`: กฎห้าม Noto Sans Thai กับซับที่มีคำอังกฤษ บอกให้ชัดว่าไฟล์ชุด notofonts (รุ่น 2.002 ที่เครื่องนี้ติดตั้ง) ไม่มีตัวละตินเลย ส่วนชุดบน Google Fonts มี · ดูจากชื่อฟอนต์ไม่ออก จึงยังไม่ใช้ทั้ง 2 ชุด (ตรวจตารางตัวอักษร 2026-10-26)

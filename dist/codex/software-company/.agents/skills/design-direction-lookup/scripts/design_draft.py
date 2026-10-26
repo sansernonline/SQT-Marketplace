@@ -43,11 +43,22 @@ LABELS = ['ก', 'ข', 'ค']
 TONE_LINE = 'ผู้ใหญ่หาผ้าใหม่ ให้สะใภ้ใช้คล้องคอ · ปฏิทิน ฎีกา ญาติ ฤดูกาล'
 
 
-def luminance(hex_color):
+MIN_PRIMARY_DISTANCE = 30  # ระยะ RGB ของสีหลักระหว่าง 2 แนว ต่ำกว่านี้ตาแยกไม่ออก
+
+
+def rgb(hex_color):
     h = hex_color.strip().lstrip('#')
     if len(h) == 3:
         h = ''.join(c * 2 for c in h)
-    channels = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    return [int(h[i:i + 2], 16) for i in (0, 2, 4)]
+
+
+def color_distance(a, b):
+    return sum((x - y) ** 2 for x, y in zip(rgb(a), rgb(b))) ** 0.5
+
+
+def luminance(hex_color):
+    channels = [c / 255 for c in rgb(hex_color)]
     r, g, b = [c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4 for c in channels]
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
@@ -161,6 +172,21 @@ def pick_directions(lib, industry):
                            'font_id': font_id, 'font': lib.fonts[font_id]})
 
     used = lambda key: [d[key] for d in directions]  # noqa: E731
+
+    def distinct(pal_id):
+        """สีหลักห่างจากแนวที่เลือกแล้วพอให้ตาแยกออก · เคยได้ 2 แนวที่สีหลักต่างกันแค่ (2, 4, 15)"""
+        mine = lib.palettes[pal_id]['light']['primary']
+        return all(color_distance(mine, d['palette']['light']['primary']) >= MIN_PRIMARY_DISTANCE for d in directions)
+
+    # สลับได้เฉพาะพาเลตที่เกี่ยวกับอุตสาหกรรม · เคยสลับคลินิกทันตกรรมไปได้สีแดงเยาวราช
+    relevant = set(pal_pref) | {r['id'] for r in lib.corpus.search('palette', query, 8)}
+
+    def swap(pal_id):
+        """พาเลตเดิมถ้าแยกออก ไม่งั้นพาเลตที่เกี่ยวและผ่านเกณฑ์ตัวถัดไปที่แยกออก · ไม่มีเลยคืนตัวเดิม"""
+        if distinct(pal_id):
+            return pal_id
+        return next((p for p in good_pal if p in relevant and p not in used('palette_id') and distinct(p)), pal_id)
+
     # รอบแรก: แนวตามลำดับที่อุตสาหกรรมกำหนด (look · พาเลต · ฟอนต์ ตำแหน่งเดียวกัน)
     for i, look_id in enumerate(looks_pref):
         if len(directions) == 3:
@@ -173,6 +199,12 @@ def pick_directions(lib, industry):
             why = 'พาเลตไม่ผ่าน' if pal_id not in good_pal else 'คู่ฟอนต์ไม่ผ่าน'
             rejected.append(f'แนวที่ {i + 1} ({look_id} · {pal_id} · {font_id}) ถูกตัด เพราะ{why}')
             continue
+        if swap(pal_id) != pal_id:
+            rejected.append(f'แนวที่ {i + 1} เปลี่ยนพาเลต `{pal_id}` เป็น `{swap(pal_id)}` เพราะสีหลักใกล้แนวก่อนหน้า')
+            pal_id = swap(pal_id)
+        elif not distinct(pal_id):
+            rejected.append(f'แนวที่ {i + 1} พาเลต `{pal_id}` สีหลักใกล้แนวก่อนหน้า และไม่มีพาเลตที่เกี่ยวให้สลับ '
+                            '· ตอนทำ mockup ให้แยกด้วย accent หรือ look แทน')
         add(look_id, pal_id, font_id)
     # รอบเติม: look ถัดไปที่ยังไม่ใช้ · พาเลตและฟอนต์ที่ยังไม่ใช้ก่อน
     for look_id in look_pool:
@@ -180,7 +212,7 @@ def pick_directions(lib, industry):
             break
         if look_id in [d['look'].get('id') for d in directions]:
             continue
-        pal_id = next((p for p in good_pal if p not in used('palette_id')), good_pal[0])
+        pal_id = swap(next((p for p in good_pal if p not in used('palette_id')), good_pal[0]))
         font_id = next((f for f in good_font if f not in used('font_id')), good_font[0])
         add(look_id, pal_id, font_id)
     return directions, rejected
@@ -315,8 +347,33 @@ def css_stack(field, fallback):
     return ', '.join([f'"{f}"' for f in fams] + [fallback])
 
 
+# การ์ดของแต่ละแนวต่างกันตาม depth ของ look (คำแรกที่เจอชนะ) · เดิมทุกแนวใช้การ์ดเดียวกัน แนวที่สีใกล้กันจึงดูเหมือนกัน
+DEPTH_STYLES = [  # (คำใน depth, เส้นขอบ, เงา, ตัวคูณมุมโค้ง)
+    ('ขอบหนา', '2px solid {text}', '4px 4px 0 {text}', 0.5),
+    ('เงานุ่ม', 'none', '0 2px 4px {shade}, 0 8px 20px {shade}', 2),
+    ('เส้นหนา', '2px solid {border}', '0 3px 0 {border}', 1.5),
+    ('เงา', '1px solid {border}', '0 1px 2px {shade}, 0 4px 12px {shade}', 1),
+    ('tonal', 'none', 'none', 2),
+    ('ไม่มีเงา', 'none', 'none', 0),
+    ('กระดาษ', '1px dashed {border}', 'none', 0),
+    ('เส้นบาง', '1px solid {border}', 'none', 0.5),
+]
+DENSITY_PADDING = [('แน่น', 12), ('โปร่งมาก', 40), ('โปร่ง', 28)]
+
+def card_style(look, p, mode, radius):
+    """(css ของการ์ด · มุมโค้งที่ใช้) ตาม depth และ density ของ look"""
+    depth, density = look.get('depth', ''), look.get('density', '')
+    border, shadow, scale = next((s[1:] for s in DEPTH_STYLES if s[0] in depth), ('1px solid {border}', 'none', 1))
+    shade = 'rgba(0,0,0,.12)' if mode == 'light' else 'rgba(0,0,0,.45)'
+    fill = lambda s: s.format(text=p['text'], border=p['border'], shade=shade)  # noqa: E731
+    pad = next((px for word, px in DENSITY_PADDING if word in density), 20)
+    r = round(radius * scale)
+    return f'border:{fill(border)};box-shadow:{fill(shadow)};border-radius:{r}px;padding:{pad}px', r
+
+
 def render_panel(d, mode, industry, brief, today, radius):
     p, font, e = d['palette'][mode], d['font'], html.escape
+    card, radius = card_style(d['look'], p, mode, radius)
     head, body = css_stack(font.get('heading'), 'serif'), css_stack(font.get('body'), 'sans-serif')
     # ฟอนต์ตัวเลขส่วนใหญ่ไม่มีอักษรไทย จึงต่อด้วยฟอนต์เนื้อ ให้คำไทยในบรรทัดเดียวกัน (ต.ค. · น.) ใช้ฟอนต์เนื้อแทนฟอนต์ของระบบ
     num = css_stack('; '.join(filter(None, [font.get('numeric'), font.get('body')])), 'sans-serif')
@@ -328,7 +385,7 @@ def render_panel(d, mode, industry, brief, today, radius):
     size = font.get('min_body_px') or '16'
     return f'''<div class="panel" style="background:{p['bg']};color:{p['text']}">
   <p class="mode" style="color:{p['text_muted']}">{'สว่าง' if mode == 'light' else 'มืด'}</p>
-  <div class="card" style="background:{p['surface']};border:1px solid {p['border']};border-radius:{radius}px">
+  <div class="card" style="background:{p['surface']};{card}">
     <h3 style="font-family:{e(head)};color:{p['text']}">{e(industry.get('name_th', ''))}</h3>
     <p style="font-family:{e(body)};font-size:{e(size)}px;line-height:{e(lh)}">{e(brief)}</p>
     <p style="font-family:{e(body)};font-size:{e(size)}px;line-height:{e(lh)};color:{p['text_muted']}">{TONE_LINE}</p>
@@ -358,7 +415,7 @@ def render_html(brief, industry, directions, today, thai_fonts):
     <dt>ความลึก · การเคลื่อนไหว</dt><dd>{e(look.get('depth', '-'))} · {e(look.get('motion', '-'))}</dd>
     <dt>ความแน่น</dt><dd>{e(look.get('density', '-'))}</dd>
     <dt>ข้อห้าม</dt><dd>{e(look.get('avoid_th') or '-')}</dd>
-    <dt>token</dt><dd><code>{e(d['palette_id'])}</code> · <code>{e(d['font_id'])}</code> · มุมโค้ง {radius}px</dd>
+    <dt>token</dt><dd><code>{e(d['palette_id'])}</code> · <code>{e(d['font_id'])}</code> · มุมโค้ง {card_style(look, d['palette']['light'], 'light', radius)[1]}px</dd>
   </dl>
 </section>''')
     return f'''<!doctype html>
@@ -468,6 +525,9 @@ def self_test():
         check('DESIGN.md บอกว่าเป็นจุดเริ่ม', 'ไม่ใช่คำตัดสิน' in md and 'ด่านสวย' in md)
         check('DESIGN.md มีกฎ UX 5 ข้อ', len(re.findall(r'^\d\. \*\*', md, re.M)) == 5)
         check('HTML มีตัวอย่างไทยและปุ่ม', TONE_LINE in html_text and '<button' in html_text)
+        p = {'text': '#111111', 'border': '#dddddd'}
+        check('การ์ดต่างกันตาม look', card_style({'depth': 'ขอบหนา 2px'}, p, 'light', 8)
+              != card_style({'depth': 'เงานุ่มสองชั้น', 'density': 'โปร่ง'}, p, 'light', 8))
         check('HTML ไม่มี Inter และไม่มีสี Tailwind', not re.search(r'family=Inter|"Inter"', html_text)
               and not any(f'#{h}' in html_text.lower() for h in TAILWIND_DEFAULTS))
         check('ไม่มีคำโฆษณา', not HYPE_WORDS.search(md + html_text))

@@ -1,5 +1,12 @@
 # Changelog — software-company
 
+## 2.25.0 — 2026-10-26
+
+- `security-audit` (`classes-thai.md`): GB Prime Pay ทุกช่องทางที่เปิดอ่าน (QR · บัตร · ผ่อน · wallet · mobile banking · bill payment) ไม่มีลายเซ็นในข้อความแจ้งกลับ · วิธีลงชื่อ webhook ของ Ksher (GET · HMAC-SHA256 ด้วย token · `message` ไม่มียอดเงินจึงต้องดึงสถานะซ้ำ) · บริการตรวจสลิป (SCB · EasySlip · SlipOK) และสิ่งที่ตัวตรวจโค้ดต้องเห็น 6 ข้อ
+- `design-direction-lookup`: การ์ดตัวอย่างของแต่ละแนวเปลี่ยนตาม depth และ density ของ look (เดิมทุกแนวใช้การ์ดเดียวกัน) · สีหลักของ 2 แนวห่างกันไม่ถึงระยะ RGB 30 ให้สลับไปพาเลตที่เกี่ยวกับอุตสาหกรรม ไม่มีให้เตือนใน DESIGN.md (ตรวจทั้ง 69 อุตสาหกรรม: สลับได้ 16 · ยังเตือน 28 เพราะ `industries.csv` ใส่พาเลตโทนเดียวกัน) · ใบอนุญาตฟอนต์ SIPA 11 แถวใส่แหล่งรอง (Fedora · fonts-tlwg เพราะไม่พบข้อความทางการของ SIPA) อีก 3 แถวยังไม่ได้ตรวจ · กฎ stack 11 ข้อกับ ux-085 ใส่แหล่งทางการแล้ว · flutter-22 ครอบคลุม iOS
+- `dynamic-website`: ตัวบท GSAP Standard License (ห้ามเฉพาะเครื่องมือสร้างแอนิเมชันแบบไม่เขียนโค้ดที่แข่งกับ Webflow) · path plugin บน cdnjs 3.15.0 ตอบ 200 ครบ
+- `thai-marketplace-apis.md` และ `thai-accounting-apis.md`: ตรวจซ้ำราคาแพ็กเกจที่ใช้ API ของ PEAK และ FlowAccount · rate limit รายงานงบทดลองของ PEAK · อายุ timestamp ของ Lazada (7200 วินาที) และ TikTok Shop (5 นาที) · rate limit ของ Lazada (10 qps ต่อร้านใน GetSellerItemLimit) และ TikTok Shop (dynamic QPS) · ผู้พัฒนาที่สมัครได้ของ 3 แพลตฟอร์ม · เหลือ rate limit ของ Shopee ที่เอกสารไม่ระบุ
+
 ## 2.24.1 — 2026-10-26
 
 - `security-audit` (`classes-thai.md`): GB Prime Pay ตรวจจากเอกสารทางการแล้ว · ข้อความที่ส่งเข้า background URL ไม่มีลายเซ็น ต้องดึงสถานะซ้ำด้วย `/v1/check_status_txn` แล้วเทียบสถานะและยอด · plugin ทางการไม่ดึงซ้ำ · `gateway-no-refetch` บอกว่าเจ้าที่ไม่ลงชื่อ การดึงซ้ำเป็นทางเดียวที่กันปลอม
