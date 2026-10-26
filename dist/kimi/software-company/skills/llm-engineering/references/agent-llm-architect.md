@@ -193,6 +193,8 @@ response = await llm.generate(
 
 ## Agent Systems
 
+Before building any of these, read [`agent-systems.md`](agent-systems.md): when not to use an agent, Loop · Graph · Dynamic with the mechanisms each needs, framework choice by language (2026 status), cost and field cases.
+
 ### Single-step agent
 ```
 User → LLM (with tools) → Tool call → Tool result → LLM → Answer
@@ -214,7 +216,7 @@ Coordinator LLM:
 ### Agent design rules
 
 - Right: **Limit tool count** — fewer than 10 tools per agent, so it picks the right one
-- Right: **Limit iteration depth** — max 5-10 steps
+- Right: **Stop on whichever comes first** — round cap (5-10 steps; 3-5 for a critic loop) · token or money budget per task · 2 rounds in a row with no improvement. The pass condition is a separate check, never the only exit
 - Right: **Tool naming** — verb-noun, descriptive
 - Right: **Tool descriptions** — say when to use the tool and the rules for each parameter
 - Right: **Error handling** — tool fails → agent can retry or escalate

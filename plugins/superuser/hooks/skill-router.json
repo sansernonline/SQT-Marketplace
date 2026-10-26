@@ -19,6 +19,7 @@
     { "pattern": "mockup|หน้าจอ|\\bui\\b|landing page|หน้าเว็บ|โปสเตอร์|poster|โลโก้|\\blogo\\b|แบนเนอร์|banner|อินโฟกราฟิก|infographic", "skills": ["no-ai-look"] },
     { "pattern": "mockup|หน้าจอ|\\bui\\b|landing page|หน้าเว็บ|wireframe", "skills": ["ui-craft"] },
     { "pattern": "(โทน|ชุด)สี|พาเลต|palette|คู่ฟอนต์|font pair|ฟอนต์ไทย[^\\n]{0,20}(เข้ากัน|คู่|อะไรดี)|design system|ทิศทางภาพ|แนว(หน้าตา|ดีไซน์)", "skills": ["design-direction-lookup"] },
+    { "pattern": "prompt[^\\n]{0,20}(หลายขั้น|ให้\\s*(ai|chatgpt|gemini|claude)?\\s*ตรวจ)|workflow[^\\n]{0,20}(ในแชต|ใน chat)|(loop|graph|dynamic)\\s*(workflow|template)|ให้\\s*(ai|chatgpt)\\s*ตรวจ(งาน)?ตัวเอง|prompt[^\\n]{0,50}ตรวจ(งาน)?ตัวเอง|prompt[^\\n]{0,40}(แยก|แตก)[^\\n]{0,30}แล้วรวม|prompt[^\\n]{0,30}ปรับแผน", "skills": ["chat-prompt-workflows"] },
     { "pattern": "ช่องโหว่ทั้ง|ไล่หาช่องโหว่|ตรวจช่องโหว่|security audit|pen ?test|penetration test|audit[^\\n]{0,20}(ความปลอดภัย|security)", "skills": ["security-audit"] },
     { "pattern": "เว็บ[^\\n]{0,20}(animation|แอนิเม|เคลื่อนไหว|dynamic|มีชีวิต|เลื่อนแล้ว)|\\bgsap\\b|scroll-?driven|เว็บ(แบบ)?บท|one-?page site|\\bdynamic (web)?site\\b", "skills": ["dynamic-website", "motion-basics", "no-ai-look"] },
     { "pattern": "ภาษาไทย(ให้)?(ลื่น|เป็นธรรมชาติ|อ่านง่าย)|ขัดภาษา|ตรวจเข้ม|เกลาภาษา|แปล(เป็น)?ไทย|อ่านแล้ว(แข็ง|เหมือนแปล|ห้วน)", "skills": ["human-writing"] },

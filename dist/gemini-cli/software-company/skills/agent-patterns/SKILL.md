@@ -26,6 +26,8 @@ description: Use when SuperUser plans how agents run a task (Planning, ReAct, Re
 | **Graph** | วาดครั้งเดียวตอนเริ่ม: งานย่อยมีลำดับพึ่งกัน แยกทำแล้วรวม | งานแตกเป็นชิ้นที่ไม่พึ่งกัน รู้ทางตั้งแต่ต้น | Multi-Agent + `parallel-split-and-merge` · ตกลงรูปข้อมูลก่อนแยก · ข้อกำหนดขัดกันแยกเป็นชิ้นเก็บข้อขัดแย้ง (หัวข้อ 4) |
 | **Dynamic** | ปรับระหว่างทาง: วางแผน → ทำทีละชิ้น → ประเมินว่าแผนยังใช้ได้ไหม | ข้อเท็จจริงหรือข้อกำหนดเปลี่ยนกลางงาน | Planning แบบปรับแผน: แผนมีเลขรุ่น · ปรับเฉพาะเมื่อเข้าเหตุ 3 ข้อ · ไม่เกิน 3 ครั้ง (หัวข้อ 1) |
 
+ตารางนี้คือวิธีทำงานของทีม agent ของเราเอง · ถ้าลูกค้าจะสร้างระบบ agent ในผลิตภัณฑ์ (เลือก framework · checkpoint · คนอนุมัติ · eval) → `llm-engineering` ของ software-company (`references/agent-systems.md`) คู่กับ `mcp-server` และ `background-jobs` · ใช้ 3 แบบนี้ผ่านแชตโดยไม่เขียนโค้ด → [`chat-prompt-workflows`](../chat-prompt-workflows/SKILL.md)
+
 **ไม่เปิด agent teams เป็นค่าเริ่ม** — ใช้ subagent แทน เพราะ agent teams ยังเป็นของทดลองและปิดอยู่ · ใช้ token มากกว่ามาก (ราว 7 เท่าเมื่อ teammate อยู่ใน plan mode) · เปิดแล้ว subagent ที่ตั้งชื่อจะกลายเป็น teammate เอง · teammate แบบ in-process (ค่าเริ่ม) ส่ง subagent เบื้องหลังไม่ได้ · teammate คุยกันเอง ขัดกับหลักทุกอย่างผ่านหัวหน้าทีม · ยกเว้นผู้ใช้เปิดไว้แล้วและงานเป็น debug หลายสมมติฐานที่ต้องให้ถกล้มทฤษฎีกัน · ([Claude Code: agent teams](https://code.claude.com/docs/en/agent-teams) · ตรวจ 21 ต.ค. 2569)
 
 **บอกในรายงาน** เฉพาะเมื่อมันเปลี่ยนการตัดสินใจ เช่น `Reranker (คัด 24 → 4 แหล่ง)`

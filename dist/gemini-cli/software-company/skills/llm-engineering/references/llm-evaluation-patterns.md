@@ -11,6 +11,7 @@
 - [Safety Eval](#safety-eval)
 - [Regression Tests](#regression-tests)
 - [Production Monitoring](#production-monitoring)
+- [Agent Evaluation](#agent-evaluation)
 - [Common Eval Tools (2026)](#common-eval-tools-2026)
 - [Common Pitfalls](#common-pitfalls)
 - [Eval Quality Targets](#eval-quality-targets)
@@ -339,6 +340,39 @@ async def hourly_quality_check():
     # Track over time
     await metrics.record('llm_quality', avg_quality)
 ```
+
+## Agent Evaluation
+
+An agent can give the right final answer by the wrong road, at many times the cost (agents used about 4 times the tokens of a chat, multi-agent runs about 15 times · Anthropic multi-agent research system). Score the road and the bill, not only the answer. Patterns and sources for agent design: [`agent-systems.md`](agent-systems.md).
+
+| Measure | What you check | Pass when |
+|---|---|---|
+| **Tool choice** | For each case, the tool(s) the agent should call | Right tool called · no broad tool used then filtered by hand · no repeat calls |
+| **Trajectory** | The sequence of steps against an expected path, or against rules (approval asked before a payment, no write before validation) | Required steps present in order · forbidden steps absent · extra steps within a set allowance |
+| **Task success rate** | Final state checked by code: row written, test passes, file exists, query runs | Measured as % of cases over the suite, tracked per release |
+| **Cost and rounds per task** | Tokens, money, tool calls and rounds per case | Within budget · compare p50 and p95 with the last release · alert on cap hits |
+| **Stop behaviour** | Cases with no answer or an impossible request | Agent stops at the cap or reports it cannot finish · no endless search |
+| **Adversarial cases** | Cases built to make it fail: instructions planted in tool output, wrong or missing input, ambiguous request, tool that errors or times out | No planted instruction followed · bad input rejected or asked about · error reported, not guessed around |
+
+```python
+# Read the trace, not just the answer
+def score_agent_case(case, run):
+    tools = [step.tool for step in run.steps if step.tool]
+    return {
+        "success": case.check_final_state(run),          # real check: DB row, test, file
+        "right_tools": set(case.expected_tools) <= set(tools),
+        "forbidden_used": bool(set(case.forbidden_tools) & set(tools)),
+        "rounds": len(run.steps),
+        "tokens": run.usage.total_tokens,
+        "hit_cap": run.stop_reason == "max_rounds",
+    }
+```
+
+- Score success with a real check (code, query, file). Use an LLM judge only for the quality of free text, and validate it against people as above.
+- Start with about 20 cases ([Anthropic research system](https://www.anthropic.com/engineering/multi-agent-research-system), checked 2026-10-26) and grow from production traces.
+- Run the same case several times: agents are less repeatable than single calls. Report the success rate, not one run.
+- Agents that reach systems through an MCP server: start from the 3 cases in [`mcp-server`](../../mcp-server/SKILL.md) section 7 (right tool · bad input rejected · instruction in returned data ignored) and add trajectory, cost and success rate on top.
+- Add every production failure (loop, wrong tool, followed injected text) to the suite before fixing it.
 
 ## Common Eval Tools (2026)
 

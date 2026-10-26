@@ -1,5 +1,11 @@
 # Changelog — software-company
 
+## 2.24.0 — 2026-10-26
+
+- `llm-engineering`: reference ใหม่ `agent-systems.md` สำหรับสร้างระบบ agent ในผลิตภัณฑ์ · เมื่อไหร่ไม่ควรใช้ agent · Loop · Graph · Dynamic ในโค้ด · progress ledger · 3 กลไกที่ทุก framework มี (เพดานรอบแยกจากเงื่อนไขผ่าน · จุดรวมหลังแยก · checkpoint หยุดรอคนแล้วทำต่อ) · เลือก framework ตามภาษาพร้อมสถานะ 2026 (AutoGen archive · Semantic Kernel ย้ายไป Microsoft Agent Framework · Bedrock Agents Classic maintenance · ADK 2.0) · ต้นทุน token · 8 กรณีใช้จริงพร้อมป้ายหลักฐาน · เปิดแหล่งจริง 2026-10-26
+- `llm-evaluation-patterns`: หัวข้อ eval ของ agent (เลือก tool · เส้นทาง · สำเร็จกี่ % · ต้นทุนต่องาน) · `agent-llm-architect`: เกณฑ์หยุดเป็นเพดานรอบ งบ token หรือไม่ดีขึ้น 2 รอบ แล้วแต่อย่างไหนถึงก่อน
+- `background-jobs` หัวข้อ 9: durable workflow (Temporal · Step Functions) สำหรับงาน agent ที่รันยาวหรือรอคนอนุมัติ · กฎ replay ตรวจกับเอกสาร Temporal 2026-10-26 · agent `ai-engineer` ชี้ไป agent-systems
+
 ## 2.23.0 — 2026-10-26
 
 - skill ใหม่ `security-audit`: ตรวจช่องโหว่ทั้งระบบก่อนส่งมอบ 6 ขั้น (สำรวจ · รายการครอบคลุม · ล่า · ตรวจช่องว่าง · ยืนยันโดยตัวใหม่ที่พยายามหักล้าง · ตรวจ record รอบสุดท้าย) · 3 คำตัดสิน confirmed · needs_validation (ไม่มีระดับ ต้องบอกสิ่งที่ขาด) · rejected · ระดับไม่เกินผลกระทบที่พิสูจน์ · hardening ไม่นับเป็น finding · ผล `findings.json` และ `ledger.json` พร้อมตัวตรวจ Node ที่รันบน Windows ได้ (self-test 28/28 · 11/11 · 9/9) และรายงานภาษาไทยที่มีภาษาเจ้าของกิจการ แถว A01–A10 และป้าย PDPA · ประเภทการโจมตีของระบบไทย (ลายเซ็น LINE · ID token ของ LIFF · webhook Omise และ 2C2P · สลิป PromptPay · e-Tax Invoice) ตรวจกับเอกสารทางการ 2026-10-26 · แนวคิดจาก cloudflare/security-audit-skill (MIT) เขียนใหม่ทั้งหมด ไม่คัดข้อความ

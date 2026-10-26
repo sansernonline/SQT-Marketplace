@@ -1,0 +1,44 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการเดิม (2026-10-26 รอบแดง · general-purpose ระดับ sonnet ไม่มี skill): เห็นจริงว่า prompt ให้ ChatGPT ตรวจตัวเองด้วย "เหตุผลหนึ่งบรรทัด"
+# ไม่สั่งให้ยกข้อความเป็นหลักฐาน ไม่มีกฎหาหลักฐานไม่ได้นับว่าไม่ผ่าน หยุดได้แค่ครบ 3 รอบ (ไม่มีหยุดเมื่อข้อเดิมไม่ผ่าน 2 รอบติด)
+# และไม่บอกให้เปิดแชตใหม่ตรวจอิสระ — chat-prompt-workflows หัวข้อ 2 และ 5 เพิ่มเพื่อปิดจุดนี้
+schema_version: "1.1"
+name: chat-prompt-workflows-regression
+description: prompt ตรวจตัวเองจนผ่านเกณฑ์ ต้องให้ผู้ตรวจยกหลักฐาน หาไม่เจอนับไม่ผ่าน มีเกณฑ์หยุดเมื่อข้อเดิมไม่ดีขึ้น 2 รอบ และบอกให้ตรวจอิสระในแชตใหม่
+tags: [regression, chat-prompt-workflows]
+runs: 3
+expected_outcome: prompt มีผู้ตรวจที่ยกข้อความหลักฐานทุกเกณฑ์ · ไม่มีหลักฐานนับว่าไม่ผ่าน · หยุดเมื่อผ่านครบ ครบ 3 รอบ หรือข้อเดิมไม่ผ่าน 2 รอบติด · ท้ายคำตอบแนะนำเปิดแชตใหม่ตรวจซ้ำ
+execution:
+  prompt: |
+    ช่วยเขียน prompt ให้ ChatGPT ร่างประกาศรับสมัครงานแล้วตรวจตัวเองจนผ่านเกณฑ์ 5 ข้อ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: evidence-required
+    type: regex
+    pattern: "ยก[^\\n]{0,30}หลักฐาน|หลักฐาน[^\\n]{0,40}(ไม่ผ่าน|FAIL)|ไม่มีหลักฐาน[^\\n]{0,20}(ไม่ผ่าน|FAIL)"
+    match: contains
+    target: last_message
+  - name: no-progress-stop
+    type: regex
+    pattern: "(?:2|สอง) ?(?:รอบ|ครั้ง) ?ติด"
+    match: contains
+    target: last_message
+  - name: checker-uses-evidence
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. prompt สั่งให้ผู้ตรวจยกข้อความจากงานจริงเป็นหลักฐานของแต่ละเกณฑ์ ไม่ใช่แค่ให้เหตุผลสั้น ๆ
+      2. prompt บอกว่าเกณฑ์ที่หาหลักฐานไม่เจอนับว่าไม่ผ่าน
+      3. มีเงื่อนไขหยุดเมื่อเกณฑ์เดิมไม่ผ่าน 2 รอบติดกันโดยไม่ดีขึ้น นอกจากเพดานจำนวนรอบ
+  - name: fresh-chat-check
+    type: regex
+    pattern: "แชตใหม่|แชทใหม่|เปิดแชต|new chat"
+    match: contains
+    target: last_message
+  - name: no-emoji
+    type: regex
+    pattern: "✅|❌|📌|🚀|💡|✨|⭐|🔥|👉|📊|📝|🎯|⚠️"
+    match: not_contains
+    target: last_message
