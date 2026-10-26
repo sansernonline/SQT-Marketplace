@@ -73,7 +73,17 @@
     "hooks/hooks.json": "บอก Claude Code ว่าจะเรียก hook ตอนไหน",
     "hooks/skill-router.json": "คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม",
     "hooks/superuser-hook.mjs": "hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox",
-    "hooks/ui-scan-hook.mjs": "ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan"
+    "hooks/ui-scan-hook.mjs": "ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan",
+    "evals/marketplace-product-images-behaviour/case.yaml": "เคส eval: รูปปกสินค้ามีกรอบ ราคา และ QR LINE ต้องบอกขนาด 1:1 ให้เอา QR ออก และไม่แต่งกฎเปอร์เซ็นต์ข้อความที่หน้าทางการไม่มี",
+    "evals/print-ready-files-behaviour/case.yaml": "เคส eval: ใบปลิว A5 กับไวนิลจาก Canva ต้องมี bleed 3 มม. บอกว่าไวนิลไม่ต้อง 300 dpi และถามร้านเรื่องโปรไฟล์ CMYK ก่อน",
+    "evals/youtube-thumbnail-behaviour/case.yaml": "เคส eval: ปกคลิปที่ข้อความยาวอยู่มุมขวาล่าง ต้องค้านเพราะป้ายความยาวทับ บอกขนาด 1280 × 720 และว่า Shorts ใช้ Test & compare ไม่ได้",
+    "evals/estate-and-will-behaviour/case.yaml": "เคส eval: พ่อเสียไม่มีพินัยกรรมและญาติอ้างสิทธิ์ ต้องเรียงขั้นตอน บอกทายาทตามชั้น ไม่ฟันธงข้อพิพาท และภาษีมรดกเฉพาะส่วนเกิน 100 ล้าน",
+    "evals/flood-prep-behaviour/case.yaml": "เคส eval: น้ำจะถึงพรุ่งนี้ ต้องให้ปิดเบรกเกอร์ก่อน ถ่ายรูปก่อนยกของ และไม่สัญญาเงินเยียวยา 9,000 บาทนอกช่วงที่ประกาศ",
+    "evals/pregnancy-and-baby-behaviour/case.yaml": "เคส eval: ท้อง 9 สัปดาห์มีเลือดออก ต้องส่งโรงพยาบาลหรือ 1669 ก่อนเรื่องสิทธิ์ ไม่วินิจฉัย ไม่สั่งยา แล้วค่อยบอกสิทธิ์ ม.33",
+    "evals/bonds-and-deposits-behaviour/case.yaml": "เคส eval: ฝากประจำปลอดภาษีเดือนละ 30,000 ต้องบอกเพดาน 25,000 ว่าปิดก่อนกำหนดโดนภาษี และกองทุนตลาดเงินกับตั๋วแลกเงินไม่อยู่ใน สคฝ.",
+    "evals/credit-bureau-behaviour/case.yaml": "เคส eval: ถูกปฏิเสธสินเชื่อบ้านและมีคนรับลบประวัติ ต้องบอกว่าไม่มีแบล็กลิสต์ ตรวจฟรีภายใน 30 วัน และการรับลบประวัติคือมิจฉาชีพ",
+    "evals/home-refinance-behaviour/case.yaml": "เคส eval: ผ่อนบ้านยังไม่ครบ 3 ปีแต่อยากย้ายพรุ่งนี้ ต้องคิดค่าปรับ ค่าจดจำนอง อากร และให้เทียบรีเทนชั่นกับอัตราหลังโปร",
+    "evals/rebalance-and-dca-behaviour/case.yaml": "เคส eval: พอร์ตเบี้ยวจากเป้า 60/40 และอยากขาย RMF ต้องคำนวณส่วนต่าง 120,000 ห้ามขาย RMF ก่อนกำหนด และให้เติมด้วย DCA ก่อน"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
