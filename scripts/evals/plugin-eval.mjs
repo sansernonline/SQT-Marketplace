@@ -14,8 +14,10 @@ import { spawnSync } from "node:child_process";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const args = process.argv.slice(2);
 const plugin = args.shift();
-const take = (flag) => { const i = args.indexOf(flag); return i < 0 ? null : args.splice(i, 2)[1]; };
+const take = (flag) => { const i = args.indexOf(flag); return i < 0 ? null : args.splice(i, 2)[1] ?? ""; };
 const only = take("--only");
+// --only ที่ไม่มีค่าจะกลายเป็นรันทั้งชุดเงียบ ๆ และเสียเงิน จึงหยุดก่อน
+if (only === "" || only?.startsWith("--")) { console.error("--only ต้องตามด้วย regex ชื่อเคส"); process.exit(2); }
 const probe = !args.includes("--no-probe");
 const rest = args.filter((a) => a !== "--no-probe");
 const source = join(ROOT, "plugins", plugin ?? "");
@@ -32,12 +34,15 @@ const data = JSON.parse(readFileSync(manifest, "utf8"));
 delete data.dependencies;
 writeFileSync(manifest, JSON.stringify(data, null, 2));
 const evalsDir = join(copy, "evals");
+if (!existsSync(evalsDir)) { console.error(`plugins/${plugin} ไม่มีโฟลเดอร์ evals/`); process.exit(2); }
 const cases = readdirSync(evalsDir, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name);
 for (const c of cases) if (only && !new RegExp(only).test(c)) rmSync(join(evalsDir, c), { recursive: true, force: true });
 const kept = cases.filter((c) => !only || new RegExp(only).test(c));
+if (!kept.length) { console.error(`--only "${only}" ไม่ตรงเคสไหนเลย`); process.exit(2); }
 console.log(`สำเนา: ${copy} · เคส ${kept.length}: ${kept.join(" ")}`);
 
-const evalRun = (extra) => spawnSync("claude", ["plugin", "eval", copy, "--trust-plugin", "--no-publish", ...extra], { stdio: "inherit", shell: process.platform === "win32" }).status;
+// เรียก claude ตรง ไม่ผ่าน shell · path ชั่วคราวที่มีช่องว่างและ regex ใน --only จึงไม่ถูกตัด
+const evalRun = (extra) => spawnSync("claude", ["plugin", "eval", copy, "--trust-plugin", "--no-publish", ...extra], { stdio: "inherit" }).status;
 
 // ลอง 1 เคส trigger ก่อน: skill ต้องถูกเปิด ไม่งั้นทั้งชุดจะวัดอะไรไม่ได้
 const trigger = kept.find((c) => c.endsWith("-trigger"));

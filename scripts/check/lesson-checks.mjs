@@ -159,9 +159,14 @@ function badDoubleQuoteEscape(line) {
   return false;
 }
 
+// ข้าม block scalar (key: | หรือ >) เพราะข้างในไม่มี escape · ไม่ตามสตริง "..." ที่ขึ้นบรรทัดใหม่ (พบน้อย ยอมหลุด)
 export function yamlEscapeTraps(text) {
   const out = [];
+  let block = -1;   // ระยะเยื้องของบรรทัด key: | · -1 = ไม่อยู่ใน block
   text.split('\n').forEach((line, i) => {
+    const indent = line.search(/\S/);
+    if (block >= 0 && (indent < 0 || indent > block)) { if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(line)) out.push({ at: i + 1, msg: 'มีอักขระควบคุม (มักเป็น backspace แทน \\b จาก heredoc) — เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์' }); return; }
+    block = /:\s*[|>][-+0-9]*\s*(#.*)?$/.test(line) ? indent : -1;
     if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(line)) out.push({ at: i + 1, msg: 'มีอักขระควบคุม (มักเป็น backspace แทน \\b จาก heredoc) — เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์' });
     else if (badDoubleQuoteEscape(line)) out.push({ at: i + 1, msg: 'ใน YAML แบบ "..." ใช้ \\s \\d ตรง ๆ ไม่ได้ ไฟล์จะโหลดไม่ขึ้น — ครอบด้วย \'...\' แทน หรือเขียน \\\\s' });
   });
