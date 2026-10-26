@@ -7,7 +7,7 @@
 
   python design_draft.py "เว็บขายทองรูปพรรณ ร้านเก่าในเยาวราช" --out docs/DESIGN.md
   python design_draft.py "dental clinic booking site" --industry dental-clinic --html docs/design/dc-design-directions.html
-  python design_draft.py "แอปร้านซ่อมโดรน" --extra-palettes web.csv --palettes "web-drone;night-vault"
+  python design_draft.py "แอปร้านซ่อมโดรน" --extra-palettes web.csv --palette "ชื่อ:#hex,#hex"
   python design_draft.py --self-test
 """
 import argparse
@@ -124,16 +124,18 @@ class Library:
     def __init__(self, data_dir):
         self.corpus = Corpus(data_dir)
         self.industries = {r['id']: r for r in self.corpus.rows('industry')}
-        self.palettes = {}
+        self.stored = {}  # คลังสำรองใน data/ · ใช้เมื่อไม่มีสีจากการค้นสดเท่านั้น
         for r in self.corpus.rows('palette'):
-            self.palettes.setdefault(r['id'], {})[(r.get('mode') or '').strip().lower()] = r
+            self.stored.setdefault(r['id'], {})[(r.get('mode') or '').strip().lower()] = r
+        self.palettes = {}
+        self.is_fallback = False
         self.fonts = {r['id']: r for r in self.corpus.rows('font')}
         self.looks = {r['id']: r for r in self.corpus.rows('look')}
         self.thai_fonts = {r['family'].strip().lower(): r for r in self.corpus.table('thai-fonts.csv')}
 
-    def add_palettes(self, csv_path):
-        """พาเลตเพิ่มจาก brand_colors.py --palette · ไม่เข้าดัชนีค้น จึงใช้ได้ผ่าน --palettes เท่านั้น"""
-        for r in read_csv(Path(csv_path)):
+    def add_palettes(self, rows):
+        """พาเลตจากการค้นสด (--palette · --extra-palettes) · ชนะคลังสำรองเสมอ"""
+        for r in rows:
             self.palettes.setdefault(r['id'], {})[(r.get('mode') or '').strip().lower()] = r
 
     def ranked(self, domain, query, preferred, pool):
@@ -151,7 +153,7 @@ def pick_directions(lib, industry):
     query = ' '.join([industry.get('name_en', ''), industry.get('keywords_en', '').replace(';', ' '),
                       industry.get('keywords_th', '').replace(';', ' ')])
     looks_pref = split_values(industry.get('looks'))
-    pal_pref = split_values(industry.get('palette_ids'))
+    pal_pref = split_values(industry.get('palette_ids')) if lib.is_fallback else list(lib.palettes)
     font_pref = split_values(industry.get('font_pair_ids'))
     look_pool = lib.ranked('look', query, looks_pref, lib.looks)
     pal_pool = lib.ranked('palette', query, pal_pref, lib.palettes)
@@ -185,8 +187,10 @@ def pick_directions(lib, industry):
         mine = lib.palettes[pal_id]['light']['primary']
         return all(color_distance(mine, d['palette']['light']['primary']) >= MIN_PRIMARY_DISTANCE for d in directions)
 
-    # สลับได้เฉพาะพาเลตที่เกี่ยวกับอุตสาหกรรม · เคยสลับคลินิกทันตกรรมไปได้สีแดงเยาวราช
-    relevant = set(pal_pref) | {r['id'] for r in lib.corpus.search('palette', query, 8)}
+    # คลังสำรองสลับได้เฉพาะพาเลตที่เกี่ยวกับอุตสาหกรรม · เคยสลับคลินิกทันตกรรมไปได้สีแดงเยาวราช
+    relevant = set(pal_pool)
+    if lib.is_fallback:
+        relevant = set(pal_pref) | {r['id'] for r in lib.corpus.search('palette', query, 8)}
 
     def swap(pal_id):
         """พาเลตเดิมถ้าแยกออก ไม่งั้นพาเลตที่เกี่ยวและผ่านเกณฑ์ตัวถัดไปที่แยกออก · ไม่มีเลยคืนตัวเดิม"""
@@ -200,7 +204,7 @@ def pick_directions(lib, industry):
             break
         pal_id = pal_pref[i] if i < len(pal_pref) else None
         font_id = font_pref[i] if i < len(font_pref) else None
-        if look_id in [d['look'].get('id') for d in directions]:
+        if look_id in [d['look'].get('id') for d in directions] or pal_id is None:
             continue
         if pal_id not in good_pal or font_id not in good_font:
             why = 'พาเลตไม่ผ่าน' if pal_id not in good_pal else 'คู่ฟอนต์ไม่ผ่าน'
@@ -291,11 +295,15 @@ def licence_line(font, thai_fonts):
     return ' · '.join(parts)
 
 
-def render_markdown(brief, industry, match, directions, rules, rejected, today, thai_fonts):
+FALLBACK_NOTE = 'ใช้คลังสีสำรองใน data/ · ค้นสดตาม design-references จะทันสมัยกว่า'
+
+
+def render_markdown(brief, industry, match, directions, rules, rejected, today, thai_fonts, is_fallback=False):
     name, _ = personality(industry)
     lines = [f'# ทิศทางภาพตั้งต้น · {industry.get("name_th", "")} ({industry.get("name_en", "")})', '',
              f'> ร่างโดย `design-direction-lookup` วันที่ {today.isoformat()} · เป็นจุดเริ่มให้ `ui-craft` ข้อ 0.1 ขั้น 3 '
              'ไม่ใช่คำตัดสิน · ทำ mockup ทั้ง 3 แนว แล้วเลือกที่ด่านสวย (`ui-craft` ข้อ 9)', '',
+             *([f'> **{FALLBACK_NOTE}**', ''] if is_fallback else []),
              '## โจทย์', '', brief, '',
              '## อุตสาหกรรมที่จับได้', '',
              f'- `{industry["id"]}` {industry.get("name_th", "")} · คะแนนค้น {match.get("score", "-")} · '
@@ -313,7 +321,8 @@ def render_markdown(brief, industry, match, directions, rules, rejected, today, 
                   f'เนื้อเล็กสุด {font.get("min_body_px", "-")}px · line-height {font.get("line_height", "-")}',
                   f'- ใบอนุญาตฟอนต์: {licence_line(font, thai_fonts)}',
                   f'- ข้อห้าม: {look.get("avoid_th") or "-"}', '',
-                  f'พาเลต `{d["palette_id"]}` {pal["light"].get("name_th", "")}', '',
+                  f'พาเลต `{d["palette_id"]}` {pal["light"].get("name_th", "")}',
+                  f'ที่มาของสี: {pal["light"].get("notes_th") or "-"}', '',
                   '| บทบาท | สว่าง | มืด |', '|---|---|---|']
         lines += [f'| {role} | `{pal["light"][role]}` | `{pal["dark"][role]}` |' for role in COLOR_ROLES]
         ratios = [f'{fg}/{bg} {contrast(pal["light"][fg], pal["light"][bg]):.1f} · {contrast(pal["dark"][fg], pal["dark"][bg]):.1f}'
@@ -474,38 +483,74 @@ def render_html(brief, industry, directions, today, thai_fonts):
 
 
 def custom_industry(brief):
-    """อุตสาหกรรมชั่วคราวเมื่อไม่มีในข้อมูลแต่มีพาเลตจากเว็บจริงแล้ว · look และคู่ฟอนต์มาจากการค้นด้วยคำในโจทย์"""
+    """อุตสาหกรรมชั่วคราวเมื่อไม่มีในข้อมูล · look และคู่ฟอนต์มาจากการค้นด้วยคำในโจทย์"""
     return {'id': 'custom', 'name_th': brief, 'name_en': 'custom', 'keywords_th': brief, 'keywords_en': '',
             'personality': '', 'looks': '', 'palette_ids': '', 'font_pair_ids': ''}
 
 
-def find_industry(lib, brief, industry_id, has_own_palettes=False):
+def find_industry(lib, brief, industry_id):
     if industry_id:
         if industry_id not in lib.industries:
             raise SystemExit(f'ไม่มีอุตสาหกรรม id "{industry_id}"')
         return lib.industries[industry_id], {'score': '-', 'coverage': 1.0}, []
     found = lib.corpus.search('industry', brief, 3)
-    if not found and has_own_palettes:
-        return custom_industry(brief), {'score': '-', 'coverage': 0.0}, []
     if not found:
-        raise SystemExit('ไม่พบอุตสาหกรรมที่ตรงกับโจทย์ · ลองเขียนโจทย์ให้มีชื่อธุรกิจ หรือใส่ --industry <id> '
-                         '(ค้นรายชื่อด้วย design_search.py "<คำ>" --domain industry -n 10)')
+        return custom_industry(brief), {'score': '-', 'coverage': 0.0}, []
     return lib.industries[found[0]['id']], found[0], found[1:]
 
 
+SPEC_ROLES = ['bg', 'surface', 'text', 'text_muted', 'primary', 'secondary', 'accent', 'border']
+HEX6 = re.compile(r'#[0-9a-fA-F]{6}')
+
+
+def parse_spec(spec):
+    """"ชื่อ:..." → (ชื่อ, dict 8 หน้าที่ หรือรายการสีแบรนด์)
+    ชื่อ:bg=#..,surface=#..,... (ต้องมีทุกหน้าที่ ยกเว้น secondary) · ชื่อ:สี 8 ตัวตามลำดับ SPEC_ROLES · ชื่อ:สีแบรนด์ 1–7 ตัว"""
+    name, _, body = spec.partition(':')
+    parts = [c.strip() for c in body.split(',') if c.strip()]
+    named = [c.partition('=') for c in parts if '=' in c]
+    hexes = [v.strip() for _, _, v in named] if named else parts
+    if not name.strip() or not hexes or not all(HEX6.fullmatch(h) for h in hexes):
+        raise SystemExit(f'--palette "{spec}" ต้องเป็น "<ชื่อ>:#RRGGBB,..." หรือ "<ชื่อ>:bg=#RRGGBB,surface=#RRGGBB,..."')
+    if named:
+        roles = {k.strip(): v.strip() for k, _, v in named}
+        missing = [r for r in SPEC_ROLES if r != 'secondary' and r not in roles]
+        unknown = [r for r in roles if r not in SPEC_ROLES]
+        if missing or unknown:
+            raise SystemExit(f'--palette "{name}" หน้าที่ขาด {missing} หรือไม่รู้จัก {unknown} · ใช้ {SPEC_ROLES}')
+        return name.strip(), roles
+    return name.strip(), dict(zip(SPEC_ROLES, hexes)) if len(hexes) == len(SPEC_ROLES) else hexes
+
+
+def palette_from_spec(spec, today):
+    from brand_palette import build_palette, palette_from_roles  # นำเข้าตอนใช้ เพราะ brand_palette นำเข้าไฟล์นี้
+    name, colors = parse_spec(spec)
+    if isinstance(colors, dict):
+        return palette_from_roles(name, colors, today.isoformat())
+    site = {'host': name, 'brand': [{'hex': h.upper(), 'weight': len(colors) - i} for i, h in enumerate(colors)]}
+    return build_palette(name, [site], today.isoformat())
+
+
 def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=None,
-          palette_ids=None, extra_palettes=None):
+          palette_ids=None, extra_palettes=None, palette_specs=None):
     """คืน (directions, rejected, เส้นทางที่เขียน) · ไม่เขียนทับไฟล์ที่มีอยู่ถ้าไม่ force
-    palette_ids ใช้แทนพาเลตของอุตสาหกรรม · extra_palettes คือ CSV จาก brand_colors.py --palette"""
+    ลำดับแหล่งสี: สีจากการค้นสด (palette_specs · extra_palettes) ก่อนเสมอ · ไม่มีเลยจึงใช้คลังสำรองใน data/ พร้อมคำเตือน
+    palette_ids เลือกและเรียงบางชุดจากแหล่งที่ใช้ (ค่าตั้งต้นคือทุกชุด)"""
     today = today or datetime.date.today()
     lib = Library(data_dir)
     if extra_palettes:
-        lib.add_palettes(extra_palettes)
+        lib.add_palettes(read_csv(Path(extra_palettes)))
+    for spec in palette_specs or []:
+        lib.add_palettes(palette_from_spec(spec, today))
+    if not lib.palettes:
+        lib.palettes, lib.is_fallback = lib.stored, True
+        print(f'คำเตือน: {FALLBACK_NOTE}', file=sys.stderr)
     unknown = [p for p in palette_ids or [] if p not in lib.palettes]
     if unknown:
-        raise SystemExit(f'ไม่มีพาเลต id {unknown} · พาเลตจากเว็บต้องใส่ไฟล์ด้วย --extra-palettes')
-    industry, match, others = find_industry(lib, brief, industry_id, bool(palette_ids))
+        raise SystemExit(f'ไม่มีพาเลต id {unknown} ในแหล่งสีที่ใช้ · มี: {", ".join(lib.palettes)}')
+    industry, match, others = find_industry(lib, brief, industry_id)
     if palette_ids:
+        lib.palettes = {p: lib.palettes[p] for p in palette_ids}
         industry = {**industry, 'palette_ids': ';'.join(palette_ids)}
     html_path = Path(html_path or f'docs/design/{industry["id"]}-design-directions.html')
     out = Path(out)
@@ -516,7 +561,7 @@ def draft(brief, data_dir, out, html_path, industry_id=None, force=False, today=
     if len(directions) < 3:
         raise SystemExit(f'ได้แนวที่ผ่านแค่ {len(directions)} แนว · ที่ตัดออก: {rejected}')
     rules = ux_rules(lib, brief, industry)
-    md = render_markdown(brief, industry, match, directions, rules, rejected, today, lib.thai_fonts)
+    md = render_markdown(brief, industry, match, directions, rules, rejected, today, lib.thai_fonts, lib.is_fallback)
     page = render_html(brief, industry, directions, today, lib.thai_fonts)
     check_hype(md.replace(brief, ''))
     check_hype(page.replace(html.escape(brief), ''))
@@ -538,7 +583,9 @@ def self_test():
     with tempfile.TemporaryDirectory() as tmp:
         out, page = Path(tmp, 'docs/DESIGN.md'), Path(tmp, 'docs/design/gs-design-directions.html')
         brief = 'เว็บขายทองรูปพรรณ ร้านเก่าในเยาวราช ลูกค้า 35–60 ซื้อผ่านมือถือ'
-        dirs, rejected, _ = draft(brief, FIXTURES, out, page, today=datetime.date(2026, 10, 26))
+        test_palettes = FIXTURES / 'palettes.csv'  # ข้อมูลทดสอบ ไม่ใช่คลังสี
+        dirs, rejected, _ = draft(brief, FIXTURES, out, page, today=datetime.date(2026, 10, 26),
+                                  extra_palettes=test_palettes)
         looks = [d['look']['id'] for d in dirs]
         check('ได้ 3 แนว look ไม่ซ้ำ', len(dirs) == 3 and len(set(looks)) == 3)
         check('พาเลตสี Tailwind ถูกตัด', 'tw-indigo' not in [d['palette_id'] for d in dirs])
@@ -560,29 +607,41 @@ def self_test():
         check('ไม่มีคำโฆษณา', not HYPE_WORDS.search(md + html_text))
         before = out.read_text(encoding='utf-8')
         try:
-            draft(brief, FIXTURES, out, page)
+            draft(brief, FIXTURES, out, page, extra_palettes=test_palettes)
             refused = False
         except SystemExit:
             refused = True
         check('ไม่เขียนทับเมื่อไม่ใส่ --force', refused and out.read_text(encoding='utf-8') == before)
-        draft('dentist booking site', FIXTURES, out, page, force=True)
+        draft('dentist booking site', FIXTURES, out, page, force=True, extra_palettes=test_palettes)
         check('--force เขียนทับได้ และค้นอังกฤษได้', 'คลินิกทันตกรรม' in out.read_text(encoding='utf-8'))
-        try:
-            draft('quantum zebra spaceship', FIXTURES, Path(tmp, 'x.md'), Path(tmp, 'x.html'))
-            abstained = False
-        except SystemExit:
-            abstained = True
-        check('โจทย์ไม่ตรงอุตสาหกรรมไหน → หยุด ไม่เดา', abstained and not Path(tmp, 'x.md').exists())
-        extra = Path(tmp, 'web-palettes.csv')
-        web_rows = [{**r, 'id': 'web-test'} for r in read_csv(FIXTURES / 'palettes.csv') if r['id'] == 'jade-paper']
-        with extra.open('w', encoding='utf-8', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=list(web_rows[0]))
-            writer.writeheader()
-            writer.writerows(web_rows)
+        draft(brief, FIXTURES, Path(tmp, 'x.md'), Path(tmp, 'x.html'))
+        check('ไม่มีสีส่งมา → ใช้คลังสำรองและเขียนคำเตือนใน DESIGN.md',
+              FALLBACK_NOTE in Path(tmp, 'x.md').read_text(encoding='utf-8'))
+        check('สีที่ส่งมาไม่มีคำเตือนคลังสำรอง', FALLBACK_NOTE not in out.read_text(encoding='utf-8'))
+        spec = 'web-test:#B5462A,#0E7C86'
         dirs, _, _ = draft('quantum zebra spaceship', FIXTURES, Path(tmp, 'c.md'), Path(tmp, 'c.html'),
-                           palette_ids=['web-test', 'gold-ink'], extra_palettes=extra)
-        check('--palettes กับอุตสาหกรรมที่ไม่มี → ใช้ custom และพาเลตที่ส่งมา', len(dirs) == 3
-              and dirs[0]['palette_id'] == 'web-test' and '`custom`' in Path(tmp, 'c.md').read_text(encoding='utf-8'))
+                           palette_specs=[spec], palette_ids=None)
+        check('--palette สีแบรนด์ → ชนะคลังสำรอง ผ่านเกณฑ์ ใช้ custom เมื่อไม่พบอุตสาหกรรม',
+              len(dirs) == 3 and dirs[0]['palette_id'] == 'web-test' and not palette_problems(dirs[0]['palette'])
+              and '`custom`' in Path(tmp, 'c.md').read_text(encoding='utf-8'))
+        eight = ('web-eight:bg=#FAF7F2,surface=#FFFFFF,text=#2B2118,text_muted=#6B5A48,primary=#8A3B12,'
+                 'secondary=#D9B26F,accent=#2F6F6A,border=#D8CBB8')
+        rows = palette_from_spec(eight, datetime.date(2026, 10, 27))
+        check('--palette 8 หน้าที่แบบมีชื่อ → ใช้สีตรง ผ่านเกณฑ์ เก็บ secondary ใน notes',
+              rows[0]['primary'] == '#8A3B12' and 'D9B26F' in rows[0]['notes_th']
+              and not palette_problems({r['mode']: r for r in rows}))
+        positional = 'web-pos:' + ','.join(re.findall(r'=(#\w+)', eight.partition(':')[2]))
+        check('--palette 8 สีเรียงตามลำดับ = แบบมีชื่อ', palette_from_spec(positional, datetime.date(2026, 10, 27))[0]['accent'] == '#2F6F6A')
+        failures = 0
+        for bad in ('x:สีแดง', 'x:bg=#FAF7F2', 'x:bg=#FAF7F2,surface=#FFFFFF,text=#EEEEEE,text_muted=#F0F0F0,primary=#8A3B12,accent=#2F6F6A,border=#D8CBB8'):
+            try:
+                palette_from_spec(bad, datetime.date.today())
+            except SystemExit:
+                failures += 1
+        check('--palette ที่ไม่ใช่ hex · หน้าที่ไม่ครบ · contrast ไม่ผ่าน ถูกปฏิเสธ', failures == 3)
+        dirs, _, _ = draft('quantum zebra spaceship', FIXTURES, Path(tmp, 'd.md'), Path(tmp, 'd.html'),
+                           palette_ids=['jade-paper'], extra_palettes=test_palettes)
+        check('--palettes เลือกเฉพาะ id ที่ส่งมา', {d['palette_id'] for d in dirs} == {'jade-paper'})
     failed = [n for n, ok in checks if not ok]
     for name, ok in checks:
         print(('ผ่าน     ' if ok else 'ไม่ผ่าน  ') + name)
@@ -598,9 +657,12 @@ def main():
     ap.add_argument('--industry', help='บังคับ id อุตสาหกรรม เมื่อค้นไม่เจอหรือเจอผิด')
     ap.add_argument('--data', default=str(DATA_DIR))
     ap.add_argument('--force', action='store_true', help='เขียนทับไฟล์ที่มีอยู่')
-    ap.add_argument('--extra-palettes', help='CSV พาเลตเพิ่ม (ผลของ brand_colors.py --palette)')
-    ap.add_argument('--palettes', help='id พาเลตคั่นด้วย ; ใช้แทนพาเลตของอุตสาหกรรม · '
-                    'หาอุตสาหกรรมไม่เจอจะใช้อุตสาหกรรมชั่วคราว custom แทนการหยุด')
+    ap.add_argument('--extra-palettes', help='CSV พาเลตจากการค้นสด (ผลของ brand_colors.py --palette)')
+    ap.add_argument('--palette', action='append', metavar='ชื่อ:สี',
+                    help='สีจากการค้นสด ใส่ซ้ำได้ · ชื่อ:bg=#..,surface=#..,text=#..,text_muted=#..,primary=#..,'
+                    'secondary=#..,accent=#..,border=#.. · หรือสี 8 ตัวตามลำดับนี้ · หรือสีแบรนด์ 1-7 ตัว')
+    ap.add_argument('--palettes', help='id พาเลตคั่นด้วย ; เลือกและเรียงเป็นแนว ก ข ค (ค่าตั้งต้น ทุกชุดของแหล่งที่ใช้) · '
+                    'ไม่ได้ส่งสดมาเลยจะใช้คลังสำรองใน data/ พร้อมคำเตือน')
     ap.add_argument('--self-test', action='store_true')
     args = ap.parse_args()
     if hasattr(sys.stdout, 'reconfigure'):
@@ -610,7 +672,8 @@ def main():
     if not args.brief:
         ap.error('ใส่โจทย์ หรือ --self-test')
     directions, rejected, paths = draft(args.brief, args.data, args.out, args.html, args.industry, args.force,
-                                        palette_ids=split_values(args.palettes), extra_palettes=args.extra_palettes)
+                                        palette_ids=split_values(args.palettes), extra_palettes=args.extra_palettes,
+                                        palette_specs=args.palette)
     for label, d in zip(LABELS, directions):
         print(f'แนว {label}: {d["look"].get("id")} · พาเลต {d["palette_id"]} · ฟอนต์ {d["font_id"]}')
     if rejected:

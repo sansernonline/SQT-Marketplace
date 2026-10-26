@@ -31,7 +31,7 @@ description: Use when building a desktop app or mockup that must look native on 
 > **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ template ใหม่** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่
 
 ```
-0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ fluent.css
+0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (ค้นต้นแบบตาม design-references ประเภท app แล้วถอดสี · หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ fluent.css
    (เช่น --win-accent สีแบรนด์ · ธีมเริ่มต้นมืด · พื้นกรอบเป็นสีกลางตาม fluent.css ไม่ย้อมสี) — เขียนเป็นบล็อก token ต่อท้าย fluent.css ไม่แก้ไฟล์ต้นฉบับ
 1. เลือกโครงจากตารางข้อ 0 ใน references/patterns.md แล้วคัดลอก template ที่ตรงกับแอป + assets/fluent.css ไปไว้คู่กัน
    (mockup-template.html = ตั้งค่า/dashboard · tool-app-template.html = แอปเครื่องมือที่ข้อมูลแน่น · หน้าตาของทั้งสองแบบดูได้ที่ assets/templates-preview.webp)

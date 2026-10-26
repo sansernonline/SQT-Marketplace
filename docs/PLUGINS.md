@@ -13,7 +13,7 @@
 ทีมผู้ช่วยทำงานหลายขั้น: หัวหน้าทีมรับงาน → จัดขนาด → brainstorm (งานใหญ่) → เลือก playbook → แจกงานให้ agent ตัวใหม่ → ตรวจกับของจริง → ส่งงาน → เรียนรู้ · ใช้กับงานได้ทุกสาขา (เอกสาร · หาข้อมูล · ร้านค้า · เงิน · โค้ด) · plugin สาขาอื่นต่อยอดจากตัวนี้ทาง `dependencies`
 
 ### มีอะไรบ้าง
-**3 agents · 36 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
+**3 agents · 37 skills · 0 commands** · 6 playbooks · hook 1 ชุด (skill เอกสารออกแบบ สไลด์ รูป อยู่ใน `software-company` · ภาพ AI ใน `graphic-design` · ประชุมใน `personal-life`)
 
 - **agent กลาง:** brainstormer (คิดทางเลือก) · reviewer (ตรวจด้วยสายตาใหม่) · learning-reviewer (ทบทวนวิธีทำงาน)
 - **playbook:** research · document · review · unattended-run · learn-from-session · pickup-and-pause (รับงานต่อ · หยุดงาน)

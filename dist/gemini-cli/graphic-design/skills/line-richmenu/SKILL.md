@@ -59,7 +59,7 @@ A ready JSON for a 6-button full menu with the grid coordinates: [references/ric
 ## 5. Workflow
 
 1. Pick the 6 main customer tasks from chat history.
-2. Designer brief — size, grid, safe margins, brand colours, text per cell.
+2. Designer brief — size, grid, safe margins, brand colours, text per cell · no brand yet → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `app` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้.
 3. Export ≤ 1 MB (PNG-8 or JPEG quality ~80).
 4. Validate → create → upload → set default → test on iOS and Android.
 5. Text fallback: the greeting message lists the same 6 keywords.

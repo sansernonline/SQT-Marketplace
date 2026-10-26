@@ -9,6 +9,7 @@ Motion is emphasis. Everything else is decoration. Most amateur motion has 3 fau
 
 ## Workflow
 
+0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `motion` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
 1. **Name the purpose** of each movement — reveal, connect, emphasise, transition. No purpose, no motion. A background must carry meaning too: on the AI4BA site, 1 dot = 1 registered person, the path = the agenda, and the camera flies to the item you hover. A background that only decorates is cut
 2. **Pick 1 entrance and 1 exit style** for the whole piece (e.g. fade-up in, fade out)
 3. **Set durations** from the timing table

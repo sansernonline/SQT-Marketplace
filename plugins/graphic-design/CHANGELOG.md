@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.15.0 — 2026-10-27
+
+- skill 10 ตัว (`brand-kit` · `campaign-set` · `social-formats` · `youtube-thumbnail` · `icon-design` · `image-generation` · `style-consistency` · `line-richmenu` · `motion-basics` · `brief-to-image`) และ agent `art-director` `brand-keeper` `social-creator` `image-artist`: ขั้นแรกค้นต้นแบบสดตาม `design-references` (superuser) แล้วถอดสีจากงานที่เลือก
+
 ## 0.14.0 — 2026-10-27
 
 - `icon-design`: แนวที่โค้ดวาดเองไม่ถึง (มีมิติ · หลายสี · 3 มิติ · ภาพประกอบ) หยิบชุดที่นักออกแบบทำไว้มาปรับแทน · `references/asset-sets.md` ชุดและใบอนุญาต 20 ชุด (Fluent color · IconPark · Fluent Emoji · Phosphor · Open Peeps ฯลฯ อ่าน LICENSE 2026-10-27) · `scripts/recolor_icon.py` เปลี่ยนเฉดสีให้เป็นของแบรนด์โดยคงแสงเงาของนักออกแบบ (self-test 5/5)

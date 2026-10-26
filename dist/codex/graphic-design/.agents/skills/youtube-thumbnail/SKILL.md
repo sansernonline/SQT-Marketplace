@@ -24,6 +24,7 @@ description: Use when a YouTube video needs a thumbnail (ภาพปกคล�
 | ภาพคนหรือฉากที่ต้องสร้างด้วย AI | `brief-to-image` · `image-generation` |
 | ปกทั้งซีรีส์ต้องหน้าตาเป็นชุด | `style-consistency` · สีและฟอนต์จาก `brand-kit` |
 | ตรวจความสวยก่อนส่ง | `design-review` |
+| เริ่มออกแบบปกที่ยังไม่มีแนว | **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `social` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ |
 
 ## ขั้นตอน
 

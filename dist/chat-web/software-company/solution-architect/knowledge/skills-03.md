@@ -81,7 +81,7 @@ What are you showing?
 
 ### สี
 
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
+ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ค้นต้นแบบตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · ค้นสดไม่ได้จึงใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
 
 ### Reusable snippets
 
@@ -449,7 +449,8 @@ skill นี้คือ house style เดียวของรูปที่�
 1. `doc-theme` ในเอกสารของโปรเจกต์ (ดู `polished-document-style` หัวข้อ "ธีมของเอกสาร")
 2. สีแบรนด์ที่โปรเจกต์ใช้จริง — ตัวแปรสีหลักในโค้ด (`--primary` · `--brand` · `--accent` ใน CSS · `primary` ใน Tailwind / ธีม UI · `colorPrimary` ในแอปมือถือ) · ชุดแบรนด์ (brand kit) · สีหลักในโลโก้
    ดูสีพื้นจากที่เดียวกันด้วย (`--background` · `--bg` · `background` ใน Tailwind · โหมดมืดหรือสว่างที่แอปใช้เป็นหลัก) เพราะรูปและเด็คใช้สีพื้นตามดีไซน์ของโปรเจกต์
-3. ยังไม่มีเลย → ใช้ชุดสีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
+3. ยังไม่มีเลย → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `document` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
+4. ค้นสดไม่ได้ → ใช้ชุดสีประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` ไว้ในรายงาน แล้วทำต่อ ไม่หยุดถาม · เสนอโทนจาก [references/colour-by-domain.md](references/colour-by-domain.md) ไว้ในรายงานให้เลือกทีหลัง
 
 เจอสีจากข้อ 2 แล้วแต่ยังไม่มี `doc-theme` ให้ประกาศ `doc-theme` ด้วยค่านั้น เพื่อให้รูป เอกสาร และสไลด์ของโปรเจกต์ใช้สีเดียวกัน
 
