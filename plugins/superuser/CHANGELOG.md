@@ -1,7 +1,9 @@
 # Changelog — superuser
 
-## Unreleased
+## 3.3.0 — 2026-10-26
 
+- repo SQT-Marketplace: `.claude/` อยู่ใน `.gitignore` และเอาไฟล์ทีม 7 ไฟล์ออกจาก git (ไฟล์ในเครื่องยังอยู่) ตามที่ผู้ใช้เลือก · `.claude-plugin/` ยังอยู่ใน git เพราะเป็นตัว marketplace · `AGENTS.md` บอกให้อ่าน CONTEXT จากโฟลเดอร์หลัก · **ก่อน `git pull` ในโฟลเดอร์หลักครั้งแรกหลังรุ่นนี้ ให้คัดลอก `.claude/superuser/` ไปไว้ใน `_to_delete/` ก่อน** เพราะ pull จะลบไฟล์ที่เลิก track ออกจากเครื่อง แล้วค่อยคัดลอกกลับ
+- skill ใหม่ `workspace-setup` + `scripts/setup.mjs`: ignore `.claude/` และ `.claude-plugin/` (ยกเว้นโปรเจกต์ที่เป็น plugin หรือ marketplace เอง) · กฎอนุญาต `gh pr merge` · `git branch -d` · `git push origin --delete` · `git worktree remove` ใน `.claude/settings.local.json` · ติดตั้ง `~/.claude/CLAUDE.md` รุ่นล่าสุดโดยสำรองของเดิม · agent ตรวจและแก้ `.gitignore` เอง ส่วนสิทธิ์และกฎประจำตัวผู้ใช้กดรันบรรทัดเดียว (ระบบตรวจสิทธิ์ไม่ให้ agent แก้สิทธิ์ของตัวเอง) · self-test 5/5 · ขั้น merge ให้จบในรอบเดียวและห้ามซ้อน PR
 - validator: ตารางวันหมดอายุของข้อเท็จจริง `scripts/check/expiry.json` (16 แถวจาก 4 plugin) · เตือนเมื่อเลยวันหรือเหลือไม่ถึง 30 วันตามวันที่ของเครื่อง · ล้มเมื่อไฟล์ที่อ้างไม่มี · self-test 27/27
 - หน้า README ของแผนผัง plugin บอกว่าตัวเลข skill รวมของกลางจาก superuser กี่ตัว (เดิมขึ้น "skill 49" โดยไม่บอกที่มา)
 - รวมบทเรียน 2026-10-25 (3 ข้อจาก `learn/2026-10-25-all-fixes.md` ที่ผู้ใช้รับ ทุกข้อมีกรณีทดสอบจากเหตุการณ์จริง):

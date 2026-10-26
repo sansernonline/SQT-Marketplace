@@ -369,6 +369,7 @@
     "tax-vat-th": "เดือนนี้ต้องยื่นอะไร: VAT · หัก ณ ที่จ่าย · ค่าปรับ (ภ.พ.30 · ภ.ง.ด.3 · 53)",
     "tech-radar": "ติดตามการเปลี่ยนแปลงของเครื่องมือรายสัปดาห์จาก release notes ทางการ",
     "technical-signals": "กราฟบอกอะไร ตอนนี้เข้าได้ไหม RSI · MACD · volume หมายถึงอะไร",
+    "workspace-setup": "ตั้งโปรเจกต์ให้ agent ทำงานจนจบ: ignore .claude และ .claude-plugin · สิทธิ์ merge และลบ branch · กฎประจำตัวใน ~/.claude/CLAUDE.md",
     "temp-file-discipline": "ไฟล์ชั่วคราวทั้งหมดไปอยู่ใน _to_delete/ ไม่ปนกับงานจริง",
     "test-case-template": "เขียน test case และแผนทดสอบฟีเจอร์จาก acceptance criteria",
     "test-design": "ทำ test case ของฟีเจอร์ด้วย qa-tester",

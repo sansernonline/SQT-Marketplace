@@ -12,7 +12,7 @@
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 19 | 6 | 9 | 105 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 158 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 95 | 29 | 17 | 790 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 34 | 0 | 7 | 101 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 35 | 0 | 7 | 103 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 7 | 10 | 79 |
 
 ## โครงของทุก plugin
@@ -73,6 +73,7 @@ plugins/<plugin>/
 | skill | `targeted-fix` | มีคนบอกว่าผิด → แก้ให้เล็กที่สุดตรงจุด | — |
 | skill | `temp-file-discipline` | ไฟล์ชั่วคราวทั้งหมดไปอยู่ใน _to_delete/ ไม่ปนกับงานจริง | — |
 | skill | `translate-th-en` | แปลไทย-อังกฤษทั้ง 2 ทาง (เอกสาร · ข้อความหน้าจอ · แชต) ด้วย glossary ต่อโปรเจกต์และไฟล์คู่แก้พร้อมกัน | — |
+| skill | `workspace-setup` | ตั้งโปรเจกต์ให้ agent ทำงานจนจบ: ignore .claude และ .claude-plugin · สิทธิ์ merge และลบ branch · กฎประจำตัวใน ~/.claude/CLAUDE.md | `scripts/setup.mjs` |
 | agent | `brainstormer` | คิดทางเลือกเมื่องานคลุมเครือ | `agents/brainstormer.md` |
 | agent | `learning-reviewer` | ทบทวนวิธีทำงานและเสนอแก้ | `agents/learning-reviewer.md` |
 | agent | `reviewer` | ตรวจงานด้วยสายตาใหม่ | `agents/reviewer.md` |
@@ -126,9 +127,9 @@ plugins/<plugin>/
 | `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
 | `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (33 + ของกลาง 33)
+### skill (33 + ของกลาง 34)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -225,9 +226,9 @@ plugins/<plugin>/
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 | `agents/video-editor.md` | ตัดต่อ ใส่ซับ และส่งออกวิดีโอ |
 
-### skill (19 + ของกลาง 33)
+### skill (19 + ของกลาง 34)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -296,9 +297,9 @@ plugins/<plugin>/
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (42 + ของกลาง 33)
+### skill (42 + ของกลาง 34)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -450,9 +451,9 @@ plugins/<plugin>/
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (95 + ของกลาง 33)
+### skill (95 + ของกลาง 34)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 **หลักการทำงาน**
 
@@ -679,9 +680,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (1 + ของกลาง 33)
+### skill (1 + ของกลาง 34)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 **แกนทีม · ส่งต่องาน**
 
@@ -717,9 +718,9 @@ plugins/<plugin>/
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 
-### skill (23 + ของกลาง 33)
+### skill (23 + ของกลาง 34)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|

@@ -4,7 +4,7 @@
 
 ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย
 
-agent 8 · skill 66 (ของ plugin 32 · ของกลางจาก superuser 34) · คำสั่ง 14 · playbook 18 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`superuser`](../superuser/README.md) · [`personal-life`](../personal-life/README.md)
+agent 8 · skill 67 (ของ plugin 32 · ของกลางจาก superuser 35) · คำสั่ง 14 · playbook 18 · ส่งงานต่อให้ [`graphic-design`](../graphic-design/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`superuser`](../superuser/README.md) · [`personal-life`](../personal-life/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/e-commerce/`](../../../plugins/e-commerce/)
 
