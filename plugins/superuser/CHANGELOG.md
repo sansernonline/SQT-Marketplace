@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.6.3 — 2026-10-26
+
+- `workspace-setup`: กฎสิทธิ์เปลี่ยนจาก `gh pr merge` และ `git push origin --delete` เป็น `git push` และ `gh pr` ที่กว้างกว่า พร้อม deny force push 3 แบบ (โปรเจกต์ที่ตั้งไว้ด้วยรายการเดิมจะถูกรายงานว่าขาด รัน `--permissions` ซ้ำได้ กฎเดิมไม่ถูกลบ) · ตัวเลือก `--user` เขียนลง `~/.claude/settings.json` ใช้ได้ทุกโปรเจกต์ · กฎระดับผู้ใช้นับว่าครบ ไม่เพิ่มซ้ำในโปรเจกต์ · agent เพิ่มสิทธิ์เองได้เฉพาะเมื่อผู้ใช้สั่งในแชตรอบนั้น · self-test 6/6
+
 ## 3.6.2 — 2026-10-26
 
 - hook router และ `triggers.md`: แถวของ skill ใหม่ 10 ตัวใน trading-finance · personal-life · graphic-design (ประโยคจริง 5 แบบต่อตัวจับได้ ประโยคไม่เกี่ยวไม่จับ)
