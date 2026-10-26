@@ -185,8 +185,8 @@ getWorld(): รอ renderer หนักไม่เกิน 4 วินาท�
 | เรื่อง | ที่มา |
 |---|---|
 | โครง · recipe · กฎ · anti-pattern | เว็บ ai4ba.ai-cie.com (index.html · css/styles.css · js/app.js · js/fx.js · js/neural.js · js/net3d.js) อ่านโค้ดสาธารณะ · ไม่มี licence ระบุ · vendor/ ที่เว็บใช้ไม่ได้ดาวน์โหลด (ยังไม่ได้ตรวจ) |
-| GSAP ฟรี | README gsap@3.15.0 บน cdn.jsdelivr.net และ gsap.com/pricing "Now Free!" — ฟรีรวมทุก plugin ใช้เชิงพาณิชย์ได้ · ฟรีตั้งแต่ 3.13.0 (npm 2025-04-30) · ข้อความ licence ฉบับเต็มและข้อยกเว้นคู่แข่ง Webflow (ยังไม่ได้ตรวจ) |
-| GSAP CDN | cdnjs.com/libraries/gsap 3.15.0 (2026-04-13) · `gsap.min.js` · plugin โฟลเดอร์เดียวกัน (`Observer.min.js` `ScrollTrigger.min.js` `SplitText.min.js` — path บน cdnjs ยังไม่ได้ตรวจ) |
+| GSAP ฟรี | README gsap@3.15.0 บน cdn.jsdelivr.net และ gsap.com/pricing "Now Free!" — ฟรีรวมทุก plugin ใช้เชิงพาณิชย์ได้ · ฟรีตั้งแต่ 3.13.0 (npm 2025-04-30) · licence ฉบับเต็ม (Standard "No Charge" GSAP License · มีผล 2025-04-30 · แก้ล่าสุด 2025-05-30) อ่านจากสำเนา web.archive.org/web/20261017164627/https://gsap.com/standard-license เพราะ gsap.com ตอบหน้าปิดปรับปรุงบางหน้า · ตัวบทห้ามเฉพาะ "Prohibited Uses" คือใช้ในเครื่องมือสร้างแอนิเมชันภาพแบบไม่เขียนโค้ดที่แข่งกับ Webflow · คำอธิบายสั้นบนหน้าเดียวกันยังเขียนว่าห้ามเก็บเงินผู้ใช้ปลายทาง ซึ่งขัดกับตัวบทและหน้า pricing จึงยึดตัวบท · ตรวจ 2026-10-26 · npm gsap@3.15.0 ระบุ license ชี้ gsap.com/standard-license และไม่มีไฟล์ LICENSE ในแพ็กเกจ |
+| GSAP CDN | cdnjs.com/libraries/gsap 3.15.0 (2026-04-13) · `gsap.min.js` · plugin โฟลเดอร์เดียวกัน (`Observer.min.js` `ScrollTrigger.min.js` `SplitText.min.js` — ตรวจ 2026-10-26: ทั้ง 4 ไฟล์ตอบ HTTP 200 ที่ `cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/<ชื่อ>.min.js` · api.cdnjs.com/libraries/gsap ระบุ version 3.15.0 และ licence "Standard 'No Charge' GreenSock License") |
 | CSS scroll-driven | developer.mozilla.org animation-timeline · drweb.de |
 | View Transitions | web.dev/blog/same-document-view-transitions-are-now-baseline-newly-available (2025-10-16) |
 | `@starting-style` · scroll-snap | developer.mozilla.org/@starting-style · caniuse.com/css-snappoints |
