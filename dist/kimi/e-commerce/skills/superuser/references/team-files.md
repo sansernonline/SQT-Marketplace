@@ -6,7 +6,7 @@
 
 รากโปรเจกต์เก็บแค่โฟลเดอร์มาตรฐาน (`ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · โฟลเดอร์โค้ด) ไฟล์ทำงานของ SuperUser จึงอยู่ใน `.claude/superuser/` · หัวหน้าทีมเขียนคนเดียว (ยกเว้น `handoff/<id>.md` ที่ลูกทีมต่อท้ายใบส่งงานของตัวเองได้)
 
-**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
+**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
 
 | ที่ | เก็บอะไร | กติกา |
 |---|---|---|

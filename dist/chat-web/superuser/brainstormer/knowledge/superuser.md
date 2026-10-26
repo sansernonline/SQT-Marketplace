@@ -25,7 +25,7 @@ Use when any task spans several steps or the user says superuser with no domain 
 6. **ไม่แต่งข้อมูลของผู้ใช้** — ตัวเลข ชื่อ วันที่ งบ ที่ไม่รู้ ใส่ `(รอยืนยัน)` แล้วทำต่อ
 7. **งานเสี่ยงหรือย้อนไม่ได้ หัวหน้าทำเองหรือตรวจเองก่อนปล่อย** ไม่ให้ลูกทีม effort ต่ำทำ (รายการ "รออนุมัติ" ใน `autonomy`)
 8. **จบงานด้วยสรุปสั้น (หัวข้อ 7) และเทียบคาดกับจริง** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
-9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง · ไม่ commit ลง branch หลักโดยไม่ถาม · ต้นฉบับของกติกานี้อยู่ใน `team-files`
+9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · ไม่ commit ลง branch หลักโดยไม่ถาม · ต้นฉบับของกติกานี้อยู่ใน `team-files`
    - งานใน git repo แก้บน branch ของงาน ไม่แก้บน branch หลัก · repo ที่มี AI หรือ session อื่นแก้พร้อมกัน → **1 ตัว 1 worktree** และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ (`claude/` · `codex/`) · วิธีและกฎใน [`team-files`](references/team-files.md) หัวข้อ "หลาย AI ใน repo เดียว"
 10. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** และบอกเฉพาะตัวที่เปลี่ยนการตัดสินใจ · ห้ามแก้ไฟล์ skill · agent · playbook เอง (รอผู้ใช้สั่ง "รวมบทเรียน")
 
@@ -733,7 +733,7 @@ Use when any task spans several steps or the user says superuser with no domain 
 
 รากโปรเจกต์เก็บแค่โฟลเดอร์มาตรฐาน (`ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · โฟลเดอร์โค้ด) ไฟล์ทำงานของ SuperUser จึงอยู่ใน `.claude/superuser/` · หัวหน้าทีมเขียนคนเดียว (ยกเว้น `handoff/<id>.md` ที่ลูกทีมต่อท้ายใบส่งงานของตัวเองได้)
 
-**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
+**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
 
 | ที่ | เก็บอะไร | กติกา |
 |---|---|---|
@@ -891,7 +891,7 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | ผู้ใช้แก้เรื่องเดิมซ้ำ / อยากให้ทำแบบที่เขาชอบ / สั่งรวมบทเรียน | `repeated-mistakes-to-checks` / `owner-style-capture` / `session-lessons-to-skills` |
 | เอกสารที่คนเก็บไว้ใช้ (Markdown · Word · PDF) | `polished-document-style` · ตั้งชื่อไฟล์ → `document-naming` · คำย่อเยอะ → `spell-out-abbreviations` · ต้องดูออกแบบมา → `branded-document-design` · Markdown เป็น Word → `markdown-report-docx` (2 ตัวหลังอยู่ใน plugin `software-company`) |
 | เขียนไฟล์ชั่วคราว (ไฟล์ดึงข้อมูล · ตัวอย่าง · สคริปต์ใช้ครั้งเดียว) | `temp-file-discipline` |
-| เริ่มงานในโฟลเดอร์ใหม่ · ผู้ใช้ต้องพิมพ์ `gh pr merge` เอง หรืออยากให้ agent merge และลบ branch เอง · `~/.claude/CLAUDE.md` ไม่มีหรือเป็นรุ่นเก่า | `workspace-setup` (agent ตรวจและแก้ `.gitignore` เอง · สิทธิ์กับกฎประจำตัวให้ผู้ใช้กดรันบรรทัดเดียว) |
+| เริ่มงานในโฟลเดอร์ใหม่ · ผู้ใช้ต้องพิมพ์อนุญาต push · PR · merge ทุกครั้ง หรืออยากให้ agent merge และลบ branch เอง · `~/.claude/CLAUDE.md` ไม่มีหรือเป็นรุ่นเก่า | `workspace-setup` (agent ตรวจและแก้ `.gitignore` เอง · สิทธิ์ agent เพิ่มเองได้เมื่อผู้ใช้สั่งชัดในแชต ไม่งั้นให้ผู้ใช้กดรันบรรทัดเดียว · โปรเจกต์ที่ยังไม่มีนโยบาย git ถามครั้งเดียวว่าให้ทำเองแค่ไหน · กฎประจำตัวให้ผู้ใช้รันเอง) |
 | รูปในเอกสาร (ขั้นตอน · ระบบ · ผัง) / รูปในไฟล์ Markdown | `diagram-figures` / `markdown-visuals` (plugin `software-company`) |
 | สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-company`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-company`) |
 | เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` / `pptx-to-html-deck` (plugin `software-company`) |
