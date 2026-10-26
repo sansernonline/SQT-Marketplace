@@ -40,6 +40,11 @@ TH = {
     "ฟิตเนส": "fitness gym", "กีฬา": "sport", "ดนตรี": "music", "งานแต่ง": "wedding", "ไทย": "thai", "ญี่ปุ่น": "japanese",
     "มินิมอล": "minimal", "หรู": "luxury", "วินเทจ": "vintage", "อบอุ่น": "warm", "สดใส": "vibrant", "ธรรมชาติ": "natural organic",
     "รายงาน": "report", "ใบเสนอราคา": "proposal", "นำเสนอ": "pitch deck", "แดชบอร์ด": "dashboard", "โปสเตอร์": "poster",
+    "จองคิว": "booking appointment", "นัดหมาย": "appointment", "ขอทุน": "fundraising pitch", "ระดมทุน": "fundraising",
+    "สตาร์ทอัพ": "startup", "สตาร์ทอัป": "startup", "ร้านตัดผม": "barber", "ร้านเสริมสวย": "beauty salon", "ส่งของ": "delivery",
+    "ตลาด": "marketplace", "ชุมชน": "community", "องค์กร": "corporate", "โรงงาน": "manufacturing", "เกษตร": "agriculture",
+    "พลังงาน": "energy", "ประชุม": "conference event", "สัมมนา": "seminar event", "งานวิ่ง": "running event", "คอนเสิร์ต": "concert",
+    "เมนู": "menu", "ป้าย": "signage", "นามบัตร": "business card", "ปก": "cover", "โบรชัวร์": "brochure", "แคตตาล็อก": "catalog",
 }
 
 
@@ -118,11 +123,30 @@ def public_url(url):
 
 
 def capture(url, out_png):
+    """จับภาพหน้าเว็บ · ทุก request รวม redirect และไฟล์ย่อยต้องไปเครื่องสาธารณะ ไม่งั้นตัดทิ้ง (กัน SSRF และ DNS rebinding)"""
     from playwright.sync_api import sync_playwright
+    checked = {}
+
+    def guard(route):
+        host = urllib.parse.urlparse(route.request.url).hostname or ""
+        if route.request.url.startswith("data:"):
+            return route.continue_()
+        if host not in checked:
+            checked[host] = public_url(route.request.url)
+        return route.continue_() if checked[host] else route.abort()
+
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         t = b.new_page(viewport={"width": 1440, "height": 900})
-        t.goto(url, timeout=45000, wait_until="load")
+        t.route("**/*", guard)
+        try:
+            t.goto(url, timeout=45000, wait_until="load")
+        except Exception as e:  # เว็บล่ม หมดเวลา หรือ redirect ไปที่อยู่ภายในแล้วถูกตัด
+            b.close()
+            raise ValueError(f"เปิด {url} ไม่ได้ ({str(e).splitlines()[0][:120]}) · ถ้าเว็บพาไปที่อยู่ภายในเครื่องจะถูกตัดโดยตั้งใจ")
+        if not public_url(t.url):
+            b.close()
+            raise ValueError(f"{url} พาไปที่อยู่ที่ไม่ใช่เว็บสาธารณะ ({t.url}) จึงไม่จับภาพ")
         t.wait_for_timeout(1500)
         text = (t.inner_text("body") or "")[:3000].lower()
         t.screenshot(path=str(out_png), full_page=True)
@@ -209,7 +233,11 @@ def palette_from_image(path, k=8):
     """แบ่งสีละเอียด 32 กลุ่มก่อน แล้วรวมกลุ่มที่ใกล้กัน (สีสดพื้นที่น้อยจะไม่ถูกสีพื้นกลืน)
     เก็บ k สีที่ต่างกันจริงเรียงตามพื้นที่ แล้วจัดเป็น 8 หน้าที่พร้อมค่า contrast"""
     from PIL import Image
-    img = Image.open(path).convert("RGB")
+    img = Image.open(path)
+    if img.mode in ("RGBA", "LA", "P"):  # ภาพโปร่งใส วางบนพื้นขาวก่อน ไม่งั้นได้สีที่ซ่อนใต้ส่วนโปร่งใส
+        rgba = img.convert("RGBA")
+        img = Image.alpha_composite(Image.new("RGBA", rgba.size, "#ffffff"), rgba)
+    img = img.convert("RGB")
     img.thumbnail((400, 400))
     q = img.quantize(colors=32, method=Image.Quantize.MAXCOVERAGE)
     pal, counts = q.getpalette(), sorted(q.getcolors(), reverse=True)
@@ -225,7 +253,14 @@ def palette_from_image(path, k=8):
     merged.sort(key=lambda m: m[1], reverse=True)
     cols = [(h, a) for h, a in merged if a >= 0.003][:k]
     r = roles(cols)
-    return {"colors": cols, "roles": r, "text_contrast": round(contrast(r["text"], r["bg"]), 1),
+    if len(cols) < 2:
+        warning = "ภาพมีสีเดียว สีอื่นทั้งหมดสร้างจากการผสม ไม่ได้ถอดจากงานจริง · ใช้ภาพงานที่มีหลายสี"
+    elif sum(a for h, a in cols if sat(h) <= 30) >= 0.97:
+        warning = ("ได้สีเทาเกือบทั้งหมด อาจติดหน้ากันบอท แบนเนอร์คุกกี้ หรือหน้ายังโหลดไม่ขึ้น · "
+                   "เปิดภาพดูก่อนใช้ หรือจับภาพหน้าจอเองแล้วส่งไฟล์ภาพ")
+    else:
+        warning = ""
+    return {"colors": cols, "roles": r, "warning": warning, "text_contrast": round(contrast(r["text"], r["bg"]), 1),
             "muted_contrast": round(contrast(r["text_muted"], r["bg"]), 1),
             "primary_contrast": round(contrast(r["primary"], r["bg"]), 1)}
 
@@ -247,9 +282,9 @@ def fallback(query, n=8):
     words = keywords(query).lower().split()
     with (SITES.parent / "palettes-fallback.csv").open(encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
-    scored = sorted(((sum(w in r["keywords"] for w in words), r["source"] == "wada", r) for r in rows),
-                    key=lambda x: (x[0], x[1]), reverse=True)
-    return [r for s, _, r in scored[:n] if s]
+    tokens = lambda s: set(s.lower().replace("·", " ").split())  # นับคำเต็ม ไม่นับคำที่ซ่อนในคำอื่น
+    scored = sorted(((len(set(words) & tokens(r["keywords"])), r) for r in rows), key=lambda x: x[0], reverse=True)
+    return [r for s, r in scored[:n] if s]
 
 
 def board(kind, query, refs, out):
@@ -335,6 +370,8 @@ def main():
                 print(" · ".join(str(v) for v in r.values()))
         elif a.cmd == "palette-from":
             p = palette_from(a.args[0], a.out)
+            if p["warning"]:
+                print("เตือน: " + p["warning"])
             print("สีที่ถอดได้ (สัดส่วนพื้นที่): " + " · ".join(f"{c} {x:.0%}" for c, x in p["colors"]))
             for k, c in p["roles"].items():
                 print(f"  {k:11} {c}  {ROLE_TH[k]}")
