@@ -23,7 +23,8 @@ const missing = [];
 
 // ── อ่านของจริง ─────────────────────────────────────────────────────────
 
-const list = (p) => (existsSync(p) ? readdirSync(p).filter((n) => !n.startsWith(".")).sort() : []);
+// ไฟล์ที่เครื่องสร้างเองตอนรัน (cache ของ Python) ไม่อยู่ใน git · ถ้านับ แผนผังในเครื่องจะไม่ตรงกับ CI
+const list = (p) => (existsSync(p) ? readdirSync(p).filter((n) => !n.startsWith(".") && n !== "__pycache__" && !n.endsWith(".pyc")).sort() : []);
 
 function walk(dir, base = "") {
   return list(dir).flatMap((name) => {
