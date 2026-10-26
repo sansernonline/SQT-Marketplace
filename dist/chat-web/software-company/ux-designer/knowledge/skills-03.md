@@ -1,3 +1,356 @@
+# skill: web-app-design
+
+Use when designing or building a web app UI or mockup (dashboard, admin panel, internal tool, SaaS).
+
+# Web App Design
+
+> **กฎข้อเดียว:** สีทุกสีในโค้ดคอมโพเนนต์ต้องมาจาก token
+> ถ้า `#hex` โผล่นอกไฟล์ token แปลว่าระบบดีไซน์เริ่มพังแล้ว และพังแบบเงียบ ๆ
+
+## เมื่อไหร่ใช้ skill นี้
+
+- ทำหน้าจอเว็บแอป: แดชบอร์ด, admin panel, เครื่องมือภายใน, SaaS
+- ต้องการให้ทุกหน้าที่คนละคนทำออกมาหน้าตาเป็นชุดเดียวกัน
+- ต้องรองรับหลายแบรนด์/หลายธีมโดยไม่แตะโค้ดคอมโพเนนต์
+- ใช้ได้กับ Angular / React / Vue / Svelte / HTML เปล่า — CSS ล้วน ไม่ผูกเฟรมเวิร์ก
+
+## เมื่อไหร่ **ไม่** ใช้
+
+- แอปเดสก์ท็อป Windows ให้ใช้ `windows-app-design`
+- เอกสาร .docx/.pptx ให้ใช้ `branded-document-design`
+- เว็บไซต์การตลาด/landing page เพราะระบบนี้ออกแบบมาสำหรับ **แอป** ที่ต้องอัดข้อมูล
+  ตัวหนังสือฐาน 13px จึงเล็กเกินไปสำหรับหน้าขาย
+
+---
+
+## 1 · ลำดับการทำงาน — mockup ก่อนเสมอ
+
+> **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ appstrack** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่ · appstrack คือพื้น ไม่ใช่หน้าตาสุดท้าย
+
+```
+0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (ค้นต้นแบบตาม design-references ประเภท web หรือ dashboard แล้วถอดสี · หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ appstrack.css ในบล็อก token
+   หน้าที่มีรูป (hero · สินค้า · บริการ · ทีม) → `graphic-design:image-artist` หารูปตาม image-generation ลง public/images/ ก่อนขั้น 2 · ไม่วาดรูปทรงพื้นฐานแทนของจริงเอง
+1. คัดลอก assets/mockup-template.html + assets/appstrack.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
+2. แก้เนื้อหาเป็นหน้าจริงที่จะทำ (ยังไม่แตะโค้ดแอป)
+3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
+   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900
+   python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 420
+4. เปิดภาพดูจริงทุกความกว้าง แก้จนพอใจ แล้วค่อยให้คนอื่นรีวิว
+5. อนุมัติแล้วจึงแปลงเป็นคอมโพเนนต์ — copy คลาสเดิม ไม่เขียน CSS ใหม่
+6. ต่อ scripts/check-design-tokens.mjs เข้า CI ตั้งแต่วันแรก
+```
+
+**mockup ส่งมอบเป็นไฟล์เดียว** (`mockup/<รหัส>-mockup.html` ทุกหน้าจอเป็น section) → ฝังเนื้อ `appstrack.css` ลงใน `<style>` แทน `<link>` ก่อนส่ง · ตรวจ token ด้วยไฟล์ mockup เป็นไฟล์ token เอง: `node scripts/check-design-tokens.mjs mockup/<รหัส>-mockup.html mockup --ext html`
+
+ข้อ 6 สำคัญกว่าที่คิด เพราะระบบดีไซน์ที่ไม่มีตัวตรวจบังคับจะค่อย ๆ เพี้ยนจาก
+"ขอ hardcode แค่ครั้งเดียว" ภายใน 3 สัปดาห์ และไม่มีใครรู้ตัวจนเปลี่ยนธีมแล้วพัง
+
+---
+
+## 2 · Design tokens
+
+> **สีมาจากเนื้องาน — ไม่หยุดถาม**
+> ถ้าลูกค้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ใช้ค่าประจำบ้าน `#2A78D6` — ในหน้าจอใช้เฉดเข้ม `#226CC6` เป็น `--brand` (ใน `assets/appstrack.css`) เพราะตัวขาวบน `#2A78D6` ได้แค่ 4.42:1 เขียน `(รอยืนยัน)` แล้วทำต่อ และเสนอโทนจากเนื้องานไว้ในรายงานให้เลือกทีหลัง
+> (การแพทย์เขียว · การเงินน้ำเงินเข้ม · อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า ·
+> ตารางเต็มอยู่ใน `colour-by-domain` (`diagram-figures` → `references/colour-by-domain.md`)
+> สีอยู่ใน token ที่เดียว ผู้ใช้เลือกโทนแล้วแก้ค่าเดียวทั้ง mockup
+> **สีแบรนด์ต้องผ่าน 4.5:1 ทั้งตัวขาวบนพื้นแบรนด์ และสีแบรนด์บนพื้นหน้า** — สีลูกค้าที่สว่างเกิน ให้ทำเฉดเข้มขึ้นสำหรับ `--brand` แล้วเก็บสีเดิมไว้ที่โลโก้และกราฟ
+
+91 token อยู่ในบล็อก `:root` ของ `assets/appstrack.css` ส่วนรายละเอียดครบอยู่ใน
+**`references/tokens.md`** โครงที่ต้องจำได้มีดังนี้ (ค่าสีมาจากข้อบนนี้ ไม่ใช่จากตาราง):
+
+| | หน้าที่ | ได้มาจาก |
+|---|---|---|
+| `--brand` / `--brand-2` | สีหลักทึบ (ปุ่มหลัก · ลิงก์ · แถบเลือก · ข้อมูล) · สีข้อมูลชุดที่ 2 | สีแบรนด์ หรือค่าประจำบ้าน `#2A78D6` → เฉดเข้ม `#226CC6` `(รอยืนยัน)` + เพื่อนบ้านบนวงล้อสี · ไม่มี gradient |
+| `--brand-50` / `--brand-100` | พื้นอ่อนของ avatar · mention · วงแหวนโฟกัส · ราง spinner | สีหลักผสมขาว 96% / 90% |
+| พื้นหน้า / การ์ด | พื้นหลังเทาอ่อนมาก / การ์ดขาว (การ์ดแยกด้วยเส้น + พื้นต่างเฉด ไม่มีเงา) | เทากลาง ไม่ย้อมสีแบรนด์ |
+| ข้อความ 4 ระดับ | หัวข้อ · เนื้อ · รอง · จาง | เทาเข้ม → เทากลาง · **ทุกระดับ ≥ 4.5:1 บนขาวและบนพื้นหน้า** |
+| เส้น 2 ระดับ | เส้นในการ์ด (อ่อนกว่า) · ขอบ input | เทาอ่อนมาก |
+| มุม | `14px` การ์ด · `9px` ปุ่ม/input · `99px` pill | **ค่าคงที่ ไม่เปลี่ยนตามแบรนด์** |
+| เลย์เอาต์ | sidebar `232px` · topbar `56px` · เนื้อหา `1160px` | **ค่าคงที่ ไม่เปลี่ยนตามแบรนด์** |
+
+**เปลี่ยนแบรนด์ทั้งแอป = แก้ 4 ค่า** (`--brand --brand-2 --brand-50 --brand-100`)
+ที่เหลือคำนวณหรืออ้างอิงจาก 4 ค่านี้ทั้งหมด ถ้าต้องแก้ค่าที่ 5 แปลว่ามีที่ไหน hardcode อยู่
+
+`assets/appstrack.css` มีชุดสีตัวอย่างมาให้ 5 ชุด (ocean · emerald · sunset · plum · graphite)
+สลับด้วย `body[data-theme]` และ sidebar สว่าง/เข้มด้วย `body[data-side='dark']` (เข้ม = เทาเข้มกลาง ไม่ย้อมสีแบรนด์)
+**ชุดพวกนี้คือตัวอย่างให้ดูว่าระบบรองรับการเปลี่ยนสีได้จริง ไม่ใช่ตัวเลือกที่ต้องเลือกใช้**
+ถ้าเนื้องานไม่เข้ากับทั้ง 5 ชุด ให้สร้างชุดที่ 6 จากสีของงานนั้น
+
+**สีสถานะ (สำเร็จ · เตือน · ผิดพลาด) ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่าน เสมอ
+
+**กรอบแอปเป็นสีกลาง** (ตามความชอบของเจ้าของ และ `ui-craft` ด่านสวย หมายเหตุแพลตฟอร์ม) — sidebar · topbar · เส้นขอบ · ไอคอนเมนู เป็นเทา-ดำ · สีแบรนด์อยู่ที่ข้อมูล ปุ่มหลัก ลิงก์ ขีดเลือกเมนู 3px และโลโก้ · ย้อมกรอบได้เฉพาะเมื่อผู้ใช้สั่ง
+
+---
+
+## 3 · โครงหน้าจอ
+
+```
+┌──────────┬─────────────────────────────────────────────────┐
+│ 232px    │ topbar 56px · พื้นทึบ · sticky                   │
+│ sidebar  ├─────────────────────────────────────────────────┤
+│          │  ชื่อหน้า h1 22px          [ปุ่มรอง] [ปุ่มหลัก]   │
+│ • เมนู   │  คำอธิบาย 12px สีรอง                             │
+│ • เมนู   │                                                 │
+│          │  ┌─ stat-grid: การ์ดตัวเลข auto-fit 190px ─────┐ │
+│  ─────   │  └─────────────────────────────────────────────┘ │
+│ กลุ่มที่2 │  ┌─ card ────────────────┐ ┌─ card ──────────┐  │
+│ • เมนู   │  │ ตาราง / ฟอร์ม          │ │ กิจกรรม / สรุป  │  │
+│          │  └───────────────────────┘ └─────────────────┘  │
+│ ⚙ ตั้งค่า │             ← เนื้อหากว้างสุด 1160px จัดกลาง →     │
+└──────────┴─────────────────────────────────────────────────┘
+```
+
+- **เมนูตั้งค่าอยู่ล่างสุดของ sidebar** (`.foot` มี `margin-top:auto`)
+- **หน้าละ 1 h1** และมีคำอธิบายใต้ h1 เสมอ — หน้าที่ไม่บอกว่าตัวเองทำอะไร = หน้าที่ยังไม่เสร็จ
+- **ปุ่มหลัก 1 ปุ่มต่อหน้า** (`.btn-primary` สีแบรนด์ทึบ ไม่มี gradient ไม่มีเงา) ที่เหลือเป็น `.btn` หรือ `.btn-ghost`
+- **KPI 3–5 ใบ** ถ้าเกินนั้นตัวเลขจะเล็กจนไม่เด่น
+- ตัวเลขทุกตัวที่เรียงเป็นคอลัมน์ต้องมีคลาส `.num` ไม่งั้นหลักไม่ตรง
+
+---
+
+## 4 · คอมโพเนนต์ที่มีให้แล้ว
+
+โครง `.app-shell/.app-sidebar/.app-topbar/.app-main` · การ์ด `.card/.card-head/.card-body` ·
+KPI `.stat-grid > .card.stat` · สถานะ `.pill-*` 7 โทน · ปุ่ม 4 แบบ ·
+ฟอร์ม `.field/.input/.select/.textarea` · ตาราง `.tb-wrap > .tb` ·
+ตัวกรอง `.chips/.tabs` · `.prog` · `.ava` · `.md-html` · `.empty` · `.skeleton` · `.spinner` ·
+`.toasts/.toast` · `.backdrop + .modal` · ยูทิลิตี `.row/.col/.grow/.ellipsis/.num`
+
+รายการเต็มพร้อมคำอธิบายอยู่ท้าย `references/tokens.md`
+
+**ไอคอน:** inline SVG stroke 2 ขนาด 15px ใน sidebar / 14px ในปุ่ม / 11px ใน pill
+ใช้ `stroke="currentColor"` เสมอ แล้วไอคอนจะเปลี่ยนสีตาม state ให้เอง
+
+---
+
+## 5 · ภาษาไทย
+
+- `Inter` ไม่มีอักษรไทย — ต้องมี `Noto Sans Thai` ต่อท้ายใน `--font` เสมอ
+- ระยะบรรทัด 1.6 (เนื้อความ) / 1.85 (`.md-html`) — ไทยต้องการมากกว่าอังกฤษ
+- **ห้าม justify** · **ห้าม `text-transform: uppercase` กับข้อความไทย** (ไม่มีผล แต่
+  `letter-spacing` ที่มากับมันจะดันวรรณยุกต์เพี้ยน) — หัวตารางที่เป็นไทยให้เอา uppercase ออก
+- ปุ่มไทยกว้างกว่าอังกฤษ ~20% อย่า fix ความกว้างปุ่ม
+- ทดสอบด้วยข้อความไทยจริง ไม่ใช่ Lorem ipsum
+
+---
+
+## 6 · ตรวจงาน
+
+```bash
+# 1. ระบบดีไซน์ยังสะอาดอยู่ไหม
+node scripts/check-design-tokens.mjs src/styles.css src/app
+
+# 2. หน้าตายังถูกทุกความกว้างไหม
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 1440
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 900
+python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 420
+```
+
+แล้วเปิดภาพดูจริง ตรวจ:
+
+- [ ] ไม่มีสี hardcode (ตัวตรวจต้องขึ้น ✓)
+- [ ] ที่ 1024px sidebar หดเหลือไอคอน ส่วนที่ 720px กลายเป็น drawer และมีปุ่มเปิด
+- [ ] ตารางกว้างเกินจอเลื่อนเฉพาะในกรอบ **ไม่ใช่ทั้งหน้า** (ลากดูแนวนอนแล้ว sidebar ต้องไม่ขยับ)
+- [ ] สลับครบทั้ง 5 ธีม + sidebar สว่าง/เข้ม แล้วไม่มีข้อความกลืนพื้น
+- [ ] ข้อความไทยไม่ล้นปุ่ม · วรรณยุกต์ไม่ชนสระ
+- [ ] คอนทราสต์ ≥ 4.5:1 ทุกคู่ข้อความกับพื้น รวมตัวขาวบน `--brand` (`--text-faint` บน `--bg` คือจุดที่เฉียดที่สุด 4.65 — ห้ามทำให้จางกว่านี้ · สีแบรนด์ใหม่ต้องวัดก่อนใช้)
+- [ ] เดินด้วย Tab ได้ครบและเห็นวงแหวนโฟกัสทุกจุด
+- [ ] มี empty state ทุกที่ที่รายการอาจว่าง (`.empty`) และ loading ทุกที่ที่ต้องรอ: เนื้อหาใช้โครงร่าง `.skeleton` ในรูปทรงของจริง · `.spinner` ใช้เฉพาะรอสั้น ๆ ในปุ่มหรือข้างข้อความ ไม่วางกลางจอ
+
+---
+
+## 7 · Anti-patterns
+
+- **`#hex` ในไฟล์คอมโพเนนต์** — ต้นเหตุอันดับ 1 ของธีมพัง ให้ตัวตรวจจับไว้
+- **gradient บนปุ่ม chip หรือกราฟ · topbar กระจกฝ้า** — สัญญาณ AI ใน `no-ai-look` และค่าสีบนกราฟต้องคงที่ ใช้ `--brand` และ `--c-*` ทึบ
+- **ย้อมสีแบรนด์ที่ sidebar topbar หรือเส้นขอบ** — กรอบแอปเป็นสีกลาง (ข้อ 2)
+- **เงาใต้การ์ด** — การ์ดนิ่งไม่ได้ลอย แยกด้วยเส้นและพื้นต่างเฉด · `--shadow` สำหรับ dropdown/tooltip · `--shadow-lg` สำหรับ modal/toast เท่านั้น
+- **ปุ่มหลักหลายปุ่มในหน้าเดียว** — ผู้ใช้ไม่รู้ว่าต้องกดอะไร
+- **`overflow-x` ที่ `<body>`** เพื่อแก้ตารางล้น — ต้องแก้ที่ `.tb-wrap`
+- **`alert()` / `confirm()`** — ใช้ `.toast` และ `.modal`
+- **สร้างขนาดตัวอักษรใหม่** นอกสเกล 11/12/13/15/22 (ตรงกับ `ui-craft` ข้อ 2 · เล็กสุด 11 · ≤ 5 ขนาดต่อหน้าจอ)
+- **`.modal` ที่ไม่ตั้ง `position`** — จะจมอยู่ใต้ `.backdrop` แล้วคลิกอะไรไม่ได้เลย
+  (มีคอมเมนต์อธิบายไว้ใน CSS แล้ว อย่าลบ)
+- **ส่ง mockup โดยไม่เคยเรนเดอร์ดู**
+
+---
+
+## 8 · เชื่อมกับ skill อื่น
+
+| ต้องการ | ใช้คู่กับ |
+|---|---|
+| user flow / IA ก่อนลงสี | agent `ux-designer` |
+| แอปเดสก์ท็อป Windows โทนเดียวกัน | `windows-app-design` |
+| เอกสาร spec ของหน้าจอ | `polished-document-style` + `branded-document-design` |
+| ไดอะแกรมประกอบ spec | `markdown-visuals` |
+| กฎระยะห่าง ลำดับสายตา และ 5 สถานะของหน้าจอ | `ui-craft` |
+| ไดอะแกรมสถาปัตยกรรม | `software-diagrams` |
+
+---
+
+## ไม่ให้ดูเหมือน AI ทำ
+
+ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
+
+## ตัวย่อ
+
+เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
+หลังจากนั้นใช้ตัวย่อได้ ดูรายละเอียดใน skill `spell-out-abbreviations`
+
+
+## reference: tokens.md
+
+# Token reference — ระบบดีไซน์เว็บแอปสไตล์ Apps Track
+
+> ระวัง: **ค่าสีในไฟล์นี้เป็นตัวอย่างที่ประกอบครบแล้ว ไม่ใช่ค่ามาตรฐาน**
+> เลือกสีจากเนื้องานก่อนเสมอ (ดูข้อ "สีมาจากเนื้องาน" ใน `SKILL.md`)
+> สิ่งที่ให้ยึดจากไฟล์นี้คือ **รายชื่อ token และหน้าที่ของมัน** ไม่ใช่ค่าสี
+> ส่วนขนาด ระยะ มุม และ breakpoint เป็นค่าคงที่ คัดลอกไปใช้ได้เลย
+
+นิยามทั้งหมดอยู่ใน `assets/appstrack.css` บล็อก `:root`
+**ทุกอย่างใต้บรรทัด `=== base ===` ห้ามมีสีดิบ** เพราะตัวตรวจใช้บรรทัดนั้นเป็นเส้นแบ่ง
+
+## สารบัญ
+
+1. [แบรนด์ — สีทึบ](#แบรนด์--สีทึบ)
+2. [พื้นผิว · เส้น · เงา](#พื้นผิว--เส้น--เงา)
+3. [ตัวอักษร](#ตัวอักษร)
+4. [สีข้อมูล (กราฟ) — ทึบเสมอ](#สีข้อมูล-กราฟ--ทึบเสมอ)
+5. [Pill (สถานะ) — สามค่าเป็นชุด](#pill-สถานะ--สามค่าเป็นชุด)
+6. [เลย์เอาต์](#เลย์เอาต์)
+7. [เปลี่ยนธีม / เปลี่ยนแบรนด์](#เปลี่ยนธีม--เปลี่ยนแบรนด์)
+8. [คลาสคอมโพเนนต์ที่มีให้แล้ว](#คลาสคอมโพเนนต์ที่มีให้แล้ว)
+
+---
+
+## แบรนด์ — สีทึบ
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--brand` | `#226cc6` (เฉดเข้มของค่าประจำบ้าน `#2A78D6`) | ปุ่มหลัก · chip ที่เลือก · แถบ progress · ลิงก์ · แท็บที่เลือก · ขีดเลือกเมนู · เส้นขอบตอนโฟกัส · โลโก้ |
+| `--brand-2` | `#6a5cd6` | สีข้อมูลชุดที่ 2 คู่กับ `--brand` (กราฟ) |
+| `--brand-50` | `#eef4fd` | พื้น avatar · mention · วงแหวนโฟกัส |
+| `--brand-100` | `#dde9fb` | รางของ spinner |
+
+> **ไม่มี gradient** — ปุ่ม chip progress และกราฟใช้ `--brand` ทึบ (`no-ai-look`: ไล่สีม่วง-น้ำเงิน → สีแบรนด์ทึบ 1 สี)
+> **`--brand` ต้องผ่าน 4.5:1** ทั้งตัวขาวบนพื้น brand (`#226cc6` = 5.21) · brand บน `--bg` (4.87) · brand บน `--brand-50` (4.71) — ตรวจ 22 ต.ค. 2569
+
+## พื้นผิว · เส้น · เงา
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--bg` | `#f6f7fb` | พื้นหน้า |
+| `--surface` | `#ffffff` | การ์ด · input · ปุ่มปกติ |
+| `--line` | `#eef0f5` | เส้นในการ์ด · เส้นตาราง |
+| `--line-strong` | `#e4e7ee` | ขอบ input · ขอบปุ่ม |
+| `--skeleton` | `#e4e7ee` | โครงร่างตอนโหลด (`.skeleton`) |
+| `--shadow` | เงา 2 ชั้นบาง | dropdown · tooltip (ของที่ลอยเล็ก ๆ) |
+| `--shadow-lg` | เงา 2 ชั้นลึก | modal · toast · เมนูลอย |
+| `--radius` / `--radius-sm` / `--radius-pill` | `14px` / `9px` / `99px` | การ์ด / ปุ่ม·input / pill·chip |
+| `--ease` | `cubic-bezier(.16, 1, .3, 1)` | ของที่โผล่เข้ามา (dropdown · toast · modal) — พุ่งเร็วแล้วค่อยหยุด (expo-out) |
+| `--ease-io` | `cubic-bezier(.65, 0, .35, 1)` | ของที่ย้ายที่ (เลื่อนแผง · สลับแท็บ) · ระยะเวลาใช้ตาม `ui-craft` ข้อ 7 |
+
+> **การ์ดไม่มีเงา** — การ์ดนิ่งไม่ได้ลอย แยกจากพื้นหน้าด้วยเส้น `--line` + พื้น `--surface` บน `--bg` (`ui-craft` ข้อ 4) · topbar พื้น `--surface` ทึบ ไม่ใช้กระจกฝ้า
+
+**เงา 2 ส่วนจากสีเดียว:** `--shadow` และ `--shadow-lg` ข้างบนเป็นเงา 2 ชั้นสี `rgba(20, 30, 55)` อยู่แล้ว · โปรเจกต์ที่พื้นไม่ใช่เทาฟ้า (ครีม เขียว ธีมมืด) หรือต้องการ 3 ระดับ ให้เพิ่มชุดนี้ใน `:root` ของโปรเจกต์ (ยังไม่อยู่ใน `appstrack.css`)
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--shadow-color` | `223 47% 15%` (ช่อง HSL ของ `rgba(20, 30, 55)`) | สีของเงาทุกชั้น · เปลี่ยน hue ให้ตรงสีพื้น ไม่ใช้ดำโปร่ง |
+| `--elev-1` | `0 1px 2px hsl(var(--shadow-color) / .12), 0 2px 6px hsl(var(--shadow-color) / .06)` | ชิ้นเล็กที่ยกขึ้น: หัวตารางติดบนตอนเลื่อน · ปุ่มเลื่อนของ switch |
+| `--elev-2` | `0 1px 3px hsl(var(--shadow-color) / .14), 0 8px 20px hsl(var(--shadow-color) / .08)` | dropdown · tooltip (แทน `--shadow`) |
+| `--elev-3` | `0 2px 4px hsl(var(--shadow-color) / .12), 0 18px 40px hsl(var(--shadow-color) / .12)` | modal · toast (แทน `--shadow-lg`) |
+
+ชั้นแรกแคบและเข้มกว่า (ใต้ชิ้นที่แสงเข้าไม่ถึง) ชั้นที่ 2 กว้างและจาง (แสงรอบตัว) · ระดับสูงขึ้น ชั้นกว้างเยื้องลงมากขึ้นทิศเดียวกัน · การ์ดนิ่งยังไม่มีเงา · เงาซ้อนหลายชั้น ขอบโปร่ง และภาษาความลึกอื่น → `ui-craft` → `references/depth-and-flourish.md`
+
+**มุมซ้อน:** มุมใน = มุมนอก − ระยะจากขอบนอกถึงของข้างใน (padding) ให้เส้นโค้ง 2 ชั้นขนานกัน เช่น การ์ด `--radius` 14 มีรูปห่างขอบ 6 → รูปโค้ง 8 · ผลเป็น 0 หรือติดลบ (padding ≥ มุมนอก) → ใช้ `--radius-sm` เพราะ 2 มุมห่างกันจนตาไม่เทียบแล้ว · ที่มา vercel-labs/web-interface-guidelines หัวข้อ nested radii (MIT · ตรวจ 2026-10-23)
+
+## ตัวอักษร
+
+| Token | ค่า | ใช้กับ |
+|---|---|---|
+| `--text` | `#333b4a` | หัวข้อ · ตัวเลขตัวชี้วัดหลัก (Key Performance Indicator · KPI) |
+| `--text-body` | `#414957` | เนื้อความ (ค่าเริ่มต้นของ body) |
+| `--text-muted` | `#5f6673` | label · คำอธิบาย · หัวตาราง · empty state · เมนูที่ไม่ active |
+| `--text-faint` | `#69707d` | timestamp · หัวกลุ่มเมนู · ข้อความประกอบ |
+
+contrast (Web Content Accessibility Guidelines (WCAG) 2.2 ระดับ AA ต้อง ≥ 4.5:1 · ตรวจ 22 ต.ค. 2569): `--text-muted` บนขาว 5.78 · บน `--bg` 5.40 · `--text-faint` บนขาว 4.98 · บน `--bg` 4.65 ← ต่ำสุดของระบบ ห้ามทำให้จางกว่านี้
+
+สเกล 5 ขนาด ตรงกับ `ui-craft` ข้อ 2 (lg 22 · md 15 · base 13 · sm 12 · xs 11 · เล็กสุด 11):
+
+| ระดับ | ขนาด | |
+|---|---|---|
+| h1 · ตัวเลข KPI | 22px / 500 · KPI 600 | ชื่อหน้า · KPI ใช้ `letter-spacing:-.4px` + `tabular-nums` |
+| h2 | 15px / 500 | หัวการ์ด · ชื่อแอปใน sidebar |
+| body · h3 | 13px / 1.6 · h3 หนา 500 | เนื้อความ · input · tab · เมนู · หัวข้อย่อย |
+| ปุ่ม · คำอธิบายใต้ h1 | 12px | |
+| label · pill · หัวตาราง · faint | 11px | หัวตารางเป็นตัวพิมพ์ใหญ่ letter-spacing .4px (เฉพาะอังกฤษ) |
+
+ฟอนต์ตั้งต้นใช้ `Inter` + `Noto Sans Thai` — เลือก Inter เพราะอ่านง่ายที่ขนาด 11–13px ในหน้าจอข้อมูลแน่น (`graphic-design` ข้อ 6 ให้บอกเหตุผลเมื่อใช้ฟอนต์ที่คนใช้กันมาก) · โปรเจกต์ที่มีฟอนต์แบรนด์ ใช้ของโปรเจกต์ · **Inter ไม่มีอักษรไทย** ถ้าลืมใส่ Noto Sans Thai
+เบราว์เซอร์จะใช้ฟอนต์ระบบแทน (fallback) ซึ่งความสูงไม่เข้ากัน ตัวไทยจะดูเล็กและเตี้ยกว่าอังกฤษ
+
+ตัวเลขทุกที่ที่เรียงเป็นคอลัมน์ต้องใส่ `.num` (`tabular-nums`) ไม่งั้นหลักจะไม่ตรงกัน
+
+## สีข้อมูล (กราฟ) — ทึบเสมอ
+
+`--c-blue #4a8ee0` · `--c-teal #2bbd8a` · `--c-amber #f0ad2e` · `--c-green #1f9d3f` ·
+`--c-violet #6a5cc9` · `--c-red #e87f7c` · `--c-grey #c8ced9`
+คู่แผน/จริง: `--c-plan #e0eaf8` vs `--c-actual #5a97e0` · เลยกำหนด `--c-late #e58079`
+
+## Pill (สถานะ) — สามค่าเป็นชุด
+
+| โทน | พื้น | ตัวอักษร | เส้น | ใช้กับ |
+|---|---|---|---|---|
+| green | `#e9f7ef` | `#17794a` | `#d6efe1` | เสร็จ · ปกติ |
+| blue | `#eaf2fd` | `#2160ab` | `#d8e7fb` | รีวิว · กำลังดำเนินการ |
+| amber | `#fdf5e4` | `#96660d` | `#f7e9c9` | รอ · เตือน |
+| orange | `#fdefe6` | `#a2541b` | `#f8ddcb` | ใกล้เกินกำหนด |
+| red | `#fdedec` | `#a63a34` | `#f8d9d7` | ค้าง · ผิดพลาด |
+| violet | `#f1eefc` | `#52439f` | `#e3ddf8` | ประเภทพิเศษ |
+| grey | `#f2f4f8` | `#626a7a` | `#e7eaf1` | ปิด · ยังไม่เริ่ม |
+
+## เลย์เอาต์
+
+| Token | ค่า |
+|---|---|
+| `--sidebar-w` | `232px` (≤1024px หด 64px · ≤720px เป็น drawer 240px) |
+| `--topbar-h` | `56px` |
+| `--content-max` | `1160px` |
+
+จุดตัด: **1024px** sidebar หดเหลือไอคอน · **720px** sidebar เป็น drawer (`body.nav-open`)
+ถ้าตารางกว้างเกินจอ ให้เลื่อนแนวนอน**เฉพาะใน `.tb-wrap`** ห้ามให้ทั้งหน้าเลื่อน
+
+## เปลี่ยนธีม / เปลี่ยนแบรนด์
+
+**สลับ accent ทั้งแอป** — `body[data-theme]`: ว่าง (ocean `#226cc6`) · `emerald #097a54` · `sunset #b8501a` · `plum #7a4ee8` · `graphite #0a7a90`
+แต่ละธีมแก้แค่ 4 token (`--brand --brand-2 --brand-50 --brand-100`) · ทุก `--brand` ผ่าน 4.5:1 กับตัวขาว · `--bg` · `--brand-50` ของธีมตัวเอง
+
+**sidebar สว่าง/เข้ม** — `body[data-side='dark']` เปลี่ยน 9 token ของ sidebar · พื้นเข้มคือ `--sidebar-dark-bg #1f2329` เทากลาง ไม่ย้อมสีแบรนด์
+เมนู active: โหมดสว่าง = พื้นเทา `--sidebar-active-bg` + ขีดสีแบรนด์ 3px (`--sidebar-active-bar`) · โหมดเข้ม = แผ่นทับโปร่ง `--on-brand-veil` + ขีดขาว
+กรอบแอปเป็นสีกลาง — สีแบรนด์ในกรอบมีได้แค่ขีดเลือกกับโลโก้
+
+**แบรนด์ลูกค้าใหม่** ให้คัดลอกบล็อก `body[data-theme='…']` แล้วใส่ 4 ค่าของลูกค้า (สีลูกค้าสว่างเกิน → ใช้เฉดเข้มที่ผ่าน 4.5:1 เป็น `--brand` เก็บสีเดิมไว้ที่โลโก้และกราฟ)
+ไม่ต้องแตะคอมโพเนนต์แม้แต่บรรทัดเดียว
+
+## คลาสคอมโพเนนต์ที่มีให้แล้ว
+
+| กลุ่ม | คลาส |
+|---|---|
+| โครง | `.app-shell` `.app-sidebar` `.nav-link(.on)` `.app-topbar` `.app-main > .inner` `.page-head` |
+| การ์ด | `.card` `.card-head` `.card-body` |
+| KPI | `.stat-grid` `.card.stat` (`.label` `.value` `.foot`) |
+| สถานะ | `.pill.pill-green/blue/amber/orange/red/violet/grey` |
+| ปุ่ม | `.btn` `.btn-primary` `.btn-ghost` `.btn-danger` `.btn-sm` |
+| ฟอร์ม | `.field > label` `.input` `.select` `.textarea` `.err` |
+| ตาราง | `.tb-wrap > .tb` (`.right`) |
+| ตัวกรอง | `.chips > .chip(.on)` · `.tabs > .tab(.on)` |
+| อื่น | `.prog > i` `.ava(.ava-lg)` `.md-html` `.empty` `.skeleton(.lg)` (โหลดเนื้อหา) `.spinner` (รอสั้น ๆ ในปุ่ม) `.toasts > .toast(.ok/.err)` `.backdrop + .modal` |
+| ยูทิลิตี | `.row` `.row-between` `.col` `.grow` `.ellipsis` `.wrap` `.mt-*` `.mb-*` `.gap-*` `.num` `.muted` `.faint` |
+
+
+---
+
 # skill: mobile-app-design
 
 Use when designing or building a phone app UI or mockup (PWA, React Native, Flutter). Not desktop.
@@ -27,7 +380,7 @@ Use when designing or building a phone app UI or mockup (PWA, React Native, Flut
 > **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ speakgo** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่ · speakgo คือพื้น ไม่ใช่หน้าตาสุดท้าย
 
 ```
-0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ speakgo.css ในบล็อก token
+0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (ค้นต้นแบบตาม design-references ประเภท app แล้วถอดสี · หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ speakgo.css ในบล็อก token
 1. คัดลอก assets/mockup-template.html + assets/speakgo.css ไปไว้คู่กัน (หน้าตา: assets/mockup-template-preview.webp)
 2. แก้เนื้อหาให้เป็นหน้าจริง (ยังไม่แตะโค้ดแอป)
 3. python scripts/screenshot.py mockup/<รหัส>-mockup.html _to_delete/screenshots/ --width 390 --height 844   # iPhone
@@ -484,7 +837,7 @@ Use when building a desktop app or mockup that must look native on Windows 11 (W
 > **โปรเจกต์มีหน้าจออยู่แล้ว → ลอกหน้าเดิมตาม `ui-craft` ข้อ 0 ไม่ใช้ template ใหม่** (ยกเว้นสั่งออกแบบใหม่ หรือหน้าเดิมยังไม่ผ่านด่านสวย) · ลำดับด้านล่างสำหรับโปรเจกต์ที่ยังไม่มีหน้าตาเลย หรือกำลังออกแบบใหม่
 
 ```
-0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ fluent.css
+0. ทิศทางภาพตาม ui-craft ข้อ 0.1 (ค้นต้นแบบตาม design-references ประเภท app แล้วถอดสี · หน้าจอพระเอก · แอปอ้างอิง · 3 แนว · เลือก 1 · โลโก้) → ได้ token ของแบรนด์ทับ fluent.css
    (เช่น --win-accent สีแบรนด์ · ธีมเริ่มต้นมืด · พื้นกรอบเป็นสีกลางตาม fluent.css ไม่ย้อมสี) — เขียนเป็นบล็อก token ต่อท้าย fluent.css ไม่แก้ไฟล์ต้นฉบับ
 1. เลือกโครงจากตารางข้อ 0 ใน references/patterns.md แล้วคัดลอก template ที่ตรงกับแอป + assets/fluent.css ไปไว้คู่กัน
    (mockup-template.html = ตั้งค่า/dashboard · tool-app-template.html = แอปเครื่องมือที่ข้อมูลแน่น · หน้าตาของทั้งสองแบบดูได้ที่ assets/templates-preview.webp)
@@ -1046,378 +1399,3 @@ Segoe UI Variable **ไม่มีอักษรไทย** แต่ Windows 
 ดูรายการเต็ม: Microsoft Learn → "Segoe Fluent Icons font"
 เครื่องที่ไม่ใช่ Windows ไม่มีฟอนต์นี้ ไอคอนจึงกลายเป็นสี่เหลี่ยม ดังนั้น mockup ที่จะให้
 คนดูบน Mac/Linux ต้องสลับไปใช้ inline SVG แทน
-
-
----
-
-# skill: markdown-visuals
-
-Use when a markdown doc needs a picture. Pick inline SVG, image file, ASCII or Mermaid by where it is read (GitHub drops inline SVG).
-
-# Markdown Visuals
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-> **Scope:** this skill decides *how a picture goes into a markdown file* (inline SVG · image file · ASCII · Mermaid) and how to embed it. What a diagram should show lives in `software-diagrams` (plugin `software-company`) (Mermaid in the house theme) and `diagram-figures` (designed figures). Document formatting around the picture lives in `polished-document-style`.
-
-> **Rule:** Every plan, process, design, spec, or architecture doc must show — not just tell. If you wrote "the button sits top-right," you owe the reader a picture.
-
-## When to use this skill
-
-- A picture *inside a markdown file* — sketch, flow or state in a business plan, report, process guide, spec or README
-- Writing a plan, Functional Specification Document (FSD), Business Requirements Document (BRD), Architecture Decision Record (ADR) or architecture doc that describes layout, flow, or relationships (the diagrams themselves follow the routing rule below)
-- Explaining state transitions, user journeys, or system interactions
-- Comparing 2+ visual options for the user
-- The user asked "show me how it looks" inside a markdown doc or chat reply
-
-**If the doc has zero visuals and is about anything visual or structural — stop and add one.**
-
-## When NOT to use
-
-| Task | Use instead |
-|---|---|
-| "Make a mockup" — clickable HTML screens in `mockup/<CODE>-mockup.html` | `ui-craft` + platform skill (`web-app-design` · `windows-app-design` · `mobile-app-design`) (plugin `software-company`) |
-| Chart colours and chart design in an app or dashboard | `web-app-design` (plugin `software-company`) → `references/tokens.md` "สีข้อมูล (กราฟ)" |
-| Designed figure for a proposal, slide or print | `diagram-figures` |
-
-## Decision tree: which format?
-
-```
-What are you showing?
-│
-├─ UI sketch in a doc / component state / icon → Inline SVG (doc read on GitHub → same SVG as a `.svg` file, §2)
-├─ Layout sketch / box diagram / state map  →  ASCII art (boxes & arrows)
-├─ Flow / process / money flow / decision   →  repo note (README · Pull Request (PR) · code note) → Mermaid (`software-diagrams`, plugin `software-company`)
-│                                              project document (BRD · Software Requirements Specification (SRS) · FSD · ADR) or read outside the team → `diagram-figures`
-├─ Architecture / Entity-Relationship (ER) / class → same rule as the line above
-├─ Designed figure (proposal, slide, print) →  diagram-figures → embed the PNG as an image file (§2)
-├─ Data viz (chart, pie, quadrant)          →  Mermaid pie/quadrant OR inline SVG, colours from web-app-design (plugin `software-company`) tokens.md "สีข้อมูล (กราฟ)"
-├─ Photo, screenshot, complex illustration  →  External file → ![alt](figures/x.png) (file in `docs/figures/`)
-└─ Quick concept in chat reply              →  Inline SVG or ASCII (no external file)
-```
-
-**Routing rule (same in `software-diagrams` and `diagram-figures`):** markdown in a repo read by the team (README · PR · code note) → Mermaid via `software-diagrams` · a project document (BRD · SRS · FSD · ADR · ER · flows) or anything people outside the team read → `diagram-figures`.
-
-**Follow the tree above.** Where the doc will be read decides inline SVG vs image file:
-
-- **Inline `<svg>` renders** in VS Code preview, Obsidian, many static-site generators and chat replies.
-- **Inline `<svg>` does not render on GitHub** — GitHub's sanitizer drops the `<svg>` element, so the reader sees nothing. Other hosts (GitLab, Bitbucket): preview before relying on it.
-- **Doc will be read on GitHub** → save the SVG as `docs/figures/x.svg` and reference it with `![alt](figures/x.svg)` or `<img>` (§2). It still versions cleanly in git and stays editable.
-
-## 1 · Inline SVG (for viewers that render it — not GitHub)
-
-### Boilerplate
-
-```markdown
-<p align="center">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-label="<what this shows>">
-  <!-- background = bg-canvas of the project palette (see สี below) -->
-  <rect width="640" height="280" rx="14" fill="<bg-canvas>"/>
-
-  <!-- content goes here -->
-</svg>
-</p>
-```
-
-**Required attributes:**
-- `xmlns="http://www.w3.org/2000/svg"` — required when the same markup is saved as a `.svg` file (GitHub shows `.svg` files only through `![]()` / `<img>`, and only with `xmlns`)
-- `viewBox` — sets the coordinate space; lets the SVG scale responsively
-- `role="img"` + `aria-label` — accessibility, screen readers
-- `<p align="center">` wrapper — centers in the rendered page
-
-**Sizing:** Use `viewBox` (not width/height) so it scales. Common sizes:
-- Sketch of a UI bar: `viewBox="0 0 640 200"` (wide, short)
-- Component state: `viewBox="0 0 400 300"` (squarer)
-- Icon / chip: `viewBox="0 0 64 64"`
-- Full screen layout: `viewBox="0 0 800 500"`
-
-### สี
-
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น ส่วนถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม (ลำดับใน `diagram-figures` ข้อ 5 · ตารางโทนตามเนื้องาน [`colour-by-domain.md`](../diagram-figures/references/colour-by-domain.md)) ส่วน token ตามหน้าที่ (`bg-canvas` · `accent-primary` · `state-*` …) ดูได้ใน [references/svg-snippets.md](references/svg-snippets.md) และ **1 เอกสารใช้ชุดสีเดียว**
-
-### Reusable snippets
-
-Window chrome, phone frame, button, card, status badge, running dot and tooltip snippets, plus the UI-state worked example, are in [references/svg-snippets.md](references/svg-snippets.md). Copy the structure and swap in the agreed colour tokens.
-
-## 2 · External image files
-
-Use when:
-- The doc will be read on GitHub (inline `<svg>` is dropped there) — save the SVG as a file
-- Photo or screenshot
-- Illustration too complex to author as SVG by hand (50+ shapes)
-- Reusing the same image across many docs
-- Generated by a design tool (Figma export, etc.)
-
-### Folder convention
-
-```
-docs/
-  figures/
-    01-hover-state.svg
-    02-empty-state.png
-    architecture-overview.svg
-    src/                      editable sources (.mmd · .drawio · .html)
-```
-
-- Put figures in `docs/figures/` (editable sources in `docs/figures/src/`) — relative to the doc · brand files (logo, icons) live in the project-root `assets/`, not here
-- Name files `<doc-section-number>-<short-slug>.<ext>` so they sort with the doc
-- Prefer `.svg` over `.png` when possible (scales, smaller, diff-friendly)
-
-### Reference syntax
-
-```markdown
-![Hover state showing magnified Projects tile](figures/01-hover-state.svg)
-```
-
-- **Alt text** describes what the image shows, for accessibility — not "screenshot.png"
-- Path is **relative to the markdown file**, not absolute
-- For centered + sized images, wrap in HTML:
-
-```markdown
-<p align="center">
-  <img src="figures/01-hover-state.svg" alt="Hover state" width="640"/>
-</p>
-```
-
-### Creating SVG files
-
-When the visual is too big to inline (>50 lines of SVG markup), save it as a file instead. Use the `Write` tool to create the SVG file in `docs/figures/`.
-
-## 3 · ASCII art
-
-For quick layouts, state diagrams, and structural sketches that don't need pixel-perfect visuals. Renders identically in every viewer and in terminal/diff output.
-
-Box-drawing characters plus worked layout sketch, state machine and curve examples are in [references/ascii-patterns.md](references/ascii-patterns.md).
-
-Always wrap ASCII in a fenced code block (` ``` `) so spacing is preserved.
-
-## 4 · Mermaid
-
-**การเลือกชนิดไดอะแกรม ธีม กติกาความอ่านง่าย และป้ายภาษาไทย อยู่ใน `software-diagrams` (plugin `software-company`) ข้อ 1–5 และ `assets/mermaid-theme.md`** · Mermaid ในเอกสารโปรเจกต์ที่ต้องแปลงเป็นรูปลง Word ใช้ตัวแปลงใน `diagram-figures` → `references/engine-mermaid.md`
-ที่นี่บอกแค่ว่า *เมื่อไหร่ควรเลือก Mermaid แทนรูปแบบอื่น*
-
-| เลือก Mermaid เมื่อ | เลือกอย่างอื่นเมื่อ |
-|---|---|
-| เป็นกล่องกับลูกศรที่เครื่องจัดวางให้ได้ | ถ้าต้องคุมตำแหน่งเองให้ใช้ inline SVG ส่วนรูปที่ต้องดูออกแบบมาให้ใช้ `diagram-figures` (HTML layout หรือ engine-svg-python) แล้วฝังเป็นไฟล์ภาพ |
-| อยู่ในไฟล์ที่ต้อง diff ใน git | เป็นภาพหน้าจอจริง ให้ใช้ไฟล์ภาพ |
-| ผู้อ่านเปิดใน GitHub หรือ Notion | ผู้อ่านเปิดในเอกสาร Word หรือสไลด์ ให้ใช้ไฟล์ภาพ |
-
-## Combining formats in one doc
-
-A full design spec usually mixes formats (SVG mockup, reference table, ASCII sketch, Mermaid state diagram, acceptance table). The 6-part pattern is in [references/combining-formats.md](references/combining-formats.md). Don't force everything into one format.
-
-## Accessibility checklist
-
-For every visual:
-
-- [ ] **Inline SVG** has `role="img"` and `aria-label="<description>"`
-- [ ] **Image file** has descriptive alt text (not "image.png")
-- [ ] **Mermaid** diagrams have a 1-sentence caption above or below
-- [ ] **ASCII art** has a prose summary nearby — screen readers will read the characters literally
-- [ ] **Colour** is not the only signal — pair red badges with `!`, green dots with a label
-- [ ] **Contrast** for text in SVG ≥ 4.5:1 against its background
-
-## Anti-patterns
-
-- **Text-only design docs** — "the icon is in the top-right" with no picture
-- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- **PNG screenshots of text** — use the text, in a code block
-- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
-
-## Quick-start recipe
-
-When a markdown doc needs a design picture (clickable app screens go to the platform design skill, `mockup/<CODE>-mockup.html`):
-
-1. **Identify what kinds of visuals are needed** (UI state? flow? architecture?)
-2. **Pick the format(s)** using the decision tree above
-3. **For each visual:**
-   - State a one-line caption
-   - Emit the SVG/Mermaid/ASCII
-   - Add `role="img"` + `aria-label` (SVG) or alt text (file)
-4. **Add a feature reference table** below the visuals — what each element means
-5. **Cross-check accessibility checklist** before delivery
-
-Not sure a visual will render? Preview it in the viewer the reader will use (GitHub, Notion, VS Code) before delivery.
-
-## Related skills
-
-- `polished-document-style` — overall doc formatting, figure captions, callout boxes
-- `simplicity-first` (plugin `software-company`) — don't over-design the diagram; show what's needed
-- `software-diagrams` (plugin `software-company`) — which diagram type answers which question, plus the shared Mermaid theme
-- `diagram-figures` — designed figures for proposals, slides and print (HTML layouts or engine-svg-python)
-- `ui-craft` (plugin `software-company`) — spacing, hierarchy and states when the picture is a screen
-
-## ไม่ให้ดูเหมือน AI ทำ
-
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: ascii-patterns.md
-
-# ASCII patterns
-
-Worked ASCII examples for markdown docs · used by [SKILL.md](../SKILL.md) §3 · always wrap ASCII in a fenced code block so spacing is preserved
-
-## Box-drawing characters
-
-```
-┌─────┐  ┏━━━━━┓  ╭─────╮  ┌╌╌╌╌╌┐
-│     │  ┃     ┃  │     │  ╎     ╎
-└─────┘  ┗━━━━━┛  ╰─────╯  └╌╌╌╌╌┘
- light    heavy   rounded   dashed
-```
-
-Corners: `┌ ┐ └ ┘` ‧ `┏ ┓ ┗ ┛` ‧ `╭ ╮ ╰ ╯`
-Lines:   `─ │` ‧ `━ ┃` ‧ `═ ║`
-Joins:   `├ ┤ ┬ ┴ ┼`
-Arrows:  `→ ← ↑ ↓ ▲ ▼ ▶ ◀ ↔ ↕ ⇒ ⇐`
-Dots:    `• · ◦ ● ○ ▪ ▫`
-
-## Common patterns
-
-**Layout sketch:**
-```
-┌─────────────────────────────────────┐
-│ Header        [Search]      [👤]    │
-├──────────┬──────────────────────────┤
-│ Sidebar  │ Main content             │
-│  • Item  │                          │
-│  • Item  │  ┌────────────────────┐  │
-│          │  │  Primary CTA       │  │
-│          │  └────────────────────┘  │
-└──────────┴──────────────────────────┘
-```
-
-**State machine:**
-```
-┌─────────┐  hover  ┌──────────┐  click  ┌─────────┐
-│  REST   │────────►│ MAGNIFIED│────────►│ LAUNCH  │
-└─────────┘◄────────└──────────┘◄────────└─────────┘
-            exit               done
-```
-
-**Curve / chart:**
-```
-scale
- ↑
-1.7│         ╱╲
-1.4│       ╱    ╲
-1.2│     ╱        ╲
-1.0│___╱            ╲___
-   └──────────┬──────────→ cursor X
-         tile.Center
-```
-
-
-## reference: combining-formats.md
-
-# Combining formats in one doc
-
-Used by [SKILL.md](../SKILL.md) · a full design spec usually mixes formats.
-
-The 6-part pattern for a design spec:
-
-```
-1. Inline SVG mockup of each UI state              ← "what it looks like"
-2. Feature reference table                          ← "what it does"
-3. ASCII layout sketch with measurements           ← "how it's positioned"
-4. Mermaid state diagram                            ← "how it transitions"
-5. ASCII / inline-SVG zoom curve                    ← "the math"
-6. Acceptance criteria table                        ← "how we verify"
-```
-
-Don't force everything into one format. Each format is best at something different.
-
-
-## reference: svg-snippets.md
-
-# Inline SVG snippets
-
-Reusable building blocks for inline SVG pictures of a screen inside .md docs (the real mockup is HTML) · used by [SKILL.md](../SKILL.md) §1
-
-## สี — มาจากเนื้องาน ไม่ใช่จากตารางสำเร็จรูป
-
-ถ้าเอกสารหรือโปรเจกต์มีชุดสีอยู่แล้ว ให้ใช้ชุดนั้น
-ถ้ายังไม่มี ให้ใช้ค่าประจำบ้าน `#2A78D6` เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนจากเนื้องานไว้ในรายงาน — การแพทย์เขียว · การเงินน้ำเงินเข้ม ·
-อุตสาหกรรมเหลืองอำพัน · ราชการกรมท่า · ซอฟต์แวร์ทั่วไปน้ำเงิน (ตารางเต็มอยู่ใน [`diagram-figures/references/colour-by-domain.md`](../../diagram-figures/references/colour-by-domain.md))
-
-กำหนดเป็น **token ตามหน้าที่** ไว้บนสุดของเอกสาร แล้วใช้ค่าเดียวกันทุกรูปในเอกสารนั้น:
-
-| Token | หน้าที่ | ได้มาจาก |
-|---|---|---|
-| `bg-canvas` | พื้นหลังของรูป | เฉดเข้มสุด (โหมดมืด) หรืออ่อนสุด (โหมดสว่าง) |
-| `bg-surface` | แผ่น พาเนล การ์ด | ต่างจาก canvas พอให้เห็นขอบโดยไม่ต้องตีเส้น |
-| `bg-elevated` | ไทล์ที่ลอยขึ้นมาอีกชั้น | |
-| `accent-primary` | จุดเน้น สถานะที่กำลังทำงาน | **สีแบรนด์** (ไม่มี → `#2A78D6` + `(รอยืนยัน)`) |
-| `text-primary` | ข้อความหลัก | contrast ≥ 4.5:1 กับพื้นที่มันวางอยู่ |
-| `text-muted` | ข้อความรอง placeholder | `rgba(...,0.55)` ของ `text-primary` |
-| `state-success` · `state-warning` · `state-danger` | สถานะ | **ไม่เปลี่ยนตามแบรนด์** — เขียวคือผ่าน แดงคือไม่ผ่านเสมอ |
-
-**1 เอกสารใช้ชุดสีเดียว** — รูป 10 รูปในเอกสารเดียวที่สีไม่ตรงกัน อ่านยากกว่ารูปไม่สวยแต่สีตรงกัน
-
-## Snippets
-
-> ตัวอย่างข้างล่างใช้ชุดสีโหมดมืดชุดหนึ่งเป็นตัวแทนเท่านั้น
-> **เปลี่ยนค่าสีให้ตรงกับชุดที่ตกลงไว้ก่อนใช้** โครงสร้างคือสิ่งที่ต้องคัดลอก ไม่ใช่ค่าสี
-
-**Window chrome (desktop app mockup):**
-```xml
-<rect x="20" y="20" width="600" height="360" rx="10" fill="#2a3245"/>
-<circle cx="42" cy="42" r="6" fill="#ff5f57"/>
-<circle cx="62" cy="42" r="6" fill="#febc2e"/>
-<circle cx="82" cy="42" r="6" fill="#28c940"/>
-<text x="320" y="46" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Window title</text>
-<line x1="20" y1="64" x2="620" y2="64" stroke="rgba(255,255,255,0.08)"/>
-```
-
-**Phone frame (mobile mockup):**
-```xml
-<rect x="100" y="20" width="200" height="400" rx="28" fill="#0a0d14" stroke="#2a3245" stroke-width="2"/>
-<rect x="120" y="50" width="160" height="340" rx="6" fill="#1c2230"/>
-<rect x="170" y="28" width="60" height="14" rx="7" fill="#0a0d14"/>
-```
-
-**Button:**
-```xml
-<rect x="40" y="100" width="120" height="40" rx="8" fill="#0078d4"/>
-<text x="100" y="125" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="14" font-weight="500">Click me</text>
-```
-
-**Card with title and body:**
-```xml
-<rect x="40" y="40" width="240" height="120" rx="12" fill="#2a3245"/>
-<text x="60" y="72" fill="#fff" font-family="system-ui" font-size="14" font-weight="600">Card title</text>
-<text x="60" y="96" fill="rgba(255,255,255,0.7)" font-family="system-ui" font-size="12">Supporting body text goes here.</text>
-<rect x="60" y="116" width="80" height="28" rx="6" fill="#0078d4"/>
-<text x="100" y="134" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12">Action</text>
-```
-
-**Status badge (top-right of tile):**
-```xml
-<circle cx="<tile-right-x>" cy="<tile-top-y>" r="9" fill="#e24b4a"/>
-<text x="<tile-right-x>" y="<tile-top-y + 4>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="13" font-weight="500">!</text>
-```
-
-**Running dot (indicator below tile):**
-```xml
-<circle cx="<tile-center-x>" cy="<tile-bottom-y + 12>" r="4" fill="#4cc2ff"/>
-```
-
-**Tooltip text (no balloon — plain floating text):**
-```xml
-<text x="<tile-center-x>" y="<tile-top-y - 12>" text-anchor="middle" fill="#fff" font-family="system-ui" font-size="12" font-weight="500">Tooltip label</text>
-```
-
-## Worked example — UI state mockup
-
-Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).

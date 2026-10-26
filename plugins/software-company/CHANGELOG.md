@@ -1,5 +1,10 @@
 # Changelog — software-company
 
+## 2.27.0 — 2026-10-27
+
+- skill ออกแบบ 14 ตัว (`ui-craft` · `web-app-design` · `mobile-app-design` · `windows-app-design` · `presentation-design` · `html-slide-deck` · `pptx-to-html-deck` · `branded-document-design` · `markdown-report-docx` · `doc-cover-design` · `diagram-figures` · `dynamic-website` · `graphic-design` · `markdown-visuals`) และ agent `ux-designer` `graphic-designer`: ขั้นแรกค้นต้นแบบสดตาม `design-references` (superuser) แล้วถอดสีจากงานที่เลือก · สีบ้านหรือคลังเป็นตัวสำรอง
+- `design-direction-lookup`: สีจากการค้นสดมาก่อนเสมอ · `--palette` รับ 8 หน้าที่ (bg · surface · text · text_muted · primary · secondary · accent · border) แบบมีชื่อหรือเรียงสี · ไม่ส่งสีมาใช้คลังใน data/ พร้อมคำเตือนใน DESIGN.md · หาอุตสาหกรรมไม่เจอใช้ `custom` · self-test 22/22 · holdout 20/20
+
 ## 2.26.0 — 2026-10-26
 
 - `design-direction-lookup`: ขั้นใหม่ "ดูสีจากธุรกิจจริง" · `brand_colors.py` ดึงสีจากเว็บธุรกิจจริงในวงการ (กันที่อยู่ภายในเครือข่ายและ DNS rebinding · จำกัดขนาดและเวลา · ตัดสีตั้งต้นของ Bootstrap Swiper WordPress) · `brand_palette.py` สร้างพาเลตจากสีที่พบแล้วเลื่อนเฉดไม่ให้เหมือนคู่แข่ง · ตัวร่างรับ `--extra-palettes` `--palettes` และโจทย์ที่ไม่มีในรายการอุตสาหกรรม · ข้อมูลใน `data/` เป็นค่าสำรองทบทวนทุก 6 เดือน (ทดสอบเว็บร้านกาแฟจริง 4 เว็บ 2026-10-26)

@@ -93,7 +93,7 @@ def build_palette(palette_id, sites, fetched_on):
     """คืน (แถว light, แถว dark) ตามคอลัมน์ palettes.csv · ไม่มีสีแบรนด์เลยหรือพาเลตไม่ผ่าน → SystemExit"""
     usable = [s for s in sites if s['brand']]
     if not usable:
-        raise SystemExit('ไม่มีเว็บที่ดึงสีแบรนด์ได้ จึงสร้างพาเลตไม่ได้ · ใช้พาเลตใน data/ แทน')
+        raise SystemExit('ไม่มีเว็บที่ดึงสีแบรนด์ได้ จึงสร้างพาเลตไม่ได้ · ลองเว็บอื่นในวงการ หรือถอดสีจากงานต้นแบบแล้วส่งด้วย design_draft.py --palette')
     primary, accent = pick_primary_and_accent(common_colors(usable))
     hue, _, saturation = to_hls(primary['hex'])
     hue_degrees = hue * 360 + HUE_SHIFT_DEGREES
@@ -118,3 +118,25 @@ def build_palette(palette_id, sites, fetched_on):
         raise SystemExit(f'พาเลตที่สร้างไม่ผ่าน: {problems}')
     columns = COLUMNS['palettes.csv']
     return [{c: light[c] for c in columns}, {c: dark[c] for c in columns}]
+
+
+def palette_from_roles(palette_id, roles, fetched_on):
+    """สี 8 หน้าที่ (bg surface text text_muted primary secondary accent border) ที่ถอดจากงานจริง → (light, dark)
+    light ใช้สีที่ให้มาตรง ๆ · on_primary และสีสถานะคิดให้ผ่าน contrast · dark คิดจากเฉดของ primary และ accent
+    secondary ไม่มีช่องในตาราง จึงบันทึกใน notes_th"""
+    light = {r: roles[r].upper() for r in ('bg', 'surface', 'text', 'text_muted', 'primary', 'accent', 'border')}
+    light['on_primary'] = max((light['surface'], light['text']), key=lambda c: contrast(c, light['primary']))
+    for role, hue in STATUS_HUES.items():
+        light[role] = shift_until(hue, 0.65, 0.45, -0.01, lambda c: contrast(c, light['surface']) >= 4.6)
+    p_hue, _, p_sat = to_hls(light['primary'])
+    a_hue, _, a_sat = to_hls(light['accent'])
+    dark = dark_row(p_hue * 360, p_sat, a_hue * 360, a_sat)
+    secondary = roles.get('secondary')
+    notes = (f'สีจากงานจริงที่ผู้ใช้ส่ง วันที่ {fetched_on} · โหมดสว่างตามสีที่ส่ง · on_primary สีสถานะ และโหมดมืด'
+             f'คิดให้ผ่าน contrast' + (f' · secondary {secondary.upper()} (ไม่มีช่องในตาราง)' if secondary else ''))
+    common = {'id': palette_id, 'name_th': f'สีจากงานจริง {palette_id}', 'keywords': palette_id, 'notes_th': notes}
+    rows = [{**common, 'mode': 'light', **light}, {**common, 'mode': 'dark', **dark}]
+    problems = palette_problems({r['mode']: r for r in rows})
+    if problems:
+        raise SystemExit(f'พาเลต "{palette_id}" ไม่ผ่าน: {problems}')
+    return [{c: r[c] for c in COLUMNS['palettes.csv']} for r in rows]

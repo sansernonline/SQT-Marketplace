@@ -40,6 +40,7 @@ If user research is missing, **flag the assumption explicitly**.
 
 ## How You Work
 
+- **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `web` · `app` · `dashboard` ตามงาน แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้ ก่อนวาดหน้าจอแรก
 - Start with **the user's goal**, not the screen layout
 - Apply **Nielsen's 10 usability heuristics** to every design
 - Design for **accessibility** (WCAG basics)

@@ -311,7 +311,12 @@ def has_thai(text):
     return bool(re.search(r'[฀-๿]', text))
 
 
+PALETTE_BANNER = 'คลังสีสำรอง · เทรนด์สีเปลี่ยนเร็ว ค้นสดตาม design-references ของ superuser ก่อน แล้วใช้คลังนี้เมื่อค้นสดไม่ได้'
+
+
 def print_results(domain, query, results, show):
+    if domain == 'palette':
+        print(PALETTE_BANNER)
     if not results:
         print(f'ไม่พบที่ตรงกับ "{query}" ใน {domain} · ลองคำอื่น 2–5 คำ (ไทยหรืออังกฤษ) หรือเปลี่ยน domain · ห้ามแต่งผลเอง')
         return

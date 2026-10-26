@@ -11,6 +11,7 @@ For app or product screens, the `software-company` plugin's `ui-craft` skill (if
 
 ## Workflow
 
+0. **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `logo` (สีใช้ `color`) แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
 1. **Collect** — brand name (Thai and English), 1-sentence positioning, audience, 3 personality adjectives, existing logo files, and 2 competitors to look different from
 2. **Copy the folder template** in [kit-template.md](references/kit-template.md) to `brand-kit/v1/`
 3. **Logo** — collect or request the 4 versions (full colour · reversed white · solid black · solid white), set clear space and minimum size (below)

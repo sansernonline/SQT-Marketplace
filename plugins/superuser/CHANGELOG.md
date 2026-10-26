@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.7.0 — 2026-10-27
+
+- skill ใหม่ `design-references`: ทุกงานออกแบบเริ่มจากเอาคำของโปรเจกต์ไปค้นสดในเว็บที่เก่งงานแต่ละประเภท (12 ประเภท · 41 เว็บใน `data/sites.csv`) แล้วถอดสี 8 หน้าที่จากงานที่เลือกด้วย `scripts/find_refs.py palette-from` (ดักเว็บกันบอท · ปรับ contrast ให้ผ่าน) · เก็บแค่รายชื่อเว็บ ไม่เก็บตัวอย่างงาน · คลังสำรอง 2,360 ชุด 8 หน้าที่ (Wada MIT · color-palettes-sd CC BY 4.0) ใช้เมื่อค้นสดไม่ได้ · eval 3 เคส · router 1 แถว · ผู้ใช้สั่ง 2026-10-27
+- `no-ai-look` · `polished-document-style` · `parallel-attempts-pick-best` และ agent ที่เลือกหน้าตา: ขั้นแรกให้ค้นต้นแบบตาม `design-references`
+
 ## 3.6.8 — 2026-10-26
 
 - `parallel-attempts-pick-best` ข้อ 0: ก่อนขอตัวอย่าง ค้นงานจริงในหมวดเดียวกันเองแล้วเสนอ 3–4 แนวพร้อมลิงก์ ไม่เสนอแนวจากความรู้สึก

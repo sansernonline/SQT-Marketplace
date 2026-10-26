@@ -8,7 +8,7 @@ Goal: 10 assets that look like one person made them. AI images drift by default:
 
 ## Workflow
 
-1. **Pick 1–3 anchor images** — the approved hero, or reference photos that show the look
+1. **Pick 1–3 anchor images** — the approved hero, or reference photos that show the look · no anchor yet → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `illustration` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้
 2. **Write the style lock sheet** with [style-lock-sheet.md](references/style-lock-sheet.md) before generating anything else
 3. **Build the style block** — the fixed part of every prompt (light, lens, palette, style, negatives); only the subject line changes per image
 4. **Lock the tool settings** — same model and version, same aspect-ratio family, same style/reference image, seed where it helps

@@ -1,0 +1,42 @@
+type,site,good_for,search_url,use
+web,Awwwards,เว็บที่ได้รางวัล ทุกอุตสาหกรรม,https://www.awwwards.com/websites/?text={q},ดูเป็นต้นแบบ
+web,Godly,เว็บสวยคัดด้วยมือ มีการเคลื่อนไหว,https://godly.website/?search={q},ดูเป็นต้นแบบ
+web,Land-book,หน้าแรกและ landing page,https://land-book.com/?search={q},ดูเป็นต้นแบบ
+web,Lapa Ninja,landing page แยกหมวด,https://www.lapa.ninja/search/?q={q},ดูเป็นต้นแบบ
+web,SiteInspire,เว็บแยกตามสไตล์และหมวด,https://www.siteinspire.com/websites?search={q},ดูเป็นต้นแบบ
+web,One Page Love,เว็บหน้าเดียว,https://onepagelove.com/?s={q},ดูเป็นต้นแบบ
+app,Mobbin,หน้าจอแอปจริงจากแอปดัง (ต้องมีบัญชี),https://mobbin.com/search/apps/ios?content_type=apps&q={q},ดูเป็นต้นแบบ
+app,Dribbble · mobile,หน้าจอแอปที่นักออกแบบทำ,https://dribbble.com/search/{q}%20mobile%20app,ดูเป็นต้นแบบ
+dashboard,Dribbble · dashboard,แดชบอร์ดและระบบหลังบ้าน,https://dribbble.com/search/{q}%20dashboard,ดูเป็นต้นแบบ
+dashboard,Behance · UI/UX,เคสออกแบบระบบทั้งชุด,https://www.behance.net/search/projects?search={q}%20dashboard&field=ui%2Fux,ดูเป็นต้นแบบ
+slide,Behance · presentation,เด็คนำเสนอที่ออกแบบทั้งชุด,https://www.behance.net/search/projects?search={q}%20presentation,ดูเป็นต้นแบบ
+slide,Pitch · templates,แม่แบบเด็คธุรกิจ,https://pitch.com/templates?search={q},ดูเป็นต้นแบบ
+slide,Canva · presentations,แม่แบบสไลด์ทุกหมวด,https://www.canva.com/presentations/templates/?query={q},ใช้ใน Canva ได้ · ห้ามทำเครื่องหมายการค้า
+slide,SlidesCarnival,แม่แบบสไลด์ฟรี,https://www.slidescarnival.com/?s={q},ฟรีต้องให้เครดิต (ตรวจหน้าใบอนุญาตก่อนใช้)
+document,Behance · annual report,รายงานประจำปีและเอกสารที่จัดหน้าสวย,https://www.behance.net/search/projects?search={q}%20annual%20report,ดูเป็นต้นแบบ
+document,Dribbble · report,รายงาน ใบเสนอราคา โบรชัวร์,https://dribbble.com/search/{q}%20report%20layout,ดูเป็นต้นแบบ
+document,Canva · documents,แม่แบบเอกสาร proposal รายงาน,https://www.canva.com/docs/templates/?query={q},ใช้ใน Canva ได้ · ห้ามทำเครื่องหมายการค้า
+document,Pinterest · editorial,จัดหน้าแบบนิตยสารและเอกสาร,https://www.pinterest.com/search/pins/?q={q}%20editorial%20layout,ดูเป็นต้นแบบ
+icon,Iconify,ไอคอน 244 ชุด ค้นรายตัวได้ ใบอนุญาตต่อชุด,https://icon-sets.iconify.design/?query={q},ใช้ได้ตามใบอนุญาตของชุด
+icon,Noun Project,ไอคอนทุกสไตล์จากนักวาดหลายคน,https://thenounproject.com/search/icons/?q={q},ฟรีต้องให้เครดิตผู้วาด
+icon,Flaticon,แพ็กไอคอนหลายสไตล์,https://www.flaticon.com/search?word={q},ตรวจใบอนุญาตก่อนใช้
+icon,Dribbble · icons,ไอคอนแอปและชุดไอคอนที่นักออกแบบทำ,https://dribbble.com/search/{q}%20icon,ดูเป็นต้นแบบ
+logo,Behance · branding,งานแบรนด์ทั้งชุด โลโก้ สี ฟอนต์,https://www.behance.net/search/projects?search={q}%20branding,ดูเป็นต้นแบบ
+logo,Dribbble · logo,โลโก้และเครื่องหมาย,https://dribbble.com/search/{q}%20logo,ดูเป็นต้นแบบ
+logo,Brand New,รีวิวการรีแบรนด์ของแบรนด์จริง,https://www.underconsideration.com/brandnew/?s={q},ดูเป็นต้นแบบ
+social,Pinterest,โพสต์ โปสเตอร์ ภาพโฆษณา,https://www.pinterest.com/search/pins/?q={q},ดูเป็นต้นแบบ
+social,Canva · social,แม่แบบโพสต์ทุกแพลตฟอร์ม,https://www.canva.com/templates/?query={q},ใช้ใน Canva ได้ · ห้ามทำเครื่องหมายการค้า
+social,Freepik,แม่แบบโพสต์ ภาพเวกเตอร์ ม็อกอัป,https://www.freepik.com/search?query={q},ฟรีต้องให้เครดิต · ห้ามทำเครื่องหมายการค้า
+social,Behance · poster,โปสเตอร์และงานกราฟิก,https://www.behance.net/search/projects?search={q}%20poster,ดูเป็นต้นแบบ
+illustration,Dribbble · illustration,ภาพประกอบทุกสไตล์,https://dribbble.com/search/{q}%20illustration,ดูเป็นต้นแบบ
+illustration,Openverse,ภาพ CC ที่กรองใช้เชิงพาณิชย์ได้,https://openverse.org/search/?q={q}&license_type=commercial,ใช้ได้ตามใบอนุญาตต่อชิ้น
+illustration,unDraw,ภาพประกอบแบนเปลี่ยนสีได้,https://undraw.co/illustrations,ใช้ได้ไม่ต้องให้เครดิต · ห้ามดึงอัตโนมัติ
+color,Coolors · trending,พาเลตที่คนใช้ช่วงนี้,https://coolors.co/palettes/trending/{q},ดูเป็นต้นแบบ
+color,Color Hunt,พาเลตคัดด้วยมือ,https://colorhunt.co/palettes/{q},ดูเป็นต้นแบบ
+color,Adobe Color · explore,พาเลตจากชุมชนและเทรนด์,https://color.adobe.com/search?q={q},ดูเป็นต้นแบบ
+font,Google Fonts,ฟอนต์ฟรีรวมฟอนต์ไทย,https://fonts.google.com/?query={q},ใช้ได้ตามใบอนุญาตของฟอนต์
+font,Fontshare,ฟอนต์ละตินฟรีคุณภาพสูง,https://www.fontshare.com/?q={q},ใช้ได้ตามใบอนุญาตของฟอนต์
+font,f0nt,ฟอนต์ไทย,https://www.f0nt.com/?s={q},ตรวจใบอนุญาตของแต่ละฟอนต์
+font,Fonts In Use,ฟอนต์ที่งานจริงใช้ แยกตามหมวด,https://fontsinuse.com/search?terms={q},ดูเป็นต้นแบบ
+motion,Dribbble · animation,การเคลื่อนไหวในหน้าจอ,https://dribbble.com/search/{q}%20animation,ดูเป็นต้นแบบ
+motion,LottieFiles,แอนิเมชันพร้อมใช้,https://lottiefiles.com/search?q={q},ตรวจใบอนุญาตก่อนใช้

@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: design-references-regression
+description: เห็นจริง 2026-10-26 ถึง 2026-10-27 · agent ออกแบบไอคอนและเลือกสีจากความจำหรือคลังที่เก็บไว้ (Lucide ใส่กรอบ · พาเลตสำเร็จรูป) ผู้ใช้ปฏิเสธหลายรอบว่าไม่สวยและดูเหมือน AI ทำ · ต้องค้นงานจริงก่อน
+tags: [regression, design-references]
+runs: 3
+expected_outcome: ไม่ส่ง SVG หรือรหัสสีที่เลือกเองทันที · เสนอค้นงานจริงในหมวดก่อน พร้อมลิงก์เว็บ แล้วค่อยถอดสีจากงานที่เลือก
+execution:
+  prompt: |
+    ทำไอคอนประจำแอปบันทึกรายจ่ายของผมให้หน่อย เอาแบบสวย ๆ เลือกสีให้ด้วย ทำมาเลยไม่ต้องถามเยอะ
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: no-instant-svg
+    type: regex
+    pattern: '<svg'
+    flags: i
+    match: not_contains
+    target: last_message
+  - name: points-to-live-search
+    type: regex
+    pattern: 'Dribbble|Behance|Iconify|Noun Project|Flaticon|ค้น|search'
+    flags: i
+    match: contains
+    target: last_message
+  - name: colour-from-references
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อ:
+      สีที่เสนอมาจากงานต้นแบบที่ค้นมา หรือบอกว่าจะถอดสีจากงานที่ค้นเจอ · ไม่ได้ฟันธงรหัสสีชุดเดียวจากความรู้สึกโดยไม่มีที่มา
