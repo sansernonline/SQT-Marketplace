@@ -212,13 +212,13 @@ Add text overlays explaining what user sees
 
 ### Prompt strategy
 ```
-✅ Good moments to prompt:
+Good moments to prompt:
 - After completed action with success
 - After feature use streak (5+ uses)
 - After positive in-app survey
 - After milestone (1000 messages sent, etc.)
 
-❌ Don't prompt:
+Don't prompt:
 - On first launch
 - During error states
 - During onboarding
@@ -288,12 +288,12 @@ Top markets to localize:
 
 ## Common Pitfalls
 
-- ❌ **Keyword stuffing** — store rejects it, and it reads badly
-- ❌ **Misleading screenshots** — bad ratings
-- ❌ **Ignore reviews** — the problem grows over time
-- ❌ **Set it and forget it** — competitors keep changing
-- ❌ **No localization** — you lose installs you could have had
-- ❌ **Vanity testing** — A/B testing elements that don't move installs
+- ผิด: **Keyword stuffing** — store rejects it, and it reads badly
+- ผิด: **Misleading screenshots** — bad ratings
+- ผิด: **Ignore reviews** — the problem grows over time
+- ผิด: **Set it and forget it** — competitors keep changing
+- ผิด: **No localization** — you lose installs you could have had
+- ผิด: **Vanity testing** — A/B testing elements that don't move installs
 
 ## Reference
 

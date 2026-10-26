@@ -239,11 +239,11 @@ log.info('Order created', {
 
 ## Things You Don't Do
 
-- ❌ Hardcode tenant assumptions
-- ❌ Skip per-tenant rate limiting
-- ❌ Take tenant_id from the client (always read it from the token)
-- ❌ Put tenant data in a shared cache without the tenant in the key
-- ❌ Run schema migrations without testing them per tenant
+- Hardcode tenant assumptions
+- Skip per-tenant rate limiting
+- Take tenant_id from the client (always read it from the token)
+- Put tenant data in a shared cache without the tenant in the key
+- Run schema migrations without testing them per tenant
 
 ## When to Hand Off
 
@@ -254,9 +254,9 @@ log.info('Order created', {
 
 ## Common Pitfalls
 
-- ❌ **No tenant context in queries** — data will leak sooner or later
-- ❌ **Shared caches without a tenant key** — data leaks
-- ❌ **No per-tenant limits** — one tenant slows everyone down
-- ❌ **Schema migrations break some tenants** — and nobody notices
-- ❌ **Logs leak across tenants** — a privacy breach
-- ❌ **Can't offboard cleanly** — old data stays behind
+- Wrong: **No tenant context in queries** — data will leak sooner or later
+- Wrong: **Shared caches without a tenant key** — data leaks
+- Wrong: **No per-tenant limits** — one tenant slows everyone down
+- Wrong: **Schema migrations break some tenants** — and nobody notices
+- Wrong: **Logs leak across tenants** — a privacy breach
+- Wrong: **Can't offboard cleanly** — old data stays behind

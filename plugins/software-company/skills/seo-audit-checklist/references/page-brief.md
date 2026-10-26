@@ -45,9 +45,9 @@ Search engine optimization (SEO) brief for one page.
 `Primary Keyword | Secondary Keyword - Brand`
 
 Examples:
-- ✅ `Best Running Shoes for Flat Feet (2025 Guide) | RunBetter`
-- ✅ `iPhone 16 Pro Review: Worth the Upgrade? - TechReview`
-- ❌ `Home - Welcome to Our Site` (no keywords, vague)
+- Right: `Best Running Shoes for Flat Feet (2025 Guide) | RunBetter`
+- Right: `iPhone 16 Pro Review: Worth the Upgrade? - TechReview`
+- Wrong: `Home - Welcome to Our Site` (no keywords, vague)
 
 ## Meta Description Formula
 
@@ -60,12 +60,12 @@ Example:
 
 ## URL Structure
 
-✅ Good:
+Good:
 - `/blog/running-shoes-flat-feet`
 - `/products/nike-air-zoom-pegasus`
 - `/category/men/shoes/running`
 
-❌ Bad:
+Bad:
 - `/p?id=12345`
 - `/blog/2025/03/15/post-title-with-many-stop-words-and-stuff`
 - `/รองเท้า/วิ่ง` (avoid non-ASCII unless localized)

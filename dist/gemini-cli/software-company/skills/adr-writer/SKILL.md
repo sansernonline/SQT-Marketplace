@@ -58,11 +58,11 @@ Before finalizing:
 
 ## Anti-patterns
 
-- ❌ Writing ADR after implementation is done (write BEFORE)
-- ❌ Listing only the chosen option (need real alternatives)
-- ❌ Vague titles like "Database Decision" (be specific: "Use PostgreSQL over MongoDB for user data")
-- ❌ Skipping "Negative consequences" (every decision has trade-offs)
-- ❌ Editing accepted ADRs (create new one that supersedes it instead)
+- Writing ADR after implementation is done (write BEFORE)
+- Listing only the chosen option (need real alternatives)
+- Vague titles like "Database Decision" (be specific: "Use PostgreSQL over MongoDB for user data")
+- Skipping "Negative consequences" (every decision has trade-offs)
+- Editing accepted ADRs (create new one that supersedes it instead)
 
 ---
 

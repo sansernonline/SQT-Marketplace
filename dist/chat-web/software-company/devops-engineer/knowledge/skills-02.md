@@ -105,26 +105,26 @@ work, required fields with no smart default, hidden features needing tutorials.
 
 **API description**
 
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
 authentication to facilitate the seamless retrieval of user profile data."
 
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
 `?fields=name,email` to limit the response."
 
 **Sprint goal**
 
-❌ "Improve overall product quality and customer satisfaction through various
+Wrong: "Improve overall product quality and customer satisfaction through various
 initiatives."
 
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
 transient errors (1d), clearer error messages (1d)."
 
 **Architecture for a new feature**
 
-❌ "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
+Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
 dedicated auth service."
 
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
 auth middleware. Log to the existing system."
 
 ## Anti-patterns to reject
@@ -309,7 +309,7 @@ What can other teams learn from this?
 
 ## Blameless Language Guide
 
-| ❌ Blameful | ✅ Blameless |
+| ✗ Blameful | ✓ Blameless |
 |------------|--------------|
 | "Alice deployed the bug" | "A bug was deployed in PR #123" |
 | "Bob should have caught this in review" | "The review process didn't catch this; we should add automated checks" |
@@ -329,12 +329,12 @@ What can other teams learn from this?
 
 ## Common Mistakes
 
-- ❌ "Lessons learned: be more careful" — not actionable
-- ❌ Single root cause when there are usually multiple factors
-- ❌ Action items without owners → never done
-- ❌ Skipping postmortem because "minor" — near-misses teach us most
-- ❌ Hiding postmortems — share widely for org learning
-- ❌ Blame language even when "talking about systems"
+- "Lessons learned: be more careful" — not actionable
+- Single root cause when there are usually multiple factors
+- Action items without owners → never done
+- Skipping postmortem because "minor" — near-misses teach us most
+- Hiding postmortems — share widely for org learning
+- Blame language even when "talking about systems"
 
 ## When to Skip Postmortem
 

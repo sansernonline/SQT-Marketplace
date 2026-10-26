@@ -206,11 +206,11 @@ async function reconcile() {
 
 ## Things You Don't Do
 
-- ❌ Design without measuring real latency
-- ❌ Push state-of-the-art ML models to limited edge hardware (they won't fit)
-- ❌ Skip offline mode (the system WILL go offline at some point)
-- ❌ Sync by brute force (sending full state every time)
-- ❌ Centralize everything (a cloud outage takes the whole system down)
+- Design without measuring real latency
+- Push state-of-the-art ML models to limited edge hardware (they won't fit)
+- Skip offline mode (the system WILL go offline at some point)
+- Sync by brute force (sending full state every time)
+- Centralize everything (a cloud outage takes the whole system down)
 
 ## When to Hand Off
 
@@ -360,11 +360,11 @@ Boot flow:
 ## Memory Discipline
 
 ```c
-// ❌ Avoid in hot paths
+// Avoid in hot paths
 char *buf = malloc(256);    // heap fragmentation
 sprintf(buf, "...");
 
-// ✅ Static allocation
+// Right: Static allocation
 static char buf[256];
 snprintf(buf, sizeof(buf), "...");
 ```
@@ -386,11 +386,11 @@ extern const i2c_driver_t esp32_i2c;
 
 ## Things You Don't Do
 
-- ❌ Dynamic allocation in interrupt handlers
-- ❌ Long operations in interrupt service routines (ISRs) — set a flag, do the work in the main loop
-- ❌ printf to UART in performance-critical code
-- ❌ Skip watchdog feeding
-- ❌ Ship without OTA capability
+- Dynamic allocation in interrupt handlers
+- Long operations in interrupt service routines (ISRs) — set a flag, do the work in the main loop
+- printf to UART in performance-critical code
+- Skip watchdog feeding
+- Ship without OTA capability
 
 ## Skills You Use
 
@@ -570,11 +570,11 @@ NEVER:
 
 ## Things You Don't Do
 
-- ❌ Hardcode credentials in firmware
-- ❌ Skip TLS (some legacy IoT systems do; never do it)
-- ❌ Trust device-sent timestamps for billing
-- ❌ Allow unbounded telemetry rates (you end up DDoSing your own service)
-- ❌ Push firmware without rollback path
+- Hardcode credentials in firmware
+- Skip TLS (some legacy IoT systems do; never do it)
+- Trust device-sent timestamps for billing
+- Allow unbounded telemetry rates (you end up DDoSing your own service)
+- Push firmware without rollback path
 
 ## Skills You Use
 
@@ -589,11 +589,11 @@ NEVER:
 
 ## Common Pitfalls
 
-- ❌ **Chatty devices** — drain battery and bandwidth
-- ❌ **No edge fail-safe** — a cloud outage bricks devices
-- ❌ **Per-device unique processing** — custom handling per device doesn't scale
-- ❌ **No fleet-wide observability** — failures go unnoticed
-- ❌ **OTA without A/B** — a bricked device must be replaced in the field
+- Wrong: **Chatty devices** — drain battery and bandwidth
+- Wrong: **No edge fail-safe** — a cloud outage bricks devices
+- Wrong: **Per-device unique processing** — custom handling per device doesn't scale
+- Wrong: **No fleet-wide observability** — failures go unnoticed
+- Wrong: **OTA without A/B** — a bricked device must be replaced in the field
 
 
 ## reference: agent-mqtt-specialist.md
@@ -651,12 +651,12 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 
 | Broker | Scale | Persistence | Best for |
 |--------|------:|:-----------:|----------|
-| **EMQX** | 100M+ conn | ✅ | Self-hosting at massive scale |
-| **HiveMQ** | High | ✅ | Enterprise managed |
+| **EMQX** | 100M+ conn | ✓ | Self-hosting at massive scale |
+| **HiveMQ** | High | ✓ | Enterprise managed |
 | **Mosquitto** | Low-mid | 🟡 | Simple, embedded |
-| **VerneMQ** | High | ✅ | Distributed, Erlang |
-| **AWS IoT Core** | Massive | ✅ | Teams already on AWS |
-| **Azure IoT Hub** | Massive | ✅ | Teams already on Azure |
+| **VerneMQ** | High | ✓ | Distributed, Erlang |
+| **AWS IoT Core** | Massive | ✓ | Teams already on AWS |
+| **Azure IoT Hub** | Massive | ✓ | Teams already on Azure |
 | **GCP IoT Core** | (deprecated 2023) | — | Use a third-party broker on GCP |
 
 ## Topic Design Patterns
@@ -684,8 +684,8 @@ acme/factory-1/#                  # everything in factory-1
 
 ### Anti-pattern: Flat namespace
 ```
-❌ device-abc-temp
-❌ device-def-humid
+Wrong: device-abc-temp
+Wrong: device-def-humid
    Hard to subscribe, ACL, route
 ```
 
@@ -823,11 +823,11 @@ Key metrics:
 
 ## Things You Don't Do
 
-- ❌ Send credentials in plain text (always use TLS)
-- ❌ Use wildcard subscriptions for high-throughput consumers
-- ❌ Use QoS 2 unless you truly need it (it is expensive)
-- ❌ Create one topic per data point (put structure in the payload instead)
-- ❌ Forget to clean up retained messages (they pile up)
+- Send credentials in plain text (always use TLS)
+- Use wildcard subscriptions for high-throughput consumers
+- Use QoS 2 unless you truly need it (it is expensive)
+- Create one topic per data point (put structure in the payload instead)
+- Forget to clean up retained messages (they pile up)
 
 ## Skills You Use
 
@@ -1159,12 +1159,12 @@ Stagger to avoid thundering herd
 
 ## Things You Don't Do
 
-- ❌ Push an OTA update to the whole fleet at once (start with a canary group)
-- ❌ Share one set of credentials across the fleet
-- ❌ Skip device authentication
-- ❌ Trust the state a device reports without checking it
-- ❌ Decommission a device without revoking its certificates
-- ❌ Design so that recovering a bricked device needs someone on site
+- Push an OTA update to the whole fleet at once (start with a canary group)
+- Share one set of credentials across the fleet
+- Skip device authentication
+- Trust the state a device reports without checking it
+- Decommission a device without revoking its certificates
+- Design so that recovering a bricked device needs someone on site
 
 ## Reference
 
@@ -1222,12 +1222,12 @@ Stagger to avoid thundering herd
 
 | Need | Edge required? |
 |------|:--------------:|
-| Sub-100ms latency | ✅ |
-| Keep working when the cloud is down | ✅ |
-| Limited bandwidth back to the cloud | ✅ |
-| Data must stay local (privacy) | ✅ |
+| Sub-100ms latency | ✓ |
+| Keep working when the cloud is down | ✓ |
+| Limited bandwidth back to the cloud | ✓ |
+| Data must stay local (privacy) | ✓ |
 | Many devices per site | Often |
-| Few cheap devices with a fast WAN link | ❌ |
+| Few cheap devices with a fast WAN link | ✗ |
 
 ## Edge Runtime Selection
 
@@ -1480,12 +1480,12 @@ Break-even depends on:
 
 ## Things You Don't Do
 
-- ❌ Push a state-of-the-art LLM to the edge (it won't fit)
-- ❌ Leave offline mode out of the spec
-- ❌ Sync everything (sync only what is needed)
-- ❌ Forget time sync (NTP / chrony — events can't be ordered without it)
-- ❌ Trust in one direction only (edge must verify cloud, and cloud must verify edge)
-- ❌ Ship OTA without testing the rollback path
+- Push a state-of-the-art LLM to the edge (it won't fit)
+- Leave offline mode out of the spec
+- Sync everything (sync only what is needed)
+- Forget time sync (NTP / chrony — events can't be ordered without it)
+- Trust in one direction only (edge must verify cloud, and cloud must verify edge)
+- Ship OTA without testing the rollback path
 
 ## Reference
 
@@ -1534,7 +1534,7 @@ Break-even depends on:
 | Compatibility | Universal | Newer brokers only |
 | Reason codes | Limited | Detailed |
 | Properties | None | Per-packet metadata |
-| Shared subs | No | ✅ |
+| Shared subs | No | ✓ |
 | Retain handling | Basic | Advanced |
 | Use when | Legacy required | Greenfield |
 
@@ -1814,17 +1814,17 @@ def on_publish(client, userdata, mid, reason_code, properties):
 ## Topic Filter Best Practices
 
 ```
-✅ Subscribe specific:
+Right: Subscribe specific:
    acme/factory-1/sensor/+/telemetry
 
-❌ Subscribe too broad:
+Wrong: Subscribe too broad:
    #
    (gets EVERYTHING, kills consumer)
 
-✅ Use shared subs for high-volume:
+Right: Use shared subs for high-volume:
    $share/processors/acme/+/+/telemetry
 
-❌ Many overlapping subscriptions:
+Wrong: Many overlapping subscriptions:
    acme/+/+/+
    acme/factory-1/+/+
    acme/factory-1/sensor/+
@@ -1833,11 +1833,11 @@ def on_publish(client, userdata, mid, reason_code, properties):
 
 ## Things You Don't Do
 
-- ❌ Subscribe to `#` (you receive EVERYTHING)
-- ❌ Use QoS 2 by default (it is slow)
-- ❌ Forget to clean up retained messages
-- ❌ Block inside the message callback (queues fill up)
-- ❌ Reconnect without backoff (devices end up DDoSing the broker)
+- Subscribe to `#` (you receive EVERYTHING)
+- Use QoS 2 by default (it is slow)
+- Forget to clean up retained messages
+- Block inside the message callback (queues fill up)
+- Reconnect without backoff (devices end up DDoSing the broker)
 
 ## Reference
 

@@ -12,7 +12,7 @@
  */
 import { plan as planSuperuser, rulesCopyAction, rulesHeader } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
-import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday } from './lesson-checks.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday, badPluginRefs, changelogOrder, iconLines } from './lesson-checks.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
@@ -624,21 +624,42 @@ function selfTest() {
   console.log(`  ${cr ? '✅' : '❌'} CR ดิบกลางบรรทัดโดนจับ · ไฟล์ CRLF และ LF ปกติไม่โดน`);
   if (cr) ok++;
   // เหตุการณ์จริง: Imagen 4 ปิด 2026-08-17 แต่ skill ยังแนะนำอยู่ เพราะไม่มีใครเตือนเมื่อเลยวัน
+  const page = (f) => (f === 'a.md' ? 'Imagen 4 ปิด · tick เปลี่ยน · VAT ถึง 2570' : null);
   const ex = expiredFacts([
-    { date: '2026-08-17', file: 'a.md', what: 'Imagen 4' },
-    { date: '2026-11-10', file: 'a.md', what: 'ใกล้หมด' },
-    { date: '2027-09-30', file: 'a.md', what: 'อีกนาน' },
-    { date: '2027-01-01', file: 'gone.md', what: 'ไฟล์หาย' },
-    { date: '2027-1-1', file: 'a.md', what: 'วันผิดรูป' },
-  ], '2026-10-25', (f) => f === 'a.md');
+    { date: '2026-08-17', file: 'a.md', what: 'Imagen 4', quote: 'Imagen 4' },
+    { date: '2026-11-10', file: 'a.md', what: 'ใกล้หมด', quote: 'tick เปลี่ยน' },
+    { date: '2027-09-30', file: 'a.md', what: 'อีกนาน', quote: 'VAT ถึง 2570' },
+    { date: '2027-01-01', file: 'gone.md', what: 'ไฟล์หาย', quote: 'x' },
+    { date: '2027-1-1', file: 'a.md', what: 'วันผิดรูป', quote: 'x' },
+    // เหตุการณ์จริง 2026-10-26: แถวอ้าง "ตรวจทุก 6 เดือน" แต่ไฟล์ไม่ได้เขียน
+    { date: '2027-04-26', file: 'a.md', what: 'รอบตรวจ 6 เดือน', quote: 'ตรวจซ้ำทุก 6 เดือน' },
+    { date: '2027-04-26', file: 'a.md', what: 'ไม่มี quote' },
+  ], '2026-10-25', page);
   const d = new Date(2026, 9, 26, 0, 30);   // 00:30 ตามเวลาเครื่อง = ยังเป็นวันที่ 25 ใน UTC ถ้าเครื่องอยู่ไทย
-  const exp = ex.warns.length === 2 && ex.warns[0].includes('หมดแล้ว') && ex.warns[1].includes('อีก 16 วัน') && ex.errors.length === 2
+  const exp = ex.warns.length === 2 && ex.warns[0].includes('หมดแล้ว') && ex.warns[1].includes('อีก 16 วัน') && ex.errors.length === 4
+    && ex.errors.some((e) => e.includes('ตรวจซ้ำทุก 6 เดือน'))
     && localToday(d) === '2026-10-26'
-    && expiredFacts([{ date: '2026-11-25', file: 'a.md', what: 'ขอบ 30 วัน' }], '2026-10-26', () => true).warns.length === 1;
-  console.log(`  ${exp ? '✅' : '❌'} ข้อเท็จจริงที่เลยวันหรือเหลือไม่ถึง 30 วันโดนเตือน · ไฟล์หายและวันผิดรูปโดนจับ · ที่ยังอีกนานไม่โดน`);
+    && expiredFacts([{ date: '2026-11-25', file: 'a.md', what: 'ขอบ 30 วัน', quote: 'VAT' }], '2026-10-26', page).warns.length === 1;
+  console.log(`  ${exp ? '✅' : '❌'} ข้อเท็จจริงที่เลยวันหรือเหลือไม่ถึง 30 วันโดนเตือน · ไฟล์หาย วันผิดรูป ไม่มี quote และ quote ที่ไฟล์ไม่ได้เขียนโดนจับ · ที่ยังอีกนานไม่โดน`);
   if (exp) ok++;
+  // เหตุการณ์จริง 2026-10-23: seller-tax-basics ย้ายไป thai-workplace แต่ยังมีตัวชี้ `e-commerce:seller-tax-basics`
+  const owns = { 'e-commerce': ['pdpa-workflow'], 'personal-life': ['seller-tax-basics'], superuser: ['superuser'] };
+  const ownsRef = (p, n) => (owns[p] ?? []).includes(n);
+  const refs = badPluginRefs('ดู `e-commerce:seller-tax-basics` และ `e-commerce:pdpa-workflow`\n<!-- superuser:begin rules -->\nhttps://x.com/e-commerce:abc `superuser:superuser`', ['e-commerce', 'personal-life', 'superuser'], ownsRef);
+  const pr = refs.length === 1 && refs[0].at === 1 && refs[0].msg.includes('e-commerce:seller-tax-basics');
+  console.log(`  ${pr ? '✅' : '❌'} ตัวชี้ plugin:ชื่อ ที่ไม่มีใน plugin นั้นโดนจับ · ของที่มีจริง · เครื่องหมายบล็อกใน comment · URL ไม่โดน`);
+  if (pr) ok++;
+  const co = changelogOrder('## Unreleased\n## 1.2.0 — x\n## 1.1.0\n## ประวัติ\n## 1.0.0', '1.2.0').length === 0
+    && changelogOrder('## 1.1.0\n## 1.2.0', '1.2.0').length === 2
+    && changelogOrder('## 1.2.0\n## Unreleased', '1.2.0').length === 1
+    && changelogOrder('## 1.1.0', '1.2.0').length === 1;
+  console.log(`  ${co ? '✅' : '❌'} CHANGELOG เรียงผิด · Unreleased ไม่อยู่บนสุด · รุ่นบนสุดไม่ตรง plugin.json โดนจับ · ลำดับถูกผ่าน`);
+  if (co) ok++;
+  const ic = iconLines('- ❌ **ลบไฟล์ผู้ใช้**\nบรรทัด `⚠ แปลงไม่ครบ` จากสคริปต์\n```\n# ✅ ในโค้ด\n```\n| a | ✓ |').length === 1;
+  console.log(`  ${ic ? '✅' : '❌'} ไอคอนในเนื้อหาโดนจับ · ใน backtick บล็อกโค้ด และ ✓ ✗ ในตารางไม่โดน`);
+  if (ic) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 20;
+  const total = cases.length + 23;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -714,6 +735,11 @@ for (const [rel, text] of docFiles) {
 const teamDir = join(ROOT, '.claude', 'superuser');
 for (const [rel, text] of docFiles.concat(existsSync(teamDir) ? markdownFiles(teamDir) : []))
   for (const { at, msg } of loneCR(text)) err(`${rel}:${at}`, msg);
+// ตัวชี้ plugin:ชื่อ ใน plugins/ และ prompt/ · CHANGELOG (ประวัติ) และเคสที่ตั้งใจพังของ review-recall ข้าม
+const hasRef = (p, n) => existsSync(join(pluginsDir, p, 'skills', n, 'SKILL.md')) || existsSync(join(pluginsDir, p, 'agents', `${n}.md`));
+for (const [rel, text] of docFiles)
+  if (/^(plugins|prompt)\//.test(rel) && !/CHANGELOG\.md$|review-recall\/cases\//.test(rel))
+    for (const { at, msg } of badPluginRefs(text, plugins, hasRef).concat(/human-writing\/SKILL\.md$/.test(rel) ? [] : iconLines(text))) err(`${rel}:${at}`, msg);
 if (existsSync(factsFile)) checkRetired(JSON.parse(readFileSync(factsFile, 'utf8')).retired ?? [], docFiles);
 
 // skill กลางที่ต้องเหมือนกันทุก plugin (human-writing · agent-patterns) · ทุก agent ต้องชี้ไปที่ human-writing
@@ -742,6 +768,10 @@ for (const p of plugins) {
   try { repoVersions[p] = JSON.parse(readFileSync(join(pluginsDir, p, '.claude-plugin', 'plugin.json'), 'utf8')).version; } catch { /* plugin.json พัง checkPlugin รายงานแล้ว */ }
 }
 for (const m of installedOlder(join(homedir(), '.claude', 'plugins', 'installed_plugins.json'), repoVersions)) warn('~/.claude/plugins/installed_plugins.json', m);
+for (const p of plugins) {
+  const cl = join(pluginsDir, p, 'CHANGELOG.md');
+  if (existsSync(cl)) for (const m of changelogOrder(readFileSync(cl, 'utf8').replace(/\r\n/g, '\n'), repoVersions[p])) err(`plugins/${p}/CHANGELOG.md`, m);
+}
 function walkFiles(dir, exts, out = []) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
@@ -771,7 +801,8 @@ const contextFile = join(ROOT, '.claude', 'superuser', 'CONTEXT.md');
 if (existsSync(contextFile)) for (const m of decisionRows(readFileSync(contextFile, 'utf8'))) warn('.claude/superuser/CONTEXT.md', m);
 const expiryFile = join(ROOT, 'scripts', 'check', 'expiry.json');
 if (existsSync(expiryFile)) {
-  const { warns: ew, errors: ee } = expiredFacts(JSON.parse(readFileSync(expiryFile, 'utf8')).facts ?? [], localToday(), (f) => existsSync(join(ROOT, f)));
+  const { warns: ew, errors: ee } = expiredFacts(JSON.parse(readFileSync(expiryFile, 'utf8')).facts ?? [], localToday(),
+    (f) => (existsSync(join(ROOT, f)) ? readFileSync(join(ROOT, f), 'utf8').replace(/\r\n/g, '\n') : null));
   for (const m of ew) warn('scripts/check/expiry.json', m);
   for (const m of ee) err('scripts/check/expiry.json', m);
 }

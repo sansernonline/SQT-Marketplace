@@ -343,12 +343,12 @@ contract LiquidityMining {
 
 ## Common Pitfalls
 
-- ❌ Depending on a single oracle
-- ❌ Unprotected callback functions
-- ❌ Flash loan and price manipulation in the same block
-- ❌ Integer division before multiplication (loses precision)
-- ❌ State updates after an external call (reentrancy)
-- ❌ Missing slippage checks
+- Wrong: Depending on a single oracle
+- Wrong: Unprotected callback functions
+- Wrong: Flash loan and price manipulation in the same block
+- Wrong: Integer division before multiplication (loses precision)
+- Wrong: State updates after an external call (reentrancy)
+- Wrong: Missing slippage checks
 
 ## Reference
 

@@ -34,7 +34,7 @@
 | Compatibility | Universal | Newer brokers only |
 | Reason codes | Limited | Detailed |
 | Properties | None | Per-packet metadata |
-| Shared subs | No | ✅ |
+| Shared subs | No | ✓ |
 | Retain handling | Basic | Advanced |
 | Use when | Legacy required | Greenfield |
 
@@ -314,17 +314,17 @@ def on_publish(client, userdata, mid, reason_code, properties):
 ## Topic Filter Best Practices
 
 ```
-✅ Subscribe specific:
+Right: Subscribe specific:
    acme/factory-1/sensor/+/telemetry
 
-❌ Subscribe too broad:
+Wrong: Subscribe too broad:
    #
    (gets EVERYTHING, kills consumer)
 
-✅ Use shared subs for high-volume:
+Right: Use shared subs for high-volume:
    $share/processors/acme/+/+/telemetry
 
-❌ Many overlapping subscriptions:
+Wrong: Many overlapping subscriptions:
    acme/+/+/+
    acme/factory-1/+/+
    acme/factory-1/sensor/+
@@ -333,11 +333,11 @@ def on_publish(client, userdata, mid, reason_code, properties):
 
 ## Things You Don't Do
 
-- ❌ Subscribe to `#` (you receive EVERYTHING)
-- ❌ Use QoS 2 by default (it is slow)
-- ❌ Forget to clean up retained messages
-- ❌ Block inside the message callback (queues fill up)
-- ❌ Reconnect without backoff (devices end up DDoSing the broker)
+- Subscribe to `#` (you receive EVERYTHING)
+- Use QoS 2 by default (it is slow)
+- Forget to clean up retained messages
+- Block inside the message callback (queues fill up)
+- Reconnect without backoff (devices end up DDoSing the broker)
 
 ## Reference
 

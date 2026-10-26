@@ -31,11 +31,11 @@
 ## The 5 Pillars of AML Program
 
 ```
-1. ✅ Internal controls (policies, procedures)
-2. ✅ Designated compliance officer
-3. ✅ Ongoing training
-4. ✅ Independent audit
-5. ✅ Customer Due Diligence (CDD)
+1. Internal controls (policies, procedures)
+2. Designated compliance officer
+3. Ongoing training
+4. Independent audit
+5. Customer Due Diligence (CDD)
 ```
 
 This file covers how to build #5 in software.
@@ -148,10 +148,10 @@ if (match.score > 0.95) {
 ```
 
 ### Anti-patterns
-- ❌ Exact match only (misses 80% of real matches)
-- ❌ One-time check only (lists update daily)
-- ❌ Blocking every fuzzy match (floods you with false positives)
-- ❌ Manual lists in spreadsheets (use API services)
+- Exact match only (misses 80% of real matches)
+- One-time check only (lists update daily)
+- Blocking every fuzzy match (floods you with false positives)
+- Manual lists in spreadsheets (use API services)
 
 ## PEP (Politically Exposed Persons)
 
@@ -246,7 +246,7 @@ Tier 3: ML models
 
 **Thailand:** the Anti-Money Laundering Act B.E. 2542 (พ.ร.บ.ป้องกันและปราบปรามการฟอกเงิน) section 22 sets the periods for customer due diligence (CDD) records and transaction records, and the 2015 amendment changed the retention period (Tilleke & Gibbins, Sep 2025). The exact years — possibly 10 years for CDD records after the relationship ends — are `(รอยืนยัน)`: check the Act and the Anti-Money Laundering Board (AMLB) ordinance on safe-keeping CDD information (2016) on amlo.go.th. Until confirmed, keep Thai records for the longer period.
 
-> ⚠️ Clashes with a deletion request? For Thai users this is the Personal Data Protection Act (PDPA); for EU users the GDPR "right to erasure". Both let you keep data that another law requires you to keep, so AML retention usually wins — record the legal basis and delete when the period ends. Details → `pdpa-compliance`.
+> Note: Clashes with a deletion request? For Thai users this is the Personal Data Protection Act (PDPA); for EU users the GDPR "right to erasure". Both let you keep data that another law requires you to keep, so AML retention usually wins — record the legal basis and delete when the period ends. Details → `pdpa-compliance`.
 
 ## Risk-Based Approach
 
@@ -280,13 +280,13 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ## Common Pitfalls
 
-- ❌ **One-time checks** — must be ongoing
-- ❌ **Treating low-risk as no monitoring needed**
-- ❌ **Over-reliance on vendor** — you're still responsible
-- ❌ **Alert fatigue** — too many false positives → real ones missed
-- ❌ **No documentation** — the regulator will ask you to show your reasoning
-- ❌ **Mixing fraud + AML** — they have different goals and different rules
-- ❌ **Auto-block on PEP** — a PEP is not a criminal. Do EDD instead
+- Wrong: **One-time checks** — must be ongoing
+- Wrong: **Treating low-risk as no monitoring needed**
+- Wrong: **Over-reliance on vendor** — you're still responsible
+- Wrong: **Alert fatigue** — too many false positives → real ones missed
+- Wrong: **No documentation** — the regulator will ask you to show your reasoning
+- Wrong: **Mixing fraud + AML** — they have different goals and different rules
+- Wrong: **Auto-block on PEP** — a PEP is not a criminal. Do EDD instead
 
 ## Quality Targets
 

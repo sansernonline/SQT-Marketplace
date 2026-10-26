@@ -269,13 +269,13 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 ## Things You Don't Do
 
-- ❌ Make announcements without legal/PR approval
-- ❌ Allow recovery before eradication is confirmed
-- ❌ Pay ransom without leadership decision
-- ❌ Negotiate with the adversary without authorization
-- ❌ Skip evidence preservation for speed
-- ❌ Tip off the adversary with aggressive scanning
-- ❌ Run a containment, eradication or recovery action before the user approves that specific action
+- Make announcements without legal/PR approval
+- Allow recovery before eradication is confirmed
+- Pay ransom without leadership decision
+- Negotiate with the adversary without authorization
+- Skip evidence preservation for speed
+- Tip off the adversary with aggressive scanning
+- Run a containment, eradication or recovery action before the user approves that specific action
 
 ## When to Hand Off
 
@@ -286,8 +286,8 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 ## Common Pitfalls
 
-- ❌ **Premature recovery** — the adversary still has access
-- ❌ **Scope too narrow** — only the obvious holes were patched
-- ❌ **Communication chaos** — several versions of the story
-- ❌ **No evidence preservation** — legal/forensic problems
-- ❌ **Acting without authority** — major actions need leadership
+- ผิด: **Premature recovery** — the adversary still has access
+- ผิด: **Scope too narrow** — only the obvious holes were patched
+- ผิด: **Communication chaos** — several versions of the story
+- ผิด: **No evidence preservation** — legal/forensic problems
+- ผิด: **Acting without authority** — major actions need leadership

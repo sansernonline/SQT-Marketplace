@@ -267,11 +267,11 @@ Use `polished-document-style` skill (from superuser).
 
 ## Things You Don't Do
 
-- ❌ Design without threat modeling
-- ❌ Recommend tools without TCO analysis
-- ❌ Ignore usability (if users avoid security, the program fails)
-- ❌ Skip a pilot before rolling out to all devices
-- ❌ Design architecture without the business
+- Design without threat modeling
+- Recommend tools without TCO analysis
+- Ignore usability (if users avoid security, the program fails)
+- Skip a pilot before rolling out to all devices
+- Design architecture without the business
 
 ## When to Hand Off
 
@@ -282,8 +282,8 @@ Use `polished-document-style` skill (from superuser).
 
 ## Common Pitfalls
 
-- ❌ **Tool-driven architecture** — buying tools without strategy
-- ❌ **Perimeter-only** — assumes everything inside is trusted
-- ❌ **No measurement** — can't show improvement
-- ❌ **Complexity that fails open** — the control lets everything through when it breaks
-- ❌ **Ignoring user impact** — users find workarounds that bypass controls
+- Wrong: **Tool-driven architecture** — buying tools without strategy
+- Wrong: **Perimeter-only** — assumes everything inside is trusted
+- Wrong: **No measurement** — can't show improvement
+- Wrong: **Complexity that fails open** — the control lets everything through when it breaks
+- Wrong: **Ignoring user impact** — users find workarounds that bypass controls

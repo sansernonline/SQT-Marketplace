@@ -293,11 +293,11 @@ return { document: newlyGenerated, changes_from_last: diff };
 
 ## Things You Don't Do
 
-- ❌ Auto-generate and send without review
-- ❌ Share variables across templates (it gets confusing)
-- ❌ Skip versioning (you lose the audit trail and reproducibility)
-- ❌ Provide legal advice
-- ❌ Forget e-signature integration
+- Auto-generate and send without review
+- Share variables across templates (it gets confusing)
+- Skip versioning (you lose the audit trail and reproducibility)
+- Provide legal advice
+- Forget e-signature integration
 
 ## Skills You Use
 

@@ -167,15 +167,15 @@ For every visual:
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -432,7 +432,7 @@ Someone scanning `git log --oneline` should understand each line without opening
 - **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
 - **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit. Check `git diff --stat` before writing the subject: when the files fall into more than one topic (feature + unrelated rename, fix + formatting sweep), propose the split as a list of `<subject> → <files>` per commit and stage each with `git add <files>` or `git add -p`; never hide the second topic in the body
 
-| ❌ Hard to read | ✅ Short and clear |
+| ✗ Hard to read | ✓ Short and clear |
 |---|---|
 | `update items.js, server.js, add test, fix bug` | `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` |
 | `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
@@ -466,12 +466,12 @@ Co-authored-by: ...      ← attribution
 
 ## Anti-patterns
 
-- ❌ `update code`
-- ❌ `fix bug`
-- ❌ `WIP`
-- ❌ `final commit` / `final final`
-- ❌ Past tense: `added feature` (use `add feature`)
-- ❌ Vague scope: `fix(misc): ...` (be specific)
+- `update code`
+- `fix bug`
+- `WIP`
+- `final commit` / `final final`
+- Past tense: `added feature` (use `add feature`)
+- Vague scope: `fix(misc): ...` (be specific)
 
 
 ---
@@ -580,11 +580,11 @@ python -c "import pymupdf; d=pymupdf.open('report.pdf'); [p.get_pixmap(dpi=70).s
 
 ## 6 · Anti-patterns
 
-- ❌ **แก้ .docx ใน Word แล้วส่ง** — รันใหม่เมื่อไรก็หาย · แก้ที่ .md
-- ❌ **ใช้ List Number ของ Word** — นับต่อข้ามรายการ สคริปต์จึงใส่เลขเอง
-- ❌ **ภาพหน้าจอขนาดเล็กขยายเต็มหน้า** — แตก ให้ถ่ายใหม่ที่ความกว้าง ≥ 1600 px
-- ❌ **ตารางกว้าง 7 คอลัมน์ขึ้นไปในหน้าแนวตั้ง** — แยกเป็น 2 ตาราง
-- ❌ **ส่งโดยไม่ได้เปิดดู PDF** — ดูข้อ 5
+- **แก้ .docx ใน Word แล้วส่ง** — รันใหม่เมื่อไรก็หาย · แก้ที่ .md
+- **ใช้ List Number ของ Word** — นับต่อข้ามรายการ สคริปต์จึงใส่เลขเอง
+- **ภาพหน้าจอขนาดเล็กขยายเต็มหน้า** — แตก ให้ถ่ายใหม่ที่ความกว้าง ≥ 1600 px
+- **ตารางกว้าง 7 คอลัมน์ขึ้นไปในหน้าแนวตั้ง** — แยกเป็น 2 ตาราง
+- **ส่งโดยไม่ได้เปิดดู PDF** — ดูข้อ 5
 
 ## 7 · เชื่อมกับ skill อื่น
 

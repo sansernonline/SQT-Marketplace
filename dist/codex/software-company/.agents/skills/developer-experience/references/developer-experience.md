@@ -74,20 +74,20 @@ npm run dev
 ```
 
 ### Common Friction
-- ❌ Sign up for account first
-- ❌ Configure environment variables
-- ❌ Install N dependencies
-- ❌ Read documentation before code
-- ❌ Decide between multiple paths
-- ❌ Manual API key setup
+- Wrong: Sign up for account first
+- Wrong: Configure environment variables
+- Wrong: Install N dependencies
+- Wrong: Read documentation before code
+- Wrong: Decide between multiple paths
+- Wrong: Manual API key setup
 
 ### Solutions
-- ✅ Free tier with no sign-up
-- ✅ Templates with sensible defaults
-- ✅ Dependencies bundled in
-- ✅ Docs that start with code
-- ✅ Clear "recommended" path
-- ✅ Sandbox mode without keys
+- Free tier with no sign-up
+- Templates with sensible defaults
+- Dependencies bundled in
+- Docs that start with code
+- Clear "recommended" path
+- Sandbox mode without keys
 
 ## Error Message Design
 
@@ -105,10 +105,10 @@ Reference: learn more
 ### Examples
 
 ```
-❌ Generic
+Wrong: Generic
 Error: Invalid configuration
 
-✅ Specific + Actionable
+Right: Specific + Actionable
 Error: API_KEY_INVALID
   Your API key was not recognized by the server.
 
@@ -158,11 +158,11 @@ tool reset --force             # require flag
 
 ### Anti-Patterns
 ```
-❌ tool unique-non-verb-command
-❌ tool --random-flag-order-matters
-❌ No --help
-❌ Silent destructive operations
-❌ Color in piped output (respect NO_COLOR)
+Wrong: tool unique-non-verb-command
+Wrong: tool --random-flag-order-matters
+Wrong: No --help
+Wrong: Silent destructive operations
+Wrong: Color in piped output (respect NO_COLOR)
 ```
 
 ## Local Dev Setup
@@ -199,7 +199,7 @@ make dev   # or `npm run dev` or `docker compose up`
 ## Sample App Quality Standards
 
 ```
-✅ Quality checklist:
+Right: Quality checklist:
 - [ ] One-click deploy (Vercel, Railway, Render button)
 - [ ] README explains "why this exists"
 - [ ] Step-by-step setup
@@ -214,10 +214,10 @@ make dev   # or `npm run dev` or `docker compose up`
 ## Code Sample Standards
 
 ```typescript
-// ❌ Incomplete
+// Incomplete
 const result = client.doStuff(data);
 
-// ✅ Runnable
+// Runnable
 import { Client } from '@example/sdk';
 
 // Step 1: Initialize client
@@ -262,12 +262,12 @@ Track how many developers pass each step. Fix the step that loses the most.
 ```
 Edit code → see result
 
-❌ Slow:
+Wrong: Slow:
 - 30 sec restart
 - 5 min CI run
 - Manual deploy
 
-✅ Fast:
+Right: Fast:
 - Hot reload (1 sec)
 - Watch mode tests
 - Fast preview deploys (Vercel/Netlify)
@@ -305,12 +305,12 @@ NPS = % promoters - % detractors
 
 ## Things You Don't Do
 
-- ❌ Force sign-up before the first code runs
-- ❌ Hide errors that need to be visible
-- ❌ Require configuration with no sensible defaults
-- ❌ Give examples that leave parts for the reader to guess
-- ❌ Make onboarding long before the developer does anything
-- ❌ Ignore DX metrics
+- Force sign-up before the first code runs
+- Hide errors that need to be visible
+- Require configuration with no sensible defaults
+- Give examples that leave parts for the reader to guess
+- Make onboarding long before the developer does anything
+- Ignore DX metrics
 
 ## Reference
 

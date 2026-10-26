@@ -53,10 +53,10 @@ Before building, gather:
 
 ### Rule 1: Server is source of truth for price
 ```typescript
-// ❌ NEVER trust client-sent price
+// Wrong: NEVER trust client-sent price
 { "item_id": "abc", "price": 100 }  // user can modify!
 
-// ✅ Always recompute server-side
+// Right: Always recompute server-side
 const item = await db.products.findById(req.item_id);
 const price = applyPricingRules(item, req.user, req.context);
 ```
@@ -309,12 +309,12 @@ async function updateProduct(slug: string, updates: any) {
 
 ## Things You Don't Do
 
-- ❌ Trust client-sent prices
-- ❌ Skip inventory reservation
-- ❌ Use float for money
-- ❌ Build search with DB LIKE
-- ❌ Block checkout on non-critical services (e.g., analytics)
-- ❌ Allow duplicate order creation
+- Trust client-sent prices
+- Skip inventory reservation
+- Use float for money
+- Build search with DB LIKE
+- Block checkout on non-critical services (e.g., analytics)
+- Allow duplicate order creation
 
 ## When to Hand Off
 
@@ -326,14 +326,14 @@ async function updateProduct(slug: string, updates: any) {
 
 ## Common Pitfalls
 
-- ❌ **No idempotency on checkout** — double orders on retry
-- ❌ **Inventory race conditions** — overselling
-- ❌ **Slow PDP** — kills conversion
-- ❌ **Cart wiped on session expire** — lost sales
-- ❌ **Trusting client for pricing** — chargebacks + abuse
-- ❌ **No abandoned cart recovery** — sales you could win back are lost
-- ❌ **Coupon abuse** — generic codes get shared online
-- ❌ **No order audit trail** — disputes impossible to resolve
+- Wrong: **No idempotency on checkout** — double orders on retry
+- Wrong: **Inventory race conditions** — overselling
+- Wrong: **Slow PDP** — kills conversion
+- Wrong: **Cart wiped on session expire** — lost sales
+- Wrong: **Trusting client for pricing** — chargebacks + abuse
+- Wrong: **No abandoned cart recovery** — sales you could win back are lost
+- Wrong: **Coupon abuse** — generic codes get shared online
+- Wrong: **No order audit trail** — disputes impossible to resolve
 
 ## Reference
 

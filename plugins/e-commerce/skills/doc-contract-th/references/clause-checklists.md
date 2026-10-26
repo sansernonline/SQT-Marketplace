@@ -2,7 +2,7 @@
 
 Contents: 1. Employment (สัญญาจ้างแรงงาน) · 2. Lease (สัญญาเช่า) · 3. Hire of work / services (สัญญาจ้างทำของ)
 
-Tick each item. `{…}` = must be filled. ⚠️ = a lawyer must review.
+Tick each item. `{…}` = must be filled. [ให้ทนายตรวจ] = a lawyer must review.
 
 ## 1. สัญญาจ้างแรงงาน
 
@@ -15,8 +15,8 @@ Tick each item. `{…}` = must be filled. ⚠️ = a lawyer must review.
 - [ ] Leave types and procedure — refer to company work rules (ข้อบังคับเกี่ยวกับการทำงาน) and `doc-leave`
 - [ ] Social security, provident fund (if any), withholding tax
 - [ ] Confidentiality; IP created in the job belongs to employer
-- [ ] ⚠️ Non-compete / non-solicit (limit field, area, 6–12 months)
-- [ ] ⚠️ Deposit or guarantor
+- [ ] [ให้ทนายตรวจ] Non-compete / non-solicit (limit field, area, 6–12 months)
+- [ ] [ให้ทนายตรวจ] Deposit or guarantor
 - [ ] Personal data notice for HR data (`pdpa-workflow`)
 - [ ] Termination: notice of 1 pay period (ม.17), severance per law, grounds without severance (ม.119)
 - [ ] Return of company property; final pay within 3 days of termination
@@ -26,7 +26,7 @@ Tick each item. `{…}` = must be filled. ⚠️ = a lawyer must review.
 
 - [ ] Lessor (owner or authorised — check title deed / condo title, power of attorney)
 - [ ] Property: address, title deed number, area, furniture list with photos (annex)
-- [ ] Term, start date, renewal option and notice; ⚠️ over 3 years → register at the land office
+- [ ] Term, start date, renewal option and notice; [ให้ทนายตรวจ] over 3 years → register at the land office
 - [ ] Rent, due date, late fee (reasonable), payment channel
 - [ ] Deposit amount, what it covers, refund timeline and inspection procedure
 - [ ] Utilities: who pays; residential business landlords may not mark up state electricity/water rates
@@ -46,7 +46,7 @@ Tick each item. `{…}` = must be filled. ⚠️ = a lawyer must review.
 - [ ] Change request procedure and pricing
 - [ ] Materials: who supplies; risk until delivery
 - [ ] Defects liability / warranty period (e.g. 1 year), response time
-- [ ] ⚠️ Delay penalty — realistic daily rate and a cap
+- [ ] [ให้ทนายตรวจ] Delay penalty — realistic daily rate and a cap
 - [ ] IP ownership on full payment; licence for pre-existing tools
 - [ ] Confidentiality; personal data processing terms if contractor touches customer data (`pdpa-workflow`)
 - [ ] Subcontracting only with consent

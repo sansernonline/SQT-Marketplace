@@ -212,11 +212,11 @@ These prefixes are for comments on a pull request. A review report uses the `rev
 ## Anti-patterns to Avoid
 
 As a reviewer:
-- ❌ Bikeshedding — don't fight over trivial style if there's no convention
-- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
-- ❌ Only criticism — acknowledge good things too
-- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
-- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)
+- Bikeshedding — don't fight over trivial style if there's no convention
+- "Why didn't you do it MY way?" — there are often multiple valid approaches
+- Only criticism — acknowledge good things too
+- Vague comments like "this is wrong" — explain WHY and suggest fix
+- Reviewing too much at once — request smaller PRs (under 400 lines)
 
 
 ## reference: full-checklist.md
@@ -397,40 +397,40 @@ What's authenticating?
 **When to use:** server-rendered apps, monoliths, one domain
 
 **Implementation requirements:**
-- ✅ Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
-- ✅ Session ID: cryptographically random, ≥ 128 bits
-- ✅ Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
-- ✅ Idle timeout: 30 min default
-- ✅ Absolute timeout: 8-12 hours
-- ✅ Issue a new session ID when privileges change (login, role change)
-- ✅ On logout, delete the session from the store
+- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
+- Session ID: cryptographically random, ≥ 128 bits
+- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
+- Idle timeout: 30 min default
+- Absolute timeout: 8-12 hours
+- Issue a new session ID when privileges change (login, role change)
+- On logout, delete the session from the store
 
 **Pitfalls:**
-- ❌ Storing session in JWT (can't revoke)
-- ❌ Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
-- ❌ Keeping the same ID after login (session fixation)
+- ผิด: Storing session in JWT (can't revoke)
+- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
+- ผิด: Keeping the same ID after login (session fixation)
 
 ## Pattern 2: JWT (Stateless Token)
 
 **When to use:** microservices, mobile, single-page app (SPA) with a backend API
 
-> ⚠️ **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
 
 **Implementation requirements:**
-- ✅ Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
-- ✅ Short-lived access token: 5-15 min
-- ✅ Refresh token: longer-lived (days), stored separately, revocable
-- ✅ Issue a new refresh token each time one is used
-- ✅ Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
-- ✅ Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
-- ✅ Have a way to cancel tokens (blocklist, short expiry, etc.)
+- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
+- Short-lived access token: 5-15 min
+- Refresh token: longer-lived (days), stored separately, revocable
+- Issue a new refresh token each time one is used
+- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
+- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
+- Have a way to cancel tokens (blocklist, short expiry, etc.)
 
 **Pitfalls:**
-- ❌ `alg: none` attacks (check the algorithm explicitly)
-- ❌ Storing JWT in `localStorage` (XSS-stealable)
-- ❌ Long-lived access tokens (you can't cancel them)
-- ❌ Putting sensitive data in JWT (it's base64, not encrypted)
-- ❌ Skipping signature verification
+- ผิด: `alg: none` attacks (check the algorithm explicitly)
+- ผิด: Storing JWT in `localStorage` (XSS-stealable)
+- ผิด: Long-lived access tokens (you can't cancel them)
+- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
+- ผิด: Skipping signature verification
 
 ## Pattern 3: OAuth 2.0 / OIDC
 
@@ -439,18 +439,18 @@ What's authenticating?
 ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
 
 **Implementation requirements:**
-- ✅ **Always use PKCE** (even for confidential clients)
-- ✅ Validate `id_token` signature (use IdP's JWKS)
-- ✅ Validate `aud`, `iss`, `exp`, `nonce`
-- ✅ Use the `state` parameter to prevent cross-site request forgery (CSRF)
-- ✅ Match `code_verifier` to `code_challenge`
-- ✅ Use a library, don't write your own (Auth0, Passport.js, etc.)
+- **Always use PKCE** (even for confidential clients)
+- Validate `id_token` signature (use IdP's JWKS)
+- Validate `aud`, `iss`, `exp`, `nonce`
+- Use the `state` parameter to prevent cross-site request forgery (CSRF)
+- Match `code_verifier` to `code_challenge`
+- Use a library, don't write your own (Auth0, Passport.js, etc.)
 
 **Pitfalls:**
-- ❌ Implicit flow (deprecated, insecure)
-- ❌ Resource Owner Password Credentials flow (deprecated)
-- ❌ Skipping `state` validation (CSRF risk)
-- ❌ Trusting `id_token` without verifying signature
+- ผิด: Implicit flow (deprecated, insecure)
+- ผิด: Resource Owner Password Credentials flow (deprecated)
+- ผิด: Skipping `state` validation (CSRF risk)
+- ผิด: Trusting `id_token` without verifying signature
 
 ## Pattern 4: Multi-Factor Authentication (MFA)
 
@@ -459,16 +459,16 @@ What's authenticating?
 ## Pattern 5: Password Management
 
 ### Storage
-- ✅ **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
-- ❌ Never: MD5, SHA-1, SHA-256 raw, plain text
+- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
+- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
 
 ### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
-- ✅ Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
-- ✅ Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
-- ✅ Allow long passphrases (any maximum must be at least 64 chars)
-- ✅ Allow special characters (don't restrict them)
-- ❌ Don't force composition rules (uppercase + digit + symbol)
-- ❌ Don't force regular password changes (only when you suspect a breach)
+- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
+- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
+- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
+- ถูก: Allow special characters (don't restrict them)
+- Don't force composition rules (uppercase + digit + symbol)
+- Don't force regular password changes (only when you suspect a breach)
 
 ### Password reset flow
 
@@ -483,8 +483,8 @@ Login attempts:
 - Use IP + email combo, not just one
 
 Lockout messaging:
-✅ "Too many failed attempts. Try again in 15 minutes."
-❌ "Account locked." (reveals account exists)
+ถูก: "Too many failed attempts. Try again in 15 minutes."
+ผิด: "Account locked." (reveals account exists)
 ```
 
 ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
@@ -517,14 +517,14 @@ Lockout messaging:
 
 ## Anti-patterns
 
-- ❌ Writing your own crypto or auth (use libraries)
-- ❌ Storing passwords reversibly
-- ❌ JWT for sessions when you have one backend
-- ❌ Long-lived JWT without rotation
-- ❌ Authentication without authorization checks
-- ❌ Trusting JWT claims as authorization source
-- ❌ Logout that doesn't invalidate token server-side
-- ❌ Allowing weak passwords for compliance "convenience"
+- Writing your own crypto or auth (use libraries)
+- Storing passwords reversibly
+- JWT for sessions when you have one backend
+- Long-lived JWT without rotation
+- Authentication without authorization checks
+- Trusting JWT claims as authorization source
+- Logout that doesn't invalidate token server-side
+- Allowing weak passwords for compliance "convenience"
 
 
 ## reference: api-auth-and-authorization.md
@@ -628,11 +628,11 @@ PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped fo
 ## Password storage — code
 
 ```typescript
-// ✅ Good (using bcrypt)
+// Good (using bcrypt)
 const hash = await bcrypt.hash(password, 12);
 const valid = await bcrypt.compare(password, storedHash);
 
-// ❌ Bad
+// Bad
 const hash = crypto.createHash('sha256').update(password).digest('hex');
 ```
 
@@ -688,7 +688,7 @@ Verify:
 ## SMS / Email codes
 **When:** there's no other option (users without smartphone apps)
 
-- ⚠️ SMS is **NOT secure** (SIM swap attacks)
+- Note: SMS is **NOT secure** (SIM swap attacks)
 - Use only as a last resort, never as the main method
 - Use strict rate limits
 - Codes: 6 digits, 5 min expiry

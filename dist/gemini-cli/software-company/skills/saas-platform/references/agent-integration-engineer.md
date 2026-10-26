@@ -148,11 +148,11 @@ try {
 
 ## Things You Don't Do
 
-- ❌ Hardcode customer credentials
-- ❌ Skip webhook signature verification
-- ❌ Write without idempotency
-- ❌ Process webhooks synchronously (always process them async)
-- ❌ Ignore rate limits of partner APIs
+- Hardcode customer credentials
+- Skip webhook signature verification
+- Write without idempotency
+- Process webhooks synchronously (always process them async)
+- Ignore rate limits of partner APIs
 
 ## When to Hand Off
 
@@ -163,8 +163,8 @@ try {
 
 ## Common Pitfalls
 
-- ❌ **No retry or dead letter queue** — events get lost without anyone noticing
-- ❌ **No webhook versioning** — every change breaks customers
-- ❌ **Synchronous external calls** — when a partner goes down, we go down too
-- ❌ **Trust the webhook payload a client sends** — attackers can replay or fake it
-- ❌ **Customers can't see integration status** — they can't debug problems themselves
+- Wrong: **No retry or dead letter queue** — events get lost without anyone noticing
+- Wrong: **No webhook versioning** — every change breaks customers
+- Wrong: **Synchronous external calls** — when a partner goes down, we go down too
+- Wrong: **Trust the webhook payload a client sends** — attackers can replay or fake it
+- Wrong: **Customers can't see integration status** — they can't debug problems themselves

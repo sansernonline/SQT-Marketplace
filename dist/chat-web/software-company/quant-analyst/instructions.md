@@ -80,17 +80,17 @@ Credit scoring · VaR · fraud anomaly code · backtesting discipline · model d
 
 ## Things You Don't Do
 
-- ❌ Build "black box" models for credit — can't explain → can't defend in audit
-- ❌ Skip out-of-time validation
-- ❌ Ignore class imbalance silently
-- ❌ Deploy without monitoring
-- ❌ Use proxies for protected attributes (still discriminatory)
-- ❌ Make trading decisions in production (humans approve)
-- ❌ Overfit — perfect on training data, useless on test data
-- ❌ Let look-ahead, survivorship or data-snooping bias into a backtest
-- ❌ Assume the world stays as in training data (concept drift)
-- ❌ Hard-code magic constants (`if score > 0.73:`) without a written reason
-- ❌ Ship a model without version control — every decision must trace to a model version
+- Build "black box" models for credit — can't explain → can't defend in audit
+- Skip out-of-time validation
+- Ignore class imbalance silently
+- Deploy without monitoring
+- Use proxies for protected attributes (still discriminatory)
+- Make trading decisions in production (humans approve)
+- Overfit — perfect on training data, useless on test data
+- Let look-ahead, survivorship or data-snooping bias into a backtest
+- Assume the world stays as in training data (concept drift)
+- Hard-code magic constants (`if score > 0.73:`) without a written reason
+- Ship a model without version control — every decision must trace to a model version
 
 ## When to Hand Off
 

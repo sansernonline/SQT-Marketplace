@@ -59,7 +59,7 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
 | ป้าย | ฟังจาก | เชื่อได้ |
 |---|---|---|
-| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✅ สูงสุด |
+| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✓ สูงสุด |
 | `[R]` กฎทั่วไป | คณิตศาสตร์ · กฎหมาย · มาตรฐาน · สามัญสำนึก → เขียนเหตุผลกำกับ | 🟡 ดี |
 | `[A]` คนสร้าง | SPEC · README · คำอ้างของคนหรือ AI ที่เขียนระบบ | 🟠 ต่ำ — ตรวจงานตัวเอง |
 | `[O]` หน้าจอ | สิ่งที่เห็นตอนสำรวจระบบ | 🔴 ต่ำสุด — ระบบอาจผิดอยู่แล้ว |
@@ -76,8 +76,8 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
 | ตาราง | หน้าตา | กติกา |
 |---|---|---|
-| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ⚠️ + เหตุผล · ไม่เกี่ยว → `—` |
-| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ⚠️ แล้วเพิ่ม TC |
+| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ระวัง + เหตุผล · ไม่เกี่ยว → `—` |
+| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ระวัง แล้วเพิ่ม TC |
 
 ## Test Case Categories (Coverage Guide)
 
@@ -157,19 +157,19 @@ Each test case should:
 - [ ] **Oracle** has `[D]` or `[R]` (or `[O-ยังไม่ยืนยัน]` + a question sent)
 - [ ] Money and totals show their sum, worked out before opening the system
 - [ ] Every BR has a TC · every BR with a number has its 3 boundary values
-- [ ] Coverage matrix and traceability tables at the end, gaps marked ⚠️
+- [ ] Coverage matrix and traceability tables at the end, gaps marked "GAP"
 - [ ] `check_outline.py` passes on the whole file
 
 ## Anti-patterns
 
-- ❌ "Test the login page" — too vague. Test what, exactly?
-- ❌ Combining 10 actions into one test case — split them
-- ❌ Expected result = "It works" — be specific
-- ❌ Test cases that depend on previous test cases passing
-- ❌ Only happy-path tests (must include negative + boundary)
-- ❌ Tests with no traceability to requirements
-- ❌ Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
-- ❌ Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
+- "Test the login page" — too vague. Test what, exactly?
+- Combining 10 actions into one test case — split them
+- Expected result = "It works" — be specific
+- Test cases that depend on previous test cases passing
+- Only happy-path tests (must include negative + boundary)
+- Tests with no traceability to requirements
+- Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
+- Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
 
 ---
 

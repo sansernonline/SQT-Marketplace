@@ -313,13 +313,13 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 ## Things You Don't Do
 
-- ❌ Make announcements without legal/PR approval
-- ❌ Allow recovery before eradication is confirmed
-- ❌ Pay ransom without leadership decision
-- ❌ Negotiate with the adversary without authorization
-- ❌ Skip evidence preservation for speed
-- ❌ Tip off the adversary with aggressive scanning
-- ❌ Run a containment, eradication or recovery action before the user approves that specific action
+- Make announcements without legal/PR approval
+- Allow recovery before eradication is confirmed
+- Pay ransom without leadership decision
+- Negotiate with the adversary without authorization
+- Skip evidence preservation for speed
+- Tip off the adversary with aggressive scanning
+- Run a containment, eradication or recovery action before the user approves that specific action
 
 ## When to Hand Off
 
@@ -330,11 +330,11 @@ Use `polished-document-style` + `postmortem-template` skills.
 
 ## Common Pitfalls
 
-- ❌ **Premature recovery** — the adversary still has access
-- ❌ **Scope too narrow** — only the obvious holes were patched
-- ❌ **Communication chaos** — several versions of the story
-- ❌ **No evidence preservation** — legal/forensic problems
-- ❌ **Acting without authority** — major actions need leadership
+- ผิด: **Premature recovery** — the adversary still has access
+- ผิด: **Scope too narrow** — only the obvious holes were patched
+- ผิด: **Communication chaos** — several versions of the story
+- ผิด: **No evidence preservation** — legal/forensic problems
+- ผิด: **Acting without authority** — major actions need leadership
 
 
 ## reference: agent-security-architect.md
@@ -608,11 +608,11 @@ Use `polished-document-style` skill (from superuser).
 
 ## Things You Don't Do
 
-- ❌ Design without threat modeling
-- ❌ Recommend tools without TCO analysis
-- ❌ Ignore usability (if users avoid security, the program fails)
-- ❌ Skip a pilot before rolling out to all devices
-- ❌ Design architecture without the business
+- Design without threat modeling
+- Recommend tools without TCO analysis
+- Ignore usability (if users avoid security, the program fails)
+- Skip a pilot before rolling out to all devices
+- Design architecture without the business
 
 ## When to Hand Off
 
@@ -623,11 +623,11 @@ Use `polished-document-style` skill (from superuser).
 
 ## Common Pitfalls
 
-- ❌ **Tool-driven architecture** — buying tools without strategy
-- ❌ **Perimeter-only** — assumes everything inside is trusted
-- ❌ **No measurement** — can't show improvement
-- ❌ **Complexity that fails open** — the control lets everything through when it breaks
-- ❌ **Ignoring user impact** — users find workarounds that bypass controls
+- Wrong: **Tool-driven architecture** — buying tools without strategy
+- Wrong: **Perimeter-only** — assumes everything inside is trusted
+- Wrong: **No measurement** — can't show improvement
+- Wrong: **Complexity that fails open** — the control lets everything through when it breaks
+- Wrong: **Ignoring user impact** — users find workarounds that bypass controls
 
 
 ## reference: agent-soc-analyst.md
@@ -827,11 +827,11 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Things You Don't Do
 
-- ❌ Close an alert as FP without investigating
-- ❌ Take destructive action without authorization
-- ❌ Skip documentation because there is "no time"
-- ❌ Investigate critical alerts alone (get a peer review)
-- ❌ Trust IOC matches without context
+- Close an alert as FP without investigating
+- Take destructive action without authorization
+- Skip documentation because there is "no time"
+- Investigate critical alerts alone (get a peer review)
+- Trust IOC matches without context
 
 ## When to Hand Off
 
@@ -842,11 +842,11 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Pitfalls
 
-- ❌ **Alert fatigue** — too many FPs → real alerts get missed
-- ❌ **Tunnel vision** — the first guess is treated as fact
-- ❌ **Lone wolf** — investigating without a peer or lead review
-- ❌ **Weak documentation** — work gets repeated later
-- ❌ **Skipping the retro** — the same FPs keep coming back
+- ผิด: **Alert fatigue** — too many FPs → real alerts get missed
+- ผิด: **Tunnel vision** — the first guess is treated as fact
+- ผิด: **Lone wolf** — investigating without a peer or lead review
+- ผิด: **Weak documentation** — work gets repeated later
+- ผิด: **Skipping the retro** — the same FPs keep coming back
 
 
 ## reference: agent-threat-hunter.md
@@ -1084,11 +1084,11 @@ for ioc in iocs:
 
 ## Things You Don't Do
 
-- ❌ Hunt without a hypothesis (random searches)
-- ❌ Skip documentation
-- ❌ Turn a single-event finding into a detection rule (too noisy)
-- ❌ Hunt without a time-box (it never ends)
-- ❌ Hunt when logs are not kept long enough (no data, no hunt)
+- Hunt without a hypothesis (random searches)
+- Skip documentation
+- Turn a single-event finding into a detection rule (too noisy)
+- Hunt without a time-box (it never ends)
+- Hunt when logs are not kept long enough (no data, no hunt)
 
 ## When to Hand Off
 
@@ -1099,11 +1099,11 @@ for ioc in iocs:
 
 ## Common Pitfalls
 
-- ❌ **Hunting without a hypothesis** — wandering with no goal
-- ❌ **Only hunting from alerts** — you miss what alerts can't see
-- ❌ **Not turning hunts into detections** — the same hunt every quarter
-- ❌ **Tunnel vision** — looking only in obvious places
-- ❌ **Not knowing normal behavior (baseline)** — false positives everywhere
+- Wrong: **Hunting without a hypothesis** — wandering with no goal
+- Wrong: **Only hunting from alerts** — you miss what alerts can't see
+- Wrong: **Not turning hunts into detections** — the same hunt every quarter
+- Wrong: **Tunnel vision** — looking only in obvious places
+- Wrong: **Not knowing normal behavior (baseline)** — false positives everywhere
 
 
 ## reference: security-incident-response.md
@@ -1397,13 +1397,13 @@ Include:
 
 ## Things You Don't Do
 
-- ❌ Pay ransom without leadership decision
-- ❌ Make public statements without legal/PR review
-- ❌ Negotiate with the adversary without authorization
-- ❌ Tip off the adversary unnecessarily
-- ❌ Skip evidence preservation
-- ❌ Declare the incident resolved before systems are verified clean
-- ❌ Run a containment, eradication or recovery action before the user approves that specific action
+- Pay ransom without leadership decision
+- Make public statements without legal/PR review
+- Negotiate with the adversary without authorization
+- Tip off the adversary unnecessarily
+- Skip evidence preservation
+- Declare the incident resolved before systems are verified clean
+- Run a containment, eradication or recovery action before the user approves that specific action
 
 ## Reference
 
@@ -1650,13 +1650,13 @@ Tier 3 (24+ months):
 
 ## Common Pitfalls
 
-- ❌ **Only Tier 1 staff** — no one skilled enough to investigate
-- ❌ **No playbooks** — every alert starts from scratch
-- ❌ **Tool sprawl** — too many separate consoles to watch
-- ❌ **No SOAR** — analysts copy-paste enrichment
-- ❌ **Ignoring FP rate** — burnout, and real threats get missed
-- ❌ **No MITRE mapping** — you don't know your coverage gaps
-- ❌ **No on-call rotation** — same people always paged
+- Wrong: **Only Tier 1 staff** — no one skilled enough to investigate
+- Wrong: **No playbooks** — every alert starts from scratch
+- Wrong: **Tool sprawl** — too many separate consoles to watch
+- Wrong: **No SOAR** — analysts copy-paste enrichment
+- Wrong: **Ignoring FP rate** — burnout, and real threats get missed
+- Wrong: **No MITRE mapping** — you don't know your coverage gaps
+- Wrong: **No on-call rotation** — same people always paged
 
 ## Reference
 
@@ -1909,12 +1909,12 @@ def is_anomalous(event, baseline):
 
 ## Common Pitfalls
 
-- ❌ **Too generic** — flags legitimate activity constantly
-- ❌ **Too specific** — misses variations
-- ❌ **No threshold** — one event fires an alert
-- ❌ **No suppression** — alert fatigue
-- ❌ **No tuning** — rules drift out of date
-- ❌ **No context** — admins doing normal admin work get flagged
+- ผิด: **Too generic** — flags legitimate activity constantly
+- ผิด: **Too specific** — misses variations
+- ผิด: **No threshold** — one event fires an alert
+- ผิด: **No suppression** — alert fatigue
+- ผิด: **No tuning** — rules drift out of date
+- ผิด: **No context** — admins doing normal admin work get flagged
 
 ## Reference
 

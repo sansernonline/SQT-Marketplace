@@ -170,7 +170,7 @@ What can other teams learn from this?
 
 ## Blameless Language Guide
 
-| ❌ Blameful | ✅ Blameless |
+| ✗ Blameful | ✓ Blameless |
 |------------|--------------|
 | "Alice deployed the bug" | "A bug was deployed in PR #123" |
 | "Bob should have caught this in review" | "The review process didn't catch this; we should add automated checks" |
@@ -190,12 +190,12 @@ What can other teams learn from this?
 
 ## Common Mistakes
 
-- ❌ "Lessons learned: be more careful" — not actionable
-- ❌ Single root cause when there are usually multiple factors
-- ❌ Action items without owners → never done
-- ❌ Skipping postmortem because "minor" — near-misses teach us most
-- ❌ Hiding postmortems — share widely for org learning
-- ❌ Blame language even when "talking about systems"
+- "Lessons learned: be more careful" — not actionable
+- Single root cause when there are usually multiple factors
+- Action items without owners → never done
+- Skipping postmortem because "minor" — near-misses teach us most
+- Hiding postmortems — share widely for org learning
+- Blame language even when "talking about systems"
 
 ## When to Skip Postmortem
 

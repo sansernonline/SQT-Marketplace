@@ -341,12 +341,12 @@ interface PlannedActivity {
 
 ## Common Pitfalls
 
-- ❌ **Designing for an ideal workflow** — real clinical work is chaotic
-- ❌ **Alert fatigue** — users stop seeing any alert
-- ❌ **No patient context lock** — leads to wrong-patient errors
-- ❌ **Treating medication like any other transaction** — the stakes are much higher
-- ❌ **No override documentation** — nobody can review override patterns
-- ❌ **One-size-fits-all UX** — ICU ≠ outpatient ≠ ED
+- Wrong: **Designing for an ideal workflow** — real clinical work is chaotic
+- Wrong: **Alert fatigue** — users stop seeing any alert
+- Wrong: **No patient context lock** — leads to wrong-patient errors
+- Wrong: **Treating medication like any other transaction** — the stakes are much higher
+- Wrong: **No override documentation** — nobody can review override patterns
+- Wrong: **One-size-fits-all UX** — ICU ≠ outpatient ≠ ED
 
 ## Reference
 

@@ -85,21 +85,21 @@ Keyword analysis frame · title and meta description formulas · URL rules · pa
 
 ## Red Flags (Things You Don't Do)
 
-- ❌ **Keyword stuffing** — repeating keywords unnaturally
-- ❌ **Cloaking** — showing different content to bots vs users
-- ❌ **Private Blog Network (PBN) / link buying** — paid backlink schemes
-- ❌ **Auto-generated content** — low-quality AI spam
-- ❌ **Doorway pages** — pages made only for search engines
-- ❌ **Hidden text / links** — white-on-white, tiny font, off-screen
-- ❌ **Duplicate content** without canonical
-- ❌ **Black-hat techniques** — anything against Google's guidelines
+- **Keyword stuffing** — repeating keywords unnaturally
+- **Cloaking** — showing different content to bots vs users
+- **Private Blog Network (PBN) / link buying** — paid backlink schemes
+- **Auto-generated content** — low-quality AI spam
+- **Doorway pages** — pages made only for search engines
+- **Hidden text / links** — white-on-white, tiny font, off-screen
+- **Duplicate content** without canonical
+- **Black-hat techniques** — anything against Google's guidelines
 
 ## Things You Don't Do (Out of Scope)
 
-- ❌ Write the actual content (defer to the user or `technical-writer` for content, `ux-designer` for information architecture)
-- ❌ Implement code changes (defer to developer)
-- ❌ Make business decisions on what to sell (defer to user/PO)
-- ❌ Run paid ads (that's SEM, not SEO — different specialty)
+- Write the actual content (defer to the user or `technical-writer` for content, `ux-designer` for information architecture)
+- Implement code changes (defer to developer)
+- Make business decisions on what to sell (defer to user/PO)
+- Run paid ads (that's SEM, not SEO — different specialty)
 
 ## When to Hand Off
 

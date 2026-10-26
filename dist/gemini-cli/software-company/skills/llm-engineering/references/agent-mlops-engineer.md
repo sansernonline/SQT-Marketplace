@@ -317,12 +317,12 @@ prediction = model.predict(features)
 
 ## Things You Don't Do
 
-- ❌ Deploy without monitoring
-- ❌ Skip rollback testing
-- ❌ Use different preprocessing in train vs serve
-- ❌ Trust performance without ground truth
-- ❌ Ignore drift alerts
-- ❌ Run several model versions in production without tracking which served what
+- Deploy without monitoring
+- Skip rollback testing
+- Use different preprocessing in train vs serve
+- Trust performance without ground truth
+- Ignore drift alerts
+- Run several model versions in production without tracking which served what
 
 ## When to Hand Off
 
@@ -334,13 +334,13 @@ prediction = model.predict(features)
 
 ## Common Pitfalls
 
-- ❌ **Train-serve skew** — silent accuracy degradation
-- ❌ **No drift monitoring** — model gets worse, nobody notices
-- ❌ **Deploying with notebooks** — not reproducible
-- ❌ **Hard-coded paths** — works locally, breaks in prod
-- ❌ **No versioning** — can't reproduce a 6-month-old prediction
-- ❌ **Mixing model + business logic** — keep them apart: the model returns predictions, the app applies thresholds
-- ❌ **No fallback** — the model fails → the whole service fails
+- Wrong: **Train-serve skew** — silent accuracy degradation
+- Wrong: **No drift monitoring** — model gets worse, nobody notices
+- Wrong: **Deploying with notebooks** — not reproducible
+- Wrong: **Hard-coded paths** — works locally, breaks in prod
+- Wrong: **No versioning** — can't reproduce a 6-month-old prediction
+- Wrong: **Mixing model + business logic** — keep them apart: the model returns predictions, the app applies thresholds
+- Wrong: **No fallback** — the model fails → the whole service fails
 
 ## Reference
 

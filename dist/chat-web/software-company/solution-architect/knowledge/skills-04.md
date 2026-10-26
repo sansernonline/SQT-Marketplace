@@ -313,11 +313,11 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 
 | เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✅ | ❌ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ⚠️ ใช้คอลัมน์ JSON | ✅ |
-| ต้องการ transaction ข้ามหลายตาราง | ✅ | ⚠️ ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✅ | ❌ |
-| เขียนหนักมาก log/telemetry | ⚠️ | ✅ หรือใช้ time-series |
+| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✓ | ✗ ต้องทำมือ |
+| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ระวัง ใช้คอลัมน์ JSON | ✓ |
+| ต้องการ transaction ข้ามหลายตาราง | ✓ | ระวัง ได้แต่แพงกว่า |
+| รายงาน ผลรวม การวิเคราะห์ | ✓ | ✗ |
+| เขียนหนักมาก log/telemetry | ระวัง | ✓ หรือใช้ time-series |
 
 > **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
 > "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
@@ -336,7 +336,7 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 | คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
 | foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✅ (ไม่ใช่ `user_roles`) |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✓ (ไม่ใช่ `user_roles`) |
 | index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
 | unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
 | foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
@@ -344,10 +344,10 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 
 **สิ่งที่ห้ามทำ:**
 
-- ❌ ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
-- ❌ ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ❌ ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
-- ❌ ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+- ผิด: ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
+- ผิด: ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
+- ผิด: ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
+- ผิด: ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
 
 > SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
 > **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
@@ -503,15 +503,15 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 ## 12 · Anti-patterns
 
-- ❌ **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
-- ❌ **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
-- ❌ **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
-- ❌ **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
-- ❌ **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- ❌ **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- ❌ **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
-- ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+- **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
+- **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
+- **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
+- **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
+- **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
+- **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
+- **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
+- **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
+- **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
 
 
 ## reference: data-pipeline-patterns.md
@@ -666,12 +666,12 @@ For every table, document:
 ### เงิน
 
 ```sql
-total_amount   numeric(19,4)   NOT NULL      -- ✅
-currency       char(3)         NOT NULL      -- ✅ ISO 4217 เช่น THB
-total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่ากับ 0.3
+total_amount   numeric(19,4)   NOT NULL      -- ถูก:
+currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น THB
+total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
 ```
 
-> ❌ **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
+> ผิด: **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
 > ปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
 
 ### เวลา
@@ -694,11 +694,11 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 | ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy มีชื่อไทย/อังกฤษ และมีลำดับการแสดง | ต้อง join |
 | `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
 | ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
-| `int` ดิบ ๆ | — | ❌ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
+| `int` ดิบ ๆ | — | ✗ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
 
 ### boolean
 
-- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` ✅ · `is_not_disabled` ❌
+- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` (ถูก) · `is_not_disabled` (ผิด)
 - **ถ้าอาจมีสถานะที่ 3 ในอนาคต อย่าใช้ boolean** เพราะ `is_approved` จะกลายเป็น `approval_status`
   ภายใน 6 เดือน เมื่อมี "รออนุมัติ" เพิ่มมา
 
@@ -904,7 +904,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -923,7 +923,7 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
+dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
 dotnet ef database update                                # dev เท่านั้น
 ```
 

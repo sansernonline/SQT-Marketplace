@@ -44,8 +44,8 @@ Without an eval set, you're guessing. Period.
 ```
 
 **Categories to include:**
-- ✅ Happy path (50%)
-- ⚠️ Edge cases (20%)
+- Happy path (50%)
+- Note: Edge cases (20%)
 - 🚨 Safety / refusal (15%)
 - 🌐 Multilingual (if applicable) (10%)
 - 🐛 Known failure modes (5%)
@@ -354,15 +354,15 @@ async def hourly_quality_check():
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — you are guessing
-- ❌ **Tiny eval set** — fewer than 20 examples gives noisy results
-- ❌ **Stale eval** — not updated as production traffic changes
-- ❌ **Single metric** — quality has several dimensions
-- ❌ **No safety eval** — you find issues after launch
-- ❌ **Judge uses the same model** — it shares the same biases
-- ❌ **No human check of the judge** — it may be wrong and you won't know
-- ❌ **No regression test in CI** — quality drops go unnoticed
-- ❌ **Optimizing only for accuracy** — cost and latency get ignored
+- Wrong: **No eval set** — you are guessing
+- Wrong: **Tiny eval set** — fewer than 20 examples gives noisy results
+- Wrong: **Stale eval** — not updated as production traffic changes
+- Wrong: **Single metric** — quality has several dimensions
+- Wrong: **No safety eval** — you find issues after launch
+- Wrong: **Judge uses the same model** — it shares the same biases
+- Wrong: **No human check of the judge** — it may be wrong and you won't know
+- Wrong: **No regression test in CI** — quality drops go unnoticed
+- Wrong: **Optimizing only for accuracy** — cost and latency get ignored
 
 ## Eval Quality Targets
 

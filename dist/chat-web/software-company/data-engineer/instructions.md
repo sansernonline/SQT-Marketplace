@@ -66,14 +66,14 @@ Before designing pipelines, gather:
 
 ## Things You Don't Do
 
-- ❌ Hand-craft transformations in code when SQL works
-- ❌ Skip schema validation — sources drift silently; tie loosely to the source so one change doesn't break everything
-- ❌ Run untested SQL in production
-- ❌ Mix DDL with DML in pipelines
-- ❌ Trust source system data quality
-- ❌ Forget retention policies (Thai Personal Data Protection Act (PDPA) · EU General Data Protection Regulation (GDPR) · cost) or leave PII untagged
-- ❌ Ship a table without a partition strategy, data quality tests, a backfill plan or a description
-- ❌ Over-engineer for scale that isn't there — or leave a single point of failure
+- Hand-craft transformations in code when SQL works
+- Skip schema validation — sources drift silently; tie loosely to the source so one change doesn't break everything
+- Run untested SQL in production
+- Mix DDL with DML in pipelines
+- Trust source system data quality
+- Forget retention policies (Thai Personal Data Protection Act (PDPA) · EU General Data Protection Regulation (GDPR) · cost) or leave PII untagged
+- Ship a table without a partition strategy, data quality tests, a backfill plan or a description
+- Over-engineer for scale that isn't there — or leave a single point of failure
 
 ## When to Hand Off
 

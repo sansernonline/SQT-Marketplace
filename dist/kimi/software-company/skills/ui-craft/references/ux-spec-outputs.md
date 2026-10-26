@@ -13,8 +13,8 @@ Text parts of a UX spec that sit beside the clickable HTML mockup (`mockup/<CODE
 2. Clicks "Get Started"
 3. Sees Form B with fields: ...
 4. Submits → System validates
-   - ✅ Success → Page C with confirmation
-   - ❌ Error → Inline error, focus on first invalid field
+   - Right: Success → Page C with confirmation
+   - Wrong: Error → Inline error, focus on first invalid field
 5. User reaches goal at Page C
 ```
 

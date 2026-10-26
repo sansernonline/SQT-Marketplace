@@ -87,7 +87,7 @@ Use when building a desktop app or mockup that must look native on Windows 11 (W
 
 **เปลี่ยนแบรนด์** = แก้ 3 ค่า (`accent`, `accent-text`, `on-accent`) ต่อโหมด (มืด · สว่าง) ในไฟล์ token ที่เดียวทั้งแอป
 
-> ⚠️ **ห้ามเขียนค่าสีดิบในคอมโพเนนต์** ต้องอ้าง token เสมอ ไม่งั้นโหมดมืดจะพังเป็นจุด ๆ
+> ระวัง: **ห้ามเขียนค่าสีดิบในคอมโพเนนต์** ต้องอ้าง token เสมอ ไม่งั้นโหมดมืดจะพังเป็นจุด ๆ
 > โดยที่ไม่มีใครเห็นจนกว่าลูกค้าจะเปิดใช้
 
 ---
@@ -323,8 +323,8 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
 ## 1 · รายการที่มีปุ่มในแต่ละแถว
 
 ```
-❌ ทุกแถวมี [Connect] สีทึบ + [Edit]       → ปุ่มทึบ 8 ปุ่มแย่งกันเด่น
-✅ ชื่อ · ข้อมูล · เวลา         ▷ ✎ ⋯       → ไอคอนโผล่เมื่อชี้หรือเลือกแถว
+ผิด: ทุกแถวมี [Connect] สีทึบ + [Edit]       → ปุ่มทึบ 8 ปุ่มแย่งกันเด่น
+ถูก: ชื่อ · ข้อมูล · เวลา         ▷ ✎ ⋯       → ไอคอนโผล่เมื่อชี้หรือเลือกแถว
    ปุ่มหลัก (สีทึบ) อยู่ที่แผงรายละเอียดของแถวที่เลือก · ดับเบิลคลิก = ทำงานหลัก
 ```
 
@@ -355,8 +355,8 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
 ## 4 · หัวกลุ่มในรายการ
 
 ```
-❌ PRODUCTION · 3      (11px ตัวพิมพ์ใหญ่ สีจาง — แบบเว็บ)
-✅ ⌄ Production  3     (14px semibold · ตัวเลขสีรอง · แถว 32–40px · กดพับได้)
+ผิด: PRODUCTION · 3      (11px ตัวพิมพ์ใหญ่ สีจาง — แบบเว็บ)
+ถูก: ⌄ Production  3     (14px semibold · ตัวเลขสีรอง · แถว 32–40px · กดพับได้)
 ```
 
 ## 5 · Tab ใน title bar (แบบ Windows Terminal)
@@ -389,11 +389,11 @@ mockup HTML ของเราจึงควรตั้ง `width`/`height` �
 
 | ที่ | ต้องมี | ขนาด |
 |---|---|---|
-| ปุ่มใน nav / rail | ✅ | 16 / 18px |
-| ปุ่มใน command bar | ✅ คู่ข้อความ | 16px |
-| ปุ่มในแถว | ✅ ไอคอนอย่างเดียว + tooltip | 16px |
-| ชนิดของรายการ (SSH · ไฟล์ · RDP) | ✅ ในกล่อง 24px มุม 4px | 14px |
-| หัวแผงรายละเอียด | ✅ กล่อง 48px มุม 8px | 24px |
+| ปุ่มใน nav / rail | ✓ | 16 / 18px |
+| ปุ่มใน command bar | ✓ คู่ข้อความ | 16px |
+| ปุ่มในแถว | ✓ ไอคอนอย่างเดียว + tooltip | 16px |
+| ชนิดของรายการ (SSH · ไฟล์ · RDP) | ✓ ในกล่อง 24px มุม 4px | 14px |
+| หัวแผงรายละเอียด | ✓ กล่อง 48px มุม 8px | 24px |
 | ปุ่มหลักใน dialog | ไม่จำเป็น | — |
 
 รหัสที่ใช้บ่อย (Segoe Fluent Icons): เพิ่ม `E710` · ค้นหา `E721` · ตั้งค่า `E713` · แก้ไข `E70F` · อื่น ๆ `E712` · เล่น/เปิด `E768`
@@ -443,23 +443,23 @@ node ../web-app-design/scripts/check-design-tokens.mjs mockup/<รหัส>-moc
 
 ## Anti-patterns (ข้อ 7)
 
-- ❌ **ระบายพื้น accent ทั้งแถวเมนูที่เลือก** — Windows ใช้ขีดเล็กชิดซ้าย
-- ❌ **ย้อมสีแบรนด์ที่กรอบหน้าต่าง** (แถบชื่อ · nav · rail · command bar · Mica/Acrylic · เส้นขอบ · ไอคอนเมนู) — กรอบเป็นเทา-ดำตามธีม Windows · accent อยู่ที่ขีดเลือก ปุ่มหลัก และข้อมูล · ย้อมได้เฉพาะเมื่อผู้ใช้สั่ง
-- ❌ **มุมโค้ง 12–16px** — นั่นคือหน้าตาเว็บ/มือถือ ส่วน Windows ใช้ 4px กับ 8px
-- ❌ **เงาใต้การ์ด** — Windows 11 ใช้เส้นขอบบาง ๆ เงาสงวนไว้ให้ flyout/dialog เท่านั้น
-- ❌ **`alert()` / `confirm()`** ในแอปที่ห่อเว็บ — ใช้ InfoBar หรือ ContentDialog
-- ❌ **ทำเฉพาะโหมดมืดเพราะภาพต้นแบบเป็นมืด** — Windows 11 ตั้งต้นเป็นโหมดสว่าง และผู้ใช้เลือกได้ทั้งสองแบบ ต้องผ่านทั้งคู่
-- ❌ **ฮาร์ดโค้ดสี accent เป็นน้ำเงิน** — ถ้าอยากตามสีที่ผู้ใช้ตั้งไว้ ต้องอ่านจากระบบ
+- **ระบายพื้น accent ทั้งแถวเมนูที่เลือก** — Windows ใช้ขีดเล็กชิดซ้าย
+- **ย้อมสีแบรนด์ที่กรอบหน้าต่าง** (แถบชื่อ · nav · rail · command bar · Mica/Acrylic · เส้นขอบ · ไอคอนเมนู) — กรอบเป็นเทา-ดำตามธีม Windows · accent อยู่ที่ขีดเลือก ปุ่มหลัก และข้อมูล · ย้อมได้เฉพาะเมื่อผู้ใช้สั่ง
+- **มุมโค้ง 12–16px** — นั่นคือหน้าตาเว็บ/มือถือ ส่วน Windows ใช้ 4px กับ 8px
+- **เงาใต้การ์ด** — Windows 11 ใช้เส้นขอบบาง ๆ เงาสงวนไว้ให้ flyout/dialog เท่านั้น
+- **`alert()` / `confirm()`** ในแอปที่ห่อเว็บ — ใช้ InfoBar หรือ ContentDialog
+- **ทำเฉพาะโหมดมืดเพราะภาพต้นแบบเป็นมืด** — Windows 11 ตั้งต้นเป็นโหมดสว่าง และผู้ใช้เลือกได้ทั้งสองแบบ ต้องผ่านทั้งคู่
+- **ฮาร์ดโค้ดสี accent เป็นน้ำเงิน** — ถ้าอยากตามสีที่ผู้ใช้ตั้งไว้ ต้องอ่านจากระบบ
   (WinUI: อย่า override `AccentFillColorDefaultBrush` · web: `AccentColor` ของ CSS)
-- ❌ **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
-- ❌ **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
-- ❌ **ปุ่มทึบสี accent ทุกแถวของตาราง** — ปุ่มในแถวเป็นไอคอนที่โผล่เมื่อชี้ ปุ่มหลักอยู่ในแผงรายละเอียด (patterns.md ข้อ 1)
-- ❌ **ปุ่มและเมนูเป็นข้อความล้วน ไม่มีไอคอน** — ดูเป็น wireframe
-- ❌ **เนื้อหาอยู่ครึ่งบน ครึ่งล่างว่าง · ตารางยืดเต็มจอจนคอลัมน์ห่างกัน 400px** — ใช้ list-detail (patterns.md ข้อ 2)
-- ❌ **หัวกลุ่ม 11px ตัวพิมพ์ใหญ่ · ป้ายพื้นสีทึบใน status bar · เส้นสีบน tab** — เป็นแบบเว็บ
-- ❌ **การ์ดใหญ่หลายใบเรียงกันในหน้าเริ่มต้นของแอป** — ดูเป็น dashboard ของ SaaS ใช้แถวปุ่มทางลัดแทน (หน้าแรกของ mockup ไม่นับ ดู `ui-craft`)
-- ❌ **แถบควบคุมของ mockup (รหัสข้อกำหนดเชิงหน้าที่ (Functional Requirement · FR) · ตัวสลับสถานะ) ติดในภาพที่ส่งรีวิว** — ใช้ `screenshot.py --hide`
-- ❌ **ทำทุกหน้าในรอบเดียวโดยไม่มีหน้าหลักเป็นแบบ** — ดูข้อ 1
+- **แถบเมนูกว้างตามใจ** — 320px เปิด / 48px ย่อ เท่านั้น
+- **ส่ง mockup โดยไม่เคยเรนเดอร์ดู** — ดูข้อ 6
+- **ปุ่มทึบสี accent ทุกแถวของตาราง** — ปุ่มในแถวเป็นไอคอนที่โผล่เมื่อชี้ ปุ่มหลักอยู่ในแผงรายละเอียด (patterns.md ข้อ 1)
+- **ปุ่มและเมนูเป็นข้อความล้วน ไม่มีไอคอน** — ดูเป็น wireframe
+- **เนื้อหาอยู่ครึ่งบน ครึ่งล่างว่าง · ตารางยืดเต็มจอจนคอลัมน์ห่างกัน 400px** — ใช้ list-detail (patterns.md ข้อ 2)
+- **หัวกลุ่ม 11px ตัวพิมพ์ใหญ่ · ป้ายพื้นสีทึบใน status bar · เส้นสีบน tab** — เป็นแบบเว็บ
+- **การ์ดใหญ่หลายใบเรียงกันในหน้าเริ่มต้นของแอป** — ดูเป็น dashboard ของ SaaS ใช้แถวปุ่มทางลัดแทน (หน้าแรกของ mockup ไม่นับ ดู `ui-craft`)
+- **แถบควบคุมของ mockup (รหัสข้อกำหนดเชิงหน้าที่ (Functional Requirement · FR) · ตัวสลับสถานะ) ติดในภาพที่ส่งรีวิว** — ใช้ `screenshot.py --hide`
+- **ทำทุกหน้าในรอบเดียวโดยไม่มีหน้าหลักเป็นแบบ** — ดูข้อ 1
 
 ## ข้อจำกัดที่ต้องรู้ (ข้อ 8)
 
@@ -765,15 +765,15 @@ For every visual:
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 

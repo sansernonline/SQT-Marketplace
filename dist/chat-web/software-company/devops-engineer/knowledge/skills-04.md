@@ -34,15 +34,15 @@ Use when writing an operational runbook, on-call guide or what-to-do-when-X-brea
 A **runbook** answers: "Alert X fired. What do I do?"
 
 It's NOT:
-- ❌ A postmortem (that analyses the incident afterwards)
-- ❌ Architecture documentation (that explains the bigger picture)
-- ❌ Training material (that goes into too much detail)
+- A postmortem (that analyses the incident afterwards)
+- Architecture documentation (that explains the bigger picture)
+- Training material (that goes into too much detail)
 
 It IS:
-- ✅ Step-by-step actions
-- ✅ Decision flowcharts
-- ✅ Commands to copy-paste
-- ✅ Escalation paths
+- Step-by-step actions
+- Decision flowcharts
+- Commands to copy-paste
+- Escalation paths
 
 ## Runbook Quality Standards
 
@@ -106,12 +106,12 @@ alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ�
 
 ## Anti-patterns
 
-- ❌ **Theoretical runbooks** written by someone who never saw the failure
-- ❌ **Long background text** before the first action
-- ❌ **"Contact the team"** without saying who or how
-- ❌ **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
-- ❌ **Runbook in a wiki nobody can find** — link from alert
-- ❌ **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
+- **Theoretical runbooks** written by someone who never saw the failure
+- **Long background text** before the first action
+- **"Contact the team"** without saying who or how
+- **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
+- **Runbook in a wiki nobody can find** — link from alert
+- **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
 
 ## Document Look
 
@@ -447,7 +447,7 @@ Use when writing or reviewing code that logs (format, levels, correlation ids, r
 | `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
 | `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
 
-> ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
+> ระวัง: **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
 > คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
 
 ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
@@ -504,9 +504,9 @@ logs/
 
 | ไฟล์ | สแต็ก | สถานะ |
 |---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✅ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✅ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
+| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✓ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
+| `references/per-stack.md` | .NET (Serilog) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
 
 ```js
 // Node
@@ -552,15 +552,15 @@ grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวไ�
 
 ## 8 · Anti-patterns
 
-- ❌ **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- ❌ **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
-- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
-- ❌ **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
+- **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
+- **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
+- **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
+- **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
+- **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
   ใช้ข้อความคงที่ + context แทน
-- ❌ **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
-- ❌ **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
-- ❌ **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+- **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
+- **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
+- **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
 
 ---
 
@@ -578,7 +578,7 @@ grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวไ�
 
 # ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
 
-> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
+> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
 > `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
 > ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
 
@@ -683,12 +683,12 @@ public sealed class CorrelationIdMiddleware(RequestDelegate next)
 ### เขียน log
 
 ```csharp
-// ✅ ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
+// ถูก: ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
 //    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
 using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
     _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
 
-// ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
+// ผิด: ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
 _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
 ```
 
@@ -964,9 +964,9 @@ SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/rea
 
 | ไฟล์ | สแต็ก | สถานะ |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
 
 ```js
 // Node
@@ -1016,15 +1016,15 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 
 ## 8 · Anti-patterns
 
-- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
-- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
-- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- **ส่ง stack trace / connection string ใน health หรือ error 500**
+- **health ต้อง login** — orchestrator ไม่มี token ให้
+- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
 
 ---
 
@@ -1044,7 +1044,7 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 
 # .NET และ Angular
 
-> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
+> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
 > `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
 > ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
 

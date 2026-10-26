@@ -1,6 +1,6 @@
 # ธีม Mermaid และตัวอย่างที่เรนเดอร์แล้ว
 
-> ✅ ทุกไดอะแกรมในไฟล์นี้ **เรนเดอร์ออกมาเป็นภาพจริงแล้วเปิดดูด้วยตา**
+> ถูก: ทุกไดอะแกรมในไฟล์นี้ **เรนเดอร์ออกมาเป็นภาพจริงแล้วเปิดดูด้วยตา**
 > ด้วย `@mermaid-js/mermaid-cli` 11.17.0 — ไม่ใช่แค่ตรวจไวยากรณ์
 
 ---
@@ -25,15 +25,15 @@
 | `actorBkg` · `actorBorder` · `signalColor` | เฉพาะ sequence diagram |
 | `noteBkgColor` · `noteBorderColor` | กล่อง `Note` สีเหลืองอ่อน |
 
-### ⚠️ `fontFamily` ต้องอยู่นอก `themeVariables`
+### ระวัง: `fontFamily` ต้องอยู่นอก `themeVariables`
 
 ทดสอบแล้วกับ Mermaid 11 — ใส่ผิดที่จะถูกเมินเงียบ ๆ ไม่มี error:
 
 ```js
-// ❌ ถูกเมิน → ได้ฟอนต์เริ่มต้น "trebuchet ms",verdana,arial,sans-serif
+// ถูกเมิน → ได้ฟอนต์เริ่มต้น "trebuchet ms",verdana,arial,sans-serif
 {'themeVariables': {'fontFamily': 'Tahoma, Arial, sans-serif'}}
 
-// ✅ ได้ font-family:Tahoma,Arial,sans-serif ใน SVG จริง
+// ถูก: ได้ font-family:Tahoma,Arial,sans-serif ใน SVG จริง
 {'fontFamily': 'Tahoma, Arial, sans-serif', 'themeVariables': {...}}
 ```
 

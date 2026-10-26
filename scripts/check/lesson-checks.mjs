@@ -7,7 +7,10 @@
  *   5. SKILL.md ใหญ่เกิน 20,000 ไบต์ → warning บรรทัดเดียว
  *   6. ตาราง "การตัดสินใจ" ใน .claude/superuser/CONTEXT.md เกิน 20 แถว → warning
  *   7. ไฟล์ .md มีตัว CR ดิบที่ไม่ตามด้วย LF → error
- *   8. ข้อเท็จจริงที่หมดอายุตามปฏิทิน (scripts/check/expiry.json) เลยวันแล้วหรือเหลือไม่ถึง 30 วัน → warning · ไฟล์ที่อ้างไม่มี → error
+ *   8. ข้อเท็จจริงที่หมดอายุตามปฏิทิน (scripts/check/expiry.json) เลยวันแล้วหรือเหลือไม่ถึง 30 วัน → warning · ไฟล์ที่อ้างไม่มี หรือไม่มีข้อความที่แถวอ้าง → error
+ *   9. ตัวชี้ `<plugin>:<ชื่อ>` ต้องมี skill หรือ agent ชื่อนั้นใน plugin นั้นจริง → error
+ *  10. CHANGELOG: หัวรุ่นเรียงจากใหม่ไปเก่า · Unreleased อยู่บนสุดเท่านั้น · รุ่นบนสุดตรงกับ plugin.json → error
+ *  11. ไอคอน ✅ ❌ ⚠ ในเนื้อหา (human-writing ห้าม) · ในโค้ดและ backtick ได้ เพราะอ้างผลที่สคริปต์พิมพ์ → error
  * ทุกฟังก์ชันรับข้อความเข้าและคืนรายการปัญหา (ข้อความ หรือ {at, msg} ของข้อ 3) ไม่อ่านไฟล์เอง (ยกเว้น installedOlder ที่รับ path)
  */
 import { readFileSync, existsSync } from 'node:fs';
@@ -89,21 +92,59 @@ export function loneCR(text) {
   return out;
 }
 
-// 8. ข้อเท็จจริงที่หมดอายุตามปฏิทิน · entries = [{ date: 'YYYY-MM-DD', file, what }] · today = 'YYYY-MM-DD'
-//    exists(file) บอกว่าไฟล์ยังมีไหม · คืน { warns, errors } · เลยวัน = ต้องตรวจแหล่งใหม่แล้วแก้ไฟล์ แล้วลบหรือเลื่อนแถว
+// 8. ข้อเท็จจริงที่หมดอายุตามปฏิทิน · entries = [{ date: 'YYYY-MM-DD', file, what, quote }] · today = 'YYYY-MM-DD'
+//    read(file) คืนข้อความของไฟล์ หรือ null ถ้าไม่มี · quote ต้องพบในไฟล์ (บทเรียน 2026-10-26: 4 แถวอ้างรอบตรวจที่ไฟล์ไม่ได้เขียน)
+//    คืน { warns, errors } · เลยวัน = ต้องตรวจแหล่งใหม่แล้วแก้ไฟล์ แล้วลบหรือเลื่อนแถว
 // วันที่ตามเวลาเครื่อง แบบ YYYY-MM-DD · ไม่ใช้ toISOString() เพราะเป็น UTC (ไทยหลังเที่ยงคืนจะได้วันก่อนหน้า)
 export const localToday = (d = new Date()) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
-export function expiredFacts(entries, today, exists, soonDays = 30) {
+export function expiredFacts(entries, today, read, soonDays = 30) {
   const day = (s) => Date.parse(`${s}T00:00:00Z`) / 86400000;
   const warns = [], errors = [];
   for (const e of entries) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date ?? '') || !e.file || !e.what) { errors.push(`แถวไม่ครบ (ต้องมี date แบบ YYYY-MM-DD · file · what): ${JSON.stringify(e)}`); continue; }
-    if (!exists(e.file)) { errors.push(`${e.file} ไม่มีแล้ว — แก้ path หรือลบแถว "${e.what}"`); continue; }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date ?? '') || !e.file || !e.what || !e.quote) { errors.push(`แถวไม่ครบ (ต้องมี date แบบ YYYY-MM-DD · file · what · quote): ${JSON.stringify(e)}`); continue; }
+    const text = read(e.file);
+    if (text === null) { errors.push(`${e.file} ไม่มีแล้ว — แก้ path หรือลบแถว "${e.what}"`); continue; }
+    if (!text.includes(e.quote)) { errors.push(`${e.file} ไม่มีข้อความ "${e.quote}" ที่แถว "${e.what}" อ้าง — แถวต้องพูดเท่าที่ไฟล์เขียน แก้แถวหรือแก้ไฟล์`); continue; }
     const left = day(e.date) - day(today);
     if (left < 0) warns.push(`${e.file}: ${e.what} หมดแล้วเมื่อ ${e.date} — ตรวจแหล่งทางการใหม่ แก้ไฟล์ แล้วลบหรือเลื่อนแถวใน expiry.json`);
     else if (left <= soonDays) warns.push(`${e.file}: ${e.what} หมด ${e.date} (อีก ${left} วัน) — เตรียมตรวจแหล่งใหม่`);
   }
   return { warns, errors };
+}
+
+// 9. ตัวชี้ข้าม plugin · บทเรียน 2026-10-23: ย้าย skill ข้าม plugin แล้วแทนชื่อทั้ง repo ทำให้ตัวชี้ชี้ plugin ผิด
+//    plugins = ชื่อ plugin ของเรา · has(plugin, name) บอกว่ามี skill หรือ agent ชื่อนั้นไหม · ข้ามเครื่องหมายบล็อกใน HTML comment
+export function badPluginRefs(text, plugins, has) {
+  const plain = text.replace(/<!--[\s\S]*?-->/g, (c) => c.replace(/[^\n]/g, ' '));
+  const re = new RegExp(`(^|[^A-Za-z0-9/_.-])(${plugins.map((p) => p.replace(/-/g, '\\-')).join('|')}):([a-z0-9][a-z0-9-]*)`, 'g');
+  const out = [];
+  plain.split('\n').forEach((line, i) => {
+    for (const m of line.matchAll(re)) if (!has(m[2], m[3])) out.push({ at: i + 1, msg: `\`${m[2]}:${m[3]}\` ไม่มี skill หรือ agent ชื่อนี้ใน plugin ${m[2]} — ย้ายไป plugin อื่นแล้วหรือพิมพ์ผิด` });
+  });
+  return out;
+}
+
+// 11. ไอคอนในเนื้อหา · เก็บกวาดแล้ว 2026-10-26 (superuser 72 จุด · plugin อื่นราว 1,900 บรรทัด) ตัวนี้กันไม่ให้กลับมา
+export function iconLines(text) {
+  const out = [];
+  let fence = false;
+  text.split('\n').forEach((line, i) => {
+    if (/^\s*(```|~~~)/.test(line)) { fence = !fence; return; }
+    if (!fence && /[✅❌⚠]/.test(line.replace(/`[^`]*`/g, ''))) out.push({ at: i + 1, msg: 'มีไอคอน ✅ ❌ ⚠ ในเนื้อหา — human-writing ห้าม ใช้คำแทน (ผิด: / ถูก: · ตารางใช่/ไม่ใช้ ✓ ✗)' });
+  });
+  return out;
+}
+
+// 10. ลำดับหัวรุ่นใน CHANGELOG · หัวที่ไม่ใช่รุ่น (เช่น "ประวัติจาก …") ข้าม
+export function changelogOrder(text, version) {
+  const heads = [...text.matchAll(/^## (Unreleased|\d+\.\d+\.\d+)\b/gm)].map((m) => m[1]);
+  const out = [];
+  const u = heads.indexOf('Unreleased');
+  if (u > 0 || heads.lastIndexOf('Unreleased') !== u) out.push('หัว "Unreleased" ต้องอยู่บนสุดและมีที่เดียว');
+  const vers = heads.filter((h) => h !== 'Unreleased');
+  for (let i = 1; i < vers.length; i++) if (!isOlder(vers[i], vers[i - 1])) out.push(`หัวรุ่น ${vers[i]} อยู่ใต้ ${vers[i - 1]} แต่ไม่ได้เก่ากว่า — เรียงใหม่จากใหม่ไปเก่า`);
+  if (version && vers[0] && vers[0] !== version) out.push(`หัวรุ่นบนสุด ${vers[0]} ไม่ตรงกับ plugin.json ${version}`);
+  return out;
 }

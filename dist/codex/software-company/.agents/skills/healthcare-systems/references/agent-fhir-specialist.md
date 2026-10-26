@@ -212,7 +212,7 @@ GET <content-location-url>
 | **Aidbox** | Modern, easy setup |
 | **public test servers** (e.g., HAPI public) | Quick prototyping |
 
-> ⚠️ Public servers: NEVER post real PHI.
+> Note: Public servers: NEVER post real PHI.
 
 ## EHR-Specific Quirks
 
@@ -259,20 +259,20 @@ GET <content-location-url>
 
 ## Common Pitfalls
 
-- ❌ **Treating FHIR like generic REST** — read the spec; the meaning of each field matters
-- ❌ **Ignoring profiles** — bare FHIR vs US Core differ significantly
-- ❌ **Not validating** — invalid resources break data exchange
-- ❌ **Storing references as strings** — use proper Reference type
-- ❌ **Mixing FHIR versions** — pick one (R4 for production usually)
-- ❌ **Skipping AuditEvent** — required for HIPAA
-- ❌ **Custom extensions everywhere** — other systems can no longer read your data
+- Wrong: **Treating FHIR like generic REST** — read the spec; the meaning of each field matters
+- Wrong: **Ignoring profiles** — bare FHIR vs US Core differ significantly
+- Wrong: **Not validating** — invalid resources break data exchange
+- Wrong: **Storing references as strings** — use proper Reference type
+- Wrong: **Mixing FHIR versions** — pick one (R4 for production usually)
+- Wrong: **Skipping AuditEvent** — required for HIPAA
+- Wrong: **Custom extensions everywhere** — other systems can no longer read your data
 
 ## Things You Don't Do
 
-- ❌ Build clinical decisions on FHIR data without clinical review
-- ❌ Skip capability statement (clients can't discover features)
-- ❌ Mix demographics with clinical data in custom shapes
-- ❌ Use FHIR for high-throughput non-healthcare data
+- Build clinical decisions on FHIR data without clinical review
+- Skip capability statement (clients can't discover features)
+- Mix demographics with clinical data in custom shapes
+- Use FHIR for high-throughput non-healthcare data
 
 ## Skills You Use
 

@@ -206,11 +206,11 @@ Blog post (full)
 
 ## Things You Don't Do
 
-- ❌ Promote without substance
-- ❌ Ignore competing products (an honest comparison helps)
-- ❌ Publish content, then ignore the comments
-- ❌ Chase vanity numbers instead of impact
-- ❌ Force product into every conversation
+- Promote without substance
+- Ignore competing products (an honest comparison helps)
+- Publish content, then ignore the comments
+- Chase vanity numbers instead of impact
+- Force product into every conversation
 
 ## When to Hand Off
 
@@ -444,11 +444,11 @@ docs.example.com/zh    (Chinese)
 
 ## Things You Don't Do
 
-- ❌ Build docs without testing code samples
-- ❌ Ignore search analytics
-- ❌ Keep the same content in more than one place
-- ❌ Put off versioning until it hurts
-- ❌ Replace technical writers (work with them)
+- Build docs without testing code samples
+- Ignore search analytics
+- Keep the same content in more than one place
+- Put off versioning until it hurts
+- Replace technical writers (work with them)
 
 ## When to Hand Off
 
@@ -575,11 +575,11 @@ kubectl get pods -n production
 
 ## Things You Don't Do
 
-- ❌ Hide complexity behind too many abstractions
-- ❌ Use a different error format in different docs
-- ❌ Write sample code that needs heavy configuration
-- ❌ Invent your own conventions (follow the language's norms)
-- ❌ Skip work on the "first 10 minutes"
+- Hide complexity behind too many abstractions
+- Use a different error format in different docs
+- Write sample code that needs heavy configuration
+- Invent your own conventions (follow the language's norms)
+- Skip work on the "first 10 minutes"
 
 ## When to Hand Off
 
@@ -724,9 +724,9 @@ Published to package manager
 
 | Tool | Languages | Quality |
 |------|-----------|---------|
-| **Stainless** | All major | ✅ Premium, used by OpenAI, Anthropic |
-| **Fern** | All major | ✅ Open source + managed |
-| **Speakeasy** | All major | ✅ Modern, idiomatic |
+| **Stainless** | All major | ✓ Premium, used by OpenAI, Anthropic |
+| **Fern** | All major | ✓ Open source + managed |
+| **Speakeasy** | All major | ✓ Modern, idiomatic |
 | **openapi-generator** | 50+ | 🟡 Free, less polished |
 
 > 💡 **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
@@ -822,11 +822,11 @@ await client.charges.create(data, {
 
 ## Things You Don't Do
 
-- ❌ Hand-write 5 SDKs (use a generator)
-- ❌ Vary conventions per language when the language's idiom doesn't call for it
-- ❌ Skip versioning
-- ❌ Let internal types leak into the public SDK
-- ❌ Make breaking changes for minor improvements
+- Hand-write 5 SDKs (use a generator)
+- Vary conventions per language when the language's idiom doesn't call for it
+- Skip versioning
+- Let internal types leak into the public SDK
+- Make breaking changes for minor improvements
 
 ## When to Hand Off
 
@@ -914,20 +914,20 @@ npm run dev
 ```
 
 ### Common Friction
-- ❌ Sign up for account first
-- ❌ Configure environment variables
-- ❌ Install N dependencies
-- ❌ Read documentation before code
-- ❌ Decide between multiple paths
-- ❌ Manual API key setup
+- Wrong: Sign up for account first
+- Wrong: Configure environment variables
+- Wrong: Install N dependencies
+- Wrong: Read documentation before code
+- Wrong: Decide between multiple paths
+- Wrong: Manual API key setup
 
 ### Solutions
-- ✅ Free tier with no sign-up
-- ✅ Templates with sensible defaults
-- ✅ Dependencies bundled in
-- ✅ Docs that start with code
-- ✅ Clear "recommended" path
-- ✅ Sandbox mode without keys
+- Free tier with no sign-up
+- Templates with sensible defaults
+- Dependencies bundled in
+- Docs that start with code
+- Clear "recommended" path
+- Sandbox mode without keys
 
 ## Error Message Design
 
@@ -945,10 +945,10 @@ Reference: learn more
 ### Examples
 
 ```
-❌ Generic
+Wrong: Generic
 Error: Invalid configuration
 
-✅ Specific + Actionable
+Right: Specific + Actionable
 Error: API_KEY_INVALID
   Your API key was not recognized by the server.
 
@@ -998,11 +998,11 @@ tool reset --force             # require flag
 
 ### Anti-Patterns
 ```
-❌ tool unique-non-verb-command
-❌ tool --random-flag-order-matters
-❌ No --help
-❌ Silent destructive operations
-❌ Color in piped output (respect NO_COLOR)
+Wrong: tool unique-non-verb-command
+Wrong: tool --random-flag-order-matters
+Wrong: No --help
+Wrong: Silent destructive operations
+Wrong: Color in piped output (respect NO_COLOR)
 ```
 
 ## Local Dev Setup
@@ -1039,7 +1039,7 @@ make dev   # or `npm run dev` or `docker compose up`
 ## Sample App Quality Standards
 
 ```
-✅ Quality checklist:
+Right: Quality checklist:
 - [ ] One-click deploy (Vercel, Railway, Render button)
 - [ ] README explains "why this exists"
 - [ ] Step-by-step setup
@@ -1054,10 +1054,10 @@ make dev   # or `npm run dev` or `docker compose up`
 ## Code Sample Standards
 
 ```typescript
-// ❌ Incomplete
+// Incomplete
 const result = client.doStuff(data);
 
-// ✅ Runnable
+// Runnable
 import { Client } from '@example/sdk';
 
 // Step 1: Initialize client
@@ -1102,12 +1102,12 @@ Track how many developers pass each step. Fix the step that loses the most.
 ```
 Edit code → see result
 
-❌ Slow:
+Wrong: Slow:
 - 30 sec restart
 - 5 min CI run
 - Manual deploy
 
-✅ Fast:
+Right: Fast:
 - Hot reload (1 sec)
 - Watch mode tests
 - Fast preview deploys (Vercel/Netlify)
@@ -1145,12 +1145,12 @@ NPS = % promoters - % detractors
 
 ## Things You Don't Do
 
-- ❌ Force sign-up before the first code runs
-- ❌ Hide errors that need to be visible
-- ❌ Require configuration with no sensible defaults
-- ❌ Give examples that leave parts for the reader to guess
-- ❌ Make onboarding long before the developer does anything
-- ❌ Ignore DX metrics
+- Force sign-up before the first code runs
+- Hide errors that need to be visible
+- Require configuration with no sensible defaults
+- Give examples that leave parts for the reader to guess
+- Make onboarding long before the developer does anything
+- Ignore DX metrics
 
 ## Reference
 
@@ -1329,7 +1329,7 @@ async retrieveOrder(id: OrderId): Promise<Order>;
 
 // TypeScript catches:
 const userId: UserId = 'user_123' as UserId;
-client.orders.retrieve(userId);  // ❌ compile error
+client.orders.retrieve(userId);  // Wrong: compile error
 ```
 
 ## Error Handling Patterns
@@ -1499,12 +1499,12 @@ const client = new Client({
 
 ## Things You Don't Do
 
-- ❌ Naming that breaks the language's own convention (e.g. camelCase methods in Python) — follow each language's idiom (table above)
-- ❌ Use untyped parameters when the language supports types
-- ❌ Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
-- ❌ Break v1 users with a v1.x release
-- ❌ Ignore retry edge cases
-- ❌ Force callbacks when async/promises would work
+- Naming that breaks the language's own convention (e.g. camelCase methods in Python) — follow each language's idiom (table above)
+- Use untyped parameters when the language supports types
+- Hand-write a full multi-language SDK family — Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
+- Break v1 users with a v1.x release
+- Ignore retry edge cases
+- Force callbacks when async/promises would work
 
 ## Reference
 
@@ -1640,10 +1640,10 @@ github.com/example/tutorial-x
 
 ### Examples
 
-❌ Marketing tone:
+Wrong: Marketing tone:
 > Our revolutionary platform empowers developers to seamlessly build cutting-edge applications.
 
-✅ Developer tone:
+Right: Developer tone:
 > This API lets you create users in 2-3 lines of code. Here's an example using TypeScript.
 
 ## Code in Content
@@ -1669,10 +1669,10 @@ Long: link to repo or playground
 ### Annotations
 
 ```typescript
-// ✅ Inline comments explain WHY
+// Right: Inline comments explain WHY
 const cache = new LRU(1000);  // 1000 items based on memory budget
 
-// ✅ Numbered for narrative
+// Right: Numbered for narrative
 // 1. Authenticate
 const token = await getToken();
 
@@ -1736,7 +1736,7 @@ const response = await fetch(url, {
 ## Sample App Standards
 
 ```
-✅ README has:
+Right: README has:
 - 1-paragraph "what this is"
 - Live demo link
 - "Why we built this" (motivation)
@@ -1744,7 +1744,7 @@ const response = await fetch(url, {
 - Architecture overview
 - "How to extend" examples
 
-✅ Code has:
+Right: Code has:
 - Type safety where possible
 - Production patterns (auth, errors)
 - Tests for key functions
@@ -1811,12 +1811,12 @@ Structure:
 
 ## Things You Don't Do
 
-- ❌ Pile up buzzwords ("AI-powered cloud-native")
-- ❌ Make vague claims without examples
-- ❌ Show code that leaves parts for the reader to guess
-- ❌ Write a long intro before the content
-- ❌ Hide tradeoffs (show only the upside)
-- ❌ Use outdated examples
+- Pile up buzzwords ("AI-powered cloud-native")
+- Make vague claims without examples
+- Show code that leaves parts for the reader to guess
+- Write a long intro before the content
+- Hide tradeoffs (show only the upside)
+- Use outdated examples
 
 ## Reference
 

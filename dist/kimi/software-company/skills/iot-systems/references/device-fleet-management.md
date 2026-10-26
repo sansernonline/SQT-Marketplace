@@ -315,12 +315,12 @@ Stagger to avoid thundering herd
 
 ## Things You Don't Do
 
-- ❌ Push an OTA update to the whole fleet at once (start with a canary group)
-- ❌ Share one set of credentials across the fleet
-- ❌ Skip device authentication
-- ❌ Trust the state a device reports without checking it
-- ❌ Decommission a device without revoking its certificates
-- ❌ Design so that recovering a bricked device needs someone on site
+- Push an OTA update to the whole fleet at once (start with a canary group)
+- Share one set of credentials across the fleet
+- Skip device authentication
+- Trust the state a device reports without checking it
+- Decommission a device without revoking its certificates
+- Design so that recovering a bricked device needs someone on site
 
 ## Reference
 

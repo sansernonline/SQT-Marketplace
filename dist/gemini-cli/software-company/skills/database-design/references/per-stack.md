@@ -160,7 +160,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -179,7 +179,7 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
+dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
 dotnet ef database update                                # dev เท่านั้น
 ```
 

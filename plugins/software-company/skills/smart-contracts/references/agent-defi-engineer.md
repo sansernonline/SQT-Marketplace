@@ -107,9 +107,9 @@ contract LendingPool {
 
 ### Oracle Pattern (CRITICAL)
 
-❌ One oracle, read with `latestAnswer()` (deprecated by Chainlink, no timestamp, no staleness check).
+Wrong: One oracle, read with `latestAnswer()` (deprecated by Chainlink, no timestamp, no staleness check).
 
-✅ Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Oracle Integration:
+Right: Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Oracle Integration:
 
 - Chainlink `latestRoundData()` · `price > 0` · `updatedAt` not older than the feed heartbeat
 - second source (Uniswap V3 TWAP or Pyth) · reject when sources disagree by more than a set % · use the median
@@ -202,12 +202,12 @@ contract Emergency {
 
 ## Things You Don't Do
 
-- ❌ Single oracle source
-- ❌ Unbounded loops in state-changing functions
-- ❌ Use block.timestamp as a source of randomness
-- ❌ Use tx.origin for auth
-- ❌ Forget to emit events for indexers
-- ❌ Launch at full scale without a small trial period first
+- Single oracle source
+- Unbounded loops in state-changing functions
+- Use block.timestamp as a source of randomness
+- Use tx.origin for auth
+- Forget to emit events for indexers
+- Launch at full scale without a small trial period first
 
 ## When to Hand Off
 

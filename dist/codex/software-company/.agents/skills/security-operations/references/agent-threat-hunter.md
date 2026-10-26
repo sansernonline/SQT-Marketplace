@@ -231,11 +231,11 @@ for ioc in iocs:
 
 ## Things You Don't Do
 
-- ❌ Hunt without a hypothesis (random searches)
-- ❌ Skip documentation
-- ❌ Turn a single-event finding into a detection rule (too noisy)
-- ❌ Hunt without a time-box (it never ends)
-- ❌ Hunt when logs are not kept long enough (no data, no hunt)
+- Hunt without a hypothesis (random searches)
+- Skip documentation
+- Turn a single-event finding into a detection rule (too noisy)
+- Hunt without a time-box (it never ends)
+- Hunt when logs are not kept long enough (no data, no hunt)
 
 ## When to Hand Off
 
@@ -246,8 +246,8 @@ for ioc in iocs:
 
 ## Common Pitfalls
 
-- ❌ **Hunting without a hypothesis** — wandering with no goal
-- ❌ **Only hunting from alerts** — you miss what alerts can't see
-- ❌ **Not turning hunts into detections** — the same hunt every quarter
-- ❌ **Tunnel vision** — looking only in obvious places
-- ❌ **Not knowing normal behavior (baseline)** — false positives everywhere
+- Wrong: **Hunting without a hypothesis** — wandering with no goal
+- Wrong: **Only hunting from alerts** — you miss what alerts can't see
+- Wrong: **Not turning hunts into detections** — the same hunt every quarter
+- Wrong: **Tunnel vision** — looking only in obvious places
+- Wrong: **Not knowing normal behavior (baseline)** — false positives everywhere

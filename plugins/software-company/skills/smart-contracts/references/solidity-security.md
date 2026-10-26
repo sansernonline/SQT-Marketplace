@@ -26,14 +26,14 @@
 ### 1. Reentrancy
 
 ```solidity
-// ❌ Vulnerable
+// Wrong: Vulnerable
 function withdraw() public {
     uint amount = balances[msg.sender];
     (bool sent,) = msg.sender.call{value: amount}("");  // external call
     balances[msg.sender] = 0;  // state change after
 }
 
-// ✅ Checks-Effects-Interactions
+// Right: Checks-Effects-Interactions
 function withdraw() public {
     uint amount = balances[msg.sender];
     balances[msg.sender] = 0;  // state change first
@@ -41,7 +41,7 @@ function withdraw() public {
     require(sent);
 }
 
-// ✅ Even safer: ReentrancyGuard (OpenZeppelin 5.x path)
+// Right: Even safer: ReentrancyGuard (OpenZeppelin 5.x path)
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract Bank is ReentrancyGuard {
@@ -52,19 +52,19 @@ contract Bank is ReentrancyGuard {
 ### 2. Access Control
 
 ```solidity
-// ❌ Public function affecting state
+// Wrong: Public function affecting state
 function setOwner(address newOwner) public {
     owner = newOwner;
 }
 
-// ✅ Access control
+// Right: Access control
 function setOwner(address newOwner) public {
     require(msg.sender == owner, "Not owner");
     require(newOwner != address(0), "Zero address");
     owner = newOwner;
 }
 
-// ✅ Better: OpenZeppelin Ownable (5.x needs the first owner in the constructor)
+// Better: OpenZeppelin Ownable (5.x needs the first owner in the constructor)
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MyContract is Ownable {
     constructor(address initialOwner) Ownable(initialOwner) {}
@@ -79,11 +79,11 @@ contract MyContract is Ownable {
 // In Solidity 0.8.0+, overflow auto-reverts
 // For older versions, use SafeMath
 
-// ✅ Solidity 0.8+
+// Right: Solidity 0.8+
 uint256 a = type(uint256).max;
 a + 1;  // reverts
 
-// ⚠️ Unchecked blocks (use carefully) — wrap only the counter, never the loop body
+// Note: Unchecked blocks (use carefully) — wrap only the counter, never the loop body
 for (uint256 i = 0; i < length;) {
     /* body stays checked */
     unchecked { ++i; }
@@ -107,11 +107,11 @@ for (uint256 i = 0; i < length;) {
 ### 5. Oracle Manipulation
 
 ```solidity
-// ❌ Spot price from AMM
+// Wrong: Spot price from AMM
 uint256 price = uniswapPool.price();  // manipulable via flash loan
 ```
 
-✅ Use the patterns in [`defi-patterns.md`](defi-patterns.md) · Oracle Integration (one copy, kept up to date):
+Right: Use the patterns in [`defi-patterns.md`](defi-patterns.md) · Oracle Integration (one copy, kept up to date):
 
 - Chainlink `latestRoundData()` with `price > 0` and a staleness check on `updatedAt` — never `latestAnswer()` (deprecated, no timestamp)
 - Time-Weighted Average Price (TWAP) from Uniswap V3 for a second opinion
@@ -126,13 +126,13 @@ contract MyContract {
     address b;  // slot 1
 }
 
-// ❌ V2 — DON'T reorder
+// Wrong: V2 — DON'T reorder
 contract MyContractV2 {
     address b;  // slot 0 now! corrupts data
     uint256 a;  // slot 1
 }
 
-// ✅ V2 — append only
+// Right: V2 — append only
 contract MyContractV2 {
     uint256 a;  // slot 0 (unchanged)
     address b;  // slot 1 (unchanged)
@@ -150,7 +150,7 @@ contract MyContractV2 {
 // delegatecall preserves msg.sender + storage of caller
 // VERY dangerous if user can choose target
 
-// ❌ Anti-pattern
+// Wrong: Anti-pattern
 function callExternal(address target, bytes memory data) public {
     target.delegatecall(data);  // attacker can hijack state
 }
@@ -159,13 +159,13 @@ function callExternal(address target, bytes memory data) public {
 ### 8. Signature Replay
 
 ```solidity
-// ❌ Vulnerable: no nonce or chain ID
+// Wrong: Vulnerable: no nonce or chain ID
 function permit(address user, bytes signature) public {
     require(verify(user, signature));
     // ...
 }
 
-// ✅ EIP-712 typed data: domain (name, version, chainId, this contract)
+// Right: EIP-712 typed data: domain (name, version, chainId, this contract)
 //    + type hash + nonce + deadline, bound to the exact action
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -217,14 +217,14 @@ Defense:
 ### 10. Initialization
 
 ```solidity
-// ❌ Constructor in proxy (doesn't run)
+// Wrong: Constructor in proxy (doesn't run)
 contract MyContract {
     constructor() {
         owner = msg.sender;  // never executes via proxy
     }
 }
 
-// ✅ Initializer pattern (OpenZeppelin 5.x upgradeable)
+// Right: Initializer pattern (OpenZeppelin 5.x upgradeable)
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 

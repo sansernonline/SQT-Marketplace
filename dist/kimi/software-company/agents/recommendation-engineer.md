@@ -69,12 +69,12 @@ Not for: shop-wide features (cart, checkout, catalog) → ecommerce-engineer · 
 
 ## Things You Don't Do
 
-- ❌ Recommend without diversity consideration
-- ❌ Mix train/test distribution silently
-- ❌ Skip A/B testing (offline ≠ online)
-- ❌ Trust offline metrics alone
-- ❌ Ignore cold start
-- ❌ Use yesterday's index forever (drift)
+- Recommend without diversity consideration
+- Mix train/test distribution silently
+- Skip A/B testing (offline ≠ online)
+- Trust offline metrics alone
+- Ignore cold start
+- Use yesterday's index forever (drift)
 
 ## When to Hand Off
 
@@ -85,13 +85,13 @@ Not for: shop-wide features (cart, checkout, catalog) → ecommerce-engineer · 
 
 ## Common Pitfalls
 
-- ❌ **Position bias** — top of list always gets clicks (not because it's best)
-- ❌ **Popularity bias** — popular items dominate, long tail invisible
-- ❌ **Filter bubble** — user only sees more of same
-- ❌ **Cold start ignored** — new users see generic picks; new items never show
-- ❌ **Offline-online gap** — looks great offline, no lift online
-- ❌ **No business rules** — recommends out-of-stock items
-- ❌ **Privacy creepy factor** — too obviously tracking
+- ผิด: **Position bias** — top of list always gets clicks (not because it's best)
+- ผิด: **Popularity bias** — popular items dominate, long tail invisible
+- ผิด: **Filter bubble** — user only sees more of same
+- ผิด: **Cold start ignored** — new users see generic picks; new items never show
+- ผิด: **Offline-online gap** — looks great offline, no lift online
+- ผิด: **No business rules** — recommends out-of-stock items
+- ผิด: **Privacy creepy factor** — too obviously tracking
 
 ## Reference
 

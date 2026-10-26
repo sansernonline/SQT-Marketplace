@@ -52,9 +52,9 @@ Card data path: Browser → Server → Gateway
 
 Anywhere card data goes, that system is in scope.
 
-✅ Hosted fields:    Browser → Gateway (skip your server)
-✅ Tokenization:     Server stores TOKEN, not PAN
-✅ Network segmentation:  CDE isolated from rest of infra
+Right: Hosted fields:    Browser → Gateway (skip your server)
+Right: Tokenization:     Server stores TOKEN, not PAN
+Right: Network segmentation:  CDE isolated from rest of infra
 ```
 
 ## SAQ Selection (Critical Decision)
@@ -138,37 +138,37 @@ Anywhere card data goes, that system is in scope.
 
 ## Common Anti-patterns
 
-### ❌ Storing CVV
+### Wrong: Storing CVV
 **Never.** Period. Not even encrypted. PCI-DSS forbids it.
 
-### ❌ Card data in logs
+### Wrong: Card data in logs
 ```typescript
 // 💥 BAD — logs may contain card number
 log.info(`Processing payment: ${JSON.stringify(req.body)}`);
 
-// ✅ GOOD — mask sensitive fields
+// Right: GOOD — mask sensitive fields
 log.info(`Processing payment`, { last4: req.body.card?.last4 });
 ```
 
-### ❌ Card data in URL
+### Wrong: Card data in URL
 ```
-❌ /process-payment?pan=4111111111111111  ← in proxy logs forever
-✅ POST /process-payment (body, TLS, masked logs)
+Wrong: /process-payment?pan=4111111111111111  ← in proxy logs forever
+Right: POST /process-payment (body, TLS, masked logs)
 ```
 
-### ❌ Custom encryption
+### Wrong: Custom encryption
 ```typescript
 // 💥 NEVER
 function "encrypt"(pan: string): string {
   return Buffer.from(pan).toString('base64'); // not encryption!
 }
 
-// ✅ Use proven libraries
+// Right: Use proven libraries
 import { createCipheriv } from 'crypto';
 // AES-256-GCM with KMS-managed key
 ```
 
-### ❌ Local key storage
+### Wrong: Local key storage
 Keys in a `.env` file or in the codebase fail the audit.
 Use a key management service (KMS) from AWS, Azure or GCP, or a hardware security module (HSM).
 
@@ -273,12 +273,12 @@ Before QSA arrives:
 
 ## Anti-patterns Specific to PCI
 
-- ❌ **Believing SAQ-A is automatic** — you still need the controls and a signed attestation
-- ❌ **Mixing CHD with other data** — increases scope
-- ❌ **Allowing developer access to prod** — even read-only access exposes PCI data
-- ❌ **Skipping rotation** — not rotating keys, passwords and certificates
-- ❌ **One-time compliance** — it's continuous
-- ❌ **Treating QSA as adversary** — they're trying to help
+- **Believing SAQ-A is automatic** — you still need the controls and a signed attestation
+- **Mixing CHD with other data** — increases scope
+- **Allowing developer access to prod** — even read-only access exposes PCI data
+- **Skipping rotation** — not rotating keys, passwords and certificates
+- **One-time compliance** — it's continuous
+- **Treating QSA as adversary** — they're trying to help
 
 ## Reference
 

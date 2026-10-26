@@ -27,13 +27,13 @@ Queries ◄── Read Models (denormalized for query)
 ```
 
 **When to use:**
-- ✅ Read load and write load are very different
-- ✅ Complex reporting / dashboards
-- ✅ Multiple read views from same data
+- Read load and write load are very different
+- Complex reporting / dashboards
+- Multiple read views from same data
 
 **When NOT to use:**
-- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
-- ❌ Reads must always show the latest write
+- Simple create/read/update/delete (CRUD) apps (far too much)
+- Reads must always show the latest write
 
 ---
 
@@ -53,18 +53,18 @@ State is computed from events
 ```
 
 **When to use:**
-- ✅ Strong audit/compliance requirements
-- ✅ Need to replay history
-- ✅ Questions about the past ("balance at date X")
-- ✅ Complex business logic with many state transitions
+- Strong audit/compliance requirements
+- Need to replay history
+- Questions about the past ("balance at date X")
+- Complex business logic with many state transitions
 
 **When NOT to use:**
-- ❌ Apps with simple state (too much)
-- ❌ No team experience with it
-- ❌ Don't need history/audit
-- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
+- Apps with simple state (too much)
+- No team experience with it
+- Don't need history/audit
+- You must be able to delete data, e.g. under GDPR (events are hard to delete)
 
-> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+> Note: **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
 
 ---
 

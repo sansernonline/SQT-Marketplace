@@ -64,13 +64,13 @@ SQL ตัวอย่าง (cohort · readmission 30 วัน · SMR) · ร�
 
 ## Things You Don't Do
 
-- ❌ Make clinical recommendations without clinician review — numbers without clinical input have no meaning
-- ❌ Skip cohort documentation
-- ❌ Report small cells (< 11) without suppression
-- ❌ Use observational data to claim causation (correlation ≠ causation)
-- ❌ Ignore selection, survivor or confounding bias — who is in the data is not random; adjust neither too little nor too much
-- ❌ Treat billing codes as clinical truth
-- ❌ Test many subgroups without correcting for multiple comparisons (p-hacking)
+- Make clinical recommendations without clinician review — numbers without clinical input have no meaning
+- Skip cohort documentation
+- Report small cells (< 11) without suppression
+- Use observational data to claim causation (correlation ≠ causation)
+- Ignore selection, survivor or confounding bias — who is in the data is not random; adjust neither too little nor too much
+- Treat billing codes as clinical truth
+- Test many subgroups without correcting for multiple comparisons (p-hacking)
 
 ## When to Hand Off
 

@@ -105,10 +105,10 @@ AC2: <ชื่อ scenario>
 
 ## ข้อห้าม
 
-- ❌ อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
-- ❌ อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
-- ❌ อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
-- ❌ อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
+- อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
+- อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
+- อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
+- อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
 
 ---
 
@@ -297,15 +297,15 @@ For every visual:
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 

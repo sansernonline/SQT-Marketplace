@@ -25,10 +25,10 @@ description: Use when choosing system architecture (monolith, microservices, ser
 How many engineers? Team count? Domain complexity?
 │
 ├─ <10 engineers, 1 team
-│  └─ ✅ Monolith (modular monolith)
+│  └─ Monolith (modular monolith)
 │
 ├─ 10-50 engineers, 2-5 teams
-│  └─ ✅ Modular monolith OR few services
+│  └─ Modular monolith OR few services
 │
 ├─ 50+ engineers, 5+ teams
 │  └─ Consider microservices (only if needed)
@@ -63,14 +63,14 @@ Details for each are in [references/advanced-patterns.md](references/advanced-pa
 
 ## Anti-patterns
 
-- ❌ **Microservices too early** — start with a monolith
-- ❌ **Distributed monolith** — services that must deploy together
-- ❌ **God service** — one service that does everything
-- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
-- ❌ **Shared database across microservices** — all the coupling, none of the isolation
-- ❌ **Synchronous calls in critical path** — cascading failures
-- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
-- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
+- **Microservices too early** — start with a monolith
+- **Distributed monolith** — services that must deploy together
+- **God service** — one service that does everything
+- **Chatty interfaces** — one request fans out into many service calls (N+1)
+- **Shared database across microservices** — all the coupling, none of the isolation
+- **Synchronous calls in critical path** — cascading failures
+- **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- **Resume-driven architecture** — using K8s/microservices to look fancy
 
 ---
 

@@ -135,13 +135,13 @@ async def route_request(input_text: str):
 
 ### When to use RAG
 
-✅ **Use RAG when:**
+Right: **Use RAG when:**
 - Knowledge base updates frequently
 - Need source citations
 - Domain-specific knowledge not in LLM training
 - Cost matters (RAG is cheaper than fine-tuning)
 
-❌ **Skip RAG when:**
+Wrong: **Skip RAG when:**
 - Static, small knowledge base (just include in prompt)
 - Tasks need reasoning, not retrieval
 - Latency-critical (RAG adds round trips)
@@ -253,13 +253,13 @@ Coordinator LLM:
 
 ### Agent design rules
 
-- ✅ **Limit tool count** — fewer than 10 tools per agent, so it picks the right one
-- ✅ **Limit iteration depth** — max 5-10 steps
-- ✅ **Tool naming** — verb-noun, descriptive
-- ✅ **Tool descriptions** — say when to use the tool and the rules for each parameter
-- ✅ **Error handling** — tool fails → agent can retry or escalate
-- ❌ **Don't trust agents in prod without guardrails**
-- ❌ **Don't allow infinite loops** — hard limit on iterations
+- Right: **Limit tool count** — fewer than 10 tools per agent, so it picks the right one
+- Right: **Limit iteration depth** — max 5-10 steps
+- Right: **Tool naming** — verb-noun, descriptive
+- Right: **Tool descriptions** — say when to use the tool and the rules for each parameter
+- Right: **Error handling** — tool fails → agent can retry or escalate
+- Wrong: **Don't trust agents in prod without guardrails**
+- Wrong: **Don't allow infinite loops** — hard limit on iterations
 
 ## Evaluation System
 
@@ -366,12 +366,12 @@ Levers:
 
 ## Things You Don't Do
 
-- ❌ Build agent systems without evals
-- ❌ Use Opus for everything (expensive, slow)
-- ❌ Trust LLM output without validation
-- ❌ Put user-supplied text into the system prompt
-- ❌ Skip safety filtering when traffic grows
-- ❌ Run unlimited agent loops in production
+- Build agent systems without evals
+- Use Opus for everything (expensive, slow)
+- Trust LLM output without validation
+- Put user-supplied text into the system prompt
+- Skip safety filtering when traffic grows
+- Run unlimited agent loops in production
 
 ## When to Hand Off
 
@@ -382,14 +382,14 @@ Levers:
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — can't measure improvements
-- ❌ **Over-engineering** — RAG when prompt would do
-- ❌ **Under-engineering** — prompt when fine-tune would help
-- ❌ **Single point of failure** — only one LLM provider
-- ❌ **Prompt injection** — user input concatenated into system prompt
-- ❌ **Cost explosion** — agents loop without limits
-- ❌ **Latency creep** — multi-step systems get slow
-- ❌ **No guardrails** — the LLM does whatever bad input asks
+- Wrong: **No eval set** — can't measure improvements
+- Wrong: **Over-engineering** — RAG when prompt would do
+- Wrong: **Under-engineering** — prompt when fine-tune would help
+- Wrong: **Single point of failure** — only one LLM provider
+- Wrong: **Prompt injection** — user input concatenated into system prompt
+- Wrong: **Cost explosion** — agents loop without limits
+- Wrong: **Latency creep** — multi-step systems get slow
+- Wrong: **No guardrails** — the LLM does whatever bad input asks
 
 ## Reference
 
@@ -485,31 +485,31 @@ Define success metric
 Problem type? Data size? Latency?
 │
 ├─ Tabular, small data (< 100k rows)
-│  └─ ✅ Logistic / Linear regression, Random Forest, XGBoost
+│  └─ Logistic / Linear regression, Random Forest, XGBoost
 │
 ├─ Tabular, large data
-│  └─ ✅ XGBoost, LightGBM (still best for tabular)
+│  └─ XGBoost, LightGBM (still best for tabular)
 │
 ├─ Image
 │  ├─ Standard task (classification, detection)
-│  │  └─ ✅ Pretrained + fine-tune (timm, torchvision)
+│  │  └─ Pretrained + fine-tune (timm, torchvision)
 │  └─ Novel domain
-│     └─ ✅ Train custom CNN / ViT
+│     └─ Train custom CNN / ViT
 │
 ├─ Text
 │  ├─ Standard NLP (sentiment, NER, classification)
-│  │  └─ ✅ Pretrained transformer (BERT, RoBERTa)
+│  │  └─ Pretrained transformer (BERT, RoBERTa)
 │  └─ Generative
-│     └─ ✅ Use LLM (defer to ai-engineer)
+│     └─ Use LLM (defer to ai-engineer)
 │
 ├─ Sequence (time-series)
 │  ├─ Univariate
-│  │  └─ ✅ ARIMA, Prophet, exponential smoothing
+│  │  └─ ARIMA, Prophet, exponential smoothing
 │  └─ Multivariate
-│     └─ ✅ LSTM, Transformer, gradient boosting
+│     └─ LSTM, Transformer, gradient boosting
 │
 └─ Unstructured / mixed
-   └─ ✅ Embedding + classical (or multi-modal model)
+   └─ Embedding + classical (or multi-modal model)
 ```
 
 > 💡 **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
@@ -552,10 +552,10 @@ df['days_since'] = (df['timestamp'] - df['first_seen']).dt.days
 
 ### Aggregations (be careful with leakage!)
 ```python
-# ❌ Bad: includes future data
+# Bad: includes future data
 df['user_avg_purchase'] = df.groupby('user')['amount'].transform('mean')
 
-# ✅ Good: only past data
+# Good: only past data
 df = df.sort_values('timestamp')
 df['user_avg_purchase'] = (
     df.groupby('user')['amount']
@@ -654,13 +654,13 @@ Hand model to `ai-engineer` with:
 
 ## Things You Don't Do
 
-- ❌ Deploy without monitoring
-- ❌ Train without baseline comparison
-- ❌ Skip out-of-time validation
-- ❌ Ignore class imbalance without saying so
-- ❌ Hard-code feature names in many places (use a registry)
-- ❌ Use different preprocessing in training and production
-- ❌ Trust a single metric
+- Deploy without monitoring
+- Train without baseline comparison
+- Skip out-of-time validation
+- Ignore class imbalance without saying so
+- Hard-code feature names in many places (use a registry)
+- Use different preprocessing in training and production
+- Trust a single metric
 
 ## When to Hand Off
 
@@ -671,14 +671,14 @@ Hand model to `ai-engineer` with:
 
 ## Common Pitfalls
 
-- ❌ **Data leakage** — future info in features, target in features
-- ❌ **Train-test mismatch** — different preprocessing in production
-- ❌ **Overfitting** — perfect on train, useless on test
-- ❌ **Wrong metric** — optimizing accuracy on imbalanced data
-- ❌ **Ignoring class imbalance** — model predicts majority always
-- ❌ **No baseline** — model "works" but rules work better
-- ❌ **Model for its own sake** — adding a model where rules would do
-- ❌ **Black box where explainability is needed** (credit, healthcare)
+- Wrong: **Data leakage** — future info in features, target in features
+- Wrong: **Train-test mismatch** — different preprocessing in production
+- Wrong: **Overfitting** — perfect on train, useless on test
+- Wrong: **Wrong metric** — optimizing accuracy on imbalanced data
+- Wrong: **Ignoring class imbalance** — model predicts majority always
+- Wrong: **No baseline** — model "works" but rules work better
+- Wrong: **Model for its own sake** — adding a model where rules would do
+- Wrong: **Black box where explainability is needed** (credit, healthcare)
 
 ## Reference
 
@@ -1009,12 +1009,12 @@ prediction = model.predict(features)
 
 ## Things You Don't Do
 
-- ❌ Deploy without monitoring
-- ❌ Skip rollback testing
-- ❌ Use different preprocessing in train vs serve
-- ❌ Trust performance without ground truth
-- ❌ Ignore drift alerts
-- ❌ Run several model versions in production without tracking which served what
+- Deploy without monitoring
+- Skip rollback testing
+- Use different preprocessing in train vs serve
+- Trust performance without ground truth
+- Ignore drift alerts
+- Run several model versions in production without tracking which served what
 
 ## When to Hand Off
 
@@ -1026,13 +1026,13 @@ prediction = model.predict(features)
 
 ## Common Pitfalls
 
-- ❌ **Train-serve skew** — silent accuracy degradation
-- ❌ **No drift monitoring** — model gets worse, nobody notices
-- ❌ **Deploying with notebooks** — not reproducible
-- ❌ **Hard-coded paths** — works locally, breaks in prod
-- ❌ **No versioning** — can't reproduce a 6-month-old prediction
-- ❌ **Mixing model + business logic** — keep them apart: the model returns predictions, the app applies thresholds
-- ❌ **No fallback** — the model fails → the whole service fails
+- Wrong: **Train-serve skew** — silent accuracy degradation
+- Wrong: **No drift monitoring** — model gets worse, nobody notices
+- Wrong: **Deploying with notebooks** — not reproducible
+- Wrong: **Hard-coded paths** — works locally, breaks in prod
+- Wrong: **No versioning** — can't reproduce a 6-month-old prediction
+- Wrong: **Mixing model + business logic** — keep them apart: the model returns predictions, the app applies thresholds
+- Wrong: **No fallback** — the model fails → the whole service fails
 
 ## Reference
 
@@ -1140,13 +1140,13 @@ Output the category name only, lowercase, no explanation.
 
 ### Pattern 2: Structured Output (Use Tool Use!)
 
-❌ **Avoid:** Asking for JSON in text
+Wrong: **Avoid:** Asking for JSON in text
 ```
 Output as JSON with keys: name, age, email
 → Often invalid JSON, hard to parse
 ```
 
-✅ **Use:** Tool calling / structured output
+Right: **Use:** Tool calling / structured output
 ```python
 # Anthropic API
 response = client.messages.create(
@@ -1180,7 +1180,7 @@ tool_input = next(b.input for b in response.content if b.type == "tool_use")
 
 ### Pattern 3: Chain-of-Thought (When to Use)
 
-✅ **Use for:** complex reasoning, math, multi-step
+Right: **Use for:** complex reasoning, math, multi-step
 ```
 Think step by step about this problem before answering.
 
@@ -1189,7 +1189,7 @@ Problem: <complex question>
 Show your reasoning, then give the final answer.
 ```
 
-❌ **Don't use for:**
+Wrong: **Don't use for:**
 - Simple classification (overhead, no benefit)
 - Tasks requiring fast latency
 - Models that already reason step by step internally
@@ -1252,7 +1252,7 @@ Generate the answer. Then critique your own answer.
 If critique finds issues, revise. Output ONLY the final answer.
 ```
 
-> ⚠️ Adds latency. Use it when accuracy matters far more than speed.
+> Note: Adds latency. Use it when accuracy matters far more than speed.
 
 ## Few-Shot vs Fine-Tuning
 
@@ -1369,12 +1369,12 @@ async def call_llm(prompt_id: str, input: str):
 
 ## Things You Don't Do
 
-- ❌ Skip the eval set (no eval = guessing)
-- ❌ Hide prompts in databases (version with code)
-- ❌ Rely on temperature alone for consistency — some models (Claude Opus 4.7 / 4.8) have no temperature setting; use strict schemas, fixed labels and evals
-- ❌ Trust LLM output without validation (schema check)
-- ❌ Manually parse JSON when tool use available
-- ❌ Make prompt-only changes without measuring
+- Skip the eval set (no eval = guessing)
+- Hide prompts in databases (version with code)
+- Rely on temperature alone for consistency — some models (Claude Opus 4.7 / 4.8) have no temperature setting; use strict schemas, fixed labels and evals
+- Trust LLM output without validation (schema check)
+- Manually parse JSON when tool use available
+- Make prompt-only changes without measuring
 
 ## When to Hand Off
 
@@ -1386,13 +1386,13 @@ async def call_llm(prompt_id: str, input: str):
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — can't tell if changes help
-- ❌ **Optimizing on one example** — works for that, fails generally
-- ❌ **Long prompts everywhere** — not using caching
-- ❌ **Trust output blindly** — no schema/range check
-- ❌ **Unstated assumptions** — you think the model "should know" → it often doesn't
-- ❌ **No A/B testing** — changing prod and hoping for the best
-- ❌ **Magic numbers** — e.g. temperature 0.7 with no stated reason
+- Wrong: **No eval set** — can't tell if changes help
+- Wrong: **Optimizing on one example** — works for that, fails generally
+- Wrong: **Long prompts everywhere** — not using caching
+- Wrong: **Trust output blindly** — no schema/range check
+- Wrong: **Unstated assumptions** — you think the model "should know" → it often doesn't
+- Wrong: **No A/B testing** — changing prod and hoping for the best
+- Wrong: **Magic numbers** — e.g. temperature 0.7 with no stated reason
 
 ## Reference
 
@@ -1449,8 +1449,8 @@ Without an eval set, you're guessing. Period.
 ```
 
 **Categories to include:**
-- ✅ Happy path (50%)
-- ⚠️ Edge cases (20%)
+- Happy path (50%)
+- Note: Edge cases (20%)
 - 🚨 Safety / refusal (15%)
 - 🌐 Multilingual (if applicable) (10%)
 - 🐛 Known failure modes (5%)
@@ -1759,15 +1759,15 @@ async def hourly_quality_check():
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — you are guessing
-- ❌ **Tiny eval set** — fewer than 20 examples gives noisy results
-- ❌ **Stale eval** — not updated as production traffic changes
-- ❌ **Single metric** — quality has several dimensions
-- ❌ **No safety eval** — you find issues after launch
-- ❌ **Judge uses the same model** — it shares the same biases
-- ❌ **No human check of the judge** — it may be wrong and you won't know
-- ❌ **No regression test in CI** — quality drops go unnoticed
-- ❌ **Optimizing only for accuracy** — cost and latency get ignored
+- Wrong: **No eval set** — you are guessing
+- Wrong: **Tiny eval set** — fewer than 20 examples gives noisy results
+- Wrong: **Stale eval** — not updated as production traffic changes
+- Wrong: **Single metric** — quality has several dimensions
+- Wrong: **No safety eval** — you find issues after launch
+- Wrong: **Judge uses the same model** — it shares the same biases
+- Wrong: **No human check of the judge** — it may be wrong and you won't know
+- Wrong: **No regression test in CI** — quality drops go unnoticed
+- Wrong: **Optimizing only for accuracy** — cost and latency get ignored
 
 ## Eval Quality Targets
 
@@ -1838,12 +1838,12 @@ You're known for clear, opinionated recommendations with concrete trade-offs.
 
 ### Pattern 2: Clear Task Definition
 
-❌ Vague:
+Wrong: Vague:
 ```
 Help me with code review.
 ```
 
-✅ Specific:
+Right: Specific:
 ```
 Review the provided TypeScript code for:
 1. Type safety issues
@@ -1908,12 +1908,12 @@ Final answer: ...
 
 ### Pattern 5: Structured Output via Tool Use
 
-❌ Asking for JSON in text (often invalid):
+Wrong: Asking for JSON in text (often invalid):
 ```
 Output as JSON: {"name": ..., "age": ...}
 ```
 
-✅ Use tool/function calling:
+Right: Use tool/function calling:
 ```python
 response = client.messages.create(
     tools=[{
@@ -2041,7 +2041,7 @@ Provide findings as a numbered list with:
 
 ## Anti-patterns
 
-### ❌ Anti-pattern 1: Begging for performance
+### Wrong: Anti-pattern 1: Begging for performance
 
 ```
 PLEASE be careful! This is VERY IMPORTANT! Do your BEST!!!
@@ -2049,14 +2049,14 @@ PLEASE be careful! This is VERY IMPORTANT! Do your BEST!!!
 
 **Why bad:** It doesn't help. Write clear instructions instead.
 
-### ❌ Anti-pattern 2: Contradictory rules
+### Wrong: Anti-pattern 2: Contradictory rules
 
 ```
 Be concise. But also explain everything in detail. And use bullet points.
 But also write in flowing prose.
 ```
 
-### ❌ Anti-pattern 3: Vague metrics
+### Wrong: Anti-pattern 3: Vague metrics
 
 ```
 Make sure the output is high quality.
@@ -2064,7 +2064,7 @@ Make sure the output is high quality.
 
 → What's "high quality"? Define it.
 
-### ❌ Anti-pattern 4: Mixing concerns
+### Wrong: Anti-pattern 4: Mixing concerns
 
 ```
 You are a customer support agent who also writes code and does taxes.
@@ -2072,7 +2072,7 @@ You are a customer support agent who also writes code and does taxes.
 
 → One agent, one role.
 
-### ❌ Anti-pattern 5: Examples that miss edge cases
+### Wrong: Anti-pattern 5: Examples that miss edge cases
 
 ```
 Examples (all easy):
@@ -2260,10 +2260,10 @@ When output is wrong:
 
 ## When NOT to RAG
 
-- ❌ Small static knowledge → put it in the prompt
-- ❌ Reasoning tasks (not factual retrieval)
-- ❌ Latency-critical (RAG adds round trips)
-- ❌ Live values that change by the minute (prices, stock levels, balances) → call the source API or a tool at question time instead
+- Small static knowledge → put it in the prompt
+- Reasoning tasks (not factual retrieval)
+- Latency-critical (RAG adds round trips)
+- Live values that change by the minute (prices, stock levels, balances) → call the source API or a tool at question time instead
 
 ## RAG Pipeline Overview
 
@@ -2380,13 +2380,13 @@ Model names and prices change often. Check each provider's current embedding mod
 
 | Vector DB | Open Source | Hybrid Search | Filtering | Scale | Best for |
 |-----------|:----------:|:-------------:|:---------:|:-----:|----------|
-| **Pinecone** | ❌ | 🟡 | ✅ | 🟢 | Quick start, managed |
-| **Weaviate** | ✅ | ✅ | ✅ | 🟢 | Self-host, GraphQL |
-| **Qdrant** | ✅ | ✅ | ✅ | 🟢 | Performance, Rust |
-| **Chroma** | ✅ | 🟡 | ✅ | 🟡 | Local dev |
-| **pgvector** | ✅ | ✅ (with FTS) | ✅ | 🟡 | Already on Postgres |
-| **Elasticsearch** | ✅ | ✅✅ | ✅ | 🟢 | Hybrid + analytics |
-| **OpenSearch** | ✅ | ✅✅ | ✅ | 🟢 | AWS-native |
+| **Pinecone** | ✗ | 🟡 | ✓ | 🟢 | Quick start, managed |
+| **Weaviate** | ✓ | ✓ | ✓ | 🟢 | Self-host, GraphQL |
+| **Qdrant** | ✓ | ✓ | ✓ | 🟢 | Performance, Rust |
+| **Chroma** | ✓ | 🟡 | ✓ | 🟡 | Local dev |
+| **pgvector** | ✓ | ✓ (with FTS) | ✓ | 🟡 | Already on Postgres |
+| **Elasticsearch** | ✓ | ✓✓ | ✓ | 🟢 | Hybrid + analytics |
+| **OpenSearch** | ✓ | ✓✓ | ✓ | 🟢 | AWS-native |
 
 ### When to choose what
 
@@ -2610,14 +2610,14 @@ final = await retrieve(refined_query)
 
 ## Common Pitfalls
 
-- ❌ **One-size chunking** — different doc types need different sizes
-- ❌ **Pure vector search** — hybrid almost always better
-- ❌ **No re-ranking** — the top result is often not the most relevant
-- ❌ **Embedding model mismatch** — query and docs must use same model
-- ❌ **No eval set** — can't measure quality
-- ❌ **No citation requirement** — the LLM makes things up
-- ❌ **Static index** — knowledge changes, index doesn't
-- ❌ **Stuffing too much context** — model gets confused
+- Wrong: **One-size chunking** — different doc types need different sizes
+- Wrong: **Pure vector search** — hybrid almost always better
+- Wrong: **No re-ranking** — the top result is often not the most relevant
+- Wrong: **Embedding model mismatch** — query and docs must use same model
+- Wrong: **No eval set** — can't measure quality
+- Wrong: **No citation requirement** — the LLM makes things up
+- Wrong: **Static index** — knowledge changes, index doesn't
+- Wrong: **Stuffing too much context** — model gets confused
 
 ## Reference
 
@@ -2714,7 +2714,7 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 
 **แจ้งเตือนจากสิ่งที่ผู้ใช้รู้สึก ไม่ใช่จากตัวเลขของเครื่อง**
 
-| ❌ เตือนแบบนี้ | ✅ เตือนแบบนี้ |
+| ✗ เตือนแบบนี้ | ✓ เตือนแบบนี้ |
 |---|---|
 | CPU เกิน 80% | อัตรา error เกิน 2% นาน 5 นาที |
 | หน่วยความจำเกิน 70% | p95 ของหน้าชำระเงินเกิน 3 วินาที นาน 10 นาที |
@@ -2780,15 +2780,15 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 
 ## 7 · Anti-patterns
 
-- ❌ **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
-- ❌ **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
-- ❌ **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
-- ❌ **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
-- ❌ **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
-- ❌ **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
-- ❌ **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
-- ❌ **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
-- ❌ **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตี 3
+- **ดูค่าเฉลี่ยของเวลาตอบสนอง** — กลบคนที่เจอปัญหาทุกครั้ง
+- **แจ้งเตือนที่ไม่ต้องทำอะไร** — สอนให้ทุกคนเลิกสนใจการแจ้งเตือน
+- **เตือนจาก CPU และหน่วยความจำ** — ระบบที่ CPU 90% แต่ผู้ใช้ปกติ ไม่ใช่เหตุ
+- **ใส่ id ที่ไม่จำกัดค่าเป็น label** — ระบบเก็บ metric ล่มเสียเอง
+- **แดชบอร์ด 40 กราฟ** — ไม่มีใครรู้ว่าต้องดูอันไหน
+- **วัดแต่เทคนิค ไม่วัดธุรกิจ** — ทุกอย่างเขียวแต่ไม่มีใครสั่งซื้อได้
+- **เก็บ trace ทุกคำขอ** — แพงโดยไม่ได้อะไรเพิ่ม สุ่มเก็บก็พอ
+- **ไม่มีเส้นบอกเวลา deploy** — เสียเวลาครึ่งชั่วโมงกว่าจะนึกได้ว่าเพิ่ง deploy ไป
+- **แจ้งเตือนที่ไม่มีลิงก์ไป runbook** — คนรับต้องเริ่มค้นจากศูนย์ตอนตี 3
 
 ---
 

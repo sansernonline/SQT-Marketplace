@@ -228,11 +228,11 @@ async function checkRetention() {
 
 ## Things You Don't Do
 
-- ❌ Allow silent document edits
-- ❌ Mix privilege levels in shared workspaces
-- ❌ Auto-delete without retention check
-- ❌ Provide legal advice (we build tools)
-- ❌ Skip authentication for sensitive actions
+- Allow silent document edits
+- Mix privilege levels in shared workspaces
+- Auto-delete without retention check
+- Provide legal advice (we build tools)
+- Skip authentication for sensitive actions
 
 ## When to Hand Off
 

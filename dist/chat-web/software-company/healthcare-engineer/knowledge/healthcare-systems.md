@@ -257,7 +257,7 @@ GET <content-location-url>
 | **Aidbox** | Modern, easy setup |
 | **public test servers** (e.g., HAPI public) | Quick prototyping |
 
-> ⚠️ Public servers: NEVER post real PHI.
+> Note: Public servers: NEVER post real PHI.
 
 ## EHR-Specific Quirks
 
@@ -304,20 +304,20 @@ GET <content-location-url>
 
 ## Common Pitfalls
 
-- ❌ **Treating FHIR like generic REST** — read the spec; the meaning of each field matters
-- ❌ **Ignoring profiles** — bare FHIR vs US Core differ significantly
-- ❌ **Not validating** — invalid resources break data exchange
-- ❌ **Storing references as strings** — use proper Reference type
-- ❌ **Mixing FHIR versions** — pick one (R4 for production usually)
-- ❌ **Skipping AuditEvent** — required for HIPAA
-- ❌ **Custom extensions everywhere** — other systems can no longer read your data
+- Wrong: **Treating FHIR like generic REST** — read the spec; the meaning of each field matters
+- Wrong: **Ignoring profiles** — bare FHIR vs US Core differ significantly
+- Wrong: **Not validating** — invalid resources break data exchange
+- Wrong: **Storing references as strings** — use proper Reference type
+- Wrong: **Mixing FHIR versions** — pick one (R4 for production usually)
+- Wrong: **Skipping AuditEvent** — required for HIPAA
+- Wrong: **Custom extensions everywhere** — other systems can no longer read your data
 
 ## Things You Don't Do
 
-- ❌ Build clinical decisions on FHIR data without clinical review
-- ❌ Skip capability statement (clients can't discover features)
-- ❌ Mix demographics with clinical data in custom shapes
-- ❌ Use FHIR for high-throughput non-healthcare data
+- Build clinical decisions on FHIR data without clinical review
+- Skip capability statement (clients can't discover features)
+- Mix demographics with clinical data in custom shapes
+- Use FHIR for high-throughput non-healthcare data
 
 ## Skills You Use
 
@@ -555,13 +555,13 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 
 ## Things You Don't Do
 
-- ❌ Use real PHI in dev/test
-- ❌ Skip audit logging "for performance"
-- ❌ Trust client-sent patient ID
-- ❌ Show PHI in URLs / query strings
-- ❌ Send PHI via SMS/email without encryption
-- ❌ Make clinical decisions in code (always provider-confirmed)
-- ❌ Roll your own clinical algorithms
+- Use real PHI in dev/test
+- Skip audit logging "for performance"
+- Trust client-sent patient ID
+- Show PHI in URLs / query strings
+- Send PHI via SMS/email without encryption
+- Make clinical decisions in code (always provider-confirmed)
+- Roll your own clinical algorithms
 
 ## When to Hand Off
 
@@ -573,13 +573,13 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 
 ## Common Pitfalls
 
-- ❌ **Wrong patient errors** — the most dangerous bug in healthcare
-- ❌ **No medication reconciliation** — the patient takes 10 drugs, the system knows of 3
-- ❌ **Silent PHI exposure** — a search engine indexes it by accident
-- ❌ **Logging PHI to logs** — the log aggregator turns into a PHI store
-- ❌ **No break-the-glass** (emergency access) — providers can't open the record in an emergency
-- ❌ **Audit log mutable** — should be append-only
-- ❌ **No clinical context** — features that clinicians won't use
+- Wrong: **Wrong patient errors** — the most dangerous bug in healthcare
+- Wrong: **No medication reconciliation** — the patient takes 10 drugs, the system knows of 3
+- Wrong: **Silent PHI exposure** — a search engine indexes it by accident
+- Wrong: **Logging PHI to logs** — the log aggregator turns into a PHI store
+- Wrong: **No break-the-glass** (emergency access) — providers can't open the record in an emergency
+- Wrong: **Audit log mutable** — should be append-only
+- Wrong: **No clinical context** — features that clinicians won't use
 
 ## Reference
 
@@ -1359,12 +1359,12 @@ interface PlannedActivity {
 
 ## Common Pitfalls
 
-- ❌ **Designing for an ideal workflow** — real clinical work is chaotic
-- ❌ **Alert fatigue** — users stop seeing any alert
-- ❌ **No patient context lock** — leads to wrong-patient errors
-- ❌ **Treating medication like any other transaction** — the stakes are much higher
-- ❌ **No override documentation** — nobody can review override patterns
-- ❌ **One-size-fits-all UX** — ICU ≠ outpatient ≠ ED
+- Wrong: **Designing for an ideal workflow** — real clinical work is chaotic
+- Wrong: **Alert fatigue** — users stop seeing any alert
+- Wrong: **No patient context lock** — leads to wrong-patient errors
+- Wrong: **Treating medication like any other transaction** — the stakes are much higher
+- Wrong: **No override documentation** — nobody can review override patterns
+- Wrong: **One-size-fits-all UX** — ICU ≠ outpatient ≠ ED
 
 ## Reference
 
@@ -1449,7 +1449,7 @@ Audit                          → AuditEvent
 ## References
 
 ```json
-// ✅ Good: typed reference
+// Good: typed reference
 {
   "subject": {
     "reference": "Patient/123",
@@ -1458,7 +1458,7 @@ Audit                          → AuditEvent
   }
 }
 
-// ✅ Also good: identifier reference (when no resource exists yet)
+// Right: Also good: identifier reference (when no resource exists yet)
 {
   "subject": {
     "identifier": {
@@ -1705,14 +1705,14 @@ Key profiles you'll likely use:
 
 ## Common Pitfalls
 
-- ❌ **Bare strings instead of system+value** for identifiers/codes
-- ❌ **String references** with no resource type
-- ❌ **Mixing FHIR versions** (R4 client vs R5 server)
-- ❌ **Custom extensions for everything** — other systems can no longer read your data
-- ❌ **Ignoring CapabilityStatement** — clients can't discover features
-- ❌ **No AuditEvent** — required for HIPAA
-- ❌ **Loose validation** — accepting data that doesn't match the spec
-- ❌ **Using FHIR for non-clinical data** — it's the wrong tool
+- Wrong: **Bare strings instead of system+value** for identifiers/codes
+- Wrong: **String references** with no resource type
+- Wrong: **Mixing FHIR versions** (R4 client vs R5 server)
+- Wrong: **Custom extensions for everything** — other systems can no longer read your data
+- Wrong: **Ignoring CapabilityStatement** — clients can't discover features
+- Wrong: **No AuditEvent** — required for HIPAA
+- Wrong: **Loose validation** — accepting data that doesn't match the spec
+- Wrong: **Using FHIR for non-clinical data** — it's the wrong tool
 
 ## Resource Selection Cheatsheet
 
@@ -1793,14 +1793,14 @@ HIPAA Security Rule
 ## Administrative Safeguards (Required)
 
 ### 1. Security Management Process
-- ✅ Annual risk analysis (documented)
-- ✅ Risk management plan
-- ✅ Sanction policy (consequences for violations)
-- ✅ Information system activity review (audit log review)
+- Annual risk analysis (documented)
+- Risk management plan
+- Sanction policy (consequences for violations)
+- Information system activity review (audit log review)
 
 ### 2. Assigned Security Responsibility
-- ✅ A named Security Officer (with a job description)
-- ✅ A named Privacy Officer
+- A named Security Officer (with a job description)
+- A named Privacy Officer
 
 ### 3. Workforce Security
 ```
@@ -1814,56 +1814,56 @@ Each step has procedure:
 ```
 
 ### 4. Information Access Management
-- ✅ Keep clearinghouse functions separate
-- ✅ Access authorization
-- ✅ Access establishment + modification
+- Keep clearinghouse functions separate
+- Access authorization
+- Access establishment + modification
 
 ### 5. Security Awareness + Training
-- ✅ Security reminders (periodic)
-- ✅ Protection from malicious software
-- ✅ Login monitoring
-- ✅ Password management
+- Security reminders (periodic)
+- Protection from malicious software
+- Login monitoring
+- Password management
 
 ### 6. Security Incident Procedures
-- ✅ A plan to respond and report
-- ✅ The plan is written down and tested
+- A plan to respond and report
+- The plan is written down and tested
 
 ### 7. Contingency Plan
-- ✅ Data backup plan
-- ✅ Disaster recovery plan
-- ✅ Emergency mode operation
-- ✅ Testing + revision
-- ✅ Analysis of how critical each application and data set is
+- Data backup plan
+- Disaster recovery plan
+- Emergency mode operation
+- Testing + revision
+- Analysis of how critical each application and data set is
 
 ### 8. Evaluation
-- ✅ Regular technical and non-technical evaluation
-- ✅ Record which changes trigger a new evaluation
+- Regular technical and non-technical evaluation
+- Record which changes trigger a new evaluation
 
 ### 9. Business Associate Contracts
-- ✅ Written contracts (BAAs)
-- ✅ Track every vendor with PHI access
+- Written contracts (BAAs)
+- Track every vendor with PHI access
 
 ## Physical Safeguards
 
 ### 1. Facility Access Controls
-- ✅ Contingency operations
-- ✅ Facility security plan
-- ✅ Access control + validation
-- ✅ Maintenance records
+- Contingency operations
+- Facility security plan
+- Access control + validation
+- Maintenance records
 
 ### 2. Workstation Use
-- ✅ Policies on appropriate use
-- ✅ Screen privacy filters in shared areas
+- Policies on appropriate use
+- Screen privacy filters in shared areas
 
 ### 3. Workstation Security
-- ✅ Physical protection (locks, location)
-- ✅ Auto-lock screensavers
+- Physical protection (locks, location)
+- Auto-lock screensavers
 
 ### 4. Device + Media Controls
-- ✅ Disposal procedures (sanitization)
-- ✅ Media re-use procedures
-- ✅ Accountability (track devices)
-- ✅ Data backup + storage
+- Disposal procedures (sanitization)
+- Media re-use procedures
+- Accountability (track devices)
+- Data backup + storage
 
 ## Technical Safeguards (where engineers live most)
 
@@ -1923,8 +1923,8 @@ interface AuditEntry {
 ```
 
 ### 4. Person or Entity Authentication
-- ✅ Verify identity before access
-- ✅ MFA recommended
+- Verify identity before access
+- MFA recommended
 
 ### 5. Transmission Security
 ```
@@ -1942,18 +1942,18 @@ Addressable (effectively required):
 
 | Vendor | BAA available? | Notes |
 |--------|:--------------:|-------|
-| **AWS** | ✅ | Most services BAA-eligible |
-| **Azure** | ✅ | Most services BAA-eligible |
-| **GCP** | ✅ | HIPAA-eligible services list |
-| **Cloudflare** | ✅ (Enterprise) | |
-| **Sentry** | ✅ | |
-| **Datadog** | ✅ | |
-| **GitHub** | ✅ (Enterprise) | |
-| **Slack** | ✅ (Enterprise+) | |
-| **Stripe** | ⚠️ Usually not needed | Payment processing alone falls under the HIPAA §1179 exemption, so no BAA is needed. If you send PHI beyond payment data (diagnosis, visit reason in metadata), you need a vendor that signs a BAA |
-| **OpenAI** | ⚠️ ZDR + BAA available | |
-| **Anthropic** | ✅ via API on AWS | |
-| **Various startups** | ❌ Often no | Check before using |
+| **AWS** | ✓ | Most services BAA-eligible |
+| **Azure** | ✓ | Most services BAA-eligible |
+| **GCP** | ✓ | HIPAA-eligible services list |
+| **Cloudflare** | ✓ (Enterprise) | |
+| **Sentry** | ✓ | |
+| **Datadog** | ✓ | |
+| **GitHub** | ✓ (Enterprise) | |
+| **Slack** | ✓ (Enterprise+) | |
+| **Stripe** | ระวัง Usually not needed | Payment processing alone falls under the HIPAA §1179 exemption, so no BAA is needed. If you send PHI beyond payment data (diagnosis, visit reason in metadata), you need a vendor that signs a BAA |
+| **OpenAI** | ระวัง ZDR + BAA available | |
+| **Anthropic** | ✓ via API on AWS | |
+| **Various startups** | ✗ Often no | Check before using |
 
 **Critical:** putting PHI on a service without a BAA counts as a breach.
 
@@ -2036,16 +2036,16 @@ const ROLES: Role[] = [
 ## Logging: What NOT to log
 
 ```python
-# ❌ Bad: PHI in logs
+# Bad: PHI in logs
 logger.info(f"Loaded patient: {patient_dict}")
 
-# ✅ Good: Log IDs only
+# Good: Log IDs only
 logger.info(f"Loaded patient: id={patient_id}")
 
-# ❌ Bad: PHI in error messages
+# Bad: PHI in error messages
 raise Exception(f"Invalid SSN {ssn} for patient")
 
-# ✅ Good: Generic
+# Good: Generic
 raise Exception(f"Invalid SSN for patient {patient_id}")
 ```
 
@@ -2100,12 +2100,12 @@ raise Exception(f"Invalid SSN for patient {patient_id}")
 
 ## Common Pitfalls
 
-- ❌ **Treating HIPAA as security only** — the Privacy Rule is a separate set of rules
-- ❌ **Using cloud services without a BAA** — an immediate breach
-- ❌ **PHI in test data** — the whole test environment then holds PHI
-- ❌ **No disaster recovery (DR)/backup** — the Security Rule requires it
-- ❌ **Treating "addressable" encryption as optional** — it is effectively required; skipping it holds up only with a documented alternative
-- ❌ **One-time compliance** — the obligation never ends
+- Wrong: **Treating HIPAA as security only** — the Privacy Rule is a separate set of rules
+- Wrong: **Using cloud services without a BAA** — an immediate breach
+- Wrong: **PHI in test data** — the whole test environment then holds PHI
+- Wrong: **No disaster recovery (DR)/backup** — the Security Rule requires it
+- Wrong: **Treating "addressable" encryption as optional** — it is effectively required; skipping it holds up only with a documented alternative
+- Wrong: **One-time compliance** — the obligation never ends
 
 ## Reference
 

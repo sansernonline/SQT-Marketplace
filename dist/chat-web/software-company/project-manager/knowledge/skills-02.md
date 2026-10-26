@@ -600,15 +600,15 @@ For every visual:
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -893,18 +893,18 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 ### หัวสไลด์คือข้อสรุป
 
 ```
-❌ ผลการวิเคราะห์เวลาดำเนินการ
-✅ ขั้นอนุมัติกินเวลาสองในสามของทั้งหมด
+ผิด: ผลการวิเคราะห์เวลาดำเนินการ
+ถูก: ขั้นอนุมัติกินเวลาสองในสามของทั้งหมด
 
-❌ สถานะโครงการ
-✅ ส่งทันกำหนด ยกเว้นงานเชื่อมระบบบัญชีที่ช้า 1 สัปดาห์
+ผิด: สถานะโครงการ
+ถูก: ส่งทันกำหนด ยกเว้นงานเชื่อมระบบบัญชีที่ช้า 1 สัปดาห์
 ```
 
 หัวสไลด์ยาวได้ถึง 2 บรรทัด **อย่าย่อจนกลายเป็นชื่อหัวข้อ** และอย่าย่อจนอ่านไม่ลื่น: หัวที่มี 2 ท่อนต้องมีคำเชื่อม ใช้วลีที่คนพูดจริง และเลือกคำตามคนฟัง (กฎเต็มอยู่ใน `human-writing` หัวข้อ 6)
 
 ```
-❌ ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
-✅ ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
+ผิด: ทุกข้อความผ่าน 8 ขั้น: Artificial Intelligence (AI) ทำงานภาษา โค้ดตัดสินเรื่องสำคัญ
+ถูก: ทุกข้อความผ่าน 8 ขั้น: AI ช่วยเขียนคำตอบ ส่วนเรื่องสำคัญให้ระบบตัดสิน
 ```
 
 ### งบต่อแผ่น นับเป็นบรรทัด
@@ -1068,16 +1068,16 @@ Use when building a slide deck for any work (pitch, plan, report, training) that
 
 ใช้ตอนตรวจเด็คก่อนส่ง
 
-- ❌ **หัวสไลด์เป็นชื่อหัวข้อ** — "ภาพรวมระบบ" ไม่ได้บอกอะไรเลย
-- ❌ **หัวสไลด์ย่อจนต้องเดา** — 2 วลีวางเรียงกันโดยไม่มีคำเชื่อม หรือใช้ศัพท์ที่คนฟังไม่รู้ ("Guard" · "โค้ด") กับผู้ฟังทั่วไป
-- ❌ **สไลด์เป็นเอกสาร** — ย่อหน้าเต็มแผ่น ตัวอักษร 12 pt
-- ❌ **อ่านสไลด์ให้ผู้ฟังฟัง** — ถ้าทุกคำอยู่บนจอแล้ว ไม่ต้องมีคนพูด
-- ❌ **ลดขนาดตัวอักษรเพื่อให้เนื้อหาพอดี** — ให้ตัดเนื้อหาแทน
-- ❌ **บูลเล็ตซ้อน 3 ชั้น** — มากสุดคือ 2 ชั้น ถ้าถึง 3 ชั้นแปลว่าควรแยกแผ่น
-- ❌ **แอนิเมชันเข้าทีละบูลเล็ตทุกแผ่น** — ช้า และผู้ฟังรำคาญตั้งแต่แผ่นที่ 3
-- ❌ **ภาพสต๊อกที่ไม่เกี่ยวกับเนื้อหา** — คนจับมือกัน ลูกศรพุ่งขึ้น
-- ❌ **ตารางข้อมูล 15 แถวบนสไลด์** — ย้ายไปเอกสารแนบ
-- ❌ **กราฟที่คัดลอกจาก Excel มาทั้งดุ้น** พร้อมเส้นตารางและคำอธิบายครบ
-- ❌ **สีแบรนด์บนทุกอย่าง** — สีแบรนด์ใช้กับสิ่งที่ต้องการให้มองเท่านั้น
-- ❌ **ไม่มีเลขหน้า** — ผู้ฟังอ้างถึงแผ่นไม่ได้
-- ❌ **ส่งเด็คโดยไม่เคยดูเป็นภาพย่อทั้งชุด**
+- **หัวสไลด์เป็นชื่อหัวข้อ** — "ภาพรวมระบบ" ไม่ได้บอกอะไรเลย
+- **หัวสไลด์ย่อจนต้องเดา** — 2 วลีวางเรียงกันโดยไม่มีคำเชื่อม หรือใช้ศัพท์ที่คนฟังไม่รู้ ("Guard" · "โค้ด") กับผู้ฟังทั่วไป
+- **สไลด์เป็นเอกสาร** — ย่อหน้าเต็มแผ่น ตัวอักษร 12 pt
+- **อ่านสไลด์ให้ผู้ฟังฟัง** — ถ้าทุกคำอยู่บนจอแล้ว ไม่ต้องมีคนพูด
+- **ลดขนาดตัวอักษรเพื่อให้เนื้อหาพอดี** — ให้ตัดเนื้อหาแทน
+- **บูลเล็ตซ้อน 3 ชั้น** — มากสุดคือ 2 ชั้น ถ้าถึง 3 ชั้นแปลว่าควรแยกแผ่น
+- **แอนิเมชันเข้าทีละบูลเล็ตทุกแผ่น** — ช้า และผู้ฟังรำคาญตั้งแต่แผ่นที่ 3
+- **ภาพสต๊อกที่ไม่เกี่ยวกับเนื้อหา** — คนจับมือกัน ลูกศรพุ่งขึ้น
+- **ตารางข้อมูล 15 แถวบนสไลด์** — ย้ายไปเอกสารแนบ
+- **กราฟที่คัดลอกจาก Excel มาทั้งดุ้น** พร้อมเส้นตารางและคำอธิบายครบ
+- **สีแบรนด์บนทุกอย่าง** — สีแบรนด์ใช้กับสิ่งที่ต้องการให้มองเท่านั้น
+- **ไม่มีเลขหน้า** — ผู้ฟังอ้างถึงแผ่นไม่ได้
+- **ส่งเด็คโดยไม่เคยดูเป็นภาพย่อทั้งชุด**

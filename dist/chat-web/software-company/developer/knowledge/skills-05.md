@@ -546,15 +546,15 @@ For every visual:
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -928,9 +928,9 @@ SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/rea
 
 | ไฟล์ | สแต็ก | สถานะ |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
 
 ```js
 // Node
@@ -980,15 +980,15 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 
 ## 8 · Anti-patterns
 
-- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
-- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
-- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- **ส่ง stack trace / connection string ใน health หรือ error 500**
+- **health ต้อง login** — orchestrator ไม่มี token ให้
+- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
 
 ---
 
@@ -1008,7 +1008,7 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 
 # .NET และ Angular
 
-> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
+> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/health.node.js` และ
 > `assets/health_py.py` ที่รันจริงครบทุก endpoint แล้ว) โค้ดนี้เป็นการตั้งค่ามาตรฐานของ
 > ASP.NET Core ตอนรันครั้งแรกให้เทียบ response กับรูปร่างใน SKILL.md ข้อ 1
 
@@ -1318,7 +1318,7 @@ GET    /v1/orders/{id}/items      ทรัพยากรลูก
 POST   /v1/orders/{id}/cancel     การกระทำที่ไม่ใช่ CRUD (Create, Read, Update, Delete)
 ```
 
-| กฎ | ✅ | ❌ |
+| กฎ | ✓ | ✗ |
 |---|---|---|
 | คำนาม พหูพจน์ | `/orders` | `/getOrders`, `/order` |
 | ตัวพิมพ์เล็ก ขีดกลาง | `/purchase-orders` | `/purchaseOrders`, `/purchase_orders` |
@@ -1525,15 +1525,15 @@ Retry-After: 42                ← ต้องมีคู่กับ 429 เ�
 
 ## 12 · Anti-patterns
 
-- ❌ **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
-- ❌ **กริยาใน URL** — `/createOrder`, `/getOrderById`
-- ❌ **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
-- ❌ **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
-- ❌ **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
-- ❌ **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
-- ❌ **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
-- ❌ **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
-- ❌ **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
+- **`200 OK` พร้อม `{"success": false}`** — ตัวเฝ้าระบบและ log ทั้งหมดจะมองไม่เห็นว่าพัง
+- **กริยาใน URL** — `/createOrder`, `/getOrderById`
+- **รายการที่ไม่มี pagination** — วันหนึ่งจะคืนข้อมูล 50,000 แถวในครั้งเดียว
+- **รูปแบบวันที่คนละแบบในแต่ละ endpoint** — เช่น `"25/09/2026"` ที่ไม่มีใครรู้ว่าวันหรือเดือนขึ้นก่อน
+- **ส่ง entity ของฐานข้อมูลออกไปตรง ๆ** — เพิ่มคอลัมน์ทีไร API เปลี่ยนตามโดยไม่ตั้งใจ และเสี่ยงข้อมูลภายในหลุด
+- **ชื่อฟิลด์ปนกัน** `created_at` กับ `updatedAt` ใน response เดียวกัน
+- **`GET` ที่เปลี่ยนข้อมูล** — ตัวโหลดหน้าเว็บล่วงหน้าจะยิงเองโดยไม่มีใครกด
+- **error message เปลี่ยนไปเรื่อย ๆ** โดยไม่มี `code` คงที่
+- **ไม่มีเอกสาร** — OpenAPI ที่สร้างจากโค้ดจริง ดีกว่าเอกสารที่เขียนมือแล้วไม่ตรง
 
 
 ## reference: contract-testing.md

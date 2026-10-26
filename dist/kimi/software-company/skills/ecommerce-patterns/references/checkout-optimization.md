@@ -38,17 +38,17 @@
 
 ## The 7 Critical Improvements
 
-### 1. ✅ Guest Checkout (or "purchase as guest")
+### 1. Guest Checkout (or "purchase as guest")
 
-❌ Bad: "Sign up to checkout"
-✅ Good: "Continue as guest" → option to create account on confirmation
+Bad: "Sign up to checkout"
+Good: "Continue as guest" → option to create account on confirmation
 
-### 2. ✅ Transparent Pricing
+### 2. Transparent Pricing
 
 Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
 Extra costs that are too high are the top abandonment reason in Baymard's list (~40% of non-browsing abandonments, Baymard, read 22 ต.ค. 2569).
 
-### 3. ✅ Multiple Payment Methods
+### 3. Multiple Payment Methods
 
 | Method | Why |
 |--------|-----|
@@ -60,20 +60,20 @@ Extra costs that are too high are the top abandonment reason in Baymard's list (
 | Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers (markets where offered) |
 | Bank transfer | Widely used in Thailand |
 
-### 4. ✅ Address Autocomplete
+### 4. Address Autocomplete
 
 Use Google Places or similar.
 Fewer fields, fewer errors, faster to finish.
 
-### 5. ✅ Inline Validation
+### 5. Inline Validation
 
 ```typescript
-// ❌ Bad: validation only on submit
+// Bad: validation only on submit
 form.onSubmit(() => {
   if (!emailValid) showError('Invalid email');
 });
 
-// ✅ Good: validate on blur, show errors next to field
+// Good: validate on blur, show errors next to field
 emailField.onBlur(() => {
   if (!isValidEmail(emailField.value)) {
     showInlineError(emailField, 'Please enter a valid email');
@@ -81,7 +81,7 @@ emailField.onBlur(() => {
 });
 ```
 
-### 6. ✅ Progress Indicator (Multi-Step)
+### 6. Progress Indicator (Multi-Step)
 
 ```
 [1. Cart] → [2. Shipping] → [3. Payment] → [4. Review]
@@ -90,7 +90,7 @@ emailField.onBlur(() => {
 
 Users can see how many steps are left.
 
-### 7. ✅ Visible Trust Signals
+### 7. Visible Trust Signals
 
 - 🔒 SSL padlock + security badges
 - 💳 Accepted payment logos
@@ -103,7 +103,7 @@ Users can see how many steps are left.
 ### Reduce field count
 
 ```
-❌ Over-collection:
+Wrong: Over-collection:
 - First name
 - Last name
 - Company
@@ -112,7 +112,7 @@ Users can see how many steps are left.
 - Birthdate
 - ...
 
-✅ Minimum viable:
+Right: Minimum viable:
 - Email (for receipt + account creation later)
 - Name (full, single field)
 - Phone (for delivery)
@@ -207,13 +207,13 @@ async function startApplePay() {
 ### Pattern: Recoverable errors don't break flow
 
 ```typescript
-// ❌ Bad: error wipes form
+// Bad: error wipes form
 catch (paymentError) {
   setForm({});
   setError(paymentError.message);
 }
 
-// ✅ Good: preserve state, fix what's wrong
+// Good: preserve state, fix what's wrong
 catch (paymentError) {
   if (paymentError.code === 'invalid_card') {
     setCardError('Card declined. Try another card.');
@@ -312,14 +312,14 @@ Funnel by:
 
 ## Common Pitfalls
 
-- ❌ **Hidden fees revealed late** — main abandonment cause
-- ❌ **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
-- ❌ **No express checkout on mobile** — slow checkout, fewer sales
-- ❌ **Long forms** — drop-off increases per field
-- ❌ **Wrong keyboard** — slow, error-prone typing
-- ❌ **No address autocomplete** — errors + slow
-- ❌ **No inline validation** — frustrating
-- ❌ **Cart wiped on logout** — hostile UX
+- Wrong: **Hidden fees revealed late** — main abandonment cause
+- Wrong: **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
+- Wrong: **No express checkout on mobile** — slow checkout, fewer sales
+- Wrong: **Long forms** — drop-off increases per field
+- Wrong: **Wrong keyboard** — slow, error-prone typing
+- Wrong: **No address autocomplete** — errors + slow
+- Wrong: **No inline validation** — frustrating
+- Wrong: **Cart wiped on logout** — hostile UX
 
 ## Reference
 

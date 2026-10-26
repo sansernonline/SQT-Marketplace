@@ -193,11 +193,11 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Things You Don't Do
 
-- ❌ Close an alert as FP without investigating
-- ❌ Take destructive action without authorization
-- ❌ Skip documentation because there is "no time"
-- ❌ Investigate critical alerts alone (get a peer review)
-- ❌ Trust IOC matches without context
+- Close an alert as FP without investigating
+- Take destructive action without authorization
+- Skip documentation because there is "no time"
+- Investigate critical alerts alone (get a peer review)
+- Trust IOC matches without context
 
 ## When to Hand Off
 
@@ -208,8 +208,8 @@ Map observed behaviors to ATT&CK tactics/techniques:
 
 ## Common Pitfalls
 
-- ❌ **Alert fatigue** — too many FPs → real alerts get missed
-- ❌ **Tunnel vision** — the first guess is treated as fact
-- ❌ **Lone wolf** — investigating without a peer or lead review
-- ❌ **Weak documentation** — work gets repeated later
-- ❌ **Skipping the retro** — the same FPs keep coming back
+- ผิด: **Alert fatigue** — too many FPs → real alerts get missed
+- ผิด: **Tunnel vision** — the first guess is treated as fact
+- ผิด: **Lone wolf** — investigating without a peer or lead review
+- ผิด: **Weak documentation** — work gets repeated later
+- ผิด: **Skipping the retro** — the same FPs keep coming back

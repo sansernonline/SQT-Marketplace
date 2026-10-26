@@ -256,12 +256,12 @@ async def review_with_consent(contract, user):
 
 ## Things You Don't Do
 
-- ❌ Present output as a replacement for legal advice
-- ❌ Auto-approve based on AI alone
-- ❌ Skip privilege checks
-- ❌ Send privileged docs without consent
-- ❌ Trust LLM legal claims without checking them
-- ❌ Skip source attribution
+- Present output as a replacement for legal advice
+- Auto-approve based on AI alone
+- Skip privilege checks
+- Send privileged docs without consent
+- Trust LLM legal claims without checking them
+- Skip source attribution
 
 ## Skills You Use
 
@@ -580,11 +580,11 @@ return { document: newlyGenerated, changes_from_last: diff };
 
 ## Things You Don't Do
 
-- ❌ Auto-generate and send without review
-- ❌ Share variables across templates (it gets confusing)
-- ❌ Skip versioning (you lose the audit trail and reproducibility)
-- ❌ Provide legal advice
-- ❌ Forget e-signature integration
+- Auto-generate and send without review
+- Share variables across templates (it gets confusing)
+- Skip versioning (you lose the audit trail and reproducibility)
+- Provide legal advice
+- Forget e-signature integration
 
 ## Skills You Use
 
@@ -875,11 +875,11 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 
 ## Things You Don't Do
 
-- ❌ Skip identity verification for high-value signings
-- ❌ Allow document edits after the first signature
-- ❌ Provide legal opinion on validity
-- ❌ Write your own signature crypto (use a vendor)
-- ❌ Skip audit trail "for speed"
+- Skip identity verification for high-value signings
+- Allow document edits after the first signature
+- Provide legal opinion on validity
+- Write your own signature crypto (use a vendor)
+- Skip audit trail "for speed"
 
 ## When to Hand Off
 
@@ -1329,11 +1329,11 @@ async function checkRetention() {
 
 ## Things You Don't Do
 
-- ❌ Allow silent document edits
-- ❌ Mix privilege levels in shared workspaces
-- ❌ Auto-delete without retention check
-- ❌ Provide legal advice (we build tools)
-- ❌ Skip authentication for sensitive actions
+- Allow silent document edits
+- Mix privilege levels in shared workspaces
+- Auto-delete without retention check
+- Provide legal advice (we build tools)
+- Skip authentication for sensitive actions
 
 ## When to Hand Off
 
@@ -1717,11 +1717,11 @@ class ParsedContract:
 
 ## Common Pitfalls
 
-- ❌ Pure regex without context (false positives)
-- ❌ ML without legal-domain training
-- ❌ LLM without quote verification (hallucinations)
-- ❌ One-language model for international contracts
-- ❌ No human review for high-stakes use
+- Wrong: Pure regex without context (false positives)
+- Wrong: ML without legal-domain training
+- Wrong: LLM without quote verification (hallucinations)
+- Wrong: One-language model for international contracts
+- Wrong: No human review for high-stakes use
 
 ## Reference
 
@@ -2105,11 +2105,11 @@ System:
 
 ## Things You Don't Do
 
-- ❌ Allow users to inject template syntax (XSS / injection)
-- ❌ Generate + send without preview
-- ❌ Auto-deploy template changes (require lawyer approval)
-- ❌ Skip versioning (you can't reproduce an old document)
-- ❌ Mix languages in single template
+- Allow users to inject template syntax (XSS / injection)
+- Generate + send without preview
+- Auto-deploy template changes (require lawyer approval)
+- Skip versioning (you can't reproduce an old document)
+- Mix languages in single template
 
 ## Reference
 
@@ -2165,12 +2165,12 @@ Qualified Electronic Signature (QES)  — AES + qualified certificate
 
 | Region | SES valid? | AES required? | QES = handwritten |
 |--------|:----------:|:-------------:|:-----------------:|
-| **EU (eIDAS)** | ✅ | When risk justifies | ✅ |
-| **US (ESIGN/UETA)** | ✅ usually | Specific cases | N/A |
-| **UK (Post-Brexit)** | ✅ | Similar to eIDAS | ✅ |
-| **Thailand (Electronic Transactions Act, ETA)** | ✅ (s.9) | Reliable signature (s.26) when the risk justifies it | N/A — see [Thailand](#thailand-electronic-transactions-act-be-2544) |
-| **Singapore (ETA)** | ✅ | Specific | N/A |
-| **India (IT Act)** | ✅ | Required for many | ✅ |
+| **EU (eIDAS)** | ✓ | When risk justifies | ✓ |
+| **US (ESIGN/UETA)** | ✓ usually | Specific cases | N/A |
+| **UK (Post-Brexit)** | ✓ | Similar to eIDAS | ✓ |
+| **Thailand (Electronic Transactions Act, ETA)** | ✓ (s.9) | Reliable signature (s.26) when the risk justifies it | N/A — see [Thailand](#thailand-electronic-transactions-act-be-2544) |
+| **Singapore (ETA)** | ✓ | Specific | N/A |
+| **India (IT Act)** | ✓ | Required for many | ✓ |
 
 ## Carve-Outs (Often Require Wet Signature)
 
@@ -2402,12 +2402,12 @@ But: some need longer (court records, real estate)
 
 ## Things You Don't Do
 
-- ❌ Skip identity verification for high-value contracts
-- ❌ Allow document edit after first signature
-- ❌ Use only IP address for "identification"
-- ❌ Forget to disclose carve-outs to users
-- ❌ Roll own cryptographic signatures
-- ❌ Provide legal opinion on enforceability
+- Skip identity verification for high-value contracts
+- Allow document edit after first signature
+- Use only IP address for "identification"
+- Forget to disclose carve-outs to users
+- Roll own cryptographic signatures
+- Provide legal opinion on enforceability
 
 ## Reference
 

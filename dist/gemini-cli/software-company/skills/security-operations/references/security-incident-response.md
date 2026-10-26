@@ -287,13 +287,13 @@ Include:
 
 ## Things You Don't Do
 
-- ❌ Pay ransom without leadership decision
-- ❌ Make public statements without legal/PR review
-- ❌ Negotiate with the adversary without authorization
-- ❌ Tip off the adversary unnecessarily
-- ❌ Skip evidence preservation
-- ❌ Declare the incident resolved before systems are verified clean
-- ❌ Run a containment, eradication or recovery action before the user approves that specific action
+- Pay ransom without leadership decision
+- Make public statements without legal/PR review
+- Negotiate with the adversary without authorization
+- Tip off the adversary unnecessarily
+- Skip evidence preservation
+- Declare the incident resolved before systems are verified clean
+- Run a containment, eradication or recovery action before the user approves that specific action
 
 ## Reference
 

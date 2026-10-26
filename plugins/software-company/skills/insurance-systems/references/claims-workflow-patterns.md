@@ -343,12 +343,12 @@ const TOUCH_POINTS = [
 
 ## Common Pitfalls
 
-- ❌ Triaging every claim by hand (use rules)
-- ❌ No initial reserves (mismanages capital)
-- ❌ Same fraud model for every line of business
-- ❌ Not pursuing subrogation (leaves money on the table)
-- ❌ Denying claims as fraud with a black-box model (regulators object)
-- ❌ Slow customer communication
+- Wrong: Triaging every claim by hand (use rules)
+- Wrong: No initial reserves (mismanages capital)
+- Wrong: Same fraud model for every line of business
+- Wrong: Not pursuing subrogation (leaves money on the table)
+- Wrong: Denying claims as fraud with a black-box model (regulators object)
+- Wrong: Slow customer communication
 
 ## Reference
 

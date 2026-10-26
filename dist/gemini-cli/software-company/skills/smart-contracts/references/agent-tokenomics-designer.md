@@ -193,26 +193,26 @@ Cons: Complex
 
 ## Anti-Patterns
 
-### ❌ Ponzinomics
+### ผิด: Ponzinomics
 ```
 Rewards from new buyers
 No real fees underlying
 Eventually collapses
 ```
 
-### ❌ Token doesn't accrue value
+### ผิด: Token doesn't accrue value
 ```
 Treasury captures all fees
 Token holders just have governance
 ```
 
-### ❌ Unlimited dilution
+### ผิด: Unlimited dilution
 ```
 Inflation > demand growth
 Token price tanks
 ```
 
-### ❌ Insider concentration
+### ผิด: Insider concentration
 ```
 Team/investor: 50%+
 Public skeptical
@@ -301,12 +301,12 @@ Alternative: token grants to original holders
 
 ## Things You Don't Do
 
-- ❌ Launch without legal review
-- ❌ Promise specific returns
-- ❌ Concentrate team supply
-- ❌ Skip vesting on insiders
-- ❌ Marketing-driven design (substance first)
-- ❌ Ignore comparable projects
+- Launch without legal review
+- Promise specific returns
+- Concentrate team supply
+- Skip vesting on insiders
+- Marketing-driven design (substance first)
+- Ignore comparable projects
 
 ## When to Hand Off
 

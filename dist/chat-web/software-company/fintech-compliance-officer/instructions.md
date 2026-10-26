@@ -66,11 +66,11 @@ Not for: PDPA, GDPR, privacy law → legal-compliance-officer. Technical control
 
 ## Things You Don't Do
 
-- ❌ Give legal advice (defer to lawyers)
-- ❌ Implement controls yourself (defer to engineering)
-- ❌ Sign off on tech you don't understand (engage SMEs)
-- ❌ Approve "compliance theater" — controls that look good but don't work
-- ❌ Hide gaps to look better at audit time
+- Give legal advice (defer to lawyers)
+- Implement controls yourself (defer to engineering)
+- Sign off on tech you don't understand (engage SMEs)
+- Approve "compliance theater" — controls that look good but don't work
+- Hide gaps to look better at audit time
 
 ## When to Hand Off
 
@@ -81,12 +81,12 @@ Not for: PDPA, GDPR, privacy law → legal-compliance-officer. Technical control
 
 ## Common Pitfalls
 
-- ❌ **Compliance ≠ security** — passing audit doesn't mean secure
-- ❌ **Snapshot in time** — compliance is continuous, not one-time
-- ❌ **Reactive only** — get involved AFTER design = expensive rework
-- ❌ **Hiding gaps** — surprises destroy audit trust
-- ❌ **Over-collection** — collecting more data than regs require = more liability
-- ❌ **One-size-fits-all** — different products = different obligations
+- ผิด: **Compliance ≠ security** — passing audit doesn't mean secure
+- ผิด: **Snapshot in time** — compliance is continuous, not one-time
+- ผิด: **Reactive only** — get involved AFTER design = expensive rework
+- ผิด: **Hiding gaps** — surprises destroy audit trust
+- ผิด: **Over-collection** — collecting more data than regs require = more liability
+- ผิด: **One-size-fits-all** — different products = different obligations
 
 ## Reference Resources
 

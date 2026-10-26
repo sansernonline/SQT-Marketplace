@@ -94,13 +94,13 @@ Output the category name only, lowercase, no explanation.
 
 ### Pattern 2: Structured Output (Use Tool Use!)
 
-❌ **Avoid:** Asking for JSON in text
+Wrong: **Avoid:** Asking for JSON in text
 ```
 Output as JSON with keys: name, age, email
 → Often invalid JSON, hard to parse
 ```
 
-✅ **Use:** Tool calling / structured output
+Right: **Use:** Tool calling / structured output
 ```python
 # Anthropic API
 response = client.messages.create(
@@ -134,7 +134,7 @@ tool_input = next(b.input for b in response.content if b.type == "tool_use")
 
 ### Pattern 3: Chain-of-Thought (When to Use)
 
-✅ **Use for:** complex reasoning, math, multi-step
+Right: **Use for:** complex reasoning, math, multi-step
 ```
 Think step by step about this problem before answering.
 
@@ -143,7 +143,7 @@ Problem: <complex question>
 Show your reasoning, then give the final answer.
 ```
 
-❌ **Don't use for:**
+Wrong: **Don't use for:**
 - Simple classification (overhead, no benefit)
 - Tasks requiring fast latency
 - Models that already reason step by step internally
@@ -206,7 +206,7 @@ Generate the answer. Then critique your own answer.
 If critique finds issues, revise. Output ONLY the final answer.
 ```
 
-> ⚠️ Adds latency. Use it when accuracy matters far more than speed.
+> Note: Adds latency. Use it when accuracy matters far more than speed.
 
 ## Few-Shot vs Fine-Tuning
 
@@ -323,12 +323,12 @@ async def call_llm(prompt_id: str, input: str):
 
 ## Things You Don't Do
 
-- ❌ Skip the eval set (no eval = guessing)
-- ❌ Hide prompts in databases (version with code)
-- ❌ Rely on temperature alone for consistency — some models (Claude Opus 4.7 / 4.8) have no temperature setting; use strict schemas, fixed labels and evals
-- ❌ Trust LLM output without validation (schema check)
-- ❌ Manually parse JSON when tool use available
-- ❌ Make prompt-only changes without measuring
+- Skip the eval set (no eval = guessing)
+- Hide prompts in databases (version with code)
+- Rely on temperature alone for consistency — some models (Claude Opus 4.7 / 4.8) have no temperature setting; use strict schemas, fixed labels and evals
+- Trust LLM output without validation (schema check)
+- Manually parse JSON when tool use available
+- Make prompt-only changes without measuring
 
 ## When to Hand Off
 
@@ -340,13 +340,13 @@ async def call_llm(prompt_id: str, input: str):
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — can't tell if changes help
-- ❌ **Optimizing on one example** — works for that, fails generally
-- ❌ **Long prompts everywhere** — not using caching
-- ❌ **Trust output blindly** — no schema/range check
-- ❌ **Unstated assumptions** — you think the model "should know" → it often doesn't
-- ❌ **No A/B testing** — changing prod and hoping for the best
-- ❌ **Magic numbers** — e.g. temperature 0.7 with no stated reason
+- Wrong: **No eval set** — can't tell if changes help
+- Wrong: **Optimizing on one example** — works for that, fails generally
+- Wrong: **Long prompts everywhere** — not using caching
+- Wrong: **Trust output blindly** — no schema/range check
+- Wrong: **Unstated assumptions** — you think the model "should know" → it often doesn't
+- Wrong: **No A/B testing** — changing prod and hoping for the best
+- Wrong: **Magic numbers** — e.g. temperature 0.7 with no stated reason
 
 ## Reference
 

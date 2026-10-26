@@ -216,11 +216,11 @@ public class MyModule: Module {
 
 ## Things You Don't Do
 
-- ❌ Force one framework where another is clearly better
-- ❌ Ignore platform conventions (iOS back swipe, Android back button)
-- ❌ Skip native testing on real devices
-- ❌ Pretend cross-platform is free (it has real costs)
-- ❌ Ignore platform-specific App Store policies
+- Force one framework where another is clearly better
+- Ignore platform conventions (iOS back swipe, Android back button)
+- Skip native testing on real devices
+- Pretend cross-platform is free (it has real costs)
+- Ignore platform-specific App Store policies
 
 ## Skills You Use
 

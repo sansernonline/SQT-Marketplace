@@ -248,11 +248,11 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 ## Things You Don't Do
 
-- ❌ Let an algorithm deny claims on its own (regulators object)
-- ❌ Skip fraud investigation when red flags appear
-- ❌ Set reserves at zero (mismanages capital)
-- ❌ Mix policyholder data with third-party data
-- ❌ Pay before liability is confirmed
+- Let an algorithm deny claims on its own (regulators object)
+- Skip fraud investigation when red flags appear
+- Set reserves at zero (mismanages capital)
+- Mix policyholder data with third-party data
+- Pay before liability is confirmed
 
 ## When to Hand Off
 

@@ -44,9 +44,9 @@ Use when writing or reviewing code that can fail (network, database, services). 
 **3 อย่างที่ห้ามทำเด็ดขาด:**
 
 ```csharp
-try { ... } catch { }                      // ❌ กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ❌ ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ❌ log ซ้ำทุกชั้น
+try { ... } catch { }                      // ผิด: กลืนเงียบ
+try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
+catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
 ```
 
 **ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
@@ -71,9 +71,9 @@ catch (SmtpException ex)
 | ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
 
 ```
-❌ "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-❌ "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-✅ "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
+ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
+ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
 ```
 
 **ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
@@ -166,16 +166,16 @@ catch (SmtpException ex)
 
 ## 8 · Anti-patterns
 
-- ❌ **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- ❌ **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- ❌ **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- ❌ **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- ❌ **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- ❌ **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- ❌ **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- ❌ **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- ❌ **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- ❌ **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
+- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
+- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
+- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
+- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
+- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
+- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
+- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
+- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
+- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
 
 
 ---
@@ -237,7 +237,7 @@ Use when writing or reviewing code that logs (format, levels, correlation ids, r
 | `DEBUG` | รายละเอียดสำหรับไล่ปัญหา — **ปิดใน production** | ค่าที่คำนวณได้ระหว่างทาง |
 | `TRACE` | ละเอียดระดับทุก step — เปิดเฉพาะตอนไล่จริง ๆ | payload ดิบ |
 
-> ⚠️ **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
+> ระวัง: **`ERROR` ที่ไม่มีใครต้องทำอะไร คือ `WARN`** — ถ้า ERROR ขึ้นทุกนาทีจนคนเลิกดู
 > คุณเพิ่งทำลายระบบเตือนภัยของตัวเอง
 
 ค่าเริ่มต้นของ dev คือ `DEBUG` ส่วน production คือ `INFO` และปรับได้ด้วย env `LOG_LEVEL` **ไม่ต้อง build ใหม่ แค่ restart (หรือ reload config)** — .NET อ่านจาก `appsettings.json` แทน (ดู `references/per-stack.md`)
@@ -294,9 +294,9 @@ logs/
 
 | ไฟล์ | สแต็ก | สถานะ |
 |---|---|---|
-| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✅ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
-| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✅ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
-| `references/per-stack.md` | .NET (Serilog) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/logger.node.js` | Node/TS — winston + winston-daily-rotate-file | ✓ รันทดสอบแล้ว 2026-10-25 (Node 22.23.2 · winston 3.19.0 · winston-daily-rotate-file 5.0.0 · ปิดรหัสผ่าน · correlation id · ตัดขึ้นบรรทัดในข้อความหลักและค่า) |
+| `assets/logger_py.py` | Python — stdlib ล้วน ไม่ต้องลงอะไร | ✓ รันทดสอบแล้ว 2026-10-25 (Python 3.13.5 · ชุดทดสอบเดียวกัน) |
+| `references/per-stack.md` | .NET (Serilog) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
 
 ```js
 // Node
@@ -342,15 +342,15 @@ grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวไ�
 
 ## 8 · Anti-patterns
 
-- ❌ **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
-- ❌ **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
-- ❌ **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
-- ❌ **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
-- ❌ **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
+- **`console.log` / `print()` ในโค้ดจริง** — ไม่มี level ไม่มีเวลา ไม่มี cid ไม่ลงไฟล์
+- **log ทุกอย่าง** — ไฟล์ใหญ่จนหาอะไรไม่เจอ ราคาแพง และช้า
+- **`try { } catch (e) { }` เงียบ ๆ** — ต้อง log อย่างน้อย 1 บรรทัด
+- **log แล้ว throw ต่อ** — ปัญหาเดียวจะโผล่ 3 ครั้งในไฟล์ ให้ log ที่ชั้นบนสุดซึ่งจัดการ error จริงแทน
+- **ตัวแปรฝังในข้อความ** (`` `บันทึก order ${id} ไม่สำเร็จ` ``) — ทำให้ group log ไม่ได้
   ใช้ข้อความคงที่ + context แทน
-- ❌ **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
-- ❌ **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
-- ❌ **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
+- **log ในลูปที่วนหลายพันรอบ** — ให้สรุปทีเดียวตอนจบลูป
+- **timestamp ไม่มี timezone** — server ใช้ UTC แต่คนไทยอ่านเป็น +07:00 จึงเทียบเวลาผิดไป 7 ชั่วโมง
+- **ไม่มี retention** — วันหนึ่งดิสก์เต็มแล้วระบบล่มเพราะ log ของตัวเอง
 
 ---
 
@@ -368,7 +368,7 @@ grep "a3f9c1b2" logs/app-*.log          # ตาม request เดียวไ�
 
 # ตั้งค่า logger ให้ได้รูปแบบเดียวกัน — .NET และ Angular
 
-> ⚠️ โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
+> ระวัง: โค้ดในไฟล์นี้ **ยังไม่ได้คอมไพล์ทดสอบ** (ต่างจาก `assets/logger.node.js` และ
 > `assets/logger_py.py` ที่รันจริงแล้ว) โค้ดนี้ใช้การตั้งค่ามาตรฐานของแต่ละไลบรารี
 > ตอน build ครั้งแรกให้เทียบบรรทัดที่ออกมากับรูปแบบใน SKILL.md ข้อ 1
 
@@ -473,12 +473,12 @@ public sealed class CorrelationIdMiddleware(RequestDelegate next)
 ### เขียน log
 
 ```csharp
-// ✅ ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
+// ถูก: ข้อความคงที่ + ค่าไปอยู่ใน {Context} เป็น k=v ตามรูปแบบ SKILL.md ข้อ 1
 //    ผลลัพธ์: ... INFO   [a3f9c1b2] Orders  สร้างคำสั่งซื้อสำเร็จ  orderId=1042 ms=134
 using (Serilog.Context.LogContext.PushProperty("Context", $"orderId={orderId} ms={sw.ElapsedMilliseconds}"))
     _logger.LogInformation("สร้างคำสั่งซื้อสำเร็จ");
 
-// ❌ ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
+// ผิด: ตัวแปรฝังใน string — ทุกบรรทัดกลายเป็นข้อความคนละอัน group ไม่ได้
 _logger.LogInformation($"สร้างคำสั่งซื้อ {orderId} สำเร็จ");
 ```
 
@@ -629,40 +629,40 @@ What's authenticating?
 **When to use:** server-rendered apps, monoliths, one domain
 
 **Implementation requirements:**
-- ✅ Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
-- ✅ Session ID: cryptographically random, ≥ 128 bits
-- ✅ Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
-- ✅ Idle timeout: 30 min default
-- ✅ Absolute timeout: 8-12 hours
-- ✅ Issue a new session ID when privileges change (login, role change)
-- ✅ On logout, delete the session from the store
+- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
+- Session ID: cryptographically random, ≥ 128 bits
+- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
+- Idle timeout: 30 min default
+- Absolute timeout: 8-12 hours
+- Issue a new session ID when privileges change (login, role change)
+- On logout, delete the session from the store
 
 **Pitfalls:**
-- ❌ Storing session in JWT (can't revoke)
-- ❌ Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
-- ❌ Keeping the same ID after login (session fixation)
+- ผิด: Storing session in JWT (can't revoke)
+- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
+- ผิด: Keeping the same ID after login (session fixation)
 
 ## Pattern 2: JWT (Stateless Token)
 
 **When to use:** microservices, mobile, single-page app (SPA) with a backend API
 
-> ⚠️ **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
 
 **Implementation requirements:**
-- ✅ Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
-- ✅ Short-lived access token: 5-15 min
-- ✅ Refresh token: longer-lived (days), stored separately, revocable
-- ✅ Issue a new refresh token each time one is used
-- ✅ Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
-- ✅ Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
-- ✅ Have a way to cancel tokens (blocklist, short expiry, etc.)
+- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
+- Short-lived access token: 5-15 min
+- Refresh token: longer-lived (days), stored separately, revocable
+- Issue a new refresh token each time one is used
+- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
+- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
+- Have a way to cancel tokens (blocklist, short expiry, etc.)
 
 **Pitfalls:**
-- ❌ `alg: none` attacks (check the algorithm explicitly)
-- ❌ Storing JWT in `localStorage` (XSS-stealable)
-- ❌ Long-lived access tokens (you can't cancel them)
-- ❌ Putting sensitive data in JWT (it's base64, not encrypted)
-- ❌ Skipping signature verification
+- ผิด: `alg: none` attacks (check the algorithm explicitly)
+- ผิด: Storing JWT in `localStorage` (XSS-stealable)
+- ผิด: Long-lived access tokens (you can't cancel them)
+- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
+- ผิด: Skipping signature verification
 
 ## Pattern 3: OAuth 2.0 / OIDC
 
@@ -671,18 +671,18 @@ What's authenticating?
 ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
 
 **Implementation requirements:**
-- ✅ **Always use PKCE** (even for confidential clients)
-- ✅ Validate `id_token` signature (use IdP's JWKS)
-- ✅ Validate `aud`, `iss`, `exp`, `nonce`
-- ✅ Use the `state` parameter to prevent cross-site request forgery (CSRF)
-- ✅ Match `code_verifier` to `code_challenge`
-- ✅ Use a library, don't write your own (Auth0, Passport.js, etc.)
+- **Always use PKCE** (even for confidential clients)
+- Validate `id_token` signature (use IdP's JWKS)
+- Validate `aud`, `iss`, `exp`, `nonce`
+- Use the `state` parameter to prevent cross-site request forgery (CSRF)
+- Match `code_verifier` to `code_challenge`
+- Use a library, don't write your own (Auth0, Passport.js, etc.)
 
 **Pitfalls:**
-- ❌ Implicit flow (deprecated, insecure)
-- ❌ Resource Owner Password Credentials flow (deprecated)
-- ❌ Skipping `state` validation (CSRF risk)
-- ❌ Trusting `id_token` without verifying signature
+- ผิด: Implicit flow (deprecated, insecure)
+- ผิด: Resource Owner Password Credentials flow (deprecated)
+- ผิด: Skipping `state` validation (CSRF risk)
+- ผิด: Trusting `id_token` without verifying signature
 
 ## Pattern 4: Multi-Factor Authentication (MFA)
 
@@ -691,16 +691,16 @@ What's authenticating?
 ## Pattern 5: Password Management
 
 ### Storage
-- ✅ **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
-- ❌ Never: MD5, SHA-1, SHA-256 raw, plain text
+- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
+- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
 
 ### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
-- ✅ Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
-- ✅ Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
-- ✅ Allow long passphrases (any maximum must be at least 64 chars)
-- ✅ Allow special characters (don't restrict them)
-- ❌ Don't force composition rules (uppercase + digit + symbol)
-- ❌ Don't force regular password changes (only when you suspect a breach)
+- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
+- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
+- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
+- ถูก: Allow special characters (don't restrict them)
+- Don't force composition rules (uppercase + digit + symbol)
+- Don't force regular password changes (only when you suspect a breach)
 
 ### Password reset flow
 
@@ -715,8 +715,8 @@ Login attempts:
 - Use IP + email combo, not just one
 
 Lockout messaging:
-✅ "Too many failed attempts. Try again in 15 minutes."
-❌ "Account locked." (reveals account exists)
+ถูก: "Too many failed attempts. Try again in 15 minutes."
+ผิด: "Account locked." (reveals account exists)
 ```
 
 ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
@@ -749,14 +749,14 @@ Lockout messaging:
 
 ## Anti-patterns
 
-- ❌ Writing your own crypto or auth (use libraries)
-- ❌ Storing passwords reversibly
-- ❌ JWT for sessions when you have one backend
-- ❌ Long-lived JWT without rotation
-- ❌ Authentication without authorization checks
-- ❌ Trusting JWT claims as authorization source
-- ❌ Logout that doesn't invalidate token server-side
-- ❌ Allowing weak passwords for compliance "convenience"
+- Writing your own crypto or auth (use libraries)
+- Storing passwords reversibly
+- JWT for sessions when you have one backend
+- Long-lived JWT without rotation
+- Authentication without authorization checks
+- Trusting JWT claims as authorization source
+- Logout that doesn't invalidate token server-side
+- Allowing weak passwords for compliance "convenience"
 
 
 ## reference: api-auth-and-authorization.md
@@ -860,11 +860,11 @@ PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped fo
 ## Password storage — code
 
 ```typescript
-// ✅ Good (using bcrypt)
+// Good (using bcrypt)
 const hash = await bcrypt.hash(password, 12);
 const valid = await bcrypt.compare(password, storedHash);
 
-// ❌ Bad
+// Bad
 const hash = crypto.createHash('sha256').update(password).digest('hex');
 ```
 
@@ -920,7 +920,7 @@ Verify:
 ## SMS / Email codes
 **When:** there's no other option (users without smartphone apps)
 
-- ⚠️ SMS is **NOT secure** (SIM swap attacks)
+- Note: SMS is **NOT secure** (SIM swap attacks)
 - Use only as a last resort, never as the main method
 - Use strict rate limits
 - Codes: 6 digits, 5 min expiry
@@ -965,11 +965,11 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 
 | เกณฑ์ | Relational (PostgreSQL, SQL Server, MySQL) | Document (MongoDB) |
 |---|---|---|
-| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✅ | ❌ ต้องทำมือ |
-| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ⚠️ ใช้คอลัมน์ JSON | ✅ |
-| ต้องการ transaction ข้ามหลายตาราง | ✅ | ⚠️ ได้แต่แพงกว่า |
-| รายงาน ผลรวม การวิเคราะห์ | ✅ | ❌ |
-| เขียนหนักมาก log/telemetry | ⚠️ | ✅ หรือใช้ time-series |
+| ข้อมูลมีความสัมพันธ์ชัด ต้อง join | ✓ | ✗ ต้องทำมือ |
+| รูปร่างข้อมูลไม่แน่นอน ต่างกันรายตัว | ระวัง ใช้คอลัมน์ JSON | ✓ |
+| ต้องการ transaction ข้ามหลายตาราง | ✓ | ระวัง ได้แต่แพงกว่า |
+| รายงาน ผลรวม การวิเคราะห์ | ✓ | ✗ |
+| เขียนหนักมาก log/telemetry | ระวัง | ✓ หรือใช้ time-series |
 
 > **ค่าเริ่มต้นคือ relational** ให้เลือก document เมื่อ**ตอบได้ว่าทำไม**
 > "ยืดหยุ่นกว่า" ไม่ใช่เหตุผล แต่แปลว่ายังไม่ได้ออกแบบ
@@ -988,7 +988,7 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 | คอลัมน์ | `snake_case` เอกพจน์ | `created_at`, `total_amount` |
 | primary key | `id` | `id` |
 | foreign key | `<ตารางเอกพจน์>_id` | `customer_id` |
-| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✅ (ไม่ใช่ `user_roles`) |
+| ตารางเชื่อม | `<a>_<b>` เรียงตามตัวอักษร | `role_users` ✓ (ไม่ใช่ `user_roles`) |
 | index | `ix_<ตาราง>_<คอลัมน์>` | `ix_orders_customer_id` |
 | unique | `ux_<ตาราง>_<คอลัมน์>` | `ux_users_email` |
 | foreign key constraint | `fk_<ตาราง>_<ตารางปลายทาง>` | `fk_orders_customers` |
@@ -996,10 +996,10 @@ Use when designing or changing a database schema (tables, columns, indexes, rela
 
 **สิ่งที่ห้ามทำ:**
 
-- ❌ ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
-- ❌ ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
-- ❌ ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
-- ❌ ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
+- ผิด: ใส่ชนิดข้อมูลในชื่อ เช่น `name_varchar`, `is_active_bit`
+- ผิด: ใส่ชื่อตารางนำหน้าคอลัมน์ เช่น `order_order_date` (มันอยู่ในตาราง `orders` อยู่แล้ว)
+- ผิด: ใช้คำสงวน เช่น `user`, `order`, `group`, `key` ซึ่งต้องใส่เครื่องหมายคำพูดทุกครั้ง ให้ใช้ `users`, `orders` แทน
+- ผิด: ตัวย่อที่คนอ่านไม่ออก เช่น `cst_nm` ประหยัดได้ 8 ตัวอักษร แต่แลกกับความสับสน 3 ปี
 
 > SQL Server ใช้ `PascalCase` ก็ได้ ถ้าโปรเจกต์เดิมใช้อยู่แล้ว
 > **ใช้แบบเดียวกันทั้งระบบสำคัญกว่าว่าแบบไหนถูก** อย่าเปลี่ยนกลางทาง
@@ -1155,15 +1155,15 @@ index `(a, b)` ใช้กับ query ที่กรองด้วย `a` �
 
 ## 12 · Anti-patterns
 
-- ❌ **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
-- ❌ **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
-- ❌ **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
-- ❌ **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
-- ❌ **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
-- ❌ **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
-- ❌ **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
-- ❌ **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
-- ❌ **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
+- **ตารางเดียวเก็บทุกอย่าง** (`entity` / `attribute` / `value`) query อะไรก็ยากไปหมด
+- **`varchar(255)` ทุกคอลัมน์** ตัวเลขนี้ไม่มีความหมายอะไร ให้กำหนดจากข้อมูลจริง
+- **เก็บหลายค่าในคอลัมน์เดียว** เช่น `"1,4,7"` ค้นไม่ได้ ใส่ constraint ไม่ได้ ให้ใช้ตารางเชื่อม
+- **ไม่มี foreign key เพราะ "แอปดูแลเอง"** สักวันจะมีแถวกำพร้า
+- **index ทุกคอลัมน์เผื่อไว้** เขียนช้าลง พื้นที่บาน โดยไม่มีใครได้ประโยชน์
+- **`SELECT *` ในโค้ดจริง** เพิ่มคอลัมน์ทีไรโค้ดพังทุกที
+- **ตรรกะธุรกิจใน trigger** ไล่ปัญหาไม่เจอ เพราะไม่มีใครเห็นว่ามันทำงาน
+- **migration ที่เขียนข้อมูลด้วย** ปนกับที่เปลี่ยนโครงสร้าง พอ rollback ข้อมูลก็หาย
+- **แก้ schema บน production ด้วยมือ** deploy รอบหน้า schema จะไม่ตรงกัน
 
 
 ## reference: data-pipeline-patterns.md
@@ -1318,12 +1318,12 @@ For every table, document:
 ### เงิน
 
 ```sql
-total_amount   numeric(19,4)   NOT NULL      -- ✅
-currency       char(3)         NOT NULL      -- ✅ ISO 4217 เช่น THB
-total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่ากับ 0.3
+total_amount   numeric(19,4)   NOT NULL      -- ถูก:
+currency       char(3)         NOT NULL      -- ถูก: ISO 4217 เช่น THB
+total_amount   float / double                -- ผิด: 0.1 + 0.2 ไม่เท่ากับ 0.3
 ```
 
-> ❌ **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
+> ผิด: **float กับเงินคือบั๊กที่หาไม่เจอ** ยอดรวมเพี้ยนรายการละ 1 สตางค์
 > ปิดงบสิ้นเดือนถึงรู้ แล้วไล่ย้อนไม่ได้ว่าเพี้ยนตรงไหน
 
 ### เวลา
@@ -1346,11 +1346,11 @@ total_amount   float / double                -- ❌ 0.1 + 0.2 ไม่เท่
 | ตาราง lookup + foreign key | ค่าเพิ่มได้โดยไม่ deploy มีชื่อไทย/อังกฤษ และมีลำดับการแสดง | ต้อง join |
 | `check constraint` เป็นข้อความ | ค่าคงที่ ไม่ค่อยเปลี่ยน | เพิ่มค่าต้อง migration |
 | ชนิด `enum` ของ PostgreSQL | เร็ว เล็ก | **ลบค่าออกไม่ได้** เปลี่ยนลำดับไม่ได้ |
-| `int` ดิบ ๆ | — | ❌ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
+| `int` ดิบ ๆ | — | ✗ อ่าน `status = 3` แล้วไม่มีใครรู้ว่าอะไร |
 
 ### boolean
 
-- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` ✅ · `is_not_disabled` ❌
+- ตั้งชื่อเป็นประโยคบอกเล่าเชิงบวก: `is_active` (ถูก) · `is_not_disabled` (ผิด)
 - **ถ้าอาจมีสถานะที่ 3 ในอนาคต อย่าใช้ boolean** เพราะ `is_approved` จะกลายเป็น `approval_status`
   ภายใน 6 เดือน เมื่อมี "รออนุมัติ" เพิ่มมา
 
@@ -1556,7 +1556,7 @@ db.createCollection("orders", {
     properties: {
       orderNo:     { bsonType: "string" },
       customerId:  { bsonType: "objectId" },
-      totalAmount: { bsonType: "decimal" },   // ❌ อย่าใช้ double กับเงิน
+      totalAmount: { bsonType: "decimal" },   // ผิด: อย่าใช้ double กับเงิน
       createdAt:   { bsonType: "date" }
     }
   }}
@@ -1575,7 +1575,7 @@ db.orders.createIndex({ customerId: 1, createdAt: -1 });
 
 ```bash
 dotnet ef migrations add AddOrderStatus
-dotnet ef migrations script <from> <to> -o migrate.sql   # ✅ ตรวจ SQL ก่อนรันจริง
+dotnet ef migrations script <from> <to> -o migrate.sql   # ถูก: ตรวจ SQL ก่อนรันจริง
 dotnet ef database update                                # dev เท่านั้น
 ```
 
@@ -1825,7 +1825,7 @@ Use when settings differ by environment or something must never be committed (ke
 | | config | secret |
 |---|---|---|
 | ตัวอย่าง | ที่อยู่ API, ระดับ log, จำนวนต่อหน้า, โซนเวลา, feature flag | รหัสผ่านฐานข้อมูล, API key, กุญแจเซ็น token, ใบรับรอง |
-| อยู่ใน git ได้ | ✅ ได้ | ❌ ไม่ได้เด็ดขาด |
+| อยู่ใน git ได้ | ✓ ได้ | ✗ ไม่ได้เด็ดขาด |
 | ใครเห็นได้ | ทั้งทีม | เฉพาะที่จำเป็น |
 | หลุดแล้วเป็นไร | ไม่เป็นไร | ต้องเพิกถอนและเปลี่ยนทันที |
 | เปลี่ยนบ่อย | ตามงาน | ตามรอบหมุนเวียน |
@@ -1893,7 +1893,7 @@ APP_FEATURE_NEW_CHECKOUT
 | มีคำนำหน้าของระบบ | กัน `PATH`, `HOME`, `USER` ของระบบชนกัน |
 | ชื่อเดียวกันทุก environment | ค่าต่างได้ แต่ชื่อห้ามต่าง ไม่งั้นย้าย environment ทีไรต้องแก้โค้ด |
 | ใส่หน่วยในชื่อ | `APP_TIMEOUT_SECONDS` ไม่ใช่ `APP_TIMEOUT` |
-| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ❌ `APP_PROD_DB_HOST` |
+| อย่าใส่ชื่อ environment ในชื่อตัวแปร | ✗ `APP_PROD_DB_HOST` |
 
 ---
 
@@ -1901,9 +1901,9 @@ APP_FEATURE_NEW_CHECKOUT
 
 | ไฟล์ | อยู่ใน git | หน้าที่ |
 |---|:--:|---|
-| `.env.example` | ✅ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
-| `.env` | ❌ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
-| `.env.production` | ❌ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
+| `.env.example` | ✓ | รายชื่อค่าที่ต้องมี **ทั้งหมด** พร้อมคำอธิบาย และค่าตัวอย่างที่ไม่ใช่ของจริง |
+| `.env` | ✗ | ค่าจริงบนเครื่องนักพัฒนาแต่ละคน |
+| `.env.production` | ✗ | **ไม่ควรมีไฟล์นี้เลย** เพราะ production ใช้ secret store |
 
 ```bash
 # .gitignore
@@ -2009,15 +2009,15 @@ APP_LOG_LEVEL=debug
 
 ## 11 · Anti-patterns
 
-- ❌ **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
-- ❌ **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
-- ❌ **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
-- ❌ **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
-- ❌ **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
-- ❌ **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
-- ❌ **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
-- ❌ **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
-- ❌ **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
+- **connection string ในโค้ด** แม้จะเป็นของ dev เพราะสักวันจะมีคนลอกแบบนี้ไปใช้กับ production
+- **`.env` ของ production วางไว้บนเซิร์ฟเวอร์** ใครเข้าเครื่องได้ก็อ่านได้ และไม่มีบันทึกว่าใครอ่าน
+- **secret เดียวกันทุก environment** พอ staging หลุด production ก็หลุดด้วย
+- **ส่ง secret ทางแชตหรืออีเมล** ค่าจะอยู่ในนั้นตลอดไป และค้นเจอด้วย
+- **ไม่มี `.env.example`** คนใหม่จะเสียเวลาครึ่งวันเดาว่าต้องมีค่าอะไรบ้าง
+- **บูตผ่านทั้งที่ config ไม่ครบ** แล้วไปพังตอนใช้งานจริง
+- **พิมพ์ config ทั้งก้อนลง log ตอนบูต** รวม secret
+- **`ALLOWED_ORIGINS=*` บน production** เพราะ "ตอน dev มันติด Cross-Origin Resource Sharing (CORS)"
+- **กุญแจที่ไม่เคยเปลี่ยนเลยตั้งแต่ปีแรก**
 
 
 ## reference: per-stack.md
@@ -2172,11 +2172,11 @@ fetch('/config.json', { cache: 'no-store' })
 **Docker อย่าใส่ secret ตอน build:**
 
 ```dockerfile
-# ❌ ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
+# ผิด: ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
 ARG NPM_TOKEN
 ENV NPM_TOKEN=$NPM_TOKEN
 
-# ✅ mount เฉพาะตอนใช้ ไม่ติดไปกับ image
+# ถูก: mount เฉพาะตอนใช้ ไม่ติดไปกับ image
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
 ```
 
@@ -2251,7 +2251,7 @@ $b = New-Object byte[] 48
 # PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
-> ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
+> ผิด: **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
 > เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน
 
 
@@ -2415,12 +2415,12 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 
 ## 8 · Anti-patterns
 
-- ❌ **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
-- ❌ **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
-- ❌ **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
-- ❌ **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
-- ❌ **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
-- ❌ **ส่งข้อมูลทั้งก้อนใน payload** — ควรส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
-- ❌ **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
-- ❌ **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
-- ❌ **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา
+- **งานที่รันซ้ำแล้วเกิดผลซ้ำ** — คิวจะรันซ้ำแน่นอน ไม่ใช่อาจจะ
+- **retry ไม่จำกัด** — งานเดียวที่พังทำให้ทั้งคิวตัน
+- **ไม่มี dead letter** — งานหายเงียบ ๆ ไม่มีใครรู้
+- **มี dead letter แต่ไม่มีใครดู** — เท่ากับไม่มี
+- **งานตามเวลาบนหลาย instance โดยไม่มีล็อก** — รันซ้อนกัน
+- **ส่งข้อมูลทั้งก้อนใน payload** — ควรส่ง id แล้วให้งานไปอ่านเอง จะได้ข้อมูลล่าสุดด้วย
+- **งานยาวที่ยกเลิกไม่ได้** — ผู้ใช้กดผิดแล้วต้องรอ 40 นาที
+- **หน้าจอที่หมุนเปล่าโดยไม่บอกความคืบหน้า** — ผู้ใช้จะกดซ้ำ แล้วได้งานซ้ำ
+- **ไม่วัดคิว** — ตันแล้วรู้ตอนลูกค้าโทรมา

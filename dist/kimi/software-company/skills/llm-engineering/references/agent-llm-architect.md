@@ -95,13 +95,13 @@ async def route_request(input_text: str):
 
 ### When to use RAG
 
-✅ **Use RAG when:**
+Right: **Use RAG when:**
 - Knowledge base updates frequently
 - Need source citations
 - Domain-specific knowledge not in LLM training
 - Cost matters (RAG is cheaper than fine-tuning)
 
-❌ **Skip RAG when:**
+Wrong: **Skip RAG when:**
 - Static, small knowledge base (just include in prompt)
 - Tasks need reasoning, not retrieval
 - Latency-critical (RAG adds round trips)
@@ -213,13 +213,13 @@ Coordinator LLM:
 
 ### Agent design rules
 
-- ✅ **Limit tool count** — fewer than 10 tools per agent, so it picks the right one
-- ✅ **Limit iteration depth** — max 5-10 steps
-- ✅ **Tool naming** — verb-noun, descriptive
-- ✅ **Tool descriptions** — say when to use the tool and the rules for each parameter
-- ✅ **Error handling** — tool fails → agent can retry or escalate
-- ❌ **Don't trust agents in prod without guardrails**
-- ❌ **Don't allow infinite loops** — hard limit on iterations
+- Right: **Limit tool count** — fewer than 10 tools per agent, so it picks the right one
+- Right: **Limit iteration depth** — max 5-10 steps
+- Right: **Tool naming** — verb-noun, descriptive
+- Right: **Tool descriptions** — say when to use the tool and the rules for each parameter
+- Right: **Error handling** — tool fails → agent can retry or escalate
+- Wrong: **Don't trust agents in prod without guardrails**
+- Wrong: **Don't allow infinite loops** — hard limit on iterations
 
 ## Evaluation System
 
@@ -326,12 +326,12 @@ Levers:
 
 ## Things You Don't Do
 
-- ❌ Build agent systems without evals
-- ❌ Use Opus for everything (expensive, slow)
-- ❌ Trust LLM output without validation
-- ❌ Put user-supplied text into the system prompt
-- ❌ Skip safety filtering when traffic grows
-- ❌ Run unlimited agent loops in production
+- Build agent systems without evals
+- Use Opus for everything (expensive, slow)
+- Trust LLM output without validation
+- Put user-supplied text into the system prompt
+- Skip safety filtering when traffic grows
+- Run unlimited agent loops in production
 
 ## When to Hand Off
 
@@ -342,14 +342,14 @@ Levers:
 
 ## Common Pitfalls
 
-- ❌ **No eval set** — can't measure improvements
-- ❌ **Over-engineering** — RAG when prompt would do
-- ❌ **Under-engineering** — prompt when fine-tune would help
-- ❌ **Single point of failure** — only one LLM provider
-- ❌ **Prompt injection** — user input concatenated into system prompt
-- ❌ **Cost explosion** — agents loop without limits
-- ❌ **Latency creep** — multi-step systems get slow
-- ❌ **No guardrails** — the LLM does whatever bad input asks
+- Wrong: **No eval set** — can't measure improvements
+- Wrong: **Over-engineering** — RAG when prompt would do
+- Wrong: **Under-engineering** — prompt when fine-tune would help
+- Wrong: **Single point of failure** — only one LLM provider
+- Wrong: **Prompt injection** — user input concatenated into system prompt
+- Wrong: **Cost explosion** — agents loop without limits
+- Wrong: **Latency creep** — multi-step systems get slow
+- Wrong: **No guardrails** — the LLM does whatever bad input asks
 
 ## Reference
 

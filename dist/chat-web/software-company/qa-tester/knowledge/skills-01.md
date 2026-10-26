@@ -58,7 +58,7 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
 | ป้าย | ฟังจาก | เชื่อได้ |
 |---|---|---|
-| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✅ สูงสุด |
+| `[D]` เจ้าของงาน | ลูกค้า · เจ้าของระบบ → `docs/USER-STORIES.md` · REQUIREMENTS · ข้อมูลทดสอบที่เขายืนยัน | ✓ สูงสุด |
 | `[R]` กฎทั่วไป | คณิตศาสตร์ · กฎหมาย · มาตรฐาน · สามัญสำนึก → เขียนเหตุผลกำกับ | 🟡 ดี |
 | `[A]` คนสร้าง | SPEC · README · คำอ้างของคนหรือ AI ที่เขียนระบบ | 🟠 ต่ำ — ตรวจงานตัวเอง |
 | `[O]` หน้าจอ | สิ่งที่เห็นตอนสำรวจระบบ | 🔴 ต่ำสุด — ระบบอาจผิดอยู่แล้ว |
@@ -75,8 +75,8 @@ Copy **[`assets/test-case.md`](assets/test-case.md)** once per test case and fil
 
 | ตาราง | หน้าตา | กติกา |
 |---|---|---|
-| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ⚠️ + เหตุผล · ไม่เกี่ยว → `—` |
-| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ⚠️ แล้วเพิ่ม TC |
+| Coverage matrix | ฟีเจอร์ × เทคนิค (Happy · Negative · Boundary · Equivalence · State · Security/API) | ช่องที่ควรมีแต่ยังว่าง → ระวัง + เหตุผล · ไม่เกี่ยว → `—` |
+| Traceability | FR / BR → รหัส TC | BR ทุกข้อมี ≥ 1 TC · ไม่มี → ระวัง แล้วเพิ่ม TC |
 
 ## Test Case Categories (Coverage Guide)
 
@@ -156,19 +156,19 @@ Each test case should:
 - [ ] **Oracle** has `[D]` or `[R]` (or `[O-ยังไม่ยืนยัน]` + a question sent)
 - [ ] Money and totals show their sum, worked out before opening the system
 - [ ] Every BR has a TC · every BR with a number has its 3 boundary values
-- [ ] Coverage matrix and traceability tables at the end, gaps marked ⚠️
+- [ ] Coverage matrix and traceability tables at the end, gaps marked "GAP"
 - [ ] `check_outline.py` passes on the whole file
 
 ## Anti-patterns
 
-- ❌ "Test the login page" — too vague. Test what, exactly?
-- ❌ Combining 10 actions into one test case — split them
-- ❌ Expected result = "It works" — be specific
-- ❌ Test cases that depend on previous test cases passing
-- ❌ Only happy-path tests (must include negative + boundary)
-- ❌ Tests with no traceability to requirements
-- ❌ Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
-- ❌ Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
+- "Test the login page" — too vague. Test what, exactly?
+- Combining 10 actions into one test case — split them
+- Expected result = "It works" — be specific
+- Test cases that depend on previous test cases passing
+- Only happy-path tests (must include negative + boundary)
+- Tests with no traceability to requirements
+- Expected result copied from the screen or the builder's SPEC — it bakes the bug into the test
+- Test fails → expected result edited to match the system. Triage first (`qa-tester` → เมื่อผลไม่ตรง)
 
 ---
 
@@ -335,7 +335,7 @@ IDs: User Story (US) · Acceptance Criteria (AC) · Web Content Accessibility Gu
 
 | Feature | Happy | Negative | Boundary | Equivalence | State | Security/API |
 |---|---|---|---|---|---|---|
-| Login | TC-LOGIN-001 | TC-LOGIN-002 | TC-LOGIN-004 · 005 | ⚠️ ยังไม่มี: ชนิดรหัสผ่านที่ผิด | — | TC-LOGIN-003 |
+| Login | TC-LOGIN-001 | TC-LOGIN-002 | TC-LOGIN-004 · 005 | ระวัง ยังไม่มี: ชนิดรหัสผ่านที่ผิด | — | TC-LOGIN-003 |
 
 ## Traceability
 
@@ -645,12 +645,12 @@ Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not w
 
 ## Title Writing Guide
 
-❌ Bad titles:
+Bad titles:
 - "Login broken"
 - "Bug in checkout"
 - "It doesn't work"
 
-✅ Good titles (action + condition + result):
+Good titles (action + condition + result):
 - "Login fails with 500 error when email contains apostrophe"
 - "Checkout total shows NaN when quantity is decimal"
 - "Search returns no results for queries longer than 100 chars"
@@ -681,11 +681,11 @@ Before submitting:
 
 ## Anti-patterns
 
-- ❌ "Same as last week's bug" — describe it fully
-- ❌ Multiple bugs in one report — split them
-- ❌ "Bug" without steps — give steps to reproduce
-- ❌ Putting a proposed fix in the title — the developer decides the fix
-- ❌ Marking everything as P1 — be honest about priority
+- "Same as last week's bug" — describe it fully
+- Multiple bugs in one report — split them
+- "Bug" without steps — give steps to reproduce
+- Putting a proposed fix in the title — the developer decides the fix
+- Marking everything as P1 — be honest about priority
 
 ---
 

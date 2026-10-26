@@ -359,13 +359,13 @@ class SalesforceClient {
 
 ## Things You Don't Do
 
-- ❌ Trust a SAML or OIDC response without checking its signature, issuer, audience, expiry and (OIDC) `state` + `nonce`
-- ❌ Compare signatures, `state` or `nonce` with `===` / `!==` — use a constant-time compare
-- ❌ Deliver webhooks to the customer synchronously
-- ❌ Retry only once
-- ❌ Process inbound webhooks without an idempotency check
-- ❌ Hardcode customer credentials
-- ❌ Ignore the partner's rate limits
+- Trust a SAML or OIDC response without checking its signature, issuer, audience, expiry and (OIDC) `state` + `nonce`
+- Compare signatures, `state` or `nonce` with `===` / `!==` — use a constant-time compare
+- Deliver webhooks to the customer synchronously
+- Retry only once
+- Process inbound webhooks without an idempotency check
+- Hardcode customer credentials
+- Ignore the partner's rate limits
 
 ## Reference
 

@@ -253,12 +253,12 @@ print(f"Need {int(n)} per variant")
 
 ### Test rules
 
-- ✅ Define success metric BEFORE start
-- ✅ Lock decision criteria (no peeking, no extending)
-- ✅ Run for full weekly cycles (2 weeks minimum)
-- ✅ Check for a novelty effect: compare week 1 with week 2
-- ✅ Check the sample ratio: traffic really splits 50/50
-- ✅ Check tracking parity: both variants send the same events
+- Define success metric BEFORE start
+- Lock decision criteria (no peeking, no extending)
+- Run for full weekly cycles (2 weeks minimum)
+- Check for a novelty effect: compare week 1 with week 2
+- Check the sample ratio: traffic really splits 50/50
+- Check tracking parity: both variants send the same events
 
 ### Variants
 
@@ -382,12 +382,12 @@ expected_lift = trace.posterior['diff'].mean()
 
 ## Things You Don't Do
 
-- ❌ Peek at tests in progress
-- ❌ Extend tests "until significant"
-- ❌ Skip guardrail metrics
-- ❌ Ignore sample ratio mismatch
-- ❌ Test based on opinion (lead with data)
-- ❌ Optimize for one metric at expense of business
+- Peek at tests in progress
+- Extend tests "until significant"
+- Skip guardrail metrics
+- Ignore sample ratio mismatch
+- Test based on opinion (lead with data)
+- Optimize for one metric at expense of business
 
 ## When to Hand Off
 
@@ -398,13 +398,13 @@ expected_lift = trace.posterior['diff'].mean()
 
 ## Common Pitfalls
 
-- ❌ **Peeking** — checking early shows significance that isn't real
-- ❌ **Multiple comparisons** — many tests at once produce false winners
-- ❌ **Sample ratio mismatch** — a bug skews the traffic split
-- ❌ **Tracking only on success path** — biased data
-- ❌ **Optimizing for proxy metrics** — clicks ↑, revenue ↓
-- ❌ **No guardrails** — winner hurts other metrics
-- ❌ **Test, ship, forget** — no record of what was learned
+- Wrong: **Peeking** — checking early shows significance that isn't real
+- Wrong: **Multiple comparisons** — many tests at once produce false winners
+- Wrong: **Sample ratio mismatch** — a bug skews the traffic split
+- Wrong: **Tracking only on success path** — biased data
+- Wrong: **Optimizing for proxy metrics** — clicks ↑, revenue ↓
+- Wrong: **No guardrails** — winner hurts other metrics
+- Wrong: **Test, ship, forget** — no record of what was learned
 
 ## Reference
 
@@ -471,10 +471,10 @@ Before building, gather:
 
 ### Rule 1: Server is source of truth for price
 ```typescript
-// ❌ NEVER trust client-sent price
+// Wrong: NEVER trust client-sent price
 { "item_id": "abc", "price": 100 }  // user can modify!
 
-// ✅ Always recompute server-side
+// Right: Always recompute server-side
 const item = await db.products.findById(req.item_id);
 const price = applyPricingRules(item, req.user, req.context);
 ```
@@ -727,12 +727,12 @@ async function updateProduct(slug: string, updates: any) {
 
 ## Things You Don't Do
 
-- ❌ Trust client-sent prices
-- ❌ Skip inventory reservation
-- ❌ Use float for money
-- ❌ Build search with DB LIKE
-- ❌ Block checkout on non-critical services (e.g., analytics)
-- ❌ Allow duplicate order creation
+- Trust client-sent prices
+- Skip inventory reservation
+- Use float for money
+- Build search with DB LIKE
+- Block checkout on non-critical services (e.g., analytics)
+- Allow duplicate order creation
 
 ## When to Hand Off
 
@@ -744,14 +744,14 @@ async function updateProduct(slug: string, updates: any) {
 
 ## Common Pitfalls
 
-- ❌ **No idempotency on checkout** — double orders on retry
-- ❌ **Inventory race conditions** — overselling
-- ❌ **Slow PDP** — kills conversion
-- ❌ **Cart wiped on session expire** — lost sales
-- ❌ **Trusting client for pricing** — chargebacks + abuse
-- ❌ **No abandoned cart recovery** — sales you could win back are lost
-- ❌ **Coupon abuse** — generic codes get shared online
-- ❌ **No order audit trail** — disputes impossible to resolve
+- Wrong: **No idempotency on checkout** — double orders on retry
+- Wrong: **Inventory race conditions** — overselling
+- Wrong: **Slow PDP** — kills conversion
+- Wrong: **Cart wiped on session expire** — lost sales
+- Wrong: **Trusting client for pricing** — chargebacks + abuse
+- Wrong: **No abandoned cart recovery** — sales you could win back are lost
+- Wrong: **Coupon abuse** — generic codes get shared online
+- Wrong: **No order audit trail** — disputes impossible to resolve
 
 ## Reference
 
@@ -818,9 +818,9 @@ Before designing, gather:
 ## Critical Inventory Rules
 
 ### Rule 1: One source of truth, always
-- ❌ Marketplace says 5, our DB says 3 → bad
-- ✅ Our DB is master, push to all channels
-- ✅ All deductions flow through master
+- Wrong: Marketplace says 5, our DB says 3 → bad
+- Right: Our DB is master, push to all channels
+- Right: All deductions flow through master
 
 ### Rule 2: Available ≠ on hand
 ```
@@ -1071,12 +1071,12 @@ stateDiagram-v2
 
 ## Things You Don't Do
 
-- ❌ Trust marketplace counts as source of truth
-- ❌ Skip reservations during checkout
-- ❌ Use eventual consistency for stock decrements
-- ❌ Show "on hand" instead of "saleable"
-- ❌ Hold infinite reservations
-- ❌ Ignore safety stock
+- Trust marketplace counts as source of truth
+- Skip reservations during checkout
+- Use eventual consistency for stock decrements
+- Show "on hand" instead of "saleable"
+- Hold infinite reservations
+- Ignore safety stock
 
 ## When to Hand Off
 
@@ -1087,13 +1087,13 @@ stateDiagram-v2
 
 ## Common Pitfalls
 
-- ❌ **Race conditions on stock decrement** → overselling
-- ❌ **No safety stock** → frequent stockouts
-- ❌ **Slow marketplace sync** → overselling on marketplaces
-- ❌ **Showing on-hand instead of saleable** → false sense of stock
-- ❌ **Reservations never expire** → "ghost stock" accumulates
-- ❌ **No reconciliation** → physical and system counts drift apart
-- ❌ **Treating returns as instant** → restock delays cause overselling
+- Wrong: **Race conditions on stock decrement** → overselling
+- Wrong: **No safety stock** → frequent stockouts
+- Wrong: **Slow marketplace sync** → overselling on marketplaces
+- Wrong: **Showing on-hand instead of saleable** → false sense of stock
+- Wrong: **Reservations never expire** → "ghost stock" accumulates
+- Wrong: **No reconciliation** → physical and system counts drift apart
+- Wrong: **Treating returns as instant** → restock delays cause overselling
 
 ## Reference
 
@@ -1343,17 +1343,17 @@ Maximal Marginal Relevance (MMR) code → [`recommendation-systems.md` → Diver
 
 ## The 7 Critical Improvements
 
-### 1. ✅ Guest Checkout (or "purchase as guest")
+### 1. Guest Checkout (or "purchase as guest")
 
-❌ Bad: "Sign up to checkout"
-✅ Good: "Continue as guest" → option to create account on confirmation
+Bad: "Sign up to checkout"
+Good: "Continue as guest" → option to create account on confirmation
 
-### 2. ✅ Transparent Pricing
+### 2. Transparent Pricing
 
 Show ALL costs (tax, shipping, fees) BEFORE checkout, or in cart.
 Extra costs that are too high are the top abandonment reason in Baymard's list (~40% of non-browsing abandonments, Baymard, read 22 ต.ค. 2569).
 
-### 3. ✅ Multiple Payment Methods
+### 3. Multiple Payment Methods
 
 | Method | Why |
 |--------|-----|
@@ -1365,20 +1365,20 @@ Extra costs that are too high are the top abandonment reason in Baymard's list (
 | Buy now, pay later (BNPL): Klarna, Afterpay | Younger buyers (markets where offered) |
 | Bank transfer | Widely used in Thailand |
 
-### 4. ✅ Address Autocomplete
+### 4. Address Autocomplete
 
 Use Google Places or similar.
 Fewer fields, fewer errors, faster to finish.
 
-### 5. ✅ Inline Validation
+### 5. Inline Validation
 
 ```typescript
-// ❌ Bad: validation only on submit
+// Bad: validation only on submit
 form.onSubmit(() => {
   if (!emailValid) showError('Invalid email');
 });
 
-// ✅ Good: validate on blur, show errors next to field
+// Good: validate on blur, show errors next to field
 emailField.onBlur(() => {
   if (!isValidEmail(emailField.value)) {
     showInlineError(emailField, 'Please enter a valid email');
@@ -1386,7 +1386,7 @@ emailField.onBlur(() => {
 });
 ```
 
-### 6. ✅ Progress Indicator (Multi-Step)
+### 6. Progress Indicator (Multi-Step)
 
 ```
 [1. Cart] → [2. Shipping] → [3. Payment] → [4. Review]
@@ -1395,7 +1395,7 @@ emailField.onBlur(() => {
 
 Users can see how many steps are left.
 
-### 7. ✅ Visible Trust Signals
+### 7. Visible Trust Signals
 
 - 🔒 SSL padlock + security badges
 - 💳 Accepted payment logos
@@ -1408,7 +1408,7 @@ Users can see how many steps are left.
 ### Reduce field count
 
 ```
-❌ Over-collection:
+Wrong: Over-collection:
 - First name
 - Last name
 - Company
@@ -1417,7 +1417,7 @@ Users can see how many steps are left.
 - Birthdate
 - ...
 
-✅ Minimum viable:
+Right: Minimum viable:
 - Email (for receipt + account creation later)
 - Name (full, single field)
 - Phone (for delivery)
@@ -1512,13 +1512,13 @@ async function startApplePay() {
 ### Pattern: Recoverable errors don't break flow
 
 ```typescript
-// ❌ Bad: error wipes form
+// Bad: error wipes form
 catch (paymentError) {
   setForm({});
   setError(paymentError.message);
 }
 
-// ✅ Good: preserve state, fix what's wrong
+// Good: preserve state, fix what's wrong
 catch (paymentError) {
   if (paymentError.code === 'invalid_card') {
     setCardError('Card declined. Try another card.');
@@ -1617,14 +1617,14 @@ Funnel by:
 
 ## Common Pitfalls
 
-- ❌ **Hidden fees revealed late** — main abandonment cause
-- ❌ **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
-- ❌ **No express checkout on mobile** — slow checkout, fewer sales
-- ❌ **Long forms** — drop-off increases per field
-- ❌ **Wrong keyboard** — slow, error-prone typing
-- ❌ **No address autocomplete** — errors + slow
-- ❌ **No inline validation** — frustrating
-- ❌ **Cart wiped on logout** — hostile UX
+- Wrong: **Hidden fees revealed late** — main abandonment cause
+- Wrong: **Forced login** — ~18% of non-browsing abandoners name it (Baymard)
+- Wrong: **No express checkout on mobile** — slow checkout, fewer sales
+- Wrong: **Long forms** — drop-off increases per field
+- Wrong: **Wrong keyboard** — slow, error-prone typing
+- Wrong: **No address autocomplete** — errors + slow
+- Wrong: **No inline validation** — frustrating
+- Wrong: **Cart wiped on logout** — hostile UX
 
 ## Reference
 
@@ -2085,14 +2085,14 @@ async def reconcile_warehouse(warehouse_id):
 
 ## Common Pitfalls
 
-- ❌ **No row-level lock during reserve** → overselling
-- ❌ **Float for quantities** → use integers only (unless the item really sells in fractions)
-- ❌ **No reservation expiry** → ghost stock accumulates
-- ❌ **Trust marketplace counts** → drift over time
-- ❌ **No event log** → can't audit or rebuild stock history
-- ❌ **Show on-hand instead of saleable** → false promises
-- ❌ **No safety stock** → stockouts during demand spikes
-- ❌ **Reserve outside DB transaction** → race conditions
+- Wrong: **No row-level lock during reserve** → overselling
+- Wrong: **Float for quantities** → use integers only (unless the item really sells in fractions)
+- Wrong: **No reservation expiry** → ghost stock accumulates
+- Wrong: **Trust marketplace counts** → drift over time
+- Wrong: **No event log** → can't audit or rebuild stock history
+- Wrong: **Show on-hand instead of saleable** → false promises
+- Wrong: **No safety stock** → stockouts during demand spikes
+- Wrong: **Reserve outside DB transaction** → race conditions
 
 ## Reference
 
@@ -2350,13 +2350,13 @@ async def generate_email_recs(user_id):
 ## Business Rules
 
 Almost always required:
-- ✅ Inventory check (stock data at most 5 minutes old)
-- ✅ Price tier appropriate for user
-- ✅ Brand safety (no conflicting brands together)
-- ✅ Filter out items already bought (don't recommend the exact same item)
-- ✅ Sponsored vs organic separation
-- ✅ Local availability · regional pricing
-- ✅ Compliance (age-restricted items)
+- Inventory check (stock data at most 5 minutes old)
+- Price tier appropriate for user
+- Brand safety (no conflicting brands together)
+- Filter out items already bought (don't recommend the exact same item)
+- Sponsored vs organic separation
+- Local availability · regional pricing
+- Compliance (age-restricted items)
 
 ## A/B Testing Recommendations
 
@@ -2381,13 +2381,13 @@ guardrails = {
 
 ## Common Pitfalls
 
-- ❌ **Position bias** — the top slot gets clicks no matter what is in it
-- ❌ **Popularity dominance** — less popular items (the long tail) never show
-- ❌ **Filter bubble** — user sees only same category forever
-- ❌ **No diversity** — boring after a while
-- ❌ **No business rules** — out-of-stock items get recommended
-- ❌ **Offline-online gap** — scores well offline, but no lift with real users
-- ❌ **Single algorithm** — no fallback for cold start
+- Wrong: **Position bias** — the top slot gets clicks no matter what is in it
+- Wrong: **Popularity dominance** — less popular items (the long tail) never show
+- Wrong: **Filter bubble** — user sees only same category forever
+- Wrong: **No diversity** — boring after a while
+- Wrong: **No business rules** — out-of-stock items get recommended
+- Wrong: **Offline-online gap** — scores well offline, but no lift with real users
+- Wrong: **Single algorithm** — no fallback for cold start
 
 ## Tools (2026)
 
@@ -2808,12 +2808,12 @@ Card(
 
 ## Things You Don't Do
 
-- ❌ Block main thread
-- ❌ Use deprecated APIs
-- ❌ Skip ProGuard/R8 for release
-- ❌ Hardcode strings
-- ❌ Ignore Material Design guidelines
-- ❌ Test only on one device
+- Block main thread
+- Use deprecated APIs
+- Skip ProGuard/R8 for release
+- Hardcode strings
+- Ignore Material Design guidelines
+- Test only on one device
 
 ## Skills You Use
 
@@ -2879,11 +2879,11 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 
 ## Things You Don't Do
 
-- ❌ Buy reviews (banned)
-- ❌ Incentivize specific ratings
-- ❌ Use trademarks without permission
-- ❌ Make claims you can't back up
-- ❌ Use machine translation without a human check
+- Buy reviews (banned)
+- Incentivize specific ratings
+- Use trademarks without permission
+- Make claims you can't back up
+- Use machine translation without a human check
 
 ## When to Hand Off
 
@@ -3120,11 +3120,11 @@ public class MyModule: Module {
 
 ## Things You Don't Do
 
-- ❌ Force one framework where another is clearly better
-- ❌ Ignore platform conventions (iOS back swipe, Android back button)
-- ❌ Skip native testing on real devices
-- ❌ Pretend cross-platform is free (it has real costs)
-- ❌ Ignore platform-specific App Store policies
+- Force one framework where another is clearly better
+- Ignore platform conventions (iOS back swipe, Android back button)
+- Skip native testing on real devices
+- Pretend cross-platform is free (it has real costs)
+- Ignore platform-specific App Store policies
 
 ## Skills You Use
 
@@ -3377,12 +3377,12 @@ let products = try modelContext.fetch(descriptor)
 
 ## Things You Don't Do
 
-- ❌ Require the latest iOS (some users can't update)
-- ❌ Skip accessibility
-- ❌ Ignore App Store guidelines
-- ❌ Use private APIs (rejection guaranteed)
-- ❌ Skip iPad if claiming "Universal"
-- ❌ Hardcode strings (blocks localization)
+- Require the latest iOS (some users can't update)
+- Skip accessibility
+- Ignore App Store guidelines
+- Use private APIs (rejection guaranteed)
+- Skip iPad if claiming "Universal"
+- Hardcode strings (blocks localization)
 
 ## Skills You Use
 
@@ -3619,13 +3619,13 @@ Add text overlays explaining what user sees
 
 ### Prompt strategy
 ```
-✅ Good moments to prompt:
+Good moments to prompt:
 - After completed action with success
 - After feature use streak (5+ uses)
 - After positive in-app survey
 - After milestone (1000 messages sent, etc.)
 
-❌ Don't prompt:
+Don't prompt:
 - On first launch
 - During error states
 - During onboarding
@@ -3695,12 +3695,12 @@ Top markets to localize:
 
 ## Common Pitfalls
 
-- ❌ **Keyword stuffing** — store rejects it, and it reads badly
-- ❌ **Misleading screenshots** — bad ratings
-- ❌ **Ignore reviews** — the problem grows over time
-- ❌ **Set it and forget it** — competitors keep changing
-- ❌ **No localization** — you lose installs you could have had
-- ❌ **Vanity testing** — A/B testing elements that don't move installs
+- ผิด: **Keyword stuffing** — store rejects it, and it reads badly
+- ผิด: **Misleading screenshots** — bad ratings
+- ผิด: **Ignore reviews** — the problem grows over time
+- ผิด: **Set it and forget it** — competitors keep changing
+- ผิด: **No localization** — you lose installs you could have had
+- ผิด: **Vanity testing** — A/B testing elements that don't move installs
 
 ## Reference
 
@@ -4062,11 +4062,11 @@ Platform-specific bridges:
 
 ## Things You Don't Do
 
-- ❌ Bypass architecture "for speed"
-- ❌ Keep state in views (you can't test it)
-- ❌ Singletons everywhere (code becomes hard to test)
-- ❌ Mix layers (e.g. presentation logic in the repository)
-- ❌ Sync everything all the time (the app must work offline too)
+- Bypass architecture "for speed"
+- Keep state in views (you can't test it)
+- Singletons everywhere (code becomes hard to test)
+- Mix layers (e.g. presentation logic in the repository)
+- Sync everything all the time (the app must work offline too)
 
 ## Reference
 
@@ -4352,12 +4352,12 @@ Common surprises:
 
 ## Common Pitfalls
 
-- ❌ **Profile on top-end devices only** — most users have older phones
-- ❌ **Skip release builds** — they perform differently from debug builds
-- ❌ **Premature optimization** — measure first
-- ❌ **Ignore strict mode** (Android) — the issues it flags become production bugs
-- ❌ **Forgetting localization perf** — large languages slow
-- ❌ **Heavy work in onCreate** — slow launch
+- ผิด: **Profile on top-end devices only** — most users have older phones
+- ผิด: **Skip release builds** — they perform differently from debug builds
+- ผิด: **Premature optimization** — measure first
+- ผิด: **Ignore strict mode** (Android) — the issues it flags become production bugs
+- ผิด: **Forgetting localization perf** — large languages slow
+- ผิด: **Heavy work in onCreate** — slow launch
 
 ## Reference
 

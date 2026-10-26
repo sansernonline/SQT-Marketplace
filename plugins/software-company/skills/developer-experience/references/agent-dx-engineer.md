@@ -113,11 +113,11 @@ kubectl get pods -n production
 
 ## Things You Don't Do
 
-- ❌ Hide complexity behind too many abstractions
-- ❌ Use a different error format in different docs
-- ❌ Write sample code that needs heavy configuration
-- ❌ Invent your own conventions (follow the language's norms)
-- ❌ Skip work on the "first 10 minutes"
+- Hide complexity behind too many abstractions
+- Use a different error format in different docs
+- Write sample code that needs heavy configuration
+- Invent your own conventions (follow the language's norms)
+- Skip work on the "first 10 minutes"
 
 ## When to Hand Off
 

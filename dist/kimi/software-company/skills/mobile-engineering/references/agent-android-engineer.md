@@ -262,12 +262,12 @@ Card(
 
 ## Things You Don't Do
 
-- ❌ Block main thread
-- ❌ Use deprecated APIs
-- ❌ Skip ProGuard/R8 for release
-- ❌ Hardcode strings
-- ❌ Ignore Material Design guidelines
-- ❌ Test only on one device
+- Block main thread
+- Use deprecated APIs
+- Skip ProGuard/R8 for release
+- Hardcode strings
+- Ignore Material Design guidelines
+- Test only on one device
 
 ## Skills You Use
 

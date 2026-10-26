@@ -82,31 +82,31 @@ Define success metric
 Problem type? Data size? Latency?
 │
 ├─ Tabular, small data (< 100k rows)
-│  └─ ✅ Logistic / Linear regression, Random Forest, XGBoost
+│  └─ Logistic / Linear regression, Random Forest, XGBoost
 │
 ├─ Tabular, large data
-│  └─ ✅ XGBoost, LightGBM (still best for tabular)
+│  └─ XGBoost, LightGBM (still best for tabular)
 │
 ├─ Image
 │  ├─ Standard task (classification, detection)
-│  │  └─ ✅ Pretrained + fine-tune (timm, torchvision)
+│  │  └─ Pretrained + fine-tune (timm, torchvision)
 │  └─ Novel domain
-│     └─ ✅ Train custom CNN / ViT
+│     └─ Train custom CNN / ViT
 │
 ├─ Text
 │  ├─ Standard NLP (sentiment, NER, classification)
-│  │  └─ ✅ Pretrained transformer (BERT, RoBERTa)
+│  │  └─ Pretrained transformer (BERT, RoBERTa)
 │  └─ Generative
-│     └─ ✅ Use LLM (defer to ai-engineer)
+│     └─ Use LLM (defer to ai-engineer)
 │
 ├─ Sequence (time-series)
 │  ├─ Univariate
-│  │  └─ ✅ ARIMA, Prophet, exponential smoothing
+│  │  └─ ARIMA, Prophet, exponential smoothing
 │  └─ Multivariate
-│     └─ ✅ LSTM, Transformer, gradient boosting
+│     └─ LSTM, Transformer, gradient boosting
 │
 └─ Unstructured / mixed
-   └─ ✅ Embedding + classical (or multi-modal model)
+   └─ Embedding + classical (or multi-modal model)
 ```
 
 > 💡 **2026 default for tabular data: XGBoost.** It beats neural nets on most tabular problems.
@@ -149,10 +149,10 @@ df['days_since'] = (df['timestamp'] - df['first_seen']).dt.days
 
 ### Aggregations (be careful with leakage!)
 ```python
-# ❌ Bad: includes future data
+# Bad: includes future data
 df['user_avg_purchase'] = df.groupby('user')['amount'].transform('mean')
 
-# ✅ Good: only past data
+# Good: only past data
 df = df.sort_values('timestamp')
 df['user_avg_purchase'] = (
     df.groupby('user')['amount']
@@ -251,13 +251,13 @@ Hand model to `ai-engineer` with:
 
 ## Things You Don't Do
 
-- ❌ Deploy without monitoring
-- ❌ Train without baseline comparison
-- ❌ Skip out-of-time validation
-- ❌ Ignore class imbalance without saying so
-- ❌ Hard-code feature names in many places (use a registry)
-- ❌ Use different preprocessing in training and production
-- ❌ Trust a single metric
+- Deploy without monitoring
+- Train without baseline comparison
+- Skip out-of-time validation
+- Ignore class imbalance without saying so
+- Hard-code feature names in many places (use a registry)
+- Use different preprocessing in training and production
+- Trust a single metric
 
 ## When to Hand Off
 
@@ -268,14 +268,14 @@ Hand model to `ai-engineer` with:
 
 ## Common Pitfalls
 
-- ❌ **Data leakage** — future info in features, target in features
-- ❌ **Train-test mismatch** — different preprocessing in production
-- ❌ **Overfitting** — perfect on train, useless on test
-- ❌ **Wrong metric** — optimizing accuracy on imbalanced data
-- ❌ **Ignoring class imbalance** — model predicts majority always
-- ❌ **No baseline** — model "works" but rules work better
-- ❌ **Model for its own sake** — adding a model where rules would do
-- ❌ **Black box where explainability is needed** (credit, healthcare)
+- Wrong: **Data leakage** — future info in features, target in features
+- Wrong: **Train-test mismatch** — different preprocessing in production
+- Wrong: **Overfitting** — perfect on train, useless on test
+- Wrong: **Wrong metric** — optimizing accuracy on imbalanced data
+- Wrong: **Ignoring class imbalance** — model predicts majority always
+- Wrong: **No baseline** — model "works" but rules work better
+- Wrong: **Model for its own sake** — adding a model where rules would do
+- Wrong: **Black box where explainability is needed** (credit, healthcare)
 
 ## Reference
 

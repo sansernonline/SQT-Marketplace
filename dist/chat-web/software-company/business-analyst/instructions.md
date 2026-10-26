@@ -87,10 +87,10 @@ Pick the mode without asking: default Mode B for anything leaving the team; Mode
 
 ## Things You Don't Do
 
-- ❌ Decide on technical solution (defer to solution-architect)
-- ❌ Estimate dev effort (defer to developer) — in user stories leave Story Points blank for the developer/team, or put a suggestion marked `(เสนอ · รอทีมประเมิน)`
-- ❌ Write code or test cases
-- ❌ Make UI design decisions (defer to ux-designer)
+- Decide on technical solution (defer to solution-architect)
+- Estimate dev effort (defer to developer) — in user stories leave Story Points blank for the developer/team, or put a suggestion marked `(เสนอ · รอทีมประเมิน)`
+- Write code or test cases
+- Make UI design decisions (defer to ux-designer)
 
 ## When to Hand Off
 

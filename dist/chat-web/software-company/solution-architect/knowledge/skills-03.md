@@ -167,15 +167,15 @@ For every visual:
 
 ## Anti-patterns
 
-- ❌ **Text-only design docs** — "the icon is in the top-right" with no picture
-- ❌ **Linking to Figma / external design tools as the only source** — visuals must render in the repo
-- ❌ **PNG screenshots of text** — use the text, in a code block
-- ❌ **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
-- ❌ **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
-- ❌ **ASCII art outside a code fence** — proportional fonts will mangle alignment
-- ❌ **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
-- ❌ **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
-- ❌ **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
+- **Text-only design docs** — "the icon is in the top-right" with no picture
+- **Linking to Figma / external design tools as the only source** — visuals must render in the repo
+- **PNG screenshots of text** — use the text, in a code block
+- **Inline `<svg>` in a doc read on GitHub** — GitHub drops it; save as `docs/figures/x.svg` and use `![alt](figures/x.svg)` · a `.svg` file without `xmlns` also fails
+- **Inline SVG over 50 lines** — extract to `docs/figures/x.svg` and reference it
+- **ASCII art outside a code fence** — proportional fonts will mangle alignment
+- **Mermaid syntax newer than the viewer** — GitHub's Mermaid version changes; check it with a ```` ```mermaid ```` block containing `info` before using new diagram types
+- **Generated images checked in without source** — commit the `.svg` source, not just the `.png` export
+- **Decorative emoji as visuals** — emoji ≠ a mockup; pair them with real diagrams
 
 ## Quick-start recipe
 
@@ -426,7 +426,7 @@ skill นี้คือ house style เดียวของรูปที่�
 
 โลโก้อยู่หน้าชื่อรูป (`<img class="logo">` ชี้ไป `assets/logo/` ของโปรเจกต์ · ไม่มีโลโก้ให้จดไว้ในรายงานว่าขาด) · คำขยายบอกว่า "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ · **รูปที่ไม่มีวันที่ ไม่มีใครกล้าแก้และไม่มีใครกล้าเชื่อ**
 
-เหตุผลเต็มกับตัวอย่าง ❌/✅ ของคำขยาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "หัวรูป" 
+เหตุผลเต็มกับตัวอย่าง ผิด/ถูก ของคำขยาย → [`references/design-system.md`](references/design-system.md) หัวข้อ "หัวรูป" 
 
 ## 4 · ระบบขนาด
 
@@ -545,15 +545,15 @@ python scripts/check-figure-source.py docs/figures/src       # ทุกรู�
 
 ## 11 · Anti-patterns
 
-- ❌ **ใช้ skill นี้กับรูปในทีม** — เสียเวลาหลายรอบเพื่อความสวยที่ไม่มีใครต้องการ
-- ❌ **ใช้โลโก้ทางการในลักษณะที่ดูเหมือนผู้ให้บริการรับรอง** — ข้อ 6 และ [icons.md](references/icons.md)
-- ❌ **กล่อง `.focus` 2 กล่อง** — แปลว่ารูปตอบ 2 คำถาม
-- ❌ **ส่งไฟล์ HTML ให้ลูกค้า** — ให้ส่ง PNG ส่วนไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
-- ❌ **ไม่เก็บไฟล์ HTML** — ปีหน้าต้องแก้รูป แล้วต้องวาดใหม่ทั้งใบ
-- ❌ **รูปไม่มีวันที่และเจ้าของ**
-- ❌ **เส้นเฉียงหรือมุมแหลม** — เส้นต้องตั้งหรือนอน หักด้วยมุมโค้ง (ข้อ 4 และ 7)
-- ❌ **ไอคอนต่างสไตล์ปนกัน** — เส้นบางปนเส้นหนา ปนไอคอนทึบ
-- ❌ **รูปจืด: การ์ดขาวเท่ากันทุกใบ เส้นบางเท่ากันทุกเส้น** — อ่านออกแต่ไม่มีจุดเด่น ทำตามข้อ 5.1
+- **ใช้ skill นี้กับรูปในทีม** — เสียเวลาหลายรอบเพื่อความสวยที่ไม่มีใครต้องการ
+- **ใช้โลโก้ทางการในลักษณะที่ดูเหมือนผู้ให้บริการรับรอง** — ข้อ 6 และ [icons.md](references/icons.md)
+- **กล่อง `.focus` 2 กล่อง** — แปลว่ารูปตอบ 2 คำถาม
+- **ส่งไฟล์ HTML ให้ลูกค้า** — ให้ส่ง PNG ส่วนไฟล์ HTML คือแหล่งที่มา เก็บไว้ใน repo
+- **ไม่เก็บไฟล์ HTML** — ปีหน้าต้องแก้รูป แล้วต้องวาดใหม่ทั้งใบ
+- **รูปไม่มีวันที่และเจ้าของ**
+- **เส้นเฉียงหรือมุมแหลม** — เส้นต้องตั้งหรือนอน หักด้วยมุมโค้ง (ข้อ 4 และ 7)
+- **ไอคอนต่างสไตล์ปนกัน** — เส้นบางปนเส้นหนา ปนไอคอนทึบ
+- **รูปจืด: การ์ดขาวเท่ากันทุกใบ เส้นบางเท่ากันทุกเส้น** — อ่านออกแต่ไม่มีจุดเด่น ทำตามข้อ 5.1
 
 ## 12 · เชื่อมกับ skill อื่น
 
@@ -608,8 +608,8 @@ HTML — HyperText Markup Language · PNG — Portable Network Graphics · SVG �
 คำขยายบอกว่า "ของจริงเป็นอย่างไร" ไม่ใช่ขยายชื่อ:
 
 ```
-❌ ภาพรวมระบบ Dr Screening
-✅ เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
+ผิด: ภาพรวมระบบ Dr Screening
+ถูก: เครื่องเดียวในห้อง Server ของโรงพยาบาล รันทุกบริการด้วย Docker Compose
 ```
 
 ## ระบบขนาด (จากข้อ 4)
@@ -1333,7 +1333,7 @@ python scripts/open_items.py docs/ docs/<CODE>-OPEN-ITEMS.xlsx --project <CODE> 
 
 ## 8 · Anti-patterns
 
-❌ `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
+ผิด: `.docx` ไม่มี Heading style · เก็บแต่ PNG ไม่เก็บต้นทาง · `.docx` และ mockup ใน repo โค้ด (ถึงจุดนี้ต้องย้ายเป็นแบบ B) · เอกสารอยู่ 2 ที่ (= 2 เวอร์ชัน) · FSD ก่อน SRS ยืนยัน · ใช้ LLM แต่ไม่มี PROMPT-LIBRARY · sub-project ชื่อ `projects/` `modules/` `apps/` · โฟลเดอร์ว่างสร้างเผื่อ · เอกสารชิ้นเดียวตอบทุกคำถาม
 
 ---
 
@@ -1716,7 +1716,7 @@ Thanks to: @alice, @bob, @charlie
 
 ### Release Notes Template (ภาษาไทย)
 
-> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ✅/❌ อยู่ใน skill `release-notes` ข้อ 4
+> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ถูก/ผิด อยู่ใน skill `release-notes` ข้อ 4
 
 ````markdown
 # เวอร์ชัน 2.1.0 — YYYY-MM-DD
@@ -1784,10 +1784,10 @@ Use when choosing system architecture (monolith, microservices, serverless, even
 How many engineers? Team count? Domain complexity?
 │
 ├─ <10 engineers, 1 team
-│  └─ ✅ Monolith (modular monolith)
+│  └─ Monolith (modular monolith)
 │
 ├─ 10-50 engineers, 2-5 teams
-│  └─ ✅ Modular monolith OR few services
+│  └─ Modular monolith OR few services
 │
 ├─ 50+ engineers, 5+ teams
 │  └─ Consider microservices (only if needed)
@@ -1822,14 +1822,14 @@ Details for each are in [references/advanced-patterns.md](references/advanced-pa
 
 ## Anti-patterns
 
-- ❌ **Microservices too early** — start with a monolith
-- ❌ **Distributed monolith** — services that must deploy together
-- ❌ **God service** — one service that does everything
-- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
-- ❌ **Shared database across microservices** — all the coupling, none of the isolation
-- ❌ **Synchronous calls in critical path** — cascading failures
-- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
-- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
+- **Microservices too early** — start with a monolith
+- **Distributed monolith** — services that must deploy together
+- **God service** — one service that does everything
+- **Chatty interfaces** — one request fans out into many service calls (N+1)
+- **Shared database across microservices** — all the coupling, none of the isolation
+- **Synchronous calls in critical path** — cascading failures
+- **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- **Resume-driven architecture** — using K8s/microservices to look fancy
 
 ---
 
@@ -1887,13 +1887,13 @@ Queries ◄── Read Models (denormalized for query)
 ```
 
 **When to use:**
-- ✅ Read load and write load are very different
-- ✅ Complex reporting / dashboards
-- ✅ Multiple read views from same data
+- Read load and write load are very different
+- Complex reporting / dashboards
+- Multiple read views from same data
 
 **When NOT to use:**
-- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
-- ❌ Reads must always show the latest write
+- Simple create/read/update/delete (CRUD) apps (far too much)
+- Reads must always show the latest write
 
 ---
 
@@ -1913,18 +1913,18 @@ State is computed from events
 ```
 
 **When to use:**
-- ✅ Strong audit/compliance requirements
-- ✅ Need to replay history
-- ✅ Questions about the past ("balance at date X")
-- ✅ Complex business logic with many state transitions
+- Strong audit/compliance requirements
+- Need to replay history
+- Questions about the past ("balance at date X")
+- Complex business logic with many state transitions
 
 **When NOT to use:**
-- ❌ Apps with simple state (too much)
-- ❌ No team experience with it
-- ❌ Don't need history/audit
-- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
+- Apps with simple state (too much)
+- No team experience with it
+- Don't need history/audit
+- You must be able to delete data, e.g. under GDPR (events are hard to delete)
 
-> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+> Note: **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
 
 ---
 
@@ -2150,15 +2150,15 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
-- ✅ You need to ship changes fast
-- ✅ Operations needs are simple
-- ✅ All parts can deploy together
+- Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
+- You need to ship changes fast
+- Operations needs are simple
+- All parts can deploy together
 
 **When NOT to use:**
-- ❌ Multiple teams needing independent deploys
-- ❌ Features need very different scaling
-- ❌ Parts need different tech stacks
+- Multiple teams needing independent deploys
+- Features need very different scaling
+- Parts need different tech stacks
 
 **Implementation tips:**
 - Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
@@ -2185,16 +2185,16 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Independent teams (Conway's Law)
-- ✅ Different scaling needs per service
-- ✅ Services need different languages or stacks
-- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
+- Independent teams (Conway's Law)
+- Different scaling needs per service
+- Services need different languages or stacks
+- Mature continuous integration and delivery (CI/CD) and monitoring already in place
 
 **When NOT to use (most projects):**
-- ❌ Small team — the extra overhead slows everyone down
-- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
-- ❌ Can't afford distributed tracing
-- ❌ Business areas don't have clear boundaries yet
+- Small team — the extra overhead slows everyone down
+- No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- Can't afford distributed tracing
+- Business areas don't have clear boundaries yet
 
 **Hidden costs:**
 - 💸 Much harder to operate (more services to deploy, monitor and debug)
@@ -2216,17 +2216,17 @@ Event ──► Function ──► Service / DB / Queue
 ```
 
 **Good fits:**
-- ✅ Async background processing
-- ✅ Scheduled tasks (cron)
-- ✅ Glue code between services
-- ✅ Spiky / unpredictable traffic
-- ✅ Image/video processing pipelines
+- Async background processing
+- Scheduled tasks (cron)
+- Glue code between services
+- Spiky / unpredictable traffic
+- Image/video processing pipelines
 
 **Bad fits:**
-- ❌ Long-running processes (the limit is usually 15 min)
-- ❌ Processing that must keep state between calls
-- ❌ Frequent calls that need a fast response (cold starts add delay)
-- ❌ Heavy traffic all day (the bill climbs fast)
+- Long-running processes (the limit is usually 15 min)
+- Processing that must keep state between calls
+- Frequent calls that need a fast response (cold starts add delay)
+- Heavy traffic all day (the bill climbs fast)
 
 ---
 

@@ -124,7 +124,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 
 **มันคืออะไร · หน่วยอะไร · ใช้ได้ตอนไหน**
 
-| ❌ | ✅ | ที่ต่างคือ |
+| ✗ | ✓ | ที่ต่างคือ |
 |---|---|---|
 | `d` | `daysSinceLastLogin` | มีหน่วย มีจุดอ้างอิง |
 | `list` | `overdueInvoices` | บอกว่าข้างในคืออะไร |
@@ -201,12 +201,12 @@ Use when writing or reviewing code for readability (names, function shape, comme
 ## 6 · คอมเมนต์ — เขียน "ทำไม" ไม่ใช่ "ทำอะไร"
 
 ```ts
-// ❌ เพิ่มค่า i ทีละ 1
-// ❌ ฟังก์ชันคำนวณภาษี
+// ผิด: เพิ่มค่า i ทีละ 1
+// ผิด: ฟังก์ชันคำนวณภาษี
 
-// ✅ ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
-// ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
-// ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
+// ถูก: ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
+// ถูก: ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
+// ถูก: ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
 
 **คอมเมนต์ที่อธิบายว่าโค้ดทำอะไร คือสัญญาณว่าชื่อตั้งผิด** ให้แก้ชื่อแล้วลบคอมเมนต์
@@ -245,14 +245,14 @@ Use when writing or reviewing code for readability (names, function shape, comme
 ### จัดตามฟีเจอร์ ไม่ใช่ตามชนิดไฟล์
 
 ```
-❌ จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
+ผิด: จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
 src/
   controllers/   invoice.ts  customer.ts  report.ts
   services/      invoice.ts  customer.ts  report.ts
   models/        invoice.ts  customer.ts  report.ts
   validators/    invoice.ts  customer.ts  report.ts
 
-✅ จัดตามฟีเจอร์ — ทุกอย่างของใบแจ้งหนี้อยู่ที่เดียว
+ถูก: จัดตามฟีเจอร์ — ทุกอย่างของใบแจ้งหนี้อยู่ที่เดียว
 src/
   invoice/       routes.ts  service.ts  model.ts  validation.ts  invoice.test.ts
   customer/      ...
@@ -307,13 +307,13 @@ src/
 
 ## 11 · Anti-patterns
 
-- ❌ **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
-- ❌ **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
-- ❌ **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
-- ❌ **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
-- ❌ **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
-- ❌ **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
-- ❌ **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
+- **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
+- **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
+- **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
+- **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
+- **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
+- **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
+- **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
 
 ---
 
@@ -634,15 +634,15 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 
 ## 8 · Anti-patterns
 
-- ❌ **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
+- **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
   ไม่ใช่สิ่งที่มันควรทำ
-- ❌ **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
-- ❌ **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
-- ❌ **mock ทุกอย่างจน test ทดสอบแค่ mock**
-- ❌ **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
-- ❌ **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
-- ❌ **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
-- ❌ **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
+- **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
+- **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
+- **mock ทุกอย่างจน test ทดสอบแค่ mock**
+- **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
+- **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
+- **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
+- **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
 
 ---
 
@@ -1070,11 +1070,11 @@ These prefixes are for comments on a pull request. A review report uses the `rev
 ## Anti-patterns to Avoid
 
 As a reviewer:
-- ❌ Bikeshedding — don't fight over trivial style if there's no convention
-- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
-- ❌ Only criticism — acknowledge good things too
-- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
-- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)
+- Bikeshedding — don't fight over trivial style if there's no convention
+- "Why didn't you do it MY way?" — there are often multiple valid approaches
+- Only criticism — acknowledge good things too
+- Vague comments like "this is wrong" — explain WHY and suggest fix
+- Reviewing too much at once — request smaller PRs (under 400 lines)
 
 
 ## reference: full-checklist.md
@@ -1212,7 +1212,7 @@ Someone scanning `git log --oneline` should understand each line without opening
 - **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
 - **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit. Check `git diff --stat` before writing the subject: when the files fall into more than one topic (feature + unrelated rename, fix + formatting sweep), propose the split as a list of `<subject> → <files>` per commit and stage each with `git add <files>` or `git add -p`; never hide the second topic in the body
 
-| ❌ Hard to read | ✅ Short and clear |
+| ✗ Hard to read | ✓ Short and clear |
 |---|---|
 | `update items.js, server.js, add test, fix bug` | `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` |
 | `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
@@ -1246,9 +1246,9 @@ Co-authored-by: ...      ← attribution
 
 ## Anti-patterns
 
-- ❌ `update code`
-- ❌ `fix bug`
-- ❌ `WIP`
-- ❌ `final commit` / `final final`
-- ❌ Past tense: `added feature` (use `add feature`)
-- ❌ Vague scope: `fix(misc): ...` (be specific)
+- `update code`
+- `fix bug`
+- `WIP`
+- `final commit` / `final final`
+- Past tense: `added feature` (use `add feature`)
+- Vague scope: `fix(misc): ...` (be specific)
