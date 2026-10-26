@@ -17,7 +17,7 @@
 | `e-commerce` | 1.1.1 | 67 | 11 | 14 | 0.5 MB |
 | `graphic-design` | 0.12.2 | 53 | 9 | 6 | 0.5 MB |
 | `personal-life` | 0.15.1 | 76 | 12 | 16 | 0.6 MB |
-| `software-company` | 2.24.0 | 131 | 41 | 29 | 6.7 MB |
+| `software-company` | 2.24.1 | 131 | 41 | 29 | 6.7 MB |
 | `superuser` | 3.6.1 | 36 | 3 | 0 | 0.4 MB |
 | `trading-finance` | 0.13.0 | 57 | 8 | 7 | 0.4 MB |
 

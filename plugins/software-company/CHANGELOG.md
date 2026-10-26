@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.24.1 — 2026-10-26
+
+- `security-audit` (`classes-thai.md`): GB Prime Pay ตรวจจากเอกสารทางการแล้ว · ข้อความที่ส่งเข้า background URL ไม่มีลายเซ็น ต้องดึงสถานะซ้ำด้วย `/v1/check_status_txn` แล้วเทียบสถานะและยอด · plugin ทางการไม่ดึงซ้ำ · `gateway-no-refetch` บอกว่าเจ้าที่ไม่ลงชื่อ การดึงซ้ำเป็นทางเดียวที่กันปลอม
+
 ## 2.24.0 — 2026-10-26
 
 - `llm-engineering`: reference ใหม่ `agent-systems.md` สำหรับสร้างระบบ agent ในผลิตภัณฑ์ · เมื่อไหร่ไม่ควรใช้ agent · Loop · Graph · Dynamic ในโค้ด · progress ledger · 3 กลไกที่ทุก framework มี (เพดานรอบแยกจากเงื่อนไขผ่าน · จุดรวมหลังแยก · checkpoint หยุดรอคนแล้วทำต่อ) · เลือก framework ตามภาษาพร้อมสถานะ 2026 (AutoGen archive · Semantic Kernel ย้ายไป Microsoft Agent Framework · Bedrock Agents Classic maintenance · ADK 2.0) · ต้นทุน token · 8 กรณีใช้จริงพร้อมป้ายหลักฐาน · เปิดแหล่งจริง 2026-10-26
