@@ -108,7 +108,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 6. **ไม่แต่งข้อมูลของผู้ใช้** — ตัวเลข ชื่อ วันที่ งบ ที่ไม่รู้ ใส่ `(รอยืนยัน)` แล้วทำต่อ
 7. **งานเสี่ยงหรือย้อนไม่ได้ หัวหน้าทำเองหรือตรวจเองก่อนปล่อย** ไม่ให้ลูกทีม effort ต่ำทำ (รายการ "รออนุมัติ" ใน `autonomy`)
 8. **จบงานด้วยสรุปสั้น (หัวข้อ 7) และเทียบคาดกับจริง** — ยกเว้นคำถามเล็ก · คุยทั่วไป · playbook อ่านอย่างเดียว
-9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง · ไม่ commit ลง branch หลักโดยไม่ถาม · ต้นฉบับของกติกานี้อยู่ใน `team-files`
+9. **commit เมื่อได้รับอนุญาตเท่านั้น** (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · ไม่ commit ลง branch หลักโดยไม่ถาม · ต้นฉบับของกติกานี้อยู่ใน `team-files`
    - งานใน git repo แก้บน branch ของงาน ไม่แก้บน branch หลัก · repo ที่มี AI หรือ session อื่นแก้พร้อมกัน → **1 ตัว 1 worktree** และชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ (`claude/` · `codex/`) · วิธีและกฎใน [`team-files`](references/team-files.md) หัวข้อ "หลาย AI ใน repo เดียว"
 10. **อ้างเฉพาะ skill ที่เปิดอ่านจริงในรอบนี้** และบอกเฉพาะตัวที่เปลี่ยนการตัดสินใจ · ห้ามแก้ไฟล์ skill · agent · playbook เอง (รอผู้ใช้สั่ง "รวมบทเรียน")
 
@@ -1383,7 +1383,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 
 รากโปรเจกต์เก็บแค่โฟลเดอร์มาตรฐาน (`ref/` · `docs/` · `mockup/` · `assets/` · `qa/` · `_to_delete/` · `.claude/` · โฟลเดอร์โค้ด) ไฟล์ทำงานของ SuperUser จึงอยู่ใน `.claude/superuser/` · หัวหน้าทีมเขียนคนเดียว (ยกเว้น `handoff/<id>.md` ที่ลูกทีมต่อท้ายใบส่งงานของตัวเองได้)
 
-**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
+**กติกา commit (ที่เดียว ไฟล์อื่นลิงก์มาที่นี่)** — `CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` อยู่ใน git ได้ · agent commit ได้เมื่อได้รับอนุญาตเท่านั้น ตามกฎข้อ 9 ของ `SKILL.md` (ผู้ใช้สั่ง · `~/.claude/superuser-style.md` · `docs/AGENT-LOOP.md` · หัวข้อ "กติกา" ใน `CONTEXT.md`) → 1 ขั้นที่ตรวจผ่าน = 1 commit ตาม `commit-log` · ไม่ได้อนุญาต → ใส่ข้อความ commit ที่แนะนำในคำตอบ · ไม่ push เว้นแต่ผู้ใช้สั่ง หรือบรรทัด **git อัตโนมัติ** ใน "กติกา" เป็น `auto` · `log/` · `inbox/` · `learn/` · `handoff/` · `state.json` และ `_to_delete/` ไม่ commit ใส่ `.gitignore` เพราะ log มีชื่อไฟล์และคำสั่งภายใน
 
 | ที่ | เก็บอะไร | กติกา |
 |---|---|---|

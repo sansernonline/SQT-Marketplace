@@ -90,14 +90,15 @@ export function permissions(project, write, { user = false, userFile = join(user
 // CLAUDE.md นับหัวข้อ "กติกา" ใน CONTEXT.md เป็นคำอนุญาตของผู้ใช้อยู่แล้ว
 export const POLICY_MARK = "- **git อัตโนมัติ:**";
 export const POLICIES = {
-  auto: "commit · push · เปิด PR · merge · ลบ branch ได้เอง หลัง CI ผ่านและผู้ตรวจตัวใหม่ให้ผ่าน",
+  auto: "commit ใน branch งาน · push · เปิด PR · merge · ลบ branch ได้เอง หลัง CI ผ่านและผู้ตรวจตัวใหม่ให้ผ่าน · ไม่ commit ลง main ตรง",
   commit: "commit ใน branch งานได้เอง · push · PR · merge ถามก่อนทุกครั้ง",
   manual: "ไม่ commit · push · merge เอง ผู้ใช้ review เอง · ใส่ข้อความ commit ที่แนะนำไว้ในคำตอบ",
 };
 
 export function gitPolicy(project, value, write, today = new Date().toISOString().slice(0, 10)) {
   const file = join(project, ".claude", "superuser", "CONTEXT.md");
-  const text = existsSync(file) ? lf(readFileSync(file, "utf8")) : "";
+  const raw = existsSync(file) ? readFileSync(file, "utf8") : "";
+  const text = lf(raw);
   const line = text.split("\n").find((l) => l.startsWith(POLICY_MARK));
   if (!write || !value) return { file, current: line ?? null };
   if (!POLICIES[value]) return { file, error: `--git-policy ต้องเป็น ${Object.keys(POLICIES).join(" · ")}` };
@@ -108,7 +109,7 @@ export function gitPolicy(project, value, write, today = new Date().toISOString(
   else out = `${text}${text && !text.endsWith("\n") ? "\n" : ""}${text ? "\n" : ""}## กติกา\n${next}\n`;
   if (existsSync(file)) backup(project, file, "context-md");
   mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, out);
+  writeFileSync(file, raw.includes("\r\n") ? out.replace(/\n/g, "\r\n") : out);   // คงการขึ้นบรรทัดแบบเดิม
   return { file, current: next };
 }
 
@@ -210,10 +211,11 @@ if (process.argv[1]?.replace(/\\/g, "/").endsWith("/setup.mjs")) {
   }
   if (run("--git-policy")) {
     const i = args.indexOf("--git-policy");
-    const value = i >= 0 ? args[i + 1] : null;
+    const value = i >= 0 && args[i + 1] && !args[i + 1].startsWith("--") ? args[i + 1] : null;
     const r = gitPolicy(project, value, !check && Boolean(value));
     if (r.error) { console.log(`นโยบาย git: ${r.error}`); gaps++; }
-    else if (!r.current) { gaps++; console.log(`นโยบาย git: ยังไม่ได้เลือก · ถามผู้ใช้ 1 ครั้ง แล้วรัน --git-policy ${Object.keys(POLICIES).join("|")}`); }
+    // ยังไม่เลือกเป็นคำแนะนำ ไม่นับว่าขาด · ไม่งั้น --check ล้มทุกโปรเจกต์ที่ยังไม่เคยถาม
+    else if (!r.current) console.log(`นโยบาย git: ยังไม่ได้เลือก · ถามผู้ใช้ 1 ครั้ง แล้วรัน --git-policy ${Object.keys(POLICIES).join("|")}`);
     else console.log(`นโยบาย git (${r.file}): ${r.current.slice(POLICY_MARK.length).trim()}`);
   }
   if (!check && run("--permissions")) console.log("\nกฎสิทธิ์และกฎประจำตัวมีผลกับ session ใหม่ · เปิด Claude Code ใหม่หรือเริ่ม session ใหม่");
