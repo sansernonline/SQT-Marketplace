@@ -4,6 +4,7 @@
 
 - hook router และ `triggers.md`: แถวของ skill ใหม่ 10 ตัวใน trading-finance · personal-life · graphic-design (ประโยคจริง 5 แบบต่อตัวจับได้ ประโยคไม่เกี่ยวไม่จับ)
 - `human-writing` (`thai-grammar.md`): หลักเกณฑ์เว้นวรรคเรื่องไม้ยมก (ข้อ ๑.๒.๑๕.๑) และประกาศการทับศัพท์ 2532 (ราชกิจจานุเบกษา เล่ม 106 ตอน 153) ใส่ที่มาจาก orst.go.th · เพิ่มข้อยกเว้นวรรณยุกต์และการันต์
+- `skill-authoring` (`eval-format.md`): plugin ที่มี `dependencies` โหลดไม่ขึ้นทั้งตัวใน `claude plugin eval` ให้รันที่สำเนาที่ลบ dependencies และรันเคส trigger 1 เคสก่อนทั้งชุด (ตรวจจริง 2026-10-26)
 
 ## 3.6.1 — 2026-10-26
 
