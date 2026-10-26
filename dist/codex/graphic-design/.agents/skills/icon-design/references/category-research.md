@@ -67,5 +67,7 @@
 - Claude Code · Plugins reference — https://code.claude.com/docs/en/plugins-reference · Claude · Submit a plugin — https://claude.com/docs/plugins/submit
 - Raycast · Prepare an extension for the Store — https://developers.raycast.com/basics/prepare-an-extension-for-store
 - JetBrains · Plugin icon file — https://plugins.jetbrains.com/docs/intellij/plugin-icon-file.html
+- JetBrains Marketplace · Best practices for listing (ห้ามโลโก้ที่เป็นแค่ชื่อ · ห้ามคล้ายแบรนด์อื่น) — https://plugins.jetbrains.com/docs/marketplace/best-practices-for-listing.html
 - VS Code · Extension manifest — https://code.visualstudio.com/api/references/extension-manifest
+- VS Code · Publishing extensions (ไอคอนใน package.json ห้ามเป็น SVG) — https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 - Chrome Web Store · Images — https://developer.chrome.com/docs/webstore/images
