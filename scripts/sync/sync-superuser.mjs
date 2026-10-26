@@ -110,6 +110,8 @@ export function plan(root) {
   const known = new Set([...(router.external ?? []), ...readdirSync(pluginsDir).flatMap((p) => existsSync(join(pluginsDir, p, "skills")) ? readdirSync(join(pluginsDir, p, "skills")) : [])]);
   for (const r of router.rules ?? []) {
     try { new RegExp(r.pattern, "i"); } catch (e) { problems.push(`skill-router.json pattern พัง (${e.message}) — ต้องแก้มือ`); }
+    // backspace ที่มาแทนขอบคำ \b เมื่อเขียนผ่าน heredoc ใน Bash · เกิด 5 ครั้งถึง 2026-10-26
+    if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(r.pattern)) problems.push(`skill-router.json pattern ของ ${(r.skills ?? []).join(",")} มีอักขระควบคุม (มักเป็น backspace แทน \\b) — เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์`);
     for (const s of r.skills ?? []) if (s.includes(":") ? !existsSync(join(pluginsDir, s.split(":")[0], "skills", s.split(":")[1], "SKILL.md")) : !known.has(s)) problems.push(`skill-router.json อ้าง skill "${s}" ที่ไม่มีใน plugins/ — ต้องแก้มือ`);
   }
   for (const p of targets) {

@@ -12,7 +12,7 @@
  */
 import { plan as planSuperuser, rulesCopyAction, rulesHeader } from '../sync/sync-superuser.mjs';
 import { plan as planPromptRules, PROMPT_DIR } from '../sync/sync-prompt-rules.mjs';
-import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday, badPluginRefs, changelogOrder, iconLines } from './lesson-checks.mjs';
+import { installedOlder, regressionNeverSeen, undatedClaims, promptTestLine, bigSkills, decisionRows, loneCR, expiredFacts, localToday, badPluginRefs, changelogOrder, iconLines, yamlEscapeTraps } from './lesson-checks.mjs';
 import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, existsSync, statSync, mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir, homedir } from 'node:os';
@@ -658,8 +658,11 @@ function selfTest() {
   const ic = iconLines('- ❌ **ลบไฟล์ผู้ใช้**\nบรรทัด `⚠ แปลงไม่ครบ` จากสคริปต์\n```\n# ✅ ในโค้ด\n```\n| a | ✓ |').length === 1;
   console.log(`  ${ic ? '✅' : '❌'} ไอคอนในเนื้อหาโดนจับ · ใน backtick บล็อกโค้ด และ ✓ ✗ ในตารางไม่โดน`);
   if (ic) ok++;
+  const ye = yamlEscapeTraps('pattern: "1280\\s*x"\n# "\\s ในคอมเมนต์"\npattern: \'1280\\s*x\'\npattern: "a\\\\sb \\n ok"\nx: "\u0008"\nprompt: |\n  ใน block a\\sb "x\\s"\nnext: "ok"').length === 2;
+  console.log(`  ${ye ? '✅' : '❌'} case.yaml ที่มี \\s ใน "..." และอักขระควบคุมโดนจับ · '...' คอมเมนต์ block scalar และ escape ที่ YAML รับไม่โดน`);
+  if (ye) ok++;
   errors.length = 0; warns.length = 0;
-  const total = cases.length + 23;
+  const total = cases.length + 24;
   console.log(`\nself-test ${ok}/${total} ผ่าน`);
   process.exit(ok === total ? 0 : 1);
 }
@@ -787,6 +790,7 @@ for (const p of plugins) {
   if (existsSync(evals)) for (const f of walkFiles(evals, ['.yaml', '.yml', '.md'])) {
     const text = readFileSync(f, 'utf8');
     if (basename(f) === 'case.yaml') for (const m of regressionNeverSeen(basename(dirname(f)), text)) err(relOf(f), m);
+    if (basename(f) === 'case.yaml') for (const { at, msg } of yamlEscapeTraps(text)) err(`${relOf(f)}:${at}`, msg);
     for (const { at, msg } of undatedClaims(text)) warn(`${relOf(f)}:${at}`, msg);
   }
   const skills = join(pluginsDir, p, 'skills');

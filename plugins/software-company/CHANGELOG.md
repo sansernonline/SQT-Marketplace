@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.25.1 — 2026-10-26
+
+- `html-slide-deck`: สีสว่างประจำบ้าน `5B9BE6` บนพื้นขาวได้แค่ 2.89:1 จึงให้ใช้ `--brand 2A78D6,1F5FAF` เมื่อเด็คเป็นพื้นสว่าง · `presentation-design` เช็กลิสต์บูลเล็ตตรงกับตารางงบต่อแผ่น (6 ข้อ · ข้อละไม่เกิน 2 บรรทัด)
+
 ## 2.25.0 — 2026-10-26
 
 - `security-audit` (`classes-thai.md`): GB Prime Pay ทุกช่องทางที่เปิดอ่าน (QR · บัตร · ผ่อน · wallet · mobile banking · bill payment) ไม่มีลายเซ็นในข้อความแจ้งกลับ · วิธีลงชื่อ webhook ของ Ksher (GET · HMAC-SHA256 ด้วย token · `message` ไม่มียอดเงินจึงต้องดึงสถานะซ้ำ) · บริการตรวจสลิป (SCB · EasySlip · SlipOK) และสิ่งที่ตัวตรวจโค้ดต้องเห็น 6 ข้อ

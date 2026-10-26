@@ -52,7 +52,7 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 | `plugins/<plugin>/skills/<name>/SKILL.md` | ตัว skill |
 | ของกลางใน `superuser` เท่านั้น: `scripts/sync/sync-superuser.mjs` รายการ `SHARED_ONLY_IN_SUPERUSER` และ `scripts/build/build-targets.mjs` รายการ `SHARED_SKILLS` | เพิ่มชื่อ เรียงตามตัวอักษร ทั้ง 2 รายการต้องตรงกัน |
 | `scripts/sync/file-map-th.json` → `node scripts/sync/sync-file-map.mjs` | คำอธิบายไทย 1 บรรทัด แล้วสร้าง `docs/FILE-MAP.md` ใหม่ |
-| `plugins/superuser/hooks/skill-router.json` | pattern 1 แถว · ทดสอบ: `node -e "const j=require('./plugins/superuser/hooks/skill-router.json');for(const s of ['ประโยคจริง 1','ประโยคที่ไม่เกี่ยว'])console.log(s,j.rules.filter(r=>new RegExp(r.pattern,'i').test(s)).flatMap(r=>r.skills))"` |
+| `plugins/superuser/hooks/skill-router.json` | pattern 1 แถว · ทดสอบ: `node -e "const j=require('./plugins/superuser/hooks/skill-router.json');for(const s of ['ประโยคจริง 1','ประโยคที่ไม่เกี่ยว'])console.log(s,j.rules.filter(r=>new RegExp(r.pattern,'i').test(s)).flatMap(r=>r.skills))"` · **แก้ JSON หรือ YAML ที่มี regex ด้วย Edit หรือสคริปต์ที่เป็นไฟล์ ห้ามผ่าน heredoc ใน Bash** เพราะ `\\b` หายเหลือ `\b` ซึ่งเป็น backspace (เกิด 5 ครั้งถึง 2026-10-26) · `sync-superuser --check` และ validator จับอักขระควบคุมกับ `\s` ใน YAML แบบ `"..."` ให้แล้ว |
 | `plugins/superuser/skills/superuser/references/triggers.md` | แถวสถานการณ์ → skill ให้หัวหน้าทีมอ่าน |
 | `plugins/<plugin>/evals/<name>-*/case.yaml` × 3 | หัวข้อ 6 |
 | `plugins/<plugin>/CHANGELOG.md` หัวข้อ Unreleased | 1 bullet |
@@ -84,7 +84,7 @@ description: Use when creating or changing a skill, agent or playbook in this ma
 - **รอบแดงทำถูกอยู่แล้ว** → ตั้งชื่อเคส `<skill>-guard` ไม่นับเป็น 1 ใน 3 เคส · แดงทำถูกทุกโจทย์ → ย่อ skill เหลือสคริปต์กับข้อเท็จจริงที่โมเดลไม่รู้เอง แล้วถามผู้ใช้ว่าคงหรือเลิก · validator ล้มเมื่อ `case.yaml` ของ `-regression` เขียนว่ายังไม่เคยเห็นจริง
 
 - โจทย์ต้องเป็นงานที่ agent ทำไม่ได้ดีโดยไม่มี skill — โจทย์ง่ายเกินไปทั้ง 2 รอบผ่านหมด วัดอะไรไม่ได้ (`จากแหล่ง` skill-creator) · ค่าเริ่มต้นรัน 3 รอบต่อเคส ทั้งรอบมี plugin และไม่มี แล้วรายงาน `WITH` `W/OUT` `Δ`
-- รัน: `claude plugin eval plugins/<plugin> --trust-plugin --case "<skill>-*" --no-publish --max-cost-usd 5` · ใน CI เพิ่ม `--json results.json --threshold 0.8` และอ่าน exit code (0 ผ่าน · 1 ไม่ผ่าน · 2 ชนเพดานเงินหรือ auth)
+- รัน: `node scripts/evals/plugin-eval.mjs <plugin> --only "^<skill>-" --max-cost-usd 5` (plugin ที่มี `dependencies` โหลดไม่ขึ้นถ้ารัน `claude plugin eval` ตรง ๆ · รายละเอียดใน `eval-format`) · ใน CI เพิ่ม `--json results.json --threshold 0.8` และอ่าน exit code (0 ผ่าน · 1 ไม่ผ่าน · 2 ชนเพดานเงินหรือ auth)
 - ใส่ `evals/results/` ใน `.gitignore` · ผลสรุปที่อยากเก็บลง `RESULTS.md` ของ plugin นั้น
 - eval ของ repo (`scripts/evals/triggers` `speed` `coding`) เป็นคนละชั้น: วัดข้ามทุก plugin และเทียบ 2 รุ่นจาก git ref · ไม่แทนกัน (ความต่างใน README ของ `plugins/superuser/evals/`)
 

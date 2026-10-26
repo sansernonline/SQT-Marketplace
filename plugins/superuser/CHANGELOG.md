@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.6.4 — 2026-10-26
+
+- รวมบทเรียนจากคิว 2026-10-23 ถึง 2026-10-26: `autonomy` ข้อกฎหมายแก้ได้เมื่อเทียบตัวบทคำต่อคำเท่านั้น · `skill-authoring` ห้ามแก้ JSON หรือ YAML ที่มี regex ผ่าน heredoc และรัน eval ผ่าน `scripts/evals/plugin-eval.mjs` · `eval-format` ชี้สคริปต์และบอกว่า `--case` ไม่รับปีกกา
+- ตัวตรวจใหม่: `sync-superuser --check` จับอักขระควบคุมใน pattern ของ hook router · validator จับ `case.yaml` ที่มีอักขระควบคุมหรือ escape ที่ YAML แบบ `"..."` ไม่รับ (self-test 31/31)
+
 ## 3.6.3 — 2026-10-26
 
 - `workspace-setup`: กฎสิทธิ์เปลี่ยนจาก `gh pr merge` และ `git push origin --delete` เป็น `git push` และ `gh pr` ที่กว้างกว่า พร้อม deny force push 3 แบบ (โปรเจกต์ที่ตั้งไว้ด้วยรายการเดิมจะถูกรายงานว่าขาด รัน `--permissions` ซ้ำได้ กฎเดิมไม่ถูกลบ) · ตัวเลือก `--user` เขียนลง `~/.claude/settings.json` ใช้ได้ทุกโปรเจกต์ · กฎระดับผู้ใช้นับว่าครบ ไม่เพิ่มซ้ำในโปรเจกต์ · agent เพิ่มสิทธิ์เองได้เฉพาะเมื่อผู้ใช้สั่งในแชตรอบนั้น · กฎสิทธิ์รวม `git add` และ `git commit` · `--git-policy auto|commit|manual` จดว่าโปรเจกต์ไหนให้ agent ทำ git เองแค่ไหนในหัวข้อกติกาของ CONTEXT.md ถามผู้ใช้ครั้งเดียวต่อโปรเจกต์ (บางโปรเจกต์ผู้ใช้ review เอง) · self-test 7/7

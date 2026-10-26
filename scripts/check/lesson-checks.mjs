@@ -137,6 +137,42 @@ export function iconLines(text) {
   return out;
 }
 
+// 12. case.yaml ที่ backslash เพี้ยน · อักขระควบคุมจาก heredoc และ escape ที่ YAML แบบ "..." ไม่รับ (\s \d) ทำให้เคสโหลดไม่ขึ้นเงียบ ๆ
+// เจอ 3 ไฟล์ในรอบเดียว 2026-10-26 ผู้ตรวจจับได้ ไม่ใช่ตัวตรวจ
+const YAML_DQ_OK = '0abt\tnvfre "/\\N_LPxuU';
+// อ่านทีละตัว: ในเครื่องหมาย "..." ทุก \ ต้องตามด้วยตัวที่ YAML รับ · ใน '...' backslash เป็นตัวธรรมดา · # นอกเครื่องหมายคือคอมเมนต์
+function badDoubleQuoteEscape(line) {
+  let quote = null;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (!quote) {
+      if (c === '#' && (i === 0 || line[i - 1] === ' ')) return false;
+      if (c === '"' || c === "'") quote = c;
+    } else if (quote === "'") {
+      if (c === "'" && line[i + 1] === "'") i++;
+      else if (c === "'") quote = null;
+    } else if (c === '\\') {
+      if (!YAML_DQ_OK.includes(line[i + 1] ?? '')) return true;
+      i++;
+    } else if (c === '"') quote = null;
+  }
+  return false;
+}
+
+// ข้าม block scalar (key: | หรือ >) เพราะข้างในไม่มี escape · ไม่ตามสตริง "..." ที่ขึ้นบรรทัดใหม่ (พบน้อย ยอมหลุด)
+export function yamlEscapeTraps(text) {
+  const out = [];
+  let block = -1;   // ระยะเยื้องของบรรทัด key: | · -1 = ไม่อยู่ใน block
+  text.split('\n').forEach((line, i) => {
+    const indent = line.search(/\S/);
+    if (block >= 0 && (indent < 0 || indent > block)) { if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(line)) out.push({ at: i + 1, msg: 'มีอักขระควบคุม (มักเป็น backspace แทน \\b จาก heredoc) — เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์' }); return; }
+    block = /:\s*[|>][-+0-9]*\s*(#.*)?$/.test(line) ? indent : -1;
+    if (/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(line)) out.push({ at: i + 1, msg: 'มีอักขระควบคุม (มักเป็น backspace แทน \\b จาก heredoc) — เขียนใหม่ด้วย Edit หรือสคริปต์ที่เป็นไฟล์' });
+    else if (badDoubleQuoteEscape(line)) out.push({ at: i + 1, msg: 'ใน YAML แบบ "..." ใช้ \\s \\d ตรง ๆ ไม่ได้ ไฟล์จะโหลดไม่ขึ้น — ครอบด้วย \'...\' แทน หรือเขียน \\\\s' });
+  });
+  return out;
+}
+
 // 10. ลำดับหัวรุ่นใน CHANGELOG · หัวที่ไม่ใช่รุ่น (เช่น "ประวัติจาก …") ข้าม
 export function changelogOrder(text, version) {
   const heads = [...text.matchAll(/^## (Unreleased|\d+\.\d+\.\d+)\b/gm)].map((m) => m[1]);
