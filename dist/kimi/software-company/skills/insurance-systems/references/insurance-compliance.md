@@ -386,12 +386,12 @@ Preparation:
 
 ## Common Compliance Gaps
 
-- ❌ Outdated rate filings (still using approved rates from 2018)
-- ❌ Producer licenses not checked at the point of sale
-- ❌ Missing or incomplete privacy notices
-- ❌ Claims handling inconsistent across states
-- ❌ Adverse action notices missing
-- ❌ No testing for discrimination
+- ผิด: Outdated rate filings (still using approved rates from 2018)
+- ผิด: Producer licenses not checked at the point of sale
+- ผิด: Missing or incomplete privacy notices
+- ผิด: Claims handling inconsistent across states
+- ผิด: Adverse action notices missing
+- ผิด: No testing for discrimination
 
 ## Reference
 

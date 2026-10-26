@@ -268,14 +268,14 @@ Regulatory scope unclear? **Escalate to fintech-compliance-officer**.
 
 ### Rule 1: Never use floats for money
 ```typescript
-// ❌ FORBIDDEN
+// Wrong: FORBIDDEN
 const total = price * quantity * 1.07; // floating point drift
 
-// ✅ Use decimal libraries or integer cents
+// Right: Use decimal libraries or integer cents
 import Decimal from 'decimal.js';
 const total = new Decimal(price).times(quantity).times('1.07');
 
-// ✅ Or use integer minor units (satang/cents) as bigint, with explicit rounding
+// Right: Or use integer minor units (satang/cents) as bigint, with explicit rounding
 // `/ 100` on a JS number gives a float again; on bigint it truncates — so round on purpose:
 const totalCents = (priceCents * quantity * 107n + 50n) / 100n; // half-up, for amounts ≥ 0
 // e.g. 1999n * 3n → 5997n × 1.07 = 6416.79 → 6417n
@@ -413,13 +413,13 @@ interface AuditEvent {
 
 ## Things You Don't Do
 
-- ❌ Use floats for money (EVER)
-- ❌ Allow non-idempotent money operations
-- ❌ Edit financial records (only add new records or reversals)
-- ❌ Skip audit logging "for performance"
-- ❌ Implement crypto from scratch (use proven libraries)
-- ❌ Build your own Know Your Customer (KYC) or Anti-Money Laundering (AML) checks (use compliance providers)
-- ❌ Make business compliance decisions (defer to fintech-compliance-officer)
+- Use floats for money (EVER)
+- Allow non-idempotent money operations
+- Edit financial records (only add new records or reversals)
+- Skip audit logging "for performance"
+- Implement crypto from scratch (use proven libraries)
+- Build your own Know Your Customer (KYC) or Anti-Money Laundering (AML) checks (use compliance providers)
+- Make business compliance decisions (defer to fintech-compliance-officer)
 
 ## When to Hand Off
 
@@ -431,14 +431,14 @@ interface AuditEvent {
 
 ## Common Pitfalls
 
-- ❌ **Floating point math** — $0.10 + $0.20 = $0.30000000000000004
-- ❌ **Race conditions on balance** — two requests read and update the balance at once, without a lock
-- ❌ **Optimistic UI for money** — showing success before the bank confirms
-- ❌ **No reversal mechanism** — no way to undo a mistake
-- ❌ **Soft delete of transactions** — records should only be added, never deleted
-- ❌ **Timezone bugs** — settlement is timezone-sensitive
-- ❌ **Currency rounding inconsistency** — mixing banker's rounding and half-up rounding
-- ❌ **Untested edge cases** — leap year, daylight saving, currency switching
+- Wrong: **Floating point math** — $0.10 + $0.20 = $0.30000000000000004
+- Wrong: **Race conditions on balance** — two requests read and update the balance at once, without a lock
+- Wrong: **Optimistic UI for money** — showing success before the bank confirms
+- Wrong: **No reversal mechanism** — no way to undo a mistake
+- Wrong: **Soft delete of transactions** — records should only be added, never deleted
+- Wrong: **Timezone bugs** — settlement is timezone-sensitive
+- Wrong: **Currency rounding inconsistency** — mixing banker's rounding and half-up rounding
+- Wrong: **Untested edge cases** — leap year, daylight saving, currency switching
 
 ## Reference Standards
 
@@ -510,24 +510,24 @@ Before integration, gather:
 
 | Gateway | Best for | Card | Wallets | Local methods | Settlement |
 |---------|----------|:----:|:-------:|:-------------:|:----------:|
-| **Stripe** | Global SaaS | ✅ | ✅ | 🟡 limited TH | T+2-7 |
-| **Adyen** | Enterprise global | ✅ | ✅ | ✅ comprehensive | T+1 |
-| **Omise** | Thailand | ✅ | ✅ TH wallets | ✅ PromptPay, internet banking | T+1 |
-| **2C2P** | SEA | ✅ | ✅ | ✅ SEA-specific | T+1-2 |
-| **TrueMoney** | TH wallet only | ❌ | ✅ | ❌ | Real-time |
-| **PromptPay direct** | TH instant | ❌ | ❌ | ✅ QR + ID | Real-time |
+| **Stripe** | Global SaaS | ✓ | ✓ | 🟡 limited TH | T+2-7 |
+| **Adyen** | Enterprise global | ✓ | ✓ | ✓ comprehensive | T+1 |
+| **Omise** | Thailand | ✓ | ✓ TH wallets | ✓ PromptPay, internet banking | T+1 |
+| **2C2P** | SEA | ✓ | ✓ | ✓ SEA-specific | T+1-2 |
+| **TrueMoney** | TH wallet only | ✗ | ✓ | ✗ | Real-time |
+| **PromptPay direct** | TH instant | ✗ | ✗ | ✓ QR + ID | Real-time |
 
 ## Critical Payment Patterns
 
 ### Pattern 1: Use Hosted Fields (Reduce PCI Scope)
 
-❌ **Avoid:** Card data touches your server
+Wrong: **Avoid:** Card data touches your server
 ```html
 <!-- Bad: card number in your form -->
 <input name="cardNumber" />  <!-- → server → gateway → PCI SAQ D -->
 ```
 
-✅ **Use:** Gateway-hosted fields
+Right: **Use:** Gateway-hosted fields
 ```html
 <!-- Good: Stripe Elements (iframe) -->
 <div id="card-element"></div>
@@ -576,8 +576,8 @@ Order: verify signature on the raw body → store the event (event id = primary 
 
 The idempotency key comes from a **stored refund request**, created once per real refund — the same pattern as `payment-gateway-integration.md` → Refund Edge Cases.
 
-- ❌ `refund_${paymentId}_${Date.now()}` → a new key on every retry → timeout + retry = refunded twice
-- ❌ `refund_${paymentId}_${amount}` → two real refunds of the same amount share one key → the 2nd is silently dropped
+- Wrong: `refund_${paymentId}_${Date.now()}` → a new key on every retry → timeout + retry = refunded twice
+- Wrong: `refund_${paymentId}_${amount}` → two real refunds of the same amount share one key → the 2nd is silently dropped
 
 ```typescript
 // 1. Record the request once: transaction + row lock + UNIQUE (client_request_id)
@@ -595,15 +595,15 @@ const refund = await stripe.refunds.create({
 
 ## Webhook Best Practices
 
-- ✅ Verify signature ALWAYS
-- ✅ Respond fast (< 5s), process async
-- ✅ Idempotent processing (event ID dedup)
-- ✅ Persist raw event before processing
-- ✅ Retry with exponential backoff (wait longer after each failure)
-- ✅ Move events that keep failing to a dead letter queue (a holding queue for manual review)
-- ✅ Monitor lag (how far processing runs behind incoming events)
-- ❌ Don't trust the amount or status in a webhook alone — check it with the API
-- ❌ Don't process inside the request (a slow reply makes the gateway retry again and again)
+- Right: Verify signature ALWAYS
+- Right: Respond fast (< 5s), process async
+- Right: Idempotent processing (event ID dedup)
+- Right: Persist raw event before processing
+- Right: Retry with exponential backoff (wait longer after each failure)
+- Right: Move events that keep failing to a dead letter queue (a holding queue for manual review)
+- Right: Monitor lag (how far processing runs behind incoming events)
+- Don't trust the amount or status in a webhook alone — check it with the API
+- Don't process inside the request (a slow reply makes the gateway retry again and again)
 
 ## Settlement Reconciliation
 
@@ -627,12 +627,12 @@ Daily job:
 
 ## Things You Don't Do
 
-- ❌ Store card numbers in your DB (use tokens)
-- ❌ Log card data anywhere (CVV especially)
-- ❌ Trust client-sent amount
-- ❌ Skip webhook signature verification
-- ❌ Process webhooks inside the request (slow replies cause retries)
-- ❌ Build your own gateway
+- Store card numbers in your DB (use tokens)
+- Log card data anywhere (CVV especially)
+- Trust client-sent amount
+- Skip webhook signature verification
+- Process webhooks inside the request (slow replies cause retries)
+- Build your own gateway
 
 ## Skills You Use
 
@@ -647,13 +647,13 @@ Daily job:
 
 ## Common Pitfalls
 
-- ❌ **Webhook timeout** — handler takes > 5s, so the gateway retries and you get duplicates
-- ❌ **Replay attack** — accepting old webhooks without timestamp check
-- ❌ **Trust client amount** — the frontend says $1, the gateway charges $100
-- ❌ **No idempotency** — a network glitch charges the customer twice
-- ❌ **PCI scope creep** — accidentally logging card data
-- ❌ **Webhook order** — assuming events arrive in order (they don't)
-- ❌ **No reconciliation** — small daily differences add up to a big monthly loss
+- Wrong: **Webhook timeout** — handler takes > 5s, so the gateway retries and you get duplicates
+- Wrong: **Replay attack** — accepting old webhooks without timestamp check
+- Wrong: **Trust client amount** — the frontend says $1, the gateway charges $100
+- Wrong: **No idempotency** — a network glitch charges the customer twice
+- Wrong: **PCI scope creep** — accidentally logging card data
+- Wrong: **Webhook order** — assuming events arrive in order (they don't)
+- Wrong: **No reconciliation** — small daily differences add up to a big monthly loss
 
 ## Reference
 
@@ -735,11 +735,11 @@ scores = model.score_samples(X_new)
 ## Backtesting Discipline
 
 ```python
-# ❌ Bad: look-ahead bias
+# Bad: look-ahead bias
 features = compute_features(all_data)  # uses future data!
 model.fit(features[:train_end], target[:train_end])
 
-# ✅ Good: walk-forward
+# Good: walk-forward
 for date in test_dates:
     # Only data available at this date
     historical = data[data.date < date]
@@ -893,11 +893,11 @@ Predict probability of loan default within 12 months.
 ## The 5 Pillars of AML Program
 
 ```
-1. ✅ Internal controls (policies, procedures)
-2. ✅ Designated compliance officer
-3. ✅ Ongoing training
-4. ✅ Independent audit
-5. ✅ Customer Due Diligence (CDD)
+1. Internal controls (policies, procedures)
+2. Designated compliance officer
+3. Ongoing training
+4. Independent audit
+5. Customer Due Diligence (CDD)
 ```
 
 This file covers how to build #5 in software.
@@ -1010,10 +1010,10 @@ if (match.score > 0.95) {
 ```
 
 ### Anti-patterns
-- ❌ Exact match only (misses 80% of real matches)
-- ❌ One-time check only (lists update daily)
-- ❌ Blocking every fuzzy match (floods you with false positives)
-- ❌ Manual lists in spreadsheets (use API services)
+- Exact match only (misses 80% of real matches)
+- One-time check only (lists update daily)
+- Blocking every fuzzy match (floods you with false positives)
+- Manual lists in spreadsheets (use API services)
 
 ## PEP (Politically Exposed Persons)
 
@@ -1108,7 +1108,7 @@ Tier 3: ML models
 
 **Thailand:** the Anti-Money Laundering Act B.E. 2542 (พ.ร.บ.ป้องกันและปราบปรามการฟอกเงิน) section 22 sets the periods for customer due diligence (CDD) records and transaction records, and the 2015 amendment changed the retention period (Tilleke & Gibbins, Sep 2025). The exact years — possibly 10 years for CDD records after the relationship ends — are `(รอยืนยัน)`: check the Act and the Anti-Money Laundering Board (AMLB) ordinance on safe-keeping CDD information (2016) on amlo.go.th. Until confirmed, keep Thai records for the longer period.
 
-> ⚠️ Clashes with a deletion request? For Thai users this is the Personal Data Protection Act (PDPA); for EU users the GDPR "right to erasure". Both let you keep data that another law requires you to keep, so AML retention usually wins — record the legal basis and delete when the period ends. Details → `pdpa-compliance`.
+> Note: Clashes with a deletion request? For Thai users this is the Personal Data Protection Act (PDPA); for EU users the GDPR "right to erasure". Both let you keep data that another law requires you to keep, so AML retention usually wins — record the legal basis and delete when the period ends. Details → `pdpa-compliance`.
 
 ## Risk-Based Approach
 
@@ -1142,13 +1142,13 @@ function calculateRiskScore(customer: Customer): RiskLevel {
 
 ## Common Pitfalls
 
-- ❌ **One-time checks** — must be ongoing
-- ❌ **Treating low-risk as no monitoring needed**
-- ❌ **Over-reliance on vendor** — you're still responsible
-- ❌ **Alert fatigue** — too many false positives → real ones missed
-- ❌ **No documentation** — the regulator will ask you to show your reasoning
-- ❌ **Mixing fraud + AML** — they have different goals and different rules
-- ❌ **Auto-block on PEP** — a PEP is not a criminal. Do EDD instead
+- Wrong: **One-time checks** — must be ongoing
+- Wrong: **Treating low-risk as no monitoring needed**
+- Wrong: **Over-reliance on vendor** — you're still responsible
+- Wrong: **Alert fatigue** — too many false positives → real ones missed
+- Wrong: **No documentation** — the regulator will ask you to show your reasoning
+- Wrong: **Mixing fraud + AML** — they have different goals and different rules
+- Wrong: **Auto-block on PEP** — a PEP is not a criminal. Do EDD instead
 
 ## Quality Targets
 
@@ -1203,13 +1203,13 @@ Settlement times and coverage change often and were not re-checked on 2026-10-14
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
-| **Stripe** | ✅ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
-| **Adyen** | ✅ Excellent | All major | ✅ | ✅ | T+1 | Enterprise, global retail |
-| **Omise** | ✅ | ✅ TH-specific | ✅ Comprehensive | 🟡 | T+1 | Thailand-first |
-| **2C2P** | ✅ | ✅ | ✅ | ✅ SEA-strong | T+1-2 | SEA regional |
-| **Braintree** | ✅ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
-| **Razorpay** | ✅ | UPI | ❌ | 🟡 | T+2 | India |
-| **Square** | ✅ | Cash App | ❌ | ❌ | T+1 | US/CA in-person |
+| **Stripe** | ✓ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
+| **Adyen** | ✓ Excellent | All major | ✓ | ✓ | T+1 | Enterprise, global retail |
+| **Omise** | ✓ | ✓ TH-specific | ✓ Comprehensive | 🟡 | T+1 | Thailand-first |
+| **2C2P** | ✓ | ✓ | ✓ | ✓ SEA-strong | T+1-2 | SEA regional |
+| **Braintree** | ✓ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
+| **Razorpay** | ✓ | UPI | ✗ | 🟡 | T+2 | India |
+| **Square** | ✓ | Cash App | ✗ | ✗ | T+1 | US/CA in-person |
 
 ## Card Payment Flow (Generic)
 
@@ -1538,9 +1538,9 @@ async function reconcilePayouts(date: Date) {
 //    - Wallet: usually instant
 
 // Partial refund pattern — the idempotency key comes from a STORED refund request.
-// ❌ `refund_${paymentId}_${Date.now()}` → new key on every retry → timeout + retry = refunded twice
-// ❌ `refund_${paymentId}_${amount}`     → two real refunds of the same amount share a key → the 2nd is silently dropped
-// ✅ one refund_requests row per real refund; its id is the key; every retry reuses it
+// Wrong: `refund_${paymentId}_${Date.now()}` → new key on every retry → timeout + retry = refunded twice
+// Wrong: `refund_${paymentId}_${amount}`     → two real refunds of the same amount share a key → the 2nd is silently dropped
+// Right: one refund_requests row per real refund; its id is the key; every retry reuses it
 
 // Step 1: record the request once (inside a transaction, payment row locked)
 async function requestRefund(paymentId: string, clientRequestId: string, amountCents?: bigint) {
@@ -1612,16 +1612,16 @@ async function executeRefund(refundRequestId: string) {
 
 ## Common Pitfalls
 
-- ❌ **Trust webhook order** — events can arrive in any order
-- ❌ **Trust webhook amount** — check it with the API
-- ❌ **No idempotency** — a network glitch charges the customer twice
-- ❌ **Process webhook inline** — slow replies make the gateway retry and create duplicates
-- ❌ **Store card numbers** — even encrypted, they keep your system in PCI scope
-- ❌ **Skip 3DS** — many payments get declined in the EU
-- ❌ **Hard-code currency** — breaks when you add new markets
-- ❌ **Sync state from gateway only on demand** — your data drifts further from the gateway's over time
-- ❌ **Mix gateway IDs with internal IDs** — store both, in separate fields
-- ❌ **No reconciliation** — small daily differences add up to a big monthly loss
+- Wrong: **Trust webhook order** — events can arrive in any order
+- Wrong: **Trust webhook amount** — check it with the API
+- Wrong: **No idempotency** — a network glitch charges the customer twice
+- Wrong: **Process webhook inline** — slow replies make the gateway retry and create duplicates
+- Wrong: **Store card numbers** — even encrypted, they keep your system in PCI scope
+- Wrong: **Skip 3DS** — many payments get declined in the EU
+- Wrong: **Hard-code currency** — breaks when you add new markets
+- Wrong: **Sync state from gateway only on demand** — your data drifts further from the gateway's over time
+- Wrong: **Mix gateway IDs with internal IDs** — store both, in separate fields
+- Wrong: **No reconciliation** — small daily differences add up to a big monthly loss
 
 ## Reference
 
@@ -1688,9 +1688,9 @@ Card data path: Browser → Server → Gateway
 
 Anywhere card data goes, that system is in scope.
 
-✅ Hosted fields:    Browser → Gateway (skip your server)
-✅ Tokenization:     Server stores TOKEN, not PAN
-✅ Network segmentation:  CDE isolated from rest of infra
+Right: Hosted fields:    Browser → Gateway (skip your server)
+Right: Tokenization:     Server stores TOKEN, not PAN
+Right: Network segmentation:  CDE isolated from rest of infra
 ```
 
 ## SAQ Selection (Critical Decision)
@@ -1774,37 +1774,37 @@ Anywhere card data goes, that system is in scope.
 
 ## Common Anti-patterns
 
-### ❌ Storing CVV
+### Wrong: Storing CVV
 **Never.** Period. Not even encrypted. PCI-DSS forbids it.
 
-### ❌ Card data in logs
+### Wrong: Card data in logs
 ```typescript
 // 💥 BAD — logs may contain card number
 log.info(`Processing payment: ${JSON.stringify(req.body)}`);
 
-// ✅ GOOD — mask sensitive fields
+// Right: GOOD — mask sensitive fields
 log.info(`Processing payment`, { last4: req.body.card?.last4 });
 ```
 
-### ❌ Card data in URL
+### Wrong: Card data in URL
 ```
-❌ /process-payment?pan=4111111111111111  ← in proxy logs forever
-✅ POST /process-payment (body, TLS, masked logs)
+Wrong: /process-payment?pan=4111111111111111  ← in proxy logs forever
+Right: POST /process-payment (body, TLS, masked logs)
 ```
 
-### ❌ Custom encryption
+### Wrong: Custom encryption
 ```typescript
 // 💥 NEVER
 function "encrypt"(pan: string): string {
   return Buffer.from(pan).toString('base64'); // not encryption!
 }
 
-// ✅ Use proven libraries
+// Right: Use proven libraries
 import { createCipheriv } from 'crypto';
 // AES-256-GCM with KMS-managed key
 ```
 
-### ❌ Local key storage
+### Wrong: Local key storage
 Keys in a `.env` file or in the codebase fail the audit.
 Use a key management service (KMS) from AWS, Azure or GCP, or a hardware security module (HSM).
 
@@ -1909,12 +1909,12 @@ Before QSA arrives:
 
 ## Anti-patterns Specific to PCI
 
-- ❌ **Believing SAQ-A is automatic** — you still need the controls and a signed attestation
-- ❌ **Mixing CHD with other data** — increases scope
-- ❌ **Allowing developer access to prod** — even read-only access exposes PCI data
-- ❌ **Skipping rotation** — not rotating keys, passwords and certificates
-- ❌ **One-time compliance** — it's continuous
-- ❌ **Treating QSA as adversary** — they're trying to help
+- **Believing SAQ-A is automatic** — you still need the controls and a signed attestation
+- **Mixing CHD with other data** — increases scope
+- **Allowing developer access to prod** — even read-only access exposes PCI data
+- **Skipping rotation** — not rotating keys, passwords and certificates
+- **One-time compliance** — it's continuous
+- **Treating QSA as adversary** — they're trying to help
 
 ## Reference
 

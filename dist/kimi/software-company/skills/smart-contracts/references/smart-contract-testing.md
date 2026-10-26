@@ -281,12 +281,12 @@ function test_GasUsage_Deposit() public {
 
 ## Common Mistakes
 
-- ❌ Test only the happy path
-- ❌ Skip fuzz testing
-- ❌ Mock dependencies in integration tests
-- ❌ No invariant tests
-- ❌ Test without forking the real protocols
-- ❌ Skip gas testing (regressions sneak in)
+- Test only the happy path
+- Skip fuzz testing
+- Mock dependencies in integration tests
+- No invariant tests
+- Test without forking the real protocols
+- Skip gas testing (regressions sneak in)
 
 ## Reference
 

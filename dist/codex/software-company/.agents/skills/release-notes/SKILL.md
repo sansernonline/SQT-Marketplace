@@ -28,16 +28,16 @@ The technical writer should:
    - Documentation updates (if significant)
 
 4. **Translate dev-speak to user value:**
-   - ❌ "Refactored auth middleware"
-   - ✅ "Login is now 40% faster" — only with a measured number (before/after, how measured); no measurement → describe the change without a number
-   - ❌ "Fixed null pointer in cart.ts:127"
-   - ✅ "Fixed crash when removing the last item from cart"
+   - ผิด: "Refactored auth middleware"
+   - ถูก: "Login is now 40% faster" — only with a measured number (before/after, how measured); no measurement → describe the change without a number
+   - ผิด: "Fixed null pointer in cart.ts:127"
+   - ถูก: "Fixed crash when removing the last item from cart"
 
    **ภาษาไทย** — ใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม ("ส่งออกรายงานเป็น CSV ได้แล้ว") · ปิดท้ายด้วยเลขเวอร์ชันและวันที่
-   - ❌ "ได้มีการปรับปรุงประสิทธิภาพในส่วนของการส่งออก ซึ่งทำให้ผู้ใช้ได้รับประสบการณ์ที่ดีขึ้น"
-   - ✅ "ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที"
-   - ❌ "เราได้แก้ไขข้อผิดพลาดที่เกิดขึ้นเมื่อผู้ใช้ทำการลบสินค้าชิ้นสุดท้าย"
-   - ✅ "ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก"
+   - ผิด: "ได้มีการปรับปรุงประสิทธิภาพในส่วนของการส่งออก ซึ่งทำให้ผู้ใช้ได้รับประสบการณ์ที่ดีขึ้น"
+   - ถูก: "ส่งออกรายงาน 1,000 แถวใช้เวลา 3 วินาที จาก 12 วินาที"
+   - ผิด: "เราได้แก้ไขข้อผิดพลาดที่เกิดขึ้นเมื่อผู้ใช้ทำการลบสินค้าชิ้นสุดท้าย"
+   - ถูก: "ลบสินค้าชิ้นสุดท้ายในตะกร้าแล้วแอปไม่ปิดตัวเองอีก"
 
 5. **Produce release notes** following the release-notes template in `project-doc-set/references/writer-templates.md`:
    - Too long; didn't read (TL;DR) highlights at top

@@ -39,15 +39,15 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
-- ✅ You need to ship changes fast
-- ✅ Operations needs are simple
-- ✅ All parts can deploy together
+- Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
+- You need to ship changes fast
+- Operations needs are simple
+- All parts can deploy together
 
 **When NOT to use:**
-- ❌ Multiple teams needing independent deploys
-- ❌ Features need very different scaling
-- ❌ Parts need different tech stacks
+- Multiple teams needing independent deploys
+- Features need very different scaling
+- Parts need different tech stacks
 
 **Implementation tips:**
 - Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
@@ -74,16 +74,16 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Independent teams (Conway's Law)
-- ✅ Different scaling needs per service
-- ✅ Services need different languages or stacks
-- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
+- Independent teams (Conway's Law)
+- Different scaling needs per service
+- Services need different languages or stacks
+- Mature continuous integration and delivery (CI/CD) and monitoring already in place
 
 **When NOT to use (most projects):**
-- ❌ Small team — the extra overhead slows everyone down
-- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
-- ❌ Can't afford distributed tracing
-- ❌ Business areas don't have clear boundaries yet
+- Small team — the extra overhead slows everyone down
+- No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- Can't afford distributed tracing
+- Business areas don't have clear boundaries yet
 
 **Hidden costs:**
 - 💸 Much harder to operate (more services to deploy, monitor and debug)
@@ -105,17 +105,17 @@ Event ──► Function ──► Service / DB / Queue
 ```
 
 **Good fits:**
-- ✅ Async background processing
-- ✅ Scheduled tasks (cron)
-- ✅ Glue code between services
-- ✅ Spiky / unpredictable traffic
-- ✅ Image/video processing pipelines
+- Async background processing
+- Scheduled tasks (cron)
+- Glue code between services
+- Spiky / unpredictable traffic
+- Image/video processing pipelines
 
 **Bad fits:**
-- ❌ Long-running processes (the limit is usually 15 min)
-- ❌ Processing that must keep state between calls
-- ❌ Frequent calls that need a fast response (cold starts add delay)
-- ❌ Heavy traffic all day (the bill climbs fast)
+- Long-running processes (the limit is usually 15 min)
+- Processing that must keep state between calls
+- Frequent calls that need a fast response (cold starts add delay)
+- Heavy traffic all day (the bill climbs fast)
 
 ---
 

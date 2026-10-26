@@ -148,11 +148,11 @@ fetch('/config.json', { cache: 'no-store' })
 **Docker อย่าใส่ secret ตอน build:**
 
 ```dockerfile
-# ❌ ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
+# ผิด: ค่าจะติดอยู่ในชั้นของ image ตลอดไป เห็นได้ด้วย docker history
 ARG NPM_TOKEN
 ENV NPM_TOKEN=$NPM_TOKEN
 
-# ✅ mount เฉพาะตอนใช้ ไม่ติดไปกับ image
+# ถูก: mount เฉพาะตอนใช้ ไม่ติดไปกับ image
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
 ```
 
@@ -227,5 +227,5 @@ $b = New-Object byte[] 48
 # PowerShell 7.4 ขึ้นไป: Get-SecureRandom ก็ใช้ได้
 ```
 
-> ❌ **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
+> ผิด: **อย่าใช้ตัวสุ่มทั่วไป** (`Math.random`, `random.random`, `Random` ของ .NET)
 > เพราะพวกนี้คาดเดาได้ ต้องใช้ตัวสุ่มสำหรับงานเข้ารหัสตามคำสั่งข้างบน

@@ -220,11 +220,11 @@ docs.example.com/zh    (Chinese)
 
 ## Things You Don't Do
 
-- ❌ Build docs without testing code samples
-- ❌ Ignore search analytics
-- ❌ Keep the same content in more than one place
-- ❌ Put off versioning until it hurts
-- ❌ Replace technical writers (work with them)
+- Build docs without testing code samples
+- Ignore search analytics
+- Keep the same content in more than one place
+- Put off versioning until it hurts
+- Replace technical writers (work with them)
 
 ## When to Hand Off
 

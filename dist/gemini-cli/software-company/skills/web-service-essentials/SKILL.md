@@ -175,9 +175,9 @@ SIGTERM → 1. หยุดรับ request ใหม่ (ให้ /health/rea
 
 | ไฟล์ | สแต็ก | สถานะ |
 |---|---|---|
-| `assets/health.node.js` | Node / Express | ✅ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
-| `assets/health_py.py` | Python / FastAPI | ✅ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
-| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ⚠️ ยังไม่ได้คอมไพล์ทดสอบ |
+| `assets/health.node.js` | Node / Express | ✓ รันทดสอบครบทั้ง 4 endpoint + เคส degraded/down/timeout |
+| `assets/health_py.py` | Python / FastAPI | ✓ รันทดสอบครบเหมือนกัน ผลตรงกันทุก field |
+| `references/per-stack.md` | .NET (ASP.NET Core health checks) + Angular | ระวัง ยังไม่ได้คอมไพล์ทดสอบ |
 
 ```js
 // Node
@@ -227,15 +227,15 @@ docker stop mydb && curl -i localhost:8080/health/ready && curl -i localhost:808
 
 ## 8 · Anti-patterns
 
-- ❌ **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
-- ❌ **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
-- ❌ **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
-- ❌ **ส่ง stack trace / connection string ใน health หรือ error 500**
-- ❌ **health ต้อง login** — orchestrator ไม่มี token ให้
-- ❌ **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
-- ❌ **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
-- ❌ **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
-- ❌ **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
+- **`/health` ตัวเดียวเช็คทุกอย่าง** — orchestrator แยกไม่ออกว่าควร restart หรือแค่ตัด traffic
+- **liveness เช็ค DB** — DB สะดุด 10 วินาที = pod ตายยกแถว
+- **health check ไม่มี timeout** — dependency ค้าง แล้ว health ค้างตาม
+- **ส่ง stack trace / connection string ใน health หรือ error 500**
+- **health ต้อง login** — orchestrator ไม่มี token ให้
+- **รูปแบบ error ต่างกันทุก endpoint** — client ต้องเขียนโค้ดแกะ 5 แบบ
+- **`/ping` เขียนลง log** — ทุกวินาที × 86400 = ขยะเต็มไฟล์
+- **ไม่มี graceful shutdown** — deploy ทีไรลูกค้าเจอ error ทุกที
+- **`Access-Control-Allow-Origin: *` คู่กับ cookie** — เปิดช่องให้เว็บอื่นยิงแทนผู้ใช้
 
 ---
 

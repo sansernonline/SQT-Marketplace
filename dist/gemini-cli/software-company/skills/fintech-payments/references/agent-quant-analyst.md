@@ -68,11 +68,11 @@ scores = model.score_samples(X_new)
 ## Backtesting Discipline
 
 ```python
-# ❌ Bad: look-ahead bias
+# Bad: look-ahead bias
 features = compute_features(all_data)  # uses future data!
 model.fit(features[:train_end], target[:train_end])
 
-# ✅ Good: walk-forward
+# Good: walk-forward
 for date in test_dates:
     # Only data available at this date
     historical = data[data.date < date]

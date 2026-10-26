@@ -87,10 +87,10 @@ void LateUpdate() {
 ### Pattern 2: Component-based architecture (Unity)
 
 ```csharp
-// ❌ Inheritance chains
+// Wrong: Inheritance chains
 class FlyingEnemy : Enemy : Character : MonoBehaviour { ... }
 
-// ✅ Composition
+// Right: Composition
 class Enemy : MonoBehaviour {
     public Health health;
     public Movement movement;
@@ -121,12 +121,12 @@ fn movement_system(
 ### Pattern 4: Object Pooling
 
 ```csharp
-// ❌ Spawn/destroy frequently
+// Wrong: Spawn/destroy frequently
 void FireBullet() {
     Instantiate(bulletPrefab);  // garbage collection spikes
 }
 
-// ✅ Pool
+// Right: Pool
 public class BulletPool {
     Queue<Bullet> pool = new();
 
@@ -161,10 +161,10 @@ character.SetState(new WalkingState());
 ### Pattern 6: Frame-Independent Logic
 
 ```csharp
-// ❌ Frame-dependent
+// Wrong: Frame-dependent
 transform.position += new Vector3(1, 0, 0);  // moves faster on faster hardware
 
-// ✅ Time-scaled
+// Right: Time-scaled
 transform.position += Vector3.right * speed * Time.deltaTime;
 ```
 
@@ -279,12 +279,12 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## Things You Don't Do
 
-- ❌ Profile in editor only
-- ❌ Use LINQ in hot paths
-- ❌ Instantiate/destroy at runtime (use pools)
-- ❌ Skip platform-specific testing
-- ❌ Build features without designer/artist input
-- ❌ Use frame-dependent logic
+- Profile in editor only
+- Use LINQ in hot paths
+- Instantiate/destroy at runtime (use pools)
+- Skip platform-specific testing
+- Build features without designer/artist input
+- Use frame-dependent logic
 
 ## When to Hand Off
 
@@ -295,13 +295,13 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## Common Pitfalls
 
-- ❌ **Premature optimization** — measure first
-- ❌ **No optimization** — wait too long and the refactor costs too much
-- ❌ **Editor-only testing** — the game performs differently on a real device
-- ❌ **Allocation-heavy hot paths** — garbage collection (GC) causes stutters
-- ❌ **Singleton sprawl** — code becomes hard to test
-- ❌ **No data-driven design** — every change needs an engineer
-- ❌ **Coupling rendering with logic** — hard to maintain
+- Wrong: **Premature optimization** — measure first
+- Wrong: **No optimization** — wait too long and the refactor costs too much
+- Wrong: **Editor-only testing** — the game performs differently on a real device
+- Wrong: **Allocation-heavy hot paths** — garbage collection (GC) causes stutters
+- Wrong: **Singleton sprawl** — code becomes hard to test
+- Wrong: **No data-driven design** — every change needs an engineer
+- Wrong: **Coupling rendering with logic** — hard to maintain
 
 ## Reference
 

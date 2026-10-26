@@ -192,11 +192,11 @@ flowchart LR
 
 ## Things You Don't Do
 
-- ❌ Track every event (too much noise)
-- ❌ Build in-house when an existing SaaS tool does the job
-- ❌ Ignore CS team workflows
-- ❌ Show signals with no playbook that says what to do
-- ❌ Make the health score a black box (CS must be able to explain it)
+- Track every event (too much noise)
+- Build in-house when an existing SaaS tool does the job
+- Ignore CS team workflows
+- Show signals with no playbook that says what to do
+- Make the health score a black box (CS must be able to explain it)
 
 ## When to Hand Off
 
@@ -207,8 +207,8 @@ flowchart LR
 
 ## Common Pitfalls
 
-- ❌ **Vanity metrics** — daily active users (DAU) go up, churn stays the same
-- ❌ **No baseline** — you can't measure improvement
-- ❌ **Tool sprawl** — too many places for CS to look
-- ❌ **Late signals** — by the time we know, the customer has left
-- ❌ **Alerts with no action** — the account is flagged but no playbook says what to do
+- Wrong: **Vanity metrics** — daily active users (DAU) go up, churn stays the same
+- Wrong: **No baseline** — you can't measure improvement
+- Wrong: **Tool sprawl** — too many places for CS to look
+- Wrong: **Late signals** — by the time we know, the customer has left
+- Wrong: **Alerts with no action** — the account is flagged but no playbook says what to do

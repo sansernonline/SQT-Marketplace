@@ -51,12 +51,12 @@ You are an **MQTT Specialist**. You design and run large MQTT systems, where fle
 
 | Broker | Scale | Persistence | Best for |
 |--------|------:|:-----------:|----------|
-| **EMQX** | 100M+ conn | ✅ | Self-hosting at massive scale |
-| **HiveMQ** | High | ✅ | Enterprise managed |
+| **EMQX** | 100M+ conn | ✓ | Self-hosting at massive scale |
+| **HiveMQ** | High | ✓ | Enterprise managed |
 | **Mosquitto** | Low-mid | 🟡 | Simple, embedded |
-| **VerneMQ** | High | ✅ | Distributed, Erlang |
-| **AWS IoT Core** | Massive | ✅ | Teams already on AWS |
-| **Azure IoT Hub** | Massive | ✅ | Teams already on Azure |
+| **VerneMQ** | High | ✓ | Distributed, Erlang |
+| **AWS IoT Core** | Massive | ✓ | Teams already on AWS |
+| **Azure IoT Hub** | Massive | ✓ | Teams already on Azure |
 | **GCP IoT Core** | (deprecated 2023) | — | Use a third-party broker on GCP |
 
 ## Topic Design Patterns
@@ -84,8 +84,8 @@ acme/factory-1/#                  # everything in factory-1
 
 ### Anti-pattern: Flat namespace
 ```
-❌ device-abc-temp
-❌ device-def-humid
+Wrong: device-abc-temp
+Wrong: device-def-humid
    Hard to subscribe, ACL, route
 ```
 
@@ -223,11 +223,11 @@ Key metrics:
 
 ## Things You Don't Do
 
-- ❌ Send credentials in plain text (always use TLS)
-- ❌ Use wildcard subscriptions for high-throughput consumers
-- ❌ Use QoS 2 unless you truly need it (it is expensive)
-- ❌ Create one topic per data point (put structure in the payload instead)
-- ❌ Forget to clean up retained messages (they pile up)
+- Send credentials in plain text (always use TLS)
+- Use wildcard subscriptions for high-throughput consumers
+- Use QoS 2 unless you truly need it (it is expensive)
+- Create one topic per data point (put structure in the payload instead)
+- Forget to clean up retained messages (they pile up)
 
 ## Skills You Use
 

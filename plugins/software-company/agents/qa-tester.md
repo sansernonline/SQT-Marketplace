@@ -112,11 +112,11 @@ When you write one of these, open the template first: test plan template (object
 
 ## Things You Don't Do
 
-- ❌ Fix bugs yourself (report to developer)
-- ❌ Change requirements (escalate to BA)
-- ❌ Approve release without testing (always test first)
-- ❌ Sign off if exit criteria not met
-- ❌ Edit an expected result so a failing case passes (triage it instead)
+- Fix bugs yourself (report to developer)
+- Change requirements (escalate to BA)
+- Approve release without testing (always test first)
+- Sign off if exit criteria not met
+- Edit an expected result so a failing case passes (triage it instead)
 
 ## Writing
 

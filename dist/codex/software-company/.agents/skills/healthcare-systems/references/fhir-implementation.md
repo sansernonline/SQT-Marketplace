@@ -71,7 +71,7 @@ Audit                          → AuditEvent
 ## References
 
 ```json
-// ✅ Good: typed reference
+// Good: typed reference
 {
   "subject": {
     "reference": "Patient/123",
@@ -80,7 +80,7 @@ Audit                          → AuditEvent
   }
 }
 
-// ✅ Also good: identifier reference (when no resource exists yet)
+// Right: Also good: identifier reference (when no resource exists yet)
 {
   "subject": {
     "identifier": {
@@ -327,14 +327,14 @@ Key profiles you'll likely use:
 
 ## Common Pitfalls
 
-- ❌ **Bare strings instead of system+value** for identifiers/codes
-- ❌ **String references** with no resource type
-- ❌ **Mixing FHIR versions** (R4 client vs R5 server)
-- ❌ **Custom extensions for everything** — other systems can no longer read your data
-- ❌ **Ignoring CapabilityStatement** — clients can't discover features
-- ❌ **No AuditEvent** — required for HIPAA
-- ❌ **Loose validation** — accepting data that doesn't match the spec
-- ❌ **Using FHIR for non-clinical data** — it's the wrong tool
+- Wrong: **Bare strings instead of system+value** for identifiers/codes
+- Wrong: **String references** with no resource type
+- Wrong: **Mixing FHIR versions** (R4 client vs R5 server)
+- Wrong: **Custom extensions for everything** — other systems can no longer read your data
+- Wrong: **Ignoring CapabilityStatement** — clients can't discover features
+- Wrong: **No AuditEvent** — required for HIPAA
+- Wrong: **Loose validation** — accepting data that doesn't match the spec
+- Wrong: **Using FHIR for non-clinical data** — it's the wrong tool
 
 ## Resource Selection Cheatsheet
 

@@ -2,12 +2,12 @@
 
 สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
 
-## ❌ Bad: log in via UI every test
+## Bad: log in via UI every test
 ```
 Slow, brittle, duplicate code
 ```
 
-## ✅ Good: log in once, share state
+## Good: log in once, share state
 ```typescript
 // playwright.config.ts
 {
@@ -16,7 +16,7 @@ Slow, brittle, duplicate code
 }
 ```
 
-## ✅ Better: API login (no UI)
+## Better: API login (no UI)
 ```typescript
 // page.request shares its cookie jar with the page's browser context,
 // so the Set-Cookie from the login response is already in the browser — no addCookies needed.

@@ -5,7 +5,7 @@ description: Use when drafting or checking a Thai contract (employment, lease, h
 
 # Thai Basic Contract Draft
 
-This skill gives a complete first draft and flags every risky clause. It is general information, not legal advice. A Thai lawyer (ทนายความ) reviews anything flagged ⚠️ before anyone signs.
+This skill gives a complete first draft and flags every risky clause. It is general information, not legal advice. A Thai lawyer (ทนายความ) reviews anything flagged [ให้ทนายตรวจ] before anyone signs.
 
 ## 1. Pick the contract type first
 
@@ -38,7 +38,7 @@ Worked example: office lease 25,000/month × 36 months = 900,000 → 900 baht st
 
 Full checklists for employment, lease and hire-of-work contracts: [references/clause-checklists.md](references/clause-checklists.md). Every contract has: parties with ID/tax numbers and authorised signer, recitals, scope, price and payment, term, breach and cure, termination, notices, governing law, signatures and 2 witnesses.
 
-## 4. Red flags (mark ⚠️, never remove silently)
+## 4. Red flags (mark [ให้ทนายตรวจ], never remove silently)
 
 | Clause | Why it is risky in Thailand |
 |---|---|
@@ -53,7 +53,7 @@ Full checklists for employment, lease and hire-of-work contracts: [references/cl
 
 ## 5. When a lawyer is required, not optional
 
-- Any ⚠️ clause above; amount above ~1 million baht or term over 3 years.
+- Any [ให้ทนายตรวจ] clause above; amount above ~1 million baht or term over 3 years.
 - Land, condominium, share, franchise, loan with collateral (จำนอง/จำนำ).
 - Foreign party, foreign-currency payment, or arbitration abroad.
 - Dismissing an employee, settlement agreements, or anything already in dispute.
@@ -62,7 +62,7 @@ Full checklists for employment, lease and hire-of-work contracts: [references/cl
 
 1. Identify the type (section 1) and the parties' authority (company: หนังสือรับรอง and authorised director).
 2. Fill the checklist for that type; leave unknowns as `{…}` not guesses.
-3. Mark ⚠️ on red-flag clauses, with 1 line on why.
+3. Mark [ให้ทนายตรวจ] on red-flag clauses, with 1 line on why.
 4. Compute stamp duty and say who pays.
 5. Close with: "ร่างนี้เรียบเรียงจากที่คู่สัญญาตกลงกัน ก่อนลงนามควรให้ทนายความตรวจ".
 

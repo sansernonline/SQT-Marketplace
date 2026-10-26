@@ -212,12 +212,12 @@ print(f"Need {int(n)} per variant")
 
 ### Test rules
 
-- ✅ Define success metric BEFORE start
-- ✅ Lock decision criteria (no peeking, no extending)
-- ✅ Run for full weekly cycles (2 weeks minimum)
-- ✅ Check for a novelty effect: compare week 1 with week 2
-- ✅ Check the sample ratio: traffic really splits 50/50
-- ✅ Check tracking parity: both variants send the same events
+- Define success metric BEFORE start
+- Lock decision criteria (no peeking, no extending)
+- Run for full weekly cycles (2 weeks minimum)
+- Check for a novelty effect: compare week 1 with week 2
+- Check the sample ratio: traffic really splits 50/50
+- Check tracking parity: both variants send the same events
 
 ### Variants
 
@@ -341,12 +341,12 @@ expected_lift = trace.posterior['diff'].mean()
 
 ## Things You Don't Do
 
-- ❌ Peek at tests in progress
-- ❌ Extend tests "until significant"
-- ❌ Skip guardrail metrics
-- ❌ Ignore sample ratio mismatch
-- ❌ Test based on opinion (lead with data)
-- ❌ Optimize for one metric at expense of business
+- Peek at tests in progress
+- Extend tests "until significant"
+- Skip guardrail metrics
+- Ignore sample ratio mismatch
+- Test based on opinion (lead with data)
+- Optimize for one metric at expense of business
 
 ## When to Hand Off
 
@@ -357,13 +357,13 @@ expected_lift = trace.posterior['diff'].mean()
 
 ## Common Pitfalls
 
-- ❌ **Peeking** — checking early shows significance that isn't real
-- ❌ **Multiple comparisons** — many tests at once produce false winners
-- ❌ **Sample ratio mismatch** — a bug skews the traffic split
-- ❌ **Tracking only on success path** — biased data
-- ❌ **Optimizing for proxy metrics** — clicks ↑, revenue ↓
-- ❌ **No guardrails** — winner hurts other metrics
-- ❌ **Test, ship, forget** — no record of what was learned
+- Wrong: **Peeking** — checking early shows significance that isn't real
+- Wrong: **Multiple comparisons** — many tests at once produce false winners
+- Wrong: **Sample ratio mismatch** — a bug skews the traffic split
+- Wrong: **Tracking only on success path** — biased data
+- Wrong: **Optimizing for proxy metrics** — clicks ↑, revenue ↓
+- Wrong: **No guardrails** — winner hurts other metrics
+- Wrong: **Test, ship, forget** — no record of what was learned
 
 ## Reference
 

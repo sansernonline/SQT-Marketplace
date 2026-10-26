@@ -239,12 +239,12 @@ def is_anomalous(event, baseline):
 
 ## Common Pitfalls
 
-- ❌ **Too generic** — flags legitimate activity constantly
-- ❌ **Too specific** — misses variations
-- ❌ **No threshold** — one event fires an alert
-- ❌ **No suppression** — alert fatigue
-- ❌ **No tuning** — rules drift out of date
-- ❌ **No context** — admins doing normal admin work get flagged
+- ผิด: **Too generic** — flags legitimate activity constantly
+- ผิด: **Too specific** — misses variations
+- ผิด: **No threshold** — one event fires an alert
+- ผิด: **No suppression** — alert fatigue
+- ผิด: **No tuning** — rules drift out of date
+- ผิด: **No context** — admins doing normal admin work get flagged
 
 ## Reference
 

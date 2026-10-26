@@ -66,12 +66,12 @@ Copy **[`assets/bug-report.md`](assets/bug-report.md)** and fill it in. Do not w
 
 ## Title Writing Guide
 
-❌ Bad titles:
+Bad titles:
 - "Login broken"
 - "Bug in checkout"
 - "It doesn't work"
 
-✅ Good titles (action + condition + result):
+Good titles (action + condition + result):
 - "Login fails with 500 error when email contains apostrophe"
 - "Checkout total shows NaN when quantity is decimal"
 - "Search returns no results for queries longer than 100 chars"
@@ -102,11 +102,11 @@ Before submitting:
 
 ## Anti-patterns
 
-- ❌ "Same as last week's bug" — describe it fully
-- ❌ Multiple bugs in one report — split them
-- ❌ "Bug" without steps — give steps to reproduce
-- ❌ Putting a proposed fix in the title — the developer decides the fix
-- ❌ Marking everything as P1 — be honest about priority
+- "Same as last week's bug" — describe it fully
+- Multiple bugs in one report — split them
+- "Bug" without steps — give steps to reproduce
+- Putting a proposed fix in the title — the developer decides the fix
+- Marking everything as P1 — be honest about priority
 
 ---
 

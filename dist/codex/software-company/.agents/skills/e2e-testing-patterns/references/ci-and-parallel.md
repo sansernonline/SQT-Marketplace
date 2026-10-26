@@ -12,9 +12,9 @@
 | Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
 
 **Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
+- Tests don't share state
+- Unique test data per test
+- Database/external services support concurrency
 
 ## CI Integration
 
@@ -77,8 +77,8 @@ npx playwright test                                             # pre-prod (ค�
 > WebKit ของ Playwright ไม่ใช่ Safari ตัวจริง 100% → งานที่ลูกค้าใช้ iPhone เยอะ ให้ลองบนเครื่องจริงก่อน release อีกรอบ
 
 ### Artifacts to capture
-- ✅ Screenshots on failure
-- ✅ Video on failure
-- ✅ Trace files (Playwright)
-- ✅ Console logs
-- ✅ Network logs
+- Screenshots on failure
+- Video on failure
+- Trace files (Playwright)
+- Console logs
+- Network logs

@@ -143,7 +143,7 @@ IDs: User Story (US) · Acceptance Criteria (AC) · Web Content Accessibility Gu
 
 | Feature | Happy | Negative | Boundary | Equivalence | State | Security/API |
 |---|---|---|---|---|---|---|
-| Login | TC-LOGIN-001 | TC-LOGIN-002 | TC-LOGIN-004 · 005 | ⚠️ ยังไม่มี: ชนิดรหัสผ่านที่ผิด | — | TC-LOGIN-003 |
+| Login | TC-LOGIN-001 | TC-LOGIN-002 | TC-LOGIN-004 · 005 | ระวัง ยังไม่มี: ชนิดรหัสผ่านที่ผิด | — | TC-LOGIN-003 |
 
 ## Traceability
 

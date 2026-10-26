@@ -342,7 +342,7 @@ if (hasFeature(req.tenant, 'advanced_analytics')) {
 const cacheKey = `tenant:${tenantId}:order:${orderId}`;
 await cache.set(cacheKey, order);
 
-// ❌ NEVER share cache across tenants
+// Wrong: NEVER share cache across tenants
 const cacheKey = `order:${orderId}`;  // BAD
 ```
 
@@ -388,12 +388,12 @@ async def offboard_tenant(tenant_id):
 
 ## Common Pitfalls
 
-- ❌ **Missing tenant_id in queries** — data leaks and nobody notices
-- ❌ **Shared cache without a tenant key** — one tenant sees another's data
-- ❌ **Background jobs without the tenant** — the job runs as the wrong tenant
-- ❌ **No rate limit per tenant** — one tenant slows everyone down
-- ❌ **Hardcoded tenant assumptions** — breaks as soon as a tenant differs from the first one
-- ❌ **Per-tenant migrations not tested** — surprises in production
+- Wrong: **Missing tenant_id in queries** — data leaks and nobody notices
+- Wrong: **Shared cache without a tenant key** — one tenant sees another's data
+- Wrong: **Background jobs without the tenant** — the job runs as the wrong tenant
+- Wrong: **No rate limit per tenant** — one tenant slows everyone down
+- Wrong: **Hardcoded tenant assumptions** — breaks as soon as a tenant differs from the first one
+- Wrong: **Per-tenant migrations not tested** — surprises in production
 
 ## Reference
 

@@ -30,7 +30,7 @@ Verify:
 ## SMS / Email codes
 **When:** there's no other option (users without smartphone apps)
 
-- ⚠️ SMS is **NOT secure** (SIM swap attacks)
+- Note: SMS is **NOT secure** (SIM swap attacks)
 - Use only as a last resort, never as the main method
 - Use strict rate limits
 - Codes: 6 digits, 5 min expiry

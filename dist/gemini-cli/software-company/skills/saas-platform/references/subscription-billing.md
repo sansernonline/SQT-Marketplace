@@ -338,12 +338,12 @@ await stripe.subscriptions.create({
 
 ## Things You Don't Do
 
-- ❌ Build your own billing engine
-- ❌ Calculate tax manually
-- ❌ Trust prices the client sends
-- ❌ Skip the idempotency check on webhooks
-- ❌ Recognize revenue when you send the invoice (recognize it over the service period)
-- ❌ Store money as a float
+- Build your own billing engine
+- Calculate tax manually
+- Trust prices the client sends
+- Skip the idempotency check on webhooks
+- Recognize revenue when you send the invoice (recognize it over the service period)
+- Store money as a float
 
 ## Reference
 

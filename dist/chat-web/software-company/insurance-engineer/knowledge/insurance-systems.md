@@ -275,12 +275,12 @@ for scenario_name, shocks in scenarios.items():
 
 ## Things You Don't Do
 
-- ❌ Build black-box models with no explanation
-- ❌ Skip back-testing
-- ❌ Skip peer review for major changes
-- ❌ Use the same data to fit and to test
-- ❌ Trust a single-number estimate (always show the uncertainty)
-- ❌ Forget regulatory documentation
+- Build black-box models with no explanation
+- Skip back-testing
+- Skip peer review for major changes
+- Use the same data to fit and to test
+- Trust a single-number estimate (always show the uncertainty)
+- Forget regulatory documentation
 
 ## When to Hand Off
 
@@ -550,11 +550,11 @@ async function adjustReserve(claim, category, newAmount, rationale) {
 
 ## Things You Don't Do
 
-- ❌ Let an algorithm deny claims on its own (regulators object)
-- ❌ Skip fraud investigation when red flags appear
-- ❌ Set reserves at zero (mismanages capital)
-- ❌ Mix policyholder data with third-party data
-- ❌ Pay before liability is confirmed
+- Let an algorithm deny claims on its own (regulators object)
+- Skip fraud investigation when red flags appear
+- Set reserves at zero (mismanages capital)
+- Mix policyholder data with third-party data
+- Pay before liability is confirmed
 
 ## When to Hand Off
 
@@ -1057,12 +1057,12 @@ async function processRenewals(daysAhead: number = 60) {
 
 ## Things You Don't Do
 
-- ❌ Use float for money
-- ❌ Allow retroactive effective dates
-- ❌ Change rates in a way that affects existing policies
-- ❌ Skip rate book versioning
-- ❌ Issue policies without a compliance check
-- ❌ Provide insurance advice (we build tools)
+- Use float for money
+- Allow retroactive effective dates
+- Change rates in a way that affects existing policies
+- Skip rate book versioning
+- Issue policies without a compliance check
+- Provide insurance advice (we build tools)
 
 ## When to Hand Off
 
@@ -1334,11 +1334,11 @@ if decision == 'decline' and used_consumer_report:
 
 ## Things You Don't Do
 
-- ❌ Use protected attributes (race, religion, etc.) as inputs
-- ❌ Skip adverse action notices
-- ❌ Use black-box models for credit decisions
-- ❌ Ignore disparate impact
-- ❌ Set thresholds without loss ratio analysis
+- Use protected attributes (race, religion, etc.) as inputs
+- Skip adverse action notices
+- Use black-box models for credit decisions
+- Ignore disparate impact
+- Set thresholds without loss ratio analysis
 
 ## When to Hand Off
 
@@ -1702,12 +1702,12 @@ const TOUCH_POINTS = [
 
 ## Common Pitfalls
 
-- ❌ Triaging every claim by hand (use rules)
-- ❌ No initial reserves (mismanages capital)
-- ❌ Same fraud model for every line of business
-- ❌ Not pursuing subrogation (leaves money on the table)
-- ❌ Denying claims as fraud with a black-box model (regulators object)
-- ❌ Slow customer communication
+- Wrong: Triaging every claim by hand (use rules)
+- Wrong: No initial reserves (mismanages capital)
+- Wrong: Same fraud model for every line of business
+- Wrong: Not pursuing subrogation (leaves money on the table)
+- Wrong: Denying claims as fraud with a black-box model (regulators object)
+- Wrong: Slow customer communication
 
 ## Reference
 
@@ -2107,12 +2107,12 @@ Preparation:
 
 ## Common Compliance Gaps
 
-- ❌ Outdated rate filings (still using approved rates from 2018)
-- ❌ Producer licenses not checked at the point of sale
-- ❌ Missing or incomplete privacy notices
-- ❌ Claims handling inconsistent across states
-- ❌ Adverse action notices missing
-- ❌ No testing for discrimination
+- ผิด: Outdated rate filings (still using approved rates from 2018)
+- ผิด: Producer licenses not checked at the point of sale
+- ผิด: Missing or incomplete privacy notices
+- ผิด: Claims handling inconsistent across states
+- ผิด: Adverse action notices missing
+- ผิด: No testing for discrimination
 
 ## Reference
 
@@ -2304,7 +2304,7 @@ def test_disparate_impact(model, test_data, protected_attribute='race'):
     for group, rate in approval_by_group.items():
         ratio = rate / majority_rate
         if ratio < 0.8:
-            print(f'⚠️ Disparate impact: {group} = {ratio:.2f}')
+            print(f'Disparate impact: {group} = {ratio:.2f}')
 
     return approval_by_group
 ```
@@ -2416,12 +2416,12 @@ if monthly_metrics['gini'] < BASELINE * 0.9:
 
 ## Common Pitfalls
 
-- ❌ Black box models without explainability
-- ❌ Using protected attributes (direct or proxy)
-- ❌ Skipping fairness testing
-- ❌ No model versioning (breaks the audit trail)
-- ❌ Forgetting adverse action notices
-- ❌ Validating only once (drift degrades models over time)
+- Wrong: Black box models without explainability
+- Wrong: Using protected attributes (direct or proxy)
+- Wrong: Skipping fairness testing
+- Wrong: No model versioning (breaks the audit trail)
+- Wrong: Forgetting adverse action notices
+- Wrong: Validating only once (drift degrades models over time)
 
 ## Reference
 

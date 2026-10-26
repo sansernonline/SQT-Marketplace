@@ -238,10 +238,10 @@ Risk: pay-to-win destroys long-term
 - Selling **skip-the-grind** is OK, selling **buy-the-power** is not
 
 ### Avoid
-- ❌ Energy mechanics that block play
-- ❌ Loot boxes (regulatory + ethical issues)
-- ❌ Dark patterns (forced purchases)
-- ❌ Power creep (each new item stronger than the last) that makes old purchases useless
+- Energy mechanics that block play
+- Loot boxes (regulatory + ethical issues)
+- Dark patterns (forced purchases)
+- Power creep (each new item stronger than the last) that makes old purchases useless
 
 ## Onboarding: First 5 Minutes
 
@@ -252,8 +252,8 @@ Critical decisions in opening:
 4. **Give next goal** — reason to come back
 
 ```
-✅ Good (Mario): Walk right → see enemy → jump → success
-❌ Bad: 5 min tutorial reading text
+Good (Mario): Walk right → see enemy → jump → success
+Bad: 5 min tutorial reading text
 ```
 
 ## Level Design Principles
@@ -343,11 +343,11 @@ A <genre> where you <core verb> to <player goal>.
 
 ## Things You Don't Do
 
-- ❌ Design without playing competitor games
-- ❌ Ignore math (balance is math)
-- ❌ Design in isolation (playtest constantly)
-- ❌ Add features without removing others
-- ❌ Skip onboarding design
+- Design without playing competitor games
+- Ignore math (balance is math)
+- Design in isolation (playtest constantly)
+- Add features without removing others
+- Skip onboarding design
 
 ## When to Hand Off
 
@@ -358,13 +358,13 @@ A <genre> where you <core verb> to <player goal>.
 
 ## Common Pitfalls
 
-- ❌ **Feature creep** — every "wouldn't it be cool" added
-- ❌ **No clear vision** — every change of direction wastes work
-- ❌ **Designing for self** — your taste is not the market's
-- ❌ **No playtesting** — gut feel often wrong
-- ❌ **Over-tutorializing** — kills the fun of discovering
-- ❌ **Pay-to-win in F2P** — money now, dead game later
-- ❌ **No content beyond launch** — players leave fast
+- Wrong: **Feature creep** — every "wouldn't it be cool" added
+- Wrong: **No clear vision** — every change of direction wastes work
+- Wrong: **Designing for self** — your taste is not the market's
+- Wrong: **No playtesting** — gut feel often wrong
+- Wrong: **Over-tutorializing** — kills the fun of discovering
+- Wrong: **Pay-to-win in F2P** — money now, dead game later
+- Wrong: **No content beyond launch** — players leave fast
 
 ## Reference
 
@@ -466,10 +466,10 @@ void LateUpdate() {
 ### Pattern 2: Component-based architecture (Unity)
 
 ```csharp
-// ❌ Inheritance chains
+// Wrong: Inheritance chains
 class FlyingEnemy : Enemy : Character : MonoBehaviour { ... }
 
-// ✅ Composition
+// Right: Composition
 class Enemy : MonoBehaviour {
     public Health health;
     public Movement movement;
@@ -500,12 +500,12 @@ fn movement_system(
 ### Pattern 4: Object Pooling
 
 ```csharp
-// ❌ Spawn/destroy frequently
+// Wrong: Spawn/destroy frequently
 void FireBullet() {
     Instantiate(bulletPrefab);  // garbage collection spikes
 }
 
-// ✅ Pool
+// Right: Pool
 public class BulletPool {
     Queue<Bullet> pool = new();
 
@@ -540,10 +540,10 @@ character.SetState(new WalkingState());
 ### Pattern 6: Frame-Independent Logic
 
 ```csharp
-// ❌ Frame-dependent
+// Wrong: Frame-dependent
 transform.position += new Vector3(1, 0, 0);  // moves faster on faster hardware
 
-// ✅ Time-scaled
+// Right: Time-scaled
 transform.position += Vector3.right * speed * Time.deltaTime;
 ```
 
@@ -658,12 +658,12 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## Things You Don't Do
 
-- ❌ Profile in editor only
-- ❌ Use LINQ in hot paths
-- ❌ Instantiate/destroy at runtime (use pools)
-- ❌ Skip platform-specific testing
-- ❌ Build features without designer/artist input
-- ❌ Use frame-dependent logic
+- Profile in editor only
+- Use LINQ in hot paths
+- Instantiate/destroy at runtime (use pools)
+- Skip platform-specific testing
+- Build features without designer/artist input
+- Use frame-dependent logic
 
 ## When to Hand Off
 
@@ -674,13 +674,13 @@ Supports keyboard, gamepad, touch, VR controllers from same code.
 
 ## Common Pitfalls
 
-- ❌ **Premature optimization** — measure first
-- ❌ **No optimization** — wait too long and the refactor costs too much
-- ❌ **Editor-only testing** — the game performs differently on a real device
-- ❌ **Allocation-heavy hot paths** — garbage collection (GC) causes stutters
-- ❌ **Singleton sprawl** — code becomes hard to test
-- ❌ **No data-driven design** — every change needs an engineer
-- ❌ **Coupling rendering with logic** — hard to maintain
+- Wrong: **Premature optimization** — measure first
+- Wrong: **No optimization** — wait too long and the refactor costs too much
+- Wrong: **Editor-only testing** — the game performs differently on a real device
+- Wrong: **Allocation-heavy hot paths** — garbage collection (GC) causes stutters
+- Wrong: **Singleton sprawl** — code becomes hard to test
+- Wrong: **No data-driven design** — every change needs an engineer
+- Wrong: **Coupling rendering with logic** — hard to maintain
 
 ## Reference
 
@@ -800,10 +800,10 @@ Structure, XP math and pricing: [`live-ops-patterns.md` → Battle Pass Design](
 - **Catch-up XP:** for late buyers
 
 ### Anti-patterns
-- ❌ Battle pass requires excessive grinding
-- ❌ Battle pass impossible without daily play
-- ❌ Reward gap between free and premium is too large
-- ❌ Better rewards only at end (frustrating)
+- Battle pass requires excessive grinding
+- Battle pass impossible without daily play
+- Reward gap between free and premium is too large
+- Better rewards only at end (frustrating)
 
 ## Event Types
 
@@ -952,11 +952,11 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 
 ## Things You Don't Do
 
-- ❌ Pure monetization, no value to player
-- ❌ FOMO without substance (manipulative)
-- ❌ Pay-to-win in competitive
-- ❌ Ignore D30+ players (loyalists need new content)
-- ❌ Copy competitor's event without context
+- Pure monetization, no value to player
+- FOMO without substance (manipulative)
+- Pay-to-win in competitive
+- Ignore D30+ players (loyalists need new content)
+- Copy competitor's event without context
 
 ## When to Hand Off
 
@@ -966,12 +966,12 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 
 ## Common Pitfalls
 
-- ❌ **Content drought** — players leave, and they are hard to win back
-- ❌ **Power creep** — new items make old ones useless
-- ❌ **Energy mechanics** — blocking play makes players quit
-- ❌ **Battle pass too grindy** — fewer players buy it
-- ❌ **No segmentation** — same offer to whale and minnow
-- ❌ **Ignoring social play** — progression is purely individual
+- Wrong: **Content drought** — players leave, and they are hard to win back
+- Wrong: **Power creep** — new items make old ones useless
+- Wrong: **Energy mechanics** — blocking play makes players quit
+- Wrong: **Battle pass too grindy** — fewer players buy it
+- Wrong: **No segmentation** — same offer to whale and minnow
+- Wrong: **Ignoring social play** — progression is purely individual
 
 ## Reference
 
@@ -1270,11 +1270,11 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 ## Things You Don't Do
 
-- ❌ Trust the client (cheaters are everywhere)
-- ❌ Skip lag compensation in shooters (feels terrible)
-- ❌ Use P2P for competitive (anti-cheat impossible)
-- ❌ Send full state every frame (wastes bandwidth)
-- ❌ Block on network calls in game loop
+- Trust the client (cheaters are everywhere)
+- Skip lag compensation in shooters (feels terrible)
+- Use P2P for competitive (anti-cheat impossible)
+- Send full state every frame (wastes bandwidth)
+- Block on network calls in game loop
 
 ## When to Hand Off
 
@@ -1285,13 +1285,13 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 ## Common Pitfalls
 
-- ❌ **Building netcode after game logic** — forces a painful refactor
-- ❌ **No lag compensation** — the game feels broken for laggy players
-- ❌ **Client authority** — cheating becomes trivial
-- ❌ **Naive interpolation** — jittery, no extrapolation
-- ❌ **No reconnect support** — a dropped connection ruins the match
-- ❌ **Matchmaking ignores latency** — skill matches well, but players are in far-apart regions
-- ❌ **No load testing** — production becomes the first scale test
+- Wrong: **Building netcode after game logic** — forces a painful refactor
+- Wrong: **No lag compensation** — the game feels broken for laggy players
+- Wrong: **Client authority** — cheating becomes trivial
+- Wrong: **Naive interpolation** — jittery, no extrapolation
+- Wrong: **No reconnect support** — a dropped connection ruins the match
+- Wrong: **Matchmaking ignores latency** — skill matches well, but players are in far-apart regions
+- Wrong: **No load testing** — production becomes the first scale test
 
 ## Reference
 
@@ -1672,13 +1672,13 @@ public class Weapon : MonoBehaviour {
 
 ## Anti-patterns
 
-- ❌ **Singleton sprawl** — every system is a singleton → everything depends on everything
-- ❌ **God objects** — one Manager doing 50 things
-- ❌ **Tight rendering/logic coupling** — hard to test or refactor
-- ❌ **Magic numbers in code** — should be in data
-- ❌ **Resources/ folder for everything** — it all loads at startup
-- ❌ **Sync asset loading** — frames freeze while loading
-- ❌ **Update everywhere** — kills performance
+- **Singleton sprawl** — every system is a singleton → everything depends on everything
+- **God objects** — one Manager doing 50 things
+- **Tight rendering/logic coupling** — hard to test or refactor
+- **Magic numbers in code** — should be in data
+- **Resources/ folder for everything** — it all loads at startup
+- **Sync asset loading** — frames freeze while loading
+- **Update everywhere** — kills performance
 
 ## Reference
 
@@ -1966,7 +1966,7 @@ Item leaves store
 Cycle repeats with new item
 ```
 
-> ⚠️ Fear of missing out (FOMO) is powerful, but overuse burns players out.
+> Note: Fear of missing out (FOMO) is powerful, but overuse burns players out.
 
 ## A/B Testing in Live Games
 
@@ -2064,23 +2064,23 @@ bot_suspects = segments.filter(
 
 ## Anti-patterns
 
-- ❌ **Energy mechanics blocking play** — feels punishing
-- ❌ **Pay-to-win in competitive** — destroys the game long-term
-- ❌ **Loot box for gameplay items** — legal and ethical risk
-- ❌ **Aggressive FOMO every week** — players burn out
-- ❌ **Power creep** — old purchases become useless
-- ❌ **No comeback mechanic** — once behind, never catch up
-- ❌ **Same offer to whale and minnow** — segmentation matters
+- **Energy mechanics blocking play** — feels punishing
+- **Pay-to-win in competitive** — destroys the game long-term
+- **Loot box for gameplay items** — legal and ethical risk
+- **Aggressive FOMO every week** — players burn out
+- **Power creep** — old purchases become useless
+- **No comeback mechanic** — once behind, never catch up
+- **Same offer to whale and minnow** — segmentation matters
 
 ## Healthy Live-Ops Principles
 
-- ✅ Players should feel valued, not exploited
-- ✅ Free path should be substantive
-- ✅ Premium = convenience or cosmetics, not power
-- ✅ Surprise + delight regularly
-- ✅ Communicate roadmap (manage expectations)
-- ✅ Respond to community feedback
-- ✅ Fight cheating hard (cheaters drive players away)
+- Players should feel valued, not exploited
+- Free path should be substantive
+- Premium = convenience or cosmetics, not power
+- Surprise + delight regularly
+- Communicate roadmap (manage expectations)
+- Respond to community feedback
+- Fight cheating hard (cheaters drive players away)
 
 ## Reference
 
@@ -2464,13 +2464,13 @@ void MovePlayerServerRpc(Vector3 newPosition) {
 
 ## Common Pitfalls
 
-- ❌ **Client authority over state** — cheating becomes trivial
-- ❌ **No lag compensation in FPS** — laggy player can't hit
-- ❌ **Snap-only interpolation** — other players' movement looks jittery
-- ❌ **No rate limiting** — clients can DDoS server
-- ❌ **Send full state every frame** — wastes huge bandwidth
-- ❌ **TCP for game traffic** — one lost packet holds up all later ones (head-of-line blocking)
-- ❌ **No reconnect** — a brief disconnect ends the match
+- Wrong: **Client authority over state** — cheating becomes trivial
+- Wrong: **No lag compensation in FPS** — laggy player can't hit
+- Wrong: **Snap-only interpolation** — other players' movement looks jittery
+- Wrong: **No rate limiting** — clients can DDoS server
+- Wrong: **Send full state every frame** — wastes huge bandwidth
+- Wrong: **TCP for game traffic** — one lost packet holds up all later ones (head-of-line blocking)
+- Wrong: **No reconnect** — a brief disconnect ends the match
 
 ## Reference
 

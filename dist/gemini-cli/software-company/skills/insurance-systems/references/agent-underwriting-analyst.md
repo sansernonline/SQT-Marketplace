@@ -249,11 +249,11 @@ if decision == 'decline' and used_consumer_report:
 
 ## Things You Don't Do
 
-- ❌ Use protected attributes (race, religion, etc.) as inputs
-- ❌ Skip adverse action notices
-- ❌ Use black-box models for credit decisions
-- ❌ Ignore disparate impact
-- ❌ Set thresholds without loss ratio analysis
+- Use protected attributes (race, religion, etc.) as inputs
+- Skip adverse action notices
+- Use black-box models for credit decisions
+- Ignore disparate impact
+- Set thresholds without loss ratio analysis
 
 ## When to Hand Off
 

@@ -24,10 +24,10 @@ Use when choosing system architecture (monolith, microservices, serverless, even
 How many engineers? Team count? Domain complexity?
 │
 ├─ <10 engineers, 1 team
-│  └─ ✅ Monolith (modular monolith)
+│  └─ Monolith (modular monolith)
 │
 ├─ 10-50 engineers, 2-5 teams
-│  └─ ✅ Modular monolith OR few services
+│  └─ Modular monolith OR few services
 │
 ├─ 50+ engineers, 5+ teams
 │  └─ Consider microservices (only if needed)
@@ -62,14 +62,14 @@ Details for each are in [references/advanced-patterns.md](references/advanced-pa
 
 ## Anti-patterns
 
-- ❌ **Microservices too early** — start with a monolith
-- ❌ **Distributed monolith** — services that must deploy together
-- ❌ **God service** — one service that does everything
-- ❌ **Chatty interfaces** — one request fans out into many service calls (N+1)
-- ❌ **Shared database across microservices** — all the coupling, none of the isolation
-- ❌ **Synchronous calls in critical path** — cascading failures
-- ❌ **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
-- ❌ **Resume-driven architecture** — using K8s/microservices to look fancy
+- **Microservices too early** — start with a monolith
+- **Distributed monolith** — services that must deploy together
+- **God service** — one service that does everything
+- **Chatty interfaces** — one request fans out into many service calls (N+1)
+- **Shared database across microservices** — all the coupling, none of the isolation
+- **Synchronous calls in critical path** — cascading failures
+- **No bulkheads** (no limits that isolate one service's resources) — one slow service drags everything down
+- **Resume-driven architecture** — using K8s/microservices to look fancy
 
 ---
 
@@ -127,13 +127,13 @@ Queries ◄── Read Models (denormalized for query)
 ```
 
 **When to use:**
-- ✅ Read load and write load are very different
-- ✅ Complex reporting / dashboards
-- ✅ Multiple read views from same data
+- Read load and write load are very different
+- Complex reporting / dashboards
+- Multiple read views from same data
 
 **When NOT to use:**
-- ❌ Simple create/read/update/delete (CRUD) apps (far too much)
-- ❌ Reads must always show the latest write
+- Simple create/read/update/delete (CRUD) apps (far too much)
+- Reads must always show the latest write
 
 ---
 
@@ -153,18 +153,18 @@ State is computed from events
 ```
 
 **When to use:**
-- ✅ Strong audit/compliance requirements
-- ✅ Need to replay history
-- ✅ Questions about the past ("balance at date X")
-- ✅ Complex business logic with many state transitions
+- Strong audit/compliance requirements
+- Need to replay history
+- Questions about the past ("balance at date X")
+- Complex business logic with many state transitions
 
 **When NOT to use:**
-- ❌ Apps with simple state (too much)
-- ❌ No team experience with it
-- ❌ Don't need history/audit
-- ❌ You must be able to delete data, e.g. under GDPR (events are hard to delete)
+- Apps with simple state (too much)
+- No team experience with it
+- Don't need history/audit
+- You must be able to delete data, e.g. under GDPR (events are hard to delete)
 
-> ⚠️ **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
+> Note: **CQRS and Event Sourcing both add a lot of complexity. Use them only where they pay off.**
 
 ---
 
@@ -390,15 +390,15 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
-- ✅ You need to ship changes fast
-- ✅ Operations needs are simple
-- ✅ All parts can deploy together
+- Small/medium team (up to about 50 engineers; same bands as the decision tree in SKILL.md)
+- You need to ship changes fast
+- Operations needs are simple
+- All parts can deploy together
 
 **When NOT to use:**
-- ❌ Multiple teams needing independent deploys
-- ❌ Features need very different scaling
-- ❌ Parts need different tech stacks
+- Multiple teams needing independent deploys
+- Features need very different scaling
+- Parts need different tech stacks
 
 **Implementation tips:**
 - Enforce module boundaries (e.g., NestJS modules, Java packages, Go internal/)
@@ -425,16 +425,16 @@ Details moved out of [SKILL.md](../SKILL.md). Load this file once the decision t
 ```
 
 **When to use:**
-- ✅ Independent teams (Conway's Law)
-- ✅ Different scaling needs per service
-- ✅ Services need different languages or stacks
-- ✅ Mature continuous integration and delivery (CI/CD) and monitoring already in place
+- Independent teams (Conway's Law)
+- Different scaling needs per service
+- Services need different languages or stacks
+- Mature continuous integration and delivery (CI/CD) and monitoring already in place
 
 **When NOT to use (most projects):**
-- ❌ Small team — the extra overhead slows everyone down
-- ❌ No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
-- ❌ Can't afford distributed tracing
-- ❌ Business areas don't have clear boundaries yet
+- Small team — the extra overhead slows everyone down
+- No Kubernetes (K8s) or infrastructure-as-code (IaC) skills on the team
+- Can't afford distributed tracing
+- Business areas don't have clear boundaries yet
 
 **Hidden costs:**
 - 💸 Much harder to operate (more services to deploy, monitor and debug)
@@ -456,17 +456,17 @@ Event ──► Function ──► Service / DB / Queue
 ```
 
 **Good fits:**
-- ✅ Async background processing
-- ✅ Scheduled tasks (cron)
-- ✅ Glue code between services
-- ✅ Spiky / unpredictable traffic
-- ✅ Image/video processing pipelines
+- Async background processing
+- Scheduled tasks (cron)
+- Glue code between services
+- Spiky / unpredictable traffic
+- Image/video processing pipelines
 
 **Bad fits:**
-- ❌ Long-running processes (the limit is usually 15 min)
-- ❌ Processing that must keep state between calls
-- ❌ Frequent calls that need a fast response (cold starts add delay)
-- ❌ Heavy traffic all day (the bill climbs fast)
+- Long-running processes (the limit is usually 15 min)
+- Processing that must keep state between calls
+- Frequent calls that need a fast response (cold starts add delay)
+- Heavy traffic all day (the bill climbs fast)
 
 ---
 

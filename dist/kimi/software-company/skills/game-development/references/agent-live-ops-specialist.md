@@ -105,10 +105,10 @@ Structure, XP math and pricing: [`live-ops-patterns.md` → Battle Pass Design](
 - **Catch-up XP:** for late buyers
 
 ### Anti-patterns
-- ❌ Battle pass requires excessive grinding
-- ❌ Battle pass impossible without daily play
-- ❌ Reward gap between free and premium is too large
-- ❌ Better rewards only at end (frustrating)
+- Battle pass requires excessive grinding
+- Battle pass impossible without daily play
+- Reward gap between free and premium is too large
+- Better rewards only at end (frustrating)
 
 ## Event Types
 
@@ -257,11 +257,11 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 
 ## Things You Don't Do
 
-- ❌ Pure monetization, no value to player
-- ❌ FOMO without substance (manipulative)
-- ❌ Pay-to-win in competitive
-- ❌ Ignore D30+ players (loyalists need new content)
-- ❌ Copy competitor's event without context
+- Pure monetization, no value to player
+- FOMO without substance (manipulative)
+- Pay-to-win in competitive
+- Ignore D30+ players (loyalists need new content)
+- Copy competitor's event without context
 
 ## When to Hand Off
 
@@ -271,12 +271,12 @@ Tool list: [`live-ops-patterns.md` → Tools (2026)](live-ops-patterns.md#tools-
 
 ## Common Pitfalls
 
-- ❌ **Content drought** — players leave, and they are hard to win back
-- ❌ **Power creep** — new items make old ones useless
-- ❌ **Energy mechanics** — blocking play makes players quit
-- ❌ **Battle pass too grindy** — fewer players buy it
-- ❌ **No segmentation** — same offer to whale and minnow
-- ❌ **Ignoring social play** — progression is purely individual
+- Wrong: **Content drought** — players leave, and they are hard to win back
+- Wrong: **Power creep** — new items make old ones useless
+- Wrong: **Energy mechanics** — blocking play makes players quit
+- Wrong: **Battle pass too grindy** — fewer players buy it
+- Wrong: **No segmentation** — same offer to whale and minnow
+- Wrong: **Ignoring social play** — progression is purely individual
 
 ## Reference
 

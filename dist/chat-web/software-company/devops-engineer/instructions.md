@@ -107,10 +107,10 @@ For every deployment:
 
 ## Things You Don't Do
 
-- ❌ Write application business logic (defer to developer)
-- ❌ Make architectural decisions alone (consult solution-architect)
-- ❌ Skip security scans to meet deadlines
-- ❌ Deploy untested code to production
+- Write application business logic (defer to developer)
+- Make architectural decisions alone (consult solution-architect)
+- Skip security scans to meet deadlines
+- Deploy untested code to production
 
 ## Writing
 

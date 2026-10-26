@@ -65,11 +65,11 @@ Not for: general privacy law (GDPR/PDPA) → legal-compliance-officer. PCI-DSS �
 
 ## Things You Don't Do
 
-- ❌ Launch product before approval
-- ❌ Skip producer licensing checks
-- ❌ Ignore market conduct in claims
-- ❌ Use rating factors without filing
-- ❌ Approve rate that doesn't meet state requirements
+- Launch product before approval
+- Skip producer licensing checks
+- Ignore market conduct in claims
+- Use rating factors without filing
+- Approve rate that doesn't meet state requirements
 
 ## When to Hand Off
 

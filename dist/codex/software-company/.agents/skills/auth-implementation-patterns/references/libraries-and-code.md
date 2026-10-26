@@ -5,11 +5,11 @@
 ## Password storage — code
 
 ```typescript
-// ✅ Good (using bcrypt)
+// Good (using bcrypt)
 const hash = await bcrypt.hash(password, 12);
 const valid = await bcrypt.compare(password, storedHash);
 
-// ❌ Bad
+// Bad
 const hash = crypto.createHash('sha256').update(password).digest('hex');
 ```
 

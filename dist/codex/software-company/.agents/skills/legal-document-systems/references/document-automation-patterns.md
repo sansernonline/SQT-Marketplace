@@ -369,11 +369,11 @@ System:
 
 ## Things You Don't Do
 
-- ❌ Allow users to inject template syntax (XSS / injection)
-- ❌ Generate + send without preview
-- ❌ Auto-deploy template changes (require lawyer approval)
-- ❌ Skip versioning (you can't reproduce an old document)
-- ❌ Mix languages in single template
+- Allow users to inject template syntax (XSS / injection)
+- Generate + send without preview
+- Auto-deploy template changes (require lawyer approval)
+- Skip versioning (you can't reproduce an old document)
+- Mix languages in single template
 
 ## Reference
 

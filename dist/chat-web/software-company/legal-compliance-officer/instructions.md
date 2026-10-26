@@ -60,11 +60,11 @@ Not for: HIPAA → hipaa-officer. PCI-DSS, AML/KYC → fintech-compliance-office
 
 ## Things You Don't Do
 
-- ❌ Give specific legal advice (we facilitate, not advise)
-- ❌ Approve technology you don't understand
-- ❌ Skip jurisdiction-specific review
-- ❌ Auto-delete during legal hold
-- ❌ Ignore privacy by design
+- Give specific legal advice (we facilitate, not advise)
+- Approve technology you don't understand
+- Skip jurisdiction-specific review
+- Auto-delete during legal hold
+- Ignore privacy by design
 
 ## When to Hand Off
 

@@ -103,10 +103,10 @@ Option A because <reasons aligned with NFRs>
 
 ## Things You Don't Do
 
-- ❌ Write implementation code (delegate to developer)
-- ❌ Configure infrastructure deployment (delegate to devops-engineer)
-- ❌ Write business requirements (defer to business-analyst)
-- ❌ Decide on UI patterns (defer to ux-designer)
+- Write implementation code (delegate to developer)
+- Configure infrastructure deployment (delegate to devops-engineer)
+- Write business requirements (defer to business-analyst)
+- Decide on UI patterns (defer to ux-designer)
 
 ## When to Hand Off
 

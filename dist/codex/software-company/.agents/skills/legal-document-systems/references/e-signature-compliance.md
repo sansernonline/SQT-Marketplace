@@ -41,12 +41,12 @@ Qualified Electronic Signature (QES)  — AES + qualified certificate
 
 | Region | SES valid? | AES required? | QES = handwritten |
 |--------|:----------:|:-------------:|:-----------------:|
-| **EU (eIDAS)** | ✅ | When risk justifies | ✅ |
-| **US (ESIGN/UETA)** | ✅ usually | Specific cases | N/A |
-| **UK (Post-Brexit)** | ✅ | Similar to eIDAS | ✅ |
-| **Thailand (Electronic Transactions Act, ETA)** | ✅ (s.9) | Reliable signature (s.26) when the risk justifies it | N/A — see [Thailand](#thailand-electronic-transactions-act-be-2544) |
-| **Singapore (ETA)** | ✅ | Specific | N/A |
-| **India (IT Act)** | ✅ | Required for many | ✅ |
+| **EU (eIDAS)** | ✓ | When risk justifies | ✓ |
+| **US (ESIGN/UETA)** | ✓ usually | Specific cases | N/A |
+| **UK (Post-Brexit)** | ✓ | Similar to eIDAS | ✓ |
+| **Thailand (Electronic Transactions Act, ETA)** | ✓ (s.9) | Reliable signature (s.26) when the risk justifies it | N/A — see [Thailand](#thailand-electronic-transactions-act-be-2544) |
+| **Singapore (ETA)** | ✓ | Specific | N/A |
+| **India (IT Act)** | ✓ | Required for many | ✓ |
 
 ## Carve-Outs (Often Require Wet Signature)
 
@@ -278,12 +278,12 @@ But: some need longer (court records, real estate)
 
 ## Things You Don't Do
 
-- ❌ Skip identity verification for high-value contracts
-- ❌ Allow document edit after first signature
-- ❌ Use only IP address for "identification"
-- ❌ Forget to disclose carve-outs to users
-- ❌ Roll own cryptographic signatures
-- ❌ Provide legal opinion on enforceability
+- Skip identity verification for high-value contracts
+- Allow document edit after first signature
+- Use only IP address for "identification"
+- Forget to disclose carve-outs to users
+- Roll own cryptographic signatures
+- Provide legal opinion on enforceability
 
 ## Reference
 

@@ -166,11 +166,11 @@ async function reconcile() {
 
 ## Things You Don't Do
 
-- ❌ Design without measuring real latency
-- ❌ Push state-of-the-art ML models to limited edge hardware (they won't fit)
-- ❌ Skip offline mode (the system WILL go offline at some point)
-- ❌ Sync by brute force (sending full state every time)
-- ❌ Centralize everything (a cloud outage takes the whole system down)
+- Design without measuring real latency
+- Push state-of-the-art ML models to limited edge hardware (they won't fit)
+- Skip offline mode (the system WILL go offline at some point)
+- Sync by brute force (sending full state every time)
+- Centralize everything (a cloud outage takes the whole system down)
 
 ## When to Hand Off
 

@@ -52,14 +52,14 @@ Regulatory scope unclear? **Escalate to fintech-compliance-officer**.
 
 ### Rule 1: Never use floats for money
 ```typescript
-// ❌ FORBIDDEN
+// Wrong: FORBIDDEN
 const total = price * quantity * 1.07; // floating point drift
 
-// ✅ Use decimal libraries or integer cents
+// Right: Use decimal libraries or integer cents
 import Decimal from 'decimal.js';
 const total = new Decimal(price).times(quantity).times('1.07');
 
-// ✅ Or use integer minor units (satang/cents) as bigint, with explicit rounding
+// Right: Or use integer minor units (satang/cents) as bigint, with explicit rounding
 // `/ 100` on a JS number gives a float again; on bigint it truncates — so round on purpose:
 const totalCents = (priceCents * quantity * 107n + 50n) / 100n; // half-up, for amounts ≥ 0
 // e.g. 1999n * 3n → 5997n × 1.07 = 6416.79 → 6417n
@@ -197,13 +197,13 @@ interface AuditEvent {
 
 ## Things You Don't Do
 
-- ❌ Use floats for money (EVER)
-- ❌ Allow non-idempotent money operations
-- ❌ Edit financial records (only add new records or reversals)
-- ❌ Skip audit logging "for performance"
-- ❌ Implement crypto from scratch (use proven libraries)
-- ❌ Build your own Know Your Customer (KYC) or Anti-Money Laundering (AML) checks (use compliance providers)
-- ❌ Make business compliance decisions (defer to fintech-compliance-officer)
+- Use floats for money (EVER)
+- Allow non-idempotent money operations
+- Edit financial records (only add new records or reversals)
+- Skip audit logging "for performance"
+- Implement crypto from scratch (use proven libraries)
+- Build your own Know Your Customer (KYC) or Anti-Money Laundering (AML) checks (use compliance providers)
+- Make business compliance decisions (defer to fintech-compliance-officer)
 
 ## When to Hand Off
 
@@ -215,14 +215,14 @@ interface AuditEvent {
 
 ## Common Pitfalls
 
-- ❌ **Floating point math** — $0.10 + $0.20 = $0.30000000000000004
-- ❌ **Race conditions on balance** — two requests read and update the balance at once, without a lock
-- ❌ **Optimistic UI for money** — showing success before the bank confirms
-- ❌ **No reversal mechanism** — no way to undo a mistake
-- ❌ **Soft delete of transactions** — records should only be added, never deleted
-- ❌ **Timezone bugs** — settlement is timezone-sensitive
-- ❌ **Currency rounding inconsistency** — mixing banker's rounding and half-up rounding
-- ❌ **Untested edge cases** — leap year, daylight saving, currency switching
+- Wrong: **Floating point math** — $0.10 + $0.20 = $0.30000000000000004
+- Wrong: **Race conditions on balance** — two requests read and update the balance at once, without a lock
+- Wrong: **Optimistic UI for money** — showing success before the bank confirms
+- Wrong: **No reversal mechanism** — no way to undo a mistake
+- Wrong: **Soft delete of transactions** — records should only be added, never deleted
+- Wrong: **Timezone bugs** — settlement is timezone-sensitive
+- Wrong: **Currency rounding inconsistency** — mixing banker's rounding and half-up rounding
+- Wrong: **Untested edge cases** — leap year, daylight saving, currency switching
 
 ## Reference Standards
 

@@ -43,12 +43,12 @@
 
 | Need | Edge required? |
 |------|:--------------:|
-| Sub-100ms latency | ✅ |
-| Keep working when the cloud is down | ✅ |
-| Limited bandwidth back to the cloud | ✅ |
-| Data must stay local (privacy) | ✅ |
+| Sub-100ms latency | ✓ |
+| Keep working when the cloud is down | ✓ |
+| Limited bandwidth back to the cloud | ✓ |
+| Data must stay local (privacy) | ✓ |
 | Many devices per site | Often |
-| Few cheap devices with a fast WAN link | ❌ |
+| Few cheap devices with a fast WAN link | ✗ |
 
 ## Edge Runtime Selection
 
@@ -301,12 +301,12 @@ Break-even depends on:
 
 ## Things You Don't Do
 
-- ❌ Push a state-of-the-art LLM to the edge (it won't fit)
-- ❌ Leave offline mode out of the spec
-- ❌ Sync everything (sync only what is needed)
-- ❌ Forget time sync (NTP / chrony — events can't be ordered without it)
-- ❌ Trust in one direction only (edge must verify cloud, and cloud must verify edge)
-- ❌ Ship OTA without testing the rollback path
+- Push a state-of-the-art LLM to the edge (it won't fit)
+- Leave offline mode out of the spec
+- Sync everything (sync only what is needed)
+- Forget time sync (NTP / chrony — events can't be ordered without it)
+- Trust in one direction only (edge must verify cloud, and cloud must verify edge)
+- Ship OTA without testing the rollback path
 
 ## Reference
 

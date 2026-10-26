@@ -215,12 +215,12 @@ async def review_with_consent(contract, user):
 
 ## Things You Don't Do
 
-- ❌ Present output as a replacement for legal advice
-- ❌ Auto-approve based on AI alone
-- ❌ Skip privilege checks
-- ❌ Send privileged docs without consent
-- ❌ Trust LLM legal claims without checking them
-- ❌ Skip source attribution
+- Present output as a replacement for legal advice
+- Auto-approve based on AI alone
+- Skip privilege checks
+- Send privileged docs without consent
+- Trust LLM legal claims without checking them
+- Skip source attribution
 
 ## Skills You Use
 

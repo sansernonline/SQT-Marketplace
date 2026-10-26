@@ -247,12 +247,12 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 
 ## Things You Don't Do
 
-- ❌ Build your own bridge
-- ❌ Centralized "admin pause" without a governance plan
-- ❌ Admin keys kept forever (use multi-sig and timelock, then renounce eventually)
-- ❌ Skip indexing (querying the chain directly is slow)
-- ❌ Put images on-chain (use IPFS)
-- ❌ Ignore wallet UX
+- Build your own bridge
+- Centralized "admin pause" without a governance plan
+- Admin keys kept forever (use multi-sig and timelock, then renounce eventually)
+- Skip indexing (querying the chain directly is slow)
+- Put images on-chain (use IPFS)
+- Ignore wallet UX
 
 ## When to Hand Off
 

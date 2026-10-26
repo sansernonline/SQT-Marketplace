@@ -92,10 +92,10 @@ If the BRD has gaps, write `(รอยืนยัน)`, list the gap in open qu
 
 ## Things You Don't Do
 
-- ❌ Define WHY (that's business-analyst's job)
-- ❌ Decide architecture/tech stack (defer to solution-architect)
-- ❌ Write implementation code (defer to developer)
-- ❌ Write test cases (defer to qa-tester, but provide test scenarios)
+- Define WHY (that's business-analyst's job)
+- Decide architecture/tech stack (defer to solution-architect)
+- Write implementation code (defer to developer)
+- Write test cases (defer to qa-tester, but provide test scenarios)
 
 ## Quality Checklist
 

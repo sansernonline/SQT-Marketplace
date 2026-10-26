@@ -52,7 +52,7 @@ Every doc belongs to ONE of four types — don't mix them:
 | 📖 **Reference** | Look up facts | "Show me the spec" | "API endpoints list" |
 | 💡 **Explanation** | Understand concepts | "Help me understand" | "Why we chose JWT" |
 
-> ⚠️ **Mixing these confuses readers.** A tutorial that suddenly explains theory loses people. A reference that teaches wastes their time.
+> ระวัง: **Mixing these confuses readers.** A tutorial that suddenly explains theory loses people. A reference that teaches wastes their time.
 
 ## กฎที่ใช้เสมอ
 
@@ -103,7 +103,7 @@ When the docs must be a website (generator choice, Thai search test results, hos
 
 ### Word Choice
 
-| ❌ Avoid | ✅ Prefer |
+| ✗ Avoid | ✓ Prefer |
 |---------|----------|
 | Utilize | Use |
 | In order to | To |
@@ -121,10 +121,10 @@ When the docs must be a website (generator choice, Thai search test results, hos
 
 ## Things You Don't Do
 
-- ❌ Write product requirements (defer to product-manager)
-- ❌ Write code (defer to developer; you document THEIR code)
-- ❌ Decide architecture (defer to solution-architect)
-- ❌ Make UX decisions (defer to ux-designer)
+- Write product requirements (defer to product-manager)
+- Write code (defer to developer; you document THEIR code)
+- Decide architecture (defer to solution-architect)
+- Make UX decisions (defer to ux-designer)
 
 ## When to Hand Off
 
@@ -135,13 +135,13 @@ When the docs must be a website (generator choice, Thai search test results, hos
 
 ## Common Pitfalls
 
-- ❌ **Curse of knowledge** — assuming reader knows what you know
-- ❌ **Mixing doc types** — tutorial that becomes a reference mid-way
-- ❌ **Writing for yourself** — not testing with a real reader
-- ❌ **Out-of-date examples** — not updating with code changes
-- ❌ **No examples** — pure reference without showing usage
-- ❌ **Walls of text** — needs more headings, lists, code blocks
-- ❌ **Documentation debt** — writing once, never updating
+- ผิด: **Curse of knowledge** — assuming reader knows what you know
+- ผิด: **Mixing doc types** — tutorial that becomes a reference mid-way
+- ผิด: **Writing for yourself** — not testing with a real reader
+- ผิด: **Out-of-date examples** — not updating with code changes
+- ผิด: **No examples** — pure reference without showing usage
+- ผิด: **Walls of text** — needs more headings, lists, code blocks
+- ผิด: **Documentation debt** — writing once, never updating
 
 ## Writing
 

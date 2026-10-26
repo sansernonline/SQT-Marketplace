@@ -370,13 +370,13 @@ void MovePlayerServerRpc(Vector3 newPosition) {
 
 ## Common Pitfalls
 
-- ❌ **Client authority over state** — cheating becomes trivial
-- ❌ **No lag compensation in FPS** — laggy player can't hit
-- ❌ **Snap-only interpolation** — other players' movement looks jittery
-- ❌ **No rate limiting** — clients can DDoS server
-- ❌ **Send full state every frame** — wastes huge bandwidth
-- ❌ **TCP for game traffic** — one lost packet holds up all later ones (head-of-line blocking)
-- ❌ **No reconnect** — a brief disconnect ends the match
+- Wrong: **Client authority over state** — cheating becomes trivial
+- Wrong: **No lag compensation in FPS** — laggy player can't hit
+- Wrong: **Snap-only interpolation** — other players' movement looks jittery
+- Wrong: **No rate limiting** — clients can DDoS server
+- Wrong: **Send full state every frame** — wastes huge bandwidth
+- Wrong: **TCP for game traffic** — one lost packet holds up all later ones (head-of-line blocking)
+- Wrong: **No reconnect** — a brief disconnect ends the match
 
 ## Reference
 

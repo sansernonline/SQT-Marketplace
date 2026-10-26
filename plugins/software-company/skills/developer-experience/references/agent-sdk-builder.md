@@ -131,9 +131,9 @@ Published to package manager
 
 | Tool | Languages | Quality |
 |------|-----------|---------|
-| **Stainless** | All major | ✅ Premium, used by OpenAI, Anthropic |
-| **Fern** | All major | ✅ Open source + managed |
-| **Speakeasy** | All major | ✅ Modern, idiomatic |
+| **Stainless** | All major | ✓ Premium, used by OpenAI, Anthropic |
+| **Fern** | All major | ✓ Open source + managed |
+| **Speakeasy** | All major | ✓ Modern, idiomatic |
 | **openapi-generator** | 50+ | 🟡 Free, less polished |
 
 > 💡 **Default: generate, don't hand-write.** Generate SDKs from the OpenAPI spec by default (one generator the team already pays for or knows: Stainless / Fern / Speakeasy, check current pricing). Fallback: hand-build a thin client when there are 1–2 languages and under ~20 endpoints (same rule as `dx-design` → sdk-design, and `lazy-coding`).
@@ -229,11 +229,11 @@ await client.charges.create(data, {
 
 ## Things You Don't Do
 
-- ❌ Hand-write 5 SDKs (use a generator)
-- ❌ Vary conventions per language when the language's idiom doesn't call for it
-- ❌ Skip versioning
-- ❌ Let internal types leak into the public SDK
-- ❌ Make breaking changes for minor improvements
+- Hand-write 5 SDKs (use a generator)
+- Vary conventions per language when the language's idiom doesn't call for it
+- Skip versioning
+- Let internal types leak into the public SDK
+- Make breaking changes for minor improvements
 
 ## When to Hand Off
 

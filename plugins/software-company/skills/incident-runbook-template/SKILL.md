@@ -35,15 +35,15 @@ description: Use when writing an operational runbook, on-call guide or what-to-d
 A **runbook** answers: "Alert X fired. What do I do?"
 
 It's NOT:
-- ❌ A postmortem (that analyses the incident afterwards)
-- ❌ Architecture documentation (that explains the bigger picture)
-- ❌ Training material (that goes into too much detail)
+- A postmortem (that analyses the incident afterwards)
+- Architecture documentation (that explains the bigger picture)
+- Training material (that goes into too much detail)
 
 It IS:
-- ✅ Step-by-step actions
-- ✅ Decision flowcharts
-- ✅ Commands to copy-paste
-- ✅ Escalation paths
+- Step-by-step actions
+- Decision flowcharts
+- Commands to copy-paste
+- Escalation paths
 
 ## Runbook Quality Standards
 
@@ -107,12 +107,12 @@ alert ทุกตัว**ต้อง**มีลิงก์ไป runbook ผ�
 
 ## Anti-patterns
 
-- ❌ **Theoretical runbooks** written by someone who never saw the failure
-- ❌ **Long background text** before the first action
-- ❌ **"Contact the team"** without saying who or how
-- ❌ **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
-- ❌ **Runbook in a wiki nobody can find** — link from alert
-- ❌ **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
+- **Theoretical runbooks** written by someone who never saw the failure
+- **Long background text** before the first action
+- **"Contact the team"** without saying who or how
+- **Treating mitigation as the root-cause fix** (mitigation should be FAST; the fix comes later)
+- **Runbook in a wiki nobody can find** — link from alert
+- **Update postmortems but not runbooks** — every postmortem should lead to a runbook update
 
 ## Document Look
 

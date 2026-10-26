@@ -283,9 +283,9 @@ Use when writing or reviewing SQL queries, procedures or data-change scripts (SQ
 สิ่งที่ต้องดูใน plan: scan ทั้งตารางที่ใหญ่ · จำนวนแถวที่คาด vs ได้จริงต่างกันมาก (statistics เก่า) · key lookup ซ้ำหลายพันครั้ง · sort หรือ hash ที่ล้นลง disk
 
 - **sargable** คือเงื่อนไขที่ใช้ index ได้ ห้ามครอบคอลัมน์ที่มี index ด้วย function
-  - ❌ `WHERE YEAR(created_at) = 2026` → ✅ `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
-  - ❌ `WHERE LOWER(email) = @e` → ✅ เก็บ email ตัวเล็กตั้งแต่แรก หรือทำ index บน expression (PostgreSQL) หรือ computed column + index (SQL Server)
-  - ❌ `WHERE name LIKE '%สมชาย'` ใช้ index ไม่ได้ ถ้าต้องค้นกลางคำให้ใช้ full-text search
+  - ผิด: `WHERE YEAR(created_at) = 2026` → ถูก: `WHERE created_at >= '2026-01-01' AND created_at < '2027-01-01'`
+  - ผิด: `WHERE LOWER(email) = @e` → ถูก: เก็บ email ตัวเล็กตั้งแต่แรก หรือทำ index บน expression (PostgreSQL) หรือ computed column + index (SQL Server)
+  - ผิด: `WHERE name LIKE '%สมชาย'` ใช้ index ไม่ได้ ถ้าต้องค้นกลางคำให้ใช้ full-text search
 - **covering index**: ใส่คอลัมน์ที่ query อ่านไว้ใน `INCLUDE (...)` (SQL Server · PostgreSQL 11+) จะได้ไม่ต้องย้อนไปอ่านตาราง ส่วน MySQL ไม่มี `INCLUDE` ให้ต่อท้ายใน key แทน
 - ทุก index ที่เพิ่มต้องตอบได้ว่ารับ query ไหน เพราะ index ทำให้ INSERT/UPDATE ช้าลงทุกตัว
 - **แบ่งหน้าลึก** ใช้ keyset แทน `OFFSET` เพราะ `OFFSET 100000` ต้องอ่านทิ้ง 100,000 แถวทุกครั้ง
@@ -591,13 +591,13 @@ Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tes
 ```
 Most resilient ─────────────────────────► Most brittle
 
-✅ Role + accessible name      page.getByRole('button', { name: 'Submit' })
-✅ Test IDs                     page.getByTestId('submit-btn')
+ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
+ถูก: Test IDs                     page.getByTestId('submit-btn')
 🟡 Visible text                 page.getByText('Submit')
 🟡 Label                        page.getByLabel('Email')
 🔴 CSS classes                  page.locator('.btn-primary')
 🔴 Tag + index                  page.locator('button:nth-child(3)')
-❌ XPath                        page.locator('//div[2]/button')
+ผิด: XPath                        page.locator('//div[2]/button')
 ```
 
 **Rule:** Prefer queries that survive refactoring.
@@ -609,14 +609,14 @@ Most resilient ─────────────────────�
 
 ## What to Test E2E (Not Everything!)
 
-### ✅ DO test E2E
+### ถูก: DO test E2E
 - Critical user journeys (login → checkout → confirmation)
 - Multi-step workflows that span multiple pages
 - Integration with external services (payment, email)
 - "Smoke tests" that verify deployment works
 - Cross-browser specific behavior
 
-### ❌ DON'T test E2E
+### DON'T test E2E
 - Every form validation (use unit tests)
 - Edge cases of business logic (use unit/integration)
 - Every error message (use unit tests)
@@ -672,14 +672,14 @@ Most resilient ─────────────────────�
 
 ## Anti-patterns
 
-- ❌ **Testing implementation details** — selectors based on internal structure
-- ❌ **Long monolithic tests** — one test with 50 steps is hard to debug
-- ❌ **Coupled tests** — Test B depends on Test A having run
-- ❌ **Hidden state** — tests behave differently depending on order or data
-- ❌ **Manual cleanup** — relying on people to reset the environment
-- ❌ **No quarantine** — failing tests get merged anyway because "it's flaky"
-- ❌ **Mocking everything** — at this layer, use the real integrations, or it's not E2E
-- ❌ **Expected value read from the page** — the bug becomes the expectation
+- **Testing implementation details** — selectors based on internal structure
+- **Long monolithic tests** — one test with 50 steps is hard to debug
+- **Coupled tests** — Test B depends on Test A having run
+- **Hidden state** — tests behave differently depending on order or data
+- **Manual cleanup** — relying on people to reset the environment
+- **No quarantine** — failing tests get merged anyway because "it's flaky"
+- **Mocking everything** — at this layer, use the real integrations, or it's not E2E
+- **Expected value read from the page** — the bug becomes the expectation
 
 ## Quality Targets (from qa-tester agent)
 
@@ -698,12 +698,12 @@ Most resilient ─────────────────────�
 
 สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
 
-## ❌ Bad: log in via UI every test
+## Bad: log in via UI every test
 ```
 Slow, brittle, duplicate code
 ```
 
-## ✅ Good: log in once, share state
+## Good: log in once, share state
 ```typescript
 // playwright.config.ts
 {
@@ -712,7 +712,7 @@ Slow, brittle, duplicate code
 }
 ```
 
-## ✅ Better: API login (no UI)
+## Better: API login (no UI)
 ```typescript
 // page.request shares its cookie jar with the page's browser context,
 // so the Set-Cookie from the login response is already in the browser — no addCookies needed.
@@ -746,9 +746,9 @@ async function login(page, user) {
 | Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
 
 **Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
+- Tests don't share state
+- Unique test data per test
+- Database/external services support concurrency
 
 ## CI Integration
 
@@ -811,11 +811,11 @@ npx playwright test                                             # pre-prod (ค�
 > WebKit ของ Playwright ไม่ใช่ Safari ตัวจริง 100% → งานที่ลูกค้าใช้ iPhone เยอะ ให้ลองบนเครื่องจริงก่อน release อีกรอบ
 
 ### Artifacts to capture
-- ✅ Screenshots on failure
-- ✅ Video on failure
-- ✅ Trace files (Playwright)
-- ✅ Console logs
-- ✅ Network logs
+- Screenshots on failure
+- Video on failure
+- Trace files (Playwright)
+- Console logs
+- Network logs
 
 
 ## reference: coverage-and-libraries.md
@@ -859,14 +859,14 @@ Priority uses the `test-case-template` scale (P1 = most important, P3 = least), 
 
 โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
 
-## ❌ Bad (sleep hack)
+## Bad (sleep hack)
 ```typescript
 await page.click('#submit');
 await page.waitForTimeout(2000); // ← flaky
 await expect(page.getByText('Success')).toBeVisible();
 ```
 
-## ✅ Good (event-based wait)
+## Good (event-based wait)
 ```typescript
 const responsePromise = page.waitForResponse('/api/submit');
 await page.click('#submit');
@@ -881,7 +881,7 @@ await expect(page.getByText('Success')).toBeVisible();
 
 ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
 
-## ❌ Bad (no abstraction)
+## Bad (no abstraction)
 ```typescript
 test('user can login', async ({ page }) => {
   await page.goto('/login');
@@ -901,7 +901,7 @@ test('user can update profile', async ({ page }) => {
 });
 ```
 
-## ✅ Good (Page Object)
+## Good (Page Object)
 ```typescript
 // pages/LoginPage.ts
 export class LoginPage {
@@ -936,22 +936,22 @@ test('user can login', async ({ page }) => {
 
 ## Option 1: Shared test DB (popular, problematic)
 ```
-❌ All tests share same data
-❌ Order-dependent
-❌ Hard to parallelize
-❌ Pollution between tests
+Wrong: All tests share same data
+Wrong: Order-dependent
+Wrong: Hard to parallelize
+Wrong: Pollution between tests
 ```
 
 ## Option 2: Per-test setup (slow)
 ```
 🟡 Clean slate every test
 🟡 Reliable but slow
-✅ Good for critical flows
+Good for critical flows
 ```
 
 ## Option 3: API setup, UI verification (best)
 ```typescript
-// ✅ Setup via API (fast), verify via UI (real test)
+// Right: Setup via API (fast), verify via UI (real test)
 test('user sees orders', async ({ page, request }) => {
   // Setup via API — fast, reliable
   const user = await api.createUser();
@@ -965,8 +965,8 @@ test('user sees orders', async ({ page, request }) => {
 
 ## Option 4: Database snapshot + rollback
 ```
-✅ Real production-like data
-✅ Fast (uses snapshots)
+Right: Real production-like data
+Right: Fast (uses snapshots)
 🟡 Requires DB tooling
 ```
 
@@ -1187,13 +1187,13 @@ page.screenshot(path="_to_delete/check/login.png")
 
 ## 9 · Anti-patterns
 
-- ❌ **โยนข้อกำหนดทั้งฉบับให้รอบเดียว** — สาเหตุอันดับ 1 ที่ได้โค้ดมั่ว
-- ❌ **เขียนโค้ดก่อนแล้วค่อยเขียน test ตาม** — ได้ test ที่ยืนยันสิ่งที่เพิ่งเขียน ไม่ใช่สิ่งที่ต้องการ
-- ❌ **เดาเมื่อข้อกำหนดกำกวม** — ผิดตั้งแต่ต้น แต่มารู้ตอนส่งมอบ
-- ❌ **แก้ test ให้ผ่าน** แล้วรายงานว่าเสร็จ
-- ❌ **แตก agent ขนานบนไฟล์เดียวกัน**
-- ❌ **เคลมว่า UI ตรง mockup โดยไม่เคยเปิดดู**
-- ❌ **ปิดงานโดยไม่มีตารางสืบย้อน** — ไม่มีใครรู้ว่าอะไรยังไม่ได้ทำ
+- **โยนข้อกำหนดทั้งฉบับให้รอบเดียว** — สาเหตุอันดับ 1 ที่ได้โค้ดมั่ว
+- **เขียนโค้ดก่อนแล้วค่อยเขียน test ตาม** — ได้ test ที่ยืนยันสิ่งที่เพิ่งเขียน ไม่ใช่สิ่งที่ต้องการ
+- **เดาเมื่อข้อกำหนดกำกวม** — ผิดตั้งแต่ต้น แต่มารู้ตอนส่งมอบ
+- **แก้ test ให้ผ่าน** แล้วรายงานว่าเสร็จ
+- **แตก agent ขนานบนไฟล์เดียวกัน**
+- **เคลมว่า UI ตรง mockup โดยไม่เคยเปิดดู**
+- **ปิดงานโดยไม่มีตารางสืบย้อน** — ไม่มีใครรู้ว่าอะไรยังไม่ได้ทำ
 
 ---
 

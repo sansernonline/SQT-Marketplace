@@ -362,11 +362,11 @@ class ParsedContract:
 
 ## Common Pitfalls
 
-- ❌ Pure regex without context (false positives)
-- ❌ ML without legal-domain training
-- ❌ LLM without quote verification (hallucinations)
-- ❌ One-language model for international contracts
-- ❌ No human review for high-stakes use
+- Wrong: Pure regex without context (false positives)
+- Wrong: ML without legal-domain training
+- Wrong: LLM without quote verification (hallucinations)
+- Wrong: One-language model for international contracts
+- Wrong: No human review for high-stakes use
 
 ## Reference
 

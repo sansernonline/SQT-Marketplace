@@ -99,9 +99,9 @@ Use when writing a pull request description or preparing a PR for review.
 
 | Lines changed | Review difficulty | Recommendation |
 |--------------|-------------------|----------------|
-| < 100 | Easy | ✅ Ideal size |
-| 100-400 | Moderate | ✅ Acceptable |
-| > 400 | Hard | ❌ Split into stacked PRs |
+| < 100 | Easy | ✓ Ideal size |
+| 100-400 | Moderate | ✓ Acceptable |
+| > 400 | Hard | ✗ Split into stacked PRs |
 
 If your PR is huge, split into:
 1. Refactoring PR (no behavior change)
@@ -111,12 +111,12 @@ If your PR is huge, split into:
 
 ## Summary Writing
 
-❌ Bad summaries:
+Bad summaries:
 - "Fixes bug"
 - "Updates code"
 - "See ticket"
 
-✅ Good summaries:
+Good summaries:
 - "Prevents double-charging customers when payment provider times out, by adding idempotency key to charge API calls"
 - "Adds email verification step during signup to reduce spam accounts; sends 6-digit code via existing email service"
 
@@ -140,12 +140,12 @@ If your PR is huge, split into:
 
 ## Anti-patterns
 
-- ❌ Empty description: "see code"
-- ❌ Linking ticket without explanation in PR
-- ❌ Massive PR with 1000+ lines mixed concerns
-- ❌ No screenshots for UI changes
-- ❌ "Testing: tested locally" with no detail
-- ❌ Pushing right before merge deadline with no time to review
+- Empty description: "see code"
+- Linking ticket without explanation in PR
+- Massive PR with 1000+ lines mixed concerns
+- No screenshots for UI changes
+- "Testing: tested locally" with no detail
+- Pushing right before merge deadline with no time to review
 
 ---
 

@@ -52,7 +52,7 @@ Code targets Solidity 0.8.24+ and OpenZeppelin Contracts 5.x (compile-checked wi
 ### Checks-Effects-Interactions (Reentrancy Prevention)
 
 ```solidity
-// ❌ BAD: vulnerable to reentrancy
+// Wrong: BAD: vulnerable to reentrancy
 function withdraw(uint amount) public {
     require(balances[msg.sender] >= amount);
     (bool success,) = msg.sender.call{value: amount}("");  // external call
@@ -60,7 +60,7 @@ function withdraw(uint amount) public {
     balances[msg.sender] -= amount;  // state change after
 }
 
-// ✅ GOOD: Checks-Effects-Interactions
+// Right: GOOD: Checks-Effects-Interactions
 function withdraw(uint amount) public {
     require(balances[msg.sender] >= amount);  // Checks
     balances[msg.sender] -= amount;             // Effects
@@ -68,7 +68,7 @@ function withdraw(uint amount) public {
     require(success);
 }
 
-// ✅ BETTER: ReentrancyGuard (5.x: utils/, not security/)
+// Right: BETTER: ReentrancyGuard (5.x: utils/, not security/)
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract MyContract is ReentrancyGuard {
@@ -246,12 +246,12 @@ Common auditors (2026):
 
 ## Things You Don't Do
 
-- ❌ Skip security audit before mainnet
-- ❌ Trust user input
-- ❌ Skip reentrancy protection on external calls
-- ❌ Hardcode admin keys
-- ❌ Write your own ERC-20/721 (use OpenZeppelin)
-- ❌ Deploy without monitoring
+- Skip security audit before mainnet
+- Trust user input
+- Skip reentrancy protection on external calls
+- Hardcode admin keys
+- Write your own ERC-20/721 (use OpenZeppelin)
+- Deploy without monitoring
 
 ## Skills You Use
 

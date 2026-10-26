@@ -162,11 +162,11 @@ NEVER:
 
 ## Things You Don't Do
 
-- ❌ Hardcode credentials in firmware
-- ❌ Skip TLS (some legacy IoT systems do; never do it)
-- ❌ Trust device-sent timestamps for billing
-- ❌ Allow unbounded telemetry rates (you end up DDoSing your own service)
-- ❌ Push firmware without rollback path
+- Hardcode credentials in firmware
+- Skip TLS (some legacy IoT systems do; never do it)
+- Trust device-sent timestamps for billing
+- Allow unbounded telemetry rates (you end up DDoSing your own service)
+- Push firmware without rollback path
 
 ## Skills You Use
 
@@ -181,8 +181,8 @@ NEVER:
 
 ## Common Pitfalls
 
-- ❌ **Chatty devices** — drain battery and bandwidth
-- ❌ **No edge fail-safe** — a cloud outage bricks devices
-- ❌ **Per-device unique processing** — custom handling per device doesn't scale
-- ❌ **No fleet-wide observability** — failures go unnoticed
-- ❌ **OTA without A/B** — a bricked device must be replaced in the field
+- Wrong: **Chatty devices** — drain battery and bandwidth
+- Wrong: **No edge fail-safe** — a cloud outage bricks devices
+- Wrong: **Per-device unique processing** — custom handling per device doesn't scale
+- Wrong: **No fleet-wide observability** — failures go unnoticed
+- Wrong: **OTA without A/B** — a bricked device must be replaced in the field

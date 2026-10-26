@@ -71,7 +71,7 @@ Common mitigations, lowest risk first (same order as `incident-runbook-template`
 
 Document what worked AND what didn't.
 
-## ✅ Phase 4: Resolution
+## Right: Phase 4: Resolution
 
 1. **Implement permanent fix:**
    - Identify root cause (5 Whys)

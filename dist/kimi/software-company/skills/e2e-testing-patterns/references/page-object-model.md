@@ -2,7 +2,7 @@
 
 ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
 
-## ❌ Bad (no abstraction)
+## Bad (no abstraction)
 ```typescript
 test('user can login', async ({ page }) => {
   await page.goto('/login');
@@ -22,7 +22,7 @@ test('user can update profile', async ({ page }) => {
 });
 ```
 
-## ✅ Good (Page Object)
+## Good (Page Object)
 ```typescript
 // pages/LoginPage.ts
 export class LoginPage {

@@ -30,10 +30,10 @@
 
 ## When NOT to RAG
 
-- ❌ Small static knowledge → put it in the prompt
-- ❌ Reasoning tasks (not factual retrieval)
-- ❌ Latency-critical (RAG adds round trips)
-- ❌ Live values that change by the minute (prices, stock levels, balances) → call the source API or a tool at question time instead
+- Small static knowledge → put it in the prompt
+- Reasoning tasks (not factual retrieval)
+- Latency-critical (RAG adds round trips)
+- Live values that change by the minute (prices, stock levels, balances) → call the source API or a tool at question time instead
 
 ## RAG Pipeline Overview
 
@@ -150,13 +150,13 @@ Model names and prices change often. Check each provider's current embedding mod
 
 | Vector DB | Open Source | Hybrid Search | Filtering | Scale | Best for |
 |-----------|:----------:|:-------------:|:---------:|:-----:|----------|
-| **Pinecone** | ❌ | 🟡 | ✅ | 🟢 | Quick start, managed |
-| **Weaviate** | ✅ | ✅ | ✅ | 🟢 | Self-host, GraphQL |
-| **Qdrant** | ✅ | ✅ | ✅ | 🟢 | Performance, Rust |
-| **Chroma** | ✅ | 🟡 | ✅ | 🟡 | Local dev |
-| **pgvector** | ✅ | ✅ (with FTS) | ✅ | 🟡 | Already on Postgres |
-| **Elasticsearch** | ✅ | ✅✅ | ✅ | 🟢 | Hybrid + analytics |
-| **OpenSearch** | ✅ | ✅✅ | ✅ | 🟢 | AWS-native |
+| **Pinecone** | ✗ | 🟡 | ✓ | 🟢 | Quick start, managed |
+| **Weaviate** | ✓ | ✓ | ✓ | 🟢 | Self-host, GraphQL |
+| **Qdrant** | ✓ | ✓ | ✓ | 🟢 | Performance, Rust |
+| **Chroma** | ✓ | 🟡 | ✓ | 🟡 | Local dev |
+| **pgvector** | ✓ | ✓ (with FTS) | ✓ | 🟡 | Already on Postgres |
+| **Elasticsearch** | ✓ | ✓✓ | ✓ | 🟢 | Hybrid + analytics |
+| **OpenSearch** | ✓ | ✓✓ | ✓ | 🟢 | AWS-native |
 
 ### When to choose what
 
@@ -380,14 +380,14 @@ final = await retrieve(refined_query)
 
 ## Common Pitfalls
 
-- ❌ **One-size chunking** — different doc types need different sizes
-- ❌ **Pure vector search** — hybrid almost always better
-- ❌ **No re-ranking** — the top result is often not the most relevant
-- ❌ **Embedding model mismatch** — query and docs must use same model
-- ❌ **No eval set** — can't measure quality
-- ❌ **No citation requirement** — the LLM makes things up
-- ❌ **Static index** — knowledge changes, index doesn't
-- ❌ **Stuffing too much context** — model gets confused
+- Wrong: **One-size chunking** — different doc types need different sizes
+- Wrong: **Pure vector search** — hybrid almost always better
+- Wrong: **No re-ranking** — the top result is often not the most relevant
+- Wrong: **Embedding model mismatch** — query and docs must use same model
+- Wrong: **No eval set** — can't measure quality
+- Wrong: **No citation requirement** — the LLM makes things up
+- Wrong: **Static index** — knowledge changes, index doesn't
+- Wrong: **Stuffing too much context** — model gets confused
 
 ## Reference
 

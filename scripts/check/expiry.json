@@ -1,21 +1,21 @@
 {
-  "_about": "ข้อเท็จจริงที่หมดอายุตามปฏิทิน · validate-marketplace.mjs เตือนเมื่อเลยวันหรือเหลือไม่ถึง 30 วัน และล้มเมื่อไฟล์ที่อ้างไม่มี · ถึงวันแล้วให้ตรวจแหล่งทางการใหม่ แก้ไฟล์ แล้วลบหรือเลื่อนแถว · date ใช้ ค.ศ.",
+  "_about": "ข้อเท็จจริงที่หมดอายุตามปฏิทิน · validate-marketplace.mjs เตือนเมื่อเลยวันหรือเหลือไม่ถึง 30 วัน และล้มเมื่อไฟล์ที่อ้างไม่มี · ถึงวันแล้วให้ตรวจแหล่งทางการใหม่ แก้ไฟล์ แล้วลบหรือเลื่อนแถว · date ใช้ ค.ศ. · quote = ข้อความที่ต้องพบในไฟล์ (กันแถวที่อ้างเกินกว่าที่ไฟล์เขียน)",
   "facts": [
-    { "date": "2026-10-28", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "ประชุม กนง. ดอกเบี้ยนโยบาย 1.00% และ MRR ของธนาคารที่ยกตัวอย่างอาจเปลี่ยน" },
-    { "date": "2026-11-13", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรออมพลัส ปีงบ 2570 รอบ 1 ปิดขาย (ตัวอย่างอัตรา 1.80/2.80%)" },
-    { "date": "2026-11-16", "file": "plugins/trading-finance/skills/position-sizing/SKILL.md", "what": "SET เปลี่ยนช่วงราคา (tick) ของหุ้น 5–50 บาท · ลบตาราง tick เดิมหลังวันนี้" },
-    { "date": "2026-12-31", "file": "plugins/trading-finance/skills/debt-payoff/SKILL.md", "what": "ขั้นต่ำบัตรเครดิต 8% ใช้ถึงสิ้นปี 2569" },
-    { "date": "2026-12-31", "file": "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md", "what": "ลดหย่อนปีภาษี 2569 สิ้นสุด · ทำไฟล์ปีภาษี 2570" },
-    { "date": "2027-01-10", "file": "plugins/personal-life/skills/pet-care/SKILL.md", "what": "ข้อบัญญัติ กทม. เรื่องการเลี้ยงสัตว์เริ่มใช้ (วันที่ตามข่าวว่าเลื่อน)" },
-    { "date": "2027-01-26", "file": "plugins/graphic-design/skills/marketplace-product-images/SKILL.md", "what": "กฎรูปสินค้า Shopee และ TikTok Shop เปลี่ยนบ่อย ตรวจทุก 3 เดือน" },
-    { "date": "2027-01-31", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "ยื่นแบบออนไลน์ได้เพิ่ม 8 วัน ครอบถึงแบบที่ครบกำหนด 31 ม.ค. 2570" },
-    { "date": "2027-01-31", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรผ่านวอลเล็ตรอบ ก.ค. 2569 เริ่มโอนเปลี่ยนมือได้" },
-    { "date": "2027-04-26", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดและพื้นที่ปลอดภัยของ TikTok YouTube LINE X ตรวจทุก 6 เดือน" },
-    { "date": "2027-04-26", "file": "plugins/graphic-design/skills/line-richmenu/SKILL.md", "what": "เพดานของ rich menu API ตรวจทุก 6 เดือน" },
-    { "date": "2027-04-26", "file": "plugins/graphic-design/skills/youtube-thumbnail/SKILL.md", "what": "ขนาด thumbnail และ Test & compare ตรวจทุก 6 เดือน" },
-    { "date": "2027-05-15", "file": "plugins/personal-life/skills/flood-prep/SKILL.md", "what": "เงินช่วยน้ำท่วม 9,000 บาทครอบเฉพาะ 15 พ.ค.–30 ก.ย. 2569 · ตรวจเกณฑ์ฤดูฝนใหม่" },
-    { "date": "2027-06-30", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "มาตรการค่าจดจำนอง 0.01% สิ้นสุด 30 มิ.ย. 2570" },
-    { "date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 ใช้ถึง 30 ก.ย. 2570" },
-    { "date": "2028-12-31", "file": "plugins/e-commerce/skills/social-security-th/SKILL.md", "what": "เพดานค่าจ้างประกันสังคม 17,500 ขึ้นเป็น 20,000 ตั้งแต่ปี 2572 (เงินสมทบ 875 เปลี่ยน)" }
+    {"date": "2026-10-28", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "ประชุม กนง. ดอกเบี้ยนโยบาย 1.00% และ MRR ของธนาคารที่ยกตัวอย่างอาจเปลี่ยน", "quote": "1.00% since 25 Feb 2569"},
+    {"date": "2026-11-13", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรออมพลัส ปีงบ 2570 รอบ 1 ปิดขาย (ตัวอย่างอัตรา 1.80/2.80%)", "quote": "ออมพลัส fiscal year 2570 round 1"},
+    {"date": "2026-11-16", "file": "plugins/trading-finance/skills/position-sizing/SKILL.md", "what": "SET เปลี่ยนช่วงราคา (tick) ของหุ้น 5–50 บาท · ลบตาราง tick เดิมหลังวันนี้", "quote": "16 Nov 2569"},
+    {"date": "2026-12-31", "file": "plugins/trading-finance/skills/debt-payoff/SKILL.md", "what": "ขั้นต่ำบัตรเครดิต 8% ใช้ถึงสิ้นปี 2569", "quote": "kept at 8% until 31 Dec 2569"},
+    {"date": "2026-12-31", "file": "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md", "what": "ลดหย่อนปีภาษี 2569 สิ้นสุด · ทำไฟล์ปีภาษี 2570", "quote": "2569 (income Jan–Dec 2026"},
+    {"date": "2027-01-10", "file": "plugins/personal-life/skills/pet-care/SKILL.md", "what": "ข้อบัญญัติ กทม. เรื่องการเลี้ยงสัตว์เริ่มใช้ (วันที่ตามข่าวว่าเลื่อน)", "quote": "postponed and is reported to start **10 Jan 2570"},
+    {"date": "2027-01-26", "file": "plugins/graphic-design/skills/marketplace-product-images/SKILL.md", "what": "กฎรูปสินค้า Shopee และ TikTok Shop เปลี่ยนบ่อย ตรวจทุก 3 เดือน", "quote": "ตรวจซ้ำทุก 3 เดือน ครั้งหน้า 2027-01-26"},
+    {"date": "2027-01-31", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "ยื่นแบบออนไลน์ได้เพิ่ม 8 วัน ครอบถึงแบบที่ครบกำหนด 31 ม.ค. 2570", "quote": "2026-10-22 (ช่วงขยาย 1 ก.พ. 2567 – 31 ม.ค. 2570"},
+    {"date": "2027-01-31", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรผ่านวอลเล็ตรอบ ก.ค. 2569 เริ่มโอนเปลี่ยนมือได้", "quote": "31 Jan 2570"},
+    {"date": "2027-04-26", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดและพื้นที่ปลอดภัยของ TikTok YouTube LINE X ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
+    {"date": "2027-04-26", "file": "plugins/graphic-design/skills/line-richmenu/SKILL.md", "what": "เพดานของ rich menu API ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
+    {"date": "2027-04-26", "file": "plugins/graphic-design/skills/youtube-thumbnail/SKILL.md", "what": "ขนาด thumbnail และ Test & compare ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
+    {"date": "2027-05-15", "file": "plugins/personal-life/skills/flood-prep/SKILL.md", "what": "เงินช่วยน้ำท่วม 9,000 บาทครอบเฉพาะ 15 พ.ค.–30 ก.ย. 2569 · ตรวจเกณฑ์ฤดูฝนใหม่", "quote": "Cabinet flat payment 2569 | 9,000 บาท"},
+    {"date": "2027-06-30", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "มาตรการค่าจดจำนอง 0.01% สิ้นสุด 30 มิ.ย. 2570", "quote": "0.01% (homes ≤ 7 million baht, until 30 Jun 2570"},
+    {"date": "2027-09-30", "file": "plugins/e-commerce/skills/tax-vat-th/SKILL.md", "what": "VAT 7% ตาม พ.ร.ฎ. ฉบับที่ 807 ใช้ถึง 30 ก.ย. 2570", "quote": "23 ส.ค. 2569 ใช้ 1 ต.ค. 2569 – 30 ก.ย. 2570"},
+    {"date": "2028-12-31", "file": "plugins/e-commerce/skills/social-security-th/SKILL.md", "what": "เพดานค่าจ้างประกันสังคม 17,500 ขึ้นเป็น 20,000 ตั้งแต่ปี 2572 (เงินสมทบ 875 เปลี่ยน)", "quote": "| 2572 – 2574 | 20,000"}
   ]
 }

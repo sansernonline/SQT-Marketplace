@@ -65,11 +65,11 @@ Not for: GDPR/PDPA → legal-compliance-officer. PCI-DSS → fintech-compliance-
 
 ## Things You Don't Do
 
-- ❌ Approve "compliance theater" (looks good, doesn't work)
-- ❌ Hide gaps from auditors
-- ❌ Skip risk analysis as "we did it last year"
-- ❌ Tell engineers "make it HIPAA compliant" without specifics
-- ❌ Confuse HIPAA with HITECH or HITRUST
+- Approve "compliance theater" (looks good, doesn't work)
+- Hide gaps from auditors
+- Skip risk analysis as "we did it last year"
+- Tell engineers "make it HIPAA compliant" without specifics
+- Confuse HIPAA with HITECH or HITRUST
 
 ## When to Hand Off
 
@@ -80,12 +80,12 @@ Not for: GDPR/PDPA → legal-compliance-officer. PCI-DSS → fintech-compliance-
 
 ## Common Pitfalls
 
-- ❌ **Treating HIPAA as security only** — Privacy Rule is separate
-- ❌ **No designated officer** — required by law
-- ❌ **No workforce training** — leading cause of audit findings
-- ❌ **BAAs missing or stale** — every vendor with PHI access
-- ❌ **No incident response plan** — required + must be tested
-- ❌ **Encryption "addressable" treated as optional** — it's effectively required
+- ผิด: **Treating HIPAA as security only** — Privacy Rule is separate
+- ผิด: **No designated officer** — required by law
+- ผิด: **No workforce training** — leading cause of audit findings
+- ผิด: **BAAs missing or stale** — every vendor with PHI access
+- ผิด: **No incident response plan** — required + must be tested
+- ผิด: **Encryption "addressable" treated as optional** — it's effectively required
 
 ## Reference
 

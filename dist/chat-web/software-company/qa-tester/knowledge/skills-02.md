@@ -31,7 +31,7 @@ Use when writing or reviewing code for readability (names, function shape, comme
 
 **มันคืออะไร · หน่วยอะไร · ใช้ได้ตอนไหน**
 
-| ❌ | ✅ | ที่ต่างคือ |
+| ✗ | ✓ | ที่ต่างคือ |
 |---|---|---|
 | `d` | `daysSinceLastLogin` | มีหน่วย มีจุดอ้างอิง |
 | `list` | `overdueInvoices` | บอกว่าข้างในคืออะไร |
@@ -108,12 +108,12 @@ Use when writing or reviewing code for readability (names, function shape, comme
 ## 6 · คอมเมนต์ — เขียน "ทำไม" ไม่ใช่ "ทำอะไร"
 
 ```ts
-// ❌ เพิ่มค่า i ทีละ 1
-// ❌ ฟังก์ชันคำนวณภาษี
+// ผิด: เพิ่มค่า i ทีละ 1
+// ผิด: ฟังก์ชันคำนวณภาษี
 
-// ✅ ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
-// ✅ ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
-// ✅ ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
+// ถูก: ปัดเศษสตางค์ลงเสมอ ไม่ใช่ปัดใกล้สุด — ตามที่ลูกค้ากำหนด (อ้างที่มาจริง: ชื่อประกาศ/สัญญา + ข้อ + ลิงก์)
+// ถูก: ผู้ให้บริการ SMS จำกัด 3 ข้อความ/วินาที เกินแล้วบล็อกไอพี 5 นาที
+// ถูก: ต้องเรียงลำดับนี้เท่านั้น — เรียก validate ก่อน normalize จะได้เบอร์ที่ผิดรูปแบบ
 ```
 
 **คอมเมนต์ที่อธิบายว่าโค้ดทำอะไร คือสัญญาณว่าชื่อตั้งผิด** ให้แก้ชื่อแล้วลบคอมเมนต์
@@ -152,14 +152,14 @@ Use when writing or reviewing code for readability (names, function shape, comme
 ### จัดตามฟีเจอร์ ไม่ใช่ตามชนิดไฟล์
 
 ```
-❌ จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
+ผิด: จัดตามชนิด — แก้ฟีเจอร์เดียวต้องเปิด 5 โฟลเดอร์
 src/
   controllers/   invoice.ts  customer.ts  report.ts
   services/      invoice.ts  customer.ts  report.ts
   models/        invoice.ts  customer.ts  report.ts
   validators/    invoice.ts  customer.ts  report.ts
 
-✅ จัดตามฟีเจอร์ — ทุกอย่างของใบแจ้งหนี้อยู่ที่เดียว
+ถูก: จัดตามฟีเจอร์ — ทุกอย่างของใบแจ้งหนี้อยู่ที่เดียว
 src/
   invoice/       routes.ts  service.ts  model.ts  validation.ts  invoice.test.ts
   customer/      ...
@@ -214,13 +214,13 @@ src/
 
 ## 11 · Anti-patterns
 
-- ❌ **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
-- ❌ **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
-- ❌ **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
-- ❌ **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
-- ❌ **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
-- ❌ **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
-- ❌ **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
+- **แก้ชื่อทั้งไฟล์ในคอมมิตเดียวกับที่แก้ตรรกะ** — รีวิวไม่ได้ว่าอะไรเปลี่ยนจริง ให้แยกคอมมิต
+- **`utils.ts` ที่มี 40 ฟังก์ชันไม่เกี่ยวกัน**
+- **คอมเมนต์หัวไฟล์ที่ generate มาแล้วไม่มีใครอัปเดต** — `@author` `@version` ที่ git บอกได้ดีกว่า
+- **โค้ดที่ถูกคอมเมนต์ทิ้งไว้ "เผื่อได้ใช้"** — git เก็บให้แล้ว ให้ลบทิ้ง
+- **ตั้งชื่อตาม pattern แทนตามหน้าที่** — `InvoiceFactoryStrategyImpl` บอกว่าใช้ pattern อะไร ไม่ได้บอกว่าทำอะไร
+- **เปลี่ยนแบบการตั้งชื่อกลางโปรเจกต์** — ความไม่สม่ำเสมอแย่กว่าแบบที่ไม่สวย
+- **ย่อชื่อเพราะบรรทัดยาวเกิน** — ให้ขึ้นบรรทัดใหม่ อย่าตัดชื่อ
 
 ---
 
@@ -547,15 +547,15 @@ push / PR → lint → unit (< 10 วินาที) → integration → build
 
 ## 8 · Anti-patterns
 
-- ❌ **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
+- **เขียน test หลังจบงานเพื่อให้ผ่าน gate** — ได้ test ที่ยืนยันว่าโค้ดทำสิ่งที่มันทำ
   ไม่ใช่สิ่งที่มันควรทำ
-- ❌ **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
-- ❌ **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
-- ❌ **mock ทุกอย่างจน test ทดสอบแค่ mock**
-- ❌ **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
-- ❌ **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
-- ❌ **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
-- ❌ **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
+- **assert ว่า "ไม่ throw"** เฉย ๆ — ไม่ได้ทดสอบอะไรเลย
+- **test ที่พึ่ง test ก่อนหน้า** — พอรันเดี่ยว ๆ แดงทันที
+- **mock ทุกอย่างจน test ทดสอบแค่ mock**
+- **`sleep(1000)` รอ async** — ช้าและยังเปราะอยู่ดี
+- **retry flaky test จนเขียว** — คุณเพิ่งซ่อนบั๊กที่เกิดจริงใน production
+- **ไล่ coverage 100%** — เขียน test ให้ getter เพื่อตัวเลข
+- **ข้อมูลทดสอบเป็นข้อมูลลูกค้าจริง** — ผิดกฎหมายและหลุดง่าย ใช้ตัวสร้างข้อมูลปลอม
 
 ---
 
@@ -974,13 +974,13 @@ Use when designing end-to-end tests with Playwright or Cypress, fixing flaky tes
 ```
 Most resilient ─────────────────────────► Most brittle
 
-✅ Role + accessible name      page.getByRole('button', { name: 'Submit' })
-✅ Test IDs                     page.getByTestId('submit-btn')
+ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
+ถูก: Test IDs                     page.getByTestId('submit-btn')
 🟡 Visible text                 page.getByText('Submit')
 🟡 Label                        page.getByLabel('Email')
 🔴 CSS classes                  page.locator('.btn-primary')
 🔴 Tag + index                  page.locator('button:nth-child(3)')
-❌ XPath                        page.locator('//div[2]/button')
+ผิด: XPath                        page.locator('//div[2]/button')
 ```
 
 **Rule:** Prefer queries that survive refactoring.
@@ -992,14 +992,14 @@ Most resilient ─────────────────────�
 
 ## What to Test E2E (Not Everything!)
 
-### ✅ DO test E2E
+### ถูก: DO test E2E
 - Critical user journeys (login → checkout → confirmation)
 - Multi-step workflows that span multiple pages
 - Integration with external services (payment, email)
 - "Smoke tests" that verify deployment works
 - Cross-browser specific behavior
 
-### ❌ DON'T test E2E
+### DON'T test E2E
 - Every form validation (use unit tests)
 - Edge cases of business logic (use unit/integration)
 - Every error message (use unit tests)
@@ -1055,14 +1055,14 @@ Most resilient ─────────────────────�
 
 ## Anti-patterns
 
-- ❌ **Testing implementation details** — selectors based on internal structure
-- ❌ **Long monolithic tests** — one test with 50 steps is hard to debug
-- ❌ **Coupled tests** — Test B depends on Test A having run
-- ❌ **Hidden state** — tests behave differently depending on order or data
-- ❌ **Manual cleanup** — relying on people to reset the environment
-- ❌ **No quarantine** — failing tests get merged anyway because "it's flaky"
-- ❌ **Mocking everything** — at this layer, use the real integrations, or it's not E2E
-- ❌ **Expected value read from the page** — the bug becomes the expectation
+- **Testing implementation details** — selectors based on internal structure
+- **Long monolithic tests** — one test with 50 steps is hard to debug
+- **Coupled tests** — Test B depends on Test A having run
+- **Hidden state** — tests behave differently depending on order or data
+- **Manual cleanup** — relying on people to reset the environment
+- **No quarantine** — failing tests get merged anyway because "it's flaky"
+- **Mocking everything** — at this layer, use the real integrations, or it's not E2E
+- **Expected value read from the page** — the bug becomes the expectation
 
 ## Quality Targets (from qa-tester agent)
 
@@ -1081,12 +1081,12 @@ Most resilient ─────────────────────�
 
 สามวิธีล็อกอินในชุดทดสอบ เรียงจากแย่ไปดี พร้อมโค้ดตัวอย่างของ Playwright
 
-## ❌ Bad: log in via UI every test
+## Bad: log in via UI every test
 ```
 Slow, brittle, duplicate code
 ```
 
-## ✅ Good: log in once, share state
+## Good: log in once, share state
 ```typescript
 // playwright.config.ts
 {
@@ -1095,7 +1095,7 @@ Slow, brittle, duplicate code
 }
 ```
 
-## ✅ Better: API login (no UI)
+## Better: API login (no UI)
 ```typescript
 // page.request shares its cookie jar with the page's browser context,
 // so the Set-Cookie from the login response is already in the browser — no addCookies needed.
@@ -1129,9 +1129,9 @@ async function login(page, user) {
 | Cloud grid (BrowserStack, etc.) | Massive | 🔴 High (cost) |
 
 **Requirements for safe parallel:**
-- ✅ Tests don't share state
-- ✅ Unique test data per test
-- ✅ Database/external services support concurrency
+- Tests don't share state
+- Unique test data per test
+- Database/external services support concurrency
 
 ## CI Integration
 
@@ -1194,11 +1194,11 @@ npx playwright test                                             # pre-prod (ค�
 > WebKit ของ Playwright ไม่ใช่ Safari ตัวจริง 100% → งานที่ลูกค้าใช้ iPhone เยอะ ให้ลองบนเครื่องจริงก่อน release อีกรอบ
 
 ### Artifacts to capture
-- ✅ Screenshots on failure
-- ✅ Video on failure
-- ✅ Trace files (Playwright)
-- ✅ Console logs
-- ✅ Network logs
+- Screenshots on failure
+- Video on failure
+- Trace files (Playwright)
+- Console logs
+- Network logs
 
 
 ## reference: coverage-and-libraries.md
@@ -1242,14 +1242,14 @@ Priority uses the `test-case-template` scale (P1 = most important, P3 = least), 
 
 โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
 
-## ❌ Bad (sleep hack)
+## Bad (sleep hack)
 ```typescript
 await page.click('#submit');
 await page.waitForTimeout(2000); // ← flaky
 await expect(page.getByText('Success')).toBeVisible();
 ```
 
-## ✅ Good (event-based wait)
+## Good (event-based wait)
 ```typescript
 const responsePromise = page.waitForResponse('/api/submit');
 await page.click('#submit');
@@ -1264,7 +1264,7 @@ await expect(page.getByText('Success')).toBeVisible();
 
 ตัวอย่างเทียบเทสต์ที่ไม่มี abstraction กับเทสต์ที่ใช้ Page Object ใช้ตอนตั้งโครงชุดทดสอบหรือรีวิวเทสต์ที่ลอกขั้นตอนซ้ำกัน
 
-## ❌ Bad (no abstraction)
+## Bad (no abstraction)
 ```typescript
 test('user can login', async ({ page }) => {
   await page.goto('/login');
@@ -1284,7 +1284,7 @@ test('user can update profile', async ({ page }) => {
 });
 ```
 
-## ✅ Good (Page Object)
+## Good (Page Object)
 ```typescript
 // pages/LoginPage.ts
 export class LoginPage {
@@ -1319,22 +1319,22 @@ test('user can login', async ({ page }) => {
 
 ## Option 1: Shared test DB (popular, problematic)
 ```
-❌ All tests share same data
-❌ Order-dependent
-❌ Hard to parallelize
-❌ Pollution between tests
+Wrong: All tests share same data
+Wrong: Order-dependent
+Wrong: Hard to parallelize
+Wrong: Pollution between tests
 ```
 
 ## Option 2: Per-test setup (slow)
 ```
 🟡 Clean slate every test
 🟡 Reliable but slow
-✅ Good for critical flows
+Good for critical flows
 ```
 
 ## Option 3: API setup, UI verification (best)
 ```typescript
-// ✅ Setup via API (fast), verify via UI (real test)
+// Right: Setup via API (fast), verify via UI (real test)
 test('user sees orders', async ({ page, request }) => {
   // Setup via API — fast, reliable
   const user = await api.createUser();
@@ -1348,7 +1348,7 @@ test('user sees orders', async ({ page, request }) => {
 
 ## Option 4: Database snapshot + rollback
 ```
-✅ Real production-like data
-✅ Fast (uses snapshots)
+Right: Real production-like data
+Right: Fast (uses snapshots)
 🟡 Requires DB tooling
 ```

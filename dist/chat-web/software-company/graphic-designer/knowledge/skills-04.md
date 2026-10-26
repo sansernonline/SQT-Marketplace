@@ -60,26 +60,26 @@ work, required fields with no smart default, hidden features needing tutorials.
 
 **API description**
 
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
 authentication to facilitate the seamless retrieval of user profile data."
 
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
 `?fields=name,email` to limit the response."
 
 **Sprint goal**
 
-❌ "Improve overall product quality and customer satisfaction through various
+Wrong: "Improve overall product quality and customer satisfaction through various
 initiatives."
 
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
 transient errors (1d), clearer error messages (1d)."
 
 **Architecture for a new feature**
 
-❌ "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
+Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
 dedicated auth service."
 
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
 auth middleware. Log to the existing system."
 
 ## Anti-patterns to reject
@@ -226,17 +226,17 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 
 ## 7 · Anti-patterns
 
-- ❌ **ใช้ Heading style ที่มากับ Word** → ใช้ `h1()/h2()/h3()`
-- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** → เส้น `line` 0.5pt
-- ❌ **ตัวอักษรสีดำสนิท** → ใช้ `text_body`
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี**
-- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** → `fixed_widths()` เสมอ
-- ❌ **อีโมจิเยอะเกิน**
-- ❌ **ส่งไฟล์โดยไม่เคย render ดู**
-- ❌ **ใช้หน้าตาตั้งต้นของ skill เป็นเอกสารส่งมอบ ทั้งที่แอปมีตัวตนแล้ว** → ทำข้อ 0.1
-- ❌ **รูปกว้าง 2000px วางในหน้าแนวตั้ง 17 ซม. โดยไม่คิดขนาดตัวอักษร** → ตัวอักษรเหลือราว 5pt (ข้อ 0.1 ข้อ 6)
-- ❌ **ภาพตกแต่งบนปกที่ไม่มีใครบอกว่าว้าว** → ตัดออก ให้ตัวอักษรเป็นจุดเด่น (references/word-layout.md ข้อ 8)
-- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ**
+- **ใช้ Heading style ที่มากับ Word** → ใช้ `h1()/h2()/h3()`
+- **เส้นตารางดำหนาแบบค่าเริ่มต้น** → เส้น `line` 0.5pt
+- **ตัวอักษรสีดำสนิท** → ใช้ `text_body`
+- **หัวตารางตัวหนาแต่ไม่มีพื้นสี**
+- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** → `fixed_widths()` เสมอ
+- **อีโมจิเยอะเกิน**
+- **ส่งไฟล์โดยไม่เคย render ดู**
+- **ใช้หน้าตาตั้งต้นของ skill เป็นเอกสารส่งมอบ ทั้งที่แอปมีตัวตนแล้ว** → ทำข้อ 0.1
+- **รูปกว้าง 2000px วางในหน้าแนวตั้ง 17 ซม. โดยไม่คิดขนาดตัวอักษร** → ตัวอักษรเหลือราว 5pt (ข้อ 0.1 ข้อ 6)
+- **ภาพตกแต่งบนปกที่ไม่มีใครบอกว่าว้าว** → ตัดออก ให้ตัวอักษรเป็นจุดเด่น (references/word-layout.md ข้อ 8)
+- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ**
 
 เหตุผลและสิ่งที่ใช้แทนของแต่ละข้อ → [`references/anti-patterns.md`](references/anti-patterns.md)
 
@@ -274,16 +274,16 @@ render เป็น PDF แล้วแปลงเป็นภาพ แล้�
 
 หัวข้อสั้นอยู่ใน `SKILL.md`
 
-- ❌ **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
+- **ใช้ Heading style ที่มากับ Word** — จะทับสีที่ตั้งไว้ ให้ใช้ `h1()/h2()/h3()`
   ซึ่งตั้ง `outlineLvl` เอง สารบัญ (TOC) จึงยังเห็นหัวข้อ
-- ❌ **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
-- ❌ **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
-- ❌ **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
-- ❌ **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
+- **เส้นตารางดำหนาแบบค่าเริ่มต้น** — เอกสารดูเก่าทันที ใช้เส้นสี `line` หนา 0.5pt ระหว่างแถว (ใต้แถวหัวคือเส้นแบรนด์ 1.5pt)
+- **ตัวอักษรสีดำสนิท** — ให้ใช้ `text_body` ซึ่งเป็นเทาเข้ม เนื้อความจะนุ่มขึ้นมาก
+- **หัวตารางตัวหนาแต่ไม่มีพื้นสี** — ตารางข้ามหน้าแล้วคนอ่านไม่รู้ว่าเริ่มตรงไหน
+- **ปล่อยความกว้างคอลัมน์ให้ Word คิดเอง** — ต้อง `fixed_widths()` เสมอ
   ไม่งั้นคอลัมน์รหัสจะกว้างเท่าคอลัมน์รายละเอียด
-- ❌ **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
-- ❌ **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
-- ❌ **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
+- **อีโมจิเยอะเกิน** — 1 ตัวต่อ callout พอ ไม่ใส่ในหัวข้อทุกอัน
+- **ส่งไฟล์โดยไม่เคย render ดู** — ดูข้อ 6
+- **สร้าง .docx โดยไม่เก็บ markdown ต้นฉบับ** — รอบหน้าแก้ไม่ได้
 
 
 ## reference: api.md
@@ -529,7 +529,7 @@ d.save("deck.pptx")
 
 # ตัวอย่างชุดสีที่เคยใช้จริง
 
-> ⚠️ **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
+> ระวัง: **นี่คือตัวอย่าง ไม่ใช่ค่ามาตรฐาน**
 > เลือกสีจากเนื้องานตามข้อ 0 ของ `SKILL.md` ก่อนเสมอ
 > ใช้ไฟล์นี้เพื่อดูว่าชุดที่ครบและผ่านเกณฑ์ contrast (ตรวจด้วยสคริปต์แล้ว 22 ต.ค. 2569) หน้าตาเป็นอย่างไร ไม่ใช่เพื่อคัดลอก
 

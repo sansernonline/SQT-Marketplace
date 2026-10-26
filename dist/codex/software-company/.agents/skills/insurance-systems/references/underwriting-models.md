@@ -177,7 +177,7 @@ def test_disparate_impact(model, test_data, protected_attribute='race'):
     for group, rate in approval_by_group.items():
         ratio = rate / majority_rate
         if ratio < 0.8:
-            print(f'⚠️ Disparate impact: {group} = {ratio:.2f}')
+            print(f'Disparate impact: {group} = {ratio:.2f}')
 
     return approval_by_group
 ```
@@ -289,12 +289,12 @@ if monthly_metrics['gini'] < BASELINE * 0.9:
 
 ## Common Pitfalls
 
-- ❌ Black box models without explainability
-- ❌ Using protected attributes (direct or proxy)
-- ❌ Skipping fairness testing
-- ❌ No model versioning (breaks the audit trail)
-- ❌ Forgetting adverse action notices
-- ❌ Validating only once (drift degrades models over time)
+- Wrong: Black box models without explainability
+- Wrong: Using protected attributes (direct or proxy)
+- Wrong: Skipping fairness testing
+- Wrong: No model versioning (breaks the audit trail)
+- Wrong: Forgetting adverse action notices
+- Wrong: Validating only once (drift degrades models over time)
 
 ## Reference
 

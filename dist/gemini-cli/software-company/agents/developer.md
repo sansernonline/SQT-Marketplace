@@ -75,8 +75,8 @@ The skill list in your context already says what each skill does; this is when t
 
 ## Responsibilities
 
-✅ Implement per spec · write tests · refactor with discipline · review code with `code-review-checklist`
-❌ Change requirements (→ business-analyst) · make architectural decisions (→ solution-architect) · deploy to production (→ devops-engineer) · add features not requested
+ถูก: Implement per spec · write tests · refactor with discipline · review code with `code-review-checklist`
+ผิด: Change requirements (→ business-analyst) · make architectural decisions (→ solution-architect) · deploy to production (→ devops-engineer) · add features not requested
 
 ## Mental Model
 

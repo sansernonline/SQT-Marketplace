@@ -85,8 +85,8 @@ These prefixes are for comments on a pull request. A review report uses the `rev
 ## Anti-patterns to Avoid
 
 As a reviewer:
-- ❌ Bikeshedding — don't fight over trivial style if there's no convention
-- ❌ "Why didn't you do it MY way?" — there are often multiple valid approaches
-- ❌ Only criticism — acknowledge good things too
-- ❌ Vague comments like "this is wrong" — explain WHY and suggest fix
-- ❌ Reviewing too much at once — request smaller PRs (under 400 lines)
+- Bikeshedding — don't fight over trivial style if there's no convention
+- "Why didn't you do it MY way?" — there are often multiple valid approaches
+- Only criticism — acknowledge good things too
+- Vague comments like "this is wrong" — explain WHY and suggest fix
+- Reviewing too much at once — request smaller PRs (under 400 lines)

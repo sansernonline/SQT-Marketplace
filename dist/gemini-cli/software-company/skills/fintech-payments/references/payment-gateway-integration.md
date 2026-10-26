@@ -32,13 +32,13 @@ Settlement times and coverage change often and were not re-checked on 2026-10-14
 
 | Gateway | Card | Wallets | Local TH | Local SEA | Settlement | Best for |
 |---------|:----:|:-------:|:--------:|:---------:|:----------:|----------|
-| **Stripe** | ✅ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
-| **Adyen** | ✅ Excellent | All major | ✅ | ✅ | T+1 | Enterprise, global retail |
-| **Omise** | ✅ | ✅ TH-specific | ✅ Comprehensive | 🟡 | T+1 | Thailand-first |
-| **2C2P** | ✅ | ✅ | ✅ | ✅ SEA-strong | T+1-2 | SEA regional |
-| **Braintree** | ✅ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
-| **Razorpay** | ✅ | UPI | ❌ | 🟡 | T+2 | India |
-| **Square** | ✅ | Cash App | ❌ | ❌ | T+1 | US/CA in-person |
+| **Stripe** | ✓ Excellent | Apple/Google | 🟡 PromptPay | 🟡 Some | T+2-7 | Global, SaaS, subscriptions |
+| **Adyen** | ✓ Excellent | All major | ✓ | ✓ | T+1 | Enterprise, global retail |
+| **Omise** | ✓ | ✓ TH-specific | ✓ Comprehensive | 🟡 | T+1 | Thailand-first |
+| **2C2P** | ✓ | ✓ | ✓ | ✓ SEA-strong | T+1-2 | SEA regional |
+| **Braintree** | ✓ | PayPal+ | 🟡 | 🟡 | T+2 | PayPal users |
+| **Razorpay** | ✓ | UPI | ✗ | 🟡 | T+2 | India |
+| **Square** | ✓ | Cash App | ✗ | ✗ | T+1 | US/CA in-person |
 
 ## Card Payment Flow (Generic)
 
@@ -367,9 +367,9 @@ async function reconcilePayouts(date: Date) {
 //    - Wallet: usually instant
 
 // Partial refund pattern — the idempotency key comes from a STORED refund request.
-// ❌ `refund_${paymentId}_${Date.now()}` → new key on every retry → timeout + retry = refunded twice
-// ❌ `refund_${paymentId}_${amount}`     → two real refunds of the same amount share a key → the 2nd is silently dropped
-// ✅ one refund_requests row per real refund; its id is the key; every retry reuses it
+// Wrong: `refund_${paymentId}_${Date.now()}` → new key on every retry → timeout + retry = refunded twice
+// Wrong: `refund_${paymentId}_${amount}`     → two real refunds of the same amount share a key → the 2nd is silently dropped
+// Right: one refund_requests row per real refund; its id is the key; every retry reuses it
 
 // Step 1: record the request once (inside a transaction, payment row locked)
 async function requestRefund(paymentId: string, clientRequestId: string, amountCents?: bigint) {
@@ -441,16 +441,16 @@ async function executeRefund(refundRequestId: string) {
 
 ## Common Pitfalls
 
-- ❌ **Trust webhook order** — events can arrive in any order
-- ❌ **Trust webhook amount** — check it with the API
-- ❌ **No idempotency** — a network glitch charges the customer twice
-- ❌ **Process webhook inline** — slow replies make the gateway retry and create duplicates
-- ❌ **Store card numbers** — even encrypted, they keep your system in PCI scope
-- ❌ **Skip 3DS** — many payments get declined in the EU
-- ❌ **Hard-code currency** — breaks when you add new markets
-- ❌ **Sync state from gateway only on demand** — your data drifts further from the gateway's over time
-- ❌ **Mix gateway IDs with internal IDs** — store both, in separate fields
-- ❌ **No reconciliation** — small daily differences add up to a big monthly loss
+- Wrong: **Trust webhook order** — events can arrive in any order
+- Wrong: **Trust webhook amount** — check it with the API
+- Wrong: **No idempotency** — a network glitch charges the customer twice
+- Wrong: **Process webhook inline** — slow replies make the gateway retry and create duplicates
+- Wrong: **Store card numbers** — even encrypted, they keep your system in PCI scope
+- Wrong: **Skip 3DS** — many payments get declined in the EU
+- Wrong: **Hard-code currency** — breaks when you add new markets
+- Wrong: **Sync state from gateway only on demand** — your data drifts further from the gateway's over time
+- Wrong: **Mix gateway IDs with internal IDs** — store both, in separate fields
+- Wrong: **No reconciliation** — small daily differences add up to a big monthly loss
 
 ## Reference
 

@@ -447,14 +447,14 @@ async def reconcile_warehouse(warehouse_id):
 
 ## Common Pitfalls
 
-- ❌ **No row-level lock during reserve** → overselling
-- ❌ **Float for quantities** → use integers only (unless the item really sells in fractions)
-- ❌ **No reservation expiry** → ghost stock accumulates
-- ❌ **Trust marketplace counts** → drift over time
-- ❌ **No event log** → can't audit or rebuild stock history
-- ❌ **Show on-hand instead of saleable** → false promises
-- ❌ **No safety stock** → stockouts during demand spikes
-- ❌ **Reserve outside DB transaction** → race conditions
+- Wrong: **No row-level lock during reserve** → overselling
+- Wrong: **Float for quantities** → use integers only (unless the item really sells in fractions)
+- Wrong: **No reservation expiry** → ghost stock accumulates
+- Wrong: **Trust marketplace counts** → drift over time
+- Wrong: **No event log** → can't audit or rebuild stock history
+- Wrong: **Show on-hand instead of saleable** → false promises
+- Wrong: **No safety stock** → stockouts during demand spikes
+- Wrong: **Reserve outside DB transaction** → race conditions
 
 ## Reference
 

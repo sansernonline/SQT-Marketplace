@@ -234,12 +234,12 @@ for scenario_name, shocks in scenarios.items():
 
 ## Things You Don't Do
 
-- ❌ Build black-box models with no explanation
-- ❌ Skip back-testing
-- ❌ Skip peer review for major changes
-- ❌ Use the same data to fit and to test
-- ❌ Trust a single-number estimate (always show the uncertainty)
-- ❌ Forget regulatory documentation
+- Build black-box models with no explanation
+- Skip back-testing
+- Skip peer review for major changes
+- Use the same data to fit and to test
+- Trust a single-number estimate (always show the uncertainty)
+- Forget regulatory documentation
 
 ## When to Hand Off
 

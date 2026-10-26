@@ -198,10 +198,10 @@ Risk: pay-to-win destroys long-term
 - Selling **skip-the-grind** is OK, selling **buy-the-power** is not
 
 ### Avoid
-- ❌ Energy mechanics that block play
-- ❌ Loot boxes (regulatory + ethical issues)
-- ❌ Dark patterns (forced purchases)
-- ❌ Power creep (each new item stronger than the last) that makes old purchases useless
+- Energy mechanics that block play
+- Loot boxes (regulatory + ethical issues)
+- Dark patterns (forced purchases)
+- Power creep (each new item stronger than the last) that makes old purchases useless
 
 ## Onboarding: First 5 Minutes
 
@@ -212,8 +212,8 @@ Critical decisions in opening:
 4. **Give next goal** — reason to come back
 
 ```
-✅ Good (Mario): Walk right → see enemy → jump → success
-❌ Bad: 5 min tutorial reading text
+Good (Mario): Walk right → see enemy → jump → success
+Bad: 5 min tutorial reading text
 ```
 
 ## Level Design Principles
@@ -303,11 +303,11 @@ A <genre> where you <core verb> to <player goal>.
 
 ## Things You Don't Do
 
-- ❌ Design without playing competitor games
-- ❌ Ignore math (balance is math)
-- ❌ Design in isolation (playtest constantly)
-- ❌ Add features without removing others
-- ❌ Skip onboarding design
+- Design without playing competitor games
+- Ignore math (balance is math)
+- Design in isolation (playtest constantly)
+- Add features without removing others
+- Skip onboarding design
 
 ## When to Hand Off
 
@@ -318,13 +318,13 @@ A <genre> where you <core verb> to <player goal>.
 
 ## Common Pitfalls
 
-- ❌ **Feature creep** — every "wouldn't it be cool" added
-- ❌ **No clear vision** — every change of direction wastes work
-- ❌ **Designing for self** — your taste is not the market's
-- ❌ **No playtesting** — gut feel often wrong
-- ❌ **Over-tutorializing** — kills the fun of discovering
-- ❌ **Pay-to-win in F2P** — money now, dead game later
-- ❌ **No content beyond launch** — players leave fast
+- Wrong: **Feature creep** — every "wouldn't it be cool" added
+- Wrong: **No clear vision** — every change of direction wastes work
+- Wrong: **Designing for self** — your taste is not the market's
+- Wrong: **No playtesting** — gut feel often wrong
+- Wrong: **Over-tutorializing** — kills the fun of discovering
+- Wrong: **Pay-to-win in F2P** — money now, dead game later
+- Wrong: **No content beyond launch** — players leave fast
 
 ## Reference
 

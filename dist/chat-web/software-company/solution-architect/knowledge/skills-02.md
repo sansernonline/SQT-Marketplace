@@ -353,11 +353,11 @@ flowchart LR
 
 ## Things You Don't Do
 
-- ❌ Track every event (too much noise)
-- ❌ Build in-house when an existing SaaS tool does the job
-- ❌ Ignore CS team workflows
-- ❌ Show signals with no playbook that says what to do
-- ❌ Make the health score a black box (CS must be able to explain it)
+- Track every event (too much noise)
+- Build in-house when an existing SaaS tool does the job
+- Ignore CS team workflows
+- Show signals with no playbook that says what to do
+- Make the health score a black box (CS must be able to explain it)
 
 ## When to Hand Off
 
@@ -368,11 +368,11 @@ flowchart LR
 
 ## Common Pitfalls
 
-- ❌ **Vanity metrics** — daily active users (DAU) go up, churn stays the same
-- ❌ **No baseline** — you can't measure improvement
-- ❌ **Tool sprawl** — too many places for CS to look
-- ❌ **Late signals** — by the time we know, the customer has left
-- ❌ **Alerts with no action** — the account is flagged but no playbook says what to do
+- Wrong: **Vanity metrics** — daily active users (DAU) go up, churn stays the same
+- Wrong: **No baseline** — you can't measure improvement
+- Wrong: **Tool sprawl** — too many places for CS to look
+- Wrong: **Late signals** — by the time we know, the customer has left
+- Wrong: **Alerts with no action** — the account is flagged but no playbook says what to do
 
 
 ## reference: agent-integration-engineer.md
@@ -527,11 +527,11 @@ try {
 
 ## Things You Don't Do
 
-- ❌ Hardcode customer credentials
-- ❌ Skip webhook signature verification
-- ❌ Write without idempotency
-- ❌ Process webhooks synchronously (always process them async)
-- ❌ Ignore rate limits of partner APIs
+- Hardcode customer credentials
+- Skip webhook signature verification
+- Write without idempotency
+- Process webhooks synchronously (always process them async)
+- Ignore rate limits of partner APIs
 
 ## When to Hand Off
 
@@ -542,11 +542,11 @@ try {
 
 ## Common Pitfalls
 
-- ❌ **No retry or dead letter queue** — events get lost without anyone noticing
-- ❌ **No webhook versioning** — every change breaks customers
-- ❌ **Synchronous external calls** — when a partner goes down, we go down too
-- ❌ **Trust the webhook payload a client sends** — attackers can replay or fake it
-- ❌ **Customers can't see integration status** — they can't debug problems themselves
+- Wrong: **No retry or dead letter queue** — events get lost without anyone noticing
+- Wrong: **No webhook versioning** — every change breaks customers
+- Wrong: **Synchronous external calls** — when a partner goes down, we go down too
+- Wrong: **Trust the webhook payload a client sends** — attackers can replay or fake it
+- Wrong: **Customers can't see integration status** — they can't debug problems themselves
 
 
 ## reference: agent-revops-analyst.md
@@ -986,11 +986,11 @@ log.info('Order created', {
 
 ## Things You Don't Do
 
-- ❌ Hardcode tenant assumptions
-- ❌ Skip per-tenant rate limiting
-- ❌ Take tenant_id from the client (always read it from the token)
-- ❌ Put tenant data in a shared cache without the tenant in the key
-- ❌ Run schema migrations without testing them per tenant
+- Hardcode tenant assumptions
+- Skip per-tenant rate limiting
+- Take tenant_id from the client (always read it from the token)
+- Put tenant data in a shared cache without the tenant in the key
+- Run schema migrations without testing them per tenant
 
 ## When to Hand Off
 
@@ -1001,12 +1001,12 @@ log.info('Order created', {
 
 ## Common Pitfalls
 
-- ❌ **No tenant context in queries** — data will leak sooner or later
-- ❌ **Shared caches without a tenant key** — data leaks
-- ❌ **No per-tenant limits** — one tenant slows everyone down
-- ❌ **Schema migrations break some tenants** — and nobody notices
-- ❌ **Logs leak across tenants** — a privacy breach
-- ❌ **Can't offboard cleanly** — old data stays behind
+- Wrong: **No tenant context in queries** — data will leak sooner or later
+- Wrong: **Shared caches without a tenant key** — data leaks
+- Wrong: **No per-tenant limits** — one tenant slows everyone down
+- Wrong: **Schema migrations break some tenants** — and nobody notices
+- Wrong: **Logs leak across tenants** — a privacy breach
+- Wrong: **Can't offboard cleanly** — old data stays behind
 
 
 ## reference: enterprise-integration.md
@@ -1372,13 +1372,13 @@ class SalesforceClient {
 
 ## Things You Don't Do
 
-- ❌ Trust a SAML or OIDC response without checking its signature, issuer, audience, expiry and (OIDC) `state` + `nonce`
-- ❌ Compare signatures, `state` or `nonce` with `===` / `!==` — use a constant-time compare
-- ❌ Deliver webhooks to the customer synchronously
-- ❌ Retry only once
-- ❌ Process inbound webhooks without an idempotency check
-- ❌ Hardcode customer credentials
-- ❌ Ignore the partner's rate limits
+- Trust a SAML or OIDC response without checking its signature, issuer, audience, expiry and (OIDC) `state` + `nonce`
+- Compare signatures, `state` or `nonce` with `===` / `!==` — use a constant-time compare
+- Deliver webhooks to the customer synchronously
+- Retry only once
+- Process inbound webhooks without an idempotency check
+- Hardcode customer credentials
+- Ignore the partner's rate limits
 
 ## Reference
 
@@ -1735,7 +1735,7 @@ if (hasFeature(req.tenant, 'advanced_analytics')) {
 const cacheKey = `tenant:${tenantId}:order:${orderId}`;
 await cache.set(cacheKey, order);
 
-// ❌ NEVER share cache across tenants
+// Wrong: NEVER share cache across tenants
 const cacheKey = `order:${orderId}`;  // BAD
 ```
 
@@ -1781,12 +1781,12 @@ async def offboard_tenant(tenant_id):
 
 ## Common Pitfalls
 
-- ❌ **Missing tenant_id in queries** — data leaks and nobody notices
-- ❌ **Shared cache without a tenant key** — one tenant sees another's data
-- ❌ **Background jobs without the tenant** — the job runs as the wrong tenant
-- ❌ **No rate limit per tenant** — one tenant slows everyone down
-- ❌ **Hardcoded tenant assumptions** — breaks as soon as a tenant differs from the first one
-- ❌ **Per-tenant migrations not tested** — surprises in production
+- Wrong: **Missing tenant_id in queries** — data leaks and nobody notices
+- Wrong: **Shared cache without a tenant key** — one tenant sees another's data
+- Wrong: **Background jobs without the tenant** — the job runs as the wrong tenant
+- Wrong: **No rate limit per tenant** — one tenant slows everyone down
+- Wrong: **Hardcoded tenant assumptions** — breaks as soon as a tenant differs from the first one
+- Wrong: **Per-tenant migrations not tested** — surprises in production
 
 ## Reference
 
@@ -2138,12 +2138,12 @@ await stripe.subscriptions.create({
 
 ## Things You Don't Do
 
-- ❌ Build your own billing engine
-- ❌ Calculate tax manually
-- ❌ Trust prices the client sends
-- ❌ Skip the idempotency check on webhooks
-- ❌ Recognize revenue when you send the invoice (recognize it over the service period)
-- ❌ Store money as a float
+- Build your own billing engine
+- Calculate tax manually
+- Trust prices the client sends
+- Skip the idempotency check on webhooks
+- Recognize revenue when you send the invoice (recognize it over the service period)
+- Store money as a float
 
 ## Reference
 
@@ -2218,26 +2218,26 @@ work, required fields with no smart default, hidden features needing tutorials.
 
 **API description**
 
-❌ "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
+Wrong: "This sophisticated, enterprise-grade endpoint leverages state-of-the-art
 authentication to facilitate the seamless retrieval of user profile data."
 
-✅ "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
+Right: "`GET /users/{id}` returns a user profile. Requires a Bearer token. Use
 `?fields=name,email` to limit the response."
 
 **Sprint goal**
 
-❌ "Improve overall product quality and customer satisfaction through various
+Wrong: "Improve overall product quality and customer satisfaction through various
 initiatives."
 
-✅ "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
+Right: "Reduce login errors by 50% (8% → 4%): fix timeout bug (2d), retry on
 transient errors (1d), clearer error messages (1d)."
 
 **Architecture for a new feature**
 
-❌ "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
+Wrong: "Event-sourced microservice with Command Query Responsibility Segregation (CQRS), Kafka ingestion, Redis cache, and a
 dedicated auth service."
 
-✅ "Add an endpoint to the existing API. One Postgres table for state. Standard
+Right: "Add an endpoint to the existing API. One Postgres table for state. Standard
 auth middleware. Log to the existing system."
 
 ## Anti-patterns to reject

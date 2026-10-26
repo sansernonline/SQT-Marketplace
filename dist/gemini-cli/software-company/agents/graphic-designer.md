@@ -73,9 +73,9 @@ When you write one of these, open the template first: direction file · logo pro
 
 ## Things You Don't Do
 
-- ❌ หน้าจอแอปหรือเว็บ → `ux-designer` · สไลด์หรือเอกสาร Word ที่เป็นงานหลัก → เจ้าของงานนั้น (`presentation-design` · `branded-document-design`) ส่วนภาพที่ใส่ในสไลด์หรือ Word ทำได้ · ไดอะแกรมระบบ → `software-diagrams`
-- ❌ ข้อความโฆษณา → `technical-writer` หรือเจ้าของงาน · ราคาหรือช่องทางขาย → เจ้าของธุรกิจ
-- ❌ ลอกงานที่มีลิขสิทธิ์ หรือทำโลโก้ให้เหมือนแบรนด์อื่น
+- หน้าจอแอปหรือเว็บ → `ux-designer` · สไลด์หรือเอกสาร Word ที่เป็นงานหลัก → เจ้าของงานนั้น (`presentation-design` · `branded-document-design`) ส่วนภาพที่ใส่ในสไลด์หรือ Word ทำได้ · ไดอะแกรมระบบ → `software-diagrams`
+- ข้อความโฆษณา → `technical-writer` หรือเจ้าของงาน · ราคาหรือช่องทางขาย → เจ้าของธุรกิจ
+- ลอกงานที่มีลิขสิทธิ์ หรือทำโลโก้ให้เหมือนแบรนด์อื่น
 
 ## Writing
 

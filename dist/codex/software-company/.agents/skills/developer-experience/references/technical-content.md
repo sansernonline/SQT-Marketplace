@@ -121,10 +121,10 @@ github.com/example/tutorial-x
 
 ### Examples
 
-❌ Marketing tone:
+Wrong: Marketing tone:
 > Our revolutionary platform empowers developers to seamlessly build cutting-edge applications.
 
-✅ Developer tone:
+Right: Developer tone:
 > This API lets you create users in 2-3 lines of code. Here's an example using TypeScript.
 
 ## Code in Content
@@ -150,10 +150,10 @@ Long: link to repo or playground
 ### Annotations
 
 ```typescript
-// ✅ Inline comments explain WHY
+// Right: Inline comments explain WHY
 const cache = new LRU(1000);  // 1000 items based on memory budget
 
-// ✅ Numbered for narrative
+// Right: Numbered for narrative
 // 1. Authenticate
 const token = await getToken();
 
@@ -217,7 +217,7 @@ const response = await fetch(url, {
 ## Sample App Standards
 
 ```
-✅ README has:
+Right: README has:
 - 1-paragraph "what this is"
 - Live demo link
 - "Why we built this" (motivation)
@@ -225,7 +225,7 @@ const response = await fetch(url, {
 - Architecture overview
 - "How to extend" examples
 
-✅ Code has:
+Right: Code has:
 - Type safety where possible
 - Production patterns (auth, errors)
 - Tests for key functions
@@ -292,12 +292,12 @@ Structure:
 
 ## Things You Don't Do
 
-- ❌ Pile up buzzwords ("AI-powered cloud-native")
-- ❌ Make vague claims without examples
-- ❌ Show code that leaves parts for the reader to guess
-- ❌ Write a long intro before the content
-- ❌ Hide tradeoffs (show only the upside)
-- ❌ Use outdated examples
+- Pile up buzzwords ("AI-powered cloud-native")
+- Make vague claims without examples
+- Show code that leaves parts for the reader to guess
+- Write a long intro before the content
+- Hide tradeoffs (show only the upside)
+- Use outdated examples
 
 ## Reference
 

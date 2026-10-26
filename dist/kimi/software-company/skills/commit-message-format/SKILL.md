@@ -58,7 +58,7 @@ Someone scanning `git log --oneline` should understand each line without opening
 - **No filler** — no "this commit", "minor changes", "update code", "แก้นิดหน่อย", or a list of changed files (the diff already shows them)
 - **One commit, one topic** — if the subject needs "and" or `·` to join unrelated changes, split the commit. Check `git diff --stat` before writing the subject: when the files fall into more than one topic (feature + unrelated rename, fix + formatting sweep), propose the split as a list of `<subject> → <files>` per commit and stage each with `git add <files>` or `git add -p`; never hide the second topic in the body
 
-| ❌ Hard to read | ✅ Short and clear |
+| ✗ Hard to read | ✓ Short and clear |
 |---|---|
 | `update items.js, server.js, add test, fix bug` | `fix(stock): เบิกของเท่ากับที่เหลือพอดีได้แล้ว` |
 | `feat: implement new functionality for exporting the low-stock report data to CSV format` | `feat(report): ส่งออกรายงานของใกล้หมดเป็น CSV` |
@@ -92,9 +92,9 @@ Co-authored-by: ...      ← attribution
 
 ## Anti-patterns
 
-- ❌ `update code`
-- ❌ `fix bug`
-- ❌ `WIP`
-- ❌ `final commit` / `final final`
-- ❌ Past tense: `added feature` (use `add feature`)
-- ❌ Vague scope: `fix(misc): ...` (be specific)
+- `update code`
+- `fix bug`
+- `WIP`
+- `final commit` / `final final`
+- Past tense: `added feature` (use `add feature`)
+- Vague scope: `fix(misc): ...` (be specific)

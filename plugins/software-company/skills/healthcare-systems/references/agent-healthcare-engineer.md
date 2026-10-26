@@ -211,13 +211,13 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 
 ## Things You Don't Do
 
-- ❌ Use real PHI in dev/test
-- ❌ Skip audit logging "for performance"
-- ❌ Trust client-sent patient ID
-- ❌ Show PHI in URLs / query strings
-- ❌ Send PHI via SMS/email without encryption
-- ❌ Make clinical decisions in code (always provider-confirmed)
-- ❌ Roll your own clinical algorithms
+- Use real PHI in dev/test
+- Skip audit logging "for performance"
+- Trust client-sent patient ID
+- Show PHI in URLs / query strings
+- Send PHI via SMS/email without encryption
+- Make clinical decisions in code (always provider-confirmed)
+- Roll your own clinical algorithms
 
 ## When to Hand Off
 
@@ -229,13 +229,13 @@ The bedside side (all 5 rights: patient, drug, dose, route, time) is in [`clinic
 
 ## Common Pitfalls
 
-- ❌ **Wrong patient errors** — the most dangerous bug in healthcare
-- ❌ **No medication reconciliation** — the patient takes 10 drugs, the system knows of 3
-- ❌ **Silent PHI exposure** — a search engine indexes it by accident
-- ❌ **Logging PHI to logs** — the log aggregator turns into a PHI store
-- ❌ **No break-the-glass** (emergency access) — providers can't open the record in an emergency
-- ❌ **Audit log mutable** — should be append-only
-- ❌ **No clinical context** — features that clinicians won't use
+- Wrong: **Wrong patient errors** — the most dangerous bug in healthcare
+- Wrong: **No medication reconciliation** — the patient takes 10 drugs, the system knows of 3
+- Wrong: **Silent PHI exposure** — a search engine indexes it by accident
+- Wrong: **Logging PHI to logs** — the log aggregator turns into a PHI store
+- Wrong: **No break-the-glass** (emergency access) — providers can't open the record in an emergency
+- Wrong: **Audit log mutable** — should be append-only
+- Wrong: **No clinical context** — features that clinicians won't use
 
 ## Reference
 

@@ -193,11 +193,11 @@ description: Use when auditing a web page for accessibility (WCAG 2.2 AA) or per
 
 ## Anti-patterns
 
-- ❌ รายงานเป็นภาพหน้าจอ Lighthouse ต่อกัน ไม่มีว่าแก้ตรงไหน
-- ❌ ทุกข้อเป็น Critical
-- ❌ แก้ `outline: none` ด้วยการลบ CSS ทั้งไฟล์ แทนที่จะใส่ `:focus-visible` ที่เห็นชัด
-- ❌ ปิด animation ทั้งเว็บเพื่อให้ผ่าน แทนที่จะใส่ kill-switch ตาม `prefers-reduced-motion`
-- ❌ ใส่ `aria-*` ทับ element ที่ควรเป็น `<button>` อยู่แล้ว — HTML ถูกชนิดชนะ ARIA ทุกครั้ง
+- รายงานเป็นภาพหน้าจอ Lighthouse ต่อกัน ไม่มีว่าแก้ตรงไหน
+- ทุกข้อเป็น Critical
+- แก้ `outline: none` ด้วยการลบ CSS ทั้งไฟล์ แทนที่จะใส่ `:focus-visible` ที่เห็นชัด
+- ปิด animation ทั้งเว็บเพื่อให้ผ่าน แทนที่จะใส่ kill-switch ตาม `prefers-reduced-motion`
+- ใส่ `aria-*` ทับ element ที่ควรเป็น `<button>` อยู่แล้ว — HTML ถูกชนิดชนะ ARIA ทุกครั้ง
 
 ## เชื่อมกับ skill อื่น
 

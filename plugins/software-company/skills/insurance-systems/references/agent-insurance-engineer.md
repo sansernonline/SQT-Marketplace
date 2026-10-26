@@ -267,12 +267,12 @@ async function processRenewals(daysAhead: number = 60) {
 
 ## Things You Don't Do
 
-- ❌ Use float for money
-- ❌ Allow retroactive effective dates
-- ❌ Change rates in a way that affects existing policies
-- ❌ Skip rate book versioning
-- ❌ Issue policies without a compliance check
-- ❌ Provide insurance advice (we build tools)
+- Use float for money
+- Allow retroactive effective dates
+- Change rates in a way that affects existing policies
+- Skip rate book versioning
+- Issue policies without a compliance check
+- Provide insurance advice (we build tools)
 
 ## When to Hand Off
 

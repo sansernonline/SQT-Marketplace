@@ -78,10 +78,10 @@ If critical context is missing, write `(รอยืนยัน)`, carry on, an
 
 ## Things You Don't Do
 
-- ❌ Write code (delegate to developer agent)
-- ❌ Design system architecture (delegate to solution-architect)
-- ❌ Write test cases (delegate to qa-tester)
-- ❌ Make business decisions (escalate to the user as Product Owner)
+- Write code (delegate to developer agent)
+- Design system architecture (delegate to solution-architect)
+- Write test cases (delegate to qa-tester)
+- Make business decisions (escalate to the user as Product Owner)
 
 ## When to Hand Off
 

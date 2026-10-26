@@ -132,15 +132,15 @@ PowerShell 5.1 ไม่มี `&&` → ใช้ `;` หรือ `if ($?) { �
 
 ## 9 · Anti-patterns
 
-- ❌ **worktree ในโฟลเดอร์ repo โดยไม่ ignore** — main เห็นเป็น untracked · `rg` และ build เจอ 2 ชุด
-- ❌ **`cp -r` ทั้ง main มา worktree** — พา `node_modules` · `.git` ย่อย · ค่าลับที่ไม่ตั้งใจ
-- ❌ **branch เดียวใช้ 2 worktree** — git ปฏิเสธ · ถ้าบังคับ `--force` จะได้ HEAD ชนกัน
-- ❌ **แก้ conflict ด้วย `--ours` ทั้งไฟล์** — ลบงานคนอื่นโดยไม่รู้ตัว · ตรวจไม่เจอจน production
-- ❌ **merge ลง main แล้วค่อย test** — test พังบน main = ทุกคนพัง · test บน branch ก่อน แล้ว test อีกครั้งหลัง merge ก่อน push
-- ❌ **`git worktree remove --force` โดยไม่ดู `status`** — ของค้างหายถาวร
-- ❌ **ทิ้ง worktree ไว้เป็นเดือน** — branch ตามไม่ทัน main · conflict โตทุกวัน · ปิดหรือทิ้งภายในรอบงาน
-- ❌ **`git branch -D` แทน `-d` เพราะ `-d` ไม่ยอม** — `-d` ปฏิเสธคือหลักฐานว่ายังไม่ merge
-- ❌ **agent merge ลง main หรือ push เอง**เพราะ "test ผ่านแล้ว" — อยู่ใน "รออนุมัติ" เสมอเว้นแต่เขียนอนุญาตไว้
+- **worktree ในโฟลเดอร์ repo โดยไม่ ignore** — main เห็นเป็น untracked · `rg` และ build เจอ 2 ชุด
+- **`cp -r` ทั้ง main มา worktree** — พา `node_modules` · `.git` ย่อย · ค่าลับที่ไม่ตั้งใจ
+- **branch เดียวใช้ 2 worktree** — git ปฏิเสธ · ถ้าบังคับ `--force` จะได้ HEAD ชนกัน
+- **แก้ conflict ด้วย `--ours` ทั้งไฟล์** — ลบงานคนอื่นโดยไม่รู้ตัว · ตรวจไม่เจอจน production
+- **merge ลง main แล้วค่อย test** — test พังบน main = ทุกคนพัง · test บน branch ก่อน แล้ว test อีกครั้งหลัง merge ก่อน push
+- **`git worktree remove --force` โดยไม่ดู `status`** — ของค้างหายถาวร
+- **ทิ้ง worktree ไว้เป็นเดือน** — branch ตามไม่ทัน main · conflict โตทุกวัน · ปิดหรือทิ้งภายในรอบงาน
+- **`git branch -D` แทน `-d` เพราะ `-d` ไม่ยอม** — `-d` ปฏิเสธคือหลักฐานว่ายังไม่ merge
+- **agent merge ลง main หรือ push เอง**เพราะ "test ผ่านแล้ว" — อยู่ใน "รออนุมัติ" เสมอเว้นแต่เขียนอนุญาตไว้
 
 ## เชื่อมกับ skill อื่น
 

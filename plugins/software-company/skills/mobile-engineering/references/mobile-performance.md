@@ -272,12 +272,12 @@ Common surprises:
 
 ## Common Pitfalls
 
-- ❌ **Profile on top-end devices only** — most users have older phones
-- ❌ **Skip release builds** — they perform differently from debug builds
-- ❌ **Premature optimization** — measure first
-- ❌ **Ignore strict mode** (Android) — the issues it flags become production bugs
-- ❌ **Forgetting localization perf** — large languages slow
-- ❌ **Heavy work in onCreate** — slow launch
+- ผิด: **Profile on top-end devices only** — most users have older phones
+- ผิด: **Skip release builds** — they perform differently from debug builds
+- ผิด: **Premature optimization** — measure first
+- ผิด: **Ignore strict mode** (Android) — the issues it flags become production bugs
+- ผิด: **Forgetting localization perf** — large languages slow
+- ผิด: **Heavy work in onCreate** — slow launch
 
 ## Reference
 

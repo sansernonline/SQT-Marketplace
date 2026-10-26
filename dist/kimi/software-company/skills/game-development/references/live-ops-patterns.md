@@ -274,7 +274,7 @@ Item leaves store
 Cycle repeats with new item
 ```
 
-> ⚠️ Fear of missing out (FOMO) is powerful, but overuse burns players out.
+> Note: Fear of missing out (FOMO) is powerful, but overuse burns players out.
 
 ## A/B Testing in Live Games
 
@@ -372,23 +372,23 @@ bot_suspects = segments.filter(
 
 ## Anti-patterns
 
-- ❌ **Energy mechanics blocking play** — feels punishing
-- ❌ **Pay-to-win in competitive** — destroys the game long-term
-- ❌ **Loot box for gameplay items** — legal and ethical risk
-- ❌ **Aggressive FOMO every week** — players burn out
-- ❌ **Power creep** — old purchases become useless
-- ❌ **No comeback mechanic** — once behind, never catch up
-- ❌ **Same offer to whale and minnow** — segmentation matters
+- **Energy mechanics blocking play** — feels punishing
+- **Pay-to-win in competitive** — destroys the game long-term
+- **Loot box for gameplay items** — legal and ethical risk
+- **Aggressive FOMO every week** — players burn out
+- **Power creep** — old purchases become useless
+- **No comeback mechanic** — once behind, never catch up
+- **Same offer to whale and minnow** — segmentation matters
 
 ## Healthy Live-Ops Principles
 
-- ✅ Players should feel valued, not exploited
-- ✅ Free path should be substantive
-- ✅ Premium = convenience or cosmetics, not power
-- ✅ Surprise + delight regularly
-- ✅ Communicate roadmap (manage expectations)
-- ✅ Respond to community feedback
-- ✅ Fight cheating hard (cheaters drive players away)
+- Players should feel valued, not exploited
+- Free path should be substantive
+- Premium = convenience or cosmetics, not power
+- Surprise + delight regularly
+- Communicate roadmap (manage expectations)
+- Respond to community feedback
+- Fight cheating hard (cheaters drive players away)
 
 ## Reference
 

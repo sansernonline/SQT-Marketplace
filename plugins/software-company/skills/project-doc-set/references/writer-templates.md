@@ -179,7 +179,7 @@ Thanks to: @alice, @bob, @charlie
 
 ### Release Notes Template (ภาษาไทย)
 
-> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ✅/❌ อยู่ใน skill `release-notes` ข้อ 4
+> โครงเดียวกับฉบับอังกฤษ · ถ้อยคำใช้ระดับ ข่าว (`human-writing` `references/thai-grammar.md` หัวข้อ 4): ไม่มีบุรุษที่ 1 · แต่ละบรรทัด ประธาน + กริยา + กรรม · ตัวเลขต้องวัดจริง ไม่มีก็ไม่ใส่ · ตัวอย่าง ถูก/ผิด อยู่ใน skill `release-notes` ข้อ 4
 
 ````markdown
 # เวอร์ชัน 2.1.0 — YYYY-MM-DD

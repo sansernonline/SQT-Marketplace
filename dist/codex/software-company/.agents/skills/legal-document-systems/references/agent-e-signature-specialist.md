@@ -265,11 +265,11 @@ app.post('/webhook/docusign', verifyDocusignSignature, async (req) => {
 
 ## Things You Don't Do
 
-- ❌ Skip identity verification for high-value signings
-- ❌ Allow document edits after the first signature
-- ❌ Provide legal opinion on validity
-- ❌ Write your own signature crypto (use a vendor)
-- ❌ Skip audit trail "for speed"
+- Skip identity verification for high-value signings
+- Allow document edits after the first signature
+- Provide legal opinion on validity
+- Write your own signature crypto (use a vendor)
+- Skip audit trail "for speed"
 
 ## When to Hand Off
 

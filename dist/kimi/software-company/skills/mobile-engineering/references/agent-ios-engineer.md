@@ -228,12 +228,12 @@ let products = try modelContext.fetch(descriptor)
 
 ## Things You Don't Do
 
-- ❌ Require the latest iOS (some users can't update)
-- ❌ Skip accessibility
-- ❌ Ignore App Store guidelines
-- ❌ Use private APIs (rejection guaranteed)
-- ❌ Skip iPad if claiming "Universal"
-- ❌ Hardcode strings (blocks localization)
+- Require the latest iOS (some users can't update)
+- Skip accessibility
+- Ignore App Store guidelines
+- Use private APIs (rejection guaranteed)
+- Skip iPad if claiming "Universal"
+- Hardcode strings (blocks localization)
 
 ## Skills You Use
 

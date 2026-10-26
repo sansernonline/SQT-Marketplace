@@ -3,9 +3,9 @@
 // อยู่ใน plugin superuser ที่เดียว · plugin อื่นได้ hook นี้ทาง dependencies · plugin รุ่นเก่าที่ยังมีสำเนา → ตัวแรกที่รับเหตุการณ์ทำงาน ตัวอื่นออกเลย (ไม่จดซ้ำ)
 // กฎประจำตัวและตัวบอก skill ทำงานทุก session · log · inbox · ด่านต่าง ๆ ทำงานเฉพาะโปรเจกต์ที่มี .claude/superuser/ (หรือ .superuser/ แบบเก่า)
 // โมดูล log · inbox · review_gate · split_gate ปิดได้ใน .claude/superuser/config.json (moduleOn) · ไม่สร้างโฟลเดอร์ทีมเอง · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
-import { readFileSync, readSync, writeSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync } from "node:fs";
+import { readFileSync, readSync, writeSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync, utimesSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { join, dirname, resolve, relative } from "node:path";
+import { join, dirname, resolve, relative, basename } from "node:path";
 import { homedir, tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
@@ -319,6 +319,7 @@ const SKIP_PATH = /(^|[\\/])(_to_delete|\.claude|node_modules)([\\/]|$)/;
 
 export function reviewGate(s) {
   if (!s.usedSuperuser || s.edited.length < REVIEW_MIN_FILES || s.lastCheck > s.lastEdit) return null;
+  if (s.pending?.length) return null;   // ลูกทีมยังทำงานเบื้องหลังอยู่ = งานยังไม่จบ ยังไม่ถึงเวลาตรวจ (บทเรียน 2026-10-26)
   if (/ข้ามรีวิว\s*:\s*\S/.test(s.lastText)) return null;
   return `ด่านรีวิว (SuperUser): แก้ไฟล์งานไป ${s.edited.length} ไฟล์ แต่หลังการแก้ครั้งสุดท้ายยังไม่มีผู้ตรวจตัวใหม่ — ส่ง \`reviewer\` ตัวใหม่ตามกฎข้อ 3 (ชิ้นงาน · คำขอของผู้ใช้ · เสร็จเมื่อ) แล้วแก้ข้อสูงและกลางก่อนจบ · ถ้าเป็นงานเล็กที่หัวหน้าทีมตรวจเองได้จริง ให้ใส่บรรทัด \`ข้ามรีวิว: <เหตุผล>\` ในคำตอบสุดท้าย`;
 }
@@ -374,7 +375,28 @@ export function splitGate(s, target, currentId = null, current = { name: "Write"
 // session ยาวหลาย MB → ไม่ parse ทั้งไฟล์ทุกครั้ง · จำ byte ที่อ่านถึงและตัวนับของด่านไว้ ต่อ transcript_path แล้วอ่านเฉพาะส่วนที่เพิ่ม
 // ไฟล์เล็กลง = ถูกเขียนใหม่ → นับใหม่ · ไม่อ่านบรรทัดท้ายที่ยังเขียนไม่จบ
 const GATE_KEEP = 20;
-const freshGate = () => ({ offset: 0, line: 0, usedSuperuser: false, workers: 0, pieces: [], edited: [], lastEdit: -1, lastCheck: -1, lastText: "" });
+const freshGate = () => ({ offset: 0, line: 0, usedSuperuser: false, workers: 0, pieces: [], edited: [], lastEdit: -1, lastCheck: -1, lastText: "", pending: [], agentCalls: [] });
+
+// ลูกทีมเบื้องหลัง: ผลของคำสั่ง Agent ขึ้นว่า "Async agent launched" (มี agentId) = เริ่ม
+// ข้อความ <task-notification> ที่มี <tool-use-id> หรือ <task-id> ตรงกัน = จบ (บางฉบับมีแค่ task-id)
+const LAUNCHED = "Async agent launched";
+const textOf = (c) => (typeof c === "string" ? c : Array.isArray(c) ? c.map((x) => x?.text ?? "").join("\n") : "");
+export function foldBackground(s, m) {
+  const content = m.message?.content;
+  for (const b of Array.isArray(content) ? content : []) {
+    const t = b.type === "tool_result" ? textOf(b.content) : "";
+    // นับเฉพาะผลของคำสั่ง Agent จริง · ผลของ Bash หรือ Read ที่บังเอิญมีข้อความนี้ (เช่น grep transcript) ไม่นับ
+    if (t.includes(LAUNCHED) && s.agentCalls.includes(b.tool_use_id) && !s.pending.some((p) => p[0] === b.tool_use_id))
+      s.pending.push([b.tool_use_id, t.match(/agentId:\s*([\w-]+)/)?.[1] ?? ""]);
+  }
+  // ข้อความแจ้งจบอยู่ได้ 3 ที่: ข้อความผู้ใช้ · บรรทัด queue-operation (content) · บรรทัด attachment (attachment.prompt)
+  const text = [textOf(content), typeof m.content === "string" ? m.content : "", m.attachment?.prompt ?? ""].join("\n");
+  if (text.includes("<task-notification>")) {
+    const done = [...text.matchAll(/<(?:tool-use-id|task-id)>\s*([^<\s]+)\s*<\/(?:tool-use-id|task-id)>/g)].map((x) => x[1]);
+    s.pending = s.pending.filter(([tool, task]) => !done.includes(tool) && !(task && done.includes(task)));
+  }
+  return s;
+}
 
 export function readNew(file, from = 0) {
   const size = statSync(file).size;
@@ -390,8 +412,10 @@ export function readNew(file, from = 0) {
 export function foldTranscript(s, lines) {
   for (const line of lines) {
     const i = s.line++;
-    if (!line.includes('"assistant"')) continue;
+    s.pending ??= []; s.agentCalls ??= [];   // สถานะที่บันทึกไว้ก่อนมีช่องนี้
+    if (!line.includes('"assistant"') && !line.includes(LAUNCHED) && !line.includes("task-notification")) continue;
     let m; try { m = JSON.parse(line); } catch { continue; }
+    if (m.message?.role !== "assistant") { if (!m.isSidechain) foldBackground(s, m); continue; }
     const msg = m.message;
     if (m.isSidechain || msg?.role !== "assistant" || !Array.isArray(msg.content)) continue;
     for (const b of msg.content) {
@@ -402,6 +426,7 @@ export function foldTranscript(s, lines) {
       const p = String(inp.file_path ?? inp.notebook_path ?? "");
       if (EDIT_TOOLS.has(b.name) && p && !SKIP_PATH.test(p)) { if (!s.edited.includes(p)) s.edited.push(p); s.lastEdit = i; }
       if (["Agent", "Task"].includes(b.name)) {
+        if (b.id) s.agentCalls = [...s.agentCalls, b.id].slice(-50);   // ใช้จับคู่ผล "Async agent launched"
         if (CHECKER.test(inp.subagent_type ?? "")) s.lastCheck = i;
         if (!WORKER_SKIP.test(inp.subagent_type ?? "")) s.workers++;
       }
@@ -426,11 +451,21 @@ export function gateState(teamDir, transcript) {
   return s;
 }
 
-function writeAtomic(file, text) {
+// เขียนไฟล์ชั่วคราวแล้ว rename · บน Windows rename ล้มได้เมื่อ hook อีกตัวเปิดไฟล์ปลายทางอยู่ → ข้ามรอบนี้และลบไฟล์ชั่วคราว ไม่ทิ้ง .tmp ค้าง
+// (เกิดจริง 2026-10-26: state.json.*.tmp ค้าง 8 ไฟล์) · ไฟล์ชั่วคราวที่ค้างจากรอบก่อนเกิน 10 นาทีลบทิ้งด้วย
+export const TMP_MAX_AGE_MS = 10 * 60 * 1000;
+export function writeAtomic(file, text) {
   mkdirSync(dirname(file), { recursive: true });
   const temp = `${file}.${process.pid}.tmp`;
   writeFileSync(temp, text);
-  renameSync(temp, file);
+  try { renameSync(temp, file); }
+  catch { try { unlinkSync(temp); } catch { /* ลบไม่ได้ก็ปล่อย รอบหน้ากวาด */ } }
+  const base = basename(file) + ".";
+  for (const name of readdirSync(dirname(file))) {
+    if (!name.startsWith(base) || !name.endsWith(".tmp")) continue;
+    const p = join(dirname(file), name);
+    try { if (Date.now() - statSync(p).mtimeMs > TMP_MAX_AGE_MS) unlinkSync(p); } catch { /* ไฟล์หายไปแล้ว */ }
+  }
 }
 
 // ── ด่านข้อความเจ้าของ (PreToolUse ทุก agent) ───────────────────────────
@@ -782,9 +817,7 @@ function logAndNotice(input, raw, root, teamDir, event) {
   }
   const keys = Object.keys(state.models);
   if (keys.length > 40) for (const key of keys.slice(0, keys.length - 40)) delete state.models[key];
-  const temp = `${statePath}.${process.pid}.tmp`;
-  writeFileSync(temp, JSON.stringify(state));
-  renameSync(temp, statePath);
+  writeAtomic(statePath, JSON.stringify(state));
   return notice;
 }
 
@@ -804,12 +837,25 @@ function selfTest() {
   const edit = (f, n = 50) => T({ type: "tool_use", name: "Write", input: { file_path: `/p/${f}`, content: "x\n".repeat(n) } });
   const rev = T({ type: "tool_use", name: "Agent", input: { subagent_type: "software-company:reviewer" } });
   const say = (s) => T({ type: "text", text: s });
+  // เหตุการณ์จริง 2026-10-26: ด่านเตือนตอนลูกทีม 3 ตัวยังทำงานเบื้องหลัง
+  const UM = (content) => JSON.stringify({ message: { role: "user", content } });
+  const launchText = (id) => [{ type: "text", text: `Async agent launched successfully.\nagentId: a-${id}` }];
+  const launched = (id) => [T({ type: "tool_use", id, name: "Agent", input: { subagent_type: "general-purpose" } }),
+    UM([{ type: "tool_result", tool_use_id: id, content: launchText(id) }])];
+  // ผลของ Bash ที่ grep transcript แล้วมีข้อความเดียวกัน (เกิดจริงตอนทดสอบ) ต้องไม่นับเป็นลูกทีม
+  const quoted = (id) => [T({ type: "tool_use", id, name: "Bash", input: { command: "grep" } }), UM([{ type: "tool_result", tool_use_id: id, content: launchText(id) }])];
+  const notified = (id) => UM(`<task-notification>\n<task-id>x</task-id>\n<tool-use-id>${id}</tool-use-id>\n<status>completed</status>\n</task-notification>`);
   const fold = (l) => foldTranscript(freshGate(), l);
   const gates = [
     ["ด่านรีวิว: แก้ 3 ไฟล์ ไม่มี reviewer → บล็อก", [skill, edit("a"), edit("b"), edit("c")], true],
     ["ด่านรีวิว: มี reviewer หลังแก้ → ผ่าน", [skill, edit("a"), edit("b"), edit("c"), rev], false],
     ["ด่านรีวิว: แก้ต่อหลัง reviewer → บล็อก", [skill, edit("a"), edit("b"), rev, edit("c")], true],
     ["ด่านรีวิว: แก้ 2 ไฟล์ → ผ่าน", [skill, edit("a"), edit("b")], false],
+    ["ด่านรีวิว: ลูกทีมเบื้องหลังยังไม่จบ → ไม่เตือน", [skill, edit("a"), edit("b"), edit("c"), ...launched("t1"), ...launched("t2"), notified("t1")], false],
+    ["ด่านรีวิว: ลูกทีมเบื้องหลังจบครบแล้ว → เตือน", [skill, edit("a"), edit("b"), edit("c"), ...launched("t1"), notified("t1")], true],
+    ["ด่านรีวิว: ข้อความจบมีแค่ task-id → นับว่าจบ", [skill, edit("a"), edit("b"), edit("c"), ...launched("t1"), UM("<task-notification>\n<task-id>a-t1</task-id>\n<status>completed</status>\n</task-notification>")], true],
+    ["ด่านรีวิว: ข้อความจบมาเป็นบรรทัด queue-operation → นับว่าจบ", [skill, edit("a"), edit("b"), edit("c"), ...launched("t1"), JSON.stringify({ type: "queue-operation", content: "<task-notification><task-id>a-t1</task-id><status>completed</status></task-notification>" })], true],
+    ["ด่านรีวิว: ผล Bash ที่อ้างข้อความ launched ไม่นับเป็นลูกทีม → เตือน", [skill, edit("a"), edit("b"), edit("c"), ...quoted("b1")], true],
     ["ด่านรีวิว: ใส่ ข้ามรีวิว: → ผ่าน", [skill, edit("a"), edit("b"), edit("c"), say("ข้ามรีวิว: งานเล็ก แก้ข้อความ 3 ไฟล์")], false],
     ["ด่านรีวิว: ไม่ได้ใช้ superuser → ผ่าน", [edit("a"), edit("b"), edit("c")], false],
     ["ด่านรีวิว: ไฟล์ใน _to_delete ไม่นับ", [skill, edit("a"), edit("b"), edit("_to_delete/x")], false],
@@ -880,6 +926,16 @@ function selfTest() {
   const cfgDir = join(tmpdir(), `sqt-superuser-cfg-${process.pid}`); mkdirSync(cfgDir, { recursive: true });
   writeFileSync(join(cfgDir, "config.json"), JSON.stringify({ modules: { log: false, review_gate: true } }));
   gates.push(["config: ปิด log ได้ · ไม่มี key = เปิด · ไม่มีไฟล์ = เปิด", [], true, () => moduleOn(cfgDir, "log") === false && moduleOn(cfgDir, "review_gate") === true && moduleOn(cfgDir, "inbox") === true && moduleOn(join(cfgDir, "none"), "log") === true]);
+  // เหตุการณ์จริง 2026-10-26: rename ล้มบน Windows แล้วทิ้ง state.json.<pid>.tmp ค้าง 8 ไฟล์ · จำลองด้วยปลายทางที่เป็นโฟลเดอร์ (rename ล้มทุกระบบ)
+  gates.push(["เขียนไฟล์: rename ล้มไม่ทิ้ง .tmp · .tmp เก่าเกิน 10 นาทีถูกกวาด · ของใหม่ไม่โดน", [], true, () => {
+    const d = join(tmpdir(), `sqt-atomic-${process.pid}`); mkdirSync(join(d, "state.json"), { recursive: true });
+    const old = join(d, "x.json.999.tmp"), fresh = join(d, "x.json.998.tmp");
+    writeFileSync(old, "a"); writeFileSync(fresh, "b"); const t = (Date.now() - 2 * TMP_MAX_AGE_MS) / 1000; utimesSync(old, t, t);
+    try { writeAtomic(join(d, "state.json"), "{}"); } catch { return false; }
+    writeAtomic(join(d, "x.json"), "{}");
+    const left = readdirSync(d).filter((n) => n.endsWith(".tmp"));
+    return left.length === 1 && left[0] === "x.json.998.tmp" && readFileSync(join(d, "x.json"), "utf8") === "{}";
+  }]);
   let gateOk = 0;
   const qHome = join(tmpdir(), `sqt-queue-${process.pid}`); mkdirSync(join(qHome, ".claude", "superuser"), { recursive: true });
   writeFileSync(join(qHome, ".claude", "superuser", "improvements.md"), "| วันที่ | a |\n|---|---|\n| 2026-10-12 | p | k | r | w | 1 | s | ควรรวม | แล้ว 2026-10-12 (x) | c | — |\n| 2026-10-13 | p | k | r | w | 1 | s | ควรรวม | ยัง | c | — |\n\n- 2026-10-15 · P · รับ · เรื่องหนึ่ง\n- 2026-10-16 · P · รับ · เรื่องสอง รวมแล้ว 2026-10-20\n");

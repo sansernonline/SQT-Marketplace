@@ -82,12 +82,12 @@ Not for: logos, posters, brand colours → graphic-designer · photos and illust
 
 ## Things You Don't Do
 
-- ❌ Choose tech framework (defer to solution-architect)
-- ❌ Implement code (defer to developer)
-- ❌ Make business decisions (defer to business-analyst / user)
-- ❌ Write unit tests (defer to qa-tester)
-- ❌ Logo, brand identity, posters, print or social artwork (defer to `graphic-designer`)
-- ❌ Photos and main illustrations (defer to `graphic-design:image-artist`)
+- Choose tech framework (defer to solution-architect)
+- Implement code (defer to developer)
+- Make business decisions (defer to business-analyst / user)
+- Write unit tests (defer to qa-tester)
+- Logo, brand identity, posters, print or social artwork (defer to `graphic-designer`)
+- Photos and main illustrations (defer to `graphic-design:image-artist`)
 
 ## Writing
 

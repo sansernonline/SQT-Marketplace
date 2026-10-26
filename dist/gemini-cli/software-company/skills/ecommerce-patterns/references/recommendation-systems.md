@@ -245,13 +245,13 @@ async def generate_email_recs(user_id):
 ## Business Rules
 
 Almost always required:
-- ✅ Inventory check (stock data at most 5 minutes old)
-- ✅ Price tier appropriate for user
-- ✅ Brand safety (no conflicting brands together)
-- ✅ Filter out items already bought (don't recommend the exact same item)
-- ✅ Sponsored vs organic separation
-- ✅ Local availability · regional pricing
-- ✅ Compliance (age-restricted items)
+- Inventory check (stock data at most 5 minutes old)
+- Price tier appropriate for user
+- Brand safety (no conflicting brands together)
+- Filter out items already bought (don't recommend the exact same item)
+- Sponsored vs organic separation
+- Local availability · regional pricing
+- Compliance (age-restricted items)
 
 ## A/B Testing Recommendations
 
@@ -276,13 +276,13 @@ guardrails = {
 
 ## Common Pitfalls
 
-- ❌ **Position bias** — the top slot gets clicks no matter what is in it
-- ❌ **Popularity dominance** — less popular items (the long tail) never show
-- ❌ **Filter bubble** — user sees only same category forever
-- ❌ **No diversity** — boring after a while
-- ❌ **No business rules** — out-of-stock items get recommended
-- ❌ **Offline-online gap** — scores well offline, but no lift with real users
-- ❌ **Single algorithm** — no fallback for cold start
+- Wrong: **Position bias** — the top slot gets clicks no matter what is in it
+- Wrong: **Popularity dominance** — less popular items (the long tail) never show
+- Wrong: **Filter bubble** — user sees only same category forever
+- Wrong: **No diversity** — boring after a while
+- Wrong: **No business rules** — out-of-stock items get recommended
+- Wrong: **Offline-online gap** — scores well offline, but no lift with real users
+- Wrong: **Single algorithm** — no fallback for cold start
 
 ## Tools (2026)
 

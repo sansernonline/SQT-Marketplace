@@ -366,13 +366,13 @@ public class Weapon : MonoBehaviour {
 
 ## Anti-patterns
 
-- ❌ **Singleton sprawl** — every system is a singleton → everything depends on everything
-- ❌ **God objects** — one Manager doing 50 things
-- ❌ **Tight rendering/logic coupling** — hard to test or refactor
-- ❌ **Magic numbers in code** — should be in data
-- ❌ **Resources/ folder for everything** — it all loads at startup
-- ❌ **Sync asset loading** — frames freeze while loading
-- ❌ **Update everywhere** — kills performance
+- **Singleton sprawl** — every system is a singleton → everything depends on everything
+- **God objects** — one Manager doing 50 things
+- **Tight rendering/logic coupling** — hard to test or refactor
+- **Magic numbers in code** — should be in data
+- **Resources/ folder for everything** — it all loads at startup
+- **Sync asset loading** — frames freeze while loading
+- **Update everywhere** — kills performance
 
 ## Reference
 

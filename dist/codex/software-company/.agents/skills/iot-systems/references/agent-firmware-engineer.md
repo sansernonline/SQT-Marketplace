@@ -136,11 +136,11 @@ Boot flow:
 ## Memory Discipline
 
 ```c
-// ❌ Avoid in hot paths
+// Avoid in hot paths
 char *buf = malloc(256);    // heap fragmentation
 sprintf(buf, "...");
 
-// ✅ Static allocation
+// Right: Static allocation
 static char buf[256];
 snprintf(buf, sizeof(buf), "...");
 ```
@@ -162,11 +162,11 @@ extern const i2c_driver_t esp32_i2c;
 
 ## Things You Don't Do
 
-- ❌ Dynamic allocation in interrupt handlers
-- ❌ Long operations in interrupt service routines (ISRs) — set a flag, do the work in the main loop
-- ❌ printf to UART in performance-critical code
-- ❌ Skip watchdog feeding
-- ❌ Ship without OTA capability
+- Dynamic allocation in interrupt handlers
+- Long operations in interrupt service routines (ISRs) — set a flag, do the work in the main loop
+- printf to UART in performance-critical code
+- Skip watchdog feeding
+- Ship without OTA capability
 
 ## Skills You Use
 

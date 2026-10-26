@@ -233,13 +233,13 @@ Tier 3 (24+ months):
 
 ## Common Pitfalls
 
-- ❌ **Only Tier 1 staff** — no one skilled enough to investigate
-- ❌ **No playbooks** — every alert starts from scratch
-- ❌ **Tool sprawl** — too many separate consoles to watch
-- ❌ **No SOAR** — analysts copy-paste enrichment
-- ❌ **Ignoring FP rate** — burnout, and real threats get missed
-- ❌ **No MITRE mapping** — you don't know your coverage gaps
-- ❌ **No on-call rotation** — same people always paged
+- Wrong: **Only Tier 1 staff** — no one skilled enough to investigate
+- Wrong: **No playbooks** — every alert starts from scratch
+- Wrong: **Tool sprawl** — too many separate consoles to watch
+- Wrong: **No SOAR** — analysts copy-paste enrichment
+- Wrong: **Ignoring FP rate** — burnout, and real threats get missed
+- Wrong: **No MITRE mapping** — you don't know your coverage gaps
+- Wrong: **No on-call rotation** — same people always paged
 
 ## Reference
 

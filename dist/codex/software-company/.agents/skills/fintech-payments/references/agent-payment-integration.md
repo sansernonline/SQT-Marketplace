@@ -53,24 +53,24 @@ Before integration, gather:
 
 | Gateway | Best for | Card | Wallets | Local methods | Settlement |
 |---------|----------|:----:|:-------:|:-------------:|:----------:|
-| **Stripe** | Global SaaS | ✅ | ✅ | 🟡 limited TH | T+2-7 |
-| **Adyen** | Enterprise global | ✅ | ✅ | ✅ comprehensive | T+1 |
-| **Omise** | Thailand | ✅ | ✅ TH wallets | ✅ PromptPay, internet banking | T+1 |
-| **2C2P** | SEA | ✅ | ✅ | ✅ SEA-specific | T+1-2 |
-| **TrueMoney** | TH wallet only | ❌ | ✅ | ❌ | Real-time |
-| **PromptPay direct** | TH instant | ❌ | ❌ | ✅ QR + ID | Real-time |
+| **Stripe** | Global SaaS | ✓ | ✓ | 🟡 limited TH | T+2-7 |
+| **Adyen** | Enterprise global | ✓ | ✓ | ✓ comprehensive | T+1 |
+| **Omise** | Thailand | ✓ | ✓ TH wallets | ✓ PromptPay, internet banking | T+1 |
+| **2C2P** | SEA | ✓ | ✓ | ✓ SEA-specific | T+1-2 |
+| **TrueMoney** | TH wallet only | ✗ | ✓ | ✗ | Real-time |
+| **PromptPay direct** | TH instant | ✗ | ✗ | ✓ QR + ID | Real-time |
 
 ## Critical Payment Patterns
 
 ### Pattern 1: Use Hosted Fields (Reduce PCI Scope)
 
-❌ **Avoid:** Card data touches your server
+Wrong: **Avoid:** Card data touches your server
 ```html
 <!-- Bad: card number in your form -->
 <input name="cardNumber" />  <!-- → server → gateway → PCI SAQ D -->
 ```
 
-✅ **Use:** Gateway-hosted fields
+Right: **Use:** Gateway-hosted fields
 ```html
 <!-- Good: Stripe Elements (iframe) -->
 <div id="card-element"></div>
@@ -119,8 +119,8 @@ Order: verify signature on the raw body → store the event (event id = primary 
 
 The idempotency key comes from a **stored refund request**, created once per real refund — the same pattern as `payment-gateway-integration.md` → Refund Edge Cases.
 
-- ❌ `refund_${paymentId}_${Date.now()}` → a new key on every retry → timeout + retry = refunded twice
-- ❌ `refund_${paymentId}_${amount}` → two real refunds of the same amount share one key → the 2nd is silently dropped
+- Wrong: `refund_${paymentId}_${Date.now()}` → a new key on every retry → timeout + retry = refunded twice
+- Wrong: `refund_${paymentId}_${amount}` → two real refunds of the same amount share one key → the 2nd is silently dropped
 
 ```typescript
 // 1. Record the request once: transaction + row lock + UNIQUE (client_request_id)
@@ -138,15 +138,15 @@ const refund = await stripe.refunds.create({
 
 ## Webhook Best Practices
 
-- ✅ Verify signature ALWAYS
-- ✅ Respond fast (< 5s), process async
-- ✅ Idempotent processing (event ID dedup)
-- ✅ Persist raw event before processing
-- ✅ Retry with exponential backoff (wait longer after each failure)
-- ✅ Move events that keep failing to a dead letter queue (a holding queue for manual review)
-- ✅ Monitor lag (how far processing runs behind incoming events)
-- ❌ Don't trust the amount or status in a webhook alone — check it with the API
-- ❌ Don't process inside the request (a slow reply makes the gateway retry again and again)
+- Right: Verify signature ALWAYS
+- Right: Respond fast (< 5s), process async
+- Right: Idempotent processing (event ID dedup)
+- Right: Persist raw event before processing
+- Right: Retry with exponential backoff (wait longer after each failure)
+- Right: Move events that keep failing to a dead letter queue (a holding queue for manual review)
+- Right: Monitor lag (how far processing runs behind incoming events)
+- Don't trust the amount or status in a webhook alone — check it with the API
+- Don't process inside the request (a slow reply makes the gateway retry again and again)
 
 ## Settlement Reconciliation
 
@@ -170,12 +170,12 @@ Daily job:
 
 ## Things You Don't Do
 
-- ❌ Store card numbers in your DB (use tokens)
-- ❌ Log card data anywhere (CVV especially)
-- ❌ Trust client-sent amount
-- ❌ Skip webhook signature verification
-- ❌ Process webhooks inside the request (slow replies cause retries)
-- ❌ Build your own gateway
+- Store card numbers in your DB (use tokens)
+- Log card data anywhere (CVV especially)
+- Trust client-sent amount
+- Skip webhook signature verification
+- Process webhooks inside the request (slow replies cause retries)
+- Build your own gateway
 
 ## Skills You Use
 
@@ -190,13 +190,13 @@ Daily job:
 
 ## Common Pitfalls
 
-- ❌ **Webhook timeout** — handler takes > 5s, so the gateway retries and you get duplicates
-- ❌ **Replay attack** — accepting old webhooks without timestamp check
-- ❌ **Trust client amount** — the frontend says $1, the gateway charges $100
-- ❌ **No idempotency** — a network glitch charges the customer twice
-- ❌ **PCI scope creep** — accidentally logging card data
-- ❌ **Webhook order** — assuming events arrive in order (they don't)
-- ❌ **No reconciliation** — small daily differences add up to a big monthly loss
+- Wrong: **Webhook timeout** — handler takes > 5s, so the gateway retries and you get duplicates
+- Wrong: **Replay attack** — accepting old webhooks without timestamp check
+- Wrong: **Trust client amount** — the frontend says $1, the gateway charges $100
+- Wrong: **No idempotency** — a network glitch charges the customer twice
+- Wrong: **PCI scope creep** — accidentally logging card data
+- Wrong: **Webhook order** — assuming events arrive in order (they don't)
+- Wrong: **No reconciliation** — small daily differences add up to a big monthly loss
 
 ## Reference
 

@@ -4,22 +4,22 @@
 
 ## Option 1: Shared test DB (popular, problematic)
 ```
-❌ All tests share same data
-❌ Order-dependent
-❌ Hard to parallelize
-❌ Pollution between tests
+Wrong: All tests share same data
+Wrong: Order-dependent
+Wrong: Hard to parallelize
+Wrong: Pollution between tests
 ```
 
 ## Option 2: Per-test setup (slow)
 ```
 🟡 Clean slate every test
 🟡 Reliable but slow
-✅ Good for critical flows
+Good for critical flows
 ```
 
 ## Option 3: API setup, UI verification (best)
 ```typescript
-// ✅ Setup via API (fast), verify via UI (real test)
+// Right: Setup via API (fast), verify via UI (real test)
 test('user sees orders', async ({ page, request }) => {
   // Setup via API — fast, reliable
   const user = await api.createUser();
@@ -33,7 +33,7 @@ test('user sees orders', async ({ page, request }) => {
 
 ## Option 4: Database snapshot + rollback
 ```
-✅ Real production-like data
-✅ Fast (uses snapshots)
+Right: Real production-like data
+Right: Fast (uses snapshots)
 🟡 Requires DB tooling
 ```

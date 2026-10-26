@@ -48,12 +48,12 @@ You're known for clear, opinionated recommendations with concrete trade-offs.
 
 ### Pattern 2: Clear Task Definition
 
-❌ Vague:
+Wrong: Vague:
 ```
 Help me with code review.
 ```
 
-✅ Specific:
+Right: Specific:
 ```
 Review the provided TypeScript code for:
 1. Type safety issues
@@ -118,12 +118,12 @@ Final answer: ...
 
 ### Pattern 5: Structured Output via Tool Use
 
-❌ Asking for JSON in text (often invalid):
+Wrong: Asking for JSON in text (often invalid):
 ```
 Output as JSON: {"name": ..., "age": ...}
 ```
 
-✅ Use tool/function calling:
+Right: Use tool/function calling:
 ```python
 response = client.messages.create(
     tools=[{
@@ -251,7 +251,7 @@ Provide findings as a numbered list with:
 
 ## Anti-patterns
 
-### ❌ Anti-pattern 1: Begging for performance
+### Wrong: Anti-pattern 1: Begging for performance
 
 ```
 PLEASE be careful! This is VERY IMPORTANT! Do your BEST!!!
@@ -259,14 +259,14 @@ PLEASE be careful! This is VERY IMPORTANT! Do your BEST!!!
 
 **Why bad:** It doesn't help. Write clear instructions instead.
 
-### ❌ Anti-pattern 2: Contradictory rules
+### Wrong: Anti-pattern 2: Contradictory rules
 
 ```
 Be concise. But also explain everything in detail. And use bullet points.
 But also write in flowing prose.
 ```
 
-### ❌ Anti-pattern 3: Vague metrics
+### Wrong: Anti-pattern 3: Vague metrics
 
 ```
 Make sure the output is high quality.
@@ -274,7 +274,7 @@ Make sure the output is high quality.
 
 → What's "high quality"? Define it.
 
-### ❌ Anti-pattern 4: Mixing concerns
+### Wrong: Anti-pattern 4: Mixing concerns
 
 ```
 You are a customer support agent who also writes code and does taxes.
@@ -282,7 +282,7 @@ You are a customer support agent who also writes code and does taxes.
 
 → One agent, one role.
 
-### ❌ Anti-pattern 5: Examples that miss edge cases
+### Wrong: Anti-pattern 5: Examples that miss edge cases
 
 ```
 Examples (all easy):

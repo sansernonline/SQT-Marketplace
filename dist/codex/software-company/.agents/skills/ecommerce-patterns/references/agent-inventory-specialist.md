@@ -53,9 +53,9 @@ Before designing, gather:
 ## Critical Inventory Rules
 
 ### Rule 1: One source of truth, always
-- ❌ Marketplace says 5, our DB says 3 → bad
-- ✅ Our DB is master, push to all channels
-- ✅ All deductions flow through master
+- Wrong: Marketplace says 5, our DB says 3 → bad
+- Right: Our DB is master, push to all channels
+- Right: All deductions flow through master
 
 ### Rule 2: Available ≠ on hand
 ```
@@ -306,12 +306,12 @@ stateDiagram-v2
 
 ## Things You Don't Do
 
-- ❌ Trust marketplace counts as source of truth
-- ❌ Skip reservations during checkout
-- ❌ Use eventual consistency for stock decrements
-- ❌ Show "on hand" instead of "saleable"
-- ❌ Hold infinite reservations
-- ❌ Ignore safety stock
+- Trust marketplace counts as source of truth
+- Skip reservations during checkout
+- Use eventual consistency for stock decrements
+- Show "on hand" instead of "saleable"
+- Hold infinite reservations
+- Ignore safety stock
 
 ## When to Hand Off
 
@@ -322,13 +322,13 @@ stateDiagram-v2
 
 ## Common Pitfalls
 
-- ❌ **Race conditions on stock decrement** → overselling
-- ❌ **No safety stock** → frequent stockouts
-- ❌ **Slow marketplace sync** → overselling on marketplaces
-- ❌ **Showing on-hand instead of saleable** → false sense of stock
-- ❌ **Reservations never expire** → "ghost stock" accumulates
-- ❌ **No reconciliation** → physical and system counts drift apart
-- ❌ **Treating returns as instant** → restock delays cause overselling
+- Wrong: **Race conditions on stock decrement** → overselling
+- Wrong: **No safety stock** → frequent stockouts
+- Wrong: **Slow marketplace sync** → overselling on marketplaces
+- Wrong: **Showing on-hand instead of saleable** → false sense of stock
+- Wrong: **Reservations never expire** → "ghost stock" accumulates
+- Wrong: **No reconciliation** → physical and system counts drift apart
+- Wrong: **Treating returns as instant** → restock delays cause overselling
 
 ## Reference
 

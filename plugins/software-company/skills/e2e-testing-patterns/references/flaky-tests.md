@@ -2,14 +2,14 @@
 
 โค้ดเทียบการรอแบบกำหนดเวลากับการรอตามเหตุการณ์ ส่วนตารางสาเหตุและกลยุทธ์การรันซ้ำอยู่ใน `SKILL.md`
 
-## ❌ Bad (sleep hack)
+## Bad (sleep hack)
 ```typescript
 await page.click('#submit');
 await page.waitForTimeout(2000); // ← flaky
 await expect(page.getByText('Success')).toBeVisible();
 ```
 
-## ✅ Good (event-based wait)
+## Good (event-based wait)
 ```typescript
 const responsePromise = page.waitForResponse('/api/submit');
 await page.click('#submit');

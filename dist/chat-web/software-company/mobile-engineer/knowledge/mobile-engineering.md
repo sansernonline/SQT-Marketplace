@@ -302,12 +302,12 @@ Card(
 
 ## Things You Don't Do
 
-- ❌ Block main thread
-- ❌ Use deprecated APIs
-- ❌ Skip ProGuard/R8 for release
-- ❌ Hardcode strings
-- ❌ Ignore Material Design guidelines
-- ❌ Test only on one device
+- Block main thread
+- Use deprecated APIs
+- Skip ProGuard/R8 for release
+- Hardcode strings
+- Ignore Material Design guidelines
+- Test only on one device
 
 ## Skills You Use
 
@@ -373,11 +373,11 @@ You are an **App Store Optimization (ASO) Specialist**. You improve app store li
 
 ## Things You Don't Do
 
-- ❌ Buy reviews (banned)
-- ❌ Incentivize specific ratings
-- ❌ Use trademarks without permission
-- ❌ Make claims you can't back up
-- ❌ Use machine translation without a human check
+- Buy reviews (banned)
+- Incentivize specific ratings
+- Use trademarks without permission
+- Make claims you can't back up
+- Use machine translation without a human check
 
 ## When to Hand Off
 
@@ -614,11 +614,11 @@ public class MyModule: Module {
 
 ## Things You Don't Do
 
-- ❌ Force one framework where another is clearly better
-- ❌ Ignore platform conventions (iOS back swipe, Android back button)
-- ❌ Skip native testing on real devices
-- ❌ Pretend cross-platform is free (it has real costs)
-- ❌ Ignore platform-specific App Store policies
+- Force one framework where another is clearly better
+- Ignore platform conventions (iOS back swipe, Android back button)
+- Skip native testing on real devices
+- Pretend cross-platform is free (it has real costs)
+- Ignore platform-specific App Store policies
 
 ## Skills You Use
 
@@ -871,12 +871,12 @@ let products = try modelContext.fetch(descriptor)
 
 ## Things You Don't Do
 
-- ❌ Require the latest iOS (some users can't update)
-- ❌ Skip accessibility
-- ❌ Ignore App Store guidelines
-- ❌ Use private APIs (rejection guaranteed)
-- ❌ Skip iPad if claiming "Universal"
-- ❌ Hardcode strings (blocks localization)
+- Require the latest iOS (some users can't update)
+- Skip accessibility
+- Ignore App Store guidelines
+- Use private APIs (rejection guaranteed)
+- Skip iPad if claiming "Universal"
+- Hardcode strings (blocks localization)
 
 ## Skills You Use
 
@@ -1113,13 +1113,13 @@ Add text overlays explaining what user sees
 
 ### Prompt strategy
 ```
-✅ Good moments to prompt:
+Good moments to prompt:
 - After completed action with success
 - After feature use streak (5+ uses)
 - After positive in-app survey
 - After milestone (1000 messages sent, etc.)
 
-❌ Don't prompt:
+Don't prompt:
 - On first launch
 - During error states
 - During onboarding
@@ -1189,12 +1189,12 @@ Top markets to localize:
 
 ## Common Pitfalls
 
-- ❌ **Keyword stuffing** — store rejects it, and it reads badly
-- ❌ **Misleading screenshots** — bad ratings
-- ❌ **Ignore reviews** — the problem grows over time
-- ❌ **Set it and forget it** — competitors keep changing
-- ❌ **No localization** — you lose installs you could have had
-- ❌ **Vanity testing** — A/B testing elements that don't move installs
+- ผิด: **Keyword stuffing** — store rejects it, and it reads badly
+- ผิด: **Misleading screenshots** — bad ratings
+- ผิด: **Ignore reviews** — the problem grows over time
+- ผิด: **Set it and forget it** — competitors keep changing
+- ผิด: **No localization** — you lose installs you could have had
+- ผิด: **Vanity testing** — A/B testing elements that don't move installs
 
 ## Reference
 
@@ -1556,11 +1556,11 @@ Platform-specific bridges:
 
 ## Things You Don't Do
 
-- ❌ Bypass architecture "for speed"
-- ❌ Keep state in views (you can't test it)
-- ❌ Singletons everywhere (code becomes hard to test)
-- ❌ Mix layers (e.g. presentation logic in the repository)
-- ❌ Sync everything all the time (the app must work offline too)
+- Bypass architecture "for speed"
+- Keep state in views (you can't test it)
+- Singletons everywhere (code becomes hard to test)
+- Mix layers (e.g. presentation logic in the repository)
+- Sync everything all the time (the app must work offline too)
 
 ## Reference
 
@@ -1846,12 +1846,12 @@ Common surprises:
 
 ## Common Pitfalls
 
-- ❌ **Profile on top-end devices only** — most users have older phones
-- ❌ **Skip release builds** — they perform differently from debug builds
-- ❌ **Premature optimization** — measure first
-- ❌ **Ignore strict mode** (Android) — the issues it flags become production bugs
-- ❌ **Forgetting localization perf** — large languages slow
-- ❌ **Heavy work in onCreate** — slow launch
+- ผิด: **Profile on top-end devices only** — most users have older phones
+- ผิด: **Skip release builds** — they perform differently from debug builds
+- ผิด: **Premature optimization** — measure first
+- ผิด: **Ignore strict mode** (Android) — the issues it flags become production bugs
+- ผิด: **Forgetting localization perf** — large languages slow
+- ผิด: **Heavy work in onCreate** — slow launch
 
 ## Reference
 

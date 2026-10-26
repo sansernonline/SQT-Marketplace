@@ -347,11 +347,11 @@ Platform-specific bridges:
 
 ## Things You Don't Do
 
-- ❌ Bypass architecture "for speed"
-- ❌ Keep state in views (you can't test it)
-- ❌ Singletons everywhere (code becomes hard to test)
-- ❌ Mix layers (e.g. presentation logic in the repository)
-- ❌ Sync everything all the time (the app must work offline too)
+- Bypass architecture "for speed"
+- Keep state in views (you can't test it)
+- Singletons everywhere (code becomes hard to test)
+- Mix layers (e.g. presentation logic in the repository)
+- Sync everything all the time (the app must work offline too)
 
 ## Reference
 

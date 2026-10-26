@@ -301,12 +301,12 @@ For EVM L1-L2: use the native bridge for the canonical token and accept slower w
 
 ## Things You Don't Do
 
-- ❌ Build your own bridge
-- ❌ Centralized "admin pause" without a governance plan
-- ❌ Admin keys kept forever (use multi-sig and timelock, then renounce eventually)
-- ❌ Skip indexing (querying the chain directly is slow)
-- ❌ Put images on-chain (use IPFS)
-- ❌ Ignore wallet UX
+- Build your own bridge
+- Centralized "admin pause" without a governance plan
+- Admin keys kept forever (use multi-sig and timelock, then renounce eventually)
+- Skip indexing (querying the chain directly is slow)
+- Put images on-chain (use IPFS)
+- Ignore wallet UX
 
 ## When to Hand Off
 
@@ -435,9 +435,9 @@ contract LendingPool {
 
 ### Oracle Pattern (CRITICAL)
 
-❌ One oracle, read with `latestAnswer()` (deprecated by Chainlink, no timestamp, no staleness check).
+Wrong: One oracle, read with `latestAnswer()` (deprecated by Chainlink, no timestamp, no staleness check).
 
-✅ Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Oracle Integration:
+Right: Code (one copy, kept up to date) → [`defi-patterns.md`](defi-patterns.md) · Oracle Integration:
 
 - Chainlink `latestRoundData()` · `price > 0` · `updatedAt` not older than the feed heartbeat
 - second source (Uniswap V3 TWAP or Pyth) · reject when sources disagree by more than a set % · use the median
@@ -530,12 +530,12 @@ contract Emergency {
 
 ## Things You Don't Do
 
-- ❌ Single oracle source
-- ❌ Unbounded loops in state-changing functions
-- ❌ Use block.timestamp as a source of randomness
-- ❌ Use tx.origin for auth
-- ❌ Forget to emit events for indexers
-- ❌ Launch at full scale without a small trial period first
+- Single oracle source
+- Unbounded loops in state-changing functions
+- Use block.timestamp as a source of randomness
+- Use tx.origin for auth
+- Forget to emit events for indexers
+- Launch at full scale without a small trial period first
 
 ## When to Hand Off
 
@@ -609,7 +609,7 @@ Code targets Solidity 0.8.24+ and OpenZeppelin Contracts 5.x (compile-checked wi
 ### Checks-Effects-Interactions (Reentrancy Prevention)
 
 ```solidity
-// ❌ BAD: vulnerable to reentrancy
+// Wrong: BAD: vulnerable to reentrancy
 function withdraw(uint amount) public {
     require(balances[msg.sender] >= amount);
     (bool success,) = msg.sender.call{value: amount}("");  // external call
@@ -617,7 +617,7 @@ function withdraw(uint amount) public {
     balances[msg.sender] -= amount;  // state change after
 }
 
-// ✅ GOOD: Checks-Effects-Interactions
+// Right: GOOD: Checks-Effects-Interactions
 function withdraw(uint amount) public {
     require(balances[msg.sender] >= amount);  // Checks
     balances[msg.sender] -= amount;             // Effects
@@ -625,7 +625,7 @@ function withdraw(uint amount) public {
     require(success);
 }
 
-// ✅ BETTER: ReentrancyGuard (5.x: utils/, not security/)
+// Right: BETTER: ReentrancyGuard (5.x: utils/, not security/)
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract MyContract is ReentrancyGuard {
@@ -803,12 +803,12 @@ Common auditors (2026):
 
 ## Things You Don't Do
 
-- ❌ Skip security audit before mainnet
-- ❌ Trust user input
-- ❌ Skip reentrancy protection on external calls
-- ❌ Hardcode admin keys
-- ❌ Write your own ERC-20/721 (use OpenZeppelin)
-- ❌ Deploy without monitoring
+- Skip security audit before mainnet
+- Trust user input
+- Skip reentrancy protection on external calls
+- Hardcode admin keys
+- Write your own ERC-20/721 (use OpenZeppelin)
+- Deploy without monitoring
 
 ## Skills You Use
 
@@ -1027,26 +1027,26 @@ Cons: Complex
 
 ## Anti-Patterns
 
-### ❌ Ponzinomics
+### ผิด: Ponzinomics
 ```
 Rewards from new buyers
 No real fees underlying
 Eventually collapses
 ```
 
-### ❌ Token doesn't accrue value
+### ผิด: Token doesn't accrue value
 ```
 Treasury captures all fees
 Token holders just have governance
 ```
 
-### ❌ Unlimited dilution
+### ผิด: Unlimited dilution
 ```
 Inflation > demand growth
 Token price tanks
 ```
 
-### ❌ Insider concentration
+### ผิด: Insider concentration
 ```
 Team/investor: 50%+
 Public skeptical
@@ -1135,12 +1135,12 @@ Alternative: token grants to original holders
 
 ## Things You Don't Do
 
-- ❌ Launch without legal review
-- ❌ Promise specific returns
-- ❌ Concentrate team supply
-- ❌ Skip vesting on insiders
-- ❌ Marketing-driven design (substance first)
-- ❌ Ignore comparable projects
+- Launch without legal review
+- Promise specific returns
+- Concentrate team supply
+- Skip vesting on insiders
+- Marketing-driven design (substance first)
+- Ignore comparable projects
 
 ## When to Hand Off
 
@@ -1506,12 +1506,12 @@ contract LiquidityMining {
 
 ## Common Pitfalls
 
-- ❌ Depending on a single oracle
-- ❌ Unprotected callback functions
-- ❌ Flash loan and price manipulation in the same block
-- ❌ Integer division before multiplication (loses precision)
-- ❌ State updates after an external call (reentrancy)
-- ❌ Missing slippage checks
+- Wrong: Depending on a single oracle
+- Wrong: Unprotected callback functions
+- Wrong: Flash loan and price manipulation in the same block
+- Wrong: Integer division before multiplication (loses precision)
+- Wrong: State updates after an external call (reentrancy)
+- Wrong: Missing slippage checks
 
 ## Reference
 
@@ -1808,12 +1808,12 @@ function test_GasUsage_Deposit() public {
 
 ## Common Mistakes
 
-- ❌ Test only the happy path
-- ❌ Skip fuzz testing
-- ❌ Mock dependencies in integration tests
-- ❌ No invariant tests
-- ❌ Test without forking the real protocols
-- ❌ Skip gas testing (regressions sneak in)
+- Test only the happy path
+- Skip fuzz testing
+- Mock dependencies in integration tests
+- No invariant tests
+- Test without forking the real protocols
+- Skip gas testing (regressions sneak in)
 
 ## Reference
 
@@ -1854,14 +1854,14 @@ function test_GasUsage_Deposit() public {
 ### 1. Reentrancy
 
 ```solidity
-// ❌ Vulnerable
+// Wrong: Vulnerable
 function withdraw() public {
     uint amount = balances[msg.sender];
     (bool sent,) = msg.sender.call{value: amount}("");  // external call
     balances[msg.sender] = 0;  // state change after
 }
 
-// ✅ Checks-Effects-Interactions
+// Right: Checks-Effects-Interactions
 function withdraw() public {
     uint amount = balances[msg.sender];
     balances[msg.sender] = 0;  // state change first
@@ -1869,7 +1869,7 @@ function withdraw() public {
     require(sent);
 }
 
-// ✅ Even safer: ReentrancyGuard (OpenZeppelin 5.x path)
+// Right: Even safer: ReentrancyGuard (OpenZeppelin 5.x path)
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract Bank is ReentrancyGuard {
@@ -1880,19 +1880,19 @@ contract Bank is ReentrancyGuard {
 ### 2. Access Control
 
 ```solidity
-// ❌ Public function affecting state
+// Wrong: Public function affecting state
 function setOwner(address newOwner) public {
     owner = newOwner;
 }
 
-// ✅ Access control
+// Right: Access control
 function setOwner(address newOwner) public {
     require(msg.sender == owner, "Not owner");
     require(newOwner != address(0), "Zero address");
     owner = newOwner;
 }
 
-// ✅ Better: OpenZeppelin Ownable (5.x needs the first owner in the constructor)
+// Better: OpenZeppelin Ownable (5.x needs the first owner in the constructor)
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MyContract is Ownable {
     constructor(address initialOwner) Ownable(initialOwner) {}
@@ -1907,11 +1907,11 @@ contract MyContract is Ownable {
 // In Solidity 0.8.0+, overflow auto-reverts
 // For older versions, use SafeMath
 
-// ✅ Solidity 0.8+
+// Right: Solidity 0.8+
 uint256 a = type(uint256).max;
 a + 1;  // reverts
 
-// ⚠️ Unchecked blocks (use carefully) — wrap only the counter, never the loop body
+// Note: Unchecked blocks (use carefully) — wrap only the counter, never the loop body
 for (uint256 i = 0; i < length;) {
     /* body stays checked */
     unchecked { ++i; }
@@ -1935,11 +1935,11 @@ for (uint256 i = 0; i < length;) {
 ### 5. Oracle Manipulation
 
 ```solidity
-// ❌ Spot price from AMM
+// Wrong: Spot price from AMM
 uint256 price = uniswapPool.price();  // manipulable via flash loan
 ```
 
-✅ Use the patterns in [`defi-patterns.md`](defi-patterns.md) · Oracle Integration (one copy, kept up to date):
+Right: Use the patterns in [`defi-patterns.md`](defi-patterns.md) · Oracle Integration (one copy, kept up to date):
 
 - Chainlink `latestRoundData()` with `price > 0` and a staleness check on `updatedAt` — never `latestAnswer()` (deprecated, no timestamp)
 - Time-Weighted Average Price (TWAP) from Uniswap V3 for a second opinion
@@ -1954,13 +1954,13 @@ contract MyContract {
     address b;  // slot 1
 }
 
-// ❌ V2 — DON'T reorder
+// Wrong: V2 — DON'T reorder
 contract MyContractV2 {
     address b;  // slot 0 now! corrupts data
     uint256 a;  // slot 1
 }
 
-// ✅ V2 — append only
+// Right: V2 — append only
 contract MyContractV2 {
     uint256 a;  // slot 0 (unchanged)
     address b;  // slot 1 (unchanged)
@@ -1978,7 +1978,7 @@ contract MyContractV2 {
 // delegatecall preserves msg.sender + storage of caller
 // VERY dangerous if user can choose target
 
-// ❌ Anti-pattern
+// Wrong: Anti-pattern
 function callExternal(address target, bytes memory data) public {
     target.delegatecall(data);  // attacker can hijack state
 }
@@ -1987,13 +1987,13 @@ function callExternal(address target, bytes memory data) public {
 ### 8. Signature Replay
 
 ```solidity
-// ❌ Vulnerable: no nonce or chain ID
+// Wrong: Vulnerable: no nonce or chain ID
 function permit(address user, bytes signature) public {
     require(verify(user, signature));
     // ...
 }
 
-// ✅ EIP-712 typed data: domain (name, version, chainId, this contract)
+// Right: EIP-712 typed data: domain (name, version, chainId, this contract)
 //    + type hash + nonce + deadline, bound to the exact action
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
@@ -2045,14 +2045,14 @@ Defense:
 ### 10. Initialization
 
 ```solidity
-// ❌ Constructor in proxy (doesn't run)
+// Wrong: Constructor in proxy (doesn't run)
 contract MyContract {
     constructor() {
         owner = msg.sender;  // never executes via proxy
     }
 }
 
-// ✅ Initializer pattern (OpenZeppelin 5.x upgradeable)
+// Right: Initializer pattern (OpenZeppelin 5.x upgradeable)
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 

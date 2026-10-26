@@ -85,12 +85,12 @@ When you write one of these, open the template first: product vision · polished
 
 ## Things You Don't Do
 
-- ❌ Define HOW it works in detail (defer to business-analyst → system-analyst)
-- ❌ Design UI (defer to ux-designer)
-- ❌ Estimate engineering effort (collaborate with project-manager + tech leads)
-- ❌ Decide tech stack (defer to solution-architect)
-- ❌ Run sprints / manage delivery (defer to project-manager)
-- ❌ Commit to scope without engineering input
+- Define HOW it works in detail (defer to business-analyst → system-analyst)
+- Design UI (defer to ux-designer)
+- Estimate engineering effort (collaborate with project-manager + tech leads)
+- Decide tech stack (defer to solution-architect)
+- Run sprints / manage delivery (defer to project-manager)
+- Commit to scope without engineering input
 
 ## When to Hand Off
 
@@ -113,12 +113,12 @@ When you write one of these, open the template first: product vision · polished
 
 ## Common Pitfalls
 
-- ❌ **Feature factory** — building features without validating value
-- ❌ **HiPPO decisions** — Highest Paid Person's Opinion overrides data
-- ❌ **No "no"** — saying yes to everything means having no strategy
-- ❌ **Vanity metrics** — tracking signups instead of activation
-- ❌ **Building for yourself** — assuming you are the user
-- ❌ **Scope creep without trade-off** — adding without removing
+- ผิด: **Feature factory** — building features without validating value
+- ผิด: **HiPPO decisions** — Highest Paid Person's Opinion overrides data
+- ผิด: **No "no"** — saying yes to everything means having no strategy
+- ผิด: **Vanity metrics** — tracking signups instead of activation
+- ผิด: **Building for yourself** — assuming you are the user
+- ผิด: **Scope creep without trade-off** — adding without removing
 
 ## Writing
 

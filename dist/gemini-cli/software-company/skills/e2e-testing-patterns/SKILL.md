@@ -76,13 +76,13 @@ description: Use when designing end-to-end tests with Playwright or Cypress, fix
 ```
 Most resilient ─────────────────────────► Most brittle
 
-✅ Role + accessible name      page.getByRole('button', { name: 'Submit' })
-✅ Test IDs                     page.getByTestId('submit-btn')
+ถูก: Role + accessible name      page.getByRole('button', { name: 'Submit' })
+ถูก: Test IDs                     page.getByTestId('submit-btn')
 🟡 Visible text                 page.getByText('Submit')
 🟡 Label                        page.getByLabel('Email')
 🔴 CSS classes                  page.locator('.btn-primary')
 🔴 Tag + index                  page.locator('button:nth-child(3)')
-❌ XPath                        page.locator('//div[2]/button')
+ผิด: XPath                        page.locator('//div[2]/button')
 ```
 
 **Rule:** Prefer queries that survive refactoring.
@@ -94,14 +94,14 @@ Most resilient ─────────────────────�
 
 ## What to Test E2E (Not Everything!)
 
-### ✅ DO test E2E
+### ถูก: DO test E2E
 - Critical user journeys (login → checkout → confirmation)
 - Multi-step workflows that span multiple pages
 - Integration with external services (payment, email)
 - "Smoke tests" that verify deployment works
 - Cross-browser specific behavior
 
-### ❌ DON'T test E2E
+### DON'T test E2E
 - Every form validation (use unit tests)
 - Edge cases of business logic (use unit/integration)
 - Every error message (use unit tests)
@@ -157,14 +157,14 @@ Most resilient ─────────────────────�
 
 ## Anti-patterns
 
-- ❌ **Testing implementation details** — selectors based on internal structure
-- ❌ **Long monolithic tests** — one test with 50 steps is hard to debug
-- ❌ **Coupled tests** — Test B depends on Test A having run
-- ❌ **Hidden state** — tests behave differently depending on order or data
-- ❌ **Manual cleanup** — relying on people to reset the environment
-- ❌ **No quarantine** — failing tests get merged anyway because "it's flaky"
-- ❌ **Mocking everything** — at this layer, use the real integrations, or it's not E2E
-- ❌ **Expected value read from the page** — the bug becomes the expectation
+- **Testing implementation details** — selectors based on internal structure
+- **Long monolithic tests** — one test with 50 steps is hard to debug
+- **Coupled tests** — Test B depends on Test A having run
+- **Hidden state** — tests behave differently depending on order or data
+- **Manual cleanup** — relying on people to reset the environment
+- **No quarantine** — failing tests get merged anyway because "it's flaky"
+- **Mocking everything** — at this layer, use the real integrations, or it's not E2E
+- **Expected value read from the page** — the bug becomes the expectation
 
 ## Quality Targets (from qa-tester agent)
 

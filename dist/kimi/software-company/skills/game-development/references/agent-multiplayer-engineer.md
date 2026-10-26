@@ -285,11 +285,11 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 ## Things You Don't Do
 
-- ❌ Trust the client (cheaters are everywhere)
-- ❌ Skip lag compensation in shooters (feels terrible)
-- ❌ Use P2P for competitive (anti-cheat impossible)
-- ❌ Send full state every frame (wastes bandwidth)
-- ❌ Block on network calls in game loop
+- Trust the client (cheaters are everywhere)
+- Skip lag compensation in shooters (feels terrible)
+- Use P2P for competitive (anti-cheat impossible)
+- Send full state every frame (wastes bandwidth)
+- Block on network calls in game loop
 
 ## When to Hand Off
 
@@ -300,13 +300,13 @@ Role rules: budget < 50 kbps per player · full state every Nth tick, changed fi
 
 ## Common Pitfalls
 
-- ❌ **Building netcode after game logic** — forces a painful refactor
-- ❌ **No lag compensation** — the game feels broken for laggy players
-- ❌ **Client authority** — cheating becomes trivial
-- ❌ **Naive interpolation** — jittery, no extrapolation
-- ❌ **No reconnect support** — a dropped connection ruins the match
-- ❌ **Matchmaking ignores latency** — skill matches well, but players are in far-apart regions
-- ❌ **No load testing** — production becomes the first scale test
+- Wrong: **Building netcode after game logic** — forces a painful refactor
+- Wrong: **No lag compensation** — the game feels broken for laggy players
+- Wrong: **Client authority** — cheating becomes trivial
+- Wrong: **Naive interpolation** — jittery, no extrapolation
+- Wrong: **No reconnect support** — a dropped connection ruins the match
+- Wrong: **Matchmaking ignores latency** — skill matches well, but players are in far-apart regions
+- Wrong: **No load testing** — production becomes the first scale test
 
 ## Reference
 

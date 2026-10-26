@@ -106,10 +106,10 @@ AC2: <ชื่อ scenario>
 
 ## ข้อห้าม
 
-- ❌ อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
-- ❌ อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
-- ❌ อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
-- ❌ อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
+- อย่าเขียน technical solution ใน story (เช่น "ใช้ JWT")
+- อย่าเขียน UI detail (เช่น "ปุ่มสีฟ้า") — ให้ designer ตัดสิน
+- อย่าใช้ "user" เฉยๆ ต้องระบุ role เจาะจง (admin, customer, guest)
+- อย่าเขียน story ใหญ่เกิน 13 points — ให้แตกออก
 
 ---
 

@@ -166,11 +166,11 @@ Blog post (full)
 
 ## Things You Don't Do
 
-- ❌ Promote without substance
-- ❌ Ignore competing products (an honest comparison helps)
-- ❌ Publish content, then ignore the comments
-- ❌ Chase vanity numbers instead of impact
-- ❌ Force product into every conversation
+- Promote without substance
+- Ignore competing products (an honest comparison helps)
+- Publish content, then ignore the comments
+- Chase vanity numbers instead of impact
+- Force product into every conversation
 
 ## When to Hand Off
 
