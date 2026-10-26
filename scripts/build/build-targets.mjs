@@ -67,8 +67,8 @@ const KNOWLEDGE_FILES_MAX = 10;    // Gem รับ 10 ไฟล์ · Custom GP
 // ไฟล์ที่ไม่ใส่ในชุดสำหรับหน้าเว็บ (ใหญ่เกินและหน้าเว็บรันสคริปต์แตกไฟล์ไม่ได้)
 const WEB_SKIP = [/\.zip$/i];
 
-// ไฟล์ขยะจากการรันสคริปต์ในเครื่อง ไม่ส่งออกทุกชุด
-const JUNK = /(^|[\\/])(__pycache__|\.pytest_cache|node_modules)([\\/]|$)|\.pyc$/;
+// ไฟล์ขยะจากการรันสคริปต์ในเครื่อง ไม่ส่งออกทุกชุด · .ruff_cache เคยหลุดเข้า zip จน CI ล้ม (PR #23 · 2026-10-26)
+const JUNK = /(^|[\\/])(__pycache__|\.pytest_cache|\.ruff_cache|\.mypy_cache|\.venv|node_modules)([\\/]|$)|\.pyc$/;
 const COPY = { recursive: true, filter: (src) => !JUNK.test(src) };
 
 // ── อ่านของจริงจาก plugins/ ────────────────────────────────────────────

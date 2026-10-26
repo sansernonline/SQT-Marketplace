@@ -26,7 +26,8 @@ export const isPluginRepo = (project) =>
   ["marketplace.json", "plugin.json"].some((f) => existsSync(join(project, ".claude-plugin", f)));
 
 export function wantedIgnores(project) {
-  return isPluginRepo(project) ? [".claude/"] : [".claude/", ".claude-plugin/"];
+  // _to_delete/ คือที่วางของชั่วคราวตามกฎประจำตัว ห้ามขึ้น git ทุกโปรเจกต์ (ผู้ใช้สั่ง 2026-10-26)
+  return isPluginRepo(project) ? [".claude/", "_to_delete/"] : [".claude/", ".claude-plugin/", "_to_delete/"];
 }
 
 function backup(project, file, name) {
@@ -143,10 +144,10 @@ function selfTest() {
   // .gitignore: โปรเจกต์ทั่วไปได้ 2 บรรทัด · รันซ้ำไม่เพิ่ม · repo ที่เป็น plugin ไม่ ignore .claude-plugin
   gitignore(proj, true); gitignore(proj, true);
   const gi = readFileSync(join(proj, ".gitignore"), "utf8");
-  ok.push(["gitignore", gi.startsWith("node_modules\n") && (gi.match(/^\.claude\/$/gm) ?? []).length === 1 && gi.includes(".claude-plugin/")]);
+  ok.push(["gitignore", gi.startsWith("node_modules\n") && (gi.match(/^\.claude\/$/gm) ?? []).length === 1 && gi.includes(".claude-plugin/") && gi.includes("_to_delete/")]);
   gitignore(plug, true);
   const pg = readFileSync(join(plug, ".gitignore"), "utf8");
-  ok.push(["plugin repo", pg.includes(".claude/") && !pg.includes(".claude-plugin/")]);
+  ok.push(["plugin repo", pg.includes(".claude/") && pg.includes("_to_delete/") && !pg.includes(".claude-plugin/")]);
   // สิทธิ์: เก็บกฎเดิม · ไม่ซ้ำ · มีสำเนาสำรอง · JSON พังไม่แตะ
   mkdirSync(join(proj, ".claude"));
   writeFileSync(join(proj, ".claude", "settings.local.json"), JSON.stringify({ permissions: { allow: ["Bash(ls:*)"] }, x: 1 }));
