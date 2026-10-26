@@ -1,0 +1,34 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: design-direction-lookup-behaviour
+description: โจทย์ร้านทองออนไลน์ ต้องได้ 3 แนวที่ต่าง look กัน ฟอนต์ไทยมีตัวละตินในตระกูลหรือระบุคู่ละตินชัด ไม่ใช้ Inter และบอกว่าตรวจ contrast แล้ว
+tags: [behaviour, design-direction-lookup]
+runs: 3
+expected_outcome: 3 แนวต่าง look · ไม่มี Inter · ไม่มี Noto Sans Thai ที่ไม่มีคู่ละติน · มีผลตรวจ contrast
+execution:
+  prompt: |
+    ทำเว็บขายทองรูปพรรณของร้านเก่าในเยาวราช ลูกค้าอายุ 35–60 ซื้อผ่านมือถือ มีราคาทองวันนี้ขึ้นหน้าแรก
+    ขอแนวหน้าตา 3 แนว แต่ละแนวมีชุดสีทั้งโหมดสว่างและมืด คู่ฟอนต์ไทย-อังกฤษ และเหตุผลสั้น ๆ ไม่ต้องถามกลับ
+  max_turns: 12
+  timeout_seconds: 400
+graders:
+  - name: no-inter
+    type: regex
+    # จับเฉพาะ Inter ที่ถูกเลือกเป็นฟอนต์ (คู่กับ + หรือตามหลังบทบาท) คำตอบที่เขียนว่า "ไม่ใช้ Inter" ต้องไม่ตก
+    pattern: "\\+\\s*Inter\\b|\\bInter\\s*\\+|(เนื้อ|body|หัว|heading|ฟอนต์อังกฤษ|ละติน|Latin)\\s*[:：/]?\\s*Inter\\b"
+    match: not_contains
+    target: last_message
+  - name: contrast-checked
+    type: regex
+    pattern: "(?i)contrast|คอนทราสต์|ความต่างสี|4\\.5"
+    match: contains
+    target: last_message
+  - name: distinct-and-paired
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. มี 3 แนวที่ต่างกันจริง (look หรือบุคลิกต่างกัน ไม่ใช่แค่เปลี่ยนสีหลัก)
+      2. ทุกแนวมีค่าสีทั้งโหมดสว่างและโหมดมืด
+      3. ฟอนต์ไทยทุกตัวที่เลือกมีตัวละตินในตระกูลเดียวกัน หรือระบุฟอนต์ละตินคู่ไว้ชัด (Noto Sans Thai อย่างเดียวไม่ผ่าน เพราะไม่มีตัวละติน)
+      4. ไม่ใช้สี slate หรือ indigo ของ Tailwind เป็นสีหลัก

@@ -61,6 +61,7 @@ Not for: logos, posters, brand colours → graphic-designer · photos and illust
 ## Skills You Use
 
 - `simplify` — **APPLY TO EVERY DESIGN** — fewest steps to user goal, reuse existing patterns, defaults that work for 80%
+- `design-direction-lookup` — before the 3 design directions of a new project: industry, palettes that pass contrast, Thai-Latin font pairs, Thai UX rules, stack rules
 - `ui-craft` + platform skill (`web-app-design` for web apps · `mobile-app-design` for mobile apps · `windows-app-design` for Windows programs) — **APPLY TO EVERY MOCKUP** — one clickable HTML file `mockup/<CODE>-mockup.html`; never deliver a text-only design
 - `markdown-visuals` — pictures inside .md files only (UI state SVG, ASCII layout sketch, Mermaid flow in a spec)
 - ไฟล์ Office ที่ได้รับมาหรือต้องส่งออก ให้เรียก skill ที่มากับระบบโดยตรง: `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (ไม่แกะไฟล์เอง)

@@ -1,0 +1,7 @@
+id,category,rule_th,why_th,keywords_th,keywords_en,severity,platform,source
+th-date-be,ฟอร์มไทย,ช่องวันที่แสดงปี พ.ศ. และรับได้ทั้ง พ.ศ. และ ค.ศ.,คนไทยกรอก พ.ศ. เป็นปกติ,วันที่;พ.ศ.;ปฏิทิน,date;buddhist year;calendar,high,all,ours
+th-line-break,ตัวอักษรไทย,ตัดบรรทัดไทยด้วยคำ ไม่ตัดกลางคำ,ไทยไม่เว้นวรรคระหว่างคำ,ตัดบรรทัด;ตัดคำ,line break;wrap,high,web,ours
+th-vowel-clip,ตัวอักษรไทย,line-height ภาษาไทยอย่างน้อย 1.5 เพื่อไม่ให้สระบนล่างโดนตัด,สระและวรรณยุกต์ซ้อนสูง,สระ;วรรณยุกต์;ระยะบรรทัด,line height;clipping,high,all,ours
+touch-target,ปุ่ม,ปุ่มบนมือถือสูงอย่างน้อย 44px,นิ้วกดพลาด,ปุ่ม;มือถือ;ผู้สูงอายุ,touch target;mobile,high,mobile,WCAG 2.2
+price-time,ราคา,ราคาที่เปลี่ยนทุกวันต้องบอกเวลาประกาศ,คนต้องรู้ว่าราคาสดไหม,ราคา;ราคาทอง;เวลา,price;timestamp,medium,all,ours
+promptpay,ชำระเงิน,มี QR พร้อมเพย์ให้สแกนบนมือถือและบอกยอดชัด,คนไทยจ่ายผ่าน QR,พร้อมเพย์;ชำระเงิน;โอนเงิน,promptpay;payment,medium,all,ours

@@ -1,0 +1,57 @@
+{
+  "rows": [
+    {
+      "coverage_id": "C-orders-read-idor",
+      "entrypoint": "src/routes/orders.js#GET /orders/:id",
+      "boundary": "ลูกค้า → คำสั่งซื้อของคนอื่น",
+      "class": "idor",
+      "status": "checked",
+      "finding_ids": [
+        "F-001"
+      ],
+      "note": ""
+    },
+    {
+      "coverage_id": "C-products-search-sqli",
+      "entrypoint": "src/routes/products.js#GET /products?q=",
+      "boundary": "คนนอก → ฐานข้อมูล",
+      "class": "sqli",
+      "status": "checked",
+      "finding_ids": [
+        "F-002"
+      ],
+      "note": ""
+    },
+    {
+      "coverage_id": "C-admin-exposure",
+      "entrypoint": "deploy/nginx.conf#location /admin",
+      "boundary": "อินเทอร์เน็ต → หน้า admin",
+      "class": "exposed-admin",
+      "status": "blocked",
+      "finding_ids": [
+        "F-003"
+      ],
+      "note": "ไม่มีสิทธิ์ดู firewall"
+    },
+    {
+      "coverage_id": "C-profile-upload",
+      "entrypoint": "src/routes/profile.js#POST /profile/avatar",
+      "boundary": "ลูกค้า → ไฟล์บนเซิร์ฟเวอร์",
+      "class": "unrestricted-upload",
+      "status": "checked",
+      "finding_ids": [
+        "F-004"
+      ],
+      "note": ""
+    },
+    {
+      "coverage_id": "C-webhook-signature",
+      "entrypoint": "src/routes/payment.js#POST /webhook",
+      "boundary": "ผู้ให้บริการจ่ายเงิน → คำสั่งซื้อ",
+      "class": "webhook-forgery",
+      "status": "pending",
+      "finding_ids": [],
+      "note": ""
+    }
+  ]
+}

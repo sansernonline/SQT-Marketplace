@@ -1,6 +1,6 @@
 {
  "plugin": "software-company",
- "version": "2.22.1",
+ "version": "2.23.0",
  "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
  "cross": [],
  "skills": [
@@ -26,6 +26,7 @@
   "data-analysis",
   "data-import-export",
   "database-design",
+  "design-direction-lookup",
   "developer-experience",
   "diagram-figures",
   "doc-cover-design",
@@ -75,6 +76,7 @@
   "reference-app-research",
   "reverse-engineering",
   "saas-platform",
+  "security-audit",
   "security-gate",
   "security-operations",
   "seo-audit-checklist",
@@ -700,6 +702,7 @@
     "readable-code",
     "principle-secure-by-default",
     "security-gate",
+    "security-audit",
     "code-review-checklist",
     "auth-implementation-patterns",
     "config-and-secrets",
@@ -804,6 +807,7 @@
    "skills": [
     "ui-craft",
     "superuser",
+    "design-direction-lookup",
     "web-app-design",
     "mobile-app-design",
     "windows-app-design",

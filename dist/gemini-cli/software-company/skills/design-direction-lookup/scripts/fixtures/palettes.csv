@@ -1,0 +1,9 @@
+id,name_th,keywords,mode,bg,surface,text,text_muted,primary,on_primary,accent,border,success,warning,danger,notes_th
+gold-ink,ทองหมึก,gold;ทอง;หรู;luxury,light,#fbfaf7,#ffffff,#1d1a16,#5c554b,#7a5a12,#ffffff,#9c2f1c,#d9d2c3,#2f6b3a,#8a5a00,#a12a1f,ทองเข้มบนพื้นกระดาษ
+gold-ink,ทองหมึก,gold;ทอง;หรู;luxury,dark,#15130f,#201d18,#f2ede4,#b8af9f,#d9b45a,#1d1a16,#e08a6e,#3a352c,#7cc48a,#e6b450,#f08a7e,ทองสว่างบนพื้นเกือบดำ
+jade-paper,หยกบนกระดาษ,jade;เขียว;green;calm,light,#f6f7f2,#ffffff,#17201b,#4f5b54,#1f5e4a,#ffffff,#b5452b,#cfd6cf,#2f6b3a,#8a5a00,#a12a1f,เขียวหยกเข้ม
+jade-paper,หยกบนกระดาษ,jade;เขียว;green;calm,dark,#101613,#18211c,#e8efe9,#a9b8ae,#7cc8a4,#0f1a15,#e9967a,#2c3a32,#7cc48a,#e6b450,#f08a7e,เขียวหยกสว่าง
+tw-indigo,ม่วงคราม,indigo,light,#ffffff,#f8fafc,#0f172a,#475569,#6366f1,#ffffff,#8b5cf6,#e2e8f0,#16a34a,#ca8a04,#dc2626,ค่าตั้งต้นของ Tailwind ใช้ทดสอบว่าถูกตัด
+tw-indigo,ม่วงคราม,indigo,dark,#0f172a,#1e293b,#f8fafc,#94a3b8,#818cf8,#0f172a,#a78bfa,#334155,#4ade80,#facc15,#f87171,ค่าตั้งต้นของ Tailwind ใช้ทดสอบว่าถูกตัด
+low-contrast,จาง,pale,light,#ffffff,#ffffff,#9a9a9a,#bbbbbb,#e0c070,#ffffff,#f0a0a0,#eeeeee,#88cc88,#eecc66,#ee8888,สีจางใช้ทดสอบว่าถูกตัด
+low-contrast,จาง,pale,dark,#222222,#2a2a2a,#555555,#444444,#666666,#777777,#555555,#333333,#446644,#665522,#663333,สีจางใช้ทดสอบว่าถูกตัด

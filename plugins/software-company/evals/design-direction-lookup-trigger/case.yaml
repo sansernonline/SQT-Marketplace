@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: design-direction-lookup-trigger
+description: ผู้ใช้ขอโทนสีและฟอนต์ไทยสำหรับเว็บใหม่ ไม่เอ่ยชื่อ skill ต้องทำให้ design-direction-lookup ถูกเปิด
+tags: [trigger, design-direction-lookup]
+runs: 3
+expected_outcome: เปิด Skill design-direction-lookup แล้วเสนอ 3 แนวที่มีชุดสีเป็นค่า hex และคู่ฟอนต์ไทย-ละติน
+execution:
+  prompt: |
+    กำลังจะทำเว็บคลินิกทันตกรรมย่านบางนา อยากได้โทนสีกับฟอนต์ไทยที่เข้ากัน ขอ 3 แนวให้เลือก ยังไม่ต้องทำหน้าจอ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-direction-lookup"'
+    min: 1
+    arm: with-only
+  - name: hex-colours-given
+    type: regex
+    pattern: "#[0-9A-Fa-f]{6}"
+    match: "count:6"
+    target: last_message

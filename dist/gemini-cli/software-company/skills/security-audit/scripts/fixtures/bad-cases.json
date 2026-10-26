@@ -1,0 +1,35 @@
+{
+  "_note": "แต่ละเคสเอา good-full มาแก้ตาม set (ใส่ค่า) และ unset (ลบช่อง) แล้วต้องเจอ error รหัส expect · target บอกว่าแก้ไฟล์ไหน",
+  "cases": [
+    { "name": "needs_validation มีระดับ", "target": "findings", "set": { "findings.2.severity": "high" }, "expect": "severity-not-allowed" },
+    { "name": "confirmed ไม่มีระดับ", "target": "findings", "set": { "findings.0.severity": null }, "expect": "confirmed-severity" },
+    { "name": "confirmed ไม่มีหลักฐาน", "target": "findings", "set": { "findings.0.evidence": " " }, "expect": "confirmed-evidence" },
+    { "name": "confirmed ไม่มีเส้นทาง", "target": "findings", "set": { "findings.0.trace": [] }, "expect": "confirmed-trace" },
+    { "name": "ผู้ยืนยันคนเดียวกับผู้หา", "target": "findings", "set": { "findings.0.verified_by": "hunter-auth" }, "expect": "confirmed-verifier" },
+    { "name": "confirmed ไม่มีผู้ยืนยัน", "target": "findings", "unset": ["findings.1.verified_by"], "expect": "confirmed-verifier" },
+    { "name": "เส้นทางไม่เริ่มที่ไฟล์ entrypoint", "target": "findings", "set": { "findings.0.trace.0.file": "src/orders/order-service.js" }, "expect": "trace-entry-file" },
+    { "name": "needs_validation ไม่มีแผนตรวจ", "target": "findings", "set": { "findings.2.check_plan": "" }, "expect": "nv-plan" },
+    { "name": "rejected ไม่มีเหตุผล", "target": "findings", "unset": ["findings.3.reject_reason"], "expect": "rejected-reason" },
+    { "name": "id ซ้ำ", "target": "findings", "set": { "findings.1.id": "F-001" }, "expect": "id-dup" },
+    { "name": "fingerprint ซ้ำ", "target": "findings", "set": { "findings.1.fingerprint": "14ac27e2d6be558b" }, "expect": "fp-dup" },
+    { "name": "fingerprint ไม่ตรงสูตร", "target": "findings", "set": { "findings.0.fingerprint": "0000000000000000" }, "expect": "fp-mismatch" },
+    { "name": "path มี ..", "target": "findings", "set": { "findings.0.location.file": "../etc/passwd" }, "expect": "path-unsafe" },
+    { "name": "path ขึ้นต้นด้วยไดรฟ์", "target": "findings", "set": { "findings.1.location.file": "C:/shop/src/products/search.js" }, "expect": "path-unsafe" },
+    { "name": "path ขึ้นต้นด้วย /", "target": "findings", "set": { "findings.1.trace.1.file": "/srv/app/search.js" }, "expect": "path-unsafe" },
+    { "name": "ค่าลับ AWS ในหลักฐาน", "target": "findings", "set": { "findings.1.evidence": "เจอ key AKIAIOSFODNN7EXAMPLE ใน config" }, "expect": "secret-in-text" },
+    { "name": "private key ในหลักฐาน", "target": "findings", "set": { "findings.2.evidence": "-----BEGIN RSA PRIVATE KEY----- MIIE..." }, "expect": "secret-in-text" },
+    { "name": "PDPA true แต่ไม่บอกชนิด", "target": "findings", "set": { "findings.0.pdpa.kinds": [] }, "expect": "pdpa-kinds" },
+    { "name": "ขาดช่องบังคับ", "target": "findings", "unset": ["findings.0.title"], "expect": "field-missing" },
+    { "name": "คำตัดสินผิดค่า", "target": "findings", "set": { "findings.0.verdict": "maybe" }, "expect": "field-type" },
+    { "name": "owasp ผิดรูป", "target": "findings", "set": { "findings.1.owasp": "A11" }, "expect": "field-type" },
+    { "name": "ช่องสะกดผิด", "target": "findings", "set": { "findings.0.severty": "high" }, "expect": "field-unknown" },
+    { "name": "finding อ้าง coverage ที่ไม่มี", "target": "findings", "set": { "findings.1.coverage_ids": ["C-nothing"] }, "expect": "finding-coverage-missing" },
+
+    { "name": "coverage_id ซ้ำ", "target": "ledger", "set": { "rows.1.coverage_id": "C-orders-read-idor" }, "expect": "cov-dup" },
+    { "name": "สถานะผิดค่า", "target": "ledger", "set": { "rows.0.status": "done" }, "expect": "field-type" },
+    { "name": "แถวอ้าง finding ที่ไม่มี", "target": "ledger", "set": { "rows.4.finding_ids": ["F-999"] }, "expect": "ledger-finding-missing" },
+    { "name": "blocked ไม่มีเหตุผล", "target": "ledger", "set": { "rows.2.note": "" }, "expect": "ledger-note" },
+    { "name": "ลิงก์ทางเดียว", "target": "ledger", "set": { "rows.0.finding_ids": [] }, "expect": "link-oneway" },
+    { "name": "entrypoint เป็น path นอก repo", "target": "ledger", "set": { "rows.4.entrypoint": "../other/app.js#POST /x" }, "expect": "path-unsafe" }
+  ]
+}

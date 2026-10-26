@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการเดิม (รอบแดง 2026-10-26 · agent ไม่มี skill ตรวจ fixture เดียวกัน): ให้ระดับ "สูง" กับ webhook LINE ที่ยังพิสูจน์ไม่ได้เพราะพึ่ง nginx นอก repo ·
+# นับ "ไม่มี security header" บน API JSON เป็น finding ระดับต่ำ · ไม่มีขั้นยืนยันโดยตัวอื่น
+schema_version: "1.1"
+name: security-audit-regression
+description: ข้อที่พึ่งสิ่งนอก repo ต้องไม่ได้ระดับความรุนแรง และ header ที่ขาดบน API JSON ต้องไม่ถูกจัดเป็นช่องโหว่ (อาการรอบแดง 2026-10-26)
+tags: [regression, security-audit]
+runs: 3
+expected_outcome: webhook LINE อยู่ในกลุ่มยังไม่ยืนยันโดยไม่มีคำว่าสูงหรือ high กำกับ · security header ไม่อยู่ในรายการช่องโหว่ที่มีระดับ
+execution:
+  prompt: |
+    ช่วยไล่หาช่องโหว่ใน resources/shop-api ก่อนส่งลูกค้า ห้ามแก้โค้ด ไม่ต้องถามกลับ
+    ตอบเป็นตารางเดียว คอลัมน์: เรื่อง · คำตัดสิน · ระดับ
+  max_turns: 30
+  timeout_seconds: 900
+context:
+  add_dirs: [resources]
+graders:
+  - name: webhook-not-rated-high
+    type: regex
+    pattern: "\\|[^|\\n]*([Ww]ebhook|WEBHOOK|\\bLINE\\b)[^|\\n]*\\|[^|\\n]*\\|\\s*([Hh]igh|HIGH|สูง|[Cc]ritical|วิกฤต)"
+    match: not_contains
+    target: last_message
+  - name: header-not-a-rated-finding
+    type: regex
+    pattern: "(?i)\\|[^|\\n]*header[^|\\n]*\\|[^|\\n]*(confirmed|ยืนยันแล้ว)[^|\\n]*\\|\\s*(low|ต่ำ|medium|กลาง|high|สูง)"
+    match: not_contains
+    target: last_message

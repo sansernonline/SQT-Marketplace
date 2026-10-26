@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# fixture resources/shop-api ฝังไว้ 3 อย่าง: IDOR ที่ GET /orders/:id (คืนเลขบัตรประชาชนของคนอื่น) ·
+# webhook LINE ไม่ตรวจ x-line-signature แต่ README บอกว่ากันด้วย nginx ที่ไม่อยู่ใน repo · API ตอบ JSON ล้วนไม่มีหน้า HTML
+schema_version: "1.1"
+name: security-audit-behaviour
+description: ตรวจ repo เล็กที่ฝังช่องโหว่ ต้องยืนยัน IDOR พร้อมป้าย PDPA · webhook ที่พึ่ง nginx นอก repo ต้องเป็น needs_validation ไม่มีระดับ · header ที่ขาดบน API JSON ไม่นับเป็น finding
+tags: [behaviour, security-audit]
+runs: 3
+expected_outcome: findings.json ที่ IDOR เป็น confirmed มี pdpa · webhook LINE เป็น needs_validation ไม่มี severity บอกสิ่งที่ขาด · security header อยู่ในส่วน hardening
+execution:
+  prompt: |
+    ตรวจช่องโหว่ทั้งโปรเจกต์ในโฟลเดอร์ resources/shop-api แบบ quick ไม่ต้องถามกลับ ห้ามแก้โค้ด
+    เขียนผลเป็น findings.json ตามรูปแบบของทีมไว้ที่โฟลเดอร์ทำงานปัจจุบัน แล้วสรุปสั้น ๆ ว่าเจออะไร
+  max_turns: 30
+  timeout_seconds: 900
+context:
+  add_dirs: [resources]
+graders:
+  - name: findings-file-written
+    type: file_exists
+    path: findings.json
+    exists: true
+  - name: verdicts-separated
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. การที่ GET /orders/:id ไม่ตรวจว่าออเดอร์เป็นของผู้ใช้ที่ login (IDOR) ถูกยืนยันแล้ว และบอกว่าข้อมูลส่วนบุคคลหลุด (เลขบัตรประชาชน เบอร์โทร ที่อยู่)
+      2. webhook LINE ที่ไม่ตรวจลายเซ็น ถูกจัดเป็นข้อที่ยังไม่ยืนยัน (needs_validation) เพราะต้องดู nginx ที่ไม่อยู่ใน repo และไม่ได้ให้ระดับความรุนแรง
+      3. การไม่มี security header บน API ที่ตอบ JSON ล้วน ไม่ได้นับเป็นช่องโหว่ระดับใด อาจอยู่ในหัวข้อ hardening ได้
+      4. บอกว่าใครหรือขั้นไหนยืนยันผล โดยไม่ใช่ตัวเดียวกับที่ล่า

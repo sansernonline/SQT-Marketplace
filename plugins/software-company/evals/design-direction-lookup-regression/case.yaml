@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการเดิม (รอบแดง 2026-10-26 · agent ไม่มี skill ทำโจทย์ร้านทองเยาวราช): แนวแรกใช้ Noto Sans Thai คู่ Inter
+# (Noto Sans Thai ไม่มีตัวละติน · Inter ติดกฎ overused-font ของ no-ai-look) · ไม่ได้ตรวจ contrast และใบอนุญาตฟอนต์
+schema_version: "1.1"
+name: design-direction-lookup-regression
+description: ชุดฟอนต์ที่เสนอต้องไม่ใช่ Noto Sans Thai คู่ Inter และต้องบอกใบอนุญาตฟอนต์ (อาการรอบแดง 2026-10-26)
+tags: [regression, design-direction-lookup]
+runs: 3
+expected_outcome: ไม่มี Inter · ระบุใบอนุญาตฟอนต์ (OFL หรือชื่อใบอนุญาตอื่น)
+execution:
+  prompt: |
+    ร้านทองในเยาวราชจะทำเว็บขายทองออนไลน์ ขอชุดสีและคู่ฟอนต์ไทย-อังกฤษ 3 แนว ไม่ต้องถามกลับ
+  max_turns: 12
+  timeout_seconds: 400
+graders:
+  - name: no-inter
+    type: regex
+    # จับเฉพาะ Inter ที่ถูกเลือกเป็นฟอนต์ (คู่กับ + หรือตามหลังบทบาท) คำตอบที่เขียนว่า "ไม่ใช้ Inter" ต้องไม่ตก
+    pattern: "\\+\\s*Inter\\b|\\bInter\\s*\\+|(เนื้อ|body|หัว|heading|ฟอนต์อังกฤษ|ละติน|Latin)\\s*[:：/]?\\s*Inter\\b"
+    match: not_contains
+    target: last_message
+  - name: font-licence-stated
+    type: regex
+    pattern: "(?i)\\bOFL\\b|Open Font License|ใบอนุญาต|licen[cs]e"
+    match: contains
+    target: last_message

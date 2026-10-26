@@ -1,0 +1,498 @@
+{
+ "about": "ชุดวัดความแม่นของ design_search.py · ผ่าน = id ที่คาดอย่างน้อย 1 ตัวอยู่ใน 3 อันดับแรก · calibration แก้ได้ · holdout ห้ามแก้ให้ผ่าน (เขียน 2026-10-26 ก่อนรันครั้งแรก)",
+ "cases": [
+  {
+   "query": "ร้านทองออนไลน์ ราคาทองวันนี้",
+   "domain": "industry",
+   "expect_ids": [
+    "gold-shop"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "คลินิกเลเซอร์หน้าใส ฉีดโบท็อกซ์",
+   "domain": "industry",
+   "expect_ids": [
+    "beauty-clinic"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "เว็บโรงพยาบาลเอกชน แพ็กเกจตรวจสุขภาพ",
+   "domain": "industry",
+   "expect_ids": [
+    "private-hospital"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "เว็บเทศบาลรับเรื่องร้องเรียน",
+   "domain": "industry",
+   "expect_ids": [
+    "local-gov"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "แม่ค้าออนไลน์ขายบน Shopee",
+   "domain": "industry",
+   "expect_ids": [
+    "marketplace-shop"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "คาเฟ่ถ่ายรูปสวย เมนูเครื่องดื่ม",
+   "domain": "industry",
+   "expect_ids": [
+    "cafe"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ร้านเค้กวันเกิด สั่งออนไลน์",
+   "domain": "industry",
+   "expect_ids": [
+    "bakery"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ระบบคลังสินค้า สแกนบาร์โค้ด นับสต็อก",
+   "domain": "industry",
+   "expect_ids": [
+    "warehouse"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "แอปปรึกษาแพทย์ผ่านวิดีโอคอล",
+   "domain": "industry",
+   "expect_ids": [
+    "telemedicine"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ร้านนวดแผนไทย จองคิวนวด",
+   "domain": "industry",
+   "expect_ids": [
+    "spa-massage"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ขายผ้าไหมทอมือ ชุดไทย",
+   "domain": "industry",
+   "expect_ids": [
+    "thai-silk"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "สีครามผ้าทอ",
+   "domain": "palette",
+   "expect_ids": [
+    "indigo-dye"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "โทนสีราชการ หนังสือราชการ",
+   "domain": "palette",
+   "expect_ids": [
+    "krom-tha"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ฟอนต์ราชการ แบบฟอร์ม e-service",
+   "domain": "font",
+   "expect_ids": [
+    "sarabun-gov",
+    "noto-looped"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ฟอนต์ร้านทองหรู",
+   "domain": "font",
+   "expect_ids": [
+    "chonburi-luxe"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "หน้าตาแบบหนังสือพิมพ์ อ่านบทความยาว",
+   "domain": "look",
+   "expect_ids": [
+    "editorial",
+    "paper-print"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ช่องกรอกที่อยู่ ตำบล อำเภอ จังหวัด",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-119",
+    "ux-121"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "สระบนโดนตัดในปุ่ม",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-133",
+    "ux-132"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "จ่ายเงินด้วย QR พร้อมเพย์",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-123",
+    "ux-125"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "ดูแนวโน้มยอดขายรายเดือน",
+   "domain": "chart",
+   "expect_ids": [
+    "ch-01"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "gold price and jewelry store website",
+   "domain": "industry",
+   "expect_ids": [
+    "gold-shop"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "dental clinic with online booking",
+   "domain": "industry",
+   "expect_ids": [
+    "dental-clinic"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "savings cooperative member portal",
+   "domain": "industry",
+   "expect_ids": [
+    "savings-coop"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "LINE OA shop with rich menu and coupons",
+   "domain": "industry",
+   "expect_ids": [
+    "line-oa-shop"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "B2B SaaS CRM landing",
+   "domain": "industry",
+   "expect_ids": [
+    "saas-b2b"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "crypto trading app portfolio",
+   "domain": "industry",
+   "expect_ids": [
+    "crypto-trading"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "condo project showroom site near BTS",
+   "domain": "industry",
+   "expect_ids": [
+    "condo"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "durian export orchard GAP certified",
+   "domain": "industry",
+   "expect_ids": [
+    "fruit-export"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "mobile banking app",
+   "domain": "industry",
+   "expect_ids": [
+    "bank"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "concert ticket booking with seat map",
+   "domain": "industry",
+   "expect_ids": [
+    "concert-event"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "kids learning app with stories",
+   "domain": "industry",
+   "expect_ids": [
+    "kids-learning"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "fintech bank teal",
+   "domain": "palette",
+   "expect_ids": [
+    "deep-teal-bank"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "spa herbal massage colors",
+   "domain": "palette",
+   "expect_ids": [
+    "herbal-spa"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "developer terminal monospace font",
+   "domain": "font",
+   "expect_ids": [
+    "dev-terminal"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "font for elderly readers with low vision",
+   "domain": "font",
+   "expect_ids": [
+    "atkinson-access",
+    "plex-looped-read"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "android material design app",
+   "domain": "look",
+   "expect_ids": [
+    "material-3"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "reduce motion for users who get dizzy",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-010"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "date picker in buddhist calendar",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-108"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "show where customers drop off in funnel",
+   "domain": "chart",
+   "expect_ids": [
+    "ch-13"
+   ],
+   "split": "calibration"
+  },
+  {
+   "query": "blazor form validation error messages in thai",
+   "domain": "stack",
+   "expect_ids": [
+    "blazor-04",
+    "blazor-01"
+   ],
+   "split": "calibration",
+   "stack": "blazor"
+  },
+  {
+   "query": "อยากทำเว็บร้านหมอฟัน มีระบบนัดคิว",
+   "domain": "industry",
+   "expect_ids": [
+    "dental-clinic"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "แอปสหกรณ์ให้สมาชิกดูหุ้นกับเงินปันผล",
+   "domain": "industry",
+   "expect_ids": [
+    "savings-coop"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "เว็บโรงแรมริมทะเลภูเก็ต จองห้องพัก",
+   "domain": "industry",
+   "expect_ids": [
+    "resort"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "ระบบยื่นคำขอใบอนุญาตออนไลน์ของหน่วยงานรัฐ",
+   "domain": "industry",
+   "expect_ids": [
+    "gov-eservice"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "ร้านข้าวผัดกะเพราอยากรับออเดอร์ออนไลน์",
+   "domain": "industry",
+   "expect_ids": [
+    "street-food"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "สีเขียวโรงพยาบาลรัฐ",
+   "domain": "palette",
+   "expect_ids": [
+    "moph-green"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "ฟอนต์สำหรับแอปเด็กปฐมวัย อ่านนิทาน",
+   "domain": "font",
+   "expect_ids": [
+    "mali-kids",
+    "playpen-kids"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "กรอกเลขบัตรประชาชน 13 หลัก ตรวจความถูกต้อง",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-115",
+    "ux-116"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "กราฟเทียบยอดขายแต่ละสาขา มากไปน้อย",
+   "domain": "chart",
+   "expect_ids": [
+    "ch-05",
+    "ch-06"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "ปฏิทินเลือกวันแสดงพ.ศ.",
+   "domain": "stack",
+   "expect_ids": [
+    "flutter-11",
+    "flutter-10"
+   ],
+   "split": "holdout",
+   "stack": "flutter"
+  },
+  {
+   "query": "website for a silver jewellery maker in Chiang Mai",
+   "domain": "industry",
+   "expect_ids": [
+    "jewelry-silver"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "veterinary clinic appointment site for dogs and cats",
+   "domain": "industry",
+   "expect_ids": [
+    "vet-clinic"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "parcel tracking portal for a courier company",
+   "domain": "industry",
+   "expect_ids": [
+    "logistics"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "online exam prep course for university entrance",
+   "domain": "industry",
+   "expect_ids": [
+    "tutoring"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "employee leave request portal on Microsoft Teams",
+   "domain": "industry",
+   "expect_ids": [
+    "enterprise-intranet"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "warm coffee roastery brown",
+   "domain": "palette",
+   "expect_ids": [
+    "roastery"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "formal font pairing for a law firm contracts",
+   "domain": "font",
+   "expect_ids": [
+    "taviraj-legal"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "users double tap the submit button and pay twice",
+   "domain": "ux",
+   "expect_ids": [
+    "ux-035"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "Windows enterprise app style",
+   "domain": "look",
+   "expect_ids": [
+    "fluent-2"
+   ],
+   "split": "holdout"
+  },
+  {
+   "query": "landing page to collect donations for a temple",
+   "domain": "landing",
+   "expect_ids": [
+    "ld-15"
+   ],
+   "split": "holdout"
+  }
+ ]
+}

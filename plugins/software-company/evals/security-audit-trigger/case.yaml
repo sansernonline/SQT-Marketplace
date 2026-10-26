@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: security-audit-trigger
+description: ผู้ใช้ขอไล่หาช่องโหว่ทั้งโปรเจกต์ก่อนส่งมอบ ไม่เอ่ยชื่อ skill ต้องทำให้ security-audit ถูกเปิด และแยกข้อที่ยังไม่ยืนยันออกจากข้อที่ยืนยันแล้ว
+tags: [trigger, security-audit]
+runs: 3
+expected_outcome: เปิด Skill security-audit แล้วอธิบายแผนตรวจ ถามโปรไฟล์และขอบเขตครั้งเดียว มีคำว่ายังไม่ยืนยันหรือ needs_validation
+execution:
+  prompt: |
+    ลูกค้าจะรับระบบสั่งของออนไลน์ของเราสัปดาห์หน้า ช่วยวางแผนไล่หาช่องโหว่ทั้งโปรเจกต์ให้หน่อย
+    อยากรู้ว่าจะตรวจอะไรบ้าง ใช้คนกี่ตัว และผลจะออกมาหน้าตาแบบไหน ยังไม่ต้องลงมือตรวจ
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?security-audit"'
+    min: 1
+    arm: with-only
+  - name: unconfirmed-bucket-named
+    type: regex
+    pattern: "needs_validation|ยังไม่ยืนยัน"
+    match: contains
+    target: last_message
