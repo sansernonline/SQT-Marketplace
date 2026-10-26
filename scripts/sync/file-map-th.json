@@ -83,7 +83,8 @@
     "evals/bonds-and-deposits-behaviour/case.yaml": "เคส eval: ฝากประจำปลอดภาษีเดือนละ 30,000 ต้องบอกเพดาน 25,000 ว่าปิดก่อนกำหนดโดนภาษี และกองทุนตลาดเงินกับตั๋วแลกเงินไม่อยู่ใน สคฝ.",
     "evals/credit-bureau-behaviour/case.yaml": "เคส eval: ถูกปฏิเสธสินเชื่อบ้านและมีคนรับลบประวัติ ต้องบอกว่าไม่มีแบล็กลิสต์ ตรวจฟรีภายใน 30 วัน และการรับลบประวัติคือมิจฉาชีพ",
     "evals/home-refinance-behaviour/case.yaml": "เคส eval: ผ่อนบ้านยังไม่ครบ 3 ปีแต่อยากย้ายพรุ่งนี้ ต้องคิดค่าปรับ ค่าจดจำนอง อากร และให้เทียบรีเทนชั่นกับอัตราหลังโปร",
-    "evals/rebalance-and-dca-behaviour/case.yaml": "เคส eval: พอร์ตเบี้ยวจากเป้า 60/40 และอยากขาย RMF ต้องคำนวณส่วนต่าง 120,000 ห้ามขาย RMF ก่อนกำหนด และให้เติมด้วย DCA ก่อน"
+    "evals/rebalance-and-dca-behaviour/case.yaml": "เคส eval: พอร์ตเบี้ยวจากเป้า 60/40 และอยากขาย RMF ต้องคำนวณส่วนต่าง 120,000 ห้ามขาย RMF ก่อนกำหนด และให้เติมด้วย DCA ก่อน",
+    "evals/RESULTS.md": "ผล eval ที่รันจริงของ plugin นี้ เทียบรอบมี skill กับไม่มี skill พร้อมวันที่ รุ่น และค่าใช้จ่าย"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
