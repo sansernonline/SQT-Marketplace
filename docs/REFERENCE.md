@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (95)
+## 🛠️ Skills (97)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -853,6 +853,18 @@
 
 ### 95. infra-as-code
 **Description:** Use when cloud servers, databases or networks should be built from code (OpenTofu, Terraform, Pulumi), drift appears, or data must stay in Thailand.
+
+---
+
+### 96. design-direction-lookup
+**ใช้กับ:** ux-designer
+**Description:** Use when a new screen, app or site needs a starting look (palette, Thai-Latin fonts, industry, UX and stack rules) before ui-craft design directions.
+
+---
+
+### 97. security-audit
+**ใช้กับ:** security-engineer
+**Description:** Use when auditing a whole codebase for vulnerabilities before handover, a pen test of source, or ตรวจช่องโหว่ทั้งระบบ. Pre-ship scan → security-gate.
 
 ---
 

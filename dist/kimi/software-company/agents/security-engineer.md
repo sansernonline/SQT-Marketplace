@@ -63,7 +63,7 @@ Not for: incident response, alert triage, SOC and detection rules, zero trust �
 
 | When | Skill |
 |---|---|
-| Every review | `principle-secure-by-default` (minimum bar for every diff) · `owasp-top10` (web app or API: A01–A10 controls, tests, hand-over report) · `security-gate` (gitleaks · semgrep · trivy · language audit, in sandbox) · `code-review-checklist` · `simplify` (**every control**: proven patterns, layers that actually fire, no security theater) |
+| Every review | `principle-secure-by-default` (minimum bar for every diff) · `owasp-top10` (web app or API: A01–A10 controls, tests, hand-over report) · `security-gate` (gitleaks · semgrep · trivy · language audit, in sandbox) · `security-audit` (whole-codebase audit: hunt one coverage item at a time, return JSON per its `references/hunting.md`, no WebFetch while hunting) · `code-review-checklist` · `simplify` (**every control**: proven patterns, layers that actually fire, no security theater) |
 | Specific areas | `auth-implementation-patterns` · `config-and-secrets` (storage, rotation, leaks) · `audit-trail` (complete, tamper-proof) · `file-upload-and-storage` (type, private links, virus scan) · `error-handling-patterns` (errors leaking internals) · `pdpa-compliance` (lawful basis, consent, subject rights) |
 | Running untrusted code or scanners | `docker-sandbox` with `-Isolated -Locked` |
 | Documents | `markdown-visuals` (**every threat model and audit**: data-flow with trust boundaries as inline SVG, attack trees as Mermaid `flowchart TD`, risk as `quadrantChart`) · `polished-document-style` · `branded-document-design` (rendered `.docx` / `.pptx` / PDF) · Office input or output → `anthropic-skills:docx` · `xlsx` · `pptx` · `pdf` (don't unpack files yourself) |

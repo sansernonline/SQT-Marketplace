@@ -1,5 +1,13 @@
 # Changelog — software-company
 
+## 2.23.0 — 2026-10-26
+
+- skill ใหม่ `security-audit`: ตรวจช่องโหว่ทั้งระบบก่อนส่งมอบ 6 ขั้น (สำรวจ · รายการครอบคลุม · ล่า · ตรวจช่องว่าง · ยืนยันโดยตัวใหม่ที่พยายามหักล้าง · ตรวจ record รอบสุดท้าย) · 3 คำตัดสิน confirmed · needs_validation (ไม่มีระดับ ต้องบอกสิ่งที่ขาด) · rejected · ระดับไม่เกินผลกระทบที่พิสูจน์ · hardening ไม่นับเป็น finding · ผล `findings.json` และ `ledger.json` พร้อมตัวตรวจ Node ที่รันบน Windows ได้ (self-test 28/28 · 11/11 · 9/9) และรายงานภาษาไทยที่มีภาษาเจ้าของกิจการ แถว A01–A10 และป้าย PDPA · ประเภทการโจมตีของระบบไทย (ลายเซ็น LINE · ID token ของ LIFF · webhook Omise และ 2C2P · สลิป PromptPay · e-Tax Invoice) ตรวจกับเอกสารทางการ 2026-10-26 · แนวคิดจาก cloudflare/security-audit-skill (MIT) เขียนใหม่ทั้งหมด ไม่คัดข้อความ
+  - รอบแดง 2026-10-26 (agent ไม่มี skill ตรวจ repo ทดสอบ): ให้ระดับสูงกับ webhook ที่พึ่ง nginx นอก repo · นับ header ที่ขาดบน API JSON เป็นช่องโหว่ · ไม่มีผู้ยืนยัน · รอบเขียว: IDOR confirmed พร้อม PDPA · webhook เป็น needs_validation ไม่มีระดับ · header ไปอยู่ hardening · ผู้ยืนยัน 4 ตัวแยกจากผู้ล่า
+- skill ใหม่ `design-direction-lookup`: ตารางค้นได้สำหรับเริ่มหน้าตา ฟอนต์ไทย 49 · คู่ฟอนต์ไทย-ละติน 37 · look 15 · ชุดสี 68 ชุด ทั้งโหมดสว่างและมืดที่ผ่าน contrast และไม่ใช้สี Tailwind · อุตสาหกรรม 69 (ไทยก่อน) · กฎ UX 146 (กฎไทย 40) · กราฟ 28 · landing 18 · กฎ 7 stack (React · Angular · Blazor · ASP.NET MVC · Flutter · LINE LIFF · PWA) · ตัวค้นที่ตัดคำไทยได้ (holdout 20/20 · ก่อนปรับตัวค้น 19/20) · ตัวร่าง 3 แนวที่ตัดแนว contrast ไม่ผ่าน Inter และฟอนต์ไทยที่ไม่มีคู่ละตินทิ้งก่อนเขียน `docs/DESIGN.md` และหน้าเทียบ · ตัวตรวจข้อมูล `check_data.py` · แนวคิดจาก nextlevelbuilder/ui-ux-pro-max-skill (MIT) ข้อมูลเขียนใหม่ทั้งหมด
+  - รอบแดง 2026-10-26 (โจทย์ร้านทองเยาวราช ไม่มี skill): ใช้ Noto Sans Thai คู่ Inter · ไม่ได้ตรวจ contrast และใบอนุญาตฟอนต์
+- `ui-craft` ข้อ 0.1 ขั้น 3 · `security-gate` ข้อ 3 · agent `security-engineer` และ `ux-designer` · ตัวกระตุ้นของ `superuser` ชี้ไป skill ใหม่ทั้ง 2 ตัว · `security-gate`: `ยังไม่ยืนยัน` ไม่ติดระดับ · eval ใหม่ 6 เคสในโฟลเดอร์ `evals/` (เคส security ใช้ repo ทดสอบ `shop-api` ที่ฝังช่องโหว่ไว้)
+
 ## 2.22.1 — 2026-10-26
 
 - ไอคอน ✅ ❌ ⚠ ราว 1,870 บรรทัดเปลี่ยนเป็นคำตามที่ `human-writing` ห้าม (ตารางใช่/ไม่ใช้ ✓ ✗ · คู่ตัวอย่างใช้ ผิด:/ถูก: · รายการ Anti-patterns ตัดไอคอนออก) · เหลือ 3 จุดใน `pptx-to-html-deck` ที่อ้างข้อความที่สคริปต์พิมพ์จริง

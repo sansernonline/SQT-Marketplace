@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.4.1 — 2026-10-26
+
+- hook router: เพิ่ม pattern ของ `security-audit` (ไล่หาช่องโหว่ · pen test · security audit) และ `design-direction-lookup` (โทนสี · พาเลต · คู่ฟอนต์ · ทิศทางภาพ)
+
 ## 3.4.0 — 2026-10-26
 
 - รวมบทเรียน 2026-10-26 (3 ข้อจาก `learn/2026-10-26-prep-1.0.md` ที่ผู้ใช้รับ ทุกข้อมีกรณีทดสอบจากเหตุการณ์จริง):

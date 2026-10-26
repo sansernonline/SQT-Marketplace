@@ -1,0 +1,3 @@
+id,topic,rule_th,do,dont,keywords,source
+blazor-font,ฟอนต์,โหลดฟอนต์ไทยใน App.razor ครั้งเดียว,link ใน head,import ซ้ำทุก component,font;ฟอนต์;razor,ours
+blazor-form,ฟอร์ม,ใช้ EditForm กับ DataAnnotations ข้อความ error เป็นไทย,EditForm,validate เองทุกช่อง,form;ฟอร์ม;validation,ours

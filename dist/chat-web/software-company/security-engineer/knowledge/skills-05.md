@@ -1,3 +1,185 @@
+# skill: error-handling-patterns
+
+Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
+
+# จัดการข้อผิดพลาด
+
+> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
+> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
+
+## เมื่อไหร่ใช้ skill นี้
+
+- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
+- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
+- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
+- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
+
+## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
+
+| งาน | skill | |
+|---|---|---|
+| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
+| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
+| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
+| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
+| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
+| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
+| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
+| test กรณีล้มเหลว | `testing-standards` | คู่ |
+| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
+
+---
+
+## 1 · จับที่ไหน ปล่อยที่ไหน
+
+| ชั้น | ทำอะไร |
+|---|---|
+| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
+| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
+| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
+
+> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
+> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
+
+**3 อย่างที่ห้ามทำเด็ดขาด:**
+
+```csharp
+try { ... } catch { }                      // ผิด: กลืนเงียบ
+try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
+catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
+```
+
+**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
+
+```csharp
+catch (SmtpException ex)
+{
+    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
+    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
+}
+```
+
+---
+
+## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
+
+| | ผู้ใช้เห็น | log เก็บ |
+|---|---|---|
+| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
+| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
+| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
+| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
+
+```
+ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
+ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
+ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
+```
+
+**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
+รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
+
+---
+
+## 3 · แยกประเภทก่อนตัดสินใจ
+
+| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
+|---|---|---|---|
+| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
+| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
+| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
+| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
+| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
+| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
+
+> 🚨 **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
+> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
+
+---
+
+## 4 · timeout และการลองใหม่
+
+**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
+
+| การเรียก | timeout ที่ใช้ได้ทั่วไป |
+|---|---|
+| ฐานข้อมูล query ปกติ | 5–10 วินาที |
+| HTTP ภายใน | 3–5 วินาที |
+| HTTP ภายนอก | 10–30 วินาที |
+| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
+
+**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
+
+```
+ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
+ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
+```
+
+- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
+- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
+- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
+- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
+
+---
+
+## 5 · ตัดวงจร (circuit breaker)
+
+เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
+
+```
+ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
+           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
+```
+
+ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
+
+**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
+**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
+
+---
+
+## 6 · ล้มบางส่วน
+
+งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
+
+| แบบ | เหมาะกับ |
+|---|---|
+| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
+| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
+
+แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
+
+**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
+ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
+
+---
+
+## 7 · ตรวจก่อนส่ง
+
+ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
+
+- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
+- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
+- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
+- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
+- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
+
+## 8 · Anti-patterns
+
+- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
+- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
+- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
+- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
+- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
+- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
+- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
+- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
+- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
+- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
+
+
+---
+
 # skill: pdpa-compliance
 
 Use when software stores personal data of people in Thailand (PDPA consent, rights, retention, breach).
@@ -761,436 +943,3 @@ Reusable building blocks for inline SVG pictures of a screen inside .md docs (th
 ## Worked example — UI state mockup
 
 Use this pattern by default for showing UI feature states. On GitHub, save the SVG as a file in `docs/figures/` and reference it (inline `<svg>` is dropped there).
-
-
----
-
-# skill: polished-document-style
-
-Use when writing or tidying a document people keep (report, proposal, Word, PDF) — headings, tables, Thai. Designed look → branded-document-design.
-
-# Polished Document Style
-
-> **ภาษา:** ถ้อยคำทุกบรรทัดเขียนตาม `human-writing` — skill นี้บอกรูปแบบและโครง ส่วน human-writing บอกวิธีเขียนให้คนอ่านรู้เรื่อง
-
-## When to use this skill
-
-- Output is meant for **general readers** (managers, executives, clients, customers)
-- Document needs **sign-off** or formal review
-- Output will be **shared widely** or converted to PDF/Word later · any doc with 3+ sections or 500+ words
-- จัดหน้าเอกสารที่คนเก็บไว้อ่านทุกชนิด (Markdown · Word · PDF) รวมถึงข้อความไทยในไฟล์ Office
-
-## When NOT to use
-
-- Internal notes for the author's own team (keep them concise)
-- Quick scratch notes · code comments
-- A whole Markdown report that must come out as one .docx → `markdown-report-docx` (plugin `software-company`)
-
-> **Note:** This skill governs the *markdown source*. When the deliverable is a
-> rendered **.docx / .pptx / .pdf** that a stakeholder will open, use
-> `branded-document-design` (plugin `software-company`) on top of it — that skill carries the design tokens,
-> the typography scale, Thai typography rules, and the `brandkit.py` builder.
-
-## อ่านเพิ่มเมื่อ
-
-| ไฟล์ | เปิดเมื่อ |
-|---|---|
-| [references/markdown-patterns.md](references/markdown-patterns.md) | ถ้าจะเขียนส่วนหัว สารบัญ กล่องข้อความ ตาราง ป้ายสถานะ cover block ตารางเทียบตัวเลือก ส่วนเซ็นรับ หรืออภิธานศัพท์ ให้เปิดดูตัวอย่าง markdown แล้วลอกไปใช้ |
-| [scripts/check_outline.py](scripts/check_outline.py) | ถ้า skill ที่เขียนเอกสารมีไฟล์แบบใน `assets/` ให้รัน `python scripts/check_outline.py <แบบ.md> <เอกสาร.md>` ก่อนส่ง — ตรวจหัวข้อครบและเรียงตามแบบ ช่องตัวหนาครบ หัวตารางตรง และไม่มีช่องที่ยังไม่เติม · ในแบบ ใส่ `<!-- optional -->` ท้ายหัวข้อหรือช่องที่ไม่บังคับ · แก้ตัวตรวจแล้วรัน `--self-test` ก่อน |
-| [references/theme-colors.md](references/theme-colors.md) | ถ้าต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์ ให้เปิดดูว่าใครคุมสีส่วนไหน และค่าสีตั้งต้นประจำบ้านคืออะไร |
-
-## Document Header (Always)
-
-Every polished doc MUST start with ส่วนหัวชุดเดียวกัน คือ H1 ข้อความล้วน ตามด้วยกล่อง quote ที่บอกเวอร์ชัน วันที่ สถานะ ผู้เขียน ผู้รีวิว และแท็ก แล้วปิดด้วย `---` ตัวอย่างเต็มอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Status values:
-- **Draft** (ร่าง) — work in progress
-- **Review** (กำลังรีวิว) — under stakeholder review
-- **Approved** (อนุมัติแล้ว) — signed off
-- **Archived** (เก็บถาวร) — historical reference
-
-ชุดนี้ 4 ค่าเท่านั้น เขียนเหมือนกันทุก skill (`status-report` ใช้ชุดเดียวกัน และเพิ่ม `ยังไม่เริ่ม` สำหรับเอกสารที่ยังไม่ลงมือ) · ช่อง Status ในตาราง Sign-off เป็นสถานะของคนเซ็น ใช้ **Approved** · **Review** · **Pending** (ยังไม่ส่งให้ดู) · **Rejected**
-
-## Section Hierarchy
-
-- **H1** — Document title (exactly one)
-- **H2** — Numbered sections (`## 1. Section`)
-- **H3** — Sub-sections (`### 1.1 Sub-topic`)
-- **H4** — Rare, use only if needed
-
-**Always add Table of Contents** for docs with 5+ sections และต้องกดลิงก์ในสารบัญแล้วไปถึงหัวข้อจริง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## ธีมของเอกสาร — ตัดสินใจครั้งเดียว ใช้ทุกที่ในเอกสารนั้น
-
-เอกสาร 1 ฉบับผ่านหลาย skill: markdown (skill นี้) · รูปจาก `diagram-figures` ·
-ไฟล์ .docx จาก `branded-document-design` · สไลด์จาก `presentation-design` (ทั้งสามอยู่ใน plugin `software-company`)
-ถ้าแต่ละตัวเลือกสีเอง ผู้อ่านจะได้เอกสารที่รูปสีหนึ่ง หัวข้อสีหนึ่ง และสไลด์อีกสีหนึ่ง
-
-**markdown เป็นต้นฉบับหลัก (source of truth) จึงประกาศธีมไว้ที่นี่** — ใส่ไว้ท้ายส่วนหัวของเอกสารหรือในไฟล์ข้างกัน:
-
-```markdown
-<!-- doc-theme: accent=<สีหลัก> · ที่มา=<แบรนด์ลูกค้า / เสนอจากเนื้องาน> · ยืนยันเมื่อ=YYYY-MM-DD -->
-```
-
-**สีหลักมาจากเนื้องาน ไม่ใช่จากค่าเริ่มต้นของเครื่องมือ**
-ถ้ามีสีแบรนด์อยู่แล้วให้ใช้สีนั้น ถ้ายังไม่มีให้ใช้ค่าตั้งต้นประจำบ้าน เขียน `(รอยืนยัน)` แล้วทำต่อ ไม่หยุดถาม และเสนอโทนที่เข้ากับเนื้องานไว้ในรายงาน
-(ตารางจับคู่เนื้องานกับโทนสีอยู่ใน `colour-by-domain` ของ skill `diagram-figures` (plugin `software-company`))
-
-markdown เองไม่มีสี จึงใช้คำกำกับและน้ำหนักตัวอักษรแทน ส่วนไดอะแกรม รูป ไฟล์ .docx และสไลด์อ่านค่าจาก `doc-theme` ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ให้ใช้ค่าตั้งต้นประจำบ้าน ตารางทั้งสองอยู่ใน [references/theme-colors.md](references/theme-colors.md)
-
-**คำสถานะไม่ขึ้นกับธีม** — วิกฤต · ผ่าน ใช้คำเดิมทุกเอกสาร ส่วนสีของสถานะในรูป .docx และสไลด์อยู่ใน [references/theme-colors.md](references/theme-colors.md)
-
-## คำกำกับ — ใช้คำ ไม่ใช้อีโมจิ
-
-**ไม่มีอีโมจิในเอกสาร** ทั้งหัวข้อ กล่องข้อความ ป้ายสถานะ และตาราง เพราะอีโมจิในหัวข้อและป้ายเป็นสัญญาณว่า AI ทำ (`no-ai-look`) · ใช้คำตัวหนาที่คงที่ทั้งเอกสารแทน
-
-| ใช้ทำอะไร | คำที่ใช้ |
-|---|---|
-| ระดับความสำคัญ | วิกฤต · สูง · กลาง · ต่ำ |
-| สถานะงาน | เสร็จ · ทำอยู่ · ติด · รออนุมัติ · ค้างอยู่ |
-| ผลตรวจ | ผ่าน · ไม่ผ่าน |
-| ชนิดกล่องข้อความ | ข้อแนะนำ (Tip) · ข้อควรจำ (Note) · ข้อควรระวัง (Warning) · อันตราย (Critical) · คำถามที่ยังเปิด (Open Question) |
-
-ช่องใช่/ไม่ในตาราง ใช้เครื่องหมายตัวอักษร `✓` `✗` ได้ (ไม่ใช่อีโมจิสี) หรือเขียน "ใช่" "ไม่" 
-
-## Callout Boxes
-
-Use blockquotes with a bold label (no emoji) มี 5 ชนิด คือ **Tip** (ข้อแนะนำ) · **Note** (ข้อควรจำ) · **Warning** (ข้อควรระวัง) · **Critical** (อันตราย) · **Open Question** (คำถามที่ยังเปิด) ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-**Rules:**
-- Keep callouts to 1-3 sentences
-- One callout per topic — don't stack
-- Don't overuse — max 3-5 per page
-
-## Tables — When and How
-
-Use tables when items have **2+ attributes** ถ้าเขียนเป็น bullet แล้วแต่ละบรรทัดมีหลายค่าคั่นด้วยจุลภาค ให้เปลี่ยนเป็นตาราง ตัวอย่างเทียบกันอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-- Left-align text, center checkmarks/numbers, right-align money
-- Use `—` (em dash) for "not applicable", not `-` or blank
-- Keep cells short — long content goes in body paragraphs
-- Bold key columns: `**email**`
-
-ถ้าเอกสารต้องเทียบตัวเลือกหรือชั่งข้อดีข้อเสีย (strategy, vendor choice, plan options) ให้ใช้ตารางเทียบที่มีคอลัมน์ Recommendation ส่วนเอกสารที่ต้องอนุมัติให้ปิดท้ายด้วยตาราง Sign-off และเอกสารที่มีตัวย่อตั้งแต่ 5 ตัวขึ้นไป (เกณฑ์เดียวกับ `spell-out-abbreviations`) ให้มีอภิธานศัพท์ ตัวอย่างทั้งสามแบบอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Diagrams
-
-**รูปในเอกสารโปรเจกต์ (รายงาน · ข้อเสนอ · ผังขั้นตอน · ผังข้อมูล) วาดด้วย `diagram-figures` ซึ่งเป็น house style เดียว แล้วฝังเป็นไฟล์ภาพ** · Mermaid (`software-diagrams` ใน plugin `software-company`) ใช้แค่รูปด่วนใน README · PR · โน้ตในโค้ด
-skill นี้คุมเฉพาะเรื่องการวางรูปลงในเอกสาร
-
-- วางไว้**หลังย่อหน้าที่อธิบายว่ารูปนี้ตอบคำถามอะไร** ไม่ใช่ลอยขึ้นมาเฉย ๆ
-- ทุกรูปมีคำบรรยายใต้รูป 1 บรรทัด ขึ้นต้นด้วย **รูปที่ N —**
-- รูปเดียวกันอย่าใส่ซ้ำหลายที่ในเอกสาร ให้อ้างถึงเลขรูปแทน
-
-## Status Badges and Cover Block
-
-ช่องสำคัญในส่วนหัวหรือในตารางให้ใช้ป้ายสถานะเป็นคำตัวหนา เช่น `**Status:** Approved` ส่วนเอกสารทางการ (ข้อเสนอ · รายงานทางการ · สัญญา · postmortem) ให้เปิดด้วย cover block ที่บอกชนิดเอกสาร เวอร์ชัน สถานะ วันที่ ผู้เขียน ผู้รีวิว และเอกสารที่เกี่ยวข้อง ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## Lists and Code Blocks
-
-**Rule:** ไม่ซ้อน bullet เลย ถ้ารายการต้องมีชั้นย่อย ให้แยกเป็นหัวข้อย่อยหรือใช้ตาราง
-ตัวอย่างรายการที่ดีและรายการที่ซ้อนเกินอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-Code blocks ต้องระบุภาษาทุกครั้ง (Always specify language) และถ้าโค้ดยาว ให้ใส่ชื่อไฟล์เป็นคอมเมนต์ในบรรทัดแรก ตัวอย่างอยู่ใน [references/markdown-patterns.md](references/markdown-patterns.md)
-
-## เอกสาร Office ภาษาไทย
-
-ใช้กับไฟล์ Word · Excel · PDF ทุกไฟล์ที่มีภาษาไทย จะสร้างด้วยสคริปต์หรือทำมือก็ตาม รายละเอียดและตัวช่วยอยู่ใน `branded-document-design`
-
-- Word นับภาษาไทยเป็น complex script จึงมีช่องฟอนต์ ขนาด และตัวหนาแยกจากละติน ถ้าตั้งแค่ช่องละติน ข้อความไทยจะไม่เปลี่ยน ต้องตั้งให้ครบทั้งสองชุด
-- ย่อหน้าไทยไม่จัดชิดสองขอบ (justify) เพราะไทยไม่มีช่องว่างระหว่างคำ Word จะยืดช่องไฟจนเป็นรู (ยกเว้นคู่มือวิทยานิพนธ์สั่ง Thai Distributed)
-- ข้อความไทยห้ามใช้ฟอนต์ mono เพราะ Consolas กับ Cascadia ไม่มีอักษรไทย ใช้ mono กับรหัส คีย์ และตัวเลขเท่านั้น
-- ส่งออก PDF ให้ฝังฟอนต์ทุกครั้ง ไม่งั้นเครื่องที่ไม่มีฟอนต์จะเอาตัวอื่นมาแทนและวรรณยุกต์ลอย
-- CSV ที่ให้คนไทยเปิดใน Excel บันทึกเป็น UTF-8 แบบมี BOM ไม่งั้นภาษาไทยเพี้ยน
-- ก่อนบอกว่าเสร็จ แปลงทุกหน้าเป็นภาพแล้วเปิดดูจริง ตารางล้น หัวข้อค้างท้ายหน้า วรรณยุกต์ลอย ดูจากโค้ดไม่เห็น
-
-## Quality Checklist
-
-Before delivering any polished doc:
-
-- [ ] H1 title in plain text — no emoji in any heading, callout, badge or table
-- [ ] Header block with version, date, status, authors (cover block เฉพาะเอกสารทางการ)
-- [ ] TOC if 5+ sections
-- [ ] All sections numbered consistently
-- [ ] Anchor links in TOC actually work
-- [ ] Status badges where applicable
-- [ ] Tables used (not bullets) where data has 2+ attributes
-- [ ] Every flow or relationship has a diagram drawn with `diagram-figures` (plugin `software-company` · house style), not default Mermaid
-- [ ] Callout boxes for tips/warnings (not just paragraphs)
-- [ ] Code blocks have language hints
-- [ ] Glossary for docs with 5+ abbreviations (ตัวย่อตั้งแต่ 5 ตัว)
-- [ ] No placeholder text (TBD, TODO, Lorem ipsum) — `(รอยืนยัน)` markers listed in the pending-confirmation list are not placeholders; keep them
-- [ ] Tested rendering in the real viewer (Word · PDF · GitHub preview)
-
-> ไดอะแกรมในเอกสารโปรเจกต์อยู่ใน `diagram-figures` · เอกสารโค้ด (Mermaid ด่วน · ข้อกำหนดซอฟต์แวร์) → ส่วนเพิ่มใน plugin `software-company`
-
-## Anti-patterns
-
-- **Emoji anywhere** — in headings, callouts, badges or tables it reads as AI-made; use bold words
-- **Nested bullets** — any bullet under a bullet; use a sub-heading or a table instead
-- **Inconsistent terminology** — "user" in one section, "customer" in next
-- **Tables of paragraphs** — if cells are >2 sentences, use headings instead
-
-## ไม่ให้ดูเหมือน AI ทำ
-
-ก่อนส่ง ไล่ข้อ 3 ของ `no-ai-look` — งาน HTML รันสคริปต์ของมัน · ภาพและไฟล์อื่นดูด้วยตา 8 ข้อ · ข้อห้ามในไฟล์นี้เป็นส่วนเฉพาะของงานนี้ รายการเต็มทุกสื่ออยู่ที่นั่น
-
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกเสมอ แล้ววงเล็บตัวย่อไว้ — เช่น Model Context Protocol (MCP)
-หลังจากนั้นใช้ตัวย่อได้เลย ดูรายละเอียดใน skill `spell-out-abbreviations`
-
-
-## reference: markdown-patterns.md
-
-# รูปแบบ markdown พร้อมตัวอย่าง
-
-ตัวอย่างโค้ด markdown ของทุกรูปแบบที่ `SKILL.md` อ้างถึง ให้ลอกไปใช้ได้ทันที ส่วนกฎว่าใช้เมื่อไหร่อยู่ใน `SKILL.md`
-
-**สารบัญ:** Document Header · Table of Contents · Callout Boxes · Tables · Figures · Status Badges · Cover Block · Comparison / Decision Tables · Lists · Code Blocks · Approval/Sign-off · Glossary
-
-## Document Header (Always)
-
-Every polished doc MUST start with:
-
-```markdown
-# <Document Title>
-
-> **Version:** 1.0 · **Date:** YYYY-MM-DD · **Status:** Draft
-> **Authors:** <names> · **Reviewers:** <names>
-> **Tags:** `<area>` `<topic>`
-
----
-```
-
-Status values:
-- **Draft** — work in progress
-- **Review** — under stakeholder review
-- **Approved** — signed off
-- **Archived** — historical reference
-
-## Table of Contents
-
-**Always add Table of Contents** for docs with 5+ sections:
-
-```markdown
-## Table of Contents
-
-1. [Executive Summary](#1-executive-summary)
-2. [Scope](#2-scope)
-3. [Details](#3-details)
-```
-
-## Callout Boxes
-
-Use blockquotes with a bold label — no emoji. 5 ชนิด ชื่อไทยคู่กัน: Tip (ข้อแนะนำ) · Note (ข้อควรจำ) · Warning (ข้อควรระวัง) · Critical (อันตราย) · Open Question (คำถามที่ยังเปิด):
-
-```markdown
-> **Tip:** Brief actionable insight.
-
-> **Warning:** Important caveat or limitation.
-
-> **Critical:** Must-read before proceeding.
-
-> **Note:** Additional context or background.
-
-> **Open Question:** Needs decision/clarification.
-```
-
-## Tables — When and How
-
-### When to use tables instead of bullets
-
-Use tables when items have **2+ attributes**:
-
-Don't use bullets:
-```markdown
-- email: string, required, unique
-- age: number, optional
-- role: enum, required, default "user"
-```
-
-Use a table:
-```markdown
-| Field | Type   | Required | Default | Description       |
-|-------|--------|:--------:|:-------:|-------------------|
-| email | string | ✓        | —       | Unique login email|
-| age   | number | ✗        | —       | Optional          |
-| role  | enum   | ✓        | `user`  | Access level      |
-```
-
-## Figures (รูปในเอกสาร)
-
-รูปในเอกสารโปรเจกต์วาดด้วย `diagram-figures` (plugin `software-company` · house style) แล้วฝังเป็นไฟล์ภาพ · Mermaid ใช้แค่รูปด่วนใน README · PR ไม่ใช้ในเอกสารที่ส่งต่อ
-
-```markdown
-ลำดับการเรียกเมื่อผู้ใช้กดบันทึกแสดงในรูปที่ 3
-
-![ลำดับการเรียกเมื่อผู้ใช้กดบันทึก](figures/fig-03.png)
-
-**รูปที่ 3 —** ลำดับการเรียกเมื่อผู้ใช้กดบันทึก
-```
-
-## Status Badges (Inline)
-
-For key fields in headers/tables:
-
-```markdown
-**Status:** Approved
-**Priority:** High
-**Risk Level:** Medium
-**Service Level Agreement (SLA):** < 200ms
-```
-
-Multiple badges in a header:
-
-```markdown
-> **Approved** · **High Priority** · Owner @alice · Due 2025-03-15
-```
-
-## Cover Block Pattern
-
-For formal documents (Business Requirements Document (BRD), Functional Specification Document (FSD), Architecture Decision Record (ADR), postmortem):
-
-```markdown
-# <Title>
-
-| | |
-|--|--|
-| **Document Type** | BRD \| FSD \| ADR \| Postmortem |
-| **Version** | 1.2 |
-| **Status** | Approved |
-| **Date** | 2025-01-15 |
-| **Author(s)** | @alice, @bob |
-| **Reviewer(s)** | @charlie |
-| **Related** | [BRD-001](link), [FSD-005](link) |
-
----
-```
-
-## Comparison / Decision Tables
-
-For trade-off analysis (architect, Project Manager (PM), Search Engine Optimization (SEO) recommendations):
-
-```markdown
-| Option | Cost | Effort | Risk | Time-to-Value | Recommendation |
-|--------|:----:|:------:|:----:|:-------------:|:--------------:|
-| **A**  | ฿80k | Med  | Low  | Fast | **Recommended** |
-| B      | ฿40k | Low  | High | Med  | Not recommended |
-| C      | ฿150k| High | Low  | Slow | Future consideration |
-```
-
-## Lists — When to nest, when to flatten
-
-### Good list
-```markdown
-- Email is unique across all users
-- Passwords must be 8+ characters with mixed case
-- Sessions expire after 30 days of inactivity
-```
-
-### Bad list (over-nested)
-```markdown
-- Users
-  - Email
-    - Must be unique
-    - Required
-  - Password
-    - 8+ chars
-    - Mixed case
-```
-
-→ Should be a table instead.
-
-## Code Blocks
-
-Always specify language:
-
-````markdown
-```typescript
-const user: User = { id: 1, email: 'a@b.com' };
-```
-
-```bash
-npm install
-```
-
-```sql
-SELECT * FROM users WHERE id = $1;
-```
-````
-
-For long blocks, put the file name in a comment on the first line:
-
-```typescript
-// src/services/auth.ts
-export async function login(email: string, password: string) {
-  // ...
-}
-```
-
-## Approval/Sign-off Section (End of Doc)
-
-For documents needing formal approval:
-
-```markdown
-## Sign-off
-
-| Role | Name | Status | Date |
-|------|------|:------:|------|
-| Product Owner | @alice | Approved | 2025-01-15 |
-| Tech Lead | @bob | Review | — |
-| QA Lead | @charlie | Pending | — |
-| Security | @dave | Rejected | 2025-01-14 |
-```
-
-## Glossary Section
-
-For docs with 5+ technical terms:
-
-```markdown
-## Glossary
-
-| Term | Definition |
-|------|------------|
-| **API** | Application Programming Interface |
-| **JWT** | JSON Web Token, used for stateless auth |
-| **SLA** | Service Level Agreement |
-```
-
-Define acronyms on first use, then add to glossary.
-
-
-## reference: theme-colors.md
-
-# ตารางสีของธีมเอกสาร
-
-ไฟล์นี้บอกว่าส่วนไหนของเอกสารใครเป็นคนคุมสี และค่าสีตั้งต้นประจำบ้านคืออะไร ใช้ตอนต้องใส่สีจริงลงรูป ไฟล์ .docx หรือสไลด์
-
-## ใครคุมสีส่วนไหน
-
-| ส่วนของเอกสาร | ใครคุมสี | อ่านค่าจาก |
-|---|---|---|
-| หัวข้อ ตาราง กล่องข้อความใน markdown | markdown ไม่มีสี ใช้คำกำกับตัวหนาและน้ำหนักตัวอักษรแทน | — |
-| ไดอะแกรม Mermaid | `diagram-figures` → `references/engine-mermaid.md` (README · PR: `software-diagrams` ข้อ 2 ใน plugin `software-company`) | `doc-theme` |
-| รูปที่เป็นไฟล์ภาพ | `diagram-figures` (plugin `software-company`) | `doc-theme` |
-| ไฟล์ .docx / .pdf ที่ส่งออก | `branded-document-design` (plugin `software-company`) ข้อ 0–1 | `doc-theme` |
-| สไลด์ | `presentation-design` (plugin `software-company`) | `doc-theme` |
-
-## ค่าตั้งต้นประจำบ้าน (house default)
-
-ถ้า `doc-theme` ยังไม่ประกาศ accent เฉพาะงาน ทุก skill ใช้ชุดนี้เป็นค่าตั้งต้น เพื่อให้รูป เอกสาร และสไลด์เป็นชุดสีเดียวกันตั้งแต่แรก ชุดนี้คือชุดเดียวกับ `presentation-design` และ `branded-document-design`:
-
-| token | ค่า | ใช้กับ |
-|---|---|---|
-| brand | `#2A78D6` | สีหลัก · หัวข้อ · เส้น accent |
-| brand-deep | `#2A4C86` | หัวตาราง · H2 · ชื่อระบบ |
-| brand-2 | `#6A5CD6` | accent รอง (ม่วง) |
-| tint | `#EDF1FB` | พื้นหัวตาราง · พื้นกล่องเน้น |
-| ink / body | `#333B4A` / `#414957` | หัวข้อ / เนื้อความ |
-| muted / faint | `#7D8492` / `#A9AEB9` | คำบรรยาย / หมายเหตุ |
-| line | `#E4E7EE` | เส้นขอบ · เส้นเชื่อม |
-| exception | `#C77A11` | ทาง/โซนที่ไม่ใช่เส้นทางหลัก (ต่างจาก brand เสมอ) |
-| ฟอนต์ | Tahoma (เอกสาร/สไลด์) · Noto Sans Thai → Tahoma (ภาพ) | ทั้งไทยและอังกฤษ |
-
-เมื่อประกาศ accent เฉพาะงานแล้ว ให้ใช้ค่านั้นแทน brand ส่วนสีอื่นคำนวณจาก accent ตัวนั้น

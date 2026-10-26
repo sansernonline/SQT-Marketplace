@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "findings.schema.json",
+  "title": "security-audit findings.json",
+  "description": "เอกสารโครงข้อมูล · ตัวตรวจจริงคือ scripts/validate_findings.mjs (Node stdlib ไม่พึ่งไลบรารี) ซึ่งตรวจเพิ่มจากนี้: id และ fingerprint ไม่ซ้ำ · fingerprint ตรงสูตร · path ปลอดภัย · trace ขั้นแรกเป็นไฟล์ของ entrypoint · verified_by ต่างจาก hunted_by · ไม่มีค่าที่หน้าตาเหมือนค่าลับในทุกข้อความ · coverage_ids มีจริงใน ledger.json",
+  "type": "object",
+  "required": ["audit", "findings"],
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "type": "object",
+      "required": ["date", "repo", "commit", "profile"],
+      "additionalProperties": false,
+      "properties": {
+        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "repo": { "type": "string", "minLength": 1 },
+        "commit": { "type": "string", "minLength": 1 },
+        "profile": { "enum": ["quick", "standard", "deep"] }
+      }
+    },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } }
+  },
+  "$defs": {
+    "text": { "type": "string", "pattern": "\\S" },
+    "optionalText": { "type": ["string", "null"] },
+    "repoPath": {
+      "description": "path สัมพัทธ์ใน repo ใช้ / · ไม่มี .. · ไม่ขึ้นต้นด้วย / ~ หรือไดรฟ์ · ไม่มี \\ หรือ :",
+      "type": "string",
+      "pattern": "^(?![/~])(?!.*(^|/)\\.{1,2}(/|$))(?!.*//)[^\\\\:\\u0000]+$"
+    },
+    "finding": {
+      "type": "object",
+      "required": ["id", "fingerprint", "verdict", "title", "class", "owasp", "cwe", "location", "entrypoint", "trace", "pdpa", "evidence", "hunted_by", "coverage_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^F-\\d{3,}$" },
+        "fingerprint": {
+          "description": "sha256 ของ class, location.file, location.symbol (null = ว่าง), entrypoint คั่นด้วย \\n ตัดเหลือ 16 hex แรก · คำนวณด้วย scripts/fingerprint.mjs · คงที่ข้ามรอบตราบที่ต้นเหตุเดิม",
+          "type": "string", "pattern": "^[0-9a-f]{16}$"
+        },
+        "verdict": { "enum": ["confirmed", "needs_validation", "rejected"] },
+        "severity": { "description": "ใช้กับ confirmed เท่านั้น", "enum": ["critical", "high", "medium", "low", "info", null] },
+        "title": { "$ref": "#/$defs/text" },
+        "class": { "description": "ประเภทการโจมตี เช่น idor · sqli", "$ref": "#/$defs/text" },
+        "owasp": { "description": "หมวด OWASP Top 10:2025", "type": ["string", "null"], "pattern": "^A(0[1-9]|10)$" },
+        "cwe": { "type": ["string", "null"], "pattern": "^CWE-\\d+$" },
+        "location": {
+          "type": "object",
+          "required": ["file"],
+          "additionalProperties": false,
+          "properties": {
+            "file": { "$ref": "#/$defs/repoPath" },
+            "line": { "type": ["integer", "null"], "minimum": 1 },
+            "symbol": { "type": ["string", "null"] }
+          }
+        },
+        "entrypoint": { "description": "\"<path>\" หรือ \"<path>#<ทางเข้า>\" เช่น \"src/routes/orders.js#GET /orders/:id\" · ส่วนหน้า # ต้องเป็น repoPath", "$ref": "#/$defs/text" },
+        "trace": {
+          "description": "เส้นทางจากทางเข้าถึงจุดที่เกิดผล · ขั้นแรกต้องเป็นไฟล์ของ entrypoint",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["file", "line", "note"],
+            "additionalProperties": false,
+            "properties": {
+              "file": { "$ref": "#/$defs/repoPath" },
+              "line": { "type": "integer", "minimum": 1 },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "preconditions": { "type": "array", "items": { "type": "string" } },
+        "impact": { "$ref": "#/$defs/optionalText" },
+        "owner_impact_th": { "description": "ผลต่อธุรกิจเป็นภาษาเจ้าของกิจการ · ใช้ในตารางของ REPORT.md", "$ref": "#/$defs/optionalText" },
+        "pdpa": {
+          "type": "object",
+          "required": ["personal_data", "kinds"],
+          "additionalProperties": false,
+          "properties": {
+            "personal_data": { "type": "boolean" },
+            "kinds": { "type": "array", "items": { "type": "string" } }
+          },
+          "if": { "properties": { "personal_data": { "const": true } } },
+          "then": { "properties": { "kinds": { "minItems": 1 } } }
+        },
+        "evidence": { "description": "ห้ามมีค่าลับ ตัดเหลือ 4 ตัวท้าย", "type": "string" },
+        "missing": { "$ref": "#/$defs/optionalText" },
+        "check_plan": { "$ref": "#/$defs/optionalText" },
+        "reject_reason": { "$ref": "#/$defs/optionalText" },
+        "fix": { "$ref": "#/$defs/optionalText" },
+        "verified_by": { "description": "confirmed: ต้องไม่ว่างและไม่ใช่คนเดียวกับ hunted_by", "$ref": "#/$defs/optionalText" },
+        "hunted_by": { "$ref": "#/$defs/text" },
+        "coverage_ids": { "description": "coverage_id ใน ledger.json ที่ finding นี้มาจาก · แถวนั้นต้องอ้าง id นี้กลับใน finding_ids", "type": "array", "minItems": 1, "items": { "type": "string" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "verdict": { "const": "confirmed" } } },
+          "then": {
+            "required": ["severity", "impact", "owner_impact_th", "fix", "verified_by"],
+            "properties": {
+              "severity": { "enum": ["critical", "high", "medium", "low", "info"] },
+              "evidence": { "$ref": "#/$defs/text" },
+              "trace": { "minItems": 1 },
+              "impact": { "$ref": "#/$defs/text" },
+              "owner_impact_th": { "$ref": "#/$defs/text" },
+              "fix": { "$ref": "#/$defs/text" },
+              "verified_by": { "$ref": "#/$defs/text" }
+            }
+          },
+          "else": { "properties": { "severity": { "const": null } } }
+        },
+        {
+          "if": { "properties": { "verdict": { "const": "needs_validation" } } },
+          "then": { "required": ["missing", "check_plan"], "properties": { "missing": { "$ref": "#/$defs/text" }, "check_plan": { "$ref": "#/$defs/text" } } }
+        },
+        {
+          "if": { "properties": { "verdict": { "const": "rejected" } } },
+          "then": { "required": ["reject_reason"], "properties": { "reject_reason": { "$ref": "#/$defs/text" } } }
+        }
+      ]
+    },
+    "ledger": {
+      "description": "โครงของ ledger.json (ตรวจด้วย scripts/validate_ledger.mjs) · coverage_id ไม่ซ้ำ · not_applicable และ blocked ต้องมี note · pending ที่เหลือเป็นคำเตือน",
+      "type": "object",
+      "required": ["rows"],
+      "additionalProperties": false,
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["coverage_id", "entrypoint", "boundary", "class", "status", "finding_ids"],
+            "additionalProperties": false,
+            "properties": {
+              "coverage_id": { "$ref": "#/$defs/text" },
+              "entrypoint": { "$ref": "#/$defs/text" },
+              "boundary": { "$ref": "#/$defs/text" },
+              "class": { "$ref": "#/$defs/text" },
+              "status": { "enum": ["pending", "checked", "not_applicable", "blocked"] },
+              "finding_ids": { "type": "array", "items": { "type": "string" } },
+              "note": { "type": ["string", "null"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

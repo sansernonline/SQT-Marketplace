@@ -1,3 +1,353 @@
+# skill: auth-implementation-patterns
+
+Use when implementing login or identity (session vs JWT, OAuth, SSO, MFA, password reset).
+
+# Authentication Implementation Patterns
+
+## When to use this skill
+
+- Building login/signup/logout
+- Adding password reset flow
+- Adding multi-factor authentication (MFA): TOTP, SMS, WebAuthn
+- Choosing session vs token authentication
+- Integrating OAuth or OpenID Connect (OIDC) logins (Google, GitHub, etc.)
+- Implementing single sign-on (SSO) with SAML or OIDC
+- Designing API authentication (API keys, JSON Web Token (JWT), OAuth)
+- Reviewing existing auth code for security issues
+
+## อ่านเพิ่มเมื่อ
+
+| ไฟล์ | เปิดเมื่อ |
+|---|---|
+| [references/auth-flows.md](references/auth-flows.md) | ถ้าจะลงมือเขียน session · JWT · OAuth กับ PKCE หรือการรีเซ็ตรหัสผ่าน ให้เปิดดูลำดับขั้นทีละข้อ |
+| [references/mfa.md](references/mfa.md) | ตอนเลือกหรือลงมือทำ MFA และต้องการขั้นตั้งค่า TOTP · การใช้ WebAuthn · ข้อจำกัดของ SMS |
+| [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md) | ถ้าออกแบบการยืนยันตัวตนของ API หรือ API key หรือต้องการตัวอย่าง RBAC กับ ABAC ให้เปิดไฟล์นี้ |
+| [references/libraries-and-code.md](references/libraries-and-code.md) | ตอนเลือกไลบรารีตามภาษา หรือต้องการโค้ดตัวอย่างการ hash รหัสผ่านและเครื่องมือจำกัดจำนวนครั้ง |
+
+## Choose the Right Pattern
+
+```
+What's authenticating?
+│
+├─ Browser user
+│  ├─ First-party app → Session cookies (HttpOnly, Secure, SameSite)
+│  └─ Need cross-domain → JWT with httpOnly cookie (NOT localStorage)
+│
+├─ Mobile app
+│  └─ Token-based: OAuth 2.0 PKCE flow
+│
+├─ Service-to-service
+│  ├─ Same org → mTLS or service mesh
+│  └─ External → OAuth 2.0 Client Credentials
+│
+└─ Third-party developer
+   └─ API keys (with rotation) OR OAuth
+```
+
+## Pattern 1: Session-Based Auth (Most apps)
+
+**When to use:** server-rendered apps, monoliths, one domain
+
+**Implementation requirements:**
+- Cookie: `HttpOnly`, `Secure`, `SameSite=Lax` (or Strict)
+- Session ID: cryptographically random, ≥ 128 bits
+- Session storage: Redis with a time-to-live (TTL). Not in app memory if you run more than one instance
+- Idle timeout: 30 min default
+- Absolute timeout: 8-12 hours
+- Issue a new session ID when privileges change (login, role change)
+- On logout, delete the session from the store
+
+**Pitfalls:**
+- ผิด: Storing session in JWT (can't revoke)
+- ผิด: Using `localStorage` for the session token (cross-site scripting (XSS) can steal it)
+- ผิด: Keeping the same ID after login (session fixation)
+
+## Pattern 2: JWT (Stateless Token)
+
+**When to use:** microservices, mobile, single-page app (SPA) with a backend API
+
+> ระวัง: **JWT is overused.** If you have a single backend, sessions are simpler and safer.
+
+**Implementation requirements:**
+- Algorithm: `RS256` or `ES256` (NOT `HS256` for distributed systems)
+- Short-lived access token: 5-15 min
+- Refresh token: longer-lived (days), stored separately, revocable
+- Issue a new refresh token each time one is used
+- Required claims: `sub`, `iat`, `exp`, `iss`, `aud`
+- Store JWT in `HttpOnly Secure cookie` (NOT localStorage)
+- Have a way to cancel tokens (blocklist, short expiry, etc.)
+
+**Pitfalls:**
+- ผิด: `alg: none` attacks (check the algorithm explicitly)
+- ผิด: Storing JWT in `localStorage` (XSS-stealable)
+- ผิด: Long-lived access tokens (you can't cancel them)
+- ผิด: Putting sensitive data in JWT (it's base64, not encrypted)
+- ผิด: Skipping signature verification
+
+## Pattern 3: OAuth 2.0 / OIDC
+
+**When to use:** "Login with Google/GitHub", or handing login to an identity provider (IdP)
+
+ใช้ Authorization Code Flow with PKCE (Proof Key for Code Exchange) เสมอ เพราะกันไม่ให้ code ที่ถูกขโมยไปแลกเป็น token ได้ ลำดับขั้นอยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+**Implementation requirements:**
+- **Always use PKCE** (even for confidential clients)
+- Validate `id_token` signature (use IdP's JWKS)
+- Validate `aud`, `iss`, `exp`, `nonce`
+- Use the `state` parameter to prevent cross-site request forgery (CSRF)
+- Match `code_verifier` to `code_challenge`
+- Use a library, don't write your own (Auth0, Passport.js, etc.)
+
+**Pitfalls:**
+- ผิด: Implicit flow (deprecated, insecure)
+- ผิด: Resource Owner Password Credentials flow (deprecated)
+- ผิด: Skipping `state` validation (CSRF risk)
+- ผิด: Trusting `id_token` without verifying signature
+
+## Pattern 4: Multi-Factor Authentication (MFA)
+
+มี 3 แบบ ถ้าเป็นแอปใหม่ให้ใช้ WebAuthn (passkeys) เป็นค่าเริ่มต้น เพราะไม่มีความลับร่วมให้ถูกหลอกเอาไป ถ้าต้องการ 2FA มาตรฐานที่ผู้ใช้ตั้งเองได้ง่ายให้ใช้ TOTP ส่วน SMS หรือ email ให้ใช้เป็นทางสุดท้ายเท่านั้น เพราะ SMS ไม่ปลอดภัยจากการสลับซิม (SIM swap) รายละเอียดทั้ง 3 แบบอยู่ใน [references/mfa.md](references/mfa.md)
+
+## Pattern 5: Password Management
+
+### Storage
+- ถูก: **Argon2id** (preferred) or **bcrypt** (cost factor ≥ 12)
+- ผิด: Never: MD5, SHA-1, SHA-256 raw, plain text
+
+### Password policy (NIST SP 800-63B-4 §3.1.1.2, checked 2026-10-14 at pages.nist.gov/800-63-4/sp800-63b.html)
+- ถูก: Minimum **15 characters** when the password is the only factor · minimum **8** when it is used only inside multi-factor authentication (MFA)
+- ถูก: Check against a list of breached passwords (Have I Been Pwned (HIBP) API)
+- ถูก: Allow long passphrases (any maximum must be at least 64 chars)
+- ถูก: Allow special characters (don't restrict them)
+- Don't force composition rules (uppercase + digit + symbol)
+- Don't force regular password changes (only when you suspect a breach)
+
+### Password reset flow
+
+ข้อที่ห้ามพลาดในการรีเซ็ตรหัสผ่าน: ข้อความตอบต้องเหมือนกันไม่ว่าอีเมลจะมีในระบบหรือไม่ token ต้องสุ่มอย่างน้อย 256 bits เก็บแบบ hash และหมดอายุใน 15 นาที และเมื่อตั้งรหัสใหม่แล้วต้องยกเลิกทุก session เดิมและส่งอีเมลยืนยัน ลำดับขั้นครบทั้ง 9 ข้ออยู่ใน [references/auth-flows.md](references/auth-flows.md)
+
+## Pattern 6: Account Lockout & Rate Limiting
+
+```
+Login attempts:
+- 5 failed attempts in 15 min → lock account 15 min
+- 10 failed attempts in 1 hour → lock 1 hour
+- Use IP + email combo, not just one
+
+Lockout messaging:
+ถูก: "Too many failed attempts. Try again in 15 minutes."
+ผิด: "Account locked." (reveals account exists)
+```
+
+ให้ใช้เครื่องมือที่มีอยู่แล้วแทนการเขียนเอง รายชื่อเครื่องมืออยู่ใน [references/libraries-and-code.md](references/libraries-and-code.md)
+
+## Pattern 7: API Authentication
+
+เลือกตามผู้เรียก: API key สำหรับ server-to-server แบบง่าย · OAuth 2.0 Client Credentials สำหรับ service-to-service · mTLS สำหรับระบบภายในที่ต้องการความปลอดภัยสูง · HMAC signing สำหรับตรวจ webhook ส่วน API key ต้องแสดง secret ครั้งเดียวตอนสร้าง เก็บแบบ hash และให้ผู้ใช้ยกเลิกได้ทันที ตารางเทียบและหลักการครบอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+## Authorization Patterns (after authentication)
+
+ใช้ RBAC (Role-Based Access Control) เป็นหลัก และใช้ ABAC (Attribute-Based Access Control) เมื่อต้องการสิทธิ์ละเอียดตามคุณสมบัติของข้อมูล ตัวอย่างอยู่ใน [references/api-auth-and-authorization.md](references/api-auth-and-authorization.md)
+
+### Implementation tip
+- Check authorization at every endpoint
+- Don't trust a role sent by the client
+- Check on the server, using the user from the session or token
+
+## Common Vulnerabilities Checklist
+
+- [ ] Session fixation (regenerate ID on login)
+- [ ] CSRF (token or SameSite cookie)
+- [ ] Brute force (rate limiting)
+- [ ] Credential stuffing, i.e. logins with leaked passwords (HIBP check, MFA)
+- [ ] Open redirect (allowlist redirect URLs)
+- [ ] User enumeration, i.e. finding which accounts exist (same error message every time)
+- [ ] Timing attacks (compare in constant time)
+- [ ] Token in URL (use header or cookie)
+- [ ] Logout that does nothing on the server (invalidate server-side)
+- [ ] Privilege escalation (re-check after role change)
+
+## Anti-patterns
+
+- Writing your own crypto or auth (use libraries)
+- Storing passwords reversibly
+- JWT for sessions when you have one backend
+- Long-lived JWT without rotation
+- Authentication without authorization checks
+- Trusting JWT claims as authorization source
+- Logout that doesn't invalidate token server-side
+- Allowing weak passwords for compliance "convenience"
+
+
+## reference: api-auth-and-authorization.md
+
+# API Authentication และ Authorization Patterns
+
+วิธียืนยันตัวตนของ API แต่ละแบบ หลักการจัดการ API key และตัวอย่าง RBAC กับ ABAC
+
+## Pattern 7: API Authentication
+
+| Method | Use case | Token format |
+|--------|----------|--------------|
+| **API Keys** | Server-to-server, simple | `sk_live_xxx` |
+| **OAuth 2.0 Client Credentials** | Service-to-service | JWT bearer |
+| **mTLS** (both sides present certificates) | High-security, internal | X.509 certs |
+| **HMAC signing** | Webhook verification | `HMAC-SHA256` |
+
+### API Key best practices
+- Prefix with environment: `sk_test_xxx`, `sk_live_xxx`
+- Show the secret ONCE, when it is created
+- Store it hashed (like a password)
+- Allow scopes/permissions per key
+- Allow expiry and replacement
+- Show when each key was last used
+- Let users revoke a key instantly
+
+## Authorization Patterns (after authentication)
+
+### RBAC (Role-Based Access Control)
+```
+User → Role → Permissions
+e.g., user@example.com → admin → [users.read, users.write, billing.read]
+```
+
+### ABAC (Attribute-Based) — fine-grained
+```
+Allow if user.department === resource.department AND action === "read"
+```
+
+
+## reference: auth-flows.md
+
+# ลำดับขั้นของแต่ละ flow
+
+ลำดับขั้นทีละข้อของ session · JWT · OAuth กับ PKCE และการรีเซ็ตรหัสผ่าน ใช้ตอนลงมือเขียนโค้ดหรือรีวิวว่าโค้ดทำครบทุกขั้นไหม ส่วนข้อกำหนดและข้อผิดพลาดที่ต้องเลี่ยงอยู่ใน `SKILL.md`
+
+## Pattern 1: Session-Based Auth — Flow
+
+```
+1. User submits credentials
+2. Server validates, creates session ID
+3. Server stores session in Redis/DB
+4. Server sets HttpOnly Secure cookie
+5. Client sends cookie on every request
+6. Server looks up session, identifies user
+```
+
+## Pattern 2: JWT — Flow
+
+```
+1. User submits credentials
+2. Server validates, signs JWT
+3. Client stores JWT (in HttpOnly cookie preferred)
+4. Client sends JWT on every request (Authorization header or cookie)
+5. Server verifies signature, extracts claims
+```
+
+## Pattern 3: OAuth 2.0 / OIDC — Authorization Code Flow with PKCE
+
+PKCE = Proof Key for Code Exchange. It stops a stolen code from being swapped for a token.
+
+```
+1. App → IdP: /authorize?code_challenge=...
+2. User logs in at IdP
+3. IdP → App: /callback?code=...
+4. App → IdP: /token (with code_verifier)
+5. IdP → App: access_token + id_token + refresh_token
+```
+
+## Pattern 5: Password reset flow
+
+```
+1. User requests reset (enter email)
+2. Server: always show "if email exists, link sent" (don't leak)
+3. Generate random token (≥ 256 bits), hash it, store with expiry (15 min)
+4. Email link with raw token
+5. User clicks → /reset?token=...
+6. Server hashes input, compares, verifies expiry
+7. User sets new password (apply policy)
+8. Invalidate all existing sessions
+9. Send confirmation email
+```
+
+
+## reference: libraries-and-code.md
+
+# ไลบรารีและโค้ดตัวอย่าง
+
+โค้ดตัวอย่างการเก็บรหัสผ่าน เครื่องมือจำกัดจำนวนครั้ง และไลบรารีที่แนะนำแยกตามภาษา
+
+## Password storage — code
+
+```typescript
+// Good (using bcrypt)
+const hash = await bcrypt.hash(password, 12);
+const valid = await bcrypt.compare(password, storedHash);
+
+// Bad
+const hash = crypto.createHash('sha256').update(password).digest('hex');
+```
+
+## Rate limiting tools
+
+Use existing tools:
+- `express-rate-limit` (Node.js)
+- `django-ratelimit` (Django)
+- Cloudflare / AWS WAF (edge)
+
+## Library Recommendations
+
+| Stack | Library | Notes |
+|-------|---------|-------|
+| Node.js | `passport`, Auth.js, Better Auth | Lucia v3 is deprecated (lucia-auth.com, checked 22 Oct 2026) so do not start new work on it; Better Auth status (รอยืนยัน, check before use) |
+| Python | `authlib`, `PyJWT` (or `joserfc`) | authlib for OAuth; python-jose is rarely maintained (รอยืนยัน) |
+| Go | `oauth2`, `golang-jwt` | Standard |
+| Rust | `axum-login`, `jsonwebtoken` | — |
+| Any | Auth0, Clerk, Supabase Auth | Managed (faster) |
+
+
+## reference: mfa.md
+
+# Pattern 4: Multi-Factor Authentication (MFA)
+
+รายละเอียดของการยืนยันตัวตนหลายขั้นทั้ง 3 แบบ ใช้ตอนเลือกหรือลงมือทำ MFA
+
+## TOTP (Google Authenticator, Authy)
+**When:** standard two-factor login (2FA), easy for users. TOTP = time-based one-time password.
+
+```
+Setup:
+1. Server generates random secret (160 bits)
+2. Server shows QR code: otpauth://totp/...?secret=...
+3. User scans with authenticator app
+4. User confirms with first code
+5. Server stores secret encrypted
+
+Verify:
+1. User enters 6-digit code
+2. Server computes expected code(s) (±1 window for clock drift)
+3. Match → grant access
+```
+
+## WebAuthn (Passkeys) — Future-proof
+**When:** you want login that phishing can't beat, no SMS, hardware keys
+
+- Use `@simplewebauthn` library
+- Supports Touch ID, Face ID, YubiKey
+- No shared secret, so nothing to phish
+- Default for new apps in 2026+
+
+## SMS / Email codes
+**When:** there's no other option (users without smartphone apps)
+
+- Note: SMS is **NOT secure** (SIM swap attacks)
+- Use only as a last resort, never as the main method
+- Use strict rate limits
+- Codes: 6 digits, 5 min expiry
+
+
+---
+
 # skill: config-and-secrets
 
 Use when settings differ by environment or something must never be committed (keys, connection strings).
@@ -782,185 +1132,3 @@ Use when users upload files or the system stores and serves them (type checks, v
 - **ไม่ลบ EXIF** — พิกัดบ้านผู้ใช้หลุดออกไปโดยไม่มีใครตั้งใจ
 - **ไฟล์ไม่อยู่ในแผนสำรองข้อมูล** — ฐานข้อมูลกู้ได้ แต่เอกสารหายหมด
 - **อ่านไฟล์ทั้งก้อนเข้าหน่วยความจำ** — ไฟล์ใหญ่ทำให้ process ตาย
-
-
----
-
-# skill: error-handling-patterns
-
-Use when writing or reviewing code that can fail (network, database, services). Retry, timeout.
-
-# จัดการข้อผิดพลาด
-
-> **กฎข้อเดียว:** จับ error เฉพาะตอนที่**ทำอะไรกับมันได้จริง**
-> จับแล้วไม่ทำอะไร แย่กว่าไม่จับ เพราะระบบจะเดินต่อทั้งที่ข้างในพังไปแล้ว
-
-## เมื่อไหร่ใช้ skill นี้
-
-- เขียนโค้ดที่เรียกเครือข่าย ฐานข้อมูล ไฟล์ หรือระบบของทีมอื่น
-- ต้องตัดสินใจว่าจะ retry ไหม กี่ครั้ง รอเท่าไหร่
-- ผู้ใช้เจอข้อความว่า "เกิดข้อผิดพลาด" แล้วไม่รู้ต้องทำอะไรต่อ
-- ไล่ปัญหาแล้วพบว่า log ไม่มีอะไรให้ดูเลย เพราะมีคน catch ทิ้ง
-
-## เมื่อไหร่ใช้ตัวอื่นแทน หรือใช้คู่กัน
-
-| งาน | skill | |
-|---|---|---|
-| รูปร่าง JSON ของ error ที่ API ส่งออก | `web-service-essentials` · `api-conventions` | แทน |
-| รูปแบบบรรทัด log และการปิดบังข้อมูล | `logging-standards` | แทน |
-| แก้บั๊กเฉพาะจุดที่มีคนแจ้งมา | `targeted-fix` | แทน |
-| ขั้นตอนตอนระบบล่มจริง | `incident-runbook-template` | แทน |
-| ตัวชี้วัดอัตรา error และการแจ้งเตือน | `observability-basics` | คู่ |
-| งานเบื้องหลังที่ล้มแล้วต้องไปไหนต่อ | `background-jobs` | คู่ |
-| ข้อความ error ที่ต้องแปลหลายภาษา | `i18n-and-locale` | คู่ |
-| test กรณีล้มเหลว | `testing-standards` | คู่ |
-| ตัวย่อในงานที่คนอ่าน | `spell-out-abbreviations` | คู่ |
-
----
-
-## 1 · จับที่ไหน ปล่อยที่ไหน
-
-| ชั้น | ทำอะไร |
-|---|---|
-| ชั้นในสุด (เรียก DB, HTTP, ไฟล์) | **ปล่อยผ่าน** หรือแปลงเป็น error ของโดเมนที่มีความหมาย |
-| ชั้นตรรกะธุรกิจ | จับเฉพาะที่มีทางเลือกสำรองจริง ๆ (มีค่าเริ่มต้น มีแหล่งข้อมูลสำรอง) |
-| **ชั้นนอกสุด** (controller, handler, main) | **จับทุกอย่าง** · log 1 ครั้ง · แปลงเป็นคำตอบที่ผู้ใช้เข้าใจ |
-
-> **log ที่เดียว คือชั้นนอกสุด** — ถ้าทุกชั้น catch แล้ว log แล้ว throw ต่อ
-> error 1 ตัวจะกลายเป็น 10 บรรทัดใน log และไม่มีใครรู้ว่าเป็นเรื่องเดียวกัน
-
-**3 อย่างที่ห้ามทำเด็ดขาด:**
-
-```csharp
-try { ... } catch { }                      // ผิด: กลืนเงียบ
-try { ... } catch (Exception) { return null; }   // ผิด: ผู้เรียกเจอ null โดยไม่รู้ว่าเกิดอะไร
-catch (Exception ex) { log.Error(ex); throw; }   // ผิด: log ซ้ำทุกชั้น
-```
-
-**ถ้าตั้งใจจะกลืนจริง ๆ ต้องเขียนเหตุผลไว้:**
-
-```csharp
-catch (SmtpException ex)
-{
-    // ตั้งใจกลืน — ส่งอีเมลแจ้งไม่สำเร็จไม่ควรทำให้การสั่งซื้อล้ม
-    log.Warning(ex, "ส่งอีเมลยืนยันไม่สำเร็จ orderId={OrderId}", order.Id);
-}
-```
-
----
-
-## 2 · ข้อความถึงผู้ใช้ ≠ ข้อความใน log
-
-| | ผู้ใช้เห็น | log เก็บ |
-|---|---|---|
-| เนื้อหา | เกิดอะไร · ต้องทำอะไรต่อ | stack trace · ค่าตัวแปร · id ของคำขอ |
-| ภาษา | ภาษาของผู้ใช้ | อังกฤษก็ได้ |
-| รายละเอียดภายใน | **ไม่มีเลย** | มีได้ |
-| ตัวเชื่อม 2 ฝั่ง | **รหัสอ้างอิง** | รหัสเดียวกัน |
-
-```
-ผิด: "เกิดข้อผิดพลาด"                    ผู้ใช้ทำอะไรต่อไม่ได้
-ผิด: "SqlException: timeout expired"      หลุดรายละเอียดภายใน และเขาก็อ่านไม่ออก
-ถูก: "บันทึกไม่สำเร็จเพราะระบบตอบช้า ลองอีกครั้งใน 1 นาที (อ้างอิง: 01J9Z8K)"
-```
-
-**ข้อความที่ดีมี 3 ส่วน** — เกิดอะไร · เพราะอะไร (ถ้าบอกได้) · ต้องทำอะไรต่อ
-รหัสอ้างอิงคือ correlation id ตัวเดียวกับใน `logging-standards`
-
----
-
-## 3 · แยกประเภทก่อนตัดสินใจ
-
-| ประเภท | ตัวอย่าง | ทำยังไง | log ระดับ |
-|---|---|---|---|
-| **ผู้ใช้ทำผิด** | กรอกไม่ครบ ค่าผิดรูปแบบ | บอกให้แก้ · **ห้าม retry** | ไม่ต้อง log |
-| **ชั่วคราว** | timeout · 503 · deadlock · เชื่อมต่อหลุด | **retry ได้** | warning |
-| **ถูกจำกัดอัตรา** | 429 Too Many Requests | retry ได้ **หลังเวลาที่ `Retry-After` บอก** (ไม่มีค่านี้ → ใช้สูตร §4) · ห้ามยิงถี่กว่านั้น | warning |
-| **ถาวร** | 404 · 401 · ข้อมูลไม่ตรงเงื่อนไข | ไม่ retry · บอกให้ชัด | warning |
-| **บั๊กของเรา** | null reference · แปลงชนิดไม่ได้ | ไม่ retry · **ต้องมีคนแก้** | error |
-| **ข้อมูลไม่สอดคล้อง** | ยอดไม่ตรง สถานะเป็นไปไม่ได้ | หยุด · **เรียกคน** | error + แจ้งเตือน |
-
-> 🚨 **การ retry error ที่ลองกี่ครั้งก็ไม่หาย คือการยิงซ้ำใส่ระบบที่ล้มอยู่ให้ล้มหนักขึ้น**
-> `400` กับ `401` ยิงอีก 100 ครั้งก็ได้คำตอบเดิม
-
----
-
-## 4 · timeout และการลองใหม่
-
-**ทุกการเรียกออกนอก process ต้องมี timeout** — ค่าเริ่มต้นของไลบรารีส่วนใหญ่คือ "รอตลอดไป"
-
-| การเรียก | timeout ที่ใช้ได้ทั่วไป |
-|---|---|
-| ฐานข้อมูล query ปกติ | 5–10 วินาที |
-| HTTP ภายใน | 3–5 วินาที |
-| HTTP ภายนอก | 10–30 วินาที |
-| งานเบื้องหลังที่หนัก | ตั้งตามของจริง แล้วต้องตัดจบได้ |
-
-**สูตรการลองใหม่** (service เรียก service · งานในคิวใช้ตัวเลขของ [`background-jobs`](../background-jobs/SKILL.md) §4 · มีคนนั่งรอหน้าจอ → ดูข้อสุดท้ายด้านล่าง):
-
-```
-ลองไม่เกิน 3 ครั้ง · หน่วงแบบทวีคูณ + สุ่ม
-ครั้งที่ 1 รอ 1 วินาที · ครั้งที่ 2 รอ 2 · ครั้งที่ 3 รอ 4  (แต่ละครั้ง ±20% แบบสุ่ม)
-```
-
-- **ต้องมีตัวสุ่ม** — ไม่งั้นทุก instance จะลองใหม่พร้อมกันเป๊ะ แล้วทับระบบปลายทางซ้ำ
-- **เวลารวมของการลองใหม่ต้องน้อยกว่า timeout ของผู้เรียก** ไม่งั้นเขาเลิกรอไปแล้วแต่เรายังลองอยู่
-- **retry การเขียนต้องมี idempotency key** ไม่งั้นลูกค้าถูกตัดเงิน 2 รอบ (ดู `api-conventions`)
-- **มีคนนั่งรออยู่หน้าจอ** → ลองใหม่อัตโนมัติไม่เกิน 1 ครั้ง แล้วแสดงปุ่ม "ลองอีกครั้ง" ให้เขากดเอง (ไม่ใช้ 3 ครั้งของสูตรด้านบน)
-
----
-
-## 5 · ตัดวงจร (circuit breaker)
-
-เมื่อปลายทางล้ม การยิงต่อไม่ได้ช่วยอะไร แค่ทำให้เราค้างตามไปด้วย
-
-```
-ปิด (ปกติ) → ล้มติดกัน N ครั้ง → เปิด (ไม่ยิงเลย ตอบ error ทันที)
-           → รอ X วินาที → ครึ่งเปิด (half-open): ปล่อยให้ลอง 1 คำขอ → สำเร็จก็กลับไปปิด · ล้มก็เปิดต่อ
-```
-
-ค่าเริ่มต้นที่ใช้ได้: ถ้าล้ม 5 ครั้งติดกันภายใน 30 วินาที ให้เปิดวงจรไว้ 60 วินาที
-
-**ควรใส่เมื่อ** — เรียกระบบภายนอกที่เคยล่ม · เรียกข้ามหลาย service · ปลายทางช้าแล้วลามมาถึงเรา
-**ไม่ต้องใส่เมื่อ** — เรียกฐานข้อมูลของตัวเอง · งานที่วิ่งครั้งเดียวต่อวัน
-
----
-
-## 6 · ล้มบางส่วน
-
-งานที่ทำหลายรายการ ต้องตอบให้ได้ว่า **"ทำได้ 8 จาก 10 แล้วอีก 2 ไปไหน"**
-
-| แบบ | เหมาะกับ |
-|---|---|
-| ทั้งหมดหรือไม่ทำเลย (transaction) | เงิน · สต็อก · อะไรที่ครึ่ง ๆ แล้วพัง |
-| ทำเท่าที่ได้ แล้วรายงานรายการที่ไม่ผ่าน | นำเข้าข้อมูล · ส่งแจ้งเตือนหลายคน |
-
-แบบที่สองต้อง**คืนรายการที่ล้มพร้อมเหตุผลรายตัว** ไม่ใช่บอกว่า "บางรายการไม่สำเร็จ"
-
-**งานเก็บกวาดต้องรันเสมอ** ไม่ว่างานหลักจะสำเร็จหรือไม่ เช่น ปิดไฟล์ คืน connection ลบไฟล์ชั่วคราว
-ให้ใช้ `finally` / `using` / `with` / `defer` แทนการเขียนซ้ำในทุกทางออก
-
----
-
-## 7 · ตรวจก่อนส่ง
-
-ไล่กับ diff ทุกครั้งที่แตะโค้ดที่เรียกออกนอก process (แนวคิดจาก ECC error-handling)
-
-- [ ] ทุก `catch` ทำอย่างใดอย่างหนึ่งชัด ๆ: จัดการแล้วไปต่อ · แปลงเป็น error ของชั้นตัวเองแล้วโยนต่อ · ปล่อยไปให้ชั้นนอกสุด log (ข้อ 1) — ไม่มี `catch` ที่ log แล้วโยนต่อ
-- [ ] ทุกการเรียกออกนอก (HTTP · DB · คิว · ไฟล์) มี timeout ที่ตั้งใจ และ retry เฉพาะประเภทชั่วคราวในข้อ 3 · การเขียนที่ retry มี idempotency key (ข้อ 4)
-- [ ] ข้อความถึงผู้ใช้บอกว่าทำอะไรต่อ · ไม่มี stack trace หรือชื่อตารางออกไป (ข้อ 2) · log ของ error เดียวกันมี correlation id และข้อมูลพอให้ทำซ้ำ
-- [ ] ผลที่ธุรกิจคาดไว้ (ไม่พบ · ยอดไม่พอ · ซ้ำ) เป็นค่าคืนหรือ type ที่ผู้เรียกต้องจัดการ ไม่ใช่ exception
-- [ ] dependency ภายนอกแต่ละตัวมี test เส้นทางล้มอย่างน้อย 1 กรณี (timeout · 5xx · payload ผิด) และ test ยืนยันว่าระบบล้มบางส่วนตามข้อ 6 ไม่ล้มทั้งหน้า
-
-## 8 · Anti-patterns
-
-- **`catch` ว่างเปล่า** — ปัญหาที่หายากที่สุดคือปัญหาที่ไม่มีร่องรอย
-- **คืน `null` แทนการโยน error** — ผู้เรียกไม่รู้ว่าไม่มีข้อมูล หรือระบบพัง
-- **`catch (Exception)` ที่ชั้นในสุด** — กลืนบั๊กของตัวเองไปด้วย
-- **log แล้ว throw ต่อทุกชั้น** — error 1 ตัวได้ 10 บรรทัด
-- **"เกิดข้อผิดพลาด"** — ไม่บอกว่าต้องทำอะไรต่อ
-- **ส่ง stack trace ให้ผู้ใช้** — เปิดโครงสร้างภายในให้คนที่กำลังหาช่องโหว่เห็น
-- **retry แบบไม่หน่วง** — ยิงรัวใส่ระบบที่ล้มอยู่
-- **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
-- **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
-- **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ

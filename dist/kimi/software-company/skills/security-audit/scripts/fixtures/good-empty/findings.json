@@ -1,0 +1,9 @@
+{
+  "audit": {
+    "date": "2026-10-26",
+    "repo": "example-shop",
+    "commit": "a1b2c3d",
+    "profile": "deep"
+  },
+  "findings": []
+}

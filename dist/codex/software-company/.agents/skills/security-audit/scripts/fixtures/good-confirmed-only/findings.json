@@ -1,0 +1,61 @@
+{
+  "audit": {
+    "date": "2026-10-26",
+    "repo": "example-shop",
+    "commit": "a1b2c3d",
+    "profile": "standard"
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "fingerprint": "14ac27e2d6be558b",
+      "verdict": "confirmed",
+      "severity": "critical",
+      "title": "ดูคำสั่งซื้อของลูกค้าคนอื่นได้ด้วยการเปลี่ยนเลข id",
+      "class": "idor",
+      "owasp": "A01",
+      "cwe": "CWE-639",
+      "location": {
+        "file": "src/orders/order-service.js",
+        "line": 42,
+        "symbol": "getOrder"
+      },
+      "entrypoint": "src/routes/orders.js#GET /orders/:id",
+      "trace": [
+        {
+          "file": "src/routes/orders.js",
+          "line": 12,
+          "note": "รับ id จาก URL แล้วส่งต่อโดยไม่ตรวจเจ้าของ"
+        },
+        {
+          "file": "src/orders/order-service.js",
+          "line": 42,
+          "note": "ค้นด้วย id อย่างเดียว ไม่มีเงื่อนไข customer_id"
+        }
+      ],
+      "preconditions": [
+        "ล็อกอินเป็นลูกค้าคนใดก็ได้"
+      ],
+      "impact": "ลูกค้าที่ล็อกอินแล้วอ่านชื่อ ที่อยู่ เบอร์โทร ของคำสั่งซื้อทุกรายการได้",
+      "owner_impact_th": "ลูกค้าคนหนึ่งเห็นชื่อ ที่อยู่ และเบอร์โทรของลูกค้าทุกคน ต้องแจ้งเหตุตาม PDPA ถ้าถูกใช้จริง",
+      "pdpa": {
+        "personal_data": true,
+        "kinds": [
+          "ชื่อ",
+          "ที่อยู่",
+          "เบอร์โทร"
+        ]
+      },
+      "evidence": "GET /orders/1002 ด้วย session ของลูกค้า 1001 ได้ 200 และข้อมูลของลูกค้า 1002 (รันใน docker-sandbox)",
+      "missing": null,
+      "check_plan": null,
+      "reject_reason": null,
+      "fix": "เพิ่มเงื่อนไข customer_id = ผู้ใช้ปัจจุบัน ใน getOrder และคืน 404 เมื่อไม่ใช่เจ้าของ",
+      "verified_by": "verifier-1",
+      "hunted_by": "hunter-auth",
+      "coverage_ids": [
+        "C-1"
+      ]
+    }
+  ]
+}
