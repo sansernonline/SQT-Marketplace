@@ -33,6 +33,17 @@ graders:
     pattern: "120 ?วัน"
     match: contains
     target: last_message
+  # ข้อเท็จจริงที่ skill มีแต่รอบไม่มี skill มักพลาด (กรมอนามัย 8 ครั้ง · เงินสงเคราะห์บุตร 1,000 บาท) เก็บไว้เป็น regex ให้ Δ ยังวัดได้
+  - name: anc-8-visits
+    type: regex
+    pattern: "8 ?ครั้ง"
+    match: contains
+    target: last_message
+  - name: child-allowance-1000
+    type: regex
+    pattern: "1,?000 ?บาท ?(/ ?|ต่อ ?)เดือน"
+    match: contains
+    target: last_message
   # เกณฑ์ llm แยกตามเรื่อง · เดิมรวม 6 ข้อแบบครบทุกข้อ ตก 0/3 ทั้ง 2 รอบเพราะขาดคำว่า "ชัก" และข้อ "ไม่แต่งตัวเลข" ที่ผู้ตัดสินตรวจไม่ได้ (2026-10-26)
   - name: danger-first
     type: llm
@@ -50,4 +61,3 @@ graders:
       2. สิทธิ์ประกันสังคมมาตรา 33 อย่างน้อยค่าคลอด 15,000 บาท และเงินชดเชยช่วงลาคลอด 50% ของค่าจ้าง 90 วัน
       3. แจ้งเกิดภายใน 15 วัน
       ตัวเลขอื่นที่ถูกต้องตามจริงไม่ทำให้ตก
-
