@@ -16,6 +16,8 @@ import tempfile
 from pathlib import Path
 
 HEX = re.compile(r"#[0-9a-fA-F]{6}\b")
+# รูปแบบสีที่สคริปต์ไม่แปลง: hex 3 · 4 · 8 หลัก · rgb() hsl() · ชื่อสี
+OTHER = re.compile(r'#[0-9a-fA-F]{8}\b|#[0-9a-fA-F]{3,4}\b|\b(?:rgb|hsl)a?\(|(?:fill|stroke|stop-color)[=:]\s*"?(?!none|url|#|currentColor)[a-zA-Z]+')
 GREY = 0.04  # ความอิ่มต่ำกว่านี้ถือเป็นสีเทา
 
 
@@ -103,13 +105,21 @@ def main():
         if not HEX.fullmatch(a.hex):
             ap.error("--hex ต้องเป็นสี hex 6 หลัก เช่น #C2461A")
         a.hue = to_oklch(a.hex)[2]
-    if a.hue is None or not a.files:
-        ap.error("ต้องมีไฟล์ SVG และ --hue หรือ --hex")
+    if a.hue is None or not a.files or not math.isfinite(a.hue):
+        ap.error("ต้องมีไฟล์ SVG และ --hue (ตัวเลข) หรือ --hex")
+    missing = [str(f) for f in a.files if not f.is_file()]
+    if missing:
+        ap.error(f"ไม่พบไฟล์: {', '.join(missing)}")
     if not 0 <= a.squeeze <= 1:
         ap.error("--squeeze ต้องอยู่ระหว่าง 0 ถึง 1")
     a.out.mkdir(parents=True, exist_ok=True)
     for f in a.files:
-        (a.out / f.name).write_text(recolor(f.read_text(encoding="utf-8"), a.hue, a.squeeze), encoding="utf-8")
+        svg = f.read_text(encoding="utf-8")
+        if OTHER.search(svg):
+            print(f"เตือน {f.name}: มีสีแบบอื่นนอกจาก #rrggbb ส่วนนั้นไม่ถูกเปลี่ยน")
+        if mean_hue(set(HEX.findall(svg))) is None:
+            print(f"เตือน {f.name}: ไม่มีสีสดให้เปลี่ยน")
+        (a.out / f.name).write_text(recolor(svg, a.hue, a.squeeze), encoding="utf-8")
     print(f"เปลี่ยนสี {len(a.files)} ไฟล์เป็นเฉด {a.hue:.0f} ลง {a.out} · เปิดภาพดูเองทุกครั้ง แล้วรัน icon_check.py")
 
 
