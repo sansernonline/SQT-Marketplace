@@ -18,7 +18,7 @@ All fonts below are distributed under the **SIL Open Font License 1.1** (OFL): f
 
 ## Notes that trip people up
 
-- **Sarabun (Google Fonts) is not TH Sarabun New / TH SarabunPSK.** The TH versions belong to the 13 national fonts (ฟอนต์แห่งชาติ) released through Software Industry Promotion Agency (SIPA) under their own free licence (รอยืนยัน licence terms). They are the government-document fonts, a different design with a smaller visual size — do not mix them in one layout.
+- **Sarabun (Google Fonts) is not TH Sarabun New / TH SarabunPSK.** The TH versions belong to the 13 national fonts (ฟอนต์แห่งชาติ) released through Software Industry Promotion Agency (SIPA) under their own free licence (checked 2026-10-26 from secondary sources only: most of the 13 use the DIP-SIPA licence, which allows free use, copying and adapting but not selling the font on its own, and adapting needs written notice to DIP and SIPA plus a new font name; TH Sarabun New is GPL-2.0-or-later with a font exception for documents that embed it; no official SIPA licence text was reachable, so read the licence file in the download before shipping). They are the government-document fonts, a different design with a smaller visual size — do not mix them in one layout.
 - Weight names differ between families: Kanit Medium looks heavier than Sarabun Medium. Pair by eye at the real size.
 - Under about 14 px on screen, or 7 pt in print, looped Thai reads better than loopless.
 - Free-font sites that repackage files sometimes strip the licence or add their own terms — download from Google Fonts, the foundry's GitHub, or the official site, and keep the `OFL.txt` in `type/licences/`.

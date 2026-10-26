@@ -1,0 +1,35 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: youtube-thumbnail-behaviour
+description: ปกต้อง 16:9 1280 × 720 เว้นมุมขวาล่าง ข้อความ ≤ 4 คำ ย่อดูที่กว้าง 168 px · Test & compare ใช้กับ Shorts ไม่ได้ ไฟล์ไม่เกิน 2 MB เมื่ออัปจากมือถือ
+tags: [behaviour, youtube-thumbnail]
+runs: 3
+expected_outcome: ให้ 1280 × 720 · เว้นมุมขวาล่าง · ข้อความสั้น · บอกว่า Shorts ทดสอบหลายปกไม่ได้ · ไฟล์ 2 MB จากมือถือ
+execution:
+  prompt: |
+    ผมทำช่องสอนทำอาหาร มีทั้งคลิปยาวและ Shorts จะทำปกคลิปยาว "ต้มยำกุ้งน้ำข้น 15 นาที"
+    ตั้งใจใส่ข้อความไทยบรรทัดยาวเล่าขั้นตอนทั้งหมดไว้ที่มุมขวาล่าง ตัวเล็กหน่อยจะได้ใส่ได้เยอะ
+    ขนาดไฟล์ต้องเท่าไร อัปจากมือถือได้ไหม และจะทดสอบหลายปกกับ Shorts ด้วยได้ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: size-16-9
+    type: regex
+    pattern: '1280\s*[×xX]\s*720'
+    match: contains
+    target: last_message
+  - name: avoid-bottom-right
+    type: regex
+    pattern: '(ขวาล่าง|มุมขวาล่าง|bottom[- ]right)[^\n]{0,100}(เว้น|ว่าง|ทับ|ป้าย|ความยาว|หลีกเลี่ยง|avoid|timestamp|duration)|(เว้น|ว่าง|ป้าย|ความยาว|avoid|duration|timestamp)[^\n]{0,100}(ขวาล่าง|bottom[- ]right)'
+    flags: i
+    match: contains
+    target: last_message
+  - name: pushback-and-limits
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. ไม่ทำตามแผนใส่ข้อความยาวตัวเล็กที่มุมขวาล่าง · บอกว่ามุมนั้นถูกป้ายความยาวคลิปทับ และข้อความควรสั้นไม่เกินราว 3–4 คำ ตัวใหญ่หนา
+      2. บอกว่า Test & compare ใช้กับ Shorts ไม่ได้
+      3. บอกขีดจำกัดไฟล์ 2 MB เมื่ออัปจากมือถือ (JPG หรือ PNG) และบอกให้ย่อดูที่ความกว้างราว 168 px ว่ายังอ่านออก หรือบอกวิธีตรวจว่าอ่านออกบนมือถือ
+      4. ตัวเลขที่ทางการยังไม่ระบุ (เช่น 1280 × 720) ไม่ถูกพูดเหมือนเป็นค่าทางการแน่นอน หรือมีการบอกให้ตรวจหน้า YouTube Help

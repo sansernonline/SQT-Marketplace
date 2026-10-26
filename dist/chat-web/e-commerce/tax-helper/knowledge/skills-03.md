@@ -122,8 +122,9 @@ Changes in force from **7 Dec 2568** (พ.ร.บ.คุ้มครองแร
 ## 4. Probation, notice, pay in lieu
 
 - **Probation** — the Act sets no length. A probationer is an employee: dismissal still needs notice (ม.17). Service of **120 days or more** earns severance even during probation — hence "119-day probation" contracts.
-- **Notice (ม.17)** — for an indefinite-term contract, give written notice **at or before a pay day** so it takes effect on the **next pay day**; never more than 3 months is required. A fixed-term contract ends on its date without notice.
-- **Pay in lieu (ม.17/1)** — dismiss now and pay the wages up to the date the notice would have taken effect.
+- **Notice (ม.17)** — a fixed-term contract ends on its date without notice (para 1). For a contract with no fixed term, either side gives written notice **on or before a pay day** so the contract ends on the **next pay day**; no more than 3 months' notice is required (para 2). If the employer gives no reason in the dismissal letter, it cannot rely on ม.119 grounds afterwards (para 3). Paras 1-3 checked against the gazette text of the 2541 Act.
+- **Pay in lieu (ม.17 para 4 · ม.17/1)** — the employer may pay the wages due up to the notice end date and let the employee leave at once (ม.17 para 4). If it dismisses without notice, ม.17/1 requires a sum equal to the wages the employee would have earned from the leaving date to the date the termination would have taken effect, paid on the leaving date.
+- Sources, checked 2026-10-26: ม.17 — Royal Gazette vol. 115 part 8 ก, 20 Feb 2541, p. 6 (copy of ratchakitcha.soc.go.th held by web.archive.org); ม.17/1 — Labour Protection Act (No. 7) B.E. 2562 as quoted by the Secretariat of the Senate, senate.go.th/assets/portals/93/fileups/272/files/Sub_Jun/12know/k147.pdf p. 141. Not yet checked: the gazette of No. 7 itself, and that Nos. 8 and 9 left ม.17 unchanged.
 - On termination also pay: unused annual leave pro rata (ม.67), outstanding wages and OT within 3 days (ม.70).
 
 ## 5. Severance pay (ม.118)

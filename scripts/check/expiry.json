@@ -1,8 +1,8 @@
 {
   "_about": "ข้อเท็จจริงที่หมดอายุตามปฏิทิน · validate-marketplace.mjs เตือนเมื่อเลยวันหรือเหลือไม่ถึง 30 วัน และล้มเมื่อไฟล์ที่อ้างไม่มี · ถึงวันแล้วให้ตรวจแหล่งทางการใหม่ แก้ไฟล์ แล้วลบหรือเลื่อนแถว · date ใช้ ค.ศ. · quote = ข้อความที่ต้องพบในไฟล์ (กันแถวที่อ้างเกินกว่าที่ไฟล์เขียน)",
   "facts": [
-    {"date": "2026-10-28", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "ประชุม กนง. ดอกเบี้ยนโยบาย 1.00% และ MRR ของธนาคารที่ยกตัวอย่างอาจเปลี่ยน", "quote": "1.00% since 25 Feb 2569"},
-    {"date": "2026-11-13", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรออมพลัส ปีงบ 2570 รอบ 1 ปิดขาย (ตัวอย่างอัตรา 1.80/2.80%)", "quote": "ออมพลัส fiscal year 2570 round 1"},
+    {"date": "2026-10-29", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "ประชุม กนง. 28 ต.ค. (ครั้งถัดไป 23 ธ.ค.) · ดอกเบี้ยนโยบาย 1.00% และ MRR ของธนาคารที่ยกตัวอย่างอาจเปลี่ยน", "quote": "1.00% since 25 Feb 2569"},
+    {"date": "2026-12-15", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรออมพลัส ปีงบ 2570 รอบ 1 ปิดขาย (ตัวอย่างอัตรา 1.80/2.80%)", "quote": "ออมพลัส fiscal year 2570 round 1"},
     {"date": "2026-11-16", "file": "plugins/trading-finance/skills/position-sizing/SKILL.md", "what": "SET เปลี่ยนช่วงราคา (tick) ของหุ้น 5–50 บาท · ลบตาราง tick เดิมหลังวันนี้", "quote": "16 Nov 2569"},
     {"date": "2026-12-31", "file": "plugins/trading-finance/skills/debt-payoff/SKILL.md", "what": "ขั้นต่ำบัตรเครดิต 8% ใช้ถึงสิ้นปี 2569", "quote": "kept at 8% until 31 Dec 2569"},
     {"date": "2026-12-31", "file": "plugins/trading-finance/skills/tax-deduction-planner/references/deductions-2569.md", "what": "ลดหย่อนปีภาษี 2569 สิ้นสุด · ทำไฟล์ปีภาษี 2570", "quote": "2569 (income Jan–Dec 2026"},

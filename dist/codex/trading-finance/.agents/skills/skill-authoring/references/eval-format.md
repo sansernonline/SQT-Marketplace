@@ -71,7 +71,8 @@ graders:
 
 ## สภาพแวดล้อมตอนรัน
 
-- แต่ละรอบ = home ใหม่ · workspace ใหม่ · `claude -p` ที่โหลดเฉพาะ plugin นี้ · ไม่มี CLAUDE.md ของเครื่อง · ไม่มี auto memory · ไม่มี plugin อื่น — `superuser` ที่สาขา `dependencies` ไว้จึงไม่ถูกโหลดเอง (ยังไม่ได้ตรวจว่า `--plugin-dir` ซ้อนได้ใน eval) · eval ของ skill กลางจึงรันที่ `plugins/superuser` โดยตรง
+- แต่ละรอบ = home ใหม่ · workspace ใหม่ · `claude -p` ที่โหลดเฉพาะ plugin นี้ · ไม่มี CLAUDE.md ของเครื่อง · ไม่มี auto memory · ไม่มี plugin อื่น · eval ของ skill กลางจึงรันที่ `plugins/superuser` โดยตรง
+- **plugin ที่มี `dependencies` โหลดไม่ขึ้นทั้งตัวใน eval** (`plugin_errors: dependency-unsatisfied` ใน trace ที่ `--keep-temp` เก็บไว้) · ไม่มีตัวเลือกให้โหลด dependency · ผลคือรอบมี plugin ไม่มี skill ของเราเลย เคส trigger เปิด skill ได้ 0/3 ทุกเคส และ Δ ใกล้ 0 · ตรวจจริง 2026-10-26 Claude Code 2.1.310 (รันครบ 5 ชุด 59 เคส เสีย 35.39 ดอลลาร์ก่อนรู้) · **วิธีรัน:** คัดลอก plugin ไปโฟลเดอร์ชั่วคราว ลบช่อง `dependencies` ใน `.claude-plugin/plugin.json` ของสำเนา แล้วรัน eval ที่สำเนา (ลอง 1 เคสแล้ว skill ถูกเปิด) · skill กลางของ superuser จะไม่อยู่ในรอบนั้น · ก่อนรันทั้งชุดให้รันเคส trigger 1 เคส `--runs 1 --ablation none` แล้วดูว่า `skill-opened` ผ่าน
 - เครื่องมือที่ให้โดยไม่ต้องขอ: อ่านอย่างเดียว (`Read` `Glob` `Grep` `Skill` `Agent` `TodoWrite` …) · เพิ่มด้วย `--allow-tools Write Edit "Bash(npm test *)"` · Bash รันใต้ sandbox ของระบบ — **Windows ไม่มี sandbox ให้ใช้ WSL2** · โฟลเดอร์ `evals/` ถูกซ่อนจาก agent
 
 ## คำสั่งและ exit code

@@ -36,7 +36,7 @@ DPA covers up to **1,000,000 baht per depositor per bank**, all Thai-baht saving
 
 - Sold in rounds. Each round sets its own rates, tenors, minimums, caps and channels — **read the round's "รู้ก่อนซื้อ" sheet from PDMO before quoting any number.**
 - Channels: the เป๋าตัง app (สบม. wallet) and agent banks / Bond Connect, depending on the round.
-- Example round, for shape only: ออมพลัส fiscal year 2570 round 1 — 3 years 1.80%, 10 years 2.80% fixed; wallet sale 26 Oct–13 Nov 2569, bank channel 27–29 Oct 2569 (bot.or.th sale page, checked 2026-10-26). The wallet round of July 2569 sold from 100 baht in steps of 100, capped at 3 million baht a time and 50 million per person, and could be transferred only from 31 Jan 2570. Caps change every round (an earlier wallet round capped 20 million).
+- Example round, for shape only: ออมพลัส fiscal year 2570 round 1 — 3 years 1.80%, 10 years 2.80% fixed; wallet sale 26 Oct–13 Nov 2569, bank channel 27–29 Oct 2569 (bot.or.th sale page; rates and 26 Oct start rechecked in news 2026-10-26: https://www.naewna.com/n/?p=109617 , https://infoquest.co.th/2026/662598 — the wallet quota was reported as 2,000 million of a 4,000 million total, so read the PDMO sheet). The wallet round of July 2569 sold from 100 baht in steps of 100, capped at 3 million baht a time and 50 million per person, and could be transferred only from 31 Jan 2570. Caps change every round (an earlier wallet round capped 20 million).
 - Interest is 15% withheld each payment.
 
 ตรวจล่าสุด 2026-10-26 · แหล่ง: https://www.bot.or.th/th/our-services/bond-and-debt-securities-services/Saving-Bond-Sale.html , https://backend.pdmo.go.th/uploads/documents/2026/Jul/20260723165731_8729.pdf (รู้ก่อนซื้อ รุ่นวอลเล็ต ก.ค. 2569) · รุ่นนี้มีแหล่งทางการเป็นหลัก สื่อยืนยัน 1 แหล่ง (infoquest.co.th/2026/662598) จึงถือเป็นตัวอย่าง ไม่ใช่ตัวเลขที่ใช้ซื้อ (รอยืนยัน ทุกรุ่น)
@@ -111,7 +111,7 @@ General information, not financial advice; every fee and rate is confirmed with 
 | MOR (Minimum Overdraft Rate) | Overdrafts to prime large companies |
 | BOT policy rate | Bank of Thailand rate; banks move MRR with it but set their own levels |
 
-Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBank 6.58% and ttb 7.105% (from 2 Mar 2569). BOT policy rate 1.00% since 25 Feb 2569; the next meeting is 28 Oct 2569, so read the bank's current rate table on the day.
+Each bank sets its own MRR. Examples: Bangkok Bank 6.50% (from 26 Feb 2569), KBank 6.58% and ttb 7.105% (from 2 Mar 2569, rechecked on ttbbank.com 2026-10-26). BOT policy rate 1.00% since 25 Feb 2569 (held at 1.00% on 26 Aug 2569 per Naewna and Kaohoon news; BOT meeting page lists the next meeting on 28 Oct 2569 and then 23 Dec 2569), so read the bank's current rate table on the day.
 
 ตรวจล่าสุด 2026-10-26 · แหล่ง: https://www.bangkokbank.com (ตารางอัตราดอกเบี้ยเงินให้สินเชื่อ 26 ก.พ. 2569) , https://www.kasikornbank.com/th/rate/LendingPDF/lending-02032026-th.pdf , https://www.ttbbank.com/th/rates/loan-interest-rates , https://www.infoquest.co.th/2026/572846 · ดอกเบี้ยนโยบาย https://www.bot.or.th/th/our-roles/monetary-policy/mpc-meeting.html , https://www.thaipbs.or.th/news/content/509928 · MRR ของแต่ละธนาคารมาจากตารางของธนาคารเองแหล่งเดียวต่อธนาคาร (เป็นแหล่งทางการ)
 
