@@ -4,7 +4,7 @@ repo นี้มี AI หลายตัวแก้พร้อมกัน (
 
 ## ก่อนเริ่ม
 
-- อ่าน `.claude/superuser/CONTEXT.md` หัวข้อ "ความคืบหน้า" และ "รับงานต่อ"
+- อ่าน `.claude/superuser/CONTEXT.md` หัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ในโฟลเดอร์หลัก `SQT-Marketplace/` · `.claude/` ไม่อยู่ใน git (ผู้ใช้เลือก 2026-10-26) worktree ที่แตกจาก `main` จึงไม่มีไฟล์นี้ อ่านและแก้ที่ `../SQT-Marketplace/.claude/superuser/` เท่านั้น
 - รัน `git worktree list` ดูว่าตัวอื่นทำ branch ไหนอยู่ในโฟลเดอร์ไหน
 
 ## 1 ตัว 1 worktree

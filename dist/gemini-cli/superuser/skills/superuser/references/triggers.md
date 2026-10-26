@@ -31,6 +31,7 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | ผู้ใช้แก้เรื่องเดิมซ้ำ / อยากให้ทำแบบที่เขาชอบ / สั่งรวมบทเรียน | `repeated-mistakes-to-checks` / `owner-style-capture` / `session-lessons-to-skills` |
 | เอกสารที่คนเก็บไว้ใช้ (Markdown · Word · PDF) | `polished-document-style` · ตั้งชื่อไฟล์ → `document-naming` · คำย่อเยอะ → `spell-out-abbreviations` · ต้องดูออกแบบมา → `branded-document-design` · Markdown เป็น Word → `markdown-report-docx` (2 ตัวหลังอยู่ใน plugin `software-company`) |
 | เขียนไฟล์ชั่วคราว (ไฟล์ดึงข้อมูล · ตัวอย่าง · สคริปต์ใช้ครั้งเดียว) | `temp-file-discipline` |
+| เริ่มงานในโฟลเดอร์ใหม่ · ผู้ใช้ต้องพิมพ์ `gh pr merge` เอง หรืออยากให้ agent merge และลบ branch เอง · `~/.claude/CLAUDE.md` ไม่มีหรือเป็นรุ่นเก่า | `workspace-setup` (agent ตรวจและแก้ `.gitignore` เอง · สิทธิ์กับกฎประจำตัวให้ผู้ใช้กดรันบรรทัดเดียว) |
 | รูปในเอกสาร (ขั้นตอน · ระบบ · ผัง) / รูปในไฟล์ Markdown | `diagram-figures` / `markdown-visuals` (plugin `software-company`) |
 | สไลด์ / ภาพจริงในหน้าเว็บ สไลด์ หรือเอกสาร / ตั้งชื่อสินค้าหรือแบรนด์ | `presentation-design` (plugin `software-company`) / `image-generation` (plugin `graphic-design`) / `product-naming` (plugin `software-company`) |
 | เด็คเป็นไฟล์ .html เดียว นำเสนอจากเบราว์เซอร์ / มี .pptx แล้วอยากได้ .html มี animation | `html-slide-deck` / `pptx-to-html-deck` (plugin `software-company`) |

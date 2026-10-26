@@ -7,6 +7,7 @@
     { "pattern": "\\.pdf\\b|\\bpdf\\b", "skills": ["pdf", "human-writing"] },
     { "pattern": "\\.pptx\\b|powerpoint|สไลด์|\\bslides?\\b|\\bdeck\\b|พรีเซน", "skills": ["presentation-design", "pptx", "human-writing", "no-ai-look"] },
     { "pattern": "\\.xlsx\\b|\\bexcel\\b|สเปรดชีต|spreadsheet", "skills": ["xlsx"] },
+    { "pattern": "merge[^\\n]{0,30}(เอง|ไม่ต้อง(ขอ|ถาม))|ไม่ต้องขอ[^\\n]{0,20}(merge|pr|branch)|settings\\.local\\.json|/permissions|\\.gitignore[^\\n]{0,30}\\.claude", "skills": ["workspace-setup"] },
     { "pattern": "เปรียบเทียบ|ข้อดีข้อเสีย|ควรเลือก|ตัวไหนดี|แบบไหนดี|\\bvs\\.?\\s|\\bcompare\\b|trade-?offs?|pros and cons|which should", "skills": ["answer-shape"] },
     { "pattern": "โค้ด|\\bcode\\b|สคริปต์(?! ?พูด)|\\bscript\\b|ฟังก์ชัน|\\bfunction\\b|\\brefactor|\\bendpoint\\b", "skills": ["superuser:simplify", "lazy-coding", "readable-code"] },
     { "pattern": "python|\\.py\\b|fastapi|django|pandas", "skills": ["stack-python"] },
