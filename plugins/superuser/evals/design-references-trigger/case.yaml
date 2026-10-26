@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: design-references-trigger
+description: เจ้าของร้านขอออกแบบหน้าเว็บ ไม่เอ่ยชื่อ skill ต้องทำให้ design-references ถูกเปิด และเสนอค้นงานจริงก่อนออกแบบ
+tags: [trigger, design-references]
+runs: 3
+expected_outcome: เรียก Skill design-references แล้วเสนอเอาคำของโปรเจกต์ไปค้นในเว็บที่เก่งงานเว็บ (เช่น Awwwards · Land-book) พร้อมลิงก์ ก่อนเลือกสีหรือเลย์เอาต์
+execution:
+  prompt: |
+    ผมเปิดร้านกาแฟ specialty เล็ก ๆ ในเชียงใหม่ อยากได้หน้าเว็บร้านที่ดูทันสมัย ไม่เหมือนเว็บทั่วไป
+    ช่วยคิดหน้าตากับโทนสีให้หน่อย
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-references"'
+    min: 1
+    arm: with-only
+  - name: names-design-sites
+    type: regex
+    pattern: 'Awwwards|Godly|Land-book|Lapa|SiteInspire|One Page Love|Dribbble|Behance'
+    flags: i
+    match: contains
+    target: last_message
+  - name: references-before-design
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อมีครบ 2 เรื่อง:
+      1. เสนอค้นงานจริงหรือเว็บตัวอย่างก่อน แล้วค่อยเลือกสีหรือเลย์เอาต์ ไม่ได้ฟันธงสีจากความรู้สึก
+      2. สีหรือธีมที่เสนอผูกกับงานต้นแบบที่ค้นมา หรือบอกว่าจะถอดสีจากงานที่ผู้ใช้เลือก
