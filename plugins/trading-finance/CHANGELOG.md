@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.13.2 — 2026-10-26
+
+- eval: `home-refinance-trigger` และ `rebalance-and-dca-behaviour` แยกเกณฑ์ `llm` ตามเรื่อง (เดิมตก 0/3 ทั้ง 2 แขน) · `rmf-skip-limit` แยกออกมาเพราะจับความผิดจริงที่ agent ตอบว่าหยุดซื้อ RMF 2 ปีได้
+
 ## 0.13.1 — 2026-10-26
 
 - eval แบบ behaviour ให้ skill ใหม่ 4 ตัว (`bonds-and-deposits` · `credit-bureau` · `home-refinance` · `rebalance-and-dca`) · แถว hook router ของทั้ง 4 ตัวอยู่ใน `superuser`
