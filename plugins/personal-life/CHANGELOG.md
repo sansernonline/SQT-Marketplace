@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.15.3 — 2026-10-26
+
+- eval: `flood-prep-behaviour` และ `pregnancy-and-baby-behaviour` แยกเกณฑ์ `llm` ตามเรื่องและย้ายตัวเลขไป regex (เดิมตก 0/3 ทั้ง 2 แขนเพราะข้อละเอียดเกินและข้อ "ไม่แต่งตัวเลข") · `household-bills-behaviour` เปลี่ยนข้อ "ไม่แต่งอัตราค่าไฟ" เป็นสิ่งที่เห็นได้ในคำตอบ
+
 ## 0.15.2 — 2026-10-26
 
 - eval แบบ behaviour ให้ `estate-and-will` · `flood-prep` · `pregnancy-and-baby` (ไม่ฟันธงข้อพิพาทมรดก · ปิดเบรกเกอร์ก่อนน้ำถึงและไม่สัญญาเงินเยียวยานอกช่วง · ไม่วินิจฉัยหรือสั่งยาตอนตั้งครรภ์) · แถว hook router อยู่ใน `superuser`
