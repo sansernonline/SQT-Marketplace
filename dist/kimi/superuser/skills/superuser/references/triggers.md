@@ -39,6 +39,7 @@ skill เอกสารหลัก (`polished-document-style` · `document-nam
 | เขียนสคริปต์ให้คนพูดหน้ากล้อง (คลิป influencer · รีวิว · พิธีกร · voiceover) | `speaking-script` (plugin `graphic-design`) — ภาพนำหรือคลิปตัดต่อที่ไม่มีคนพูด → `video-script-to-clip` |
 | เสียงบรรยายจากสคริปต์โดยไม่อัดเอง · ตัดต่อด้วยคำสั่ง · ซับไทยเป็นไฟล์ | `video-editing` (รวมเสียงบรรยายจากสคริปต์) · `subtitles-th` (plugin `graphic-design`) |
 | รูปสินค้าลง marketplace · ส่งไฟล์โรงพิมพ์หรือร้านป้าย · ปกคลิป YouTube | `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` (plugin `graphic-design`) |
+| ไอคอนในแอปไม่เข้ากันหรือไม่สวย · ไอคอนแอป · favicon · ไอคอน plugin · เครื่องหมายโลโก้แบบรูป | `icon-design` (plugin `graphic-design`) · ไอคอนแบรนด์ขอตัวอย่างที่ผู้ใช้ชอบก่อนเสมอ |
 | เงินฝากประจำ พันธบัตร หุ้นกู้ · เครดิตบูโร · รีไฟแนนซ์บ้าน · DCA และปรับพอร์ต | `bonds-and-deposits` · `credit-bureau` · `home-refinance` · `rebalance-and-dca` (plugin `trading-finance`) |
 | คนในบ้านเสียชีวิตหรือทำพินัยกรรม · น้ำท่วม · ตั้งครรภ์และลูกแรกเกิด | `estate-and-will` · `flood-prep` · `pregnancy-and-baby` (plugin `personal-life`) |
 | หยุดงานไว้ หรือรับงานที่ค้างต่อ | playbook `pickup-and-pause` + `handoff` |
