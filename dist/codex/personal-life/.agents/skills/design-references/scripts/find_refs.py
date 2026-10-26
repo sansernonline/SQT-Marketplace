@@ -44,7 +44,7 @@ TH = {
     "สตาร์ทอัพ": "startup", "สตาร์ทอัป": "startup", "ร้านตัดผม": "barber", "ร้านเสริมสวย": "beauty salon", "ส่งของ": "delivery",
     "ตลาด": "marketplace", "ชุมชน": "community", "องค์กร": "corporate", "โรงงาน": "manufacturing", "เกษตร": "agriculture",
     "พลังงาน": "energy", "ประชุม": "conference event", "สัมมนา": "seminar event", "งานวิ่ง": "running event", "คอนเสิร์ต": "concert",
-    "เมนู": "menu", "ป้าย": "signage", "นามบัตร": "business card", "ปก": "cover", "โบรชัวร์": "brochure", "แคตตาล็อก": "catalog",
+    "เมนู": "menu", "ป้ายร้าน": "signage", "นามบัตร": "business card", "หน้าปก": "cover", "โบรชัวร์": "brochure", "แคตตาล็อก": "catalog",
 }
 
 
