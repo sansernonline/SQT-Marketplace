@@ -12,6 +12,7 @@
     {"date": "2027-01-31", "file": "plugins/trading-finance/skills/bonds-and-deposits/SKILL.md", "what": "พันธบัตรผ่านวอลเล็ตรอบ ก.ค. 2569 เริ่มโอนเปลี่ยนมือได้", "quote": "31 Jan 2570"},
     {"date": "2027-04-26", "file": "plugins/graphic-design/skills/social-formats/references/platform-sizes.md", "what": "ขนาดและพื้นที่ปลอดภัยของ TikTok YouTube LINE X ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
     {"date": "2027-04-26", "file": "plugins/graphic-design/skills/line-richmenu/SKILL.md", "what": "เพดานของ rich menu API ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
+    {"date": "2027-04-26", "file": "plugins/software-company/skills/design-direction-lookup/data/looks.csv", "what": "ทบทวน look พาเลต และคู่ฟอนต์ให้ตรงเทรนด์ปัจจุบัน", "quote": "quiet-utility,เครื่องมือเงียบ,quiet utility"},
     {"date": "2027-04-26", "file": "plugins/graphic-design/skills/youtube-thumbnail/SKILL.md", "what": "ขนาด thumbnail และ Test & compare ตรวจทุก 6 เดือน", "quote": "ครั้งหน้า 2027-04-26"},
     {"date": "2027-05-15", "file": "plugins/personal-life/skills/flood-prep/SKILL.md", "what": "เงินช่วยน้ำท่วม 9,000 บาทครอบเฉพาะ 15 พ.ค.–30 ก.ย. 2569 · ตรวจเกณฑ์ฤดูฝนใหม่", "quote": "Cabinet flat payment 2569 | 9,000 บาท"},
     {"date": "2027-06-30", "file": "plugins/trading-finance/skills/home-refinance/SKILL.md", "what": "มาตรการค่าจดจำนอง 0.01% สิ้นสุด 30 มิ.ย. 2570", "quote": "0.01% (homes ≤ 7 million baht, until 30 Jun 2570"},
