@@ -28,7 +28,7 @@
 | Android adaptive | เลเยอร์ละ 108×108dp · เนื้อหาหลักอยู่ใน 66×66dp กลาง (ขั้นต่ำ 48) · ต้องมีเลเยอร์ monochrome สำหรับ themed icon | ห้ามใส่ mask หรือเงาในไฟล์ OEM เป็นคนตัด | Android Developers |
 | Windows | อย่างน้อย 16 · 24 · 32 · 48 · 256 · ไฟล์ `targetsize-N` แบบ unplated ทั้งธีมมืดและสว่าง ไม่งั้นระบบใส่แผ่นรอง | — | Microsoft Learn (แก้ 2026-08-05) |
 | เว็บ | `favicon.ico` 32 (เพิ่ม 16 ถ้า 32 ย่อแล้วเบลอ) · `icon.svg` รองรับธีมมืดด้วย media query · `apple-touch-icon.png` 180 มี padding และสีพื้น · `icon-192.png` · `icon-512.png` · maskable 512 ลายอยู่ใน 409 กลาง | Google Search ไม่รับ SVG อย่างเดียว ต้องมี PNG หรือ ICO · ขั้นต่ำ 8×8 แนะนำเกิน 48 | Evil Martians (Andrey Sitnik · 2026-01-21) · Google Search Central |
-| plugin ของ Claude Code | ช่อง `icon` ใน `plugin.json` ชี้ไฟล์รูปใน plugin เช่น `./logo.png` · ใช้แค่หน้ารายการตอน `claude.ai/directory/manage` Claude Code ไม่อ่าน | ขนาดที่ต้องใช้ไม่พบในเอกสาร (ยังไม่ได้ตรวจ) | code.claude.com plugins-reference · publish |
+| plugin ของ Claude Code | ช่อง `icon` ใน `plugin.json` ชี้ไฟล์รูปใน plugin เช่น `./logo.png` · ใช้แค่หน้ารายการตอน `claude.ai/directory/manage` Claude Code ไม่อ่าน | เอกสารไม่กำหนดขนาด รูปทรง หรือธีม (ตรวจ 2026-10-26) · ด่าน directory รับ PNG JPEG GIF WebP SVG · ทำต้นแบบ SVG แล้วส่งออก PNG 512 ไว้ก่อน ใช้กับ Raycast ได้ด้วย | code.claude.com plugins-reference · publish |
 
 ## แหล่ง
 
