@@ -45,8 +45,8 @@ def lint(path):
             problems.append(f"มี <{name}> · ไอคอนต้องเป็นรูปทรงล้วน แปลงตัวอักษรเป็น path ก่อน")
         style = el.get("style", "")
         sw = el.get("stroke-width") or (re.search(r"stroke-width:\s*([\d.]+)", style) or [None, None])[1]
-        if sw:
-            info["strokes"].add(float(sw))
+        if sw and NUM.search(sw):
+            info["strokes"].add(float(NUM.search(sw)[0]))  # รับ "2px" ด้วย
         for attr in ("d", "x", "y", "cx", "cy", "x1", "y1", "x2", "y2", "points", "width", "height", "r"):
             if el.get(attr):
                 info["coords"] += [float(n) for n in NUM.findall(el.get(attr))]
