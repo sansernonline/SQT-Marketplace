@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.6.7 — 2026-10-26
+
+- `parallel-attempts-pick-best` ข้อ 0: งานที่ตัดสินด้วยรสนิยมต้องขอตัวอย่างที่ผู้ใช้ชอบก่อนแข่ง · hook router และ `triggers.md` แถว `icon-design`
+
 ## 3.6.6 — 2026-10-26
 
 - `workspace-setup`: `.gitignore` ของทุกโปรเจกต์ใส่ `_to_delete/` ด้วย (self-test 7/7)

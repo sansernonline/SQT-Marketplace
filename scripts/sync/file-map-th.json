@@ -84,7 +84,10 @@
     "evals/credit-bureau-behaviour/case.yaml": "เคส eval: ถูกปฏิเสธสินเชื่อบ้านและมีคนรับลบประวัติ ต้องบอกว่าไม่มีแบล็กลิสต์ ตรวจฟรีภายใน 30 วัน และการรับลบประวัติคือมิจฉาชีพ",
     "evals/home-refinance-behaviour/case.yaml": "เคส eval: ผ่อนบ้านยังไม่ครบ 3 ปีแต่อยากย้ายพรุ่งนี้ ต้องคิดค่าปรับ ค่าจดจำนอง อากร และให้เทียบรีเทนชั่นกับอัตราหลังโปร",
     "evals/rebalance-and-dca-behaviour/case.yaml": "เคส eval: พอร์ตเบี้ยวจากเป้า 60/40 และอยากขาย RMF ต้องคำนวณส่วนต่าง 120,000 ห้ามขาย RMF ก่อนกำหนด และให้เติมด้วย DCA ก่อน",
-    "evals/RESULTS.md": "ผล eval ที่รันจริงของ plugin นี้ เทียบรอบมี skill กับไม่มี skill พร้อมวันที่ รุ่น และค่าใช้จ่าย"
+    "evals/RESULTS.md": "ผล eval ที่รันจริงของ plugin นี้ เทียบรอบมี skill กับไม่มี skill พร้อมวันที่ รุ่น และค่าใช้จ่าย",
+    "evals/icon-design-trigger/case.yaml": "เคส eval: เจ้าของแอปบ่นว่าไอคอนไม่เข้ากัน ไม่เอ่ยชื่อ skill ต้องทำให้ icon-design ถูกเปิด และแนะนำชุดไอคอนเดียวที่ใบอนุญาตใช้ได้",
+    "evals/icon-design-behaviour/case.yaml": "เคส eval: ขอไอคอนแอปทุกแพลตฟอร์ม ต้องขอตัวอย่างที่ชอบก่อน บอกขนาดกับ safe zone และค้านการใส่ชื่อแอปหรือเงานูนในไอคอน",
+    "evals/icon-design-regression/case.yaml": "เคส eval: ขอไอคอน plugin 3 แนว ต้องไม่เริ่มเขียน SVG ทันที ขอตัวอย่างที่ชอบก่อน และบอกข้อจำกัดของการวาดด้วยโค้ด (เห็นจริง 2026-10-26)"
   },
   "superuser_files": {
     "references/code-extensions.md": "ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser",
@@ -433,6 +436,7 @@
     "workspace-setup": "ตั้งโปรเจกต์ให้ agent ทำงานจนจบ: ignore .claude และ .claude-plugin · สิทธิ์ merge และลบ branch · กฎประจำตัวใน ~/.claude/CLAUDE.md",
     "worktree-and-branch": "แยกที่ทำงานให้ agent ด้วย git worktree แล้วปิด branch ให้จบ (merge · PR · ทิ้ง) พร้อมหลักฐาน",
     "year-end-filing": "ไทม์ไลน์ยื่นสิ้นปีของบริษัท (ประชุมผู้ถือหุ้น · บอจ.5 · e-Filing · ภ.ง.ด.50)",
-    "youtube-thumbnail": "ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare)"
+    "youtube-thumbnail": "ภาพปกคลิป YouTube ที่อ่านออกบนมือถือ และการทดสอบหลายปก (Test & compare)",
+    "icon-design": "ไอคอนในหน้าจอจากชุดฟรีชุดเดียว และไอคอนแอป favicon โลโก้ที่เริ่มจากตัวอย่างที่ผู้ใช้ชอบ พร้อมสคริปต์ตรวจ"
   }
 }

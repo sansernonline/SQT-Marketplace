@@ -1,0 +1,33 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: icon-design-trigger
+description: เจ้าของแอปบ่นว่าไอคอนในแอปไม่สวยและดูไม่เข้ากัน ไม่เอ่ยชื่อ skill ต้องทำให้ icon-design ถูกเปิด และแนะนำให้ใช้ชุดไอคอนเดียวที่ใบอนุญาตใช้ได้
+tags: [trigger, icon-design]
+runs: 3
+expected_outcome: เรียก Skill icon-design แล้วแนะนำชุดไอคอนฟรีชุดเดียวทั้งแอป (เช่น Lucide · Tabler · Material Symbols) พร้อมบอกใบอนุญาต ไม่เสนอวาดไอคอนใหม่ทั้งชุดเอง
+execution:
+  prompt: |
+    แอปจองคิวร้านตัดผมของผม ไอคอนเมนูแต่ละตัวมาจากคนละที่ บางตัวเส้นบาง บางตัวทึบ ดูไม่เข้ากันเลย
+    อยากให้ไอคอนทั้งแอปดูเป็นชุดเดียวกันและสวยขึ้น ควรทำยังไงดี
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?icon-design"'
+    min: 1
+    arm: with-only
+  - name: names-a-licensed-set
+    type: regex
+    pattern: 'Lucide|Tabler|Phosphor|Material Symbols|Heroicons|Iconoir|Fluent'
+    flags: i
+    match: contains
+    target: last_message
+  - name: one-set-and-licence
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อมีครบ 2 เรื่อง:
+      1. ให้ใช้ไอคอนชุดเดียวทั้งแอป และไอคอนที่ขาดให้ทำตามกฎของชุดนั้น (กริด น้ำหนักเส้น) ไม่ผสมหลายชุด
+      2. พูดถึงใบอนุญาตของชุดที่แนะนำ (เช่น MIT · ISC · Apache อย่างใดอย่างหนึ่งก็พอ)

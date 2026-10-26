@@ -1,5 +1,10 @@
 # Changelog — graphic-design
 
+## 0.13.0 — 2026-10-26
+
+- skill ใหม่ `icon-design`: ไอคอนในหน้าจอใช้ชุดฟรีชุดเดียวที่ใบอนุญาตใช้ได้ (Lucide · Tabler · Phosphor · Material Symbols · Fluent · ห้าม Remix และ SF Symbols ทำโลโก้) · ไอคอนแบรนด์ (แอป · favicon · plugin · เครื่องหมาย) ขอตัวอย่างที่ผู้ใช้ชอบก่อน หา metaphor 10 อย่าง เลือกเครื่องมือตามของที่มีในเครื่อง · ตัวเลขทุกแพลตฟอร์มใน `references/specs.md` · `scripts/icon_check.py` ตรวจ viewBox เส้น กริด แล้วทำหน้าเทียบทุกขนาดพร้อม blur test · eval 3 เคส · แหล่ง 28 หน้าเปิดอ่าน 2026-10-26
+- รอบแดง 2026-10-26: ไอคอน plugin 3 แนวที่ agent เขียน SVG ทีละเส้นโดยไม่มีตัวอย่างจากผู้ใช้ ผ่านตัวตรวจทุกตัวแต่ผู้ใช้ปฏิเสธทั้งหมด
+
 ## 0.12.3 — 2026-10-26
 
 - eval แบบ behaviour ให้ `marketplace-product-images` · `print-ready-files` · `youtube-thumbnail` · แถว hook router อยู่ใน `superuser`
