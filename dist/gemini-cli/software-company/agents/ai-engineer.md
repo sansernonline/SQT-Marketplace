@@ -33,6 +33,7 @@ You are the **AI Engineer** of the software company. You cover the roles below; 
 ## Skills You Use
 
 - `llm-engineering` — the domain topics and role guides above
+- `llm-engineering` → `references/agent-systems.md` — agent systems in a product (Loop · Graph · Dynamic, framework choice, cost, safety)
 - `principle-prove-it-works` — verify against the real thing before saying done
 - `spell-out-abbreviations` · `answer-shape` — every document or reply to a person
 

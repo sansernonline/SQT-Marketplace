@@ -11,8 +11,8 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 14 | 18 | 112 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 19 | 6 | 9 | 105 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 158 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 97 | 29 | 17 | 861 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 35 | 0 | 7 | 103 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 97 | 29 | 17 | 862 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 36 | 0 | 7 | 110 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 7 | 10 | 79 |
 
 ## โครงของทุก plugin
@@ -41,8 +41,9 @@ plugins/<plugin>/
 | ชนิด | ชื่อ | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ |
 |---|---|---|---|
 | skill | `adversarial-review-panel` | คณะรีวิว 3 มุมที่หาจุดอ่อนก่อนส่งงาน | — |
-| skill | `agent-patterns` | เลือกรูปแบบการทำงานของ agent (วางแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ) | `references/pattern-details.md` |
+| skill | `agent-patterns` | เลือกรูปแบบการทำงานของ agent (วางแผนและปรับแผน · ReAct · ตรวจตัวเอง · หลาย agent · รวมคำตอบ) และ workflow Loop · Graph · Dynamic | `references/pattern-details.md` |
 | skill | `answer-shape` | เลือกว่าคำตอบควรเป็นย่อหน้า ตาราง หรือแผนภาพ | — |
+| skill | `chat-prompt-workflows` | แม่แบบ prompt Loop · Graph · Dynamic ภาษาไทย คัดลอกไปวางในแชตได้ สำหรับคนที่ไม่เขียนโค้ด | `templates/dynamic.md` · `templates/graph.md` · `templates/loop.md` |
 | skill | `commit-log` | commit ทุกขั้นที่ทำเสร็จด้วยข้อความรูปแบบเดียวกัน ให้ git log เป็นบันทึกงาน | — |
 | skill | `context-budget` | ประหยัด context เมื่อต้องอ่านไฟล์เยอะหรือรันคำสั่งที่พิมพ์ผลยาว | `references/settings.md` · `references/windows-shell.md` |
 | skill | `decision-log` | จดทุกครั้งที่ agent ตัดสินใจเองในงานยาวหรืองานที่ไม่มีคนดู | — |
@@ -127,9 +128,9 @@ plugins/<plugin>/
 | `agents/tax-helper.md` | วางปฏิทินภาษีที่ต้องยื่น |
 | `agents/thai-doc-writer.md` | ร่างเอกสารธุรกิจไทย |
 
-### skill (33 + ของกลาง 34)
+### skill (33 + ของกลาง 35)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -226,9 +227,9 @@ plugins/<plugin>/
 | `agents/social-creator.md` | ทำโพสต์และโฆษณาโซเชียล |
 | `agents/video-editor.md` | ตัดต่อ ใส่ซับ และส่งออกวิดีโอ |
 
-### skill (19 + ของกลาง 34)
+### skill (19 + ของกลาง 35)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -297,9 +298,9 @@ plugins/<plugin>/
 | `agents/meeting-prep.md` | เตรียมและสรุปประชุม |
 | `agents/tech-mentor.md` | วางแผนเรียนและทำตัวอย่างโค้ด |
 
-### skill (42 + ของกลาง 34)
+### skill (42 + ของกลาง 35)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
@@ -451,9 +452,9 @@ plugins/<plugin>/
 | `agents/technical-writer.md` | เขียนคู่มือและเอกสาร |
 | `agents/ux-designer.md` | ออกแบบหน้าจอและ mockup |
 
-### skill (97 + ของกลาง 34)
+### skill (97 + ของกลาง 35)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 **หลักการทำงาน**
 
@@ -593,7 +594,7 @@ plugins/<plugin>/
 | `insurance-systems` | ซอฟต์แวร์ประกัน: กรมธรรม์ · ใบเสนอราคา · เคลม · ฉ้อฉล · รายงาน คปภ. | `references/agent-actuarial-engineer.md` · `references/agent-claims-processing-specialist.md` · `references/agent-insurance-compliance-officer.md` · `references/agent-insurance-engineer.md` · `references/agent-underwriting-analyst.md` · `references/claims-workflow-patterns.md` · `references/insurance-compliance.md` · `references/underwriting-models.md` |
 | `iot-systems` | อุปกรณ์เชื่อมต่อ: ลงทะเบียนเครื่อง · อัปเดต OTA · edge หรือ cloud · MQTT | `references/agent-edge-architect.md` · `references/agent-firmware-engineer.md` · `references/agent-iot-engineer.md` · `references/agent-mqtt-specialist.md` · `references/device-fleet-management.md` · `references/edge-computing-architecture.md` · `references/mqtt-protocol-patterns.md` |
 | `legal-document-systems` | ซอฟต์แวร์เอกสารกฎหมาย: ดึงข้อสัญญา · สร้างเอกสาร · e-signature · พ.ร.บ.ธุรกรรมฯ | `references/agent-contract-analyzer.md` · `references/agent-document-automation-engineer.md` · `references/agent-e-signature-specialist.md` · `references/agent-legal-compliance-officer.md` · `references/agent-legaltech-engineer.md` · `references/contract-parsing-patterns.md` · `references/document-automation-patterns.md` · `references/e-signature-compliance.md` |
-| `llm-engineering` | ระบบที่เรียก LLM: prompt · ผลแบบมีโครงสร้าง · RAG · embedding · วัดผล | `references/agent-llm-architect.md` · `references/agent-ml-engineer.md` · `references/agent-mlops-engineer.md` · `references/agent-prompt-engineer.md` · `references/llm-evaluation-patterns.md` · `references/prompt-engineering-patterns.md` · `references/rag-architecture.md` |
+| `llm-engineering` | ระบบที่เรียก LLM: prompt · ผลแบบมีโครงสร้าง · RAG · embedding · วัดผล | `references/agent-llm-architect.md` · `references/agent-ml-engineer.md` · `references/agent-mlops-engineer.md` · `references/agent-prompt-engineer.md` · `references/agent-systems.md` · `references/llm-evaluation-patterns.md` · `references/prompt-engineering-patterns.md` · `references/rag-architecture.md` |
 | `mobile-engineering` | งานวิศวกรรมแอปมือถือ (Kotlin · Swift · Flutter · React Native · ใช้งานออฟไลน์) | `references/agent-android-engineer.md` · `references/agent-aso-specialist.md` · `references/agent-cross-platform-engineer.md` · `references/agent-ios-engineer.md` · `references/app-store-optimization.md` · `references/mobile-architecture-patterns.md` · `references/mobile-performance.md` |
 | `smart-contracts` | สร้างงานบนบล็อกเชน: สัญญา Solidity / Solana · ตรวจสัญญา · DeFi | `references/agent-blockchain-architect.md` · `references/agent-defi-engineer.md` · `references/agent-smart-contract-developer.md` · `references/agent-tokenomics-designer.md` · `references/defi-patterns.md` · `references/smart-contract-testing.md` · `references/solidity-security.md` |
 | `developer-experience` | ประสบการณ์นักพัฒนา: เวลาถึง hello world · ข้อความ error · CLI · SDK | `references/agent-devrel-engineer.md` · `references/agent-docs-engineer.md` · `references/agent-dx-engineer.md` · `references/agent-sdk-builder.md` · `references/developer-experience.md` · `references/sdk-design-patterns.md` · `references/technical-content.md` |
@@ -672,7 +673,7 @@ plugins/<plugin>/
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ · ภาพประกอบ: [docs/plugins/superuser](plugins/superuser/README.md) · ต้นฉบับ: `plugins/superuser/`
 
-**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/README.md` (วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก scripts/evals/ ของ repo อย่างไร) · `evals/human-writing-behaviour/case.yaml` (เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้) · `evals/human-writing-regression/case.yaml` (เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน) · `evals/human-writing-trigger/case.yaml` (เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/guard-rules.json` (รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox) · `hooks/ui-scan-hook.mjs` (ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan)
+**ไฟล์ระดับ plugin:** `.claude-plugin/plugin.json` (ป้ายชื่อ plugin: ชื่อ · รุ่น · คำอธิบาย ที่ Claude Code อ่านตอนติดตั้ง) · `ADAPT.md` (วิธีคัดลอก SuperUser ไปปรับใช้กับ plugin สาขาใหม่) · `CHANGELOG.md` (บันทึกว่าแต่ละรุ่นเปลี่ยนอะไร) · `evals/README.md` (วิธีรัน eval รูปแบบทางการ (claude plugin eval) ของ skill ในชุด superuser และต่างจาก scripts/evals/ ของ repo อย่างไร) · `evals/chat-prompt-workflows-behaviour/case.yaml` (เคส eval: prompt ที่ได้มีเกณฑ์หยุด ผู้ตรวจยกหลักฐาน และเปิดแชตใหม่ตรวจอิสระ) · `evals/chat-prompt-workflows-regression/case.yaml` (เคส eval: กันอาการรอบแดง ผู้ตรวจไม่ยกหลักฐาน ไม่มีเกณฑ์หยุดเมื่อไม่คืบ) · `evals/chat-prompt-workflows-trigger/case.yaml` (เคส eval: โจทย์ขอ prompt หลายขั้นที่ต้องทำให้ chat-prompt-workflows ถูกเปิด) · `evals/human-writing-behaviour/case.yaml` (เคส eval: ภาษาไทยที่เขียนออกมาต้องไม่มีท่าที่ AI ชอบใช้) · `evals/human-writing-regression/case.yaml` (เคส eval: กันกฎเก่ากลับมา เช่น ตัดคำทำหน้าที่จนประโยคห้วน) · `evals/human-writing-trigger/case.yaml` (เคส eval: ข้อความที่ต้องทำให้ human-writing ถูกเปิด) · `hooks/core-rules.md` (กฎประจำตัวที่ hook ส่งให้ทุก session (สำเนาของ scripts/install/CLAUDE.global.md · sync-superuser สร้าง)) · `hooks/guard-rules.json` (รายการคำสั่งที่โมดูล guard บล็อกก่อนรัน (push · commit · reset --hard · ลบนอก _to_delete · แก้ settings) พร้อมเหตุผลและกฎที่มา) · `hooks/hooks.json` (บอก Claude Code ว่าจะเรียก hook ตอนไหน) · `hooks/skill-router.json` (คำในข้อความผู้ใช้ → ชื่อ skill ที่ hook บอกให้เปิดก่อนเริ่ม) · `hooks/superuser-hook.mjs` (hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox) · `hooks/ui-scan-hook.mjs` (ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan)
 
 ### agent (3)
 
@@ -682,9 +683,9 @@ plugins/<plugin>/
 | `agents/learning-reviewer.md` | ทบทวนวิธีทำงานและเสนอแก้ · ของกลาง |
 | `agents/reviewer.md` | ตรวจงานด้วยสายตาใหม่ · ของกลาง |
 
-### skill (1 + ของกลาง 34)
+### skill (1 + ของกลาง 35)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 **แกนทีม · ส่งต่องาน**
 
@@ -720,9 +721,9 @@ plugins/<plugin>/
 | `agents/risk-manager.md` | คำนวณขนาดไม้และความเสี่ยง |
 | `agents/trade-journal-coach.md` | หาจุดพลาดซ้ำจากบันทึกเทรด |
 
-### skill (23 + ของกลาง 34)
+### skill (23 + ของกลาง 35)
 
-ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
+ของกลาง: `adversarial-review-panel` · `agent-patterns` · `answer-shape` · `chat-prompt-workflows` · `commit-log` · `context-budget` · `decision-log` · `document-naming` · `flag-and-propose` · `handoff` · `human-writing` · `no-ai-look` · `owner-style-capture` · `parallel-attempts-pick-best` · `parallel-split-and-merge` · `polished-document-style` · `polite-message-th-en` · `principle-build-a-tool-not-handwork` · `principle-fix-root-cause` · `principle-proceed-on-reversible-work` · `principle-prove-it-works` · `principle-small-verifiable-steps` · `principle-user-experience-first` · `prior-art-review` · `repeated-mistakes-to-checks` · `research-with-sources` · `session-lessons-to-skills` · `simplify` · `skill-authoring` · `spell-out-abbreviations` · `status-report` · `targeted-fix` · `temp-file-discipline` · `translate-th-en` · `workspace-setup` — ดู [ของกลาง](#ของกลาง)
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|

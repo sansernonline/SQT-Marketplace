@@ -1,0 +1,45 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: chat-prompt-workflows-behaviour
+description: งานที่ข้อมูลเปลี่ยนกลางทาง ต้องได้ prompt แบบ Dynamic ที่แผนมีเลขรุ่น ปรับแผนเฉพาะ 3 เหตุ เพดาน 3 ครั้ง และมีบันทึกความคืบหน้า (วนซ้ำไหม · คืบไหม)
+tags: [behaviour, chat-prompt-workflows]
+runs: 3
+expected_outcome: เลือก Dynamic พร้อมเหตุผล · prompt มีแผน v1 ที่ทุกงานมีเสร็จเมื่อ · ปรับแผนได้เฉพาะ 3 เหตุ ไม่เกิน 3 ครั้ง · ทุกรุ่นใหม่มีเหตุ เปลี่ยนอะไร กระทบอะไร ใช้ต่อได้ · ผู้ประเมินถามวนซ้ำไหมและคืบไหม · มีวิธีส่งข้อมูลใหม่กลางทาง
+execution:
+  prompt: |
+    ช่วยเขียน prompt ให้ฉันเอาไปวางใน Gemini ให้ช่วยวางแผนงานเลี้ยงปีใหม่บริษัท
+    ตอนนี้ 40 คน งบ 80,000 บาท แต่ผู้บริหารยังไม่ยืนยัน งบหรือจำนวนคนอาจเปลี่ยนระหว่างที่ทำแผนอยู่
+    อยากให้มันปรับแผนเองเป็นขั้น ๆ โดยไม่ทิ้งงานที่ทำไปแล้ว
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: plan-versions
+    type: regex
+    pattern: "v2|รุ่น(?:ใหม่|ถัดไป)"
+    match: contains
+    target: last_message
+  - name: replan-cap
+    type: regex
+    pattern: "(?:ไม่เกิน|สูงสุด) ?3 ครั้ง"
+    match: contains
+    target: last_message
+  - name: progress-ledger
+    type: regex
+    pattern: "วนซ้ำ"
+    match: contains
+    target: last_message
+  - name: no-emoji
+    type: regex
+    pattern: "✅|❌|📌|🚀|💡|✨|⭐|🔥|👉|📊|📝|🎯|⚠️"
+    match: not_contains
+    target: last_message
+  - name: dynamic-rules-complete
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. เลือกแบบที่ปรับแผนกลางทางได้ (Dynamic) และให้เหตุผลว่าข้อมูลอาจเปลี่ยน
+      2. prompt อนุญาตให้ปรับแผนเฉพาะเมื่อ งานใหม่โผล่จากผลที่ทำ · งานหนึ่งทำไม่ได้ · ข้อมูลใหม่เปลี่ยนข้อกำหนด (ครบ 3 เหตุ)
+      3. แผนรุ่นใหม่ต้องเขียนเหตุ สิ่งที่เปลี่ยน ผลกระทบ และงานที่ใช้ต่อได้โดยไม่ทำซ้ำ
+      4. ไม่แต่งราคาหรือรายการที่ผู้ใช้ไม่ได้ให้ ให้ใส่ (รอยืนยัน) หรือเว้นเป็นช่องกรอก
+      5. บอกว่าการประเมินในแชตเดียวไม่ใช่การตรวจอิสระ และแนะนำให้เปิดแชตใหม่หรือให้คนตรวจ

@@ -1,6 +1,6 @@
 {
  "plugin": "superuser",
- "version": "3.5.0",
+ "version": "3.6.0",
  "description": "SuperUser — a team lead agent. Sizes the task and picks a budget, writes a 5-point brief for every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, improvements, learning loop, inbox, hook gates) switch on and off per project. Use it alone or as the core other plugins extend.",
  "cross": [],
  "skills": [],
@@ -9,6 +9,7 @@
   "adversarial-review-panel",
   "agent-patterns",
   "answer-shape",
+  "chat-prompt-workflows",
   "workspace-setup",
   "commit-log",
   "context-budget",
@@ -51,6 +52,7 @@
    "skills": [
     "parallel-attempts-pick-best",
     "superuser",
+    "agent-patterns",
     "human-writing",
     "simplify"
    ]
@@ -62,6 +64,7 @@
    "description": "Use at the end of a multi-step SuperUser task to review how the team worked. Proposes up to 3 fixes with evidence.",
    "skills": [
     "superuser",
+    "agent-patterns",
     "repeated-mistakes-to-checks",
     "human-writing",
     "simplify"
