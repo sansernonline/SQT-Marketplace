@@ -1,5 +1,10 @@
 # Changelog — software-company
 
+## 2.31.0 — 2026-10-27
+
+- skill ใหม่ `rabbitmq-messaging`: เลือก RabbitMQ หรือ Kafka · quorum queue · publisher confirms · manual ack และ prefetch · กันซ้ำ · dead letter ด้วย policy · `delivery-limit` และ delayed retry (4.3 ขึ้นไป · ล้มชั่วคราวใช้ reject ไม่ใช่ nack) · ความปลอดภัยของ broker · eval 3 เคส
+- `mcp-server/references/devops-mcp.md` เพิ่ม MCP ของ RabbitMQ: `amq-mcp-server-rabbitmq` ของ Amazon MQ ใช้แบบอ่านอย่างเดียว · ตัวของ awslabs จัดการ broker ใน AWS และมี CVE ในรุ่นก่อน 2.0.24
+
 ## 2.30.0 — 2026-10-27
 
 - `bug-inbox-triage` เรียงด้วย RICE/WSJF (S1 และช่องโหว่ยังทำก่อนเสมอ) · `security-gate` ข้อกลางแก้ทันทีถ้าไม่เกิน 1 ชั่วโมง ที่เหลือเข้าคิวตามคะแนน · `code-gardener` เลือกธีมด้วย knapsack · `cicd-and-release` ขยาย canary และ rollback ด้วยเกณฑ์ burn rate จาก `observability-basics` (ทั้งหมดใช้ `decision-scoring` ของ superuser)

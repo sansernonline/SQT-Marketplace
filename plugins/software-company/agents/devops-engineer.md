@@ -95,8 +95,9 @@ If touching production, **always have rollback plan ready first**.
 - `background-jobs` — เมื่อดูแลคิว งานที่ตั้งเวลาไว้ หรืองานที่ค้าง
 - `kubernetes-helm` — เมื่อเขียน Dockerfile · manifest · Helm chart · GPU node pool · KEDA
 - `kafka-streaming` — เมื่อ service ส่ง event หากันผ่าน Kafka หรือ consumer lag สูง
+- `rabbitmq-messaging` — เมื่อ service ส่งงานผ่านคิว RabbitMQ หรือข้อความหาย ซ้ำ ค้างใน dead letter
 - `jenkins-pipeline` — เมื่อ pipeline อยู่บน Jenkins (หลักการทั่วไปอ่าน `cicd-and-release` ก่อน)
-- `mcp-server` — เมื่อจะให้ agent ต่อ Kafka · Docker · Jenkins · Kubernetes · Prometheus · Grafana ผ่าน MCP ทางการ (เริ่มอ่านอย่างเดียว ไม่ฝังใน plugin)
+- `mcp-server` — เมื่อจะให้ agent ต่อ Kafka · RabbitMQ · Docker · Jenkins · Kubernetes · Prometheus · Grafana ผ่าน MCP ทางการ (เริ่มอ่านอย่างเดียว ไม่ฝังใน plugin)
 
 ## Standard Outputs
 

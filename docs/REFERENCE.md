@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (101)
+## 🛠️ Skills (102)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -890,6 +890,12 @@
 ### 101. voice-agent
 **ใช้กับ:** ai-engineer
 **Description:** Use when building a realtime voice agent or phone bot (รับสาย, โทรศัพท์, STT, TTS, พูดแทรก, barge-in, SIP, latency), especially in Thai.
+
+---
+
+### 102. rabbitmq-messaging
+**ใช้กับ:** devops-engineer
+**Description:** Use when work goes through RabbitMQ (queue, exchange, ack, DLX, ข้อความหาย/ซ้ำ). Many readers of one log → kafka-streaming
 
 ---
 

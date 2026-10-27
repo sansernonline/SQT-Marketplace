@@ -1,0 +1,45 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: rabbitmq-messaging-behaviour
+description: ออกแบบคิวส่งอีเมลยืนยันออเดอร์ ต้องใช้ quorum queue, publisher confirms กับ mandatory, manual ack หลังทำเสร็จ, กันซ้ำด้วย message id และมี dead letter
+tags: [behaviour, rabbitmq-messaging]
+runs: 3
+expected_outcome: คำตอบมี quorum queue · confirms · mandatory · manual ack · prefetch · message id กันซ้ำ · DLX · ไม่ใช้ auto-ack
+execution:
+  prompt: |
+    เว็บแอปสั่งซื้อ (Python) ส่งอีเมลยืนยันออเดอร์ผ่าน RabbitMQ ออกแบบ exchange กับ queue ค่าตั้งของ producer
+    และ consumer โครงข้อความตัวอย่าง 1 ตัว และบอกว่าถ้าส่งอีเมลล้มเหลวต้องทำอย่างไร
+    ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: quorum-queue
+    type: regex
+    pattern: "quorum"
+    flags: i
+    match: contains
+    target: last_message
+  - name: publisher-confirms
+    type: regex
+    pattern: "confirm"
+    flags: i
+    match: contains
+    target: last_message
+  - name: auto-ack-left-on
+    type: regex
+    pattern: 'auto_ack\s*=\s*True'
+    match: not_contains
+    target: last_message
+  - name: ack-after-work-and-dedupe
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกทั้ง 2 เรื่อง
+      1. consumer ack หลังส่งอีเมลหรือบันทึกผลเสร็จแล้ว ไม่ใช่ก่อน
+      2. consumer กันข้อความซ้ำด้วยรหัสข้อความที่ไม่ซ้ำกัน (เช่น message_id เก็บในตาราง หรือ idempotency key อย่างใดอย่างหนึ่งก็พอ)
+  - name: dead-letter-and-no-requeue-loop
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบมีที่เก็บข้อความที่ทำไม่ได้ (dead letter exchange หรือคิวตาย)
+      และข้อความถอดไม่ได้หรือเกินจำนวนครั้ง ไปที่นั่น ไม่ใช่ requeue วนไม่รู้จบ

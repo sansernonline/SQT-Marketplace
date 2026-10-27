@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: rabbitmq-messaging-trigger
+description: ผู้ใช้ขอออกแบบคิวส่งอีเมลด้วย RabbitMQ ไม่เอ่ยชื่อ skill ต้องทำให้ rabbitmq-messaging ถูกเปิด และคำตอบพูดถึงการรับซ้ำได้ของ consumer
+tags: [trigger, rabbitmq-messaging]
+runs: 3
+expected_outcome: เปิด Skill rabbitmq-messaging แล้วเสนอ quorum queue พร้อม manual ack และบอกว่า consumer ต้องกันข้อความซ้ำ
+execution:
+  prompt: |
+    เว็บแอปสั่งซื้อของเราจะส่งอีเมลยืนยันออเดอร์ผ่านคิว ทีมเลือก RabbitMQ แล้ว ช่วยวางแนวทางให้หน่อยว่า
+    queue กับ exchange ควรตั้งอย่างไร ให้อีเมลไม่หายเมื่อ worker ตาย ยังไม่ต้องเขียนโค้ด
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?rabbitmq-messaging"'
+    min: 1
+    arm: with-only
+  - name: duplicate-handling-named
+    type: regex
+    pattern: "message_id|idempoten|ทำซ้ำได้|กันซ้ำ|dedup"
+    flags: i
+    match: contains
+    target: last_message

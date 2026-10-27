@@ -43,6 +43,7 @@ jobs:
           node plugins/superuser/skills/decision-scoring/scripts/decide.mjs --self-test
           node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
+          node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |

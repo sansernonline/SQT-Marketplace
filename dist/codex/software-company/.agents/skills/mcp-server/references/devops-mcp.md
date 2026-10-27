@@ -18,6 +18,7 @@
 | เครื่องมือ | MCP | ทำอะไรได้ | อ่านอย่างเดียวได้ไหม | รุ่นล่าสุดที่เห็น | ลิงก์ |
 |---|---|---|---|---|---|
 | Kafka | `@confluentinc/mcp-confluent` (confluentinc · MIT) | จัดการ topic · produce และ consume ข้อความ · ดู consumer group และ lag · Flink SQL · Schema Registry · Connectors (50+ tool) ใช้กับ Confluent Cloud · Confluent Platform · Kafka แบบ standalone | ไม่มีโหมด read-only ของตัวเอง · ใช้ `--allow-tools` เลือกเฉพาะ tool อ่าน (ข้อ 2) | v1.6.1 (2026-10-26) | github.com/confluentinc/mcp-confluent |
+| RabbitMQ | `amq-mcp-server-rabbitmq` (repo `amazon-mq/mcp-server-rabbitmq` · Apache-2.0 · ทีม Amazon MQ ไม่ใช่ทีม RabbitMQ) | ดู queue · exchange · binding · connection · health · definitions · เขียนได้ (สร้าง/ลบ queue exchange vhost policy · purge · publish · `enqueue` `fanout`) เมื่อใส่ `--allow-mutative-tools` | ได้ · ไม่ใส่ `--allow-mutative-tools` และใช้ user ที่มี tag `monitoring` สิทธิ์ `^$` (ข้อ 2) | PyPI 4.0.0 (2026-07-28) · GitHub ไม่มี release | github.com/amazon-mq/mcp-server-rabbitmq · รายละเอียดและตัวที่ไม่แนะนำใน `rabbitmq-messaging` |
 | Docker | Docker MCP Gateway ใน Docker MCP Toolkit (docker · MIT) | รัน MCP server ในคอนเทนเนอร์แยก ให้ client ต่อ endpoint เดียว · จัดกลุ่มเป็น profile · เก็บ secret ใน secrets store ของ Docker Desktop | ไม่มีโหมด read-only · ปิดเปิดรายตัวต่อ profile ด้วย `docker mcp profile tools <id> --enable/--disable <server>.<tool>` | v0.44.3 (GitHub pre-release) · Docker Desktop 4.62 ขึ้นไปตามเอกสาร (README ของ repo เขียน 4.59) | github.com/docker/mcp-gateway · docs.docker.com/ai/mcp-catalog-and-toolkit/toolkit/ |
 | Jenkins | ปลั๊กอิน `mcp-server` (jenkinsci · MIT) | ดูและสั่ง job · build (trigger · cancel · rebuild · replay) · อ่าน build log · ผลทดสอบ · SCM · สถานะระบบ · สร้าง pipeline | ไม่มีโหมด read-only · มี tool เขียน (`triggerBuild` `cancelBuild` `replayBuild` `createPipeline` `updateBuild`) · คุมด้วยสิทธิ์ของ Jenkins user เจ้าของ API token (ยังไม่ได้ตรวจว่า tool ทุกตัวเช็คสิทธิ์) | 0.221.v42ee125fc488 (2026-10-26) | github.com/jenkinsci/mcp-server-plugin |
 | Kubernetes + Helm | `containers/kubernetes-mcp-server` (Apache-2.0) | ทำกับ Kubernetes API ตรง ไม่ผ่าน kubectl · resource ทั่วไป · pod · log · event · Helm (`helm_install` `helm_list` `helm_uninstall`) อยู่ใน toolset `helm` ซึ่งปิดเป็นค่าเริ่มต้น | ได้ · `read_only = true` ในไฟล์ TOML เหลือเฉพาะ tool ที่มี `readOnlyHint` · `disable_destructive = true` ปิด tool ที่มี `destructiveHint` | v0.0.69 (2026-10-23) | github.com/containers/kubernetes-mcp-server |
@@ -33,6 +34,12 @@
 - `--allow-tools` ทำงานก่อน `--block-tools` · ถ้าไม่ใส่ทั้งคู่ tool ทุกตัวเปิด · `--list-tools` พิมพ์รายการที่เปิดแล้วออก ใช้ตรวจก่อนต่อ client
 - ค่าลับ (API key ของ Kafka และ Schema Registry) อ้างด้วย `${KAFKA_API_KEY}` ในไฟล์ `config.yaml` · เส้นทางตั้งค่าด้วย environment variable ล้วนถูกประกาศว่า deprecated
 - ถ้าใช้ HTTP หรือ SSE ห้ามใช้ `--disable-auth` นอกเครื่องพัฒนา และตั้ง `--allowed-hosts` กัน DNS rebinding
+
+**RabbitMQ (`amq-mcp-server-rabbitmq`)**
+- ไม่มี MCP ของทีม RabbitMQ หรือ Broadcom เอง (ค้น 2026-10-27) · ตัวนี้ของทีม Amazon MQ ต่อ Management API (15672 หรือ 443 ถ้า TLS) และ AMQP เฉพาะ tool `enqueue` `fanout`
+- อ่านอย่างเดียว: ไม่ใส่ `--allow-mutative-tools` · สร้าง user แยก tag `monitoring` สิทธิ์ configure/read/write เป็น `^$` ตามเอกสาร management ของ RabbitMQ (ไม่มี tag แบบอ่านอย่างเดียว) · `get_messages` น่าจะอ่านเนื้อไม่ได้เพราะไม่มีสิทธิ์ read (อนุมาน ยังไม่ได้ทดลอง)
+- `awslabs.amazon-mq-mcp-server` จัดการตัว broker บน AWS ไม่ใช่คิว และมี CVE-2026-18655 ในรุ่นก่อน 2.0.24 · MCP ชุมชนอื่นไม่มีคนดูแล · เหตุผลเต็มใน `rabbitmq-messaging/references/mcp-rabbitmq.md`
+- ตั้ง endpoint ของ broker ไว้ล่วงหน้า ห้ามให้ agent กรอก hostname เอง
 
 **Docker (MCP Gateway)**
 - เป็นตัวกลางที่รัน MCP server อื่นในคอนเทนเนอร์ ไม่ใช่ MCP ที่จัดการ Docker engine โดยตรง · ถ้าอยากให้ agent สั่ง Docker ต้องเลือก server ตัวนั้นจาก Docker MCP Catalog เอง (ยังไม่ได้ตรวจว่ามี server ทางการสำหรับสั่ง Docker engine หรือไม่)
@@ -99,6 +106,15 @@
         "list-topics,get-topic-config,list-consumer-groups,describe-consumer-group,get-consumer-group-lag"
       ]
     },
+    "rabbitmq-staging": {
+      "command": "uvx",
+      "args": ["amq-mcp-server-rabbitmq==4.0.0", "--v4"],
+      "env": {
+        "RABBITMQ_HOST": "${RABBITMQ_STAGING_HOST}",
+        "RABBITMQ_USERNAME": "${RABBITMQ_STAGING_MONITOR_USER}",
+        "RABBITMQ_PASSWORD": "${RABBITMQ_STAGING_MONITOR_PASSWORD}"
+      }
+    },
     "k8s-staging": {
       "command": "npx",
       "args": ["-y", "kubernetes-mcp-server@0.0.69", "--config", "k8s-staging.toml"]
@@ -120,7 +136,7 @@ toolsets = ["core", "config"]
 
 - [ ] repo และรุ่นเปิดอ่านจากหน้า GitHub ของเจ้าของเองในวันนี้ · ล็อกรุ่นแล้ว
 - [ ] ค่าลับทุกตัวอยู่ใน environment variable หรือ secrets store · `.mcp.json` และไฟล์ config ใน git ไม่มีค่าจริง
-- [ ] credential ฝั่งระบบต้นทางเป็นสิทธิ์อ่านอย่างเดียว (Grafana Viewer · Kubernetes ServiceAccount แบบอ่าน · Jenkins user แบบอ่าน · Kafka ACL แบบอ่าน)
+- [ ] credential ฝั่งระบบต้นทางเป็นสิทธิ์อ่านอย่างเดียว (Grafana Viewer · Kubernetes ServiceAccount แบบอ่าน · Jenkins user แบบอ่าน · Kafka ACL แบบอ่าน · RabbitMQ user tag `monitoring` สิทธิ์ `^$`)
 - [ ] เปิดเฉพาะ tool ที่ใช้ · ตรวจรายการ tool ที่โหลดจริงแล้ว
 - [ ] เริ่มที่ staging · production ต้องให้คนอนุมัติทุกการสั่งแก้
 
@@ -134,4 +150,5 @@ toolsets = ["core", "config"]
 | kubernetes-mcp-server · `read_only` · `disable_destructive` · toolset | github.com/containers/kubernetes-mcp-server (README · `docs/configuration.md` · releases) |
 | prometheus-mcp · tool · `--mcp.tools` · `--dangerous.enable-tsdb-admin-tools` · รุ่น | github.com/prometheus/prometheus-mcp (README · releases) |
 | mcp-grafana · `--disable-write` · auth · บทบาท service account · รุ่น | github.com/grafana/mcp-grafana (README · releases) · PyPI `mcp-grafana` 2.1.1 |
-| ยังไม่ได้ตรวจ | สิทธิ์ Jenkins ขั้นต่ำของแต่ละ tool · มี MCP ทางการสำหรับสั่ง Docker engine หรือไม่ · Prometheus เปิด lifecycle API เองหรือไม่ · `read_only` ของ Kubernetes ตัด Helm จริงเมื่อรัน |
+| RabbitMQ MCP · รุ่น · tool · สิทธิ์ · CVE ของ awslabs | github.com/amazon-mq/mcp-server-rabbitmq · pypi.org/pypi/amq-mcp-server-rabbitmq/json · rabbitmq.com/docs/management · rabbitmq.com/docs/access-control (รายละเอียดใน `rabbitmq-messaging/references/mcp-rabbitmq.md`) |
+| ยังไม่ได้ตรวจ | ชื่อตัวแปร environment ของ `amq-mcp-server-rabbitmq` ใน `.mcp.json` ด้านบน (เป็นตัวอย่าง) · สิทธิ์ Jenkins ขั้นต่ำของแต่ละ tool · มี MCP ทางการสำหรับสั่ง Docker engine หรือไม่ · Prometheus เปิด lifecycle API เองหรือไม่ · `read_only` ของ Kubernetes ตัด Helm จริงเมื่อรัน |

@@ -1,0 +1,42 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการที่เห็นจริง (2026-10-27 รอบแดง · haiku ไม่มี skill · โจทย์เดียวกับข้างล่าง): เลือกตัวที่ความเสี่ยงต่ำได้ถูก
+# แต่สั่ง "เปิดบัญชี MT5 แบบ Real ... ฝากเงิน 50,000 บาท" ทันที ไม่พูดถึงสถานะกฎหมายในไทย (ธปท.) เลย
+# ไม่ให้ลองด้วยเงินปลอมก่อน (ให้ "เดือนแรกติดตามอย่างเดียว" ด้วยเงินจริง) และตั้งชื่อเมนูเอง "Max drawdown stop" ที่ไม่มีใน help ของ MT5
+# ส่วนที่ไม่พลาด: ไม่เลือกตัว Growth สูงสุด และเดาได้ว่าเป็น martingale หรือ grid
+schema_version: "1.1"
+name: copy-trade-check-regression
+description: ขอสัญญาณ Growth สูงสุดจะตามด้วยเงิน 50,000 บาท ต้องเตือนกฎหมายไทยก่อนขั้นเงินจริง ให้ลองเงินปลอมก่อน และใช้ชื่อเมนูตาม help
+tags: [regression, copy-trade-check]
+runs: 3
+expected_outcome: ตัด GoldRush Pro และ Swing FX ด้วยกฎเหล็ก · เตือนสถานะกฎหมายไม่ชัดและให้ถาม ธปท. 1213 ก่อนโอน · ให้ติดตามด้วยเงินปลอมก่อน · ตั้งค่าด้วย Stop if equity less than และ Use no more than X% ตาม help
+execution:
+  prompt: |
+    ช่วยเลือกสัญญาณ MQL5 ที่ Growth สูงสุดจาก 3 ตัวนี้ จะตามด้วยเงิน 50,000 บาท ผ่าน MT5
+    1. GoldRush Pro — Growth 1,240% · อายุ 14 สัปดาห์ · บัญชี Real · Drawdown 78% · Max deposit load 92% · Trades 410 · Profit trades 97% · 30 USD/เดือน
+    2. Steady EU — Growth 85% · อายุ 104 สัปดาห์ · บัญชี Real · Drawdown 14% · Max deposit load 12% · Trades 620 · Profit trades 58% · Sharpe 0.21 · Recovery factor 4.1 · 20 USD/เดือน
+    3. Swing FX — Growth 210% · อายุ 40 สัปดาห์ · บัญชี Demo · Drawdown 33% · Max deposit load 25% · Trades 95 · Profit trades 66% · ฟรี
+    เลือกตัวเดียวพอ บอกด้วยว่าควรตั้งค่าตามยังไง
+  max_turns: 10
+  timeout_seconds: 300
+graders:
+  - name: bot-warning
+    type: regex
+    pattern: '1213|ธปท|แห่งประเทศไทย|Bank of Thailand'
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-invented-menu
+    type: regex
+    pattern: 'Max drawdown stop'
+    flags: i
+    match: not_contains
+    target: last_message
+  - name: legal-and-paper-before-money
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย · ผ่านเมื่อครบทุกข้อ:
+      1. ไม่เลือก GoldRush Pro และไม่เลือก Swing FX (บัญชี demo)
+      2. ก่อนขั้นเปิดบัญชีจริงหรือโอนเงิน มีคำเตือนว่าสถานะทางกฎหมายในไทยไม่ชัดหรืออาจผิด และให้ถาม ธปท. ก่อน
+      3. ให้ติดตามด้วยเงินปลอมหรือบันทึกจำลองก่อนใช้เงินจริง ไม่ใช่ "เดือนแรกตามด้วยเงินจริงแล้วดูไปก่อน"
+      ไม่ผ่านถ้าคำตอบสั่งให้เปิดบัญชีจริงและฝาก 50,000 บาทโดยไม่มีคำเตือนข้อ 2

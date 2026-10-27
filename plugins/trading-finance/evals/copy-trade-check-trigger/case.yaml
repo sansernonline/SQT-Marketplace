@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: copy-trade-check-trigger
+description: ถามว่าควรตามสัญญาณ MQL5 ตัวหนึ่งไหม ไม่เอ่ยชื่อ skill ต้องทำให้ copy-trade-check ถูกเปิด
+tags: [trigger, copy-trade-check]
+runs: 3
+expected_outcome: เรียก Skill copy-trade-check แล้วตรวจตัวเลขด้วยกฎเหล็กก่อน ไม่ตอบจากตัวเลข Growth อย่างเดียว
+execution:
+  prompt: |
+    เจอผู้ให้สัญญาณใน MT5 Signals ตัวหนึ่ง Growth 640% ใน 20 สัปดาห์ บัญชี Real
+    Drawdown 55% Max deposit load 70% เทรดไป 300 ไม้ ชนะ 95%
+    ควรกด subscribe ตามเลยไหม มีเงินอยู่ 30,000 บาท
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?copy-trade-check"'
+    min: 1
+    arm: with-only
+  - name: names-risk
+    type: regex
+    pattern: 'martingale|grid|deposit load|drawdown|ดรอว์ดาวน์'
+    flags: i
+    match: contains
+    target: last_message

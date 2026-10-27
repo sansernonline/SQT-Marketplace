@@ -232,6 +232,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 |---|---|---|
 | timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
 | event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
+| คิวงานผ่าน RabbitMQ (หลาย worker · retry · dead letter · ต้องมี broker จริง) | `rabbitmq-messaging` | แทน |
 | ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
 | เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
 | นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
@@ -1123,6 +1124,7 @@ Use when services pass events via Kafka (topic, producer, consumer, DLQ, ส่�
 | สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
 |---|---|---|
 | คิวงานธรรมดา มีผู้รับเดียว | [`background-jobs`](../background-jobs/SKILL.md) | หัวข้อ 1 ตัดสินว่าต้องใช้ Kafka จริงไหม |
+| คิวงานที่ต้องแจกให้ worker พร้อม retry และ dead letter ใช้ RabbitMQ | [`rabbitmq-messaging`](../rabbitmq-messaging/SKILL.md) | หัวข้อ 1 ของไฟล์นั้นเทียบ 2 ตัว |
 | งานที่อาจรันซ้ำหรือหยุดกลางทาง | [`principle-safe-to-rerun`](../principle-safe-to-rerun/SKILL.md) | consumer ทุกตัวต้องผ่านหลักนี้ (หัวข้อ 4) |
 | ปลายทางเป็นอีเมล LINE push SMS | [`notifications`](../notifications/SKILL.md) | consumer แจ้งเตือนใช้กฎช่องทางและโควตาของ skill นั้น |
 | เลือก event-driven เทียบแบบอื่น | [`architecture-patterns`](../architecture-patterns/SKILL.md) | Kafka เป็นเครื่องมือ ไม่ใช่ตัวเลือกสถาปัตยกรรม |

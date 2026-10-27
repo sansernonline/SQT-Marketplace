@@ -38,6 +38,8 @@ A practice account that only works if it is treated as real. General information
 - No restarting the account after a bad week; drawdown is part of the result.
 - Use end-of-day prices only if the strategy is end-of-day; intraday strategies need intraday timestamps.
 
+Paper-following an MQL5 copy-trade signal before subscribing (a demo account cannot copy a real signal) → `copy-trade-check` section 6, then log here.
+
 Broker apps and trading platforms often have a built-in simulator; using one is fine, but still keep this ledger so the statistics match the live journal.
 
 ## Graduation gate — from paper to small real size
