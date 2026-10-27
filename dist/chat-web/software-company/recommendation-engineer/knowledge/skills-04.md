@@ -15,6 +15,7 @@ Use when a system calls a large language model (prompts, structured output, RAG,
 | designing or optimizing prompts for LLMs, building prompt templates, implementing few-shot learning, chain-of-thought reasoning, structured output, or improving prompts step by step. Production patterns with concrete examples | [`references/prompt-engineering-patterns.md`](references/prompt-engineering-patterns.md) |
 | building LLM evaluation systems, designing eval sets, choosing eval metrics, implementing LLM-as-judge, running A/B tests, or measuring how LLM quality changes. Needed for any LLM app in production | [`references/llm-evaluation-patterns.md`](references/llm-evaluation-patterns.md) |
 | building an agent system inside a product — whether to use an agent at all, Loop · Graph · Dynamic workflows, round caps, checkpoints and human approval, progress ledger and re-planning, choosing a framework by language (LangGraph, Microsoft Agent Framework, ADK, OpenAI Agents SDK, Temporal), token cost, field cases | [`references/agent-systems.md`](references/agent-systems.md) |
+| building a Deep Research Agent product — planner → queue (Kafka) → parallel workers (web · browser · PDF · vector DB) → citation check → writer, token budgets and quotas, browser-agent sandbox and prompt injection, scheduled re-runs, metrics | [`references/deep-research-system.md`](references/deep-research-system.md) |
 | designing Retrieval-Augmented Generation systems, choosing vector databases, designing chunking strategies, implementing hybrid search, evaluating retrieval quality, or scaling RAG. Production patterns from prototype to scale | [`references/rag-architecture.md`](references/rag-architecture.md) |
 
 ## คู่มือบทบาท
@@ -1649,6 +1650,209 @@ All opened 2026-10-26.
 - [R9] [LangChain · Klarna](https://www.langchain.com/blog/customers-klarna) · [R10] [LangChain · AppFolio](https://www.langchain.com/blog/customers-appfolio)
 - [X1] [Cognition · Don't Build Multi-Agents](https://cognition.com/blog/dont-build-multi-agents) · [X2] [arXiv 2503.13657 · Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)
 - [P1] [Huang et al. · LLMs Cannot Self-Correct Reasoning Yet](https://arxiv.org/abs/2310.01798) · [P2] [Reflexion](https://arxiv.org/abs/2303.11366) · [P3] [Self-Refine](https://arxiv.org/abs/2303.17651) · [P5] [LLMCompiler](https://arxiv.org/abs/2312.04511) · [P6] [ReWOO](https://arxiv.org/abs/2305.18323) · [P7] [ADaPT](https://arxiv.org/abs/2311.05772)
+
+
+## reference: deep-research-system.md
+
+> ออกแบบ "ระบบ Deep Research Agent" เป็นผลิตภัณฑ์: ผู้ใช้พิมพ์หัวข้อเดียว ได้รายงานพร้อมอ้างอิง · แหล่งที่เปิดอ่านจริงตรวจเมื่อ 2026-10-27 · `(ยังไม่ได้ตรวจ)` = ยังไม่ได้เปิดอ่าน · `อนุมาน` = ข้อสรุปของเราเอง ไม่ใช่ที่หน้าเว็บบอก
+>
+> ไฟล์นี้เป็นแผนที่ของระบบ ส่วนรายละเอียดของแต่ละชิ้นอยู่ในไฟล์และ skill ที่ชี้ไว้ ไม่ลอกมาซ้ำ
+
+**สารบัญ**
+
+- [1. สถาปัตยกรรม](#1-สถาปัตยกรรม)
+- [2. คิว](#2-คิว)
+- [3. งบและการหยุด](#3-งบและการหยุด)
+- [4. browser agent](#4-browser-agent)
+- [5. PDF งานวิจัยและ vector DB](#5-pdf-งานวิจัยและ-vector-db)
+- [6. ตรวจอ้างอิง](#6-ตรวจอ้างอิง)
+- [7. เว็บแอปและผู้ใช้](#7-เว็บแอปและผู้ใช้)
+- [8. ตัวชี้วัดที่ต้องเฝ้าดู](#8-ตัวชี้วัดที่ต้องเฝ้าดู)
+- [9. ตัวอย่างจริง](#9-ตัวอย่างจริง)
+- [10. ตรวจก่อนส่ง](#10-ตรวจก่อนส่ง)
+- [11. ที่มา](#11-ที่มา)
+
+## 1. สถาปัตยกรรม
+
+ก่อนสร้าง ตอบก่อนว่าใช้ multi-agent คุ้มไหม → [`agent-systems.md`](agent-systems.md) หัวข้อ 1 · งานค้นหลายทางที่แยกกันได้เป็นงานที่เหมาะ งานที่ทุกตัวต้องใช้บริบทเดียวกันไม่เหมาะ ([A2])
+
+```text
+ผู้ใช้ → API → planner → คิว → worker หลายตัว → ตัวตรวจอ้างอิง → writer → รายงาน
+                 ↑__________ ถ้าข้อมูลยังไม่พอ planner ออกคำถามย่อยเพิ่ม __________|
+```
+
+| บทบาท | ทำอะไร | ทำไมแยก |
+|---|---|---|
+| planner (orchestrator) | แตกหัวข้อเป็นคำถามย่อย กำหนดงบ ตัดสินว่าพอหรือยัง | ถือแผนทั้งหมดไว้ที่เดียว ตัวอื่นไม่ต้องรู้ภาพรวม |
+| worker | ค้นคำถามย่อยข้อเดียวด้วยเครื่องมือของตัวเอง (เว็บ · browser · PDF · vector DB) คืนข้อสรุปสั้นพร้อมที่มา | บริบทของแต่ละตัวสะอาด ค้นขนานได้ ล้มตัวเดียวไม่ล้มทั้งงาน |
+| ตัวตรวจอ้างอิง (citation agent) | จับคู่ทุกข้ออ้างกับข้อความในแหล่ง | ไม่ให้คนเขียนตรวจงานตัวเอง |
+| writer | เรียบเรียงรายงาน กราฟ ภาพปก จากข้ออ้างที่ผ่านแล้วเท่านั้น | แยกการหา ออกจากการเขียน |
+
+ระบบที่มีอยู่จริง (เปิดอ่านแล้ว):
+
+| ระบบ | โครงที่หน้าเอกสารบอก | เอามาใช้อย่างไร |
+|---|---|---|
+| Anthropic Research ([A2]) | lead agent วางแผนและเก็บแผนลง memory · subagent ค้นขนานในบริบทของตัวเอง · CitationAgent ท้ายงานหาว่าแต่ละข้ออ้างควรอ้างที่ไหน | แบบอ้างอิงหลักของโครงนี้ |
+| GPT Researcher ([G1]) | planner สร้างคำถาม · execution agent ค้นแต่ละข้อ · สรุปและโยงกลับแหล่ง · publisher รวมเป็นรายงาน · ค้นขนาน | ดูวิธีกรองเนื้อหาก่อนเข้า LLM |
+| LangChain open_deep_research ([L1]) | ใช้โมเดลคนละบทบาท (สรุป · ค้น · บีบ · เขียนรายงาน) · ค้นผ่าน Tavily เป็นค่าตั้งต้น · มี MCP · รุ่นเก่ามี supervisor กับ researcher ขนาน | ดูการแยกโมเดลตามบทบาท (ขั้นตอนของรุ่นปัจจุบันหน้า README ไม่ได้บอก: ยังไม่ได้ตรวจใน `configuration.py`) |
+| Stanford STORM ([S1]) | 2 ช่วง: หาข้อมูลและทำโครง → เขียนบทความพร้อมอ้างอิง · ถามจากหลายมุมมอง · Co-STORM ให้คนร่วมชี้ทิศ | ดูวิธีเปิดมุมมองก่อนแตกคำถามย่อย |
+
+## 2. คิว
+
+| ถามก่อน | ตอบแบบนี้ → Kafka | ตอบแบบนี้ → คิวง่ายกว่าพอ |
+|---|---|---|
+| ผู้รับ event กี่ราย | หลายราย (worker · ตัวบันทึกความคืบหน้า · ตัวเก็บสถิติ) อ่านชุดเดียวกัน | worker เดียวชนิดเดียวรับงาน |
+| ต้องย้อนอ่านเหตุการณ์ไหม (เล่นซ้ำหลังแก้บั๊ก · ตรวจย้อนว่าทำไมรายงานผิด) | ต้อง | ทำแล้วทิ้ง |
+| มีคนดูแล cluster ไหม | มี หรือใช้บริการ managed | ไม่มี |
+
+เกณฑ์ข้างบนยกจาก [`kafka-streaming`](../../kafka-streaming/SKILL.md) หัวข้อ 1 · ถ้าตอบว่า "รายเดียว ไม่ย้อนอ่าน" ให้ใช้คิวงานเบื้องหลัง (Redis · Simple Queue Service (SQS) · ตารางงานในฐานข้อมูล) ตาม [`background-jobs`](../../background-jobs/SKILL.md) · เริ่มจากแบบง่ายแล้วย้ายเมื่อวัดได้ว่าไม่พอ (`อนุมาน`) · งานของเราส่วนใหญ่ยาวเป็นนาทีและเป็นงานเดียวต่อรายงาน จึงเข้าฝั่ง "ไม่ต้อง Kafka" ได้ตั้งแต่เริ่ม · โจทย์ที่ผู้ใช้ให้มากำหนด Kafka ไว้แล้ว ให้ทำตามนั้นและจดเหตุผล (ผู้รับหลายราย + ย้อนอ่านได้) ลง Architecture Decision Record (ADR) → `adr-writer`
+
+ถ้าใช้ Kafka:
+
+- 1 คำถามย่อย = 1 ข้อความ ใส่ `report_id` เป็น key เพื่อให้งานของรายงานเดียวอยู่ partition เดียวและเรียงลำดับ
+- worker ต้องทำซ้ำได้โดยผลไม่เปลี่ยน เพราะข้อความอาจมาซ้ำ (at-least-once) · ผลของ worker เขียนด้วย `report_id + question_id` เป็นกุญแจ → `principle-safe-to-rerun`
+- งานที่ล้มซ้ำเกินกำหนดไป dead-letter topic (DLQ) ไม่ใช่วนไม่รู้จบ → `kafka-streaming`
+- ขยาย worker ตามงานค้างด้วย KEDA ดู consumer lag → [`kubernetes-helm/references/keda-queue-scaling.md`](../../kubernetes-helm/references/keda-queue-scaling.md) · เพดานจำนวน worker ตั้งตามงบเงิน ไม่ใช่ตามความยาวคิว (หัวข้อ 3)
+
+## 3. งบและการหยุด
+
+ตัวเลขจากแหล่ง ([A2]): agent ใช้ token ประมาณ 4 เท่าของแชต · multi-agent ประมาณ 15 เท่า · token อธิบาย 80% ของความต่างผลบน BrowseComp · Anthropic บอกว่าคุ้มเฉพาะงานคุณค่าสูง ตัวเลขนี้เป็นของ Anthropic เองและตอนนั้นใช้ Opus 4 กับ Sonnet 4 ของระบบเราต้องวัดเอง
+
+| ระดับ | ตั้งอะไร | พฤติกรรมเมื่อชน |
+|---|---|---|
+| ต่อรายงาน | token รวม · จำนวนรอบค้น · จำนวน worker พร้อมกัน · เวลารวม | planner หยุดเปิดคำถามใหม่ แล้วเขียนจากที่มี พร้อมบอกว่าไม่ครบ |
+| ต่อ worker | จำนวนการเรียกเครื่องมือ · token · เวลา | คืนเท่าที่หาได้ ติดป้าย "ไม่ครบ" |
+| ต่อผู้ใช้ | โควตารายเดือนหรือรายวัน หักตามจริงเมื่อ worker จบงาน | ปฏิเสธก่อนเริ่มถ้าประมาณการเกินโควตา · ดูรูปแบบโควตาใน [`saas-platform`](../../saas-platform/SKILL.md) (usage metering) |
+| ทั้งระบบ | เพดาน worker ใน KEDA (`maxReplicaCount`) · เพดานเงินต่อวัน | หยุดรับงานใหม่ แจ้งผู้ใช้ว่าคิวเต็ม |
+
+กฎขนาดแรงงานจาก [A2] ใช้เป็นจุดเริ่มแล้วปรับด้วย eval: ถามข้อเท็จจริงง่าย 1 agent เรียกเครื่องมือ 3–10 ครั้ง · เปรียบเทียบตรง ๆ 2–4 subagent ตัวละ 10–15 ครั้ง · วิจัยซับซ้อนเกิน 10 subagent แบ่งหน้าที่ชัด · planner ต้องเลือกระดับจากความยากของหัวข้อ ไม่ใช้ระดับสูงสุดทุกครั้ง
+
+เงื่อนไขหยุดค้น (ต้องเขียนในคำสั่งของ planner และบังคับในโค้ดด้วย ไม่พึ่งแค่คำสั่ง):
+
+1. ทุกคำถามย่อยมีคำตอบพร้อมที่มาอย่างน้อย 1 แหล่งที่ผ่านการตรวจ
+2. รอบล่าสุดไม่ได้ข้ออ้างใหม่ (ข้อมูลอิ่มตัว)
+3. ชนงบข้อใดข้อหนึ่งในตารางบน
+
+เหตุที่ต้องบังคับในโค้ด: Anthropic เห็นตอนจำลอง prompt ว่า agent ทำต่อทั้งที่ได้ผลเพียงพอแล้ว ([A2])
+
+## 4. browser agent
+
+agent ที่คลิกเว็บเจอข้อความของคนแปลกหน้าตลอดเวลา · Open Worldwide Application Security Project (OWASP) เรียกสิ่งนี้ว่า indirect prompt injection: เนื้อหาภายนอกมีคำสั่งแฝง แล้วโมเดลทำตาม ([O1]) · Anthropic วัดกับ browser agent ของตัวเองได้อัตราโจมตีสำเร็จ 1.4%–2.4% หลังเพิ่มชั้นป้องกัน (13.8% ในโมเดลเปล่าของ Sonnet 4.5) และบอกเองว่า 1% ก็ยังเป็นความเสี่ยง ยังไม่แก้หมด ([A3]) จึงต้องออกแบบให้ถือว่ามีคนเจาะได้
+
+| ข้อ | ทำ |
+|---|---|
+| ที่รัน | container ที่ใช้ครั้งเดียวทิ้ง ไม่มี secret ไม่มีสิทธิ์เข้า network ภายใน · `docker-sandbox` |
+| ข้อความในหน้าเว็บ | เป็นข้อมูล ไม่ใช่คำสั่ง · ห่อด้วยตัวคั่นและบอกโมเดลว่าเป็นเนื้อหาไม่น่าเชื่อถือ ([O1]) |
+| สิทธิ์ | เท่าที่งานค้นต้องใช้: อ่านอย่างเดียว · ไม่ส่งฟอร์ม ไม่ซื้อ ไม่ลบ · งานเสี่ยงให้คนอนุมัติ ([O1]) |
+| credential ของผู้ใช้ | ไม่ส่งให้ browser agent · หน้าที่ต้องล็อกอินคือนอกขอบเขต แจ้งผู้ใช้ให้ส่งไฟล์มาเอง |
+| ผลลัพธ์ที่ออกจาก worker | ตรวจรูปแบบด้วยโค้ด (schema) · worker ไม่มีเครื่องมือส่งข้อมูลออกนอก ([O1]) |
+| robots.txt และเงื่อนไขเว็บ | อ่านและทำตามก่อนดึง · มาตรฐาน RFC 9309 (กันยายน 2022) บอกว่า robots.txt "ไม่ใช่การอนุญาตให้เข้าถึง" ([R1]) เป็นแค่ข้อตกลงมารยาทของ crawler จึงต้องอ่านเงื่อนไขการใช้ของเว็บด้วย · ไม่ข้ามกำแพงจ่ายเงินหรือล็อกอิน |
+| จำกัดโดเมน | รายชื่อโดเมนห้าม (denylist) และจำกัดอัตราต่อโดเมน |
+
+ทดสอบด้วยหน้าเว็บที่เราทำเองและมีคำสั่งแฝง ให้ผ่านก่อนปล่อย (adversarial test ตาม [O1]) · รวมใน eval ข้อ 6
+
+## 5. PDF งานวิจัยและ vector DB
+
+ขั้นตอนเต็ม (แยกส่วน · chunk · embedding · hybrid search · rerank) อยู่ใน [`rag-architecture.md`](rag-architecture.md) ที่นี่เฉพาะส่วนที่งานวิจัยต่างออกไป:
+
+- ต้องการที่มาระดับหน้าและย่อหน้า: เก็บ metadata ทุก chunk = `source_id` · url หรือ DOI · ชื่อเรื่อง · ผู้เขียน · ปี · หน้า · ตำแหน่งตัวอักษร · วันที่ดึง · hash ของไฟล์ (เพื่อรู้ว่าแหล่งเปลี่ยน)
+- แยก chunk ตามหัวข้อของบทความ (บทคัดย่อ · วิธีวิจัย · ผล) และเก็บ chunk แม่ไว้ให้ writer ใช้บริบทกว้าง ตามแบบ parent-child ใน `rag-architecture.md`
+- ตาราง สูตร ภาพในบทความ: ตรวจว่าตัวแยกข้อความอ่านได้จริง ถ้าไม่ได้ให้ติดป้ายว่า "ตัวเลขจากตารางยังไม่ได้ยืนยัน" ดีกว่าให้ตัวเลขผิด
+- คลังความจำ (vector DB) เก็บผลที่ตรวจแล้วเพื่อใช้ซ้ำข้ามรายงาน ต้องแยกตามผู้ใช้หรือ tenant และใส่วันที่ เพื่อให้ตัดข้อมูลเก่าได้ · ผลที่ยังไม่ผ่านตัวตรวจอย่าเก็บ
+- PDF ที่ผู้ใช้อัปโหลดเป็นข้อมูลส่วนตัวของผู้ใช้นั้น ไม่ปนกับคลังกลาง · ทางเก็บไฟล์ → `file-upload-and-storage`
+
+## 6. ตรวจอ้างอิง
+
+ทุกข้ออ้างในรายงานต้องมีรายการ (claim, source_id, ข้อความที่ยกมา, ตำแหน่ง) ที่ตัวตรวจจับคู่ได้
+
+1. แยกรายงานร่างเป็นข้ออ้างทีละข้อ (ตัวเลข ชื่อ วันที่ ข้อสรุป)
+2. สำหรับแต่ละข้อ: ดึงข้อความจากแหล่งตามตำแหน่งที่ระบุ แล้วให้ตัวตรวจตอบว่า "ข้อความนี้ยืนยันข้ออ้างหรือไม่" = ยืนยัน · ยืนยันบางส่วน · ไม่ยืนยัน
+3. ไม่ยืนยัน → ตัดออกหรือเขียนใหม่ให้ตรงแหล่ง · ยืนยันบางส่วน → ลดความมั่นใจของประโยค · ห้ามเก็บข้ออ้างที่ไม่มีที่มา
+4. เทียบเลขและชื่อด้วยโค้ดก่อน แล้วค่อยใช้โมเดล (ตรวจด้วยโค้ดถูกกว่าและไม่หลอน) · การตรวจต้องเป็นของจริง ไม่ใช่ให้โมเดลบอกว่าตรวจแล้ว → [`agent-systems.md`](agent-systems.md) หัวข้อ 7
+5. ที่มาที่เป็น URL: เปิดอ่านจริงรอบนี้ ไม่ใช้ลิงก์ที่โมเดลจำมา
+
+วัดด้วย eval (ชุดหัวข้อจริงราว 20 หัวข้อเป็นจุดเริ่มตาม [A2] แล้วเพิ่มจากข้อผิดที่เจอ):
+
+| ตัววัด | ความหมาย |
+|---|---|
+| citation precision | ข้ออ้างที่อ้างแล้วถูกต้อง ÷ ข้ออ้างที่อ้างทั้งหมด |
+| citation recall | ข้ออ้างที่มีที่มาถูกต้อง ÷ ข้ออ้างทั้งหมดที่ควรมีที่มา |
+| faithfulness | คำตอบมีฐานจากบริบทที่ดึงมาหรือไม่ (นิยามใน `llm-evaluation-patterns.md`) |
+| คุณภาพแหล่ง | [A2] ใช้ LLM judge ให้คะแนนความถูกต้อง การอ้างอิง ความครบ คุณภาพแหล่ง ประสิทธิภาพเครื่องมือ และพบว่าต้องมีคนทดสอบด้วย เพราะคนเห็นว่า agent ชอบหยิบเว็บ SEO แทนแหล่งหลัก |
+
+วิธีสร้างชุดข้อสอบ ตัดสินด้วย LLM judge และ A/B → [`llm-evaluation-patterns.md`](llm-evaluation-patterns.md) · เกณฑ์ผ่านตั้งเป็นตัวเลขก่อนเริ่มวัด (`(รอยืนยัน)` จากเจ้าของโปรเจกต์)
+
+## 7. เว็บแอปและผู้ใช้
+
+| เรื่อง | ทำ | ชี้ต่อ |
+|---|---|---|
+| ล็อกอิน | session หรือ OAuth ตามผู้ใช้ · ตรวจสิทธิ์ที่ API ทุกครั้ง ไม่ใช่ที่หน้าจอ | `auth-implementation-patterns` |
+| โควตาต่อผู้ใช้ | จองโควตาตอนรับงาน คืนส่วนที่ไม่ใช้ตอนจบ · แสดงยอดคงเหลือก่อนกดเริ่ม | `saas-platform` |
+| สถานะงาน | ผู้ใช้เห็น "แตกคำถาม → ค้น 7/12 → ตรวจอ้างอิง → เขียน" แบบสตรีม (Server-Sent Events (SSE) หรือ WebSocket) · เก็บสถานะในฐานข้อมูล เปิดหน้าใหม่แล้วยังเห็น | `web-service-essentials` |
+| งานล้มกลางทาง | เก็บ checkpoint ต่อคำถามย่อย ทำต่อจากจุดเดิมไม่เริ่มใหม่ ([A2] แนะนำให้ resume จาก checkpoint) · ปล่อยเวอร์ชันใหม่ต้องไม่ฆ่างานที่วิ่งอยู่ ([A2] ใช้ rainbow deployment) | `jenkins-pipeline` · `kubernetes-helm` |
+| ตั้งเวลาวิจัยซ้ำ | ตารางตั้งเวลาในฐานข้อมูลสร้างงานเข้าคิวเดียวกับงานปกติ นับโควตาเหมือนกัน · กันรันซ้ำด้วยกุญแจ `schedule_id + รอบเวลา` · ผลรอบใหม่เทียบกับรอบก่อนแล้วบอกว่าอะไรเปลี่ยน | `background-jobs` |
+| ข้อมูลส่วนบุคคลในหัวข้อ | หัวข้ออาจมีชื่อคนหรือข้อมูลสุขภาพ · บอกผู้ใช้ก่อนส่ง · ไม่ใส่หัวข้อเต็มใน log (เก็บรหัสงาน) · กำหนดอายุเก็บรายงานและให้ลบได้ · Anthropic เฝ้ารูปแบบการตัดสินใจของ agent ไม่เก็บเนื้อหาสนทนาเพื่อคุ้มครองความเป็นส่วนตัว ([A2]) | `pdpa-compliance` · `logging-standards` |
+| หลังบ้าน | ดูงานตามผู้ใช้ · ต้นทุนต่อรายงาน · ปรับโควตา · หยุดงานที่หลุด · ทุกการกระทำของแอดมินมีบันทึก | `audit-trail` |
+
+## 8. ตัวชี้วัดที่ต้องเฝ้าดู
+
+วิธีเก็บและตั้งเตือนด้วย Prometheus กับ Grafana → [`observability-basics`](../../observability-basics/SKILL.md) และ [`prometheus-grafana.md`](../../observability-basics/references/prometheus-grafana.md) · ข้างล่างคือสิ่งที่ระบบนี้ต้องมี (ชื่อ metric เป็นข้อเสนอของเรา)
+
+| ตัวชี้วัด | ตัวอย่างชื่อ | ดูทำไม |
+|---|---|---|
+| เวลาต่อรายงาน (p50 · p95) | `research_report_duration_seconds` | ผู้ใช้รอนานเกินหรือไม่ |
+| token ต่อรายงาน แยกตามบทบาท | `research_tokens_total{role}` | บอกว่าเงินไปไหน และเทียบกับงบ |
+| งานค้างในคิว | consumer lag (Kafka exporter) | ตัวเดียวกับที่ KEDA ใช้ขยาย |
+| อัตราข้ออ้างที่ตรวจไม่ผ่าน | `research_claims_rejected_total` ÷ ทั้งหมด | พุ่ง = worker หรือแหล่งมีปัญหา |
+| รายงานที่ชนงบก่อนจบ | `research_budget_hit_total{limit}` | งบตั้งต่ำเกินหรือ planner ค้นเปลือง |
+| ข้อผิดของเครื่องมือ | `research_tool_errors_total{tool}` | เว็บบล็อก · browser ค้าง |
+
+เก็บ trace ต่อรายงานเพื่อไล่ว่า agent ตัดสินใจอย่างไร · [A2] เพิ่ม production tracing เต็มรูปเพราะ agent ไม่แน่นอนแล้วดีบั๊กยาก · อย่าใช้ `user_id` หรือหัวข้อเป็น label ของ Prometheus (ค่ามากเกินไป)
+
+## 9. ตัวอย่างจริง
+
+โจทย์ที่ผู้ใช้ให้มา: พิมพ์หัวข้อเดียว ได้รายงานพร้อมอ้างอิง · ตั้งเวลาวิจัยซ้ำได้ · เว็บแอปหน้าลูกค้าและหลังบ้าน · staging แล้ว production
+
+| ชั้น | เลือก | หัวข้อในไฟล์นี้ |
+|---|---|---|
+| ผู้ใช้ | เว็บแอป ล็อกอิน โควตาต่อผู้ใช้ สถานะสตรีม | 7 |
+| API | รับหัวข้อ → ตรวจโควตา → สร้างงาน → ส่งต่อ planner | 3 · 7 |
+| planner | แตกคำถามย่อย เลือกระดับแรงงาน ส่งเข้า Kafka topic `research.questions` | 1 · 3 |
+| worker | 4 ชนิด: ค้นเว็บ · browser agent (sandbox) · อ่าน PDF · ค้น vector DB · แต่ละชนิดเป็น deployment ของตัวเอง ขยายด้วย KEDA ตาม lag | 2 · 4 · 5 |
+| ผล | topic `research.findings` → ตัวตรวจอ้างอิง → ข้ออ้างที่ผ่านลงฐานข้อมูล | 6 |
+| writer | เรียบเรียงจากข้ออ้างที่ผ่าน · กราฟ → `dataviz` · ภาพปก → `graphic-design:image-generation` · ส่งออก Word → `markdown-report-docx` | 1 |
+| ตั้งเวลา | scheduler ในฐานข้อมูล สร้างงานเข้า API ตัวเดียวกัน | 7 |
+| ปล่อย | Docker image → Jenkins ทดสอบ + eval → Helm ลง staging → ตรวจ → production | `jenkins-pipeline` · `kubernetes-helm` |
+| เฝ้าดู | Prometheus + Grafana ตามหัวข้อ 8 | 8 |
+
+ลำดับสร้างที่แนะนำ (`อนุมาน`): ทำ planner + worker ค้นเว็บ + ตัวตรวจอ้างอิง + writer ให้รันในโปรเซสเดียวและผ่าน eval ก่อน → แยกเป็นคิวและ service → เพิ่ม worker ชนิดอื่น (PDF แล้วค่อย browser agent เพราะเสี่ยงสุด) → ตั้งเวลาและโควตา · ถ้ายังไม่ผ่าน eval ตอนรันตัวเดียว การแยก service จะแค่ทำให้ดีบั๊กยากขึ้น
+
+## 10. ตรวจก่อนส่ง
+
+- [ ] ข้ออ้างทุกข้อในรายงานตัวอย่าง 20 หัวข้อมีที่มาที่ตัวตรวจจับคู่ได้ และรายงาน citation precision / recall แล้ว
+- [ ] ชนงบทุกระดับแล้วระบบหยุดและรายงานว่า "ไม่ครบ" ไม่ค้าง ไม่ใช้เงินเกิน
+- [ ] หน้าเว็บทดสอบที่มีคำสั่งแฝงไม่ทำให้ worker ทำตามหรือส่งข้อมูลออก
+- [ ] ผู้ใช้ A เห็นและหักโควตาเฉพาะของ A · คลังความจำไม่ปนข้ามผู้ใช้
+- [ ] kill worker กลางงาน แล้วงานทำต่อจาก checkpoint ผลไม่ซ้ำ
+- [ ] KEDA ขยายขึ้นและลงตาม lag ที่ staging และไม่เกินเพดาน
+- [ ] ทุกตัวชี้วัดในหัวข้อ 8 มีกราฟและมีเตือนอย่างน้อย 3 ตัว (เวลา · งานค้าง · ข้ออ้างไม่ผ่าน)
+- [ ] ก่อนส่งงาน รัน `security-gate` และ `principle-prove-it-works`
+
+## 11. ที่มา
+
+ทุกลิงก์เปิดอ่านจริง 2026-10-27 ตัวเลขของบริษัทเป็นที่บริษัทรายงานเอง ไม่มีผู้ตรวจอิสระ
+
+| รหัส | แหล่ง | ใช้ในเรื่อง |
+|---|---|---|
+| A2 | [Anthropic, How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) (2025-06-13) | โครง orchestrator-worker · CitationAgent · 4x และ 15x · กฎขนาดแรงงาน · eval · production |
+| A3 | [Anthropic, Mitigating the risk of prompt injections in browser use](https://www.anthropic.com/research/prompt-injection-defenses) (2025-11-24) | อัตราโจมตีสำเร็จของ browser agent |
+| O1 | [OWASP, LLM01 Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) | indirect injection · least privilege · คนอนุมัติ · adversarial test |
+| R1 | [RFC 9309, Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html) (กันยายน 2022) | robots.txt ไม่ใช่การอนุญาต |
+| G1 | [GPT Researcher](https://github.com/assafelovic/gpt-researcher) | planner · execution · publisher |
+| L1 | [LangChain open_deep_research](https://github.com/langchain-ai/open_deep_research) | แยกโมเดลตามบทบาท |
+| S1 | [Stanford STORM](https://github.com/stanford-oval/storm) (Shao et al., NAACL 2024, arXiv:2402.14207) | pre-writing · หลายมุมมอง |
+
+ไม่ได้ตรวจ: ค่าใช้จ่ายจริงต่อรายงานของระบบเรา · ขั้นตอนภายในของ open_deep_research รุ่นปัจจุบัน · เกณฑ์ SQS/Redis เทียบ Kafka ด้วยตัวเลข (ใช้เกณฑ์ใน `kafka-streaming` แทน)
 
 
 ## reference: llm-evaluation-patterns.md

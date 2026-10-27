@@ -11,8 +11,8 @@
 | [`e-commerce`](#e-commerce) | ขายออนไลน์ ซื้ออย่างมั่นใจ และงานหลังบ้านบริษัทไทย | 8 | 33 | 14 | 18 | 114 |
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 20 | 6 | 9 | 122 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 164 |
-| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 101 | 29 | 17 | 893 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 38 | 0 | 7 | 133 |
+| [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 101 | 29 | 17 | 894 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 38 | 0 | 7 | 137 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 7 | 10 | 86 |
 
 ## โครงของทุก plugin
@@ -56,7 +56,7 @@ plugins/<plugin>/
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
 | skill | `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |
-| skill | `parallel-split-and-merge` | แบ่งงานที่ไม่ทับกันให้หลาย agent ทำพร้อมกันแล้วรวม | `scripts/plan.mjs` · `scripts/plan.test.mjs` |
+| skill | `parallel-split-and-merge` | แบ่งงานที่ไม่ทับกันให้หลาย agent ทำพร้อมกันแล้วรวม | `scripts/plan-actual.mjs` · `scripts/plan-draw.mjs` · `scripts/plan.mjs` · `scripts/plan.test.mjs` |
 | skill | `polished-document-style` | จัดรูปแบบเอกสาร Markdown ให้ผู้บริหารหรือลูกค้าอ่าน (BRD · FSD · ADR) | `references/markdown-patterns.md` · `references/theme-colors.md` · `scripts/check_outline.py` |
 | skill | `polite-message-th-en` | เขียนข้อความที่พูดยาก (ขอให้ช่วย · ปฏิเสธ · ทวงเงิน) ไทยหรืออังกฤษ | `references/templates.md` |
 | skill | `principle-build-a-tool-not-handwork` | งานซ้ำ ๆ ให้เขียนสคริปต์ ไม่ทำมือทีละไฟล์ | — |
@@ -93,6 +93,7 @@ plugins/<plugin>/
 | `references/brief-template.md` | แบบฟอร์มใบสั่งงานที่ส่งให้ลูกทีม | ทุก plugin |
 | `references/code-extensions.md` | ส่วนที่ใช้เฉพาะงานโค้ดของ skill กลางใน plugin superuser | `software-company` |
 | `references/context-template.md` | แบบไฟล์ CONTEXT.md สำหรับส่งงานต่อ | `e-commerce` · `graphic-design` · `personal-life` · `trading-finance` |
+| `references/deep-research.md` | โหมด deep research: ต้นไม้คำถาม · ไฟล์คิวกลาง · ลูกทีมเขียนผลลงไฟล์ตัวเอง · ตรวจทุกข้ออ้าง · รวมรายงาน · วิจัยซ้ำตามเวลา | `superuser` |
 | `references/evidence.md` | หลักฐานแบบไหนนับว่า "เสร็จจริง" | ทุก plugin |
 | `references/examples.md` | ตัวอย่างงานจริงตั้งแต่รับจนส่ง | ทุก plugin |
 | `references/lead-playbook.md` | บทเรียนของหัวหน้าทีมเอง: คาดกับจริงต่างกันตรงไหน จัดขนาดและแจกงานอย่างไร | ทุก plugin |
@@ -110,6 +111,7 @@ plugins/<plugin>/
 | `templates/TEAM.md` | โปรไฟล์ลูกทีม: ใครถนัดอะไร พลาดบ่อยเรื่องไหน ใช้ระดับไหนพอ | ทุก plugin |
 | `templates/config.json` | ค่าเปิดปิดโมดูลและงบของโฟลเดอร์งาน | ทุก plugin |
 | `templates/improvements-queue.md` | แบบคิวข้อเสนอแก้ skill รวมทั้งเครื่อง | ทุก plugin |
+| `templates/research-queue.json` | แม่แบบไฟล์คิวกลางของ deep research: ข้อย่อย · สถานะ · ไฟล์ผล · ผลตรวจอ้างอิง · รอบวิจัยซ้ำ | `superuser` |
 
 ## e-commerce
 
@@ -597,7 +599,7 @@ plugins/<plugin>/
 | `insurance-systems` | ซอฟต์แวร์ประกัน: กรมธรรม์ · ใบเสนอราคา · เคลม · ฉ้อฉล · รายงาน คปภ. | `references/agent-actuarial-engineer.md` · `references/agent-claims-processing-specialist.md` · `references/agent-insurance-compliance-officer.md` · `references/agent-insurance-engineer.md` · `references/agent-underwriting-analyst.md` · `references/claims-workflow-patterns.md` · `references/insurance-compliance.md` · `references/underwriting-models.md` |
 | `iot-systems` | อุปกรณ์เชื่อมต่อ: ลงทะเบียนเครื่อง · อัปเดต OTA · edge หรือ cloud · MQTT | `references/agent-edge-architect.md` · `references/agent-firmware-engineer.md` · `references/agent-iot-engineer.md` · `references/agent-mqtt-specialist.md` · `references/device-fleet-management.md` · `references/edge-computing-architecture.md` · `references/mqtt-protocol-patterns.md` |
 | `legal-document-systems` | ซอฟต์แวร์เอกสารกฎหมาย: ดึงข้อสัญญา · สร้างเอกสาร · e-signature · พ.ร.บ.ธุรกรรมฯ | `references/agent-contract-analyzer.md` · `references/agent-document-automation-engineer.md` · `references/agent-e-signature-specialist.md` · `references/agent-legal-compliance-officer.md` · `references/agent-legaltech-engineer.md` · `references/contract-parsing-patterns.md` · `references/document-automation-patterns.md` · `references/e-signature-compliance.md` |
-| `llm-engineering` | ระบบที่เรียก LLM: prompt · ผลแบบมีโครงสร้าง · RAG · embedding · วัดผล | `references/agent-llm-architect.md` · `references/agent-ml-engineer.md` · `references/agent-mlops-engineer.md` · `references/agent-prompt-engineer.md` · `references/agent-systems.md` · `references/llm-evaluation-patterns.md` · `references/prompt-engineering-patterns.md` · `references/rag-architecture.md` |
+| `llm-engineering` | ระบบที่เรียก LLM: prompt · ผลแบบมีโครงสร้าง · RAG · embedding · วัดผล | `references/agent-llm-architect.md` · `references/agent-ml-engineer.md` · `references/agent-mlops-engineer.md` · `references/agent-prompt-engineer.md` · `references/agent-systems.md` · `references/deep-research-system.md` · `references/llm-evaluation-patterns.md` · `references/prompt-engineering-patterns.md` · `references/rag-architecture.md` |
 | `mobile-engineering` | งานวิศวกรรมแอปมือถือ (Kotlin · Swift · Flutter · React Native · ใช้งานออฟไลน์) | `references/agent-android-engineer.md` · `references/agent-aso-specialist.md` · `references/agent-cross-platform-engineer.md` · `references/agent-ios-engineer.md` · `references/app-store-optimization.md` · `references/mobile-architecture-patterns.md` · `references/mobile-performance.md` |
 | `smart-contracts` | สร้างงานบนบล็อกเชน: สัญญา Solidity / Solana · ตรวจสัญญา · DeFi | `references/agent-blockchain-architect.md` · `references/agent-defi-engineer.md` · `references/agent-smart-contract-developer.md` · `references/agent-tokenomics-designer.md` · `references/defi-patterns.md` · `references/smart-contract-testing.md` · `references/solidity-security.md` |
 | `developer-experience` | ประสบการณ์นักพัฒนา: เวลาถึง hello world · ข้อความ error · CLI · SDK | `references/agent-devrel-engineer.md` · `references/agent-docs-engineer.md` · `references/agent-dx-engineer.md` · `references/agent-sdk-builder.md` · `references/developer-experience.md` · `references/sdk-design-patterns.md` · `references/technical-content.md` |
@@ -698,7 +700,7 @@ plugins/<plugin>/
 
 | โฟลเดอร์ใน `skills/` | ใช้ทำอะไร | ไฟล์ในโฟลเดอร์ (นอกจาก SKILL.md) |
 |---|---|---|
-| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/autonomy.md` · `references/brief-template.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/modules.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/CONTEXT.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` |
+| `superuser` | ทีมผู้ช่วยหลายขั้น: หัวหน้าทีมเลือก playbook แจกงาน ตรวจ แล้วรายงาน | `references/autonomy.md` · `references/brief-template.md` · `references/deep-research.md` · `references/evidence.md` · `references/examples.md` · `references/lead-playbook.md` · `references/learning-loop.md` · `references/modules.md` · `references/playbook-document.md` · `references/playbook-learn-from-session.md` · `references/playbook-pickup-and-pause.md` · `references/playbook-research.md` · `references/playbook-review.md` · `references/playbook-team-project.md` · `references/playbook-template.md` · `references/playbook-unattended-run.md` · `references/team-files.md` · `references/team-roles.md` · `references/triggers.md` · `references/voting.md` · `templates/CONTEXT.md` · `templates/HISTORY.md` · `templates/IMPROVEMENTS.md` · `templates/TEAM.md` · `templates/config.json` · `templates/improvements-queue.md` · `templates/research-queue.json` |
 
 ### playbook (7) — `skills/superuser/references/`
 
