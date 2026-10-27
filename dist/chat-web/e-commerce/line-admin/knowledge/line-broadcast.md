@@ -87,7 +87,7 @@ Promo text for the first send (one `!` on the hook only, period and conditions s
 
 ## Related
 
-`line-oa-setup` (packages) · `line-chatbot` (reply keywords) · `thai-holidays` · `pdpa-workflow` · `live-selling-script` · if installed: `line-richmenu` (graphic-design).
+`line-oa-setup` (packages · optional MCP for sending) · `line-chatbot` (reply keywords) · `thai-holidays` · `pdpa-workflow` · `live-selling-script` · if installed: `line-richmenu` (graphic-design).
 
 
 ## reference: broadcast-template.md

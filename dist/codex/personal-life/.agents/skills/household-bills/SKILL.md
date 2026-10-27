@@ -66,6 +66,23 @@ Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย
 | 8 | Aircon not cleaned for 6+ months | See `home-maintenance` |
 | 9 | Still unexplained | Ask the utility to test the meter (ขอตรวจสอบมิเตอร์) — call 1130 (กฟน.), 1129 (กฟภ.), 1125 (กปน.), 1662 (กปภ.) |
 
+## Script
+
+`power-bill.mjs` computes the bill as (tiered energy + service charge + Ft × units) + VAT 7%. Given 2 months it says how much of the difference comes from more units, from units moving into a higher tier, and from a Ft change; the three add up to the difference (VAT included).
+
+```
+node power-bill.mjs <file.json> [--json]     # example file: scripts/example.json
+node power-bill.mjs --self-test
+```
+
+Input file: `{ "tiers": [ { "upTo": 150, "rate": 3.0 }, { "upTo": null, "rate": 5.0 } ], "service": 25, "months": [ { "label": "Apr", "units": 330, "ft": 39.72 } ] }` · `rate` is baht/unit, `upTo` is the cumulative unit limit (last tier `null`), `ft` is satang/unit. One month = a bill; two months = a comparison. A bad field stops the script with a message naming it.
+
+`scripts/rates.json` holds only what this file lists with a source: the Ft rate (16.23 สตางค์, ก.ย.–ธ.ค. 2569, checked 2026-10-14) and VAT. The tier rates and service charge are still (รอยืนยัน) above, so **you must pass `tiers` and `service` from the back of the user's bill**; the script stops and says so if they are missing. When the Ft period changes, pass `ft` in the file or update `rates.json`. `scripts/example.json` uses made-up tier rates, not real tariffs.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/personal-life/*/skills/household-bills/scripts/power-bill.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/personal-life/skills/household-bills/scripts/power-bill.mjs` · Node only, no dependencies.
+
+The output is information; check it against the printed bill before acting.
+
 ## Worked example
 
 A Bangkok house used 412 units in May against 318 / 305 / 330 in Feb–Apr (average 318). 412 / 318 = +30% → spike. Billing period 30 days, read not estimated. Night leak test: meter still. May is peak heat and 2 aircons were last cleaned 9 months ago. Action: clean both aircons (see `home-maintenance`), set them to 26 °C, re-check June units. June came in at 352 — the residual over April is seasonal.

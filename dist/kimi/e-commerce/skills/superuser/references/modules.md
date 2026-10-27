@@ -20,6 +20,7 @@
 | **guard** | `guard` · **ค่าเริ่มปิด** | ด่านป้องกัน (hook PreToolUse เฉพาะ `Bash` ทุก agent): คำสั่งที่กฎประจำตัวห้ามอยู่แล้วถูกปฏิเสธพร้อมเหตุผล 1 บรรทัดและกฎที่มา — `git push` · `git commit` · `git reset --hard` · `git stash drop/clear` · `rm -rf` และ `Remove-Item -Recurse -Force` นอก `_to_delete/` · เขียนทับ `~/.claude/settings.json` ผ่าน shell · รายการ regex อยู่ใน `hooks/guard-rules.json` · ไม่แตะ Read/Edit/Write · ยกเว้นต่อโฟลเดอร์งานใน `.claude/superuser/guard-allow.json` `{"allow": ["git-commit", "^git push origin feature/"]}` (id = ปิดข้อนั้น · อื่น ๆ = regex ที่ถ้าตรงคำสั่งให้ผ่าน) — ผู้ใช้สั่ง commit ก็เพิ่ม `git-commit` ไว้ | ไม่มีด่านเครื่อง กฎประจำตัวยังห้ามเหมือนเดิมแต่หัวหน้าคุมเอง |
 | **recompact** | `recompact` · **ค่าเริ่มปิด** | หลังย่อบริบท (SessionStart `source: compact` — hook ส่งกฎประจำตัวซ้ำตรงนี้อยู่แล้ว) เติมหัวข้อ "ความคืบหน้า" และ "รับงานต่อ" ของ `CONTEXT.md` ไม่เกิน 40 บรรทัด หัวหน้าจึงไม่หลุดตำแหน่งงาน · ไม่มีไฟล์หรือไม่มีหัวข้อ = ไม่ส่ง · เอกสาร hooks (code.claude.com/docs/en/hooks ตรวจ 2026-10-23) บอกว่า `PostCompact` "has no decision control" และทิ้ง `systemMessage`/`continue` จึงใช้ส่งบริบทไม่ได้ — hook รับ `PostCompact` ไว้แค่จด log ว่าย่อเมื่อไร | หลังย่อบริบทได้กฎประจำตัวอย่างเดียว ต้องอ่าน `CONTEXT.md` เอง |
 | **ui_scan** | `ui_scan` | ด่านหน้าตา (hook PostToolUse · `hooks/ui-scan-hook.mjs`): แก้ไฟล์ UI (html · css · jsx · tsx · vue · svelte · astro) ด้วย Write/Edit แล้วรัน `slop_scan.py` ของ `no-ai-look` กับไฟล์นั้นทันที · P0/P1 ส่งกลับให้แก้ · P2 แจ้งเป็นบริบท · P3 ไม่แจ้ง · ผลเดิมไม่เตือนซ้ำ · **ทำงานแม้ไม่มีโฟลเดอร์ทีม** · ไม่มี Python = เงียบ · ข้าม `_to_delete` `node_modules` `dist` `build` `evals` | ต้องรัน `slop_scan.py` เองก่อนส่ง (`no-ai-look` ข้อ 3) |
+| **pii_gate** | `pii_gate` | ด่านข้อมูลส่วนตัว (hook PreToolUse · Write/Edit): สิ่งที่จะเขียนมีเลขบัตรประชาชนที่หลักตรวจสอบถูก (ไม่นับเลขนิติบุคคลที่ขึ้นต้น 0) เลขบัตรเครดิตที่ผ่าน Luhn หรือเลขบัญชีแบบ xxx-x-xxxxx-x → ถามผู้ใช้ก่อนเขียน ไม่ปฏิเสธ · ข้ามไฟล์ test fixture และ `_to_delete` · **ทำงานแม้ไม่มีโฟลเดอร์ทีม** · ยังไม่ตรวจคำสั่ง Bash ที่เขียนไฟล์ | ต้องคอยดูเองว่าไม่ได้เขียนเลขบัตรหรือเลขบัญชีลงไฟล์งาน |
 
 `.claude/superuser/` ไม่ commit ยกเว้น `CONTEXT.md` และ `IMPROVEMENTS.md` · brief ไป `docs/BRIEF.md` · `CONTEXT.md` กับ `.superuser/` ที่รากของโปรเจกต์เก่าใช้ต่อได้
 
@@ -34,7 +35,7 @@
     "context": true, "log": true, "improvements": true, "learning": true,
     "inbox": true, "handoff": true, "patterns_advanced": true,
     "review_gate": true, "split_gate": true,
-    "guard": false, "recompact": false, "ui_scan": true
+    "guard": false, "recompact": false, "ui_scan": true, "pii_gate": true
   }
 }
 ```

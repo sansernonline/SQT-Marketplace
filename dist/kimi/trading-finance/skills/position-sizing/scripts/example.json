@@ -1,0 +1,8 @@
+{
+  "type": "share",
+  "capital": 100000,
+  "riskPct": 1,
+  "entry": 48.5,
+  "stop": 47.5,
+  "costPerShare": 0.19
+}

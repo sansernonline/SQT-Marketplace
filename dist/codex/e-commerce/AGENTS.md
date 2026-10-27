@@ -1,6 +1,6 @@
 # SQT e-commerce — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.2.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.3.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.
 
