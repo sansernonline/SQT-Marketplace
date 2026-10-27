@@ -661,23 +661,66 @@ export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(
   return "";
 }
 
+// ── ด่านข้อมูลส่วนตัวในไฟล์งาน (PreToolUse Write/Edit · โมดูล pii_gate ค่าเริ่มเปิด · ทำงานแม้ไม่มีโฟลเดอร์ทีม) ──
+// กฎประจำตัว: เลขบัตร เลขบัญชี ไม่ลงไฟล์งาน เก็บได้แค่ 4 ตัวท้าย · ถาม (ask) ไม่ปฏิเสธ เพราะบางงานตั้งใจเขียน เช่นข้อมูลตัวอย่าง
+// ลดการทักผิด: เลขบัตรประชาชนนับเฉพาะที่หลักตรวจสอบถูก และไม่ขึ้นต้นด้วย 0 (เลขผู้เสียภาษีนิติบุคคลขึ้นต้น 0 และพิมพ์บนใบกำกับภาษีตามปกติ)
+// เลขบัตรเครดิตนับเฉพาะ 14–19 หลักที่ผ่าน Luhn · ไฟล์ test และ fixture ไม่ตรวจ เพราะตัวตรวจเลขต้องมีเลขตัวอย่าง
+export function thaiIdValid(d) {
+  if (!/^\d{13}$/.test(d)) return false;
+  let s = 0;
+  for (let i = 0; i < 12; i++) s += Number(d[i]) * (13 - i);
+  return (11 - (s % 11)) % 10 === Number(d[12]);
+}
+// บัตรเครดิต: เลขติดกัน 14–19 หลัก หรือกลุ่มละ 4 หลักคั่นด้วยเว้นวรรคหรือขีดแบบเดียวกัน · ต้องขึ้นต้นด้วยรหัสผู้ออกบัตร
+// (Visa 4 · Mastercard 51–55 และ 2221–2720 · Amex 34 37 · JCB 35) เพราะเลขทั่วไปผ่าน Luhn ได้ราว 1 ใน 10 · วันที่ 2026-10-28 ไม่เข้ารูปกลุ่ม 4 หลัก
+const CARD = /(?<![\d-])(?:\d{4}([ -])\d{4}\1\d{4}\1\d{1,7}|\d{4}([ -])\d{6}\2\d{5}|\d{14,19})(?![\d-])/g;   // กลุ่ม 4-6-5 คือรูปของ Amex
+const ID_LABEL = /บัตร|ประจำตัว|ประชาชน|\bID\b|national/i;
+const cardPrefix = (d) => /^(4|5[1-5]|3[457])/.test(d) || (Number(d.slice(0, 4)) >= 2221 && Number(d.slice(0, 4)) <= 2720);
+const PII_SKIP = /(^|[\\/])(tests?|fixtures?|__tests__|_to_delete)[\\/]|\.(test|spec)\.|[\\/]hooks[\\/]superuser-hook\.mjs$/i;
+export function personalDataGate(name, inp = {}) {
+  if (name !== "Write" && name !== "Edit") return "";
+  const path = String(inp.file_path ?? "");
+  if (PII_SKIP.test(path)) return "";
+  const text = String((name === "Write" ? inp.content : inp.new_string) ?? "");
+  const found = [];
+  for (const m of text.matchAll(/(?<![\d-])\d-?\d{4}-?\d{5}-?\d{2}-?\d(?![\d-])/g)) {
+    const d = m[0].replace(/-/g, "");
+    // เลขติดกัน 13 หลักผ่านหลักตรวจสอบได้ราว 1 ใน 10 (เช่น timestamp) · ทักเฉพาะที่มีขีดแบบบัตร หรือมีคำว่าบัตรหรือประจำตัวนำหน้าใน 30 ตัวอักษร
+    const labelled = m[0].includes("-") || ID_LABEL.test(text.slice(Math.max(0, m.index - 30), m.index));
+    if (d[0] !== "0" && labelled && thaiIdValid(d)) { found.push("เลขบัตรประชาชน"); break; }
+  }
+  for (const m of text.matchAll(CARD)) {
+    const d = m[0].replace(/\D/g, "");
+    if (cardPrefix(d) && luhn(d)) { found.push("เลขบัตรเครดิต"); break; }
+  }
+  if (/(?<!\d)\d{3}-\d-\d{5}-\d(?!\d)/.test(text)) found.push("เลขบัญชีธนาคาร");
+  return found.length ? `ด่านข้อมูลส่วนตัว (SuperUser): สิ่งที่จะเขียนลง ${basename(path)} มี${found.join(" · ")} · กฎ: ไม่เก็บเลขบัตรหรือเลขบัญชีลงไฟล์งาน เก็บได้แค่ 4 ตัวท้าย · ถ้าเป็นข้อมูลตัวอย่าง หรือผู้ใช้สั่งให้เก็บ อนุมัติได้ · ปิดทั้งโปรเจกต์ได้ที่ .claude/superuser/config.json {"modules": {"pii_gate": false}}` : "";
+}
+
 // ทางด่วน: ไม่มีโฟลเดอร์ทีม หรือปิด split_gate → ออกก่อนแตะ transcript · ด่านข้อความเจ้าของไม่อ่านไฟล์ จึงตรวจทุกโปรเจกต์
+// ด่านที่ปฏิเสธ (deny) ทำงานก่อน แล้วค่อยถาม (ask) เรื่องข้อมูลส่วนตัว · ถ้าถามก่อน ผู้ใช้กดอนุมัติแล้วไฟล์ที่ควรถูกปฏิเสธจะถูกเขียน
+function denyReason(input, teamDir) {
+  if (teamDir && moduleOn(teamDir, "guard", false)) { const g = guardGate(input.tool_name, input.tool_input ?? {}, teamDir); if (g) return g; }
+  if (teamDir && !moduleOn(teamDir, "split_gate")) return "";
+  const owner = ownerInboxGate(input.tool_name, input.tool_input ?? {});
+  if (owner) return owner;
+  if (!teamDir || input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return "";
+  const current = { name: input.tool_name, input: input.tool_input ?? {} };
+  const targets = targetsOf(current.name, current.input);
+  if (!targets.length) return "";
+  const s = gateState(teamDir, input.transcript_path);
+  return targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean) ?? "";
+}
 function preWriteGate(input) {
   if (input.hook_event_name !== "PreToolUse" || !["Write", "Edit", "Bash"].includes(input.tool_name)) return;
   const root = findProjectRoot(input.cwd ?? process.cwd());
   const teamDir = root && teamDirOf(root);
-  const deny = (reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: reason } }));
-  if (teamDir && moduleOn(teamDir, "guard", false)) { const g = guardGate(input.tool_name, input.tool_input ?? {}, teamDir); if (g) { deny(g); return; } }
-  if (teamDir && !moduleOn(teamDir, "split_gate")) return;
-  const owner = ownerInboxGate(input.tool_name, input.tool_input ?? {});
-  if (owner) { deny(owner); return; }
-  if (!teamDir || input.agent_id || !input.transcript_path || !existsSync(input.transcript_path)) return;
-  const current = { name: input.tool_name, input: input.tool_input ?? {} };
-  const targets = targetsOf(current.name, current.input);
-  if (!targets.length) return;
-  const s = gateState(teamDir, input.transcript_path);
-  const reason = targets.map((t) => splitGate(s, t, input.tool_use_id ?? null, current, input.cwd ?? process.cwd())).find(Boolean);
-  if (reason) deny(reason);
+  const answer = (decision, reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: decision, permissionDecisionReason: reason } }));
+  const deny = denyReason(input, teamDir);
+  if (deny) { answer("deny", deny); return; }
+  if (teamDir && !moduleOn(teamDir, "pii_gate")) return;
+  const pii = personalDataGate(input.tool_name, input.tool_input ?? {});
+  if (pii) answer("ask", pii);
 }
 
 // ── ส่งตำแหน่งงานกลับหลังย่อบริบท (โมดูล recompact ค่าเริ่มปิด) ──────────
@@ -1194,6 +1237,31 @@ ${rows}
       try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", agent_id: "sub-1", tool_input: { file_path: "/p/.claude/superuser/inbox/x-owner.md", content: "x" } }); }
       finally { process.stdout.write = w; }
       return /"deny"/.test(out);
+    }],
+  );
+  // ด่านข้อมูลส่วนตัว: เลขสมมุติที่หลักตรวจสอบถูก (ไม่ใช่เลขของคนจริง) · 4111… คือเลขบัตรทดสอบมาตรฐาน
+  const pii = (name, inp) => personalDataGate(name, inp);
+  gates.push(
+    ["ด่านข้อมูลส่วนตัว: หลักตรวจสอบบัตรประชาชน", [], true, () => thaiIdValid("1101700123456") && !thaiIdValid("1101700123457")],
+    ["ด่านข้อมูลส่วนตัว: เขียนเลขบัตรประชาชนลงไฟล์ → ถาม", [], true, () => pii("Write", { file_path: "/p/docs/staff.md", content: "คุณเอ 1-1017-00123-45-6" }).includes("เลขบัตรประชาชน") && pii("Write", { file_path: "/p/a.md", content: "เลขประจำตัว 1101700123456" }).includes("เลขบัตรประชาชน")],
+    ["ด่านข้อมูลส่วนตัว: timestamp 13 หลักไม่มีคำนำ → ผ่าน · Amex 4-6-5 → ถาม", [], true, () => !pii("Write", { file_path: "/p/a.md", content: "ts 1101700123456" }) && pii("Write", { file_path: "/p/a.md", content: "amex 3782 822463 10005" }).includes("เลขบัตรเครดิต")],
+    ["ด่านข้อมูลส่วนตัว: Edit ใส่เลขบัตรเครดิต และเลขบัญชี → ถาม", [], true, () => /เลขบัตรเครดิต · เลขบัญชีธนาคาร/.test(pii("Edit", { file_path: "/p/a.md", new_string: "บัตร 4111 1111 1111 1111 โอนเข้า 123-4-56789-0" }))],
+    ["ด่านข้อมูลส่วนตัว: เลขผู้เสียภาษีนิติบุคคล (ขึ้นต้น 0) · หลักตรวจสอบผิด · 4 ตัวท้าย → ผ่าน", [], false, () => pii("Write", { file_path: "/p/quote.md", content: "เลขผู้เสียภาษี 0105556000009 · 1101700123457 · บัตรลงท้าย 1111" }) || !thaiIdValid("0105556000009")],
+    ["ด่านข้อมูลส่วนตัว: ไฟล์ test และ fixture → ไม่ตรวจ", [], false, () => pii("Write", { file_path: "/p/scripts/thai-id.test.mjs", content: "1101700123456" }) || pii("Write", { file_path: "/p/tests/fixtures/a.json", content: "4111111111111111" })],
+    ["ด่านข้อมูลส่วนตัว: วันที่ 2 ตัว · เลขคำสั่งซื้อที่ไม่มีรหัสผู้ออกบัตร → ผ่าน", [], false, () => pii("Write", { file_path: "/p/a.md", content: "2026-10-28 2026-11-16 · order 99123456789012345 · 1234 5678 9012 3456" })],
+    ["ด่านข้อมูลส่วนตัว: ด่านเจ้าของ (deny) มาก่อน ask", [], true, () => {
+      const w = process.stdout.write; let out = "";
+      process.stdout.write = (s) => { out += s; return true; };
+      try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: tmpdir(), tool_input: { file_path: "/p/.claude/superuser/inbox/x-owner.md", content: "1101700123456" } }); }
+      finally { process.stdout.write = w; }
+      return /"deny"/.test(out) && !/"ask"/.test(out);
+    }],
+    ["ด่านข้อมูลส่วนตัว: preWriteGate ตอบ ask ไม่ใช่ deny", [], true, () => {
+      const w = process.stdout.write; let out = "";
+      process.stdout.write = (s) => { out += s; return true; };
+      try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: tmpdir(), tool_input: { file_path: join(tmpdir(), "x.md"), content: "บัตรประชาชน 1101700123456" } }); }
+      finally { process.stdout.write = w; }
+      return /"ask"/.test(out) && !/"deny"/.test(out);
     }],
   );
   // ด่านป้องกัน (guard): โปรเจกต์ชั่วคราวที่มี .claude/superuser/ · ไม่มี config = ปิด · เปิดแล้วบล็อกตามรายการ · guard-allow.json ยกเว้นได้

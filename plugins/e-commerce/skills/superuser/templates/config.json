@@ -12,6 +12,7 @@
     "split_gate": true,
     "guard": false,
     "recompact": false,
-    "ui_scan": true
+    "ui_scan": true,
+    "pii_gate": true
   }
 }
