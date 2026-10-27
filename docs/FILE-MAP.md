@@ -12,7 +12,7 @@
 | [`graphic-design`](#graphic-design) | ทำโลโก้ แบรนด์ โพสต์ และคลิปให้หน้าตาเป็นชุดเดียวกัน | 6 | 20 | 6 | 9 | 122 |
 | [`personal-life`](#personal-life) | จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้ | 9 | 42 | 16 | 30 | 164 |
 | [`software-company`](#software-company) | ทีมซอฟต์แวร์ครบชุด ตั้งแต่โจทย์จนส่งมอบ | 38 | 97 | 29 | 17 | 866 |
-| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 38 | 0 | 7 | 131 |
+| [`superuser`](#superuser) | ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ | 3 | 38 | 0 | 7 | 133 |
 | [`trading-finance`](#trading-finance) | วางแผนเงิน ดูพอร์ต และเทรดอย่างมีวินัย ไม่ชี้นำ | 5 | 23 | 7 | 10 | 86 |
 
 ## โครงของทุก plugin
@@ -56,7 +56,7 @@ plugins/<plugin>/
 | skill | `no-ai-look` | ตรวจงานที่คนต้องมอง ไม่ให้ดูเหมือน AI ทำ (มีสคริปต์สแกน) | `references/catalog.md` · `scripts/slop_scan.py` |
 | skill | `owner-style-capture` | จดวิธีทำงานที่เจ้าของชอบ ให้ agent ทำตามโดยไม่ต้องบอกซ้ำ | — |
 | skill | `parallel-attempts-pick-best` | ลองหลายแบบพร้อมกันแล้วเลือกแบบที่ดีที่สุด (ดีไซน์ · interface · mockup) | — |
-| skill | `parallel-split-and-merge` | แบ่งงานที่ไม่ทับกันให้หลาย agent ทำพร้อมกันแล้วรวม | — |
+| skill | `parallel-split-and-merge` | แบ่งงานที่ไม่ทับกันให้หลาย agent ทำพร้อมกันแล้วรวม | `scripts/plan.mjs` · `scripts/plan.test.mjs` |
 | skill | `polished-document-style` | จัดรูปแบบเอกสาร Markdown ให้ผู้บริหารหรือลูกค้าอ่าน (BRD · FSD · ADR) | `references/markdown-patterns.md` · `references/theme-colors.md` · `scripts/check_outline.py` |
 | skill | `polite-message-th-en` | เขียนข้อความที่พูดยาก (ขอให้ช่วย · ปฏิเสธ · ทวงเงิน) ไทยหรืออังกฤษ | `references/templates.md` |
 | skill | `principle-build-a-tool-not-handwork` | งานซ้ำ ๆ ให้เขียนสคริปต์ ไม่ทำมือทีละไฟล์ | — |

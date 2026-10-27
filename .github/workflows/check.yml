@@ -35,6 +35,11 @@ jobs:
           node scripts/sync/sync-prompt-rules.mjs --check
       - name: hook self-test
         run: node plugins/superuser/hooks/superuser-hook.mjs --self-test
+      - name: scorecard และ planner self-test
+        shell: bash
+        run: |
+          node plugins/superuser/skills/model-scorecard/scripts/scorecard.mjs --self-test
+          node plugins/superuser/skills/parallel-split-and-merge/scripts/plan.mjs --self-test
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |
