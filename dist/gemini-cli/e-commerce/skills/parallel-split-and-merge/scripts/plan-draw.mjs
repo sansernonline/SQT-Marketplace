@@ -10,7 +10,8 @@ function criticalEdge(a, from, to) {
 }
 
 export function toMermaid(a) {
-  const safe = (id) => `n_${String(id).replace(/[^\w]/g, "_")}`;
+  // ชื่อ node ตามลำดับชิ้น ไม่ใช้ id ตรง ๆ เพราะ id ภาษาไทยหรือ a-b กับ a_b จะกลายเป็นชื่อเดียวกัน · id จริงอยู่ในป้าย
+  const index = new Map(a.tasks.map((t, i) => [t.id, i])), safe = (id) => `n${index.get(id)}`;
   const label = (t) => `${t.id}${t.title ? ` ${t.title}` : ""}<br/>${t.sizeLabel ? `${t.sizeLabel} ` : ""}${n1(t.size)}k · rank ${n1(a.rank.get(t.id))}`.replace(/"/g, "'");
   return [
     "```mermaid",
@@ -24,7 +25,7 @@ export function toMermaid(a) {
 }
 
 // ชั้นของแต่ละชิ้น: วางชิดชิ้นที่รอมันอยู่ (ชั้นสุดท้าย − ทอดที่ยาวที่สุดไปถึงชิ้นท้าย) ชิ้นนอกสายวิกฤตจึงไม่ไปกองซ้ายสุดแล้วลากเส้นยาวทับกล่องอื่น
-function levels(a) {
+export function levels(a) {
   const depth = new Map(), height = new Map();
   const down = (id) => depth.get(id) ?? depth.set(id, Math.max(-1, ...a.tasks.find((t) => t.id === id).needs.map(down)) + 1).get(id);
   const up = (id) => height.get(id) ?? height.set(id, Math.max(-1, ...a.tasks.filter((t) => t.needs.includes(id)).map((t) => up(t.id))) + 1).get(id);

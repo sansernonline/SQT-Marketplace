@@ -1,6 +1,6 @@
 // --self-test ของ plan.mjs · ตัวอย่างใน superuser/references/team-roles.md "แบ่งงาน" + กรณีผิดที่ต้องจับได้
 import { validate, ranks, analyse, render } from "./plan.mjs";
-import { toMermaid, toHtml } from "./plan-draw.mjs";
+import { toMermaid, toHtml, levels } from "./plan-draw.mjs";
 import { actualReport } from "./plan-actual.mjs";
 
 const example = { name: "ตัวอย่าง team-roles", tasks: [
@@ -50,7 +50,16 @@ export function selfTest() {
     ["ตัวอย่างผ่านการตรวจ", validate(example).length === 0],
     ["lab: array · depends_on · exclusive · S/M/L แปลงเป็น 20/50/100", (() => { const l = analyse(lab); return validate(lab).length === 0 && l.cpLen === 170 && l.tasks.find((t) => t.id === "k8s").solo === true && render({}, l).includes("L 100k"); })()],
     ["ขนาดป้ายที่ไม่รู้จักฟ้อง · sizes ในไฟล์เปลี่ยนค่าได้", validate([{ id: "x", size: "XL" }])[0].includes("XL") && analyse({ sizes: { S: 5 }, tasks: [{ id: "x", size: "s" }] }).total === 5],
-    ["Mermaid: flowchart มีเส้นวิกฤต ==> และ class critical", (() => { const m = toMermaid(a); return m.startsWith("```mermaid\nflowchart LR") && m.includes("n_a ==> n_b") && m.includes("n_c[") && m.includes("class n_a critical") && !m.includes("class n_c critical"); })()],
+    ["Mermaid: flowchart มีเส้นวิกฤต ==> และ class critical", (() => { const m = toMermaid(a); return m.startsWith("```mermaid\nflowchart LR") && m.includes("n0 ==> n1") && m.includes("n2[") && m.includes("class n0 critical") && !m.includes("class n2 critical"); })()],
+    ["Mermaid: id ภาษาไทยและ a-b กับ a_b ไม่ชนกัน ไม่มีเส้นวนเข้าตัวเอง", (() => { const m = toMermaid(analyse({ tasks: [{ id: "ก", size: 1 }, { id: "ข", size: 1, needs: ["ก"] }, { id: "a-b", size: 1 }, { id: "a_b", size: 1, needs: ["a-b"] }] })); return m.includes("n0 ==> n1") && m.includes("n2 ==> n3") && !/(n\d+) [-=]+> \1\b/.test(m); })()],
+    ["DAG: ชิ้นพ่ออยู่ชั้นซ้ายของลูกเสมอ · ชิ้นที่ไม่เกี่ยวกับใครอยู่ชั้นแรก", (() => { const l = analyse(layered), lv = levels(l); return l.tasks.every((t) => t.needs.every((n) => lv.get(n) < lv.get(t.id))) && lv.get("g") === 0 && lv.get("d") > lv.get("a"); })()],
+    ["DAG: ชิ้นนอกสายวิกฤตวางชิดชิ้นที่รอมัน ไม่กองซ้ายสุด (x → z อยู่ชั้น 2 ไม่ใช่ 0)", (() => { const lv = levels(analyse({ tasks: [{ id: "a", size: 1 }, { id: "b", size: 1, needs: ["a"] }, { id: "c", size: 1, needs: ["b"] }, { id: "x", size: 1 }, { id: "z", size: 1, needs: ["c", "x"] }] })); return lv.get("x") === 2 && lv.get("z") === 3; })()],
+    ["actual: แผนมีแค่ b · งาน b-2 ไม่นับเป็นของ b (- ไม่ใช่ตัวคั่น)", actualReport(analyse({ tasks: [{ id: "b", size: 1 }] }), [{ ts: at(0), step: "code", description: "b-2: งานอื่น", async: true, duration_ms: 1000 }]).rows.length === 0],
+    ["actual: งาน b-2 ไม่ผูกกับชิ้น b · ใช้ id ที่ยาวที่สุด", (() => { const p = analyse({ tasks: [{ id: "b", size: 1 }, { id: "b-2", size: 1 }] }); const r = actualReport(p, [{ ts: at(0), step: "code", description: "b-2: งานย่อย", async: true, duration_ms: 60000 }]); return r.rows.length === 1 && r.rows[0].label.startsWith("b-2") && r.summary.includes("ยังไม่ได้ปล่อย: b"); })()],
+    ["actual: review ที่มาก่อนไม่ถูกนับเป็นงาน · ผลตรวจอ่านจาก reviews ที่ผูกไว้ · duration 0 นับว่าจบ", (() => { const r = actualReport(a, [{ ts: at(0), step: "review", description: "a: ตรวจ", duration_ms: 1000 }, { ts: at(5), step: "design", description: "a: ทำ", async: true, duration_ms: 0, reviews: ["fail"] }]); return r.rows.length === 1 && /\| a \|[^\n]*\| 0 นาที \|[^\n]*\| fail \|/.test(r.markdown); })()],
+    ["actual: งานแบบรอผลเริ่มที่ ts ลบเวลาที่ใช้ (hook จด ts ตอนจบ)", (() => { const r = actualReport(a, [{ ts: at(0), step: "design", description: "a: ทำ", async: true, duration_ms: 60000 }, { ts: at(20), step: "code", description: "b: ทำ", async: false, duration_ms: 600000 }]); return r.markdown.includes("| b | – | – | 10 | 10 นาที |"); })()],
+    ["คิว deep research แปลงเป็นแผนได้ (ข้อย่อย · คำถาม · ขนาด · ไฟล์ผล)", (() => { const q = { "งาน": "x", "ข้อย่อย": [{ id: "q1", "คำถาม": "ก", depends_on: [], "ขนาด": "S", "ไฟล์ผล": "r/q1.md" }, { id: "q2", "คำถาม": "ข", depends_on: ["q1"], "ขนาด": "M", "ไฟล์ผล": "r/q2.md" }] }; const p = analyse(q); return validate(q).length === 0 && p.total === 70 && p.tasks[1].owns[0] === "r/q2.md"; })()],
+    ["ตาราง markdown: ชื่อที่มี | ไม่ทำคอลัมน์เลื่อน", render({}, analyse({ tasks: [{ id: "x", title: "ก|ข", size: 1 }] })).includes("x ก\\|ข")],
     ["HTML: มี SVG ของ DAG และ Gantt · escape ข้อความ · ไม่มี undefined/NaN", (() => { const h = toHtml({ name: "<x>" }, a); return (h.match(/<svg /g) ?? []).length === 2 && h.includes("&lt;x&gt;") && !/undefined|NaN/.test(h); })()],
     ["actual: ผูกงานด้วย id ต้นคำอธิบาย · ไม่นับ review · ไม่สับสน ba กับ b · บอกชิ้นที่ยังไม่ปล่อย", (() => { const r = actualReport(a, runs); return r.rows.length === 2 && r.markdown.includes("| a | general-purpose | sonnet | 0 | 10 นาที | 2.5k / 2k |") && r.markdown.includes("| b | developer |") && r.summary.includes("ยังไม่ได้ปล่อย: c d") && r.summary.includes("เกินที่ประเมินเกิน 1.5 เท่า: b"); })()],
     ["actual: ไม่มีงานใน log → บอกวิธีตั้งคำอธิบาย", actualReport(a, []).markdown.includes("`a: ออกแบบตาราง`")],

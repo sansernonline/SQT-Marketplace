@@ -15,9 +15,14 @@ export const DEFAULT_SIZES = { S: 20, M: 50, L: 100 };
 
 const isList = (x) => x === undefined || (Array.isArray(x) && x.every((v) => typeof v === "string"));
 
-// รับรูปแบบของ lab ด้วย: ไฟล์เป็น array เปล่า · depends_on แทน needs · exclusive แทน solo · ขนาดเป็นป้าย S/M/L
+// คิวของโหมด deep research (templates/research-queue.json) → ชิ้นงาน · คำถามเป็นชื่อ · ไฟล์ผลเป็นไฟล์ที่ชิ้นนั้นเป็นเจ้าของ
+const fromQueue = (q) => ({ name: q["งาน"], max_agents: q["ลูกทีมสูงสุด"], tasks: q["ข้อย่อย"].map((x) => (x && typeof x === "object"
+  ? { id: x.id, title: x["คำถาม"], depends_on: x.depends_on, size: x["ขนาด"], owns: x["ไฟล์ผล"] ? [x["ไฟล์ผล"]] : undefined } : x)) });
+
+// รับรูปแบบของ lab ด้วย: ไฟล์เป็น array เปล่า · depends_on แทน needs · exclusive แทน solo · ขนาดเป็นป้าย S/M/L · และไฟล์คิวของ deep research
 export function adapt(raw) {
-  const plan = Array.isArray(raw) ? { tasks: raw } : { ...raw };
+  if (!raw || typeof raw !== "object") return { tasks: null };
+  const plan = Array.isArray(raw) ? { tasks: raw } : Array.isArray(raw["ข้อย่อย"]) ? fromQueue(raw) : { ...raw };
   if (!Array.isArray(plan.tasks)) return plan;
   const sizes = { ...DEFAULT_SIZES, ...(plan.sizes ?? {}) };
   plan.tasks = plan.tasks.map((t) => {
@@ -151,6 +156,8 @@ export function analyse(raw, { agents, k = {} } = {}) {
 
 const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
 
+const cell = (s) => String(s).replace(/\|/g, "\\|");
+
 export function render(plan, a) {
   const bar = (r) => { const scale = 40 / a.makespan; return "·".repeat(Math.round(r.start * scale)) + "█".repeat(Math.max(1, Math.round((r.end - r.start) * scale))); };
   const title = (id) => a.tasks.find((t) => t.id === id).title ?? id;
@@ -163,7 +170,7 @@ export function render(plan, a) {
     ...(a.team === 1 && a.wide > 1 ? [`- ปล่อยขนาน ${a.wide} ตัวเร็วขึ้นแค่ ${a.parallelSpeedup.toFixed(1)} เท่า กราฟเกือบเป็นสายเดียว จึงใช้ลูกทีมตัวเดียวทำตาม rank (ชิ้นเล็กนอกสายวิกฤต หัวหน้าทีมทำเองระหว่างรอได้)`] : []),
     ...(a.needsWorkflow ? [`- กว้างเกิน ${WORKFLOW_AT} ชิ้น: เสนอ dynamic workflow ในคำถามตอนเริ่ม ถ้าผู้ใช้ไม่เอา แผนนี้ปล่อยรอบละ ${WORKFLOW_AT} ตาม rank`] : []),
     "", "| ลำดับปล่อย | ชิ้น | ขนาด | rank | เผื่อได้ | รอ | เจ้าของไฟล์ | ลูกทีม | เริ่ม → จบ | ไทม์ไลน์ |", "|---|---|---|---|---|---|---|---|---|---|",
-    ...sorted.map((r, i) => { const t = a.tasks.find((x) => x.id === r.id); return `| ${i + 1} | ${t.id}${t.title ? ` ${t.title}` : ""}${t.solo ? " (คนเดียว)" : ""} | ${t.sizeLabel ? `${t.sizeLabel} ` : ""}${n1(t.size)}k | ${n1(a.rank.get(t.id))} | ${a.cpm.get(t.id).float ? n1(a.cpm.get(t.id).float) : "0 วิกฤต"} | ${(t.needs ?? []).join(" ") || "–"} | ${(t.owns ?? []).join(" ") || "–"} | ${r.lane} | ${n1(r.start)} → ${n1(r.end)} | \`${bar(r)}\` |`; }),
+    ...sorted.map((r, i) => { const t = a.tasks.find((x) => x.id === r.id); return `| ${i + 1} | ${cell(`${t.id}${t.title ? ` ${t.title}` : ""}`)}${t.solo ? " (คนเดียว)" : ""} | ${t.sizeLabel ? `${t.sizeLabel} ` : ""}${n1(t.size)}k | ${n1(a.rank.get(t.id))} | ${a.cpm.get(t.id).float ? n1(a.cpm.get(t.id).float) : "0 วิกฤต"} | ${(t.needs ?? []).join(" ") || "–"} | ${(t.owns ?? []).join(" ") || "–"} | ${r.lane} | ${n1(r.start)} → ${n1(r.end)} | \`${bar(r)}\` |`; }),
     "",
   ].join("\n");
 }
@@ -204,8 +211,13 @@ async function main() {
   if (args.selfTest) return (await import("./plan.test.mjs")).selfTest();
   if (!args.file || args.html === undefined && process.argv.includes("--html")) { console.error(USAGE); process.exit(1); }
   if (args.agents !== undefined && !(Number.isInteger(args.agents) && args.agents >= 1)) { console.error("--agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
-  const plan = JSON.parse(readFileSync(args.file, "utf8"));
-  if (plan.max_agents !== undefined && !(Number.isInteger(plan.max_agents) && plan.max_agents >= 1)) { console.error("max_agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
+  let text;
+  try { text = readFileSync(args.file, "utf8"); } catch { console.error(`อ่านไฟล์ไม่ได้: ${args.file}`); process.exit(1); }
+  let raw;
+  try { raw = JSON.parse(text); } catch (e) { console.error(`JSON ผิดรูปแบบใน ${args.file}: ${e.message}`); process.exit(1); }
+  if (!raw || typeof raw !== "object") { console.error("ไฟล์แผนต้องเป็น object ที่มี tasks หรือเป็นรายการชิ้นงาน (array)"); process.exit(1); }
+  const plan = adapt(raw);
+  if (plan.max_agents != null && !(Number.isInteger(plan.max_agents) && plan.max_agents >= 1)) { console.error("max_agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
   const errors = validate(plan);
   if (errors.length) { console.error(errors.map((e) => `- ${e}`).join("\n")); process.exit(1); }
   const logDir = args.log ?? join(".claude", "superuser", "log");

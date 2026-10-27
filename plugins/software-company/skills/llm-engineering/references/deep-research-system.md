@@ -81,7 +81,7 @@
 
 ## 4. browser agent
 
-agent ที่คลิกเว็บเจอข้อความของคนแปลกหน้าตลอดเวลา · Open Worldwide Application Security Project (OWASP) เรียกสิ่งนี้ว่า indirect prompt injection: เนื้อหาภายนอกมีคำสั่งแฝง แล้วโมเดลทำตาม ([O1]) · Anthropic วัดกับ browser agent ของตัวเองได้อัตราโจมตีสำเร็จ 1.4%–2.4% หลังเพิ่มชั้นป้องกัน (13.8% ในโมเดลเปล่าของ Sonnet 4.5) และบอกเองว่า 1% ก็ยังเป็นความเสี่ยง ยังไม่แก้หมด ([A3]) จึงต้องออกแบบให้ถือว่ามีคนเจาะได้
+agent ที่คลิกเว็บเจอข้อความของคนแปลกหน้าตลอดเวลา · Open Worldwide Application Security Project (OWASP) เรียกสิ่งนี้ว่า indirect prompt injection: เนื้อหาภายนอกมีคำสั่งแฝง แล้วโมเดลทำตาม ([O1]) · Anthropic วัดกับ browser agent ของตัวเองได้อัตราโจมตีสำเร็จ 1.4%–2.4% หลังเพิ่มชั้นป้องกัน ข้ามโมเดล Claude 4 รุ่น (Sonnet 4.5 จาก 13.8% ในโมเดลเปล่าเหลือ 1.9%) และบอกเองว่า 1% ก็ยังเป็นความเสี่ยง ยังไม่แก้หมด ([A3]) จึงต้องออกแบบให้ถือว่ามีคนเจาะได้
 
 | ข้อ | ทำ |
 |---|---|
@@ -164,7 +164,7 @@ agent ที่คลิกเว็บเจอข้อความของ�
 | planner | แตกคำถามย่อย เลือกระดับแรงงาน ส่งเข้า Kafka topic `research.questions` | 1 · 3 |
 | worker | 4 ชนิด: ค้นเว็บ · browser agent (sandbox) · อ่าน PDF · ค้น vector DB · แต่ละชนิดเป็น deployment ของตัวเอง ขยายด้วย KEDA ตาม lag | 2 · 4 · 5 |
 | ผล | topic `research.findings` → ตัวตรวจอ้างอิง → ข้ออ้างที่ผ่านลงฐานข้อมูล | 6 |
-| writer | เรียบเรียงจากข้ออ้างที่ผ่าน · กราฟ → `dataviz` · ภาพปก → `graphic-design:image-generation` · ส่งออก Word → `markdown-report-docx` | 1 |
+| writer | เรียบเรียงจากข้ออ้างที่ผ่าน · กราฟ → `data-analysis` · ภาพปก → `graphic-design:image-generation` · ส่งออก Word → `markdown-report-docx` | 1 |
 | ตั้งเวลา | scheduler ในฐานข้อมูล สร้างงานเข้า API ตัวเดียวกัน | 7 |
 | ปล่อย | Docker image → Jenkins ทดสอบ + eval → Helm ลง staging → ตรวจ → production | `jenkins-pipeline` · `kubernetes-helm` |
 | เฝ้าดู | Prometheus + Grafana ตามหัวข้อ 8 | 8 |
