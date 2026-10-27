@@ -1,0 +1,10 @@
+[
+  { "id": "rag1", "title": "รวบรวมตำรา", "size": "S" },
+  { "id": "rag2", "title": "แบ่ง chunk", "size": "M", "depends_on": ["rag1"] },
+  { "id": "rag3", "title": "embedding + vector DB", "size": "M", "depends_on": ["rag2"] },
+  { "id": "ml1", "title": "เตรียมข้อมูล", "size": "M" },
+  { "id": "ml2", "title": "เทรนโมเดล", "size": "L", "depends_on": ["ml1"], "tool": "claude" },
+  { "id": "k1", "title": "Dockerfile", "size": "S", "tool": "codex" },
+  { "id": "k2", "title": "deploy บน cluster", "size": "M", "depends_on": ["rag3", "ml2", "k1"] },
+  { "id": "k3", "title": "ทดสอบรวม", "size": "M", "depends_on": ["k2"], "exclusive": true }
+]

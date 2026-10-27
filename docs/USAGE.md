@@ -39,6 +39,8 @@
 
 ![pstack vs SuperUser](superuser-vs-pstack.png)
 
+**ตัวอย่าง planner** (วางกราฟงาน · แจกงานข้ามหลายบัญชี LLM · เทียบกับงานจริง): [`docs/examples/planner`](examples/planner/README.md)
+
 ### SuperUser ใน plugin อื่น
 
 ทุก plugin มี `superuser` ของตัวเอง — แนวคิดเดียวกัน (หัวหน้าทีมคนเดียว · เข้าใจงานและจัดขนาด · เลือกหรือประกอบ playbook · ไม่หยุดถาม · พิสูจน์ผล · `CONTEXT.md` · รอบเรียนรู้) ที่ต่างคือ playbook · เกณฑ์งาน 3 ข้อ และรายการ "รออนุมัติ" ปรับตามงาน

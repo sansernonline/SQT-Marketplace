@@ -79,7 +79,8 @@ export function assign(a, accountsIn, { weights = DEFAULT_WEIGHTS, safety = DEFA
   return { makespan: now, schedule: out, accounts: accounts.map((x) => ({ name: x.name, tool: x.tool, used: near(out.filter((r) => r.account === x.name).reduce((s, r) => s + a.tasks.find((t) => t.id === r.id).size, 0)), tasks: out.filter((r) => r.account === x.name).length })) };
 }
 
-const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
+// ปัดทศนิยม 1 ตำแหน่งก่อน เพราะ 400 × 0.2 ได้ 80.00000000000001 แล้วจะแสดงเป็น 80.0
+const n1 = (x) => { const r = Math.round(x * 10) / 10; return Number.isInteger(r) ? String(r) : r.toFixed(1); };
 
 export function renderAssign(a, res) {
   const title = (id) => { const t = a.tasks.find((x) => x.id === id); return `${t.id}${t.title ? ` ${t.title}` : ""}`.replace(/\|/g, "\\|"); };

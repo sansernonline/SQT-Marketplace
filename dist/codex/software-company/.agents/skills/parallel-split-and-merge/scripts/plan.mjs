@@ -154,7 +154,8 @@ export function analyse(raw, { agents, k = {} } = {}) {
     makespan: sim.makespan, speedup: total / sim.makespan, schedule: sim.schedule, needsWorkflow: width > WORKFLOW_AT && cap > WORKFLOW_AT };
 }
 
-const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
+// ปัดทศนิยม 1 ตำแหน่งก่อน เพราะ 400 × 0.2 ได้ 80.00000000000001 แล้วจะแสดงเป็น 80.0
+const n1 = (x) => { const r = Math.round(x * 10) / 10; return Number.isInteger(r) ? String(r) : r.toFixed(1); };
 
 const cell = (s) => String(s).replace(/\|/g, "\\|");
 
@@ -195,12 +196,13 @@ function parseArgs(argv) {
     else if (argv[i] === "--actual") args.actual = true;
     else if (argv[i] === "--accounts") args.accounts = argv[++i];
     else if (argv[i] === "--quota") args.quota = argv[++i];
+    else if (argv[i] === "--now") args.now = argv[++i];
     else args.file = argv[i];
   }
   return args;
 }
 
-const USAGE = "ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--accounts <accounts.json>] [--quota <quota.json>] [--mermaid] [--html <ไฟล์.html>] [--actual] [--json]";
+const USAGE = "ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--accounts <accounts.json>] [--quota <quota.json>] [--now <เวลา ISO>] [--mermaid] [--html <ไฟล์.html>] [--actual] [--json]";
 
 async function runsFrom(logDir) {
   if (!existsSync(logDir)) return [];
@@ -242,6 +244,9 @@ async function main() {
 
 // บัญชี LLM สำหรับแจกงานข้ามบัญชี: ช่อง accounts ในแผน หรือไฟล์ --accounts (รูปเดียวกับ templates/accounts.json) · --quota เติมโควตาที่เหลือจาก quota.mjs
 async function accountsFrom(args, plan) {
+  // --now กำหนดเวลาตอนคิดโควตา ใช้ให้ตัวอย่างและการทดสอบได้ผลเดิมทุกครั้ง · ไม่ใส่ = เวลาจริง
+  const now = args.now ? new Date(args.now) : new Date();
+  if (Number.isNaN(now.getTime())) { console.error(`--now ต้องเป็นเวลา ISO เช่น 2026-10-27T09:00:00Z`); process.exit(1); }
   let src = plan.accounts ? { accounts: plan.accounts, weights: plan.weights, safety: plan.safety } : null;
   if (args.accounts) {
     try { const j = JSON.parse(readFileSync(args.accounts, "utf8")); src = Array.isArray(j) ? { accounts: j } : j; }
@@ -252,9 +257,9 @@ async function accountsFrom(args, plan) {
     let snap;
     try { snap = JSON.parse(readFileSync(args.quota, "utf8")); } catch (e) { console.error(`อ่านไฟล์โควตาไม่ได้: ${args.quota} (${e.message})`); process.exit(1); }
     const { applyQuota } = await import("./quota.mjs");
-    src = { ...src, accounts: applyQuota(src.accounts, snap) };
+    src = { ...src, accounts: applyQuota(src.accounts, snap, now) };
   }
-  return src;
+  return { ...src, now: now.getTime() };
 }
 
 // ไม่ await ที่ระดับบนสุด เพราะ plan.test.mjs import ไฟล์นี้กลับ ถ้า await จะรอกันเองไม่จบ

@@ -1,0 +1,6 @@
+{"ts":"2026-10-27T02:00:00.000Z","session":"demo","event":"run","tool_use_id":"t1","role":"general-purpose","model":"sonnet","account":".claude-work","step":"research","description":"rag1: รวบรวมตำรา","async":true,"ok":true,"duration_ms":null,"tokens":null,"estimate_tokens":20000}
+{"ts":"2026-10-27T02:06:00.000Z","session":"demo","event":"result","tool_use_id":"t1","total_tokens":26000}
+{"ts":"2026-10-27T02:00:30.000Z","session":"demo","event":"run","tool_use_id":"t2","role":"general-purpose","model":"sonnet","account":".claude","step":"code","description":"ml1: เตรียมข้อมูล","async":true,"ok":true,"duration_ms":null,"tokens":null,"estimate_tokens":50000}
+{"ts":"2026-10-27T02:15:30.000Z","session":"demo","event":"result","tool_use_id":"t2","total_tokens":61000}
+{"ts":"2026-10-27T02:16:00.000Z","session":"demo","event":"run","tool_use_id":"t3","role":"software-company:developer","model":"opus","account":".claude","step":"code","description":"ml2: เทรนโมเดล","async":true,"ok":true,"duration_ms":null,"tokens":null,"estimate_tokens":100000}
+{"ts":"2026-10-27T02:07:00.000Z","session":"demo","event":"run","tool_use_id":"t4","role":"general-purpose","model":"sonnet","account":".claude-work","step":"code","description":"rag2: แบ่ง chunk","async":true,"ok":true,"duration_ms":null,"tokens":null,"estimate_tokens":50000}
