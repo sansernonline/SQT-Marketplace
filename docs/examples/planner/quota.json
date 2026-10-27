@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-27T09:00:00.000Z",
+  "accounts": [
+    { "account": ".claude", "tool": "claude", "at": "2026-10-27T09:00:00.000Z", "five_hour": { "used": 80, "reset": "2026-10-27T10:00:00.000Z" }, "week": { "used": 30, "reset": "2026-10-31T00:00:00.000Z" } },
+    { "account": ".claude-work", "tool": "claude", "at": "2026-10-27T09:00:00.000Z", "five_hour": { "used": 10, "reset": "2026-10-27T13:00:00.000Z" }, "week": { "used": 5, "reset": "2026-11-01T00:00:00.000Z" } },
+    { "account": ".codex", "tool": "codex", "at": "2026-10-27T08:30:00.000Z", "five_hour": { "used": 0, "reset": "2026-10-27T14:00:00.000Z" }, "week": null }
+  ]
+}

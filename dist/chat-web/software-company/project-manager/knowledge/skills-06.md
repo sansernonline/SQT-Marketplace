@@ -154,6 +154,7 @@ Use when work splits into independent slices (chapters, listings, research quest
 - **รูปแบบของ lab และคิว deep research ใช้ได้เลย:** `research/<งาน>/queue.json` ส่งให้ planner ได้ตรง ๆ · ไฟล์เป็น array เปล่าก็ได้ · `depends_on` = `needs` · `exclusive` = `solo` · `size` เป็นป้าย `S` `M` `L` ได้ (ค่าตั้งต้น 20k · 50k · 100k เป็นค่าตั้งเอง ยังไม่ได้วัด เปลี่ยนด้วยช่อง `"sizes": { "S": 30 }` แล้วค่า k จาก log ปรับต่อ)
 - **รูป:** `--mermaid` พิมพ์ flowchart ของ DAG ให้วางใน markdown (GitHub แสดงเป็นรูป · เส้นหนาสีส้ม = สายวิกฤต) · `--html <ไฟล์.html>` เขียนหน้าเดียวที่มี SVG ของ DAG และ Gantt ตามแผน เปิดในเบราว์เซอร์ได้เลย ไม่ต้องติดตั้งอะไร ถ้าต้องการ PNG ให้จับภาพจากหน้านั้น
 - **เทียบกับงานจริง:** `--actual` อ่าน `runs.jsonl` ใน log ของ superuser แล้วผูกงานลูกทีมกับชิ้นในแผนด้วย**คำอธิบายงานที่ขึ้นต้นด้วย id ของชิ้น** (ช่อง description ของเครื่องมือ Agent เช่น `a: ออกแบบตาราง`) · ได้ตารางว่าใครทำ model อะไร เริ่มและใช้เวลากี่นาที token จริงเทียบที่ประเมิน ผลตรวจ ชิ้นที่ยังไม่ปล่อย และชิ้นที่ใช้ token เกินที่ประเมิน 1.5 เท่า · ใส่คู่กับ `--html` ได้ Gantt ของที่เกิดจริงเพิ่มอีกรูป
+- ตัวอย่างครบทั้ง 3 ขั้นพร้อมไฟล์และรูป: [`docs/examples/planner`](https://github.com/sansernonline/SQT-Marketplace/tree/main/docs/examples/planner) · `--now <เวลา ISO>` กำหนดเวลาตอนคิดโควตาให้ตัวอย่างได้ผลเดิมทุกครั้ง
 - ทดสอบ: `node scripts/plan.mjs --self-test` · แนวคิดจาก lab `02_DAG_Planner` และ `04_Multi_Agent_Orchestra` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
 
 ## หลายบัญชี LLM — แจกงานข้ามบัญชีตามโควตา

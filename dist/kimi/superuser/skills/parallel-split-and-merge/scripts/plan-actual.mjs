@@ -2,7 +2,8 @@
 // ผูกด้วยคำอธิบายงาน (description ของเครื่องมือ Agent) ที่ขึ้นต้นด้วย id ของชิ้น เช่น "a: ออกแบบตาราง" หรือ "a ออกแบบตาราง"
 import { score, DEFAULT_WEIGHTS } from "./plan-assign.mjs";
 
-const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
+// ปัดทศนิยม 1 ตำแหน่งก่อน เพราะ 400 × 0.2 ได้ 80.00000000000001 แล้วจะแสดงเป็น 80.0
+const n1 = (x) => { const r = Math.round(x * 10) / 10; return Number.isInteger(r) ? String(r) : r.toFixed(1); };
 const realTokens = (r) => r.total_tokens ?? (r.tokens && !r.tokensEstimated ? Object.values(r.tokens).reduce((s, v) => s + (v ?? 0), 0) : null);
 const escRe = (id) => id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // id ตามด้วย : หรือช่องว่างเท่านั้น · "-" และ "." เป็นส่วนของ id ได้ (b-2 ไม่ใช่งานของ b)
@@ -71,7 +72,7 @@ function accountSection(a, rows, team, est) {
   return [
     "## บัญชีระหว่างทำงาน", "",
     "| บัญชี | โควตาเหลือ | รีเซ็ตใน | ข้อมูลโควตา | ความเร็วที่ตั้ง | ความเร็วจริง (EMA) |", "|---|---|---|---|---|---|",
-    ...team.accounts.map((acc) => { const sp = speeds.get(acc.name); return `| ${cell(acc.name)} | ${n1(acc.remaining_k ?? acc.cap_k)}k / ${n1(acc.cap_k)}k | ${acc.reset_in_hours != null ? `${n1(acc.reset_in_hours)} ชม.` : "–"} | ${quotaAge(acc)} | ${acc.speed_k_per_hour}k/ชม. | ${sp ? `${n1(sp.speed)}k/ชม. (${sp.n} งาน) → แก้ speed_k_per_hour ใน accounts.json` : "ยังไม่มีงานที่จบ"} |`; }),
+    ...team.accounts.map((acc) => { const sp = speeds.get(acc.name); return `| ${cell(acc.name)} | ${n1(acc.remaining_k ?? acc.cap_k)}k / ${n1(acc.cap_k)}k | ${acc.reset_in_hours != null ? `${n1(acc.reset_in_hours)} ชม.` : "–"} | ${quotaAge(acc, team.now ?? Date.now())} | ${acc.speed_k_per_hour}k/ชม. | ${sp ? `${n1(sp.speed)}k/ชม. (${sp.n} งาน) → แก้ speed_k_per_hour ใน accounts.json` : "ยังไม่มีงานที่จบ"} |`; }),
     "",
     ...(moves.length ? ["**ควรย้ายงาน (โควตาไม่พอกับงานที่ค้าง)**", "",
       ...moves.map((m) => `- ${cell(m.id)}: ${m.from} ต้องใช้ราว ${n1(m.need)}k แต่เหลือ ${n1(m.left)}k → ${m.to ? `ส่งไม้ให้ ${m.to}: ลูกทีมบน ${m.from} เขียนใบส่งต่อ \`.claude/superuser/handoff/${m.id}.md\` ในโฟลเดอร์หลักของ repo (\`.claude/\` ไม่ตามไปใน worktree) ตาม skill \`handoff\` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานบน ${m.to} ด้วยคำอธิบาย \`${m.id}: ทำต่อจากใบส่งต่อ ไม่เริ่มใหม่\`` : "ไม่มีบัญชีที่โควตาพอ รอรีเซ็ตหรือแตกชิ้นให้เล็กลง"}`), ""] : ["โควตาทุกบัญชีพอกับงานที่ค้างอยู่", ""]),

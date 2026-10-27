@@ -1,6 +1,7 @@
 // วาดแผนกราฟงานเป็นรูป: Mermaid (เปิดบน GitHub ได้) และ HTML ไฟล์เดียวที่มี SVG ของ DAG กับ Gantt · ไม่ใช้ library ภายนอก
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
+// ปัดทศนิยม 1 ตำแหน่งก่อน เพราะ 400 × 0.2 ได้ 80.00000000000001 แล้วจะแสดงเป็น 80.0
+const n1 = (x) => { const r = Math.round(x * 10) / 10; return Number.isInteger(r) ? String(r) : r.toFixed(1); };
 const isCritical = (a, id) => a.cpm.get(id).float === 0;
 
 // เส้นวิกฤต = ทั้ง 2 ปลายเผื่อได้ 0 และลูกเริ่มทันทีที่พ่อจบ

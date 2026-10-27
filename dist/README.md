@@ -18,7 +18,7 @@
 | `graphic-design` | 0.15.1 | 56 | 9 | 6 | 0.8 MB |
 | `personal-life` | 0.15.4 | 78 | 12 | 16 | 0.8 MB |
 | `software-company` | 2.29.0 | 137 | 41 | 29 | 7.1 MB |
-| `superuser` | 3.11.0 | 38 | 3 | 0 | 0.7 MB |
+| `superuser` | 3.11.1 | 38 | 3 | 0 | 0.7 MB |
 | `trading-finance` | 0.13.3 | 59 | 8 | 7 | 0.7 MB |
 
 ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ
