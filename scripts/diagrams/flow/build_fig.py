@@ -197,7 +197,7 @@ def build(name):
   <div class="sub">ก่อนแตะงาน: 3 บรรทัด → จัดขนาด → เลือกงบ → คาดไว้ก่อน → เลือก 1 playbook</div>
   <div class="card plan" id="plan">
     <div><div class="t">3 บรรทัดก่อนแตะงาน</div><div class="d"><b>เป้า</b> · <b>เสร็จเมื่อ</b> · <b>เสี่ยง</b><br>ย้อนไม่ได้ → หัวหน้าทำหรือตรวจเอง</div></div><div class="ar">→</div>
-    <div><div class="t">จัดขนาด</div><div class="d"><b>เล็ก</b> หัวหน้าทำเอง<br><b>กลาง</b> playbook · ลูกทีม 1–4<br><b>ใหญ่</b> brainstormer เสนอ 2–3 ทาง · ลูกทีม 5–10</div></div><div class="ar">→</div>
+    <div><div class="t">จัดขนาด</div><div class="d"><b>เล็ก</b> หัวหน้าทำเอง<br><b>กลาง</b> playbook · ลูกทีมเท่าความกว้างของกราฟ<br><b>ใหญ่</b> brainstormer เสนอ 2–3 ทาง · วางกราฟทั้งงานก่อน</div></div><div class="ar">→</div>
     <div><div class="t">เลือกงบ</div><div class="d"><b>เร็ว</b> ลูกทีมเล็ก · ตรวจ 1 รอบ<br><b>สมดุล</b> ค่าเริ่ม · ตามงาน<br><b>คุณภาพ</b> ขึ้น 1 ระดับ · opus ตรวจทุกรอบ</div></div><div class="ar">→</div>
     <div><div class="t">คาดไว้ก่อน</div><div class="d">ลูกทีม N · รอบตรวจ N · ระดับ<br>จดก่อนแจกงาน<br>ตอนจบเทียบกับจริงและ token</div></div>
   </div>

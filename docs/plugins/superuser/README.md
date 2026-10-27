@@ -4,7 +4,7 @@
 
 ทีมผู้ช่วยทำงานหลายขั้นให้จบพร้อมตรวจ
 
-agent 3 · skill 37 (ของ plugin 0 · ของกลางจาก superuser 37) · คำสั่ง 0 · playbook 7 · ส่งงานต่อให้ —
+agent 3 · skill 38 (ของ plugin 0 · ของกลางจาก superuser 38) · คำสั่ง 0 · playbook 7 · ส่งงานต่อให้ —
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/superuser/`](../../../plugins/superuser/)
 

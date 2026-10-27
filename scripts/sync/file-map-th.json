@@ -75,6 +75,8 @@
     "evals/model-scorecard-trigger/case.yaml": "เคส eval: ถามว่า model ไหนเหมาะกับขั้น review ต้องทำให้ model-scorecard ถูกเปิด",
     "evals/model-scorecard-behaviour/case.yaml": "เคส eval: log มีแค่ 3 งาน ต้องบอกว่าตัวอย่างน้อย ไม่ฟันธงเปลี่ยน model",
     "evals/model-scorecard-regression/case.yaml": "เคส eval: ข้อมูลหลายโปรเจกต์ต้องไม่ถูกรวมหรือเขียนออกนอกโปรเจกต์โดยไม่สั่ง",
+    "skills/parallel-split-and-merge/scripts/plan.mjs": "planner กราฟงาน: ตรวจกราฟวนและเจ้าของไฟล์ซ้ำ แล้วคิด rank สายวิกฤต จำนวนลูกทีม และลำดับปล่อย ไม่ใช้ token",
+    "skills/parallel-split-and-merge/scripts/plan.test.mjs": "self-test ของ plan.mjs จากตัวอย่างใน team-roles และกรณีผิดที่ต้องจับได้",
     "hooks/step-rules.json": "กฎคำจัดชนิดขั้นของลูกทีม (plan code review ...) แก้ได้โดยไม่แตะโค้ด · ใช้โดย model-scorecard",
     "hooks/superuser-hook.mjs": "hook ของ SuperUser: ส่งกฎประจำตัวตอนเริ่ม · บอก skill ที่ต้องเปิด · เขียน log การทำงาน · เตือนเมื่อมีข้อความใน inbox",
     "hooks/ui-scan-hook.mjs": "ด่านหน้าตา: แก้ไฟล์ UI แล้วรัน slop_scan.py ของ no-ai-look กับไฟล์นั้น · P0/P1 ส่งกลับให้แก้ · ปิดด้วยโมดูล ui_scan",

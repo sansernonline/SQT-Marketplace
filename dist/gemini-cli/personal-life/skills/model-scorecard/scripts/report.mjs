@@ -113,6 +113,33 @@ export function observations(cells) {
   return [modelGap(cells), heaviestStep(cells), resultCoverage(cells)];
 }
 
+// ขนาดจริงของงาน: token รวมจากข้อความงานเบื้องหลังจบ หรือผลรวม token ที่จดตรง (ไม่ใช้ค่าที่หารเฉลี่ย)
+const actualTokens = (r) => r.total_tokens ?? (r.tokens && !r.tokensEstimated ? TOKEN_KEYS.reduce((s, k) => s + (r.tokens[k] ?? 0), 0) : null);
+
+// ค่าปรับขนาดต่อขั้น k ← 0.6k + 0.4 × (จริง ÷ ประเมิน) เรียงตามเวลา (สูตรจาก lab Multi_Agent_Orchestra ของคอร์ส CWN2026)
+export function sizeFactors(runs) {
+  const byStep = new Map();
+  for (const r of [...runs].sort((a, b) => Date.parse(a.ts) - Date.parse(b.ts))) {
+    const real = actualTokens(r);
+    if (!(r.estimate_tokens > 0) || !(real > 0)) continue;
+    const s = byStep.get(r.step) ?? { step: r.step, n: 0, k: 1 };
+    s.n++; s.k = 0.6 * s.k + 0.4 * (real / r.estimate_tokens);
+    byStep.set(r.step, s);
+  }
+  return [...byStep.values()].sort((a, b) => STEP_ORDER.indexOf(a.step) - STEP_ORDER.indexOf(b.step));
+}
+
+function sizeSection(runs) {
+  const rows = sizeFactors(runs);
+  const head = ["", "## ขนาดจริงต่อที่ประเมิน", ""];
+  if (!rows.length) return [...head, "ยังไม่มีงานที่ใบสั่งงานมีบรรทัด `ขนาด: <N>k` และมี token จริง", ""];
+  return [...head,
+    "| ขั้น | งานที่เทียบได้ | จริงต่อประเมิน (k) | ใช้อย่างไร | ป้าย |",
+    "|---|---|---|---|---|",
+    ...rows.map((s) => `| ${s.step} | ${s.n} | ${s.k.toFixed(2)} | ประเมินชิ้นขั้นนี้ครั้งหน้า × ${s.k.toFixed(2)} | ${s.n < THIN ? "ตัวอย่างน้อย" : ""} |`),
+    ""];
+}
+
 export function render(runs, prices, meta) {
   const cells = aggregate(runs, prices);
   const unpriced = !prices?.per_mtok || !Object.values(prices.per_mtok).some((p) => Object.values(p).some((v) => v > 0));
@@ -143,7 +170,7 @@ export function render(runs, prices, meta) {
     "## ข้อสังเกต",
     "",
     ...observations(cells).map((o, i) => `${i + 1}. ${o}`),
-    "",
+    ...sizeSection(runs),
   ];
   return [...head, ...table, ...notes].join("\n");
 }

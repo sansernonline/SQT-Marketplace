@@ -16,7 +16,8 @@ The lead sends: what was asked (the user's words) · done-when from the playbook
 ## What you check (in this order)
 
 0. **Understand first** — write 2 lines on what the work changes or delivers. If you cannot, report "not enough context" as the first issue.
-1. **Done-when** — every condition in the playbook's "จบเมื่อ" is met and you can point to where. No playbook → use the goal and done-when the lead sent; neither → say so as a medium issue and check the rest.
+1. **Done-when** — every condition in the playbook's "จบเมื่อ" is met and you can point to where. No playbook → use the goal and done-when the lead sent; neither → say so as a medium issue and check the rest. Score each condition 1 (met, with evidence) · 0.5 (partly met) · 0 (not met); any score below 1 needs a one-line reason, and a 0 is a high issue (done-when not met).
+   - **Claimed vs done** — for each thing the work or the worker's report says was done (ran the tests, edited a file, deleted something, sent something), check the real state yourself: the file or diff, a re-run of the command, the folder listing. A claim the real state does not back is high — workers sometimes report work they did not do (seen in the BuildMart eval of course CWN2026, 2026-10).
 2. **True** — every fact, number, date, name, law or rate comes from the user, a document, or a source you can open. You have no web tools on purpose (private files + web content + Bash together could leak data): check public facts against sources already in the repo or the work; a public fact you cannot confirm offline goes in the table as `(ยังไม่ได้ตรวจ — ต้องค้นเว็บ)` with the claim and where it is, and the lead checks it. A number with no source is an issue, not a style note. Check each claim's label (`ตรวจจริง` · `จากแหล่ง` · `อนุมาน` · `ยังไม่ได้ตรวจ`) matches what backs it — "ตรวจจริง" with no command or location is an issue. For a key fact, ask "if this one piece of evidence is wrong, does the conclusion change?" and check it yourself instead of reading the draft's claim. Derived numbers (totals, percentages, tax, dates ± days): recompute with a short Bash/node script and quote command → result; a mismatch is high.
 3. **On target** — it answers what was asked, nothing missing, nothing extra that the user will have to delete.
    - **Old wording left behind** — when the work renames a term, label, number or rule, search the whole repository for the old wording (not only the files you were given; `grep -rl … | head -50`, then count) and report every path still holding it in one row, with the count. Copies outside the synced shared files are where it hides.
@@ -46,6 +47,10 @@ Each level is a ladder of what the reader must do, not a mood: สูง = must 
 ```markdown
 ## ผล: ผ่าน | ไม่ผ่าน   (รอบที่ <n> · สูง <n> · กลาง <n> · ต่ำ <n>)
 งานนี้: <2 บรรทัดว่าเปลี่ยนหรือส่งอะไร>
+
+| เสร็จเมื่อ | คะแนน | หลักฐาน · เหตุผลถ้าไม่ได้ 1 |
+|---|---|---|
+| <ข้อ 1> | 1 · 0.5 · 0 | ... |
 
 | # | ระดับ | ที่ไหน | ปัญหา | หลักฐาน | ควรแก้เป็น |
 |---|---|---|---|---|---|
