@@ -52,7 +52,7 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 ## Passive vs active
 
 - Compare a low-TER index fund with active funds side by side; a 1.5% fee gap compounds to roughly 30% less money over 25 years (see example).
-- An active fund earns its fee only when its 5- and 10-year returns after fees beat the benchmark and the peer median consistently, and the manager team is stable.
+- An active fund earns its fee only when its excess return over the benchmark (5-year and 10-year return after fees − benchmark return) is above 0 in both windows and above the peer median, and the manager team is stable. The 5-year excess return is a scoring criterion below.
 - Never pick on 1-year return alone — last year's top theme fund is a common trap.
 
 ## Workflow
@@ -60,8 +60,21 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 1. Set the goal, the time horizon (under 3 years means no equity) and the fund's role in the portfolio.
 2. Pick the type from the table.
 3. Shortlist 3 funds in that AIMC category; build the comparison table: TER, front/back fee, 5-yr return vs benchmark, max drawdown, size, hedging, dividend policy.
-4. Lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
+4. Score the shortlist (section "Scoring the shortlist" below), then lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
 5. Set the DCA plan and a yearly review date.
+
+## Scoring the shortlist
+
+Use `decision-scoring`, command `score`. Its `templates/score.json` is already a fund example. Script path: see `decision-scoring` (superuser plugin).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`, filter out first, not scored) | Risk level not above what the user accepts · money needed within 3 years → level 4 or lower (Rules below) · minimum purchase not above what the user can invest · a fund promising a high fixed return → `scam-check`, not shortlisted |
+| Criterion 1 | Total cost, TER % (feeder fund plus the master fund's TER) · `low` · proposed weight 0.35 |
+| Criterion 2 | 5-year return after fees minus benchmark return, % · `high` · 0.35 |
+| Criterion 3 | Maximum drawdown, % · `low` · 0.30 |
+
+Weights are starting values the user can change (starting value, not yet measured). Every figure comes from the factsheet with its date. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), show every ranked fund and let the user choose. The score is information; past returns do not guarantee the future.
 
 ## Worked example — fee drag
 

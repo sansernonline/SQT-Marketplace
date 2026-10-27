@@ -41,7 +41,15 @@ A return handled fast costs one order. A return fought badly costs the shop rati
 | Your packing video clearly shows the correct, complete item | Dispute through the platform with the video |
 | Same buyer, third suspicious claim | Dispute with evidence; report the account to the platform |
 
-Rule of thumb: dispute only when you have video or tracking proof and the amount is worth the time; otherwise refund fast — the rating is worth more than one item.
+Dispute only when both are true. (1) Hard rule: you hold proof (packing video, or tracking with photo or signature); no proof → refund fast. (2) The expected value is above ฿100 (starting value, not yet measured; raise it if disputes take your time or hurt your rating):
+
+```
+expected value = chance of winning x value at stake - cost of your time
+value at stake = refund amount + shipping lost (+ rating points at risk, only if you can put a baht figure on them)
+cost of time   = minutes spent x your hourly rate / 60
+```
+
+Start from a chance of winning of 0.7 for a clear video and 0.5 for tracking proof only (starting value, not yet measured; replace with the shop's own win rate once 10 disputes are logged). Example: ฿400 item, video proof, 20 minutes at ฿150 an hour → 0.7 x 400 - 50 = ฿230 → dispute. ฿120 item, tracking only, 20 minutes → 0.5 x 120 - 50 = ฿10, below ฿100 → refund fast and keep the rating. When the outcome hangs on a platform ruling you cannot estimate, `decision-scoring` command `payoff` compares dispute vs refund across scenarios. The numbers are information; the seller decides.
 
 ## Review replies
 

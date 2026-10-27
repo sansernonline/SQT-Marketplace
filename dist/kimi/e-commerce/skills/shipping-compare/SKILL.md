@@ -25,7 +25,7 @@ On marketplaces the platform's shipping rate and subsidies apply; the comparison
 3. **Get quotes** for each typical parcel from each courier's app or website, **as a business account** (volume rates are lower than walk-in), Bangkok and upcountry
 4. **Compute chargeable weight** for each (rule below)
 5. **Add COD cost** = COD fee % × COD amount (+ VAT if charged) for the COD share
-6. **Score** with the comparison table — cost per average order, plus pick-up, payout days, claim experience
+6. **Score** with the comparison table, then the weighted score below (`decision-scoring` command `score`): cost per average order, delivery days, damage rate, COD payout days
 7. **Trial** the winner for two weeks on real orders before switching everything; keep a second courier for remote areas and outages
 
 ## Chargeable weight
@@ -62,6 +62,39 @@ Mix: 60% 0.5 kg envelopes, 40% 1 kg boxes; 30% COD, average COD ฿450.
 Courier A: envelope ฿28, box ฿35, COD 2.5% → (0.6 × 28 + 0.4 × 35) + 0.3 × 450 × 2.5% = 16.8 + 14 + 3.38 = **฿34.18 per order**.
 Courier B: envelope ฿25, box ฿38, COD 3% → 15 + 15.2 + 4.05 = **฿34.25 per order** (illustrative quotes).
 Near tie — decide on pick-up reliability and COD payout speed, not the rate card.
+
+## Score the couriers (ตัดสินด้วยตัวเลข)
+
+Ranking by cost alone hides a courier that breaks 3% of parcels. Use `decision-scoring` command `score` (`node decide.mjs score <file.json>`): one option per courier, numbers from your own last month.
+
+| Step | Rule |
+|---|---|
+| Hard rules first (`must`, the courier is dropped before scoring) | max weight below your heaviest parcel · does not serve your top provinces · no COD service when COD is over 20% of orders |
+| Criteria (`better`) | cost per average order, from the formula in the worked example (`low`) · delivery days, median (`low`) · damage and loss rate, % of parcels from your own claims (`low`) · COD payout days (`low`) |
+| Default weights (starting value, not yet measured · change to fit the shop) | cost 0.40 · damage rate 0.25 · delivery days 0.20 · COD payout days 0.15 |
+| Read the result line | `ยังไม่นิ่ง` or `สูสี` (a near tie, like the worked example below) → show the top 2 and the criterion that flips them; you choose, the score does not |
+
+Cost per order must already include chargeable weight, COD fee and remote-area surcharge. With only 2 couriers, min-max scoring gives 0 and 100 on every criterion, so read the raw numbers in brackets too. Trial run 2026-10-27 (illustrative numbers, 4 couriers; save the JSON below as a file and run `decide.mjs score <file>`): a courier with a 3 kg limit was dropped by the hard rule; the other 3 scored 50 / 48 / 40 and the line said `ยังไม่นิ่ง` (delivery days flips first place), so the choice went to the owner.
+
+```json
+{
+  "criteria": [
+    { "name": "ค่าส่งต่อออเดอร์ บาท", "weight": 0.40, "better": "low" },
+    { "name": "อัตราเสียหาย %", "weight": 0.25, "better": "low" },
+    { "name": "เวลาส่ง วัน", "weight": 0.20, "better": "low" },
+    { "name": "COD เงินเข้า วัน", "weight": 0.15, "better": "low" }
+  ],
+  "must": [ { "criterion": "น้ำหนักสูงสุด kg", "min": 5 } ],
+  "options": [
+    { "name": "ขนส่ง A", "values": { "ค่าส่งต่อออเดอร์ บาท": 34.18, "อัตราเสียหาย %": 0.8, "เวลาส่ง วัน": 2, "COD เงินเข้า วัน": 5, "น้ำหนักสูงสุด kg": 50 } },
+    { "name": "ขนส่ง B", "values": { "ค่าส่งต่อออเดอร์ บาท": 34.25, "อัตราเสียหาย %": 0.4, "เวลาส่ง วัน": 3, "COD เงินเข้า วัน": 3, "น้ำหนักสูงสุด kg": 30 } },
+    { "name": "ขนส่ง C", "values": { "ค่าส่งต่อออเดอร์ บาท": 29, "อัตราเสียหาย %": 2.5, "เวลาส่ง วัน": 4, "COD เงินเข้า วัน": 7, "น้ำหนักสูงสุด kg": 20 } },
+    { "name": "ขนส่ง D", "values": { "ค่าส่งต่อออเดอร์ บาท": 25, "อัตราเสียหาย %": 1, "เวลาส่ง วัน": 3, "COD เงินเข้า วัน": 4, "น้ำหนักสูงสุด kg": 3 } }
+  ]
+}
+```
+
+No damage data yet → use the claim count from the courier's app, or leave that criterion out and say so.
 
 ## Packaging
 

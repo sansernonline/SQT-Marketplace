@@ -92,7 +92,7 @@ Small monthly charges hide well. Once a quarter, put every one of them on a sing
 1. **Extract recurring lines.** A line counts as recurring when the same merchant appears at a similar amount and a similar day across 2 or more months, or once a year at the same date. Thai statement descriptors and patterns are listed in [references/statement-patterns.md](references/statement-patterns.md)
 2. **Normalise to baht per month.** Foreign-currency charges show the converted baht amount plus a foreign transaction fee on the card. Use the baht figure that was actually charged. Divide annual plans by 12
 3. **Count use.** Ask how many times it was used last month (opens, episodes, gym visits, GB stored). If the user does not know, the honest answer is usually "almost never"
-4. **Cost-per-use table.** Compute baht ÷ uses and fill in the table below
+4. **Cost-per-use table.** `฿/use = ฿ per month ÷ uses per month` (a service used 0 times has no ฿/use: it is a cancel by rule 1). Also write the **alternative price per use**: what one use costs bought singly or on the cheaper alternative (a cinema ticket, a day pass, the ad-supported tier ÷ uses). Fill in the table below
 5. **Decide each line** using the decision rules below: **Cancel**, **Downgrade**, **Rotate** or **Keep**
 6. **Cancel the right way.** Each charge is billed through one channel: the App Store, Google Play, the merchant's website or a carrier bill. Cancel through that channel. Steps are in [references/cancel-steps.md](references/cancel-steps.md)
 7. **Trial watch.** For every free trial, add a calendar reminder **2 days before** it ends. Apple's rule is to cancel at least 24 hours before the trial ends
@@ -109,10 +109,11 @@ Small monthly charges hide well. Once a quarter, put every one of them on a sing
 | Situation | Decision |
 |---|---|
 | 0 uses in 30 days | **Cancel** now. Re-subscribing later costs nothing |
-| ฿/use above what one use would cost bought singly (a cinema ticket, a day pass) | **Cancel** or switch to pay-per-use |
+| ฿/use above the alternative price per use (one use bought singly, or the cheaper tier ÷ uses) | **Cancel** or switch to pay-per-use or the cheaper tier |
 | Two services do the same job (2 video streamers, 2 cloud drives) | Keep the one used more. **Rotate** the other: one month on, then cancel |
 | Used, but only the basic features | **Downgrade** to a cheaper tier or to an ad-supported tier |
-| Used weekly or more, ฿/use is low | **Keep**. Then check whether the annual plan is cheaper (next section) |
+| Used weekly or more, and ฿/use is at most half of the alternative price per use (starting value, not yet measured) | **Keep**. Then check whether the annual plan is cheaper (next section) |
+| ฿/use between half and 100% of the alternative price per use | **Keep for now**, mark "review next audit"; the user decides. Use goes down for 2 audits in a row → **Cancel** |
 | Family members pay separately for the same service | Move to a family plan if the plan rules allow it |
 | Cannot find what the charge is | Search the descriptor. If it is still unknown, call the card issuer. This may be fraud. See `digital-hygiene` |
 

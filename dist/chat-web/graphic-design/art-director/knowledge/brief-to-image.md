@@ -14,7 +14,7 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 1. **Ask 5 things** if missing: image style (`photo` · `flat` · `3d` · `watercolor` · `line` · `isometric` — one style per set; unattended → pick from the use and log why; references from step 0 outrank the default list) · what must the image show · where it will be used (placement → aspect ratio, from `social-formats`) · what text goes on it (usually none in the image — add text in layout) · brand kit or style lock sheet to follow
 2. **Fill the brief** with the anatomy below; save it as `briefs/<asset-name>.md` using [prompt-anatomy.md](references/prompt-anatomy.md)
 3. **Assemble the prompt** in anatomy order, most important first
-4. **Generate 3–4 variations**, not 1. Pick by the brief, not by gut feeling
+4. **Generate 3–4 variations**, not 1. Pick with the score below, not by gut feeling
 5. **Fix misses 1 element at a time** — wrong light? Change only the light line
 6. **3 misses on 1 element** → the brief is wrong or the model cannot do it. Rewrite that element or change approach (edit, composite, photograph)
 7. **Record the winning prompt, model name and version, seed and settings** next to the brief — that is the reusable asset
@@ -36,6 +36,20 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 
 Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md).
 One tactile 3D object as the hero (paper cut, clay, felt): use the 8-line template (subject · material · light · shadow · lens · background · one colour · negatives) and its worked example in [prompt-anatomy.md](references/prompt-anatomy.md), section "Tactile 3D hero object".
+
+## Pick the image (ตัดสินด้วยตัวเลข)
+
+Use `decision-scoring` command `score` (`node decide.mjs score <file.json>`) on the 3–4 variations. The score picks among images that are already acceptable; taste is the user's final call.
+
+| Part | Rule |
+|---|---|
+| Hard rules first (`must`, the variation is dropped) | physical-errors score below 3 (extra fingers, melted faces, floating objects) · garbled text when the brief asked for text · another brand's logo or an identifiable real person |
+| Criteria, each scored 1–5 by a reviewer that did not generate the image (`better: high`) | matches the brief · text readable (leave out when the image has no text) · matches the style lock · no physical errors · crop-ready (room for the headline, survives the placements' ratios) |
+| Default weights (starting value, not yet measured · change per job) | brief 0.30 · style lock 0.25 · no physical errors 0.25 · crop-ready 0.10 · text readable 0.10 |
+| Hard to score directly | use `pairwise`: show each pair twice with positions swapped and record the winner; a pair whose winner flips with position counts as a tie |
+| Result line | `ยังไม่นิ่ง` or a near tie → show the top 2 to the user and say which criterion splits them; they choose |
+
+Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>.md`) with the winning prompt. A model that reviews its own output leans toward long or flashy images: use a different reviewer, and spot-check one score by eye.
 
 ## Model differences (general, check your tool's docs)
 

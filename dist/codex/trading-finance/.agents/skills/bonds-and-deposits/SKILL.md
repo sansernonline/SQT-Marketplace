@@ -60,7 +60,20 @@ Who may buy unrated or high-yield bonds is restricted by SEC rules; the exact cu
 2. Emergency part: savings and money market fund only.
 3. 1–3 year money: fixed deposits across banks (each ≤ 1 million), savings bonds of matching tenor, short government bond fund.
 4. Longer money: longer savings bonds; corporate bonds only investment grade, spread, and only what the user can hold to maturity.
-5. Show the table with after-tax interest in baht for the user's real amount. The user picks.
+5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld). Score the options that survive the hard rules below. The user picks.
+
+## Scoring the options
+
+Use `decision-scoring`, command `score`. Script path: see `decision-scoring` (superuser plugin). Score only the money that passed the split in Workflow steps 1–4. The emergency part is not scored (savings and money market fund only).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`) | Lock period (months) not longer than the time the user will not touch this money · deposit per bank at most 1,000,000 · corporate bond rated BBB- or better, with one issuer at most about 10% of the safe money (item 4, Concentration, in the bond checks above) |
+| Criterion 1 | Interest after tax, % a year · `high` · proposed weight 0.5 |
+| Criterion 2 | Covered by the Deposit Protection Agency (DPA, สคฝ.): 1 = yes, 0 = no · `high` · 0.3 |
+| Criterion 3 | Lock period, months · `low` · 0.2 |
+
+Weights are starting values the user can change (starting value, not yet measured). Every rate needs a source and a date; if unknown, write (รอยืนยัน) and leave that option out until confirmed. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user chooses. A high score driven by a high rate means more risk or harder access, so name the criterion that pulls the score every time.
 
 ## Worked example
 

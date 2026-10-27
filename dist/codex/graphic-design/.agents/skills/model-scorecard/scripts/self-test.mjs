@@ -4,7 +4,9 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import { buildReport } from "./report.mjs";
+import { buildReport, aggregate } from "./report.mjs";
+import { collectProject } from "./collect.mjs";
+import { pertByStep, bestOdds, pickOnce, contenders, seeded, betaDraw } from "./choose.mjs";
 
 const SCORECARD = join(dirname(fileURLToPath(import.meta.url)), "scorecard.mjs");
 const PRICES = { checked: "test", source: "test", per_mtok: { sonnet: { input: 3, output: 15, cache_read: 0.3, cache_write: 3.75 }, opus: { input: 15, output: 75, cache_read: 1.5, cache_write: 18.75 } } };
@@ -50,7 +52,21 @@ export async function selfTest() {
   const rollup = cli("--rollup", join(root, "proj-a"), join(root, "proj-b"), "--out", out);
   const inside = cli("--rollup", join(root, "proj-a"), "--out", join(root, "proj-a", "r.md"));
   const relative = spawnSync(process.execPath, [SCORECARD, "--rollup", "./proj-a", "--out", "./PROJ-A/r.md"], { encoding: "utf8", cwd: root });
+  const pert = pertByStep([10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((n) => ({ step: "code", total_tokens: n * 1000 })))[0];
+  const odds = bestOdds([{ model: "good", a: 21, b: 3, cost: 1 }, { model: "bad", a: 3, b: 21, cost: 1 }]);
+  const cheap = bestOdds([{ model: "pricey", a: 9, b: 3, cost: 10 }, { model: "cheap", a: 8, b: 4, cost: 1 }]);
+  const draws = Array.from({ length: 4000 }, ((r) => () => betaDraw(3, 7, r))(seeded(7)));
+  const c = makeProject(root, "proj-c", { "2026-10-20": { "runs.jsonl": [...newDay, { ...run(30, "s4", "software-company:developer", "code"), model: "opus" }, review(31, "s4", "fail", 1)] } });
+  const mixed = aggregate(collectProject(c[1], "proj-c").runs, PRICES);
+  const withUntried = contenders(mixed, "code", PRICES, ["haiku"]);
   const cases = [
+    ["PERT: เร็ว P10 10k · กลาง P50 50k · ช้า P90 90k · ค่าคาด (10+200+90)÷6 = 50k · ± (90−10)÷2.56 = 31.25k", pert.o === 10000 && pert.m === 50000 && pert.p === 90000 && pert.mean === 50000 && pert.sd === 31250],
+    ["Beta(3,7) สุ่ม 4000 ครั้ง เฉลี่ยใกล้ 0.3", Math.abs(draws.reduce((s, x) => s + x, 0) / draws.length - 0.3) < 0.02],
+    ["Thompson: ผ่าน 20/22 ชนะ 2/22 เกิน 95%", odds.rows[0].model === "good" && odds.rows[0].pBest > 0.95],
+    ["Thompson หารราคา: ผ่านพอ ๆ กันแต่ถูกกว่า 10 เท่า ชนะ", cheap.rows[0].model === "cheap"],
+    ["--pick คืนชื่อ model ที่อยู่ในรายการ", ["good", "bad"].includes(pickOnce(odds.rows, seeded(3)))],
+    ["ผู้ท้าชิงขั้น code: sonnet + opus จากผลตรวจ + haiku ที่ยังไม่เคยใช้ได้ Beta(1,1)", withUntried.length === 3 && withUntried.some((c) => c.model === "haiku" && c.a === 1 && c.b === 1)],
+    ["รายงานมีหัวข้อขนาดจาก PERT และ model ต่อขั้น", report.includes("## ขนาดชิ้นงานจากงานเก่า") && report.includes("## model ต่อขั้น")],
     ["นับงานต่อ model × ขั้น", report.includes("| sonnet | code | 2 |")],
     ["ผ่านรอบแรก 1 ใน 2 (รอบ 2 ผูกกับงานเดิม)", report.includes("50% (1/2)")],
     ["รอบแก้เฉลี่ย 0.5 (1 รอบแก้ใน 2 งาน)", report.includes("| 0.5 |")],

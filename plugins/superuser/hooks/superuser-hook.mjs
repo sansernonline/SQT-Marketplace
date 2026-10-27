@@ -1065,6 +1065,11 @@ function selfTest() {
     ["ตัวบอก skill: โค้ด python → simplify + stack-python", [], true, () => ["superuser:simplify", "stack-python"].every((s) => routes("เขียนสคริปต์ Python อ่าน csv").includes(s))],
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
+    // ตัดสินด้วยตัวเลข: ถามเลือกหรือจัดลำดับที่มีตัวเลขหรือเกณฑ์ → decision-scoring · ถามลอย ๆ ไม่มีตัวเลข → ไม่บอก
+    ...["เทียบกองทุน 3 กอง เลือกอันไหนดี", "บั๊ก 12 ตัว ทำอะไรก่อนดี", "เทียบ 3 กองทุนให้คะแนน", "which option is best for us", "ขนส่งเจ้าไหนคุ้ม ค่าส่ง 32 กับ 28 บาท"]
+      .map((s) => [`ตัวบอก skill: ตัดสินด้วยตัวเลข → decision-scoring · ${s}`, [], true, () => routes(s).includes("decision-scoring")]),
+    ...["ซื้อเสื้อตัวไหนดี", "ฟอนต์แบบไหนดีกว่า", "ติดตั้ง node ต้องทำอะไรก่อน", "ติดตั้ง node 22 ต้องทำอะไรก่อน", "แก้บั๊กหน้า login 500 error ต้องดูอะไรก่อน", "ช่วยให้คะแนนเรียงความนี้หน่อย", "ร้านไหนดี ไป 2 คน"]
+      .map((s) => [`ตัวบอก skill: ไม่มีตัวเลข → ไม่บอก decision-scoring · ${s}`, [], true, () => !routes(s).includes("decision-scoring")]),
     // งานหลายขั้นที่ไม่เอ่ยชื่อ → superuser · งานเล็กไม่โดน (ประโยคจริงจาก session 2026-10-27)
     ...[
       "แก้พวก flow ใน docs ให้หมดทุกไฟล์เลยให้เข้ากับ plugin ใหม่เรา",

@@ -46,6 +46,13 @@ Bring: registration book copy (สำเนาเล่มทะเบียน)
 | ชั้น 2 | ✘ | ✘ | ✔ | ✔ | |
 | ชั้น 3 | ✘ | ✘ | ✘ | ✔ | Cheapest legal-liability top-up to พ.ร.บ. |
 
+### Compare insurance quotes by numbers (`decision-scoring`, command `score`)
+
+1. **Iron rules (กฎเหล็ก):** insurer not licensed on oic.or.th · sum insured above the car's market value (you pay for cover you cannot collect) · class below what the lender requires. Put them in `must`.
+2. **Criteria (default weights, starting value, not yet measured, the user changes them):** premium per year, baht (low, 0.35) · excess per claim, baht (low, 0.20) · claim service 1–5 from the user's own reading of reviews and the garage list (high, 0.25) · garage type 1–5 (อู่ห้าง = 5, high, 0.20). Use quotes with the same sum insured and the same drivers.
+3. **Run:** `node decide.mjs score insurance.json`. Unstable or close (`ยังไม่นิ่ง`, `สูสี`) → the user decides. Insurance money is the user's decision; the score is supporting data.
+4. **Class step-up has a direct formula, no script:** ชั้น 1 is worth it over ชั้น 2+ when `extra premium per year < chance of a single-vehicle claim per year × average repair cost`. The chance comes from the user's own history (starting value, not yet measured; ask, do not guess).
+
 Compare quotes on: sum insured (ทุนประกัน — not above market value), excess/deductible (ค่าเสียหายส่วนแรก), garage type (อู่ห้าง dealer vs. อู่ประกัน network), named drivers, roadside assistance. Check the insurer is licensed on oic.or.th.
 
 ## Maintenance by distance
@@ -92,7 +99,7 @@ If the licence has already expired (the same bands apply to both types; รอ�
 
 ## Worked example
 
-Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax expiry date (14 Feb 2027) the car is 8 full years old → ตรอ. needed. Plan: book ตรอ. mid-Dec 2026 (inside the 90-day window from 16 Nov 2026), renew พ.ร.บ. 645.21 บาท at the same ตรอ., pay tax there or online. Voluntary policy: car is 8 years old, market value has fallen → compare ชั้น 2+ against ชั้น 1 on the price difference vs. one single-vehicle repair.
+Honda City first registered 15 Feb 2018, tax expires 14 Feb 2027. On the tax expiry date (14 Feb 2027) the car is 8 full years old → ตรอ. needed. Plan: book ตรอ. mid-Dec 2026 (inside the 90-day window from 16 Nov 2026), renew พ.ร.บ. 645.21 บาท at the same ตรอ., pay tax there or online. Voluntary policy: car is 8 years old, market value has fallen → compare ชั้น 2+ against ชั้น 1 with the step-up formula above: for example extra premium 4,000/year against a 10% yearly chance of a 30,000 repair = 3,000 expected, so ชั้น 2+ is cheaper on average (the 10% and 30,000 are assumed figures; use the user's).
 
 ## Related
 

@@ -64,7 +64,8 @@ The manufacturer's warranty is a contract on top of this — read what it exclud
 
 Buy only if **all** are true:
 - A repair would hurt your budget (not easily paid from savings)
-- Price of the plan is below about 10–15% of the item price (rule of thumb — compare to likely repair costs)
+- The plan pays off on expected cost: **chance the covered part fails during the extension x repair cost it covers > plan price**. Take the chance from the brand's failure reports or owner reviews and the repair cost from the service centre's quote, each written down with date and source. Example: 15% x 8,000 = 1,200, so a 3,900 plan fails the test
+- No usable chance figure → the shortcut is plan price below about 10–15% of the item price (rule of thumb, kept as the fallback when there is no data), or compare buy vs skip with `decision-scoring` command `payoff` using minimax regret, only when you have no idea at all of the chance: scenarios = fails / does not fail; regret of buying = plan price (when it does not fail); regret of skipping = repair cost − plan price (when it fails); take the option with the smaller worst regret. So it picks "buy" only when the repair cost is above 2 times the plan price. Example with repair 8,000 and plan 3,900 (chance 15%): worst regret buy 3,900, skip 4,100 → minimax regret says buy, while the expected-value test above (1,200 < 3,900) says skip. The two disagree, so use the chance figure whenever you have one
 - It covers what actually fails for this item (compressor, screen, accidental damage) — read exclusions
 - The provider will exist and is reachable in 3 years; claims go to an authorised centre
 

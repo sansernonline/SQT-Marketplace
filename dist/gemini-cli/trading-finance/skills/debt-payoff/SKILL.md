@@ -28,13 +28,28 @@ A lender charging above these, or an unlicensed lender (เงินกู้น
 1. **List every debt**: lender, balance, rate, minimum payment, overdue status. Use statements, not memory.
 2. **Stop the bleeding**: no new borrowing; cards out of the phone wallet. Keep a 1-month mini buffer so a surprise bill does not go back on the card.
 3. **Budget the fixed monthly debt payment** from `personal-budget` — minimums on all + everything extra on one target.
-4. **Pick order**:
+4. **Pick order by the numbers** — run `payoff.mjs` (section "Simulation script" below) on the real debt list and budget:
    - **Avalanche** — highest rate first; least total interest.
    - **Snowball** — smallest balance first; fastest first win, keeps people going.
-   - Choose snowball if the user has quit plans before; otherwise avalanche.
+   - Gap = snowball total interest − avalanche total interest (baht). Avalanche is the default. If the gap is at most 1 month of the budget (starting value, not yet measured) **and** the user says they have quit plans before or need early wins, snowball is fine — tell the user it costs that many baht extra. If the gap is larger, show both and say how many baht the user pays for the earlier first win; the user decides.
 5. **When a debt is cleared**, roll its whole payment onto the next target.
 6. **Check refinance / consolidation** (below).
 7. **If minimum payments are impossible**, use the restructuring channels before the debt turns a non-performing loan (NPL, 90+ days overdue).
+
+## Simulation script
+
+`payoff.mjs` simulates avalanche and snowball month by month: each month it adds interest (balance × yearly rate ÷ 12), pays every minimum, and puts the rest of the budget on the target debt; when a debt clears, its payment rolls to the next. Output: the month each debt clears, the month all clear, total interest, and the gap in baht.
+
+```
+node payoff.mjs <file.json> [--json]     # example file: scripts/example.json
+node payoff.mjs --self-test
+```
+
+Input file: `{ "budget": 8000, "debts": [ { "name": "...", "balance": 15000, "rate": 16, "min": 1000 } ] }` · rate is % a year (24, not 0.24; the script warns below 1). Every field must be a finite number; a bad field stops the script with a message naming it. If the budget is below the sum of minimums the script stops and says so. If the monthly interest is more than the payment, the debt never clears: the script reports that the budget cannot clear these debts and does not compare the two methods. If snowball finishes sooner than avalanche, it says so as it is.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/debt-payoff/scripts/payoff.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs` · Node only, no dependencies.
+
+Debt output is information; the user decides.
 
 ## Worked example — snowball vs avalanche
 
@@ -53,7 +68,7 @@ Simulated monthly, interest added then payments:
 | Snowball | B → C → A | B 6, C 16, A 23 | 37,843 | month 23 |
 | Avalanche | A → C → B | A 20, C 23, B 17 (by minimums) | 36,602 | month 23 |
 
-Avalanche saves about 1,240 baht; snowball clears the first debt in month 6. The gap widens when rates differ more or balances are larger. The real win is the fixed 8,000 — paying only minimums would take years longer.
+Avalanche saves about 1,240 baht (1,241 by `payoff.mjs scripts/example.json`, run 2026-10-27). That is under 1 month of the 8,000 budget, so snowball is a fair choice for a user who needs early wins, and costs about 1,240 baht extra; snowball clears the first debt in month 6. The gap widens when rates differ more or balances are larger. The real win is the fixed 8,000 — paying only minimums would take years longer.
 
 ## Refinance and consolidation
 

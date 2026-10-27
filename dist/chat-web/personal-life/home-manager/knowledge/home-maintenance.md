@@ -60,6 +60,13 @@ Before paying anything, every quote must show:
 
 For a formal quotation format see `e-commerce` `doc-quotation` (if installed); for a written agreement on a big job see `e-commerce` `doc-contract-th` (if installed).
 
+## Compare quotes by numbers (`decision-scoring`, command `score`)
+
+1. **Iron rules (กฎเหล็ก), drop the quote before scoring:** no written quotation (a verbal price only) · deposit above 30% (common practice, not law) · contractor identity or phone missing. Put them in `must` as `equals` or `max`, for example `{"criterion":"written quote 1=yes","equals":1}` and `{"criterion":"deposit %","max":30}`.
+2. **Criteria (default weights, starting value, not yet measured, the user changes them):** total price in baht, same scope for every quote (low, 0.40) · workmanship warranty in months (high, 0.25) · reviews or references 1–5, user's score (high, 0.20) · days to finish (low, 0.15).
+3. **Run:** `node decide.mjs score quotes.json`. Compare only quotes with the same scope; if scope differs, fix the scope first, because the cheapest quote is often the one that leaves things out.
+4. **Unstable or close** (`ยังไม่นิ่ง`, `สูสี`) → ask the top two contractors for the missing item (warranty in writing, a firm date), then rerun. The user picks; the score is supporting data.
+
 ## Worked example
 
 House with 3 wall aircons (bedroom 9,000 BTU ×2, living room 18,000 BTU), cleaned last in March. Schedule: bedrooms in June and December, living room (runs longest) in June, September, December, March. Spread cleanings so no single month carries all three. Quotes for March: A 600/unit, no warranty; B 700/unit incl. coil chemical wash, 30-day re-clean if dripping. Choose B — the drip guarantee prevents a second call-out.

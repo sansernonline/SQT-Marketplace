@@ -1,4 +1,5 @@
 import { collectProject } from "./collect.mjs";
+import { chooseSections } from "./choose.mjs";
 
 // รายการงานลูกทีม (จาก collect.mjs) → ตาราง model × ขั้น + ข้อสังเกต 3 ข้อ (markdown)
 const STEP_ORDER = ["plan", "research", "design", "write", "code", "test", "review", "other"];
@@ -17,7 +18,7 @@ export function priceFor(label, prices) {
   return p && Object.values(p).some((v) => v > 0) ? p : null;
 }
 
-const costOf = (tokens, price) => TOKEN_KEYS.reduce((s, k) => s + (tokens[k] ?? 0) * (price[PER_MTOK[k]] ?? 0), 0) / 1e6;
+export const costOf = (tokens, price) => TOKEN_KEYS.reduce((s, k) => s + (tokens[k] ?? 0) * (price[PER_MTOK[k]] ?? 0), 0) / 1e6;
 
 function newCell(model, step) {
   return { model, step, n: 0, tok: { n: 0, input: 0, output: 0, cacheRead: 0, cacheCreate: 0, estimated: false }, cost: { n: 0, sum: 0 },
@@ -50,7 +51,7 @@ export function aggregate(runs, prices) {
   return [...cells.values()].sort((a, b) => STEP_ORDER.indexOf(a.step) - STEP_ORDER.indexOf(b.step) || b.n - a.n);
 }
 
-const costPerRun = (c) => (c.cost.n ? c.cost.sum / c.cost.n : null);
+export const costPerRun = (c) => (c.cost.n ? c.cost.sum / c.cost.n : null);
 const firstPassRate = (c) => (c.review.n ? c.review.firstPass / c.review.n : null);
 const score = (c) => (costPerRun(c) && firstPassRate(c) != null ? firstPassRate(c) / costPerRun(c) : null);
 
@@ -114,7 +115,7 @@ export function observations(cells) {
 }
 
 // ขนาดจริงของงาน: token รวมจากข้อความงานเบื้องหลังจบ หรือผลรวม token ที่จดตรง (ไม่ใช้ค่าที่หารเฉลี่ย)
-const actualTokens = (r) => r.total_tokens ?? (r.tokens && !r.tokensEstimated ? TOKEN_KEYS.reduce((s, k) => s + (r.tokens[k] ?? 0), 0) : null);
+export const actualTokens = (r) => r.total_tokens ?? (r.tokens && !r.tokensEstimated ? TOKEN_KEYS.reduce((s, k) => s + (r.tokens[k] ?? 0), 0) : null);
 
 // ค่าปรับขนาดต่อขั้น k ← 0.6k + 0.4 × (จริง ÷ ประเมิน) เรียงตามเวลา (สูตรจาก lab Multi_Agent_Orchestra ของคอร์ส CWN2026)
 export function sizeFactors(runs) {
@@ -171,6 +172,7 @@ export function render(runs, prices, meta) {
     "",
     ...observations(cells).map((o, i) => `${i + 1}. ${o}`),
     ...sizeSection(runs),
+    ...chooseSections(runs, cells, prices),
   ];
   return [...head, ...table, ...notes].join("\n");
 }

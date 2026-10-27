@@ -59,7 +59,20 @@ Who may buy unrated or high-yield bonds is restricted by SEC rules; the exact cu
 2. Emergency part: savings and money market fund only.
 3. 1–3 year money: fixed deposits across banks (each ≤ 1 million), savings bonds of matching tenor, short government bond fund.
 4. Longer money: longer savings bonds; corporate bonds only investment grade, spread, and only what the user can hold to maturity.
-5. Show the table with after-tax interest in baht for the user's real amount. The user picks.
+5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld). Score the options that survive the hard rules below. The user picks.
+
+## Scoring the options
+
+Use `decision-scoring`, command `score`. Script path: see `decision-scoring` (superuser plugin). Score only the money that passed the split in Workflow steps 1–4. The emergency part is not scored (savings and money market fund only).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`) | Lock period (months) not longer than the time the user will not touch this money · deposit per bank at most 1,000,000 · corporate bond rated BBB- or better, with one issuer at most about 10% of the safe money (item 4, Concentration, in the bond checks above) |
+| Criterion 1 | Interest after tax, % a year · `high` · proposed weight 0.5 |
+| Criterion 2 | Covered by the Deposit Protection Agency (DPA, สคฝ.): 1 = yes, 0 = no · `high` · 0.3 |
+| Criterion 3 | Lock period, months · `low` · 0.2 |
+
+Weights are starting values the user can change (starting value, not yet measured). Every rate needs a source and a date; if unknown, write (รอยืนยัน) and leave that option out until confirmed. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user chooses. A high score driven by a high rate means more risk or harder access, so name the criterion that pulls the score every time.
 
 ## Worked example
 
@@ -132,10 +145,31 @@ The government cut of the mortgage fee to 0.01% (homes ≤ 7 million baht, until
 
 1. From the contract and latest statement: balance, current rate, monthly payment, months since signing, penalty clause.
 2. Get written offers: the current bank's retention rate and fee; 1–2 other banks' rates for each year and the rate after the promo (usually MRR − x).
-3. Simulate the same months (normally 36) with the same monthly payment for each path: interest paid and balance left.
-4. Add each path's one-off costs. Break-even = extra cost ÷ monthly interest saved.
+3. Simulate the same months N (normally 36) with the same monthly payment for each path: interest paid and balance left. Run `refinance.mjs compare` (section "Formulas and script" below).
+4. Add each path's one-off costs. **Break-even (months) = total cost of moving ÷ interest saved per month**, where interest saved per month = (interest over N months on the old path − interest over N months on the new path) ÷ N. Compare the totals too: interest over N months + one-off costs, per path.
 5. Look past the promo: compare the rate in year 4 onward (MRR − x) at each bank.
 6. Lay out the table; the user decides. If cash is short, ask whether the new bank adds fees to the loan (it raises the balance).
+
+## Formulas and script
+
+| What | Formula |
+|---|---|
+| Monthly payment (reducing balance) | PMT = P × r ÷ (1 − (1 + r)^−n) · P = loan amount · r = yearly rate ÷ 12 · n = number of payments · if r = 0 → P ÷ n |
+| Interest over N months | Each month: interest = balance × r · new balance = old balance + interest − payment · sum the interest over N months |
+| Break-even (months) | total cost of moving (minus the baseline's own cost) ÷ interest saved per month (if saving ≤ 0 → not worth it) |
+| Compare | Interest over the holding period + one-off costs, per path · the lowest total is best for that period |
+
+```
+node refinance.mjs pmt <loan> <yearly rate %> <payments>
+node refinance.mjs compare <file.json> [--json]     # example file: scripts/example.json
+node refinance.mjs --self-test
+```
+
+Input fields `balance`, `payment`, `months`, `stay.rate` and each option's `rate` and `cost` must be finite numbers, with `months` above 0; a bad field stops the script with a message naming it. A rate below 1 gets a warning (it may have been typed as a decimal instead of %). `baseline` (optional) names the option to compare against; the default is staying put.
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/home-refinance/scripts/refinance.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs` · Node only, no dependencies.
+
+**Rate after the promo is uncertain** (MRR can rise or fall): use `decision-scoring`, command `payoff`. Options = refinance · retention · stay put; scenarios = MRR up · flat · down (compute interest plus costs for each cell with `refinance.mjs`; `better` = `low`). If the probability of each scenario is unknown, read the "smallest maximum regret" (minimax regret) column; do not guess probabilities. Script path: see `decision-scoring` (superuser plugin). If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), or for any home-loan decision, the output is information and the user decides.
 
 ## Worked example
 
@@ -148,7 +182,7 @@ Balance 2,400,000 after exactly 3 years (no penalty). Payment kept at 18,000 a m
 | Interest + cost | 449,842 | 290,184 | 238,510 |
 | Balance left | 2,201,842 | 2,018,184 | 1,962,310 |
 
-Refinance costs 4,200 more up front than retention and saves about 1,550 interest a month against it, so it breaks even in about 3 months and is about 51,700 ahead after 3 years. Before choosing, compare each bank's rate from year 4 (MRR − x) and the new 3-year lock. (Monthly simulation, computed here 2026-10-26.)
+Refinance costs 4,200 more up front than retention and saves about 1,550 interest a month against it, so it breaks even in about 3 months (4,200 ÷ 1,550) and is about 51,700 ahead after 3 years. Before choosing, compare each bank's rate from year 4 (MRR − x) and the new 3-year lock. (Monthly simulation, computed here 2026-10-26 and rerun with `refinance.mjs compare scripts/example.json` 2026-10-27: interest 449,842 · 266,184 · 210,310.)
 
 ## Check before sending
 

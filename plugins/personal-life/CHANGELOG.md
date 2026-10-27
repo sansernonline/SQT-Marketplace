@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.16.0 — 2026-10-27
+
+- ตัดสินด้วยตัวเลขผ่าน `decision-scoring`: ข้อเสนองาน ใบเสนอราคาผู้รับเหมา ประกันรถ (score) · การตัดสินใจใหญ่ (payoff) · เมนูในงบและเป้าหมายไม่เกิน 3 (knapsack) · อีเมลและปฏิทิน (Eisenhower) · `subscription-audit` ต้นทุนต่อครั้งที่ใช้ · `tech-radar` และ `meeting-prep-card` มีเกณฑ์ตัวเลข
+
 ## 0.15.4 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

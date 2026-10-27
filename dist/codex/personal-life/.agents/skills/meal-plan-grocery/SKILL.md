@@ -24,7 +24,7 @@ General information, not dietary advice — for diabetes, kidney disease or alle
 ## Workflow
 
 1. **Budget per head per day** = weekly budget ÷ 7 ÷ people. Compare with what the household actually spent last month (`trading-finance` `personal-budget` (if installed))
-2. **Pick 4 proteins** for the week (e.g. chicken, pork mince, eggs, fish) and **2 cheap fillers** (tofu, beans/ถั่ว, eggs) — rotating proteins is what keeps cost down
+2. **Pick 4 proteins** for the week (e.g. chicken, pork mince, eggs, fish) and **2 cheap fillers** (tofu, beans/ถั่ว, eggs) — rotating proteins is what keeps cost down. More candidates than the budget allows → choose by numbers, see "Choose items inside the budget" below
 3. **Fill the week grid** — [references/weekly-plan-template.md](references/weekly-plan-template.md); one "cook once, eat twice" pair per 2–3 days
 4. **Write the grocery list by section** (below) from the grid; check fridge and pantry first and cross off what is there
 5. **Batch on Sunday:** rice/grains portions, one braise or curry paste base, washed and cut vegetables (keep 3–4 days), marinated protein portions frozen flat
@@ -46,6 +46,19 @@ Group items in walking order so one pass covers the store:
 | 7 ของใช้ในบ้าน | | Household — separate budget line |
 
 Rules: buy rice, oil and sauces monthly in bulk (Makro or promotion weeks); buy vegetables twice a week; check unit price (ราคาต่อกรัม on the shelf label), not pack price.
+
+## Choose items inside the budget (`decision-scoring`, command `knapsack`)
+
+1. **Iron rules first (กฎเหล็ก):** anything on the allergy or doctor's avoid list is removed before the run; anything the grandparent's diet needs goes in with `"must": true`.
+2. **Budget** = the protein part of the weekly food budget, in baht (the user sets it; starting value, not yet measured until a month of receipts). **Cost** = shelf price in baht. **Value** = grams of protein in the pack (from the label), or meals served if the user prefers to count meals; one unit per run, never mixed.
+3. **Run:** `node decide.mjs knapsack grocery.json`. It tries every set up to 20 items and returns the true best, not just the cheapest per gram.
+4. Example input (illustrative prices and grams, budget 400 baht; check the labels):
+
+```json
+{"budget":400,"items":[{"name":"chicken breast 1 kg","cost":110,"value":230},{"name":"eggs 30","cost":105,"value":180},{"name":"minced pork 500 g","cost":85,"value":90},{"name":"tofu 10 blocks","cost":60,"value":100},{"name":"mackerel 1 kg","cost":120,"value":200,"must":true}]}
+```
+
+Result when run: chicken, eggs, tofu and mackerel (395 of 400 baht, 710 g protein); pork mince is left out. Two sets within a few grams of each other → the family picks by taste. Protein grams are not a diet plan; for a medical diet follow the doctor's list.
 
 ## Food safety in Thai heat
 

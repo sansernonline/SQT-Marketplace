@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 3.12.0 — 2026-10-27
+
+- skill ใหม่ `decision-scoring` ตัดสินด้วยตัวเลข: `decide.mjs` คำสั่ง score (กฎเหล็กตัดก่อน → min-max → ถ่วงน้ำหนัก → ขยับน้ำหนัก ±20% ดูว่าอันดับ 1 นิ่งไหม) · payoff (ค่าคาดหวัง + minimax regret) · knapsack (ลองทุกชุดเมื่อไม่เกิน 20 รายการ · `max_items`) · priority (RICE · WSJF · Eisenhower) · pairwise (Bradley-Terry สลับตำแหน่ง) · review (ตรวจอีกรอบคุ้มไหม) · ทุกคำสั่งตรวจค่าที่ใส่ · knapsack บอกชุดรองลงมาและเพดานต่อกลุ่ม · test 19 ข้อ · eval 3 เคส (regression จากรอบแดงที่ทำสเกลก่อนตัดตัวเลือกที่ผิดกฎเหล็ก)
+- `model-scorecard` รายงานเพิ่ม 2 หัวข้อ: ขนาดชิ้นงานจากงานเก่า (P10/P50/P90 + ค่าคาด PERT ต่อขั้น) · model ต่อขั้นด้วย Thompson sampling (Beta-Binomial หารค่าใช้จ่ายต่องาน) · `--pick <ขั้น> [--candidates]` · test 26 ข้อ
+- แกน: ตารางขนาดงานมีเกณฑ์ตัวเลข · ข้ามรีวิวด้วยค่าคาดของการพลาด · รอบตรวจใช้ `decide.mjs review` (เพดาน 3/5 รอบยังเป็นกฎเหล็ก) · โหวตเรื่องย้อนไม่ได้คู่กับตาราง minimax regret · `parallel-attempts-pick-best` ใช้ pairwise · `prior-art-review` และ `context-budget` มีเกณฑ์ตัวเลข
+- router และ triggers รู้จัก `decision-scoring` · CI รัน self-test ของ decide และสคริปต์การเงินใหม่
+
 ## 3.11.1 — 2026-10-27
 
 - planner `--now <เวลา ISO>` กำหนดเวลาตอนคิดโควตา · ตัวเลขปัดทศนิยมก่อนแสดง (80k ไม่ใช่ 80.0k) · test 56 ข้อ (เพิ่มการเผื่อโควตาของบัญชีปลายทางตอนเสนอย้าย)
