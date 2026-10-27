@@ -20,6 +20,8 @@ description: Use when setting up or fixing a build and deploy pipeline or decidi
 | งาน | skill | |
 |---|---|---|
 | ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
+| pipeline อยู่บน Jenkins (Jenkinsfile · credentials · input อนุมัติ) | `jenkins-pipeline` | คู่ |
+| Dockerfile · Helm chart · deploy ขึ้น Kubernetes | `kubernetes-helm` | คู่ |
 | สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
 | เขียน migration | `database-design` | แทน |
 | ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |

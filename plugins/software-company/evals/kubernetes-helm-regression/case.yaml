@@ -6,7 +6,7 @@ name: kubernetes-helm-regression
 description: Dockerfile และ chart สำหรับ production ต้องล็อก image ด้วย digest และปิด root filesystem กับ capabilities (อาการรอบแดง 2026-10-27)
 tags: [regression, kubernetes-helm]
 runs: 3
-expected_outcome: มี @sha256 หรือบอกให้ล็อก digest · readOnlyRootFilesystem · drop ALL · ไม่มีรหัสผ่านที่ผู้ใช้ให้มาอยู่ในไฟล์
+expected_outcome: image อ้างด้วย @sha256 · readOnlyRootFilesystem · drop ALL · ไม่มีรหัสผ่านที่ผู้ใช้ให้มาอยู่ในไฟล์
 execution:
   prompt: |
     มี FastAPI service ต่อ Postgres อยากได้ Dockerfile กับ Helm chart (Chart.yaml, values.yaml, deployment.yaml, service.yaml)
@@ -17,8 +17,7 @@ execution:
 graders:
   - name: image-pinned-by-digest
     type: regex
-    pattern: "(@sha256:|digest)"
-    flags: i
+    pattern: "@sha256:"
     match: contains
     target: last_message
   - name: read-only-root-filesystem
@@ -28,7 +27,7 @@ graders:
     target: last_message
   - name: capabilities-dropped
     type: regex
-    pattern: "drop:\\s*(\\[\\s*)?[\"']?ALL"
+    pattern: "drop:\\s*(\\[\\s*|-\\s*)?[\"']?ALL"
     match: contains
     target: last_message
   - name: password-not-in-files

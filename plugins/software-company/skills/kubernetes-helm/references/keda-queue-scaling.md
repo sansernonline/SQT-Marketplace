@@ -1,6 +1,6 @@
 # ขยาย worker ตามงานค้างในคิวด้วย KEDA (Kafka consumer lag)
 
-ใช้กับขั้น 3 ข้อย่อย "ขยายตามคิว" ของ [`SKILL.md`](../SKILL.md) · แหล่งทั้งหมดมาจาก keda.sh ตรวจ 2026-10-27 (KEDA 2.21 เป็นรุ่นล่าสุดที่หน้าเอกสารระบุ) · ฝั่ง Kafka เอง (partition · consumer group · commit offset) ดู `kafka-streaming` ถ้ามีใน plugin
+ใช้กับขั้น 3 ข้อย่อย "ขยายตามคิว" ของ [`SKILL.md`](../SKILL.md) · แหล่งทั้งหมดมาจาก keda.sh ตรวจ 2026-10-27 (KEDA 2.21 เป็นรุ่นล่าสุดที่หน้าเอกสารระบุ) · ฝั่ง Kafka เอง (partition · consumer group · commit offset) ดู [`kafka-streaming`](../../kafka-streaming/SKILL.md)
 
 ## KEDA ต่างจาก HPA อย่างไร
 
@@ -64,10 +64,10 @@ spec:
 
 ## ข้อควรระวัง
 
-- **จำนวน partition คือเพดานจริง.** เพิ่ม partition ภายหลังทำให้ลำดับ key เปลี่ยนและ rebalance · ตัดสินใจจำนวน partition ตั้งแต่ออกแบบ topic (`kafka-streaming`) ก่อนตั้ง `maxReplicaCount`
+- **จำนวน partition คือเพดานจริง.** เพิ่ม partition ภายหลังทำให้ลำดับ key เปลี่ยนและ rebalance · ตัดสินใจจำนวน partition ตั้งแต่ออกแบบ topic ([`kafka-streaming`](../../kafka-streaming/SKILL.md)) ก่อนตั้ง `maxReplicaCount`
 - **ห้ามมี HPA ของเราเองคู่กับ ScaledObject บน Deployment เดียวกัน.** KEDA สร้าง HPA ให้แล้ว admission webhook ของ KEDA ตรวจกรณี ScaledObject 2 ตัวชี้ Deployment เดียวกัน ([Concepts](https://keda.sh/docs/latest/concepts/)) · จะย้าย HPA เดิมให้ KEDA ดู ให้ใช้ annotation `scaledobject.keda.sh/transfer-hpa-ownership: "true"` ตาม [Scaling Deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/) · เอา `spec.replicas` ออกจาก Deployment เหมือนกรณี HPA
 - **trigger CPU หรือ memory ลงเหลือ 0 ไม่ได้** · ใช้ Kafka trigger อย่างเดียวถ้าต้องการ scale-to-zero
 - **worker ที่ทำงานนาน** ต้องตั้ง `terminationGracePeriodSeconds` ให้พอจบงานที่ถืออยู่ และ commit offset หลังทำเสร็จ ไม่ใช่ตอนรับ · ไม่งั้นตอนลดจำนวน pod งานหาย หรือถูกทำซ้ำ (ทำซ้ำได้ต้องออกแบบให้ idempotent ตาม `principle-safe-to-rerun`) · ลำดับที่ HPA เลือก pod ที่จะถอด `(ยังไม่ได้ตรวจ)`
 - **Kafka มี SASL หรือ TLS** ต้องใส่ข้อมูลยืนยันตัวตนให้ scaler ผ่าน `TriggerAuthentication` ที่อ้าง Secret ของ cluster ไม่ใส่รหัสใน `metadata` · รูปแบบดูหัวข้อ SASL/TLS ในหน้า [Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) (ยังไม่ได้ตรวจรายละเอียดช่องในหน้านั้น)
 - **ใน Helm chart** เขียน ScaledObject เป็น template ที่เปิดด้วย `keda.enabled` และปิด HPA ตัวเดิมด้วยค่า `autoscaling.enabled` ตรงข้าม เพื่อไม่ให้ 2 ตัวชน · ตรวจด้วย `helm template` ว่าไม่มีทั้ง HPA และ ScaledObject ของ Deployment เดียวกัน
-- **kubeconform** ไม่รู้จัก ScaledObject เพราะเป็น CRD · ใส่ `-schema-location` ของ catalog หรือ `-ignore-missing-schemas` แล้วจดไว้ว่าข้ามตัวไหน (ดู [`helm-chart.md`](helm-chart.md))
+- **kubeconform** ไม่มี schema ของ ScaledObject ในตัว เพราะเป็น CRD · catalog ของ datreeio มี `keda.sh/scaledobject_v1alpha1.json` ([ไดเรกทอรี](https://github.com/datreeio/CRDs-catalog/tree/main/keda.sh) · ตรวจ 2026-10-27) จึงใส่ `-schema-location` ของ catalog ได้ · CRD ตัวอื่นที่ไม่มีใน catalog ใช้ `-ignore-missing-schemas` แล้วจดไว้ว่าข้ามตัวไหน (ดู [`helm-chart.md`](helm-chart.md))

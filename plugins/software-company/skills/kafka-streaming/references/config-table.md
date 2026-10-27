@@ -12,14 +12,14 @@
 | `delivery.timeout.ms` | 120000 | ไม่แตะ จนกว่าจะมีเหตุ | เวลารวมก่อนรายงานสำเร็จหรือล้ม ต้องจัดการผลล้มเสมอ |
 | `max.in.flight.requests.per.connection` | 5 | ไม่เกิน 5 | เปิด idempotence ต้อง 5 หรือน้อยกว่า |
 | `transactional.id` | `null` | ไม่ใช้ในงานนี้ | transaction ครอบเฉพาะ Kafka ไป Kafka |
-| `linger.ms` | 5 | ไม่แตะ | เปลี่ยนจาก 0 เป็น 5 ใน 4.0 |
+| `linger.ms` | 5 | ไม่แตะ | เปลี่ยนจาก 0 เป็น 5 ตั้งแต่ Kafka 4.0 (ยืนยันจากข้อความดิบของหน้า producer-configs 2026-10-27) |
 
 ## consumer — https://kafka.apache.org/44/configuration/consumer-configs/
 
 | ค่า | เริ่มต้น | ที่แนะนำ | หมายเหตุ |
 |---|---|---|---|
 | `enable.auto.commit` | `true` | `false` | commit เองหลังงานเสร็จ |
-| `auto.offset.reset` | `latest` | `earliest` ถ้าต้องอ่านจากต้น | `latest` อาจข้าม record เมื่อเพิ่ม partition · เอกสารแนะ `by_duration` |
+| `auto.offset.reset` | `latest` | `earliest` ถ้าต้องอ่านจากต้น | `latest` อาจข้าม record เมื่อเพิ่ม partition · เอกสารแนะ `by_duration:<ISO 8601>` เช่น `by_duration:PT6M` (ค่าติดลบไม่ได้) · ค่าที่ใช้ได้ `latest` `earliest` `none` `by_duration:PnDTnHnMn.nS` |
 | `max.poll.interval.ms` | 300000 | ตามงานต่อรอบ | เกินแล้ว consumer ถูกถือว่าล้ม เกิด rebalance |
 | `max.poll.records` | 500 | ลดถ้างานต่อ record ช้า | |
 | `session.timeout.ms` | 45000 | ไม่แตะ | ใช้ไม่ได้เมื่อ `group.protocol=consumer` |

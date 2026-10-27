@@ -15,7 +15,7 @@ execution:
 graders:
   - name: producer-durability
     type: regex
-    pattern: "acks\\s*=\\s*all"
+    pattern: "acks[\"']?\\s*[:=]\\s*[\"']?all"
     flags: i
     match: contains
     target: last_message

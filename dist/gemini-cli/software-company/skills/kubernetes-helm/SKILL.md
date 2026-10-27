@@ -25,12 +25,12 @@ description: Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm ch
 |---|---|---|
 | สร้าง cluster · node pool · เครือข่ายจากโค้ด | [`infra-as-code`](../infra-as-code/SKILL.md) | ที่นั่นสร้างของ ที่นี่ลงของบน cluster · คำถามว่าคุ้มใช้ Kubernetes ไหมอยู่ที่นั่น |
 | ค่าลับ · config ต่อ environment | [`config-and-secrets`](../config-and-secrets/SKILL.md) | ที่นั่นกำหนดว่าอะไรเป็นลับและหมุนอย่างไร ที่นี่กำหนดว่าเข้า pod ทางไหน |
-| pipeline build · ด่าน · rollback ระดับระบบ | [`cicd-and-release`](../cicd-and-release/SKILL.md) | build ครั้งเดียวแล้วเลื่อนขั้น (หัวข้อ 2) มาจากที่นั่น ที่นี่ลงรายละเอียดฝั่ง Kubernetes · เขียนไฟล์ Jenkins → `jenkins-pipeline` ถ้ามี |
+| pipeline build · ด่าน · rollback ระดับระบบ | [`cicd-and-release`](../cicd-and-release/SKILL.md) | build ครั้งเดียวแล้วเลื่อนขั้น (หัวข้อ 2) มาจากที่นั่น ที่นี่ลงรายละเอียดฝั่ง Kubernetes · เขียนไฟล์ Jenkins → [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) |
 | endpoint `/health/live` กับ `/health/ready` · ปิดตัวเรียบร้อย | [`web-service-essentials`](../web-service-essentials/SKILL.md) | probe ในที่นี้ชี้ไปที่ endpoint เหล่านั้น |
 | รันโค้ดทดลองใน container | [`docker-sandbox`](../docker-sandbox/SKILL.md) | ห้องทดลองไม่ใช่ image ที่ส่งขึ้น production |
 | ตรวจ image และ manifest ก่อนส่ง | [`security-gate`](../security-gate/SKILL.md) | สแกน secret และช่องโหว่ใน image |
 | metric · alert · แดชบอร์ด (Prometheus/Grafana) | [`observability-basics`](../observability-basics/SKILL.md) | ที่นี่แค่ให้ pod เปิด metric ได้ |
-| Kafka เอง (topic · partition · consumer) | `kafka-streaming` ถ้ามี | ที่นี่มีแค่การขยาย consumer ตามคิว (ขั้น 3.7) |
+| Kafka เอง (topic · partition · consumer) | [`kafka-streaming`](../kafka-streaming/SKILL.md) | ที่นี่มีแค่การขยาย consumer ตามคิว (ขั้น 3.7) |
 
 ## 1 · ค้นก่อนถาม แล้วถามรวมครั้งเดียว
 

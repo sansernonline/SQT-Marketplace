@@ -2,7 +2,13 @@
 
 ใช้กับขั้น 3 ของ [`SKILL.md`](../SKILL.md) · ตรวจ 2026-10-27 · ค่าตัวเลขในตัวอย่าง (CPU · memory · จำนวน replica) เป็นจุดเริ่ม ต้องปรับตามการวัดจริง
 
-สารบัญ: [Deployment](#deployment-ของ-web-service-ย่อ) · [PDB](#poddisruptionbudget-pdb) · [HPA](#horizontalpodautoscaler-hpa) · [NetworkPolicy](#networkpolicy) · [rollout และ rollback](#rollout-และ-rollback)
+สารบัญ
+
+- [Deployment](#deployment-ของ-web-service-ย่อ)
+- [PodDisruptionBudget](#poddisruptionbudget-pdb)
+- [HorizontalPodAutoscaler](#horizontalpodautoscaler-hpa)
+- [NetworkPolicy](#networkpolicy)
+- [rollout และ rollback](#rollout-และ-rollback)
 
 ## Deployment ของ web service (ย่อ)
 
@@ -113,7 +119,7 @@ spec:
 - ต้องมี CPU request ในทุก container ไม่งั้น HPA ไม่ทำอะไรกับ metric นั้น ([HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/))
 - เมื่อใช้ HPA ให้เอา `spec.replicas` ออกจาก Deployment ไม่งั้น `kubectl apply` ทุกครั้งตั้งจำนวนกลับ (เอกสารมีขั้นตอนย้ายแบบไม่ให้ pod หายชั่วคราว)
 - 300 วินาทีคือค่าเริ่มต้นของ scale down อยู่แล้ว เขียนไว้ให้คนเห็น
-- workload ที่ scale ตามความลึกคิว (Kafka consumer) ใช้ metric อื่น เช่น KEDA `(ยังไม่ได้ตรวจ)` · ดู `kafka-streaming` ถ้ามีใน plugin
+- workload ที่ scale ตามความลึกคิว (Kafka consumer) ใช้ metric อื่น เช่น KEDA `(ยังไม่ได้ตรวจ)` · ดู [`kafka-streaming`](../../kafka-streaming/SKILL.md) และ [`keda-queue-scaling.md`](keda-queue-scaling.md)
 
 ## NetworkPolicy
 

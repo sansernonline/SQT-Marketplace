@@ -21,6 +21,7 @@ description: Use when cloud servers, databases or networks should be built from 
 | งาน | skill | |
 |---|---|---|
 | ท่อ build และ deploy ตัวแอป | `cicd-and-release` | คู่ |
+| ตัวแอปบน Kubernetes (manifest · Helm chart · GPU node pool · KEDA) | `kubernetes-helm` | คู่ |
 | เก็บรหัสผ่านและ key ของระบบ | `config-and-secrets` | คู่ |
 | ส่งข้อมูลออกนอกประเทศตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (PDPA) | `pdpa-compliance` ข้อ 7 | คู่ |
 | เลือกสถาปัตยกรรม (monolith · microservices · serverless) | `architecture-patterns` | แทน |

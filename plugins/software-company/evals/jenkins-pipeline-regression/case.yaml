@@ -22,8 +22,13 @@ graders:
     target: last_message
   - name: not-build-number-tag
     type: regex
-    pattern: "IMAGE_TAG\\s*=\\s*[\"']?\\$\\{?(env\\.)?BUILD_NUMBER"
+    pattern: "TAG\\w*\\s*=\\s*[\"']?\\$\\{?(env\\.)?BUILD_NUMBER"
     match: not_contains
+    target: last_message
+  - name: approval-has-timeout
+    type: regex
+    pattern: "timeout\\s*\\(\\s*time"
+    match: contains
     target: last_message
   - name: same-image-and-safe-build
     type: llm

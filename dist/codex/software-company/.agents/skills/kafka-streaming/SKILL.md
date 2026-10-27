@@ -70,7 +70,7 @@ description: Use when services pass events via Kafka (topic, producer, consumer,
 3. ตรวจลำดับด้วยข้อมูลใน event ไม่ใช่เวลารับ: ถ้า event "เลื่อนนัด" มาก่อน "จองนัด" ให้รอหรือส่งเข้าลองใหม่ ไม่ใช่เขียนทับ
 4. ล้มชั่วคราว (CRM ช้า LINE ตอบ 5xx) → ลองใหม่ในโปรเซสด้วยหน่วงเวลาเพิ่มขึ้น จำนวนครั้งจำกัด · ล้มถาวร (ข้อมูลผิดรูป schema ไม่ตรง) หรือหมดรอบลอง → ส่งเข้า **DLQ** (dead letter queue คือ topic เก็บ event ที่ประมวลผลไม่ได้) `<topic>.dlq` พร้อม header บอก topic · partition · offset เดิมและชนิด error แล้ว commit ต่อ · ไม่ลองใหม่ไม่รู้จบ เพราะ partition นั้นติดทั้งแถว
 5. DLQ ไม่ว่าง = มีงานของคน · ตั้ง alert (หัวข้อ 7) และมีคนรับผิดชอบเล่นซ้ำหลังแก้
-6. `auto.offset.reset` ค่าเริ่มต้น `latest` · consumer group ใหม่หรือ offset หมดอายุจะข้าม event เก่าเงียบ ๆ → service ที่ต้องเริ่มจากต้น ตั้ง `earliest` (หรือ `by_duration`)
+6. `auto.offset.reset` ค่าเริ่มต้น `latest` · consumer group ใหม่หรือ offset หมดอายุจะข้าม event เก่าเงียบ ๆ → service ที่ต้องเริ่มจากต้น ตั้ง `earliest` (หรือ `by_duration:<ระยะเวลา ISO 8601>` เช่น `by_duration:PT6M` ที่เอกสารแนะเมื่อเพิ่ม partition · ต้องยาวกว่าเวลาที่ consumer ใช้ค้นพบ partition ใหม่)
 7. rebalance: ถ้างานต่อ record ช้า (เรียก LINE) ลด `max.poll.records` (ค่าเริ่มต้น 500) หรือเพิ่ม `max.poll.interval.ms` (ค่าเริ่มต้น 5 นาที) ให้รอบหนึ่งจบทัน · เกินแล้วกลุ่มคิดว่า consumer ตาย แล้ว rebalance ทำให้ event ถูกทำซ้ำ · deploy บน container ที่รีสตาร์ทบ่อย พิจารณา `group.instance.id` (static membership) · `group.protocol=consumer` (โปรโตคอลใหม่) เป็นทางเลือก `(ยังไม่ได้ตรวจความพร้อมของ client ที่ใช้)` ใช้ค่าเริ่มต้น `classic` ไปก่อน
 8. จำนวน consumer ที่ทำงานได้สูงสุดในกลุ่มเท่ากับจำนวน partition · ตัวที่เกินจะว่าง
 

@@ -44,10 +44,10 @@ Model Context Protocol (MCP) คือโปรโตคอลเปิด (JSON
 | เครื่องมือ | MCP | อ่านอย่างเดียวได้ไหม | รุ่นที่เห็น |
 |---|---|---|---|
 | Kafka | `@confluentinc/mcp-confluent` | ไม่มีโหมดของตัวเอง · ใช้ `--allow-tools` เลือกเฉพาะ tool อ่าน | v1.6.1 |
-| Docker | MCP Gateway ใน Docker MCP Toolkit | ไม่มีโหมดของตัวเอง · เปิดปิดรายตัวต่อ profile | tag v0.44.3 |
+| Docker | MCP Gateway ใน Docker MCP Toolkit | ตัวกลางรัน MCP อื่น ไม่ได้สั่ง Docker engine · ไม่มีโหมดของตัวเอง · เปิดปิดรายตัวต่อ profile | tag v0.44.3 |
 | Jenkins | ปลั๊กอิน `mcp-server` (jenkinsci) | ไม่มีโหมดของตัวเอง · คุมด้วยสิทธิ์ของ Jenkins user (ยังไม่ได้ตรวจรายตัว) | 0.221.v42ee125fc488 |
 | Kubernetes + Helm | `containers/kubernetes-mcp-server` | ได้ · `read_only = true` ใน TOML | v0.0.69 |
-| Prometheus | `prometheus/prometheus-mcp` | tool หลักอ่านอย่างเดียว · เลือกด้วย `--mcp.tools` · tool ลบข้อมูลปิดอยู่ | v0.18.0 |
+| Prometheus | `prometheus/prometheus-mcp` | tool ส่วนใหญ่อ่านอย่างเดียว แต่ `reload` `quit` โหลดเป็นค่าตั้งต้น ต้องตัดด้วย `--mcp.tools` · tool ลบข้อมูลปิดอยู่ | v0.18.0 |
 | Grafana | `grafana/mcp-grafana` | ได้ · `--disable-write` | v2.1.1 |
 
 **เปิดใช้ต่อโปรเจกต์:** ใส่ใน `.mcp.json` ของโปรเจกต์ ไม่ฝังใน plugin · ล็อกรุ่น (ไม่ใช้ `@latest`) · ค่าลับผ่าน `${VAR}` ไม่เขียนลงไฟล์ · เริ่มจากสิทธิ์อ่านอย่างเดียวและ cluster หรือระบบ staging โดยให้ credential ฝั่งต้นทางเป็นสิทธิ์อ่านจริงด้วย · การสั่งแก้ production ต้องให้คนอนุมัติทุกครั้ง ไม่ allow ล่วงหน้า

@@ -231,6 +231,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 | งาน | skill | |
 |---|---|---|
 | timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
+| event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
 | ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
 | เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
 | นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
@@ -431,12 +432,12 @@ Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm chart, deployin
 |---|---|---|
 | สร้าง cluster · node pool · เครือข่ายจากโค้ด | [`infra-as-code`](../infra-as-code/SKILL.md) | ที่นั่นสร้างของ ที่นี่ลงของบน cluster · คำถามว่าคุ้มใช้ Kubernetes ไหมอยู่ที่นั่น |
 | ค่าลับ · config ต่อ environment | [`config-and-secrets`](../config-and-secrets/SKILL.md) | ที่นั่นกำหนดว่าอะไรเป็นลับและหมุนอย่างไร ที่นี่กำหนดว่าเข้า pod ทางไหน |
-| pipeline build · ด่าน · rollback ระดับระบบ | [`cicd-and-release`](../cicd-and-release/SKILL.md) | build ครั้งเดียวแล้วเลื่อนขั้น (หัวข้อ 2) มาจากที่นั่น ที่นี่ลงรายละเอียดฝั่ง Kubernetes · เขียนไฟล์ Jenkins → `jenkins-pipeline` ถ้ามี |
+| pipeline build · ด่าน · rollback ระดับระบบ | [`cicd-and-release`](../cicd-and-release/SKILL.md) | build ครั้งเดียวแล้วเลื่อนขั้น (หัวข้อ 2) มาจากที่นั่น ที่นี่ลงรายละเอียดฝั่ง Kubernetes · เขียนไฟล์ Jenkins → [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) |
 | endpoint `/health/live` กับ `/health/ready` · ปิดตัวเรียบร้อย | [`web-service-essentials`](../web-service-essentials/SKILL.md) | probe ในที่นี้ชี้ไปที่ endpoint เหล่านั้น |
 | รันโค้ดทดลองใน container | [`docker-sandbox`](../docker-sandbox/SKILL.md) | ห้องทดลองไม่ใช่ image ที่ส่งขึ้น production |
 | ตรวจ image และ manifest ก่อนส่ง | [`security-gate`](../security-gate/SKILL.md) | สแกน secret และช่องโหว่ใน image |
 | metric · alert · แดชบอร์ด (Prometheus/Grafana) | [`observability-basics`](../observability-basics/SKILL.md) | ที่นี่แค่ให้ pod เปิด metric ได้ |
-| Kafka เอง (topic · partition · consumer) | `kafka-streaming` ถ้ามี | ที่นี่มีแค่การขยาย consumer ตามคิว (ขั้น 3.7) |
+| Kafka เอง (topic · partition · consumer) | [`kafka-streaming`](../kafka-streaming/SKILL.md) | ที่นี่มีแค่การขยาย consumer ตามคิว (ขั้น 3.7) |
 
 ## 1 · ค้นก่อนถาม แล้วถามรวมครั้งเดียว
 
@@ -745,7 +746,15 @@ kubectl exec -n <ns> deploy/stt -- nvidia-smi                            # ต�
 
 ใช้กับขั้น 4 6 7 8 9 ของ [`SKILL.md`](../SKILL.md) · ตรวจ 2026-10-27 · Helm 4 เป็นรุ่นที่หน้า [helm.sh/docs](https://helm.sh/docs/overview/) ระบุว่าใหม่สุด (4.3.1) · Helm 3 ยังมีเอกสาร (3.22.1)
 
-สารบัญ: [โครง chart](#โครง-chart) · [values ต่อ environment](#values-ต่อ-environment) · [ค่าลับ](#ค่าลับไม่อยู่ใน-values) · [ตรวจ](#ตรวจแบบไม่แตะ-cluster) · [ล็อกรุ่น](#ล็อกรุ่น-chart) · [deploy](#deploy) · [rollback](#rollback)
+สารบัญ
+
+- [โครง chart](#โครง-chart)
+- [values ต่อ environment](#values-ต่อ-environment)
+- [ค่าลับ](#ค่าลับไม่อยู่ใน-values)
+- [ตรวจแบบไม่แตะ cluster](#ตรวจแบบไม่แตะ-cluster)
+- [ล็อกรุ่น chart](#ล็อกรุ่น-chart)
+- [deploy](#deploy)
+- [rollback](#rollback)
 
 ## โครง chart
 
@@ -816,7 +825,7 @@ helm template clinic deploy/chart/clinic-voice \
 ```
 
 - `helm lint --strict` ทำให้ warning ล้มด้วย · ERROR คือ chart ติดตั้งไม่ได้ ([helm lint](https://helm.sh/docs/helm/helm_lint/))
-- `kubeconform`: `-strict` ปฏิเสธ field ที่ไม่มีใน schema · `-kubernetes-version` ค่าเริ่มต้นคือ `master` จึงต้องระบุให้ตรง cluster · `-schema-location default` ต้องใส่คู่กับ catalog ของ CRD ไม่งั้นชนิดในตัวหาไม่เจอ · CRD ที่ไม่มีใน catalog (เช่น ScaledObject) ใช้ `-ignore-missing-schemas` แล้วจดไว้ ([kubeconform](https://github.com/yannh/kubeconform))
+- `kubeconform`: `-strict` ปฏิเสธ field ที่ไม่มีใน schema · `-kubernetes-version` ค่าเริ่มต้นคือ `master` จึงต้องระบุให้ตรง cluster · `-schema-location default` ต้องใส่คู่กับ catalog ของ CRD ไม่งั้นชนิดในตัวหาไม่เจอ · CRD ที่ไม่มีใน catalog (ScaledObject มีอยู่ใน catalog ของ datreeio ตรวจ 2026-10-27) ใช้ `-ignore-missing-schemas` แล้วจดไว้ ([kubeconform](https://github.com/yannh/kubeconform))
 - รัน lint+template ทั้ง 2 ไฟล์ values (staging และ production) ไม่ใช่แค่ไฟล์เดียว
 - ตรวจ policy เพิ่มด้วยเครื่องมือของทีมถ้ามี (ยังไม่ได้ตรวจ ว่าทีมเลือกตัวไหน)
 
@@ -838,7 +847,7 @@ helm upgrade --install clinic deploy/chart/clinic-voice \
   --atomic --timeout 10m
 ```
 
-Helm 4: ใน source ของ `helm upgrade` ธง `--atomic` ถูกทำเครื่องหมาย deprecated ให้ใช้ `--rollback-on-failure` แทน และธงนี้ตั้ง `--wait` เป็นโหมด `watcher` ([upgrade.go](https://raw.githubusercontent.com/helm/helm/main/pkg/cmd/upgrade.go) · [Helm 4 upgrade](https://helm.sh/docs/helm/helm_upgrade/)) · ใช้ `helm version` ดูรุ่นของเครื่อง build แล้วเลือกธงให้ตรง
+Helm 4: หน้า [Helm 4.3.1 upgrade](https://helm.sh/docs/helm/helm_upgrade/) (ตรวจ 2026-10-27) ไม่แสดงธง `--atomic` แสดงแต่ `--rollback-on-failure` ซึ่งเอกสารบอกว่าตั้ง `--wait` เป็น `watcher` เมื่อใช้ · ที่ว่า `--atomic` ยังรับอยู่แต่ deprecated มาจาก source ([upgrade.go](https://raw.githubusercontent.com/helm/helm/main/pkg/cmd/upgrade.go) ตรวจ 2026-10-27) ไม่ใช่หน้าเอกสาร จึงใน Helm 4 ให้ใช้ `--rollback-on-failure` เท่านั้น · ใช้ `helm version` ดูรุ่นของเครื่อง build แล้วเลือกธงให้ตรง
 
 - `--timeout` ค่าเริ่มต้น 5 นาที ต่อ 1 การทำงาน (เช่น hook job) · workload GPU ที่ต้องดึง image ใหญ่และโหลดโมเดลต้องตั้งยาวกว่านั้น ค่าจริง `(ยังไม่ได้วัด)`
 - `--cleanup-on-fail` ลบ resource ใหม่ที่เกิดจาก upgrade ที่ล้มเหลว
@@ -858,7 +867,7 @@ helm rollback clinic <revision> -n clinic-production --wait
 
 # ขยาย worker ตามงานค้างในคิวด้วย KEDA (Kafka consumer lag)
 
-ใช้กับขั้น 3 ข้อย่อย "ขยายตามคิว" ของ [`SKILL.md`](../SKILL.md) · แหล่งทั้งหมดมาจาก keda.sh ตรวจ 2026-10-27 (KEDA 2.21 เป็นรุ่นล่าสุดที่หน้าเอกสารระบุ) · ฝั่ง Kafka เอง (partition · consumer group · commit offset) ดู `kafka-streaming` ถ้ามีใน plugin
+ใช้กับขั้น 3 ข้อย่อย "ขยายตามคิว" ของ [`SKILL.md`](../SKILL.md) · แหล่งทั้งหมดมาจาก keda.sh ตรวจ 2026-10-27 (KEDA 2.21 เป็นรุ่นล่าสุดที่หน้าเอกสารระบุ) · ฝั่ง Kafka เอง (partition · consumer group · commit offset) ดู [`kafka-streaming`](../../kafka-streaming/SKILL.md)
 
 ## KEDA ต่างจาก HPA อย่างไร
 
@@ -922,13 +931,13 @@ spec:
 
 ## ข้อควรระวัง
 
-- **จำนวน partition คือเพดานจริง.** เพิ่ม partition ภายหลังทำให้ลำดับ key เปลี่ยนและ rebalance · ตัดสินใจจำนวน partition ตั้งแต่ออกแบบ topic (`kafka-streaming`) ก่อนตั้ง `maxReplicaCount`
+- **จำนวน partition คือเพดานจริง.** เพิ่ม partition ภายหลังทำให้ลำดับ key เปลี่ยนและ rebalance · ตัดสินใจจำนวน partition ตั้งแต่ออกแบบ topic ([`kafka-streaming`](../../kafka-streaming/SKILL.md)) ก่อนตั้ง `maxReplicaCount`
 - **ห้ามมี HPA ของเราเองคู่กับ ScaledObject บน Deployment เดียวกัน.** KEDA สร้าง HPA ให้แล้ว admission webhook ของ KEDA ตรวจกรณี ScaledObject 2 ตัวชี้ Deployment เดียวกัน ([Concepts](https://keda.sh/docs/latest/concepts/)) · จะย้าย HPA เดิมให้ KEDA ดู ให้ใช้ annotation `scaledobject.keda.sh/transfer-hpa-ownership: "true"` ตาม [Scaling Deployments](https://keda.sh/docs/latest/concepts/scaling-deployments/) · เอา `spec.replicas` ออกจาก Deployment เหมือนกรณี HPA
 - **trigger CPU หรือ memory ลงเหลือ 0 ไม่ได้** · ใช้ Kafka trigger อย่างเดียวถ้าต้องการ scale-to-zero
 - **worker ที่ทำงานนาน** ต้องตั้ง `terminationGracePeriodSeconds` ให้พอจบงานที่ถืออยู่ และ commit offset หลังทำเสร็จ ไม่ใช่ตอนรับ · ไม่งั้นตอนลดจำนวน pod งานหาย หรือถูกทำซ้ำ (ทำซ้ำได้ต้องออกแบบให้ idempotent ตาม `principle-safe-to-rerun`) · ลำดับที่ HPA เลือก pod ที่จะถอด `(ยังไม่ได้ตรวจ)`
 - **Kafka มี SASL หรือ TLS** ต้องใส่ข้อมูลยืนยันตัวตนให้ scaler ผ่าน `TriggerAuthentication` ที่อ้าง Secret ของ cluster ไม่ใส่รหัสใน `metadata` · รูปแบบดูหัวข้อ SASL/TLS ในหน้า [Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) (ยังไม่ได้ตรวจรายละเอียดช่องในหน้านั้น)
 - **ใน Helm chart** เขียน ScaledObject เป็น template ที่เปิดด้วย `keda.enabled` และปิด HPA ตัวเดิมด้วยค่า `autoscaling.enabled` ตรงข้าม เพื่อไม่ให้ 2 ตัวชน · ตรวจด้วย `helm template` ว่าไม่มีทั้ง HPA และ ScaledObject ของ Deployment เดียวกัน
-- **kubeconform** ไม่รู้จัก ScaledObject เพราะเป็น CRD · ใส่ `-schema-location` ของ catalog หรือ `-ignore-missing-schemas` แล้วจดไว้ว่าข้ามตัวไหน (ดู [`helm-chart.md`](helm-chart.md))
+- **kubeconform** ไม่มี schema ของ ScaledObject ในตัว เพราะเป็น CRD · catalog ของ datreeio มี `keda.sh/scaledobject_v1alpha1.json` ([ไดเรกทอรี](https://github.com/datreeio/CRDs-catalog/tree/main/keda.sh) · ตรวจ 2026-10-27) จึงใส่ `-schema-location` ของ catalog ได้ · CRD ตัวอื่นที่ไม่มีใน catalog ใช้ `-ignore-missing-schemas` แล้วจดไว้ว่าข้ามตัวไหน (ดู [`helm-chart.md`](helm-chart.md))
 
 
 ## reference: manifest-checklist.md
@@ -937,7 +946,13 @@ spec:
 
 ใช้กับขั้น 3 ของ [`SKILL.md`](../SKILL.md) · ตรวจ 2026-10-27 · ค่าตัวเลขในตัวอย่าง (CPU · memory · จำนวน replica) เป็นจุดเริ่ม ต้องปรับตามการวัดจริง
 
-สารบัญ: [Deployment](#deployment-ของ-web-service-ย่อ) · [PDB](#poddisruptionbudget-pdb) · [HPA](#horizontalpodautoscaler-hpa) · [NetworkPolicy](#networkpolicy) · [rollout และ rollback](#rollout-และ-rollback)
+สารบัญ
+
+- [Deployment](#deployment-ของ-web-service-ย่อ)
+- [PodDisruptionBudget](#poddisruptionbudget-pdb)
+- [HorizontalPodAutoscaler](#horizontalpodautoscaler-hpa)
+- [NetworkPolicy](#networkpolicy)
+- [rollout และ rollback](#rollout-และ-rollback)
 
 ## Deployment ของ web service (ย่อ)
 
@@ -1048,7 +1063,7 @@ spec:
 - ต้องมี CPU request ในทุก container ไม่งั้น HPA ไม่ทำอะไรกับ metric นั้น ([HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/))
 - เมื่อใช้ HPA ให้เอา `spec.replicas` ออกจาก Deployment ไม่งั้น `kubectl apply` ทุกครั้งตั้งจำนวนกลับ (เอกสารมีขั้นตอนย้ายแบบไม่ให้ pod หายชั่วคราว)
 - 300 วินาทีคือค่าเริ่มต้นของ scale down อยู่แล้ว เขียนไว้ให้คนเห็น
-- workload ที่ scale ตามความลึกคิว (Kafka consumer) ใช้ metric อื่น เช่น KEDA `(ยังไม่ได้ตรวจ)` · ดู `kafka-streaming` ถ้ามีใน plugin
+- workload ที่ scale ตามความลึกคิว (Kafka consumer) ใช้ metric อื่น เช่น KEDA `(ยังไม่ได้ตรวจ)` · ดู [`kafka-streaming`](../../kafka-streaming/SKILL.md) และ [`keda-queue-scaling.md`](keda-queue-scaling.md)
 
 ## NetworkPolicy
 
@@ -1155,7 +1170,7 @@ Use when services pass events via Kafka (topic, producer, consumer, DLQ, ส่�
 3. ตรวจลำดับด้วยข้อมูลใน event ไม่ใช่เวลารับ: ถ้า event "เลื่อนนัด" มาก่อน "จองนัด" ให้รอหรือส่งเข้าลองใหม่ ไม่ใช่เขียนทับ
 4. ล้มชั่วคราว (CRM ช้า LINE ตอบ 5xx) → ลองใหม่ในโปรเซสด้วยหน่วงเวลาเพิ่มขึ้น จำนวนครั้งจำกัด · ล้มถาวร (ข้อมูลผิดรูป schema ไม่ตรง) หรือหมดรอบลอง → ส่งเข้า **DLQ** (dead letter queue คือ topic เก็บ event ที่ประมวลผลไม่ได้) `<topic>.dlq` พร้อม header บอก topic · partition · offset เดิมและชนิด error แล้ว commit ต่อ · ไม่ลองใหม่ไม่รู้จบ เพราะ partition นั้นติดทั้งแถว
 5. DLQ ไม่ว่าง = มีงานของคน · ตั้ง alert (หัวข้อ 7) และมีคนรับผิดชอบเล่นซ้ำหลังแก้
-6. `auto.offset.reset` ค่าเริ่มต้น `latest` · consumer group ใหม่หรือ offset หมดอายุจะข้าม event เก่าเงียบ ๆ → service ที่ต้องเริ่มจากต้น ตั้ง `earliest` (หรือ `by_duration`)
+6. `auto.offset.reset` ค่าเริ่มต้น `latest` · consumer group ใหม่หรือ offset หมดอายุจะข้าม event เก่าเงียบ ๆ → service ที่ต้องเริ่มจากต้น ตั้ง `earliest` (หรือ `by_duration:<ระยะเวลา ISO 8601>` เช่น `by_duration:PT6M` ที่เอกสารแนะเมื่อเพิ่ม partition · ต้องยาวกว่าเวลาที่ consumer ใช้ค้นพบ partition ใหม่)
 7. rebalance: ถ้างานต่อ record ช้า (เรียก LINE) ลด `max.poll.records` (ค่าเริ่มต้น 500) หรือเพิ่ม `max.poll.interval.ms` (ค่าเริ่มต้น 5 นาที) ให้รอบหนึ่งจบทัน · เกินแล้วกลุ่มคิดว่า consumer ตาย แล้ว rebalance ทำให้ event ถูกทำซ้ำ · deploy บน container ที่รีสตาร์ทบ่อย พิจารณา `group.instance.id` (static membership) · `group.protocol=consumer` (โปรโตคอลใหม่) เป็นทางเลือก `(ยังไม่ได้ตรวจความพร้อมของ client ที่ใช้)` ใช้ค่าเริ่มต้น `classic` ไปก่อน
 8. จำนวน consumer ที่ทำงานได้สูงสุดในกลุ่มเท่ากับจำนวน partition · ตัวที่เกินจะว่าง
 
@@ -1358,14 +1373,14 @@ max.poll.interval.ms=300000
 | `delivery.timeout.ms` | 120000 | ไม่แตะ จนกว่าจะมีเหตุ | เวลารวมก่อนรายงานสำเร็จหรือล้ม ต้องจัดการผลล้มเสมอ |
 | `max.in.flight.requests.per.connection` | 5 | ไม่เกิน 5 | เปิด idempotence ต้อง 5 หรือน้อยกว่า |
 | `transactional.id` | `null` | ไม่ใช้ในงานนี้ | transaction ครอบเฉพาะ Kafka ไป Kafka |
-| `linger.ms` | 5 | ไม่แตะ | เปลี่ยนจาก 0 เป็น 5 ใน 4.0 |
+| `linger.ms` | 5 | ไม่แตะ | เปลี่ยนจาก 0 เป็น 5 ตั้งแต่ Kafka 4.0 (ยืนยันจากข้อความดิบของหน้า producer-configs 2026-10-27) |
 
 ## consumer — https://kafka.apache.org/44/configuration/consumer-configs/
 
 | ค่า | เริ่มต้น | ที่แนะนำ | หมายเหตุ |
 |---|---|---|---|
 | `enable.auto.commit` | `true` | `false` | commit เองหลังงานเสร็จ |
-| `auto.offset.reset` | `latest` | `earliest` ถ้าต้องอ่านจากต้น | `latest` อาจข้าม record เมื่อเพิ่ม partition · เอกสารแนะ `by_duration` |
+| `auto.offset.reset` | `latest` | `earliest` ถ้าต้องอ่านจากต้น | `latest` อาจข้าม record เมื่อเพิ่ม partition · เอกสารแนะ `by_duration:<ISO 8601>` เช่น `by_duration:PT6M` (ค่าติดลบไม่ได้) · ค่าที่ใช้ได้ `latest` `earliest` `none` `by_duration:PnDTnHnMn.nS` |
 | `max.poll.interval.ms` | 300000 | ตามงานต่อรอบ | เกินแล้ว consumer ถูกถือว่าล้ม เกิด rebalance |
 | `max.poll.records` | 500 | ลดถ้างานต่อ record ช้า | |
 | `session.timeout.ms` | 45000 | ไม่แตะ | ใช้ไม่ได้เมื่อ `group.protocol=consumer` |

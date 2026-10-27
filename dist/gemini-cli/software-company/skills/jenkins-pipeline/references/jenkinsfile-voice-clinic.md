@@ -1,6 +1,6 @@
 # Jenkinsfile ตัวอย่าง — voice agent คลินิกทันตกรรม
 
-ใช้คู่กับ `SKILL.md` ของ `jenkins-pipeline` · ชื่อ credential · registry · namespace · chart เป็นชื่อสมมุติ ให้แทนด้วยของจริง · **ยังไม่ได้รันกับ Jenkins จริง** ผ่านการอ่านเทียบเอกสารเท่านั้น (ตรวจ 2026-10-27) · ตรวจไวยากรณ์ด้วย `declarative-linter` ก่อน commit
+ใช้คู่กับ `SKILL.md` ของ `jenkins-pipeline` · ชื่อ service · chart · namespace · probe ตรงกับ `kubernetes-helm` (chart เดียว `clinic-voice` · release `clinic`) · ชื่อ credential · registry เป็นชื่อสมมุติ ให้แทนด้วยของจริง · **ยังไม่ได้รันกับ Jenkins จริง** ผ่านการอ่านเทียบเอกสารเท่านั้น (ตรวจ 2026-10-27) · ตรวจไวยากรณ์ด้วย `declarative-linter` ก่อน commit
 
 ## สารบัญ
 
@@ -16,12 +16,13 @@
 pipeline {
   agent none
   options {
-    timeout(time: 60, unit: 'MINUTES')
+    timeout(time: 4, unit: 'HOURS')   // ต้องมากกว่าเวลา build ทั้งหมดรวมเวลารออนุมัติ 2 ชั่วโมง เพราะ timeout ระดับบนนับเวลารอ input ด้วย
     disableConcurrentBuilds()
     buildDiscarder(logRotator(numToKeepStr: '30'))
   }
   environment {
     REGISTRY = 'registry.example.com/clinic'
+    CHART    = 'deploy/chart/clinic-voice'
   }
 
   stages {
@@ -29,16 +30,16 @@ pipeline {
       agent { label 'docker-build' }
       steps {
         sh 'make lint test'
+        // values ที่ commit ต้องมี digest ชั่วคราวที่ผ่าน required ของ chart ไม่งั้น lint ล้มก่อนขั้นเขียน digest จริง
+        sh 'helm lint "$CHART" --strict -f "$CHART/values-production.yaml"'
       }
     }
 
-    stage('Build, push, scan') {
-      when { branch 'main' }
+    stage('Build, push, scan, pin digest') {
+      when { branch 'main'; beforeAgent true }
       agent { label 'docker-build' }
       steps {
-        script {
-          env.TAG = env.GIT_COMMIT.take(12)
-        }
+        script { env.TAG = env.GIT_COMMIT.take(12) }
         withCredentials([usernamePassword(credentialsId: 'registry-push',
                                           usernameVariable: 'REG_USER',
                                           passwordVariable: 'REG_PASS')]) {
@@ -46,52 +47,59 @@ pipeline {
           sh '''
             set +x
             echo "$REG_PASS" | docker login registry.example.com -u "$REG_USER" --password-stdin
-            for svc in gateway asr dialog booking; do
+            # ชื่อ image : ชื่อ key ใน values.yaml
+            for pair in web:web api:api voice-gateway:voiceGateway stt:stt tts:tts; do
+              svc=${pair%%:*}; key=${pair##*:}
               docker buildx build "services/$svc" \
                 -t "$REGISTRY/$svc:$TAG" --push --metadata-file "meta-$svc.json"
-              jq -r '."containerimage.digest"' "meta-$svc.json" > "digest-$svc.txt"
+              D=$(jq -r '."containerimage.digest"' "meta-$svc.json")
               trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
-                "$REGISTRY/$svc@$(cat digest-$svc.txt)"
+                "$REGISTRY/$svc@$D"
+              # digest อยู่ใน values ของแต่ละ environment · staging กับ production ได้ตัวเดียวกัน
+              for env in staging production; do
+                D="$D" yq -i ".$key.image.digest = strenv(D)" "$CHART/values-$env.yaml"
+              done
             done
           '''
         }
-        archiveArtifacts artifacts: 'digest-*.txt', fingerprint: true
-        stash name: 'digests', includes: 'digest-*.txt'
+        archiveArtifacts artifacts: 'meta-*.json, deploy/chart/clinic-voice/values-*.yaml', fingerprint: true
+        stash name: 'pinned', includes: 'deploy/chart/clinic-voice/values-*.yaml'
       }
     }
 
     stage('Deploy staging') {
-      when { branch 'main' }
+      when { branch 'main'; beforeAgent true }
       agent { kubernetes { yamlFile 'ci/helm-pod.yaml'; defaultContainer 'helm' } }
       steps {
-        unstash 'digests'
+        unstash 'pinned'
         withCredentials([file(credentialsId: 'kubeconfig-staging', variable: 'KUBECONFIG')]) {
+          // timeout ยาวเพราะ stt/tts ดึง image ใหญ่และโหลดโมเดล (ค่าจริงยังไม่ได้วัด)
           sh '''
-            for svc in gateway asr dialog booking; do
-              helm upgrade --install "$svc" ./charts/"$svc" -n clinic-staging \
-                --atomic --timeout 5m --history-max 10 \
-                --set image.repository="$REGISTRY/$svc" \
-                --set image.digest="$(cat digest-$svc.txt)"
-            done
+            helm upgrade --install clinic "$CHART" -n clinic-staging --create-namespace \
+              -f "$CHART/values.yaml" -f "$CHART/values-staging.yaml" \
+              --atomic --timeout 20m
+            kubectl -n clinic-staging rollout status deploy --timeout=10m
           '''
         }
       }
     }
 
     stage('Test on staging') {
-      when { branch 'main' }
+      when { branch 'main'; beforeAgent true }
       agent { label 'docker-build' }
       steps {
-        sh 'make smoke-staging'   // เรียก /healthz ของทั้ง 4 service + สายทดสอบ 1 สาย
+        // ต่อ /health/live และ /health/ready ของ web api voice-gateway + สายทดสอบ 1 สาย
+        sh 'make smoke-staging'
       }
     }
 
     stage('Production') {
-      when { branch 'main' }
+      // beforeOptions true: ไม่ให้คำถามอนุมัติเด้งบน branch ที่ไม่ใช่ main
+      when { branch 'main'; beforeOptions true }
       options { timeout(time: 2, unit: 'HOURS') }
       // input อยู่ก่อน agent: ไม่ถือ executor ระหว่างรอคน
       input {
-        message 'Deploy to production?'
+        message 'Deploy to production (namespace clinic-production)?'
         ok 'Deploy'
         submitter 'clinic-release-managers'
         submitterParameter 'APPROVER'
@@ -99,28 +107,22 @@ pipeline {
       agent { kubernetes { yamlFile 'ci/helm-pod.yaml'; defaultContainer 'helm' } }
       steps {
         echo "Approved by ${APPROVER}"        // ชื่อผู้ใช้ ไม่ใช่ค่าลับ
-        unstash 'digests'
+        unstash 'pinned'
         withCredentials([file(credentialsId: 'kubeconfig-production', variable: 'KUBECONFIG')]) {
           sh '''
-            for svc in gateway asr dialog booking; do
-              helm upgrade --install "$svc" ./charts/"$svc" -n clinic-prod \
-                --atomic --timeout 5m --history-max 10 \
-                --set image.repository="$REGISTRY/$svc" \
-                --set image.digest="$(cat digest-$svc.txt)"
-            done
-            ./ci/smoke.sh clinic-prod
+            helm upgrade --install clinic "$CHART" -n clinic-production \
+              -f "$CHART/values.yaml" -f "$CHART/values-production.yaml" \
+              --atomic --timeout 20m
+            kubectl -n clinic-production rollout status deploy --timeout=10m
+            ./ci/smoke.sh clinic-production
           '''
         }
       }
       post {
         failure {
           withCredentials([file(credentialsId: 'kubeconfig-production', variable: 'KUBECONFIG')]) {
-            // ย้อนกลับทุก release ไปรุ่นก่อนหน้า (ไม่ใส่เลขรุ่น)
-            sh '''
-              for svc in gateway asr dialog booking; do
-                helm rollback "$svc" -n clinic-prod --wait --timeout 5m || true
-              done
-            '''
+            // ย้อน release เดียวไปรุ่นก่อนหน้า (ไม่ใส่เลขรุ่น) ดูเลขด้วย helm history clinic
+            sh 'helm rollback clinic -n clinic-production --wait --timeout 20m'
           }
         }
       }
@@ -134,16 +136,16 @@ pipeline {
 | ที่ | แทนด้วย |
 |---|---|
 | `ci/helm-pod.yaml` | pod ที่มี container ชื่อ `helm` (image ที่มี `helm` กับ `kubectl` ปักเลขรุ่น ไม่ใช้ `latest`) |
-| `registry-push` · `kubeconfig-staging` · `kubeconfig-production` | ID ของ credential ใน Jenkins · kubeconfig ของ production ให้ใช้ ServiceAccount ที่แก้ได้เฉพาะ namespace `clinic-prod` |
+| `registry-push` · `kubeconfig-staging` · `kubeconfig-production` | ID ของ credential ใน Jenkins · kubeconfig ของ production ใช้ ServiceAccount ที่แก้ได้เฉพาะ namespace `clinic-production` |
 | `clinic-release-managers` | กลุ่มผู้อนุมัติ · เริ่มจากไม่ใช้คนเดียวกับผู้ push |
 | `make lint test` · `make smoke-staging` · `ci/smoke.sh` | คำสั่งของโปรเจกต์ |
-| `image.repository` · `image.digest` | ชื่อค่าใน `values.yaml` ของ chart (`kubernetes-helm`) |
-| Helm 4 | ตรวจ `helm upgrade --help` แล้วเปลี่ยน `--atomic` เป็น `--rollback-on-failure` ถ้าแฟล็กเดิมไม่รับ |
+| key ใน `.<key>.image.digest` | ชื่อค่าใน `values-<env>.yaml` ของ chart (`kubernetes-helm` `references/helm-chart.md` ใช้ `api.image.digest`) |
+| `--atomic` | Helm 4 ใช้ `--rollback-on-failure` (`--atomic` deprecated) · รัน `helm version` ก่อนเลือก |
+| digest ใน values | ไฟล์ที่ pipeline แก้อยู่แค่ใน workspace และ artifact · จะ commit กลับเข้า git หรือไม่เป็นเรื่องของทีม `(รอยืนยัน)` |
 
 ## ข้อที่ยังไม่ได้ตรวจ
 
-- `--atomic` ยังใช้ได้ใน Helm 4 ไหม (หน้า 4.3.1 ไม่เอ่ยถึง)
-- `jq` และ `trivy` ต้องติดตั้งบนเครื่องที่ติดป้าย `docker-build`
-- `stash` ไฟล์ digest ข้าม agent ทำงานตามที่เขียน (ยังไม่ได้ทดลอง)
-- รูปแบบ `yamlFile` + `defaultContainer` บรรทัดเดียวคั่น `;` ใน declarative (หน้าปลั๊กอินแสดงแบบหลายบรรทัด)
-- `||true` ใน rollback ทำให้ stage ไม่ล้มซ้ำ แต่ซ่อนข้อผิดพลาดของ rollback ต้องดูใน log
+- `jq` `yq` `trivy` ต้องติดตั้งบนเครื่องที่ติดป้าย `docker-build` · `yq -i` กับ `strenv()` ยังไม่ได้เปิดอ่านเอกสาร
+- `stash` ไฟล์ values ข้าม agent แล้ว `unstash` ทับไฟล์ที่ checkout ทำงานตามที่เขียน (ยังไม่ได้ทดลอง)
+- รูปแบบ `yamlFile` + `defaultContainer` บรรทัดเดียวคั่น `;` และ `when { branch 'main'; beforeAgent true }` บรรทัดเดียว (หน้าเอกสารแสดงแบบหลายบรรทัด) · ให้ `declarative-linter` ตัดสิน
+- ค่า `--timeout 20m` ของ stt/tts ยังไม่ได้วัด

@@ -10,6 +10,8 @@ Use when a project needs its own Docker container (untrusted code, system instal
 
 ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
 
+ไม่ใช้เมื่อ: เขียน Dockerfile หรือ image สำหรับ deploy จริง → [`kubernetes-helm`](../kubernetes-helm/SKILL.md) เพราะห้องทดลองเป็นที่รันงานชั่วคราว ไม่ใช่ image ที่ขึ้น production
+
 ---
 
 ## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง

@@ -16,16 +16,19 @@ description: Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD
 - มี service หลายตัวและอยากแชร์ pipeline (shared library)
 - ค่าลับโผล่ใน console log หรือ pipeline ใช้ tag `latest`
 
+ไม่ใช้เมื่อ: ใช้ GitHub Actions · GitLab CI · Azure DevOps → `cicd-and-release` (`references/per-platform.md`) · ยังไม่มี chart ให้ deploy → `kubernetes-helm` ก่อน
+
 ## ใช้ตัวอื่นแทนหรือคู่กัน
 
-| งาน | skill | |
+| งาน | skill | ใช้แบบ |
 |---|---|---|
 | หลักการ pipeline ทั่วไป: ขั้นตอน · build ครั้งเดียว · branch · environment · migration · rollback | `cicd-and-release` | **คู่ (อ่านก่อน)** skill นี้รับเฉพาะส่วนที่เป็นของ Jenkins |
 | ที่เก็บ หมุน และแยกค่าลับตาม environment | `config-and-secrets` | คู่ |
 | ตรวจ dependency · secret ในโค้ด · image ก่อนปล่อย | `security-gate` | คู่ |
-| เขียน chart · values · probe · resource limit | `kubernetes-helm` (ถ้ามีใน plugin) | คู่ |
+| เขียน chart · values · probe · resource limit · Dockerfile | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) | คู่ (เจ้าของเรื่อง chart) |
+| service ที่ส่งข้อความผ่าน Kafka | [`kafka-streaming`](../kafka-streaming/SKILL.md) | คู่ |
 | ให้ agent สั่ง Jenkins ผ่าน MCP | `mcp-server` | แทน |
-| เขียน Dockerfile · sandbox | `docker-sandbox` | แทนเมื่อเป็นเรื่อง container ล้วน |
+| container สำหรับรันโค้ดไม่น่าไว้ใจ · sandbox | `docker-sandbox` | แทน |
 | ช่องโหว่ทั้งระบบ | `security-audit` | แทน |
 
 ## 1 · โครง Declarative Pipeline
@@ -33,11 +36,12 @@ description: Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD
 - ใช้ Declarative ไม่ใช่ Scripted · `agent none` ที่ระดับบน แล้วให้แต่ละ stage ประกาศ `agent` เอง · Jenkins บังคับให้ทุก stage มี `agent` เมื่อใช้ `agent none` ([Pipeline Syntax](https://www.jenkins.io/doc/book/pipeline/syntax/))
 - ลำดับ stage ตาม `cicd-and-release` หัวข้อ 1: lint → test → build + สแกน → staging → ทดสอบบน staging → อนุมัติ → production → ตรวจหลัง deploy
 - ใช้ Multibranch Pipeline เพราะ `when { branch 'main' }` ใช้ได้เฉพาะ multibranch · stage deploy ขึ้นเฉพาะ `main` · PR รันได้แค่ lint · test · build
+- **`when` ใส่ `beforeAgent true`** (ค่าเริ่มต้นประเมินหลังจัดสรร agent จึงเปลือง pod ให้ branch ที่ไม่ deploy) · **stage ที่มี `input` ใส่ `beforeOptions true`** เพราะค่าเริ่มต้น `when` ไม่ถูกประเมินก่อน `input` คำถามอนุมัติจะเด้งแม้ branch ไม่ใช่ `main` · `beforeOptions true` ทับ `beforeInput` และ `beforeAgent` ([Pipeline Syntax หัวข้อ when](https://www.jenkins.io/doc/book/pipeline/syntax/#when))
 - `options` ที่ต้องมีเสมอ
 
 | option | ตัวอย่าง | เหตุผล |
 |---|---|---|
-| `timeout` | `timeout(time: 45, unit: 'MINUTES')` | ไม่ให้ build ค้างกินตัวรัน (ที่ระดับบนไม่นับเวลารอ agent) |
+| `timeout` | `timeout(time: 45, unit: 'MINUTES')` | ไม่ให้ build ค้างกินตัวรัน (ที่ระดับบนไม่นับเวลารอ agent แต่นับเวลารอ `input` ด้วย pipeline ที่มีด่านอนุมัติจึงต้องตั้งยาวกว่าเวลารออนุมัติ) |
 | `disableConcurrentBuilds` | `disableConcurrentBuilds()` | 2 build deploy release เดียวกันพร้อมกันไม่ได้ · แบบธรรมดาให้ build ใหม่เข้าคิว · `abortPrevious: true` ยกเลิกตัวที่รันอยู่ ซึ่งอาจกำลัง deploy จึงไม่ใช้กับ pipeline ที่ deploy |
 | `buildDiscarder` | `buildDiscarder(logRotator(numToKeepStr: '30'))` | log และ artifact ไม่โตไม่จำกัด · เลข 30 เราตั้งเอง ไม่ใช่ค่าทางการ |
 
@@ -80,15 +84,15 @@ description: Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD
 ## 5 · deploy ด้วย Helm
 
 ```
-helm upgrade --install <release> <chart> -n <ns> \
-  --atomic --timeout 5m --history-max 10 \
-  --set image.repository=<repo> --set image.digest=<sha256:...>
+helm upgrade --install clinic deploy/chart/clinic-voice -n clinic-production \
+  -f deploy/chart/clinic-voice/values.yaml -f deploy/chart/clinic-voice/values-production.yaml \
+  --atomic --timeout 20m
 ```
 
 - `--install` ติดตั้งให้ถ้ายังไม่มี release ([helm upgrade](https://helm.sh/docs/helm/helm_upgrade/))
-- `--atomic` ถอยกลับเองเมื่ออัปเกรดล้ม และเปิด `--wait` ให้ ([Helm 3](https://helm.sh/docs/v3/helm/helm_upgrade/)) · **หน้า Helm 4.3.1 ลงแฟล็กนี้ชื่อ `--rollback-on-failure`** และไม่เอ่ยถึง `--atomic` `(ยังไม่ได้ตรวจ: --atomic ยังใช้ได้ใน Helm 4 ไหม)` → รัน `helm version` และ `helm upgrade --help` ก่อนเขียนแฟล็ก
-- `--timeout` นับต่อการกระทำย่อยแต่ละอย่าง ไม่ใช่ทั้งการอัปเกรด (ค่าเริ่มต้น 5m0s) · `--history-max` ค่าเริ่มต้น 10
-- ชื่อค่า `image.digest` ขึ้นกับ chart ของเรา chart ต้องประกอบ `repo@digest` เอง → `kubernetes-helm`
+- Helm 3: `--atomic` ถอยกลับเองเมื่ออัปเกรดล้ม และเปิด `--wait` ให้ ([Helm 3](https://helm.sh/docs/v3/helm/helm_upgrade/)) · Helm 4: ธง `--atomic` ถูกทำเครื่องหมาย deprecated ให้ใช้ `--rollback-on-failure` แทน (ตามที่ `kubernetes-helm` ตรวจไว้ใน `references/helm-chart.md` · [Helm 4 upgrade](https://helm.sh/docs/helm/helm_upgrade/)) → รัน `helm version` บนเครื่อง build แล้วเลือกธงให้ตรง
+- `--timeout` นับต่อการกระทำย่อยแต่ละอย่าง ไม่ใช่ทั้งการอัปเกรด (ค่าเริ่มต้น 5m0s) · workload ที่โหลดโมเดล (stt · tts) ต้องยาวกว่านั้น ค่าจริง `(ยังไม่ได้วัด)` ตามที่ `kubernetes-helm` ข้อ 5 · `--history-max` ค่าเริ่มต้น 10
+- **digest อยู่ใน `values-<env>.yaml`** ตามที่ chart ของ `kubernetes-helm` กำหนด (`api.image.digest` ฯลฯ · chart ใช้ `required` บังคับให้มี) ไม่ส่งด้วย `--set` · pipeline เขียน digest ที่ build ได้ลงไฟล์ values ของ environment แล้วส่งต่อไฟล์เดียวกันให้ staging และ production
 - **staging อัตโนมัติ** เมื่อ merge เข้า `main` แล้วรันทดสอบบน staging (smoke · integration) ให้ผ่านก่อนถึงด่านคน
 - **production ต้องมี `input`**
   - `input message: '...', ok: 'Deploy', submitter: 'release-managers'` · `submitter` คือรายชื่อผู้ใช้หรือกลุ่มที่กดได้ คั่นด้วยจุลภาค ไม่ใส่คือใครก็กดได้ ([Pipeline Syntax](https://www.jenkins.io/doc/book/pipeline/syntax/))
@@ -122,17 +126,18 @@ helm upgrade --install <release> <chart> -n <ns> \
 
 ## ตัวอย่างจริง — voice agent คลินิกทันตกรรม
 
-**โจทย์:** ระบบรับสายนัดหมายด้วยเสียง 4 service (`gateway` · `asr` · `dialog` · `booking`) · build เป็น Docker image · staging ทดสอบอัตโนมัติ · production ให้ผู้จัดการปล่อยกดอนุมัติ
+**โจทย์:** ระบบ voice agent คลินิกทันตกรรม 5 service (`web` · `api` · `voice-gateway` · `stt` · `tts`) ใน chart เดียว `clinic-voice` · build เป็น Docker image · staging ทดสอบอัตโนมัติ · production ให้ผู้จัดการปล่อยกดอนุมัติ · ชื่อ service namespace และ probe ตรงกับ `kubernetes-helm`
 
 **ที่ทำ:** Jenkinsfile เต็มอยู่ที่ [`references/jenkinsfile-voice-clinic.md`](references/jenkinsfile-voice-clinic.md) · สรุปการตัดสินใจ
 
 | เรื่อง | เลือก | เหตุผล |
 |---|---|---|
-| ค่าลับของคลินิก (token LINE · คีย์ speech) | อยู่ใน Kubernetes Secret ของแต่ละ namespace ไม่ผ่าน Jenkins | Jenkins รู้แค่ kubeconfig กับ registry · ข้อมูลผู้ป่วยไม่เข้า log ของ build (`pdpa-compliance` · `logging-standards`) |
+| ค่าลับของคลินิก (คีย์ STT/TTS · Kafka · ฐานข้อมูล) | อยู่ใน `ExternalSecret` ของ chart ไม่ผ่าน Jenkins | Jenkins รู้แค่ kubeconfig กับ registry · ข้อมูลผู้ป่วยไม่เข้า log ของ build (`pdpa-compliance` · `logging-standards`) |
 | image | `registry.example.com/clinic/<service>:<sha12>` + digest | ทุก service มีรุ่นของตัวเอง |
-| ทดสอบ staging | smoke ต่อ `/healthz` ของทั้ง 4 service | ก่อนด่านคน |
+| digest | เขียนลง `values-staging.yaml` และ `values-production.yaml` ในขั้น build | production ใช้ digest ตัวเดียวกับที่ผ่าน staging |
+| ทดสอบ staging | ต่อ `/health/live` และ `/health/ready` ของ `web` `api` `voice-gateway` + สายทดสอบ 1 สาย | ก่อนด่านคน |
 | ด่านคน | `input` `submitter: 'clinic-release-managers'` timeout 2 ชั่วโมง | ช่วงเวลาปล่อยที่ไม่ชนสายที่กำลังคุย `(รอยืนยัน)` |
-| ล้ม | `--atomic` ย้อนเอง · smoke หลัง deploy ล้ม → `helm rollback` | ซ้อมบน staging ทุกไตรมาส |
+| ล้ม | release `clinic` ใน `clinic-production` · `--atomic --timeout 20m` ย้อนเอง · smoke หลัง deploy ล้ม → `helm rollback clinic` | stt/tts โหลดโมเดลนาน จึงตั้ง timeout ยาว `(ยังไม่ได้วัด)` · ซ้อมบน staging ทุกไตรมาส |
 
 **ผล:** ค่าลับไม่อยู่ใน Jenkinsfile · production ได้ image ตัวเดียวกับที่ผ่าน staging ไล่ได้ด้วย digest `(ยังไม่ได้ตรวจ: ยังไม่ได้รันกับ Jenkins จริง)`
 

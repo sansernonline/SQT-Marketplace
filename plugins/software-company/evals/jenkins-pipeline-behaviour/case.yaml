@@ -27,7 +27,7 @@ graders:
     target: last_message
   - name: production-input-with-submitter
     type: regex
-    pattern: 'input\s*(\{|\()[\s\S]*submitter'
+    pattern: 'input\b[\s\S]*submitter'
     match: contains
     target: last_message
   - name: rollback-on-failure-flag

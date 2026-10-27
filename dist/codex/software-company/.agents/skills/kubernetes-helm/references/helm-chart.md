@@ -2,7 +2,15 @@
 
 ใช้กับขั้น 4 6 7 8 9 ของ [`SKILL.md`](../SKILL.md) · ตรวจ 2026-10-27 · Helm 4 เป็นรุ่นที่หน้า [helm.sh/docs](https://helm.sh/docs/overview/) ระบุว่าใหม่สุด (4.3.1) · Helm 3 ยังมีเอกสาร (3.22.1)
 
-สารบัญ: [โครง chart](#โครง-chart) · [values ต่อ environment](#values-ต่อ-environment) · [ค่าลับ](#ค่าลับไม่อยู่ใน-values) · [ตรวจ](#ตรวจแบบไม่แตะ-cluster) · [ล็อกรุ่น](#ล็อกรุ่น-chart) · [deploy](#deploy) · [rollback](#rollback)
+สารบัญ
+
+- [โครง chart](#โครง-chart)
+- [values ต่อ environment](#values-ต่อ-environment)
+- [ค่าลับ](#ค่าลับไม่อยู่ใน-values)
+- [ตรวจแบบไม่แตะ cluster](#ตรวจแบบไม่แตะ-cluster)
+- [ล็อกรุ่น chart](#ล็อกรุ่น-chart)
+- [deploy](#deploy)
+- [rollback](#rollback)
 
 ## โครง chart
 
@@ -73,7 +81,7 @@ helm template clinic deploy/chart/clinic-voice \
 ```
 
 - `helm lint --strict` ทำให้ warning ล้มด้วย · ERROR คือ chart ติดตั้งไม่ได้ ([helm lint](https://helm.sh/docs/helm/helm_lint/))
-- `kubeconform`: `-strict` ปฏิเสธ field ที่ไม่มีใน schema · `-kubernetes-version` ค่าเริ่มต้นคือ `master` จึงต้องระบุให้ตรง cluster · `-schema-location default` ต้องใส่คู่กับ catalog ของ CRD ไม่งั้นชนิดในตัวหาไม่เจอ · CRD ที่ไม่มีใน catalog (เช่น ScaledObject) ใช้ `-ignore-missing-schemas` แล้วจดไว้ ([kubeconform](https://github.com/yannh/kubeconform))
+- `kubeconform`: `-strict` ปฏิเสธ field ที่ไม่มีใน schema · `-kubernetes-version` ค่าเริ่มต้นคือ `master` จึงต้องระบุให้ตรง cluster · `-schema-location default` ต้องใส่คู่กับ catalog ของ CRD ไม่งั้นชนิดในตัวหาไม่เจอ · CRD ที่ไม่มีใน catalog (ScaledObject มีอยู่ใน catalog ของ datreeio ตรวจ 2026-10-27) ใช้ `-ignore-missing-schemas` แล้วจดไว้ ([kubeconform](https://github.com/yannh/kubeconform))
 - รัน lint+template ทั้ง 2 ไฟล์ values (staging และ production) ไม่ใช่แค่ไฟล์เดียว
 - ตรวจ policy เพิ่มด้วยเครื่องมือของทีมถ้ามี (ยังไม่ได้ตรวจ ว่าทีมเลือกตัวไหน)
 
@@ -95,7 +103,7 @@ helm upgrade --install clinic deploy/chart/clinic-voice \
   --atomic --timeout 10m
 ```
 
-Helm 4: ใน source ของ `helm upgrade` ธง `--atomic` ถูกทำเครื่องหมาย deprecated ให้ใช้ `--rollback-on-failure` แทน และธงนี้ตั้ง `--wait` เป็นโหมด `watcher` ([upgrade.go](https://raw.githubusercontent.com/helm/helm/main/pkg/cmd/upgrade.go) · [Helm 4 upgrade](https://helm.sh/docs/helm/helm_upgrade/)) · ใช้ `helm version` ดูรุ่นของเครื่อง build แล้วเลือกธงให้ตรง
+Helm 4: หน้า [Helm 4.3.1 upgrade](https://helm.sh/docs/helm/helm_upgrade/) (ตรวจ 2026-10-27) ไม่แสดงธง `--atomic` แสดงแต่ `--rollback-on-failure` ซึ่งเอกสารบอกว่าตั้ง `--wait` เป็น `watcher` เมื่อใช้ · ที่ว่า `--atomic` ยังรับอยู่แต่ deprecated มาจาก source ([upgrade.go](https://raw.githubusercontent.com/helm/helm/main/pkg/cmd/upgrade.go) ตรวจ 2026-10-27) ไม่ใช่หน้าเอกสาร จึงใน Helm 4 ให้ใช้ `--rollback-on-failure` เท่านั้น · ใช้ `helm version` ดูรุ่นของเครื่อง build แล้วเลือกธงให้ตรง
 
 - `--timeout` ค่าเริ่มต้น 5 นาที ต่อ 1 การทำงาน (เช่น hook job) · workload GPU ที่ต้องดึง image ใหญ่และโหลดโมเดลต้องตั้งยาวกว่านั้น ค่าจริง `(ยังไม่ได้วัด)`
 - `--cleanup-on-fail` ลบ resource ใหม่ที่เกิดจาก upgrade ที่ล้มเหลว

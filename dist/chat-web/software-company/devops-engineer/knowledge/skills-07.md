@@ -10,6 +10,8 @@ Use when a project needs its own Docker container (untrusted code, system instal
 
 ใช้คู่กับ [`superuser`](../superuser/SKILL.md) — โปรเจกต์ที่มี `.sandbox/` งานติดตั้งและรันทุกอย่างทำในห้องนี้
 
+ไม่ใช้เมื่อ: เขียน Dockerfile หรือ image สำหรับ deploy จริง → [`kubernetes-helm`](../kubernetes-helm/SKILL.md) เพราะห้องทดลองเป็นที่รันงานชั่วคราว ไม่ใช่ image ที่ขึ้น production
+
 ---
 
 ## 1 · หนึ่งโปรเจกต์ = หนึ่งห้อง
@@ -176,6 +178,8 @@ Use when setting up or fixing a build and deploy pipeline or deciding how a proj
 | งาน | skill | |
 |---|---|---|
 | ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
+| pipeline อยู่บน Jenkins (Jenkinsfile · credentials · input อนุมัติ) | `jenkins-pipeline` | คู่ |
+| Dockerfile · Helm chart · deploy ขึ้น Kubernetes | `kubernetes-helm` | คู่ |
 | สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
 | เขียน migration | `database-design` | แทน |
 | ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |
@@ -798,6 +802,8 @@ Use when settings differ by environment or something must never be committed (ke
 | งาน | skill | |
 |---|---|---|
 | เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
+| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
 | ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
 | กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
 | connection string ของฐานข้อมูล | `database-design` | คู่ |
@@ -1474,6 +1480,7 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 | summary | คำนวณ quantile ที่ฝั่งแอป ในช่วงเวลาเลื่อน | ใช้เมื่อไม่ต้องรวมข้าม instance เท่านั้น · quantile และช่วงเวลาเลือกตอนเขียนโค้ด เปลี่ยนทีหลังไม่ได้ | หายาก ปกติเลือก histogram |
 
 - ห้ามเอา quantile จาก summary หลาย instance มาเฉลี่ยกัน ผลที่ได้ไม่มีความหมายทางสถิติ (เอกสาร Prometheus ใช้คำนี้)
+- **เลือกอย่างไร** (prometheus.io/docs/practices/histograms/ ตรวจ 2026-10-27): ถ้า library และ Prometheus ที่ใช้รองรับ ให้ใช้ native histogram ก่อน เพราะเปลี่ยน percentile และช่วงเวลาทีหลังใน PromQL ได้ · ไม่รองรับแต่ต้องรวมข้าม instance ให้ใช้ classic histogram · summary เฉพาะเมื่อไม่ต้องรวมข้าม instance
 - เอกสาร Prometheus แนะนำ native histogram ก่อน แต่ library ที่รองรับยังจำกัด ถ้า library ไม่รองรับให้ใช้ classic histogram แล้ววาง bucket ให้มีขอบอยู่ตรงค่า SLO ไม่งั้น p95 ที่ประมาณได้จะคลาด (ตัวอย่างในเอกสาร: p95 จริงราว 320 ms ประมาณได้ 443 ms เพราะ bucket กว้างตั้งแต่ 300 ถึง 450 ms)
 
 ## 2 · ชื่อและหน่วย
@@ -1515,6 +1522,8 @@ queue_depth_jobs                 ค่า ณ ขณะนั้น
 ## 5 · กฎ alert
 
 หลักจากเอกสาร Prometheus: เตือนจากอาการที่ผู้ใช้รู้สึก (latency · error) ที่จุดสูงในสแตกเท่าที่ทำได้ · ปลุกคนเรื่อง latency ที่จุดเดียวของสแตก · สาเหตุ (CPU · GPU · lag ของ consumer) ใส่ในแดชบอร์ดไว้ไล่หา ไม่ปลุกคน · ยกเว้นเรื่องที่ต้องมีคนลงมือก่อนระบบล่ม เช่นความจุ
+
+ข้อยกเว้น: ตัวเลขที่ผู้ใช้รู้สึกโดยตรงนับเป็นอาการ แม้มาจากระบบข้างใต้ เช่น consumer lag ของ Kafka ที่ทำให้ผู้โทรต้องรอคำตอบ (ข้อ 7) ปลุกคนได้ · lag ที่ไม่กระทบใครทันที เช่นงานรายงานหลังจบสาย เป็นสาเหตุ ใส่แดชบอร์ดหรือแชตทีม
 
 ทุกกฎต้องมี 4 อย่าง
 
@@ -1607,7 +1616,9 @@ voice_turn_duration_seconds_bucket{le="…"}   # จากผู้โทรพ�
 - [ ] dashboard เป็น JSON ใน git · provision ด้วยไฟล์ · `allowUiUpdates: false`
 - [ ] มี dashboard RED ต่อ service และ USE ต่อทรัพยากร
 
-## 9 · ที่มา (ตรวจ 2026-10-27)
+## 9 · ที่มา
+
+ตรวจ 2026-10-27
 
 | เรื่อง | ที่มา |
 |---|---|
