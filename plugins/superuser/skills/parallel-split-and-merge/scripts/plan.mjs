@@ -1,22 +1,47 @@
 #!/usr/bin/env node
-// node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--json]   วางแผนกราฟงาน: rank · สายวิกฤต · จำนวนลูกทีม · ลำดับปล่อย
+// node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--mermaid] [--html <ไฟล์>] [--actual] [--json]
+//   วางแผนกราฟงาน: rank · สายวิกฤต · จำนวนลูกทีม · ลำดับปล่อย · รูป DAG และ Gantt (plan-draw.mjs) · เทียบงานจริงจาก log (plan-actual.mjs)
 // node plan.mjs --self-test
 // plan.json: { "name": "...", "max_agents": 6, "tasks": [{ "id": "a", "title": "...", "size": 20, "needs": [], "owns": ["src/db.ts"], "solo": false, "step": "code" }] }
-// size = token รวมโดยประมาณ หน่วยพัน (k) · ไม่ใช้ library ภายนอก ไม่ใช้ token
-import { readFileSync, existsSync } from "node:fs";
+// size = token รวมโดยประมาณ หน่วยพัน (k) หรือป้าย S/M/L · รับรูปแบบของ lab ด้วย (depends_on · exclusive · ไฟล์เป็น array) · ไม่ใช้ library ภายนอก ไม่ใช้ token
+import { readFileSync, existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const WORKFLOW_AT = 8; // พร้อมกันเกินนี้ต้องเสนอ dynamic workflow ให้ผู้ใช้เริ่ม (parallel-split-and-merge)
 const WORTH_PARALLEL = 1.3; // ขนานแล้วเร็วขึ้นไม่ถึงเท่านี้ ใช้ตัวเดียว เพราะลูกทีมทุกตัวต้องอ่านบริบทใหม่ (ค่าตั้งเอง ยังไม่ได้วัด)
 
+// ขนาดแบบป้าย (S/M/L) → token หน่วยพัน · ค่าตั้งเอง ยังไม่ได้วัด · เปลี่ยนได้ด้วยช่อง "sizes" ใน plan.json และค่า k จาก log ปรับต่อ
+export const DEFAULT_SIZES = { S: 20, M: 50, L: 100 };
+
 const isList = (x) => x === undefined || (Array.isArray(x) && x.every((v) => typeof v === "string"));
 
+// คิวของโหมด deep research (templates/research-queue.json) → ชิ้นงาน · คำถามเป็นชื่อ · ไฟล์ผลเป็นไฟล์ที่ชิ้นนั้นเป็นเจ้าของ
+const fromQueue = (q) => ({ name: q["งาน"], max_agents: q["ลูกทีมสูงสุด"], tasks: q["ข้อย่อย"].map((x) => (x && typeof x === "object"
+  ? { id: x.id, title: x["คำถาม"], depends_on: x.depends_on, size: x["ขนาด"], owns: x["ไฟล์ผล"] ? [x["ไฟล์ผล"]] : undefined } : x)) });
+
+// รับรูปแบบของ lab ด้วย: ไฟล์เป็น array เปล่า · depends_on แทน needs · exclusive แทน solo · ขนาดเป็นป้าย S/M/L · และไฟล์คิวของ deep research
+export function adapt(raw) {
+  if (!raw || typeof raw !== "object") return { tasks: null };
+  const plan = Array.isArray(raw) ? { tasks: raw } : Array.isArray(raw["ข้อย่อย"]) ? fromQueue(raw) : { ...raw };
+  if (!Array.isArray(plan.tasks)) return plan;
+  const sizes = { ...DEFAULT_SIZES, ...(plan.sizes ?? {}) };
+  plan.tasks = plan.tasks.map((t) => {
+    if (!t || typeof t !== "object" || Array.isArray(t)) return t;
+    const { depends_on, exclusive, ...rest } = t;
+    const label = typeof t.size === "string" ? t.size.trim().toUpperCase() : null;
+    return { ...rest, needs: t.needs ?? depends_on, solo: t.solo ?? exclusive, size: label ? sizes[label] ?? t.size : t.size, ...(label ? { sizeLabel: label } : {}) };
+  });
+  return plan;
+}
+
 // ตัด id และไฟล์ที่ใส่ซ้ำในชิ้นเดียวกัน · ไม่งั้น needs ซ้ำถูกนับเป็นกราฟวน และ owns ซ้ำฟ้องว่าชนกับตัวเอง
-export function normalize(plan) {
+export function normalize(raw) {
+  const plan = adapt(raw);
   return { ...plan, tasks: plan.tasks.map((t) => ({ ...t, needs: [...new Set(t.needs ?? [])], owns: [...new Set(t.owns ?? [])] })) };
 }
 
-export function validate(plan) {
+export function validate(raw) {
+  const plan = adapt(raw);
   if (!Array.isArray(plan?.tasks)) return ["tasks ต้องเป็นรายการ (array) ของชิ้นงาน"];
   const bad = plan.tasks.flatMap((t, i) => (t && typeof t === "object" && !Array.isArray(t)
     ? [!isList(t.needs) && `${t.id ?? `ชิ้นที่ ${i + 1}`}: needs ต้องเป็นรายการ id`, !isList(t.owns) && `${t.id ?? `ชิ้นที่ ${i + 1}`}: owns ต้องเป็นรายการ path`].filter(Boolean)
@@ -28,7 +53,8 @@ export function validate(plan) {
     if (!t.id) errors.push(`ชิ้นที่ไม่มี id: ${JSON.stringify(t).slice(0, 60)}`);
     else if (ids.has(t.id)) errors.push(`id ซ้ำ: ${t.id}`);
     ids.add(t.id);
-    if (!(t.size > 0)) errors.push(`${t.id}: size ต้องมากกว่า 0`);
+    if (typeof t.size === "string") errors.push(`${t.id}: ขนาด "${t.size}" ไม่รู้จัก ใช้ตัวเลข หรือ ${Object.keys({ ...DEFAULT_SIZES, ...(plan.sizes ?? {}) }).join("/")}`);
+    else if (!(t.size > 0)) errors.push(`${t.id}: size ต้องมากกว่า 0`);
   }
   for (const t of tasks) for (const n of t.needs ?? []) if (!ids.has(n)) errors.push(`${t.id}: รอชิ้น ${n} ที่ไม่มีอยู่`);
   if (errors.length) return errors;
@@ -111,7 +137,8 @@ export function simulate(tasks, rank, agents) {
   return { makespan: now, schedule: out, width: Math.max(...out.map((o) => out.filter((x) => x.start <= o.start && x.end > o.start).length)) };
 }
 
-export function analyse(plan, { agents, k = {} } = {}) {
+export function analyse(raw, { agents, k = {} } = {}) {
+  const plan = adapt(raw);
   const tasks = normalize(plan).tasks.map((t) => ({ ...t, size: t.size * (k[t.step] ?? 1) }));
   const rank = ranks(tasks), total = tasks.reduce((s, t) => s + t.size, 0);
   const cp = criticalPath(tasks, rank), cpLen = Math.max(...rank.values());
@@ -129,6 +156,8 @@ export function analyse(plan, { agents, k = {} } = {}) {
 
 const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
 
+const cell = (s) => String(s).replace(/\|/g, "\\|");
+
 export function render(plan, a) {
   const bar = (r) => { const scale = 40 / a.makespan; return "·".repeat(Math.round(r.start * scale)) + "█".repeat(Math.max(1, Math.round((r.end - r.start) * scale))); };
   const title = (id) => a.tasks.find((t) => t.id === id).title ?? id;
@@ -141,7 +170,7 @@ export function render(plan, a) {
     ...(a.team === 1 && a.wide > 1 ? [`- ปล่อยขนาน ${a.wide} ตัวเร็วขึ้นแค่ ${a.parallelSpeedup.toFixed(1)} เท่า กราฟเกือบเป็นสายเดียว จึงใช้ลูกทีมตัวเดียวทำตาม rank (ชิ้นเล็กนอกสายวิกฤต หัวหน้าทีมทำเองระหว่างรอได้)`] : []),
     ...(a.needsWorkflow ? [`- กว้างเกิน ${WORKFLOW_AT} ชิ้น: เสนอ dynamic workflow ในคำถามตอนเริ่ม ถ้าผู้ใช้ไม่เอา แผนนี้ปล่อยรอบละ ${WORKFLOW_AT} ตาม rank`] : []),
     "", "| ลำดับปล่อย | ชิ้น | ขนาด | rank | เผื่อได้ | รอ | เจ้าของไฟล์ | ลูกทีม | เริ่ม → จบ | ไทม์ไลน์ |", "|---|---|---|---|---|---|---|---|---|---|",
-    ...sorted.map((r, i) => { const t = a.tasks.find((x) => x.id === r.id); return `| ${i + 1} | ${t.id}${t.title ? ` ${t.title}` : ""}${t.solo ? " (คนเดียว)" : ""} | ${n1(t.size)}k | ${n1(a.rank.get(t.id))} | ${a.cpm.get(t.id).float ? n1(a.cpm.get(t.id).float) : "0 วิกฤต"} | ${(t.needs ?? []).join(" ") || "–"} | ${(t.owns ?? []).join(" ") || "–"} | ${r.lane} | ${n1(r.start)} → ${n1(r.end)} | \`${bar(r)}\` |`; }),
+    ...sorted.map((r, i) => { const t = a.tasks.find((x) => x.id === r.id); return `| ${i + 1} | ${cell(`${t.id}${t.title ? ` ${t.title}` : ""}`)}${t.solo ? " (คนเดียว)" : ""} | ${t.sizeLabel ? `${t.sizeLabel} ` : ""}${n1(t.size)}k | ${n1(a.rank.get(t.id))} | ${a.cpm.get(t.id).float ? n1(a.cpm.get(t.id).float) : "0 วิกฤต"} | ${(t.needs ?? []).join(" ") || "–"} | ${(t.owns ?? []).join(" ") || "–"} | ${r.lane} | ${n1(r.start)} → ${n1(r.end)} | \`${bar(r)}\` |`; }),
     "",
   ].join("\n");
 }
@@ -161,23 +190,44 @@ function parseArgs(argv) {
     else if (argv[i] === "--agents") args.agents = Number(argv[++i]);
     else if (argv[i] === "--log") args.log = argv[++i];
     else if (argv[i] === "--json") args.json = true;
+    else if (argv[i] === "--mermaid") args.mermaid = true;
+    else if (argv[i] === "--html") args.html = argv[++i];
+    else if (argv[i] === "--actual") args.actual = true;
     else args.file = argv[i];
   }
   return args;
 }
 
+const USAGE = "ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--mermaid] [--html <ไฟล์.html>] [--actual] [--json]";
+
+async function runsFrom(logDir) {
+  if (!existsSync(logDir)) return [];
+  const { collectProject } = await import("../../model-scorecard/scripts/collect.mjs");
+  return collectProject(logDir, "").runs;
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.selfTest) return (await import("./plan.test.mjs")).selfTest();
-  if (!args.file) { console.error("ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--json]"); process.exit(1); }
+  if (!args.file || args.html === undefined && process.argv.includes("--html")) { console.error(USAGE); process.exit(1); }
   if (args.agents !== undefined && !(Number.isInteger(args.agents) && args.agents >= 1)) { console.error("--agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
-  const plan = JSON.parse(readFileSync(args.file, "utf8"));
-  if (plan.max_agents !== undefined && !(Number.isInteger(plan.max_agents) && plan.max_agents >= 1)) { console.error("max_agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
+  let text;
+  try { text = readFileSync(args.file, "utf8"); } catch { console.error(`อ่านไฟล์ไม่ได้: ${args.file}`); process.exit(1); }
+  let raw;
+  try { raw = JSON.parse(text); } catch (e) { console.error(`JSON ผิดรูปแบบใน ${args.file}: ${e.message}`); process.exit(1); }
+  if (!raw || typeof raw !== "object") { console.error("ไฟล์แผนต้องเป็น object ที่มี tasks หรือเป็นรายการชิ้นงาน (array)"); process.exit(1); }
+  const plan = adapt(raw);
+  if (plan.max_agents != null && !(Number.isInteger(plan.max_agents) && plan.max_agents >= 1)) { console.error("max_agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
   const errors = validate(plan);
   if (errors.length) { console.error(errors.map((e) => `- ${e}`).join("\n")); process.exit(1); }
-  const k = await factorsFrom(args.log ?? join(".claude", "superuser", "log"));
+  const logDir = args.log ?? join(".claude", "superuser", "log");
+  const k = await factorsFrom(logDir);
   const a = analyse(plan, { agents: args.agents, k });
-  console.log(args.json ? JSON.stringify({ ...a, rank: Object.fromEntries(a.rank), k }, null, 2) : render(plan, a));
+  if (args.json) return console.log(JSON.stringify({ ...a, rank: Object.fromEntries(a.rank), cpm: Object.fromEntries(a.cpm), k }, null, 2));
+  const actual = args.actual ? (await import("./plan-actual.mjs")).actualReport(a, await runsFrom(logDir)) : null;
+  const draw = args.mermaid || args.html ? await import("./plan-draw.mjs") : null;
+  console.log([render(adapt(plan), a), args.mermaid ? draw.toMermaid(a) : "", actual?.markdown ?? ""].filter(Boolean).join("\n"));
+  if (args.html) { writeFileSync(args.html, draw.toHtml(adapt(plan), a, actual)); console.log(`เขียนรูป ${args.html}`); }
 }
 
 // ไม่ await ที่ระดับบนสุด เพราะ plan.test.mjs import ไฟล์นี้กลับ ถ้า await จะรอกันเองไม่จบ

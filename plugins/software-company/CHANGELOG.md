@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.29.0 — 2026-10-27
+
+- `llm-engineering` reference ใหม่ `deep-research-system.md`: สร้างระบบ Deep Research Agent เป็นผลิตภัณฑ์ (planner → คิว → worker → ตรวจอ้างอิง → writer · งบ token และโควตาต่อผู้ใช้ · browser agent ใน sandbox และ prompt injection · ตัวชี้วัด) ชี้ `kafka-streaming` · `kubernetes-helm` (KEDA) · `observability-basics` · ที่มาเปิดอ่าน 2026-10-27 (Anthropic multi-agent research system · GPT Researcher · open_deep_research · STORM · OWASP LLM01 · RFC 9309)
+
 ## 2.28.0 — 2026-10-27
 
 - skill ใหม่ 4 ตัว (ทุกข้อมูลรุ่นและค่าตั้งมีลิงก์ทางการ ตรวจ 2026-10-27 · ข้อที่ยังไม่ได้ตรวจติดป้ายในไฟล์):
