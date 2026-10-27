@@ -16,7 +16,7 @@ description: Use when SuperUser plans how agents run a task (Planning, ReAct, Re
 | **MoA** (Mixture-of-Agents) | 3 ตัว (เช่น `brainstormer`) โจทย์เดียวคนละมุม → agent ใหม่รวม · แรง 3–5 เท่า | ≈ 2 รอบ (3 ตัวพร้อมกัน + รวม) เมื่อส่งในข้อความเดียว | เลือกผิดแล้วแพง · ต้องการมุมที่ขัดกัน | คำตอบเดียวที่ตรวจได้ |
 | **Reranker** | รวบรวม 10–30 ชิ้น → ให้คะแนน → อ่านเต็ม 3–5 ชิ้นบนสุด | ให้คะแนนพร้อมกันได้ + อ่าน 1 รอบ | ของมากเกินอ่านหมด | ไม่เกิน 3 ชิ้น |
 
-**สูตรปกติ:** Planning → ReAct → Reflection ก่อนส่ง · งานใหญ่ + Multi-Agent · ทางสำคัญ + MoA · ข้อมูลเยอะ + Reranker · เกิน 8 ชิ้น หรืองานซ้ำทีละไฟล์ → workflow script ของ Claude Code (ผู้ใช้เป็นคนเริ่ม · [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md) หัวข้อ dynamic workflow · คนละเรื่องกับแบบ Dynamic ในตารางล่าง)
+**สูตรปกติ:** Planning → ReAct → Reflection ก่อนส่ง · งานใหญ่ + Multi-Agent · ทางสำคัญ + MoA · ข้อมูลเยอะ + Reranker · ชิ้นที่ทำพร้อมกันเกิน 8 หรืองานซ้ำทีละไฟล์ → workflow script ของ Claude Code (ผู้ใช้เป็นคนเริ่ม · [`parallel-split-and-merge`](../parallel-split-and-merge/SKILL.md) หัวข้อ dynamic workflow · คนละเรื่องกับแบบ Dynamic ในตารางล่าง)
 
 **workflow 3 แบบ เลือกจากว่าใครกำหนดลำดับงานและกำหนดเมื่อไหร่** (คำเรียกตามคอร์สที่นิยมสอน · กลไกเต็มใน [`pattern-details`](references/pattern-details.md))
 

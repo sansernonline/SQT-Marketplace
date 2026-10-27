@@ -1147,7 +1147,9 @@ ${rows}
     ["runs: ขนาดที่ประเมินในใบสั่งงาน · token จริงจากข้อความงานเบื้องหลังจบ", [], true, () => {
       const note = "<task-notification>\n<task-id>a1</task-id>\n<tool-use-id>toolu_9</tool-use-id>\n<status>completed</status>\n<usage><subagent_tokens>58738</subagent_tokens></usage>\n</task-notification>";
       const ev = runEvents({ hook_event_name: "UserPromptSubmit", prompt: note }, { ts: "t", session: "s", event: "UserPromptSubmit" }, null)[0];
-      return estimateTokens("เป้า: x\n- **ขนาด:** 40k\n") === 40000 && estimateTokens("size: 1.5k token") === 1500 && estimateTokens("ขนาดชิ้นใหญ่ 40k") === null && estimateTokens("ขนาด: 40kg") === null
+      const spawn = { hook_event_name: "PostToolUse", tool_name: "Agent", tool_use_id: "t2", tool_input: { subagent_type: "general-purpose", description: "x", prompt: "เป้า: x\nขนาด: 20k" }, tool_response: { content: [] } };
+      const run = runEvents(spawn, buildEntry(spawn, { models: {} }), null)[0];
+      return run.estimate_tokens === 20000 && estimateTokens("เป้า: x\n- **ขนาด:** 40k\n") === 40000 && estimateTokens("size: 1.5k token") === 1500 && estimateTokens("ขนาดชิ้นใหญ่ 40k") === null && estimateTokens("ขนาด: 40kg") === null
         && ev.event === "result" && ev.tool_use_id === "toolu_9" && ev.total_tokens === 58738 && taskDone("ทำต่อ") === null;
     }],
     ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
