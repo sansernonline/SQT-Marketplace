@@ -66,11 +66,13 @@ export function assign(a, accountsIn, { weights = DEFAULT_WEIGHTS, safety = DEFA
     const finishes = accounts.flatMap((x) => x.running.map((r) => r.end));
     const resets = accounts.map((x) => now + x.resetIn);
     const next = Math.min(...finishes, ...(finishes.length && ready().length === 0 ? [] : resets));
+    if (!(next > now - 1e-9)) throw new Error("จำลองย้อนเวลา: ตรวจ window_hours และ reset_in_hours ใน accounts");
     const step = next - now;
     now = next;
     for (const x of accounts) {
       x.resetIn -= step;
-      if (x.resetIn <= 1e-9) { x.left = x.cap_k; x.resetIn += x.window; }
+      // ก้าวเวลา 1 ครั้งอาจข้ามหลายรอบโควตา จึงบวกรอบจนเวลารีเซ็ตถัดไปอยู่ข้างหน้า ไม่งั้นรอบถัดไปได้ next น้อยกว่า now
+      if (x.resetIn <= 1e-9) { x.left = x.cap_k; while (x.resetIn <= 1e-9) x.resetIn += x.window; }
       for (const r of x.running.filter((q) => q.end <= now + 1e-9)) { done.add(r.id); x.running.splice(x.running.indexOf(r), 1); }
     }
   }

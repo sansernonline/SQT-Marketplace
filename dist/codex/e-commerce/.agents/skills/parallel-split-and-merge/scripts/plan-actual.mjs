@@ -1,5 +1,7 @@
 // เทียบแผนกับงานที่เกิดจริง: อ่านงานลูกทีมจาก log ของ superuser (runs.jsonl ผ่าน model-scorecard) แล้วผูกกับชิ้นในแผน
 // ผูกด้วยคำอธิบายงาน (description ของเครื่องมือ Agent) ที่ขึ้นต้นด้วย id ของชิ้น เช่น "a: ออกแบบตาราง" หรือ "a ออกแบบตาราง"
+import { score, DEFAULT_WEIGHTS } from "./plan-assign.mjs";
+
 const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
 const realTokens = (r) => r.total_tokens ?? (r.tokens && !r.tokensEstimated ? Object.values(r.tokens).reduce((s, v) => s + (v ?? 0), 0) : null);
 const escRe = (id) => id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -33,32 +35,46 @@ export function learnSpeed(rows, accounts) {
   return out;
 }
 
-// ⑤ คาดการณ์ว่าโควตาของบัญชีจะพอสำหรับงานที่ค้างอยู่ไหม · ไม่พอ ให้ย้าย และ ✦ ส่งไม้ด้วยใบ handoff ไปบัญชีที่คะแนนดีสุด
+// ⑤ คาดการณ์ว่าโควตาของบัญชีพอกับงานที่ค้างไหม · ไม่พอ ให้ย้ายชิ้นใหญ่ก่อนจนที่เหลือพอ · ✦ ส่งไม้ไปบัญชีที่ผ่านกฎเหล็กเดียวกับ ② และคะแนน ③ สูงสุด แล้วหักโควตาปลายทางทุกครั้งที่เสนอ
 export function predictMoves(a, rows, team, est) {
   const safety = team.safety ?? 1.2, moves = [];
-  for (const acc of team.accounts) {
-    const open = rows.filter((x) => !x.done && x.r.account === acc.name);
-    const need = open.reduce((s, x) => s + est(x.id) / 1000, 0) * safety, left = acc.remaining_k ?? acc.cap_k;
-    if (!open.length || need <= left) continue;
+  const pool = team.accounts.map((b) => ({ ...b, left: b.remaining_k ?? b.cap_k, resetIn: b.reset_in_hours ?? b.window_hours ?? 5, max_parallel: b.max_parallel ?? 1,
+    running: rows.filter((x) => !x.done && x.r.account === b.name) }));
+  const maxSpeed = Math.max(...pool.map((b) => b.speed_k_per_hour));
+  for (const acc of pool) {
+    const open = [...acc.running].sort((p, q) => est(q.id) - est(p.id));
+    let need = open.reduce((s, x) => s + est(x.id) / 1000, 0) * safety;
+    const left = acc.left;
     for (const x of open) {
-      const size = est(x.id) / 1000;
-      const to = team.accounts.filter((b) => b.name !== acc.name && (b.remaining_k ?? b.cap_k) >= size * safety)
-        .sort((p, q) => (q.remaining_k ?? q.cap_k) / q.cap_k - (p.remaining_k ?? p.cap_k) / p.cap_k)[0];
+      if (need <= left) break;
+      const task = a.tasks.find((t) => t.id === x.id), size = est(x.id) / 1000;
+      const to = pool.filter((b) => b.name !== acc.name && b.left >= size * safety && (!task.tool || task.tool === b.tool))
+        .map((b) => ({ b, s: score(b, { size }, { critical: a.cpm.get(x.id).float === 0, maxSpeed, weights: team.weights ?? DEFAULT_WEIGHTS }).total }))
+        .sort((p, q) => q.s - p.s)[0]?.b;
+      if (to) to.left -= size;
       moves.push({ id: x.id, from: acc.name, to: to?.name ?? null, need, left });
+      need -= size * safety;
     }
   }
   return moves;
 }
 
+// อายุของข้อมูลโควตา · เก่ากว่า 1 รอบ (ค่าตั้งต้น 5 ชม.) เตือน เพราะอาจไม่ตรงกับตอนนี้
+const quotaAge = (acc, now = Date.now()) => {
+  if (!acc.quota_at) return "ไม่มี (ใช้เต็มถัง)";
+  const h = (now - Date.parse(acc.quota_at)) / 3600000;
+  return h > (acc.window_hours ?? 5) ? `เก่า ${n1(Math.round(h))} ชม. ควรอ่านใหม่` : `${n1(Math.round(h * 10) / 10)} ชม. ก่อน`;
+};
+
 function accountSection(a, rows, team, est) {
   const speeds = learnSpeed(rows, team.accounts), moves = predictMoves(a, rows, team, est);
   return [
     "## บัญชีระหว่างทำงาน", "",
-    "| บัญชี | โควตาเหลือ | รีเซ็ตใน | ความเร็วที่ตั้ง | ความเร็วจริง (EMA) |", "|---|---|---|---|---|",
-    ...team.accounts.map((acc) => { const sp = speeds.get(acc.name); return `| ${cell(acc.name)} | ${n1(acc.remaining_k ?? acc.cap_k)}k / ${n1(acc.cap_k)}k | ${acc.reset_in_hours != null ? `${n1(acc.reset_in_hours)} ชม.` : "–"} | ${acc.speed_k_per_hour}k/ชม. | ${sp ? `${n1(sp.speed)}k/ชม. (${sp.n} งาน) → แก้ speed_k_per_hour ใน accounts.json` : "ยังไม่มีงานที่จบ"} |`; }),
+    "| บัญชี | โควตาเหลือ | รีเซ็ตใน | ข้อมูลโควตา | ความเร็วที่ตั้ง | ความเร็วจริง (EMA) |", "|---|---|---|---|---|---|",
+    ...team.accounts.map((acc) => { const sp = speeds.get(acc.name); return `| ${cell(acc.name)} | ${n1(acc.remaining_k ?? acc.cap_k)}k / ${n1(acc.cap_k)}k | ${acc.reset_in_hours != null ? `${n1(acc.reset_in_hours)} ชม.` : "–"} | ${quotaAge(acc)} | ${acc.speed_k_per_hour}k/ชม. | ${sp ? `${n1(sp.speed)}k/ชม. (${sp.n} งาน) → แก้ speed_k_per_hour ใน accounts.json` : "ยังไม่มีงานที่จบ"} |`; }),
     "",
     ...(moves.length ? ["**ควรย้ายงาน (โควตาไม่พอกับงานที่ค้าง)**", "",
-      ...moves.map((m) => `- ${cell(m.id)}: ${m.from} ต้องใช้ราว ${n1(m.need)}k แต่เหลือ ${n1(m.left)}k → ${m.to ? `ส่งไม้ให้ ${m.to}: ลูกทีมบน ${m.from} เขียนใบส่งต่อ \`.claude/superuser/handoff/${m.id}.md\` ตาม skill \`handoff\` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานบน ${m.to} ด้วยคำอธิบาย \`${m.id}: ทำต่อจากใบส่งต่อ ไม่เริ่มใหม่\`` : "ไม่มีบัญชีที่โควตาพอ รอรีเซ็ตหรือแตกชิ้นให้เล็กลง"}`), ""] : ["โควตาทุกบัญชีพอกับงานที่ค้างอยู่", ""]),
+      ...moves.map((m) => `- ${cell(m.id)}: ${m.from} ต้องใช้ราว ${n1(m.need)}k แต่เหลือ ${n1(m.left)}k → ${m.to ? `ส่งไม้ให้ ${m.to}: ลูกทีมบน ${m.from} เขียนใบส่งต่อ \`.claude/superuser/handoff/${m.id}.md\` ในโฟลเดอร์หลักของ repo (\`.claude/\` ไม่ตามไปใน worktree) ตาม skill \`handoff\` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานบน ${m.to} ด้วยคำอธิบาย \`${m.id}: ทำต่อจากใบส่งต่อ ไม่เริ่มใหม่\`` : "ไม่มีบัญชีที่โควตาพอ รอรีเซ็ตหรือแตกชิ้นให้เล็กลง"}`), ""] : ["โควตาทุกบัญชีพอกับงานที่ค้างอยู่", ""]),
   ];
 }
 

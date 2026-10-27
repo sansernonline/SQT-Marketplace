@@ -15,7 +15,8 @@ const lastPart = (dir) => dir.replace(/[\\/]+$/, "").split(/[\\/]/).pop();
 export function accountName(env = process.env, tool = "claude") {
   if (env.SQT_ACCOUNT) return env.SQT_ACCOUNT;
   const dir = tool === "codex" ? env.CODEX_HOME : env.CLAUDE_CONFIG_DIR;
-  return dir ? lastPart(dir) : "default";
+  // ไม่ตั้งตัวแปร = โฟลเดอร์ตั้งต้นของเครื่องมือ (~/.claude หรือ ~/.codex) ชื่อจึงตรงกับ hook และแม่แบบ accounts.json
+  return dir ? lastPart(dir) : tool === "codex" ? ".codex" : ".claude";
 }
 
 const iso = (sec) => (sec ? new Date(sec * 1000).toISOString() : null);
@@ -72,7 +73,9 @@ export function applyQuota(accounts, snap, now = new Date()) {
     const week = q.week && hours(q.week.reset) > 0 ? q.week : null;
     if (week && week.used >= 100) return { ...a, remaining_k: 0, reset_in_hours: hours(week.reset), quota_at: q.at };
     if (!five) return { ...a, quota_at: q.at };
-    return { ...a, remaining_k: a.cap_k * Math.max(0, 1 - five.used / 100), reset_in_hours: hours(five.reset), quota_at: q.at };
+    // ใช้ส่วนที่เหลือน้อยกว่าระหว่างรอบ 5 ชม. กับรอบยาว · รอบยาวใกล้เต็มแล้ว รอบ 5 ชม. ที่ยังว่างก็ใช้ได้ไม่เต็ม
+    const share = Math.max(0, Math.min(1 - five.used / 100, week ? 1 - week.used / 100 : 1));
+    return { ...a, remaining_k: a.cap_k * share, reset_in_hours: hours(five.reset), quota_at: q.at };
   });
 }
 
