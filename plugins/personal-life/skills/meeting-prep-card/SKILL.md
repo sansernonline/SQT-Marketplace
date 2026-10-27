@@ -25,6 +25,12 @@ One page, fifteen minutes before you walk in. If you cannot fill the goal line, 
 
 Apply the gate to meetings the user organises; for meetings the user is invited to, it decides whether to attend or send a written input.
 
+**Go, or send it in writing — by numbers.** Go when either is true:
+1. The user **owns the decision** (the one who says yes or no), or
+2. **Value of the decision > people-hours in the room × hourly rate.** Room cost = attendees × meeting hours × hourly rate (monthly pay ÷ working hours per month, the user's own figures; use the average of the room if unknown, marked `(รอยืนยัน)`). Value of the decision = what the user would gain or avoid losing in baht if this meeting changes the outcome (the user's estimate, starting value, not yet measured).
+
+Example: 6 people × 1 hour × 400 baht = 2,400 baht; a decision that moves a 50,000 baht quote passes, a status round with no decision does not. Neither is true → send a written input (the Async row) and offer to join only if a question comes back. Close call (value within about 2 times the room cost, starting value, not yet measured) → the user decides. No script needed; it is one multiplication.
+
 > **If the meeting is a day or more away** (decision meetings): draft a one-page note or your questions to send about 24 hours ahead — people decide faster when they have read it. Draft only; send only when the user says send.
 
 ## Meeting types
