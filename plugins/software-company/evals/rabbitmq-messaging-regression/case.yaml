@@ -1,0 +1,35 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการเดิม (รอบแดง 2026-10-27 · agent haiku ไม่มี skill ทำโจทย์เดียวกัน): เลือก quorum queue · confirms · mandatory · manual ack · กันซ้ำด้วย message_key ถูกหมด
+# แต่ตั้ง dead-letter-exchange และ delivery-limit ด้วย arguments ตอนประกาศคิว (ไม่ใช่ policy) · ทำ retry ด้วยคิว TTL หลายขั้นแทน delayed retry ของ quorum queue · ไม่พูดถึง user/vhost/TLS · confirm ทีละข้อความผ่าน BlockingConnection
+schema_version: "1.1"
+name: rabbitmq-messaging-regression
+description: dead letter ต้องตั้งด้วย policy ไม่ใช่ arguments ตอนประกาศคิว และคำตอบต้องพูดถึงความปลอดภัยของ broker (อาการรอบแดง 2026-10-27)
+tags: [regression, rabbitmq-messaging]
+runs: 3
+expected_outcome: DLX ตั้งด้วย policy · บอกไม่ใช้ guest และ user ต่อแอป vhost TLS 5671
+execution:
+  prompt: |
+    ออกแบบคิวส่งอีเมลด้วย RabbitMQ ที่ไม่ทำข้อความหายและส่งซ้ำได้ปลอดภัย ระบบเป็นเว็บแอปสั่งซื้อ (Python)
+    ที่ต้องส่งอีเมลยืนยันออเดอร์ ให้ตัวอย่างโค้ด producer และ consumer กับค่าตั้งของ queue/exchange
+    บอกว่าถ้าส่งอีเมลล้มเหลวต้องทำอย่างไร และต้องเตรียม broker อะไรก่อนขึ้น production
+    ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: dlx-not-in-queue-arguments
+    type: regex
+    pattern: 'arguments\s*=\s*\{[^}]*x-dead-letter-exchange'
+    match: not_contains
+    target: last_message
+  - name: dlx-by-policy
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบตั้ง dead letter exchange ด้วย policy (เช่น rabbitmqctl set_policy หรือ Management API policy)
+      ไม่ใช่ใส่ x-dead-letter-exchange เป็นอาร์กิวเมนต์ตอนประกาศคิว
+  - name: broker-security
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกอย่างน้อย 3 ข้อ จาก 4 ข้อนี้ ลบหรือไม่ใช้ user guest ·
+      user แยกต่อแอป · vhost แยก · TLS 1.2 ขึ้นไป (port 5671)
