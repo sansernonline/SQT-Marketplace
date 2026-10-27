@@ -11,7 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 CSS = open(os.path.join(HERE, "style.css"), encoding="utf-8").read()
 FONTS = "https://fonts.googleapis.com/css2?family=Anuphan:wght@400;600&family=Bai+Jamjuree:wght@400;600&display=swap"
 sys.path.insert(0, HERE)
-from palette import COLOR, SHAPE, emblem, badge
+from palette import COLOR, ICON_CSS, emblem, badge, svg_icon
 TODAY = date.today().isoformat()
 # วลีไทยที่คั่นด้วยช่องว่าง ห้ามตัดกลางวลี
 NOBREAK = "(function(){var th=/[\u0e00-\u0e7f]/,w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),ns=[];while(w.nextNode())ns.push(w.currentNode);ns.forEach(function(n){var p=n.parentNode;if(!th.test(n.nodeValue)||p.closest('svg,script,style'))return;var f=document.createElement('span');f.className='nbw';n.nodeValue.split(/(\\s+)/).forEach(function(x){if(th.test(x)&&x.length<=20){var s=document.createElement('span');s.className='nb';s.textContent=x;f.appendChild(s);}else f.appendChild(document.createTextNode(x));});p.replaceChild(f,n);});})();"
@@ -25,7 +25,7 @@ def e(text):
 def page(title, body, plugin="superuser"):
     body = re.sub(r'"ใช้ superuser( …)?"', lambda m: f'<span class="nb">{m[0]}</span>', body)
     return (f'<!doctype html><html lang="th"><head><meta charset="utf-8"><title>{e(title)}</title>'
-            f'<link href="{FONTS}" rel="stylesheet"><style>{CSS}</style></head>'
+            f'<link href="{FONTS}" rel="stylesheet"><style>{CSS}{ICON_CSS}</style></head>'
             f'<body><div id="sheet" style="--pc:{COLOR.get(plugin, COLOR["superuser"])}">{body}</div><script>{NOBREAK}</script></body></html>')
 
 
@@ -301,12 +301,10 @@ def network(cross):
     for n, (x, y) in pos.items():
         right = x >= cx + 4; left = x <= cx - 4
         anchor, lx, ly = ("start", x + 32, y + 5) if right else ("end", x - 32, y + 5) if left else ("middle", x, y - 32)
-        nodes.append(f'<rect x="{x - 22:.1f}" y="{y - 22:.1f}" width="44" height="44" rx="10" fill="{COLOR[n]}"/>'
-                     f'<g transform="translate({x - 14:.1f} {y - 14:.1f}) scale(1.1667)" fill="none" stroke="#fff" stroke-width="1.8" '
-                     f'stroke-linecap="round" stroke-linejoin="round">{SHAPE[n]}</g>'
+        nodes.append(svg_icon(n, x - 24, y - 24, 48) +
                      f'<text x="{lx:.1f}" y="{ly:.1f}" text-anchor="{anchor}" font-size="15" font-weight="600" fill="#1A1B22">{e(n)}</text>')
     core = (f'<circle cx="{cx}" cy="{cy}" r="{hub}" fill="{COLOR["superuser"]}"/><circle cx="{cx}" cy="{cy}" r="{hub + 6}" fill="none" stroke="{COLOR["superuser"]}" stroke-width="2"/>'
-            f'<g transform="translate({cx - 20} {cy - 36}) scale(1.6667)" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{SHAPE["superuser"]}</g>'
+            + svg_icon("superuser", cx - 22, cy - 40, 44) +
             f'<text x="{cx}" y="{cy + 26}" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">superuser</text>'
             f'<text x="{cx}" y="{cy + 44}" text-anchor="middle" font-size="13" fill="#fff">แกนกลาง</text>')
     return (f'<svg class="net" viewBox="0 0 {W} {H}" width="{W}" height="{H}" font-family="Anuphan, sans-serif">'

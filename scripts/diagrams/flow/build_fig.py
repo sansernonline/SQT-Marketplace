@@ -8,7 +8,7 @@ import os, re, sys, html
 from figdata import P
 import bilingual
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from palette import COLOR, emblem, badge
+from palette import COLOR, ICON_CSS, emblem, badge
 
 ROOT, TEMPLATE, OUT = sys.argv[1:4]
 # เฉพาะ plugin ที่มี skill superuser
@@ -62,8 +62,11 @@ def read_plugin(name):
 
 PAT_HOW = {"Planning": "วางแผนทั้งหมดก่อน → ทำทีละข้อ", "ReAct": "คิด → ทำ → ดูผล วนจนเสร็จ",
   "Reflection": "ทำเสร็จ → อีกตัวตรวจ → แก้", "Multi-Agent": "หลาย agent คนละงาน ส่งต่อเป็นสาย",
-  "Mixture-of-Agents (MoA)": "หลาย agent งานเดียวกัน คนละมุม → รวม", "Reranker": "ให้คะแนนหลายชิ้น → เลือกที่ตรงสุด"}
-PAT_CSS = """<style>
+  "Mixture-of-Agents (MoA)": "หลาย agent งานเดียวกัน คนละมุม → รวม", "Reranker": "ให้คะแนนหลายชิ้น → เลือกที่ตรงสุด",
+  # รูปแบบการเดินงานที่หัวหน้าทีมเลือกเองตามงาน (agent-patterns · เพิ่มใน PR #18)
+  "Loop": "ทำ → ตรวจ → แก้ ซ้ำจนผ่าน", "Graph": "แตกงานที่พึ่งกันครั้งเดียว → ทำขนาน → รวม",
+  "Dynamic": "วางแผน → ทำทีละชิ้น → ปรับแผนระหว่างทาง"}
+PAT_CSS = "<style>" + ICON_CSS + "</style>" + """<style>
 .pat{padding:16px 24px;margin-top:16px}
 .pat h3{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:var(--fs-l);margin-bottom:12px}
 .pat h3 .i{color:var(--pc);width:24px;height:24px}
@@ -105,7 +108,7 @@ def pattern_card(pats):
     cell = lambda n, e: (f'<div class="pc{"" if n in CORE_PATS else " opt"}"><b>{html.escape(n.replace("Mixture-of-Agents (MoA)", "MoA"))}</b>'
                          f'<i>{PAT_HOW[n]}</i><span>{md_inline(e)}</span></div>')
     return f'''<div class="card pat">
-  <h3>{ICON["list"]}รูปแบบการทำงาน<small>แกน 4 แบบใช้ทุกงาน · กรอบเส้นประคือโมดูล patterns_advanced</small></h3>
+  <h3>{ICON["list"]}รูปแบบการทำงาน<small>แกน 4 แบบใช้ทุกงาน · กรอบเส้นประคือโมดูล patterns_advanced และรูปแบบการเดินงาน Loop · Graph · Dynamic ที่หัวหน้าทีมเลือกเองตามงาน</small></h3>
   <div class="patrow">{"".join(cell(n, e) for n, e in pats)}</div>
   <div class="patnote"><b>สูตรของแกน:</b> Planning (จัดขนาด งบ คาด) → ReAct ทุกขั้น → Reflection (ตรวจซ้ำจนผ่าน) · Multi-Agent คือการแจกงานขนาน · MoA แรง 3–5 เท่า และ Reranker ใช้เฉพาะเรื่องที่เลือกผิดแล้วแพง</div>
 </div>

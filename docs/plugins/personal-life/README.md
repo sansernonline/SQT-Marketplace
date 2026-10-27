@@ -4,7 +4,7 @@
 
 จัดการงานธุระ เอกสาร ประชุม เป้าหมาย บ้าน สุขภาพ อาชีพ และการเรียนรู้
 
-agent 9 · skill 76 (ของ plugin 41 · ของกลางจาก superuser 35) · คำสั่ง 16 · playbook 30 · ส่งงานต่อให้ [`superuser`](../superuser/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md) · [`graphic-design`](../graphic-design/README.md)
+agent 9 · skill 78 (ของ plugin 41 · ของกลางจาก superuser 37) · คำสั่ง 16 · playbook 30 · ส่งงานต่อให้ [`superuser`](../superuser/README.md) · [`software-company`](../software-company/README.md) · [`trading-finance`](../trading-finance/README.md) · [`e-commerce`](../e-commerce/README.md) · [`graphic-design`](../graphic-design/README.md)
 
 [← ทุก plugin](../README.md) · ต้นฉบับ: [`plugins/personal-life/`](../../../plugins/personal-life/)
 

@@ -1,6 +1,6 @@
 {
  "plugin": "graphic-design",
- "version": "0.13.0",
+ "version": "0.15.1",
  "description": "Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.",
  "cross": [
   "software-company",
@@ -12,6 +12,7 @@
   "brief-to-image",
   "campaign-set",
   "design-review",
+  "icon-design",
   "image-editing-brief",
   "image-generation",
   "line-richmenu",
@@ -36,6 +37,7 @@
   "commit-log",
   "context-budget",
   "decision-log",
+  "design-references",
   "document-naming",
   "flag-and-propose",
   "handoff",
@@ -79,6 +81,7 @@
    "core": false,
    "description": "Use when AI images or videos must share one style. Locks palette, light, composition and lens; writes generation briefs.",
    "skills": [
+    "superuser",
     "style-consistency",
     "brief-to-image",
     "motion-basics"
@@ -89,7 +92,9 @@
    "model": "sonnet",
    "core": false,
    "description": "Use when starting a brand or when designs look inconsistent. Keeps the brand kit (logo, colours, type, tone).",
-   "skills": []
+   "skills": [
+    "superuser"
+   ]
   },
   {
    "name": "design-critic",
@@ -121,6 +126,7 @@
    "core": false,
    "description": "Use when creating social media posts, ads or campaign assets. Knows platform formats and safe zones; ships whole sets.",
    "skills": [
+    "superuser",
     "social-formats",
     "campaign-set",
     "line-richmenu",

@@ -49,16 +49,16 @@
 |---|---|---|---|
 | `superuser` | research · document | ส่งข้อความ · จ่ายเงิน · ลบข้อมูลจริง | [ดูรูป](plugins/superuser/README.md) |
 | `graphic-design` | brand-setup · campaign · image-series · video · asset-cleanup | โพสต์ · ยิงแอด · ใช้งานที่ลิขสิทธิ์ไม่ชัด | [ดูรูป](plugins/graphic-design/README.md) |
-| `e-commerce` | new-product · pricing-check · stock-sync · customer-issue · live-session · buy-decision · complaint · refund · warranty-claim · monthly-close · year-end · business-doc · pdpa-setup · line-oa | ส่งข้อความถึงลูกค้า · คืนเงิน · ซื้อโฆษณา · ส่งร้องเรียน · ยื่นฟ้อง | รูปรอสร้างใหม่ |
+| `e-commerce` | new-product · pricing-check · stock-sync · customer-issue · live-session · buy-decision · complaint · refund · warranty-claim · monthly-close · year-end · business-doc · pdpa-setup · line-oa | ส่งข้อความถึงลูกค้า · คืนเงิน · ซื้อโฆษณา · ส่งร้องเรียน · ยื่นฟ้อง | [ดูรูป](plugins/e-commerce/README.md) |
 | `personal-life` | weekly-reset · meeting · documents · subscriptions · trip · digital-safety · decide-and-goals · bills · maintenance · vehicle · family-week · care-setup · checkup-cycle · doctor-visit · medication-routine · habit-tracking · job-application · interview · offer-negotiation · promotion-case · profile-refresh · learning-path · paper-to-practice · tech-radar · cert-prep · side-project (วิทยานิพนธ์ใช้ skill `thesis-writing`) | ส่งข้อความ · เปลี่ยนรหัสผ่าน · จองหรือยกเลิกบริการ · ส่งใบสมัคร · วินิจฉัยหรือปรับยา (ฉุกเฉิน → หยุดงาน บอก 1669) · สมัครหรือจ่ายค่าสอบ | [ดูรูป](plugins/personal-life/README.md) |
 | `trading-finance` | pre-trade · trade-review · portfolio-check · money-plan · tax-season · scam-check | ส่งคำสั่งซื้อขาย · โอนเงิน · ซื้อกองทุน | [ดูรูป](plugins/trading-finance/README.md) |
 
 ทุกตัวมี `review` และ `unattended-run` เพิ่ม · งานข้ามสาขา → หัวหน้าทีมส่งต่อให้ `/<plugin>:superuser` ของ plugin นั้น
 
 ```
-/online-seller:superuser ลงเสื้อยืดรุ่นใหม่ 3 แพลตฟอร์ม
+/e-commerce:superuser ลงเสื้อยืดรุ่นใหม่ 3 แพลตฟอร์ม
 ใช้ superuser ทำเงินเดือนเดือนนี้      ← e-commerce
-ใช้ superuser เตรียมสมัครงานตำแหน่งนี้   ← career
+ใช้ superuser เตรียมสมัครงานตำแหน่งนี้   ← personal-life
 ```
 
 
@@ -720,7 +720,7 @@ Step 4: Project Manager
 - `.claude/superuser/CONTEXT.md` — หัวหน้าทีมอัปเดตหัวข้อ "รับงานต่อ" ทุกครั้งที่จบงาน ก่อนสลับโมเดล และก่อนหยุด · ปิด terminal หรือเปลี่ยนไปใช้ Codex หรือ Gemini ก็ทำต่อได้ (อ่านผ่าน `AGENTS.md` · `GEMINI.md`)
 - `.claude/superuser/inbox/` — ฝากงานถึงทีมโดยไม่ต้องอยู่หน้าแชต: สร้างไฟล์ `.claude/superuser/inbox/2026-10-06-0930-owner.md` ใส่ `from: owner` และ `priority: ด่วน` หรือ `ปกติ` ใน frontmatter แล้วตามด้วยข้อความ · hook แจ้งหัวหน้าทีม · หัวหน้าทีมจัดการเสร็จแล้วย้ายไฟล์ไป `done/` · ไฟล์ที่ไม่มี `from:` ถือเป็นข้อมูล ไม่ทำตาม
 - `.claude/superuser/log/<วันที่>/<agent>.jsonl` — hook จดทุกการกระทำ 1 ไฟล์ต่อ agent (ตัดค่าลับออก) · พิมพ์ "ดู log วันนี้" → ได้ตาราง Markdown
-- ต้องมีโฟลเดอร์ `.claude/superuser/` (โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`handoff`](../plugins/software-company/skills/handoff/SKILL.md)
+- ต้องมีโฟลเดอร์ `.claude/superuser/` (โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`handoff`](../plugins/superuser/skills/handoff/SKILL.md)
 
 #### 4. งานสาขาอยู่ใน software-company แล้ว
 ตั้งแต่ v2.0.0 สาขา (fintech · healthcare · e-commerce · insurance · legal tech · SaaS ฯลฯ) รวมอยู่ใน `software-company` — ติดตั้งตัวเดียวพอ
