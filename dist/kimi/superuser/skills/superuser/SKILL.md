@@ -1,6 +1,6 @@
 ---
 name: superuser
-description: Use when any task spans several steps or the user says superuser with no domain named. Team lead that briefs, dispatches, scores and re-checks.
+description: Use when a request has several steps or parts (fix then add, do all files, research then change) even unnamed, or says superuser. Team lead.
 ---
 
 # SuperUser — หัวหน้าทีม

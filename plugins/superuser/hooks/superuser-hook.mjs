@@ -176,6 +176,68 @@ export function logFileName(agent) {
   return String(agent || "main").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^[-.]+|[-.]+$/g, "").slice(0, 60) || "main";
 }
 
+// runs.jsonl · 1 บรรทัดต่อ 1 งานลูกทีม (run) + 1 บรรทัดต่อรายงานที่ลูกทีมส่งกลับ (result) + 1 บรรทัดต่อคำปฏิเสธหรือรับของผู้ใช้ (feedback) · ใช้โดย skill model-scorecard
+// ค่าที่ขึ้นต้นด้วยการอนุมานจากคำ (step · verdict · user_feedback) ไม่ใช่ผลวัด · ไฟล์เดิมไม่เปลี่ยนรูปแบบ
+export const RUNS_FILE = "runs.jsonl";
+const REJECT = /(ไม่สวย|ไม่ใช่|ไม่ผ่าน|ผิด|แก้ใหม่|ไม่ชอบ|\bnot what i\b)/i;
+const ACCEPT = /(ดีมาก|สวยแล้ว|ผ่าน|โอเค|เอาแบบนี้)/;
+const VERDICT_LINE = /ผล(?:การตรวจ)?\s*[:：]\s*\**\s*(ผ่านแบบมีเงื่อนไข|ผ่านอย่างมีเงื่อนไข|ไม่ผ่าน|ผ่าน|PASS|FAIL|CONDITIONAL)/i;
+const AGENT_MESSAGE = /^\s*<agent-message from="([^"]+)"/;
+
+export function classifyStep(role, description, rules) {
+  const text = `${role ?? ""} ${description ?? ""}`;
+  const hit = (rules?.rules ?? []).find((r) => { try { return new RegExp(r.pattern, "i").test(text); } catch { return false; } });
+  return hit?.step ?? rules?.default ?? "other";
+}
+
+const toVerdict = (word) => /เงื่อนไข|CONDITIONAL/i.test(word) ? "conditional" : /ไม่ผ่าน|FAIL/i.test(word) ? "fail" : "pass";
+
+export function parseVerdict(text) {
+  const t = String(text ?? "");
+  const line = t.match(VERDICT_LINE)?.[1];
+  const loose = line ?? t.match(/ผ่านแบบมีเงื่อนไข|ไม่ผ่าน|\bFAIL\b|\bPASS\b|\bCONDITIONAL\b/i)?.[0];
+  return { verdict: loose ? toVerdict(loose) : null, round: Number(t.match(/รอบที่\s*(\d+)/)?.[1]) || null };
+}
+
+export function userFeedback(prompt) {
+  const text = String(prompt ?? "");
+  if (NOT_USER.test(text)) return null;
+  return REJECT.test(text) ? "reject" : ACCEPT.test(text) ? "accept" : null;
+}
+
+function responseText(res) {
+  if (typeof res === "string") return res;
+  return textOf(res?.content ?? res?.result ?? res?.output ?? "");
+}
+
+function runTokens(res) {
+  const u = res?.usage;
+  if (!u) return null;
+  return { input: u.input_tokens ?? 0, output: u.output_tokens ?? 0, cacheRead: u.cache_read_input_tokens ?? 0, cacheCreate: u.cache_creation_input_tokens ?? 0 };
+}
+
+export function runEvents(input, entry, rules) {
+  const base = { ts: entry.ts, session: entry.session };
+  if (entry.event === "UserPromptSubmit") {
+    const from = String(input.prompt ?? "").match(AGENT_MESSAGE)?.[1];
+    if (from) return [{ ...base, event: "result", spawned_id: shortId(from), ...parseVerdict(input.prompt) }];
+    const feedback = userFeedback(input.prompt);
+    return feedback ? [{ ...base, event: "feedback", user_feedback: feedback, inferred: true }] : [];
+  }
+  if (entry.event !== "PostToolUse" || !entry.role || input.agent_id) return [];
+  const res = input.tool_response, text = responseText(res);
+  const isAsync = text.includes(LAUNCHED);
+  const description = input.tool_input.description ?? "";
+  const step = classifyStep(entry.role, description, rules);
+  return [{
+    ...base, event: "run", tool_use_id: input.tool_use_id ?? null, spawned_id: entry.spawned_id ?? null,
+    role: entry.role, model: input.tool_input.model ?? "inherit", lead_model: entry.model, effort: input.tool_input.effort ?? null,
+    step, description: redact(description, 80), async: isAsync, ok: entry.ok,
+    duration_ms: res?.totalDurationMs ?? res?.duration_ms ?? null, tokens: runTokens(res),
+    ...(!isAsync && step === "review" ? parseVerdict(text) : {}),
+  }];
+}
+
 export function pendingMessages(teamDir) {
   const inbox = join(teamDir, "inbox");
   if (!existsSync(inbox)) return [];
@@ -267,10 +329,25 @@ export function coreRules({ configDir = process.env.CLAUDE_CONFIG_DIR ?? join(ho
   return text.slice(0, CONTEXT_MAX);
 }
 
+// งานหลายขั้นที่ไม่เอ่ยชื่อ superuser มักไม่มีคำเฉพาะให้ regex แถวเดียวจับ (เปิดเองแทบ 0% เมื่อพูดอ้อม · Scott Spence 2026-02-08)
+// จึงนับสัญญาณหลายอย่างใน router.multistep: แต่ละ signal นับ 1 แต้มเมื่อเจอ pattern อย่างน้อย min ครั้ง หรือข้อความยาวถึง minLength
+export function multistepScore(text, cfg) {
+  let score = 0;
+  for (const s of cfg?.signals ?? []) {
+    const w = s.weight ?? 1;   // สัญญาณที่หลายขั้นในตัวเอง (สั่งสร้างเว็บ · แอป · skill) ให้ 2 แต้ม
+    if (s.minLength) { if (text.length >= s.minLength) score += w; continue; }
+    let re; try { re = new RegExp(s.pattern, "gim"); } catch { continue; }
+    if ((text.match(re) ?? []).length >= (s.min ?? 1)) score += w;
+  }
+  return score;
+}
+
 export function routeSkills(prompt, router) {
   const text = String(prompt ?? "").trim();
   if (!text || text.startsWith("/")) return [];   // คำสั่ง slash เปิด skill ของมันเองอยู่แล้ว
   const out = [];
+  const ms = router?.multistep;
+  if (ms && multistepScore(text, ms) >= (ms.threshold ?? 2)) out.push(...(ms.skills ?? []));
   for (const rule of router?.rules ?? []) {
     let re; try { re = new RegExp(rule.pattern, "i"); } catch { continue; }
     if (re.test(text)) for (const s of rule.skills ?? []) if (!out.includes(s)) out.push(s);
@@ -278,11 +355,19 @@ export function routeSkills(prompt, router) {
   return out;
 }
 
-export function routerNotice(skills) {
-  return skills.length
-    ? `เปิด skill ก่อนลงมือ (เครื่องมือ Skill ทีละตัว · ไม่มีในเครื่องข้ามไป): ${skills.map((s) => `\`${s}\``).join(" · ")}`
-    : "";
+export function routerNotice(skills, note = "") {
+  if (!skills.length) return "";
+  const head = `เปิด skill ก่อนลงมือ (เครื่องมือ Skill ทีละตัว · ไม่มีในเครื่องข้ามไป): ${skills.map((s) => `\`${s}\``).join(" · ")}`;
+  return note && skills.some((s) => s.endsWith("superuser")) ? `${head}\n${note}` : head;
 }
+
+// ข้อความสั้นตอนเริ่ม session (แนวเดียวกับ using-superpowers ของ obra/superpowers · วัดได้ 66% เทียบ skill ธรรมดา 6% · Codeminer42 2026-04-09)
+// เขียนเป็นข้อเท็จจริงและบอกทางข้ามของงานเล็ก เพื่อไม่ให้งานเล็กช้าลง · ส่งแม้ติดตั้งกฎประจำตัวแล้ว เพราะสั้นและเป็นจุดที่หลุดบ่อยสุด
+export const MULTISTEP_NOTE = [
+  "งานหลายขั้นในเครื่องนี้มีหัวหน้าทีมคือ skill `superuser` (งานของสาขาไหนใช้ `<plugin>:superuser` ของสาขานั้น) ผู้ใช้ไม่ต้องเอ่ยชื่อ",
+  "หลายขั้น = มีงานมากกว่า 1 ชิ้นในคำขอเดียว · แก้ตั้งแต่ 3 ไฟล์ · ต้องค้นแล้วค่อยทำ · หรือต้องมีคนตรวจก่อนส่ง → เปิด superuser ก่อนเริ่ม",
+  "งานเล็ก (คำถามเดียว · แก้จุดเดียว · คุยทั่วไป) ไม่ต้องเปิด",
+].join("\n");
 
 // zip ของ claude.ai มีสำเนา hook ในทุก plugin (ไม่มี dependencies) → ทุกสำเนาได้เหตุการณ์เดียวกัน · ให้ตัวแรกที่จองได้ส่งข้อความ ตัวอื่นเงียบ
 // จองด้วยไฟล์ใน tmp ต่อ session · เหตุการณ์ · ข้อความ · agent · ช่วงเวลา · ไฟล์เก่ากว่า 10 นาทีลบทิ้ง
@@ -304,8 +389,11 @@ export function claimContext(input, dir = join(tmpdir(), "sqt-superuser-context"
 
 function leadContext(input) {
   if (input.agent_id) return "";
-  if (input.hook_event_name === "SessionStart") return coreRules();
-  if (input.hook_event_name === "UserPromptSubmit") return routerNotice(routeSkills(input.prompt, readJson(join(HERE, "skill-router.json"), { rules: [] })));
+  if (input.hook_event_name === "SessionStart") return [coreRules(), MULTISTEP_NOTE].filter(Boolean).join("\n\n");
+  if (input.hook_event_name === "UserPromptSubmit") {
+    const router = readJson(join(HERE, "skill-router.json"), { rules: [] });
+    return routerNotice(routeSkills(input.prompt, router), router.multistep?.note);
+  }
   return "";
 }
 
@@ -569,7 +657,7 @@ const PASSED = /^\s*(ผ่าน|pass)/i;
 
 export function countDay(dayDir) {
   const day = { prompts: 0, corrections: 0, passedReviews: 0, correctedAfterPass: 0, actions: 0, failed: 0, spawns: [], agents: {} };
-  for (const name of readdirSync(dayDir).filter((n) => n.endsWith(".jsonl"))) {
+  for (const name of readdirSync(dayDir).filter((n) => n.endsWith(".jsonl") && n !== RUNS_FILE)) {
     const entries = readLines(join(dayDir, name));
     let open = false;   // รอบตรวจล่าสุดในไฟล์นี้ผ่าน และยังไม่มีข้อความแก้ตามมา
     for (const e of entries) {
@@ -796,6 +884,10 @@ function logAndNotice(input, raw, root, teamDir, event) {
   const logDir = join(teamDir, "log", entry.ts.slice(0, 10));
   mkdirSync(logDir, { recursive: true });
   appendFileSync(join(logDir, `${logFileName(entry.agent)}.jsonl`), JSON.stringify(entry) + "\n");
+  try {
+    const rules = entry.role ? readJson(join(HERE, "step-rules.json"), null) : null;
+    for (const run of runEvents(input, entry, rules)) appendFileSync(join(logDir, RUNS_FILE), JSON.stringify(run) + "\n");
+  } catch { /* runs.jsonl พังต้องไม่ทำให้ log หลักหาย */ }
 
   let notice = "";
   const isLead = !input.agent_id;
@@ -916,6 +1008,18 @@ function selfTest() {
     ["ตัวบอก skill: โค้ด python → simplify + stack-python", [], true, () => ["superuser:simplify", "stack-python"].every((s) => routes("เขียนสคริปต์ Python อ่าน csv").includes(s))],
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
+    // งานหลายขั้นที่ไม่เอ่ยชื่อ → superuser · งานเล็กไม่โดน (ประโยคจริงจาก session 2026-10-27)
+    ...[
+      "แก้พวก flow ใน docs ให้หมดทุกไฟล์เลยให้เข้ากับ plugin ใหม่เรา",
+      "ทำไอคอน plugin ด้วยวิธีใหม่เลย แล้วใส่ใน plugin.json ทั้ง 6 ตัว",
+      "research ดูว่าเคสอื่นแก้ปัญหาอย่างไร แล้วแก้ไขใน plugin",
+      "1. เพิ่มหน้า login\n2. แก้บั๊กตะกร้า\n3. เขียน test",
+      "Fix the login bug, then add a password reset flow and update the docs",
+    ].map((s) => [`ตัวบอก skill: หลายขั้น → superuser · ${s.slice(0, 24)}`, [], true, () => routes(s).includes("superuser:superuser")]),
+    ...[
+      "แก้ typo บรรทัด 3 ใน README", "สวัสดีครับ", "ราคา Opus 5.5 เท่าไร", "แปลประโยคนี้เป็นอังกฤษ", "ตอบเป็นไทย",
+    ].map((s) => [`ตัวบอก skill: งานเล็ก → ไม่ใช่ superuser · ${s}`, [], true, () => !routes(s).includes("superuser:superuser")]),
+    ["ตัวบอก skill: บอก superuser แล้วต่อท้ายคำอธิบายสาขา", [], true, () => routerNotice(["superuser:superuser"], "N").endsWith("\nN") && !routerNotice(["docx"], "N").includes("N")],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
     ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
@@ -951,6 +1055,27 @@ ${rows}
 | ก | คาด: ข |
 `);
   gates.push(
+    ["runs: จัดขั้นจากชื่อ agent และ description (review · code · plan · other)", [], true, () => {
+      const r = readJson(join(HERE, "step-rules.json"), null);
+      return ["superuser:reviewer|x", "software-company:developer|x", "Plan|x", "general-purpose|x"].map((k) => classifyStep(...k.split("|"), r)).join() === "review,code,plan,other"
+        && classifyStep("general-purpose", "ตรวจรอบสุดท้าย", r) === "review";
+    }],
+    ["runs: ผลผู้ตรวจ ผ่าน · ไม่ผ่าน · มีเงื่อนไข · รอบที่", [], true, () => {
+      const v = (t) => parseVerdict(t);
+      return v("ผล: ผ่าน").verdict === "pass" && v("ผล: ไม่ผ่าน (รอบที่ 2)").round === 2 && v("**ผล: ผ่านแบบมีเงื่อนไข**").verdict === "conditional"
+        && v("FAIL").verdict === "fail" && v("เสร็จแล้ว").verdict === null && v("ผล: ผ่าน · ข้อที่ไม่ผ่านรอบก่อนแก้แล้ว").verdict === "pass";
+    }],
+    ["runs: ผู้ใช้ปฏิเสธ · รับ · ข้อความลูกทีมไม่นับ", [], true, () => userFeedback("ไม่สวยเลย แก้ใหม่") === "reject" && userFeedback("ไม่ผ่านนะ") === "reject"
+      && userFeedback("สวยแล้ว เอาแบบนี้") === "accept" && userFeedback("ทำต่อ") === null && userFeedback("<agent-message from=\"x\">ผิด</agent-message>") === null],
+    ["runs: คำสั่ง Agent → บรรทัด run มี model inherit · step · verdict · งานเบื้องหลังไม่ใส่ผล", [], true, () => {
+      const rules = readJson(join(HERE, "step-rules.json"), null);
+      const mk = (response, model) => ({ hook_event_name: "PostToolUse", tool_name: "Agent", tool_use_id: "t1", tool_input: { subagent_type: "superuser:reviewer", description: "review", ...(model ? { model } : {}) }, tool_response: response });
+      const run = (i, e = buildEntry(i, { models: {} })) => runEvents(i, e, rules)[0];
+      const sync = run(mk({ content: [{ type: "text", text: "ผล: ผ่าน" }], totalDurationMs: 900, usage: { input_tokens: 5, output_tokens: 7 } }));
+      const bg = run(mk({ content: [{ type: "text", text: "Async agent launched agentId: a1" }] }, "sonnet"));
+      return sync.model === "inherit" && sync.step === "review" && sync.verdict === "pass" && sync.duration_ms === 900 && sync.tokens.output === 7
+        && bg.async === true && bg.model === "sonnet" && !("verdict" in bg);
+    }],
     ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
     ["คิวปรับทีม: นับเฉพาะข้อที่รับแล้วยังไม่รวม (ตาราง 1 + bullet 1)", [], true, () => pendingImprovements(qHome) === 2 && pendingImprovements(join(qHome, "none")) === 0],
     ["คาด: ตารางตัดสินใจมีแถวแต่ไม่มี คาด: → เตือน · มี คาด: หรือไม่มีแถว → เงียบ", [], true, () => {

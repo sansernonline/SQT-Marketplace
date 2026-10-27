@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: model-scorecard-trigger
+description: ถามว่า model ไหนเหมาะกับขั้นไหนจากงานที่ผ่านมา ไม่เอ่ยชื่อ skill ต้องทำให้ model-scorecard ถูกเปิด
+tags: [trigger, model-scorecard]
+runs: 3
+expected_outcome: เรียก Skill model-scorecard แล้วบอกว่าจะอ่าน log ของโปรเจกต์นี้ ไม่ตอบจากความรู้สึก
+execution:
+  prompt: |
+    ทีมเราใช้ Opus ตรวจงานทุกชิ้น รู้สึกว่าแพงเกินไป
+    ช่วยดูหน่อยว่า model ไหนเหมาะกับขั้น review มากกว่ากัน จากงานที่โปรเจกต์นี้ทำมาจริง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?model-scorecard"'
+    min: 1
+    arm: with-only
+  - name: mentions-log-source
+    type: regex
+    pattern: 'log|runs.jsonl|scorecard'
+    flags: i
+    match: contains
+    target: last_message

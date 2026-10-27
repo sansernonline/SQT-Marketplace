@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.8.0 — 2026-10-27
+
+- superuser ถูกเรียกเองเมื่อผู้ใช้สั่งงานหลายขั้นโดยไม่เอ่ยชื่อ: hook SessionStart ส่งข้อความสั้นบอกว่างานแบบไหนต้องเปิดและงานเล็กข้ามได้ (แนว using-superpowers) · router ให้คะแนนสัญญาณงานหลายขั้นใน `skill-router.json` ช่อง `multistep` (คำเชื่อมลำดับ · ทั้งหมด · ข้อเป็นเลข · กริยาหลายตัว · สั่งสร้างเว็บ แอป skill · จำนวนชิ้น · ข้อความยาว) ถึง 2 แต้มจึงบอก superuser · description ใส่คำที่ผู้ใช้พูดจริง · เคส triggers 3 ตัว (`expect_none` ใหม่) · ทดลองประโยคจริง 18 คู่ ผ่านทั้งหมด · ที่มา: Scott Spence (เปิดเองแทบ 0% เมื่อพูดอ้อม 2026-02-08) · Codeminer42 (66% เทียบ 6% 2026-04-09)
+- skill ใหม่ `model-scorecard` + hook จด `log/<วันที่>/runs.jsonl` (model · ขั้น · ผลผู้ตรวจ · คำรับ/ปฏิเสธของผู้ใช้ ต่องานลูกทีม) → รายงานเทียบ model รายขั้นในโปรเจกต์ของตัวเอง · `--rollup` รวมหลายโปรเจกต์เมื่อคนสั่ง · กฎจัดขั้นอยู่ใน `hooks/step-rules.json`
+
 ## 3.7.1 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

@@ -1,0 +1,13 @@
+{
+  "_": "จัดชนิดขั้นของลูกทีมจากชื่อ agent + description ที่หัวหน้าทีมสั่ง · แถวแรกที่ pattern ตรง (regex ไม่สนตัวพิมพ์) ชนะ · ไม่ตรงสักแถว = default · hook อ่านไฟล์นี้เมื่อมีคำสั่ง Agent เท่านั้น · แก้ได้โดยไม่แตะโค้ด · ใช้โดย skill model-scorecard",
+  "default": "other",
+  "rules": [
+    { "step": "review", "pattern": "review|critic|audit|verif|adversarial|ตรวจ|รีวิว|วิจารณ์" },
+    { "step": "test", "pattern": "qa-tester|\\btests?\\b|\\be2e\\b|ทดสอบ" },
+    { "step": "plan", "pattern": "\\bplan|architect|\\bbrainstorm|แผน|วางแผน|สถาปัตย์" },
+    { "step": "research", "pattern": "research|explore|investigat|survey|ค้น|สำรวจ|หาข้อมูล" },
+    { "step": "design", "pattern": "design|mockup|\\bui\\b|\\bux\\b|logo|image-artist|ออกแบบ|ภาพ" },
+    { "step": "write", "pattern": "writ|docs?\\b|document|report|translat|spec|เขียน|เอกสาร|รายงาน|แปล" },
+    { "step": "code", "pattern": "develop|engineer|implement|\\bcode\\b|refactor|\\bfix\\b|bug|build|script|โค้ด|แก้|สร้าง" }
+  ]
+}
