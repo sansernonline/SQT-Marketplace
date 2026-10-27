@@ -9,6 +9,8 @@ const example = { name: "ตัวอย่าง team-roles", tasks: [
 ] };
 const wide = { tasks: Array.from({ length: 10 }, (_, i) => ({ id: `w${i}`, size: 1 })) };
 const diamond = { tasks: [{ id: "a", size: 2 }, { id: "b", size: 3, needs: ["a"] }, { id: "c", size: 5, needs: ["a"] }, { id: "d", size: 1, needs: ["b", "c"] }] };
+const layered = { tasks: [{ id: "a", size: 3 }, { id: "b", size: 4, needs: ["a"] }, { id: "c", size: 2, needs: ["b"] }, { id: "d", size: 1, needs: ["a"] },
+  { id: "e", size: 2, needs: ["d"] }, { id: "f", size: 1, needs: ["c", "e"] }, { id: "g", size: 1 }] };
 const solo = { tasks: [{ id: "x", size: 2 }, { id: "y", size: 2 }, { id: "z", size: 1, solo: true }] };
 
 export function selfTest() {
@@ -36,6 +38,7 @@ export function selfTest() {
     ["ตัวอย่างผ่านการตรวจ", validate(example).length === 0],
     ["เพชร: rank ใช้ค่าสูงสุดของชิ้นที่รอ ไม่ใช่ผลรวม (a = 2 + 6 = 8)", ranks(diamond.tasks).get("a") === 8 && analyse(diamond).cp.join() === "a,c,d"],
     ["CPM เพชร: c และ d เผื่อได้ 0 · b เผื่อได้ 2 (เริ่มเร็วสุด 2 ช้าสุด 4)", (() => { const c = analyse(diamond).cpm; return c.get("a").float === 0 && c.get("c").float === 0 && c.get("d").float === 0 && c.get("b").early === 2 && c.get("b").late === 4 && c.get("b").float === 2; })()],
+    ["CPM หลายระดับ: d e เผื่อได้ 3 · g เผื่อได้ 9 · สายวิกฤต a b c f ยาว 10", (() => { const c = analyse(layered).cpm; return ["a", "b", "c", "f"].every((x) => c.get(x).float === 0) && c.get("d").float === 3 && c.get("e").early === 4 && c.get("e").float === 3 && c.get("g").float === 9; })()],
     ["needs หรือ owns ซ้ำในชิ้นเดียว ไม่ฟ้องผิด", validate({ tasks: [{ id: "p", size: 1, owns: ["f", "f"] }, { id: "q", size: 1, needs: ["p", "p"] }] }).length === 0],
     ["input เพี้ยนได้ข้อความไทยที่บอกชิ้น ไม่พัง", validate({ tasks: {} })[0].includes("array") && validate({ tasks: [null] })[0].includes("object") && validate({ tasks: [{ id: "p", size: 1, needs: "a" }] })[0].startsWith("p: needs")],
   ];
