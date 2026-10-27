@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.8.0 — 2026-10-27
+
+- superuser ถูกเรียกเองเมื่อผู้ใช้สั่งงานหลายขั้นโดยไม่เอ่ยชื่อ 3 ชั้น: (1) SessionStart ส่งข้อความสั้นบอกว่างานแบบไหนต้องเปิดและงานเล็กข้ามได้ (แนว using-superpowers) (2) **ให้ model ตัดสินเอง** ทุกข้อความแทรกบรรทัดเตือนสั้นจนกว่าจะเปิด superuser ใน session นั้น ข้อความสั้น คำสั่ง slash และรายงานลูกทีมไม่เตือน (ผู้ใช้เลือก 2026-10-27) (3) router ช่อง `multistep` นับสัญญาณงานหลายขั้นถึง 2 แต้มจึงเน้นชื่อ superuser · เลือกแบบนี้เพราะ regex อย่างเดียววัดได้ 36–93% ตามชุดประโยค (ผู้ตรวจ 3 ตัวตั้งประโยคเอง) · description ใส่คำที่ผู้ใช้พูดจริง · เคส triggers 3 ตัว (`expect_none` ใหม่) · ที่มา (เปิดอ่าน 2026-10-27): Scott Spence เปิดเองแทบ 0% เมื่อพูดอ้อม และ forced eval 22/22 (https://scottspence.com/posts/how-to-make-claude-code-skills-activate-reliably · https://scottspence.com/posts/measuring-claude-code-skill-activation-with-sandboxed-evals) · Codeminer42 66% เทียบ 6% (https://blog.codeminer42.com/stop-putting-best-practices-in-skills/) · 36–93% มาจากผู้ตรวจ 3 ตัวในงานนี้ตั้งประโยคเอง (ไฟล์ทดลองอยู่ใน `_to_delete/` ไม่ได้เก็บใน repo)
+- skill ใหม่ `model-scorecard` + hook จด `log/<วันที่>/runs.jsonl` (model · ขั้น · ผลผู้ตรวจ · คำรับ/ปฏิเสธของผู้ใช้ ต่องานลูกทีม) → รายงานเทียบ model รายขั้นในโปรเจกต์ของตัวเอง · `--rollup` รวมหลายโปรเจกต์เมื่อคนสั่ง · กฎจัดขั้นอยู่ใน `hooks/step-rules.json`
+
 ## 3.7.1 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

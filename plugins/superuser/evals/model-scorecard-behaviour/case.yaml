@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: model-scorecard-behaviour
+description: ขอรายงานเทียบ model รายขั้นตอนที่ log ยังไม่มีข้อมูล ต้องบอกว่าไม่มีตัวอย่างพอ ไม่แต่งตัวเลข
+tags: [behaviour, model-scorecard]
+runs: 3
+expected_outcome: บอกวิธีสร้างรายงานจาก log ของโปรเจกต์ บอกว่าตัวอย่างต่ำกว่า 5 ใช้ตัดสินไม่ได้ ไม่ฟันธงว่า model ไหนดีกว่า
+execution:
+  prompt: |
+    โปรเจกต์นี้เพิ่งเริ่ม มีงานลูกทีมแค่ 3 งานใน log (reviewer ใช้ Opus 2 งาน Sonnet 1 งาน ผ่านรอบแรกทั้งหมด)
+    สรุปให้หน่อยว่าควรเปลี่ยนผู้ตรวจทุกงานไปใช้ Sonnet ไหม
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: small-sample-flagged
+    type: regex
+    pattern: "ตัวอย่างน้อย|น้อยเกินไป|ไม่พอ|ยังไม่พอ|5 งาน|too few|small sample|not enough"
+    flags: i
+    match: contains
+    target: last_message
+  - name: no-hard-verdict
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อคำตอบไม่ฟันธงให้เปลี่ยนผู้ตรวจทุกงานเป็น Sonnet จากข้อมูล 3 งาน
+      (เช่น บอกว่ายังเร็วไป ให้รอสะสมตัวอย่างหรือลองกับงานเสี่ยงต่ำก่อน)

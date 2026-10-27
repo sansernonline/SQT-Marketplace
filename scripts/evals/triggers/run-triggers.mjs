@@ -10,7 +10,7 @@
  * ทุกเคสรัน `claude -p` ในโฟลเดอร์ใหม่ใต้ _to_delete/triggers/ (คัดลอก fixtures/ ไปด้วย)
  * โหลดเฉพาะ plugin จาก --src ด้วย --plugin-dir · --setting-sources project จึงไม่โหลด plugin ที่ติดตั้งในเครื่อง
  * ห้ามเครื่องมือเขียนไฟล์ · รันคำสั่ง · ส่ง agent → วัดแค่การเลือก skill ช่วงต้นงาน ไม่ได้ทำงานจริง
- * ผ่าน = เปิดครบทุกตัวใน expect_all และอย่างน้อย 1 ตัวใน expect_any (ว่าง = ไม่บังคับ) · เทียบชื่อหลัง ":" จึงไม่สนชื่อ plugin
+ * ผ่าน = เปิดครบทุกตัวใน expect_all และอย่างน้อย 1 ตัวใน expect_any (ว่าง = ไม่บังคับ) และไม่เปิดตัวใน expect_none · เทียบชื่อหลัง ":" จึงไม่สนชื่อ plugin
  * ผลรายรอบ → _to_delete/triggers/<label>/*.json · ตารางสรุปต่อท้าย RESULTS.md
  */
 import { spawn } from "node:child_process";
@@ -63,7 +63,8 @@ function run(c, n) {
       let overBudget = null;
       try { overBudget = readFileSync(debug, "utf8").match(/Skill listing over budget: [^\n]*/)?.[0] ?? null; } catch { /* ไม่มี log */ }
       const got = new Set(skills.map(base));
-      const pass = c.expect_all.every((s) => got.has(s)) && (!c.expect_any.length || c.expect_any.some((s) => got.has(s)));
+      const pass = c.expect_all.every((s) => got.has(s)) && (!c.expect_any.length || c.expect_any.some((s) => got.has(s)))
+        && !(c.expect_none ?? []).some((s) => got.has(s));   // งานเล็กต้องไม่เปิดหัวหน้าทีม (superuser)
       const r = { id: c.id, run: n, pass, skills, cost, overBudget };
       writeFileSync(join(OUT, `${c.id}-${n}.json`), JSON.stringify(r, null, 2));
       rmSync(work, { recursive: true, force: true });

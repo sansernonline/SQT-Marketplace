@@ -4,7 +4,7 @@
 
 Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.
 
-ชุดนี้มี skill 58 ตัว · บทบาท 8 บทบาท · คำสั่งสำเร็จรูป 7 คำสั่ง
+ชุดนี้มี skill 59 ตัว · บทบาท 8 บทบาท · คำสั่งสำเร็จรูป 7 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/ชื่อคำสั่ง`

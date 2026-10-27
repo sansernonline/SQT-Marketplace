@@ -8,5 +8,8 @@
   { "id": "bugfix", "prompt": "ผู้ใช้ล็อกอินไม่ได้หลังเปลี่ยนรหัสผ่าน ช่วยหาสาเหตุแล้วแก้ให้หน่อย", "expect_all": [], "expect_any": ["principle-fix-root-cause", "targeted-fix", "superuser"] },
   { "id": "slides", "prompt": "ทำสไลด์ 5 หน้าสรุปความคืบหน้าโครงการจาก report.docx", "expect_all": [], "expect_any": ["presentation-design", "html-slide-deck", "pptx"] },
   { "id": "domain-tax", "prompt": "ขายของออนไลน์ปีนี้ได้ 1.5 ล้าน ต้องจด VAT ไหม", "expect_all": [], "expect_any": ["seller-tax-basics", "tax-vat-th", "tax-basics-th"] },
-  { "id": "domain-pet", "prompt": "หมาอายุ 3 เดือน ต้องฉีดวัคซีนพิษสุนัขบ้าเมื่อไหร่ ต้องจดทะเบียนไหม", "expect_all": [], "expect_any": ["pet-care"] }
+  { "id": "domain-pet", "prompt": "หมาอายุ 3 เดือน ต้องฉีดวัคซีนพิษสุนัขบ้าเมื่อไหร่ ต้องจดทะเบียนไหม", "expect_all": [], "expect_any": ["pet-care"] },
+  { "id": "multistep-noname", "prompt": "แก้บั๊กล็อกอินหลังเปลี่ยนรหัสผ่าน แล้วเพิ่มหน้ารีเซ็ตรหัสผ่าน พร้อมเขียน test ให้ครบ", "expect_all": ["superuser"], "expect_any": [] },
+  { "id": "multistep-docs-all", "prompt": "อัปเดตรูปใน docs ให้หมดทุกไฟล์ให้เข้ากับไอคอนใหม่ของ plugin", "expect_all": ["superuser"], "expect_any": [] },
+  { "id": "small-no-lead", "prompt": "แก้คำผิดในบรรทัดแรกของ README ให้หน่อย", "expect_all": [], "expect_any": [], "expect_none": ["superuser"] }
 ]
