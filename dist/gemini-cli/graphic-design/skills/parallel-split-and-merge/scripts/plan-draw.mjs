@@ -71,7 +71,13 @@ export function planRows(a) {
     .map((r) => { const t = a.tasks.find((x) => x.id === r.id); return { label: `ลูกทีม ${r.lane} · ${title(t)}`, start: r.start, end: r.end, crit: isCritical(a, r.id) }; });
 }
 
-export function toHtml(plan, a, actual) {
+// แถว Gantt ของการแจกข้ามบัญชี (หน่วยชั่วโมง) · เรียงตามบัญชีแล้วตามเวลาเริ่ม
+export function accountRows(a, assigned) {
+  return [...assigned.schedule].sort((x, y) => x.account.localeCompare(y.account) || x.start - y.start)
+    .map((r) => { const t = a.tasks.find((x) => x.id === r.id); return { label: `${r.account} · ${t.id}${t.title ? ` ${t.title}` : ""}`, start: r.start, end: r.end, crit: r.critical }; });
+}
+
+export function toHtml(plan, a, actual, assigned) {
   const css = `:root{--bg:#faf8f5;--fg:#1f2328;--muted:#5b6470;--line:#c9ced6;--box:#ffffff;--crit:#c2410c;--bar:#4f6db8}
 @media (prefers-color-scheme:dark){:root{--bg:#16181c;--fg:#e8eaed;--muted:#9aa3ad;--line:#3a4049;--box:#1f2329;--crit:#f97316;--bar:#7b97e0}}
 body{margin:0;padding:24px 16px;background:var(--bg);color:var(--fg);font:15px/1.6 "Sarabun","Noto Sans Thai","Leelawadee UI",system-ui,sans-serif}
@@ -85,6 +91,7 @@ svg{display:block;max-width:none}.node rect{fill:var(--box);stroke:var(--line);s
 <p>คาด: ลูกทีม ${a.team} · สายวิกฤต ${n1(a.cpLen)}k · กว้างสุด ${a.width} · เร็วขึ้น ${a.speedup.toFixed(1)} เท่า · สีส้ม = สายวิกฤต (เผื่อได้ 0) · กรอบเส้นประ = ทำคนเดียว</p>
 <h2>กราฟงาน (DAG)</h2><div class="wrap">${dagSvg(a)}</div>
 <h2>ไทม์ไลน์ตามแผน (หน่วย k token)</h2><div class="wrap">${ganttSvg(planRows(a), "k")}</div>
+${assigned?.schedule.length ? `<h2>แจกงานข้ามบัญชี (ชั่วโมง)</h2><p>${esc(assigned.accounts.map((x) => `${x.name} ${x.tasks} ชิ้น ${n1(x.used)}k`).join(" · "))} · ใช้เวลา ${n1(assigned.makespan)} ชั่วโมง</p><div class="wrap">${ganttSvg(accountRows(a, assigned), "ชม.")}</div>` : ""}
 ${actual?.rows.length ? `<h2>ไทม์ไลน์ที่เกิดจริง (นาทีจากชิ้นแรก)</h2><p>${esc(actual.summary)}</p><div class="wrap">${ganttSvg(actual.rows, "น.")}</div>` : ""}
 </body></html>`;
 }

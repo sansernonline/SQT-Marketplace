@@ -193,12 +193,14 @@ function parseArgs(argv) {
     else if (argv[i] === "--mermaid") args.mermaid = true;
     else if (argv[i] === "--html") args.html = argv[++i];
     else if (argv[i] === "--actual") args.actual = true;
+    else if (argv[i] === "--accounts") args.accounts = argv[++i];
+    else if (argv[i] === "--quota") args.quota = argv[++i];
     else args.file = argv[i];
   }
   return args;
 }
 
-const USAGE = "ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--mermaid] [--html <ไฟล์.html>] [--actual] [--json]";
+const USAGE = "ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--accounts <accounts.json>] [--quota <quota.json>] [--mermaid] [--html <ไฟล์.html>] [--actual] [--json]";
 
 async function runsFrom(logDir) {
   if (!existsSync(logDir)) return [];
@@ -224,10 +226,35 @@ async function main() {
   const k = await factorsFrom(logDir);
   const a = analyse(plan, { agents: args.agents, k });
   if (args.json) return console.log(JSON.stringify({ ...a, rank: Object.fromEntries(a.rank), cpm: Object.fromEntries(a.cpm), k }, null, 2));
-  const actual = args.actual ? (await import("./plan-actual.mjs")).actualReport(a, await runsFrom(logDir)) : null;
+  const team = await accountsFrom(args, plan);
+  let assigned = null;
+  if (team) {
+    const { validateAccounts, assign, renderAssign } = await import("./plan-assign.mjs");
+    const bad = validateAccounts(team.accounts, a.tasks, team.safety);
+    if (bad.length) { console.error(bad.map((e) => `- ${e}`).join("\n")); process.exit(1); }
+    assigned = { ...assign(a, team.accounts, team), render: renderAssign };
+  }
+  const actual = args.actual ? (await import("./plan-actual.mjs")).actualReport(a, await runsFrom(logDir), team) : null;
   const draw = args.mermaid || args.html ? await import("./plan-draw.mjs") : null;
-  console.log([render(adapt(plan), a), args.mermaid ? draw.toMermaid(a) : "", actual?.markdown ?? ""].filter(Boolean).join("\n"));
-  if (args.html) { writeFileSync(args.html, draw.toHtml(adapt(plan), a, actual)); console.log(`เขียนรูป ${args.html}`); }
+  console.log([render(adapt(plan), a), assigned ? assigned.render(a, assigned) : "", args.mermaid ? draw.toMermaid(a) : "", actual?.markdown ?? ""].filter(Boolean).join("\n"));
+  if (args.html) { writeFileSync(args.html, draw.toHtml(adapt(plan), a, actual, assigned)); console.log(`เขียนรูป ${args.html}`); }
+}
+
+// บัญชี LLM สำหรับแจกงานข้ามบัญชี: ช่อง accounts ในแผน หรือไฟล์ --accounts (รูปเดียวกับ templates/accounts.json) · --quota เติมโควตาที่เหลือจาก quota.mjs
+async function accountsFrom(args, plan) {
+  let src = plan.accounts ? { accounts: plan.accounts, weights: plan.weights, safety: plan.safety } : null;
+  if (args.accounts) {
+    try { const j = JSON.parse(readFileSync(args.accounts, "utf8")); src = Array.isArray(j) ? { accounts: j } : j; }
+    catch (e) { console.error(`อ่านไฟล์บัญชีไม่ได้: ${args.accounts} (${e.message})`); process.exit(1); }
+  }
+  if (!src) return null;
+  if (args.quota) {
+    let snap;
+    try { snap = JSON.parse(readFileSync(args.quota, "utf8")); } catch (e) { console.error(`อ่านไฟล์โควตาไม่ได้: ${args.quota} (${e.message})`); process.exit(1); }
+    const { applyQuota } = await import("./quota.mjs");
+    src = { ...src, accounts: applyQuota(src.accounts, snap) };
+  }
+  return src;
 }
 
 // ไม่ await ที่ระดับบนสุด เพราะ plan.test.mjs import ไฟล์นี้กลับ ถ้า await จะรอกันเองไม่จบ
