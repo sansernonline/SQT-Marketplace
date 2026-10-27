@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: decision-scoring-trigger
+description: ขอให้เลือกขนส่ง 1 เจ้าจากตัวเลขหลายเกณฑ์ ไม่เอ่ยชื่อ skill ต้องทำให้ decision-scoring ถูกเปิด
+tags: [trigger, decision-scoring]
+runs: 3
+expected_outcome: เรียก Skill decision-scoring แล้วให้คะแนนด้วยเกณฑ์และน้ำหนัก ไม่ตอบจากความรู้สึก
+execution:
+  prompt: |
+    ร้านส่งพัสดุวันละ 40 กล่อง น้ำหนักราว 1 กิโล เลือกขนส่งเจ้าไหนดี
+    เจ้า ก ค่าส่ง 32 บาท ถึงใน 2 วัน เสียหาย 0.5% · เจ้า ข 28 บาท 3 วัน เสียหาย 1.2% · เจ้า ค 35 บาท 1 วัน เสียหาย 0.3%
+    ผมสนใจค่าส่งมากที่สุด รองลงมาคือของเสียหาย
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?decision-scoring"'
+    min: 1
+    arm: with-only
+  - name: shows-weights
+    type: regex
+    pattern: 'น้ำหนัก|weight|คะแนน'
+    flags: i
+    match: contains
+    target: last_message
