@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>
+<linearGradient id="t-software-company-a" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#00c7e1"/><stop offset="1" stop-color="#007fc0"/></linearGradient>
+<linearGradient id="b-software-company-a" x1="8" y1="8" x2="50" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#00c7e1"/><stop offset="1" stop-color="#007fc0"/></linearGradient>
+<filter id="sh-software-company-a" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1.8"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="64" height="64" rx="15" fill="url(#t-software-company-a)"/>
+<g transform="translate(4.5 4.2) scale(.86)">
+<g fill="#ffffff"><rect x="8" y="10" width="40" height="34" rx="8"/></g>
+<g filter="url(#sh-software-company-a)" fill="#9fddec" stroke="#005c8d" stroke-width="1.8" stroke-linejoin="round"><rect x="20" y="24" width="36" height="30" rx="8"/></g>
+<g fill="none" stroke="#005c8d" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M33 33l-6 6 6 6M43 33l6 6-6 6M40 31l-4 16"/></g></g></svg>

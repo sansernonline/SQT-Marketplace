@@ -1,5 +1,9 @@
 # Changelog — trading-finance
 
+## 0.13.3 — 2026-10-27
+
+- ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic
+
 ## 0.13.2 — 2026-10-26
 
 - eval: `home-refinance-trigger` และ `rebalance-and-dca-behaviour` แยกเกณฑ์ `llm` ตามเรื่อง (เดิมตก 0/3 ทั้ง 2 แขน) · `rmf-skip-limit` แยกออกมาเพราะจับความผิดจริงที่ agent ตอบว่าหยุดซื้อ RMF 2 ปีได้

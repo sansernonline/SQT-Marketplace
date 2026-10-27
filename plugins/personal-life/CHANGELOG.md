@@ -1,5 +1,9 @@
 # Changelog — personal-life
 
+## 0.15.4 — 2026-10-27
+
+- ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic
+
 ## 0.15.3 — 2026-10-26
 
 - eval: `flood-prep-behaviour` และ `pregnancy-and-baby-behaviour` แยกเกณฑ์ `llm` ตามเรื่องและย้ายตัวเลขไป regex (เดิมตก 0/3 ทั้ง 2 แขนเพราะข้อละเอียดเกินและข้อ "ไม่แต่งตัวเลข") · `household-bills-behaviour` เปลี่ยนข้อ "ไม่แต่งอัตราค่าไฟ" เป็นสิ่งที่เห็นได้ในคำตอบ

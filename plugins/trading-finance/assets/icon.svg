@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>
+<linearGradient id="t-trading-finance-a" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#e79900"/><stop offset="1" stop-color="#936800"/></linearGradient>
+<linearGradient id="b-trading-finance-a" x1="8" y1="8" x2="50" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e79900"/><stop offset="1" stop-color="#936800"/></linearGradient>
+<filter id="sh-trading-finance-a" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1.8"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="64" height="64" rx="15" fill="url(#t-trading-finance-a)"/>
+<g transform="translate(4.5 4.2) scale(.86)">
+<g fill="#ffffff"><rect x="8" y="34" width="10" height="20" rx="3"/><rect x="21" y="24" width="10" height="30" rx="3"/><rect x="34" y="12" width="10" height="42" rx="3"/></g>
+<g filter="url(#sh-trading-finance-a)" fill="#e6cea0" stroke="#714300" stroke-width="1.8" stroke-linejoin="round"><circle cx="44" cy="42" r="14"/></g>
+<g fill="none" stroke="#714300" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M44 34v16M48 37.5c-1-1.5-2.6-2-4.2-2-2.4 0-4 1.2-4 3s1.6 2.5 4 3 4 1.2 4 3-1.6 3-4 3c-1.8 0-3.4-.6-4.4-2"/></g></g></svg>

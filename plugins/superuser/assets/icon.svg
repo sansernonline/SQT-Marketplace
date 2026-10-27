@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>
+<linearGradient id="t-superuser-a" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#51aeff"/><stop offset="1" stop-color="#4860db"/></linearGradient>
+<linearGradient id="b-superuser-a" x1="8" y1="8" x2="50" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#51aeff"/><stop offset="1" stop-color="#4860db"/></linearGradient>
+<filter id="sh-superuser-a" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1.8"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="64" height="64" rx="15" fill="url(#t-superuser-a)"/>
+<g transform="translate(4.5 4.2) scale(.86)">
+<g fill="#ffffff"><circle cx="24" cy="22" r="14"/></g>
+<g filter="url(#sh-superuser-a)" fill="#b9d2fd" stroke="#2340a8" stroke-width="1.8" stroke-linejoin="round"><rect x="20" y="24" width="32" height="30" rx="8"/></g>
+<g fill="none" stroke="#2340a8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M28 34h16M28 41h11M28 48h14" /></g></g></svg>

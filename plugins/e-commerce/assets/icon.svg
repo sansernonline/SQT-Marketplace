@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>
+<linearGradient id="t-e-commerce-a" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#ff7c63"/><stop offset="1" stop-color="#bf3e00"/></linearGradient>
+<linearGradient id="b-e-commerce-a" x1="8" y1="8" x2="50" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ff7c63"/><stop offset="1" stop-color="#bf3e00"/></linearGradient>
+<filter id="sh-e-commerce-a" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1.8"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="64" height="64" rx="15" fill="url(#t-e-commerce-a)"/>
+<g transform="translate(4.5 4.2) scale(.86)">
+<g fill="#ffffff"><path d="M12 22h30l-2 30H14z"/><path d="M19 22v-4a8 8 0 0 1 16 0v4" fill="none" stroke="#ffffff" stroke-width="4"/></g>
+<g filter="url(#sh-e-commerce-a)" fill="#f8c3b1" stroke="#911800" stroke-width="1.8" stroke-linejoin="round"><path d="M24 30h15l10 10-13 13-12-12z" /></g>
+<g fill="none" stroke="#911800" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="34" cy="36" r="2.4"/></g></g></svg>

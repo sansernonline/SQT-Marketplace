@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>
+<linearGradient id="t-graphic-design-a" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#e281e2"/><stop offset="1" stop-color="#b53087"/></linearGradient>
+<linearGradient id="b-graphic-design-a" x1="8" y1="8" x2="50" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e281e2"/><stop offset="1" stop-color="#b53087"/></linearGradient>
+<filter id="sh-graphic-design-a" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1.8"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="64" height="64" rx="15" fill="url(#t-graphic-design-a)"/>
+<g transform="translate(4.5 4.2) scale(.86)">
+<g fill="#ffffff"><circle cx="30" cy="28" r="20"/></g>
+<g filter="url(#sh-graphic-design-a)" fill="#edc1e2" stroke="#841068" stroke-width="1.8" stroke-linejoin="round"><path d="M16 52 20 38 38 20a5 5 0 0 1 7 7L27 45z"/></g>
+<g fill="none" stroke="#841068" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 38l7 7"/></g></g></svg>
