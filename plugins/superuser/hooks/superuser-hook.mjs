@@ -391,13 +391,38 @@ export function claimContext(input, dir = join(tmpdir(), "sqt-superuser-context"
   } catch (e) { return e?.code !== "EEXIST"; }   // จองไม่ได้เพราะมีตัวอื่นจองแล้ว → เงียบ · tmp ใช้ไม่ได้ → พูดเอง (ซ้ำดีกว่าหาย)
 }
 
+// regex จับความหมายของงานไม่ได้ (ผู้ตรวจ 3 ตัววัดได้ 36–93% ตามชุดประโยค · 2026-10-27) ผู้ใช้จึงเลือกให้ model ตัดสินเอง:
+// ทุกข้อความแทรกบรรทัดเตือนสั้น ๆ จนกว่า superuser จะถูกเปิดใน session นั้น (skill นี้เปิดค้างได้ทั้ง session จึงเลิกเตือน)
+// แนวเดียวกับ forced eval ของ Scott Spence ที่วัดได้ 22/22 แต่สั้นกว่ามาก ไม่ไล่ทุก skill · regex ยังใช้เป็นตัวเน้นเมื่อเจอสัญญาณชัด
+export const MULTISTEP_REMINDER = "ดูคำขอนี้เองก่อนลงมือ: ถ้ามีงานมากกว่า 1 ชิ้น ต้องแก้ตั้งแต่ 3 ไฟล์ ต้องค้นข้อมูลก่อน หรือต้องมีคนตรวจก่อนส่ง ให้เปิด skill `superuser` (หรือ `<plugin>:superuser` ของสาขานั้น) ก่อนเริ่ม · ถ้าเป็นงานเล็กหรือคำถามเดียว ทำต่อได้เลย";
+const OPEN_DIR = join(tmpdir(), "sqt-superuser-open");
+const sessionFile = (dir, session) => join(dir, String(session ?? "none").replace(/[^\w-]/g, "_"));
+
+/** จำว่า session นี้เปิด superuser แล้ว (เรียกตอน PostToolUse ของเครื่องมือ Skill) · ไฟล์เก่าเกิน 1 วันลบทิ้ง */
+export function markSuperuserOpen(input, dir = OPEN_DIR, now = Date.now()) {
+  if (input.tool_name !== "Skill" || !/(^|:)superuser$/.test(input.tool_input?.skill ?? "")) return false;
+  try {
+    mkdirSync(dir, { recursive: true });
+    for (const name of readdirSync(dir)) { try { if (now - statSync(join(dir, name)).mtimeMs > 86400000) unlinkSync(join(dir, name)); } catch { /* ตัวอื่นลบแล้ว */ } }
+    writeFileSync(sessionFile(dir, input.session_id), "1");
+    return true;
+  } catch { return false; }
+}
+
+export function promptNotice(input, router, dir = OPEN_DIR) {
+  const text = String(input.prompt ?? "").trim();
+  const skills = routeSkills(text, router);
+  const notice = routerNotice(skills, router.multistep?.note);
+  // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว
+  const quiet = text.length < 12 || text.startsWith("/") || NOT_USER.test(text) || skills.some((s) => s.endsWith("superuser"))
+    || existsSync(sessionFile(dir, input.session_id));
+  return quiet ? notice : [notice, MULTISTEP_REMINDER].filter(Boolean).join("\n");
+}
+
 function leadContext(input) {
   if (input.agent_id) return "";
   if (input.hook_event_name === "SessionStart") return [coreRules(), MULTISTEP_NOTE].filter(Boolean).join("\n\n");
-  if (input.hook_event_name === "UserPromptSubmit") {
-    const router = readJson(join(HERE, "skill-router.json"), { rules: [] });
-    return routerNotice(routeSkills(input.prompt, router), router.multistep?.note);
-  }
+  if (input.hook_event_name === "UserPromptSubmit") return promptNotice(input, readJson(join(HERE, "skill-router.json"), { rules: [] }));
   return "";
 }
 
@@ -857,6 +882,7 @@ function main() {
   // PostToolUse · PostToolUseFailure: leadContext คืนค่าว่างโดยไม่อ่านไฟล์ · ไม่มีโฟลเดอร์ทีมออกที่ !root · ปิด log ออกที่บรรทัดแรกของ logAndNotice
   // writeSync: process.exit ทันทีหลังเขียน · write แบบ async อาจถูกตัดเมื่อข้อความยาว (กฎประจำตัวราว 20 KB)
   const say = (text) => { if (text) writeSync(1, JSON.stringify({ hookSpecificOutput: { hookEventName: event, additionalContext: text.slice(0, CONTEXT_MAX) } })); };
+  if (event === "PostToolUse" && !input.agent_id) markSuperuserOpen(input);   // เลิกเตือนเรื่องงานหลายขั้นเมื่อหัวหน้าทีมเปิด superuser แล้ว
   const speaks = ["SessionStart", "UserPromptSubmit", "SubagentStart"].includes(event) ? claimContext(input) : true;
   if (!speaks) return;   // สำเนา hook อีกตัวส่งข้อความของเหตุการณ์นี้แล้ว (log ก็จดแล้วเช่นกัน)
   // subagent เริ่มใหม่ไม่เห็นกฎของหัวหน้าทีม → ส่งเฉพาะตาราง "งาน → skill" ให้สั้น
@@ -1024,6 +1050,16 @@ function selfTest() {
       "แก้ typo บรรทัด 3 ใน README", "สวัสดีครับ", "ราคา Opus 5.5 เท่าไร", "แปลประโยคนี้เป็นอังกฤษ", "ตอบเป็นไทย",
     ].map((s) => [`ตัวบอก skill: งานเล็ก → ไม่ใช่ superuser · ${s}`, [], true, () => !routes(s).includes("superuser:superuser")]),
     ["ตัวบอก skill: บอก superuser แล้วต่อท้ายคำอธิบายสาขา", [], true, () => routerNotice(["superuser:superuser"], "N").endsWith("\nN") && !routerNotice(["docx"], "N").includes("N")],
+    // ให้ model ตัดสินเอง: เตือนทุกข้อความจนกว่าจะเปิด superuser · ข้อความสั้น คำสั่ง slash และรายงานลูกทีมไม่เตือน
+    ["เตือนงานหลายขั้น: เตือนก่อนเปิด · เลิกเตือนหลังเปิด · ไม่เตือนข้อความสั้น", [], true, () => {
+      const d = join(tmpdir(), `sqt-open-test-${process.pid}`);
+      const ask = (prompt, session = "t1") => promptNotice({ prompt, session_id: session }, router, d);
+      const long = "Audit our AWS bill and cut anything we don't use";
+      const before = ask(long).includes(MULTISTEP_REMINDER) && !ask("ต่อ").includes(MULTISTEP_REMINDER) && !ask("/superuser:superuser ทำงานนี้").includes(MULTISTEP_REMINDER);
+      const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-company:superuser" }, session_id: "t1" }, d)
+        && !markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "human-writing" }, session_id: "t2" }, d);
+      return before && marked && !ask(long).includes(MULTISTEP_REMINDER) && ask(long, "t2").includes(MULTISTEP_REMINDER);
+    }],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
     ["กฎประจำตัว: subagent ได้แค่ตาราง skill", [], true, () => { const c = coreRules({ configDir: "/nonexistent", routeOnly: true }); return c.startsWith(ROUTE_HEAD) && !c.includes("## ทำให้จบ"); }],
