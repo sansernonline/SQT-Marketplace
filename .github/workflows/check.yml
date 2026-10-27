@@ -44,6 +44,14 @@ jobs:
           node plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs --self-test
           node plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs --self-test
           node plugins/trading-finance/skills/copy-trade-check/scripts/signal-check.mjs --self-test
+          node plugins/trading-finance/skills/position-sizing/scripts/size.mjs --self-test
+          node plugins/trading-finance/skills/post-trade-review/scripts/trade-stats.mjs --self-test
+          node plugins/e-commerce/skills/promptpay-qr/scripts/promptpay.mjs --self-test
+          node plugins/e-commerce/skills/e-tax-invoice/scripts/thai-id.mjs --self-test
+          node plugins/e-commerce/skills/doc-quotation/scripts/thai-doc-total.mjs --self-test
+          node plugins/e-commerce/skills/marketplace-fees-pricing/scripts/price-calc.mjs --self-test
+          node plugins/e-commerce/skills/payroll-th/scripts/payroll.mjs --self-test
+          node plugins/personal-life/skills/household-bills/scripts/power-bill.mjs --self-test
       - name: dist ที่ commit ไว้ตรงกับที่สร้างใหม่
         shell: bash
         run: |

@@ -8,6 +8,7 @@
       "files": [
         "plugins/personal-life/skills/salary-negotiation/SKILL.md",
         "plugins/e-commerce/skills/payroll-th/SKILL.md",
+        "plugins/e-commerce/skills/payroll-th/scripts/rates.json",
         "plugins/e-commerce/skills/social-security-th/SKILL.md",
         "plugins/trading-finance/skills/emergency-fund/SKILL.md",
         "plugins/trading-finance/skills/personal-budget/SKILL.md",
