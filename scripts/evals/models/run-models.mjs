@@ -182,7 +182,9 @@ async function paidRun() {
   let spent = 0;
   console.log(`เริ่ม ${todo.length} ช่อง · effort ${EFFORT} · งบรวม ${usd(BUDGET_TOTAL)}`);
   for (const { model, step } of todo) {
-    if (spent >= BUDGET_TOTAL) { console.log(`ถึงงบ ${usd(BUDGET_TOTAL)} หยุด · ข้าม ${model}:${step}`); rows.push({ model, step, skipped: true }); continue; }
+    // เช็กกับเพดานของช่องนี้ด้วย ไม่งั้นช่องสุดท้ายเริ่มได้ตอนใช้ไป $19.9 แล้วเกินงบที่ผู้ใช้อนุมัติไปเท่าเพดานของช่อง
+    const cap = STEPS[step].cap * (STEPS[step].calls ?? 1);
+    if (spent + cap > BUDGET_TOTAL) { console.log(`เหลืองบ ${usd(BUDGET_TOTAL - spent)} ไม่พอเพดานช่อง ${usd(cap)} · ข้าม ${model}:${step}`); rows.push({ model, step, skipped: true }); continue; }
     const r = { model, step, ...(await RUNNERS[step](model)) };
     spent += r.cost;
     rows.push(r);

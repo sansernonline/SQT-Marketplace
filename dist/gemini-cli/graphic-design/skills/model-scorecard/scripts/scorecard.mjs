@@ -12,7 +12,9 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const TEAM_DIRS = [join(".claude", "superuser"), ".superuser"];
 
 const logDirOf = (project) => join(project, TEAM_DIRS.find((d) => existsSync(join(project, d))) ?? TEAM_DIRS[0], "log");
-const isInside = (file, folder) => (resolve(file) + sep).startsWith(resolve(folder) + sep);
+// Windows ไม่สนตัวพิมพ์ของ path · เทียบแบบตัวพิมพ์เล็กทั้งคู่ ไม่งั้น --out c:/… หลุดกฎ "ห้ามเขียนลงโปรเจกต์ที่อ่าน"
+const norm = (p) => (process.platform === "win32" ? resolve(p).toLowerCase() : resolve(p));
+export const isInside = (file, folder) => (norm(file) + sep).startsWith(norm(folder) + sep);
 
 export function parseArgs(argv) {
   const args = { rollup: [] };

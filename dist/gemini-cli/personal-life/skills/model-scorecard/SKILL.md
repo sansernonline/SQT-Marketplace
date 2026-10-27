@@ -1,6 +1,6 @@
 ---
 name: model-scorecard
-description: Use when comparing which model fits which step from a project's log (speed, tokens, value), or when told to roll up several projects to update a plugin.
+description: Use when comparing which model fits which step from a project log (speed, tokens, value) or told to roll up projects to update a plugin.
 ---
 
 # model-scorecard — model ไหนเหมาะกับขั้นไหน ดูจากงานจริงของโปรเจกต์
@@ -15,7 +15,15 @@ description: Use when comparing which model fits which step from a project's log
 - ก่อนเปลี่ยน model ประจำของ agent หรือขั้น (เช่น ให้ผู้ตรวจใช้ Sonnet แทน Opus) อยากเห็นตัวเลขก่อน
 - คนสั่งรวมผลหลายโปรเจกต์ไปปรับ plugin (`--rollup` ข้อ 3)
 
-ไม่ใช้เมื่อ: แค่สั่งเปลี่ยน model ของงานนี้ → ทำตามสั่ง · ถามราคา model ปัจจุบัน → `research-with-sources` · ตัดสินว่า skill ไหนควรแก้จากบทเรียน → `session-lessons-to-skills`
+ไม่ใช้เมื่อ: แค่สั่งเปลี่ยน model ของงานนี้ → ทำตามสั่ง
+
+## ใช้ตัวอื่นแทนหรือคู่กัน
+
+| สถานการณ์ | ใช้ | เหตุผล |
+|---|---|---|
+| ถามราคา model ปัจจุบัน | `research-with-sources` | ราคาเปลี่ยนได้ ต้องเปิดหน้าราคาทางการ |
+| ตัดสินว่า skill ไหนควรแก้จากบทเรียนของงาน | `session-lessons-to-skills` | skill นี้ให้ตัวเลข ไม่ได้ตัดสินว่าแก้อะไร |
+| อยากทดลองเทียบ model บนโจทย์เดียวกัน | `scripts/evals/models/` ใน repo SQT-Marketplace | log งานจริงตอบได้แค่ model ที่ใช้อยู่ การทดลองเทียบได้ทุกตัว (เสียเงิน) |
 
 ## ข้อมูลมาจากไหน
 
