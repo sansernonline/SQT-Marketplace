@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.14.0 — 2026-10-27
+
+- สคริปต์ใหม่ `debt-payoff/scripts/payoff.mjs` จำลอง avalanche กับ snowball รายเดือน บอกส่วนต่างดอกเบี้ยเป็นบาท · `home-refinance/scripts/refinance.mjs` ค่างวด ดอกเบี้ยรวม และจุดคุ้มทุน (self-test 19 ข้อทั้งคู่ · input ผิดหยุดพร้อมข้อความ · งบไม่พอจ่ายดอกบอกว่าปลดไม่หมด)
+- `mutual-fund-picker` · `bonds-and-deposits` · `insurance-review` · `watchlist-setup` ให้คะแนนด้วยกฎเหล็ก + น้ำหนัก (`decision-scoring`) · `tax-deduction-planner` เลือกลดหย่อนในงบด้วย knapsack · `rebalance-and-dca` เบี่ยงเกินแถบ 5 จุดให้ใช้เงิน DCA ปิดก่อน ถ้าต้องใช้เกิน 12 เดือนจึงเสนอขายพร้อมต้นทุน · `technical-signals` เลือกตัวชี้วัดจาก hit rate อย่างน้อย 30 สัญญาณ · คะแนนเป็นข้อมูลประกอบ ผู้ใช้ตัดสิน
+
 ## 0.13.3 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

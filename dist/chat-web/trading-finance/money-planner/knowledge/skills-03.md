@@ -12,7 +12,7 @@ General information, not insurance advice — a licensed agent or broker sells; 
 2. **List what is at risk**: dependants, debts, monthly spending, existing savings, which hospital the user would actually use.
 3. **Size each need** with the table below.
 4. **Gap and overlap**: show have / need / gap per type; flag duplicate riders and savings-type policies with low cover per baht.
-5. **Premium check**: total protection premium about 10% of income or less (rule of thumb, adjust to dependants).
+5. **Premium check**: total protection premium at most 10% of yearly income. This is the `must` filter in "Comparing quotes" below. The 10% is a starting value (starting value, not yet measured); the user may raise or lower it for dependants.
 6. **Prepare questions** for the agent (end of file).
 7. **Tax**: premiums deductible — life + health max 100,000, own health 25,000, parents' health 15,000 (`tax-deduction-planner`). Never buy cover for the deduction alone.
 
@@ -28,6 +28,21 @@ General information, not insurance advice — a licensed agent or broker sells; 
 | Disability income | monthly if unable to work | consider for self-employed with no sick-pay |
 
 Social security ม.33 already covers medical care at the registered hospital — count it as the base layer.
+
+## Comparing quotes
+
+Use `decision-scoring`, command `score`, when 2 or more plans fill the same gap. Get every figure from the agent's benefit table in writing. Script path: see `decision-scoring` (superuser plugin).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`) | Total premium of all policies after purchase at most 10% of yearly income · health cover must be the new standard form · no purchase for the tax deduction alone |
+| Criterion 1 | Yearly premium, baht · `low` · proposed weight 0.30 |
+| Criterion 2 | Gap this plan fills, baht · `high` · 0.30 |
+| Criterion 3 | Room limit per night (IPD), baht · `high` · 0.12 |
+| Criterion 4 | Limit per illness or per year (IPD), baht · `high` · 0.13 |
+| Criterion 5 | Premium at age 60 per the insurer's table, baht · `low` · 0.15 |
+
+Weights are starting values the user can change (starting value, not yet measured). Order the gaps to fix by gap size in baht, largest first. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user decides. Insurance output is information; this skill does not pick a plan (see the line at the top).
 
 ## Rules that changed recently
 
@@ -66,7 +81,7 @@ Office of Insurance Commission (สำนักงาน คปภ.) hotline **1
 
 ## Output format
 
-Table of policies → have / need / gap per type → overlap and overspend → questions for the agent → one-line priority ("fix IPD cap first").
+Table of policies → have / need / gap per type → overlap and overspend → questions for the agent → one-line priority (the gap with the largest baht amount first, for example "fix IPD cap first").
 
 
 ---
@@ -124,7 +139,7 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 ## Passive vs active
 
 - Compare a low-TER index fund with active funds side by side; a 1.5% fee gap compounds to roughly 30% less money over 25 years (see example).
-- An active fund earns its fee only when its 5- and 10-year returns after fees beat the benchmark and the peer median consistently, and the manager team is stable.
+- An active fund earns its fee only when its excess return over the benchmark (5-year and 10-year return after fees − benchmark return) is above 0 in both windows and above the peer median, and the manager team is stable. The 5-year excess return is a scoring criterion below.
 - Never pick on 1-year return alone — last year's top theme fund is a common trap.
 
 ## Workflow
@@ -132,8 +147,21 @@ Where to compare: SEC fund search (https://market.sec.or.th/public/mfeds/), Morn
 1. Set the goal, the time horizon (under 3 years means no equity) and the fund's role in the portfolio.
 2. Pick the type from the table.
 3. Shortlist 3 funds in that AIMC category; build the comparison table: TER, front/back fee, 5-yr return vs benchmark, max drawdown, size, hedging, dividend policy.
-4. Lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
+4. Score the shortlist (section "Scoring the shortlist" below), then lay out the shapes side by side ("low-cost SET50 index" vs "global index feeder" vs active) with fees and risk; the user picks.
 5. Set the DCA plan and a yearly review date.
+
+## Scoring the shortlist
+
+Use `decision-scoring`, command `score`. Its `templates/score.json` is already a fund example. Script path: see `decision-scoring` (superuser plugin).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`, filter out first, not scored) | Risk level not above what the user accepts · money needed within 3 years → level 4 or lower (Rules below) · minimum purchase not above what the user can invest · a fund promising a high fixed return → `scam-check`, not shortlisted |
+| Criterion 1 | Total cost, TER % (feeder fund plus the master fund's TER) · `low` · proposed weight 0.35 |
+| Criterion 2 | 5-year return after fees minus benchmark return, % · `high` · 0.35 |
+| Criterion 3 | Maximum drawdown, % · `low` · 0.30 |
+
+Weights are starting values the user can change (starting value, not yet measured). Every figure comes from the factsheet with its date. If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), show every ranked fund and let the user choose. The score is information; past returns do not guarantee the future.
 
 ## Worked example — fee drag
 

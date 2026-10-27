@@ -34,6 +34,13 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20230309.html
 
+### Order the Today and This-week items by numbers (`decision-scoring`, command `priority`)
+
+When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":"boss asks for figures","urgent":5,"important":5,"minutes":60},{"name":"school form due tomorrow","urgent":4,"important":4,"minutes":5},{"name":"landlord repair time","urgent":3,"important":3,"minutes":2},{"name":"vendor invoice query","urgent":2,"important":4,"minutes":20},{"name":"newsletter survey","urgent":2,"important":1,"minutes":15}]}`. The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
+
+- **Iron rules (กฎเหล็ก) outside the score:** **Verify** mail is handled first; an item due today (`urgent` 5) is done before the others, because short tasks win the score inside a group and would push a long deadline task down (the boss's figures rank 3rd of 3 in the first group above).
+- Scores are the user's and untested (starting value, not yet measured). Two items with scores within about 20% of each other → the user picks the order.
+
 ## Folder / label set (keep it to seven)
 
 `1-Today` · `2-This week` · `3-Waiting for` · `Receipts-Tax` (e-Tax invoices, ใบเสร็จ, insurance premium certificates — needed for ลดหย่อน) · `Travel` · `Reference` · Archive. More labels = more deciding.

@@ -14,11 +14,11 @@
 
 | plugin | รุ่น | skill | บทบาท | คำสั่ง | ขนาด zip |
 |---|---|---:|---:|---:|---:|
-| `e-commerce` | 1.1.3 | 69 | 11 | 14 | 0.8 MB |
-| `graphic-design` | 0.15.1 | 56 | 9 | 6 | 0.8 MB |
-| `personal-life` | 0.15.4 | 78 | 12 | 16 | 0.8 MB |
-| `software-company` | 2.29.0 | 137 | 41 | 29 | 7.1 MB |
-| `superuser` | 3.11.1 | 38 | 3 | 0 | 0.7 MB |
-| `trading-finance` | 0.13.3 | 59 | 8 | 7 | 0.7 MB |
+| `e-commerce` | 1.2.0 | 70 | 11 | 14 | 0.8 MB |
+| `graphic-design` | 0.16.0 | 57 | 9 | 6 | 0.9 MB |
+| `personal-life` | 0.16.0 | 79 | 12 | 16 | 0.9 MB |
+| `software-company` | 2.30.0 | 138 | 41 | 29 | 7.1 MB |
+| `superuser` | 3.12.0 | 39 | 3 | 0 | 0.7 MB |
+| `trading-finance` | 0.14.0 | 60 | 8 | 7 | 0.8 MB |
 
 ไฟล์ .zip ภายใน skill (เช่นคลังไอคอน) ไม่อยู่ใน `claude-web/` เพราะหน้าเว็บแตกไฟล์ไม่ได้ · ชุด codex · gemini-cli · kimi มีครบ

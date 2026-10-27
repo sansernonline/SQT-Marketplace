@@ -9,7 +9,7 @@ Turn "I want to watch some stocks" into a short list where every name has a reas
 ## Workflow
 
 1. **Context** — capital, horizon (day / swing weeks / long-term years), markets reachable (SET, mai, SET-listed DRs (Depositary Receipts) for foreign stocks, offshore via broker), and whether dividends or growth matter more.
-2. **Limit the list** — max **10 names** (swing) or **15** (long-term). More means none get real attention. Rank by conviction; cut the bottom.
+2. **Limit the list** — max **10 names** (swing) or **15** (long-term). More means none get real attention. When the list is over the limit, score the names (section "Scoring when over the limit" below) and cut from the bottom.
 3. **Per symbol record**
    - ticker, market, sector, as-of date of every number
    - **thesis** — one falsifiable sentence ("EPS growing 20%+ two quarters in a row while P/E is below its 5-year average")
@@ -22,6 +22,20 @@ Turn "I want to watch some stocks" into a short list where every name has a reas
 
 ตรวจล่าสุด 2026-10-26 · แหล่ง: เครื่องหมาย https://www.set.or.th/en/market/information/trading-procedure/trading-signs , https://www.set.or.th/en/listing/listed-company/simplified-regulations/disclosure/c-sign-posting , https://media.set.or.th/rulebook/circular-letter/attachment-file/237.pdf · กำหนดส่งงบ https://www.set.or.th/en/listing/listed-company/simplified-regulations/disclosure/periodic-disclosure , https://www.sec.or.th/TH/Documents/Report56/FAQ-FinancialStatement-issuer.pdf , https://publish.sec.or.th/nrs/10198s.pdf
 5. **Save** as `watchlist.md` (or `.csv`) in the finance folder; date the file.
+
+## Scoring when over the limit
+
+Use `decision-scoring`, command `score`, on the names that pass the hard rules. Script path: see `decision-scoring` (superuser plugin).
+
+| Step | Value |
+|---|---|
+| Hard rules (`must`) | A one-sentence thesis is written · 20-day liquidity at least 5 million baht a day (the figure in the liquidity step) · no SP or H sign (trading halted) |
+| Criterion 1 | Reward to risk = (target − entry) ÷ (entry − price where the thesis breaks) · `high` · proposed weight 0.35 |
+| Criterion 2 | Conviction in the thesis, 1–5 (given by the user) · `high` · 0.25 |
+| Criterion 3 | Distance from the current price to the entry zone, % · `low` · 0.20 |
+| Criterion 4 | 20-day average traded value, million baht · `high` · 0.20 |
+
+Weights are starting values the user can change (starting value, not yet measured). Drop the lowest scores until the list is at the cap (10 or 15). If the cut line reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), the user chooses which name goes.
 
 ## Decision table — add, keep or drop
 

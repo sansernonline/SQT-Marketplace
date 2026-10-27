@@ -11,7 +11,7 @@ Viewers arrive and leave every few seconds. A live that works repeats a short lo
 
 1. **Collect**: platform, length, host, backstage person, product list (normal price, live price, stock allocated to the live), shipping offer, vouchers already set
 2. **Allocate stock** for the live in `multi-shop-stock` and set the live prices and vouchers in Seller Centre **before** going live
-3. **Pick the hero product** (best seller or best deal) and 1–2 add-ons that pair with it
+3. **Pick the hero product** (best seller or best deal) and 1–2 add-ons that pair with it; choose flash-deal items with the knapsack rule below
 4. **Build the run sheet** (template below): 10–15 minute loops
 5. **Write host lines** from [host lines](references/host-lines.md) — hook, proof, price, call to action per product
 6. **Compliance pass** — every claim against `product-listing` prohibited claims; every price on air = price in the system
@@ -34,6 +34,20 @@ Viewers arrive and leave every few seconds. A live that works repeats a short lo
 | 0:57–1:00 | Close | Last call, next live date and time | Screenshot results |
 
 Flash-deal rules of thumb: first deal after viewers have built up (around minute 15–25), not at minute 0; 3–10 minute window; quantity small enough to sell out (10–20% of the live allocation) so "หมดแล้ว" is true; never a fake countdown.
+
+## Pick flash-deal items by expected profit (ตัดสินด้วยตัวเลข)
+
+Use `decision-scoring` command `knapsack` (`node decide.mjs knapsack <file.json>`; up to 20 items it finds the true best set).
+
+| Part | Rule |
+|---|---|
+| Hard rules first | live price above the campaign floor (`marketplace-fees-pricing`) · live stock covers the units you will announce · no item with a banned claim (`product-listing`) |
+| Budget | minutes of flash-deal slots in the run sheet (e.g. 2 deals x 5 min = 10), or units of live stock when stock is the limit. One budget per run |
+| Cost of an item | minutes it takes on air (demo + countdown + CTA) |
+| Value of an item | expected profit in baht = margin per unit x expected units sold. Expected units come from this shop's last live; no past live → write `(รอยืนยัน)` and use the lowest number you would accept |
+| Must-keep | the hero product: `"must": true`, so it stays in the set whatever the numbers say |
+
+Read the line "ชุดรองลงมา" in the result (items, total value, gap from the best set in %; shown only when there are 20 items or fewer). If the gap is under 10% (starting value, not yet measured), the host picks by what fits the story of the live.
 
 ## Backstage checklist
 

@@ -42,10 +42,20 @@ DCA lowers the average cost only when prices move both ways; it does not prevent
 | Rule | Trigger | Good for |
 |---|---|---|
 | Calendar | Once a year on a fixed date (for example the first week of December, before tax-fund cut-offs) | Most people; easy to remember |
-| Band | Any line moves more than 5 percentage points from its target (60 becomes 65 or 55) | Larger portfolios that are checked monthly |
+| Band | Deviation = actual share − target share (percentage points, can be negative). Act when the absolute deviation is above the band; default band 5 points (starting value, not yet measured), so 60 becomes 65 or 55 | Larger portfolios that are checked monthly |
 | Both | Look once a year, act only if the band is broken | Keeps trading and fees low |
 
 Do not rebalance on news or after one bad month. A band of 5 points is a common rule of thumb, not a regulation.
+
+**Close the deviation with new money first; sell only if that takes too long.** Redirecting new money costs nothing, so it is always allowed. When the deviation is above the band:
+
+| Step | Rule |
+|---|---|
+| 1. Months to close | Gap in baht ÷ (monthly DCA × (1 − target share of the underweight asset)). Gap in baht = target share × total portfolio value − current value of the underweight asset. The `(1 − target share)` part is there because new money also grows the whole portfolio, so only part of each month closes the gap |
+| 2. At most N months (N = 12, starting value, not yet measured) | Close it with DCA; do not sell |
+| 3. More than N months | Selling or switching is allowed. Tell the user the cost (fees for selling, switching and buying + tax on what is sold + broker commission) and the months DCA alone would take; the user decides |
+
+The 5-point band comes from Vanguard's study of rebalancing (2010, US market, checked 2026-10-27): https://indexacapital.com/bundles/unaiadvisor/docs/papers/2010-Vanguard-Best-practices-for-portfolio-rebalancing.pdf . It is a rule of thumb for US portfolios, not a Thai rule. To compare several ways of rebalancing on cost and months to target (both `low`), use `decision-scoring`, command `score`. Script path: see `decision-scoring` (superuser plugin).
 
 ## 4 · How to rebalance — cheapest way first
 
@@ -61,18 +71,18 @@ Do not rebalance on news or after one bad month. A band of 5 points is a common 
 
 Target equity 60 / bonds 40. Today: equity funds 780,000 · bond fund 320,000 · total 1,100,000. DCA 10,000 a month.
 
-| Line | Now | % now | Target % | Target baht | Gap |
-|---|---|---|---|---|---|
-| Equity | 780,000 | 70.9 | 60 | 660,000 | −120,000 |
-| Bonds | 320,000 | 29.1 | 40 | 440,000 | +120,000 |
+| Line | Now | % now | Target % | Deviation (points) | Target baht | Gap |
+|---|---|---|---|---|---|---|
+| Equity | 780,000 | 70.9 | 60 | +10.9 | 660,000 | −120,000 |
+| Bonds | 320,000 | 29.1 | 40 | −10.9 | 440,000 | +120,000 |
 
-The band (5 points) is broken. Options shown to the user:
+Deviation 10.9 is above the 5-point band. Months for DCA (all into bonds) to close it = 120,000 ÷ (10,000 × (1 − 0.40)) = 20, which is more than N = 12, so selling or switching may be offered with its costs (switching fee from the factsheet, tax if sold) next to DCA alone; the user decides. Check: after 20 months bonds are 320,000 + 200,000 = 520,000 of 1,300,000 = 40%. With a DCA of 20,000 a month it would take 10 months, and DCA alone (option A) is the rule. Options shown to the user:
 
 | Option | What happens | Cost |
 |---|---|---|
-| A · New money only | Put the whole 10,000 a month into bonds | About 12 months to close the gap at today's prices; no fees |
+| A · New money only | Put the whole 10,000 a month into bonds | About 20 months to close the gap at today's prices (120,000 ÷ 6,000); no fees |
 | B · Switch now | Switch 120,000 from the equity fund to a bond fund at the same fund house | Switching fee per factsheet; done in a few days |
-| C · Half and half | Switch 60,000 now, redirect DCA for 6 months | Half the fee of B, back to target in about 6 months |
+| C · Half and half | Switch 60,000 now, redirect DCA for 10 months | Half the fee of B, back to target in about 10 months (60,000 ÷ 6,000) |
 
 The user picks. Record the date and the new mix.
 
@@ -80,7 +90,7 @@ The user picks. Record the date and the new mix.
 
 - Target mix and trigger written down, with the date
 - Percentages add up to 100 and the gap is in baht
-- Fees and tax-wrapper rules named before any sale or switch
+- Months for DCA to close the deviation worked out before any sale; fees and tax-wrapper rules named before any sale or switch
 - No specific fund named as "the best"
 
 ## Sources

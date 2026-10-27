@@ -33,6 +33,13 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 
 ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.bot.or.th/th/news-and-media/news/news-20230309.html
 
+### Order the Today and This-week items by numbers (`decision-scoring`, command `priority`)
+
+When more than 3 items are in **Today** or **This week**, score each: **urgent 1–5** (5 = due today, 4 = tomorrow, 3 = this week, 2 = next week, 1 = no date) · **important 1–5** (the user's score: money, people, a promise) · **minutes** to answer. Run `node decide.mjs priority mail.json` with `{"method":"eisenhower","items":[{"name":"boss asks for figures","urgent":5,"important":5,"minutes":60},{"name":"school form due tomorrow","urgent":4,"important":4,"minutes":5},{"name":"landlord repair time","urgent":3,"important":3,"minutes":2},{"name":"vendor invoice query","urgent":2,"important":4,"minutes":20},{"name":"newsletter survey","urgent":2,"important":1,"minutes":15}]}`. The tool sorts into 4 groups (urgent and important both 3 or more = do now; important only = schedule; urgent only = delegate or reply short; neither = drop), then by `urgent × important ÷ minutes`.
+
+- **Iron rules (กฎเหล็ก) outside the score:** **Verify** mail is handled first; an item due today (`urgent` 5) is done before the others, because short tasks win the score inside a group and would push a long deadline task down (the boss's figures rank 3rd of 3 in the first group above).
+- Scores are the user's and untested (starting value, not yet measured). Two items with scores within about 20% of each other → the user picks the order.
+
 ## Folder / label set (keep it to seven)
 
 `1-Today` · `2-This week` · `3-Waiting for` · `Receipts-Tax` (e-Tax invoices, ใบเสร็จ, insurance premium certificates — needed for ลดหย่อน) · `Travel` · `Reference` · Archive. More labels = more deciding.
@@ -91,7 +98,7 @@ Your calendar is the honest record of your priorities. Read it once a month.
 3. **Compute the split** in hours and % of available hours (e.g. 4 weeks × 5 days × 8 h = 160 h).
 4. **Compare with the target split** the user names (default targets below) and with their stated top three priorities — any priority with under 10% of time is not really a priority this month.
 5. **List recurring meetings** with: sessions in the period, total hours (× attendees if the user organises it), decisions produced.
-6. **Pick the worst three** and choose an action for each: kill · shorten · less often · make async · send a delegate.
+6. **Pick the worst three by numbers** with `decision-scoring` command `priority` (below), then choose an action for each: kill · shorten · less often · make async · send a delegate.
 7. **Protect** — put focus blocks and guard rails into next month's calendar *now*, as real events.
 8. **Record** the split in a running file so next month shows a trend.
 
@@ -113,6 +120,14 @@ Managers often run 50–60% meetings by design — adjust targets to the role, b
 `hours per session × attendees × sessions per month` = person-hours. Example: weekly sync 1 h × 8 people × 4 = 32 person-hours/month. Ask: "what did those 32 hours decide?"
 
 **Refocus overhead.** A meeting dropped into a focus block costs its length plus about 23 minutes to get back into the work. Count it: `meetings that cut a focus block × 23 min` and add it to the meetings column — 5 scattered 30-minute calls in a day cost about 2 h of focus on top of their 2.5 h. Same-length meetings back to back cost nothing extra, which is why the guard rails below cluster them. (23 minutes: Mark, Gudith and Klocke, "The cost of interrupted work: more speed and stress", CHI 2008 — figure as widely quoted; paper not opened on 2026-10-23 → รอยืนยัน.)
+
+## Rank recurring meetings by numbers (`decision-scoring`, command `priority`)
+
+Per recurring meeting give: **urgent 1–5** (does a decision or deadline wait on it this month: 5 = yes now, 1 = no) · **important 1–5** (how much it serves one of the user's top three priorities; the user's own score) · **minutes** = the user's own minutes per month, plus the 23-minute refocus overhead for each session that cuts a focus block. Run `node decide.mjs priority meetings.json` with `{"method":"eisenhower","items":[{"name":"weekly status sync","urgent":2,"important":2,"minutes":240},{"name":"daily stand-up","urgent":3,"important":3,"minutes":600},{"name":"vendor call","urgent":3,"important":4,"minutes":240}]}`.
+
+- Group "drop" (urgent and important both under 3) → kill or make async · group "delegate" (urgent only) → send a delegate · the lowest scores inside the keep groups → shorten or run less often. The worst three are the bottom three rows.
+- Number of decisions produced (the column in the worked example) breaks a tie: zero decisions in the last 4 sessions moves the meeting one step down.
+- Scores are the user's and untested (starting value, not yet measured). Close scores (within about 20%) → the user decides.
 
 ## Guard rails
 

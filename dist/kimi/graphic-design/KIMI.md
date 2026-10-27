@@ -1,10 +1,10 @@
 # SQT graphic-design — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.15.1) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/graphic-design/ โดย scripts/build/build-targets.mjs (v0.16.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Creative design beyond product UI — brand kits, AI image generation and briefs with style consistency, social media formats, marketplace product images, YouTube thumbnails, print-ready files, campaign sets, LINE rich menus, video editing with Thai subtitles and narration, speaking scripts, motion basics, and a design-review checklist.
 
-ชุดนี้มี skill 56 ตัว · บทบาท 9 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
+ชุดนี้มี skill 57 ตัว · บทบาท 9 บทบาท · คำสั่งสำเร็จรูป 6 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`

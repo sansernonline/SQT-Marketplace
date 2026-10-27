@@ -10,7 +10,7 @@ Few goals, measured honestly, carried by habits small enough to survive a bad we
 ## Workflow
 
 1. **Brain-dump** everything the user wants this quarter. Do not filter yet
-2. **Pick three, at most.** Ask "if only one happened, which would matter most?" three times. Everything else goes on a `someday` list, which is parked, not deleted
+2. **Pick three, at most** — by numbers, see "Choosing goals by numbers" below. Everything else goes on a `someday` list, which is parked, not deleted
 3. **Make each goal measurable** using the outcome formula below
 4. **Find the lead habit** for each goal: the repeated action that produces the outcome. A goal with no habit is a wish
 5. **Design the habit** with cue, routine and reward, and shrink it with the 2-minute rule
@@ -19,6 +19,20 @@ Few goals, measured honestly, carried by habits small enough to survive a bad we
 8. **Week 6 midpoint**: is the goal on pace? If not, change the plan (step 9). Do not just try harder
 9. **Failure review** when two weeks in a row are missed, or at quarter end. See the failure review section below
 10. **Quarter end**: score each goal, write three lines of lessons, and carry forward or drop
+
+## Choosing goals by numbers (`decision-scoring`, command `knapsack`)
+
+1. **Budget = real free hours per week**, not wished-for hours: 168 minus sleep, work, commute, family and chores, as the user counts it from last week's calendar. Write that number first.
+2. **For each brain-dump item** give: cost = hours per week it needs; value = **impact × desire**, each 1–5 by the user (impact = how much life changes if it happens; desire = how much the user wants it, not how much they should). Value is 1–25.
+3. **Iron rules:** an item with a fixed deadline outside the user's control (an exam date, a tax filing) goes in with `"must": true`. Cost over the whole budget → cut or shrink the item.
+4. **Run:** `node decide.mjs knapsack goals.json` — it tries every set and returns the best one for the budget · put `"max_items": 3` in the file so it never picks more than three goals. Example input (6 free hours a week; value = impact × desire):
+
+```json
+{"budget":6,"max_items":3,"items":[{"name":"Run 5 km","cost":3,"value":12},{"name":"Emergency fund 60,000","cost":1,"value":20},{"name":"English 60 lessons","cost":4,"value":15},{"name":"Read 6 books","cost":2,"value":6}]}
+```
+
+Result when run: emergency fund + run 5 km + read 6 books (6 of 6 hours, total value 38); English is the one parked on `someday`.
+5. A close call (the "ชุดรองลงมา" line in the result is under 10% behind the best set, starting value, not yet measured; the line appears only with 20 items or fewer) or a goal the user refuses → the user decides. Impact and desire are the user's own scores; the tool only does the arithmetic. Time budget and scores are starting value, not yet measured until a quarter of weekly checks shows the real hours.
 
 ## Outcome formula
 

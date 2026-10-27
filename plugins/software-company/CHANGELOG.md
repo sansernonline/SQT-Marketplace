@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.30.0 — 2026-10-27
+
+- `bug-inbox-triage` เรียงด้วย RICE/WSJF (S1 และช่องโหว่ยังทำก่อนเสมอ) · `security-gate` ข้อกลางแก้ทันทีถ้าไม่เกิน 1 ชั่วโมง ที่เหลือเข้าคิวตามคะแนน · `code-gardener` เลือกธีมด้วย knapsack · `cicd-and-release` ขยาย canary และ rollback ด้วยเกณฑ์ burn rate จาก `observability-basics` (ทั้งหมดใช้ `decision-scoring` ของ superuser)
+
 ## 2.29.0 — 2026-10-27
 
 - `llm-engineering` reference ใหม่ `deep-research-system.md`: สร้างระบบ Deep Research Agent เป็นผลิตภัณฑ์ (planner → คิว → worker → ตรวจอ้างอิง → writer · งบ token และโควตาต่อผู้ใช้ · browser agent ใน sandbox และ prompt injection · ตัวชี้วัด) ชี้ `kafka-streaming` · `kubernetes-helm` (KEDA) · `observability-basics` · ที่มาเปิดอ่าน 2026-10-27 (Anthropic multi-agent research system · GPT Researcher · open_deep_research · STORM · OWASP LLM01 · RFC 9309)

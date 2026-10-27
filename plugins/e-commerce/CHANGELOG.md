@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.2.0 — 2026-10-27
+
+- ตัดสินด้วยตัวเลขผ่าน `decision-scoring`: `shipping-compare` ให้คะแนนขนส่ง · `live-selling-script` และ `line-broadcast` เลือกชิ้นหรือ segment ภายใต้งบด้วย knapsack · `returns-and-bad-reviews` สู้เคลมเมื่อค่าคาดหวังเป็นบวกและมีหลักฐาน · `warranty-tracker` ประกันขยายด้วยค่าคาดหวัง · `cash-flow` ปิดช่องว่างเงินสดจากทางที่ต้นทุนต่อบาทต่ำสุด
+
 ## 1.1.3 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

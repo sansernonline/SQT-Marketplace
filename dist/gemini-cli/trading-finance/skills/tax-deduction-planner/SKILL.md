@@ -14,11 +14,35 @@ Current caps and the rate table: [references/deductions-2569.md](references/dedu
 1. **Fix the tax year.** Planning in October 2026 means tax year 2569, filed Jan–Mar 2570. Money must be paid by **31 December**.
 2. **Collect income.** Salary + bonus (from the employer's ทวิ 50 estimate or payslips × 12), freelance 40(2), other income. Note the PVD rate and social security deducted.
 3. **Compute tax now** — income − expense deduction (50%, max 100,000 for salary) − allowances already locked in (personal, family, social security, PVD, insurance already paid) = net income → apply the rate table.
-4. **Find the marginal rate.** This is the value of every extra baht deducted. If net income is already in the 0% band, stop — further deductions save nothing.
+4. **Find the marginal rate.** A deduction of 1 baht saves tax equal to the marginal rate of the band the net income falls in (rate table in the reference file; never use rates from memory). A deduction large enough to cross into a lower band saves the lower rate on the part that crosses: saved = tax before − tax after, computed with the table. If net income is already in the 0% band, stop — further deductions save nothing.
 5. **Walk the checklist** below; for each line, ask "already have it / can still add / not applicable".
-6. **Size the funds last.** Check room left: RMF ≤ 30% of income, ThaiESG ≤ 30% and 300,000, and PVD + RMF + pension insurance + กอช. ≤ 500,000 combined.
+6. **Size the funds last.** Check room left: RMF ≤ 30% of income, ThaiESG ≤ 30% and 300,000, and PVD + RMF + pension insurance + กอช. ≤ 500,000 combined. When several items compete for one budget, pick them with the knapsack below.
 7. **Recompute** and show before / after / saved, and the cash the plan locks up (RMF to age 55, ThaiESG 5 years).
 8. **Paperwork list** for filing (see end).
+
+## Choosing several items under a budget
+
+Use `decision-scoring`, command `knapsack`. Its `templates/knapsack.json` is an example. Script path: see `decision-scoring` (superuser plugin).
+
+| Field | What to enter |
+|---|---|
+| `budget` | Cash the user sets aside for deductions this year (baht) |
+| `groups` | Top level: `{"<name>": <cap on total cost>}`. One group per shared cap, for example the room left under the 500,000 combined cap (500,000 minus what PVD already took) |
+| Each `item` | Split into blocks, for example RMF 50,000, ThaiESG 50,000; a block must not exceed the item's cap in the Year-end checklist · `cost` = cash paid · `value` = tax saved by that block (tax before − tax after, from the rate table in the reference file) minus the cost of locking the money (if the user states one, else 0) · `group` = the group it counts against |
+| `must` | Items the user needs anyway (for example an insurance premium already due) |
+
+Example (made-up numbers): salary 1,500,000 a year. After the expense deduction 100,000, personal 60,000, social security 10,500, PVD 150,000 (10% of wage, under the 15% cap), pension insurance 150,000 (its cap is 15% of income = 225,000, limited to 200,000, so 50,000 is left), an earlier RMF purchase 80,000, two parents 60,000 and life insurance 89,500, net income is 800,000 before these blocks. PVD, pension insurance and RMF already took 380,000 of the 500,000 combined cap (so 120,000 is left). At 800,000 the first 50,000 block saves 20% (10,000) and the next ones 15% (7,500):
+
+```json
+{ "budget": 150000, "groups": { "cap-500k": 120000, "thaiesg": 300000 },
+  "items": [
+    { "name": "RMF block 1", "cost": 50000, "value": 10000, "group": "cap-500k" },
+    { "name": "RMF block 2", "cost": 50000, "value": 7500, "group": "cap-500k" },
+    { "name": "Pension insurance", "cost": 50000, "value": 7500, "group": "cap-500k" },
+    { "name": "ThaiESG block", "cost": 50000, "value": 7500, "group": "thaiesg" } ] }
+```
+
+`node <decide.mjs> knapsack file.json` picks RMF block 1 + RMF block 2 + ThaiESG (value 25,000). Pension insurance ties with RMF block 2, and the script lists that set as the runner-up, so the user chooses. Each `value` is an estimate from the marginal rate of the band that block lands in (block 1: 50,000 × 20% = 10,000; later blocks fall into the 15% band). Because one block changes the saving of the next, **after the script gives a set, recompute the tax for the whole set from the rate table** and show that figure, not the sum of the estimates. Lists over 20 blocks are ranked by value per cost and not fully searched. Limits that depend on income (RMF and ThaiESG at 30% of income) are checked outside the script against the chosen set. Tax output is information; the user decides.
 
 ## Year-end checklist
 

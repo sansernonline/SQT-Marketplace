@@ -143,6 +143,26 @@ Entry and revisit templates: [references/entry-template.md](references/entry-tem
 9. **Schedule the revisit** in the calendar now.
 10. **At the revisit** — fill the revisit block **without editing the original**, give the verdict, write one process lesson.
 
+## Choose between options by numbers (`decision-scoring`)
+
+Use this at step 3–5, once the options and the numbers exist. Pick the command by what is known:
+
+| Situation | Command | Read the result as |
+|---|---|---|
+| The outcome depends on the future and the user can state the chances | `payoff` | expected value (ค่าคาดหวัง) = sum of chance × outcome |
+| Chances unknown (a guess dressed as a number) or the door is one-way | `payoff`, read the **เสียดายมากสุด** column | minimax regret: pick the option whose worst regret is smallest |
+| Several different criteria (money, time, growth), each option sure | `score` | weighted score after iron rules drop options |
+
+Iron rules first (กฎเหล็ก): an option that breaks a limit the user set before looking (monthly payment above a fixed share of income, no emergency fund left) is dropped, not scored. Run `node decide.mjs payoff decision.json` or `score`. Example, the job offer in the worked example below (pay in year 1, baht, higher is better; chances 0.3 / 0.4 / 0.3 are the user's guess):
+
+```json
+{"better":"high","options":["stay at A","take B","negotiate at A"],
+ "scenarios":[{"name":"B bonus 0 months","p":0.3},{"name":"B bonus 1 month","p":0.4},{"name":"B bonus 2 months","p":0.3}],
+ "table":{"stay at A":[624000,624000,624000],"take B":[720000,780000,840000],"negotiate at A":[672000,672000,672000]}}
+```
+
+Result when run: take B has the best expected value (780,000), the best worst case (720,000) and regret 0. That is only year-1 pay; growth, commute and the PVD loss go into a `score` run. Expected value and score disagree, or two options are close (`สูสี`) → the user decides, and writes why in the entry. Money and life decisions: supporting data, not advice.
+
 ## Revisit verdict grid
 
 | | Outcome good | Outcome bad |

@@ -39,10 +39,23 @@ These are the common platform defaults (Streaming, TradingView, Settrade charts 
 | Breakout on high volume | มีคนซื้อจริงหนุน | One-day spike on news, then gives back | Close back inside the old range within 3 days |
 | Breakout on low volume | ทะลุแต่ไม่มีแรงหนุน | Usually fails (false breakout) | — treat as unconfirmed |
 
+## Choosing RSI or MACD (by the stock's own hit rate)
+
+**Hit rate = signals after which price moved the way the signal said ÷ all signals.** Count it by backtest on the same symbol and timeframe, with the parameters in Default parameters. "Moved the way it said" = the close N bars after the signal bar is beyond the signal bar's close in that direction (N = 10 bars, starting value, not yet measured).
+
+| Condition | Do |
+|---|---|
+| An indicator has fewer than 30 signals (starting value, not yet measured) | Say **"not enough data"** for it; do not use it for the choice |
+| Both have fewer than 30 | Answer "not enough data". Read RSI 14 (platform default) and say it is not measured which is more accurate for this stock |
+| Both have 30 or more and the hit rates differ by less than 5 points (starting value, not yet measured) | Too close; read both, do not choose |
+| Both have 30 or more and differ by 5 points or more | Use the one with the higher hit rate. If even the higher one is not above 50%, do not use that signal as a reason to enter |
+
+No price history to count on → answer "not enough data (not measured)"; never guess a hit rate. Hit rate does not give profit per trade; see `post-trade-review`. This is information; the user decides. This skill does not use `decide.mjs`.
+
 ## Workflow
 
 1. Ask: symbol, timeframe, the user's holding period, and what they are deciding (enter / add / exit).
-2. Read **trend** (MAs) → **momentum** (RSI or MACD, pick one) → **volume** on the last big move.
+2. Read **trend** (MAs) → **momentum** (RSI or MACD, chosen by hit rate, see "Choosing RSI or MACD") → **volume** on the last big move.
 3. Mark the nearest 2 supports and 2 resistances.
 4. State the read in one line each, then **the invalidation** — the price that makes the read wrong.
 5. Hand the invalidation price to `position-sizing` as the stop (same plugin).

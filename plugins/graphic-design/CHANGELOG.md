@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.16.0 — 2026-10-27
+
+- `brief-to-image` และ `image-generation` เลือกภาพจากหลายแบบด้วยคะแนน 5 เกณฑ์หรือเทียบเป็นคู่สลับตำแหน่ง (`decision-scoring`) · เรื่องรสนิยมผู้ใช้ตัดสิน
+
 ## 0.15.1 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

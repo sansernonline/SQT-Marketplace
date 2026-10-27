@@ -237,8 +237,22 @@ Put these in the forecast on the date the money leaves, for the forms that apply
 | COD refusals or returns rising | Wrong buyers, slow delivery | Push prepaid (`promptpay-qr`), confirm COD orders by chat before shipping |
 | Paying WHT or VAT from new sales | Tax money spent as working capital | Move withheld tax and VAT into a separate "tax" account on the day you collect it |
 | Card bill paid late or only the minimum | Ads spending ahead of payouts | Cap daily ad spend to what last week's payouts can cover |
-| Forecast below buffer within 4 weeks | Any of the above | Ask suppliers for later payment terms; chase customer invoices; delay non-essential spend; only then consider a short loan, compare the full cost in writing |
+| Forecast below buffer within 4 weeks | Any of the above | Close the gap with the cheapest source first, ranked by cost per baht in the table below; compare any loan on its full yearly cost in writing |
 | Owner draws exceed profit for 3 months | Business funding the household | Fix the owner draw at a set amount (`sme-bookkeeping` section 3) |
+
+### Close the gap in order of cost per baht
+
+Work down the list and stop when the shortfall (buffer minus lowest closing cash) is covered. Cost is shown as a yearly rate so the options compare.
+
+| Order | Option | Cost per baht (formula) |
+|---|---|---|
+| 1 | Later supplier payment that loses no discount | 0% |
+| 2 | Later supplier payment that gives up an early-pay discount of d% for n extra days | d / (100 - d) x 365 / n (example: 2% for 20 days = 37% a year) |
+| 3 | Collect customer invoices early (a call, or a discount of e% for paying n days sooner) | call: 0% · discount: e / (100 - e) x 365 / n |
+| 4 | Order less stock, or split the order in two lots | no interest; the cost is sales you may miss, so check the sell-through of those SKUs first |
+| 5 | Short loan or card advance | (total fees + interest) / amount x 365 / days = yearly rate; ask the lender for the full yearly cost (interest + fees), not the headline monthly rate (current rates: ask the lender, รอยืนยัน) |
+
+Two options at the same cost → take the one that is easier to undo. Row 4 can move above row 2 when the missed sales are small. These are formulas on quoted numbers; the owner decides, the table only shows which source costs least.
 
 Never pay supplier deposits or "release fees" to unlock platform money at the request of a chat, call or link — platforms pay out through the seller centre only. Treat such messages as possible scams (`scam-check` in `trading-finance`, if installed).
 
