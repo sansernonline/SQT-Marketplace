@@ -345,13 +345,11 @@ export function multistepScore(text, cfg) {
 
 export function routeSkills(prompt, router) {
   const text = String(prompt ?? "").trim();
-  if (!text || text.startsWith("/")) return [];   // คำสั่ง slash เปิด skill ของมันเองอยู่แล้ว
+  // คำสั่ง slash เปิด skill ของมันเองอยู่แล้ว · รายงานลูกทีมมาในช่องข้อความผู้ใช้แต่ไม่ใช่คำขอของผู้ใช้
+  if (!text || text.startsWith("/") || NOT_USER.test(text)) return [];
   const out = [];
   const ms = router?.multistep;
-  // ข้อความยาวใช้เกณฑ์ต่ำกว่า (longThreshold): งานเล็กส่วนใหญ่สั้น · งานใหญ่ที่มีกริยาตัวเดียวมักบรรยายยาว
-  // จับเกินเสียแค่เปิด superuser ที่ตัดสินเองว่างานเล็กทำเอง · พลาดงานใหญ่เสียมากกว่า (ผู้ใช้เจอจริง 2026-10-27)
-  const need = ms?.longThreshold && text.length >= ms.longThreshold.minLength ? ms.longThreshold.threshold : (ms?.threshold ?? 2);
-  if (ms && multistepScore(text, ms) >= need) out.push(...(ms.skills ?? []));
+  if (ms && multistepScore(text, ms) >= (ms.threshold ?? 2)) out.push(...(ms.skills ?? []));
   for (const rule of router?.rules ?? []) {
     let re; try { re = new RegExp(rule.pattern, "i"); } catch { continue; }
     if (re.test(text)) for (const s of rule.skills ?? []) if (!out.includes(s)) out.push(s);
@@ -411,6 +409,8 @@ export function markSuperuserOpen(input, dir = OPEN_DIR, now = Date.now()) {
 
 export function promptNotice(input, router, dir = OPEN_DIR) {
   const text = String(input.prompt ?? "").trim();
+  // เปิดด้วยคำสั่ง slash ไม่มี PostToolUse ของเครื่องมือ Skill → จดว่าเปิดแล้วจากข้อความเอง
+  if (/^\/([\w-]+:)?superuser\b/.test(text)) markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "superuser" }, session_id: input.session_id }, dir);
   const skills = routeSkills(text, router);
   const notice = routerNotice(skills, router.multistep?.note);
   // ไม่เตือน: คำสั่ง slash · ข้อความสั้นอย่าง "ต่อ" "ok" · รายงานลูกทีมที่มาในช่องผู้ใช้ · superuser เปิดแล้ว · regex เน้นให้แล้ว
@@ -1059,6 +1059,14 @@ function selfTest() {
       const marked = markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "software-company:superuser" }, session_id: "t1" }, d)
         && !markSuperuserOpen({ tool_name: "Skill", tool_input: { skill: "human-writing" }, session_id: "t2" }, d);
       return before && marked && !ask(long).includes(MULTISTEP_REMINDER) && ask(long, "t2").includes(MULTISTEP_REMINDER);
+    }],
+    ["เตือนงานหลายขั้น: รายงานลูกทีมไม่ได้ทั้งบรรทัดเตือนและชื่อ superuser · เปิดด้วย slash แล้วเลิกเตือน", [], true, () => {
+      const d = join(tmpdir(), `sqt-open-test2-${process.pid}`);
+      const reports = ["<task-notification>งานพื้นหลังเสร็จแล้ว รันคำสั่งทดสอบผ่านทั้งหมดเรียบร้อย แล้วแก้ไฟล์ทุกไฟล์</task-notification>",
+        "<agent-message from=\"x\">แก้ครบทุกไฟล์แล้ว แล้วเขียน test และอัปเดตเอกสารทั้งหมด</agent-message>"];
+      const clean = reports.every((p) => { const n = promptNotice({ prompt: p, session_id: "r1" }, router, d); return !n.includes(MULTISTEP_REMINDER) && !n.includes("superuser"); });
+      promptNotice({ prompt: "/software-company:superuser ทำฟีเจอร์ใหม่", session_id: "s9" }, router, d);
+      return clean && !promptNotice({ prompt: "Audit our AWS bill and cut anything we don't use", session_id: "s9" }, router, d).includes(MULTISTEP_REMINDER);
     }],
     ["กฎประจำตัว: ส่งได้ไม่เกินเพดาน", [], true, () => { const c = coreRules({ configDir: "/nonexistent" }); return c.includes(CORE_MARK) && c.length <= CONTEXT_MAX; }],
     ["กฎประจำตัว: ไม่ส่งหัวสำเนา · เริ่มที่ CORE_MARK", [], true, () => coreRules({ configDir: "/nonexistent" }).startsWith(CORE_MARK)],
