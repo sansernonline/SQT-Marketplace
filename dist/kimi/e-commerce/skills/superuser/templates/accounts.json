@@ -1,0 +1,9 @@
+{
+  "weights": { "U": 0.4, "F": 0.2, "R": 0.15, "V": 0.15, "L": -0.1 },
+  "safety": 1.2,
+  "accounts": [
+    { "name": ".claude", "tool": "claude", "speed_k_per_hour": 300, "max_parallel": 4, "cap_k": 2000, "window_hours": 5 },
+    { "name": ".claude-work", "tool": "claude", "speed_k_per_hour": 300, "max_parallel": 4, "cap_k": 2000, "window_hours": 5 },
+    { "name": ".codex", "tool": "codex", "speed_k_per_hour": 200, "max_parallel": 2, "cap_k": 1000, "window_hours": 5 }
+  ]
+}

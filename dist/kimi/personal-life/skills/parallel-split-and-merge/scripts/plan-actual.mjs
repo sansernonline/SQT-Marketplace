@@ -21,7 +21,48 @@ export function matchRuns(a, runs) {
 const startMs = (r) => Date.parse(r.ts) - (!r.async && r.duration_ms > 0 ? r.duration_ms : 0);
 const verdictOf = (r) => r.reviews?.at(-1) ?? r.verdict ?? "–";
 
-export function actualReport(a, runs) {
+// ⑥ เรียนรู้ความเร็วจริงต่อบัญชี: k token ต่อชั่วโมงของงานที่จบแล้ว · ถ่วงแบบ EMA k ← 0.6k + 0.4 × ค่าใหม่ (สูตรเดียวกับ model-scorecard)
+export function learnSpeed(rows, accounts) {
+  const out = new Map();
+  for (const x of [...rows].sort((p, q) => p.start - q.start)) {
+    const tk = realTokens(x.r), hrs = x.r.duration_ms / 3600000;
+    if (!x.r.account || !x.done || !(tk > 0) || !(hrs > 0)) continue;
+    const prev = out.get(x.r.account) ?? { n: 0, speed: accounts.find((acc) => acc.name === x.r.account)?.speed_k_per_hour ?? tk / 1000 / hrs };
+    out.set(x.r.account, { n: prev.n + 1, speed: 0.6 * prev.speed + 0.4 * (tk / 1000 / hrs) });
+  }
+  return out;
+}
+
+// ⑤ คาดการณ์ว่าโควตาของบัญชีจะพอสำหรับงานที่ค้างอยู่ไหม · ไม่พอ ให้ย้าย และ ✦ ส่งไม้ด้วยใบ handoff ไปบัญชีที่คะแนนดีสุด
+export function predictMoves(a, rows, team, est) {
+  const safety = team.safety ?? 1.2, moves = [];
+  for (const acc of team.accounts) {
+    const open = rows.filter((x) => !x.done && x.r.account === acc.name);
+    const need = open.reduce((s, x) => s + est(x.id) / 1000, 0) * safety, left = acc.remaining_k ?? acc.cap_k;
+    if (!open.length || need <= left) continue;
+    for (const x of open) {
+      const size = est(x.id) / 1000;
+      const to = team.accounts.filter((b) => b.name !== acc.name && (b.remaining_k ?? b.cap_k) >= size * safety)
+        .sort((p, q) => (q.remaining_k ?? q.cap_k) / q.cap_k - (p.remaining_k ?? p.cap_k) / p.cap_k)[0];
+      moves.push({ id: x.id, from: acc.name, to: to?.name ?? null, need, left });
+    }
+  }
+  return moves;
+}
+
+function accountSection(a, rows, team, est) {
+  const speeds = learnSpeed(rows, team.accounts), moves = predictMoves(a, rows, team, est);
+  return [
+    "## บัญชีระหว่างทำงาน", "",
+    "| บัญชี | โควตาเหลือ | รีเซ็ตใน | ความเร็วที่ตั้ง | ความเร็วจริง (EMA) |", "|---|---|---|---|---|",
+    ...team.accounts.map((acc) => { const sp = speeds.get(acc.name); return `| ${cell(acc.name)} | ${n1(acc.remaining_k ?? acc.cap_k)}k / ${n1(acc.cap_k)}k | ${acc.reset_in_hours != null ? `${n1(acc.reset_in_hours)} ชม.` : "–"} | ${acc.speed_k_per_hour}k/ชม. | ${sp ? `${n1(sp.speed)}k/ชม. (${sp.n} งาน) → แก้ speed_k_per_hour ใน accounts.json` : "ยังไม่มีงานที่จบ"} |`; }),
+    "",
+    ...(moves.length ? ["**ควรย้ายงาน (โควตาไม่พอกับงานที่ค้าง)**", "",
+      ...moves.map((m) => `- ${cell(m.id)}: ${m.from} ต้องใช้ราว ${n1(m.need)}k แต่เหลือ ${n1(m.left)}k → ${m.to ? `ส่งไม้ให้ ${m.to}: ลูกทีมบน ${m.from} เขียนใบส่งต่อ \`.claude/superuser/handoff/${m.id}.md\` ตาม skill \`handoff\` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานบน ${m.to} ด้วยคำอธิบาย \`${m.id}: ทำต่อจากใบส่งต่อ ไม่เริ่มใหม่\`` : "ไม่มีบัญชีที่โควตาพอ รอรีเซ็ตหรือแตกชิ้นให้เล็กลง"}`), ""] : ["โควตาทุกบัญชีพอกับงานที่ค้างอยู่", ""]),
+  ];
+}
+
+export function actualReport(a, runs, team = null) {
   const matched = matchRuns(a, runs), hits = [...matched.entries()].filter(([, r]) => r);
   if (!hits.length) return { rows: [], markdown: "ยังไม่มีงานใน log ที่คำอธิบายขึ้นต้นด้วย id ของชิ้นในแผน (เช่น `a: ออกแบบตาราง`)", summary: "" };
   const t0 = Math.min(...hits.map(([, r]) => startMs(r)));
@@ -40,8 +81,9 @@ export function actualReport(a, runs) {
   const markdown = [
     "## เกิดจริงเทียบแผน", "", summary, "",
     "| ชิ้น | ใครทำ | model | เริ่ม (นาที) | ใช้เวลา | token จริง / ประเมิน | ผลตรวจ | ไทม์ไลน์ |", "|---|---|---|---|---|---|---|---|",
-    ...rows.map((x) => { const tk = realTokens(x.r); return `| ${cell(x.id)} | ${cell(x.r.role ?? "–")} | ${cell(x.r.model ?? "–")} | ${n1(x.start)} | ${x.done ? `${n1(x.end - x.start)} นาที` : "ยังไม่จบ"} | ${tk == null ? "–" : `${n1(tk / 1000)}k / ${n1(est(x.id) / 1000)}k`} | ${verdictOf(x.r)} | \`${bar(x)}\` |`; }),
+    ...rows.map((x) => { const tk = realTokens(x.r); return `| ${cell(x.id)} | ${cell(`${x.r.role ?? "–"}${x.r.account ? ` @ ${x.r.account}` : ""}`)} | ${cell(x.r.model ?? "–")} | ${n1(x.start)} | ${x.done ? `${n1(x.end - x.start)} นาที` : "ยังไม่จบ"} | ${tk == null ? "–" : `${n1(tk / 1000)}k / ${n1(est(x.id) / 1000)}k`} | ${verdictOf(x.r)} | \`${bar(x)}\` |`; }),
     "",
+    ...(team ? accountSection(a, rows, team, est) : []),
   ].join("\n");
   return { summary, markdown, rows: rows.map((x) => ({ label: `${x.id} · ${x.r.role ?? ""}`, start: x.start, end: Math.max(x.end, x.start + 0.1), crit: a.cpm.get(x.id).float === 0 })) };
 }

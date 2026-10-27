@@ -1,7 +1,27 @@
 // --self-test ของ plan.mjs · ตัวอย่างใน superuser/references/team-roles.md "แบ่งงาน" + กรณีผิดที่ต้องจับได้
 import { validate, ranks, analyse, render } from "./plan.mjs";
 import { toMermaid, toHtml, levels } from "./plan-draw.mjs";
-import { actualReport } from "./plan-actual.mjs";
+import { actualReport, learnSpeed, predictMoves } from "./plan-actual.mjs";
+import { assign, validateAccounts, score, renderAssign } from "./plan-assign.mjs";
+import { fromStatusLine, fromCodexLine, applyQuota, accountName } from "./quota.mjs";
+
+// บัญชีจำลอง (หน่วยขนาด = k token · ความเร็ว = k ต่อชั่วโมง)
+const fast = { name: "fast", tool: "claude", speed_k_per_hour: 2, max_parallel: 1, cap_k: 10, reset_in_hours: 5 };
+const slow = { name: "slow", tool: "claude", speed_k_per_hour: 1, max_parallel: 1, cap_k: 10, reset_in_hours: 5 };
+const NOW = new Date("2026-10-27T00:00:00Z");
+const accountCases = (a) => [
+  ["บัญชี ①–④: ชิ้นวิกฤต a ได้บัญชีเร็ว · c ไปบัญชีที่ว่าง · จองโควตาทันที", (() => { const r = assign(a, [fast, slow]); const of = (id) => r.schedule.find((x) => x.id === id).account; return of("a") === "fast" && of("c") === "slow" && r.accounts.find((x) => x.name === "fast").used === 7; })()],
+  ["บัญชี ②: โควตาไม่พอ (เหลือ < ขนาด × 1.2) ต้องรอรีเซ็ต · ชิ้นที่ 2 เริ่มชั่วโมงที่ 5", (() => { const p = analyse({ tasks: [{ id: "x", size: 2 }, { id: "y", size: 2 }] }); const r = assign(p, [{ name: "one", speed_k_per_hour: 10, cap_k: 3, reset_in_hours: 5 }]); const y = r.schedule.find((s) => s.id === "y"); return y.start === 5 && Math.abs(r.makespan - 5.2) < 1e-9; })()],
+  ["บัญชี ②: ชิ้นที่ระบุ tool ไปได้เฉพาะบัญชีของ tool นั้น", (() => { const p = analyse({ tasks: [{ id: "x", size: 1, tool: "codex" }] }); return assign(p, [fast, { ...slow, name: "cx", tool: "codex" }]).schedule[0].account === "cx"; })()],
+  ["บัญชี: ชิ้นใหญ่กว่าโควตาเต็มถังของทุกบัญชีฟ้อง · บัญชีไม่มี speed ฟ้อง", validateAccounts([fast], [{ id: "big", size: 20 }]).some((e) => e.includes("big")) && validateAccounts([{ name: "x", cap_k: 1 }], []).some((e) => e.includes("speed_k_per_hour"))],
+  ["บัญชี ③: U สูงเมื่อใกล้รีเซ็ต · L หักบัญชีที่งานล้น", (() => { const t = { size: 1 }, base = { left: 5, cap_k: 10, speed_k_per_hour: 1, max_parallel: 2 }; const soon = score({ ...base, resetIn: 0, running: [] }, t, { critical: false, maxSpeed: 1 }), late = score({ ...base, resetIn: 24, running: [] }, t, { critical: false, maxSpeed: 1 }), busy = score({ ...base, resetIn: 0, running: [{}] }, t, { critical: false, maxSpeed: 1 }); return soon.parts.U === 1 && late.parts.U === 0.5 && soon.total > late.total && busy.total < soon.total; })()],
+  ["บัญชี: ตาราง markdown และ HTML มี Gantt แยกบัญชี", (() => { const r = assign(a, [fast, slow]); return renderAssign(a, r).includes("| a ออกแบบตาราง | fast |") && toHtml({}, a, null, r).includes("แจกงานข้ามบัญชี"); })()],
+  ["โควตา: status line → % ที่ใช้และเวลารีเซ็ต · ชื่อบัญชีจาก CLAUDE_CONFIG_DIR", (() => { const q = fromStatusLine({ rate_limits: { five_hour: { used_percentage: 40, resets_at: NOW.getTime() / 1000 + 7200 } } }, { CLAUDE_CONFIG_DIR: "C:\\u\\.claude-b" }, NOW); return q.account === ".claude-b" && q.five_hour.used === 40 && fromStatusLine({}, {}, NOW) === null && accountName({ CODEX_HOME: "/h/.codex-2" }, "codex") === ".codex-2"; })()],
+  ["โควตา: บรรทัด token_count ของ Codex (รอบ 5 ชม. กับรอบยาว)", (() => { const q = fromCodexLine(JSON.stringify({ timestamp: "t", payload: { type: "token_count", rate_limits: { primary: { used_percent: 30, window_minutes: 300, resets_at: 1 }, secondary: { used_percent: 7, window_minutes: 10080, resets_at: 2 } } } }), "cx"); return q.five_hour.used === 30 && q.week.used === 7; })()],
+  ["โควตา: ใช้ไป 40% → เหลือ 60k · รอบที่เลยรีเซ็ตแล้วถือว่าเต็ม · รายสัปดาห์เต็มแล้วเหลือ 0", (() => { const h = (x) => new Date(NOW.getTime() + x * 3600000).toISOString(); const accs = [{ name: "a", cap_k: 100 }, { name: "b", cap_k: 100 }, { name: "c", cap_k: 100 }]; const out = applyQuota(accs, { accounts: [{ account: "a", five_hour: { used: 40, reset: h(2) } }, { account: "b", five_hour: { used: 90, reset: h(-1) } }, { account: "c", five_hour: { used: 10, reset: h(1) }, week: { used: 100, reset: h(30) } }] }, NOW); return out[0].remaining_k === 60 && out[0].reset_in_hours === 2 && out[1].remaining_k === undefined && out[2].remaining_k === 0 && out[2].reset_in_hours === 30; })()],
+  ["ระหว่างทำ ⑥: ความเร็วจริงต่อบัญชีแบบ EMA (ตั้ง 2 · จริง 4 → 2.8)", learnSpeed([{ start: 0, done: true, r: { account: "fast", total_tokens: 4000, duration_ms: 3600000 } }], [fast]).get("fast").speed === 2.8],
+  ["ระหว่างทำ ⑤✦: โควตาไม่พอกับงานค้าง → ย้ายไปบัญชีที่เหลือมาก พร้อมคำสั่งส่งไม้", (() => { const est = () => 2000; const rows = [{ id: "a", done: false, r: { account: "fast" } }]; const m = predictMoves(a, rows, { accounts: [{ ...fast, remaining_k: 1 }, slow] }, est); const md = actualReport(a, [{ ts: at(0), step: "design", description: "a: ทำ", async: true, account: "fast" }], { accounts: [{ ...fast, remaining_k: 1 }, slow] }).markdown; return m[0].to === "slow" && md.includes("ส่งไม้ให้ slow") && md.includes("handoff/a.md"); })()],
+];
 
 const example = { name: "ตัวอย่าง team-roles", tasks: [
   { id: "a", title: "ออกแบบตาราง", size: 2, owns: ["db/schema.sql"], step: "design" },
@@ -60,6 +80,7 @@ export function selfTest() {
     ["actual: งานแบบรอผลเริ่มที่ ts ลบเวลาที่ใช้ (hook จด ts ตอนจบ)", (() => { const r = actualReport(a, [{ ts: at(0), step: "design", description: "a: ทำ", async: true, duration_ms: 60000 }, { ts: at(20), step: "code", description: "b: ทำ", async: false, duration_ms: 600000 }]); return r.markdown.includes("| b | – | – | 10 | 10 นาที |"); })()],
     ["คิว deep research แปลงเป็นแผนได้ (ข้อย่อย · คำถาม · ขนาด · ไฟล์ผล)", (() => { const q = { "งาน": "x", "ข้อย่อย": [{ id: "q1", "คำถาม": "ก", depends_on: [], "ขนาด": "S", "ไฟล์ผล": "r/q1.md" }, { id: "q2", "คำถาม": "ข", depends_on: ["q1"], "ขนาด": "M", "ไฟล์ผล": "r/q2.md" }] }; const p = analyse(q); return validate(q).length === 0 && p.total === 70 && p.tasks[1].owns[0] === "r/q2.md"; })()],
     ["ตาราง markdown: ชื่อที่มี | ไม่ทำคอลัมน์เลื่อน", render({}, analyse({ tasks: [{ id: "x", title: "ก|ข", size: 1 }] })).includes("x ก\\|ข")],
+    ...accountCases(a),
     ["HTML: มี SVG ของ DAG และ Gantt · escape ข้อความ · ไม่มี undefined/NaN", (() => { const h = toHtml({ name: "<x>" }, a); return (h.match(/<svg /g) ?? []).length === 2 && h.includes("&lt;x&gt;") && !/undefined|NaN/.test(h); })()],
     ["actual: ผูกงานด้วย id ต้นคำอธิบาย · ไม่นับ review · ไม่สับสน ba กับ b · บอกชิ้นที่ยังไม่ปล่อย", (() => { const r = actualReport(a, runs); return r.rows.length === 2 && r.markdown.includes("| a | general-purpose | sonnet | 0 | 10 นาที | 2.5k / 2k |") && r.markdown.includes("| b | developer |") && r.summary.includes("ยังไม่ได้ปล่อย: c d") && r.summary.includes("เกินที่ประเมินเกิน 1.5 เท่า: b"); })()],
     ["actual: ไม่มีงานใน log → บอกวิธีตั้งคำอธิบาย", actualReport(a, []).markdown.includes("`a: ออกแบบตาราง`")],

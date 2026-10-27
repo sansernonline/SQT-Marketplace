@@ -1,5 +1,12 @@
 # Changelog — superuser
 
+## 3.11.0 — 2026-10-27
+
+- แจกงานข้ามหลายบัญชี LLM ตามแนว KC-QUEST (lab 03 ของคอร์ส CWN2026 · เขียนใหม่): `plan-assign.mjs` ช่วงแจกงานครั้งแรก ① เรียง rank ② กรองบัญชีที่ผิดกฎเหล็ก (ช่องเต็ม · โควตาน้อยกว่าขนาด × safety · tool ไม่ตรง) ③ คะแนน 0.4U + 0.2F + 0.15R + 0.15V − 0.1L (แก้น้ำหนักได้) ④ จองโควตาทันที · ไม่มีบัญชีรับได้ รอรีเซ็ต · ตาราง + Gantt แยกบัญชีใน `--html`
+- ช่วงระหว่างทำใน `--actual --accounts`: ⑤ โควตาไม่พอกับงานค้าง → รายการควรย้ายพร้อมบัญชีปลายทาง · ✦ ส่งไม้ด้วยใบ handoff · ⑥ ความเร็วจริงต่อบัญชีแบบ EMA
+- `quota.mjs`: `record` ให้ status line ของ Claude Code เรียก อ่านช่อง `rate_limits` ตามเอกสาร status line · `snapshot` รวมกับ `rate_limits` จาก session ของ Codex · อ่านในเครื่องเท่านั้น ไม่แตะ credential · แม่แบบ `templates/accounts.json`
+- hook จดชื่อบัญชี (`SQT_ACCOUNT` หรือโฟลเดอร์ `CLAUDE_CONFIG_DIR`) ในทุกงานลูกทีม · planner self-test 47 ข้อ
+
 ## 3.10.0 — 2026-10-27
 
 - planner `plan.mjs` รับรูปแบบของ lab (ไฟล์เป็น array · `depends_on` · `exclusive` · ขนาด S/M/L ค่าตั้งต้น 20k/50k/100k เปลี่ยนได้ด้วยช่อง `sizes`) · `--mermaid` พิมพ์ flowchart ของ DAG · `--html` เขียนหน้าเดียวที่มี SVG ของ DAG และ Gantt (ไม่ใช้ library ภายนอก) · `--actual` อ่าน `runs.jsonl` ผูกงานลูกทีมกับชิ้นในแผนด้วย id ต้นคำอธิบายงาน แล้วบอกใครทำ เวลา token จริงเทียบประเมิน ชิ้นที่ยังไม่ปล่อย · โค้ดแยกเป็น `plan-draw.mjs` และ `plan-actual.mjs` · self-test 27 ข้อ

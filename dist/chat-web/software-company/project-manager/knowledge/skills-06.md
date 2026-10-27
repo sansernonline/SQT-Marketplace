@@ -156,6 +156,20 @@ Use when work splits into independent slices (chapters, listings, research quest
 - **เทียบกับงานจริง:** `--actual` อ่าน `runs.jsonl` ใน log ของ superuser แล้วผูกงานลูกทีมกับชิ้นในแผนด้วย**คำอธิบายงานที่ขึ้นต้นด้วย id ของชิ้น** (ช่อง description ของเครื่องมือ Agent เช่น `a: ออกแบบตาราง`) · ได้ตารางว่าใครทำ model อะไร เริ่มและใช้เวลากี่นาที token จริงเทียบที่ประเมิน ผลตรวจ ชิ้นที่ยังไม่ปล่อย และชิ้นที่ใช้ token เกินที่ประเมิน 1.5 เท่า · ใส่คู่กับ `--html` ได้ Gantt ของที่เกิดจริงเพิ่มอีกรูป
 - ทดสอบ: `node scripts/plan.mjs --self-test` · แนวคิดจาก lab `02_DAG_Planner` และ `04_Multi_Agent_Orchestra` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
 
+## หลายบัญชี LLM — แจกงานข้ามบัญชีตามโควตา
+
+ใช้เมื่อเปิด Claude Code หรือ Codex หลายตัวคนละบัญชี (คนละ worktree ตาม `team-files`) · subagent ใช้บัญชีเดียวกับตัวที่เรียกเสมอ การแบ่งงานข้ามบัญชีจึงเป็นการแบ่งงานระหว่าง session หลายตัว · แนวคิดจาก KC-QUEST ใน lab `03_KC_QUEST` ของคอร์ส CWN2026 เขียนใหม่ ไม่ได้นำโค้ดมา
+
+1. **ตั้งชื่อบัญชี:** รันแต่ละบัญชีด้วย `CLAUDE_CONFIG_DIR` (หรือ `CODEX_HOME`) ของตัวเอง ชื่อบัญชีคือชื่อโฟลเดอร์นั้น หรือตั้ง `SQT_ACCOUNT` เอง · hook จดชื่อบัญชีในทุกงานลูกทีม
+2. **บอกขนาดถัง:** คัดลอก `superuser/templates/accounts.json` ไปไว้ที่ `~/.claude/superuser/accounts.json` แล้วแก้ `cap_k` (โควตาเต็มถังเป็น k token โดยประมาณ) · `speed_k_per_hour` · `max_parallel` · `window_hours` · ค่าในแม่แบบเป็นตัวอย่าง ยังไม่ได้วัด
+3. **อ่านโควตาที่เหลือ (อ่านในเครื่องเท่านั้น ไม่แตะ credential):**
+   - Claude: ตั้ง status line ของแต่ละบัญชีให้เรียก `node <plugin>/skills/parallel-split-and-merge/scripts/quota.mjs record` · Claude Code ส่งช่อง `rate_limits.five_hour` และ `seven_day` (`used_percentage` · `resets_at`) ให้ status line เฉพาะแผน Pro/Max และหลัง response แรกของ session ([status line](https://code.claude.com/docs/en/statusline) · ตรวจ 2026-10-27) · สคริปต์จดลง `~/.claude/superuser/quota/<บัญชี>.json`
+   - Codex: อ่าน `rate_limits` จาก event `token_count` ในไฟล์ session ใต้ `$CODEX_HOME/sessions` (ตรวจกับไฟล์จริงในเครื่อง 2026-10-27 · ไม่มีหน้าเอกสาร รูปแบบอาจเปลี่ยน)
+   - รวมเป็นไฟล์เดียว: `node quota.mjs snapshot --out quota.json` · ห้ามใช้ endpoint ที่ต้องดึง OAuth token ของบัญชีมาเรียก API เอง เพราะเสี่ยงผิดเงื่อนไขการใช้งาน
+4. **แจกงานครั้งแรก (① จัดลำดับ ② กรอง ③ ให้คะแนน ④ เลือกแล้วจอง):** `node scripts/plan.mjs plan.json --accounts ~/.claude/superuser/accounts.json --quota quota.json --html plan.html` · ชิ้นที่พร้อมเรียงตาม rank · ② ตัดบัญชีที่ผิดกฎเหล็กทิ้งก่อน (ช่องว่างเต็ม · โควตาเหลือน้อยกว่าขนาด × `safety` · `tool` ไม่ตรงกับช่อง `tool` ของชิ้น) · ③ คะแนน = 0.4U + 0.2F + 0.15R + 0.15V − 0.1L (U = 24/(24+ชั่วโมงก่อนรีเซ็ต · F พอดีถัง · R ถังว่าง · V บัญชีเร็วรับชิ้นวิกฤต · L งานค้าง · น้ำหนักแก้ได้ในช่อง `weights`) · ④ จองโควตาทันทีให้ชิ้นถัดไปในรอบเดียวกันเห็นของที่เหลือจริง · ไม่มีบัญชีไหนรับได้ ชิ้นนั้นรอรีเซ็ต
+5. **ระหว่างทำ (⑤ คาดการณ์และย้าย ⑥ เรียนรู้ ✦ ส่งไม้):** `node scripts/plan.mjs plan.json --accounts … --quota quota.json --actual` · ⑤ บัญชีที่โควตาเหลือไม่พอกับงานค้าง × `safety` ขึ้นรายการ "ควรย้าย" พร้อมบัญชีปลายทาง · ✦ ส่งไม้ด้วยใบ `handoff` (ทำถึงไหน · commit อะไร · ต่อจากตรงไหน) แล้วเปิดงานต่อบนบัญชีใหม่ ไม่เริ่มใหม่ · ⑥ ความเร็วจริงต่อบัญชีแบบ EMA ไว้แก้ `speed_k_per_hour`
+- น้ำหนักและสูตรเป็นค่าของคอร์ส ยังไม่ได้วัดกับงานเรา · ไม่มีไฟล์บัญชี planner ทำงานแบบบัญชีเดียวเหมือนเดิม
+
 ## dynamic workflow — พร้อมกันเกิน 8 ชิ้น หรืองานซ้ำทีละไฟล์
 
 หัวข้อนี้คือ workflow script ของ Claude Code (สคริปต์สั่ง subagent จำนวนมาก) ซึ่งคนละเรื่องกับแบบ Dynamic ที่ปรับแผนระหว่างทาง (`agent-patterns` หัวข้อ 1)

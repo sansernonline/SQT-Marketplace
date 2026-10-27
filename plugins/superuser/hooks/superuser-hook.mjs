@@ -234,6 +234,13 @@ function runTokens(res) {
   return { input: u.input_tokens ?? 0, output: u.output_tokens ?? 0, cacheRead: u.cache_read_input_tokens ?? 0, cacheCreate: u.cache_creation_input_tokens ?? 0 };
 }
 
+// ชื่อบัญชี LLM ของ session นี้: SQT_ACCOUNT หรือชื่อโฟลเดอร์ของ CLAUDE_CONFIG_DIR (วิธีรันหลายบัญชีตามเอกสาร Claude Code) · ไม่ตั้ง = null
+export function accountOf(env = process.env) {
+  if (env.SQT_ACCOUNT) return env.SQT_ACCOUNT;
+  // แยกเองแทน basename เพราะบน Linux basename ไม่แยก path ที่ใช้ \ ของ Windows
+  return env.CLAUDE_CONFIG_DIR ? env.CLAUDE_CONFIG_DIR.replace(/[\\/]+$/, "").split(/[\\/]/).pop() : null;
+}
+
 export function runEvents(input, entry, rules) {
   const base = { ts: entry.ts, session: entry.session };
   if (entry.event === "UserPromptSubmit") {
@@ -252,7 +259,7 @@ export function runEvents(input, entry, rules) {
   return [{
     ...base, event: "run", tool_use_id: input.tool_use_id ?? null, spawned_id: entry.spawned_id ?? null,
     role: entry.role, model: input.tool_input.model ?? "inherit", lead_model: entry.model, effort: input.tool_input.effort ?? null,
-    step, description: redact(description, 80), async: isAsync, ok: entry.ok,
+    account: accountOf(), step, description: redact(description, 80), async: isAsync, ok: entry.ok,
     duration_ms: res?.totalDurationMs ?? res?.duration_ms ?? null, tokens: runTokens(res),
     estimate_tokens: estimateTokens(input.tool_input.prompt),
     ...(!isAsync && step === "review" ? parseVerdict(text) : {}),
@@ -1144,6 +1151,8 @@ ${rows}
       return sync.model === "inherit" && sync.step === "review" && sync.verdict === "pass" && sync.duration_ms === 900 && sync.tokens.output === 7
         && bg.async === true && bg.model === "sonnet" && !("verdict" in bg);
     }],
+    ["runs: ชื่อบัญชีจาก SQT_ACCOUNT หรือโฟลเดอร์ CLAUDE_CONFIG_DIR · ไม่ตั้ง = null", [], true, () => accountOf({ SQT_ACCOUNT: "acc-a" }) === "acc-a"
+      && accountOf({ CLAUDE_CONFIG_DIR: "C:\\Users\\x\\.claude-work\\" }) === ".claude-work" && accountOf({ CLAUDE_CONFIG_DIR: "/home/x/.claude-b" }) === ".claude-b" && accountOf({}) === null],
     ["runs: ขนาดที่ประเมินในใบสั่งงาน · token จริงจากข้อความงานเบื้องหลังจบ", [], true, () => {
       const note = "<task-notification>\n<task-id>a1</task-id>\n<tool-use-id>toolu_9</tool-use-id>\n<status>completed</status>\n<usage><subagent_tokens>58738</subagent_tokens></usage>\n</task-notification>";
       const ev = runEvents({ hook_event_name: "UserPromptSubmit", prompt: note }, { ts: "t", session: "s", event: "UserPromptSubmit" }, null)[0];
