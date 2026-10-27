@@ -9,8 +9,20 @@ import { join } from "node:path";
 const WORKFLOW_AT = 8; // พร้อมกันเกินนี้ต้องเสนอ dynamic workflow ให้ผู้ใช้เริ่ม (parallel-split-and-merge)
 const WORTH_PARALLEL = 1.3; // ขนานแล้วเร็วขึ้นไม่ถึงเท่านี้ ใช้ตัวเดียว เพราะลูกทีมทุกตัวต้องอ่านบริบทใหม่ (ค่าตั้งเอง ยังไม่ได้วัด)
 
+const isList = (x) => x === undefined || (Array.isArray(x) && x.every((v) => typeof v === "string"));
+
+// ตัด id และไฟล์ที่ใส่ซ้ำในชิ้นเดียวกัน · ไม่งั้น needs ซ้ำถูกนับเป็นกราฟวน และ owns ซ้ำฟ้องว่าชนกับตัวเอง
+export function normalize(plan) {
+  return { ...plan, tasks: plan.tasks.map((t) => ({ ...t, needs: [...new Set(t.needs ?? [])], owns: [...new Set(t.owns ?? [])] })) };
+}
+
 export function validate(plan) {
-  const tasks = plan?.tasks ?? [], errors = [], ids = new Set();
+  if (!Array.isArray(plan?.tasks)) return ["tasks ต้องเป็นรายการ (array) ของชิ้นงาน"];
+  const bad = plan.tasks.flatMap((t, i) => (t && typeof t === "object" && !Array.isArray(t)
+    ? [!isList(t.needs) && `${t.id ?? `ชิ้นที่ ${i + 1}`}: needs ต้องเป็นรายการ id`, !isList(t.owns) && `${t.id ?? `ชิ้นที่ ${i + 1}`}: owns ต้องเป็นรายการ path`].filter(Boolean)
+    : [`ชิ้นที่ ${i + 1} ต้องเป็น object`]));
+  if (bad.length) return bad;
+  const { tasks } = normalize(plan), errors = [], ids = new Set();
   if (!tasks.length) errors.push("ไม่มีชิ้นงานใน tasks");
   for (const t of tasks) {
     if (!t.id) errors.push(`ชิ้นที่ไม่มี id: ${JSON.stringify(t).slice(0, 60)}`);
@@ -60,6 +72,13 @@ export function ranks(tasks) {
   return rank;
 }
 
+// Critical Path Method (CPM): เริ่มเร็วสุด (forward pass) · เริ่มช้าสุด = สายวิกฤต − rank (backward pass) · เผื่อได้ = ช้าสุด − เร็วสุด · ชิ้นที่เผื่อได้ 0 อยู่บนสายวิกฤต
+export function slack(tasks, rank) {
+  const byId = new Map(tasks.map((t) => [t.id, t])), early = new Map(), end = Math.max(...rank.values());
+  for (const id of topoOrder(tasks)) early.set(id, Math.max(0, ...byId.get(id).needs.map((n) => early.get(n) + byId.get(n).size)));
+  return new Map(tasks.map((t) => [t.id, { early: early.get(t.id), late: end - rank.get(t.id), float: end - rank.get(t.id) - early.get(t.id) }]));
+}
+
 function criticalPath(tasks, rank) {
   const path = [];
   let cur = tasks.filter((t) => !(t.needs ?? []).length).sort((a, b) => rank.get(b.id) - rank.get(a.id))[0];
@@ -84,7 +103,6 @@ export function simulate(tasks, rank, agents) {
       slots[lane] = t.id;
       const run = { id: t.id, solo: Boolean(t.solo), start: now, end: now + t.size, lane: lane + 1 };
       running.push(run); out.push(run);
-      if (t.solo) break;
     }
     const next = Math.min(...running.map((r) => r.end));
     now = next;
@@ -94,16 +112,19 @@ export function simulate(tasks, rank, agents) {
 }
 
 export function analyse(plan, { agents, k = {} } = {}) {
-  const tasks = plan.tasks.map((t) => ({ ...t, size: t.size * (k[t.step] ?? 1) }));
+  const tasks = normalize(plan).tasks.map((t) => ({ ...t, size: t.size * (k[t.step] ?? 1) }));
   const rank = ranks(tasks), total = tasks.reduce((s, t) => s + t.size, 0);
   const cp = criticalPath(tasks, rank), cpLen = Math.max(...rank.values());
   const width = simulate(tasks, rank, tasks.length).width;
   const cap = agents ?? plan.max_agents ?? Infinity;
   const wide = Math.max(1, Math.min(width, cap, WORKFLOW_AT));
-  const parallelSpeedup = total / simulate(tasks, rank, wide).makespan;
+  const parallelMakespan = simulate(tasks, rank, wide).makespan;
+  const parallelSpeedup = total / parallelMakespan;
   const team = parallelSpeedup < WORTH_PARALLEL ? 1 : wide;
   const sim = simulate(tasks, rank, team);
-  return { tasks, rank, total, cp, cpLen, width, team, parallelSpeedup, lowerBound: Math.max(cpLen, total / team), makespan: sim.makespan, speedup: total / sim.makespan, schedule: sim.schedule, needsWorkflow: width > WORKFLOW_AT && cap > WORKFLOW_AT };
+  // เวลาต่ำสุด = ขอบล่างตามสูตร · เร็วขึ้น = งานรวม ÷ เวลาที่จำลองปล่อยตาม rank ได้จริง (ไม่เกินงานรวม ÷ เวลาต่ำสุด)
+  return { tasks, rank, cpm: slack(tasks, rank), total, cp, cpLen, width, wide, team, parallelMakespan, parallelSpeedup, lowerBound: Math.max(cpLen, total / wide),
+    makespan: sim.makespan, speedup: total / sim.makespan, schedule: sim.schedule, needsWorkflow: width > WORKFLOW_AT && cap > WORKFLOW_AT };
 }
 
 const n1 = (x) => (Number.isInteger(x) ? String(x) : x.toFixed(1));
@@ -116,11 +137,11 @@ export function render(plan, a) {
     `# แผนกราฟงาน${plan.name ? `: ${plan.name}` : ""}`, "",
     `คาด: ลูกทีม ${a.team} · สายวิกฤต ${n1(a.cpLen)}k · กว้างสุด ${a.width} · เร็วขึ้น ${a.speedup.toFixed(1)} เท่า`, "",
     `- สายวิกฤต: ${a.cp.map(title).join(" → ")} (${n1(a.cpLen)}k)`,
-    `- งานรวม ${n1(a.total)}k · เวลาต่ำสุดตามสูตร ${n1(a.lowerBound)}k · จำลองการปล่อยจริงได้ ${n1(a.makespan)}k`,
-    ...(a.team === 1 && a.width > 1 ? [`- ปล่อยขนาน ${Math.min(a.width, WORKFLOW_AT)} ตัวเร็วขึ้นแค่ ${a.parallelSpeedup.toFixed(1)} เท่า กราฟเกือบเป็นสายเดียว จึงใช้ลูกทีมตัวเดียวทำตาม rank (ชิ้นเล็กนอกสายวิกฤต หัวหน้าทีมทำเองระหว่างรอได้)`] : []),
+    `- งานรวม ${n1(a.total)}k · ขนาน ${a.wide} ตัว: เวลาต่ำสุดตามสูตร ${n1(a.lowerBound)}k · จำลองปล่อยตาม rank ได้ ${n1(a.parallelMakespan)}k (เร็วขึ้น ${a.parallelSpeedup.toFixed(1)} เท่า)`,
+    ...(a.team === 1 && a.wide > 1 ? [`- ปล่อยขนาน ${a.wide} ตัวเร็วขึ้นแค่ ${a.parallelSpeedup.toFixed(1)} เท่า กราฟเกือบเป็นสายเดียว จึงใช้ลูกทีมตัวเดียวทำตาม rank (ชิ้นเล็กนอกสายวิกฤต หัวหน้าทีมทำเองระหว่างรอได้)`] : []),
     ...(a.needsWorkflow ? [`- กว้างเกิน ${WORKFLOW_AT} ชิ้น: เสนอ dynamic workflow ในคำถามตอนเริ่ม ถ้าผู้ใช้ไม่เอา แผนนี้ปล่อยรอบละ ${WORKFLOW_AT} ตาม rank`] : []),
-    "", "| ลำดับปล่อย | ชิ้น | ขนาด | rank | รอ | เจ้าของไฟล์ | ลูกทีม | เริ่ม → จบ | ไทม์ไลน์ |", "|---|---|---|---|---|---|---|---|---|",
-    ...sorted.map((r, i) => { const t = a.tasks.find((x) => x.id === r.id); return `| ${i + 1} | ${t.id}${t.title ? ` ${t.title}` : ""}${t.solo ? " (คนเดียว)" : ""} | ${n1(t.size)}k | ${n1(a.rank.get(t.id))} | ${(t.needs ?? []).join(" ") || "–"} | ${(t.owns ?? []).join(" ") || "–"} | ${r.lane} | ${n1(r.start)} → ${n1(r.end)} | \`${bar(r)}\` |`; }),
+    "", "| ลำดับปล่อย | ชิ้น | ขนาด | rank | เผื่อได้ | รอ | เจ้าของไฟล์ | ลูกทีม | เริ่ม → จบ | ไทม์ไลน์ |", "|---|---|---|---|---|---|---|---|---|---|",
+    ...sorted.map((r, i) => { const t = a.tasks.find((x) => x.id === r.id); return `| ${i + 1} | ${t.id}${t.title ? ` ${t.title}` : ""}${t.solo ? " (คนเดียว)" : ""} | ${n1(t.size)}k | ${n1(a.rank.get(t.id))} | ${a.cpm.get(t.id).float ? n1(a.cpm.get(t.id).float) : "0 วิกฤต"} | ${(t.needs ?? []).join(" ") || "–"} | ${(t.owns ?? []).join(" ") || "–"} | ${r.lane} | ${n1(r.start)} → ${n1(r.end)} | \`${bar(r)}\` |`; }),
     "",
   ].join("\n");
 }
@@ -149,7 +170,9 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.selfTest) return (await import("./plan.test.mjs")).selfTest();
   if (!args.file) { console.error("ใช้: node plan.mjs <plan.json> [--agents N] [--log <โฟลเดอร์ log>] [--json]"); process.exit(1); }
+  if (args.agents !== undefined && !(Number.isInteger(args.agents) && args.agents >= 1)) { console.error("--agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
   const plan = JSON.parse(readFileSync(args.file, "utf8"));
+  if (plan.max_agents !== undefined && !(Number.isInteger(plan.max_agents) && plan.max_agents >= 1)) { console.error("max_agents ต้องเป็นจำนวนเต็มตั้งแต่ 1"); process.exit(1); }
   const errors = validate(plan);
   if (errors.length) { console.error(errors.map((e) => `- ${e}`).join("\n")); process.exit(1); }
   const k = await factorsFrom(args.log ?? join(".claude", "superuser", "log"));
