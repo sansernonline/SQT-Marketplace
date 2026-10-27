@@ -1,0 +1,34 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการเดิม (รอบแดง 2026-10-27 · agent ไม่มี skill ทำโจทย์เดียวกัน): key ต่อ booking · acks=all · outbox · กันซ้ำด้วย event_id ถูก
+# แต่ json.loads อยู่นอก try ข้อความเสีย (poison message) ทำให้ consumer ล้มแล้ววนอ่านข้อความเดิม · retry อยู่ใน handler โดยไม่ดูเวลา จนเกิน max.poll.interval.ms แล้วกลุ่ม rebalance
+schema_version: "1.1"
+name: kafka-streaming-regression
+description: consumer ต้องส่งข้อความที่ถอดไม่ได้เข้า dead letter และ retry ต้องไม่ค้างจนเกิน max.poll.interval.ms (อาการรอบแดง 2026-10-27)
+tags: [regression, kafka-streaming]
+runs: 3
+expected_outcome: ข้อความที่ parse ไม่ได้ไป DLQ แล้ว commit ต่อ · บอกขีดจำกัด max.poll.interval.ms และวิธีไม่ให้ retry ค้าง
+execution:
+  prompt: |
+    ระบบนัดหมายส่ง event booking_created / booking_cancelled เข้า Kafka topic เดียว อยากได้ consumer Python
+    ที่อ่าน event แล้วบันทึกลง CRM ผ่าน REST API และส่ง LINE แจ้งลูกค้า บอกด้วยว่าควรตั้ง topic กี่ partition
+    และ producer ฝั่งระบบนัดควรส่งยังไง ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: poll-interval-named
+    type: regex
+    pattern: "max\\.poll\\.interval\\.ms"
+    match: contains
+    target: last_message
+  - name: poison-message-to-dlq
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อโค้ดหรือคำอธิบายจัดการข้อความที่ถอด (deserialize หรือ json.loads) ไม่ได้
+      โดยส่งไป dead letter topic หรือบันทึกแล้วข้ามไป และ commit offset ต่อได้ ไม่ใช่ปล่อยให้ consumer ล้มแล้วอ่านข้อความเดิมซ้ำ
+  - name: retry-does-not-block-poll
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบจำกัดเวลาหรือจำนวน retry ใน consumer ให้จบก่อน max.poll.interval.ms
+      หรือย้าย retry ไป topic retry หรือ dead letter แทนการวนรอใน handler นาน ๆ อย่างใดอย่างหนึ่งก็พอ

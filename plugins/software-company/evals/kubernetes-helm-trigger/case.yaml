@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: kubernetes-helm-trigger
+description: ผู้ใช้ขอ Dockerfile กับ Helm chart ให้ voice agent ขึ้น Kubernetes แบบ staging แล้ว production ไม่เอ่ยชื่อ skill ต้องทำให้ kubernetes-helm ถูกเปิด และคำตอบพูดถึง digest หรือ image ตัวเดียวกันระหว่าง 2 สภาพแวดล้อม
+tags: [trigger, kubernetes-helm]
+runs: 3
+expected_outcome: เปิด Skill kubernetes-helm แล้ววางแผน Dockerfile · chart · ลำดับ staging ไป production โดยใช้ image digest เดียวกัน
+execution:
+  prompt: |
+    ระบบ voice agent ของคลินิกทันตกรรมมีเว็บแอปกับ service ที่คุยกันผ่าน Kafka ตอนนี้รันด้วย docker compose
+    อยากย้ายไป k8s ให้ทดสอบบน staging ก่อนแล้ว deploy production ช่วยวางแผนว่าจะเขียน Dockerfile กับ Helm chart อย่างไร
+    และขั้นตอนปล่อยเป็นอย่างไร ยังไม่ต้องลงมือเขียนไฟล์
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?kubernetes-helm"'
+    min: 1
+    arm: with-only
+  - name: same-image-between-environments
+    type: regex
+    pattern: "digest|sha256"
+    flags: i
+    match: contains
+    target: last_message

@@ -1,5 +1,17 @@
 # Changelog — software-company
 
+## 2.28.0 — 2026-10-27
+
+- skill ใหม่ 4 ตัว (ทุกข้อมูลรุ่นและค่าตั้งมีลิงก์ทางการ ตรวจ 2026-10-27 · ข้อที่ยังไม่ได้ตรวจติดป้ายในไฟล์):
+  - `kubernetes-helm` — Dockerfile ใช้งานจริง · manifest · Helm chart · staging → production ด้วย image digest เดียวกัน · GPU node pool · KEDA ขยาย worker ตามงานค้างในคิว · Helm 4 ใช้ `--rollback-on-failure` แทน `--atomic`
+  - `kafka-streaming` — topic · key ต่อ entity · producer `acks=all` + idempotent · outbox · consumer commit หลังทำเสร็จ · dead letter · schema · event ไม่ใส่ข้อมูลส่วนบุคคล
+  - `jenkins-pipeline` — Jenkinsfile แบบ declarative · ค่าลับใช้ single quote · tag ด้วย commit SHA · input อนุมัติ production จำกัดผู้อนุมัติ · หลักการทั่วไปชี้ `cicd-and-release`
+  - `voice-agent` — voice agent ภาษาไทยแบบ realtime: SIP/WebRTC · VAD · STT/TTS streaming · พูดแทรก (barge-in) · งบ latency ต่อช่วง · PDPA ของการอัดเสียง
+- `observability-basics` เพิ่ม Prometheus/Grafana (`references/prometheus-grafana.md`): label ที่ค่าไม่จำกัด · PromQL p95 · กฎ alert · dashboard เป็นโค้ด
+- `mcp-server` เพิ่มตาราง MCP ทางการของ Kafka · Docker · Jenkins · Kubernetes/Helm · Prometheus · Grafana (`references/devops-mcp.md`) พร้อมวิธีเปิดใน `.mcp.json` ของโปรเจกต์ เริ่มจากสิทธิ์อ่านอย่างเดียว ไม่ฝังใน plugin
+- เคส eval 3 ตัวต่อ skill ใหม่ · เคส regression มาจากรอบแดง 2026-10-27 (agent ไม่มี skill ทำโจทย์เดียวกัน)
+- ตารางตัวกระตุ้นของ superuser สาขา และ agent `devops-engineer` ชี้ skill ใหม่
+
 ## 2.27.1 — 2026-10-27
 
 - ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic

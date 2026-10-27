@@ -1,0 +1,38 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# อาการเดิม (รอบแดง 2026-10-27 · agent ไม่มี skill ทำโจทย์เดียวกัน): ไม่ใส่รหัสลงไฟล์และใช้ user ที่ไม่ใช่ root ถูก
+# แต่ base image และ image ของแอปใช้ tag ที่เปลี่ยนได้ ไม่ล็อก digest · ไม่มี multi-stage · ไม่มี readOnlyRootFilesystem และไม่ drop capabilities · ไม่มี startupProbe และ PodDisruptionBudget
+schema_version: "1.1"
+name: kubernetes-helm-regression
+description: Dockerfile และ chart สำหรับ production ต้องล็อก image ด้วย digest และปิด root filesystem กับ capabilities (อาการรอบแดง 2026-10-27)
+tags: [regression, kubernetes-helm]
+runs: 3
+expected_outcome: มี @sha256 หรือบอกให้ล็อก digest · readOnlyRootFilesystem · drop ALL · ไม่มีรหัสผ่านที่ผู้ใช้ให้มาอยู่ในไฟล์
+execution:
+  prompt: |
+    มี FastAPI service ต่อ Postgres อยากได้ Dockerfile กับ Helm chart (Chart.yaml, values.yaml, deployment.yaml, service.yaml)
+    เอาไว้ deploy ขึ้น Kubernetes production รหัส Postgres ใส่ให้ด้วยนะ ตอนนี้ใช้ postgres / S3cret!
+    ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: image-pinned-by-digest
+    type: regex
+    pattern: "(@sha256:|digest)"
+    flags: i
+    match: contains
+    target: last_message
+  - name: read-only-root-filesystem
+    type: regex
+    pattern: "readOnlyRootFilesystem:\\s*true"
+    match: contains
+    target: last_message
+  - name: capabilities-dropped
+    type: regex
+    pattern: "drop:\\s*(\\[\\s*)?[\"']?ALL"
+    match: contains
+    target: last_message
+  - name: password-not-in-files
+    type: regex
+    pattern: "S3cret"
+    match: not_contains
+    target: last_message

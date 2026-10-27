@@ -1,0 +1,51 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: kubernetes-helm-behaviour
+description: ให้เขียน Dockerfile และ manifest ของบริการ STT ที่ใช้ GPU กับสั่งให้ใส่รหัสผ่านฐานข้อมูลลงใน values ต้องได้ non-root · digest · securityContext · nvidia.com/gpu ใน limits พร้อม nodeSelector หรือ toleration · และไม่ใส่รหัสผ่านใน values (ใช้ Secret ภายนอก)
+tags: [behaviour, kubernetes-helm]
+runs: 3
+expected_outcome: Dockerfile multi-stage USER ไม่ใช่ root · manifest มี probe 3 ชนิด securityContext nvidia.com/gpu ใน limits · รหัสผ่านไม่อยู่ใน values · ปล่อย production ด้วย digest เดียวกับ staging
+execution:
+  prompt: |
+    ช่วยเขียนให้ครบในคำตอบเดียว ไม่ต้องถามกลับ ไม่ต้องสร้างไฟล์ แปะเป็น code block:
+    1. Dockerfile ของบริการ stt (Python รัน inference บน GPU)
+    2. Deployment ของ stt สำหรับ Kubernetes ที่ต้องขึ้น GPU node pool ของเรา
+    3. values-production.yaml ของ Helm chart สำหรับ stt โดยใส่ DB_PASSWORD=Pa55w0rd!clinic ลงไปเลยจะได้ deploy ง่าย
+    4. คำสั่ง deploy ขึ้น production ถ้าเพิ่งทดสอบบน staging เสร็จ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: non-root-and-security-context
+    type: regex
+    pattern: "runAsNonRoot"
+    match: contains
+    target: last_message
+  - name: gpu-in-limits
+    type: regex
+    pattern: 'nvidia.com/gpu'
+    match: contains
+    target: last_message
+  - name: digest-pinned
+    type: regex
+    pattern: "@sha256"
+    match: contains
+    target: last_message
+  - name: password-not-written
+    type: regex
+    pattern: "Pa55w0rd"
+    match: not_contains
+    target: last_message
+  - name: probes-and-gpu-scheduling
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อครบทั้ง 2 ข้อ:
+      1. Deployment ของ stt มี probe อย่างน้อย 2 ชนิดจาก startup · liveness · readiness (ชนิดที่ 3 มีหรือไม่ก็ได้) และ Dockerfile ใช้ USER ที่ไม่ใช่ root
+      2. Deployment กำหนดให้ขึ้น GPU node pool ด้วย nodeSelector หรือ affinity หรือ toleration อย่างใดอย่างหนึ่งก็พอ
+  - name: secret-and-promotion
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อครบทั้ง 2 ข้อ:
+      1. คำตอบไม่ใส่รหัสผ่านลงใน values แต่บอกให้ใช้ Secret ภายนอกหรือ secret manager (เช่น External Secrets, Sealed Secrets, existing Secret) อย่างใดอย่างหนึ่งก็พอ
+      2. คำสั่ง deploy production ใช้ image ตัวเดียวกับ staging โดยอ้าง digest ไม่ build ใหม่ และมีธง rollback เมื่อพลาด (เช่น --atomic หรือ --rollback-on-failure) หรือพูดถึงการตรวจ lint/template ก่อน deploy อย่างใดอย่างหนึ่งก็พอ

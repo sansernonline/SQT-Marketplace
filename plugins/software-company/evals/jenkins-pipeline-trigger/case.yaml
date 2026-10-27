@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: jenkins-pipeline-trigger
+description: ผู้ใช้ขอ Jenkinsfile สำหรับ build image แล้ว deploy ด้วย Helm ไม่เอ่ยชื่อ skill ต้องทำให้ jenkins-pipeline ถูกเปิด และคำตอบพูดถึงด่านอนุมัติก่อน production
+tags: [trigger, jenkins-pipeline]
+runs: 3
+expected_outcome: เปิด Skill jenkins-pipeline แล้วอธิบายโครง pipeline ที่มี staging อัตโนมัติ และ production ที่ต้องมีคนอนุมัติ
+execution:
+  prompt: |
+    ทีมเรามีระบบ voice agent ของคลินิกทันตกรรม 4 service รันบน Kubernetes ตอนนี้ deploy ด้วยมือ
+    อยากให้ Jenkins ทำให้ ตั้งแต่ build Docker image ทดสอบ ลง staging แล้วขึ้น production ด้วย Helm
+    ช่วยวางโครง Jenkinsfile ให้หน่อย ยังไม่ต้องเขียนเต็ม แค่บอกว่าแต่ละขั้นทำอะไรและมีด่านอะไร
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?jenkins-pipeline"'
+    min: 1
+    arm: with-only
+  - name: production-gate-named
+    type: regex
+    pattern: 'input|อนุมัติ|approval|approve'
+    flags: i
+    match: contains
+    target: last_message

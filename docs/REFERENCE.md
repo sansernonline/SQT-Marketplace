@@ -197,7 +197,7 @@
 
 ---
 
-## 🛠️ Skills (97)
+## 🛠️ Skills (101)
 
 ### 1. user-story-writer
 **ใช้กับ:** business-analyst, product-manager
@@ -832,6 +832,7 @@
 ---
 
 ### 91. mcp-server
+**ใช้กับ:** devops-engineer
 **Description:** Use when an agent must reach a real system (database, ERP, internal API) through an MCP server, or when choosing a vendor MCP over building one.
 
 ---
@@ -865,6 +866,30 @@
 ### 97. security-audit
 **ใช้กับ:** security-engineer
 **Description:** Use when auditing a whole codebase for vulnerabilities before handover, a pen test of source, or ตรวจช่องโหว่ทั้งระบบ. Pre-ship scan → security-gate.
+
+---
+
+### 98. jenkins-pipeline
+**ใช้กับ:** devops-engineer
+**Description:** Use when writing or fixing a Jenkinsfile or Jenkins pipeline (CI/CD) that builds a Docker image, tests, and deploys with Helm.
+
+---
+
+### 99. kafka-streaming
+**ใช้กับ:** devops-engineer
+**Description:** Use when services pass events via Kafka (topic, producer, consumer, DLQ, ส่ง event ระหว่าง service) or events get lost or doubled.
+
+---
+
+### 100. kubernetes-helm
+**ใช้กับ:** devops-engineer
+**Description:** Use when writing a Dockerfile, Kubernetes (k8s) manifest or Helm chart, deploying staging to production, or running STT/TTS on GPU nodes.
+
+---
+
+### 101. voice-agent
+**ใช้กับ:** ai-engineer
+**Description:** Use when building a realtime voice agent or phone bot (รับสาย, โทรศัพท์, STT, TTS, พูดแทรก, barge-in, SIP, latency), especially in Thai.
 
 ---
 
