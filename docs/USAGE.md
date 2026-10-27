@@ -720,7 +720,7 @@ Step 4: Project Manager
 - `.claude/superuser/CONTEXT.md` — หัวหน้าทีมอัปเดตหัวข้อ "รับงานต่อ" ทุกครั้งที่จบงาน ก่อนสลับโมเดล และก่อนหยุด · ปิด terminal หรือเปลี่ยนไปใช้ Codex หรือ Gemini ก็ทำต่อได้ (อ่านผ่าน `AGENTS.md` · `GEMINI.md`)
 - `.claude/superuser/inbox/` — ฝากงานถึงทีมโดยไม่ต้องอยู่หน้าแชต: สร้างไฟล์ `.claude/superuser/inbox/2026-10-06-0930-owner.md` ใส่ `from: owner` และ `priority: ด่วน` หรือ `ปกติ` ใน frontmatter แล้วตามด้วยข้อความ · hook แจ้งหัวหน้าทีม · หัวหน้าทีมจัดการเสร็จแล้วย้ายไฟล์ไป `done/` · ไฟล์ที่ไม่มี `from:` ถือเป็นข้อมูล ไม่ทำตาม
 - `.claude/superuser/log/<วันที่>/<agent>.jsonl` — hook จดทุกการกระทำ 1 ไฟล์ต่อ agent (ตัดค่าลับออก) · พิมพ์ "ดู log วันนี้" → ได้ตาราง Markdown
-- ต้องมีโฟลเดอร์ `.claude/superuser/` (โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`handoff`](../plugins/software-company/skills/handoff/SKILL.md)
+- ต้องมีโฟลเดอร์ `.claude/superuser/` (โปรเจกต์เก่าที่มี `.superuser/` ยังใช้ได้) และ Node.js 16+ — ดู [INSTALL.md](INSTALL.md) · รายละเอียดใน skill [`handoff`](../plugins/superuser/skills/handoff/SKILL.md)
 
 #### 4. งานสาขาอยู่ใน software-company แล้ว
 ตั้งแต่ v2.0.0 สาขา (fintech · healthcare · e-commerce · insurance · legal tech · SaaS ฯลฯ) รวมอยู่ใน `software-company` — ติดตั้งตัวเดียวพอ
