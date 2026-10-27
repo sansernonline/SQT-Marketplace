@@ -184,6 +184,23 @@ const REJECT = /(ไม่สวย|ไม่ใช่|ไม่ผ่าน|(?<
 const ACCEPT = /(ดีมาก|สวยแล้ว|(?<!ไม่)ผ่าน(?!ไหม|มั้ย|หรือยัง)|โอเค|เอาแบบนี้)/;
 const VERDICT_LINE = /ผล(?:การตรวจ)?\s*[:：]\s*\**\s*(ผ่านแบบมีเงื่อนไข|ผ่านอย่างมีเงื่อนไข|ไม่ผ่าน|ผ่าน|PASS|FAIL|CONDITIONAL)/i;
 const AGENT_MESSAGE = /^\s*<agent-message from="([^"]+)"/;
+// งานเบื้องหลังจบ: <task-notification> มี tool-use-id และ token ทั้งหมดของลูกทีม (ตรวจจาก main.jsonl 2026-10-27 ว่ามาทาง UserPromptSubmit)
+const TASK_DONE = /^\s*<task-notification>/;
+// หัวหน้าทีมประเมินขนาดชิ้นในใบสั่งงาน เช่นบรรทัด "ขนาด: 40k" (token รวมโดยประมาณ) · model-scorecard เทียบกับที่ใช้จริง
+const ESTIMATE = /^\s*[-*]?\s*\**(?:ขนาด|size)\**\s*[:：]\**\s*(\d+(?:\.\d+)?)\s*k\b/im;
+
+export function estimateTokens(prompt) {
+  const k = Number(String(prompt ?? "").match(ESTIMATE)?.[1]);
+  return k > 0 ? Math.round(k * 1000) : null;
+}
+
+export function taskDone(prompt) {
+  const t = String(prompt ?? "");
+  if (!TASK_DONE.test(t)) return null;
+  const id = t.match(/<tool-use-id>\s*([^<\s]+)/)?.[1];
+  const total = Number(t.match(/<subagent_tokens>\s*(\d+)/)?.[1]);
+  return id ? { tool_use_id: id, total_tokens: total > 0 ? total : null } : null;
+}
 
 export function classifyStep(role, description, rules) {
   const text = `${role ?? ""} ${description ?? ""}`;
@@ -222,6 +239,8 @@ export function runEvents(input, entry, rules) {
   if (entry.event === "UserPromptSubmit") {
     const from = String(input.prompt ?? "").match(AGENT_MESSAGE)?.[1];
     if (from) return [{ ...base, event: "result", spawned_id: shortId(from), ...parseVerdict(input.prompt) }];
+    const done = taskDone(input.prompt);
+    if (done) return [{ ...base, event: "result", ...done }];
     const feedback = userFeedback(input.prompt);
     return feedback ? [{ ...base, event: "feedback", user_feedback: feedback, inferred: true }] : [];
   }
@@ -235,6 +254,7 @@ export function runEvents(input, entry, rules) {
     role: entry.role, model: input.tool_input.model ?? "inherit", lead_model: entry.model, effort: input.tool_input.effort ?? null,
     step, description: redact(description, 80), async: isAsync, ok: entry.ok,
     duration_ms: res?.totalDurationMs ?? res?.duration_ms ?? null, tokens: runTokens(res),
+    estimate_tokens: estimateTokens(input.tool_input.prompt),
     ...(!isAsync && step === "review" ? parseVerdict(text) : {}),
   }];
 }
@@ -1123,6 +1143,12 @@ ${rows}
       const bg = run(mk({ content: [{ type: "text", text: "Async agent launched agentId: a1" }] }, "sonnet"));
       return sync.model === "inherit" && sync.step === "review" && sync.verdict === "pass" && sync.duration_ms === 900 && sync.tokens.output === 7
         && bg.async === true && bg.model === "sonnet" && !("verdict" in bg);
+    }],
+    ["runs: ขนาดที่ประเมินในใบสั่งงาน · token จริงจากข้อความงานเบื้องหลังจบ", [], true, () => {
+      const note = "<task-notification>\n<task-id>a1</task-id>\n<tool-use-id>toolu_9</tool-use-id>\n<status>completed</status>\n<usage><subagent_tokens>58738</subagent_tokens></usage>\n</task-notification>";
+      const ev = runEvents({ hook_event_name: "UserPromptSubmit", prompt: note }, { ts: "t", session: "s", event: "UserPromptSubmit" }, null)[0];
+      return estimateTokens("เป้า: x\n- **ขนาด:** 40k\n") === 40000 && estimateTokens("size: 1.5k token") === 1500 && estimateTokens("ขนาดชิ้นใหญ่ 40k") === null && estimateTokens("ขนาด: 40kg") === null
+        && ev.event === "result" && ev.tool_use_id === "toolu_9" && ev.total_tokens === 58738 && taskDone("ทำต่อ") === null;
     }],
     ["แก้งาน: ข้อความ <agent-message / <task-notification ไม่นับว่าผู้ใช้แก้", [], true, () => !isCorrection("<agent-message from=x>ผิดที่ไฟล์ไหน ไม่ใช่ปัญหา") && !isCorrection("  <task-notification>wrong</task-notification>") && isCorrection("ไม่ใช่ แก้ใหม่") && isCorrection("it is wrong <agent-message")],
     ["คิวปรับทีม: นับเฉพาะข้อที่รับแล้วยังไม่รวม (ตาราง 1 + bullet 1)", [], true, () => pendingImprovements(qHome) === 2 && pendingImprovements(join(qHome, "none")) === 0],

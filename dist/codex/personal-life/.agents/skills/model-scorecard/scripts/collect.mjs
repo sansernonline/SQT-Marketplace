@@ -42,17 +42,19 @@ function fromMain(entries, rules) {
 function applyResult(run, result) {
   run.verdict = result.verdict ?? run.verdict;
   run.round = result.round ?? run.round;
+  run.total_tokens = result.total_tokens ?? run.total_tokens;
   if (run.duration_ms == null) run.duration_ms = Date.parse(result.ts) - Date.parse(run.ts);
 }
 
 function fromRunsFile(lines) {
-  const runs = [], byId = new Map();
+  const runs = [], byId = new Map(), byTool = new Map();
   for (const l of lines) {
     if (l.event === "run") {
       runs.push({ ...l });
       if (l.spawned_id) byId.set(l.spawned_id, runs.at(-1));
-    } else if (l.event === "result" && byId.has(l.spawned_id)) {
-      applyResult(byId.get(l.spawned_id), l);
+      if (l.tool_use_id) byTool.set(l.tool_use_id, runs.at(-1));
+    } else if (l.event === "result" && (byId.has(l.spawned_id) || byTool.has(l.tool_use_id))) {
+      applyResult(byId.get(l.spawned_id) ?? byTool.get(l.tool_use_id), l);
     } else if (l.event === "feedback") {
       const last = runs.findLast((r) => r.session === l.session && r.step !== "review");
       if (last) (last.feedback ??= []).push(l.user_feedback);

@@ -34,6 +34,8 @@ const newDay = [
   review(11, "s2", "fail", 1),
   review(13, "s2", "pass", 2),
   { ts: at(14), session: "s2", event: "feedback", user_feedback: "reject" },
+  run(20, "s3", "general-purpose", "research", { async: true, tool_use_id: "tu3", tokens: null, duration_ms: null, estimate_tokens: 20000 }),
+  { ts: at(25), session: "s3", event: "result", tool_use_id: "tu3", total_tokens: 30000 },
 ];
 
 export async function selfTest() {
@@ -58,7 +60,9 @@ export async function selfTest() {
     ["เวลาของงานเบื้องหลังได้จากเวลาผลส่งกลับ (2.0 นาที)", report.includes("| 2.0 นาที |")],
     ["วันเก่าไม่มี runs.jsonl → แถวหยาบ inherit + ป้าย", report.includes("| inherit (claude-opus-5-5) | code | 1 |") && report.includes("1 วันไม่มี runs.jsonl")],
     ["token ของวันเก่าเป็นค่าประมาณ (~)", report.includes("~")],
-    ["ตัวอย่างน้อยกว่า 5 ติดป้ายทุกแถว", report.split("\n").filter((l) => l.startsWith("| ") && !l.startsWith("| model") && !l.includes("ตัวอย่างน้อย")).length === 0],
+    ["ตัวอย่างน้อยกว่า 5 ติดป้ายทุกแถว", report.split("\n").filter((l) => l.startsWith("| ") && !/^\| (model|ขั้น) \|/.test(l) && !l.includes("ตัวอย่างน้อย")).length === 0],
+    ["ขนาดจริงต่อประเมิน: งานเบื้องหลังได้ token จาก tool_use_id · k = 0.6 + 0.4 × 1.5 = 1.20", report.includes("| research | 1 | 1.20 |")],
+    ["ไม่มีบรรทัดขนาดในใบสั่งงาน → บอกว่ายังไม่มี", buildReport([b], PRICES).includes("ยังไม่มีงานที่ใบสั่งงานมีบรรทัด")],
     ["ไม่มีราคา → ยังไม่มีราคา", buildReport([a], null).includes("ยังไม่มีราคา")],
     ["ข้อสังเกตครบ 3 ข้อ", (report.match(/^\d\. /gm) ?? []).length === 3],
     ["log ว่าง → บอกว่ายังไม่มีงาน", buildReport([["x", join(root, "none")]], PRICES).includes("ยังไม่มีงานลูกทีม")],
