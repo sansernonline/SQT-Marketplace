@@ -1,5 +1,9 @@
 # Changelog — superuser
 
+## 3.7.1 — 2026-10-27
+
+- ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic
+
 ## 3.7.0 — 2026-10-27
 
 - skill ใหม่ `design-references`: ทุกงานออกแบบเริ่มจากเอาคำของโปรเจกต์ไปค้นสดในเว็บที่เก่งงานแต่ละประเภท (12 ประเภท · 41 เว็บใน `data/sites.csv`) แล้วถอดสี 8 หน้าที่จากงานที่เลือกด้วย `scripts/find_refs.py palette-from` (ดักเว็บกันบอท · ปรับ contrast ให้ผ่าน) · เก็บแค่รายชื่อเว็บ ไม่เก็บตัวอย่างงาน · คลังสำรอง 2,360 ชุด 8 หน้าที่ (Wada MIT · color-palettes-sd CC BY 4.0) ใช้เมื่อค้นสดไม่ได้ · eval 3 เคส · router 1 แถว · ผู้ใช้สั่ง 2026-10-27

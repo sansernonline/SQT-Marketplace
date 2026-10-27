@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>
+<linearGradient id="t-personal-life-a" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#65c55c"/><stop offset="1" stop-color="#008d45"/></linearGradient>
+<linearGradient id="b-personal-life-a" x1="8" y1="8" x2="50" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#65c55c"/><stop offset="1" stop-color="#008d45"/></linearGradient>
+<filter id="sh-personal-life-a" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1.8"/><feComponentTransfer><feFuncA type="linear" slope=".22"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="64" height="64" rx="15" fill="url(#t-personal-life-a)"/>
+<g transform="translate(4.5 4.2) scale(.86)">
+<g fill="#ffffff"><path d="M12 28 32 10l20 18v24H12z"/></g>
+<g filter="url(#sh-personal-life-a)" fill="#b3deba" stroke="#00651e" stroke-width="1.8" stroke-linejoin="round"><rect x="26" y="28" width="30" height="28" rx="7"/></g>
+<g fill="none" stroke="#00651e" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M26 37h30M33 31v3M49 31v3M34 46l4 4 8-8"/></g></g></svg>

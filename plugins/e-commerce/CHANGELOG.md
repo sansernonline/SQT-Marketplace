@@ -1,5 +1,9 @@
 # CHANGELOG — e-commerce
 
+## 1.1.3 — 2026-10-27
+
+- ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic
+
 ## 1.1.2 — 2026-10-26
 
 - `hiring-th` และ `labour-law-basics`: ม.17 ตรวจกับตัวบทในราชกิจจานุเบกษา (เล่ม 115 ตอน 8 ก) · ม.17/1 ตามสรุปของสำนักเลขาธิการวุฒิสภา · ถอดป้าย (รอยืนยัน)

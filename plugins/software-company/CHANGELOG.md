@@ -1,5 +1,9 @@
 # Changelog — software-company
 
+## 2.27.1 — 2026-10-27
+
+- ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic
+
 ## 2.27.0 — 2026-10-27
 
 - skill ออกแบบ 14 ตัว (`ui-craft` · `web-app-design` · `mobile-app-design` · `windows-app-design` · `presentation-design` · `html-slide-deck` · `pptx-to-html-deck` · `branded-document-design` · `markdown-report-docx` · `doc-cover-design` · `diagram-figures` · `dynamic-website` · `graphic-design` · `markdown-visuals`) และ agent `ux-designer` `graphic-designer`: ขั้นแรกค้นต้นแบบสดตาม `design-references` (superuser) แล้วถอดสีจากงานที่เลือก · สีบ้านหรือคลังเป็นตัวสำรอง

@@ -85,6 +85,8 @@
     "evals/home-refinance-behaviour/case.yaml": "เคส eval: ผ่อนบ้านยังไม่ครบ 3 ปีแต่อยากย้ายพรุ่งนี้ ต้องคิดค่าปรับ ค่าจดจำนอง อากร และให้เทียบรีเทนชั่นกับอัตราหลังโปร",
     "evals/rebalance-and-dca-behaviour/case.yaml": "เคส eval: พอร์ตเบี้ยวจากเป้า 60/40 และอยากขาย RMF ต้องคำนวณส่วนต่าง 120,000 ห้ามขาย RMF ก่อนกำหนด และให้เติมด้วย DCA ก่อน",
     "evals/RESULTS.md": "ผล eval ที่รันจริงของ plugin นี้ เทียบรอบมี skill กับไม่มี skill พร้อมวันที่ รุ่น และค่าใช้จ่าย",
+    "assets/icon.png": "ไอคอนประจำ plugin 512 px กรอบสี่เหลี่ยมมุมโค้งสีไล่เฉด ใช้ในหน้ารายการของ directory",
+    "assets/icon.svg": "ไอคอนประจำ plugin ต้นฉบับเวกเตอร์ ใช้ส่งออกขนาดอื่น",
     "evals/design-references-trigger/case.yaml": "เคส eval: เจ้าของร้านกาแฟขอหน้าเว็บ ไม่เอ่ยชื่อ skill ต้องทำให้ design-references ถูกเปิด และเสนอค้นงานจริงก่อนเลือกสี",
     "evals/design-references-behaviour/case.yaml": "เคส eval: ขอสไลด์ pitch คลินิกทันตกรรม ต้องตั้งคำค้นจากโปรเจกต์ ชี้เว็บสไลด์ ถอดสีจากต้นแบบ และเตือนว่าเว็บแรงบันดาลใจใช้ดูเท่านั้น",
     "evals/design-references-regression/case.yaml": "เคส eval: ขอไอคอนแบบทำมาเลย ต้องไม่ส่ง SVG หรือรหัสสีที่เลือกเอง ค้นงานจริงก่อน (เห็นจริง 2026-10-27)",

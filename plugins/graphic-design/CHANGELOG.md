@@ -1,5 +1,9 @@
 # Changelog — graphic-design
 
+## 0.15.1 — 2026-10-27
+
+- ไอคอนประจำ plugin `assets/icon.png` (512) และ `assets/icon.svg` · ช่อง `icon` ใน plugin.json (ใช้ในหน้ารายการของ directory) · ทำตาม `design-references`: ค้นต้นแบบบน Dribbble แล้วถอดสีหลักจากงานต้นแบบ หมุนเฉดต่อ plugin · ผ่าน design-critic
+
 ## 0.15.0 — 2026-10-27
 
 - skill 10 ตัว (`brand-kit` · `campaign-set` · `social-formats` · `youtube-thumbnail` · `icon-design` · `image-generation` · `style-consistency` · `line-richmenu` · `motion-basics` · `brief-to-image`) และ agent `art-director` `brand-keeper` `social-creator` `image-artist`: ขั้นแรกค้นต้นแบบสดตาม `design-references` (superuser) แล้วถอดสีจากงานที่เลือก
