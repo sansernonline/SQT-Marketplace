@@ -4,6 +4,7 @@
   "multistep": {
     "_": "งานหลายขั้นที่ไม่เอ่ยชื่อ · แต่ละ signal ได้ 1 แต้มเมื่อเจอ pattern ถึง min ครั้ง (หรือข้อความยาวถึง minLength) · ถึง threshold → บอก superuser · ปรับเกณฑ์แล้วรัน hook --self-test",
     "threshold": 2,
+    "longThreshold": { "minLength": 60, "threshold": 1 },
     "skills": ["superuser:superuser"],
     "note": "งานนี้เป็นของสาขาไหน (โค้ด · ขายของ · เงิน · ชีวิต · ออกแบบ) เปิด `<plugin>:superuser` ของสาขานั้นแทนได้",
     "signals": [

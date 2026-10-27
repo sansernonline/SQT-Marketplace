@@ -348,7 +348,10 @@ export function routeSkills(prompt, router) {
   if (!text || text.startsWith("/")) return [];   // คำสั่ง slash เปิด skill ของมันเองอยู่แล้ว
   const out = [];
   const ms = router?.multistep;
-  if (ms && multistepScore(text, ms) >= (ms.threshold ?? 2)) out.push(...(ms.skills ?? []));
+  // ข้อความยาวใช้เกณฑ์ต่ำกว่า (longThreshold): งานเล็กส่วนใหญ่สั้น · งานใหญ่ที่มีกริยาตัวเดียวมักบรรยายยาว
+  // จับเกินเสียแค่เปิด superuser ที่ตัดสินเองว่างานเล็กทำเอง · พลาดงานใหญ่เสียมากกว่า (ผู้ใช้เจอจริง 2026-10-27)
+  const need = ms?.longThreshold && text.length >= ms.longThreshold.minLength ? ms.longThreshold.threshold : (ms?.threshold ?? 2);
+  if (ms && multistepScore(text, ms) >= need) out.push(...(ms.skills ?? []));
   for (const rule of router?.rules ?? []) {
     let re; try { re = new RegExp(rule.pattern, "i"); } catch { continue; }
     if (re.test(text)) for (const s of rule.skills ?? []) if (!out.includes(s)) out.push(s);
