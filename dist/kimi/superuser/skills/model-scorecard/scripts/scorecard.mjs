@@ -36,6 +36,7 @@ function run(args) {
     return write(args.out, buildReport(args.rollup.map((p) => [basename(resolve(p)), logDirOf(p)]), prices));
   }
   const log = resolve(args.log ?? logDirOf(process.cwd()));
+  if (!existsSync(log)) return fail(`ไม่พบโฟลเดอร์ log: ${log} · ยังไม่มีงานลูกทีมให้สรุป`);
   write(args.out ?? join(log, "MODEL-REPORT.md"), buildReport([[basename(dirname(dirname(dirname(log)))) || "โปรเจกต์นี้", log]], prices));
 }
 

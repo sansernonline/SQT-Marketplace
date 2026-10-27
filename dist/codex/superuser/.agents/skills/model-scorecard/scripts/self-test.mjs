@@ -47,6 +47,7 @@ export async function selfTest() {
   const cli = (...args) => spawnSync(process.execPath, [SCORECARD, ...args], { encoding: "utf8" });
   const rollup = cli("--rollup", join(root, "proj-a"), join(root, "proj-b"), "--out", out);
   const inside = cli("--rollup", join(root, "proj-a"), "--out", join(root, "proj-a", "r.md"));
+  const relative = spawnSync(process.execPath, [SCORECARD, "--rollup", "./proj-a", "--out", "./PROJ-A/r.md"], { encoding: "utf8", cwd: root });
   const cases = [
     ["นับงานต่อ model × ขั้น", report.includes("| sonnet | code | 2 |")],
     ["ผ่านรอบแรก 1 ใน 2 (รอบ 2 ผูกกับงานเดิม)", report.includes("50% (1/2)")],
@@ -64,6 +65,7 @@ export async function selfTest() {
     ["รวม 2 โปรเจกต์: เขียนไฟล์ผลแล้ว มีชื่อทั้งคู่ งาน code ของ sonnet = 3", rollup.status === 0 && existsSync(out) && /proj-a: 2 วัน/.test(readOut(out)) && /proj-b: 1 วัน/.test(readOut(out)) && readOut(out).includes("| sonnet | code | 3 |")],
     ["รวมแล้วโปรเจกต์ที่อ่านไม่มีไฟล์เพิ่ม", lines(join(root, "proj-a")) === before],
     ["--out อยู่ในโปรเจกต์ที่อ่าน → ปฏิเสธ ไม่สร้างไฟล์", inside.status === 1 && !existsSync(join(root, "proj-a", "r.md"))],
+    ["win32: path สัมพัทธ์ต่างตัวพิมพ์ (./proj-a กับ ./PROJ-A/r.md) → ปฏิเสธ", process.platform !== "win32" || relative.status === 1],
   ];
   rmSync(root, { recursive: true, force: true });
   let ok = 0;

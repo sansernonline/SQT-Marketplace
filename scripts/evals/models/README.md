@@ -12,7 +12,7 @@
 | `review` | `review-recall` เคส r1 r2 r3 | ข้อผิดที่ฝังไว้ที่ reviewer เจอ ÷ ทั้งหมด (เทียบข้อความ ไม่ใช้ผู้ตัดสิน) |
 | `plan` | spec สั้นให้แตกงาน ([`plan-task.mjs`](plan-task.mjs)) | checklist 5 ข้อ ข้อละ 2: 3–6 ขั้น · ทุกขั้นมี "เสร็จเมื่อ" · ทุกขั้นระบุไฟล์ · ครอบคลุม csv เกณฑ์ รายงาน test README · ไม่เกิน 60 บรรทัด |
 
-model: `claude-haiku-5-5` · `claude-sonnet-5-5` · `claude-opus-5-5` · `claude-fable-5-1` (ราคาจาก `plugins/superuser/skills/model-scorecard/references/prices.json`) · ทุกรอบส่ง `--model` และ `--effort` (ค่าเริ่ม `medium`) ไม่โหลด plugin จึงวัดตัว model ไม่ใช่ทีม
+model: `claude-haiku-5-5` · `claude-sonnet-5-5` · `claude-opus-5-5` · `claude-fable-5-1` (ราคาจาก `plugins/superuser/skills/model-scorecard/references/prices.json`) · ทุกรอบส่ง `--model` และ `--effort` (ค่าเริ่ม `medium`) ไม่โหลด plugin จึงวัดตัว model ไม่ใช่ทีม · **ข้อยกเว้น: ขั้น `review`** รันผ่าน `run-review-recall.mjs` ซึ่งโหลด plugin superuser และเรียก agent `superuser:reviewer` จึงวัดทีมรีวิว ไม่ใช่ model เปล่า
 
 ## คำสั่ง
 
@@ -32,10 +32,12 @@ node scripts/evals/models/run-models.mjs --run      # เสียเงิน: 
 
 ## ค่าใช้จ่าย
 
-- เพดานต่อครั้งเรียก (`--max-budget-usd`): code $3 · code-quality $5 · review $1 ต่อเคส · plan $1
-- รันจากถูกไปแพง (haiku → fable) ช่องที่แพงสุดจึงถูกตัดก่อนเมื่อถึงงบ · เกินงบได้อย่างมากเท่าเพดานของช่องสุดท้ายที่กำลังรัน
+- เพดานต่อช่อง = max(ประมาณของ model นั้น × 2, $0.50) · ต่อครั้งเรียก (`--max-budget-usd`) = เพดานช่อง ÷ จำนวนครั้ง (review หารด้วย 3 เคส) · `--plan` แสดงทั้งยอดประมาณและเพดาน
+- ยอดใช้สะสมไม่ต่ำกว่าเงินที่อาจเสียจริง: ถ้า claude ล้ม · JSON ไม่ครบ · ไม่มี `total_cost_usd` นับ $ เท่าเพดานของครั้งนั้น · review ที่บางเคสไม่มีไฟล์ผลนับเพดานต่อเคสของเคสนั้น
+- รันจากถูกไปแพง (haiku → fable) ช่องที่แพงสุดจึงถูกตัดก่อนเมื่อถึงงบ · ก่อนเริ่มทุกช่องเช็กว่ายอดใช้ + เพดานช่องนั้น ไม่เกินงบ
+- ชุดแนะนำของ `--plan` คิดจากยอดประมาณไม่เกิน 80% ของงบ · ตัวกันจริงคือเช็ก ใช้แล้ว + เพดานช่อง ไม่เกินงบ ก่อนเริ่มทุกช่อง
 - `--plan` ประมาณจาก $ ต่อครั้งบน sonnet ในผลเก่า (`speed/RESULTS.md` t1 · `coding/RESULTS.md` c5) × อัตราราคาเฉลี่ยถ่วงของ model ÷ sonnet · ผลเก่าไม่เก็บ token จึงสมมุติสัดส่วน token (cache อ่าน 85%) · `review` กับ `plan` ยังไม่เคยวัด ใช้ค่าสมมุติ · ตัวเลขผิดได้เป็นเท่าตัว
-- ประมาณรอบแรก (2026-10-27) ทั้ง 16 ช่อง $24 เกินงบ $20 → ชุดแนะนำตัด fable ที่ code-quality กับ review เหลือ ≈ $12
+- ประมาณรอบแรก (2026-10-27) ทั้ง 16 ช่อง $24 เกินงบ $20 → ชุดแนะนำตัด fable ที่ code-quality กับ review เหลือ ≈ $12 (80% ของงบ = $16) · เพดานช่อง = max(ประมาณ × 2, $0.50) · ตัวรันข้ามช่องที่ใช้แล้ว + เพดานเกินงบ จึงไม่เกินงบรวม
 
 ## ผล
 
