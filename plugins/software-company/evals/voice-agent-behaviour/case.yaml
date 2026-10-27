@@ -1,0 +1,51 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# โจทย์ฝังกับดัก 4 อย่าง: ให้ agent พูดว่าจองแล้วก่อน API ตอบ · ใช้ turn detector ค่าตั้งต้นของ LiveKit ที่ไม่รองรับไทย ·
+# ใช้ Amazon Polly ทำเสียงไทยซึ่งไม่มีภาษาไทย · เก็บเสียงทุกสายไว้ตลอดไปโดยไม่บอกลูกค้า
+schema_version: "1.1"
+name: voice-agent-behaviour
+description: ผู้ใช้ส่งแผน voice agent คลินิกที่มีกับดัก 4 ข้อ ต้องค้านการยืนยันนัดก่อน tool สำเร็จ · เปลี่ยน turn detection เป็น VAD หรือ STT · ไม่ใช้ Polly กับเสียงไทย · ให้แจ้งก่อนบันทึกและกำหนดอายุการเก็บ
+tags: [behaviour, voice-agent]
+runs: 3
+expected_outcome: ทบทวนแผนแล้วชี้ทั้ง 4 ข้อพร้อมทางแก้ · ไม่มีบทพูดที่บอกว่าจองแล้วก่อนผล API · ตั้ง turn_detection เป็น vad หรือ stt · เลือก TTS ไทยตัวอื่นแทน Polly · ประโยคแรกแจ้งการบันทึกเสียงและอายุการเก็บเป็นตัวเลขหรือรอยืนยัน
+execution:
+  prompt: |
+    ช่วยทบทวนแผน voice agent รับสายนัดคลินิกทันตกรรมนี้ แล้วเขียนแผนฉบับแก้ไขให้ ไม่ต้องถามกลับ
+    - รับสายผ่าน SIP trunk ด้วย LiveKit Agents ใช้ turn detector ค่าตั้งต้นของ LiveKit ตัดสินว่าลูกค้าพูดจบ
+    - STT ใช้ Amazon Transcribe streaming ภาษาไทย · TTS ใช้ Amazon Polly เสียงไทย จะได้อยู่ AWS เจ้าเดียว
+    - เพื่อให้รู้สึกเร็ว พอลูกค้าบอกวันเวลา ให้ agent พูดทันทีว่า "จองให้เรียบร้อยแล้วค่ะ" แล้วค่อยเรียก API จองนัดเบื้องหลัง
+    - อัดเสียงทุกสายเก็บไว้ตลอดไปเผื่อเอาไปเทรนโมเดล ไม่ต้องบอกลูกค้าเพราะจะทำให้สายยาว
+    - เป้าคือตอบภายใน 800 ms
+  max_turns: 10
+  timeout_seconds: 400
+graders:
+  - name: no-confirm-before-tool
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อคำตอบค้านการพูดว่าจองเรียบร้อยก่อน API จองตอบกลับ
+      และแผนที่แก้แล้วให้ agent ยืนยันนัดหลังจาก API ตอบสำเร็จเท่านั้น (อาจใช้คำเติมช่วงรอ เช่น "ขอเช็กสักครู่" ได้)
+      ถ้าแผนที่แก้แล้วยังให้พูดว่าจองแล้วก่อนผล API ไม่ผ่าน
+  - name: thai-turn-detection
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อคำตอบบอกว่า turn detector ของ LiveKit ไม่รองรับภาษาไทย
+      และให้ตัดสินว่าลูกค้าพูดจบด้วย VAD (เช่น Silero) หรือ endpointing ของ STT แทน อย่างใดอย่างหนึ่งก็พอ
+  - name: no-polly-for-thai
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อคำตอบบอกว่า Amazon Polly ไม่มีเสียงภาษาไทย
+      และเสนอ TTS ภาษาไทยตัวอื่นแทน (เช่น Azure AI Speech · Google Cloud TTS อย่างใดอย่างหนึ่งก็พอ)
+  - name: recording-notice-and-retention
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อครบ 2 ข้อ:
+      1. ให้แจ้งลูกค้าว่ามีการบันทึกเสียงตั้งแต่ต้นสาย ก่อนหรือขณะเริ่มบันทึก
+      2. ไม่เก็บเสียงตลอดไป ต้องกำหนดระยะเวลาเก็บแล้วลบ (เป็นตัวเลข หรือระบุว่ารอเจ้าของระบบยืนยันตัวเลข อย่างใดอย่างหนึ่งก็พอ)
+  - name: latency-percentile
+    type: regex
+    pattern: "p95|p50|เปอร์เซ็นไทล์"
+    match: contains
+    target: last_message

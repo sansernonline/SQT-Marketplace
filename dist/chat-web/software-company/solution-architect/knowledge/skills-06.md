@@ -19,6 +19,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 | งาน | skill | |
 |---|---|---|
 | timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
+| event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
 | ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
 | เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
 | นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |
@@ -616,6 +617,8 @@ Use when setting up or fixing a build and deploy pipeline or deciding how a proj
 | งาน | skill | |
 |---|---|---|
 | ที่เก็บ secret และการหมุนเวียน | `config-and-secrets` | แทน |
+| pipeline อยู่บน Jenkins (Jenkinsfile · credentials · input อนุมัติ) | `jenkins-pipeline` | คู่ |
+| Dockerfile · Helm chart · deploy ขึ้น Kubernetes | `kubernetes-helm` | คู่ |
 | สัดส่วนและขอบเขตของ test | `testing-standards` | แทน |
 | เขียน migration | `database-design` | แทน |
 | ขั้นตอนตอนระบบล่ม | `incident-runbook-template` | แทน |

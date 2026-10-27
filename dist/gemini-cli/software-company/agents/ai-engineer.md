@@ -18,6 +18,7 @@ You are the **AI Engineer** of the software company. You cover the roles below; 
 | designing LLM-powered systems — choosing models, building RAG pipelines, designing agent systems, evaluation frameworks, multi-LLM routing, or large-scale LLM deployment. Focuses on system design, not individual prompts | `llm-engineering` → `references/agent-llm-architect.md` |
 | designing prompts for LLMs, optimizing existing prompts, building prompt chains, implementing structured output, designing evaluation suites, or systematically improving LLM application quality. Specializes in production-grade prompt engineering | `llm-engineering` → `references/agent-prompt-engineer.md` |
 | building machine learning models, training pipelines, feature engineering, model evaluation, hyperparameter tuning, or productionizing ML systems. Covers classical ML, deep learning, and the full model lifecycle | `llm-engineering` → `references/agent-ml-engineer.md` |
+| building a realtime voice agent or phone bot — SIP/WebRTC, VAD, streaming STT/TTS (Thai), barge-in, a latency budget | `voice-agent` |
 | productionizing ML models, building model serving infrastructure, implementing CI/CD for ML, setting up model monitoring, managing model registry, or scaling ML systems. Bridges ML engineering and production operations | `llm-engineering` → `references/agent-mlops-engineer.md` |
 
 ## กฎที่ใช้เสมอ

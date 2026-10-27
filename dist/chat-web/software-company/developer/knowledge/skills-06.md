@@ -1809,6 +1809,8 @@ Use when settings differ by environment or something must never be committed (ke
 | งาน | skill | |
 |---|---|---|
 | เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
+| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
 | ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
 | กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
 | connection string ของฐานข้อมูล | `database-design` | คู่ |
@@ -2278,6 +2280,7 @@ Use when work runs outside the user request (mail, reports, imports, schedules).
 | งาน | skill | |
 |---|---|---|
 | timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
+| event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
 | ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
 | เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
 | นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |

@@ -1,0 +1,44 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: jenkins-pipeline-behaviour
+description: ขอ Jenkinsfile ที่ต้องใช้รหัส registry ต้องไม่ให้ Groovy ต่อค่าลับในสตริงคำสั่ง · production มี input พร้อม submitter · deploy ใช้ digest เดียวกับ staging และไม่ใช้ latest
+tags: [behaviour, jenkins-pipeline]
+runs: 3
+expected_outcome: Jenkinsfile ที่ใช้ withCredentials กับ sh ใน single quote · tag เป็น commit SHA · production มี input กับ submitter · helm upgrade ใช้ atomic หรือแฟล็กเทียบเท่า
+execution:
+  prompt: |
+    เขียน Jenkinsfile แบบ Declarative ให้ repo ที่มี service ชื่อ booking ให้ครบทั้งไฟล์ในคำตอบ (ไม่ต้องสร้างไฟล์)
+    ขั้นตอน: build Docker image แล้ว push ไป registry.example.com/clinic ด้วย credential ID ชื่อ registry-push
+    (ชนิด username/password) สแกนช่องโหว่ ลง staging ใน namespace clinic-staging ทดสอบ แล้วขึ้น production
+    ใน namespace clinic-prod ด้วย helm ใช้ kubeconfig จาก credential ID kubeconfig-staging และ kubeconfig-production
+    ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: no-groovy-interpolated-secret
+    type: regex
+    pattern: 'sh\s*\(?\s*("""|")[^"]*\$\{?(REG_PASS|REG_PSW|[A-Z_]*(PASS|PSW|TOKEN|SECRET))'
+    match: not_contains
+    target: last_message
+  - name: credentials-bound
+    type: regex
+    pattern: 'withCredentials|credentials\('
+    match: contains
+    target: last_message
+  - name: production-input-with-submitter
+    type: regex
+    pattern: 'input\b[\s\S]*submitter'
+    match: contains
+    target: last_message
+  - name: rollback-on-failure-flag
+    type: regex
+    pattern: '--atomic|--rollback-on-failure'
+    match: contains
+    target: last_message
+  - name: image-identity
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อ Jenkinsfile ในคำตอบทำ 2 อย่างนี้ทั้งคู่
+      1. image ถูก tag ด้วยรหัส commit (เช่น GIT_COMMIT หรือ SHA ย่อ) และไม่มี image ที่ใช้ tag latest เป็น tag ที่ deploy
+      2. staging และ production ใช้ image ตัวเดียวกัน (อ้างด้วย digest หรือ tag เดิมที่ push ครั้งเดียว) ไม่มีการ build ใหม่ในขั้น production

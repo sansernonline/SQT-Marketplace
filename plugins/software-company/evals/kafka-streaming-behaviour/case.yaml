@@ -1,0 +1,50 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: kafka-streaming-behaviour
+description: ออกแบบ topic producer consumer ของคลินิกทันตกรรม ต้องมี acks=all กับ min.insync.replicas, outbox, commit หลังทำเสร็จพร้อมกันซ้ำด้วย event id, และ event ไม่ใส่เบอร์โทรหรือชื่อ
+tags: [behaviour, kafka-streaming]
+runs: 3
+expected_outcome: คำตอบมี key ต่อสาย/ต่อนัด · acks=all · min.insync.replicas · outbox · ปิด auto commit · DLQ · event มีแต่ id
+execution:
+  prompt: |
+    voice agent คลินิกทันตกรรมส่ง event สายโทร (เริ่ม จบ สรุป) และนัดหมาย (จอง เลื่อน ยกเลิก) ผ่าน Kafka
+    ไปให้ service สรุปลง CRM กับ service แจ้งเตือน LINE ออกแบบ topic, ค่าตั้งของ producer และ consumer,
+    โครง event ตัวอย่าง 1 ตัว ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: producer-durability
+    type: regex
+    pattern: "acks[\"']?\\s*[:=]\\s*[\"']?all"
+    flags: i
+    match: contains
+    target: last_message
+  - name: min-insync-named
+    type: regex
+    pattern: "min\\.insync\\.replicas"
+    match: contains
+    target: last_message
+  - name: outbox-named
+    type: regex
+    pattern: "outbox"
+    flags: i
+    match: contains
+    target: last_message
+  - name: auto-commit-left-on
+    type: regex
+    pattern: "enable\\.auto\\.commit\\s*=\\s*true"
+    match: not_contains
+    target: last_message
+  - name: commit-after-work-and-dedupe
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อคำตอบบอกทั้ง 2 เรื่อง
+      1. consumer commit offset หลังงานเสร็จหรือเขียนผลลงระบบปลายทางแล้ว ไม่ใช่ก่อน (เช่น ปิด auto commit แล้ว commit เองหลังเขียน CRM อย่างใดอย่างหนึ่งก็พอ)
+      2. consumer กัน event ซ้ำด้วยรหัส event ที่ไม่ซ้ำกัน (เช่น ตารางเก็บ event_id ที่ทำแล้ว หรือ upsert ด้วย id อย่างใดอย่างหนึ่งก็พอ)
+  - name: event-without-personal-data
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน ให้ผ่านเมื่อโครง event ตัวอย่างในคำตอบมีแต่รหัสอ้างอิง (เช่น call_id, patient_id)
+      ไม่มีเบอร์โทร ชื่อคนไข้ หรือเนื้อเสียงอยู่ในตัว event และ key ของ topic เป็นรหัสสายหรือรหัสนัด

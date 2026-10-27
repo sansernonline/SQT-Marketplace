@@ -370,6 +370,8 @@ Use when settings differ by environment or something must never be committed (ke
 | งาน | skill | |
 |---|---|---|
 | เก็บ secret ใน pipeline · ด่านอนุมัติ | `cicd-and-release` | แทน |
+| ค่าลับใน Jenkinsfile (`withCredentials` · single quote) | `jenkins-pipeline` | คู่ |
+| Secret ของ Kubernetes ไม่อยู่ใน values.yaml (External Secrets · SealedSecret) | `kubernetes-helm` | คู่ |
 | ออกแบบ login, token, สิทธิ์ผู้ใช้ | `auth-implementation-patterns` | แทน |
 | กันไม่ให้ค่าอ่อนไหวโผล่ใน log | `logging-standards` | แทน |
 | connection string ของฐานข้อมูล | `database-design` | คู่ |
