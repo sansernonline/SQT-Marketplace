@@ -268,7 +268,7 @@ Bottom line: "This matches the pattern of a fake investment LINE group. Do not t
 
 Red flags found (with source) · what could not be verified · blunt bottom line. When flags stack up, say "this matches the pattern of a scam" and recommend not transferring — better wrong once than broke once.
 
-Related (same plugin): `debt-payoff` before paying anyone to "clear debt"; `insurance-review` before a policy sold as an investment.
+Related (same plugin): `debt-payoff` before paying anyone to "clear debt"; `insurance-review` before a policy sold as an investment; `copy-trade-check` when the offer is a forex or MT4/MT5 copy-trade signal with no promises attached.
 
 
 ## reference: red-flags-and-evidence.md

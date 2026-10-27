@@ -1,5 +1,10 @@
 # Changelog — trading-finance
 
+## 0.15.0 — 2026-10-27
+
+- skill ใหม่ `copy-trade-check` ประเมินผู้ให้สัญญาณ copy trade บน MQL5 ด้วยตัวเลขก่อนตามเทรด: เตือนสถานะกฎหมายในไทยที่ยังไม่ชัด (ถาม ธปท. 1213) · กฎเหล็ก (demo · อายุสั้น · martingale · grid · deposit load) · เทียบด้วย `decision-scoring` ไม่จัดอันดับด้วย Growth · ลองเงินปลอมก่อน · ห้ามดึงหน้า mql5.com อัตโนมัติ
+- สคริปต์ `copy-trade-check/scripts/signal-check.mjs` อ่านประวัติดีล คิด win rate พร้อม Wilson interval · t-stat · drawdown · จับ martingale (lot หลังแพ้ ÷ หลังชนะ) และ grid (ไม้เปิดซ้อน) · self-test 42 ข้อ · eval 3 เคส
+
 ## 0.14.0 — 2026-10-27
 
 - สคริปต์ใหม่ `debt-payoff/scripts/payoff.mjs` จำลอง avalanche กับ snowball รายเดือน บอกส่วนต่างดอกเบี้ยเป็นบาท · `home-refinance/scripts/refinance.mjs` ค่างวด ดอกเบี้ยรวม และจุดคุ้มทุน (self-test 19 ข้อทั้งคู่ · input ผิดหยุดพร้อมข้อความ · งบไม่พอจ่ายดอกบอกว่าปลดไม่หมด)

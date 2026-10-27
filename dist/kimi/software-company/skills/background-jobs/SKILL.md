@@ -21,6 +21,7 @@ description: Use when work runs outside the user request (mail, reports, imports
 |---|---|---|
 | timeout และการ retry ของคำขอปกติ | `error-handling-patterns` | แทน |
 | event ข้ามหลาย service ผ่าน Kafka (หลาย consumer อ่าน event เดียวกัน · เก็บย้อนหลัง) | `kafka-streaming` | แทน |
+| คิวงานผ่าน RabbitMQ (หลาย worker · retry · dead letter · ต้องมี broker จริง) | `rabbitmq-messaging` | แทน |
 | ตัวชี้วัดและการแจ้งเตือน | `observability-basics` | แทน |
 | เลือกสถาปัตยกรรมภาพรวม | `architecture-patterns` | แทน |
 | นำเข้าไฟล์ Excel/CSV เป็นเนื้องาน | `data-import-export` | แทน |

@@ -1,6 +1,6 @@
 {
   "name": "software-company",
-  "version": "2.30.0",
+  "version": "2.31.0",
   "icon": "./assets/icon.png",
   "description": "Simulates a complete software development company — 38 agents from product, analysis, architecture, design, development, QA, DevOps and security to AI, mobile, data, compliance, growth and an engineer per industry. Includes 95 skills and 29 slash commands for the whole SDLC.",
   "author": {
