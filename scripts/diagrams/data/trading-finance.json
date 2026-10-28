@@ -1,6 +1,6 @@
 {
  "plugin": "trading-finance",
- "version": "0.16.1",
+ "version": "0.17.0",
  "description": "Trading and personal finance toolkit for Thai investors — watchlists, signals, paper trading, trade journal, position sizing, dividends, budgets and scam checks, plus Thai money skills: investment tax, year-end deduction planning (/tax-plan), mutual funds, retirement, debt payoff and คลินิกแก้หนี้, insurance review and emergency funds, credit bureau reports, bonds and deposits, rebalancing and DCA, and home refinance. Uses whatever market-data plugins you already have.",
  "cross": [
   "software-company",
@@ -131,7 +131,8 @@
    "core": false,
    "description": "Use before opening a position, asking how much to buy, or when a portfolio drifts. Never sizes without a stop-loss.",
    "skills": [
-    "position-sizing"
+    "position-sizing",
+    "copy-trade-check"
    ]
   },
   {
