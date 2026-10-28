@@ -99,6 +99,7 @@ git branch -d <branch>                   # -d ปฏิเสธถ้ายั�
 ```
 
 - ลบ branch เมื่อ **`git branch --merged main` มีชื่อนั้น** หรือ PR ถูก merge บน remote (`gh pr view <n> --json state`) · `-D` ใช้เฉพาะทาง "ทิ้ง" ที่อนุมัติแล้ว
+- **merge แล้วลบได้ทันที ไม่ต้องถาม** — worktree ที่สะอาดและ branch ที่ผ่านเงื่อนไขข้อบน ลบเลยแม้เป็นของ session หรือ AI ตัวอื่น (งานเข้า main ครบแล้ว ไม่มีอะไรหาย) · ไล่ดูทุกครั้งที่เริ่มและจบงาน ไม่ปล่อยโฟลเดอร์ `<repo>-<งาน>` กองข้าง repo · ยังไม่ merge หรือมีไฟล์ค้าง → ไม่แตะ
 - ลบ worktree ที่ Claude Code ล็อกอยู่ → `git worktree unlock` ก่อน · ล็อกที่คนตั้งเอง (`--reason`) ไม่แตะ ถามเจ้าของ
 - จบวันหรือจบ playbook: `git worktree list` ต้องเหลือเฉพาะที่มีเหตุผลในบันทึก · playbook `housekeeping` ของ `superuser` เรียกข้อนี้
 

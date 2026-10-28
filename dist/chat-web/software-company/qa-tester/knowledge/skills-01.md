@@ -2058,7 +2058,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 2. **ชื่อ branch ขึ้นต้นด้วยชื่อเครื่องมือ** (`claude/` · `codex/` · `gemini/`) ตามด้วยงาน เช่น `claude/ui-scan-hook` · เห็นชื่อแล้วรู้ว่าใครทำ ไม่ต้องดูแลตารางแยก
 3. **ใครทำอะไรอยู่ ดูจาก git** · `git worktree list` (ใครอยู่โฟลเดอร์ไหน branch อะไร) · `git branch -vv` · ข้อมูลนี้ไม่ต้องจดซ้ำใน `CONTEXT.md` เพราะแต่ละ branch มี `CONTEXT.md` ของตัวเอง จดไปก็เก่าและชนกันตอน merge
 4. **ห้ามแตะ worktree ของตัวอื่น** · ไม่ commit · ไม่ลบ · ไม่ switch branch ในโฟลเดอร์ที่ไม่ใช่ของตัวเอง · เจอไฟล์ค้างที่ไม่ได้มาจาก input ของ tool ใน session นี้ = ของคนอื่น ห้าม stage
-5. **merge แล้วเก็บกวาด** · ลบ branch (`gh pr merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · ถ้า worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force`
+5. **merge แล้วเก็บกวาด** · ลบ branch (`gh pr merge --delete-branch`) แล้ว `git worktree remove <โฟลเดอร์>` · ถ้า worktree ยังมีไฟล์ค้าง git จะไม่ยอมลบ ให้บอกผู้ใช้ ห้ามใส่ `--force` · ตอนเริ่มและจบงานไล่ดู `git worktree list` ด้วย: branch ไหน merge แล้ว (`git branch --merged main` มีชื่อ หรือ `gh pr list --head <branch> --state merged` เจอ PR) ลบ worktree ที่สะอาดและ branch นั้นได้ทันทีโดยไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ยังไม่ merge ห้ามแตะ
 6. ไฟล์ที่ไม่อยู่ใน git (`node_modules` · `.venv` · `.env`) ไม่ตามมาใน worktree ใหม่ ต้องติดตั้งหรือคัดลอกเอง · ค่าลับคัดลอกเฉพาะไฟล์ที่ `.gitignore` กันไว้แล้ว
 
 
