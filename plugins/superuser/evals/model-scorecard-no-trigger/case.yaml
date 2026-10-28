@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: model-scorecard-no-trigger
+description: เขียนฟังก์ชันคิดคะแนนเฉลี่ยนักเรียน มีคำว่า คะแนน แต่ไม่เกี่ยวกับการเทียบ model ต้องไม่เปิด model-scorecard
+tags: [no-trigger, model-scorecard]
+runs: 10
+expected_outcome: ไม่เรียก Skill model-scorecard · ให้ฟังก์ชัน JavaScript ที่หาค่าเฉลี่ย
+execution:
+  prompt: |
+    เขียนฟังก์ชัน JavaScript รับ array คะแนนนักเรียน [72, 85, 90] แล้วคืนคะแนนเฉลี่ยทศนิยม 2 ตำแหน่ง
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: skill-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?model-scorecard"'
+    min: 0
+    max: 0
+    arm: both
+  - name: has-function
+    type: regex
+    pattern: 'function|=>'
+    match: contains
+    target: last_message

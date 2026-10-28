@@ -48,7 +48,9 @@ For each ongoing medicine:
 | Medicine | Units per day (from label) | Units on hand | Days left = on hand ÷ per day | Refill by (days left − 7) | Where (hospital / pharmacy) | Appointment needed? |
 |---|---|---|---|---|---|---|
 
-Worked example: 60 tablets on hand, label says 1 tablet twice a day → 2 per day → 30 days left → set reminder at day 23. Hospital follow-up appointments (ใบนัด) often refill at the visit — check the ใบนัด date is before the medicine runs out.
+Do not count days by hand: write `on_hand`, `per_day` (from the label only) and `start_date` as JSON and run `node skills/important-docs/scripts/due-dates.mjs --refill <file.json>` (example: `skills/important-docs/scripts/example-refill.json`). It returns days of supply, the last day with medicine, the reminder date and a status; `per_day` of 0 is refused. It never suggests a dose.
+
+Worked example (this is the script's example file): 60 tablets on hand, label says 1 tablet twice a day → 2 per day → 30 days left → set reminder at day 23. Hospital follow-up appointments (ใบนัด) often refill at the visit — check the ใบนัด date is before the medicine runs out.
 
 ## Allergy and side-effect list
 

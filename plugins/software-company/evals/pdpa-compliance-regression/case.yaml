@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# ที่มา: ข้อความและ anti-pattern ที่ pdpa-compliance/SKILL.md ข้อ 4 และ 9 จดไว้ (soft delete อย่างเดียวไม่นับว่าลบ · ลืมข้อมูลในสำรอง log ระบบวิเคราะห์)
+# (ยังไม่ได้รันรอบแดง · ยังไม่มีผลรันของ agent ที่ไม่มี skill ให้ยืนยันว่าพลาดจริง)
+schema_version: "1.1"
+name: pdpa-compliance-regression
+description: ออกแบบการลบข้อมูลตามคำขอเจ้าของข้อมูล ต้องไม่หยุดที่ soft delete และต้องครอบคลุมสำรอง log ระบบวิเคราะห์ และผู้ให้บริการภายนอก
+tags: [regression, pdpa-compliance]
+runs: 3
+expected_outcome: ลบจริงไม่ใช่แค่ตั้งธง deleted · ไล่ที่เก็บข้อมูลอื่น (สำรอง log analytics ภายนอก) · ข้อมูลที่กฎหมายบังคับเก็บ (ภาษี) บอกเจ้าของข้อมูล
+execution:
+  prompt: |
+    ลูกค้าส่งคำขอให้ลบข้อมูลของเขาออกจากระบบร้านค้าออนไลน์ของเรา (Postgres + log ใน cloud + Google Analytics + สำรองข้อมูลรายคืน)
+    ออกแบบขั้นตอนรับและทำตามคำขอนี้ ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: not-soft-delete-only
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบไม่หยุดที่ soft delete (ตั้งธง deleted) และมีการลบหรือทำให้ระบุตัวตนไม่ได้จริง
+  - name: other-stores-covered
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบครอบคลุมที่เก็บข้อมูลอื่นนอกตารางหลักอย่างน้อย 2 อย่าง (ไฟล์สำรอง log ระบบวิเคราะห์ ผู้ให้บริการภายนอก)
+  - name: legal-retention-told
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกว่าข้อมูลที่กฎหมายบังคับให้เก็บ (เช่นเอกสารภาษี) เก็บต่อได้ แต่ต้องแจ้งเจ้าของข้อมูลว่าเก็บอะไรไว้เพราะอะไร

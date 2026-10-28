@@ -6,12 +6,17 @@
 // fees_pct = ทุกค่าธรรมเนียมที่คิดเป็น % ของราคา รวม VAT แล้ว (อัตราอ่านจากไฟล์เท่านั้น ไม่ฝังในโค้ด) · campaign ไม่บังคับ
 // สูตร: P = (C + S + F) / (1 - r - v - m) · v = 7/107 ถ้าจด VAT · ปัดราคาขึ้นให้ลงท้าย 9 หรือ 0 แล้วคิดกำไรใหม่ที่ราคาที่ปัด
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const VAT_SHARE = 7 / 107;
+// ค่าธรรมเนียมแพลตฟอร์มเปลี่ยนบ่อย (CHANGELOG 1.1.0) · 30 วันเป็นค่าตั้งต้น ยังไม่ได้วัด
+const RATES_MAX_AGE_DAYS = 30;
+const DAY_MS = 24 * 60 * 60 * 1000;
 const round2 = (n) => Math.round(n * 100) / 100;
 const sumPct = (fees) => Object.values(fees).reduce((s, v) => s + v, 0);
 
-export function validate(input) {
+export function validate(input, today = new Date()) {
   const num = (v, label) => {
     if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) throw new Error(`ช่อง ${label} ต้องเป็นตัวเลขตั้งแต่ 0 (ได้ ${JSON.stringify(v)})`);
   };
@@ -19,6 +24,8 @@ export function validate(input) {
   if (typeof input.rates_checked !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(input.rates_checked)) throw new Error(`ช่อง rates_checked ต้องเป็นวันที่ YYYY-MM-DD ที่ตรวจอัตราใน Seller Centre (ได้ ${JSON.stringify(input.rates_checked)})`);
   if (!Array.isArray(input.items) || input.items.length === 0) throw new Error('ช่อง items ต้องเป็นรายการสินค้าอย่างน้อย 1 ชิ้น');
   const warnings = [];
+  const age = Math.floor((today - new Date(`${input.rates_checked}T00:00:00Z`)) / DAY_MS);
+  if (age > RATES_MAX_AGE_DAYS) warnings.push(`อัตราตรวจล่าสุด ${input.rates_checked} (${age} วันก่อน) เก่ากว่า ${RATES_MAX_AGE_DAYS} วัน · เปิด Seller Centre ดูอัตราปัจจุบัน แล้วแก้ fees_pct และ rates_checked`);
   input.items.forEach((it, i) => {
     const n = it?.name ?? `ชิ้นที่ ${i + 1}`;
     const at = (f) => `items[${i}].${f} (${n})`;
@@ -26,6 +33,8 @@ export function validate(input) {
     num(it?.shipping, at('shipping'));
     num(it?.fixed, at('fixed'));
     num(it?.margin_pct, at('margin_pct'));
+    if (it.cost + it.shipping + it.fixed <= 0) throw new Error(`${n}: cost + shipping + fixed เป็น 0 ได้ราคา 0 · ใส่ต้นทุนจริงของสินค้า`);
+    if (it.margin_pct > 0 && it.margin_pct < 1) warnings.push(`${n}: margin_pct = ${it.margin_pct} น้อยกว่า 1 · ใส่เป็น % (20 ไม่ใช่ 0.2)`);
     if (typeof it.vat_registered !== 'boolean') throw new Error(`ช่อง ${at('vat_registered')} ต้องเป็น true หรือ false`);
     if (!it.fees_pct || typeof it.fees_pct !== 'object') throw new Error(`ช่อง ${at('fees_pct')} ต้องเป็นอ็อบเจกต์ เช่น { "commission": 10.7 }`);
     for (const [k, v] of Object.entries(it.fees_pct)) {
@@ -72,9 +81,13 @@ export function calcItem(it) {
   return out;
 }
 
-export function calc(input) {
-  const warnings = validate(input);
-  return { rates_checked: input.rates_checked, items: input.items.map(calcItem), warnings };
+export function calc(input, today = new Date()) {
+  const warnings = validate(input, today);
+  const items = input.items.map(calcItem);
+  input.items.forEach((it, i) => {
+    if ((it.campaign?.voucher ?? 0) >= items[i].price) warnings.push(`${items[i].name}: voucher ${it.campaign.voucher} ตั้งแต่ราคาขาย ${items[i].price} ขึ้นไป · เช็คว่าใส่ voucher ถูกช่องและถูกหน่วย`);
+  });
+  return { rates_checked: input.rates_checked, items, warnings };
 }
 
 const baht = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -125,7 +138,8 @@ function selfTest() {
   t('แคมเปญขาดทุน', x.campaign.loss === true);
   t('ไม่มีแคมเปญ ไม่มีช่อง', calcItem(base).campaign === undefined);
   // input checks
-  const throwsWith = (inp, word) => { try { calc(inp); return false; } catch (e) { return e.message.includes(word); } };
+  const FRESH = new Date('2026-10-10T00:00:00Z'); // 4 วันหลัง rates_checked ในตัวอย่าง จึงไม่เตือนวันที่
+  const throwsWith = (inp, word) => { try { calc(inp, FRESH); return false; } catch (e) { return e.message.includes(word); } };
   const file = (item, extra = {}) => ({ rates_checked: '2026-10-06', items: [{ ...base, ...item }], ...extra });
   t('ไม่มี rates_checked', throwsWith(file({}, { rates_checked: undefined }), 'rates_checked'));
   t('cost ติดลบ', throwsWith(file({ cost: -1 }), 'cost'));
@@ -134,22 +148,34 @@ function selfTest() {
   t('ไม่มี fees_pct', throwsWith(file({ fees_pct: undefined }), 'fees_pct'));
   t('items ว่าง', throwsWith({ rates_checked: '2026-10-06', items: [] }, 'items'));
   t('หาราคาไม่ได้ (รวม >= 100%)', throwsWith(file({ margin_pct: 90 }), '100%'));
-  t('fees_pct < 1 เตือน', calc(file({ fees_pct: { commission: 0.107 } })).warnings.length === 1);
-  t('รายงานพิมพ์วันที่อัตรา', report(calc(file({}))).includes('2026-10-06'));
+  t('fees_pct < 1 เตือน', calc(file({ fees_pct: { commission: 0.107 } }), FRESH).warnings.length === 1);
+  t('รายงานพิมพ์วันที่อัตรา', report(calc(file({}), FRESH)).includes('2026-10-06'));
+  // edge/pc1: อัตราปี 2019 · cost 0 ได้ NaN% · margin 0.2 · voucher เกินราคา
+  t('อัตราเก่า 2019 เตือน', calc(file({}, { rates_checked: '2019-01-01' }), FRESH).warnings.some((w) => w.includes('2019-01-01')));
+  t('อัตรา 30 วันพอดี ไม่เตือน', calc(file({}), new Date('2026-11-05T00:00:00Z')).warnings.length === 0);
+  t('อัตรา 31 วัน เตือน', calc(file({}), new Date('2026-11-06T00:00:00Z')).warnings.length === 1);
+  t('ต้นทุนรวม 0 ปฏิเสธ', throwsWith(file({ cost: 0, shipping: 0, fixed: 0 }), 'ราคา 0'));
+  t('margin_pct 0.2 เตือน', calc(file({ margin_pct: 0.2 }), FRESH).warnings.some((w) => w.includes('margin_pct')));
+  t('voucher เกินราคา เตือน', calc(file({ campaign: { voucher: 500 } }), FRESH).warnings.some((w) => w.includes('voucher')));
+  t('voucher ปกติ ไม่เตือน', calc(file({ campaign: { voucher: 20 } }), FRESH).warnings.length === 0);
   console.log(`self-test ${ok}/${ok + bad} ผ่าน`);
   process.exit(bad ? 1 : 0);
 }
 
-const args = process.argv.slice(2);
-if (args.includes('--self-test')) selfTest();
-else {
-  const file = args.find((a) => !a.startsWith('--'));
-  if (!file) { console.error('ใช้: node price-calc.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }
-  try {
-    const r = calc(JSON.parse(readFileSync(file, 'utf8')));
-    console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
-  } catch (e) {
-    console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${file} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${file}` : e.message}`);
-    process.exit(1);
+// รัน CLI เฉพาะตอนเรียกไฟล์นี้ตรง ๆ · import จากสคริปต์อื่นได้โดยไม่ออก
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  const args = process.argv.slice(2);
+  if (args.includes('--self-test')) selfTest();
+  else {
+    const file = args.find((a) => !a.startsWith('--'));
+    if (!file) { console.error('ใช้: node price-calc.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }
+    try {
+      const r = calc(JSON.parse(readFileSync(file, 'utf8')));
+      console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
+    } catch (e) {
+      console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${file} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${file}` : e.message}`);
+      process.exit(1);
+    }
   }
 }

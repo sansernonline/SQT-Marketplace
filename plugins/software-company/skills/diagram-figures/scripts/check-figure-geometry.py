@@ -2,11 +2,17 @@
 ป้ายและเลขลำดับไม่ทับกัน และเส้นไม่พาดผ่านตัวหนังสือหรือไอคอน
 
     python check-figure-geometry.py <ไฟล์ .html หรือโฟลเดอร์>     (exit 0 = ผ่าน)
+    python check-figure-geometry.py --self-test                    (ตรวจตัวตรวจเอง · ข้ามถ้าไม่มี playwright/chromium)
 
 ต้องมี playwright (pip install playwright && playwright install chromium)"""
 import asyncio, sys
 from pathlib import Path
-from playwright.async_api import async_playwright
+try:
+    from playwright.async_api import async_playwright
+except ImportError:                      # --self-test below skips instead of crashing
+    if sys.argv[1:] != ["--self-test"]:
+        raise
+    async_playwright = None
 
 JS = r"""() => {
   const R = e => { const r = e.getBoundingClientRect(); return {x0:r.left, y0:r.top, x1:r.right, y1:r.bottom}; };
@@ -59,4 +65,33 @@ async def main(folder):
         await br.close()
     sys.exit(1 if bad else 0)
 
-asyncio.run(main(sys.argv[1]))
+PAGE = """<html><body style="margin:0"><div id="stage" class="stage" style="position:relative;width:400px;height:240px">
+<div class="name" style="position:absolute;left:150px;top:90px;width:80px;height:20px">Box</div>
+<svg class="wires" width="400" height="240" style="position:absolute;left:0;top:0"><path class="wire" d="%s" fill="none" stroke="#000"/></svg>
+</div></body></html>"""
+
+
+def self_test():
+    """Three tiny pages: a clean elbow wire passes; a diagonal wire and a wire through a label fail."""
+    import tempfile
+    if async_playwright is None:
+        print("self-test skipped: playwright missing (pip install playwright && playwright install chromium)")
+        return
+    cases = (("clean", "M 10 20 L 100 20 A 10 10 0 0 1 110 30 L 110 200", 0),
+             ("diagonal", "M 10 10 L 100 100", 1),
+             ("through-text", "M 10 100 L 390 100", 1))
+    with tempfile.TemporaryDirectory() as tmp:
+        for name, d, want in cases:
+            (Path(tmp) / f"{name}.html").write_text(PAGE % d, encoding="utf-8")
+            try:
+                asyncio.run(main(str(Path(tmp) / f"{name}.html")))
+            except SystemExit as done:
+                assert done.code == want, f"{name}: exit {done.code}, wanted {want}"
+    print("self-test ok")
+
+
+if __name__ == "__main__":
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+    else:
+        asyncio.run(main(sys.argv[1]))

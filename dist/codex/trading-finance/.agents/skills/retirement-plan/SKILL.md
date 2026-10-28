@@ -22,6 +22,8 @@ General information, not financial advice — a Certified Financial Planner (CFP
 - Future value of monthly saving = PMT × ((1 + r)^n − 1) ÷ r, with r = annual return ÷ 12 and n = months.
 - Required monthly saving = gap ÷ that same factor.
 
+Run the numbers with the script instead of by hand: `node scripts/retire.mjs <file.json>` (example: `scripts/example.json` = the worked example below; `--self-test` checks it). Input: `age` `retireAge` `planToAge` `spendMonthly` `returnPct`, optional `inflationPct` (3), `year` (Buddhist year now), `sso: { monthsNow, monthsPerYear, avgWage }`, `assets: [{ name, balance, monthly, returnPct }]` for PVD / RMF, `levers: { retireLaterYears, spendLessMonthly }` (default 3 years and 5,000, from the worked example). Output: spending at retirement, needed sum, pension, gap, monthly saving, the three levers and the saving at 3% / 5% / 6%. Without `avgWage` the pension uses the wage ceiling of the retirement year (upper bound). Pension rule and ceilings: `scripts/sso-pension.json` (`checked` date). **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/retirement-plan/scripts/retire.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs` · Node only.
+
 ## Social security old age (กรณีชราภาพ, ม.33 / ม.39)
 
 | Contributions | Benefit at age 55 and leaving insured work |
@@ -82,3 +84,10 @@ A fixed "4% of the starting pot, raised with inflation every year" ignores what 
 - State the return assumption beside every result.
 - Do not count the pension as inflation-proof.
 - Recompute every year or after a job change.
+
+## Check before sending
+
+- The needed sum, gap and monthly saving come from a `retire.mjs` run in this session; the return and inflation used are stated beside them.
+- The three levers and the 3% / 5% / 6% line from the script are shown, with the one the user picked.
+- Pension: say whether it used the user's average wage or the ceiling (upper bound), give the `sso-pension.json` `checked` date, and that it is not inflation-linked.
+- Each `คำเตือน` line from the script is fixed in the input or repeated to the user.

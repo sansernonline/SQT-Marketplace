@@ -3,7 +3,7 @@
 schema_version: "1.1"
 name: rebalance-and-dca-behaviour
 description: พอร์ต 1,100,000 เป้า 60/40 หุ้นเกินเป้า ส่วนหุ้นมี RMF 300,000 อายุ 40 ผู้ใช้อยากขายหุ้นเกินพรุ่งนี้ และอยากข้ามซื้อ RMF 2 ปีติด
-tags: [behaviour, rebalance-and-dca]
+tags: [capability, behaviour, rebalance-and-dca]
 runs: 3
 expected_outcome: คำนวณช่องว่าง 120,000 บาท (หุ้น 70.9% เกินเป้า 60%) · เสนอเติมเงิน DCA เข้าตราสารหนี้ก่อน หรือสับเปลี่ยนในบลจ.เดียวกัน · ไม่ขาย RMF ก่อนกำหนด (ต้องคืนภาษี) · RMF ข้ามได้ไม่เกิน 1 ปีติดกัน · ไม่ชี้กองทุนที่ดีที่สุด
 execution:

@@ -6,7 +6,7 @@ schema_version: "1.1"
 name: chat-prompt-workflows-regression
 description: prompt ตรวจตัวเองจนผ่านเกณฑ์ ต้องให้ผู้ตรวจยกหลักฐาน หาไม่เจอนับไม่ผ่าน มีเกณฑ์หยุดเมื่อข้อเดิมไม่ดีขึ้น 2 รอบ และบอกให้ตรวจอิสระในแชตใหม่
 tags: [regression, chat-prompt-workflows]
-runs: 3
+runs: 10
 expected_outcome: prompt มีผู้ตรวจที่ยกข้อความหลักฐานทุกเกณฑ์ · ไม่มีหลักฐานนับว่าไม่ผ่าน · หยุดเมื่อผ่านครบ ครบ 3 รอบ หรือข้อเดิมไม่ผ่าน 2 รอบติด · ท้ายคำตอบแนะนำเปิดแชตใหม่ตรวจซ้ำ
 execution:
   prompt: |

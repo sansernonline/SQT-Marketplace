@@ -3,7 +3,8 @@ schema_version: "1.1"
 name: jenkins-pipeline-trigger
 description: ผู้ใช้ขอ Jenkinsfile สำหรับ build image แล้ว deploy ด้วย Helm ไม่เอ่ยชื่อ skill ต้องทำให้ jenkins-pipeline ถูกเปิด และคำตอบพูดถึงด่านอนุมัติก่อน production
 tags: [trigger, jenkins-pipeline]
-runs: 3
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+runs: 5
 expected_outcome: เปิด Skill jenkins-pipeline แล้วอธิบายโครง pipeline ที่มี staging อัตโนมัติ และ production ที่ต้องมีคนอนุมัติ
 execution:
   prompt: |

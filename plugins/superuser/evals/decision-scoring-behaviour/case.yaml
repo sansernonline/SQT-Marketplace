@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: decision-scoring-behaviour
 description: เลือกข้อเสนองาน 2 ที่ที่คะแนนสูสี ต้องบอกว่าผลยังไม่นิ่งและให้ผู้ใช้ตัดสิน ไม่ฟันธงแทน
 tags: [behaviour, decision-scoring]
-runs: 3
+runs: 10
 expected_outcome: ให้คะแนนตามน้ำหนักที่ผู้ใช้บอก ขยับน้ำหนักดูความไว แล้วบอกว่าอันดับพลิกได้ จึงชี้เกณฑ์ที่ทำให้พลิกให้ผู้ใช้เลือก
 execution:
   prompt: |

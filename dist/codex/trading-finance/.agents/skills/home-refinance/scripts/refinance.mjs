@@ -3,7 +3,10 @@
 // ใช้:
 //   node refinance.mjs pmt <ยอดกู้> <ดอกเบี้ย%ต่อปี> <จำนวนงวด>
 //   node refinance.mjs compare <ไฟล์.json> [--json]
+//   node refinance.mjs scenarios <ไฟล์.json>     → JSON ตาราง options × scenarios สำหรับ decide.mjs payoff
 //   node refinance.mjs --self-test
+// อัตราหลายช่วง: ใส่ "rates": [{ "months": 36, "rate": 3.2 }, { "rate": 5.5, "floating": true }] แทน "rate" · ช่วงสุดท้ายใช้ต่อจนครบ N เดือน
+// scenarios: { ..., "scenarios": [{ "name": "MRR ขึ้น 1 จุด", "shift": 1 }] } · shift (จุด %) บวกเข้าเฉพาะช่วงที่ "floating": true
 // ไฟล์ compare: { "balance": 2400000, "payment": 18000, "months": 36,
 //   "stay": { "rate": 6.5 },
 //   "options": [ { "name": "A รีไฟแนนซ์", "rate": 3.2, "cost": 28200 } ] }
@@ -28,6 +31,28 @@ export function simulate(balance, annualRatePct, payment, months) {
   return { interest, balance: bal };
 }
 
+// rates = [{ months, rate }] ตามลำดับ · ช่วงสุดท้ายไม่ต้องมี months (ใช้ต่อจนครบ) · shift บวกเข้าช่วง floating
+export function simulateSegments(balance, rates, payment, months, shift = 0) {
+  let bal = balance;
+  let interest = 0;
+  let m = 0;
+  rates.forEach((seg, k) => {
+    const end = k === rates.length - 1 ? months : Math.min(months, m + seg.months);
+    const r = seg.rate + (seg.floating ? shift : 0);
+    if (r < 0) throw new Error(`อัตราช่วงที่ ${k + 1} หลังบวก shift ${shift} จุดเหลือ ${r.toFixed(2)}% ต่ำกว่า 0 · ลด shift ให้ติดลบน้อยลง หรือเช็ก rate ของช่วง floating`);
+    for (; m < end && bal > 0.005; m++) {
+      const i = (bal * r) / 100 / 12;
+      interest += i;
+      bal = Math.max(0, bal + i - payment);
+    }
+    m = end;
+  });
+  return { interest, balance: bal };
+}
+
+const segmentsOf = (o) => o.rates ?? [{ rate: o.rate }];
+const rateText = (o) => (o.rates ? o.rates.map((s) => `${s.rate}${s.floating ? '*' : ''}${s.months ? ` (${s.months} ด.)` : ''}`).join(' → ') : String(o.rate));
+
 export function breakEvenMonths(extraCost, monthlySaving) {
   if (extraCost <= 0) return 0;
   return monthlySaving > 0 ? extraCost / monthlySaving : null;
@@ -43,18 +68,32 @@ export function validate(input) {
   num(input.payment, 'payment', 0, true);
   num(input.months, 'months', 0, true);
   if (!input.stay || typeof input.stay !== 'object') throw new Error('ช่อง stay ต้องมี (เช่น { "rate": 6.5 })');
-  num(input.stay.rate, 'stay.rate', 0, false);
-  if (input.stay.cost !== undefined) num(input.stay.cost, 'stay.cost', 0, false);
-  if (!Array.isArray(input.options) || input.options.length === 0) throw new Error('ช่อง options ต้องเป็นรายการทางเลือกอย่างน้อย 1 ทาง');
   const warnings = [];
   const rateWarn = (n, rate) => { if (rate > 0 && rate < 1) warnings.push(`${n}: rate ${rate} น้อยกว่า 1 · rate เป็น % ต่อปี (ใส่ 3.2 ไม่ใช่ 0.032) · ตรวจว่าไม่ได้ใส่เป็นทศนิยม`); };
-  rateWarn('อยู่เฉย ๆ', input.stay.rate);
+  // rate (ตัวเดียว) หรือ rates (หลายช่วง) อย่างใดอย่างหนึ่ง
+  const rates = (o, label) => {
+    if (o.rates === undefined) { num(o.rate, `${label}.rate`, 0, false); rateWarn(label, o.rate); return; }
+    if (o.rate !== undefined) throw new Error(`${label} ใส่ได้อย่างใดอย่างหนึ่ง: rate หรือ rates · ลบช่องหนึ่งออก`);
+    if (!Array.isArray(o.rates) || o.rates.length === 0) throw new Error(`ช่อง ${label}.rates ต้องเป็นรายการช่วง เช่น [{ "months": 36, "rate": 3.2 }, { "rate": 5.5 }]`);
+    o.rates.forEach((seg, k) => {
+      num(seg?.rate, `${label}.rates[${k}].rate`, 0, false);
+      rateWarn(label, seg.rate);
+      if (k < o.rates.length - 1) num(seg.months, `${label}.rates[${k}].months (ทุกช่วงยกเว้นช่วงสุดท้ายต้องบอกจำนวนเดือน)`, 0, true);
+    });
+  };
+  rates(input.stay, 'stay');
+  if (input.stay.cost !== undefined) num(input.stay.cost, 'stay.cost', 0, false);
+  if (!Array.isArray(input.options) || input.options.length === 0) throw new Error('ช่อง options ต้องเป็นรายการทางเลือกอย่างน้อย 1 ทาง');
   input.options.forEach((o, i) => {
     const n = o?.name ?? `ทางที่ ${i + 1}`;
-    num(o?.rate, `options[${i}].rate (${n})`, 0, false);
-    num(o?.cost, `options[${i}].cost (${n})`, 0, false);
-    rateWarn(n, o.rate);
+    if (!o || typeof o !== 'object') throw new Error(`ช่อง options[${i}] ต้องเป็นอ็อบเจกต์ { name, rate หรือ rates, cost }`);
+    rates(o, `options[${i}] (${n})`);
+    num(o.cost, `options[${i}].cost (${n})`, 0, false);
   });
+  if (input.scenarios !== undefined) {
+    if (!Array.isArray(input.scenarios) || input.scenarios.length === 0) throw new Error('ช่อง scenarios ต้องเป็นรายการฉาก เช่น [{ "name": "MRR ขึ้น 1 จุด", "shift": 1 }]');
+    input.scenarios.forEach((sc, k) => num(sc?.shift, `scenarios[${k}].shift (จุด % ที่บวกเข้าช่วง floating)`, -100, true));
+  }
   if (input.baseline !== undefined && input.baseline !== 'อยู่เฉย ๆ' && !input.options.some((o) => o.name === input.baseline)) throw new Error(`ช่อง baseline "${input.baseline}" ไม่ตรงกับชื่อทางเลือกใดเลย`);
   return warnings;
 }
@@ -63,24 +102,40 @@ export function validate(input) {
 export function compare(input) {
   const warnings = validate(input);
   const { balance, payment, months } = input;
-  const mk = (name, rate, cost) => {
-    const s = simulate(balance, rate, payment, months);
-    return { name, rate, cost, ...s, total: s.interest + cost };
+  const mk = (name, o, cost) => {
+    const s = simulateSegments(balance, segmentsOf(o), payment, months);
+    return { name, rate: segmentsOf(o)[0].rate, rateText: rateText(o), cost, ...s, total: s.interest + cost };
   };
-  const all = [mk('อยู่เฉย ๆ', input.stay.rate, input.stay.cost ?? 0), ...input.options.map((o) => mk(o.name, o.rate, o.cost))];
+  const all = [mk('อยู่เฉย ๆ', input.stay, input.stay.cost ?? 0), ...input.options.map((o) => mk(o.name, o, o.cost))];
   const base = all.find((x) => x.name === input.baseline) ?? all[0];
   const rows = all.map((x) => {
     const monthlySaving = (base.interest - x.interest) / months;
     return { ...x, saved: base.total - x.total, monthlySaving, breakEven: x === base ? 0 : breakEvenMonths(x.cost - base.cost, monthlySaving) };
   });
-  return { months, payment, baseline: base.name, rows, warnings, warning: payment <= (balance * input.stay.rate) / 100 / 12 ? 'ค่างวดไม่พอจ่ายดอกเบี้ยเดือนแรกของทางเดิม' : null };
+  return { months, payment, baseline: base.name, rows, warnings, warning: payment <= (balance * segmentsOf(input.stay)[0].rate) / 100 / 12 ? 'ค่างวดไม่พอจ่ายดอกเบี้ยเดือนแรกของทางเดิม' : null };
+}
+
+// ตาราง ดอกเบี้ยรวม + ค่าใช้จ่าย ต่อฉาก → input ของ decide.mjs payoff (better = low) · ปัดเป็นบาท
+export function scenarios(input) {
+  validate(input);
+  if (!input.scenarios) throw new Error('ไม่มีช่อง scenarios · ใส่เช่น [{ "name": "MRR ลง 1 จุด", "shift": -1 }, { "name": "MRR ทรงตัว", "shift": 0 }] และติด "floating": true ที่ช่วงอัตราลอยตัว');
+  const { balance, payment, months } = input;
+  const opts = [...input.options.map((o) => ({ name: o.name, o, cost: o.cost })), { name: 'อยู่เฉย ๆ', o: input.stay, cost: input.stay.cost ?? 0 }];
+  const cell = (o, cost, shift) => Math.round(simulateSegments(balance, segmentsOf(o), payment, months, shift).interest + cost);
+  return {
+    _note: `ดอกเบี้ยรวม ${months} เดือน + ค่าใช้จ่ายครั้งเดียว (บาท) จาก refinance.mjs scenarios · shift บวกเฉพาะช่วง floating · อัตราหลังโปรเป็นข้อสมมติจนกว่าธนาคารยืนยัน`,
+    better: 'low',
+    options: opts.map((x) => x.name),
+    scenarios: input.scenarios.map((sc) => ({ name: sc.name ?? `shift ${sc.shift}` })),
+    table: Object.fromEntries(opts.map(({ name, o, cost }) => [name, input.scenarios.map((sc) => cell(o, cost, sc.shift))])),
+  };
 }
 
 const fmt = (n) => Math.round(n).toLocaleString('en-US');
 
 function report(r) {
   const head = `| ทางเลือก | ดอกเบี้ย %/ปี | ดอกเบี้ย ${r.months} เดือน | ค่าใช้จ่ายครั้งเดียว | ดอกเบี้ย + ค่าใช้จ่าย | เงินต้นคงเหลือ | ดีกว่า ${r.baseline} | คุ้มทุนเทียบ ${r.baseline} (เดือน) |`;
-  const rows = r.rows.map((x) => `| ${x.name} | ${x.rate} | ${fmt(x.interest)} | ${fmt(x.cost)} | ${fmt(x.total)} | ${fmt(x.balance)} | ${fmt(x.saved)} | ${x.breakEven === null ? 'ไม่คุ้ม' : x.breakEven === 0 ? '-' : x.breakEven.toFixed(1)} |`);
+  const rows = r.rows.map((x) => `| ${x.name} | ${x.rateText} | ${fmt(x.interest)} | ${fmt(x.cost)} | ${fmt(x.total)} | ${fmt(x.balance)} | ${fmt(x.saved)} | ${x.breakEven === null ? 'ไม่คุ้ม' : x.breakEven === 0 ? '-' : x.breakEven.toFixed(1)} |`);
   const best = [...r.rows].sort((a, b) => b.saved - a.saved)[0];
   return [
     `จ่ายงวดคงที่ ${fmt(r.payment)} บาท/เดือน เท่ากันทุกทาง นาน ${r.months} เดือน`,
@@ -135,6 +190,22 @@ function selfTest() {
   t('ไม่มี cost', throwsWith({ ...G, options: [{ name: 'X', rate: 4 }] }, 'cost'));
   t('ไม่มี stay', throwsWith({ ...G, stay: undefined }, 'stay'));
   t('rate < 1 เตือน', compare({ ...G, options: [{ name: 'X', rate: 0.04, cost: 1000 }] }).warnings.length === 1);
+  t('rates ช่วงเดียวเท่า rate', near(simulateSegments(100_000, [{ rate: 12 }], 10_000, 1).interest, 1000));
+  t('rate กับ rates พร้อมกัน error', throwsWith({ ...G, options: [{ name: 'X', rate: 4, rates: [{ rate: 4 }], cost: 0 }] }, 'อย่างใดอย่างหนึ่ง'));
+  t('rates ช่วงกลางไม่มี months error', throwsWith({ ...G, options: [{ name: 'X', rates: [{ rate: 3 }, { rate: 5 }], cost: 0 }] }, 'months'));
+  // 9 ช่องจากรายงานตรวจ 2026-10-28 (คิดแยกด้วยสคริปต์อื่น): 2.4M จ่าย 18,000 · 60 เดือน · MRR ลง/ทรงตัว/ขึ้น 1 จุด
+  const S9 = { balance: 2_400_000, payment: 18_000, months: 60,
+    stay: { rates: [{ rate: 6.5, floating: true }] },
+    options: [{ name: 'refi', cost: 28_200, rates: [{ months: 36, rate: 3.2 }, { rate: 5.5, floating: true }] },
+      { name: 'ret', cost: 24_000, rates: [{ months: 36, rate: 4.0 }, { rate: 5.5, floating: true }] }],
+    scenarios: [{ name: 'ลง', shift: -1 }, { name: 'ทรงตัว', shift: 0 }, { name: 'ขึ้น', shift: 1 }] };
+  const tb = scenarios(S9).table;
+  t('ฉาก refi 3 ช่อง', JSON.stringify(tb.refi) === JSON.stringify([403795, 442579, 482140]));
+  t('ฉาก ret 3 ช่อง', JSON.stringify(tb.ret) === JSON.stringify([460721, 500735, 541549]));
+  t('ฉาก อยู่เฉย ๆ 3 ช่อง', JSON.stringify(tb['อยู่เฉย ๆ']) === JSON.stringify([597834, 726630, 862419]));
+  t('scenarios ไม่มีช่อง error', (() => { try { scenarios(G); return false; } catch (e) { return e.message.includes('scenarios'); } })());
+  t('compare --json rate เป็นตัวเลข', c.rows[1].rate === 6 && typeof c.rows[0].rate === 'number' && compare(S9).rows[1].rate === 3.2 && compare(S9).rows[1].rateText === '3.2 (36 ด.) → 5.5*');
+  t('shift ทำให้อัตราต่ำกว่า 0 หยุด', (() => { try { scenarios({ ...S9, scenarios: [{ name: 'x', shift: -7 }] }); return false; } catch (e) { return e.message.includes('ต่ำกว่า 0'); } })());
   console.log(`self-test: ${ok} ผ่าน ${bad} ล้ม`);
   process.exit(bad ? 1 : 0);
 }
@@ -146,15 +217,16 @@ else if (args[0] === 'pmt' && args.length === 4) {
   const bad = [[p > 0, 'ยอดกู้ต้องมากกว่า 0'], [r >= 0, 'ดอกเบี้ยต้องไม่ติดลบ'], [n > 0 && Number.isInteger(n), 'จำนวนงวดต้องเป็นจำนวนเต็มมากกว่า 0']].find(([ok]) => !ok);
   if (bad) { console.error(bad[1]); process.exitCode = 1; }
   else console.log(`ค่างวด ${pmt(p, r, n).toFixed(2)} บาท/เดือน (ยอด ${p} · ${r}%/ปี · ${n} งวด)`);
-} else if (args[0] === 'compare' && args[1]) {
+} else if ((args[0] === 'compare' || args[0] === 'scenarios') && args[1]) {
   try {
-    const r = compare(JSON.parse(readFileSync(args[1], 'utf8')));
-    console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
+    const input = JSON.parse(readFileSync(args[1], 'utf8'));
+    if (args[0] === 'scenarios') console.log(JSON.stringify(scenarios(input), null, 2));
+    else { const r = compare(input); console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r)); }
   } catch (e) {
     console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${args[1]} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${args[1]}` : e.message}`);
     process.exit(1);
   }
 } else {
-  console.error('ใช้: node refinance.mjs pmt <ยอด> <ดอก%> <งวด> | compare <ไฟล์.json> [--json] | --self-test');
+  console.error('ใช้: node refinance.mjs pmt <ยอด> <ดอก%> <งวด> | compare <ไฟล์.json> [--json] | scenarios <ไฟล์.json> | --self-test');
   process.exit(2);
 }

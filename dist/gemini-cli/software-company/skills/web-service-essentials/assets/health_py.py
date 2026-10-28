@@ -21,19 +21,29 @@ health_py.py — endpoint พื้นฐานที่ทุก service ต้
 
 รับ check ได้ทั้งฟังก์ชันธรรมดาและ async — ฟังก์ชันธรรมดาจะถูกโยนไป thread
 เพื่อไม่ให้บล็อก event loop
+
+ทดสอบ:  python health_py.py --self-test     (ต้องมี fastapi + httpx · ไม่มี → ข้ามและบอกชัด)
 """
 
 from __future__ import annotations
 
 import asyncio
+import inspect
 import os
 import socket
+import sys
 import time
 from datetime import datetime, timezone
 from typing import Any, Callable, Mapping
 
-from fastapi import APIRouter, Response
-from fastapi.responses import JSONResponse, PlainTextResponse
+try:
+    from fastapi import APIRouter, Response
+    from fastapi.responses import JSONResponse, PlainTextResponse
+except ImportError:                                  # --self-test ต้องบอกชัดว่าข้าม ไม่ใช่ล้ม
+    if "--self-test" in sys.argv:
+        print("SKIP self-test: ไม่มี fastapi (pip install fastapi httpx)")
+        raise SystemExit(0)
+    raise
 
 DEFAULT_TIMEOUT_S = 3.0
 
@@ -48,11 +58,12 @@ async def _run_check(name: str, spec: Any, timeout_s: float) -> dict:
 
     started = time.perf_counter()
     try:
-        result = fn()
-        # ฟังก์ชันธรรมดา (sync) ต้องไปรันใน thread ไม่งั้นบล็อก event loop
-        # ทำให้ทั้ง service ค้างเพราะแค่ health check
-        coro = result if asyncio.iscoroutine(result) else asyncio.to_thread(lambda: result)
-        await asyncio.wait_for(coro, timeout=timeout_s)
+        # ฟังก์ชันธรรมดา (sync) ต้องไปรันใน thread ไม่งั้นบล็อก event loop และ timeout ไม่ทำงาน
+        # ทำให้ทั้ง service ค้างเพราะแค่ health check · เรียก fn() ก่อนห่อ thread = บล็อกไปแล้ว
+        coro = fn() if inspect.iscoroutinefunction(fn) else asyncio.to_thread(fn)
+        result = await asyncio.wait_for(coro, timeout=timeout_s)
+        if asyncio.iscoroutine(result):  # sync ที่คืน coroutine เช่น lambda: db.ping()
+            await asyncio.wait_for(result, timeout=timeout_s)
         status, error = "up", None
     except asyncio.TimeoutError:
         status, error = "down", f"{name} timeout after {timeout_s}s"
@@ -129,3 +140,47 @@ def make_health_router(
         }
 
     return router
+
+
+def _self_test() -> int:
+    try:
+        from fastapi import FastAPI
+        from fastapi.testclient import TestClient
+    except ImportError:
+        print("SKIP self-test: ไม่มี httpx สำหรับ TestClient (pip install httpx)")
+        return 0
+
+    async def slow() -> None:
+        await asyncio.sleep(1)
+
+    def boom() -> None:
+        raise RuntimeError("db down")
+
+    def app_with(checks, timeout_s=DEFAULT_TIMEOUT_S):
+        app = FastAPI()
+        app.include_router(make_health_router({"name": "t", "version": "9.9.9"}, checks, timeout_s))
+        return TestClient(app)
+
+    good = app_with({"db": lambda: None, "queue": {"critical": False, "run": lambda: None}})
+    soft = app_with({"db": lambda: None, "mail": {"critical": False, "run": boom}})
+    hard = app_with({"db": boom})
+    late = app_with({"slow": slow}, timeout_s=0.1)
+    r_good, r_soft, r_hard, r_late = (c.get("/health/ready") for c in (good, soft, hard, late))
+    checks = {
+        "/ping 200 pong": good.get("/ping").text == "pong",
+        "/health/live 200 up": good.get("/health/live").json()["status"] == "up",
+        "/version ตรงที่ส่งเข้า": good.get("/version").json()["version"] == "9.9.9",
+        "ready: ทุก check ผ่าน = 200 up": r_good.status_code == 200 and r_good.json()["status"] == "up",
+        "ready: check ไม่ critical ล่ม = 200 degraded": r_soft.status_code == 200 and r_soft.json()["status"] == "degraded",
+        "ready: check critical ล่ม = 503 down": r_hard.status_code == 503 and r_hard.json()["checks"]["db"]["error"] == "db down",
+        "ready: check ค้าง = 503 ตาม timeout": r_late.status_code == 503 and "timeout" in r_late.json()["checks"]["slow"]["error"],
+        "ไม่ส่ง _critical ออกนอก": all("_critical" not in v for v in r_hard.json()["checks"].values()),
+    }
+    for name, ok in checks.items():
+        print("ok  " if ok else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
+if __name__ == "__main__":
+    sys.exit(_self_test() if "--self-test" in sys.argv else print(__doc__))

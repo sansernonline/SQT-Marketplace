@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+schema_version: "1.1"
+name: security-gate-trigger
+description: ผู้ใช้กำลังจะ merge โค้ดที่เพิ่ม dependency ใหม่ ไม่เอ่ยชื่อ skill ต้องทำให้ security-gate ถูกเปิด และคำตอบบอกว่าต้องยืนยันผลสแกนกับโค้ดจริง
+tags: [trigger, security-gate]
+runs: 5
+expected_outcome: เปิด Skill security-gate แล้ววางขั้นตอนสแกนค่าลับ dependency และโค้ด พร้อมติดป้ายยืนยันแล้ว/แจ้งผิด/ยังไม่ยืนยัน
+execution:
+  prompt: |
+    ผมเพิ่ม library อัปโหลดไฟล์ตัวใหม่เข้า API ของระบบ (Node + Express) และกำลังจะ merge เข้า main พรุ่งนี้
+    ก่อน merge ควรเช็กความปลอดภัยอะไรบ้าง ยังไม่ต้องรันอะไร แค่บอกขั้นตอน
+  max_turns: 6
+  timeout_seconds: 240
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?security-gate"'
+    min: 1
+    arm: with-only
+  - name: confirm-labels-named
+    type: regex
+    pattern: "ยืนยัน|แจ้งผิด|false positive|verify|confirm"
+    flags: i
+    match: contains
+    target: last_message

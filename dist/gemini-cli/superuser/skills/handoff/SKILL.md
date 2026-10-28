@@ -24,7 +24,7 @@ description: Use when project work starts or passes on — to a subagent, next s
 
 ---
 
-## 2 · Super Folder — ที่เก็บกลางของทีม
+## 2 · `.claude/superuser` — ที่เก็บกลางของทีม
 
 ทุกอย่างอยู่ใต้ `.claude/superuser/` · ไฟล์ทั้งหมด การเปิดใช้ครั้งแรก inbox และ log อยู่ใน [`team-memory`](references/team-memory.md) · กติกา commit อยู่ใน [`team-files`](../superuser/references/team-files.md)
 
@@ -109,9 +109,13 @@ files_allowed: [research/shipping/**]
 
 ## 5 · รับงานต่อ — ข้าม session · สลับโมเดล · context ใกล้เต็ม
 
+หัวข้อ `## รับงานต่อ` ใน `CONTEXT.md` ใช้กติกาชุดนี้ชุดเดียว · ตาราง `## ความคืบหน้า` ที่อยู่ข้างกันเป็นของ `status-report`
+
 **ก่อนส่ง** — อัปเดตหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ก่อนจบ session · ก่อนสลับโมเดล · เมื่อ context ใช้ไปเกินครึ่งในงานยาว
 - **ทำต่อเป็นข้อแรก:** 1 ข้อ ทำได้ทันที ชี้ไฟล์หรือ `handoff/<id>.md`
 - **ชิ้นที่ยังเปิด:** รายการ `id` ที่ `status` ไม่ใช่ `เสร็จ`
+- **รออนุมัติ:** งานที่พร้อมแล้วแต่ย้อนไม่ได้ บอกไฟล์หรือคำสั่งที่พร้อมใช้ (ไม่มีก็ไม่ต้องใส่)
+- **ค้างอยู่:** คำถามที่ agent ไปต่อเองไม่ได้ บอกว่าถามใคร (ไม่มีให้เขียน `ไม่มี`)
 - **ระวัง:** กับดักที่เจอ · สิ่งที่ห้ามรื้อ (ตัดสินแล้ว) · ทางที่ลองแล้วพัง (รวมจากใบส่งงานทุกชิ้น)
 - **ทุกข้อติดป้าย** `ตรวจจริง` (เห็นเองใน session นี้) หรือ `ยังไม่ได้ตรวจ` (จำมาจากรอบก่อน) · ตัวรับงานเชื่อข้อแรกได้เลย ส่วนข้อหลังต้องตรวจก่อนใช้ · ไม่มีป้าย = ถือว่ายังไม่ได้ตรวจ
 
@@ -153,14 +157,6 @@ files_allowed: [research/shipping/**]
 
 ---
 
-## 8 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code — อะไรอยู่ที่ไหน
+## 8 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code
 
-Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน และ **auto memory** ที่ Claude เขียนเองที่ `~/.claude/projects/<โปรเจกต์>/memory/MEMORY.md` (ดัชนี โหลด 200 บรรทัดแรกทุก session) + ไฟล์หัวข้อ ชนิด `user` `feedback` `project` `reference` · เปิดปิดและเปิดโฟลเดอร์ด้วย `/memory` · ไม่ถูกส่งให้ subagent (`จากแหล่ง` [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory) · 2026-10-23)
-
-| ไฟล์ของเรา | ตรงกับของ Claude Code | ตอนนี้ควรเขียนที่ไหน |
-|---|---|---|
-| `scripts/install/CLAUDE.global.md` (กฎประจำตัว) | user `~/.claude/CLAUDE.md` · hook ส่งสำเนาทุก session | คงไว้ — กฎที่ทุกโปรเจกต์ต้องเห็นแม้ไม่มี hook |
-| `~/.claude/superuser-style.md` (ค่าตั้งต้นของเจ้าของ) · คู่ก่อน/หลังจาก `owner-style-capture` | auto memory ชนิด `user` และ `feedback` | **เขียนลง auto memory แทน** ให้ Claude จดเองเมื่อผู้ใช้แก้ · ไฟล์เดิมเหลือเฉพาะค่าที่สคริปต์หรือ hook ต้องอ่าน (ชื่อ · ค่าใช้จ่าย · ผู้ส่งที่เชื่อได้) |
-| กติกาถาวรของโปรเจกต์ใน `CONTEXT.md` (โครงโฟลเดอร์ · คำสั่งรัน · ห้ามแตะอะไร) | project `./CLAUDE.md` หรือ `.claude/rules/*.md` (ใส่ `paths:` ให้โหลดเฉพาะเมื่อแตะไฟล์นั้น) | ย้ายกฎที่ไม่เปลี่ยนไป `.claude/rules/` · `CONTEXT.md` เหลือ ความคืบหน้า · การตัดสินใจ · รับงานต่อ ซึ่งต้องเป็นไฟล์ เพราะ auto memory ไม่ถึง subagent ไม่ถึง Codex/Gemini และไม่ commit |
-| `TEAM.md` · `LEAD-PLAYBOOK.md` ใน `~/.claude/superuser/` | auto memory ชนิด `project` หรือ `reference` ก็จดได้ | คงเป็นไฟล์ — hook และสคริปต์อ่านตารางนี้ (ยังไม่ได้ตรวจว่า auto memory ใช้ข้ามเครื่องได้) |
-| `IMPROVEMENTS.md` · `log/` · `inbox/` | ไม่มีคู่ | คงไว้ |
+จะจดอะไรสักอย่างแล้วไม่แน่ใจว่าลง `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` หรือ auto memory → เปิด [`team-memory`](references/team-memory.md) หัวข้อ 7

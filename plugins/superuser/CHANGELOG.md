@@ -1,8 +1,33 @@
 # Changelog — superuser
 
-## 3.14.3 — 2026-10-28
+## 3.15.1 — 2026-10-28
 
 - `parallel-split-and-merge` `plan-draw.mjs`: เส้นในกราฟงาน (DAG) ของ `--html` เป็นเส้นนอน → ตั้ง → นอน หักมุมฉาก แทนเส้นโค้ง · หลายเส้นที่เข้ากล่องเดียวกันรวมเป็นเส้นตั้งเส้นเดียว
+
+## 3.15.0 — 2026-10-28
+
+- ด่านป้องกัน (guard) กันเพิ่ม 5 แบบ: `push --force` · `commit --amend` · `git branch -D` · `git clean -f` · `git checkout -- .` / `git restore .` · กฎใส่ `"flags": ""` ได้เมื่อตัวพิมพ์มีความหมาย · ค่าเริ่มยังปิดเหมือนเดิม (P6)
+- guard อ่านบรรทัด **git อัตโนมัติ** ใน `CONTEXT.md`: `auto` ให้ push และ commit ผ่าน · `commit` ให้ commit ผ่าน · force และ amend โดนกันเสมอ (P7)
+- โมดูลใหม่ `name_gate` (ค่าเริ่มปิด) ถามก่อนเขียนไฟล์ใหม่ที่ชื่อมีเว้นวรรค ไทย อีโมจิ final หรือ new · กฎประจำตัวประกาศว่าชื่อเอกสารส่งลูกค้าตาม `document-naming` ใช้ตัวใหญ่ได้ (P23)
+- `skill-router.json` เพิ่ม 10 แถวให้ skill ที่ผู้ใช้เรียกด้วยคำ · อีก 10 ตัวที่เปิดจากสถานะงานจดเหตุผลไว้ในช่อง `_unrouted` (P39)
+- `validate-marketplace` จับอักขระควบคุมในไฟล์ .json (หลัง parse) และ .mjs เช่น `\b` ที่กลายเป็น backspace · จับคำว่า "กันไว้" ในเคส `-regression` (P30 · P17)
+- `parallel-split-and-merge`: `plan.test.mjs` รันตรงแล้วรัน test จริง 57/57 · `plan.json` ใส่ `scope` และ `covers` ให้สคริปต์ตรวจว่าแบ่งงานไม่ซ้ำไม่ตก · ข้อร้ายแรงต้องเปิดดูซ้ำก่อนรายงาน (P3 · P27)
+- `prior-art-review` · `flag-and-propose` · `decision-log` เรียงหรือเลือกด้วย `decide.mjs` พร้อมแม่แบบ JSON ใน `templates/` ที่รันผ่าน (P18 · P19 · P20)
+- `decision-log` ชี้ไป `flag-and-propose` สำหรับเรื่องที่ผู้ใช้ต้องตัดสิน (P35)
+- `prior-art-review` ย้ายสัญญาอนุญาตและฉบับงานวิจัยไป `references/` (P41)
+- สคริปต์ตรวจใหม่: `commit-msg-check.mjs` (P21) · `i18n-pair-check.mjs` (P22) · `root-check.mjs` (P24) · `doc-name-check.mjs` พร้อมแผนเปลี่ยนชื่อ (P25) · `delete-plan-check.mjs` ก่อนลบ `_to_delete/` (P26) · ทุกตัวมี `--self-test`
+- `log-to-md.mjs` ปฏิเสธ argument แปลกและวันที่ผิด · `--out` ไม่เขียนทับถ้าไม่ใส่ `--force` · มี `--self-test` เช่นเดียวกับ `thai_linebreak.py` (P9 · P45)
+- ค่าคงที่ `ITER` (pairwise) และ `DRAWS` (model-scorecard) มีคอมเมนต์เหตุผล · ราคาใน `prices.json` อยู่ใน `expiry.json` ตรวจทุก 3 เดือน (P10 · P11)
+- กฎตัวย่ออยู่ที่ `spell-out-abbreviations` ที่เดียว (P32)
+- เส้นแบ่งที่ชี้หากัน: human-writing (ถ้อยคำ) กับ polished-document-style (หน้าตา) (P33) · handoff เป็นเจ้าของหัวข้อรับงานต่อ status-report ดูแลตารางความคืบหน้า (P34) · pick-best กับ adversarial-review-panel (P36) · ตาราง "ใช้ตัวไหน" ของ 3 skill บทเรียน (P38)
+- ย้ายเนื้อหายาวไป `references/`: ธีมและ Office ภาษาไทยของ polished-document-style (P40) · นโยบาย memory ของ handoff (P42) · context-budget ชี้ไป temp-file-discipline (P43)
+- คำเรียกเดียวกันทุกไฟล์: `.claude/superuser` แทน Super Folder · ใบสั่งงานใช้กับลูกทีมเท่านั้น · หัวหน้าทีม (P44) · ADAPT.md ไม่ระบุจำนวน skill (P31)
+- `targeted-fix` มีหัวข้อรับผลรีวิว (P28) · `principle-small-verifiable-steps` มีแม่แบบไฟล์แผน (P29)
+- eval: เคส behaviour 21 เคสของ skill หลัก 7 ตัว · เคส `-no-trigger` 5 เคส · เคสลบใน triggers 10 เคส · ทุกเคส 10 รอบ · เกณฑ์กันถอยหลัง 1.0 · `list-cases.mjs` สร้างตารางใน evals/README · `model-scorecard-regression` เปลี่ยนชื่อเป็น `-guard` · RESULTS ของ triggers เขียนว่ายังแยกไม่ออก (P8 · P12–P14 · P16 · P17)
+- guard ข้อใหม่ `git-push-main` กัน push ลง main/master (`origin main` · `HEAD:main`) · ลบ ref (`:ref` · `--delete`) · `--mirror` แม้บรรทัด git อัตโนมัติเป็น `auto` · push ที่ไม่ระบุ branch (`git push` · `origin HEAD`) ถาม git ว่าอยู่ branch ไหน อยู่บน main หรืออ่านไม่ได้ก็กัน · `git -C "<พาธมีเว้นวรรค>"` ยังจับได้ · `git-discard-all` ครอบ `checkout HEAD -- .` · `restore -SW .` · `restore --source=HEAD .` · `--amend` ในข้อความ `-m` ไม่ถูกบล็อก
+- router 6 แถว (reflect · stress test · fan-out · ตั้งชื่อไฟล์ · รายงานสถานะ · ทำหลายแบบให้เลือก) ต้องมีคำบริบทคู่ ข้อความเรื่องโค้ดอย่าง "reflect package ใน Go" หรือ "เปลี่ยนชื่อไฟล์ utils.ts" ไม่เปิด skill ผิดแล้ว · "สถานะงานถึงไหนแล้ว" และ "ทำโลโก้มาหลายแบบให้เลือก" ติดแล้ว
+- router: แถวตัวย่อ · ชื่อไฟล์ · รายงานสถานะ · หลายแบบให้เลือก ไม่เปิดเมื่อข้อความพูดถึงโค้ด (src · migration · dashboard · enum · test · mock) · "ทำโลโก้ 3 แบบให้เลือก" เปิด pick-best
+- `doc-name-check --apply` เปลี่ยนชื่อที่ต่างแค่ตัวพิมพ์บน Windows ได้ · ไม่ฟ้อง SKILL.md · BUILD-PLAN.md · index.md · CONTEXT.md · บอกจำนวนที่เปลี่ยนจริง · `commit-msg-check` ข้าม `Revert "..."` ที่ git เขียนเอง · `!` ไม่บังคับ footer · red และ shared ไม่นับเป็นรูปอดีต · `i18n-pair-check` จับคีย์ JSON ซ้ำ และไม่นับ `50%discount` เป็น `%d`
 
 ## 3.14.2 — 2026-10-28
 

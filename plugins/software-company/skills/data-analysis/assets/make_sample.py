@@ -4,10 +4,13 @@
 เลขไทย ๐–๙ · ช่องว่าง (ข้อมูลหาย) ต่างจาก "-" (Excel แบบบัญชีแสดง 0 เป็น "-")
 
     python make_sample.py sales-sample.csv
+    python make_sample.py --self-test
 """
 import csv
 import random
 import sys
+import tempfile
+from pathlib import Path
 
 MONTHS = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
           "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."]
@@ -44,5 +47,26 @@ def main(path):
         csv.writer(f).writerows(rows)
 
 
+def self_test():
+    """Build the file twice: same bytes both times, 72 data rows, and each planted problem is really in it."""
+    with tempfile.TemporaryDirectory() as tmp:
+        a, b = Path(tmp, "a.csv"), Path(tmp, "b.csv")
+        main(a), main(b)
+        assert a.read_bytes() == b.read_bytes(), "fixed seed must give the same file every time"
+        assert a.read_bytes().startswith(b"\xef\xbb\xbf"), "needs the UTF-8 BOM Excel writes"
+        rows = list(csv.reader(a.read_text(encoding="utf-8-sig").splitlines()))
+        assert rows[0] == ["เดือน", "ช่องทาง", "ยอดขาย (บาท)", "ออร์เดอร์"] and len(rows) == 1 + 24 * 3, len(rows)
+        by = {(r[0], r[1]): r for r in rows[1:]}
+        assert by[("มี.ค. 2568", "LINE")][2:] == ["", ""]                       # missing, not zero
+        assert by[("ส.ค. 2568", "หน้าร้าน")][2:] == ["-", "-"]                  # real zero shown as "-"
+        assert any(ch in by[("ม.ค. 2568", "LINE")][2] for ch in "๐๑๒๓๔๕๖๗๘๙")   # Thai digits
+        assert "," in by[("ม.ค. 2567", "หน้าร้าน")][2]                           # thousands separator
+        assert int(by[("พ.ย. 2567", "Shopee")][2].replace(",", "")) > int(by[("ต.ค. 2567", "Shopee")][2].replace(",", ""))  # 11.11 campaign
+    print("self-test ok")
+
+
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "sales-sample.csv")
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+    else:
+        main(sys.argv[1] if len(sys.argv) > 1 else "sales-sample.csv")

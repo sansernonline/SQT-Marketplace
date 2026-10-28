@@ -6,14 +6,26 @@
 ปัญหาที่หา: ทั้งหน้าสูงเกิน 1080 (scrollHeight) · ของล้นขอบ 1920×1080 · ทับแถบ foot ด้านล่าง · ข้อความใน card/detail/list ล้นกล่อง · ตัวอักษรเล็กกว่า 16px · รูปโหลดไม่ขึ้น
 ต้องมี playwright (pip install playwright && playwright install chromium) และ Pillow
 exit 1 เมื่อพบปัญหา
+
+    python check_deck.py --self-test       # เด็คตัวอย่างต้องผ่าน · ใส่ตัวอักษร 12px เข้าไปต้องถูกจับได้ (ไม่มี playwright → ข้ามและบอกชัด)
 """
 from __future__ import annotations
 
 import argparse
+import re
+import shutil
 from pathlib import Path
 
-from PIL import Image
-from playwright.sync_api import sync_playwright
+import sys
+
+try:
+    from PIL import Image
+    from playwright.sync_api import sync_playwright
+except ImportError:                                           # --self-test ต้องบอกชัดว่าข้าม ไม่ใช่ล้ม
+    if "--self-test" in sys.argv:
+        print("SKIP self-test: ไม่มี playwright หรือ Pillow (pip install playwright pillow && playwright install chromium)")
+        raise SystemExit(0)
+    raise SystemExit("ต้องมี playwright และ Pillow: pip install playwright pillow && playwright install chromium")
 
 PROBE = """(s) => {
   const out = [], box = s.getBoundingClientRect(), k = box.width / 1920;
@@ -39,7 +51,42 @@ PROBE = """(s) => {
 }"""
 
 
+def self_test() -> int:
+    import subprocess
+    import tempfile
+    here = Path(__file__).resolve()
+    example = here.parent.parent / "assets" / "slides-example.html"
+    with tempfile.TemporaryDirectory() as tmp:
+        t = Path(tmp)
+        good, bad = t / "good.html", t / "bad.html"
+        shutil.copy(example.parent / "example-logo.png", t)       # bad-src.html อ้างรูปนี้ด้วย path ข้างไฟล์
+        text = example.read_text(encoding="utf-8")
+        (t / "bad-src.html").write_text(text.replace("</section>", '<p style="font-size:12px">tiny</p></section>', 1), encoding="utf-8")
+        for out, src in ((good, example), (bad, t / "bad-src.html")):   # 12px ในหน้าแรก = ต้องถูกจับ
+            subprocess.run([sys.executable, "-B", str(here.with_name("build_deck.py")), str(src), "-o", str(out)],
+                           check=True, capture_output=True)
+
+        def run(deck):
+            return subprocess.run([sys.executable, "-B", str(here), str(deck), "--out", str(t / deck.stem), "--wait", "300"],
+                                  capture_output=True, text=True, encoding="utf-8")
+        ok, no = run(good), run(bad)
+    if "BrowserType.launch" in ok.stderr:
+        print("SKIP self-test: ไม่มี chromium (playwright install chromium)")
+        return 0
+    checks = {
+        "เด็คตัวอย่าง exit 0 และปัญหา 0 จุด": ok.returncode == 0 and "ปัญหา 0 จุด" in ok.stdout,
+        "ถ่ายครบทุกหน้า": re.search(r"(\d+) หน้า", ok.stdout) is not None and int(re.search(r"(\d+) หน้า", ok.stdout)[1]) > 1,
+        "ตัวอักษร 12px ถูกจับ (exit 1)": no.returncode == 1 and "ตัวเล็กกว่า 16px" in no.stdout,
+    }
+    for name, good_ in checks.items():
+        print("ok  " if good_ else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
 def main() -> None:
+    if "--self-test" in sys.argv:
+        raise SystemExit(self_test())
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("deck", type=Path)
     ap.add_argument("--out", type=Path, default=Path("_to_delete/deck-check"))

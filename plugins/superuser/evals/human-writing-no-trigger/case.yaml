@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: human-writing-no-trigger
+description: โจทย์ขอ regex อย่างเดียว ไม่มีข้อความให้คนอ่าน ต้องไม่เปิด human-writing (กันคำอธิบาย skill ที่กว้างจนเปิดทุกงาน)
+tags: [no-trigger, human-writing]
+runs: 10
+expected_outcome: ไม่เรียก Skill human-writing · ตอบเป็น regex ที่จับเลข 13 หลัก
+execution:
+  prompt: |
+    ขอ regex จับเลขบัตรประชาชนไทย 13 หลัก แบบมีขีดคั่น 1-2345-67890-12-3 หรือไม่มีขีดก็ได้ ตอบเฉพาะ regex บรรทัดเดียว
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: skill-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?human-writing"'
+    min: 0
+    max: 0
+    arm: both
+  - name: gives-regex
+    type: regex
+    pattern: '\d|\[0-9\]'
+    match: contains
+    target: last_message

@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: chat-prompt-workflows-behaviour
 description: งานที่ข้อมูลเปลี่ยนกลางทาง ต้องได้ prompt แบบ Dynamic ที่แผนมีเลขรุ่น ปรับแผนเฉพาะ 3 เหตุ เพดาน 3 ครั้ง และมีบันทึกความคืบหน้า (วนซ้ำไหม · คืบไหม)
 tags: [behaviour, chat-prompt-workflows]
-runs: 3
+runs: 10
 expected_outcome: เลือก Dynamic พร้อมเหตุผล · prompt มีแผน v1 ที่ทุกงานมีเสร็จเมื่อ · ปรับแผนได้เฉพาะ 3 เหตุ ไม่เกิน 3 ครั้ง · ทุกรุ่นใหม่มีเหตุ เปลี่ยนอะไร กระทบอะไร ใช้ต่อได้ · ผู้ประเมินถามวนซ้ำไหมและคืบไหม · มีวิธีส่งข้อมูลใหม่กลางทาง
 execution:
   prompt: |

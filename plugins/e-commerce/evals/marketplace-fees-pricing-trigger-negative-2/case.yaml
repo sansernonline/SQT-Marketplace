@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: marketplace-fees-pricing-trigger-negative-2
+description: เขียนหน้าสินค้า เป็นของ skill หน้าสินค้า · ต้องไม่เปิด marketplace-fees-pricing
+tags: [trigger, negative, regression-suite, marketplace-fees-pricing]
+runs: 3
+expected_outcome: ไม่เปิด Skill marketplace-fees-pricing · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    ช่วยเขียนชื่อสินค้ากับรายละเอียดเสื้อยืดคอตตอนลง Shopee ให้ติดค้นหาหน่อย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: marketplace-fees-pricing-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?marketplace-fees-pricing"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ชื่อสินค้า|คีย์เวิร์ด|keyword|คำค้น'
+    flags: i
+    match: contains
+    target: last_message

@@ -7,14 +7,25 @@
 · ชิ้นที่แปลงไม่ได้ · JavaScript error · กด → จากหน้าแรกแล้วไม่ถึงหน้าสุดท้ายครบทุกขั้น
 --pptx ใส่ไฟล์ต้นทาง = เทียบจำนวนหน้า และจำนวนขั้น On Click
 ต้องมี playwright (pip install playwright && playwright install chromium) และ Pillow
+
+    python check_html_deck.py --self-test   # สร้างเด็คตัวอย่าง ต้องผ่าน · ใส่กล่อง "แปลงไม่ได้" เข้าไป ต้องถูกจับได้
+ไม่มี playwright / Pillow / chromium → self-test ข้ามและบอกชัด
 """
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-from PIL import Image
-from playwright.sync_api import sync_playwright
+import sys
+
+try:
+    from PIL import Image
+    from playwright.sync_api import sync_playwright
+except ImportError:                                           # --self-test ต้องบอกชัดว่าข้าม ไม่ใช่ล้ม
+    if "--self-test" in sys.argv:
+        print("SKIP self-test: ไม่มี playwright หรือ Pillow (pip install playwright pillow && playwright install chromium)")
+        raise SystemExit(0)
+    raise SystemExit("ต้องมี playwright และ Pillow: pip install playwright pillow && playwright install chromium")
 
 PROBE = """(s) => {
   const out = [], box = s.getBoundingClientRect(), k = box.width / s.offsetWidth;
@@ -36,7 +47,48 @@ PROBE = """(s) => {
 }"""
 
 
+def self_test() -> int:
+    """เด็คปกติ → exit 0 และ 3 หน้า · เด็คที่มีกล่องแปลงไม่ได้ → exit 1"""
+    import subprocess
+    import tempfile
+    from click_steps import sample_deck
+    here = Path(__file__).resolve()
+    with tempfile.TemporaryDirectory() as tmp:
+        t = Path(tmp)
+        pptx, good, bad = sample_deck(t / "t.pptx"), t / "good.html", t / "bad.html"
+        subprocess.run([sys.executable, "-B", str(here.with_name("pptx_to_html.py")), str(pptx), "-o", str(good)],
+                       check=True, capture_output=True)
+        html = good.read_text(encoding="utf-8")
+        bad.write_text(html.replace("</section>", '<div class="s unsupported">แปลงไม่ได้: ทดสอบ</div></section>', 1), encoding="utf-8")
+
+        def run(deck, *extra):
+            return subprocess.run([sys.executable, "-B", str(here), str(deck), "--out", str(t / deck.stem), "--wait", "300", *extra],
+                                  capture_output=True, text=True, encoding="utf-8")
+        try:
+            ok, no = run(good, "--pptx", str(pptx)), run(bad)
+        except OSError as e:
+            print(f"SKIP self-test: {e}")
+            return 0
+        if "BrowserType.launch" in ok.stderr:
+            print("SKIP self-test: ไม่มี chromium (playwright install chromium)")
+            return 0
+        checks = {
+            "เด็คปกติ exit 0": ok.returncode == 0,
+            "เด็คปกติ: 3 หน้า · ขั้นรวม 2 · ปัญหา 0": "3 หน้า · ขั้นรวม 2 · ปัญหา 0" in ok.stdout,
+            "ถ่ายครบ 3 ภาพ + แผ่นรวม": len(list((t / "good").glob("p*.png"))) == 3 and (t / "good" / "sheet-1.png").exists(),
+            "เด็คที่มีกล่องแปลงไม่ได้ exit 1": no.returncode == 1 and "แปลงไม่ได้" in no.stdout,
+        }
+    for name, good_ in checks.items():
+        print("ok  " if good_ else "FAIL", name)
+    if not all(checks.values()):
+        print(ok.stdout[-400:], ok.stderr[-400:])
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
 def main() -> None:
+    if "--self-test" in sys.argv:
+        raise SystemExit(self_test())
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("deck", type=Path)
     ap.add_argument("--out", type=Path, default=Path("_to_delete/deck-check"))

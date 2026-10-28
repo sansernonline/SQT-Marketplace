@@ -11,10 +11,7 @@ Use when the user corrects the same mistake twice or reviews keep flagging one i
 
 ## ไม่ใช้เมื่อ
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| บทเรียนจากงานใหญ่ที่ต้องแก้ skill หรือ agent | `session-lessons-to-skills` |
-| ความชอบส่วนตัวของผู้ใช้ ไม่ใช่ความผิด | `owner-style-capture` |
+ใช้ตัวไหนระหว่าง `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` → ตารางกลางใน [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md) หัวข้อ "ใช้ตัวไหน"
 
 ## ขั้นตอน
 

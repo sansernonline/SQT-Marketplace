@@ -273,7 +273,7 @@ Dates on Thai papers are often พ.ศ. — subtract 543 before entering (2572 �
 2. **Scan and name** — `YYYY-MM-DD_holder_item.ext` (e.g. `2020-05-02_nok_idcard.pdf`; date = issue date), one folder per section. Originals stay physical; the registry says where.
 3. **Fill the CSV** — one row per document; ID and policy numbers last 4 only.
 4. **Set lead time** — from the renewal table in references (passport 120 days before travel, ID card at expiry, vehicle tax 90 days).
-5. **Renewal watch** — each monthly check lists rows where `end_date − today ≤ renew_lead_days`, plus fixed 60 / 30 / 7-day warnings, each with location and the renewal step.
+5. **Renewal watch** — do not count days by hand. Write the rows as JSON (`end_date` in YYYY-MM-DD, พ.ศ. or ค.ศ.; `lead_days` from step 4) and run `node skills/important-docs/scripts/due-dates.mjs <file.json>` (example: `scripts/example-docs.json`). It sorts by days left and marks each row เลยกำหนด / ต้องทำตอนนี้ (`end_date − today ≤ lead_days`) / ยังไม่ถึง. Add the fixed 60 / 30 / 7-day warnings, each with location and the renewal step.
 6. **Gap check** — flag what this household should have but lacks (see list below).
 7. **Emergency page** — print one page: who to call, where originals are, which insurer and policy last-4. Tell one trusted person where it is.
 

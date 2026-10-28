@@ -5,7 +5,7 @@ schema_version: "1.1"
 name: decision-scoring-regression
 description: กองที่เกินเพดานความเสี่ยงต้องถูกตัดก่อนทำสเกล ไม่งั้นค่าธรรมเนียมต่ำของมันบีบสเกลจนเลือกผิด
 tags: [regression, decision-scoring]
-runs: 3
+runs: 10
 expected_outcome: ตัดกองทุน C ก่อนให้คะแนน แล้วเทียบ A กับ B ด้วยสเกลของ 2 กองนี้ ได้ A (60 ต่อ 40) และบอกว่าขยับน้ำหนักแล้วยังนิ่ง
 execution:
   prompt: |

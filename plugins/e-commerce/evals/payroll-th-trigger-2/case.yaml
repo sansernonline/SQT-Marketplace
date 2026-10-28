@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: payroll-th-trigger-2
+description: ถามภาษีหัก ณ ที่จ่ายของเงินเดือน ต้องเปิด payroll-th และได้ตัวเลขต่อเดือน · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, payroll-th]
+runs: 3
+expected_outcome: เปิด Skill payroll-th แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    พนักงานเงินเดือน 40,000 โสด ไม่มีลูก ต้องหักภาษี ณ ที่จ่ายเดือนละเท่าไหร่คะ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?payroll-th"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: '704\.17|704'
+    flags: i
+    match: contains
+    target: last_message

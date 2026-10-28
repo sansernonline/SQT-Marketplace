@@ -1,0 +1,28 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: design-review-trigger
+description: ขอตรวจงานภาพก่อนส่ง ต้องเปิด design-review และให้จุดแก้ไม่เกิน 3 ข้อพร้อมสิ่งที่ต้องเก็บ
+tags: [trigger, design-review]
+runs: 3
+expected_outcome: เปิด Skill design-review · ให้ 3 จุดแก้ที่ระบุองค์ประกอบกับค่า · บอก 1 อย่างที่ต้องเก็บ
+execution:
+  prompt: |
+    โปสเตอร์โปรโมชันนี้ดูแล้วรู้สึกแปลก ๆ แต่บอกไม่ถูกว่าตรงไหน หัวข้อสีขาวบนรูปถ่ายหน้าต่างสว่าง ราคาอยู่มุมล่าง ช่วยตรวจก่อนผมส่งโรงพิมพ์
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: design-review-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?design-review"'
+    min: 1
+    arm: with-only
+  - name: three-fixes-and-keep
+    type: llm
+    focus: last_message
+    criteria: |
+      ให้ผ่านเมื่อครบทุกข้อ:
+      1. มีจุดแก้ไม่เกิน 3 ข้อ แต่ละข้อระบุองค์ประกอบ สิ่งที่เปลี่ยน และปริมาณ (ไม่ใช่แค่ "ดูรก")
+      2. ระบุ 1 อย่างที่ต้องเก็บไว้ ไม่ให้แก้พัง
+      3. เรื่องคอนทราสต์ของหัวข้อขาวบนพื้นสว่างถูกยกขึ้นมา

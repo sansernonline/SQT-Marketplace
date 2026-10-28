@@ -1,11 +1,13 @@
 ---
 name: human-writing
-description: Use before writing or editing anything a person reads — answer, email, report, README, .docx, slide, label — in Thai or English.
+description: Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
 ---
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
 ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+
+เส้นแบ่ง: skill นี้ดูแลถ้อยคำ · หน้าตาของเอกสารที่คนเก็บไว้ (หัวข้อ ตาราง กล่องข้อความ ธีม) → `polished-document-style` · ตัวย่อและอภิธานศัพท์ → `spell-out-abbreviations`
 
 ## 1 · หลักใหญ่
 
@@ -30,7 +32,7 @@ description: Use before writing or editing anything a person reads — answer, e
 
 - ใช้คำที่คนพูดจริง ไม่ใช้คำราชการหรือศัพท์แปลตรงตัว
 - ศัพท์ที่คนในวงการใช้อยู่แล้ว (token · prompt · API · OCR) คงภาษาอังกฤษไว้
-- ตัวย่อเขียนเต็มครั้งแรกแล้ววงเล็บ จากนั้นใช้ตัวย่อ · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
+- ตัวย่อ → ทำตาม `spell-out-abbreviations` · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
 - สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
 - เอกสาร 2 ภาษา: เลือกภาษาหลัก 1 ภาษา อีกภาษาอยู่ในวงเล็บหรือคอลัมน์ที่ 2 ไม่สลับไปมาในประโยค
 - ตัดคำฟุ่มเฟือย ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ")

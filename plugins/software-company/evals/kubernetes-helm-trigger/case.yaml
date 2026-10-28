@@ -3,7 +3,8 @@ schema_version: "1.1"
 name: kubernetes-helm-trigger
 description: ผู้ใช้ขอ Dockerfile กับ Helm chart ให้ voice agent ขึ้น Kubernetes แบบ staging แล้ว production ไม่เอ่ยชื่อ skill ต้องทำให้ kubernetes-helm ถูกเปิด และคำตอบพูดถึง digest หรือ image ตัวเดียวกันระหว่าง 2 สภาพแวดล้อม
 tags: [trigger, kubernetes-helm]
-runs: 3
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+runs: 5
 expected_outcome: เปิด Skill kubernetes-helm แล้ววางแผน Dockerfile · chart · ลำดับ staging ไป production โดยใช้ image digest เดียวกัน
 execution:
   prompt: |

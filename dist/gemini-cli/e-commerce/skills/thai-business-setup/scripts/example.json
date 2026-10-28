@@ -1,0 +1,13 @@
+{
+  "_note": "ตัวอย่างกระเป๋าผ้า 200 ใบใน SKILL.md หัวข้อ 5 · ทุกตัวเลขเป็นตัวอย่าง",
+  "qty": 200,
+  "goods_cny": 5000,
+  "fx_thb_per_cny": 5.0,
+  "cn_shipping_cny": 100,
+  "freight_thb": 2400,
+  "insurance_pct": 1,
+  "duty_pct": 20,
+  "excise_thb": 0,
+  "broker_thb": 1000,
+  "th_delivery_thb": 300
+}

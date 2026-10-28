@@ -7,6 +7,7 @@ Columns test_result (what actually happened) and evidence (GIF or screenshot fil
   python build-test-workbook.py cases.csv qa/PRJ-test-cases.xlsx
   python build-test-workbook.py cases.xlsx qa/PRJ-test-cases.xlsx --mockup mockup/PRJ-mockup.html --topics topics.json
   python build-test-workbook.py ... --brand 7C3AED --head-fill E4DCFD --ink 2E1065     # project colours (doc-theme)
+  python build-test-workbook.py --self-test       # builds a 4-case sample, reopens it, counts tabs and rows
   python build-test-workbook.py cases.csv qa/PRJ-test-cases.xlsx --results qa/evidence/<run-id>/results.csv
 
 --results: results.csv from test-evidence/scripts/make_evidence.py (id, result, test_result, evidence). Fills those
@@ -19,7 +20,13 @@ Never keeps an "all cases" tab: results recorded in two places drift apart. Over
 Needs: pip install openpyxl
 """
 import argparse, collections, csv, json, re, sys
-import openpyxl
+try:
+    import openpyxl
+except ImportError:  # --self-test must say clearly that it skipped, not crash
+    if '--self-test' in sys.argv:
+        print('SKIP self-test: openpyxl not installed (pip install openpyxl)')
+        sys.exit(0)
+    sys.exit('openpyxl is required: pip install openpyxl')
 from openpyxl.formatting.rule import FormulaRule
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
@@ -48,6 +55,33 @@ def screens_by_fr(path):
             for fr in filter(None, f[1].split(',')):
                 out[fr].append(f'{m[1]} ' + (t[1].split(' — ')[-1] if t else ''))
     return out
+
+
+def self_test():
+    """Build a tiny workbook through main(), reopen it and count tabs and rows."""
+    import os, tempfile
+    cases = chr(10).join(['id,module,fr,title,type,result', 'T1,login,FR-1,Sign in,normal,Pass',
+                        'T2,login,FR-1,Bad password,negative,', 'T3,orders,FR-2,Create order,normal,',
+                        'T4,orders,FR-2,Zero qty,boundary,']) + chr(10)
+    with tempfile.TemporaryDirectory() as tmp:
+        src, out = os.path.join(tmp, 'c.csv'), os.path.join(tmp, 'o.xlsx')
+        open(src, 'w', encoding='utf-8').write(cases)
+        sys.argv = ['build-test-workbook.py', src, out]
+        main()
+        wb = openpyxl.load_workbook(out)
+        rows = lambda name: [r for r in wb[name].iter_rows(min_row=5, values_only=True) if r[0]]
+        checks = {
+            'tabs == Overview, Login, Orders': wb.sheetnames == ['Overview', 'Login', 'Orders'],
+            'Login has 2 case rows': len(rows('Login')) == 2,
+            'Orders has 2 case rows': len(rows('Orders')) == 2,
+            'test_result and evidence columns added': [c.value for c in wb['Login'][4]][-2:] == ['test_result', 'evidence'],
+            'Overview total row sums cases': wb['Overview']['B7'].value == '=SUM(B5:B6)',
+            'result column has dropdown': len(wb['Login'].data_validations.dataValidation) == 1,
+        }
+    for name, ok in checks.items():
+        print('ok  ' if ok else 'FAIL', name)
+    print(f'self-test {sum(checks.values())}/{len(checks)}')
+    sys.exit(0 if all(checks.values()) else 1)
 
 
 def main():
@@ -177,4 +211,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    self_test() if '--self-test' in sys.argv else main()

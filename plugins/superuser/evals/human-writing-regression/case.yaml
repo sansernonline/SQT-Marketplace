@@ -5,7 +5,7 @@ schema_version: "1.1"
 name: human-writing-regression
 description: ย่อข้อความแชตถึงลูกค้าให้สั้นลง ต้องลดจำนวนข้อหรือย่อเนื้อหา ไม่ตัดคำสุภาพและคำทำหน้าที่
 tags: [regression, human-writing]
-runs: 3
+runs: 10
 expected_outcome: ข้อความสั้นลงจริง ยังมี ค่ะ และ ขอ หรือ รบกวน อยู่ ไม่มีประโยคที่เหลือแต่คำนามเรียงกัน
 execution:
   prompt: |

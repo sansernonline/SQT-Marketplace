@@ -1,10 +1,12 @@
 # skill: human-writing
 
-Use before writing or editing anything a person reads — answer, email, report, README, .docx, slide, label — in Thai or English.
+Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
 ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+
+เส้นแบ่ง: skill นี้ดูแลถ้อยคำ · หน้าตาของเอกสารที่คนเก็บไว้ (หัวข้อ ตาราง กล่องข้อความ ธีม) → `polished-document-style` · ตัวย่อและอภิธานศัพท์ → `spell-out-abbreviations`
 
 ## 1 · หลักใหญ่
 
@@ -29,7 +31,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 - ใช้คำที่คนพูดจริง ไม่ใช้คำราชการหรือศัพท์แปลตรงตัว
 - ศัพท์ที่คนในวงการใช้อยู่แล้ว (token · prompt · API · OCR) คงภาษาอังกฤษไว้
-- ตัวย่อเขียนเต็มครั้งแรกแล้ววงเล็บ จากนั้นใช้ตัวย่อ · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
+- ตัวย่อ → ทำตาม `spell-out-abbreviations` · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
 - สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
 - เอกสาร 2 ภาษา: เลือกภาษาหลัก 1 ภาษา อีกภาษาอยู่ในวงเล็บหรือคอลัมน์ที่ 2 ไม่สลับไปมาในประโยค
 - ตัดคำฟุ่มเฟือย ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ")
@@ -475,7 +477,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 | ไฟล์ | วิธีแก้ |
 |---|---|
-| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` |
+| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` · ตรวจตัวสคริปต์ด้วย `python -B scripts/thai_linebreak.py --self-test` (ไม่ต้องมี pythainlp) |
 | **.md ก่อนแปลงด้วย pandoc** | รันสคริปต์เดียวกันกับ .md · โค้ดใน `` ` `` ไม่ถูกแตะ |
 | **python-docx / docx-js** | ตั้งภาษาไทยให้ run (`w:lang w:bidi="th-TH"`) และฟอนต์ complex script (`w:rFonts w:cs="TH Sarabun New"`) ตั้งแต่ตอนสร้าง แล้วรันสคริปต์ปิดท้าย |
 | **HTML** | Chrome · Edge · Firefox ตัดคำไทยเองได้ ไม่ต้องใส่ ZWSP · ใส่ `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · เนื้อหาไทยใช้ `text-align: left` · ห้าม `word-break: break-all` (ตัดกลางคำ) |
@@ -531,7 +533,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 
 > รับงาน → จัดขนาดและงบ → ใบสั่งงาน 5 ข้อ → แจกลูกทีม → ตรวจกับของจริงวนจนผ่าน → ส่งมอบสั้น → เทียบคาดกับจริง แล้วจำ
 
-หัวหน้างาน 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
+หัวหน้าทีม 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
 
 **ไฟล์นี้คือแกน อ่านทุกงาน** · เปิดเพิ่มเมื่อถึงจังหวะ: [`autonomy`](references/autonomy.md) (ถามครั้งเดียว · ตัดสินใจเอง · รออนุมัติ · รู้จังหวะหยุด) · [`modules`](references/modules.md) (ไฟล์กลาง · log · รอบเรียนรู้ · inbox · config · ด่านของ hook) · plugin สาขามี `superuser` ของตัวเองที่มีเฉพาะส่วนสาขา (playbook · agent · รออนุมัติ) และบอกให้เปิดไฟล์นี้ก่อน ([`ADAPT.md`](../../ADAPT.md))
 
@@ -826,6 +828,8 @@ skill กลาง (หลักการ · ตรวจงาน · แบ่�
 ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
 
 ใช้เมื่องานขนาดใหญ่หรือโจทย์ไม่ชัด หลัง brainstorm และเลือกทางแล้ว ให้หัวหน้าทีมเขียน brief ก่อนลงมือ ส่งให้ผู้ใช้อ่านในคำตอบ แล้วเก็บไว้ที่ `docs/BRIEF.md` · ถ้างานเปลี่ยนทิศ ให้เขียน brief ใหม่ทับ ไม่ต่อท้าย
+
+brief คือสรุปให้ผู้ใช้อ่าน ไม่ใช่ใบสั่งงาน · คำว่า "ใบสั่งงาน" ใช้กับใบที่หัวหน้าทีมส่งให้ลูกทีม (`handoff/<id>.md` ตาม skill `handoff` หัวข้อ 3) อย่างเดียว
 
 ## กติกา
 
@@ -1891,7 +1895,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 | agent | ระดับโมเดล | ใช้เมื่อ | ไม่ใช่ |
 |---|---|---|---|
 | `brainstormer` | ใหญ่ | ก่อนเริ่มงานใหญ่หรือโจทย์ไม่ชัด — คิด 2–3 ทางบนกระดาษ ให้คะแนน 1–5 (5 = ดีสุด) | สร้างของจริงหลายชุดแล้วเลือก → `parallel-attempts-pick-best` |
-| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ใน brief |
+| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
 | `learning-reviewer` | กลาง | ตอนจบงานหลายขั้น — ตรวจวิธีทำงานของทีม ไม่ใช่ตัวงาน | — |
 
 เรียกตัวใหม่ทุกครั้ง เพราะตัวที่ทำงานไม่ตรวจงานของตัวเอง · ผู้ตรวจเฉพาะทาง (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) ใช้แทน `reviewer` ได้เฉพาะขั้นที่เขียนว่า "อ่านอย่างเดียว · ไม่แก้ไฟล์" (เรียกด้วย `model: opus`) · ขั้นที่ตัวนั้นเขียน test หรือแก้ของนับเป็นการลงมือ

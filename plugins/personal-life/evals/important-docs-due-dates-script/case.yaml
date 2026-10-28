@@ -1,0 +1,29 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคสใหม่ 2026-10-28 (ยังไม่ได้รัน) · ผสมปี พ.ศ. กับ ค.ศ. ข้ามปี · ต้องเรียก due-dates.mjs · วันที่เป็นข้อมูลสมมติ
+schema_version: "1.1"
+name: important-docs-due-dates-script
+description: รายการเอกสาร 4 อย่างปีผสม พ.ศ. กับ ค.ศ. วันนี้ 2026-10-28 ถามว่าอะไรต้องทำก่อน ต้องเรียก due-dates.mjs
+tags: [behaviour, important-docs, script]
+runs: 5
+expected_outcome: เรียกสคริปต์ due-dates.mjs · พ.ร.บ. สิ้นสุด 20 ต.ค. 2569 ถูกจัดเป็นเลยกำหนด · ภาษีรถ 20 มิ.ย. 2570 ถูกอ่านเป็น ค.ศ. 2027
+execution:
+  prompt: |
+    วันนี้ 28 ต.ค. 2026 ช่วยเรียงเอกสารที่ต้องต่อให้หน่อย บอกว่าอะไรเลยกำหนดแล้ว อะไรต้องเริ่มทำตอนนี้
+    - พ.ร.บ. รถ หมดอายุ 20 ต.ค. 2569 เวลานำ 30 วัน
+    - พาสปอร์ต หมดอายุ 1 ก.พ. 2027 เวลานำ 120 วัน
+    - ภาษีรถ หมดอายุ 20 มิ.ย. 2570 เวลานำ 90 วัน
+    - ใบขับขี่ หมดอายุ 5 ม.ค. 2028 เวลานำ 60 วัน
+  max_turns: 8
+  timeout_seconds: 180
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'due-dates\.mjs'
+    min: 1
+    arm: with-only
+  - name: overdue-found
+    type: regex
+    pattern: "เลยกำหนด|เลยวัน|หมดอายุแล้ว"
+    match: contains
+    target: last_message

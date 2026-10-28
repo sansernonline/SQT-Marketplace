@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": กันการแก้ description แล้ว skill เปิดบ่อยเกิน · ผ่านเมื่อ skill ไม่ถูกเปิดทุกรอบ · เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: youtube-thumbnail-trigger-negative
+description: ขอภาพโพสต์ทั่วไปของร้าน ไม่ใช่ปกคลิป ต้องไม่เปิด youtube-thumbnail
+tags: [trigger, negative, youtube-thumbnail]
+runs: 5
+expected_outcome: ไม่เปิด Skill youtube-thumbnail · พูดถึงขนาดภาพโพสต์ Facebook
+execution:
+  prompt: |
+    ช่วยออกแบบรูปโพสต์ Facebook ประกาศโปรโมชันวันแม่ของร้านขนม ขนาดที่เหมาะกับฟีด
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: youtube-thumbnail-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?youtube-thumbnail"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: on-topic
+    type: regex
+    pattern: "Facebook|ฟีด|โพสต์"
+    flags: i
+    match: contains
+    target: last_message

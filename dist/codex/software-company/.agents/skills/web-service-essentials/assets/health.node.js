@@ -16,10 +16,11 @@
  *   GET /health/live   200 | 503           process ยังทำงานอยู่ไหม
  *   GET /health/ready  200 | 503           พร้อมรับ traffic ไหม (เช็ค dependency)
  *   GET /version       200                 เวอร์ชันที่รันอยู่จริง
+ *
+ * ทดสอบ:  node health.node.js --self-test     (ไม่ต้องมี express · ทดสอบ runCheck และ timeout)
  */
 'use strict';
 
-const express = require('express');
 const os = require('os');
 
 const DEFAULT_TIMEOUT_MS = 3000;
@@ -62,7 +63,7 @@ function createHealthRouter(options = {}) {
     startedAt = Date.now(),
   } = options;
 
-  const router = express.Router();
+  const router = require('express').Router(); // โหลดตอนใช้ เพื่อให้ --self-test รันได้โดยไม่ต้องลง express
 
   // ---- ping: ตัวที่ load balancer เรียกทุกวินาที ต้องเบาที่สุด ไม่ต้อง log ----
   router.get('/ping', (_req, res) => res.type('text/plain').send('pong'));
@@ -113,3 +114,32 @@ function createHealthRouter(options = {}) {
 }
 
 module.exports = { createHealthRouter, runCheck };
+
+/* self-test: ไม่เปิดพอร์ต ไม่ใช้ express — ทดสอบตรรกะ check ตัวเดียว */
+async function selfTest() {
+  const assert = require('assert');
+  const results = [];
+  const t = async (name, fn) => { try { await fn(); results.push([name, true]); } catch (e) { results.push([name, false, e.message]); } };
+  await t('check ผ่าน = up', async () => assert.strictEqual((await runCheck('db', async () => {}, 200)).status, 'up'));
+  await t('function ธรรมดาก็ใช้ได้', async () => assert.strictEqual((await runCheck('db', () => 1, 200)).status, 'up'));
+  await t('check พัง = down + ข้อความ error ไม่มี stack', async () => {
+    const r = await runCheck('db', async () => { throw new Error('db down'); }, 200);
+    assert.deepStrictEqual([r.status, r.error, r.critical], ['down', 'db down', true]);
+  });
+  await t('check ค้าง = down ตาม timeout', async () => {
+    const r = await runCheck('slow', () => new Promise((res) => setTimeout(res, 1000)), 50);
+    assert.ok(r.status === 'down' && /timeout after 50ms/.test(r.error) && r.durationMs < 500);
+  });
+  await t('critical:false ถูกอ่านจาก object', async () =>
+    assert.strictEqual((await runCheck('m', { critical: false, run: async () => { throw new Error('x'); } }, 200)).critical, false));
+  await t('createHealthRouter ไม่ล้ม (ข้ามถ้าไม่มี express)', async () => {
+    try { require.resolve('express'); } catch { return; }
+    assert.strictEqual(typeof createHealthRouter({}).use, 'function');
+  });
+  results.forEach(([n, ok, m]) => console.log(ok ? 'ok  ' : 'FAIL', n, ok ? '' : m));
+  const passed = results.filter((r) => r[1]).length;
+  console.log(`self-test ${passed}/${results.length}`);
+  process.exit(passed === results.length ? 0 : 1);
+}
+
+if (require.main === module && process.argv.includes('--self-test')) selfTest();

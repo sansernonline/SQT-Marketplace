@@ -16,6 +16,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from outguard import expect_refusal, refuse_overwrite
+
 VIDEO_EXT = {".mp4", ".mov", ".mkv", ".m4v", ".webm"}
 
 
@@ -63,6 +65,9 @@ def self_test() -> int:
             print(f"ปรับจริงด้วย ffmpeg: ก่อน {first['input_i']} → หลัง {after:.1f} LUFS (เป้า -16 ±1):",
                   "ผ่าน" if hit else "ไม่ผ่าน")
             ok = ok and hit
+            held = expect_refusal(Path(__file__), [str(src), str(out)], out)
+            print("ไม่เขียนทับไฟล์ที่มีอยู่:", "ผ่าน" if held else "ไม่ผ่าน")
+            ok = ok and held
     print("self-test", "ผ่าน" if ok else "ไม่ผ่าน")
     return 0 if ok else 1
 
@@ -77,12 +82,15 @@ def main() -> None:
     ap.add_argument("--tp", type=float, default=-1.5, help="เพดาน true peak dBTP (ค่าตั้งต้น -1.5)")
     ap.add_argument("--lra", type=float, default=11.0, help="ช่วงความดังเป้าหมาย LU (ค่าตั้งต้น 11)")
     ap.add_argument("--measure", action="store_true", help="วัดอย่างเดียว")
+    ap.add_argument("--force", action="store_true", help="เขียนทับไฟล์ผลลัพธ์ที่มีอยู่ (ไม่ใส่ = ปฏิเสธ)")
     ap.add_argument("--self-test", action="store_true", help="ทดสอบตัวเอง (ไม่มี ffmpeg ข้ามส่วนวัดเสียงจริง)")
     a = ap.parse_args()
     if a.self_test:
         sys.exit(self_test())
     if not a.src:
         sys.exit("ใส่ path ของไฟล์เสียงหรือวิดีโอ")
+    if not a.measure:
+        refuse_overwrite(a.out, a.force)  # ก่อนวัดรอบแรก ไม่เสียเวลาแล้วค่อยล้ม
 
     m = measure(a.src, a.target, a.tp, a.lra)
     print(f"วัดได้: {m['input_i']} LUFS · true peak {m['input_tp']} dBTP · LRA {m['input_lra']} LU")
@@ -94,7 +102,7 @@ def main() -> None:
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:"
           "linear=true:print_format=summary")
     codec = ["-c:v", "copy", "-c:a", "aac", "-b:a", "192k"] if a.src.suffix.lower() in VIDEO_EXT else []
-    err = ffmpeg(["-y", "-i", str(a.src), "-af", af, "-ar", "48000", *codec, str(a.out)])
+    err = ffmpeg([*(["-y"] if a.force else []), "-i", str(a.src), "-af", af, "-ar", "48000", *codec, str(a.out)])
     for line in err.splitlines():
         if line.strip().startswith(("Output Integrated", "Output True Peak", "Normalization Type")):
             print(line.strip())

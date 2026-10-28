@@ -5,6 +5,9 @@
 
 PowerPoint เล่นเป็นคลิกทีละขั้น และ pptx_to_html.py แปลงเป็นขั้นในหน้า (→ เปิดทีละขั้น)
 เรียกซ้ำกับสไลด์เดิม = เขียนทับลำดับเดิม
+
+    python click_steps.py --self-test      # สร้าง .pptx 3 หน้า (มี 2 ขั้นในหน้า 2) แล้วอ่านขั้นกลับมานับ
+ต้องมี python-pptx (ไม่มี → self-test ข้ามและบอกชัด)
 """
 from __future__ import annotations
 
@@ -59,3 +62,49 @@ def add_click_steps(slide, steps: list[list]) -> None:
         ext.addprevious(timing)
     else:
         sld.append(timing)
+
+
+def sample_deck(path):
+    """.pptx ตัวอย่างสำหรับ --self-test ของสคริปต์ในโฟลเดอร์นี้ · หน้า 2 มี 2 ขั้น (ขั้น 1 = 2 ชิ้น, ขั้น 2 = 1 ชิ้น)"""
+    from pptx import Presentation
+    from pptx.util import Inches
+    prs = Presentation()
+    for n in (1, 2, 3):
+        s = prs.slides.add_slide(prs.slide_layouts[5])
+        s.shapes.title.text = f"Slide {n}"
+        if n == 2:
+            boxes = [s.shapes.add_textbox(Inches(1), Inches(1.5 + k), Inches(4), Inches(0.6)) for k in range(3)]
+            for k, b in enumerate(boxes):
+                b.text_frame.text = f"Step box {k}"
+            add_click_steps(s, [[boxes[0], boxes[1]], [boxes[2]]])
+    prs.save(str(path))
+    return path
+
+
+def self_test() -> int:
+    import tempfile
+    try:
+        from pptx import Presentation
+    except ImportError:
+        print("SKIP self-test: ไม่มี python-pptx (pip install python-pptx)")
+        return 0
+    from pptx_to_html import click_steps
+    with tempfile.TemporaryDirectory() as tmp:
+        prs = Presentation(str(sample_deck(f"{tmp}/t.pptx")))
+    got = [click_steps(s) for s in prs.slides]
+    checks = {
+        "3 หน้า": len(got) == 3,
+        "หน้า 1 และ 3 ไม่มีขั้น": not got[0] and not got[2],
+        "หน้า 2 มี 3 ชิ้น": len(got[1]) == 3,
+        "หน้า 2 มี 2 ขั้น (1 กับ 2)": sorted(set(got[1].values())) == [1, 2],
+        "ขั้น 1 มี 2 ชิ้น ขั้น 2 มี 1 ชิ้น": sorted(list(got[1].values()).count(k) for k in (1, 2)) == [1, 2],
+    }
+    for name, ok in checks.items():
+        print("ok  " if ok else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(self_test() if "--self-test" in sys.argv else print(__doc__))

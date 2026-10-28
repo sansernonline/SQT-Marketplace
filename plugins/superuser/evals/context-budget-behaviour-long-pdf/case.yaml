@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: context-budget-behaviour-long-pdf
+description: สัญญา PDF 300 หน้า อยากรู้แค่ข้อบอกเลิกสัญญา ต้องหาตำแหน่งก่อนแล้วอ่านเฉพาะหน้าที่เกี่ยว ไม่อ่านทั้งเล่ม (context-budget)
+tags: [behaviour, context-budget]
+runs: 10
+expected_outcome: แผนอ่าน ดูสารบัญหรือค้นคำ (บอกเลิก · termination) ก่อน แล้วอ่านเฉพาะช่วงหน้า · บอกว่าไม่อ่านทั้ง 300 หน้า
+execution:
+  prompt: |
+    มีสัญญาเช่าโกดัง contract.pdf 300 หน้า อยากรู้แค่เงื่อนไขการบอกเลิกสัญญาก่อนกำหนด
+    บอกวิธีที่จะอ่านไฟล์นี้ (ยังไม่ต้องเปิด)
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: page-range
+    type: regex
+    pattern: 'หน้า|pages|สารบัญ'
+    match: contains
+    target: last_message
+  - name: locate-then-read
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. หาตำแหน่งก่อน เช่น เปิดสารบัญ หรือค้นคำว่า บอกเลิก หรือ termination อย่างใดอย่างหนึ่งก็พอ
+      2. แล้วอ่านเฉพาะช่วงหน้าที่เจอ ไม่อ่านทั้ง 300 หน้า

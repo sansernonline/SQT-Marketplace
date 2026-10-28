@@ -4,9 +4,15 @@ Both functions return PNG bytes, so nothing is written to disk. Needs numpy and 
 (`pip install numpy pillow`); brandkit imports this file only when the night cover is used.
 """
 import io
+import sys
 
-import numpy as np
-from PIL import Image
+try:
+    import numpy as np
+    from PIL import Image
+except ImportError:                       # --self-test below can then skip instead of crash
+    if sys.argv[1:] != ["--self-test"]:
+        raise
+    np = Image = None
 
 PAGE_PX = (1240, 1754)                 # A4 at 150 dpi
 PX_CM = PAGE_PX[0] / 21.0
@@ -67,3 +73,30 @@ def light_line(width_cm, colors):
     hot = (np.exp(-((yy - cy) / (0.9 * SCALE)) ** 2) * core * 0.45)[..., None]
     rgba = np.dstack([col * (1 - hot) + 255 * hot, alpha * 255])
     return _png(rgba, "RGBA"), GLOW_PAD_CM
+
+
+def self_test():
+    """python cover_art.py --self-test — draws both pictures and checks size, mode and transparency"""
+    if np is None:
+        print("self-test skipped: numpy/pillow missing (pip install numpy pillow)")
+        return
+    bg = Image.open(night_background("2A78D6", "9B5DE5"))
+    assert bg.size == PAGE_PX and bg.mode == "RGB", (bg.size, bg.mode)
+    px = bg.load()
+    assert px[PAGE_PX[0] // 2, PAGE_PX[1] // 2] != (0, 0, 0)           # base colour, not black
+    assert px[PAGE_PX[0] - 3, 3][2] > px[PAGE_PX[0] // 2, PAGE_PX[1] // 2][2]  # glow A brightens the top-right corner
+    buf, pad = light_line(10, ("2A78D6", "9B5DE5", "F15BB5"))
+    line = Image.open(buf)
+    assert pad == GLOW_PAD_CM and line.mode == "RGBA", (pad, line.mode)
+    assert line.size == (int(10 * PX_CM * SCALE + 2 * pad * PX_CM * SCALE), int(LINE_HEIGHT_CM * PX_CM * SCALE)), line.size
+    a = line.getchannel("A")
+    assert a.getpixel((line.width // 2, line.height // 2)) == 255      # solid bar in the middle
+    assert a.getpixel((0, 0)) == 0 and a.getpixel((line.width - 1, line.height - 1)) == 0  # glow fades out before the edge
+    print("self-test ok")
+
+
+if __name__ == "__main__":
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+    else:
+        print("usage: python cover_art.py --self-test   (this file is imported by brandkit.py)")

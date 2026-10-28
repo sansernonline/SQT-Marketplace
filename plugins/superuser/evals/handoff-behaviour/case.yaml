@@ -1,0 +1,36 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: handoff-behaviour
+description: เขียนใบสั่งงานให้ลูกทีม ต้องครบ 5 หัวข้อ (เป้า · เสร็จเมื่อ · ใช้อะไร · ขอบเขต · ส่งกลับแบบไหน) และเสร็จเมื่อตรวจได้ (handoff หัวข้อ 3)
+tags: [behaviour, handoff]
+runs: 10
+expected_outcome: ใบมี 5 หัวข้อ · เสร็จเมื่อ เป็นสิ่งที่นับหรือเปิดดูได้ · ขอบเขตบอกสิ่งที่ทำได้และไม่ทำ · ส่งกลับบอกรูปแบบผล · ข้อมูลร้านอยู่ในใบ
+execution:
+  prompt: |
+    เขียนใบสั่งงานให้ลูกทีมอีกตัวไปเทียบค่าส่งพัสดุ 1 กิโลของ Flash, Kerry, ไปรษณีย์ไทย ให้ร้านเรา
+    ลูกทีมตัวนั้นไม่รู้อะไรเกี่ยวกับร้านเลย ร้านส่งวันละ 40 กล่อง เก็บปลายทางครึ่งหนึ่ง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: has-done-when
+    type: regex
+    pattern: 'เสร็จเมื่อ'
+    match: contains
+    target: last_message
+  - name: has-scope
+    type: regex
+    pattern: 'ขอบเขต'
+    match: contains
+    target: last_message
+  - name: has-return-format
+    type: regex
+    pattern: 'ส่งกลับ'
+    match: contains
+    target: last_message
+  - name: self-contained
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. ใบมีข้อมูลร้าน (40 กล่องต่อวัน · เก็บปลายทางครึ่งหนึ่ง) อยู่ในตัว คนที่ไม่รู้เรื่องอ่านแล้วเริ่มได้
+      2. เกณฑ์เสร็จตรวจได้ เช่น ตารางครบ 3 เจ้า หรือทุกราคามีลิงก์และวันที่ อย่างใดอย่างหนึ่งก็พอ

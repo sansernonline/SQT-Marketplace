@@ -43,7 +43,7 @@ description: Use when design work spans several assets (brand kit, campaign, AI 
 
 ## 3 · ตัวกระตุ้น — เจอสถานการณ์นี้ เรียก skill นี้
 
-ตารางสถานการณ์ → skill (12 แถว) อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
+ตารางสถานการณ์ → skill อยู่ใน [`triggers`](references/triggers.md) · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น
 
 ---
 
@@ -80,6 +80,8 @@ description: Use when design work spans several assets (brand kit, campaign, AI 
 - จ่ายเงิน · โอนเงิน · ใส่รหัสผ่าน เลขบัตร หรือเลขบัญชี · ยอมรับเงื่อนไขในนามผู้ใช้
 - ลบไฟล์หรือข้อมูลจริงของผู้ใช้ — ย้ายไป `_to_delete/` แทน
 - เจอ CAPTCHA — ไม่แก้ ไม่หาทางหลบ บอกผู้ใช้ให้ทำเอง
+
+**เลือกว่าจะสร้างภาพไหนใต้งบเครดิต** — ให้ผู้ใช้ให้คะแนนความสำคัญ 1–10 ต่อภาพ ภาพที่ขาดไม่ได้ใส่ `must` แล้วรัน `node <decision-scoring>/scripts/decide.mjs knapsack ไฟล์.json` (`<decision-scoring>` คือโฟลเดอร์ skill `superuser:decision-scoring`) · ได้ชุดที่ไม่เกินงบเสมอ · ตัวอย่าง [`credit-knapsack.example.json`](../campaign-set/references/credit-knapsack.example.json) (ตัวเลขสมมติ รันผ่าน 2026-10-28: ใช้ 35 จากงบ 40) · งบเป็นเพดานที่ผู้ใช้ตั้ง เกินเมื่อไรกลับไปรออนุมัติ
 
 **อนุญาตไว้ล่วงหน้า** — ผู้ใช้เขียนไว้ใน `~/.claude/superuser-style.md` หรือหัวข้อ "กติกา" ของ `CONTEXT.md` เช่น "สร้างภาพทดลองได้ไม่เกิน 20 ภาพต่องาน" ข้อนั้นจะไม่ต้องรออนุมัติ แต่เฉพาะในขอบเขตที่เขียนไว้ · **อนุญาตล่วงหน้าไม่ได้:** โพสต์หรือยิงแอดในนามผู้ใช้ · ใช้งานที่ละเมิดลิขสิทธิ์ · จ่ายหรือโอนเงิน · ใส่รหัสผ่านหรือข้อมูลบัตร · ลบข้อมูลจริง · CAPTCHA
 

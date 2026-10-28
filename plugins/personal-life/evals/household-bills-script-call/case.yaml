@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคสใหม่ 2026-10-28 (ยังไม่ได้รัน) · เช็กว่าโมเดลเรียก power-bill.mjs เมื่อผู้ใช้ให้ขั้นบันไดจากบิล · ขั้นบันไดเป็นตัวอย่างสมมติ
+schema_version: "1.1"
+name: household-bills-script-call
+description: ผู้ใช้ให้หน่วยไฟ 2 เดือนพร้อมขั้นบันไดและค่าบริการจากบิล ถามว่าทำไมบิลเพิ่ม ต้องเรียก power-bill.mjs ไม่คิดเอง
+tags: [behaviour, household-bills, script]
+runs: 5
+expected_outcome: เรียกสคริปต์ power-bill.mjs ด้วยไฟล์ JSON ที่ใส่ขั้นบันไดจากผู้ใช้ · แยกส่วนต่างเป็นหน่วยที่เพิ่ม ขั้นบันไดที่ขยับ และ Ft
+execution:
+  prompt: |
+    ช่วยดูหน่อยว่าทำไมบิลไฟเดือน พ.ค. แพงกว่า เม.ย. ข้อมูลจากหลังบิลฉัน
+    ขั้นบันได: 150 หน่วยแรก หน่วยละ 3.00 บาท · 151-400 หน่วยละ 4.00 บาท · เกิน 400 หน่วยละ 5.00 บาท · ค่าบริการ 25 บาท
+    เม.ย. ใช้ 330 หน่วย Ft 39.72 สตางค์ · พ.ค. ใช้ 412 หน่วย Ft 16.23 สตางค์
+  max_turns: 8
+  timeout_seconds: 180
+graders:
+  - name: script-called
+    type: tool_used
+    tool: Bash
+    input_match: 'power-bill\.mjs'
+    min: 1
+    arm: with-only
+  - name: tier-wording
+    type: regex
+    pattern: "ขั้นบันได"
+    match: contains
+    target: last_message

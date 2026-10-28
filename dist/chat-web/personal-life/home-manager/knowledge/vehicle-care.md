@@ -55,6 +55,15 @@ Bring: registration book copy (สำเนาเล่มทะเบียน)
 
 Compare quotes on: sum insured (ทุนประกัน — not above market value), excess/deductible (ค่าเสียหายส่วนแรก), garage type (อู่ห้าง dealer vs. อู่ประกัน network), named drivers, roadside assistance. Check the insurer is licensed on oic.or.th.
 
+## Before buying a car (compare 5-year cost)
+
+Same method as the insurance quotes, with `decision-scoring` command `score`: copy [references/buy-car-score-example.json](references/buy-car-score-example.json) (made-up numbers) and put in the real quotes.
+
+1. **Iron rule (กฎเหล็ก):** monthly instalment above the limit the user set before looking at cars → dropped, not scored (the example uses 12,000 baht). Also dropped: no licensed lender or dealer (check the dealer and any lender on official registers, not on the seller's word).
+2. **Total cost over 5 years, in baht, per option:** instalments + interest + insurance + annual tax + servicing + fuel − resale value at year 5. The user fills each part from quotes and the maintenance table below; resale value is the user's estimate (default, not measured; ask a dealer in writing). Never invent a price or a loan rate: loan rates and car prices change, so every figure comes from the user's own quote.
+3. **Criteria (default weights, starting value, not yet measured):** total cost 5 years (low, 0.50) · instalment per month (low, 0.20) · size and seats for the family 1–5, user's score (high, 0.20) · service centre near home 1–5, user's score (high, 0.10).
+4. **Run:** `node decide.mjs score car.json`. Unstable or close (`ยังไม่นิ่ง`, `สูสี`) → the user decides. Buying a car is a one-way door (hard to undo): also log it in `decision-journal`.
+
 ## Maintenance by distance
 
 Follow the owner's manual first; this is the common pattern for a petrol passenger car (รอยืนยัน against your manual):

@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-10-28 จากรายงานตรวจ plugin (P16 P18) · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: bonds-and-deposits-negative
+description: ถามเลือกกองทุนหุ้นจาก factsheet ไม่ได้ถามเงินฝากหรือหุ้นกู้ ต้องเปิด mutual-fund-picker และไม่เปิด bonds-and-deposits
+tags: [capability, negative, bonds-and-deposits, mutual-fund-picker]
+runs: 3
+expected_outcome: เปิด Skill mutual-fund-picker · ไม่เปิด bonds-and-deposits
+execution:
+  prompt: |
+    กำลังเลือกกองทุนหุ้นไทยมา 2 กอง จะลงทุนยาว 10 ปี
+    อ่าน factsheet แล้วงง ค่าธรรมเนียมรวมต่อปีต่างกันเกือบ 1% มันสำคัญแค่ไหน ควรดูอะไรบ้างก่อนเลือก
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: fund-picker-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?mutual-fund-picker"'
+    min: 1
+    arm: with-only
+  - name: bonds-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?bonds-and-deposits"'
+    min: 0
+    max: 0

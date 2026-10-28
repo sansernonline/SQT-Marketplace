@@ -1,6 +1,6 @@
 # ADAPT — เอา SuperUser ไปใช้กับ plugin ของคุณ
 
-plugin `superuser` คือหัวหน้างาน 1 คน ใช้ได้ 2 แบบ:
+plugin `superuser` คือหัวหน้าทีม 1 คน ใช้ได้ 2 แบบ:
 
 1. **ติดตั้งตัวเดียว** — `/superuser:superuser` ทำงานได้ทันทีกับงานทั่วไป (หาข้อมูล · ทำเอกสาร · ตรวจงาน · งานยาว) · skill เอกสารหลัก (`polished-document-style` · `document-naming` · `spell-out-abbreviations` · `polite-message-th-en`) อยู่ในแกน · เอกสารออกแบบ สไลด์ รูปประกอบ อยู่ใน `software-company` · ภาพ AI อยู่ใน `graphic-design` · ประชุม อยู่ใน `personal-life`
 2. **เป็นแกนให้ plugin สาขา** — plugin ของคุณประกาศ `dependencies` แล้วมี `skills/superuser/SKILL.md` ของตัวเองที่มี**เฉพาะส่วนสาขา** (playbook · agent · เกณฑ์ · รออนุมัติ) และบรรทัดแรกบอกให้เปิดแกนก่อน
@@ -9,7 +9,7 @@ plugin `superuser` คือหัวหน้างาน 1 คน ใช้ไ
 
 ## 0 · แกน กับ โมดูล — อะไรอยู่ตรงไหน และใครตัดสินใจ
 
-SuperUser คือหัวหน้างาน 1 คน: แจกงาน · ประเมินลูกน้อง · จัดการงาน · ตรวจซ้ำจนสำเร็จ ด้วยลูกน้อง effort ต่ำ · กฎแยกคือ **หัวหน้าทำงานไม่ได้ถ้าขาด → แกน · ทำได้แต่ดีขึ้น → โมดูล** · โมดูลเปิดปิดได้ต่อโฟลเดอร์งานใน `.claude/superuser/config.json` · ค่าเริ่มต้นเปิดทุกตัว
+SuperUser คือหัวหน้าทีม 1 คน: แจกงาน · ประเมินลูกน้อง · จัดการงาน · ตรวจซ้ำจนสำเร็จ ด้วยลูกน้อง effort ต่ำ · กฎแยกคือ **หัวหน้าทำงานไม่ได้ถ้าขาด → แกน · ทำได้แต่ดีขึ้น → โมดูล** · โมดูลเปิดปิดได้ต่อโฟลเดอร์งานใน `.claude/superuser/config.json` · ค่าเริ่มต้นเปิดทุกตัว
 
 | อยู่ไหน | มีอะไร | ไฟล์ |
 |---|---|---|
@@ -30,7 +30,7 @@ SuperUser คือหัวหน้างาน 1 คน: แจกงาน �
 |---|---|---|
 | `skills/superuser/SKILL.md` | แกนทั้งไฟล์ (หัวข้อ 1–9) · Claude Code เปิดให้ทาง `superuser:superuser` | `SKILL.md` ของสาขา: frontmatter · บรรทัด "เปิด `superuser:superuser` ก่อน" · กฎเพิ่มเลข 11 ขึ้นไป · ตาราง playbook · เกณฑ์ 3 ข้อ · ตาราง agent · รออนุมัติของสาขา · ตัวอย่างตารางสถานะ · ไฟล์กลางของสาขา · **ห้ามมีบล็อก `<!-- superuser:begin -->` อีก** (sync `--check` จับ) |
 | playbook และ reference | ทั้งไฟล์ คัดลอกไปทุกสาขาเพื่อให้ลิงก์ในสาขาใช้ได้: `playbook-learn-from-session.md` · `playbook-template.md` · `playbook-team-project.md` · `learning-loop.md` · `brief-template.md` · `team-files.md` · `evidence.md` · `team-roles.md` · `voting.md` · `templates/improvements-queue.md` · `lead-playbook.md` · `templates/TEAM.md` · `templates/config.json` · บล็อก `review-steps` ใน `playbook-review.md` (ขั้น 2–6) · `unattended-steps` ใน `playbook-unattended-run.md` · `context` ใน `references/context-template.md` · `autonomy.md` และ `modules.md` อยู่ที่แกนที่เดียว (เปิดผ่านแกน) | playbook ของสาขา · `review` ขั้น 1 และหัวไฟล์ · `unattended-run` หัวไฟล์ (`ลูกทีมต่อชิ้น` · `ผู้ตรวจต่อชิ้น` · `รออนุมัติที่เจอบ่อย`) · `context-template` หัวข้อ "ค่าของ plugin นี้" · `triggers.md` · `examples.md` (ตัวอย่างอย่างเดียว ห้ามเขียนกฎซ้ำกับแกน) |
-| skill | หัวหน้างานและเอกสารหลัก 31 ตัวใน `plugins/superuser/skills/` (รายการจริงใน `SHARED_ONLY_IN_SUPERUSER` ของ `sync-superuser.mjs`) · skill เอกสารออกแบบ สไลด์ รูป ประชุม อยู่ใน plugin สาขาที่ใช้มากสุด (`software-company` · `graphic-design` · `personal-life`) สาขาอื่นอ้างด้วยชื่อ plugin | skill ของสาขา · ส่วนเฉพาะสาขาของ skill กลางเขียนเป็นไฟล์ใน `skills/superuser/references/` ของสาขา (ตัวอย่าง: `software-company` → `code-extensions.md`) |
+| skill | หัวหน้าทีมและเอกสารหลักใน `plugins/superuser/skills/` · รายชื่อและจำนวนดูที่ `SHARED_ONLY_IN_SUPERUSER` ใน `scripts/sync/sync-superuser.mjs` ที่เดียว · skill เอกสารออกแบบ สไลด์ รูป ประชุม อยู่ใน plugin สาขาที่ใช้มากสุด (`software-company` · `graphic-design` · `personal-life`) สาขาอื่นอ้างด้วยชื่อ plugin | skill ของสาขา · ส่วนเฉพาะสาขาของ skill กลางเขียนเป็นไฟล์ใน `skills/superuser/references/` ของสาขา (ตัวอย่าง: `software-company` → `code-extensions.md`) |
 | agent | `brainstormer` · `reviewer` (ค่าเริ่ม `sonnet` + `medium` · งานใหญ่หรืองบคุณภาพหัวหน้าส่ง `model: opus`) · `learning-reviewer` | agent ตามบทบาทของสาขา · ผู้ตรวจเฉพาะทาง (เพิ่มชื่อลง `CHECKERS` ใน `scripts/check/validate-marketplace.mjs`) |
 | hook | `hooks/` ทั้งโฟลเดอร์ (hook · กฎประจำตัว `core-rules.md` · ตัวบอก skill `skill-router.json`) | — |
 | ค่าเริ่มต้นของ superuser (sync ไม่คัดลอก) | — | playbook `research` · `document` · `pickup-and-pause` และ `templates/CONTEXT.md` · `HISTORY.md` · `IMPROVEMENTS.md` คัดลอกไปตอนตั้งสาขาใหม่ แล้วเก็บ ปรับ หรือลบก็ได้ |

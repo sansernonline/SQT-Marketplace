@@ -9,8 +9,17 @@
 // All money is counted in whole satang (integers) so 2-decimal rounding happens once per step, half up.
 
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join, resolve } from 'node:path';
 
-const DEFAULT_VAT_RATE = 7; // doc-quotation/SKILL.md section 2: 7% until 30 Sep 2570 - pass vatRate when it changes
+// Default VAT rate lives in rates.json next to this file, with the date it was checked and the date the reduced rate ends.
+const RATES_FILE = join(dirname(fileURLToPath(import.meta.url)), 'rates.json');
+export const loadRates = () => JSON.parse(readFileSync(RATES_FILE, 'utf8'));
+// The VAT rate changes about once a year by royal decree · 90 days is a starting value, not measured
+const RATES_MAX_AGE_DAYS = 90;
+const DAY_MS = 24 * 60 * 60 * 1000;
+// toSatang keeps 12 significant digits, so satang stay exact only up to 12 digits; larger amounts also need ล้านล้าน in words
+const MAX_TOTAL_SATANG = 999999999999; // 9,999,999,999.99 baht
 const VAT_MODES = ['exclusive', 'inclusive', 'none'];
 const SATANG_PER_BAHT = 100;
 
@@ -86,10 +95,15 @@ export function validate(input) {
 }
 
 // Returns satang for every step.
-export function compute(input) {
+export function compute(input, rates = loadRates(), today = new Date()) {
   const warnings = validate(input);
   const mode = input.vatMode ?? 'exclusive';
-  const vatRate = input.vatRate ?? DEFAULT_VAT_RATE;
+  const vatRate = input.vatRate ?? rates.vat_pct;
+  if (mode !== 'none' && input.vatRate === undefined) {
+    const age = Math.floor((today - new Date(`${rates.checked}T00:00:00Z`)) / DAY_MS);
+    if (age > RATES_MAX_AGE_DAYS) warnings.push(`อัตรา VAT ${rates.vat_pct}% ใน rates.json ตรวจล่าสุด ${rates.checked} (${age} วันก่อน) · เทียบกับ rd.go.th แล้วแก้ rates.json หรือใส่ vatRate เอง`);
+    if (today > new Date(`${rates.vat_pct_valid_until}T23:59:59Z`)) warnings.push(`อัตรา VAT ${rates.vat_pct}% ใช้ถึง ${rates.vat_pct_valid_until} ซึ่งผ่านมาแล้ว · หา พ.ร.ฎ. ฉบับใหม่ที่ rd.go.th แล้วใส่ vatRate`);
+  }
   const lines = input.items.map((it) => toSatang(it.qty * it.price) - toSatang(it.discount ?? 0));
   const subtotal = lines.reduce((s, x) => s + x, 0);
   let base = subtotal, vat = 0, total = subtotal;
@@ -102,6 +116,7 @@ export function compute(input) {
   }
   const wht = roundHalfUp((base * (input.whtRate ?? 0)) / 100);
   const net = total - wht;
+  if (total > MAX_TOTAL_SATANG) throw new Error(`ยอดรวม ${total / SATANG_PER_BAHT} บาท เกินเพดาน 9,999,999,999.99 บาทที่สคริปต์อ่านเป็นตัวหนังสือได้ถูก · เช็ค qty และ price หรือแยกเป็นหลายเอกสาร`);
   return { lines, subtotal, base, vat, total, wht, net, totalText: bahtText(total), netText: bahtText(net), warnings };
 }
 
@@ -109,7 +124,7 @@ const baht = (satang) => (satang / SATANG_PER_BAHT).toLocaleString('en-US', { mi
 
 export function report(input, r) {
   const mode = input.vatMode ?? 'exclusive';
-  const vatRate = input.vatRate ?? DEFAULT_VAT_RATE;
+  const vatRate = input.vatRate ?? loadRates().vat_pct;
   const rows = input.items.map((it, i) => `| ${it.name ?? `รายการที่ ${i + 1}`} | ${it.qty} × ${it.price}${it.discount ? ` − ${it.discount}` : ''} | ${baht(r.lines[i])} |`);
   const summary = [['รวมเป็นเงิน', r.subtotal]];
   if (mode === 'inclusive') summary.push([`มูลค่าก่อน VAT`, r.base]);
@@ -183,13 +198,31 @@ function selfTest() {
   t('ส่วนลดเกินยอด', throwsWith({ items: [item(100, { discount: 101 })] }, 'discount'));
   t('vatMode ผิด', throwsWith({ items: [item(1)], vatMode: 'both' }, 'vatMode'));
   t('whtRate เกิน 100', throwsWith({ items: [item(1)], whtRate: 300 }, 'whtRate'));
+  // edge/dt7: ยอดเกินเพดาน · VAT จาก rates.json เตือนเมื่อเก่าหรือหมดช่วงลดอัตรา
+  t('ยอดเกินเพดานปฏิเสธ', throwsWith({ items: [item(99999999999, { qty: 2147483647.5 })] }, 'เพดาน'));
+  t('ยอดใต้เพดานพอดีผ่าน', compute({ items: [item(9999999999.99)], vatMode: 'none' }).total === MAX_TOTAL_SATANG);
+  const rates = loadRates();
+  const fresh = new Date(`${rates.checked}T00:00:00Z`);
+  const plus = (d) => new Date(fresh.getTime() + d * DAY_MS);
+  t('VAT ตั้งต้นจาก rates.json', compute({ items: [item(100)] }, rates, fresh).vat === rates.vat_pct * 100 && rates.vat_pct === 7);
+  t('rates.json ใหม่ไม่เตือน', compute({ items: [item(100)] }, rates, fresh).warnings.length === 0);
+  t('rates.json 91 วันเตือน', compute({ items: [item(100)] }, rates, plus(91)).warnings.length === 1);
+  t('เลยวันสิ้นสุดอัตราลดเตือน', compute({ items: [item(100)] }, rates, new Date('2027-10-01T00:00:00Z')).warnings.some((w) => w.includes('ผ่านมาแล้ว')));
+  t('ใส่ vatRate เองไม่เตือนวันที่', compute({ items: [item(100)], vatRate: 7 }, rates, plus(400)).warnings.length === 0);
+  // rates.json ตรงกับ facts.json (มีเฉพาะใน repo · ข้ามเมื่อยังไม่มีรายการ vat-rate)
+  try {
+    const fact = JSON.parse(readFileSync(join(dirname(RATES_FILE), '..', '..', '..', '..', '..', 'scripts', 'check', 'facts.json'), 'utf8')).facts['vat-rate'];
+    if (fact) t('VAT ตรง facts.json vat-rate', `${rates.vat_pct}%` === fact.value);
+  } catch (err) { if (err.code !== 'ENOENT') throw err; }
   t('รายงานมีตัวหนังสือ', report({ items: [item(50000)], whtRate: 3 }, compute({ items: [item(50000)], whtRate: 3 })).includes('ห้าหมื่นสองพันบาทถ้วน'));
   console.log(`self-test ${ok}/${ok + bad} ผ่าน`);
   process.exit(bad ? 1 : 0);
 }
 
+// รัน CLI เฉพาะตอนเรียกไฟล์นี้ตรง ๆ · import จากสคริปต์อื่นได้โดยไม่ออก
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 const args = process.argv.slice(2);
-if (args.includes('--self-test')) selfTest();
+if (!isMain) { /* imported */ } else if (args.includes('--self-test')) selfTest();
 else {
   const file = args.find((a) => !a.startsWith('--'));
   if (!file) { console.error('ใช้: node thai-doc-total.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }

@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: human-writing-behaviour
 description: รายงานสถานะภาษาไทยต้องขึ้นต้นด้วยข้อสรุป ไม่มีคำฟุ่มเฟือย ไม่มีอีโมจิ ตัวย่อเขียนเต็มครั้งแรก ตัวเลขเป็นเลข
 tags: [behaviour, human-writing]
-runs: 3
+runs: 10
 expected_outcome: ย่อหน้าแรกบอกผลรวม (2 ใน 3 เสร็จ ติด 1) ตามด้วยตาราง ผล ที่ทำ ต่อไป ไม่มี ทำการ มีการ ในส่วนของ ไม่มีอีโมจิ OCR เขียนเต็มครั้งแรก
 execution:
   prompt: |

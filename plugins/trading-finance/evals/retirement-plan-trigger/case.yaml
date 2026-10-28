@@ -1,0 +1,21 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เพิ่ม 2026-10-28 จากรายงานตรวจ plugin (P16 P18) · โจทย์คิดขึ้นเอง ไม่ได้มาจากงานที่พลาดจริง · ยังไม่ได้รัน
+schema_version: "1.1"
+name: retirement-plan-trigger
+description: ถามว่าต้องมีเงินเท่าไรถึงเกษียณได้ ไม่เอ่ยชื่อ skill ต้องทำให้ retirement-plan ถูกเปิด
+tags: [capability, trigger, retirement-plan]
+runs: 3
+expected_outcome: เรียก Skill retirement-plan · บอกข้อสมมติเงินเฟ้อและผลตอบแทน
+execution:
+  prompt: |
+    อายุ 35 อยากหยุดทำงานตอน 60 ตอนนี้ใช้เงินเดือนละ 30,000
+    ต้องมีเงินเก็บเท่าไรถึงจะพอ แล้วต้องออมเดือนละเท่าไร
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?retirement-plan"'
+    min: 1
+    arm: with-only

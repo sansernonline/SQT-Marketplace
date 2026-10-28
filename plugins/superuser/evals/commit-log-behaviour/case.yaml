@@ -1,0 +1,31 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: commit-log-behaviour
+description: การเปลี่ยนแปลง 2 เรื่องที่ไม่เกี่ยวกัน ต้องแยกเป็น 2 commit แบบ Conventional Commit ไม่รวบเป็น commit เดียว (commit-log หัวข้อ 2 ข้อ 3)
+tags: [behaviour, commit-log]
+runs: 10
+expected_outcome: 2 commit · fix(...) สำหรับ timeout ล็อกอิน · docs(...) สำหรับ README · มีคำสั่ง git add แยกไฟล์ทีละเรื่อง
+execution:
+  prompt: |
+    git status ของฉันตอนนี้:
+      modified: src/auth/login.ts   (แก้ timeout ล็อกอินจาก 5 เป็น 30 วินาที เพราะลูกค้าต่างจังหวัดเน็ตช้าแล้วหลุด)
+      modified: README.md           (เพิ่มวิธีติดตั้งบน Windows)
+    ช่วยเขียนข้อความ commit และคำสั่งที่จะใช้ commit ให้หน่อย
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: fix-type
+    type: regex
+    pattern: 'fix(\([\w/-]+\))?:'
+    match: contains
+    target: last_message
+  - name: docs-type
+    type: regex
+    pattern: 'docs(\([\w/-]+\))?:'
+    match: contains
+    target: last_message
+  - name: split-commits
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อแยกเป็น 2 commit โดย git add ทีละไฟล์ ไม่ใช้ git add . หรือ git add -A รวมทั้ง 2 เรื่องใน commit เดียว

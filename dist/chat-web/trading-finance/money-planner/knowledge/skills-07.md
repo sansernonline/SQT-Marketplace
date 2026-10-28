@@ -59,7 +59,7 @@ Who may buy unrated or high-yield bonds is restricted by SEC rules; the exact cu
 2. Emergency part: savings and money market fund only.
 3. 1–3 year money: fixed deposits across banks (each ≤ 1 million), savings bonds of matching tenor, short government bond fund.
 4. Longer money: longer savings bonds; corporate bonds only investment grade, spread, and only what the user can hold to maturity.
-5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld). Score the options that survive the hard rules below. The user picks.
+5. Show the table with after-tax interest in baht for the user's real amount (formula: amount × rate × (1 − 0.15) × years, for products with 15% withheld; run `node money-calc.mjs afterTax <file.json>`, script in `portfolio-snapshot`, see its Script path; example `../portfolio-snapshot/scripts/examples/afterTax.json`: 500,000 at 1.80% for 3 years → 22,950 after tax, 1.53% a year). Score the options that survive the hard rules below. The user picks.
 
 ## Scoring the options
 
@@ -162,14 +162,15 @@ The government cut of the mortgage fee to 0.01% (homes ≤ 7 million baht, until
 ```
 node refinance.mjs pmt <loan> <yearly rate %> <payments>
 node refinance.mjs compare <file.json> [--json]     # example file: scripts/example.json
+node refinance.mjs scenarios <file.json>            # example: scripts/scenarios-example.json -> JSON for decide.mjs payoff
 node refinance.mjs --self-test
 ```
 
-Input fields `balance`, `payment`, `months`, `stay.rate` and each option's `rate` and `cost` must be finite numbers, with `months` above 0; a bad field stops the script with a message naming it. A rate below 1 gets a warning (it may have been typed as a decimal instead of %). `baseline` (optional) names the option to compare against; the default is staying put.
+Input fields `balance`, `payment`, `months`, `stay.rate` and each option's `rate` and `cost` must be finite numbers, with `months` above 0; a bad field stops the script with a message naming it. A rate below 1 gets a warning (it may have been typed as a decimal instead of %). A stepped rate (promo then MRR − x) goes in `rates` instead of `rate`: `[{ "months": 36, "rate": 3.2 }, { "rate": 5.5, "floating": true }]`; the last step runs to month N. `baseline` (optional) names the option to compare against; the default is staying put.
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/home-refinance/scripts/refinance.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/home-refinance/scripts/refinance.mjs` · Node only, no dependencies.
 
-**Rate after the promo is uncertain** (MRR can rise or fall): use `decision-scoring`, command `payoff`. Options = refinance · retention · stay put; scenarios = MRR up · flat · down (compute interest plus costs for each cell with `refinance.mjs`; `better` = `low`). If the probability of each scenario is unknown, read the "smallest maximum regret" (minimax regret) column; do not guess probabilities. Script path: see `decision-scoring` (superuser plugin). If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), or for any home-loan decision, the output is information and the user decides.
+**Rate after the promo is uncertain** (MRR can rise or fall): use `decision-scoring`, command `payoff`. Options = refinance · retention · stay put; scenarios = MRR up · flat · down (`refinance.mjs scenarios <file.json>` writes the whole table with `better` = `low`: each scenario adds its `shift` to the steps marked `floating`; run 2026-10-28 on `scripts/scenarios-example.json`: refinance regret 0 · retention 59,409 · stay 380,279). If the probability of each scenario is unknown, read the "smallest maximum regret" (minimax regret) column; do not guess probabilities. Script path: see `decision-scoring` (superuser plugin). If the result reads `ยังไม่นิ่ง` (not stable) or `สูสี` (too close), or for any home-loan decision, the output is information and the user decides.
 
 ## Worked example
 

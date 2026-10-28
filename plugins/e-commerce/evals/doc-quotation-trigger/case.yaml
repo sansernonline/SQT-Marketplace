@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: doc-quotation-trigger
+description: ขอใบเสนอราคาที่มี VAT ต้องเปิด doc-quotation และได้ยอดรวมที่ถูก · ไม่เอ่ยชื่อ skill
+tags: [trigger, regression-suite, doc-quotation]
+runs: 3
+expected_outcome: เปิด Skill doc-quotation แล้วตอบตรงคำถาม
+execution:
+  prompt: |
+    ลูกค้าบริษัทขอใบเสนอราคา สติกเกอร์ฉลากสินค้า 2,000 ดวง ดวงละ 3.50 ร้านเราจด VAT แล้ว ช่วยทำให้หน่อยค่ะ
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: skill-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?doc-quotation"'
+    min: 1
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: '7,?490'
+    flags: i
+    match: contains
+    target: last_message

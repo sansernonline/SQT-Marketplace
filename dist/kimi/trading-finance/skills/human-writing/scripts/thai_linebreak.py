@@ -10,6 +10,7 @@
   python thai_linebreak.py รายงาน.docx --check      ตรวจอย่างเดียว ไม่เขียนไฟล์
   python thai_linebreak.py รายงาน.docx --align left เปลี่ยนการจัดย่อหน้าภาษาไทยเป็นชิดซ้าย (หรือ both = ชิดสองข้าง)
   python thai_linebreak.py บท1.md                    ไฟล์ข้อความ (ก่อนแปลงด้วย pandoc)
+  python thai_linebreak.py --self-test              ตรวจตัวเอง ใช้ตัวตัดคำจำลอง ไม่ต้องมี pythainlp
 
 ต้องมี: pip install pythainlp lxml
 """
@@ -19,7 +20,7 @@ from pathlib import Path
 try:
     from pythainlp.tokenize import word_tokenize
 except ImportError:
-    sys.exit("ต้องติดตั้ง pythainlp ก่อน: pip install pythainlp")
+    word_tokenize = None  # --self-test ใช้ตัวตัดคำจำลองได้ · งานจริงต้องมี (ตรวจใน main)
 
 ZWSP, NBSP = "​", " "
 THAI = re.compile(r"[฀-๿]")
@@ -155,7 +156,57 @@ def report(path, s):
     print(line)
 
 
+def self_test():
+    """ใช้ตัวตัดคำจำลองจากรายการคำ ผลจึงคงที่ไม่ขึ้นกับรุ่นของ pythainlp · ไม่ทดสอบ .docx (ต้องมี lxml)"""
+    import tempfile
+    global word_tokenize
+    words = ["สวัสดี", "ครับ", "เด็ก", "ๆ", "ตาราง", "ที่", "ประเด็น"]
+
+    def fake_tokenize(text, engine=None, keep_whitespace=True):
+        out, i = [], 0
+        while i < len(text):
+            w = next((w for w in words if text.startswith(w, i)), text[i])
+            out.append(w)
+            i += len(w)
+        return out
+
+    real, word_tokenize = word_tokenize, fake_tokenize
+    cases = {
+        "ใส่จุดตัดระหว่างคำไทย": lambda: break_points("สวัสดีครับ") == [6],
+        "ไม่ตัดหน้าไม้ยมก": lambda: break_points("เด็กๆ") == [],
+        "ข้อความไม่มีไทยไม่แตะ": lambda: break_points("hello world") == [] and fix_text("hello world") == "hello world",
+        "รันซ้ำได้ผลเดิม": lambda: fix_text(fix_text("สวัสดีครับ")) == fix_text("สวัสดีครับ") == "สวัสดี" + ZWSP + "ครับ",
+        "ผูกตัวเลขกับคำข้าง ๆ": lambda: fix_text("ตารางที่ 1") == "ตาราง" + ZWSP + "ที่" + NBSP + "1" and NBSP in fix_text("4 ประเด็น"),
+    }
+
+    def text_file_case():
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "a.md"
+            f.write_text("`สวัสดีครับ` สวัสดีครับ\n", encoding="utf-8")
+            do_text(f, check=False)
+            out = f.read_text(encoding="utf-8")
+            return out.startswith("`สวัสดีครับ`") and ZWSP in out and (Path(d) / "_to_delete" / "a.before-linebreak.md").exists()
+
+    cases["ไฟล์ .md ข้ามโค้ดและสำรองต้นฉบับ"] = text_file_case
+    failed = 0
+    for name, fn in cases.items():
+        try:
+            ok = fn()
+        except Exception as e:  # noqa: BLE001 — รายงานเป็นข้อไม่ผ่าน ไม่ล้มทั้งชุด
+            ok = False
+            name += f" ({e})"
+        failed += not ok
+        print(f"{'ผ่าน ' if ok else 'ไม่ผ่าน'} {name}")
+    word_tokenize = real
+    print(f"self-test {len(cases) - failed}/{len(cases)} ผ่าน")
+    return 1 if failed else 0
+
+
 if __name__ == "__main__":
+    if "--self-test" in sys.argv:
+        sys.exit(self_test())
+    if word_tokenize is None:
+        sys.exit("ต้องติดตั้ง pythainlp ก่อน: pip install pythainlp")
     ap = argparse.ArgumentParser(description="ตัดคำภาษาไทยให้ขึ้นบรรทัดสวย")
     ap.add_argument("files", nargs="+", type=Path)
     ap.add_argument("--check", action="store_true", help="ตรวจอย่างเดียว")

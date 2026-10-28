@@ -77,7 +77,17 @@ Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010
 2. Place it near the total, at least **2.5 × 2.5 cm** printed, with a quiet zone of 4 modules; label "สแกนชำระผ่าน PromptPay" and the account name the payer will see.
 3. Print the invoice number next to it and ask payers to send the slip — for tag 29 there is no reference in the transfer.
 4. Quotations: amount may change — use a static QR or regenerate on the invoice. Template in `doc-quotation`; tax invoice fields in `e-tax-invoice`.
-5. Re-scan the printed PDF with 2 different bank apps before sending.
+5. Re-scan the printed PDF with 2 different bank apps before sending, and read out the account name each app shows: it must match the business name on the invoice. A QR that scans but shows another name goes to someone else — stop and recheck the ID.
+
+## 5. Before shipping: check the money arrived, not the slip
+
+A slip is a picture; it can be edited or reused from an older transfer. Ship only when the money shows in the shop's own account.
+
+1. Open the shop's bank app or statement and find the transfer: amount, time and payer name match the order.
+2. One transfer pays one order — when two orders show the same slip, the second one has not paid.
+3. Never ship on a slip alone, even for a regular customer, and do not accept "the bank is slow, I'll send proof later" as payment.
+4. Turn on the bank's incoming-transfer notification for the shop account so checking takes seconds.
+5. For many orders a day, use a payment gateway or the bank's API with a payment callback instead of reading slips (Rules).
 
 ## Script
 

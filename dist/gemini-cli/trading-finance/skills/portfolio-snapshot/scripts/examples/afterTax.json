@@ -1,0 +1,6 @@
+{
+  "_note": "bonds-and-deposits formula · 1.80% / 3 years is the ออมพลัส 2570 round 1 example rate in the skill (shape only, not a quote) · withholdingPct defaults to 15",
+  "options": [
+    { "name": "Savings bond 3 years (example rate)", "amount": 500000, "ratePct": 1.80, "years": 3 }
+  ]
+}

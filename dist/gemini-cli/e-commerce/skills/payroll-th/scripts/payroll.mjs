@@ -7,20 +7,25 @@
 // ขั้นบันไดภาษี เพดานประกันสังคม และค่าลดหย่อนอยู่ใน rates.json (ข้างไฟล์นี้) · เงินได้ทั้งปี = gross x periods
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 const RATES_FILE = join(dirname(fileURLToPath(import.meta.url)), 'rates.json');
+// อัตราภาษีและประกันสังคมเปลี่ยนปีละครั้งหรือน้อยกว่า · 90 วันเป็นค่าตั้งต้น ยังไม่ได้วัด
+const RATES_MAX_AGE_DAYS = 90;
+const DAY_MS = 24 * 60 * 60 * 1000;
 export const loadRates = () => JSON.parse(readFileSync(RATES_FILE, 'utf8'));
 
 const round2 = (n) => Math.round(n * 100) / 100;
 
-export function validate(input) {
+export function validate(input, rates = loadRates(), today = new Date()) {
   const num = (v, label, max = Infinity) => {
     if (typeof v !== 'number' || !Number.isFinite(v) || v < 0 || v > max) throw new Error(`ช่อง ${label} ต้องเป็นตัวเลขตั้งแต่ 0${max < Infinity ? ` ถึง ${max}` : ''} (ได้ ${JSON.stringify(v)})`);
   };
   if (!input || typeof input !== 'object') throw new Error('ไฟล์ต้องเป็นอ็อบเจกต์ JSON');
   if (!Array.isArray(input.employees) || input.employees.length === 0) throw new Error('ช่อง employees ต้องเป็นรายชื่อพนักงานอย่างน้อย 1 คน');
   const warnings = [];
+  const age = Math.floor((today - new Date(`${rates.checked}T00:00:00Z`)) / DAY_MS);
+  if (age > RATES_MAX_AGE_DAYS) warnings.push(`rates.json ตรวจล่าสุด ${rates.checked} (${age} วันก่อน) เก่ากว่า ${RATES_MAX_AGE_DAYS} วัน · เทียบอัตรากับกรมสรรพากรและสำนักงานประกันสังคม แล้วแก้ค่าและ checked ใน rates.json`);
   input.employees.forEach((e, i) => {
     const n = e?.name ?? `คนที่ ${i + 1}`;
     const at = (f) => `employees[${i}].${f} (${n})`;
@@ -32,6 +37,9 @@ export function validate(input) {
     if (e.spouse !== undefined && typeof e.spouse !== 'boolean') throw new Error(`ช่อง ${at('spouse')} ต้องเป็น true หรือ false`);
     if (e.periods !== undefined && !Number.isInteger(e.periods)) throw new Error(`ช่อง ${at('periods')} ต้องเป็นจำนวนเต็ม (จำนวนงวดจ่ายในปี)`);
     if (e.periods === 0) throw new Error(`ช่อง ${at('periods')} ต้องมากกว่า 0`);
+    for (const f of ['pvd_employee_pct', 'pvd_employer_pct']) {
+      if (e[f] > 0 && e[f] < 1) warnings.push(`${n}: ${f} = ${e[f]} น้อยกว่า 1 · ใส่เป็น % (5 ไม่ใช่ 0.05)`);
+    }
     if (e.pvd_employee_pct > 15) warnings.push(`${n}: PVD ลูกจ้าง ${e.pvd_employee_pct}% เกิน 15% ของค่าจ้าง · ลดหย่อนภาษีได้ไม่เกิน 15%`);
   });
   return warnings;
@@ -76,9 +84,13 @@ export function calcEmployee(e, rates) {
   };
 }
 
-export function calc(input, rates = loadRates()) {
-  const warnings = validate(input);
-  return { rates: { checked: rates.checked, source: rates.source }, employees: input.employees.map((e) => calcEmployee(e, rates)), warnings };
+export function calc(input, rates = loadRates(), today = new Date()) {
+  const warnings = validate(input, rates, today);
+  const employees = input.employees.map((e) => calcEmployee(e, rates));
+  for (const x of employees) {
+    if (x.net_pay < 0) warnings.push(`${x.name}: เงินสุทธิติดลบ ${round2(x.net_pay)} (ประกันสังคมขั้นต่ำหรือ PVD มากกว่าเงินได้) · เช็ค gross ว่าเป็นเงินต่องวดจริงไหม`);
+  }
+  return { rates: { checked: rates.checked, source: rates.source }, employees, warnings };
 }
 
 const baht = (n) => round2(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -149,11 +161,14 @@ function selfTest() {
   // rates.json ตรงกับ facts.json (มีเฉพาะใน repo)
   const facts = join(dirname(RATES_FILE), '..', '..', '..', '..', '..', 'scripts', 'check', 'facts.json');
   try {
-    const cap = Number(JSON.parse(readFileSync(facts, 'utf8')).facts['sso-wage-cap-2569'].value.replace(/,/g, ''));
+    const f = JSON.parse(readFileSync(facts, 'utf8')).facts;
+    const cap = Number(f['sso-wage-cap-2569'].value.replace(/,/g, ''));
     t('เพดานประกันสังคมตรง facts.json', cap === rates.sso.wage_cap);
+    t('ขั้นสูงสุดตรง facts.json pit-top-bracket', `${rates.brackets.at(-1).rate_pct}%` === f['pit-top-bracket'].value);
   } catch (err) { if (err.code !== 'ENOENT') throw err; }
-  // input checks
-  const throwsWith = (inp, word) => { try { calc(inp, rates); return false; } catch (err) { return err.message.includes(word); } };
+  // input checks · วันที่คงที่ให้ผลไม่ขึ้นกับวันที่รัน
+  const FRESH = new Date(`${rates.checked}T00:00:00Z`);
+  const throwsWith = (inp, word) => { try { calc(inp, rates, FRESH); return false; } catch (err) { return err.message.includes(word); } };
   const emp = (e) => ({ employees: [{ name: 'A', gross: 20000, ...e }] });
   t('ไม่มี employees', throwsWith({ employees: [] }, 'employees'));
   t('gross เป็นข้อความ', throwsWith(emp({ gross: '20000' }), 'gross'));
@@ -161,22 +176,33 @@ function selfTest() {
   t('children ติดลบ', throwsWith(emp({ children: -1 }), 'children'));
   t('spouse ไม่ใช่ boolean', throwsWith(emp({ spouse: 'yes' }), 'spouse'));
   t('periods ไม่ใช่จำนวนเต็ม', throwsWith(emp({ periods: 6.5 }), 'periods'));
-  t('PVD เกิน 15% เตือน', calc(emp({ pvd_employee_pct: 20 }), rates).warnings.length === 1);
-  t('รายงานพิมพ์วันที่ตรวจ', report(calc(emp({}), rates)).includes(rates.checked));
+  t('PVD เกิน 15% เตือน', calc(emp({ pvd_employee_pct: 20 }), rates, FRESH).warnings.length === 1);
+  t('รายงานพิมพ์วันที่ตรวจ', report(calc(emp({}), rates, FRESH)).includes(rates.checked));
+  // edge/pr2: gross 0.01 ได้สุทธิ -82.99 · PVD 0.05 ตั้งใจ 5%
+  t('เงินสุทธิติดลบ เตือน', calc(emp({ gross: 0.01 }), rates, FRESH).warnings.some((w) => w.includes('ติดลบ')));
+  t('PVD 0.05 เตือน', calc(emp({ pvd_employee_pct: 0.05 }), rates, FRESH).warnings.some((w) => w.includes('pvd_employee_pct')));
+  t('ไม่มีปัญหา ไม่เตือน', calc(emp({ pvd_employee_pct: 5 }), rates, FRESH).warnings.length === 0);
+  const later = (days) => new Date(FRESH.getTime() + days * 24 * 60 * 60 * 1000);
+  t('rates.json 90 วัน ไม่เตือน', calc(emp({}), rates, later(90)).warnings.length === 0);
+  t('rates.json 91 วัน เตือน', calc(emp({}), rates, later(91)).warnings.some((w) => w.includes('rates.json')));
   console.log(`self-test ${ok}/${ok + bad} ผ่าน`);
   process.exit(bad ? 1 : 0);
 }
 
-const args = process.argv.slice(2);
-if (args.includes('--self-test')) selfTest();
-else {
-  const file = args.find((a) => !a.startsWith('--'));
-  if (!file) { console.error('ใช้: node payroll.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }
-  try {
-    const r = calc(JSON.parse(readFileSync(file, 'utf8')));
-    console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
-  } catch (e) {
-    console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${file} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${file}` : e.message}`);
-    process.exit(1);
+// รัน CLI เฉพาะตอนเรียกไฟล์นี้ตรง ๆ · import progressiveTax และ loadRates จากสคริปต์อื่นได้
+const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  const args = process.argv.slice(2);
+  if (args.includes('--self-test')) selfTest();
+  else {
+    const file = args.find((a) => !a.startsWith('--'));
+    if (!file) { console.error('ใช้: node payroll.mjs <ไฟล์.json> [--json] | --self-test'); process.exit(2); }
+    try {
+      const r = calc(JSON.parse(readFileSync(file, 'utf8')));
+      console.log(args.includes('--json') ? JSON.stringify(r, null, 2) : report(r));
+    } catch (e) {
+      console.error(`ผิดพลาด: ${e instanceof SyntaxError ? `ไฟล์ ${file} ไม่ใช่ JSON ที่ถูกต้อง (${e.message})` : e.code === 'ENOENT' ? `ไม่พบไฟล์ ${file}` : e.message}`);
+      process.exit(1);
+    }
   }
 }

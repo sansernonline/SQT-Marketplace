@@ -98,6 +98,8 @@ skill นี้บอกรูปทรงและโครง ถ้อยค�
 
 ## ตัวย่อ
 
+ตัวย่อที่ใช้ในไฟล์นี้ · กฎเขียนตัวย่อ → `spell-out-abbreviations`
+
 - **ASCII** — American Standard Code for Information Interchange (การวาดรูปด้วยตัวอักษรธรรมดา)
 - **Mermaid** — ภาษาเขียนไดอะแกรมเป็นข้อความ แล้วให้โปรแกรมวาดให้
 - **DICOM** — Digital Imaging and Communications in Medicine (มาตรฐานไฟล์และการส่งภาพทางการแพทย์)
@@ -189,7 +191,11 @@ Use when a task writes temporary files (extracts, previews, backups, drafts, one
 
 1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
 2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ · ก่อน `rm` พิมพ์รายการลบกับรายการเก็บมาเทียบ (บน Windows `ls` อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ โดยทำ 3 ขั้น:
+   1. เขียนแผนลงไฟล์ `_to_delete/delete-plan.txt` 1 พาธต่อบรรทัด นับจากรากโปรเจกต์ (`_to_delete/render-check`)
+   2. รัน `node <โฟลเดอร์ skill นี้>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → พิมพ์รายการลบกับรายการเก็บมาเทียบ · พาธไหนหลุดออกนอก `_to_delete/` (`..` · พาธเต็ม · ลิงก์ชี้ออกข้างนอก) จะ exit 1 ห้ามลบ
+   3. ผ่านแล้วจึงลบตามรายการ "ลบ" ทีละบรรทัด สคริปต์ไม่ลบเอง · อย่าสร้างรายการจาก `ls` (บน Windows อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+4. **ก่อนบอกว่าจบงาน** รัน `node <โฟลเดอร์ skill นี้>/scripts/root-check.mjs <รากโปรเจกต์>` → ลงรายการของที่รากนอกรายการอนุญาต (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` โฟลเดอร์โค้ด และของใน `.gitignore`) · ของที่โปรเจกต์ตั้งใจวางไว้ที่ราก ใส่ `--allow README.md,LICENSE`
 
 ---
 
@@ -205,7 +211,4 @@ Use when a task writes temporary files (extracts, previews, backups, drafts, one
 
 ---
 
-## ตัวย่อ
-
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
+ตัวย่อและศัพท์เทคนิคในข้อความถึงผู้ใช้ เขียนตาม `spell-out-abbreviations`

@@ -1,0 +1,6 @@
+{
+  "skus": [
+    { "sku": "BAG-TOTE-BLK-L", "on_hand": 140, "reserved": 14, "avg_daily": 4, "max_daily": 9, "lead_avg": 10, "lead_max": 14, "cover_days": 45, "orders_per_day": 8, "syncs_per_day": 2 },
+    { "sku": "BAG-TOTE-RED-S", "on_hand": 50, "reserved": 0, "avg_daily": 0.2, "max_daily": 1, "lead_avg": 10, "lead_max": 14, "cover_days": 45 }
+  ]
+}

@@ -5,7 +5,7 @@
     python silences.py in.wav --noise -40 --pad 0.2        # เสียงพื้นเบามาก ลดเกณฑ์ · เว้นขอบช่วงพูด 0.2 วินาที
 
 --noise คือเกณฑ์เงียบ (dB) · ตั้งให้ต่ำกว่าเสียงพูดเบาสุดแต่สูงกว่าเสียงพื้นห้อง: ดูค่า mean_volume จาก
-`ffmpeg -i in.wav -af volumedetect -f null -` ก่อน แล้วลองที่ราว 10 dB ใต้ mean_volume
+`ffmpeg -i in.wav -af volumedetect -f null -` ก่อน (ค่าตั้งต้น -35 ยังไม่ได้วัด)
 ใช้แค่ Python มาตรฐาน + ffmpeg/ffprobe ใน PATH
 """
 from __future__ import annotations
@@ -15,6 +15,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+
+from outguard import expect_refusal, refuse_overwrite
 
 
 def silences(src: Path, noise: float, min_len: float) -> list[tuple[float, float]]:
@@ -89,6 +91,11 @@ def self_test() -> int:
             hit = len(gaps) == 1 and abs(gaps[0][0] - 1.0) < 0.1 and gaps[0][1] and abs(gaps[0][1] - 2.5) < 0.1
             print("วัดเสียงจริงด้วย ffmpeg:", "ผ่าน" if hit else f"ไม่ผ่าน ได้ {gaps} ต้องเป็นราว [(1.0, 2.5)]")
             ok = ok and bool(hit)
+    with tempfile.TemporaryDirectory() as d:
+        out = Path(d) / "o.mp4"
+        hit = expect_refusal(Path(__file__), [str(Path(d) / "none.wav"), "-o", str(out)], out)
+        print("ไม่เขียนทับไฟล์ที่มีอยู่:", "ผ่าน" if hit else "ไม่ผ่าน")
+        ok = ok and hit
     print("self-test", "ผ่าน" if ok else "ไม่ผ่าน")
     return 0 if ok else 1
 
@@ -99,15 +106,17 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("src", type=Path, nargs="?")
     ap.add_argument("-o", "--out", type=Path)
-    ap.add_argument("--noise", type=float, default=-35.0, help="เกณฑ์เงียบ dB (ค่าตั้งต้น -35)")
-    ap.add_argument("--min", type=float, default=0.7, help="ตัดเฉพาะช่วงเงียบที่ยาวกว่านี้ วินาที (ค่าตั้งต้น 0.7)")
-    ap.add_argument("--pad", type=float, default=0.15, help="เว้นขอบก่อนและหลังช่วงพูด วินาที (ค่าตั้งต้น 0.15)")
+    ap.add_argument("--noise", type=float, default=-35.0, help="เกณฑ์เงียบ dB (ค่าตั้งต้น -35 ยังไม่ได้วัด)")
+    ap.add_argument("--min", type=float, default=0.7, help="ตัดเฉพาะช่วงเงียบที่ยาวกว่านี้ วินาที (ค่าตั้งต้น 0.7 · สั้นกว่านี้มักเป็นจังหวะหายใจ ยังไม่ได้วัด)")
+    ap.add_argument("--pad", type=float, default=0.15, help="เว้นขอบก่อนและหลังช่วงพูด วินาที (ค่าตั้งต้น 0.15 · กันคำท้ายขาด ยังไม่ได้วัด)")
+    ap.add_argument("--force", action="store_true", help="เขียนทับไฟล์ผลลัพธ์ที่มีอยู่ (ไม่ใส่ = ปฏิเสธ)")
     ap.add_argument("--self-test", action="store_true", help="ทดสอบตัวเอง (ไม่มี ffmpeg ข้ามส่วนวัดเสียงจริง)")
     a = ap.parse_args()
     if a.self_test:
         sys.exit(self_test())
     if not a.src:
         sys.exit("ใส่ path ของไฟล์เสียงหรือวิดีโอ")
+    refuse_overwrite(a.out, a.force)  # ก่อนเรียก ffprobe/ffmpeg ใด ๆ
 
     total = duration(a.src)
     gaps = silences(a.src, a.noise, a.min)
@@ -135,8 +144,8 @@ def main() -> None:
     graph = ";".join(parts + [concat])
     maps = ["-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-crf", "20", "-pix_fmt", "yuv420p", "-c:a", "aac",
             "-b:a", "192k"] if video else ["-map", "[a]"]
-    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(a.src),
-                    "-filter_complex", graph, *maps, str(a.out)], check=True)
+    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", str(a.src),
+                    "-filter_complex", graph, *maps, *(["-y"] if a.force else []), str(a.out)], check=True)
     print(f"เขียน {a.out} · ยาว {duration(a.out):.2f} วินาที")
 
 

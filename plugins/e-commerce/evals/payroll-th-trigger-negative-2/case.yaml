@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": คำถามใกล้เคียงที่เป็นงานของ skill อื่น · tool_used min 0 max 0 ตาม skill-authoring/references/eval-format.md
+schema_version: "1.1"
+name: payroll-th-trigger-negative-2
+description: การลาป่วยเป็นเรื่องกฎหมายแรงงานหรือใบลา ไม่ใช่การทำเงินเดือน · ต้องไม่เปิด payroll-th
+tags: [trigger, negative, regression-suite, payroll-th]
+runs: 3
+expected_outcome: ไม่เปิด Skill payroll-th · คำตอบยังตอบคำถามได้
+execution:
+  prompt: |
+    ลูกน้องลาป่วยติดกัน 3 วัน ต้องขอใบรับรองแพทย์มั้ย แล้วหักเงินได้รึเปล่า
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: payroll-th-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?payroll-th"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: answer-on-topic
+    type: regex
+    pattern: 'ใบรับรองแพทย์|แพทย์'
+    flags: i
+    match: contains
+    target: last_message

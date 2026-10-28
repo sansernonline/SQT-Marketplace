@@ -3,7 +3,8 @@ schema_version: "1.1"
 name: rabbitmq-messaging-trigger
 description: ผู้ใช้ขอออกแบบคิวส่งอีเมลด้วย RabbitMQ ไม่เอ่ยชื่อ skill ต้องทำให้ rabbitmq-messaging ถูกเปิด และคำตอบพูดถึงการรับซ้ำได้ของ consumer
 tags: [trigger, rabbitmq-messaging]
-runs: 3
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+runs: 5
 expected_outcome: เปิด Skill rabbitmq-messaging แล้วเสนอ quorum queue พร้อม manual ack และบอกว่า consumer ต้องกันข้อความซ้ำ
 execution:
   prompt: |

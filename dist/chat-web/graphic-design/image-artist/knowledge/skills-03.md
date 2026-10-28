@@ -1,6 +1,6 @@
 # skill: brief-to-image
 
-Use when about to generate an AI image or prompts keep missing. Writes the brief and the prompt.
+Use when the AI-image route is chosen and a brief and prompt must be written, or prompts keep missing. Route choice → image-generation.
 
 # Brief to Image
 
@@ -34,6 +34,8 @@ This skill writes the brief and prompt. Generation happens in whatever image too
 | 9 | Negatives | What must not appear | → "no text, no logo, no hands, no straw, no extra glasses" |
 | 10 | Format | Aspect ratio, resolution | → "4:5 portrait" (set as a parameter if the tool has one) |
 
+This skill writes the brief and the prompt once the AI-generation route is chosen. Choosing the route (generate, draw SVG, or free stock photo) and the image list → `image-generation`.
+
 Lens and light vocabulary: see [prompt-anatomy.md](references/prompt-anatomy.md).
 One tactile 3D object as the hero (paper cut, clay, felt): use the 8-line template (subject · material · light · shadow · lens · background · one colour · negatives) and its worked example in [prompt-anatomy.md](references/prompt-anatomy.md), section "Tactile 3D hero object".
 
@@ -44,10 +46,12 @@ Use `decision-scoring` command `score` (`node decide.mjs score <file.json>`) on 
 | Part | Rule |
 |---|---|
 | Hard rules first (`must`, the variation is dropped) | physical-errors score below 3 (extra fingers, melted faces, floating objects) · garbled text when the brief asked for text · another brand's logo or an identifiable real person |
-| Criteria, each scored 1–5 by a reviewer that did not generate the image (`better: high`) | matches the brief · text readable (leave out when the image has no text) · matches the style lock · no physical errors · crop-ready (room for the headline, survives the placements' ratios) |
-| Default weights (starting value, not yet measured · change per job) | brief 0.30 · style lock 0.25 · no physical errors 0.25 · crop-ready 0.10 · text readable 0.10 |
+| Criteria, each scored 1–5 by a reviewer that did not generate the image (`better: high`) | matches the brief · text readable (leave out when the image has no text) · matches the style lock · crop-ready (room for the headline, survives the placements' ratios) · physical errors are **not** scored here: they are the hard rule above, counted once |
+| Default weights (starting value, not yet measured · change per job) | brief 0.40 · style lock 0.30 · crop-ready 0.15 · text readable 0.15 |
 | Hard to score directly | use `pairwise`: show each pair twice with positions swapped and record the winner; a pair whose winner flips with position counts as a tie |
 | Result line | `ยังไม่นิ่ง` or a near tie → show the top 2 to the user and say which criterion splits them; they choose |
+
+The script re-ranks with each weight moved ±20% and says whether rank 1 holds (`นิ่ง`); if it flips, treat the top 2 as a tie. These weights have not been compared with human rankings yet: before trusting them, have a person and the reviewer rank the same 5 real sets and count the matches.
 
 Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>.md`) with the winning prompt. A model that reviews its own output leans toward long or flashy images: use a different reviewer, and spot-check one score by eye.
 
@@ -75,7 +79,7 @@ Write the 1–5 scores and who gave them next to the brief (`briefs/<asset-name>
 | Set does not match across images | Style lock sheet (`style-consistency`) and the same seed or reference image |
 | Wrong aspect ratio | Set the parameter, delete the ratio words from the prompt |
 
-Gemini API users: Imagen is no longer the way — the `imagen-4.0-*` models were shut down on 17 Aug 2026 per the deprecations page, and the image-generation page now lists `gemini-3.1-flash-image` (Nano Banana 2), `gemini-nano-banana-2.1` and `gemini-3-pro-image`, with `gemini-2.5-flash-image` kept as legacy. Record the exact model ID you used (workflow step 7). ตรวจ 2026-10-23 · แหล่ง: https://ai.google.dev/gemini-api/docs/image-generation · https://ai.google.dev/gemini-api/docs/deprecations
+Gemini API users: Imagen is no longer the way — the `imagen-4.0-*` models were shut down on 17 Aug 2026 per the deprecations page, and the image-generation page now lists `gemini-3.1-flash-image` (Nano Banana 2), `gemini-nano-banana-2.1` and `gemini-3-pro-image`, with `gemini-2.5-flash-image` kept as legacy. Record the exact model ID you used (workflow step 7). ตรวจ 2026-10-23 · ตรวจซ้ำทุก 3 เดือน ครั้งหน้า 2027-01-23 · แหล่ง: https://ai.google.dev/gemini-api/docs/image-generation · https://ai.google.dev/gemini-api/docs/deprecations
 
 ## Worked example — brief to prompt
 

@@ -76,7 +76,17 @@ Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010
 2. Place it near the total, at least **2.5 × 2.5 cm** printed, with a quiet zone of 4 modules; label "สแกนชำระผ่าน PromptPay" and the account name the payer will see.
 3. Print the invoice number next to it and ask payers to send the slip — for tag 29 there is no reference in the transfer.
 4. Quotations: amount may change — use a static QR or regenerate on the invoice. Template in `doc-quotation`; tax invoice fields in `e-tax-invoice`.
-5. Re-scan the printed PDF with 2 different bank apps before sending.
+5. Re-scan the printed PDF with 2 different bank apps before sending, and read out the account name each app shows: it must match the business name on the invoice. A QR that scans but shows another name goes to someone else — stop and recheck the ID.
+
+## 5. Before shipping: check the money arrived, not the slip
+
+A slip is a picture; it can be edited or reused from an older transfer. Ship only when the money shows in the shop's own account.
+
+1. Open the shop's bank app or statement and find the transfer: amount, time and payer name match the order.
+2. One transfer pays one order — when two orders show the same slip, the second one has not paid.
+3. Never ship on a slip alone, even for a regular customer, and do not accept "the bank is slow, I'll send proof later" as payment.
+4. Turn on the bank's incoming-transfer notification for the shop account so checking takes seconds.
+5. For many orders a day, use a payment gateway or the bank's API with a payment callback instead of reading slips (Rules).
 
 ## Script
 
@@ -235,6 +245,19 @@ Gross sales ฿1,200,000 (all channels). Actual costs with receipts ฿900,000. 
 | **Tax payable** | **19,500** | **6,000** |
 
 Actual expenses win, but only with receipts — and the 0.5% minimum lifts the bill from ฿4,500 to ฿6,000. Sales are under ฿1.8 million, so no VAT registration yet; as sales grow, check monthly.
+
+### Run the script, do not add up by hand
+
+`scripts/tax-compare.mjs` does the table above in one call: both methods, the 0.5% check and which one is cheaper. Rates live in `scripts/rates.json` with the date they were checked; the report prints that date and warns when it is older than 90 days.
+
+```bash
+node scripts/tax-compare.mjs scripts/example.json      # { "sales": 1200000, "actual_expenses": 900000 } → 19,500 vs 6,000
+node scripts/tax-compare.mjs --self-test
+```
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/seller-tax-basics/scripts/tax-compare.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/seller-tax-basics/scripts/tax-compare.mjs` · Node only, no dependencies.
+
+`allowances` is the year's total allowances (default: personal ฿60,000 only). Salary or other income types are out of scope — use `payroll-th` or ask an accountant. Comparing sole trader against a company: `"mode": "company"`, see `thai-business-setup` section 2.
 
 ## Who reports your sales to the Revenue Department
 

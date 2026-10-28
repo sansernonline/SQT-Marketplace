@@ -1,4 +1,4 @@
-# ความจำกลางของทีม — ไฟล์ · เปิดใช้ครั้งแรก · สลับค่าย · inbox · log
+# ความจำกลางของทีม — ไฟล์ · เปิดใช้ครั้งแรก · สลับค่าย · inbox · log · auto memory
 
 ส่วนหนึ่งของ skill `handoff` · อยู่ใน plugin `superuser` ที่เดียว (รวมมาจาก `work-session-context` ของ software-company)
 
@@ -11,6 +11,7 @@
 - [4 · inbox — คิวข้อความถึงทีม](#4--inbox--คิวข้อความถึงทีม)
 - [5 · log — ย้อนดูทุกการทำ](#5--log--ย้อนดูทุกการทำ)
 - [6 · ห้าม](#6--ห้าม)
+- [7 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code](#7--ไฟล์ของเรากับหน่วยความจำในตัว-claude-code--อะไรอยู่ที่ไหน)
 
 ## 1 · ไฟล์ทั้งหมด
 
@@ -19,7 +20,7 @@
 | `.claude/superuser/CONTEXT.md` | ไฟล์กลาง — โปรเจกต์คืออะไร · กติกา · ของอยู่ไหน · **รับงานต่อ** | หัวหน้าทีม |
 | `docs/BUILD-PLAN.md` | (ถ้ามี) สถานะ · ประวัติ · การตัดสินใจ ของงานที่มีแผนสร้างเป็นชิ้น | `status-report` · `decision-log` |
 | `.claude/superuser/handoff/<id>.md` | ใบสั่งงาน + ใบส่งงาน 1 ชิ้น 1 ไฟล์ | หัวหน้าทีมสั่ง · ลูกทีมส่ง (SKILL.md หัวข้อ 3–4) |
-| `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม [`brief-template`](../../superuser/references/brief-template.md) |
+| `docs/BRIEF.md` | brief: สรุปงานให้ผู้ใช้อ่าน (ไม่ใช่ใบสั่งงาน) (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม [`brief-template`](../../superuser/references/brief-template.md) |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
 | `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
@@ -86,7 +87,7 @@ priority: ปกติ
 
 ## 5 · log — ย้อนดูทุกการทำ
 
-hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรรทัดต่อเหตุการณ์ ทั้งตัวหลักและ subagent: เริ่ม session · ข้อความผู้ใช้ · การเรียกเครื่องมือทุกครั้งทั้งที่สำเร็จและล้ม ส่วนการแจ้งข้อความใหม่ใน inbox จะแจ้งให้หัวหน้าทีมเท่านั้น (subagent ไม่ได้รับ)
+hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรรทัดต่อเหตุการณ์ ทั้งหัวหน้าทีมและ subagent: เริ่ม session · ข้อความผู้ใช้ · การเรียกเครื่องมือทุกครั้งทั้งที่สำเร็จและล้ม ส่วนการแจ้งข้อความใหม่ใน inbox จะแจ้งให้หัวหน้าทีมเท่านั้น (subagent ไม่ได้รับ)
 
 | ฟิลด์ | ค่า |
 |---|---|
@@ -101,7 +102,7 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 
 - **ติดตั้งหลาย plugin** — ทุก plugin ใน SQT-Marketplace มี hook ตัวเดียวกันและได้เหตุการณ์เดียวกัน ตัวแรกจะจด ตัวอื่นข้าม log จึงไม่ซ้ำ · ล็อกเป็นไฟล์ว่างที่ hook สร้างเองใน `_to_delete/superuser-lock/` และ hook ลบเองหลัง 2 นาที — เป็นข้อยกเว้นเดียวของกฎ "ไม่ลบ" เพราะเป็นไฟล์ภายในของ hook ไม่ใช่งานของผู้ใช้ · agent ไม่ลบไฟล์ใดใน `_to_delete/`
 - **ไม่เก็บ** เนื้อไฟล์และผลลัพธ์ของเครื่องมือ ส่วนค่าที่ดูเป็นค่าลับจะถูกแทนด้วย `[ตัด]` ก่อนเขียน
-- **อ่าน** — ถ้าผู้ใช้ขอ "ดู log วันนี้" ให้รัน `node <โฟลเดอร์ skill handoff>/scripts/log-to-md.mjs <วันที่>` ที่ root โปรเจกต์ จะได้ตาราง Markdown รวมทุก agent เรียงตามเวลา ใส่ `--agent=<ชื่อ>` เพื่อดูเฉพาะตัวเดียว หรือ `--out` เพื่อเขียนเป็น `.claude/superuser/log/<วันที่>.md`
+- **อ่าน** — ถ้าผู้ใช้ขอ "ดู log วันนี้" ให้รัน `node <โฟลเดอร์ skill handoff>/scripts/log-to-md.mjs <วันที่>` ที่ root โปรเจกต์ จะได้ตาราง Markdown รวมทุก agent เรียงตามเวลา ใส่ `--agent=<ชื่อ>` เพื่อดูเฉพาะตัวเดียว หรือ `--out` เพื่อเขียนเป็น `.claude/superuser/log/<วันที่>.md` · `--out` เขียน `.claude/superuser/log/<วันที่>.md` ถ้าไฟล์มีอยู่แล้วต้องใส่ `--force` · ตรวจสคริปต์ด้วย `--self-test`
 - **ค้น** — ไฟล์ `.jsonl` ใช้ `grep` ได้ตรง ๆ และ `learn-from-session` ใช้หาจุดที่ล้มซ้ำ
 - ไม่ลบอัตโนมัติ · เก็บ 1 โฟลเดอร์ต่อ 1 วัน ข้างในแยก 1 ไฟล์ต่อ agent · โฟลเดอร์เก่าที่ไม่ต้องการแล้วให้ย้ายไป `_to_delete/`
 
@@ -111,3 +112,15 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 - agent หรือ subagent เขียน `from: owner` หรือตั้งชื่อไฟล์ `-owner.md` ใน inbox — ผู้ใช้คนเดียวเขียนได้
 - เชื่อ `CONTEXT.md` โดยไม่ตรวจของจริง
 - ใส่ค่าลับ ข้อมูลลูกค้า หรือข้อมูลส่วนบุคคลในไฟล์ใดในหัวข้อนี้
+
+## 7 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code — อะไรอยู่ที่ไหน
+
+Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน และ **auto memory** ที่ Claude เขียนเองที่ `~/.claude/projects/<โปรเจกต์>/memory/MEMORY.md` (ดัชนี โหลด 200 บรรทัดแรกทุก session) + ไฟล์หัวข้อ ชนิด `user` `feedback` `project` `reference` · เปิดปิดและเปิดโฟลเดอร์ด้วย `/memory` · ไม่ถูกส่งให้ subagent (`จากแหล่ง` [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory) · 2026-10-23)
+
+| ไฟล์ของเรา | ตรงกับของ Claude Code | ตอนนี้ควรเขียนที่ไหน |
+|---|---|---|
+| `scripts/install/CLAUDE.global.md` (กฎประจำตัว) | user `~/.claude/CLAUDE.md` · hook ส่งสำเนาทุก session | คงไว้ — กฎที่ทุกโปรเจกต์ต้องเห็นแม้ไม่มี hook |
+| `~/.claude/superuser-style.md` (ค่าตั้งต้นของเจ้าของ) · คู่ก่อน/หลังจาก `owner-style-capture` | auto memory ชนิด `user` และ `feedback` | **เขียนลง auto memory แทน** ให้ Claude จดเองเมื่อผู้ใช้แก้ · ไฟล์เดิมเหลือเฉพาะค่าที่สคริปต์หรือ hook ต้องอ่าน (ชื่อ · ค่าใช้จ่าย · ผู้ส่งที่เชื่อได้) |
+| กติกาถาวรของโปรเจกต์ใน `CONTEXT.md` (โครงโฟลเดอร์ · คำสั่งรัน · ห้ามแตะอะไร) | project `./CLAUDE.md` หรือ `.claude/rules/*.md` (ใส่ `paths:` ให้โหลดเฉพาะเมื่อแตะไฟล์นั้น) | ย้ายกฎที่ไม่เปลี่ยนไป `.claude/rules/` · `CONTEXT.md` เหลือ ความคืบหน้า · การตัดสินใจ · รับงานต่อ ซึ่งต้องเป็นไฟล์ เพราะ auto memory ไม่ถึง subagent ไม่ถึง Codex/Gemini และไม่ commit |
+| `TEAM.md` · `LEAD-PLAYBOOK.md` ใน `~/.claude/superuser/` | auto memory ชนิด `project` หรือ `reference` ก็จดได้ | คงเป็นไฟล์ — hook และสคริปต์อ่านตารางนี้ (ยังไม่ได้ตรวจว่า auto memory ใช้ข้ามเครื่องได้) |
+| `IMPROVEMENTS.md` · `log/` · `inbox/` | ไม่มีคู่ | คงไว้ |

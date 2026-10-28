@@ -1,0 +1,39 @@
+{
+  "tax_year": 2569,
+  "checked": "2026-10-06",
+  "source": "ค่าทุกตัวคัดจาก references/deductions-2569.md (ตรวจล่าสุด 2026-10-06 บรรทัด 27, 72, 84) และปันผลจาก tax-basics-th/references/investment-income-rules.md (ตรวจล่าสุด 2026-10-06 บรรทัด 15) · ต้นทาง https://www.rd.go.th/59670.html · ปีภาษีใหม่ให้ทำไฟล์ rates-2570.json จากเอกสารที่ตรวจใหม่",
+  "brackets_source": "deductions-2569.md บรรทัด 14-23 · ขั้นสูงสุด 35% เมื่อเงินได้สุทธิเกิน 5,000,000",
+  "brackets": [
+    { "up_to": 150000, "rate_pct": 0 },
+    { "up_to": 300000, "rate_pct": 5 },
+    { "up_to": 500000, "rate_pct": 10 },
+    { "up_to": 750000, "rate_pct": 15 },
+    { "up_to": 1000000, "rate_pct": 20 },
+    { "up_to": 2000000, "rate_pct": 25 },
+    { "up_to": 5000000, "rate_pct": 30 },
+    { "up_to": null, "rate_pct": 35 }
+  ],
+  "expense": { "rate_pct": 50, "max": 100000, "source": "deductions-2569.md บรรทัด 33 (40(1)+40(2) รวมกัน)" },
+  "personal": { "amount": 60000, "source": "deductions-2569.md บรรทัด 40" },
+  "caps": {
+    "socialSecurity": { "max": 10500, "source": "deductions-2569.md บรรทัด 52 · ฐานค่าจ้าง 17,500 × 5% × 12" },
+    "lifeInsurance": { "max": 100000, "source": "deductions-2569.md บรรทัด 53" },
+    "ownHealth": { "max": 25000, "source": "deductions-2569.md บรรทัด 54" },
+    "parentsHealth": { "max": 15000, "source": "deductions-2569.md บรรทัด 55" },
+    "pensionInsurance": { "pct_of_income": 15, "max": 200000, "source": "deductions-2569.md บรรทัด 56" },
+    "rmf": { "pct_of_income": 30, "max": 500000, "source": "deductions-2569.md บรรทัด 64" },
+    "nsf": { "max": 30000, "source": "deductions-2569.md บรรทัด 65 (กอช.)" },
+    "thaiesg": { "pct_of_income": 30, "max": 300000, "source": "deductions-2569.md บรรทัด 67 (นอกวงเงินรวม 500,000)" },
+    "homeLoanInterest": { "max": 100000, "source": "deductions-2569.md บรรทัด 78" },
+    "politicalParty": { "max": 10000, "source": "deductions-2569.md บรรทัด 81" }
+  },
+  "life_plus_health_max": 100000,
+  "life_plus_health_source": "deductions-2569.md บรรทัด 54",
+  "pvd_pct_of_wage": 15,
+  "pvd_source": "deductions-2569.md บรรทัด 62",
+  "retirement_group": { "keys": ["pvd", "gpf", "rmf", "nsf", "pensionInsurance"], "max": 500000, "source": "deductions-2569.md บรรทัด 66" },
+  "donation": { "double_multiplier": 2, "max_pct_of_net": 10, "source": "deductions-2569.md บรรทัด 79-80 (10% ของเงินได้หลังหักค่าลดหย่อนอื่น)" },
+  "dividend": { "withholding_pct": 10, "default_corporate_rate_pct": 20, "source": "investment-income-rules.md บรรทัด 6 (หัก 10%) และ 21-30 (เครดิต = ปันผล × t ÷ (100 − t), บริษัทจดทะเบียนส่วนใหญ่ t = 20%)" },
+  "block_size": 50000,
+  "block_size_source": "ขนาดก้อนตามตัวอย่าง knapsack ใน SKILL.md (RMF 50,000, ThaiESG 50,000) · ค่าตั้งต้น ไม่ใช่กฎภาษี"
+}

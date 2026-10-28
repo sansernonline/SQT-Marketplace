@@ -40,7 +40,8 @@ export function installedOlder(installedFile, repoVersions, marketplace = 'sqt-m
 }
 
 // 2. case.yaml ของ eval ชื่อ *-regression ที่เขียนว่ายังไม่เคยเห็นจริง (และไม่มีบรรทัดที่บอกว่าเห็นจริง)
-const NEVER_SEEN = /ยังไม่เคย(?:เห็น|พลาด)|ยังไม่ได้เห็น|not observed|never (?:seen|observed)/i;
+// "กันไว้" = กันเรื่องที่ยังไม่เกิด (บทเรียน 2026-10-28: model-scorecard-regression เขียน "อาการที่กันไว้" แต่ตัวตรวจไม่จับ)
+const NEVER_SEEN = /ยังไม่เคย(?:เห็น|พลาด)|ยังไม่ได้เห็น|กันไว้|not observed|never (?:seen|observed)/i;
 const SEEN = /(?<!ยังไม่เคย)(?<!ยังไม่ได้)(?:เห็นจริง|พลาดจริง|observed failure)/;
 export function regressionNeverSeen(caseName, text) {
   if (!/-regression$/.test(caseName)) return [];

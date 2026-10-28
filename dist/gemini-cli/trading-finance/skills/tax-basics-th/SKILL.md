@@ -35,7 +35,7 @@ Tax year 2569 (income 2026): paper by 31 March 2570; the online extension date i
 
 1. Confirm tax year and residence (180-day rule).
 2. List every income source with gross amount and tax withheld; sort into the table in the reference file.
-3. For each optional item (dividends, deposit interest) compute both ways and pick the cheaper.
+3. For each optional item (dividends, deposit interest) compute both ways and pick the cheaper. Dividends: `tax-deduction-planner` script `tax.mjs` with a `dividends` field prints both ways.
 4. Run `tax-deduction-planner` for deductions; combine into one net-income calculation.
 5. Pick the form and deadline; list the documents below.
 

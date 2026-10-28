@@ -15,7 +15,7 @@ Visuals only; a second look at text, code or a plan → a new `reviewer` agent.
 3. **2-second test** — look for 2 seconds, look away, and say what it was about
    - **Squint test** — squint, or zoom to 10%, or blur the image 10 px: what still shows is the real hierarchy. If the offer or the one action disappears and the photo stays, point 2 fails whatever the sizes say
 4. **Score the 8 points** below — pass or fail by the criteria, 1 line each
-5. **Rank the top 3 fixes** by impact on the one action. Each fix names the element, the change and the amount
+5. **Rank the top 3 fixes** by impact on the one action. Each fix names the element, the change and the amount · with more than 3 candidate fixes, rank them with `decision-scoring` `priority` (`node <decision-scoring>/scripts/decide.mjs priority fixes.json`; `<decision-scoring>` is the folder of skill `superuser:decision-scoring`): reach = how many of the pieces in the set the fault touches, impact 0.25–3 on the one action, confidence 0–1, effort in hours · example in [fix-priority.example.json](references/fix-priority.example.json) (made-up numbers, run 2026-10-28) · a tie → the cheaper fix first
 6. **Name 1 thing to keep** that the fixes must not break
 7. Write the result with the sheet in [review-sheet.md](references/review-sheet.md)
 

@@ -1,6 +1,6 @@
 # skill: complaint-letter-th
 
-Use when a Thai seller will not fix, deliver or keep a promise. Complaint letter, platform or OCPB 1166.
+Use when a seller you bought from will not fix, deliver or keep a promise. Buyer's complaint letter, platform or OCPB 1166.
 
 # Complaint Letter (Thailand)
 

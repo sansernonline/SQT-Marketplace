@@ -47,13 +47,15 @@ Model: every channel draws on one shared pool, so each channel shows at most `av
 
 | Situation | Shown stock per channel |
 |---|---|
-| Plenty (available > 50) | every channel shows `available − buffer` |
-| Low (available 10–50) | show full `available − buffer` on the busiest channel only; others show a fixed small number (e.g. 3–5) |
-| Very low (< 10) | sell on one channel only; set the others to 0 |
+| Plenty (more than 14 days of sales left) | every channel shows `available − buffer` |
+| Low (3–14 days left) | show full `available − buffer` on the busiest channel only; others show a fixed small number (e.g. 3–5) |
+| Very low (under 3 days left, or available ≤ buffer) | sell on one channel only; set the others to 0 |
 | During a live or flash sale | allocate a fixed quantity to that channel in advance; others get `available − buffer − allocation` |
 | Bundle SKU | shown stock = min(component available ÷ units per bundle) |
 
-**Buffer** = average orders that arrive between two syncs + 2. With syncs twice a day and 8 orders/day across channels: buffer = 4 + 2 = 6.
+Days of sales left = `available ÷ average daily sales` (all channels). A fixed unit count does not work: 50 units is 12 days for a SKU selling 4 a day but 250 days for one selling 0.2 a day. The 14-day and 3-day lines are starting values, not measured — tune them to your supplier lead time.
+
+**Buffer** = average orders that arrive between two syncs + 2. With syncs twice a day and 8 orders/day across channels: buffer = 4 + 2 = 6. The +2 covers orders that arrive in a burst rather than evenly (starting value, not measured; raise it if you still oversell).
 
 Multi-channel tools (BigSeller, Zort, Duoke and similar) sync stock automatically by seller SKU — they only work if step 1 is done. Prices and features change; compare before paying (รอยืนยัน current plans).
 
@@ -78,6 +80,17 @@ Worked example — `BAG-TOTE-BLK-L`, all channels together:
 | Reorder qty when available = 126 | 4 × 45 = **180** |
 
 Before a big campaign (9.9, 10.10, 11.11, 12.12, payday sales) raise average daily sales for the campaign window from last year's numbers, not this month's.
+
+### Run the script at every stock count
+
+`scripts/stock-calc.mjs` does all of the above per SKU in one call: available, buffer, days left, stock level and what each channel may show, safety stock, reorder point and reorder quantity, with warnings for oversold (negative available) and no-sales SKUs. Do not work these out by hand.
+
+```bash
+node scripts/stock-calc.mjs scripts/example.json     # BAG-TOTE-BLK-L → safety 86 · reorder point 126 · order 180
+node scripts/stock-calc.mjs --self-test
+```
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/e-commerce/*/skills/multi-shop-stock/scripts/stock-calc.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/e-commerce/skills/multi-shop-stock/scripts/stock-calc.mjs` · Node only, no dependencies.
 
 ## Rules
 

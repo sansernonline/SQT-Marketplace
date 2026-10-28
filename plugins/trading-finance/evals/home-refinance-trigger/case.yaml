@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: home-refinance-trigger
 description: กู้บ้านครบ 3 ปีแล้วดอกเบี้ยลอยตัวขึ้น ไม่เอ่ยชื่อ skill ต้องทำให้ home-refinance ถูกเปิด และได้ตารางเทียบรีไฟแนนซ์กับขอลดดอกเบี้ยธนาคารเดิมที่นับค่าธรรมเนียม
-tags: [trigger, home-refinance]
+tags: [capability, trigger, home-refinance]
 runs: 3
 expected_outcome: เรียก Skill home-refinance · เทียบรีไฟแนนซ์กับรีเทนชั่นเป็นตัวเลขบาท · นับค่าธรรมเนียมจดจำนอง ประเมิน อากร และค่าปรับไถ่ถอนก่อนกำหนด · บอกจุดคุ้มทุนเป็นเดือน
 execution:

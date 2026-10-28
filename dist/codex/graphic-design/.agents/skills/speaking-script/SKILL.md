@@ -111,7 +111,7 @@ CTA     "ใครไปแล้ว เมนูไหนดี คอมเม
 
 | ต้องการ | ใช้ |
 |---|---|
-| แปลงสคริปต์เป็นคลิป (shot list · ซับ · safe zone · เครื่องมือตัดต่อ) | `video-script-to-clip` + `references/production-tools.md` |
+| แปลงสคริปต์เป็นคลิป (shot list · ซับ · safe zone · เครื่องมือตัดต่อ) | `video-script-to-clip` + `skills/video-script-to-clip/references/production-tools.md` |
 | ภาพประกอบ/ฉาก gen ในคลิป | `brief-to-image` · `image-generation` |
 | ระดับภาษาและเสียงของแบรนด์ | `brand-kit` ข้อ Voice |
 | ถ้อยคำทั่วไป (สคริปต์มีข้อยกเว้นของตัวเองด้านบน) | `human-writing` (plugin `superuser`) |

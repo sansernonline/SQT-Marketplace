@@ -908,3 +908,65 @@ def embed_fonts(doc):
     settings.insert(0, _el("w:saveSubsetFonts"))
     settings.insert(0, _el("w:embedTrueTypeFonts"))
 
+
+
+def self_test():
+    """python brandkit.py --self-test — สร้างเอกสารเล็ก ๆ แล้วเปิดกลับมาตรวจ (ไม่ต้องมี Word)"""
+    import os
+    import tempfile
+    saved = dict(TOKENS)
+    try:
+        assert abs(contrast("000000", "FFFFFF") - 21) < 0.01 and contrast("777777", "777777") == 1
+        assert mix("000000", "FFFFFF", 0.5) in ("808080", "7F7F7F")
+        check_contrast()                                   # ชุดสีตั้งต้นต้องผ่านเกณฑ์
+        try:
+            use_brand(brand="FFFF00")                      # เหลืองบนขาว contrast ต่ำ ต้องถูกปฏิเสธ
+            raise AssertionError("use_brand ต้องปฏิเสธสีเหลืองบนขาว")
+        except ValueError:
+            pass
+        TOKENS.update(saved)
+
+        doc = BrandDoc()
+        doc.cover("ชื่อเอกสารทดสอบ", subtitle="Subtitle", meta="v1")
+        doc.h1("ภาพรวม")
+        doc.para("ย่อหน้า hello")
+        doc.table(["หัว A", "หัว B"], [["a1", "b1"], ["a2", "b2"]], widths=[4819, 4819])
+        doc.callout("tip", "ข้อแนะนำ", "เนื้อ callout")
+        thai_runs(doc.doc.element.body)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = os.path.join(tmp, "t.docx")
+            doc.save(out)
+            back = Document(out)
+        text = "".join(back.element.body.itertext())          # รวมข้อความในตารางด้วย (ปกอยู่ในตาราง)
+        for want in ("ชื่อเอกสารทดสอบ", "ภาพรวม", "ย่อหน้า hello", "เนื้อ callout", "ข้อแนะนำ"):
+            assert want in text, f"หาไม่เจอในไฟล์ที่บันทึก: {want}"
+        grid = [[c.text for c in r.cells] for t in back.tables for r in t.rows if r.cells[0].text.startswith(("หัว", "a"))]
+        assert grid == [["หัว A", "หัว B"], ["a1", "b1"], ["a2", "b2"]], grid
+        # thai_runs: ข้อความไทยปนละตินต้องถูกแยก run และ run ไทยได้ฟอนต์ FONT ครบ 4 ช่อง
+        probe = BrandDoc()
+        probe.doc.add_paragraph("abc ไทย def")
+        thai_runs(probe.doc.element.body)
+        runs = probe.doc.paragraphs[-1].runs
+        assert [r.text for r in runs] == ["abc ", "ไทย", " def"], [r.text for r in runs]
+        rfonts = runs[1]._r.rPr.find(qn("w:rFonts"))
+        assert all(rfonts.get(qn("w:" + a)) == FONT for a in ("ascii", "hAnsi", "cs", "eastAsia"))
+        try:
+            import numpy  # noqa: F401  ปกเข้มต้องใช้ numpy + pillow
+            from PIL import Image  # noqa: F401
+        except ImportError:
+            print("ข้ามปกเข้ม: ไม่มี numpy/pillow (pip install numpy pillow)")
+        else:
+            night = BrandDoc()
+            night.cover("Night", subtitle="x", style="night")
+    finally:
+        TOKENS.clear()
+        TOKENS.update(saved)
+    print("self-test ok")
+
+
+if __name__ == "__main__":
+    import sys
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+    else:
+        print("ใช้: python brandkit.py --self-test   (ไลบรารีนี้ import ใช้ — ดูตัวอย่างที่หัวไฟล์)")

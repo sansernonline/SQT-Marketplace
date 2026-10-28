@@ -10,6 +10,7 @@ Usage:
   python dotnet_meta.py <file> --strings          # also print user strings, secrets masked
   python dotnet_meta.py <file> --no-methods       # types only (shorter output)
   python dotnet_meta.py <file> --json
+  python dotnet_meta.py --self-test               # builds a tiny assembly in memory and reads it back
 
 Not supported: single-file bundles (extract first), tables behind #- pointer
 tables (rare, unoptimised metadata keeps working but method grouping may shift).
@@ -336,13 +337,79 @@ def print_text(info, show_methods):
         print("  " + repr(s))
 
 
+def tiny_assembly():
+    """Smallest PE the reader accepts: tables Module, TypeDef, MethodDef, Assembly; one section at RVA 0x1000."""
+    strings = b"\0"
+    def add(text):
+        nonlocal strings
+        index = len(strings)
+        strings += text.encode() + b"\0"
+        return index
+    asm, ns, cls, m_run, m_main, mod = add("Demo"), add("App"), add("Foo"), add("Run"), add("Main"), add("<Module>")
+    user = b"\0"
+    for text in ("Password=hunter2;Server=x", "hello"):
+        raw = text.encode("utf-16-le")
+        user += bytes([len(raw) + 1]) + raw + b"\0"
+    u2, u4 = lambda *v: struct.pack("<%dH" % len(v), *v), lambda *v: struct.pack("<%dI" % len(v), *v)
+    rows = (u2(0, asm, 0, 0, 0)                            # Module: gen, name, mvid, encid, encbaseid
+            + u4(0) + u2(mod, 0, 0, 1, 1)                  # TypeDef <Module>: no methods (first = 1)
+            + u4(1) + u2(cls, ns, 0, 1, 1)                 # TypeDef App.Foo: fields from 1, methods from 1
+            + u4(0) + u2(0, 0, m_run, 0, 1) + u4(0) + u2(0, 0, m_main, 0, 1)   # MethodDef Run, Main
+            + u4(0) + u2(1, 0, 0, 0) + u4(0) + u2(0, asm, 0))                   # Assembly 1.0.0.0 "Demo"
+    tilde = (u4(0) + bytes([2, 0, 0, 1]) + struct.pack("<QQ", 1 << 0 | 1 << 2 | 1 << 6 | 1 << 32, 0)
+             + u4(1, 2, 2, 1) + rows)
+    pad = lambda b: b + b"\0" * (-len(b) % 4)
+    heaps = [("#~", pad(tilde)), ("#Strings", pad(strings)), ("#US", pad(user))]
+    version = pad(b"v4.0.30319\0")
+    head = u4(METADATA_MAGIC) + u2(1, 1) + u4(0, len(version)) + version + u2(0, len(heaps))
+    head_size = len(head) + sum(8 + len(pad(n.encode() + b"\0")) for n, _ in heaps)
+    offset, streams = head_size, b""
+    for name, blob in heaps:
+        streams += u4(offset, len(blob)) + pad(name.encode() + b"\0")
+        offset += len(blob)
+    metadata = head + streams + b"".join(blob for _, blob in heaps)
+    cli = u4(72) + u2(2, 5) + u4(0x1000 + 72, len(metadata), 1) + bytes(72 - 20)
+    section = cli + metadata
+    pe = bytearray(0x200) + section
+    pe[:2] = b"MZ"
+    struct.pack_into("<I", pe, 0x3C, 0x80)
+    pe[0x80:0x84] = b"PE\0\0"
+    struct.pack_into("<H", pe, 0x80 + 6, 1)           # one section
+    struct.pack_into("<H", pe, 0x80 + 20, 224)        # optional header size (PE32)
+    opt = 0x80 + 24
+    struct.pack_into("<H", pe, opt, 0x10B)
+    struct.pack_into("<II", pe, opt + 96 + 14 * 8, 0x1000, 72)
+    struct.pack_into("<IIII", pe, opt + 224 + 8, len(section), 0x1000, len(section), 0x200)
+    return bytes(pe)
+
+
+def self_test():
+    info = analyse(tiny_assembly())
+    assert info["assembly"] == {"name": "Demo", "version": "1.0.0.0"}, info["assembly"]
+    assert [(t["name"], t["methods"]) for t in info["types"]] == [("<Module>", []), ("App.Foo", ["Run", "Main"])], info["types"]
+    assert info["runtime"] == "v4.0.30319" and info["il_only"] and info["streams"] == ["#Strings", "#US", "#~"]
+    assert [redact(u) for u in info["user_strings"]] == ["Password=***;Server=x", "hello"]
+    native = bytearray(tiny_assembly())
+    cli_dir = 0x80 + 24 + 96 + 14 * 8
+    native[cli_dir:cli_dir + 8] = bytes(8)       # no CLI header directory
+    assert "not a .NET assembly" in analyse(bytes(native))["error"]
+    assert read_compressed(bytes([0x81, 0x02]), 0) == (0x102, 2)
+    assert redact("Authorization: Bearer abc123") == "Authorization: Bearer ***"
+    print("self-test ok")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("file")
+    ap.add_argument("file", nargs="?")
+    ap.add_argument("--self-test", action="store_true", help="run built-in checks and exit")
     ap.add_argument("--strings", action="store_true", help="print user strings, secrets masked")
     ap.add_argument("--no-methods", action="store_true", help="do not list methods under each type")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
+    if args.self_test:
+        return self_test()
+    if not args.file:
+        ap.error("give a <file>, or --self-test")
     with open(args.file, "rb") as f:
         data = f.read()
     try:

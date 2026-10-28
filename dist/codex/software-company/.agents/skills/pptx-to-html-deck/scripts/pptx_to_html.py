@@ -6,6 +6,7 @@
 animation ใส่ให้เอง (หัวข้อพุ่งจากซ้าย · ข้อความลอยขึ้น · กล่องเด้ง · เส้นลากตามทิศ · ตารางขึ้นทีละแถว · กราฟแท่งโต · ตัวเลขใหญ่นับขึ้น)
 animation แบบ "On Click" ใน PowerPoint กลายเป็นขั้นในหน้า (→ เปิดทีละขั้นก่อนไปหน้าถัดไป)
 ของที่แปลงไม่ได้ (SmartArt · วิดีโอ · กราฟบางชนิด · รูปทรงแปลก) ขึ้นเป็นกล่องลายเตือน และพิมพ์รายการใน stdout
+    python pptx_to_html.py --self-test     # แปลง .pptx ตัวอย่าง 3 หน้า แล้วนับหน้า ขั้น ข้อความในไฟล์ .html
 ต้องมี python-pptx
 """
 from __future__ import annotations
@@ -774,6 +775,30 @@ CHROME = """<div id="menu"><div class="mhead"><b>สารบัญ<span>คล�
 <div id="ui"><span id="clock" title="เวลาที่ใช้ (กด T เริ่ม/หยุด)">0:00</span><button id="prev" title="ก่อนหน้า (←)">‹</button><span id="count"></span><button id="next" title="ถัดไป (→)">›</button><button id="mb" title="สารบัญ (M)">สารบัญ</button><button id="nb" title="โน้ตผู้พูด (N)">โน้ต</button><button id="fs" title="เต็มจอ (F)">เต็มจอ</button></div>"""
 
 
+def self_test() -> int:
+    import sys
+    import tempfile
+    from click_steps import sample_deck
+    with tempfile.TemporaryDirectory() as tmp:
+        src, out = Path(tmp) / "t.pptx", Path(tmp) / "t.html"
+        sample_deck(src)
+        sys.argv = ["pptx_to_html.py", str(src), "-o", str(out)]
+        main()
+        h = out.read_text(encoding="utf-8")
+    steps = sorted(re.findall(r'data-step="(\d+)"', h))
+    checks = {
+        "3 หน้า (section.slide)": len(re.findall(r'<section[^>]*class="slide', h)) == 3,
+        "เมนูตรงชื่อหน้า": re.findall(r'data-menu="([^"]*)"', h) == ["Slide 1", "Slide 2", "Slide 3"],
+        "ขั้น 1 มี 2 ชิ้น ขั้น 2 มี 1 ชิ้น": steps == ["1", "1", "2"],
+        "ข้อความกล่องอยู่ในไฟล์": "Step box 2" in h,
+        "ไม่มีกล่องเตือนแปลงไม่ได้": 'class="s unsupported' not in h and not warnings,
+    }
+    for name, ok in checks.items():
+        print("ok  " if ok else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("pptx", type=Path)
@@ -816,4 +841,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    sys.exit(self_test()) if "--self-test" in sys.argv else main()

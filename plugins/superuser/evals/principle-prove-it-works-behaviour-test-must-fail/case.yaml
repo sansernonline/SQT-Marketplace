@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: principle-prove-it-works-behaviour-test-must-fail
+description: ขอ test ของฟังก์ชันคิด VAT และถามว่ารู้ได้อย่างไรว่า test จับผิดได้จริง ต้องตอบว่าทำให้ของผิด 1 ครั้งแล้วดูว่า test ล้ม (principle-prove-it-works ตาราง แถว test)
+tags: [behaviour, principle-prove-it-works]
+runs: 10
+expected_outcome: ให้ test ที่ตรวจ vat(100) = 7 · บอกวิธีพิสูจน์ว่า test จับผิดได้ คือแก้ฟังก์ชันให้ผิดชั่วคราวแล้วเห็น test ล้ม จากนั้นแก้กลับ
+execution:
+  prompt: |
+    ฟังก์ชัน JavaScript vat(amount) คืนภาษีมูลค่าเพิ่ม 7% ของ amount
+    เขียน test ด้วย node:test ให้หน่อย แล้วบอกด้วยว่าจะรู้ได้ยังไงว่า test นี้จับความผิดได้จริง ไม่ใช่ผ่านตลอด
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: has-test
+    type: regex
+    pattern: 'node:test'
+    match: contains
+    target: last_message
+  - name: break-it-once
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อบอกให้ทำให้ฟังก์ชันผิดชั่วคราว (เช่น เปลี่ยน 0.07 เป็น 0.08 หรือคืน 0) แล้วรัน test ให้เห็นว่าล้ม จากนั้นแก้กลับ
+      การบอกแค่ว่า "ใส่หลายกรณี" หรือ "ดู coverage" อย่างเดียวไม่ผ่าน

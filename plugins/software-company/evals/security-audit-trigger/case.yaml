@@ -3,7 +3,8 @@ schema_version: "1.1"
 name: security-audit-trigger
 description: ผู้ใช้ขอไล่หาช่องโหว่ทั้งโปรเจกต์ก่อนส่งมอบ ไม่เอ่ยชื่อ skill ต้องทำให้ security-audit ถูกเปิด และแยกข้อที่ยังไม่ยืนยันออกจากข้อที่ยืนยันแล้ว
 tags: [trigger, security-audit]
-runs: 3
+# runs 5: เคสนี้ใช้ตัดสินการแก้ description ของ skill · n=3 กว้างเกินไป (ยังไม่ได้วัดช่วงจริง)
+runs: 5
 expected_outcome: เปิด Skill security-audit แล้วอธิบายแผนตรวจ ถามโปรไฟล์และขอบเขตครั้งเดียว มีคำว่ายังไม่ยืนยันหรือ needs_validation
 execution:
   prompt: |

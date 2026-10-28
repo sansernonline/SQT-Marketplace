@@ -1,0 +1,36 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: data-import-export-behaviour
+description: ออกแบบนำเข้ารายชื่อจาก Excel ต้องตรวจก่อนเขียน รายงานแถว คอลัมน์ ค่าที่พบ ถามปี พ.ศ./ค.ศ. และอ่านรหัสเป็นข้อความ
+tags: [behaviour, data-import-export]
+runs: 3
+expected_outcome: ตรวจทั้งไฟล์ก่อนเขียน · รายงานผิดแถว/คอลัมน์/ค่าที่พบ/ค่าที่ควรเป็น รวมทุกแถวในครั้งเดียว · ถามปีแบบไหน · เบอร์โทรอ่านเป็นข้อความ
+execution:
+  prompt: |
+    ออกแบบการนำเข้ารายชื่อลูกค้าจากไฟล์ Excel (ชื่อ เบอร์โทร วันเกิด อีเมล) เข้าระบบ ผู้ใช้เป็นเจ้าหน้าที่ธุรการ
+    ไฟล์มาจากหลายสาขา ตอบในแชต ไม่ต้องสร้างไฟล์ ไม่ต้องถามกลับ
+  max_turns: 8
+  timeout_seconds: 300
+graders:
+  - name: row-error-report
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบรายงานข้อผิดพลาดโดยระบุแถว คอลัมน์ และค่าที่พบ
+      และรายงานทุกแถวที่ผิดในครั้งเดียว (ไม่หยุดที่แถวแรกที่ผิด)
+  - name: validate-before-write
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบตรวจไฟล์ให้จบก่อนเขียนลงฐานข้อมูล (หรือเขียนทั้งก้อนในธุรกรรมเดียว) ไม่ปล่อยให้ข้อมูลค้างครึ่งเดียว
+  - name: buddhist-year-asked
+    type: regex
+    pattern: "พ\\.ศ\\.|พุทธศักราช|Buddhist|543"
+    flags: i
+    match: contains
+    target: last_message
+  - name: phone-as-text
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ให้ผ่านเมื่อคำตอบบอกว่าเบอร์โทรต้องอ่านเป็นข้อความ เพื่อไม่ให้เลข 0 นำหน้าหาย

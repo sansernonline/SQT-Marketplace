@@ -32,6 +32,8 @@ yield on cost         = annual DPS ÷ average cost per share
 portfolio yield       = expected annual net dividends ÷ current portfolio value
 ```
 
+Gross, withheld, net and yields per holding: `node money-calc.mjs dividend <file.json>` (script in `portfolio-snapshot`, see its Script path; the worked example below is `../portfolio-snapshot/scripts/examples/dividend.json` and gives 1,600 / 160 / 1,440 and 4.5%). `source` is `thai-listed` or `thai-fund` (10% withheld) or `foreign` (the script refuses until `withholdingPct` is given from a checked source).
+
 **Tax**: the 10% is withheld at source; the holder may leave it as final tax or include all such dividends in ภ.ง.ด.90 and claim the dividend tax credit (เครดิตภาษีเงินปันผล). Which is cheaper depends on the marginal rate — compute it with `tax-basics-th` (same plugin). Thai mutual fund dividends: 10% withheld, no credit. Foreign dividends (DRs, offshore): withholding differs by country — ask the user's situation, mark unknown rates (รอยืนยัน).
 
 ## Workflow
@@ -137,7 +139,7 @@ Tax year 2569 (income 2026): paper by 31 March 2570; the online extension date i
 
 1. Confirm tax year and residence (180-day rule).
 2. List every income source with gross amount and tax withheld; sort into the table in the reference file.
-3. For each optional item (dividends, deposit interest) compute both ways and pick the cheaper.
+3. For each optional item (dividends, deposit interest) compute both ways and pick the cheaper. Dividends: `tax-deduction-planner` script `tax.mjs` with a `dividends` field prints both ways.
 4. Run `tax-deduction-planner` for deductions; combine into one net-income calculation.
 5. Pick the form and deadline; list the documents below.
 

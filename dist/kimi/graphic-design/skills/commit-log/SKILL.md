@@ -21,7 +21,7 @@ description: Use when a step of work is finished in a git folder, or the user as
 2. `git log -10 --oneline` → ใช้ภาษาและชื่อ scope แบบที่ repo ใช้อยู่
 3. แยกตามเรื่อง → 1 commit = 1 เรื่อง · subject ต้องใช้ "และ" เชื่อมของที่ไม่เกี่ยวกัน → แยก 2 commit (`git add <ไฟล์>` ทีละเรื่อง)
 4. ตรวจของที่ไม่ควรเข้า → ค่าลับ · `.env` · key · ไฟล์ build · ไฟล์ใหญ่ · `.claude/superuser/log/` `inbox/` `learn/` `handoff/` `state.json` · `_to_delete/` → ใส่ `.gitignore` (log กับ handoff มีชื่อไฟล์และคำสั่งภายใน)
-5. เลือก type → เขียนข้อความ → commit
+5. เลือก type → เขียนข้อความ → ตรวจด้วย `node <โฟลเดอร์ skill นี้>/scripts/commit-msg-check.mjs "<ข้อความ>"` (หรือ `--file <ไฟล์ข้อความ>`) ผ่านแล้วจึง commit · สคริปต์ตรวจ type ความยาว จุดท้าย คำต้องห้าม และ body ส่วนที่ต้องใช้วิจารณญาณยังตรวจด้วยตา
 6. จด hash ลง log ของงาน (บรรทัด `commit` ใน `log/<วันที่>/main.jsonl`) · บอกผู้ใช้ 1 บรรทัด เช่น `a1b2c3d feat(auth): เพิ่มล็อกอินด้วย LINE`
 
 ## 3 · รูปแบบ
@@ -48,7 +48,7 @@ description: Use when a step of work is finished in a git folder, or the user as
 | `build` | ระบบ build · สคริปต์ build | `build: add release build target` |
 | `revert` | ย้อน commit เดิม | `revert: feat(auth): add user authentication` |
 
-ของที่เปลี่ยนแล้วของเดิมพัง → ใส่ `!` หลัง type (`feat(api)!: ...`) และ footer `BREAKING CHANGE: ...`
+ของที่เปลี่ยนแล้วของเดิมพัง → ใส่ `!` หลัง type (`feat(api)!: ...`) · ต้องอธิบายว่าอะไรพังให้เพิ่ม footer `BREAKING CHANGE: ...` (ไม่บังคับ)
 
 ## 4 · กติกาข้อความ
 

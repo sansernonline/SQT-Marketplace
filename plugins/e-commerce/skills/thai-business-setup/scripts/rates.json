@@ -1,0 +1,7 @@
+{
+  "checked": "2026-10-23",
+  "source": "thai-business-setup/SKILL.md หัวข้อ 5 · พ.ร.ฎ. ฉบับที่ 807 (ราชกิจจานุเบกษา เล่ม 143 ตอนที่ 50 ก 23 ส.ค. 2569) https://rd.go.th/fileadmin/user_upload/kormor/newlaw/dc807.pdf · ฐาน VAT การนำเข้า ม.79/2 https://www.rd.go.th/5205.html",
+  "vat_pct": 7,
+  "vat_pct_valid_until": "2027-09-30",
+  "note": "VAT นำเข้า 7% (6.3% + ภาษีท้องถิ่น) ถึง 30 ก.ย. 2570 · อัตราอากรไม่อยู่ที่นี่ เพราะขึ้นกับพิกัดสินค้า ใส่ใน input ทุกครั้ง"
+}

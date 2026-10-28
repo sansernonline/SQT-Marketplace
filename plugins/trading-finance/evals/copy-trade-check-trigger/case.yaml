@@ -2,7 +2,7 @@
 schema_version: "1.1"
 name: copy-trade-check-trigger
 description: ถามว่าควรตามสัญญาณ MQL5 ตัวหนึ่งไหม ไม่เอ่ยชื่อ skill ต้องทำให้ copy-trade-check ถูกเปิด
-tags: [trigger, copy-trade-check]
+tags: [capability, trigger, copy-trade-check]
 runs: 3
 expected_outcome: เรียก Skill copy-trade-check แล้วตรวจตัวเลขด้วยกฎเหล็กก่อน ไม่ตอบจากตัวเลข Growth อย่างเดียว
 execution:

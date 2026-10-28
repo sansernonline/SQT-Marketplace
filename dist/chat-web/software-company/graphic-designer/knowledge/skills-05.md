@@ -111,11 +111,11 @@ subagent มี context ของตัวเอง จึงอ่านไป 
 <คำสั่งที่ output ยาว>
 
 # ถูก: เข้า context แค่บรรทัดสรุป
-<คำสั่งที่ output ยาว> > _to_delete/out.log 2>&1; tail -20 _to_delete/out.log
+<คำสั่งที่ output ยาว> > <โฟลเดอร์ชั่วคราว>/out.log 2>&1; tail -20 <โฟลเดอร์ชั่วคราว>/out.log
 ```
 
 **ใช้กับ**: ข้อความจากเว็บหรือ PDF ที่ดึงมา · ตารางข้อมูลใหญ่ (กรองหรือนับด้วยสคริปต์ ไม่ต้องอ่านทุกแถว) · ผลรัน test · log · ผลจากการแปลงไฟล์
-เก็บไว้ที่ `_to_delete/` ตาม `temp-file-discipline` · เจออะไรให้จดลงไฟล์ตั้งแต่รอบแรก จะได้ไม่ต้องอ่านซ้ำ
+ไฟล์พวกนี้วางที่ไหน → `temp-file-discipline` · เจออะไรให้จดลงไฟล์ตั้งแต่รอบแรก จะได้ไม่ต้องอ่านซ้ำ
 
 **ทำซ้ำทุกงาน → ให้ hook กรองแทนวินัย** — hook ตัดของยาวก่อนเข้า context ได้ (log หมื่น token เหลือหลักร้อย) · ตัวอย่างงานโค้ด → ส่วนเพิ่มใน plugin `software-company` → `superuser` → `references/code-extensions.md`
 
@@ -275,7 +275,11 @@ Use when a task writes temporary files (extracts, previews, backups, drafts, one
 
 1. **บอกว่ามีอะไรค้างอยู่ใน `_to_delete/`** เป็นบรรทัดเดียว ไม่ต้องลงรายการยาว
 2. **ห้ามลบเอง** — ลบเมื่อผู้ใช้สั่งเท่านั้น การลบในโฟลเดอร์ผู้ใช้กู้คืนไม่ได้
-3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ · ก่อน `rm` พิมพ์รายการลบกับรายการเก็บมาเทียบ (บน Windows `ls` อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+3. **ผู้ใช้สั่งลบ** → ย้ายเข้า `_to_delete/` ก่อน (ตามกฎกลาง) แล้วบอกผู้ใช้ · ลบจริงเฉพาะของใน `_to_delete/` เมื่อผู้ใช้สั่งตรง ๆ โดยทำ 3 ขั้น:
+   1. เขียนแผนลงไฟล์ `_to_delete/delete-plan.txt` 1 พาธต่อบรรทัด นับจากรากโปรเจกต์ (`_to_delete/render-check`)
+   2. รัน `node <โฟลเดอร์ skill นี้>/scripts/delete-plan-check.mjs _to_delete/delete-plan.txt` → พิมพ์รายการลบกับรายการเก็บมาเทียบ · พาธไหนหลุดออกนอก `_to_delete/` (`..` · พาธเต็ม · ลิงก์ชี้ออกข้างนอก) จะ exit 1 ห้ามลบ
+   3. ผ่านแล้วจึงลบตามรายการ "ลบ" ทีละบรรทัด สคริปต์ไม่ลบเอง · อย่าสร้างรายการจาก `ls` (บน Windows อาจมี `/` ต่อท้ายชื่อ ดู `context-budget` → [`windows-shell`](../context-budget/references/windows-shell.md))
+4. **ก่อนบอกว่าจบงาน** รัน `node <โฟลเดอร์ skill นี้>/scripts/root-check.mjs <รากโปรเจกต์>` → ลงรายการของที่รากนอกรายการอนุญาต (`ref` `docs` `mockup` `assets` `qa` `_to_delete` `.claude` โฟลเดอร์โค้ด และของใน `.gitignore`) · ของที่โปรเจกต์ตั้งใจวางไว้ที่ราก ใส่ `--allow README.md,LICENSE`
 
 ---
 
@@ -291,10 +295,7 @@ Use when a task writes temporary files (extracts, previews, backups, drafts, one
 
 ---
 
-## ตัวย่อ
-
-- **zip** — ไฟล์บีบอัดรูปแบบ ZIP
-- **git** — ระบบควบคุมเวอร์ชัน Git
+ตัวย่อและศัพท์เทคนิคในข้อความถึงผู้ใช้ เขียนตาม `spell-out-abbreviations`
 
 
 ---
@@ -396,7 +397,7 @@ Use when something found mid-task in any work changes what happens next (stale f
 ```
 
 - คอลัมน์ขวาคือ **ประโยชน์** ไม่ใช่ขั้นตอน — คนอ่านกำลังตัดสินใจว่าคุ้มไหม ไม่ได้กำลังลงมือทำ
-- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ
+- เรียงจากคุ้มที่สุดลงมา ไม่ใช่เรียงตามลำดับการทำ · "คุ้ม" วัดด้วยสูตร คนหรือไฟล์ที่ได้ประโยชน์ × ผลกระทบ × ความมั่นใจ ÷ แรงงาน: ตั้งแต่ 3 ข้อขึ้นไปใส่ตัวเลขตามแม่แบบ [`templates/priority.json`](templates/priority.json) แล้วรัน `node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json` · ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัยใส่ `"first": true` ให้ขึ้นก่อนเสมอ · มีงบเวลาจำกัดใช้ `knapsack` แทน (`decision-scoring`)
 - **ผูกข้อเสนอกับปัญหาที่เพิ่งเจอถ้าผูกได้** — เป็นเหตุผลที่หนักแน่นที่สุดที่มี
 - เกิน 5 แถวเมื่อไหร่ แปลว่ากำลังเสนอหลายเรื่องปนกัน ให้แยกเป็นคนละรอบ
 

@@ -1,0 +1,11 @@
+{
+  "_note": "เกณฑ์ที่ print_check.py ใช้ · ต้นทางเดียวกับตารางใน SKILL.md (ร้านต้องมาก่อน: ร้านบอกค่าอื่น ใช้ --bleed-mm / --min-ppi แทน)",
+  "checked": "2026-10-26",
+  "recheck_by": "2027-04-26",
+  "bleed_mm": 3,
+  "bleed_tolerance_pt": 0.5,
+  "bleed_tolerance_note": "ค่าตั้งต้น ยังไม่ได้วัด · กันเศษทศนิยมตอน export จากโปรแกรมออกแบบ",
+  "min_ppi": { "flyer": 300, "vinyl": 70 },
+  "min_ppi_note": "flyer: บางร้านรับ 266 · vinyl: ช่วง 70-150 ตามระยะมอง ใส่ --min-ppi 150 เมื่อดูใกล้",
+  "max_total_ink_percent": 300
+}
