@@ -12,10 +12,7 @@ description: Use when the user wants agents to work their way (learn my style) o
 
 ## ไม่ใช้เมื่อ
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ความผิดที่เกิดซ้ำและตรวจด้วยเครื่องได้ | `repeated-mistakes-to-checks` |
-| บทเรียนจากงานที่ทำให้ skill หรือ agent ต้องแก้ | `session-lessons-to-skills` |
+ใช้ตัวไหนระหว่าง `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` → ตารางกลางใน [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md) หัวข้อ "ใช้ตัวไหน"
 
 ## แหล่งหลักฐาน (อ่านเท่านั้น)
 

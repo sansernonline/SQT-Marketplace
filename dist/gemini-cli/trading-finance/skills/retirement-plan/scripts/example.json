@@ -1,0 +1,7 @@
+{
+  "_note": "ตัวอย่างใน SKILL.md (Worked example) · year = ปี พ.ศ. ตอนวางแผน (ไม่ใส่ = ปีปัจจุบัน)",
+  "age": 35, "retireAge": 60, "planToAge": 85,
+  "spendMonthly": 30000, "inflationPct": 3, "returnPct": 6, "year": 2569,
+  "sso": { "monthsNow": 0 },
+  "assets": [ { "name": "PVD 5% + นายจ้าง 5%", "balance": 0, "monthly": 4000, "returnPct": 5 } ]
+}

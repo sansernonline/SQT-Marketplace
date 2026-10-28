@@ -2,6 +2,15 @@
 
 ทุกข้อ `จากแหล่ง` [code.claude.com/docs/en/plugin-evals](https://code.claude.com/docs/en/plugin-evals) · ดู 2026-10-23 · ต้องใช้ Claude Code 2.1.269 ขึ้นไป · ใช้บัญชีที่ล็อกอินอยู่ มีค่าใช้จ่าย
 
+## สารบัญ
+- [โครงไฟล์](#โครงไฟล์)
+- [case.yaml](#caseyaml)
+- [grader](#grader)
+- [คะแนนและรอบไม่มี plugin](#คะแนนและรอบไม่มี-plugin)
+- [จำนวนรอบและเกณฑ์ผ่าน](#จำนวนรอบและเกณฑ์ผ่าน)
+- [สภาพแวดล้อมตอนรัน](#สภาพแวดล้อมตอนรัน)
+- [คำสั่งและ exit code](#คำสั่งและ-exit-code)
+
 ## โครงไฟล์
 
 ```
@@ -27,7 +36,7 @@ schema_version: "1.1"        # บังคับ
 name: human-writing-behaviour # บังคับ · ตรงชื่อโฟลเดอร์
 description: …               # ให้คนอ่าน
 tags: [smoke]
-runs: 3                      # 1–50
+runs: 10                     # 1–50 · เราใช้ 10 (เหตุผลในหัวข้อ "จำนวนรอบและเกณฑ์ผ่าน")
 expected_outcome: …          # ให้คนอ่าน ไม่ใช้ตัดสิน
 execution:
   prompt: |                  # โจทย์ (เมื่อไม่มี prompt.md)
@@ -55,7 +64,7 @@ graders:
 | type | ช่อง | ใช้เมื่อ |
 |---|---|---|
 | `regex` | `pattern` · `flags` · `match` (`contains` ค่าเริ่ม · `not_contains` · `"count:N"`) · `target` | คำต้องมี/ต้องไม่มี · ถูกสุด ไม่แกว่ง |
-| `tool_used` | `tool` · `input_match` (regex กับ JSON ของ input) · `min` (1) · `max` · `min: 0, max: 0` = ห้ามเรียก | skill ถูกเปิดไหม: `tool: Skill` + `input_match: '"skill"\s*:\s*"(?:[\w-]+:)?human-writing"'` |
+| `tool_used` | `tool` · `input_match` (regex กับ JSON ของ input) · `min` (1) · `max` · `min: 0, max: 0` = ห้ามเรียก (เคส `-no-trigger` ใส่ `arm: both` ด้วย ให้นับคะแนน) | skill ถูกเปิดไหม: `tool: Skill` + `input_match: '"skill"\s*:\s*"(?:[\w-]+:)?human-writing"'` |
 | `tool_order` | `before` · `after` | ลำดับเครื่องมือ |
 | `file_exists` | `path` · `exists` | ผลเป็นไฟล์ (ต้องให้สิทธิ์ Write ก่อน) |
 | `llm` | `criteria` · `focus` | เกณฑ์ที่ regex จับไม่ได้ · ผู้ตัดสิน 3 เสียง ผ่านเมื่อ ≥ 2 |
@@ -80,6 +89,19 @@ graders:
 - **2 แขนโดยค่าเริ่มต้น**: รอบมี plugin (`WITH`) และรอบไม่มี plugin เลย (`W/OUT`) แล้วรายงานผลต่าง `Δ` · `--ablation none` รันแขนเดียว
 - ในรอบ 2 แขน grader `tool_used` ที่ `tool: Skill` และ grader ที่ `arm: with-only` รายงานเป็นตัวชี้วัด (`scored: false`) ไม่นับคะแนน เว้นแต่ใส่ `arm: both` · เคสที่มีแต่ grader ชนิดนี้จึงต้องมี grader ผลลัพธ์อีก 1 ตัว
 
+## จำนวนรอบและเกณฑ์ผ่าน
+
+ค่าในหัวข้อนี้เป็นค่าตั้งต้น ยังไม่ได้วัด · ปรับเมื่อมีผลรันจริงหลายรอบ
+
+- **รันเคสละ 10 รอบ** (`runs: 10`) · 3 รอบได้อัตราผ่านแค่ 0 · .33 · .67 · 1 และที่ .67 ช่วงความเชื่อมั่น 95% (p ± 1.96√(p(1−p)/n)) กว้าง ±.53 · 10 รอบแคบลงเหลือ ±.29 · แยก 80% กับ 95% ให้ขาดต้องราว 72 รอบต่อแขน จึงใช้ 10 รอบจับแค่การถอยหลังที่ชัด ไม่ใช้ตัดสินความต่างเล็ก ๆ
+- **รายงาน 2 ค่า** จากผลรายรอบใน `aggregate-result.json`: **pass@k** = มีอย่างน้อย 1 ใน k รอบผ่าน (skill ทำได้ไหม) · **pass^k** = ผ่านครบทั้ง k รอบ (ไว้ใจได้ทุกครั้งไหม) · ค่าเฉลี่ยค่าเดียวซ่อนเคสที่ผ่านครึ่งเดียว
+- **แยกเกณฑ์ 2 แบบ** แทน threshold 0.8 ชุดเดียว · แยกรันด้วย `--tag`:
+
+| แบบ | เคส (tag) | เกณฑ์ผ่าน |
+|---|---|---|
+| วัดความสามารถ | `trigger` · `behaviour` | คะแนนเฉลี่ย ≥ 0.8 (`--threshold 0.8`) |
+| กันถอยหลัง | `regression` · `guard` · `no-trigger` | ผ่านครบ k จาก k รอบ (`--threshold 1.0`) · ตก 1 รอบ = ถอยหลัง |
+
 ## สภาพแวดล้อมตอนรัน
 
 - แต่ละรอบ = home ใหม่ · workspace ใหม่ · `claude -p` ที่โหลดเฉพาะ plugin นี้ · ไม่มี CLAUDE.md ของเครื่อง · ไม่มี auto memory · ไม่มี plugin อื่น · eval ของ skill กลางจึงรันที่ `plugins/superuser` โดยตรง
@@ -90,7 +112,8 @@ graders:
 
 ```
 claude plugin eval plugins/superuser --trust-plugin --case "human-writing-*" --no-publish --max-cost-usd 5
-claude plugin eval plugins/superuser --trust-plugin --json results.json --threshold 0.8 --model claude-sonnet-5 --judge-model claude-haiku-4-5 --no-publish --max-cost-usd 20   # CI
+claude plugin eval plugins/superuser --trust-plugin --tag behaviour --json behaviour.json --threshold 0.8 --model claude-sonnet-5 --judge-model claude-haiku-4-5 --no-publish --max-cost-usd 20   # CI ความสามารถ
+claude plugin eval plugins/superuser --trust-plugin --tag regression --json regression.json --threshold 1.0 --model claude-sonnet-5 --judge-model claude-haiku-4-5 --no-publish --max-cost-usd 20   # CI กันถอยหลัง (ทำซ้ำกับ --tag guard และ --tag no-trigger)
 ```
 
 flag อื่น: `--runs` · `-j/--concurrency 1–8` · `--ablation none|with-without` · `--tag` · `--scaffold` · `--mocks record|off` · `--output-dir` · `--report` · `--verbose` · `--keep-temp` · ใส่ target ก่อน `--tag` `--allow-tools` `--json`

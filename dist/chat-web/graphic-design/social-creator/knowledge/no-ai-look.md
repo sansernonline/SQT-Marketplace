@@ -95,7 +95,7 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 
 ---
 
-## 4 · เขียน brief ให้เครื่องมือสร้างภาพหรือ subagent
+## 4 · เขียน brief ให้เครื่องมือสร้างภาพ หรือใบสั่งงานให้ subagent
 
 ใส่ทุกครั้ง ไม่งั้นได้ค่าเฉลี่ย:
 
@@ -107,9 +107,7 @@ python <path ของ skill นี้>/scripts/slop_scan.py --self-test        
 
 ---
 
-## ตัวย่อ
-
-เขียนตัวย่อเต็มครั้งแรกแล้ววงเล็บตัวย่อ เช่น Cascading Style Sheets (CSS) · ดู `human-writing` ข้อ 3
+กฎเขียนตัวย่อ → `spell-out-abbreviations`
 
 
 ## reference: catalog.md

@@ -18,7 +18,7 @@ Numbers marked (รอยืนยัน) came from secondary sources or were no
 | FB link preview | 1.91:1 | 1200 × 630 | LinkedIn link posts use 1200 × 627 (1200 × 630 also works at 1.91:1), see section 6 |
 | Primary text / headline (ads) | — | 50–150 characters; headline about 27 characters | Stories primary text 125 characters |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.facebook.com/business/ads-guide/update/image · https://www.facebook.com/business/ads-guide/update/image/instagram-story · https://www.facebook.com/help/125379114252045
+ตรวจล่าสุด 2026-10-06 · ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-06 · แหล่ง: https://www.facebook.com/business/ads-guide/update/image · https://www.facebook.com/business/ads-guide/update/image/instagram-story · https://www.facebook.com/help/125379114252045
 
 ## 2 · TikTok
 
@@ -79,7 +79,7 @@ Rich menu text: each tap area is about 1/3 of the phone width on screen. Make th
 | Life tab main image | 1128 × 376 | — |
 | Personal profile background | 1584 × 396 (4:1) (รอยืนยัน) | Profile photo covers bottom-left |
 
-ตรวจล่าสุด 2026-10-06 · แหล่ง: https://www.linkedin.com/help/linkedin/answer/a563309
+ตรวจล่าสุด 2026-10-06 · ตรวจซ้ำทุก 6 เดือน ครั้งหน้า 2027-04-06 · แหล่ง: https://www.linkedin.com/help/linkedin/answer/a563309
 
 ## 7 · Export settings that work everywhere
 

@@ -12,6 +12,8 @@ logger_py.py — logger มาตรฐานสำหรับ Python (ใช�
     set_correlation_id("a3f9c1b2")             # ต่อ request (ContextVar — ปลอดภัยกับ async)
     log.info("สร้างคำสั่งซื้อสำเร็จ", extra={"ctx": {"order_id": 1042, "ms": 134}})
     log.exception("พังตรงนี้")                  # ใน except block — ได้ stack ให้อัตโนมัติ
+
+ทดสอบ:  python logger_py.py --self-test     (stdlib ล้วน · เขียน log ลงโฟลเดอร์ชั่วคราวแล้วอ่านกลับมาตรวจ)
 """
 
 from __future__ import annotations
@@ -175,3 +177,54 @@ def setup_logging(
 
 def get_logger(source: str) -> logging.Logger:
     return logging.getLogger(source)
+
+
+def _self_test() -> int:
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = setup_logging("t", log_dir=tmp, level="DEBUG")
+        again = len(root.handlers)
+        setup_logging("t", log_dir=tmp, level="DEBUG")                    # เรียกซ้ำต้องไม่เพิ่ม handler
+        set_correlation_id("abcdef123456")
+        log = get_logger("orders")
+        log.info("สร้างคำสั่งซื้อ\nFAKE", extra={"ctx": {
+            "order_id": 1042, "password": "hunter2", "shipping": "ems",
+            "card_note": "4111 1111 1111 1111 paid", "memo": "a\nb", "nested": {"apiKey": "k"}}})
+        try:
+            1 / 0
+        except ZeroDivisionError:
+            log.exception("พัง")
+        log.debug("ไม่ควรโดนตัด")
+        for h in list(root.handlers):                                     # ปิดไฟล์ก่อนลบโฟลเดอร์ (Windows)
+            h.flush()
+            h.close()
+            root.removeHandler(h)
+        main_log = (Path(tmp) / "t.log").read_text(encoding="utf-8")
+        err_log = (Path(tmp) / "t-error.log").read_text(encoding="utf-8")
+    lines = main_log.splitlines()
+    first = lines[0]
+    checks = {
+        "เรียก setup ซ้ำไม่เพิ่ม handler": len(root.handlers) == 0 and again == 3,
+        "รูปแบบบรรทัด: เวลา ระดับ [cid] ชื่อ": bool(re.match(
+            r"\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d{3} [+-]\d\d:\d\d  INFO   \[abcdef12\] orders  ", first)),
+        "ข้อความหลักไม่มีตัวขึ้นบรรทัด (กัน log injection)": "สร้างคำสั่งซื้อ FAKE" in first,
+        "order_id ลงบรรทัดเดียวกัน": "order_id=1042" in first,
+        "password ถูกปิด": "password=***" in first and "hunter2" not in main_log,
+        "key ซ้อนข้างในก็ปิด (apiKey)": "'apiKey': '***'" in first,
+        "shipping ไม่ถูกปิดเกิน": "shipping=ems" in first,
+        "เลขบัตรในค่าอิสระถูกปิด": "4111" not in main_log,
+        "ค่าหลายบรรทัดรวมเป็นบรรทัดเดียว": 'memo="a b"' in first,
+        "exception มี stack เยื้อง 4 ช่อง": any(l.startswith("    ") and "ZeroDivisionError" in l for l in lines),
+        "ไฟล์ error มีเฉพาะ ERROR": "พัง" in err_log and "สร้างคำสั่งซื้อ" not in err_log,
+        "ระดับ DEBUG เข้าไฟล์รวม": "DEBUG" in main_log,
+    }
+    for name, ok in checks.items():
+        print("ok  " if ok else "FAIL", name)
+    print(f"self-test {sum(checks.values())}/{len(checks)}")
+    return 0 if all(checks.values()) else 1
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(_self_test() if "--self-test" in sys.argv else print(__doc__))

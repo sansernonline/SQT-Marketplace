@@ -242,6 +242,19 @@ things is a new bug waiting to happen and a change nobody can review.
 5. **Smallest fix.** Change only what's needed. Match the surrounding style.
 6. **Prove it.** Re-run the failing case → it passes. Re-run nearby cases → still pass. Show the before/after of the one thing that changed.
 
+## รับผลรีวิว (receiving review feedback)
+
+Review comments from `reviewer`, a person or a bot are claims, not orders. Reviewers can be wrong.
+
+1. **List every item** with its own id. Unclear item → restate it in one line before touching anything.
+2. **Check each item against the code or evidence** (file:line, test, source). Mark it: right · wrong · unsure.
+3. **Wrong → push back with evidence** (the test that passes, the line that already handles it, the spec clause). Don't apply a change just to make the comment go away, and don't agree without checking.
+4. **Unsure → verify first** (run it, read it). Still unsure → log it in `decision-log` and take the lowest-impact reading.
+5. **Fix one item at a time** with the steps above, re-run its check, then move to the next. No batch of every fix followed by one test run.
+6. **Report per item:** `id · fixed (evidence) / declined (evidence) / open (why)`.
+
+Idea from `receiving-code-review` in obra/superpowers.
+
 ## หาจุดให้เร็ว
 
 Cause known, line not found yet → search the literal wrong text, number or error string (it usually appears once). Tracing a cause (stack trace, version history, scope clues) → `principle-fix-root-cause`.
@@ -276,7 +289,7 @@ Use when a non-trivial software task starts (feature, bug, refactor, investigati
 
 > รับงาน → จัดขนาดและงบ → ใบสั่งงาน 5 ข้อ → แจกลูกทีม → ตรวจกับของจริงวนจนผ่าน → ส่งมอบสั้น → เทียบคาดกับจริง แล้วจำ
 
-หัวหน้างาน 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
+หัวหน้าทีม 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
 
 **ไฟล์นี้คือแกน อ่านทุกงาน** · เปิดเพิ่มเมื่อถึงจังหวะ: [`autonomy`](references/autonomy.md) (ถามครั้งเดียว · ตัดสินใจเอง · รออนุมัติ · รู้จังหวะหยุด) · [`modules`](references/modules.md) (ไฟล์กลาง · log · รอบเรียนรู้ · inbox · config · ด่านของ hook) · plugin สาขามี `superuser` ของตัวเองที่มีเฉพาะส่วนสาขา (playbook · agent · รออนุมัติ) และบอกให้เปิดไฟล์นี้ก่อน ([`ADAPT.md`](../../ADAPT.md))
 
@@ -571,6 +584,8 @@ skill กลาง (หลักการ · ตรวจงาน · แบ่�
 ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
 
 ใช้เมื่องานขนาดใหญ่หรือโจทย์ไม่ชัด หลัง brainstorm และเลือกทางแล้ว ให้หัวหน้าทีมเขียน brief ก่อนลงมือ ส่งให้ผู้ใช้อ่านในคำตอบ แล้วเก็บไว้ที่ `docs/BRIEF.md` · ถ้างานเปลี่ยนทิศ ให้เขียน brief ใหม่ทับ ไม่ต่อท้าย
+
+brief คือสรุปให้ผู้ใช้อ่าน ไม่ใช่ใบสั่งงาน · คำว่า "ใบสั่งงาน" ใช้กับใบที่หัวหน้าทีมส่งให้ลูกทีม (`handoff/<id>.md` ตาม skill `handoff` หัวข้อ 3) อย่างเดียว
 
 ## กติกา
 
@@ -1636,7 +1651,7 @@ skill หลัก: skill ตรวจแอปของโปรเจกต์
 | agent | ระดับโมเดล | ใช้เมื่อ | ไม่ใช่ |
 |---|---|---|---|
 | `brainstormer` | ใหญ่ | ก่อนเริ่มงานใหญ่หรือโจทย์ไม่ชัด — คิด 2–3 ทางบนกระดาษ ให้คะแนน 1–5 (5 = ดีสุด) | สร้างของจริงหลายชุดแล้วเลือก → `parallel-attempts-pick-best` |
-| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ใน brief |
+| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
 | `learning-reviewer` | กลาง | ตอนจบงานหลายขั้น — ตรวจวิธีทำงานของทีม ไม่ใช่ตัวงาน | — |
 
 เรียกตัวใหม่ทุกครั้ง เพราะตัวที่ทำงานไม่ตรวจงานของตัวเอง · ผู้ตรวจเฉพาะทาง (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) ใช้แทน `reviewer` ได้เฉพาะขั้นที่เขียนว่า "อ่านอย่างเดียว · ไม่แก้ไฟล์" (เรียกด้วย `model: opus`) · ขั้นที่ตัวนั้นเขียน test หรือแก้ของนับเป็นการลงมือ

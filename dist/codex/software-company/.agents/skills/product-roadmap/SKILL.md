@@ -30,9 +30,9 @@ The product manager should:
 4. **Prioritize using RICE (Reach, Impact, Confidence, Effort):**
    - **R**each — how many users affected per period
    - **I**mpact — magnitude (0.25 = minimal, 3 = massive)
-   - **C**onfidence — how sure are we (50-100%)
-   - **E**ffort — person-months estimate
-   - Score = (R × I × C) / E
+   - **C**onfidence — how sure are we, as a fraction 0–1 (0.5 / 0.8 / 1), never a percentage
+   - **E**ffort — person-days (or hours), same unit for every item
+   - Score = (R × I × C) / E — do not compute by hand: put the items in a JSON file and run `decision-scoring` command `priority` (`node decide.mjs priority <file.json>`; example [`templates/rice.json`](templates/rice.json), verified run: PromptPay 853.33 ranks first). Paste the script's table, not your own arithmetic
 
 5. **Allocate to quarters:**
    - Consider dependencies

@@ -52,7 +52,9 @@ POST   https://api.line.me/v2/bot/user/{userId}/richmenu/{richMenuId}    link to
 DELETE https://api.line.me/v2/bot/user/{userId}/richmenu                 unlink → user falls back to default
 ```
 
-All calls need `Authorization: Bearer {channel access token}`. Many users at once: `POST /v2/bot/richmenu/bulk/link` (up to 500 user IDs per call · ตรวจล่าสุด 2026-10-26 ในหน้าอ้างอิง API).
+All calls need `Authorization: Bearer {channel access token}` · read the token from an environment variable (for example `LINE_CHANNEL_TOKEN`); never write it to a file, a log or the reply. Many users at once: `POST /v2/bot/richmenu/bulk/link` (up to 500 user IDs per call · ตรวจล่าสุด 2026-10-26 ในหน้าอ้างอิง API).
+
+**Needs user approval first** (it changes what every follower sees and is hard to undo; listed in `superuser` section 6, "รออนุมัติ"): `POST .../user/all/richmenu/...` (set default) and every delete of a rich menu or image. Before asking, show the user that `validate` passed and that the menu works for one test user (`POST .../user/{userId}/richmenu/{richMenuId}` on your own account), then wait for a yes.
 
 A ready JSON for a 6-button full menu with the grid coordinates: [references/richmenu-6.md](references/richmenu-6.md).
 
@@ -61,9 +63,9 @@ A ready JSON for a 6-button full menu with the grid coordinates: [references/ric
 1. Pick the 6 main customer tasks from chat history.
 2. Designer brief — size, grid, safe margins, brand colours, text per cell · no brand yet → **ค้นต้นแบบก่อน:** เอาคำของโปรเจกต์ไปค้นสดตาม `design-references` (plugin `superuser`) ประเภท `app` แล้วถอดสีจากงานที่เลือก · คลังสีที่เก็บไว้ใช้เมื่อค้นสดไม่ได้.
 3. Export ≤ 1 MB (PNG-8 or JPEG quality ~80).
-4. Validate → create → upload → set default → test on iOS and Android.
+4. Check locally first: `python scripts/richmenu_check.py menu.json menu.png` (size, 20 areas, 14 characters, areas inside the image, 1 MB; limits in [references/richmenu-limits.json](references/richmenu-limits.json), checked 2026-10-26 · `--self-test` 8/8). Then the API: validate → create → upload → test on one user → **ask approval** → set default → test on iOS and Android.
 5. Text fallback: the greeting message lists the same 6 keywords.
-6. Seasonal menu: create the new one first, switch default, then delete the old one.
+6. Seasonal menu: create the new one first, ask approval, switch default, then delete the old one only after approval too.
 
 ## Not an AI look
 

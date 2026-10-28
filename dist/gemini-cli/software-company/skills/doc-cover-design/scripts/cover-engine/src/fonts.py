@@ -6,12 +6,18 @@ into its own static font: 400 -> "Family", 700 -> "Family" Bold, 500 -> "Family 
 Idempotent: skips files already installed. Per-user install (no admin): %LOCALAPPDATA%\\Microsoft\\Windows\\Fonts + HKCU.
 """
 import ctypes
+import sys
 import urllib.request
-import winreg
 from pathlib import Path
 
-from fontTools.ttLib import TTFont
-from fontTools.varLib.instancer import instantiateVariableFont
+try:
+    import winreg
+    from fontTools.ttLib import TTFont
+    from fontTools.varLib.instancer import instantiateVariableFont
+except ImportError:                      # Windows-only + fontTools; `--self-test` then skips instead of crashing
+    if sys.argv[1:] != ["--self-test"]:
+        raise
+    winreg = TTFont = None
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / "build" / "fonts"
@@ -84,7 +90,38 @@ def install(path, full):
     return True
 
 
+def self_test():
+    """python fonts.py --self-test: name mapping and static-font renaming; nothing is downloaded or installed."""
+    assert word_family("Space Grotesk", 400) == ("Space Grotesk", False)
+    assert word_family("Space Grotesk", 600) == ("Space Grotesk SemiBold", False)
+    assert word_family("Anuphan", 700) == ("Anuphan", True)
+    assert all(w in SUFFIX for _, w in NEEDED) and all(f in SOURCES for f, _ in NEEDED)
+    if TTFont is None:
+        print("self-test: rename check skipped (needs fontTools + Windows)")
+        return
+    from fontTools.fontBuilder import FontBuilder
+    from fontTools.pens.ttGlyphPen import TTGlyphPen
+    fb = FontBuilder(1000, isTTF=True)
+    fb.setupGlyphOrder([".notdef"])
+    fb.setupCharacterMap({})
+    fb.setupGlyf({".notdef": TTGlyphPen(None).glyph()})
+    fb.setupHorizontalMetrics({".notdef": (500, 0)})
+    fb.setupHorizontalHeader(ascent=800, descent=-200)
+    fb.setupNameTable({"familyName": "Tmp", "styleName": "Regular"})
+    fb.setupOS2()
+    fb.setupPost()
+    font = fb.font
+    assert _rename(font, "Space Grotesk", 600) == "Space Grotesk SemiBold"
+    assert font["name"].getDebugName(1) == "Space Grotesk SemiBold" and font["name"].getDebugName(2) == "Regular"
+    assert font["OS/2"].usWeightClass == 600
+    assert _rename(font, "Anuphan", 700) == "Anuphan Bold" and font["head"].macStyle == 1
+    assert font["name"].getDebugName(2) == "Bold" and font["name"].getDebugName(6) == "AnuphanBold"
+    print("self-test ok")
+
+
 def main():
+    if sys.argv[1:] == ["--self-test"]:
+        return self_test()
     for family, weight in NEEDED:
         out, full = build_static(family, weight)
         print(("installed " if install(out, full) else "ok        ") + full)

@@ -11,10 +11,7 @@ Use when the user corrects the same mistake twice or reviews keep flagging one i
 
 ## ไม่ใช้เมื่อ
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| บทเรียนจากงานใหญ่ที่ต้องแก้ skill หรือ agent | `session-lessons-to-skills` |
-| ความชอบส่วนตัวของผู้ใช้ ไม่ใช่ความผิด | `owner-style-capture` |
+ใช้ตัวไหนระหว่าง `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` → ตารางกลางใน [`session-lessons-to-skills`](../session-lessons-to-skills/SKILL.md) หัวข้อ "ใช้ตัวไหน"
 
 ## ขั้นตอน
 
@@ -71,12 +68,15 @@ Use when a big task of any kind ends, the user says reflect or รวมบท�
 
 งานสั้นหรือง่าย agent ทำตาม skill ที่มีอยู่แล้วได้ถูกต้อง หรือเป็นเรื่องที่เกิดครั้งเดียว
 
-## ไม่ใช้เมื่อ
+## ใช้ตัวไหน — ตารางเดียวของ 3 skill
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ผู้ใช้แก้ความผิดเดิมซ้ำ หรือ review เตือนเรื่องเดิมซ้ำ | `repeated-mistakes-to-checks` — ทำเป็น type · lint · test |
-| อยากให้ agent ทำงานตามสไตล์ของผู้ใช้ | `owner-style-capture` |
+ตารางนี้เป็นของกลางของ `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` (อีก 2 ตัวชี้มาที่นี่)
+
+| เกิดอะไร | ใช้ | ผลลัพธ์ |
+|---|---|---|
+| งานใหญ่จบ · ผู้ใช้สั่งรวมบทเรียน · skill พาไปผิด | `session-lessons-to-skills` (ตัวนี้) | ข้อเสนอแก้ skill หรือ agent |
+| ผู้ใช้แก้เรื่องเดิมครั้งที่ 2 · รีวิวเตือนเรื่องเดิมซ้ำ | [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) | ตัวตรวจ (type · lint · test · hook) |
+| รสนิยมหรือความชอบของผู้ใช้ ไม่ใช่ความผิด | [`owner-style-capture`](../owner-style-capture/SKILL.md) | `~/.claude/superuser-style.md` |
 
 ## ขั้นตอน
 
@@ -177,6 +177,8 @@ Use when creating, renaming or filing any document a team or client keeps or sen
 - **วันที่เป็น ISO `YYYY-MM-DD` เสมอ** และวางท้ายสุด — เรียงตามชื่อแล้วได้เรียงตามเวลาเอง · ข้อยกเว้นเดียว: บันทึกประชุมวางวันที่ไว้หน้าสุด เพราะโฟลเดอร์ `docs/meetings/` มีแต่บันทึกประชุม จึงเรียงตามวันได้ทันที
 - ชื่อไฟล์เป็นอังกฤษ แม้เนื้อหาเป็นไทย — กันปัญหาตอนแนบอีเมลและ zip ข้ามระบบ
 - ห้ามใส่ชื่อคนในชื่อไฟล์ — `-somchai-edit` คือสัญญาณว่าไม่ได้ใช้ต้นฉบับเดียว
+
+**ตรวจด้วยสคริปต์:** `node <โฟลเดอร์ skill นี้>/scripts/doc-name-check.mjs docs/*` → บอกชื่อที่ผิดพร้อมชื่อที่เสนอ · เปลี่ยนชื่อหลายไฟล์: เติม `--plan _to_delete/renames.json` ได้แผนโดยยังไม่แตะไฟล์ ตรวจหรือแก้แผนแล้วรัน `--plan _to_delete/renames.json --apply` · สคริปต์ไม่เปลี่ยนชื่อไฟล์ `APPROVED` และไม่ทับไฟล์ที่มีอยู่ · ไม่ใส่ไฟล์ที่ได้รับมา (`ref/`) เข้าแผน
 
 ---
 

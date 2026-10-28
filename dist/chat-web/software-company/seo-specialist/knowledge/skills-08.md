@@ -23,7 +23,7 @@ Use when project work starts or passes on — to a subagent, next session, anoth
 
 ---
 
-## 2 · Super Folder — ที่เก็บกลางของทีม
+## 2 · `.claude/superuser` — ที่เก็บกลางของทีม
 
 ทุกอย่างอยู่ใต้ `.claude/superuser/` · ไฟล์ทั้งหมด การเปิดใช้ครั้งแรก inbox และ log อยู่ใน [`team-memory`](references/team-memory.md) · กติกา commit อยู่ใน [`team-files`](../superuser/references/team-files.md)
 
@@ -108,9 +108,13 @@ files_allowed: [research/shipping/**]
 
 ## 5 · รับงานต่อ — ข้าม session · สลับโมเดล · context ใกล้เต็ม
 
+หัวข้อ `## รับงานต่อ` ใน `CONTEXT.md` ใช้กติกาชุดนี้ชุดเดียว · ตาราง `## ความคืบหน้า` ที่อยู่ข้างกันเป็นของ `status-report`
+
 **ก่อนส่ง** — อัปเดตหัวข้อ "รับงานต่อ" ใน `CONTEXT.md` ก่อนจบ session · ก่อนสลับโมเดล · เมื่อ context ใช้ไปเกินครึ่งในงานยาว
 - **ทำต่อเป็นข้อแรก:** 1 ข้อ ทำได้ทันที ชี้ไฟล์หรือ `handoff/<id>.md`
 - **ชิ้นที่ยังเปิด:** รายการ `id` ที่ `status` ไม่ใช่ `เสร็จ`
+- **รออนุมัติ:** งานที่พร้อมแล้วแต่ย้อนไม่ได้ บอกไฟล์หรือคำสั่งที่พร้อมใช้ (ไม่มีก็ไม่ต้องใส่)
+- **ค้างอยู่:** คำถามที่ agent ไปต่อเองไม่ได้ บอกว่าถามใคร (ไม่มีให้เขียน `ไม่มี`)
 - **ระวัง:** กับดักที่เจอ · สิ่งที่ห้ามรื้อ (ตัดสินแล้ว) · ทางที่ลองแล้วพัง (รวมจากใบส่งงานทุกชิ้น)
 - **ทุกข้อติดป้าย** `ตรวจจริง` (เห็นเองใน session นี้) หรือ `ยังไม่ได้ตรวจ` (จำมาจากรอบก่อน) · ตัวรับงานเชื่อข้อแรกได้เลย ส่วนข้อหลังต้องตรวจก่อนใช้ · ไม่มีป้าย = ถือว่ายังไม่ได้ตรวจ
 
@@ -152,22 +156,14 @@ files_allowed: [research/shipping/**]
 
 ---
 
-## 8 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code — อะไรอยู่ที่ไหน
+## 8 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code
 
-Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน และ **auto memory** ที่ Claude เขียนเองที่ `~/.claude/projects/<โปรเจกต์>/memory/MEMORY.md` (ดัชนี โหลด 200 บรรทัดแรกทุก session) + ไฟล์หัวข้อ ชนิด `user` `feedback` `project` `reference` · เปิดปิดและเปิดโฟลเดอร์ด้วย `/memory` · ไม่ถูกส่งให้ subagent (`จากแหล่ง` [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory) · 2026-10-23)
-
-| ไฟล์ของเรา | ตรงกับของ Claude Code | ตอนนี้ควรเขียนที่ไหน |
-|---|---|---|
-| `scripts/install/CLAUDE.global.md` (กฎประจำตัว) | user `~/.claude/CLAUDE.md` · hook ส่งสำเนาทุก session | คงไว้ — กฎที่ทุกโปรเจกต์ต้องเห็นแม้ไม่มี hook |
-| `~/.claude/superuser-style.md` (ค่าตั้งต้นของเจ้าของ) · คู่ก่อน/หลังจาก `owner-style-capture` | auto memory ชนิด `user` และ `feedback` | **เขียนลง auto memory แทน** ให้ Claude จดเองเมื่อผู้ใช้แก้ · ไฟล์เดิมเหลือเฉพาะค่าที่สคริปต์หรือ hook ต้องอ่าน (ชื่อ · ค่าใช้จ่าย · ผู้ส่งที่เชื่อได้) |
-| กติกาถาวรของโปรเจกต์ใน `CONTEXT.md` (โครงโฟลเดอร์ · คำสั่งรัน · ห้ามแตะอะไร) | project `./CLAUDE.md` หรือ `.claude/rules/*.md` (ใส่ `paths:` ให้โหลดเฉพาะเมื่อแตะไฟล์นั้น) | ย้ายกฎที่ไม่เปลี่ยนไป `.claude/rules/` · `CONTEXT.md` เหลือ ความคืบหน้า · การตัดสินใจ · รับงานต่อ ซึ่งต้องเป็นไฟล์ เพราะ auto memory ไม่ถึง subagent ไม่ถึง Codex/Gemini และไม่ commit |
-| `TEAM.md` · `LEAD-PLAYBOOK.md` ใน `~/.claude/superuser/` | auto memory ชนิด `project` หรือ `reference` ก็จดได้ | คงเป็นไฟล์ — hook และสคริปต์อ่านตารางนี้ (ยังไม่ได้ตรวจว่า auto memory ใช้ข้ามเครื่องได้) |
-| `IMPROVEMENTS.md` · `log/` · `inbox/` | ไม่มีคู่ | คงไว้ |
+จะจดอะไรสักอย่างแล้วไม่แน่ใจว่าลง `CONTEXT.md` · `CLAUDE.md` · `.claude/rules/` หรือ auto memory → เปิด [`team-memory`](references/team-memory.md) หัวข้อ 7
 
 
 ## reference: team-memory.md
 
-# ความจำกลางของทีม — ไฟล์ · เปิดใช้ครั้งแรก · สลับค่าย · inbox · log
+# ความจำกลางของทีม — ไฟล์ · เปิดใช้ครั้งแรก · สลับค่าย · inbox · log · auto memory
 
 ส่วนหนึ่งของ skill `handoff` · อยู่ใน plugin `superuser` ที่เดียว (รวมมาจาก `work-session-context` ของ software-company)
 
@@ -180,6 +176,7 @@ Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน แ�
 - [4 · inbox — คิวข้อความถึงทีม](#4--inbox--คิวข้อความถึงทีม)
 - [5 · log — ย้อนดูทุกการทำ](#5--log--ย้อนดูทุกการทำ)
 - [6 · ห้าม](#6--ห้าม)
+- [7 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code](#7--ไฟล์ของเรากับหน่วยความจำในตัว-claude-code--อะไรอยู่ที่ไหน)
 
 ## 1 · ไฟล์ทั้งหมด
 
@@ -188,7 +185,7 @@ Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน แ�
 | `.claude/superuser/CONTEXT.md` | ไฟล์กลาง — โปรเจกต์คืออะไร · กติกา · ของอยู่ไหน · **รับงานต่อ** | หัวหน้าทีม |
 | `docs/BUILD-PLAN.md` | (ถ้ามี) สถานะ · ประวัติ · การตัดสินใจ ของงานที่มีแผนสร้างเป็นชิ้น | `status-report` · `decision-log` |
 | `.claude/superuser/handoff/<id>.md` | ใบสั่งงาน + ใบส่งงาน 1 ชิ้น 1 ไฟล์ | หัวหน้าทีมสั่ง · ลูกทีมส่ง (SKILL.md หัวข้อ 3–4) |
-| `docs/BRIEF.md` | สรุปงานเป็นภาษาคน (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม [`brief-template`](../../superuser/references/brief-template.md) |
+| `docs/BRIEF.md` | brief: สรุปงานให้ผู้ใช้อ่าน (ไม่ใช่ใบสั่งงาน) (คืออะไร · ทำอะไรได้ · ต้องการให้ได้อะไร) หลัง brainstorm ของงานใหญ่ | หัวหน้าทีม ตาม [`brief-template`](../../superuser/references/brief-template.md) |
 | `.claude/superuser/IMPROVEMENTS.md` | สิ่งที่ทีมควรรู้ รอรวมเข้า skill | หัวหน้าทีม |
 | `.claude/superuser/log/<วันที่>/<agent>.jsonl` | บันทึกทุกการกระทำ 1 ไฟล์ต่อ agent (`main` = หัวหน้าทีมและข้อความผู้ใช้) ย้อนดูได้ | hook ของ plugin อัตโนมัติ |
 | `~/.claude/superuser/IMPROVEMENTS.md` | คิวกลางของเครื่อง — ข้อเสนอปรับ skill จากทุกโปรเจกต์ | หัวหน้าทีม |
@@ -255,7 +252,7 @@ priority: ปกติ
 
 ## 5 · log — ย้อนดูทุกการทำ
 
-hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรรทัดต่อเหตุการณ์ ทั้งตัวหลักและ subagent: เริ่ม session · ข้อความผู้ใช้ · การเรียกเครื่องมือทุกครั้งทั้งที่สำเร็จและล้ม ส่วนการแจ้งข้อความใหม่ใน inbox จะแจ้งให้หัวหน้าทีมเท่านั้น (subagent ไม่ได้รับ)
+hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรรทัดต่อเหตุการณ์ ทั้งหัวหน้าทีมและ subagent: เริ่ม session · ข้อความผู้ใช้ · การเรียกเครื่องมือทุกครั้งทั้งที่สำเร็จและล้ม ส่วนการแจ้งข้อความใหม่ใน inbox จะแจ้งให้หัวหน้าทีมเท่านั้น (subagent ไม่ได้รับ)
 
 | ฟิลด์ | ค่า |
 |---|---|
@@ -270,7 +267,7 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 
 - **ติดตั้งหลาย plugin** — ทุก plugin ใน SQT-Marketplace มี hook ตัวเดียวกันและได้เหตุการณ์เดียวกัน ตัวแรกจะจด ตัวอื่นข้าม log จึงไม่ซ้ำ · ล็อกเป็นไฟล์ว่างที่ hook สร้างเองใน `_to_delete/superuser-lock/` และ hook ลบเองหลัง 2 นาที — เป็นข้อยกเว้นเดียวของกฎ "ไม่ลบ" เพราะเป็นไฟล์ภายในของ hook ไม่ใช่งานของผู้ใช้ · agent ไม่ลบไฟล์ใดใน `_to_delete/`
 - **ไม่เก็บ** เนื้อไฟล์และผลลัพธ์ของเครื่องมือ ส่วนค่าที่ดูเป็นค่าลับจะถูกแทนด้วย `[ตัด]` ก่อนเขียน
-- **อ่าน** — ถ้าผู้ใช้ขอ "ดู log วันนี้" ให้รัน `node <โฟลเดอร์ skill handoff>/scripts/log-to-md.mjs <วันที่>` ที่ root โปรเจกต์ จะได้ตาราง Markdown รวมทุก agent เรียงตามเวลา ใส่ `--agent=<ชื่อ>` เพื่อดูเฉพาะตัวเดียว หรือ `--out` เพื่อเขียนเป็น `.claude/superuser/log/<วันที่>.md`
+- **อ่าน** — ถ้าผู้ใช้ขอ "ดู log วันนี้" ให้รัน `node <โฟลเดอร์ skill handoff>/scripts/log-to-md.mjs <วันที่>` ที่ root โปรเจกต์ จะได้ตาราง Markdown รวมทุก agent เรียงตามเวลา ใส่ `--agent=<ชื่อ>` เพื่อดูเฉพาะตัวเดียว หรือ `--out` เพื่อเขียนเป็น `.claude/superuser/log/<วันที่>.md` · `--out` เขียน `.claude/superuser/log/<วันที่>.md` ถ้าไฟล์มีอยู่แล้วต้องใส่ `--force` · ตรวจสคริปต์ด้วย `--self-test`
 - **ค้น** — ไฟล์ `.jsonl` ใช้ `grep` ได้ตรง ๆ และ `learn-from-session` ใช้หาจุดที่ล้มซ้ำ
 - ไม่ลบอัตโนมัติ · เก็บ 1 โฟลเดอร์ต่อ 1 วัน ข้างในแยก 1 ไฟล์ต่อ agent · โฟลเดอร์เก่าที่ไม่ต้องการแล้วให้ย้ายไป `_to_delete/`
 
@@ -281,16 +278,30 @@ hook ของ plugin (`hooks/superuser-hook.mjs`) เขียน 1 บรร�
 - เชื่อ `CONTEXT.md` โดยไม่ตรวจของจริง
 - ใส่ค่าลับ ข้อมูลลูกค้า หรือข้อมูลส่วนบุคคลในไฟล์ใดในหัวข้อนี้
 
+## 7 · ไฟล์ของเรากับหน่วยความจำในตัว Claude Code — อะไรอยู่ที่ไหน
+
+Claude Code มี 2 ระบบ: CLAUDE.md ที่คนเขียน และ **auto memory** ที่ Claude เขียนเองที่ `~/.claude/projects/<โปรเจกต์>/memory/MEMORY.md` (ดัชนี โหลด 200 บรรทัดแรกทุก session) + ไฟล์หัวข้อ ชนิด `user` `feedback` `project` `reference` · เปิดปิดและเปิดโฟลเดอร์ด้วย `/memory` · ไม่ถูกส่งให้ subagent (`จากแหล่ง` [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory) · 2026-10-23)
+
+| ไฟล์ของเรา | ตรงกับของ Claude Code | ตอนนี้ควรเขียนที่ไหน |
+|---|---|---|
+| `scripts/install/CLAUDE.global.md` (กฎประจำตัว) | user `~/.claude/CLAUDE.md` · hook ส่งสำเนาทุก session | คงไว้ — กฎที่ทุกโปรเจกต์ต้องเห็นแม้ไม่มี hook |
+| `~/.claude/superuser-style.md` (ค่าตั้งต้นของเจ้าของ) · คู่ก่อน/หลังจาก `owner-style-capture` | auto memory ชนิด `user` และ `feedback` | **เขียนลง auto memory แทน** ให้ Claude จดเองเมื่อผู้ใช้แก้ · ไฟล์เดิมเหลือเฉพาะค่าที่สคริปต์หรือ hook ต้องอ่าน (ชื่อ · ค่าใช้จ่าย · ผู้ส่งที่เชื่อได้) |
+| กติกาถาวรของโปรเจกต์ใน `CONTEXT.md` (โครงโฟลเดอร์ · คำสั่งรัน · ห้ามแตะอะไร) | project `./CLAUDE.md` หรือ `.claude/rules/*.md` (ใส่ `paths:` ให้โหลดเฉพาะเมื่อแตะไฟล์นั้น) | ย้ายกฎที่ไม่เปลี่ยนไป `.claude/rules/` · `CONTEXT.md` เหลือ ความคืบหน้า · การตัดสินใจ · รับงานต่อ ซึ่งต้องเป็นไฟล์ เพราะ auto memory ไม่ถึง subagent ไม่ถึง Codex/Gemini และไม่ commit |
+| `TEAM.md` · `LEAD-PLAYBOOK.md` ใน `~/.claude/superuser/` | auto memory ชนิด `project` หรือ `reference` ก็จดได้ | คงเป็นไฟล์ — hook และสคริปต์อ่านตารางนี้ (ยังไม่ได้ตรวจว่า auto memory ใช้ข้ามเครื่องได้) |
+| `IMPROVEMENTS.md` · `log/` · `inbox/` | ไม่มีคู่ | คงไว้ |
+
 
 ---
 
 # skill: human-writing
 
-Use before writing or editing anything a person reads — answer, email, report, README, .docx, slide, label — in Thai or English.
+Use before writing or editing anything people read (answer, email, report, README, slide, label) in Thai or English. Look → polished-document-style.
 
 # human-writing — เขียนภาษาคน อ่านลื่น เข้าใจง่าย
 
 ใช้กับทุกอย่างที่คนจะอ่าน ตั้งแต่แชตถึงป้ายใน diagram · ตัวอย่างของทุกข้อและที่มา → [`headings-and-examples`](references/headings-and-examples.md) · ภาษาไทยตั้งแต่ 1 ย่อหน้าขึ้นไป → [`thai-grammar`](references/thai-grammar.md) (โครงประโยค · ระดับภาษา · ตัวอย่างย่อหน้าใน [`thai-examples`](references/thai-examples.md)) · อยู่ใน plugin `superuser` ที่เดียว plugin อื่นใช้ร่วมผ่าน `dependencies`
+
+เส้นแบ่ง: skill นี้ดูแลถ้อยคำ · หน้าตาของเอกสารที่คนเก็บไว้ (หัวข้อ ตาราง กล่องข้อความ ธีม) → `polished-document-style` · ตัวย่อและอภิธานศัพท์ → `spell-out-abbreviations`
 
 ## 1 · หลักใหญ่
 
@@ -315,7 +326,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 - ใช้คำที่คนพูดจริง ไม่ใช้คำราชการหรือศัพท์แปลตรงตัว
 - ศัพท์ที่คนในวงการใช้อยู่แล้ว (token · prompt · API · OCR) คงภาษาอังกฤษไว้
-- ตัวย่อเขียนเต็มครั้งแรกแล้ววงเล็บ จากนั้นใช้ตัวย่อ · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
+- ตัวย่อ → ทำตาม `spell-out-abbreviations` · คำที่ตั้งเองหรือชวนงง อธิบายครั้งแรกที่ใช้
 - สิ่งเดียวกันเรียกคำเดียวทั้งชุด ทั้งแชต สไลด์ เอกสาร และ diagram
 - เอกสาร 2 ภาษา: เลือกภาษาหลัก 1 ภาษา อีกภาษาอยู่ในวงเล็บหรือคอลัมน์ที่ 2 ไม่สลับไปมาในประโยค
 - ตัดคำฟุ่มเฟือย ("ทำการ" · "มีการ" · "ในส่วนของ" · "ได้มีการ" · "เป็นการ")
@@ -761,7 +772,7 @@ Use before writing or editing anything a person reads — answer, email, report,
 
 | ไฟล์ | วิธีแก้ |
 |---|---|
-| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` |
+| **.docx** (สร้างเองหรือได้มา) | รัน `python scripts/thai_linebreak.py <ไฟล์>.docx` หลังสร้างไฟล์เสร็จ · ใส่จุดตัดที่มองไม่เห็น (U+200B) ระหว่างคำ · ติดป้ายภาษาไทยให้ run · ผูกตัวเลขกับคำข้าง ๆ ("4 ประเด็น" ไม่แยกบรรทัด) · เก็บต้นฉบับไว้ใน `_to_delete/` · ตรวจตัวสคริปต์ด้วย `python -B scripts/thai_linebreak.py --self-test` (ไม่ต้องมี pythainlp) |
 | **.md ก่อนแปลงด้วย pandoc** | รันสคริปต์เดียวกันกับ .md · โค้ดใน `` ` `` ไม่ถูกแตะ |
 | **python-docx / docx-js** | ตั้งภาษาไทยให้ run (`w:lang w:bidi="th-TH"`) และฟอนต์ complex script (`w:rFonts w:cs="TH Sarabun New"`) ตั้งแต่ตอนสร้าง แล้วรันสคริปต์ปิดท้าย |
 | **HTML** | Chrome · Edge · Firefox ตัดคำไทยเองได้ ไม่ต้องใส่ ZWSP · ใส่ `<html lang="th">` · CSS `word-break: normal; overflow-wrap: anywhere; line-break: auto;` · เนื้อหาไทยใช้ `text-align: left` · ห้าม `word-break: break-all` (ตัดกลางคำ) |

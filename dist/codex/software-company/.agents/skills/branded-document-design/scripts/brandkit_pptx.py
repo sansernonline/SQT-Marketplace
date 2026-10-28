@@ -238,3 +238,45 @@ class BrandDeck:
     def save(self, path):
         self.prs.save(path)
         return path
+
+
+def self_test():
+    """python brandkit_pptx.py --self-test — สร้างเด็คเล็ก ๆ ครบทุกชนิดสไลด์ แล้วเปิดกลับมาตรวจ"""
+    import os
+    import struct
+    import tempfile
+    import zlib
+    with tempfile.TemporaryDirectory() as tmp:
+        png = os.path.join(tmp, "dot.png")                  # PNG 2x2 สร้างเอง ไม่ต้องมี pillow
+        raw = b"".join(b"\x00" + b"\x20\x60\xc0" * 2 for _ in range(2))
+        chunk = lambda k, d: struct.pack(">I", len(d)) + k + d + struct.pack(">I", zlib.crc32(k + d))
+        with open(png, "wb") as f:
+            f.write(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0))
+                    + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+        d = BrandDeck()
+        d.title_slide("หัวเรื่อง", "รอง", "meta")
+        d.section("1 · ส่วน", kicker="ส่วนที่ 1")
+        d.bullets_slide("ขอบเขต", ["ข้อ A", "ข้อ B"])
+        d.kpi_slide("ตัวเลข", [("19", "โครงการ"), ("7", "ผู้ใช้")])
+        d.table_slide("ตาราง", ["รหัส", "สถานะ"], [["M-01", "เสร็จ"], ["M-02", "ค้าง"]],
+                      col_widths=[1, 1], status_col=1, palette={"เสร็จ": "green", "ค้าง": "red"})
+        d.image_slide("ภาพ", png, caption="คำบรรยาย")
+        d.quote_slide("ประโยค", "ที่มา")
+        out = d.save(os.path.join(tmp, "t.pptx"))
+        back = Presentation(out)
+        assert len(back.slides) == 7, len(back.slides)
+        texts = [" ".join(s.text_frame.text for s in sl.shapes if s.has_text_frame) for sl in back.slides]
+        for i, want in enumerate(("หัวเรื่อง", "1 · ส่วน", "ข้อ B", "โครงการ", "ตาราง", "ภาพ", "ที่มา")):
+            assert want in texts[i], (i, want, texts[i])
+        table = next(s.table for s in back.slides[4].shapes if s.has_table)
+        assert [c.text for c in table.rows[2].cells] == ["M-02", "ค้าง"]
+        assert any(s.shape_type == 13 for s in back.slides[5].shapes), "ไม่มีรูปบนสไลด์ภาพ"   # 13 = picture
+    print("self-test ok")
+
+
+if __name__ == "__main__":
+    import sys
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+    else:
+        print("ใช้: python brandkit_pptx.py --self-test   (ไลบรารีนี้ import ใช้ — ดูตัวอย่างที่ example_deck.py)")

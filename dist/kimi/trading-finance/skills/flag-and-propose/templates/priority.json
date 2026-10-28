@@ -1,0 +1,27 @@
+{
+  "_note": "แม่แบบ flag-and-propose ข้อ 4 · ตัวเลขเป็นตัวอย่าง · reach = ไฟล์หรือคนที่ได้ประโยชน์ · impact 0.25–3 · confidence 0–1 · effort = ชั่วโมง · ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัยใส่ \"first\": true · รัน: node <plugin>/skills/decision-scoring/scripts/decide.mjs priority priority.json",
+  "method": "rice",
+  "items": [
+    {
+      "name": "สารบัญโฟลเดอร์งาน README",
+      "reach": 10,
+      "impact": 1,
+      "confidence": 0.8,
+      "effort": 1
+    },
+    {
+      "name": "วันที่และฉบับบนหน้าแรก",
+      "reach": 8,
+      "impact": 2,
+      "confidence": 1,
+      "effort": 2
+    },
+    {
+      "name": "ตั้งชื่อไฟล์ใหม่ทั้งโฟลเดอร์",
+      "reach": 10,
+      "impact": 0.5,
+      "confidence": 0.5,
+      "effort": 3
+    }
+  ]
+}

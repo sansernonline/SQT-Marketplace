@@ -12,12 +12,15 @@ description: Use when a big task of any kind ends, the user says reflect or ร�
 
 งานสั้นหรือง่าย agent ทำตาม skill ที่มีอยู่แล้วได้ถูกต้อง หรือเป็นเรื่องที่เกิดครั้งเดียว
 
-## ไม่ใช้เมื่อ
+## ใช้ตัวไหน — ตารางเดียวของ 3 skill
 
-| งาน | ใช้ตัวนี้แทน |
-|---|---|
-| ผู้ใช้แก้ความผิดเดิมซ้ำ หรือ review เตือนเรื่องเดิมซ้ำ | `repeated-mistakes-to-checks` — ทำเป็น type · lint · test |
-| อยากให้ agent ทำงานตามสไตล์ของผู้ใช้ | `owner-style-capture` |
+ตารางนี้เป็นของกลางของ `session-lessons-to-skills` · `repeated-mistakes-to-checks` · `owner-style-capture` (อีก 2 ตัวชี้มาที่นี่)
+
+| เกิดอะไร | ใช้ | ผลลัพธ์ |
+|---|---|---|
+| งานใหญ่จบ · ผู้ใช้สั่งรวมบทเรียน · skill พาไปผิด | `session-lessons-to-skills` (ตัวนี้) | ข้อเสนอแก้ skill หรือ agent |
+| ผู้ใช้แก้เรื่องเดิมครั้งที่ 2 · รีวิวเตือนเรื่องเดิมซ้ำ | [`repeated-mistakes-to-checks`](../repeated-mistakes-to-checks/SKILL.md) | ตัวตรวจ (type · lint · test · hook) |
+| รสนิยมหรือความชอบของผู้ใช้ ไม่ใช่ความผิด | [`owner-style-capture`](../owner-style-capture/SKILL.md) | `~/.claude/superuser-style.md` |
 
 ## ขั้นตอน
 

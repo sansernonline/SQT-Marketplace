@@ -7,6 +7,8 @@ description: "Run a security audit on code, dependencies or infrastructure with 
 
 Use the `security-engineer` agent to perform a security scan on: **สิ่งที่ผู้ใช้ระบุมากับคำสั่ง**
 
+**Shortcut, not a separate method:** follow [`security-gate`](../security-gate/SKILL.md) steps 2–6 (commands, the `--config auto` + `--metrics=off` trap, per-language rule sets, ship/block rule). Line split: `security-gate` = before shipping · `security-audit` = whole system · this command = a shortcut that calls the gate. The generic checklist below is background only; where it differs from the gate, the gate wins.
+
 The security engineer should:
 
 1. **Initial Discovery** — gather:

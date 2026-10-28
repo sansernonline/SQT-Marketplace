@@ -45,8 +45,29 @@
 | จ้างพนักงานใหม่ (ประกาศรับสมัคร · ใบคัดกรอง · สัมภาษณ์ · จดหมายเสนองาน) | `hiring-th` + agent `tax-helper` |
 | PDPA | `pdpa-workflow` + agent `compliance-helper` |
 | LINE OA | `line-oa-setup` · `line-chatbot` · `line-broadcast` + agent `line-admin` · ภาพ rich menu → `line-richmenu` (graphic-design) |
-| QR พร้อมเพย์ | `promptpay-qr` |
+| QR พร้อมเพย์ · ลูกค้าส่งสลิปมา ส่งของได้เลยไหม | `promptpay-qr` (สลิป: หัวข้อ 5) |
 | วันหยุด | `thai-holidays` |
+
+**คำสั่ง slash (ผู้ใช้พิมพ์เอง โมเดลไม่เปิดให้เอง)**
+
+| พิมพ์ | ทำอะไร | skill ที่ใช้ข้างใน |
+|---|---|---|
+| `/e-commerce:compare` | เทียบสินค้าหรือบริการก่อนซื้อ | `buy-compare` |
+| `/e-commerce:complain` | ร่างจดหมายร้องเรียนและแผนส่งต่อถึง สคบ. 1166 | `complaint-letter-th` · `refund-request` |
+| `/e-commerce:contract` | ร่างสัญญาจ้าง เช่า หรือบริการ | `doc-contract-th` |
+| `/e-commerce:line-bot` | สร้างหรือปรับบอตตอบลูกค้าบน LINE OA | `line-chatbot` |
+| `/e-commerce:line-setup` | ตั้งค่า Messaging API ของ LINE OA ครบทุกขั้น | `line-oa-setup` |
+| `/e-commerce:listing` | เขียนหน้าสินค้า | `product-listing` |
+| `/e-commerce:live-script` | ทำ run sheet ไลฟ์ขายของ | `live-selling-script` |
+| `/e-commerce:payroll` | ทำเงินเดือนประจำเดือนหรือปิดปี | `payroll-th` |
+| `/e-commerce:pdpa` | งาน PDPA (consent · เหตุละเมิด · คำขอเจ้าของข้อมูล) | `pdpa-workflow` |
+| `/e-commerce:price-check` | ตั้งราคาหรือเช็กกำไรหลังค่าธรรมเนียม | `marketplace-fees-pricing` |
+| `/e-commerce:quotation` | ร่างใบเสนอราคา ใบแจ้งหนี้ ใบเสร็จ | `doc-quotation` |
+| `/e-commerce:reply` | ร่างคำตอบแชตหรือรีวิวลูกค้า | `chat-reply-templates` · `returns-and-bad-reviews` |
+| `/e-commerce:tax-due` | ปฏิทินยื่นภาษีของบริษัทหรือบุคคล | `tax-vat-th` |
+| `/e-commerce:year-end-filing` | ลำดับยื่นงานปิดปีของบริษัท | `dbd-annual-filing` |
+
+ผู้ใช้ไม่รู้ชื่อคำสั่ง ให้บอกคำสั่งในตารางนี้เมื่องานตรงแถว
 
 **ใช้ร่วมกัน**
 

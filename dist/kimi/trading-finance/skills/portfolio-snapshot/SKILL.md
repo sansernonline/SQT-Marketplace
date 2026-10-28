@@ -27,6 +27,14 @@ simple return (period)= (end value − start value − net deposits) ÷ (start v
 
 The ×0.5 assumes deposits arrived mid-period (Modified Dietz shortcut) — good enough for a monthly snapshot; say it is an approximation.
 
+Run the numbers with the script instead of by hand (the worked example below is `scripts/examples/snapshot.json` and gives the same figures):
+
+```
+node money-calc.mjs snapshot <file.json> [--json]     # also: drift · dividend · afterTax · fee · --self-test
+```
+
+**Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/portfolio-snapshot/scripts/money-calc.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/portfolio-snapshot/scripts/money-calc.mjs` · Node only, no dependencies. One script serves `rebalance-and-dca`, `dividend-tracker`, `bonds-and-deposits` and `mutual-fund-picker` too; example files for every command are in `scripts/examples/`.
+
 ## Risk checks
 
 | Check | Fires when (default) | Say |

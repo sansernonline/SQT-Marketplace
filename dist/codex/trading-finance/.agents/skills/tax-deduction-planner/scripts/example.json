@@ -1,0 +1,6 @@
+{
+  "salary": 720000,
+  "deductions": { "socialSecurity": 10500, "pvd": 36000, "lifeInsurance": 20000, "ownHealth": 15000 },
+  "buy": { "rmf": 50000, "thaiesg": 50000 },
+  "dividends": { "amount": 40000, "corporateRatePct": 20 }
+}

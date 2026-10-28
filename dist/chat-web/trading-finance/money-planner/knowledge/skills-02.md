@@ -44,7 +44,7 @@ node payoff.mjs <file.json> [--json]     # example file: scripts/example.json
 node payoff.mjs --self-test
 ```
 
-Input file: `{ "budget": 8000, "debts": [ { "name": "...", "balance": 15000, "rate": 16, "min": 1000 } ] }` · rate is % a year (24, not 0.24; the script warns below 1). Every field must be a finite number; a bad field stops the script with a message naming it. If the budget is below the sum of minimums the script stops and says so. If the monthly interest is more than the payment, the debt never clears: the script reports that the budget cannot clear these debts and does not compare the two methods. If snowball finishes sooner than avalanche, it says so as it is.
+Input file: `{ "budget": 8000, "debts": [ { "name": "...", "balance": 15000, "rate": 16, "min": 1000 } ] }` · rate is % a year (24, not 0.24; the script warns below 1). For a credit card whose minimum is a share of the balance (8% above), put `"minPct": 8` (optional `"minFloor"` in baht) instead of `"min"`, so the minimum falls as the balance falls. Debt names must differ (two cards: `"บัตร KTC"`, `"บัตร KTC (2)"`); a repeated name stops the script. Every field must be a finite number; a bad field stops the script with a message naming it. If the budget is below the sum of minimums the script stops and says so. If the monthly interest is more than the payment, the debt never clears: the script reports that the budget cannot clear these debts and does not compare the two methods. If snowball finishes sooner than avalanche, it says so as it is.
 
 **Script path:** installed from the marketplace: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/debt-payoff/scripts/payoff.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/debt-payoff/scripts/payoff.mjs` · Node only, no dependencies.
 
@@ -119,6 +119,8 @@ General information, not financial advice — a Certified Financial Planner (CFP
 - Future value of monthly saving = PMT × ((1 + r)^n − 1) ÷ r, with r = annual return ÷ 12 and n = months.
 - Required monthly saving = gap ÷ that same factor.
 
+Run the numbers with the script instead of by hand: `node scripts/retire.mjs <file.json>` (example: `scripts/example.json` = the worked example below; `--self-test` checks it). Input: `age` `retireAge` `planToAge` `spendMonthly` `returnPct`, optional `inflationPct` (3), `year` (Buddhist year now), `sso: { monthsNow, monthsPerYear, avgWage }`, `assets: [{ name, balance, monthly, returnPct }]` for PVD / RMF, `levers: { retireLaterYears, spendLessMonthly }` (default 3 years and 5,000, from the worked example). Output: spending at retirement, needed sum, pension, gap, monthly saving, the three levers and the saving at 3% / 5% / 6%. Without `avgWage` the pension uses the wage ceiling of the retirement year (upper bound). Pension rule and ceilings: `scripts/sso-pension.json` (`checked` date). **Script path:** installed: `ls -d ~/.claude/plugins/cache/*/trading-finance/*/skills/retirement-plan/scripts/retire.mjs | sort -V | tail -1` · in the SQT-Marketplace repo: `plugins/trading-finance/skills/retirement-plan/scripts/retire.mjs` · Node only.
+
 ## Social security old age (กรณีชราภาพ, ม.33 / ม.39)
 
 | Contributions | Benefit at age 55 and leaving insured work |
@@ -179,3 +181,10 @@ A fixed "4% of the starting pot, raised with inflation every year" ignores what 
 - State the return assumption beside every result.
 - Do not count the pension as inflation-proof.
 - Recompute every year or after a job change.
+
+## Check before sending
+
+- The needed sum, gap and monthly saving come from a `retire.mjs` run in this session; the return and inflation used are stated beside them.
+- The three levers and the 3% / 5% / 6% line from the script are shown, with the one the user picked.
+- Pension: say whether it used the user's average wage or the ceiling (upper bound), give the `sso-pension.json` `checked` date, and that it is not inflation-linked.
+- Each `คำเตือน` line from the script is fixed in the input or repeated to the user.

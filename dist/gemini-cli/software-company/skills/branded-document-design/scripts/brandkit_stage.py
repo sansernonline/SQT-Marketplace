@@ -415,3 +415,53 @@ class StageDeck:
     def save(self, path):
         self.prs.save(path)
         return path
+
+
+def self_test():
+    """python brandkit_stage.py --self-test — ตรวจสูตรสี แล้วสร้างเด็คเล็ก ๆ ครบชนิดสไลด์ (ไม่ต้องมีฟอนต์ในเครื่อง)"""
+    import os
+    import struct
+    import tempfile
+    import zlib
+    assert abs(contrast("000000", "FFFFFF") - 21) < .01 and mix("000000", "FFFFFF", 1) == "FFFFFF"
+    for accent, bg in (("2A78D6", "09090A"), ("C1121F", "FFFFFF"), ("F2C200", "F5F1E8"), ("0B3D2E", "09090A")):
+        t = make_theme(accent, bg)
+        assert t["dark"] == is_dark(bg)
+        assert contrast(t["muted"], bg) >= 4.4, (accent, bg, t["muted"], contrast(t["muted"], bg))
+        assert contrast(t["accent_hi"], bg) >= 4.4, (accent, bg, t["accent_hi"])
+    assert make_theme("2A78D6", text="112233")["text"] == "112233"       # override ชนะค่าที่คำนวณ
+
+    with tempfile.TemporaryDirectory() as tmp:
+        png = os.path.join(tmp, "dot.png")
+        raw = b"".join(b"\x00" + b"\x20\x60\xc0" * 2 for _ in range(2))
+        chunk = lambda k, d: struct.pack(">I", len(d)) + k + d + struct.pack(">I", zlib.crc32(k + d))
+        with open(png, "wb") as f:
+            f.write(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 2, 2, 8, 2, 0, 0, 0))
+                    + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+        d = StageDeck(accent="2A78D6", bg="09090A", project="Test")
+        d.cover("ชื่อโปรเจกต์", ["บรรทัด 1", "บรรทัด 2"], meta="ทีม")
+        d.section(1, "ส่วนแรก", "หมายเหตุ")
+        d.figure("หมวด", "ผัง", png, caption="คำบรรยาย")
+        d.compare("หมวด", "เทียบ", ["ส่วน", "เลือก", "เพราะ"], [["a", "b", "c"], ["d", "e", "f"]])
+        d.steps("หมวด", "ขั้นตอน", [("ขั้น 1", "รายละเอียด", "ตัวอย่าง"), ("ขั้น 2", "รายละเอียด", "ตัวอย่าง")],
+                example_head="ตัวอย่าง", note="โน้ต")
+        d.points("หมวด", "ประเด็น", [("หัว", "เนื้อ"), ("หัว 2", "เนื้อ 2")], image=png, caption="ภาพ")
+        d.stats("หมวด", "ผล", [{"value": "10/10", "label": "ข้อ", "sub": "1 วินาที", "example": "ตย.",
+                                "qa": [("ถาม", "q"), ("ตอบ", "a")]}])
+        d.statement("หมวด", "ข้อความเด่น", "รอง")
+        out = d.save(os.path.join(tmp, "s.pptx"))
+        back = Presentation(out)
+        assert len(back.slides) == 8, len(back.slides)
+        first = " ".join(s.text_frame.text for s in back.slides[0].shapes if s.has_text_frame)
+        assert "ชื่อโปรเจกต์" in first and "บรรทัด 2" in first, first
+        assert any(s.shape_type == 13 for s in back.slides[2].shapes), "ไม่มีรูปบนสไลด์ผัง"
+        assert "เทียบ" in " ".join(s.text_frame.text for s in back.slides[3].shapes if s.has_text_frame)
+    print("self-test ok")
+
+
+if __name__ == "__main__":
+    import sys
+    if sys.argv[1:] == ["--self-test"]:
+        self_test()
+    else:
+        print("ใช้: python brandkit_stage.py --self-test   (ไลบรารีนี้ import ใช้ — ดูตัวอย่างที่ example_stage.py)")

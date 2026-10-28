@@ -6,7 +6,7 @@ Use when daily-life work spans several steps (weekly reset, documents, home, hea
 
 > รับงาน → จัดขนาดและงบ → ใบสั่งงาน 5 ข้อ → แจกลูกทีม → ตรวจกับของจริงวนจนผ่าน → ส่งมอบสั้น → เทียบคาดกับจริง แล้วจำ
 
-หัวหน้างาน 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
+หัวหน้าทีม 1 คน เก่ง 4 เรื่อง: **แจกงาน** · **ประเมินลูกน้อง** · **จัดการงาน** · **ตรวจซ้ำจนสำเร็จ** — ใช้ลูกน้อง effort ต่ำได้ เพราะใบสั่งงานชัดและมีคนตรวจ · เรียก `/superuser:superuser` หรือพูดว่า "ใช้ superuser"
 
 **ไฟล์นี้คือแกน อ่านทุกงาน** · เปิดเพิ่มเมื่อถึงจังหวะ: [`autonomy`](references/autonomy.md) (ถามครั้งเดียว · ตัดสินใจเอง · รออนุมัติ · รู้จังหวะหยุด) · [`modules`](references/modules.md) (ไฟล์กลาง · log · รอบเรียนรู้ · inbox · config · ด่านของ hook) · plugin สาขามี `superuser` ของตัวเองที่มีเฉพาะส่วนสาขา (playbook · agent · รออนุมัติ) และบอกให้เปิดไฟล์นี้ก่อน ([`ADAPT.md`](../../ADAPT.md))
 
@@ -366,6 +366,8 @@ Use when daily-life work spans several steps (weekly reset, documents, home, hea
 ไฟล์นี้เหมือนกันทุก plugin · ต้นฉบับอยู่ที่ plugin `superuser`
 
 ใช้เมื่องานขนาดใหญ่หรือโจทย์ไม่ชัด หลัง brainstorm และเลือกทางแล้ว ให้หัวหน้าทีมเขียน brief ก่อนลงมือ ส่งให้ผู้ใช้อ่านในคำตอบ แล้วเก็บไว้ที่ `docs/BRIEF.md` · ถ้างานเปลี่ยนทิศ ให้เขียน brief ใหม่ทับ ไม่ต่อท้าย
+
+brief คือสรุปให้ผู้ใช้อ่าน ไม่ใช่ใบสั่งงาน · คำว่า "ใบสั่งงาน" ใช้กับใบที่หัวหน้าทีมส่งให้ลูกทีม (`handoff/<id>.md` ตาม skill `handoff` หัวข้อ 3) อย่างเดียว
 
 ## กติกา
 
@@ -1461,7 +1463,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | agent | ระดับโมเดล | ใช้เมื่อ | ไม่ใช่ |
 |---|---|---|---|
 | `brainstormer` | ใหญ่ | ก่อนเริ่มงานใหญ่หรือโจทย์ไม่ชัด — คิด 2–3 ทางบนกระดาษ ให้คะแนน 1–5 (5 = ดีสุด) | สร้างของจริงหลายชุดแล้วเลือก → `parallel-attempts-pick-best` |
-| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ใน brief |
+| `reviewer` | ตามตารางงบใน `SKILL.md` หัวข้อ 2 (สมดุล: รอบแรกกลาง · งานใหญ่หรือรอบสุดท้ายก่อนส่งมอบใหญ่) | ตรวจชิ้นงานที่เสร็จแล้วก่อนถึงผู้ใช้หรือคนนอก อ่านอย่างเดียว ไม่แก้ | งานเสี่ยงสูง → `adversarial-review-panel` (ใช้ `reviewer` หลายตัว) · (ถ้าติดตั้ง plugin `software-company`) โค้ด → คู่กับ `code-review-checklist` · (ถ้าติดตั้ง plugin `graphic-design`) งานภาพ → `design-critic` หรือ `design-review` · ไม่มีก็ตรวจตามเกณฑ์ในใบสั่งงาน |
 | `learning-reviewer` | กลาง | ตอนจบงานหลายขั้น — ตรวจวิธีทำงานของทีม ไม่ใช่ตัวงาน | — |
 
 เรียกตัวใหม่ทุกครั้ง เพราะตัวที่ทำงานไม่ตรวจงานของตัวเอง · ผู้ตรวจเฉพาะทาง (`design-critic` · `brand-keeper` · `qa-tester` · `security-engineer` · `risk-manager`) ใช้แทน `reviewer` ได้เฉพาะขั้นที่เขียนว่า "อ่านอย่างเดียว · ไม่แก้ไฟล์" (เรียกด้วย `model: opus`) · ขั้นที่ตัวนั้นเขียน test หรือแก้ของนับเป็นการลงมือ
@@ -1534,7 +1536,15 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 
 ย้ายมาจาก `SKILL.md` หัวข้อ 3 · เปิดเมื่อไม่แน่ใจว่าจะเรียก skill ไหน หรืองานข้ามไป plugin อื่น · ชื่อที่มีวงเล็บชื่อ plugin อื่น = ใช้ได้ถ้าติดตั้ง plugin นั้น ไม่มี → บอกผู้ใช้ในรายงาน แล้วทำต่อด้วยความรู้ทั่วไปและ skill ของ plugin นี้
 
-**จัดการชีวิต**
+- [จัดการชีวิต](#จัดการชีวิต)
+- [บ้านและครอบครัว](#บ้านและครอบครัว)
+- [สุขภาพ](#สุขภาพ)
+- [อาชีพ](#อาชีพ)
+- [เรียนรู้](#เรียนรู้)
+- [คำสั่งลัด](#คำสั่งลัด)
+- [ใช้ร่วมกัน](#ใช้ร่วมกัน)
+
+## จัดการชีวิต
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -1551,13 +1561,13 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | ของขวัญ | `gift-idea-tracker` |
 | ตัดสินใจเรื่องใหญ่ · ตั้งเป้า | `decision-journal` · `goal-and-habit` |
 
-**บ้านและครอบครัว**
+## บ้านและครอบครัว
 
 | สถานการณ์ | เรียก |
 |---|---|
 | บิลไฟ น้ำ เน็ต · บิลขึ้นผิดปกติ | `household-bills` + agent `home-manager` |
 | ดูแลบ้านตามฤดู · เทียบราคาช่าง | `home-maintenance` |
-| ภาษีรถ พ.ร.บ. ตรวจสภาพ ใบขับขี่ | `vehicle-care` |
+| ภาษีรถ พ.ร.บ. ตรวจสภาพ ใบขับขี่ · เทียบต้นทุน 5 ปีก่อนซื้อรถ | `vehicle-care` |
 | เมนูอาหารและของต้องซื้อ | `meal-plan-grocery` + agent `family-planner` |
 | งานโรงเรียนของลูก | `kids-school` |
 | ดูแลพ่อแม่สูงอายุ · สิทธิ์ผู้สูงอายุ | `elder-care` |
@@ -1565,7 +1575,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | เตรียมรับน้ำท่วม · น้ำเริ่มเข้าบ้าน · ขอเงินช่วยเหลือหรือเคลมประกันหลังน้ำลด | `flood-prep` + agent `home-manager` |
 | คนในบ้านเสียชีวิต · แบ่งมรดก · ทำพินัยกรรม · ผู้จัดการมรดก | `estate-and-will` + agent `doc-caretaker` · ข้อพิพาทหรือทรัพย์สินซับซ้อนให้ปรึกษาทนาย |
 
-**สุขภาพ**
+## สุขภาพ
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -1577,7 +1587,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | ตั้งครรภ์ · ฝากครรภ์ · สิทธิ์คลอดบุตร · แจ้งเกิด · วัคซีนเด็กเล็ก | `pregnancy-and-baby` + agent `health-organizer` · อาการอันตรายตอนตั้งครรภ์ให้โทร 1669 ก่อน |
 | ประกันสุขภาพพอไหม | `insurance-review` (trading-finance) |
 
-**อาชีพ**
+## อาชีพ
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -1589,7 +1599,7 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | ต้องเขียนข้อความสุภาพถึง HR หรือหัวหน้า | `polite-message-th-en` (superuser) |
 | สิทธิ์ลาออก ค่าชดเชย วันลา | `labour-law-basics` (e-commerce) |
 
-**เรียนรู้**
+## เรียนรู้
 
 | สถานการณ์ | เรียก |
 |---|---|
@@ -1603,7 +1613,30 @@ skill หลัก: `weekly-review` · `inbox-triage` · `calendar-audit`
 | ต้องสอนหรือจัดอบรม (ผลลัพธ์การเรียนรู้ · ตารางสอน · แบบฝึก · rubric · แบบประเมิน) | `course-builder` · สไลด์ใช้ `presentation-design` (software-company) |
 | งานกลายเป็นโค้ดของโปรเจกต์จริง | `/software-company:superuser` |
 
-**ใช้ร่วมกัน**
+## คำสั่งลัด
+
+(ผู้ใช้พิมพ์เอง รูปแบบ `/personal-life:<ชื่อ>` · โมเดลไม่เรียกเอง)
+
+| คำสั่ง | ทำอะไร | skill ที่อยู่ข้างหลัง |
+|---|---|---|
+| `bills` | อ่านบิลไฟหรือน้ำ ตรวจบิลพุ่ง | `household-bills` |
+| `checkup` | วางแผนตรวจสุขภาพประจำปี | `annual-checkup` |
+| `decide` | บันทึกการตัดสินใจใหญ่ | `decision-journal` |
+| `doctor-prep` | เตรียมพบแพทย์ | `doctor-visit-prep` |
+| `family-week` | วางสัปดาห์ครอบครัว | `meal-plan-grocery` · `kids-school` · `elder-care` · `pet-care` |
+| `interview` | เตรียมสัมภาษณ์งานหนึ่งรอบ | `interview-prep` |
+| `learn` | เรียนเทคโนโลยีผ่านหลักชัยจากงานจริง | `learning-path` |
+| `maintenance` | ตารางดูแลบ้าน 12 เดือน · เทียบราคาช่าง | `home-maintenance` |
+| `meeting` | การ์ดก่อนประชุม · สรุปหลังประชุม | `meeting-prep-card` · `meeting-summary` |
+| `negotiate` | เทียบข้อเสนองาน · ร่างคำพูดต่อรอง | `salary-negotiation` |
+| `radar` | เรดาร์เทคโนโลยีรายสัปดาห์ | `tech-radar` |
+| `resume` | เขียนหรือปรับ CV | `resume-th-en` |
+| `subscriptions` | ตรวจค่าสมาชิกรายเดือน | `subscription-audit` |
+| `travel` | เช็กลิสต์เดินทาง · แผนเดินทางไฟล์เดียว | `travel-prep` |
+| `triage-mail` | แยกอินบ็อกซ์เป็น 6 กอง | `inbox-triage` |
+| `week-review` | ทบทวนสัปดาห์ 20 นาที | `weekly-review` |
+
+## ใช้ร่วมกัน
 
 | สถานการณ์ | เรียก |
 |---|---|

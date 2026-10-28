@@ -11,6 +11,6 @@
 ไฟล์ความรู้ไม่เกิน 10 ไฟล์ (Gem)
 
 บทบาทที่ยาวเกินช่อง Instructions → ย้ายเนื้อหาไปไว้ใน `knowledge/00-role.md`:
-`e-commerce/learning-reviewer`, `e-commerce/reviewer`, `graphic-design/learning-reviewer`, `graphic-design/reviewer`, `personal-life/learning-reviewer`, `personal-life/reviewer`, `software-company/qa-tester`, `software-company/reverse-engineer`, `software-company/technical-writer`, `software-company/learning-reviewer`, `software-company/reviewer`, `superuser/learning-reviewer`, `superuser/reviewer`, `trading-finance/learning-reviewer`, `trading-finance/reviewer`
+`e-commerce/learning-reviewer`, `e-commerce/reviewer`, `graphic-design/learning-reviewer`, `graphic-design/reviewer`, `personal-life/learning-reviewer`, `personal-life/reviewer`, `software-company/qa-tester`, `software-company/reverse-engineer`, `software-company/solution-architect`, `software-company/technical-writer`, `software-company/learning-reviewer`, `software-company/reviewer`, `superuser/learning-reviewer`, `superuser/reviewer`, `trading-finance/learning-reviewer`, `trading-finance/reviewer`
 
 ข้อจำกัด: หน้าเว็บรันสคริปต์ใน skill ไม่ได้ และไม่มีคำสั่งสำเร็จรูป (slash command)

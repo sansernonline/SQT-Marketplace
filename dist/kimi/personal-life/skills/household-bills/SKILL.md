@@ -49,7 +49,7 @@ Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย
 2. **Log** each month in the tracker — [references/bill-tracker-template.md](references/bill-tracker-template.md)
 3. **Set due dates** in the family calendar 3 days before each due date; note the disconnection date printed on the electricity bill (it is later than the due date — do not plan on it)
 4. **Auto-debit** (หักบัญชีอัตโนมัติ) for fixed-ish bills: set it up in the bank app or the utility app; keep one account just for bills and check the debit on the statement each month
-5. **Spike check** — if a bill is >20% above the 3-month average in units, run the checklist below
+5. **Spike check** — if a bill is >20% above the 3-month average in units (20% is a default threshold, not measured), run the checklist below · do not compute the percentage by hand: `node power-bill.mjs --history scripts/example-history.json` (4 months of units, oldest first)
 6. **Monthly review** — 5 minutes on the 5th of each month; totals feed `trading-finance` `personal-budget` (if installed)
 
 ## Spike investigation
@@ -72,6 +72,7 @@ Ft is reset every 4 months (ม.ค.–เม.ย., พ.ค.–ส.ค., ก.ย
 
 ```
 node power-bill.mjs <file.json> [--json]     # example file: scripts/example.json
+node power-bill.mjs --history <file.json>    # latest month vs the 3 before it, units only; example: scripts/example-history.json
 node power-bill.mjs --self-test
 ```
 

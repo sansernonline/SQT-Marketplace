@@ -13,6 +13,7 @@
 | งานโซเชียลหรือแคมเปญหลายขนาด | `social-formats` · `campaign-set` + agent `social-creator` |
 | rich menu ของ LINE OA (ขนาดภาพ · พื้นที่กด · JSON · อัปโหลดผ่าน API) | `line-richmenu` + agent `social-creator` · ขนาดภาพอ่านจาก `social-formats` |
 | รูปสินค้าลง Shopee · Lazada · TikTok Shop (ขนาด · พื้นขาว · ข้อความบนรูป · รูปที่ถูกปฏิเสธ) | `marketplace-product-images` + agent `social-creator` · ข้อความในหน้าสินค้า → `e-commerce:product-listing` |
+| ไอคอนแอป · favicon · ชุดไอคอนบนจอ · โลโก้มาร์ก | `icon-design` + agent `design-critic` · ผู้ใช้ปฏิเสธไอคอนที่ agent วาดมือมาแล้ว ถามต้นแบบก่อนวาด |
 | ภาพปกคลิป YouTube (thumbnail) · ข้อความไทยบนปก · ทดสอบหลายปก | `youtube-thumbnail` + agent `social-creator` |
 | ส่งไฟล์ไปโรงพิมพ์หรือร้านป้าย (ใบปลิว · นามบัตร · ไวนิล · สติกเกอร์) · CMYK · ระยะตัดตก · ฟอนต์ไทยเพี้ยน | `print-ready-files` + agent `design-critic` |
 | วิดีโอสั้น · motion | `video-script-to-clip` · `motion-basics` + agent `art-director` |
