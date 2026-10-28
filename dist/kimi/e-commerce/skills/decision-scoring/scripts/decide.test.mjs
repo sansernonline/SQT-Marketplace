@@ -148,6 +148,20 @@ const CASES = {
     const e = priority({ method: "eisenhower", items: [{ name: "drop", urgent: 1, important: 1, minutes: 1 }, { name: "now", urgent: 5, important: 5, minutes: 60 }, { name: "plan", urgent: 1, important: 5, minutes: 5 }] });
     assert.deepEqual(e.rows.map((x) => x.quadrant), ["ทำเลย", "นัดเวลาทำ", "ตัดทิ้ง"]);
   },
+  "priority: must_first ขึ้นก่อนเสมอ แม้คะแนนต่ำสุด"() {
+    const r = priority({ method: "rice", items: [{ name: "big", reach: 1000, impact: 3, confidence: 1, effort: 1 }, { name: "unsafe", reach: 1, impact: 0.25, confidence: 0.1, effort: 10, must_first: true }, { name: "mid", reach: 10, impact: 1, confidence: 1, effort: 1 }] });
+    assert.deepEqual(r.rows.map((x) => x.name), ["unsafe", "big", "mid"]);
+    const e = priority({ method: "eisenhower", items: [{ name: "now", urgent: 5, important: 5, minutes: 1 }, { name: "drop", urgent: 1, important: 1, minutes: 99, must_first: true }] });
+    assert.equal(e.rows[0].name, "drop", "ข้ามกลุ่ม eisenhower ด้วย");
+    assert.throws(() => priority({ method: "wsjf", items: [{ name: "a", value: 1, time: 1, risk: 1, size: 1, must_first: "yes" }] }), /must_first/);
+  },
+  "priority: ชื่อซ้ำเตือน · impact นอก 0.25–3 หยุด"() {
+    const it = (name, impact = 1) => ({ name, reach: 1, impact, confidence: 1, effort: 1 });
+    assert.deepEqual(priority({ method: "rice", items: [it("a"), it("a"), it("b")] }).warnings, ["ชื่อซ้ำ: a · ตั้งชื่อให้ต่างกันแล้วรันใหม่"]);
+    assert.deepEqual(priority({ method: "rice", items: [it("a"), it("b")] }).warnings, []);
+    assert.throws(() => priority({ method: "rice", items: [it("a", 99)] }), /impact ต้องอยู่ในช่วง 0\.25–3/);
+    assert.throws(() => priority({ method: "rice", items: [it("a", 0.1)] }), /impact/);
+  },
   "pairwise: ชนะทุกคู่ได้ที่ 1 และคู่ที่สลับแล้วกลับข้างนับเสมอ"() {
     const j = (first, second, winner) => ({ first, second, winner });
     const r = pairwise({ items: ["A", "B", "C"], judgments: [j("A", "B", "A"), j("B", "A", "A"), j("A", "C", "A"), j("C", "A", "A"), j("B", "C", "B"), j("C", "B", "C")] });

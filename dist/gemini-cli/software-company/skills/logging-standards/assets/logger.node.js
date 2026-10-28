@@ -20,20 +20,37 @@ const path = require('path');
 
 /* ---------------------------------------------------------------- redaction
    คีย์ที่ห้ามหลุดลง log ไม่ว่ากรณีใด — ตัดตั้งแต่ก่อนเข้า formatter
-   ตรวจแบบ "ชื่อคีย์มีคำนี้อยู่" เพราะของจริงมาหลายชื่อ (userPassword, pwd, ...) */
-const SECRET_KEYS = [
-  'password', 'passwd', 'pwd', 'secret', 'token', 'authorization', 'cookie',
-  'apikey', 'api_key', 'accesstoken', 'refreshtoken', 'otp', 'pin',
-  'creditcard', 'cardnumber', 'cvv', 'citizenid', 'nationalid', 'ssn',
+   แยกชื่อ key เป็นส่วนตาม _ - และตัวพิมพ์ใหญ่ ทิ้งส่วนที่เป็นคำธรรมดาทั้งคำ (shipping, className) แล้วต่อที่เหลือ
+   ลับเมื่อมีคำในรายการอยู่ข้างใน เหมือนการเทียบแบบมีอยู่ในชื่อ จึงจับได้ทุกตัวที่การเทียบแบบเดิมจับได้
+   ยกเว้นชื่อที่คำลับคร่อมคำธรรมดา (AddressSn, ShotProcess) ซึ่งไม่ใช่ key ลับจริง
+   (OTPs, customersPin, X-Api-Key) · ปิดเกินได้เมื่อคำลับเกิดจากรอยต่อ (access_number) ซึ่งเสียน้อยกว่าหลุด */
+const SECRET_PARTS = [
+  'password', 'passwd', 'pwd', 'secret', 'token', 'authorization', 'cookie', 'apikey',
+  'otp', 'pin', 'creditcard', 'cardnumber', 'cvv', 'citizenid', 'nationalid', 'ssn',
 ];
+const NOT_SECRET = new Set([
+  'shipping', 'shopping', 'mapping', 'typing', 'ping', 'spin', 'spinner', 'opinion',
+  'class', 'classname', 'business', 'process', 'address', 'screenshot',
+]);
+const isSecret = (k) => {
+  const parts = k.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const name = parts.filter((p) => !NOT_SECRET.has(p)).join('');
+  return SECRET_PARTS.some((s) => name.includes(s));
+};
+const CARD = /(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)/g; // เลขบัตร 13-19 หลักในข้อความอิสระ
+const luhn = (digits) => [...digits].reverse().reduce((s, c, i) => {
+  const d = Number(c) * (i % 2 ? 2 : 1);
+  return s + (d > 9 ? d - 9 : d);
+}, 0) % 10 === 0;
+// ปิดเฉพาะเลขที่ผ่าน Luhn · เลขยาวอื่น (timestamp เลขออเดอร์) ราว 1 ใน 10 ผ่าน Luhn โดยบังเอิญจึงโดนปิดด้วย
+const maskCards = (text) => text.replace(CARD, (m) => (luhn(m.replace(/\D/g, '')) ? '***' : m));
 
 function redact(value, depth = 0) {
   if (depth > 4 || value === null || typeof value !== 'object') return value;
   if (Array.isArray(value)) return value.map((v) => redact(v, depth + 1));
   const out = {};
   for (const [k, v] of Object.entries(value)) {
-    const isSecret = SECRET_KEYS.some((s) => k.toLowerCase().includes(s));
-    out[k] = isSecret ? '***' : redact(v, depth + 1);
+    out[k] = isSecret(k) ? '***' : redact(v, depth + 1);
   }
   return out;
 }
@@ -44,7 +61,7 @@ function redact(value, depth = 0) {
 function safe(v) {
   if (v === null || v === undefined) return '-';
   const s = typeof v === 'object' ? JSON.stringify(v) : String(v);
-  const clean = s.replace(/[\r\n\t]+/g, ' ').trim();
+  const clean = maskCards(s.replace(/[\r\n\t]+/g, ' ').trim());
   return clean.includes(' ') ? `"${clean.replace(/"/g, "'")}"` : clean;
 }
 
@@ -57,7 +74,7 @@ const lineFormat = winston.format.printf((info) => {
     .filter(([k]) => !RESERVED.has(k) && !k.startsWith('Symbol('))
     .map(([k, v]) => `${k}=${safe(v)}`)
     .join(' ');
-  const head = `${info.timestamp}  ${info.level.toUpperCase().padEnd(5)}  [${cid}] ${src}  ${String(info.message).replace(/[\r\n\t]+/g, ' ').trim()}`;
+  const head = `${info.timestamp}  ${info.level.toUpperCase().padEnd(5)}  [${cid}] ${src}  ${maskCards(String(info.message).replace(/[\r\n\t]+/g, ' ').trim())}`;
   const body = ctx ? `${head}  ${ctx}` : head;
   // stack trace ขึ้นบรรทัดใหม่ได้ — เยื้อง 4 ช่องเพื่อให้เห็นว่าเป็นส่วนต่อของบรรทัดบน
   return info.stack ? `${body}\n    ${info.stack.replace(/\n/g, '\n    ')}` : body;

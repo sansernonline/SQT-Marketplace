@@ -36,7 +36,7 @@ Fewer than 20 trades: report the numbers but say the sample is too small to judg
 
 ## Script
 
-`trade-stats.mjs` computes the table above from the journal: win rate, average win and loss in R, payoff ratio, expectancy, breakeven win rate, profit factor (needs `pnl_baht` on every row), max drawdown in R (and % of capital when `capital` is given), longest winning and losing streaks, violation rate. `live` and `paper` rows (column `account`) are reported separately. Rows with a blank `r_multiple` are open trades and are skipped. With fewer than 20 closed trades the output carries a small-sample label.
+`trade-stats.mjs` computes the table above from the journal: win rate, average win and loss in R, payoff ratio, expectancy, breakeven win rate, profit factor (needs `pnl_baht` on every row), max drawdown in R (and % of capital when `capital` is given), longest winning and losing streaks, violation rate (a `violation` of blank, `no`, `n`, `none`, `false`, `0`, `-`, `ไม่` or `ไม่มี` is not a violation). `live` and `paper` rows (column `account`) are reported separately. Rows with a blank `r_multiple` are open trades and are skipped. With fewer than 20 closed trades the output carries a small-sample label.
 
 ```
 node trade-stats.mjs <file.json|file.csv> [--capital 100000] [--json]     # example file: scripts/example.json

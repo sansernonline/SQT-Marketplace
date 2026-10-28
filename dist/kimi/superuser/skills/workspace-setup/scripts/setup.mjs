@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 // ตั้งโปรเจกต์ให้ agent ทำงานจนจบได้: .gitignore · สิทธิ์ merge ใน .claude/settings.local.json · กฎประจำตัวใน ~/.claude/CLAUDE.md
 //   node setup.mjs [--project <dir>] [--gitignore] [--permissions] [--global-rules]   ไม่ใส่ส่วนไหน = ทำครบ 3 ส่วน
+//   --replace-foreign  ยอมแทนที่ ~/.claude/CLAUDE.md ที่ผู้ใช้เขียนเอง (ไม่มี CORE_MARK) · ไม่ใส่ = ไม่แตะไฟล์นั้น
 //   --user  เขียนกฎสิทธิ์ลง ~/.claude/settings.json ให้ใช้ได้ทุกโปรเจกต์ แทน .claude/settings.local.json ของโปรเจกต์
 //   --git-policy auto|commit|manual  จดว่าโปรเจกต์นี้ให้ agent commit · push · PR · merge เองแค่ไหน ลงหัวข้อ "กติกา" ใน .claude/superuser/CONTEXT.md
 //   node setup.mjs --check [--project <dir>]   ตรวจอย่างเดียว · ขาดอะไร → exit 1
-//   node setup.mjs --self-test
-// เขียนซ้ำได้ไม่พัง · สำรองไฟล์เดิมไว้ใน <project>/_to_delete/ ก่อนเขียนทับทุกครั้ง · JSON ที่อ่านไม่ได้ไม่แตะ
+//   node setup.mjs --self-test · --help
+// flag ที่ไม่รู้จัก (เช่นพิมพ์ผิด --chek) → exit 1 ไม่รันอะไรเลย · ไม่งั้นจะกลายเป็นโหมดเขียนทุกส่วน
+// เขียนซ้ำได้ไม่พัง · สำรองไฟล์เดิมไว้ใน <project>/_to_delete/ ก่อนเขียนทับทุกครั้ง (CLAUDE.md สำรองไว้ข้างไฟล์ใน ~/.claude/) · JSON ที่อ่านไม่ได้ไม่แตะ
 import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, mkdtempSync, rmSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { homedir, tmpdir } from "node:os";
@@ -119,13 +121,18 @@ export function rulesSource(hooksDir = join(HERE, "..", "..", "..", "hooks")) {
   return lf(readFileSync(join(hooksDir, "core-rules.md"), "utf8")).replace(/^<!-- สำเนาที่ [^\n]*-->\n/, "");
 }
 
-export function globalRules(project, write, { configDir = userConfigDir(), src = rulesSource() } = {}) {
+// ไฟล์ที่ไม่มี CORE_MARK คือผู้ใช้เขียนเอง (hook ใช้ CORE_MARK แยกแบบเดียวกัน) → ไม่แตะ เว้นแต่ใส่ replaceForeign
+// สำรองไว้ข้างไฟล์ ไม่ใช่ _to_delete/ ของโปรเจกต์ที่รันอยู่ ซึ่งถูกล้างทิ้งได้ทุกเมื่อ
+export function globalRules(project, write, { configDir = userConfigDir(), src = rulesSource(), replaceForeign = false } = {}) {
   const file = join(configDir, "CLAUDE.md");
   const have = existsSync(file) ? lf(readFileSync(file, "utf8")) : null;
   if (have === src) return { missing: [] };
-  const why = have === null ? "ยังไม่มีไฟล์" : have.includes(CORE_MARK) ? "เป็นกฎรุ่นเก่า" : "เป็นไฟล์ที่ไม่ได้มาจาก superuser";
+  const foreign = have !== null && !have.includes(CORE_MARK);
+  const why = have === null ? "ยังไม่มีไฟล์" : foreign ? "เป็นไฟล์ที่ไม่ได้มาจาก superuser" : "เป็นกฎรุ่นเก่า";
+  if (write && foreign && !replaceForeign) return { missing: [file], why, blocked: true };
   if (write) {
-    const saved = have === null ? null : backup(project, file, "claude-md");
+    const saved = have === null ? null : `${file}.bak-${stamp()}`;
+    if (saved) copyFileSync(file, saved);
     mkdirSync(configDir, { recursive: true });
     writeFileSync(file, src);
     return { missing: [file], why, saved };
@@ -167,8 +174,22 @@ function selfTest() {
   // กฎประจำตัว: ตัดหัวสำเนา · สำรองไฟล์เดิม · รันซ้ำแล้วไม่ขาด
   writeFileSync(join(cfg, "CLAUDE.md"), "กฎของฉันเอง\n");
   const src = rulesSource(hooks);
-  const g = globalRules(proj, true, { configDir: cfg, src });
-  ok.push(["global rules", src.startsWith(CORE_MARK) && readFileSync(join(cfg, "CLAUDE.md"), "utf8") === src && readFileSync(g.saved, "utf8") === "กฎของฉันเอง\n" && globalRules(proj, false, { configDir: cfg, src }).missing.length === 0]);
+  const kept = globalRules(proj, true, { configDir: cfg, src });
+  ok.push(["global rules: ไฟล์ที่ผู้ใช้เขียนเองไม่ถูกแตะถ้าไม่สั่ง", kept.blocked === true && readFileSync(join(cfg, "CLAUDE.md"), "utf8") === "กฎของฉันเอง\n"]);
+  const g = globalRules(proj, true, { configDir: cfg, src, replaceForeign: true });
+  ok.push(["global rules", src.startsWith(CORE_MARK) && readFileSync(join(cfg, "CLAUDE.md"), "utf8") === src && readFileSync(g.saved, "utf8") === "กฎของฉันเอง\n" && dirname(g.saved) === cfg && globalRules(proj, false, { configDir: cfg, src }).missing.length === 0]);
+  writeFileSync(join(cfg, "CLAUDE.md"), CORE_MARK + "\nกฎรุ่นเก่า\n");
+  ok.push(["global rules: รุ่นเก่าของ superuser อัปเดตได้โดยไม่ต้องสั่งเพิ่ม", !globalRules(proj, true, { configDir: cfg, src }).blocked && readFileSync(join(cfg, "CLAUDE.md"), "utf8") === src]);
+  // flag พิมพ์ผิด: รันสคริปต์จริงโดยชี้ ~/.claude ไปโฟลเดอร์ทดสอบ · ต้อง exit 1 และไม่เขียนอะไร
+  writeFileSync(join(cfg, "CLAUDE.md"), "กฎของฉันเอง\n");
+  const giBefore = readFileSync(join(proj, ".gitignore"), "utf8");
+  writeFileSync(join(proj, ".gitignore"), "node_modules\n");
+  let code = 0, err = "";
+  try { execFileSync(process.execPath, [fileURLToPath(import.meta.url), "--chek", "--project", proj], { env: { ...process.env, CLAUDE_CONFIG_DIR: cfg }, stdio: ["ignore", "pipe", "pipe"], encoding: "utf8" }); }
+  catch (e) { code = e.status; err = e.stderr; }
+  ok.push(["flag ที่ไม่รู้จัก: exit 1 ไม่เขียนไฟล์", code === 1 && err.includes("--chek") && err.includes("--check") && readFileSync(join(proj, ".gitignore"), "utf8") === "node_modules\n" && readFileSync(join(cfg, "CLAUDE.md"), "utf8") === "กฎของฉันเอง\n"]);
+  ok.push(["ตรวจ flag", badArgs(["--check", "--project", "x", "--git-policy", "auto", "--user"]).length === 0 && badArgs(["--help"]).length === 0 && badArgs(["--global-rules", "stray"]).join() === "stray"]);
+  writeFileSync(join(proj, ".gitignore"), giBefore);
   // นโยบาย git: ยังไม่เลือก → ว่าง · เลือกแล้วเปลี่ยนได้โดยมีบรรทัดเดียว · ไฟล์ที่มีหัวข้อกติกาอยู่แล้วแทรกใต้หัวข้อ
   const before = gitPolicy(proj, null, false).current;
   gitPolicy(proj, "manual", true, "2026-01-01"); gitPolicy(proj, "auto", true, "2026-01-02");
@@ -185,15 +206,33 @@ function selfTest() {
   process.exit(n === ok.length ? 0 : 1);
 }
 
+// flag ที่รู้จัก · ตัวที่ตามด้วยค่าให้ข้ามค่านั้นไป
+const FLAGS = ["--project", "--gitignore", "--permissions", "--global-rules", "--git-policy", "--user", "--check", "--replace-foreign", "--self-test", "--help"];
+const TAKES_VALUE = ["--project", "--git-policy"];
+export function badArgs(args) {
+  const bad = [];
+  for (let i = 0; i < args.length; i++) {
+    if (!FLAGS.includes(args[i])) bad.push(args[i]);
+    else if (TAKES_VALUE.includes(args[i]) && args[i + 1] && !args[i + 1].startsWith("--")) i++;
+  }
+  return bad;
+}
+
 if (process.argv[1]?.replace(/\\/g, "/").endsWith("/setup.mjs")) {
   const args = process.argv.slice(2);
   if (args.includes("--self-test")) selfTest();
+  const bad = badArgs(args);
+  if (bad.length || args.includes("--help")) {
+    if (bad.length) console.error(`ไม่รู้จัก: ${bad.join(" ")} · ไม่ได้รันอะไร แก้ตัวสะกดแล้วรันใหม่`);
+    console.error(`flag ที่ใช้ได้: ${FLAGS.join(" ")}\nวิธีใช้อยู่ที่หัวไฟล์ ${fileURLToPath(import.meta.url)} · ตรวจอย่างเดียวใช้ --check`);
+    process.exit(bad.length ? 1 : 0);
+  }
   const at = args.indexOf("--project");
   const project = resolve(at >= 0 ? args[at + 1] : process.cwd());
   const check = args.includes("--check");
   const picked = ["--gitignore", "--permissions", "--global-rules", "--git-policy"].filter((f) => args.includes(f));
   const run = (f) => picked.length === 0 || picked.includes(f);
-  let gaps = 0;
+  let gaps = 0, blocked = false;
   if (run("--gitignore")) {
     const r = gitignore(project, !check);
     gaps += r.missing.length;
@@ -206,9 +245,10 @@ if (process.argv[1]?.replace(/\\/g, "/").endsWith("/setup.mjs")) {
     else { gaps += r.missing.length; console.log(`สิทธิ์ (${r.file}): ${r.missing.length ? (check ? "ขาด " : "เพิ่ม ") + r.missing.join(" · ") : "ครบแล้ว"}`); }
   }
   if (run("--global-rules")) {
-    const r = globalRules(project, !check);
+    const r = globalRules(project, !check, { replaceForeign: args.includes("--replace-foreign") });
     gaps += r.missing.length;
-    console.log(`กฎประจำตัว (~/.claude/CLAUDE.md): ${r.missing.length ? `${check ? "ต้องติดตั้ง" : "ติดตั้งแล้ว"} (${r.why})${r.saved ? ` · ไฟล์เดิมสำรองไว้ที่ ${r.saved}` : ""}` : "เป็นรุ่นล่าสุดแล้ว"}`);
+    if (r.blocked) { blocked = true; console.log(`กฎประจำตัว (~/.claude/CLAUDE.md): ไม่แตะ เพราะ${r.why} · ย้ายกฎที่เขียนเองไปไว้ใน ~/.claude/superuser-style.md ก่อน แล้วรันซ้ำพร้อม --replace-foreign`); }
+    else console.log(`กฎประจำตัว (~/.claude/CLAUDE.md): ${r.missing.length ? `${check ? "ต้องติดตั้ง" : "ติดตั้งแล้ว"} (${r.why})${r.saved ? ` · ไฟล์เดิมสำรองไว้ที่ ${r.saved}` : ""}` : "เป็นรุ่นล่าสุดแล้ว"}`);
   }
   if (run("--git-policy")) {
     const i = args.indexOf("--git-policy");
@@ -220,5 +260,5 @@ if (process.argv[1]?.replace(/\\/g, "/").endsWith("/setup.mjs")) {
     else console.log(`นโยบาย git (${r.file}): ${r.current.slice(POLICY_MARK.length).trim()}`);
   }
   if (!check && run("--permissions")) console.log("\nกฎสิทธิ์และกฎประจำตัวมีผลกับ session ใหม่ · เปิด Claude Code ใหม่หรือเริ่ม session ใหม่");
-  process.exit(check && gaps ? 1 : 0);
+  process.exit((check && gaps) || blocked ? 1 : 0);
 }

@@ -56,7 +56,7 @@ node payroll.mjs <file.json> [--json]     # example file: scripts/example.json
 node payroll.mjs --self-test
 ```
 
-ไฟล์ input: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · มีแค่ `name` กับ `gross` ก็รันได้ ที่เหลือเริ่มต้นเป็น 0 / false / 12 · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · PVD ลูกจ้างเกิน 15% ของค่าจ้างสคริปต์เตือนและลดหย่อนให้แค่ 15%
+ไฟล์ input: `{ "employees": [ { "name": "...", "gross": 50000, "pvd_employee_pct": 0, "pvd_employer_pct": 0, "spouse": false, "children": 0, "children_2nd_plus": 0, "parents": 0, "other_deductions": 0, "periods": 12 } ] }` · มีแค่ `name` กับ `gross` ก็รันได้ ที่เหลือเริ่มต้นเป็น 0 / false / 12 · ช่องที่ผิดทำให้สคริปต์หยุดพร้อมข้อความที่ชื่อช่อง · ประกันสังคมคิดจากค่าจ้างเฉลี่ยต่อเดือน (`gross` × `periods` ÷ 12) แล้วกระจายเป็นต่องวด ลดหย่อนทั้งปีจึงเท่ากับ 12 เดือนเสมอ · PVD ลูกจ้างเกิน 15% ของค่าจ้างสคริปต์เตือนและลดหย่อนให้แค่ 15%
 
 ขั้นบันไดภาษี เพดานประกันสังคม และค่าลดหย่อนอยู่ใน `scripts/rates.json` (มีวันที่ตรวจและแหล่ง สคริปต์พิมพ์ออกมาในผล) · เพดานประกันสังคมต้องตรงกับ `scripts/check/facts.json` ซึ่ง self-test เช็คให้ · ปีภาษีเปลี่ยนให้แก้ `rates.json` ก่อนรันเดือนมกราคม · ยังไม่รวมโบนัส พนักงานเข้ากลางปี และเงินได้ที่จ่ายไปแล้ว ให้คิดตามส่วนโบนัสด้านล่างเอง
 

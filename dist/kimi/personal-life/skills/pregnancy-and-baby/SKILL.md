@@ -36,7 +36,7 @@ Bleeding from the vagina · water breaking or fluid leaking · the baby moving l
 | Right | Amount / rule | Status |
 |---|---|---|
 | ประกันสังคม มาตรา 33/39 childbirth lump sum | 15,000 บาท per birth, no limit on number; if both parents insured, one claims | confirmed |
-| SSO maternity pay | 50% of average wage (wage base cap 15,000) for 90 days; condition: 5 months' contributions in the 15 months before the birth month; form สปส. 2-01 + สูติบัตร | official page; รอยืนยัน whether days changed after the 2568 labour law |
+| SSO maternity pay | 50% of average wage (wage base cap 17,500 from 1 Jan 2569, see scripts/check/facts.json) for 90 days; condition: 5 months' contributions in the 15 months before the birth month (รอยืนยัน: secondary sources disagree, no official page checked); form สปส. 2-01 + สูติบัตร | official page; รอยืนยัน whether days changed after the 2568 labour law |
 | Maternity leave (พ.ร.บ.คุ้มครองแรงงาน ฉบับที่ 9 พ.ศ. 2568, in force 7 Dec 2568) | up to 120 days; employer pays up to 60 days; father 15 days' leave to help after birth | confirmed |
 | SSO child allowance (สงเคราะห์บุตร) | 1,000 บาท/month per child, birth to 6 years, up to 3 children; 12 months' contributions in 36 months; since 1 Jan 2568 | confirmed (old sso.go.th page still says 400 — outdated) |
 | มาตรา 40 | only plan 3 has child allowance; amount รอยืนยัน | รอยืนยัน |
@@ -73,7 +73,7 @@ Source: WHO Thailand EPI factsheet 2024; the กรมควบคุมโร�
 
 ## Worked example
 
-Office worker, มาตรา 33, positive test at 7 weeks, due 20 Jun 2570. Plan: book first ANC this week (before 12 weeks) at the hospital where she will deliver; 8 visits into the calendar; pink book in the work bag. Money: 15,000 lump sum + SSO 50% for 90 days (wage base 15,000 → 7,500 a month) + employer 60 days full pay; check the SSO contribution count (needs 5 of the last 15 months). After birth: register at the เขต of the hospital within 15 days (by 5 Jul 2570), claim สปส. 2-01, child allowance 1,000/month, ask the เขต about the 600-baht grant. Vaccine calendar from the pink book.
+Office worker, มาตรา 33, positive test at 7 weeks, due 20 Jun 2570. Plan: book first ANC this week (before 12 weeks) at the hospital where she will deliver; 8 visits into the calendar; pink book in the work bag. Money: 15,000 lump sum + SSO 50% for 90 days (wage base 17,500 → 8,750 a month) + employer 60 days full pay; check the SSO contribution count (needs 5 of the last 15 months). After birth: register at the เขต of the hospital within 15 days (by 5 Jul 2570), claim สปส. 2-01, child allowance 1,000/month, ask the เขต about the 600-baht grant. Vaccine calendar from the pink book.
 
 ## Check before sending
 

@@ -17,7 +17,7 @@ Get to "nothing hiding in here" in ten minutes a day. This is a method; reading 
 
 1. **Scan oldest unanswered first** — newest mail is often a reply to something older.
 2. **Run each message through the decision table** — one decision per message, no re-reading later.
-3. **Two-minute rule** — if the reply takes under two minutes, send it now.
+3. **Two-minute rule** — if the reply takes under two minutes, write the draft now; the user sends it.
 4. **Schedule the rest** — every "this week" item gets a calendar slot or a dated task, not a flag.
 5. **Close** — inbox shows only items received after the session started.
 

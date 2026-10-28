@@ -1,5 +1,10 @@
 # Changelog — superuser
 
+## 3.14.2 — 2026-10-28
+
+- `workspace-setup` `setup.mjs`: flag ที่ไม่รู้จัก (เช่น `--chek`) หยุดพร้อมรายชื่อ flag ที่ใช้ได้ เดิมรันโหมดเขียนทุกส่วน · `--global-rules` ไม่แทนที่ `~/.claude/CLAUDE.md` ที่ผู้ใช้เขียนเองถ้าไม่ใส่ `--replace-foreign` และสำรองไฟล์เดิมไว้ข้างไฟล์เป็น `CLAUDE.md.bak-<วันเวลา>` · self-test 11 ข้อ
+- `decision-scoring` `priority`: ช่อง `must_first` ให้ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัยขึ้นก่อนโดยไม่ดูคะแนน · rice หยุดเมื่อ impact อยู่นอก 0.25–3 · เตือนชื่อซ้ำ · self-test 21 ข้อ
+
 ## 3.14.1 — 2026-10-28
 
 - `team-files.md` หัวข้อหลาย AI ใน repo เดียว ข้อ 5: branch ที่มี PR merge แล้ว · worktree สะอาด · ไม่ล็อก → `git worktree remove` แล้ว `git branch -d` ได้ทันทีไม่ต้องถาม แม้เป็นของ session หรือ AI ตัวอื่น · ไล่ดูตอนเริ่มและจบงาน · ข้อ 4 บอกว่ายกเว้นข้อ 5 · ห้าม `-D` และ `--force`

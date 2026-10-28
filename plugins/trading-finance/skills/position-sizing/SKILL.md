@@ -64,7 +64,7 @@ Why ticks matter: stop and entry must sit on a valid tick, and on a 9.90-baht st
 
 ## Script
 
-`size.mjs` does the arithmetic so the number is not worked out in the model's head: risk budget, risk per share (with cost), raw size, round down to the board lot, then the concentration cap (10% of capital, 20% for an ETF) and the liquidity cap (5% of average daily value, only when `avgDailyValue` is given). It reports which rule bound the size. Entry and stop must sit on a valid tick from `scripts/ticks.json` (the table above, with `checked` and `source`); the table in force follows `asOf` (default today), and a price valid under only one of the two tables gets a warning.
+`size.mjs` does the arithmetic so the number is not worked out in the model's head: risk budget, risk per share (with cost), raw size, round down to the board lot, then the concentration cap (10% of capital, 20% for an ETF) and the liquidity cap (5% of average daily value, only when `avgDailyValue` is given). It reports which rule bound the size. Entry and stop must sit on a valid tick from `scripts/ticks.json` (the table above, with `checked` and `source`); the table in force follows `asOf` (default today), and a price valid under only one of the two tables gets a warning. `ticks.json` marks each table `confirmed` or not; the table after 2026-11-16 is not confirmed against the final SET notice, so the output says so and an off-tick price is a warning there, not a stop.
 
 ```
 node size.mjs <file.json> [--json]     # example file: scripts/example.json

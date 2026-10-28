@@ -15,6 +15,10 @@ const MAX_NAME_CHARS = 25; // EMVCo merchant name field limit
 const BILLER_ID_DIGITS = 15; // SKILL.md tag 30 sub-ID 01
 const SUB_ID_BY_LENGTH = { 13: '02', 15: '03' }; // national/tax ID, e-Wallet ID (tag 29)
 
+// สูตรเดียวกับ e-tax-invoice/scripts/thai-id.mjs แต่เขียนซ้ำไว้ เพราะ skill ต้องติดตั้งแยกกันได้
+// หลักที่ 13 ของเลขบัตรประชาชน/ผู้เสียภาษี = (11 - (ผลรวมหลักที่ 1-12 x น้ำหนัก 13..2) mod 11) mod 10
+const hasValidCheckDigit = (id) => (11 - ([...id.slice(0, 12)].reduce((s, d, i) => s + Number(d) * (13 - i), 0) % 11)) % 10 === Number(id[12]);
+
 const field = (id, value) => id + String(value.length).padStart(2, '0') + value;
 const isPrintableAscii = (v) => /^[ -~]*$/.test(v);
 const digitsOnly = (v) => String(v ?? '').replace(/[\s-]/g, '');
@@ -65,6 +69,7 @@ export function validate(input) {
   if (!/^\d+$/.test(id)) throw new Error(`ช่อง id ต้องเป็นตัวเลข (ได้ ${JSON.stringify(input.id)})`);
   if (![10, 13, 15].includes(id.length)) throw new Error(`ช่อง id ต้องเป็นเบอร์มือถือ 10 หลัก เลขบัตร/ผู้เสียภาษี 13 หลัก หรือ e-Wallet 15 หลัก (ได้ ${id.length} หลัก)`);
   if (id.length === 10 && !id.startsWith('0')) throw new Error('ช่อง id เบอร์มือถือ 10 หลักต้องขึ้นต้นด้วย 0');
+  if (id.length === 13 && !hasValidCheckDigit(id)) throw new Error(`ช่อง id เลข 13 หลัก ${id} ไม่ผ่านการตรวจหลักตรวจสอบ · เลขน่าจะพิมพ์ผิด ตรวจกับบัตรหรือใบทะเบียนอีกครั้งก่อนสร้าง QR (QR ที่เลขผิดสแกนได้แต่เงินไปหาคนอื่น)`);
   return [];
 }
 
@@ -96,8 +101,10 @@ function selfTest() {
   // SKILL.md section 3 worked examples, 081-234-5678
   t('static ตรงตัวอย่าง SKILL', buildPayload({ id: '0812345678' }).payload === '00020101021129370016A000000677010111011300668123456785802TH530376463045D82');
   t('dynamic 1500 ตรงตัวอย่าง SKILL', buildPayload({ id: '081-234-5678', amount: 1500 }).payload === '00020101021229370016A000000677010111011300668123456785802TH530376454071500.0063046960');
-  const nid = buildPayload({ id: '1234567890123', amount: 100 }).payload;
-  t('เลขบัตร ใช้ sub-ID 02 ยาว 13', nid.includes('29370016A000000677010111' + '02131234567890123') && crcHolds(nid));
+  const nid = buildPayload({ id: '1234567890121', amount: 100 }).payload;
+  t('เลขบัตร ใช้ sub-ID 02 ยาว 13', nid.includes('29370016A000000677010111' + '02131234567890121') && crcHolds(nid));
+  t('เลข 13 หลักผิดหลักตรวจสอบ (edge/pp1)', throwsWith({ id: '1234567890123', amount: 100 }, 'หลักตรวจสอบ'));
+  t('เลข 13 หลักมีขีดและผ่านหลักตรวจสอบ', buildPayload({ id: '1-2345-67890-12-1' }).kind === 'static');
   const wallet = buildPayload({ id: '123456789012345' }).payload;
   t('e-Wallet ใช้ sub-ID 03 ยาว 15 และ tag 29 ยาว 39', wallet.includes('29390016A000000677010111' + '0315123456789012345') && crcHolds(wallet));
   const bill = buildPayload({ billerId: '010555000000001', ref1: 'IV26100001', name: 'SHOP', amount: 20800 });

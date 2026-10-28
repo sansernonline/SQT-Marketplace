@@ -40,11 +40,35 @@ def get_correlation_id() -> str:
 
 
 # ----------------------------------------------------------------- redaction
-SECRET_KEYS = (
-    "password", "passwd", "pwd", "secret", "token", "authorization", "cookie",
-    "apikey", "api_key", "accesstoken", "refreshtoken", "otp", "pin",
-    "creditcard", "cardnumber", "cvv", "citizenid", "nationalid", "ssn",
+# แยกชื่อ key เป็นส่วนตาม _ - และตัวพิมพ์ใหญ่ ทิ้งส่วนที่เป็นคำธรรมดาทั้งคำ (shipping, className) แล้วต่อที่เหลือ
+# ลับเมื่อมีคำในรายการอยู่ข้างใน เหมือนการเทียบแบบมีอยู่ในชื่อ จึงจับได้ทุกตัวที่การเทียบแบบเดิมจับได้
+# ยกเว้นชื่อที่คำลับคร่อมคำธรรมดา (AddressSn, ShotProcess) ซึ่งไม่ใช่ key ลับจริง
+# (OTPs, customersPin, X-Api-Key) · ปิดเกินได้เมื่อคำลับเกิดจากรอยต่อ (access_number) ซึ่งเสียน้อยกว่าหลุด
+SECRET_PARTS = (
+    "password", "passwd", "pwd", "secret", "token", "authorization", "cookie", "apikey",
+    "otp", "pin", "creditcard", "cardnumber", "cvv", "citizenid", "nationalid", "ssn",
 )
+NOT_SECRET = frozenset((
+    "shipping", "shopping", "mapping", "typing", "ping", "spin", "spinner", "opinion",
+    "class", "classname", "business", "process", "address", "screenshot",
+))
+_CARD = re.compile(r"(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)", re.ASCII)  # เลขบัตร 13-19 หลักในข้อความอิสระ · ASCII ให้ตรงกับ Node (ไม่จับเลขไทย)
+
+
+def _is_secret(key) -> bool:
+    parts = re.findall(r"[a-z0-9]+", re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", str(key)).lower())
+    name = "".join(p for p in parts if p not in NOT_SECRET)
+    return any(s in name for s in SECRET_PARTS)
+
+
+def _luhn(digits: str) -> bool:
+    total = sum(d if i % 2 == 0 else (d * 2 - 9 if d > 4 else d * 2) for i, d in enumerate(map(int, reversed(digits))))
+    return total % 10 == 0
+
+
+def _mask_cards(text: str) -> str:
+    # ปิดเฉพาะเลขที่ผ่าน Luhn · เลขยาวอื่น (timestamp เลขออเดอร์) ราว 1 ใน 10 ผ่าน Luhn โดยบังเอิญจึงโดนปิดด้วย
+    return _CARD.sub(lambda m: "***" if _luhn(re.sub(r"\D", "", m.group())) else m.group(), text)
 
 
 _CTRL = re.compile(r"[\r\n\t]+")  # ข้อความหลักก็ตัดตัวขึ้นบรรทัด กันปลอมบรรทัด log
@@ -56,7 +80,7 @@ def _redact(value, depth: int = 0):
     if isinstance(value, list):
         return [_redact(v, depth + 1) for v in value]
     return {
-        k: ("***" if any(s in k.lower() for s in SECRET_KEYS) else _redact(v, depth + 1))
+        k: ("***" if _is_secret(k) else _redact(v, depth + 1))
         for k, v in value.items()
     }
 
@@ -66,7 +90,7 @@ def _safe(v) -> str:
     if v is None:
         return "-"
     s = json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else str(v)
-    s = " ".join(s.split())
+    s = _mask_cards(" ".join(s.split()))
     if " " in s:
         # เปลี่ยน " ข้างในเป็น ' ก่อนครอบ — ไม่งั้นเครื่องหมายคำพูดซ้อนกันจนอ่านไม่ออก
         return '"' + s.replace('"', "'") + '"'
@@ -94,7 +118,7 @@ class LineFormatter(logging.Formatter):
         line = (
             f"{ts}.{ms:03d} {tz}  "
             f"{_LEVEL_NAME.get(record.levelname, record.levelname):<5}  "
-            f"[{get_correlation_id()}] {record.name}  {_CTRL.sub(' ', record.getMessage()).strip()}"
+            f"[{get_correlation_id()}] {record.name}  {_mask_cards(_CTRL.sub(' ', record.getMessage()).strip())}"
         )
         if ctx_str:
             line += f"  {ctx_str}"
