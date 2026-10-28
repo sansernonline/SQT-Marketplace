@@ -41,7 +41,8 @@ def get_correlation_id() -> str:
 
 # ----------------------------------------------------------------- redaction
 # แยกชื่อ key เป็นส่วนตาม _ - และตัวพิมพ์ใหญ่ ทิ้งส่วนที่เป็นคำธรรมดาทั้งคำ (shipping, className) แล้วต่อที่เหลือ
-# ลับเมื่อมีคำในรายการอยู่ข้างใน เหมือนการเทียบแบบมีอยู่ในชื่อ จึงไม่หลุดตัวไหนที่การเทียบแบบเดิมจับได้
+# ลับเมื่อมีคำในรายการอยู่ข้างใน เหมือนการเทียบแบบมีอยู่ในชื่อ จึงจับได้ทุกตัวที่การเทียบแบบเดิมจับได้
+# ยกเว้นชื่อที่คำลับคร่อมคำธรรมดา (AddressSn, ShotProcess) ซึ่งไม่ใช่ key ลับจริง
 # (OTPs, customersPin, X-Api-Key) · ปิดเกินได้เมื่อคำลับเกิดจากรอยต่อ (access_number) ซึ่งเสียน้อยกว่าหลุด
 SECRET_PARTS = (
     "password", "passwd", "pwd", "secret", "token", "authorization", "cookie", "apikey",
@@ -51,7 +52,7 @@ NOT_SECRET = frozenset((
     "shipping", "shopping", "mapping", "typing", "ping", "spin", "spinner", "opinion",
     "class", "classname", "business", "process", "address", "screenshot",
 ))
-_CARD = re.compile(r"(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)")  # เลขบัตร 13-19 หลักในข้อความอิสระ
+_CARD = re.compile(r"(?<!\d)(?:\d[ -]?){12,18}\d(?!\d)", re.ASCII)  # เลขบัตร 13-19 หลักในข้อความอิสระ · ASCII ให้ตรงกับ Node (ไม่จับเลขไทย)
 
 
 def _is_secret(key) -> bool:
