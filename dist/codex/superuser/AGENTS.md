@@ -1,6 +1,6 @@
 # SQT superuser — OpenAI Codex CLI
 
-> สร้างอัตโนมัติจาก plugins/superuser/ โดย scripts/build/build-targets.mjs (v3.15.1) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/superuser/ โดย scripts/build/build-targets.mjs (v3.15.2) · ห้ามแก้ไฟล์นี้โดยตรง
 
 SuperUser — a team lead agent. Sizes the task and picks a budget, writes a 5-point brief for every piece, dispatches low-effort subagents in parallel, scores them, and re-checks with a fresh reviewer until done. Optional modules (shared context, logs, improvements, learning loop, inbox, hook gates) switch on and off per project. Use it alone or as the core other plugins extend.
 

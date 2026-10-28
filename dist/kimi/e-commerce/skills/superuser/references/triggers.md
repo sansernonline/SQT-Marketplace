@@ -9,6 +9,7 @@
 | เขียนหรือแก้ listing | `product-listing` + agent `shop-manager` |
 | ตั้งราคา · ขายแล้วขาดทุน | `marketplace-fees-pricing` |
 | สต็อกหลายร้านไม่ตรง | `multi-shop-stock` |
+| สั่งของจากจีน (1688 · Taobao · ชิปปิ้ง) ต้นทุนถึงร้านต่อชิ้นเท่าไร · อากร VAT · ทางรถหรือทางเรือ | `import-landed-cost` + agent `shop-manager` |
 | เลือกขนส่ง · COD | `shipping-compare` |
 | ตอบลูกค้า | `chat-reply-templates` + agent `customer-chat` |
 | คืนสินค้า · รีวิวแย่ | `returns-and-bad-reviews` |
@@ -36,7 +37,7 @@
 | ทำบัญชีรายรับรายจ่าย · เก็บเอกสารกี่ปี · ปิดบัญชีสิ้นเดือน · แยกเงินส่วนตัวกับเงินร้าน · ควรจ้างสำนักงานบัญชีไหม | `sme-bookkeeping` + agent `tax-helper` |
 | เงินจะพอจ่ายไหม · ขายดีแต่เงินในบัญชีลด · ยอดโอนจากแพลตฟอร์มหรือ COD ช้า · จะสั่งสต็อกล็อตใหญ่ | `cash-flow` + agent `tax-helper` |
 | ประกันสังคม | `social-security-th` |
-| เปิดกิจการใหม่ (บุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน · ต้นทุนนำเข้าจากจีน) | `thai-business-setup` + agent `tax-helper` |
+| เปิดกิจการใหม่ (บุคคลธรรมดา ห้างหุ้นส่วน หรือบริษัท · จดทะเบียน) | `thai-business-setup` + agent `tax-helper` |
 | ปิดปีบริษัท | `dbd-annual-filing` |
 | ใบเสนอราคา ใบเสร็จ ใบกำกับภาษี | `doc-quotation` · `e-tax-invoice` |
 | หนังสือราชการ | `doc-thai-official` + agent `thai-doc-writer` |

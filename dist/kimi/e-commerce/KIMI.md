@@ -1,10 +1,10 @@
 # SQT e-commerce — Kimi Code CLI
 
-> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.4.0) · ห้ามแก้ไฟล์นี้โดยตรง
+> สร้างอัตโนมัติจาก plugins/e-commerce/ โดย scripts/build/build-targets.mjs (v1.5.0) · ห้ามแก้ไฟล์นี้โดยตรง
 
 Thai online selling, buying and small-business back office — sell on Shopee, Lazada, TikTok Shop, LINE and Facebook (listings, pricing, stock, chat, live, returns), buy with confidence (total cost, warranty, OCPB 1166 complaints, refunds), and run the company (quotations, contracts, VAT and withholding tax, payroll, social security, year-end filing, labour law, PDPA, LINE OA, PromptPay). General information only, not tax or legal advice.
 
-ชุดนี้มี skill 70 ตัว · บทบาท 11 บทบาท · คำสั่งสำเร็จรูป 14 คำสั่ง
+ชุดนี้มี skill 71 ตัว · บทบาท 11 บทบาท · คำสั่งสำเร็จรูป 14 คำสั่ง
 
 - **skill** → โหลดเองเมื่องานตรงกับคำอธิบาย ไม่ต้องสั่ง
 - **บทบาท (agent)** → เรียกใช้เป็น subagent ด้วยชื่อ · คำสั่งสำเร็จรูปเรียกด้วย `/skill:ชื่อคำสั่ง`
