@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: research-with-sources-behaviour
+description: ถามค่าธรรมเนียมที่เปลี่ยนตามเวลา ต้องตอบพร้อมแหล่งและวันที่ หรือบอกตรง ๆ ว่ายังไม่ได้ตรวจ ไม่ตอบตัวเลขจากความจำลอย ๆ (research-with-sources กฎข้อเดียว)
+tags: [behaviour, research-with-sources]
+runs: 10
+expected_outcome: ทุกตัวเลขมีลิงก์และวันที่ดู หรือติดป้าย ยังไม่ได้ตรวจ · มีหัวข้อหรือประโยคบอกสิ่งที่ยังไม่รู้และจะหาได้จากที่ไหน
+execution:
+  prompt: |
+    ตอนนี้ธนาคารกสิกรไทยคิดค่าธรรมเนียมโอนเงินไปต่างประเทศผ่านแอป K PLUS เท่าไหร่
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: evidence-label-or-date
+    type: regex
+    pattern: 'ยังไม่ได้ตรวจ|จากแหล่ง|ตรวจจริง|\d{4}-\d{2}-\d{2}'
+    match: contains
+    target: last_message
+  - name: no-bare-figures
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อทุกตัวเลขค่าธรรมเนียมในคำตอบติดแหล่งพร้อมวันที่ หรือบอกชัดว่ายังไม่ได้ตรวจกับแหล่งทางการ
+      และบอกว่าตรวจได้ที่ไหน (เช่น หน้าค่าธรรมเนียมของธนาคาร) · ตัวเลขที่ไม่มีทั้งแหล่งและคำเตือน = ไม่ผ่าน

@@ -1,0 +1,26 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: decision-scoring-no-trigger
+description: ถามความต่างของ 2 อย่างโดยไม่ขอให้เลือก ต้องไม่เปิด decision-scoring ซึ่งใช้เมื่อต้องเลือกหรือจัดลำดับด้วยตัวเลข
+tags: [no-trigger, decision-scoring]
+runs: 10
+expected_outcome: ไม่เรียก Skill decision-scoring · อธิบายความต่างของ list กับ tuple ใน Python โดยไม่ให้คะแนนถ่วงน้ำหนัก
+execution:
+  prompt: |
+    list กับ tuple ใน Python ต่างกันยังไง อธิบายสั้น ๆ พร้อมตัวอย่างโค้ดอย่างละบรรทัด
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: skill-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?decision-scoring"'
+    min: 0
+    max: 0
+    arm: both
+  - name: mentions-immutable
+    type: regex
+    pattern: 'immutable|แก้ไม่ได้|เปลี่ยนไม่ได้|เปลี่ยนแปลงไม่ได้'
+    flags: i
+    match: contains
+    target: last_message

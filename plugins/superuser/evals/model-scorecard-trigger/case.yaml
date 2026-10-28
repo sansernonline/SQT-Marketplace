@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: model-scorecard-trigger
 description: ถามว่า model ไหนเหมาะกับขั้นไหนจากงานที่ผ่านมา ไม่เอ่ยชื่อ skill ต้องทำให้ model-scorecard ถูกเปิด
 tags: [trigger, model-scorecard]
-runs: 3
+runs: 10
 expected_outcome: เรียก Skill model-scorecard แล้วบอกว่าจะอ่าน log ของโปรเจกต์นี้ ไม่ตอบจากความรู้สึก
 execution:
   prompt: |

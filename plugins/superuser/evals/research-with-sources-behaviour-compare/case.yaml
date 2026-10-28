@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: research-with-sources-behaviour-compare
+description: เทียบราคาบริการ 3 เจ้า ต้องตอบก่อน ใช้ตาราง และท้ายคำตอบมีรายการแหล่งพร้อมวันที่ดู (research-with-sources หัวข้อ คำตอบ)
+tags: [behaviour, research-with-sources]
+runs: 10
+expected_outcome: บรรทัดแรกเป็นคำตอบ · ตารางเทียบ 3 เจ้า · รายการแหล่ง [ชื่อ](ลิงก์) · วันที่ดู หรือป้าย ยังไม่ได้ตรวจ ที่ราคาที่ไม่ได้เปิดแหล่ง
+execution:
+  prompt: |
+    เทียบราคาพื้นที่เก็บไฟล์ 2 TB รายเดือนในไทยของ Google One, iCloud+ และ Dropbox ตัวไหนถูกสุด
+  max_turns: 8
+  timeout_seconds: 240
+graders:
+  - name: has-table
+    type: regex
+    pattern: '\|.*\|.*\|'
+    match: contains
+    target: last_message
+  - name: sources-dated
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. ราคาแต่ละเจ้ามีแหล่งพร้อมวันที่ดู หรือติดป้ายว่ายังไม่ได้ตรวจ
+      2. ข้อสรุปว่าเจ้าไหนถูกสุดอยู่ต้นคำตอบ และบอกว่าขึ้นกับราคาที่ยืนยันแล้วหรือยัง

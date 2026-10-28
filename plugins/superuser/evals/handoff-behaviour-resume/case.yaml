@@ -1,0 +1,35 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: handoff-behaviour-resume
+description: เขียนหัวข้อ รับงานต่อ ให้ session ถัดไป ต้องมีข้อทำต่อเป็นข้อแรก 1 ข้อที่ชี้ไฟล์ และติดป้าย ตรวจจริง หรือ ยังไม่ได้ตรวจ (handoff หัวข้อ 5)
+tags: [behaviour, handoff]
+runs: 10
+expected_outcome: ข้อแรกทำได้ทันทีและชี้ไฟล์ · มีระวัง (ทางที่ลองแล้วพัง) · เรื่องที่ได้ยินมาติดป้าย ยังไม่ได้ตรวจ
+execution:
+  prompt: |
+    context ใกล้เต็มแล้ว เขียนหัวข้อ "รับงานต่อ" ให้ session ถัดไปจากสถานะนี้:
+    - หน้า checkout เสร็จ test ผ่าน 18 เคส (เห็นเองรอบนี้)
+    - ระบบส่งอีเมลยืนยันยังไม่เริ่ม ไฟล์ที่จะแก้คือ src/mail/confirm.ts
+    - ลองใช้ไลบรารี mailgun-lite แล้วส่งภาษาไทยเพี้ยน เลยเลิกใช้
+    - ได้ยินว่า staging เปลี่ยน URL แล้ว แต่ยังไม่ได้เปิดดู
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: evidence-labels
+    type: regex
+    pattern: 'ยังไม่ได้ตรวจ'
+    match: contains
+    target: last_message
+  - name: points-to-file
+    type: regex
+    pattern: 'src/mail/confirm\.ts'
+    match: contains
+    target: last_message
+  - name: resume-shape
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 3 ข้อ:
+      1. ข้อแรกเป็นงานถัดไป 1 ข้อที่ลงมือได้ทันที (ระบบอีเมลยืนยัน)
+      2. บอกว่า mailgun-lite ลองแล้วพัง ไม่ต้องลองซ้ำ
+      3. เรื่อง URL ของ staging ถูกบอกว่ายังไม่ได้ตรวจ ไม่ได้เขียนเหมือนเป็นข้อเท็จจริง

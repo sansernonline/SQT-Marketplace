@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: commit-log-behaviour-repo-style
+description: repo ใช้ subject ภาษาไทยกับ scope ภาษาอังกฤษ ต้องเขียน commit ตามแบบที่ repo ใช้อยู่ (commit-log หัวข้อ 2 ข้อ 2)
+tags: [behaviour, commit-log]
+runs: 10
+expected_outcome: subject แบบ feat(auth) ตามด้วยภาษาไทย · scope เป็นคำเดียวกับที่ repo ใช้ (auth) · ไม่มี subject ภาษาอังกฤษ
+execution:
+  prompt: |
+    git log -5 --oneline ของ repo:
+      a1b2c3d fix(auth): แก้ล็อกอินหลุดเมื่อเปิดหลายแท็บ
+      d4e5f6a feat(cart): เพิ่มปุ่มลบสินค้าทั้งหมด
+      0a9b8c7 docs(readme): เพิ่มวิธีรันบน Windows
+      7f6e5d4 fix(cart): ยอดรวมไม่รวมค่าส่ง
+      3c2b1a0 feat(auth): เพิ่มล็อกอินด้วย LINE
+    เพิ่งทำหน้ารีเซ็ตรหัสผ่านที่ส่งลิงก์ทางอีเมลเสร็จ เขียนข้อความ commit ให้หน่อย
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: feat-auth-thai
+    type: regex
+    pattern: 'feat\(auth\): [ก-๙]'
+    match: contains
+    target: last_message

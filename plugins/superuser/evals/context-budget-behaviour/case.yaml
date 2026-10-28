@@ -1,0 +1,30 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: context-budget-behaviour
+description: อยากรู้ error ล่าสุดใน log 2 GB ต้องเลือกคำสั่งที่อ่านเฉพาะท้ายหรือค้นแบบจำกัดผล ไม่เปิดทั้งไฟล์ (context-budget กฎข้อเดียว ตัดสินใจก่อนอ่าน)
+tags: [behaviour, context-budget]
+runs: 10
+expected_outcome: เสนอ tail หรือ grep ที่จำกัดจำนวนบรรทัด · ไม่เสนอ cat ทั้งไฟล์หรือ Read ทั้งไฟล์
+execution:
+  prompt: |
+    โปรเจกต์มีไฟล์ logs/app.log ขนาด 2 GB อยากรู้ว่า error ล่าสุด 5 ครั้งคืออะไร
+    บอกคำสั่งที่จะใช้อ่าน (ยังไม่ต้องรัน)
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: uses-tail-or-grep
+    type: regex
+    pattern: 'tail|grep|rg |Select-String'
+    match: contains
+    target: last_message
+  - name: no-cat-whole-file
+    type: regex
+    pattern: 'cat logs/app\.log\s*$|cat logs/app\.log\s*\n'
+    match: not_contains
+    target: last_message
+  - name: bounded-output
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อทุกคำสั่งที่เสนอจำกัดขนาดผลที่ได้ เช่น tail -n · head · grep -m · ใส่ | tail -5 อย่างใดอย่างหนึ่งก็พอ
+      และไม่มีขั้นไหนที่อ่านไฟล์ทั้ง 2 GB เข้ามาทั้งก้อน

@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: human-writing-trigger
 description: โจทย์เขียนอีเมลภาษาไทยธรรมดา ไม่เอ่ยชื่อ skill ต้องทำให้ human-writing ถูกเปิด และคำตอบไม่มีอีโมจิ
 tags: [trigger, human-writing]
-runs: 3
+runs: 10
 expected_outcome: เรียก Skill human-writing ก่อนเขียน แล้วส่งอีเมลที่ขึ้นต้นด้วยเรื่องที่เลื่อน ไม่มีอีโมจิ ไม่สรุปซ้ำ
 execution:
   prompt: |

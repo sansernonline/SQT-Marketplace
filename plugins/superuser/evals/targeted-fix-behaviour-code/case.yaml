@@ -1,0 +1,38 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: targeted-fix-behaviour-code
+description: ฟังก์ชันรวมยอดขาดตัวสุดท้าย ต้องแก้ช่วงของ range จุดเดียว ไม่เปลี่ยนชื่อตัวแปรหรือเขียนใหม่ทั้งฟังก์ชัน และบอกวิธีรันกรณีที่ล้มซ้ำ (targeted-fix ขั้นตอน 5-6)
+tags: [behaviour, targeted-fix]
+runs: 10
+expected_outcome: เปลี่ยน range(0, len(xs) - 1) เป็น range(len(xs)) หรือเทียบเท่า · ชื่อ ttl และ xs คงเดิม · บอกกรณีทดสอบ เช่น [1, 2, 3] ต้องได้ 6
+execution:
+  prompt: |
+    ฟังก์ชันนี้คืนผลรวมขาดตัวสุดท้าย เช่น [1, 2, 3] ได้ 3 แทน 6 แก้บั๊กให้หน่อย
+
+    ```python
+    def sum_list(xs):
+        ttl = 0
+        for i in range(0, len(xs) - 1):
+            ttl = ttl + xs[i]
+        return ttl
+    ```
+  max_turns: 4
+  timeout_seconds: 120
+graders:
+  - name: keeps-variable-name
+    type: regex
+    pattern: 'ttl'
+    match: contains
+    target: last_message
+  - name: no-rewrite-to-builtin
+    type: regex
+    pattern: 'return sum\(xs\)'
+    match: not_contains
+    target: last_message
+  - name: minimal-and-proved
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. โค้ดที่ส่งกลับต่างจากเดิมแค่บรรทัด range ไม่เปลี่ยนชื่อตัวแปร ไม่เพิ่ม type hint หรือ docstring
+      2. บอกให้รันกรณีที่ล้ม ([1, 2, 3] ต้องได้ 6) ซ้ำ หรือแสดงผลว่าได้ 6 แล้ว

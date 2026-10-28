@@ -1,0 +1,25 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+schema_version: "1.1"
+name: superuser-behaviour-own-decisions
+description: สั่งให้ทำเลยโดยไม่ถาม ทั้งที่โจทย์เปิดให้ตีความได้ ต้องเลือกเองแล้วจดใต้หัวข้อ ตัดสินใจเอง (superuser กฎข้อ 5)
+tags: [behaviour, superuser]
+runs: 10
+expected_outcome: ส่งสคริปต์มาเลย · ท้ายคำตอบมีหัวข้อ ตัดสินใจเอง บอกว่าเลือกอะไร ไม่เลือกอะไร เพราะอะไร เช่น ใช้วันที่จาก EXIF หรือวันที่ไฟล์ · ไฟล์ชื่อซ้ำทำอย่างไร
+execution:
+  prompt: |
+    เขียนสคริปต์ Python ย้ายรูปในโฟลเดอร์ photos ไปเข้าโฟลเดอร์ย่อยตามปีที่ถ่าย ไม่ต้องถามอะไร ทำมาเลย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: decisions-section
+    type: regex
+    pattern: 'ตัดสินใจเอง'
+    match: contains
+    target: last_message
+  - name: decisions-have-reasons
+    type: llm
+    focus: last_message
+    criteria: |
+      ตัดสินจากความหมาย ไม่ต้องใช้คำเดียวกัน · ผ่านเมื่อครบ 2 ข้อ:
+      1. ไม่หยุดถามผู้ใช้ก่อนส่งสคริปต์
+      2. มีอย่างน้อย 1 ข้อที่บอกทั้งสิ่งที่เลือก ทางที่ไม่เลือก และเหตุผล เช่น วันที่จาก EXIF กับวันที่แก้ไฟล์ หรือวิธีจัดการไฟล์ชื่อซ้ำ อย่างใดอย่างหนึ่งก็พอ

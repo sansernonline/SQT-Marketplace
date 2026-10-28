@@ -5,6 +5,7 @@
 // โมดูล log · inbox · review_gate · split_gate ปิดได้ใน .claude/superuser/config.json (moduleOn) · ไม่สร้างโฟลเดอร์ทีมเอง · ไม่มีวันทำให้งานหลักล้ม (จับทุก error แล้วออกด้วย 0)
 import { readFileSync, readSync, writeSync, appendFileSync, existsSync, mkdirSync, readdirSync, writeFileSync, renameSync, openSync, closeSync, statSync, unlinkSync, utimesSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { join, dirname, resolve, relative, basename } from "node:path";
 import { homedir, tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -647,15 +648,42 @@ export function ownerInboxGate(name, inp = {}) {
 // รายการห้ามอยู่ใน guard-rules.json (regex ต่อข้อ + เหตุผล + กฎที่มา) · ตรวจเฉพาะ Bash ไม่แตะ Read/Edit/Write
 // ยกเว้นต่อโปรเจกต์: .claude/superuser/guard-allow.json {"allow": ["git-commit"]} ปิดข้อนั้น · ค่าที่ไม่ใช่ id = regex ถ้าตรงคำสั่งให้ผ่าน (เช่น ผู้ใช้สั่ง commit)
 // ตอบตามเอกสาร hooks (code.claude.com/docs/en/hooks ตรวจ 2026-10-23): hookSpecificOutput.permissionDecision "deny" + permissionDecisionReason
-export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(HERE, "guard-rules.json"), { rules: [] }).rules ?? []) {
+// บรรทัด git อัตโนมัติ ใน CONTEXT.md (workspace-setup --git-policy) คือคำอนุญาตของผู้ใช้ · ไม่มีบรรทัด = manual · force · amend · push ลง main (git-push-main) ไม่เคยผ่านด้วยบรรทัดนี้
+const POLICY_ALLOWS = { auto: ["git-push", "git-commit"], commit: ["git-commit"], manual: [] };
+export function gitPolicyOf(teamDir) {
+  let text = ""; try { text = readFileSync(join(teamDir, "CONTEXT.md"), "utf8"); } catch { return "manual"; }
+  const line = text.split(/\r?\n/).find((l) => l.startsWith("- **git อัตโนมัติ:**")) ?? "";
+  return line.match(/ผู้ใช้เลือก `(auto|commit|manual)`/)?.[1] ?? "manual";
+}
+// push ที่ไม่ระบุ branch (`git push` · `git push origin` · `git push origin HEAD`) ไปที่ branch ปัจจุบัน regex มองไม่เห็นชื่อ
+// จึงถาม git ว่าอยู่ branch ไหน · อ่านไม่ได้ถือว่าอาจเป็น main
+export function pushTargetsCurrent(cmd) {
+  const bare = cmd.replace(/"[^"]*"|'[^']*'/g, (q) => (/\s/.test(q) ? "q" : q)); // ข้อความในเครื่องหมายคำพูดที่มีเว้นวรรค (เช่น -m "... git push ...") ไม่ใช่คำสั่ง
+  const m = bare.match(/\bgit\b((?:\s+-[Cc]\s+\S+)*)\s+push\b([^;&|]*)/i);
+  if (!m) return false;
+  const toks = m[2].trim().split(/\s+/).filter(Boolean), args = [];
+  for (let i = 0; i < toks.length; i++) {
+    if (/^(-o|--push-option|--repo|--receive-pack|--exec)$/.test(toks[i])) { i++; continue; } // flag ที่มีค่าตามหลัง
+    if (!toks[i].startsWith("-")) args.push(toks[i]);
+  }
+  return args.slice(1).every((r) => /^\+?(HEAD|@)$/i.test(r));
+}
+function currentBranch(cmd, teamDir) {
+  const at = cmd.match(/\bgit\s+-C\s+(?:"([^"]*)"|'([^']*)'|(\S+))/i);
+  const dir = at ? (at[1] ?? at[2] ?? at[3]) : teamDir ? dirname(dirname(teamDir)) : process.cwd();
+  try { return execFileSync("git", ["-C", dir, "rev-parse", "--abbrev-ref", "HEAD"], { encoding: "utf8", timeout: 3000, stdio: ["ignore", "pipe", "ignore"] }).trim(); } catch { return ""; }
+}
+export function guardGate(name, inp = {}, teamDir = null, rules = readJson(join(HERE, "guard-rules.json"), { rules: [] }).rules ?? [], branchOf = currentBranch) {
   if (name !== "Bash") return "";
   const cmd = String(inp.command ?? "");
-  const allow = (teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || [];
+  const allow = [...((teamDir && readJson(join(teamDir, "guard-allow.json"), {}).allow) || []), ...(teamDir ? POLICY_ALLOWS[gitPolicyOf(teamDir)] : [])];
+  if (allow.includes("git-push") && pushTargetsCurrent(cmd) && /^(main|master|HEAD|)$/.test(branchOf(cmd, teamDir)))
+    return "ด่านป้องกัน (SuperUser): push โดยไม่ระบุ branch ขณะอยู่บน main หรือ master (หรืออ่าน branch ไม่ได้) — กฎ: ไม่ commit หรือ push ลง main ตรง · ระบุ branch งานให้ชัด เช่น git push -u origin claude/<งาน>";
   const ids = new Set(rules.map((r) => r.id));
   for (const a of allow) if (!ids.has(a)) { try { if (new RegExp(a, "i").test(cmd)) return ""; } catch { /* regex พัง = ไม่ยกเว้น */ } }
   for (const r of rules) {
     if (allow.includes(r.id)) continue;
-    let re; try { re = new RegExp(r.pattern, "i"); } catch { continue; }
+    let re; try { re = new RegExp(r.pattern, r.flags ?? "i"); } catch { continue; }
     if (re.test(cmd)) return `ด่านป้องกัน (SuperUser): ${r.reason} — กฎ: ${r.rule} · ถ้าผู้ใช้สั่งไว้จริง เพิ่ม "${r.id}" ใน .claude/superuser/guard-allow.json ("allow") แล้วลองใหม่`;
   }
   return "";
@@ -718,9 +746,24 @@ function preWriteGate(input) {
   const answer = (decision, reason) => process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: decision, permissionDecisionReason: reason } }));
   const deny = denyReason(input, teamDir);
   if (deny) { answer("deny", deny); return; }
-  if (teamDir && !moduleOn(teamDir, "pii_gate")) return;
-  const pii = personalDataGate(input.tool_name, input.tool_input ?? {});
-  if (pii) answer("ask", pii);
+  const pii = teamDir && !moduleOn(teamDir, "pii_gate") ? "" : personalDataGate(input.tool_name, input.tool_input ?? {});
+  const name = teamDir && moduleOn(teamDir, "name_gate", false) ? fileNameGate(input.tool_name, input.tool_input ?? {}) : "";
+  if (pii || name) answer("ask", [pii, name].filter(Boolean).join("\n"));
+}
+
+// ── ด่านชื่อไฟล์ใหม่ (PreToolUse Write · โมดูล name_gate ค่าเริ่มปิด · ถาม ไม่ปฏิเสธ) ──
+// กฎประจำตัว: ชื่อไฟล์ใหม่ไม่มีเว้นวรรค ไทย อีโมจิ หรือคำว่า final · new · ไม่ตรวจตัวพิมพ์ใหญ่ เพราะ README.md SKILL.md และชื่อเอกสารส่งลูกค้าตาม document-naming (ACME-QUOTE-v1.2-APPROVED.docx) ใช้ตัวใหญ่ได้
+// ไม่ตรวจไฟล์ที่มีอยู่แล้ว (เขียนทับ ไม่ได้ตั้งชื่อใหม่) และไฟล์ใน _to_delete/ test fixture node_modules .git
+const NAME_SKIP = /(^|[\\/])(_to_delete|tests?|fixtures?|__tests__|node_modules|\.git)[\\/]/i;
+export function fileNameGate(name, inp = {}) {
+  const path = String(inp.file_path ?? "");
+  if (name !== "Write" || !path || NAME_SKIP.test(path) || existsSync(path)) return "";
+  const file = basename(path), found = [];
+  if (/\s/.test(file)) found.push("เว้นวรรค");
+  if (/[฀-๿]/.test(file)) found.push("ตัวอักษรไทย");
+  if (/\p{Extended_Pictographic}/u.test(file)) found.push("อีโมจิ");
+  if (file.split(/[-_.\s]+/).some((w) => /^(final|new)$/i.test(w))) found.push("คำว่า final หรือ new");
+  return found.length ? `ด่านชื่อไฟล์ (SuperUser): ชื่อไฟล์ใหม่ ${file} มี${found.join(" · ")} · กฎ: ชื่อไฟล์ใหม่ใช้อังกฤษ คั่นด้วย - ไม่มีเว้นวรรค ไทย อีโมจิ final new (document-naming) · skill ที่กำหนดแบบอื่นไว้ (เช่นโน้ตส่วนตัวใน personal-kb) อนุมัติได้ · ปิดได้ที่ .claude/superuser/config.json {"modules": {"name_gate": false}}` : "";
 }
 
 // ── ส่งตำแหน่งงานกลับหลังย่อบริบท (โมดูล recompact ค่าเริ่มปิด) ──────────
@@ -1210,7 +1253,13 @@ function selfTest() {
     ["ตัวบอก skill: แก้ไฟล์ .docx → human-writing + docx", [], true, () => routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("docx") && routes("แก้ไฟล์ report.docx ให้หัวข้อเป็นทางการ").includes("human-writing")],
     ["ตัวบอก skill: เขียนอีเมล → human-writing", [], true, () => routes("Write a short email to the client").includes("human-writing")],
     ["ตัวบอก skill: เทียบ → answer-shape", [], true, () => routes("เปรียบเทียบ PostgreSQL กับ SQL Server").includes("answer-shape")],
-    ["ตัวบอก skill: โค้ด python → simplify + stack-python", [], true, () => ["superuser:simplify", "stack-python"].every((s) => routes("เขียนสคริปต์ Python อ่าน csv").includes(s))],
+    ["ตัวบอก skill: โค้ด python → simplify + lazy-coding + stack-python (ตรงกับตาราง skill ใน CLAUDE.global.md)", [], true, () => { const r = routes("เขียนสคริปต์ Python อ่าน csv"); return ["superuser:simplify", "lazy-coding", "stack-python"].every((s) => r.includes(s)); }],
+    ["ตัวบอก skill: แถวใหม่ของ skill ที่เคยไม่มี router", [], true, () => routes("ขอ stress test แผนนี้หน่อย").includes("adversarial-review-panel") && routes("ช่วยตั้งชื่อไฟล์รายงานให้ถูก").includes("document-naming") && routes("รวมบทเรียนงานนี้").includes("session-lessons-to-skills") && !routes("สวัสดี").includes("status-report")],
+    // คำกว้าง (reflect · stress test · fan-out · naming · รายงานสถานะ) ต้องมีคำบริบทคู่ ข้อความเรื่องโค้ดจะได้ไม่เปิด skill ผิด
+    ...[["สถานะงานถึงไหนแล้ว", "status-report"], ["ทำโลโก้มาหลายแบบให้เลือก", "parallel-attempts-pick-best"], ["ทำโลโก้ 3 แบบให้เลือก", "parallel-attempts-pick-best"], ["รายงานมีตัวย่อเยอะ ช่วยทำอภิธานศัพท์", "spell-out-abbreviations"], ["fan out งานนี้ให้ลูกทีม", "parallel-split-and-merge"], ["reflect งานรอบนี้หน่อย", "session-lessons-to-skills"], ["naming convention ของไฟล์รายงาน", "document-naming"]]
+      .map(([s, k]) => [`ตัวบอก skill: "${s}" → ${k}`, [], true, () => routes(s).includes(k)]),
+    ...[["reflect package ใน Go", "session-lessons-to-skills"], ["stress test API ด้วย k6", "adversarial-review-panel"], ["naming convention ของตัวแปร", "document-naming"], ["เปลี่ยนชื่อไฟล์ utils.ts", "document-naming"], ["ออกแบบ Kafka fan-out ไปหลาย consumer", "parallel-split-and-merge"], ["เขียน endpoint รายงานสถานะ", "status-report"], ["สร้าง enum ตัวย่อสถานะในโค้ด", "spell-out-abbreviations"], ["ทำ dashboard แสดงรายงานสถานะคำสั่งซื้อ", "status-report"], ["เปลี่ยนชื่อไฟล์ทั้งโฟลเดอร์ src", "document-naming"], ["ตั้งชื่อไฟล์ migration ของ database", "document-naming"], ["ทำ unit test หลายแบบให้เลือก mock", "parallel-attempts-pick-best"]]
+      .map(([s, k]) => [`ตัวบอก skill: "${s}" → ไม่เปิด ${k}`, [], false, () => routes(s).includes(k)]),
     ["ตัวบอก skill: คำสั่ง slash → ไม่บอก", [], true, () => routes("/superuser:superuser เขียนรายงาน").length === 0],
     ["ตัวบอก skill: ทักทาย → ไม่บอก", [], true, () => routes("สวัสดีครับ").length === 0],
     // ตัดสินด้วยตัวเลข: ถามเลือกหรือจัดลำดับที่มีตัวเลขหรือเกณฑ์ → decision-scoring · ถามลอย ๆ ไม่มีตัวเลข → ไม่บอก
@@ -1368,6 +1417,19 @@ ${rows}
       finally { process.stdout.write = w; }
       return /"ask"/.test(out) && !/"deny"/.test(out);
     }],
+    ["ด่านชื่อไฟล์: ชื่อถูก 8 แบบผ่าน · ชื่อผิด 8 แบบถูกทัก · ไฟล์ที่มีอยู่และ _to_delete ไม่ตรวจ", [], true, () => {
+      const W = (f) => fileNameGate("Write", { file_path: join(tmpdir(), "sqt-name-test", f) });
+      const good = ["report-2026-10-28.md", "README.md", "ACME-QUOTE-v1.2-APPROVED.docx", "user_card.tsx", "newsletter.md", "renew-plan.md", "SKILL.md", "data.json"];
+      const bad = ["my report.md", "รายงาน.md", "plan-final.md", "plan_new.docx", "logo 🎨.png", "NEW-spec.md", "final.md", "สรุป-2026.md"];
+      return good.every((f) => !W(f)) && bad.every((f) => W(f)) && !fileNameGate("Write", { file_path: join(tmpdir(), "_to_delete", "a final.md") }) && !fileNameGate("Edit", { file_path: "x final.md" }) && !fileNameGate("Write", { file_path: HERE + "/superuser-hook.mjs" });
+    }],
+    ["ด่านชื่อไฟล์: ค่าเริ่มปิด · เปิดใน config แล้วถาม (ask) ไม่ปฏิเสธ", [], true, () => {
+      const proj = join(tmpdir(), `sqt-name-gate-${process.pid}`), team = join(proj, ".claude", "superuser"); mkdirSync(team, { recursive: true });
+      const run = () => { const w = process.stdout.write; let out = ""; process.stdout.write = (s) => { out += s; return true; }; try { preWriteGate({ hook_event_name: "PreToolUse", tool_name: "Write", cwd: proj, tool_input: { file_path: join(proj, "plan final.md"), content: "x" } }); } finally { process.stdout.write = w; } return out; };
+      const off = run(); writeFileSync(join(team, "config.json"), JSON.stringify({ modules: { name_gate: true } })); const on = run();
+      unlinkSync(join(team, "config.json"));
+      return off === "" && /"ask"/.test(on) && /ด่านชื่อไฟล์/.test(on);
+    }],
   );
   // ด่านป้องกัน (guard): โปรเจกต์ชั่วคราวที่มี .claude/superuser/ · ไม่มี config = ปิด · เปิดแล้วบล็อกตามรายการ · guard-allow.json ยกเว้นได้
   const proj = join(tmpdir(), `sqt-guard-test-${process.pid}`), gTeam = join(proj, ".claude", "superuser"); mkdirSync(gTeam, { recursive: true });
@@ -1387,6 +1449,27 @@ ${rows}
       writeFileSync(join(gTeam, "guard-allow.json"), JSON.stringify({ allow: ["git-commit", "^git push origin feature/"] }));
       const ok = !guardGate("Bash", { command: "git commit -m x" }, gTeam) && !guardGate("Bash", { command: "git push origin feature/a" }, gTeam) && Boolean(guardGate("Bash", { command: "git push origin main" }, gTeam));
       unlinkSync(join(gTeam, "guard-allow.json")); return ok;
+    }],
+    ["ด่านป้องกัน: push --force · -f · +refspec → บล็อกด้วยเหตุผล force · push ธรรมดาไม่ใช่ force", [], true, () => /force/.test(G("git push --force origin main")) && /force/.test(G("git push -f")) && /force/.test(G("git push --force-with-lease")) && /force/.test(G("git push origin +main")) && !/force/.test(G("git push origin main")) && !/force/.test(G("git push --follow-tags"))],
+    ["ด่านป้องกัน: commit --amend → บล็อก · commit -m ใช้เหตุผลทั่วไป", [], true, () => /amend/.test(G("git commit --amend --no-edit")) && !/amend/.test(G("git commit -m 'x'"))],
+    ["ด่านป้องกัน: branch -D → บล็อก · branch -d และ -f ผ่าน", [], true, () => G("git branch -D feat") && G("git branch --delete --force feat") && G("git branch -d -f feat") && !G("git branch -d feat") && !G("git branch -f feat HEAD") && !G("git branch -vv")],
+    ["ด่านป้องกัน: clean -f / -fdx → บล็อก · clean -n ผ่าน", [], true, () => G("git clean -f") && G("git clean -fdx") && G("git clean -d --force") && !G("git clean -n") && !G("git clean -nfd")],
+    ["ด่านป้องกัน: checkout -- . / restore . → บล็อก · restore ไฟล์เดียวและ --staged ผ่าน", [], true, () => G("git checkout -- .") && G("git checkout .") && G("git restore .") && G("git checkout HEAD -- .") && G("git restore -SW .") && G("git restore --source=HEAD .") && G("git restore -s HEAD .") && !G("git restore src/a.js") && !G("git restore --staged .") && !G("git restore -S .") && !G("git checkout main")],
+    ["ด่านป้องกัน: git -C \"<พาธมีเว้นวรรค>\" ยังจับได้ · --amend ในข้อความ -m ไม่นับ", [], true, () => /reset --hard/.test(G("git -C \"C:/a b & c\" reset --hard")) && /amend/.test(G("git -C 'x y' commit --amend")) && /amend/.test(G("git commit -m \"x\" --amend")) && !/amend/.test(G("git commit -m \"ห้ามใช้ --amend\"")) && !/amend/.test(G("git commit -m 'no --amend here'"))],
+    ["ด่านป้องกัน: บรรทัด git อัตโนมัติ auto → push และ commit ผ่าน · force และ amend ยังโดน · commit → แค่ commit ผ่าน · ไม่มีบรรทัด = manual", [], true, () => {
+      const ctx = join(gTeam, "CONTEXT.md"), set = (v) => writeFileSync(ctx, `# x
+
+## กติกา
+- **git อัตโนมัติ:** ข้อความ (ผู้ใช้เลือก \`${v}\` 2026-10-28)
+`);
+      const g = (c, br = "claude/x") => guardGate("Bash", { command: c }, gTeam, undefined, () => br);
+      set("auto"); const auto = !g("git push origin feat") && !g("git push -u origin claude/x") && !g("git commit -m x") && g("git push --force") && g("git commit --amend") && gitPolicyOf(gTeam) === "auto"
+        && ["git push origin main", "git push origin HEAD:main", "git push origin :main", "git push --delete origin main", "git push --mirror origin", "git -C \"C:/a b & c\" push origin master"].every((c) => /git-push-main/.test(g(c)))
+        && ["git push", "git push origin", "git push origin HEAD", "git push -u origin HEAD"].every((c) => /ไม่ระบุ branch/.test(g(c, "main")) && !g(c, "claude/x"))
+        && /ไม่ระบุ branch/.test(g("git push", "")) && !g("git push origin claude/x", "main");
+      set("commit"); const commit = !g("git commit -m x") && g("git push origin feat");
+      set("manual"); const manual = g("git push origin feat") && g("git commit -m x");
+      unlinkSync(ctx); return auto && commit && manual && gitPolicyOf(gTeam) === "manual" && g("git push");
     }],
     ["ด่านป้องกัน: Edit/Write/Read ไม่โดน", [], false, () => guardGate("Edit", { file_path: "/p/a.md", new_string: "git push origin main" }) || guardGate("Write", { file_path: "/p/a.sh", content: "rm -rf /" }) || guardGate("Read", { file_path: "~/.claude/settings.json" })],
     ["ด่านป้องกัน: เปิดใน config → ตอบ deny ตามเอกสาร PreToolUse", [], true, () => {

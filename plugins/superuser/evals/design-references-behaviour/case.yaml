@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: design-references-behaviour
 description: ขอสไลด์นำเสนอให้ดูดี ต้องตั้งคำค้นจากโปรเจกต์ ชี้เว็บที่เก่งงานสไลด์ ถอดสี 8 หน้าที่จากต้นแบบ และบอกว่างานจากเว็บแรงบันดาลใจห้ามยกมาใส่ตรง ๆ
 tags: [behaviour, design-references]
-runs: 3
+runs: 10
 expected_outcome: ตั้งคำค้นไทยและอังกฤษจากโปรเจกต์ · ลิงก์เว็บประเภทสไลด์ · ถอดสีจากงานที่เลือกเป็น 8 หน้าที่ · เตือนว่า Dribbble หรือ Behance ใช้ดูเป็นต้นแบบเท่านั้น
 execution:
   prompt: |

@@ -3,7 +3,7 @@ schema_version: "1.1"
 name: design-references-regression
 description: เห็นจริง 2026-10-26 ถึง 2026-10-27 · agent ออกแบบไอคอนและเลือกสีจากความจำหรือคลังที่เก็บไว้ (Lucide ใส่กรอบ · พาเลตสำเร็จรูป) ผู้ใช้ปฏิเสธหลายรอบว่าไม่สวยและดูเหมือน AI ทำ · ต้องค้นงานจริงก่อน
 tags: [regression, design-references]
-runs: 3
+runs: 10
 expected_outcome: ไม่ส่ง SVG หรือรหัสสีที่เลือกเองทันที · เสนอค้นงานจริงในหมวดก่อน พร้อมลิงก์เว็บ แล้วค่อยถอดสีจากงานที่เลือก
 execution:
   prompt: |
