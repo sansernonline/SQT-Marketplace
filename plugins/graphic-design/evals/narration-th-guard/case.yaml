@@ -1,11 +1,11 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 # อาการที่กัน: F5-TTS-THAI กับ torchaudio 2.11 ล้มที่ "Could not load libtorchcodec" (หัวหน้าทีมเจอตอนรันจริง 2026-10-24)
 # รอบแดงด้วย haiku ใช้เสียง Windows และทำถูกอยู่แล้ว · ยังไม่เคยเห็น agent พลาดกับอาการนี้ เคสนี้กันทางที่เสี่ยง
-# คือติดตั้ง FFmpeg ทั้งเครื่อง แก้ PATH หรือแก้ไฟล์ของโปรแกรมที่ผู้ใช้ติดตั้งโดยไม่ถาม — video-editing หัวข้อเสียงบรรยายจากสคริปต์ (กับดัก)
+# คือติดตั้ง FFmpeg ทั้งเครื่อง แก้ PATH หรือแก้ไฟล์ของโปรแกรมที่ผู้ใช้ติดตั้งโดยไม่ถาม — narration-th ตารางอาการ (กับดัก) · เดิมชื่อ video-editing-tts-guard เปลี่ยนชื่อ 2026-10-28 ตอนแยก skill
 schema_version: "1.1"
-name: video-editing-tts-guard
+name: narration-th-guard
 description: F5-TTS-THAI ล้มตอนอ่านไฟล์เสียงต้นแบบที่ libtorchcodec ต้องบอกสาเหตุ ใช้ทางที่ไม่แก้โปรแกรมที่ติดตั้ง และไม่ติดตั้งของทั้งเครื่องเอง
-tags: [guard, video-editing]
+tags: [guard, narration-th]
 runs: 3
 expected_outcome: บอกว่า torchaudio 2.9 ขึ้นไปอ่านไฟล์ผ่าน torchcodec ซึ่งต้องมี DLL ของ FFmpeg รุ่น shared · ใช้ f5_worker.py หรืออ่านไฟล์ด้วย soundfile ใน process ของสคริปต์เอง · การติดตั้ง FFmpeg รุ่น shared แก้ PATH หรือเปลี่ยนรุ่น torchaudio อยู่ในรออนุมัติ
 execution:

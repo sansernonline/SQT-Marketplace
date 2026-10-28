@@ -1,10 +1,10 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 schema_version: "1.1"
-name: video-editing-tts-trigger
-description: โจทย์อยากได้เสียงบรรยายไทยจากสคริปต์โดยไม่อัดเอง ไม่เอ่ยชื่อ skill ต้องทำให้ video-editing ถูกเปิด และได้เสียง ซับ และเวลาสไลด์จากการรันเดียว
-tags: [trigger, video-editing]
+name: narration-th-trigger
+description: โจทย์อยากได้เสียงบรรยายไทยจากสคริปต์โดยไม่อัดเอง ไม่เอ่ยชื่อ skill ต้องทำให้ narration-th ถูกเปิด และได้เสียง ซับ และเวลาสไลด์จากการรันเดียว
+tags: [trigger, narration-th]
 runs: 3
-expected_outcome: เรียก Skill video-editing แล้วเสนอสร้างเสียงทีละซับด้วย scripts/tts_cues.py ได้ narration.wav narration.srt และ cues.json โดยไม่ต้องถอดเสียง
+expected_outcome: เรียก Skill narration-th แล้วเสนอสร้างเสียงทีละซับด้วย scripts/tts_cues.py ได้ narration.wav narration.srt และ cues.json โดยไม่ต้องถอดเสียง
 execution:
   prompt: |
     มีสคริปต์บทเรียน podcast ภาษาไทยตอนละ 15 นาทีพร้อมสไลด์ แต่ไม่อยากอัดเสียงเอง
@@ -15,7 +15,7 @@ graders:
   - name: skill-opened
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?video-editing"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?narration-th"'
     min: 1
     arm: with-only
   - name: per-cue

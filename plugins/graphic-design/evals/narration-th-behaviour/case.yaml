@@ -1,8 +1,8 @@
 # รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
 schema_version: "1.1"
-name: video-editing-tts-behaviour
+name: narration-th-behaviour
 description: เตรียมสคริปต์ที่มีคำอังกฤษ ตัวเลข และจุดเปลี่ยนสไลด์ให้เครื่องอ่านด้วยเสียงที่เลียนจากผู้ใช้ ต้องได้บรรทัดละ 1 ซับ ไฟล์คำอ่าน และขั้นทำร่างก่อน
-tags: [behaviour, video-editing]
+tags: [behaviour, narration-th]
 runs: 3
 expected_outcome: แบ่งบรรทัดละ 1 ซับ ไม่เกิน 35 ตัวต่อบรรทัด ใช้ | แบ่ง 2 บรรทัด · คง [สไลด์ n] · ไฟล์คำอ่าน TSV ให้ Docker และ Kubernetes เป็นคำอ่านไทยโดยซับยังแสดงคำเดิม · ทำร่างด้วยเสียง Windows ก่อน · เสียงต้นแบบต้องเป็นเสียงผู้ใช้และมีข้อความตรงกับคลิป
 execution:

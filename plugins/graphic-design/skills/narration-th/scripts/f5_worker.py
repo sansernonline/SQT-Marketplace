@@ -14,7 +14,7 @@ from pathlib import Path
 INSTALL_HINT = """ยังไม่มีแพ็กเกจที่ F5-TTS-THAI ต้องใช้ ({name}) ใน python ตัวนี้: {exe}
 - รันด้วย python ของ venv ที่ติดตั้ง F5-TTS-THAI ไม่ใช่ python ของเครื่อง เช่น <F5>/venv/Scripts/python.exe
 - ยังไม่ได้ติดตั้ง: ทำตาม README ของ F5-TTS-THAI (github.com/VYNCX/F5-TTS-THAI) ใน venv ของมันเอง
-  การติดตั้ง torch กินพื้นที่หลาย GB ให้ผู้ใช้อนุมัติก่อน (video-editing หัวข้อเสียงบรรยายจากสคริปต์)
+  การติดตั้ง torch กินพื้นที่หลาย GB ให้ผู้ใช้อนุมัติก่อน (skill narration-th)
 - ไม่อยากติดตั้ง: ใช้ tts_cues.py --engine edge หรือ --engine windows แทน"""
 
 try:
