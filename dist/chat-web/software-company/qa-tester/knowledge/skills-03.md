@@ -1,3 +1,265 @@
+# skill: load-testing
+
+Use when checking how a system holds many users at once (load, stress, spike, soak test, k6, ยิงโหลด, รับได้กี่คน). Page speed → web-quality-audit.
+
+# load-testing — ยิงโหลดแบบมีเป้า มีเกณฑ์ผ่าน และได้รับอนุญาต
+
+อยู่ใน plugin `software-company` · ถ้อยคำในไฟล์นี้เขียนตาม `human-writing` · ข้อเท็จจริงของเครื่องมือทุกข้อมีลิงก์และวันที่ตรวจ 2026-10-28 ในหัวข้อ "ที่มา" · สคริปต์ตัวอย่าง [`assets/load-test.js`](assets/load-test.js) · workflow ตัวอย่าง [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · วิธีอ่านผล [`reading-results`](references/reading-results.md) · MCP ของ k6 [`mcp-k6`](references/mcp-k6.md)
+
+> **กฎข้อเดียว:** ไม่มีเกณฑ์ผ่านที่เขียนไว้ก่อนยิง = ไม่มีผลทดสอบ มีแค่กราฟ · และไม่ยิงระบบที่ไม่ใช่ของเรา หรือ production โดยไม่มีชื่อคนอนุมัติเป็นลายลักษณ์อักษร
+
+## ใช้เมื่อ
+
+- ก่อนเปิดระบบหรือก่อนแคมเปญที่คนจะเข้าพร้อมกันเยอะ (ลดราคา · เปิดลงทะเบียน · ประกาศผล)
+- ถามว่า "ระบบรับได้กี่คน" · "ตอนคนเยอะจะช้าไหม" · "เพิ่มเครื่องแล้วดีขึ้นจริงไหม"
+- postmortem บอกว่าเหตุเกิดเพราะไม่เคยทดสอบโหลด (`postmortem-template` หัวข้อ 5)
+- จะตั้ง smoke test ความเร็วใน CI ให้ล้มเมื่อช้ากว่าเกณฑ์
+- ผู้ใช้พูดว่า load test · stress test · spike · soak · k6 · Locust · JMeter · p95 · ยิงโหลด · ทดสอบประสิทธิภาพ
+
+ไม่ใช้เมื่อ: หน้าเว็บหน้าเดียวโหลดช้าในเบราว์เซอร์ (Lighthouse · Core Web Vitals) → [`web-quality-audit`](../web-quality-audit/SKILL.md) · ระบบจริงช้าอยู่ตอนนี้และต้องหาว่าช้าตรงไหน → [`observability-basics`](../observability-basics/SKILL.md) ก่อน · ทดสอบว่ากดปุ่มแล้วได้ผลถูก → [`e2e-testing-patterns`](../e2e-testing-patterns/SKILL.md)
+
+## ใช้ตัวอื่นแทนหรือคู่กัน
+
+| สถานการณ์ | ใช้ | เกี่ยวกับ skill นี้อย่างไร |
+|---|---|---|
+| ความเร็วฝั่งเบราว์เซอร์ของหน้าเดียว | [`web-quality-audit`](../web-quality-audit/SKILL.md) | skill นี้วัดฝั่ง server ตอนคนเยอะ ไม่ใช่เวลาวาดหน้า |
+| ต้องเห็นว่าส่วนไหนของระบบตันระหว่างยิง | [`observability-basics`](../observability-basics/SKILL.md) | เปิดแดชบอร์ดของระบบคู่กับผล k6 (หัวข้อ 6) |
+| ใส่ smoke test ลง pipeline | [`cicd-and-release`](../cicd-and-release/SKILL.md) · [`jenkins-pipeline`](../jenkins-pipeline/SKILL.md) | หัวข้อ 7 บอกว่าอะไรรันทุก PR อะไรรันตามรอบ |
+| แผนทดสอบทั้งรุ่นที่มีทุกชนิด | [`test-case-template`](../test-case-template/SKILL.md) | ใส่ load test เป็นแถวหนึ่งในแผน พร้อมเกณฑ์จากหัวข้อ 1 |
+| ยิงแล้วต้องเพิ่มเครื่องหรือ autoscale | [`kubernetes-helm`](../kubernetes-helm/SKILL.md) · [`infra-as-code`](../infra-as-code/SKILL.md) | ยิงซ้ำด้วยสคริปต์เดิมหลังปรับ เทียบกับผลก่อนปรับ |
+| ข้อมูลทดสอบมีชื่อหรือเบอร์โทร | [`pdpa-compliance`](../pdpa-compliance/SKILL.md) | ใช้ข้อมูลปลอม ไม่ดึงข้อมูลลูกค้าจริงมายิง |
+
+## 1 · เป้าและเกณฑ์ผ่าน — เขียนก่อนเปิดเครื่องมือ
+
+ถามให้ได้ 4 ข้อ แล้วจดลงหัวไฟล์สคริปต์หรือแผนทดสอบ:
+
+| ข้อ | ตัวอย่างคำตอบ | ถ้าไม่มีคำตอบ |
+|---|---|---|
+| ปริมาณที่คาด | ชั่วโมงเร่งด่วน 50 คำขอต่อวินาที ที่ path `/api/orders` | ดึงจาก log หรือ metric ของระบบจริง · ระบบใหม่ ใช้ประมาณการของเจ้าของงานแล้วติด `(รอยืนยัน)` |
+| เส้นทางที่ยิง | ดูสินค้า 70% · ใส่ตะกร้า 20% · จ่ายเงิน 10% | ยิงเส้นทางที่ทำเงินหรือแพงที่สุดก่อน 1–3 เส้น |
+| เกณฑ์ความเร็ว | `p(95)` ของเวลาตอบไม่เกินกี่มิลลิวินาที | ค่าตั้งต้น 500 ms สำหรับ API **ค่าตั้งต้น ยังไม่ได้วัด** · ปรับหลังมีผล baseline |
+| เกณฑ์ error | `http_req_failed` ต่ำกว่ากี่เปอร์เซ็นต์ | ค่าตั้งต้น 1% **ค่าตั้งต้น ยังไม่ได้วัด** |
+
+- วัดด้วย percentile ไม่ใช่ค่าเฉลี่ย: ค่าเฉลี่ยซ่อนคนส่วนน้อยที่รอนาน
+- เกณฑ์ทุกข้อแปลงเป็น `thresholds` ในสคริปต์ (หัวข้อ 4) ไม่เก็บไว้ในหัวคนอ่านผล
+- ถ้าไม่มีตัวเลขปริมาณเลย ให้ทำ smoke กับ baseline ได้ แต่ห้ามสรุปว่า "รับได้" เพราะไม่รู้ว่ารับได้เทียบกับอะไร
+
+## 2 · ด่านอนุญาต — ก่อนยิงทุกครั้งที่เกิน smoke และทุกครั้งที่ยิง production
+
+การยิงโหลดใส่ระบบที่ไม่ได้รับอนุญาตทำให้ระบบล่มได้จริงและอาจผิดกฎหมาย จึงหยุดรออนุมัติตรงนี้ ไม่ข้ามแม้ผู้ใช้เร่ง
+
+1. **ระบบเป็นของใคร** · ของคนอื่น (API ของคู่ค้า · payment gateway · SaaS ภายนอก · เว็บคู่แข่ง) → ไม่ยิง · ใช้ mock หรือ sandbox ที่ผู้ให้บริการเปิดให้ทดสอบโหลด และอ่านเงื่อนไขของเขาก่อน
+2. **environment** · ยิงที่ staging หรือ environment แยกสำหรับทดสอบโหลด · เอกสาร k6 บอกว่า QA ที่เครื่องไม่เท่า production ใช้ประเมินความสามารถรับโหลดไม่ได้ ใช้ได้แค่ smoke
+3. **production** · ต้องมีชื่อคนอนุมัติ ช่วงเวลา ปริมาณสูงสุด และคนเฝ้าที่หยุดได้ทันที · เริ่มที่ smoke ปริมาณต่ำ (เอกสาร k6 ถือเป็นแนวปฏิบัติที่เสี่ยงต่ำ) · ห้ามสร้างคำสั่งซื้อ การจ่ายเงิน อีเมล หรือ SMS จริง
+4. **ของที่ยิงแล้วเกิดผลข้างเคียง** · ตัด webhook ส่งเงิน ส่งข้อความ ออกจากเส้นทาง หรือชี้ไป mock · ผู้ให้บริการภายนอกที่คิดเงินต่อครั้ง ตั้งเพดานเงินก่อน
+5. **บันทึก** ลงหัวสคริปต์หรือแผน: ระบบ · environment · ปริมาณสูงสุด · ช่วงเวลา · ผู้อนุมัติ · ช่องทางหยุด
+
+สคริปต์ตัวอย่างบังคับด่านนี้ในโค้ด: ถ้าไม่มี `BASE_URL` หรือ `TARGET_ENV` สคริปต์จะหยุด · ถ้าเป็นแบบที่ไม่ใช่ smoke หรือ `TARGET_ENV=production` (รวม smoke) แต่ไม่มี `APPROVED_BY` สคริปต์ก็หยุด
+
+## 3 · เลือกเครื่องมือ
+
+| ถ้า | ใช้ | เหตุผล |
+|---|---|---|
+| เริ่มใหม่ · HTTP API หรือเว็บ · อยากให้เกณฑ์ผ่านล้ม CI ได้เลย | **k6** (ค่าหลัก) | เขียนเป็น JavaScript · `thresholds` ในสคริปต์ · ออก exit code ไม่ใช่ 0 เมื่อเกณฑ์ไม่ผ่าน · ใบอนุญาต AGPL-3.0 |
+| ทีมถนัด Python · ต้องเขียนลำดับขั้นซับซ้อนหรือโปรโตคอลเอง | **Locust** | สถานการณ์ทดสอบเป็นโค้ด Python ธรรมดา · กระจายหลายเครื่องได้ · รันแบบ headless ใน CI ได้ · ใบอนุญาต MIT |
+| องค์กรมีแผน `.jmx` อยู่แล้ว · ต้องยิง JDBC · JMS · LDAP · FTP · SOAP | **JMeter** | รองรับโปรโตคอลกว้าง · มี GUI บันทึกแผน · ยิงจริงใช้โหมด CLI (headless) |
+
+- รุ่นที่เห็น 2026-10-28: k6 v2.3.0 (2026-09-21) และสาย 1.x ยังออกแพตช์ความปลอดภัย v1.8.2 (2026-10-12) · ล็อกรุ่นใน CI ไม่ใช้ `latest` · `setup-k6-action` ที่ไม่ใส่ `k6-version` จะได้รุ่นล่าสุดเสมอ ([README](https://github.com/grafana/setup-k6-action) ตรวจ 2026-10-28)
+- Grafana Cloud k6 (ยิงจากคลาวด์ · เก็บผล) ราคาและโควตา `(ยังไม่ได้ตรวจ)` · เริ่มด้วย k6 บนเครื่องหรือ runner ของ CI ซึ่งฟรี
+- เครื่องที่ยิงต้องไม่ใช่เครื่องเดียวกับระบบที่ถูกยิง ไม่งั้นแย่ง CPU กันเองแล้วผลเพี้ยน
+
+## 4 · แบบทดสอบและสคริปต์
+
+ลำดับตามเอกสาร k6: **smoke ก่อนเสมอ** → average-load → แบบอื่นตามความเสี่ยง · รูปโหลดเรียบ ๆ (ไต่ขึ้น · คงที่ · ลง) ไม่ทำโหลดขึ้นลงหลายรอบเพราะหาต้นเหตุยาก
+
+| แบบ | ถามอะไร | ผู้ใช้เสมือน (VU) และเวลา ตามเอกสาร k6 | เมื่อไหร่ |
+|---|---|---|---|
+| smoke | สคริปต์ถูกไหม ระบบตอบได้ตอนคนน้อย | น้อย · วินาทีถึงไม่กี่นาที | ทุกครั้งก่อนแบบอื่น · ทุก PR ใน CI |
+| load (average-load) | ปริมาณปกติผ่านเกณฑ์ไหม | เท่าค่าเฉลี่ยของ production · 5–60 นาที | ก่อนปล่อยรุ่น · เป็น baseline |
+| stress | เกินปกติแล้วเป็นอย่างไร | สูงกว่าเฉลี่ย · 5–60 นาที | ระบบเสี่ยงช่วงใช้หนัก |
+| spike | คนแห่เข้าทันทีแล้วรอดไหม | สูงมาก · ไม่กี่นาที | ก่อนแคมเปญ · flash sale |
+| soak | ใช้นาน ๆ แล้วหน่วยความจำรั่ว connection ค้างไหม | เฉลี่ย · หลายชั่วโมง | ระบบที่เปิดยาว |
+| breakpoint | เพดานอยู่ตรงไหน | ไต่ขึ้นจนพัง | ทำไม่กี่ครั้ง ต้องได้อนุมัติข้อ 2 เสมอ · สคริปต์ตัวอย่างไม่มีแบบนี้ ต้องเขียน stages เอง |
+
+สคริปต์ [`assets/load-test.js`](assets/load-test.js) เลือกแบบด้วย `TEST_TYPE` ทุกแบบใช้ executor `ramping-arrival-rate` (กำหนดจำนวนรอบต่อหน่วยเวลา ระบบช้าลงก็ยังโดนยิงเท่าเดิม จึงเห็นอาการจริง) · หัวใจคือ thresholds:
+
+```javascript
+thresholds: {
+  http_req_failed: [{ threshold: 'rate<0.01', abortOnFail: true, delayAbortEval: '30s' }],
+  http_req_duration: ['p(95)<500'],              // ค่าตั้งต้น ยังไม่ได้วัด
+  'http_req_duration{type:API}': ['p(95)<500'],  // แยกเกณฑ์ตาม tag
+},
+```
+
+- `abortOnFail` หยุดการยิงเมื่อเกณฑ์ไม่ผ่านระหว่างทาง ไม่ทุบระบบต่อจนจบ · `delayAbortEval` รอเก็บตัวอย่างก่อนตัดสิน
+- ตัวเลขทุกตัวในสคริปต์ (rate · VU · stages) เป็น **ค่าตั้งต้น ยังไม่ได้วัด** ปรับตามหัวข้อ 1
+- รัน: `k6 run -e TEST_TYPE=smoke -e TARGET_ENV=staging -e BASE_URL=https://staging.example.com assets/load-test.js`
+
+## 5 · อ่านผล
+
+รายละเอียดและตัวอย่างอ่านผลใน [`reading-results`](references/reading-results.md) · สั้น ๆ:
+
+1. ดูบรรทัด thresholds ท้ายรายงานก่อน (ผ่าน/ไม่ผ่าน) แล้วดู exit code: 0 = ผ่านทุกเกณฑ์ · เกณฑ์ไม่ผ่านมักได้ 99
+2. ดู `http_req_failed` ก่อน `http_req_duration` · error พุ่งแปลว่าเวลาตอบที่เห็นอาจเร็วเพราะตอบ error เร็ว
+3. ดูเครื่องที่ยิงด้วย CPU เต็มหรือ VU ไม่พอ = ผลบอกขีดของเครื่องยิง ไม่ใช่ระบบ
+4. เทียบกับ baseline รอบก่อนด้วยสคริปต์เดิม ข้อมูลเดิม environment เดิม · เปลี่ยนทีละอย่าง
+5. รายงานบอกผล "ผ่าน/ไม่ผ่านเกณฑ์ข้อไหน ที่ปริมาณเท่าไร" ไม่ใช่ "ระบบรับได้ 10,000 คน" ถ้าไม่ได้ยิงแบบนั้นจริง
+
+## 6 · ยิงคู่กับการเฝ้าระบบ
+
+ผล k6 บอกว่าช้า แต่ไม่บอกว่าช้าเพราะอะไร · ระหว่างยิงเปิดแดชบอร์ดตาม `observability-basics` หัวข้อ 2 (latency · traffic · errors · saturation) ของ server ฐานข้อมูล คิว · จดเวลาเริ่มและจบการยิงเพื่อจับคู่กราฟ · คอขวดที่เจอบ่อย: connection pool ของฐานข้อมูล · query ไม่มี index · ไม่ได้คืน connection (ตัวอย่างใน `postmortem-template` หัวข้อ 5)
+
+## 7 · ต่อเข้า CI
+
+| รันเมื่อ | แบบ | ที่ไหน |
+|---|---|---|
+| ทุก PR หรือทุก push | smoke · ไม่กี่นาที | staging หรือ environment ของ PR |
+| กลางคืนหรือตามรอบ | load · stress · spike | environment แยกสำหรับทดสอบโหลด |
+| ก่อนปล่อยรุ่นใหญ่ | ครบชุดที่เลือกในหัวข้อ 4 · รันซ้ำอย่างน้อย 2 รอบ | environment ที่เท่า production |
+
+- เอกสาร k6 เตือนว่า load test ใช้ 3–15 นาทีขึ้นไป จึงไม่ใส่ในทางที่ deploy อัตโนมัติ และอย่าเชื่อผลผ่าน/ไม่ผ่านอย่างเดียวจนกว่ากระบวนการจะนิ่ง
+- GitHub Actions: `grafana/setup-k6-action@v1.2.2` (ใส่ `k6-version`) ติดตั้ง k6 แล้ว `grafana/run-k6-action@v1.5.0` รัน (รุ่นที่ล็อกไว้ ตรวจ 2026-10-28) · ตัวอย่างเต็มใน [`assets/k6-smoke.yml`](assets/k6-smoke.yml) · Jenkins หรือ CI อื่นเรียก `k6 run` ตรง ๆ
+- อย่าห่อ `k6 run` ด้วยสคริปต์ที่กลืน exit code (เช่นมี `echo` ต่อท้าย) · ให้ `k6 run` เป็นคำสั่งสุดท้าย หรือเก็บ `$?` แล้ว `exit` ด้วยค่านั้น
+- `BASE_URL` และ token มาจากตัวแปรลับของ CI (`config-and-secrets`) ไม่เขียนลงสคริปต์
+
+## ตัวอย่างจริง 1 ชุด
+
+ป้าย `ตัวอย่าง`: ออกแบบบนกระดาษ ยังไม่ได้ยิงระบบจริง
+
+**โจทย์:** ร้านออนไลน์จะจัด flash sale เที่ยงวันศุกร์ เคยล่มเพราะ connection pool เต็ม อยากรู้ว่ารอบนี้รอดไหม
+
+| ขั้น | ที่ทำ | หัวข้อ |
+|---|---|---|
+| เป้า | ปริมาณจากแคมเปญก่อน (รอยืนยัน) · เส้นทาง ดูสินค้า → ใส่ตะกร้า → จ่ายเงินด้วย mock · p95 ไม่เกิน 500 ms · error ไม่เกิน 1% (ค่าตั้งต้น ยังไม่ได้วัด) | 1 |
+| อนุญาต | ยิงที่ staging ที่ขนาดเท่า production · payment ชี้ mock · ผู้อนุมัติ ช่วงเวลา จดในหัวสคริปต์ | 2 |
+| ยิง | smoke → load (baseline) → spike | 4 |
+| เฝ้า | แดชบอร์ด connection pool และ CPU ฐานข้อมูลระหว่างยิง | 6 |
+| ผล | รายงานเกณฑ์ข้อที่ผ่านและไม่ผ่านที่ปริมาณที่ยิงจริง แล้วเพิ่ม smoke ลง CI | 5 · 7 |
+
+## ตรวจก่อนส่ง
+
+1. มีปริมาณที่คาด เส้นทาง และเกณฑ์ p95 กับอัตรา error ก่อนยิง · ค่าที่เดามีป้าย "ค่าตั้งต้น ยังไม่ได้วัด"
+2. ระบบเป็นของเรา · environment ระบุชัด · เกิน smoke มีชื่อผู้อนุมัติ · production มีคนเฝ้าและช่องทางหยุด
+3. ไม่มีเงิน อีเมล SMS หรือคำสั่งซื้อจริงเกิดจากการยิง
+4. เกณฑ์อยู่ใน `thresholds` · มี `abortOnFail` ที่อัตรา error
+5. smoke ผ่านก่อนแบบอื่น · เครื่องยิงไม่ใช่เครื่องเดียวกับระบบ
+6. รายงานบอกผลเทียบเกณฑ์และ baseline ที่ปริมาณที่ยิงจริง ไม่สรุปเกินที่ยิง
+7. CI ไม่กลืน exit code · ค่าลับมาจากตัวแปรลับ · ล็อกรุ่น k6
+
+## ที่มา
+
+ตรวจ 2026-10-28 (เปิดอ่านผ่านเครื่องมือดึงหน้าเว็บที่สรุปโดยโมเดลเล็ก ควรเปิดหน้าดิบซ้ำก่อนล็อกค่าใน production)
+
+- thresholds · `abortOnFail` · `delayAbortEval` · เกณฑ์ตาม tag https://grafana.com/docs/k6/latest/using-k6/thresholds/
+- ชื่อ executor ทั้ง 6 https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ · ตัวเลือกของ `ramping-arrival-rate` https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/ramping-arrival-rate/
+- แบบทดสอบและลำดับ https://grafana.com/docs/k6/latest/testing-guides/test-types/
+- CI · environment · production https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/
+- exit code 0 และ 99 · สคริปต์กลืน exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/
+- GitHub Actions https://github.com/grafana/run-k6-action
+- ใบอนุญาต k6 https://github.com/grafana/k6 · รุ่น https://api.github.com/repos/grafana/k6/releases
+- Locust https://docs.locust.io/en/stable/what-is-locust.html · JMeter https://jmeter.apache.org/ (หน้าแรกลิงก์ไปใบอนุญาตของ Apache Software Foundation ไม่ได้ระบุรุ่นล่าสุด)
+- ยังไม่ได้ตรวจ: ราคาและโควตา Grafana Cloud k6 · รุ่นล่าสุดของ Locust และ JMeter
+
+
+## reference: mcp-k6.md
+
+# MCP ของ k6 (grafana/mcp-k6)
+
+ส่วนขยายของ `load-testing` · ตรวจ 2026-10-28 จาก https://github.com/grafana/mcp-k6 และ https://api.github.com/repos/grafana/mcp-k6/releases · ไม่ฝังใน plugin ผู้ใช้ติดตั้งเองถ้าต้องการ
+
+## สถานะ
+
+| เรื่อง | ที่เห็น |
+|---|---|
+| ผู้ดูแล | Grafana (repo `grafana/mcp-k6`) |
+| สถานะ | README เขียนว่ายังเป็นของทดลอง (experimental) |
+| รุ่นล่าสุด | v0.7.0 วันที่ 2026-10-05 |
+| ใบอนุญาต | หน้า repo ไม่ตรงกัน: แถบข้างเขียน AGPL-3.0 แต่ README เขียน MIT · เปิดไฟล์ LICENSE ก่อนใช้ในงานลูกค้า |
+| เครื่องมือ | `validate_script` (รัน 1 VU 1 รอบ) · `run_script` (รันจริง ไม่เกิน 5 นาที) · `list_sections` · `get_documentation` |
+
+## ข้อควรระวัง
+
+- `run_script` ยิงคำขอจริงไปยังปลายทางในสคริปต์ · `validate_script` ก็ยิง 1 รอบ · ด่านอนุญาตใน `load-testing` หัวข้อ 2 ใช้กับการเรียกผ่าน MCP ด้วย ไม่มีข้อยกเว้น
+- เริ่มใช้แค่ `get_documentation` กับ `validate_script` ที่ชี้ staging · ให้ agent เรียก `run_script` เฉพาะเมื่อผู้ใช้อนุญาตในรอบนั้น
+- โหมด HTTP ไม่มีระบบยืนยันตัวตนในตัว ใช้ในเครือข่ายที่เชื่อถือได้เท่านั้น · ใช้แบบ stdio บนเครื่องตัวเองดีกว่า
+
+## ติดตั้ง (ผู้ใช้ทำเอง ล็อกรุ่น)
+
+Claude Code ผ่าน Docker (รูปแบบคำสั่งตาม README):
+
+```bash
+claude mcp add --scope=user --transport=stdio k6 -- docker run --rm -i grafana/mcp-k6:<tag ของ v0.7.0>
+```
+
+ชื่อ tag ของ image บน Docker Hub ที่ตรงกับ v0.7.0 `(ยังไม่ได้ตรวจ)` · README ใช้ `latest` แต่ให้เปิดหน้า tag แล้วใส่รุ่นที่ล็อกได้แทน · ทางอื่น: Homebrew (`brew tap grafana/grafana` แล้ว `brew install mcp-k6`) หรือแพ็กเกจ `.deb` `.rpm` จากหน้า release ของ v0.7.0 · รันแบบ native ต้องมี k6 อยู่ใน PATH ด้วย
+
+เอกสาร k6 ยังพูดถึงคำสั่ง `k6 x mcp` ที่ดึงรุ่นล่าสุดอัตโนมัติ · ต้องการล็อกรุ่นให้ใช้ตัวแยก `mcp-k6` แบบข้างบน (จากผลค้นหาที่อ้างหน้า https://grafana.com/docs/k6/v2.3.x/set-up/configure-ai-assistant/ ยังไม่ได้เปิดหน้านั้นเอง)
+
+
+## reference: reading-results.md
+
+# อ่านผล k6 แล้วเขียนรายงาน
+
+ส่วนขยายของ `load-testing` หัวข้อ 5 · ข้อเท็จจริงของ k6 ตรวจ 2026-10-28 จากหน้าที่ลิงก์ไว้ท้ายไฟล์ · วิธีตีความเป็นแนวปฏิบัติทั่วไป ยังไม่ได้ทดสอบกับระบบจริงในรอบนี้
+
+## 1 · อ่านตามลำดับนี้
+
+| ลำดับ | ดูอะไร | ตีความ |
+|---|---|---|
+| 1 | exit code | 0 = ผ่านทุกเกณฑ์ · ไม่ใช่ 0 = ไม่ผ่าน · เกณฑ์ไม่ผ่านมักได้ 99 |
+| 2 | บรรทัด thresholds ท้ายรายงาน | เกณฑ์ข้อไหนผ่าน ข้อไหนไม่ผ่าน และค่าจริงเท่าไร |
+| 3 | `http_req_failed` | error พุ่ง → เวลาตอบที่เร็วอาจเป็นเพราะตอบ error เร็ว อย่าเพิ่งดีใจกับ p95 |
+| 4 | `http_req_duration` p95 และ p99 | ช่วงที่ผู้ใช้ส่วนใหญ่เจอ และหางที่คนส่วนน้อยรอ · ค่าเฉลี่ยใช้ตัดสินไม่ได้ |
+| 5 | `checks` | คำตอบถูกไหม ไม่ใช่แค่ได้ status 200 |
+| 6 | คำเตือนเรื่อง VU ไม่พอ หรือรอบที่ไม่ได้เริ่ม | เครื่องยิงตามปริมาณที่ตั้งไม่ทัน ผลรอบนี้บอกขีดของเครื่องยิง ไม่ใช่ระบบ (ชื่อ metric ของรอบที่หลุด `(ยังไม่ได้ตรวจ)`) |
+
+## 2 · หาว่าตันตรงไหน
+
+ดูกราฟของระบบช่วงเวลาเดียวกับการยิง (`observability-basics` หัวข้อ 2):
+
+| อาการในกราฟ | สงสัยอะไรก่อน |
+|---|---|
+| CPU ของแอปเต็ม เวลาตอบโตตาม | โค้ดหนักหรือเครื่องน้อยไป · ลองเพิ่มเครื่องแล้วยิงซ้ำ |
+| CPU แอปว่าง แต่เวลาตอบโต | รอของข้างนอก: connection pool ฐานข้อมูล · ล็อกในตาราง · API ภายนอก |
+| error เริ่มที่ปริมาณหนึ่งแล้วพุ่ง | ชนเพดาน (pool · ไฟล์ที่เปิดได้ · rate limit) · หาค่าตั้งที่ปริมาณนั้น |
+| soak: หน่วยความจำขึ้นเรื่อย ๆ ไม่ลง | หน่วยความจำรั่ว · connection ไม่ถูกคืน |
+| เวลาตอบดีตอนแรก แล้วแย่ลงพร้อมข้อมูลที่โต | query ไม่มี index · ตารางโตจากข้อมูลที่ยิงสร้าง |
+
+## 3 · ยิงซ้ำให้เทียบได้
+
+- สคริปต์เดิม ข้อมูลตั้งต้นเดิม environment เดิม · ล้างข้อมูลที่การยิงรอบก่อนสร้างไว้
+- เปลี่ยนทีละอย่าง (โค้ด หรือ ค่าตั้ง หรือ ขนาดเครื่อง) แล้วยิงเทียบกับ baseline
+- เอกสาร k6 แนะนำรันแบบเดียวกันอย่างน้อย 2 รอบก่อนปล่อยรุ่น เพราะผลแต่ละรอบแกว่ง
+
+## 4 · แบบรายงาน 1 หน้า
+
+```markdown
+## ผล load test · <ระบบ> · <YYYY-MM-DD>
+
+- environment: <staging-perf> · ผู้อนุมัติ: <ชื่อ> · ช่วงเวลา: <เริ่ม–จบ>
+- แบบ: <smoke · load · spike> · ปริมาณสูงสุดที่ยิงจริง: <รอบต่อวินาที>
+- k6 รุ่น: <v2.x.y> · exit code: <0 หรือ 99>
+
+| เกณฑ์ | ตั้งไว้ | ได้จริง | ผล |
+|---|---|---|---|
+| http_req_duration p(95) | < 500 ms | <ค่า> | ผ่าน / ไม่ผ่าน |
+| http_req_failed | < 1% | <ค่า> | ผ่าน / ไม่ผ่าน |
+
+คอขวดที่เห็น: <กราฟไหน ที่ปริมาณเท่าไร>
+ทำต่อ: <ข้อแก้ 1–3 ข้อ> · ยิงซ้ำหลังแก้: <วันที่>
+```
+
+เขียนผลตามที่ยิงจริงเท่านั้น · ยิงแค่ 50 รอบต่อวินาที → ห้ามเขียนว่า "รับได้ 1,000 คนพร้อมกัน"
+
+## ที่มา
+
+- exit code https://grafana.com/docs/learning-paths/automate-k6-cicd/handle-exit-code/ (ตรวจ 2026-10-28)
+- thresholds https://grafana.com/docs/k6/latest/using-k6/thresholds/ (ตรวจ 2026-10-28)
+- รันซ้ำอย่างน้อย 2 รอบ https://grafana.com/docs/k6/latest/testing-guides/automated-performance-testing/ (ตรวจ 2026-10-28)
+
+
+---
+
 # skill: fsd-writing
 
 Use when writing or reviewing a Functional Specification Document (FSD) that screens are built from.
@@ -1057,174 +1319,3 @@ export class OrderList {
 | ข้อบังคับความปลอดภัยทุก diff | `principle-secure-by-default` |
 | env และ secret | `config-and-secrets` |
 | วันที่ไทย · พ.ศ. · เรียงคำไทย | `i18n-and-locale` |
-
-
----
-
-# skill: stack-python
-
-Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
-
-# stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
-
-ใช้เครื่องมือเดียวกับที่ repo ใช้อยู่ และทุก diff ต้องผ่าน ruff · type check · pytest ก่อนส่ง ไฟล์นี้เก็บเฉพาะเรื่องของ Python
-เรื่องทั่วไปอยู่ที่อื่น: เขียนให้น้อยดู `lazy-coding` · ตั้งชื่อดู `readable-code` · log ดู `logging-standards` · จับ error ดู `error-handling-patterns`
-
-## 1 · เริ่มงาน: ดูว่า repo ใช้อะไร แล้วใช้ตัวนั้น
-
-| เจอไฟล์ | ติดตั้ง | รันคำสั่ง |
-|---|---|---|
-| `uv.lock` | `uv sync` | `uv run <cmd>` |
-| `poetry.lock` | `poetry install` | `poetry run <cmd>` |
-| `pdm.lock` | `pdm install` | `pdm run <cmd>` |
-| `requirements*.txt` อย่างเดียว | `python -m venv .venv` แล้ว `pip install -r requirements.txt` | เปิด `.venv` ก่อน |
-| ไม่มีอะไรเลย (โปรเจกต์ใหม่) | `uv init` แล้ว `uv add` | `uv run <cmd>` |
-
-- ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
-- ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
-- อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
-- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://devguide.python.org/versions/): ตัวล่าสุด 3.15 (ออก 2026-10-09) · 3.14 ยังรับแก้ bug · 3.11–3.13 รับแค่แก้ช่องโหว่ · 3.10 หมดอายุแล้ว (2026-10-01) · ตัวถัดไปที่หมดอายุคือ 3.11 (ต.ค. 2027) · โปรเจกต์ใหม่เริ่มที่ 3.14 หรือ 3.15 ถ้า library ที่ใช้รองรับแล้ว · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
-
-คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
-
-```bash
-ruff check .                      # lint
-ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
-pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
-pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
-pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
-pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
-```
-
-- type checker: ถ้า repo มี `[tool.pyright]` หรือ `pyrightconfig.json` ให้ใช้ pyright ถ้ามี `[tool.mypy]` หรือ `mypy.ini` ให้ใช้ mypy ถ้าไม่มีทั้งคู่ให้ถามครั้งเดียว ส่วน ty ของ Astral ใช้เมื่อ repo ตั้งไว้แล้วเท่านั้น
-- ถ้า repo ยังใช้ black · isort · flake8 ให้ใช้ตามนั้น ไม่ย้ายไป ruff ในงานเดียวกัน
-
-## 2 · แบบแผนประจำ
-
-| เรื่อง | ทำแบบนี้ | ไม่ทำ |
-|---|---|---|
-| type hint | ใส่ทุกฟังก์ชันและ method ที่เรียกจากนอกไฟล์ ใช้ `list[str]` · `X \| None` | `List` · `Optional` จาก `typing` ในโค้ดใหม่ |
-| รูปร่างข้อมูล | ข้างในใช้ `@dataclass(frozen=True)` ส่วนที่ขอบระบบใช้ pydantic | `dict` ลอย ๆ ส่งข้ามโมดูล |
-| path | `pathlib.Path` | ต่อ string ด้วย `+ "/"` |
-| ข้อความ | f-string | `%` หรือ `.format()` ในโค้ดใหม่ |
-| log | `log.info("ส่งแล้ว order_id=%s", oid)` ให้ logger แทนค่าเอง | f-string ใน log (สร้าง string ทุกครั้งแม้ level ปิด) |
-| ไฟล์ · lock · connection | `with ...:` | เปิดแล้วรอ `close()` เอง |
-| ค่า default | `None` แล้วสร้างใหม่ในตัวฟังก์ชัน | `def f(items=[])` (list เดียวใช้ร่วมทุกครั้งที่เรียก) |
-| ไฟล์ข้อความภาษาไทย | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | ไม่ระบุ (Windows อ่านเป็น cp874 หรือ cp1252) |
-| สคริปต์ | logic อยู่ในฟังก์ชัน แล้วให้ `if __name__ == "__main__":` เรียก `main()` | โค้ดทำงานตอน import |
-| Command Line Interface (CLI) | ใช้ตัวที่ repo ใช้ ถ้าไม่มีให้เริ่มที่ `argparse` ก่อน typer | parse `sys.argv` เอง |
-
-```python
-@dataclass(frozen=True)
-class Refund:
-    order_id: int
-    amount_satang: int
-
-def main() -> int:
-    args = parse_args()
-    return run(args.input_path)
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
-
-## 3 · Web: FastAPI และ Django
-
-- ข้อมูลเข้าและออกผ่าน pydantic model ที่ขอบ ส่วนข้างในใช้ type ของโดเมน ไม่ส่ง `request.json()` ดิบเข้า service
-- FastAPI: ของที่ต้องเปลี่ยนตอน test (DB session · client ภายนอก · นาฬิกา) รับผ่าน `Depends` แล้วสลับด้วย `app.dependency_overrides`
-- `async def` เฉพาะเมื่อทั้งสายเรียกเป็น async (httpx `AsyncClient` · driver DB แบบ async) ถ้าใช้ไลบรารีที่บล็อก (`requests` · `time.sleep` · driver sync) ให้ใช้ `def` ธรรมดาให้ FastAPI รันใน threadpool หรือห่อด้วย `asyncio.to_thread`
-- DB session 1 ตัวต่อ 1 request ผ่าน dependency ที่ `yield` ห้ามเก็บ session ไว้ระดับโมดูล
-- Django Object-Relational Mapping (ORM): ถ้าวนลูปแล้วแตะ FK ให้ใช้ `select_related` ถ้าแตะ many-to-many หรือ reverse FK ให้ใช้ `prefetch_related` แล้วตรวจจำนวน query ใน test ด้วย `assertNumQueries` หรือ `django_assert_num_queries`
-- migration: อ่านไฟล์ที่ `makemigrations` สร้างทุกครั้งก่อน commit ถ้าลบคอลัมน์หรือเปลี่ยนชนิดบนตารางใหญ่ ให้แยกเป็นหลายขั้นตาม `database-design`
-- endpoint สุขภาพ · timeout · รูป error ที่ส่งออก ดู `web-service-essentials` และ `api-conventions`
-
-```python
-def get_db() -> Iterator[Session]:
-    with SessionLocal() as session:
-        yield session
-
-@app.post("/refunds", status_code=201)
-def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
-    return refund_service.create(db, body.to_domain())
-```
-
-## 4 · Data และ AI
-
-| เรื่อง | ทำแบบนี้ |
-|---|---|
-| แก้ค่าใน DataFrame | ใช้ `df.loc[mask, "col"] = x` เพราะ pandas 3.x เปิด Copy-on-Write เป็นค่าเริ่มต้น ทำให้ `df["col"][mask] = x` ไม่แก้ `df` เลย |
-| ความเร็ว | ใช้ operation ทั้งคอลัมน์ (`df["a"] * df["b"]` · `np.where`) ก่อน `apply` ส่วน `iterrows` ใช้เมื่อไม่มีทางอื่น |
-| เงิน | เก็บเป็นสตางค์ชนิด `int64` หรือ `Decimal` ห้ามใช้ float และปัดเศษครั้งเดียวตอนแสดงผล |
-| CSV ภาษาไทย | ลอง `utf-8-sig` ก่อน (มี BOM จาก Excel) ถ้าไม่ผ่านให้ลอง `cp874` (TIS-620) และระบุ `dtype` ของรหัสที่ขึ้นต้นด้วย 0 เป็น `str` |
-| ผลซ้ำได้ | `rng = np.random.default_rng(42)` ส่งต่อเป็นพารามิเตอร์ ตั้ง seed ของ torch และ `random` ด้วย แล้วจด seed ในผลลัพธ์ |
-| notebook | ใช้ลองไอเดียได้ แต่โค้ดที่จะใช้ซ้ำให้ย้ายเข้าโมดูลพร้อม test ให้ notebook เหลือแค่เรียกฟังก์ชันและวาดกราฟ |
-| ไฟล์ใหญ่ | อ่านทีละส่วน (`chunksize`) หรือใช้ parquet แทน CSV เมื่อคุมรูปแบบได้ |
-
-- เรื่องเรียก LLM · prompt · RAG · วัดผล ดู `llm-engineering`
-- เรื่องนำเข้าหรือส่งออก Excel และปี พ.ศ. ดู `data-import-export`
-
-## 5 · กับดักที่เจอบ่อย
-
-| กับดัก | อาการ | แก้ |
-|---|---|---|
-| datetime ไม่มี timezone | เวลาเพี้ยน 7 ชั่วโมง หรือเทียบกันแล้วได้ `TypeError` | สร้างด้วย `datetime.now(timezone.utc)` (3.11+ ใช้ `datetime.UTC` ได้) เก็บเป็น UTC แสดงด้วย `ZoneInfo("Asia/Bangkok")` และห้ามใช้ `utcnow()` |
-| เงินเป็น float | `0.1 + 0.2 != 0.3` และยอดรวมขาด 1 สตางค์ | ใช้ `int` สตางค์ หรือ `Decimal("0.10")` จาก string |
-| closure ในลูป | callback ทุกตัวได้ค่าสุดท้ายของลูป | ผูกค่าตอนสร้าง `lambda i=i: ...` หรือ `functools.partial` |
-| `except Exception:` กว้าง | error จริงถูกกลืน | จับเฉพาะชนิดที่รู้จัก ตามหลัก `error-handling-patterns` |
-| import วนกัน | `ImportError` แบบ partially initialized | ย้ายของที่ใช้ร่วมไปโมดูลที่ 3 ส่วน import ที่ใช้แค่ใน type ให้ใส่ใต้ `if TYPE_CHECKING:` |
-| งานหนัก CPU ใน thread | ใช้ thread หลายตัวแล้วไม่เร็วขึ้น เพราะ Global Interpreter Lock (GIL) | ใช้ `ProcessPoolExecutor` ส่วน thread ใช้กับงานรอ I/O |
-| `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
-| `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
-| `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
-| repo ใช้ `uv` แต่เพิ่มแพ็กเกจด้วย `uv pip install` หรือแก้ `pyproject.toml` มือ | `uv.lock` ไม่อัปเดต เครื่องอื่น `uv sync` แล้วไม่มีแพ็กเกจ | `uv add <pkg>` / `uv remove <pkg>` เท่านั้น · ของ dev ใส่ `uv add --group dev` (`[dependency-groups]`) · รันทุกอย่างผ่าน `uv run` ไม่ activate venv เอง (แนวคิดจาก trailofbits `modern-python` · CC-BY-SA เขียนใหม่) |
-| สคริปต์ไฟล์เดียวมี `requirements.txt` แยกต่างหาก | คนรันลืมติดตั้ง · เวอร์ชันไม่ตรง | ใส่ dependency ไว้ในหัวไฟล์แบบ PEP 723 (`# /// script` … `# dependencies = ["httpx"]` … `# ///`) แล้ว `uv run script.py` สร้าง env ให้เอง |
-| blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
-
-## 6 · test
-
-ตั้งค่า pytest · fixture · `parametrize` และตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest) ส่วนนี้เหลือแค่กับดักเฉพาะ Python
-
-- ไฟล์ชั่วคราวใช้ `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo · ค่า environment ใช้ `monkeypatch.setenv`
-- เวลา: ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ใช้ `time-machine` แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ
-- HTTP ภายนอก: httpx ใช้ `respx` · requests ใช้ `responses` · ห้ามยิงเน็ตจริงใน unit test
-- ฐานข้อมูลจริงใช้ `testcontainers` ตัวเดียวกับ production ไม่ใช้ SQLite แทน Postgres
-- logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
-- coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
-
-## 7 · ความปลอดภัยเฉพาะ Python
-
-หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
-
-- lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
-- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
-- ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
-- SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
-- ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`
-- ค่าลับอ่านจาก environment (`os.environ["KEY"]` หรือ pydantic-settings) แล้วตรวจตอนเริ่ม ให้ `.env` อยู่ใน `.gitignore` (ดู `config-and-secrets`)
-- Django production: `DEBUG = False` · `ALLOWED_HOSTS` ระบุชื่อจริง · `SECRET_KEY` จาก environment · รัน `python manage.py check --deploy` ก่อนปล่อย
-
-## 8 · รายการตรวจก่อนส่ง
-
-- [ ] `ruff check` ไม่มีข้อผิดพลาด
-- [ ] `ruff format --check` ผ่าน (หรือ formatter ที่ repo ใช้)
-- [ ] type checker ของ repo ได้ 0 error ในไฟล์ที่แก้
-- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้
-- [ ] พฤติกรรมใหม่ทุกอย่างมี test ที่เคยแดงก่อนแก้
-- [ ] ไม่มี `requests` · `time.sleep` · driver sync หรือ I/O ที่บล็อกอยู่ใน `async def`
-- [ ] เปิดไฟล์ข้อความทุกจุดระบุ `encoding="utf-8"` และ datetime ที่เก็บมี timezone
-- [ ] dependency ที่เพิ่มอยู่ใน lock file และผ่าน `pip-audit`
-
-## 9 · เชื่อมกับ skill อื่น
-
-| งาน | เปิด |
-|---|---|
-| เขียนให้น้อย ไม่เพิ่มของเกิน | `lazy-coding` |
-| ชื่อ · รูปฟังก์ชัน · ที่อยู่ไฟล์ | `readable-code` |
-| เลือก framework test · สัดส่วน · ชื่อ test | `testing-standards` |
-| รูปแบบ log · correlation id · logger Python สำเร็จรูป | `logging-standards` |
-| จับ error · retry · timeout | `error-handling-patterns` |
-| กฎปลอดภัยทุก diff | `principle-secure-by-default` และก่อนส่งใช้ `security-gate` |
-| เรียก LLM · RAG · วัดผล | `llm-engineering` |
-| schema · migration | `database-design` |
-| งานเบื้องหลัง (Celery · RQ · cron) | `background-jobs` |
-| ยืนยันว่าทำงานจริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |

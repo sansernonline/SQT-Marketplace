@@ -1,3 +1,174 @@
+# skill: stack-python
+
+Use when writing, reviewing or testing Python (scripts, CLIs, FastAPI, Django, pandas, AI code).
+
+# stack-python — Python ที่อ่านง่าย ถูกชนิด รันซ้ำได้
+
+ใช้เครื่องมือเดียวกับที่ repo ใช้อยู่ และทุก diff ต้องผ่าน ruff · type check · pytest ก่อนส่ง ไฟล์นี้เก็บเฉพาะเรื่องของ Python
+เรื่องทั่วไปอยู่ที่อื่น: เขียนให้น้อยดู `lazy-coding` · ตั้งชื่อดู `readable-code` · log ดู `logging-standards` · จับ error ดู `error-handling-patterns`
+
+## 1 · เริ่มงาน: ดูว่า repo ใช้อะไร แล้วใช้ตัวนั้น
+
+| เจอไฟล์ | ติดตั้ง | รันคำสั่ง |
+|---|---|---|
+| `uv.lock` | `uv sync` | `uv run <cmd>` |
+| `poetry.lock` | `poetry install` | `poetry run <cmd>` |
+| `pdm.lock` | `pdm install` | `pdm run <cmd>` |
+| `requirements*.txt` อย่างเดียว | `python -m venv .venv` แล้ว `pip install -r requirements.txt` | เปิด `.venv` ก่อน |
+| ไม่มีอะไรเลย (โปรเจกต์ใหม่) | `uv init` แล้ว `uv add` | `uv run <cmd>` |
+
+- ใช้ virtual environment เสมอ ห้าม `pip install` ลง Python ของระบบ
+- ห้ามผสมเครื่องมือ เช่น ถ้า repo ใช้ poetry ก็ไม่สร้าง `uv.lock` เพิ่ม
+- อ่าน `requires-python` ใน `pyproject.toml` แล้วห้ามใช้ syntax ที่ใหม่กว่านั้น
+- เวอร์ชัน (ตรวจล่าสุด 2026-10-14 · แหล่ง: https://devguide.python.org/versions/): ตัวล่าสุด 3.15 (ออก 2026-10-09) · 3.14 ยังรับแก้ bug · 3.11–3.13 รับแค่แก้ช่องโหว่ · 3.10 หมดอายุแล้ว (2026-10-01) · ตัวถัดไปที่หมดอายุคือ 3.11 (ต.ค. 2027) · โปรเจกต์ใหม่เริ่มที่ 3.14 หรือ 3.15 ถ้า library ที่ใช้รองรับแล้ว · ก่อนใช้ให้ตรวจหน้านี้ซ้ำ
+
+คำสั่งประจำ (ใส่ `uv run` หรือ `poetry run` นำหน้าตามเครื่องมือของ repo):
+
+```bash
+ruff check .                      # lint
+ruff format --check .             # รูปแบบโค้ด · แก้ด้วย ruff format .
+pyright                           # หรือ mypy . · ดูว่า repo ตั้งตัวไหนใน pyproject.toml
+pytest -q 2>&1 | tail -40         # ทั้งชุด · ดูแค่ท้ายผล (สรุปและ test ที่ล้ม)
+pytest -q tests/test_order.py::test_refund_over_limit   # test เดียวด้วย node id
+pytest -q -k "refund and not slow"                      # เลือกตามชื่อ
+```
+
+- type checker: ถ้า repo มี `[tool.pyright]` หรือ `pyrightconfig.json` ให้ใช้ pyright ถ้ามี `[tool.mypy]` หรือ `mypy.ini` ให้ใช้ mypy ถ้าไม่มีทั้งคู่ให้ถามครั้งเดียว ส่วน ty ของ Astral ใช้เมื่อ repo ตั้งไว้แล้วเท่านั้น
+- ถ้า repo ยังใช้ black · isort · flake8 ให้ใช้ตามนั้น ไม่ย้ายไป ruff ในงานเดียวกัน
+
+## 2 · แบบแผนประจำ
+
+| เรื่อง | ทำแบบนี้ | ไม่ทำ |
+|---|---|---|
+| type hint | ใส่ทุกฟังก์ชันและ method ที่เรียกจากนอกไฟล์ ใช้ `list[str]` · `X \| None` | `List` · `Optional` จาก `typing` ในโค้ดใหม่ |
+| รูปร่างข้อมูล | ข้างในใช้ `@dataclass(frozen=True)` ส่วนที่ขอบระบบใช้ pydantic | `dict` ลอย ๆ ส่งข้ามโมดูล |
+| path | `pathlib.Path` | ต่อ string ด้วย `+ "/"` |
+| ข้อความ | f-string | `%` หรือ `.format()` ในโค้ดใหม่ |
+| log | `log.info("ส่งแล้ว order_id=%s", oid)` ให้ logger แทนค่าเอง | f-string ใน log (สร้าง string ทุกครั้งแม้ level ปิด) |
+| ไฟล์ · lock · connection | `with ...:` | เปิดแล้วรอ `close()` เอง |
+| ค่า default | `None` แล้วสร้างใหม่ในตัวฟังก์ชัน | `def f(items=[])` (list เดียวใช้ร่วมทุกครั้งที่เรียก) |
+| ไฟล์ข้อความภาษาไทย | `open(p, encoding="utf-8")` · `p.read_text(encoding="utf-8")` | ไม่ระบุ (Windows อ่านเป็น cp874 หรือ cp1252) |
+| สคริปต์ | logic อยู่ในฟังก์ชัน แล้วให้ `if __name__ == "__main__":` เรียก `main()` | โค้ดทำงานตอน import |
+| Command Line Interface (CLI) | ใช้ตัวที่ repo ใช้ ถ้าไม่มีให้เริ่มที่ `argparse` ก่อน typer | parse `sys.argv` เอง |
+
+```python
+@dataclass(frozen=True)
+class Refund:
+    order_id: int
+    amount_satang: int
+
+def main() -> int:
+    args = parse_args()
+    return run(args.input_path)
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+## 3 · Web: FastAPI และ Django
+
+- ข้อมูลเข้าและออกผ่าน pydantic model ที่ขอบ ส่วนข้างในใช้ type ของโดเมน ไม่ส่ง `request.json()` ดิบเข้า service
+- FastAPI: ของที่ต้องเปลี่ยนตอน test (DB session · client ภายนอก · นาฬิกา) รับผ่าน `Depends` แล้วสลับด้วย `app.dependency_overrides`
+- `async def` เฉพาะเมื่อทั้งสายเรียกเป็น async (httpx `AsyncClient` · driver DB แบบ async) ถ้าใช้ไลบรารีที่บล็อก (`requests` · `time.sleep` · driver sync) ให้ใช้ `def` ธรรมดาให้ FastAPI รันใน threadpool หรือห่อด้วย `asyncio.to_thread`
+- DB session 1 ตัวต่อ 1 request ผ่าน dependency ที่ `yield` ห้ามเก็บ session ไว้ระดับโมดูล
+- Django Object-Relational Mapping (ORM): ถ้าวนลูปแล้วแตะ FK ให้ใช้ `select_related` ถ้าแตะ many-to-many หรือ reverse FK ให้ใช้ `prefetch_related` แล้วตรวจจำนวน query ใน test ด้วย `assertNumQueries` หรือ `django_assert_num_queries`
+- migration: อ่านไฟล์ที่ `makemigrations` สร้างทุกครั้งก่อน commit ถ้าลบคอลัมน์หรือเปลี่ยนชนิดบนตารางใหญ่ ให้แยกเป็นหลายขั้นตาม `database-design`
+- endpoint สุขภาพ · timeout · รูป error ที่ส่งออก ดู `web-service-essentials` และ `api-conventions`
+
+```python
+def get_db() -> Iterator[Session]:
+    with SessionLocal() as session:
+        yield session
+
+@app.post("/refunds", status_code=201)
+def create_refund(body: RefundIn, db: Session = Depends(get_db)) -> RefundOut:
+    return refund_service.create(db, body.to_domain())
+```
+
+## 4 · Data และ AI
+
+| เรื่อง | ทำแบบนี้ |
+|---|---|
+| แก้ค่าใน DataFrame | ใช้ `df.loc[mask, "col"] = x` เพราะ pandas 3.x เปิด Copy-on-Write เป็นค่าเริ่มต้น ทำให้ `df["col"][mask] = x` ไม่แก้ `df` เลย |
+| ความเร็ว | ใช้ operation ทั้งคอลัมน์ (`df["a"] * df["b"]` · `np.where`) ก่อน `apply` ส่วน `iterrows` ใช้เมื่อไม่มีทางอื่น |
+| เงิน | เก็บเป็นสตางค์ชนิด `int64` หรือ `Decimal` ห้ามใช้ float และปัดเศษครั้งเดียวตอนแสดงผล |
+| CSV ภาษาไทย | ลอง `utf-8-sig` ก่อน (มี BOM จาก Excel) ถ้าไม่ผ่านให้ลอง `cp874` (TIS-620) และระบุ `dtype` ของรหัสที่ขึ้นต้นด้วย 0 เป็น `str` |
+| ผลซ้ำได้ | `rng = np.random.default_rng(42)` ส่งต่อเป็นพารามิเตอร์ ตั้ง seed ของ torch และ `random` ด้วย แล้วจด seed ในผลลัพธ์ |
+| notebook | ใช้ลองไอเดียได้ แต่โค้ดที่จะใช้ซ้ำให้ย้ายเข้าโมดูลพร้อม test ให้ notebook เหลือแค่เรียกฟังก์ชันและวาดกราฟ |
+| ไฟล์ใหญ่ | อ่านทีละส่วน (`chunksize`) หรือใช้ parquet แทน CSV เมื่อคุมรูปแบบได้ |
+
+- เรื่องเรียก LLM · prompt · RAG · วัดผล ดู `llm-engineering`
+- เรื่องนำเข้าหรือส่งออก Excel และปี พ.ศ. ดู `data-import-export`
+
+## 5 · กับดักที่เจอบ่อย
+
+| กับดัก | อาการ | แก้ |
+|---|---|---|
+| datetime ไม่มี timezone | เวลาเพี้ยน 7 ชั่วโมง หรือเทียบกันแล้วได้ `TypeError` | สร้างด้วย `datetime.now(timezone.utc)` (3.11+ ใช้ `datetime.UTC` ได้) เก็บเป็น UTC แสดงด้วย `ZoneInfo("Asia/Bangkok")` และห้ามใช้ `utcnow()` |
+| เงินเป็น float | `0.1 + 0.2 != 0.3` และยอดรวมขาด 1 สตางค์ | ใช้ `int` สตางค์ หรือ `Decimal("0.10")` จาก string |
+| closure ในลูป | callback ทุกตัวได้ค่าสุดท้ายของลูป | ผูกค่าตอนสร้าง `lambda i=i: ...` หรือ `functools.partial` |
+| `except Exception:` กว้าง | error จริงถูกกลืน | จับเฉพาะชนิดที่รู้จัก ตามหลัก `error-handling-patterns` |
+| import วนกัน | `ImportError` แบบ partially initialized | ย้ายของที่ใช้ร่วมไปโมดูลที่ 3 ส่วน import ที่ใช้แค่ใน type ให้ใส่ใต้ `if TYPE_CHECKING:` |
+| งานหนัก CPU ใน thread | ใช้ thread หลายตัวแล้วไม่เร็วขึ้น เพราะ Global Interpreter Lock (GIL) | ใช้ `ProcessPoolExecutor` ส่วน thread ใช้กับงานรอ I/O |
+| `subprocess(..., shell=True)` | input ผู้ใช้กลายเป็นคำสั่ง shell | ส่งเป็น list `["git", "log", ref]` ใส่ `check=True` และตั้ง `timeout` |
+| `pickle.load` ข้อมูลภายนอก | รันโค้ดของคนอื่นได้ทันทีที่โหลด | ใช้ JSON หรือ parquet ถ้าเป็นโมเดลใช้ `safetensors` ถ้าเป็น torch ใส่ `weights_only=True` |
+| `yaml.load` | สร้าง object อะไรก็ได้จากไฟล์ | `yaml.safe_load` |
+| repo ใช้ `uv` แต่เพิ่มแพ็กเกจด้วย `uv pip install` หรือแก้ `pyproject.toml` มือ | `uv.lock` ไม่อัปเดต เครื่องอื่น `uv sync` แล้วไม่มีแพ็กเกจ | `uv add <pkg>` / `uv remove <pkg>` เท่านั้น · ของ dev ใส่ `uv add --group dev` (`[dependency-groups]`) · รันทุกอย่างผ่าน `uv run` ไม่ activate venv เอง (แนวคิดจาก trailofbits `modern-python` · CC-BY-SA เขียนใหม่) |
+| สคริปต์ไฟล์เดียวมี `requirements.txt` แยกต่างหาก | คนรันลืมติดตั้ง · เวอร์ชันไม่ตรง | ใส่ dependency ไว้ในหัวไฟล์แบบ PEP 723 (`# /// script` … `# dependencies = ["httpx"]` … `# ///`) แล้ว `uv run script.py` สร้าง env ให้เอง |
+| blocking ใน `async def` | ทั้ง server ค้างตาม request ที่ช้าที่สุด | ดูข้อ 3 |
+
+## 6 · test
+
+ตั้งค่า pytest · fixture · `parametrize` และตัวอย่าง ดู [`testing-standards/references/per-stack.md`](../testing-standards/references/per-stack.md#python--pytest) ส่วนนี้เหลือแค่กับดักเฉพาะ Python
+
+- ไฟล์ชั่วคราวใช้ `tmp_path` ห้ามเขียนลงโฟลเดอร์ของ repo · ค่า environment ใช้ `monkeypatch.setenv`
+- เวลา: ส่งนาฬิกาเข้าฟังก์ชันเป็นพารามิเตอร์ก่อน ถ้าแก้ไม่ได้ใช้ `time-machine` แต่ถ้า repo ใช้ `freezegun` อยู่ก็ใช้ต่อ
+- HTTP ภายนอก: httpx ใช้ `respx` · requests ใช้ `responses` · ห้ามยิงเน็ตจริงใน unit test
+- ฐานข้อมูลจริงใช้ `testcontainers` ตัวเดียวกับ production ไม่ใช้ SQLite แทน Postgres
+- logic ใหม่และบั๊กให้เขียน test ที่แดงก่อน แล้วค่อยแก้จนเขียว
+- coverage ดูเฉพาะบรรทัดที่เปลี่ยน: `pytest --cov --cov-report=term-missing` แล้วไล่บรรทัดใน diff ที่ยังไม่ถูกรัน
+
+## 7 · ความปลอดภัยเฉพาะ Python
+
+หลัก 10 ข้ออยู่ที่ `principle-secure-by-default` ส่วนนี้คือวิธีทำใน Python
+
+- lock dependency เสมอ (`uv.lock` · `poetry.lock` · `pip-compile --generate-hashes`) แล้ว commit lock file
+- สแกนช่องโหว่: `pip-audit` (ใช้ได้กับทุกเครื่องมือ) ส่วน uv มี `uv audit` แต่ยังเป็น preview (เวอร์ชันที่เริ่มมี (รอยืนยัน) · แหล่ง: https://github.com/astral-sh/uv/blob/main/CHANGELOG.md · ตรวจ 22 ต.ค. 2569) จึงใช้ได้ แต่ Continuous Integration (CI) ยังพึ่ง `pip-audit`
+- ก่อน `uv add` หรือ `pip install` แพ็กเกจใหม่ ให้สะกดชื่อตรงกับหน้า PyPI ดูคนดูแลและวันปล่อยล่าสุด และระวังชื่อคล้าย (`reqeusts` · `python-dateutil` กับ `dateutil`)
+- SQL ส่งค่าผ่าน parameter: `cur.execute("... WHERE id = %s", (oid,))` ส่วน SQLAlchemy ใช้ `text(...)` กับ `:name` และห้ามใช้ f-string
+- ชื่อไฟล์จากผู้ใช้: `(base / name).resolve()` แล้วเช็ก `.is_relative_to(base.resolve())` ส่วนเรื่องอัปโหลดดู `file-upload-and-storage`
+- ค่าลับอ่านจาก environment (`os.environ["KEY"]` หรือ pydantic-settings) แล้วตรวจตอนเริ่ม ให้ `.env` อยู่ใน `.gitignore` (ดู `config-and-secrets`)
+- Django production: `DEBUG = False` · `ALLOWED_HOSTS` ระบุชื่อจริง · `SECRET_KEY` จาก environment · รัน `python manage.py check --deploy` ก่อนปล่อย
+
+## 8 · รายการตรวจก่อนส่ง
+
+- [ ] `ruff check` ไม่มีข้อผิดพลาด
+- [ ] `ruff format --check` ผ่าน (หรือ formatter ที่ repo ใช้)
+- [ ] type checker ของ repo ได้ 0 error ในไฟล์ที่แก้
+- [ ] `pytest -q` เขียวทั้งชุด ไม่ใช่แค่ไฟล์ที่แก้
+- [ ] พฤติกรรมใหม่ทุกอย่างมี test ที่เคยแดงก่อนแก้
+- [ ] ไม่มี `requests` · `time.sleep` · driver sync หรือ I/O ที่บล็อกอยู่ใน `async def`
+- [ ] เปิดไฟล์ข้อความทุกจุดระบุ `encoding="utf-8"` และ datetime ที่เก็บมี timezone
+- [ ] dependency ที่เพิ่มอยู่ใน lock file และผ่าน `pip-audit`
+
+## 9 · เชื่อมกับ skill อื่น
+
+| งาน | เปิด |
+|---|---|
+| เขียนให้น้อย ไม่เพิ่มของเกิน | `lazy-coding` |
+| ชื่อ · รูปฟังก์ชัน · ที่อยู่ไฟล์ | `readable-code` |
+| เลือก framework test · สัดส่วน · ชื่อ test | `testing-standards` |
+| รูปแบบ log · correlation id · logger Python สำเร็จรูป | `logging-standards` |
+| จับ error · retry · timeout | `error-handling-patterns` |
+| กฎปลอดภัยทุก diff | `principle-secure-by-default` และก่อนส่งใช้ `security-gate` |
+| เรียก LLM · RAG · วัดผล | `llm-engineering` |
+| schema · migration | `database-design` |
+| งานเบื้องหลัง (Celery · RQ · cron) | `background-jobs` |
+| ยืนยันว่าทำงานจริงก่อนบอกว่าเสร็จ | `principle-prove-it-works` |
+
+
+---
+
 # skill: stack-sql
 
 Use when writing or reviewing SQL queries, procedures or data-change scripts (SQL Server, PostgreSQL, MySQL).
@@ -959,189 +1130,3 @@ catch (SmtpException ex)
 - **retry การเขียนโดยไม่มี idempotency key** — ได้รายการซ้ำ
 - **ไม่มี timeout** — thread ค้างสะสมจนระบบตาย
 - **ใช้ error เป็นตัวควบคุมการทำงานปกติ** — เช่นโยน exception เมื่อ "ไม่พบข้อมูล" ซึ่งเป็นเรื่องปกติ
-
-
----
-
-# skill: app-verifier-setup
-
-Use when a project has no scripted way for an agent to run the app and see results, or before feature one.
-
-# app-verifier-setup — ให้ agent มีมือและตา
-
-> ถ้า agent มองไม่เห็นผลงานตัวเอง ก็ปรับงานต่อเองไม่ได้ และคนต้องคอยส่งต่อสิ่งที่เห็นบนจอให้ agent
-> skill นี้สร้างเครื่องมือครั้งเดียว ให้ agent ทุกตัวหลังจากนี้ใช้ซ้ำ
-
-**ผลลัพธ์:** 2 ชิ้น คือสคริปต์ที่อยู่กับ test ของโปรเจกต์ และ skill ที่เป็นแค่คู่มือสั้น ๆ ให้ agent
-
-```
-<โปรเจกต์>/
-├─ <project-name>/test/e2e/verify.*         สคริปต์ขับแอปจริง เปิดและปิดแอปเอง (อยู่ในโฟลเดอร์โค้ด ดู project-bootstrap)
-│                                           รายการฟีเจอร์และ check อยู่ในไฟล์นี้ที่เดียว (แผนที่ฟีเจอร์)
-├─ .claude/skills/verify-<โปรเจกต์>/SKILL.md   รันอย่างไร · อ่านผลอย่างไร · ข้อห้าม (ที่ราก — ที่ Claude Code เปิด)
-└─ _to_delete/verify-runs/                  หลักฐานแต่ละรอบ — สคริปต์หา path จากที่อยู่ของตัวเอง ไม่ขึ้นกับโฟลเดอร์ที่รัน
-```
-
-(Codex · Gemini ใช้ `.agents/skills/` · `skills/` แทน `.claude/skills/`) ตัวอย่างที่ทำจริงแล้ว: โปรเจกต์ `calculator-demo` (เว็บ) · แอป Flutter Android `Lumio - Light Meter` → `lumio-light-meter/test/e2e/verify.mjs` (Node ขับ `adb` สรุปไว้ใน [`references/android-native.md`](references/android-native.md))
-
-**ทำไมไม่เขียนขั้นตอนแยกเป็นไฟล์ข้อความ** เพราะลองแล้วในโปรเจกต์ตัวอย่าง ขั้นตอนในไฟล์ `.md` กับใน script ไม่ตรงกันตั้งแต่รอบแรก จึงเก็บข้อมูลไว้ในสคริปต์ที่เดียว แล้วให้ skill ชี้ไปหา
-
----
-
-## ขั้นตอน
-
-1. **หาวิธีรันที่มีอยู่แล้ว** จาก README · `package.json` · `Makefile` · `docker-compose` · launch config (`.vscode/launch.json`) · `pubspec.yaml` (Flutter) · `build.gradle(.kts)` / `gradlew` (Android) ถ้ามีของเดิมให้ใช้ของเดิม ไม่สร้างใหม่
-2. **เลือกวิธีขับตามชนิดแอป**
-
-   | ชนิด | ขับด้วย | อ่านผลจาก |
-   |---|---|---|
-   | เว็บ | Playwright (ถ้ามี Chromium ติดตั้งอยู่แล้ว ห้ามดาวน์โหลดใหม่) | ภาพหน้าจอ · DOM · console · network |
-   | Electron · desktop | Playwright `_electron` หรือ Chrome DevTools Protocol (CDP) · Windows ใช้ pywinauto (WinAppDriver รุ่นล่าสุดน่าจะออกปี 2020 และยังไม่ยืนยันว่า Microsoft ยังดูแลอยู่ (รอยืนยัน)) | ภาพหน้าจอ · log |
-   | command line · TUI | เรียกคำสั่งจริงพร้อม input ตายตัว | stdout · stderr · exit code · ไฟล์ที่สร้าง |
-   | API · service | `curl` หรือ client ที่ repo ใช้ | status · body · log · ค่าในฐานข้อมูลทดสอบ |
-   | มือถือแบบเว็บ (progressive web app (PWA) · web-wrapped) | Playwright mobile viewport | ภาพหน้าจอ · DOM |
-   | มือถือ native · Flutter (Android) | สคริปต์ Node/Python เรียก `adb` + `uiautomator dump` (แบบ Lumio) · หรือ `integration_test` ของ Flutter · หรือ Maestro · Playwright ขับ APK ไม่ได้ | ภาพ `adb exec-out screencap -p` · ข้อความ/Semantics label จาก `uiautomator` · `dumpsys` · `logcat` |
-
-   - ถ้าโปรเจกต์มี `.sandbox/` ให้ขับเบราว์เซอร์ใน container ซึ่งค่าเริ่มคือ headless (ไม่เปิดหน้าต่าง) ถ้าอยากให้คนดูได้ ให้เปิด `up -Browser` (ดู [`docker-sandbox`](../docker-sandbox/SKILL.md) ข้อ 5) ส่วน Android emulator รันใน Docker บน Windows ไม่ได้ (ต้องมี KVM) จึงให้รัน emulator บนเครื่อง host แล้วบอกในรายงาน
-   - หน้าที่มี CAPTCHA ให้ใช้ค่าทดสอบของผู้ให้บริการหรือปิดใน environment ทดสอบ ห้ามเขียนสคริปต์แก้ CAPTCHA
-   - แอปที่อ่าน hardware (sensor · กล้อง · GPS) ให้ป้อนค่าที่รู้ล่วงหน้า ผ่าน emulator (`adb emu sensor set light 420`, กล้องเสมือน) หรือแหล่งข้อมูลปลอมที่เปิดได้เฉพาะ debug build แล้วติดป้ายทุก check ว่า `emulator` หรือ `เครื่องจริง` เพราะความแม่นของ sensor จริงพิสูจน์บน emulator ไม่ได้ ถ้ายังไม่ได้รันบนเครื่องจริง ให้เขียนว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
-
-3. **เขียน `test/e2e/verify.*`** ให้เปิดแอปเองบนพอร์ตที่ไม่ชน (มือถือ: ติดตั้ง APK แล้วล้างข้อมูลแอป) ใส่ข้อมูลทดสอบ (seed) และรอจนพร้อม**โดยมีเวลาจำกัด** (เว็บ: ถ้าไม่ขึ้นใน 10 วินาทีถือว่าล้ม · มือถือ: ตั้งเวลาแยกสำหรับ build · boot emulator · เปิดแอป · แต่ละ check ดู reference) ปิดแอปเมื่อจบเสมอ และรันซ้ำต้องได้ผลเดิม (`principle-build-a-tool-not-handwork`)
-4. **รายการฟีเจอร์เป็นข้อมูลในสคริปต์** ไล่จากเมนู · route · command list · SRS แล้วเขียน 1 กลุ่มต่อฟีเจอร์ 1 บรรทัดต่อ check (`ทำอะไร → ต้องเห็นอะไร`) อย่างน้อย 3 ฟีเจอร์หลัก และกรณีผิดพลาด 1 กรณีต่อฟีเจอร์ **ทุก check เริ่มจากสถานะสะอาด** รันเดี่ยวหรือสลับลำดับได้ และพิมพ์ผล `PASS/FAIL` พร้อม expected กับ actual
-5. **สคริปต์ต้องไม่ผ่านลอย ๆ** (ผ่านทั้งที่ไม่ได้ตรวจอะไรจริง) ถ้าชื่อฟีเจอร์ไม่มีจริงให้ exit 1 ถ้าแอปไม่ขึ้นให้ exit 1 และถ้าไม่มี check ไหนได้รันก็ให้ exit 1 (ตรวจ 0 รายการถือว่าพัง ไม่ใช่ผ่าน)
-   - **check ที่ตรวจว่า "หยุด/ปล่อยแล้ว" ต้องตรวจเงื่อนไขก่อนเสมอ** (เช่น กล้องถูกถืออยู่ก่อนกด Home) ไม่งั้นจะผ่านลอย ๆ และรอผลด้วยการวนตรวจจนหมดเวลา ไม่ใช่ `sleep` ค่าเดา
-   - **ต้องแน่ใจว่าอ่านหน้าจอล่าสุด** โดยลบไฟล์ผลเก่าก่อนอ่านใหม่ และกดเมื่อตำแหน่งเป้าหมายนิ่ง 2 รอบติด ถ้าอ่านหน้าจอไม่ได้เพราะแอปวาดไม่หยุด ถือเป็นบั๊กของแอป ไม่ใช่ของสคริปต์
-6. **พิสูจน์ว่าสคริปต์จับของผิดได้** โดยแก้แอปให้ผิด 1 จุดชั่วคราว รันแล้วต้อง `FAIL` แล้วค่อยคืนค่า
-7. **พิสูจน์ว่า skill ใช้ได้จริง** โดยส่ง agent `qa-tester` ตัวใหม่ที่ไม่เคยเห็นโค้ด ให้ใช้แค่ skill นี้ทดสอบ 1 ฟีเจอร์ตั้งแต่เปิดแอปจนถ่ายภาพผล ติดตรงไหนให้แก้ skill ตรงนั้น
-8. **เก็บหลักฐานไว้ใน `_to_delete/verify-runs/<เวลา>/`** ทั้งภาพหน้าจอและ log ของการทดสอบ ไม่ปนกับโค้ด (เป็นของชั่วคราว ผู้ใช้ลบเองได้เมื่อส่งงานแล้ว · agent ไม่ลบ)
-
-## สัญญาสำหรับทดสอบ — ใส่ในแอปตั้งแต่หน้าจอแรก
-
-verify ต้องพึ่งของที่แอปเตรียมไว้ให้ ไม่ใช่เดาจากข้อความหรือ CSS · เขียนสัญญานี้ลงแผนที่ฟีเจอร์ในสคริปต์ และให้ developer ทำตามตั้งแต่ฟีเจอร์แรก
-
-| สิ่งที่แอปต้องมี | ใช้ทำอะไร | กฎ |
-|---|---|---|
-| `data-testid="<หน้า>-<สิ่งนั้น>"` แบบ kebab-case บนทุกปุ่ม ช่องกรอก ผลลัพธ์ และข้อความ error | หาองค์ประกอบโดยไม่ผูกกับข้อความหรือ CSS → เปลี่ยนภาษาหรือดีไซน์แล้ว check ไม่พัง | เช่น `book-submit` · `summary-total` · `book-error` · ห้ามซ้ำในหน้าเดียว · รายการ testid ทั้งหมดอยู่ในแผนที่ฟีเจอร์ |
-| `<html data-ready="false">` → `"true"` เมื่อหน้าโหลดข้อมูลเสร็จ | รอแบบมีเงื่อนไขแทน `sleep` ค่าเดา (ข้อ 5) | ตั้ง `true` หลังข้อมูลชุดสุดท้ายมาถึง ไม่ใช่ตอน component mount |
-| reset endpoint เช่น `POST /api/test/reset` → ล้างแล้วใส่ seed ใหม่ ภายใน 5 วินาที | ทุก check เริ่มจากสถานะสะอาด (ข้อ 4) | มีเฉพาะเมื่อตั้ง `ALLOW_TEST_RESET=1` · ไม่ตั้ง → ตอบ 404 · ห้ามเปิดใน production |
-| ล็อกนาฬิกา: reset รับ `{"now":"<ISO + offset>"}` แล้วกฎทุกข้ออ่าน "วันนี้" จากโมดูลเดียว (`clock`) | ทดสอบกฎที่ขึ้นกับวันเวลา (หมดอายุ · ยกเลิกก่อน 24 ชั่วโมง) ให้ได้ผลเดิมทุกครั้ง | ไม่ส่ง `now` → ใช้วันเริ่มที่เขียนใน seed · ปิด flag → ใช้เวลาจริง · ห้ามเรียก `Date.now()` / `DateTime.Now` ตรง ๆ ในกฎ |
-
-แอปที่ไม่ใช่เว็บใช้แนวเดียวกัน: Flutter → `Key` / Semantics label ชื่อเดียวกัน · Android → `resource-id` · command line → ตัวเลือก `--now` หรือตัวแปร `APP_NOW` · reset บนมือถือเปิดได้เฉพาะ debug build
-
-## SKILL.md ของ verify skill ต้องมี
-
-- description บอกว่าใช้เมื่อ "ต้องพิสูจน์ว่าฟีเจอร์ใช้ได้บนแอปจริง · ทำบั๊กให้เกิดซ้ำ · ตรวจก่อนส่ง"
-- คำสั่งเริ่ม · หยุด · ข้อมูลทดสอบ (บัญชีทดสอบอยู่ไฟล์ไหน — **ห้ามใส่รหัสผ่านจริง**)
-- ลิงก์ไปแผนที่ฟีเจอร์
-- ข้อห้าม: ไม่แตะฐานข้อมูลจริง · ไม่เรียก API ภายนอกที่เสียเงินหรือส่งข้อความจริง
-
-## สิ่งที่ห้ามทำ
-
-| อย่าทำ | เพราะ |
-|---|---|
-| เขียนขั้นตอนทดสอบเป็นภาษาคนอย่างเดียว ไม่มีสคริปต์ | agent แต่ละตัวจะสร้างวิธีรันใหม่เองทุกครั้ง และแต่ละครั้งไม่เหมือนกัน |
-| ใส่ทุกฟีเจอร์ตั้งแต่วันแรก | แผนที่ใหญ่ที่ไม่ได้ทดสอบ เสียเร็วกว่าแผนที่เล็กที่ใช้ได้จริง |
-| ให้ verify skill ชี้ไปที่ระบบจริง (production) | ตรวจไปตรวจมา กลายเป็นแก้ข้อมูลลูกค้า |
-| บอกว่าเสร็จโดยไม่ได้ทำข้อ 7 | ยังไม่รู้ว่า agent ตัวอื่นใช้ได้หรือไม่ |
-
-## เชื่อมกับ skill อื่น
-
-- [`references/builtin-verify.md`](references/builtin-verify.md) — Claude Code มี `/verify` ติดเครื่อง: โปรเจกต์ที่รันบน Claude Code ให้สร้าง skill ชื่อ `verify` ที่ `.claude/skills/verify/SKILL.md` ในรูปแบบนั้น แทน `verify-<โปรเจกต์>`
-- [`app-verifier-upkeep`](../app-verifier-upkeep/SKILL.md) — แก้เมื่อแอปเปลี่ยนจนแผนที่ไม่ตรง
-- `e2e-testing-patterns` — ถ้าจะยกขั้นตอนบางส่วนขึ้นเป็น test อัตโนมัติใน continuous integration (CI)
-- [`superuser`](../superuser/SKILL.md) — playbook `bug-fix` และ `feature` เรียกใช้ skill ที่สร้างจากที่นี่
-
-
-## reference: android-native.md
-
-# ขับแอป Android native / Flutter บน emulator
-
-> สรุปจากแอปจริง `Lumio - Light Meter` (Flutter · Android) · สคริปต์ที่รันผ่านแล้วคือ `lumio-light-meter/test/e2e/verify.mjs`
-> ค่าที่เขียนว่า "วัดแล้ว" มาจาก emulator บน Windows ที่ใช้ GPU แบบซอฟต์แวร์ เครื่องอื่นอาจเร็วกว่า
-
-## เลือกวิธีขับ
-
-| วิธี | ดีตรงไหน | ข้อจำกัด | ใช้เมื่อ |
-|---|---|---|---|
-| Node/Python เรียก `adb` + `uiautomator dump` | ไม่ต้องลงอะไรเพิ่ม · ขับ sensor และกล้องเสมือนได้ · ตรวจ `dumpsys` ได้ | อ่านหน้าจอ 3–4 วินาทีต่อครั้ง (วัดแล้ว) | ค่าเริ่ม · ทดสอบทั้งเส้นทาง hardware → native → Dart → จอ |
-| Flutter `integration_test` (`flutter test integration_test/`) | หา widget ด้วย `find` ได้ตรง · เร็ว | ป้อนค่า sensor จริงไม่ได้ ต้องใช้แหล่งข้อมูลปลอม · ตรวจสถานะระบบ (กล้องถูกปล่อยไหม) ไม่ได้ | ลำดับหน้าจอยาว ๆ ที่ไม่แตะ hardware |
-| Maestro | เขียน flow เป็น YAML อ่านง่าย | ต้องติดตั้งเพิ่ม · ยังไม่ได้ทดสอบในชุดนี้ | ทีมมี Maestro อยู่แล้ว |
-
-## โครงสคริปต์ (แบบ verify.mjs)
-
-1. **ตรวจก่อนเริ่ม** ว่ามีเครื่องต่ออยู่ (`adb devices`) และมี APK (`build/app/outputs/flutter-apk/app-debug.apk`) ถ้าไม่ครบ ให้ exit 1 พร้อมบอกคำสั่งที่ต้องรัน
-2. **ติดตั้ง** `adb install -r <apk>` แล้ว **เริ่มสะอาดทุกฟีเจอร์** `adb shell pm clear <package>` → `adb shell am start -n <package>/.MainActivity` → รอข้อความหน้าแรก
-3. **อ่านหน้าจอ** `rm -f /sdcard/ui.xml` → `uiautomator dump /sdcard/ui.xml` → `exec-out cat` → ดึง `text` และ `content-desc` พร้อมจุดกึ่งกลางจาก `bounds`
-4. **กด** `adb shell input tap x y` · **ป้อนค่า** `adb emu sensor set light <lux>` · **ถ่ายภาพ** `adb exec-out screencap -p > shot.png`
-5. **ผล** `PASS/FAIL` พร้อม expected กับ actual และ exit 0 เฉพาะเมื่อมี check ได้รันอย่างน้อย 1 ข้อและผ่านทั้งหมด
-
-## กฎที่ได้จากการรันจริง
-
-| เรื่อง | ทำอย่างนี้ | เพราะ |
-|---|---|---|
-| ข้อความใน Flutter | ใส่ `Semantics(label: ...)` ให้ค่าที่ต้องตรวจ | label ขึ้นเป็น `content-desc` ใน `uiautomator dump` จึงใช้ตรวจได้ และช่วยผู้ใช้โปรแกรมอ่านจอด้วย |
-| ไฟล์ dump เก่า | ลบ `/sdcard/ui.xml` ก่อน dump ทุกครั้ง | dump ล้มแล้ว**ไม่เขียนทับ**ไฟล์เดิม จะอ่านได้หน้าจอเก่าโดยไม่รู้ตัว |
-| "could not get idle state" | ถือเป็นบั๊กของแอป แก้ที่แอป | แอปวาดใหม่ตลอด (Lumio วาด 5 ครั้ง/วินาทีทั้งที่ค่าไม่เปลี่ยน) ทำให้เปลืองแบต และ TalkBack พูดซ้ำ ให้แก้โดยแจ้ง UI เฉพาะเมื่อค่าที่แสดงเปลี่ยนจริง (sensor ที่ค่าแกว่ง: เปลี่ยนเกิน 1 %) ส่วนค่ารองที่ค่อย ๆ ขยับ ให้อัปเดตราว 1 วินาทีครั้ง |
-| ตำแหน่งที่ขยับ | กดเมื่ออ่าน 2 ครั้งติดได้ตำแหน่งเดียวกัน | dialog เลื่อนขึ้นตอนคีย์บอร์ดเปิด ถ้ากดตำแหน่งเก่าจะโดนฉากหลังแล้ว dialog ปิด (น่าจะเป็นต้นเหตุของ flake (ผลไม่คงที่) ที่เหลือ 1 ครั้ง แต่ยังไม่ได้ตรวจซ้ำ) |
-| สิทธิ์ | `adb shell pm grant <package> android.permission.CAMERA` ก่อน check ที่ไม่ได้ทดสอบหน้าขอสิทธิ์ | หน้าต่างขอสิทธิ์ของระบบไม่ใช่สิ่งที่ check นั้นตรวจ |
-| check "ปล่อยแล้ว" | ตรวจเงื่อนไขก่อน (กล้องถูกถืออยู่) → กด Home → วนตรวจ `dumpsys media.camera` หา "Active Camera Clients" ทุก 1 วินาที นานสุด 20 วินาที | emulator ปล่อยกล้อง 5–8 วินาที (วัดแล้ว) ถ้าไม่ตรวจเงื่อนไขก่อน check จะผ่านทั้งที่ไม่ได้ตรวจอะไร |
-| Git Bash | เรียก `adb` จาก Node/Python (`execFile`) หรือตั้ง `MSYS_NO_PATHCONV=1` | Git Bash แปลง `/sdcard/...` เป็น `C:/Program Files/Git/sdcard/...` |
-
-## ป้อนค่า hardware
-
-| สิ่งที่ป้อน | บน emulator | หมายเหตุ |
-|---|---|---|
-| sensor แสง | `adb emu sensor set light <lux>` แล้วแอปได้ค่าผ่าน `Sensor.TYPE_LIGHT` (วัดแล้ว) | sensor อื่นใช้ `adb emu sensor set <ชื่อ> <ค่า>` (ยังไม่ได้ตรวจทีละตัว) |
-| กล้อง | กล้องหน้าเสมือนส่งภาพพร้อม ISO และเวลาเปิดรับแสง (วัดแล้ว) | ภาพเป็นฉากสังเคราะห์ จึงตรวจได้แค่ว่า "มีค่าออกมา" ตรวจความแม่นไม่ได้ |
-| อื่น ๆ หรือ emulator ทำไม่ได้ | แหล่งข้อมูลปลอมที่ compile เข้าเฉพาะ debug build | ห้ามหลุดไป release build |
-
-ติดป้ายทุก check: `emulator` แปลว่าทางเดินข้อมูลถูก ส่วน `เครื่องจริง` แปลว่าค่าถูก ถ้า check ไหนต้องใช้เครื่องจริงแต่ยังไม่ได้รัน ให้รายงานว่า "ยังไม่ได้ตรวจบนเครื่องจริง"
-
-## เวลาและหน่วยความจำ
-
-| ขั้น | เวลาที่วัดได้ | ตั้ง timeout แยก |
-|---|---|---|
-| Gradle build ครั้งแรก (ดาวน์โหลด NDK · platform) | ~10 นาที | 20 นาที |
-| Gradle build ครั้งต่อไป | 1–2 นาที | 5 นาที |
-| boot emulator | หลายนาที (ยังไม่ได้จับเวลา) | วนตรวจ `adb shell getprop sys.boot_completed` = 1 |
-| เปิดแอปจนเห็นหน้าแรก | ไม่กี่วินาที | 20 วินาที |
-| ต่อ check (รอค่าบนจอ) | 3–4 วินาทีต่อการอ่าน | 15–20 วินาที |
-
-- emulator กับ Gradle กินหน่วยความจำมาก จน Claude Code เคยปิด emulator ที่รันเบื้องหลังเพราะหน่วยความจำไม่พอ
-- เปิด emulator ตัวเดียว และหยุด Gradle daemon หลัง build (`gradlew --stop` ใน `android/`)
-- ถ้า emulator ถูกปิดกลางทาง ให้รายงานว่า "ยังไม่ได้รันซ้ำ" พร้อมรายชื่อ check ที่ไม่ได้รัน ห้ามลองใหม่เงียบ ๆ แล้วรายงานเฉพาะผลรอบหลัง
-- ไม่มี Docker: emulator ใน Docker ต้องมี KVM ซึ่ง Docker Desktop บน Windows ไม่มี จึงให้รันบน host
-
-
-## reference: builtin-verify.md
-
-# `/verify` ที่มากับ Claude Code — กับ app-verifier ของเรา
-
-ที่มา: code.claude.com/docs/en/skills (อ่าน 2026-10-23) · ตัวเลขรุ่นที่อ้างมาจากหน้านั้น ไม่ได้ทดสอบกับทุกรุ่น
-
-## สิ่งที่ Claude Code มีอยู่แล้ว
-
-- skill ติดเครื่อง 3 ตัวทำงานด้วยกัน: `/run` เปิดและขับแอปให้เห็นว่าการแก้ใช้ได้ · `/verify` build แล้วรันแอปเพื่อยืนยันว่าโค้ดที่แก้ทำสิ่งที่ควรทำ โดยไม่ถอยไปพึ่ง test หรือ type check · `/run-skill-generator` สอน 2 ตัวแรกว่า build และเปิดโปรเจกต์นี้อย่างไร
-- `/verify` และ `/code-review` รันเมื่อผู้ใช้เรียกเท่านั้น (ตั้งแต่ v2.1.215 — ก่อนหน้านั้น Claude เรียกเองได้)
-- `/run-skill-generator` รันจาก environment สะอาด จดสิ่งที่ใช้ได้จริง (คำสั่งติดตั้ง · env · สคริปต์เปิด) แล้ว commit เป็น skill ของโปรเจกต์ที่ `.claude/skills/run-<name>/` — รันครั้งเดียวต่อโปรเจกต์ และอีกครั้งเมื่อวิธี build เปลี่ยน
-- `/verify` จดสูตรของตัวเองได้: ถ้าไม่มีสูตร มันเขียนสิ่งที่ใช้ได้ลง `.claude/skills/verify/SKILL.md` ที่รากโปรเจกต์ (monorepo: ในโฟลเดอร์ package ที่แตะ) · **skill ที่รากชื่อ `verify` แทนที่ `/verify` ติดเครื่อง**
-- session ที่เริ่มโดยมี skill ชื่อ `verify` หรือ `simplify` ของโปรเจกต์ (หรือส่วนตัว · องค์กร · `.claude/commands/`) → คำสั่ง commit ของ Claude Code สั่งให้รันก่อนทุก commit ยกเว้นแก้เฉพาะเอกสารหรือ test · ตัวติดเครื่อง · plugin skill · skill จาก claude.ai ไม่นับ
-- ปิดทั้งชุดได้ด้วย `disableBundledSkills` (เหลือ `/doctor`)
-
-## สิ่งที่ `app-verifier-setup` เพิ่มให้
-
-| ของเรา | ตัวติดเครื่องไม่มี |
-|---|---|
-| สัญญาสำหรับทดสอบในแอป: `data-testid` · `data-ready` · reset endpoint ใต้ flag · นาฬิกาล็อกได้ (`clock`) | มันขับแอปจากสิ่งที่เห็น ไม่ได้บังคับให้แอปเตรียมที่ยึด |
-| แผนที่ฟีเจอร์เป็นข้อมูลในสคริปต์ `test/e2e/verify.*` พิมพ์ `PASS/FAIL` พร้อม expected กับ actual · ตรวจ 0 รายการ = exit 1 | สูตรเป็นภาษาคนใน SKILL.md |
-| พิสูจน์ว่าจับของผิดได้ (ทำให้พัง 1 จุด ต้อง FAIL) และ agent `qa-tester` ตัวใหม่ใช้ได้จริง | — |
-| หลักฐานทุกรอบใน `_to_delete/verify-runs/` · ขับมือถือ native · CLI · API ได้ ไม่ใช่แค่เว็บ | — |
-
-## ตัดสินใจ
-
-**โปรเจกต์ที่ทำงานบน Claude Code ที่มี `/verify` ติดเครื่อง → `app-verifier-setup` สร้าง skill ของโปรเจกต์ที่ `.claude/skills/verify/SKILL.md` (ชื่อ `verify` ไม่ใช่ `verify-<โปรเจกต์>`) ในรูปแบบสูตรที่ `/verify` จดเอง** — ส่วนแรกคือสูตร build และเปิดแอป (แบบเดียวกับที่ `/run-skill-generator` จด) ต่อด้วยของเรา: คำสั่งรัน `test/e2e/verify.*` · ลิงก์แผนที่ฟีเจอร์ · สัญญาสำหรับทดสอบ · ข้อห้าม (หัวข้อ "SKILL.md ของ verify skill ต้องมี" ใน SKILL.md หลัก) · ได้ 2 อย่างฟรี: แทนที่ตัวติดเครื่อง และถูกรันก่อน commit อัตโนมัติ
-
-- ก่อนเขียน ให้อ่าน `.claude/skills/verify/SKILL.md` หรือ `run-<name>/` ที่ `/verify` จดไว้แล้ว (ถ้ามี) แล้วเขียนต่อในรูปแบบเดียวกัน — ฟิลด์ frontmatter ที่ตัวติดเครื่องใช้ยังไม่ได้ตรวจจากเอกสาร (ยังไม่ได้ตรวจ)
-- monorepo → วางในโฟลเดอร์ package ที่แตะ ตามกติกาของตัวติดเครื่อง
-- Codex · Gemini หรือ Claude Code รุ่นก่อน v2.1.145 (ยังไม่ได้ตรวจว่า `/verify` เริ่มรุ่นไหน) → ใช้ชื่อเดิม `verify-<โปรเจกต์>` ใน `.claude/skills/` · `.agents/skills/` · `skills/`
-- `app-verifier-upkeep` ดูแลไฟล์นี้ไฟล์เดียว ไม่สร้าง `verify-<โปรเจกต์>` ซ้อน
