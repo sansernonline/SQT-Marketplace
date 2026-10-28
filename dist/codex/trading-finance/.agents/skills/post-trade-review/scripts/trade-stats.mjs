@@ -37,6 +37,9 @@ export function parseCsv(text) {
 }
 
 const isBlank = (v) => v === undefined || v === null || v === '';
+// violation: blank and no / n / none / false / 0 / - / ไม่ / ไม่มี mean no violation; any other text (e.g. moved-stop) is one
+const NO_VIOLATION = ['no', 'n', 'none', 'false', '0', '-', 'ไม่', 'ไม่มี'];
+const isViolation = (v) => !isBlank(v) && !NO_VIOLATION.includes(String(v).trim().toLowerCase());
 const toNum = (v) => (typeof v === 'string' && v.trim() !== '' ? Number(v) : v);
 
 // Throws a Thai message naming the bad row and field; returns { trades, open } (open = rows skipped as unclosed).
@@ -51,7 +54,7 @@ export function validate(rawTrades) {
     if (typeof r !== 'number' || !Number.isFinite(r)) throw new Error(`ช่อง r_multiple ของรายการที่ ${i + 1} ต้องเป็นตัวเลข (ได้ ${JSON.stringify(t.r_multiple)})`);
     const pnl = isBlank(t.pnl_baht) ? null : toNum(t.pnl_baht);
     if (pnl !== null && (typeof pnl !== 'number' || !Number.isFinite(pnl))) throw new Error(`ช่อง pnl_baht ของรายการที่ ${i + 1} ต้องเป็นตัวเลขหรือเว้นว่าง (ได้ ${JSON.stringify(t.pnl_baht)})`);
-    trades.push({ r, pnl, account: isBlank(t.account) ? 'all' : String(t.account).toLowerCase(), violation: !isBlank(t.violation) });
+    trades.push({ r, pnl, account: isBlank(t.account) ? 'all' : String(t.account).toLowerCase(), violation: isViolation(t.violation) });
   });
   if (trades.length === 0) throw new Error('ไม่มีรายการที่ปิดแล้ว (ช่อง r_multiple ว่างทุกแถว)');
   return { trades, open };
@@ -165,6 +168,9 @@ function selfTest() {
   // live and paper split; open row skipped; violation counted
   const mix = analyze([{ account: 'live', r_multiple: '1.5', violation: 'moved-stop' }, { account: 'paper', r_multiple: '-1' }, { account: 'live', r_multiple: '' }]);
   t('แยก live/paper', Object.keys(mix.groups).join() === 'live,paper' && mix.open === 1 && near(mix.groups.live.violationRate, 1));
+  // edge/ts-viol.csv: "no" "false" "0" "ไม่" and blank are not violations (was 75%)
+  const viol = analyze(parseCsv(['account,r_multiple,pnl_baht,violation', 'live,2,2000,no', 'live,-1,-1000,False', 'live,1,1000,', 'live,-1,-1000,0', 'live,1,1,ไม่', 'live,1,1,moved-stop'].join('\n'))).groups.live;
+  t('violation no/false/0/ไม่/ว่าง ไม่นับ', near(viol.violationRate, 1 / 6));
   // CSV with a quoted comma
   const csv = parseCsv('id,account,reason,r_multiple\n1,live,"broke high, volume 2x",1.55\n2,paper,x,-1\n');
   t('CSV เครื่องหมายคำพูด', csv.length === 2 && csv[0].reason === 'broke high, volume 2x' && csv[0].r_multiple === '1.55');

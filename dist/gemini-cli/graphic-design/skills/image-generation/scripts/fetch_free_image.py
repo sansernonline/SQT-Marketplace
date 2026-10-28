@@ -17,6 +17,7 @@ from pathlib import Path
 
 API = "https://api.openverse.org/v1/images/"
 USER_AGENT = "sqt-image-fetch/1.0"
+MAX_BYTES = 25 * 2**20  # 25 MB: above any web photo we resize to hero size, below a memory-eating file
 RATIOS = {"1:1": 1.0, "16:9": 16 / 9, "4:3": 4 / 3, "3:2": 1.5, "9:16": 9 / 16, "3:4": 0.75, "2:3": 2 / 3, "4:5": 0.8}
 
 
@@ -24,10 +25,33 @@ def fail(message):
     sys.exit(f"fetch_free_image: {message}")
 
 
+class Refused(Exception):
+    """A URL or download this script will not take; the caller skips that photo."""
+
+
+class HttpsOnlyRedirect(urllib.request.HTTPRedirectHandler):
+    # urlopen follows redirects to http and ftp too; stop before the request goes out
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if urllib.parse.urlparse(newurl).scheme != "https":
+            raise Refused(f"refusing redirect to non-https URL: {newurl}")
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+_opener = urllib.request.build_opener(HttpsOnlyRedirect)
+
+
 def get(url, timeout=60):
+    if urllib.parse.urlparse(url).scheme != "https":
+        raise Refused(f"refusing non-https URL: {url}")
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return response.read()
+    with _opener.open(request, timeout=timeout) as response:
+        chunks, size = [], 0
+        while chunk := response.read(65536):
+            size += len(chunk)
+            if size > MAX_BYTES:
+                raise Refused(f"download larger than {MAX_BYTES // 2**20} MB, stopped: {url}")
+            chunks.append(chunk)
+        return b"".join(chunks)
 
 
 def search(query, page_size):
@@ -123,6 +147,9 @@ def main():
             blob = get(item["url"])
         except (urllib.error.URLError, TimeoutError):
             print(f"skip: cannot download {item['url']}", file=sys.stderr)
+            continue
+        except Refused as error:
+            print(f"skip: {error}", file=sys.stderr)
             continue
         path = save(blob, out.with_name(f"{out.stem}-{index}{out.suffix}"), item["url"], args.aspect, args.max_width)
         lines.append(credit_line(path.name, item))

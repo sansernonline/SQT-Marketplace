@@ -7,14 +7,14 @@ description: Use when work starts in a new project folder, the user wants agents
 
 > **กฎข้อเดียว:** agent ตรวจเองได้และแก้ `.gitignore` เองได้ · สิทธิ์ของตัวเองเพิ่มเองได้**เฉพาะเมื่อผู้ใช้สั่งในแชตรอบนั้น** (เช่น "เพิ่มให้เอง") ไม่งั้นให้ผู้ใช้กดรันคำสั่งเดียว · กฎประจำตัวของเจ้าของให้ผู้ใช้รันเองเสมอ · ห้ามหาทางเลี่ยง เพราะ agent ที่เพิ่มสิทธิ์ให้ตัวเองโดยไม่มีคนสั่งคือการยกระดับสิทธิ์เอง ระบบตรวจสิทธิ์ของ Claude Code จึงปฏิเสธ (เกิดจริง 2026-10-25 ตอน agent แก้ `~/.claude/CLAUDE.md` และรัน `gh pr merge` เอง · ส่วน 2026-10-26 ผู้ใช้สั่งให้เพิ่มกฎลง `~/.claude/settings.json` แล้วระบบไม่กัน)
 
-สคริปต์ [`scripts/setup.mjs`](scripts/setup.mjs) ทำ 4 อย่าง ทุกอย่างรันซ้ำได้ไม่พัง และสำรองไฟล์เดิมไว้ใน `<โปรเจกต์>/_to_delete/` ก่อนเขียนทับ
+สคริปต์ [`scripts/setup.mjs`](scripts/setup.mjs) ทำ 4 อย่าง ทุกอย่างรันซ้ำได้ไม่พัง และสำรองไฟล์เดิมไว้ใน `<โปรเจกต์>/_to_delete/` ก่อนเขียนทับ (ยกเว้น `~/.claude/CLAUDE.md` ที่สำรองไว้ข้างไฟล์) · flag ที่สะกดผิดหรือไม่รู้จัก สคริปต์หยุดทันที (exit 1) และบอกรายชื่อ flag ที่ใช้ได้ · `--help` ดูรายชื่อเดียวกัน
 
 | ส่วน | เพิ่มอะไร | ใครรัน |
 |---|---|---|
 | `--gitignore` | `.claude/` · `.claude-plugin/` · `_to_delete/` ใน `.gitignore` ของโปรเจกต์ (ผู้ใช้เลือก 2026-10-26: ไม่ commit ไฟล์ของ Claude Code และของชั่วคราว) · ถ้าโปรเจกต์เป็น plugin หรือ marketplace เอง (มี `.claude-plugin/marketplace.json` หรือ `plugin.json`) จะไม่ใส่ `.claude-plugin/` เพราะ `.claude-plugin/` คือตัวสินค้า เอาออกจาก GitHub แล้วติดตั้งและอัปเดต plugin ไม่ได้ทุกเครื่อง | agent รันเองได้ |
 | `--permissions` | กฎอนุญาต `git add` · `git commit` · `git push` · `gh pr` (เปิด PR · ดู CI · merge) · `git branch -d` · `git worktree remove` (2 ตัวหลังลบได้เฉพาะของที่ merge แล้วหรือ worktree ที่สะอาด) ลงใน `.claude/settings.local.json` ของโปรเจกต์ · ใส่ `--user` แล้วลงใน `~/.claude/settings.json` ใช้ได้ทุกโปรเจกต์ · กฎที่มีระดับผู้ใช้อยู่แล้วนับว่าครบ ไม่เพิ่มซ้ำในโปรเจกต์ · เพิ่ม deny `git push --force` · `-f` · `--force-with-lease` ไปพร้อมกัน เพราะ `git push:*` กว้างพอจะรวม force push และ deny ชนะ allow · กฎเดิมเก็บไว้ครบ · JSON ที่อ่านไม่ได้ไม่แตะ · ไฟล์เดิมสำรองไว้ใน `<--project>/_to_delete/` (ไม่ใส่ `--project` = โฟลเดอร์ปัจจุบัน) · **กฎนี้แค่ทำให้ไม่ต้องถาม** จะ push เปิด PR หรือ merge ได้เมื่อไหร่ยังเป็นไปตามกฎ git ใน CLAUDE.md (push เข้า main ก็ไม่ถูกกัน `gh pr:*` รวม close และ edit ด้วย) | agent เมื่อผู้ใช้สั่งในแชต · ไม่งั้นผู้ใช้ |
 | `--git-policy auto\|commit\|manual` | บรรทัด **git อัตโนมัติ** ในหัวข้อ "กติกา" ของ `.claude/superuser/CONTEXT.md` (CLAUDE.md นับหัวข้อนี้เป็นคำอนุญาตของผู้ใช้อยู่แล้ว) · `auto` commit · push · PR · merge · ลบ branch เองหลัง CI ผ่านและผู้ตรวจตัวใหม่ให้ผ่าน · `commit` commit ใน branch งานเอง แต่ push · PR · merge ถามก่อน · `manual` ไม่ทำเองเลย ผู้ใช้ review เอง · เลือกครั้งเดียวต่อโปรเจกต์ เปลี่ยนได้ด้วยการรันซ้ำ | agent หลังถามผู้ใช้ |
-| `--global-rules` | `~/.claude/CLAUDE.md` = กฎประจำตัวรุ่นล่าสุดจาก `hooks/core-rules.md` ของ plugin นี้ · **แทนที่ทั้งไฟล์ ไม่ผสาน** กฎที่ผู้ใช้เขียนเองจะหายจากไฟล์ใช้งาน (อยู่ในไฟล์สำรอง) จึงต้องบอกผู้ใช้ก่อน | ผู้ใช้ |
+| `--global-rules` | `~/.claude/CLAUDE.md` = กฎประจำตัวรุ่นล่าสุดจาก `hooks/core-rules.md` ของ plugin นี้ · **แทนที่ทั้งไฟล์ ไม่ผสาน** · ไฟล์ที่ไม่มีบรรทัด `<!-- sqt-core-rules -->` นับว่าผู้ใช้เขียนเอง สคริปต์ไม่แตะ (exit 1) เว้นแต่ใส่ `--replace-foreign` · ไฟล์เดิมสำรองไว้ข้างกันเป็น `~/.claude/CLAUDE.md.bak-<วันเวลา>` | ผู้ใช้ |
 
 ## ขั้นตอน
 
@@ -26,7 +26,7 @@ description: Use when work starts in a new project folder, the user wants agents
    ```
    node "<path>" --permissions --global-rules --project "<โฟลเดอร์>"
    ```
-   บอกผลที่จะได้ 1 บรรทัด บอกว่าไฟล์เดิมสำรองไว้ที่ไหน และถ้า `--check` บอกว่า CLAUDE.md "ไม่ได้มาจาก superuser" ให้เตือนว่ากฎที่เขียนเองจะถูกแทนที่ ต้องย้ายไปไว้ใน `~/.claude/superuser-style.md` เอง
+   บอกผลที่จะได้ 1 บรรทัด บอกว่าไฟล์เดิมสำรองไว้ที่ไหน และถ้า `--check` บอกว่า CLAUDE.md "ไม่ได้มาจาก superuser" ให้บอกว่าสคริปต์จะไม่แตะไฟล์นั้น ผู้ใช้ต้องย้ายกฎที่เขียนเองไปไว้ใน `~/.claude/superuser-style.md` ก่อน แล้วเติม `--replace-foreign` ท้ายคำสั่งเอง
 6. **นโยบาย git ของโปรเจกต์** — `--check` บอกว่า "ยังไม่ได้เลือก" และงานนี้จะมี commit → ถามผู้ใช้ครั้งเดียวด้วย `AskUserQuestion` ว่าโปรเจกต์นี้ให้ agent ทำ git เองแค่ไหน ตัวเลือก: `commit` (แนะนำ · commit ย้อนได้ในเครื่อง ส่วนของที่ออกนอกเครื่องยังผ่านผู้ใช้) · `auto` · `manual` (โปรเจกต์ที่ผู้ใช้ต้อง review เอง) → รัน `node "<path>" --git-policy <ที่เลือก> --project "<โฟลเดอร์>"` · ถ้าทำงานใน worktree ให้ส่ง `--project` เป็นโฟลเดอร์หลัก เพราะ `.claude/` ไม่อยู่ใน git worktree จึงไม่มีไฟล์นี้ · เลือกแล้วไม่ถามอีกในโปรเจกต์นั้น · ระหว่างรอคำตอบ ใช้แบบ `manual`
 7. **ตรวจซ้ำ** — หลังรัน ให้รัน `--check` อีกครั้ง แล้วบอกว่ากฎมีผลกับ session ใหม่ (เปิด Claude Code ใหม่)
 

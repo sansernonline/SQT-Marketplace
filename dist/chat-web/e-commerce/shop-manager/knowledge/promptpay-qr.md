@@ -80,7 +80,7 @@ Breakdown of the dynamic one: `000201` · `010212` · `2937` [`0016A000000677010
 
 ## Script
 
-Run `promptpay.mjs` whenever you need a real payload string: do not type the fields, lengths or CRC by hand. It builds the payload for a mobile number, a 13-digit national/tax ID or a 15-digit e-Wallet ID (tag 29), or for a biller ID with Ref1/Ref2 (tag 30), and appends the CRC16. Leave `amount` out for a static QR; put it in for a dynamic QR. Its self-test checks the CRC of `123456789` (29B1) and both worked examples in section 3 character by character.
+Run `promptpay.mjs` whenever you need a real payload string: do not type the fields, lengths or CRC by hand. It builds the payload for a mobile number, a 13-digit national/tax ID or a 15-digit e-Wallet ID (tag 29), or for a biller ID with Ref1/Ref2 (tag 30), and appends the CRC16. A 13-digit ID must pass the check digit (mod 11), otherwise the script stops and says the number was probably mistyped. Leave `amount` out for a static QR; put it in for a dynamic QR. Its self-test checks the CRC of `123456789` (29B1) and both worked examples in section 3 character by character.
 
 ```
 node promptpay.mjs <file.json> [--json]     # example file: scripts/example.json

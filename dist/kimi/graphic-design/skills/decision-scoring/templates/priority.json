@@ -1,9 +1,10 @@
 {
-  "_note": "ตัวอย่าง (ตัวเลขสมมติ): คัดบั๊กด้วย RICE · reach = คนที่โดนต่อเดือน · impact 0.25–3 · confidence 0–1 · effort = คน-วัน",
+  "_note": "ตัวอย่าง (ตัวเลขสมมติ): คัดบั๊กด้วย RICE · reach = คนที่โดนต่อเดือน · impact 0.25–3 · confidence 0–1 · effort = คน-วัน · must_first: true = ข้อที่ทำให้ผลผิดหรือไม่ปลอดภัย ขึ้นบนสุดโดยไม่ดูคะแนน",
   "method": "rice",
   "items": [
     { "name": "จ่ายเงินแล้วสถานะไม่อัปเดต", "reach": 120, "impact": 3, "confidence": 0.8, "effort": 2 },
     { "name": "ปุ่มบันทึกซ้อนบนมือถือจอเล็ก", "reach": 400, "impact": 0.5, "confidence": 1, "effort": 0.5 },
-    { "name": "รายงานส่งออก Excel วันที่เพี้ยน", "reach": 30, "impact": 1, "confidence": 0.5, "effort": 1 }
+    { "name": "รายงานส่งออก Excel วันที่เพี้ยน", "reach": 30, "impact": 1, "confidence": 0.5, "effort": 1 },
+    { "name": "หน้าเข้าสู่ระบบส่งรหัสผ่านลง log", "reach": 5, "impact": 1, "confidence": 0.5, "effort": 3, "must_first": true }
   ]
 }

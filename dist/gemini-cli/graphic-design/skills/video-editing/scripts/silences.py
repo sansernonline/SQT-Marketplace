@@ -47,7 +47,13 @@ def keep_ranges(gaps, total: float, pad: float) -> list[tuple[float, float]]:
         cur = max(e - pad, 0.0)
     if total - cur > 0.05:
         keep.append((cur, total))
-    return keep
+    merged = []  # pad เกินครึ่งช่องเงียบทำให้ช่วงทับกัน · รวมเป็นช่วงเดียว
+    for s, e in keep:
+        if merged and s <= merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], e))
+        else:
+            merged.append((s, e))
+    return merged
 
 
 def self_test() -> int:
@@ -60,6 +66,7 @@ def self_test() -> int:
         ([(0.0, 1.0)], 3.0, 0.0, [(1.0, 3.0)]),               # เงียบตั้งแต่ต้นไฟล์
         ([(2.0, None)], 3.0, 0.0, [(0.0, 2.0)]),               # เงียบจนจบไฟล์
         ([], 3.0, 0.15, [(0.0, 3.0)]),                         # ไม่มีช่วงเงียบ
+        ([(1.0, 1.4)], 3.0, 0.3, [(0.0, 3.0)]),                # pad เกินครึ่งช่องเงียบ ต้องรวมไม่ซ้อน
     ]
     ok = True
     for gaps, total, pad, want in cases:

@@ -51,15 +51,23 @@ export function validate(input) {
 }
 
 // Error if entry/stop are off the tick in force on asOf; warning if they would be off the other table.
+// A table marked unconfirmed in ticks.json never rejects: off-tick becomes a warning and the result says so.
 function checkTicks(input, type) {
   const asOf = input.asOf ?? todayLocal();
   const inForce = asOf >= TICKS.effective ? 'after' : 'before';
   const other = inForce === 'after' ? 'before' : 'after';
   const warnings = [];
+  const confirmed = TICKS.confirmed?.[inForce] !== false;
+  if (!confirmed) warnings.push(`ใช้ตาราง tick ${inForce === 'after' ? 'หลัง' : 'ก่อน'} ${TICKS.effective} ที่ยังไม่ยืนยันประกาศฉบับสุดท้ายของ SET · ตรวจราคากับประกาศก่อนส่งคำสั่ง`);
   for (const field of ['entry', 'stop']) {
     const price = input[field];
     const tick = type === 'etf' ? TICKS.etf : tickFor(price, TICKS[inForce]);
-    if (!onTick(price, tick)) throw new Error(`ช่อง ${field} ${price} ไม่อยู่บน tick ที่ใช้ ณ ${asOf} (tick ${tick} บาท) · ปรับเป็นราคาที่หาร ${tick} ลงตัว`);
+    if (!onTick(price, tick)) {
+      const msg = `ช่อง ${field} ${price} ไม่อยู่บน tick ที่ใช้ ณ ${asOf} (tick ${tick} บาท) · ปรับเป็นราคาที่หาร ${tick} ลงตัว`;
+      if (confirmed) throw new Error(msg);
+      warnings.push(`${msg} (ตารางยังไม่ยืนยัน จึงเตือนแทนหยุด)`);
+      continue;
+    }
     if (type !== 'etf' && !onTick(price, tickFor(price, TICKS[other]))) {
       warnings.push(`${field} ${price} ใช้ได้ตาม tick ${inForce === 'after' ? 'หลัง' : 'ก่อน'} ${TICKS.effective} แต่ไม่ตรง tick ${inForce === 'after' ? 'ก่อน' : 'หลัง'}วันนั้น`);
     }
@@ -154,7 +162,12 @@ function selfTest() {
   t('tick ใหม่ 48.30 ผ่าน', compute({ ...S, entry: 48.3, asOf: '2026-11-16' }).size > 0);
   t('tick stop ผิด', throwsWith({ ...S, stop: 47.4 }, 'stop'));
   t('48.50 ใช้ได้ทั้งสองตาราง ไม่เตือน', compute(S).warnings.length === 0);
-  t('tick ใหม่ 48.30 เตือนว่าไม่ตรงตารางเดิม', compute({ ...S, entry: 48.3, asOf: '2026-11-16' }).warnings.length === 1);
+  const after = compute({ ...S, entry: 48.3, asOf: '2026-11-16' }).warnings;
+  t('tick ใหม่ 48.30 เตือนว่าไม่ตรงตารางเดิม และว่าตารางยังไม่ยืนยัน', after.length === 2 && after.some((w) => w.includes('ยังไม่ยืนยัน')));
+  t('ตารางก่อนวันที่ 16 พ.ย. ไม่เตือนเรื่องยังไม่ยืนยัน', !compute(S).warnings.some((w) => w.includes('ยังไม่ยืนยัน')));
+  // ตารางหลังยังไม่ยืนยัน: ราคา 48.35 ไม่อยู่บน tick 0.10 -> เตือนแทนหยุด แต่ยังคำนวณ
+  const off = compute({ ...S, entry: 48.35, asOf: '2026-11-16' });
+  t('ตารางยังไม่ยืนยัน off-tick เตือนไม่หยุด', off.size > 0 && off.warnings.some((w) => w.includes('เตือนแทนหยุด')));
   t('ETF tick 0.01', compute({ ...S, type: 'etf', entry: 10.07, stop: 9.97 }).size > 0);
   t('tickFor 9.90 ก่อน/หลัง', tickFor(9.9, TICKS.before) === 0.05 && tickFor(9.9, TICKS.after) === 0.02 && tickFor(400, TICKS.after) === 2);
   t('capital NaN', throwsWith({ ...S, capital: NaN }, 'capital'));
