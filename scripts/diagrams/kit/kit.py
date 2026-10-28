@@ -42,7 +42,7 @@ def group(label, inner, cls="", id=""):
     """กรอบล้อมของที่อยู่ระดับเดียวกัน · ชื่อกลุ่มอยู่บนขอบบน (cls "capb" = ขอบล่าง เมื่อมีเส้นแยกเข้าหลายกล่องทางขอบบน)
     · ใส่ id แล้วต่อเส้นเข้ากรอบได้เส้นเดียว เมื่อทุกกล่องในกลุ่มรับของเดียวกัน · เส้นที่เข้าออกกลุ่มหักมุมนอกกรอบ (kit.js)"""
     at = f' id="{id}"' if id else ""
-    return f'<div class="group {cls}"{at}><span class="cap">{e(label)}</span>{inner}</div>'
+    return f'<div class="group {cls}"{at}><span class="gcap">{e(label)}</span>{inner}</div>'
 
 
 def tag(text, role=""):

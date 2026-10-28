@@ -95,5 +95,7 @@ span.nb{white-space:nowrap}
 
 /* กลุ่มของที่อยู่ระดับเดียวกัน (ผู้ใช้ขอ 2026-10-28): กรอบเส้นเดียว ไม่มีพื้น · ชื่อกลุ่มวางทับขอบบน */
 .group{position:relative;z-index:1;border:1px solid #C3CCD6;border-radius:8px;padding:24px 16px 16px}
-.group.capb{padding:16px 16px 24px}.group.capb>.cap{top:auto;bottom:-11px}
-.group>.cap{position:absolute;top:-11px;left:12px;padding:0 8px;background:var(--bg);font-size:15px;line-height:22px;font-weight:600;color:var(--ink3)}
+.group.capb{padding:16px 16px 24px}.group.capb>.gcap{top:auto;bottom:-11px}
+.group>.gcap{position:absolute;top:-11px;left:12px;padding:0 8px;background:var(--bg);font-size:15px;line-height:22px;font-weight:600;color:var(--ink3)}
+.band .group{margin-top:28px}
+.group>.fan,.group>.tags,.group>.vlist,.group>.grid,.group>p.note:first-of-type{margin-top:0}

@@ -144,7 +144,7 @@ def build_map(plugin):
     core_node = "" if is_su else (f'<div class="node"><div class="dot emb" style="--pc:{COLOR["superuser"]}">{emblem("superuser", 56)}</div><div class="lb">ของกลางจาก superuser</div>'
                                   f'<div class="sb">skill {len(data["core_skills"])} · agent {len([a for a in su_data["agents"] if a["core"]])} ใช้ร่วมทุก plugin</div></div>')
     band = (f'<div class="band"><div class="cap">ความรู้: skill คือคู่มือที่ agent เปิดอ่านก่อนลงมือ</div>'
-            f'<div class="row" style="grid-template-columns:{"1fr" if is_su else "2.2fr 1fr"}">{sk_node}{core_node}</div></div>')
+            + K.group("skill ที่ agent ใช้", f'<div class="row" style="grid-template-columns:{"1fr" if is_su else "2.2fr 1fr"}">{sk_node}{core_node}</div>') + "</div>")
 
     pairs = [(f"en{i}", "focal", "main") for i in range(len(ents))] + [("focal", a, "t") for a in ids]
     stats = [(len(agents), "agent"), (len(own), "skill")]

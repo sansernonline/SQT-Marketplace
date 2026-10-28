@@ -193,7 +193,7 @@ def f1(plug, d, r, core):
     cross = '<div class="tags">' + "".join(f'<span class="tag">{badge(c, 12)}{e(c)}</span>' for c in xs) + "</div>"
     body = (f'<div class="layers">{wires(pairs)}{top}{hub}{low}</div>'
             + band("ผู้ใช้ · หัวหน้า · ลูกทีม", "ใครคุยกับใคร", chain, "users", "pc")
-            + band("งานข้ามสาขา", sub, cross, "git-branch"))
+            + band("งานข้ามสาขา", sub, kit.group(f"ส่งต่อได้ {len(xs)} plugin", cross), "git-branch"))
     return body + legend([("core", "หัวหน้าทีม", "users"), ("agent", "ลูกทีม (subagent)"), ("user", "ผู้ใช้", "user")])
 
 
@@ -217,7 +217,7 @@ def f2(plug, d, r, core):
     extra = [x["name"] for x in pbs_all if x.get("shared")]        # ของกลางที่ plugin นี้ใช้ร่วม
     pbs = (f'<p class="note" style="margin-top:16px">ของ plugin นี้ · {len(own)} ตัว</p>' + tags(own, "skill")
            + ("" if core or not extra else f'<p class="note">ของกลางที่ใช้ร่วม · {len(extra)} ตัว</p>' + tags(extra)))
-    return grid + band("ระดับโมเดล", "พลาด → ขยับ effort ขึ้น 1 ขั้นก่อน", tiers, "sparkles") + band("เลือก playbook", "เลือก 1 ตัว · งานเล็กไม่ใช้ playbook", pbs, "list-checks")
+    return grid + band("ระดับโมเดล", "พลาด → ขยับ effort ขึ้น 1 ขั้นก่อน", kit.group("3 ระดับ", tiers), "sparkles") + band("เลือก playbook", "เลือก 1 ตัว · งานเล็กไม่ใช้ playbook", kit.group("playbook ที่เลือกได้", pbs), "list-checks")
 
 
 # ---------- รูปที่ 3: ทำ → ตรวจ → แก้ ----------
@@ -234,7 +234,7 @@ def f3(plug, d, r, core):
              vstep("ส่งผล", "ผ่านแล้วเท่านั้นจึงถึงมือผู้ใช้", "w5", "pc", "check")]
     pairs = [("w1", "w2", "main"), ("w2", "w3", "main"), ("w3", "w4", "main"), ("w4", "w5", "main"), ("w4", "w2", "back dash")]
     body = f'<div style="padding-left:24px">{vlist(steps, pairs)}</div>'
-    body += band(f"ลูกทีมของ plugin นี้ · {len(r['agents'])} agent", "", tags(r["agents"], "agent"), "bot", "agent")
+    body += band(f"ลูกทีมของ plugin นี้ · {len(r['agents'])} agent", "", kit.group(f"agent {len(r['agents'])} ตัว", tags(r["agents"], "agent")), "bot", "agent")
     return body + legend([("pc", "ขั้นของหัวหน้าทีม", "layers"), ("agent", "ลูกทีม", "bot")], note="เส้นประทางซ้าย = ไม่ผ่าน กลับไปแก้")
 
 
@@ -254,7 +254,7 @@ def f4(plug, d, r, core):
                 icard("ตารางสถานะ", "เสร็จ · ทำอยู่ · ติด", "pc", "list-checks", cls="col"),
                 icard("CONTEXT.md", "ความคืบหน้า · รับงานต่อ", "pc", "file-text", cls="col"),
                 icard(o4a, "ผู้ใช้กดเอง", "gate", "hand", cls="col")])
-    body = top + band("ส่งผล", "ออกพร้อมกัน · ตัวถัดไปอ่านไฟล์ก็ทำต่อได้", outs, "package", "pc")
+    body = top + band("ส่งผล", "ตัวถัดไปอ่านไฟล์ก็ทำต่อได้", kit.group("ออกพร้อมกัน 4 อย่าง", outs), "package", "pc")
     return body + legend([("gate", "รอผู้ใช้อนุมัติ", "hand")])
 
 
@@ -271,7 +271,7 @@ def f5(plug, d, r, core):
     grid = vlist(steps, [("l1", "l2", "main"), ("l2", "l3", "main"), ("l3", "l4", "main")])
     log = fan([icard("จดทุกการทำ", "hook จดลง <code>.claude/superuser/log/</code>", "pc", "list-checks"),
                icard("รวมตัวเลข", "<code>SUMMARY.md</code> รวม token ราย agent", "pc", "file-text")])
-    body = grid + band("ทุกอย่างถูกบันทึก", "ในเครื่องผู้ใช้เท่านั้น · ตัดค่าลับ", log, "list-checks")
+    body = grid + band("ทุกอย่างถูกบันทึก", "ในเครื่องผู้ใช้เท่านั้น · ตัดค่าลับ", kit.group("บันทึก 2 อย่าง", log), "list-checks")
     return body + legend([("agent", "agent", "bot"), ("user", "ผู้ใช้ทำเอง", "user")])
 
 
@@ -284,7 +284,7 @@ def f6(plug, d, r, core):
     mods = (f'<div class="grid g3" style="row-gap:24px;margin-top:24px;align-items:start">{mods}</div>'
             '<p class="note" style="margin-top:24px">เปิดปิดต่อโฟลเดอร์งานใน <code>config.json</code> · ไม่มีไฟล์ = เปิดทุกตัว</p>')
     gl = '<div class="cols2">' + "".join(f"<p><b>{e(a)}</b>{e(b)}</p>" for a, b in gloss) + "</div>" if gloss else ""
-    body = top + band("โมดูล 9 ตัว", "ไม่มีก็ทำงานได้ แต่ดีขึ้นเมื่อมี", mods, "layers", "pc")
+    body = top + band("โมดูล 9 ตัว", "ไม่มีก็ทำงานได้ แต่ดีขึ้นเมื่อมี", kit.group("เปิดปิดได้ทีละตัว", mods), "layers", "pc")
     if gloss:
         body += band("ศัพท์ของงานนี้", "", gl, "book-open", "pc")
     return body
