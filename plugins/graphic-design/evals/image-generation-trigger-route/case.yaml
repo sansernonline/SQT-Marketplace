@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: image-generation-trigger-route
+description: คำขอเลือกทางหารูปเมื่อยังไม่รู้ว่าจะสร้างหรือหา ต้องเปิด image-generation ไม่ใช่ brief-to-image
+tags: [trigger, image-generation]
+runs: 3
+expected_outcome: เปิด Skill image-generation · เสนอทาง สร้าง วาด SVG หรือรูปถ่ายฟรี
+execution:
+  prompt: |
+    เว็บร้านสปาของผมยังไม่มีรูปเลย ไม่รู้ว่าควรสร้างด้วย AI วาดเอง หรือหารูปฟรีมาใส่ ช่วยตัดสินใจให้หน่อย
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: image-generation-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?image-generation"'
+    min: 1
+    arm: with-only
+  - name: brief-to-image-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?brief-to-image"'
+    min: 0
+    max: 0
+    arm: with-only

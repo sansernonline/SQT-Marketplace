@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": กันการแก้ description แล้ว skill เปิดบ่อยเกิน · ผ่านเมื่อ skill ไม่ถูกเปิดทุกรอบ · เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: print-ready-files-trigger-negative
+description: ขอรูปสำหรับแสดงบนจอเว็บไซต์ ไม่ใช่งานพิมพ์ ต้องไม่เปิด print-ready-files
+tags: [trigger, negative, print-ready-files]
+runs: 5
+expected_outcome: ไม่เปิด Skill print-ready-files · พูดถึงขนาดหรือน้ำหนักไฟล์สำหรับเว็บ
+execution:
+  prompt: |
+    ช่วยย่อรูปแบนเนอร์หน้าเว็บให้กว้าง 1200 px ไฟล์ไม่เกิน 200 KB ใช้ตอนแสดงบนจอมือถือ ไม่ได้จะพิมพ์
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: print-ready-files-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?print-ready-files"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: on-topic
+    type: regex
+    pattern: "px|KB|webp|jpg|jpeg|png"
+    flags: i
+    match: contains
+    target: last_message

@@ -1,5 +1,18 @@
 # Changelog — graphic-design
 
+## 0.17.0 — 2026-10-28
+
+- สคริปต์ตัดต่อ (`silences` `loudnorm2` `slides_to_video`) ไม่เขียนทับไฟล์ผลลัพธ์ที่มีอยู่แล้ว เว้นแต่ใส่ `--force` · เสนอชื่อใหม่ `-v02` · ตัวกันร่วมกันคือ `outguard.py` มี `--self-test`
+- ค่าคงที่ของ `tts_cues.py` และ `silences.py` มีเหตุผลกำกับ หรือบอกว่า "ค่าตั้งต้น ยังไม่ได้วัด"
+- `line-richmenu`: ตั้งเมนูเริ่มต้นและลบเมนูต้องขออนุมัติก่อน (ทดสอบกับผู้ใช้ 1 คน) · token อ่านจากตัวแปรสภาพแวดล้อมเท่านั้น · สคริปต์ใหม่ `richmenu_check.py` ตรวจ JSON กับภาพในเครื่อง (8/8) · เพดานอยู่ใน `references/richmenu-limits.json`
+- `print-ready-files`: สคริปต์ใหม่ `print_check.py` ตรวจระยะตัดตก ฟอนต์ฝัง ppi หมึกรวม (8/8 รวมตรวจ PDF จริงด้วย poppler) · เกณฑ์อยู่ใน `references/print-specs.json`
+- `asset-organize`: สคริปต์ใหม่ `apply_renames.py` ตรวจ `rename-log.csv` (ต้นทางหาย ชื่อชน ชื่อซ้ำ) ค่าตั้งต้น dry-run ทำเป็นสำเนา มี `--undo` (5 ข้อ)
+- `brief-to-image`: ผิดทางกายภาพเป็นกฎเหล็กอย่างเดียว ไม่นับเป็นคะแนนซ้ำ · น้ำหนักใหม่ 0.40/0.30/0.15/0.15 (ค่าตั้งต้น ยังไม่ได้วัด) · เส้นแบ่งกับ `image-generation` ชัดขึ้น ตัดหัวข้อ brief ซ้ำออกจาก `image-generation`
+- `video-editing` ใช้ `decide.mjs score` เลือกเครื่องเสียงบรรยายด้วยกฎเหล็กสิทธิ์เชิงพาณิชย์ · `youtube-thumbnail` กรองปกด้วย `pairwise` ก่อนอัปโหลด · `design-review` จัดลำดับจุดแก้ด้วย `priority` · งบเครดิตภาพ AI ใช้ `knapsack` · ตัวอย่าง JSON 4 ไฟล์รันผ่าน
+- `motion-basics`: หัวข้อส่งออก GIF และ WebM ด้วย ffmpeg (คำสั่งรันผ่านจริง) · เพดานขนาดต่อปลายทางยังเป็น (รอยืนยัน)
+- `icon-design` มีแถวใน triggers และ `image-artist` ส่งงานไอคอนมาที่ `icon-design` · คำว่าไอคอนอยู่ใน description ของ plugin · แก้เลขแถวใน `superuser` และ path ใน `speaking-script`
+- eval: เคส "ไม่ควรเปิด" 4 เคส · เคสใหม่ 5 เคส (`brief-to-image` ×2 · `image-generation` · `design-review` · `video-script-to-clip`) · เกณฑ์อนุมัติใน `line-richmenu-behaviour` · `RESULTS.md` ใส่ช่วง 95% ยังไม่ได้รันเคสใหม่
+
 ## 0.16.1 — 2026-10-28
 
 - `silences.py` รวมช่วงเก็บที่ทับกันเมื่อ `--pad` เกินครึ่งช่วงเงียบ เดิมได้เสียงซ้ำ

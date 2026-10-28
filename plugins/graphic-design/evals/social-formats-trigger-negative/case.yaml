@@ -1,0 +1,27 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เคส "ไม่ควรเปิด": กันการแก้ description แล้ว skill เปิดบ่อยเกิน · ผ่านเมื่อ skill ไม่ถูกเปิดทุกรอบ · เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: social-formats-trigger-negative
+description: ขอไฟล์ส่งโรงพิมพ์ ไม่ใช่ภาพโซเชียล ต้องไม่เปิด social-formats
+tags: [trigger, negative, social-formats]
+runs: 5
+expected_outcome: ไม่เปิด Skill social-formats · พูดถึงระยะตัดตกหรือ CMYK
+execution:
+  prompt: |
+    จะสั่งพิมพ์นามบัตรร้านกาแฟ 500 ใบที่โรงพิมพ์ ต้องเตรียมไฟล์อย่างไรให้ร้านรับได้
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: social-formats-not-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?social-formats"'
+    min: 0
+    max: 0
+    arm: with-only
+  - name: on-topic
+    type: regex
+    pattern: "ตัดตก|bleed|CMYK"
+    flags: i
+    match: contains
+    target: last_message

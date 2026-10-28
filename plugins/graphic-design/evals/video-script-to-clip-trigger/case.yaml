@@ -1,0 +1,24 @@
+# รูปแบบตามเอกสาร code.claude.com/docs/en/plugin-evals (schema 1.1 · ตรวจ 2026-10-23)
+# เตรียมไว้ ยังไม่ได้รัน (2026-10-28)
+schema_version: "1.1"
+name: video-script-to-clip-trigger
+description: ขอทำคลิปสั้นขายของ ต้องเปิด video-script-to-clip และมี hook ใน 3 วินาทีแรกกับซับที่อ่านได้เมื่อปิดเสียง
+tags: [trigger, video-script-to-clip]
+runs: 3
+expected_outcome: เปิด Skill video-script-to-clip · มี hook 0-3 วินาที · shot list · ซับไม่เกิน 2 บรรทัด
+execution:
+  prompt: |
+    อยากทำคลิป Reel สั้น ๆ ขายมัทฉะลาเต้ของร้าน ช่วยวางตั้งแต่เปิดคลิปจนจบ คนส่วนใหญ่ดูปิดเสียง
+  max_turns: 6
+  timeout_seconds: 180
+graders:
+  - name: video-script-to-clip-opened
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?video-script-to-clip"'
+    min: 1
+    arm: with-only
+  - name: hook-and-silent
+    type: llm
+    focus: last_message
+    criteria: ให้ผ่านเมื่อมี hook ใน 3 วินาทีแรกที่เห็นสินค้าหรือปัญหาตั้งแต่เฟรมแรก มี shot list และบอกว่าซับต้องอ่านได้เมื่อปิดเสียง (ไม่เกิน 2 บรรทัด)
